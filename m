@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] gnuchess: add a patch to fix
-	getline() conflict
-Message-ID: <20100511071421.856E8AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] gawk: remove CC override
+Message-ID: <20100511071421.CCB92AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bd1a449d61e2b7c989ec5a96037143b8f5024bb
+commit: http://git.buildroot.net/buildroot/commit/?id=e627989ad847f6c7b295117334ce0abeb84dbdbb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For some unknown reason, gawk.mk was overriding CC to $(TARGET_CC) at
+build time, while it had already been set at configure time to
+"$(TARGET_CC) $(TARGET_CFLAGS)" which is already the good value.
+
+Setting it to just $(TARGET_CC) breaks the compilation with external
+toolchains because we must pass the --sysroot option. But anyway, this
+was incorrect as we were loosing some CFLAGS set by Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gnuchess/gnuchess-5.07-getline-conflicts.patch |   48 ++++++++++++++++++++
- 1 files changed, 48 insertions(+), 0 deletions(-)
- create mode 100644 package/games/gnuchess/gnuchess-5.07-getline-conflicts.patch
+ package/gawk/gawk.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/games/gnuchess/gnuchess-5.07-getline-conflicts.patch b/package/games/gnuchess/gnuchess-5.07-getline-conflicts.patch
-new file mode 100644
-index 0000000..94add79
---- /dev/null
-+++ b/package/games/gnuchess/gnuchess-5.07-getline-conflicts.patch
-@@ -0,0 +1,48 @@
-+This patch fixes a conflict between the C library getline() function
-+and gnuchess getline() function.
-+
-+Patch borrowed from the gnuchess Debian package.
-+
-+Index: gnuchess-5.07/src/input.c
-+===================================================================
-+--- gnuchess-5.07.orig/src/input.c	2009-09-29 16:01:38.000000000 +0200
-++++ gnuchess-5.07/src/input.c	2009-09-29 16:02:57.000000000 +0200
-+@@ -127,7 +127,7 @@
-+ 	      (RealGameCnt+1)/2 + 1 );
-+     }
-+     pthread_mutex_lock(&input_mutex);
-+-    getline(prompt);
-++    get_line(prompt);
-+     input_status = INPUT_AVAILABLE;
-+     pthread_cond_signal(&input_cond);
-+     pthread_mutex_unlock(&input_mutex);
-+@@ -173,13 +173,13 @@
-+ {
-+ #ifdef HAVE_LIBREADLINE
-+   if (isatty(STDIN_FILENO)) {
-+-    getline = getline_readline;
-++    get_line = getline_readline;
-+     using_history();
-+   } else {
-+-    getline = getline_standard;
-++    get_line = getline_standard;
-+   }
-+ #else
-+-  getline = getline_standard;
-++  get_line = getline_standard;
-+ #endif
-+   /* Start input thread */
-+   pthread_create(&input_thread, NULL, input_func, NULL);
-+Index: gnuchess-5.07/src/common.h
-+===================================================================
-+--- gnuchess-5.07.orig/src/common.h	2009-09-29 16:06:17.000000000 +0200
-++++ gnuchess-5.07/src/common.h	2009-09-29 16:06:40.000000000 +0200
-+@@ -745,7 +745,7 @@
-+  * Input routine, initialized to one of the specific
-+  * input routines. The given argument is the prompt.
-+  */
-+-void (*getline) (char *);
-++void (*get_line) (char *);
-+ 
-+ #define MAXSTR 128
-+ extern char inputstr[MAXSTR];
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 8886e6b..4dd1085 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -48,7 +48,7 @@ $(GAWK_DIR)/.configured: $(GAWK_DIR)/.unpacked
+ 	touch $@
+ 
+ $(GAWK_DIR)/$(GAWK_BINARY): $(GAWK_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(GAWK_DIR)
++	$(MAKE) -C $(GAWK_DIR)
+ 
+ $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
+ 	rm -f $(TARGET_DIR)/usr/bin/awk
+@@ -61,7 +61,7 @@ $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
+ gawk: $(TARGET_DIR)/$(GAWK_TARGET_BINARY)
+ 
+ gawk-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GAWK_DIR) uninstall
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GAWK_DIR) uninstall
+ 	-$(MAKE) -C $(GAWK_DIR) clean
+ 
+ gawk-dirclean:
 -- 
 1.6.3.3
