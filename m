@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] hal: add dependency on
-	host-libxml-parser-perl
-Message-ID: <20100511071422.13A0DAA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] linux-fusion: add dependency on
+	!BR2_KERNEL_none
+Message-ID: <20100511071422.76AE6AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5ff8cdc62182e3452d5811f1f0a25d3318b66af
+commit: http://git.buildroot.net/buildroot/commit/?id=6040190e920674913c0dd3dc4391a8590735f0fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-hal integrates its own version of intltool tools, but they require
-libxml-parser-perl to be installed on the host.
+linux-fusion is composed of a kernel module, and linux-fusion.mk uses
+several variable definitions that only exist when Buildroot compiles a
+kernel.
+
+We also add the same dependency to BR2_PACKAGE_DIRECTFB_MULTI, which
+relies on linux-fusion.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hal/hal.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/directfb/Config.in     |    1 +
+ package/linux-fusion/Config.in |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/hal/hal.mk b/package/hal/hal.mk
-index 746107b..262fc41 100644
---- a/package/hal/hal.mk
-+++ b/package/hal/hal.mk
-@@ -79,7 +79,7 @@ $(TARGET_DIR)/$(HAL_TARGET_BINARY): $(HAL_DIR)/hald/hald
- 		rm -f $(TARGET_DIR)/usr/libexec/$$file; \
- 	done
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 5e81b7e..8a0a736 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -10,6 +10,7 @@ if BR2_PACKAGE_DIRECTFB
+ config BR2_PACKAGE_DIRECTFB_MULTI
+ 	bool "directfb multi application"
+ 	select BR2_PACKAGE_LINUX_FUSION
++	depends on !BR2_KERNEL_none
+ 	help
+ 	  Enable use of multiple concurrent DirectFB applications
  
--hal: host-pkg-config dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
-+hal: host-pkg-config host-libxml-parser-perl dbus-glib hwdata udev $(TARGET_DIR)/$(HAL_TARGET_BINARY)
- 
- hal-clean:
- 	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/hal.conf
+diff --git a/package/linux-fusion/Config.in b/package/linux-fusion/Config.in
+index 6fb5260..ebd00b4 100644
+--- a/package/linux-fusion/Config.in
++++ b/package/linux-fusion/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_LINUX_FUSION
++	depends on !BR2_KERNEL_none
+ 	bool "linux-fusion communication layer for DirectFB multi"
+ 	help
+ 	  DirectFB Communication Layer allowing multiple DirectFB
 -- 
 1.6.3.3
