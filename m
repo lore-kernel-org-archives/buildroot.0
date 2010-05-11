@@ -1,73 +1,32 @@
-From: Paul Jones <Paul.Jones@iwtech.com.au>
-Date: Tue, 11 May 2010 09:02:07 +0200
-Subject: [Buildroot] [git commit master] xvkbd: bump version
-Message-ID: <20100511070254.799E58D479@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 May 2010 09:13:59 +0200
+Subject: [Buildroot] [pull request] Pull request for branch build-fixes
+In-Reply-To: <20100510234421.5ac0d4ce@surf> (Thomas Petazzoni's message of
+	"Mon, 10 May 2010 23:44:21 +0200")
+References: <cover.1273440344.git.thomas.petazzoni@free-electrons.com>
+	<20100510234421.5ac0d4ce@surf>
+Message-ID: <87sk5y3o7c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18f72f97309b83f1d3c43115b83a79743602ebd2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> I've updated this branch at :
 
-And fix dependencies while we're at it.
+ Thomas>  git://git.busybox.net/~tpetazzoni/git/buildroot build-fixes
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                 |    2 +-
- package/xvkbd/Config.in |    1 +
- package/xvkbd/xvkbd.mk  |    4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ Thomas> with two changes :
 
-diff --git a/CHANGES b/CHANGES
-index 70ae9d7..12702a4 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,7 +6,7 @@
- 	libxcb, mplayer, pciutils, xdriver_xf86-video-openchrome,
- 	usb_modeswitch, usbutils, wpa_supplicant, xapp_bdftopcf,
- 	xapp_mkfontdir, xfont_encodings, xlib_libX11, xlib_libXfont,
--	xlib_xtrans, xproto_fontcacheproto, xproto_fontsproto.
-+	xlib_xtrans, xproto_fontcacheproto, xproto_fontsproto, xvkbd
- 
- 	Removed packages: vice
- 
-diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
-index 888367a..8a4b847 100644
---- a/package/xvkbd/Config.in
-+++ b/package/xvkbd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XVKBD
- 	bool "xvkbd"
- 	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXAW
- 	help
- 	  on-screen keyboard for X
- 
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 8f02021..b7da396 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -3,7 +3,7 @@
- # xvkbd
- #
- #############################################################
--XVKBD_VERSION = 2.8
-+XVKBD_VERSION = 3.2
- XVKBD_SOURCE = xvkbd-$(XVKBD_VERSION).tar.gz
- XVKBD_SITE = http://homepage3.nifty.com/tsato/xvkbd
- XVKBD_AUTORECONF = NO
-@@ -15,7 +15,7 @@ XVKBD_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) LD=$(TARGET_CC) \
- 
- XVKBD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--XVKBD_DEPENDENCIES = xserver_xorg-server
-+XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw
- 
- $(eval $(call AUTOTARGETS,package,xvkbd))
- 
+ Thomas>  * Add a reason for which VLC is marked broken
+
+ Thomas>  * Add a dependency on !BR2_KERNEL_none for BR2_PACKAGE_DIRECTFB_MULTI
+
+ Thomas> If you want me to resend a full pull request, don't hesitate to ask.
+
+No, this is fine - Pulled, thanks!
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
