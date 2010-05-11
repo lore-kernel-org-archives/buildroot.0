@@ -1,35 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 May 2010 09:02:40 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	2010-05-10-fixes
-In-Reply-To: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 10 May 2010 23:39:46 +0200")
-References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87wrva3oq7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 11 May 2010 09:02:07 +0200
+Subject: [Buildroot] [git commit master] hostapd: use internal crypto library
+Message-ID: <20100511070254.AD1888D481@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit af850ce10fc490036247a8c0dd92c79f18b2281a:
- Thomas>   Peter Korsgaard (1):
- Thomas>         Merge branch 'squashfs-fixes' of git://git.busybox.net/~tpetazzoni/git/buildroot
+commit: http://git.buildroot.net/buildroot/commit/?id=de73cdf478dd5ad8a7ea5623673144701dd9767c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+When OpenSSL is not enabled, hostapd relies on an internal
+library. However, this library must be enabled, otherwise the
+compilation of hostapd fails with:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot 2010-05-10-fixes
+/home/test/ctng-arm-eglibc/bin/../lib/gcc/arm-unknown-linux-gnueabi/4.3.4/../../../../arm-unknown-linux-gnueabi/bin/ld: cannot find -ltommath
 
- Thomas> Thomas Petazzoni (5):
- Thomas>       grep: give hints to ./configure on where gettext() is
- Thomas>       hostapd: use internal crypto library
- Thomas>       less: depends on curses
- Thomas>       netplug: disable -Werror to fix build failure
- Thomas>       libnl: include limits.h to fix build failure
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/hostapd/hostapd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks, committed everything besides the grep fix.
-
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 2359fd3..bde3766 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -45,6 +45,7 @@ endif
+ # We take care of that in Config.in
+ ifneq ($(BR2_PACKAGE_OPENSSL),y)
+ 	echo "CONFIG_CRYPTO=internal" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(HOSTAPD_CONFIG)
+ 	echo "CONFIG_TLS=internal" >>$(HOSTAPD_CONFIG)
+ endif
+ # WPS
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
