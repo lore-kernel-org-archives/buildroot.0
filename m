@@ -1,38 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 May 2010 03:20:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 1753] New: lmbench: convert to autotools
-	infrastructure
-Message-ID: <bug-1753-163@https.bugs.busybox.net/>
+Date: Tue, 11 May 2010 04:45:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 743] Add Transmission bit torrent option to
+	buildroot
+In-Reply-To: <bug-743-163@https.bugs.busybox.net/>
+References: <bug-743-163@https.bugs.busybox.net/>
+Message-ID: <20100511044525.50DA88D5E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1753
+https://bugs.busybox.net/show_bug.cgi?id=743
 
-              Host: Kubuntu 9.10
-            Target: armv4
-           Summary: lmbench: convert to autotools infrastructure
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: keguang.zhang at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Kelvin Cheung <keguang.zhang@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #761 is|0                           |1
+           obsolete|                            |
 
-Created attachment 1717
-  --> https://bugs.busybox.net/attachment.cgi?id=1717
-lmbench: convert to autotools infrastructure
+--- Comment #3 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
+Created attachment 1723
+  --> https://bugs.busybox.net/attachment.cgi?id=1723
+Convert transmission to autotools infrastructure and bump to version 1.93
 
-Convert lmbench to autotools infrastructure
+Convert transmission to autotools infrastructure and bump to version 1.93
+
+And Thank jasaw and Belisko.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
