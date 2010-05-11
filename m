@@ -1,35 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 May 2010 04:45:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 743] Add Transmission bit torrent option to
-	buildroot
-In-Reply-To: <bug-743-163@https.bugs.busybox.net/>
-References: <bug-743-163@https.bugs.busybox.net/>
-Message-ID: <20100511044525.50DA88D5E9@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 May 2010 08:52:20 +0200
+Subject: [Buildroot] [PATCH] Bump xvkbd to 3.2
+In-Reply-To: <3B941116898CDA489B91563DEF88F4B620339A@iwt-server.iwt.local>
+	(Paul Jones's message of "Mon, 10 May 2010 15:02:42 +1000")
+References: <3B941116898CDA489B91563DEF88F4B620339A@iwt-server.iwt.local>
+Message-ID: <87632v3p7f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=743
+>>>>> "Paul" == Paul Jones <Paul.Jones@iwtech.com.au> writes:
 
-Kelvin Cheung <keguang.zhang@gmail.com> changed:
+ Paul> And fix dependencies while we're at it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Attachment #761 is|0                           |1
-           obsolete|                            |
+Committed, thanks.
 
---- Comment #3 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-Created attachment 1723
-  --> https://bugs.busybox.net/attachment.cgi?id=1723
-Convert transmission to autotools infrastructure and bump to version 1.93
-
-Convert transmission to autotools infrastructure and bump to version 1.93
-
-And Thank jasaw and Belisko.
+Your patch was word wrapped, but I fixed it here. Please use git
+send-email in the future.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
