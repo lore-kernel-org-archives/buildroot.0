@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] shared-mime-info: missing
-	dependency on host-intltool
-Message-ID: <20100511071423.7A1FEAA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] CHANGES: add updated packages from
+	Thomas' build-fixes branch
+Message-ID: <20100511071424.12922AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +10,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba9a902bf862a60a91f2a9d3afbd1fe5470fcb53
+commit: http://git.buildroot.net/buildroot/commit/?id=49ce10cb3c7de1f6b1e1eafa075fb631a08941cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/shared-mime-info/shared-mime-info.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ CHANGES |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index fe14142..487d4b2 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -16,7 +16,7 @@ SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 host-
+diff --git a/CHANGES b/CHANGES
+index 03eed65..17a8126 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,10 +2,11 @@
  
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+ 	Fixes all over the tree.
  
--HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config
-+HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
+-	Updated/fixed packages: busybox, customize, hal, hostapd,
+-	less, libnl, libxcb, mplayer, netplug, pciutils,
+-	xdriver_xf86-video-openchrome, usb_modeswitch, usbutils,
+-	wpa_supplicant, xapp_bdftopcf, xapp_mkfontdir,
++	Updated/fixed packages: busybox, customize, gawk, gnuchess,
++	hal, hostapd, less, libgcrypt, libnl, libxcb, linux-fusion,
++	ltp-testsuite, mplayer, netplug, pciutils, php, sed,
++	shared-mime-info usb_modeswitch, usbutils, vlc wpa_supplicant,
++	xapp_bdftopcf, xapp_mkfontdir, xdriver_xf86-video-openchrome,
+ 	xfont_encodings, xlib_libX11, xlib_libXfont, xlib_xtrans,
+ 	xproto_fontcacheproto, xproto_fontsproto, xvkbd
  
- HOST_SHARED_MIME_INFO_CONF_OPT = \
- 	--disable-update-mimedb
 -- 
 1.6.3.3
