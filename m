@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 11 May 2010 09:13:14 +0200
-Subject: [Buildroot] [git commit master] gawk: remove CC override
-Message-ID: <20100511071421.CCB92AA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libgcrypt: specify where
+	gpg-error-config is
+Message-ID: <20100511071422.40BB2AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e627989ad847f6c7b295117334ce0abeb84dbdbb
+commit: http://git.buildroot.net/buildroot/commit/?id=8b47ede9e6d5301839d2d96dfd56e2117e0e8818
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some unknown reason, gawk.mk was overriding CC to $(TARGET_CC) at
-build time, while it had already been set at configure time to
-"$(TARGET_CC) $(TARGET_CFLAGS)" which is already the good value.
-
-Setting it to just $(TARGET_CC) breaks the compilation with external
-toolchains because we must pass the --sysroot option. But anyway, this
-was incorrect as we were loosing some CFLAGS set by Buildroot.
+libgcrypt depends on libgpg-error, but it needs to know where the
+gpg-error-config utility is.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gawk/gawk.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgcrypt/libgcrypt.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 8886e6b..4dd1085 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -48,7 +48,7 @@ $(GAWK_DIR)/.configured: $(GAWK_DIR)/.unpacked
- 	touch $@
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index ef13de7..646ad83 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -12,7 +12,8 @@ LIBGCRYPT_INSTALL_TARGET = YES
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+ LIBGCRYPT_CONF_OPT = \
+-	--disable-optimization
++	--disable-optimization \
++	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
- $(GAWK_DIR)/$(GAWK_BINARY): $(GAWK_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(GAWK_DIR)
-+	$(MAKE) -C $(GAWK_DIR)
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
  
- $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
- 	rm -f $(TARGET_DIR)/usr/bin/awk
-@@ -61,7 +61,7 @@ $(TARGET_DIR)/$(GAWK_TARGET_BINARY): $(GAWK_DIR)/$(GAWK_BINARY)
- gawk: $(TARGET_DIR)/$(GAWK_TARGET_BINARY)
- 
- gawk-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GAWK_DIR) uninstall
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GAWK_DIR) uninstall
- 	-$(MAKE) -C $(GAWK_DIR) clean
- 
- gawk-dirclean:
 -- 
 1.6.3.3
