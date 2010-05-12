@@ -1,28 +1,45 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 12 May 2010 18:15:38 +0100
-Subject: [Buildroot] Status of external toolchain support
-Message-ID: <4BEAE23A.2000906@carallon.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 12 May 2010 12:35:20 -0500
+Subject: [Buildroot] [PATCH] fis: make fis list more like RedBoot's output
+Message-ID: <0D753D10438DA54287A00B0270842697636EEFB746@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am starting work on a new target and thought I'd take a look at using 
-a crosstool-NG external toolchain and I have a couple of questions about 
-what is supposed to be supported.
+The output of 'fis list' does not fit cleanly on an 80 column
+terminal.  This modifies the output to fit and more closely
+resemble the output from RedBoot.
 
-I have successfully built an arm toolchain using eglibc and nptl (Thanks 
-Yann!).
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-When configuring buildroot I set all my options the same as the 
-toolchain, except for thread support where nptl was not an option. Does 
-it matter that they don't match up? Should you even be able to set 
-thread library when using an external toolchain?
+---
 
-When using crosstools who should build gdb? If buildroot builds it I 
-have to make sure my toolchain is not read only? Can I just let 
-crosstools build gdb for the host and only get buildroot to make gdb-server?
-
-Thanks
-Will
+diff --git a/package/fis/fis-003-list_output.patch b/package/fis/fis-003-list_output.patch
+new file mode 100644
+index 0000000..1d3ea24
+--- /dev/null
++++ b/package/fis/fis-003-list_output.patch
+@@ -0,0 +1,21 @@
++--- fis.orig/fis.c	2010-05-12 10:22:10.000000000 -0700
+++++ fis/fis.c	2010-05-12 10:19:24.000000000 -0700
++@@ -142,8 +142,8 @@
++ 
++ static void dump_desc(FILE* f, const struct fis_image_desc* d)
++ {
++-  fprintf(f,"%16s: flash: 0x%08x mem:0x%08x size:0x%08x checksum:0x%08x\n",
++-             d->name, d->flash_base, d->mem_base, d->size, d->file_cksum);
+++  fprintf(f,"%-16s  0x%08x  0x%08x  0x%08x  0x%08x  0x%08x\n",
+++             d->name, d->flash_base, d->mem_base, d->size, d->entry_point, d->file_cksum);
++   for (unsigned int i=0; i<(sizeof(d->skips)/4); ++i) {
++     if (d->skips[i]==0x736b6970 || d->skips[i]==0x70696b73) { // "skip"
++       uint32_t offset = d->skips[i+1];
++@@ -400,6 +400,7 @@
++   CHECK(fd=open(device,O_RDONLY),-1);
++   dir_t dir;
++   load_dir(fd,offset,&size,swap_endianness,&dir);
+++  fprintf(stdout,"Name              FLASH addr  Mem addr    Length      Entry point Checksum\n");
++   FOR_EACH_DIR_ENTRY(dir,i) {
++     dump_desc(stdout,get(i));
++   }
