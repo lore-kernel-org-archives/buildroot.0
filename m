@@ -1,88 +1,192 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Wed, 12 May 2010 09:24:31 +0100
-Subject: [Buildroot] Buildroot 2010 rc2 fails to build
-In-Reply-To: <AANLkTim8u-blOgAiVpxjWfe1VuQ06EUIsgJ0zz_jWYxw@mail.gmail.com>
-References: <AANLkTim8u-blOgAiVpxjWfe1VuQ06EUIsgJ0zz_jWYxw@mail.gmail.com>
-Message-ID: <58B9D5B09E114795948B69CA62CAB0CE@AP366>
+From: Yavor Atov <yatov@gcn.bg>
+Date: Wed, 12 May 2010 13:14:06 +0300
+Subject: [Buildroot] webkit build fails
+Message-ID: <1273659246.23023.15.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi everyone,
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net]
-> On Behalf Of Chris Kerios
-> Sent: 11 May 2010 23:30
-> To: buildroot at busybox.net
-> Subject: [Buildroot] Buildroot 2010 rc2 fails to build
-> 
-> Hi,
-> I am building for a Geode LX using the latest release candidate - rc2.  I
-> am getting a failure when buildroot is building the gdb 6.8 packages.  It
-> is trying to resolve an undefined reference to "usleep".  The output is
-> attached below.  I redid my .config to not build the gdb packages and it
-> then goes on a ways and fails when building busybox with the same
-> unresolved reference to usleep.  I get successful builds with the 2010.02
-> release with no changes in my config file.  Any ideas???
+I'm trying to build webkit version r46969 with Buildroot 2009.02. The
+build is OK till the linkage phase, where it fails, because libtool
+searches some of the libs in the system dir /usr/lib instead of the
+target dir. I think that the problem is in libtool, which is version
+1.5.24. Here autogen.sh complains about libtool:
 
-As reported previously, I had this issue when I used my 2010.02 buildroot,
-kernel and busybox .config files with 2010.rc1 and just accepted the default
-options for missing configuration items.  However if I regenerated my
-.config from scratch using 2010.05 rc1 menuconfig (selecting all the
-same/equivalent options) then this build issue went away
- 
-> 
-> Also, I noticed with the rc2 release the uClibc is prompting me for
-> answers to questions.  Is this expected to be expected as I don't have to
-> do this for the 2010.02 release?
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/build_mipsel/WebKit-r46969
+configure.ac:84: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+suspicious cache-id, must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:632: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:4932: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:2700: _LT_AC_LANG_C_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:2699: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:80: AC_LIBTOOL_SETUP is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:60: _AC_PROG_LIBTOOL is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:25: AC_PROG_LIBTOOL is expanded from...
+configure.ac:84: the top level
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id,
+must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:677: AC_LIBTOOL_LINKER_OPTION is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id,
+must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:2781: _LT_AC_LANG_CXX_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:2780: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:1825: _LT_AC_TAGCONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id,
+must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:4007: _LT_AC_LANG_F77_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:4006: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id,
+must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:4116: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+/home/yavor/stb225/stb225/build_generic/staging/usr/share/aclocal/libtool.m4:4115: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+suspicious cache-id, must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
+aclocal.m4:1561: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+aclocal.m4:5849: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+aclocal.m4:3629: _LT_AC_LANG_C_CONFIG is expanded from...
+aclocal.m4:3628: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+aclocal.m4:1009: AC_LIBTOOL_SETUP is expanded from...
+aclocal.m4:989: _AC_PROG_LIBTOOL is expanded from...
+aclocal.m4:954: AC_PROG_LIBTOOL is expanded from...
+configure.ac:84: the top level
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:1606: AC_LIBTOOL_LINKER_OPTION is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:3706: _LT_AC_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:3705: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:2754: _LT_AC_TAGCONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:4928: _LT_AC_LANG_F77_CONFIG is expanded from...
+aclocal.m4:4927: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:5037: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+aclocal.m4:5036: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+suspicious cache-id, must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
+aclocal.m4:1561: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+aclocal.m4:5849: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+aclocal.m4:3629: _LT_AC_LANG_C_CONFIG is expanded from...
+aclocal.m4:3628: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+aclocal.m4:1009: AC_LIBTOOL_SETUP is expanded from...
+aclocal.m4:989: _AC_PROG_LIBTOOL is expanded from...
+aclocal.m4:954: AC_PROG_LIBTOOL is expanded from...
+configure.ac:84: the top level
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:1606: AC_LIBTOOL_LINKER_OPTION is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:3706: _LT_AC_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:3705: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:2754: _LT_AC_TAGCONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:4928: _LT_AC_LANG_F77_CONFIG is expanded from...
+aclocal.m4:4927: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:5037: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+aclocal.m4:5036: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:81: installing `autotools/compile'
+configure.ac:41: installing `autotools/missing'
+configure.ac:41: installing `autotools/install-sh'
+GNUmakefile.am: installing `autotools/depcomp'
+configure.ac:84: warning: AC_CACHE_VAL(lt_prog_compiler_pic_works, ...):
+suspicious cache-id, must contain _cv_ to be cached
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1974: AC_CACHE_VAL is expanded from...
+/home/yavor/stb225/stb225/build_generic/packages/buildroot-2009.02/toolchain_build_mipsel/autoconf-2.63/lib/autoconf/general.m4:1994: AC_CACHE_CHECK is expanded from...
+aclocal.m4:1561: AC_LIBTOOL_COMPILER_OPTION is expanded from...
+aclocal.m4:5849: AC_LIBTOOL_PROG_COMPILER_PIC is expanded from...
+aclocal.m4:3629: _LT_AC_LANG_C_CONFIG is expanded from...
+aclocal.m4:3628: AC_LIBTOOL_LANG_C_CONFIG is expanded from...
+aclocal.m4:1009: AC_LIBTOOL_SETUP is expanded from...
+aclocal.m4:989: _AC_PROG_LIBTOOL is expanded from...
+aclocal.m4:954: AC_PROG_LIBTOOL is expanded from...
+configure.ac:84: the top level
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:1606: AC_LIBTOOL_LINKER_OPTION is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_CXX, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:3706: _LT_AC_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:3705: AC_LIBTOOL_LANG_CXX_CONFIG is expanded from...
+aclocal.m4:2754: _LT_AC_TAGCONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_CXX, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_F77, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:4928: _LT_AC_LANG_F77_CONFIG is expanded from...
+aclocal.m4:4927: AC_LIBTOOL_LANG_F77_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_F77, ...): suspicious
+cache-id, must contain _cv_ to be cached
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_pic_works_GCJ, ...): suspicious cache-id,
+must contain _cv_ to be cached
+aclocal.m4:5037: _LT_AC_LANG_GCJ_CONFIG is expanded from...
+aclocal.m4:5036: AC_LIBTOOL_LANG_GCJ_CONFIG is expanded from...
+configure.ac:84: warning:
+AC_CACHE_VAL(lt_prog_compiler_static_works_GCJ, ...): suspicious
+cache-id, must contain _cv_ to be cached
 
-I think it is this update of uclibc options that is the problem.  I have not
-examined the differences and dug deeper to resolve but you might like to ;)
+So what do you think. Will updating libtool solve the problem?
 
-I also asked the list if carrying forward .configs like this was an
-acceptable way to move to newer versions of buildroot - it would seem at
-least you and I are doing it!
-
-> 
-> Chris
-> 
-> /home/chris/buildroot-2010.05-rc2/output/staging/usr/bin/i586-unknown-
-> linux-uclibc-gcc -Os -pipe -Os  -mtune=geode -march=geode -
-> D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -
-> I/home/chris/buildroot-2010.05-rc2/output/staging/usr/include -
-> I/home/chris/buildroot-2010.05-rc2/output/staging/include --
-> sysroot=/home/chris/buildroot-2010.05-rc2/output/staging/ -isysroot
-> /home/chris/buildroot-2010.05-rc2/output/staging -Os -pipe -Os  -
-> mtune=geode -march=geode -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
-> D_FILE_OFFSET_BITS=64 -I/home/chris/buildroot-2010.05-
-> rc2/output/staging/usr/include -I/home/chris/buildroot-2010.05-
-> rc2/output/staging/include --sysroot=/home/chris/buildroot-2010.05-
-> rc2/output/staging/ -isysroot /home/chris/buildroot-2010.05-
-> rc2/output/staging -L/home/chris/buildroot-2010.05-rc2/output/staging/lib
-> -L/home/chris/buildroot-2010.05-rc2/output/staging/usr/lib --
-> sysroot=/home/chris/buildroot-2010.05-rc2/output/staging/ -Wno-error
-> \
->         -o gdb gdb.o libgdb.a \
->            ../readline/libreadline.a ../opcodes/libopcodes.a
-> ../bfd/libbfd.a  ../libiberty/libiberty.a ../libdecnumber/libdecnumber.a
-> -lncurses -lm   ../libiberty/libiberty.a  -ldl -rdynamic
-> libgdb.a(ser-tcp.o): In function `net_open':
-> ser-tcp.c:(.text+0x1ee): warning: gethostbyname is obsolescent, use
-> getnameinfo() instead.
-> libgdb.a(linux-nat.o): In function `linux_child_follow_fork':
-> linux-nat.c:(.text+0x4da3): undefined reference to `usleep'
-> collect2: ld returned 1 exit status
-> make[3]: *** [gdb] Error 1
-> make[3]: Leaving directory `/home/chris/buildroot-2010.05-
-> rc2/output/build/gdb-6.8-target/gdb'
-> make[2]: *** [all-gdb] Error 2
-> make[2]: Leaving directory `/home/chris/buildroot-2010.05-
-> rc2/output/build/gdb-6.8-target'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory `/home/chris/buildroot-2010.05-
-> rc2/output/build/gdb-6.8-target'
-> make: *** [/home/chris/buildroot-2010.05-rc2/output/build/gdb-6.8-
-> target/gdb/gdb] Error 2
-> 
+Best regards,
+Yavor
