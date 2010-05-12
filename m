@@ -1,41 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 12 May 2010 23:47:39 +0200
+Date: Wed, 12 May 2010 23:53:18 +0200
 Subject: [Buildroot] Status of external toolchain support
-In-Reply-To: <4BEB1F7B.8010301@carallon.com>
+In-Reply-To: <hsf6tg$9v9$1@dough.gmane.org>
 References: <4BEAE23A.2000906@carallon.com>
 	<201005122319.35163.yann.morin.1998@anciens.enib.fr>
-	<4BEB1F7B.8010301@carallon.com>
-Message-ID: <201005122347.39990.yann.morin.1998@anciens.enib.fr>
+	<hsf6tg$9v9$1@dough.gmane.org>
+Message-ID: <201005122353.19051.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will, All,
+Grant, All,
 
-On Wednesday 12 May 2010 23:36:59 Will Wagner wrote:
-> > So yes, we also have to select threading model in buildroot, and it has to
-> > match the external toolchain capabilities.
+On Wednesday 12 May 2010 23:34:41 Grant Edwards wrote:
+> On 2010-05-12, Yann E. MORIN <yann.morin.1998@anciens.enib.fr> wrote:
+> > The same entity shall build both the cross gdb and the gdbserver, as
+> > those two are tightly coupled, because of the protocol to exchange
+> > information between them.
+> Sorry, I don't understand where that limitation comes from.
 
-> I understand that options that affect packages have to be set the same. 
-> I can also see that you need to know if the toolchain supports threads 
-> or not, however once you have an external toolchain surely the packages 
-> you build with it do not care what version of threading is used.
+> The gdb remote protocol is standardized.  It's plain ASCII, and I
+> can't see how it would be affected by the choice of toolchain.  There
+> are plenty of third-party gdb servers that are not only built by
+> different entities, but the server isn't even built from gdb sources.
+> 
+> As long as as the gdb server and client versions are compatible (e.g.
+> they're using the same protocol) they should work fine.
 
-The only two (non-toolchain) packages, gdb and dmalloc, that depends on
-threads, refer to !BR2_PTHREADS_NONE.
+That's what I meant. And there have been quite some reports where
+the cross gdb and the gdbserver came from two gdb versions, and
+they did not speak the same protocol.
 
-> If you need to tell buildroot the type of threading used (linuxthread 
-> old/new or nptl) then currently buildroot does not check that they match 
-> up, as I have an nptl toolchain but am unable to select that in 
-> buildroot so it is set to linuxthreads new, but I got no error.
+> Have you seen protocol failures betwee gdb server/client due to the
+> fact that a different toolchain was used to build them?  If so, my
+> understand is that's a bug and should be reported to the gdb
+> maintainers.
 
-Oh, I see what you mean:
-- the prompt for the threading model is wrong when dealing with external
-  toolchains: we only need to know if threads are supported or not
-- a check is missing to check coherency btw external toolchain threading
-  capabilties, and buildroot configuration.
+That was not what I meant. Sorry for the confusion. I was trying to say:
+ "build the cross gdb *and* the gdbserver from the same version of gdb
+ "so there is no protocol mis-match between the two
+
+Of course, the gdbserver stub in the kernel, in u-boot, in redboot, in
+my jtag ICE, and in many other places are not built from the same source.
+
+And in that case, it can happen that using too old/new a cross gdb with
+them will lead to issues, as they might not use the same protocol.
+
+Yes, I've seen that happen, with an "old" jtag ICE, and a "recent" gdb.
 
 Regards,
 Yann E. MORIN.
