@@ -1,44 +1,24 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 12 May 2010 12:25:40 +0200
-Subject: [Buildroot] webkit build fails
-In-Reply-To: <1273659246.23023.15.camel@localhost>
-References: <1273659246.23023.15.camel@localhost>
-Message-ID: <AANLkTimgJbxIw53ObvnIfzytopuXoEEjM8WD-GxAHTzs@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 12 May 2010 15:45:18 +0000 (UTC)
+Subject: [Buildroot] tar rootfs compression and copy-image-to don't work
+	together?
+Message-ID: <hseied$naf$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 12, 2010 at 12:14 PM, Yavor Atov <yatov@gcn.bg> wrote:
-> Hi everyone,
->
->
-> So what do you think. Will updating libtool solve the problem?
+If I enable building a tar rootfs with gzip compression and configure
+buildroot to copy the image to /tftpboot, the tar file that gets
+copied to /tftboot isn't compressed.
 
-Updating libtool won't solve your problem, but updating buildroot
-might solve this issue.
-If you don't want a complete update of buildroot, you can also try to
-apply theses patches :
+There is a compressed tar file in output/images, but buildroot copies
+the _uncompressed_ tar file to /tftpboot.
 
-http://git.buildroot.org/buildroot/commit/?id=0d1830b07db4ebfd14e77a258de6fb391e57e960
-http://git.buildroot.org/buildroot/commit/?id=6b939d40f6a29a43277566adc9d4312d49cb3abf
-http://git.buildroot.org/buildroot/commit/?id=2eb4b09529a891e07d09ddf36c483b28edcd19ae
+Is this a bug, or am I misunderstanding the configuration options?
 
-Regards,
-
---
-Lionel Landwerlin
-
->
-> Best regards,
-> Yavor
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-- 
+Grant Edwards               grant.b.edwards        Yow! I am NOT a nut....
+                                  at               
+                              gmail.com            
