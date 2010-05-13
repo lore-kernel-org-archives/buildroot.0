@@ -1,39 +1,43 @@
-From: Mark Fisher <fobs12@ymail.com>
-Date: Thu, 13 May 2010 12:29:21 +0000 (UTC)
-Subject: [Buildroot] Status of external toolchain support
-References: <4BEAE23A.2000906@carallon.com>
-	<201005122319.35163.yann.morin.1998@anciens.enib.fr>
-	<4BEB1F7B.8010301@carallon.com>
-	<201005122347.39990.yann.morin.1998@anciens.enib.fr>
-Message-ID: <loom.20100513T141936-42@post.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 May 2010 15:23:15 +0200
+Subject: [Buildroot] [PATCH] package: Add support for clex filemanager
+ (v 3.19)
+In-Reply-To: <201005130115.00927.PeterHuewe@gmx.de>
+References: <201005130115.00927.PeterHuewe@gmx.de>
+Message-ID: <20100513152315.322e934f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN <yann.morin.1998@...> writes:
+Hello Peter,
 
-> > If you need to tell buildroot the type of threading used (linuxthread 
-> > old/new or nptl) then currently buildroot does not check that they match 
-> > up, as I have an nptl toolchain but am unable to select that in 
-> > buildroot so it is set to linuxthreads new, but I got no error.
-> 
-> Oh, I see what you mean:
-> - the prompt for the threading model is wrong when dealing with external
->   toolchains: we only need to know if threads are supported or not
-> - a check is missing to check coherency btw external toolchain threading
->   capabilties, and buildroot configuration.
+Thanks for your contribution!
 
-I think the problem is that the file toolchain\Config.in.2 is configured to 
-only allow BR2_THREADS_NATIVE (NPTL threading option) to be selected if uclibc 
-was set to the latest snapshot. This was a change made in February. It seems 
-like this selection should also be allowed if glibc is the C library.
+On Thu, 13 May 2010 01:15:00 +0200
+Peter Huewe <PeterHuewe@gmx.de> wrote:
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+>  package/clex/clex.mk                |  103 +++++++++++++++++++++++++++++++++++
 
+clex seems to use the autotools as their build system, therefore
+your .mk file should use the Buildroot autotools infrastructure. See
+http://buildroot.uclibc.org/downloads/buildroot.html#autotools-tutorial
+for details.
 
-Mark
+> +++ b/package/clex/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_CLEX
+> +	bool "clex filemanager"
+> +	default n
+
+You can remove this "default n", this is the default value.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
