@@ -1,39 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 May 2010 20:21:07 +0200
-Subject: [Buildroot] Graphing package dependencies
-In-Reply-To: <20100506101437.5e35c795@surf>
-References: <20100506101437.5e35c795@surf>
-Message-ID: <20100513202107.1b8bfcf3@surf>
+From: Bill Borton <security@conwin.com>
+Date: Thu, 13 May 2010 14:41:45 -0500
+Subject: [Buildroot] Kernel config for Atmel at91sam9g20ek dev board?
+Message-ID: <20100513144145.16fd98a5@snot.conwin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Around October 2009 I did a "git clone git://git.buildroot.net/buildroot"
+and with these settings built a kernel and jffs2 file system that runs
+great on my Atmel AT91SAM9G20EK dev board.
 
-On Thu, 6 May 2010 10:14:37 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Build options  --->
+    [*] Atmel Device Support  ---> 
+          [*] Board support for the Atmel AT91 range of microprocessors
+              AT91 device (Atmel AT91SAM9G20 Microprocessor)  --->
+              Development Board support (Atmel AT91SAM9G20EK)  --->
 
-> Following the question asked by Will yesterday, I just went ahead and
-> implement a small tool that generates a graph of dependencies for a
-> given package.
 
-I've slightly improved this script, and it is now capable of generating
-the dependency graph for a full Buildroot configuration, i.e taking
-into account all packages that have been selected.
 
-See http://free-electrons.com/~thomas/buildroot-full-dependencies.pdf
-for a fairly large example involving X.org and Gtk.
 
-As always, the code is available in
-http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=graph-dependencies.
-Besides the modifications in the script itself, the modifications in
-the rest of Buildroot are very small.
+Yesterday I did another git clone and configured these options:
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Target options  --->
+    [*] Atmel Device Support  ---> 
+          *** Atmel AT91 Specific Device Support ***
+          [*]   Board support for the Atmel AT91 range of microprocessors 
+                *** Selection criteria ***   
+          [*]     Allow all ARM targets  
+                *** Device Selection ***  
+          AT91 device (Atmel AT91SAM9G20 Microprocessor)  --->
+                *** Development Board Selection *** 
+          Development Board support (Atmel AT91SAM9G20EK)  ---> 
+
+When I did a make it errored out with this:
+
+
+  You should create a .config for your kernel
+  and install it as
+  target/device/Atmel/at91sam9g20ek/at91sam9g20ek-linux-2.6.33.3.config
+
+cp -dpf target/device/Atmel/at91sam9g20ek/at91sam9g20ek-linux-2.6.33.3.config /home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-12-10/buildroot/output/build/linux-2.6.33.3/.config
+cp: cannot stat `target/device/Atmel/at91sam9g20ek/at91sam9g20ek-linux-2.6.33.3.config': No such file or directory
+make: ***
+[/home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-12-10/buildroot/output/build/linux-2.6.33.3/.configured]
+Error 1
+
+
+
+It seems that the first time I used buildroot it found and used
+the correct kernel config for my dev board.  Now it does not.  It
+could be I missed something I did before, but I don't think so.  I
+will start looking into it, but any pointers you can give me would
+be much appreciated.
+
+Thanks,
+-Bill
