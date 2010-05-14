@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 12:11:29 +0200
-Subject: [Buildroot] [PATCH 0/6] [WIP] Add crostool-NG as backend to
- generate toolchain
-In-Reply-To: <20100509230759.16258.48956.stgit@roazhon.bzh.lan>
-References: <20100509230759.16258.48956.stgit@roazhon.bzh.lan>
-Message-ID: <20100514121129.01085a6a@surf>
+Date: Fri, 14 May 2010 12:13:07 +0200
+Subject: [Buildroot] [PATCH 1/5] grep: give hints to ./configure on
+ where gettext() is
+In-Reply-To: <871vdj3p2l.fsf@macbook.be.48ers.dk>
+References: <cover.1273527584.git.thomas.petazzoni@free-electrons.com>
+	<cover.1273527584.git.thomas.petazzoni@free-electrons.com>
+	<73fa57064639d2877081f70b1e176b1163cd4583.1273527584.git.thomas.petazzoni@free-electrons.com>
+	<871vdj3p2l.fsf@macbook.be.48ers.dk>
+Message-ID: <20100514121307.1b02ea59@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+On Tue, 11 May 2010 08:55:14 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-I did a quick review of your patches, and found nothing specific to
-say, it looks good to me.
+> That must mean some other package has loaded the cache with wrong info.
+> We should fix that instead.
 
-I would at least like patches 1 -> 5 to be merged early in the release
-cycle of 2010.08, because I have other changes to make on external
-toolchain support that will depend on these. So don't wait for the
-CT-NG support to be fully ready to send preliminary patches cleaning up
-things that you need for CT-NG integration.
-
-Thanks!
+You're right. I have a new stack of patches fixing this the proper way.
+Several other packages were affected by this issue.
 
 Thomas
 -- 
