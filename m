@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 13:37:27 +0200
-Subject: [Buildroot] [PATCH 4/8] libcgicc: fix package after autotools
-	infrastructure conversion
+Date: Fri, 14 May 2010 13:37:30 +0200
+Subject: [Buildroot] [PATCH 7/8] avahi: needs IPv6
 In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c85a2a63d281cb0d7018dd0bfb03db18e454a9cd.1273836748.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a535d4a03f344d8b31ffe0d95fa4d2147e0d3eb8.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch had an incorrect name, and the libtool patch was applied
-while it shouldn't, and the package wasn't autoreconfed while the
-patch changes some Makefile.am files.
+Otherwise the build fails with:
+
+socket.c: In function 'avahi_mdns_mcast_join_ipv6':
+socket.c:159: error: 'IPV6_DROP_MEMBERSHIP' undeclared (first use in this function)
+socket.c:159: error: (Each undeclared identifier is reported only once
+socket.c:159: error: for each function it appears in.)
+socket.c:161: error: 'IPV6_ADD_MEMBERSHIP' undeclared (first use in this function)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...cgicc-3.2.9-disable-documentation-option.patch} |    0
- package/libcgicc/libcgicc.mk                       |    2 ++
- 2 files changed, 2 insertions(+), 0 deletions(-)
- rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
+ package/avahi/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
-similarity index 100%
-rename from package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch
-rename to package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index c2f80b6..b281eed 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -7,6 +7,8 @@ LIBCGICC_VERSION=3.2.9
- LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
- LIBCGICC_INSTALL_STAGING=YES
-+LIBCGICC_LIBTOOL_PATCH=NO
-+LIBCGICC_AUTORECONF=YES
- 
- LIBCGICC_CONF_OPT = \
- 	--disable-demos \
+diff --git a/package/avahi/Config.in b/package/avahi/Config.in
+index 3386005..9ac1e55 100644
+--- a/package/avahi/Config.in
++++ b/package/avahi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_AVAHI
+ 	bool "avahi"
++	depends on BR2_INET_IPV6
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT
+ 	help
 -- 
 1.6.3.3
