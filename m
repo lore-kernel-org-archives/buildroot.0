@@ -1,11 +1,12 @@
-From: Peter Huewe <PeterHuewe@gmx.de>
-Date: Fri, 14 May 2010 14:12:47 +0200
-Subject: [Buildroot] [PATCH v2] package: Add support for pidgin/finch
-	instant messenger
-In-Reply-To: <20100514110321.370b99b9@surf>
-References: <201005140300.25098.PeterHuewe@gmx.de>
-	<20100514110321.370b99b9@surf>
-Message-ID: <201005141412.48421.PeterHuewe@gmx.de>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Fri, 14 May 2010 14:21:51 +0200
+Subject: [Buildroot] [PATCH v3] package: Add support for clex
+	filemanager (v 3.19)
+In-Reply-To: <20100514104822.0bda583a@surf>
+References: <201005130115.00927.PeterHuewe@gmx.de>
+	<201005140122.57084.PeterHuewe@gmx.de>
+	<20100514104822.0bda583a@surf>
+Message-ID: <201005141421.51373.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,163 +15,107 @@ To: buildroot@busybox.net
 
 From: Peter Huewe <peterhuewe@gmx.de>
 
-Pidgin is a free and open source instant multiprotocol (ICQ, IRC, Jabber
-...) messenger.
+Clex is a free and open source ncurses filemanager.
+(somewhat similar to a lightweight midnight commander)
 
-Finch is a ncurses based console version of pidgin.
+"It displays directory contents including the file status
+details and provides features like command history, filename
+insertion, or name completion in order to help users to create
+commands to be executed by the shell."
 
-For more information visit http://pidgin.im
+For more information visit http://www.clex.sk/about.html
 
-This patch adds support for Finch 2.7.0 to the buildroot buildsystem.
-Finch is compiled with support for ICQ, IRC and Jabber;
-However other protocols might be added to the script too / script can be
-converted to a more modular style.
+This patch adds version 3.19 to the buildroot buildsystem.
 
 Tested on and compiled with atmel ngw100_defconfig.
 
 Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
 ---
-Updated version due to the helpful remarks by thomas.
+Removed unnecessary Config options :)
 
- package/Config.in                                  |    1 +
- package/pidgin/Config.in                           |   10 ++++
- package/pidgin/README-ISSUES.txt                   |    9 +++
- .../pidgin-2.7.0-fix-build-without-gst.patch       |   22 ++++++++
- package/pidgin/pidgin.mk                           |   52 ++++++++++++++++++++
- 5 files changed, 94 insertions(+), 0 deletions(-)
- create mode 100644 package/pidgin/Config.in
- create mode 100644 package/pidgin/README-ISSUES.txt
- create mode 100644 package/pidgin/pidgin-2.7.0-fix-build-without-gst.patch
- create mode 100644 package/pidgin/pidgin.mk
+ package/Config.in                   |    1 +
+ package/clex/Config.in              |    6 ++++++
+ package/clex/clex-3.19-delkey.patch |   11 +++++++++++
+ package/clex/clex.mk                |   28 ++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/clex/Config.in
+ create mode 100644 package/clex/clex-3.19-delkey.patch
+ create mode 100644 package/clex/clex.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d3c4316..3749f5a 100644
+index 3749f5a..28715bc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -391,6 +391,7 @@ source "package/olsr/Config.in"
- source "package/openntpd/Config.in"
- source "package/openssh/Config.in"
- source "package/openvpn/Config.in"
-+source "package/pidgin/Config.in"
- source "package/portmap/Config.in"
- source "package/pppd/Config.in"
- source "package/radvd/Config.in"
-diff --git a/package/pidgin/Config.in b/package/pidgin/Config.in
+@@ -449,6 +449,7 @@ source "package/logrotate/Config.in"
+ source "package/screen/Config.in"
+ source "package/sudo/Config.in"
+ source "package/which/Config.in"
++source "package/clex/Config.in"
+ endmenu
+ 
+ menu "System tools"
+diff --git a/package/clex/Config.in b/package/clex/Config.in
 new file mode 100644
-index 0000000..cc2f8ec
+index 0000000..6d94746
 --- /dev/null
-+++ b/package/pidgin/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PIDGIN
-+	bool "pidgin/finch"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
++++ b/package/clex/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CLEX
++	bool "clex filemanager"
++	select BR2_PACKAGE_NCURSES
 +	help
-+		Pidgin is a multi-protocol Instant Messaging client that allows you to use all of your IM accounts at once.
-+		Finch is the ncurses based version of pidgin.
-+		This builds only the ncurses based client! with support for jabber (works), irc(works) and icq/aim (broken)
-+		http://pidgin.im/
-+
-diff --git a/package/pidgin/README-ISSUES.txt b/package/pidgin/README-ISSUES.txt
++		Ncurses file manager with a full-screen user interface
++		http://www.clex.sk/
+diff --git a/package/clex/clex-3.19-delkey.patch b/package/clex/clex-3.19-delkey.patch
 new file mode 100644
-index 0000000..2b33ec9
+index 0000000..ccda3d7
 --- /dev/null
-+++ b/package/pidgin/README-ISSUES.txt
-@@ -0,0 +1,9 @@
-+ISSUES:
-+- TERM has to be set to xterm  -> TERM=xterm
-+	(this is a little problem if I access the board via rs232 with kermit)
-+
-+TODOs:
-+- Make buildscript more modular -> one should be able to select which
-+  protocols shall be built
-+
-+Created 20100514 by Peter Huewe (peterhuewe at gmx.de)
-diff --git a/package/pidgin/pidgin-2.7.0-fix-build-without-gst.patch b/package/pidgin/pidgin-2.7.0-fix-build-without-gst.patch
++++ b/package/clex/clex-3.19-delkey.patch
+@@ -0,0 +1,11 @@
++--- clex-3.19/src/inout.c.orig	2010-05-14 01:06:44.000000000 +0200
+++++ clex-3.19/src/inout.c	2010-05-14 01:10:46.000000000 +0200
++@@ -301,6 +301,8 @@ kbd_getraw(void)
++ 			continue;
++ 		}
++ #endif
+++		if (key == 0177) /* my term uses this key for backspace DEL in ascii */
+++			key=CH_CTRL('H');
++ 		return key;
++ 	}
++ }
+diff --git a/package/clex/clex.mk b/package/clex/clex.mk
 new file mode 100644
-index 0000000..feb380d
+index 0000000..a03d15c
 --- /dev/null
-+++ b/package/pidgin/pidgin-2.7.0-fix-build-without-gst.patch
-@@ -0,0 +1,22 @@
-+See http://developer.pidgin.im/ticket/11850 for details.
-+
-+Author: Polynomial-C
-+---
-+--- pidgin-2.7.0/libpurple/media/backend-fs2.h
-++++ pidgin-2.7.0/libpurple/media/backend-fs2.h
-+@@ -55,6 +55,7 @@
-+  */
-+ GType purple_media_backend_fs2_get_type(void);
-+ 
-++#ifdef USE_GSTREAMER
-+ /*
-+  * Temporary function in order to be able to test while
-+  * integrating with PurpleMedia
-+@@ -71,6 +72,7 @@
-+ void purple_media_backend_fs2_set_output_volume(PurpleMediaBackendFs2 *self,
-+ 		const gchar *sess_id, const gchar *who, double level);
-+ /* end tmp */
-++#endif /* USE_GSTREAMER */
-+ 
-+ G_END_DECLS
-+ 
-diff --git a/package/pidgin/pidgin.mk b/package/pidgin/pidgin.mk
-new file mode 100644
-index 0000000..dcb70b1
---- /dev/null
-+++ b/package/pidgin/pidgin.mk
-@@ -0,0 +1,52 @@
++++ b/package/clex/clex.mk
+@@ -0,0 +1,28 @@
 +#############################################################
 +#
-+# pidgin/finch
++# clex filemanager
 +#
-+# "Pidgin is an easy to use and free chat client used by millions. 
-+# Connect to ICQ, IRC, Jabber and more chat networks all at once."
 +#
-+# Finch is the ncurses based console version of this pidgin, 
-+# which is provided by this package
-+# http://pidgin.im
++# CLEX (pronounced KLEKS) is a file manager with a full-screen
++# user interface. It displays directory contents including the
++# file status details and provides features like command history,
++# filename insertion, or name completion in order to help users
++# to create commands to be executed by the shell.
 +#
-+# Buildroot Script by Peter Huewe <peterhuewe -@- gmx.de>
++# CLEX is a versatile tool for system administrators and all
++# users that utilize the enormous power of the command line.
++# Its unique one-panel user interface enhances productivity
++# and lessens the probability of mistake. There are no
++# built-in commands, CLEX is an add-on to your favorite shell.
++#
++# CLEX is free software released under the terms of GNU
++# General Public License. It is written in C language which
++# makes it easily portable to various Linux and UNIX systems.
++#
++#  Buildroot Script by Peter Huewe <peterhuewe@gmx.de>
++#
 +#############################################################
-+PIDGIN_VERSION = 2.7.0
-+PIDGIN_SOURCE = pidgin-$(PIDGIN_VERSION).tar.bz2
-+PIDGIN_CONF_ENV = ac_cv_path_pythonpath=''
-+PIDGIN_CONF_OPT= --disable-gtkui \
-+                --enable-consoleui \
-+                --disable-screensaver \
-+                --disable-sm \
-+                --disable-startup-notification \
-+                --disable-gtkspell \
-+                --disable-gestures   \
-+                --disable-schemas-install \
-+                --disable-gstreamer \
-+                --disable-gstreamer-interfaces  \
-+                --disable-farsight \
-+                --disable-vv \
-+                --disable-idn \
-+                --disable-meanwhile \
-+                --disable-avahi \
-+                --disable-fortify \
-+                --disable-dbus  \
-+                --disable-nm  \
-+                --disable-mono \
-+                --disable-perl \
-+                --enable-gnutls=no \
-+                --enable-nss=no \
-+                --disable-tcl \
-+                --disable-tk \
-+                --disable-pixmaps-install \
-+                --enable-nls \
-+                --disable-doxygen \
-+                --disable-dot \
-+                --without-x \
-+                --with-static-prpls=oscar,jabber,irc \
-+                --without-python \
-+                --disable-plugins \
-+                --disable-debug \
-+
-+PIDGIN_DEPENDENCIES = gettext libintl libglib2
-+$(eval $(call AUTOTARGETS,package,pidgin))
++CLEX_VERSION:=3.19
++CLEX_SITE:=http://www.clex.sk/download/
++CLEX_DEPENDENCIES = ncurses
++$(eval $(call AUTOTARGETS,package,clex))
 -- 
 1.6.4.4
