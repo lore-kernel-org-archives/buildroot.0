@@ -1,54 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 13:37:31 +0200
-Subject: [Buildroot] [PATCH 8/8] external toolchain: check
-	BR2_INSTALL_LIBSTDCPP
+Date: Fri, 14 May 2010 13:37:27 +0200
+Subject: [Buildroot] [PATCH 4/8] libcgicc: fix package after autotools
+	infrastructure conversion
 In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5e25bc482134bee62e3cc9d55af694aaa977d5b5.1273836748.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c85a2a63d281cb0d7018dd0bfb03db18e454a9cd.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Verify that the value of BR2_INSTALL_LIBSTDCPP set by the user in the
-Buildroot configuration really matches the external toolchain
-capabilities by checking that a C++ cross-compiler is available.
+The patch had an incorrect name, and the libtool patch was applied
+while it shouldn't, and the package wasn't autoreconfed while the
+patch changes some Makefile.am files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ ...cgicc-3.2.9-disable-documentation-option.patch} |    0
+ package/libcgicc/libcgicc.mk                       |    2 ++
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+ rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 2c2562c..bb4809c 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -232,6 +232,15 @@ check_arm_abi = \
- 	fi ; \
+diff --git a/package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+similarity index 100%
+rename from package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch
+rename to package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index c2f80b6..b281eed 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -7,6 +7,8 @@ LIBCGICC_VERSION=3.2.9
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_INSTALL_STAGING=YES
++LIBCGICC_LIBTOOL_PATCH=NO
++LIBCGICC_AUTORECONF=YES
  
- #
-+# Check that the external toolchain supports C++
-+#
-+check_cplusplus = \
-+	if ! test -x $(TARGET_CXX) ; then \
-+		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi ; \
-+
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- check_cross_compiler_exists = \
-@@ -288,6 +297,9 @@ endif
- ifeq ($(BR2_arm),y)
- 	$(Q)$(call check_arm_abi)
- endif
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+	$(Q)$(call check_cplusplus)
-+endif
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- 	$(Q)$(call check_uclibc,$(SYSROOT_DIR))
- else
+ LIBCGICC_CONF_OPT = \
+ 	--disable-demos \
 -- 
 1.6.3.3
