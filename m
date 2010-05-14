@@ -1,55 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 13:37:24 +0200
-Subject: [Buildroot] [PATCH 1/8] Add a BR2_NEEDS_GETTEXT option
-In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <332ed1e3ae5fa11372d522c9c0d03cc01475866a.1273836748.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 May 2010 13:37:23 +0200
+Subject: [Buildroot] [pull request] Pull request for branch 2010-05-14-fixes
+Message-ID: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using an external toolchain that uses the glibc or eglibc C
-libraries, compiling a separate gettext and libintl is not needed and
-is even a source of confusion, causing build failures. These build
-failures are due to the fact that when libintl is compiled, it
-replaces the C library libintl.h by its own, which does #define
-gettext libintl_gettext. Then, when packages want to use gettext,
-autoconf realize that gettext is available in the C library and
-therefore do not add -lintl to the LDFLAGS, causing the build failure
-because the program has been compiled to use libintl_gettext but this
-function is not available.
+Hello,
 
-Therefore, we should use gettext if a uClibc internal toolchain or a
-uClibc external toolchain. If an external glibc toolchain is used,
-gettext shouldn't be used.
+Here are a few fixes for Buildroot. The two first patches are more
+invasive than usual fixes, but they are needed to make glibc external
+toolchains work properly with packages relying on gettext. The
+proposed solution replaces the ugly "hack" submitted to fix grep a few
+days ago.
 
-In order to implement that, we introduce the BR2_NEEDS_GETTEXT option,
-which is hidden to the user, and whose value is computed automatically
-from the rest of the configuration.
+I have tested these changes by compiling a Buildroot configuration
+with busybox ltrace flex libcgicc avahi gmpc grep hal libglib2 libidn
+libsoup make libmpd php php_ext_gettext psmisc util-linux (packages
+affected by the changes), with the four following toolchains:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/Config.in.2 |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ * External ARM glibc CodeSourcery toolchain
 
-diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
-index f04f18a..1f49e00 100644
---- a/toolchain/Config.in.2
-+++ b/toolchain/Config.in.2
-@@ -56,6 +56,12 @@ config BR2_ENABLE_LOCALE_WHITELIST
- 	  will be available on the target - That purely depends on the
- 	  support for that locale in the selected packages.
- 
-+config BR2_NEEDS_GETTEXT
-+	bool
-+	default y if BR2_TOOLCHAIN_BUILDROOT
-+	default y if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	default n if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+
- config BR2_USE_WCHAR
- 	bool "Enable WCHAR support"
- 	help
+ * External ARM Buildroot uClibc no-locale toolchain
+
+ * External ARM Crosstool-NG eglibc toolchain
+
+ * Internal ARM Buildroot uClibc locale toolchain
+
+Thomas
+
+The following changes since commit 6d1ab151cb4a14a6ca29e692de26fefd2f453d0a:
+  Peter Korsgaard (1):
+        update for 2010.05-rc2
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot 2010-05-14-fixes
+
+Thomas Petazzoni (8):
+      Add a BR2_NEEDS_GETTEXT option
+      Make all package using gettext rely on BR2_NEEDS_GETTEXT
+      libcap: fix build failure
+      libcgicc: fix package after autotools infrastructure conversion
+      ltrace: fix build failure
+      gettext: make only available if BR2_NEEDS_GETTEXT is set
+      avahi: needs IPv6
+      external toolchain: check BR2_INSTALL_LIBSTDCPP
+
+ package/avahi/Config.in                            |    5 +++--
+ package/avahi/avahi.mk                             |    2 +-
+ package/gettext/Config.in                          |    2 ++
+ package/gmpc/Config.in                             |    4 ++--
+ package/gmpc/gmpc.mk                               |    3 ++-
+ package/grep/Config.in                             |    4 ++--
+ package/grep/grep.mk                               |    2 +-
+ package/hal/Config.in                              |    4 ++--
+ package/hal/hal.mk                                 |    2 +-
+ package/libcap/libcap.mk                           |    4 ++--
+ ...cgicc-3.2.9-disable-documentation-option.patch} |    0
+ package/libcgicc/libcgicc.mk                       |    2 ++
+ package/libglib2/Config.in                         |    4 ++--
+ package/libglib2/libglib2.mk                       |    2 +-
+ package/libidn/libidn.mk                           |    2 +-
+ package/libsoup/libsoup.mk                         |    2 +-
+ package/ltrace/ltrace.mk                           |    3 +--
+ package/make/Config.in                             |    4 ++--
+ package/make/make.mk                               |    2 +-
+ package/multimedia/libmpd/Config.in                |    2 --
+ package/pango/pango.mk                             |    2 +-
+ package/php/Config.ext                             |    2 +-
+ package/php/php.mk                                 |    2 +-
+ package/psmisc/Config.in                           |    4 ++--
+ package/psmisc/psmisc.mk                           |    8 +-------
+ package/sshfs/Config.in                            |    4 ++--
+ package/sshfs/sshfs.mk                             |    2 +-
+ package/util-linux/Config.in                       |    4 ++--
+ package/util-linux/util-linux.mk                   |    4 ++--
+ toolchain/Config.in.2                              |    6 ++++++
+ toolchain/external-toolchain/ext-tool.mk           |   12 ++++++++++++
+ 31 files changed, 60 insertions(+), 45 deletions(-)
+ rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
+
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
