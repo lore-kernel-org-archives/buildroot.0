@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 13:37:28 +0200
-Subject: [Buildroot] [PATCH 5/8] ltrace: fix build failure
+Date: Fri, 14 May 2010 13:37:29 +0200
+Subject: [Buildroot] [PATCH 6/8] gettext: make only available if
+	BR2_NEEDS_GETTEXT is set
 In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0878af525699db6c1298ecb340f7ffdd95541045.1273836748.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b2be1a16d4fbafddbd88fb4352fa31abb6ec2a6e.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltrace failed to build because of missing arguments to gcc to find the
-header files. This is due to the fact that the existing ltrace.mk was
-setting CC and LD at build time to incorrect values. Keeping the
-values set at configure time is just the right thing to do.
+This allows to make sure that an user, or a randpackageconfig, will
+not select the gettext or libintl package when using an external
+toolchain based on glibc/eglibc.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltrace/ltrace.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/gettext/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index c99f223..4a6811d 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -54,8 +54,7 @@ $(LTRACE_DIR)/.configured: $(LTRACE_DIR)/.patched
- 	touch $@
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index bd5950c..c6792ac 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_GETTEXT
+ 	bool "gettext"
++	depends on BR2_NEEDS_GETTEXT
+ 	help
+ 	  The GNU `gettext' utilities are a set of tools that provide a
+ 	  framework to help other GNU packages produce multi-lingual
+@@ -21,6 +22,7 @@ config BR2_PACKAGE_GETTEXT_STATIC
  
- $(LTRACE_DIR)/$(LTRACE_BINARY): $(LTRACE_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(LTRACE_ARCH) \
--		-C $(LTRACE_DIR)
-+	$(MAKE) ARCH=$(LTRACE_ARCH) -C $(LTRACE_DIR)
- 
- $(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
- 	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
+ config BR2_PACKAGE_LIBINTL
+ 	bool "libintl"
++	depends on BR2_NEEDS_GETTEXT
+ 	help
+ 	  Selecting this package installs all of gettext in the staging
+ 	  directory and the shared library for it's use in the target.
 -- 
 1.6.3.3
