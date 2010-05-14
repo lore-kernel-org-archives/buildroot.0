@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 11:03:21 +0200
-Subject: [Buildroot] package: Add support for pidgin/finch instant
- messenger
-In-Reply-To: <201005140300.25098.PeterHuewe@gmx.de>
-References: <201005140300.25098.PeterHuewe@gmx.de>
-Message-ID: <20100514110321.370b99b9@surf>
+Date: Fri, 14 May 2010 12:11:29 +0200
+Subject: [Buildroot] [PATCH 0/6] [WIP] Add crostool-NG as backend to
+ generate toolchain
+In-Reply-To: <20100509230759.16258.48956.stgit@roazhon.bzh.lan>
+References: <20100509230759.16258.48956.stgit@roazhon.bzh.lan>
+Message-ID: <20100514121129.01085a6a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 May 2010 03:00:24 +0200
-Peter Huewe <PeterHuewe@gmx.de> wrote:
+Hello Yann,
 
-> +                $(DISABLE_NLS) \
-> +                $(DISABLE_LARGEFILE) \
+I did a quick review of your patches, and found nothing specific to
+say, it looks good to me.
 
-Not needed.
-
-> +PIDGIN_DEPENDENCIES = uclibc gettext libintl libglib2
-
-You can remove "uclibc" here, it is not needed.
+I would at least like patches 1 -> 5 to be merged early in the release
+cycle of 2010.08, because I have other changes to make on external
+toolchain support that will depend on these. So don't wait for the
+CT-NG support to be fully ready to send preliminary patches cleaning up
+things that you need for CT-NG integration.
 
 Thanks!
 
