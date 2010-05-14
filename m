@@ -1,45 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 May 2010 13:37:26 +0200
-Subject: [Buildroot] [PATCH 3/8] libcap: fix build failure
+Date: Fri, 14 May 2010 13:37:28 +0200
+Subject: [Buildroot] [PATCH 5/8] ltrace: fix build failure
 In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e9598edb22c53d1463e61c2a6c3427ca7273d908.1273836748.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0878af525699db6c1298ecb340f7ffdd95541045.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On a x86-64 host, libcap tried to install things in
-$(STAGING_DIR)/lib64 and $(TARGET_DIR)/lib64. Therefore, pass lib= and
-prefix=, as required by the strange build system used by libcap.
+ltrace failed to build because of missing arguments to gcc to find the
+header files. This is due to the fact that the existing ltrace.mk was
+setting CC and LD at build time to incorrect values. Keeping the
+values set at configure time is just the right thing to do.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcap/libcap.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/ltrace/ltrace.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 3ea5e51..301d1b1 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -8,7 +8,7 @@ define LIBCAP_BUILD_CMDS
- endef
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index c99f223..4a6811d 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -54,8 +54,7 @@ $(LTRACE_DIR)/.configured: $(LTRACE_DIR)/.patched
+ 	touch $@
  
- define LIBCAP_INSTALL_STAGING_CMDS
-- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) install
-+ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
- endef
+ $(LTRACE_DIR)/$(LTRACE_BINARY): $(LTRACE_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(LTRACE_ARCH) \
+-		-C $(LTRACE_DIR)
++	$(MAKE) ARCH=$(LTRACE_ARCH) -C $(LTRACE_DIR)
  
- define LIBCAP_INSTALL_TARGET_CMDS
-@@ -20,7 +20,7 @@ define HOST_LIBCAP_BUILD_CMDS
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
-- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) install
-+ $(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) prefix=/usr lib=lib install
- endef
- 
- $(eval $(call GENTARGETS,package,libcap))
+ $(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
+ 	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
 -- 
 1.6.3.3
