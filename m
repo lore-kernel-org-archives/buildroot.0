@@ -1,48 +1,55 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 14 May 2010 12:40:49 +0200
-Subject: [Buildroot] Graphing package dependencies
-In-Reply-To: <20100513202107.1b8bfcf3@surf>
-References: <20100506101437.5e35c795@surf> <20100513202107.1b8bfcf3@surf>
-Message-ID: <AANLkTiktiF_SbHSUbTcY86Rtdjh9c81Yos87WZex1BjL@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 14 May 2010 13:37:24 +0200
+Subject: [Buildroot] [PATCH 1/8] Add a BR2_NEEDS_GETTEXT option
+In-Reply-To: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <332ed1e3ae5fa11372d522c9c0d03cc01475866a.1273836748.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-\o/ Wunderbar !
+When using an external toolchain that uses the glibc or eglibc C
+libraries, compiling a separate gettext and libintl is not needed and
+is even a source of confusion, causing build failures. These build
+failures are due to the fact that when libintl is compiled, it
+replaces the C library libintl.h by its own, which does #define
+gettext libintl_gettext. Then, when packages want to use gettext,
+autoconf realize that gettext is available in the C library and
+therefore do not add -lintl to the LDFLAGS, causing the build failure
+because the program has been compiled to use libintl_gettext but this
+function is not available.
 
-On Thu, May 13, 2010 at 8:21 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 6 May 2010 10:14:37 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->
->> Following the question asked by Will yesterday, I just went ahead and
->> implement a small tool that generates a graph of dependencies for a
->> given package.
->
-> I've slightly improved this script, and it is now capable of generating
-> the dependency graph for a full Buildroot configuration, i.e taking
-> into account all packages that have been selected.
->
-> See http://free-electrons.com/~thomas/buildroot-full-dependencies.pdf
-> for a fairly large example involving X.org and Gtk.
->
-> As always, the code is available in
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=graph-dependencies.
-> Besides the modifications in the script itself, the modifications in
-> the rest of Buildroot are very small.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Therefore, we should use gettext if a uClibc internal toolchain or a
+uClibc external toolchain. If an external glibc toolchain is used,
+gettext shouldn't be used.
+
+In order to implement that, we introduce the BR2_NEEDS_GETTEXT option,
+which is hidden to the user, and whose value is computed automatically
+from the rest of the configuration.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Config.in.2 |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index f04f18a..1f49e00 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -56,6 +56,12 @@ config BR2_ENABLE_LOCALE_WHITELIST
+ 	  will be available on the target - That purely depends on the
+ 	  support for that locale in the selected packages.
+ 
++config BR2_NEEDS_GETTEXT
++	bool
++	default y if BR2_TOOLCHAIN_BUILDROOT
++	default y if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	default n if BR2_TOOLCHAIN_EXTERNAL_GLIBC
++
+ config BR2_USE_WCHAR
+ 	bool "Enable WCHAR support"
+ 	help
+-- 
+1.6.3.3
