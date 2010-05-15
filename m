@@ -1,95 +1,104 @@
-From: Marcel <korgull@home.nl>
-Date: Sat, 15 May 2010 19:53:16 +0200
-Subject: [Buildroot] endian issue
-In-Reply-To: <hsmj3t$2rc$1@dough.gmane.org>
-References: <201005151547.02656.korgull@home.nl>
-	<201005151726.58323.korgull@home.nl> <hsmj3t$2rc$1@dough.gmane.org>
-Message-ID: <201005151953.16770.korgull@home.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 May 2010 01:15:31 +0200
+Subject: [Buildroot] [PATCH 06/12] pango: run pango-querymodules on the
+	target instead of on the host
+In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <af7569b2385c4ae2761c8caee5608e59a1a0ecf1.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 15 May 2010 06:45:50 pm Grant Edwards wrote:
-> On 2010-05-15, Marcel <korgull@home.nl> wrote:
-> > If I wish to do that, how do I detect the endianness of a sytem
-> 
-> For user space:
-> 
->   /usr/include/endian.h
-> 
-> For kernel code:
-> 
->  /usr/src/linux/include/linux/byteorder.h
-> 
-> > and do I need to reformat my data in my drivers for this?
-> 
-> That's up to you to decide.
-> 
-> Based on your original posting, I was under the impression you needed
-> to do calculations on your data on the 9g45. If you need to be able to
-> do calculations on your data on the 9g45, then that data has to be
-> little-endian.
-> 
-> If you need to do calculations on big-endian input data and generate a
-> big-endian output stream, and the 9g45 doesn't have the throughput to
-> do the byte-swapping, then you probably need to choose a different
-> (probably big-endian) part.  Many parts that are aimed more squarely
-> at network stuff are big-endian. Perhaps one of the Intel IXP network
-> processors (but not the PXA parts) or Motorola PPC chips [you can
-> check with your local distributor to find out the nom du jour for
-> company/product-line].
-> 
-> If the peripheral produces big-endian data, you don't need to do any
-> computations with that data, and you want to ship out big-endian data,
-> then, no you don't have a problem.  Just make sure that you put in
-> plenty of warning comments so that later when somebody does decide to
-> add some computations on the 9g45 they have an easier time figuring
-> out why it doesn't work.
-> 
-> Better yet, since wise maintainers generally ignore comments, you
-> could use an opaque data type for the data since it's just a blob of
-> bytes and not a numeric value.  A structure containing a single field
-> that's an array of 4 bytes should make a good opaque 32-bit type. That
-> way whoever has to maintain your code won't fall into the trap you'd be
-> setting if you declare something as a numeric type when it really isn't.
-> 
-> > If so, isn't that a pure waste of cpu cycles for the sake of reusable
-> > code?
-> 
-> If you didn't want to do calculations on data on the 9g45, what
-> exactly was the problem you were asking about in your OP?
-> 
-> > If I can do this without any speed sacrifice than I will do it, if
-> > not....than it's simply not an option for this system.
-> 
-> Sorry, I have no way of knowing what your requirements are nor of
-> knowing the cost of producing little-endian data in your driver.
-> 
-> Perhaps you can fix the board layout to correctly connect whatever
-> peripheral is providing big-endian data?  Then you'd only have to do
-> the byte-swapping once: after you've done the calculations on the 9g45
-> and before you ship it out via Ethernet or USB.
+We needed to build pango for the host in order to compile
+pango-querymodules for the host, which was used to produce
+/etc/pango/pango.modules. Unfortunately:
 
-Well, I need to do quite a lot of calculation so I decided it's wise to make 
-my driver output the data in little-endian format, than perform the 
-calculations and at the very end convert if to big endian before moving it out 
-via ethernet or USB.
-My calculations involve quite a lot of matrix multiplying in floating point so 
-conversions in there wouldn't be nice either. So, the only good choice would 
-be to output the data from my driver in little-endian format.
+ * This produces an incorrect /etc/pango/pango.modules (no modules
+   detected in my case), probably because the host pango-querymodules
+   was looking at host pango modules
 
-There's no cost of cycles in my driver whether I output little or big endian 
-data. The data comes in two bytes from a 16bit ADC and can be stored in any 
-order in my array. I basically read a stream from this ADC. Having both big 
-and little supported in the driver may cost some overhead which I don't  want.
+ * This requires to build pango for the host, which requires to build
+   cairo for the host, which requires to build X11 for the host.
 
-However since this driver is also used on another platform I will use the 
-suggested methods from the other posts to make the driver independent of the 
-host endian format and try to reduce the overhead to a minimum.
+To make things work and remove the dependency between pango and
+host-pango, we introduce a S25pango script that creates
+/etc/pango/pango.modules on startup if it doesn't exist, just as we do
+with libgtk2 for /etc/gtk-2.0/gdk-pixbuf.loaders.
 
-Thanks for all the great replies. 
+Since host-pango is no longer needed, we remove all definitions
+related to it.
 
-Best regards,
-Marcel
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pango/S25pango |   20 ++++++++++++++++++++
+ package/pango/pango.mk |   18 ++----------------
+ 2 files changed, 22 insertions(+), 16 deletions(-)
+ create mode 100644 package/pango/S25pango
+
+diff --git a/package/pango/S25pango b/package/pango/S25pango
+new file mode 100644
+index 0000000..9af9307
+--- /dev/null
++++ b/package/pango/S25pango
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# run pango-querymodules if needed
++
++FILE=/etc/pango/pango.modules
++
++case "$1" in
++     start|"")
++	if [ ! -f $FILE ] ; then
++	   mkdir -p /etc/pango
++	   /usr/bin/pango-querymodules > "$FILE"
++	fi
++	;;
++    stop)
++	;;
++    *)
++	echo "Usage: $0 {start|stop}" >&2
++	exit 1
++	;;
++esac
+\ No newline at end of file
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 812a4c8..c640045 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -40,16 +40,7 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ PANGO_CONF_OPT = --enable-shared --enable-static \
+ 		--enable-explicit-deps=no --disable-debug
+ 
+-HOST_PANGO_CONF_OPT = \
+-		--disable-static \
+-		$(if $(BR2_PACKAGE_XORG7),--with-x,--without-x) \
+-		--disable-debug \
+-
+-PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),gettext libintl) host-pkg-config host-pango libglib2 cairo
+-
+-HOST_PANGO_DEPENDENCIES = host-pkg-config host-cairo host-libglib2 host-autoconf host-automake
+-
+-HOST_PANGO_AUTORECONF = YES
++PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),gettext libintl) host-pkg-config libglib2 cairo
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+         PANGO_CONF_OPT += --with-x \
+@@ -61,12 +52,7 @@ else
+ endif
+ 
+ $(eval $(call AUTOTARGETS,package,pango))
+-$(eval $(call AUTOTARGETS,package,pango,host))
+ 
+ $(PANGO_HOOK_POST_INSTALL):
+-	mkdir -p $(TARGET_DIR)/etc/pango
+-	$(PANGO_HOST_BINARY) > $(TARGET_DIR)/etc/pango/pango.modules
+-	$(SED) 's~$(HOST_DIR)~~g' $(TARGET_DIR)/etc/pango/pango.modules
++	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
+ 	touch $@
+-
+-PANGO_HOST_BINARY:=$(HOST_DIR)/usr/bin/pango-querymodules
+-- 
+1.6.3.3
