@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:34 +0200
-Subject: [Buildroot] [PATCH 09/12] lvm2: do not override CC and similar
-	variables
+Date: Sun, 16 May 2010 01:15:35 +0200
+Subject: [Buildroot] [PATCH 10/12] uemacs: don't forget CFLAGS at link time
 In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c942391bf42f025ad15a7401e753d72a4b40d1b3.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <255c27cb8a01c5625d7e19fcd1b6b28ad6499ea2.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since lvm2 uses autoconf, there's no point in overriding CC and other
-variables at build time. This causes build breakage as CFLAGS aren't
-used at link time, therefore --sysroot lacks, which breaks the build
-with external toolchains.
+Without CFLAGS, the build breaks because --sysroot is missing at link
+time, and this option is absolutely mandatory for external toolchain
+builds.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.mk |    2 +-
+ package/uemacs/uemacs.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index bc6f458..2bd6b8b 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -74,7 +74,7 @@ $(LVM2_DIR)/.configured: $(LVM2_DIR)/.unpacked
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index 6e2f4c4..539ad51 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -23,7 +23,7 @@ $(UEMACS_DIR)/.unpacked: $(DL_DIR)/$(UEMACS_SOURCE)
  
+ $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
+ 	$(MAKE) -C $(UEMACS_DIR) \
+-	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS=-lncurses
++	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS="$(TARGET_CFLAGS) -lncurses"
+ 	$(STRIPCMD) $(UEMACS_DIR)/$(UEMACS_BINARY)
  
- $(LVM2_DIR)/.built: $(LVM2_DIR)/.configured
--	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
-+	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
- 	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
- 	# Fixup write permissions so that the files can be overwritten
- 	# several times in the $(TARGET_DIR)
+ $(TARGET_DIR)/$(UEMACS_TARGET_BINARY): $(UEMACS_DIR)/$(UEMACS_BINARY)
 -- 
 1.6.3.3
