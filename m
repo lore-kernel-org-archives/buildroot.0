@@ -1,74 +1,51 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sat, 15 May 2010 14:09:11 +0000 (UTC)
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 15 May 2010 16:19:42 +0200
 Subject: [Buildroot] endian issue
+In-Reply-To: <201005151547.02656.korgull@home.nl>
 References: <201005151547.02656.korgull@home.nl>
-Message-ID: <hsm9u7$759$1@dough.gmane.org>
+Message-ID: <1273933182.28330.87.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-05-15, Marcel <korgull@home.nl> wrote:
-
+Le samedi 15 mai 2010 ? 15:47 +0200, Marcel a ?crit :
+> Hi,
+> 
 > I'm using an Atmel sam9g45 using buildroot with linux 2.6.33.
->
-> I currently have most of my things working but run into an issue
-> which is endian related.
->
-> My driver outputs it's data in big-endian mode (ADC data).
-
-Oops. The 9g45 is a little-endian part.
-
-> This is fine with me.
-
-Apparently not, since you're complaining about how it breaks things.  ;)
-
-> I added a package to buildroot with my own software that talks to the
-> driver. This package than transfers the results either over ethernet,
-> usb or rs232. This all works great as long as I don't perform any
-> calculations in the package that I added.
-
-That's because your processor is running in little-endian mode.  Doing
-calculations on big-endian data using a little-endian part (or vice
-versa) doesn't work.
-
-> When I do so, all data will be messed up and I'm sure it's related to
-> endiannes.
-n
-Indeed it is.
-
-> I think my package is compiled in little-endian mode
-
-I would hope so, since you're running it on a little-endian part.
-
-> and I'm quite sure this is the issue.
-
-The issue is your driver.  Change your driver to return data in the
-format expected by your processor (that's little-endian in the case of
-the 9g45). Then use standard macros (hton(), htons(), htonl()) to
-convert data to "network order" before you ship it out via Ethernet or
-USB.
-
-[Don't ask me why Atmel chose little-endian when they designed the
-AT91 peripherals.  For anything with a network interface, big-endian
-makes a lot more sense to me.  But that debate has been going on for
-40 years...]
-
-> I did some byte swapping to proof it's the issue and this byte
+> 
+> I currently have most of my things working but run into an issue which is 
+> endian related.
+> 
+> My driver outputs it's data in big-endian mode (ADC data). This is fine with 
+> me.I added a package to buildroot with my own software that talks to the 
+> driver. This package than transfers the results either over ethernet, usb or 
+> rs232. This all works great as long as I don't perform any calculations in the 
+> package that I added. When I do so, all data will be messed up and I'm sure 
+> it's related to endiannes.
+> I think my package is compiled in little-endian mode and I'm quite sure this 
+> is the issue. I did some byte swapping to proof it's the issue and this byte 
 > swapping makes things fine. 
->
-> Is there any way to compile my package in big-endian mode from
-> buildroot ?
 
-Yes.
+The endianness configuration of your processor isn't something you can
+usually change 'on-the-fly'. It's usually set up early in the boot
+process.
+So you have to choose whether you want to compile all your system in big
+or little endian, you can select that from the buildroot architecture
+configuration (arm -> little, armeb -> big, for example).
 
-But doing so will result in object files that don't work.  In fact
-you won't even be able to link them.
-
+> 
+> Is there any way to compile my package in big-endian mode from buildroot ?
 > Or is there another way I should force this ?
+> 
 
-No, you shouldn't force this.  You should fix your driver.  Really.
+You can't select that for 1 package, it's for the whole system or
+nothing.
+Otherwise, the smartest approch would be to make endian detection (at
+compile time or at running time) to adapt your processing algorithm.
 
--- 
-Grant
+Regards,
+
+--
+Lionel Landwerlin
