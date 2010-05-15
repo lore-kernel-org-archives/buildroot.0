@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:27 +0200
-Subject: [Buildroot] [PATCH 02/12] lmbench: needs BR2_INET_RPC
+Date: Sun, 16 May 2010 01:15:32 +0200
+Subject: [Buildroot] [PATCH 07/12] cairo: remove host variant
 In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a5eec2fe8ef5dde4e21f9eede6a88bf66b794dfa.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6e038f07405babfad21230b6c46559b088201479.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package uses several pmap_*() functions in the C library, that
-are only available if the C library has RPC support.
+Since we no longer need to build pango on the host, cairo on the host
+is no longer needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lmbench/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/cairo/cairo.mk |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
-index 704b3ff..80d38f1 100644
---- a/package/lmbench/Config.in
-+++ b/package/lmbench/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_LMBENCH
- 	bool "lmbench"
-+	# Uses pmap_set, pmap__unset, pmap_getport, etc.
-+	depends on BR2_INET_RPC
- 	help
- 	  LMbench is a suite of simple, portable,
- 	  ANSI/C microbenchmarks for UNIX/POSIX.
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 0ca99aa..9b72ffa 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -79,8 +79,6 @@ else
+ 	CAIRO_CONF_OPT += --disable-svg
+ endif
+ 
+-HOST_CAIRO_DEPENDENCIES = host-pkg-config host-pixman host-fontconfig
+-
+ HOST_CAIRO_CONF_OPT = \
+ 		--enable-ps \
+ 		--enable-pdf \
+@@ -90,4 +88,3 @@ HOST_CAIRO_CONF_OPT = \
+ 		--disable-svg
+ 
+ $(eval $(call AUTOTARGETS,package,cairo))
+-$(eval $(call AUTOTARGETS,package,cairo,host))
 -- 
 1.6.3.3
