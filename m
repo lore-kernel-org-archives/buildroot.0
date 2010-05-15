@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:32 +0200
-Subject: [Buildroot] [PATCH 07/12] cairo: remove host variant
+Date: Sun, 16 May 2010 01:15:28 +0200
+Subject: [Buildroot] [PATCH 03/12] startup-notification: add dependency on
+	xlib_libX11
 In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6e038f07405babfad21230b6c46559b088201479.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dd5fff028052ac599e0ee382e5d6d89005125b30.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we no longer need to build pango on the host, cairo on the host
-is no longer needed.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/startup-notification/Config.in             |    2 ++
+ .../startup-notification/startup-notification.mk   |    1 +
+ 2 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 0ca99aa..9b72ffa 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -79,8 +79,6 @@ else
- 	CAIRO_CONF_OPT += --disable-svg
- endif
+diff --git a/package/startup-notification/Config.in b/package/startup-notification/Config.in
+index 23fdf74..277d300 100644
+--- a/package/startup-notification/Config.in
++++ b/package/startup-notification/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_STARTUP_NOTIFICATION
+ 	bool "startup-notification"
++	select BR2_PACKAGE_XLIB_LIBX11
++	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  Startup-notification is a library used to monitor application startup.
  
--HOST_CAIRO_DEPENDENCIES = host-pkg-config host-pixman host-fontconfig
--
- HOST_CAIRO_CONF_OPT = \
- 		--enable-ps \
- 		--enable-pdf \
-@@ -90,4 +88,3 @@ HOST_CAIRO_CONF_OPT = \
- 		--disable-svg
+diff --git a/package/startup-notification/startup-notification.mk b/package/startup-notification/startup-notification.mk
+index 62f067a..f70fcc1 100644
+--- a/package/startup-notification/startup-notification.mk
++++ b/package/startup-notification/startup-notification.mk
+@@ -9,6 +9,7 @@ STARTUP_NOTIFICATION_SITE = http://freedesktop.org/software/startup-notification
+ STARTUP_NOTIFICATION_AUTORECONF = NO
+ STARTUP_NOTIFICATION_INSTALL_STAGING = YES
+ STARTUP_NOTIFICATION_INSTALL_TARGET = YES
++STARTUP_NOTIFICATION = xlib_libX11
  
- $(eval $(call AUTOTARGETS,package,cairo))
--$(eval $(call AUTOTARGETS,package,cairo,host))
+ STARTUP_NOTIFICATION_CONF_ENV = lf_cv_sane_realloc=yes
+ 
 -- 
 1.6.3.3
