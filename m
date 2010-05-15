@@ -1,41 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:37 +0200
-Subject: [Buildroot] [PATCH 12/12] netsnmp: disable build with external
-	toolchain
-In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0b3a9a65f581c1cc9998e491dfd54cd5aa407448.1273965305.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 16 May 2010 01:15:25 +0200
+Subject: [Buildroot] [pull request] Pull request for branch 2010-05-15-fixes
+Message-ID: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a build problem with netsnmp on external toolchain that isn't
-easy to fix: libtool strips the --sysroot that we are passing it,
-which make the link step fail.
+The following changes since commit 5e25bc482134bee62e3cc9d55af694aaa977d5b5:
+  Thomas Petazzoni (1):
+        external toolchain: check BR2_INSTALL_LIBSTDCPP
 
-In preparation for the release, just make sure this package isn't
-visible to external toolchain users. Of course, on the long run, we
-should fix this.
+are available in the git repository at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/netsnmp/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+  git://git.busybox.net/~tpetazzoni/git/buildroot 2010-05-15-fixes
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index fd54eb4..91e8efb 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_NETSNMP
- 	bool "netsnmp"
-+	# Build with external toolchains is broken, libtool strips
-+	# --sysroot at link time
-+	depends on !BR2_TOOLCHAIN_EXTERNAL
- 	help
- 	  Suite of applications used to implement SNMP v1, SNMP v2c, and
- 	  SNMP v3 using both IPv4 and IPv6.
+Thomas Petazzoni (12):
+      iconv: disallow selection when BR2_ENABLE_LOCALE is enabled
+      lmbench: needs BR2_INET_RPC
+      startup-notification: add dependency on xlib_libX11
+      ntp: fix build failure
+      samba: only require libiconv if !BR2_ENABLE_LOCALE
+      pango: run pango-querymodules on the target instead of on the host
+      cairo: remove host variant
+      mutt: fix build and convert to autotools
+      lvm2: do not override CC and similar variables
+      uemacs: don't forget CFLAGS at link time
+      vpnc: pass CFLAGS at link time
+      netsnmp: disable build with external toolchain
+
+ package/cairo/cairo.mk                             |    3 -
+ package/libiconv/Config.in                         |    1 +
+ package/lmbench/Config.in                          |    2 +
+ package/lvm2/lvm2.mk                               |    2 +-
+ package/mutt/mutt-1.5.16-makedoc-hostcc.patch      |   32 ---------
+ package/mutt/mutt-1.5.17+20080114-nodoc.patch      |   21 ++++++
+ package/mutt/mutt.mk                               |   73 +++-----------------
+ package/netsnmp/Config.in                          |    3 +
+ package/ntp/ntp-4.2.4_p5-nano.patch                |   36 ++++++++++
+ package/pango/S25pango                             |   20 ++++++
+ package/pango/pango.mk                             |   18 +----
+ package/samba/Config.in                            |    2 +-
+ package/samba/samba.mk                             |    2 +-
+ package/startup-notification/Config.in             |    2 +
+ .../startup-notification/startup-notification.mk   |    1 +
+ package/uemacs/uemacs.mk                           |    2 +-
+ package/vpnc/vpnc.mk                               |    4 +-
+ 17 files changed, 105 insertions(+), 119 deletions(-)
+ delete mode 100644 package/mutt/mutt-1.5.16-makedoc-hostcc.patch
+ create mode 100644 package/mutt/mutt-1.5.17+20080114-nodoc.patch
+ create mode 100644 package/ntp/ntp-4.2.4_p5-nano.patch
+ create mode 100644 package/pango/S25pango
+
+Thanks,
 -- 
-1.6.3.3
+Thomas Petazzoni
