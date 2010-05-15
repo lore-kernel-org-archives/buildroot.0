@@ -1,46 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:30 +0200
-Subject: [Buildroot] [PATCH 05/12] samba: only require libiconv if
-	!BR2_ENABLE_LOCALE
+Date: Sun, 16 May 2010 01:15:27 +0200
+Subject: [Buildroot] [PATCH 02/12] lmbench: needs BR2_INET_RPC
 In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cce95d40fef424db5fc1d088c44fcdee0eb9335c.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a5eec2fe8ef5dde4e21f9eede6a88bf66b794dfa.1273965305.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This package uses several pmap_*() functions in the C library, that
+are only available if the C library has RPC support.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/Config.in |    2 +-
- package/samba/samba.mk  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lmbench/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 720ecd7..a7a0b34 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_SAMBA
- 	bool "samba"
--	select BR2_PACKAGE_LIBICONV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
+index 704b3ff..80d38f1 100644
+--- a/package/lmbench/Config.in
++++ b/package/lmbench/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LMBENCH
+ 	bool "lmbench"
++	# Uses pmap_set, pmap__unset, pmap_getport, etc.
++	depends on BR2_INET_RPC
  	help
- 	  Provides print services to all manner of SMB/CIFS clients,
- 	  including the numerous versions of Microsoft Windows
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 4115363..39968a9 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -16,7 +16,7 @@ SAMBA_INSTALL_TARGET = YES
- 
- 
- SAMBA_DEPENDENCIES = \
--	libiconv \
-+	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
- 	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
- 	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),readline) \
- 	$(if $(BR2_PACKAGE_SAMBA_AVAHI),avahi) \
+ 	  LMbench is a suite of simple, portable,
+ 	  ANSI/C microbenchmarks for UNIX/POSIX.
 -- 
 1.6.3.3
