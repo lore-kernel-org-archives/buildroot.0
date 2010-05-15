@@ -1,93 +1,76 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 15 May 2010 18:37:14 +0200
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sat, 15 May 2010 16:45:50 +0000 (UTC)
 Subject: [Buildroot] endian issue
-In-Reply-To: <201005151726.58323.korgull@home.nl>
 References: <201005151547.02656.korgull@home.nl>
 	<1273933182.28330.87.camel@coalu.atr> <hsmbug$d0p$1@dough.gmane.org>
 	<201005151726.58323.korgull@home.nl>
-Message-ID: <1273941434.28330.100.camel@coalu.atr>
+Message-ID: <hsmj3t$2rc$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 15 mai 2010 ? 17:26 +0200, Marcel a ?crit :
-> On Saturday 15 May 2010 04:43:29 pm Grant Edwards wrote:
-> > On 2010-05-15, Lionel Landwerlin <llandwerlin@gmail.com> wrote:
-> > > Le samedi 15 mai 2010 ?? 15:47 +0200, Marcel a ??crit :
-> > >> I'm using an Atmel sam9g45 using buildroot with linux 2.6.33.
-> > >> 
-> > >> I currently have most of my things working but run into an issue which
-> > >> is endian related.
-> > > 
-> > > The endianness configuration of your processor isn't something you
-> > > can usually change 'on-the-fly'. It's usually set up early in the
-> > > boot process.
-> > 
-> > While the endian configuration of the ARM9 core can be changed, the
-> > AT91 peripherals are little-endian.  In theory, he should be able to
-> > run the ARM9 core in big-endian mode, but a running uC core without
-> > any working peripherals is surprisingly useless.
-> > 
-> > > So you have to choose whether you want to compile all your system in
-> > > big or little endian, you can select that from the buildroot
-> > > architecture configuration (arm -> little, armeb -> big, for
-> > > example).
-> > 
-> > In this case, he has to choose little-endian.
-> 
-> That's very clear. 
-> 
-> > [I've never seen an ARM-based uController that had peripherals with
-> > configurable endianess -- are there any?]
-> > 
-> > >> Is there any way to compile my package in big-endian mode from
-> > >> buildroot? Or is there another way I should force this?
-> > > 
-> > > You can't select that for 1 package, it's for the whole system or
-> > > nothing. Otherwise, the smartest approch would be to make endian
-> > > detection (at compile time or at running time) to adapt your
-> > > processing algorithm.
-> > 
-> > Yep, the OP's should driver should return data in host-order.
-> > 
-> > Otherwise, he'll have to suffer the guilt of knowing that a few years
-> > from now some poor sod who inherits the code will have a stroke from
-> > the effort required to resist the urge to track down the OP and slap
-> > him silly.
-> 
-> If I wish to do that, how do I detect the endianness of a sytem and do I need 
-> to reformat my data in my drivers for this ? If so, isn't that a pure waste of 
-> cpu cycles for the sake of reusable code ?
-> If I can do this without any speed sacrifice than I will do it, if not....than 
-> it's simply not an option for this system.
-> 
-> Best regards,
-> Marcel
-> 
+On 2010-05-15, Marcel <korgull@home.nl> wrote:
 
-A basic example of detection (copy pasta from here
-http://www.allegro.cc/forums/print-thread/592785)
+> If I wish to do that, how do I detect the endianness of a sytem
 
-=>
+For user space:
 
-Uint32 Value32;
-Uint8 *VPtr = (Uint8 *)&Value32;
+  /usr/include/endian.h
 
-VPtr[0] = VPtr[1] = VPtr[2] = 0; VPtr[3] = 1;
+For kernel code:
 
-if(Value32 == 1)
-   printf("I'm big endian\n");
-else
-   printf("I'm little endian\n");
+ /usr/src/linux/include/linux/byteorder.h
 
-<=
+> and do I need to reformat my data in my drivers for this?
 
-Some packages make this detection within configure script using such
-code (which is problematic with cross compilation because you can't run
-target code on the host) and then use some #ifdef BIG_ENDIAN etc...
-Of course doing endian translation costs more than doing nothing.
+That's up to you to decide.
 
---
-Lionel Landwerlin
+Based on your original posting, I was under the impression you needed
+to do calculations on your data on the 9g45. If you need to be able to
+do calculations on your data on the 9g45, then that data has to be
+little-endian.
+
+If you need to do calculations on big-endian input data and generate a
+big-endian output stream, and the 9g45 doesn't have the throughput to
+do the byte-swapping, then you probably need to choose a different
+(probably big-endian) part.  Many parts that are aimed more squarely
+at network stuff are big-endian. Perhaps one of the Intel IXP network
+processors (but not the PXA parts) or Motorola PPC chips [you can
+check with your local distributor to find out the nom du jour for
+company/product-line].
+
+If the peripheral produces big-endian data, you don't need to do any
+computations with that data, and you want to ship out big-endian data,
+then, no you don't have a problem.  Just make sure that you put in
+plenty of warning comments so that later when somebody does decide to
+add some computations on the 9g45 they have an easier time figuring
+out why it doesn't work.
+
+Better yet, since wise maintainers generally ignore comments, you
+could use an opaque data type for the data since it's just a blob of
+bytes and not a numeric value.  A structure containing a single field
+that's an array of 4 bytes should make a good opaque 32-bit type. That
+way whoever has to maintain your code won't fall into the trap you'd be
+setting if you declare something as a numeric type when it really isn't.
+
+> If so, isn't that a pure waste of cpu cycles for the sake of reusable
+> code?
+
+If you didn't want to do calculations on data on the 9g45, what
+exactly was the problem you were asking about in your OP?
+
+> If I can do this without any speed sacrifice than I will do it, if
+> not....than it's simply not an option for this system.
+
+Sorry, I have no way of knowing what your requirements are nor of
+knowing the cost of producing little-endian data in your driver.
+
+Perhaps you can fix the board layout to correctly connect whatever
+peripheral is providing big-endian data?  Then you'd only have to do
+the byte-swapping once: after you've done the calculations on the 9g45
+and before you ship it out via Ethernet or USB.
+
+-- 
+Grant
