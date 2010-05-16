@@ -1,44 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 16 May 2010 01:15:36 +0200
-Subject: [Buildroot] [PATCH 11/12] vpnc: pass CFLAGS at link time
-In-Reply-To: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b0a06250a5d34ee31a9f6cffd890682cfcc1b539.1273965305.git.thomas.petazzoni@free-electrons.com>
+From: Jochen+busybox at Hayek.name <Jochen+busybox@Hayek.name>
+Date: Sun, 16 May 2010 12:24:52 +0200
+Subject: [Buildroot] FYI: Re: Conflicting types for getline
+In-Reply-To: <87ljjs5s2f.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Sat, 03 Oct 2009 19:02:32 +0200")
+References: <7085C89ACBD47E4B947F91A84B9EA9240C1CF914C3@EXCHANGE31.staff.main.ntu.edu.sg>
+	<7085C89ACBD47E4B947F91A84B9EA9240C1CF914C4@EXCHANGE31.staff.main.ntu.edu.sg>
+	<87ljjs5s2f.fsf@macbook.be.48ers.dk>
+Message-ID: <m3ocgg87pn.fsf_-_@HayekU.fritz.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-External toolchain builds absolutely require the --sysroot option to
-be passed at link time.
+>>>>> "PK" == Peter Korsgaard <jacmet-2zL2ArBv0bUdnm+yROfE0A@public.gmane.org> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vpnc/vpnc.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "TCWP" == Teng Chee Wan Philip <tcheewan-HU4z9rI8l8CLvajZxc+D7Q@public.gmane.org> writes:
 
-diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
-index 5d0f87a..c4f23fa 100644
---- a/package/vpnc/vpnc.mk
-+++ b/package/vpnc/vpnc.mk
-@@ -26,7 +26,7 @@ $(VPNC_BINARY): $(VPNC_DIR)/.unpacked
- 	rm -f $@
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) INCLUDE=$(STAGING_DIR)/usr/include \
- 		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error \
-+		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error LDFLAGS+="$(TARGET_CFLAGS)" \
- 		CC="$(TARGET_CC)" -C $(VPNC_DIR)
- 
- $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
-@@ -38,7 +38,7 @@ $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
- 		MANDIR=/usr/share/man \
- 		VERSION=$(VPNC_VERSION) \
- 		INCLUDE=$(STAGING_DIR)/usr/include \
--		LDFLAGS="-lgcrypt -lgpg-error" \
-+		LDFLAGS="-lgcrypt -lgpg-error $(TARGET_CFLAGS)" \
- 		-C $(VPNC_DIR) install
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(VPNC_TARGET_BINARY)
- 
--- 
-1.6.3.3
+    TCWP> Hi,
+    TCWP> I encountered an error running make for buildroot.  
+    TCWP> Any ideas?  
+    TCWP> Thanks in advance.
+
+    PK> That's a known problem 
+
+Oh, good to know ;-)
+
+    PK> when you try to use older Linux kernels on new distributions.
+
+    PK> Select a newer version (>2.6.28) for the Linux kernel headers
+    PK> and it should work.
+
+Well, Peter,
+I am facing the same problem as Teng Chee Wan Philip did then.
+And I am not really free in my choice regarding the kernel.
+
+My pretty brand new Internet router ("AVM FRITZ!Box 7390") is using a 2.6.19.2 Linux kernel,
+and I can't really rebuild the entire thing,
+as they only tell us, on what open source it's based,
+and they don't publish their extensions.
+
+    root at fritz.fonwlan.box(fb7390) # uname -a
+    Linux fritz.fonwlan.box 2.6.19.2 #4 Fri Mar 26 17:10:43 CET 2010 mips unknown
+
+    root at fritz.fonwlan.box(fb7390) # cat /proc/cpuinfo 
+    system type             : Ikanos Fusiv Core
+    processor               : 0
+    cpu model               : MIPS 24K V4.12
+    BogoMIPS                : 330.75
+    wait instruction        : yes
+    unaligned_instructions  : 2845982
+    microsecond timers      : yes
+    tlb_entries             : 64
+    extra interrupt vector  : yes
+    hardware watchpoint     : yes
+    ASEs implemented        : mips16 dsp
+    VCED exceptions         : not available
+    VCEI exceptions         : not available
+
+I want to be able to mount ext2 partitions on external disks,
+and not just vfat partitions,
+so I want to grab the ext2.ko from your build
+and "insmod" it in my devices kernel.
+
+
+They actually supply us with the kernel sources,
+they use for building their device,
+and I have no idea, whether they really changed it.
+Of course, I know how to do a "diff -r" on their kernel and the vanilla 2.6.19.2 ...
+
+So now with your software
+I actually also didn't find a way to tell it,
+how to use a custom kernel, that I already have on my disk.
+
+And "here" you are also telling us,
+there is a problem with buildroot regarding the kernel to be built resp.  how new it is.
+
+Well, whatever!
+Either I use your software, which so far seems to lack a few features resp. suffers from a few minor deficits,
+or I need to build a cross-compiler and then the kernel with that cross-compiler all by myself.
+
+
+Now in this light -- do you see any chance for me to get this job done?
+
+Be sure: your community would love you for this!
+
+Kind regards,
+Jochen
+
+P.S.
+I am a little in a hurry right now,
+and I hope you don't consider me curt.
+Thanks for your work on buildroot!!!
+Do you have an Amazon or whatever wishlist,
+so I can do something good for you?
