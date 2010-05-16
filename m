@@ -1,158 +1,89 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 16 May 2010 20:08:58 +0200
-Subject: [Buildroot] AVR32 support is broken since commit "toolchain:
-	add uClibc 0.9.31, mark 0.9.30.x as recent"
-In-Reply-To: <AANLkTil2Xm8jJ9AN8C2B7LLDK65GlPkoENsvFJPTuxdQ@mail.gmail.com>
-References: <AANLkTilfHmEU3NnpiaWdcYHffhNv7NI07fbNGpkhv3oH@mail.gmail.com>
-	<AANLkTil2Xm8jJ9AN8C2B7LLDK65GlPkoENsvFJPTuxdQ@mail.gmail.com>
-Message-ID: <AANLkTino7N5_kbUN8Rd4W6fn9850lA0r4-xbSYPT1JlZ@mail.gmail.com>
+From: Marcel <korgull@home.nl>
+Date: Sun, 16 May 2010 21:21:15 +0200
+Subject: [Buildroot] uClibc errors
+In-Reply-To: <201005161755.55994.korgull@home.nl>
+References: <201005161551.55321.korgull@home.nl>
+	<201005161755.55994.korgull@home.nl>
+Message-ID: <201005162121.15859.korgull@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2010/5/16 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> 2010/5/11 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> Hi all,
->>
->> It seems support for AVR32 is broken since commit
->> 266fa65afb20bf93b813d96421dce537a4dd2742 "toolchain: add uClibc 0.9.31, mark
->> 0.9.30.x as recent". Basically, the toolchain for AVR32 will not build. Steps
->> to reproduce:
->>
->> $ make atngw100_defconfig
->> $ make
->> [snip]
->> /home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/./gcc/xgcc
->> -shared-libgcc -B/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/./gcc
->> -nostdinc++ -L/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3/src
->> -L/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3/src/.libs
->> -B/usr/avr32-linux-uclibc/bin/ -B/usr/avr32-linux-uclibc/lib/ -isystem
->> /usr/avr32-linux-uclibc/include -isystem
->> /usr/avr32-linux-uclibc/sys-include
->> -I/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3/include/avr32-linux-uclibc
->> -I/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3/include
->> -I/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5/libstdc++-v3/libsupc++
->> -fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual
->> -fdiagnostics-show-location=once -ffunction-sections -fdata-sections
->> -g -Os -c ctype_members.cc ?-fPIC -DPIC -o .libs/ctype_members.o
->> ctype_members.cc: In constructor
->> 'std::ctype_byname<_CharT>::ctype_byname(const char*, size_t) [with
->> _CharT = char]':
->> ctype_members.cc:59: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> ctype_members.cc:60: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> ctype_members.cc:61: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> make[5]: *** [ctype_members.lo] Error 1
->> make[5]: *** Waiting for unfinished jobs....
->> numeric_members.cc: In member function 'void
->> std::numpunct<_CharT>::_M_initialize_numpunct(__uclibc_locale_struct*)
->> [with _CharT = wchar_t]':
->> numeric_members.cc:140: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> numeric_members.cc:141: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> make[5]: *** [numeric_members.lo] Error 1
->> monetary_members.cc: In member function 'void std::moneypunct<_CharT,
->> _Intl>::_M_initialize_moneypunct(__uclibc_locale_struct*, const char*)
->> [with _CharT = wchar_t, bool _Intl = true]':
->> monetary_members.cc:407: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> monetary_members.cc:408: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> monetary_members.cc: In member function 'void std::moneypunct<_CharT,
->> _Intl>::_M_initialize_moneypunct(__uclibc_locale_struct*, const char*)
->> [with _CharT = wchar_t, bool _Intl = false]':
->> monetary_members.cc:562: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> monetary_members.cc:563: error: invalid use of incomplete type 'struct
->> __uclibc_locale_struct'
->> /home/bjornfor/forks/buildroot/output/staging/usr/include/bits/uClibc_locale.h:85:
->> error: forward declaration of 'struct __uclibc_locale_struct'
->> make[5]: *** [monetary_members.lo] Error 1
->> make[5]: Leaving directory
->> `/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3/src'
->> make[4]: *** [all-recursive] Error 1
->> make[4]: Leaving directory
->> `/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3'
->> make[3]: *** [all] Error 2
->> make[3]: Leaving directory
->> `/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/avr32-linux-uclibc/libstdc++-v3'
->> make[2]: *** [all-target-libstdc++-v3] Error 2
->> make[2]: Leaving directory
->> `/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final'
->> make[1]: *** [all] Error 2
->> make[1]: Leaving directory
->> `/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final'
->> make: *** [/home/bjornfor/forks/buildroot/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/.compiled]
->> Error 2
->>
->>
->> Are there any toolchain guru's that can fix this issue?
->>
->> (While running git bisect to find the bad commit I also had some
->> builds error out during u-boot build. But that is another thread...)
->
-> It turned out to be an easy fix for the toolchain part; just navigate to
-> Toolchain ---> uClibc C library version and select 0.9.30.x instead of the new
-> 0.9.31.x.
->
-> However, there has been a regression in U-boot for AVR32 since commit
-> "zlib: Optimize decompression", cd514aeb996e2f7aefbe1f78481965d9d074aed4
-> (in the u-boot tree). And BR recently bumped U-Boot to a version that includes
-> this commit.
->
-> The failing u-boot build:
->
-> $ make
-> [snip]
-> /usr/bin/make -C cpu/at32ap/at32ap700x/
-> [snip]
-> /home/bjornfor/raid/raid_stuff/forks/buildroot/output/staging/usr/bin/avr32-unknown-linux-uclibc-gcc
-> ?-g ?-Os ? -ffixed-r5 -fPIC -mno-init-got -mrelax -mcpu=ap7000
-> -ffunction-sections -fdata-sections -D__KERNEL__
-> -DTEXT_BASE=0x00000000
-> -I/media/raid/bjornfor/raid_stuff/forks/buildroot/output/build/u-boot-2010.03/include
-> -fno-builtin -ffreestanding -nostdinc -isystem
-> /media/raid/bjornfor/raid_stuff/forks/buildroot/output/staging/usr/bin-ccache/../lib/gcc/avr32-unknown-linux-uclibc/4.2.2/include
-> -pipe ?-Wall -Wstrict-prototypes -fno-stack-protector ? -o cache.o
-> cache.c -c
-> zlib.c:31:27: error: asm/unaligned.h: No such file or directory
-> make[2]: *** No rule to make target `.depend', needed by `libgeneric.a'. ?Stop.
-> make[2]: Leaving directory
-> `/media/raid/bjornfor/raid_stuff/forks/buildroot/output/build/u-boot-2010.03/lib_generic'
-> make[1]: *** [lib_generic/libgeneric.a] Error 2
-> [snip]
->
-> The problem seems to be a missing header file:
-> ?zlib.c:31:27: error: asm/unaligned.h: No such file or directory
->
-> I'd like to just fix U-Boot, but there is not enough time before the next BR
-> release. As a work-around, I will try to write a patch that enables both new
-> and old versions of U-Boot to be selected in menuconfig.
+Hi,
 
-BR already supports multiple U-Boot versions in menuconfig (I don't know how
-I missed that!), so I'll just send a patch with an updated atngw100_defconfig
-that builds. The patch will be send in a new thread.
+It seems I solved the issue but have no idea about the real root cause.
+I reset my config file and suddenly things started to work.
 
-Best regards,
-Bj?rn Forsman
+Regards,
+Marcel
+
+> Hi,
+> 
+> Probably all errors I get come from this :
+> 
+> /bin/sh:
+> /home/marcel/arm/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc: No
+> such file or directory
+> make[1]:
+> /home/marcel/arm/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc:
+> Command not found
+> make[1]: Entering directory `/home/marcel/arm/toolchain_build_arm/uClibc'
+> make[1]:
+> /home/marcel/arm/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc:
+> Command not found
+>   GEN include/bits/sysnum.h
+> extra/scripts/gen_bits_syscall_h.sh: line 31:
+> /home/marcel/arm/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc: No
+> such file or directory
+> extra/scripts/gen_bits_syscall_h.sh: line 27:
+> /home/marcel/arm/build_arm/staging_dir/usr/bin/arm-linux-uclibc-gcc: No
+> such file or directory
+> ERROR: Could not generate syscalls.
+> Make sure that you have proper kernel headers.
+> Your .config in KERNEL_HEADERS="" was set to:
+> /home/marcel/arm/toolchain_build_arm/linux/include/
+> make[1]: *** [include/bits/sysnum.h] Error 1
+> 
+> I wonder why things didn't get build in build_arm/staging_dir/usr/bin
+> My initial system does have this correctly and I build the current machine
+> using the same config files (at least it seems that way).
+> 
+> Any ideas why it doesn't build the staging_dir correctly ?
+> Can I force it to build this first before continuing ?
+> 
+> regards,
+> Marcel
+> 
+> > Hi,
+> > 
+> > I have one system set up with a fully working buildroot and try to build
+> > the same on another but run into some issues with uClibc.
+> > 
+> > I have tried the daily snapshot of uClibc and versions 0.9.29 and 0.9.30
+> > but none of them compiles.
+> > 
+> > Since I don't want the daily snapshot I would like to fix my setup to
+> > version 0.9.30 but I get an error while compiling :
+> > 
+> > make[1]: Entering directory
+> > `/home/marcel/arm/toolchain_build_arm/uClibc-0.9.30'
+> > 
+> >   AS lib/crt1.o
+> > 
+> > cc1: error: bad value (ap) for -march= switch
+> > 
+> > Any ideas on this ?
+> > 
+> > Best regards,
+> > Marcel
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
