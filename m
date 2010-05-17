@@ -1,34 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 May 2010 15:00:43 +0200
-Subject: [Buildroot] [PATCH 7/8] avahi: needs IPv6
-In-Reply-To: Peter Korsgaard's message of "\(unknown date\)"
-References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-	<a535d4a03f344d8b31ffe0d95fa4d2147e0d3eb8.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87wrv2znr8.fsf@macbook.be.48ers.dk>
+From: David Wooff <David.Wooff@calrec.com>
+Date: Mon, 17 May 2010 15:02:37 +0100
+Subject: [Buildroot] buildroot compilation problem
+Message-ID: <1A3C06457633904EAC567D23DA05171702AA844F@calrec-exch03.calrecaudio.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Hi,
+my buildroot compile seems to be getting stuck with an error and I'm not
+sure how to cure it.  Would anyone care to advise?  Thanks:
+ 
+/home/dez/buildroot-v23434/build_arm/staging_dir/usr/bin/arm-linux-uclib
+cgnueabi-gcc -DMONOLITH -I.. -I../include  -mfloat-abi=soft  -fPIC
+-DOPENSSL_PIC -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H
+-DOPENSSL_NO_KRB5
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
+-DOPENSSL_NO_IDEA -DOPENSSL_NO_MDC2 -DOPENSSL_NO_RC5 -DL_ENDIAN -DTERMIO
+-O3 -fomit-frame-pointer -Wall -Os
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/include
+--sysroot=/home/dez/buildroot-v23434/build_arm/staging_dir/ -isysroot
+/home/dez/buildroot-v23434/build_arm/staging_dir -mtune=arm9tdmi
+-msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64   -c -o s_client.o s_client.c
+/home/dez/buildroot-v23434/build_arm/staging_dir/usr/bin/arm-linux-uclib
+cgnueabi-gcc -DMONOLITH -I.. -I../include  -mfloat-abi=soft  -fPIC
+-DOPENSSL_PIC -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H
+-DOPENSSL_NO_KRB5
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
+-DOPENSSL_NO_IDEA -DOPENSSL_NO_MDC2 -DOPENSSL_NO_RC5 -DL_ENDIAN -DTERMIO
+-O3 -fomit-frame-pointer -Wall -Os
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
+-I/home/dez/buildroot-v23434/build_arm/staging_dir/include
+--sysroot=/home/dez/buildroot-v23434/build_arm/staging_dir/ -isysroot
+/home/dez/buildroot-v23434/build_arm/staging_dir -mtune=arm9tdmi
+-msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64   -c -o speed.o speed.c
+speed.c:122:23: error: sys/timeb.h: No such file or directory
+speed.c: In function 'Time_F':
+speed.c:350: error: storage size of 'tstart' isn't known
+speed.c:350: error: storage size of 'tend' isn't known
+speed.c:356: warning: implicit declaration of function 'ftime'
+speed.c:350: warning: unused variable 'tend'
+speed.c:350: warning: unused variable 'tstart'
+make[2]: *** [speed.o] Error 1
+make[2]: Leaving directory
+`/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m/apps'
+make[1]: *** [sub_all] Error 1
+make[1]: Leaving directory
+`/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m'
+make: ***
+[/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m/apps/openssl] Error
+2
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
- Thomas> Otherwise the build fails with:
- Thomas> socket.c: In function 'avahi_mdns_mcast_join_ipv6':
- Thomas> socket.c:159: error: 'IPV6_DROP_MEMBERSHIP' undeclared (first use in this function)
- Thomas> socket.c:159: error: (Each undeclared identifier is reported only once
- Thomas> socket.c:159: error: for each function it appears in.)
- Thomas> socket.c:161: error: 'IPV6_ADD_MEMBERSHIP' undeclared (first use in this function)
 
- Peter> Strange, I'm using it here with a non-ipv6 / non-locale toolchain.
-
-Looking closer I see that's with uclibc 0.9.30 - On 0.9.31 those defines
-are protected by __UCLIBC_HAS_IPV6__.
-
-I'll add a patch #ifdef'ing those functions out if not available, which
-should give the same behaviour as with < 0.9.31.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100517/52f96389/attachment.htm>
