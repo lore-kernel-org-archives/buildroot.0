@@ -1,30 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 May 2010 09:55:50 +0200
-Subject: [Buildroot] [PATCH 7/8] avahi: needs IPv6
-In-Reply-To: <a535d4a03f344d8b31ffe0d95fa4d2147e0d3eb8.1273836748.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 14 May 2010 13:37:30 +0200")
-References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273836748.git.thomas.petazzoni@free-electrons.com>
-	<a535d4a03f344d8b31ffe0d95fa4d2147e0d3eb8.1273836748.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87632n0xo9.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 17 May 2010 09:34:47 +0200
+Subject: [Buildroot] [git commit master] Config: terminate version number
+	string
+Message-ID: <20100517075657.D516299B11@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Otherwise the build fails with:
- Thomas> socket.c: In function 'avahi_mdns_mcast_join_ipv6':
- Thomas> socket.c:159: error: 'IPV6_DROP_MEMBERSHIP' undeclared (first use in this function)
- Thomas> socket.c:159: error: (Each undeclared identifier is reported only once
- Thomas> socket.c:159: error: for each function it appears in.)
- Thomas> socket.c:161: error: 'IPV6_ADD_MEMBERSHIP' undeclared (first use in this function)
+commit: http://git.buildroot.net/buildroot/commit/?id=acb785cad4d34cdb501a5ebd48712478c88905bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Strange, I'm using it here with an (internal) non-ipv6 / non-locale toolchain.
+Reported-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-With what toolchain is this?
-
+diff --git a/Config.in b/Config.in
+index debac20..53aed90 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.05-rc2-git
++	default "2010.05-rc2-git"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
