@@ -1,46 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 May 2010 08:55:20 +0200
-Subject: [Buildroot] libintl.h: need a hint or two
-In-Reply-To: <4BF06BBD.4020908@unix-beratung.de>
-References: <4BF06BBD.4020908@unix-beratung.de>
-Message-ID: <20100517085520.586c2c8d@surf>
+Date: Mon, 17 May 2010 09:03:04 +0200
+Subject: [Buildroot] Graphing package dependencies
+In-Reply-To: <8739xr2fgx.fsf@macbook.be.48ers.dk>
+References: <20100506101437.5e35c795@surf> <20100513202107.1b8bfcf3@surf>
+	<8739xr2fgx.fsf@macbook.be.48ers.dk>
+Message-ID: <20100517090304.407c2159@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 17 May 2010 00:03:41 +0200
-Robert Urban <urban@unix-beratung.de> wrote:
+On Mon, 17 May 2010 08:46:06 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> I'm trying to build a router/firewall system.  Thus I've chosen the ipsec-tools
-> and radvd packages.
-> 
-> These in turn have a dependency on flex.  The flex compile is failing with the
-> following error, when compiling "dfa.c":
-> 
-> In file included from flexdef.h:102,
->                  from ccl.c:34:
-> gettext.h:26:22: error: libintl.h: No such file or directory
-> 
-> And it's right, there is no "libintl.h" under .../staging/usr/include/...
-> 
-> Please correct me if I'm wrong, but it seems I can only get libintl.h by turning
-> on first UCLIBC_MJN3_ONLY and then UCLIBC_HAS_GETTEXT_AWARENESS, but if
-> UCLIBC_MJN3_ONLY is enabled, I get slews of other errors...
-> 
-> I guess I'm doing something wrong.  Can someone help?
+> Great! Care to write a bit of documentation about it, then I'll pull it?
 
-Do you have the full build log available somewhere and the .config file
-you are using ?
-
-In general, when using a uClibc toolchain, gettext/libintl must be
-compiled separatly from the C library by using the BR2_PACKAGE_GETTEXT
-package of Buildroot. So, either flex should depend on it, or it's
-because the configure cache has been loaded with incorrect
-informations. Only the full build log can tell.
-
-Regards,
+Sure, will do.
 
 Thomas
 -- 
