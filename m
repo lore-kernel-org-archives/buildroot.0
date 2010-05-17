@@ -1,61 +1,89 @@
-From: David Wooff <David.Wooff@calrec.com>
-Date: Mon, 17 May 2010 15:02:37 +0100
-Subject: [Buildroot] buildroot compilation problem
-Message-ID: <1A3C06457633904EAC567D23DA05171702AA844F@calrec-exch03.calrecaudio.com>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Mon, 17 May 2010 16:22:54 +0200
+Subject: [Buildroot] libintl.h: need a hint or two
+In-Reply-To: <4BF11874.5080405@unix-beratung.de>
+References: <4BF06BBD.4020908@unix-beratung.de> <20100517085520.586c2c8d@surf>
+	<4BF11874.5080405@unix-beratung.de>
+Message-ID: <4BF1513E.5040200@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-my buildroot compile seems to be getting stuck with an error and I'm not
-sure how to cure it.  Would anyone care to advise?  Thanks:
- 
-/home/dez/buildroot-v23434/build_arm/staging_dir/usr/bin/arm-linux-uclib
-cgnueabi-gcc -DMONOLITH -I.. -I../include  -mfloat-abi=soft  -fPIC
--DOPENSSL_PIC -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H
--DOPENSSL_NO_KRB5
--I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
--DOPENSSL_NO_IDEA -DOPENSSL_NO_MDC2 -DOPENSSL_NO_RC5 -DL_ENDIAN -DTERMIO
--O3 -fomit-frame-pointer -Wall -Os
--I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
--I/home/dez/buildroot-v23434/build_arm/staging_dir/include
---sysroot=/home/dez/buildroot-v23434/build_arm/staging_dir/ -isysroot
-/home/dez/buildroot-v23434/build_arm/staging_dir -mtune=arm9tdmi
--msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -c -o s_client.o s_client.c
-/home/dez/buildroot-v23434/build_arm/staging_dir/usr/bin/arm-linux-uclib
-cgnueabi-gcc -DMONOLITH -I.. -I../include  -mfloat-abi=soft  -fPIC
--DOPENSSL_PIC -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H
--DOPENSSL_NO_KRB5
--I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
--DOPENSSL_NO_IDEA -DOPENSSL_NO_MDC2 -DOPENSSL_NO_RC5 -DL_ENDIAN -DTERMIO
--O3 -fomit-frame-pointer -Wall -Os
--I/home/dez/buildroot-v23434/build_arm/staging_dir/usr/include
--I/home/dez/buildroot-v23434/build_arm/staging_dir/include
---sysroot=/home/dez/buildroot-v23434/build_arm/staging_dir/ -isysroot
-/home/dez/buildroot-v23434/build_arm/staging_dir -mtune=arm9tdmi
--msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64   -c -o speed.o speed.c
-speed.c:122:23: error: sys/timeb.h: No such file or directory
-speed.c: In function 'Time_F':
-speed.c:350: error: storage size of 'tstart' isn't known
-speed.c:350: error: storage size of 'tend' isn't known
-speed.c:356: warning: implicit declaration of function 'ftime'
-speed.c:350: warning: unused variable 'tend'
-speed.c:350: warning: unused variable 'tstart'
-make[2]: *** [speed.o] Error 1
-make[2]: Leaving directory
-`/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m/apps'
-make[1]: *** [sub_all] Error 1
-make[1]: Leaving directory
-`/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m'
-make: ***
-[/home/dez/buildroot-v23434/build_arm/openssl-0.9.7m/apps/openssl] Error
-2
+I'll answer my own question...
 
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100517/52f96389/attachment.htm>
+adding
+
+	FLEX_DEPENDENCIES:=gettext libintl
+
+to .../package/flex/flex.mk  seems to have fixed my problem.
+
+cheers,
+
+Rob Urban
+
+On 05/17/2010 12:20 PM, Robert Urban wrote:
+> Hi Thomas,
+> 
+> On 05/17/2010 08:55 AM, Thomas Petazzoni wrote:
+>> On Mon, 17 May 2010 00:03:41 +0200
+>> Robert Urban <urban@unix-beratung.de> wrote:
+>>
+>>> I'm trying to build a router/firewall system.  Thus I've chosen the ipsec-tools
+>>> and radvd packages.
+>>>
+>>> These in turn have a dependency on flex.  The flex compile is failing with the
+>>> following error, when compiling "dfa.c":
+>>>
+>>> In file included from flexdef.h:102,
+>>>                  from ccl.c:34:
+>>> gettext.h:26:22: error: libintl.h: No such file or directory
+>>>
+>>> And it's right, there is no "libintl.h" under .../staging/usr/include/...
+>>>
+>>> Please correct me if I'm wrong, but it seems I can only get libintl.h by turning
+>>> on first UCLIBC_MJN3_ONLY and then UCLIBC_HAS_GETTEXT_AWARENESS, but if
+>>> UCLIBC_MJN3_ONLY is enabled, I get slews of other errors...
+>>>
+>>> I guess I'm doing something wrong.  Can someone help?
+>>
+>> Do you have the full build log available somewhere and the .config file
+>> you are using ?
+>>
+>> In general, when using a uClibc toolchain, gettext/libintl must be
+>> compiled separatly from the C library by using the BR2_PACKAGE_GETTEXT
+>> package of Buildroot. So, either flex should depend on it, or it's
+>> because the configure cache has been loaded with incorrect
+>> informations. Only the full build log can tell.
+> 
+> as you can see, gettext and libintl are auto-selected by my other choices:
+> 
+> (config-file):
+> BR2_PACKAGE_GETTEXT=y
+> BR2_PACKAGE_LIBINTL=y
+> 
+> The build log can be found at:
+> http://www.spielwiese.de/rob/Buildroot/build.log.gz
+> 
+> and the config at:
+> http://www.spielwiese.de/rob/Buildroot/config
+> 
+> After my last mail I thought I might have some problem with left-over files, so
+> I did a "make distclean" and did another build, but the result is the same.
+> 
+> I git cloned the buildroot environment on the 13th of May, and haven't updated
+> it since.
+> 
+> I would be grateful if you could have a look.
+> 
+> cheers,
+> 
+> Rob Urban
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
