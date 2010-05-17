@@ -1,48 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 May 2010 22:30:22 +0200
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.32.x /
-	2.6.33.x stable versions
-Message-ID: <20100517052223.913F412E811@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 May 2010 08:46:06 +0200
+Subject: [Buildroot] Graphing package dependencies
+In-Reply-To: <20100513202107.1b8bfcf3@surf> (Thomas Petazzoni's message of
+	"Thu, 13 May 2010 20:21:07 +0200")
+References: <20100506101437.5e35c795@surf> <20100513202107.1b8bfcf3@surf>
+Message-ID: <8739xr2fgx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b7a3166634c61ec9673e591126ea99c05b1d2df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...types-for-headers-exported-to-user-space.patch} |    0
- ...types-for-headers-exported-to-user-space.patch} |    0
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.32.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
- rename toolchain/kernel-headers/{linux-2.6.33.3-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ Thomas> I've slightly improved this script, and it is now capable of generating
+ Thomas> the dependency graph for a full Buildroot configuration, i.e taking
+ Thomas> into account all packages that have been selected.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index a3a32f1..3b0c93b 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -63,7 +63,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6.31.13"	if BR2_KERNEL_HEADERS_2_6_31
--	default "2.6.32.12"	if BR2_KERNEL_HEADERS_2_6_32
--	default "2.6.33.3"	if BR2_KERNEL_HEADERS_2_6_33
-+	default "2.6.32.13"	if BR2_KERNEL_HEADERS_2_6_32
-+	default "2.6.33.4"	if BR2_KERNEL_HEADERS_2_6_33
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-2.6.32.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.32.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-diff --git a/toolchain/kernel-headers/linux-2.6.33.3-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.33.3-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+ Thomas> See http://free-electrons.com/~thomas/buildroot-full-dependencies.pdf
+ Thomas> for a fairly large example involving X.org and Gtk.
+
+ Thomas> As always, the code is available in
+ Thomas> http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=graph-dependencies.
+ Thomas> Besides the modifications in the script itself, the modifications in
+ Thomas> the rest of Buildroot are very small.
+
+Great! Care to write a bit of documentation about it, then I'll pull it?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
