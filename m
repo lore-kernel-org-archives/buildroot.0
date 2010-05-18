@@ -1,32 +1,56 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 18 May 2010 15:06:17 +0200
-Subject: [Buildroot] Buildroot 2010 rc2 fails to build
-In-Reply-To: <AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
-References: <AANLkTim8u-blOgAiVpxjWfe1VuQ06EUIsgJ0zz_jWYxw@mail.gmail.com>
-	<58B9D5B09E114795948B69CA62CAB0CE@AP366>
-	<AANLkTil4b1zC3nN148fwJSmxsdeg3Mm5hAFO-2Uvo8nJ@mail.gmail.com>
-	<87bpcf3a6w.fsf@macbook.be.48ers.dk>
-	<AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
-Message-ID: <AANLkTilhvb0DfUPC9FWbf_UR9rXUGyQVhIwNSLyofmzm@mail.gmail.com>
+From: Robert Urban <urban@unix-beratung.de>
+Date: Tue, 18 May 2010 18:57:12 +0200
+Subject: [Buildroot] stack protection support seems not to work?
+Message-ID: <4BF2C6E8.8070702@unix-beratung.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 May 2010 23:29, Chris Kerios <ckerios@gmail.com> wrote:
-[snip]
->?I also
-> have a AVR32 NGW100 that I am beginning to work on that I will be testing
-> buildroot on next.? I will let eveyone know how that one goes and cry for
-> help when I get lost in buildroot...haha.
+Hi Folks,
 
-BR git master does not build atngw100_defconfig at the moment.
-I submitted a patch yesterday that updates atngw100_defconfig so that
-it builds again.
-I hope it will be included in the 2010.05 release. Maintainers?
+in my environment, which I git cloned yesterday, turning on stack protection
+(BR2_USE_SSP) seems to break openssh (and probably anything else that is
+compiled with it).
 
-BTW, atngw100_defconfig works fine in version 2010.02.
+When trying to run ssh/scp/ssh-agent/sftp on target,  I get something like:
 
-Best regards,
-Bj?rn Forsman
+ssh[2842] general protection ip:804c375 sp:afa542b0 error:0 in ssh[8048000+3b000]
+
+With some help from an expert, we traced the error, sort-of.  It's generated in
+main(), very near the beginning.  Here's an excerpt from "buildroot-env/objdump
+-d ssh.o":
+
+0000040e <main>:
+     40e:       8d 4c 24 04             lea    0x4(%esp),%ecx
+     412:       83 e4 f0                and    $0xfffffff0,%esp
+     415:       ff 71 fc                pushl  -0x4(%ecx)
+     418:       55                      push   %ebp
+     419:       89 e5                   mov    %esp,%ebp
+     41b:       57                      push   %edi
+     41c:       56                      push   %esi
+     41d:       53                      push   %ebx
+     41e:       51                      push   %ecx
+     41f:       81 ec d8 05 00 00       sub    $0x5d8,%esp
+     425:       65 8b 15 14 00 00 00    mov    %gs:0x14,%edx
+     42c:       89 55 ec                mov    %edx,-0x14(%ebp)
+     42f:       31 d2                   xor    %edx,%edx
+     431:       8b 01                   mov    (%ecx),%eax
+     433:       8b 71 04                mov    0x4(%ecx),%esi
+     436:       89 85 2c fa ff ff       mov    %eax,-0x5d4(%ebp)
+     43c:       e8 fc ff ff ff          call   43d <main+0x2f>
+     441:       83 ec 0c                sub    $0xc,%esp
+     444:       ff 36                   pushl  (%esi)
+
+The error probably originates from the instructions at offset 425
+
+	mov    %gs:0x14,%edx
+
+"%gs", whatever that may be, seems uninitialized.
+
+ARCH is i386, CPU is i586.
+
+if anyone cares, mail me for config and/or build log.
+
+Rob Urban
