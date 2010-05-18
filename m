@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 May 2010 14:20:07 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	2010-05-15-fixes
-In-Reply-To: <20100518141655.5b1519fa@surf> (Thomas Petazzoni's message of
-	"Tue, 18 May 2010 14:16:55 +0200")
-References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-	<87tyq5xw1o.fsf@macbook.be.48ers.dk> <20100518141655.5b1519fa@surf>
-Message-ID: <87pr0txuyw.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 18 May 2010 15:06:17 +0200
+Subject: [Buildroot] Buildroot 2010 rc2 fails to build
+In-Reply-To: <AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
+References: <AANLkTim8u-blOgAiVpxjWfe1VuQ06EUIsgJ0zz_jWYxw@mail.gmail.com>
+	<58B9D5B09E114795948B69CA62CAB0CE@AP366>
+	<AANLkTil4b1zC3nN148fwJSmxsdeg3Mm5hAFO-2Uvo8nJ@mail.gmail.com>
+	<87bpcf3a6w.fsf@macbook.be.48ers.dk>
+	<AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
+Message-ID: <AANLkTilhvb0DfUPC9FWbf_UR9rXUGyQVhIwNSLyofmzm@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 16 May 2010 23:29, Chris Kerios <ckerios@gmail.com> wrote:
+[snip]
+>?I also
+> have a AVR32 NGW100 that I am beginning to work on that I will be testing
+> buildroot on next.? I will let eveyone know how that one goes and cry for
+> help when I get lost in buildroot...haha.
 
-Hi,
+BR git master does not build atngw100_defconfig at the moment.
+I submitted a patch yesterday that updates atngw100_defconfig so that
+it builds again.
+I hope it will be included in the 2010.05 release. Maintainers?
 
- >> Could you fix that and send a new pull request, please?
+BTW, atngw100_defconfig works fine in version 2010.02.
 
- Thomas> Argh, yes, of course. In fact, it's because I started my second branch
- Thomas> on top of the first, because some of the fixes of the second branch
- Thomas> depend on fixes on the first branch.
-
- Thomas> The easiest is probably that I merge both branches, get rid of the
- Thomas> unwanted Avahi IPv6 fix, and send a new pull request for the whole
- Thomas> thing. Would that be ok for you ?
-
-Yes, that would be perfect - Thanks.
-
-It would be even better if you fix the minor comments I had while
-you're at it, but I can do that as well otherwise.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Bj?rn Forsman
