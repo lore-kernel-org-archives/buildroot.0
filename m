@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 May 2010 13:43:14 +0200
-Subject: [Buildroot] [PATCH 09/12] lvm2: do not override CC and similar
-	variables
-In-Reply-To: <c942391bf42f025ad15a7401e753d72a4b40d1b3.1273965305.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 16 May 2010 01:15:34 +0200")
+Date: Tue, 18 May 2010 13:47:04 +0200
+Subject: [Buildroot] [PATCH 12/12] netsnmp: disable build with external
+	toolchain
+In-Reply-To: <0b3a9a65f581c1cc9998e491dfd54cd5aa407448.1273965305.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 16 May 2010 01:15:37 +0200")
 References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
 	<cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-	<c942391bf42f025ad15a7401e753d72a4b40d1b3.1273965305.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8739xpzb8t.fsf@macbook.be.48ers.dk>
+	<0b3a9a65f581c1cc9998e491dfd54cd5aa407448.1273965305.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y6fhxwhz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +16,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Since lvm2 uses autoconf, there's no point in overriding CC and
- Thomas> other variables at build time. This causes build breakage as
- Thomas> CFLAGS aren't used at link time, therefore --sysroot lacks,
- Thomas> which breaks the build with external toolchains.
+ Thomas> There is a build problem with netsnmp on external toolchain that isn't
+ Thomas> easy to fix: libtool strips the --sysroot that we are passing it,
+ Thomas> which make the link step fail.
 
-Thanks. Is there anything stopping us from converting it to
-Makefile.autotools.in format?
+ Thomas> In preparation for the release, just make sure this package isn't
+ Thomas> visible to external toolchain users. Of course, on the long run, we
+ Thomas> should fix this.
+
+Hmm, yeah. We'll need to do the same for BR2_PACKAGE_QUAGGA_SNMP then.
+
+Maybe a comment "netsnmp is broken with external toolchain" would be
+good.
 
 -- 
 Bye, Peter Korsgaard
