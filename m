@@ -1,190 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 18 May 2010 10:42:13 +0200
-Subject: [Buildroot] [git commit master] avahi: fix build on uclibc 0.9.31
-	without ipv6 support
-Message-ID: <20100518084433.8A27F8F6F1@busybox.osuosl.org>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 18 May 2010 12:08:43 +0200
+Subject: [Buildroot] RFC: Libtool and wrong rpath
+In-Reply-To: <4BF1AA6B.50109@gmail.com>
+References: <4BF1AA6B.50109@gmail.com>
+Message-ID: <AANLkTinvPUF9GOWl2Vo2daT9CwGSkrZB48YAdlnHhNuP@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Very interesting...
+Same thing here, I'm pretty sure it's because of the modifications we
+make on .la files
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8272501ea070a2145f2262ff56f336716ecfcc77
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, May 17, 2010 at 10:43 PM, Paulius Zaleckas
+<paulius.zaleckas@gmail.com> wrote:
+> Hi,
+>
+> I have noticed with strace that strange path is being probed by dynamic
+> linker
+> on the target. This makes applications to start slower, since each library
+> is probed with wrong path first!
+>
+> Problem is that ELF dynamic section (readelf -d) has RPATH set to absolute
+> path
+> of the satging dir on the host:
+>
+> 0x0000000f (RPATH) ? ? ? ? ? ? ? ? ? ? ?Library rpath:
+> [/home/paulius/buildroot/output/build/staging_dir/usr/i386-unknown-linux-uclibc/lib]
+>
+> I have put some simple script to discover ELF files with this WRONG path:
+>
+> #!/bin/sh
+> for file in `find $@ -type f -executable`; do
+> ? ? ? ?if [ -n "`file $file | grep ELF`" ]; then
+> ? ? ? ? ? ? ? ?if [ -n "`readelf -d $file | grep staging`" ]; then
+> ? ? ? ? ? ? ? ? ? ? ? ?echo $file
+> ? ? ? ? ? ? ? ?fi
+> ? ? ? ?fi
+> done
+>
+> On my target directory it found 119 occurrences. Mostly X11 and GTK related.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                 |    2 +-
- package/avahi/avahi-optional-ipv6.patch |  147 +++++++++++++++++++++++++++++++
- 2 files changed, 148 insertions(+), 1 deletions(-)
- create mode 100644 package/avahi/avahi-optional-ipv6.patch
+On my target, it's all libraries, except the low level ones (libcurl,
+libdbus, libcrypto, ...).
+In fact each library which has a dependency on another library
+providing a .la modified by buildroot will have this wrong rpath.
 
-diff --git a/CHANGES b/CHANGES
-index 76f5651..8c7aaba 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,7 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: busybox
-+	Updated/fixed packages: avahi, busybox
- 
- 2010.05-rc2, Released May 11th, 2010:
- 
-diff --git a/package/avahi/avahi-optional-ipv6.patch b/package/avahi/avahi-optional-ipv6.patch
-new file mode 100644
-index 0000000..5caf87c
---- /dev/null
-+++ b/package/avahi/avahi-optional-ipv6.patch
-@@ -0,0 +1,147 @@
-+[PATCH] avahi-core: make ipv6 support optional on uclibc 0.9.31+
-+
-+uClibc 0.9.31+ doesn't define the IPV6_* defines when IPv6 support isn't
-+enabled, causing the avahi build to break. Detect this configuration, and
-+comment out IPv6 code if so.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ avahi-core/socket.c |   28 +++++++++++++++++++++++-----
-+ 1 file changed, 23 insertions(+), 5 deletions(-)
-+
-+Index: avahi-0.6.23/avahi-core/socket.c
-+===================================================================
-+--- avahi-0.6.23.orig/avahi-core/socket.c
-++++ avahi-0.6.23/avahi-core/socket.c
-+@@ -47,6 +47,11 @@
-+ #include <net/if_dl.h>
-+ #endif
-+ 
-++#include <features.h>
-++#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
-++#define NO_IPV6
-++#endif
-++
-+ #include "dns.h"
-+ #include "fdutil.h"
-+ #include "socket.h"
-+@@ -75,6 +80,7 @@ static void mdns_mcast_group_ipv4(struct
-+     inet_pton(AF_INET, AVAHI_IPV4_MCAST_GROUP, &ret_sa->sin_addr);
-+ }
-+ 
-++#ifndef NO_IPV6
-+ static void mdns_mcast_group_ipv6(struct sockaddr_in6 *ret_sa) {
-+     assert(ret_sa);
-+ 
-+@@ -83,6 +89,7 @@ static void mdns_mcast_group_ipv6(struct
-+     ret_sa->sin6_port = htons(AVAHI_MDNS_PORT);
-+     inet_pton(AF_INET6, AVAHI_IPV6_MCAST_GROUP, &ret_sa->sin6_addr);
-+ }
-++#endif
-+ 
-+ static void ipv4_address_to_sockaddr(struct sockaddr_in *ret_sa, const AvahiIPv4Address *a, uint16_t port) {
-+     assert(ret_sa);
-+@@ -95,6 +102,7 @@ static void ipv4_address_to_sockaddr(str
-+     memcpy(&ret_sa->sin_addr, a, sizeof(AvahiIPv4Address));
-+ }
-+ 
-++#ifndef NO_IPV6
-+ static void ipv6_address_to_sockaddr(struct sockaddr_in6 *ret_sa, const AvahiIPv6Address *a, uint16_t port) {
-+     assert(ret_sa);
-+     assert(a);
-+@@ -105,6 +113,7 @@ static void ipv6_address_to_sockaddr(str
-+     ret_sa->sin6_port = htons(port);
-+     memcpy(&ret_sa->sin6_addr, a, sizeof(AvahiIPv6Address));
-+ }
-++#endif
-+ 
-+ int avahi_mdns_mcast_join_ipv4(int fd, const AvahiIPv4Address *a, int idx, int join) {
-+ #ifdef HAVE_STRUCT_IP_MREQN
-+@@ -143,6 +152,7 @@ int avahi_mdns_mcast_join_ipv4(int fd, c
-+ }
-+ 
-+ int avahi_mdns_mcast_join_ipv6(int fd, const AvahiIPv6Address *a, int idx, int join) {
-++#ifndef NO_IPV6
-+     struct ipv6_mreq mreq6;
-+     struct sockaddr_in6 sa6;
-+ 
-+@@ -164,6 +174,9 @@ int avahi_mdns_mcast_join_ipv6(int fd, c
-+     }
-+ 
-+     return 0;
-++#else
-++    return -1;
-++#endif
-+ }
-+ 
-+ static int reuseaddr(int fd) {
-+@@ -372,6 +385,7 @@ fail:
-+ }
-+ 
-+ int avahi_open_socket_ipv6(int no_reuse) {
-++#ifndef NO_IPV6
-+     struct sockaddr_in6 sa, local;
-+     int fd = -1, yes, r;
-+     int ttl;
-+@@ -437,7 +451,7 @@ int avahi_open_socket_ipv6(int no_reuse)
-+ fail:
-+     if (fd >= 0)
-+         close(fd);
-+-
-++#endif
-+     return -1;
-+ }
-+ 
-+@@ -567,7 +581,7 @@ int avahi_send_dns_packet_ipv6(
-+         const AvahiIPv6Address *src_address,
-+         const AvahiIPv6Address *dst_address,
-+         uint16_t dst_port) {
-+-
-++#ifndef NO_IPV6
-+     struct sockaddr_in6 sa;
-+     struct msghdr msg;
-+     struct iovec io;
-+@@ -620,6 +634,9 @@ int avahi_send_dns_packet_ipv6(
-+     }
-+ 
-+     return sendmsg_loop(fd, &msg, 0);
-++#else
-++    return -1;
-++#endif
-+ }
-+ 
-+ AvahiDnsPacket *avahi_recv_dns_packet_ipv4(
-+@@ -782,7 +799,7 @@ AvahiDnsPacket *avahi_recv_dns_packet_ip
-+         AvahiIPv6Address *ret_dst_address,
-+         AvahiIfIndex *ret_iface,
-+         uint8_t *ret_ttl) {
-+-
-++#ifndef NO_IPV6
-+     AvahiDnsPacket *p = NULL;
-+     struct msghdr msg;
-+     struct iovec io;
-+@@ -889,7 +906,7 @@ AvahiDnsPacket *avahi_recv_dns_packet_ip
-+ fail:
-+     if (p)
-+         avahi_dns_packet_free(p);
-+-
-++#endif
-+     return NULL;
-+ }
-+ 
-+@@ -934,6 +951,7 @@ fail:
-+ }
-+ 
-+ int avahi_open_unicast_socket_ipv6(void) {
-++#ifndef NO_IPV6
-+     struct sockaddr_in6 local;
-+     int fd = -1, yes;
-+ 
-+@@ -974,6 +992,6 @@ int avahi_open_unicast_socket_ipv6(void)
-+ fail:
-+     if (fd >= 0)
-+         close(fd);
-+-
-++#endif
-+     return -1;
-+ }
--- 
-1.6.3.3
+> The source of this problem seems to be buggy libtool script...
+
+Or a buggy buildroot...
+
+> I failed to fix/identify libtool lines responsible for this, but I think we
+> can
+> use chrpath utility to remove wrong RPATH from these executables.
+>
+> If we use chrpath, then should we add package or require it from host?
+> I guess we will have to run it after all packages are installed?
+That sucks ;)
+
+
+Thx for reporting this.
+
+--
+Lionel Landwerlin
