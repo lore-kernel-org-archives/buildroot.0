@@ -1,67 +1,43 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 18 May 2010 12:08:43 +0200
-Subject: [Buildroot] RFC: Libtool and wrong rpath
-In-Reply-To: <4BF1AA6B.50109@gmail.com>
-References: <4BF1AA6B.50109@gmail.com>
-Message-ID: <AANLkTinvPUF9GOWl2Vo2daT9CwGSkrZB48YAdlnHhNuP@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 18 May 2010 12:21:23 +0200
+Subject: [Buildroot] Buildroot 2010 rc2 fails to build
+In-Reply-To: <AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
+	(Chris Kerios's message of "Sun, 16 May 2010 17:29:16 -0400")
+References: <AANLkTim8u-blOgAiVpxjWfe1VuQ06EUIsgJ0zz_jWYxw@mail.gmail.com>
+	<58B9D5B09E114795948B69CA62CAB0CE@AP366>
+	<AANLkTil4b1zC3nN148fwJSmxsdeg3Mm5hAFO-2Uvo8nJ@mail.gmail.com>
+	<87bpcf3a6w.fsf@macbook.be.48ers.dk>
+	<AANLkTil700dIJdHHJ8md_AlfjpSO1BtLeI-CWcX2oHki@mail.gmail.com>
+Message-ID: <87bpcdzf18.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Very interesting...
-Same thing here, I'm pretty sure it's because of the modifications we
-make on .la files
+>>>>> "Chris" == Chris Kerios <ckerios@gmail.com> writes:
 
-On Mon, May 17, 2010 at 10:43 PM, Paulius Zaleckas
-<paulius.zaleckas@gmail.com> wrote:
-> Hi,
->
-> I have noticed with strace that strange path is being probed by dynamic
-> linker
-> on the target. This makes applications to start slower, since each library
-> is probed with wrong path first!
->
-> Problem is that ELF dynamic section (readelf -d) has RPATH set to absolute
-> path
-> of the satging dir on the host:
->
-> 0x0000000f (RPATH) ? ? ? ? ? ? ? ? ? ? ?Library rpath:
-> [/home/paulius/buildroot/output/build/staging_dir/usr/i386-unknown-linux-uclibc/lib]
->
-> I have put some simple script to discover ELF files with this WRONG path:
->
-> #!/bin/sh
-> for file in `find $@ -type f -executable`; do
-> ? ? ? ?if [ -n "`file $file | grep ELF`" ]; then
-> ? ? ? ? ? ? ? ?if [ -n "`readelf -d $file | grep staging`" ]; then
-> ? ? ? ? ? ? ? ? ? ? ? ?echo $file
-> ? ? ? ? ? ? ? ?fi
-> ? ? ? ?fi
-> done
->
-> On my target directory it found 119 occurrences. Mostly X11 and GTK related.
+ Chris> Thanks Peter.
 
-On my target, it's all libraries, except the low level ones (libcurl,
-libdbus, libcrypto, ...).
-In fact each library which has a dependency on another library
-providing a .la modified by buildroot will have this wrong rpath.
+ Chris> I also have a AVR32 NGW100 that I am beginning to work on that I
+ Chris> will be testing buildroot on next.? I will let eveyone know how
+ Chris> that one goes and cry for help when I get lost in
+ Chris> buildroot...haha.
 
-> The source of this problem seems to be buggy libtool script...
+;)
 
-Or a buggy buildroot...
+ Chris> Regarding the JFFS2 and MTD utilities.? I just learned online
+ Chris> this week that none of it applies to working with a CompactFlash
+ Chris> card, so thanks for reinforcing that piece of knowledge for me.?
+ Chris> One less thing to worry about.? What I was wondering about was
+ Chris> since I have this configuration Geode w/Compact Flash.? What
+ Chris> does the embedded community recommend be used as a file system,
+ Chris> ext2/3 or something else.
 
-> I failed to fix/identify libtool lines responsible for this, but I think we
-> can
-> use chrpath utility to remove wrong RPATH from these executables.
->
-> If we use chrpath, then should we add package or require it from host?
-> I guess we will have to run it after all packages are installed?
-That sucks ;)
+EXT2 - The journal updates from EXT3/4 are bad for the lifetime of the
+CF.
 
+And make sure you mount it noatime to limit writes.
 
-Thx for reporting this.
-
---
-Lionel Landwerlin
+-- 
+Bye, Peter Korsgaard
