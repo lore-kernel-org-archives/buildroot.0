@@ -1,73 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 May 2010 23:11:57 +0200
-Subject: [Buildroot] [git commit master] mtd-utils: buildsystem is broken
-	with parallel make (regarding libubi)
-Message-ID: <20100519211234.93B3C8F4EA@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 20 May 2010 00:08:43 +0200
+Subject: [Buildroot] BUG libglib2 build  fails  on res_query
+Message-ID: <A0DC7146A8744029BA780D738D86D249@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi
+ 
+in an attempt to build libsoup that depends on libglib2 
+ 
+i got this error, and i don't know how to resolve the missng res_query
+ 
+i am using 2010.5rc2  with uclibc 0.9.31 and building for geode (i586)
+ 
+snip
+ 
+checking for wspiapi.h... no
+checking for strndup... yes
+checking for setresuid... yes
+checking for setreuid... yes
+checking sys/prctl.h usability... yes
+checking sys/prctl.h presence... yes
+checking for sys/prctl.h... yes
+checking arpa/nameser_compat.h usability... yes
+checking arpa/nameser_compat.h presence... yes
+checking for arpa/nameser_compat.h... yes
+checking for res_query... no
+checking for res_query in -lresolv... no
+checking for res_query in -lresolv (alternate version)... no
+checking for res_query in -lbind... no
+configure: error: res_query not found
+make: ***
+[/home/johan/buildroot/output/build/libglib2-2.22.5/.stamp_configured] Error
+1
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3122259e2cbbc0be0fc02820a146b4e4f48bef6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES            |    2 +-
- package/mtd/mtd.mk |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 8c7aaba..5b0065c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,7 @@
+Johan
  
- 	Fixes all over the tree.
  
--	Updated/fixed packages: avahi, busybox
-+	Updated/fixed packages: avahi, busybox, mtd-utils
- 
- 2010.05-rc2, Released May 11th, 2010:
- 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 2c69c16..0c9ed42 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -14,12 +14,12 @@ HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
- 
- define HOST_MTD_BUILD_CMDS
- 	CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
--		CROSS= $(MAKE) BUILDDIR=$(@D) \
-+		CROSS= $(MAKE1) BUILDDIR=$(@D) \
- 		WITHOUT_XATTR=1 -C $(@D)
- endef
- 
- define HOST_MTD_INSTALL_CMDS
--	$(MAKE) BUILDDIR=$(@D) DESTDIR=$(HOST_DIR) -C $(@D) install
-+	$(MAKE1) BUILDDIR=$(@D) DESTDIR=$(HOST_DIR) -C $(@D) install
- endef
- 
- MKFS_JFFS2=$(HOST_DIR)/usr/sbin/mkfs.jffs2
-@@ -71,7 +71,7 @@ MTD_MAKE_COMMON_FLAGS = \
- 
- ifneq ($(MTD_TARGETS_y),)
- define MTD_TARGETS_BUILD
--	$(MAKE) $(MTD_MAKE_COMMON_FLAGS) \
-+	$(MAKE1) $(MTD_MAKE_COMMON_FLAGS) \
- 		BUILDDIR=$(@D) \
- 		-C $(@D) \
- 		$(addprefix $(@D)/, $(MTD_TARGETS_y))
-@@ -80,7 +80,7 @@ endif
- 
- ifneq ($(MTD_TARGETS_UBI_y),)
- define MTD_TARGETS_UBI_BUILD
--	$(MAKE) $(MTD_MAKE_COMMON_FLAGS) \
-+	$(MAKE1) $(MTD_MAKE_COMMON_FLAGS) \
- 		BUILDDIR=$(@D)/ubi-utils/ \
- 		-C $(@D)/ubi-utils \
- 		$(addprefix $(@D)/ubi-utils/, $(MTD_TARGETS_UBI_y))
--- 
-1.6.3.3
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100520/da1c4a9a/attachment.html>
