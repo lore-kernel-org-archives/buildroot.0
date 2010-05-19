@@ -1,35 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 May 2010 13:07:28 +0200
-Subject: [Buildroot] [PATCH] Add support for Beagleboard
-In-Reply-To: <1274167966-12366-1-git-send-email-mchazaux@adeneo-embedded.com>
-References: <1274167966-12366-1-git-send-email-mchazaux@adeneo-embedded.com>
-Message-ID: <20100519130728.586b2742@surf>
+Date: Wed, 19 May 2010 13:24:20 +0200
+Subject: [Buildroot] [PATCH 09/12] lvm2: do not override CC and similar
+ variables
+In-Reply-To: <8739xpzb8t.fsf@macbook.be.48ers.dk>
+References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
+	<cover.1273965305.git.thomas.petazzoni@free-electrons.com>
+	<c942391bf42f025ad15a7401e753d72a4b40d1b3.1273965305.git.thomas.petazzoni@free-electrons.com>
+	<8739xpzb8t.fsf@macbook.be.48ers.dk>
+Message-ID: <20100519132420.33a9accf@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Micka?l,
+On Tue, 18 May 2010 13:43:14 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-On Tue, 18 May 2010 09:32:46 +0200
-Micka?l Chazaux <mchazaux@adeneo-embedded.com> wrote:
+> Thanks. Is there anything stopping us from converting it to
+> Makefile.autotools.in format?
 
->  configs/beagleboard_defconfig         |  838 +++++++++++++++++++++++++++++++++
-
-Besides BR2_PACKAGE_BUSYBOX, some other BR2_PACKAGE_* are selected. Is
-this intentional ?
-
-> index 0000000..fe75ade
-> --- /dev/null
-> +++ b/target/device/Beagleboard/Makefile.in
-> @@ -0,0 +1,3 @@
-> +BOARD_NAME:="omap3_beagle"
-> +BOARD_PATH:=$(call qtrip,$(BR2_BOARD_PATH))
-
-Small typo here: should be qstrip instead of qtrip.
-
-Otherwise, looks good.
+Probably not. In this particular case, I didn't do it because we are in
+the stabilization phase and I didn't want to introduce too much
+unneeded changes. For mutt, I had to do it because it actually fixed
+some problems.
 
 Thomas
 -- 
