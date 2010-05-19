@@ -1,75 +1,30 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 19 May 2010 22:35:35 +0200
-Subject: [Buildroot] Converting packages to autotools leading to more in
- target filesystem
-In-Reply-To: <4BF3EDD8.2070809@carallon.com>
-References: <4BF3EDD8.2070809@carallon.com>
-Message-ID: <1274301336.18849.11.camel@coalu.atr>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 19 May 2010 22:40:05 +0200
+Subject: [Buildroot] [PATCH] package/config: really clean
+In-Reply-To: <20100509131909.25762.77096.stgit@roazhon.bzh.lan>
+References: <20100509131909.25762.77096.stgit@roazhon.bzh.lan>
+Message-ID: <201005192240.05156.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mercredi 19 mai 2010 ? 14:55 +0100, Will Wagner a ?crit :
-> I have been updating a project to use the latest buildroot from git and 
-> I have noticed a change in the size of the target filesystem.
-> 
-> This is caused by the conversion of certain packages to use the 
-> autotools infrastructure. The two packages in the tree I have noticed it 
-> for are libsysfs and libraw1394. These are both libraries and previously 
-> the install step for the target just copied the libraries into 
-> $(TARGET_DIR)/usr/lib.
-> 
-> With the conversion to autotools instead the target install step is 
-> calling install-strip on the Makefile in the package source. This 
-> correctly installs the library but it also copies a number of test 
-> applications that come bundled with the library. For my project where 
-> filesystem size is constrained this can cause problems. If a system was 
-> not constrained for filesystem size I can see that the test applications 
-> could be useful to allow someone to test the library was working correctly.
-> 
-> I was easily able to remove the unwanted applications by adding a 
-> INSTALL_TARGET_CMDS override for the package as below:
-> 
-> --- a/package/libraw1394/libraw1394.mk
-> +++ b/package/libraw1394/libraw1394.mk
-> @@ -8,4 +8,8 @@ LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
->   LIBRAW1394_SITE:=http://www.kernel.org/pub/linux/libs/ieee1394/
->   LIBRAW1394_INSTALL_STAGING=YES
-> 
-> +define LIBRAW1394_INSTALL_TARGET_CMDS
-> +       $(MAKE) DESTDIR=$(TARGET_DIR)  install-strip -C 
-> $(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)/src
-> +endef
-> +
->   $(eval $(call AUTOTARGETS,package,libraw1394))
-> 
-> This works fine but forces all users to have a cut down install. Is this 
-> a problem people think is worth solving? If so I will look at changing 
-> it so that the autotools infrastructure can choose (depending on a 
-> global config option) to either install the entire package or you can 
-> specify make targets that only install some of the package.
-> 
-> Will
-> 
+Hello All,
 
-Hello Will,
+On Sunday 09 May 2010 15:19:10 Yann E. MORIN wrote:
+>  package/config/Makefile.kconfig |   13 +++++++++----
+>  1 files changed, 9 insertions(+), 4 deletions(-)
 
-We already changed that from install-strip to install because some
-package (namely directfb, but this might also be the case for any
-package that installs plugins) does not install its plugins with make
-install-strip...
-
-So I don't whether we can fix this problem otherwise than the
-"per-package" way (just like you did)...
-At some point (probably if someone works on the package generation), I
-guest we will have to do like OpenEmbedded, and describe for each
-package which files are to be installed (having the advantage to
-generate at the same time developement packages, documentation packages
-as well as standard binary packages).
+Ping ?
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Lionel Landwerlin
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
