@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 May 2010 13:24:20 +0200
-Subject: [Buildroot] [PATCH 09/12] lvm2: do not override CC and similar
- variables
-In-Reply-To: <8739xpzb8t.fsf@macbook.be.48ers.dk>
-References: <cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-	<cover.1273965305.git.thomas.petazzoni@free-electrons.com>
-	<c942391bf42f025ad15a7401e753d72a4b40d1b3.1273965305.git.thomas.petazzoni@free-electrons.com>
-	<8739xpzb8t.fsf@macbook.be.48ers.dk>
-Message-ID: <20100519132420.33a9accf@surf>
+Date: Wed, 19 May 2010 13:28:50 +0200
+Subject: [Buildroot] [PATCH 5/8] ltrace: fix build failure
+In-Reply-To: <1273922367.2046.3.camel@ubuntu>
+References: <cover.1273836748.git.thomas.petazzoni@free-electrons.com>
+	<0878af525699db6c1298ecb340f7ffdd95541045.1273836748.git.thomas.petazzoni@free-electrons.com>
+	<1273922367.2046.3.camel@ubuntu>
+Message-ID: <20100519132850.75425962@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 May 2010 13:43:14 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Sat, 15 May 2010 21:19:27 +1000
+Microbit_Ubuntu <microbit@virginbroadband.com.au> wrote:
 
-> Thanks. Is there anything stopping us from converting it to
-> Makefile.autotools.in format?
+> Is this why I also observed this problem with ltrace which I posted on
+> 4/05/10 ? :
 
-Probably not. In this particular case, I didn't do it because we are in
-the stabilization phase and I didn't want to introduce too much
-unneeded changes. For mutt, I had to do it because it actually fixed
-some problems.
+Not sure because you didn't provide enough informations, such as the
+full build log and the Buildroot configuration file to reproduce.
 
 Thomas
 -- 
