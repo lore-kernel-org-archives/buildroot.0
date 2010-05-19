@@ -1,51 +1,33 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 19 May 2010 14:55:36 +0100
-Subject: [Buildroot] Converting packages to autotools leading to more in
-	target filesystem
-Message-ID: <4BF3EDD8.2070809@carallon.com>
+From: Bill Borton <security@conwin.com>
+Date: Wed, 19 May 2010 15:06:39 -0500
+Subject: [Buildroot] Compiling host-mtd 1.3.1 error: ld: cannot find -lubi
+Message-ID: <20100519150639.0062a6ae@snot.conwin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have been updating a project to use the latest buildroot from git and 
-I have noticed a change in the size of the target filesystem.
+I am trying to build a jffs2 root file system.  I can not get
+past this latest snag.  While compiling "host-mtd 1.3.1" it
+errors out with this:
 
-This is caused by the conversion of certain packages to use the 
-autotools infrastructure. The two packages in the tree I have noticed it 
-for are libsysfs and libraw1394. These are both libraries and previously 
-the install step for the target just copied the libraries into 
-$(TARGET_DIR)/usr/lib.
+/usr/lib/gcc/i686-pc-linux-gnu/4.3.4/../../../../i686-pc-linux-gnu/bin/ld: cannot find -lubi
+collect2: ld returned 1 exit status
+make[2]: *** [/home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-19-10/buildroot-2010.05-rc2/output/build/host-mtd-1.3.1/mkfs.ubifs/mkfs.ubifs] Error 1
+rm /home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-19-10/buildroot-2010.05-rc2/output/build/host-mtd-1.3.1/mkfs.ubifs/mkfs.ubifs.o
+make[2]: Leaving directory `/home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-19-10/buildroot-2010.05-rc2/output/build/host-mtd-1.3.1/mkfs.ubifs'
+make[1]: *** [subdirs_mkfs.ubifs_all] Error 2
+make[1]: *** Waiting for unfinished jobs....
 
-With the conversion to autotools instead the target install step is 
-calling install-strip on the Makefile in the package source. This 
-correctly installs the library but it also copies a number of test 
-applications that come bundled with the library. For my project where 
-filesystem size is constrained this can cause problems. If a system was 
-not constrained for filesystem size I can see that the test applications 
-could be useful to allow someone to test the library was working correctly.
+and ultimately this:
 
-I was easily able to remove the unwanted applications by adding a 
-INSTALL_TARGET_CMDS override for the package as below:
+make[1]: Leaving directory `/home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-19-10/buildroot-2010.05-rc2/output/build/host-mtd-1.3.1'
+make: *** [/home/drumgod/space1/atmel_linux/buildroot/from_uclibc/5-19-10/buildroot-2010.05-rc2/output/build/host-mtd-1.3.1/.stamp_built] Error 2
 
---- a/package/libraw1394/libraw1394.mk
-+++ b/package/libraw1394/libraw1394.mk
-@@ -8,4 +8,8 @@ LIBRAW1394_SOURCE:=libraw1394-$(LIBRAW1394_VERSION).tar.gz
-  LIBRAW1394_SITE:=http://www.kernel.org/pub/linux/libs/ieee1394/
-  LIBRAW1394_INSTALL_STAGING=YES
+I have tried many different configuration combinations but haven't
+been able to get past this point.  Can someone please point me in
+the right direction?
 
-+define LIBRAW1394_INSTALL_TARGET_CMDS
-+       $(MAKE) DESTDIR=$(TARGET_DIR)  install-strip -C 
-$(BUILD_DIR)/libraw1394-$(LIBRAW1394_VERSION)/src
-+endef
-+
-  $(eval $(call AUTOTARGETS,package,libraw1394))
-
-This works fine but forces all users to have a cut down install. Is this 
-a problem people think is worth solving? If so I will look at changing 
-it so that the autotools infrastructure can choose (depending on a 
-global config option) to either install the entire package or you can 
-specify make targets that only install some of the package.
-
-Will
+Thanks guys,
+-Bill
