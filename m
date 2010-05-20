@@ -1,29 +1,29 @@
-From: Kai Frank <kafr0001@stud.fh-kl.de>
-Date: Thu, 20 May 2010 22:47:20 +0200
-Subject: [Buildroot] cannot login to shell
-Message-ID: <7e65c704c441011fe9f80ce01a139ca3.squirrel@post.fh-kl.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 May 2010 21:14:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 1693] NTP trys IPV& even if not configured error:
+ 'IPV6_MULTICAST_HOPS' undeclared
+In-Reply-To: <bug-1693-163@https.bugs.busybox.net/>
+References: <bug-1693-163@https.bugs.busybox.net/>
+Message-ID: <20100520211414.653158D466@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm building a kernel and roofts (jffs2) for Atmel AT91RM9200.
-Everything seems to build fine. When i boot the images i get the
-"Welcome to buildroot" screen and a login prompt. When i press enter i get
-something like "login on ttyS0". This also seems to be correct. But the it
-returns to "Welcome to buildroot".
-When i'm trying to pass an init=/bin/sh as boot oder kernel option i get
-...
-freeing init memory(92k)
-cannot open an initial console
-unable to execute /bin/sh
-kernel panic... try passing init as an kernel option.
+https://bugs.busybox.net/show_bug.cgi?id=1693
 
-My /etc/passwd and /etc/shadow should by ok, because i manually edited the
-/etc/shadow and add an encrypted password for root and then you need the
-enter the correct password before it returns to "Welcome to buildroot".
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Any ideas?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Best regards!
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed in git (484d15dea6) - Thanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
