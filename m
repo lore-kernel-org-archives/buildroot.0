@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] ntp: fix build failure
-Message-ID: <20100521184448.77F869C148@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] netsnmp: disable build with
+	external toolchain
+Message-ID: <20100521184450.1F2E59C156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,66 +10,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4051d9db88d5cf789d64d973efd0f91fc741f6e
+commit: http://git.buildroot.net/buildroot/commit/?id=52e600ebec9cb571edee8f791da851035ae6b969
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds a patch to NTP to fix the following build failure,
-using a workaround patch found on the Fedora bugzilla:
+There is a build problem with netsnmp on external toolchain that isn't
+easy to fix: libtool strips the --sysroot that we are passing it,
+which make the link step fail.
 
-ntp_loopfilter.c: In function 'local_clock':
-ntp_loopfilter.c:571: error: 'MOD_NANO' undeclared (first use in this function)
-ntp_loopfilter.c:571: error: (Each undeclared identifier is reported only once
-ntp_loopfilter.c:571: error: for each function it appears in.)
-ntp_loopfilter.c: In function 'loop_config':
-ntp_loopfilter.c:896: error: 'MOD_NANO' undeclared (first use in this function)
+In preparation for the release, just make sure this package isn't
+visible to external toolchain users. Of course, on the long run, we
+should fix this.
+
+We also disable the build of the Quagga SNMP support because it
+selects netsnmp.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntp/ntp-4.2.4_p5-nano.patch |   36 +++++++++++++++++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 package/ntp/ntp-4.2.4_p5-nano.patch
+ package/netsnmp/Config.in |    6 ++++++
+ package/quagga/Config.in  |    4 ++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/ntp/ntp-4.2.4_p5-nano.patch b/package/ntp/ntp-4.2.4_p5-nano.patch
-new file mode 100644
-index 0000000..f4097ee
---- /dev/null
-+++ b/package/ntp/ntp-4.2.4_p5-nano.patch
-@@ -0,0 +1,36 @@
-+Fixes the MOD_NANO build failure
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index fd54eb4..810b654 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -1,7 +1,13 @@
+ config BR2_PACKAGE_NETSNMP
+ 	bool "netsnmp"
++	# Build with external toolchains is broken, libtool strips
++	# --sysroot at link time
++	depends on !BR2_TOOLCHAIN_EXTERNAL
+ 	help
+ 	  Suite of applications used to implement SNMP v1, SNMP v2c, and
+ 	  SNMP v3 using both IPv4 and IPv6.
+ 
+ 	  http://net-snmp.sourceforge.net/
 +
-+ntp_loopfilter.c: In function 'local_clock':
-+ntp_loopfilter.c:571: error: 'MOD_NANO' undeclared (first use in this function)
-+ntp_loopfilter.c:571: error: (Each undeclared identifier is reported only once
-+ntp_loopfilter.c:571: error: for each function it appears in.)
-+ntp_loopfilter.c: In function 'loop_config':
-+ntp_loopfilter.c:896: error: 'MOD_NANO' undeclared (first use in this function)
++comment "lmbench is broken with external toolchains"
++        depends on BR2_TOOLCHAIN_EXTERNAL
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index e540cc6..fb0d590 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -59,8 +59,12 @@ config BR2_PACKAGE_QUAGGA_NETLINK
+ 
+ config BR2_PACKAGE_QUAGGA_SNMP
+ 	bool "SNMP support"
++	depends on !BR2_TOOLCHAIN_EXTERNAL
+ 	select BR2_PACKAGE_NETSNMP
+ 
++comment "quagga snmp support broken with external toolchains"
++	depends on BR2_TOOLCHAIN_EXTERNAL
 +
-+Taken from
-+http://cvs.fedoraproject.org/viewvc/devel/ntp/ntp-4.2.4p7-nano.patch?revision=1.1&content-type=text/plain&view=co
-+
-+See the discussion at
-+https://bugs.launchpad.net/ubuntu/+source/ntp/+bug/412242 for more
-+details and links. The below fix is not a correct fix, but only a
-+workaround. The real fix required changes to kernel/libc headers.
-+
-+Index: ntp-4.2.4p5/include/ntp_syscall.h
-+===================================================================
-+--- ntp-4.2.4p5.orig/include/ntp_syscall.h	2010-05-14 17:34:48.000000000 +0200
-++++ ntp-4.2.4p5/include/ntp_syscall.h	2010-05-14 17:35:13.000000000 +0200
-+@@ -14,6 +14,14 @@
-+ # include <sys/timex.h>
-+ #endif
-+ 
-++#if defined(ADJ_NANO) && !defined(MOD_NANO)
-++#define MOD_NANO ADJ_NANO
-++#endif
-++
-++#if defined(ADJ_TAI) && !defined(MOD_TAI)
-++#define MOD_TAI ADJ_TAI
-++#endif
-++
-+ #ifndef NTP_SYSCALLS_LIBC
-+ #ifdef NTP_SYSCALLS_STD
-+ # define ntp_adjtime(t)		syscall(SYS_ntp_adjtime, (t))
+ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	bool "TCP/IP socket connection between zebra and proto daemon"
+ 
 -- 
 1.6.3.3
