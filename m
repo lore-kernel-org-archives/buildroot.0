@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] startup-notification: add
-	dependency on xlib_libX11
-Message-ID: <20100521184448.460429C148@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] samba: only require libiconv if
+	!BR2_ENABLE_LOCALE
+Message-ID: <20100521184448.A26389C148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=362791a7c18bf2c2528334543cb7baf36c4a89fe
+commit: http://git.buildroot.net/buildroot/commit/?id=0317b30912eb73bc512b137b1581ff520b14c40a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/startup-notification/Config.in             |    2 ++
- .../startup-notification/startup-notification.mk   |    1 +
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ package/samba/Config.in |    2 +-
+ package/samba/samba.mk  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/startup-notification/Config.in b/package/startup-notification/Config.in
-index 23fdf74..277d300 100644
---- a/package/startup-notification/Config.in
-+++ b/package/startup-notification/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_STARTUP_NOTIFICATION
- 	bool "startup-notification"
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	depends on BR2_PACKAGE_XORG7
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 720ecd7..a7a0b34 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_SAMBA
+ 	bool "samba"
+-	select BR2_PACKAGE_LIBICONV
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
- 	  Startup-notification is a library used to monitor application startup.
+ 	  Provides print services to all manner of SMB/CIFS clients,
+ 	  including the numerous versions of Microsoft Windows
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 4115363..39968a9 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -16,7 +16,7 @@ SAMBA_INSTALL_TARGET = YES
  
-diff --git a/package/startup-notification/startup-notification.mk b/package/startup-notification/startup-notification.mk
-index 62f067a..f70fcc1 100644
---- a/package/startup-notification/startup-notification.mk
-+++ b/package/startup-notification/startup-notification.mk
-@@ -9,6 +9,7 @@ STARTUP_NOTIFICATION_SITE = http://freedesktop.org/software/startup-notification
- STARTUP_NOTIFICATION_AUTORECONF = NO
- STARTUP_NOTIFICATION_INSTALL_STAGING = YES
- STARTUP_NOTIFICATION_INSTALL_TARGET = YES
-+STARTUP_NOTIFICATION = xlib_libX11
  
- STARTUP_NOTIFICATION_CONF_ENV = lf_cv_sane_realloc=yes
- 
+ SAMBA_DEPENDENCIES = \
+-	libiconv \
++	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
+ 	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),readline) \
+ 	$(if $(BR2_PACKAGE_SAMBA_AVAHI),avahi) \
 -- 
 1.6.3.3
