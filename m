@@ -1,42 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 May 2010 09:50:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 1789] binutils fails to build for i386
-In-Reply-To: <bug-1789-163@https.bugs.busybox.net/>
-References: <bug-1789-163@https.bugs.busybox.net/>
-Message-ID: <20100521095042.6CA8D9C2E0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 May 2010 11:53:01 +0200
+Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
+In-Reply-To: <4BF64DBB.9030805@invalid-domain.net>
+References: <1274422785.5719.8.camel@bernd-desktop>
+	<4BF64DBB.9030805@invalid-domain.net>
+Message-ID: <20100521115301.078521bd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1789
+On Fri, 21 May 2010 11:09:15 +0200
+Ludger Keilig <buildroot@invalid-domain.net> wrote:
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I tried exactly the same configuration :
- make ARCH=i386 defconfig
- make
+> Seems to be the same as in bug #1789.
+> 
+> For me, it helped to revert the patch introduced in commit
+> 6b939d40f6a29a43277566adc9d4312d49cb3abf.
+> No, I don't like this, but at least it seems to work.
 
-and I cannot reproduce the build failure. fibheap.c just builds fine here:
+I just tested the configuration suggested in #1789, and it just worked
+for me. Something odd is going on here..
 
-if [ x"" != x ]; then \
-          /usr/bin/gcc -Wl,-rpath -Wl,/home/test/buildroot/output/host/usr/lib
--I/home/test/buildroot/output/host/include
--I/home/test/buildroot/output/host/usr/include -c -DHAVE_CONFIG_H -g -O2  -I.
--I/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/../include 
--W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  
-/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/fibheap.c -o
-pic/fibheap.o; \
-        else true; fi
-/usr/bin/gcc -Wl,-rpath -Wl,/home/test/buildroot/output/host/usr/lib
--I/home/test/buildroot/output/host/include
--I/home/test/buildroot/output/host/usr/include -c -DHAVE_CONFIG_H -g -O2  -I.
--I/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/../include 
--W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic 
-/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/fibheap.c -o
-fibheap.o
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
