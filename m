@@ -1,52 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 09:48:15 +0200
-Subject: [Buildroot] [PATCH] fix broken path in arm_toolchain_defconfig
-In-Reply-To: <AANLkTinRRSrYrySzAmiv7zEqUAW_L60IY7bgRH2ZQlHP@mail.gmail.com>
-References: <AANLkTikVbjYf9S-NaAT2Op_js9h00nnH020Y-NHTJ7Wc@mail.gmail.com>
-	<20100519133428.164d6234@surf>
-	<AANLkTinRRSrYrySzAmiv7zEqUAW_L60IY7bgRH2ZQlHP@mail.gmail.com>
-Message-ID: <20100521094815.2513c09a@surf>
+Date: Fri, 21 May 2010 09:53:53 +0200
+Subject: [Buildroot] libglib2 build
+In-Reply-To: <87vdahvitt.fsf@macbook.be.48ers.dk>
+References: <FEB4C28CC3154F1885B80CEB507D4F51@apexjs>
+	<87vdahvitt.fsf@macbook.be.48ers.dk>
+Message-ID: <20100521095353.22e3b223@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 21 May 2010 15:12:13 +0800
-Chih-Min Chao <cmchao@gmail.com> wrote:
+On Fri, 21 May 2010 09:02:06 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> So, should I generate the patch by "git format-patch --signoff
-> revision_range" ??
+> Normally it is:
+> 
+> ./staging/usr/bin/x86_64-linux-nm -D
+> target/lib/libuClibc-0.9.31.so|grep res_query 000000000002ff08 T
+> __res_query 000000000002ffbf T __res_querydomain
 
-It is usually at commit time that the signed-off line is added, by
-doing :
+res_query() is defined as soon as either UCLIBC_HAS_IPV4 or
+UCLIBC_HAS_IPV6 are defined in uClibc configuration. In the 0.9.31
+uClibc configuration that Buildroot uses, UCLIBC_HAS_IPV4 is always
+selected. So this should not happen *unless* you created a different
+uClibc configuration which doesn't have UCLIBC_HAS_IPV4. Did you made
+any change to the default uClibc configuration used in Buildroot ?
 
-  git commit -s
-
-instead of just
-
-  git commit
-
-Typical very basic work-flow :
-
- # Assuming you are on master
-
- # Create a new branch for your work and switch to this branch
- git checkout -b mywork
-
- # Hack hack hack
-
- # Commit your work (supposing you want to all changes in a single
- # commit, which may or may not be appropriate)
- git commit -a -s
-
- # Format the patch (or patches)
- git format-patch master
-
- # Send the patch
- git send-email --to buildroot at uclibc.org *.patch
-
-Regards,
+Just as Peter showed, could you check if res_query is actually
+available in your libc binary ?
 
 Thomas
 -- 
