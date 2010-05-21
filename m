@@ -1,72 +1,88 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 20 May 2010 23:13:34 +0200
-Subject: [Buildroot] [git commit master] ntp: fix build without ipv6 support
-Message-ID: <20100520211429.B1FB78D4E5@busybox.osuosl.org>
+From: Thomas <tokant@gmx.net>
+Date: Fri, 21 May 2010 08:19:45 +0200
+Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
+Message-ID: <1274422785.5719.8.camel@bernd-desktop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=484d15dea6f3175eb5b999592a7f4bb9d101c68a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I tried buildroot-2010.05-rc2:
+make at91rm9200df_defconfig
+make menuconfig
+make
 
-Closes #1693
+buildroot terminates with:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                             |    6 +++++-
- package/ntp/ntp-optional-ipv6.patch |   24 ++++++++++++++++++++++++
- 2 files changed, 29 insertions(+), 1 deletions(-)
- create mode 100644 package/ntp/ntp-optional-ipv6.patch
+checking for zlib.h... yes
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_union?:checking linker --as-needed support...
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:151: warning: implicit declaration of function ?free?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_replace_key_data?:
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: ?LONG_MIN? undeclared (first use in this function)
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: (Each undeclared identifier is reported only once
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: for each function it appears in.)
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_delete_node?:
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:261: error: ?LONG_MIN? undeclared (first use in this function)
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:265: warning: implicit declaration of function ?abort?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:265: warning: incompatible implicit declaration of built-in function ?abort?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_consolidate?:
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:368: warning: implicit declaration of function ?memset?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:368: warning: incompatible implicit declaration of built-in function ?memset?
+make[3]: *** [fibheap.o] Error 1
+make[3]: Leaving directory
+`/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1-build/libiberty'
+make[2]: *** [all-libiberty] Error 2
+make[2]: *** Waiting for unfinished jobs....
+yes
+checking for cos in -lm... yes
+checking for ftello... yes
+checking for ftello64... yes
+checking for fseeko... yes
+checking for fseeko64... yes
+checking for fopen64... yes
+checking size of off_t... 8
+checking file_ptr type... BFD_HOST_64_BIT
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for getpagesize... (cached) yes
+checking for working mmap... yes
+checking for madvise... yes
+checking for mprotect... yes
+configure: updating cache ./config.cache
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating doc/Makefile
+config.status: creating bfd-in3.h
+config.status: creating po/Makefile.in
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing default-1 commands
+config.status: executing bfd_stdint.h commands
+config.status: executing default commands
+make[2]: Leaving directory
+`/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1-build'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1-build'
+make: ***
+[/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1-build/binutils/objdump] Error 2
+bernd at bernd-desktop:/media/disk/br1005rc2/buildroot-2010.05-rc2$
 
-diff --git a/CHANGES b/CHANGES
-index c69debc..8c6d645 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,11 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: aumix, avahi, busybox, mtd-utils
-+	Updated/fixed packages: aumix, avahi, busybox, mtd-utils, ntp
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#1693: NTP trys IPV6 even if not configured error: 'IPV6_MULTICAST...
- 
- 2010.05-rc2, Released May 11th, 2010:
- 
-diff --git a/package/ntp/ntp-optional-ipv6.patch b/package/ntp/ntp-optional-ipv6.patch
-new file mode 100644
-index 0000000..20d6edf
---- /dev/null
-+++ b/package/ntp/ntp-optional-ipv6.patch
-@@ -0,0 +1,24 @@
-+[PATCH] ntpd: fix build without ipv6 support
-+
-+ntp_io.c was checkin the non-existing DISABLE_IPV6 define rather
-+than WANT_IPV6 as defined in config.h, breaking the build if
-+the toolchain doesn't have ipv6 support.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ ntpd/ntp_io.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: ntp-4.2.4p5/ntpd/ntp_io.c
-+===================================================================
-+--- ntp-4.2.4p5.orig/ntpd/ntp_io.c
-++++ ntp-4.2.4p5/ntpd/ntp_io.c
-+@@ -55,7 +55,7 @@
-+  * Set up some macros to look for IPv6 and IPv6 multicast
-+  */
-+ 
-+-#if defined(ISC_PLATFORM_HAVEIPV6) && !defined(DISABLE_IPV6)
-++#if defined(ISC_PLATFORM_HAVEIPV6) && defined(WANT_IPV6)
-+ 
-+ #define INCLUDE_IPV6_SUPPORT
-+ 
--- 
-1.6.3.3
+earlier in the terminal output, I can see a lot of warnings about
+implicit/incompatible declaration of functions:
+
+warning: implicit declaration of function ?strcpy?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c:193: warning: incompatible implicit declaration of built-in function ?strcpy?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c: In function ?dyn_string_copy_cstr?:
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c:206: warning: implicit declaration of function ?strlen?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c:206: warning: incompatible implicit declaration of built-in function ?strlen?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c:211: warning: incompatible implicit declaration of built-in function ?strcpy?
+/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/dyn-string.c: In function ?dyn_string_insert?:
+
+My host system is Ubuntu 8.04/32 Bit.
+
+Thanks, Thomas.
