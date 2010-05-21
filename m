@@ -1,56 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 May 2010 08:53:34 +0200
-Subject: [Buildroot] [git commit master] qt: update x86x86fix for 32bit pc
-	hosts
-Message-ID: <20100521065617.A60929C008@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 May 2010 09:02:06 +0200
+Subject: [Buildroot] libglib2 build
+In-Reply-To: <FEB4C28CC3154F1885B80CEB507D4F51@apexjs> (Sagaert Johan's
+	message of "Fri, 21 May 2010 00:57:20 +0200")
+References: <FEB4C28CC3154F1885B80CEB507D4F51@apexjs>
+Message-ID: <87vdahvitt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb81787ae1f8b1d8c513f42766c2155b66feaf84
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sagaert> Hi Peter
+ Sagaert> (should i post to mailinglist ?)
 
-The recent change to use config.guess to figure out GNU_HOST_NAME
-broken the x86x86fix detection for 32bit hosts, as config.guess
-returns something like i686-pc-linux-gnu rather than something with
-*-unknown-linux-* like we used to use.
-
-Fix it by simply looking for "linux" instead.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES          |    2 +-
- package/qt/qt.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 8c6d645..7a3fe09 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,7 @@
+Yes, please - Other people than me might be able to help, or learn from
+the solution.
  
- 	Fixes all over the tree.
+ Sagaert> tried again...
  
--	Updated/fixed packages: aumix, avahi, busybox, mtd-utils, ntp
-+	Updated/fixed packages: aumix, avahi, busybox, mtd-utils, ntp, qt
+ Sagaert> snip........
  
- 	Issues resolved (http://bugs.uclibc.org):
+ Sagaert> checking wspiapi.h presence... no
+ Sagaert> checking for wspiapi.h... no
+ Sagaert> checking for strndup... yes
+ Sagaert> checking for setresuid... yes
+ Sagaert> checking for setreuid... yes
+ Sagaert> checking sys/prctl.h usability... yes
+ Sagaert> checking sys/prctl.h presence... yes
+ Sagaert> checking for sys/prctl.h... yes
+ Sagaert> checking arpa/nameser_compat.h usability... yes
+ Sagaert> checking arpa/nameser_compat.h presence... yes
+ Sagaert> checking for arpa/nameser_compat.h... yes
+ Sagaert> checking for res_query... no
+ Sagaert> checking for res_query in -lresolv... no
+ Sagaert> checking for res_query in -lresolv (alternate version)... no
+ Sagaert> checking for res_query in -lbind... no
+ Sagaert> configure: error: res_query not found
+ Sagaert> make: *** [/home/johan/buildroot/output/build/libglib2-2.22.5
+ Sagaert> /.stamp_configured] Error 1
  
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 4f42e59..aaf965e 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -372,7 +372,7 @@ BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
- # x86x86fix
- # Workaround Qt Embedded bug when crosscompiling for x86 under x86 with linux
- # host. It's unclear if this would happen on other hosts.
--ifneq ($(findstring unknown-linux,$(GNU_HOST_NAME)),)
-+ifneq ($(findstring linux,$(GNU_HOST_NAME)),)
- ifneq ($(findstring x86,$(BR2_PACKAGE_QT_EMB_PLATFORM)),)
- QT_CONFIGURE+= -platform linux-g++
- endif
+ 
+ Sagaert> i wonder where res_query is defined , i guess it is not build into uclibc
+ 
+Normally it is:
+
+./staging/usr/bin/x86_64-linux-nm -D target/lib/libuClibc-0.9.31.so|grep res_query
+000000000002ff08 T __res_query
+000000000002ffbf T __res_querydomain
+
+Could you either have a look yourself in
+/home/johan/buildroot/output/build/libglib2-2.22.5/config.log or put it
+online somewhere so we can see what fails in the res_query detection?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
