@@ -1,44 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 10:08:38 +0200
-Subject: [Buildroot] [PATCH 18/19] vpnc: pass CFLAGS at link time
+Date: Fri, 21 May 2010 10:08:37 +0200
+Subject: [Buildroot] [PATCH 17/19] uemacs: don't forget CFLAGS at link time
 In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <56407a4efa4f0da90462e4eb71180b3c2c8bb874.1274428596.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d30649ada0e27b0c9f0fdff8f5d9ece18b077a87.1274428596.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-External toolchain builds absolutely require the --sysroot option to
-be passed at link time.
+Without CFLAGS, the build breaks because --sysroot is missing at link
+time, and this option is absolutely mandatory for external toolchain
+builds.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vpnc/vpnc.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/uemacs/uemacs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
-index 5d0f87a..c4f23fa 100644
---- a/package/vpnc/vpnc.mk
-+++ b/package/vpnc/vpnc.mk
-@@ -26,7 +26,7 @@ $(VPNC_BINARY): $(VPNC_DIR)/.unpacked
- 	rm -f $@
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) INCLUDE=$(STAGING_DIR)/usr/include \
- 		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error \
-+		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error LDFLAGS+="$(TARGET_CFLAGS)" \
- 		CC="$(TARGET_CC)" -C $(VPNC_DIR)
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index 6e2f4c4..539ad51 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -23,7 +23,7 @@ $(UEMACS_DIR)/.unpacked: $(DL_DIR)/$(UEMACS_SOURCE)
  
- $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
-@@ -38,7 +38,7 @@ $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
- 		MANDIR=/usr/share/man \
- 		VERSION=$(VPNC_VERSION) \
- 		INCLUDE=$(STAGING_DIR)/usr/include \
--		LDFLAGS="-lgcrypt -lgpg-error" \
-+		LDFLAGS="-lgcrypt -lgpg-error $(TARGET_CFLAGS)" \
- 		-C $(VPNC_DIR) install
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(VPNC_TARGET_BINARY)
+ $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
+ 	$(MAKE) -C $(UEMACS_DIR) \
+-	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS=-lncurses
++	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS="$(TARGET_CFLAGS) -lncurses"
+ 	$(STRIPCMD) $(UEMACS_DIR)/$(UEMACS_BINARY)
  
+ $(TARGET_DIR)/$(UEMACS_TARGET_BINARY): $(UEMACS_DIR)/$(UEMACS_BINARY)
 -- 
 1.6.3.3
