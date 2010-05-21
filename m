@@ -1,39 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] CHANGES: update with changes from
-	2010-05-15-fixes branch
-Message-ID: <20100521184450.8D0C99C156@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 May 2010 19:04:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 1801] Avahi-autoipd doesn't create
+	TARGET_DIR/var/lib
+In-Reply-To: <bug-1801-163@https.bugs.busybox.net/>
+References: <bug-1801-163@https.bugs.busybox.net/>
+Message-ID: <20100521190442.6224388EF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1801
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5faf6627eed1971ff20964601e0f4227ed8ae255
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-diff --git a/CHANGES b/CHANGES
-index 7a3fe09..52bb2dc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,11 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: aumix, avahi, busybox, mtd-utils, ntp, qt
-+	Updated/fixed packages: aumix, avahi, busybox, cairo, gettext,
-+	gmpc, grep, hal, iconv, libcgicc, libglib2, libidn, libmpd,
-+	libpcap, libsoup, lmbench, ltrace, lvm2, make, mtd-utils,
-+	mutt, netsnmp, ntp, pango, php, psmisc, qt, samba, sshfs,
-+	startup-notification, uemacs, util-linux, vpnc
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
