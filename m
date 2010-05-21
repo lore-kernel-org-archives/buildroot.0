@@ -1,38 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 09:53:53 +0200
-Subject: [Buildroot] libglib2 build
-In-Reply-To: <87vdahvitt.fsf@macbook.be.48ers.dk>
-References: <FEB4C28CC3154F1885B80CEB507D4F51@apexjs>
-	<87vdahvitt.fsf@macbook.be.48ers.dk>
-Message-ID: <20100521095353.22e3b223@surf>
+Date: Fri, 21 May 2010 10:08:21 +0200
+Subject: [Buildroot] [PATCH 01/19] Add a BR2_NEEDS_GETTEXT option
+In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <54d64798e1e14b526c3cc1142961972cff9f1e8a.1274428595.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 21 May 2010 09:02:06 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+When using an external toolchain that uses the glibc or eglibc C
+libraries, compiling a separate gettext and libintl is not needed and
+is even a source of confusion, causing build failures. These build
+failures are due to the fact that when libintl is compiled, it
+replaces the C library libintl.h by its own, which does #define
+gettext libintl_gettext. Then, when packages want to use gettext,
+autoconf realize that gettext is available in the C library and
+therefore do not add -lintl to the LDFLAGS, causing the build failure
+because the program has been compiled to use libintl_gettext but this
+function is not available.
 
-> Normally it is:
-> 
-> ./staging/usr/bin/x86_64-linux-nm -D
-> target/lib/libuClibc-0.9.31.so|grep res_query 000000000002ff08 T
-> __res_query 000000000002ffbf T __res_querydomain
+Therefore, we should only use gettext if a uClibc internal toolchain
+or a uClibc external toolchain. If an external glibc toolchain is
+used, gettext shouldn't be used.
 
-res_query() is defined as soon as either UCLIBC_HAS_IPV4 or
-UCLIBC_HAS_IPV6 are defined in uClibc configuration. In the 0.9.31
-uClibc configuration that Buildroot uses, UCLIBC_HAS_IPV4 is always
-selected. So this should not happen *unless* you created a different
-uClibc configuration which doesn't have UCLIBC_HAS_IPV4. Did you made
-any change to the default uClibc configuration used in Buildroot ?
+In order to implement that, we introduce the BR2_NEEDS_GETTEXT option,
+which is hidden to the user, and whose value is computed automatically
+from the rest of the configuration.
 
-Just as Peter showed, could you check if res_query is actually
-available in your libc binary ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Config.in.2 |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Thomas
+diff --git a/toolchain/Config.in.2 b/toolchain/Config.in.2
+index f04f18a..fc6759d 100644
+--- a/toolchain/Config.in.2
++++ b/toolchain/Config.in.2
+@@ -56,6 +56,14 @@ config BR2_ENABLE_LOCALE_WHITELIST
+ 	  will be available on the target - That purely depends on the
+ 	  support for that locale in the selected packages.
+ 
++# uClibc toolchains require a separatly-compiled gettext/libintl when
++# locale support is enabled. This isn't necessary with glibc
++#  toolchains as glibc includes gettext/libintl.
++config BR2_NEEDS_GETTEXT
++	bool
++	default y if (BR2_TOOLCHAIN_BUILDROOT && BR2_ENABLE_LOCALE)
++	default y if (BR2_TOOLCHAIN_EXTERNAL_UCLIBC && BR2_ENABLE_LOCALE)
++
+ config BR2_USE_WCHAR
+ 	bool "Enable WCHAR support"
+ 	help
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
