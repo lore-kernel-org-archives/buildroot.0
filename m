@@ -1,28 +1,35 @@
-From: Phil Edworthy <Phil.Edworthy@renesas.com>
-Date: Fri, 21 May 2010 11:01:26 +0100
-Subject: [Buildroot] Building DirectFB kernel module
-Message-ID: <AB12B32E73474741A2C5361C433A44DE01C755FC@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 May 2010 12:25:42 +0200
+Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
+In-Reply-To: <1274422785.5719.8.camel@bernd-desktop>
+References: <1274422785.5719.8.camel@bernd-desktop>
+Message-ID: <20100521122542.5c4b0907@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 21 May 2010 08:19:45 +0200
+Thomas <tokant@gmx.net> wrote:
 
-I'm new to Buildroot and think I'll use it for a BSP I'm working on. I've
-added a few packages that are specific to us and it's going pretty well.
+> I tried buildroot-2010.05-rc2:
+> make at91rm9200df_defconfig
+> make menuconfig
+> make
 
-However, for DirectFB I need to build a kernel module (sh772x gfx). The
-source for this is included in the DirectFB tarball. At the moment, I'm
-building the kernel and this module after building everything else with
-Buildroot.
+I just tried this, at the build of binutils (and the complete
+toolchain) works. The whole build process fails later while compiling
+U-Boot, but this is another issue.
 
-I'm not sure how to add an additional build step for this. Is there an
-existing BR package that does something similar?
+Could you post the full build log somewhere, with the build restarted
+from scratch (rm -rf output/ before running make) ?
 
-The alternative would be a new package for this, but then how do I get it to
-operate on the source from the DirectFB package?
+Thanks,
 
-Thanks
-Phil
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
