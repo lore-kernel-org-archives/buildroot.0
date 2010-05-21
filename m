@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] netsnmp: disable build with
-	external toolchain
-Message-ID: <20100521184450.1F2E59C156@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] pango: run pango-querymodules on
+	the target instead of on the host
+Message-ID: <20100521184448.C71099C148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,60 +10,97 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52e600ebec9cb571edee8f791da851035ae6b969
+commit: http://git.buildroot.net/buildroot/commit/?id=832ce382c6fbd416ac562da10ba3946e3fc7b935
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is a build problem with netsnmp on external toolchain that isn't
-easy to fix: libtool strips the --sysroot that we are passing it,
-which make the link step fail.
+We needed to build pango for the host in order to compile
+pango-querymodules for the host, which was used to produce
+/etc/pango/pango.modules. Unfortunately:
 
-In preparation for the release, just make sure this package isn't
-visible to external toolchain users. Of course, on the long run, we
-should fix this.
+ * This produces an incorrect /etc/pango/pango.modules (no modules
+   detected in my case), probably because the host pango-querymodules
+   was looking at host pango modules
 
-We also disable the build of the Quagga SNMP support because it
-selects netsnmp.
+ * This requires to build pango for the host, which requires to build
+   cairo for the host, which requires to build X11 for the host.
+
+To make things work and remove the dependency between pango and
+host-pango, we introduce a S25pango script that creates
+/etc/pango/pango.modules on startup if it doesn't exist, just as we do
+with libgtk2 for /etc/gtk-2.0/gdk-pixbuf.loaders.
+
+Since host-pango is no longer needed, we remove all definitions
+related to it.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsnmp/Config.in |    6 ++++++
- package/quagga/Config.in  |    4 ++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/pango/S25pango |   20 ++++++++++++++++++++
+ package/pango/pango.mk |   18 ++----------------
+ 2 files changed, 22 insertions(+), 16 deletions(-)
+ create mode 100644 package/pango/S25pango
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index fd54eb4..810b654 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -1,7 +1,13 @@
- config BR2_PACKAGE_NETSNMP
- 	bool "netsnmp"
-+	# Build with external toolchains is broken, libtool strips
-+	# --sysroot at link time
-+	depends on !BR2_TOOLCHAIN_EXTERNAL
- 	help
- 	  Suite of applications used to implement SNMP v1, SNMP v2c, and
- 	  SNMP v3 using both IPv4 and IPv6.
- 
- 	  http://net-snmp.sourceforge.net/
+diff --git a/package/pango/S25pango b/package/pango/S25pango
+new file mode 100644
+index 0000000..9af9307
+--- /dev/null
++++ b/package/pango/S25pango
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# run pango-querymodules if needed
 +
-+comment "lmbench is broken with external toolchains"
-+        depends on BR2_TOOLCHAIN_EXTERNAL
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index e540cc6..fb0d590 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -59,8 +59,12 @@ config BR2_PACKAGE_QUAGGA_NETLINK
- 
- config BR2_PACKAGE_QUAGGA_SNMP
- 	bool "SNMP support"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL
- 	select BR2_PACKAGE_NETSNMP
- 
-+comment "quagga snmp support broken with external toolchains"
-+	depends on BR2_TOOLCHAIN_EXTERNAL
++FILE=/etc/pango/pango.modules
 +
- config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
- 	bool "TCP/IP socket connection between zebra and proto daemon"
++case "$1" in
++     start|"")
++	if [ ! -f $FILE ] ; then
++	   mkdir -p /etc/pango
++	   /usr/bin/pango-querymodules > "$FILE"
++	fi
++	;;
++    stop)
++	;;
++    *)
++	echo "Usage: $0 {start|stop}" >&2
++	exit 1
++	;;
++esac
+\ No newline at end of file
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 812a4c8..c640045 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -40,16 +40,7 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ PANGO_CONF_OPT = --enable-shared --enable-static \
+ 		--enable-explicit-deps=no --disable-debug
  
+-HOST_PANGO_CONF_OPT = \
+-		--disable-static \
+-		$(if $(BR2_PACKAGE_XORG7),--with-x,--without-x) \
+-		--disable-debug \
+-
+-PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),gettext libintl) host-pkg-config host-pango libglib2 cairo
+-
+-HOST_PANGO_DEPENDENCIES = host-pkg-config host-cairo host-libglib2 host-autoconf host-automake
+-
+-HOST_PANGO_AUTORECONF = YES
++PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),gettext libintl) host-pkg-config libglib2 cairo
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+         PANGO_CONF_OPT += --with-x \
+@@ -61,12 +52,7 @@ else
+ endif
+ 
+ $(eval $(call AUTOTARGETS,package,pango))
+-$(eval $(call AUTOTARGETS,package,pango,host))
+ 
+ $(PANGO_HOOK_POST_INSTALL):
+-	mkdir -p $(TARGET_DIR)/etc/pango
+-	$(PANGO_HOST_BINARY) > $(TARGET_DIR)/etc/pango/pango.modules
+-	$(SED) 's~$(HOST_DIR)~~g' $(TARGET_DIR)/etc/pango/pango.modules
++	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
+ 	touch $@
+-
+-PANGO_HOST_BINARY:=$(HOST_DIR)/usr/bin/pango-querymodules
 -- 
 1.6.3.3
