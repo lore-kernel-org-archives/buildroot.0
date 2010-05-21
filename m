@@ -1,39 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 May 2010 16:26:49 +0200
-Subject: [Buildroot] libglib2 solved
-In-Reply-To: <CE4DE14F770C449092622CC4E29235E7@apexjs> (Sagaert Johan's
-	message of "Fri, 21 May 2010 16:14:08 +0200")
-References: <CE4DE14F770C449092622CC4E29235E7@apexjs>
-Message-ID: <877hmxuy8m.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 May 2010 16:29:11 +0200
+Subject: [Buildroot] [pull request] Pull request for branch fltk-fix-bug-1729
+Message-ID: <cover.1274452131.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Hi,
 
- Sagaert> Hi
- Sagaert> After some searching i found UCLIBC_HAS_LIBRESOLV_STUB should be turned on in
- Sagaert> order to get libresolv.
+This commit fixes bug #1729 by fixing the FLTK build.
 
-Yes:
+Thomas
 
-git grep RESOLV_STUB toolchain/uClibc/uClibc-0.9.31.config 
-toolchain/uClibc/uClibc-0.9.31.config:UCLIBC_HAS_LIBRESOLV_STUB=y
+The following changes since commit f3122259e2cbbc0be0fc02820a146b4e4f48bef6:
+  Peter Korsgaard (1):
+        mtd-utils: buildsystem is broken with parallel make (regarding libubi)
 
-So if you're using the default config you should have this already.
+are available in the git repository at:
 
- Sagaert> libglib2 is happy now about res_query , but now complains
- Sagaert> about gettext.  I guess i need to do a distclean and rebuild
- Sagaert> from scratch ( i think this is a must after changing the
- Sagaert> toolchain settings )
+  git://git.busybox.net/~tpetazzoni/git/buildroot fltk-fix-bug-1729
 
-Yes, definately.
- 
- Sagaert> There is hope...
+Thomas Petazzoni (1):
+      fltk: fix build
 
-;)
+ package/fltk/fltk-1.1.7-bail-out-on-error.patch |   54 +++++++++++++++++++++++
+ package/fltk/fltk-1.1.7-disable-test.patch      |   17 +++++++
+ package/fltk/fltk-1.1.7-scandir-fix.patch       |   20 ++++++++
+ package/fltk/fltk-1.1.7-tests.patch             |   11 -----
+ 4 files changed, 91 insertions(+), 11 deletions(-)
+ create mode 100644 package/fltk/fltk-1.1.7-bail-out-on-error.patch
+ create mode 100644 package/fltk/fltk-1.1.7-disable-test.patch
+ create mode 100644 package/fltk/fltk-1.1.7-scandir-fix.patch
+ delete mode 100644 package/fltk/fltk-1.1.7-tests.patch
 
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
