@@ -1,97 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 May 2010 14:09:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 1807] LZMA 4.32.7,
-	Required header file(s) are missing.
-In-Reply-To: <bug-1807-163@https.bugs.busybox.net/>
-References: <bug-1807-163@https.bugs.busybox.net/>
-Message-ID: <20100521140907.BA21D8F6CB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 May 2010 16:09:41 +0200
+Subject: [Buildroot] building libglib2
+In-Reply-To: <3D6F80E6910D4096A4905780E1A2E63E@apexjs> (Sagaert Johan's
+	message of "Fri, 21 May 2010 15:43:56 +0200")
+References: <3D6F80E6910D4096A4905780E1A2E63E@apexjs>
+Message-ID: <87bpc9uz16.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1807
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
---- Comment #2 from Peter Katzmann <peter.katzmann@edag.de>  ---
-  $ ./configure --target=armeb-linux --host=armeb-linux
---build=x86_64-unknown-linux-gnu --prefix=/usr --exec-prefix=/usr
---sysconfdir=/etc --disable-gtk-doc --disable-nls --disable-ipv6
---disable-debug
+ Sagaert> I checked the staging dir :
+ 
+ Sagaert> in my 0.9.30.3 build there is a staging/lib/libresolv.so.0
+ 
+ Sagaert> under my build with uclibc 0.9.31 there is no such library
 
-## --------- ##
-## Platform. ##
-## --------- ##
+No? Are you using
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config" in your
+config?
 
-hostname = pet
-uname -m = x86_64
-uname -r = 2.6.31.12-0.2-desktop
-uname -s = Linux
-uname -v = #1 SMP PREEMPT 2010-03-16 21:25:39 +0100
+libresolv is empty in 0.9.31 (functionality in libuClibc), but we are
+building a stub libresolv since mid april:
 
-/usr/bin/uname -p = unknown
-/bin/uname -X     = unknown
+4ab6883ac5aa07ea1c317d85c92495b155cf214a
+Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date:   Wed Apr 14 11:17:47 2010 -0300
 
-/bin/arch              = x86_64
-/usr/bin/arch -k       = unknown
-/usr/convex/getsysinfo = unknown
-/usr/bin/hostinfo      = unknown
-/bin/machine           = unknown
-/usr/bin/oslevel       = unknown
-/bin/universe          = unknown
-
-
-configure:20322: result: no
-configure:20326: checking utime.h presence
-configure:20341:
-/usr2/new/Source-ast162/build_env/buildroot/project_build_armeb/../toolchain/usr/bin/armeb-unknown-linux-uclibc-cpp
--Os -pipe -Os  -mtune=xscale -march=armv5te -mabi=apcs-gnu -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/usr2/new/Source-ast162/build_env/buildroot/project_build_armeb/../toolchain/usr/include
--I/usr2/new/Source-ast162/build_env/buildroot/project_build_armeb/../toolchain/include
---sysroot=/usr2/new/Source-ast162/build_env/buildroot/project_build_armeb/../toolchain/
--isysroot
-/usr2/new/Source-ast162/build_env/buildroot/project_build_armeb/../toolchain 
-conftest.c
-conftest.c:30:19: error: utime.h: No such file or directory
-configure:20348: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| #define PACKAGE_NAME "LZMA"
-| #define PACKAGE_TARNAME "lzma"
-| #define PACKAGE_VERSION "4.32.7"
-| #define PACKAGE_STRING "LZMA 4.32.7"
-| #define PACKAGE_BUGREPORT "lasse.collin at tukaani.org"
-| #define PACKAGE "lzma"
-| #define VERSION "4.32.7"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #define STDC_HEADERS 1
-| #define HAVE_FCNTL_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_LIMITS_H 1
-| #define HAVE_STDDEF_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_SYS_TIME_H 1
-| #define HAVE_UNISTD_H 1
-| /* end confdefs.h.  */
-| #include <utime.h>
-configure:20362: result: no
-configure:20395: checking for utime.h
-configure:20404: result: no
-configure:20415: error: Required header file(s) are missing.
+    uclibc: Enable libresolv and libnsl stubs by default for 0.9.31
+    
+    Closes #1555.
+    
+    Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+    Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
