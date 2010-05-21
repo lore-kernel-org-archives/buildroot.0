@@ -1,49 +1,22 @@
-From: Joachim Pihl <jpihl@nevion.com>
-Date: Fri, 21 May 2010 13:34:57 +0200
-Subject: [Buildroot] Cross Toolchain support for blackfin
-In-Reply-To: <87ljbdv7g2.fsf@macbook.be.48ers.dk>
-References: <4BF6B272.595C.0012.0@lntsec.com>
-	<87ljbdv7g2.fsf@macbook.be.48ers.dk>
-Message-ID: <op.vc1zsjcnyqa4qb@jap-lappis.nevion.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 May 2010 12:37:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 1759] qt.mk stops build to prompts user
+In-Reply-To: <bug-1759-163@https.bugs.busybox.net/>
+References: <bug-1759-163@https.bugs.busybox.net/>
+Message-ID: <20100521123747.04DB59C5EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 21 May 2010 13:07:57 +0200, Peter Korsgaard <jacmet@sunsite.dk>  
-wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1759
 
->>>>>> "TarunJain" == TarunJain SM <TarunJain.SM@lntsec.com> writes:
->
->  TarunJain> Hi,
->
-> Please send mails to the buildroot list, and not directly to me.
->
->  TarunJain>  I am planning to build a cross tool chain for blackfin
->  TarunJain> processor, for which i have download the latest available
->  TarunJain> "buildroot-2010.02.tar.gz" in which i was unable to find the
->  TarunJain> target architecture for blackfin, please guide me to the
->  TarunJain> same.
->
-> Sorry, we don't have any blackfin support in Buildroot.
->
-
-I think the Blackfin toolchain as delivered by Analog Devices is based on  
-(an old) Buildroot, maybe you should contact them to try and merge their  
-efforts into the mainline?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+We already have the BR2_PACKAGE_QT_LICENSE_APPROVED option that automatically
+approves the license. Was this option set in your configuration ?
 
 -- 
-Joachim Pihl
-Senior R&D Engineer
-Nevion
-
-Tel: +47 33 48 94 66
-Fax: +47 33 48 99 98
-Mobile: +47 91 33 98 91
-jpihl at nevion.com
-www.nevion.com
-
------------------------------------
-The Global Video Transport Leader
------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
