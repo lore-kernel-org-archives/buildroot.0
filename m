@@ -1,36 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 May 2010 13:23:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 1807] New: LZMA 4.32.7,
-	Required header file(s) are missing.
-Message-ID: <bug-1807-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 May 2010 15:23:00 +0200
+Subject: [Buildroot] [pull request] Pull request for branch pkg-stats-fixes
+Message-ID: <cover.1274448176.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1807
+The following changes since commit f3122259e2cbbc0be0fc02820a146b4e4f48bef6:
+  Peter Korsgaard (1):
+        mtd-utils: buildsystem is broken with parallel make (regarding libubi)
 
-           Summary: LZMA 4.32.7,  Required header file(s) are missing.
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: peter.katzmann at edag.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+are available in the git repository at:
 
+  git://git.busybox.net/~tpetazzoni/git/buildroot pkg-stats-fixes
 
-Buildroot snapshot 21-05-2010
+Thomas Petazzoni (1):
+      pkg-stats: better heuristics
 
-Building failed due to errore  Required header file(s) are missing.
+ scripts/pkg-stats |   27 +++++++++++++--------------
+ 1 files changed, 13 insertions(+), 14 deletions(-)
 
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
