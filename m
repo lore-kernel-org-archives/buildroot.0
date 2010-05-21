@@ -1,24 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 May 2010 22:57:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 75] arm buildroot "unrecognized option" error
-In-Reply-To: <bug-75-163@https.bugs.busybox.net/>
-References: <bug-75-163@https.bugs.busybox.net/>
-Message-ID: <20100521225703.A79DC12E820@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 May 2010 00:57:33 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	dependencies-fixes
+Message-ID: <cover.1274482644.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=75
+The following changes since commit 51861e1ba19a036625643a56382a175e8388529f:
+  Peter Korsgaard (1):
+        sshfs: needs largefile support (because of fuse)
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I have been able to reproduce by adding '.' to the PATH. I will send in a few
-minutes a pull request for a commit that adds a check at the beginning of
-Buildroot execution: if PATH contains '.', then we error out and tell the user
-about the issue.
+are available in the git repository at:
 
+  git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fixes
+
+Thomas Petazzoni (2):
+      dependencies: fix tests on LD_LIBRARY_PATH
+      dependencies: check that . is not in the PATH
+
+ toolchain/dependencies/dependencies.sh |   23 +++++++++++++++++++----
+ 1 files changed, 19 insertions(+), 4 deletions(-)
+
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
