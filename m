@@ -1,40 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 May 2010 22:53:39 +0200
-Subject: [Buildroot] [git commit master] sshfs: needs largefile support
-	(because of fuse)
-Message-ID: <20100521205458.8700412EA9B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 May 2010 21:23:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 1759] qt.mk stops build to prompts user
+In-Reply-To: <bug-1759-163@https.bugs.busybox.net/>
+References: <bug-1759-163@https.bugs.busybox.net/>
+Message-ID: <20100521212356.5149899B75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1759
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51861e1ba19a036625643a56382a175e8388529f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sshfs/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index 7ddd0c1..fc820a3 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_SSHFS
- 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_PACKAGE_OPENSSH
-+	depends on BR2_LARGEFILE
- 	help
- 	  FUSE makes it possible to implement a filesystem in a userspace
- 	  program. Features include: simple yet comprehensive API, secure
-@@ -15,4 +16,4 @@ config BR2_PACKAGE_SSHFS
- 	  http://fuse.sourceforge.net/sshfs.html
- 
- comment "sshfs requires a toolchain with LARGEFILE support"
--        depends on !BR2_LARGEFILE
-+	depends on !BR2_LARGEFILE
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+No, menuconfig doesn't allow it. It used to provide the option of the
+commercial license, but it got removed by commit
+28eefec5bd12072a68035e9f900fe75a3644e946. See
+http://git.buildroot.net/buildroot/commit/?id=28eefec5bd12072a68035e9f900fe75a3644e946.
+
+As the bug isn't valid, I'm closing it. If you're interested by the commercial
+option, don't hesitate to take the old patch, update it, check that it works,
+and submit it again.
+
 -- 
-1.6.3.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
