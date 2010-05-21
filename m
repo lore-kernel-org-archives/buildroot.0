@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] ltrace: fix build failure
-Message-ID: <20100521184447.3635F9C142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] libcgicc: fix package after
+	autotools infrastructure conversion
+Message-ID: <20100521184447.00E5A9C142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=728e43534d6c9fc50336ed1c7c95e855ecd2b438
+commit: http://git.buildroot.net/buildroot/commit/?id=bdc9c05f4450b0ca1e4bfd8edc52c4f9537e576a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ltrace failed to build because of missing arguments to gcc to find the
-header files. This is due to the fact that the existing ltrace.mk was
-setting CC and LD at build time to incorrect values. Keeping the
-values set at configure time is just the right thing to do.
+The patch had an incorrect name, and the libtool patch was applied
+while it shouldn't, and the package wasn't autoreconfed while the
+patch changes some Makefile.am files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltrace/ltrace.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ ...cgicc-3.2.9-disable-documentation-option.patch} |    0
+ package/libcgicc/libcgicc.mk                       |    2 ++
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+ rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index c99f223..4a6811d 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -54,8 +54,7 @@ $(LTRACE_DIR)/.configured: $(LTRACE_DIR)/.patched
- 	touch $@
+diff --git a/package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+similarity index 100%
+rename from package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch
+rename to package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index c2f80b6..b281eed 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -7,6 +7,8 @@ LIBCGICC_VERSION=3.2.9
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_INSTALL_STAGING=YES
++LIBCGICC_LIBTOOL_PATCH=NO
++LIBCGICC_AUTORECONF=YES
  
- $(LTRACE_DIR)/$(LTRACE_BINARY): $(LTRACE_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(LTRACE_ARCH) \
--		-C $(LTRACE_DIR)
-+	$(MAKE) ARCH=$(LTRACE_ARCH) -C $(LTRACE_DIR)
- 
- $(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
- 	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
+ LIBCGICC_CONF_OPT = \
+ 	--disable-demos \
 -- 
 1.6.3.3
