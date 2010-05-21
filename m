@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] samba: only require libiconv if
-	!BR2_ENABLE_LOCALE
-Message-ID: <20100521184448.A26389C148@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] uemacs: don't forget CFLAGS at link
+	time
+Message-ID: <20100521184449.9B1BD9C152@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0317b30912eb73bc512b137b1581ff520b14c40a
+commit: http://git.buildroot.net/buildroot/commit/?id=d30649ada0e27b0c9f0fdff8f5d9ece18b077a87
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Without CFLAGS, the build breaks because --sysroot is missing at link
+time, and this option is absolutely mandatory for external toolchain
+builds.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/Config.in |    2 +-
- package/samba/samba.mk  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uemacs/uemacs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 720ecd7..a7a0b34 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_SAMBA
- 	bool "samba"
--	select BR2_PACKAGE_LIBICONV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Provides print services to all manner of SMB/CIFS clients,
- 	  including the numerous versions of Microsoft Windows
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 4115363..39968a9 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -16,7 +16,7 @@ SAMBA_INSTALL_TARGET = YES
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index 6e2f4c4..539ad51 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -23,7 +23,7 @@ $(UEMACS_DIR)/.unpacked: $(DL_DIR)/$(UEMACS_SOURCE)
  
+ $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
+ 	$(MAKE) -C $(UEMACS_DIR) \
+-	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS=-lncurses
++	CC="$(TARGET_CC)" DEFINES="-DAUTOCONF -DPOSIX -DUSG" CFLAGS+="$(TARGET_CFLAGS) " LIBS="$(TARGET_CFLAGS) -lncurses"
+ 	$(STRIPCMD) $(UEMACS_DIR)/$(UEMACS_BINARY)
  
- SAMBA_DEPENDENCIES = \
--	libiconv \
-+	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
- 	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
- 	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),readline) \
- 	$(if $(BR2_PACKAGE_SAMBA_AVAHI),avahi) \
+ $(TARGET_DIR)/$(UEMACS_TARGET_BINARY): $(UEMACS_DIR)/$(UEMACS_BINARY)
 -- 
 1.6.3.3
