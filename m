@@ -1,55 +1,49 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 21 May 2010 13:36:15 +0200
-Subject: [Buildroot] Building DirectFB kernel module
-In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01C755FC@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-References: <AB12B32E73474741A2C5361C433A44DE01C755FC@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-Message-ID: <AANLkTimL83gvO5NX37GN_kUlaAwwRWe6SCyJ_ld8pIIt@mail.gmail.com>
+From: Joachim Pihl <jpihl@nevion.com>
+Date: Fri, 21 May 2010 13:34:57 +0200
+Subject: [Buildroot] Cross Toolchain support for blackfin
+In-Reply-To: <87ljbdv7g2.fsf@macbook.be.48ers.dk>
+References: <4BF6B272.595C.0012.0@lntsec.com>
+	<87ljbdv7g2.fsf@macbook.be.48ers.dk>
+Message-ID: <op.vc1zsjcnyqa4qb@jap-lappis.nevion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Phil,
+On Fri, 21 May 2010 13:07:57 +0200, Peter Korsgaard <jacmet@sunsite.dk>  
+wrote:
 
-I don't think the DirectFB package is supposed to build the sh772x
-kernel module. It's just there because the sh772x gfxdriver depends on
-the kernel ioctl interface
-(gfxdrivers/sh772x/kernel-module/sh772x_gfx.h).
+>>>>>> "TarunJain" == TarunJain SM <TarunJain.SM@lntsec.com> writes:
+>
+>  TarunJain> Hi,
+>
+> Please send mails to the buildroot list, and not directly to me.
+>
+>  TarunJain>  I am planning to build a cross tool chain for blackfin
+>  TarunJain> processor, for which i have download the latest available
+>  TarunJain> "buildroot-2010.02.tar.gz" in which i was unable to find the
+>  TarunJain> target architecture for blackfin, please guide me to the
+>  TarunJain> same.
+>
+> Sorry, we don't have any blackfin support in Buildroot.
+>
 
-So if you need buildroot to build another kernel module, you will have
-to add another package.
-You can take package/linux-fusion as an example. It builds/installs
-the fusion kernel module for the directfb multi application mode.
+I think the Blackfin toolchain as delivered by Analog Devices is based on  
+(an old) Buildroot, maybe you should contact them to try and merge their  
+efforts into the mainline?
 
-Regards,
+-- 
+Joachim Pihl
+Senior R&D Engineer
+Nevion
 
---
-Lionel Landwerlin
+Tel: +47 33 48 94 66
+Fax: +47 33 48 99 98
+Mobile: +47 91 33 98 91
+jpihl at nevion.com
+www.nevion.com
 
-On Fri, May 21, 2010 at 12:01 PM, Phil Edworthy
-<Phil.Edyworthy@renesas.com> wrote:
-> Hi,
->
-> I'm new to Buildroot and think I'll use it for a BSP I'm working on. I've
-> added a few packages that are specific to us and it's going pretty well.
->
-> However, for DirectFB I need to build a kernel module (sh772x gfx). The
-> source for this is included in the DirectFB tarball. At the moment, I'm
-> building the kernel and this module after building everything else with
-> Buildroot.
->
-> I'm not sure how to add an additional build step for this. Is there an
-> existing BR package that does something similar?
->
-> The alternative would be a new package for this, but then how do I get it to
-> operate on the source from the DirectFB package?
->
-> Thanks
-> Phil
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-----------------------------------
+The Global Video Transport Leader
+-----------------------------------
