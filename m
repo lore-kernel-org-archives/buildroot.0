@@ -1,54 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 10:08:27 +0200
-Subject: [Buildroot] [PATCH 07/19] external toolchain: check
-	BR2_INSTALL_LIBSTDCPP
+Date: Fri, 21 May 2010 10:08:36 +0200
+Subject: [Buildroot] [PATCH 16/19] lvm2: do not override CC and similar
+	variables
 In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fad3b5a7bee8ce6dd1cf17f230de693d8ed9230f.1274428596.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0c44617e7f16f2e925fb2672d84bbc9dfccec0f8.1274428596.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Verify that the value of BR2_INSTALL_LIBSTDCPP set by the user in the
-Buildroot configuration really matches the external toolchain
-capabilities by checking that a C++ cross-compiler is available.
+Since lvm2 uses autoconf, there's no point in overriding CC and other
+variables at build time. This causes build breakage as CFLAGS aren't
+used at link time, therefore --sysroot lacks, which breaks the build
+with external toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ package/lvm2/lvm2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 2c2562c..bb4809c 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -232,6 +232,15 @@ check_arm_abi = \
- 	fi ; \
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index bc6f458..2bd6b8b 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -74,7 +74,7 @@ $(LVM2_DIR)/.configured: $(LVM2_DIR)/.unpacked
  
- #
-+# Check that the external toolchain supports C++
-+#
-+check_cplusplus = \
-+	if ! test -x $(TARGET_CXX) ; then \
-+		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi ; \
-+
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- check_cross_compiler_exists = \
-@@ -288,6 +297,9 @@ endif
- ifeq ($(BR2_arm),y)
- 	$(Q)$(call check_arm_abi)
- endif
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+	$(Q)$(call check_cplusplus)
-+endif
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- 	$(Q)$(call check_uclibc,$(SYSROOT_DIR))
- else
+ 
+ $(LVM2_DIR)/.built: $(LVM2_DIR)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) RANLIB=$(TARGET_RANLIB) AR=$(TARGET_AR) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
++	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
+ 	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
+ 	# Fixup write permissions so that the files can be overwritten
+ 	# several times in the $(TARGET_DIR)
 -- 
 1.6.3.3
