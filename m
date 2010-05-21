@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 15:26:27 +0200
-Subject: [Buildroot] [PATCH 1/2] Extend the introduction page
+Date: Fri, 21 May 2010 15:26:28 +0200
+Subject: [Buildroot] [PATCH 2/2] Rephrase and extend the documentation page
 In-Reply-To: <cover.1274448358.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274448358.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5ee1551cef6d883ebaf70f4296f1207a3ce896c8.1274448358.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b633c9600a5acda7eb6275d9274a56bc12fe4e92.1274448358.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/about.html |   61 +++++++++++++++++++++++++++++++++++++++++-------------
- 1 files changed, 46 insertions(+), 15 deletions(-)
+ docs/docs.html |   49 +++++++++++++++++++++++--------------------------
+ 1 files changed, 23 insertions(+), 26 deletions(-)
 
-diff --git a/docs/about.html b/docs/about.html
-index 89ca62b..b985c4f 100644
---- a/docs/about.html
-+++ b/docs/about.html
-@@ -12,22 +12,53 @@
- </a>
- </div>
+diff --git a/docs/docs.html b/docs/docs.html
+index 663135a..57f4bf6 100644
+--- a/docs/docs.html
++++ b/docs/docs.html
+@@ -1,35 +1,32 @@
+ <!--#include file="header.html" -->
  
--Buildroot is a set of Makefiles and patches that makes it easy to generate a
--cross-compilation toolchain and root filesystem for your target Linux
--system using the <a href= "http://www.uclibc.org/">uClibc C library</a>.
--Buildroot is useful mainly for people working with small or embedded
--systems.  Embedded systems often use processors that are not the regular
--x86 processors everyone is used to using on their PC. It can be PowerPC
--processors, MIPS processors, ARM processors, etc.  And to be extra safe,
--you do not need to be root to build or run Buildroot.
 -
--<p>
--
--Buildroot is maintained by <a href=
--"mailto:jacmet@uclibc.org">Peter Korsgaard</a>, and
--licensed under the
-+<p>Buildroot is a set of Makefiles and patches that makes it easy to
-+generate a complete embedded Linux system. Buildroot can generate any
-+or all of a cross-compilation toolchain, a root filesystem, a kernel
-+image and a bootloader image. Buildroot is useful mainly for people
-+working with small or embedded systems, using various CPU
-+architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the
-+building process of your embedded system and eases the
-+cross-compilation process.</p>
+ <h3>Documentation</h3>
+-Documentation for buildroot includes:
 +
-+<p>The major Buildroot features are:</p>
++<p>Our document "Buildroot usage and documentation" is where you want
++to start reading if you wish to understand how Buildroot work, or wish
++to change/extend/fix things. If you find any errors (factual,
++grammatical, whatever) please report them. Choose between:</p>
+ 
+ <ul>
++  <li><a href="/downloads/buildroot.html">Latest stable release</a></li>
++  <li><a href="buildroot.html">GIT head revision</a></li>
++</ul>
++
++<p>If you find that you need help with Buildroot, you can ask for
++help:</p>
 +
 +<ul>
 +
-+  <li>Can <b>handle everything</b> in your embedded system development
-+  project: cross-compiling toolchain, root filesystem generation,
-+  kernel image compilation and bootloader compilation. Buildroot is
-+  also sufficiently flexible that it can also be used for only one or
-+  several of these steps.</li>
++  <li>On the <a href="lists.html">buildroot mailing list</a>
++  at <code>buildroot at uclibc.org</code></li>
 +
-+  <li>Is <b>very easy</b> to set up, thanks to its menuconfig and
-+  xconfig configuration interfaces, familiar to all embedded Linux
-+  developers. Building a basic embedded Linux system with Buildroot
-+  typically takes 15-30 minutes.</li>
++  <li>On the <a href="irc://freenode.net/#uclibc">Buildroot IRC
++  channel</a>, <code>#uclibc</code> on Freenode</li>
 +
-+  <li>Supports <b>several hundreds of packages</b> for userspace
-+  applications and libraries: X.org stack, Gtk2, Qt, DirectFB, SDL,
-+  GStreamer and a large number of network-related and system-related
-+  utilities and libraries are supported.</li>
-+
-+  <li>Supports <b>multiple filesystem types</b> for the root
-+  filesystem image: JFFS2, UBIFS, tarballs, romfs, cramfs, squashfs
-+  and more.</li>
-+
-+  <li>Can generate an uClibc cross-compilation toolchain, or re-use
-+  your existing glibc, eglibc or uClibc cross-compilation
-+  toolchain</li>
-+
-+  <li>Has a <b>simple structure</b> that makes it easy to understand
-+  and extend. It relies only on the well-know Makefile language.</li>
-+
-+</ul>
-+
-+<p>Buildroot is maintained by <a href=
-+"mailto:jacmet@uclibc.org">Peter Korsgaard</a>, and licensed under the
- <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU
--GENERAL PUBLIC LICENSE V2 (Or later)</a>.
-+GENERAL PUBLIC LICENSE V2 (Or later)</a>. Stable releases are
-+delivered every three months.</p>
++  <li>On our <a href="https://bugs.uclibc.org">bugtracker</a>.</li>
  
+-  <li>
+-    Usage and documentation is where you want to start reading if you
+-    wish to understand how buildroot work, or wish to
+-    change/extend/fix things. If you find any errors (factual,
+-    grammatical, whatever) please report them. Choose between:
+-    <p>
+-    <ul>
+-      <li><a href="/downloads/buildroot.html">Latest stable release</a></li>
+-      <li><a href="buildroot.html">GIT head revision</a></li>
+-    </ul>
+-    <p>
+-  </li>
+-
+-  <li>
+-    <a href="README">README</a>. This is the README file included in the
+-    buildroot source release.
+-  </li>
+-
+-  <li>
+-    If you find that you need help with buildroot, you can ask for help on the
+-    <a href= "lists.html">buildroot mailing list</a> at buildroot at uclibc.org.
+-    In addition the BusyBox, uClibc, and buildroot developers are also known to
+-    hang out on the uClibc IRC channel: #uclibc on irc.freenode.net.
+-  </li>
++  <li>Through the various companies offering commercial Buildroot
++  support.</li>
  
- <!--#include file="footer.html" -->
+ </ul>
+ 
 -- 
 1.6.3.3
