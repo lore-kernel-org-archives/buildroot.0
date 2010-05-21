@@ -1,38 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 10:08:25 +0200
-Subject: [Buildroot] [PATCH 05/19] ltrace: fix build failure
+Date: Fri, 21 May 2010 10:08:31 +0200
+Subject: [Buildroot] [PATCH 11/19] ntp: fix build failure
 In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <728e43534d6c9fc50336ed1c7c95e855ecd2b438.1274428596.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a4051d9db88d5cf789d64d973efd0f91fc741f6e.1274428596.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltrace failed to build because of missing arguments to gcc to find the
-header files. This is due to the fact that the existing ltrace.mk was
-setting CC and LD at build time to incorrect values. Keeping the
-values set at configure time is just the right thing to do.
+This patch adds a patch to NTP to fix the following build failure,
+using a workaround patch found on the Fedora bugzilla:
+
+ntp_loopfilter.c: In function 'local_clock':
+ntp_loopfilter.c:571: error: 'MOD_NANO' undeclared (first use in this function)
+ntp_loopfilter.c:571: error: (Each undeclared identifier is reported only once
+ntp_loopfilter.c:571: error: for each function it appears in.)
+ntp_loopfilter.c: In function 'loop_config':
+ntp_loopfilter.c:896: error: 'MOD_NANO' undeclared (first use in this function)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltrace/ltrace.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/ntp/ntp-4.2.4_p5-nano.patch |   36 +++++++++++++++++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/ntp/ntp-4.2.4_p5-nano.patch
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index c99f223..4a6811d 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -54,8 +54,7 @@ $(LTRACE_DIR)/.configured: $(LTRACE_DIR)/.patched
- 	touch $@
- 
- $(LTRACE_DIR)/$(LTRACE_BINARY): $(LTRACE_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(LTRACE_ARCH) \
--		-C $(LTRACE_DIR)
-+	$(MAKE) ARCH=$(LTRACE_ARCH) -C $(LTRACE_DIR)
- 
- $(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
- 	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
+diff --git a/package/ntp/ntp-4.2.4_p5-nano.patch b/package/ntp/ntp-4.2.4_p5-nano.patch
+new file mode 100644
+index 0000000..f4097ee
+--- /dev/null
++++ b/package/ntp/ntp-4.2.4_p5-nano.patch
+@@ -0,0 +1,36 @@
++Fixes the MOD_NANO build failure
++
++ntp_loopfilter.c: In function 'local_clock':
++ntp_loopfilter.c:571: error: 'MOD_NANO' undeclared (first use in this function)
++ntp_loopfilter.c:571: error: (Each undeclared identifier is reported only once
++ntp_loopfilter.c:571: error: for each function it appears in.)
++ntp_loopfilter.c: In function 'loop_config':
++ntp_loopfilter.c:896: error: 'MOD_NANO' undeclared (first use in this function)
++
++Taken from
++http://cvs.fedoraproject.org/viewvc/devel/ntp/ntp-4.2.4p7-nano.patch?revision=1.1&content-type=text/plain&view=co
++
++See the discussion at
++https://bugs.launchpad.net/ubuntu/+source/ntp/+bug/412242 for more
++details and links. The below fix is not a correct fix, but only a
++workaround. The real fix required changes to kernel/libc headers.
++
++Index: ntp-4.2.4p5/include/ntp_syscall.h
++===================================================================
++--- ntp-4.2.4p5.orig/include/ntp_syscall.h	2010-05-14 17:34:48.000000000 +0200
+++++ ntp-4.2.4p5/include/ntp_syscall.h	2010-05-14 17:35:13.000000000 +0200
++@@ -14,6 +14,14 @@
++ # include <sys/timex.h>
++ #endif
++ 
+++#if defined(ADJ_NANO) && !defined(MOD_NANO)
+++#define MOD_NANO ADJ_NANO
+++#endif
+++
+++#if defined(ADJ_TAI) && !defined(MOD_TAI)
+++#define MOD_TAI ADJ_TAI
+++#endif
+++
++ #ifndef NTP_SYSCALLS_LIBC
++ #ifdef NTP_SYSCALLS_STD
++ # define ntp_adjtime(t)		syscall(SYS_ntp_adjtime, (t))
 -- 
 1.6.3.3
