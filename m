@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 10:08:29 +0200
-Subject: [Buildroot] [PATCH 09/19] lmbench: needs BR2_INET_RPC
+Date: Fri, 21 May 2010 10:08:24 +0200
+Subject: [Buildroot] [PATCH 04/19] libcgicc: fix package after autotools
+	infrastructure conversion
 In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9923439841ffb0dc9fcf70b2ccc67a2998cd3713.1274428596.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bdc9c05f4450b0ca1e4bfd8edc52c4f9537e576a.1274428595.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package uses several pmap_*() functions in the C library, that
-are only available if the C library has RPC support.
+The patch had an incorrect name, and the libtool patch was applied
+while it shouldn't, and the package wasn't autoreconfed while the
+patch changes some Makefile.am files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lmbench/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ ...cgicc-3.2.9-disable-documentation-option.patch} |    0
+ package/libcgicc/libcgicc.mk                       |    2 ++
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+ rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
 
-diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
-index 704b3ff..d09a333 100644
---- a/package/lmbench/Config.in
-+++ b/package/lmbench/Config.in
-@@ -1,7 +1,12 @@
- config BR2_PACKAGE_LMBENCH
- 	bool "lmbench"
-+	# Uses pmap_set, pmap__unset, pmap_getport, etc.
-+	depends on BR2_INET_RPC
- 	help
- 	  LMbench is a suite of simple, portable,
- 	  ANSI/C microbenchmarks for UNIX/POSIX.
+diff --git a/package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+similarity index 100%
+rename from package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch
+rename to package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index c2f80b6..b281eed 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -7,6 +7,8 @@ LIBCGICC_VERSION=3.2.9
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_INSTALL_STAGING=YES
++LIBCGICC_LIBTOOL_PATCH=NO
++LIBCGICC_AUTORECONF=YES
  
- 	  http://sourceforge.net/projects/lmbench/
-+
-+comment "lmbench requires a toolchain with RPC support"
-+        depends on !BR2_INET_RPC
+ LIBCGICC_CONF_OPT = \
+ 	--disable-demos \
 -- 
 1.6.3.3
