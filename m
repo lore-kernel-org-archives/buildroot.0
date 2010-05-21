@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 May 2010 10:08:24 +0200
-Subject: [Buildroot] [PATCH 04/19] libcgicc: fix package after autotools
-	infrastructure conversion
+Date: Fri, 21 May 2010 10:08:30 +0200
+Subject: [Buildroot] [PATCH 10/19] startup-notification: add dependency on
+	xlib_libX11
 In-Reply-To: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1274428595.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <bdc9c05f4450b0ca1e4bfd8edc52c4f9537e576a.1274428595.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <362791a7c18bf2c2528334543cb7baf36c4a89fe.1274428596.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch had an incorrect name, and the libtool patch was applied
-while it shouldn't, and the package wasn't autoreconfed while the
-patch changes some Makefile.am files.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...cgicc-3.2.9-disable-documentation-option.patch} |    0
- package/libcgicc/libcgicc.mk                       |    2 ++
- 2 files changed, 2 insertions(+), 0 deletions(-)
- rename package/libcgicc/{cgicc-3.2.9-disable-documentation-option.patch => libcgicc-3.2.9-disable-documentation-option.patch} (100%)
+ package/startup-notification/Config.in             |    2 ++
+ .../startup-notification/startup-notification.mk   |    1 +
+ 2 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch b/package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
-similarity index 100%
-rename from package/libcgicc/cgicc-3.2.9-disable-documentation-option.patch
-rename to package/libcgicc/libcgicc-3.2.9-disable-documentation-option.patch
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index c2f80b6..b281eed 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -7,6 +7,8 @@ LIBCGICC_VERSION=3.2.9
- LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
- LIBCGICC_INSTALL_STAGING=YES
-+LIBCGICC_LIBTOOL_PATCH=NO
-+LIBCGICC_AUTORECONF=YES
+diff --git a/package/startup-notification/Config.in b/package/startup-notification/Config.in
+index 23fdf74..277d300 100644
+--- a/package/startup-notification/Config.in
++++ b/package/startup-notification/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_STARTUP_NOTIFICATION
+ 	bool "startup-notification"
++	select BR2_PACKAGE_XLIB_LIBX11
++	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  Startup-notification is a library used to monitor application startup.
  
- LIBCGICC_CONF_OPT = \
- 	--disable-demos \
+diff --git a/package/startup-notification/startup-notification.mk b/package/startup-notification/startup-notification.mk
+index 62f067a..f70fcc1 100644
+--- a/package/startup-notification/startup-notification.mk
++++ b/package/startup-notification/startup-notification.mk
+@@ -9,6 +9,7 @@ STARTUP_NOTIFICATION_SITE = http://freedesktop.org/software/startup-notification
+ STARTUP_NOTIFICATION_AUTORECONF = NO
+ STARTUP_NOTIFICATION_INSTALL_STAGING = YES
+ STARTUP_NOTIFICATION_INSTALL_TARGET = YES
++STARTUP_NOTIFICATION = xlib_libX11
+ 
+ STARTUP_NOTIFICATION_CONF_ENV = lf_cv_sane_realloc=yes
+ 
 -- 
 1.6.3.3
