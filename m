@@ -1,44 +1,42 @@
-From: Ludger Keilig <buildroot@invalid-domain.net>
-Date: Fri, 21 May 2010 11:09:15 +0200
-Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
-In-Reply-To: <1274422785.5719.8.camel@bernd-desktop>
-References: <1274422785.5719.8.camel@bernd-desktop>
-Message-ID: <4BF64DBB.9030805@invalid-domain.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 21 May 2010 09:50:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 1789] binutils fails to build for i386
+In-Reply-To: <bug-1789-163@https.bugs.busybox.net/>
+References: <bug-1789-163@https.bugs.busybox.net/>
+Message-ID: <20100521095042.6CA8D9C2E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=1789
 
-> I tried buildroot-2010.05-rc2:
-> make at91rm9200df_defconfig
-> make menuconfig
-> make
-> 
-> buildroot terminates with:
-> 
-> checking for zlib.h... yes
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_union?:checking linker --as-needed support...
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:151: warning: implicit declaration of function ?free?
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_replace_key_data?:
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: ?LONG_MIN? undeclared (first use in this function)
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: (Each undeclared identifier is reported only once
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:220: error: for each function it appears in.)
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_delete_node?:
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:261: error: ?LONG_MIN? undeclared (first use in this function)
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:265: warning: implicit declaration of function ?abort?
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:265: warning: incompatible implicit declaration of built-in function ?abort?
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c: In function ?fibheap_consolidate?:
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:368: warning: implicit declaration of function ?memset?
-> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/binutils-2.20.1/libiberty/fibheap.c:368: warning: incompatible implicit declaration of built-in function ?memset?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+I tried exactly the same configuration :
+ make ARCH=i386 defconfig
+ make
 
-Seems to be the same as in bug #1789.
+and I cannot reproduce the build failure. fibheap.c just builds fine here:
 
-For me, it helped to revert the patch introduced in commit
-6b939d40f6a29a43277566adc9d4312d49cb3abf.
-No, I don't like this, but at least it seems to work.
+if [ x"" != x ]; then \
+          /usr/bin/gcc -Wl,-rpath -Wl,/home/test/buildroot/output/host/usr/lib
+-I/home/test/buildroot/output/host/include
+-I/home/test/buildroot/output/host/usr/include -c -DHAVE_CONFIG_H -g -O2  -I.
+-I/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/../include 
+-W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  
+/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/fibheap.c -o
+pic/fibheap.o; \
+        else true; fi
+/usr/bin/gcc -Wl,-rpath -Wl,/home/test/buildroot/output/host/usr/lib
+-I/home/test/buildroot/output/host/include
+-I/home/test/buildroot/output/host/usr/include -c -DHAVE_CONFIG_H -g -O2  -I.
+-I/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/../include 
+-W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic 
+/home/test/buildroot/output/toolchain/binutils-2.20.1/libiberty/fibheap.c -o
+fibheap.o
 
-
-Ciao, Ludger
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
