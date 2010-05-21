@@ -1,43 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 May 2010 13:20:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 1801] New: Avahi-autoipd doesn't create
-	TARGET_DIR/var/lib
-Message-ID: <bug-1801-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 May 2010 15:22:12 +0200
+Subject: [Buildroot] [PATCH 1/4] package: Add new <pkg>-show-depends to list
+	dependencies
+In-Reply-To: <cover.1274448102.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1274448102.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <118b880d73e812069ec2fe72f921d70894eb10a0.1274448102.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1801
+The new <pkg>-show-depends simply outputs the list of dependencies for
+the given package.
 
-           Summary: Avahi-autoipd doesn't create TARGET_DIR/var/lib
-           Product: buildroot
-           Version: 2010.02
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: nick at leverton.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.package.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-
-Created attachment 1759
-  --> https://bugs.busybox.net/attachment.cgi?id=1759
-Patch to avahi.mk to create TARGET_DIR/var/lib
-
-Depending what other packages are selected, avahi-autoipd may fail to install
-as it doesn't create $(TARGET_DIR)/var/lib before using it.  Since avahi is
-quite early in the build the odds are that it will be the first package to need
-this directory.
-
-The attached patch should fix this issue.
-
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index c2f86c7..cdf49f8 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -338,6 +338,9 @@ $(1)-extract:		$(1)-depends \
+ 
+ $(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
+ 
++$(1)-show-depends:
++			@echo $$($(2)_DEPENDENCIES)
++
+ $(1)-source:		$$($(2)_TARGET_SOURCE)
+ 
+ $(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
