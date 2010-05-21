@@ -1,51 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 May 2010 00:57:35 +0200
-Subject: [Buildroot] [PATCH 2/2] dependencies: check that . is not in the
-	PATH
-In-Reply-To: <cover.1274482644.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1274482644.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c87eb21e00ac4d5e2106565f8ea70473895289ae.1274482644.git.thomas.petazzoni@free-electrons.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 22 May 2010 00:58:24 +0200
+Subject: [Buildroot] [PATCH]  bump mpg123  version  0.66 -> 1.12.0
+Message-ID: <5946B10D2D6647049A74AF6855353C82@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Having . in the PATH makes the toolchain build process fail because it
-confuses host tools and target tools.
-
-This fixes bug #75.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/dependencies/dependencies.sh |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
-
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index f5d9163..34149c1 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -34,6 +34,21 @@ if test -n "$LD_LIBRARY_PATH" ; then
- 	fi
- fi;
+diff -rupN buildroot-2010.05-rc2/package/multimedia/mpg123/mpg123.mk
+buildroot/package/multimedia/mpg123/mpg123.mk
+--- buildroot-2010.05-rc2/package/multimedia/mpg123/mpg123.mk 2010-05-11
+21:15:07.000000000 +0200
++++ buildroot/package/multimedia/mpg123/mpg123.mk 2010-05-21
+18:51:01.000000000 +0200
+@@ -3,10 +3,12 @@
+ # mpg123
+ #
+ #############################################################
+-MPG123_VERSION = 0.66
++MPG123_VERSION = 1.12.0
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE =
+http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
  
-+# sanity check for CWD in PATH. Having the current working directory
-+# in the PATH makes the toolchain build process break.
-+# try not to rely on egrep..
-+if test -n "$PATH" ; then
-+	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.:' >/dev/null 2>&1 ||
-+	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
-+	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
-+	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRIGGER_start\.TRIGGER_end' >/dev/null 2>&1
-+	if test $? = 0; then
-+		/bin/echo -e "\nYou seem to have the current working directory in your"
-+		/bin/echo -e "PATH environment variable. This doesn't work.\n"
-+		exit 1;
-+	fi
-+fi;
++MPG123_LIBTOOL_PATCH = NO
 +
- # Verify that which is installed
- if ! which which > /dev/null ; then
- 	/bin/echo -e "\nYou must install 'which' on your build machine\n";
--- 
-1.6.3.3
+ MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic)
+ 
+ ifeq ($(BR2_i386),y)
+ 
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100522/266a3c00/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: br_mpg123.patch
+Type: application/octet-stream
+Size: 692 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100522/266a3c00/attachment.obj>
