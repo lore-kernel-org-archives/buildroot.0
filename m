@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 21 May 2010 20:37:51 +0200
-Subject: [Buildroot] [git commit master] iconv: disallow selection when
-	BR2_ENABLE_LOCALE is enabled
-Message-ID: <20100521184447.DFC419C148@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] vpnc: pass CFLAGS at link time
+Message-ID: <20100521184449.CFFE29C156@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fae26486f86e9ed2b466ebc61a3521b60897a12
+commit: http://git.buildroot.net/buildroot/commit/?id=56407a4efa4f0da90462e4eb71180b3c2c8bb874
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A C library compiled with locale support already has an iconv()
-implementation. In that case, libiconv is useless. Therefore, disallow
-the selection of libiconv when the configuration says that the
-toolchain has locale support.
-
-This fixes build issues similar to the one we had with gettext:
-libiconv headers are installed, but -liconv is not added because the
-./configure script detects that the C library supports iconv.
+External toolchain builds absolutely require the --sysroot option to
+be passed at link time.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libiconv/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/vpnc/vpnc.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libiconv/Config.in b/package/libiconv/Config.in
-index b600944..ee4fd62 100644
---- a/package/libiconv/Config.in
-+++ b/package/libiconv/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBICONV
- 	bool "libiconv"
-+	depends on !BR2_ENABLE_LOCALE
- 	help
- 	  unicode conversion library
+diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
+index 5d0f87a..c4f23fa 100644
+--- a/package/vpnc/vpnc.mk
++++ b/package/vpnc/vpnc.mk
+@@ -26,7 +26,7 @@ $(VPNC_BINARY): $(VPNC_DIR)/.unpacked
+ 	rm -f $@
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) INCLUDE=$(STAGING_DIR)/usr/include \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error \
++		LDFLAGS+=-lgcrypt LDFLAGS+=-lgpg-error LDFLAGS+="$(TARGET_CFLAGS)" \
+ 		CC="$(TARGET_CC)" -C $(VPNC_DIR)
+ 
+ $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
+@@ -38,7 +38,7 @@ $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
+ 		MANDIR=/usr/share/man \
+ 		VERSION=$(VPNC_VERSION) \
+ 		INCLUDE=$(STAGING_DIR)/usr/include \
+-		LDFLAGS="-lgcrypt -lgpg-error" \
++		LDFLAGS="-lgcrypt -lgpg-error $(TARGET_CFLAGS)" \
+ 		-C $(VPNC_DIR) install
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(VPNC_TARGET_BINARY)
  
 -- 
 1.6.3.3
