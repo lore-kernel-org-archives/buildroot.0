@@ -1,35 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 May 2010 14:55:08 +0200
-Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
-In-Reply-To: <1274517204.15163.3.camel@bernd-desktop>
-References: <1274422785.5719.8.camel@bernd-desktop>
-	<20100521122542.5c4b0907@surf>
-	<1274479497.25288.3.camel@bernd-desktop>
-	<20100522003018.1ef13985@surf>
-	<1274517204.15163.3.camel@bernd-desktop>
-Message-ID: <20100522145508.10c885e7@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 22 May 2010 21:06:34 +0200
+Subject: [Buildroot] [git commit master] cdrkit: needs largefile support in
+	toolchain
+Message-ID: <20100522193710.CC28499FB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 May 2010 10:33:24 +0200
-Thomas <tokant@gmx.net> wrote:
 
-> > -HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
-> > +HOST_LDFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
-> 
-> yes it works :-)
+commit: http://git.buildroot.net/buildroot/commit/?id=f58b8cdef45b7e19c77af3fd801674f201688449
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ok, I will try to see if it still fixes the problem that the commit was
-originally fixing.
+At the same time fix indentation in Config.in
 
-Sincerely,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                  |   10 +++++-----
+ package/cdrkit/Config.in |   22 +++++++++++++---------
+ 2 files changed, 18 insertions(+), 14 deletions(-)
 
-Thomas
+diff --git a/CHANGES b/CHANGES
+index 75da2fd..6d2fbf0 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,11 +2,11 @@
+ 
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: aumix, avahi, busybox, cairo, fltk, gettext,
+-	gmpc, grep, hal, iconv, libcgicc, libglib2, libidn, libmpd,
+-	libpcap, libsoup, lmbench, ltrace, lvm2, make, mtd-utils,
+-	mutt, netsnmp, ntp, pango, php, psmisc, qt, samba, sshfs,
+-	startup-notification, uemacs, util-linux, vpnc
++	Updated/fixed packages: aumix, avahi, busybox, cairo, cdrkit,
++	fltk, gettext, gmpc, grep, hal, iconv, libcgicc, libglib2,
++	libidn, libmpd, libpcap, libsoup, lmbench, ltrace, lvm2, make,
++	mtd-utils, mutt, netsnmp, ntp, pango, php, psmisc, qt, samba,
++	sshfs, startup-notification, uemacs, util-linux, vpnc
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
+index 2e25581..7ff50f3 100644
+--- a/package/cdrkit/Config.in
++++ b/package/cdrkit/Config.in
+@@ -1,11 +1,15 @@
+ config BR2_PACKAGE_CDRKIT
+-       # Needed for libbz
+-       select BR2_PACKAGE_BZIP2
+-       select BR2_PACKAGE_LIBCAP
+-       bool "cdrkit"
+-       help
+-         cdrkit is a suite of programs for recording CDs and DVDs,
+-         blanking CD-RW media, creating ISO-9660 filesystem images,
+-         extracting audio CD data, and more.
++	# Needed for libbz
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_LIBCAP
++	depends on BR2_LARGEFILE
++	bool "cdrkit"
++	help
++	  cdrkit is a suite of programs for recording CDs and DVDs,
++	  blanking CD-RW media, creating ISO-9660 filesystem images,
++	  extracting audio CD data, and more.
+ 
+-	 http://www.cdrkit.org/
++	  http://www.cdrkit.org/
++
++comment "cdrkit requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3
