@@ -1,22 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 May 2010 22:13:02 +0200
-Subject: [Buildroot] [PATCH] package/config: really clean
-In-Reply-To: <20100509131909.25762.77096.stgit@roazhon.bzh.lan> (Yann
-	E. MORIN's message of "Sun, 09 May 2010 15:19:10 +0200")
-References: <20100509131909.25762.77096.stgit@roazhon.bzh.lan>
-Message-ID: <877hmvr8z5.fsf@macbook.be.48ers.dk>
+From: =?utf-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Sat, 22 May 2010 22:11:19 +0200
+Subject: [Buildroot] [git commit master] atngw100_defconfig: update to fix
+	build failure
+Message-ID: <20100522201357.B1BF47FDB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
- Yann> Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=38ec41bc53cd660c92c6af5f911bd3e96fa2d8f0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks!
+atngw100_defconfig: update to fix build failure:
 
--- 
-Bye, Peter Korsgaard
+  * The AVR32 toolchain fails to build with the new uClibc version
+    0.9.31.x. Use the older uClibc 0.9.30.x branch instead.
+  * Disable linux-fusion as it fails to build
+    (why was this selected anyway, when DirectFB was not selected?).
+  * U-Boot 2010.03 is broken for AVR32. The build fails with:
+      zlib.c:31:27: error: asm/unaligned.h: No such file or directory
+    Select the older U-Boot 2009.08 version that builds instead.
+  * Disable rsync as it fails to build.
+
+Build tested with 'make distclean && make atngw100_defconfig && make'
+on an Ubuntu 10.04 x86_64 host.
+
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+Patch is too large, so refusing to show it
