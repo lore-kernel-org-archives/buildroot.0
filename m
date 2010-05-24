@@ -1,22 +1,42 @@
-From: Barry Bridges <barry@disignconsultants.com>
-Date: Mon, 24 May 2010 08:30:47 +0100
-Subject: [Buildroot] Atmel SAM9M10 Support
-In-Reply-To: <mailman.1802.1272882129.4726.buildroot@busybox.net>
-References: <mailman.1802.1272882129.4726.buildroot@busybox.net>
-Message-ID: <000b01cafb13$06dc9430$1495bc90$@com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 May 2010 10:55:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 1789] binutils fails to build for i386
+In-Reply-To: <bug-1789-163@https.bugs.busybox.net/>
+References: <bug-1789-163@https.bugs.busybox.net/>
+Message-ID: <20100524105545.2E5BE1D3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
-I've just got hold of  an engineering sample board of the Atmel
-AT91SAM9M10-EKES. I was wondering if or when board support would be added
-for this device. I have found most things work with the latest buildroot but
-have issues with the touch screen not working when used with DirectFB.
+https://bugs.busybox.net/show_bug.cgi?id=1789
+
+--- Comment #3 from buildroot at invalid-domain.net  ---
+> See my config:
+>  http://free-electrons.com/~thomas/pub/bug1789/config1
+
+Yes, it's the same config as I am using (only with different number of
+simultaneous jobs). I have uploaded the full log to
+http://files.invalid-domain.net/buildroot-without-patch.log
 
 
-Many thanks
+I tried the patch you posted to the mailing list (changing   
+    HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib 
+to
+    HOST_LDFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
 
-Barry
+in packages/Makefile.in) and it fixed the compiling problems for binutils for
+me. Unfortunately, fakeroot reports an error ("fakeroot: preload library not
+found, aborting.") when creating the ext2 fs. Log can be found at
+http://files.invalid-domain.net/buildroot-with-proposed-patch.log
+
+Completely removing the line 
+    HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib 
+from packages/Makefile.in) leads to a successfull build (see log at
+http://files.invalid-domain.net/buildroot-with-dirty-fix.log).
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
