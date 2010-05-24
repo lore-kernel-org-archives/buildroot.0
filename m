@@ -1,43 +1,32 @@
-From: Thomas <tokant@gmx.net>
-Date: Mon, 24 May 2010 20:10:09 +0200
-Subject: [Buildroot] buildroot-2010.05-rc2, problem with binutils-2.20.1
-In-Reply-To: <20100522145508.10c885e7@surf>
-References: <1274422785.5719.8.camel@bernd-desktop>
-	<20100521122542.5c4b0907@surf> <1274479497.25288.3.camel@bernd-desktop>
-	<20100522003018.1ef13985@surf> <1274517204.15163.3.camel@bernd-desktop>
-	<20100522145508.10c885e7@surf>
-Message-ID: <1274724609.13140.8.camel@bernd-desktop>
+From: Bob Bouterse <bob.bouterse@dm-holdings-na.com>
+Date: Mon, 24 May 2010 16:23:44 -0400
+Subject: [Buildroot] Help with configuring Buildroot for the Omap3530 EVM
+Message-ID: <1274732624.9526.87.camel@bbouterse-debian.escient.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2010-05-22 at 14:55 +0200, Thomas Petazzoni wrote:
-> On Sat, 22 May 2010 10:33:24 +0200
-> Thomas <tokant@gmx.net> wrote:
-> 
-> > > -HOST_CFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
-> > > +HOST_LDFLAGS+=-Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
-> > 
-> > yes it works :-)
-> 
-> Ok, I will try to see if it still fixes the problem that the commit was
-> originally fixing.
+Sorry everone, this is a bit of complaining from me, with a hope that
+there is someone that can give me either help to configure Buildroot for
+an Omap3530 EVM board, or hard measurements that I can use to show my
+Management (and TI) that OE is slow and will cost us development time.
 
-I noticed the same problem, as described in bug report 1789: When it
-comes to root file generation (rootfs.ext2), buildroot terminates with
-the following messages:
+Here is my problem:
+We are beginning a new project, an have decided to use the Omap3530 EVM
+board to begin development on. We do not know if we will go to market
+with the OMAP or some other processor at this time.
+Seems like the entire Omap Open Source Community has jumped to using
+OpenEmbedded with no consideration for how well it works. I find several
+documents that give hearsay comments that it might be slow, but no
+metrics to show what they mean. I have seen that it seems to be around
+2.5 to 4 times slower that buildroot, and even worse running on a VM,
+but due to my lack of experience with OE, it could be a configuration
+error on my part. I am working with the Arago group on that.
 
-rm -f /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-touch /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/.fakeroot.00000
-cat /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/.fakeroot* > /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-echo "chown -R 0:0 /media/disk/br1005rc2/buildroot-2010.05-rc2/output/target" >> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-echo "/media/disk/br1005rc2/buildroot-2010.05-rc2/output/host/usr/bin/makedevs -d target/device/Atmel/root/device_table.txt /media/disk/br1005rc2/buildroot-2010.05-rc2/output/target" >> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-echo "	PATH="/media/disk/br1005rc2/buildroot-2010.05-rc2/output/toolchain/bin:/media/disk/br1005rc2/buildroot-2010.05-rc2/output/host/bin:/media/disk/br1005rc2/buildroot-2010.05-rc2/output/host/usr/bin:/media/disk/br1005rc2/buildroot-2010.05-rc2/output/host/usr/sbin/:/media/disk/br1005rc2/buildroot-2010.05-rc2/output/staging/bin:/media/disk/br1005rc2/buildroot-2010.05-rc2/output/staging/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" fs/ext2/genext2fs.sh -d /media/disk/br1005rc2/buildroot-2010.05-rc2/output/target  -U /media/disk/br1005rc2/buildroot-2010.05-rc2/output/images/rootfs.ext2" >> /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-chmod a+x /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-/media/disk/br1005rc2/buildroot-2010.05-rc2/output/host/usr/bin/fakeroot -- /media/disk/br1005rc2/buildroot-2010.05-rc2/output/build/_fakeroot.fs
-fakeroot: preload library not found, aborting.
-make: *** [/media/disk/br1005rc2/buildroot-2010.05-rc2/output/images/rootfs.ext2] Error 1
-
-Thanks, Thomas.
+Does anyone have a board configuration for the Omap3503 EVM for
+buildroot? It would help a lot if I could show my management a working
+build really quickly. I need the target/device files and Omap patches in
+a working build. I am not being given any time to work on this because
+Arago "works".
