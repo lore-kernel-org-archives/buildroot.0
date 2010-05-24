@@ -1,38 +1,56 @@
-From: =?ISO-8859-1?Q?P=E9ter_St=F3sz?= <peter.stosz@mentat.hu>
-Date: Tue, 25 May 2010 00:01:06 +0200
-Subject: [Buildroot] USB Ethernet register too late
-Message-ID: <AANLkTill0JXHnWN3zh5dhnxRb-hZqJpjPGOmdqSTzmTQ@mail.gmail.com>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 25 May 2010 08:51:58 +1000
+Subject: [Buildroot] Help with configuring Buildroot for the Omap3530 EVM
+In-Reply-To: <1274732624.9526.87.camel@bbouterse-debian.escient.local>
+References: <1274732624.9526.87.camel@bbouterse-debian.escient.local>
+Message-ID: <000c01cafb93$b9e9c4f0$2dbd4ed0$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
 
-I have a custom SAM9261 board and USB Ethernet (Davicom  DM9601) adapter.
-(Kernels 2.6.30 and 2.6.33.2)
-What can I do, to DM9601 register well and state goes up, before the
-Ethernet(/IP) configuration started?
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Bob Bouterse
+> Sent: Tuesday, 25 May 2010 6:24 AM
+> To: buildroot at busybox.net
+> Subject: [Buildroot] Help with configuring Buildroot for the Omap3530 EVM
+> 
+> Sorry everone, this is a bit of complaining from me, with a hope that
+there is
+> someone that can give me either help to configure Buildroot for an
+> Omap3530 EVM board, or hard measurements that I can use to show my
+> Management (and TI) that OE is slow and will cost us development time.
+> 
+> Here is my problem:
+> We are beginning a new project, an have decided to use the Omap3530 EVM
+> board to begin development on. We do not know if we will go to market with
+> the OMAP or some other processor at this time.
+> Seems like the entire Omap Open Source Community has jumped to using
+> OpenEmbedded with no consideration for how well it works. I find several
+> documents that give hearsay comments that it might be slow, but no metrics
+> to show what they mean. I have seen that it seems to be around
+> 2.5 to 4 times slower that buildroot, and even worse running on a VM, but
+> due to my lack of experience with OE, it could be a configuration error on
+my
+> part. I am working with the Arago group on that.
+> 
+> Does anyone have a board configuration for the Omap3503 EVM for
+> buildroot? It would help a lot if I could show my management a working
+build
+> really quickly. I need the target/device files and Omap patches in a
+working
+> build. I am not being given any time to work on this because Arago
+"works".
 
-...
-usbcore: registered new interface driver dm9601
-ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
-at91_ohci at91_ohci: AT91 OHCI
-at91_ohci at91_ohci: new USB bus registered, assigned bus number 1
-at91_ohci at91_ohci: irq 20, io mem 0x00500000
-hub 1-0:1.0: USB hub found
-hub 1-0:1.0: 1 port detected
-i2c /dev entries driver
-TCP cubic registered
-usb 1-1: new full speed USB device using at91_ohci and address 2
-IP-Config: No network devices available.
-Looking up port of RPC 100003/2 on 10.11.1.102
-eth0: register 'dm9601' at usb-at91-1, Davicom DM9601 USB Ethernet,
-00:10:13:50:ae:e6
-...
+From my experience with a mini2440 board it seems that the quickest route is
+to get a kernel patch and get that building/running using buildroot, then
+work on the root filesystem. All I had to do was select my architecture
+(arm920) and choose some packages to build.
 
-Peter
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100525/e9ce344d/attachment.html>
+Good Luck!
+
+
+Paul.
