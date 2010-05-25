@@ -1,50 +1,35 @@
-From: Jonathan Bowman <bowmanjd@gmail.com>
-Date: Mon, 24 May 2010 21:02:11 -0400
-Subject: [Buildroot] Patch for zip and tar/lzma extraction
-Message-ID: <AANLkTillAlWKQ-Ib9xq8Jr-Adf1xS3a6oTM-SQ5-Rzkn@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 May 2010 08:53:15 +0200
+Subject: [Buildroot] USB Ethernet register too late
+In-Reply-To: <AANLkTill0JXHnWN3zh5dhnxRb-hZqJpjPGOmdqSTzmTQ@mail.gmail.com>
+	(=?utf-8?Q?=22P=C3=A9ter_St=C3=B3sz=22's?= message of "Tue, 25 May 2010
+	00:01:06 +0200")
+References: <AANLkTill0JXHnWN3zh5dhnxRb-hZqJpjPGOmdqSTzmTQ@mail.gmail.com>
+Message-ID: <874ohwmq04.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>>>>> "P?ter" == P?ter St?sz <peter.stosz@mentat.hu> writes:
 
-I have attached a patch that allows sources to be lzma-compressed
-tarballs or zip archives, in addition to the bzipped and gzipped
-tarballs currently allowed in generic and autotools-based package
-makefiles.
+ P?ter> Hi!
+ P?ter> I have a custom SAM9261 board and USB Ethernet (Davicom? DM9601) adapter.
+ P?ter> (Kernels 2.6.30 and 2.6.33.2)
+ P?ter> What can I do, to DM9601 register well and state goes up, before the Ethernet(/
+ P?ter> IP) configuration started?
 
-Would someone be able to review this?
+This has nothing to do with buildroot, questions like this belong on
+netdev at vger.kernel.org. With that said, there's two things you can do:
 
-I am new to git, new to buildroot, and new to collaborative
-open-source etiquette, so have at me if I am off in any of these
-areas.
+- Either do dhcp/nfs mounting yourself in an initramfs
+- Or tweak CONF_PRE_OPEN in net/ipv4/ipconfig.c to add a longer delay
+  before it tries to open the device. You might need to change the
+  msleep to a sslep like CONF_POST_OPEN if you make it too long.
 
-I have also attached a patch that adds cyassl (a lightweight
-crypto/ssl library written in C, supposedly openssl-compatible) as an
-optional library. I have not tested it thoroughly, and it may not be
-useful at all. I only include it in case you are interested in using
-it to test the zip download/extraction process. Strangely, the yassl
-project (http://yassl.com/) does not provide tarballs, only zip files,
-hence my need for the included zip-xz patch (the lzma stuff was added
-just because it was easy to do and seemed relevant given the growing
-popularity of lzma -- it is totally unrelated to the zip extraction
-issue).
+This isn't anything specific to my dm9601 driver, but common for all
+devices on async probed busses like USB.
 
-Regards,
-Jonathan
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-zip-xz.patch.gz
-Type: application/x-gzip
-Size: 1940 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100524/697abd29/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-cyassl.patch.gz
-Type: application/x-gzip
-Size: 862 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100524/697abd29/attachment-0001.bin>
+-- 
+Bye, Peter Korsgaard
