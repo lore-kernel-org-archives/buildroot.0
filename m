@@ -1,28 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 26 May 2010 22:48:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 75] arm buildroot "unrecognized option" error
-In-Reply-To: <bug-75-163@https.bugs.busybox.net/>
-References: <bug-75-163@https.bugs.busybox.net/>
-Message-ID: <20100526224806.DD5BE12EA2A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 May 2010 00:48:18 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	dependencies-fixes
+In-Reply-To: <cover.1274482644.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 22 May 2010 00:57:33 +0200")
+References: <cover.1274482644.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87k4qqmg99.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=75
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Thomas> The following changes since commit 51861e1ba19a036625643a56382a175e8388529f:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         sshfs: needs largefile support (because of fuse)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|                            |FIXED
+ Thomas> are available in the git repository at:
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  ---
-PATH check fixed by Thomas in git.
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot dependencies-fixes
+
+Pulled, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
