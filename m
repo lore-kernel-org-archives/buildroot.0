@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 26 May 2010 14:14:39 +0200
-Subject: [Buildroot] [git commit master] Add documentation on gettext
-	integration
-Message-ID: <20100526122000.8D14F1EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] qt: use depends on for gstreamer
+Message-ID: <20100526122001.D05A51EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,89 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77e026bbfabe01fc4c4f3410d283dbd7d836162a
+commit: http://git.buildroot.net/buildroot/commit/?id=4059a814bb133d4dc306a366cdeba186cb7b8b89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/buildroot.html |   58 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 58 insertions(+), 0 deletions(-)
+Gstreamer has complicated dependencies (because of glib2), so use
+depends on rather than select. At the same time default phonon support
+to Y if gstreamer is available, as this support is likely wanted.
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index abe822f..3702b44 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -798,6 +798,8 @@ community support.</p>
- 	<li><a href="#manual-tutorial">Manual Makefile : tutorial</a></li>
-       </ul>
-       </li>
-+      <li><a href="#gettext-integration">Gettext integration and
-+      interaction with packages</a></li>
-     </ul>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 4371fc3..4bc4eaa 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -263,13 +263,17 @@ endif
  
-     <h3><a name="package-directory"></a>Package directory</h3>
-@@ -1583,6 +1585,62 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
-     line <a href="#ex2line40">40</a>, which is used by Buildroot to download,
-     compile, and then install this package. </p>
+ config BR2_PACKAGE_QT_PHONON
+ 	bool "Phonon Module"
+-	select BR2_PACKAGE_GSTREAMER
++	depends on BR2_PACKAGE_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
++	default y
+ 	help
+ 	  Build the Phonon module. Support for different audio/video
+ 	  formats can be configured at the GStreamer package.
+ 	  If unsure, say n.
  
-+    <h3><a name="gettext-integration"></a>Gettext integration and
-+    interaction with packages</h3>
++comment "Phonon module needs gstreamer"
++	depends on !BR2_PACKAGE_GSTREAMER
 +
-+    <p>Many packages that support internationalization use the gettext
-+    library. Dependency on this library are fairly complicated and
-+    therefore deserves a few explanations.</p>
-+
-+    <p>The <i>uClibc</i> C library doesn't implement gettext
-+    functionality, therefore with this C library, a separate gettext
-+    must be compiled. On the other hand, the <i>glibc</i> C library
-+    does integrate its own gettext, and in this case, the separate
-+    gettext library should not be compiled, because it creates various
-+    kind of build failures.</p>
-+
-+    <p>Additionnaly, some packages (such as libglib2) do require
-+    gettext unconditionnally, while other packages (those who
-+    support <code>--disable-nls</code> in general) only require
-+    gettext when locale support is enabled.</p>
-+
-+    <p>Therefore, Buildroot defines two configuration options:</p>
-+
-+    <ul>
-+      <li><code>BR2_NEEDS_GETTEXT</code>, which is true as soon as the
-+      toolchain doesn't provide its own gettext implementation</li>
-+
-+      <li><code>BR2_NEEDS_GETTEXT_IF_LOCALE</code>, which is true if
-+      the toolchain doesn't provide its own gettext implementation and
-+      if locale support is enabled</li>
-+
-+    </ul>
-+
-+    <p>Therefore, packages that unconditionnally need gettext should:</p>
-+
-+    <ol>
-+      <li>Use <code>select BR2_PACKAGE_GNUTTEXT if
-+      BR2_NEEDS_GETTEXT</code> and possibly <code>select
-+      BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT</code> if libintl is
-+      also needed</li>
-+
-+      <li>Use <code>$(if $(BR2_NEEDS_GETTEXT),gettext)</code> in the
-+      package <code>DEPENDENCIES</code> variable</li>
-+    </ol>
-+
-+    <p>Packages that need gettext only when locale support is enabled
-+    should:</p>
-+
-+    <ol>
-+      <li>Use <code>select BR2_PACKAGE_GNUTTEXT if
-+      BR2_NEEDS_GETTEXT_IF_LOCALE</code> and possibly <code>select
-+      BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE</code> if
-+      libintl is also needed</li>
-+
-+      <li>Use <code>$(if
-+      $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)</code> in the
-+      package <code>DEPENDENCIES</code> variable</li>
-+    </ol>
- 
-     <h3>Conclusion</h3>
- 
+ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	bool "Phonon Module Backend"
+ 	depends on BR2_PACKAGE_QT_PHONON
 -- 
 1.6.3.3
