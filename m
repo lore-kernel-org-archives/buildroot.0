@@ -1,28 +1,57 @@
-From: Bob Bouterse <bob.bouterse@dm-holdings-na.com>
-Date: Wed, 26 May 2010 16:15:28 -0400
-Subject: [Buildroot] How does the Start and Entry Point addresses for a
- uImage get set?
-In-Reply-To: <1274899552.26577.86.camel@bbouterse-debian.escient.local>
-References: <1274899552.26577.86.camel@bbouterse-debian.escient.local>
-Message-ID: <1274904928.26577.88.camel@bbouterse-debian.escient.local>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 26 May 2010 23:00:18 +0200
+Subject: [Buildroot] [git commit master] vsftpd: fix build without largefile
+	support
+Message-ID: <20100526210240.DA40A12E244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, I found this. The real fix to my problem was the complete rebuild of
-the kernel.
 
-On Wed, 2010-05-26 at 14:45 -0400, Bob Bouterse wrote:
-> Thanks for the beagleboard patch! I have morphed it into an omap3_evm
-> configuration. But I have hit a mystery...
-> When the uImage for my kernel is created with mkimage, the start address
-> is being set to 0x00008000, it should be 0x80008000 . The zreladdr-y in
-> linux/arch/arm/mach-omap2/Makefile.boot is set to 0x80008000 . 
-> 
-> Does anyone know how this gets set in the uImage header?
-> 
-> FYI, I found that the parameters to mkimage were set to zero in
-> buildroot/target/u-boot/Makefile.in . I modified these to 0x80000000,
-> and that corrected the problem, but I can't believe this is hard coded.
+commit: http://git.buildroot.net/buildroot/commit/?id=9d07fcd08e710beff30841b47db8b8772a9d3b7b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix lfs patch to include <features.h> before checking any of the
+uClibc defines.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                            |    3 ++-
+ ...ibc_lfs.patch => vsftpd-2.0.7-uclibc_lfs.patch} |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+ rename package/vsftpd/{vsftpd-2.0.5-uclibc_lfs.patch => vsftpd-2.0.7-uclibc_lfs.patch} (96%)
+
+diff --git a/CHANGES b/CHANGES
+index 354186a..83242aa 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -11,7 +11,8 @@
+ 	nbd, netsnmp, ntfsprogs, ntp, olsr, pango, pciutils, pcmanfm,
+ 	php, pkg-config, psmisc, qt, samba, shared-mime-info,
+ 	squashfs, squashfs3, sshfs, startup-notification, swfdec,
+-	sylpheed, uemacs, util-linux, valgrind, vpnc, webkit, xstroke
++	sylpheed, uemacs, util-linux, valgrind, vpnc, vsftpd, webkit,
++	xstroke
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/vsftpd/vsftpd-2.0.5-uclibc_lfs.patch b/package/vsftpd/vsftpd-2.0.7-uclibc_lfs.patch
+similarity index 96%
+rename from package/vsftpd/vsftpd-2.0.5-uclibc_lfs.patch
+rename to package/vsftpd/vsftpd-2.0.7-uclibc_lfs.patch
+index ebd25ca..610b782 100644
+--- a/package/vsftpd/vsftpd-2.0.5-uclibc_lfs.patch
++++ b/package/vsftpd/vsftpd-2.0.7-uclibc_lfs.patch
+@@ -5,7 +5,7 @@ diff -rdup vsftpd-2.0.5.orig/sysutil.c vsftpd-2.0.5/sysutil.c
+  #include "utility.h"
+  #include "tunables.h"
+  
+-+#include "builddefs.h"
+++#include <features.h>
+ +
+ +#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_LFS__)
+  /* Activate 64-bit file support on Linux/32bit plus others */
+-- 
+1.6.3.3
