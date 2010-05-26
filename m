@@ -1,41 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 May 2010 20:33:08 +0200
-Subject: [Buildroot] [git commit master] webkit: remove user visible
-	rendering target selection
-In-Reply-To: <20100526152252.484cd6a7@surf> (Thomas Petazzoni's message of
-	"Wed, 26 May 2010 15:22:52 +0200")
-References: <20100526122002.1355C1EB@busybox.osuosl.org>
-	<20100526152252.484cd6a7@surf>
-Message-ID: <878w76o6mz.fsf@macbook.be.48ers.dk>
+From: Bob Bouterse <bob.bouterse@dm-holdings-na.com>
+Date: Wed, 26 May 2010 14:45:52 -0400
+Subject: [Buildroot] How does the Start and Entry Point addresses for a
+	uImage get set?
+Message-ID: <1274899552.26577.86.camel@bbouterse-debian.escient.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thanks for the beagleboard patch! I have morphed it into an omap3_evm
+configuration. But I have hit a mystery...
+When the uImage for my kernel is created with mkimage, the start address
+is being set to 0x00008000, it should be 0x80008000 . The zreladdr-y in
+linux/arch/arm/mach-omap2/Makefile.boot is set to 0x80008000 . 
 
- Thomas> On Wed, 26 May 2010 14:14:39 +0200
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
+Does anyone know how this gets set in the uImage header?
 
- >> +ifeq ($(BR2_PACKAGE_XORG7),y)
- >> +	WEBKIT_CONF_OPT += --with-target=x11
- >> +	WEBKIT_DEPENDENCIES += xserver_xorg-server
- >> endif
-
- Thomas> Technically speaking, I don't think any X11 client applications
- Thomas> requires the server. Instead, it probably requires xlib_libX11 and
- Thomas> maybe some other additional libraries.
-
-True, but currently we have this client == server relationship in BR for
-the X11 stuff.
-
- Thomas> But, I admit that this isn't handled properly in all packages, and as
- Thomas> soon as one wants a X11 application, one probably also want the X
- Thomas> server as well, in most situations.
-
-Normally yes, but this is something we could (should?) cleanup long term
-imho.
-
--- 
-Bye, Peter Korsgaard
+FYI, I found that the parameters to mkimage were set to zero in
+buildroot/target/u-boot/Makefile.in . I modified these to 0x80000000,
+and that corrected the problem, but I can't believe this is hard coded.
