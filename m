@@ -1,28 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 May 2010 12:20:38 +0200
-Subject: [Buildroot] Build fails aound host-mtd-1.3.1
-In-Reply-To: <000001cafca3$627b5880$27720980$@com> (Barry Bridges's message of
-	"Wed, 26 May 2010 08:16:39 +0100")
-References: <000001cafca3$627b5880$27720980$@com>
-Message-ID: <87wrurnevd.fsf@macbook.be.48ers.dk>
+Date: Wed, 26 May 2010 13:55:41 +0200
+Subject: [Buildroot] [pull request] Pull request for branch gettext-fixes
+In-Reply-To: <cover.1274733199.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 24 May 2010 22:33:24 +0200")
+References: <cover.1274733199.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ocg2op1e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Barry" == Barry Bridges <barry@disignconsultants.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Barry> Hi all,
- Barry> I have a build error towards the end of the build process, not 100% sure where
- Barry> the failure lies but the error and few preceding lines are below with my
- Barry> .config.  If I type make again it finishes the build, but I?m not sure if the
- Barry> build is correct or complete.
+ Thomas> The following changes since commit 096b21e552b05b68a846172e320ae3e38dee16ac:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         pciutils: fix access to pci.ids and make update-pciids work with busybox wget
 
-You didn't post enough to show the error, but it's probably the parallel
-build issue with ubi we recently (post-rc2) fixed in mtd-utils. I'll put
-out rc3 later today or tomorrow, could you in the mean time give the
-latest nightly snapshot a try instead?
+ Thomas> are available in the git repository at:
+
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot gettext-fixes
+
+Pulled, thanks!
 
 -- 
 Bye, Peter Korsgaard
