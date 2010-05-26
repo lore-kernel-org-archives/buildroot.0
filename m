@@ -1,50 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 May 2010 23:00:18 +0200
-Subject: [Buildroot] [git commit master] valgrind: broken on ppc
-Message-ID: <20100526210240.9E5AD12E244@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 May 2010 23:21:57 +0200
+Subject: [Buildroot] gst-plugins-base alsa dependency
+In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01CA6D85@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+	(Phil Edworthy's message of "Wed, 26 May 2010 10:57:56 +0100")
+References: <AB12B32E73474741A2C5361C433A44DE01CA6D85@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+Message-ID: <874ohunytm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Phil" == Phil Edworthy <Phil.Edworthy@renesas.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0346e90a8b611ecf62984eccf379a37262aeb7c6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Phil> Hi,
 
-Valgrind 3.2.3 needs linux/a.out.h, which hasn't been exported on ppc
-since 2.6.28.
+ Phil> A lot of the GStreamer plugins are built or not based on whether
+ Phil> other packages are on the target. For example, gst-plugins-base
+ Phil> only builds the alsa plugins if it can find alsa-lib. A clean
+ Phil> build means these plugins aren?t built due to the build
+ Phil> order. However, if I rebuild gst-plugins-base afterwards, they
+ Phil> are built.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                    |    2 +-
- package/valgrind/Config.in |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks, I've just committed a patch that does this to git.
 
-diff --git a/CHANGES b/CHANGES
-index 67e20c8..354186a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -11,7 +11,7 @@
- 	nbd, netsnmp, ntfsprogs, ntp, olsr, pango, pciutils, pcmanfm,
- 	php, pkg-config, psmisc, qt, samba, shared-mime-info,
- 	squashfs, squashfs3, sshfs, startup-notification, swfdec,
--	sylpheed, uemacs, util-linux, vpnc, webkit, xstroke
-+	sylpheed, uemacs, util-linux, valgrind, vpnc, webkit, xstroke
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index d9113c9..db1bc3b 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_VALGRIND
- 	bool "valgrind"
--	depends on BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
