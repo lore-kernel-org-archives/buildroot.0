@@ -1,58 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 May 2010 23:50:11 +0200
-Subject: [Buildroot] [git commit master] iperf: override bool detection
-Message-ID: <20100526215529.13A7F120B29@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 May 2010 00:45:35 +0200
+Subject: [Buildroot] a remark on the default uclibc0.9.31 config
+In-Reply-To: <8A567CE999EB4F76B3865E87F6BC7AC4@apexjs> (Sagaert Johan's
+	message of "Sat, 22 May 2010 00:53:08 +0200")
+References: <8A567CE999EB4F76B3865E87F6BC7AC4@apexjs>
+Message-ID: <87ocg2mgds.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e13ac0ec8788092c6508636da94fe0198c18dffd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The configure script contains a buggy test for the bool datatype and
-it's size. This is normally not a big deal as the result isn't used
-for anything, but when BR2_CONFIG_CACHE (default) is used, the
-wrong ac_cv_type_bool result is stored in the cache, and other packages
-like libcurl DO need the bool type, so that breaks the build.
-
-Fix it by presetting those tests to sane values.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    2 +-
- package/iperf/iperf.mk |    4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 6dcf97c..af73187 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,7 +5,7 @@
- 	Updated/fixed packages: aumix, atk, avahi, bmon, busybox, cairo,
- 	cdrkit, dbus-glib, dbus-python, docker, enchant, fltk, gamin,
- 	gettext, gmpc, gob2, grep, gstreamer, gst-plugins-bad,
--	gst-plugins-base, gvfs, hal, iconv, icu, libcgicc, libdvdnav,
-+	gst-plugins-base, gvfs, hal, iconv, icu, iperf, libcgicc, libdvdnav,
- 	libdvdread, libglade, libglib2, libgtk2, libidn, libmms,
- 	libmpd, libpcap, libsoup, lmbench, lsof, ltrace, lvm2, make,
- 	metacity, mtd-utils, mutt, nbd, netsnmp, ntfsprogs, ntp, olsr,
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index 10e5a37..3f8e3fc 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -14,7 +14,9 @@ IPERF_INSTALL_STAGING = NO
- IPERF_INSTALL_TARGET = YES
+ Sagaert> Hi
+ Sagaert> With this set in the default uclibc config
  
- IPERF_CONF_ENV = \
--	ac_cv_func_malloc_0_nonnull=yes
-+	ac_cv_func_malloc_0_nonnull=yes \
-+	ac_cv_type_bool=yes \
-+	ac_cv_sizeof_bool=1
+ Sagaert> FORCE_SHAREABLE_TEXT_SEGMENTS=y
  
- IPERF_CONF_OPT = \
- 	--disable-dependency-tracking \
+ Sagaert> I got this:when starting mpg123
+ 
+ Sagaert> # mpg123
+
+ Sagaert> Can't modify /usr/lib/libmpg123.so.0's text section. Use GCC
+ Sagaert> option -fPIC for shared objects, please.
+  Sagaert> So i turned this option off and after rebuild the mpg123 does
+ Sagaert> no longer produce this error.
+ 
+ Sagaert> There might be more programs sensitive to this setting.
+
+Fixed, thanks.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
