@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 26 May 2010 14:14:39 +0200
-Subject: [Buildroot] [git commit master] webkit: remove user visible
-	rendering target selection
-Message-ID: <20100526122002.1355C1EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] Add documentation on gettext
+	integration
+Message-ID: <20100526122000.8D14F1EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,69 +10,89 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f4d293c30d45cb86e06216da2a9bdf55c9d9b01
+commit: http://git.buildroot.net/buildroot/commit/?id=77e026bbfabe01fc4c4f3410d283dbd7d836162a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead use the same logic as in libgtk2. The rendering target selected
-MUST be the same as libgtk2's, so just figure it out automatically
-instead.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/Config.in |   19 -------------------
- package/webkit/webkit.mk |   11 +++++++----
- 2 files changed, 7 insertions(+), 23 deletions(-)
+ docs/buildroot.html |   58 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 58 insertions(+), 0 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index eee6bcb..b0d69d7 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -21,22 +21,3 @@ config BR2_PACKAGE_WEBKIT
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index abe822f..3702b44 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -798,6 +798,8 @@ community support.</p>
+ 	<li><a href="#manual-tutorial">Manual Makefile : tutorial</a></li>
+       </ul>
+       </li>
++      <li><a href="#gettext-integration">Gettext integration and
++      interaction with packages</a></li>
+     </ul>
  
- comment "webkit requires a toolchain with C++ support and WCHAR enabled"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--
--if BR2_PACKAGE_WEBKIT
--
--choice
--	prompt "Rendering target"
--	default BR2_PACKAGE_WEBKIT_X
--	help
--	  Selects which rendering target will be used.
--
--config BR2_PACKAGE_WEBKIT_X11
--	bool "X11"
--
--config BR2_PACKAGE_WEBKIT_DIRECTFB
--	bool "DirectFB"
--	select BR2_PACKAGE_DIRECTFB
--
--endchoice
--
--endif
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 2121f4b..39debd3 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -14,12 +14,15 @@ WEBKIT_LIBTOOL_PATCH = NO
- WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
- 			libgtk2 sqlite enchant libsoup
+     <h3><a name="package-directory"></a>Package directory</h3>
+@@ -1583,6 +1585,62 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+     line <a href="#ex2line40">40</a>, which is used by Buildroot to download,
+     compile, and then install this package. </p>
  
--ifeq ($(BR2_PACKAGE_WEBKIT_X11),y)
--WEBKIT_CONF_OPT = --with-target=x11
++    <h3><a name="gettext-integration"></a>Gettext integration and
++    interaction with packages</h3>
 +
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+	WEBKIT_CONF_OPT += --with-target=x11
-+	WEBKIT_DEPENDENCIES += xserver_xorg-server
- endif
++    <p>Many packages that support internationalization use the gettext
++    library. Dependency on this library are fairly complicated and
++    therefore deserves a few explanations.</p>
++
++    <p>The <i>uClibc</i> C library doesn't implement gettext
++    functionality, therefore with this C library, a separate gettext
++    must be compiled. On the other hand, the <i>glibc</i> C library
++    does integrate its own gettext, and in this case, the separate
++    gettext library should not be compiled, because it creates various
++    kind of build failures.</p>
++
++    <p>Additionnaly, some packages (such as libglib2) do require
++    gettext unconditionnally, while other packages (those who
++    support <code>--disable-nls</code> in general) only require
++    gettext when locale support is enabled.</p>
++
++    <p>Therefore, Buildroot defines two configuration options:</p>
++
++    <ul>
++      <li><code>BR2_NEEDS_GETTEXT</code>, which is true as soon as the
++      toolchain doesn't provide its own gettext implementation</li>
++
++      <li><code>BR2_NEEDS_GETTEXT_IF_LOCALE</code>, which is true if
++      the toolchain doesn't provide its own gettext implementation and
++      if locale support is enabled</li>
++
++    </ul>
++
++    <p>Therefore, packages that unconditionnally need gettext should:</p>
++
++    <ol>
++      <li>Use <code>select BR2_PACKAGE_GNUTTEXT if
++      BR2_NEEDS_GETTEXT</code> and possibly <code>select
++      BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT</code> if libintl is
++      also needed</li>
++
++      <li>Use <code>$(if $(BR2_NEEDS_GETTEXT),gettext)</code> in the
++      package <code>DEPENDENCIES</code> variable</li>
++    </ol>
++
++    <p>Packages that need gettext only when locale support is enabled
++    should:</p>
++
++    <ol>
++      <li>Use <code>select BR2_PACKAGE_GNUTTEXT if
++      BR2_NEEDS_GETTEXT_IF_LOCALE</code> and possibly <code>select
++      BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE</code> if
++      libintl is also needed</li>
++
++      <li>Use <code>$(if
++      $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)</code> in the
++      package <code>DEPENDENCIES</code> variable</li>
++    </ol>
  
--ifeq ($(BR2_PACKAGE_WEBKIT_DIRECTFB),y)
--WEBKIT_CONF_OPT = --with-target=directfb
-+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+	WEBKIT_CONF_OPT += --with-target=directfb
-+	WEBKIT_DEPENDENCIES += directfb
- endif
+     <h3>Conclusion</h3>
  
- WEBKIT_CONF_OPT += --disable-video
 -- 
 1.6.3.3
