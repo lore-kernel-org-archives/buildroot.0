@@ -1,38 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 May 2010 14:40:12 +0200
-Subject: [Buildroot] [git commit master] busybox skeleton: allow logins from
-	ttymxc[0-2]
-Message-ID: <20100526124038.ABA74380@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 May 2010 15:22:52 +0200
+Subject: [Buildroot] [git commit master] webkit: remove user visible
+ rendering target selection
+In-Reply-To: <20100526122002.1355C1EB@busybox.osuosl.org>
+References: <20100526122002.1355C1EB@busybox.osuosl.org>
+Message-ID: <20100526152252.484cd6a7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, 26 May 2010 14:14:39 +0200
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21350c5f2f4fd365440b23d9188e36240ea323b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+> +	WEBKIT_CONF_OPT += --with-target=x11
+> +	WEBKIT_DEPENDENCIES += xserver_xorg-server
+>  endif
 
-Add ttymxc[0-2] to the list is the /etc/securetty of the Busybox skeleton.
-This is useful for serial logins on i.MX based systems. The same serial
-devices already appear in the generic "target_skeleton/".
+Technically speaking, I don't think any X11 client applications
+requires the server. Instead, it probably requires xlib_libX11 and
+maybe some other additional libraries.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../generic/target_busybox_skeleton/etc/securetty  |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+But, I admit that this isn't handled properly in all packages, and as
+soon as one wants a X11 application, one probably also want the X
+server as well, in most situations.
 
-diff --git a/target/generic/target_busybox_skeleton/etc/securetty b/target/generic/target_busybox_skeleton/etc/securetty
-index 0e7cf97..b25f4a5 100644
---- a/target/generic/target_busybox_skeleton/etc/securetty
-+++ b/target/generic/target_busybox_skeleton/etc/securetty
-@@ -30,3 +30,6 @@ ttyCPM0
- ttyCPM1
- ttyCPM2
- ttyCPM3
-+ttymxc0
-+ttymxc1
-+ttymxc2
+Thomas
 -- 
-1.6.3.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
