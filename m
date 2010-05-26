@@ -1,26 +1,23 @@
-From: Phil Edworthy <Phil.Edworthy@renesas.com>
-Date: Wed, 26 May 2010 13:31:45 +0100
-Subject: [Buildroot] gst-plugins-base alsa dependency
-In-Reply-To: <20100526120439.532638bd@surf>
-Message-ID: <AB12B32E73474741A2C5361C433A44DE01CA6F35@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 May 2010 14:40:29 +0200
+Subject: [Buildroot] [PATCH] skeleton: allow logins from ttymxc[0-2]
+In-Reply-To: <8abc531ffb433d44641cb8df53abbbe7977b77bd.1274848117.git.baruch@tkos.co.il>
+	(Baruch Siach's message of "Wed, 26 May 2010 07:31:36 +0300")
+References: <8abc531ffb433d44641cb8df53abbbe7977b77bd.1274848117.git.baruch@tkos.co.il>
+Message-ID: <87k4qqomyq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > How can a Buildroot package be told of build order dependencies,
-> > without requiring the packages to be included?
-> 
-> By doing something like:
-> 
-> ifeq ($(BR2_PACKAGE_ON_WHICH_I_DEPEND),y)
-> MYPKG_DEPENDENCIES += package-on-which-i-depend
-> endif
-> 
-> If the package "package-on-which-i-depend" is enabled in the
-> configuration, then you will have the guarantee that it gets compiled
-> before the current package.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Thanks Thomas, that's a nice and simple way to fix it.
-Phil 
+ Baruch> Add ttymxc[0-2] to the list is the /etc/securetty of the Busybox skeleton.
+ Baruch> This is useful for serial logins on i.MX based systems. The same serial
+ Baruch> devices already appear in the generic "target_skeleton/".
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
