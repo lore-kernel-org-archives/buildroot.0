@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 May 2010 14:12:21 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	pkg-stats-fixes
-In-Reply-To: <cover.1274448176.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 21 May 2010 15:23:00 +0200")
-References: <cover.1274448176.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fx1dv90a.fsf@macbook.be.48ers.dk>
+Date: Thu, 27 May 2010 14:31:01 +0200
+Subject: [Buildroot] Merge request
+In-Reply-To: <20100523105523.225c205b@surf> (Thomas Petazzoni's message of
+	"Sun, 23 May 2010 10:55:23 +0200")
+References: <20100521102918.0e8b70eb@surf>
+	<8739xjr8li.fsf@macbook.be.48ers.dk> <20100523105523.225c205b@surf>
+Message-ID: <87bpc1v856.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,19 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit f3122259e2cbbc0be0fc02820a146b4e4f48bef6:
- Thomas>   Peter Korsgaard (1):
- Thomas>         mtd-utils: buildsystem is broken with parallel make (regarding libubi)
+ Thomas> On Sat, 22 May 2010 22:21:13 +0200
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
 
- Thomas> are available in the git repository at:
+ >> I'm not completely happy about adding that one this late in the
+ >> release cycle, but I've committed the other 3 - Thanks!
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot pkg-stats-fixes
+ Thomas> Why ? This patch isn't modifying any existing code, it just adds new
+ Thomas> code. If this code is broken, well, then BeagleBoard support will not
+ Thomas> work, but otherwise it wouldn't be supported.
 
- Thomas> Thomas Petazzoni (1):
- Thomas>       pkg-stats: better heuristics
-
-Pulled, thanks.
+True, but I would like to sort out all the BR2_BOARD_NAME mess before
+adding more, and I don't like the xload package using a "random" git
+tree.
 
 -- 
 Bye, Peter Korsgaard
