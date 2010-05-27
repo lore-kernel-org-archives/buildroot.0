@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 27 May 2010 09:53:01 +0200
-Subject: [Buildroot] [git commit master] kernel-headers: bump 2.6.27.x /
-	2.6.32.x / 2.6.33.x stable versions
-Message-ID: <20100527082704.1B0219AD38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] microperl: fix build with /bin/sh =
+	dash
+Message-ID: <20100527082704.54DB39AD38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +10,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74c0c949a89ea3e8abd083dfe17ced747ad16ee6
+commit: http://git.buildroot.net/buildroot/commit/?id=062cebb08fa9079b39f61144224de2ad2e2e56a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...types-for-headers-exported-to-user-space.patch} |    0
- ...types-for-headers-exported-to-user-space.patch} |    0
- 3 files changed, 3 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
- rename toolchain/kernel-headers/{linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.33.5-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ CHANGES                        |   16 ++++++++--------
+ package/microperl/microperl.mk |    5 +++++
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 3b0c93b..c58e243 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -58,12 +58,12 @@ config BR2_DEFAULT_KERNEL_VERSION
+diff --git a/CHANGES b/CHANGES
+index 4926c6d..07bcb59 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -5,14 +5,14 @@
+ 	Updated/fixed packages: aumix, atk, avahi, bmon, busybox, cairo,
+ 	cdrkit, dbus-glib, dbus-python, docker, enchant, fltk, gamin,
+ 	gettext, gmpc, gob2, grep, gstreamer, gst-plugins-bad,
+-	gst-plugins-base, gvfs, hal, iconv, icu, iperf, libcgicc, libdvdnav,
+-	libdvdread, libglade, libglib2, libgtk2, libidn, libmms,
+-	libmpd, libpcap, libsoup, lmbench, lsof, ltrace, lvm2, make,
+-	metacity, mtd-utils, mutt, nbd, netsnmp, ntfsprogs, ntp, olsr,
+-	pango, pciutils, pcmanfm, php, pkg-config, psmisc, qt, samba,
+-	shared-mime-info, squashfs, squashfs3, sshfs,
+-	startup-notification, swfdec, sylpheed, uemacs, util-linux,
+-	valgrind, vpnc, vsftpd, webkit, xstroke
++	gst-plugins-base, gvfs, hal, iconv, icu, iperf, libcgicc,
++	libdvdnav, libdvdread, libglade, libglib2, libgtk2, libidn,
++	libmms, libmpd, libpcap, libsoup, lmbench, lsof, ltrace, lvm2,
++	make, metacity, microperl, mtd-utils, mutt, nbd, netsnmp,
++	ntfsprogs, ntp, olsr, pango, pciutils, pcmanfm, php,
++	pkg-config, psmisc, qt, samba, shared-mime-info, squashfs,
++	squashfs3, sshfs, startup-notification, swfdec, sylpheed,
++	uemacs, util-linux, valgrind, vpnc, vsftpd, webkit, xstroke
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "2.6.27.46"	if BR2_KERNEL_HEADERS_2_6_27
-+	default "2.6.27.47"	if BR2_KERNEL_HEADERS_2_6_27
- 	default "2.6.28.10"	if BR2_KERNEL_HEADERS_2_6_28
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6.31.13"	if BR2_KERNEL_HEADERS_2_6_31
--	default "2.6.32.13"	if BR2_KERNEL_HEADERS_2_6_32
--	default "2.6.33.4"	if BR2_KERNEL_HEADERS_2_6_33
-+	default "2.6.32.14"	if BR2_KERNEL_HEADERS_2_6_32
-+	default "2.6.33.5"	if BR2_KERNEL_HEADERS_2_6_33
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.32.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.32.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-diff --git a/toolchain/kernel-headers/linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.33.5-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.33.4-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.33.5-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index 7985a65..869d99c 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -22,6 +22,11 @@ $(DL_DIR)/$(MICROPERL_SOURCE):
+ 
+ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	# makedepend contains bashisms
++	$(SED) 's~sh ./makedepend~bash ./makedepend~' \
++		$(MICROPERL_DIR)/Makefile.SH \
++		$(MICROPERL_DIR)/x2p/Makefile.SH \
++		$(MICROPERL_DIR)/pod/Makefile.SH
+ 	chmod -R u+w $(MICROPERL_DIR)
+ 	touch $@
+ 
 -- 
 1.6.3.3
