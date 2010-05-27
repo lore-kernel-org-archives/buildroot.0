@@ -1,32 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 27 May 2010 14:31:01 +0200
-Subject: [Buildroot] Merge request
-In-Reply-To: <20100523105523.225c205b@surf> (Thomas Petazzoni's message of
-	"Sun, 23 May 2010 10:55:23 +0200")
-References: <20100521102918.0e8b70eb@surf>
-	<8739xjr8li.fsf@macbook.be.48ers.dk> <20100523105523.225c205b@surf>
-Message-ID: <87bpc1v856.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 May 2010 14:35:04 +0200
+Subject: [Buildroot] [git commit master] Add a <fs>-root-show-depends target
+Message-ID: <20100527123559.86AC612E2B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> On Sat, 22 May 2010 22:21:13 +0200
- Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=949db6ac05e42a90ee82e3f979805d98c41fa4f6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> I'm not completely happy about adding that one this late in the
- >> release cycle, but I've committed the other 3 - Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Thomas> Why ? This patch isn't modifying any existing code, it just adds new
- Thomas> code. If this code is broken, well, then BeagleBoard support will not
- Thomas> work, but otherwise it wouldn't be supported.
-
-True, but I would like to sort out all the BR2_BOARD_NAME mess before
-adding more, and I don't like the xload package using a "random" git
-tree.
-
+diff --git a/fs/common.mk b/fs/common.mk
+index a3248c1..50dc974 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -57,6 +57,9 @@ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
+ 	$(LZMA) -9 -c $$@ > $$@.lzma
+ endif
+ 
++$(1)-root-show-depends:
++	@echo $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot host-makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
++
+ $(1)-root: $(BINARIES_DIR)/rootfs.$(1)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
