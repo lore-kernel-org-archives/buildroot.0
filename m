@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 27 May 2010 23:15:11 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc3 released
-In-Reply-To: <1274986723.7293.8.camel@ubuntu>
+Date: Thu, 27 May 2010 23:19:54 +0200
+Subject: [Buildroot] Buildroot 2010.05-rc3 released uClibc 0.9.30.1
+	patches missing ?
+In-Reply-To: <1274994677.436.2.camel@ubuntu>
 References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<1274986723.7293.8.camel@ubuntu>
-Message-ID: <201005272315.11295.yann.morin.1998@anciens.enib.fr>
+	<1274994677.436.2.camel@ubuntu>
+Message-ID: <201005272319.54338.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +14,14 @@ To: buildroot@busybox.net
 
 Kris, All,
 
-On Thursday 27 May 2010 20:58:43 Microbit_Ubuntu wrote:
-[--SNIP--]
-> PS : ct-ng only offers "linuxthreads".
+On Thursday 27 May 2010 23:11:17 Microbit_Ubuntu wrote:
+> I don;t know if I'm off base here, but I notice that rc3 does not have
+> the patches for uClibc 0.9.30.1 at toolchain/uClibc folder in the
+> tarball ?????
 
-That's only true if you build a uClibc-based toolchain. If you build a
-glibc- or a eglibc-based toolchain, then crosstool-NG allows you to
-use NPTL.
-
-So I'll take that you build a uClibc-based toolchain...
-
-> So are we supposed to use 
-> "stable/old" in BR or "new" (latter, I guess) ????
-
-That has to match the way you configured uClibc in your toolchain.
-Check the uClibc .config file for that.
-
-> I seem to have had problems with that - invoking gdbserver prompts :
-> "can't load libthread_db.so.1".
-> This worked fine with internal toolchain... Anyone ?
-
-libthread_db.so.1 is dlopen(3)ed by gdbserver, so you have to get it on
-your target, in the standard libraries search path.
-
-Also, there is a known dangling issue wrt cross-gdb + gdbserver.
-See this thread:
-  http://lists.busybox.net/pipermail/buildroot/2010-May/034435.html
-
-In short, you have to get the cross-gdb *and* the gdbserver from the
-same version of gdb, to be sure they know how to speak to each other.
-So: either get both from crosstool-NG, or get both from buildroot.
+Indeed, that because the 0.9.30.x that is used is .3, and .1 is not present
+in the version choice, in the menuconfig. See:
+  toolchain/uClibc/Config.in at 40
 
 Regards,
 Yann E. MORIN.
