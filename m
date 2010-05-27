@@ -1,64 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 May 2010 14:48:47 +0200
-Subject: [Buildroot] [git commit master] hal: dbus expat option is
-	BR2_DBUS_EXPAT
-Message-ID: <20100527124910.AFB56BF412@busybox.osuosl.org>
+From: Microbit_Ubuntu <microbit@virginbroadband.com.au>
+Date: Fri, 28 May 2010 04:58:43 +1000
+Subject: [Buildroot] Buildroot 2010.05-rc3 released
+In-Reply-To: <877hmpv7km.fsf@macbook.be.48ers.dk>
+References: <877hmpv7km.fsf@macbook.be.48ers.dk>
+Message-ID: <1274986723.7293.8.camel@ubuntu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=170b3d3d0550b8000cfc0cf789a5a902237353e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES               |    6 ++++++
- Config.in             |    2 +-
- package/hal/Config.in |    2 +-
- 3 files changed, 8 insertions(+), 2 deletions(-)
+On Thu, 2010-05-27 at 14:43 +0200, Peter Korsgaard wrote:
+> Hi,
+> 
+> Buildroot 2010.05-rc3 is released - Go download it at:
+> 
+> http://buildroot.net/downloads/buildroot-2010.05-rc3.tar.gz
+> 
+> or
+> 
+> http://buildroot.net/downloads/buildroot-2010.05-rc3.tar.bz2
+> 
+> Or get it from Git:
+> 
+> git://git.buildroot.net/buildroot
+> 
+> Please give it a spin and report any problems to the mailing list or bug
+> tracker. Many thanks to the people contributing to this release:
+> 
+> git shortlog -s -n 2010.05_rc2..
+>     49  Peter Korsgaard
+>     32  Thomas Petazzoni
+>      1  Baruch Siach
+>      1  Bj?rn Forsman
+>      1  H Hartley Sweeten
+>      1  Julien Boibessot
+>      1  Nick Leverton
+>      1  Yann E. MORIN
+>      1  cmchao
+> 
+> Unless any big issues are found, expect the final 2010.05 release by the
+> end of the week - So please give it a good test.
+> 
+> -- 
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/CHANGES b/CHANGES
-index 202913d..f6a4ecd 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,9 @@
-+2010.05-rc4, Not yet released:
-+
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: hal
-+
- 2010.05-rc3, Released May 27th, 2010:
- 
- 	Fixes all over the tree.
-diff --git a/Config.in b/Config.in
-index 4d4dfc9..9451be7 100644
---- a/Config.in
-+++ b/Config.in
-@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
- 
- config BR2_VERSION
- 	string
--	default "2010.05-rc3"
-+	default "2010.05-rc3-git"
- 
- source "target/Config.in.arch"
- source "target/device/Config.in"
-diff --git a/package/hal/Config.in b/package/hal/Config.in
-index f8dc9dd..1951c9d 100644
---- a/package/hal/Config.in
-+++ b/package/hal/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_HAL
- 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_DBUS
--	select BR2_PACKAGE_DBUS_EXPAT
-+	select BR2_DBUS_EXPAT
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_HWDATA
- 	select BR2_PACKAGE_UDEV
--- 
-1.6.3.3
+
+While I started a clean install w/ ext toolchain (crosstool-ng -1.6.1),
+I noticed that menuconfig still has a snag in it when starting from
+scratch with config :
+
+When HAL is not used and ext toolchain selected, udev & hotplug are
+*not* displayed nor selected. 
+busybox-show-others has to be enabled and they both have to be
+explicitly enabled from there.
+BR versions < 2009.11 turned 'em on when mdev was selected.
+
+Perhaps it's deemed that HAL should be selected, dunno.
+
+In any case, hotplug & udev should not be suppressed by SHOW_OTHERS,
+since even busybox-1.16.1 does NOT offer them...
+
+More feedback when I completely rebuild.
+
+PS : ct-ng only offers "linuxthreads". So are we supposed to use
+"stable/old" in BR or "new" (latter, I guess) ????
+I seem to have had problems with that - invoking gdbserver prompts :
+"can't load libthread_db.so.1".
+This worked fine with internal toolchain... Anyone ?
+
+HTH
+Best regards,
+Kris
