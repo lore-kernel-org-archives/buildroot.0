@@ -1,8 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Fri, 28 May 2010 23:23:14 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/external: only copt the pthread
-	lib if needed
-Message-ID: <20100528212314.1541.49408.stgit@roazhon.bzh.lan>
+Date: Fri, 28 May 2010 23:23:20 +0200
+Subject: [Buildroot] [PATCH 2/2] external toolchain: also copy the
+	libthread_db.so for	gdbserver
+In-Reply-To: <20100528212314.1541.49408.stgit@roazhon.bzh.lan>
+References: <20100528212314.1541.49408.stgit@roazhon.bzh.lan>
+Message-ID: <20100528212320.1541.32398.stgit@roazhon.bzh.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,36 +13,27 @@ To: buildroot@busybox.net
 
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-If threads are disabled, do not try to copy the libpthread.so from the
-external library.
+gdbserver dlopen(3)s libthread_db.so at runtime, so there is no
+dependency on it (does not appear as being (NEEDED)).
 
-It is still expected that the BR configuration matches the external
-toolchain setup, and no check is done to enforce that.
+Copy libthread_db.so from external toolchain when gdbserver is enbled.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/external-toolchain/ext-tool.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index bb4809c..e858edb 100644
+index e858edb..8daae15 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -251,7 +251,7 @@ check_cross_compiler_exists = \
+@@ -264,6 +264,9 @@ endif
  
- uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ ifneq ($(BR2_PTHREADS_NONE),y)
+ EXTERNAL_LIBS+=libpthread.so
++ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++EXTERNAL_LIBS+=libthread_db.so
++endif # gdbserver
+ endif # ! no threads
  
--EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libpthread.so libresolv.so librt.so libutil.so
-+EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- EXTERNAL_LIBS+=ld-uClibc.so
- else
-@@ -262,6 +262,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- EXTERNAL_LIBS+=libstdc++.so
- endif
- 
-+ifneq ($(BR2_PTHREADS_NONE),y)
-+EXTERNAL_LIBS+=libpthread.so
-+endif # ! no threads
-+
  # SYSROOT_DIR selection. We first try the -print-sysroot option,
- # available in gcc 4.4.x and in some Codesourcery toolchains. If this
- # option is not available, we fallback to the value of --with-sysroot
