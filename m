@@ -1,31 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 May 2010 14:44:33 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc3 released uClibc 0.9.30.1
-	patches missing ?
-In-Reply-To: <1274994677.436.2.camel@ubuntu> (Microbit Ubuntu's message of
-	"Fri, 28 May 2010 07:11:17 +1000")
-References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<1274994677.436.2.camel@ubuntu>
-Message-ID: <87hblstcum.fsf@macbook.be.48ers.dk>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Fri, 28 May 2010 17:58:35 +0300
+Subject: [Buildroot] [PATCH 1/2] Remove locale dependency from xserver
+Message-ID: <20100528145834.11609.86446.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Microbit" == Microbit Ubuntu <microbit@virginbroadband.com.au> writes:
+XServer compiles just fine without locale support
 
- Microbit> Hallo peter,
- Microbit> Hoe gaat het ? :-)
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
-Goed (I'm actually from Denmark rather than Belgium).
+ package/x11r7/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
- Microbit> I don;t know if I'm off base here, but I notice that rc3 does
- Microbit> not have the patches for uClibc 0.9.30.1 at toolchain/uClibc
- Microbit> folder in the tarball ?????
-
-Indeed, as we don't have support for the obsolete 0.9.30.1 version
-anymore (the closest is 0.9.30.3).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 55524a0..b93cc90 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -19,11 +19,10 @@ choice
+ 
+ config BR2_PACKAGE_XSERVER_xorg
+ 	bool "Modular X.org"
+-	# depending on BR2_ENABLE_LOCALE gives a recursion error with dbus
+-	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP # && BR2_ENABLE_LOCALE
++	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP
+ 
+-comment 'X.org requires largefile, locale and C++ support'
+-	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE)
++comment 'X.org requires largefile and C++ support'
++	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP)
+ 
+ config BR2_PACKAGE_XSERVER_tinyx
+ 	bool "TinyX"
