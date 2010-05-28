@@ -1,22 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 May 2010 22:48:18 +0200
-Subject: [Buildroot] [PATCH 1/2] Remove locale dependency from xserver
-In-Reply-To: <20100528145834.11609.86446.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Fri, 28 May 2010 17:58:35 +0300")
-References: <20100528145834.11609.86446.stgit@localhost.localdomain>
-Message-ID: <878w73u50t.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 28 May 2010 22:47:52 +0200
+Subject: [Buildroot] [git commit master] Remove locale dependency from
+	xserver
+Message-ID: <20100528210456.7B0168D577@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
 
- Paulius> XServer compiles just fine without locale support
- Paulius> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=b578f670d153a04cc410e0696013e9c606f38439
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed both, thanks!
+XServer compiles just fine without locale support
 
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 55524a0..b93cc90 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -19,11 +19,10 @@ choice
+ 
+ config BR2_PACKAGE_XSERVER_xorg
+ 	bool "Modular X.org"
+-	# depending on BR2_ENABLE_LOCALE gives a recursion error with dbus
+-	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP # && BR2_ENABLE_LOCALE
++	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP
+ 
+-comment 'X.org requires largefile, locale and C++ support'
+-	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE)
++comment 'X.org requires largefile and C++ support'
++	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP)
+ 
+ config BR2_PACKAGE_XSERVER_tinyx
+ 	bool "TinyX"
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
