@@ -1,29 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 May 2010 12:19:10 +0200
-Subject: [Buildroot] git access via http
-In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01CD4EEB@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-	(Phil Edworthy's message of "Thu, 27 May 2010 09:50:55 +0100")
-References: <AB12B32E73474741A2C5361C433A44DE01CD4EEB@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-Message-ID: <87typstjkx.fsf@macbook.be.48ers.dk>
+From: =?utf-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Fri, 28 May 2010 12:06:47 +0200
+Subject: [Buildroot] [git commit master] coreutils: add 'join'
+Message-ID: <20100528113442.56FF9BFCFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Phil" == Phil Edworthy <Phil.Edworthy@renesas.com> writes:
 
- Phil> Hi,
- Phil> I just tried cloning the Buildroot repo via http but git just sits there
- Phil> after printing out "Initialized empty Git repository in
- Phil> /home/user/buildroot/.git/"
+commit: http://git.buildroot.net/buildroot/commit/?id=c0b3dc20059a29bc36c699f5a71e038a44cf7544
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Phil> I'm using git 1.6.6 and have no problems accessing github repos via http.
- Phil> Any ideas why this doesn't work?
+coreutils: add 'join' to the list of files that are copied to target
+rootfs.
 
-Hmm, seems like git-over-http was never set up by the osuosl.org
-people. Is this important for you? The native git protocol is a lot
-better.
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                        |    2 +-
+ package/coreutils/coreutils.mk |    3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index f6a4ecd..44ffa75 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
+ 
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: hal
++	Updated/fixed packages: coreutils, hal
+ 
+ 2010.05-rc3, Released May 27th, 2010:
+ 
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 2081994..e2f7bc5 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -12,7 +12,8 @@ COREUTILS_DIR:=$(BUILD_DIR)/coreutils-$(COREUTILS_VERSION)
+ COREUTILS_BINARY:=src/vdir
+ COREUTILS_TARGET_BINARY:=bin/vdir
+ BIN_PROGS:=cat chgrp chmod chown cp date dd df dir echo false hostname \
+-	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true uname
++	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
++	uname join
+ 
+ $(DL_DIR)/$(COREUTILS_SOURCE):
+ 	 $(call DOWNLOAD,$(COREUTILS_SITE),$(COREUTILS_SOURCE))
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
