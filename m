@@ -1,49 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 May 2010 22:47:52 +0200
-Subject: [Buildroot] [git commit master] xserver_xorg-server: Use $(MAKE1)
-	for make install
-Message-ID: <20100528210456.B6BB88D577@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Fri, 28 May 2010 23:23:14 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/external: only copt the pthread
+	lib if needed
+Message-ID: <20100528212314.1541.49408.stgit@roazhon.bzh.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7acacaf6e84ec05ed76dd419e645cfbd6683f7a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+If threads are disabled, do not try to copy the libpthread.so from the
+external library.
 
-Xserver installation fails with parallel make jobs.
-
-Installation to staging is not needed. So just remove it
-instead of converting to $(MAKE1).
-
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+It is still expected that the BR configuration matches the external
+toolchain setup, and no check is done to enforce that.
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 6c6017b..a49c180 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -9,7 +9,6 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_AUTORECONF = NO
- XSERVER_XORG_SERVER_LIBTOOL_PATCH = NO
--XSERVER_XORG_SERVER_INSTALL_STAGING = YES
- XSERVER_XORG_SERVER_USE_CONFIG_CACHE = NO # overrides CFLAGS
- XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index bb4809c..e858edb 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -251,7 +251,7 @@ check_cross_compiler_exists = \
  
-@@ -137,5 +136,8 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
- XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+-EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libpthread.so libresolv.so librt.so libutil.so
++EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ EXTERNAL_LIBS+=ld-uClibc.so
+ else
+@@ -262,6 +262,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ EXTERNAL_LIBS+=libstdc++.so
  endif
  
-+define XSERVER_XORG_SERVER_INSTALL_TARGET_CMDS
-+	$(MAKE1) $(XSERVER_XORG_SERVER_INSTALL_TARGET_OPT) -C $(@D)
-+endef
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xserver_xorg-server))
--- 
-1.6.3.3
++ifneq ($(BR2_PTHREADS_NONE),y)
++EXTERNAL_LIBS+=libpthread.so
++endif # ! no threads
++
+ # SYSROOT_DIR selection. We first try the -print-sysroot option,
+ # available in gcc 4.4.x and in some Codesourcery toolchains. If this
+ # option is not available, we fallback to the value of --with-sysroot
