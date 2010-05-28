@@ -1,28 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 28 May 2010 19:48:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 1843] Fix libcap build failure
-In-Reply-To: <bug-1843-163@https.bugs.busybox.net/>
-References: <bug-1843-163@https.bugs.busybox.net/>
-Message-ID: <20100528194817.B3DA5BFAE2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Fri, 28 May 2010 22:05:04 +0200
+Subject: [Buildroot] [PATCH] external toolchain: also copy the
+	libthread_db.so for	gdbserver
+Message-ID: <20100528200504.20810.91282.stgit@roazhon.bzh.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1843
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+gdbserver dlopen(3)s libthread_db.so at runtime, so there is no
+dependency on it (does not appear as being (NEEDED)).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Copy libthread_db.so from external toolchain when gdbserver is enbled.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ toolchain/external-toolchain/ext-tool.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index bb4809c..ae9dfad 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -262,6 +262,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ EXTERNAL_LIBS+=libstdc++.so
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++EXTERNAL_LIBS+=libthread_db.so
++endif
++
+ # SYSROOT_DIR selection. We first try the -print-sysroot option,
+ # available in gcc 4.4.x and in some Codesourcery toolchains. If this
+ # option is not available, we fallback to the value of --with-sysroot
