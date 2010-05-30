@@ -1,70 +1,176 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 30 May 2010 10:04:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 1855] New: XORG Keyboard driver fails to compile
-Message-ID: <bug-1855-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 May 2010 12:36:55 +0200
+Subject: [Buildroot] Package conversion for 2010.08
+Message-ID: <20100530123655.6cffcc8c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1855
+Hello,
 
-           Summary: XORG Keyboard driver fails to compile
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: paul at pauljones.id.au
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Release 2010.05 will soon be released by Peter and therefore I'd like
+to make a new status of the package conversion effort. For the record,
+the previous status of this effort was given on March, 14th:
 
+ http://lists.busybox.net/pipermail/buildroot/2010-March/032840.html
 
-Created attachment 1789
-  --> https://bugs.busybox.net/attachment.cgi?id=1789
-Buildroot config
+At that time, we had 61 packages to convert to the generic package
+infrastructure, and 107 to convert to the autotools infrastructure.
 
-This is using latest GIT buildroot with no locale support.
+As of today's Git version, we are now at 56 packages to convert to the
+generic package infrastructure and 77 packages to convert to the
+autotools infrastructure.
 
-checking for
-/home/peejay/mini2440-dev/buildroot-x86/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc
--Os -pipe -Os  -mtune=nocona -march=nocona -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/home/peejay/mini2440-dev/buildroot-x86/output/staging/usr/include
--I/home/peejay/mini2440-dev/buildroot-x86/output/staging/include
---sysroot=/home/peejay/mini2440-dev/buildroot-x86/output/staging/ -isysroot
-/home/peejay/mini2440-dev/buildroot-x86/output/staging option to accept ISO
-C89... (cached) none needed
-checking dependency style of
-/home/peejay/mini2440-dev/buildroot-x86/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc
--Os -pipe -Os  -mtune=nocona -march=nocona -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/home/peejay/mini2440-dev/buildroot-x86/output/staging/usr/include
--I/home/peejay/mini2440-dev/buildroot-x86/output/staging/include
---sysroot=/home/peejay/mini2440-dev/buildroot-x86/output/staging/ -isysroot
-/home/peejay/mini2440-dev/buildroot-x86/output/staging... (cached) gcc3
-checking if RANDR is defined... no
-checking if XINPUT is defined... no
-checking if XKB is defined... no
-checking pkg-config is at least version 0.9.0... yes
-checking for XORG... configure: error: Package requirements (xorg-server >=
-1.2.99.0 xproto ) were not met:
+Your help would be very appreciated in speeding up this conversion
+effort. Before doing any conversion, check our Bugzilla to see if
+someone else has already done the conversion work for your package.
 
-No package 'xorg-server' found
+Packages to convert to the autotools infrastructure
+===================================================
 
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
+ * alsa-utils
+ * axel
+ * bash
+ * berkeleydb
+ * boa
+ * coreutils
+ * cups
+ * cvs
+ * dash
+ * dhcp
+ * dhcpdump
+ * dialog
+ * diffutils
+ * dillo
+ * distcc
+ * dmalloc
+ * fbv
+ * file
+ * gawk
+ * gettext
+ * gmp
+ * gtk2-engines
+ * gzip
+ * hal
+ * icu
+ * imagemagick
+ * iproute2
+ * ipsec-tools
+ * libeXosip2
+ * libfuse
+ * libglib12
+ * libgpg-error
+ * libgtk12
+ * liblockfile
+ * links
+ * lrzsz
+ * ltrace
+ * lvm2
+ * madplay
+ * make
+ * module-init-tools
+ * modutils
+ * mpfr
+ * mpg123
+ * mplayer
+ * netkitbase
+ * netkittelnet
+ * netsnmp
+ * newt
+ * nfs-utils
+ * ntp
+ * pciutils
+ * pptp-linux
+ * prboom
+ * proftpd
+ * python
+ * qt
+ * quagga
+ * rp-pppoe
+ * ruby
+ * rxvt
+ * sdl
+ * sdl_mixer
+ * sdl_ttf
+ * sed
+ * socat
+ * stunnel
+ * sudo
+ * tftpd
+ * thttpd
+ * tn5250
+ * util-linux
+ * valgrind
+ * vim
+ * xerces
+ * xfsprogs
+ * zlib
 
-Alternatively, you may set the environment variables XORG_CFLAGS
-and XORG_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
+Packages to convert to the generic infrastructure
+=================================================
 
+ * acpid
+ * bsdiff
+ * busybox
+ * concierge
+ * devmem2
+ * doom-wads
+ * dosfstools
+ * ezxml
+ * fbset
+ * fconfig
+ * festival
+ * festlex
+ * festvox
+ * fis
+ * gadgetfs-test
+ * hdparm
+ * hotplug
+ * hwdata
+ * input-tools
+ * iostat
+ * l2tp
+ * liberation
+ * libfloat
+ * lmbench
+ * lm-sensors
+ * lockfile-progs
+ * logrotate
+ * lsof
+ * ltp-testsuite
+ * makedevs
+ * matchbox
+ * mcookie
+ * memtester
+ * microcom
+ * microperl
+ * microwin
+ * mii-diag
+ * mrouted
+ * netplug
+ * pcmcia
+ * portage
+ * portmap
+ * procps
+ * sfdisk
+ * slang
+ * sysklogd
+ * sysvinit
+ * tinyhttpd
+ * ttcp
+ * uemacs
+ * usbmount
+ * vpnc
+ * vsftpd
+ * webif
+ * wipe
+ * wireless-tools
+
+Thomas Petazzoni
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
