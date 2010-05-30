@@ -1,54 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 May 2010 09:32:15 +0200
-Subject: [Buildroot] [git commit master] lockfile-progs: use correct CFLAGS
-Message-ID: <20100530073455.104CBBF93C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 May 2010 09:35:15 +0200
+Subject: [Buildroot] Buildroot 2010.05-rc3 released :: 2 build errors -
+	lockfile-progs & gdb
+In-Reply-To: <1275007047.6387.17.camel@ubuntu> (Microbit Ubuntu's message of
+	"Fri, 28 May 2010 10:37:27 +1000")
+References: <877hmpv7km.fsf@macbook.be.48ers.dk>
+	<1275007047.6387.17.camel@ubuntu>
+Message-ID: <87vda5suz0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Microbit" == Microbit Ubuntu <microbit@virginbroadband.com.au> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4bba08343325113122b6601b09fe70e501bd93b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Microbit> I still come across 2 build errors with rc3 :
 
-Use the correct CFLAGS from BR and not just the LDFLAGS. This is especially
-important for external toolchain setups, but the lockfile-progs buildsystem
-also hardcodes -Werror, which breaks the build in certain setups.
+ Microbit> 1. lockfile-progs-0.1.11
+ Microbit> ========================
+ Microbit> The generated Makefile causes a build error in :
+ Microbit> CFLAGS    := -g -Wall -Werror -O2
+ Microbit> I still need to remove the -Werror to resume the build ??
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                  |    4 ++--
- package/lockfile-progs/lockfile-progs.mk |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Microbit> 2. gdb symlink
+ Microbit> ==============
+ Microbit> ct-ng generates arm-unknown-linux-uclibcgnueabi where I have
+ Microbit> arm-elf-xxx as an alias.
+ Microbit> The build stops when the symlink for gdb fails. I need to manually
+ Microbit> insert a folder 'arm-unknown-linux-uclibcgnueabi' with 'bin' as a
+ Microbit> subfolder under ../output/staging/usr
 
-diff --git a/CHANGES b/CHANGES
-index 5f65824..c6b64c0 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,8 +2,8 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: coreutils, hal, libcap, ncftp,
--	xserver_xorg-server
-+	Updated/fixed packages: coreutils, hal, libcap,
-+	lockfile-progs, ncftp, xserver_xorg-server
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
-index 6494f81..4098330 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -21,7 +21,7 @@ $(LOCKFILE_PROGS_DIR)/.unpacked: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
- 	touch $(LOCKFILE_PROGS_DIR)/.unpacked
- 
- $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(TARGET_CONFIGURE_ENV) \
- 		-C $(LOCKFILE_PROGS_DIR)
- 	cp -a $(LOCKFILE_PROGS_DIR)/bin/lockfile* $(TARGET_DIR)/usr/bin
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
+Both issues should be fixed in git now.
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
