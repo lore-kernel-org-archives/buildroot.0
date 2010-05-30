@@ -1,99 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 May 2010 22:31:17 +0200
-Subject: [Buildroot] Buildroot 2010.05 released
-Message-ID: <87iq65rv1m.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 May 2010 22:51:11 +0200
+Subject: [Buildroot] [git commit master] docs/news.html: add 2010.05
+	announcement
+Message-ID: <20100530205145.BF3583AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Buildroot 2010.05 is released - Go download it at:
+commit: http://git.buildroot.net/buildroot/commit/?id=4a640e464439a5e78458ae969dcc6017aa96278f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://buildroot.net/downloads/buildroot-2010.05.tar.gz
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-or
-
-http://buildroot.net/downloads/buildroot-2010.05.tar.bz2
-
-After 3 months of development a new stable Buildroot release is
-out. Significant changes are:
-
- - Restructured/simplified 'make menuconfig' menus to make it easier to
-   locate the packages you need. Remember you can search in menuconfig
-   using '/' if you get lost.
- - Lots of fixes for better external toolchain support, including
-   multilib toolchains.
- - Bunch of new packages and toolchain versions. Xorg 7.5. More
-   accurate wchar/locale/gettext annotations.
- - Additional system dependencies checks to give clear error messages
-   instead of various odd breakage at a later stage.
- - Additional package conversion to gentarget/autotools infrastructure.
-   A similar infrastructure has been added for the filesystem
-   outputs. Notice that this work changed the output filesystem
-   filenames.
- - Added script to display package dependencies graphically
-   (see ./scripts/graph-depends)
- - Unmaintained nios2 support removed
-
-And the usual package version updates and bug fixes. See the CHANGES
-file for details:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05
-
-Quite some work has been done during this release (666 commits) -
-Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2010.02..
-   224  Paulius Zaleckas
-   182  Thomas Petazzoni
-   148  Peter Korsgaard
-    28  Gustavo Zacarias
-    26  Will Wagner
-    14  Lionel Landwerlin
-     6  Yann E. MORIN
-     4  H Hartley Sweeten
-     3  Darius Augulis
-     3  Josh.Wu
-     3  Luca Ceresoli
-     2  Alexander Clouter
-     2  Bj?rn Forsman
-     2  Julien Boibessot
-     2  Kelvin Cheung
-     2  Paul Jones
-     2  Richard van Paasen
-     1  Baruch Siach
-     1  Chris Seawood
-     1  Frederik Vannoote
-     1  Grant Edwards
-     1  Johan Thelin
-     1  Laine Walker-Avina
-     1  Michael Roth
-     1  Mike Crowe
-     1  Nick Leverton
-     1  Thomas Brandstetter
-     1  William Wagner
-     1  cmchao
-     1  serj.kalichev
-
-The next release is going to be 2010.08. Expect the first release
-candidate in late July and the final release at the end of
-August. Notice that I'm away on holidays the first 3 weeks of August,
-so this schedule might slip slightly.
-
-Stuff in the pipeline for 2010.08 includes:
-
- - Gentarget/autotools conversion of the remaining packages. See
-   http://lists.busybox.net/pipermail/buildroot/2010-May/034868.html
-   for current status
- - More external toolchain work and closer cooporation with
-   crosstool-ng (http://ymorin.is-a-geek.org/projects/crosstool)
- - Further work on package uninstall / rebuild support
- - More permanent setup for regression tests
-
-Thanks to everyone contributing and testing the release candidates!
-
+diff --git a/docs/news.html b/docs/news.html
+index b129afd..afab7be 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -11,9 +11,10 @@
+     <p>The stable 2010.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05">CHANGES</a>
+-    file for more details, and go to the <a href="/downloads/">downloads page</a>
+-    to pick up the <a href="/downloads/buildroot-2010.05.tar.bz2">2010.05
+-    release</a>.</p>
++    file for more details, read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2010-May/034878.html">announcement</a>
++    and go to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.05.tar.bz2">2010.05 release</a>.</p>
+ 
+   <li><b>27 May 2010 -- 2010.05-rc3 released</b>
+ 
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
