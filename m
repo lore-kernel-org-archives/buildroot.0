@@ -1,246 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:31 +0200
-Subject: [Buildroot] [PATCH 45/46] defconfigs: remove references to old
-	U-Boot versions
+Date: Tue,  1 Jun 2010 00:08:30 +0200
+Subject: [Buildroot] [PATCH 44/46] at91dataflashboot: add two patches
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <026cdb2c78323dcbf9afd0049e42f33d2e2fccdd.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dc6cd220a445e73d41a9afe70fb12a32796b4a04.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The first patch allows to build with an EABI toolchain. The second
+patch disables the install step of at91dataflashboot Makefile since it
+tries to copy files to /tftpboot.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91rm9200df_defconfig       |    2 --
- configs/at91rm9200df_ext_defconfig   |    2 --
- configs/at91sam9260dfc_defconfig     |    2 --
- configs/at91sam9260dfc_ext_defconfig |    2 --
- configs/at91sam9261ek_defconfig      |    2 --
- configs/at91sam9261ek_ext_defconfig  |    2 --
- configs/at91sam9263ek_defconfig      |    2 --
- configs/at91sam9263ek_ext_defconfig  |    2 --
- configs/at91sam9g20dfc_defconfig     |    2 --
- configs/at91sam9g20dfc_ext_defconfig |    2 --
- configs/atngw100-base_defconfig      |    2 --
- configs/atngw100_defconfig           |    5 -----
- configs/atstk1005_defconfig          |    2 --
- configs/atstk100x_defconfig          |    2 --
- configs/integrator926_defconfig      |    2 --
- configs/integrator926_huge_defconfig |    2 --
- 16 files changed, 0 insertions(+), 35 deletions(-)
+ .../at91dataflashboot-1.05-do-not-install.patch    |   22 ++++++++++
+ .../at91dataflashboot-1.05-eabi-fixes.patch        |   43 ++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 0 deletions(-)
+ create mode 100644 boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
+ create mode 100644 boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
 
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index 7d2bcfd..be8ddfe 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -883,8 +883,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
-index 79e55fc..083fc68 100644
---- a/configs/at91rm9200df_ext_defconfig
-+++ b/configs/at91rm9200df_ext_defconfig
-@@ -809,8 +809,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index 087067f..e0898df 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -897,8 +897,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
-index e52cd2d..469c3c4 100644
---- a/configs/at91sam9260dfc_ext_defconfig
-+++ b/configs/at91sam9260dfc_ext_defconfig
-@@ -817,8 +817,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index cd7483b..97c151d 100644
---- a/configs/at91sam9261ek_defconfig
-+++ b/configs/at91sam9261ek_defconfig
-@@ -949,8 +949,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
-index 5ab47ad..c12fa67 100644
---- a/configs/at91sam9261ek_ext_defconfig
-+++ b/configs/at91sam9261ek_ext_defconfig
-@@ -906,8 +906,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index bc95b6b..8a95a4a 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -946,8 +946,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
-index 9771c83..24db6a1 100644
---- a/configs/at91sam9263ek_ext_defconfig
-+++ b/configs/at91sam9263ek_ext_defconfig
-@@ -868,8 +868,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index 30cc4e1..cd4c643 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -813,8 +813,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91sam9g20ek"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
-index e18754e..b3143cd 100644
---- a/configs/at91sam9g20dfc_ext_defconfig
-+++ b/configs/at91sam9g20dfc_ext_defconfig
-@@ -817,8 +817,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- BR2_TARGET_U_BOOT_ARCH_PATCH=y
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-index d3092df..a9b017b 100644
---- a/configs/atngw100-base_defconfig
-+++ b/configs/atngw100-base_defconfig
-@@ -739,8 +739,6 @@ BR2_TARGET_UBOOT_BOARDNAME="atngw100"
- # BR2_TARGET_UBOOT_2009_03 is not set
- # BR2_TARGET_UBOOT_2009_01 is not set
- BR2_TARGET_UBOOT_2008_10=y
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2008.10"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index d7c9c15..248a8fb 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -740,11 +740,6 @@ BR2_TARGET_UBOOT_BOARDNAME="atngw100"
- # BR2_TARGET_UBOOT_2010_03 is not set
- # BR2_TARGET_UBOOT_2009_11 is not set
- BR2_TARGET_UBOOT_2009_08=y
--# BR2_TARGET_UBOOT_2009_06 is not set
--# BR2_TARGET_UBOOT_2009_03 is not set
--# BR2_TARGET_UBOOT_2009_01 is not set
--# BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.08"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
-diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
-index a1fe0b7..e2d7f4f 100644
---- a/configs/atstk1005_defconfig
-+++ b/configs/atstk1005_defconfig
-@@ -771,8 +771,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="atngw100"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index 0fbbf14..ae77138 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -868,8 +868,6 @@ BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
- # BR2_TARGET_UBOOT_2009_03 is not set
- # BR2_TARGET_UBOOT_2009_01 is not set
- BR2_TARGET_UBOOT_2008_10=y
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2008.10"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index 3879272..78c5b08 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -706,8 +706,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="cp926ejs"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
-diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
-index 86443db..4d8fa6f 100644
---- a/configs/integrator926_huge_defconfig
-+++ b/configs/integrator926_huge_defconfig
-@@ -682,8 +682,6 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="cp926ejs"
- BR2_TARGET_UBOOT_2009_01=y
- # BR2_TARGET_UBOOT_2008_10 is not set
--# BR2_TARGET_UBOOT_1_3_4 is not set
--# BR2_TARGET_UBOOT_1_2_0_ATMEL is not set
- BR2_UBOOT_VERSION="2009.01"
- BR2_U_BOOT_SITE="ftp://ftp.denx.de/pub/u-boot"
- # BR2_TARGET_U_BOOT_ARCH_PATCH is not set
+diff --git a/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch b/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
+new file mode 100644
+index 0000000..41d97ad
+--- /dev/null
++++ b/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
+@@ -0,0 +1,22 @@
++Disable the automatic installation of at91dataflashboot since it tries
++to install things to /tftpboot, which is not possible when not
++building as root.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: at91dataflashboot-1.05/Makefile
++===================================================================
++--- at91dataflashboot-1.05.orig/Makefile
+++++ at91dataflashboot-1.05/Makefile
++@@ -40,7 +40,7 @@
++ 
++ I=config.h com.h dataflash.h embedded_services.h main.h stdio.h include/AT91RM9200.h include/lib_AT91RM9200.h 
++ 
++-all: 	clean $(BINNAME) $(LSSNAME) install
+++all: 	clean $(BINNAME) $(LSSNAME)
++ 	$(SIZE) $(OUTNAME)
++ 
++ # C objects here
+diff --git a/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch b/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
+new file mode 100644
+index 0000000..e38905f
+--- /dev/null
++++ b/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
+@@ -0,0 +1,43 @@
++Get at91dataflashboot to build with EABI toolchains, by providing the
++__aeabi_uidiv and __aeabi_uidivmod symbols. The code is based on
++U-Boot's code.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ _udivsi3.S |   14 ++++++++++++++
++ 1 file changed, 14 insertions(+)
++
++Index: DataflashBoot-1.05/_udivsi3.S
++===================================================================
++--- DataflashBoot-1.05.orig/_udivsi3.S
+++++ DataflashBoot-1.05/_udivsi3.S
++@@ -12,8 +12,11 @@
++ 	.text
++ 	.globl	 __udivsi3
++ 	.type  __udivsi3       ,function
+++        .globl  __aeabi_uidiv
+++        .type   __aeabi_uidiv ,function
++ 	.align	0
++  __udivsi3      :
+++ __aeabi_uidiv:
++ 	cmp	divisor, #0
++ 	beq	Ldiv0
++ 	mov	curbit, #1
++@@ -68,6 +71,17 @@
++ 	mov	r0, #0			@ about as wrong as it could be
++ 	ldmia	sp!, {pc}
++ 	.size  __udivsi3       , . -  __udivsi3
+++
+++.globl __aeabi_uidivmod
+++__aeabi_uidivmod:
+++
+++        stmfd   sp!, {r0, r1, ip, lr}
+++        bl      __aeabi_uidiv
+++        ldmfd   sp!, {r1, r2, ip, lr}
+++        mul     r3, r0, r2
+++        sub     r1, r1, r3
+++        mov     pc, lr
+++
++ /* # 235 "libgcc1.S" */
++ /* # 320 "libgcc1.S" */
++ /* # 421 "libgcc1.S" */
 -- 
 1.7.0.4
