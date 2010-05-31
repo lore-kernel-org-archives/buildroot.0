@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:20 +0200
-Subject: [Buildroot] [PATCH 34/46] at91bootstrap: fix incorrect config
-	option comment
+Date: Tue,  1 Jun 2010 00:08:22 +0200
+Subject: [Buildroot] [PATCH 36/46] at91bootstrap: add a check to verify that
+	BR2_TARGET_AT91BOOTSTRAP_BOARD is set
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0569678db1c6d140f1a57280ebf868f2bc4a1e33.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <92ef346a0c0fbac26dc9232525f957aa8edcd815.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 7c0f393..1bf8d50 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -61,10 +61,7 @@ choice
- 	prompt "Start address of application"
- 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	help
--	  Select Chip for which AT91 bootstrap should be built
--	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
--	  AT91SAM9XEEK, AT91SAM9263EK
--
-+	  Location of the application start address
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 1d1091e..b71df89 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -90,3 +90,8 @@ at91bootstrap-dirclean:
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+ TARGETS+=at91bootstrap
  
- config	BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	bool "Copy to the default U-Boot start location in the SDRAM"
++# we NEED a board name
++ifeq ($(AT91BOOTSTRAP_BOARD),)
++$(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
++endif
++endif
 -- 
 1.7.0.4
