@@ -1,40 +1,75 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 May 2010 22:51:11 +0200
-Subject: [Buildroot] [git commit master] docs/news.html: add 2010.05
-	announcement
-Message-ID: <20100530205145.BF3583AD@busybox.osuosl.org>
+From: Andrei Costin (lists) <lists@andreicostin.com>
+Date: Mon, 31 May 2010 20:49:56 +0300
+Subject: [Buildroot] buildroot GPL question
+Message-ID: <002f01cb00e9$af8f1180$0ead3480$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a640e464439a5e78458ae969dcc6017aa96278f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/docs/news.html b/docs/news.html
-index b129afd..afab7be 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -11,9 +11,10 @@
-     <p>The stable 2010.05 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05">CHANGES</a>
--    file for more details, and go to the <a href="/downloads/">downloads page</a>
--    to pick up the <a href="/downloads/buildroot-2010.05.tar.bz2">2010.05
--    release</a>.</p>
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2010-May/034878.html">announcement</a>
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2010.05.tar.bz2">2010.05 release</a>.</p>
  
-   <li><b>27 May 2010 -- 2010.05-rc3 released</b>
+
+I would like someone's advise for the course of action regarding a vendor
+that used _buildroot_  to compile an embedded linux kernel for their
+hardware product.
+
  
--- 
-1.6.3.3
+
+I have contacted them, and their response is below:
+
+"Thank you for your inquiry.
+Our company is using a standard BUILDROOT environment
+(http://buildroot.uclibc.org/) to produce the product.
+No modifications were made on original 2.6 kernel and other applications
+under the GPL licence.
+therefore we recommend you connect to http://buildroot.uclibc.org to get all
+extra information."
+
+ 
+
+Also, their product documentation and license doesn't mention at all GPL
+license in relation to the linux kernel (and other stuff used).
+
+ 
+
+So, given a hardware unit with embedded linux kernel built with _buildroot_,
+what exact things does vendor have to provide:
+
+-          In terms of documentation/license text?
+
+-          In terms of source code and build environment (build and install
+scripts/steps)
+
+ 
+
+My assumptions are:
+
+-          Documentation should mention the GPL license and the exact GPL
+modules used. Also, documentation should state how to get the necessary
+source code/configuration (FTP link, mailing address for CD order, etc.)
+
+-          Source code (exact source tree or reference to an exact
+version/revision) as well as exact configuration/makefiles used for building
+the embedded environment (including configuration files for their buildroot
+development environment) 
+
+ 
+
+Any advise is highly appreciated. 
+
+ 
+
+Thanks a lot
+
+ 
+
+Kind regards,
+
+Andrei Costin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100531/3ea62ad2/attachment.html>
