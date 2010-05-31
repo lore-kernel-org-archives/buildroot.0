@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:07:51 +0200
-Subject: [Buildroot] [PATCH 05/46] u-boot: remove ancient versions
+Date: Tue,  1 Jun 2010 00:07:50 +0200
+Subject: [Buildroot] [PATCH 04/46] u-boot: do not default to $(BOARD_NAME)
+	for the board name
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <51dc7788bb0ee71bda83919f8cc1fc43bd962184.1275343447.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <28aa25bb6254f9ceb61f3315e9fd7a18cf4de0ab.1275343447.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/Config.in |   26 --------------------------
- 1 files changed, 0 insertions(+), 26 deletions(-)
+ boot/u-boot/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
 diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index b07e67c..49d66c4 100644
+index ca47e18..b07e67c 100644
 --- a/boot/u-boot/Config.in
 +++ b/boot/u-boot/Config.in
-@@ -25,26 +25,6 @@ config BR2_TARGET_UBOOT_2009_11
- config BR2_TARGET_UBOOT_2009_08
- 	bool "u-boot-2009.08"
- 
--config BR2_TARGET_UBOOT_2009_06
--	bool "u-boot-2009.06"
--	depends on BR2_DEPRECATED
--
--config BR2_TARGET_UBOOT_2009_03
--	bool "u-boot-2009.03"
--	depends on BR2_DEPRECATED
--
--config BR2_TARGET_UBOOT_2009_01
--	bool "u-boot-2009.01"
--	depends on BR2_DEPRECATED
--
--config BR2_TARGET_UBOOT_2008_10
--	bool "u-boot-2008.10"
--	depends on BR2_DEPRECATED
--
--config BR2_TARGET_UBOOT_1_2_0_ATMEL
--	bool "u-boot-1.2.0-atmel"
--	depends on BR2_TARGET_AT91
--
- endchoice
- 
- config BR2_UBOOT_VERSION
-@@ -52,15 +32,9 @@ config BR2_UBOOT_VERSION
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
- 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
- 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
--	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
--	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
--	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
--	default "2008.10"	if BR2_TARGET_UBOOT_2008_10
--	default "1.2.0-atmel"	if BR2_TARGET_UBOOT_1_2_0_ATMEL
- 
- config BR2_U_BOOT_SITE
- 	string
--	default "$(BR2_ATMEL_MIRROR)"		if BR2_TARGET_UBOOT_1_2_0_ATMEL
- 	default "ftp://ftp.denx.de/pub/u-boot"
- 
- source "target/device/Config.in.u-boot"
+@@ -6,7 +6,6 @@ menuconfig BR2_TARGET_UBOOT
+ if BR2_TARGET_UBOOT
+ config BR2_TARGET_UBOOT_BOARDNAME
+ 	string "board name"
+-	default "$(BOARD_NAME)"
+ 	help
+ 	  One of U-Boot supported boards to be built.
+ 	  This will be suffixed with _config to meet U-Boot standard naming.
 -- 
 1.7.0.4
