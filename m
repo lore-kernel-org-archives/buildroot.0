@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:26 +0200
-Subject: [Buildroot] [PATCH 40/46] at91bootstrap: fix AT91BOOTSTRAP_BINARY
+Date: Tue,  1 Jun 2010 00:08:28 +0200
+Subject: [Buildroot] [PATCH 42/46] at91dataflashboot: various fixes
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3946a9cc24f3ba0eb26bb23e499698402819910b.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6fe790e84ec62e03222ee55d30686f4ddb2579d9.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use AT91BOOTSTRAP_BOARD instead of BOARD_NAME. Remove
-AT91BOOTSTRAP_VERSION from the final binary image name.
+Fix the URL, fix the directory to which it gets unpacked, fix make
+target names to be lower-case only.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ boot/at91dataflashboot/at91dataflashboot.mk |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index fc7206e..9030696 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -12,13 +12,9 @@ AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
- AT91BOOTSTRAP_ZCAT:=$(BZCAT)
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 519328c..dcbe1ef 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -5,29 +5,27 @@
+ #############################################################
+ DATAFLASHBOOT_VERSION:=1.05
+ DATAFLASHBOOT_NAME:=DataflashBoot-$(DATAFLASHBOOT_VERSION)
+-ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
+-DATAFLASHBOOT_SITE:=$(ATMEL_MIRROR)
++DATAFLASHBOOT_SITE:=ftp://www.at91.com/pub/buildroot/
+ DATAFLASHBOOT_SOURCE:=$(DATAFLASHBOOT_NAME).tar.bz2
+-DATAFLASHBOOT_DIR:=$(BUILD_DIR)/$(DATAFLASHBOOT_NAME)
++DATAFLASHBOOT_DIR:=$(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
+ DATAFLASHBOOT_BINARY:=$(DATAFLASHBOOT_NAME).bin
  
- AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
--
- AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
--
--AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
--
-+AT91BOOTSTRAP_BINARY:=$(AT91BOOTSTRAP_BOARD)-$(AT91BOOTSTRAP_MEMORY)boot.bin
- AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
--
- AT91BOOTSTRAP_JUMP_ADDR:=$(call qstrip,$(BR2_AT91BOOTSTRAP_JUMP_ADDR))
- AT91BOOTSTRAP_IMG_SIZE:=$(call qstrip,$(BR2_AT91BOOTSTRAP_IMG_SIZE))
+ $(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
+ 	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
  
+ $(DATAFLASHBOOT_DIR)/.unpacked: $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
+-	mkdir -p $(BUILD_DIR)
+-	ls $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	mkdir -p $(@D)
++	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ 	touch $(DATAFLASHBOOT_DIR)/.unpacked
+ 
+ $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.unpacked
+ 	ls $(DATAFLASHBOOT_DIR)/.unpacked
+ 	make -C $(DATAFLASHBOOT_DIR) CROSS_COMPILE=$(TARGET_CROSS)
+ 
+-DataflashBoot-clean:
++dataflashboot-clean:
+ 	make -C $(DATAFLASHBOOT_DIR) clean
+ 
+-DataflashBoot-dirclean:
++dataflashboot-dirclean:
+ 	rm -rf $(DATAFLASHBOOT_DIR)
+ 
+ dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
 -- 
 1.7.0.4
