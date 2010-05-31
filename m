@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:03 +0200
-Subject: [Buildroot] [PATCH 17/46] u-boot: add a few comments
+Date: Tue,  1 Jun 2010 00:08:06 +0200
+Subject: [Buildroot] [PATCH 20/46] grub2: remove GRUB2_ARCH_SUPPORTED
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b45dd29ceae6e3c8147f1cfd148afa7cb6692f80.1275343447.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d9f8bc37b1a57eaf3cafd67765b0a49dd3715187.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ boot/grub2/grub2.mk |   19 -------------------
+ 1 files changed, 0 insertions(+), 19 deletions(-)
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index e39901e..bc03039 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -108,6 +108,7 @@ endif
- endif # BR2_TARGET_UBOOT_NETWORK
- 	touch $@
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 119397b..a298ae6 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -1,20 +1,3 @@
+-GRUB2_SUPPORTED_ARCH=n
+-ifeq ($(ARCH),i386)
+-GRUB2_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i486)
+-GRUB2_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i586)
+-GRUB2_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),i686)
+-GRUB2_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(ARCH),x86_64)
+-GRUB2_SUPPORTED_ARCH=y
+-endif
+-ifeq ($(GRUB2_SUPPORTED_ARCH),y)
+ #############################################################
+ #
+ # grub2
+@@ -122,8 +105,6 @@ grub2-clean:
+ grub2-dirclean:
+ 	rm -rf $(GRUB2_DIR)
  
-+# Build U-Boot itself
- $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 	$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
-@@ -116,10 +117,15 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
- 		 -C $(U_BOOT_DIR)
- 
-+# Copy the result to the images/ directory
- $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
- 	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
- 
-+# Build just mkimage for the host. It might have already been built by
-+# the U-Boot build procedure, but mkimage may also be needed even if
-+# U-Boot isn't selected in the configuration, to generate a kernel
-+# uImage.
- $(MKIMAGE): $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CONFIGURE_OPTS) \
-@@ -130,6 +136,7 @@ $(MKIMAGE): $(U_BOOT_DIR)/.configured
- 		-C $(U_BOOT_DIR) tools
- 	cp -dpf $(U_BOOT_DIR)/tools/mkimage $(@D)
- 
-+# Build manually mkimage for the target
- $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(U_BOOT_DIR)/tools \
-@@ -143,6 +150,7 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- 
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 
-+# Build manually fw_printenv for the target
- $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+-endif
+-
+ #############################################################
+ #
+ # Toplevel Makefile options
 -- 
 1.7.0.4
