@@ -1,34 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:16 +0200
-Subject: [Buildroot] [PATCH 30/46] syslinux: depends on host-nasm
+Date: Tue,  1 Jun 2010 00:08:18 +0200
+Subject: [Buildroot] [PATCH 32/46] at91bootstrap: simplify configuration
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <de4fdd99f77edcc954dbda2ed26e8b567862665c.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e720d8527c361647b6e37b0437fbf2bd242cf31d.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There no need to depends on BR2_TARGET_AT91BOOTSTRAP when the
+configuration options are already inside a if
+BR2_TARGET_AT91BOOTSTRAP.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/syslinux.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ boot/at91bootstrap/Config.in |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 966d0c2..192e905 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -31,8 +31,8 @@ $(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
- $(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
- 	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 8514ccc..8efbd13 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -13,7 +13,6 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
+ choice
+ 	prompt "Boot Memory"
+ 	default BR2_TARGET_AT91BOOT_DATAFLASHCARD
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	help
+ 	  Select Chip for which AT91 bootstrap should be built
  
--syslinux: $(BINARIES_DIR)/isolinux.bin
--pxelinux: $(BINARIES_DIR)/pxelinux.bin
-+syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
-+pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
+@@ -45,7 +44,6 @@ endchoice
  
- pxelinux-clean syslinux-clean:
- 	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
+ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
+ 	string
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	default	"dataflash"	if	BR2_TARGET_AT91BOOT_DATAFLASH
+ 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
+@@ -55,7 +53,6 @@ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
+ 
+ config	BR2_AT91BOOTSTRAP_IMG_SIZE
+ 	string	"Image Size to copy to SDRAM"
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH
+ 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
+@@ -69,7 +66,6 @@ config	BR2_AT91BOOTSTRAP_IMG_SIZE
+ choice
+ 	prompt "Start address of application"
+ 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	help
+ 	  Select Chip for which AT91 bootstrap should be built
+ 	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
+@@ -97,10 +93,6 @@ config	BR2_AT91BOOTSTRAP_JUMP_ADDR
+ 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+ 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
+ 	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+-
+-comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 
+ endif
+ 
 -- 
 1.7.0.4
