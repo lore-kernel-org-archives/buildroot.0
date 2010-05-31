@@ -1,70 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:18 +0200
-Subject: [Buildroot] [PATCH 32/46] at91bootstrap: simplify configuration
+Date: Tue,  1 Jun 2010 00:08:15 +0200
+Subject: [Buildroot] [PATCH 29/46] nasm: new package, needed for syslinux
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e720d8527c361647b6e37b0437fbf2bd242cf31d.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6072a3c60a462937c686b088b32bd687e10afd28.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There no need to depends on BR2_TARGET_AT91BOOTSTRAP when the
-configuration options are already inside a if
-BR2_TARGET_AT91BOOTSTRAP.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+ package/nasm/nasm.mk |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/nasm/nasm.mk
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 8514ccc..8efbd13 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -13,7 +13,6 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
- choice
- 	prompt "Boot Memory"
- 	default BR2_TARGET_AT91BOOT_DATAFLASHCARD
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
- 
-@@ -45,7 +44,6 @@ endchoice
- 
- config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 	string
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"dataflash"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -55,7 +53,6 @@ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 
- config	BR2_AT91BOOTSTRAP_IMG_SIZE
- 	string	"Image Size to copy to SDRAM"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -69,7 +66,6 @@ config	BR2_AT91BOOTSTRAP_IMG_SIZE
- choice
- 	prompt "Start address of application"
- 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
- 	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
-@@ -97,10 +93,6 @@ config	BR2_AT91BOOTSTRAP_JUMP_ADDR
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
- 	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
--	depends on BR2_TARGET_AT91BOOTSTRAP
--
--comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 
- endif
- 
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+new file mode 100644
+index 0000000..08983e1
+--- /dev/null
++++ b/package/nasm/nasm.mk
+@@ -0,0 +1,19 @@
++############################################################
++#
++# nasm
++#
++# This is special case: nasm is used to build syslinux and
++# pxelinux. As these are for the target, we should cross-compile
++# nasm. However, as nasm is x86-only, there's no point in
++# cross-compiling it. So we just build it for the host. The target
++# variant is only provided because of a bug in the package
++# infrastructure that prevents having only a host variant.
++############################################################
++
++NASM_VERSION=2.08.01
++NASM_SOURCE=nasm-$(NASM_VERSION).tar.bz2
++NASM_SITE=http://www.nasm.us/pub/nasm/releasebuilds/2.08.01/
++NASM_LIBTOOL_PATCH=NO
++
++$(eval $(call AUTOTARGETS,package,nasm))
++$(eval $(call AUTOTARGETS,package,nasm,host))
 -- 
 1.7.0.4
