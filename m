@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:21 +0200
-Subject: [Buildroot] [PATCH 35/46] at91bootstrap: remove unused/useless code
+Date: Tue,  1 Jun 2010 00:08:20 +0200
+Subject: [Buildroot] [PATCH 34/46] at91bootstrap: fix incorrect config
+	option comment
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9910d5defe3bc07438c4439e850437c1b53f8c53.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0569678db1c6d140f1a57280ebf868f2bc4a1e33.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |   12 ------------
- 1 files changed, 0 insertions(+), 12 deletions(-)
+ boot/at91bootstrap/Config.in |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index dc475e4..1d1091e 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -50,8 +50,6 @@ $(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked .config
- 		$(AT91BOOTSTRAP_BOARD)_defconfig
- 	touch $(AT91BOOTSTRAP_DIR)/.configured
- 
--#		$(BOARD_NAME)_defconfig
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 7c0f393..1bf8d50 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -61,10 +61,7 @@ choice
+ 	prompt "Start address of application"
+ 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+ 	help
+-	  Select Chip for which AT91 bootstrap should be built
+-	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
+-	  AT91SAM9XEEK, AT91SAM9263EK
 -
- $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
- 	$(MAKE) \
- 		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
-@@ -61,19 +59,13 @@ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
++	  Location of the application start address
  
- $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
- 	mkdir -p $(BINARIES_DIR)
--ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
--	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--else
- 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
- 		-C $(AT91BOOTSTRAP_DIR) boot
- 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
- 		echo "Could not copy bootstrap to BINARIES_DIR"
--endif
- 	touch $@
- 
--#	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--
- .PHONY: at91bootstrap at91bootstrap-source
- 
- at91bootstrap: $(AT91BOOTSTRAP_DIR)/.installed
-@@ -97,8 +89,4 @@ at91bootstrap-dirclean:
- #############################################################
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
- TARGETS+=at91bootstrap
--endif
--
--at91bootstrap-status:
--	@echo AT91BOOTSTRAP_BOARD=$(AT91BOOTSTRAP_BOARD)
- 
+ config	BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+ 	bool "Copy to the default U-Boot start location in the SDRAM"
 -- 
 1.7.0.4
