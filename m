@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:14 +0200
-Subject: [Buildroot] [PATCH 28/46] syslinux: remove the unnecessary
-	SYSLINUX_SUPPORTED_ARCH check
+Date: Tue,  1 Jun 2010 00:08:16 +0200
+Subject: [Buildroot] [PATCH 30/46] syslinux: depends on host-nasm
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <26325d90038b8e986f817e27035b6a5a62fd51fe.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <de4fdd99f77edcc954dbda2ed26e8b567862665c.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/syslinux.mk |   20 --------------------
- 1 files changed, 0 insertions(+), 20 deletions(-)
+ boot/syslinux/syslinux.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 46b41f2..966d0c2 100644
+index 966d0c2..192e905 100644
 --- a/boot/syslinux/syslinux.mk
 +++ b/boot/syslinux/syslinux.mk
-@@ -1,21 +1,3 @@
--SYSLINUX_SUPPORTED_ARCH=n
--ifeq ($(ARCH),i386)
--SYSLINUX_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i486)
--SYSLINUX_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i586)
--SYSLINUX_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i686)
--SYSLINUX_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),x86_64)
--SYSLINUX_SUPPORTED_ARCH=y
--endif
--ifeq ($(SYSLINUX_SUPPORTED_ARCH),y)
--
- #############################################################
- #
- # syslinux to make target msdos/iso9660 filesystems bootable
-@@ -59,8 +41,6 @@ pxelinux-clean syslinux-clean:
- pxelinux-dirclean syslinux-dirclean:
- 	rm -rf $(SYSLINUX_DIR)
+@@ -31,8 +31,8 @@ $(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
+ $(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
+ 	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
  
--endif
--
- #############################################################
- #
- # Toplevel Makefile options
+-syslinux: $(BINARIES_DIR)/isolinux.bin
+-pxelinux: $(BINARIES_DIR)/pxelinux.bin
++syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
++pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
+ 
+ pxelinux-clean syslinux-clean:
+ 	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
 -- 
 1.7.0.4
