@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:07:59 +0200
-Subject: [Buildroot] [PATCH 13/46] u-boot: remove useless symbolic link
+Date: Tue,  1 Jun 2010 00:07:57 +0200
+Subject: [Buildroot] [PATCH 11/46] u-boot: simplify custom patch handling
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <42acead9c79b5496cf0e8eceaf4b80b5cd39e6ad.1275343447.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4b64a50e640ead842168ea28c8342cd9e46af9a0.1275343447.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ boot/u-boot/Config.in |    9 ++++++---
+ boot/u-boot/u-boot.mk |   10 ++--------
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 4c76d57..78a195d 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -33,10 +33,13 @@ config BR2_UBOOT_VERSION
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+ 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
+ 
+-config BR2_TARGET_UBOOT_CUSTOM_PATCH
+-	string "custom patch"
++config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
++	string "custom patch dir"
+ 	help
+-	  If your board requires a custom patch, add the path to the file here.
++	  If your board requires custom patches, add the path to the
++	  directory containing the patches here. The patches must be
++	  named u-boot-<version>-<something>.patch.
++
+ 	  Most users may leave this empty
+ 
+ choice
 diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index efde3ea..ac16c8b 100644
+index 4edef12..efde3ea 100644
 --- a/boot/u-boot/u-boot.mk
 +++ b/boot/u-boot/u-boot.mk
-@@ -11,7 +11,6 @@ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+@@ -9,7 +9,6 @@ U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
+ 
+ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
  U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
+-U_BOOT_PATCH_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)-patches
  U_BOOT_CAT:=$(BZCAT)
  U_BOOT_BIN:=u-boot.bin
--U_BOOT_TARGET_BIN:=u-boot-$(U_BOOT_VERSION)-$(DATE).bin
+ U_BOOT_TARGET_BIN:=u-boot-$(U_BOOT_VERSION)-$(DATE).bin
+@@ -69,13 +68,8 @@ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) boot/u-boot \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
+-ifneq ($(strip $(U_BOOT_ARCH_PATCH_DIR)),)
+-	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_ARCH_PATCH_DIR) \*.patch
+-endif
+-ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH)),"")
+-	@mkdir -p $(U_BOOT_PATCH_DIR)
+-	cp -dpr $(BR2_TARGET_UBOOT_CUSTOM_PATCH) $(U_BOOT_PATCH_DIR)
+-	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_PATCH_DIR) \*.patch
++ifneq ($(qstrip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
++	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
+ endif
+ 	touch $@
  
- U_BOOT_TOOLS:=$(HOST_DIR)/usr/bin/mkimage
- MKIMAGE:=$(U_BOOT_TOOLS)
-@@ -153,9 +152,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 
- $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
--	rm -f $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	(cd $(BINARIES_DIR); ln -s $(U_BOOT_TARGET_BIN) $(U_BOOT_BIN))
-+	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
- 
- $(U_BOOT_TOOLS): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	mkdir -p $(@D)
 -- 
 1.7.0.4
