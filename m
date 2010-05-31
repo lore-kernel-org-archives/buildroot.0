@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:07 +0200
-Subject: [Buildroot] [PATCH 21/46] grub/grub2: drop unnecessary dependency
-	on uclibc
+Date: Tue,  1 Jun 2010 00:08:08 +0200
+Subject: [Buildroot] [PATCH 22/46] grub/grub2: update splash image location
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <afd507cb70ce4eae4dec498122fb40e45e8a9ed4.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bbd4579a749c64a5cade4a066a5974724af5589e.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,30 +17,30 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index 96b082d..74ea77f 100644
+index 74ea77f..3805afe 100644
 --- a/boot/grub/grub.mk
 +++ b/boot/grub/grub.mk
-@@ -96,7 +96,7 @@ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
- endif
- 	touch $@
+@@ -11,7 +11,7 @@ GRUB_CAT:=$(ZCAT)
+ GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+ GRUB_BINARY:=grub/grub
+ GRUB_TARGET_BINARY:=sbin/grub
+-GRUB_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
++GRUB_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
  
--grub: uclibc $(GRUB_DIR)/.installed
-+grub: $(GRUB_DIR)/.installed
  
- grub-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB_DIR) uninstall
+ GRUB_CFLAGS=-DSUPPORT_LOOPDEV
 diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index a298ae6..06e1524 100644
+index 06e1524..24f1e1a 100644
 --- a/boot/grub2/grub2.mk
 +++ b/boot/grub2/grub2.mk
-@@ -93,7 +93,7 @@ ifeq ($(BR2_TARGET_GRUB2_SPLASH),y)
- endif
- 	touch $@
+@@ -11,7 +11,7 @@ GRUB2_CAT:=$(ZCAT)
+ GRUB2_DIR:=$(BUILD_DIR)/grub-1.95
+ GRUB2_BINARY:=grub2/grub2
+ GRUB2_TARGET_BINARY:=sbin/grub2
+-GRUB2_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
++GRUB2_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
  
--grub2: uclibc $(GRUB2_DIR)/.installed
-+grub2: $(GRUB2_DIR)/.installed
  
- grub2-clean:
- 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB2_DIR) uninstall
+ GRUB2_CFLAGS=-DSUPPORT_LOOPDEV
 -- 
 1.7.0.4
