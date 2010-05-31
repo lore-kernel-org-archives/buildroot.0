@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:23 +0200
-Subject: [Buildroot] [PATCH 37/46] at91bootstrap: bump version to 2.13
+Date: Tue,  1 Jun 2010 00:08:25 +0200
+Subject: [Buildroot] [PATCH 39/46] at91bootstrap: fix install procedure
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9c5df87b245f3ca90ee337028aad134df02c1d39.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0db9afb059336725f736754a10854861577537fc.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the same time, remove the unused AT91BOOTSTRAP_PATCH_LEVEL and
-AT91BOOTSTRAP_PATCHED_VERSION variables.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index b71df89..d6e2c18 100644
+index bad5cee..fc7206e 100644
 --- a/boot/at91bootstrap/at91bootstrap.mk
 +++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -3,9 +3,7 @@
- # at91bootstrap
- #
- #############################################################
--AT91BOOTSTRAP_VERSION:=2.10
--AT91BOOTSTRAP_PATCH_LEVEL:=
--AT91BOOTSTRAP_PATCHED_VERSION:=$(AT91BOOTSTRAP_VERSION)$(AT91BOOTSTRAP_PATCH_LEVEL)
-+AT91BOOTSTRAP_VERSION:=2.13
- AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
- ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
- AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
-@@ -18,7 +16,7 @@ AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+@@ -56,11 +56,10 @@ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
  
- AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
+ 	mkdir -p $(BINARIES_DIR)
+-	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+-		CROSS_COMPILE=$(TARGET_CROSS) \
+-		-C $(AT91BOOTSTRAP_DIR) boot
+-	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
+-		echo "Could not copy bootstrap to BINARIES_DIR"
++	make MEMORY=$(AT91BOOTSTRAP_MEMORY) 	\
++		CROSS_COMPILE=$(TARGET_CROSS) 	\
++		DESTDIR=$(BINARIES_DIR) 	\
++		-C $(AT91BOOTSTRAP_DIR) install
+ 	touch $@
  
--AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_PATCHED_VERSION).bin
-+AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
- 
- AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
- 
+ .PHONY: at91bootstrap at91bootstrap-source
 -- 
 1.7.0.4
