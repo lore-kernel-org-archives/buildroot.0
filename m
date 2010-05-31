@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:24 +0200
-Subject: [Buildroot] [PATCH 38/46] at91bootstrap: don't use the ATMEL_MIRROR
-	thing
+Date: Tue,  1 Jun 2010 00:08:23 +0200
+Subject: [Buildroot] [PATCH 37/46] at91bootstrap: bump version to 2.13
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6cccd9ceb4905deb8d5eff61c57f48aacd6ae743.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9c5df87b245f3ca90ee337028aad134df02c1d39.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+At the same time, remove the unused AT91BOOTSTRAP_PATCH_LEVEL and
+AT91BOOTSTRAP_PATCHED_VERSION variables.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index d6e2c18..bad5cee 100644
+index b71df89..d6e2c18 100644
 --- a/boot/at91bootstrap/at91bootstrap.mk
 +++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -5,8 +5,7 @@
+@@ -3,9 +3,7 @@
+ # at91bootstrap
+ #
  #############################################################
- AT91BOOTSTRAP_VERSION:=2.13
+-AT91BOOTSTRAP_VERSION:=2.10
+-AT91BOOTSTRAP_PATCH_LEVEL:=
+-AT91BOOTSTRAP_PATCHED_VERSION:=$(AT91BOOTSTRAP_VERSION)$(AT91BOOTSTRAP_PATCH_LEVEL)
++AT91BOOTSTRAP_VERSION:=2.13
  AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
--ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
--AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
-+AT91BOOTSTRAP_SITE:=ftp://www.at91.com/pub/buildroot/
- AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
- AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
- AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
+ ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
+ AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
+@@ -18,7 +16,7 @@ AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+ 
+ AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+ 
+-AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_PATCHED_VERSION).bin
++AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
+ 
+ AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
+ 
 -- 
 1.7.0.4
