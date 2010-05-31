@@ -1,56 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jun 2010 00:08:19 +0200
-Subject: [Buildroot] [PATCH 33/46] at91bootstrap: fix the boot source
-	selection
+Date: Tue,  1 Jun 2010 00:08:21 +0200
+Subject: [Buildroot] [PATCH 35/46] at91bootstrap: remove unused/useless code
 In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <17d287d2719234ce77614cd30ff1fb6b56c20346.1275343448.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9910d5defe3bc07438c4439e850437c1b53f8c53.1275343448.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The boot source configuration options were depending on U-Boot
-configuration options. Let's make it independent and just allow the
-user to select whichever boot source is appropriate.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |   12 ------------
+ 1 files changed, 0 insertions(+), 12 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 8efbd13..7c0f393 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -18,27 +18,21 @@ choice
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index dc475e4..1d1091e 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -50,8 +50,6 @@ $(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked .config
+ 		$(AT91BOOTSTRAP_BOARD)_defconfig
+ 	touch $(AT91BOOTSTRAP_DIR)/.configured
  
- config BR2_TARGET_AT91BOOT_DATAFLASH
- 	bool "AT45 Dataflash"
--	depends on BR2_BOOTSOURCE_DATAFLASH
+-#		$(BOARD_NAME)_defconfig
+-
+ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
+ 	$(MAKE) \
+ 		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+@@ -61,19 +59,13 @@ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
  
- config BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	bool "AT45 Dataflash Card"
--	depends on BR2_BOOTSOURCE_DATAFLASHCARD
+ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
+ 	mkdir -p $(BINARIES_DIR)
+-ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
+-	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-else
+ 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		-C $(AT91BOOTSTRAP_DIR) boot
+ 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
+ 		echo "Could not copy bootstrap to BINARIES_DIR"
+-endif
+ 	touch $@
  
- config BR2_TARGET_AT91BOOT_NANDFLASH
- 	bool "NAND Flash"
--	depends on BR2_BOOTSOURCE_NANDFLASH
+-#	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-
+ .PHONY: at91bootstrap at91bootstrap-source
  
- config BR2_TARGET_AT91BOOT_FLASH
- 	bool "Internal Flash or external parallel flash"
--	depends on BR2_BOOTSOURCE_FLASH
- 
- config BR2_TARGET_AT91BOOT_SDCARD
- 	bool "SD-Card"
--	depends on BR2_BOOTSOURCE_SDCARD
- 
- config BR2_TARGET_AT91BOOT_EEPROM
- 	bool "EEPROM"
--	depends on BR2_BOOTSOURCE_EEPROM
- 
- endchoice
+ at91bootstrap: $(AT91BOOTSTRAP_DIR)/.installed
+@@ -97,8 +89,4 @@ at91bootstrap-dirclean:
+ #############################################################
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+ TARGETS+=at91bootstrap
+-endif
+-
+-at91bootstrap-status:
+-	@echo AT91BOOTSTRAP_BOARD=$(AT91BOOTSTRAP_BOARD)
  
 -- 
 1.7.0.4
