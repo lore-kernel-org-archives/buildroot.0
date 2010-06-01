@@ -1,37 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 1 Jun 2010 22:27:12 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc3 released
-In-Reply-To: <1275423717.2578.5.camel@ubuntu>
-References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<201005282220.50730.yann.morin.1998@anciens.enib.fr>
-	<1275423717.2578.5.camel@ubuntu>
-Message-ID: <201006012227.12730.yann.morin.1998@anciens.enib.fr>
+Date: Tue,  1 Jun 2010 23:53:01 +0200
+Subject: [Buildroot] [PATCH 3/5] toolchain: move makefile includes
+In-Reply-To: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1275429183-8974-4-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kris, All,
+Including a bunch of Makefiles with wildcard makes it impossible
+to add new toolchain backends. Avoid that by namely including
+needed files.
 
-On Tuesday 01 June 2010 22:21:57 Microbit_Ubuntu wrote:
-> FYI, strace now does show the proper lib call (naturally :-) :
-> # strace gdbserver
-> execve("/usr/bin/gdbserver", ["gdbserver"], [/* 16 vars */]) = 0
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
-> 0) = 0x40005000
-> open("/lib/libthread_db.so.1", O_RDONLY) = 3
-> fstat(3, {st_mode=S_IFREG|0755, [SNIP].... etc....
+Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+---
+ Makefile                         |   17 ++---------------
+ toolchain/toolchain-buildroot.mk |   15 +++++++++++++++
+ toolchain/toolchain-external.mk  |   16 ++++++++++++++++
+ 3 files changed, 33 insertions(+), 15 deletions(-)
+ create mode 100644 toolchain/toolchain-buildroot.mk
+ create mode 100644 toolchain/toolchain-external.mk
 
-Good, then! Thanks for reporting success! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Makefile b/Makefile
+index 68cfebf..035c7ec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -291,22 +291,9 @@ include .config.cmd
+ # each selected package to TARGETS if that package was selected
+ # in the .config file.
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-# avoid pulling in external toolchain which is broken for toplvl parallel builds
+-# Explicit ordering:
+-include toolchain/dependencies/dependencies.mk
+-include toolchain/binutils/binutils.mk
+-include toolchain/ccache/ccache.mk
+-include toolchain/elf2flt/elf2flt.mk
+-include toolchain/gcc/gcc-uclibc-3.x.mk
+-include toolchain/gcc/gcc-uclibc-4.x.mk
+-include toolchain/gdb/gdb.mk
+-include toolchain/kernel-headers/kernel-headers.mk
+-include toolchain/mklibs/mklibs.mk
+-include toolchain/sstrip/sstrip.mk
+-include toolchain/uClibc/uclibc.mk
++include toolchain/toolchain-buildroot.mk
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+-include toolchain/helpers.mk
+-include toolchain/*/*.mk
++include toolchain/toolchain-external.mk
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX),y)
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+new file mode 100644
+index 0000000..da94b42
+--- /dev/null
++++ b/toolchain/toolchain-buildroot.mk
+@@ -0,0 +1,15 @@
++# Include files required for the internal toolchain backend
++
++# avoid pulling in external toolchain which is broken for toplvl parallel builds
++# Explicit ordering:
++include toolchain/dependencies/dependencies.mk
++include toolchain/binutils/binutils.mk
++include toolchain/ccache/ccache.mk
++include toolchain/elf2flt/elf2flt.mk
++include toolchain/gcc/gcc-uclibc-3.x.mk
++include toolchain/gcc/gcc-uclibc-4.x.mk
++include toolchain/gdb/gdb.mk
++include toolchain/kernel-headers/kernel-headers.mk
++include toolchain/mklibs/mklibs.mk
++include toolchain/sstrip/sstrip.mk
++include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+new file mode 100644
+index 0000000..6c00330
+--- /dev/null
++++ b/toolchain/toolchain-external.mk
+@@ -0,0 +1,16 @@
++# Required includes for the external toolchain backend
++
++# Explicit ordering:
++include toolchain/helpers.mk
++include toolchain/binutils/binutils.mk
++include toolchain/ccache/ccache.mk
++include toolchain/dependencies/dependencies.mk
++include toolchain/elf2flt/elf2flt.mk
++include toolchain/gcc/gcc-uclibc-3.x.mk
++include toolchain/gcc/gcc-uclibc-4.x.mk
++include toolchain/gdb/gdb.mk
++include toolchain/toolchain-external/ext-tool.mk
++include toolchain/mklibs/mklibs.mk
++include toolchain/sstrip/sstrip.mk
++include toolchain/toolchain-external/ext-tool.mk
++include toolchain/uClibc/uclibc.mk
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.6.5
