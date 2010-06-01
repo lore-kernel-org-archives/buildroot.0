@@ -1,45 +1,51 @@
 From: Microbit_Ubuntu <microbit@virginbroadband.com.au>
-Date: Tue, 01 Jun 2010 20:23:31 +1000
-Subject: [Buildroot] Buildroot 2010.05-rc3 released :: 2 build errors -
- lockfile-progs & gdb
-In-Reply-To: <87vda5suz0.fsf@macbook.be.48ers.dk>
+Date: Tue, 01 Jun 2010 20:21:26 +1000
+Subject: [Buildroot] Buildroot 2010.05-rc3 released
+In-Reply-To: <201005282220.50730.yann.morin.1998@anciens.enib.fr>
 References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<1275007047.6387.17.camel@ubuntu> <87vda5suz0.fsf@macbook.be.48ers.dk>
-Message-ID: <1275387811.1624.6.camel@ubuntu>
+	<201005272315.11295.yann.morin.1998@anciens.enib.fr>
+	<1274997359.436.32.camel@ubuntu>
+	<201005282220.50730.yann.morin.1998@anciens.enib.fr>
+Message-ID: <1275387686.1624.4.camel@ubuntu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Yann et al,
 
-On Sun, 2010-05-30 at 09:35 +0200, Peter Korsgaard wrote:
-> >>>>> "Microbit" == Microbit Ubuntu <microbit@virginbroadband.com.au> writes:
+On Fri, 2010-05-28 at 22:20 +0200, Yann E. MORIN wrote:
+> Kris, All,
 > 
->  Microbit> I still come across 2 build errors with rc3 :
+> On Thursday 27 May 2010 23:55:59 Microbit_Ubuntu wrote:
+> > On Thu, 2010-05-27 at 23:15 +0200, Yann E. MORIN wrote:
+> > > libthread_db.so.1 is dlopen(3)ed by gdbserver, so you have to get it on
+> > > your target, in the standard libraries search path.
+> > When gdbserver was bleating about libthread_db.so.1, it was in the staging directory,
+> > but it wasn't placed on the target rootfs.
+> > When I manually added it on the target (libthread_db.so.1 I mean), gdbserver worked good as gold then...
 > 
->  Microbit> 1. lockfile-progs-0.1.11
->  Microbit> ========================
->  Microbit> The generated Makefile causes a build error in :
->  Microbit> CFLAGS    := -g -Wall -Werror -O2
->  Microbit> I still need to remove the -Werror to resume the build ??
+> I've just submitted a fix for this:
+>   http://lists.busybox.net/pipermail/buildroot/2010-May/034848.html
 > 
->  Microbit> 2. gdb symlink
->  Microbit> ==============
->  Microbit> ct-ng generates arm-unknown-linux-uclibcgnueabi where I have
->  Microbit> arm-elf-xxx as an alias.
->  Microbit> The build stops when the symlink for gdb fails. I need to manually
->  Microbit> insert a folder 'arm-unknown-linux-uclibcgnueabi' with 'bin' as a
->  Microbit> subfolder under ../output/staging/usr
+> Care to test it and report, please?
 > 
-> Both issues should be fixed in git now.
+> Regards,
+> Yann E. MORIN.
 > 
 
-Thanks for reviewing. 
-Does this mean the fix is also in final 2010.05 tarball ?
-(I'm not used to git, I probably should learn, have been thinking about
-using it for my CVS)
 
-B rgds
+Sorry for brief delay.
+Have my feet back under desk now. Need to do some fiddling on XP first,
+but then back to Linux.
+I noticed that 2010.05 is fully released now, so I'll start from there.
+I'm not sure if your fix is in 2010.05 final or not, but I guess we'll
+see shortly.
+I will delete 2010.05-rc3 folder and rebuild with 2010.05 final and go
+from there. Will keep you posted.
+
+Thanks for reviewing !
+
+Best regards,
 Kris
