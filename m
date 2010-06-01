@@ -1,51 +1,40 @@
 From: Microbit_Ubuntu <microbit@virginbroadband.com.au>
-Date: Tue, 01 Jun 2010 20:21:26 +1000
-Subject: [Buildroot] Buildroot 2010.05-rc3 released
-In-Reply-To: <201005282220.50730.yann.morin.1998@anciens.enib.fr>
+Date: Tue, 01 Jun 2010 20:38:59 +1000
+Subject: [Buildroot] Buildroot 2010.05-rc3 released uClibc 0.9.30.1
+ patches missing ?
+In-Reply-To: <87hblstcum.fsf@macbook.be.48ers.dk>
 References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<201005272315.11295.yann.morin.1998@anciens.enib.fr>
-	<1274997359.436.32.camel@ubuntu>
-	<201005282220.50730.yann.morin.1998@anciens.enib.fr>
-Message-ID: <1275387686.1624.4.camel@ubuntu>
+	<1274994677.436.2.camel@ubuntu>  <87hblstcum.fsf@macbook.be.48ers.dk>
+Message-ID: <1275388739.1624.15.camel@ubuntu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann et al,
+Hi Peter,
 
-On Fri, 2010-05-28 at 22:20 +0200, Yann E. MORIN wrote:
-> Kris, All,
+On Fri, 2010-05-28 at 14:44 +0200, Peter Korsgaard wrote:
+> >>>>> "Microbit" == Microbit Ubuntu <microbit@virginbroadband.com.au> writes:
 > 
-> On Thursday 27 May 2010 23:55:59 Microbit_Ubuntu wrote:
-> > On Thu, 2010-05-27 at 23:15 +0200, Yann E. MORIN wrote:
-> > > libthread_db.so.1 is dlopen(3)ed by gdbserver, so you have to get it on
-> > > your target, in the standard libraries search path.
-> > When gdbserver was bleating about libthread_db.so.1, it was in the staging directory,
-> > but it wasn't placed on the target rootfs.
-> > When I manually added it on the target (libthread_db.so.1 I mean), gdbserver worked good as gold then...
+>  Microbit> Hallo peter,
+>  Microbit> Hoe gaat het ? :-)
 > 
-> I've just submitted a fix for this:
->   http://lists.busybox.net/pipermail/buildroot/2010-May/034848.html
+> Goed (I'm actually from Denmark rather than Belgium).
 > 
-> Care to test it and report, please?
+>  Microbit> I don;t know if I'm off base here, but I notice that rc3 does
+>  Microbit> not have the patches for uClibc 0.9.30.1 at toolchain/uClibc
+>  Microbit> folder in the tarball ?????
 > 
-> Regards,
-> Yann E. MORIN.
+> Indeed, as we don't have support for the obsolete 0.9.30.1 version
+> anymore (the closest is 0.9.30.3).
 > 
 
+I must have given away somewhere, I guess, that I'm originally Belgian ?
+I live in Australia since 1989, but lived 25 years in Belgium. I mean, I
+could have been Dutch ? :-)
 
-Sorry for brief delay.
-Have my feet back under desk now. Need to do some fiddling on XP first,
-but then back to Linux.
-I noticed that 2010.05 is fully released now, so I'll start from there.
-I'm not sure if your fix is in 2010.05 final or not, but I guess we'll
-see shortly.
-I will delete 2010.05-rc3 folder and rebuild with 2010.05 final and go
-from there. Will keep you posted.
-
-Thanks for reviewing !
+Tusend Tak ! :-) (I think this is acceptable Danish ?)
 
 Best regards,
 Kris
