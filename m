@@ -1,386 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue,  1 Jun 2010 23:53:00 +0200
-Subject: [Buildroot] [PATCH 2/5] toolchain: rename external toolchain dir
-In-Reply-To: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1275429183-8974-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+Date: Tue,  1 Jun 2010 23:52:58 +0200
+Subject: [Buildroot] [pull request] Preparatory work on toolchains
+Message-ID: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rename the external toolchain directory.
-When new backends are here, it will be easier to sort them out
-if they are all prefixed the same way.
+The following changes since commit 4a640e464439a5e78458ae969dcc6017aa96278f:
+  Peter Korsgaard (1):
+        docs/news.html: add 2010.05 announcement
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
----
- toolchain/Config.in                      |    4 +-
- toolchain/external-toolchain/Config.in   |   22 ------
- toolchain/external-toolchain/Config.in.2 |   17 -----
- toolchain/external-toolchain/ext-tool.mk |  108 ------------------------------
- toolchain/toolchain-external/Config.in   |   22 ++++++
- toolchain/toolchain-external/Config.in.2 |   17 +++++
- toolchain/toolchain-external/ext-tool.mk |  108 ++++++++++++++++++++++++++++++
- 7 files changed, 149 insertions(+), 149 deletions(-)
- delete mode 100644 toolchain/external-toolchain/Config.in
- delete mode 100644 toolchain/external-toolchain/Config.in.2
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot master
+
+These are preparatory work on toolchain, laying ground to later add
+crosstool-NG as a backend. Currently, these are rather an RFC, even
+if it works OK for me.
+
+Yann E. MORIN (5):
+      toolchain: move helper functions from external toolchain
+      toolchain: rename external toolchain dir
+      toolchain: move makefile includes
+      toollchain: move buildroot config files
+      toolchain: rename base target for external toolchains
+
+ Makefile                                           |   18 +-
+ toolchain/Config.in                                |   16 +-
+ toolchain/external-toolchain/ext-tool.mk           |  322 --------------------
+ toolchain/helpers.mk                               |  217 +++++++++++++
+ toolchain/toolchain-buildroot.mk                   |   15 +
+ .../{Config.in.1 => toolchain-buildroot/Config.in} |    2 +-
+ toolchain/toolchain-buildroot/Config.in.2          |   37 +++
+ toolchain/{Config.in.2 => toolchain-common.in}     |   46 +---
+ toolchain/toolchain-external.mk                    |   16 +
+ .../Config.in                                      |    0
+ .../Config.in.2                                    |    0
+ toolchain/toolchain-external/ext-tool.mk           |  108 +++++++
+ 12 files changed, 411 insertions(+), 386 deletions(-)
  delete mode 100644 toolchain/external-toolchain/ext-tool.mk
- create mode 100644 toolchain/toolchain-external/Config.in
- create mode 100644 toolchain/toolchain-external/Config.in.2
+ create mode 100644 toolchain/helpers.mk
+ create mode 100644 toolchain/toolchain-buildroot.mk
+ rename toolchain/{Config.in.1 => toolchain-buildroot/Config.in} (82%)
+ create mode 100644 toolchain/toolchain-buildroot/Config.in.2
+ rename toolchain/{Config.in.2 => toolchain-common.in} (84%)
+ create mode 100644 toolchain/toolchain-external.mk
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in (100%)
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in.2 (100%)
  create mode 100644 toolchain/toolchain-external/ext-tool.mk
-
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ee94143..52b9d8b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -17,7 +17,7 @@ config BR2_TOOLCHAIN_EXTERNAL
- endchoice
- 
- source "toolchain/Config.in.1"
--source "toolchain/external-toolchain/Config.in"
-+source "toolchain/toolchain-external/Config.in"
- 
- # we want gdb config in the middle of both source and external
- # toolchains, but mconf won't let us source the same file twice,
-@@ -26,6 +26,6 @@ source "toolchain/gdb/Config.in"
- comment "Common Toolchain Options"
- 
- source "toolchain/Config.in.2"
--source "toolchain/external-toolchain/Config.in.2"
-+source "toolchain/toolchain-external/Config.in.2"
- 
- endmenu
-diff --git a/toolchain/external-toolchain/Config.in b/toolchain/external-toolchain/Config.in
-deleted file mode 100644
-index efc8378..0000000
---- a/toolchain/external-toolchain/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_EXTERNAL
--choice
--	prompt "External toolchain C library"
--	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--
--config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	bool "uClibc"
--
--config BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	bool "glibc"
--
--endchoice
--
--config BR2_TOOLCHAIN_EXTERNAL_STRIP
--        bool
--        default y
--        prompt "Strip shared libraries"
--	help
--	  Strip shared libraries copied from the external toolchain.
--endif
-diff --git a/toolchain/external-toolchain/Config.in.2 b/toolchain/external-toolchain/Config.in.2
-deleted file mode 100644
-index 489558c..0000000
---- a/toolchain/external-toolchain/Config.in.2
-+++ /dev/null
-@@ -1,17 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_EXTERNAL
--config BR2_TOOLCHAIN_EXTERNAL_PATH
--	string "External toolchain path"
--	default "/path/to/staging_dir/usr"
--	help
--	  Path to where the external toolchain is installed.
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	string "External toolchain prefix"
--	default "$(ARCH)-linux"
--	help
--	  This the the external toolchain prefix. For example:
--	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
--
--endif
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-deleted file mode 100644
-index c8e7892..0000000
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ /dev/null
-@@ -1,108 +0,0 @@
--
--#
--# This file implements the support for external toolchains, i.e
--# toolchains that have not been produced by Buildroot itself and that
--# are already available on the system on which Buildroot runs. So far,
--# we have tested this with:
--#
--#  * Toolchains generated by Crosstool-NG
--#  * Toolchains generated by Buildroot
--#  * ARM toolchains made available by Codesourcery
--#
--# The basic principle is the following
--#
--#  1. Perform some checks on the conformity between the toolchain
--#  configuration described in the Buildroot menuconfig system, and the
--#  real configuration of the external toolchain. This is for example
--#  important to make sure that the Buildroot configuration system
--#  knows whether the toolchain supports RPC, IPv6, locales, large
--#  files, etc. Unfortunately, these things cannot be detected
--#  automatically, since the value of these options (such as
--#  BR2_INET_RPC) are needed at configuration time because these
--#  options are used as dependencies for other options. And at
--#  configuration time, we are not able to retrieve the external
--#  toolchain configuration.
--#
--#  2. Copy the libraries needed at runtime to the target directory,
--#  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
--#  loader and a few other utility libraries are needed if dynamic
--#  applications are to be executed on the target system.
--#
--#  3. Copy the libraries and headers to the staging directory. This
--#  will allow all further calls to gcc to be made using --sysroot
--#  $(STAGING_DIR), which greatly simplifies the compilation of the
--#  packages when using external toolchains. So in the end, only the
--#  cross-compiler binaries remains external, all libraries and headers
--#  are imported into the Buildroot tree.
--
--uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
--
--EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--EXTERNAL_LIBS+=ld-uClibc.so
--else
--EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
--endif
--
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--EXTERNAL_LIBS+=libstdc++.so
--endif
--
--ifneq ($(BR2_PTHREADS_NONE),y)
--EXTERNAL_LIBS+=libpthread.so
--ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
--EXTERNAL_LIBS+=libthread_db.so
--endif # gdbserver
--endif # ! no threads
--
--# SYSROOT_DIR selection. We first try the -print-sysroot option,
--# available in gcc 4.4.x and in some Codesourcery toolchains. If this
--# option is not available, we fallback to the value of --with-sysroot
--# as visible in CROSS-gcc -v. We don't pass the -march= option to gcc
--# as we want the "main" sysroot, which contains all variants of the C
--# library in the case of multilib toolchains.
--SYSROOT_DIR=$(shell $(TARGET_CC) -print-sysroot 2>/dev/null)
--ifeq ($(SYSROOT_DIR),)
--SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
--endif
--
--# Now, find if the toolchain specifies a sub-directory for the
--# specific architecture variant we're interested in. This is the case
--# with multilib toolchain, when the selected architecture variant is
--# not the default one. To do so, we ask the compiler by passing the
--# appropriate -march= flags. ARCH_SUBDIR will contain the
--# subdirectory, in the main SYSROOT_DIR, that corresponds to the
--# selected architecture variant. ARCH_SYSROOT_DIR will contain the
--# full path to this location.
--ifneq ($(CC_TARGET_ARCH_),)
--TARGET_CC_ARCH_CFLAGS+=-march=$(CC_TARGET_ARCH_)
--endif
--ARCH_SUBDIR=$(shell $(TARGET_CC) $(TARGET_CC_ARCH_CFLAGS) -print-multi-directory)
--ARCH_SYSROOT_DIR=$(SYSROOT_DIR)/$(ARCH_SUBDIR)
--
--$(STAMP_DIR)/ext-toolchain-installed:
--	@echo "Checking external toolchain settings"
--	$(Q)$(call check_cross_compiler_exists)
--ifeq ($(strip $(SYSROOT_DIR)),)
--	@echo "External toolchain doesn't support --sysroot. Cannot use."
--	exit 1
--endif
--ifeq ($(BR2_arm),y)
--	$(Q)$(call check_arm_abi)
--endif
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	$(Q)$(call check_cplusplus)
--endif
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--	$(Q)$(call check_uclibc,$(SYSROOT_DIR))
--else
--	$(Q)$(call check_glibc,$(SYSROOT_DIR))
--endif
--	mkdir -p $(TARGET_DIR)/lib
--	@echo "Copy external toolchain libraries to target..."
--	$(Q)for libs in $(EXTERNAL_LIBS); do \
--		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
--	done
--	@echo "Copy external toolchain sysroot to staging..."
--	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
--	@touch $@
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-new file mode 100644
-index 0000000..efc8378
---- /dev/null
-+++ b/toolchain/toolchain-external/Config.in
-@@ -0,0 +1,22 @@
-+#
-+
-+if BR2_TOOLCHAIN_EXTERNAL
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	bool "uClibc"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	bool "glibc"
-+
-+endchoice
-+
-+config BR2_TOOLCHAIN_EXTERNAL_STRIP
-+        bool
-+        default y
-+        prompt "Strip shared libraries"
-+	help
-+	  Strip shared libraries copied from the external toolchain.
-+endif
-diff --git a/toolchain/toolchain-external/Config.in.2 b/toolchain/toolchain-external/Config.in.2
-new file mode 100644
-index 0000000..489558c
---- /dev/null
-+++ b/toolchain/toolchain-external/Config.in.2
-@@ -0,0 +1,17 @@
-+#
-+
-+if BR2_TOOLCHAIN_EXTERNAL
-+config BR2_TOOLCHAIN_EXTERNAL_PATH
-+	string "External toolchain path"
-+	default "/path/to/staging_dir/usr"
-+	help
-+	  Path to where the external toolchain is installed.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	string "External toolchain prefix"
-+	default "$(ARCH)-linux"
-+	help
-+	  This the the external toolchain prefix. For example:
-+	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
-+
-+endif
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-new file mode 100644
-index 0000000..c8e7892
---- /dev/null
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -0,0 +1,108 @@
-+
-+#
-+# This file implements the support for external toolchains, i.e
-+# toolchains that have not been produced by Buildroot itself and that
-+# are already available on the system on which Buildroot runs. So far,
-+# we have tested this with:
-+#
-+#  * Toolchains generated by Crosstool-NG
-+#  * Toolchains generated by Buildroot
-+#  * ARM toolchains made available by Codesourcery
-+#
-+# The basic principle is the following
-+#
-+#  1. Perform some checks on the conformity between the toolchain
-+#  configuration described in the Buildroot menuconfig system, and the
-+#  real configuration of the external toolchain. This is for example
-+#  important to make sure that the Buildroot configuration system
-+#  knows whether the toolchain supports RPC, IPv6, locales, large
-+#  files, etc. Unfortunately, these things cannot be detected
-+#  automatically, since the value of these options (such as
-+#  BR2_INET_RPC) are needed at configuration time because these
-+#  options are used as dependencies for other options. And at
-+#  configuration time, we are not able to retrieve the external
-+#  toolchain configuration.
-+#
-+#  2. Copy the libraries needed at runtime to the target directory,
-+#  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
-+#  loader and a few other utility libraries are needed if dynamic
-+#  applications are to be executed on the target system.
-+#
-+#  3. Copy the libraries and headers to the staging directory. This
-+#  will allow all further calls to gcc to be made using --sysroot
-+#  $(STAGING_DIR), which greatly simplifies the compilation of the
-+#  packages when using external toolchains. So in the end, only the
-+#  cross-compiler binaries remains external, all libraries and headers
-+#  are imported into the Buildroot tree.
-+
-+uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
-+
-+EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+EXTERNAL_LIBS+=ld-uClibc.so
-+else
-+EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
-+endif
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+EXTERNAL_LIBS+=libstdc++.so
-+endif
-+
-+ifneq ($(BR2_PTHREADS_NONE),y)
-+EXTERNAL_LIBS+=libpthread.so
-+ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
-+EXTERNAL_LIBS+=libthread_db.so
-+endif # gdbserver
-+endif # ! no threads
-+
-+# SYSROOT_DIR selection. We first try the -print-sysroot option,
-+# available in gcc 4.4.x and in some Codesourcery toolchains. If this
-+# option is not available, we fallback to the value of --with-sysroot
-+# as visible in CROSS-gcc -v. We don't pass the -march= option to gcc
-+# as we want the "main" sysroot, which contains all variants of the C
-+# library in the case of multilib toolchains.
-+SYSROOT_DIR=$(shell $(TARGET_CC) -print-sysroot 2>/dev/null)
-+ifeq ($(SYSROOT_DIR),)
-+SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
-+endif
-+
-+# Now, find if the toolchain specifies a sub-directory for the
-+# specific architecture variant we're interested in. This is the case
-+# with multilib toolchain, when the selected architecture variant is
-+# not the default one. To do so, we ask the compiler by passing the
-+# appropriate -march= flags. ARCH_SUBDIR will contain the
-+# subdirectory, in the main SYSROOT_DIR, that corresponds to the
-+# selected architecture variant. ARCH_SYSROOT_DIR will contain the
-+# full path to this location.
-+ifneq ($(CC_TARGET_ARCH_),)
-+TARGET_CC_ARCH_CFLAGS+=-march=$(CC_TARGET_ARCH_)
-+endif
-+ARCH_SUBDIR=$(shell $(TARGET_CC) $(TARGET_CC_ARCH_CFLAGS) -print-multi-directory)
-+ARCH_SYSROOT_DIR=$(SYSROOT_DIR)/$(ARCH_SUBDIR)
-+
-+$(STAMP_DIR)/ext-toolchain-installed:
-+	@echo "Checking external toolchain settings"
-+	$(Q)$(call check_cross_compiler_exists)
-+ifeq ($(strip $(SYSROOT_DIR)),)
-+	@echo "External toolchain doesn't support --sysroot. Cannot use."
-+	exit 1
-+endif
-+ifeq ($(BR2_arm),y)
-+	$(Q)$(call check_arm_abi)
-+endif
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+	$(Q)$(call check_cplusplus)
-+endif
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+	$(Q)$(call check_uclibc,$(SYSROOT_DIR))
-+else
-+	$(Q)$(call check_glibc,$(SYSROOT_DIR))
-+endif
-+	mkdir -p $(TARGET_DIR)/lib
-+	@echo "Copy external toolchain libraries to target..."
-+	$(Q)for libs in $(EXTERNAL_LIBS); do \
-+		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+	done
-+	@echo "Copy external toolchain sysroot to staging..."
-+	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
-+	@touch $@
--- 
-1.6.5
