@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Jun 2010 19:12:29 +0000 (UTC)
+Date: Tue,  1 Jun 2010 19:12:46 +0000 (UTC)
 Subject: [Buildroot] [Bug 1885] Add a bunch of lua modules
 In-Reply-To: <bug-1885-163@https.bugs.busybox.net/>
 References: <bug-1885-163@https.bugs.busybox.net/>
-Message-ID: <20100601191229.779E59BFB0@busybox.osuosl.org>
+Message-ID: <20100601191246.ED4479C142@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,10 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=1885
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Created attachment 1813
-  --> https://bugs.busybox.net/attachment.cgi?id=1813
-Add coxpcall lua module
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 1819
+  --> https://bugs.busybox.net/attachment.cgi?id=1819
+Add rings lua module
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
