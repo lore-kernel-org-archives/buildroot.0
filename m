@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jun 2010 21:18:39 +0200
-Subject: [Buildroot] [git commit master] Revert "Add -rpath option for
- host package compilation"
-In-Reply-To: <87pr0ar3np.fsf@macbook.be.48ers.dk>
-References: <20100530084318.C8A0EC03A6@busybox.osuosl.org>
-	<20100601195204.6353fe94@surf> <87pr0ar3np.fsf@macbook.be.48ers.dk>
-Message-ID: <20100601211839.4b8e06b2@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Jun 2010 19:24:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 1897] New: Bump libusb to 1.0.7
+Message-ID: <bug-1897-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 01 Jun 2010 20:47:22 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1897
 
->  Thomas> find $(HOST_DIR)/bin $(HOST_DIR)/usr/bin
->  Thomas> $(HOST_DIR)/usr/sbin $(HOST_DIR)/sbin -type f -perm +111
->  Thomas> -exec $(HOST_DIR)/usr/bin/patchelf --set-rpath
->  Thomas> $(HOST_DIR)/usr/lib {} \; >/dev/null 2>&1 || true
-> 
->  Thomas> Would this sort of solution be acceptable ?
-> 
-> I wouldn't exactly call it pretty, but if we don't have any other
-> options ..
+              Host: i686-linux
+            Target: powerpc-uclibc
+           Summary: Bump libusb to 1.0.7
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I don't find this pretty either, but what other options do you see ?
-I'm ready to try other approaches.
 
-Thomas
+Created attachment 1861
+  --> https://bugs.busybox.net/attachment.cgi?id=1861
+Bump libusb to 1.0.7
+
+Bump libusb to version 1.0.7.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
