@@ -1,105 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jun 2010 21:29:04 +0200
-Subject: [Buildroot] libxml2 / gzopen64
-In-Reply-To: <1275407041.2737.13.camel@HellDesk.zuhause.net>
-References: <1275407041.2737.13.camel@HellDesk.zuhause.net>
-Message-ID: <20100601212904.0f0ff917@surf>
+From: Microbit_Ubuntu <microbit@virginbroadband.com.au>
+Date: Wed, 02 Jun 2010 06:21:57 +1000
+Subject: [Buildroot] Buildroot 2010.05-rc3 released
+In-Reply-To: <201005282220.50730.yann.morin.1998@anciens.enib.fr>
+References: <877hmpv7km.fsf@macbook.be.48ers.dk>
+	<201005272315.11295.yann.morin.1998@anciens.enib.fr>
+	<1274997359.436.32.camel@ubuntu>
+	<201005282220.50730.yann.morin.1998@anciens.enib.fr>
+Message-ID: <1275423717.2578.5.camel@ubuntu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann/all,
 
-On Tue, 01 Jun 2010 17:44:01 +0200
-Holger <ltsp@webers-web.net> wrote:
+On Fri, 2010-05-28 at 22:20 +0200, Yann E. MORIN wrote:
+> Kris, All,
+> 
+> On Thursday 27 May 2010 23:55:59 Microbit_Ubuntu wrote:
+> > On Thu, 2010-05-27 at 23:15 +0200, Yann E. MORIN wrote:
+> > > libthread_db.so.1 is dlopen(3)ed by gdbserver, so you have to get it on
+> > > your target, in the standard libraries search path.
+> > When gdbserver was bleating about libthread_db.so.1, it was in the staging directory,
+> > but it wasn't placed on the target rootfs.
+> > When I manually added it on the target (libthread_db.so.1 I mean), gdbserver worked good as gold then...
+> 
+> I've just submitted a fix for this:
+>   http://lists.busybox.net/pipermail/buildroot/2010-May/034848.html
+> 
+> Care to test it and report, please?
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
-> error: /home/holger/src/buildroot/output/host/usr/lib/libxml2.so.2:
-> undefined symbol: gzopen64
+FYI, strace now does show the proper lib call (naturally :-) :
 
-Ok, thanks to the build log you sent to me (BTW, why didn't you send
-the link to the list, so that others could have a look too), I could
-understand a few things.
-
-The thing is that host-libxml2 detects that zlib is available on your
-host, even if we haven't built host-zlib yet. This is because zlib is
-installed on your development system.
-
-Something must be odd with the zlib library that you have installed on
-your system. Which distribution/version are you using ? Which version
-of zlib ? By any chance, don't you have two copies of zlib, one
-in /usr/lib, one in /usr/local/lib ?
-
-Anyway, Buildroot is supposed to be independent from the host system,
-so it should rely on the host zlib to work. As I think we don't need
-zlib support in the host libxml2 that we build, something like the
-following patch should fix the problem. Can you test and report ?
-
-Thanks!
-
-Thomas
-
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 3a3e007..11b946e 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -26,7 +26,7 @@ HOST_LIBXML2_DEPENDENCIES = host-pkg-config
- 
- HOST_LIBXML2_CONF_OPT = \
-                --enable-shared --without-debugging --without-python \
--               --without-threads
-+               --without-threads --without-zlib
- 
- $(eval $(call AUTOTARGETS,package,libxml2))
- $(eval $(call AUTOTARGETS,package,libxml2,host))
+# strace gdbserver
+execve("/usr/bin/gdbserver", ["gdbserver"], [/* 16 vars */]) = 0
+mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
+0) = 0x40005000
+open("/lib/libthread_db.so.1", O_RDONLY) = 3
+fstat(3, {st_mode=S_IFREG|0755, [SNIP].... etc....
 
 
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
-nt-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Sender: buildroot-bounces at uclibc.org
-Errors-To: buildroot-bounces at uclibc.org
-
-On Wed, Oct 08, 2008 at 02:52:20PM +0200, Daniel Nystr=F6m wrote:
-> (Sorry if this has been a topic earlier, but it's really hard to search
-> the mailing archive)
-> =
-
-> Is it possible in Buildroot to make both a read-only rootfs and a second
-> writable filesystem?
-> =
-
-> A common setup is using cramfs for / and mounting a jffs2 on /mnt/flash,
-> and then make a symlink of /etc to point at /mnt/flash/etc where all
-> config files are writable.
-> =
-
-> Is this possible to achive with Buildroot?
-
-No, there's no support for building two file systems with different
-contents.
-
-There might be better ways to handle this anyway, like copying /etc from
-the cramfs to the rw jffs2 on the first bootup?
-
-With regard to mounting /mnt/flash/etc onto /etc, I don't think a
-symlink will work - you need to use/run stuff from /etc before the
-second file system can be mounted. I suggest a minimal /etc in the root,
-enough to get the other file system mounted, and then "mount --bind" the =
-
-new /etc over the top.
 
 
-Hamish
--- =
-
-Hamish Moffatt VK3SB <hamish@debian.org> <hamish@cloud.net.au>
-_______________________________________________
-buildroot mailing list
-buildroot at uclibc.org
-http://busybox.net/mailman/listinfo/buildroot
+Best regards, 
+Kris
