@@ -1,88 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Jun 2010 21:02:45 +0200
-Subject: [Buildroot] [git commit master] netperf: fix build with uClibc
-	0.9.31
-Message-ID: <20100602190350.682888A2C2@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Jun 2010 23:07:52 +0200
+Subject: [Buildroot] [pull request] Preparatory work on toolchains
+In-Reply-To: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Tue, 1 Jun 2010 23:52:58 +0200")
+References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87zkzd5ejb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c5deb98def6a7d9400c5c36dea5dead128b1b40
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Yann> The following changes since commit 4a640e464439a5e78458ae969dcc6017aa96278f:
+ Yann>   Peter Korsgaard (1):
+ Yann>         docs/news.html: add 2010.05 announcement
 
-Closes #1909
+ Yann> are available in the git repository at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                  |    8 ++++++
- package/netperf/netperf-2.4.5-dccp.patch |   38 ++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/netperf/netperf-2.4.5-dccp.patch
+ Yann>   git://git.busybox.net/~ymorin/git/buildroot master
 
-diff --git a/CHANGES b/CHANGES
-index f635864..dffc848 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,5 +1,13 @@
- 2010.08, Not released yet:
- 
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: netperf
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#1909: netperf-2.4.5 fails to build because of undeclared SOCK_DCCP
-+
- 2010.05, Released May 30th, 2010:
- 
- 	Fixes all over the tree.
-diff --git a/package/netperf/netperf-2.4.5-dccp.patch b/package/netperf/netperf-2.4.5-dccp.patch
-new file mode 100644
-index 0000000..ae84cee
---- /dev/null
-+++ b/package/netperf/netperf-2.4.5-dccp.patch
-@@ -0,0 +1,38 @@
-+[PATCH] fix build on systems where IPROTO_DCCP is defined, but SOCK_DCCP isn't
-+
-+On some systems (E.G. uClibc 0.9.31) IPROTO_DCCP is defined, but SOCK_DCCP
-+isn't - Causing the build to break. Fix it by checking for both before
-+using.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/netsh.c       |    2 +-
-+ src/nettest_bsd.c |    2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+Index: netperf-2.4.5/src/netsh.c
-+===================================================================
-+--- netperf-2.4.5.orig/src/netsh.c
-++++ netperf-2.4.5/src/netsh.c
-+@@ -452,7 +452,7 @@ parse_protocol(char protocol_string[])
-+     return IPPROTO_SDP;
-+   }
-+ #endif
-+-#ifdef IPPROTO_DCCP
-++#if defined(IPPROTO_DCCP) && defined(SOCK_DCCP)
-+   if (!strcasecmp(temp,"dccp")) {
-+     socket_type = SOCK_DCCP;
-+     return IPPROTO_DCCP;
-+Index: netperf-2.4.5/src/nettest_bsd.c
-+===================================================================
-+--- netperf-2.4.5.orig/src/nettest_bsd.c
-++++ netperf-2.4.5/src/nettest_bsd.c
-+@@ -712,7 +712,7 @@ complete_addrinfo(char *controlhost, cha
-+ 	 that we did this so the code for the Solaris kludge can do
-+ 	 the fix-up for us.  also flip error over to EAI_AGAIN and
-+ 	 make sure we don't "count" this time around the loop. */
-+-#if defined(IPPROTO_DCCP)
-++#if defined(IPPROTO_DCCP) && defined(SOCK_DCCP)
-+       /* only tweak on this one the second time around, after we've
-+ 	 kludged the ai_protocol field */
-+       if ((hints.ai_socktype == SOCK_DCCP) &&
+ Yann> These are preparatory work on toolchain, laying ground to later add
+ Yann> crosstool-NG as a backend. Currently, these are rather an RFC, even
+ Yann> if it works OK for me.
+
+ Yann> Yann E. MORIN (5):
+ Yann>       toolchain: move helper functions from external toolchain
+ Yann>       toolchain: rename external toolchain dir
+ Yann>       toolchain: move makefile includes
+ Yann>       toollchain: move buildroot config files
+ Yann>       toolchain: rename base target for external toolchains
+
+Thanks. With all those renames the patches gets a lot easier to review
+if you create them with -M (detect renames). Could you resend, please?
+
 -- 
-1.6.3.3
+Bye, Peter Korsgaard
