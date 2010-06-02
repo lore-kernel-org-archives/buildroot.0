@@ -1,29 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Jun 2010 19:03:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 1909] netperf-2.4.5 fails to build because of
- undeclared SOCK_DCCP
-In-Reply-To: <bug-1909-163@https.bugs.busybox.net/>
-References: <bug-1909-163@https.bugs.busybox.net/>
-Message-ID: <20100602190339.60C857F9F3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 2 Jun 2010 21:02:45 +0200
+Subject: [Buildroot] [git commit master] CHANGES: 2010.08 development started
+Message-ID: <20100602190349.A066E8A2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1909
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=dc5e22ee93895a9d05da716478c16e47c951f404
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES   |    2 ++
+ Config.in |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git, thanks
-
+diff --git a/CHANGES b/CHANGES
+index e6c6803..f635864 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,5 @@
++2010.08, Not released yet:
++
+ 2010.05, Released May 30th, 2010:
+ 
+ 	Fixes all over the tree.
+diff --git a/Config.in b/Config.in
+index b52fbcc..435d4bd 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.05"
++	default "2010.08-git"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.6.3.3
