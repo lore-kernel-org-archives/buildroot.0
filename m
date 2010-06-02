@@ -1,102 +1,78 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Wed, 02 Jun 2010 17:04:06 +0100
-Subject: [Buildroot] Makefile.package.in: strange conditional behaviour
-In-Reply-To: <201006021050.23206.minimod@morethan.org>
-References: <1275492337.18231.34.camel@dubciaranr1.verifone.com>
-	<201006021050.23206.minimod@morethan.org>
-Message-ID: <1275494646.18231.37.camel@dubciaranr1.verifone.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Jun 2010 16:41:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 1909] New: netperf-2.4.5 fails to build because of
+ undeclared SOCK_DCCP
+Message-ID: <bug-1909-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2010-06-02 at 10:50 -0500, Michael S. Zick wrote:
-> On Wed June 2 2010, Quotient Remainder wrote:
-> > Hello,
-> > 
-> > I'm working on allowing source control (GIT, SVN, etc.) repositories to
-> > be used as software sources (instead of tarballs) and one of the
-> > requirements of my approach is to disable the "extraction" stage if a
-> > working copy of the code has been downloaded into the $(BUILD_DIR) as
-> > part of the "download" stage.
-> > I've run into a problem where the test condition I'm using is not
-> > working correctly.  The ifeq always evaluates the else-part.
-> > 
-> > Here is an example when running with the file not present in $(DL_DIR).
-> > 
-> >         File:/home/crehill/obair/buildroot-v2010.05/dl/signtools-HEAD.tar.bz2.
-> >         Wild:.
-> 
-> Period means: "Current Directory".
-> That may be giving you the problems.
-> 
-> 
-> >         Wild is NOT empty
-> 
-> Which, unless the above is a typo in your post, is correct;
-> It is set to "Current Directory".
-> 
+https://bugs.busybox.net/show_bug.cgi?id=1909
 
-No, the dot character is there in the echo command, so I can see if
-there were whitespace characters.
+           Summary: netperf-2.4.5 fails to build because of undeclared
+                    SOCK_DCCP
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jsteckli at os.inf.tu-dresden.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-$(wildcard ...) should return either the filename or an empty string, is
-my understanding.
 
-> Mike
-> > 
-> > As is plain from the output, it IS empty!
-> > 
-> > Here is the case when the $(DL_DIR) file is present.
-> > 
-> >         File:/home/crehill/obair/buildroot-v2010.05/dl/signtools-HEAD.tar.bz2.
-> >         Wild:/home/crehill/obair/buildroot-v2010.05/dl/signtools-HEAD.tar.bz2.
-> >         Wild is NOT empty
-> > 
-> > As expected.
-> > 
-> > Do any of you makefile mavens have any idea why this behaviour might
-> > happen in the "$(BUILD_DIR)/%/.stamp_extracted" target in
-> > "package/Makefile.package.in"?
-> > It's bound to be something obvious-when-pointed-out but it's eluding me
-> > currently.
-> > 
-> > 
-> > The patch is generated off my current working copy so probably won't
-> > apply but It's just an addition of a single group of lines so is trivial
-> > to add manually.
-> > 
-> > 
-> > diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> > index b4ba7d6..e47911f 100644
-> > --- a/package/Makefile.package.in
-> > +++ b/package/Makefile.package.in
-> > @@ -152,6 +152,13 @@ endif
-> >  # Unpack the archive
-> >  $(BUILD_DIR)/%/.stamp_extracted:
-> >  # Only extract the package if it was downloaded.
-> > +       @echo "File:$(DL_DIR)/$($(PKG)_SOURCE)."
-> > +       @echo "Wild:$(wildcard $(DL_DIR)/$($(PKG)_SOURCE))."
-> > +ifeq ($(strip $(wildcard $(DL_DIR)/$($(PKG)_SOURCE))),)
-> > +       @echo Wild is empty
-> > +else
-> > +       @echo Wild is NOT empty 
-> > +endif
-> >  ifneq ($(wildcard $(DL_DIR)/$($(PKG)_SOURCE)),)
-> >         @$(call MESSAGE,"Extracting")
-> >         $(Q)mkdir -p $(@D)
-> > 
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> > 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Checkout git HEAD.
+
+> make menuconfig
+ (enable netperf in packages)
+> make
+[...]
+
+if
+/home/julian/src/linux-dev/buildroot2/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc
+-Os -pipe -Os  -mtune=i686 -march=i686
+-I/home/julian/src/linux-dev/buildroot2/output/staging/usr/include
+-I/home/julian/src/linux-dev/buildroot2/output/staging/include
+--sysroot=/home/julian/src/linux-dev/buildroot2/output/staging/ -isysroot
+/home/julian/src/linux-dev/buildroot2/output/staging -DHAVE_CONFIG_H -I. -I.
+-I..     -Os -pipe -Os  -mtune=i686 -march=i686
+-I/home/julian/src/linux-dev/buildroot2/output/staging/usr/include
+-I/home/julian/src/linux-dev/buildroot2/output/staging/include
+--sysroot=/home/julian/src/linux-dev/buildroot2/output/staging/ -isysroot
+/home/julian/src/linux-dev/buildroot2/output/staging -MT netsh.o -MD -MP -MF
+".deps/netsh.Tpo" \
+      -c -o netsh.o `test -f 'netsh.c' || echo './'`netsh.c; \
+    then mv -f ".deps/netsh.Tpo" ".deps/netsh.Po"; \
+    else rm -f ".deps/netsh.Tpo"; exit 1; \
+    fi
+netsh.c: In function 'parse_protocol':
+netsh.c:457: error: 'SOCK_DCCP' undeclared (first use in this function)
+netsh.c:457: error: (Each undeclared identifier is reported only once
+netsh.c:457: error: for each function it appears in.)
+make[4]: *** [netsh.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[4]: Leaving directory
+`/home/julian/src/linux-dev/buildroot2/output/build/netperf-2.4.5/src'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/julian/src/linux-dev/buildroot2/output/build/netperf-2.4.5/src'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/julian/src/linux-dev/buildroot2/output/build/netperf-2.4.5'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/julian/src/linux-dev/buildroot2/output/build/netperf-2.4.5'
+make: ***
+[/home/julian/src/linux-dev/buildroot2/output/build/netperf-2.4.5/.stamp_built]
+Error 2
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
