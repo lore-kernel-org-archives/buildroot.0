@@ -1,50 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue,  1 Jun 2010 23:53:03 +0200
-Subject: [Buildroot] [PATCH 5/5] toolchain: rename base target for external
-	toolchains
-In-Reply-To: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1275429183-8974-6-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Wed, 2 Jun 2010 17:14:18 +1000
+Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
+	configuredownload site
+In-Reply-To: <fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <002101cb0223$38af8910$aa0e9b30$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is misleeading to name the external toolchain make target 'uclibc', as
-external toochains can be based on other C libraries (eg. glibc or eglibc).
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Tuesday, 1 June 2010 8:08 AM
+> To: buildroot at uclibc.org
+> Cc: Thomas Petazzoni
+> Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
+> configuredownload site
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  boot/u-boot/Config.in |    4 ----
+>  boot/u-boot/u-boot.mk |    2 +-
+>  2 files changed, 1 insertions(+), 5 deletions(-)
+> 
+> diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in index
+> 49d66c4..3f4110a 100644
+> --- a/boot/u-boot/Config.in
+> +++ b/boot/u-boot/Config.in
+> @@ -33,10 +33,6 @@ config BR2_UBOOT_VERSION
+>  	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+>  	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
+> 
+> -config BR2_U_BOOT_SITE
+> -	string
+> -	default "ftp://ftp.denx.de/pub/u-boot"
+> -
+>  source "target/device/Config.in.u-boot"
+> 
+>  config BR2_TARGET_UBOOT_CUSTOM_PATCH
+> diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk index
+> a875f2b..7e98ca8 100644
+> --- a/boot/u-boot/u-boot.mk
+> +++ b/boot/u-boot/u-boot.mk
+> @@ -7,7 +7,7 @@ U_BOOT_VERSION:=$(call
+> qstrip,$(BR2_UBOOT_VERSION))
+> 
+>  U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
+> 
+> -U_BOOT_SITE:=$(call qstrip,$(BR2_U_BOOT_SITE))
+> +U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+>  U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
+>  U_BOOT_PATCH_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)-patches
+>  U_BOOT_CAT:=$(BZCAT)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
----
- Makefile                                 |    2 +-
- toolchain/toolchain-external/ext-tool.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 035c7ec..6e59a30 100644
---- a/Makefile
-+++ b/Makefile
-@@ -202,7 +202,7 @@ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--BASE_TARGETS:=uclibc
-+BASE_TARGETS:=toolchain-prepare
- endif
- TARGETS:=
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index c8e7892..d6a759c 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -35,7 +35,7 @@
- #  cross-compiler binaries remains external, all libraries and headers
- #  are imported into the Buildroot tree.
- 
--uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
-+toolchain-prepare: dependencies $(STAMP_DIR)/ext-toolchain-installed
- 
- EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--- 
-1.6.5
+It would be good if we could keep this feature - I'm in the process of
+adding support for the Mini2440 ARM boards and there is no mainline support
+for them in uboot, so buildroot needs to get uboot from
+http://repo.or.cz/w/u-boot-openmoko/mini2440.git/snapshot/HEAD.tar.gz or the
+git equivalent when git support is added.
+
+I guess another way is to just put an #ifdef equivilant in u-boot.mk to
+change the download location but that's a bit ugly.
+
+
+Cheers,
+Paul.
