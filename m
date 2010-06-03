@@ -1,42 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  3 Jun 2010 20:13:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 1951] New: Bump openssl to 0.9.8o
-Message-ID: <bug-1951-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 03 Jun 2010 17:15:43 -0300
+Subject: [Buildroot] lamp
+In-Reply-To: <386D338A-B0A0-432B-A7CF-CF9007FDF622@indomp3z.us>
+References: <386D338A-B0A0-432B-A7CF-CF9007FDF622@indomp3z.us>
+Message-ID: <4C080D6F.9000501@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1951
+On 06/03/2010 04:03 PM, Starchie iMz wrote:
 
-              Host: i686-linux
-            Target: arm-softfloat-linux-uclibcgnueabi
-           Summary: Bump openssl to 0.9.8o
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> hello there .. i wonder if i can build apache php and mysql on buildroot ?
 
-
-Created attachment 1897
-  --> https://bugs.busybox.net/attachment.cgi?id=1897
-Bump openssl to 0.9.8o
-
-Openssl 0.9.8o fixes some (non-relevant) security issues:
-http://www.openssl.org/news/secadv_20100601.txt
-Also enable MDC2 (patent expired), Camellia (royalty-free) and tlsext while
-we're at it.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Buildroot is intended for embedded targets, so LAMP isn't possible at
+the moment.
+The closest thing you've got would be LLSP.
+Yeah, i've made it up, it would be Linux-Lighttpd-Sqlite-PHP.
+Regards.
