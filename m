@@ -1,39 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Jun 2010 23:07:52 +0200
-Subject: [Buildroot] [pull request] Preparatory work on toolchains
-In-Reply-To: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Tue, 1 Jun 2010 23:52:58 +0200")
-References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87zkzd5ejb.fsf@macbook.be.48ers.dk>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Thu, 3 Jun 2010 15:04:35 +1000
+Subject: [Buildroot] Creating autotargets packages
+Message-ID: <063801cb02da$42ef0d80$c8cd2880$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Hi,
 
- Yann> The following changes since commit 4a640e464439a5e78458ae969dcc6017aa96278f:
- Yann>   Peter Korsgaard (1):
- Yann>         docs/news.html: add 2010.05 announcement
+ 
 
- Yann> are available in the git repository at:
+I'm trying to create a package for Mono, which uses the autotools build
+system. I created a simple mono.mk file based on the sample in the Buildroot
+documentation, but I get an error (see below) and I don't know enough about
+how the build system works to troubleshoot. Any pointers would be
+appreciated!
 
- Yann>   git://git.busybox.net/~ymorin/git/buildroot master
+ 
 
- Yann> These are preparatory work on toolchain, laying ground to later add
- Yann> crosstool-NG as a backend. Currently, these are rather an RFC, even
- Yann> if it works OK for me.
+>>> mono 2.6.4 Extracting
 
- Yann> Yann E. MORIN (5):
- Yann>       toolchain: move helper functions from external toolchain
- Yann>       toolchain: rename external toolchain dir
- Yann>       toolchain: move makefile includes
- Yann>       toollchain: move buildroot config files
- Yann>       toolchain: rename base target for external toolchains
+>>> mono 2.6.4 Patching package/mono
 
-Thanks. With all those renames the patches gets a lot easier to review
-if you create them with -M (detect renames). Could you resend, please?
+for file in config.guess config.sub; do for i in $(find
+/home/peejay/mini2440-dev/buildroot-x86/output/build/mono-2.6.4 -name
+$file); do cp package/gnuconfig/$file $i; done; done
 
--- 
-Bye, Peter Korsgaard
+>>>   Patching libtool
+
+ 
+
+Applying buildroot-libtool.patch using plaintext: 
+
+patching file ltmain.sh
+
+Hunk #1 FAILED at 273.
+
+Hunk #2 succeeded at 5412 (offset 3005 lines).
+
+Hunk #3 FAILED at 2551.
+
+Hunk #4 FAILED at 2895.
+
+Hunk #5 succeeded at 8058 with fuzz 1 (offset 2446 lines).
+
+Hunk #6 FAILED at 5937.
+
+4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+
+Patch failed!  Please fix buildroot-libtool.patch!
+
+ 
+
+Applying buildroot-libtool.patch using plaintext: 
+
+patching file ltmain.sh
+
+Hunk #1 FAILED at 273.
+
+Hunk #2 succeeded at 5412 (offset 3005 lines).
+
+Hunk #3 FAILED at 2551.
+
+Hunk #4 FAILED at 2895.
+
+Hunk #5 succeeded at 8058 with fuzz 1 (offset 2446 lines).
+
+Hunk #6 FAILED at 5937.
+
+4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
+
+Patch failed!  Please fix buildroot-libtool.patch!
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100603/076789bb/attachment-0001.html>
