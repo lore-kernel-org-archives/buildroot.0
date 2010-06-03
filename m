@@ -1,79 +1,92 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Thu, 3 Jun 2010 15:04:35 +1000
-Subject: [Buildroot] Creating autotargets packages
-Message-ID: <063801cb02da$42ef0d80$c8cd2880$@pauljones.id.au>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  3 Jun 2010 08:36:50 +0300
+Subject: [Buildroot] [PATCH] skeleton: remove loopback interface
+	configuration from inittab
+Message-ID: <acc7c503a6179494174d8225e121b23d69a24b61.1275543349.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The lo interface is marked auto in /etc/network/interfaces, so the
+configuration of the loopback network interface is part of the
+S40network init script. This causes the "RTNETLINK answers: File exists" error
+message to appear at startup time.
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../Atmel/root/target_busybox_skeleton/etc/inittab |    2 --
+ .../device/Atmel/root/target_skeleton/etc/inittab  |    2 --
+ target/device/xtensa/skeleton-patch/etc/inittab    |    2 --
+ target/generic/target_busybox_skeleton/etc/inittab |    2 --
+ target/generic/target_skeleton/etc/inittab         |    2 --
+ 5 files changed, 0 insertions(+), 10 deletions(-)
+
+diff --git a/target/device/Atmel/root/target_busybox_skeleton/etc/inittab b/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
+index bb18305..b394548 100644
+--- a/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
++++ b/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
+@@ -24,8 +24,6 @@
+ ::sysinit:/bin/mount -o remount,rw /
+ ::sysinit:/bin/mount -a
+ ::sysinit:/bin/hostname -F /etc/hostname
+-::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
-
-I'm trying to create a package for Mono, which uses the autotools build
-system. I created a simple mono.mk file based on the sample in the Buildroot
-documentation, but I get an error (see below) and I don't know enough about
-how the build system works to troubleshoot. Any pointers would be
-appreciated!
-
+diff --git a/target/device/Atmel/root/target_skeleton/etc/inittab b/target/device/Atmel/root/target_skeleton/etc/inittab
+index 69e4df1..2e3b9a4 100644
+--- a/target/device/Atmel/root/target_skeleton/etc/inittab
++++ b/target/device/Atmel/root/target_skeleton/etc/inittab
+@@ -18,8 +18,6 @@ null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
-
->>> mono 2.6.4 Extracting
-
->>> mono 2.6.4 Patching package/mono
-
-for file in config.guess config.sub; do for i in $(find
-/home/peejay/mini2440-dev/buildroot-x86/output/build/mono-2.6.4 -name
-$file); do cp package/gnuconfig/$file $i; done; done
-
->>>   Patching libtool
-
+diff --git a/target/device/xtensa/skeleton-patch/etc/inittab b/target/device/xtensa/skeleton-patch/etc/inittab
+index b336ff6..de3ce70 100644
+--- a/target/device/xtensa/skeleton-patch/etc/inittab
++++ b/target/device/xtensa/skeleton-patch/etc/inittab
+@@ -18,8 +18,6 @@ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
-
-Applying buildroot-libtool.patch using plaintext: 
-
-patching file ltmain.sh
-
-Hunk #1 FAILED at 273.
-
-Hunk #2 succeeded at 5412 (offset 3005 lines).
-
-Hunk #3 FAILED at 2551.
-
-Hunk #4 FAILED at 2895.
-
-Hunk #5 succeeded at 8058 with fuzz 1 (offset 2446 lines).
-
-Hunk #6 FAILED at 5937.
-
-4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
-
-Patch failed!  Please fix buildroot-libtool.patch!
-
+diff --git a/target/generic/target_busybox_skeleton/etc/inittab b/target/generic/target_busybox_skeleton/etc/inittab
+index 7c7bf7a..bd3912b 100644
+--- a/target/generic/target_busybox_skeleton/etc/inittab
++++ b/target/generic/target_busybox_skeleton/etc/inittab
+@@ -24,8 +24,6 @@
+ ::sysinit:/bin/mount -o remount,rw /
+ ::sysinit:/bin/mount -a
+ ::sysinit:/bin/hostname -F /etc/hostname
+-::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
-
-Applying buildroot-libtool.patch using plaintext: 
-
-patching file ltmain.sh
-
-Hunk #1 FAILED at 273.
-
-Hunk #2 succeeded at 5412 (offset 3005 lines).
-
-Hunk #3 FAILED at 2551.
-
-Hunk #4 FAILED at 2895.
-
-Hunk #5 succeeded at 8058 with fuzz 1 (offset 2446 lines).
-
-Hunk #6 FAILED at 5937.
-
-4 out of 6 hunks FAILED -- saving rejects to file ltmain.sh.rej
-
-Patch failed!  Please fix buildroot-libtool.patch!
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100603/076789bb/attachment-0001.html>
+diff --git a/target/generic/target_skeleton/etc/inittab b/target/generic/target_skeleton/etc/inittab
+index 2949c91..4be14b8 100644
+--- a/target/generic/target_skeleton/etc/inittab
++++ b/target/generic/target_skeleton/etc/inittab
+@@ -19,8 +19,6 @@ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
+ 
+-- 
+1.7.1
