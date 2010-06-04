@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jun 2010 10:33:24 +0200
-Subject: [Buildroot] libxml2 / gzopen64
-In-Reply-To: <1275498027.2711.39.camel@HellDesk.zuhause.net>
-References: <1275407041.2737.13.camel@HellDesk.zuhause.net>
-	<20100601212904.0f0ff917@surf>
-	<1275498027.2711.39.camel@HellDesk.zuhause.net>
-Message-ID: <20100604103324.11108281@surf>
+From: Pierre Ficheux <pierre.ficheux@openwide.fr>
+Date: Fri, 04 Jun 2010 10:39:11 +0200
+Subject: [Buildroot] buildroot and sh4
+In-Reply-To: <20100604093635.3c27d0d1@surf>
+References: <618052.82706.qm@web23107.mail.ird.yahoo.com>
+	<20100604093635.3c27d0d1@surf>
+Message-ID: <e84a2537d6560fc570fcd4346d4ffbb1@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 02 Jun 2010 19:00:27 +0200
-Holger <ltsp@webers-web.net> wrote:
+On Fri, 4 Jun 2010 09:36:35 +0200, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> 
+> I think it'd be great if we added a target/device/qemu directory, with
+> target/device/qemu/sh4-rd2 as a sub-directory, containing your kernel
+> configuration + a small README file saying how to run Qemu. Then, your
+> Buildroot config file could be added to the configs/ directory. This
+> ways, others could easily run this.
+> 
+> Thomas
+>
 
-> that seems to work :-)
+Same for Versatile PB or Integrator CP for ARM, I can do that. 
 
-Ok, thanks for the report. I'll post a clean patch to fix your problem.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Pierre FICHEUX -/- CTO OW/OS4I, France -\- pierre.ficheux at openwide.fr
+                                         http://www.os4i.com
+                                         http://www.ficheux.org
+I would love to change the world, but they won't give me the source code
