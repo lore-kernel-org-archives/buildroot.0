@@ -1,30 +1,29 @@
 From: Paul Jones <paul@pauljones.id.au>
-Date: Sun,  6 Jun 2010 09:29:04 +1000
-Subject: [Buildroot] [PATCH 105/105] xkeyboard-config: Depends on
-	host-intltool
-Message-ID: <1275780544-14048-1-git-send-email-paul@pauljones.id.au>
+Date: Sun, 6 Jun 2010 09:38:32 +1000
+Subject: [Buildroot] [PATCH 1/1] xkeyboard-config: Depends on host-intltool
+Message-ID: <000d01cb0508$36c330b0$a4499210$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Sorry for sending this as an attachment but the list seems to be dropping
+email from git.
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 9c9c8b5..eb790b8 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -10,6 +10,7 @@ XKEYBOARD_CONFIG_AUTORECONF = NO
- XKEYBOARD_CONFIG_INSTALL_STAGING = NO
- XKEYBOARD_CONFIG_INSTALL_TARGET = YES
- XKEYBOARD_CONFIG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool
  
- XKEYBOARD_CONFIG_CONF_OPT = GMSGFMT=/usr/bin/msgfmt
- 
--- 
-1.7.0.4
+
+Regards,
+
+Paul.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100606/57370fa5/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-xkeyboard-config-Depends-on-host-intltool.patch
+Type: application/octet-stream
+Size: 955 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100606/57370fa5/attachment.obj>
