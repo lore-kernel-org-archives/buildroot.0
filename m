@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Jun 2010 09:00:32 +0200
-Subject: [Buildroot] [git commit master] libidn: fix build with config.cache,
-	autoconf and emacs
-Message-ID: <20100605070248.A277B5631@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] cdrkit: fix build on uClibc
+Message-ID: <20100605070248.D497C5631@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +9,59 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=168f3b6e1412d47738c0a24660b34c58fdc680c7
+commit: http://git.buildroot.net/buildroot/commit/?id=1b9d9cbafde8c6687be9959493cad58d26d0546b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libidn contains a few elisp files, and it's configure script checks for
-emacs to know if it should install them. This is not important for BR as
-we don't have emacs, but configure fails if it's available on the host,
-config.cache is used and autoconf has already been used as that loads
-EMACS="no" into the cache.
-
-Fix it by also setting EMACS="no" here.
-
-At the same time, fix up trailing spaces in Config.in.
+cdrkit unconditionally enables code using rcmd(3), which isn't available
+on uClibc.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                  |    2 +-
- package/libidn/Config.in |    4 ++--
- package/libidn/libidn.mk |    1 +
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ CHANGES                                    |    2 +-
+ package/cdrkit/cdrkit-1.1.10-no-rcmd.patch |   22 ++++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletions(-)
+ create mode 100644 package/cdrkit/cdrkit-1.1.10-no-rcmd.patch
 
 diff --git a/CHANGES b/CHANGES
-index dffc848..1f19a24 100644
+index 1f19a24..8649588 100644
 --- a/CHANGES
 +++ b/CHANGES
 @@ -2,7 +2,7 @@
  
  	Fixes all over the tree.
  
--	Updated/fixed packages: netperf
-+	Updated/fixed packages: libidn, netperf
+-	Updated/fixed packages: libidn, netperf
++	Updated/fixed packages: cdrkit, libidn, netperf
  
  	Issues resolved (http://bugs.uclibc.org):
  
-diff --git a/package/libidn/Config.in b/package/libidn/Config.in
-index 04f8900..dcf9724 100644
---- a/package/libidn/Config.in
-+++ b/package/libidn/Config.in
-@@ -2,8 +2,8 @@ config BR2_PACKAGE_LIBIDN
- 	bool "libidn"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
--	  Libidn's purpose is to encode and decode internationalized 
--	  domain names. 
-+	  Libidn's purpose is to encode and decode internationalized
-+	  domain names.
- 
- 	  http://www.gnu.org/software/libidn/
- 
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 4b3bea3..79e0321 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -8,6 +8,7 @@ LIBIDN_VERSION = 1.15
- LIBIDN_SITE = http://ftp.gnu.org/gnu/libidn/
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_INSTALL_TARGET = YES
-+LIBIDN_CONF_ENV = EMACS="no"
- LIBIDN_CONF_OPT = --enable-shared --disable-java --enable-csharp=no
- LIBIDN_LIBTOOL_PATCH = NO
- LIBIDN_DEPENDENCIES = host-pkg-config $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/package/cdrkit/cdrkit-1.1.10-no-rcmd.patch b/package/cdrkit/cdrkit-1.1.10-no-rcmd.patch
+new file mode 100644
+index 0000000..294779f
+--- /dev/null
++++ b/package/cdrkit/cdrkit-1.1.10-no-rcmd.patch
+@@ -0,0 +1,22 @@
++[PATCH] fix build with uClibc
++
++cdrkit unconditionally enables code using rcmd(3), which isn't available
++on uClibc.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ include/xconfig.h.in |    1 -
++ 1 file changed, 1 deletion(-)
++
++Index: cdrkit-1.1.10/include/xconfig.h.in
++===================================================================
++--- cdrkit-1.1.10.orig/include/xconfig.h.in
+++++ cdrkit-1.1.10/include/xconfig.h.in
++@@ -187,7 +187,6 @@
++  *	they are placed before the large file tests.
++  */
++ 
++-#define HAVE_RCMD 1		/* rcmd() is present in libc/libsocket */
++ #define HAVE_SOCKET 1		/* socket() is present in libc/libsocket */
++ #define HAVE_SOCKETPAIR 1		/* socketpair() is present in libc/libsocket */
++ #define HAVE_GETSERVBYNAME 1	/* getservbyname() is present in libc/libsocket */
 -- 
 1.6.3.3
