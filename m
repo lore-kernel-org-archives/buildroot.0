@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Jun 2010 21:41:32 +0200
-Subject: [Buildroot] [git commit master] jffs2: let makedevs create device
-	files
-Message-ID: <20100605194211.AD40C12F56E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] package/config: also add gconfig
+	change to patch
+Message-ID: <20100605194212.179CF12F56E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,59 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3754c51560b5d250b7f0283d1291fea1ec25c55c
+commit: http://git.buildroot.net/buildroot/commit/?id=fa11d8d8306646714b81f56a04ecde07f3aec623
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The common filesystem infrastructure in fs/common.mk uses a smart
-combination of makedevs and fakeroot to create the device files in the
-target filesystem images without being root. This technique is applied
-to all filesystem formats that rely on this common infrastructure, and
-JFFS2 is one of them.
-
-Therefore, using the -D option of mkfs.jffs2, which allows to specify
-a device table, is redundant with the usage of makedevs. And it is
-worst than redundant: for some reason, -D does not create all device
-files with the correct major and minor numbers, as reported in
-bug #1771.
-
-For coherence, we just remove the usage of mkfs.jffs2 -D option, and
-rely on makedevs/fakeroot to create the device files.
-
-This commit fixes bug #1771.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES           |    1 +
- fs/jffs2/jffs2.mk |    4 ----
- 2 files changed, 1 insertions(+), 4 deletions(-)
+ package/config/kconfig-to-buildroot2.patch |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 6fddc14..a3a5203 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -8,6 +8,7 @@
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-+	#1771: Fakeroot and the target/generic/device_table.txt create bad...
- 	#1909: netperf-2.4.5 fails to build because of undeclared SOCK_DCCP
- 
- 2010.05, Released May 30th, 2010:
-diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
-index 36be037..fd5da0c 100644
---- a/fs/jffs2/jffs2.mk
-+++ b/fs/jffs2/jffs2.mk
-@@ -32,10 +32,6 @@ JFFS2_OPTS += -n
- SUMTOOL_OPTS += -n
- endif
- 
--ifneq ($(ROOTFS_DEVICE_TABLE),)
--JFFS2_OPTS += -D $(ROOTFS_DEVICE_TABLE)
--endif
--
- ROOTFS_JFFS2_DEPENDENCIES = host-mtd
- 
- ifneq ($(BR2_TARGET_ROOTFS_JFFS2_SUMMARY),)
+diff --git a/package/config/kconfig-to-buildroot2.patch b/package/config/kconfig-to-buildroot2.patch
+index 877caba..db72ea8 100644
+--- a/package/config/kconfig-to-buildroot2.patch
++++ b/package/config/kconfig-to-buildroot2.patch
+@@ -17,7 +17,7 @@ Index: config/Makefile
+ ===================================================================
+ --- config.orig/Makefile
+ +++ config/Makefile
+-@@ -124,10 +124,17 @@
++@@ -124,10 +124,21 @@
+  ifeq ($(MAKECMDGOALS),menuconfig)
+  	hostprogs-y += mconf
+  endif
+@@ -35,6 +35,10 @@ Index: config/Makefile
+  ifeq ($(MAKECMDGOALS),gconfig)
+  	gconf-target := 1
+  endif
+++ifeq ($(findstring gconf,$(MAKECMDGOALS)),gconf)
+++	gconf-target := 1
+++endif
+++
+ Index: config/README.buildroot2
+ ===================================================================
+ --- /dev/null
 -- 
 1.6.3.3
