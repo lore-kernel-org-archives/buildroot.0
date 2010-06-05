@@ -1,33 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Jun 2010 15:49:34 +0200
-Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
- configuredownload site
-In-Reply-To: <20100604103232.3f415c39@surf>
+Date: Sat, 5 Jun 2010 15:51:01 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ bootloaders-cleanup
+In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-	<fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com>
-	<002101cb0223$38af8910$aa0e9b30$@pauljones.id.au>
-	<20100604103232.3f415c39@surf>
-Message-ID: <20100605154934.6ebd9068@surf>
+Message-ID: <20100605155101.0030e90e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 4 Jun 2010 10:32:32 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hello,
 
-> Thanks for the feedback. I'll add something that allows to download
-> arbitrary tarballs. That's something that I also did for my Linux
-> kernel code cleanup in Buildroot, so I'll reuse the same scheme. I'll
-> post an updated version of this patch probably during this WE.
+Since I posted this patch set (on June, 1st), the only comment was the
+one from Paul Jones about U-Boot version flexibility, to which I
+answered today with an improved proposal.
 
-Here my proposal to improve U-Boot support to take into account the
-issue you reported:
+Are there any other comments that would prevent this patch set from
+beign merged ? Should I resend the complete patch set again ?
 
-http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=bootloaders-cleanup&id=13ef908685caecd17ba67953fd1fee8a559231a2
-
-Best regards,
+Regards,
 
 Thomas
 -- 
