@@ -1,54 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Jun 2010 21:20:01 +0200
-Subject: [Buildroot] make xconfig on Fedora 13 and buildroot-2010.05
-In-Reply-To: <AANLkTinF5cJ0T_ALpJN6uqlj9-E2fIjzLqYH0pcxWan0@mail.gmail.com>
-	(Chris Kerios's message of "Sat, 5 Jun 2010 07:10:09 -0400")
-References: <AANLkTinF5cJ0T_ALpJN6uqlj9-E2fIjzLqYH0pcxWan0@mail.gmail.com>
-Message-ID: <87vd9xnv6m.fsf@macbook.be.48ers.dk>
+Date: Sat, 05 Jun 2010 21:23:51 +0200
+Subject: [Buildroot] [PATCH 1/1] jffs2: let makedevs create device files
+In-Reply-To: <5682fe13ee493517e0d0007caa2f61ed676f2789.1275751113.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 5 Jun 2010 17:18:40 +0200")
+References: <cover.1275751113.git.thomas.petazzoni@free-electrons.com>
+	<cover.1275751113.git.thomas.petazzoni@free-electrons.com>
+	<5682fe13ee493517e0d0007caa2f61ed676f2789.1275751113.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r5klnv08.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Kerios <ckerios@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Chris> Hey guys,
+ Thomas> The common filesystem infrastructure in fs/common.mk uses a smart
+ Thomas> combination of makedevs and fakeroot to create the device files in the
+ Thomas> target filesystem images without being root. This technique is applied
+ Thomas> to all filesystem formats that rely on this common infrastructure, and
+ Thomas> JFFS2 is one of them.
 
- Chris> I just upgraded my laptop to Fedora 13 and ran into a problem with the
- Chris> make configurator.  I have all the QT3 and libstdc++ compatibility
- Chris> libraries installed.  Anyone else run into this yet?  Works fine on my
- Chris> Fedora 12 box.
+ Thomas> Therefore, using the -D option of mkfs.jffs2, which allows to specify
+ Thomas> a device table, is redundant with the usage of makedevs. And it is
+ Thomas> worst than redundant: for some reason, -D does not create all device
+ Thomas> files with the correct major and minor numbers, as reported in bug
 
-I cannot reproduce it here, but I did see that we are doing something
-odd for xconfig (E.G. doing the linking step with gcc instead of
-g++). I've just committed a cleanup of it to git. Could you give it a
-try to see if it fixes your issue?
+ Thomas> For coherence, we just remove the usage of mkfs.jffs2 -D option, and
+ Thomas> rely on makedevs/fakeroot to create the device files.
 
-commit e0197d64b5c598534b8f805174ef312398a0c48b
-Author: Peter Korsgaard <jacmet@sunsite.dk>
-Date:   Sat Jun 5 20:46:55 2010 +0200
+ Thomas> This commit fixes bug #1771.
 
-    kconfig: fix qconf (make xconfig) linking
-    
-    qconf is written in C++, so use HOSTCXX instead of HOSTCC, and pass the
-    correct flags.
-    
-    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-
-diff --git a/package/config/Makefile b/package/config/Makefile
-index a2184fa..66b54cd 100644
---- a/package/config/Makefile
-+++ b/package/config/Makefile
-@@ -26,7 +26,7 @@ $(host-cmulti): %: $(host-cobjs) $(host-cshlib)
-        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $($@-objs) $(HOST_LOADLIBES) -o $@
- 
- $(host-cxxmulti): %: $(host-cxxobjs) $(host-cobjs) $(host-cshlib)
--       $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $($@-objs) $($@-cxxobjs) $(HOSTLOADLIBES_$@) -o $@
-+       $(HOSTCXX) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCXXFLAGS_$@) $($@-objs) $($@-cxxobjs) $(HOSTLOADLIBES_$@) -o $@
- 
- $(host-cobjs): %.o: %.c
-        $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) -c $< -o $@
+Committed, thanks!
 
 -- 
 Bye, Peter Korsgaard
