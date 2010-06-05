@@ -1,23 +1,885 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Jun 2010 23:02:08 +0200
-Subject: [Buildroot] [PATCH] Remove modutils package
-In-Reply-To: <4C07C718.10405@zacarias.com.ar> (Gustavo Zacarias's message of
-	"Thu, 03 Jun 2010 12:15:36 -0300")
-References: <4C07C718.10405@zacarias.com.ar>
-Message-ID: <87aar9nqgf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 5 Jun 2010 23:01:41 +0200
+Subject: [Buildroot] [git commit master] modutils: remove package
+Message-ID: <20100605210451.2FA038038C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Let's remove the modutils package, it's old, for 2.4 kernels only and
- Gustavo> busybox acts as a replacement when/if needed.
- Gustavo> It's been deprecated for some time now.
+commit: http://git.buildroot.net/buildroot/commit/?id=6ef6e96c2bdfcf108d8771cfe253317ab6628a07
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+It's for ancient 2.4 kernels, and busybox has a modutils applet.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                               |    2 +
+ package/Config.in                     |    1 -
+ package/modutils/Config.in            |   13 -
+ package/modutils/modutils-01.patch    |   98 ------
+ package/modutils/modutils-cross.patch |  548 ---------------------------------
+ package/modutils/modutils.mk          |  143 ---------
+ 6 files changed, 2 insertions(+), 803 deletions(-)
+ delete mode 100644 package/modutils/Config.in
+ delete mode 100644 package/modutils/modutils-01.patch
+ delete mode 100644 package/modutils/modutils-cross.patch
+ delete mode 100644 package/modutils/modutils.mk
+
+diff --git a/CHANGES b/CHANGES
+index 0a2c189..a49afc5 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -9,6 +9,8 @@
+ 
+ 	Updated/fixed packages: cdrkit, libidn, netperf, qt
+ 
++	Removed packages: modutils
++
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+ 	#1771: Fakeroot and the target/generic/device_table.txt create bad...
+diff --git a/package/Config.in b/package/Config.in
+index 8d6c270..5ce01a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -466,7 +466,6 @@ menu "System tools"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ source "package/module-init-tools/Config.in"
+-source "package/modutils/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
+ source "package/sysklogd/Config.in"
+diff --git a/package/modutils/Config.in b/package/modutils/Config.in
+deleted file mode 100644
+index 2aeac6d..0000000
+--- a/package/modutils/Config.in
++++ /dev/null
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_MODUTILS
+-	bool "modutils"
+-	depends on !BR2_PACKAGE_MODULE_INIT_TOOLS
+-	depends on BR2_DEPRECATED
+-	help
+-	  The modutils packages includes the kerneld program for automatic
+-	  loading and unloading of modules, as well as other module
+-	  management programs. Examples of loaded and unloaded modules are
+-	  device drivers and filesystems, as well as some other things.
+-
+-	  linux v.<2.6
+-
+-	  http://www.kernel.org/pub/linux/utils/kernel/modutils/v2.4
+diff --git a/package/modutils/modutils-01.patch b/package/modutils/modutils-01.patch
+deleted file mode 100644
+index e0303b2..0000000
+--- a/package/modutils/modutils-01.patch
++++ /dev/null
+@@ -1,98 +0,0 @@
+-diff -ur modutils-2.4.27/Makefile.in modutils-2.4.27-patched/Makefile.in
+---- modutils-2.4.27/Makefile.in	2004-03-07 01:24:48.000000000 -0600
+-+++ modutils-2.4.27-patched/Makefile.in	2005-08-17 08:41:57.000000000 -0500
+-@@ -3,7 +3,7 @@
+- include	Makefile.common
+- 
+- TARGETS = all install-bin clean distclean realclean dep depend
+--SUBDIRS = util obj insmod genksyms depmod @kerneld_SUBDIR@
+-+SUBDIRS = util obj insmod depmod @kerneld_SUBDIR@
+- ifneq (@kerneld_SUBDIR@,)
+- 	SUBDIRS += man_kerneld
+- endif
+-diff -ur modutils-2.4.27/depmod/depmod.c modutils-2.4.27-patched/depmod/depmod.c
+---- modutils-2.4.27/depmod/depmod.c	2003-03-22 20:34:28.000000000 -0600
+-+++ modutils-2.4.27-patched/depmod/depmod.c	2005-08-17 21:33:40.000000000 -0500
+-@@ -1132,8 +1132,11 @@
+- 			return -1;
+- 
+- 		for (ksym = ksyms; so_far < nksyms; ++so_far, ksym++) {
+--			if (strncmp((char *)ksym->name, "GPLONLY_", 8) == 0)
+--				((char *)ksym->name) += 8;
+-+			if (strncmp((char *)ksym->name, "GPLONLY_", 8) == 0) {
+-+				char *p = (char *)ksym->name;
+-+				p += 8;
+-+				ksym->name = p;
+-+			}
+- 			assert(n_syms < MAX_MAP_SYM);
+- 			symtab[n_syms++] = addsym((char *)ksym->name, mod, SYM_DEFINED, 0);
+- 		}
+-diff -ur modutils-2.4.27/insmod/Makefile.in modutils-2.4.27-patched/insmod/Makefile.in
+---- modutils-2.4.27/insmod/Makefile.in	2003-10-26 22:42:07.000000000 -0600
+-+++ modutils-2.4.27-patched/insmod/Makefile.in	2005-08-17 08:41:57.000000000 -0500
+-@@ -126,10 +126,6 @@
+- 	$(MKDIR) $(DESTDIR)$(sbindir); \
+- 	$(INSTALL) $(STRIP) $$i $(DESTDIR)$(sbindir); done;
+- 	set -e; \
+--	for i in $(srcdir)/insmod_ksymoops_clean $(srcdir)/kernelversion; do \
+--	$(MKDIR) $(DESTDIR)$(sbindir); \
+--	$(INSTALL) $$i $(DESTDIR)$(sbindir); done;
+--	set -e; \
+- 	for i in $(COMB); do \
+- 	ln -sf insmod $(DESTDIR)$(sbindir)/$$i; \
+- 	(test "$(insmod_static)" = yes && \
+-diff -ur modutils-2.4.27/insmod/insmod.c modutils-2.4.27-patched/insmod/insmod.c
+---- modutils-2.4.27/insmod/insmod.c	2003-10-26 20:34:46.000000000 -0600
+-+++ modutils-2.4.27-patched/insmod/insmod.c	2005-08-17 21:34:04.000000000 -0500
+-@@ -274,8 +274,11 @@
+- 		 */
+- 		if (strncmp((char *)s->name, "GPLONLY_", 8) == 0) {
+- 			gplonly_seen = 1;
+--			if (gpl)
+--				((char *)s->name) += 8;
+-+			if (gpl) {
+-+				char *p = (char *)s->name;
+-+				p += 8;
+-+				s->name = p;
+-+			}
+- 			else
+- 				continue;
+- 		}
+-diff -ur modutils-2.4.27/obj/obj_kallsyms.c modutils-2.4.27-patched/obj/obj_kallsyms.c
+---- modutils-2.4.27/obj/obj_kallsyms.c	2002-02-28 18:39:06.000000000 -0600
+-+++ modutils-2.4.27-patched/obj/obj_kallsyms.c	2005-08-17 21:29:36.000000000 -0500
+-@@ -200,8 +200,8 @@
+- 
+-     /* Initial contents, header + one entry per input section.  No strings. */
+-     osec->header.sh_size = sizeof(*a_hdr) + loaded*sizeof(*a_sec);
+--    a_hdr = (struct kallsyms_header *) osec->contents =
+--    	xmalloc(osec->header.sh_size);
+-+    osec->contents = xmalloc(osec->header.sh_size);
+-+    a_hdr = (struct kallsyms_header *) osec->contents;
+-     memset(osec->contents, 0, osec->header.sh_size);
+-     a_hdr->size = sizeof(*a_hdr);
+-     a_hdr->sections = loaded;
+-@@ -275,8 +275,8 @@
+- 	a_hdr->symbol_off +
+- 	a_hdr->symbols*a_hdr->symbol_size +
+- 	strings_size - strings_left;
+--    a_hdr = (struct kallsyms_header *) osec->contents =
+--	xrealloc(a_hdr, a_hdr->total_size);
+-+    osec->contents = xrealloc(a_hdr, a_hdr->total_size);
+-+    a_hdr = (struct kallsyms_header *) osec->contents;
+-     p = (char *)a_hdr + a_hdr->symbol_off;
+-     memcpy(p, symbols, a_hdr->symbols*a_hdr->symbol_size);
+-     free(symbols);
+-diff -ur modutils-2.4.27/obj/obj_mips.c modutils-2.4.27-patched/obj/obj_mips.c
+---- modutils-2.4.27/obj/obj_mips.c	2003-04-04 16:47:17.000000000 -0600
+-+++ modutils-2.4.27-patched/obj/obj_mips.c	2005-08-17 21:29:20.000000000 -0500
+-@@ -244,7 +244,8 @@
+-   archdata_sec->header.sh_size = 0;
+-   sec = obj_find_section(f, "__dbe_table");
+-   if (sec) {
+--    ad = (struct archdata *) (archdata_sec->contents) = xmalloc(sizeof(*ad));
+-+    archdata_sec->contents = xmalloc(sizeof(*ad));
+-+    ad = (struct archdata *) archdata_sec->contents;
+-     memset(ad, 0, sizeof(*ad));
+-     archdata_sec->header.sh_size = sizeof(*ad);
+-     ad->__start___dbe_table = sec->header.sh_addr;
+diff --git a/package/modutils/modutils-cross.patch b/package/modutils/modutils-cross.patch
+deleted file mode 100644
+index c62f886..0000000
+--- a/package/modutils/modutils-cross.patch
++++ /dev/null
+@@ -1,548 +0,0 @@
+-diff -urN modutils-2.4.27.0.orig/depmod/depmod.c modutils-2.4.27.0/depmod/depmod.c
+---- modutils-2.4.27.0.orig/depmod/depmod.c	2005-09-29 18:14:05.000000000 -0600
+-+++ modutils-2.4.27.0/depmod/depmod.c	2005-09-29 18:12:36.000000000 -0600
+-@@ -274,7 +274,6 @@
+- 
+- extern int quick;	/* Option -A */
+- 
+--
+- /*
+-  *	Create a symbol definition.
+-  *	Add defined symbol to the head of the list of defined symbols.
+-@@ -556,6 +555,13 @@
+- 		if (!in_range(f, m_size, ref_pci, sizeof(pci_device_size)))
+- 			return;
+- 		memcpy(&pci_device_size, (char *)image + ref_pci - f->baseaddr, sizeof(pci_device_size));
+-+		if (byteswap==1) {
+-+		    if (sizeof(unsigned tgt_long) == 4) {
+-+			pci_device_size = bswap_32(pci_device_size);
+-+		    } else if (sizeof(unsigned tgt_long) == 8) {
+-+			pci_device_size = bswap_64(pci_device_size);
+-+		    }
+-+		}
+- 	}
+- 	else
+- 		pci_device_size = sizeof(pci_device);
+-@@ -573,6 +579,14 @@
+- 		memset(&pci_device, 0, sizeof(pci_device));
+- 		memcpy(&pci_device, (char *)image + ref_pci - f->baseaddr, pci_device_size);
+- 		ref_pci += pci_device_size;
+-+		if (byteswap==1) {
+-+		    pci_device.vendor = bswap_32(pci_device.vendor);
+-+		    pci_device.device = bswap_32(pci_device.device);
+-+		    pci_device.subvendor = bswap_32(pci_device.subvendor);
+-+		    pci_device.subdevice = bswap_32(pci_device.subdevice);
+-+		    pci_device.class = bswap_32(pci_device.class);
+-+		    pci_device.class_mask = bswap_32(pci_device.class_mask);
+-+		}
+- 		if (!pci_device.vendor)
+- 			break;
+- 		mod->pci_device = xrealloc(mod->pci_device, ++(mod->n_pci_device)*sizeof(*(mod->pci_device)));
+-@@ -594,6 +608,13 @@
+- 	if (!in_range(f, m_size, ref_isapnp, sizeof(isapnp_device_size)))
+- 		return;
+- 	memcpy(&isapnp_device_size, (char *)image + ref_isapnp - f->baseaddr, sizeof(isapnp_device_size));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		isapnp_device_size = bswap_32(isapnp_device_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		isapnp_device_size = bswap_64(isapnp_device_size);
+-+	    }
+-+	}
+- 	ref_ref_isapnp = obj_symbol_final_value(f, obj_find_symbol(f, "__module_isapnp_device_table"));
+- 	if (!in_range(f, m_size, ref_ref_isapnp, sizeof(ref_isapnp)))
+- 		return;
+-@@ -608,6 +629,12 @@
+- 		memset(&isapnp_device, 0, sizeof(isapnp_device));
+- 		memcpy(&isapnp_device, (char *)image + ref_isapnp - f->baseaddr, isapnp_device_size);
+- 		ref_isapnp += isapnp_device_size;
+-+		if (byteswap==1) {
+-+		    isapnp_device.card_vendor = bswap_16(isapnp_device.card_vendor);
+-+		    isapnp_device.card_device = bswap_16(isapnp_device.card_device);
+-+		    isapnp_device.vendor = bswap_16(isapnp_device.vendor);
+-+		    isapnp_device.function = bswap_16(isapnp_device.function);
+-+		}
+- 		if (!isapnp_device.card_vendor)
+- 			break;
+- 		mod->isapnp_device = xrealloc(mod->isapnp_device, ++(mod->n_isapnp_device)*sizeof(*(mod->isapnp_device)));
+-@@ -629,6 +656,13 @@
+- 	if (!in_range(f, m_size, ref_isapnp, sizeof(isapnp_card_size)))
+- 		return;
+- 	memcpy(&isapnp_card_size, (char *)image + ref_isapnp - f->baseaddr, sizeof(isapnp_card_size));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		isapnp_card_size = bswap_32(isapnp_card_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		isapnp_card_size = bswap_64(isapnp_card_size);
+-+	    }
+-+	}
+- 	ref_ref_isapnp = obj_symbol_final_value(f, obj_find_symbol(f, "__module_isapnp_card_table"));
+- 	if (!in_range(f, m_size, ref_ref_isapnp, sizeof(ref_isapnp)))
+- 		return;
+-@@ -642,6 +676,11 @@
+- 		memset(&isapnp_card, 0, sizeof(isapnp_card));
+- 		memcpy(&isapnp_card, (char *)image + ref_isapnp - f->baseaddr, isapnp_card_size);
+- 		ref_isapnp += isapnp_card_size;
+-+		if (byteswap==1) {
+-+		    isapnp_card.card_vendor = bswap_16(isapnp_card.card_vendor);
+-+		    isapnp_card.card_device = bswap_16(isapnp_card.card_device);
+-+		    // Fixme -- iterate over all devs fixing up vendor and function
+-+		}
+- 		if (!isapnp_card.card_vendor)
+- 			break;
+- 		mod->isapnp_card = xrealloc(mod->isapnp_card, ++(mod->n_isapnp_card)*sizeof(*(mod->isapnp_card)));
+-@@ -659,11 +698,25 @@
+- 	struct usb_device_id usb_device, *latest;
+- 	ElfW(Addr) ref_usb, ref_ref_usb;
+- 	unsigned tgt_long usb_device_size;
+--	ref_usb = obj_symbol_final_value(f, obj_find_symbol(f, "__module_usb_device_size"));
+-+	struct obj_symbol *sym;
+-+	sym = obj_find_symbol(f, "__module_usb_device_size");
+-+	if (!sym)
+-+		return;
+-+	ref_usb = obj_symbol_final_value(f, sym);
+- 	if (!in_range(f, m_size, ref_usb, sizeof(usb_device_size)))
+- 		return;
+- 	memcpy(&usb_device_size, (char *)image + ref_usb - f->baseaddr, sizeof(usb_device_size));
+--	ref_ref_usb = obj_symbol_final_value(f, obj_find_symbol(f, "__module_usb_device_table"));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		usb_device_size = bswap_32(usb_device_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		usb_device_size = bswap_64(usb_device_size);
+-+	    }
+-+	}
+-+	sym = obj_find_symbol(f, "__module_usb_device_table");
+-+	if (!sym)
+-+		return;
+-+	ref_ref_usb = obj_symbol_final_value(f, sym);
+- 	if (!in_range(f, m_size, ref_ref_usb, sizeof(ref_usb)))
+- 		return;
+- 	memcpy(&ref_usb, (char *)image + ref_ref_usb - f->baseaddr, sizeof(ref_usb));
+-@@ -677,6 +730,13 @@
+- 		memset(&usb_device, 0, sizeof(usb_device));
+- 		memcpy(&usb_device, (char *)image + ref_usb - f->baseaddr, usb_device_size);
+- 		ref_usb += usb_device_size;
+-+		if (byteswap==1) {
+-+		    usb_device.match_flags = bswap_16(usb_device.match_flags);
+-+		    usb_device.idVendor = bswap_16(usb_device.idVendor);
+-+		    usb_device.idProduct = bswap_16(usb_device.idProduct);
+-+		    usb_device.bcdDevice_lo = bswap_16(usb_device.bcdDevice_lo);
+-+		    usb_device.bcdDevice_hi = bswap_16(usb_device.bcdDevice_hi);
+-+		}
+- 		if (!usb_device.idVendor && !usb_device.bDeviceClass &&
+- 		    !usb_device.bInterfaceClass && !usb_device.driver_info)
+- 		break;
+-@@ -699,6 +759,13 @@
+- 	if (!in_range(f, m_size, ref_parport, sizeof(parport_device_size)))
+- 		return;
+- 	memcpy(&parport_device_size, (char *)image + ref_parport - f->baseaddr, sizeof(parport_device_size));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		parport_device_size = bswap_32(parport_device_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		parport_device_size = bswap_64(parport_device_size);
+-+	    }
+-+	}
+- 	ref_ref_parport = obj_symbol_final_value(f, obj_find_symbol(f, "__module_parport_device_table"));
+- 	if (!in_range(f, m_size, ref_ref_parport, sizeof(ref_parport)))
+- 		return;
+-@@ -713,6 +780,14 @@
+- 		memset(&parport_device, 0, sizeof(parport_device));
+- 		memcpy(&parport_device, (char *)image + ref_parport - f->baseaddr, parport_device_size);
+- 		ref_parport += parport_device_size;
+-+		if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+		    parport_device.pattern = bswap_32(parport_device.pattern);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+		    parport_device.pattern = bswap_64(parport_device.pattern);
+-+#endif
+-+		}
+- 		if (!parport_device.pattern)
+- 			break;
+- 		mod->parport_device = xrealloc(mod->parport_device, ++(mod->n_parport_device)*sizeof(*(mod->parport_device)));
+-@@ -737,6 +812,13 @@
+- 	if (!in_range(f, m_size, ref_pnpbios, sizeof(pnpbios_device_size)))
+- 		return;
+- 	memcpy(&pnpbios_device_size, (char *)image + ref_pnpbios - f->baseaddr, sizeof(pnpbios_device_size));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		pnpbios_device_size = bswap_32(pnpbios_device_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		pnpbios_device_size = bswap_64(pnpbios_device_size);
+-+	    }
+-+	}
+- 	ref_ref_pnpbios = obj_symbol_final_value(f, obj_find_symbol(f, "__module_pnpbios_device_table"));
+- 	if (!in_range(f, m_size, ref_ref_pnpbios, sizeof(ref_pnpbios)))
+- 		return;
+-@@ -751,6 +833,9 @@
+- 		memset(&pnpbios_device, 0, sizeof(pnpbios_device));
+- 		memcpy(&pnpbios_device, (char *)image + ref_pnpbios - f->baseaddr, pnpbios_device_size);
+- 		ref_pnpbios += pnpbios_device_size;
+-+		//if (byteswap==1) {
+-+		    // looks like there is nothing to do here...
+-+		//}
+- 		if (!pnpbios_device.id[0])
+- 			break;
+- 		mod->pnpbios_device = xrealloc(mod->pnpbios_device, ++(mod->n_pnpbios_device)*sizeof(*(mod->pnpbios_device)));
+-@@ -772,6 +857,13 @@
+- 	if (!in_range(f, m_size, ref_ieee1394, sizeof(ieee1394_device_size)))
+- 		return;
+- 	memcpy(&ieee1394_device_size, (char *)image + ref_ieee1394 - f->baseaddr, sizeof(ieee1394_device_size));
+-+	if (byteswap==1) {
+-+	    if (sizeof(unsigned tgt_long) == 4) {
+-+		ieee1394_device_size = bswap_32(ieee1394_device_size);
+-+	    } else if (sizeof(unsigned tgt_long) == 8) {
+-+		ieee1394_device_size = bswap_64(ieee1394_device_size);
+-+	    }
+-+	}
+- 	ref_ref_ieee1394 = obj_symbol_final_value(f, obj_find_symbol(f, "__module_ieee1394_device_table"));
+- 	if (!in_range(f, m_size, ref_ref_ieee1394, sizeof(ref_ieee1394)))
+- 		return;
+-@@ -786,6 +878,13 @@
+- 		memset(&ieee1394_device, 0, sizeof(ieee1394_device));
+- 		memcpy(&ieee1394_device, (char *)image + ref_ieee1394 - f->baseaddr, ieee1394_device_size);
+- 		ref_ieee1394 += ieee1394_device_size;
+-+		if (byteswap==1) {
+-+		    ieee1394_device.match_flags = bswap_32(ieee1394_device.match_flags);
+-+		    ieee1394_device.vendor_id = bswap_32(ieee1394_device.vendor_id);
+-+		    ieee1394_device.model_id = bswap_32(ieee1394_device.model_id);
+-+		    ieee1394_device.specifier_id = bswap_32(ieee1394_device.specifier_id);
+-+		    ieee1394_device.version = bswap_32(ieee1394_device.version);
+-+		}
+- 		if (ieee1394_device.match_flags == 0)
+- 			break;
+- 		mod->ieee1394_device = xrealloc(mod->ieee1394_device, ++(mod->n_ieee1394_device)*sizeof(*(mod->ieee1394_device)));
+-diff -urN modutils-2.4.27.0.orig/include/obj.h modutils-2.4.27.0/include/obj.h
+---- modutils-2.4.27.0.orig/include/obj.h	2003-10-26 19:34:46.000000000 -0700
+-+++ modutils-2.4.27.0/include/obj.h	2005-09-29 17:53:53.000000000 -0600
+-@@ -28,6 +28,8 @@
+- 
+- #include <stdio.h>
+- #include <sys/types.h>
+-+#include <endian.h>
+-+#include <byteswap.h>
+- #include <elf.h>
+- #include ELF_MACHINE_H
+- #include "module.h"
+-@@ -299,4 +301,6 @@
+- 
+- int obj_gpl_license(struct obj_file *, const char **);
+- 
+-+extern int byteswap;
+-+
+- #endif /* obj.h */
+-diff -urN modutils-2.4.27.0.orig/obj/obj_common.c modutils-2.4.27.0/obj/obj_common.c
+---- modutils-2.4.27.0.orig/obj/obj_common.c	2002-02-28 17:39:06.000000000 -0700
+-+++ modutils-2.4.27.0/obj/obj_common.c	2005-09-29 17:53:44.000000000 -0600
+-@@ -28,6 +28,8 @@
+- #include <util.h>
+- #include <module.h>
+- 
+-+int byteswap;
+-+
+- /*======================================================================*/
+- 
+- /* Standard ELF hash function.  */
+-diff -urN modutils-2.4.27.0.orig/util/modstat.c modutils-2.4.27.0/util/modstat.c
+---- modutils-2.4.27.0.orig/util/modstat.c	2002-11-24 21:01:57.000000000 -0700
+-+++ modutils-2.4.27.0/util/modstat.c	2005-09-29 14:41:13.000000000 -0600
+-@@ -408,6 +408,7 @@
+- 
+- int get_kernel_info(int type)
+- {
+-+#if 0
+- 	k_new_syscalls = !query_module(NULL, 0, NULL, 0, NULL);
+- 
+- #ifdef COMPAT_2_0
+-@@ -416,4 +417,7 @@
+- #endif /* COMPAT_2_0 */
+- 
+- 	return new_get_kernel_info(type);
+-+#else
+-+	return 1;
+-+#endif
+- }
+---- modutils-2.4.27/obj/obj_ppc.c.orig	2005-10-24 11:54:44.000000000 -0600
+-+++ modutils-2.4.27/obj/obj_ppc.c	2005-10-24 11:55:54.000000000 -0600
+-@@ -20,6 +20,8 @@
+-    along with this program; if not, write to the Free Software Foundation,
+-    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
+- 
+-+#include <string.h>
+-+#include <stdlib.h>
+- #include <stddef.h>
+- #include <module.h>
+- #include <obj.h>
+-@@ -255,7 +257,9 @@
+-   archdata_sec->header.sh_size = 0;
+-   sec = obj_find_section(f, "__ftr_fixup");
+-   if (sec) {
+--    ad = (struct archdata *) (archdata_sec->contents) = xmalloc(sizeof(*ad));
+-+    struct archdata * ad;
+-+    archdata_sec->contents = xmalloc(sizeof(*ad));
+-+    ad = (struct archdata *) (archdata_sec->contents);
+-     memset(ad, 0, sizeof(*ad));
+-     archdata_sec->header.sh_size = sizeof(*ad);
+-     ad->__start___ftr_fixup = sec->header.sh_addr;
+---- modutils-2.4.27/obj/obj_load.c.orig	2006-01-10 06:10:37.000000000 -0700
+-+++ modutils-2.4.27/obj/obj_load.c	2006-01-10 06:10:47.000000000 -0700
+-@@ -62,13 +62,61 @@
+-       error("%s is not an ELF file", filename);
+-       return NULL;
+-     }
+-+
+-+  /* Check if the target endianness matches the host's endianness */
+-+  byteswap = 0;
+-+#if __BYTE_ORDER == __LITTLE_ENDIAN
+-+  if (f->header.e_ident[5] == ELFDATA2MSB) {
+-+      /* Ick -- we will have to byte-swap everything */
+-+      byteswap = 1;
+-+  }
+-+#elif __BYTE_ORDER == __BIG_ENDIAN
+-+  if (f->header.e_ident[5] == ELFDATA2LSB) {
+-+      byteswap = 1;
+-+  }
+-+#else
+-+#error Unknown host byte order!
+-+#endif
+-+  if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+	  f->header.e_type=bswap_16(f->header.e_type);
+-+	  f->header.e_machine=bswap_16(f->header.e_machine);
+-+	  f->header.e_version=bswap_32(f->header.e_version);
+-+	  f->header.e_entry=bswap_32(f->header.e_entry);
+-+	  f->header.e_phoff=bswap_32(f->header.e_phoff);
+-+	  f->header.e_shoff=bswap_32(f->header.e_shoff);
+-+	  f->header.e_flags=bswap_32(f->header.e_flags);
+-+	  f->header.e_ehsize=bswap_16(f->header.e_ehsize);
+-+	  f->header.e_phentsize=bswap_16(f->header.e_phentsize);
+-+	  f->header.e_phnum=bswap_16(f->header.e_phnum);
+-+	  f->header.e_shentsize=bswap_16(f->header.e_shentsize);
+-+	  f->header.e_shnum=bswap_16(f->header.e_shnum);
+-+	  f->header.e_shstrndx=bswap_16(f->header.e_shstrndx);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+	  f->header.e_type=bswap_32(f->header.e_type);
+-+	  f->header.e_machine=bswap_32(f->header.e_machine);
+-+	  f->header.e_version=bswap_64(f->header.e_version);
+-+	  f->header.e_entry=bswap_64(f->header.e_entry);
+-+	  f->header.e_phoff=bswap_64(f->header.e_phoff);
+-+	  f->header.e_shoff=bswap_64(f->header.e_shoff);
+-+	  f->header.e_flags=bswap_64(f->header.e_flags);
+-+	  f->header.e_ehsize=bswap_32(f->header.e_ehsize);
+-+	  f->header.e_phentsize=bswap_32(f->header.e_phentsize);
+-+	  f->header.e_phnum=bswap_32(f->header.e_phnum);
+-+	  f->header.e_shentsize=bswap_32(f->header.e_shentsize);
+-+	  f->header.e_shnum=bswap_32(f->header.e_shnum);
+-+	  f->header.e_shstrndx=bswap_32(f->header.e_shstrndx);
+-+#endif
+-+  }
+-+
+-   if (f->header.e_ident[EI_CLASS] != ELFCLASSM
+-       || f->header.e_ident[EI_DATA] != ELFDATAM
+-       || f->header.e_ident[EI_VERSION] != EV_CURRENT
+-       || !MATCH_MACHINE(f->header.e_machine))
+-     {
+--      error("ELF file %s not for this architecture", filename);
+--      return NULL;
+-+      error("WARNING: ELF file %s not for this architecture", filename);
+-+      //return NULL;
+-     }
+-   if (f->header.e_type != e_type && e_type != ET_NONE)
+-     {
+-@@ -116,6 +164,33 @@
+-     {
+-       struct obj_section *sec;
+- 
+-+      if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+	  section_headers[i].sh_name=bswap_32(section_headers[i].sh_name);
+-+	  section_headers[i].sh_type=bswap_32(section_headers[i].sh_type);
+-+	  section_headers[i].sh_flags=bswap_32(section_headers[i].sh_flags);
+-+	  section_headers[i].sh_addr=bswap_32(section_headers[i].sh_addr);
+-+	  section_headers[i].sh_offset=bswap_32(section_headers[i].sh_offset);
+-+	  section_headers[i].sh_size=bswap_32(section_headers[i].sh_size);
+-+	  section_headers[i].sh_link=bswap_32(section_headers[i].sh_link);
+-+	  section_headers[i].sh_info=bswap_32(section_headers[i].sh_info);
+-+	  section_headers[i].sh_addralign=bswap_32(section_headers[i].sh_addralign);
+-+	  section_headers[i].sh_entsize=bswap_32(section_headers[i].sh_entsize);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+	  section_headers[i].sh_name=bswap_64(section_headers[i].sh_name);
+-+	  section_headers[i].sh_type=bswap_64(section_headers[i].sh_type);
+-+	  section_headers[i].sh_flags=bswap_64(section_headers[i].sh_flags);
+-+	  section_headers[i].sh_addr=bswap_64(section_headers[i].sh_addr);
+-+	  section_headers[i].sh_offset=bswap_64(section_headers[i].sh_offset);
+-+	  section_headers[i].sh_size=bswap_64(section_headers[i].sh_size);
+-+	  section_headers[i].sh_link=bswap_64(section_headers[i].sh_link);
+-+	  section_headers[i].sh_info=bswap_64(section_headers[i].sh_info);
+-+	  section_headers[i].sh_addralign=bswap_64(section_headers[i].sh_addralign);
+-+	  section_headers[i].sh_entsize=bswap_64(section_headers[i].sh_entsize);
+-+#endif
+-+      }
+-+
+-       f->sections[i] = sec = arch_new_section();
+-       memset(sec, 0, sizeof(*sec));
+- 
+-@@ -223,6 +298,20 @@
+- 	    nsym = sec->header.sh_size / sizeof(ElfW(Sym));
+- 	    strtab = f->sections[sec->header.sh_link]->contents;
+- 	    sym = (ElfW(Sym) *) sec->contents;
+-+	    if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+		sym->st_name = bswap_32(sym->st_name);
+-+		sym->st_value = bswap_32(sym->st_value);
+-+		sym->st_size = bswap_32(sym->st_size);
+-+		sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+		sym->st_name = bswap_64(sym->st_name);
+-+		sym->st_value = bswap_64(sym->st_value);
+-+		sym->st_size = bswap_64(sym->st_size);
+-+		sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+	    }
+- 
+- 	    /* Allocate space for a table of local symbols.  */
+- 	    j = f->local_symtab_size = sec->header.sh_info;
+-@@ -233,6 +322,22 @@
+- 	    for (j = 1, ++sym; j < nsym; ++j, ++sym)
+- 	      {
+- 		const char *name;
+-+
+-+		if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+		    sym->st_name = bswap_32(sym->st_name);
+-+		    sym->st_value = bswap_32(sym->st_value);
+-+		    sym->st_size = bswap_32(sym->st_size);
+-+		    sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+		    sym->st_name = bswap_64(sym->st_name);
+-+		    sym->st_value = bswap_64(sym->st_value);
+-+		    sym->st_size = bswap_64(sym->st_size);
+-+		    sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+		}
+-+
+- 		if (sym->st_name)
+- 		  name = strtab+sym->st_name;
+- 		else
+-@@ -298,9 +403,26 @@
+- 	      {
+- 		struct obj_symbol *intsym;
+- 		unsigned long symndx;
+-+		if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+		    rel->r_offset = bswap_32(rel->r_offset);
+-+		    rel->r_info = bswap_32(rel->r_info);
+-+#if Elf32_RelM != Elf32_Rel
+-+		    rel->r_addend = bswap_32(rel->r_addend);
+-+#endif
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+		    rel->r_offset = bswap_64(rel->r_offset);
+-+		    rel->r_info = bswap_64(rel->r_info);
+-+#if Elf32_RelM != Elf32_Rel
+-+		    rel->r_addend = bswap_64(rel->r_addend);
+-+#endif
+-+#endif
+-+		}
+- 		symndx = ELFW(R_SYM)(rel->r_info);
+- 		if (symndx)
+- 		  {
+-+		    ElfW(Sym) *sym;
+- 		    if (symndx >= nsyms)
+- 		      {
+- 			error("%s: Bad symbol index: %08lx >= %08lx",
+-@@ -308,7 +430,22 @@
+- 			continue;
+- 		      }
+- 
+--		    obj_find_relsym(intsym, f, f, rel, (ElfW(Sym) *)(symtab->contents), strtab);
+-+		    sym = (ElfW(Sym) *)(symtab->contents);
+-+		    if (byteswap==1) {
+-+#if ELFCLASSM == ELFCLASS32
+-+			sym->st_name = bswap_32(sym->st_name);
+-+			sym->st_value = bswap_32(sym->st_value);
+-+			sym->st_size = bswap_32(sym->st_size);
+-+			sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+#if ELFCLASSM == ELFCLASS64
+-+			sym->st_name = bswap_64(sym->st_name);
+-+			sym->st_value = bswap_64(sym->st_value);
+-+			sym->st_size = bswap_64(sym->st_size);
+-+			sym->st_shndx = bswap_16(sym->st_shndx);
+-+#endif
+-+		    }
+-+		    obj_find_relsym(intsym, f, f, rel, sym, strtab);
+- 		    intsym->r_type = ELFW(R_TYPE)(rel->r_info);
+- 		  }
+- 	      }
+---- modutils-2.4.27/obj/obj_reloc.c.orig	2003-10-26 18:25:08.000000000 -0800
+-+++ modutils-2.4.27/obj/obj_reloc.c	2006-06-20 17:47:11.000000000 -0700
+-@@ -331,6 +331,18 @@
+- 	  value += rel->r_addend;
+- #endif
+- 
+-+	  /* Byte swap if necessary. For some archs, other adjustments may
+-+	     need to be done in arch_apply_relocation. */
+-+	  if (byteswap==1)
+-+	    {
+-+	      if (sizeof(unsigned tgt_long) == 4)
+-+		*(tgt_long *)(targsec->contents + rel->r_offset) =
+-+		  bswap_32(*(tgt_long *)(targsec->contents + rel->r_offset));
+-+	      else if (sizeof(unsigned tgt_long) == 8)
+-+		*(tgt_long *)(targsec->contents + rel->r_offset) =
+-+		  bswap_64(*(tgt_long *)(targsec->contents + rel->r_offset));
+-+	    }
+-+
+- 	  /* Do it! */
+- 	  switch (arch_apply_relocation(f,targsec,symsec,intsym,rel,value))
+- 	    {
+---- odutils-2.4.27.0.orig/include/module.h.orig	2006-01-10 08:15:09.000000000 -0700
+-+++ odutils-2.4.27.0/include/module.h	2006-01-10 08:15:13.000000000 -0700
+-@@ -88,16 +88,34 @@
+- /* For sizeof() which are related to the module platform and not to the
+-    environment isnmod is running in, use sizeof_xx instead of sizeof(xx).  */
+- 
+--#define tgt_sizeof_char		sizeof(char)
+--#define tgt_sizeof_short	sizeof(short)
+--#define tgt_sizeof_int		sizeof(int)
+--#define tgt_sizeof_long		sizeof(long)
+--#define tgt_sizeof_char_p	sizeof(char *)
+--#define tgt_sizeof_void_p	sizeof(void *)
+--#define tgt_long		long
+-+#include <stdint.h>
+-+
+-+#if ELFCLASSM == ELFCLASS32
+-+
+-+#define tgt_sizeof_char		1
+-+#define tgt_sizeof_short	2
+-+#define tgt_sizeof_int		4
+-+#define tgt_sizeof_long		4
+-+#define tgt_sizeof_char_p	4
+-+#define tgt_sizeof_void_p	4
+-+#define tgt_long		int
+- #define tgt_long_fmt		"l"
+- #define tgt_strtoul		strtoul
+- 
+-+#else
+-+
+-+#define tgt_sizeof_char		1
+-+#define tgt_sizeof_short	2
+-+#define tgt_sizeof_int		4
+-+#define tgt_sizeof_long		8
+-+#define tgt_sizeof_char_p	8
+-+#define tgt_sizeof_void_p	8
+-+#define tgt_long		long
+-+#define tgt_long_fmt		"ll"
+-+#define tgt_strtoul		strtoull
+-+
+-+#endif
+-+
+- /* This assumes that long long on a 32 bit system is equivalent to long on the
+-  * equivalent 64 bit system.  Also that void and char pointers are 8 bytes on
+-  * all 64 bit systems.  Add per system tweaks if it ever becomes necessary.
+diff --git a/package/modutils/modutils.mk b/package/modutils/modutils.mk
+deleted file mode 100644
+index 735445b..0000000
+--- a/package/modutils/modutils.mk
++++ /dev/null
+@@ -1,143 +0,0 @@
+-#############################################################
+-#
+-# modutils
+-#
+-#############################################################
+-MODUTILS_VERSION:=2.4.27
+-MODUTILS_SOURCE=modutils-$(MODUTILS_VERSION).tar.bz2
+-MODUTILS_CAT:=$(BZCAT)
+-MODUTILS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/modutils/v2.4/
+-MODUTILS_DIR1=$(BUILD_DIR)/modutils-$(MODUTILS_VERSION)
+-MODUTILS_DIR2=$(TOOLCHAIN_DIR)/modutils-$(MODUTILS_VERSION)
+-MODUTILS_BINARY=depmod
+-MODUTILS_TARGET_BINARY=sbin/$(MODUTILS_BINARY)
+-
+-STRIPPROG=$(STRIPCMD)
+-
+-$(DL_DIR)/$(MODUTILS_SOURCE):
+-	$(call DOWNLOAD,$(MODUTILS_SITE),$(MODUTILS_SOURCE))
+-
+-#############################################################
+-#
+-# build modutils for use on the target system
+-#
+-#############################################################
+-$(MODUTILS_DIR1)/.source: $(DL_DIR)/$(MODUTILS_SOURCE)
+-	$(MODUTILS_CAT) $(DL_DIR)/$(MODUTILS_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(MODUTILS_DIR1) \
+-		package/modutils \*.patch
+-	touch $(MODUTILS_DIR1)/.source
+-
+-$(MODUTILS_DIR1)/.configured: $(MODUTILS_DIR1)/.source
+-	(cd $(MODUTILS_DIR1); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		INSTALL=$(MODUTILS_DIR1)/install-sh \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/ \
+-		--sysconfdir=/etc \
+-	)
+-	touch $@
+-
+-$(MODUTILS_DIR1)/.build: $(MODUTILS_DIR1)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) -C $(MODUTILS_DIR1)
+-	touch $@
+-
+-$(STAGING_DIR)/$(MODUTILS_TARGET_BINARY): $(MODUTILS_DIR1)/.build
+-	STRIPPROG='$(STRIPPROG)' \
+-	$(MAKE) prefix=$(STAGING_DIR) -C $(MODUTILS_DIR1) install-bin
+-	touch -c $@
+-
+-$(TARGET_DIR)/sbin/rmmod: $(STAGING_DIR)/$(MODUTILS_TARGET_BINARY)
+-	cp -dpf $(STAGING_DIR)/sbin/depmod $(TARGET_DIR)/sbin/depmod
+-	cp -dpf $(STAGING_DIR)/sbin/insmod $(TARGET_DIR)/sbin/insmod
+-	cp -dpf $(STAGING_DIR)/sbin/modinfo $(TARGET_DIR)/sbin/modinfo
+-	ln -s insmod $(TARGET_DIR)/sbin/kallsyms
+-	ln -s insmod $(TARGET_DIR)/sbin/ksyms
+-	ln -s insmod $(TARGET_DIR)/sbin/lsmod
+-	ln -s insmod $(TARGET_DIR)/sbin/modprobe
+-	ln -s insmod $(TARGET_DIR)/sbin/rmmod
+-
+-modutils: $(TARGET_DIR)/sbin/rmmod
+-
+-modutils-source: $(DL_DIR)/$(MODUTILS_SOURCE)
+-
+-modutils-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(MODUTILS_DIR1) uninstall
+-	-$(MAKE) -C $(MODUTILS_DIR1) clean
+-
+-modutils-dirclean:
+-	rm -rf $(MODUTILS_DIR1)
+-
+-modutils-target-clean:
+-	rm -f $(TARGET_DIR)/sbin/depmod
+-	rm -f $(TARGET_DIR)/sbin/insmod
+-	rm -f $(TARGET_DIR)/sbin/modinfo
+-	rm -f $(TARGET_DIR)/sbin/kallsyms
+-	rm -f $(TARGET_DIR)/sbin/ksyms
+-	rm -f $(TARGET_DIR)/sbin/lsmod
+-	rm -f $(TARGET_DIR)/sbin/modprobe
+-	rm -f $(TARGET_DIR)/sbin/rmmod
+-
+-#############################################################
+-#
+-# build modutils for use on the host system
+-#
+-#############################################################
+-ifeq ($(BR2_mips),y)
+-DEPMOD_EXTRA_STUFF=CFLAGS=-D__MIPSEB__
+-endif
+-ifeq ($(BR2_mipsel),y)
+-DEPMOD_EXTRA_STUFF=CFLAGS=-D__MIPSEL__
+-endif
+-
+-$(MODUTILS_DIR2)/.source: $(DL_DIR)/$(MODUTILS_SOURCE)
+-	$(MODUTILS_CAT) $(DL_DIR)/$(MODUTILS_SOURCE) | tar -C $(TOOLCHAIN_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(MODUTILS_DIR2) \
+-		package/modutils \*.patch
+-	touch $@
+-
+-$(MODUTILS_DIR2)/.configured: $(MODUTILS_DIR2)/.source
+-	(cd $(MODUTILS_DIR2); \
+-		./configure $(QUIET) $(DEPMOD_EXTRA_STUFF) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/ \
+-		--sysconfdir=/etc \
+-	)
+-	touch $@
+-
+-$(MODUTILS_DIR2)/$(MODUTILS_BINARY): $(MODUTILS_DIR2)/.configured
+-	$(MAKE1) -C $(MODUTILS_DIR2)
+-	touch -c $@
+-
+-$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod: $(MODUTILS_DIR2)/$(MODUTILS_BINARY)
+-	mkdir -p $(STAGING_DIR)/bin
+-	cp $(MODUTILS_DIR2)/$(MODUTILS_BINARY) $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod
+-	touch -c $@
+-
+-cross-depmod: $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod
+-
+-cross-depmod-source: $(DL_DIR)/$(MODUTILS_SOURCE)
+-
+-cross-depmod-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(MODUTILS_DIR2) uninstall
+-	-$(MAKE) -C $(MODUTILS_DIR2) clean
+-
+-cross-depmod-dirclean:
+-	rm -rf $(MODUTILS_DIR2)
+-
+-
+-
+-#############################################################
+-#
+-## Toplevel Makefile options
+-#
+-##############################################################
+-ifeq ($(BR2_PACKAGE_MODUTILS),y)
+-TARGETS+=modutils
+-endif
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
