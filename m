@@ -1,38 +1,37 @@
-From: Friday Nick <fridaynick@gmail.com>
-Date: Sat, 5 Jun 2010 16:16:12 +0300
-Subject: [Buildroot] Generation toolchain that supports EABI 0
-Message-ID: <AANLkTikhORrvIEt23SdvEAnjVhjmurDQK5sQ6mVnEZ-2@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Jun 2010 15:49:34 +0200
+Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
+ configuredownload site
+In-Reply-To: <20100604103232.3f415c39@surf>
+References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<002101cb0223$38af8910$aa0e9b30$@pauljones.id.au>
+	<20100604103232.3f415c39@surf>
+Message-ID: <20100605154934.6ebd9068@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
-I'm in need to generate a toolchain (based on uClibc), that can
-generate binary files in EABI version 0 format. Is it possible to do
-with buildroot? How can i do that? I've been told that there are
-difficulties to rebuild infrastructure (that is the most "useful"
-answer i've got so far).
-If not, is it possible to create my own EABI0 toolchain, using uClibc?
-How this process differs from the ordinary EABI4 toolchain generation?
-Thanks a lot for any answer!
+On Fri, 4 Jun 2010 10:32:32 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
+> Thanks for the feedback. I'll add something that allows to download
+> arbitrary tarballs. That's something that I also did for my Linux
+> kernel code cleanup in Buildroot, so I'll reuse the same scheme. I'll
+> post an updated version of this patch probably during this WE.
 
-And below is a long story, why do i need that :)
-I have an embedded device, and my task is to write an application for
-it, that uses OpenSSL libraries, installed on it. Unfortunately, when
-i try to link my application with those libraries, i get an error
-("your current EABI version is 4, but the library has EABI version
-0"). I searched through google, and found that almost everywhere the
-solution is to replace those "version 0" libraries with a newer ones
-(to ask a vendor, for example). I can't do that, because i need to
-change firmware, and i'm not allowed to do that on a target device.
+Here my proposal to improve U-Boot support to take into account the
+issue you reported:
 
-As i understand, uClibc should be compiled as EABI v0 either. Will
-applications, that are compiled with that EABI4 toolchain work on
-device, that has EABI0 uClibc version?
-Strange thing is that on my device my current applications (compiled
-as EABI4) work with installed uclibc (which is EABI4 or EABI0? I don't
-know..), but when i try to link with installed there OpenSSL libraries
-(they are EABI0), i get an error.
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=bootloaders-cleanup&id=13ef908685caecd17ba67953fd1fee8a559231a2
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
