@@ -1,28 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Jun 2010 15:51:01 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
- bootloaders-cleanup
-In-Reply-To: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20100605155101.0030e90e@surf>
+Date: Sat, 5 Jun 2010 15:58:07 +0200
+Subject: [Buildroot] [PATCH] Remove modutils package
+In-Reply-To: <4C07C718.10405@zacarias.com.ar>
+References: <4C07C718.10405@zacarias.com.ar>
+Message-ID: <20100605155807.2316d460@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, 03 Jun 2010 12:15:36 -0300
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-Since I posted this patch set (on June, 1st), the only comment was the
-one from Paul Jones about U-Boot version flexibility, to which I
-answered today with an improved proposal.
+> Let's remove the modutils package, it's old, for 2.4 kernels only and
+> busybox acts as a replacement when/if needed.
+> It's been deprecated for some time now.
 
-Are there any other comments that would prevent this patch set from
-beign merged ? Should I resend the complete patch set again ?
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Regards,
-
-Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
