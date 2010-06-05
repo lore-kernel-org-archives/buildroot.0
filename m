@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Jun 2010 22:16:11 +0200
-Subject: [Buildroot] [git commit master] New lua module: wsapi
-Message-ID: <20100605201726.24B979BFB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] New lua module: copas
+Message-ID: <20100605201725.CE25F9BFB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,86 +9,86 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5d578a6e2ea8244d7e6de12747930b0f2e3393b
+commit: http://git.buildroot.net/buildroot/commit/?id=bfce1e4cbcd995792e5fe92c4c1f2d0e77d52618
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                 |    2 +-
+ CHANGES                 |    3 ++-
  package/Config.in       |    1 +
- package/wsapi/Config.in |    9 +++++++++
- package/wsapi/wsapi.mk  |   21 +++++++++++++++++++++
+ package/copas/Config.in |    9 +++++++++
+ package/copas/copas.mk  |   20 ++++++++++++++++++++
  4 files changed, 32 insertions(+), 1 deletions(-)
- create mode 100644 package/wsapi/Config.in
- create mode 100644 package/wsapi/wsapi.mk
+ create mode 100644 package/copas/Config.in
+ create mode 100644 package/copas/copas.mk
 
 diff --git a/CHANGES b/CHANGES
-index daeba2d..8be098f 100644
+index b1787fa..daeba2d 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -5,7 +5,7 @@
+@@ -4,7 +4,8 @@
+ 
  	New GTK-based configurator, usable using 'make gconfig'.
  
- 	New packages: cgilua, copas, coxpcall, luafilesystem,
--	luasocket, rings
-+	luasocket, rings, wsapi
+-	New packages: cgilua, coxpcall, luafilesystem, luasocket, rings
++	New packages: cgilua, copas, coxpcall, luafilesystem,
++	luasocket, rings
  
  	Updated/fixed packages: cdrkit, libidn, netperf
  
 diff --git a/package/Config.in b/package/Config.in
-index 2fb61b5..5f389e0 100644
+index 05ec42f..2fb61b5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -214,6 +214,7 @@ source "package/coxpcall/Config.in"
+@@ -209,6 +209,7 @@ source "package/java/jamvm/Config.in"
+ source "package/lua/Config.in"
+ if BR2_PACKAGE_LUA
+ source "package/cgilua/Config.in"
++source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
  source "package/luafilesystem/Config.in"
  source "package/luasocket/Config.in"
- source "package/rings/Config.in"
-+source "package/wsapi/Config.in"
- endif
- source "package/microperl/Config.in"
- source "package/php/Config.in"
-diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+diff --git a/package/copas/Config.in b/package/copas/Config.in
 new file mode 100644
-index 0000000..3621648
+index 0000000..9969c8f
 --- /dev/null
-+++ b/package/wsapi/Config.in
++++ b/package/copas/Config.in
 @@ -0,0 +1,9 @@
-+config BR2_PACKAGE_WSAPI
-+	bool "wsapi"
++config BR2_PACKAGE_COPAS
++	bool "copas"
 +	select BR2_PACKAGE_COXPCALL
-+	select BR2_PACKAGE_LUAFILESYSTEM
-+	select BR2_PACKAGE_RINGS
++	select BR2_PACKAGE_LUASOCKET
 +	help
-+	  API that abstracts the web server from Lua web applications.
++	  Copas is a dispatcher based on coroutines that
++	  can be used by TCP/IP servers.
 +
-+	  http://keplerproject.github.com/wsapi/
-diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
++	  http://keplerproject.github.com/copas/
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
 new file mode 100644
-index 0000000..c0f9c8b
+index 0000000..1baed83
 --- /dev/null
-+++ b/package/wsapi/wsapi.mk
-@@ -0,0 +1,21 @@
++++ b/package/copas/copas.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# wsapi
++# copas
 +#
 +#############################################################
 +
-+WSAPI_VERSION = 1.3.4
-+WSAPI_SITE = http://github.com/downloads/keplerproject/wsapi
-+WSAPI_DEPENDENCIES = coxpcall luafilesystem rings
++COPAS_VERSION = 1.1.6
++COPAS_SITE = http://github.com/downloads/keplerproject/copas
++COPAS_DEPENDENCIES = lua coxpcall luasocket
 +
-+define WSAPI_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/wsapi
-+	$(INSTALL) -m 0644 -D $(@D)/src/wsapi/*.lua \
-+		$(TARGET_DIR)/usr/share/lua/wsapi
++define COPAS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
++		$(TARGET_DIR)/usr/share/lua/copas.lua
 +endef
 +
-+define WSAPI_UNINSTALL_TARGET_CMDS
-+	rm -rf "$(TARGET_DIR)/usr/share/lua/wsapi"
++define COPAS_UNINSTALL_TARGET_CMDS
++	rm -f "$(TARGET_DIR)/usr/share/lua/copas.lua"
 +endef
 +
-+$(eval $(call GENTARGETS,package,wsapi))
++$(eval $(call GENTARGETS,package,copas))
 -- 
 1.6.3.3
