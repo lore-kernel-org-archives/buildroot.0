@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Jun 2010 22:16:11 +0200
-Subject: [Buildroot] [git commit master] New lua module: copas
-Message-ID: <20100605201725.CE25F9BFB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] New lua module: xavante
+Message-ID: <20100605201726.6C9ED9BFB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,86 +9,93 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfce1e4cbcd995792e5fe92c4c1f2d0e77d52618
+commit: http://git.buildroot.net/buildroot/commit/?id=db7b08447001c169f48cc5e4a2e67b9d2e54b045
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                 |    3 ++-
- package/Config.in       |    1 +
- package/copas/Config.in |    9 +++++++++
- package/copas/copas.mk  |   20 ++++++++++++++++++++
- 4 files changed, 32 insertions(+), 1 deletions(-)
- create mode 100644 package/copas/Config.in
- create mode 100644 package/copas/copas.mk
+ CHANGES                    |    2 +-
+ package/Config.in          |    1 +
+ package/xavante/Config.in  |   14 ++++++++++++++
+ package/xavante/xavante.mk |   23 +++++++++++++++++++++++
+ 4 files changed, 39 insertions(+), 1 deletions(-)
+ create mode 100644 package/xavante/Config.in
+ create mode 100644 package/xavante/xavante.mk
 
 diff --git a/CHANGES b/CHANGES
-index b1787fa..daeba2d 100644
+index 8be098f..98a9e12 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -4,7 +4,8 @@
- 
+@@ -5,7 +5,7 @@
  	New GTK-based configurator, usable using 'make gconfig'.
  
--	New packages: cgilua, coxpcall, luafilesystem, luasocket, rings
-+	New packages: cgilua, copas, coxpcall, luafilesystem,
-+	luasocket, rings
+ 	New packages: cgilua, copas, coxpcall, luafilesystem,
+-	luasocket, rings, wsapi
++	luasocket, rings, wsapi, xavante
  
  	Updated/fixed packages: cdrkit, libidn, netperf
  
 diff --git a/package/Config.in b/package/Config.in
-index 05ec42f..2fb61b5 100644
+index 5f389e0..8b837fd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -209,6 +209,7 @@ source "package/java/jamvm/Config.in"
- source "package/lua/Config.in"
- if BR2_PACKAGE_LUA
- source "package/cgilua/Config.in"
-+source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
- source "package/luafilesystem/Config.in"
+@@ -215,6 +215,7 @@ source "package/luafilesystem/Config.in"
  source "package/luasocket/Config.in"
-diff --git a/package/copas/Config.in b/package/copas/Config.in
+ source "package/rings/Config.in"
+ source "package/wsapi/Config.in"
++source "package/xavante/Config.in"
+ endif
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
 new file mode 100644
-index 0000000..9969c8f
+index 0000000..7a3535a
 --- /dev/null
-+++ b/package/copas/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_COPAS
-+	bool "copas"
++++ b/package/xavante/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_XAVANTE
++	bool "xavante"
++	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
++	select BR2_PACKAGE_CGILUA
++	select BR2_PACKAGE_COPAS
 +	select BR2_PACKAGE_COXPCALL
++	select BR2_PACKAGE_LUAFILESYSTEM
 +	select BR2_PACKAGE_LUASOCKET
++	select BR2_PACKAGE_WSAPI
 +	help
-+	  Copas is a dispatcher based on coroutines that
-+	  can be used by TCP/IP servers.
++	  Xavante is a Lua HTTP 1.1 Web server that uses a modular
++	  architecture based on URI mapped handlers.
 +
-+	  http://keplerproject.github.com/copas/
-diff --git a/package/copas/copas.mk b/package/copas/copas.mk
++	  http://keplerproject.github.com/xavante/
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
 new file mode 100644
-index 0000000..1baed83
+index 0000000..525b09f
 --- /dev/null
-+++ b/package/copas/copas.mk
-@@ -0,0 +1,20 @@
++++ b/package/xavante/xavante.mk
+@@ -0,0 +1,23 @@
 +#############################################################
 +#
-+# copas
++# xavante
 +#
 +#############################################################
 +
-+COPAS_VERSION = 1.1.6
-+COPAS_SITE = http://github.com/downloads/keplerproject/copas
-+COPAS_DEPENDENCIES = lua coxpcall luasocket
++XAVANTE_VERSION = 2.2.0
++XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
++XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
 +
-+define COPAS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
-+		$(TARGET_DIR)/usr/share/lua/copas.lua
++define XAVANTE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) PREFIX=/usr \
++		LUA_DIR="$(TARGET_DIR)/usr/share/lua" \
++		LUA_LIBDIR="$(TARGET_DIR)/usr/lib/lua" install
 +endef
 +
-+define COPAS_UNINSTALL_TARGET_CMDS
-+	rm -f "$(TARGET_DIR)/usr/share/lua/copas.lua"
++define XAVANTE_UNINSTALL_TARGET_CMDS
++	rm -rf "$(TARGET_DIR)/usr/share/xavante"
++	rm -f "$(TARGET_DIR)/usr/share/xavante.lua"
++	rm -f "$(TARGET_DIR)/usr/share/sajax.lua"
 +endef
 +
-+$(eval $(call GENTARGETS,package,copas))
++$(eval $(call GENTARGETS,package,xavante))
 -- 
 1.6.3.3
