@@ -1,70 +1,60 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Sun, 6 Jun 2010 17:29:35 +1000
-Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
-	configuredownload site
-In-Reply-To: <20100605154934.6ebd9068@surf>
-References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com><fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com><002101cb0223$38af8910$aa0e9b30$@pauljones.id.au><20100604103232.3f415c39@surf>
-	<20100605154934.6ebd9068@surf>
-Message-ID: <000001cb054a$04f5af80$0ee10e80$@pauljones.id.au>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Jun 2010 20:36:09 +0200
+Subject: [Buildroot] [git commit master] libusb: bump version
+Message-ID: <20100606183654.EE40A8B888@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Thomas Petazzoni
-> Sent: Saturday, 5 June 2010 11:50 PM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH 07/46] u-boot: remove option to
-> configuredownload site
-> 
-> On Fri, 4 Jun 2010 10:32:32 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> > Thanks for the feedback. I'll add something that allows to download
-> > arbitrary tarballs. That's something that I also did for my Linux
-> > kernel code cleanup in Buildroot, so I'll reuse the same scheme. I'll
-> > post an updated version of this patch probably during this WE.
-> 
-> Here my proposal to improve U-Boot support to take into account the issue
-> you reported:
-> 
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=bootloaders-
-> cleanup&id=13ef908685caecd17ba67953fd1fee8a559231a2
 
-That is perfect! Thanks. Tested and working.
+commit: http://git.buildroot.net/buildroot/commit/?id=3638e528e0e308d18e62f03c57aeb01079c12956
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There seems to be a bug in your bootloaders-cleanup branch somewhere.
-If I do a make distclean and then configure the kernel to be built into a
-uImage I get the following error:
-(have attached .config)
+Closes #1897
 
-Verbose user fault messages (DEBUG_USER) [N/y/?] n
-Verbose kernel error messages (DEBUG_ERRORS) [N/y/?] n
-Enable stack utilization instrumentation (DEBUG_STACK_USAGE) [N/y/?] n
-Kernel low-level debugging functions (DEBUG_LL) [N/y/?] n
-#
-# configuration written to .config
-#
-make[1]: Leaving directory
-`/home/peejay/mini2440-dev/buildroot/output/build/linux-2.6.32.13'
-touch
-/home/peejay/mini2440-dev/buildroot/output/build/linux-2.6.32.13/.configured
-mkdir -p /home/peejay/mini2440-dev/buildroot/output/build/u-boot-tools
-cp /home/peejay/mini2440-dev/buildroot/output/host/usr/bin/mkimage
-/home/peejay/mini2440-dev/buildroot/output/build/u-boot-tools
-cp: cannot stat
-`/home/peejay/mini2440-dev/buildroot/output/host/usr/bin/mkimage': No such
-file or directory
-make: ***
-[/home/peejay/mini2440-dev/buildroot/output/build/u-boot-tools/mkimage]
-Error 1
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config
-Type: application/octet-stream
-Size: 19284 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100606/0ca3b1fd/attachment-0001.obj>
+[Peter: bump to 1.08 instead]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                  |    3 ++-
+ package/libusb/libusb.mk |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index a49afc5..eaac40d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7,7 +7,7 @@
+ 	New packages: cgilua, copas, coxpcall, luafilesystem,
+ 	luasocket, rings, wsapi, xavante
+ 
+-	Updated/fixed packages: cdrkit, libidn, netperf, qt
++	Updated/fixed packages: cdrkit, libidn, netperf, qt, usbutils
+ 
+ 	Removed packages: modutils
+ 
+@@ -16,6 +16,7 @@
+ 	#1771: Fakeroot and the target/generic/device_table.txt create bad...
+ 	#1879: Bump iptables to 1.4.8
+ 	#1885: Add a bunch of lua modules
++	#1897: Bump libusb to 1.0.7
+ 	#1909: netperf-2.4.5 fails to build because of undeclared SOCK_DCCP
+ 
+ 2010.05, Released May 30th, 2010:
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 8977d52..141633b 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -3,7 +3,7 @@
+ # libusb
+ #
+ #############################################################
+-LIBUSB_VERSION = 1.0.3
++LIBUSB_VERSION = 1.0.8
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
+ LIBUSB_LIBTOOL_PATCH = NO
+-- 
+1.6.3.3
