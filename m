@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  6 Jun 2010 20:46:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 1945] PHP: add sqlite3 dependency when using
-	external lib
-In-Reply-To: <bug-1945-163@https.bugs.busybox.net/>
-References: <bug-1945-163@https.bugs.busybox.net/>
-Message-ID: <20100606204636.A494E828A2@busybox.osuosl.org>
+Date: Sun,  6 Jun 2010 21:16:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 1951] Bump openssl to 0.9.8o
+In-Reply-To: <bug-1951-163@https.bugs.busybox.net/>
+References: <bug-1951-163@https.bugs.busybox.net/>
+Message-ID: <20100606211625.E974481737@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1945
+https://bugs.busybox.net/show_bug.cgi?id=1951
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
