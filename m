@@ -1,53 +1,49 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 8 Jun 2010 23:32:40 +0200
-Subject: [Buildroot] [git commit master] gstreamer: remove
-	--disable-registry from configure options
-Message-ID: <20100608220139.9E699909FC@busybox.osuosl.org>
+From: Dmytro Milinevskyy <milinevskyy@gmail.com>
+Date: Tue, 8 Jun 2010 00:37:01 +0300
+Subject: [Buildroot] [PATCH] target skeleton definition
+In-Reply-To: <87d3w2k0e0.fsf@macbook.be.48ers.dk>
+References: <4c0d5b02.8c4bdf0a.5e33.ffff9c4e@mx.google.com> 
+	<20100607230541.5f2bf769@surf> <87d3w2k0e0.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTik8q5u0zS1M4VBD-8YEQ35CNQf5r-EBbWe2c6_z@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, Peter,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=726616a8efb6a1c9bcc5566689caefc15cc27679
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+some targets depend on busybox skeleton. Are you sure it's safe to
+remove it completely?
 
---disable-registry has no dependency on libxml2 and should not be
-linked to BR2_PACKAGE_GSTREAMER_LIBXML2. If we want to disable
-registry then we should add another option.
+-- Dima
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                   |    2 +-
- package/multimedia/gstreamer/gstreamer.mk |    1 -
- 2 files changed, 1 insertions(+), 2 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 5569267..0c4b9d6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -7,7 +7,7 @@
- 	New packages: cgilua, copas, coxpcall, luafilesystem,
- 	luasocket, rings, wsapi, xavante
- 
--	Updated/fixed packages: cdrkit, file, gawk, intltool,
-+	Updated/fixed packages: cdrkit, file, gawk, gstreamer, intltool,
- 	iptables, libidn, lmbench, netperf, openssl, php, qt, sqlite,
- 	tn5250, usbutils, xkeyboard-config
- 
-diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
-index 0391b14..49ac0df 100644
---- a/package/multimedia/gstreamer/gstreamer.mk
-+++ b/package/multimedia/gstreamer/gstreamer.mk
-@@ -27,7 +27,6 @@ ifeq ($(BR2_PACKAGE_GSTREAMER_LIBXML2),y)
- GSTREAMER_DEPENDENCIES += libxml2
- else
- GSTREAMER_CONF_OPT += \
--	--disable-registry \
- 	--disable-loadsave
- endif
- 
--- 
-1.6.3.3
+On Tue, Jun 8, 2010 at 12:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+> ?Thomas> Hello Dmytro,
+> ?Thomas> On Mon, 7 Jun 2010 21:06:42 +0300
+> ?Thomas> Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+>
+> ?>> Here's the patch to give posibility to redefine path to the rootfs
+> ?>> skeleton. Also this patch moves default and busybox skeleton trees
+> ?>> into fs/skeleton dir.
+>
+> ?Thomas> Thanks for this patch. In general, this is something I intended to do,
+> ?Thomas> so it's great to see patches implementing this.
+>
+> ?Thomas> Personaly, I'd prefer if we could get rid of the "busybox" skeleton
+> ?Thomas> altogether. I think Peter Korsgaard agreed with this decision, but I'll
+> ?Thomas> let him restate his preference here.
+>
+> Yes, I think now would be a good moment to cleanup this stuff.
+>
+> ?Thomas> If Peter agrees, then the skeleton could be moved to just fs/skeleton/.
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
