@@ -1,182 +1,29 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Mon,  7 Jun 2010 23:08:31 +1000
-Subject: [Buildroot] (no subject)
-Message-ID: <1275916111-30654-1-git-send-email-paul@pauljones.id.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 Jun 2010 13:43:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 1735] [PATCH] mplayer: convert to autotools
+	infrastructure
+In-Reply-To: <bug-1735-163@https.bugs.busybox.net/>
+References: <bug-1735-163@https.bugs.busybox.net/>
+Message-ID: <20100607134324.9FE328FDF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Paul Jones <paul@pauljones.id.au>
-Date: Mon, 7 Jun 2010 22:33:06 +1000
-Subject: [PATCH] zlib: Bump to 1.2.5
+https://bugs.busybox.net/show_bug.cgi?id=1735
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/zlib/zlib-1.2.1-configure.patch |  103 -------------------------------
- package/zlib/zlib-arflags.patch         |   21 ------
- package/zlib/zlib.mk                    |    3 +-
- 3 files changed, 1 insertions(+), 126 deletions(-)
- delete mode 100644 package/zlib/zlib-1.2.1-configure.patch
- delete mode 100644 package/zlib/zlib-arflags.patch
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+(In reply to comment #1)
+> Don't set MPLAYER_CONFIGURE_CMDS but use MPLAYER_CONF_OPT instead. Remember
+> that most ./configure options (prefix, etc.) are already passed. You just need
+> to pass options that are specific to the package.
 
-diff --git a/package/zlib/zlib-1.2.1-configure.patch b/package/zlib/zlib-1.2.1-configure.patch
-deleted file mode 100644
-index ccd67ca..0000000
---- a/package/zlib/zlib-1.2.1-configure.patch
-+++ /dev/null
-@@ -1,103 +0,0 @@
----- zlib/configure
--+++ zlib/configure
--@@ -160,8 +160,8 @@
-- if test $shared -eq 1; then
--   echo Checking for shared library support...
--   # we must test in two steps (cc then ld), required at least on SunOS 4.x
---  if test "`($CC -c $SFLAGS $test.c) 2>&1`" = "" &&
---     test "`($LDSHARED -o $test$shared_ext $test.o) 2>&1`" = ""; then
--+  if ($CC -c $SFLAGS $test.c) 2>>config.log &&
--+     ($LDSHARED -o $test$shared_ext $test.o) 2>>config.log; then
--     CFLAGS="$SFLAGS"
--     LIBS="$LIBS $SHAREDLIBV"
--     echo Building shared library $SHAREDLIBV with $CC.
--@@ -185,7 +185,7 @@
-- #include <unistd.h>
-- int main() { return 0; }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   sed < zconf.in.h "/HAVE_UNISTD_H/s%0%1%" > zconf.h
--   echo "Checking for unistd.h... Yes."
-- else
--@@ -208,7 +208,7 @@
-- }
-- EOF
-- 
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   echo "Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf()"
-- 
--   cat > $test.c <<EOF
--@@ -232,7 +232,7 @@
-- }
-- EOF
-- 
---  if test "`($CC $CFLAGS -o $test $test.c) 2>&1`" = ""; then
--+  if ($CC $CFLAGS -o $test $test.c) 2>>config.log; then
--     echo "Checking for vsnprintf() in stdio.h... Yes."
-- 
--     cat >$test.c <<EOF
--@@ -257,7 +257,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of vsnprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_vsnprintf_void"
--@@ -295,7 +295,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of vsprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_vsprintf_void"
--@@ -325,7 +325,7 @@
-- }
-- EOF
-- 
---  if test "`($CC $CFLAGS -o $test $test.c) 2>&1`" = ""; then
--+  if ($CC $CFLAGS -o $test $test.c) 2>>config.log; then
--     echo "Checking for snprintf() in stdio.h... Yes."
-- 
--     cat >$test.c <<EOF
--@@ -344,7 +344,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of snprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_snprintf_void"
--@@ -376,7 +376,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of sprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_sprintf_void"
--@@ -392,7 +392,7 @@
-- #include <errno.h>
-- int main() { return 0; }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   echo "Checking for errno.h... Yes."
-- else
--   echo "Checking for errno.h... No."
--@@ -407,7 +407,7 @@
--   return mmap((caddr_t)0, (off_t)0, PROT_READ, MAP_SHARED, 0, (off_t)0);
-- }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   CFLAGS="$CFLAGS -DUSE_MMAP"
--   echo Checking for mmap support... Yes.
-- else
-diff --git a/package/zlib/zlib-arflags.patch b/package/zlib/zlib-arflags.patch
-deleted file mode 100644
-index f9dae52..0000000
---- a/package/zlib/zlib-arflags.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
----- zlib-1.2.3/Makefile.in
--+++ zlib-1.2.3/Makefile.in
--@@ -33,7 +33,8 @@
-- SHAREDLIBV=libz.so.1.2.3
-- SHAREDLIBM=libz.so.1
-- 
---AR=ar rc
--+AR=ar
--+ARFLAGS=rc
-- RANLIB=ranlib
-- TAR=tar
-- SHELL=/bin/sh
--@@ -68,7 +69,7 @@
-- 	fi
-- 
-- libz.a: $(OBJS) $(OBJA)
---	$(AR) $@ $(OBJS) $(OBJA)
--+	$(AR) $(ARFLAGS) $@ $(OBJS) $(OBJA)
-- 	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
-- 
-- match.o: match.S
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 3144ae9..ad5eda7 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -3,7 +3,7 @@
- # zlib
- #
- #############################################################
--ZLIB_VERSION:=1.2.3
-+ZLIB_VERSION:=1.2.5
- ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
- ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- ZLIB_INSTALL_STAGING=YES
-@@ -24,7 +24,6 @@ define ZLIB_CONFIGURE_CMDS
- 		./configure \
- 		$(ZLIB_SHARED) \
- 		--prefix=/usr \
--		--exec-prefix=$(STAGING_DIR)/usr/bin \
- 		--libdir=$(STAGING_DIR)/usr/lib \
- 		--includedir=$(STAGING_DIR)/usr/include \
- 	)
+Careful though, mplayer uses (or atleast used to use) a handwritten configure
+script, E.G. no autotools - And in the past it would error out on unknown
+configure args.
+
 -- 
-1.7.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
