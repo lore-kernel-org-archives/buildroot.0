@@ -1,30 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jun 2010 15:39:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 1735] [PATCH] mplayer: convert to autotools
-	infrastructure
-In-Reply-To: <bug-1735-163@https.bugs.busybox.net/>
-References: <bug-1735-163@https.bugs.busybox.net/>
-Message-ID: <20100607153906.475929A926@busybox.osuosl.org>
+From: Marcus Tangermann <marcus.tangermann@gmail.com>
+Date: Mon, 7 Jun 2010 18:41:29 +0200
+Subject: [Buildroot] buildroot for Freescale P2020RDB board
+Message-ID: <AANLkTilZluCVpvJzNT8FhStCyABMxOtL_Sh_RC9d_Ibh@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1735
+Hello,
 
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  ---
-(In reply to comment #3)
-> We should really use a newer version, 1.0rc2 is very old, has security bugs and
-> lacks newer optimizations (neon for example).
-> That said they haven't released tarballs in a while now so it would be
-> snapshot-based (svn).
+I try to get a working kernel and image for a Freescale PowerPC P2 based
+board P2020RDB using buildroot 2010.05.
+In menuconfig I've chosen a PowerPC generic architecture with uClibc 0.9.30
+and gcc 4.4.4.
+The compiled images (kernel and ext2 rootfs) don't work. After loading them
+via tftp and u-boot, the machine simply stops (=crashes).
+To test the rootfs I've manually compiled a kernel using the Freescale
+toolchain. The kernel works but the rootfs crashes the machine after
+loading.
+So I guess there is something fundamental wrong ;-)
 
-Even though it isn't the newest sw, 1.0rc3 was released last week.
+So, I would be glad if someone has some hints regarding my problem:
+1. Is it possible to generate a working image for an P2020RDB or are there
+problems with the e500v2 core?
+2. Is it possible to integrate the external toolchain from Freescale
+(gcc-4.3.74-eglibc-2.8.74-dp-2) ? The toolchain type seems to fit neither
+glibc nor eglibc style.
 
-http://www.mplayerhq.hu/design7/news.html#mplayer10rc3
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks!
+Marcus
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100607/4921f961/attachment.html>
