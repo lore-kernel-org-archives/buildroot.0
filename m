@@ -1,23 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jun 2010 10:27:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 1807] LZMA 4.32.7,
-	Required header file(s) are missing.
-In-Reply-To: <bug-1807-163@https.bugs.busybox.net/>
-References: <bug-1807-163@https.bugs.busybox.net/>
-Message-ID: <20100607102748.DEEFA8B68D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jun 2010 12:28:09 +0200
+Subject: [Buildroot] Package conversion for 2010.08
+In-Reply-To: <AANLkTikURmMB185MTpfck7BHOTSjvXcBQ7q86cEqrryU@mail.gmail.com>
+References: <20100530123655.6cffcc8c@surf> <20100607111716.26033337@surf>
+	<AANLkTikURmMB185MTpfck7BHOTSjvXcBQ7q86cEqrryU@mail.gmail.com>
+Message-ID: <20100607122809.2770020a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1807
+On Mon, 7 Jun 2010 17:37:28 +0800
+Kelvin Cheung <keguang.zhang@gmail.com> wrote:
 
---- Comment #5 from Peter Katzmann <peter.katzmann@edag.de>  ---
-Problem was, as guessed, the old uclibc config.
-After reworking this everything works fine
+> axel (https://bugs.busybox.net/show_bug.cgi?id=1723)
+> mplayer (https://bugs.busybox.net/show_bug.cgi?id=1735)
+> lmbench (https://bugs.busybox.net/show_bug.cgi?id=1753)
+> transmission (https://bugs.busybox.net/show_bug.cgi?id=743)
 
+Thanks!
+
+I did a quick review of the four patches and commented in the Bugzilla.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
