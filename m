@@ -1,26 +1,37 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jun 2010 20:08:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 1957] Bump sqlite to 3.6.23.1
-In-Reply-To: <bug-1957-163@https.bugs.busybox.net/>
-References: <bug-1957-163@https.bugs.busybox.net/>
-Message-ID: <20100607200859.65CF2826B2@busybox.osuosl.org>
+Date: Mon,  7 Jun 2010 20:17:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 1975] New: Package removal/deprecation
+Message-ID: <bug-1975-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1957
+https://bugs.busybox.net/show_bug.cgi?id=1975
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+           Summary: Package removal/deprecation
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-committed, thanks
+Created attachment 1921
+  --> https://bugs.busybox.net/attachment.cgi?id=1921
+Deprecate rp-pppoe
+
+Deprecate rp-pppoe since the pppoe plugin has been included in the pppd package
+for some time now.
+Remove portage, since our really old version can't handle modern portage trees.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
