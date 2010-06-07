@@ -1,12 +1,16 @@
 From: Paul Jones <paul@pauljones.id.au>
-Date: Mon,  7 Jun 2010 22:51:30 +1000
-Subject: [Buildroot] [PATCH] zlib: Bump to 1.2.5
-Message-ID: <1275915090-2423-1-git-send-email-paul@pauljones.id.au>
+Date: Mon,  7 Jun 2010 23:08:31 +1000
+Subject: [Buildroot] (no subject)
+Message-ID: <1275916111-30654-1-git-send-email-paul@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+From: Paul Jones <paul@pauljones.id.au>
+Date: Mon, 7 Jun 2010 22:33:06 +1000
+Subject: [PATCH] zlib: Bump to 1.2.5
 
 Signed-off-by: Paul Jones <paul@pauljones.id.au>
 ---
