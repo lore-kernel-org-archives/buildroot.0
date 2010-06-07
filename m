@@ -1,37 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jun 2010 23:17:59 +0200
-Subject: [Buildroot] [PATCH] target skeleton definition
-In-Reply-To: <20100607230541.5f2bf769@surf> (Thomas Petazzoni's message of
-	"Mon, 7 Jun 2010 23:05:41 +0200")
-References: <4c0d5b02.8c4bdf0a.5e33.ffff9c4e@mx.google.com>
-	<20100607230541.5f2bf769@surf>
-Message-ID: <87d3w2k0e0.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jun 2010 23:22:15 +0200
+Subject: [Buildroot] [PATCH 07/46] u-boot: remove option to
+ configuredownload site
+In-Reply-To: <000001cb054a$04f5af80$0ee10e80$@pauljones.id.au>
+References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<fd8347fd9ea408c4150f9358521a5dfceca92bc4.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<002101cb0223$38af8910$aa0e9b30$@pauljones.id.au>
+	<20100604103232.3f415c39@surf> <20100605154934.6ebd9068@surf>
+	<000001cb054a$04f5af80$0ee10e80$@pauljones.id.au>
+Message-ID: <20100607232215.3d36732e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Sun, 6 Jun 2010 17:29:35 +1000
+"Paul Jones" <paul@pauljones.id.au> wrote:
 
- Thomas> Hello Dmytro,
- Thomas> On Mon, 7 Jun 2010 21:06:42 +0300
- Thomas> Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+> There seems to be a bug in your bootloaders-cleanup branch somewhere.
+> If I do a make distclean and then configure the kernel to be built
+> into a uImage I get the following error:
+> (have attached .config)
 
- >> Here's the patch to give posibility to redefine path to the rootfs
- >> skeleton. Also this patch moves default and busybox skeleton trees
- >> into fs/skeleton dir.
+Fixed by
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=bootloaders-cleanup&id=cc8813eaab198ee4d142a38d1e5eebc8e41561b3
+which is a new commit in my bootloaders-cleanup branch.
 
- Thomas> Thanks for this patch. In general, this is something I intended to do,
- Thomas> so it's great to see patches implementing this.
+Thanks for your test report!
 
- Thomas> Personaly, I'd prefer if we could get rid of the "busybox" skeleton
- Thomas> altogether. I think Peter Korsgaard agreed with this decision, but I'll
- Thomas> let him restate his preference here.
-
-Yes, I think now would be a good moment to cleanup this stuff.
-
- Thomas> If Peter agrees, then the skeleton could be moved to just fs/skeleton/.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
