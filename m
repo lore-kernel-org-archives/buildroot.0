@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jun 2010 22:30:57 +0200
-Subject: [Buildroot] [git commit master] sqlite: bump version
-Message-ID: <20100607203309.3415C8DA6E@busybox.osuosl.org>
+Date: Mon, 7 Jun 2010 22:35:44 +0200
+Subject: [Buildroot] [git commit master] Iptables: needs host-pkg-config
+Message-ID: <20100607203608.2176B8DCD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cffb9cf0d57c1422fd6f7d029b63e662f5fae347
+commit: http://git.buildroot.net/buildroot/commit/?id=3af86820e225400110947075538d50cfaf860dd5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Closes #1957
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                  |    3 ++-
- package/sqlite/sqlite.mk |    2 +-
+ CHANGES                      |    4 ++--
+ package/iptables/iptables.mk |    1 +
  2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index a1b83ae..529d845 100644
+index ccc4393..99cfd65 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -8,7 +8,7 @@
+@@ -7,8 +7,8 @@
+ 	New packages: cgilua, copas, coxpcall, luafilesystem,
  	luasocket, rings, wsapi, xavante
  
- 	Updated/fixed packages: cdrkit, libidn, netperf, openssl, php,
--	qt, tn5250, usbutils
-+	qt, sqlite, tn5250, usbutils
+-	Updated/fixed packages: cdrkit, gawk, libidn, netperf,
+-	openssl, php, qt, sqlite, tn5250, usbutils
++	Updated/fixed packages: cdrkit, gawk, iptables, libidn,
++	netperf, openssl, php, qt, sqlite, tn5250, usbutils
  
  	Removed packages: modutils
  
-@@ -23,6 +23,7 @@
- 	#1909: netperf-2.4.5 fails to build because of undeclared SOCK_DCCP
- 	#1945: PHP: add sqlite3 dependency when using external lib
- 	#1951: Bump openssl to 0.9.8o
-+	#1957: Bump sqlite to 3.6.23.1
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 3e847d2..8e2ebc4 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -6,6 +6,7 @@
+ IPTABLES_VERSION = 1.4.8
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
++IPTABLES_DEPENDENCIES = host-pkg-config
  
- 2010.05, Released May 30th, 2010:
- 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 375ab42..1d336f6 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQLITE_VERSION = 3.6.22
-+SQLITE_VERSION = 3.6.23.1
- SQLITE_SOURCE = sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
- SQLITE_INSTALL_STAGING = YES
+ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
+ ifneq ($(BR2_INET_IPV6),y)
 -- 
 1.6.3.3
