@@ -1,80 +1,30 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Mon, 7 Jun 2010 17:37:28 +0800
-Subject: [Buildroot] Package conversion for 2010.08
-In-Reply-To: <20100607111716.26033337@surf>
-References: <20100530123655.6cffcc8c@surf> <20100607111716.26033337@surf>
-Message-ID: <AANLkTikURmMB185MTpfck7BHOTSjvXcBQ7q86cEqrryU@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 Jun 2010 10:20:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 1723] [PATCH] axel: convert to autotools
+	infrastructure
+In-Reply-To: <bug-1723-163@https.bugs.busybox.net/>
+References: <bug-1723-163@https.bugs.busybox.net/>
+Message-ID: <20100607102006.D3A25834CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=1723
 
-The following packages were converted by me:
-
-axel (https://bugs.busybox.net/show_bug.cgi?id=1723)
-mplayer (https://bugs.busybox.net/show_bug.cgi?id=1735)
-lmbench (https://bugs.busybox.net/show_bug.cgi?id=1753)
-transmission (https://bugs.busybox.net/show_bug.cgi?id=743)
-
-Could you check them?
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
 Thanks!
 
+However, this patch is not completely correct :
 
-2010/6/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ * AXEL_CONFIGURE_CMDS shouldn't be defined. Instead, you should use
+AXEL_CONF_OPT to pass the --i18n=0 option. No need to pass --prefix.
 
-> On Sun, 30 May 2010 12:36:55 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->
-> >  * file
->
-> Conversion done by Gustavo Zacarias. To be merged.
-> https://bugs.busybox.net/show_bug.cgi?id=1927
->
-> >  * gawk
->
-> Conversion done by Gustavo Zacarias. To be merged.
-> https://bugs.busybox.net/show_bug.cgi?id=1933
->
-> >  * module-init-tools
->
-> I have a converted package in my linux-cleanup branch. Will be
-> submitted as part of this work.
->
-> >  * modutils
->
-> Removed. Was only needed for 2.4 kernels.
->
-> >  * pciutils
->
-> Already converted (false positive in my script).
->
-> >  * rp-pppoe
->
-> Package to drop, no longer needed. According to Gustavo, ppp includes a
-> plug-in that does the same thing.
->
-> >  * tn5250
->
-> Conversion done by Gustavo Zacarias. Merged.
->
-> All other packages still require some love :-)
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100607/a43f1f1b/attachment.html>
+ * Are you sure you need to pass AXEL_MAKE_OPT and AXEL_INSTALL_TARGET ? If the
+package uses autoconf/automake, it shouldn't be needed.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
