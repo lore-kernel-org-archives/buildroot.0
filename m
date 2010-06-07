@@ -1,22 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jun 2010 14:22:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 583] build fails with external x86_64 toolchain
-In-Reply-To: <bug-583-163@https.bugs.busybox.net/>
-References: <bug-583-163@https.bugs.busybox.net/>
-Message-ID: <20100607142256.57D0C8D9C7@busybox.osuosl.org>
+Date: Mon,  7 Jun 2010 14:38:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 1933] Bump gawk to 3.1.8 and migrate to autotargets
+In-Reply-To: <bug-1933-163@https.bugs.busybox.net/>
+References: <bug-1933-163@https.bugs.busybox.net/>
+Message-ID: <20100607143831.265248F727@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=583
+https://bugs.busybox.net/show_bug.cgi?id=1933
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Ok, I confirm the issue and agrees with your proposal. I've written a patch
-implementing this, but unfortunately, the build still doesn't work for me due
-to mix between the host x86-64 C library and the target x86-64 C library. I'll
-try to work these out.
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #1885|0                           |1
+        is obsolete|                            |
+
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 1909
+  --> https://bugs.busybox.net/attachment.cgi?id=1909
+Bump gawk to 3.1.8 and migrate to autotargets [2]
+
+Okie.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
