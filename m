@@ -1,39 +1,24 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 7 Jun 2010 11:12:38 +0200
-Subject: [Buildroot] [PATCH] cdrkit: fix build by adding zlib as
-	dependency
-In-Reply-To: <20100607110843.5a0264ae@surf>
-References: <1275860600-19335-1-git-send-email-bjorn.forsman@gmail.com>
-	<20100607092201.2847fba7@surf> <20100607110843.5a0264ae@surf>
-Message-ID: <AANLkTim1qdQyFPHlIld1R4AW-MFc5LYtIC7Ymxctb17x@mail.gmail.com>
+From: Phil Edworthy <Phil.Edworthy@renesas.com>
+Date: Mon, 7 Jun 2010 10:14:16 +0100
+Subject: [Buildroot] buildroot and sh4
+In-Reply-To: <942768.62333.qm@web23105.mail.ird.yahoo.com>
+References: <20100604093635.3c27d0d1@surf>
+	<942768.62333.qm@web23105.mail.ird.yahoo.com>
+Message-ID: <AB12B32E73474741A2C5361C433A44DE01D3A63B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 7 June 2010 11:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 7 Jun 2010 09:22:01 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->
->> > -CDRKIT_DEPENDENCIES=libcap bzip2 host-cmake
->> > +CDRKIT_DEPENDENCIES=libcap bzip2 zlib host-cmake
->> > ?HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2
->>
->> If zlib is indeed needed on the target, we also need to add it on the
->> host as well, ie:
->>
->> HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2 host-zlib
->
-> I confirm that zlib is indeed needed to build cdrkit. Can you resend
-> your patches with the host-zlib addition ?
->
-> In that case, your patch would have my
->
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+BTW, I have successfully used a CodeSourcery external toolchain with
+Buildroot on sh4 (MS7724 development board). I'm currently waiting for git
+access via http before creating patches for this... 
 
-Thanks. I will send updated patch.
+ 
 
-Best regards,
-Bj?rn forsman
+Phil
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100607/17665527/attachment.html>
