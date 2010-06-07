@@ -1,39 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Jun 2010 00:04:15 +0200
-Subject: [Buildroot] [PATCH] target skeleton definition
-In-Reply-To: <87d3w2k0e0.fsf@macbook.be.48ers.dk>
-References: <4c0d5b02.8c4bdf0a.5e33.ffff9c4e@mx.google.com>
-	<20100607230541.5f2bf769@surf> <87d3w2k0e0.fsf@macbook.be.48ers.dk>
-Message-ID: <20100608000415.543cae7d@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 Jun 2010 22:04:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 1711] Should libtool package install ltmain.sh
+	into staging ?
+In-Reply-To: <bug-1711-163@https.bugs.busybox.net/>
+References: <bug-1711-163@https.bugs.busybox.net/>
+Message-ID: <20100607220455.D79907FBC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 07 Jun 2010 23:17:59 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=1711
 
->  Thomas> Personaly, I'd prefer if we could get rid of the "busybox"
->  Thomas> skeleton altogether. I think Peter Korsgaard agreed with
->  Thomas> this decision, but I'll let him restate his preference here.
-> 
-> Yes, I think now would be a good moment to cleanup this stuff.
+Nick Leverton <nick@leverton.org> changed:
 
-So, Dmytro, could you update your patch to remove the busybox skeleton,
-and just put the default skeleton in fs/skeleton ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |nick at leverton.org
 
-You could indeed split it in two patches:
+--- Comment #2 from Nick Leverton <nick@leverton.org>  ---
+Heavens no, I'm not sure why it looks like I said that.  Sorry.  So many
+packages in buildroot rely on that file.  Did my patch have a bad side effect
+on it ?
 
- * One doing the skeleton move
+I'm wondering if there is any reason why the latest ltmain.sh shouldn't be
+available in the toolchain staging as-is, rather than going to the trouble of
+patching $RANDOM_LTMAIN from the upstream ?  On my Debian packaging I find it's
+often (not always, admittedly) more trouble than it's worth to patch auto*/lt*
+rather than just use the distro's current version (BR's current build version
+chosen by the configurer, in this case).
 
- * One adding the option to configure the skeleton
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
