@@ -1,7 +1,8 @@
-From: Paul Jones <paul@pauljones.id.au>
+From: =?utf-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
 Date: Tue, 8 Jun 2010 23:32:40 +0200
-Subject: [Buildroot] [git commit master] intltool: Fix spelling mistake
-Message-ID: <20100608220138.418E9909FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master] cdrkit: fix build by adding zlib as
+	dependency
+Message-ID: <20100608220139.4A449909FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,46 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8df21528ed0d16bf52f743d1f20db381122271a8
+commit: http://git.buildroot.net/buildroot/commit/?id=e3b4430c3de11011e8b208273d5effd2e0776946
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #1987
-
-intltool.mk has a typo, this patch fixes the problem.
-
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                       |    3 ++-
- package/intltool/{intltook.mk => intltool.mk} |    0
- 2 files changed, 2 insertions(+), 1 deletions(-)
- rename package/intltool/{intltook.mk => intltool.mk} (100%)
+ package/cdrkit/cdrkit.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 99cfd65..67c4348 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -7,7 +7,7 @@
- 	New packages: cgilua, copas, coxpcall, luafilesystem,
- 	luasocket, rings, wsapi, xavante
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index a6a2e80..f7e21b0 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -2,8 +2,8 @@ CDRKIT_VERSION=1.1.10
+ CDRKIT_SOURCE=cdrkit-$(CDRKIT_VERSION).tar.gz
+ CDRKIT_SITE=http://www.cdrkit.org/releases/
  
--	Updated/fixed packages: cdrkit, gawk, iptables, libidn,
-+	Updated/fixed packages: cdrkit, gawk, intltool, iptables, libidn,
- 	netperf, openssl, php, qt, sqlite, tn5250, usbutils
+-CDRKIT_DEPENDENCIES=libcap bzip2 host-cmake
+-HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2
++CDRKIT_DEPENDENCIES=libcap bzip2 host-cmake zlib
++HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2 host-zlib
  
- 	Removed packages: modutils
-@@ -25,6 +25,7 @@
- 	#1945: PHP: add sqlite3 dependency when using external lib
- 	#1951: Bump openssl to 0.9.8o
- 	#1957: Bump sqlite to 3.6.23.1
-+	#1987: intltool: Fix spelling mistake
- 
- 2010.05, Released May 30th, 2010:
- 
-diff --git a/package/intltool/intltook.mk b/package/intltool/intltool.mk
-similarity index 100%
-rename from package/intltool/intltook.mk
-rename to package/intltool/intltool.mk
+ ifeq ($(BR2_ENDIAN),"BIG")
+ CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
 -- 
 1.6.3.3
