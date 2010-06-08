@@ -1,30 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jun 2010 23:55:38 +0200
-Subject: [Buildroot] [PATCH 26/46] grub2: only available on x86 and
-	PowerPC and mark as BROKEN
-In-Reply-To: <64d193b8f6b235b6ebe0b14f7ffee3f30565e7ab.1275343448.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 1 Jun 2010 00:08:12 +0200")
-References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-	<cover.1275343447.git.thomas.petazzoni@free-electrons.com>
-	<64d193b8f6b235b6ebe0b14f7ffee3f30565e7ab.1275343448.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87typdgpet.fsf@macbook.be.48ers.dk>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 8 Jun 2010 23:32:40 +0200
+Subject: [Buildroot] [git commit master] intltool: Fix spelling mistake
+Message-ID: <20100608220138.418E9909FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The build process of grub2 breaks the compilation. It breaks with:
- Thomas> ./configure: line 4766: syntax error near unexpected token `external'
- Thomas> ./configure: line 4766: `AM_GNU_GETTEXT(external)'
+commit: http://git.buildroot.net/buildroot/commit/?id=8df21528ed0d16bf52f743d1f20db381122271a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> In addition to this, it later requires Ruby. Do we really want to make
- Thomas> Buildroot depend on Ruby being installed on the host ? Do we really
- Thomas> want to build our own Ruby ? Do we even care about Grub2 ?
+Closes #1987
 
-I would guess not as no one has complained.
+intltool.mk has a typo, this patch fixes the problem.
 
+Signed-off-by: Paul Jones <paul@pauljones.id.au>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                       |    3 ++-
+ package/intltool/{intltook.mk => intltool.mk} |    0
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+ rename package/intltool/{intltook.mk => intltool.mk} (100%)
+
+diff --git a/CHANGES b/CHANGES
+index 99cfd65..67c4348 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7,7 +7,7 @@
+ 	New packages: cgilua, copas, coxpcall, luafilesystem,
+ 	luasocket, rings, wsapi, xavante
+ 
+-	Updated/fixed packages: cdrkit, gawk, iptables, libidn,
++	Updated/fixed packages: cdrkit, gawk, intltool, iptables, libidn,
+ 	netperf, openssl, php, qt, sqlite, tn5250, usbutils
+ 
+ 	Removed packages: modutils
+@@ -25,6 +25,7 @@
+ 	#1945: PHP: add sqlite3 dependency when using external lib
+ 	#1951: Bump openssl to 0.9.8o
+ 	#1957: Bump sqlite to 3.6.23.1
++	#1987: intltool: Fix spelling mistake
+ 
+ 2010.05, Released May 30th, 2010:
+ 
+diff --git a/package/intltool/intltook.mk b/package/intltool/intltool.mk
+similarity index 100%
+rename from package/intltool/intltook.mk
+rename to package/intltool/intltool.mk
 -- 
-Bye, Peter Korsgaard
+1.6.3.3
