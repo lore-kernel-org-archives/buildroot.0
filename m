@@ -1,42 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 8 Jun 2010 19:14:24 +0200
-Subject: [Buildroot] [pull request] Preparatory work on toolchains
-In-Reply-To: <87zkzd5ejb.fsf@macbook.be.48ers.dk>
-References: <1275429183-8974-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<87zkzd5ejb.fsf@macbook.be.48ers.dk>
-Message-ID: <201006081914.24708.yann.morin.1998@anciens.enib.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  8 Jun 2010 18:49:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 1993] New: Bump bash to 4.1.7(1) and migrate to
+	autotargets
+Message-ID: <bug-1993-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+https://bugs.busybox.net/show_bug.cgi?id=1993
 
-On Wednesday 02 June 2010 23:07:52 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
->  Yann> The following changes since commit 4a640e464439a5e78458ae969dcc6017aa96278f:
->  Yann>   Peter Korsgaard (1):
->  Yann>         docs/news.html: add 2010.05 announcement
-[--SNIP--]
-> Thanks. With all those renames the patches gets a lot easier to review
-> if you create them with -M (detect renames). Could you resend, please?
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump bash to 4.1.7(1) and migrate to autotargets
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Sorry for the delay, I have been pretty busy IRL lately...
-I will rework the series this week.
 
-However, can't you get and inspect the patches using the git tree I have
-pushed them into? It has been previously suggested that using the git tree
-would be easier to review the patchset, and the reason I asked for it in
-the first place.
-
-Regards,
-Yann E. MORIN.
+Bump bash to 4.1.7(1) and migrate to autotargets.
+/bin/sh logic is now save the link/file if it exists as /bin/sh.prebash to
+restore it later if bash is uninstalled. Bash assumes it's superior and
+replaces it.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
