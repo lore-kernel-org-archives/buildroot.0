@@ -1,31 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jun 2010 06:20:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 743] Add Transmission bit torrent option to
-	buildroot
-In-Reply-To: <bug-743-163@https.bugs.busybox.net/>
-References: <bug-743-163@https.bugs.busybox.net/>
-Message-ID: <20100608062021.2B4A781969@busybox.osuosl.org>
+Date: Tue,  8 Jun 2010 06:45:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 1987] [PATCH 1/1] intltool: Fix spelling mistake
+In-Reply-To: <bug-1987-163@https.bugs.busybox.net/>
+References: <bug-1987-163@https.bugs.busybox.net/>
+Message-ID: <20100608064531.D3A57832DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=743
+https://bugs.busybox.net/show_bug.cgi?id=1987
 
-Kelvin Cheung <keguang.zhang@gmail.com> changed:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Attachment #1723|0                           |1
-        is obsolete|                            |
+   Target Milestone|---                         |2010.08
 
---- Comment #5 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-Created attachment 1957
-  --> https://bugs.busybox.net/attachment.cgi?id=1957
-convert transmission to autotools infrastructure
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Updated the patch according to the suggestion.
+I'm surprised that this got unnoticed until now :-)
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
