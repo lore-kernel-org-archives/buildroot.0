@@ -1,26 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jun 2010 22:41:44 +0200
-Subject: [Buildroot] [PATCH 1/1] xkeyboard-config: Depends on
-	host-intltool
-In-Reply-To: <000d01cb0508$36c330b0$a4499210$@pauljones.id.au> (Paul Jones's
-	message of "Sun, 6 Jun 2010 09:38:32 +1000")
-References: <000d01cb0508$36c330b0$a4499210$@pauljones.id.au>
-Message-ID: <87vd9ti7ef.fsf@macbook.be.48ers.dk>
+Date: Tue, 08 Jun 2010 22:43:21 +0200
+Subject: [Buildroot] [PATCH] cdrkit: fix build by adding zlib as
+	dependency
+In-Reply-To: <1275910667-9357-1-git-send-email-bjorn.forsman@gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Mon,
+	7 Jun 2010 13:37:47 +0200")
+References: <1275910667-9357-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <87r5khi7bq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <paul@pauljones.id.au> writes:
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
- Paul> Sorry for sending this as an attachment but the list seems to be
- Paul> dropping email from git.
+ Bj?rn> cdrkit: fix build by adding zlib as dependency.
 
-Huh, that shouldn't happen. I did get your 105/105 patch you sent
-~10mins earlier.
+Committed, thanks.
 
-Anyway - Thanks, committed.
-
--- 
+- 
 Bye, Peter Korsgaard
