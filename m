@@ -1,26 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jun 2010 12:57:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 1987] [PATCH 1/1] intltool: Fix spelling mistake
-In-Reply-To: <bug-1987-163@https.bugs.busybox.net/>
-References: <bug-1987-163@https.bugs.busybox.net/>
-Message-ID: <20100608125744.858BF8B8B9@busybox.osuosl.org>
+Date: Tue,  8 Jun 2010 16:50:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 1927] Bump file to 5.03 and migrate to autotargets
+In-Reply-To: <bug-1927-163@https.bugs.busybox.net/>
+References: <bug-1927-163@https.bugs.busybox.net/>
+Message-ID: <20100608165029.504DC857AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1987
+https://bugs.busybox.net/show_bug.cgi?id=1927
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+   Attachment #1915|0                           |1
+        is obsolete|                            |
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
+--- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 1975
+  --> https://bugs.busybox.net/attachment.cgi?id=1975
+Bump file to 5.04 and migrate to autotargets
+
+It seems file uses file to build its magic file and also that minor version
+bumps may make the magic source incompatible (thus my case of running host 5.03
+on my distro not liking to build 5.04 for BR).
+So yeah, we need host-file.
+Fixed, try it now.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
