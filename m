@@ -1,27 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jun 2010 07:40:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 1735] [PATCH] mplayer: convert to autotools
-	infrastructure
-In-Reply-To: <bug-1735-163@https.bugs.busybox.net/>
-References: <bug-1735-163@https.bugs.busybox.net/>
-Message-ID: <20100608074053.E352482B4B@busybox.osuosl.org>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Tue, 8 Jun 2010 15:47:17 +0800
+Subject: [Buildroot] Package conversion for 2010.08
+In-Reply-To: <20100607122809.2770020a@surf>
+References: <20100530123655.6cffcc8c@surf> <20100607111716.26033337@surf> 
+	<AANLkTikURmMB185MTpfck7BHOTSjvXcBQ7q86cEqrryU@mail.gmail.com> 
+	<20100607122809.2770020a@surf>
+Message-ID: <AANLkTikRp8dV5G5Y9Q9n3tAF5f0jMVajJEJPW7dNRlGy@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1735
+Hi Thomas,
 
---- Comment #7 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-Created attachment 1969
-  --> https://bugs.busybox.net/attachment.cgi?id=1969
-convert mplayer to generic package infrastructure and bump to version 1.0rc3
+  The four patches have been updated according to the suggestion.
+  Please check them again.
+  Thanks!
 
-Here is 1.0rc3.
-But I don't know how to deal with the rc2 patches.
+2010/6/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> On Mon, 7 Jun 2010 17:37:28 +0800
+> Kelvin Cheung <keguang.zhang@gmail.com> wrote:
+>
+> > axel (https://bugs.busybox.net/show_bug.cgi?id=1723)
+> > mplayer (https://bugs.busybox.net/show_bug.cgi?id=1735)
+> > lmbench (https://bugs.busybox.net/show_bug.cgi?id=1753)
+> > transmission (https://bugs.busybox.net/show_bug.cgi?id=743)
+>
+> Thanks!
+>
+> I did a quick review of the four patches and commented in the Bugzilla.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100608/329062b7/attachment.html>
