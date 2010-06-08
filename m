@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jun 2010 06:58:00 +0000 (UTC)
+Date: Tue,  8 Jun 2010 07:40:53 +0000 (UTC)
 Subject: [Buildroot] [Bug 1735] [PATCH] mplayer: convert to autotools
 	infrastructure
 In-Reply-To: <bug-1735-163@https.bugs.busybox.net/>
 References: <bug-1735-163@https.bugs.busybox.net/>
-Message-ID: <20100608065800.A280FBFBF1@busybox.osuosl.org>
+Message-ID: <20100608074053.E352482B4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,13 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=1735
 
-Kelvin Cheung <keguang.zhang@gmail.com> changed:
+--- Comment #7 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
+Created attachment 1969
+  --> https://bugs.busybox.net/attachment.cgi?id=1969
+convert mplayer to generic package infrastructure and bump to version 1.0rc3
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #1711|0                           |1
-        is obsolete|                            |
-
---- Comment #6 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-Created attachment 1963
-  --> https://bugs.busybox.net/attachment.cgi?id=1963
-convert mplayer to generic package infrastructure
+Here is 1.0rc3.
+But I don't know how to deal with the rc2 patches.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
