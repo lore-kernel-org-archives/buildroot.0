@@ -1,24 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jun 2010 23:24:42 +0200
-Subject: [Buildroot] [PATCH 4/4] gstreamer: remove --disable-registry
-	from configure options
-In-Reply-To: <1275761030-20955-5-git-send-email-llandwerlin@gmail.com>
-	(llandwerlin@gmail.com's message of "Sat, 5 Jun 2010 20:03:50 +0200")
-References: <1275761030-20955-1-git-send-email-llandwerlin@gmail.com>
-	<1275761030-20955-5-git-send-email-llandwerlin@gmail.com>
-Message-ID: <87mxv5i5et.fsf@macbook.be.48ers.dk>
+Date: Tue, 08 Jun 2010 23:34:32 +0200
+Subject: [Buildroot] [PATCH] Set correct GCC tune option for
+	ARM926T(==ARM926EJ-S) core
+In-Reply-To: <1275664864-23680-1-git-send-email-julien.boibessot@free.fr>
+	(julien boibessot's message of "Fri, 4 Jun 2010 17:21:04 +0200")
+References: <1275664864-23680-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87eighi4yf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
- llandwerlin> --disable-registry has no dependency on libxml2 and should not be
- llandwerlin> linked to BR2_PACKAGE_GSTREAMER_LIBXML2. If we want to disable
- llandwerlin> registry then we should add another option.
+ julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
 
 Committed, thanks.
 
