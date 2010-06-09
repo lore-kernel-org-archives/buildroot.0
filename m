@@ -1,27 +1,39 @@
-From: Matthew Davison <matt.davison@lantronix.com>
-Date: Tue, 8 Jun 2010 15:36:36 -0700
-Subject: [Buildroot] How to set file ownership prior to JFFS2 root
-	filesystem generation
-Message-ID: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E08@2putt.int.lantronix.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 9 Jun 2010 04:58:35 +0300
+Subject: [Buildroot] [PATCH] skeleton: remove loopback interface
+ configuration from inittab
+In-Reply-To: <20100607092312.7e736feb@surf>
+References: <acc7c503a6179494174d8225e121b23d69a24b61.1275543349.git.baruch@tkos.co.il>
+	<20100607092312.7e736feb@surf>
+Message-ID: <20100609015835.GD2318@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I would like to create a home directory on the target and set its
-ownership to the uid of a user that will also be present on the target.
-I've noticed that something like this is already happening for the
-/home/default directory, but I have been unable to determine how. In
-general, how do you set the ownership of a file prior to JFFS2 root
-filesystem generation?
- 
-Thanks for your help.
- 
-Matt
- 
-**********************************************************************
-This e-mail is the property of Lantronix. It is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential, or otherwise protected from disclosure. Distribution or copying of this e-mail, or the information contained herein, to anyone other than the intended recipient is prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100608/b54baab6/attachment.html>
+Hi Thomas,
+
+On Mon, Jun 07, 2010 at 09:23:12AM +0200, Thomas Petazzoni wrote:
+> On Thu,  3 Jun 2010 08:36:50 +0300
+> Baruch Siach <baruch@tkos.co.il> wrote:
+> 
+> > The lo interface is marked auto in /etc/network/interfaces, so the
+> > configuration of the loopback network interface is part of the
+> > S40network init script. This causes the "RTNETLINK answers: File exists" error
+> > message to appear at startup time.
+> 
+> Not tested, but I think it's ok.
+> 
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks.
+
+Any chance of this being accepted upstream?
+
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
