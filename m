@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Jun 2010 08:31:42 +0200
-Subject: [Buildroot] [PATCH] skeleton: remove loopback interface
- configuration from inittab
-In-Reply-To: <20100609015835.GD2318@tarshish>
-References: <acc7c503a6179494174d8225e121b23d69a24b61.1275543349.git.baruch@tkos.co.il>
-	<20100607092312.7e736feb@surf> <20100609015835.GD2318@tarshish>
-Message-ID: <20100609083142.0524d5a6@surf>
+Date: Wed, 9 Jun 2010 08:35:20 +0200
+Subject: [Buildroot] [git commit master] file: bump version and migrate
+ to autotargets
+In-Reply-To: <20100608220138.82FF1909FC@busybox.osuosl.org>
+References: <20100608220138.82FF1909FC@busybox.osuosl.org>
+Message-ID: <20100609083520.09d5f9b2@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 9 Jun 2010 04:58:35 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Hello,
 
-> > > The lo interface is marked auto in /etc/network/interfaces, so the
-> > > configuration of the loopback network interface is part of the
-> > > S40network init script. This causes the "RTNETLINK answers: File
-> > > exists" error message to appear at startup time.
-> > 
-> > Not tested, but I think it's ok.
-> > 
-> > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Thanks.
-> 
-> Any chance of this being accepted upstream?
+On Tue, 8 Jun 2010 23:32:40 +0200
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-Yes. Just wait for Peter (Buildroot's maintainer) to pick up your
-patch. It may take a few days for this to happen. If we haven't merged
-your patch in one week from now, then ping us again.
+> +$(FILE_TARGET_UNINSTALL):
+> +	$(call MESSAGE,"Uninstalling")
+> +	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(FILE_DIR)
+> +	rm -f $(TARGET_DIR)/usr/lib/libmagic.*
+> +	rm -f $(FILE_TARGET_INSTALL_TARGET) $(FILE_HOOK_POST_INSTALL)
 
-Thanks!
+Ah, I didn't catch this at the review phase. I'd like to get rid of
+these ? old style ? way of overloading operations. You can do the same
+in a new style way with:
+
+define FILE_UNINSTALL_TARGET_CMDS
+	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
+	rm -f $(TARGET_DIR)/usr/lib/libmagic.*
+endef
+
+Thanks,
 
 Thomas
 -- 
