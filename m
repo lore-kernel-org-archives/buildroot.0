@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Jun 2010 12:04:25 +0200
-Subject: [Buildroot] [git commit master 1/1] dependencies.sh: fix CWD in
-	PATH check
-Message-ID: <20100609100642.CB5CA7FA57@busybox.osuosl.org>
+Date: Wed, 9 Jun 2010 13:38:58 +0200
+Subject: [Buildroot] [git commit master 1/1] skeleton: remove loopback
+	interface configuration from inittab
+Message-ID: <20100609113925.0C3E87FEB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +10,89 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=016eb67078952e6309d573d447b7df25cde0aa15
+commit: http://git.buildroot.net/buildroot/commit/?id=8dad77bac4a027ede5ea95400dbf5c8131bbf635
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #1999
+The lo interface is marked auto in /etc/network/interfaces, so the
+configuration of the loopback network interface is part of the
+S40network init script. This causes the "RTNETLINK answers: File exists" error
+message to appear at startup time.
 
-Signed-off-by: Nick Leverton <nick@leverton.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                |    1 +
- toolchain/dependencies/dependencies.sh |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ .../Atmel/root/target_busybox_skeleton/etc/inittab |    2 --
+ .../device/Atmel/root/target_skeleton/etc/inittab  |    2 --
+ target/device/xtensa/skeleton-patch/etc/inittab    |    2 --
+ target/generic/target_busybox_skeleton/etc/inittab |    2 --
+ target/generic/target_skeleton/etc/inittab         |    2 --
+ 5 files changed, 0 insertions(+), 10 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 0c4b9d6..3ba7195 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -30,6 +30,7 @@
- 	#1951: Bump openssl to 0.9.8o
- 	#1957: Bump sqlite to 3.6.23.1
- 	#1987: intltool: Fix spelling mistake
-+	#1999: Typo in path checking
+diff --git a/target/device/Atmel/root/target_busybox_skeleton/etc/inittab b/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
+index bb18305..b394548 100644
+--- a/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
++++ b/target/device/Atmel/root/target_busybox_skeleton/etc/inittab
+@@ -24,8 +24,6 @@
+ ::sysinit:/bin/mount -o remount,rw /
+ ::sysinit:/bin/mount -a
+ ::sysinit:/bin/hostname -F /etc/hostname
+-::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
- 2010.05, Released May 30th, 2010:
+diff --git a/target/device/Atmel/root/target_skeleton/etc/inittab b/target/device/Atmel/root/target_skeleton/etc/inittab
+index 69e4df1..2e3b9a4 100644
+--- a/target/device/Atmel/root/target_skeleton/etc/inittab
++++ b/target/device/Atmel/root/target_skeleton/etc/inittab
+@@ -18,8 +18,6 @@ null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
  
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index 34149c1..96f843f 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -41,7 +41,7 @@ if test -n "$PATH" ; then
- 	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.:' >/dev/null 2>&1 ||
- 	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
- 	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
--	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRIGGER_start\.TRIGGER_end' >/dev/null 2>&1
-+	/bin/echo TRiGGER_start"$PATH"TRiGGER_end | /bin/grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
- 	if test $? = 0; then
- 		/bin/echo -e "\nYou seem to have the current working directory in your"
- 		/bin/echo -e "PATH environment variable. This doesn't work.\n"
+diff --git a/target/device/xtensa/skeleton-patch/etc/inittab b/target/device/xtensa/skeleton-patch/etc/inittab
+index b336ff6..de3ce70 100644
+--- a/target/device/xtensa/skeleton-patch/etc/inittab
++++ b/target/device/xtensa/skeleton-patch/etc/inittab
+@@ -18,8 +18,6 @@ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
+ 
+diff --git a/target/generic/target_busybox_skeleton/etc/inittab b/target/generic/target_busybox_skeleton/etc/inittab
+index 7c7bf7a..bd3912b 100644
+--- a/target/generic/target_busybox_skeleton/etc/inittab
++++ b/target/generic/target_busybox_skeleton/etc/inittab
+@@ -24,8 +24,6 @@
+ ::sysinit:/bin/mount -o remount,rw /
+ ::sysinit:/bin/mount -a
+ ::sysinit:/bin/hostname -F /etc/hostname
+-::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
+ 
+diff --git a/target/generic/target_skeleton/etc/inittab b/target/generic/target_skeleton/etc/inittab
+index 2949c91..4be14b8 100644
+--- a/target/generic/target_skeleton/etc/inittab
++++ b/target/generic/target_skeleton/etc/inittab
+@@ -19,8 +19,6 @@ null::sysinit:/bin/mount -t proc proc /proc
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+-null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+-null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+ # now run any rc scripts
+ ::sysinit:/etc/init.d/rcS
+ 
 -- 
 1.7.1
