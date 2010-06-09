@@ -1,40 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jun 2010 08:54:32 +0200
-Subject: [Buildroot] [git commit master] file: bump version and migrate
-	to autotargets
-In-Reply-To: <20100609083520.09d5f9b2@surf> (Thomas Petazzoni's message of
-	"Wed, 9 Jun 2010 08:35:20 +0200")
-References: <20100608220138.82FF1909FC@busybox.osuosl.org>
-	<20100609083520.09d5f9b2@surf>
-Message-ID: <87pr00hf13.fsf@macbook.be.48ers.dk>
+From: Dmytro Milinevskyy <milinevskyy@gmail.com>
+Date: Wed, 9 Jun 2010 10:06:14 +0300
+Subject: [Buildroot] [PATCH] target skeleton definition
+In-Reply-To: <20100609083922.2b4a28e7@surf>
+References: <4c0d5b02.8c4bdf0a.5e33.ffff9c4e@mx.google.com> 
+	<20100607230541.5f2bf769@surf> <87d3w2k0e0.fsf@macbook.be.48ers.dk> 
+	<20100608000415.543cae7d@surf>
+	<AANLkTikq0K_QAcO7evZCpi9cwqkL_xczCDdYdUN_sCC_@mail.gmail.com> 
+	<AANLkTimGqWZLo20F77yKkPhiF7FFowRO0F1sI-zPaiHn@mail.gmail.com> 
+	<20100609083922.2b4a28e7@surf>
+Message-ID: <AANLkTimd_VZmkudhXhpsroC4LS4M-NzmBwN1JJ7FtOIP@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Ok, I will do that.
 
- Thomas> Hello,
- Thomas> On Tue, 8 Jun 2010 23:32:40 +0200
- Thomas> Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+-- Dima
 
- >> +$(FILE_TARGET_UNINSTALL):
- >> +	$(call MESSAGE,"Uninstalling")
- >> +	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(FILE_DIR)
- >> +	rm -f $(TARGET_DIR)/usr/lib/libmagic.*
- >> +	rm -f $(FILE_TARGET_INSTALL_TARGET) $(FILE_HOOK_POST_INSTALL)
-
- Thomas> Ah, I didn't catch this at the review phase. I'd like to get rid of
- Thomas> these ? old style ? way of overloading operations. You can do the same
- Thomas> in a new style way with:
-
- Thomas> define FILE_UNINSTALL_TARGET_CMDS
- Thomas> 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
- Thomas> 	rm -f $(TARGET_DIR)/usr/lib/libmagic.*
- Thomas> endef
-
-Fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+On Wed, Jun 9, 2010 at 9:39 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 8 Jun 2010 22:54:31 +0300
+> Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+>
+>> Thomas, what should be done w/ target that depend on busybox skeleton?
+>
+> I'd say: just convert them over to the normal skeleton.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
