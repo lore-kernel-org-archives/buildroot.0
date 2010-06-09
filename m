@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jun 2010 13:39:29 +0200
-Subject: [Buildroot] [PATCH] skeleton: remove loopback interface
-	configuration from inittab
-In-Reply-To: <acc7c503a6179494174d8225e121b23d69a24b61.1275543349.git.baruch@tkos.co.il>
-	(Baruch Siach's message of "Thu, 3 Jun 2010 08:36:50 +0300")
-References: <acc7c503a6179494174d8225e121b23d69a24b61.1275543349.git.baruch@tkos.co.il>
-Message-ID: <87d3w0h1u6.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  9 Jun 2010 12:49:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 2005] New: Bump dnsmasq to 2.55 and migrate to
+	gentargets
+Message-ID: <bug-2005-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2005
 
- Baruch> The lo interface is marked auto in /etc/network/interfaces, so the
- Baruch> configuration of the loopback network interface is part of the
- Baruch> S40network init script. This causes the "RTNETLINK answers: File exists" error
- Baruch> message to appear at startup time.
+              Host: i686-linux
+            Target: arm-softfloat-linux-uclibcgnueabi
+           Summary: Bump dnsmasq to 2.55 and migrate to gentargets
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Committed, thanks.
+
+Created attachment 1993
+  --> https://bugs.busybox.net/attachment.cgi?id=1993
+Bump dnsmasq to 2.55 and migrate to gentargets
+
+New dnsmasq 2.55 out with many improvements.
+Also migrate to gentargets since it's not really auto.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
