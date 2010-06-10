@@ -1,25 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jun 2010 09:35:21 +0200
-Subject: [Buildroot] file 5.04 build problem
-In-Reply-To: <AANLkTikMAkJuMaruOkIMhJyqeAJIAD9OHdvJ8_B5IgIR@mail.gmail.com>
-	(Chris Kerios's message of "Wed, 9 Jun 2010 19:21:42 -0400")
-References: <AANLkTimzWZ6hMxsy68DYLja5UmL_KXU4e1_8koRJ4VOU@mail.gmail.com>
-	<AANLkTikMAkJuMaruOkIMhJyqeAJIAD9OHdvJ8_B5IgIR@mail.gmail.com>
-Message-ID: <874ohbgx1i.fsf@macbook.be.48ers.dk>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Thu, 10 Jun 2010 21:51:17 +1000
+Subject: [Buildroot] Installing host packages
+Message-ID: <001f01cb0893$3d550d70$b7ff2850$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Kerios <ckerios@gmail.com> writes:
+Ok, here's a weird question: How would one go about installing a host
+package into the target dir? 
 
- Chris> ****NEVERMIND****
- Chris> Looked at the instructions deeper in config output and deleted the
- Chris> tgt-config.cache file and restarted make.  Problem went away and build
- Chris> is continuing.  Sorry for the noise.
+ 
 
-Fixed in git, thanks.
+ 
 
--- 
-Bye, Peter Korsgaard
+Thanks,
+
+Paul.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100610/e4a0938f/attachment.html>
