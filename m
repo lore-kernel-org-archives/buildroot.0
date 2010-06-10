@@ -1,30 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jun 2010 08:57:39 +0200
-Subject: [Buildroot] file 5.04 build problem
-In-Reply-To: <AANLkTikMAkJuMaruOkIMhJyqeAJIAD9OHdvJ8_B5IgIR@mail.gmail.com>
-	(Chris Kerios's message of "Wed, 9 Jun 2010 19:21:42 -0400")
-References: <AANLkTimzWZ6hMxsy68DYLja5UmL_KXU4e1_8koRJ4VOU@mail.gmail.com>
-	<AANLkTikMAkJuMaruOkIMhJyqeAJIAD9OHdvJ8_B5IgIR@mail.gmail.com>
-Message-ID: <878w6ngysc.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 10 Jun 2010 09:33:32 +0200
+Subject: [Buildroot] [git commit master 1/1] file: don't force _GNU_SOURCE
+	in CFLAGS
+Message-ID: <20100610073512.C072A8164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Kerios <ckerios@gmail.com> writes:
 
- Chris> ****NEVERMIND****
- Chris> Looked at the instructions deeper in config output and deleted the
- Chris> tgt-config.cache file and restarted make.  Problem went away and build
- Chris> is continuing.  Sorry for the noise.
- Chris> Chris
+commit: http://git.buildroot.net/buildroot/commit/?id=7c709f4affc44f3bbc9a09fec8d84ae3807e31e7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Still, it's a bug. File should either not override CFLAGS or it should
-disable the config cache.
+Breaks the build with BR2_CONFIG_CACHE, and isn't needed anyway, as
+the configure script figures out to add _GNU_SOURCE to config.h
+anyway.
 
-From a quick look, I don't think it needs the special CFLAGS - But I'll
-do a testbuild without it and fix.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/file/file.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
+diff --git a/package/file/file.mk b/package/file/file.mk
+index c4f9709..b8281d0 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -6,7 +6,6 @@
+ 
+ FILE_VERSION = 5.04
+ FILE_SITE = ftp://ftp.astron.com/pub/file/
+-FILE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.1
