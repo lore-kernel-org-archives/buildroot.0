@@ -1,27 +1,40 @@
-From: Andy Gibbs <andyg1001@hotmail.co.uk>
-Date: Fri, 11 Jun 2010 14:56:35 +0200
-Subject: [Buildroot] Linux from file in buildroot with external toolchain
-Message-ID: <BLU0-SMTP746AC14EB6D66389DECA50E7D90@phx.gbl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Jun 2010 13:18:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 2035] New: ipsec-tools-0.7.2 fails to build with
+	gcc-4.4.x
+Message-ID: <bug-2035-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=2035
 
-I am using buildroot 2010.05 with an external toolchain (actually 
-crosstool-ng) and I am finding it very difficult to find the setting to take 
-the linux source code from a local file.  If I use the buildroot toolchain 
-instead, then under the Toolchain menu and Kernel Headers sub-menu I can 
-select a local linux snapshot and then, under the Kernal menu select to use 
-the same linux version as used for the headers.  This works.
+           Summary: ipsec-tools-0.7.2 fails to build with gcc-4.4.x
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: nnazarenko at radiofid.ru
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-However, when using the external toolchain, it doesn't seem possible to do 
-this -- I expect that I have missed something really obvious, but a good 
-while Googling, trying things and failing, and I can't find it.
 
-Can anyone point me right?
+ipsec-tools fails to build with uclibc and gcc-4.4.x. 
 
-Many thanks
-Andy
+isakmp.c: In function 'isakmp_handler':
+isakmp.c:248: error: dereferencing pointer 'udp' does break strict-aliasing
+rules
+isakmp.c:247: note: initialized from here
+make[5]: *** [isakmp.o] Error 1
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
