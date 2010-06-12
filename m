@@ -1,70 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:09 +0200
-Subject: [Buildroot] [PATCH 35/49] at91bootstrap: simplify configuration
-In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1b3ff4a6490c66c88c9bb725e5465a508b39899d.1276352309.git.thomas.petazzoni@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 12 Jun 2010 18:22:37 +0200
+Subject: [Buildroot] Add ffmpeg support
+Message-ID: <1276359761-13721-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There no need to depends on BR2_TARGET_AT91BOOTSTRAP when the
-configuration options are already inside a if
-BR2_TARGET_AT91BOOTSTRAP.
+FFmpeg is a complete, cross-platform solution to record, convert and stream
+audio and video. It includes libavcodec - the leading audio/video codec library.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/at91bootstrap/Config.in |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+This patchset adds support for building ffmpeg in buildroot.
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 8514ccc..8efbd13 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -13,7 +13,6 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
- choice
- 	prompt "Boot Memory"
- 	default BR2_TARGET_AT91BOOT_DATAFLASHCARD
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
- 
-@@ -45,7 +44,6 @@ endchoice
- 
- config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 	string
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"dataflash"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -55,7 +53,6 @@ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 
- config	BR2_AT91BOOTSTRAP_IMG_SIZE
- 	string	"Image Size to copy to SDRAM"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -69,7 +66,6 @@ config	BR2_AT91BOOTSTRAP_IMG_SIZE
- choice
- 	prompt "Start address of application"
- 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
- 	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
-@@ -97,10 +93,6 @@ config	BR2_AT91BOOTSTRAP_JUMP_ADDR
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
- 	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
--	depends on BR2_TARGET_AT91BOOTSTRAP
--
--comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 
- endif
- 
--- 
-1.7.0.4
+Most high-level options are provided via kconfig options, and there is a hook
+in the last commit to allow passing .configure any parameters not directly
+supported (very handy for machine support, for example).
+
+Note that this support is much more complete than the one in bug 401
+(https://bugs.busybox.net/show_bug.cgi?id=401).
+
+Thanks,
+Luca
+
+ffmpeg: add new package
+ffmpeg: add commandline programs
+ffmpeg: allow customization of codecs, (de)muxers and other components
+ffmpeg: add user-defined configure parameters
+
+ CHANGES                                            |    2 +-
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/ffmpeg/Config.in                |  145 +++++++++++++++++++
+ .../ffmpeg-0.5.2-fix-sdl-config-search.patch       |   17 +++
+ package/multimedia/ffmpeg/ffmpeg.mk                |  150 ++++++++++++++++++++
+ 5 files changed, 314 insertions(+), 1 deletions(-)
+
+Luca
