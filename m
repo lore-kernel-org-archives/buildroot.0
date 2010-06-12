@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:22 +0200
-Subject: [Buildroot] [PATCH 48/49] Add support for the Barebox bootloader
+Date: Sat, 12 Jun 2010 16:22:12 +0200
+Subject: [Buildroot] [PATCH 38/49] at91bootstrap: remove unused/useless code
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6cc9d936a978d558211a0553ba3cdf9113ab9c96.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <004acd88b14a8ad146a45932ded4416cbe1c07ac.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,110 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/Config.in          |    1 +
- boot/barebox/Config.in  |   14 ++++++++++
- boot/barebox/barebox.mk |   61 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 76 insertions(+), 0 deletions(-)
- create mode 100644 boot/barebox/Config.in
- create mode 100644 boot/barebox/barebox.mk
+ boot/at91bootstrap/at91bootstrap.mk |   12 ------------
+ 1 files changed, 0 insertions(+), 12 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 78ff82c..6bcc98a 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -1,5 +1,6 @@
- menu "Bootloaders"
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index dc475e4..1d1091e 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -50,8 +50,6 @@ $(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked .config
+ 		$(AT91BOOTSTRAP_BOARD)_defconfig
+ 	touch $(AT91BOOTSTRAP_DIR)/.configured
  
-+source "boot/barebox/Config.in"
- source "boot/grub/Config.in"
- source "boot/grub2/Config.in"
- source "boot/syslinux/Config.in"
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-new file mode 100644
-index 0000000..0c90f03
---- /dev/null
-+++ b/boot/barebox/Config.in
-@@ -0,0 +1,14 @@
-+menuconfig BR2_TARGET_BAREBOX
-+	bool "Barebox"
-+	help
-+	  The Barebox bootloader, formerly known as U-Boot v2.
-+
-+	  http://www.barebox.org
-+
-+if BR2_TARGET_BAREBOX
-+config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
-+	string "board defconfig"
-+	help
-+	  Name of the board for which Barebox should be built, without
-+	  the _defconfig suffix.
-+endif
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-new file mode 100644
-index 0000000..7c2cbc1
---- /dev/null
-+++ b/boot/barebox/barebox.mk
-@@ -0,0 +1,61 @@
-+#############################################################
-+#
-+# Barebox
-+#
-+#############################################################
-+
-+BAREBOX_VERSION:=2010.05.0
-+BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
-+BAREBOX_SITE:=http://www.barebox.org/download/
-+BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
-+BAREBOX_CAT:=$(BZCAT)
-+BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
-+
-+ifeq ($(KERNEL_ARCH),i386)
-+BAREBOX_ARCH=x86
-+else ifeq ($(KERNEL_ARCH),powerpc)
-+BAREBOX_ARCH=ppc
-+else
-+BAREBOX_ARCH=$(KERNEL_ARCH)
-+endif
-+
-+BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE=$(TARGET_CROSS)
-+
-+$(DL_DIR)/$(BAREBOX_SOURCE):
-+	 $(call DOWNLOAD,$(BAREBOX_SITE),$(BAREBOX_SOURCE))
-+
-+$(BAREBOX_DIR)/.unpacked: $(DL_DIR)/$(BAREBOX_SOURCE)
-+	mkdir -p $(@D)
-+	$(INFLATE$(suffix $(BAREBOX_SOURCE))) $(DL_DIR)/$(BAREBOX_SOURCE) \
-+		| tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(BAREBOX_DIR)/.patched: $(BAREBOX_DIR)/.unpacked
-+	toolchain/patch-kernel.sh $(BAREBOX_DIR) boot/barebox \
-+		barebox-$(BAREBOX_VERSION)-\*.patch \
-+		barebox-$(BAREBOX_VERSION)-\*.patch.$(ARCH)
-+	touch $@
-+
-+$(BAREBOX_DIR)/.configured: $(BAREBOX_DIR)/.patched
-+	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
-+	touch $@
-+
-+$(BAREBOX_DIR)/.built: $(BAREBOX_DIR)/.configured
-+	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR)
-+	touch $@
-+
-+$(BAREBOX_DIR)/.installed: $(BAREBOX_DIR)/.built
-+	cp $(BAREBOX_DIR)/barebox.bin $(BINARIES_DIR)
-+	touch $@
-+
-+barebox: $(BAREBOX_DIR)/.installed
-+
-+ifeq ($(BR2_TARGET_BAREBOX),y)
-+TARGETS+=barebox
-+
-+# we NEED a board defconfig file
-+ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
-+$(error No Barebox defconfig file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
-+endif
-+
-+endif
+-#		$(BOARD_NAME)_defconfig
+-
+ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
+ 	$(MAKE) \
+ 		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+@@ -61,19 +59,13 @@ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
+ 
+ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
+ 	mkdir -p $(BINARIES_DIR)
+-ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
+-	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-else
+ 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		-C $(AT91BOOTSTRAP_DIR) boot
+ 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
+ 		echo "Could not copy bootstrap to BINARIES_DIR"
+-endif
+ 	touch $@
+ 
+-#	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-
+ .PHONY: at91bootstrap at91bootstrap-source
+ 
+ at91bootstrap: $(AT91BOOTSTRAP_DIR)/.installed
+@@ -97,8 +89,4 @@ at91bootstrap-dirclean:
+ #############################################################
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+ TARGETS+=at91bootstrap
+-endif
+-
+-at91bootstrap-status:
+-	@echo AT91BOOTSTRAP_BOARD=$(AT91BOOTSTRAP_BOARD)
+ 
 -- 
 1.7.0.4
