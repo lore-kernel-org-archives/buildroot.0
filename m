@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:21:46 +0200
-Subject: [Buildroot] [PATCH 12/49] u-boot: remove patch for obsolete version
+Date: Sat, 12 Jun 2010 16:21:37 +0200
+Subject: [Buildroot] [PATCH 03/49] boot: remove references to COPYTO
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ff0c91acc25129cc30b0a96c23ceeb31b2bcf7fd.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5eaa0e7faea81f21c5d0c9fb8c3b8fd8a53386b0.1276352307.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...boot-2009.01-include_asm-avr32_io.h.patch.avr32 |   13 -------------
- 1 files changed, 0 insertions(+), 13 deletions(-)
- delete mode 100644 boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
+ boot/at91bootstrap/at91bootstrap.mk         |    6 ------
+ boot/at91dataflashboot/at91dataflashboot.mk |    3 +--
+ 2 files changed, 1 insertions(+), 8 deletions(-)
 
-diff --git a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32 b/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
-deleted file mode 100644
-index 07cddb0..0000000
---- a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
-+++ /dev/null
-@@ -1,13 +0,0 @@
--diff -urN u-boot-2009.01-rc3/include/asm-avr32/io.h u-boot-avr32//include/asm-avr32/io.h
----- u-boot-2009.01-rc3/include/asm-avr32/io.h	2009-01-18 21:37:48.000000000 +0100
--+++ u-boot-avr32//include/asm-avr32/io.h	2009-01-22 07:14:38.000000000 +0100
--@@ -125,9 +125,4 @@
-- 
-- }
-- 
---static inline phys_addr_t virt_to_phys(void * vaddr)
---{
---	return (phys_addr_t)(vaddr);
---}
---
-- #endif /* __ASM_AVR32_IO_H */
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 2072c6b..dc475e4 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -63,22 +63,16 @@ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
+ 	mkdir -p $(BINARIES_DIR)
+ ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
+ 	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-	$(call COPY_FILE, $(AT91BOOTSTRAP_TARGET), $(BR2_TARGET_ATMEL_COPYTO), $(AT91BOOTSTRAP_BINARY))
+ else
+ 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+ 		-C $(AT91BOOTSTRAP_DIR) boot
+ 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
+ 		echo "Could not copy bootstrap to BINARIES_DIR"
+-ifneq ($(BR2_TARGET_ATMEL_COPYTO),)
+-	make DESTDIR=$(BR2_TARGET_ATMEL_COPYTO) -C $(AT91BOOTSTRAP_DIR) install || \
+-		echo "Could not copy bootstrap to BR2_ATMEL_COPYTO"
+-endif
+ endif
+ 	touch $@
+ 
+ #	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-#	cp $(AT91BOOTSTRAP_TARGET) $(BR2_TARGET_ATMEL_COPYTO)/$(AT91BOOTSTRAP_BINARY)
+ 
+ .PHONY: at91bootstrap at91bootstrap-source
+ 
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 8939c28..519328c 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -31,8 +31,7 @@ DataflashBoot-dirclean:
+ 	rm -rf $(DATAFLASHBOOT_DIR)
+ 
+ dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
+-	$(call COPY_FILE, $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY), $(TARGET_ATMEL_COPYTO),	$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY))
+-
++	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY) $(BINARIES_DIR)
+ 
+ #############################################################
+ #
 -- 
 1.7.0.4
