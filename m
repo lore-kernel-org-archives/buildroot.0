@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:21:43 +0200
-Subject: [Buildroot] [PATCH 09/49] u-boot: remove u-boot-status make target
+Date: Sat, 12 Jun 2010 16:21:46 +0200
+Subject: [Buildroot] [PATCH 12/49] u-boot: remove patch for obsolete version
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <86074e71b6a0933afcd88b0ccdd3d7cccd2779fd.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ff0c91acc25129cc30b0a96c23ceeb31b2bcf7fd.1276352308.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |   15 ---------------
- 1 files changed, 0 insertions(+), 15 deletions(-)
+ ...boot-2009.01-include_asm-avr32_io.h.patch.avr32 |   13 -------------
+ 1 files changed, 0 insertions(+), 13 deletions(-)
+ delete mode 100644 boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 7e98ca8..466d4a0 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -276,18 +276,3 @@ $(error NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
- endif
- 
- endif
--
--u-boot-status:
--	@echo
--	@echo U_BOOT_INC_CONF_FILE = $(U_BOOT_INC_CONF_FILE)
--	@echo BR2_UBOOT_VERSION = $(BR2_UBOOT_VERSION)
--	@echo BR2_TARGET_UBOOT_SERVERIP = $(BR2_TARGET_UBOOT_SERVERIP)
--	@echo BR2_TARGET_UBOOT_IPADDR = $(BR2_TARGET_UBOOT_IPADDR)
--	@echo BR2_TARGET_UBOOT_GATEWAY = $(BR2_TARGET_UBOOT_GATEWAY)
--	@echo BR2_TARGET_UBOOT_NETMASK = $(BR2_TARGET_UBOOT_NETMASK)
--	@echo BR2_TARGET_UBOOT_ETH0ADDR = $(BR2_TARGET_UBOOT_ETHADDR)
--	@echo BR2_TARGET_UBOOT_ETH1ADDR = $(BR2_TARGET_UBOOT_ETH1ADDR)
--	@echo BR2_TARGET_UBOOT_SILENT = $(BR2_TARGET_UBOOT_SILENT)
--	@echo UBOOT_BOARD_NAME=$(UBOOT_BOARD_NAME)
--	@exit 0
--
+diff --git a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32 b/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
+deleted file mode 100644
+index 07cddb0..0000000
+--- a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
++++ /dev/null
+@@ -1,13 +0,0 @@
+-diff -urN u-boot-2009.01-rc3/include/asm-avr32/io.h u-boot-avr32//include/asm-avr32/io.h
+---- u-boot-2009.01-rc3/include/asm-avr32/io.h	2009-01-18 21:37:48.000000000 +0100
+-+++ u-boot-avr32//include/asm-avr32/io.h	2009-01-22 07:14:38.000000000 +0100
+-@@ -125,9 +125,4 @@
+- 
+- }
+- 
+--static inline phys_addr_t virt_to_phys(void * vaddr)
+--{
+--	return (phys_addr_t)(vaddr);
+--}
+--
+- #endif /* __ASM_AVR32_IO_H */
 -- 
 1.7.0.4
