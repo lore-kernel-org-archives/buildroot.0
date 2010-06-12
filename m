@@ -1,64 +1,49 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Sat, 12 Jun 2010 10:45:13 +1000
-Subject: [Buildroot] [PATCH 1/1] Add package xterm
-Message-ID: <1276303513-31445-1-git-send-email-paul@pauljones.id.au>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Jun 2010 16:15:43 +0200
+Subject: [Buildroot] [PATCH 14/46] u-boot: support building for mkimage
+In-Reply-To: <877hm9i4fd.fsf@macbook.be.48ers.dk>
+References: <cover.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<cover.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<09b5460223d8c9930125c60c4ab8dab52b05372b.1275343447.git.thomas.petazzoni@free-electrons.com>
+	<877hm9i4fd.fsf@macbook.be.48ers.dk>
+Message-ID: <20100612161543.0e06da9a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/Config.in       |    1 +
- package/xterm/Config.in |    6 ++++++
- package/xterm/xterm.mk  |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/xterm/Config.in
- create mode 100644 package/xterm/xterm.mk
+On Tue, 08 Jun 2010 23:45:58 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 427b35a..2378f08 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -139,6 +139,7 @@ source "package/synergy/Config.in"
- source "package/torsmo/Config.in"
- source "package/x11vnc/Config.in"
- source "package/xstroke/Config.in"
-+source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- endmenu
- 
-diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-new file mode 100644
-index 0000000..da3e9fe
---- /dev/null
-+++ b/package/xterm/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_XTERM
-+	bool "xterm"
-+	depends on BR2_PACKAGE_XORG7
-+	help
-+	  xterm terminal emulator
-+
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-new file mode 100644
-index 0000000..b07eda4
---- /dev/null
-+++ b/package/xterm/xterm.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# xterm
-+#
-+#############################################################
-+
-+XTERM_VERSION:=259
-+XTERM_SOURCE:=xterm-$(XTERM_VERSION).tgz
-+XTERM_SITE:=ftp://invisible-island.net/xterm
-+XTERM_DEPENDENCIES = xserver_xorg-server
-+XTERM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+
-+$(eval $(call AUTOTARGETS,package,xterm))
+>  Thomas>  U_BOOT_VERSION:=$(call qstrip,$(BR2_UBOOT_VERSION))
+>  Thomas> +U_BOOT_BOARD_NAME:=$(call
+>  Thomas> qstrip,$(BR2_TARGET_UBOOT_BOARDNAME)) +
+>  Thomas> +# An U-Boot version and board might not be specified if
+>  Thomas> U-Boot isn't +# explicitly selected, but mkimage needs to be
+>  Thomas> compiled. In this case, +# we just take a random U-Boot
+>  Thomas> version and configuration. +ifeq ($(U_BOOT_VERSION),)
+>  Thomas> +U_BOOT_VERSION=2010.03
+>  Thomas> +U_BOOT_BOARD_NAME=smdk2410
+>  Thomas> +endif
+>   
+>  Thomas>  # u-boot still uses arch=ppc for powerpc
+>  Thomas>  U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
+>  
+> Does that work if KERNEL_ARCH != arm?
+
+Yes, it was. But I looked more closely at this and discovered that it
+was possible to build mkimage *without* configuring U-Boot. I've taken
+advantage of this to not configure U-Boot with a fake board.
+
+> Huh, isn't that supposed to be mkimage for the host? Why do you need
+> to pass all this target stuff?
+
+I've removed this and simplified the build of mkimage for the host.
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
