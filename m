@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:15 +0200
-Subject: [Buildroot] [PATCH 41/49] at91bootstrap: don't use the ATMEL_MIRROR
-	thing
+Date: Sat, 12 Jun 2010 16:21:59 +0200
+Subject: [Buildroot] [PATCH 25/49] grub/grub2: update splash image location
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <dc572b7e30dddd66350cc6d505ae61c4e481c9de.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bff56ab5484ac4d0ad593a20590cf570637f3f0c.1276352308.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ boot/grub/grub.mk   |    2 +-
+ boot/grub2/grub2.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index d6e2c18..bad5cee 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -5,8 +5,7 @@
- #############################################################
- AT91BOOTSTRAP_VERSION:=2.13
- AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
--ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
--AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
-+AT91BOOTSTRAP_SITE:=ftp://www.at91.com/pub/buildroot/
- AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
- AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
- AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 74ea77f..3805afe 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -11,7 +11,7 @@ GRUB_CAT:=$(ZCAT)
+ GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+ GRUB_BINARY:=grub/grub
+ GRUB_TARGET_BINARY:=sbin/grub
+-GRUB_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
++GRUB_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
+ 
+ 
+ GRUB_CFLAGS=-DSUPPORT_LOOPDEV
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 06e1524..24f1e1a 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -11,7 +11,7 @@ GRUB2_CAT:=$(ZCAT)
+ GRUB2_DIR:=$(BUILD_DIR)/grub-1.95
+ GRUB2_BINARY:=grub2/grub2
+ GRUB2_TARGET_BINARY:=sbin/grub2
+-GRUB2_SPLASHIMAGE=$(TOPDIR)/target/x86/grub/splash.xpm.gz
++GRUB2_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
+ 
+ 
+ GRUB2_CFLAGS=-DSUPPORT_LOOPDEV
 -- 
 1.7.0.4
