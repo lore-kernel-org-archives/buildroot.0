@@ -1,62 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:19 +0200
-Subject: [Buildroot] [PATCH 45/49] at91dataflashboot: various fixes
+Date: Sat, 12 Jun 2010 16:21:53 +0200
+Subject: [Buildroot] [PATCH 19/49] u-boot: beautify option prompts
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a4c1f0635036f3fed16c1290281bfdc6f2c9ccb8.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8f07a596113f5ae1aea9cefcfa27aeab6b9348e8.1276352308.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the URL, fix the directory to which it gets unpacked, fix make
-target names to be lower-case only.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91dataflashboot/at91dataflashboot.mk |   14 ++++++--------
- 1 files changed, 6 insertions(+), 8 deletions(-)
+ boot/u-boot/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
-index 519328c..dcbe1ef 100644
---- a/boot/at91dataflashboot/at91dataflashboot.mk
-+++ b/boot/at91dataflashboot/at91dataflashboot.mk
-@@ -5,29 +5,27 @@
- #############################################################
- DATAFLASHBOOT_VERSION:=1.05
- DATAFLASHBOOT_NAME:=DataflashBoot-$(DATAFLASHBOOT_VERSION)
--ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
--DATAFLASHBOOT_SITE:=$(ATMEL_MIRROR)
-+DATAFLASHBOOT_SITE:=ftp://www.at91.com/pub/buildroot/
- DATAFLASHBOOT_SOURCE:=$(DATAFLASHBOOT_NAME).tar.bz2
--DATAFLASHBOOT_DIR:=$(BUILD_DIR)/$(DATAFLASHBOOT_NAME)
-+DATAFLASHBOOT_DIR:=$(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
- DATAFLASHBOOT_BINARY:=$(DATAFLASHBOOT_NAME).bin
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 79c5c3d..00fd03a 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -1,11 +1,11 @@
+ menuconfig BR2_TARGET_UBOOT
+-	bool "Das U-Boot Boot Monitor"
++	bool "U-Boot"
+ 	help
+ 	  Build "Das U-Boot" Boot Monitor
  
- $(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
- 	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
+ if BR2_TARGET_UBOOT
+ config BR2_TARGET_UBOOT_BOARDNAME
+-	string "board name"
++	string "U-Boot board name"
+ 	help
+ 	  One of U-Boot supported boards to be built.
+ 	  This will be suffixed with _config to meet U-Boot standard naming.
+@@ -17,13 +17,13 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
- $(DATAFLASHBOOT_DIR)/.unpacked: $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
--	mkdir -p $(BUILD_DIR)
--	ls $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	mkdir -p $(@D)
-+	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
- 	touch $(DATAFLASHBOOT_DIR)/.unpacked
+ config BR2_TARGET_UBOOT_2010_03
+-	bool "u-boot-2010.03"
++	bool "2010.03"
  
- $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.unpacked
- 	ls $(DATAFLASHBOOT_DIR)/.unpacked
- 	make -C $(DATAFLASHBOOT_DIR) CROSS_COMPILE=$(TARGET_CROSS)
+ config BR2_TARGET_UBOOT_2009_11
+-	bool "u-boot-2009.11"
++	bool "2009.11"
  
--DataflashBoot-clean:
-+dataflashboot-clean:
- 	make -C $(DATAFLASHBOOT_DIR) clean
+ config BR2_TARGET_UBOOT_2009_08
+-	bool "u-boot-2009.08"
++	bool "2009.08"
  
--DataflashBoot-dirclean:
-+dataflashboot-dirclean:
- 	rm -rf $(DATAFLASHBOOT_DIR)
- 
- dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
+ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	bool "Custom tarball"
 -- 
 1.7.0.4
