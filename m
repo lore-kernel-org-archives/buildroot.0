@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:21:47 +0200
-Subject: [Buildroot] [PATCH 13/49] u-boot: remove useless symbolic link
+Date: Sat, 12 Jun 2010 16:22:03 +0200
+Subject: [Buildroot] [PATCH 29/49] grub2: only available on x86 and PowerPC
+	and mark as BROKEN
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <dc63ef95f39302195b7430b6be00d250cc5c9aea.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <38a88b691834eece3fc9c0719d08b4f41ab2c474.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The build process of grub2 breaks the compilation. It breaks with:
+
+./configure: line 4766: syntax error near unexpected token `external'
+./configure: line 4766: `AM_GNU_GETTEXT(external)'
+
+In addition to this, it later requires Ruby. Do we really want to make
+Buildroot depend on Ruby being installed on the host ? Do we really
+want to build our own Ruby ? Do we even care about Grub2 ?
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ boot/grub2/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index efde3ea..ac16c8b 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -11,7 +11,6 @@ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
- U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
- U_BOOT_CAT:=$(BZCAT)
- U_BOOT_BIN:=u-boot.bin
--U_BOOT_TARGET_BIN:=u-boot-$(U_BOOT_VERSION)-$(DATE).bin
- 
- U_BOOT_TOOLS:=$(HOST_DIR)/usr/bin/mkimage
- MKIMAGE:=$(U_BOOT_TOOLS)
-@@ -153,9 +152,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 
- $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
--	rm -f $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	(cd $(BINARIES_DIR); ln -s $(U_BOOT_TARGET_BIN) $(U_BOOT_BIN))
-+	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
- 
- $(U_BOOT_TOOLS): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	mkdir -p $(@D)
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index d27cb4c..1301b5b 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -1,4 +1,9 @@
+ config BR2_TARGET_GRUB2
+ 	bool "grub2"
++	# Only supports PC, Mac (Power, x86 and x86-64), Pegasos
++	depends on BR2_i386 || BR2_powerpc
++	# Build process is broken (./configure doesn't work, Ruby
++	# required, etc.)
++	depends on BROKEN
+ 	help
+ 	  The GRand Unified Bootloader for x86 systems, take #2.
 -- 
 1.7.0.4
