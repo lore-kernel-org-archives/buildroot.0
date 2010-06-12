@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:10 +0200
-Subject: [Buildroot] [PATCH 36/49] at91bootstrap: fix the boot source
-	selection
+Date: Sat, 12 Jun 2010 16:22:17 +0200
+Subject: [Buildroot] [PATCH 43/49] at91bootstrap: fix AT91BOOTSTRAP_BINARY
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5880111f2aebd5f35545581f4c231ff4abf8b3b6.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <793f5faa3384146beda496fad75ddb15e2ee5a93.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The boot source configuration options were depending on U-Boot
-configuration options. Let's make it independent and just allow the
-user to select whichever boot source is appropriate.
+Use AT91BOOTSTRAP_BOARD instead of BOARD_NAME. Remove
+AT91BOOTSTRAP_VERSION from the final binary image name.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 8efbd13..7c0f393 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -18,27 +18,21 @@ choice
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index fc7206e..9030696 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -12,13 +12,9 @@ AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
+ AT91BOOTSTRAP_ZCAT:=$(BZCAT)
  
- config BR2_TARGET_AT91BOOT_DATAFLASH
- 	bool "AT45 Dataflash"
--	depends on BR2_BOOTSOURCE_DATAFLASH
- 
- config BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	bool "AT45 Dataflash Card"
--	depends on BR2_BOOTSOURCE_DATAFLASHCARD
- 
- config BR2_TARGET_AT91BOOT_NANDFLASH
- 	bool "NAND Flash"
--	depends on BR2_BOOTSOURCE_NANDFLASH
- 
- config BR2_TARGET_AT91BOOT_FLASH
- 	bool "Internal Flash or external parallel flash"
--	depends on BR2_BOOTSOURCE_FLASH
- 
- config BR2_TARGET_AT91BOOT_SDCARD
- 	bool "SD-Card"
--	depends on BR2_BOOTSOURCE_SDCARD
- 
- config BR2_TARGET_AT91BOOT_EEPROM
- 	bool "EEPROM"
--	depends on BR2_BOOTSOURCE_EEPROM
- 
- endchoice
+ AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+-
+ AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+-
+-AT91BOOTSTRAP_BINARY:=$(BOARD_NAME)-$(AT91BOOTSTRAP_MEMORY)boot-$(AT91BOOTSTRAP_VERSION).bin
+-
++AT91BOOTSTRAP_BINARY:=$(AT91BOOTSTRAP_BOARD)-$(AT91BOOTSTRAP_MEMORY)boot.bin
+ AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_DIR)/binaries/$(AT91BOOTSTRAP_BINARY)
+-
+ AT91BOOTSTRAP_JUMP_ADDR:=$(call qstrip,$(BR2_AT91BOOTSTRAP_JUMP_ADDR))
+ AT91BOOTSTRAP_IMG_SIZE:=$(call qstrip,$(BR2_AT91BOOTSTRAP_IMG_SIZE))
  
 -- 
 1.7.0.4
