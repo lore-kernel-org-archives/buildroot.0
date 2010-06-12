@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:21:53 +0200
-Subject: [Buildroot] [PATCH 19/49] u-boot: beautify option prompts
+Date: Sat, 12 Jun 2010 16:21:58 +0200
+Subject: [Buildroot] [PATCH 24/49] grub/grub2: drop unnecessary dependency
+	on uclibc
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8f07a596113f5ae1aea9cefcfa27aeab6b9348e8.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e6b73b6548ffbed78b9979fe3b4f6f8848289749.1276352308.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/Config.in |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ boot/grub/grub.mk   |    2 +-
+ boot/grub2/grub2.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 79c5c3d..00fd03a 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -1,11 +1,11 @@
- menuconfig BR2_TARGET_UBOOT
--	bool "Das U-Boot Boot Monitor"
-+	bool "U-Boot"
- 	help
- 	  Build "Das U-Boot" Boot Monitor
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 96b082d..74ea77f 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -96,7 +96,7 @@ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ endif
+ 	touch $@
  
- if BR2_TARGET_UBOOT
- config BR2_TARGET_UBOOT_BOARDNAME
--	string "board name"
-+	string "U-Boot board name"
- 	help
- 	  One of U-Boot supported boards to be built.
- 	  This will be suffixed with _config to meet U-Boot standard naming.
-@@ -17,13 +17,13 @@ choice
- 	  Select the specific U-Boot version you want to use
+-grub: uclibc $(GRUB_DIR)/.installed
++grub: $(GRUB_DIR)/.installed
  
- config BR2_TARGET_UBOOT_2010_03
--	bool "u-boot-2010.03"
-+	bool "2010.03"
+ grub-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB_DIR) uninstall
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index a298ae6..06e1524 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -93,7 +93,7 @@ ifeq ($(BR2_TARGET_GRUB2_SPLASH),y)
+ endif
+ 	touch $@
  
- config BR2_TARGET_UBOOT_2009_11
--	bool "u-boot-2009.11"
-+	bool "2009.11"
+-grub2: uclibc $(GRUB2_DIR)/.installed
++grub2: $(GRUB2_DIR)/.installed
  
- config BR2_TARGET_UBOOT_2009_08
--	bool "u-boot-2009.08"
-+	bool "2009.08"
- 
- config BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	bool "Custom tarball"
+ grub2-clean:
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GRUB2_DIR) uninstall
 -- 
 1.7.0.4
