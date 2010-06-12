@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:11 +0200
-Subject: [Buildroot] [PATCH 37/49] at91bootstrap: fix incorrect config
-	option comment
+Date: Sat, 12 Jun 2010 16:22:15 +0200
+Subject: [Buildroot] [PATCH 41/49] at91bootstrap: don't use the ATMEL_MIRROR
+	thing
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b19272d4bef98a8d46d06fe968beab031026d9f3.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dc572b7e30dddd66350cc6d505ae61c4e481c9de.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 7c0f393..1bf8d50 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -61,10 +61,7 @@ choice
- 	prompt "Start address of application"
- 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	help
--	  Select Chip for which AT91 bootstrap should be built
--	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
--	  AT91SAM9XEEK, AT91SAM9263EK
--
-+	  Location of the application start address
- 
- config	BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	bool "Copy to the default U-Boot start location in the SDRAM"
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index d6e2c18..bad5cee 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -5,8 +5,7 @@
+ #############################################################
+ AT91BOOTSTRAP_VERSION:=2.13
+ AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
+-ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
+-AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
++AT91BOOTSTRAP_SITE:=ftp://www.at91.com/pub/buildroot/
+ AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
+ AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
+ AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
 -- 
 1.7.0.4
