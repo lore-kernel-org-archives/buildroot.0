@@ -1,54 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:23 +0200
-Subject: [Buildroot] [PATCH 49/49] linux: fix dependency on mkimage
+Date: Sat, 12 Jun 2010 16:22:10 +0200
+Subject: [Buildroot] [PATCH 36/49] at91bootstrap: fix the boot source
+	selection
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8e73aeb69e20635f7e7832e6694967adb3cb58eb.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5880111f2aebd5f35545581f4c231ff4abf8b3b6.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After the rework of the U-Boot configuration/compilation process, we
-need to slightly rework how target/linux/Makefile.in.advanced depends
-on mkimage on the host to produce an uImage.
-
-target/linux/Makefile.in doesn't need to be fixed as it just doesn't
-handle this dependency for the moment.
+The boot source configuration options were depending on U-Boot
+configuration options. Let's make it independent and just allow the
+user to select whichever boot source is appropriate.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/linux/Config.in.advanced   |    1 -
- target/linux/Makefile.in.advanced |    4 ++--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ boot/at91bootstrap/Config.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/target/linux/Config.in.advanced b/target/linux/Config.in.advanced
-index d6c8559..645ed2e 100644
---- a/target/linux/Config.in.advanced
-+++ b/target/linux/Config.in.advanced
-@@ -383,7 +383,6 @@ config BR2_LINUX_BIN_BZIMAGE
- config BR2_LINUX_BIN_UIMAGE
- 	bool "uImage"
- 	depends on BR2_PACKAGE_LINUX
--	select BR2_TARGET_UBOOT
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 8efbd13..7c0f393 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -18,27 +18,21 @@ choice
  
- config BR2_LINUX_BIN_VMLINUX
- 	bool "vmlinux"
-diff --git a/target/linux/Makefile.in.advanced b/target/linux/Makefile.in.advanced
-index 86d94ca..cc9d1e1 100644
---- a/target/linux/Makefile.in.advanced
-+++ b/target/linux/Makefile.in.advanced
-@@ -137,8 +137,8 @@ endif
- # --------------
- # UIMAGE
- ifeq ($(LINUX26_FORMAT),uImage)
--LINUX26_MKIMAGE_DIR:=$(BUILD_DIR)/u-boot-tools
--LINUX26_MKIMAGE_DEP:=$(LINUX26_MKIMAGE_DIR)/mkimage
-+LINUX26_MKIMAGE_DIR:=$(MKIMAGE)
-+LINUX26_MKIMAGE_DEP:=$(MKIMAGE)
- ifeq ($(LINUX26_BINLOC),)
- LINUX26_BINLOC:=arch/$(KERNEL_ARCH)/boot/$(LINUX26_FORMAT)
- endif
+ config BR2_TARGET_AT91BOOT_DATAFLASH
+ 	bool "AT45 Dataflash"
+-	depends on BR2_BOOTSOURCE_DATAFLASH
+ 
+ config BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	bool "AT45 Dataflash Card"
+-	depends on BR2_BOOTSOURCE_DATAFLASHCARD
+ 
+ config BR2_TARGET_AT91BOOT_NANDFLASH
+ 	bool "NAND Flash"
+-	depends on BR2_BOOTSOURCE_NANDFLASH
+ 
+ config BR2_TARGET_AT91BOOT_FLASH
+ 	bool "Internal Flash or external parallel flash"
+-	depends on BR2_BOOTSOURCE_FLASH
+ 
+ config BR2_TARGET_AT91BOOT_SDCARD
+ 	bool "SD-Card"
+-	depends on BR2_BOOTSOURCE_SDCARD
+ 
+ config BR2_TARGET_AT91BOOT_EEPROM
+ 	bool "EEPROM"
+-	depends on BR2_BOOTSOURCE_EEPROM
+ 
+ endchoice
+ 
 -- 
 1.7.0.4
