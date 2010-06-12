@@ -1,165 +1,185 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 12 Jun 2010 18:22:38 +0200
-Subject: [Buildroot] [PATCH 1/4] ffmpeg: add new package
+Date: Sat, 12 Jun 2010 18:22:40 +0200
+Subject: [Buildroot] [PATCH 3/4] ffmpeg: allow customization of codecs,
+	(de)muxers and other components
 In-Reply-To: <1276359761-13721-1-git-send-email-luca@lucaceresoli.net>
 References: <1276359761-13721-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1276359761-13721-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1276359761-13721-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add the option to customize the list of decoders, encoders, muxers, demuxers,
+parsers, protocols, bsfs and filters to be built into ffmpeg, and to compile or
+exclude input and output devices.
+
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- CHANGES                             |    2 +-
- package/multimedia/Config.in        |    1 +
- package/multimedia/ffmpeg/Config.in |   25 +++++++++++
- package/multimedia/ffmpeg/ffmpeg.mk |   79 +++++++++++++++++++++++++++++++++++
- 4 files changed, 106 insertions(+), 1 deletions(-)
- create mode 100644 package/multimedia/ffmpeg/Config.in
- create mode 100644 package/multimedia/ffmpeg/ffmpeg.mk
+ package/multimedia/ffmpeg/Config.in |   88 +++++++++++++++++++++++++++++++++++
+ package/multimedia/ffmpeg/ffmpeg.mk |   52 ++++++++++++++++++++
+ 2 files changed, 140 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3ba7195..6ca4fc9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -4,7 +4,7 @@
- 
- 	New GTK-based configurator, usable using 'make gconfig'.
- 
--	New packages: cgilua, copas, coxpcall, luafilesystem,
-+	New packages: cgilua, copas, coxpcall, ffmpeg, luafilesystem,
- 	luasocket, rings, wsapi, xavante
- 
- 	Updated/fixed packages: cdrkit, file, gawk, gstreamer, intltool,
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 3305f7b..3b0eec5 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -3,6 +3,7 @@ source "package/multimedia/alsa-lib/Config.in"
- source "package/multimedia/alsa-utils/Config.in"
- source "package/multimedia/aumix/Config.in"
- source "package/multimedia/flac/Config.in"
-+source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
 diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
-new file mode 100644
-index 0000000..bc8fb22
---- /dev/null
+index 736a8ec..7530929 100644
+--- a/package/multimedia/ffmpeg/Config.in
 +++ b/package/multimedia/ffmpeg/Config.in
-@@ -0,0 +1,25 @@
-+menuconfig BR2_PACKAGE_FFMPEG
-+	bool "ffmpeg"
+@@ -47,4 +47,92 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	help
+          FFserver is a streaming server for both audio and video.
+ 
++config BR2_PACKAGE_FFMPEG_ENCODERS
++	string "Enabled encoders"
++	default "all"
 +	help
-+         FFmpeg is a complete, cross-platform solution to record, convert
-+         and stream audio and video.
++	 Space-separated list of encoders to build in FFmpeg,
++	 or "all" to build all of them.
 +
-+	 http://www.ffmpeg.org
++	 Run ./configure --list-encoders in the ffmpeg sources
++	 directory to know the available options.
 +
-+if BR2_PACKAGE_FFMPEG
-+
-+config BR2_PACKAGE_FFMPEG_GPL
-+	bool "Enable GPL code"
-+	default n
++config BR2_PACKAGE_FFMPEG_DECODERS
++	string "Enabled decoders"
++	default "all"
 +	help
-+         allow use of GPL code, the resulting libs and binaries will
-+         be under GPL
++	 Space-separated list of decoders to build in FFmpeg,
++	 or "all" to build all of them.
 +
-+config BR2_PACKAGE_FFMPEG_NONFREE
-+	bool "Enable nonfree code"
-+	default n
++	 Run ./configure --list-decoders in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_MUXERS
++	string "Enabled muxers"
++	default "all"
 +	help
-+         allow use of nonfree code, the resulting libs and binaries
-+         will be unredistributable
++	 Space-separated list of muxers to build in FFmpeg,
++	 or "all" to build all of them.
 +
-+endif
++	 Run ./configure --list-muxers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_DEMUXERS
++	string "Enabled demuxers"
++	default "all"
++	help
++	 Space-separated list of demuxers to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-demuxers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_PARSERS
++	string "Enabled parsers"
++	default "all"
++	help
++	 Space-separated list of parsers to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-parsers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_BSFS
++	string "Enabled bitstreams"
++	default "all"
++	help
++	 Space-separated list of bitstream filters to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-bsfs in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_PROTOCOLS
++	string "Enabled protocols"
++	default "all"
++	help
++	 Space-separated list of protocols to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-protocols in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_FILTERS
++	string "Enabled filters"
++	default "all"
++	help
++	 Space-separated list of filters to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-filters in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_INDEVS
++	bool "Enable input devices"
++	default y
++
++config BR2_PACKAGE_FFMPEG_OUTDEVS
++	bool "Enable output devices"
++	default y
++
+ endif
 diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-new file mode 100644
-index 0000000..b4abefb
---- /dev/null
+index 0af08e5..3fc4990 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
 +++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -0,0 +1,79 @@
-+#############################################################
-+#
-+# ffmpeg
-+#
-+#############################################################
-+FFMPEG_VERSION := 0.5.2
-+FFMPEG_SOURCE := ffmpeg-$(FFMPEG_VERSION).tar.bz2
-+FFMPEG_SITE := http://ffmpeg.org/releases
-+FFMPEG_INSTALL_STAGING = YES
-+FFMPEG_INSTALL_TARGET = YES
-+
-+FFMPEG_CONF_OPT = \
-+	--prefix=/usr		\
-+	--enable-shared 	\
-+	--disable-ffmpeg	\
-+	--disable-ffplay	\
-+	--disable-ffserver	\
-+	--disable-avfilter	\
-+	--disable-postproc	\
-+	--disable-swscale	\
-+	--disable-vhook		\
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
-+FFMPEG_CONF_OPT += --enable-gpl
-+else
-+FFMPEG_CONF_OPT += --disable-gpl
+@@ -49,6 +49,58 @@ else
+ FFMPEG_CONF_OPT += --disable-ffserver
+ endif
+ 
++ifneq ($(BR2_PACKAGE_FFMPEG_ENCODERS),"all")
++FFMPEG_CONF_OPT += --disable-encoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),--enable-encoder=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_FFMPEG_NONFREE),y)
-+FFMPEG_CONF_OPT += --enable-nonfree
-+else
-+FFMPEG_CONF_OPT += --disable-nonfree
++ifneq ($(BR2_PACKAGE_FFMPEG_DECODERS),"all")
++FFMPEG_CONF_OPT += --disable-decoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),--enable-decoder=$(x))
 +endif
 +
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+FFMPEG_CONF_OPT += --disable-pthreads
-+else
-+FFMPEG_CONF_OPT += --enable-pthreads
++ifneq ($(BR2_PACKAGE_FFMPEG_MUXERS),"all")
++FFMPEG_CONF_OPT += --disable-muxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_MUXERS)),--enable-muxer=$(x))
 +endif
 +
-+ifeq ($(BR2_INET_IPV6),y)
-+FFMPEG_CONF_OPT += --enable-ipv6
-+else
-+FFMPEG_CONF_OPT += --disable-ipv6
++ifneq ($(BR2_PACKAGE_FFMPEG_DEMUXERS),"all")
++FFMPEG_CONF_OPT += --disable-demuxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DEMUXERS)),--enable-demuxer=$(x))
 +endif
 +
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+FFMPEG_CONF_OPT += --enable-zlib
-+FFMPEG_DEPENDENCIES += zlib
-+else
-+FFMPEG_CONF_OPT += --disable-zlib
++ifneq ($(BR2_PACKAGE_FFMPEG_PARSERS),"all")
++FFMPEG_CONF_OPT += --disable-parsers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PARSERS)),--enable-parser=$(x))
 +endif
 +
-+# Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
-+define FFMPEG_CONFIGURE_CMDS
-+	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(TARGET_CONFIGURE_ENV) \
-+	$(FFMPEG_CONF_ENV) \
-+	./configure \
-+		--enable-cross-compile	\
-+		--cross-prefix=$(TARGET_CROSS) \
-+		--sysroot=$(STAGING_DIR) \
-+		--host-cc=$(HOSTCC) \
-+		--cc=$(TARGET_CC) \
-+		--arch=$(BR2_ARCH) \
-+		--extra-cflags=-fPIC \
-+		$(DISABLE_NLS) \
-+		$(DISABLE_LARGEFILE) \
-+		$(DISABLE_IPV6) \
-+		$(FFMPEG_CONF_OPT) \
-+	)
-+endef
++ifneq ($(BR2_PACKAGE_FFMPEG_BSFS),"all")
++FFMPEG_CONF_OPT += --disable-bsfs \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
++endif
 +
-+# Override FFMPEG_INSTALL_TARGET_OPT: FFmpeg does not support install-strip
-+FFMPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++ifneq ($(BR2_PACKAGE_FFMPEG_PROTOCOLS),"all")
++FFMPEG_CONF_OPT += --disable-protocols \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),--enable-protocol=$(x))
++endif
 +
-+$(eval $(call AUTOTARGETS,package/multimedia,ffmpeg))
++ifneq ($(BR2_PACKAGE_FFMPEG_FILTERS),"all")
++FFMPEG_CONF_OPT += --disable-filters \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_FILTERS)),--enable-filter=$(x))
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
++FFMPEG_CONF_OPT += --enable-indevs
++else
++FFMPEG_CONF_OPT += --disable-indevs
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
++FFMPEG_CONF_OPT += --enable-outdevs
++else
++FFMPEG_CONF_OPT += --disable-outdevs
++endif
++
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ FFMPEG_CONF_OPT += --disable-pthreads
+ else
 -- 
 1.7.0.4
