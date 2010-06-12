@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:22:16 +0200
-Subject: [Buildroot] [PATCH 42/49] at91bootstrap: fix install procedure
+Date: Sat, 12 Jun 2010 16:22:20 +0200
+Subject: [Buildroot] [PATCH 46/49] at91dataflashboot: add a patch step
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f195596132326fe7640f6c2ae4020294a50137b0.1276352309.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <470888bede7d604c870a6d47c6f41fa53a47a5d3.1276352309.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    9 ++++-----
- 1 files changed, 4 insertions(+), 5 deletions(-)
+ boot/at91dataflashboot/at91dataflashboot.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index bad5cee..fc7206e 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -56,11 +56,10 @@ $(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.configured
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index dcbe1ef..d11f842 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -18,7 +18,11 @@ $(DATAFLASHBOOT_DIR)/.unpacked: $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
+ 	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ 	touch $(DATAFLASHBOOT_DIR)/.unpacked
  
- $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
- 	mkdir -p $(BINARIES_DIR)
--	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
--		CROSS_COMPILE=$(TARGET_CROSS) \
--		-C $(AT91BOOTSTRAP_DIR) boot
--	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
--		echo "Could not copy bootstrap to BINARIES_DIR"
-+	make MEMORY=$(AT91BOOTSTRAP_MEMORY) 	\
-+		CROSS_COMPILE=$(TARGET_CROSS) 	\
-+		DESTDIR=$(BINARIES_DIR) 	\
-+		-C $(AT91BOOTSTRAP_DIR) install
- 	touch $@
+-$(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.unpacked
++$(DATAFLASHBOOT_DIR)/.patched: $(DATAFLASHBOOT_DIR)/.unpacked
++	toolchain/patch-kernel.sh $(@D) boot/at91dataflashboot \
++		at91dataflashboot-$(DATAFLASHBOOT_VERSION)-\*.patch
++
++$(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.patched
+ 	ls $(DATAFLASHBOOT_DIR)/.unpacked
+ 	make -C $(DATAFLASHBOOT_DIR) CROSS_COMPILE=$(TARGET_CROSS)
  
- .PHONY: at91bootstrap at91bootstrap-source
 -- 
 1.7.0.4
