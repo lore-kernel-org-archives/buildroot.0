@@ -1,55 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jun 2010 16:21:51 +0200
-Subject: [Buildroot] [PATCH 17/49] u-boot: add a few comments
+Date: Sat, 12 Jun 2010 16:21:52 +0200
+Subject: [Buildroot] [PATCH 18/49] u-boot: re-add infrastructure to specify
+	custom tarball
 In-Reply-To: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6db01c1b3091aec8c0131f0f559daabb27e78c1c.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f15702a97f2c614840b687cae80df127433d1b44.1276352308.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The bootloader being very specific to the hardware, being able to
+build U-Boot from an arbitrary tarball available on the web might be
+needed.
+
+Therefore, for U-Boot, we provide two methods :
+
+ * Get a given stable version from U-Boot official FTP server
+
+ * Get an arbitrary tarball
+
+This should hopefully satisfy most needs, without complicating too
+much the U-Boot build procedure on Buildroot side.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ boot/u-boot/Config.in |   11 +++++++++++
+ boot/u-boot/u-boot.mk |   16 ++++++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index a4f5fd9..79c5c3d 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -25,13 +25,24 @@ config BR2_TARGET_UBOOT_2009_11
+ config BR2_TARGET_UBOOT_2009_08
+ 	bool "u-boot-2009.08"
+ 
++config BR2_TARGET_UBOOT_CUSTOM_TARBALL
++	bool "Custom tarball"
++
+ endchoice
+ 
++if BR2_TARGET_UBOOT_CUSTOM_TARBALL
++
++config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
++	string "URL of custom U-Boot tarball"
++
++endif
++
+ config BR2_UBOOT_VERSION
+ 	string
+ 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+ 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
++	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
 diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 220eeb2..90a45b8 100644
+index 90a45b8..ee56611 100644
 --- a/boot/u-boot/u-boot.mk
 +++ b/boot/u-boot/u-boot.mk
-@@ -108,6 +108,7 @@ endif
- endif # BR2_TARGET_UBOOT_NETWORK
+@@ -14,9 +14,17 @@ ifeq ($(U_BOOT_VERSION),)
+ U_BOOT_VERSION=2010.03
+ endif
+ 
++ifeq ($(U_BOOT_VERSION),custom)
++# Handle custom U-Boot tarballs as specified by the configuration
++U_BOOT_TARBALL=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
++U_BOOT_SITE:=$(dir $(U_BOOT_TARBALL))
++U_BOOT_SOURCE:=$(notdir $(U_BOOT_TARBALL))
++else
++# Handle stable official U-Boot versions
++U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+ U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
++endif
+ 
+-U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
+ U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
+ U_BOOT_CAT:=$(BZCAT)
+ U_BOOT_BIN:=u-boot.bin
+@@ -51,9 +59,9 @@ $(DL_DIR)/$(U_BOOT_SOURCE):
+ 	 $(call DOWNLOAD,$(U_BOOT_SITE),$(U_BOOT_SOURCE))
+ 
+ $(U_BOOT_DIR)/.unpacked: $(DL_DIR)/$(U_BOOT_SOURCE)
+-	$(U_BOOT_CAT) $(DL_DIR)/$(U_BOOT_SOURCE) \
+-		| tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	mkdir -p $(U_BOOT_DIR)
++	mkdir -p $(@D)
++	$(INFLATE$(suffix $(U_BOOT_SOURCE))) $(DL_DIR)/$(U_BOOT_SOURCE) \
++		| tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
  	touch $@
  
-+# Build U-Boot itself
- $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 	$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
-@@ -116,6 +117,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
- 		 -C $(U_BOOT_DIR)
- 
-+# Copy the result to the images/ directory
- $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
- 	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
-@@ -129,6 +131,7 @@ $(MKIMAGE): $(U_BOOT_DIR)/.patched
- 	$(MAKE) -C $(U_BOOT_DIR) tools
- 	cp -dpf $(U_BOOT_DIR)/tools/mkimage $(@D)
- 
-+# Build manually mkimage for the target
- $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(U_BOOT_DIR)/tools \
-@@ -142,6 +145,7 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- 
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 
-+# Build manually fw_printenv for the target
- $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
 -- 
 1.7.0.4
