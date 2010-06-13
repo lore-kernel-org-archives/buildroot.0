@@ -1,63 +1,112 @@
-From: sani.broyeur <sani.broyeur@free.fr>
-Date: Sun, 13 Jun 2010 05:13:14 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Jun 2010 11:19:49 +0200
 Subject: [Buildroot] Annoying... nothing work at all :-(
-Message-ID: <1276398794.8108.31.camel@localhost>
+In-Reply-To: <1276398794.8108.31.camel@localhost>
+References: <1276398794.8108.31.camel@localhost>
+Message-ID: <20100613111949.358df33a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all.
+Hello,
 
-I'm trying for several days to get a simple working result with
-buildroot. Nothing.
+On Sun, 13 Jun 2010 05:13:14 +0200
+"sani.broyeur" <sani.broyeur@free.fr> wrote:
 
-I'm very surprised!
+> - When invoking "make menuconfig && make" an ext2 image is created. OK
+> but unbootable, without bootloader nor kernel.
 
-The source PC is a regular Fedora12 AMD quadcore.
+We've made the choice by default to only build a toolchain + a simple
+root filesystem image with only Busybox in it. So that's expected.
 
-The target is a MiniITX single board regular Atom PC, able to boot with
-all desktop OS, on a regular disk or a CompactFlash reader.
+> - When asking to add a bootloader, grub doesn't install properly on
+> target image, config is not done. This part is broken.
 
-- When invoking "make menuconfig && make" an ext2 image is created. OK
-but unbootable, without bootloader nor kernel.
+What do you expect exactly ? How would you want grub to be installed ?
+If you're not more specific about what you expect, it's going to be
+hard to help you.
 
-- When asking to add a bootloader, grub doesn't install properly on
-target image, config is not done. This part is broken.
+(FYI: I'm currently doing a fairly big bootloader code cleanup, for
+which I've sent a 49 patches patch set yesterday on this list. At least
+with this patch set applied, Grub compiles properly. However, I'm not
+sure what to do with the resulting binaries.)
 
-- When asking to add a CF/FAT16 bootloader, syslinux doesn't install at
-all on target image, this part is also broken since it does really
-nothing on the image :-)
+> - When asking to add a CF/FAT16 bootloader, syslinux doesn't install
+> at all on target image, this part is also broken since it does really
+> nothing on the image :-)
 
-- When asking a kernel, attempts lead often to cryptic make errors and
-the whole buildroot tree has to be recreated from .tar.gz without kernel
-generation. The "kernel" menu in menuconfig is broken, and no kernel
-config is invoked at build or within menuconfig.
+What do you call "target image" ? The ext2 filesystem ? Then it is
+expected that syslinux isn't installed *in* it. However, the syslinux
+image is supposed to be available in output/images/.
 
-- When invoking linux26-menuconfig (I'v found that one time), either
-nothing, or make errors, this one is also broken.
+But again, I know syslinux builds properly with my bootloaders-cleanup
+branch applied. The bootloader code in Buildroot hasn't been
+unmaintained for quite some time, so he doesn't surprise me that you
+encounter issues.
 
-Etc, etc...
+Another thing is that Buildroot is used a lot for non-x86 architectures
+(ARM, PowerPC, etc.), and for these architectures, the bootloader is
+never *in* the root filesystem image. The fact the bootloader is *in*
+the root filesystem image is a x86-specific thing, and as we haven't
+had a lot of x86-related contributions lately, it may well be that
+we're not doing what should be done for this specific architecture.
 
-- Why asking for installation of a bootloader that is never installed,
-nor configured on the target ?
+> - When asking a kernel, attempts lead often to cryptic make errors and
+> the whole buildroot tree has to be recreated from .tar.gz without
+> kernel generation. The "kernel" menu in menuconfig is broken, and no
+> kernel config is invoked at build or within menuconfig.
 
-- Why asking for generation of a kernel that is never created and lead
-to corruption of buildroot tree ?
+Please provide detailed reproduction steps, because ? attemps lead
+often to cryptic make errors ? is by no means an useful description of
+what's happening.
 
-etc, etc...
+FWIW :
 
-All produced forms of "target" are either incomplete, or unusable, or
-unbootable, when the commands are not ending with errors!
+ * I've built succesfully a kernel yesterday with Buildroot, both ARM
+   and PowerPC.
 
-Is there somewhere an USABLE documentation?
+ * I'm working on a big cleanup of the linux compilation code in
+   Buildroot, because the current code is way too complicated.
 
-A step-by-step tutorial ? With exemple and results ?
+> - When invoking linux26-menuconfig (I'v found that one time), either
+> nothing, or make errors, this one is also broken.
 
-I'm not a newbie to linux, but this "buildroot project" seems for sure
-not usable before years of improvements...
+Be more specific ?
 
-Comments would be appreciated.
+> All produced forms of "target" are either incomplete, or unusable, or
+> unbootable, when the commands are not ending with errors!
 
-Regards.
+Be more specific ?
+
+> Is there somewhere an USABLE documentation?
+
+The only documentation we have so far is
+http://buildroot.org/downloads/buildroot.html. Patches welcome.
+
+> I'm not a newbie to linux, but this "buildroot project" seems for sure
+> not usable before years of improvements...
+
+We certainly have rough edges, particularly in the area of
+bootloader/kernel compilation, which haven't seen any
+cleanup/refactoring since a very, very long time.
+
+I'm sorry, but your message is by no means useful :
+
+ * You're not giving an appropriate level of precision that would give
+   us the opportunity to understand and solve the problems you're
+   facing. For each problem: the .config file that allows to produce
+   the issue, the behaviour that you see, and the behaviour that you
+   would expect Buildroot to have.
+
+ * You're insulting the work done by the developers on the Buildroot
+   project, reducing their incentive to help you and to solve your
+   problems.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
