@@ -1,112 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jun 2010 11:19:49 +0200
-Subject: [Buildroot] Annoying... nothing work at all :-(
-In-Reply-To: <1276398794.8108.31.camel@localhost>
-References: <1276398794.8108.31.camel@localhost>
-Message-ID: <20100613111949.358df33a@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jun 2010 13:54:40 +0200
+Subject: [Buildroot] [PATCH 1/4] ffmpeg: add new package
+In-Reply-To: <1276359761-13721-2-git-send-email-luca@lucaceresoli.net> (Luca
+	Ceresoli's message of "Sat, 12 Jun 2010 18:22:38 +0200")
+References: <1276359761-13721-1-git-send-email-luca@lucaceresoli.net>
+	<1276359761-13721-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87ocfff8qn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-On Sun, 13 Jun 2010 05:13:14 +0200
-"sani.broyeur" <sani.broyeur@free.fr> wrote:
+ Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-> - When invoking "make menuconfig && make" an ext2 image is created. OK
-> but unbootable, without bootloader nor kernel.
+Looks good - A few comments though:
 
-We've made the choice by default to only build a toolchain + a simple
-root filesystem image with only Busybox in it. So that's expected.
+ Luca> ---
+ Luca>  CHANGES                             |    2 +-
+ Luca>  package/multimedia/Config.in        |    1 +
+ Luca>  package/multimedia/ffmpeg/Config.in |   25 +++++++++++
+ Luca>  package/multimedia/ffmpeg/ffmpeg.mk |   79 +++++++++++++++++++++++++++++++++++
+ Luca>  4 files changed, 106 insertions(+), 1 deletions(-)
+ Luca>  create mode 100644 package/multimedia/ffmpeg/Config.in
+ Luca>  create mode 100644 package/multimedia/ffmpeg/ffmpeg.mk
 
-> - When asking to add a bootloader, grub doesn't install properly on
-> target image, config is not done. This part is broken.
+ Luca> diff --git a/CHANGES b/CHANGES
+ Luca> index 3ba7195..6ca4fc9 100644
+ Luca> --- a/CHANGES
+ Luca> +++ b/CHANGES
+ Luca> @@ -4,7 +4,7 @@
+ 
+ Luca>  	New GTK-based configurator, usable using 'make gconfig'.
+ 
+ Luca> -	New packages: cgilua, copas, coxpcall, luafilesystem,
+ Luca> +	New packages: cgilua, copas, coxpcall, ffmpeg, luafilesystem,
+ Luca>  	luasocket, rings, wsapi, xavante
 
-What do you expect exactly ? How would you want grub to be installed ?
-If you're not more specific about what you expect, it's going to be
-hard to help you.
+I would prefer if patches don't edit CHANGES - There's too high risk for
+merge conflicts.
 
-(FYI: I'm currently doing a fairly big bootloader code cleanup, for
-which I've sent a 49 patches patch set yesterday on this list. At least
-with this patch set applied, Grub compiles properly. However, I'm not
-sure what to do with the resulting binaries.)
+ Luca> +config BR2_PACKAGE_FFMPEG_GPL
+ Luca> +	bool "Enable GPL code"
+ Luca> +	default n
+ Luca> +config BR2_PACKAGE_FFMPEG_NONFREE
+ Luca> +	bool "Enable nonfree code"
+ Luca> +	default n
 
-> - When asking to add a CF/FAT16 bootloader, syslinux doesn't install
-> at all on target image, this part is also broken since it does really
-> nothing on the image :-)
+'n' is default, so there's no need for those lines.
 
-What do you call "target image" ? The ext2 filesystem ? Then it is
-expected that syslinux isn't installed *in* it. However, the syslinux
-image is supposed to be available in output/images/.
+ Luca> +ifeq ($(BR2_INET_IPV6),y)
+ Luca> +FFMPEG_CONF_OPT += --enable-ipv6
+ Luca> +else
+ Luca> +FFMPEG_CONF_OPT += --disable-ipv6
+ Luca> +endif
 
-But again, I know syslinux builds properly with my bootloaders-cleanup
-branch applied. The bootloader code in Buildroot hasn't been
-unmaintained for quite some time, so he doesn't surprise me that you
-encounter issues.
+We do have a generic DISABLE_IPV6 if ffmpeg detects ipv6 support
+automatically even if --enable-ipv6 isn' passed.
 
-Another thing is that Buildroot is used a lot for non-x86 architectures
-(ARM, PowerPC, etc.), and for these architectures, the bootloader is
-never *in* the root filesystem image. The fact the bootloader is *in*
-the root filesystem image is a x86-specific thing, and as we haven't
-had a lot of x86-related contributions lately, it may well be that
-we're not doing what should be done for this specific architecture.
+ Luca> +# Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ Luca> +define FFMPEG_CONFIGURE_CMDS
+ Luca> +	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+ Luca> +	$(TARGET_CONFIGURE_OPTS) \
+ Luca> +	$(TARGET_CONFIGURE_ARGS) \
+ Luca> +	$(TARGET_CONFIGURE_ENV) \
+ Luca> +	$(FFMPEG_CONF_ENV) \
+ Luca> +	./configure \
+ Luca> +		--enable-cross-compile	\
+ Luca> +		--cross-prefix=$(TARGET_CROSS) \
+ Luca> +		--sysroot=$(STAGING_DIR) \
+ Luca> +		--host-cc=$(HOSTCC) \
+ Luca> +		--cc=$(TARGET_CC) \
+ Luca> +		--arch=$(BR2_ARCH) \
+ Luca> +		--extra-cflags=-fPIC \
+ Luca> +		$(DISABLE_NLS) \
+ Luca> +		$(DISABLE_LARGEFILE) \
+ Luca> +		$(DISABLE_IPV6) \
+ Luca> +		$(FFMPEG_CONF_OPT) \
 
-> - When asking a kernel, attempts lead often to cryptic make errors and
-> the whole buildroot tree has to be recreated from .tar.gz without
-> kernel generation. The "kernel" menu in menuconfig is broken, and no
-> kernel config is invoked at build or within menuconfig.
+Does ffmpeg configure handle the -q (quiet) flag? If so, please add
+$(QUIET) as well.
 
-Please provide detailed reproduction steps, because ? attemps lead
-often to cryptic make errors ? is by no means an useful description of
-what's happening.
+Is --cc needed? Doesn't it just use the CC environment variable? If not,
+what about TARGET_CFLAGS / TARGET_LDFLAGS?
 
-FWIW :
+ Luca> +	)
+ Luca> +endef
+ Luca> +
+ Luca> +# Override FFMPEG_INSTALL_TARGET_OPT: FFmpeg does not support install-strip
+ Luca> +FFMPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
 
- * I've built succesfully a kernel yesterday with Buildroot, both ARM
-   and PowerPC.
+FYI, in the future I would like to get rid of the 'make install vs make
+install-strip', but for now this is fine.
 
- * I'm working on a big cleanup of the linux compilation code in
-   Buildroot, because the current code is way too complicated.
-
-> - When invoking linux26-menuconfig (I'v found that one time), either
-> nothing, or make errors, this one is also broken.
-
-Be more specific ?
-
-> All produced forms of "target" are either incomplete, or unusable, or
-> unbootable, when the commands are not ending with errors!
-
-Be more specific ?
-
-> Is there somewhere an USABLE documentation?
-
-The only documentation we have so far is
-http://buildroot.org/downloads/buildroot.html. Patches welcome.
-
-> I'm not a newbie to linux, but this "buildroot project" seems for sure
-> not usable before years of improvements...
-
-We certainly have rough edges, particularly in the area of
-bootloader/kernel compilation, which haven't seen any
-cleanup/refactoring since a very, very long time.
-
-I'm sorry, but your message is by no means useful :
-
- * You're not giving an appropriate level of precision that would give
-   us the opportunity to understand and solve the problems you're
-   facing. For each problem: the .config file that allows to produce
-   the issue, the behaviour that you see, and the behaviour that you
-   would expect Buildroot to have.
-
- * You're insulting the work done by the developers on the Buildroot
-   project, reducing their incentive to help you and to solve your
-   problems.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
