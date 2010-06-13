@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jun 2010 13:54:40 +0200
-Subject: [Buildroot] [PATCH 1/4] ffmpeg: add new package
-In-Reply-To: <1276359761-13721-2-git-send-email-luca@lucaceresoli.net> (Luca
-	Ceresoli's message of "Sat, 12 Jun 2010 18:22:38 +0200")
+Date: Sun, 13 Jun 2010 14:01:48 +0200
+Subject: [Buildroot] [PATCH 3/4] ffmpeg: allow customization of codecs,
+	(de)muxers and other components
+In-Reply-To: <1276359761-13721-4-git-send-email-luca@lucaceresoli.net> (Luca
+	Ceresoli's message of "Sat, 12 Jun 2010 18:22:40 +0200")
 References: <1276359761-13721-1-git-send-email-luca@lucaceresoli.net>
-	<1276359761-13721-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87ocfff8qn.fsf@macbook.be.48ers.dk>
+	<1276359761-13721-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87k4q3f8er.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,86 +15,25 @@ To: buildroot@busybox.net
 
 >>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Luca> Add the option to customize the list of decoders, encoders,
+ Luca> muxers, demuxers, parsers, protocols, bsfs and filters to be
+ Luca> built into ffmpeg, and to compile or exclude input and output
+ Luca> devices.
 
-Looks good - A few comments though:
-
- Luca> ---
- Luca>  CHANGES                             |    2 +-
- Luca>  package/multimedia/Config.in        |    1 +
- Luca>  package/multimedia/ffmpeg/Config.in |   25 +++++++++++
- Luca>  package/multimedia/ffmpeg/ffmpeg.mk |   79 +++++++++++++++++++++++++++++++++++
- Luca>  4 files changed, 106 insertions(+), 1 deletions(-)
- Luca>  create mode 100644 package/multimedia/ffmpeg/Config.in
- Luca>  create mode 100644 package/multimedia/ffmpeg/ffmpeg.mk
-
- Luca> diff --git a/CHANGES b/CHANGES
- Luca> index 3ba7195..6ca4fc9 100644
- Luca> --- a/CHANGES
- Luca> +++ b/CHANGES
- Luca> @@ -4,7 +4,7 @@
+ Luca> +++ b/package/multimedia/ffmpeg/ffmpeg.mk
+ Luca> @@ -49,6 +49,58 @@ else
+ Luca>  FFMPEG_CONF_OPT += --disable-ffserver
+ Luca>  endif
  
- Luca>  	New GTK-based configurator, usable using 'make gconfig'.
- 
- Luca> -	New packages: cgilua, copas, coxpcall, luafilesystem,
- Luca> +	New packages: cgilua, copas, coxpcall, ffmpeg, luafilesystem,
- Luca>  	luasocket, rings, wsapi, xavante
-
-I would prefer if patches don't edit CHANGES - There's too high risk for
-merge conflicts.
-
- Luca> +config BR2_PACKAGE_FFMPEG_GPL
- Luca> +	bool "Enable GPL code"
- Luca> +	default n
- Luca> +config BR2_PACKAGE_FFMPEG_NONFREE
- Luca> +	bool "Enable nonfree code"
- Luca> +	default n
-
-'n' is default, so there's no need for those lines.
-
- Luca> +ifeq ($(BR2_INET_IPV6),y)
- Luca> +FFMPEG_CONF_OPT += --enable-ipv6
- Luca> +else
- Luca> +FFMPEG_CONF_OPT += --disable-ipv6
+ Luca> +ifneq ($(BR2_PACKAGE_FFMPEG_ENCODERS),"all")
+ Luca> +FFMPEG_CONF_OPT += --disable-encoders \
+ Luca> +	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),--enable-encoder=$(x))
  Luca> +endif
-
-We do have a generic DISABLE_IPV6 if ffmpeg detects ipv6 support
-automatically even if --enable-ipv6 isn' passed.
-
- Luca> +# Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
- Luca> +define FFMPEG_CONFIGURE_CMDS
- Luca> +	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
- Luca> +	$(TARGET_CONFIGURE_OPTS) \
- Luca> +	$(TARGET_CONFIGURE_ARGS) \
- Luca> +	$(TARGET_CONFIGURE_ENV) \
- Luca> +	$(FFMPEG_CONF_ENV) \
- Luca> +	./configure \
- Luca> +		--enable-cross-compile	\
- Luca> +		--cross-prefix=$(TARGET_CROSS) \
- Luca> +		--sysroot=$(STAGING_DIR) \
- Luca> +		--host-cc=$(HOSTCC) \
- Luca> +		--cc=$(TARGET_CC) \
- Luca> +		--arch=$(BR2_ARCH) \
- Luca> +		--extra-cflags=-fPIC \
- Luca> +		$(DISABLE_NLS) \
- Luca> +		$(DISABLE_LARGEFILE) \
- Luca> +		$(DISABLE_IPV6) \
- Luca> +		$(FFMPEG_CONF_OPT) \
-
-Does ffmpeg configure handle the -q (quiet) flag? If so, please add
-$(QUIET) as well.
-
-Is --cc needed? Doesn't it just use the CC environment variable? If not,
-what about TARGET_CFLAGS / TARGET_LDFLAGS?
-
- Luca> +	)
- Luca> +endef
  Luca> +
- Luca> +# Override FFMPEG_INSTALL_TARGET_OPT: FFmpeg does not support install-strip
- Luca> +FFMPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ Luca> +ifneq ($(BR2_PACKAGE_FFMPEG_DECODERS),"all")
 
-FYI, in the future I would like to get rid of the 'make install vs make
-install-strip', but for now this is fine.
+I would suggest you use qstrip + strip here as well, so it doesn't break if the
+user accidently added extra spaces or so.
 
 -- 
 Bye, Peter Korsgaard
