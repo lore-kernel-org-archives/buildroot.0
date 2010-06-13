@@ -1,10 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jun 2010 18:41:30 +0200
-Subject: [Buildroot] Annoying... nothing work at all :-(
-In-Reply-To: <1276442348.14503.5.camel@localhost>
-References: <1276398794.8108.31.camel@localhost> <20100613111949.358df33a@surf>
-	<1276442348.14503.5.camel@localhost>
-Message-ID: <20100613184130.4082a1f6@surf>
+Date: Sun, 13 Jun 2010 20:50:04 +0200
+Subject: [Buildroot] [pull request] Pull request for branch linux-cleanup
+Message-ID: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,202 +10,73 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for sharing more precisions about the issues you're having, this
-report is actually helpful, even though a little bit more details on
-some of the issues are still needed.
+Here is a set of 10 patches that completely rewrites the Linux kernel
+compilation process in Buildroot. It is supposed to be applied on top
+of the bootloaders-cleanup branch I've sent yesterday.
 
-On Sun, 13 Jun 2010 17:19:08 +0200
-"sani.broyeur" <sani.broyeur@free.fr> wrote:
+I've fairly drastically reduced the number of options to configure the
+kernel, and particulary removed the horrible mess of version
+selection. See the first commit in this branch for what remains in
+terms of configuration options for the kernel. As I've removed quite a
+few things, I'm interested to know how you're using Buildroot to build
+your kernel, and whether this proposal still matches your use cases.
 
-> 0) My experience is not an "insult", juste a "result" :-)
-
-Sorry, but:
-
-?
-I'm not a newbie to linux, but this "buildroot project" seems for sure
-not usable before years of improvements...
-?
-
-is indeed insulting the work of the developers contributing to
-Buildroot.
-
-> 6) make
-> 
-> make[1]: *** [insmod.static] Erreur 1
-> make[1]: *** Attente des t?ches non termin?es....
-> make[1]: quittant le r?pertoire
-> ? /devel/buildroot-2010.05/output/toolchain/module-init-tools-3.2.2 ?
-> make: ***
-> [/devel/buildroot-2010.05/output/toolchain/module-init-tools-3.2.2/depmod]
-> Erreur 2 [root at hercules buildroot-2010.05]# 
-> 
-> -> Message means "waiting for unfinished tasks": the "-j 2" option in
-> make invocation (defaut = 2) is perhaps the cause. Relaunch!
-
-Please provide the rest of the build log, the real error occured before
-that.
-
-> /usr/lib64/ccache/gcc  -g -O2 -Wunused -Wall   -o insmod.static
-> -static insmod.o  
-> /usr/bin/ld: cannot find -lc
-> collect2: ld a retourn? 1 code d'?tat d'ex?cution
-> make[1]: *** [insmod.static] Erreur 1
-> make[1]: quittant le r?pertoire
-> ? /devel/buildroot-2010.05/output/toolchain/module-init-tools-3.2.2 ?
-> make: ***
-> [/devel/buildroot-2010.05/output/toolchain/module-init-tools-3.2.2/depmod]
-> Erreur 2
-> 
-> -> ld perhaps invoked with an empty variable leading to syntax
-> mismatch, option taken for parameter or missing one, or something
-> alike. Relaunch!
-
-Here I'm sorry, but it looks like something is broken on your side:
-we're just using the gcc/ld of your host. Could you try to disable
-ccache on your system and see if it works better ?
-
-If you try to statically compile a simple program on your host, does it
-work ?
-
-> make goes on, generating all the regular stuff.
-> [...] MODPOST 1975 modules
-
-Ouch, huge number of modules. Certainly not an use case we've been
-testing too much.
-
-> >> -- /devel/buildroot-2010.05/output/build/_fakeroot.fs
-> rootdir=/devel/buildroot-2010.05/output/target
-> table='target/generic/device_table.txt'
-> genext2fs: couldn't allocate a block (no free space)
-> make: *** [/devel/buildroot-2010.05/output/images/rootfs.ext2] Erreur
-> 1 
-> 
-> -> KO the ext2 fs is NOT generated.
-
-Here, it seems that our help script fs/ext2/genext2fs.sh made a wrong
-estimate of the number of blocks the target filesystem should be to
-contain all the files of your system.
-
-This is definitely a bug, I'll have a look at it.
-
-> Of course, there is plenty of Gb available on disk, this error is
-> surprising.
-
-No, it isn't :-)
-
-> 9) trying to generate something else, i.e cramfs, squashfs and
-> initramfs:
-> - make menuconfig -> target filesystem option
->         ENABLED cramfs
->         ENABLED squashfs
->         ENABLED initramfs
->         DISABLED ext2
-> - save on exit
-> 
-> 10) make again
-> - building of cramfs
-> [...]
-> >>>   Generating root filesystem image rootfs.cramfs
-> warning: estimate of required size (upper bound) is 661MB, but maximum
-> image size is 272MB, we might die prematurely
-> mkcramfs: filesystem too big
-> make: *** [/devel/buildroot-2010.05/output/images/rootfs.cramfs]
-> Erreur 8
-
-By design, cramfs filesystems are limited to ~272 MB. See
-http://en.wikipedia.org/wiki/Cramfs:
-
-? Maximum file system size is a little under 272MB. (The last file on
-the file system must begin before the 256MB block, but can extend past
-it.) ?
-
-Nothing we can really do about: cramfs filesystems are useful for some
-embedded systems, and having a 661 MB root filesystem in Buildroot is
-definitely not the common case.
-
-Moreover, the message is pretty clear, it's saying: ? filesystem too
-big ?
-
-> 11) let see what we got after attempting to generate either a root fs
-> and the corresponding kernel:
-> 
-> [root at hercules buildroot-2010.05]# ll output/images/
-> total 7156
-> -rw-r--r-- 1 root root 3272576 juin  13 15:50 bzImage
-> -rw-r--r-- 1 root root       0 juin  13 15:50 rootfs.cramfs
-> -rw-r--r-- 1 root root 3645440 juin  13 14:08 rootfs.ext2
-> -rw-r--r-- 1 root root  394744 juin  13 15:49 rootfs.initramfs
-> 
-> - kernel seems to be generated (no evidence it will load at this time)
-> - rootfs.cramfs isn't generated
-
-Yes, see above explanation.
-
-> - rootfs.ext2 seems to be generated BUT is not (error above at point
-> 8)
-
-Yes, see above explanation.
-
-> - rootfs.initramfs is only a text file without any CPIO content:
-
-This is normal, this file is *not* supposed to be a CPIO archive. It is
-supposed to be used by the kernel as the CONFIG_INITRAMFS_SOURCE value.
-Its purpose is to describe what the initramfs should contain.
-
-> This "rootfs.initramfs" is NOT an initramfs as expected but something
-> else I cannot state on.
-
-rootfs.initramfs *IS* the text file that will allow the kernel to
-include an initramfs.
-
-> 12) additional investigations:
-> - asking for a bootloader without kernel prevent errors in target
-> filesystems generation, since the size issue is avoided.
-
-Yes, as these errors are all due to the fact that your filesystem is
-much, much bigger than the typical cases we do (< 50 MB).
-
-> - asking a bootloader in make menuconfig lead to strange things:
->         -> grub only create a /boot/grub subdir in target, but doesn't
-> create
-> menu.lst nor invoque root (hd0,0) nor setup (hd0,0). Doing it manually
-> afterwards is refused.
-
-What would you want Buildroot to do exactly with Grub ? Remember that
-Buildroot doesn't run as root, and this might limit the actions that
-Buildroot can take with regard to the installation of a bootloader.
-
->         -> sysconfig is an external bootloader, your're right, so
-> including it
-> in menuconfig could be understood as "prepare a subdir in output/image
-> with all the relevant stuff configured, that is: bzImage+ldlinux.sys
-> +rootfs.cramfs+syslinux.cfg. Nothing this way is done. What means
-> "syslinux" in menuconfig?
-
-I'm not sure what the current syslinux code is doing. In my cleanup,
-I've made sure it copies isolinux.bin to output/images. If you'd like
-it to do more things, please describe that in detail and I can have a
-look at it.
-
-> 13) Pending questions...
-> - Is buildroot suitable at this time to create tiny x86 embedded
-> systems, either by regular filesystem on a disk (ext2) or ramdisk in a
-> flashcard (syslinux+initrd) ?
-
-Yes, but as you can see, there might be issues here and there, mostly
-because the bootloader code isn't very good for x86 bootloaders. Some
-help on *what* Buildroot should do would be very helpful.
-
-> - Why is there so many unrecoverable errors as I used default
-> presets ?
-
-See above explanations. I have no explanation for the module-init-tools
-error you had, except that something seems strange with your ccache set
-up.
+Peter: for me, this patch set is ready for inclusion, unless there are
+comments, of course.
 
 Thomas
+
+The following changes since commit fa2a311b7756fc458ae55b5aa90ac865cef6c498:
+  Thomas Petazzoni (1):
+        linux: fix dependency on mkimage
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot linux-cleanup
+
+Thomas Petazzoni (10):
+      New, simpler, infrastructure for building the Linux kernel
+      Remove old Linux infrastructure
+      iso9660: take into account the linux changes
+      module-init-tools: remove support for cross-depmod
+      module-init-tools: bump version + convert to autotools
+      linux: Add dependency on host-module-init-tools
+      Add generic functions to enable/set/disable options in kconfig files
+      linux: adjust kernel config according to the Buildroot configuration
+      linux: add support for linux26-{menuconfig,xconfig,gconfig} targets
+      linux: add support for initramfs
+
+ Config.in                                          |    2 +-
+ Makefile                                           |    5 +-
+ fs/common.mk                                       |    6 +-
+ fs/initramfs/initramfs.mk                          |    2 +
+ fs/iso9660/Config.in                               |    4 +-
+ fs/iso9660/iso9660.mk                              |    6 +-
+ linux/Config.in                                    |  129 +++++
+ linux/linux.mk                                     |  169 +++++++
+ package/Makefile.package.in                        |   15 +
+ ...nit-tools-3.11-add-manpages-config-option.patch |   47 ++
+ .../module-init-tools-remove-index.patch           |   12 -
+ package/module-init-tools/module-init-tools.mk     |  124 +-----
+ package/module-init-tools/module-init-tools.patch  |   77 ---
+ target/Makefile.in                                 |   16 -
+ target/linux/Config.in                             |   33 --
+ target/linux/Config.in.advanced                    |  463 -----------------
+ target/linux/Config.in.versions                    |   62 ---
+ target/linux/Makefile.in                           |  250 ---------
+ target/linux/Makefile.in.advanced                  |  532 --------------------
+ 19 files changed, 385 insertions(+), 1569 deletions(-)
+ create mode 100644 linux/Config.in
+ create mode 100644 linux/linux.mk
+ create mode 100644 package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch
+ delete mode 100644 package/module-init-tools/module-init-tools-remove-index.patch
+ delete mode 100644 package/module-init-tools/module-init-tools.patch
+ delete mode 100644 target/linux/Config.in
+ delete mode 100644 target/linux/Config.in.advanced
+ delete mode 100644 target/linux/Config.in.versions
+ delete mode 100644 target/linux/Makefile.in
+ delete mode 100644 target/linux/Makefile.in.advanced
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
