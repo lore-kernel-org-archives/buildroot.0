@@ -1,62 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jun 2010 20:50:07 +0200
-Subject: [Buildroot] [PATCH 03/10] iso9660: take into account the linux
-	changes
+Date: Sun, 13 Jun 2010 20:50:08 +0200
+Subject: [Buildroot] [PATCH 04/10] module-init-tools: remove support for
+	cross-depmod
 In-Reply-To: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5392121addc957f0723cdb98f5afe89dccaeeb5e.1276454802.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7f4da0ef07505a56a286e261c166ccabf7fcb8bb.1276454802.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The new infrastructure to build the Linux kernel doesn't use a
+cross-depmod. This isn't needed with modern module-init-tools that
+most distros include perfectly handle this.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/iso9660/Config.in  |    4 ++--
- fs/iso9660/iso9660.mk |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/module-init-tools/module-init-tools.mk |   44 ------------------------
+ 1 files changed, 0 insertions(+), 44 deletions(-)
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 7830581..5f7cdf4 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -1,7 +1,7 @@
- config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
- 	depends on BR2_i386
--	depends on !BR2_KERNEL_none
-+	depends on BR2_LINUX_KERNEL
- 	select BR2_TARGET_ROOTFS_EXT2
- 	select BR2_TARGET_GRUB
- 	help
-@@ -13,4 +13,4 @@ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	default "fs/iso9660/menu.lst"
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index 129770e..8adb684 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -70,50 +70,6 @@ module-init-tools-dirclean:
+ 	rm -rf $(MODULE_INIT_TOOLS_DIR)
  
- comment "iso image requires a Linux kernel to be built"
--	depends on BR2_i386 && BR2_KERNEL_none
-+	depends on BR2_i386 && !BR2_LINUX_KERNEL
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 66e2de2..6f60893 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -15,14 +15,14 @@ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
- ISO9660_OPTS+=-U
- endif
- 
--$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot $(LINUX_KERNEL) $(BINARIES_DIR)/rootfs.ext2 grub
-+$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux26 ext2-root grub
- 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
- 	mkdir -p $(ISO9660_TARGET_DIR)
- 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
- 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
--	cp $(LINUX_KERNEL) $(ISO9660_TARGET_DIR)/kernel
--	cp $(EXT2_TARGET) $(ISO9660_TARGET_DIR)/initrd
-+	cp $(LINUX26_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
-+	cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(FAKEROOT_SCRIPT)
- 	touch $(BUILD_DIR)/.fakeroot.00000
+ #############################################################
+-
+-
+-$(MODULE_INIT_TOOLS_DIR2)/.source: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
+-	$(MODULE_INIT_TOOLS_CAT) $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE) | tar -C $(TOOLCHAIN_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(MODULE_INIT_TOOLS_DIR2) package/module-init-tools \*.patch
+-	$(CONFIG_UPDATE) $(MODULE_INIT_TOOLS_DIR2)
+-	touch $(MODULE_INIT_TOOLS_DIR2)/.source
+-
+-$(MODULE_INIT_TOOLS_DIR2)/.configured: $(MODULE_INIT_TOOLS_DIR2)/.source
+-	(cd $(MODULE_INIT_TOOLS_DIR2); \
+-		CC="$(HOSTCC)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--sysconfdir=/etc \
+-		--program-transform-name='' \
+-	)
+-	touch $(MODULE_INIT_TOOLS_DIR2)/.configured
+-
+-$(MODULE_INIT_TOOLS_DIR2)/$(MODULE_INIT_TOOLS_BINARY): $(MODULE_INIT_TOOLS_DIR2)/.configured
+-	$(MAKE) -C $(MODULE_INIT_TOOLS_DIR2)
+-	touch -c $(MODULE_INIT_TOOLS_DIR2)/$(MODULE_INIT_TOOLS_BINARY)
+-
+-
+-$(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26: $(MODULE_INIT_TOOLS_DIR2)/$(MODULE_INIT_TOOLS_BINARY)
+-	$(INSTALL) -D $(MODULE_INIT_TOOLS_DIR2)/$(MODULE_INIT_TOOLS_BINARY) $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26
+-
+-cross-depmod26: $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26
+-
+-module-init-tools-source cross-depmod26-source: $(DL_DIR)/$(MODULE_INIT_TOOLS_SOURCE)
+-
+-cross-depmod26-clean:
+-	rm -f $(STAGING_DIR)/bin/$(GNU_TARGET_NAME)-depmod26
+-	-$(MAKE) -C $(MODULE_INIT_TOOLS_DIR2) clean
+-
+-cross-depmod26-dirclean:
+-	rm -rf $(MODULE_INIT_TOOLS_DIR2)
+-
+-ifeq ($(BR2_PACKAGE_LINUX),y)
+-HOST_SOURCE+=module-init-tools-source
+-endif
+-
+-#############################################################
+ #
+ ## Toplevel Makefile options
+ #
 -- 
 1.7.0.4
