@@ -1,58 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jun 2010 13:54:11 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	ext-toolchain-fixes
-Message-ID: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jun 2010 13:54:12 +0200
+Subject: [Buildroot] [PATCH 01/10] ext-toolchains: take into account other
+	Glibc dynamic loader variants
+In-Reply-To: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b68eb48549402e13326e6826aa0f3dc2051de21a.1276516273.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+External toolchains using Glibc have different names for the dynamic
+loader. Some of them name it ld-linux.so.*, while some others (such as
+the PowerPC and MIPS CodeSourcery toolchains) name it simply ld.so.*.
 
-Here is a patch set improving the support for external toolchains,
-after testing with Buildroot x86-64 toolchain, Crosstool-NG x86-64
-toolchain, MIPS and PowerPC CodeSourcery toolchains.
+Therefore, we fix the glibc detection code to handle this case.
 
-The MIPS CodeSourcery toolchain is not fully supported yet: it is a
-very smart multilib toolchain, which supports both glibc and uclibc in
-a single toolchain, with -muclibc being the gcc flag to switch to
-uClibc. For the moment, only the default variant (glibc) is supported.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/external-toolchain/ext-tool.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-This patchset only touches toolchain/external-toolchain/ext-tool.mk,
-except for a patch that is added to uClibc to fix fcntl64() on 64 bits
-targets. This patch is already upstream in the master branch, and a
-bug has been filled into the uClibc bug tracker to ask for this patch
-to be merged into the 0.9.31 branch.
-
-Thomas
-
-The following changes since commit 7c709f4affc44f3bbc9a09fec8d84ae3807e31e7:
-  Peter Korsgaard (1):
-        file: don't force _GNU_SOURCE in CFLAGS
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot ext-toolchain-fixes
-
-Thomas Petazzoni (10):
-      ext-toolchains: take into account other Glibc dynamic loader variants
-      ext-toolchain: Fix ARCH_SYSROOT detection
-      external-toolchain: only copy existing directories of the sysroot
-      external-toolchain: support 64 bits glibc toolchains
-      external-toolchain: create lib64 symlinks if needed
-      external-toolchain: mention MIPS and PowerPC CodeSourcery toolchains
-      external-toolchain: recognize uClibc 64 bits toolchains
-      uclibc: add patch to fix fcntl64() on 64 bits targets
-      external-toolchain: handle libstdc++/libgcc_s for BR toolchains
-      external-toolchain: hardcode the destination directory for a library
-
- toolchain/external-toolchain/ext-tool.mk           |   92 +++++++++++++-------
- ...ibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch |   34 +++++++
- 2 files changed, 96 insertions(+), 30 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
-
-Thanks,
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 8daae15..3943ceb 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -155,7 +155,7 @@ check_glibc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* ; then \
++	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
+@@ -251,11 +251,9 @@ check_cross_compiler_exists = \
+ 
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+-EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-EXTERNAL_LIBS+=ld-uClibc.so
+-else
+-EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
++EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCLIBC),y)
++EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+ 
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 -- 
-Thomas Petazzoni
+1.7.0.4
