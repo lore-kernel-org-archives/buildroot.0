@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] yaboot: drop support
-Message-ID: <20100614203434.59BA480E24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: remove u-boot-status
+	make target
+Message-ID: <20100614203435.CCA8C80E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,93 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afd77256c9914663af7684792051fee74c610fb9
+commit: http://git.buildroot.net/buildroot/commit/?id=86074e71b6a0933afcd88b0ccdd3d7cccd2779fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Yaboot does not build, hasn't been updated since a long time, and
-isn't very common these days on embedded PowerPC platforms.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/Config.in        |    1 -
- boot/yaboot/Config.in |    5 -----
- boot/yaboot/yaboot.mk |   44 --------------------------------------------
- 3 files changed, 0 insertions(+), 50 deletions(-)
- delete mode 100644 boot/yaboot/Config.in
- delete mode 100644 boot/yaboot/yaboot.mk
+ boot/u-boot/u-boot.mk |   15 ---------------
+ 1 files changed, 0 insertions(+), 15 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 6f2796f..78ff82c 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -3,7 +3,6 @@ menu "Bootloaders"
- source "boot/grub/Config.in"
- source "boot/grub2/Config.in"
- source "boot/syslinux/Config.in"
--source "boot/yaboot/Config.in"
- source "boot/u-boot/Config.in"
- source "boot/at91bootstrap/Config.in"
- source "boot/at91dataflashboot/Config.in"
-diff --git a/boot/yaboot/Config.in b/boot/yaboot/Config.in
-deleted file mode 100644
-index 75da815..0000000
---- a/boot/yaboot/Config.in
-+++ /dev/null
-@@ -1,5 +0,0 @@
--config BR2_TARGET_YABOOT
--	bool "yaboot"
--	depends on BR2_powerpc
--	help
--	  The yaboot bootloader for new world powerpc systems.
-diff --git a/boot/yaboot/yaboot.mk b/boot/yaboot/yaboot.mk
-deleted file mode 100644
-index cbeae50..0000000
---- a/boot/yaboot/yaboot.mk
-+++ /dev/null
-@@ -1,44 +0,0 @@
--ifeq ($(ARCH),powerpc)
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index 7e98ca8..466d4a0 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -276,18 +276,3 @@ $(error NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
+ endif
+ 
+ endif
 -
--#############################################################
--#
--# yaboot
--#
--#############################################################
--
--YABOOT_SOURCE:=yaboot-1.3.13.tar.gz
--YABOOT_SITE:=http://penguinppc.org/bootloaders/yaboot
--YABOOT_DIR:=$(BUILD_DIR)/yaboot-1.3.13
--
--$(DL_DIR)/$(YABOOT_SOURCE):
--	 $(call DOWNLOAD,$(YABOOT_SITE),$(YABOOT_SOURCE))
--
--yaboot-source: $(DL_DIR)/$(YABOOT_SOURCE)
--
--$(YABOOT_DIR)/Makefile: $(DL_DIR)/$(YABOOT_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(YABOOT_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	touch -c $(YABOOT_DIR)/Makefile
--
--$(YABOOT_DIR)/second/yaboot: $(YABOOT_DIR)/Makefile
--	$(MAKE) -C $(YABOOT_DIR) CROSS=$(TARGET_CROSS)
--	touch -c $(YABOOT_DIR)/second/yaboot
--
--yaboot: $(YABOOT_DIR)/second/yaboot
--
--yaboot-clean:
--	$(MAKE) -C $(YABOOT_DIR) clean
--
--yaboot-dirclean:
--	rm -rf $(YABOOT_DIR)
--
--endif
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_TARGET_YABOOT),y)
--TARGETS+=yaboot
--endif
+-u-boot-status:
+-	@echo
+-	@echo U_BOOT_INC_CONF_FILE = $(U_BOOT_INC_CONF_FILE)
+-	@echo BR2_UBOOT_VERSION = $(BR2_UBOOT_VERSION)
+-	@echo BR2_TARGET_UBOOT_SERVERIP = $(BR2_TARGET_UBOOT_SERVERIP)
+-	@echo BR2_TARGET_UBOOT_IPADDR = $(BR2_TARGET_UBOOT_IPADDR)
+-	@echo BR2_TARGET_UBOOT_GATEWAY = $(BR2_TARGET_UBOOT_GATEWAY)
+-	@echo BR2_TARGET_UBOOT_NETMASK = $(BR2_TARGET_UBOOT_NETMASK)
+-	@echo BR2_TARGET_UBOOT_ETH0ADDR = $(BR2_TARGET_UBOOT_ETHADDR)
+-	@echo BR2_TARGET_UBOOT_ETH1ADDR = $(BR2_TARGET_UBOOT_ETH1ADDR)
+-	@echo BR2_TARGET_UBOOT_SILENT = $(BR2_TARGET_UBOOT_SILENT)
+-	@echo UBOOT_BOARD_NAME=$(UBOOT_BOARD_NAME)
+-	@exit 0
 -
 -- 
 1.7.1
