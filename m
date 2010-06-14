@@ -1,92 +1,145 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 14 Jun 2010 10:16:14 +0200
-Subject: [Buildroot] PATCH  [1/1]  New package  ebtables
-Message-ID: <1E85353ABB7D4F10B2D683F4863E7C6E@apexjs>
+Date: Mon, 14 Jun 2010 10:19:45 +0200
+Subject: [Buildroot] PATCH [1/1] fix  building QT with uclibc 0.9.31
+Message-ID: <AC75A538105F448E979110FFB6C1D3B9@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-Added ebtables to the buildroot system
-ebtables is the bridge filetering tool.
- 
- 
- 
---- buildroot-2010.05/package/Config.in 2010-05-30 22:24:10.000000000 +0200
-+++ buildroot/package/Config.in 2010-06-13 19:06:17.000000000 +0200
-@@ -354,6 +354,7 @@ source "package/dhcp/Config.in"
- endif
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
-+source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
- source "package/hostapd/Config.in"
- source "package/ifplugd/Config.in"
-diff -rupN buildroot-2010.05/package/ebtables/Config.in
-buildroot/package/ebtables/Config.in
---- buildroot-2010.05/package/ebtables/Config.in 1970-01-01
-01:00:00.000000000 +0100
-+++ buildroot/package/ebtables/Config.in 2010-06-13 19:10:16.000000000 +0200
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_EBTABLES
-+ bool "ebtables"
-+ help
-+   Linux kernel bridge filtering tools.
-+   http://sourceforge.net/projects/ebtables/
-diff -rupN buildroot-2010.05/package/ebtables/ebtables.mk
-buildroot/package/ebtables/ebtables.mk
---- buildroot-2010.05/package/ebtables/ebtables.mk 1970-01-01
-01:00:00.000000000 +0100
-+++ buildroot/package/ebtables/ebtables.mk 2010-06-13 19:10:16.000000000
-+0200
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# ebtables
-+#
-+#############################################################
-+EBTABLES_VERSION = v2.0.9-2
-+EBTABLES_SOURCE = ebtables-$(EBTABLES_VERSION).tar.gz
-+EBTABLES_SITE =
-http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-2-0-9-2
-+
-+define EBTABLES_BUILD_CMDS
-+ $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
-+endef
-+
-+define EBTABLES_INSTALL_TARGET_CMDS
-+ mkdir -p $(TARGET_DIR)/usr/lib
-+ cp -dpf $(@D)/ebtables $(TARGET_DIR)/usr/bin
-+ cp -dpf $(@D)/ebtables-restore $(TARGET_DIR)/usr/bin
-+ cp -dpf $(@D)/*.so $(TARGET_DIR)/usr/lib
-+ cp -dpf $(@D)/extensions/*.so $(TARGET_DIR)/usr/lib
-+endef
-+
-+define EBTABLES_INSTALL_STAGING_CMDS
-+ cp -dpf $(@D)/include/*.h $(STAGING_DIR)/usr/include
-+ cp -dpf $(@D)/*.so $(STAGING_DIR)/usr/lib/
-+ cp -dpf $(@D)/extensions/*.so $(STAGING_DIR)/usr/lib/
-+endef
-+
-+$(eval $(call GENTARGETS,package,ebtables))
+diff -rupN buildroot-2010.05/package/qt/qt-4.6.2-pthread_getattr_np.patch
+buildroot/package/qt/qt-4.6.2-pthread_getattr_np.patch
+--- buildroot-2010.05/package/qt/qt-4.6.2-pthread_getattr_np.patch
+1970-01-01 01:00:00.000000000 +0100
++++ buildroot/package/qt/qt-4.6.2-pthread_getattr_np.patch 2010-06-13
+19:10:16.000000000 +0200
+@@ -0,0 +1,104 @@
++---
+qt-everywhere-opensource-src-4.6.2/src/3rdparty/javascriptcore/JavaScriptCor
+e/runtime/Collector.cpp 2010-02-11 16:55:20.000000000 +0100
+++++
+qt-everywhere-opensource-src-4.6.2JS/src/3rdparty/javascriptcore/JavaScriptC
+ore/runtime/Collector.cpp 2010-05-23 10:49:29.000000000 +0200
++@@ -74,6 +74,22 @@
++ #endif
++ #include <unistd.h>
++ 
+++#if defined(QT_LINUXBASE)
+++#include <dlfcn.h>
+++#endif
+++
+++#if defined(__UCLIBC__)
+++// versions of uClibc 0.9.28 and below do not have
+++// pthread_getattr_np or pthread_attr_getstack.
+++#if __UCLIBC_MAJOR__ == 0 && \
+++    (__UCLIBC_MINOR__ < 9 || \
+++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
+++#define UCLIBC_USE_PROC_SELF_MAPS 1
+++#include <stdio_ext.h>
+++extern int *__libc_stack_end;
+++#endif
+++#endif
+++
++ #if PLATFORM(SOLARIS)
++ #include <thread.h>
++ #else
++@@ -667,16 +683,59 @@ static inline void* currentThreadStackBa
++     get_thread_info(find_thread(NULL), &threadInfo);
++     return threadInfo.stack_end;
++ #elif PLATFORM(UNIX)
+++#ifdef UCLIBC_USE_PROC_SELF_MAPS
+++    // Read /proc/self/maps and locate the line whose address
+++    // range contains __libc_stack_end.
+++    FILE *file = fopen("/proc/self/maps", "r");
+++    if (!file)
+++        return 0;
+++    __fsetlocking(file, FSETLOCKING_BYCALLER);
+++    char *line = NULL;
+++    size_t lineLen = 0;
+++    while (!feof_unlocked(file)) {
+++        if (getdelim(&line, &lineLen, '\n', file) <= 0)
+++            break;
+++
+++        long from;
+++        long to;
+++        if (sscanf (line, "%lx-%lx", &from, &to) != 2)
+++            continue;
+++        if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to)
+{
+++            fclose(file);
+++            free(line);
+++#ifdef _STACK_GROWS_UP
+++            return (void *)from;
+++#else
+++            return (void *)to;
+++#endif
+++        }
+++    }
+++    fclose(file);
+++    free(line);
+++    return 0;
+++ #else
++     static void* stackBase = 0;
++     static size_t stackSize = 0;
++     static pthread_t stackThread;
++     pthread_t thread = pthread_self();
++     if (stackBase == 0 || thread != stackThread) {
+++
+++#if defined(QT_LINUXBASE)
+++        // LinuxBase is missing pthread_getattr_np - resolve it once at
+runtime instead
+++        // see http://bugs.linuxbase.org/show_bug.cgi?id=2364
+++        typedef int (*GetAttrPtr)(pthread_t, pthread_attr_t *);
+++        static int (*pthread_getattr_np_ptr)(pthread_t, pthread_attr_t *)
+= 0;
+++        if (!pthread_getattr_np_ptr)
+++            *(void **)&pthread_getattr_np_ptr = dlsym(RTLD_DEFAULT,
+"pthread_getattr_np");
+++#endif
++         pthread_attr_t sattr;
++         pthread_attr_init(&sattr);
++ #if HAVE(PTHREAD_NP_H) || PLATFORM(NETBSD)
++         // e.g. on FreeBSD 5.4, neundorf@kde.org
++         pthread_attr_get_np(thread, &sattr);
+++#elif defined(QT_LINUXBASE)
+++        if (pthread_getattr_np_ptr)
+++            pthread_getattr_np_ptr(thread, &sattr);
++ #else
++         // FIXME: this function is non-portable; other POSIX systems may
+have different np alternatives
++         pthread_getattr_np(thread, &sattr);
++@@ -688,6 +747,7 @@ static inline void* currentThreadStackBa
++         stackThread = thread;
++     }
++     return static_cast<char*>(stackBase) + stackSize;
+++#endif
++ #elif PLATFORM(WINCE)
++     if (g_stackBase)
++         return g_stackBase;
++---
+qt-everywhere-opensource-src-4.6.2/src/3rdparty/webkit/JavaScriptCore/runtim
+e/Collector.cpp 2010-02-11 16:55:17.000000000 +0100
+++++
+qt-everywhere-opensource-src-4.6.2JS/src/3rdparty/webkit/JavaScriptCore/runt
+ime/Collector.cpp 2010-05-23 01:41:06.000000000 +0200
++@@ -83,7 +83,7 @@
++ // pthread_getattr_np or pthread_attr_getstack.
++ #if __UCLIBC_MAJOR__ == 0 && \
++     (__UCLIBC_MINOR__ < 9 || \
++-    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 30))
+++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
++ #define UCLIBC_USE_PROC_SELF_MAPS 1
++ #include <stdio_ext.h>
++ extern int *__libc_stack_end;
 
- 
- 
- 
- 
- 
- 
- 
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100614/be50dabd/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100614/9af9720a/attachment-0001.html>
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: ebtables.patch
+Name: br_qt.patch
 Type: application/octet-stream
-Size: 2054 bytes
+Size: 4268 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100614/be50dabd/attachment.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100614/9af9720a/attachment-0001.obj>
