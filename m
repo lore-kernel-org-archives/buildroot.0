@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 14 Jun 2010 21:41:42 +0200
-Subject: [Buildroot] [PATCH v2 1/4] ffmpeg: add new package
+Date: Mon, 14 Jun 2010 21:41:43 +0200
+Subject: [Buildroot] [PATCH v2 2/4] ffmpeg: add commandline programs
 In-Reply-To: <1276544505-2969-1-git-send-email-luca@lucaceresoli.net>
 References: <1276544505-2969-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1276544505-2969-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1276544505-2969-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,131 +12,107 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/multimedia/Config.in        |    1 +
- package/multimedia/ffmpeg/Config.in |   23 +++++++++++
- package/multimedia/ffmpeg/ffmpeg.mk |   72 +++++++++++++++++++++++++++++++++++
- 3 files changed, 96 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/ffmpeg/Config.in
- create mode 100644 package/multimedia/ffmpeg/ffmpeg.mk
+ package/multimedia/ffmpeg/Config.in                |   23 ++++++++++++++++++++
+ .../ffmpeg-0.5.2-fix-sdl-config-search.patch       |   17 ++++++++++++++
+ package/multimedia/ffmpeg/ffmpeg.mk                |   23 +++++++++++++++++--
+ 3 files changed, 60 insertions(+), 3 deletions(-)
+ create mode 100644 package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 3305f7b..3b0eec5 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -3,6 +3,7 @@ source "package/multimedia/alsa-lib/Config.in"
- source "package/multimedia/alsa-utils/Config.in"
- source "package/multimedia/aumix/Config.in"
- source "package/multimedia/flac/Config.in"
-+source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
 diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
-new file mode 100644
-index 0000000..7004a11
---- /dev/null
+index 7004a11..fe6814f 100644
+--- a/package/multimedia/ffmpeg/Config.in
 +++ b/package/multimedia/ffmpeg/Config.in
-@@ -0,0 +1,23 @@
-+menuconfig BR2_PACKAGE_FFMPEG
-+	bool "ffmpeg"
+@@ -20,4 +20,27 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+          allow use of nonfree code, the resulting libs and binaries
+          will be unredistributable
+ 
++config BR2_PACKAGE_FFMPEG_FFMPEG
++	bool "Build ffmpeg (the command line application)"
++	default y
 +	help
-+         FFmpeg is a complete, cross-platform solution to record, convert
-+         and stream audio and video.
++         FFmpeg is a very fast video and audio converter.
++         It can also grab from a live audio/video source.
 +
-+	 http://www.ffmpeg.org
++         It is not needed if you want to link the FFmpeg libraries
++         to your application.
 +
-+if BR2_PACKAGE_FFMPEG
-+
-+config BR2_PACKAGE_FFMPEG_GPL
-+	bool "Enable GPL code"
++config BR2_PACKAGE_FFMPEG_FFPLAY
++	bool "Build ffplay"
++	select BR2_PACKAGE_SDL
 +	help
-+         allow use of GPL code, the resulting libs and binaries will
-+         be under GPL
++         FFplay is a very simple and portable media player using the
++         FFmpeg libraries and the SDL library.
++         It is mostly used as a testbed for the various FFmpeg APIs.
 +
-+config BR2_PACKAGE_FFMPEG_NONFREE
-+	bool "Enable nonfree code"
++config BR2_PACKAGE_FFMPEG_FFSERVER
++	bool "Build ffserver"
 +	help
-+         allow use of nonfree code, the resulting libs and binaries
-+         will be unredistributable
++         FFserver is a streaming server for both audio and video.
 +
-+endif
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+ endif
+diff --git a/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch b/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
 new file mode 100644
-index 0000000..5385937
+index 0000000..58d08aa
 --- /dev/null
++++ b/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
+@@ -0,0 +1,17 @@
++Allow FFmpeg's ./configure script to use a custom sdl-config command.
++
++Inspired from:
++http://www.mail-archive.com/uclinux-dist-commits at blackfin.uclinux.org/msg01099.html
++
++diff -u ffmpeg-0.5.2-orig/configure ffmpeg-0.5.2/configure
++--- a/configure
+++++ b/configure
++@@ -2066,7 +2066,7 @@
++ 
++ disable sdl_too_old
++ disable sdl
++-SDL_CONFIG="${cross_prefix}sdl-config"
+++SDL_CONFIG="${SDL_CONFIG-${cross_prefix}sdl-config}"
++ if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
++     sdl_cflags=`"${SDL_CONFIG}" --cflags`
++     temp_cflags $sdl_cflags
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 5385937..c38f7c3 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
 +++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -0,0 +1,72 @@
-+#############################################################
-+#
-+# ffmpeg
-+#
-+#############################################################
-+FFMPEG_VERSION := 0.5.2
-+FFMPEG_SOURCE := ffmpeg-$(FFMPEG_VERSION).tar.bz2
-+FFMPEG_SITE := http://ffmpeg.org/releases
-+FFMPEG_INSTALL_STAGING = YES
-+FFMPEG_INSTALL_TARGET = YES
-+
-+FFMPEG_CONF_OPT = \
-+	--prefix=/usr		\
-+	--enable-shared 	\
-+	--disable-ffmpeg	\
-+	--disable-ffplay	\
-+	--disable-ffserver	\
-+	--disable-avfilter	\
-+	--disable-postproc	\
-+	--disable-swscale	\
-+	--disable-vhook		\
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
-+FFMPEG_CONF_OPT += --enable-gpl
+@@ -12,9 +12,6 @@ FFMPEG_INSTALL_TARGET = YES
+ FFMPEG_CONF_OPT = \
+ 	--prefix=/usr		\
+ 	--enable-shared 	\
+-	--disable-ffmpeg	\
+-	--disable-ffplay	\
+-	--disable-ffserver	\
+ 	--disable-avfilter	\
+ 	--disable-postproc	\
+ 	--disable-swscale	\
+@@ -32,6 +29,26 @@ else
+ FFMPEG_CONF_OPT += --disable-nonfree
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_FFMPEG),y)
++FFMPEG_CONF_OPT += --enable-ffmpeg
 +else
-+FFMPEG_CONF_OPT += --disable-gpl
++FFMPEG_CONF_OPT += --disable-ffmpeg
 +endif
 +
-+ifeq ($(BR2_PACKAGE_FFMPEG_NONFREE),y)
-+FFMPEG_CONF_OPT += --enable-nonfree
++ifeq ($(BR2_PACKAGE_FFMPEG_FFPLAY),y)
++FFMPEG_DEPENDENCIES += sdl
++FFMPEG_CONF_OPT += --enable-ffplay
++FFMPEG_CONF_ENV += SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
 +else
-+FFMPEG_CONF_OPT += --disable-nonfree
++FFMPEG_CONF_OPT += --disable-ffplay
 +endif
 +
-+ifeq ($(BR2_PTHREADS_NONE),y)
-+FFMPEG_CONF_OPT += --disable-pthreads
++ifeq ($(BR2_PACKAGE_FFMPEG_FFSERVER),y)
++FFMPEG_CONF_OPT += --enable-ffserver
 +else
-+FFMPEG_CONF_OPT += --enable-pthreads
++FFMPEG_CONF_OPT += --disable-ffserver
 +endif
 +
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+FFMPEG_CONF_OPT += --enable-zlib
-+FFMPEG_DEPENDENCIES += zlib
-+else
-+FFMPEG_CONF_OPT += --disable-zlib
-+endif
-+
-+# Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
-+define FFMPEG_CONFIGURE_CMDS
-+	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	$(TARGET_CONFIGURE_ENV) \
-+	$(FFMPEG_CONF_ENV) \
-+	./configure \
-+		--enable-cross-compile	\
-+		--cross-prefix=$(TARGET_CROSS) \
-+		--sysroot=$(STAGING_DIR) \
-+		--host-cc=$(HOSTCC) \
-+		--arch=$(BR2_ARCH) \
-+		--extra-cflags=-fPIC \
-+		$(DISABLE_NLS) \
-+		$(DISABLE_LARGEFILE) \
-+		$(DISABLE_IPV6) \
-+		$(FFMPEG_CONF_OPT) \
-+	)
-+endef
-+
-+# Override FFMPEG_INSTALL_TARGET_OPT: FFmpeg does not support install-strip
-+FFMPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+
-+$(eval $(call AUTOTARGETS,package/multimedia,ffmpeg))
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ FFMPEG_CONF_OPT += --disable-pthreads
+ else
 -- 
 1.7.0.4
