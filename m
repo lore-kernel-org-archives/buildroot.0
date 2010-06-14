@@ -1,7 +1,7 @@
 From: Paul Jones <paul@pauljones.id.au>
-Date: Mon, 14 Jun 2010 23:13:48 +1000
-Subject: [Buildroot] [PATCH] Add support for *.tbz2 package archives
-Message-ID: <1276521228-8454-1-git-send-email-paul@pauljones.id.au>
+Date: Mon, 14 Jun 2010 23:47:15 +1000
+Subject: [Buildroot] [PATCH] Display current action in title bar
+Message-ID: <1276523235-26299-1-git-send-email-paul@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Paul Jones <paul@pauljones.id.au>
 ---
- package/Makefile.package.in |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/Makefile.package.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index cdf49f8..a2720d7 100644
+index a2720d7..327ab92 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -41,11 +41,12 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
-      $(__tmp))
+@@ -48,8 +48,9 @@ INFLATE.tbz2 = $(BZCAT)
+ INFLATE.tgz  = $(ZCAT)
+ INFLATE.tar  = cat
  
- # Define extrators for different archive suffixes
--INFLATE.bz2 = $(BZCAT)
--INFLATE.gz  = $(ZCAT)
--INFLATE.tbz = $(BZCAT)
--INFLATE.tgz = $(ZCAT)
--INFLATE.tar = cat
-+INFLATE.bz2  = $(BZCAT)
-+INFLATE.gz   = $(ZCAT)
-+INFLATE.tbz  = $(BZCAT)
-+INFLATE.tbz2 = $(BZCAT)
-+INFLATE.tgz  = $(ZCAT)
-+INFLATE.tar  = cat
+-# MESSAGE Macro -- display a message in bold type
+-MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
++# MESSAGE Macro -- display a message in bold type and in the title bar
++MESSAGE  = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" \
++		&& echo -en "\033]2; $($(PKG)_NAME) $($(PKG)_VERSION) $(1) \007"
+ TERM_BOLD := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
  
- # MESSAGE Macro -- display a message in bold type
- MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
 -- 
 1.7.0.4
