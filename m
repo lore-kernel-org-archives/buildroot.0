@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] at91dataflashboot: add two
-	patches
-Message-ID: <20100614203444.1A7F9804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] at91bootstrap: simplify
+	configuration
+Message-ID: <20100614203441.8DCAF804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,97 +10,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef81363d69b7293e3c8088a0939d34a10845e675
+commit: http://git.buildroot.net/buildroot/commit/?id=1b3ff4a6490c66c88c9bb725e5465a508b39899d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The first patch allows to build with an EABI toolchain. The second
-patch disables the install step of at91dataflashboot Makefile since it
-tries to copy files to /tftpboot.
+There no need to depends on BR2_TARGET_AT91BOOTSTRAP when the
+configuration options are already inside a if
+BR2_TARGET_AT91BOOTSTRAP.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../at91dataflashboot-1.05-do-not-install.patch    |   22 ++++++++++
- .../at91dataflashboot-1.05-eabi-fixes.patch        |   43 ++++++++++++++++++++
- 2 files changed, 65 insertions(+), 0 deletions(-)
- create mode 100644 boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
- create mode 100644 boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
+ boot/at91bootstrap/Config.in |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch b/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
-new file mode 100644
-index 0000000..41d97ad
---- /dev/null
-+++ b/boot/at91dataflashboot/at91dataflashboot-1.05-do-not-install.patch
-@@ -0,0 +1,22 @@
-+Disable the automatic installation of at91dataflashboot since it tries
-+to install things to /tftpboot, which is not possible when not
-+building as root.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: at91dataflashboot-1.05/Makefile
-+===================================================================
-+--- at91dataflashboot-1.05.orig/Makefile
-++++ at91dataflashboot-1.05/Makefile
-+@@ -40,7 +40,7 @@
-+ 
-+ I=config.h com.h dataflash.h embedded_services.h main.h stdio.h include/AT91RM9200.h include/lib_AT91RM9200.h 
-+ 
-+-all: 	clean $(BINNAME) $(LSSNAME) install
-++all: 	clean $(BINNAME) $(LSSNAME)
-+ 	$(SIZE) $(OUTNAME)
-+ 
-+ # C objects here
-diff --git a/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch b/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
-new file mode 100644
-index 0000000..e38905f
---- /dev/null
-+++ b/boot/at91dataflashboot/at91dataflashboot-1.05-eabi-fixes.patch
-@@ -0,0 +1,43 @@
-+Get at91dataflashboot to build with EABI toolchains, by providing the
-+__aeabi_uidiv and __aeabi_uidivmod symbols. The code is based on
-+U-Boot's code.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ _udivsi3.S |   14 ++++++++++++++
-+ 1 file changed, 14 insertions(+)
-+
-+Index: DataflashBoot-1.05/_udivsi3.S
-+===================================================================
-+--- DataflashBoot-1.05.orig/_udivsi3.S
-++++ DataflashBoot-1.05/_udivsi3.S
-+@@ -12,8 +12,11 @@
-+ 	.text
-+ 	.globl	 __udivsi3
-+ 	.type  __udivsi3       ,function
-++        .globl  __aeabi_uidiv
-++        .type   __aeabi_uidiv ,function
-+ 	.align	0
-+  __udivsi3      :
-++ __aeabi_uidiv:
-+ 	cmp	divisor, #0
-+ 	beq	Ldiv0
-+ 	mov	curbit, #1
-+@@ -68,6 +71,17 @@
-+ 	mov	r0, #0			@ about as wrong as it could be
-+ 	ldmia	sp!, {pc}
-+ 	.size  __udivsi3       , . -  __udivsi3
-++
-++.globl __aeabi_uidivmod
-++__aeabi_uidivmod:
-++
-++        stmfd   sp!, {r0, r1, ip, lr}
-++        bl      __aeabi_uidiv
-++        ldmfd   sp!, {r1, r2, ip, lr}
-++        mul     r3, r0, r2
-++        sub     r1, r1, r3
-++        mov     pc, lr
-++
-+ /* # 235 "libgcc1.S" */
-+ /* # 320 "libgcc1.S" */
-+ /* # 421 "libgcc1.S" */
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 8514ccc..8efbd13 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -13,7 +13,6 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
+ choice
+ 	prompt "Boot Memory"
+ 	default BR2_TARGET_AT91BOOT_DATAFLASHCARD
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	help
+ 	  Select Chip for which AT91 bootstrap should be built
+ 
+@@ -45,7 +44,6 @@ endchoice
+ 
+ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
+ 	string
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	default	"dataflash"	if	BR2_TARGET_AT91BOOT_DATAFLASH
+ 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
+@@ -55,7 +53,6 @@ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
+ 
+ config	BR2_AT91BOOTSTRAP_IMG_SIZE
+ 	string	"Image Size to copy to SDRAM"
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH
+ 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
+@@ -69,7 +66,6 @@ config	BR2_AT91BOOTSTRAP_IMG_SIZE
+ choice
+ 	prompt "Start address of application"
+ 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 	help
+ 	  Select Chip for which AT91 bootstrap should be built
+ 	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
+@@ -97,10 +93,6 @@ config	BR2_AT91BOOTSTRAP_JUMP_ADDR
+ 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
+ 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
+ 	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+-
+-comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
+-	depends on BR2_TARGET_AT91BOOTSTRAP
+ 
+ endif
+ 
 -- 
 1.7.1
