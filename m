@@ -1,54 +1,37 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 14 Jun 2010 12:10:15 +0200
-Subject: [Buildroot] PATCH [1/1] fix  building QT with uclibc 0.9.31
-In-Reply-To: <87bpbef1un.fsf@macbook.be.48ers.dk>
-Message-ID: <4E257B4130C8484E8CF9FF02387EAF61@apexjs>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 Jun 2010 13:25:27 +0200
+Subject: [Buildroot] [PATCH 3/4] ffmpeg: allow customization of codecs,
+	(de)muxers and other components
+In-Reply-To: <L40153$4B4F2698302B94CA4D89952637FD93F6@aruba.it> (Luca
+	Ceresoli's message of "Mon, 14 Jun 2010 12:00:39 +0200")
+References: <L40153$4B4F2698302B94CA4D89952637FD93F6@aruba.it>
+Message-ID: <8739wpg8k8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi Peter
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Did you build the JavaScriptCore and Multimedia module ?
+Hi,
 
-I had a build error : pthread_getattr_np is not defined in uclibc,
-there was a workaround for uclibc 0.9.30.x but not for 0.9.31.
+ >> Not the foreach, but the ifneq (....,"all") would break if the user
+ >> ended up setting it to "all " or " all" or similar.
 
-Snippet from the patch.
+ Luca> Sorry, now I got what you mean.
 
- #if __UCLIBC_MAJOR__ == 0 && \
-     (__UCLIBC_MINOR__ < 9 || \
--    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 30))
-+    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
- #define UCLIBC_USE_PROC_SELF_MAPS 1
- #include <stdio_ext.h>
+ Luca> Why do you say qstrip+strip anyway? qstrip does strip itself:
 
- 
+Ahh yes, then just qstrip.
 
------Oorspronkelijk bericht-----
-Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
-Verzonden: maandag 14 juni 2010 10:36
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: PATCH [1/1] fix building QT with uclibc 0.9.31
+ Luca> So I would do:
+ Luca> -ifneq ($(BR2_PACKAGE_FFMPEG_ENCODERS),"all")
+ Luca> +ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),all)
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+ Luca> If that's ok, it will be in the re-submitted patches.
 
- Sagaert> diff -rupN
-buildroot-2010.05/package/qt/qt-4.6.2-pthread_getattr_np.patch
+Yes please.
 
-What does this fix? I've build qt-4.6.2 several times with uclibc 0.9.31 /
-gcc 4.4.4 without problems?
-
---
+-- 
 Bye, Peter Korsgaard
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qt-4.6.2-pthread_getattr_np.patch
-Type: application/octet-stream
-Size: 3819 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100614/b970cfeb/attachment.obj>
