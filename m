@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: remove reference to old
-	1.2.0-atmel version
-Message-ID: <20100614203436.0560980E24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: remove patch for
+	obsolete version
+Message-ID: <20100614203436.6547880E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b116aff43428adbede513850902a397fa58d0a3c
+commit: http://git.buildroot.net/buildroot/commit/?id=ff0c91acc25129cc30b0a96c23ceeb31b2bcf7fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ ...boot-2009.01-include_asm-avr32_io.h.patch.avr32 |   13 -------------
+ 1 files changed, 0 insertions(+), 13 deletions(-)
+ delete mode 100644 boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 466d4a0..4edef12 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -46,11 +46,7 @@ ifeq ($(BR2_TARGET_UBOOT_TOOL_ENV),y)
- U_BOOT_TARGETS+=$(TARGET_DIR)/usr/sbin/fw_printenv
- endif
- 
--U_BOOT_CONFIGURE_OPTS :=
--
--ifneq ($(BR2_TARGET_UBOOT_1_2_0_ATMEL),)
- U_BOOT_CONFIGURE_OPTS += CONFIG_NOSOFTFLOAT=1
--endif
- 
- # Define a helper function
- define insert_define
+diff --git a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32 b/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
+deleted file mode 100644
+index 07cddb0..0000000
+--- a/boot/u-boot/u-boot-2009.01-include_asm-avr32_io.h.patch.avr32
++++ /dev/null
+@@ -1,13 +0,0 @@
+-diff -urN u-boot-2009.01-rc3/include/asm-avr32/io.h u-boot-avr32//include/asm-avr32/io.h
+---- u-boot-2009.01-rc3/include/asm-avr32/io.h	2009-01-18 21:37:48.000000000 +0100
+-+++ u-boot-avr32//include/asm-avr32/io.h	2009-01-22 07:14:38.000000000 +0100
+-@@ -125,9 +125,4 @@
+- 
+- }
+- 
+--static inline phys_addr_t virt_to_phys(void * vaddr)
+--{
+--	return (phys_addr_t)(vaddr);
+--}
+--
+- #endif /* __ASM_AVR32_IO_H */
 -- 
 1.7.1
