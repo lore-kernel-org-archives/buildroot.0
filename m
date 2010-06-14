@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: remove useless symbolic
-	link
-Message-ID: <20100614203436.97F7E80E24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: remove arch specific
+	patches infrastructure
+Message-ID: <20100614203435.A98B280E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc63ef95f39302195b7430b6be00d250cc5c9aea
+commit: http://git.buildroot.net/buildroot/commit/?id=1cee7b34b479d29ad090e2fc76d58aa5cc6e93a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/u-boot/u-boot.mk |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+A very complicated infrastructure for just a special case, for an
+ancient version of U-Boot. Recent versions of U-Boot are reported to
+work just fine on Atmel ARM evaluation boards.
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index efde3ea..ac16c8b 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -11,7 +11,6 @@ U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
- U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
- U_BOOT_CAT:=$(BZCAT)
- U_BOOT_BIN:=u-boot.bin
--U_BOOT_TARGET_BIN:=u-boot-$(U_BOOT_VERSION)-$(DATE).bin
- 
- U_BOOT_TOOLS:=$(HOST_DIR)/usr/bin/mkimage
- MKIMAGE:=$(U_BOOT_TOOLS)
-@@ -153,9 +152,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 
- $(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
--	rm -f $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/$(U_BOOT_TARGET_BIN)
--	(cd $(BINARIES_DIR); ln -s $(U_BOOT_TARGET_BIN) $(U_BOOT_BIN))
-+	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
- 
- $(U_BOOT_TOOLS): $(U_BOOT_DIR)/$(U_BOOT_BIN)
- 	mkdir -p $(@D)
--- 
-1.7.1
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Patch is too large, so refusing to show it
