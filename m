@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] at91bootstrap: simplify
-	configuration
-Message-ID: <20100614203441.8DCAF804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add support for the Barebox
+	bootloader
+Message-ID: <20100614203444.4A6C4804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,64 +10,115 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b3ff4a6490c66c88c9bb725e5465a508b39899d
+commit: http://git.buildroot.net/buildroot/commit/?id=6cc9d936a978d558211a0553ba3cdf9113ab9c96
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There no need to depends on BR2_TARGET_AT91BOOTSTRAP when the
-configuration options are already inside a if
-BR2_TARGET_AT91BOOTSTRAP.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+ boot/Config.in          |    1 +
+ boot/barebox/Config.in  |   14 ++++++++++
+ boot/barebox/barebox.mk |   61 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 76 insertions(+), 0 deletions(-)
+ create mode 100644 boot/barebox/Config.in
+ create mode 100644 boot/barebox/barebox.mk
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 8514ccc..8efbd13 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -13,7 +13,6 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
- choice
- 	prompt "Boot Memory"
- 	default BR2_TARGET_AT91BOOT_DATAFLASHCARD
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
+diff --git a/boot/Config.in b/boot/Config.in
+index 78ff82c..6bcc98a 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -1,5 +1,6 @@
+ menu "Bootloaders"
  
-@@ -45,7 +44,6 @@ endchoice
- 
- config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 	string
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"dataflash"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"dataflashcard"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"nandflash"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -55,7 +53,6 @@ config BR2_TARGET_AT91BOOTSTRAP_MEMORY
- 
- config	BR2_AT91BOOTSTRAP_IMG_SIZE
- 	string	"Image Size to copy to SDRAM"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASH
- 	default	"0x32000"	if	BR2_TARGET_AT91BOOT_DATAFLASHCARD
- 	default	"0x30000"	if	BR2_TARGET_AT91BOOT_NANDFLASH
-@@ -69,7 +66,6 @@ config	BR2_AT91BOOTSTRAP_IMG_SIZE
- choice
- 	prompt "Start address of application"
- 	default BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 	help
- 	  Select Chip for which AT91 bootstrap should be built
- 	  Currently supports AT91SAM9260EK, AT91SAM9261EK,
-@@ -97,10 +93,6 @@ config	BR2_AT91BOOTSTRAP_JUMP_ADDR
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT
- 	default	"0x23F00000" if BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM
- 	default "0x20000000" if BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM
--	depends on BR2_TARGET_AT91BOOTSTRAP
--
--comment "It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)"
--	depends on BR2_TARGET_AT91BOOTSTRAP
- 
- endif
- 
++source "boot/barebox/Config.in"
+ source "boot/grub/Config.in"
+ source "boot/grub2/Config.in"
+ source "boot/syslinux/Config.in"
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+new file mode 100644
+index 0000000..0c90f03
+--- /dev/null
++++ b/boot/barebox/Config.in
+@@ -0,0 +1,14 @@
++menuconfig BR2_TARGET_BAREBOX
++	bool "Barebox"
++	help
++	  The Barebox bootloader, formerly known as U-Boot v2.
++
++	  http://www.barebox.org
++
++if BR2_TARGET_BAREBOX
++config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
++	string "board defconfig"
++	help
++	  Name of the board for which Barebox should be built, without
++	  the _defconfig suffix.
++endif
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+new file mode 100644
+index 0000000..7c2cbc1
+--- /dev/null
++++ b/boot/barebox/barebox.mk
+@@ -0,0 +1,61 @@
++#############################################################
++#
++# Barebox
++#
++#############################################################
++
++BAREBOX_VERSION:=2010.05.0
++BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
++BAREBOX_SITE:=http://www.barebox.org/download/
++BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
++BAREBOX_CAT:=$(BZCAT)
++BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
++
++ifeq ($(KERNEL_ARCH),i386)
++BAREBOX_ARCH=x86
++else ifeq ($(KERNEL_ARCH),powerpc)
++BAREBOX_ARCH=ppc
++else
++BAREBOX_ARCH=$(KERNEL_ARCH)
++endif
++
++BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE=$(TARGET_CROSS)
++
++$(DL_DIR)/$(BAREBOX_SOURCE):
++	 $(call DOWNLOAD,$(BAREBOX_SITE),$(BAREBOX_SOURCE))
++
++$(BAREBOX_DIR)/.unpacked: $(DL_DIR)/$(BAREBOX_SOURCE)
++	mkdir -p $(@D)
++	$(INFLATE$(suffix $(BAREBOX_SOURCE))) $(DL_DIR)/$(BAREBOX_SOURCE) \
++		| tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++	touch $@
++
++$(BAREBOX_DIR)/.patched: $(BAREBOX_DIR)/.unpacked
++	toolchain/patch-kernel.sh $(BAREBOX_DIR) boot/barebox \
++		barebox-$(BAREBOX_VERSION)-\*.patch \
++		barebox-$(BAREBOX_VERSION)-\*.patch.$(ARCH)
++	touch $@
++
++$(BAREBOX_DIR)/.configured: $(BAREBOX_DIR)/.patched
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
++	touch $@
++
++$(BAREBOX_DIR)/.built: $(BAREBOX_DIR)/.configured
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR)
++	touch $@
++
++$(BAREBOX_DIR)/.installed: $(BAREBOX_DIR)/.built
++	cp $(BAREBOX_DIR)/barebox.bin $(BINARIES_DIR)
++	touch $@
++
++barebox: $(BAREBOX_DIR)/.installed
++
++ifeq ($(BR2_TARGET_BAREBOX),y)
++TARGETS+=barebox
++
++# we NEED a board defconfig file
++ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
++$(error No Barebox defconfig file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
++endif
++
++endif
 -- 
 1.7.1
