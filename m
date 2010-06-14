@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] grub2: only available on x86
-	and PowerPC and mark as BROKEN
-Message-ID: <20100614203440.460A8804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] grub2: remove non-existing
+	options
+Message-ID: <20100614203440.0B631804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,79 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38a88b691834eece3fc9c0719d08b4f41ab2c474
+commit: http://git.buildroot.net/buildroot/commit/?id=1d73ef9449f6ff0d5d3d9c93291c8869b27830cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build process of grub2 breaks the compilation. It breaks with:
-
-./configure: line 4766: syntax error near unexpected token `external'
-./configure: line 4766: `AM_GNU_GETTEXT(external)'
-
-In addition to this, it later requires Ruby. Do we really want to make
-Buildroot depend on Ruby being installed on the host ? Do we really
-want to build our own Ruby ? Do we even care about Grub2 ?
+Much of the grub2.mk seems to have been copy/pasted from
+grub.mk. However, all the network/splashimage related ./configure
+options do not exist in grub2.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/grub2/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ boot/grub2/Config.in |    9 ---------
+ boot/grub2/grub2.mk  |   27 ---------------------------
+ 2 files changed, 0 insertions(+), 36 deletions(-)
 
 diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index d27cb4c..1301b5b 100644
+index 7526399..d27cb4c 100644
 --- a/boot/grub2/Config.in
 +++ b/boot/grub2/Config.in
-@@ -1,4 +1,9 @@
- config BR2_TARGET_GRUB2
+@@ -2,12 +2,3 @@ config BR2_TARGET_GRUB2
  	bool "grub2"
-+	# Only supports PC, Mac (Power, x86 and x86-64), Pegasos
-+	depends on BR2_i386 || BR2_powerpc
-+	# Build process is broken (./configure doesn't work, Ruby
-+	# required, etc.)
-+	depends on BROKEN
  	help
  	  The GRand Unified Bootloader for x86 systems, take #2.
+-
+-config BR2_TARGET_GRUB2_SPLASH
+-	bool "Splashimage support"
+-	depends on BR2_TARGET_GRUB2
+-	help
+-	  Add support for splashimage.
+-	
+-	  A splashimage is a 14-color indexed .xpm picture which
+-	  is displayed as background for the grub menu.
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 95fa245..6c3bbef 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -18,39 +18,12 @@ GRUB2_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub2
+ GRUB2_PATCH_SITE:=$(GRUB2_SITE)
+ GRUB2_CAT:=$(ZCAT)
+ GRUB2_DIR:=$(BUILD_DIR)/grub-1.98
+-GRUB2_BINARY:=grub2/grub2
+-GRUB2_TARGET_BINARY:=sbin/grub2
+-GRUB2_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
+ 
+ GRUB2_CFLAGS=-DSUPPORT_LOOPDEV
+ ifeq ($(BR2_LARGEFILE),)
+ GRUB2_CFLAGS+=-U_FILE_OFFSET_BITS
+ endif
+ 
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_SPLASH) += --enable-graphics
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_DISKLESS) += --enable-diskless
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_3c595) += --enable-3c595
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_3c90x) += --enable-3c90x
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_davicom) += --enable-davicom
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_e1000) += --enable-e1000
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_eepro100) += --enable-eepro100
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_epic100) += --enable-epic100
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_forcedeth) += --enable-forcedeth
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_natsemi) += --enable-natsemi
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_ns83820) += --enable-ns83820
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_ns8390) += --enable-ns8390
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_pcnet32) += --enable-pcnet32
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_pnic) += --enable-pnic
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_rtl8139) += --enable-rtl8139
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_r8169) += --enable-r8169
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_sis900) += --enable-sis900
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_tg3) += --enable-tg3
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_tulip) += --enable-tulip
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_tlan) += --enable-tlan
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_undi) += --enable-undi
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_via_rhine) += --enable-via-rhine
+-GRUB2_CONFIG-$(BR2_TARGET_GRUB2_w89c840) += --enable-w89c840
+-
+ $(DL_DIR)/$(GRUB2_SOURCE):
+ 	 $(call DOWNLOAD,$(GRUB2_SITE),$(GRUB2_SOURCE))
+ 
 -- 
 1.7.1
