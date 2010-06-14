@@ -1,35 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] at91bootstrap: don't depend on
-	BR .config
-Message-ID: <20100614203444.E5A05804D0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jun 2010 22:59:02 +0200
+Subject: [Buildroot] [PATCH 04/10] external-toolchain: support 64 bits
+ glibc toolchains
+In-Reply-To: <201006142207.30440.yann.morin.1998@anciens.enib.fr>
+References: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
+	<25dbc7e97053c914268f376953019868b35ae49d.1276516273.git.thomas.petazzoni@free-electrons.com>
+	<201006142207.30440.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20100614225902.668e9f07@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, 14 Jun 2010 22:07:30 +0200
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db55d4b80aa879bb63fb7057a7d17700742214c8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Using readelf(1) on libc.so would give us the exact name of the
+> dynamic linker ( but I'm just repeating myself here... :-) )
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/at91bootstrap/at91bootstrap.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+That's a good idea to investigate. I'll have a look at it, but I'd
+prefer if this patch set could get merged as is, and have a look at
+this idea afterwards.
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 9030696..d7723c4 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -35,7 +35,7 @@ $(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
- 	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) boot/at91bootstrap/ at91bootstrap-$(AT91BOOTSTRAP_VERSION)\*.patch
- 	touch $(AT91BOOTSTRAP_DIR)/.unpacked
- 
--$(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked .config
-+$(AT91BOOTSTRAP_DIR)/.configured: $(AT91BOOTSTRAP_DIR)/.unpacked
- 	$(MAKE) \
- 		MEMORY=$(AT91BOOTSTRAP_MEMORY) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
+Thanks for the hint!
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
