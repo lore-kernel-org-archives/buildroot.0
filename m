@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] at91bootstrap: do not default
-	to $(BOARD_NAME)
-Message-ID: <20100614203441.56AA7804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] syslinux: bump version and fix
+	build
+Message-ID: <20100614203440.784E8804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +10,113 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de5dfe4a1ee74e6f44166e7dbde8f64a388ce6ba
+commit: http://git.buildroot.net/buildroot/commit/?id=e69ae0bce5dc988b3e15d2525eebcfa440fa5915
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/syslinux/syslinux-3.82-makefile.patch |   11 ----------
+ boot/syslinux/syslinux-3.85-makefile.patch |   17 +++++++++++++++
+ boot/syslinux/syslinux.mk                  |   30 +++++++++++++++------------
+ 3 files changed, 34 insertions(+), 24 deletions(-)
+ delete mode 100644 boot/syslinux/syslinux-3.82-makefile.patch
+ create mode 100644 boot/syslinux/syslinux-3.85-makefile.patch
 
-diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
-index 44db8f5..8514ccc 100644
---- a/boot/at91bootstrap/Config.in
-+++ b/boot/at91bootstrap/Config.in
-@@ -6,7 +6,7 @@ if	BR2_TARGET_AT91BOOTSTRAP
+diff --git a/boot/syslinux/syslinux-3.82-makefile.patch b/boot/syslinux/syslinux-3.82-makefile.patch
+deleted file mode 100644
+index 9e98a78..0000000
+--- a/boot/syslinux/syslinux-3.82-makefile.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- syslinux-3.82-org/Makefile	2009-09-17 13:11:23.000000000 +0200
+-+++ syslinux-3.82/Makefile	2009-09-17 13:13:32.000000000 +0200
+-@@ -42,7 +42,7 @@
+- 	mbr/mbr_c.bin mbr/altmbr_c.bin mbr/gptmbr_c.bin \
+- 	mbr/mbr_f.bin mbr/altmbr_f.bin mbr/gptmbr_f.bin \
+- 	core/pxelinux.0 core/isolinux.bin core/isolinux-debug.bin \
+--	gpxe/gpxelinux.0 dos/syslinux.com win32/syslinux.exe \
+-+	gpxe/gpxelinux.0 dos/syslinux.com \
+- 	$(MODULES)
+- 
+- # BSUBDIRs build the on-target binary components.
+diff --git a/boot/syslinux/syslinux-3.85-makefile.patch b/boot/syslinux/syslinux-3.85-makefile.patch
+new file mode 100644
+index 0000000..ff85b8d
+--- /dev/null
++++ b/boot/syslinux/syslinux-3.85-makefile.patch
+@@ -0,0 +1,17 @@
++---
++ Makefile |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: syslinux-3.85/Makefile
++===================================================================
++--- syslinux-3.85.orig/Makefile
+++++ syslinux-3.85/Makefile
++@@ -43,7 +43,7 @@
++ 	mbr/mbr_c.bin mbr/altmbr_c.bin mbr/gptmbr_c.bin \
++ 	mbr/mbr_f.bin mbr/altmbr_f.bin mbr/gptmbr_f.bin \
++ 	core/pxelinux.0 core/isolinux.bin core/isolinux-debug.bin \
++-	gpxe/gpxelinux.0 dos/syslinux.com win32/syslinux.exe \
+++	gpxe/gpxelinux.0 dos/syslinux.com \
++ 	dosutil/*.com dosutil/*.sys \
++ 	$(MODULES)
++ 
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index df27b6d..46b41f2 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -22,34 +22,38 @@ ifeq ($(SYSLINUX_SUPPORTED_ARCH),y)
+ #
+ #############################################################
  
- config BR2_TARGET_AT91BOOTSTRAP_BOARD
- 	string "Bootstrap board"
--	default "$(BOARD_NAME)"
-+	default ""
- 	help
- 	  This is used to do a make <board>_config
+-SYSLINUX_VERSION:=3.82
++SYSLINUX_VERSION:=3.85
+ SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
+-SYSLINUX_DIR2=$(TOOLCHAIN_DIR)/syslinux-$(SYSLINUX_VERSION)
+ SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
+ SYSLINUX_CAT:=$(BZCAT)
+-SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/
+-SYSLINUX_BIN=$(SYSLINUX_DIR2)/mtools/syslinux
+-
++SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
  
+ $(DL_DIR)/$(SYSLINUX_SOURCE):
+ 	 $(call DOWNLOAD,$(SYSLINUX_SITE),$(SYSLINUX_SOURCE))
+ 
+ syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
+ 
+-$(SYSLINUX_DIR)/Makefile: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
+-	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(SYSLINUX_DIR) boot/syslinux/ \*.patch
++$(SYSLINUX_DIR)/.unpacked: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
++	mkdir -p $(@D)
++	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++	toolchain/patch-kernel.sh $(@D) boot/syslinux/ \*.patch
+ 	touch -c $@
+ 
+-$(SYSLINUX_DIR)/isolinux.bin $(SYSLINUX_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/Makefile
+-	$(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
++$(SYSLINUX_DIR)/.compiled: $(SYSLINUX_DIR)/.unpacked
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
+ 	touch -c $@
+ 
+-syslinux: $(SYSLINUX_DIR)/isolinux.bin
+-pxelinux: $(SYSLINUX_DIR)/pxelinux.bin
++$(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
++	cp -a $(SYSLINUX_DIR)/core/isolinux.bin $@
++
++$(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
++	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
++
++syslinux: $(BINARIES_DIR)/isolinux.bin
++pxelinux: $(BINARIES_DIR)/pxelinux.bin
+ 
+ pxelinux-clean syslinux-clean:
+-	rm -f $(SYSLINUX_DIR)/isolinux.bin $(SYSLINUX_DIR)/pxelinux.bin
++	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
+ 	-$(MAKE) -C $(SYSLINUX_DIR) clean
+ 
+ pxelinux-dirclean syslinux-dirclean:
 -- 
 1.7.1
