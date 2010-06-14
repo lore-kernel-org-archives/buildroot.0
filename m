@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] nasm: new package,
-	needed for syslinux
-Message-ID: <20100614203440.DC993804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] at91bootstrap: fix the boot
+	source selection
+Message-ID: <20100614203441.B604F804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da8d09b716a7dea65697efcadd1067d5e9b4f7f7
+commit: http://git.buildroot.net/buildroot/commit/?id=5880111f2aebd5f35545581f4c231ff4abf8b3b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The boot source configuration options were depending on U-Boot
+configuration options. Let's make it independent and just allow the
+user to select whichever boot source is appropriate.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nasm/nasm.mk |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/nasm/nasm.mk
+ boot/at91bootstrap/Config.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-new file mode 100644
-index 0000000..08983e1
---- /dev/null
-+++ b/package/nasm/nasm.mk
-@@ -0,0 +1,19 @@
-+############################################################
-+#
-+# nasm
-+#
-+# This is special case: nasm is used to build syslinux and
-+# pxelinux. As these are for the target, we should cross-compile
-+# nasm. However, as nasm is x86-only, there's no point in
-+# cross-compiling it. So we just build it for the host. The target
-+# variant is only provided because of a bug in the package
-+# infrastructure that prevents having only a host variant.
-+############################################################
-+
-+NASM_VERSION=2.08.01
-+NASM_SOURCE=nasm-$(NASM_VERSION).tar.bz2
-+NASM_SITE=http://www.nasm.us/pub/nasm/releasebuilds/2.08.01/
-+NASM_LIBTOOL_PATCH=NO
-+
-+$(eval $(call AUTOTARGETS,package,nasm))
-+$(eval $(call AUTOTARGETS,package,nasm,host))
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index 8efbd13..7c0f393 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -18,27 +18,21 @@ choice
+ 
+ config BR2_TARGET_AT91BOOT_DATAFLASH
+ 	bool "AT45 Dataflash"
+-	depends on BR2_BOOTSOURCE_DATAFLASH
+ 
+ config BR2_TARGET_AT91BOOT_DATAFLASHCARD
+ 	bool "AT45 Dataflash Card"
+-	depends on BR2_BOOTSOURCE_DATAFLASHCARD
+ 
+ config BR2_TARGET_AT91BOOT_NANDFLASH
+ 	bool "NAND Flash"
+-	depends on BR2_BOOTSOURCE_NANDFLASH
+ 
+ config BR2_TARGET_AT91BOOT_FLASH
+ 	bool "Internal Flash or external parallel flash"
+-	depends on BR2_BOOTSOURCE_FLASH
+ 
+ config BR2_TARGET_AT91BOOT_SDCARD
+ 	bool "SD-Card"
+-	depends on BR2_BOOTSOURCE_SDCARD
+ 
+ config BR2_TARGET_AT91BOOT_EEPROM
+ 	bool "EEPROM"
+-	depends on BR2_BOOTSOURCE_EEPROM
+ 
+ endchoice
+ 
 -- 
 1.7.1
