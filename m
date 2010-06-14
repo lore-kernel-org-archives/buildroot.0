@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] syslinux: depends on host-nasm
-Message-ID: <20100614203441.1D6D8804D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] at91bootstrap: don't use the
+	ATMEL_MIRROR thing
+Message-ID: <20100614203442.B8772804D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +10,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5fe862e61e705590d49f479f2d15ac167228bae
+commit: http://git.buildroot.net/buildroot/commit/?id=dc572b7e30dddd66350cc6d505ae61c4e481c9de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/syslinux.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 966d0c2..192e905 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -31,8 +31,8 @@ $(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
- $(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
- 	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
- 
--syslinux: $(BINARIES_DIR)/isolinux.bin
--pxelinux: $(BINARIES_DIR)/pxelinux.bin
-+syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
-+pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
- 
- pxelinux-clean syslinux-clean:
- 	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index d6e2c18..bad5cee 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -5,8 +5,7 @@
+ #############################################################
+ AT91BOOTSTRAP_VERSION:=2.13
+ AT91BOOTSTRAP_NAME:=at91bootstrap-$(AT91BOOTSTRAP_VERSION)
+-ATMEL_MIRROR:=$(call qstrip,$(BR2_ATMEL_MIRROR))
+-AT91BOOTSTRAP_SITE:=$(ATMEL_MIRROR)
++AT91BOOTSTRAP_SITE:=ftp://www.at91.com/pub/buildroot/
+ AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).tar.bz2
+ AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/$(AT91BOOTSTRAP_NAME)
+ AT91BOOTSTRAP:=$(call qstrip,$(BR2_AT91BOOTSTRAP))
 -- 
 1.7.1
