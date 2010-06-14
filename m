@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] grub: remove GRUB_SUPPORTED_ARCH
-Message-ID: <20100614203438.A334880E24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] grub2: bump version
+Message-ID: <20100614203439.88DB680E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,50 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5aa5ccb9e459fff198cc8aacbe781e5c9f0fff8e
+commit: http://git.buildroot.net/buildroot/commit/?id=7aaf4e899531fa98d24eda698e76be4625e64c80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-grub can already only be selected for x86 and x86_64. No need to check
-again for this in grub.mk.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/grub/grub.mk |   19 -------------------
- 1 files changed, 0 insertions(+), 19 deletions(-)
+ boot/grub2/grub2.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index 80f9b6d..96b082d 100644
---- a/boot/grub/grub.mk
-+++ b/boot/grub/grub.mk
-@@ -1,20 +1,3 @@
--GRUB_SUPPORTED_ARCH=n
--ifeq ($(ARCH),i386)
--GRUB_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i486)
--GRUB_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i586)
--GRUB_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),i686)
--GRUB_SUPPORTED_ARCH=y
--endif
--ifeq ($(ARCH),x86_64)
--GRUB_SUPPORTED_ARCH=y
--endif
--ifeq ($(GRUB_SUPPORTED_ARCH),y)
- #############################################################
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 24f1e1a..4af6c02 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -3,12 +3,12 @@
+ # grub2
  #
- # grub
-@@ -125,8 +108,6 @@ grub-clean:
- grub-dirclean:
- 	rm -rf $(GRUB_DIR)
- 
--endif
--
  #############################################################
- #
- # Toplevel Makefile options
+-GRUB2_SOURCE:=grub2_1.95.orig.tar.gz
+-GRUB2_PATCH:=grub2_1.95-5.diff.gz
++GRUB2_SOURCE:=grub2_1.98.orig.tar.gz
++GRUB2_PATCH:=grub2_1.98-1.diff.gz
+ GRUB2_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub2
+-GRUB2_PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub2
++GRUB2_PATCH_SITE:=$(GRUB2_SITE)
+ GRUB2_CAT:=$(ZCAT)
+-GRUB2_DIR:=$(BUILD_DIR)/grub-1.95
++GRUB2_DIR:=$(BUILD_DIR)/grub-1.98
+ GRUB2_BINARY:=grub2/grub2
+ GRUB2_TARGET_BINARY:=sbin/grub2
+ GRUB2_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
 -- 
 1.7.1
