@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jun 2010 17:37:22 +0200
-Subject: [Buildroot] Valgrind compilation, with patch 3.5.0, need help
-In-Reply-To: <4C164671.2050903@terawatt.fr>
-References: <4C164671.2050903@terawatt.fr>
-Message-ID: <20100614173722.4358b2d7@surf>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 14 Jun 2010 21:41:41 +0200
+Subject: [Buildroot] [PATCH v2] Add ffmpeg support
+Message-ID: <1276544505-2969-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Jun 2010 17:10:41 +0200
-Damien Borie <dbe@terawatt.fr> wrote:
+FFmpeg is a complete, cross-platform solution to record, convert and stream
+audio and video. It includes libavcodec - the leading audio/video codec library.
 
-> I Have to add Valgrind to my distribution to debug my programs. The 
-> version in buildroot doesn't compile because it needs glibc 2.2 -2.5, 
-> and I have 2.9. So I tried with the patch to bump to Valgrind 3.5.0.
-> But it ask me fro a file to patch, and I don't understand what I must
-> type to apply correctly the patch and compile Valgrind. In the match
-> itself, I cannot see indications about this file to choose.
+This patchset adds support for building ffmpeg in buildroot.
 
-What is your target architecture ? Remember that Valgrind only works on
-x86, x86_64 and PowerPC 32/64.
+Most high-level options are provided via kconfig options, and there is a hook
+in the last commit to allow passing .configure any parameters not directly
+supported (very handy for machine support, for example).
 
-Moreover, I don't really see how Valgrind in Buildroot would depend on
-a particular version of glibc. Can you be more specific about what
-you're doing and the exact result of the commands you're using ?
+Note that this support is much more complete than the one in bug 401
+(https://bugs.busybox.net/show_bug.cgi?id=401).
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+v2 includes improvements suggested by Peter Korsgaard.
+
+Thanks,
+Luca
+
+ffmpeg: add new package
+ffmpeg: add commandline programs
+ffmpeg: allow customization of codecs, (de)muxers and other components
+ffmpeg: add user-defined configure parameters
+
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/ffmpeg/Config.in                |  141 +++++++++++++++++++
+ .../ffmpeg-0.5.2-fix-sdl-config-search.patch       |   17 +++
+ package/multimedia/ffmpeg/ffmpeg.mk                |  143 ++++++++++++++++++++
+
+Luca
