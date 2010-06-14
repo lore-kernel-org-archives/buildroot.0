@@ -1,21 +1,20 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 14 Jun 2010 21:54:16 +0200
-Subject: [Buildroot] [PATCH 02/10] ext-toolchain: Fix ARCH_SYSROOT
-	detection
-In-Reply-To: <bf1bcc24c829475c10cf9304df7f3515f21d937f.1276516273.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jun 2010 21:56:32 +0200
+Subject: [Buildroot] [PATCH 03/10] external-toolchain: only copy
+	existing directories of the sysroot
+In-Reply-To: <82c0893c94969ff1093a212282deb525562692f8.1276516273.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
-	<bf1bcc24c829475c10cf9304df7f3515f21d937f.1276516273.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201006142154.16135.yann.morin.1998@anciens.enib.fr>
+	<82c0893c94969ff1093a212282deb525562692f8.1276516273.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201006142156.32260.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 14 June 2010 13:54:13 Thomas Petazzoni wrote:
+On Monday 14 June 2010 13:54:14 Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-FWIW:
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
 -- 
