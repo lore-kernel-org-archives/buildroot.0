@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jun 2010 13:54:14 +0200
-Subject: [Buildroot] [PATCH 03/10] external-toolchain: only copy existing
-	directories of the sysroot
+Date: Mon, 14 Jun 2010 13:54:15 +0200
+Subject: [Buildroot] [PATCH 04/10] external-toolchain: support 64 bits glibc
+	toolchains
 In-Reply-To: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <82c0893c94969ff1093a212282deb525562692f8.1276516273.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <25dbc7e97053c914268f376953019868b35ae49d.1276516273.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of copying all directories in "etc lib sbin usr", check that
-each of them exists before doing the copy. This is only to avoid an
-harmless error message.
+On 64 bits glibc toolchains, the dynamic loader is named
+ld-linux-x86-64.so and not simply ld-linux.so. So, adjust the
+detection of the C library accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index b1eee23..9c1ec8f 100644
+index 9c1ec8f..a181f25 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -120,7 +120,9 @@ copy_toolchain_sysroot = \
- 	ARCH_SYSROOT_DIR="$(strip $2)"; \
- 	ARCH_SUBDIR="$(strip $3)"; \
- 	for i in etc lib sbin usr ; do \
--		cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
-+		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
-+			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
-+		fi ; \
- 	done ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+@@ -157,7 +157,7 @@ check_glibc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
++	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
 -- 
 1.7.0.4
