@@ -1,29 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 13 Jun 2010 21:47:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 2035] ipsec-tools-0.7.2 fails to build with
-	gcc-4.4.x
-In-Reply-To: <bug-2035-163@https.bugs.busybox.net/>
-References: <bug-2035-163@https.bugs.busybox.net/>
-Message-ID: <20100613214754.9D55680DA8@busybox.osuosl.org>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Mon, 14 Jun 2010 11:50:02 +1000
+Subject: [Buildroot] [pull request] Pull request for branch linux-cleanup
+In-Reply-To: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <001801cb0b63$e94b86e0$bbe294a0$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2035
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Monday, 14 June 2010 4:50 AM
+> To: buildroot at uclibc.org
+> Cc: Thomas Petazzoni
+> Subject: [Buildroot] [pull request] Pull request for branch linux-cleanup
+> 
+> Hello,
+> 
+> Here is a set of 10 patches that completely rewrites the Linux kernel
+> compilation process in Buildroot. It is supposed to be applied on top of
+the
+> bootloaders-cleanup branch I've sent yesterday.
+> 
+> I've fairly drastically reduced the number of options to configure the
+kernel,
+> and particulary removed the horrible mess of version selection. See the
+first
+> commit in this branch for what remains in terms of configuration options
+for
+> the kernel. As I've removed quite a few things, I'm interested to know how
+> you're using Buildroot to build your kernel, and whether this proposal
+still
+> matches your use cases.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Looks good to me. The only comment I have is I liked the old automatic
+kernel patching from kernel.org, but now you need to know what the latest
+version is. No big deal though.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git, thanks
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Cheers,
+Paul.
