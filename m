@@ -1,76 +1,85 @@
 From: Jonathan dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Mon, 14 Jun 2010 09:55:42 -0400
-Subject: [Buildroot] Annoying... nothing work at all :-(
-In-Reply-To: <1276398794.8108.31.camel@localhost>
-References: <1276398794.8108.31.camel@localhost>
-Message-ID: <22DB3ABB269549758E8D79D540845F90@cimeq.ca>
+Date: Mon, 14 Jun 2010 09:51:53 -0400
+Subject: [Buildroot] [PATCH 05/49] u-boot: remove ancient versions
+In-Reply-To: <4cbd9ed6131651f029fcc93deecf6e9b9ac9a6a5.1276352308.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1276352307.git.thomas.petazzoni@free-electrons.com>
+	<4cbd9ed6131651f029fcc93deecf6e9b9ac9a6a5.1276352308.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <B4E78A8571BC4BAE91ACD7035DAA005A@cimeq.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-I think you should provide the error messages and .config file too to have
-some answer...
+Like I already said, removing the 2008.10 version will broke the atngw100
+target and stk1000 too. I wonder if we can use the GIT version of Haavard
+Skinnemoen directly. I have not use it and tested it but this tree should
+work. 
+I think only this patch is needed to get the atngw100 bord working
+
+http://git.denx.de/?p=u-boot/u-boot-avr32.git;a=commit;h=fc3174ef4dc5a90d528
+58e37505c51573fc3cfe3
+
+Again I couldn't confirm it. 
 
 Jonathan
+
 buildroot-bounces at busybox.net wrote:
-> Hi all.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  boot/u-boot/Config.in |   26 --------------------------
+>  1 files changed, 0 insertions(+), 26 deletions(-)
 > 
-> I'm trying for several days to get a simple working result with
-> buildroot. Nothing. 
+> diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in index
+> b07e67c..49d66c4 100644 --- a/boot/u-boot/Config.in
+> +++ b/boot/u-boot/Config.in
+> @@ -25,26 +25,6 @@ config BR2_TARGET_UBOOT_2009_11  config
+>  	BR2_TARGET_UBOOT_2009_08 bool "u-boot-2009.08"
 > 
-> I'm very surprised!
+> -config BR2_TARGET_UBOOT_2009_06
+> -	bool "u-boot-2009.06"
+> -	depends on BR2_DEPRECATED
+> -
+> -config BR2_TARGET_UBOOT_2009_03
+> -	bool "u-boot-2009.03"
+> -	depends on BR2_DEPRECATED
+> -
+> -config BR2_TARGET_UBOOT_2009_01
+> -	bool "u-boot-2009.01"
+> -	depends on BR2_DEPRECATED
+> -
+> -config BR2_TARGET_UBOOT_2008_10
+> -	bool "u-boot-2008.10"
+> -	depends on BR2_DEPRECATED
+> -
+> -config BR2_TARGET_UBOOT_1_2_0_ATMEL
+> -	bool "u-boot-1.2.0-atmel"
+> -	depends on BR2_TARGET_AT91
+> -
+>  endchoice
 > 
-> The source PC is a regular Fedora12 AMD quadcore.
+>  config BR2_UBOOT_VERSION
+> @@ -52,15 +32,9 @@ config BR2_UBOOT_VERSION
+>  	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+>  	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+>  	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
+> -	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
+> -	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
+> -	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
+> -	default "2008.10"	if BR2_TARGET_UBOOT_2008_10
+> -	default "1.2.0-atmel"	if BR2_TARGET_UBOOT_1_2_0_ATMEL
 > 
-> The target is a MiniITX single board regular Atom PC, able to boot
-> with all desktop OS, on a regular disk or a CompactFlash reader. 
+>  config BR2_U_BOOT_SITE
+>  	string
+> -	default "$(BR2_ATMEL_MIRROR)"		if
+BR2_TARGET_UBOOT_1_2_0_ATMEL
+>  	default "ftp://ftp.denx.de/pub/u-boot"
 > 
-> - When invoking "make menuconfig && make" an ext2 image is created.
-> OK but unbootable, without bootloader nor kernel. 
-> 
-> - When asking to add a bootloader, grub doesn't install properly on
-> target image, config is not done. This part is broken. 
-> 
-> - When asking to add a CF/FAT16 bootloader, syslinux doesn't install
-> at all on target image, this part is also broken since it does really
-> nothing on the image :-)  
-> 
-> - When asking a kernel, attempts lead often to cryptic make errors
-> and the whole buildroot tree has to be recreated from .tar.gz without
-> kernel generation. The "kernel" menu in menuconfig is broken, and no
-> kernel config is invoked at build or within menuconfig.   
-> 
-> - When invoking linux26-menuconfig (I'v found that one time), either
-> nothing, or make errors, this one is also broken. 
-> 
-> Etc, etc...
-> 
-> - Why asking for installation of a bootloader that is never
-> installed, nor configured on the target ? 
-> 
-> - Why asking for generation of a kernel that is never created and
-> lead to corruption of buildroot tree ? 
-> 
-> etc, etc...
-> 
-> All produced forms of "target" are either incomplete, or unusable, or
-> unbootable, when the commands are not ending with errors! 
-> 
-> Is there somewhere an USABLE documentation?
-> 
-> A step-by-step tutorial ? With exemple and results ?
-> 
-> I'm not a newbie to linux, but this "buildroot project" seems for
-> sure not usable before years of improvements... 
-> 
-> Comments would be appreciated.
-> 
-> Regards.
-> 
+>  source "target/device/Config.in.u-boot"
+> --
+> 1.7.0.4
 > 
 > _______________________________________________
 > buildroot mailing list
