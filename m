@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 14 Jun 2010 22:33:08 +0200
-Subject: [Buildroot] [git commit master 1/1] boot: remove references to
-	COPYTO
-Message-ID: <20100614203434.8A2BE80E24@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: remove ancient versions
+Message-ID: <20100614203434.F16EB80E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +9,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5eaa0e7faea81f21c5d0c9fb8c3b8fd8a53386b0
+commit: http://git.buildroot.net/buildroot/commit/?id=4cbd9ed6131651f029fcc93deecf6e9b9ac9a6a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk         |    6 ------
- boot/at91dataflashboot/at91dataflashboot.mk |    3 +--
- 2 files changed, 1 insertions(+), 8 deletions(-)
+ boot/u-boot/Config.in |   26 --------------------------
+ 1 files changed, 0 insertions(+), 26 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 2072c6b..dc475e4 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -63,22 +63,16 @@ $(AT91BOOTSTRAP_DIR)/.installed:: $(AT91BOOTSTRAP_TARGET)
- 	mkdir -p $(BINARIES_DIR)
- ifeq	($(AT91BOOTSTRAP_VERSION),2.3)
- 	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--	$(call COPY_FILE, $(AT91BOOTSTRAP_TARGET), $(BR2_TARGET_ATMEL_COPYTO), $(AT91BOOTSTRAP_BINARY))
- else
- 	make MEMORY=$(AT91BOOTSTRAP_MEMORY) \
- 		CROSS_COMPILE=$(TARGET_CROSS) \
- 		-C $(AT91BOOTSTRAP_DIR) boot
- 	make DESTDIR=$(BINARIES_DIR) -C $(AT91BOOTSTRAP_DIR) install || \
- 		echo "Could not copy bootstrap to BINARIES_DIR"
--ifneq ($(BR2_TARGET_ATMEL_COPYTO),)
--	make DESTDIR=$(BR2_TARGET_ATMEL_COPYTO) -C $(AT91BOOTSTRAP_DIR) install || \
--		echo "Could not copy bootstrap to BR2_ATMEL_COPYTO"
--endif
- endif
- 	touch $@
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index b07e67c..49d66c4 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -25,26 +25,6 @@ config BR2_TARGET_UBOOT_2009_11
+ config BR2_TARGET_UBOOT_2009_08
+ 	bool "u-boot-2009.08"
  
- #	cp $(AT91BOOTSTRAP_TARGET) $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--#	cp $(AT91BOOTSTRAP_TARGET) $(BR2_TARGET_ATMEL_COPYTO)/$(AT91BOOTSTRAP_BINARY)
- 
- .PHONY: at91bootstrap at91bootstrap-source
- 
-diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
-index 8939c28..519328c 100644
---- a/boot/at91dataflashboot/at91dataflashboot.mk
-+++ b/boot/at91dataflashboot/at91dataflashboot.mk
-@@ -31,8 +31,7 @@ DataflashBoot-dirclean:
- 	rm -rf $(DATAFLASHBOOT_DIR)
- 
- dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
--	$(call COPY_FILE, $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY), $(TARGET_ATMEL_COPYTO),	$(BOARD_NAME)-$(DATAFLASHBOOT_BINARY))
+-config BR2_TARGET_UBOOT_2009_06
+-	bool "u-boot-2009.06"
+-	depends on BR2_DEPRECATED
 -
-+	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY) $(BINARIES_DIR)
+-config BR2_TARGET_UBOOT_2009_03
+-	bool "u-boot-2009.03"
+-	depends on BR2_DEPRECATED
+-
+-config BR2_TARGET_UBOOT_2009_01
+-	bool "u-boot-2009.01"
+-	depends on BR2_DEPRECATED
+-
+-config BR2_TARGET_UBOOT_2008_10
+-	bool "u-boot-2008.10"
+-	depends on BR2_DEPRECATED
+-
+-config BR2_TARGET_UBOOT_1_2_0_ATMEL
+-	bool "u-boot-1.2.0-atmel"
+-	depends on BR2_TARGET_AT91
+-
+ endchoice
  
- #############################################################
- #
+ config BR2_UBOOT_VERSION
+@@ -52,15 +32,9 @@ config BR2_UBOOT_VERSION
+ 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+ 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
+-	default "2009.06"	if BR2_TARGET_UBOOT_2009_06
+-	default "2009.03"	if BR2_TARGET_UBOOT_2009_03
+-	default "2009.01"	if BR2_TARGET_UBOOT_2009_01
+-	default "2008.10"	if BR2_TARGET_UBOOT_2008_10
+-	default "1.2.0-atmel"	if BR2_TARGET_UBOOT_1_2_0_ATMEL
+ 
+ config BR2_U_BOOT_SITE
+ 	string
+-	default "$(BR2_ATMEL_MIRROR)"		if BR2_TARGET_UBOOT_1_2_0_ATMEL
+ 	default "ftp://ftp.denx.de/pub/u-boot"
+ 
+ source "target/device/Config.in.u-boot"
 -- 
 1.7.1
