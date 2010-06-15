@@ -1,103 +1,39 @@
-From: Dmytro Milinevskyy <milinevskyy@gmail.com>
-Date: Tue, 15 Jun 2010 11:14:33 +0300
-Subject: [Buildroot] [PATCH 2/2] [skeleton] option to define path to
-	custom rootfs skeleton
-In-Reply-To: <20100615092113.19f92cf3@surf>
-References: <4c114472.0d01df0a.4f84.1499@mx.google.com>
-	<20100615092113.19f92cf3@surf>
-Message-ID: <AANLkTinTi0L1f8h-Y8KgfKkMewy1eN5JACBxSItEuFCe@mail.gmail.com>
+From: Ahmed Soliman <asolimanbadr@gmail.com>
+Date: Tue, 15 Jun 2010 01:25:48 -0700
+Subject: [Buildroot] Fwd: Ask for support.(buildroot).
+In-Reply-To: <AANLkTilc3EONIH7kWw5eX9TLAcaSSSVbyDCTiFdeAl7Y@mail.gmail.com>
+References: <AANLkTilc3EONIH7kWw5eX9TLAcaSSSVbyDCTiFdeAl7Y@mail.gmail.com>
+Message-ID: <AANLkTimzO7bNdt1MhPAi6jOtcZx2t_-wTZFhCahu-ZEo@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok. I will redo the patch and resend everything from scratch.
+Dear Sir,
 
--- Dima
+THIS IS MY PROBLEM ,
 
-On Tue, Jun 15, 2010 at 10:21 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 10 Jun 2010 22:58:40 +0300
-> Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
->
->> index 6865eea..2163890 100644
->> --- a/fs/Config.in
->> +++ b/fs/Config.in
->> @@ -23,6 +23,30 @@ config BR2_ROOTFS_DEVICE_TABLE
->> ? ? ? ? ? to the makedevs utility to create all the special device
->> ? ? ? ? ? files in the target filesystem.
->>
->> +choice
->> + ? ? prompt "Root FS skeleton"
->> +
->> + ? ? config BR2_ROOTFS_SKELETON_DEFAULT
->> + ? ? ? ? ? ? bool "default target skeleton"
->> + ? ? ? ?help
->> + ? ? ? ? ?Use default target skeleton
->> +
->> + ? ? config BR2_ROOTFS_SKELETON_CUSTOM
->> + ? ? ? ? ? ? bool "custom target skeleton"
->> + ? ? ? ? ? ? help
->> + ? ? ? ? ? ? ?Use custom target skeleton.
->> +
->> +endchoice
->> +
->> +if BR2_ROOTFS_SKELETON_CUSTOM
->> + ? ? config BR2_ROOTFS_SKELETON_CUSTOM_PATH
->> + ? ? ? ? ? ? string "custom target skeleton path"
->> + ? ? ? ?default "fs/skeleton"
->> + ? ? ? ? ? ? help
->> + ? ? ? ? ? ? ?Path custom target skeleton.
->> +endif
->> +
->> +
->
-> You have indentation issues here. It should be:
->
-> choice
-> ? ? ? ?prompt "Root FS skeleton"
->
-> config BR2_ROOTFS_SKELETON_DEFAULT
-> ? ? ? ?bool "default target skeleton"
-> ? ? ? ?help
-> ? ? ? ? ?Use default target skeleton
->
-> config BR2_ROOTFS_SKELETON_CUSTOM
-> ? ? ? ?bool "custom target skeleton"
-> ? ? ? ?help
-> ? ? ? ? ?Use custom target skeleton
->
-> endchoice
->
-> if BR2_ROOTFS_SKELETON_CUSTOM
->
-> config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-> ? ? ? ?string "custom target skeleton path"
-> ? ? ? ?default "fs/skeleton"
-> ? ? ? ?help
-> ? ? ? ? ?Path to the custom target skeleton
->
-> endif
->
-> So :
->
-> ?* config statements at the beginning of the line
-> ?* one tab before "bool" and "help"
-> ?* tab + 2 spaces before each line of the help message
->
-> Otherwise, looks good to me, thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+I dont know what i have to select and configure in the menu config of
+bulidroot  TO  build my linux
+
+I am buliding this embedded linux to work on this device spec.
+
+VIA Eden Esther 1.2 GHz processor
+AMI BIOS
+SYSTEM CHIPST VIA CX700M
+i/o chip  Winbond W83697
+MEMORY 1GB DDR2
+
+
+I NEED TO BOOT IT UP FROM COMPACT FLASH.
+
+
+THANKS
+Please help...
+
+
+Eng . AHmed Badr
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100615/a7f3aeee/attachment.html>
