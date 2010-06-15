@@ -1,28 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Jun 2010 09:27:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 2059] busybox fails to link with gcc 4.4.x
-In-Reply-To: <bug-2059-163@https.bugs.busybox.net/>
-References: <bug-2059-163@https.bugs.busybox.net/>
-Message-ID: <20100615092704.8E6A280F57@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jun 2010 11:54:51 +0200
+Subject: [Buildroot] [PATCH] Add support for *.tbz2 package archives
+In-Reply-To: <1276521228-8454-1-git-send-email-paul@pauljones.id.au>
+References: <1276521228-8454-1-git-send-email-paul@pauljones.id.au>
+Message-ID: <20100615115451.362aa14b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2059
+On Mon, 14 Jun 2010 23:13:48 +1000
+Paul Jones <paul@pauljones.id.au> wrote:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+> Signed-off-by: Paul Jones <paul@pauljones.id.au>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-It works here. Are you by any chance using the uClibc-0.9.30.config? Please
-attach your buildroot .config
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
