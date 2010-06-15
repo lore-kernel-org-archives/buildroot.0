@@ -1,29 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Jun 2010 06:53:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 401] new package: ffmpeg
-In-Reply-To: <bug-401-163@https.bugs.busybox.net/>
-References: <bug-401-163@https.bugs.busybox.net/>
-Message-ID: <20100615065309.C98AC80E47@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 Jun 2010 08:54:35 +0200
+Subject: [Buildroot] [PATCH v2] Add ffmpeg support
+In-Reply-To: <1276544505-2969-1-git-send-email-luca@lucaceresoli.net> (Luca
+	Ceresoli's message of "Mon, 14 Jun 2010 21:41:41 +0200")
+References: <1276544505-2969-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87pqzseqfo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=401
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Luca> FFmpeg is a complete, cross-platform solution to record, convert
+ Luca> and stream audio and video. It includes libavcodec - the leading
+ Luca> audio/video codec library.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Luca> This patchset adds support for building ffmpeg in buildroot.
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-A more complete patch series adding ffmpeg (by Luca Ceresoli) has been added to
-git, thanks.
+ Luca> Most high-level options are provided via kconfig options, and
+ Luca> there is a hook in the last commit to allow passing .configure
+ Luca> any parameters not directly supported (very handy for machine
+ Luca> support, for example).
+
+ Luca> Note that this support is much more complete than the one in bug 401
+ Luca> (https://bugs.busybox.net/show_bug.cgi?id=401).
+
+ Luca> v2 includes improvements suggested by Peter Korsgaard.
+
+Thanks, committed. I had to fix up a few things though:
+
+- Missing ')' in qstrip calls
+- configure doesn't handle --disable-nls / --disable-largefile
+- ffmpeg doesn't build if the toolchain doesn't have largefile support
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
