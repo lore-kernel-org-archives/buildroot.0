@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 15 Jun 2010 08:52:17 +0200
-Subject: [Buildroot] [git commit master 1/1] ffmpeg: add user-defined
-	configure parameters
-Message-ID: <20100615065458.6734B80E52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] ffmpeg: allow customization of
+	codecs, (de)muxers and other components
+Message-ID: <20100615065458.34C4880E52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +10,180 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5db7204c80454fe5211c1f7df5490c36b9470af3
+commit: http://git.buildroot.net/buildroot/commit/?id=56e4d692549d84e40035f551e9f87ab052138915
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #401
+Add the option to customize the list of decoders, encoders, muxers, demuxers,
+parsers, protocols, bsfs and filters to be built into ffmpeg, and to compile or
+exclude input and output devices.
 
+[Peter: fix qstrip invocation]
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                             |    3 ++-
- package/multimedia/ffmpeg/Config.in |    7 +++++++
- package/multimedia/ffmpeg/ffmpeg.mk |    2 ++
- 3 files changed, 11 insertions(+), 1 deletions(-)
+ package/multimedia/ffmpeg/Config.in |   88 +++++++++++++++++++++++++++++++++++
+ package/multimedia/ffmpeg/ffmpeg.mk |   52 ++++++++++++++++++++
+ 2 files changed, 140 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index f0822d5..ac9e744 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -7,7 +7,7 @@
- 
- 	New GTK-based configurator, usable using 'make gconfig'.
- 
--	New packages: cgilua, copas, coxpcall, luafilesystem,
-+	New packages: cgilua, copas, coxpcall, ffmpeg, luafilesystem,
- 	luasocket, rings, wsapi, xavante
- 
- 	Updated/fixed packages: busybox, cdrkit, file, gawk,
-@@ -19,6 +19,7 @@
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-+	#401:  new package: ffmpeg
- 	#1753: lmbench: convert to generic package infrastructure
- 	#1771: Fakeroot and the target/generic/device_table.txt create bad...
- 	#1807: LZMA 4.32.7, Required header file(s) are missing
 diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
-index c9fdd54..fb6591b 100644
+index 16bb32d..c9fdd54 100644
 --- a/package/multimedia/ffmpeg/Config.in
 +++ b/package/multimedia/ffmpeg/Config.in
-@@ -135,4 +135,11 @@ config BR2_PACKAGE_FFMPEG_OUTDEVS
- 	bool "Enable output devices"
- 	default y
+@@ -47,4 +47,92 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
+ 	help
+          FFserver is a streaming server for both audio and video.
  
-+config BR2_PACKAGE_FFMPEG_EXTRACONF
-+	string "Additional parameters for ./configure"
-+	default ""
++config BR2_PACKAGE_FFMPEG_ENCODERS
++	string "Enabled encoders"
++	default "all"
 +	help
-+	 Extra parameters that will be appended to FFmpeg's
-+	 ./configure commandline.
++	 Space-separated list of encoders to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-encoders in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_DECODERS
++	string "Enabled decoders"
++	default "all"
++	help
++	 Space-separated list of decoders to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-decoders in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_MUXERS
++	string "Enabled muxers"
++	default "all"
++	help
++	 Space-separated list of muxers to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-muxers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_DEMUXERS
++	string "Enabled demuxers"
++	default "all"
++	help
++	 Space-separated list of demuxers to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-demuxers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_PARSERS
++	string "Enabled parsers"
++	default "all"
++	help
++	 Space-separated list of parsers to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-parsers in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_BSFS
++	string "Enabled bitstreams"
++	default "all"
++	help
++	 Space-separated list of bitstream filters to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-bsfs in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_PROTOCOLS
++	string "Enabled protocols"
++	default "all"
++	help
++	 Space-separated list of protocols to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-protocols in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_FILTERS
++	string "Enabled filters"
++	default "all"
++	help
++	 Space-separated list of filters to build in FFmpeg,
++	 or "all" to build all of them.
++
++	 Run ./configure --list-filters in the ffmpeg sources
++	 directory to know the available options.
++
++config BR2_PACKAGE_FFMPEG_INDEVS
++	bool "Enable input devices"
++	default y
++
++config BR2_PACKAGE_FFMPEG_OUTDEVS
++	bool "Enable output devices"
++	default y
 +
  endif
 diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index eea76f7..81984f1 100644
+index 1f9f472..eea76f7 100644
 --- a/package/multimedia/ffmpeg/ffmpeg.mk
 +++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -114,6 +114,8 @@ else
- FFMPEG_CONF_OPT += --disable-zlib
+@@ -49,6 +49,58 @@ else
+ FFMPEG_CONF_OPT += --disable-ffserver
  endif
  
-+FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),all)
++FFMPEG_CONF_OPT += --disable-encoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),--enable-encoder=$(x))
++endif
 +
- # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
- define FFMPEG_CONFIGURE_CMDS
- 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),all)
++FFMPEG_CONF_OPT += --disable-decoders \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),--enable-decoder=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_MUXERS)),all)
++FFMPEG_CONF_OPT += --disable-muxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_MUXERS)),--enable-muxer=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DEMUXERS)),all)
++FFMPEG_CONF_OPT += --disable-demuxers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DEMUXERS)),--enable-demuxer=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PARSERS)),all)
++FFMPEG_CONF_OPT += --disable-parsers \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PARSERS)),--enable-parser=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
++FFMPEG_CONF_OPT += --disable-bsfs \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),all)
++FFMPEG_CONF_OPT += --disable-protocols \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),--enable-protocol=$(x))
++endif
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_FILTERS)),all)
++FFMPEG_CONF_OPT += --disable-filters \
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_FILTERS)),--enable-filter=$(x))
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
++FFMPEG_CONF_OPT += --enable-indevs
++else
++FFMPEG_CONF_OPT += --disable-indevs
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
++FFMPEG_CONF_OPT += --enable-outdevs
++else
++FFMPEG_CONF_OPT += --disable-outdevs
++endif
++
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ FFMPEG_CONF_OPT += --disable-pthreads
+ else
 -- 
 1.7.1
