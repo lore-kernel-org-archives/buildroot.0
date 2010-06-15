@@ -1,47 +1,106 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Tue, 15 Jun 2010 20:33:19 +1000
-Subject: [Buildroot] [PATCH] Display current action in title bar
-In-Reply-To: <20100615115613.29b5b01a@surf>
-References: <1276523235-26299-1-git-send-email-paul@pauljones.id.au>
-	<20100615115613.29b5b01a@surf>
-Message-ID: <002201cb0c76$2dd52a10$897f7e30$@pauljones.id.au>
+From: Damien Borie <dbe@terawatt.fr>
+Date: Tue, 15 Jun 2010 13:15:41 +0200
+Subject: [Buildroot] [Re:  Valgrind compilation, with patch 3.5.0,
+ need help]
+In-Reply-To: <4C174EB3.5070902@terawatt.fr>
+References: <4C1726CE.8080009@terawatt.fr> <20100615093736.1872e8e7@surf>
+	<4C174EB3.5070902@terawatt.fr>
+Message-ID: <4C1760DD.8020001@terawatt.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Thomas Petazzoni
-> Sent: Tuesday, 15 June 2010 7:56 PM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] Display current action in title bar
-> 
-> On Mon, 14 Jun 2010 23:47:15 +1000
-> Paul Jones <paul@pauljones.id.au> wrote:
-> 
-> > -# MESSAGE Macro -- display a message in bold type -MESSAGE = echo
-> > "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
-> $(1)$(TERM_RESET)"
-> > +# MESSAGE Macro -- display a message in bold type and in the title
-> > +bar MESSAGE  = echo "$(TERM_BOLD)>>> $($(PKG)_NAME)
-> $($(PKG)_VERSION) $(1)$(TERM_RESET)" \
-> > +		&& echo -en "\033]2; $($(PKG)_NAME) $($(PKG)_VERSION)
-> $(1) \007"
-> 
-> I've tried this here in my xfterm (XFCE terminal) and it doesn't do
-anything. Is
-> my terminal emulator too crappy ?
-> 
-> Anyway, I'm not sure I'd like to see Buildroot hijack the title bar of my
-> terminal emulator. Or maybe I'm missing the point of your patch ?
+Ok I've applied successfully the patch 'bump to 3.5.0' and the large 
+file patch. But I still have the same error
+'checking for /proc/self/fd... configure: error: cannot check for file 
+existence when cross compiling'
+In 'configure' file, I can see that it result of a test of variable 
+'cross-compiling'. If true, this error appears. I wonder if i can 
+comment this and ignore this test...
 
-It works using the Gnome terminal and Putty. I'll try it on some others.
-Since the terminal title is usually set by the PS1 variable that means that
-as soon as builtroot stops running it will return to normal. The Gentoo
-build system does the same thing and it is quite handy to see what's
-happening.
- 
+Damien Borie
 
-Paul.
+TERAWATT / AENERGIA S.A.S.
+ZA DUBOSCOA
+64990 Villefranque
+FRANCE 
+
+tel : +33 (0)5 59 44 26 08
+fax : +33 (0)5 59 31 15 11 
+
+
+
+Damien Borie a ?crit :
+> Thanks!
+>
+> Well, this patch seems to work. But then, the compilation doesn't 
+> works. It returns with this error :
+> 'checking for /proc/self/fd... configure: error: cannot check for file 
+> existence when cross compiling'
+> I know I had this error in the past on other packages, but I don't 
+> remember how to fix it.
+> Note that I don't apply the patch 'valgrind.patch' because it cause 
+> errors. The only patch applied is 'valgrind-3.5.0-largefile.patch'.
+> Yesterday, I found a patch in the mailing list named 'valgrind bump to 
+> 3.5.0' (link : 
+> http://lists.busybox.net/pipermail/buildroot/2010-April/033673.html) 
+> but I didn't succeed in applying it. I'm not sure but I think it will 
+> patch vargrind.patch and vargrind.mk to work with 3.5.0 version.
+> But how to apply it?
+>
+> Damien Borie
+>
+> TERAWATT / AENERGIA S.A.S.
+> ZA DUBOSCOA
+> 64990 Villefranque
+> FRANCE
+> tel : +33 (0)5 59 44 26 08
+> fax : +33 (0)5 59 31 15 11
+>
+>
+> Thomas Petazzoni a ?crit :
+>> Hello Damien,
+>>
+>> On Tue, 15 Jun 2010 09:07:58 +0200
+>> Damien Borie <dbe@terawatt.fr> wrote:
+>>
+>>  
+>>> So, I tried to compile Valgrind version 3.5.0. I only change the 
+>>> version
+>>> number in Config.in file (in package/valgrind/). 'make source' cause 
+>>> the
+>>> package download without problems. Then 'make' doesn't cause error but
+>>> it try to apply a patch ('valgrind-largefile patch'). This patch modify
+>>> a file 'coregrind/m_ume.c' and ask me to type a path to a file to 
+>>> patch,
+>>> with no others precisions.
+>>>     
+>>
+>> It means that the file the patch is modifying doesn't exist anymore in
+>> newer versions of Valgrind. So you need to see whether the patch is
+>> still needed or not. From a quick look, it looks like it does.
+>>
+>> Attached is a updated version of the patch for Valgrind 3.5.0. I haven't
+>> tested it *at all*, I haven't even built Valgrind with this patch. But
+>> at least, it applies on Valgrind 3.5.0.
+>>
+>> Regards,
+>>
+>> Thomas
+>>   
+>> ------------------------------------------------------------------------
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
