@@ -1,51 +1,33 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 15 Jun 2010 11:54:53 +0200
-Subject: [Buildroot] PATCH [1/1] fix  building QT with uclibc 0.9.31
-In-Reply-To: <87hbl4eko5.fsf@macbook.be.48ers.dk>
-Message-ID: <2C6417354DD842388DB55C32FB629195@apexjs>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jun 2010 11:56:13 +0200
+Subject: [Buildroot] [PATCH] Display current action in title bar
+In-Reply-To: <1276523235-26299-1-git-send-email-paul@pauljones.id.au>
+References: <1276523235-26299-1-git-send-email-paul@pauljones.id.au>
+Message-ID: <20100615115613.29b5b01a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, 14 Jun 2010 23:47:15 +1000
+Paul Jones <paul@pauljones.id.au> wrote:
 
-Peter
+> -# MESSAGE Macro -- display a message in bold type
+> -MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
+> +# MESSAGE Macro -- display a message in bold type and in the title bar
+> +MESSAGE  = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)" \
+> +		&& echo -en "\033]2; $($(PKG)_NAME) $($(PKG)_VERSION) $(1) \007"
 
-I think i started here
-http://survey.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=539852
-and
-https://dev.openwrt.org/browser/packages/Xorg/lib/qt4/patches/100-fix-webkit
--for-uclibc.patch
-and
-http://qt4-x11.sourcearchive.com/documentation/4.5.0~plus-prc1-0ubuntu1/Coll
-ector_8cpp-source.html
-Are also references to the problem/solutions
+I've tried this here in my xfterm (XFCE terminal) and it doesn't do
+anything. Is my terminal emulator too crappy ?
 
-I'am not sure who wrote the original patch but i guess it might originate
-from openwrt 
+Anyway, I'm not sure I'd like to see Buildroot hijack the title bar of
+my terminal emulator. Or maybe I'm missing the point of your patch ?
 
-
------Oorspronkelijk bericht-----
-Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
-Verzonden: dinsdag 15 juni 2010 10:59
-Aan: Sagaert Johan
-CC: 'Peter Korsgaard'; buildroot at busybox.net
-Onderwerp: Re: PATCH [1/1] fix building QT with uclibc 0.9.31
-
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
-
- Sagaert> Hi Peter
-
- Sagaert> Did you build the JavaScriptCore and Multimedia module ?
-
-Ahh, no - I didn't. I've tested it now and see the issue as well.
-
- Sagaert> I had a build error : pthread_getattr_np is not defined in uclibc,
-Sagaert> there was a workaround for uclibc 0.9.30.x but not for 0.9.31.
-
-Where does this patch come from? We try to add a description of what the
-patches do and where they come from to the top of the files.
-
---
-Bye, Peter Korsgaard
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
