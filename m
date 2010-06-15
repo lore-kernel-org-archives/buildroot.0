@@ -1,21 +1,28 @@
-From: Dark SavanT <savant.d@gmail.com>
-Date: Tue, 15 Jun 2010 13:13:16 +0400
-Subject: [Buildroot] Package getting sources from git/svn/etc
-Message-ID: <AANLkTilTmwn4nJbe49NBXZvY9MDP-6k8QYmFvgD3m2cS@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Jun 2010 09:27:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 2059] busybox fails to link with gcc 4.4.x
+In-Reply-To: <bug-2059-163@https.bugs.busybox.net/>
+References: <bug-2059-163@https.bugs.busybox.net/>
+Message-ID: <20100615092704.8E6A280F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+https://bugs.busybox.net/show_bug.cgi?id=2059
 
-Can someone give me example of package which get sources from git,
-subversion or any other VCS?
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Best regards,
-Nikita Nazarenko
-"IRZ" Ltd
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100615/e96b8080/attachment.html>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+It works here. Are you by any chance using the uClibc-0.9.30.config? Please
+attach your buildroot .config
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
