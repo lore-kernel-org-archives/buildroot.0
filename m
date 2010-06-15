@@ -1,29 +1,18 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Jun 2010 21:22:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 2065] Internal toolchain: bump gcc 4.3.x series to
-	4.3.5
-In-Reply-To: <bug-2065-163@https.bugs.busybox.net/>
-References: <bug-2065-163@https.bugs.busybox.net/>
-Message-ID: <20100615212257.830EF80F61@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 Jun 2010 23:16:55 +0200
+Subject: [Buildroot] [git commit master 1/1] toolchain: remove gcc 4.1.2 and
+	non-sysroot support
+Message-ID: <20100615214800.05914803C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2065
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=5fd095b3748115d7cbe89524332e4b310550b7c3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-committed, thanks
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Patch is too large, so refusing to show it
