@@ -1,189 +1,76 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 Jun 2010 08:52:17 +0200
-Subject: [Buildroot] [git commit master 1/1] ffmpeg: allow customization of
-	codecs, (de)muxers and other components
-Message-ID: <20100615065458.34C4880E52@busybox.osuosl.org>
+From: Damien Borie <dbe@terawatt.fr>
+Date: Tue, 15 Jun 2010 09:07:58 +0200
+Subject: [Buildroot] [Re:  Valgrind compilation, with patch 3.5.0, need help]
+Message-ID: <4C1726CE.8080009@terawatt.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+My architecture is x86.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56e4d692549d84e40035f551e9f87ab052138915
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It's not me that say that Valgrind depends on glibc version, it's the
+log...I have only added valgrind in my configuration and launch 'make
+source' and 'make'. The package is downloaded without problem but during
+compilation, there is a test on glibc version number. I can see it in
+'configure.in' file. And it say me that Valgrind need glibc version 2.2
+to 2.5. I use 2.9.
 
-Add the option to customize the list of decoders, encoders, muxers, demuxers,
-parsers, protocols, bsfs and filters to be built into ffmpeg, and to compile or
-exclude input and output devices.
+So, I tried to compile Valgrind version 3.5.0. I only change the version
+number in Config.in file (in package/valgrind/). 'make source' cause the
+package download without problems. Then 'make' doesn't cause error but
+it try to apply a patch ('valgrind-largefile patch'). This patch modify
+a file 'coregrind/m_ume.c' and ask me to type a path to a file to patch,
+with no others precisions.
+So I don't know how to type here. And if I ignore, the compilation end
+with an error (saying that I must apply the patch).
 
-[Peter: fix qstrip invocation]
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/ffmpeg/Config.in |   88 +++++++++++++++++++++++++++++++++++
- package/multimedia/ffmpeg/ffmpeg.mk |   52 ++++++++++++++++++++
- 2 files changed, 140 insertions(+), 0 deletions(-)
+Any idea?
 
-diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
-index 16bb32d..c9fdd54 100644
---- a/package/multimedia/ffmpeg/Config.in
-+++ b/package/multimedia/ffmpeg/Config.in
-@@ -47,4 +47,92 @@ config BR2_PACKAGE_FFMPEG_FFSERVER
- 	help
-          FFserver is a streaming server for both audio and video.
- 
-+config BR2_PACKAGE_FFMPEG_ENCODERS
-+	string "Enabled encoders"
-+	default "all"
-+	help
-+	 Space-separated list of encoders to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-encoders in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_DECODERS
-+	string "Enabled decoders"
-+	default "all"
-+	help
-+	 Space-separated list of decoders to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-decoders in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_MUXERS
-+	string "Enabled muxers"
-+	default "all"
-+	help
-+	 Space-separated list of muxers to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-muxers in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_DEMUXERS
-+	string "Enabled demuxers"
-+	default "all"
-+	help
-+	 Space-separated list of demuxers to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-demuxers in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_PARSERS
-+	string "Enabled parsers"
-+	default "all"
-+	help
-+	 Space-separated list of parsers to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-parsers in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_BSFS
-+	string "Enabled bitstreams"
-+	default "all"
-+	help
-+	 Space-separated list of bitstream filters to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-bsfs in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_PROTOCOLS
-+	string "Enabled protocols"
-+	default "all"
-+	help
-+	 Space-separated list of protocols to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-protocols in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_FILTERS
-+	string "Enabled filters"
-+	default "all"
-+	help
-+	 Space-separated list of filters to build in FFmpeg,
-+	 or "all" to build all of them.
-+
-+	 Run ./configure --list-filters in the ffmpeg sources
-+	 directory to know the available options.
-+
-+config BR2_PACKAGE_FFMPEG_INDEVS
-+	bool "Enable input devices"
-+	default y
-+
-+config BR2_PACKAGE_FFMPEG_OUTDEVS
-+	bool "Enable output devices"
-+	default y
-+
- endif
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index 1f9f472..eea76f7 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -49,6 +49,58 @@ else
- FFMPEG_CONF_OPT += --disable-ffserver
- endif
- 
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),all)
-+FFMPEG_CONF_OPT += --disable-encoders \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),--enable-encoder=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),all)
-+FFMPEG_CONF_OPT += --disable-decoders \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),--enable-decoder=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_MUXERS)),all)
-+FFMPEG_CONF_OPT += --disable-muxers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_MUXERS)),--enable-muxer=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DEMUXERS)),all)
-+FFMPEG_CONF_OPT += --disable-demuxers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DEMUXERS)),--enable-demuxer=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PARSERS)),all)
-+FFMPEG_CONF_OPT += --disable-parsers \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PARSERS)),--enable-parser=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
-+FFMPEG_CONF_OPT += --disable-bsfs \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),all)
-+FFMPEG_CONF_OPT += --disable-protocols \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),--enable-protocol=$(x))
-+endif
-+
-+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_FILTERS)),all)
-+FFMPEG_CONF_OPT += --disable-filters \
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_FILTERS)),--enable-filter=$(x))
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_INDEVS),y)
-+FFMPEG_CONF_OPT += --enable-indevs
-+else
-+FFMPEG_CONF_OPT += --disable-indevs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_OUTDEVS),y)
-+FFMPEG_CONF_OPT += --enable-outdevs
-+else
-+FFMPEG_CONF_OPT += --disable-outdevs
-+endif
-+
- ifeq ($(BR2_PTHREADS_NONE),y)
- FFMPEG_CONF_OPT += --disable-pthreads
- else
+Damien Borie
+
+TERAWATT / AENERGIA S.A.S.
+ZA DUBOSCOA
+64990 Villefranque
+FRANCE
+
+tel : +33 (0)5 59 44 26 08
+fax : +33 (0)5 59 31 15 11
+
+
+
+Thomas Petazzoni a ?crit :
+ > On Mon, 14 Jun 2010 17:10:41 +0200
+ > Damien Borie <dbe@terawatt.fr> wrote:
+ >
+ >
+ >> I Have to add Valgrind to my distribution to debug my programs. The
+ >> version in buildroot doesn't compile because it needs glibc 2.2 -2.5,
+ >> and I have 2.9. So I tried with the patch to bump to Valgrind 3.5.0.
+ >> But it ask me fro a file to patch, and I don't understand what I must
+ >> type to apply correctly the patch and compile Valgrind. In the match
+ >> itself, I cannot see indications about this file to choose.
+ >>
+ >
+ > What is your target architecture ? Remember that Valgrind only works on
+ > x86, x86_64 and PowerPC 32/64.
+ >
+ > Moreover, I don't really see how Valgrind in Buildroot would depend on
+ > a particular version of glibc. Can you be more specific about what
+ > you're doing and the exact result of the commands you're using ?
+ >
+ > Thomas
+ >
+
+
 -- 
-1.7.1
+Damien Borie
+
+TERAWATT / AENERGIA S.A.S.
+ZA DUBOSCOA
+64990 Villefranque
+FRANCE 
+
+tel : +33 (0)5 59 44 26 08
+fax : +33 (0)5 59 31 15 11 
