@@ -1,87 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jun 2010 09:21:13 +0200
-Subject: [Buildroot] [PATCH 2/2] [skeleton] option to define path to
- custom rootfs skeleton
-In-Reply-To: <4c114472.0d01df0a.4f84.1499@mx.google.com>
-References: <4c114472.0d01df0a.4f84.1499@mx.google.com>
-Message-ID: <20100615092113.19f92cf3@surf>
+Date: Tue, 15 Jun 2010 09:37:36 +0200
+Subject: [Buildroot] [Re:  Valgrind compilation, with patch 3.5.0,
+ need help]
+In-Reply-To: <4C1726CE.8080009@terawatt.fr>
+References: <4C1726CE.8080009@terawatt.fr>
+Message-ID: <20100615093736.1872e8e7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Damien,
 
-On Thu, 10 Jun 2010 22:58:40 +0300
-Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+On Tue, 15 Jun 2010 09:07:58 +0200
+Damien Borie <dbe@terawatt.fr> wrote:
 
-> index 6865eea..2163890 100644
-> --- a/fs/Config.in
-> +++ b/fs/Config.in
-> @@ -23,6 +23,30 @@ config BR2_ROOTFS_DEVICE_TABLE
->           to the makedevs utility to create all the special device
->           files in the target filesystem.
->  
-> +choice
-> +	prompt "Root FS skeleton"
-> +
-> +	config BR2_ROOTFS_SKELETON_DEFAULT
-> +		bool "default target skeleton"
-> +        help
-> +          Use default target skeleton
-> +
-> +	config BR2_ROOTFS_SKELETON_CUSTOM
-> +		bool "custom target skeleton"
-> +		help
-> +	  	 Use custom target skeleton.
-> +
-> +endchoice
-> +
-> +if BR2_ROOTFS_SKELETON_CUSTOM
-> +	config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-> +		string "custom target skeleton path"
-> +        default "fs/skeleton"
-> +		help
-> +	  	 Path custom target skeleton.
-> +endif
-> +
-> +
+> So, I tried to compile Valgrind version 3.5.0. I only change the version
+> number in Config.in file (in package/valgrind/). 'make source' cause the
+> package download without problems. Then 'make' doesn't cause error but
+> it try to apply a patch ('valgrind-largefile patch'). This patch modify
+> a file 'coregrind/m_ume.c' and ask me to type a path to a file to patch,
+> with no others precisions.
 
-You have indentation issues here. It should be:
+It means that the file the patch is modifying doesn't exist anymore in
+newer versions of Valgrind. So you need to see whether the patch is
+still needed or not. From a quick look, it looks like it does.
 
-choice
-	prompt "Root FS skeleton"
+Attached is a updated version of the patch for Valgrind 3.5.0. I haven't
+tested it *at all*, I haven't even built Valgrind with this patch. But
+at least, it applies on Valgrind 3.5.0.
 
-config BR2_ROOTFS_SKELETON_DEFAULT
-	bool "default target skeleton"
-	help
-	  Use default target skeleton
-
-config BR2_ROOTFS_SKELETON_CUSTOM
-	bool "custom target skeleton"
-	help
-	  Use custom target skeleton
-
-endchoice
-
-if BR2_ROOTFS_SKELETON_CUSTOM
-
-config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-	string "custom target skeleton path"
-	default "fs/skeleton"
-	help
-	  Path to the custom target skeleton
-
-endif
-
-So :
-
- * config statements at the beginning of the line
- * one tab before "bool" and "help"
- * tab + 2 spaces before each line of the help message
-
-Otherwise, looks good to me, thanks!
+Regards,
 
 Thomas
 -- 
@@ -89,3 +39,10 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: valgrind-3.5.0-largefile.patch
+Type: text/x-patch
+Size: 2435 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100615/aa15e560/attachment.bin>
