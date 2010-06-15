@@ -1,76 +1,43 @@
-From: Damien Borie <dbe@terawatt.fr>
-Date: Tue, 15 Jun 2010 09:07:58 +0200
-Subject: [Buildroot] [Re:  Valgrind compilation, with patch 3.5.0, need help]
-Message-ID: <4C1726CE.8080009@terawatt.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jun 2010 09:10:46 +0200
+Subject: [Buildroot] Buildroot 2010.05-rc3 released :: 2 build errors -
+ lockfile-progs & gdb
+In-Reply-To: <1275417022.1598.5.camel@ubuntu>
+References: <877hmpv7km.fsf@macbook.be.48ers.dk>
+	<1275007047.6387.17.camel@ubuntu>
+	<87vda5suz0.fsf@macbook.be.48ers.dk>
+	<1275417022.1598.5.camel@ubuntu>
+Message-ID: <20100615091046.7b268452@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My architecture is x86.
+On Wed, 02 Jun 2010 04:30:22 +1000
+Microbit_Ubuntu <microbit@virginbroadband.com.au> wrote:
 
-It's not me that say that Valgrind depends on glibc version, it's the
-log...I have only added valgrind in my configuration and launch 'make
-source' and 'make'. The package is downloaded without problem but during
-compilation, there is a test on glibc version number. I can see it in
-'configure.in' file. And it say me that Valgrind need glibc version 2.2
-to 2.5. I use 2.9.
+> 2010.05 builds 100% fine now, except for the little snag with the gdb
+> symlink. I'll see if I can figure out what the common denominator is,
+> but I'm a bit stumped.
+> 
+> I find I still have to manually insert the folder
+> 'arm-unknown-linux-uclibcgnueabi' with 'bin' as a subfolder under
+> buildroot-2010.05/output/staging/usr
 
-So, I tried to compile Valgrind version 3.5.0. I only change the version
-number in Config.in file (in package/valgrind/). 'make source' cause the
-package download without problems. Then 'make' doesn't cause error but
-it try to apply a patch ('valgrind-largefile patch'). This patch modify
-a file 'coregrind/m_ume.c' and ask me to type a path to a file to patch,
-with no others precisions.
-So I don't know how to type here. And if I ignore, the compilation end
-with an error (saying that I must apply the patch).
+Can you give a .config or reproduction steps for this ?
 
-Any idea?
+> (ext toolchain built with CT-NG 1.6.1, alias used is 'arm-elf-xxx'
 
-Damien Borie
+FWIW, arm-elf is a prefix typically used for bare-metal toolchains, but
+here you're doing an uClibc/Linux toolchain, which is fairly different.
+It probably doesn't cause particular problems but might be confusing.
 
-TERAWATT / AENERGIA S.A.S.
-ZA DUBOSCOA
-64990 Villefranque
-FRANCE
+Regards,
 
-tel : +33 (0)5 59 44 26 08
-fax : +33 (0)5 59 31 15 11
-
-
-
-Thomas Petazzoni a ?crit :
- > On Mon, 14 Jun 2010 17:10:41 +0200
- > Damien Borie <dbe@terawatt.fr> wrote:
- >
- >
- >> I Have to add Valgrind to my distribution to debug my programs. The
- >> version in buildroot doesn't compile because it needs glibc 2.2 -2.5,
- >> and I have 2.9. So I tried with the patch to bump to Valgrind 3.5.0.
- >> But it ask me fro a file to patch, and I don't understand what I must
- >> type to apply correctly the patch and compile Valgrind. In the match
- >> itself, I cannot see indications about this file to choose.
- >>
- >
- > What is your target architecture ? Remember that Valgrind only works on
- > x86, x86_64 and PowerPC 32/64.
- >
- > Moreover, I don't really see how Valgrind in Buildroot would depend on
- > a particular version of glibc. Can you be more specific about what
- > you're doing and the exact result of the commands you're using ?
- >
- > Thomas
- >
-
-
+Thomas
 -- 
-Damien Borie
-
-TERAWATT / AENERGIA S.A.S.
-ZA DUBOSCOA
-64990 Villefranque
-FRANCE 
-
-tel : +33 (0)5 59 44 26 08
-fax : +33 (0)5 59 31 15 11 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
