@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jun 2010 09:17:12 +0200
-Subject: [Buildroot] [PATCH 1/2] [skeleton] move default skeleton to fs/
- and drop busybox skeleton
-In-Reply-To: <4c114469.104ddf0a.710f.1519@mx.google.com>
-References: <4c114469.104ddf0a.710f.1519@mx.google.com>
-Message-ID: <20100615091712.2f41ce8f@surf>
+Date: Tue, 15 Jun 2010 09:21:13 +0200
+Subject: [Buildroot] [PATCH 2/2] [skeleton] option to define path to
+ custom rootfs skeleton
+In-Reply-To: <4c114472.0d01df0a.4f84.1499@mx.google.com>
+References: <4c114472.0d01df0a.4f84.1499@mx.google.com>
+Message-ID: <20100615092113.19f92cf3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-Which skeleton are you moving to fs/skeleton/ ? The
-target/generic/target_skeleton or
-target/generic/target_busybox_skeleton ?
-
-On Thu, 10 Jun 2010 22:58:30 +0300
+On Thu, 10 Jun 2010 22:58:40 +0300
 Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
 
->  rename {target/generic/target_busybox_skeleton/dev => fs/skeleton/bin}/.empty (100%)
+> index 6865eea..2163890 100644
+> --- a/fs/Config.in
+> +++ b/fs/Config.in
+> @@ -23,6 +23,30 @@ config BR2_ROOTFS_DEVICE_TABLE
+>           to the makedevs utility to create all the special device
+>           files in the target filesystem.
+>  
+> +choice
+> +	prompt "Root FS skeleton"
+> +
+> +	config BR2_ROOTFS_SKELETON_DEFAULT
+> +		bool "default target skeleton"
+> +        help
+> +          Use default target skeleton
+> +
+> +	config BR2_ROOTFS_SKELETON_CUSTOM
+> +		bool "custom target skeleton"
+> +		help
+> +	  	 Use custom target skeleton.
+> +
+> +endchoice
+> +
+> +if BR2_ROOTFS_SKELETON_CUSTOM
+> +	config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+> +		string "custom target skeleton path"
+> +        default "fs/skeleton"
+> +		help
+> +	  	 Path custom target skeleton.
+> +endif
+> +
+> +
 
-I'm not sure what's happening here, but this rename (and many others)
-look strange. Is it because all these .empty files are identical and
-Git misdetects the renames ?
+You have indentation issues here. It should be:
 
->  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S20urandom (100%)
->  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S40network (100%)
->  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/rcS (100%)
->  rename {target/generic/target_skeleton => fs/skeleton}/etc/inittab (100%)
+choice
+	prompt "Root FS skeleton"
 
-Some files renamed from target_busybox_skeleton, some others from
-target_skeleton, strange. Is it also a strange Git behaviour because
-the files are identical ?
+config BR2_ROOTFS_SKELETON_DEFAULT
+	bool "default target skeleton"
+	help
+	  Use default target skeleton
 
-Otherwise looks good,
+config BR2_ROOTFS_SKELETON_CUSTOM
+	bool "custom target skeleton"
+	help
+	  Use custom target skeleton
+
+endchoice
+
+if BR2_ROOTFS_SKELETON_CUSTOM
+
+config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+	string "custom target skeleton path"
+	default "fs/skeleton"
+	help
+	  Path to the custom target skeleton
+
+endif
+
+So :
+
+ * config statements at the beginning of the line
+ * one tab before "bool" and "help"
+ * tab + 2 spaces before each line of the help message
+
+Otherwise, looks good to me, thanks!
 
 Thomas
 -- 
