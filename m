@@ -1,48 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jun 2010 09:37:36 +0200
-Subject: [Buildroot] [Re:  Valgrind compilation, with patch 3.5.0,
- need help]
-In-Reply-To: <4C1726CE.8080009@terawatt.fr>
-References: <4C1726CE.8080009@terawatt.fr>
-Message-ID: <20100615093736.1872e8e7@surf>
+From: Dmytro Milinevskyy <milinevskyy@gmail.com>
+Date: Tue, 15 Jun 2010 11:13:15 +0300
+Subject: [Buildroot] [PATCH 1/2] [skeleton] move default skeleton to fs/
+	and drop busybox skeleton
+In-Reply-To: <20100615091712.2f41ce8f@surf>
+References: <4c114469.104ddf0a.710f.1519@mx.google.com>
+	<20100615091712.2f41ce8f@surf>
+Message-ID: <AANLkTimfWuqCcyJBC1bg5YN1ygCJeNqbksOe-wFOKTA0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Damien,
+Hi, Thomas!
 
-On Tue, 15 Jun 2010 09:07:58 +0200
-Damien Borie <dbe@terawatt.fr> wrote:
+target/generic/target_skeleton became  default skeleton and busybox
+skeleton was dropped.
 
-> So, I tried to compile Valgrind version 3.5.0. I only change the version
-> number in Config.in file (in package/valgrind/). 'make source' cause the
-> package download without problems. Then 'make' doesn't cause error but
-> it try to apply a patch ('valgrind-largefile patch'). This patch modify
-> a file 'coregrind/m_ume.c' and ask me to type a path to a file to patch,
-> with no others precisions.
+Indeed git behavior is a bit weird.
 
-It means that the file the patch is modifying doesn't exist anymore in
-newer versions of Valgrind. So you need to see whether the patch is
-still needed or not. From a quick look, it looks like it does.
+-- Dima
 
-Attached is a updated version of the patch for Valgrind 3.5.0. I haven't
-tested it *at all*, I haven't even built Valgrind with this patch. But
-at least, it applies on Valgrind 3.5.0.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: valgrind-3.5.0-largefile.patch
-Type: text/x-patch
-Size: 2435 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100615/aa15e560/attachment.bin>
+On Tue, Jun 15, 2010 at 10:17 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Which skeleton are you moving to fs/skeleton/ ? The
+> target/generic/target_skeleton or
+> target/generic/target_busybox_skeleton ?
+>
+> On Thu, 10 Jun 2010 22:58:30 +0300
+> Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+>
+>> ?rename {target/generic/target_busybox_skeleton/dev => fs/skeleton/bin}/.empty (100%)
+>
+> I'm not sure what's happening here, but this rename (and many others)
+> look strange. Is it because all these .empty files are identical and
+> Git misdetects the renames ?
+>
+>> ?rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S20urandom (100%)
+>> ?rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S40network (100%)
+>> ?rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/rcS (100%)
+>> ?rename {target/generic/target_skeleton => fs/skeleton}/etc/inittab (100%)
+>
+> Some files renamed from target_busybox_skeleton, some others from
+> target_skeleton, strange. Is it also a strange Git behaviour because
+> the files are identical ?
+>
+> Otherwise looks good,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
