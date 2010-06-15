@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jun 2010 09:10:46 +0200
-Subject: [Buildroot] Buildroot 2010.05-rc3 released :: 2 build errors -
- lockfile-progs & gdb
-In-Reply-To: <1275417022.1598.5.camel@ubuntu>
-References: <877hmpv7km.fsf@macbook.be.48ers.dk>
-	<1275007047.6387.17.camel@ubuntu>
-	<87vda5suz0.fsf@macbook.be.48ers.dk>
-	<1275417022.1598.5.camel@ubuntu>
-Message-ID: <20100615091046.7b268452@surf>
+Date: Tue, 15 Jun 2010 09:17:12 +0200
+Subject: [Buildroot] [PATCH 1/2] [skeleton] move default skeleton to fs/
+ and drop busybox skeleton
+In-Reply-To: <4c114469.104ddf0a.710f.1519@mx.google.com>
+References: <4c114469.104ddf0a.710f.1519@mx.google.com>
+Message-ID: <20100615091712.2f41ce8f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 02 Jun 2010 04:30:22 +1000
-Microbit_Ubuntu <microbit@virginbroadband.com.au> wrote:
+Hello,
 
-> 2010.05 builds 100% fine now, except for the little snag with the gdb
-> symlink. I'll see if I can figure out what the common denominator is,
-> but I'm a bit stumped.
-> 
-> I find I still have to manually insert the folder
-> 'arm-unknown-linux-uclibcgnueabi' with 'bin' as a subfolder under
-> buildroot-2010.05/output/staging/usr
+Which skeleton are you moving to fs/skeleton/ ? The
+target/generic/target_skeleton or
+target/generic/target_busybox_skeleton ?
 
-Can you give a .config or reproduction steps for this ?
+On Thu, 10 Jun 2010 22:58:30 +0300
+Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
 
-> (ext toolchain built with CT-NG 1.6.1, alias used is 'arm-elf-xxx'
+>  rename {target/generic/target_busybox_skeleton/dev => fs/skeleton/bin}/.empty (100%)
 
-FWIW, arm-elf is a prefix typically used for bare-metal toolchains, but
-here you're doing an uClibc/Linux toolchain, which is fairly different.
-It probably doesn't cause particular problems but might be confusing.
+I'm not sure what's happening here, but this rename (and many others)
+look strange. Is it because all these .empty files are identical and
+Git misdetects the renames ?
 
-Regards,
+>  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S20urandom (100%)
+>  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/S40network (100%)
+>  rename {target/generic/target_busybox_skeleton => fs/skeleton}/etc/init.d/rcS (100%)
+>  rename {target/generic/target_skeleton => fs/skeleton}/etc/inittab (100%)
+
+Some files renamed from target_busybox_skeleton, some others from
+target_skeleton, strange. Is it also a strange Git behaviour because
+the files are identical ?
+
+Otherwise looks good,
 
 Thomas
 -- 
