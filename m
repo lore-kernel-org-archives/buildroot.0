@@ -1,22 +1,19 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jun 2010 19:13:22 +0200
-Subject: [Buildroot] [PATCH 19/19] lrzsz : convert to autotools
- infrastructure
-In-Reply-To: <1276688841-5252-20-git-send-email-cmchao@gmail.com>
-References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-	<1276688841-5252-20-git-send-email-cmchao@gmail.com>
-Message-ID: <20100616191322.53f26319@surf>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Jun 2010 16:17:23 -0300
+Subject: [Buildroot] [PATCH] libart should really install in staging
+Message-ID: <4C192343.5050106@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+The libart package had a couple of typos so it never really installed to
+staging. So fix it.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-fix-libart-staging.patch
+Type: text/x-patch
+Size: 858 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100616/7c7ad656/attachment.bin>
