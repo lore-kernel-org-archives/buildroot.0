@@ -1,10 +1,10 @@
 From: cmchao <cmchao@gmail.com>
-Date: Wed, 16 Jun 2010 19:47:06 +0800
-Subject: [Buildroot] [PATCH 04/19] links : convert to autotools
-	infrastructure & bump to 1.01pre1-no-ssl
+Date: Wed, 16 Jun 2010 19:47:07 +0800
+Subject: [Buildroot] [PATCH 05/19] dialog : convert to autotools
+	infrastructure & bump to 1.1-20100428
 In-Reply-To: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
 References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1276688841-5252-5-git-send-email-cmchao@gmail.com>
+Message-ID: <1276688841-5252-6-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/links/links.mk |   66 +++++++++--------------------------------------
- 1 files changed, 13 insertions(+), 53 deletions(-)
+ package/dialog/dialog.mk |   63 +++++++++------------------------------------
+ 1 files changed, 13 insertions(+), 50 deletions(-)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 298c165..b02e801 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -3,64 +3,24 @@
- # links (text based web browser)
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index 9c6f2a9..c34510a 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -3,59 +3,22 @@
+ # dialog
  #
  #############################################################
--LINKS_VERSION:=0.99pre9-no-ssl
-+LINKS_VERSION:=1.01pre1-no-ssl
- LINKS_SITE:=http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/download/no-ssl
- LINKS_SOURCE:=links-$(LINKS_VERSION).tar.gz
--LINKS_DIR:=$(BUILD_DIR)/links-$(LINKS_VERSION)
+-DIALOG_VERSION:=1.1-20070704
++DIALOG_VERSION:=1.1-20100428
+ DIALOG_SOURCE:=dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE:=ftp://invisible-island.net/dialog
+-DIALOG_DIR:=$(BUILD_DIR)/dialog-$(DIALOG_VERSION)
+-DIALOG_BINARY:=dialog
+-DIALOG_TARGET_BINARY:=usr/bin/dialog
  
--$(DL_DIR)/$(LINKS_SOURCE):
--	$(call DOWNLOAD,$(LINKS_SITE),$(LINKS_SOURCE))
-+LINKS_INSTALL_STAGING = NO
-+LINKS_INSTALL_TARGET = YES
-+LINKS_CONF_OPT = --localstatedir=/tmp
+-$(DL_DIR)/$(DIALOG_SOURCE):
+-	$(call DOWNLOAD,$(DIALOG_SITE),$(DIALOG_SOURCE))
++DIALOG_INSTALL_STAGING = NO
++DIALOG_INSTALL_TARGET = YES
++DIALOG_DEPENDENCIES = ncurses
  
--links-source: $(DL_DIR)/$(LINKS_SOURCE)
-+define LINKS_INSTALL_TARGET_CMDS
-+	install -c $(@D)/links $(TARGET_DIR)/usr/bin/links
-+	$(STRIPCMD) $(@D)/links
+-$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(DIALOG_DIR)
+-	touch $@
++define DIALOG_INSTALL_TARGET_CMDS
++	install -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
++	$(STRIPCMD) $(@D)/dialog
 +endef
  
--$(LINKS_DIR)/.unpacked: $(DL_DIR)/$(LINKS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LINKS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LINKS_DIR)/.unpacked
--
--$(LINKS_DIR)/.configured: $(LINKS_DIR)/.unpacked
--	(cd $(LINKS_DIR); rm -rf config.cache; \
+-$(DIALOG_DIR)/.configured: $(DIALOG_DIR)/.source
+-	(cd $(DIALOG_DIR); rm -f config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -56,48 +57,42 @@ index 298c165..b02e801 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/tmp \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
+-		--sysconfdir=/etc; \
 -	)
--	touch $(LINKS_DIR)/.configured
--
--$(LINKS_DIR)/links: $(LINKS_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LINKS_DIR)
--	$(STRIPCMD) $(LINKS_DIR)/links
--
--$(TARGET_DIR)/usr/bin/links: $(LINKS_DIR)/links
--	install -c $(LINKS_DIR)/links $(TARGET_DIR)/usr/bin/links
--
--links-clean:
--	-$(MAKE) -C $(LINKS_DIR) clean
-+define LINKS_POST_CLEAN
+-	touch $@
++define DIALOG_POST_CLEAN
 +	-$(MAKE) -C $(@D) clean
- 	rm -f $(TARGET_DIR)/usr/bin/links
++	rm -f $(TARGET_DIR)/usr/bin/dialog
 +endef
  
--links-dirclean:
--	rm -rf $(LINKS_DIR)
+-$(DIALOG_DIR)/$(DIALOG_BINARY): $(DIALOG_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIALOG_DIR)
+-	touch -c $@
 -
--links: $(TARGET_DIR)/usr/bin/links
-+LINKS_POST_CLEAN_HOOKS += LINKS_POST_CLEAN
- 
+-$(TARGET_DIR)/$(DIALOG_TARGET_BINARY): $(DIALOG_DIR)/$(DIALOG_BINARY)
+-	$(MAKE) prefix=$(TARGET_DIR)/usr \
+-		mandir=$(TARGET_DIR)/usr/share/man \
+-		-C $(DIALOG_DIR) install
+-
+-dialog: ncurses $(TARGET_DIR)/$(DIALOG_TARGET_BINARY)
+-
+-dialog-source: $(DL_DIR)/$(DIALOG_SOURCE)
+-
+-dialog-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(DIALOG_DIR) uninstall
+-	-$(MAKE) -C $(DIALOG_DIR) clean
+-
+-dialog-dirclean:
+-	rm -rf $(DIALOG_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LINKS),y)
--TARGETS+=links
+-ifeq ($(BR2_PACKAGE_DIALOG),y)
+-TARGETS+=dialog
 -endif
-+$(eval $(call AUTOTARGETS,package,links))
++$(eval $(call AUTOTARGETS,package,dialog))
 -- 
 1.7.0.4
