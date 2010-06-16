@@ -1,10 +1,10 @@
 From: cmchao <cmchao@gmail.com>
-Date: Wed, 16 Jun 2010 19:47:20 +0800
-Subject: [Buildroot] [PATCH 18/19] liblockfile : convert to autotools
-	infrastructure & bump to 1.08-4
+Date: Wed, 16 Jun 2010 19:47:21 +0800
+Subject: [Buildroot] [PATCH 19/19] lrzsz : convert to autotools
+	infrastructure
 In-Reply-To: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
 References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1276688841-5252-19-git-send-email-cmchao@gmail.com>
+Message-ID: <1276688841-5252-20-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/liblockfile/liblockfile.mk |   65 ++++++++----------------------------
- 1 files changed, 14 insertions(+), 51 deletions(-)
+ package/lrzsz/lrzsz.mk |   71 +++++++++++------------------------------------
+ 1 files changed, 17 insertions(+), 54 deletions(-)
 
-diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
-index b30d356..6684e86 100644
---- a/package/liblockfile/liblockfile.mk
-+++ b/package/liblockfile/liblockfile.mk
-@@ -6,66 +6,29 @@
- LIBLOCKFILE_VERSION=1.08
- LIBLOCKFILE_SOURCE:=liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
- LIBLOCKFILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/libl/liblockfile/
--LIBLOCKFILE_CAT:=$(ZCAT)
--LIBLOCKFILE_DIR:=$(BUILD_DIR)/liblockfile-$(LIBLOCKFILE_VERSION)
--LIBLOCKFILE_BINARY:=usr/lib/liblockfile.so.1.0
-+LIBLOCKFILE_PATCH:=liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
+diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
+index 0a7de51..0b7f4e6 100644
+--- a/package/lrzsz/lrzsz.mk
++++ b/package/lrzsz/lrzsz.mk
+@@ -23,64 +23,27 @@
+ LRZSZ_VERSION:=0.12.20
+ LRZSZ_SITE:=http://www.ohse.de/uwe/releases
+ LRZSZ_SOURCE:=lrzsz-$(LRZSZ_VERSION).tar.gz
+-LRZSZ_DIR:=$(BUILD_DIR)/lrzsz-$(LRZSZ_VERSION)
  
--$(DL_DIR)/$(LIBLOCKFILE_SOURCE):
--	 $(call DOWNLOAD,$(LIBLOCKFILE_SITE),$(LIBLOCKFILE_SOURCE))
-+LIBLOCKFILE_INSTALL_STAGING = YES
-+LIBLOCKFILE_INSTALL_TARGET = YES
-+LIBLOCKFILE_CONF_OPT = --enable-shared --mandir=/usr/share/man
+-$(DL_DIR)/$(LRZSZ_SOURCE):
+-	$(call DOWNLOAD,$(LRZSZ_SITE),$(LRZSZ_SOURCE))
++LRZSR_CONF_OPT = --disable-timesync
  
--liblockfile-source: $(DL_DIR)/$(LIBLOCKFILE_SOURCE)
--
--$(LIBLOCKFILE_DIR)/.unpacked: $(DL_DIR)/$(LIBLOCKFILE_SOURCE)
--	$(LIBLOCKFILE_CAT) $(DL_DIR)/$(LIBLOCKFILE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBLOCKFILE_DIR) package/liblockfile/ \*.patch
--	touch $@
--
--$(LIBLOCKFILE_DIR)/.configured: $(LIBLOCKFILE_DIR)/.unpacked
--	(cd $(LIBLOCKFILE_DIR); rm -rf config.cache; \
+-lrzsz-source: $(DL_DIR)/$(LRZSZ_SOURCE)
++define LRZSZ_POST_CONFIGURE_HOOKS
++	$(SED) "s/-lnsl//;" $(@D)/src/Makefile
++	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(@D)/config.h
++endef
+ 
+-$(LRZSZ_DIR)/.unpacked: $(DL_DIR)/$(LRZSZ_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LRZSZ_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LRZSZ_DIR)/.unpacked
++define LRZSZ_BUILD_HOOKS
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(@D)
++	$(STRIPCMD) $(@D)/src/lrz $(@D)/src/lsz
++endef
+ 
+-$(LRZSZ_DIR)/.configured: $(LRZSZ_DIR)/.unpacked
+-	(cd $(LRZSZ_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -52,55 +54,54 @@ index b30d356..6684e86 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
--		--libdir=/usr/lib \
--		--includedir=/usr/include \
--		--mandir=/usr/share/man \
--		--enable-shared \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/tmp \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
+-		--disable-timesync \
 -	)
--	touch $@
--
--$(STAGING_DIR)/$(LIBLOCKFILE_BINARY): $(LIBLOCKFILE_DIR)/.configured
-+define LIBLOCKFILE_INSTALL_STAGING_CMDS
- 	mkdir -p $(addprefix $(STAGING_DIR)/usr/share/man/man,1 3)
- 	rm -f $(STAGING_DIR)/usr/lib/liblockfile.so
- 	$(MAKE) -C $(LIBLOCKFILE_DIR) ROOT=$(STAGING_DIR) install
- 	ln -sf liblockfile.so $(STAGING_DIR)/usr/lib/liblockfile.so.1
--	touch -c $@
+-	$(SED) "s/-lnsl//;" $(LRZSZ_DIR)/src/Makefile
+-	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(LRZSZ_DIR)/config.h
+-	touch $(LRZSZ_DIR)/.configured
++define LRZSZ_INSTALL_TARGET_CMDS
++	cp $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
++	cp $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
 +endef
  
--$(TARGET_DIR)/$(LIBLOCKFILE_BINARY): $(STAGING_DIR)/$(LIBLOCKFILE_BINARY)
--	mkdir -p $(@D)
--	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(@D)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
--	touch -c $@
-+define LIBLOCKFILE_INSTALL_TARGET_CMDS
-+	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(TARGET_DIR)/usr/lib
-+	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/liblockfile.so*
-+endef
- 
--liblockfile: $(TARGET_DIR)/$(LIBLOCKFILE_BINARY)
+-$(LRZSZ_DIR)/src/lrz: $(LRZSZ_DIR)/.configured
+-	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(LRZSZ_DIR)
+-	$(STRIPCMD) $(LRZSZ_DIR)/src/lrz $(LRZSZ_DIR)/src/lsz
 -
--liblockfile-clean:
-+define LIBLOCKFILE_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/usr/lib/liblockfile.so*
- 	rm -f $(STAGING_DIR)/usr/lib/liblockfile*
- 	rm -f $(addprefix $(STAGING_DIR)/usr/include/,lockfile.h mailfile.h)
--	-$(MAKE) -C $(LIBLOCKFILE_DIR) clean
+-$(TARGET_DIR)/usr/bin/rz: $(LRZSZ_DIR)/src/lrz
+-	cp $(LRZSZ_DIR)/src/lrz $(TARGET_DIR)/usr/bin/rz
+-	cp $(LRZSZ_DIR)/src/lsz $(TARGET_DIR)/usr/bin/sz
 -
--liblockfile-dirclean:
--	rm -rf $(LIBLOCKFILE_DIR)
+-lrzsz: $(TARGET_DIR)/usr/bin/rz
+-
+-lrzsz-clean:
++define LRZSZ_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/rz
+-	-$(MAKE) -C $(LRZSZ_DIR) clean
 +	-$(MAKE) -C $(@D) clean
 +endef
  
+-lrzsz-dirclean:
+-	rm -rf $(LRZSZ_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBLOCKFILE),y)
--TARGETS+=liblockfile
+-ifeq ($(BR2_PACKAGE_LRZSZ),y)
+-TARGETS+=lrzsz
 -endif
-+$(eval $(call AUTOTARGETS,package,liblockfile))
++$(eval $(call AUTOTARGETS,package,lrzsz))
 -- 
 1.7.0.4
