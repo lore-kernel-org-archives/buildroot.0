@@ -1,69 +1,63 @@
-From: Dmytro Milinevskyy <milinevskyy@gmail.com>
-Date: Wed, 16 Jun 2010 23:25:56 +0300
-Subject: [Buildroot] [PATCH 2/2] [skeleton] option to define path to custom
-	rootfs skeleton
-Message-ID: <4c1933f7.954fdf0a.3c35.6c7e@mx.google.com>
+From: Ossy <ossy1980@gmx.net>
+Date: Wed, 16 Jun 2010 22:42:41 +0200
+Subject: [Buildroot] installing kernel modules fails due to not existing
+	directory
+Message-ID: <4C193741.4010108@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear buildrootmailinglist,
 
-Signed-off-by: Dmytro Milinevskyy <milinevskyy@gmail.com>
----
- Makefile     |    4 ++++
- fs/Config.in |   23 +++++++++++++++++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+I wasn't able to run a simple make with linux kernel 2.6.33.X (same 
+version as headers). It was not possible to install the modules.
 
-diff --git a/Makefile b/Makefile
-index e0fac17..58a7a72 100644
---- a/Makefile
-+++ b/Makefile
-@@ -368,6 +368,10 @@ $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)/usr/include
- 	@mkdir -p $(STAGING_DIR)/usr/bin
- 
-+ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
-+TARGET_SKELETON=$(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
-+endif
-+
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
-diff --git a/fs/Config.in b/fs/Config.in
-index 6865eea..188e815 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -23,6 +23,29 @@ config BR2_ROOTFS_DEVICE_TABLE
-          to the makedevs utility to create all the special device
-          files in the target filesystem.
- 
-+choice
-+	prompt "Root FS skeleton"
-+
-+config BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "default target skeleton"
-+	help
-+	  Use default target skeleton
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM
-+	bool "custom target skeleton"
-+	help
-+	  Use custom target skeleton.
-+
-+endchoice
-+
-+if BR2_ROOTFS_SKELETON_CUSTOM
-+config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-+	string "custom target skeleton path"
-+	default "fs/skeleton"
-+	help
-+	  Path custom target skeleton.
-+endif
-+
- source "fs/cramfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/ext2/Config.in"
--- 
-1.7.1
+The reason might be this:
+WARNING: Couldn't open directory 
+..buildroot-dev/output/target/lib/modules/2.6.33.5: No such file or 
+directory
+
+This directory is indeed not there, but I found:
+ossy at debian-virtual:~/buildroot/buildroot-dev/output/target/lib/modules$ ll
+drwxr-xr-x 3 ossy ossy 86 15. Jun 14:06 
+2.6.33.5-dockstarViaBR-00109-g5fd095b-dirty
+So how do I make sure to use 2.6.33.5 and not the git-generated name?
+Or is it the script which should use the git-generated name?
+
+I tried to create a link, but it was removed after running make.
+
+Thanks for your help.
+
+
+Kind regards,
+Marcus
+
+...
+   DEPMOD  2.6.33.5-dockstarViaBR-00109-g5fd095b-dirty
+make[1]: Leaving directory 
+`/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.33.5'
++ rm -f 
+/home/ossy/buildroot/buildroot-dev/output/target/lib/modules/2.6.33.5/build 
+/home/ossy/buildroot/buildroot-dev/output/target/lib/mod
+ules/2.6.33.5/source
++ 
+/home/ossy/buildroot/buildroot-dev/output/staging/bin/arm-linux-depmod26 
+-b /home/ossy/buildroot/buildroot-dev/output/target 2.6.33.5
+WARNING: Couldn't open directory 
+/home/ossy/buildroot/buildroot-dev/output/target/lib/modules/2.6.33.5: 
+No such file or directory
+FATAL: Could not open 
+/home/ossy/buildroot/buildroot-dev/output/target/lib/modules/2.6.33.5/modules.dep.temp 
+for writing: No such file or di
+rectory
+make: *** 
+[/home/ossy/buildroot/buildroot-dev/output/target/lib/modules/2.6.33.5/modules.dep] 
+Fehler 1
+...
+
+
+ossy at debian-virtual:~/buildroot/buildroot-dev$ cat .git/FETCH_HEAD
+5fd095b3748115d7cbe89524332e4b310550b7c3                branch 'master' 
+of http://git.buildroot.net/buildroot
