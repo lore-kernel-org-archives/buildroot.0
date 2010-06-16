@@ -1,10 +1,10 @@
 From: cmchao <cmchao@gmail.com>
-Date: Wed, 16 Jun 2010 19:47:17 +0800
-Subject: [Buildroot] [PATCH 15/19] sdl : convert to autotools infrastructure
-	& bump to 1.2.14
+Date: Wed, 16 Jun 2010 19:47:18 +0800
+Subject: [Buildroot] [PATCH 16/19] gmp : convert to autotools infrastructure
+	& bump to 5.0.1
 In-Reply-To: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
 References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1276688841-5252-16-git-send-email-cmchao@gmail.com>
+Message-ID: <1276688841-5252-17-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,157 +14,129 @@ To: buildroot@busybox.net
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/sdl/sdl.mk |  105 +++++++++++-----------------------------------------
- 1 files changed, 22 insertions(+), 83 deletions(-)
+ package/gmp/gmp.mk |  111 ++++------------------------------------------------
+ 1 files changed, 8 insertions(+), 103 deletions(-)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 959be7e..facff42 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -3,122 +3,61 @@
- # SDL
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index a3488b8..b850ad1 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -3,108 +3,13 @@
+ # gmp
  #
  #############################################################
--SDL_VERSION:=1.2.13
-+SDL_VERSION:=1.2.14
- SDL_SOURCE:=SDL-$(SDL_VERSION).tar.gz
- SDL_SITE:=http://www.libsdl.org/release
--SDL_CAT:=$(ZCAT)
--SDL_DIR:=$(BUILD_DIR)/SDL-$(SDL_VERSION)
+-GMP_VERSION:=4.2.4
+-GMP_SOURCE:=gmp-$(GMP_VERSION).tar.bz2
+-GMP_SITE:=$(BR2_GNU_MIRROR)/gmp
+-GMP_CAT:=$(BZCAT)
+-GMP_DIR:=$(TOOLCHAIN_DIR)/gmp-$(GMP_VERSION)
+-GMP_TARGET_DIR:=$(BUILD_DIR)/gmp-$(GMP_VERSION)
+-GMP_BINARY:=libgmp$(LIBTGTEXT)
+-GMP_HOST_BINARY:=libgmp$(HOST_LIBEXT)
+-GMP_LIBVERSION:=3.4.4
++LIBGMP_VERSION:=5.0.1
++LIBGMP_SOURCE:=gmp-$(LIBGMP_VERSION).tar.bz2
++LIBGMP_SITE:=$(BR2_GNU_MIRROR)/gmp
  
-+
-+SDL_LIBTOOL_PATCH = NO
-+SDL_INSTALL_STAGING = YES
-+SDL_INSTALL_TARGET = YES
- SDL_EXTRA_CFLAGS = -I./include -D_GNU_SOURCE=1 -fvisibility=hidden -D_REENTRANT -D_REENTRANT -DHAVE_LINUX_VERSION_H
+-# this is a workaround for a bug in GMP, please see
+-# http://gmplib.org/list-archives/gmp-devel/2006-April/000618.html
+-ifeq ($(HOST_EXEEXT),.exe)
+-GMP_CPP_FLAGS:=CPPFLAGS=-DDLL_EXPORT
+-endif
++LIBGMP_LIBTOOL_PATCH = NO
++LIBGMP_INSTALL_STAGING = YES
++LIBGMP_INSTALL_TARGET = YES
  
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
--SDL_FBCON=--enable-video-fbcon=yes
-+SDL_CONF_OPT+=--enable-video-fbcon=yes
- else
--SDL_FBCON=--enable-video-fbcon=no
-+SDL_CONF_OPT+=--enable-video-fbcon=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
- SDL_DEPENDENCIES += directfb
--SDL_DIRECTFB=--enable-video-directfb=yes
--SDL_DIRECTFB_TARGET:=$(STAGING_DIR)/include/directfb
--SDL_DIRECTFB_INCLUDES:=-I$(STAGING_DIR)/usr/include/directfb
--SDL_EXTRA_CFLAGS += $(SDL_DIRECTFB_INCLUDES)
-+SDL_CONF_OPT+=--enable-video-directfb=yes
-+SDL_CONF_ENV+= $(SDL_DIRECTFB_INCLUDES)
- else
- SDL_DIRECTFB=--enable-video-directfb=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_QTOPIA),y)
--SDL_QTOPIA=--enable-video-qtopia=yes
-+SDL_CONF_OPT+=--enable-video-qtopia=yes
- SDL_DEPENDENCIES += qt
- else
--SDL_QTOPIA=--enable-video-qtopia=no
-+SDL_CONF_OPT+=--enable-video-qtopia=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_X11),y)
--SDL_X11=--enable-video-x11=yes
-+SDL_CONF_OPT+=--enable-video-x11=yes
- SDL_DEPENDENCIES += xserver_xorg-server
- else
--SDL_X11=--enable-video-x11=no
-+SDL_CONF_OPT+=--enable-video-x11=no
- endif
- 
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL_DEPENDENCIES += tslib
- endif
- 
--$(DL_DIR)/$(SDL_SOURCE):
--	$(call DOWNLOAD,$(SDL_SITE),$(SDL_SOURCE))
+-$(DL_DIR)/$(GMP_SOURCE):
+-	 $(call DOWNLOAD,$(GMP_SITE),$(GMP_SOURCE))
 -
--sdl-source: $(DL_DIR)/$(SDL_SOURCE)
+-libgmp-source: $(DL_DIR)/$(GMP_SOURCE)
 -
--$(SDL_DIR)/.unpacked: $(DL_DIR)/$(SDL_SOURCE)
--	$(SDL_CAT) $(DL_DIR)/$(SDL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SDL_DIR) package/sdl sdl-$(SDL_VERSION)\*.patch
--	$(CONFIG_UPDATE) $(SDL_DIR)
--	$(CONFIG_UPDATE) $(SDL_DIR)/build-scripts
+-$(GMP_DIR)/.unpacked: $(DL_DIR)/$(GMP_SOURCE)
+-	$(GMP_CAT) $(DL_DIR)/$(GMP_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(GMP_DIR) package/gmp/ \*.patch
+-	$(CONFIG_UPDATE) $(@D)
 -	touch $@
 -
--$(SDL_DIR)/.configured: $(SDL_DIR)/.unpacked
--	(cd $(SDL_DIR); rm -rf config.cache; \
+-$(GMP_TARGET_DIR)/.configured: $(GMP_DIR)/.unpacked
+-	mkdir -p $(GMP_TARGET_DIR)
+-	(cd $(GMP_TARGET_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
+-		$(GMP_CPP_FLAGS) \
+-		$(GMP_DIR)/configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
--		--prefix=$(STAGING_DIR)/usr \
--		--sysconfdir=/etc \
--		--localstatedir=/var \
--		--enable-pulseaudio=no \
-+SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-arts \
- 		--disable-esd \
--		--disable-nasm \
--		$(SDL_FBCON) \
--		$(SDL_DIRECTFB) \
--		$(SDL_QTOPIA) \
--		$(SDL_X11) \
--		)
+-		--prefix=/usr \
+-		$(PREFERRED_LIB_FLAGS) \
+-		$(DISABLE_NLS) \
+-	)
 -	touch $@
-+		--disable-nasm
- 
--ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
--$(SDL_DIRECTFB_TARGET):
--	mkdir -p $(STAGING_DIR)/include
--	ln -s -f ../usr/include/directfb $(SDL_DIRECTFB_TARGET)
+-
+-$(GMP_TARGET_DIR)/.libs/$(GMP_BINARY): $(GMP_TARGET_DIR)/.configured
+-	#$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(GMP_TARGET_DIR)
+-	$(MAKE) -C $(GMP_TARGET_DIR)
+-
+-$(STAGING_DIR)/usr/lib/$(GMP_BINARY): $(GMP_TARGET_DIR)/.libs/$(GMP_BINARY)
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(GMP_TARGET_DIR) install
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(STAGING_DIR)/usr/lib/libgmp$(LIBTGTEXT)*
+-
+-$(TARGET_DIR)/usr/lib/libgmp.so $(TARGET_DIR)/usr/lib/libgmp.so.$(GMP_LIBVERSION) $(TARGET_DIR)/usr/lib/libgmp.a: $(STAGING_DIR)/usr/lib/$(GMP_BINARY)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libgmp$(LIBTGTEXT)* $(TARGET_DIR)/usr/lib/
+-ifeq ($(BR2_PACKAGE_LIBGMP_HEADERS),y)
+-	test -d $(TARGET_DIR)/usr/include || mkdir -p $(TARGET_DIR)/usr/include
+-	cp -dpf $(STAGING_DIR)/usr/include/gmp.h $(TARGET_DIR)/usr/include/
 -endif
 -
--$(SDL_DIR)/.compiled: $(SDL_DIR)/.configured $(SDL_DIRECTFB_TARGET)
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) \
--		EXTRA_CFLAGS="$(SDL_EXTRA_CFLAGS)" \
--		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
--		DESTDIR=$(STAGING_DIR)/usr -C $(SDL_DIR)
+-libgmp: $(TARGET_DIR)/usr/lib/libgmp$(LIBTGTEXT)
+-stage-libgmp: $(STAGING_DIR)/usr/lib/$(GMP_BINARY)
+-
+-libgmp-clean:
+-	rm -f $(TARGET_DIR)/usr/lib/libgmp.* $(TARGET_DIR)/usr/include/gmp.h \
+-		$(STAGING_DIR)/usr/lib/libgmp* $(STAGING_DIR)/usr/include/gmp.h
+-	-$(MAKE) -C $(GMP_TARGET_DIR) clean
+-
+-libgmp-dirclean:
+-	rm -rf $(GMP_TARGET_DIR) $(GMP_DIR)
+-
+-GMP_DIR2:=$(TOOLCHAIN_DIR)/gmp-$(GMP_VERSION)-host
+-GMP_HOST_DIR:=$(TOOLCHAIN_DIR)/gmp
+-$(GMP_DIR2)/.configured: $(GMP_DIR)/.unpacked
+-	mkdir -p $(GMP_DIR2)
+-	(cd $(GMP_DIR2); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		$(GMP_CPP_FLAGS) \
+-		$(GMP_DIR)/configure $(QUIET) \
+-		--prefix="$(GMP_HOST_DIR)" \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--disable-shared \
+-		--enable-static \
+-		$(DISABLE_NLS) \
+-	)
 -	touch $@
-+define SDL_POST_INSTALL_STAGING_HOOKS
-+       $(SED) 's^libdir=\$${exec_prefix}^libdir=/usr^' \
-+               $(STAGING_DIR)/usr/bin/sdl-config
-+endef
- 
--$(STAGING_DIR)/usr/lib/libSDL.so: $(SDL_DIR)/.compiled
--	$(MAKE) -C $(SDL_DIR) install
--# use correct rpath for linking
--	$(SED) 's^libdir=\$${exec_prefix}^libdir=/usr^' \
--		$(STAGING_DIR)/usr/bin/sdl-config
--	touch -c $@
 -
--$(TARGET_DIR)/usr/lib/libSDL.so: $(STAGING_DIR)/usr/lib/libSDL.so
-+define SDL_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL*.so* $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL.so
-+endef
- 
--SDL sdl: $(SDL_DEPENDENCIES) $(TARGET_DIR)/usr/lib/libSDL.so
+-$(GMP_HOST_DIR)/lib/libgmp$(HOST_LIBEXT): $(GMP_DIR2)/.configured
+-	$(MAKE) -C $(GMP_DIR2) install
 -
--sdl-unpacked: $(SDL_DIR)/.unpacked
--
--sdl-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_DIR) uninstall
--	-$(MAKE) -C $(SDL_DIR) clean
--
--sdl-dirclean:
--	rm -rf $(SDL_DIR)
+-host-libgmp: $(GMP_HOST_DIR)/lib/$(GMP_HOST_BINARY)
+-host-libgmp-source: libgmp-source
+-host-libgmp-clean:
+-	rm -rf $(GMP_HOST_DIR)
+-	-$(MAKE) -C $(GMP_DIR2) clean
+-host-libgmp-dirclean:
+-	rm -rf $(GMP_HOST_DIR) $(GMP_DIR2)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SDL),y)
--TARGETS+=sdl
+-ifeq ($(BR2_PACKAGE_LIBGMP),y)
+-TARGETS+=libgmp
 -endif
-+$(eval $(call AUTOTARGETS,package,sdl))
++$(eval $(call AUTOTARGETS,package,libgmp))
++$(eval $(call AUTOTARGETS,package,libgmp,host))
 -- 
 1.7.0.4
