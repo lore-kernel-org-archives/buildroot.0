@@ -1,10 +1,10 @@
 From: cmchao <cmchao@gmail.com>
-Date: Wed, 16 Jun 2010 19:47:08 +0800
-Subject: [Buildroot] [PATCH 06/19] berkeleydb : convert to autotools
-	infrastructure & bump to 4.4.20
+Date: Wed, 16 Jun 2010 19:47:09 +0800
+Subject: [Buildroot] [PATCH 07/19] dash : convert to autotools
+	infrastructure & bump to 0.5.5.1
 In-Reply-To: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
 References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1276688841-5252-7-git-send-email-cmchao@gmail.com>
+Message-ID: <1276688841-5252-8-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,111 +14,98 @@ To: buildroot@busybox.net
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/berkeleydb/berkeleydb.mk |   71 +++++++++++++-------------------------
- 1 files changed, 24 insertions(+), 47 deletions(-)
+ package/dash/dash.mk |   71 ++++++++++----------------------------------------
+ 1 files changed, 14 insertions(+), 57 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index f15df6a..4227f7f 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -3,25 +3,18 @@
- # berkeley db
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 63a102a..1f229de 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -3,71 +3,28 @@
+ # dash
  #
  #############################################################
--DB_VERSION:=4.3.29
--DB_SO_VERSION:=4.3
--DB_SITE:=ftp://ftp.sleepycat.com/releases
--DB_SOURCE:=db-$(DB_VERSION).NC.tar.gz
--DB_DIR:=$(BUILD_DIR)/db-$(DB_VERSION).NC
--DB_SHARLIB:=libdb-$(DB_SO_VERSION).so
-+BERKELEYDB_VERSION:=4.4.20
-+BERKELEYDB_SO_VERSION:=4.4
-+BERKELEYDB_SITE:=ftp://ftp.sleepycat.com/releases
-+BERKELEYDB_SOURCE:=db-$(BERKELEYDB_VERSION).NC.tar.gz
-+BERKELEYDB_SHARLIB:=libdb-$(BERKELEYDB_SO_VERSION).so
+-DASH_VERSION:=0.5.3
++DASH_VERSION:=0.5.5.1
+ DASH_SOURCE:=dash_$(DASH_VERSION).orig.tar.gz
+ DASH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
+-DASH_CAT:=$(ZCAT)
+-DASH_DIR:=$(BUILD_DIR)/dash-$(DASH_VERSION)
+-DASH_PATCH1:=dash_$(DASH_VERSION)-7.diff.gz
++DASH_PATCH:=dash_$(DASH_VERSION)-6.diff.gz
+ DASH_BINARY:=src/dash
+ DASH_TARGET_BINARY:=bin/dash
  
--$(DL_DIR)/$(DB_SOURCE):
--	$(call DOWNLOAD,$(DB_SITE),$(DB_SOURCE))
-+BERKELEYDB_INSTALL_STAGING = YES
-+BERKELEYDB_INSTALL_TARGET = YES
+-$(DL_DIR)/$(DASH_SOURCE):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_SOURCE))
++DASH_INSTALL_STAGING = NO
++DASH_INSTALL_TARGET = YES
  
--berkeleydb-source: $(DL_DIR)/$(DB_SOURCE)
--
--$(DB_DIR)/.dist: $(DL_DIR)/$(DB_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(DB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(DB_DIR)/.configured: $(DB_DIR)/.dist
--	$(CONFIG_UPDATE) $(DB_DIR)/dist
--	(cd $(DB_DIR)/build_unix; rm -rf config.cache; \
-+#build directory can't be the directory where configure are there, so..
-+define BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		../dist/configure $(QUIET) \
-@@ -48,48 +41,32 @@ $(DB_DIR)/.configured: $(DB_DIR)/.dist
- 		--disable-tcl \
- 		--disable-compat185 \
- 		--with-pic \
--		$(DISABLE_LARGEFILE) \
- 	)
--	$(SED) 's/\.lo/.o/g' $(DB_DIR)/build_unix/Makefile
--	touch $@
-+	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
+-$(DL_DIR)/$(DASH_PATCH1):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_PATCH1))
++define DASH_BUILD_CMDS
++	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(@D)
 +endef
  
--$(DB_DIR)/build_unix/.libs/$(DB_SHARLIB): $(DB_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(DB_DIR)/build_unix
-+define BERKELEYDB_BUILD_CMDS
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D)/build_unix
+-dash-source: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-
+-$(DASH_DIR)/.unpacked: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-	$(DASH_CAT) $(DL_DIR)/$(DASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(ZCAT) $(DL_DIR)/$(DASH_PATCH1) | patch -p1 -d $(DASH_DIR)
+-	touch $(DASH_DIR)/.unpacked
+-
+-$(DASH_DIR)/.configured: $(DASH_DIR)/.unpacked
+-	(cd $(DASH_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-	)
+-	touch $(DASH_DIR)/.configured
+-
+-$(DASH_DIR)/$(DASH_BINARY): $(DASH_DIR)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(DASH_DIR)
+-	touch -c $(DASH_DIR)/$(DASH_BINARY)
+-
+-$(TARGET_DIR)/$(DASH_TARGET_BINARY): $(DASH_DIR)/$(DASH_BINARY)
++define DASH_INSTALL_TARGET_CMDS
+ 	cp -a $(DASH_DIR)/$(DASH_BINARY) $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash: $(TARGET_DIR)/$(DASH_TARGET_BINARY)
++	-$(STRIPCMD) $(TARGET_DIR)/$(DASH_TARGET_BINARY)
 +endef
  
--$(STAGING_DIR)/lib/$(DB_SHARLIB): $(DB_DIR)/build_unix/.libs/$(DB_SHARLIB)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DB_DIR)/build_unix install
-+define BERKELEYDB_INSTALL_STAGING_CMDS
-+	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D)/build_unix install
- 	chmod a-x $(STAGING_DIR)/lib/libdb*so*
- 	rm -f $(STAGING_DIR)/bin/db_*
- 	rm -rf $(STAGING_DIR)/share/locale
+-dash-clean:
+-	$(MAKE1) CC=$(TARGET_CC) -C $(DASH_DIR) clean
++define DASH_CLEAN_CMDS
++	$(MAKE1) CC=$(TARGET_CC) -C $(@@D) clean
+ 	rm -f $(TARGET_DIR)/$(DASH_TARGET_BINARY)
 +endef
  
--$(TARGET_DIR)/lib/$(DB_SHARLIB): $(STAGING_DIR)/lib/$(DB_SHARLIB)
-+define BERKELEYDB_INSTALL_TARGET_CMDS
- 	rm -rf $(TARGET_DIR)/lib/libdb*
- 	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
- 	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
--	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(DB_SHARLIB) libdb.so)
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(BERKELEYDB_SHARLIB) libdb.so)
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libdb*so*
--
--$(TARGET_DIR)/usr/lib/libdb.a: $(STAGING_DIR)/lib/libdb-$(DB_SO_VERSION).a
-+	mkdir -p $(TARGET_DIR)/usr/include
- 	cp -dpf $(STAGING_DIR)/usr/include/db.h $(TARGET_DIR)/usr/include/
-+	mkdir -p $(TARGET_DIR)/usr/lib
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.a $(TARGET_DIR)/usr/lib/
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.la $(TARGET_DIR)/usr/lib/
--	touch -c $@
--
--berkeleydb-headers: $(TARGET_DIR)/usr/lib/libdb.a
--
--berkeleydb-clean:
--	-$(MAKE) -C $(DB_DIR)/build_unix clean
--
--berkeleydb-dirclean:
--	rm -rf $(DB_DIR)
-+endef
- 
--berkeleydb: $(TARGET_DIR)/lib/$(DB_SHARLIB)
+-dash-dirclean:
+-	rm -rf $(DASH_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
--TARGETS+=berkeleydb
+-ifeq ($(BR2_PACKAGE_DASH),y)
+-TARGETS+=dash
 -endif
-+$(eval $(call AUTOTARGETS,package,berkeleydb))
++$(eval $(call AUTOTARGETS,package,dash))
 -- 
 1.7.0.4
