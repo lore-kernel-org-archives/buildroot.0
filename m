@@ -1,42 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Jun 2010 22:51:13 +0200
-Subject: [Buildroot] package/games/Config.in usage
-In-Reply-To: <20100617222716.468feb2e@surf> (Thomas Petazzoni's message of
-	"Thu, 17 Jun 2010 22:27:16 +0200")
-References: <4C1A1F22.70500@free.fr> <87zkytbwgo.fsf@macbook.be.48ers.dk>
-	<20100617222716.468feb2e@surf>
-Message-ID: <87mxutbcxq.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Jun 2010 23:02:09 +0200
+Subject: [Buildroot] [PATCH 0/2]  skeleton reorganization patchset
+In-Reply-To: <4c1933c5.0b4ddf0a.0de4.6a7a@mx.google.com>
+References: <4c1933c5.0b4ddf0a.0de4.6a7a@mx.google.com>
+Message-ID: <20100617230209.5274a34a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Wed, 16 Jun 2010 23:25:09 +0300
+Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
 
-Hi,
+> This is a patchset for the reorganization of target rootfs skeleton.
+> First one moves target/generic/target_skeleton to fs/skeleton, makes it default and drops busybox skeleton
+> Second patch adds option to define path to detault skeleton used for the build
 
- >> Me too.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Thomas> Why not, but in that case, we need non ambiguous names. I'm
- Thomas> referring to the recent introduction of several Lua packages:
- Thomas> some of them have fairly common names:
+Thanks!
 
- Thomas>  http://git.buildroot.net/buildroot/commit/?id=50d6f2dde4db8c9d042294a09d5e8e120aec9987
-
- Thomas> Maybe they should be named "lua-XXX" instead ?
-
-Yes, sorry I forgot to answer your mail on this. It is not only the
-directory name, but also the BR2_PACKAGE_* symbol that need to be
-specific enough.
-
- Thomas> Another strategy would be to mimick in the directory layout the
- Thomas> organization of options in the menuconfig.
-
-I find it quite handy to do a quick cd package/<package> when I need to
-fix something in a package, without having to start make menuconfig to
-figure out in what sub directory it is - The current package/multimedia
-stuff kind of bothers me.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
