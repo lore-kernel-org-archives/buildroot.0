@@ -1,126 +1,45 @@
-From: cmchao <cmchao@gmail.com>
-Date: Thu, 17 Jun 2010 22:45:22 +0200
-Subject: [Buildroot] [git commit master 1/1] lrzsz: convert to autotools
-	infrastructure
-Message-ID: <20100617204627.B89DD81632@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Jun 2010 22:27:16 +0200
+Subject: [Buildroot] package/games/Config.in usage
+In-Reply-To: <87zkytbwgo.fsf@macbook.be.48ers.dk>
+References: <4C1A1F22.70500@free.fr>
+	<87zkytbwgo.fsf@macbook.be.48ers.dk>
+Message-ID: <20100617222716.468feb2e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 17 Jun 2010 15:49:27 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f3f291a3bfc1893cbfb4d9803c35a4f6752784d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  Julien> Hello,
+>  Julien> it seems package/games/Config.in is not used. Indeed package/Config.in
+>  Julien> do not "source" it but copy its content (line 76).
+> 
+>  Julien> What is the actual philosophy in BR: regroup packages by "classes" (ex
+>  Julien> games, multimedia...) in package/ subdirs and then source these
+>  Julien> sub-Config.in in package/Config.in or put all packages in package/ and
+>  Julien> organize the stuff in package/Config.in ?
+>  Julien> (I prefer the second one)
+> 
+> Me too.
 
-Signed-off-by: cmchao <cmchao@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    4 +-
- package/lrzsz/lrzsz.mk |   71 +++++++++++------------------------------------
- 2 files changed, 19 insertions(+), 56 deletions(-)
+Why not, but in that case, we need non ambiguous names. I'm referring
+to the recent introduction of several Lua packages: some of them have
+fairly common names:
 
-diff --git a/CHANGES b/CHANGES
-index fb32f5b..0b1dde9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,8 +15,8 @@
- 
- 	Updated/fixed packages: busybox, cdrkit, file, gawk,
- 	gstreamer, intltool, ipsec-tools, iptables, libart, libidn,
--	lmbench, netperf, openssl, php, qt, sqlite, tn5250, usbutils,
--	xkeyboard-config
-+	lmbench, lrzsz, netperf, openssl, php, qt, sqlite, tn5250,
-+	usbutils, xkeyboard-config
- 
- 	Removed packages: modutils
- 
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 0a7de51..0b7f4e6 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -23,64 +23,27 @@
- LRZSZ_VERSION:=0.12.20
- LRZSZ_SITE:=http://www.ohse.de/uwe/releases
- LRZSZ_SOURCE:=lrzsz-$(LRZSZ_VERSION).tar.gz
--LRZSZ_DIR:=$(BUILD_DIR)/lrzsz-$(LRZSZ_VERSION)
- 
--$(DL_DIR)/$(LRZSZ_SOURCE):
--	$(call DOWNLOAD,$(LRZSZ_SITE),$(LRZSZ_SOURCE))
-+LRZSR_CONF_OPT = --disable-timesync
- 
--lrzsz-source: $(DL_DIR)/$(LRZSZ_SOURCE)
-+define LRZSZ_POST_CONFIGURE_HOOKS
-+	$(SED) "s/-lnsl//;" $(@D)/src/Makefile
-+	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(@D)/config.h
-+endef
- 
--$(LRZSZ_DIR)/.unpacked: $(DL_DIR)/$(LRZSZ_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LRZSZ_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LRZSZ_DIR)/.unpacked
-+define LRZSZ_BUILD_HOOKS
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(@D)
-+	$(STRIPCMD) $(@D)/src/lrz $(@D)/src/lsz
-+endef
- 
--$(LRZSZ_DIR)/.configured: $(LRZSZ_DIR)/.unpacked
--	(cd $(LRZSZ_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/tmp \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
--		--disable-timesync \
--	)
--	$(SED) "s/-lnsl//;" $(LRZSZ_DIR)/src/Makefile
--	$(SED) "s~\(#define ENABLE_SYSLOG.*\)~/* \1 */~;" $(LRZSZ_DIR)/config.h
--	touch $(LRZSZ_DIR)/.configured
-+define LRZSZ_INSTALL_TARGET_CMDS
-+	cp $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
-+	cp $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
-+endef
- 
--$(LRZSZ_DIR)/src/lrz: $(LRZSZ_DIR)/.configured
--	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" prefix="$(TARGET_DIR)" -C $(LRZSZ_DIR)
--	$(STRIPCMD) $(LRZSZ_DIR)/src/lrz $(LRZSZ_DIR)/src/lsz
--
--$(TARGET_DIR)/usr/bin/rz: $(LRZSZ_DIR)/src/lrz
--	cp $(LRZSZ_DIR)/src/lrz $(TARGET_DIR)/usr/bin/rz
--	cp $(LRZSZ_DIR)/src/lsz $(TARGET_DIR)/usr/bin/sz
--
--lrzsz: $(TARGET_DIR)/usr/bin/rz
--
--lrzsz-clean:
-+define LRZSZ_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/rz
--	-$(MAKE) -C $(LRZSZ_DIR) clean
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--lrzsz-dirclean:
--	rm -rf $(LRZSZ_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LRZSZ),y)
--TARGETS+=lrzsz
--endif
-+$(eval $(call AUTOTARGETS,package,lrzsz))
+ http://git.buildroot.net/buildroot/commit/?id=50d6f2dde4db8c9d042294a09d5e8e120aec9987
+
+Maybe they should be named "lua-XXX" instead ?
+
+Another strategy would be to mimick in the directory layout the
+organization of options in the menuconfig.
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
