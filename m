@@ -1,35 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Jun 2010 14:54:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 2077] New: Add package for picocom
-Message-ID: <bug-2077-163@https.bugs.busybox.net/>
+Date: Fri, 18 Jun 2010 16:36:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 2083] New: Bump ncurses to 5.7
+Message-ID: <bug-2083-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2077
+https://bugs.busybox.net/show_bug.cgi?id=2083
 
-           Summary: Add package for picocom
+              Host: i686-linux
+            Target: powerpc-uclibc
+           Summary: Bump ncurses to 5.7
            Product: buildroot
-           Version: 2010.05
+           Version: unspecified
           Platform: PC
         OS/Version: Linux
             Status: NEW
-          Severity: enhancement
+          Severity: minor
           Priority: P5
-         Component: Other
+         Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: manuel.stahl at iis.fraunhofer.de
+        ReportedBy: gustavo at zacarias.com.ar
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created attachment 2035
-  --> https://bugs.busybox.net/attachment.cgi?id=2035
-Patch to add picocom package.
+Created attachment 2041
+  --> https://bugs.busybox.net/attachment.cgi?id=2041
+Bump ncurses to 5.7
 
-This patch adds a package for picocom, a minimalistic serial terminal program.
+Bump ncurses package from 5.6 to 5.7.
+Seems the libraries are somewhat smaller too!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
