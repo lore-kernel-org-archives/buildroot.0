@@ -1,28 +1,20 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Jun 2010 17:24:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 2083] Bump ncurses to 5.7
-In-Reply-To: <bug-2083-163@https.bugs.busybox.net/>
-References: <bug-2083-163@https.bugs.busybox.net/>
-Message-ID: <20100618172426.762C980011@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 18 Jun 2010 15:09:55 -0300
+Subject: [Buildroot] [PATCH] rsync build fix
+Message-ID: <4C1BB673.7080202@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2083
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Rsync fails to build with a central config cache enabled since
+ac_cv_type_struct_sockaddr_storage is wrong thus redefining the
+sockaddr_storage struct.
+Please test and commit.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-rsync-fix-build-failure-with-config-cache.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100618/8cf7a1c2/attachment.ksh>
