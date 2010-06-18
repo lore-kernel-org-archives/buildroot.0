@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Jun 2010 16:36:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 2083] New: Bump ncurses to 5.7
-Message-ID: <bug-2083-163@https.bugs.busybox.net/>
+Date: Fri, 18 Jun 2010 17:24:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 2083] Bump ncurses to 5.7
+In-Reply-To: <bug-2083-163@https.bugs.busybox.net/>
+References: <bug-2083-163@https.bugs.busybox.net/>
+Message-ID: <20100618172426.762C980011@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +12,15 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2083
 
-              Host: i686-linux
-            Target: powerpc-uclibc
-           Summary: Bump ncurses to 5.7
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Created attachment 2041
-  --> https://bugs.busybox.net/attachment.cgi?id=2041
-Bump ncurses to 5.7
-
-Bump ncurses package from 5.6 to 5.7.
-Seems the libraries are somewhat smaller too!
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
