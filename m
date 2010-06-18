@@ -1,61 +1,82 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 Jun 2010 21:43:10 +0200
-Subject: [Buildroot] [PATCH 08/10] linux: adjust kernel config according
-	to the Buildroot configuration
-In-Reply-To: <655e8a3a75bc2f73712ebabca64e83805dd8b87d.1276454802.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 13 Jun 2010 20:50:12 +0200")
-References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
-	<cover.1276454802.git.thomas.petazzoni@free-electrons.com>
-	<655e8a3a75bc2f73712ebabca64e83805dd8b87d.1276454802.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y6ec9lf5.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Marc=2DAndr=E9_H=E9bert?= <hebert.marcandre@gmail.com>
+Date: Fri, 18 Jun 2010 15:46:22 -0400
+Subject: [Buildroot] Problem building ncurses
+Message-ID: <AANLkTikJOmTQ8C91PrGs2wAWWxgvjGvOx8XfXXe6j4ZH@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- Thomas> We only adjust the configuration or ARM EABI and IPv6. The (more
+I tried adding alsa-util to my configuration so ncurses is
+automatically included. But the build for ncurses fails. I saw the
+patch for updating ncurses to 5.7 but it still fails but differently.
+I am using an external toolchain. Here are my error messages:
 
-s/or/of/.
+Error for ncurses-5.6:
+/home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/arm-none-linux-gnueabi-gcc
+-Os -pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux
+-msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 --sysroot
+/home/vadmin/workdir/git/buildroot/output/staging/ -Os -pipe -Os
+-mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/  -o
+foldkeys ../obj_s/foldkeys.o
+-Wl,-rpath,/home/vadmin/workdir/git/buildroot/output/build/ncurses-5.6/lib
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/
+-L/home/vadmin/workdir/git/buildroot/output/staging/lib
+-L/home/vadmin/workdir/git/buildroot/output/staging/usr/lib -I../test
+-I. -DHAVE_CONFIG_H -I. -I../include  -D_GNU_SOURCE -DNDEBUG -Os -pipe
+-Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/  -fPIC
+`echo "-L../lib -lform -lmenu -lpanel -lncurses  " | sed -e
+'s/-lform.*-lpanel[^ ]*//'` -lm
+../obj_s/foldkeys.o: In function `demo_foldkeys':
+foldkeys.c:(.text+0x30): undefined reference to `_nc_strnames'
+foldkeys.c:(.text+0x4c): undefined reference to `_nc_strnames'
+collect2: ld returned 1 exit status
+make[1]: *** [foldkeys] Error 1
+make[1]: Leaving directory
+`/home/vadmin/workdir/git/buildroot/output/build/ncurses-5.6/test'
 
- Thomas> complicated) initramfs case is handled in a separate commit. The user
- Thomas> is expected to take care of all other configuration details (like
- Thomas> having Netfilter enabled to make iptables work, etc.)
+Error for ncurses-5.7:
+/home/vadmin/CodeSourcery/Sourcery_G++_Lite/bin/arm-none-linux-gnueabi-gcc
+-Os -pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux
+-msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 --sysroot
+/home/vadmin/workdir/git/buildroot/output/staging/ -Os -pipe -Os
+-mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/  --param
+max-inline-insns-single=1200  -o dots ../obj_s/dots.o
+-Wl,-rpath,/home/vadmin/workdir/git/buildroot/output/build/ncurses-5.7/lib
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/
+-L/home/vadmin/workdir/git/buildroot/output/staging/lib
+-L/home/vadmin/workdir/git/buildroot/output/staging/usr/lib -I../test
+-I. -DHAVE_CONFIG_H -I. -I../include  -D_GNU_SOURCE -DNDEBUG -Os -pipe
+-Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+--sysroot /home/vadmin/workdir/git/buildroot/output/staging/  --param
+max-inline-insns-single=1200  -fPIC  -L../lib -lncurses   -lutil  -lm
+../obj_s/dots.o: In function `main':
+dots.c:(.text+0x12c): undefined reference to `_nc_cur_term'
+dots.c:(.text+0x13c): undefined reference to `_nc_cur_term'
+dots.c:(.text+0x14c): undefined reference to `_nc_cur_term'
+dots.c:(.text+0x160): undefined reference to `_nc_cur_term'
+dots.c:(.text+0x174): undefined reference to `_nc_cur_term'
+../obj_s/dots.o:dots.c:(.text+0x188): more undefined references to
+`_nc_cur_term' follow
+collect2: ld returned 1 exit status
+make[2]: *** [dots] Error 1
+make[2]: Leaving directory
+`/home/vadmin/workdir/git/buildroot/output/build/ncurses-5.7/test'
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  linux/linux.mk |   12 ++++++++++++
- Thomas>  1 files changed, 12 insertions(+), 0 deletions(-)
+I've tried looking at the code but I don't even get how dots.c (for
+5.7) references _nc_cur_term. Any help/suggestion would be welcomed.
 
- Thomas> diff --git a/linux/linux.mk b/linux/linux.mk
- Thomas> index d3a583e..4cdc304 100644
- Thomas> --- a/linux/linux.mk
- Thomas> +++ b/linux/linux.mk
- Thomas> @@ -90,6 +90,18 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM),y)
- Thomas>  	cp $(BR2_LINUX_KERNEL_CUSTOM_FILE) $(@D)/.config
- Thomas>  	yes "" | $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig
- Thomas>  endif
- Thomas> +ifeq ($(BR2_ARM_EABI),y)
- Thomas> +	$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config)
- Thomas> +	$(call KCONFIG_DISABLE_OPT,CONFIG_OABI_COMPAT,$(@D)/.config)
- Thomas> +else
- Thomas> +	$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config)
-
-I'm not sure I like this hardcoded policy. What if the user wants to run
-some precompiled OABI binaries together with his EABI rootfs?
-
-
- Thomas> +endif
- Thomas> +ifeq ($(BR2_INET_IPV6),y)
- Thomas> +	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6,$(@D)/.config)
- Thomas> +else
- Thomas> +	$(call KCONFIG_DISABLE_OPT,CONFIG_IPV6,$(@D)/.config)
- Thomas> +endif
- Thomas> +	yes "" | $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig 2>&1 >/dev/null
-
-The yes shouldn't be needed, and I don't like hiding errors.
-
--- 
-Bye, Peter Korsgaard
+Thanks
+Marc
