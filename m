@@ -1,24 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jun 2010 18:43:10 +0200
-Subject: [Buildroot] uImage could not be built before and after big
- bootloader patch
-In-Reply-To: <20100619171205.606fb887@surf>
-References: <4C1BE51D.5040406@gmx.net> <20100619133446.2123896f@surf>
-	<4C1CC857.50309@gmx.net> <20100619171205.606fb887@surf>
-Message-ID: <20100619184310.0259ae52@surf>
+Date: Sat, 19 Jun 2010 19:37:52 +0200
+Subject: [Buildroot] Buildroot Developer Day at ELCE, October 29th 2010
+Message-ID: <20100619193752.7482dd43@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Jun 2010 17:12:05 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hello,
 
-> Yes, I would need to reproduce the issue. So please reproduce the issue
-> from a clean build, even if it involves doing :
+Last year, just the day after Embedded Linux Conference Europe, we
+organized a "Buildroot Developer Day" in Grenoble, France, close to the
+location of the conference.
 
-I managed to reproduce the issue. I will investigate.
+This year, Embedded Linux Conference Europe will take place in
+Cambridge, UK, on the 27th and 28th of October (Wednesday/Thursday). On
+the 26th (Tuesday), there will be the Gstreamer Conference 2010.
+
+Therefore, I'd like to see if there's some interest in organizing a
+Buildroot Developer Day at ELCE, presumably on Friday, 29th, just after
+ELCE. It would be the opportunity to meet each other, make a status on
+the progress we made since last year Buildroot Developer Day, and have
+a brain-storming on things we would like to see happening in Buildroot.
+
+Who would be interested in joining such an event ?
+
+By the way, the Call for Papers for ELCE is open until the end of June.
+Do not hesitate to propose your conference, a fairly short abstract is
+sufficient, and as long as your conference is about embedded Linux and
+is about technical stuff, there's a good chance of being accepted.
 
 Regards,
 
