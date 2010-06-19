@@ -1,41 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jun 2010 19:37:52 +0200
-Subject: [Buildroot] Buildroot Developer Day at ELCE, October 29th 2010
-Message-ID: <20100619193752.7482dd43@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 19 Jun 2010 19:45:53 +0200
+Subject: [Buildroot] [PATCH 08/10] linux: adjust kernel config according
+	to the Buildroot configuration
+In-Reply-To: <20100619162435.1039628c@surf> (Thomas Petazzoni's message of
+	"Sat, 19 Jun 2010 16:24:35 +0200")
+References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
+	<cover.1276454802.git.thomas.petazzoni@free-electrons.com>
+	<655e8a3a75bc2f73712ebabca64e83805dd8b87d.1276454802.git.thomas.petazzoni@free-electrons.com>
+	<87y6ec9lf5.fsf@macbook.be.48ers.dk> <20100619162435.1039628c@surf>
+Message-ID: <87ljaaapbi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Last year, just the day after Embedded Linux Conference Europe, we
-organized a "Buildroot Developer Day" in Grenoble, France, close to the
-location of the conference.
+Hi,
 
-This year, Embedded Linux Conference Europe will take place in
-Cambridge, UK, on the 27th and 28th of October (Wednesday/Thursday). On
-the 26th (Tuesday), there will be the Gstreamer Conference 2010.
+ >> I'm not sure I like this hardcoded policy. What if the user wants to run
+ >> some precompiled OABI binaries together with his EABI rootfs?
 
-Therefore, I'd like to see if there's some interest in organizing a
-Buildroot Developer Day at ELCE, presumably on Friday, 29th, just after
-ELCE. It would be the opportunity to meet each other, make a status on
-the progress we made since last year Buildroot Developer Day, and have
-a brain-storming on things we would like to see happening in Buildroot.
+ Thomas> I don't really like this hardcoded policy either, but I kept what
+ Thomas> existed before.
 
-Who would be interested in joining such an event ?
+ Thomas> What should we do ? Just not modify the kernel configuration, except
+ Thomas> for the initramfs case ? Isn't the EABI thing going to hit a large
+ Thomas> number of users, coming back with a "my Busybox init doesn't start"
+ Thomas> question ?
 
-By the way, the Call for Papers for ELCE is open until the end of June.
-Do not hesitate to propose your conference, a fairly short abstract is
-sufficient, and as long as your conference is about embedded Linux and
-is about technical stuff, there's a good chance of being accepted.
+I find the EABI one ok, but the COMPAT thing is afaik just an
+optimization, it doesn't really harm to have it enabled.
 
-Regards,
+ Thomas> +	yes "" | $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig 2>&1 >/dev/null
+ >> 
+ >> The yes shouldn't be needed, and I don't like hiding errors.
 
-Thomas
+ Thomas> It does not hide errors, it uses the default choice for every unset
+ Thomas> option :-)
+
+It's the 2>&1 >/dev/null that I don't like - That does hide errors.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
