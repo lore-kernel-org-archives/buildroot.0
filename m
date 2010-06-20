@@ -1,79 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jun 2010 15:35:08 +0200
-Subject: [Buildroot] [PATCH 01/10] New, simpler,
- infrastructure for building the Linux kernel
-In-Reply-To: <87hbkyajnf.fsf@macbook.be.48ers.dk>
+Date: Sun, 20 Jun 2010 15:37:16 +0200
+Subject: [Buildroot] [pull request] Pull request for branch linux-cleanup
+In-Reply-To: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
-	<cover.1276454802.git.thomas.petazzoni@free-electrons.com>
-	<851a84fbbe113196adb69e1a241e18a958cd77c2.1276454802.git.thomas.petazzoni@free-electrons.com>
-	<87bpb8b0ld.fsf@macbook.be.48ers.dk> <20100619161327.3748f49c@surf>
-	<87hbkyajnf.fsf@macbook.be.48ers.dk>
-Message-ID: <20100620153508.4e7e2a28@surf>
+Message-ID: <20100620153716.63b1ff25@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Jun 2010 21:48:20 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Sun, 13 Jun 2010 20:50:04 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> Well, "stable" has different meanings to different people. When I think
-> of stable in regard to kernels, I think of the stable at kernel.org
-> releases (E.G. 2.6.x.y).
-
-Ah, I see. For me, 2.6.x versions are also stable versions, by
-oppposition with -rc versions. But ok, I've changed this.
-
->  Thomas> I could add another option to say ? same version as kernel headers ?.
->  Thomas> However, I'd prefer to keep the "BR2_LINUX_KERNEL_2_6_34" option as it
->  Thomas> is: remember that in the external toolchain case, ? same version as
->  Thomas> kernel headers ? doesn't make sense.
+> Here is a set of 10 patches that completely rewrites the Linux kernel
+> compilation process in Buildroot. It is supposed to be applied on top
+> of the bootloaders-cleanup branch I've sent yesterday.
 > 
-> Ok. You could hide the option if !internal toolchain.
-
-Sure, done.
-
-> Well, only add it if you need the text string for something (E.G. the
-> make target). If you prefer doing it in make, then that's fine as well -
-> It's not something that needs to change often.
+> I've fairly drastically reduced the number of options to configure the
+> kernel, and particulary removed the horrible mess of version
+> selection. See the first commit in this branch for what remains in
+> terms of configuration options for the kernel. As I've removed quite a
+> few things, I'm interested to know how you're using Buildroot to build
+> your kernel, and whether this proposal still matches your use cases.
 > 
-> In general I think it makes sense to keep these things in Kconfig when
-> you need to keep several lines in sync, and otherwise don't need to
-> change anything in .mk files (E.G. when adding new kernel headers,
-> busybox versions, ..).
+> Peter: for me, this patch set is ready for inclusion, unless there are
+> comments, of course.
 
-Ok. I haven't changed this part for now.
+I've pushed a newer version, with the following changes since the
+previous post :
 
-> The point is that it isn't consistent. We don't do this for
-> uclibc/busybox, and you don't do it for defconfigs in the kernel tree
-> (which often are also slightly outdated).
+ * Provide a "same as kernel headers" choice for the version selection
 
-Ok, I got rid of it.
+ * Use "depends on" instead of an "if...endif" block when a single
+   option needs to be conditionnaly shown
 
->  Thomas> make uImage only builds the uImage kernel image. make with no arguments
->  Thomas> builds the default kernel image (zImage in the ARM case) and also
->  Thomas> builds the modules.
-> 
-> This seems platform/arch specific. On PPC, the default image is
-> typically uImage, so make with no arguments builds uImage and modules.
-> 
-> Does this mean that the existing advanced linux support is broken on
-> ARM/uImage when using a modular kernel? - There it looks like it just
-> calls 'make uImage'. I always use a nonmodular kernel, so I never
-> noticed.
+ * Merge BR2_LINUX_KERNEL_PATCH and BR2_LINUX_KERNEL_PATCH_LOCATION
+   into a single option. When the option value is empty, not patch is
+   applied. When the option value is non empty, it is considered as a
+   path or URL to a patch to be applied to the kernel.
 
-The current advanced thing does "make modules ; make modules_install"
-when CONFIG_MODULES is enabled.
+ * Rename BR2_LINUX_KERNEL_USE_CUSTOM to
+   BR2_LINUX_KERNEL_USE_CUSTOM_FILE.
 
->  Thomas>  make uImage
->  Thomas>  make modules
-> 
-> Probably better to do make; make <format> (where format is uImage/zImage/bzImage/..)
+ * Fix the default value for the kernel binary format: BR2_i386
+   instead of BR2_386 and bzImage by default on BR2_x86_64.
 
-Isn't this what I'm doing already ?
+ * Use BR2_KERNEL_MIRROR where appropriate
 
-Regards,
+ * Use the $(shell...) construct instead of back-quotes
+
+ * Use $(filter ...) instead of multiple $(findstring ...)
+
+ * Fix escaping of linux-*.patch -> linux-\*.patch
+
+ * Remove yes "" | make oldconfig constructs
+
+ * Install the modules only if CONFIG_MODULES is enabled
+
+ * Add newline at the end of linux.mk.
+
+ * Add $(TARGET_MAKE_ENV) to $(MAKE) invocations so that a PATH
+   containing $(HOST_DIR)/usr/bin is used when building the
+   kernel. This is needed in order to allow the kernel to find mkimage
+   and other host tools (module-init-tools). This fixes the problem
+   reported by Ossy.
+
+ * Rename option mentioning "stable" so as to not use the "stable"
+   wording since it could be confusing for users.
 
 Thomas
 -- 
