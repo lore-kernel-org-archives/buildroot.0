@@ -1,72 +1,90 @@
-From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Sun, 20 Jun 2010 12:41:10 +0530
-Subject: [Buildroot] Buildroot] [PATCH 08/10] linux: adjust kernel config
-	according to the Buildroot configuration
-Message-ID: <AANLkTim0tMStgE2C6v8-_laWvfIOZfIDD8n5PiaxFq_B@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Jun 2010 14:35:35 +0200
+Subject: [Buildroot] Storing board configuration ?
+Message-ID: <20100620143535.38416ef6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hello,
 
-I was using  atmel patched kernel 2.6.30 on at91sam9263 Sbc with
-CONFIG_OABI_COMPAT=y default.  But when disabled, my freepascal (
-ww.freepascal.org) binanies wouldnt work.
+The work on cleaning up the target/ directory has been making some
+progress lately: bootloaders-cleanup has been merged, linux-cleanup has
+been through a first review phase and Dmytro Milinevskyy has
+contributed the cleanup of the filesystem skeleton.
 
-Maybe fpc dont generate  fully EABI for arm-uclibc.
+The last big part is the "board support", i.e what allows to configure
+Buildroot to build a system for a particular hardware board, without
+the user having to worry about kernel/bootloader/toolchain details.
 
+Instead of having configuration details defined in makefiles in
+target/device, I'd like to use defconfigs instead.
 
-regards
+However, defconfigs are not perfect : they are large and they get
+out-dated pretty quickly because they must store the value of *every*
+existing option.
 
-Nataraj
+For that reason, I'm wondering whether we should limit the defconfigs
+to the important options for a particular board and remove all other
+option values. This would leave ~30 lines to a human-written defconfig
+instead of ~1000 lines of automatically-generated defconfigs.
 
+A "mini-defconfig" could look like :
 
+======================================================================
+# General
+BR2_HAVE_DOT_CONFIG=y
+BR2_arm=y
+BR2_arm926t=y
+BR2_ARM_EABI=y
+BR2_PROJECT="at91sam9263ek"
+BR2_HOSTNAME="AT91SAM9263EK"
 
+# Root filesystem
+BR2_TARGET_ROOTFS_JFFS2=y
+BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K=y
+BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x800
+BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
+BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+BR2_TARGET_ROOTFS_JFFS2_PAD=y
+BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x02000000
+BR2_TARGET_ROOTFS_JFFS2_LE=y
 
-On Sat, Jun 19, 2010 at 11:15 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+# Boot
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BOARDNAME="at91sam9263ek"
+BR2_TARGET_UBOOT_2009_01=y
+BR2_TARGET_AT91BOOTSTRAP=y
+BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9263ek"
+BR2_TARGET_AT91BOOT_DATAFLASHCARD=y
+BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT=y
+BR2_AT91BOOTSTRAP_JUMP_ADDR="0x23F00000"
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> writes:
->
-> Hi,
->
->  >> I'm not sure I like this hardcoded policy. What if the user wants to
-> run
->  >> some precompiled OABI binaries together with his EABI rootfs?
->
->  Thomas> I don't really like this hardcoded policy either, but I kept what
->  Thomas> existed before.
->
->  Thomas> What should we do ? Just not modify the kernel configuration,
-> except
->  Thomas> for the initramfs case ? Isn't the EABI thing going to hit a large
->  Thomas> number of users, coming back with a "my Busybox init doesn't
-> start"
->  Thomas> question ?
->
-> I find the EABI one ok, but the COMPAT thing is afaik just an
-> optimization, it doesn't really harm to have it enabled.
->
->  Thomas> +      yes "" | $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig
-> 2>&1 >/dev/null
->  >>
->  >> The yes shouldn't be needed, and I don't like hiding errors.
->
->  Thomas> It does not hide errors, it uses the default choice for every
-> unset
->  Thomas> option :-)
->
-> It's the 2>&1 >/dev/null that I don't like - That does hide errors.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100620/bb5d28f8/attachment.html>
+# Kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_2_6_34=y
+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263ek"
+======================================================================
+
+But if we do that, we would have to modify the main Makefile so that
+when an user does "make foobar_defconfig", configs/foobar_defconfig is
+used and for all options non-specified in the defconfig, the default
+options would be choosen. So something like :
+
+%_defconfig: $(TOPDIR)/configs/%_defconfig
+        cp $^ .config
+        @yes "" | $(MAKE) oldconfig
+
+What do you think about this ?
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
