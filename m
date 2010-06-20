@@ -1,31 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jun 2010 17:02:25 +0200
-Subject: [Buildroot] [PATCH 00/19] Convert packages to new autotools
-In-Reply-To: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-References: <1276688841-5252-1-git-send-email-cmchao@gmail.com>
-Message-ID: <20100620170225.6b73c3e4@surf>
+Date: Sun, 20 Jun 2010 17:03:53 +0200
+Subject: [Buildroot] [PATCH 1/1] Remove package rxvt
+In-Reply-To: <1276300431-13565-1-git-send-email-paul@pauljones.id.au>
+References: <1276300431-13565-1-git-send-email-paul@pauljones.id.au>
+Message-ID: <20100620170353.465e5d3c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Paul,
 
-On Wed, 16 Jun 2010 19:47:02 +0800
-cmchao <cmchao@gmail.com> wrote:
+On Sat, 12 Jun 2010 09:53:51 +1000
+Paul Jones <paul@pauljones.id.au> wrote:
 
->  The work convert 19 autotool-based packages to new infrastructure and some of them
->  are upgraded to new version
+> It is very old (cira 2003) and very broken
+> 
+> Signed-off-by: Paul Jones <paul@pauljones.id.au>
 
-Thanks! I've picked up all patches, except the lrzsz one which has
-already been merged in mainline by Peter, and I've integrated those
-patches into my autotools-conversion branch at
-
- http://git.buildroot.net/~tpetazzoni/git/buildroot/log/
-
-I've already done a bunch of small improvements to your patches and
-I'll test them now. Once they'll be ready, I'll push them to Peter.
+I've integrated this into my autotools-conversion branch at
+http://git.buildroot.net/~tpetazzoni/git/buildroot/log/ together with
+other patches converting packages to the autotools infrastructure. I'll
+test them soon and will push them to Peter afterwards.
 
 Thanks for doing this work!
 
