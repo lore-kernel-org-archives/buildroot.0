@@ -1,38 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jun 2010 18:41:27 +0200
-Subject: [Buildroot] gettext 0.17 anyone ?
-In-Reply-To: <1277134110.8029.38.camel@sven>
-References: <1277134110.8029.38.camel@sven>
-Message-ID: <20100621184127.0a46b1f2@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Jun 2010 22:37:24 +0200
+Subject: [Buildroot] Buildroot Developer Day at ELCE, October 29th 2010
+In-Reply-To: <20100619193752.7482dd43@surf> (Thomas Petazzoni's message of
+	"Sat, 19 Jun 2010 19:37:52 +0200")
+References: <20100619193752.7482dd43@surf>
+Message-ID: <87y6e86s1n.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Jun 2010 17:28:30 +0200
-Sven Neumann <s.neumann@raumfeld.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> we need gettext >= 0.17 for our project and it seems that buildroot is
-> still stuck with 0.16. Since I don't want to duplicate effort, I am
-> asking if anyone is working on updating gettext or perhaps already has
-> an updated version in his/her tree?
+Hi,
 
-As far as I know, we don't have any gettext >= 0.17 patch pending. I've
-checked the bug tracker, nothing, and we haven't talked about bumping
-gettext since a long while (I don't even have this in my mailing list
-history here).
+ Thomas> Therefore, I'd like to see if there's some interest in organizing a
+ Thomas> Buildroot Developer Day at ELCE, presumably on Friday, 29th, just after
+ Thomas> ELCE. It would be the opportunity to meet each other, make a status on
+ Thomas> the progress we made since last year Buildroot Developer Day, and have
+ Thomas> a brain-storming on things we would like to see happening in Buildroot.
 
-So I think you can go ahead on this without duplicating any existing
-effort.
+ Thomas> Who would be interested in joining such an event ?
 
-Just for info, what particular features in gettext >= 0.17 do you need ?
+Me, naturally. Friday is good for me.
 
-Thanks,
+ Thomas> By the way, the Call for Papers for ELCE is open until the end of June.
+ Thomas> Do not hesitate to propose your conference, a fairly short abstract is
+ Thomas> sufficient, and as long as your conference is about embedded Linux and
+ Thomas> is about technical stuff, there's a good chance of being accepted.
 
-Thomas
+Yes, I need to write a proposal soon.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
