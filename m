@@ -1,29 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Jun 2010 21:08:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 1213] Move .config into output directory
-In-Reply-To: <bug-1213-163@https.bugs.busybox.net/>
-References: <bug-1213-163@https.bugs.busybox.net/>
-Message-ID: <20100621210848.AAD1B817CA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Jun 2010 23:12:02 +0200
+Subject: [Buildroot] git access via http
+In-Reply-To: <87d3wfuaaq.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+	of "Fri, 28 May 2010 20:54:21 +0200")
+References: <AB12B32E73474741A2C5361C433A44DE01CD4EEB@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+	<87typstjkx.fsf@macbook.be.48ers.dk>
+	<201005281824.09647.yann.morin.1998@anciens.enib.fr>
+	<87d3wfuaaq.fsf@macbook.be.48ers.dk>
+Message-ID: <87tyow6qfx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1213
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Yann> So, having buildroot's git available through http would be nice, IMHO.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+ Peter> Ok, I'll ask the osuosl guys to set it up.
 
---- Comment #13 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks. There were a few small issues regarding make
-<blah>_defconfig, but I fixed that.
+It's finally up and running and the git page on the website has been
+updated.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
