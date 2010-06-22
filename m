@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:10 +0200
-Subject: [Buildroot] [PATCH 16/20] sdl : convert to autotools infrastructure
-	& bump to 1.2.14
+Date: Tue, 22 Jun 2010 22:21:09 +0200
+Subject: [Buildroot] [PATCH 15/20] sdl_ttf : convert to autotools
+	infrastructure
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <164700053d6f2ce10b7b383c1be363aadccf59d5.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8c8a56d19c5758abf8b53d5f6c9b9a97d7557819.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,160 +16,97 @@ From: cmchao <cmchao@gmail.com>
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  * Installation to target is the default
- * Remove SDL_EXTRA_CFLAGS, unused
- * Remove reference to SDL_DIRECTFB_INCLUDES, unused
- * Remove strip, done globally
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/sdl/sdl.mk |  104 +++++++++------------------------------------------
- 1 files changed, 19 insertions(+), 85 deletions(-)
+ package/sdl_ttf/sdl_ttf.mk |   75 ++++---------------------------------------
+ 1 files changed, 7 insertions(+), 68 deletions(-)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 959be7e..44981ea 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -3,122 +3,56 @@
- # SDL
- #
- #############################################################
--SDL_VERSION:=1.2.13
-+SDL_VERSION:=1.2.14
- SDL_SOURCE:=SDL-$(SDL_VERSION).tar.gz
- SDL_SITE:=http://www.libsdl.org/release
--SDL_CAT:=$(ZCAT)
--SDL_DIR:=$(BUILD_DIR)/SDL-$(SDL_VERSION)
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 21bfc5e..7ff5cb8 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -6,74 +6,13 @@
+ SDL_TTF_VERSION:=2.0.9
+ SDL_TTF_SOURCE:=SDL_ttf-$(SDL_TTF_VERSION).tar.gz
+ SDL_TTF_SITE:=http://www.libsdl.org/projects/SDL_ttf/release/
+-SDL_TTF_CAT:=$(ZCAT)
+-SDL_TTF_DIR:=$(BUILD_DIR)/SDL_ttf-$(SDL_TTF_VERSION)
  
--SDL_EXTRA_CFLAGS = -I./include -D_GNU_SOURCE=1 -fvisibility=hidden -D_REENTRANT -D_REENTRANT -DHAVE_LINUX_VERSION_H
-+SDL_LIBTOOL_PATCH = NO
-+SDL_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
--SDL_FBCON=--enable-video-fbcon=yes
-+SDL_CONF_OPT+=--enable-video-fbcon=yes
- else
--SDL_FBCON=--enable-video-fbcon=no
-+SDL_CONF_OPT+=--enable-video-fbcon=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
- SDL_DEPENDENCIES += directfb
--SDL_DIRECTFB=--enable-video-directfb=yes
--SDL_DIRECTFB_TARGET:=$(STAGING_DIR)/include/directfb
--SDL_DIRECTFB_INCLUDES:=-I$(STAGING_DIR)/usr/include/directfb
--SDL_EXTRA_CFLAGS += $(SDL_DIRECTFB_INCLUDES)
-+SDL_CONF_OPT+=--enable-video-directfb=yes
- else
- SDL_DIRECTFB=--enable-video-directfb=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_QTOPIA),y)
--SDL_QTOPIA=--enable-video-qtopia=yes
-+SDL_CONF_OPT+=--enable-video-qtopia=yes
- SDL_DEPENDENCIES += qt
- else
--SDL_QTOPIA=--enable-video-qtopia=no
-+SDL_CONF_OPT+=--enable-video-qtopia=no
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_X11),y)
--SDL_X11=--enable-video-x11=yes
-+SDL_CONF_OPT+=--enable-video-x11=yes
- SDL_DEPENDENCIES += xserver_xorg-server
- else
--SDL_X11=--enable-video-x11=no
-+SDL_CONF_OPT+=--enable-video-x11=no
- endif
- 
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL_DEPENDENCIES += tslib
- endif
- 
--$(DL_DIR)/$(SDL_SOURCE):
--	$(call DOWNLOAD,$(SDL_SITE),$(SDL_SOURCE))
+-$(DL_DIR)/$(SDL_TTF_SOURCE):
+-	$(call DOWNLOAD,$(SDL_TTF_SITE),$(SDL_TTF_SOURCE))
 -
--sdl-source: $(DL_DIR)/$(SDL_SOURCE)
+-sdl_ttf-source: $(DL_DIR)/$(SDL_TTF_SOURCE)
 -
--$(SDL_DIR)/.unpacked: $(DL_DIR)/$(SDL_SOURCE)
--	$(SDL_CAT) $(DL_DIR)/$(SDL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(SDL_DIR) package/sdl sdl-$(SDL_VERSION)\*.patch
--	$(CONFIG_UPDATE) $(SDL_DIR)
--	$(CONFIG_UPDATE) $(SDL_DIR)/build-scripts
+-$(SDL_TTF_DIR)/.unpacked: $(DL_DIR)/$(SDL_TTF_SOURCE)
+-	$(SDL_TTF_CAT) $(DL_DIR)/$(SDL_TTF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(SDL_TTF_DIR)
 -	touch $@
 -
--$(SDL_DIR)/.configured: $(SDL_DIR)/.unpacked
--	(cd $(SDL_DIR); rm -rf config.cache; \
+-$(SDL_TTF_DIR)/.configured: $(SDL_TTF_DIR)/.unpacked
+-	(cd $(SDL_TTF_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
--		--prefix=$(STAGING_DIR)/usr \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/bin \
+-		--sbindir=/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/lib \
 -		--sysconfdir=/etc \
+-		--datadir=/share \
 -		--localstatedir=/var \
--		--enable-pulseaudio=no \
-+SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-arts \
- 		--disable-esd \
--		--disable-nasm \
--		$(SDL_FBCON) \
--		$(SDL_DIRECTFB) \
--		$(SDL_QTOPIA) \
--		$(SDL_X11) \
+-		--includedir=/include \
+-		--mandir=/man \
+-		--infodir=/info \
+-		--without-x \
++SDL_TTF_LIBTOOL_PATCH = NO
++SDL_TTF_INSTALL_STAGING = YES
++SDL_TTF_DEPENDENCIES = sdl freetype
++SDL_TTF_CONF_OPT = --without-x \
+ 		--with-freetype-prefix=$(STAGING_DIR)/usr \
+-		--with-sdl-prefix=$(STAGING_DIR)/usr \
 -		)
 -	touch $@
 -
--ifeq ($(BR2_PACKAGE_SDL_DIRECTFB),y)
--$(SDL_DIRECTFB_TARGET):
--	mkdir -p $(STAGING_DIR)/include
--	ln -s -f ../usr/include/directfb $(SDL_DIRECTFB_TARGET)
--endif
-+		--disable-nasm
- 
--$(SDL_DIR)/.compiled: $(SDL_DIR)/.configured $(SDL_DIRECTFB_TARGET)
+-$(SDL_TTF_DIR)/.compiled: $(SDL_TTF_DIR)/.configured
 -	$(MAKE1) $(TARGET_CONFIGURE_OPTS) \
--		EXTRA_CFLAGS="$(SDL_EXTRA_CFLAGS)" \
+-		INCLUDES="-I$(STAGING_DIR)/usr/include/SDL -I$(STAGING_DIR)/usr/include/freetype2" \
 -		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
--		DESTDIR=$(STAGING_DIR)/usr -C $(SDL_DIR)
+-		DESTDIR=$(STAGING_DIR)/usr -C $(SDL_TTF_DIR)
 -	touch $@
-+define SDL_POST_INSTALL_STAGING_HOOKS
-+       $(SED) 's^libdir=\$${exec_prefix}^libdir=/usr^' \
-+               $(STAGING_DIR)/usr/bin/sdl-config
-+endef
- 
--$(STAGING_DIR)/usr/lib/libSDL.so: $(SDL_DIR)/.compiled
--	$(MAKE) -C $(SDL_DIR) install
--# use correct rpath for linking
--	$(SED) 's^libdir=\$${exec_prefix}^libdir=/usr^' \
--		$(STAGING_DIR)/usr/bin/sdl-config
+-
+-$(STAGING_DIR)/usr/lib/libSDL_ttf.so: $(SDL_TTF_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(SDL_TTF_DIR) install
 -	touch -c $@
 -
--$(TARGET_DIR)/usr/lib/libSDL.so: $(STAGING_DIR)/usr/lib/libSDL.so
-+define SDL_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL*.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL.so
+-$(TARGET_DIR)/usr/lib/libSDL_ttf.so: $(STAGING_DIR)/usr/lib/libSDL_ttf.so
+-	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_ttf.so
 -
--SDL sdl: $(SDL_DEPENDENCIES) $(TARGET_DIR)/usr/lib/libSDL.so
-+endef
+-sdl_ttf: sdl freetype $(TARGET_DIR)/usr/lib/libSDL_ttf.so
++		--with-sdl-prefix=$(STAGING_DIR)/usr
  
--sdl-unpacked: $(SDL_DIR)/.unpacked
+-sdl_ttf-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_TTF_DIR) uninstall
+-	-$(MAKE) -C $(SDL_TTF_DIR) clean
 -
--sdl-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_DIR) uninstall
--	-$(MAKE) -C $(SDL_DIR) clean
--
--sdl-dirclean:
--	rm -rf $(SDL_DIR)
+-sdl_ttf-dirclean:
+-	rm -rf $(SDL_TTF_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SDL),y)
--TARGETS+=sdl
+-ifeq ($(BR2_PACKAGE_SDL_TTF),y)
+-TARGETS+=sdl_ttf
 -endif
-+$(eval $(call AUTOTARGETS,package,sdl))
++SDL_TTF_MAKE_OPT = INCLUDES="-I$(STAGING_DIR)/usr/include/SDL"  LDFLAGS="-L$(STAGING_DIR)/usr/lib"
++$(eval $(call AUTOTARGETS,package,sdl_ttf))
 -- 
 1.7.0.4
