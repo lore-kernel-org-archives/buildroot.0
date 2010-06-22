@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:20:56 +0200
-Subject: [Buildroot] [PATCH 02/20] dmalloc : convert to autotools
-	infrastructure
+Date: Tue, 22 Jun 2010 22:20:57 +0200
+Subject: [Buildroot] [PATCH 03/20] fbv : convert to autotools infrastructure
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <89889c712fc8e962f0d13c851266da68107ba35e.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c7071f7297385406143bc397418d4119b0048439.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,144 +14,85 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-     * Target installation is the default behaviour
-     * No installation to staging is the default behaviour
-     * Remove DMALLOC_TARGET_BINARY variable
+ * Target installation is the default behaviour
+ * No installation to staging is the default behaviour
+ * Remove FBV_BINARY/FBV_TARGET_BINARY variables
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/dmalloc/dmalloc.mk |   97 +++++++++++--------------------------------
- 1 files changed, 25 insertions(+), 72 deletions(-)
+ package/fbv/fbv.mk |   50 +++++++++++++++-----------------------------------
+ 1 files changed, 15 insertions(+), 35 deletions(-)
 
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index dd83583..60ad763 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -6,100 +6,53 @@
- DMALLOC_VERSION:=5.4.3
- DMALLOC_SOURCE:=dmalloc-$(DMALLOC_VERSION).tgz
- DMALLOC_SITE:=http://dmalloc.com/releases
--DMALLOC_DIR:=$(BUILD_DIR)/dmalloc-$(DMALLOC_VERSION)
--DMALLOC_CAT:=$(ZCAT)
--DMALLOC_BINARY:=dmalloc
--DMALLOC_TARGET_BINARY:=usr/bin/dmalloc
+diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
+index 44ce5c6..7305c6e 100644
+--- a/package/fbv/fbv.mk
++++ b/package/fbv/fbv.mk
+@@ -6,23 +6,11 @@
+ FBV_VERSION:=1.0b
+ FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
+ FBV_SITE:=http://s-tech.elsat.net.pl/fbv
+-FBV_DIR:=$(BUILD_DIR)/fbv-$(FBV_VERSION)
+-FBV_CAT:=$(ZCAT)
+-FBV_BINARY:=fbv
+-FBV_TARGET_BINARY:=usr/bin/$(FBV_BINARY)
  
--$(DL_DIR)/$(DMALLOC_SOURCE):
--	 $(call DOWNLOAD,$(DMALLOC_SITE),$(DMALLOC_SOURCE))
+-$(DL_DIR)/$(FBV_SOURCE):
+-	$(call DOWNLOAD,$(FBV_SITE),$(FBV_SOURCE))
++FBV_DEPENDENCIES = libpng jpeg libungif
+ 
+-fbv-source: $(DL_DIR)/$(FBV_SOURCE)
 -
--dmalloc-source: $(DL_DIR)/$(DMALLOC_SOURCE)
--
--$(DMALLOC_DIR)/.unpacked: $(DL_DIR)/$(DMALLOC_SOURCE)
--	$(DMALLOC_CAT) $(DL_DIR)/$(DMALLOC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(DMALLOC_DIR) package/dmalloc dmalloc\*.patch
--	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(DMALLOC_DIR)/configure
--	$(SED) 's/(ld -/($${LD-ld} -/' $(DMALLOC_DIR)/configure
--	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(DMALLOC_DIR)/configure
--	-$(SED) 's/ar cr/$$(AR) cr/' $(DMALLOC_DIR)/Makefile.in
--	touch $@
-+DMALLOC_INSTALL_STAGING = YES
-+DMALLOC_CONF_OPT:= --enable-shlib
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--DMALLOC_CONFIG_ARGS:=--enable-cxx
-+DMALLOC_CONF_OPT+=--enable-cxx
- else
--DMALLOC_CONFIG_ARGS:=--disable-cxx
-+DMALLOC_CONF_OPT+=--disable-cxx
- endif
- 
- ifeq ($(BR2_PTHREADS_NONE),y)
--DMALLOC_CONFIG_ARGS+=--disable-threads
-+DMALLOC_CONF_OPT+=--disable-threads
- else
--DMALLOC_CONFIG_ARGS+=--enable-threads
-+DMALLOC_CONF_OPT+=--enable-threads
- endif
- 
-+define DMALLOC_POST_PATCH
-+	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
-+	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
-+	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
-+	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
-+endef
- 
-+DMALLOC_POST_PATCH_HOOKS += DMALLOC_POST_PATCH
- 
--$(DMALLOC_DIR)/.configured: $(DMALLOC_DIR)/.unpacked
--	(cd $(DMALLOC_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="-g" \
--		LDFLAGS="-g" \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--enable-shlib \
--		$(DMALLOC_CONFIG_ARGS) \
--	)
+-$(FBV_DIR)/.unpacked: $(DL_DIR)/$(FBV_SOURCE)
+-	$(FBV_CAT) $(DL_DIR)/$(FBV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ \
+-		fbv-$(FBV_VERSION)\*.patch fbv-$(FBV_VERSION)\*.patch.$(ARCH)
 -	touch $@
 -
--$(DMALLOC_DIR)/$(DMALLOC_BINARY): $(DMALLOC_DIR)/.configured
--	$(MAKE) -C $(DMALLOC_DIR)
+-$(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
++#fbv donesn't support cross-compilation
++define FBV_CONFIGURE_CMDS
+ 	(cd $(FBV_DIR); rm -f config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+@@ -30,27 +18,19 @@ $(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
+ 		--prefix=/usr \
+ 		--libs="-lz -lm" \
+ 	)
+-	touch $@
++endef
+ 
+-$(FBV_DIR)/$(FBV_BINARY): $(FBV_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FBV_DIR)
++define FBV_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
+ 
+-$(TARGET_DIR)/$(FBV_TARGET_BINARY): $(FBV_DIR)/$(FBV_BINARY)
+-	install -D $(FBV_DIR)/$(FBV_BINARY) $(TARGET_DIR)/$(FBV_TARGET_BINARY)
++define FBV_INSTALL_TARGET_CMDS
++	install -D $(@D)/fbv $(TARGET_DIR)/usr/bin/fbv
++endef
+ 
+-fbv: libpng jpeg libungif $(TARGET_DIR)/$(FBV_TARGET_BINARY)
++define FBV_CLEAN_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/fbv
++	-$(MAKE) -C $(@D) clean
++endef
+ 
+-fbv-clean:
+-	rm -f $(TARGET_DIR)/$(FBV_TARGET_BINARY)
+-	-$(MAKE) -C $(FBV_DIR) clean
 -
--$(TARGET_DIR)/$(DMALLOC_TARGET_BINARY): $(DMALLOC_DIR)/$(DMALLOC_BINARY)
--	# both DESTDIR and PREFIX are ignored..
-+# both DESTDIR and PREFIX are ignored..
-+define DMALLOC_INSTALL_STAGING_CMDS
- 	$(MAKE) includedir="$(STAGING_DIR)/usr/include" \
- 		bindir="$(STAGING_DIR)/usr/bin" \
- 		libdir="$(STAGING_DIR)/usr/lib" \
- 		shlibdir="$(STAGING_DIR)/usr/lib" \
- 		includedir="$(STAGING_DIR)/usr/share/info/" \
--		-C $(DMALLOC_DIR) install
--	(cd $(STAGING_DIR)/usr/lib; \
--		mv libdmalloc*.so $(TARGET_DIR)/usr/lib)
--	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
-+		-C $(@D) install
-+endef
- 
--dmalloc: $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
-+define DMALLOC_INSTALL_TARGET_CMDS
-+	mv $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
-+	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
-+endef
- 
--dmalloc-clean:
-+define DMALLOC_CLEAN_CMDS
- 	-rm -f $(TARGET_DIR)/usr/lib/libdmalloc*
- 	-rm -f $(STAGING_DIR)/usr/lib/libdmalloc*
- 	rm -f $(STAGING_DIR)/usr/include/dmalloc.h
--	rm -f $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
-+	rm -f $(TARGET_DIR)/usr/bin/dmalloc
- 	-$(MAKE) -C $(DMALLOC_DIR) clean
--
--dmalloc-dirclean:
--	rm -rf $(DMALLOC_DIR)
-+endef
- 
- 
+-fbv-dirclean:
+-	rm -rf $(FBV_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DMALLOC),y)
--TARGETS+=dmalloc
+-ifeq ($(BR2_PACKAGE_FBV),y)
+-TARGETS+=fbv
 -endif
-+$(eval $(call AUTOTARGETS,package,dmalloc))
++$(eval $(call AUTOTARGETS,package,fbv))
 -- 
 1.7.0.4
