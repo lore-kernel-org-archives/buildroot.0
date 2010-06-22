@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:05 +0200
-Subject: [Buildroot] [PATCH 11/20] make : convert to autotools infrastructure
+Date: Tue, 22 Jun 2010 22:21:11 +0200
+Subject: [Buildroot] [PATCH 17/20] libgpg-error : convert to autotools
+	infrastructure & bump to 1.8
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d38d45bb1927ac929acf19a7b44435526de7bc77.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7bb992889072af977f24acffcff6ec9475143f54.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +15,45 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Target installation is the default
- * No staging installation is the default
+ * Installation to target is the default
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/make/make.mk |   75 +++++--------------------------------------------
- 1 files changed, 8 insertions(+), 67 deletions(-)
+ package/libgpg-error/libgpg-error.mk |   71 ++--------------------------------
+ 1 files changed, 4 insertions(+), 67 deletions(-)
 
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 0b2657d..12d236a 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -3,73 +3,14 @@
- # make
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 0b513ff..89ff24c 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -3,74 +3,11 @@
+ # libgpg-error
  #
  #############################################################
--GNUMAKE_VERSION:=3.81
--GNUMAKE_SOURCE:=make-$(GNUMAKE_VERSION).tar.bz2
--GNUMAKE_SITE:=$(BR2_GNU_MIRROR)/make
--GNUMAKE_DIR:=$(BUILD_DIR)/make-$(GNUMAKE_VERSION)
--GNUMAKE_CAT:=$(BZCAT)
--GNUMAKE_BINARY:=make
--GNUMAKE_TARGET_BINARY:=usr/bin/make
-+MAKE_VERSION:=3.81
-+MAKE_SOURCE:=make-$(MAKE_VERSION).tar.bz2
-+MAKE_SITE:=$(BR2_GNU_MIRROR)/make
+-LIBGPG_ERROR_VERSION:=1.5
++LIBGPG_ERROR_VERSION:=1.8
+ LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
+-LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
+-LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
+-LIBGPG_ERROR_DESTDIR:=usr/lib
+-LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
  
--$(DL_DIR)/$(GNUMAKE_SOURCE):
--	 $(call DOWNLOAD,$(GNUMAKE_SITE),$(GNUMAKE_SOURCE))
-+MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+-$(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
+-	$(call DOWNLOAD,$(LIBGPG_ERROR_SITE),$(LIBGPG_ERROR_SOURCE))
++LIBGPG_ERROR_LIBTOOL_PATCH = NO
++LIBGPG_ERROR_INSTALL_STAGING = YES
  
--make-source: $(DL_DIR)/$(GNUMAKE_SOURCE)
-+MAKE_CONF_ENV = make_cv_sys_gnu_glob=no \
-+		GLOBINC='-I$(@D)/glob' \
-+		GLOBLIB=glob/libglob.a
- 
--$(GNUMAKE_DIR)/.unpacked: $(DL_DIR)/$(GNUMAKE_SOURCE)
--	$(GNUMAKE_CAT) $(DL_DIR)/$(GNUMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(GNUMAKE_DIR)/config
--	touch $@
+-$(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
+-	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
+-	$(CONFIG_UPDATE) $(LIBGPG_ERROR_DIR)
+-	touch $(LIBGPG_ERROR_DIR)/.source
 -
--$(GNUMAKE_DIR)/.configured: $(GNUMAKE_DIR)/.unpacked
--	(cd $(GNUMAKE_DIR); rm -rf config.cache; \
+-$(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
+-	(cd $(LIBGPG_ERROR_DIR); rm -f config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
--		make_cv_sys_gnu_glob=no \
--		GLOBINC='-I$(GNUMAKE_DIR)/glob' \
--		GLOBLIB=glob/libglob.a \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -70,43 +62,48 @@ index 0b2657d..12d236a 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
+-		--libdir=/usr/lib \
+-		--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
 -		--localstatedir=/var \
+-		--includedir=/usr/include \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
 -		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
 -	)
--	touch $@
+-	touch $(LIBGPG_ERROR_DIR)/.configured
 -
--$(GNUMAKE_DIR)/$(GNUMAKE_BINARY): $(GNUMAKE_DIR)/.configured
--	$(MAKE) MAKE=$(HOSTMAKE) -C $(GNUMAKE_DIR)
+-$(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY): $(LIBGPG_ERROR_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LIBGPG_ERROR_DIR)
 -
--$(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY): $(GNUMAKE_DIR)/$(GNUMAKE_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-$(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
+-	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgpg-error.la
 -
--make: $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY)
+-$(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
+-	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)
 -
--make-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) uninstall
--	-$(MAKE) -C $(GNUMAKE_DIR) clean
+-libgpg-error: $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
 -
--make-dirclean:
--	rm -rf $(GNUMAKE_DIR)
+-libgpg-error-source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
+-
+-libgpg-error-clean:
+-	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
+-	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
+-	rm -f $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)\*
+-
+-libgpg-error-dirclean:
+-	rm -rf $(LIBGPG_ERROR_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_MAKE),y)
--TARGETS+=make
+-ifeq ($(BR2_PACKAGE_LIBGPG_ERROR),y)
+-TARGETS+=libgpg-error
 -endif
-+$(eval $(call AUTOTARGETS,package,make))
++$(eval $(call AUTOTARGETS,package,libgpg-error))
 -- 
 1.7.0.4
