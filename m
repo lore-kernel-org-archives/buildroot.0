@@ -1,49 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jun 2010 09:33:06 +0200
-Subject: [Buildroot] Missing UBIFS utils
-In-Reply-To: <AANLkTilpYe-9Mk_hZNpeTBGF8YwFAfyW6hBCl2G2OXJd@mail.gmail.com>
-	(=?utf-8?Q?=22P=C3=A9ter_St=C3=B3sz=22's?= message of "Mon, 21 Jun 2010
-	22:49:35 +0200")
-References: <AANLkTilpYe-9Mk_hZNpeTBGF8YwFAfyW6hBCl2G2OXJd@mail.gmail.com>
-Message-ID: <87pqzj7c99.fsf@macbook.be.48ers.dk>
+From: Darcy L. Watkins <dwatkins@tranzeo.com>
+Date: Tue, 22 Jun 2010 07:16:24 -0700
+Subject: [Buildroot] [May15 patch 12/12] netsnmp: disable build with
+	external toolchain
+Message-ID: <1277216184.23331.8.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "P?ter" == P?ter St?sz <peter.stosz@mentat.hu> writes:
+Hello,
 
- P?ter> Hi!
- P?ter> How can I make UBI utils to the target?
- P?ter> Config below.
- P?ter> Found the needed utils on the host/usr/sbin directory, but not exist on target
- P?ter> /... dir.
+I need to be able to build net-snmp in my buildroot using a crosstool-ng
+external toolchain.
 
- P?ter> BR2010.05
- P?ter> Target: SAM9261
- P?ter> Host: Ubuntu10.04
+Has anyone made progress or determined the underlying cause of why
+net-snmp cannot properly locate the libraries even though --sysroot
+points to the buildroot staging area (instead of using the toolchain
+default)?
 
- P?ter> BR2_PACKAGE_MTD=y
- P?ter> ...
- P?ter> BR2_PACKAGE_MTD_MTDINFO=y
- P?ter> BR2_PACKAGE_MTD_UBIATTACH=y
- P?ter> BR2_PACKAGE_MTD_UBICRC32=y
- P?ter> BR2_PACKAGE_MTD_UBIDETACH=y
- P?ter> BR2_PACKAGE_MTD_UBIFORMAT=y
- P?ter> BR2_PACKAGE_MTD_UBIMKVOL=y
- P?ter> BR2_PACKAGE_MTD_UBINFO=y
- P?ter> BR2_PACKAGE_MTD_UBINIZE=y
- P?ter> BR2_PACKAGE_MTD_UBIRENAME=y
- P?ter> BR2_PACKAGE_MTD_UBIRMVOL=y
- P?ter> BR2_PACKAGE_MTD_UBIRSVOL=y
- P?ter> BR2_PACKAGE_MTD_UBIUPDATEVOL=y
+Would adding redundant -L<path> to the staging library area work (and
+likely also -I<path> to the includes if needed)?
 
-It works here. Did you by any chance first build mtd without those ubi
-programs and then later on enable them without doing a make clean in
-between?
+Any insight as to why this happens with net-snmp (or is it observed with
+some other packages too)?
 
-If not, please send your .config so I can investigate.
+Regards,
 
--- 
-Bye, Peter Korsgaard
+Darcy
