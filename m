@@ -1,38 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jun 2010 22:33:48 +0200
-Subject: [Buildroot] [PATCH] rsync build fix
-In-Reply-To: <AANLkTinKoHuTnyYD9RfzItMxhQsAouMfIRbyGZ7v-Hzu@mail.gmail.com>
-	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue, 22 Jun 2010
-	14:01:30 -0300")
-References: <4C1BB673.7080202@zacarias.com.ar>
-	<AANLkTinKoHuTnyYD9RfzItMxhQsAouMfIRbyGZ7v-Hzu@mail.gmail.com>
-Message-ID: <878w667qoj.fsf@macbook.be.48ers.dk>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 22 Jun 2010 21:10:57 +0000 (UTC)
+Subject: [Buildroot] Suggestion for config menu help for path values
+Message-ID: <hvr8t1$io0$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
+Just a suggestion for anytime somebody is working on the config menu
+help for an option that allows a path to be entered: always specify in
+the item's help whether an absolute path is required, and if not,
+where the starting point is for a relative path.
 
-Hi,
+For several different options, it's taken me many guesses to figure
+out from what working direction a relative path should be referenced.
+When each guess requires a build from-scratch, you can spend hours
+trying to figure out what path value to enter for a particular script
+or config file.
 
- >> Rsync fails to build with a central config cache enabled since
- >> ac_cv_type_struct_sockaddr_storage is wrong thus redefining the
- >> sockaddr_storage struct.
- >> Please test and commit.
- >> 
+Right now I'm trying to figure out the CWD when the post-build script
+is called, and I'll submit a help patch when I figure out the answer.
 
- Thiago> Tested here, and worked great.
+Another source of confusion I've run into a few times are cases where
+the title for a config item doesn't match up with either the config
+variable name or the phrase commonly used elsewhere to refer to that
+item.  For example, it takes a bit if digging to figure out that in
+the config menus, what the documentation calls the "post-build
+script", who's value is "BR2_ROOTFS_POST_BUILD_SCRIPT" is titled
+"Custom script to run before packing files".
 
- Thiago> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
-
- Thiago> PS: Forgot to include the list address, sorry for the duplicate.
-
-Again, I think this fix just pampers over another bug, E.G. some other
-package that puts the wrong value into the config.cache.
-
-I haven't been able to reproduce it here, care to send your .config?
+A title including the words "post build script" would seem to be a
+more obvious/consistent choice.
 
 -- 
-Bye, Peter Korsgaard
+Grant Edwards               grant.b.edwards        Yow! !  I'm in a very
+                                  at               clever and adorable INSANE
+                              gmail.com            ASYLUM!!
