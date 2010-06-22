@@ -1,31 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:06 +0200
-Subject: [Buildroot] [PATCH 12/20] gawk: enable host package
-In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <aeab9ad6d16cc335e727d988d9b30a1203bff7a3.1277237892.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Jun 2010 22:32:29 +0200
+Subject: [Buildroot] sdl demo app install problem
+In-Reply-To: <0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
+	(H. Hartley Sweeten's message of "Tue, 22 Jun 2010 10:39:39 -0500")
+References: <0D753D10438DA54287A00B027084269763715D5D31@AUSP01VMBX24.collaborationhost.net>
+	<87hbkv6sej.fsf@macbook.be.48ers.dk>
+	<0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <87d3vi7qqq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gawk/gawk.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 35c487c..7ed7f9d 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -9,6 +9,7 @@ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_TARGET_BINS = awk gawk igawk pgawk
- 
- $(eval $(call AUTOTARGETS,package,gawk))
-+$(eval $(call AUTOTARGETS,package,gawk,host))
- 
- $(GAWK_HOOK_POST_INSTALL): $(GAWK_TARGET_INSTALL_TARGET)
- 	ln -sf /usr/bin/gawk $(TARGET_DIR)/usr/bin/awk
+Hi,
+
+ H> Hello Peter,
+
+ H> I added this to the *.mk and it worked:
+
+ H> FIRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
+
+ H> Is that the correct way to handle this?
+
+Well, it certainly works around the problem about the buildsystem
+calling install -s, but the real issue is that the install program is
+hardcoded to run "strip" and not whatever we have set $STRIP or
+$STRIP_FOR_TARGET to.
+
+Anyway, this is what coreutils' install does, so we probably don't have
+much chance for changing it. I have been pondering always doing make
+install instead of install-strip as we always strip at the end anyway.
+
 -- 
-1.7.0.4
+Bye, Peter Korsgaard
