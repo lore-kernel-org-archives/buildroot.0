@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:04 +0200
-Subject: [Buildroot] [PATCH 10/20] gzip : convert to autotools
-	infrastructure & bump to 1.4
+Date: Tue, 22 Jun 2010 22:21:02 +0200
+Subject: [Buildroot] [PATCH 08/20] diffutils : convert to autotools
+	infrastructure
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <71cb79a9454cedbe198cd69c86550ab5a2099538.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <85124403020d70e3000fc50763ef283c7356de53.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,135 +15,93 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-     * Installation to target is the default
-     * No installation to staging is the default
+ * Installation to target is the default
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/gzip/gzip-1.3.12-rename-futimens.patch |   48 ---------------------
- package/gzip/gzip.mk                           |   55 +-----------------------
- 2 files changed, 2 insertions(+), 101 deletions(-)
- delete mode 100644 package/gzip/gzip-1.3.12-rename-futimens.patch
+ package/diffutils/diffutils.mk |   63 ++-------------------------------------
+ 1 files changed, 4 insertions(+), 59 deletions(-)
 
-diff --git a/package/gzip/gzip-1.3.12-rename-futimens.patch b/package/gzip/gzip-1.3.12-rename-futimens.patch
-deleted file mode 100644
-index 8315d7c..0000000
---- a/package/gzip/gzip-1.3.12-rename-futimens.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
-----
-- gzip.c        |    2 +-
-- lib/utimens.c |    4 ++--
-- lib/utimens.h |    2 +-
-- 3 files changed, 4 insertions(+), 4 deletions(-)
--
--Index: gzip-1.3.12/gzip.c
--===================================================================
----- gzip-1.3.12.orig/gzip.c
--+++ gzip-1.3.12/gzip.c
--@@ -1637,7 +1637,7 @@
-- 	}
--       }
-- 
---    if (futimens (ofd, ofname, timespec) != 0)
--+    if (gz_futimens (ofd, ofname, timespec) != 0)
--       {
-- 	int e = errno;
-- 	WARN ((stderr, "%s: ", program_name));
--Index: gzip-1.3.12/lib/utimens.c
--===================================================================
----- gzip-1.3.12.orig/lib/utimens.c
--+++ gzip-1.3.12/lib/utimens.c
--@@ -75,7 +75,7 @@
--    Return 0 on success, -1 (setting errno) on failure.  */
-- 
-- int
---futimens (int fd ATTRIBUTE_UNUSED,
--+gz_futimens (int fd ATTRIBUTE_UNUSED,
-- 	  char const *file, struct timespec const timespec[2])
-- {
--   /* Some Linux-based NFS clients are buggy, and mishandle time stamps
--@@ -185,5 +185,5 @@
-- int
-- utimens (char const *file, struct timespec const timespec[2])
-- {
---  return futimens (-1, file, timespec);
--+  return gz_futimens (-1, file, timespec);
-- }
--Index: gzip-1.3.12/lib/utimens.h
--===================================================================
----- gzip-1.3.12.orig/lib/utimens.h
--+++ gzip-1.3.12/lib/utimens.h
--@@ -1,3 +1,3 @@
-- #include <time.h>
---int futimens (int, char const *, struct timespec const [2]);
--+int gz_futimens (int, char const *, struct timespec const [2]);
-- int utimens (char const *, struct timespec const [2]);
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 3feb49a..672172d 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -3,59 +3,8 @@
- # gzip
- #
- #############################################################
--GZIP_VERSION:=1.3.12
-+GZIP_VERSION:=1.4
- GZIP_SOURCE:=gzip-$(GZIP_VERSION).tar.gz
- GZIP_SITE:=$(BR2_GNU_MIRROR)/gzip
--GZIP_DIR:=$(BUILD_DIR)/gzip-$(GZIP_VERSION)
--GZIP_CAT:=$(ZCAT)
--GZIP_BINARY:=$(GZIP_DIR)/gzip
--GZIP_TARGET_BINARY:=$(TARGET_DIR)/bin/zmore
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index fd5e5a3..c0b3830 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -6,26 +6,10 @@
+ DIFFUTILS_VERSION=2.8.1
+ DIFFUTILS_SOURCE:=diffutils-$(DIFFUTILS_VERSION).tar.gz
+ DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+-DIFFUTILS_CAT:=$(ZCAT)
+-DIFFUTILS_DIR:=$(BUILD_DIR)/diffutils-$(DIFFUTILS_VERSION)
+-DIFFUTILS_BINARY:=src/diff
+-DIFFUTILS_TARGET_BINARY:=usr/bin/diff
  
--$(DL_DIR)/$(GZIP_SOURCE):
--	 $(call DOWNLOAD,$(GZIP_SITE),$(GZIP_SOURCE))
+-$(DL_DIR)/$(DIFFUTILS_SOURCE):
+-	 $(call DOWNLOAD,$(DIFFUTILS_SITE),$(DIFFUTILS_SOURCE))
++DIFFUTILS_INSTALL_STAGING = YES
+ 
+-diffutils-source: $(DL_DIR)/$(DIFFUTILS_SOURCE)
 -
--gzip-source: $(DL_DIR)/$(GZIP_SOURCE)
+-$(DIFFUTILS_DIR)/.unpacked: $(DL_DIR)/$(DIFFUTILS_SOURCE)
+-	$(DIFFUTILS_CAT) $(DL_DIR)/$(DIFFUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(DIFFUTILS_DIR)/config
+-	touch $@
 -
--$(GZIP_DIR)/.unpacked: $(DL_DIR)/$(GZIP_SOURCE)
--	$(GZIP_CAT) $(DL_DIR)/$(GZIP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(GZIP_DIR) package/gzip gzip\*.patch
--	touch $(GZIP_DIR)/.unpacked
--
--$(GZIP_DIR)/.configured: $(GZIP_DIR)/.unpacked
--	(cd $(GZIP_DIR); rm -rf config.cache; \
+-$(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
+-	(cd $(DIFFUTILS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_strtod=yes \
++DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
+ 		ac_fsusage_space=yes \
+ 		fu_cv_sys_stat_statfs2_bsize=yes \
+ 		ac_cv_func_closedir_void=no \
+@@ -71,45 +55,6 @@ $(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
+ 		gl_cv_func_mkstemp_limitations=no \
+ 		ac_cv_func_working_mktime=yes \
+ 		jm_cv_func_working_re_compile_pattern=yes \
+-		ac_use_included_regex=no \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/ \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
 -		$(DISABLE_NLS) \
 -		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(GZIP_DIR)/.configured
+-	touch $@
 -
--$(GZIP_BINARY): $(GZIP_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(GZIP_DIR)
+-$(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY): $(DIFFUTILS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR)
 -
--$(GZIP_TARGET_BINARY): $(GZIP_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GZIP_DIR) install-strip
+-$(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY): $(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) \
+-		$(if $(BR2_STRIP_none),install,install-strip)
+-ifneq ($(BR2_ENABLE_LOCALE),y)
+-	rm -rf $(TARGET_DIR)/usr/share/locale
+-endif
 -
--gzip: $(GZIP_TARGET_BINARY)
+-diffutils: $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
 -
--gzip-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(GZIP_DIR) uninstall
--	-$(MAKE) -C $(GZIP_DIR) clean
+-diff-utils-unpacked: $(DIFFUTILS_DIR)/.unpacked
++		ac_use_included_regex=no
+ 
+-diffutils-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) uninstall
+-	-$(MAKE) -C $(DIFFUTILS_DIR) clean
 -
--gzip-dirclean:
--	rm -rf $(GZIP_DIR)
+-diffutils-dirclean:
+-	rm -rf $(DIFFUTILS_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_GZIP),y)
--TARGETS+=gzip
+-ifeq ($(BR2_PACKAGE_DIFFUTILS),y)
+-TARGETS+=diffutils
 -endif
-+$(eval $(call AUTOTARGETS,package,gzip))
++$(eval $(call AUTOTARGETS,package,diffutils))
 -- 
 1.7.0.4
