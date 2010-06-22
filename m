@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:00 +0200
-Subject: [Buildroot] [PATCH 06/20] berkeleydb : convert to autotools
-	infrastructure & bump to 4.4.20
+Date: Tue, 22 Jun 2010 22:21:03 +0200
+Subject: [Buildroot] [PATCH 09/20] libfuse : convert to autotools
+	infrastructure & bump to 2.8.4
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8bf2d5ccdf7be5df7fe221d5bf9d4ea963ea02ff.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <70150f67ed89a0fe54437f9d76333b7ffd3e6333.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,119 +16,107 @@ From: cmchao <cmchao@gmail.com>
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  * Installation to target is the default
- * Use BERKELEYDB_SUBDIR to get rid of the specific BUILD_CMDS and
-   INSTALL_STAGING_CMDS
- * Split the INSTALL_TARGET_CMDS to install development files on the
-   target only when needed
+ * Remove incorrect libfuse-dirclean target
+ * Remove INSTALL_STAGING_CMDS, since its implementation was the default behaviour
+ * No need to strip, done globally
+ * No need to create main directories in $(TARGET_DIR)
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/berkeleydb/berkeleydb.mk |   82 +++++++++++--------------------------
- 1 files changed, 25 insertions(+), 57 deletions(-)
+ package/fuse/libfuse.mk |   69 ++++++++--------------------------------------
+ 1 files changed, 12 insertions(+), 57 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index f15df6a..b026143 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -3,25 +3,17 @@
- # berkeley db
+diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
+index b45f9ee..87d746f 100644
+--- a/package/fuse/libfuse.mk
++++ b/package/fuse/libfuse.mk
+@@ -3,75 +3,30 @@
+ # libfuse
  #
  #############################################################
--DB_VERSION:=4.3.29
--DB_SO_VERSION:=4.3
--DB_SITE:=ftp://ftp.sleepycat.com/releases
--DB_SOURCE:=db-$(DB_VERSION).NC.tar.gz
--DB_DIR:=$(BUILD_DIR)/db-$(DB_VERSION).NC
--DB_SHARLIB:=libdb-$(DB_SO_VERSION).so
--
--$(DL_DIR)/$(DB_SOURCE):
--	$(call DOWNLOAD,$(DB_SITE),$(DB_SOURCE))
--
--berkeleydb-source: $(DL_DIR)/$(DB_SOURCE)
--
--$(DB_DIR)/.dist: $(DL_DIR)/$(DB_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(DB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(DB_DIR)/.configured: $(DB_DIR)/.dist
--	$(CONFIG_UPDATE) $(DB_DIR)/dist
--	(cd $(DB_DIR)/build_unix; rm -rf config.cache; \
-+BERKELEYDB_VERSION:=4.4.20
-+BERKELEYDB_SO_VERSION:=4.4
-+BERKELEYDB_SITE:=ftp://ftp.sleepycat.com/releases
-+BERKELEYDB_SOURCE:=db-$(BERKELEYDB_VERSION).NC.tar.gz
-+BERKELEYDB_SHARLIB:=libdb-$(BERKELEYDB_SO_VERSION).so
-+BERKELEYDB_SUBDIR=build_unix
-+BERKELEYDB_INSTALL_STAGING = YES
-+
-+#build directory can't be the directory where configure are there, so..
-+define BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		../dist/configure $(QUIET) \
-@@ -48,48 +40,24 @@ $(DB_DIR)/.configured: $(DB_DIR)/.dist
- 		--disable-tcl \
- 		--disable-compat185 \
- 		--with-pic \
--		$(DISABLE_LARGEFILE) \
- 	)
--	$(SED) 's/\.lo/.o/g' $(DB_DIR)/build_unix/Makefile
--	touch $@
--
--$(DB_DIR)/build_unix/.libs/$(DB_SHARLIB): $(DB_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(DB_DIR)/build_unix
--
--$(STAGING_DIR)/lib/$(DB_SHARLIB): $(DB_DIR)/build_unix/.libs/$(DB_SHARLIB)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DB_DIR)/build_unix install
--	chmod a-x $(STAGING_DIR)/lib/libdb*so*
--	rm -f $(STAGING_DIR)/bin/db_*
--	rm -rf $(STAGING_DIR)/share/locale
-+	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
-+endef
+-LIBFUSE_VERSION:=2.8.1
++LIBFUSE_VERSION:=2.8.4
+ LIBFUSE_SOURCE:=fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+-LIBFUSE_DIR:=$(BUILD_DIR)/fuse-$(LIBFUSE_VERSION)
+-LIBFUSE_BINARY:=libfuse
+-$(DL_DIR)/$(LIBFUSE_SOURCE):
+-	$(call DOWNLOAD,$(LIBFUSE_SITE),$(LIBFUSE_SOURCE))
  
--$(TARGET_DIR)/lib/$(DB_SHARLIB): $(STAGING_DIR)/lib/$(DB_SHARLIB)
--	rm -rf $(TARGET_DIR)/lib/libdb*
--	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
--	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
--	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(DB_SHARLIB) libdb.so)
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libdb*so*
+-$(LIBFUSE_DIR)/.source: $(DL_DIR)/$(LIBFUSE_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LIBFUSE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBFUSE_DIR) package/fuse/ \*.patch
+-	touch $@
 -
--$(TARGET_DIR)/usr/lib/libdb.a: $(STAGING_DIR)/lib/libdb-$(DB_SO_VERSION).a
-+ifeq ($(BR2_HAVE_DEVFILES),y)
-+define BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/include/db.h $(TARGET_DIR)/usr/include/
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.a $(TARGET_DIR)/usr/lib/
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.la $(TARGET_DIR)/usr/lib/
+-
+-$(LIBFUSE_DIR)/.configured: $(LIBFUSE_DIR)/.source
+-	(cd $(LIBFUSE_DIR); rm -rf config.cache ; \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CFLAGS="$(TARGET_CFLAGS)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
+-		--program-prefix="" \
++LIBFUSE_INSTALL_STAGING = YES
++LIBFUSE_LIBTOOL_PATCH = NO
++LIBFUSE_CONF_OPT= --program-prefix="" \
+ 		--enable-shared \
+ 		--enable-static \
+ 		--disable-nls \
+ 		--disable-example \
+ 		--disable-kernel-module \
+ 		--enable-lib \
+-		--enable-util \
+-	);
+-	touch $@
+-
+-$(LIBFUSE_DIR)/.compiled: $(LIBFUSE_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LIBFUSE_DIR)
+-	touch $@
++		--enable-util
+ 
+-$(STAGING_DIR)/usr/lib/libfuse.so: $(LIBFUSE_DIR)/.compiled
+-	$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
 -	touch -c $@
 -
--berkeleydb-headers: $(TARGET_DIR)/usr/lib/libdb.a
+-$(TARGET_DIR)/usr/lib/libfuse.so: $(STAGING_DIR)/usr/lib/libfuse.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	mkdir -p $(TARGET_DIR)/usr/bin
++define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/fusermount
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfuse.so
+-	touch -c $@
 -
--berkeleydb-clean:
--	-$(MAKE) -C $(DB_DIR)/build_unix clean
+-libfuse: $(TARGET_DIR)/usr/lib/libfuse.so
 -
--berkeleydb-dirclean:
--	rm -rf $(DB_DIR)
-+endef
-+endif
- 
--berkeleydb: $(TARGET_DIR)/lib/$(DB_SHARLIB)
-+define BERKELEYDB_INSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/lib/libdb*
-+	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
-+	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(BERKELEYDB_SHARLIB) libdb.so)
-+	$(BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS)
+-libfuse-source: $(DL_DIR)/$(LIBFUSE_SOURCE)
 +endef
  
+-libfuse-clean:
+-	-$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR) uninstall
+-	-$(MAKE) -C $(LIBFUSE_DIR) clean
++define LIBFUSE_CLEAN_CMDS
++	-$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) uninstall
++	-$(MAKE) -C $(@D) clean
+ 	rm -f $(TARGET_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/lib/libfuse.so*
++endef
+ 
+-libfuse-dirclean:
+-	rm -rf $(LIBFUSE_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
--TARGETS+=berkeleydb
+-ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+-TARGETS+=libfuse
 -endif
-+$(eval $(call AUTOTARGETS,package,berkeleydb))
++$(eval $(call AUTOTARGETS,package,libfuse))
 -- 
 1.7.0.4
