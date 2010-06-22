@@ -1,31 +1,51 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 22 Jun 2010 14:01:30 -0300
-Subject: [Buildroot] [PATCH] rsync build fix
-In-Reply-To: <4C1BB673.7080202@zacarias.com.ar>
-References: <4C1BB673.7080202@zacarias.com.ar>
-Message-ID: <AANLkTinKoHuTnyYD9RfzItMxhQsAouMfIRbyGZ7v-Hzu@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Jun 2010 22:15:48 +0200
+Subject: [Buildroot] [pull request] Pull request for branch linux-cleanup
+In-Reply-To: <20100620212248.73b3804a@surf>
+References: <cover.1276454802.git.thomas.petazzoni@free-electrons.com>
+	<20100620153716.63b1ff25@surf> <20100620155140.78e57e4a@surf>
+	<874ogxa8wj.fsf@macbook.be.48ers.dk> <20100620212248.73b3804a@surf>
+Message-ID: <20100622221548.71717b3a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sun, 20 Jun 2010 21:22:48 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-On Fri, Jun 18, 2010 at 3:09 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
->
-> Rsync fails to build with a central config cache enabled since
-> ac_cv_type_struct_sockaddr_storage is wrong thus redefining the
-> sockaddr_storage struct.
-> Please test and commit.
->
+> Ah, ok, I misunderstood. Fixed in my tree, will be part of the next
+> push. I'll let you know when it's ready.
 
-Tested here, and worked great.
+The next (and hopefully final) push has been made. Changes since the
+last one :
 
-Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+ * Do not touch the OABI_COMPAT kernel option
 
-PS: Forgot to include the list address, sorry for the duplicate.
+ * At compile time do :
+	make <image-type>
+	if modules:
+		make modules
 
-Kind Regards,
-   Thiago A. Correa
+   At install time do :
+	cp <image-path> $(BINARIES_DIR)
+	if modules:
+		make modules_install
+
+   At initramfs regeneration time do :
+	make <image-type>
+
+ * Minor Config.in improvements (tabulations, help texts, etc.)
+
+As usual, available in the linux-cleanup branch at
+git://git.busybox.net/~tpetazzoni/git/buildroot.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
