@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:08 +0200
-Subject: [Buildroot] [PATCH 14/20] sdl_mixer : convert to autotools
-	infrastructure & bump to 1.2.11
+Date: Tue, 22 Jun 2010 22:20:55 +0200
+Subject: [Buildroot] [PATCH 01/20] distcc : convert to autotools
+	infrastructure & bump to 1.1-20100428
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cfe3738002d8a4552186d6debf35facdfaa2c48f.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c6166664cc320cce4294ec61eb8401477618482d.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,51 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default
- * No need to strip, done globally
+     * Target installation is the default behaviour
+     * No installation to staging is the default behaviour
+     * Remove DISTCC_BINARY/DISTCC_TARGET_BINARY variables
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/sdl_mixer/sdl_mixer.mk |   67 +++++++--------------------------------
- 1 files changed, 12 insertions(+), 55 deletions(-)
+ package/distcc/distcc.mk |   70 +++++++--------------------------------------
+ 1 files changed, 11 insertions(+), 59 deletions(-)
 
-diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-index a097734..8033495 100644
---- a/package/sdl_mixer/sdl_mixer.mk
-+++ b/package/sdl_mixer/sdl_mixer.mk
-@@ -3,66 +3,23 @@
- # SDL_mixer
- #
+diff --git a/package/distcc/distcc.mk b/package/distcc/distcc.mk
+index 75cfacc..f3d13bd 100644
+--- a/package/distcc/distcc.mk
++++ b/package/distcc/distcc.mk
+@@ -5,67 +5,19 @@
  #############################################################
--SDL_MIXER_VERSION:=1.2.8
-+SDL_MIXER_VERSION:=1.2.11
- SDL_MIXER_SOURCE:=SDL_mixer-$(SDL_MIXER_VERSION).tar.gz
- SDL_MIXER_SITE:=http://www.libsdl.org/projects/SDL_mixer/release/
--SDL_MIXER_CAT:=$(ZCAT)
--SDL_MIXER_DIR:=$(BUILD_DIR)/SDL_mixer-$(SDL_MIXER_VERSION)
+ DISTCC_VERSION:=2.18.3
+ DISTCC_SOURCE:=distcc-$(DISTCC_VERSION).tar.bz2
+-DISTCC_CAT:=$(BZCAT)
+ DISTCC_SITE:=http://distcc.samba.org/ftp/distcc/
+-DISTCC_BUILDDIR:=$(BUILD_DIR)/distcc-$(DISTCC_VERSION)
+-DISTCC_BINARY:=distcc
+-DISTCC_TARGET_BINARY:=usr/bin/distcc
  
--$(DL_DIR)/$(SDL_MIXER_SOURCE):
--	$(call DOWNLOAD,$(SDL_MIXER_SITE),$(SDL_MIXER_SOURCE))
-+SDL_MIXER_LIBTOOL_PATCH = NO
-+SDL_MIXER_INSTALL_STAGING = YES
-+SDL_MIXER_DEPENDENCIES = sdl
-+SDL_MIXER_CONF_OPT = --without-x --with-sdl-prefix=$(STAGING_DIR)/usr
+-$(DL_DIR)/$(DISTCC_SOURCE):
+-	$(call DOWNLOAD,$(DISTCC_SITE),$(DISTCC_SOURCE))
++DISTCC_CONF_OPT = --with-included-popt --without-gtk --without-gnome
  
--sdl_mixer-source: $(DL_DIR)/$(SDL_MIXER_SOURCE)
--
--$(SDL_MIXER_DIR)/.unpacked: $(DL_DIR)/$(SDL_MIXER_SOURCE)
--	$(SDL_MIXER_CAT) $(DL_DIR)/$(SDL_MIXER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(SDL_MIXER_DIR)/build-scripts
--	touch $@
--
--$(SDL_MIXER_DIR)/.configured: $(SDL_MIXER_DIR)/.unpacked $(STAGING_DIR)/usr/lib/libSDL.so
--	(cd $(SDL_MIXER_DIR); rm -rf config.cache; \
+-distcc-source: $(DL_DIR)/$(CVS_SOURCE)
++define DISTCC_INSTALL_TARGET_CMDS
++	install -D $(@D)/distccd $(TARGET_DIR)/usr/bin/distccd
++	install -D $(@D)/distcc $(TARGET_DIR)/usr/bin/distcc
++endef
+ 
+-$(DISTCC_BUILDDIR)/.unpacked: $(DL_DIR)/$(DISTCC_SOURCE)
+-	$(DISTCC_CAT) $(DL_DIR)/$(DISTCC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(DISTCC_BUILDDIR)
+-	touch $(DISTCC_BUILDDIR)/.unpacked
++define DISTCC_CLEAN_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/distcc
++	rm -f $(TARGET_DIR)/usr/bin/distccd
++	-$(MAKE) -C $(@D) clean
++endef
+ 
+-$(DISTCC_BUILDDIR)/.configured: $(DISTCC_BUILDDIR)/.unpacked
+-	(cd $(DISTCC_BUILDDIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -61,50 +67,45 @@ index a097734..8033495 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
+-		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--without-x \
--		--with-freetype-prefix=$(STAGING_DIR)/usr \
--		--with-sdl-prefix=$(STAGING_DIR)/usr \
--		)
--	touch $@
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--with-included-popt \
+-		--without-gtk \
+-		--without-gnome \
+-	)
+-	touch $(DISTCC_BUILDDIR)/.configured
 -
--$(SDL_MIXER_DIR)/.compiled: $(SDL_MIXER_DIR)/.configured
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(SDL_MIXER_DIR)
--	touch $@
+-$(DISTCC_BUILDDIR)/$(DISTCC_BINARY): $(DISTCC_BUILDDIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DISTCC_BUILDDIR)
 -
--$(STAGING_DIR)/usr/lib/libSDL_mixer.so: $(SDL_MIXER_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SDL_MIXER_DIR) install
--	touch -c $@
+-$(TARGET_DIR)/$(DISTCC_TARGET_BINARY): $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)
+-	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)d $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
+-	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY) $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
 -
--$(TARGET_DIR)/usr/lib/libSDL_mixer.so: $(STAGING_DIR)/usr/lib/libSDL_mixer.so
-+define SDL_MIXER_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_mixer*.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
+-distcc: $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
 -
--sdl_mixer: sdl $(TARGET_DIR)/usr/lib/libSDL_mixer.so
-+endef
- 
--sdl_mixer-clean:
-+define SDL_MIXER_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
--	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SDL_MIXER_DIR) uninstall
--	-$(MAKE) -C $(SDL_MIXER_DIR) clean
-+	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) uninstall
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--sdl_mixer-dirclean:
--	rm -rf $(SDL_MIXER_DIR)
+-distcc-clean:
+-	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
+-	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
+-	-$(MAKE) -C $(DISTCC_BUILDDIR) clean
 -
+-distcc-dirclean:
+-	rm -rf $(DISTCC_BUILDDIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SDL_MIXER),y)
--TARGETS+=sdl_mixer
+-ifeq ($(BR2_PACKAGE_DISTCC),y)
+-TARGETS+=distcc
 -endif
-+$(eval $(call AUTOTARGETS,package,sdl_mixer))
++$(eval $(call AUTOTARGETS,package,distcc))
 -- 
 1.7.0.4
