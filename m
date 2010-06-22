@@ -1,38 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Jun 2010 22:32:29 +0200
-Subject: [Buildroot] sdl demo app install problem
-In-Reply-To: <0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
-	(H. Hartley Sweeten's message of "Tue, 22 Jun 2010 10:39:39 -0500")
-References: <0D753D10438DA54287A00B027084269763715D5D31@AUSP01VMBX24.collaborationhost.net>
-	<87hbkv6sej.fsf@macbook.be.48ers.dk>
-	<0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <87d3vi7qqq.fsf@macbook.be.48ers.dk>
+Date: Tue, 22 Jun 2010 22:33:48 +0200
+Subject: [Buildroot] [PATCH] rsync build fix
+In-Reply-To: <AANLkTinKoHuTnyYD9RfzItMxhQsAouMfIRbyGZ7v-Hzu@mail.gmail.com>
+	("Thiago A. =?utf-8?Q?Corr=C3=AAa=22's?= message of "Tue, 22 Jun 2010
+	14:01:30 -0300")
+References: <4C1BB673.7080202@zacarias.com.ar>
+	<AANLkTinKoHuTnyYD9RfzItMxhQsAouMfIRbyGZ7v-Hzu@mail.gmail.com>
+Message-ID: <878w667qoj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+>>>>> "Thiago" == Thiago A Corr?a <thiago.correa@gmail.com> writes:
 
 Hi,
 
- H> Hello Peter,
+ >> Rsync fails to build with a central config cache enabled since
+ >> ac_cv_type_struct_sockaddr_storage is wrong thus redefining the
+ >> sockaddr_storage struct.
+ >> Please test and commit.
+ >> 
 
- H> I added this to the *.mk and it worked:
+ Thiago> Tested here, and worked great.
 
- H> FIRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
+ Thiago> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
 
- H> Is that the correct way to handle this?
+ Thiago> PS: Forgot to include the list address, sorry for the duplicate.
 
-Well, it certainly works around the problem about the buildsystem
-calling install -s, but the real issue is that the install program is
-hardcoded to run "strip" and not whatever we have set $STRIP or
-$STRIP_FOR_TARGET to.
+Again, I think this fix just pampers over another bug, E.G. some other
+package that puts the wrong value into the config.cache.
 
-Anyway, this is what coreutils' install does, so we probably don't have
-much chance for changing it. I have been pondering always doing make
-install instead of install-strip as we always strip at the end anyway.
+I haven't been able to reproduce it here, care to send your .config?
 
 -- 
 Bye, Peter Korsgaard
