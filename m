@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:20:58 +0200
-Subject: [Buildroot] [PATCH 04/20] links : convert to autotools
-	infrastructure & bump to 1.01pre1-no-ssl
+Date: Tue, 22 Jun 2010 22:21:12 +0200
+Subject: [Buildroot] [PATCH 18/20] liblockfile : convert to autotools
+	infrastructure & bump to 1.08-4
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a6527f404e26debce3c2b535e2c7de7c8801a671.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6cae9983537d6f3467080cf21bd92337d6ed6ae7.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,41 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default behaviour
- * No installation to staging is the default behaviour
- * Stripping is done globally
- * Remove incorrect cleaning rules
+ * Installation to target is the default
+ * No need to strip, it's done globally
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/links/links.mk |   62 ++++-------------------------------------------
- 1 files changed, 6 insertions(+), 56 deletions(-)
+ package/liblockfile/liblockfile.mk |   63 +++++++-----------------------------
+ 1 files changed, 12 insertions(+), 51 deletions(-)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 298c165..2e17066 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -3,64 +3,14 @@
- # links (text based web browser)
- #
- #############################################################
--LINKS_VERSION:=0.99pre9-no-ssl
-+LINKS_VERSION:=1.01pre1-no-ssl
- LINKS_SITE:=http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/download/no-ssl
- LINKS_SOURCE:=links-$(LINKS_VERSION).tar.gz
--LINKS_DIR:=$(BUILD_DIR)/links-$(LINKS_VERSION)
+diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
+index b30d356..bd14faf 100644
+--- a/package/liblockfile/liblockfile.mk
++++ b/package/liblockfile/liblockfile.mk
+@@ -6,66 +6,27 @@
+ LIBLOCKFILE_VERSION=1.08
+ LIBLOCKFILE_SOURCE:=liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
+ LIBLOCKFILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/libl/liblockfile/
+-LIBLOCKFILE_CAT:=$(ZCAT)
+-LIBLOCKFILE_DIR:=$(BUILD_DIR)/liblockfile-$(LIBLOCKFILE_VERSION)
+-LIBLOCKFILE_BINARY:=usr/lib/liblockfile.so.1.0
++LIBLOCKFILE_PATCH:=liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
  
--$(DL_DIR)/$(LINKS_SOURCE):
--	$(call DOWNLOAD,$(LINKS_SITE),$(LINKS_SOURCE))
-+LINKS_CONF_OPT = --localstatedir=/tmp
+-$(DL_DIR)/$(LIBLOCKFILE_SOURCE):
+-	 $(call DOWNLOAD,$(LIBLOCKFILE_SITE),$(LIBLOCKFILE_SOURCE))
++LIBLOCKFILE_INSTALL_STAGING = YES
++LIBLOCKFILE_CONF_OPT = --enable-shared --mandir=/usr/share/man
  
--links-source: $(DL_DIR)/$(LINKS_SOURCE)
-+define LINKS_INSTALL_TARGET_CMDS
-+	install -c $(@D)/links $(TARGET_DIR)/usr/bin/links
-+endef
- 
--$(LINKS_DIR)/.unpacked: $(DL_DIR)/$(LINKS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LINKS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(LINKS_DIR)/.unpacked
+-liblockfile-source: $(DL_DIR)/$(LIBLOCKFILE_SOURCE)
 -
--$(LINKS_DIR)/.configured: $(LINKS_DIR)/.unpacked
--	(cd $(LINKS_DIR); rm -rf config.cache; \
+-$(LIBLOCKFILE_DIR)/.unpacked: $(DL_DIR)/$(LIBLOCKFILE_SOURCE)
+-	$(LIBLOCKFILE_CAT) $(DL_DIR)/$(LIBLOCKFILE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBLOCKFILE_DIR) package/liblockfile/ \*.patch
+-	touch $@
+-
+-$(LIBLOCKFILE_DIR)/.configured: $(LIBLOCKFILE_DIR)/.unpacked
+-	(cd $(LIBLOCKFILE_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -61,44 +57,54 @@ index 298c165..2e17066 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/tmp \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
+-		--libdir=/usr/lib \
+-		--includedir=/usr/include \
+-		--mandir=/usr/share/man \
+-		--enable-shared \
 -	)
--	touch $(LINKS_DIR)/.configured
+-	touch $@
 -
--$(LINKS_DIR)/links: $(LINKS_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LINKS_DIR)
--	$(STRIPCMD) $(LINKS_DIR)/links
+-$(STAGING_DIR)/$(LIBLOCKFILE_BINARY): $(LIBLOCKFILE_DIR)/.configured
++define LIBLOCKFILE_INSTALL_STAGING_CMDS
+ 	mkdir -p $(addprefix $(STAGING_DIR)/usr/share/man/man,1 3)
+ 	rm -f $(STAGING_DIR)/usr/lib/liblockfile.so
+ 	$(MAKE) -C $(LIBLOCKFILE_DIR) ROOT=$(STAGING_DIR) install
+ 	ln -sf liblockfile.so $(STAGING_DIR)/usr/lib/liblockfile.so.1
+-	touch -c $@
++endef
+ 
+-$(TARGET_DIR)/$(LIBLOCKFILE_BINARY): $(STAGING_DIR)/$(LIBLOCKFILE_BINARY)
+-	mkdir -p $(@D)
+-	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(@D)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+-	touch -c $@
++define LIBLOCKFILE_INSTALL_TARGET_CMDS
++	cp -a $(STAGING_DIR)/usr/lib/liblockfile.so* $(TARGET_DIR)/usr/lib
++endef
+ 
+-liblockfile: $(TARGET_DIR)/$(LIBLOCKFILE_BINARY)
 -
--$(TARGET_DIR)/usr/bin/links: $(LINKS_DIR)/links
--	install -c $(LINKS_DIR)/links $(TARGET_DIR)/usr/bin/links
+-liblockfile-clean:
++define LIBLOCKFILE_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/usr/lib/liblockfile.so*
+ 	rm -f $(STAGING_DIR)/usr/lib/liblockfile*
+ 	rm -f $(addprefix $(STAGING_DIR)/usr/include/,lockfile.h mailfile.h)
+-	-$(MAKE) -C $(LIBLOCKFILE_DIR) clean
 -
--links-clean:
--	-$(MAKE) -C $(LINKS_DIR) clean
--	rm -f $(TARGET_DIR)/usr/bin/links
--
--links-dirclean:
--	rm -rf $(LINKS_DIR)
--
--links: $(TARGET_DIR)/usr/bin/links
--
+-liblockfile-dirclean:
+-	rm -rf $(LIBLOCKFILE_DIR)
++	-$(MAKE) -C $(@D) clean
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LINKS),y)
--TARGETS+=links
+-ifeq ($(BR2_PACKAGE_LIBLOCKFILE),y)
+-TARGETS+=liblockfile
 -endif
-+$(eval $(call AUTOTARGETS,package,links))
++$(eval $(call AUTOTARGETS,package,liblockfile))
 -- 
 1.7.0.4
