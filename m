@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:20:55 +0200
-Subject: [Buildroot] [PATCH 01/20] distcc : convert to autotools
-	infrastructure & bump to 1.1-20100428
+Date: Tue, 22 Jun 2010 22:21:05 +0200
+Subject: [Buildroot] [PATCH 11/20] make : convert to autotools infrastructure
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c6166664cc320cce4294ec61eb8401477618482d.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d38d45bb1927ac929acf19a7b44435526de7bc77.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,58 +14,60 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-     * Target installation is the default behaviour
-     * No installation to staging is the default behaviour
-     * Remove DISTCC_BINARY/DISTCC_TARGET_BINARY variables
+ * Target installation is the default
+ * No staging installation is the default
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/distcc/distcc.mk |   70 +++++++--------------------------------------
- 1 files changed, 11 insertions(+), 59 deletions(-)
+ package/make/make.mk |   75 +++++--------------------------------------------
+ 1 files changed, 8 insertions(+), 67 deletions(-)
 
-diff --git a/package/distcc/distcc.mk b/package/distcc/distcc.mk
-index 75cfacc..f3d13bd 100644
---- a/package/distcc/distcc.mk
-+++ b/package/distcc/distcc.mk
-@@ -5,67 +5,19 @@
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 0b2657d..12d236a 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -3,73 +3,14 @@
+ # make
+ #
  #############################################################
- DISTCC_VERSION:=2.18.3
- DISTCC_SOURCE:=distcc-$(DISTCC_VERSION).tar.bz2
--DISTCC_CAT:=$(BZCAT)
- DISTCC_SITE:=http://distcc.samba.org/ftp/distcc/
--DISTCC_BUILDDIR:=$(BUILD_DIR)/distcc-$(DISTCC_VERSION)
--DISTCC_BINARY:=distcc
--DISTCC_TARGET_BINARY:=usr/bin/distcc
+-GNUMAKE_VERSION:=3.81
+-GNUMAKE_SOURCE:=make-$(GNUMAKE_VERSION).tar.bz2
+-GNUMAKE_SITE:=$(BR2_GNU_MIRROR)/make
+-GNUMAKE_DIR:=$(BUILD_DIR)/make-$(GNUMAKE_VERSION)
+-GNUMAKE_CAT:=$(BZCAT)
+-GNUMAKE_BINARY:=make
+-GNUMAKE_TARGET_BINARY:=usr/bin/make
++MAKE_VERSION:=3.81
++MAKE_SOURCE:=make-$(MAKE_VERSION).tar.bz2
++MAKE_SITE:=$(BR2_GNU_MIRROR)/make
  
--$(DL_DIR)/$(DISTCC_SOURCE):
--	$(call DOWNLOAD,$(DISTCC_SITE),$(DISTCC_SOURCE))
-+DISTCC_CONF_OPT = --with-included-popt --without-gtk --without-gnome
+-$(DL_DIR)/$(GNUMAKE_SOURCE):
+-	 $(call DOWNLOAD,$(GNUMAKE_SITE),$(GNUMAKE_SOURCE))
++MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
  
--distcc-source: $(DL_DIR)/$(CVS_SOURCE)
-+define DISTCC_INSTALL_TARGET_CMDS
-+	install -D $(@D)/distccd $(TARGET_DIR)/usr/bin/distccd
-+	install -D $(@D)/distcc $(TARGET_DIR)/usr/bin/distcc
-+endef
+-make-source: $(DL_DIR)/$(GNUMAKE_SOURCE)
++MAKE_CONF_ENV = make_cv_sys_gnu_glob=no \
++		GLOBINC='-I$(@D)/glob' \
++		GLOBLIB=glob/libglob.a
  
--$(DISTCC_BUILDDIR)/.unpacked: $(DL_DIR)/$(DISTCC_SOURCE)
--	$(DISTCC_CAT) $(DL_DIR)/$(DISTCC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(DISTCC_BUILDDIR)
--	touch $(DISTCC_BUILDDIR)/.unpacked
-+define DISTCC_CLEAN_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/distcc
-+	rm -f $(TARGET_DIR)/usr/bin/distccd
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--$(DISTCC_BUILDDIR)/.configured: $(DISTCC_BUILDDIR)/.unpacked
--	(cd $(DISTCC_BUILDDIR); rm -rf config.cache; \
+-$(GNUMAKE_DIR)/.unpacked: $(DL_DIR)/$(GNUMAKE_SOURCE)
+-	$(GNUMAKE_CAT) $(DL_DIR)/$(GNUMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(GNUMAKE_DIR)/config
+-	touch $@
+-
+-$(GNUMAKE_DIR)/.configured: $(GNUMAKE_DIR)/.unpacked
+-	(cd $(GNUMAKE_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		make_cv_sys_gnu_glob=no \
+-		GLOBINC='-I$(GNUMAKE_DIR)/glob' \
+-		GLOBLIB=glob/libglob.a \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
 -		--libdir=/lib \
@@ -76,36 +77,36 @@ index 75cfacc..f3d13bd 100644
 -		--localstatedir=/var \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
--		--with-included-popt \
--		--without-gtk \
--		--without-gnome \
+-		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
 -	)
--	touch $(DISTCC_BUILDDIR)/.configured
+-	touch $@
 -
--$(DISTCC_BUILDDIR)/$(DISTCC_BINARY): $(DISTCC_BUILDDIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DISTCC_BUILDDIR)
+-$(GNUMAKE_DIR)/$(GNUMAKE_BINARY): $(GNUMAKE_DIR)/.configured
+-	$(MAKE) MAKE=$(HOSTMAKE) -C $(GNUMAKE_DIR)
 -
--$(TARGET_DIR)/$(DISTCC_TARGET_BINARY): $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)
--	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)d $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
--	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY) $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
+-$(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY): $(GNUMAKE_DIR)/$(GNUMAKE_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) install
+-	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
 -
--distcc: $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
+-make: $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY)
 -
--distcc-clean:
--	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
--	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
--	-$(MAKE) -C $(DISTCC_BUILDDIR) clean
+-make-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) uninstall
+-	-$(MAKE) -C $(GNUMAKE_DIR) clean
 -
--distcc-dirclean:
--	rm -rf $(DISTCC_BUILDDIR)
+-make-dirclean:
+-	rm -rf $(GNUMAKE_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DISTCC),y)
--TARGETS+=distcc
+-ifeq ($(BR2_PACKAGE_MAKE),y)
+-TARGETS+=make
 -endif
-+$(eval $(call AUTOTARGETS,package,distcc))
++$(eval $(call AUTOTARGETS,package,make))
 -- 
 1.7.0.4
