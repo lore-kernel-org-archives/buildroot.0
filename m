@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:20:57 +0200
-Subject: [Buildroot] [PATCH 03/20] fbv : convert to autotools infrastructure
+Date: Tue, 22 Jun 2010 22:21:01 +0200
+Subject: [Buildroot] [PATCH 07/20] dash : convert to autotools
+	infrastructure & bump to 0.5.5.1
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c7071f7297385406143bc397418d4119b0048439.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <296e361906d66d25f1acd3c83e414191e4e0fa64.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,85 +15,105 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Target installation is the default behaviour
- * No installation to staging is the default behaviour
- * Remove FBV_BINARY/FBV_TARGET_BINARY variables
+ * No need to strip
+ * Target installation is the default
+ * No installation to staging is the default
+ * Remove DASH_BINARY/DASH_SOURCE variables
+ * Fix minor mistakes
+ * Simplify: no need to pass CC/CC_FOR_BUILD
 
 Signed-off-by: cmchao <cmchao@gmail.com>
----
- package/fbv/fbv.mk |   50 +++++++++++++++-----------------------------------
- 1 files changed, 15 insertions(+), 35 deletions(-)
 
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index 44ce5c6..7305c6e 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -6,23 +6,11 @@
- FBV_VERSION:=1.0b
- FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
- FBV_SITE:=http://s-tech.elsat.net.pl/fbv
--FBV_DIR:=$(BUILD_DIR)/fbv-$(FBV_VERSION)
--FBV_CAT:=$(ZCAT)
--FBV_BINARY:=fbv
--FBV_TARGET_BINARY:=usr/bin/$(FBV_BINARY)
+merge dash
+---
+ package/dash/dash.mk |   73 +++++++-------------------------------------------
+ 1 files changed, 10 insertions(+), 63 deletions(-)
+
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 63a102a..e5da642 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -3,71 +3,18 @@
+ # dash
+ #
+ #############################################################
+-DASH_VERSION:=0.5.3
++DASH_VERSION:=0.5.5.1
+ DASH_SOURCE:=dash_$(DASH_VERSION).orig.tar.gz
+ DASH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
+-DASH_CAT:=$(ZCAT)
+-DASH_DIR:=$(BUILD_DIR)/dash-$(DASH_VERSION)
+-DASH_PATCH1:=dash_$(DASH_VERSION)-7.diff.gz
+-DASH_BINARY:=src/dash
+-DASH_TARGET_BINARY:=bin/dash
++DASH_PATCH:=dash_$(DASH_VERSION)-6.diff.gz
  
--$(DL_DIR)/$(FBV_SOURCE):
--	$(call DOWNLOAD,$(FBV_SITE),$(FBV_SOURCE))
-+FBV_DEPENDENCIES = libpng jpeg libungif
+-$(DL_DIR)/$(DASH_SOURCE):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_SOURCE))
++define DASH_INSTALL_TARGET_CMDS
++	cp -a $(@D)/src/dash $(TARGET_DIR)/bin/dash
++endef
  
--fbv-source: $(DL_DIR)/$(FBV_SOURCE)
+-$(DL_DIR)/$(DASH_PATCH1):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_PATCH1))
++define DASH_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++	rm -f $(TARGET_DIR)/bin/dash
++endef
+ 
+-dash-source: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
 -
--$(FBV_DIR)/.unpacked: $(DL_DIR)/$(FBV_SOURCE)
--	$(FBV_CAT) $(DL_DIR)/$(FBV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ \
--		fbv-$(FBV_VERSION)\*.patch fbv-$(FBV_VERSION)\*.patch.$(ARCH)
--	touch $@
+-$(DASH_DIR)/.unpacked: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-	$(DASH_CAT) $(DL_DIR)/$(DASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(ZCAT) $(DL_DIR)/$(DASH_PATCH1) | patch -p1 -d $(DASH_DIR)
+-	touch $(DASH_DIR)/.unpacked
 -
--$(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
-+#fbv donesn't support cross-compilation
-+define FBV_CONFIGURE_CMDS
- 	(cd $(FBV_DIR); rm -f config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -30,27 +18,19 @@ $(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
- 		--prefix=/usr \
- 		--libs="-lz -lm" \
- 	)
--	touch $@
-+endef
- 
--$(FBV_DIR)/$(FBV_BINARY): $(FBV_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FBV_DIR)
-+define FBV_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
- 
--$(TARGET_DIR)/$(FBV_TARGET_BINARY): $(FBV_DIR)/$(FBV_BINARY)
--	install -D $(FBV_DIR)/$(FBV_BINARY) $(TARGET_DIR)/$(FBV_TARGET_BINARY)
-+define FBV_INSTALL_TARGET_CMDS
-+	install -D $(@D)/fbv $(TARGET_DIR)/usr/bin/fbv
-+endef
- 
--fbv: libpng jpeg libungif $(TARGET_DIR)/$(FBV_TARGET_BINARY)
-+define FBV_CLEAN_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/fbv
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--fbv-clean:
--	rm -f $(TARGET_DIR)/$(FBV_TARGET_BINARY)
--	-$(MAKE) -C $(FBV_DIR) clean
+-$(DASH_DIR)/.configured: $(DASH_DIR)/.unpacked
+-	(cd $(DASH_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-	)
+-	touch $(DASH_DIR)/.configured
 -
--fbv-dirclean:
--	rm -rf $(FBV_DIR)
+-$(DASH_DIR)/$(DASH_BINARY): $(DASH_DIR)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(DASH_DIR)
+-	touch -c $(DASH_DIR)/$(DASH_BINARY)
+-
+-$(TARGET_DIR)/$(DASH_TARGET_BINARY): $(DASH_DIR)/$(DASH_BINARY)
+-	cp -a $(DASH_DIR)/$(DASH_BINARY) $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash: $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash-clean:
+-	$(MAKE1) CC=$(TARGET_CC) -C $(DASH_DIR) clean
+-	rm -f $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash-dirclean:
+-	rm -rf $(DASH_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_FBV),y)
--TARGETS+=fbv
+-ifeq ($(BR2_PACKAGE_DASH),y)
+-TARGETS+=dash
 -endif
-+$(eval $(call AUTOTARGETS,package,fbv))
++$(eval $(call AUTOTARGETS,package,dash))
 -- 
 1.7.0.4
