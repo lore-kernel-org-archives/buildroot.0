@@ -1,48 +1,43 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Mon, 21 Jun 2010 20:05:38 -0500
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Tue, 22 Jun 2010 03:18:25 +0200
 Subject: [Buildroot] sdl demo app install problem
-In-Reply-To: <201006220147.29583.PeterHuewe@gmx.de>
+In-Reply-To: <0D753D10438DA54287A00B027084269763715D5D81@AUSP01VMBX24.collaborationhost.net>
 References: <0D753D10438DA54287A00B027084269763715D5D31@AUSP01VMBX24.collaborationhost.net>
-	<201006220132.46363.PeterHuewe@gmx.de>
-	<0D753D10438DA54287A00B027084269763715D5D47@AUSP01VMBX24.collaborationhost.net>
 	<201006220147.29583.PeterHuewe@gmx.de>
-Message-ID: <0D753D10438DA54287A00B027084269763715D5D81@AUSP01VMBX24.collaborationhost.net>
+	<0D753D10438DA54287A00B027084269763715D5D81@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <201006220318.27568.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, June 21, 2010 4:47 PM, Peter H?we wrote:
->> Am Dienstag 22 Juni 2010 01:25:24 schrieb H Hartley Sweeten:
->>>  /home/bigguiness/extratech/buildroot/output/target/usr/bin/fire strip:
->>>  Unable to recognise the format of the input file
->>>  `/home/bigguiness/extratech/buildroot/output/target/usr/bin/fire'
->>>  /usr/bin/install: strip process terminated abnormally
+Am Dienstag 22 Juni 2010 03:05:38 schrieb H Hartley Sweeten:
+> 
+> Well, I got it to install.  But, I'm not sure if this was the right way to
+> do it.  I added the following to the *.mk file:
+> 
+> 
+> FIRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
 >
-> I've checked it here and got this result:
->
-> $ strip /avr/buildroot-2010.02/output/target/usr/bin/fire                   
-> strip: Unable to recognise the format of the input file `/avr/buildroot-2010.02/output/target/usr/bin/fire'    
->
-> $ ./output/staging/usr/avr32-linux-uclibc/bin/strip /avr/buildroot-2010.02/output/target/usr/bin/fire
-> $
->
-> It seems to use the wrong strip command - not the one from the buildroot
-> toolchain, but rather the host one -- so maybe you have to patch one of
-> the files (configure/install) from fire - nevertheless I'll have a look
-> at it too
 
-Well, I got it to install.  But, I'm not sure if this was the right way to
-do it.  I added the following to the *.mk file:
+Great :) - atleast it works - thanks for figuring it out.
+
+I tried to rewrite the whole autoconf stuff meanwhile with (partial) success - 
+but your solution seems far more elegant - but unfortunately I can't tell you 
+whether this is the "correct" solution.
 
 
-FIRE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
+However I noticed that ncftp suffers from the same issue, but simply ignores 
+it - but maybe we should fix it there too - but on the other hand these 
+binaries aren't copied to the target fs, and ncftp gets stripped afterwards.
+
+strip: Unable to recognise the format of the input file `../bin/ncftp'                                         
+strip: Unable to recognise the format of the input file `../bin/ncftpbatch'  
+strip: Unable to recognise the format of the input file `../bin/ncftpls'                                       
+strip: Unable to recognise the format of the input file 
+`../bin/ncftpbookmarks'                                
+make[2]: [../bin/ncftpbookmarks] errors 1 (ignoriert)  
 
 
-I had to export SDL_NOMOUSE=1 on the board (I can't find a USB mouse and a
-hub right at the moment) but the 'fire' app does run on the i.MX35.  Now
-on to my actuall app....
-
-Thanks,
-Hartley
+Peter
