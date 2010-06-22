@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jun 2010 22:21:11 +0200
-Subject: [Buildroot] [PATCH 17/20] libgpg-error : convert to autotools
-	infrastructure & bump to 1.8
+Date: Tue, 22 Jun 2010 22:20:58 +0200
+Subject: [Buildroot] [PATCH 04/20] links : convert to autotools
+	infrastructure & bump to 1.01pre1-no-ssl
 In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7bb992889072af977f24acffcff6ec9475143f54.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a6527f404e26debce3c2b535e2c7de7c8801a671.1277237892.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,43 +15,45 @@ From: cmchao <cmchao@gmail.com>
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default
+ * Installation to target is the default behaviour
+ * No installation to staging is the default behaviour
+ * Stripping is done globally
+ * Remove incorrect cleaning rules
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/libgpg-error/libgpg-error.mk |   71 ++--------------------------------
- 1 files changed, 4 insertions(+), 67 deletions(-)
+ package/links/links.mk |   62 ++++-------------------------------------------
+ 1 files changed, 6 insertions(+), 56 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 0b513ff..89ff24c 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -3,74 +3,11 @@
- # libgpg-error
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 298c165..2e17066 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -3,64 +3,14 @@
+ # links (text based web browser)
  #
  #############################################################
--LIBGPG_ERROR_VERSION:=1.5
-+LIBGPG_ERROR_VERSION:=1.8
- LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
--LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
--LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
--LIBGPG_ERROR_DESTDIR:=usr/lib
--LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
+-LINKS_VERSION:=0.99pre9-no-ssl
++LINKS_VERSION:=1.01pre1-no-ssl
+ LINKS_SITE:=http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/download/no-ssl
+ LINKS_SOURCE:=links-$(LINKS_VERSION).tar.gz
+-LINKS_DIR:=$(BUILD_DIR)/links-$(LINKS_VERSION)
  
--$(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
--	$(call DOWNLOAD,$(LIBGPG_ERROR_SITE),$(LIBGPG_ERROR_SOURCE))
-+LIBGPG_ERROR_LIBTOOL_PATCH = NO
-+LIBGPG_ERROR_INSTALL_STAGING = YES
+-$(DL_DIR)/$(LINKS_SOURCE):
+-	$(call DOWNLOAD,$(LINKS_SITE),$(LINKS_SOURCE))
++LINKS_CONF_OPT = --localstatedir=/tmp
  
--$(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
--	$(CONFIG_UPDATE) $(LIBGPG_ERROR_DIR)
--	touch $(LIBGPG_ERROR_DIR)/.source
+-links-source: $(DL_DIR)/$(LINKS_SOURCE)
++define LINKS_INSTALL_TARGET_CMDS
++	install -c $(@D)/links $(TARGET_DIR)/usr/bin/links
++endef
+ 
+-$(LINKS_DIR)/.unpacked: $(DL_DIR)/$(LINKS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LINKS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LINKS_DIR)/.unpacked
 -
--$(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
--	(cd $(LIBGPG_ERROR_DIR); rm -f config.cache; \
+-$(LINKS_DIR)/.configured: $(LINKS_DIR)/.unpacked
+-	(cd $(LINKS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -62,48 +64,41 @@ index 0b513ff..89ff24c 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
+-		--localstatedir=/tmp \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
 -		$(DISABLE_NLS) \
 -	)
--	touch $(LIBGPG_ERROR_DIR)/.configured
+-	touch $(LINKS_DIR)/.configured
 -
--$(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY): $(LIBGPG_ERROR_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LIBGPG_ERROR_DIR)
+-$(LINKS_DIR)/links: $(LINKS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LINKS_DIR)
+-	$(STRIPCMD) $(LINKS_DIR)/links
 -
--$(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgpg-error.la
+-$(TARGET_DIR)/usr/bin/links: $(LINKS_DIR)/links
+-	install -c $(LINKS_DIR)/links $(TARGET_DIR)/usr/bin/links
 -
--$(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
--	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)
+-links-clean:
+-	-$(MAKE) -C $(LINKS_DIR) clean
+-	rm -f $(TARGET_DIR)/usr/bin/links
 -
--libgpg-error: $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
+-links-dirclean:
+-	rm -rf $(LINKS_DIR)
 -
--libgpg-error-source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
--
--libgpg-error-clean:
--	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
--	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
--	rm -f $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)\*
--
--libgpg-error-dirclean:
--	rm -rf $(LIBGPG_ERROR_DIR)
+-links: $(TARGET_DIR)/usr/bin/links
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBGPG_ERROR),y)
--TARGETS+=libgpg-error
+-ifeq ($(BR2_PACKAGE_LINKS),y)
+-TARGETS+=links
 -endif
-+$(eval $(call AUTOTARGETS,package,libgpg-error))
++$(eval $(call AUTOTARGETS,package,links))
 -- 
 1.7.0.4
