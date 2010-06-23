@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 23 Jun 2010 11:27:29 +0200
-Subject: [Buildroot] [git commit master 1/1] linux: add support for
-	linux26-{menuconfig, xconfig, gconfig} targets
-Message-ID: <20100623092837.0FE6781886@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Remove now unused Config.in for
+	kernel selection
+Message-ID: <20100623092837.7163581886@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +10,73 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4944e8c883efd0e11cc9e7585905e89941eb825b
+commit: http://git.buildroot.net/buildroot/commit/?id=7b7b4260966a5d991b1dabc82c792fbecd77c63a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These targets allow the user to customize the configuration of the
-Linux kernel. After changing the kernel configuration, the next time
-the user runs "make", the kernel is rebuilt to take into account the
-new configuration (not rebuilt from scratch).
+It's now linux/Config.in that allows to configure the kernel
+configuration/compilation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ target/Config.in |   50 --------------------------------------------------
+ 1 files changed, 0 insertions(+), 50 deletions(-)
+ delete mode 100644 target/Config.in
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 71d9616..d1f1842 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -98,8 +98,9 @@ endif
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig
- 	$(Q)touch $@
- 
--# Compilation
--$(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured
-+# Compilation. We make sure the kernel gets rebuilt when the
-+# configuration has changed.
-+$(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/.config
- 	@$(call MESSAGE,"Compiling kernel")
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) $(LINUX26_IMAGE_NAME)
- 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
-@@ -123,6 +124,9 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 
- linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
- 
-+linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
-+	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
-+
- ifeq ($(BR2_LINUX_KERNEL),y)
- TARGETS+=linux26
- endif
+diff --git a/target/Config.in b/target/Config.in
+deleted file mode 100644
+index 2d96793..0000000
+--- a/target/Config.in
++++ /dev/null
+@@ -1,50 +0,0 @@
+-menu "Kernel"
+-choice
+-	prompt "Kernel type"
+-	default BR2_KERNEL_none
+-
+-config BR2_KERNEL_none
+-	bool "none"
+-	help
+-	  Do not build a kernel
+-
+-config BR2_KERNEL_LINUX_ADVANCED
+-	bool "linux (Advanced configuration)"
+-	select BR2_PACKAGE_LINUX
+-	help
+-	  The Linux kernel - Advanced Configuration.
+-	  http://www.kernel.org/
+-
+-	  Note: Requires kernel-headers >= 2.6.19 since the other
+-	        kernel headers are just that (headers) and not full
+-	        kernels. This is a feature.
+-
+-# The kernel with the same version as linux headers cannot be compiled
+-# when using an external toolchain, because the linux headers are not
+-# handled by Buildroot in this case.
+-if BR2_TOOLCHAIN_BUILDROOT
+-
+-config BR2_KERNEL_LINUX
+-	bool "linux (Same version as linux headers)"
+-	select BR2_PACKAGE_LINUX
+-	help
+-	  The Linux kernel.
+-	  http://www.kernel.org/
+-
+-	  Note: Requires kernel-headers >= 2.6.19 since the other
+-	        kernel headers are just that (headers) and not full
+-	        kernels. This is a feature.
+-
+-endif
+-
+-endchoice
+-
+-config BR2_PACKAGE_LINUX
+-	bool
+-
+-if BR2_PACKAGE_LINUX
+-source "target/linux/Config.in"
+-source "target/linux/Config.in.advanced"
+-endif
+-
+-endmenu
 -- 
 1.7.1
