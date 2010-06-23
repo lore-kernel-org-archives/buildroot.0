@@ -1,37 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Jun 2010 23:13:48 +0200
-Subject: [Buildroot] [git commit master 1/1] Makefile.autotools.in fix typo
-	(s/extrators/extractors/)
-Message-ID: <20100623211450.25BE88177D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 Jun 2010 23:14:53 +0200
+Subject: [Buildroot] [git commit master 1/1] Makefile.package.in: Add
+	support for *.tbz2 package archives
+In-Reply-To: <201006231611.48363.minimod@morethan.org> (Michael S. Zick's
+	message of "Wed, 23 Jun 2010 16:11:45 -0500")
+References: <20100623210706.866168188C@busybox.osuosl.org>
+	<201006231611.48363.minimod@morethan.org>
+Message-ID: <8763195u42.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d39ca39269b340cfc9a1618f470543db91565cba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Michael> On Wed June 23 2010, Peter Korsgaard wrote:
+ >> extrators
 
-Noticed by Michael S. Zick.
+ Michael> ???
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Heh, will fix.
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 2769707..16ce16a 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -55,7 +55,7 @@ define KCONFIG_DISABLE_OPT
-        echo "# $(1) is not set" >> $(2)
- endef
- 
--# Define extrators for different archive suffixes
-+# Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
- INFLATE.gz   = $(ZCAT)
- INFLATE.tbz  = $(BZCAT)
 -- 
-1.7.1
+Bye, Peter Korsgaard
