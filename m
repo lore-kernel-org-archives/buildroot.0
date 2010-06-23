@@ -1,51 +1,46 @@
-From: Cristi Magherusan <Cristi.Magherusan@net.utcluj.ro>
-Date: Wed, 23 Jun 2010 21:06:20 +0300
-Subject: [Buildroot] package/customize
-In-Reply-To: <0D753D10438DA54287A00B027084269763716C4C12@AUSP01VMBX24.collaborationhost.net>
-References: <0D753D10438DA54287A00B027084269763716C4C12@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <1277316380.24680.10.camel@ufo>
+From: Darcy L. Watkins <dwatkins@tranzeo.com>
+Date: Wed, 23 Jun 2010 11:25:45 -0700
+Subject: [Buildroot] [May15 patch 12/12] netsnmp: disable build with
+ external toolchain
+In-Reply-To: <1277307031.18561.19.camel@localhost.localdomain>
+References: <1277216184.23331.8.camel@localhost.localdomain>
+	<1277307031.18561.19.camel@localhost.localdomain>
+Message-ID: <1277317545.21423.117.camel@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2010-06-23 at 12:03 -0500, H Hartley Sweeten wrote:
-> Hello all,
-> 
-> Is there a way to tag the package/customize directory so that a 
-> 'git pull' will ignore it?  I use that directory as a hacking point
-> to test/add packages that are not currently in buildroot.  Right
-> now, every time I do a git pull I have to copy that directory out
-> of my tree and restore the original one before I do a 'git pull' to
-> update my tree.
-> 
-> Thanks,
-> Hartley
-> _______________________________________________
-Hi Hartley,
+Hello,
 
-Why don't you create a feature branches for your stuff, where you can
-make commits freely, and track the upstream in another branch. 
+The patch below appears to get net-snmp to build OK (at least in my
+environment using crosstool-ng).  It is a bit of a hack/kludge since it
+is basically saying, "just in case you don't understand the --sysroot
+directive, here are some redundant -I and -L directives to include with
+CFLAGS and LDFLAGS to point to the staging area includes and libraries."
 
-Then when one of your feature branches is complete, make a pull request
-or send a patch for inclusion in mainline, and delete it after the code
-was merged.
-
-Here's a small document that describes such a workflow:
-http://www-cs-students.stanford.edu/~blynn/gitmagic/ch04.html
 
 Regards,
-Cristi
 
--- 
-Cristi M?gheru?an, alumnus System/Network Engineer
-Technical University of Cluj-Napoca, Romania
-http://cc.utcluj.ro  +40264 401247
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100623/ccb83d24/attachment.pgp>
+Darcy
+
+------
+
+
+signed-off-by: Darcy Watkins <dwatkins@tranzeo.com>
+Index: buildroot-2010.02_x86/package/Makefile.in
+===================================================================
+--- buildroot-2010.02_x86.orig/package/Makefile.in
++++ buildroot-2010.02_x86/package/Makefile.in
+@@ -92,8 +92,10 @@ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ #########################################################################
+ else
+ TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) --sysroot $(STAGING_DIR)/
++TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ TARGET_LDFLAGS=--sysroot $(STAGING_DIR)/
++TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ endif
+ #########################################################################
+ #ifeq ($(BR2_ROOTFS_SUFFIX),)
