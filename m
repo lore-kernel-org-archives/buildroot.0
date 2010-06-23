@@ -1,38 +1,51 @@
 From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
-Date: Thu, 24 Jun 2010 00:25:10 +0200
-Subject: [Buildroot] [PATCH v3] package: Add support for clex
-	filemanager (v 3.19)
-In-Reply-To: <201005141421.51373.PeterHuewe@gmx.de>
-References: <201005130115.00927.PeterHuewe@gmx.de>
-	<20100514104822.0bda583a@surf>
-	<201005141421.51373.PeterHuewe@gmx.de>
-Message-ID: <201006240025.11012.PeterHuewe@gmx.de>
+Date: Thu, 24 Jun 2010 00:53:12 +0200
+Subject: [Buildroot] nbd fails to compile with /usr/bin/klcc: unknown
+	option: --sysroot=
+Message-ID: <201006240053.12651.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Freitag 14 Mai 2010 14:21:51 schrieb Peter H?we:
-> From: Peter Huewe <peterhuewe@gmx.de>
-> 
-> Clex is a free and open source ncurses filemanager.
-> (somewhat similar to a lightweight midnight commander)
-> 
-> "It displays directory contents including the file status
-> details and provides features like command history, filename
-> insertion, or name completion in order to help users to create
-> commands to be executed by the shell."
-> 
-> For more information visit http://www.clex.sk/about.html
-> 
-> This patch adds version 3.19 to the buildroot buildsystem.
-> 
-> Tested on and compiled with atmel ngw100_defconfig.
-> 
-> Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
+Hi,
 
-Any updates on the merge of this one?
+the atngw100_defconfig has nbd client and server enabled, and unfortunately it fails to compile, with the message
+
+/usr/bin/klcc: unknown option: --sysroot=/avr/buildroot/output/staging/
+
+$klcc --version
+x86_64-pc-linux-gnu-gcc (GCC) 4.1.2 (Gentoo 4.1.2 p1.3)
+
+How can I fix this ? - Unfortunately I'm not that into the whole buildroot system (yet, but I'd like to learn and contribute to it).
 
 Thanks,
 Peter
+
+Here are the last few lines:
+
+
+/usr/bin/klcc -DHAVE_CONFIG_H -I.     -Os -pipe -Os  -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -
+I/avr/buildroot/output/staging/usr/include -I/avr/buildroot/output/staging/include --sysroot=/avr/buildroot/output/staging/ -isysroot /avr/buildroot/output/staging -c -o 
+knbd_client-nbd-client.o nbd-client.c
+/avr/buildroot/output/staging/usr/bin/avr32-unknown-linux-uclibc-gcc -Os -pipe -Os  -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
+D_FILE_OFFSET_BITS=64 -I/avr/buildroot/output/staging/usr/include -I/avr/buildroot/output/staging/include --sysroot=/avr/buildroot/output/staging/ -isysroot 
+/avr/buildroot/output/staging -DHAVE_CONFIG_H -I.     -Os -pipe -Os  -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -
+D_FILE_OFFSET_BITS=64 -I/avr/buildroot/output/staging/usr/include -I/avr/buildroot/output/staging/include --sysroot=/avr/buildroot/output/staging/ -isysroot 
+/avr/buildroot/output/staging -MT nbd-client.o -MD -MP -MF .deps/nbd-client.Tpo -c -o nbd-client.o nbd-client.c
+/usr/bin/klcc: unknown option: --sysroot=/avr/buildroot/output/staging/
+make[2]: *** [knbd_client-nbd-client.o] Fehler 25
+make[2]: *** Warte auf noch nicht beendete Prozesse...
+In file included from nbd-client.c:17:
+lfs.h:7:1: warning: "_LARGEFILE_SOURCE" redefined
+<command-line>: warning: this is the location of the previous definition
+In file included from nbd-server.c:56:
+lfs.h:7:1: warning: "_LARGEFILE_SOURCE" redefined
+<command-line>: warning: this is the location of the previous definition
+mv -f .deps/nbd-client.Tpo .deps/nbd-client.Po
+mv -f .deps/nbd_server-nbd-server.Tpo .deps/nbd_server-nbd-server.Po
+make[2]: Leaving directory `/avr/buildroot/output/build/nbd-2.9.11'
+make[1]: *** [all] Fehler 2
+make[1]: Leaving directory `/avr/buildroot/output/build/nbd-2.9.11'
+make: *** [/avr/buildroot/output/build/nbd-2.9.11/.stamp_built] Fehler 2
