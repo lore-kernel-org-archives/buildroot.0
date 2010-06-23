@@ -1,46 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jun 2010 10:46:13 +0200
-Subject: [Buildroot] On strip and debugging symbols
-In-Reply-To: <874ogu6vsv.fsf@macbook.be.48ers.dk>
-References: <0D753D10438DA54287A00B027084269763715D5D31@AUSP01VMBX24.collaborationhost.net>
-	<87hbkv6sej.fsf@macbook.be.48ers.dk>
-	<0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
-	<87d3vi7qqq.fsf@macbook.be.48ers.dk> <20100623091224.266d1030@surf>
-	<874ogu6vsv.fsf@macbook.be.48ers.dk>
-Message-ID: <20100623104613.78fe0d97@surf>
+Date: Wed, 23 Jun 2010 11:20:22 +0200
+Subject: [Buildroot] Host libraries - status
+In-Reply-To: <20100623090015.199dd823@surf>
+References: <201006230045.23043.yann.morin.1998@anciens.enib.fr>
+	<20100623090015.199dd823@surf>
+Message-ID: <20100623112022.4bb9cab0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Jun 2010 09:40:48 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Hello,
 
-> As mentioned before, the problem with this is that people have
-> historically expected that they can just export
-> PATH=path/to/staging/usr/bin:$PATH and use the cross compiler outside
-> buildroot. If you start installing target binaries into
-> staging/usr/bin then this would break horrible.
+On Wed, 23 Jun 2010 09:00:15 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> > - fix fakeroot, so it works with rpath. Might require a huge amount
+> > of work.
 > 
-> (Yes, I know people should atleast append it to the path (export
-> PATH=$PATH:path/to/staging/usr/bin), but people will forget and it
-> used to work.
+> I'm not sure what the exact problem with fakeroot is. Maybe we should
+> dig into this.
 
-As mentionned before, adding $(STAGING_DIR)/usr/bin to the path is just
-wrong. The possible solutions to this are :
+Ok, I took the time to investigate this. I tried:
 
- * Install the toolchain outside of $(STAGING_DIR) and then re-use what
-   we do for external toolchains, and then tell people to not add
-   $(STAGING_DIR)/usr/bin to their PATH, but rather the location where
-   the toolchain was installed. This has the added benefit that
-   $(STAGING_DIR) would not contain binaries compiled for the host,
-   mixed with binaries compiled for the target.
+HOST_LDFLAGS += -Wl,-rpath -Wl,$(HOST_DIR)/usr/lib
 
- * Keep the toolchain binaries in $(STAGING_DIR), but create shell
-   wrappers installed in another directory for the toolchain binaries,
-   and tell people to add the directory where these wrappers are
-   installed to their PATH.
+and I could reproduce the fakeroot problem: "preload library not
+found". This happens because libfakeroot.so doesn't get compiled. This
+in turn happens because ./configure detects that LD doesn't support
+shared libraries, which in turn happens because ./configure detects
+that LD isn't GNU LD, which happens because for ld, "-Wl,-rpath
+-Wl,$(HOST_DIR)/usr/lib" are incorrect options. And it's true, since
+the ld option is just "-rpath", the -Wl thing being here to tell gcc to
+pass these options down to ld.
+
+So, I decided to try :
+
+HOST_LDFLAGS += -rpath $(HOST_DIR)/usr/lib
+
+unfortunately, it breaks host-genext2fs, because this stupid guy passes
+those LDFLAGS directly to gcc :
+
+configure:2562: checking for C compiler default output file name
+configure:2589: /usr/bin/gcc -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include -I/home/test/outputs/arm-2009q
+3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include  -L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/lib -L/home/test/outputs
+/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib -rpath /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib conftest.c  >&5
+gcc: /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib: No such file or directory
+gcc: unrecognized option '-rpath'
+
+I have therefore looked at the ./configure options and environment we
+are passing to host-genext2fs ./configure script, and we *never* pass
+the -rpath option in CFLAGS. Here is the full command line that is used
+to run host-genext2fs ./configure, formatted for readability:
+
+(
+cd /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/build/host-genext2fs-1.4/ && rm -rf config.cache;
+PATH=/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/bin:/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/games
+AR="/usr/bin/ar"
+AS="/usr/bin/as"
+LD="/usr/bin/ld -L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/lib -L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib -rpath /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib"
+NM="/usr/bin/nm"
+CC="/usr/bin/gcc -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+GCC="/usr/bin/gcc -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+CXX="/usr/bin/g++ -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+CPP="/usr/bin/cpp -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+AR_FOR_BUILD="/usr/bin/ar"
+AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/bin/gcc"
+GCC_FOR_BUILD="/usr/bin/gcc"
+CXX_FOR_BUILD="/usr/bin/g++"
+LD_FOR_BUILD="/usr/bin/ld"
+FC_FOR_BUILD="/usr/bin/ld"
+CFLAGS_FOR_BUILD="-I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+CXXFLAGS_FOR_BUILD="-I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+LDFLAGS_FOR_BUILD="-L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/lib -L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib -rpath /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib"
+FCFLAGS_FOR_BUILD=""
+AR_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-ar"
+AS_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-as"
+CC_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-gcc"
+LD_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-ld"
+NM_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-nm"
+RANLIB_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-ranlib"
+STRIP_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-strip"
+OBJCOPY_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-objcopy"
+OBJDUMP_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-objdump"
+DEFAULT_ASSEMBLER="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-as"
+DEFAULT_LINKER="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-ld"
+ORIGINAL_AS_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-as"
+ORIGINAL_LD_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-ld"
+ORIGINAL_NM_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-nm"
+ORIGINAL_OBJDUMP_FOR_TARGET="/home/test/arm-2009q3/bin/arm-none-linux-gnueabi-objdump"
+PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/bin/pkg-config"
+PKG_CONFIG_LIBDIR="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib/pkgconfig"
+PERLLIB="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib/perl"
+LD_LIBRARY_PATH="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib:"
+CFLAGS="-I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/include -I/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/include"
+LDFLAGS="-L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/lib -L/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib -rpath /home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr/lib"
+./configure
+--verbose
+--prefix="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/usr"
+--sysconfdir="/home/test/outputs/arm-2009q3-2010-06-23-08-58-40/output/host/etc"
+)
+
+Do you see anything wrong here ?
+
+Regards,
 
 Thomas
 -- 
