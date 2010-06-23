@@ -1,48 +1,38 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Thu, 24 Jun 2010 08:09:48 +1000
-Subject: [Buildroot] Storing board configuration ?
-In-Reply-To: <87eifx5uo0.fsf@macbook.be.48ers.dk>
-References: <20100620143535.38416ef6@surf> <87eifx5uo0.fsf@macbook.be.48ers.dk>
-Message-ID: <000c01cb1320$ccaf68c0$660e3a40$@pauljones.id.au>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Thu, 24 Jun 2010 00:25:10 +0200
+Subject: [Buildroot] [PATCH v3] package: Add support for clex
+	filemanager (v 3.19)
+In-Reply-To: <201005141421.51373.PeterHuewe@gmx.de>
+References: <201005130115.00927.PeterHuewe@gmx.de>
+	<20100514104822.0bda583a@surf>
+	<201005141421.51373.PeterHuewe@gmx.de>
+Message-ID: <201006240025.11012.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Peter Korsgaard
-> Sent: Thursday, 24 June 2010 7:03 AM
-> To: Thomas Petazzoni
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] Storing board configuration ?
+Am Freitag 14 Mai 2010 14:21:51 schrieb Peter H?we:
+> From: Peter Huewe <peterhuewe@gmx.de>
 > 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-
-> electrons.com> writes:
+> Clex is a free and open source ncurses filemanager.
+> (somewhat similar to a lightweight midnight commander)
 > 
-> Hi,
+> "It displays directory contents including the file status
+> details and provides features like command history, filename
+> insertion, or name completion in order to help users to create
+> commands to be executed by the shell."
 > 
->  Thomas> But if we do that, we would have to modify the main Makefile so
-> that  Thomas> when an user does "make foobar_defconfig",
-> configs/foobar_defconfig is  Thomas> used and for all options
-non-specified
-> in the defconfig, the default  Thomas> options would be choosen. So
-> something like :
+> For more information visit http://www.clex.sk/about.html
 > 
->  Thomas> %_defconfig: $(TOPDIR)/configs/%_defconfig
->  Thomas>         cp $^ .config
->  Thomas>         @yes "" | $(MAKE) oldconfig
+> This patch adds version 3.19 to the buildroot buildsystem.
 > 
->  Thomas> What do you think about this ?
+> Tested on and compiled with atmel ngw100_defconfig.
 > 
-> I like it. It will ofcourse hide any new questions you might have wanted
-to get
-> asked about, but that's not so bad.
+> Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
 
+Any updates on the merge of this one?
 
-We could add another command like make foobar_defconfig_ask to cover both
-cases.
-
-
-Paul.
+Thanks,
+Peter
