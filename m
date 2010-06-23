@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 23 Jun 2010 11:27:29 +0200
-Subject: [Buildroot] [git commit master 1/1] module-init-tools: don't build
-	documentation
-Message-ID: <20100623092837.E114981886@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] integrator926: use standard
+	uclibc config
+Message-ID: <20100623092838.50F9E81886@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +10,290 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=503f8c041d7791d89538b214a0df1a946c4f7586
+commit: http://git.buildroot.net/buildroot/commit/?id=6d34f1d3bfc22eb60d9bc9a1ff032dfd31945610
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We don't have docbook2man in buildroot, and the build breaks if you
-have it on the host, but in an incompatible version (like on my machine).
+I don't see any reason to use a custom config here.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                        |    5 +++--
- package/module-init-tools/module-init-tools.mk |    2 ++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ configs/integrator926_defconfig                  |    2 +-
+ configs/integrator926_huge_defconfig             |    2 +-
+ target/device/ARMLTD/uClibc.integrator926.config |  240 ----------------------
+ 3 files changed, 2 insertions(+), 242 deletions(-)
+ delete mode 100644 target/device/ARMLTD/uClibc.integrator926.config
 
-diff --git a/CHANGES b/CHANGES
-index c06b3cc..5f84453 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,8 +15,9 @@
- 
- 	Updated/fixed packages: busybox, cdrkit, file, gawk,
- 	gstreamer, intltool, ipsec-tools, iptables, libart, libidn,
--	lmbench, lrzsz, ncurses, netperf, ntfsprogs, openssl, php, qt,
--	sqlite, squashfs, tn5250, usbutils, xkeyboard-config
-+	lmbench, lrzsz, ncurses, module-init-tools, netperf,
-+	ntfsprogs, openssl, php, qt, sqlite, squashfs, tn5250,
-+	usbutils, xkeyboard-config
- 
- 	Removed packages: modutils
- 
-diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
-index ea7c014..5dfdaad 100644
---- a/package/module-init-tools/module-init-tools.mk
-+++ b/package/module-init-tools/module-init-tools.mk
-@@ -6,6 +6,7 @@
- MODULE_INIT_TOOLS_VERSION=3.11
- MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
- MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
-+MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
- MODULE_INIT_TOOLS_CONF_OPT = \
- 	--disable-static-utils \
- 	--disable-builddir \
-@@ -15,6 +16,7 @@ MODULE_INIT_TOOLS_CONF_OPT = \
- # configure.ac and Makefile.am
- MODULE_INIT_TOOLS_AUTORECONF=YES
- HOST_MODULE_INIT_TOOLS_AUTORECONF=YES
-+HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
- 
- $(eval $(call AUTOTARGETS,package,module-init-tools))
- $(eval $(call AUTOTARGETS,package,module-init-tools,host))
+diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
+index cb83023..815d259 100644
+--- a/configs/integrator926_defconfig
++++ b/configs/integrator926_defconfig
+@@ -158,7 +158,7 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ BR2_UCLIBC_VERSION_0_9_30=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_CONFIG="target/device/ARMLTD/uClibc.integrator926.config"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_ENABLE_LOCALE is not set
+ # BR2_PTHREADS_NONE is not set
+ # BR2_PTHREADS is not set
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+index f9d05c0..9b68258 100644
+--- a/configs/integrator926_huge_defconfig
++++ b/configs/integrator926_huge_defconfig
+@@ -158,7 +158,7 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ BR2_UCLIBC_VERSION_0_9_30=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_CONFIG="target/device/ARMLTD/uClibc.integrator926.config"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+ # BR2_ENABLE_LOCALE is not set
+ # BR2_PTHREADS_NONE is not set
+ # BR2_PTHREADS is not set
+diff --git a/target/device/ARMLTD/uClibc.integrator926.config b/target/device/ARMLTD/uClibc.integrator926.config
+deleted file mode 100644
+index a1b70b5..0000000
+--- a/target/device/ARMLTD/uClibc.integrator926.config
++++ /dev/null
+@@ -1,240 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Version: 0.9.30
+-# Thu Jan 29 20:41:39 2009
+-#
+-# TARGET_alpha is not set
+-TARGET_arm=y
+-# TARGET_avr32 is not set
+-# TARGET_bfin is not set
+-# TARGET_cris is not set
+-# TARGET_e1 is not set
+-# TARGET_frv is not set
+-# TARGET_h8300 is not set
+-# TARGET_hppa is not set
+-# TARGET_i386 is not set
+-# TARGET_i960 is not set
+-# TARGET_ia64 is not set
+-# TARGET_m68k is not set
+-# TARGET_microblaze is not set
+-# TARGET_mips is not set
+-# TARGET_nios is not set
+-# TARGET_nios2 is not set
+-# TARGET_powerpc is not set
+-# TARGET_sh is not set
+-# TARGET_sh64 is not set
+-# TARGET_sparc is not set
+-# TARGET_v850 is not set
+-# TARGET_vax is not set
+-# TARGET_x86_64 is not set
+-# TARGET_xtensa is not set
+-
+-#
+-# Target Architecture Features and Options
+-#
+-TARGET_ARCH="arm"
+-FORCE_OPTIONS_FOR_ARCH=y
+-# CONFIG_ARM_OABI is not set
+-CONFIG_ARM_EABI=y
+-# USE_BX is not set
+-# CONFIG_GENERIC_ARM is not set
+-# CONFIG_ARM610 is not set
+-# CONFIG_ARM710 is not set
+-# CONFIG_ARM7TDMI is not set
+-# CONFIG_ARM720T is not set
+-# CONFIG_ARM920T is not set
+-# CONFIG_ARM922T is not set
+-CONFIG_ARM926T=y
+-# CONFIG_ARM10T is not set
+-# CONFIG_ARM1136JF_S is not set
+-# CONFIG_ARM1176JZ_S is not set
+-# CONFIG_ARM1176JZF_S is not set
+-# CONFIG_ARM_CORTEX_M3 is not set
+-# CONFIG_ARM_CORTEX_M1 is not set
+-# CONFIG_ARM_SA110 is not set
+-# CONFIG_ARM_SA1100 is not set
+-# CONFIG_ARM_XSCALE is not set
+-# CONFIG_ARM_IWMMXT is not set
+-TARGET_SUBARCH=""
+-
+-#
+-# Using ELF file format
+-#
+-ARCH_ANY_ENDIAN=y
+-ARCH_LITTLE_ENDIAN=y
+-# ARCH_WANTS_BIG_ENDIAN is not set
+-ARCH_WANTS_LITTLE_ENDIAN=y
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
+-UCLIBC_HAS_FLOATS=y
+-# UCLIBC_HAS_FPU is not set
+-UCLIBC_HAS_SOFT_FLOAT=y
+-DO_C99_MATH=y
+-# UCLIBC_HAS_FENV is not set
+-KERNEL_HEADERS="/home/ulf/projects/Buildroot/20090129/buildroot/toolchain_build_arm/linux/include"
+-HAVE_DOT_CONFIG=y
+-
+-#
+-# General Library Settings
+-#
+-# HAVE_NO_PIC is not set
+-DOPIC=y
+-# ARCH_HAS_NO_SHARED is not set
+-# ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+-# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+-LDSO_LDD_SUPPORT=y
+-LDSO_CACHE_SUPPORT=y
+-# LDSO_PRELOAD_FILE_SUPPORT is not set
+-LDSO_BASE_FILENAME="ld.so"
+-# UCLIBC_STATIC_LDCONFIG is not set
+-# LDSO_RUNPATH is not set
+-UCLIBC_CTOR_DTOR=y
+-# LDSO_GNU_HASH_SUPPORT is not set
+-# HAS_NO_THREADS is not set
+-UCLIBC_HAS_THREADS=y
+-# PTHREADS_DEBUG_SUPPORT is not set
+-LINUXTHREADS_OLD=y
+-UCLIBC_HAS_SYSLOG=y
+-# UCLIBC_HAS_LFS is not set
+-# MALLOC is not set
+-# MALLOC_SIMPLE is not set
+-MALLOC_STANDARD=y
+-MALLOC_GLIBC_COMPAT=y
+-UCLIBC_DYNAMIC_ATEXIT=y
+-# COMPAT_ATEXIT is not set
+-# UCLIBC_SUSV3_LEGACY is not set
+-# UCLIBC_SUSV3_LEGACY_MACROS is not set
+-# UCLIBC_HAS_STUBS is not set
+-UCLIBC_HAS_SHADOW=y
+-# UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
+-UCLIBC_HAS_PTY=y
+-ASSUME_DEVPTS=y
+-# UNIX98PTY_ONLY is not set
+-UCLIBC_HAS_GETPT=y
+-UCLIBC_HAS_TM_EXTENSIONS=y
+-UCLIBC_HAS_TZ_CACHING=y
+-UCLIBC_HAS_TZ_FILE=y
+-UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+-
+-#
+-# Advanced Library Settings
+-#
+-UCLIBC_PWD_BUFFER_SIZE=256
+-UCLIBC_GRP_BUFFER_SIZE=256
+-
+-#
+-# Support various families of functions
+-#
+-UCLIBC_LINUX_MODULE_24=y
+-UCLIBC_LINUX_SPECIFIC=y
+-UCLIBC_HAS_GNU_ERROR=y
+-UCLIBC_BSD_SPECIFIC=y
+-UCLIBC_HAS_BSD_ERR=y
+-# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
+-# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
+-# UCLIBC_NTP_LEGACY is not set
+-# UCLIBC_SV4_DEPRECATED is not set
+-UCLIBC_HAS_REALTIME=y
+-UCLIBC_HAS_ADVANCED_REALTIME=y
+-UCLIBC_HAS_EPOLL=y
+-UCLIBC_HAS_XATTR=y
+-UCLIBC_HAS_PROFILING=y
+-UCLIBC_HAS_CRYPT_IMPL=y
+-UCLIBC_HAS_CRYPT=y
+-UCLIBC_HAS_NETWORK_SUPPORT=y
+-UCLIBC_HAS_SOCKET=y
+-UCLIBC_HAS_IPV4=y
+-# UCLIBC_HAS_IPV6 is not set
+-# UCLIBC_HAS_RPC is not set
+-# UCLIBC_USE_NETLINK is not set
+-# UCLIBC_HAS_BSD_RES_CLOSE is not set
+-
+-#
+-# String and Stdio Support
+-#
+-UCLIBC_HAS_STRING_GENERIC_OPT=y
+-UCLIBC_HAS_STRING_ARCH_OPT=y
+-UCLIBC_HAS_CTYPE_TABLES=y
+-UCLIBC_HAS_CTYPE_SIGNED=y
+-# UCLIBC_HAS_CTYPE_UNSAFE is not set
+-UCLIBC_HAS_CTYPE_CHECKED=y
+-# UCLIBC_HAS_CTYPE_ENFORCED is not set
+-# UCLIBC_HAS_WCHAR is not set
+-# UCLIBC_HAS_LOCALE is not set
+-UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-# UCLIBC_HAS_GLIBC_CUSTOM_PRINTF is not set
+-# USE_OLD_VFPRINTF is not set
+-UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+-UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
+-UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
+-UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
+-# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
+-# UCLIBC_HAS_STDIO_GETC_MACRO is not set
+-# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
+-UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+-UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+-UCLIBC_HAS_PRINTF_M_SPEC=y
+-UCLIBC_HAS_ERRNO_MESSAGES=y
+-# UCLIBC_HAS_SYS_ERRLIST is not set
+-UCLIBC_HAS_SIGNUM_MESSAGES=y
+-# UCLIBC_HAS_SYS_SIGLIST is not set
+-UCLIBC_HAS_GNU_GETOPT=y
+-# UCLIBC_HAS_GNU_GETSUBOPT is not set
+-
+-#
+-# Big and Tall
+-#
+-UCLIBC_HAS_REGEX=y
+-# UCLIBC_HAS_REGEX_OLD is not set
+-UCLIBC_HAS_FNMATCH=y
+-# UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
+-# UCLIBC_HAS_FTW is not set
+-UCLIBC_HAS_GLOB=y
+-UCLIBC_HAS_GNU_GLOB=y
+-
+-#
+-# Library Installation Options
+-#
+-SHARED_LIB_LOADER_PREFIX="/lib"
+-RUNTIME_PREFIX="/"
+-DEVEL_PREFIX="/usr/"
+-
+-#
+-# Security options
+-#
+-# UCLIBC_BUILD_PIE is not set
+-# UCLIBC_HAS_ARC4RANDOM is not set
+-# HAVE_NO_SSP is not set
+-# UCLIBC_HAS_SSP is not set
+-UCLIBC_BUILD_RELRO=y
+-UCLIBC_BUILD_NOW=y
+-# UCLIBC_BUILD_NOEXECSTACK is not set
+-
+-#
+-# uClibc development/debugging options
+-#
+-CROSS_COMPILER_PREFIX="/home/ulf/projects/Buildroot/20090129/buildroot/build_arm/staging_dir/usr/bin/arm-linux-uclibcgnueabi-"
+-UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DODEBUG_PT is not set
+-DOSTRIP=y
+-# DOASSERTS is not set
+-# SUPPORT_LD_DEBUG is not set
+-# SUPPORT_LD_DEBUG_EARLY is not set
+-# UCLIBC_MALLOC_DEBUGGING is not set
+-WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
+-# DOMULTI is not set
+-# UCLIBC_MJN3_ONLY is not set
 -- 
 1.7.1
