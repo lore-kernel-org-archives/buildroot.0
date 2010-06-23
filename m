@@ -1,47 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jun 2010 09:04:29 +0200
-Subject: [Buildroot] Suggestion for config menu help for path values
-In-Reply-To: <hvr8t1$io0$1@dough.gmane.org>
-References: <hvr8t1$io0$1@dough.gmane.org>
-Message-ID: <20100623090429.539f3c0f@surf>
+Date: Wed, 23 Jun 2010 09:12:24 +0200
+Subject: [Buildroot] On strip and debugging symbols
+In-Reply-To: <87d3vi7qqq.fsf@macbook.be.48ers.dk>
+References: <0D753D10438DA54287A00B027084269763715D5D31@AUSP01VMBX24.collaborationhost.net>
+	<87hbkv6sej.fsf@macbook.be.48ers.dk>
+	<0D753D10438DA54287A00B027084269763715D651B@AUSP01VMBX24.collaborationhost.net>
+	<87d3vi7qqq.fsf@macbook.be.48ers.dk>
+Message-ID: <20100623091224.266d1030@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Jun 2010 21:10:57 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+On Tue, 22 Jun 2010 22:32:29 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> Just a suggestion for anytime somebody is working on the config menu
-> help for an option that allows a path to be entered: always specify in
-> the item's help whether an absolute path is required, and if not,
-> where the starting point is for a relative path.
-> 
-> For several different options, it's taken me many guesses to figure
-> out from what working direction a relative path should be referenced.
-> When each guess requires a build from-scratch, you can spend hours
-> trying to figure out what path value to enter for a particular script
-> or config file.
-> 
-> Right now I'm trying to figure out the CWD when the post-build script
-> is called, and I'll submit a help patch when I figure out the answer.
+> Anyway, this is what coreutils' install does, so we probably don't
+> have much chance for changing it. I have been pondering always doing
+> make install instead of install-strip as we always strip at the end
+> anyway.
 
-All Buildroot Makefiles are interpreted from the top Buildroot source
-directory, as we only use Makefile inclusion and not recursive make.
-So, in general, relative paths are interpreted relatively to the top
-Buildroot source directory.
+In the notes I have from our Buildroot Developer Day after FOSDEM in
+February :
 
-> Another source of confusion I've run into a few times are cases where
-> the title for a config item doesn't match up with either the config
-> variable name or the phrase commonly used elsewhere to refer to that
-> item.  For example, it takes a bit if digging to figure out that in
-> the config menus, what the documentation calls the "post-build
-> script", who's value is "BR2_ROOTFS_POST_BUILD_SCRIPT" is titled
-> "Custom script to run before packing files".
+ * Figure out if we can always build the packages in $(STAGING) *with*
+   debugging symbols. If so, make it the default. If not, make it an
+   option (location to be decided ?)
 
-Don't hesitate to point us those inconsistencies, and either submit a
-patch to fix them or ask us to do so :-)
+Therefore, I'd propose to add two options (which would replace the
+existing ENABLE_DEBUG knob) :
+
+ * ENABLE_DEBUG_IN_STAGING, which is enabled by default, and has the
+   effect of building all packages with '-g', and installing them
+   unstripped in $(STAGING_DIR). All *packages* would be installed in
+   STAGING, be there libraries or end-user applications, so we could
+   get rid of the <pkg>_INSTALL_STAGING and <pkg>_INSTALL_TARGET knobs.
+   Having the debugging symbols in $(STAGING_DIR) allows to use remote
+   debugging correctly. All packages are installed with
+   "DESTDIR=$(STAGING_DIR) install" and "DESTDIR=$(TARGET_DIR)
+   install", and only the stripping in $(TARGET_DIR) is done at a
+   global level. So we don't try to use install-strip anymore.
+
+ * ENABLE_DEBUG_IN_TARGET, which depends on ENABLE_DEBUG_IN_STAGING,
+   and is disabled by default. This would disable the stripping of
+   binaries on the target, so as to keep debugging symbols on the
+   target, in case someone wants to run/use gdb on the target.
+
+With this, we would have three cases :
+
+ * (ENABLE_DEBUG_IN_STAGING=y, ENABLE_DEBUG_IN_TARGET=n) which is the
+   default behaviour. Packages are built with debugging symbols, they
+   are kept in $(STAGING_DIR), removed in $(TARGET_DIR). Remote
+   debugging is possible. Target debugging is not.
+
+ * (ENABLE_DEBUG_IN_STAGING=n, ENABLE_DEBUG_IN_TARGET=n). In that case
+   packages are built without debugging symbols. Binaries are kept
+   unstripped in $(STAGING_DIR) and stripped in $(TARGET_DIR). Remote
+   and target debugging are not possible.
+
+ * (ENABLE_DEBUG_IN_STAGING=y, ENABLE_DEBUG_IN_TARGET=y). Packages are
+   built with debugging symbols, they are kept in $(STAGING_DIR) *and*
+   $(TARGET_DIR). Remote *and* target debugging are possible.
+
+Are there other cases not handled here that would be useful ?
 
 Regards,
 
