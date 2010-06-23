@@ -1,58 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 23 Jun 2010 14:48:14 +0200
-Subject: [Buildroot] Host libraries - status
-In-Reply-To: <20100623131800.35b2189f@surf>
-References: <201006230045.23043.yann.morin.1998@anciens.enib.fr>
-	<20100623112022.4bb9cab0@surf> <20100623131800.35b2189f@surf>
-Message-ID: <201006231448.15070.yann.morin.1998@anciens.enib.fr>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 23 Jun 2010 13:53:05 +0000 (UTC)
+Subject: [Buildroot] Suggestion for config menu help for path values
+References: <hvr8t1$io0$1@dough.gmane.org> <20100623090429.539f3c0f@surf>
+Message-ID: <hvt3k1$167$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 2010-06-23, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-On Wednesday 23 June 2010 112022 Thomas Petazzoni wrote:
-> So, I decided to try :
-> HOST_LDFLAGS += -rpath $(HOST_DIR)/usr/lib
-> unfortunately, it breaks host-genext2fs, because this stupid guy passes
-> those LDFLAGS directly to gcc :
+>> Right now I'm trying to figure out the CWD when the post-build script
+>> is called, and I'll submit a help patch when I figure out the answer.
+>
+> All Buildroot Makefiles are interpreted from the top Buildroot source
+> directory, as we only use Makefile inclusion and not recursive make.
+> So, in general, relative paths are interpreted relatively to the top
+> Buildroot source directory.
 
-Unfortunately, genext2fs is not the only sucker in this category. A lot
-of packages happen to use gcc as the frontend to ld, and mis-interpret
-things such as --fatal-warnings
+I had initially assumed that scripts belonged in the "scripts"
+directory.  That didn't work.  Then I tried the top of the source
+directory.  That didn't work either.  I finally figured out that the
+script path wasn't interpreted relative to a fixed point, but it was
+left up to the shell to find using the normal PATH mechanism (so it
+had to be ./filename rather than filename).
 
-On Wednesday 23 June 2010 131800 Thomas Petazzoni wrote:
-> With this + the HOST_LDFLAGS as shown above, my mkfontscale test case
-> is OK, and fakeroot continues to work properly. I managed to build a
-> X.org stack + ext2 filesystem for ARM correctly.
+I'll submit a patch to the docs.
 
-Hmm... That's great news, then!
+> Don't hesitate to point us those inconsistencies, and either submit a
+> patch to fix them or ask us to do so :-)
 
-I dwelved into it yesterday evening^Wnight, but mostly from a theoretical
-point of view. That is, I googled for such errors. :-/
-
-
-
-> Generally speaking, I think we shouldn't do:
->                 CC="$(HOSTCC) $(HOST_CFLAGS)" \
->                 GCC="$(HOSTCC) $(HOST_CFLAGS)" \
->                 CXX="$(HOSTCXX) $(HOST_CXXFLAGS)" \
->                 CPP="$(HOSTCPP) $(HOST_CFLAGS)" \
-> But only set CC="$(HOSTCC)", and pass CFLAGS in a separate variable.
-
-Ditto for GCC, GXX, CPP and LD, I guess. And ./configure just does honor the
-CPPFLAGS, CFLAGS, CXXFLAGS and LDFLAGS if given in the environmanet and/or
-on the command line, IIRC.
-
-Regards,
-Yann E. MORIN.
+I will.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Grant Edwards               grant.b.edwards        Yow! It's a lot of fun
+                                  at               being alive ... I wonder if
+                              gmail.com            my bed is made?!?
