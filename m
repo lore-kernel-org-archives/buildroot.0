@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 23 Jun 2010 11:27:29 +0200
-Subject: [Buildroot] [git commit master 1/1] Remove now unused Config.in for
-	kernel selection
-Message-ID: <20100623092837.7163581886@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] linux: adjust kernel config
+	according to the Buildroot configuration
+Message-ID: <20100623092836.D2D4D81886@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,73 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b7b4260966a5d991b1dabc82c792fbecd77c63a
+commit: http://git.buildroot.net/buildroot/commit/?id=100c09a53b8806b2281a93ad21744d26f68bcc6b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's now linux/Config.in that allows to configure the kernel
-configuration/compilation.
+We only adjust the configuration or ARM EABI and IPv6. The (more
+complicated) initramfs case is handled in a separate commit. The user
+is expected to take care of all other configuration details (like
+having Netfilter enabled to make iptables work, etc.)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in |   50 --------------------------------------------------
- 1 files changed, 0 insertions(+), 50 deletions(-)
- delete mode 100644 target/Config.in
+ linux/linux.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/target/Config.in b/target/Config.in
-deleted file mode 100644
-index 2d96793..0000000
---- a/target/Config.in
-+++ /dev/null
-@@ -1,50 +0,0 @@
--menu "Kernel"
--choice
--	prompt "Kernel type"
--	default BR2_KERNEL_none
--
--config BR2_KERNEL_none
--	bool "none"
--	help
--	  Do not build a kernel
--
--config BR2_KERNEL_LINUX_ADVANCED
--	bool "linux (Advanced configuration)"
--	select BR2_PACKAGE_LINUX
--	help
--	  The Linux kernel - Advanced Configuration.
--	  http://www.kernel.org/
--
--	  Note: Requires kernel-headers >= 2.6.19 since the other
--	        kernel headers are just that (headers) and not full
--	        kernels. This is a feature.
--
--# The kernel with the same version as linux headers cannot be compiled
--# when using an external toolchain, because the linux headers are not
--# handled by Buildroot in this case.
--if BR2_TOOLCHAIN_BUILDROOT
--
--config BR2_KERNEL_LINUX
--	bool "linux (Same version as linux headers)"
--	select BR2_PACKAGE_LINUX
--	help
--	  The Linux kernel.
--	  http://www.kernel.org/
--
--	  Note: Requires kernel-headers >= 2.6.19 since the other
--	        kernel headers are just that (headers) and not full
--	        kernels. This is a feature.
--
--endif
--
--endchoice
--
--config BR2_PACKAGE_LINUX
--	bool
--
--if BR2_PACKAGE_LINUX
--source "target/linux/Config.in"
--source "target/linux/Config.in.advanced"
--endif
--
--endmenu
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8b83e30..71d9616 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -85,6 +85,16 @@ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ 	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(@D)/.config
+ endif
++ifeq ($(BR2_ARM_EABI),y)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config)
++else
++	$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config)
++endif
++ifeq ($(BR2_INET_IPV6),y)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6,$(@D)/.config)
++else
++	$(call KCONFIG_DISABLE_OPT,CONFIG_IPV6,$(@D)/.config)
++endif
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig
+ 	$(Q)touch $@
+ 
 -- 
 1.7.1
