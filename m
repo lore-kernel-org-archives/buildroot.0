@@ -1,29 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Jun 2010 14:03:13 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
- autotools-conversion
-In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20100624140313.09e20a06@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Jun 2010 12:05:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 2101] New: blackbox depends on locale support
+Message-ID: <bug-2101-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Jun 2010 22:20:54 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2101
 
-> Here is a set of package conversions to the autotools infrastructure,
-> coming from cmao and Paul Jones.
+           Summary: blackbox depends on locale support
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jsteckli at os.inf.tu-dresden.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I've rebased and pushed an updated version of this branch, which adds a
-patch to links I forgot to git add. The patch allows links to build
-with a !LARGEFILE toolchain.
 
-Thomas
+Steps to repeat:
+ 1. Checkout git head
+ 2. Enable WCHAR support, but not locales
+ 3. Enable blackbox
+ 4. make
+-> config of blackbox fails with missing iconv
+
+Workaround:
+ Select locale support.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
