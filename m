@@ -1,23 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Jun 2010 10:30:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 1975] Package removal/deprecation
-In-Reply-To: <bug-1975-163@https.bugs.busybox.net/>
-References: <bug-1975-163@https.bugs.busybox.net/>
-Message-ID: <20100624103029.071B181975@busybox.osuosl.org>
+Date: Thu, 24 Jun 2010 10:31:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 1981] zlib: bump to 1.2.5
+In-Reply-To: <bug-1981-163@https.bugs.busybox.net/>
+References: <bug-1981-163@https.bugs.busybox.net/>
+Message-ID: <20100624103112.62B6681975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1975
+https://bugs.busybox.net/show_bug.cgi?id=1981
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |jacmet at uclibc.org
-                   |.org                        |
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Paul, could you attach the patch here ?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
