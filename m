@@ -1,26 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Jun 2010 11:58:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 2095] make gconfig: undefined reference to symbol
- 'dlsym@@GLIBC_2.2.5'
-In-Reply-To: <bug-2095-163@https.bugs.busybox.net/>
-References: <bug-2095-163@https.bugs.busybox.net/>
-Message-ID: <20100624115801.1968381851@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Jun 2010 14:03:13 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ autotools-conversion
+In-Reply-To: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1277237892.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20100624140313.09e20a06@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2095
+On Tue, 22 Jun 2010 22:20:54 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
---- Comment #9 from Mitch Davis <mjd-busybox.net@afork.com>  ---
-Now I understand (I think).
+> Here is a set of package conversions to the autotools infrastructure,
+> coming from cmao and Paul Jones.
 
-This is not a fix to find the link line for GTK+ apps in general.  Instead,
-this fixes the problem where gconfig needs the dl library.  Now the fix looks
-right to me :-)
+I've rebased and pushed an updated version of this branch, which adds a
+patch to links I forgot to git add. The patch allows links to build
+with a !LARGEFILE toolchain.
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
