@@ -1,20 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Jun 2010 14:05:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 2101] blackbox depends on locale support
-In-Reply-To: <bug-2101-163@https.bugs.busybox.net/>
-References: <bug-2101-163@https.bugs.busybox.net/>
-Message-ID: <20100624140536.B099681D7B@busybox.osuosl.org>
+Date: Thu, 24 Jun 2010 15:01:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 2095] make gconfig: undefined reference to symbol
+ 'dlsym@@GLIBC_2.2.5'
+In-Reply-To: <bug-2095-163@https.bugs.busybox.net/>
+References: <bug-2095-163@https.bugs.busybox.net/>
+Message-ID: <20100624150141.6D0FD81D7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2101
+https://bugs.busybox.net/show_bug.cgi?id=2095
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Instead, we should do like samba: add a dependency on libiconv if locale aren't
-enabled.
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #10 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
