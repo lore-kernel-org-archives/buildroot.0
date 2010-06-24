@@ -1,39 +1,31 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Jun 2010 12:05:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 2101] New: blackbox depends on locale support
-Message-ID: <bug-2101-163@https.bugs.busybox.net/>
+Date: Thu, 24 Jun 2010 12:12:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 2005] Bump dnsmasq to 2.55 and migrate to
+	gentargets
+In-Reply-To: <bug-2005-163@https.bugs.busybox.net/>
+References: <bug-2005-163@https.bugs.busybox.net/>
+Message-ID: <20100624121222.A2A3381976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2101
+https://bugs.busybox.net/show_bug.cgi?id=2005
 
-           Summary: blackbox depends on locale support
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: jsteckli at os.inf.tu-dresden.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #1993|0                           |1
+        is obsolete|                            |
 
-Steps to repeat:
- 1. Checkout git head
- 2. Enable WCHAR support, but not locales
- 3. Enable blackbox
- 4. make
--> config of blackbox fails with missing iconv
+--- Comment #2 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 2083
+  --> https://bugs.busybox.net/attachment.cgi?id=2083
+Bump dnsmasq to 2.55 and migrate to gentargets
 
-Workaround:
- Select locale support.
+I really need a vacation :)
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
