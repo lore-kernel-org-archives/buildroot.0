@@ -1,25 +1,26 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Thu, 24 Jun 2010 21:50:28 +1000
-Subject: [Buildroot] How to Login in a filesystem as a root
-In-Reply-To: <SNT127-W419F4B2391D74166A2B60B7C60@phx.gbl>
-References: <SNT127-W619D09ED5AF2F021B401ACB7C60@phx.gbl>
-	<20100624094558.7d1ff7da@surf> 
-	<AANLkTik5FwI48yklM-2mvxv1XKHJGm6ChSc6K0Rexd0v@mail.gmail.com> 
-	<SNT127-W419F4B2391D74166A2B60B7C60@phx.gbl>
-Message-ID: <AANLkTilQopdmVT0Z3UN5Nz1POtWNmjbbJ92ymD-8QrZ4@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Jun 2010 11:58:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 2095] make gconfig: undefined reference to symbol
+ 'dlsym@@GLIBC_2.2.5'
+In-Reply-To: <bug-2095-163@https.bugs.busybox.net/>
+References: <bug-2095-163@https.bugs.busybox.net/>
+Message-ID: <20100624115801.1968381851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2010/6/24 amr ali <amraldo@hotmail.com>:
-> I checked the passwd and shadow files, they have a root user but whenever I
-> type root at login it give invalid login.
-> May be you are right. I need to read more about buildroot. I can send you my
-> configuration files if possible to check it yourself.
+https://bugs.busybox.net/show_bug.cgi?id=2095
 
-Do you have a file on your DaVinci called "/etc/securetty"?  If so,
-what's in it?
+--- Comment #9 from Mitch Davis <mjd-busybox.net@afork.com>  ---
+Now I understand (I think).
 
-Mitch.
+This is not a fix to find the link line for GTK+ apps in general.  Instead,
+this fixes the problem where gconfig needs the dl library.  Now the fix looks
+right to me :-)
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
