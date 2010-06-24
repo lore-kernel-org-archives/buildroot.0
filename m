@@ -1,24 +1,21 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Jun 2010 10:36:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 1651] Build fail caused by ccache in
-	module-init-tools
-In-Reply-To: <bug-1651-163@https.bugs.busybox.net/>
-References: <bug-1651-163@https.bugs.busybox.net/>
-Message-ID: <20100624103600.0BD0181975@busybox.osuosl.org>
+Date: Thu, 24 Jun 2010 10:39:25 +0000 (UTC)
+Subject: [Buildroot] [Bug 2095] make gconfig: undefined reference to symbol
+ 'dlsym@@GLIBC_2.2.5'
+In-Reply-To: <bug-2095-163@https.bugs.busybox.net/>
+References: <bug-2095-163@https.bugs.busybox.net/>
+Message-ID: <20100624103925.2742281975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1651
+https://bugs.busybox.net/show_bug.cgi?id=2095
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Mitch, with the merge of the linux-cleanup work, the module-init-tools package
-has been upgraded and migrated to the autotools infrastructure. So it is
-possible that the problem you're seeing has been fixed.
-
-Can you give a try at the latest Buildroot git ?
+--- Comment #3 from Mitch Davis <mjd-busybox.net@afork.com>  ---
+Patch in kernel notwithstanding, if gtk-2.0 apps need -ldl, I'm wondering why
+it's not included in the output of pkg-config --libs gtk+-2.0?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
