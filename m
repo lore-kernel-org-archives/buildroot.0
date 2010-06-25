@@ -1,8 +1,7 @@
-From: cmchao <cmchao@gmail.com>
+From: Paul Jones <paul@pauljones.id.au>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] fbv : convert to autotools
-	infrastructure
-Message-ID: <20100625103240.088DA81DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add package xterm
+Message-ID: <20100625103243.4D36781DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,90 +9,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9486dcc93a15e3e44e6a584589562c24da23fc50
+commit: http://git.buildroot.net/buildroot/commit/?id=6b92969386a6fce36a0396844769ab3eac463df7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
- * Target installation is the default behaviour
- * No installation to staging is the default behaviour
- * Remove FBV_BINARY/FBV_TARGET_BINARY variables
-
-Signed-off-by: cmchao <cmchao@gmail.com>
+Signed-off-by: Paul Jones <paul@pauljones.id.au>
 ---
- package/fbv/fbv.mk |   50 +++++++++++++++-----------------------------------
- 1 files changed, 15 insertions(+), 35 deletions(-)
+ package/Config.in       |    1 +
+ package/xterm/Config.in |    6 ++++++
+ package/xterm/xterm.mk  |   13 +++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/xterm/Config.in
+ create mode 100644 package/xterm/xterm.mk
 
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index 44ce5c6..7305c6e 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -6,23 +6,11 @@
- FBV_VERSION:=1.0b
- FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
- FBV_SITE:=http://s-tech.elsat.net.pl/fbv
--FBV_DIR:=$(BUILD_DIR)/fbv-$(FBV_VERSION)
--FBV_CAT:=$(ZCAT)
--FBV_BINARY:=fbv
--FBV_TARGET_BINARY:=usr/bin/$(FBV_BINARY)
+diff --git a/package/Config.in b/package/Config.in
+index be3f064..0b8ecfd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -139,6 +139,7 @@ source "package/synergy/Config.in"
+ source "package/torsmo/Config.in"
+ source "package/x11vnc/Config.in"
+ source "package/xstroke/Config.in"
++source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ endmenu
  
--$(DL_DIR)/$(FBV_SOURCE):
--	$(call DOWNLOAD,$(FBV_SITE),$(FBV_SOURCE))
-+FBV_DEPENDENCIES = libpng jpeg libungif
- 
--fbv-source: $(DL_DIR)/$(FBV_SOURCE)
--
--$(FBV_DIR)/.unpacked: $(DL_DIR)/$(FBV_SOURCE)
--	$(FBV_CAT) $(DL_DIR)/$(FBV_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(FBV_DIR) package/fbv/ \
--		fbv-$(FBV_VERSION)\*.patch fbv-$(FBV_VERSION)\*.patch.$(ARCH)
--	touch $@
--
--$(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
-+#fbv donesn't support cross-compilation
-+define FBV_CONFIGURE_CMDS
- 	(cd $(FBV_DIR); rm -f config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -30,27 +18,19 @@ $(FBV_DIR)/.configured: $(FBV_DIR)/.unpacked
- 		--prefix=/usr \
- 		--libs="-lz -lm" \
- 	)
--	touch $@
-+endef
- 
--$(FBV_DIR)/$(FBV_BINARY): $(FBV_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FBV_DIR)
-+define FBV_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
- 
--$(TARGET_DIR)/$(FBV_TARGET_BINARY): $(FBV_DIR)/$(FBV_BINARY)
--	install -D $(FBV_DIR)/$(FBV_BINARY) $(TARGET_DIR)/$(FBV_TARGET_BINARY)
-+define FBV_INSTALL_TARGET_CMDS
-+	install -D $(@D)/fbv $(TARGET_DIR)/usr/bin/fbv
-+endef
- 
--fbv: libpng jpeg libungif $(TARGET_DIR)/$(FBV_TARGET_BINARY)
-+define FBV_CLEAN_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/fbv
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--fbv-clean:
--	rm -f $(TARGET_DIR)/$(FBV_TARGET_BINARY)
--	-$(MAKE) -C $(FBV_DIR) clean
--
--fbv-dirclean:
--	rm -rf $(FBV_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_FBV),y)
--TARGETS+=fbv
--endif
-+$(eval $(call AUTOTARGETS,package,fbv))
+diff --git a/package/xterm/Config.in b/package/xterm/Config.in
+new file mode 100644
+index 0000000..da3e9fe
+--- /dev/null
++++ b/package/xterm/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_XTERM
++	bool "xterm"
++	depends on BR2_PACKAGE_XORG7
++	help
++	  xterm terminal emulator
++
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+new file mode 100644
+index 0000000..b07eda4
+--- /dev/null
++++ b/package/xterm/xterm.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# xterm
++#
++#############################################################
++
++XTERM_VERSION:=259
++XTERM_SOURCE:=xterm-$(XTERM_VERSION).tgz
++XTERM_SITE:=ftp://invisible-island.net/xterm
++XTERM_DEPENDENCIES = xserver_xorg-server
++XTERM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++
++$(eval $(call AUTOTARGETS,package,xterm))
 -- 
 1.7.1
