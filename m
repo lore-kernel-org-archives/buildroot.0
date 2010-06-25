@@ -1,8 +1,8 @@
-From: cmchao <cmchao@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] make : convert to autotools
-	infrastructure
-Message-ID: <20100625103241.A490B81DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update after
+	autotools-conversion merge
+Message-ID: <20100625103243.CE6EC81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,104 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cfa586f15bc88a3e71846b70db7894a6e21434b
+commit: http://git.buildroot.net/buildroot/commit/?id=88d451c8db4f7d6cfa72f21dceabf8e10fb5b825
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
- * Target installation is the default
- * No staging installation is the default
-
-Signed-off-by: cmchao <cmchao@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/make/make.mk |   75 +++++--------------------------------------------
- 1 files changed, 8 insertions(+), 67 deletions(-)
+ CHANGES |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 0b2657d..12d236a 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -3,73 +3,14 @@
- # make
- #
- #############################################################
--GNUMAKE_VERSION:=3.81
--GNUMAKE_SOURCE:=make-$(GNUMAKE_VERSION).tar.bz2
--GNUMAKE_SITE:=$(BR2_GNU_MIRROR)/make
--GNUMAKE_DIR:=$(BUILD_DIR)/make-$(GNUMAKE_VERSION)
--GNUMAKE_CAT:=$(BZCAT)
--GNUMAKE_BINARY:=make
--GNUMAKE_TARGET_BINARY:=usr/bin/make
-+MAKE_VERSION:=3.81
-+MAKE_SOURCE:=make-$(MAKE_VERSION).tar.bz2
-+MAKE_SITE:=$(BR2_GNU_MIRROR)/make
+diff --git a/CHANGES b/CHANGES
+index fc1a7fb..585a700 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -11,15 +11,17 @@
+ 	New GTK-based configurator, usable using 'make gconfig'.
  
--$(DL_DIR)/$(GNUMAKE_SOURCE):
--	 $(call DOWNLOAD,$(GNUMAKE_SITE),$(GNUMAKE_SOURCE))
-+MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+ 	New packages: cgilua, copas, coxpcall, ffmpeg, luafilesystem,
+-	luasocket, rings, wsapi, xavante
++	luasocket, rings, wsapi, xavante, xterm
  
--make-source: $(DL_DIR)/$(GNUMAKE_SOURCE)
-+MAKE_CONF_ENV = make_cv_sys_gnu_glob=no \
-+		GLOBINC='-I$(@D)/glob' \
-+		GLOBLIB=glob/libglob.a
+-	Updated/fixed packages: busybox, cdrkit, file, gawk,
+-	gstreamer, intltool, ipsec-tools, iptables, libart, libidn,
+-	lmbench, lrzsz, ncurses, module-init-tools, nbd, netperf,
+-	ntfsprogs, openssl, php, qt, sqlite, squashfs, tn5250,
+-	usbutils, xkeyboard-config
++	Updated/fixed packages: berkeleydb, busybox, cdrkit, dash,
++	dialog, diffutils, distcc, dmalloc, fbv, file, gawk,
++	gstreamer, gzip, intltool, ipsec-tools, iptables, libart,
++	libfuse, libgpg-error, libidn, liblockfile, links, lmbench,
++	lrzsz, make, module-init-tools, nbd, ncurses, netperf,
++	ntfsprogs, openssl, php, qt, quagga, sqlite, sdl, sdl_mixer,
++	sdl_ttf, squashfs, tn5250, usbutils, xkeyboard-config
  
--$(GNUMAKE_DIR)/.unpacked: $(DL_DIR)/$(GNUMAKE_SOURCE)
--	$(GNUMAKE_CAT) $(DL_DIR)/$(GNUMAKE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(GNUMAKE_DIR)/config
--	touch $@
--
--$(GNUMAKE_DIR)/.configured: $(GNUMAKE_DIR)/.unpacked
--	(cd $(GNUMAKE_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		make_cv_sys_gnu_glob=no \
--		GLOBINC='-I$(GNUMAKE_DIR)/glob' \
--		GLOBLIB=glob/libglob.a \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--	)
--	touch $@
--
--$(GNUMAKE_DIR)/$(GNUMAKE_BINARY): $(GNUMAKE_DIR)/.configured
--	$(MAKE) MAKE=$(HOSTMAKE) -C $(GNUMAKE_DIR)
--
--$(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY): $(GNUMAKE_DIR)/$(GNUMAKE_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) install
--	rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--		$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--
--make: $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(TARGET_DIR)/$(GNUMAKE_TARGET_BINARY)
--
--make-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GNUMAKE_DIR) uninstall
--	-$(MAKE) -C $(GNUMAKE_DIR) clean
--
--make-dirclean:
--	rm -rf $(GNUMAKE_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_MAKE),y)
--TARGETS+=make
--endif
-+$(eval $(call AUTOTARGETS,package,make))
+-	Removed packages: modutils
++	Removed packages: modutils, rxvt
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
 -- 
 1.7.1
