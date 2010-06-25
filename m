@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] berkeleydb : convert to
-	autotools infrastructure & bump to 4.4.20
-Message-ID: <20100625103240.9D40F81DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] diffutils : convert to
+	autotools infrastructure
+Message-ID: <20100625103241.071EA81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,125 +10,98 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef82aebff9d4046525a253f518ca1167d843cf9a
+commit: http://git.buildroot.net/buildroot/commit/?id=fb42c6a11a72adb1cb4b1e18e957095bbc97adf2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  * Installation to target is the default
- * Use BERKELEYDB_SUBDIR to get rid of the specific BUILD_CMDS and
-   INSTALL_STAGING_CMDS
- * Split the INSTALL_TARGET_CMDS to install development files on the
-   target only when needed
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/berkeleydb/berkeleydb.mk |   82 +++++++++++--------------------------
- 1 files changed, 25 insertions(+), 57 deletions(-)
+ package/diffutils/diffutils.mk |   63 ++-------------------------------------
+ 1 files changed, 4 insertions(+), 59 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index f15df6a..b026143 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -3,25 +3,17 @@
- # berkeley db
- #
- #############################################################
--DB_VERSION:=4.3.29
--DB_SO_VERSION:=4.3
--DB_SITE:=ftp://ftp.sleepycat.com/releases
--DB_SOURCE:=db-$(DB_VERSION).NC.tar.gz
--DB_DIR:=$(BUILD_DIR)/db-$(DB_VERSION).NC
--DB_SHARLIB:=libdb-$(DB_SO_VERSION).so
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index fd5e5a3..c0b3830 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -6,26 +6,10 @@
+ DIFFUTILS_VERSION=2.8.1
+ DIFFUTILS_SOURCE:=diffutils-$(DIFFUTILS_VERSION).tar.gz
+ DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+-DIFFUTILS_CAT:=$(ZCAT)
+-DIFFUTILS_DIR:=$(BUILD_DIR)/diffutils-$(DIFFUTILS_VERSION)
+-DIFFUTILS_BINARY:=src/diff
+-DIFFUTILS_TARGET_BINARY:=usr/bin/diff
+ 
+-$(DL_DIR)/$(DIFFUTILS_SOURCE):
+-	 $(call DOWNLOAD,$(DIFFUTILS_SITE),$(DIFFUTILS_SOURCE))
++DIFFUTILS_INSTALL_STAGING = YES
+ 
+-diffutils-source: $(DL_DIR)/$(DIFFUTILS_SOURCE)
 -
--$(DL_DIR)/$(DB_SOURCE):
--	$(call DOWNLOAD,$(DB_SITE),$(DB_SOURCE))
--
--berkeleydb-source: $(DL_DIR)/$(DB_SOURCE)
--
--$(DB_DIR)/.dist: $(DL_DIR)/$(DB_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(DB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-$(DIFFUTILS_DIR)/.unpacked: $(DL_DIR)/$(DIFFUTILS_SOURCE)
+-	$(DIFFUTILS_CAT) $(DL_DIR)/$(DIFFUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(DIFFUTILS_DIR)/config
 -	touch $@
 -
--$(DB_DIR)/.configured: $(DB_DIR)/.dist
--	$(CONFIG_UPDATE) $(DB_DIR)/dist
--	(cd $(DB_DIR)/build_unix; rm -rf config.cache; \
-+BERKELEYDB_VERSION:=4.4.20
-+BERKELEYDB_SO_VERSION:=4.4
-+BERKELEYDB_SITE:=ftp://ftp.sleepycat.com/releases
-+BERKELEYDB_SOURCE:=db-$(BERKELEYDB_VERSION).NC.tar.gz
-+BERKELEYDB_SHARLIB:=libdb-$(BERKELEYDB_SO_VERSION).so
-+BERKELEYDB_SUBDIR=build_unix
-+BERKELEYDB_INSTALL_STAGING = YES
-+
-+#build directory can't be the directory where configure are there, so..
-+define BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		../dist/configure $(QUIET) \
-@@ -48,48 +40,24 @@ $(DB_DIR)/.configured: $(DB_DIR)/.dist
- 		--disable-tcl \
- 		--disable-compat185 \
- 		--with-pic \
+-$(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
+-	(cd $(DIFFUTILS_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_strtod=yes \
++DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
+ 		ac_fsusage_space=yes \
+ 		fu_cv_sys_stat_statfs2_bsize=yes \
+ 		ac_cv_func_closedir_void=no \
+@@ -71,45 +55,6 @@ $(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
+ 		gl_cv_func_mkstemp_limitations=no \
+ 		ac_cv_func_working_mktime=yes \
+ 		jm_cv_func_working_re_compile_pattern=yes \
+-		ac_use_included_regex=no \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		$(DISABLE_NLS) \
 -		$(DISABLE_LARGEFILE) \
- 	)
--	$(SED) 's/\.lo/.o/g' $(DB_DIR)/build_unix/Makefile
+-	)
 -	touch $@
 -
--$(DB_DIR)/build_unix/.libs/$(DB_SHARLIB): $(DB_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(DB_DIR)/build_unix
+-$(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY): $(DIFFUTILS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR)
 -
--$(STAGING_DIR)/lib/$(DB_SHARLIB): $(DB_DIR)/build_unix/.libs/$(DB_SHARLIB)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DB_DIR)/build_unix install
--	chmod a-x $(STAGING_DIR)/lib/libdb*so*
--	rm -f $(STAGING_DIR)/bin/db_*
--	rm -rf $(STAGING_DIR)/share/locale
-+	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
-+endef
+-$(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY): $(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) \
+-		$(if $(BR2_STRIP_none),install,install-strip)
+-ifneq ($(BR2_ENABLE_LOCALE),y)
+-	rm -rf $(TARGET_DIR)/usr/share/locale
+-endif
+-
+-diffutils: $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
+-
+-diff-utils-unpacked: $(DIFFUTILS_DIR)/.unpacked
++		ac_use_included_regex=no
  
--$(TARGET_DIR)/lib/$(DB_SHARLIB): $(STAGING_DIR)/lib/$(DB_SHARLIB)
--	rm -rf $(TARGET_DIR)/lib/libdb*
--	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
--	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
--	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(DB_SHARLIB) libdb.so)
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libdb*so*
+-diffutils-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) uninstall
+-	-$(MAKE) -C $(DIFFUTILS_DIR) clean
 -
--$(TARGET_DIR)/usr/lib/libdb.a: $(STAGING_DIR)/lib/libdb-$(DB_SO_VERSION).a
-+ifeq ($(BR2_HAVE_DEVFILES),y)
-+define BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/include/db.h $(TARGET_DIR)/usr/include/
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.a $(TARGET_DIR)/usr/lib/
- 	cp -dpf $(STAGING_DIR)/lib/libdb*.la $(TARGET_DIR)/usr/lib/
--	touch -c $@
+-diffutils-dirclean:
+-	rm -rf $(DIFFUTILS_DIR)
 -
--berkeleydb-headers: $(TARGET_DIR)/usr/lib/libdb.a
--
--berkeleydb-clean:
--	-$(MAKE) -C $(DB_DIR)/build_unix clean
--
--berkeleydb-dirclean:
--	rm -rf $(DB_DIR)
-+endef
-+endif
- 
--berkeleydb: $(TARGET_DIR)/lib/$(DB_SHARLIB)
-+define BERKELEYDB_INSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/lib/libdb*
-+	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
-+	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(BERKELEYDB_SHARLIB) libdb.so)
-+	$(BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS)
-+endef
- 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
--TARGETS+=berkeleydb
+-ifeq ($(BR2_PACKAGE_DIFFUTILS),y)
+-TARGETS+=diffutils
 -endif
-+$(eval $(call AUTOTARGETS,package,berkeleydb))
++$(eval $(call AUTOTARGETS,package,diffutils))
 -- 
 1.7.1
