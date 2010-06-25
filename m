@@ -1,47 +1,43 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Thu, 24 Jun 2010 10:48:09 -0500
-Subject: [Buildroot] make linux26-force
-In-Reply-To: <20100624092307.38486bc6@surf>
-References: <0D753D10438DA54287A00B027084269763716C534F@AUSP01VMBX24.collaborationhost.net>
-	<20100624092307.38486bc6@surf>
-Message-ID: <0D753D10438DA54287A00B02708426976372DCA426@AUSP01VMBX24.collaborationhost.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Jun 2010 02:36:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 2107] New: New package: input-event-daemon
+Message-ID: <bug-2107-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, June 24, 2010 12:23 AM, Thomas Petazzoni wrote:
-> On Wed, 23 Jun 2010 17:59:33 -0500
-> H Hartley Sweeten <hartleys@visionengravers.com> wrote:
->
->> Is there a reason make linux26-force was removed by the linux-cleanup commit?
->
-> Because I haven't seen the use case for that. Which use case does this
-> solve ?
->
-> The kernel already gets rebuilt whenever its .config file is changed
-> (by means of linux26-menuconfig, linux26-xconfig, or directly). Isn't
-> this enough ?
+https://bugs.busybox.net/show_bug.cgi?id=2107
 
-No.  Manually adding a new patch or making a change to one of the source
-files will not cause the kernel to be rebuilt.  And, doing a linux26-menuconfig
-also will not cause the rebuild (unless something is changed).
+           Summary: New package: input-event-daemon
+           Product: buildroot
+           Version: 2010.05
+          Platform: All
+               URL: http://github.com/gandro/input-event-daemon
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: keguang.zhang at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I'm trying to bring up a new board design so I am always making changes to
-my kernel board init file, either to enable a new feature or test something.
 
-I know I can force the rebuild by touching the stamp_configured file but
-it's kind of a hassle since I was used to just doing either:
+Created attachment 2089
+  --> https://bugs.busybox.net/attachment.cgi?id=2089
+Add new package: input-event-daemon
 
-$ make linux26-force;make
+input-event-daemon is a daemon which executes a user-defined command on input
+events, such as keys, mouse buttons and switches.
+This can be useful to handle special keys on laptops or multimedia keyboards
+without X11.
 
-Of 
+See: http://github.com/gandro/input-event-daemon
 
-$ make linux26-force;make linux26
-
-This has worked fine for me since I started using buildroot.  The linux-cleanup
-commit changed that behavior.
-
-Regards,
-Hartley
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
