@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] sdl_ttf : convert to autotools
+Subject: [Buildroot] [git commit master 1/1] dmalloc : convert to autotools
 	infrastructure
-Message-ID: <20100625103242.73DA781DB8@busybox.osuosl.org>
+Message-ID: <20100625103239.C370981DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,103 +10,149 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcb48a9a6568f09d2c246470de156299d9c5e846
+commit: http://git.buildroot.net/buildroot/commit/?id=c4c8b254671c8df3c120fcb4ebd0d96601ccc688
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default
+     * Target installation is the default behaviour
+     * No installation to staging is the default behaviour
+     * Remove DMALLOC_TARGET_BINARY variable
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/sdl_ttf/sdl_ttf.mk |   75 ++++---------------------------------------
- 1 files changed, 7 insertions(+), 68 deletions(-)
+ package/dmalloc/dmalloc.mk |   97 +++++++++++--------------------------------
+ 1 files changed, 25 insertions(+), 72 deletions(-)
 
-diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
-index 21bfc5e..7ff5cb8 100644
---- a/package/sdl_ttf/sdl_ttf.mk
-+++ b/package/sdl_ttf/sdl_ttf.mk
-@@ -6,74 +6,13 @@
- SDL_TTF_VERSION:=2.0.9
- SDL_TTF_SOURCE:=SDL_ttf-$(SDL_TTF_VERSION).tar.gz
- SDL_TTF_SITE:=http://www.libsdl.org/projects/SDL_ttf/release/
--SDL_TTF_CAT:=$(ZCAT)
--SDL_TTF_DIR:=$(BUILD_DIR)/SDL_ttf-$(SDL_TTF_VERSION)
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index dd83583..60ad763 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -6,100 +6,53 @@
+ DMALLOC_VERSION:=5.4.3
+ DMALLOC_SOURCE:=dmalloc-$(DMALLOC_VERSION).tgz
+ DMALLOC_SITE:=http://dmalloc.com/releases
+-DMALLOC_DIR:=$(BUILD_DIR)/dmalloc-$(DMALLOC_VERSION)
+-DMALLOC_CAT:=$(ZCAT)
+-DMALLOC_BINARY:=dmalloc
+-DMALLOC_TARGET_BINARY:=usr/bin/dmalloc
  
--$(DL_DIR)/$(SDL_TTF_SOURCE):
--	$(call DOWNLOAD,$(SDL_TTF_SITE),$(SDL_TTF_SOURCE))
+-$(DL_DIR)/$(DMALLOC_SOURCE):
+-	 $(call DOWNLOAD,$(DMALLOC_SITE),$(DMALLOC_SOURCE))
 -
--sdl_ttf-source: $(DL_DIR)/$(SDL_TTF_SOURCE)
+-dmalloc-source: $(DL_DIR)/$(DMALLOC_SOURCE)
 -
--$(SDL_TTF_DIR)/.unpacked: $(DL_DIR)/$(SDL_TTF_SOURCE)
--	$(SDL_TTF_CAT) $(DL_DIR)/$(SDL_TTF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(SDL_TTF_DIR)
+-$(DMALLOC_DIR)/.unpacked: $(DL_DIR)/$(DMALLOC_SOURCE)
+-	$(DMALLOC_CAT) $(DL_DIR)/$(DMALLOC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(DMALLOC_DIR) package/dmalloc dmalloc\*.patch
+-	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(DMALLOC_DIR)/configure
+-	$(SED) 's/(ld -/($${LD-ld} -/' $(DMALLOC_DIR)/configure
+-	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(DMALLOC_DIR)/configure
+-	-$(SED) 's/ar cr/$$(AR) cr/' $(DMALLOC_DIR)/Makefile.in
 -	touch $@
--
--$(SDL_TTF_DIR)/.configured: $(SDL_TTF_DIR)/.unpacked
--	(cd $(SDL_TTF_DIR); rm -rf config.cache; \
++DMALLOC_INSTALL_STAGING = YES
++DMALLOC_CONF_OPT:= --enable-shlib
+ 
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+-DMALLOC_CONFIG_ARGS:=--enable-cxx
++DMALLOC_CONF_OPT+=--enable-cxx
+ else
+-DMALLOC_CONFIG_ARGS:=--disable-cxx
++DMALLOC_CONF_OPT+=--disable-cxx
+ endif
+ 
+ ifeq ($(BR2_PTHREADS_NONE),y)
+-DMALLOC_CONFIG_ARGS+=--disable-threads
++DMALLOC_CONF_OPT+=--disable-threads
+ else
+-DMALLOC_CONFIG_ARGS+=--enable-threads
++DMALLOC_CONF_OPT+=--enable-threads
+ endif
+ 
++define DMALLOC_POST_PATCH
++	$(SED) 's/^ac_cv_page_size=0$$/ac_cv_page_size=12/' $(@D)/configure
++	$(SED) 's/(ld -/($${LD-ld} -/' $(@D)/configure
++	$(SED) 's/'\''ld -/"$${LD-ld}"'\'' -/' $(@D)/configure
++	$(SED) 's/ar cr/$$(AR) cr/' $(@D)/Makefile.in
++endef
+ 
++DMALLOC_POST_PATCH_HOOKS += DMALLOC_POST_PATCH
+ 
+-$(DMALLOC_DIR)/.configured: $(DMALLOC_DIR)/.unpacked
+-	(cd $(DMALLOC_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="-g" \
+-		LDFLAGS="-g" \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
 -		--exec-prefix=/usr \
--		--bindir=/bin \
--		--sbindir=/sbin \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
 -		--libdir=/lib \
--		--libexecdir=/lib \
+-		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/share \
+-		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--includedir=/include \
--		--mandir=/man \
--		--infodir=/info \
--		--without-x \
-+SDL_TTF_LIBTOOL_PATCH = NO
-+SDL_TTF_INSTALL_STAGING = YES
-+SDL_TTF_DEPENDENCIES = sdl freetype
-+SDL_TTF_CONF_OPT = --without-x \
- 		--with-freetype-prefix=$(STAGING_DIR)/usr \
--		--with-sdl-prefix=$(STAGING_DIR)/usr \
--		)
+-		--includedir=/usr/include \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--enable-shlib \
+-		$(DMALLOC_CONFIG_ARGS) \
+-	)
 -	touch $@
 -
--$(SDL_TTF_DIR)/.compiled: $(SDL_TTF_DIR)/.configured
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) \
--		INCLUDES="-I$(STAGING_DIR)/usr/include/SDL -I$(STAGING_DIR)/usr/include/freetype2" \
--		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
--		DESTDIR=$(STAGING_DIR)/usr -C $(SDL_TTF_DIR)
--	touch $@
+-$(DMALLOC_DIR)/$(DMALLOC_BINARY): $(DMALLOC_DIR)/.configured
+-	$(MAKE) -C $(DMALLOC_DIR)
 -
--$(STAGING_DIR)/usr/lib/libSDL_ttf.so: $(SDL_TTF_DIR)/.compiled
--	$(MAKE) DESTDIR=$(STAGING_DIR)/usr -C $(SDL_TTF_DIR) install
--	touch -c $@
--
--$(TARGET_DIR)/usr/lib/libSDL_ttf.so: $(STAGING_DIR)/usr/lib/libSDL_ttf.so
--	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_ttf*.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_ttf.so
--
--sdl_ttf: sdl freetype $(TARGET_DIR)/usr/lib/libSDL_ttf.so
-+		--with-sdl-prefix=$(STAGING_DIR)/usr
+-$(TARGET_DIR)/$(DMALLOC_TARGET_BINARY): $(DMALLOC_DIR)/$(DMALLOC_BINARY)
+-	# both DESTDIR and PREFIX are ignored..
++# both DESTDIR and PREFIX are ignored..
++define DMALLOC_INSTALL_STAGING_CMDS
+ 	$(MAKE) includedir="$(STAGING_DIR)/usr/include" \
+ 		bindir="$(STAGING_DIR)/usr/bin" \
+ 		libdir="$(STAGING_DIR)/usr/lib" \
+ 		shlibdir="$(STAGING_DIR)/usr/lib" \
+ 		includedir="$(STAGING_DIR)/usr/share/info/" \
+-		-C $(DMALLOC_DIR) install
+-	(cd $(STAGING_DIR)/usr/lib; \
+-		mv libdmalloc*.so $(TARGET_DIR)/usr/lib)
+-	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++		-C $(@D) install
++endef
  
--sdl_ttf-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(SDL_TTF_DIR) uninstall
--	-$(MAKE) -C $(SDL_TTF_DIR) clean
+-dmalloc: $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++define DMALLOC_INSTALL_TARGET_CMDS
++	mv $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
++endef
+ 
+-dmalloc-clean:
++define DMALLOC_CLEAN_CMDS
+ 	-rm -f $(TARGET_DIR)/usr/lib/libdmalloc*
+ 	-rm -f $(STAGING_DIR)/usr/lib/libdmalloc*
+ 	rm -f $(STAGING_DIR)/usr/include/dmalloc.h
+-	rm -f $(TARGET_DIR)/$(DMALLOC_TARGET_BINARY)
++	rm -f $(TARGET_DIR)/usr/bin/dmalloc
+ 	-$(MAKE) -C $(DMALLOC_DIR) clean
 -
--sdl_ttf-dirclean:
--	rm -rf $(SDL_TTF_DIR)
--
+-dmalloc-dirclean:
+-	rm -rf $(DMALLOC_DIR)
++endef
+ 
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SDL_TTF),y)
--TARGETS+=sdl_ttf
+-ifeq ($(BR2_PACKAGE_DMALLOC),y)
+-TARGETS+=dmalloc
 -endif
-+SDL_TTF_MAKE_OPT = INCLUDES="-I$(STAGING_DIR)/usr/include/SDL"  LDFLAGS="-L$(STAGING_DIR)/usr/lib"
-+$(eval $(call AUTOTARGETS,package,sdl_ttf))
++$(eval $(call AUTOTARGETS,package,dmalloc))
 -- 
 1.7.1
