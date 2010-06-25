@@ -1,50 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 26 Jun 2010 00:15:32 +0200
-Subject: [Buildroot] [PATCH 5/5] toolchain: rename base target for external
-	toolchains
+Date: Sat, 26 Jun 2010 00:15:30 +0200
+Subject: [Buildroot] [PATCH 3/5] toolchain: move makefile includes
 In-Reply-To: <1277504132-11184-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1277504132-11184-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1277504132-11184-6-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1277504132-11184-4-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is misleeading to name the external toolchain make target 'uclibc', as
-external toochains can be based on other C libraries (eg. glibc or eglibc).
+Including a bunch of Makefiles with wildcard makes it impossible
+to add new toolchain backends. Avoid that by namely including
+needed files.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 ---
- Makefile                                 |    2 +-
- toolchain/toolchain-external/ext-tool.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile                         |   16 ++--------------
+ toolchain/toolchain-buildroot.mk |   14 ++++++++++++++
+ toolchain/toolchain-external.mk  |   16 ++++++++++++++++
+ 3 files changed, 32 insertions(+), 14 deletions(-)
+ create mode 100644 toolchain/toolchain-buildroot.mk
+ create mode 100644 toolchain/toolchain-external.mk
 
 diff --git a/Makefile b/Makefile
-index a167826..5b28cbd 100644
+index fe320df..a167826 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -230,7 +230,7 @@ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
+@@ -293,21 +293,9 @@ all: world
+ # each selected package to TARGETS if that package was selected
+ # in the .config file.
  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
+-# avoid pulling in external toolchain which is broken for toplvl parallel builds
+-# Explicit ordering:
+-include toolchain/dependencies/dependencies.mk
+-include toolchain/binutils/binutils.mk
+-include toolchain/ccache/ccache.mk
+-include toolchain/elf2flt/elf2flt.mk
+-include toolchain/gcc/gcc-uclibc-4.x.mk
+-include toolchain/gdb/gdb.mk
+-include toolchain/kernel-headers/kernel-headers.mk
+-include toolchain/mklibs/mklibs.mk
+-include toolchain/sstrip/sstrip.mk
+-include toolchain/uClibc/uclibc.mk
++include toolchain/toolchain-buildroot.mk
  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--BASE_TARGETS:=uclibc
-+BASE_TARGETS:=toolchain-prepare
+-include toolchain/helpers.mk
+-include toolchain/*/*.mk
++include toolchain/toolchain-external.mk
  endif
- TARGETS:=
  
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index c8e7892..d6a759c 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -35,7 +35,7 @@
- #  cross-compiler binaries remains external, all libraries and headers
- #  are imported into the Buildroot tree.
- 
--uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
-+toolchain-prepare: dependencies $(STAMP_DIR)/ext-toolchain-installed
- 
- EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ include package/*/*.mk
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+new file mode 100644
+index 0000000..1bf714b
+--- /dev/null
++++ b/toolchain/toolchain-buildroot.mk
+@@ -0,0 +1,14 @@
++# Include files required for the internal toolchain backend
++
++# avoid pulling in external toolchain which is broken for toplvl parallel builds
++# Explicit ordering:
++include toolchain/dependencies/dependencies.mk
++include toolchain/binutils/binutils.mk
++include toolchain/ccache/ccache.mk
++include toolchain/elf2flt/elf2flt.mk
++include toolchain/gcc/gcc-uclibc-4.x.mk
++include toolchain/gdb/gdb.mk
++include toolchain/kernel-headers/kernel-headers.mk
++include toolchain/mklibs/mklibs.mk
++include toolchain/sstrip/sstrip.mk
++include toolchain/uClibc/uclibc.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+new file mode 100644
+index 0000000..6c00330
+--- /dev/null
++++ b/toolchain/toolchain-external.mk
+@@ -0,0 +1,16 @@
++# Required includes for the external toolchain backend
++
++# Explicit ordering:
++include toolchain/helpers.mk
++include toolchain/binutils/binutils.mk
++include toolchain/ccache/ccache.mk
++include toolchain/dependencies/dependencies.mk
++include toolchain/elf2flt/elf2flt.mk
++include toolchain/gcc/gcc-uclibc-3.x.mk
++include toolchain/gcc/gcc-uclibc-4.x.mk
++include toolchain/gdb/gdb.mk
++include toolchain/toolchain-external/ext-tool.mk
++include toolchain/mklibs/mklibs.mk
++include toolchain/sstrip/sstrip.mk
++include toolchain/toolchain-external/ext-tool.mk
++include toolchain/uClibc/uclibc.mk
 -- 
 1.7.1
