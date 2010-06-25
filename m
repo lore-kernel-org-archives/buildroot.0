@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] libfuse : convert to autotools
-	infrastructure & bump to 2.8.4
-Message-ID: <20100625103241.3A25B81DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] dialog : convert to autotools
+	infrastructure & bump to 1.1-20100428
+Message-ID: <20100625103240.7624181DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,113 +10,93 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e9655a5e86c276b2e3dd872d93741d3c03c14b1
+commit: http://git.buildroot.net/buildroot/commit/?id=f97d2871dcca42ced4f2d85facc08803aa0eef5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default
- * Remove incorrect libfuse-dirclean target
- * Remove INSTALL_STAGING_CMDS, since its implementation was the default behaviour
- * No need to strip, done globally
- * No need to create main directories in $(TARGET_DIR)
+ * Installation to target is the default behaviour
+ * No installation to staging is the default behaviour
+ * Stripping is done globally
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/fuse/libfuse.mk |   69 ++++++++--------------------------------------
- 1 files changed, 12 insertions(+), 57 deletions(-)
+ package/dialog/dialog.mk |   60 +++++++--------------------------------------
+ 1 files changed, 10 insertions(+), 50 deletions(-)
 
-diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
-index b45f9ee..87d746f 100644
---- a/package/fuse/libfuse.mk
-+++ b/package/fuse/libfuse.mk
-@@ -3,75 +3,30 @@
- # libfuse
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index 9c6f2a9..7674861 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -3,59 +3,19 @@
+ # dialog
  #
  #############################################################
--LIBFUSE_VERSION:=2.8.1
-+LIBFUSE_VERSION:=2.8.4
- LIBFUSE_SOURCE:=fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
--LIBFUSE_DIR:=$(BUILD_DIR)/fuse-$(LIBFUSE_VERSION)
--LIBFUSE_BINARY:=libfuse
--$(DL_DIR)/$(LIBFUSE_SOURCE):
--	$(call DOWNLOAD,$(LIBFUSE_SITE),$(LIBFUSE_SOURCE))
+-DIALOG_VERSION:=1.1-20070704
++DIALOG_VERSION:=1.1-20100428
+ DIALOG_SOURCE:=dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE:=ftp://invisible-island.net/dialog
+-DIALOG_DIR:=$(BUILD_DIR)/dialog-$(DIALOG_VERSION)
+-DIALOG_BINARY:=dialog
+-DIALOG_TARGET_BINARY:=usr/bin/dialog
  
--$(LIBFUSE_DIR)/.source: $(DL_DIR)/$(LIBFUSE_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LIBFUSE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBFUSE_DIR) package/fuse/ \*.patch
+-$(DL_DIR)/$(DIALOG_SOURCE):
+-	$(call DOWNLOAD,$(DIALOG_SITE),$(DIALOG_SOURCE))
++DIALOG_DEPENDENCIES = ncurses
+ 
+-$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(DIALOG_DIR)
 -	touch $@
--
--
--$(LIBFUSE_DIR)/.configured: $(LIBFUSE_DIR)/.source
--	(cd $(LIBFUSE_DIR); rm -rf config.cache ; \
--	$(TARGET_CONFIGURE_OPTS) \
--	CFLAGS="$(TARGET_CFLAGS)" \
++define DIALOG_INSTALL_TARGET_CMDS
++	install -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
++endef
+ 
+-$(DIALOG_DIR)/.configured: $(DIALOG_DIR)/.source
+-	(cd $(DIALOG_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--sysconfdir=/etc \
--		--program-prefix="" \
-+LIBFUSE_INSTALL_STAGING = YES
-+LIBFUSE_LIBTOOL_PATCH = NO
-+LIBFUSE_CONF_OPT= --program-prefix="" \
- 		--enable-shared \
- 		--enable-static \
- 		--disable-nls \
- 		--disable-example \
- 		--disable-kernel-module \
- 		--enable-lib \
--		--enable-util \
--	);
+-		--sysconfdir=/etc; \
+-	)
 -	touch $@
--
--$(LIBFUSE_DIR)/.compiled: $(LIBFUSE_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LIBFUSE_DIR)
--	touch $@
-+		--enable-util
- 
--$(STAGING_DIR)/usr/lib/libfuse.so: $(LIBFUSE_DIR)/.compiled
--	$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
--	touch -c $@
--
--$(TARGET_DIR)/usr/lib/libfuse.so: $(STAGING_DIR)/usr/lib/libfuse.so
--	mkdir -p $(TARGET_DIR)/usr/lib
--	mkdir -p $(TARGET_DIR)/usr/bin
-+define LIBFUSE_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/fusermount
- 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfuse.so
--	touch -c $@
--
--libfuse: $(TARGET_DIR)/usr/lib/libfuse.so
--
--libfuse-source: $(DL_DIR)/$(LIBFUSE_SOURCE)
-+endef
- 
--libfuse-clean:
--	-$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR) uninstall
--	-$(MAKE) -C $(LIBFUSE_DIR) clean
-+define LIBFUSE_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) uninstall
++define DIALOG_POST_CLEAN
 +	-$(MAKE) -C $(@D) clean
- 	rm -f $(TARGET_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/lib/libfuse.so*
++	rm -f $(TARGET_DIR)/usr/bin/dialog
 +endef
  
--libfuse-dirclean:
--	rm -rf $(LIBFUSE_DIR)
+-$(DIALOG_DIR)/$(DIALOG_BINARY): $(DIALOG_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIALOG_DIR)
+-	touch -c $@
+-
+-$(TARGET_DIR)/$(DIALOG_TARGET_BINARY): $(DIALOG_DIR)/$(DIALOG_BINARY)
+-	$(MAKE) prefix=$(TARGET_DIR)/usr \
+-		mandir=$(TARGET_DIR)/usr/share/man \
+-		-C $(DIALOG_DIR) install
+-
+-dialog: ncurses $(TARGET_DIR)/$(DIALOG_TARGET_BINARY)
+-
+-dialog-source: $(DL_DIR)/$(DIALOG_SOURCE)
+-
+-dialog-clean:
+-	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(DIALOG_DIR) uninstall
+-	-$(MAKE) -C $(DIALOG_DIR) clean
+-
+-dialog-dirclean:
+-	rm -rf $(DIALOG_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LIBFUSE),y)
--TARGETS+=libfuse
+-ifeq ($(BR2_PACKAGE_DIALOG),y)
+-TARGETS+=dialog
 -endif
-+$(eval $(call AUTOTARGETS,package,libfuse))
++$(eval $(call AUTOTARGETS,package,dialog))
 -- 
 1.7.1
