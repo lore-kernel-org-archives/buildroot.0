@@ -1,40 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 25 Jun 2010 11:53:28 +0200
-Subject: [Buildroot] make linux26-force
-In-Reply-To: <0D753D10438DA54287A00B02708426976372DCA426@AUSP01VMBX24.collaborationhost.net>
-	(H. Hartley Sweeten's message of "Thu, 24 Jun 2010 10:48:09 -0500")
-References: <0D753D10438DA54287A00B027084269763716C534F@AUSP01VMBX24.collaborationhost.net>
-	<20100624092307.38486bc6@surf>
-	<0D753D10438DA54287A00B02708426976372DCA426@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <874ogr4ew7.fsf@macbook.be.48ers.dk>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Fri, 25 Jun 2010 12:00:27 +0200
+Subject: [Buildroot] [PATCH v4] package: Add support for pidgin/finch
+	instant messenger (2.7.1)
+In-Reply-To: <20100625091927.4c67886b@surf>
+References: <201005140300.25098.PeterHuewe@gmx.de>
+	<201006241726.25775.PeterHuewe@gmx.de>
+	<20100625091927.4c67886b@surf>
+Message-ID: <201006251200.27398.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+Am Freitag 25 Juni 2010 09:19:27 schrieb Thomas Petazzoni:
+> On Thu, 24 Jun 2010 17:26:25 +0200
+> 
+> Peter Huewe <PeterHuewe@gmx.de> wrote:
+> > +	select BR2_PACKAGE_GNUTTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+> 
+>                            ^^^ should be BR2_PACKAGE_GETTEXT
+> 
+> Otherwise, looks good, I think the next version will get by Acked-by :-)
+> 
+> Thomas
+> 
 
-Hi,
+Then it seems to be wrong in the documentation - esspecially if you look at 
+the extra T in GNUT :)
 
- H> No.  Manually adding a new patch or making a change to one of the
- H> source files will not cause the kernel to be rebuilt.  And, doing a
- H> linux26-menuconfig also will not cause the rebuild (unless something
- H> is changed).
+>Packages that need gettext only when locale support is enabled should:
+>
+>   1. Use select BR2_PACKAGE_GNUTTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE and 
+>possibly select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE if libintl 
+>is also needed
 
- H> I'm trying to bring up a new board design so I am always making
- H> changes to my kernel board init file, either to enable a new feature
- H> or test something.
 
-I would personally do that kind of work outside buildroot, and build the
-kernel manually.
+http://buildroot.org/downloads/buildroot.html#gettext-integration 
+Maybe we should change that - patch comes in the next message ;)
 
-BR is nice for automating stuff once you have the basic config stable,
-but I'm not the best option when you do lowlevel kernel work like board
-code / device drivers.
-
-But ok, we can readd that option - But where to stop? Some day someone
-will want to hack on something else (u-boot/busybox/uClibc/whatever) and
-end up in the same situation.
--- 
-Bye, Peter Korsgaard
+Peter
