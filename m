@@ -1,23 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Jun 2010 09:33:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 1981] zlib: bump to 1.2.5
-In-Reply-To: <bug-1981-163@https.bugs.busybox.net/>
-References: <bug-1981-163@https.bugs.busybox.net/>
-Message-ID: <20100625093310.BC6E581DB8@busybox.osuosl.org>
+Date: Fri, 25 Jun 2010 09:36:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 1399] xfont_font-adobe-100dpi does not build
+In-Reply-To: <bug-1399-163@https.bugs.busybox.net/>
+References: <bug-1399-163@https.bugs.busybox.net/>
+Message-ID: <20100625093659.21A4D818EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1981
+https://bugs.busybox.net/show_bug.cgi?id=1399
 
---- Comment #4 from Paul Jones <paul@pauljones.id.au>  ---
-Created attachment 2095
-  --> https://bugs.busybox.net/attachment.cgi?id=2095
-zlib-Bump-to-1.2.5.patch
+Paul Jones <paul.jones@iwtech.com.au> changed:
 
-3rd time lucky....
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+--- Comment #15 from Paul Jones <paul.jones@iwtech.com.au>  ---
+I can't seem to reproduce any more. I only had the problem on Gentoo systems
+but not on Ubuntu. Hopefully the problem is gone so marking as closed.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
