@@ -1,43 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 25 Jun 2010 02:36:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 2107] New: New package: input-event-daemon
-Message-ID: <bug-2107-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Jun 2010 09:18:00 +0200
+Subject: [Buildroot] [PATCH v4] package: Add support for clex
+ filemanager (v 3.19)
+In-Reply-To: <201006241733.08033.PeterHuewe@gmx.de>
+References: <201005130115.00927.PeterHuewe@gmx.de>
+	<201005141421.51373.PeterHuewe@gmx.de>
+	<201006240025.11012.PeterHuewe@gmx.de>
+	<201006241733.08033.PeterHuewe@gmx.de>
+Message-ID: <20100625091800.57a5e17d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2107
+On Thu, 24 Jun 2010 17:33:07 +0200
+Peter H?we <PeterHuewe@gmx.de> wrote:
 
-           Summary: New package: input-event-daemon
-           Product: buildroot
-           Version: 2010.05
-          Platform: All
-               URL: http://github.com/gandro/input-event-daemon
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: keguang.zhang at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> From: Peter Huewe <peterhuewe@gmx.de>
+> 
+> Clex is a free and open source ncurses filemanager.
+> (somewhat similar to a lightweight midnight commander)
+> 
+> "It displays directory contents including the file status
+> details and provides features like command history, filename
+> insertion, or name completion in order to help users to create
+> commands to be executed by the shell."
+> 
+> For more information visit http://www.clex.sk/about.html
+> 
+> This patch adds version 3.19 to the buildroot buildsystem.
+> 
+> Tested on and compiled with atmel ngw100_defconfig.
+> 
+> Signed-off-by: Peter Huewe <peterhuewe@gmx.de>
 
+Not tested, but looks good, so:
 
-Created attachment 2089
-  --> https://bugs.busybox.net/attachment.cgi?id=2089
-Add new package: input-event-daemon
-
-input-event-daemon is a daemon which executes a user-defined command on input
-events, such as keys, mouse buttons and switches.
-This can be useful to handle special keys on laptops or multimedia keyboards
-without X11.
-
-See: http://github.com/gandro/input-event-daemon
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
