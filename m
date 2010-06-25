@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] dash : convert to autotools
-	infrastructure & bump to 0.5.5.1
-Message-ID: <20100625103240.C810281DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] links : convert to autotools
+	infrastructure & bump to 1.01pre1-no-ssl
+Message-ID: <20100625103240.4983D81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,66 +10,80 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1e3d5d2a192339efe3f27eb8363c6229cfa5a30
+commit: http://git.buildroot.net/buildroot/commit/?id=2406251d701a0be48d9e52bb0bf809586e62b920
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * No need to strip
- * Target installation is the default
- * No installation to staging is the default
- * Remove DASH_BINARY/DASH_SOURCE variables
- * Fix minor mistakes
- * Simplify: no need to pass CC/CC_FOR_BUILD
+ * Installation to target is the default behaviour
+ * No installation to staging is the default behaviour
+ * Stripping is done globally
+ * Remove incorrect cleaning rules
 
 Signed-off-by: cmchao <cmchao@gmail.com>
-
-merge dash
 ---
- package/dash/dash.mk |   73 +++++++-------------------------------------------
- 1 files changed, 10 insertions(+), 63 deletions(-)
+ .../links/links-1.01pre1-no-ssl-largefile.patch    |   22 +++++++
+ package/links/links.mk                             |   62 ++------------------
+ 2 files changed, 28 insertions(+), 56 deletions(-)
+ create mode 100644 package/links/links-1.01pre1-no-ssl-largefile.patch
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 63a102a..e5da642 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -3,71 +3,18 @@
- # dash
+diff --git a/package/links/links-1.01pre1-no-ssl-largefile.patch b/package/links/links-1.01pre1-no-ssl-largefile.patch
+new file mode 100644
+index 0000000..f3143cb
+--- /dev/null
++++ b/package/links/links-1.01pre1-no-ssl-largefile.patch
+@@ -0,0 +1,22 @@
++Index: links-1.01pre1-no-ssl/links.h
++===================================================================
++--- links-1.01pre1-no-ssl.orig/links.h	2010-06-21 00:39:10.000000000 +0200
+++++ links-1.01pre1-no-ssl/links.h	2010-06-21 00:39:52.000000000 +0200
++@@ -2,6 +2,9 @@
++ #define __EXTENSIONS__
++ #endif
++ 
+++#include <features.h>
+++/* uclibc without largefile support #errors on _FILE_OFFSET_BITS=64 */
+++#if !(defined(__UCLIBC__) && !defined(__UCLIBC_HAS_LFS__))
++ #ifndef _LARGEFILE_SOURCE
++ #define _LARGEFILE_SOURCE	1
++ #endif
++@@ -9,6 +12,7 @@
++ #ifndef _FILE_OFFSET_BITS
++ #define _FILE_OFFSET_BITS	64
++ #endif
+++#endif
++ 
++ #ifdef HAVE_CONFIG_H
++ #include "config.h"
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 298c165..2e17066 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -3,64 +3,14 @@
+ # links (text based web browser)
  #
  #############################################################
--DASH_VERSION:=0.5.3
-+DASH_VERSION:=0.5.5.1
- DASH_SOURCE:=dash_$(DASH_VERSION).orig.tar.gz
- DASH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
--DASH_CAT:=$(ZCAT)
--DASH_DIR:=$(BUILD_DIR)/dash-$(DASH_VERSION)
--DASH_PATCH1:=dash_$(DASH_VERSION)-7.diff.gz
--DASH_BINARY:=src/dash
--DASH_TARGET_BINARY:=bin/dash
-+DASH_PATCH:=dash_$(DASH_VERSION)-6.diff.gz
+-LINKS_VERSION:=0.99pre9-no-ssl
++LINKS_VERSION:=1.01pre1-no-ssl
+ LINKS_SITE:=http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/download/no-ssl
+ LINKS_SOURCE:=links-$(LINKS_VERSION).tar.gz
+-LINKS_DIR:=$(BUILD_DIR)/links-$(LINKS_VERSION)
  
--$(DL_DIR)/$(DASH_SOURCE):
--	$(call DOWNLOAD,$(DASH_SITE),$(DASH_SOURCE))
-+define DASH_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/src/dash $(TARGET_DIR)/bin/dash
+-$(DL_DIR)/$(LINKS_SOURCE):
+-	$(call DOWNLOAD,$(LINKS_SITE),$(LINKS_SOURCE))
++LINKS_CONF_OPT = --localstatedir=/tmp
+ 
+-links-source: $(DL_DIR)/$(LINKS_SOURCE)
++define LINKS_INSTALL_TARGET_CMDS
++	install -c $(@D)/links $(TARGET_DIR)/usr/bin/links
 +endef
  
--$(DL_DIR)/$(DASH_PATCH1):
--	$(call DOWNLOAD,$(DASH_SITE),$(DASH_PATCH1))
-+define DASH_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+	rm -f $(TARGET_DIR)/bin/dash
-+endef
- 
--dash-source: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-$(LINKS_DIR)/.unpacked: $(DL_DIR)/$(LINKS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LINKS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LINKS_DIR)/.unpacked
 -
--$(DASH_DIR)/.unpacked: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
--	$(DASH_CAT) $(DL_DIR)/$(DASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(ZCAT) $(DL_DIR)/$(DASH_PATCH1) | patch -p1 -d $(DASH_DIR)
--	touch $(DASH_DIR)/.unpacked
--
--$(DASH_DIR)/.configured: $(DASH_DIR)/.unpacked
--	(cd $(DASH_DIR); rm -rf config.cache; \
+-$(LINKS_DIR)/.configured: $(LINKS_DIR)/.unpacked
+-	(cd $(LINKS_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -80,40 +94,41 @@ index 63a102a..e5da642 100644
 -		--exec-prefix=/usr \
 -		--bindir=/usr/bin \
 -		--sbindir=/usr/sbin \
+-		--libdir=/lib \
 -		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
 -		--datadir=/usr/share \
--		--localstatedir=/var \
+-		--localstatedir=/tmp \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
 -	)
--	touch $(DASH_DIR)/.configured
+-	touch $(LINKS_DIR)/.configured
 -
--$(DASH_DIR)/$(DASH_BINARY): $(DASH_DIR)/.configured
--	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(DASH_DIR)
--	touch -c $(DASH_DIR)/$(DASH_BINARY)
+-$(LINKS_DIR)/links: $(LINKS_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LINKS_DIR)
+-	$(STRIPCMD) $(LINKS_DIR)/links
 -
--$(TARGET_DIR)/$(DASH_TARGET_BINARY): $(DASH_DIR)/$(DASH_BINARY)
--	cp -a $(DASH_DIR)/$(DASH_BINARY) $(TARGET_DIR)/$(DASH_TARGET_BINARY)
--	touch -c $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-$(TARGET_DIR)/usr/bin/links: $(LINKS_DIR)/links
+-	install -c $(LINKS_DIR)/links $(TARGET_DIR)/usr/bin/links
 -
--dash: $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-links-clean:
+-	-$(MAKE) -C $(LINKS_DIR) clean
+-	rm -f $(TARGET_DIR)/usr/bin/links
 -
--dash-clean:
--	$(MAKE1) CC=$(TARGET_CC) -C $(DASH_DIR) clean
--	rm -f $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-links-dirclean:
+-	rm -rf $(LINKS_DIR)
 -
--dash-dirclean:
--	rm -rf $(DASH_DIR)
+-links: $(TARGET_DIR)/usr/bin/links
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DASH),y)
--TARGETS+=dash
+-ifeq ($(BR2_PACKAGE_LINKS),y)
+-TARGETS+=links
 -endif
-+$(eval $(call AUTOTARGETS,package,dash))
++$(eval $(call AUTOTARGETS,package,links))
 -- 
 1.7.1
