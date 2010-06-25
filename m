@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] distcc : convert to autotools
-	infrastructure & bump to 1.1-20100428
-Message-ID: <20100625103239.8D1C381DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] berkeleydb : convert to
+	autotools infrastructure & bump to 4.4.20
+Message-ID: <20100625103240.9D40F81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,102 +10,125 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8397a4ca1b0ff32f6517e012e3e7553c5dfe3d26
+commit: http://git.buildroot.net/buildroot/commit/?id=ef82aebff9d4046525a253f518ca1167d843cf9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-     * Target installation is the default behaviour
-     * No installation to staging is the default behaviour
-     * Remove DISTCC_BINARY/DISTCC_TARGET_BINARY variables
+ * Installation to target is the default
+ * Use BERKELEYDB_SUBDIR to get rid of the specific BUILD_CMDS and
+   INSTALL_STAGING_CMDS
+ * Split the INSTALL_TARGET_CMDS to install development files on the
+   target only when needed
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/distcc/distcc.mk |   70 +++++++--------------------------------------
- 1 files changed, 11 insertions(+), 59 deletions(-)
+ package/berkeleydb/berkeleydb.mk |   82 +++++++++++--------------------------
+ 1 files changed, 25 insertions(+), 57 deletions(-)
 
-diff --git a/package/distcc/distcc.mk b/package/distcc/distcc.mk
-index 75cfacc..f3d13bd 100644
---- a/package/distcc/distcc.mk
-+++ b/package/distcc/distcc.mk
-@@ -5,67 +5,19 @@
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index f15df6a..b026143 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -3,25 +3,17 @@
+ # berkeley db
+ #
  #############################################################
- DISTCC_VERSION:=2.18.3
- DISTCC_SOURCE:=distcc-$(DISTCC_VERSION).tar.bz2
--DISTCC_CAT:=$(BZCAT)
- DISTCC_SITE:=http://distcc.samba.org/ftp/distcc/
--DISTCC_BUILDDIR:=$(BUILD_DIR)/distcc-$(DISTCC_VERSION)
--DISTCC_BINARY:=distcc
--DISTCC_TARGET_BINARY:=usr/bin/distcc
- 
--$(DL_DIR)/$(DISTCC_SOURCE):
--	$(call DOWNLOAD,$(DISTCC_SITE),$(DISTCC_SOURCE))
-+DISTCC_CONF_OPT = --with-included-popt --without-gtk --without-gnome
- 
--distcc-source: $(DL_DIR)/$(CVS_SOURCE)
-+define DISTCC_INSTALL_TARGET_CMDS
-+	install -D $(@D)/distccd $(TARGET_DIR)/usr/bin/distccd
-+	install -D $(@D)/distcc $(TARGET_DIR)/usr/bin/distcc
+-DB_VERSION:=4.3.29
+-DB_SO_VERSION:=4.3
+-DB_SITE:=ftp://ftp.sleepycat.com/releases
+-DB_SOURCE:=db-$(DB_VERSION).NC.tar.gz
+-DB_DIR:=$(BUILD_DIR)/db-$(DB_VERSION).NC
+-DB_SHARLIB:=libdb-$(DB_SO_VERSION).so
+-
+-$(DL_DIR)/$(DB_SOURCE):
+-	$(call DOWNLOAD,$(DB_SITE),$(DB_SOURCE))
+-
+-berkeleydb-source: $(DL_DIR)/$(DB_SOURCE)
+-
+-$(DB_DIR)/.dist: $(DL_DIR)/$(DB_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(DB_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(DB_DIR)/.configured: $(DB_DIR)/.dist
+-	$(CONFIG_UPDATE) $(DB_DIR)/dist
+-	(cd $(DB_DIR)/build_unix; rm -rf config.cache; \
++BERKELEYDB_VERSION:=4.4.20
++BERKELEYDB_SO_VERSION:=4.4
++BERKELEYDB_SITE:=ftp://ftp.sleepycat.com/releases
++BERKELEYDB_SOURCE:=db-$(BERKELEYDB_VERSION).NC.tar.gz
++BERKELEYDB_SHARLIB:=libdb-$(BERKELEYDB_SO_VERSION).so
++BERKELEYDB_SUBDIR=build_unix
++BERKELEYDB_INSTALL_STAGING = YES
++
++#build directory can't be the directory where configure are there, so..
++define BERKELEYDB_CONFIGURE_CMDS
++	(cd $(@D)/build_unix; rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		../dist/configure $(QUIET) \
+@@ -48,48 +40,24 @@ $(DB_DIR)/.configured: $(DB_DIR)/.dist
+ 		--disable-tcl \
+ 		--disable-compat185 \
+ 		--with-pic \
+-		$(DISABLE_LARGEFILE) \
+ 	)
+-	$(SED) 's/\.lo/.o/g' $(DB_DIR)/build_unix/Makefile
+-	touch $@
+-
+-$(DB_DIR)/build_unix/.libs/$(DB_SHARLIB): $(DB_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(DB_DIR)/build_unix
+-
+-$(STAGING_DIR)/lib/$(DB_SHARLIB): $(DB_DIR)/build_unix/.libs/$(DB_SHARLIB)
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DB_DIR)/build_unix install
+-	chmod a-x $(STAGING_DIR)/lib/libdb*so*
+-	rm -f $(STAGING_DIR)/bin/db_*
+-	rm -rf $(STAGING_DIR)/share/locale
++	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
 +endef
  
--$(DISTCC_BUILDDIR)/.unpacked: $(DL_DIR)/$(DISTCC_SOURCE)
--	$(DISTCC_CAT) $(DL_DIR)/$(DISTCC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(DISTCC_BUILDDIR)
--	touch $(DISTCC_BUILDDIR)/.unpacked
-+define DISTCC_CLEAN_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/distcc
-+	rm -f $(TARGET_DIR)/usr/bin/distccd
-+	-$(MAKE) -C $(@D) clean
+-$(TARGET_DIR)/lib/$(DB_SHARLIB): $(STAGING_DIR)/lib/$(DB_SHARLIB)
+-	rm -rf $(TARGET_DIR)/lib/libdb*
+-	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
+-	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(DB_SHARLIB) libdb.so)
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libdb*so*
+-
+-$(TARGET_DIR)/usr/lib/libdb.a: $(STAGING_DIR)/lib/libdb-$(DB_SO_VERSION).a
++ifeq ($(BR2_HAVE_DEVFILES),y)
++define BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/include/db.h $(TARGET_DIR)/usr/include/
+ 	cp -dpf $(STAGING_DIR)/lib/libdb*.a $(TARGET_DIR)/usr/lib/
+ 	cp -dpf $(STAGING_DIR)/lib/libdb*.la $(TARGET_DIR)/usr/lib/
+-	touch -c $@
+-
+-berkeleydb-headers: $(TARGET_DIR)/usr/lib/libdb.a
+-
+-berkeleydb-clean:
+-	-$(MAKE) -C $(DB_DIR)/build_unix clean
+-
+-berkeleydb-dirclean:
+-	rm -rf $(DB_DIR)
++endef
++endif
+ 
+-berkeleydb: $(TARGET_DIR)/lib/$(DB_SHARLIB)
++define BERKELEYDB_INSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/lib/libdb*
++	cp -a $(STAGING_DIR)/lib/libdb*so* $(TARGET_DIR)/lib/
++	rm -f $(addprefix $(TARGET_DIR)/lib/,libdb.so libdb.la libdb.a)
++	(cd $(TARGET_DIR)/usr/lib; ln -fs /lib/$(BERKELEYDB_SHARLIB) libdb.so)
++	$(BERKELEYDB_INSTALL_TARGET_DEVFILES_CMDS)
 +endef
  
--$(DISTCC_BUILDDIR)/.configured: $(DISTCC_BUILDDIR)/.unpacked
--	(cd $(DISTCC_BUILDDIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--with-included-popt \
--		--without-gtk \
--		--without-gnome \
--	)
--	touch $(DISTCC_BUILDDIR)/.configured
--
--$(DISTCC_BUILDDIR)/$(DISTCC_BINARY): $(DISTCC_BUILDDIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DISTCC_BUILDDIR)
--
--$(TARGET_DIR)/$(DISTCC_TARGET_BINARY): $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)
--	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY)d $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
--	install -D $(DISTCC_BUILDDIR)/$(DISTCC_BINARY) $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
--
--distcc: $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
--
--distcc-clean:
--	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)
--	rm -f $(TARGET_DIR)/$(DISTCC_TARGET_BINARY)d
--	-$(MAKE) -C $(DISTCC_BUILDDIR) clean
--
--distcc-dirclean:
--	rm -rf $(DISTCC_BUILDDIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DISTCC),y)
--TARGETS+=distcc
+-ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+-TARGETS+=berkeleydb
 -endif
-+$(eval $(call AUTOTARGETS,package,distcc))
++$(eval $(call AUTOTARGETS,package,berkeleydb))
 -- 
 1.7.1
