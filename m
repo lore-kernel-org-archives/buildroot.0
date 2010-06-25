@@ -1,62 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 26 Jun 2010 00:15:29 +0200
-Subject: [Buildroot] [PATCH 2/5] toolchain: rename external toolchain dir
+Date: Sat, 26 Jun 2010 00:15:32 +0200
+Subject: [Buildroot] [PATCH 5/5] toolchain: rename base target for external
+	toolchains
 In-Reply-To: <1277504132-11184-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1277504132-11184-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1277504132-11184-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1277504132-11184-6-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rename the external toolchain directory.
-When new backends are here, it will be easier to sort them out
-if they are all prefixed the same way.
+It is misleeading to name the external toolchain make target 'uclibc', as
+external toochains can be based on other C libraries (eg. glibc or eglibc).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/Config.in                                |    4 ++--
- .../Config.in                                      |    0
- .../Config.in.2                                    |    0
- .../ext-tool.mk                                    |    0
- 4 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/{external-toolchain => toolchain-external}/Config.in (100%)
- rename toolchain/{external-toolchain => toolchain-external}/Config.in.2 (100%)
- rename toolchain/{external-toolchain => toolchain-external}/ext-tool.mk (100%)
+ Makefile                                 |    2 +-
+ toolchain/toolchain-external/ext-tool.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ee94143..52b9d8b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -17,7 +17,7 @@ config BR2_TOOLCHAIN_EXTERNAL
- endchoice
+diff --git a/Makefile b/Makefile
+index a167826..5b28cbd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -230,7 +230,7 @@ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+-BASE_TARGETS:=uclibc
++BASE_TARGETS:=toolchain-prepare
+ endif
+ TARGETS:=
  
- source "toolchain/Config.in.1"
--source "toolchain/external-toolchain/Config.in"
-+source "toolchain/toolchain-external/Config.in"
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index c8e7892..d6a759c 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -35,7 +35,7 @@
+ #  cross-compiler binaries remains external, all libraries and headers
+ #  are imported into the Buildroot tree.
  
- # we want gdb config in the middle of both source and external
- # toolchains, but mconf won't let us source the same file twice,
-@@ -26,6 +26,6 @@ source "toolchain/gdb/Config.in"
- comment "Common Toolchain Options"
+-uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
++toolchain-prepare: dependencies $(STAMP_DIR)/ext-toolchain-installed
  
- source "toolchain/Config.in.2"
--source "toolchain/external-toolchain/Config.in.2"
-+source "toolchain/toolchain-external/Config.in.2"
- 
- endmenu
-diff --git a/toolchain/external-toolchain/Config.in b/toolchain/toolchain-external/Config.in
-similarity index 100%
-rename from toolchain/external-toolchain/Config.in
-rename to toolchain/toolchain-external/Config.in
-diff --git a/toolchain/external-toolchain/Config.in.2 b/toolchain/toolchain-external/Config.in.2
-similarity index 100%
-rename from toolchain/external-toolchain/Config.in.2
-rename to toolchain/toolchain-external/Config.in.2
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-similarity index 100%
-rename from toolchain/external-toolchain/ext-tool.mk
-rename to toolchain/toolchain-external/ext-tool.mk
+ EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
 -- 
 1.7.1
