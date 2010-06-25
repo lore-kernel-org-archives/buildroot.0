@@ -1,7 +1,8 @@
-From: Paul Jones <paul@pauljones.id.au>
+From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] Add package xterm
-Message-ID: <20100625103243.4D36781DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] dash : convert to autotools
+	infrastructure & bump to 0.5.5.1
+Message-ID: <20100625103240.C810281DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,60 +10,110 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b92969386a6fce36a0396844769ab3eac463df7
+commit: http://git.buildroot.net/buildroot/commit/?id=c1e3d5d2a192339efe3f27eb8363c6229cfa5a30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
----
- package/Config.in       |    1 +
- package/xterm/Config.in |    6 ++++++
- package/xterm/xterm.mk  |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/xterm/Config.in
- create mode 100644 package/xterm/xterm.mk
+Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index be3f064..0b8ecfd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -139,6 +139,7 @@ source "package/synergy/Config.in"
- source "package/torsmo/Config.in"
- source "package/x11vnc/Config.in"
- source "package/xstroke/Config.in"
-+source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- endmenu
+ * No need to strip
+ * Target installation is the default
+ * No installation to staging is the default
+ * Remove DASH_BINARY/DASH_SOURCE variables
+ * Fix minor mistakes
+ * Simplify: no need to pass CC/CC_FOR_BUILD
+
+Signed-off-by: cmchao <cmchao@gmail.com>
+
+merge dash
+---
+ package/dash/dash.mk |   73 +++++++-------------------------------------------
+ 1 files changed, 10 insertions(+), 63 deletions(-)
+
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 63a102a..e5da642 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -3,71 +3,18 @@
+ # dash
+ #
+ #############################################################
+-DASH_VERSION:=0.5.3
++DASH_VERSION:=0.5.5.1
+ DASH_SOURCE:=dash_$(DASH_VERSION).orig.tar.gz
+ DASH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/d/dash
+-DASH_CAT:=$(ZCAT)
+-DASH_DIR:=$(BUILD_DIR)/dash-$(DASH_VERSION)
+-DASH_PATCH1:=dash_$(DASH_VERSION)-7.diff.gz
+-DASH_BINARY:=src/dash
+-DASH_TARGET_BINARY:=bin/dash
++DASH_PATCH:=dash_$(DASH_VERSION)-6.diff.gz
  
-diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-new file mode 100644
-index 0000000..da3e9fe
---- /dev/null
-+++ b/package/xterm/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_XTERM
-+	bool "xterm"
-+	depends on BR2_PACKAGE_XORG7
-+	help
-+	  xterm terminal emulator
-+
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-new file mode 100644
-index 0000000..b07eda4
---- /dev/null
-+++ b/package/xterm/xterm.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# xterm
-+#
-+#############################################################
-+
-+XTERM_VERSION:=259
-+XTERM_SOURCE:=xterm-$(XTERM_VERSION).tgz
-+XTERM_SITE:=ftp://invisible-island.net/xterm
-+XTERM_DEPENDENCIES = xserver_xorg-server
-+XTERM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-+
-+$(eval $(call AUTOTARGETS,package,xterm))
+-$(DL_DIR)/$(DASH_SOURCE):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_SOURCE))
++define DASH_INSTALL_TARGET_CMDS
++	cp -a $(@D)/src/dash $(TARGET_DIR)/bin/dash
++endef
+ 
+-$(DL_DIR)/$(DASH_PATCH1):
+-	$(call DOWNLOAD,$(DASH_SITE),$(DASH_PATCH1))
++define DASH_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++	rm -f $(TARGET_DIR)/bin/dash
++endef
+ 
+-dash-source: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-
+-$(DASH_DIR)/.unpacked: $(DL_DIR)/$(DASH_SOURCE) $(DL_DIR)/$(DASH_PATCH1)
+-	$(DASH_CAT) $(DL_DIR)/$(DASH_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(ZCAT) $(DL_DIR)/$(DASH_PATCH1) | patch -p1 -d $(DASH_DIR)
+-	touch $(DASH_DIR)/.unpacked
+-
+-$(DASH_DIR)/.configured: $(DASH_DIR)/.unpacked
+-	(cd $(DASH_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-	)
+-	touch $(DASH_DIR)/.configured
+-
+-$(DASH_DIR)/$(DASH_BINARY): $(DASH_DIR)/.configured
+-	$(MAKE1) CC=$(TARGET_CC) CC_FOR_BUILD="$(HOSTCC)" -C $(DASH_DIR)
+-	touch -c $(DASH_DIR)/$(DASH_BINARY)
+-
+-$(TARGET_DIR)/$(DASH_TARGET_BINARY): $(DASH_DIR)/$(DASH_BINARY)
+-	cp -a $(DASH_DIR)/$(DASH_BINARY) $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash: $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash-clean:
+-	$(MAKE1) CC=$(TARGET_CC) -C $(DASH_DIR) clean
+-	rm -f $(TARGET_DIR)/$(DASH_TARGET_BINARY)
+-
+-dash-dirclean:
+-	rm -rf $(DASH_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_DASH),y)
+-TARGETS+=dash
+-endif
++$(eval $(call AUTOTARGETS,package,dash))
 -- 
 1.7.1
