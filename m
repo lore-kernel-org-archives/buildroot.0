@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] dialog : convert to autotools
-	infrastructure & bump to 1.1-20100428
-Message-ID: <20100625103240.7624181DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] sdl_mixer : convert to
+	autotools infrastructure & bump to 1.2.11
+Message-ID: <20100625103242.51EFD81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f97d2871dcca42ced4f2d85facc08803aa0eef5a
+commit: http://git.buildroot.net/buildroot/commit/?id=9b3219fd493a7b834c4f928242df5166e121c18f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- * Installation to target is the default behaviour
- * No installation to staging is the default behaviour
- * Stripping is done globally
+ * Installation to target is the default
+ * No need to strip, done globally
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/dialog/dialog.mk |   60 +++++++--------------------------------------
- 1 files changed, 10 insertions(+), 50 deletions(-)
+ package/sdl_mixer/sdl_mixer.mk |   67 +++++++--------------------------------
+ 1 files changed, 12 insertions(+), 55 deletions(-)
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 9c6f2a9..7674861 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -3,59 +3,19 @@
- # dialog
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index a097734..8033495 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -3,66 +3,23 @@
+ # SDL_mixer
  #
  #############################################################
--DIALOG_VERSION:=1.1-20070704
-+DIALOG_VERSION:=1.1-20100428
- DIALOG_SOURCE:=dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE:=ftp://invisible-island.net/dialog
--DIALOG_DIR:=$(BUILD_DIR)/dialog-$(DIALOG_VERSION)
--DIALOG_BINARY:=dialog
--DIALOG_TARGET_BINARY:=usr/bin/dialog
+-SDL_MIXER_VERSION:=1.2.8
++SDL_MIXER_VERSION:=1.2.11
+ SDL_MIXER_SOURCE:=SDL_mixer-$(SDL_MIXER_VERSION).tar.gz
+ SDL_MIXER_SITE:=http://www.libsdl.org/projects/SDL_mixer/release/
+-SDL_MIXER_CAT:=$(ZCAT)
+-SDL_MIXER_DIR:=$(BUILD_DIR)/SDL_mixer-$(SDL_MIXER_VERSION)
  
--$(DL_DIR)/$(DIALOG_SOURCE):
--	$(call DOWNLOAD,$(DIALOG_SITE),$(DIALOG_SOURCE))
-+DIALOG_DEPENDENCIES = ncurses
+-$(DL_DIR)/$(SDL_MIXER_SOURCE):
+-	$(call DOWNLOAD,$(SDL_MIXER_SITE),$(SDL_MIXER_SOURCE))
++SDL_MIXER_LIBTOOL_PATCH = NO
++SDL_MIXER_INSTALL_STAGING = YES
++SDL_MIXER_DEPENDENCIES = sdl
++SDL_MIXER_CONF_OPT = --without-x --with-sdl-prefix=$(STAGING_DIR)/usr
  
--$(DIALOG_DIR)/.source: $(DL_DIR)/$(DIALOG_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(DIALOG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(DIALOG_DIR)
+-sdl_mixer-source: $(DL_DIR)/$(SDL_MIXER_SOURCE)
+-
+-$(SDL_MIXER_DIR)/.unpacked: $(DL_DIR)/$(SDL_MIXER_SOURCE)
+-	$(SDL_MIXER_CAT) $(DL_DIR)/$(SDL_MIXER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(SDL_MIXER_DIR)/build-scripts
 -	touch $@
-+define DIALOG_INSTALL_TARGET_CMDS
-+	install -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
-+endef
- 
--$(DIALOG_DIR)/.configured: $(DIALOG_DIR)/.source
--	(cd $(DIALOG_DIR); rm -f config.cache; \
+-
+-$(SDL_MIXER_DIR)/.configured: $(SDL_MIXER_DIR)/.unpacked $(STAGING_DIR)/usr/lib/libSDL.so
+-	(cd $(SDL_MIXER_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -61,42 +61,50 @@ index 9c6f2a9..7674861 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--sysconfdir=/etc; \
--	)
+-		--sysconfdir=/etc \
+-		--localstatedir=/var \
+-		--without-x \
+-		--with-freetype-prefix=$(STAGING_DIR)/usr \
+-		--with-sdl-prefix=$(STAGING_DIR)/usr \
+-		)
 -	touch $@
-+define DIALOG_POST_CLEAN
-+	-$(MAKE) -C $(@D) clean
-+	rm -f $(TARGET_DIR)/usr/bin/dialog
-+endef
- 
--$(DIALOG_DIR)/$(DIALOG_BINARY): $(DIALOG_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(DIALOG_DIR)
+-
+-$(SDL_MIXER_DIR)/.compiled: $(SDL_MIXER_DIR)/.configured
+-	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(SDL_MIXER_DIR)
+-	touch $@
+-
+-$(STAGING_DIR)/usr/lib/libSDL_mixer.so: $(SDL_MIXER_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SDL_MIXER_DIR) install
 -	touch -c $@
 -
--$(TARGET_DIR)/$(DIALOG_TARGET_BINARY): $(DIALOG_DIR)/$(DIALOG_BINARY)
--	$(MAKE) prefix=$(TARGET_DIR)/usr \
--		mandir=$(TARGET_DIR)/usr/share/man \
--		-C $(DIALOG_DIR) install
+-$(TARGET_DIR)/usr/lib/libSDL_mixer.so: $(STAGING_DIR)/usr/lib/libSDL_mixer.so
++define SDL_MIXER_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libSDL_mixer*.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
 -
--dialog: ncurses $(TARGET_DIR)/$(DIALOG_TARGET_BINARY)
--
--dialog-source: $(DL_DIR)/$(DIALOG_SOURCE)
--
--dialog-clean:
--	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(DIALOG_DIR) uninstall
--	-$(MAKE) -C $(DIALOG_DIR) clean
--
--dialog-dirclean:
--	rm -rf $(DIALOG_DIR)
+-sdl_mixer: sdl $(TARGET_DIR)/usr/lib/libSDL_mixer.so
++endef
+ 
+-sdl_mixer-clean:
++define SDL_MIXER_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/usr/lib/libSDL_mixer*.so*
+-	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(SDL_MIXER_DIR) uninstall
+-	-$(MAKE) -C $(SDL_MIXER_DIR) clean
++	-$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) uninstall
++	-$(MAKE) -C $(@D) clean
++endef
+ 
+-sdl_mixer-dirclean:
+-	rm -rf $(SDL_MIXER_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DIALOG),y)
--TARGETS+=dialog
+-ifeq ($(BR2_PACKAGE_SDL_MIXER),y)
+-TARGETS+=sdl_mixer
 -endif
-+$(eval $(call AUTOTARGETS,package,dialog))
++$(eval $(call AUTOTARGETS,package,sdl_mixer))
 -- 
 1.7.1
