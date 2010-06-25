@@ -1,8 +1,8 @@
 From: cmchao <cmchao@gmail.com>
 Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] diffutils : convert to
-	autotools infrastructure
-Message-ID: <20100625103241.071EA81DB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libfuse : convert to autotools
+	infrastructure & bump to 2.8.4
+Message-ID: <20100625103241.3A25B81DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,98 +10,113 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb42c6a11a72adb1cb4b1e18e957095bbc97adf2
+commit: http://git.buildroot.net/buildroot/commit/?id=6e9655a5e86c276b2e3dd872d93741d3c03c14b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
  * Installation to target is the default
+ * Remove incorrect libfuse-dirclean target
+ * Remove INSTALL_STAGING_CMDS, since its implementation was the default behaviour
+ * No need to strip, done globally
+ * No need to create main directories in $(TARGET_DIR)
 
 Signed-off-by: cmchao <cmchao@gmail.com>
 ---
- package/diffutils/diffutils.mk |   63 ++-------------------------------------
- 1 files changed, 4 insertions(+), 59 deletions(-)
+ package/fuse/libfuse.mk |   69 ++++++++--------------------------------------
+ 1 files changed, 12 insertions(+), 57 deletions(-)
 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index fd5e5a3..c0b3830 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -6,26 +6,10 @@
- DIFFUTILS_VERSION=2.8.1
- DIFFUTILS_SOURCE:=diffutils-$(DIFFUTILS_VERSION).tar.gz
- DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
--DIFFUTILS_CAT:=$(ZCAT)
--DIFFUTILS_DIR:=$(BUILD_DIR)/diffutils-$(DIFFUTILS_VERSION)
--DIFFUTILS_BINARY:=src/diff
--DIFFUTILS_TARGET_BINARY:=usr/bin/diff
+diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
+index b45f9ee..87d746f 100644
+--- a/package/fuse/libfuse.mk
++++ b/package/fuse/libfuse.mk
+@@ -3,75 +3,30 @@
+ # libfuse
+ #
+ #############################################################
+-LIBFUSE_VERSION:=2.8.1
++LIBFUSE_VERSION:=2.8.4
+ LIBFUSE_SOURCE:=fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+-LIBFUSE_DIR:=$(BUILD_DIR)/fuse-$(LIBFUSE_VERSION)
+-LIBFUSE_BINARY:=libfuse
+-$(DL_DIR)/$(LIBFUSE_SOURCE):
+-	$(call DOWNLOAD,$(LIBFUSE_SITE),$(LIBFUSE_SOURCE))
  
--$(DL_DIR)/$(DIFFUTILS_SOURCE):
--	 $(call DOWNLOAD,$(DIFFUTILS_SITE),$(DIFFUTILS_SOURCE))
-+DIFFUTILS_INSTALL_STAGING = YES
- 
--diffutils-source: $(DL_DIR)/$(DIFFUTILS_SOURCE)
--
--$(DIFFUTILS_DIR)/.unpacked: $(DL_DIR)/$(DIFFUTILS_SOURCE)
--	$(DIFFUTILS_CAT) $(DL_DIR)/$(DIFFUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(DIFFUTILS_DIR)/config
+-$(LIBFUSE_DIR)/.source: $(DL_DIR)/$(LIBFUSE_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LIBFUSE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LIBFUSE_DIR) package/fuse/ \*.patch
 -	touch $@
 -
--$(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
--	(cd $(DIFFUTILS_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_func_strtod=yes \
-+DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
- 		ac_fsusage_space=yes \
- 		fu_cv_sys_stat_statfs2_bsize=yes \
- 		ac_cv_func_closedir_void=no \
-@@ -71,45 +55,6 @@ $(DIFFUTILS_DIR)/.configured: $(DIFFUTILS_DIR)/.unpacked
- 		gl_cv_func_mkstemp_limitations=no \
- 		ac_cv_func_working_mktime=yes \
- 		jm_cv_func_working_re_compile_pattern=yes \
--		ac_use_included_regex=no \
+-
+-$(LIBFUSE_DIR)/.configured: $(LIBFUSE_DIR)/.source
+-	(cd $(LIBFUSE_DIR); rm -rf config.cache ; \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	CFLAGS="$(TARGET_CFLAGS)" \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--	)
+-		--sysconfdir=/etc \
+-		--program-prefix="" \
++LIBFUSE_INSTALL_STAGING = YES
++LIBFUSE_LIBTOOL_PATCH = NO
++LIBFUSE_CONF_OPT= --program-prefix="" \
+ 		--enable-shared \
+ 		--enable-static \
+ 		--disable-nls \
+ 		--disable-example \
+ 		--disable-kernel-module \
+ 		--enable-lib \
+-		--enable-util \
+-	);
 -	touch $@
 -
--$(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY): $(DIFFUTILS_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR)
--
--$(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY): $(DIFFUTILS_DIR)/$(DIFFUTILS_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) \
--		$(if $(BR2_STRIP_none),install,install-strip)
--ifneq ($(BR2_ENABLE_LOCALE),y)
--	rm -rf $(TARGET_DIR)/usr/share/locale
--endif
--
--diffutils: $(TARGET_DIR)/$(DIFFUTILS_TARGET_BINARY)
--
--diff-utils-unpacked: $(DIFFUTILS_DIR)/.unpacked
-+		ac_use_included_regex=no
+-$(LIBFUSE_DIR)/.compiled: $(LIBFUSE_DIR)/.configured
+-	$(MAKE) CC=$(TARGET_CC) -C $(LIBFUSE_DIR)
+-	touch $@
++		--enable-util
  
--diffutils-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(DIFFUTILS_DIR) uninstall
--	-$(MAKE) -C $(DIFFUTILS_DIR) clean
+-$(STAGING_DIR)/usr/lib/libfuse.so: $(LIBFUSE_DIR)/.compiled
+-	$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR)/ install
+-	touch -c $@
 -
--diffutils-dirclean:
--	rm -rf $(DIFFUTILS_DIR)
+-$(TARGET_DIR)/usr/lib/libfuse.so: $(STAGING_DIR)/usr/lib/libfuse.so
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	mkdir -p $(TARGET_DIR)/usr/bin
++define LIBFUSE_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/bin/
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/fusermount
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libfuse.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfuse.so
+-	touch -c $@
+-
+-libfuse: $(TARGET_DIR)/usr/lib/libfuse.so
+-
+-libfuse-source: $(DL_DIR)/$(LIBFUSE_SOURCE)
++endef
+ 
+-libfuse-clean:
+-	-$(MAKE) -C $(LIBFUSE_DIR) DESTDIR=$(STAGING_DIR) uninstall
+-	-$(MAKE) -C $(LIBFUSE_DIR) clean
++define LIBFUSE_CLEAN_CMDS
++	-$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) uninstall
++	-$(MAKE) -C $(@D) clean
+ 	rm -f $(TARGET_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/lib/libfuse.so*
++endef
+ 
+-libfuse-dirclean:
+-	rm -rf $(LIBFUSE_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_DIFFUTILS),y)
--TARGETS+=diffutils
+-ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+-TARGETS+=libfuse
 -endif
-+$(eval $(call AUTOTARGETS,package,diffutils))
++$(eval $(call AUTOTARGETS,package,libfuse))
 -- 
 1.7.1
