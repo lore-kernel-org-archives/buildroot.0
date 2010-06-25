@@ -1,109 +1,35 @@
-From: cmchao <cmchao@gmail.com>
-Date: Fri, 25 Jun 2010 12:31:51 +0200
-Subject: [Buildroot] [git commit master 1/1] libgpg-error : convert to
-	autotools infrastructure & bump to 1.8
-Message-ID: <20100625103242.C5CE181DB8@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Jun 2010 10:57:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 1741] external toolchain linking error
+In-Reply-To: <bug-1741-163@https.bugs.busybox.net/>
+References: <bug-1741-163@https.bugs.busybox.net/>
+Message-ID: <20100625105743.5F44381DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=1741
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9155a9cfa06aceac300500a7b017197dde006aa3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--- Comment #7 from Matthias Brugger <mensch0815@gmail.com>  ---
+Hello Thomas,
 
-Changes by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+right now I get a different error, maybe it's because I use 2010.05.
+But after all I think there is a problem, when you build an external toolchain
+with one buildroot and then try to build another buildroot with this toolchain.
+In my case I build the atngw100 with toolchain dir to /home/matthias/toolchain.
+Afterwards I took another buildroot (with same version) and tried to build
+antgw100 but stating that the external toolchain is at
+/home/matthias/toolchain.
 
- * Installation to target is the default
+Check this, I'm sure you will find some bugs.
+Hope that helped a bit.
 
-Signed-off-by: cmchao <cmchao@gmail.com>
----
- package/libgpg-error/libgpg-error.mk |   71 ++--------------------------------
- 1 files changed, 4 insertions(+), 67 deletions(-)
+Regards,
+Matthias
 
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 0b513ff..89ff24c 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -3,74 +3,11 @@
- # libgpg-error
- #
- #############################################################
--LIBGPG_ERROR_VERSION:=1.5
-+LIBGPG_ERROR_VERSION:=1.8
- LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
--LIBGPG_ERROR_DIR:=$(BUILD_DIR)/libgpg-error-$(LIBGPG_ERROR_VERSION)
--LIBGPG_ERROR_LIBRARY:=src/libgpg-error.la
--LIBGPG_ERROR_DESTDIR:=usr/lib
--LIBGPG_ERROR_TARGET_LIBRARY=$(LIBGPG_ERROR_DESTDIR)/libgpg-error.so
- 
--$(DL_DIR)/$(LIBGPG_ERROR_SOURCE):
--	$(call DOWNLOAD,$(LIBGPG_ERROR_SITE),$(LIBGPG_ERROR_SOURCE))
-+LIBGPG_ERROR_LIBTOOL_PATCH = NO
-+LIBGPG_ERROR_INSTALL_STAGING = YES
- 
--$(LIBGPG_ERROR_DIR)/.source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(LIBGPG_ERROR_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LIBGPG_ERROR_DIR) package/libgpg-error/ libgpg-error\*.patch
--	$(CONFIG_UPDATE) $(LIBGPG_ERROR_DIR)
--	touch $(LIBGPG_ERROR_DIR)/.source
--
--$(LIBGPG_ERROR_DIR)/.configured: $(LIBGPG_ERROR_DIR)/.source
--	(cd $(LIBGPG_ERROR_DIR); rm -f config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/usr/lib \
--		--libexecdir=/$(LIBGPG_ERROR_DESTDIR) \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_NLS) \
--	)
--	touch $(LIBGPG_ERROR_DIR)/.configured
--
--$(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY): $(LIBGPG_ERROR_DIR)/.configured
--	$(MAKE) CC=$(TARGET_CC) -C $(LIBGPG_ERROR_DIR)
--
--$(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(LIBGPG_ERROR_DIR)/$(LIBGPG_ERROR_LIBRARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(LIBGPG_ERROR_DIR) install
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgpg-error.la
--
--$(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY): $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
--	cp -dpf $<* $(TARGET_DIR)/$(LIBGPG_ERROR_DESTDIR)
--
--libgpg-error: $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)
--
--libgpg-error-source: $(DL_DIR)/$(LIBGPG_ERROR_SOURCE)
--
--libgpg-error-clean:
--	rm -f $(TARGET_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)*
--	-$(MAKE) -C $(LIBGPG_ERROR_DIR) clean
--	rm -f $(STAGING_DIR)/$(LIBGPG_ERROR_TARGET_LIBRARY)\*
--
--libgpg-error-dirclean:
--	rm -rf $(LIBGPG_ERROR_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LIBGPG_ERROR),y)
--TARGETS+=libgpg-error
--endif
-+$(eval $(call AUTOTARGETS,package,libgpg-error))
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
