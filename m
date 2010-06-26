@@ -1,29 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Jun 2010 05:44:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 2119] Tries to build kernel,
-	although disabled in config
-In-Reply-To: <bug-2119-163@https.bugs.busybox.net/>
-References: <bug-2119-163@https.bugs.busybox.net/>
-Message-ID: <20100626054454.4CE6881E0B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 26 Jun 2010 07:45:07 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	initramfs-dep-fix
+In-Reply-To: <cover.1277503341.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 26 Jun 2010 00:02:26 +0200")
+References: <cover.1277503341.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87eifu2vq4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2119
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Thomas> The following changes since commit f4abd4e61215b119d38ccba011a901732ce704e4:
+ Thomas>   Peter Huewe (1):
+ Thomas>         docs: Fixed spelling error in buildroot.html GETTEXT instead of GNUTTEXT
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Thomas> are available in the git repository at:
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed Thomas' fix, thanks
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot initramfs-dep-fix
+
+Pulled, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
