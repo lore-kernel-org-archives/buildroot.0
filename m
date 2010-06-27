@@ -1,26 +1,36 @@
-From: amr ali <amraldo@hotmail.com>
-Date: Sun, 27 Jun 2010 12:59:55 +0300
-Subject: [Buildroot] Linking Error while Building Host Mime Info
-Message-ID: <SNT127-W1234C4D14F0F263F86249EB7C90@phx.gbl>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sun, 27 Jun 2010 13:42:34 +0000 (UTC)
+Subject: [Buildroot] [git commit master 1/1] initramfs: update help text
+References: <20100626054529.9E7CE81E0B@busybox.osuosl.org>
+	<i052d8$8up$1@dough.gmane.org> <87aaqh38vi.fsf@macbook.be.48ers.dk>
+	<i06hjh$fj$2@dough.gmane.org> <87hbkp3sfz.fsf@macbook.be.48ers.dk>
+Message-ID: <i07kg9$jsp$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2010-06-27, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
+>
+> >> How about just using the tarball output instead?
+>
+> Grant> When building an initramfs into a kernel, a tarball isn't one of the
+> Grant> options that's accepted by the kernel build system.
+>
+> No, but you could extract the tarball (as root or using fakeroot) and
+> point CONFIG_INITRAMFS_SOURCE to it.
 
-The log is found at http://pastebin.org/361650
-Your help is appreciated.
---
-Amr Ali Abdel-Naby
-Embedded Systems Developer
-www.embedded-tips.blogspot.com
+An extracted tarball isn't one of the options either.
+CONFIG_INITRAMFS_SOURCE can be pointed at either a cpio archive or the
+source file list.
 
+> But yes, providing a way to generate the cpio archive without building a
+> kernel would be nicer.
 
- 		 	   		  
-_________________________________________________________________
-Hotmail: Trusted email with powerful SPAM protection.
-https://signup.live.com/signup.aspx?id=60969
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100627/591803b4/attachment.html>
+It works fine the way it is.  What's the reason for disabling the
+buildign of a cpio file source list?
+
+-- 
+Grant
