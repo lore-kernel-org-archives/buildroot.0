@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jun 2010 20:57:14 +0200
-Subject: [Buildroot] [git commit master 1/1] initramfs: update help text
-In-Reply-To: <i07kg9$jsp$1@dough.gmane.org>
-References: <20100626054529.9E7CE81E0B@busybox.osuosl.org>
-	<i052d8$8up$1@dough.gmane.org> <87aaqh38vi.fsf@macbook.be.48ers.dk>
-	<i06hjh$fj$2@dough.gmane.org> <87hbkp3sfz.fsf@macbook.be.48ers.dk>
-	<i07kg9$jsp$1@dough.gmane.org>
-Message-ID: <20100627205714.507b5439@surf>
+From: =?ISO-8859-1?Q?Ob=E9lix?= <obelix0@yahoo.fr>
+Date: Sun, 27 Jun 2010 21:30:01 +0200
+Subject: [Buildroot] Helps for CV860A (VIA C3) Motherboard
+Message-ID: <4C27A6B9.8010805@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Jun 2010 13:42:34 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+Hello,
+I have a CV860A (VIA C3) motherboard and I would like to build a small 
+kernel with a small filesystem based on busybox to use it on a compact 
+flash of 1go. I think that buildroot can be the right way to do it !
 
-> > No, but you could extract the tarball (as root or using fakeroot) and
-> > point CONFIG_INITRAMFS_SOURCE to it.
-> 
-> An extracted tarball isn't one of the options either.
-> CONFIG_INITRAMFS_SOURCE can be pointed at either a cpio archive or the
-> source file list.
+I did a first test to build a cpio root fs with grub and a vmlinuz kernel :
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_GRUB=y
+BR2_KERNEL_LINUX_ADVANCED=y
+BR2_LINUX_BIN_VMLINUX=y
 
-Or a directory containing the hierarchy of files/directories to include
-in the initramfs.
+I did the "make", when buildroot ask me to configure the kernel, I 
+changed nothing and i build this :
+------------------
+ls -hl output/images/
+total 984M
+-rw-r--r-- 1 user user 855M 2010-06-24 20:29 rootfs.cpio
+-rwxr-xr-x 1 user user 129M 2010-06-24 16:56 vmlinux
+------------------
 
-> > But yes, providing a way to generate the cpio archive without building a
-> > kernel would be nicer.
-> 
-> It works fine the way it is.  What's the reason for disabling the
-> buildign of a cpio file source list?
+I'm a little bit surprised by the size of the root fs and the kernel. I 
+chekc the fs and I found that I have a lot of modules but I don't need 
+of Xserver or wifi driver. How can I know modules that I can select or 
+unselect in the make linux26-menuconfig" ? Is there somebody who have a 
+.config to share ?
 
-It was to fix bug #2119.
+Moreover, I think that during the building I can preapre the compact 
+flash to receive the kernel and fs. Have you got a method to do it ?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks for your help.
+
+Best regards
+
+David
