@@ -1,73 +1,67 @@
 From: Phil Edworthy <Phil.Edworthy@renesas.com>
-Date: Mon, 28 Jun 2010 13:15:36 +0100
-Subject: [Buildroot] [PATCH] Added GStreamer Real-Time Streaming Protocol
-	pkg.
-Message-ID: <AB12B32E73474741A2C5361C433A44DE01E38DE5@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+Date: Mon, 28 Jun 2010 14:09:05 +0100
+Subject: [Buildroot] Steps to add a new board
+Message-ID: <AB12B32E73474741A2C5361C433A44DE01E38E6B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
----
- package/multimedia/Config.in            |    1 +
- package/multimedia/gst-rtsp/Config.in   |    9 +++++++++
- package/multimedia/gst-rtsp/gst-rtsp.mk |   15 +++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-rtsp/Config.in
- create mode 100644 package/multimedia/gst-rtsp/gst-rtsp.mk
+ 
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 3b0eec5..690e2d7 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -9,6 +9,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/gst-rtsp/Config.in"
- source "package/multimedia/libcdaudio/Config.in"
- source "package/multimedia/libdvdread/Config.in"
- source "package/multimedia/libdvdnav/Config.in"
-diff --git a/package/multimedia/gst-rtsp/Config.in
-b/package/multimedia/gst-rtsp/Config.in
-new file mode 100644
-index 0000000..c12ff59
---- /dev/null
-+++ b/package/multimedia/gst-rtsp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GST_RTSP
-+	bool "gst-rtsp"
-+	depends on BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE
-+	help
-+	  A GStreamer based RTSP server.
-+
-+	  http://gstreamer.freedesktop.org/modules/gst-rtsp-server.html
-+
-diff --git a/package/multimedia/gst-rtsp/gst-rtsp.mk
-b/package/multimedia/gst-rtsp/gst-rtsp.mk
-new file mode 100644
-index 0000000..be51a43
---- /dev/null
-+++ b/package/multimedia/gst-rtsp/gst-rtsp.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# gst-rtsp
-+#
-+#############################################################
-+GST_RTSP_VERSION = 0.10.5
-+GST_RTSP_SOURCE = gst-rtsp-$(GST_RTSP_VERSION).tar.bz2
-+GST_RTSP_SITE = http://people.freedesktop.org/~wtay/
-+GST_RTSP_LIBTOOL_PATCH = NO
-+GST_RTSP_INSTALL_STAGING = YES
-+GST_RTSP_INSTALL_TARGET = YES
-+
-+GST_RTSP_DEPENDENCIES = gst-plugins-base gstreamer liboil
-+
-+$(eval $(call AUTOTARGETS,package/multimedia,gst-rtsp))
--- 
-1.7.1
+I've been using Buildroot for a Renesas SH4 device (SH7724) on a MS7724
+development board, so first of all many thanks for all your work!
+
+In order to get the board going, I've had to make a number of changes and
+want to feed these back... However, there are a few things I'd like to iron
+out.
+
+ 
+
+Right now I'm using an external toolchain (CodeSourcery) as I had some
+problems building the kernel using the BR generated toolchain. Would you
+accept patches based on using an external toolchain? I guess this causes
+problems for the board's defconfig.
+
+ 
+
+Regarding the directory structure, I assume that I should populate
+target/device/Renesas/MS7724 with the kernel & busybox configs and
+device_table.txt. For the kernel, I'm using 2.6.33 with a few patches, so
+under this dir I should have a kernel-patches dir for patches required and
+these patches should start with linux-2.6.33-  is this correct?
+
+ 
+
+I also use a post build script to fix securetty (the device needs ttySC0)
+and also add an mdev script to /etc/init.d along with mdef.conf.
+
+Atmel provides its own target skeleton, but I only need to fix securetty. Is
+there a better way to do this? Since the need for ttySC0 means
+target/generic/Config.in has to be fixed, surely it makes sense to fix the
+generic securetty?
+
+ 
+
+I notice that other boards only setup mdev via a replacement target
+skeleton. Should I be doing this instead of a post build script? Is there a
+way to apply a patch to the generic skeleton?
+
+ 
+
+Thanks for any help,
+
+Phil
+
+ 
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100628/6f656e4a/attachment.html>
