@@ -1,48 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Jun 2010 13:09:07 +0200
-Subject: [Buildroot] [PATCH 02/10] ext-toolchain: Fix ARCH_SYSROOT
-	detection
-In-Reply-To: <bf1bcc24c829475c10cf9304df7f3515f21d937f.1276516273.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 14 Jun 2010 13:54:13 +0200")
-References: <cover.1276516273.git.thomas.petazzoni@free-electrons.com>
-	<cover.1276516273.git.thomas.petazzoni@free-electrons.com>
-	<bf1bcc24c829475c10cf9304df7f3515f21d937f.1276516273.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bpav2z3g.fsf@macbook.be.48ers.dk>
+From: Phil Edworthy <Phil.Edworthy@renesas.com>
+Date: Mon, 28 Jun 2010 13:15:36 +0100
+Subject: [Buildroot] [PATCH] Added GStreamer Real-Time Streaming Protocol
+	pkg.
+Message-ID: <AB12B32E73474741A2C5361C433A44DE01E38DE5@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ package/multimedia/Config.in            |    1 +
+ package/multimedia/gst-rtsp/Config.in   |    9 +++++++++
+ package/multimedia/gst-rtsp/gst-rtsp.mk |   15 +++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-rtsp/Config.in
+ create mode 100644 package/multimedia/gst-rtsp/gst-rtsp.mk
 
- Thomas> For the detection of the ARCH_SYSROOT_DIR (which contains the C
- Thomas> library variant specific to the compiler flags), we used to
- Thomas> pass only the -march argument instead of the full
- Thomas> TARGET_CFLAGS. This was done because TARGET_CFLAGS contains
- Thomas> --sysroot, and we don't want to tell here the compiler which
- Thomas> sysroot to use, because we're specifically asking the compiler
- Thomas> where the *normal* arch sysroot directory is.
-
- Thomas> Unfortunately, there are some multilib variants that aren't
- Thomas> decided only based on -march, but also on -msoft-float or other
- Thomas> compiler flags. Therefore, we take the opposite approach: pass
- Thomas> the full TARGET_CFLAGS, from which we have stripped the
- Thomas> --sysroot option.
-
-[snip]
-
- Thomas> +TARGET_CFLAGS_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CFLAGS))
-
-Hmm, in package/Makefile.in I see:
-
-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-TARGET_CFLAGS+=--sysroot $(STAGING_DIR)/
-TARGET_CXXFLAGS=$(TARGET_CFLAGS)
-
-E.G. no = between --sysroot and the value.
-
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 3b0eec5..690e2d7 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -9,6 +9,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
++source "package/multimedia/gst-rtsp/Config.in"
+ source "package/multimedia/libcdaudio/Config.in"
+ source "package/multimedia/libdvdread/Config.in"
+ source "package/multimedia/libdvdnav/Config.in"
+diff --git a/package/multimedia/gst-rtsp/Config.in
+b/package/multimedia/gst-rtsp/Config.in
+new file mode 100644
+index 0000000..c12ff59
+--- /dev/null
++++ b/package/multimedia/gst-rtsp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_GST_RTSP
++	bool "gst-rtsp"
++	depends on BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_GST_PLUGINS_BASE
++	help
++	  A GStreamer based RTSP server.
++
++	  http://gstreamer.freedesktop.org/modules/gst-rtsp-server.html
++
+diff --git a/package/multimedia/gst-rtsp/gst-rtsp.mk
+b/package/multimedia/gst-rtsp/gst-rtsp.mk
+new file mode 100644
+index 0000000..be51a43
+--- /dev/null
++++ b/package/multimedia/gst-rtsp/gst-rtsp.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# gst-rtsp
++#
++#############################################################
++GST_RTSP_VERSION = 0.10.5
++GST_RTSP_SOURCE = gst-rtsp-$(GST_RTSP_VERSION).tar.bz2
++GST_RTSP_SITE = http://people.freedesktop.org/~wtay/
++GST_RTSP_LIBTOOL_PATCH = NO
++GST_RTSP_INSTALL_STAGING = YES
++GST_RTSP_INSTALL_TARGET = YES
++
++GST_RTSP_DEPENDENCIES = gst-plugins-base gstreamer liboil
++
++$(eval $(call AUTOTARGETS,package/multimedia,gst-rtsp))
 -- 
-Bye, Peter Korsgaard
+1.7.1
