@@ -1,25 +1,54 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 28 Jun 2010 01:03:07 +0000 (UTC)
-Subject: [Buildroot] [git commit master 1/1] initramfs: update help text
-References: <20100626054529.9E7CE81E0B@busybox.osuosl.org>
-	<i052d8$8up$1@dough.gmane.org> <87aaqh38vi.fsf@macbook.be.48ers.dk>
-	<i06hjh$fj$2@dough.gmane.org> <87hbkp3sfz.fsf@macbook.be.48ers.dk>
-	<i07kg9$jsp$1@dough.gmane.org> <87631444ss.fsf@macbook.be.48ers.dk>
-Message-ID: <i08scb$3fn$1@dough.gmane.org>
+From: Andy Gibbs <andyg1001@hotmail.co.uk>
+Date: Mon, 28 Jun 2010 09:16:09 +0200
+Subject: [Buildroot] [PATCH] fix ldconfig at target-finalize
+References: <013c7951a6ee3d95f4eb50842e16b771e4f42619.1276695686.git.baruch@tkos.co.il>
+Message-ID: <BLU0-SMTP74DDC98C00DC73900EC521E7CA0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-06-27, Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Wednesday, June 16, 2010 3:43 PM, Baruch Siach wrote:
+> Host ldconfig fails when the directory of the aux-cache file
+> (/var/cache/ldconfig, by default) does not exist. Make sure this directory
+> exists before calling ldconfig.
+>
 
-> Is there any advantage to using a source file for gen_init_cpio instead
-> of just building a cpio archive?
+Also would be good to do a "touch $(TARGET_DIR)/etc/ld.so.conf" too, along 
+with your mkdir.
 
-No, I don't think so.  But if you're not allowed to build the list of
-files/nodes to go into a cpio archive, surely building the cpio
-archive is out of the question?
+Then you get rid of both errors...
 
--- 
-Grant
+/sbin/ldconfig: Can't open configuration file 
+(...)/target-dir/etc/ld.so.conf: No such file or directory
+/sbin/ldconfig: Can't open cache file /var/cache/ldconfig/aux-cache : No 
+such file or directory
+
+Do you need me to provide a patch file to do this?
+
+Cheers
+Andy
+
+
+> Signed-off-by: Baruch Siach 
+> <baruch-NswTu9S1W3P6gbPvEgmw2w@public.gmane.org>
+> ---
+> Makefile |    1 +
+> 1 files changed, 1 insertions(+), 0 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 794a298..1415e30 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -402,6 +402,7 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>  rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+> endif
+>  find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || 
+> true
+> + mkdir -p $(TARGET_DIR)/var/cache/ldconfig
+>  $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
+>
+>  mkdir -p $(TARGET_DIR)/etc
+> -- 
+> 1.7.1 
