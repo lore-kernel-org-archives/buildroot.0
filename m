@@ -1,59 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 27 Jun 2010 23:28:47 +0200
-Subject: [Buildroot] [PATCH 3/5] toolchain: move makefile includes
-In-Reply-To: <87wrtk2nin.fsf@macbook.be.48ers.dk>
-References: <1277504132-11184-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<1277504132-11184-4-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<87wrtk2nin.fsf@macbook.be.48ers.dk>
-Message-ID: <201006272328.47905.yann.morin.1998@anciens.enib.fr>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Mon, 28 Jun 2010 00:39:58 +0000 (UTC)
+Subject: [Buildroot] [git commit master 1/1] initramfs: update help text
+References: <20100626054529.9E7CE81E0B@busybox.osuosl.org>
+	<i052d8$8up$1@dough.gmane.org> <87aaqh38vi.fsf@macbook.be.48ers.dk>
+	<i06hjh$fj$2@dough.gmane.org> <87hbkp3sfz.fsf@macbook.be.48ers.dk>
+	<i07kg9$jsp$1@dough.gmane.org> <20100627205714.507b5439@surf>
+Message-ID: <i08r0u$vue$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On 2010-06-27, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> On Sun, 27 Jun 2010 13:42:34 +0000 (UTC)
+> Grant Edwards <grant.b.edwards@gmail.com> wrote:
+>
+>> > No, but you could extract the tarball (as root or using fakeroot) and
+>> > point CONFIG_INITRAMFS_SOURCE to it.
+>> 
+>> An extracted tarball isn't one of the options either.
+>> CONFIG_INITRAMFS_SOURCE can be pointed at either a cpio archive or the
+>> source file list.
+>
+> Or a directory containing the hierarchy of files/directories to include
+> in the initramfs.
 
-On Sunday 27 June 2010 23:06:56 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
->  Yann> Including a bunch of Makefiles with wildcard makes it impossible
->  Yann> to add new toolchain backends. Avoid that by namely including
->  Yann> needed files.
-[--SNIP--]
-> Why are the order of those includes not the same?
+You're right.  I'd mis-read the help for the initramfs option.
 
-For external toolchains, the original Makefile was doing:
-  include toolchain/*/*.mk
+Doesn't that means you have to do one step of the build as root?
 
-So I just did:
-  ls -1 toolchain/*/*.mk
+I don't think I that's a viable option.
 
-and replaced the single include with the output of ls, so as to keep the
-inclusion in the same order the original Makefile was doing it.
+>> > But yes, providing a way to generate the cpio archive without building a
+>> > kernel would be nicer.
+>> 
+>> It works fine the way it is.  What's the reason for disabling the
+>> buildign of a cpio file source list?
+>
+> It was to fix bug #2119.
 
-> gcc-uclibc-3.x.mk is gone.
-> 2x toolchain-external/ext-tool.mk?
-
-Hmmm... I seem to have missed something here. Wrong tree, I guess... :-(
-
-> Why do we need to include all these when using an external toolchain?
-> Most of them doesn't seem to make sense to me.
-
-I just did what the original Makefile did, just moved the stuff to
-toolchain-specific Makefiles.
-
-I guess it is needed when the user wants to have a native toolchain
-in his/her rootfs, as the rules to build it are in those files. The
-cross-stuff is not built due to the BASE_TARGETS variable that does
-include them only for internal toolchain.
-
-Regards,
-Yann E. MORIN.
+I currently build with the initramfs option without having to build a
+kernel. Isn't there some way to fix bug 2119 without breaking a use
+case for existing users?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Grant
