@@ -1,54 +1,51 @@
-From: Andy Gibbs <andyg1001@hotmail.co.uk>
-Date: Mon, 28 Jun 2010 09:16:09 +0200
-Subject: [Buildroot] [PATCH] fix ldconfig at target-finalize
-References: <013c7951a6ee3d95f4eb50842e16b771e4f42619.1276695686.git.baruch@tkos.co.il>
-Message-ID: <BLU0-SMTP74DDC98C00DC73900EC521E7CA0@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Jun 2010 09:22:00 +0200
+Subject: [Buildroot] [git commit master 1/1] initramfs: update help text
+In-Reply-To: <i08r0u$vue$1@dough.gmane.org> (Grant Edwards's message of "Mon, 
+	28 Jun 2010 00:39:58 +0000 (UTC)")
+References: <20100626054529.9E7CE81E0B@busybox.osuosl.org>
+	<i052d8$8up$1@dough.gmane.org> <87aaqh38vi.fsf@macbook.be.48ers.dk>
+	<i06hjh$fj$2@dough.gmane.org> <87hbkp3sfz.fsf@macbook.be.48ers.dk>
+	<i07kg9$jsp$1@dough.gmane.org> <20100627205714.507b5439@surf>
+	<i08r0u$vue$1@dough.gmane.org>
+Message-ID: <87fx0739lz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, June 16, 2010 3:43 PM, Baruch Siach wrote:
-> Host ldconfig fails when the directory of the aux-cache file
-> (/var/cache/ldconfig, by default) does not exist. Make sure this directory
-> exists before calling ldconfig.
->
+>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
-Also would be good to do a "touch $(TARGET_DIR)/etc/ld.so.conf" too, along 
-with your mkdir.
+Hi,
 
-Then you get rid of both errors...
+ >> Or a directory containing the hierarchy of files/directories to include
+ >> in the initramfs.
 
-/sbin/ldconfig: Can't open configuration file 
-(...)/target-dir/etc/ld.so.conf: No such file or directory
-/sbin/ldconfig: Can't open cache file /var/cache/ldconfig/aux-cache : No 
-such file or directory
+ Grant> You're right.  I'd mis-read the help for the initramfs option.
+ Grant> Doesn't that means you have to do one step of the build as root?
+ Grant> I don't think I that's a viable option.
 
-Do you need me to provide a patch file to do this?
+Either that, use fakeroot or use the cpio target.
 
-Cheers
-Andy
+ >>> > But yes, providing a way to generate the cpio archive without building a
+ >>> > kernel would be nicer.
+ >>> 
+ >>> It works fine the way it is.  What's the reason for disabling the
+ >>> buildign of a cpio file source list?
+ >> 
+ >> It was to fix bug #2119.
 
+ Grant> I currently build with the initramfs option without having to build a
+ Grant> kernel. Isn't there some way to fix bug 2119 without breaking a use
+ Grant> case for existing users?
 
-> Signed-off-by: Baruch Siach 
-> <baruch-NswTu9S1W3P6gbPvEgmw2w@public.gmane.org>
-> ---
-> Makefile |    1 +
-> 1 files changed, 1 insertions(+), 0 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 794a298..1415e30 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -402,6 +402,7 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
->  rm -rf $(TARGET_DIR)/usr/share/gtk-doc
-> endif
->  find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || 
-> true
-> + mkdir -p $(TARGET_DIR)/var/cache/ldconfig
->  $(TARGET_LDCONFIG) -r $(TARGET_DIR) 2>/dev/null
->
->  mkdir -p $(TARGET_DIR)/etc
-> -- 
-> 1.7.1 
+Yes, we could make the:
+
+ROOTFS_INITRAMFS_POST_TARGETS += linux26-rebuild-with-initramfs
+
+conditional on the kernel being built or not, but why are we having both
+a cpio and initramfs target in the first place?
+
+-- 
+Bye, Peter Korsgaard
