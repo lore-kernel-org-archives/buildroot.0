@@ -1,90 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Jul 2010 13:51:18 +0200
-Subject: [Buildroot] Correct way to check for clock_gettime()
-Message-ID: <20100730135118.45adcc67@surf>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Thu, 1 Jul 2010 08:22:55 +1000
+Subject: [Buildroot] Kernel build process
+In-Reply-To: <20100630185824.095c6ad0@surf>
+References: <002401cb1843$dc1e2670$945a7350$@pauljones.id.au>
+	<20100630185824.095c6ad0@surf>
+Message-ID: <000f01cb18a2$d4f5fad0$7ee1f070$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Thursday, 1 July 2010 2:58 AM
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Kernel build process
+> 
+> >
+> > 3)      Add code to ignore copying config file if "Configuration file
+> > path" is still blank and just continue compiling the kernel with the
+> > default options.
+> >
+> > That way it should be obvious to any beginners what the options do,
+> > and if they are not set (ie left as default) the build will still be
+> > able to continue.
+> 
+> I'm not sure about this last part, though. What kind of "default options"
+will
+> the kernel select ? Just a random set of options for the architecture
+selected
+> ? Yes for x86 this will do something more or less sensible, but for other
+> embedded architectures such as ARM, there's no such thing as a "default
+set
+> of options that makes sense".
+> 
+> So I'd prefer to detect the fact that the configuration file path option
+has
+> been left empty, and abort the build by showing an explicit and clear
+error
+> message about this.
+> 
+> Same could be done for the defconfig option.
+> 
+> What do you think ?
 
-I have a build problem related to the fact that I build two seperate
-packages (ctorrent and libglib) while sharing a configure cache (using
-the --cache-file ./configure option) [*]
+Good point. I guess if we tell the user to run "make linux26-menuconfig"
+that would be just as good.
 
-The issue is that CTorrent first does:
 
-AC_SEARCH_LIBS([clock_gettime],[rt posix4])
 
-Which tests if clock_gettime() can be found with no special library
-argument (which fails), and then tests if it can be found using "-lrt",
-which works. So 
-
-Then, CTorrent does:
-
-AC_CHECK_FUNCS([clock_gettime])
-
-Which works too, because the test program gets compiled with
-"-lrt" (which is strange, because I thought that only AC_CHECK_LIB was
-adding the matching library to LIBS, and that AC_SEARCH_LIBS was not
-doing that). But anyway, the test works, so CTorrent configure.ac adds:
-
- ac_cv_func_clock_gettime=${ac_cv_func_clock_gettime=yes}
- ac_cv_search_clock_gettime=${ac_cv_search_clock_gettime=-lrt}
-
-to the configure cache.
-
-Then later on, the ./configure script of libglib is executed. And it
-does:
-
-AC_CHECK_FUNCS(clock_gettime, [], [
-  AC_CHECK_LIB(rt, clock_gettime, [
-    AC_DEFINE(HAVE_CLOCK_GETTIME, 1)
-    G_THREAD_LIBS="$G_THREAD_LIBS -lrt"
-    G_THREAD_LIBS_FOR_GTHREAD="$G_THREAD_LIBS_FOR_GTHREAD -lrt"
-  ])
-])
-
-The AC_CHECK_FUNCS test sees that ac_cv_func_clock_gettime is "yes" in
-the cache (as inserted by CTorrent), so it assumes that clock_gettime()
-is available without making any compilation test. So it doesn't know
-that "-lrt" should be appended to the set of libraries to link with,
-and the libglib build process fails later on because "-lrt" is missing
-on the command line.
-
-So the question is, which of CTorrent and libglib is wrong in its
-configure.{ac,in} ?
-
-I've attached the CTorrent configure.ac and libglib configure.in to
-this e-mail (renamed ctorrent-configure.ac and libglib-configure.in).
-
-Thanks !
-
-Thomas
-
-[*] For those who wonder, we're doing this kind of builds in Buildroot,
-    which is an embedded Linux build system. As we repeatedly configure
-    and build several dozens of packages, sharing the configure cache
-    greatly speeds up the build... but raises some issues such as the
-    one described in this e-mail.
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ctorrent-configure.ac
-Type: application/octet-stream
-Size: 4655 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100730/37c64fe7/attachment-0002.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libglib-configure.in
-Type: application/octet-stream
-Size: 104463 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100730/37c64fe7/attachment-0003.obj>
+Paul.
