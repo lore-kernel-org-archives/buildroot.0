@@ -1,54 +1,53 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Wed, 30 Jun 2010 21:03:22 +1000
-Subject: [Buildroot] Kernel build process
-Message-ID: <002401cb1843$dc1e2670$945a7350$@pauljones.id.au>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Jun 2010 14:03:55 +0200
+Subject: [Buildroot] [PATCH] Fixed LINUX26_IMAGE_PATH
+In-Reply-To: <1277894627-4586-1-git-send-email-henuxd@gmail.com>
+References: <1277894627-4586-1-git-send-email-henuxd@gmail.com>
+Message-ID: <20100630140355.7fddbd22@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Henri,
 
- 
+I've seen your message on IRC, but you left too early for me to react
+on your question.
 
-Just some comments about the new kernel cleanup code. If a kernel config is
-not supplied, the default action is to stop with a rather cryptic error.
-This doesn't seem like a good idea to me, especially when the previous
-behaviour was to just create a default .config and continue. I can see a lot
-of beginners getting caught out with that one.
+On Wed, 30 Jun 2010 13:43:47 +0300
+Henri H?kkinen <henuxd@gmail.com> wrote:
 
- 
+> Kernel image is actually located in boot/images/ rather than in boot/
+> ---
+>  linux/linux.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 593a1b4..355276e 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -42,7 +42,7 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+>  LINUX26_IMAGE_NAME=vmlinux.bin
+>  endif
+>  
+> -LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/$(LINUX26_IMAGE_NAME)
+> +LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/images/$(LINUX26_IMAGE_NAME)
 
-What I would like to suggest is this:
+This will break ARM/x86 and many other architectures. Instead, we
+probably need something like:
 
-1)      Change the default Kernel Configuration to "Using a custom config
-file" (is currently set to use a defconfig)
+ifeq ($(KERNEL_ARCH),avr32)
+LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/images/$(LINUX26_IMAGE_NAME)
+else
+LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/$(LINUX26_IMAGE_NAME)
+endif
 
-2)      Leave "Configuration file path" blank as default
+Regards,
 
-3)      Add code to ignore copying config file if "Configuration file path"
-is still blank and just continue compiling the kernel with the default
-options.
-
- 
-
-That way it should be obvious to any beginners what the options do, and if
-they are not set (ie left as default) the build will still be able to
-continue.
-
- 
-
- 
-
-Thoughts?
-
- 
-
- 
-
-Paul.
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100630/3e06bcb6/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
