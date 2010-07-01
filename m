@@ -1,26 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Jul 2010 09:15:46 +0200
-Subject: [Buildroot] [git commit master 1/1] package/config: create
-	.depend in object directory
-In-Reply-To: <1277922133.2534.45.camel@dubciaranr1.verifone.com> (Quotient
-	Remainder's message of "Wed, 30 Jun 2010 19:22:13 +0100")
-References: <20100621210811.D9437817F1@busybox.osuosl.org>
-	<1277922133.2534.45.camel@dubciaranr1.verifone.com>
-Message-ID: <87fx03ad0d.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  1 Jul 2010 07:27:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 2149] xterm build failure
+In-Reply-To: <bug-2149-163@https.bugs.busybox.net/>
+References: <bug-2149-163@https.bugs.busybox.net/>
+Message-ID: <20100701072752.DEF2A8188F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Quotient" == Quotient Remainder <quotientvremainder@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2149
 
- Quotient> I get a (non-fatal) permission denied error when I do "make distclean"
- Quotient> and I've tracked it down to this change, I think.
- Quotient> It appears that $(obj) has an empty value when this is invoked.  I did
- Quotient> not do an out-of-tree build, btw.
-
-Fixed, thanks.
+--- Comment #3 from Mitch Davis <mjd-busybox.net@afork.com>  ---
+I looked at the attached patch.  Does UCLIBC_HAS_GETPT need to have an entry in
+the menuconfig?
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
