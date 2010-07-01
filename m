@@ -1,45 +1,49 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 1 Jul 2010 15:03:45 +0200
-Subject: [Buildroot] Buildroot Developer Day at ELCE, October 29th 2010
-In-Reply-To: <201006220004.28867.yann.morin.1998@anciens.enib.fr>
-References: <20100619193752.7482dd43@surf>
-	<201006220004.28867.yann.morin.1998@anciens.enib.fr>
-Message-ID: <AANLkTilhW_emXda32iA6aoYHRaiXCDS3UQbDT8kw5aiA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 1 Jul 2010 15:35:00 +0200
+Subject: [Buildroot] [git commit master 1/1] ubifs: fix lzo typo
+Message-ID: <20100701133609.246E981662@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 22, 2010 at 12:04 AM, Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> wrote:
-> Thomas, All,
->
-> On Saturday 19 June 2010 19:37:52 Thomas Petazzoni wrote:
->> Therefore, I'd like to see if there's some interest in organizing a
->> Buildroot Developer Day at ELCE, presumably on Friday, 29th, just after
->> ELCE. It would be the opportunity to meet each other, make a status on
->> the progress we made since last year Buildroot Developer Day, and have
->> a brain-storming on things we would like to see happening in Buildroot.
->> Who would be interested in joining such an event ?
->
-> I'll be present at ELCE`10, barring accident...
-> If I can't get my company to send me there, I'll manage on my own.
->
-> So, if place is available, count me in. Preferrably on Friday, as I should
-> arrive in Cambridge late the Tuesday.
->
->> By the way, the Call for Papers for ELCE is open until the end of June.
->> Do not hesitate to propose your conference, a fairly short abstract is
->> sufficient, and as long as your conference is about embedded Linux and
->> is about technical stuff, there's a good chance of being accepted.
->
-> Yeah... Bang on my head. Hard.
->
 
-I'll be present too unless last minute big problem.
+commit: http://git.buildroot.net/buildroot/commit/?id=9280cafe308fe4d8706ba2b12e6d5ae464fb8aed
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Regards,
+Closes #2155
 
---
-Lionel Landwerlin
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES           |    1 +
+ fs/ubifs/ubifs.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index d00172b..9e672f1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -51,6 +51,7 @@
+ 	#2038: Bump ncurses to 5.7
+ 	#2095: make gconfig: undefined reference to symbol 'dlsym@@GLIBC_2.2.5'
+ 	#2119: Tries to build kernel, although disabled in config
++	#2155: Compression lzo don't set for ubifs
+ 
+ 2010.05, Released May 30th, 2010:
+ 
+diff --git a/fs/ubifs/ubifs.mk b/fs/ubifs/ubifs.mk
+index 0fad234..337180e 100644
+--- a/fs/ubifs/ubifs.mk
++++ b/fs/ubifs/ubifs.mk
+@@ -9,7 +9,7 @@ UBIFS_OPTS := -e $(BR2_TARGET_ROOTFS_UBIFS_LEBSIZE) -c $(BR2_TARGET_ROOTFS_UBIFS
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_ZLIB),y)
+ UBIFS_OPTS += -x zlib
+ endif
+-ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_LZI),y)
++ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_LZO),y)
+ UBIFS_OPTS += -x lzo
+ endif
+ ifeq ($(BR2_TARGET_ROOTFS_UBIFS_RT_NONE),y)
+-- 
+1.7.1
