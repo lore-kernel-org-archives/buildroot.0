@@ -1,34 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Jul 2010 08:45:12 +0200
-Subject: [Buildroot] Kernel build process
-In-Reply-To: <000f01cb18a2$d4f5fad0$7ee1f070$@pauljones.id.au>
-References: <002401cb1843$dc1e2670$945a7350$@pauljones.id.au>
-	<20100630185824.095c6ad0@surf>
-	<000f01cb18a2$d4f5fad0$7ee1f070$@pauljones.id.au>
-Message-ID: <20100701084512.5146e5a1@surf>
+From: Mohamed Mohamed Nour El-Din <eng.mohamed.nour.eldin@gmail.com>
+Date: Thu, 1 Jul 2010 09:59:01 +0300
+Subject: [Buildroot] speechtools error
+Message-ID: <AANLkTilruVKEB8HLDx4dev6l-lozGbTFv71PMBvr5ZF4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 1 Jul 2010 08:22:55 +1000
-"Paul Jones" <paul@pauljones.id.au> wrote:
+hi,
+i'm trying to build a system with festival text2speech engine & i got this
+error while building speechtools:
+making dependencies -- EST_Window.cc delta.cc linux_sound.cc:395:28: error:
+alsa/asoundlib.h: No such file or directory
+i checked staging/usr/include/alsa & i found asoundlib.h there
+can anyone help me with this?
+thnx a lot,
 
-> Good point. I guess if we tell the user to run "make
-> linux26-menuconfig" that would be just as good.
-
-Or to give a configuration file or defconfig name. The problem with
-"make linux26-menuconfig" is that the configuration of the kernel will
-be stored in output/build/linux-..../.config, and being part of the
-output/ directory, it will be removed if the user doesn't save it
-elsewhere.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+regards,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100701/31ec821e/attachment.html>
