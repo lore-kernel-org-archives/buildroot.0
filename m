@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 1 Jul 2010 21:42:32 +0200
-Subject: [Buildroot] [git commit master 1/1] bash: bump to 4.1.7(1) and
-	migrate to autotargets
-Message-ID: <20100701211812.AD91B821FB@busybox.osuosl.org>
+From: Mitch Davis <mjd+buildroot@afork.com>
+Date: Fri, 2 Jul 2010 15:08:35 +1000
+Subject: [Buildroot] kernel modules & embedded linux
+In-Reply-To: <AANLkTikCi6vziDJANiDx03Fhic26UKGCg2dyn6ZrdU9K@mail.gmail.com>
+References: <AANLkTilauXcR4dwy7PUrelaKdREP4xgMBad2i0ixYfqG@mail.gmail.com> 
+	<AANLkTikCi6vziDJANiDx03Fhic26UKGCg2dyn6ZrdU9K@mail.gmail.com>
+Message-ID: <AANLkTil4dNZojTv1HZ89UZ25HEXNUaBrhPJLKnvntysH@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jul 1, 2010 at 5:42 PM, Mohamed Mohamed Nour El-Din
+<eng.mohamed.nour.eldin@gmail.com> wrote:
+>
+> what i'm facing is that lsmod doesn't give any output, i can't get any info
+> about automatically loaded modules, only i can list the modules loaded
+> manually using insmod or modprobe
+> also there's no modules.conf file in /etc
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3404ad7c4fd5997ba7becf239ab8bc5b919393aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Can you send us (ie, to this list) a copy of what you're doing that
+you think should work?
 
-Closes #1993
+For example, what happens when you run "cat /proc/modules"?  Do you
+have the right modules for your hardware, installed in the right place
+in the filesystem?  Did you run "depmod -a"?  Is there anything
+relevant in /var/log/messages?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+We need to see what you're trying to do.
 
-Patch is too large, so refusing to show it
+Mitch.
