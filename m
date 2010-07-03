@@ -1,35 +1,58 @@
-From: Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com>
-Date: Sat, 3 Jul 2010 11:53:35 +0300
-Subject: [Buildroot] qt ,buidroot and media files
-Message-ID: <AANLkTilZ88rTjESzVeJHJewxPYakrHPsOzJc78DO9Qgj@mail.gmail.com>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sat, 3 Jul 2010 10:52:38 +0000 (GMT)
+Subject: [Buildroot] buildroot and sh4
+In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01D3A63B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+Message-ID: <212181.52672.qm@web23104.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i made FS using Buildroot and BusyBox
-,included Qt framework with phonon modules
-,then cross compiled Qt media application for my board "Mini2440"
+Hi,
 
-*but no media files make sound*
+First, sorry for this late answer.
 
-im using (*wav,mp3,ogg*) files and in Buildroot i included *Gstreamer , good
-plugins , and any codec has name oog , wav or mp3
-*
-can any one list codec needed in buildroot to be able to play these media
-files
+I've done a little patch that add a qemu device target for sh4. You could find it here : http://zarb.org/~trem/buildroot/add_qemu_sh4_r2d_target.patch
 
-and does Qt needs extra codec to play media?
+regards,
+Philippe
 
-thx in advance
+--- En date de?: Lun 7.6.10, Phil Edworthy <Phil.Edworthy@renesas.com> a ?crit?:
 
--- 
-KEEP ENERGY PUMPING
-MMS
-@MamdouhAlShamy
-Sync :Logistics and Reception Director
-Mentor Graphics Design Contest '09 Winner
+De: Phil Edworthy <Phil.Edworthy@renesas.com>
+Objet: RE: [Buildroot] buildroot and sh4
+?: "Philippe Reynes" <tremyfr@yahoo.fr>, buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+Date: Lundi 7 juin 2010, 11h14
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+BTW, I have successfully used a
+CodeSourcery external toolchain with Buildroot on sh4 (MS7724 development
+board). I?m currently waiting for git access via http before creating patches
+for this?  
+
+ ? 
+
+Phil 
+
+
+
+ 
+
+
+
+
+      
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100703/8b5e79dd/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100703/81428c14/attachment-0001.html>
