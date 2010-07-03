@@ -1,21 +1,35 @@
-From: mike <mike-buildroot@tiedyenetworks.com>
-Date: Fri, 02 Jul 2010 13:49:45 -0700
-Subject: [Buildroot] issue with ppp
-Message-ID: <4C2E50E9.4090305@tiedyenetworks.com>
+From: Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com>
+Date: Sat, 3 Jul 2010 11:53:35 +0300
+Subject: [Buildroot] qt ,buidroot and media files
+Message-ID: <AANLkTilZ88rTjESzVeJHJewxPYakrHPsOzJc78DO9Qgj@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+i made FS using Buildroot and BusyBox
+,included Qt framework with phonon modules
+,then cross compiled Qt media application for my board "Mini2440"
 
-Hi,
+*but no media files make sound*
 
-   In my buildroot, I'd already bumped to 2.4.5 and fixed a number of 
-things. Radiusclient files aren't being installed by the buildroot 
-makefile and it's also missing 1 plug in, radrealms, which my version 
-does handle now. Not to be a total dweeb but what would be the best way 
-to merge and submit some of these fixes to buildroot without corrupting 
-my local tree?
+im using (*wav,mp3,ogg*) files and in Buildroot i included *Gstreamer , good
+plugins , and any codec has name oog , wav or mp3
+*
+can any one list codec needed in buildroot to be able to play these media
+files
 
-Mike-
+and does Qt needs extra codec to play media?
+
+thx in advance
+
+-- 
+KEEP ENERGY PUMPING
+MMS
+@MamdouhAlShamy
+Sync :Logistics and Reception Director
+Mentor Graphics Design Contest '09 Winner
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100703/8b5e79dd/attachment.html>
