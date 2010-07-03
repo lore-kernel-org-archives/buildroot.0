@@ -1,51 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Jul 2010 19:55:56 +0200
-Subject: [Buildroot] [git commit master 1/1] sdl_sound: fix dependencies
-Message-ID: <20100703175635.3444882524@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 Jul 2010 19:57:52 +0200
+Subject: [Buildroot] SDL error
+In-Reply-To: <AANLkTimPniOL9FCAY6DiekWBjZB07cpxeCB_ztd9ff1C@mail.gmail.com>
+	(Mahmoud Mamdouh's message of "Sat, 3 Jul 2010 19:56:30 +0300")
+References: <AANLkTimPniOL9FCAY6DiekWBjZB07cpxeCB_ztd9ff1C@mail.gmail.com>
+Message-ID: <87zky88n33.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Mahmoud" == Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc5cc936d65dc46d2e5e141d15b1a3cc11f22257
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Mahmoud> while making FS with Buildroot (BusyBox)
+ Mahmoud> i included SDL
+ Mahmoud> but i dot that error
 
-sdl_sound naturally depends on SDL.
+ Mahmoud> "
+ Mahmoud> checking for sdl-config... (cached) no
+ Mahmoud> checking for SDL - version >= 1.2.0... no
+ Mahmoud> *** The sdl-config script installed by SDL could not be found
+ Mahmoud> *** If SDL was installed in PREFIX, make sure PREFIX/bin is in
+ Mahmoud> *** your path, or set the SDL_CONFIG environment variable to the
+ Mahmoud> *** full path to sdl-config.
+ Mahmoud> configure: error: *** SDL version 1.2.0 not found!
+ Mahmoud> make: *** [/media/HomeLand/GP/FS/FS_3Jul_SDL_ogg/build/sdl_sound-1.0.3
+ Mahmoud> /.stamp_configured] Error 1
+ Mahmoud> "
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                        |    4 ++--
- package/sdl_sound/sdl_sound.mk |    1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
+There wasn't a make dependency on sdl to ensure it got built before
+sdl_sound - Fixed in git (fc5cc936d).
 
-diff --git a/CHANGES b/CHANGES
-index 7e95a3b..6120d25 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -19,8 +19,8 @@
- 	ipsec-tools, iptables, libart, libfuse, libgpg-error, libidn,
- 	liblockfile, links, lmbench, lrzsz, make, module-init-tools,
- 	nbd, ncurses, netperf, ntfsprogs, openssl, php, qt, quagga,
--	sqlite, sdl, sdl_mixer, sdl_ttf, squashfs, tn5250, tremor,
--	usbutils, xkeyboard-config, xserver_xorg-server
-+	sqlite, sdl, sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250,
-+	tremor, usbutils, xkeyboard-config, xserver_xorg-server
- 
- 	Removed packages: modutils, portage, rxvt
- 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 1923257..610e968 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -9,6 +9,7 @@ SDL_SOUND_SITE:=http://icculus.org/SDL_sound/downloads/
- SDL_SOUND_LIBTOOL_PATCH:=NO
- SDL_SOUND_INSTALL_STAGING:=YES
- SDL_SOUND_INSTALL_TARGET:=YES
-+SDL_SOUND_DEPENDENCIES = sdl
- 
- SDL_SOUND_CONF_OPT:=--with-sdl-prefix=$(STAGING_DIR)/usr \
- 		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+Thanks.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
