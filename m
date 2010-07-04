@@ -1,25 +1,21 @@
-From: Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com>
-Date: Sun, 4 Jul 2010 14:43:52 +0300
-Subject: [Buildroot] audio device
-Message-ID: <AANLkTikrJMZ8GjadEkF1mI8O3vPFBB09S-E8fVjagyX4@mail.gmail.com>
+From: mike <mike-buildroot@tiedyenetworks.com>
+Date: Sun, 04 Jul 2010 10:07:49 -0700
+Subject: [Buildroot] ppp
+Message-ID: <4C30BFE5.4080902@tiedyenetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-im trying to run any audio files
 
-in Qt app
+    Related to ppp, rp-pppoe also shouldn't be depreciated since 
+pppoe-server is so useful, and in fact should be updated as well. I have 
+a fixed package for that too as well as some feature additions to 
+support pppoe intermediate agent tags. For ppp I also have support for 
+gigawords (radius accounting, 64bit ints instead of 32). Does buildroot 
+want original author only pristine packages without feature 
+enhancements, or will it accept package submissions with additional 
+patches? 
 
-but i got in getty
-
-"
-
-Failed opening audio device"
-
-
-plz help
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100704/72a2e0a8/attachment.html>
+Mike-
