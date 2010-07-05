@@ -1,54 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Jul 2010 18:59:02 +0200
-Subject: [Buildroot] [PATCH 09/10] external-toolchain: handle
-	libstdc++/libgcc_s for BR toolchains
+Date: Mon,  5 Jul 2010 18:59:01 +0200
+Subject: [Buildroot] [PATCH 08/10] uclibc: add patch to fix fcntl64() on 64
+	bits targets
 In-Reply-To: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a7e0e446d9a896bfb12f1acf0b1e2dcccb770b20.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5879815c4d049ef7d0b9684fb5e62c98f9bbb6ca.1278349072.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most toolchains have their libraries either in /lib or /usr/lib
-relative to their ARCH_SYSROOT_DIR. Buildroot toolchains, however,
-have basic libraries in /lib, and libstdc++/libgcc_s in
-/usr/<target-name>/lib(64).
+The patch is already in upstream uClibc, in the master branch, at
+http://git.buildroot.net/uClibc/commit/?id=6f1daaaf2d94c1e6184add44eda38b0781b88cf0.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+ ...ibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 3996184..1c84893 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -42,6 +42,11 @@
- # directory to the target directory. Also optionaly strips the
- # library.
- #
-+# Most toolchains have their libraries either in /lib or /usr/lib
-+# relative to their ARCH_SYSROOT_DIR. Buildroot toolchains, however,
-+# have basic libraries in /lib, and libstdc++/libgcc_s in
-+# /usr/<target-name>/lib(64).
-+#
- # $1: arch specific sysroot directory
- # $2: library name
- # $3: destination directory
-@@ -52,7 +57,11 @@ copy_toolchain_lib_root = \
- 	LIB="$(strip $2)"; \
- 	STRIP="$(strip $4)"; \
-  \
--	LIBS=`(cd $${ARCH_SYSROOT_DIR}; find . -path "./lib/$${LIB}.*" -o -path "./usr/lib/$${LIB}.*")` ; \
-+	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
-+		find -L . -path "./lib/$${LIB}.*"     -o \
-+			  -path "./usr/lib/$${LIB}.*" -o \
-+			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
-+		)` ; \
- 	for FILE in $${LIBS} ; do \
- 		LIB=`basename $${FILE}`; \
- 		LIBDIR=`dirname $${FILE}` ; \
+diff --git a/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+new file mode 100644
+index 0000000..763bfd3
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+@@ -0,0 +1,34 @@
++From 6f1daaaf2d94c1e6184add44eda38b0781b88cf0 Mon Sep 17 00:00:00 2001
++From: Rob Landley <rob@landley.net>
++Date: Sun, 16 May 2010 21:41:36 +0000
++Subject: Fix fcntl64 for 64 bit targets.
++
++64 bit targets often don't have a separate fcntl64() system call, because they don't need one.
++
++Signed-off-by: Rob Landley <rob@landley.net>
++Signed-off-by: Austin Foxley <austinf@cetoncorp.com>
++---
++diff --git a/include/fcntl.h b/include/fcntl.h
++index e37073f..3cfb25f 100644
++--- a/include/fcntl.h
+++++ b/include/fcntl.h
++@@ -73,7 +73,7 @@ __BEGIN_DECLS
++ 
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++-#ifndef __USE_FILE_OFFSET64
+++#if !defined(__USE_FILE_OFFSET64) || defined(__LP64__)
++ extern int fcntl (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl)
++ #else
++@@ -83,7 +83,7 @@ extern int __REDIRECT (fcntl, (int __fd, int __cmd, ...), fcntl64);
++ #  define fcntl fcntl64
++ # endif
++ #endif
++-#ifdef __USE_LARGEFILE64
+++#if defined(__USE_LARGEFILE64) && !defined(__LP64__)
++ extern int fcntl64 (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl64)
++ #endif
++--
++cgit v0.8.2.1
 -- 
 1.7.0.4
