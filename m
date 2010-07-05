@@ -1,21 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 5 Jul 2010 21:27:14 +0200
-Subject: [Buildroot] [PATCH 03/10] external-toolchain: only copy
-	existing directories of the sysroot
-In-Reply-To: <671dd67a882e2c9d0275115574b7d7cea27c9998.1278349072.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jul 2010 21:27:21 +0200
+Subject: [Buildroot] [PATCH 04/10] external-toolchain: support 64 bits
+	glibc toolchains
+In-Reply-To: <41ba3c02c9a077d732289378e0a346b94298b479.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-	<671dd67a882e2c9d0275115574b7d7cea27c9998.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201007052127.14102.yann.morin.1998@anciens.enib.fr>
+	<41ba3c02c9a077d732289378e0a346b94298b479.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201007052127.21075.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 July 2010 18:58:56 Thomas Petazzoni wrote:
-> Instead of copying all directories in "etc lib sbin usr", check that
-> each of them exists before doing the copy. This is only to avoid an
-> harmless error message.
+On Monday 05 July 2010 18:58:57 Thomas Petazzoni wrote:
+> On 64 bits glibc toolchains, the dynamic loader is named
+> ld-linux-x86-64.so and not simply ld-linux.so. So, adjust the
+> detection of the C library accordingly.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
