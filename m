@@ -1,23 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 5 Jul 2010 21:26:54 +0200
-Subject: [Buildroot] [PATCH 01/10] ext-toolchains: take into account
-	other Glibc dynamic loader variants
-In-Reply-To: <0a3f00ff9d6e41588457320552daa0388433ba02.1278349072.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jul 2010 21:27:14 +0200
+Subject: [Buildroot] [PATCH 03/10] external-toolchain: only copy
+	existing directories of the sysroot
+In-Reply-To: <671dd67a882e2c9d0275115574b7d7cea27c9998.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-	<0a3f00ff9d6e41588457320552daa0388433ba02.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201007052126.54747.yann.morin.1998@anciens.enib.fr>
+	<671dd67a882e2c9d0275115574b7d7cea27c9998.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201007052127.14102.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 July 2010 18:58:54 Thomas Petazzoni wrote:
-> External toolchains using Glibc have different names for the dynamic
-> loader. Some of them name it ld-linux.so.*, while some others (such as
-> the PowerPC and MIPS CodeSourcery toolchains) name it simply ld.so.*.
-> 
-> Therefore, we fix the glibc detection code to handle this case.
+On Monday 05 July 2010 18:58:56 Thomas Petazzoni wrote:
+> Instead of copying all directories in "etc lib sbin usr", check that
+> each of them exists before doing the copy. This is only to avoid an
+> harmless error message.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
