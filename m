@@ -1,54 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Jul 2010 18:58:54 +0200
-Subject: [Buildroot] [PATCH 01/10] ext-toolchains: take into account other
-	Glibc dynamic loader variants
+Date: Mon,  5 Jul 2010 18:58:56 +0200
+Subject: [Buildroot] [PATCH 03/10] external-toolchain: only copy existing
+	directories of the sysroot
 In-Reply-To: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0a3f00ff9d6e41588457320552daa0388433ba02.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <671dd67a882e2c9d0275115574b7d7cea27c9998.1278349072.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-External toolchains using Glibc have different names for the dynamic
-loader. Some of them name it ld-linux.so.*, while some others (such as
-the PowerPC and MIPS CodeSourcery toolchains) name it simply ld.so.*.
-
-Therefore, we fix the glibc detection code to handle this case.
+Instead of copying all directories in "etc lib sbin usr", check that
+each of them exists before doing the copy. This is only to avoid an
+harmless error message.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   10 ++++------
- 1 files changed, 4 insertions(+), 6 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 8daae15..3943ceb 100644
+index b1eee23..9c1ec8f 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -155,7 +155,7 @@ check_glibc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* ; then \
-+	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
-@@ -251,11 +251,9 @@ check_cross_compiler_exists = \
- 
- uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
- 
--EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--EXTERNAL_LIBS+=ld-uClibc.so
--else
--EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
-+EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCLIBC),y)
-+EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
- endif
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+@@ -120,7 +120,9 @@ copy_toolchain_sysroot = \
+ 	ARCH_SYSROOT_DIR="$(strip $2)"; \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	for i in etc lib sbin usr ; do \
+-		cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
++			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
 -- 
 1.7.0.4
