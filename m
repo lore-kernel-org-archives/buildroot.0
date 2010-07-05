@@ -1,109 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 5 Jul 2010 16:54:45 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: add 2010.06 release
-Message-ID: <20100705145734.06B7082579@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  5 Jul 2010 18:58:53 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	ext-toolchain-fixes
+Message-ID: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9997ca731a42eaa4c04dd6c2bf8632b72dac038
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Here is a new version of my ext-toolchain-fixes branch, which fixes
+the problem noted by Peter on the sysroot detection code.
 
-A few minor modifications of u-boot.mk is needed to support 2010.06:
+We switch to --sysroot=/path/to instead of --sysroot /path/to, which
+eases the filtering of this option, which is needed to find out the
+original location of the toolchain sysroot.
 
-- U-Boot now uses ARCH=powerpc like the kernel (instead of ARCH=ppc)
-- Library files have moved, so adjust the target mkimage/fw_printenv rules
-  (still compatible with older versions)
+Thanks,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES               |    3 ++-
- boot/u-boot/Config.in |    6 +++++-
- boot/u-boot/u-boot.mk |   11 +++++++----
- 3 files changed, 14 insertions(+), 6 deletions(-)
+Thomas
 
-diff --git a/CHANGES b/CHANGES
-index 2d8253c..3222e7a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,7 +6,8 @@
- 	and non-sysroot support removed.
- 
- 	Bootloaders: Various cleanups, moved to boot/, added Barebox,
--	removed yaboot. Support building u-boot from custom tarball.
-+	removed yaboot. Support building u-boot from custom tarball,
-+	u-boot 2010.06.
- 
- 	New GTK-based configurator, usable using 'make gconfig'.
- 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index aa680cf..d445145 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2010_03
-+	default BR2_TARGET_UBOOT_2010_06
- 	help
- 	  Select the specific U-Boot version you want to use
- 
-+config BR2_TARGET_UBOOT_2010_06
-+	bool "2010.06"
-+
- config BR2_TARGET_UBOOT_2010_03
- 	bool "2010.03"
- 
-@@ -39,6 +42,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
-+	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
- 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
- 	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index ad67343..37ed215 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -32,9 +32,12 @@ U_BOOT_BIN:=u-boot.bin
- MKIMAGE:=$(HOST_DIR)/usr/bin/mkimage
- 
- U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN) $(MKIMAGE)
-+U_BOOT_ARCH=$(KERNEL_ARCH)
- 
--# u-boot still uses arch=ppc for powerpc
-+# u-boot in the past used arch=ppc for powerpc
-+ifneq ($(findstring x200,$(UBOOT_VERSION))$(findstring x2010.03,$(UBOOT_VERSION)),)
- U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
-+endif
- 
- U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/config.h
- 
-@@ -147,9 +150,9 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- 		$(U_BOOT_DIR)/common/image.c \
- 		$(wildcard $(addprefix $(U_BOOT_DIR)/tools/,default_image.c \
- 			fit_image.c imximage.c kwbimage.c mkimage.c)) \
--		$(addprefix $(U_BOOT_DIR)/lib_generic/,crc32.c md5.c sha1.c) \
-+		$(addprefix $(U_BOOT_DIR)/lib*/,crc32.c md5.c sha1.c) \
- 		$(U_BOOT_DIR)/tools/os_support.c \
--		$(U_BOOT_DIR)/libfdt/fdt*.c
-+		$(wildcard $(U_BOOT_DIR)/libfdt/fdt*.c $(U_BOOT_DIR)/lib/libfdt/fdt*.c)
- 
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 
-@@ -158,7 +161,7 @@ $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
- 	mkdir -p $(@D)
- 	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
- 		-DUSE_HOSTCC -o $@ \
--		$(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib_generic/crc32.c
-+		$(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib*/crc32.c
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
- 	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
- 
+The following changes since commit f4abd4e61215b119d38ccba011a901732ce704e4:
+  Peter Huewe (1):
+        docs: Fixed spelling error in buildroot.html GETTEXT instead of GNUTTEXT
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot ext-toolchain-fixes
+
+Thomas Petazzoni (10):
+      ext-toolchains: take into account other Glibc dynamic loader variants
+      ext-toolchain: Fix ARCH_SYSROOT detection
+      external-toolchain: only copy existing directories of the sysroot
+      external-toolchain: support 64 bits glibc toolchains
+      external-toolchain: create lib64 symlinks if needed
+      external-toolchain: mention MIPS and PowerPC CodeSourcery toolchains
+      external-toolchain: recognize uClibc 64 bits toolchains
+      uclibc: add patch to fix fcntl64() on 64 bits targets
+      external-toolchain: handle libstdc++/libgcc_s for BR toolchains
+      external-toolchain: hardcode the destination directory for a library
+
+ package/Makefile.in                                |    4 +-
+ toolchain/external-toolchain/ext-tool.mk           |   92 +++++++++++++-------
+ ...ibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch |   34 +++++++
+ 3 files changed, 98 insertions(+), 32 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
