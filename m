@@ -1,37 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Jul 2010 18:58:57 +0200
-Subject: [Buildroot] [PATCH 04/10] external-toolchain: support 64 bits glibc
-	toolchains
+Date: Mon,  5 Jul 2010 18:58:58 +0200
+Subject: [Buildroot] [PATCH 05/10] external-toolchain: create lib64 symlinks
+	if needed
 In-Reply-To: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <41ba3c02c9a077d732289378e0a346b94298b479.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a6c511b1016582c8f6b8fbd6518e40c753f10cc4.1278349072.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 64 bits glibc toolchains, the dynamic loader is named
-ld-linux-x86-64.so and not simply ld-linux.so. So, adjust the
-detection of the C library accordingly.
+Create lib64 -> lib and usr/lib64 -> usr/lib symbolic links in the
+target and staging directories. This is needed for some 64 bits
+toolchains such as the Crosstool-NG toolchains, for which the path to
+the dynamic loader and other libraries is /lib64, but the libraries
+are stored in /lib.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/external-toolchain/ext-tool.mk |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 9c1ec8f..a181f25 100644
+index a181f25..d5a64b5 100644
 --- a/toolchain/external-toolchain/ext-tool.mk
 +++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -157,7 +157,7 @@ check_glibc_feature = \
+@@ -133,6 +133,19 @@ copy_toolchain_sysroot = \
+ 	find $(STAGING_DIR) -type d | xargs chmod 755
+ 
  #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
-+	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
++# Create lib64 -> lib and usr/lib64 -> usr/lib symbolic links in the
++# target and staging directories. This is needed for some 64 bits
++# toolchains such as the Crosstool-NG toolchains, for which the path
++# to the dynamic loader and other libraries is /lib64, but the
++# libraries are stored in /lib.
++#
++create_lib64_symlinks = \
++	(cd $(TARGET_DIR) ;      ln -s lib lib64) ; \
++	(cd $(TARGET_DIR)/usr ;  ln -s lib lib64) ; \
++	(cd $(STAGING_DIR) ;     ln -s lib lib64) ; \
++	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
++
++#
+ # Check the availability of a particular glibc feature. We assume that
+ # all Buildroot toolchain options are supported by glibc, so we just
+ # check that they are enabled.
+@@ -319,4 +332,8 @@ endif
+ 	done
+ 	@echo "Copy external toolchain sysroot to staging..."
+ 	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
++	# Create lib64 symbolic links if needed
++	$(Q)if [ -L $(ARCH_SYSROOT_DIR)/lib64 ] ; then \
++		$(call create_lib64_symlinks) ; \
++	fi
+ 	@touch $@
 -- 
 1.7.0.4
