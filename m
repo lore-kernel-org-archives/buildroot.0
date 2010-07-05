@@ -1,34 +1,22 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Mon, 5 Jul 2010 20:01:24 +1000
-Subject: [Buildroot] QSound
-In-Reply-To: <20100705114438.42654139@surf>
-References: <AANLkTimNs2jP4EzQhA7XwVVXvXaRTI-FhTbKvnxgqSuj@mail.gmail.com> 
-	<20100705114438.42654139@surf>
-Message-ID: <AANLkTikEBUlfD4bFyAW2EV9yOdvZ0DvHGjnn7um6JAd3@mail.gmail.com>
+From: Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com>
+Date: Mon, 5 Jul 2010 13:48:08 +0300
+Subject: [Buildroot] qt ,buidroot and media files
+In-Reply-To: <AANLkTilsUx57lVxDKbQMU7XFnan92vR7F5zA1L1fummJ@mail.gmail.com>
+References: <AANLkTilZ88rTjESzVeJHJewxPYakrHPsOzJc78DO9Qgj@mail.gmail.com>
+	<AANLkTik1U67fkAFZnj5OKS3fQHpNnPEX3h6oVsg7J0WS@mail.gmail.com>
+	<AANLkTilq2k_5SDbUBdN6j7Jodd6I74_1JE5sqLTF1KGE@mail.gmail.com>
+	<AANLkTinNNmqYMviBg7Jtj12hGnuH_eGpqiDqv8VvvNHP@mail.gmail.com>
+	<AANLkTilsUx57lVxDKbQMU7XFnan92vR7F5zA1L1fummJ@mail.gmail.com>
+Message-ID: <AANLkTimbjmPXoeVyoAKpmtPl2hCfBEmPx0LFcLbaVtUW@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 5, 2010 at 7:44 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Sun, 4 Jul 2010 14:29:40 +0300
-> Mahmoud Mamdouh <mamdouh.al.shamy@gmail.com> wrote:
->
->> can't load library 'libQtMultimedia.so.4
->
-> There is a bug in Buildroot 2010.05: Buildroot doesn't copy the
-> libQtMultimedia library to the target when BR2_PACKAGE_QT_MULTIMEDIA is
-> enabled.
+i removed Buldroot FS and tried Qtopia to play OGG, MP3,WAV
 
-Ahh, that would explain it :-)
-
-> In the mean time, you can apply commit
-> 79ec8e88f3a5afacff27e8eb94a5aeda17cf734a to your tree to fix the issue.
-
-Mahmoud, if you're not a git user, you can retrieve the patch here:
-
-  http://git.buildroot.net/buildroot/patch/?id=79ec8e88f3a5afacff27e8eb94a5aeda17cf734a
-
-Mitch.
+and all these audio files worked fine on Qtopia with the same Kernel uImage
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100705/5ddb477b/attachment-0001.html>
