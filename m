@@ -1,22 +1,23 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 5 Jul 2010 21:26:46 +0200
-Subject: [Buildroot] [PATCH 07/10] external-toolchain: recognize uClibc
-	64 bits toolchains
-In-Reply-To: <e3bae80372d1327fc88436202825562178faf08d.1278349072.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Jul 2010 21:26:54 +0200
+Subject: [Buildroot] [PATCH 01/10] ext-toolchains: take into account
+	other Glibc dynamic loader variants
+In-Reply-To: <0a3f00ff9d6e41588457320552daa0388433ba02.1278349072.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-	<e3bae80372d1327fc88436202825562178faf08d.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201007052126.46978.yann.morin.1998@anciens.enib.fr>
+	<0a3f00ff9d6e41588457320552daa0388433ba02.1278349072.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201007052126.54747.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 July 2010 18:59:00 Thomas Petazzoni wrote:
+On Monday 05 July 2010 18:58:54 Thomas Petazzoni wrote:
+> External toolchains using Glibc have different names for the dynamic
+> loader. Some of them name it ld-linux.so.*, while some others (such as
+> the PowerPC and MIPS CodeSourcery toolchains) name it simply ld.so.*.
 > 
-> With uClibc 64 bits toolchain, the dynamic loader is named
-> ld64-uClibc.so.0 and not ld-uClibc.so.0. So, this commit adjust the
-> uClibc detection code for external toolchains.
+> Therefore, we fix the glibc detection code to handle this case.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
