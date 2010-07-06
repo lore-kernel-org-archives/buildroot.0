@@ -1,37 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Jul 2010 17:27:03 +0200
-Subject: [Buildroot] [git commit master 1/1] libsvgtiny: fix clean command
-	name
-Message-ID: <20100706152828.4AEF5825AA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 Jul 2010 15:37:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 2125] libXfont build fail
+In-Reply-To: <bug-2125-163@https.bugs.busybox.net/>
+References: <bug-2125-163@https.bugs.busybox.net/>
+Message-ID: <20100706153752.69BAD82630@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2125
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b709a3d86407556f09642ef5ee4b37de2f4e93c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Here, libXfont for the host and for the target builds just fine in a limited
+chroot with no special tools installed.
 
-Thanks to Thomas for noticing.
+What kind of build failure are you seeing ?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libsvgtiny/libsvgtiny.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index 7484764..5e53346 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -45,7 +45,7 @@ define LIBSVGTINY_UNINSTALL_TARGET_CMDS
- 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) uninstall
- endef
- 
--define BZIP2_CLEAN_CMDS
-+define LIBSVGTINY_CLEAN_CMDS
- 	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(@D) clean
- endef
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
