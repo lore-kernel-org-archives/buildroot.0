@@ -1,48 +1,41 @@
-From: Phil Edworthy <Phil.Edworthy@renesas.com>
-Date: Tue, 6 Jul 2010 14:29:14 +0100
-Subject: [Buildroot] Steps to add a new board
-In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01E38E6B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-References: <AB12B32E73474741A2C5361C433A44DE01E38E6B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-Message-ID: <AB12B32E73474741A2C5361C433A44DE01E98C50@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 6 Jul 2010 16:43:04 +0200
+Subject: [Buildroot] [git commit master 1/1] libsvgtiny: needs gperf on the
+	host
+Message-ID: <20100706144330.269478257C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Just wondering if anyone had any comments or suggestions regarding my
-questions?
+commit: http://git.buildroot.net/buildroot/commit/?id=94962bf597920eb3b9a29c4c20001278c6f536f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I've been using Buildroot for a Renesas SH4 device (SH7724) on a MS7724
-> development board, so first of all many thanks for all your work!
-> In order to get the board going, I've had to make a number of changes and
-> want to feed these back... However, there are a few things I'd like to
-iron
-> out.
-> 
-> Right now I'm using an external toolchain (CodeSourcery) as I had some
-> problems building the kernel using the BR generated toolchain. Would you
-> accept patches based on using an external toolchain? I guess this causes
-> problems for the board's defconfig.
-> 
-> Regarding the directory structure, I assume that I should populate
-> target/device/Renesas/MS7724 with the kernel & busybox configs and
-> device_table.txt. For the kernel, I'm using 2.6.33 with a few patches, so
-> under this dir I should have a kernel-patches dir for patches required and
-> these patches should start with linux-2.6.33-  is this correct?
-> 
-> I also use a post build script to fix securetty (the device needs ttySC0)
-> and also add an mdev script to /etc/init.d along with mdef.conf.
-> Atmel provides its own target skeleton, but I only need to fix securetty.
-> Is there a better way to do this? Since the need for ttySC0 means
-> target/generic/Config.in has to be fixed, surely it makes sense to fix the
-> generic securetty?
-> 
-> I notice that other boards only setup mdev via a replacement target
-> skeleton. Should I be doing this instead of a post build script? Is there
-> a way to apply a patch to the generic skeleton?
+And fix the .mk file name while we're at it.
 
-Thanks
-Phil
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libsvgtiny/{libsvtiny.mk => libsvgtiny.mk} |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/libsvgtiny/{libsvtiny.mk => libsvgtiny.mk} (96%)
+
+diff --git a/package/libsvgtiny/libsvtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+similarity index 96%
+rename from package/libsvgtiny/libsvtiny.mk
+rename to package/libsvgtiny/libsvgtiny.mk
+index 57430fe..ca0d2c9 100644
+--- a/package/libsvgtiny/libsvtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -10,7 +10,7 @@ LIBSVGTINY_SVNDIR = libsvgtiny-svn-r$(LIBSVGTINY_VERSION)
+ LIBSVGTINY_SOURCE = $(LIBSVGTINY_SVNDIR).tar.bz2
+ LIBSVGTINY_INSTALL_STAGING = YES
+ LIBSVGTINY_INSTALL_TARGET = YES
+-LIBSVGTINY_DEPENDENCIES = libxml2
++LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf
+ 
+ $(DL_DIR)/$(LIBSVGTINY_SOURCE):
+ 	$(SVN_CO) -r $(LIBSVGTINY_VERSION) $(LIBSVGTINY_SITE) $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
+-- 
+1.7.1
