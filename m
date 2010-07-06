@@ -1,25 +1,29 @@
-From: vbr vbr <vvvg77@gmail.com>
-Date: Tue, 6 Jul 2010 10:27:26 -0700
-Subject: [Buildroot] ISO menu option
-Message-ID: <AANLkTiluCRHpfGQpvW6yPjUx7elEdRsRgacJ3HH118SR@mail.gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 6 Jul 2010 11:25:58 -0700
+Subject: [Buildroot] [PATCH] e2fsprogs: bump version
+Message-ID: <201007061125.58262.hartleys@visionengravers.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Version 1.41.12 was released May 18, 2010.
 
-I am new to buildroot. First congratulations for the awesome tool!
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-I noticed that when I pick the i386 as a target platform, the ISO option is
-present under fs. However, if I pick a different target, say x86_64, the ISO
-menu option disappears. I was wondering what the reason was behind this as I
-am trying to build an ISO image for x86_64.
+---
 
-Thanks for your help
-
-Vince
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100706/30a039c4/attachment.html>
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index af3c3ed..78bf21c 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -3,7 +3,7 @@
+ # e2fsprogs
+ #
+ #############################################################
+-E2FSPROGS_VERSION:=1.41.11
++E2FSPROGS_VERSION:=1.41.12
+ E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
+ E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+ 
