@@ -1,28 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Jul 2010 08:02:29 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	ext-toolchain-fixes
-In-Reply-To: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 5 Jul 2010 18:58:53 +0200")
-References: <cover.1278349072.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87wrt96tca.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 6 Jul 2010 08:01:00 +0200
+Subject: [Buildroot] [git commit master 1/1] uclibc: add patch to fix
+	fcntl64() on 64 bits targets
+Message-ID: <20100706060218.A3A25825FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is a new version of my ext-toolchain-fixes branch, which fixes
- Thomas> the problem noted by Peter on the sysroot detection code.
+commit: http://git.buildroot.net/buildroot/commit/?id=086e4b7475c3ee3e256fc8b850553ed0502bf3d7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> We switch to --sysroot=/path/to instead of --sysroot /path/to, which
- Thomas> eases the filtering of this option, which is needed to find out the
- Thomas> original location of the toolchain sysroot.
+The patch is already in upstream uClibc, in the master branch, at
+http://git.buildroot.net/uClibc/commit/?id=6f1daaaf2d94c1e6184add44eda38b0781b88cf0.
 
-Committed, thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...ibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
 
+diff --git a/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+new file mode 100644
+index 0000000..763bfd3
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+@@ -0,0 +1,34 @@
++From 6f1daaaf2d94c1e6184add44eda38b0781b88cf0 Mon Sep 17 00:00:00 2001
++From: Rob Landley <rob@landley.net>
++Date: Sun, 16 May 2010 21:41:36 +0000
++Subject: Fix fcntl64 for 64 bit targets.
++
++64 bit targets often don't have a separate fcntl64() system call, because they don't need one.
++
++Signed-off-by: Rob Landley <rob@landley.net>
++Signed-off-by: Austin Foxley <austinf@cetoncorp.com>
++---
++diff --git a/include/fcntl.h b/include/fcntl.h
++index e37073f..3cfb25f 100644
++--- a/include/fcntl.h
+++++ b/include/fcntl.h
++@@ -73,7 +73,7 @@ __BEGIN_DECLS
++ 
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++-#ifndef __USE_FILE_OFFSET64
+++#if !defined(__USE_FILE_OFFSET64) || defined(__LP64__)
++ extern int fcntl (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl)
++ #else
++@@ -83,7 +83,7 @@ extern int __REDIRECT (fcntl, (int __fd, int __cmd, ...), fcntl64);
++ #  define fcntl fcntl64
++ # endif
++ #endif
++-#ifdef __USE_LARGEFILE64
+++#if defined(__USE_LARGEFILE64) && !defined(__LP64__)
++ extern int fcntl64 (int __fd, int __cmd, ...);
++ libc_hidden_proto(fcntl64)
++ #endif
++--
++cgit v0.8.2.1
 -- 
-Bye, Peter Korsgaard
+1.7.1
