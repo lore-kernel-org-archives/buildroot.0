@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 6 Jul 2010 17:27:03 +0200
-Subject: [Buildroot] [git commit master 1/1] libsvgtiny: only print
-	debugging if GRADIENT_DEBUG is enabled
-Message-ID: <20100706152828.1E436825AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libsvgtiny: fix clean command
+	name
+Message-ID: <20100706152828.4AEF5825AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,145 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=634163f800e688b91cdb7c5051dd2c10052ab20e
+commit: http://git.buildroot.net/buildroot/commit/?id=3b709a3d86407556f09642ef5ee4b37de2f4e93c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Thanks to Thomas for noticing.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libsvgtiny-disable-debug-printfs.patch         |  125 ++++++++++++++++++++
- 1 files changed, 125 insertions(+), 0 deletions(-)
- create mode 100644 package/libsvgtiny/libsvgtiny-disable-debug-printfs.patch
+ package/libsvgtiny/libsvgtiny.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libsvgtiny/libsvgtiny-disable-debug-printfs.patch b/package/libsvgtiny/libsvgtiny-disable-debug-printfs.patch
-new file mode 100644
-index 0000000..72ed21c
---- /dev/null
-+++ b/package/libsvgtiny/libsvgtiny-disable-debug-printfs.patch
-@@ -0,0 +1,125 @@
-+svntiny: svntiny_gradient.c: only print debugging if GRADIENT_DEBUG is enabled
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/svgtiny_gradient.c |   23 ++++++++++++++++++++++-
-+ 1 file changed, 22 insertions(+), 1 deletion(-)
-+
-+Index: libsvgtiny/src/svgtiny_gradient.c
-+===================================================================
-+--- libsvgtiny.orig/src/svgtiny_gradient.c
-++++ libsvgtiny/src/svgtiny_gradient.c
-+@@ -30,8 +30,9 @@ void svgtiny_find_gradient(const char *i
-+ {
-+ 	xmlNode *gradient;
-+ 
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "svgtiny_find_gradient: id \"%s\"\n", id);
-+-
-++#endif
-+ 	state->linear_gradient_stop_count = 0;
-+ 	state->gradient_x1 = "0%";
-+ 	state->gradient_y1 = "0%";
-+@@ -47,13 +48,17 @@ void svgtiny_find_gradient(const char *i
-+ 
-+ 	gradient = svgtiny_find_element_by_id(
-+ 			(xmlNode *) state->document, id);
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "gradient %p\n", (void *) gradient);
-++#endif
-+ 	if (!gradient) {
-+ 		fprintf(stderr, "gradient \"%s\" not found\n", id);
-+ 		return;
-+ 	}
-+ 
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "gradient name \"%s\"\n", gradient->name);
-++#endif
-+ 	if (strcmp((const char *) gradient->name, "linearGradient") == 0) {
-+ 		svgtiny_parse_linear_gradient(gradient, state);
-+ 	}
-+@@ -98,8 +103,10 @@ svgtiny_code svgtiny_parse_linear_gradie
-+ 				return svgtiny_OUT_OF_MEMORY;
-+ 			svgtiny_parse_transform(s, &a, &b, &c, &d, &e, &f);
-+ 			free(s);
-++#ifdef GRADIENT_DEBUG
-+ 			fprintf(stderr, "transform %g %g %g %g %g %g\n",
-+ 					a, b, c, d, e, f);
-++#endif
-+ 			state->gradient_transform.a = a;
-+ 			state->gradient_transform.b = b;
-+ 			state->gradient_transform.c = c;
-+@@ -143,7 +150,9 @@ svgtiny_code svgtiny_parse_linear_gradie
-+ 		}
-+ 
-+ 		if (offset != -1 && color != svgtiny_TRANSPARENT) {
-++#ifdef GRADIENT_DEBUG
-+ 			fprintf(stderr, "stop %g %x\n", offset, color);
-++#endif
-+ 			state->gradient_stop[i].offset = offset;
-+ 			state->gradient_stop[i].color = color;
-+ 			i++;
-+@@ -220,9 +229,11 @@ svgtiny_code svgtiny_add_path_linear_gra
-+ 	#endif
-+ 
-+ 	/* compute gradient vector */
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "x1 %s, y1 %s, x2 %s, y2 %s\n",
-+ 			state->gradient_x1, state->gradient_y1,
-+ 			state->gradient_x2, state->gradient_y2);
-++#endif
-+ 	if (!state->gradient_user_space_on_use) {
-+ 		gradient_x0 = object_x0 +
-+ 				svgtiny_parse_length(state->gradient_x1,
-+@@ -297,9 +308,11 @@ svgtiny_code svgtiny_add_path_linear_gra
-+ 
-+ 	/* invert gradient transform for applying to vertices */
-+ 	svgtiny_invert_matrix(&state->gradient_transform.a, trans);
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "inverse transform %g %g %g %g %g %g\n",
-+ 			trans[0], trans[1], trans[2], trans[3],
-+ 			trans[4], trans[5]);
-++#endif
-+ 
-+ 	/* compute points on the path for triangle vertices */
-+ 	/* r, r0, r1 are distance along gradient vector */
-+@@ -372,8 +385,10 @@ svgtiny_code svgtiny_add_path_linear_gra
-+ 		steps = ceilf(fabsf(r1 - r0) / 0.05);
-+ 		if (steps == 0)
-+ 			steps = 1;
-++#ifdef GRADIENT_DEBUG
-+ 		fprintf(stderr, "r0 %g, r1 %g, steps %i\n",
-+ 				r0, r1, steps);
-++#endif
-+ 
-+ 		/* loop through intermediate points */
-+ 		for (z = 1; z != steps; z++) {
-+@@ -398,7 +413,9 @@ svgtiny_code svgtiny_add_path_linear_gra
-+ 			r = ((x_trans - gradient_x0) * gradient_dx +
-+ 					(y_trans - gradient_y0) * gradient_dy) /
-+ 					gradient_norm_squared;
-++#ifdef GRADIENT_DEBUG
-+ 			fprintf(stderr, "(%g %g [%g]) ", x, y, r);
-++#endif
-+ 			point = svgtiny_list_push(pts);
-+ 			if (!point) {
-+ 				svgtiny_list_free(pts);
-+@@ -412,14 +429,18 @@ svgtiny_code svgtiny_add_path_linear_gra
-+ 				min_pt = svgtiny_list_size(pts) - 1;
-+ 			}
-+ 		}
-++#ifdef GRADIENT_DEBUG
-+ 		fprintf(stderr, "\n");
-++#endif
-+ 
-+ 		/* next segment start point is this segment end point */
-+ 		x0 = x1;
-+ 		y0 = y1;
-+ 	}
-++#ifdef GRADIENT_DEBUG
-+ 	fprintf(stderr, "pts size %i, min_pt %i, min_r %.3f\n",
-+ 			svgtiny_list_size(pts), min_pt, min_r);
-++#endif
-+ 
-+ 	/* render triangles */
-+ 	stop_count = state->linear_gradient_stop_count;
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index 7484764..5e53346 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -45,7 +45,7 @@ define LIBSVGTINY_UNINSTALL_TARGET_CMDS
+ 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) uninstall
+ endef
+ 
+-define BZIP2_CLEAN_CMDS
++define LIBSVGTINY_CLEAN_CMDS
+ 	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) clean
+ endef
 -- 
 1.7.1
