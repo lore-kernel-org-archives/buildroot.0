@@ -1,26 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Jul 2010 17:20:41 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Jul 2010 17:26:45 +0200
 Subject: [Buildroot] [git commit master 1/1] libsvgtiny: pass
- TARGET_CONFIGURE_ENV / OPTS to each make invocation
-In-Reply-To: <20100706144330.4DBF08257C@busybox.osuosl.org>
+	TARGET_CONFIGURE_ENV / OPTS to each make invocation
+In-Reply-To: <20100706172041.7df6c560@surf> (Thomas Petazzoni's message of
+	"Tue, 6 Jul 2010 17:20:41 +0200")
 References: <20100706144330.4DBF08257C@busybox.osuosl.org>
-Message-ID: <20100706172041.7df6c560@surf>
+	<20100706172041.7df6c560@surf>
+Message-ID: <87y6do637u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 6 Jul 2010 16:43:04 +0200
-Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->  define BZIP2_CLEAN_CMDS
+ Thomas> On Tue, 6 Jul 2010 16:43:04 +0200
+ Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-Should probably be LIBSVGTINY_CLEAN_CMDS.
+ >> define BZIP2_CLEAN_CMDS
 
-Thomas
+ Thomas> Should probably be LIBSVGTINY_CLEAN_CMDS.
+
+Argh, cut'n'paste - Will fix.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
