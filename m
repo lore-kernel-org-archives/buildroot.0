@@ -1,46 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  6 Jul 2010 20:29:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 2167] New: Bump busybox to 1.17.0,
- convert to gentargets, drop 1.12, deprecate 1.13 and 1.15
-Message-ID: <bug-2167-163@https.bugs.busybox.net/>
+From: Ossy <ossy1980@gmx.net>
+Date: Wed, 07 Jul 2010 00:16:46 +0200
+Subject: [Buildroot] init: I won't write compressed data to a terminal.
+Message-ID: <4C33AB4E.9050604@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2167
+Hi buildroot mailinglist,
 
-           Summary: Bump busybox to 1.17.0, convert to gentargets, drop
-                    1.12, deprecate 1.13 and 1.15
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gustavo at zacarias.com.ar
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+After successfully compiling a whole rootfs and mounting it via loop on 
+some nfs export I started my arm ebedded device and ran into tho 
+following error after booting the image via tftp.
 
+"init: I won't write compressed data to a terminal."
 
-Created attachment 2173
-  --> https://bugs.busybox.net/attachment.cgi?id=2173
-Bump busybox to 1.17.0, convert to gentargets, drop 1.12, deprecate 1.13 and
-1.15
+The bootargs include a console=ttyS0,115200 and rootfs over nfs options.
+I guess there is is an issue with the built in zip/bzip compression.
+But why is the init process not able to output to the terminal?
+After that error, the kernel panics, so I can't boot into my brand new 
+rootfs. (The search function of the mailinglist didn't give a hint...)
 
-Bump busybox package to 1.17.0.
-Convert package to gentargets infra.
-Drop version 1.12.x.
-Mark 1.13.x as deprecated (wasn't for some odd reason).
-Mark 1.15.x as deprecated now that 1.17.x is out.
-
-Give it a good spin since it's a big change.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks for your help,
+Marcus
