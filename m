@@ -1,28 +1,46 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 6 Jul 2010 11:30:52 -0700
-Subject: [Buildroot] [PATCH] linux: rebuild after reconfiguring kernel
-Message-ID: <201007061130.52946.hartleys@visionengravers.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 Jul 2010 20:29:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 2167] New: Bump busybox to 1.17.0,
+ convert to gentargets, drop 1.12, deprecate 1.13 and 1.15
+Message-ID: <bug-2167-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for rebuilding the kernel after make linux26-menuconfig.
+https://bugs.busybox.net/show_bug.cgi?id=2167
 
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+           Summary: Bump busybox to 1.17.0, convert to gentargets, drop
+                    1.12, deprecate 1.13 and 1.15
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gustavo at zacarias.com.ar
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
----
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 593a1b4..a014f55 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -139,6 +139,7 @@ linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_in
- 
- linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
-+	$(Q)touch $@
- 
- # Support for rebuilding the kernel after the initramfs file list has
- # been generated in $(BINARIES_DIR)/rootfs.initramfs.
+Created attachment 2173
+  --> https://bugs.busybox.net/attachment.cgi?id=2173
+Bump busybox to 1.17.0, convert to gentargets, drop 1.12, deprecate 1.13 and
+1.15
+
+Bump busybox package to 1.17.0.
+Convert package to gentargets infra.
+Drop version 1.12.x.
+Mark 1.13.x as deprecated (wasn't for some odd reason).
+Mark 1.15.x as deprecated now that 1.17.x is out.
+
+Give it a good spin since it's a big change.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
