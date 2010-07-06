@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 6 Jul 2010 08:01:00 +0200
-Subject: [Buildroot] [git commit master 1/1] uclibc: add patch to fix
-	fcntl64() on 64 bits targets
-Message-ID: <20100706060218.A3A25825FB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] ext-toolchains: take into
+	account other Glibc dynamic loader variants
+Message-ID: <20100706060217.53ABD825FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,58 +10,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=086e4b7475c3ee3e256fc8b850553ed0502bf3d7
+commit: http://git.buildroot.net/buildroot/commit/?id=7192668cbf7c28976938bec2fe78fe7d265fd45a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch is already in upstream uClibc, in the master branch, at
-http://git.buildroot.net/uClibc/commit/?id=6f1daaaf2d94c1e6184add44eda38b0781b88cf0.
+External toolchains using Glibc have different names for the dynamic
+loader. Some of them name it ld-linux.so.*, while some others (such as
+the PowerPC and MIPS CodeSourcery toolchains) name it simply ld.so.*.
+
+Therefore, we fix the glibc detection code to handle this case.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...ibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
+ toolchain/external-toolchain/ext-tool.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
-new file mode 100644
-index 0000000..763bfd3
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-fix-fcntl64-for-64-bit-targets.patch
-@@ -0,0 +1,34 @@
-+From 6f1daaaf2d94c1e6184add44eda38b0781b88cf0 Mon Sep 17 00:00:00 2001
-+From: Rob Landley <rob@landley.net>
-+Date: Sun, 16 May 2010 21:41:36 +0000
-+Subject: Fix fcntl64 for 64 bit targets.
-+
-+64 bit targets often don't have a separate fcntl64() system call, because they don't need one.
-+
-+Signed-off-by: Rob Landley <rob@landley.net>
-+Signed-off-by: Austin Foxley <austinf@cetoncorp.com>
-+---
-+diff --git a/include/fcntl.h b/include/fcntl.h
-+index e37073f..3cfb25f 100644
-+--- a/include/fcntl.h
-++++ b/include/fcntl.h
-+@@ -73,7 +73,7 @@ __BEGIN_DECLS
-+ 
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+-#ifndef __USE_FILE_OFFSET64
-++#if !defined(__USE_FILE_OFFSET64) || defined(__LP64__)
-+ extern int fcntl (int __fd, int __cmd, ...);
-+ libc_hidden_proto(fcntl)
-+ #else
-+@@ -83,7 +83,7 @@ extern int __REDIRECT (fcntl, (int __fd, int __cmd, ...), fcntl64);
-+ #  define fcntl fcntl64
-+ # endif
-+ #endif
-+-#ifdef __USE_LARGEFILE64
-++#if defined(__USE_LARGEFILE64) && !defined(__LP64__)
-+ extern int fcntl64 (int __fd, int __cmd, ...);
-+ libc_hidden_proto(fcntl64)
-+ #endif
-+--
-+cgit v0.8.2.1
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 8daae15..3943ceb 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -155,7 +155,7 @@ check_glibc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* ; then \
++	if ! test -f $${SYSROOT_DIR}/lib/ld-linux.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
+@@ -251,11 +251,9 @@ check_cross_compiler_exists = \
+ 
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+-EXTERNAL_LIBS=libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+-EXTERNAL_LIBS+=ld-uClibc.so
+-else
+-EXTERNAL_LIBS+=ld-linux.so libnss_files.so libnss_dns.so
++EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCLIBC),y)
++EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+ 
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 -- 
 1.7.1
