@@ -1,29 +1,28 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 6 Jul 2010 11:25:58 -0700
-Subject: [Buildroot] [PATCH] e2fsprogs: bump version
-Message-ID: <201007061125.58262.hartleys@visionengravers.com>
+Date: Tue, 6 Jul 2010 11:30:52 -0700
+Subject: [Buildroot] [PATCH] linux: rebuild after reconfiguring kernel
+Message-ID: <201007061130.52946.hartleys@visionengravers.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 1.41.12 was released May 18, 2010.
+Add support for rebuilding the kernel after make linux26-menuconfig.
 
 Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
 ---
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index af3c3ed..78bf21c 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -3,7 +3,7 @@
- # e2fsprogs
- #
- #############################################################
--E2FSPROGS_VERSION:=1.41.11
-+E2FSPROGS_VERSION:=1.41.12
- E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
- E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 593a1b4..a014f55 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -139,6 +139,7 @@ linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_in
  
+ linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
++	$(Q)touch $@
+ 
+ # Support for rebuilding the kernel after the initramfs file list has
+ # been generated in $(BINARIES_DIR)/rootfs.initramfs.
