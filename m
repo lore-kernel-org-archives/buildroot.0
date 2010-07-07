@@ -1,108 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:20:57 +0200
-Subject: [Buildroot] [PATCH 04/20] ruby: convert to autotools and fix build
+Date: Wed,  7 Jul 2010 08:20:59 +0200
+Subject: [Buildroot] [PATCH 06/20] fontconfig: fix cross-compilation patch
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8bd423159927d40647e47681a74e483fef178677.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <daa537c3349b54e59a3e06a4ecb0d086add7f5de.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ruby is converted to the autotools infrastructure, and the dependency
-on host-ruby is added since a ruby interpreter is needed to build a
-ruby interpreter. Fortunately, this is taken into account in the ruby
-build process, and it first start to build a mini-interpreter that is
-used to build the rest. However, this doesn't take the
-cross-compilation case into account, so we have to build ruby for the
-host.
+The existing cross-compilation patch works with our not completely
+correct TARGET_CONFIGURE_OPTS. With the correct variables (CFLAGS,
+LDFLAGS) being passed, fontconfig was trying to use target
+CFLAGS/LDFLAGS when building tools for the host.
+
+This updated patch fixes that problem by correctly using the
+CC_FOR_BUILD, CFLAGS_FOR_BUILD variables.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ruby/ruby.mk |   71 +++++---------------------------------------------
- 1 files changed, 7 insertions(+), 64 deletions(-)
+ .../fontconfig-2.6.0-use_for_build.patch           |   93 ++++++++++++--------
+ 1 files changed, 57 insertions(+), 36 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 4ae76c1..07e5472 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -6,69 +6,12 @@
- RUBY_VERSION:=1.9.1-p129
- RUBY_SOURCE:=ruby-$(RUBY_VERSION).tar.gz
- RUBY_SITE:=ftp://ftp.ruby-lang.org/pub/ruby/1.9
--RUBY_DIR:=$(BUILD_DIR)/ruby-$(RUBY_VERSION)
--RUBY_CAT:=$(ZCAT)
--RUBY_BINARY:=ruby
--RUBY_TARGET_BINARY:=usr/bin/ruby
-+RUBY_AUTORECONF=YES
-+RUBY_DEPENDENCIES=host-ruby
-+RUBY_INSTALL_TARGET_OPT=DESTDIR=$(TARGET_DIR) install
-+RUBY_MAKE_ENV=$(TARGET_MAKE_ENV)
- 
--$(DL_DIR)/$(RUBY_SOURCE):
--	 $(call DOWNLOAD,$(RUBY_SITE),$(RUBY_SOURCE))
-+RUBY_CONF_OPT = --disable-install-doc
- 
--ruby-source: $(DL_DIR)/$(RUBY_SOURCE)
+diff --git a/package/fontconfig/fontconfig-2.6.0-use_for_build.patch b/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
+index cdf9056..334cbba 100644
+--- a/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
++++ b/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
+@@ -1,59 +1,80 @@
+----
+- fc-arch/Makefile.am      |    2 +-
+- fc-case/Makefile.am      |    2 +-
+- fc-glyphname/Makefile.am |    2 +-
+- fc-lang/Makefile.am      |    2 +-
+- 4 files changed, 4 insertions(+), 4 deletions(-)
 -
--$(RUBY_DIR)/.unpacked: $(DL_DIR)/$(RUBY_SOURCE)
--	$(RUBY_CAT) $(DL_DIR)/$(RUBY_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(RUBY_DIR) package/ruby/ ruby-\*.patch
--	(cd $(RUBY_DIR); autoreconf)
--	touch $(RUBY_DIR)/.unpacked
--
--$(RUBY_DIR)/.configured: $(RUBY_DIR)/.unpacked
--	(cd $(RUBY_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		--disable-install-doc \
--		$(DISABLE_IPV6) \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--	)
--	touch $(RUBY_DIR)/.configured
--
--$(RUBY_DIR)/$(RUBY_BINARY): $(RUBY_DIR)/.configured
--	$(MAKE) -C $(RUBY_DIR)
--
--$(TARGET_DIR)/$(RUBY_TARGET_BINARY): $(RUBY_DIR)/$(RUBY_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(RUBY_DIR) install
--	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--
--ruby: $(TARGET_DIR)/$(RUBY_TARGET_BINARY)
--
--ruby-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(RUBY_DIR) uninstall
--	-$(MAKE) -C $(RUBY_DIR) clean
--
--ruby-dirclean:
--	rm -rf $(RUBY_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_RUBY),y)
--TARGETS+=ruby
--endif
-+$(eval $(call AUTOTARGETS,package,ruby))
-+$(eval $(call AUTOTARGETS,package,ruby,host))
+-Index: fontconfig-2.6.0/fc-arch/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-arch/Makefile.am
+-+++ fontconfig-2.6.0/fc-arch/Makefile.am
+-@@ -24,7 +24,7 @@
+- 
+- CC = @CC_FOR_BUILD@
++diff -Naur fontconfig-2.6.0.orig/doc/Makefile.am fontconfig-2.6.0/doc/Makefile.am
++--- fontconfig-2.6.0.orig/doc/Makefile.am	2007-11-06 01:05:37.000000000 +0100
+++++ fontconfig-2.6.0/doc/Makefile.am	2010-05-22 00:03:00.000000000 +0200
++@@ -21,9 +21,10 @@
++ # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
++ # PERFORMANCE OF THIS SOFTWARE.
++ 
++-CC = @CC_FOR_BUILD@
++ EXEEXT = @EXEEXT_FOR_BUILD@
++-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
++ 
++ DOC_SRC = $(srcdir)
++ DOC_MODULE = fontconfig
++diff -Naur fontconfig-2.6.0.orig/fc-arch/Makefile.am fontconfig-2.6.0/fc-arch/Makefile.am
++--- fontconfig-2.6.0.orig/fc-arch/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-arch/Makefile.am	2010-05-21 23:59:18.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
++ 
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-case/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-case/Makefile.am
+-+++ fontconfig-2.6.0/fc-case/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-case/Makefile.am fontconfig-2.6.0/fc-case/Makefile.am
++--- fontconfig-2.6.0.orig/fc-case/Makefile.am	2010-05-21 23:55:02.000000000 +0200
+++++ fontconfig-2.6.0/fc-case/Makefile.am	2010-05-22 00:04:09.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-glyphname/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-glyphname/Makefile.am
+-+++ fontconfig-2.6.0/fc-glyphname/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-glyphname/Makefile.am fontconfig-2.6.0/fc-glyphname/Makefile.am
++--- fontconfig-2.6.0.orig/fc-glyphname/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-glyphname/Makefile.am	2010-05-22 00:04:54.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-lang/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-lang/Makefile.am
+-+++ fontconfig-2.6.0/fc-lang/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-lang/Makefile.am fontconfig-2.6.0/fc-lang/Makefile.am
++--- fontconfig-2.6.0.orig/fc-lang/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-lang/Makefile.am	2010-05-22 00:05:44.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
 -- 
 1.7.0.4
