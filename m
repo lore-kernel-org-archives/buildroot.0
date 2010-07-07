@@ -1,35 +1,40 @@
-From: Matthew Davison <matt.davison@lantronix.com>
-Date: Wed, 7 Jul 2010 15:26:04 -0700
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Thu, 8 Jul 2010 00:33:24 +0200
 Subject: [Buildroot] Controlling dependencies for package with manual
 	Makefile
-Message-ID: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E3A@2putt.int.lantronix.com>
+In-Reply-To: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E3A@2putt.int.lantronix.com>
+References: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E3A@2putt.int.lantronix.com>
+Message-ID: <201007080033.24836.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I understand that for packages using the autotools infrastructure,
-that the PACKAGENAME_DEPENDENCIES variable (replacing PACKAGENAME
-appropriately) is used to tell buildroot to build these dependencies
-first. Setting this variable in a manual Makefile (non-autotools based),
-does not appear to work.
+Matthew, All,
 
-> Is there a way to force buildroot to build package dependencies first,
-without having to convert to an autotools compliant Makefile?
+On Thursday 08 July 2010 00:26:04 Matthew Davison wrote:
+> > Is there a way to force buildroot to build package dependencies first,
+> > without having to convert to an autotools compliant Makefile?
+> 
+> It's a bit of a kludge, but I discovered that I can just add the
+> dependency package name directly into my package's target prerequisites.
+> So for dependency <lib1>, I can modify my primary package target (in
+> packagename.mk) to:
+> packagename: lib1 <existing prerequisites go here>
+>  
+> This is far from ideal, but it does appear to be working.
 
-It's a bit of a kludge, but I discovered that I can just add the
-dependency package name directly into my package's target prerequisites.
-So for dependency <lib1>, I can modify my primary package target (in
-packagename.mk) to:
-packagename: lib1 <existing prerequisites go here>
- 
-This is far from ideal, but it does appear to be working.
- 
-Matt
- 
-**********************************************************************
-This e-mail is the property of Lantronix. It is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential, or otherwise protected from disclosure. Distribution or copying of this e-mail, or the information contained herein, to anyone other than the intended recipient is prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100707/0de28b59/attachment.html>
+From the docs, it seems it;s just the thing to do:
+  http://buildroot.org/buildroot.html#manual-tutorial
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
