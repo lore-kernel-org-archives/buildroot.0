@@ -1,52 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:21:06 +0200
-Subject: [Buildroot] [PATCH 13/20] Remove $(TOOLCHAIN_DIR)/bin and
-	$(STAGING_DIR)/{usr/bin, bin} from the PATH
+Date: Wed,  7 Jul 2010 08:21:08 +0200
+Subject: [Buildroot] [PATCH 15/20] Merge TARGET_CONFIGURE_ENV into
+	TARGET_CONFIGURE_OPTS
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0ab16a01bbe02d37ad2daa007fdb5a0de0ff9eab.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e721a7c07e0a9ab4a6a8fe7aff9f378ac4144df6.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These shouldn't be needed. Even when the cross-compiler is in
-$(STAGING_DIR)/usr/bin, we anyway use an absolute path for TARGET_CC,
-TARGET_LD and al.
-
-Not having $(STAGING_DIR)/{usr/bin,bin} in the PATH will avoid having
-Buildroot trying to run target binaries.
+TARGET_CONFIGURE_ENV defines CFLAGS, LDFLAGS, CXXFLAGS and FCFLAGS,
+separatly from all other variables that are part of
+TARGET_CONFIGURE_OPTS. This is useless and not consistent with the
+HOST_CONFIGURE_ variables, therefore we merge TARGET_CONFIGURE_ENV
+into TARGET_CONFIGURE_OPTS and fix the few users of
+TARGET_CONFIGURE_ENV.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ package/Makefile.autotools.in            |    1 -
+ package/Makefile.in                      |   10 ++++------
+ package/lockfile-progs/lockfile-progs.mk |    3 +--
+ package/mtd/mtd.mk                       |    3 +--
+ package/multimedia/ffmpeg/ffmpeg.mk      |    1 -
+ 5 files changed, 6 insertions(+), 12 deletions(-)
 
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 337aee4..1ccf44c 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -90,7 +90,6 @@ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache && \
+ 	$$(TARGET_CONFIGURE_OPTS) \
+ 	$$(TARGET_CONFIGURE_ARGS) \
+-	$$(TARGET_CONFIGURE_ENV) \
+ 	$$($$(PKG)_CONF_ENV) \
+ 	./configure \
+ 		$$(if $$(filter YES,$$($$(PKG)_USE_CONFIG_CACHE)),--cache-file="$(BUILD_DIR)/tgt-config.cache",) \
 diff --git a/package/Makefile.in b/package/Makefile.in
-index 0d80a2a..1c965c9 100644
+index 1c965c9..189806d 100644
 --- a/package/Makefile.in
 +++ b/package/Makefile.in
-@@ -103,17 +103,16 @@ endif
- REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
+@@ -194,18 +194,16 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+ 		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
+ 		DEFAULT_LINKER="$(TARGET_LD)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		CXXFLAGS="$(TARGET_CXXFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		FCFLAGS="$(TARGET_FCFLAGS)" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+ 		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
+ 		STAGING_DIR="$(STAGING_DIR)"
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-TARGET_CONFIGURE_ENV=\
+-	CFLAGS="$(TARGET_CFLAGS)" \
+-	CXXFLAGS="$(TARGET_CXXFLAGS)" \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
+-	FCFLAGS="$(TARGET_FCFLAGS)" \
 -
--# Quotes are needed for spaces et al in path components.
--TARGET_PATH="$(TOOLCHAIN_DIR)/bin:$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(STAGING_DIR)/bin:$(STAGING_DIR)/usr/bin:$(PATH)"
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
--TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(TOOLCHAIN_DIR)/bin:$(TOOLCHAIN_EXTERNAL_PATH)/bin:$(PATH)"
- TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- endif
+ TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
+ 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
  
-+# Quotes are needed for spaces et al in path components.
-+TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
-+
- # Define TARGET_xx variables for all common binutils/gcc tools by
- # including the --sysroot option where necessary.
- TARGET_AR       = $(TARGET_CROSS)ar
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index 4098330..3925ca3 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -21,8 +21,7 @@ $(LOCKFILE_PROGS_DIR)/.unpacked: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
+ 	touch $(LOCKFILE_PROGS_DIR)/.unpacked
+ 
+ $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(TARGET_CONFIGURE_ENV) \
+-		-C $(LOCKFILE_PROGS_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LOCKFILE_PROGS_DIR)
+ 	cp -a $(LOCKFILE_PROGS_DIR)/bin/lockfile* $(TARGET_DIR)/usr/bin
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
+ 
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 0c9ed42..c573849 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -65,8 +65,7 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRSVOL)	+= ubirsvol
+ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
+ 
+ MTD_MAKE_COMMON_FLAGS = \
+-	$(TARGET_CONFIGURE_ENV) \
+-	CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
++	$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
+ 	WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1
+ 
+ ifneq ($(MTD_TARGETS_y),)
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 81984f1..aac39c1 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -121,7 +121,6 @@ define FFMPEG_CONFIGURE_CMDS
+ 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	$(TARGET_CONFIGURE_ARGS) \
+-	$(TARGET_CONFIGURE_ENV) \
+ 	$(FFMPEG_CONF_ENV) \
+ 	./configure \
+ 		--enable-cross-compile	\
 -- 
 1.7.0.4
