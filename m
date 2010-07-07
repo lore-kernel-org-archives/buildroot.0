@@ -1,58 +1,69 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Wed, 07 Jul 2010 22:20:31 +0200
-Subject: [Buildroot] init: I won't write compressed data to a terminal.
-In-Reply-To: <AANLkTimdJ34gAH-YTjfOkW_iEsKZyRvBVnbLIS55oMdd@mail.gmail.com>
-References: <4C33AB4E.9050604@gmx.net>
-	<AANLkTimdJ34gAH-YTjfOkW_iEsKZyRvBVnbLIS55oMdd@mail.gmail.com>
-Message-ID: <4C34E18F.4080109@gmx.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 07 Jul 2010 22:21:59 +0200
+Subject: [Buildroot] [git commit master 1/1] Makefile.package.in: allow
+ packages to override download step
+In-Reply-To: <20100701180447.3477a6fa@surf>
+References: <20100701153712.9DCD6821E8@busybox.osuosl.org>
+	<20100701180447.3477a6fa@surf>
+Message-ID: <4C34E1E7.6040605@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 07.07.2010 02:35, schrieb Mitch Davis:
-> On Wed, Jul 7, 2010 at 8:16 AM, Ossy<ossy1980@gmx.net>  wrote:
->> Hi buildroot mailinglist,
+Thomas Petazzoni ha scritto:
+> Hello,
 >
-> Hey Ossy!
+> On Thu, 1 Jul 2010 17:33:29 +0200
+> Peter Korsgaard <jacmet@sunsite.dk> wrote:
 >
->> After successfully compiling a whole rootfs and mounting it via loop on some
->> nfs export I started my arm ebedded device and ran into tho following error
->> after booting the image via tftp.
->>
->> "init: I won't write compressed data to a terminal."
->>
->> The bootargs include a console=ttyS0,115200 and rootfs over nfs options.
->> I guess there is is an issue with the built in zip/bzip compression.
->> But why is the init process not able to output to the terminal?
+>   
+>> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+>> index 16ce16a..c476de9 100644
+>> --- a/package/Makefile.package.in
+>> +++ b/package/Makefile.package.in
+>> @@ -292,7 +292,7 @@ $(2)_TARGET_BUILD =
+>> $$($(2)_DIR)/.stamp_built $(2)_TARGET_CONFIGURE =
+>> $$($(2)_DIR)/.stamp_configured $(2)_TARGET_PATCH =
+>> $$($(2)_DIR)/.stamp_patched $(2)_TARGET_EXTRACT =
+>> $$($(2)_DIR)/.stamp_extracted -$(2)_TARGET_SOURCE =
+>> $$($(2)_DIR)/.stamp_downloaded +$(2)_TARGET_SOURCE ?=
+>> $$($(2)_DIR)/.stamp_downloaded $(2)_TARGET_UNINSTALL =
+>> $$($(2)_DIR)/.stamp_uninstalled $(2)_TARGET_CLEAN =
+>> $$($(2)_DIR)/.stamp_cleaned $(2)_TARGET_DIRCLEAN =
+>> $$($(2)_DIR)/.stamp_dircleaned
+>>     
 >
-> I would suspect that it's not init as-such, but rather there is a
-> startup script that is not working properly.
+> As said on IRC, I'm sorry but I don't think I really like this.
 >
-> What happens if you also include "init=/bin/sh" on your kernel boot
-> line, then boot?
-> What happens if you rename /etc/inittab to have a different name (so
-> init won't find /etc/inittab) then boot?
+> We already have a mechanism to override steps in Makefile.autotools.in.
+> I'd prefer to see if we can rely on a similar mechanism rather than
+> doing this.
+>   
+It's a good feature to have, but I agree with Thomas about the way to 
+implement it. As I proposed in the discussion about "Getting package 
+sources from git/svn/bzr", I'd rather make the DOWNLOAD command 
+overridable in package/Makefile.package.in, like this:
 
-After passing init=/bin/sh to the kernel, I ran into a similar error:
-[    4.387550] eth0: link up, 100 Mb/s, full duplex, flow control disabled
-[    4.716652] Looking up port of RPC 100003/2 on 192.168.1.106
-[    4.727962] Looking up port of RPC 100005/1 on 192.168.1.106
-[    4.739261] VFS: Mounted root (nfs filesystem) on device 0:12.
-[    4.745153] Freeing init memory: 112K
-sh: I won't write compressed data to a terminal.
-sh: For help, type: `sh --help'.
-[    4.816666] Kernel panic - not syncing: Attempted to kill init!
-[    4.822617] Backtrace:
-[    4.825103] [<c0028544>] (dump_backtrace+0x0/0x110) from [<c0314e70>] 
-(dump_stack+0x18/0x1c)
-[    4.833598]  r7:c7820000 r6:c7820000 r5:4005eef0 r4:c03f89dc
-[    4.839341] [<c0314e58>] (dump_stack+0x0/0x1c) from [<c0314ec4>] 
-(panic+0x50/0x13c)
+@@ -118,19 +118,19 @@
+ # Retrieve the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ # support make source-check/external-deps
+ ifeq ($(SPIDER),)
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
+ 		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
+ 		$(call MESSAGE,"Downloading")
+ endif
+-	$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE))
++	$($(PKG)_DOWNLOAD_CMDS)
+ 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
 
-I think the init process somewhere calls an inline zipping. But I can't 
-imagine where and why.
 
-Regards,
-Marcus
+where of course $(PKG)_DOWNLOAD_CMDS would default to $(call DOWNLOAD,...).
+
+Would such a patch be applied, if I wrote one?
+
+
+Luca
