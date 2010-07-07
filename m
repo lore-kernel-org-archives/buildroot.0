@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:20:54 +0200
-Subject: [Buildroot] [PATCH 01/20] webkit: fix misc build issues
+Date: Wed,  7 Jul 2010 08:20:58 +0200
+Subject: [Buildroot] [PATCH 05/20] cmake: pass LDFLAGS/CFLAGS when building
+	for the host
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9dd1a03a78adfd28cb1c1c1844af86bbae7eaff7.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <77b5b803c7ae4298b885d6b2e0b7506804943669.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Webkit depends on libjpeg, so add it as a dependency. Webkit also uses
-icu but fails to find it if we don't pass ac_cv_path_icu_config to its
-./configure script.
+Passing LDFLAGS/CFLAGS when building for the host allows cmake to be
+compiled with the proper -rpath value (the -rpath option is added to
+HOST_LDFLAGS in a later commit).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/webkit.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/cmake/cmake.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 39debd3..fc355ce 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -12,8 +12,9 @@ WEBKIT_INSTALL_TARGET = YES
- WEBKIT_LIBTOOL_PATCH = NO
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 42d4ff5..b388874 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,7 +4,9 @@ CMAKE_SITE=http://www.cmake.org/files/v2.8/
  
- WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
--			libgtk2 sqlite enchant libsoup
-+			libgtk2 sqlite enchant libsoup jpeg
+ define HOST_CMAKE_CONFIGURE_CMDS
+  (cd $(@D); \
+-   ./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(BR2_JLEVEL) \
++	LDFLAGS="$(HOST_LDFLAGS)" \
++	CFLAGS="$(HOST_CFLAGS)" \
++	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(BR2_JLEVEL) \
+  )
+ endef
  
-+WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- 	WEBKIT_CONF_OPT += --with-target=x11
 -- 
 1.7.0.4
