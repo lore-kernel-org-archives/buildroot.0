@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:21:13 +0200
-Subject: [Buildroot] [PATCH 20/20] GETPT support is needed by rxvt.
+Date: Wed,  7 Jul 2010 08:21:12 +0200
+Subject: [Buildroot] [PATCH 19/20] xvkbd: add missing dependency on
+	xlib_libXtst
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d0169fda2144ef5dfe25e801d58a227ed119a38c.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0bfca3ec2573d50b7a883d6e89dd8b322b276dda.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Darius Augulis <augulis.darius@gmail.com>
-
-Signed-off-by: Darius Augulis <augulis.darius@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uClibc-0.9.30.config |    2 +-
- toolchain/uClibc/uClibc-0.9.31.config |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xvkbd/Config.in |    1 +
+ package/xvkbd/xvkbd.mk  |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.30.config b/toolchain/uClibc/uClibc-0.9.30.config
-index c8efe18..2202b9e 100644
---- a/toolchain/uClibc/uClibc-0.9.30.config
-+++ b/toolchain/uClibc/uClibc-0.9.30.config
-@@ -87,7 +87,7 @@ UCLIBC_HAS___PROGNAME=y
- UCLIBC_HAS_PTY=y
- ASSUME_DEVPTS=y
- UNIX98PTY_ONLY=y
--# UCLIBC_HAS_GETPT is not set
-+UCLIBC_HAS_GETPT=y
- UCLIBC_HAS_TM_EXTENSIONS=y
- UCLIBC_HAS_TZ_CACHING=y
- UCLIBC_HAS_TZ_FILE=y
-diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
-index 04d6895..60b4628 100644
---- a/toolchain/uClibc/uClibc-0.9.31.config
-+++ b/toolchain/uClibc/uClibc-0.9.31.config
-@@ -94,7 +94,7 @@ UCLIBC_HAS_SHADOW=y
- UCLIBC_HAS_PTY=y
- ASSUME_DEVPTS=y
- UNIX98PTY_ONLY=y
--# UCLIBC_HAS_GETPT is not set
-+UCLIBC_HAS_GETPT=y
- UCLIBC_HAS_LIBUTIL=y
- UCLIBC_HAS_TM_EXTENSIONS=y
- UCLIBC_HAS_TZ_CACHING=y
+diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
+index 8a4b847..a75687d 100644
+--- a/package/xvkbd/Config.in
++++ b/package/xvkbd/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XVKBD
+ 	bool "xvkbd"
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXAW
++	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+ 	  on-screen keyboard for X
+ 
+diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
+index c40fa57..7c74be7 100644
+--- a/package/xvkbd/xvkbd.mk
++++ b/package/xvkbd/xvkbd.mk
+@@ -15,7 +15,7 @@ XVKBD_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_CC)" \
+ 
+ XVKBD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+-XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw
++XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw xlib_libXtst
+ 
+ $(eval $(call AUTOTARGETS,package,xvkbd))
+ 
 -- 
 1.7.0.4
