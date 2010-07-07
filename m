@@ -1,79 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:21:10 +0200
-Subject: [Buildroot] [PATCH 17/20] external-toolchain: adjust tests on
-	TARGET_CC and TARGET_CXX
+Date: Wed,  7 Jul 2010 08:21:13 +0200
+Subject: [Buildroot] [PATCH 20/20] GETPT support is needed by rxvt.
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <08235f7144d08bc111b07d3523ac6439f6fd0b94.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d0169fda2144ef5dfe25e801d58a227ed119a38c.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following the changes to TARGET_CC/TARGET_CXX to include the --sysroot
-option, these variables not only contain the path to the compiler, but
-also the --sysroot option. For that reason, we cannot anymore just use
-"test -x" to test for the compiler presence. Instead, we see if
-$(TARGET_CC) -v and $(TARGET_CXX) -v return a zero status.
+From: Darius Augulis <augulis.darius@gmail.com>
 
-Moreover, --sysroot now needs to be filtered out of $(TARGET_CC) and
-not $(TARGET_CFLAGS) when asking the toolchain for its original
-sysroot and arch sysroot.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Darius Augulis <augulis.darius@gmail.com>
 ---
- toolchain/external-toolchain/ext-tool.mk |   16 +++++++++-------
- 1 files changed, 9 insertions(+), 7 deletions(-)
+ toolchain/uClibc/uClibc-0.9.30.config |    2 +-
+ toolchain/uClibc/uClibc-0.9.31.config |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 7ca138b..9ad1e31 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -262,7 +262,8 @@ check_arm_abi = \
- # Check that the external toolchain supports C++
- #
- check_cplusplus = \
--	if ! test -x $(TARGET_CXX) ; then \
-+	$(TARGET_CXX) -v > /dev/null 2>&1 ; \
-+	if test $$? -ne 0 ; then \
- 		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
- 		exit 1 ; \
- 	fi ; \
-@@ -271,8 +272,9 @@ check_cplusplus = \
- # Check that the cross-compiler given in the configuration exists
- #
- check_cross_compiler_exists = \
--	if ! test -x $(TARGET_CC) ; then \
--		echo "Cannot find cross-compiler $(TARGET_CC)" ; \
-+	$(TARGET_CC) -v > /dev/null 2>&1 ; \
-+	if test $$? -ne 0 ; then \
-+		echo "Cannot execute cross-compiler '$(TARGET_CC)'" ; \
- 		exit 1 ; \
- 	fi ; \
- 
-@@ -301,9 +303,10 @@ endif # ! no threads
- # could select a multilib variant as we want the "main" sysroot, which
- # contains all variants of the C library in the case of multilib
- # toolchains.
--SYSROOT_DIR=$(shell $(TARGET_CC) -print-sysroot 2>/dev/null)
-+TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC))
-+SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
- ifeq ($(SYSROOT_DIR),)
--SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
-+SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
- endif
- 
- # Now, find if the toolchain specifies a sub-directory for the
-@@ -315,8 +318,7 @@ endif
- # subdirectory, in the main SYSROOT_DIR, that corresponds to the
- # selected architecture variant. ARCH_SYSROOT_DIR will contain the
- # full path to this location.
--TARGET_CFLAGS_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CFLAGS))
--ARCH_SUBDIR=$(shell $(TARGET_CC) $(TARGET_CFLAGS_NO_SYSROOT) -print-multi-directory)
-+ARCH_SUBDIR=$(shell $(TARGET_CC_NO_SYSROOT) $(TARGET_CFLAGS) -print-multi-directory)
- ARCH_SYSROOT_DIR=$(SYSROOT_DIR)/$(ARCH_SUBDIR)
- 
- $(STAMP_DIR)/ext-toolchain-installed:
+diff --git a/toolchain/uClibc/uClibc-0.9.30.config b/toolchain/uClibc/uClibc-0.9.30.config
+index c8efe18..2202b9e 100644
+--- a/toolchain/uClibc/uClibc-0.9.30.config
++++ b/toolchain/uClibc/uClibc-0.9.30.config
+@@ -87,7 +87,7 @@ UCLIBC_HAS___PROGNAME=y
+ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+-# UCLIBC_HAS_GETPT is not set
++UCLIBC_HAS_GETPT=y
+ UCLIBC_HAS_TM_EXTENSIONS=y
+ UCLIBC_HAS_TZ_CACHING=y
+ UCLIBC_HAS_TZ_FILE=y
+diff --git a/toolchain/uClibc/uClibc-0.9.31.config b/toolchain/uClibc/uClibc-0.9.31.config
+index 04d6895..60b4628 100644
+--- a/toolchain/uClibc/uClibc-0.9.31.config
++++ b/toolchain/uClibc/uClibc-0.9.31.config
+@@ -94,7 +94,7 @@ UCLIBC_HAS_SHADOW=y
+ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+-# UCLIBC_HAS_GETPT is not set
++UCLIBC_HAS_GETPT=y
+ UCLIBC_HAS_LIBUTIL=y
+ UCLIBC_HAS_TM_EXTENSIONS=y
+ UCLIBC_HAS_TZ_CACHING=y
 -- 
 1.7.0.4
