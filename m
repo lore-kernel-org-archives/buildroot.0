@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Jul 2010 08:20:58 +0200
-Subject: [Buildroot] [PATCH 05/20] cmake: pass LDFLAGS/CFLAGS when building
-	for the host
+Date: Wed,  7 Jul 2010 08:20:55 +0200
+Subject: [Buildroot] [PATCH 02/20] xcb-util: add dependency on host-gperf
 In-Reply-To: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1278483657.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <77b5b803c7ae4298b885d6b2e0b7506804943669.1278483657.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <def6e3fd144a677d0b666a97ebc31a8be21b8ebd.1278483657.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passing LDFLAGS/CFLAGS when building for the host allows cmake to be
-compiled with the proper -rpath value (the -rpath option is added to
-HOST_LDFLAGS in a later commit).
+gperf on the host is needed, since it is used by xcb-util to generate
+a perfect hash function.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cmake/cmake.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xcb-util/xcb-util.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 42d4ff5..b388874 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,7 +4,9 @@ CMAKE_SITE=http://www.cmake.org/files/v2.8/
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index 51b753e..b0dabd8 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
+@@ -7,6 +7,7 @@ XCB_UTIL_VERSION = 0.3.6
+ XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
+ XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
+ XCB_UTIL_LIBTOOL_PATCH = NO
++XCB_UTIL_DEPENDENCIES = host-gperf
  
- define HOST_CMAKE_CONFIGURE_CMDS
-  (cd $(@D); \
--   ./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(BR2_JLEVEL) \
-+	LDFLAGS="$(HOST_LDFLAGS)" \
-+	CFLAGS="$(HOST_CFLAGS)" \
-+	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(BR2_JLEVEL) \
-  )
- endef
+ $(eval $(call AUTOTARGETS,package/x11r7,xcb-util))
  
 -- 
 1.7.0.4
