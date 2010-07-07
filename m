@@ -1,53 +1,66 @@
-From: Andy Gibbs <andyg1001@hotmail.co.uk>
-Date: Wed, 7 Jul 2010 18:35:58 +0200
-Subject: [Buildroot] Fw: Crosstool/Buildroot integration issue
-Message-ID: <BLU0-SMTP603DF137A3AEB6AF9F7333E7B30@phx.gbl>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 7 Jul 2010 19:19:28 +0200
+Subject: [Buildroot] Crosstool/Buildroot integration issue
+In-Reply-To: <BLU0-SMTP11A24568AF672F1DE458A4E7B30@phx.gbl>
+References: <BLU0-SMTP11A24568AF672F1DE458A4E7B30@phx.gbl>
+Message-ID: <201007071919.28956.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, July 07, 2010 5:22 PM, Thomas Petazzoni wrote:
+Andy, All,
 
-> Hello Andy,
->
-> ...
->
-> I definitely haven't looked at this. Can you provide a simple example
-> of an application where this is causing an issue, that I could use as a
-> test case ?
->
+On Wednesday 07 July 2010 16:19:44 Andy Gibbs wrote:
+> I know you've been working on improving the integration of crosstool
+> and buildroot recently.  Thank you - I really appreciate it,
 
- I'm not sure how I can provide a test case for you.  The problem is not 
-evident in the packages provided within buildroot and the code that best 
-demonstrates it, I am not at liberty to post publically.  However, I may be 
-able to isolate enough of the salient features to make a snippet of demo 
-code out of.
+Hey! Nice to see someone is interested in that! :-)
 
- The code in question revolves around libanthy and libuim, both of which I 
-cross-compile manually after the main buildroot part is done. Unfortunately, 
-in both cases, a number of modifications must be done to the sources to 
-enable the cross-compile since they need to run dictionary creation scripts 
-on the host.  I can easily make the patches available here, and give you 
-example configure switches, if you'd like to try to compile these packages 
-yourself.
+> but I'd like to point out an extra detail that may have been missed so
+> far, and looking at toolchain/external-toolchain/ext-tool.mk in the git
+> trunk, I think this still is missing.
+> 
+> Crosstool generates character set libraries in the 'sys-root/usr/lib/gconv'
 
-The problem that manifests itself is that uim doesn't handle the EUC-JP to 
-UTF-8 conversion.  The solution was simply to take the 
-'sys-root/usr/lib/gconv' folder from crosstool and place it in the 
-'/usr/lib' on the target, and this solved the problem instantly.  (But it 
-took some hours to find that this was the problem!).
+There's no sysrot/usr/lib/gconv in my uClibc-based toolchain! :-P
 
-My guess is that these extra libraries are simply part of eglibc and loaded 
-by it on demand.  The toolchain that crosstool makes is gcc 4.4.4 with 
-eglibc 2.10.
+> folder, but these are not being copied across into the target folder when
+> all the other libraries are copied.  These means that certain applications
+> that rely on these libraries don't function correctly.  It's a simple two
+> line patch to the bottom of ext-tool.mk:
+[--SNIp--]
+> + $(Q)cp -dr $(ARCH_SYSROOT_DIR)/usr/lib/gconv $(TARGET_DIR)/usr/lib
 
-I have some free time tomorrow and I'll see if I can't write some simple 
-code that can demonstrate this problem without the need to compile 
-uim/anthy.  How hard can it be???  I'll post again when I've got something 
-more definite to share!
+Well, I'd rather we had something like:
+- in menuconfig:
+    () Additional dirs to copy from sysroot
+      Help:
+        This is a space-separated list of paths that you want to copy
+        from the sysroot to the target. Make the paths relative to the
+        sysroot. Example:
+          /usr/lib/gconv /usr/include
 
-Thanks
+- and in ext-tool.mk (to replace your changes, above):
+  $(Q)for d in $(BR_EXT_TOOL_DIRS_EXTRA); do \
+        if [ -d "$(ARCH_SYSROOT_DIR)$${d}" ]; then
+          mkdir -p "$(TARGET_DIR)$${d}"
+          cp -a "$${d}/." "$(TARGET_DIR)${d}/."
+        else
+          echo "No such directory '$${d}' whiel trying to copy from sysroot"
+        fi
+      done
 
-Andy
+But that's just my 2-cent advice...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
