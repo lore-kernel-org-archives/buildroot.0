@@ -1,54 +1,71 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Jul 2010 20:59:09 +0200
-Subject: [Buildroot] init: I won't write compressed data to a terminal.
-In-Reply-To: <4C34C0C3.4000500@gmx.net> (Ossy's message of "Wed, 07 Jul 2010
-	20:00:35 +0200")
-References: <4C33AB4E.9050604@gmx.net> <87pqyz6dpa.fsf@macbook.be.48ers.dk>
-	<4C34C0C3.4000500@gmx.net>
-Message-ID: <87eiff5daa.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 7 Jul 2010 15:11:50 -0500
+Subject: [Buildroot] [PATCH] linux: rebuild after reconfiguring kernel
+In-Reply-To: <20100707140932.63e1eb19@surf>
+References: <201007061130.52946.hartleys@visionengravers.com>
+	<20100707140932.63e1eb19@surf>
+Message-ID: <0D753D10438DA54287A00B02708426976373A92CA9@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ossy" == Ossy  <ossy1980@gmx.net> writes:
+On Wednesday, July 07, 2010 5:10 AM, Thomas Petazzoni wrote:
+> Hello!
+>
+> On Tue, 6 Jul 2010 11:30:52 -0700
+> H Hartley Sweeten <hartleys@visionengravers.com> wrote:
+>
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index 593a1b4..a014f55 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -139,6 +139,7 @@ linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_in
+>>  
+>>  linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
+>>  	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
+>> +	$(Q)touch $@
+>
+> Unless I'm missing something, this change is going to create a
+> linux26-menuconfig file or a linux26-xconfig file, which is not
+> correct, and is not going to retrigger the build step of the kernel.
 
- Ossy> Am 07.07.2010 07:52, schrieb Peter Korsgaard:
- >>>>>>> "Ossy" == Ossy<ossy1980@gmx.net>  writes:
- >> 
- Ossy> Hi buildroot mailinglist,
- Ossy> After successfully compiling a whole rootfs and mounting it via loop
- Ossy> on some nfs export I started my arm ebedded device and ran into tho
- Ossy> following error after booting the image via tftp.
- >> 
- Ossy> "init: I won't write compressed data to a terminal."
- >> 
- >> What .config are you using? That string doesn't exist in the busybox
- >> init (or anywhere in busybox).
+Argh... Your correct.  The .stamp_configured file is the one that needs touched.
 
- Ossy> I'm using the configuration attached (you may need to ignore my custom
- Ossy> settings for the sheevaplugbased DockStar).
+> We are already handling the fact that the kernel should be rebuilt when
+> its configuration is changed. This is done through the following
+> dependency :
+>
+> $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/.config
+>
+> So, when the kernel .config is changed, the build step is restarted.
+>
+> Which exact issue are you facing ? Can you provide an example ?
 
- Ossy> I mount the generated rootfs with
- Ossy> mount -o loop,ro br_dist/dev/rootfs.ext2 /exports/rootfs/rfs1
- Ossy> and export it via nfs. The Kernel supports rootfs over nfs and was
- Ossy> able to mount the filesystem via nfs. After that I get the above
- Ossy> mentioned error.
+Your correct, when the .config file is changed the kernel does rebuild.
 
-You can also simply extract the generated tarball as root instead of the
-ext2 stuff.
+The strange thing is, yesterday it didn't work and I haven't changed anything.
+I would do:
 
- Ossy> As Mitch already mentioned, this error comes from bzip2 (or maybe
- Ossy> gzip). So I guess there is some ext2 inline compression, which is not
- Ossy> compatibel with the serial console?
+$ make linux26-menuconfig
 
-No, as you mount the ext2 on the nfs server and not on your embedded
-box. Have you added any custom init scripts in your tree?
+Change something in the config, then:
 
-What does a grep -rlis zip * in your /etc give?
+$ make
 
-I don't see anything wrong with your .config's right away.
+Or
 
--- 
-Bye, Peter Korsgaard
+$ make linux26
+
+And the kernel would not rebuild.  But if I did:
+
+$ touch output/build/linux-2.6.34/.stamp_configured
+$ make
+
+It would.
+
+Oh well, it's working now...
+
+Regards,
+Hartley
