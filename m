@@ -1,37 +1,53 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Wed,  7 Jul 2010 17:51:40 +0200
-Subject: [Buildroot] Getting package sources from git/svn/bzr
-Message-ID: <L572Q4$920622E1B47231A042F2F429C560F2E5@aruba.it>
+From: Andy Gibbs <andyg1001@hotmail.co.uk>
+Date: Wed, 7 Jul 2010 18:35:58 +0200
+Subject: [Buildroot] Fw: Crosstool/Buildroot integration issue
+Message-ID: <BLU0-SMTP603DF137A3AEB6AF9F7333E7B30@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quotient Remainder wrote:
-> Hello Luca,
+On Wednesday, July 07, 2010 5:22 PM, Thomas Petazzoni wrote:
+
+> Hello Andy,
 >
-> On Fri, 2010-07-02 at 12:58 +0200, Luca Ceresoli wrote:
-> >
-> > The difference between the two methods (clone vs archive) is not clear
-> > to me. I got how each works, but what advantages do they have over each
-> > other?
+> ...
 >
-> Well, I'm thinking that most people will just get an archive because
-> they just want to compile the code, but some will want to make edits and
-> contribute their changes so they will need to do a clone. I suppose
-> it's a first step in making buildroot into a system that can be used as
-> a day-to-day development environment as well as a build system.
+> I definitely haven't looked at this. Can you provide a simple example
+> of an application where this is causing an issue, that I could use as a
+> test case ?
+>
 
-While git archive --remote is definitely a clever thing for buildroot,
-I notice it does not work in many cases.
+ I'm not sure how I can provide a test case for you.  The problem is not 
+evident in the packages provided within buildroot and the code that best 
+demonstrates it, I am not at liberty to post publically.  However, I may be 
+able to isolate enough of the salient features to make a snippet of demo 
+code out of.
 
-Github does not support git archive --remote
-(http://support.github.com/discussions/feature-requests/145-deploying-without-cloning)
+ The code in question revolves around libanthy and libuim, both of which I 
+cross-compile manually after the main buildroot part is done. Unfortunately, 
+in both cases, a number of modifications must be done to the sources to 
+enable the cross-compile since they need to run dictionary creation scripts 
+on the host.  I can easily make the patches available here, and give you 
+example configure switches, if you'd like to try to compile these packages 
+yourself.
 
-Gitosis does not work as well.
+The problem that manifests itself is that uim doesn't handle the EUC-JP to 
+UTF-8 conversion.  The solution was simply to take the 
+'sys-root/usr/lib/gconv' folder from crosstool and place it in the 
+'/usr/lib' on the target, and this solved the problem instantly.  (But it 
+took some hours to find that this was the problem!).
 
-It seems like git.kernel.org and git.pengutronix.de do not as well. It might
-be caused my the damn corporate firewall, but sniffing suggest it's not so.
+My guess is that these extra libraries are simply part of eglibc and loaded 
+by it on demand.  The toolchain that crosstool makes is gcc 4.4.4 with 
+eglibc 2.10.
 
-Luca
+I have some free time tomorrow and I'll see if I can't write some simple 
+code that can demonstrate this problem without the need to compile 
+uim/anthy.  How hard can it be???  I'll post again when I've got something 
+more definite to share!
+
+Thanks
+
+Andy
