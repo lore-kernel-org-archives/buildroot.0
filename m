@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] xvkbd: add missing dependency
-	on xlib_libXtst
-Message-ID: <20100708115826.8A6C48269B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libcgi: fix target install if
+	usr/include doesn't exist
+Message-ID: <20100708115827.306C28269B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bfca3ec2573d50b7a883d6e89dd8b322b276dda
+commit: http://git.buildroot.net/buildroot/commit/?id=bd747b77b7702a2827635044e8f6648f167004ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xvkbd/Config.in |    1 +
- package/xvkbd/xvkbd.mk  |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ CHANGES                     |    2 +-
+ package/libcgi/libcgi.patch |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
-index 8a4b847..a75687d 100644
---- a/package/xvkbd/Config.in
-+++ b/package/xvkbd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XVKBD
- 	bool "xvkbd"
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXAW
-+	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
- 	  on-screen keyboard for X
- 
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index c40fa57..7c74be7 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -15,7 +15,7 @@ XVKBD_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_CC)" \
- 
- XVKBD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw
-+XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw xlib_libXtst
- 
- $(eval $(call AUTOTARGETS,package,xvkbd))
- 
+diff --git a/CHANGES b/CHANGES
+index 9f3d1a4..da62f13 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -17,7 +17,7 @@
+ 	Updated/fixed packages: berkeleydb, bash, blackbox, busybox,
+ 	bzip2, cdrkit, dash, dialog, diffutils, distcc, dmalloc,
+ 	dnsmasq, dropbear, e2fsprogs, fbv, file, gawk, gstreamer,
+-	gzip, intltool, ipsec-tools, iptables, libart, libfuse,
++	gzip, intltool, ipsec-tools, iptables, libart, libcgi, libfuse,
+ 	libgpg-error, libidn, liblockfile, links, lmbench, lrzsz,
+ 	make, module-init-tools, nbd, ncurses, netperf, ntfsprogs,
+ 	openssl, php, qt, quagga, sqlite, sdl, sdl_mixer, sdl_sound,
+diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
+index 5cf4915..716d83c 100644
+--- a/package/libcgi/libcgi.patch
++++ b/package/libcgi/libcgi.patch
+@@ -71,7 +71,7 @@
+ -	cp src/session.h $(INCDIR)
+ +	cp src/libcgi.a $(DESTDIR)/$(LIBDIR)
+ +	cp src/libcgi.so $(DESTDIR)/$(LIBDIR)
+-+	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir $(DESTDIR)/$(INCDIR)
+++	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir -p $(DESTDIR)/$(INCDIR)
+ +	cp src/cgi.h $(DESTDIR)/$(INCDIR)
+ +	cp src/session.h $(DESTDIR)/$(INCDIR)
+  
 -- 
 1.7.1
