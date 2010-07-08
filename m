@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] Merge TARGET_CONFIGURE_ENV into
-	TARGET_CONFIGURE_OPTS
-Message-ID: <20100708115826.0CC848269B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] fontconfig: fix
+	cross-compilation patch
+Message-ID: <20100708115825.01F3C8269B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,103 +10,142 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e721a7c07e0a9ab4a6a8fe7aff9f378ac4144df6
+commit: http://git.buildroot.net/buildroot/commit/?id=daa537c3349b54e59a3e06a4ecb0d086add7f5de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-TARGET_CONFIGURE_ENV defines CFLAGS, LDFLAGS, CXXFLAGS and FCFLAGS,
-separatly from all other variables that are part of
-TARGET_CONFIGURE_OPTS. This is useless and not consistent with the
-HOST_CONFIGURE_ variables, therefore we merge TARGET_CONFIGURE_ENV
-into TARGET_CONFIGURE_OPTS and fix the few users of
-TARGET_CONFIGURE_ENV.
+The existing cross-compilation patch works with our not completely
+correct TARGET_CONFIGURE_OPTS. With the correct variables (CFLAGS,
+LDFLAGS) being passed, fontconfig was trying to use target
+CFLAGS/LDFLAGS when building tools for the host.
+
+This updated patch fixes that problem by correctly using the
+CC_FOR_BUILD, CFLAGS_FOR_BUILD variables.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.autotools.in            |    1 -
- package/Makefile.in                      |   10 ++++------
- package/lockfile-progs/lockfile-progs.mk |    3 +--
- package/mtd/mtd.mk                       |    3 +--
- package/multimedia/ffmpeg/ffmpeg.mk      |    1 -
- 5 files changed, 6 insertions(+), 12 deletions(-)
+ .../fontconfig-2.6.0-use_for_build.patch           |   93 ++++++++++++--------
+ 1 files changed, 57 insertions(+), 36 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 337aee4..1ccf44c 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -90,7 +90,6 @@ define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache && \
- 	$$(TARGET_CONFIGURE_OPTS) \
- 	$$(TARGET_CONFIGURE_ARGS) \
--	$$(TARGET_CONFIGURE_ENV) \
- 	$$($$(PKG)_CONF_ENV) \
- 	./configure \
- 		$$(if $$(filter YES,$$($$(PKG)_USE_CONFIG_CACHE)),--cache-file="$(BUILD_DIR)/tgt-config.cache",) \
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 1c965c9..189806d 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -194,18 +194,16 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
- 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
- 		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
- 		DEFAULT_LINKER="$(TARGET_LD)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		CXXFLAGS="$(TARGET_CXXFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		FCFLAGS="$(TARGET_FCFLAGS)" \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
- 		PERLLIB="$(HOST_DIR)/usr/lib/perl" \
- 		STAGING_DIR="$(STAGING_DIR)"
- 
--TARGET_CONFIGURE_ENV=\
--	CFLAGS="$(TARGET_CFLAGS)" \
--	CXXFLAGS="$(TARGET_CXXFLAGS)" \
--	LDFLAGS="$(TARGET_LDFLAGS)" \
--	FCFLAGS="$(TARGET_FCFLAGS)" \
+diff --git a/package/fontconfig/fontconfig-2.6.0-use_for_build.patch b/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
+index cdf9056..334cbba 100644
+--- a/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
++++ b/package/fontconfig/fontconfig-2.6.0-use_for_build.patch
+@@ -1,59 +1,80 @@
+----
+- fc-arch/Makefile.am      |    2 +-
+- fc-case/Makefile.am      |    2 +-
+- fc-glyphname/Makefile.am |    2 +-
+- fc-lang/Makefile.am      |    2 +-
+- 4 files changed, 4 insertions(+), 4 deletions(-)
 -
- TARGET_MAKE_ENV=PATH=$(TARGET_PATH) \
- 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
-index 4098330..3925ca3 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -21,8 +21,7 @@ $(LOCKFILE_PROGS_DIR)/.unpacked: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
- 	touch $(LOCKFILE_PROGS_DIR)/.unpacked
- 
- $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(TARGET_CONFIGURE_ENV) \
--		-C $(LOCKFILE_PROGS_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LOCKFILE_PROGS_DIR)
- 	cp -a $(LOCKFILE_PROGS_DIR)/bin/lockfile* $(TARGET_DIR)/usr/bin
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
- 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 0c9ed42..c573849 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -65,8 +65,7 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIRSVOL)	+= ubirsvol
- MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
- 
- MTD_MAKE_COMMON_FLAGS = \
--	$(TARGET_CONFIGURE_ENV) \
--	CROSS=$(TARGET_CROSS) CC=$(TARGET_CC) \
-+	$(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
- 	WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1
- 
- ifneq ($(MTD_TARGETS_y),)
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index 81984f1..aac39c1 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -121,7 +121,6 @@ define FFMPEG_CONFIGURE_CMDS
- 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	$(TARGET_CONFIGURE_ARGS) \
--	$(TARGET_CONFIGURE_ENV) \
- 	$(FFMPEG_CONF_ENV) \
- 	./configure \
- 		--enable-cross-compile	\
+-Index: fontconfig-2.6.0/fc-arch/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-arch/Makefile.am
+-+++ fontconfig-2.6.0/fc-arch/Makefile.am
+-@@ -24,7 +24,7 @@
+- 
+- CC = @CC_FOR_BUILD@
++diff -Naur fontconfig-2.6.0.orig/doc/Makefile.am fontconfig-2.6.0/doc/Makefile.am
++--- fontconfig-2.6.0.orig/doc/Makefile.am	2007-11-06 01:05:37.000000000 +0100
+++++ fontconfig-2.6.0/doc/Makefile.am	2010-05-22 00:03:00.000000000 +0200
++@@ -21,9 +21,10 @@
++ # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
++ # PERFORMANCE OF THIS SOFTWARE.
++ 
++-CC = @CC_FOR_BUILD@
++ EXEEXT = @EXEEXT_FOR_BUILD@
++-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
++ 
++ DOC_SRC = $(srcdir)
++ DOC_MODULE = fontconfig
++diff -Naur fontconfig-2.6.0.orig/fc-arch/Makefile.am fontconfig-2.6.0/fc-arch/Makefile.am
++--- fontconfig-2.6.0.orig/fc-arch/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-arch/Makefile.am	2010-05-21 23:59:18.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
++ 
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++	$(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-case/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-case/Makefile.am
+-+++ fontconfig-2.6.0/fc-case/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-case/Makefile.am fontconfig-2.6.0/fc-case/Makefile.am
++--- fontconfig-2.6.0.orig/fc-case/Makefile.am	2010-05-21 23:55:02.000000000 +0200
+++++ fontconfig-2.6.0/fc-case/Makefile.am	2010-05-22 00:04:09.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-glyphname/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-glyphname/Makefile.am
+-+++ fontconfig-2.6.0/fc-glyphname/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-glyphname/Makefile.am fontconfig-2.6.0/fc-glyphname/Makefile.am
++--- fontconfig-2.6.0.orig/fc-glyphname/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-glyphname/Makefile.am	2010-05-22 00:04:54.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
+-Index: fontconfig-2.6.0/fc-lang/Makefile.am
+-===================================================================
+---- fontconfig-2.6.0.orig/fc-lang/Makefile.am
+-+++ fontconfig-2.6.0/fc-lang/Makefile.am
+-@@ -24,7 +24,7 @@
++diff -Naur fontconfig-2.6.0.orig/fc-lang/Makefile.am fontconfig-2.6.0/fc-lang/Makefile.am
++--- fontconfig-2.6.0.orig/fc-lang/Makefile.am	2008-01-02 17:44:39.000000000 +0100
+++++ fontconfig-2.6.0/fc-lang/Makefile.am	2010-05-22 00:05:44.000000000 +0200
++@@ -22,9 +22,10 @@
++ # PERFORMANCE OF THIS SOFTWARE.
++ #
+  
+- CC = @CC_FOR_BUILD@
++-CC = @CC_FOR_BUILD@
+  EXEEXT = @EXEEXT_FOR_BUILD@
+ -LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+-+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+++COMPILE = $(CC_FOR_BUILD) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+++		      $(CPPFLAGS_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD)
+++LINK = $(CC_FOR_BUILD) $(AM_CFLAGS) $(CFLAGS_FOR_BUILD) $(AM_LDFLAGS) $(LDFLAGS_FOR_BUILD) -o $@
+  
+  INCLUDES=-I${top_srcdir}/src -I${top_srcdir} $(WARN_CFLAGS)
+  
 -- 
 1.7.1
