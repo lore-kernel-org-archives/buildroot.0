@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] webkit: fix misc build issues
-Message-ID: <20100708115824.4F2048269B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xcb-util: add dependency on
+	host-gperf
+Message-ID: <20100708115824.6C8A9826D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9dd1a03a78adfd28cb1c1c1844af86bbae7eaff7
+commit: http://git.buildroot.net/buildroot/commit/?id=def6e3fd144a677d0b666a97ebc31a8be21b8ebd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Webkit depends on libjpeg, so add it as a dependency. Webkit also uses
-icu but fails to find it if we don't pass ac_cv_path_icu_config to its
-./configure script.
+gperf on the host is needed, since it is used by xcb-util to generate
+a perfect hash function.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webkit/webkit.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/x11r7/xcb-util/xcb-util.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
-index 39debd3..fc355ce 100644
---- a/package/webkit/webkit.mk
-+++ b/package/webkit/webkit.mk
-@@ -12,8 +12,9 @@ WEBKIT_INSTALL_TARGET = YES
- WEBKIT_LIBTOOL_PATCH = NO
+diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
+index 51b753e..b0dabd8 100644
+--- a/package/x11r7/xcb-util/xcb-util.mk
++++ b/package/x11r7/xcb-util/xcb-util.mk
+@@ -7,6 +7,7 @@ XCB_UTIL_VERSION = 0.3.6
+ XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
+ XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
+ XCB_UTIL_LIBTOOL_PATCH = NO
++XCB_UTIL_DEPENDENCIES = host-gperf
  
- WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
--			libgtk2 sqlite enchant libsoup
-+			libgtk2 sqlite enchant libsoup jpeg
+ $(eval $(call AUTOTARGETS,package/x11r7,xcb-util))
  
-+WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- 	WEBKIT_CONF_OPT += --with-target=x11
 -- 
 1.7.1
