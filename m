@@ -1,29 +1,32 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 Jul 2010 15:44:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 2185] pixman can't apply
-	pixman-0.10.0-no-tests.patch
-In-Reply-To: <bug-2185-163@https.bugs.busybox.net/>
-References: <bug-2185-163@https.bugs.busybox.net/>
-Message-ID: <20100708154417.74DAB82793@busybox.osuosl.org>
+Date: Thu,  8 Jul 2010 17:22:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 2167] Bump busybox to 1.17.0, convert to gentargets,
+ drop 1.12, deprecate 1.13 and 1.15
+In-Reply-To: <bug-2167-163@https.bugs.busybox.net/>
+References: <bug-2167-163@https.bugs.busybox.net/>
+Message-ID: <20100708172233.C90E682794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2185
+https://bugs.busybox.net/show_bug.cgi?id=2167
 
-Anthoine Bourgeois <bourgeois@bertin.fr> changed:
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+   Attachment #2173|0                           |1
+        is obsolete|                            |
 
---- Comment #4 from Anthoine Bourgeois <bourgeois@bertin.fr>  ---
-OK, it works with the right archive. Thank you !
-I work on a separate environment from internet then I download all packages
-manually. I'll run 'make source' now I know that command.
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 2191
+  --> https://bugs.busybox.net/attachment.cgi?id=2191
+Bump busybox to 1.17.0, convert to gentargets, drop 1.12, deprecate 1.13 and
+1.15
+
+Rebased to latest git.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
