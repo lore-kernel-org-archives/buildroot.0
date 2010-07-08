@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] libcgi: fix target install if
-	usr/include doesn't exist
-Message-ID: <20100708115827.306C28269B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libsvgtiny: needs
+	host-pkg-config
+Message-ID: <20100708115827.4E7978269B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd747b77b7702a2827635044e8f6648f167004ee
+commit: http://git.buildroot.net/buildroot/commit/?id=0faf47206c87b7537d8c862a96bf09fd28ab2497
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The makefile uses pkg-config for libxml2 support.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                     |    2 +-
- package/libcgi/libcgi.patch |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsvgtiny/libsvgtiny.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 9f3d1a4..da62f13 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -17,7 +17,7 @@
- 	Updated/fixed packages: berkeleydb, bash, blackbox, busybox,
- 	bzip2, cdrkit, dash, dialog, diffutils, distcc, dmalloc,
- 	dnsmasq, dropbear, e2fsprogs, fbv, file, gawk, gstreamer,
--	gzip, intltool, ipsec-tools, iptables, libart, libfuse,
-+	gzip, intltool, ipsec-tools, iptables, libart, libcgi, libfuse,
- 	libgpg-error, libidn, liblockfile, links, lmbench, lrzsz,
- 	make, module-init-tools, nbd, ncurses, netperf, ntfsprogs,
- 	openssl, php, qt, quagga, sqlite, sdl, sdl_mixer, sdl_sound,
-diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
-index 5cf4915..716d83c 100644
---- a/package/libcgi/libcgi.patch
-+++ b/package/libcgi/libcgi.patch
-@@ -71,7 +71,7 @@
- -	cp src/session.h $(INCDIR)
- +	cp src/libcgi.a $(DESTDIR)/$(LIBDIR)
- +	cp src/libcgi.so $(DESTDIR)/$(LIBDIR)
--+	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir $(DESTDIR)/$(INCDIR)
-++	[ -d $(DESTDIR)/$(INCDIR) ] || mkdir -p $(DESTDIR)/$(INCDIR)
- +	cp src/cgi.h $(DESTDIR)/$(INCDIR)
- +	cp src/session.h $(DESTDIR)/$(INCDIR)
-  
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index ed73195..b559e52 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -10,7 +10,7 @@ LIBSVGTINY_SVNDIR = libsvgtiny-svn-r$(LIBSVGTINY_VERSION)
+ LIBSVGTINY_SOURCE = $(LIBSVGTINY_SVNDIR).tar.bz2
+ LIBSVGTINY_INSTALL_STAGING = YES
+ LIBSVGTINY_INSTALL_TARGET = YES
+-LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf
++LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkg-config
+ 
+ $(DL_DIR)/$(LIBSVGTINY_SOURCE):
+ 	$(SVN_CO) -r $(LIBSVGTINY_VERSION) $(LIBSVGTINY_SITE) $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
 -- 
 1.7.1
