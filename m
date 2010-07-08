@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jul 2010 09:38:52 +0200
-Subject: [Buildroot] [PATCH 0/2] skeleton reorganization patchset
-In-Reply-To: <AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
-References: <4c1933c5.0b4ddf0a.0de4.6a7a@mx.google.com>
-	<20100617230209.5274a34a@surf>
-	<AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
-Message-ID: <20100708093852.0061dd88@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Jul 2010 08:04:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 2143] buildroot compiler generates segfaulting
+ statically linked executables
+In-Reply-To: <bug-2143-163@https.bugs.busybox.net/>
+References: <bug-2143-163@https.bugs.busybox.net/>
+Message-ID: <20100708080428.E592D826CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 6 Jul 2010 18:58:02 +0300
-Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2143
 
-> Any chance to see this in mainline?
+Sander in 't Hout <sander.ashwin@live.nl> changed:
 
-Yes, I don't see any reason why it couldn't be merged. We just need to
-wait for Peter to look at this and merge it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |VERIFIED
 
-Thanks for your contribution and patience,
+--- Comment #2 from Sander in 't Hout <sander.ashwin@live.nl>  ---
+(In reply to comment #1)
+> It's a GCC issues (BR32219) that gets triggered by uClibc 0.9.31. It has been
+> worked around in uClibc since the release, and I have now integrated those
+> fixes in git (e09aa6049323)
 
-Thomas
+Thanks for the fix!
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
