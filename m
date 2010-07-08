@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jul 2010 09:31:45 +0200
-Subject: [Buildroot] [PATCH] linux: rebuild after reconfiguring kernel
-In-Reply-To: <0D753D10438DA54287A00B02708426976373A92CA9@AUSP01VMBX24.collaborationhost.net>
-References: <201007061130.52946.hartleys@visionengravers.com>
-	<20100707140932.63e1eb19@surf>
-	<0D753D10438DA54287A00B02708426976373A92CA9@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <20100708093145.4bc1d0b9@surf>
+Date: Thu, 8 Jul 2010 09:34:56 +0200
+Subject: [Buildroot] Crosstool/Buildroot integration issue
+In-Reply-To: <201007071919.28956.yann.morin.1998@anciens.enib.fr>
+References: <BLU0-SMTP11A24568AF672F1DE458A4E7B30@phx.gbl>
+	<201007071919.28956.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20100708093456.61bf5501@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 7 Jul 2010 15:11:50 -0500
-H Hartley Sweeten <hartleys@visionengravers.com> wrote:
+On Wed, 7 Jul 2010 19:19:28 +0200
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
-> > Unless I'm missing something, this change is going to create a
-> > linux26-menuconfig file or a linux26-xconfig file, which is not
-> > correct, and is not going to retrigger the build step of the kernel.
+> Well, I'd rather we had something like:
+> - in menuconfig:
+>     () Additional dirs to copy from sysroot
+>       Help:
+>         This is a space-separated list of paths that you want to copy
+>         from the sysroot to the target. Make the paths relative to the
+>         sysroot. Example:
+>           /usr/lib/gconv /usr/include
 > 
-> Argh... Your correct.  The .stamp_configured file is the one that needs touched.
+> - and in ext-tool.mk (to replace your changes, above):
+>   $(Q)for d in $(BR_EXT_TOOL_DIRS_EXTRA); do \
+>         if [ -d "$(ARCH_SYSROOT_DIR)$${d}" ]; then
+>           mkdir -p "$(TARGET_DIR)$${d}"
+>           cp -a "$${d}/." "$(TARGET_DIR)${d}/."
+>         else
+>           echo "No such directory '$${d}' whiel trying to copy from sysroot"
+>         fi
+>       done
+> 
+> But that's just my 2-cent advice...
 
-Right.
+At first look, I'm not a big fan of this solution, as it requires a lot
+of knowledge from the Buildroot user about dependency details that
+precisely Buildroot is supposed to handle.
 
-> > Which exact issue are you facing ? Can you provide an example ?
-> 
-> Your correct, when the .config file is changed the kernel does rebuild.
-> 
-> The strange thing is, yesterday it didn't work and I haven't changed anything.
-> I would do:
-> 
-> $ make linux26-menuconfig
-> 
-> Change something in the config, then:
-> 
-> $ make
-> 
-> Or
-> 
-> $ make linux26
-> 
-> And the kernel would not rebuild.  But if I did:
-> 
-> $ touch output/build/linux-2.6.34/.stamp_configured
-> $ make
-> 
-> It would.
-> 
-> Oh well, it's working now...
-
-Strange. If you manage to reproduce something like this, don't hesitate
-to tell us.
-
-Thanks,
+I'd prefer to understand why and when these gconv files are needed, and
+depending on that, see how it should fit in our configuration system.
 
 Thomas
 -- 
