@@ -1,22 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Jul 2010 10:20:23 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump version
-In-Reply-To: <201007061125.58262.hartleys@visionengravers.com> (H. Hartley
-	Sweeten's message of "Tue, 6 Jul 2010 11:25:58 -0700")
-References: <201007061125.58262.hartleys@visionengravers.com>
-Message-ID: <87ocei4c6w.fsf@macbook.be.48ers.dk>
+From: Wu, Josh <Josh.wu@atmel.com>
+Date: Thu, 8 Jul 2010 11:47:42 +0200
+Subject: [Buildroot] How to send a sigle git patch which is too big (about
+	290k) to buildroot
+Message-ID: <C83D7CE8356557448A893798C8F9931D05C831F9@frimb01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+Hi, 
 
- H> Version 1.41.12 was released May 18, 2010.
- H> Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+ 
 
-Committed, thanks.
+I try to send a patch which includes Atmel AT91 Linux and experimental patches for Linux Kernel 2.6.30. I paste the patch in the end of the email. So the email is too big to send. Can anyone tell me what I should do?
 
--- 
-Bye, Peter Korsgaard
+ 
+
+Thank you.
+
+Best Regards,
+
+Josh Wu
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100708/699f4897/attachment.html>
