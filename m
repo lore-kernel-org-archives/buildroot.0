@@ -1,44 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jul 2010 09:37:40 +0200
-Subject: [Buildroot] Controlling dependencies for package with manual
- Makefile
-In-Reply-To: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E39@2putt.int.lantronix.com>
-References: <8128F0FD6C26E14C8EB4BFDB92B8D6B201517E39@2putt.int.lantronix.com>
-Message-ID: <20100708093740.045e621f@surf>
+Date: Thu, 8 Jul 2010 09:38:52 +0200
+Subject: [Buildroot] [PATCH 0/2] skeleton reorganization patchset
+In-Reply-To: <AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
+References: <4c1933c5.0b4ddf0a.0de4.6a7a@mx.google.com>
+	<20100617230209.5274a34a@surf>
+	<AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
+Message-ID: <20100708093852.0061dd88@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 7 Jul 2010 10:22:25 -0700
-"Matthew Davison" <matt.davison@lantronix.com> wrote:
+On Tue, 6 Jul 2010 18:58:02 +0300
+Dmytro Milinevskyy <milinevskyy@gmail.com> wrote:
 
-> I understand that for packages using the autotools infrastructure, that
-> the PACKAGENAME_DEPENDENCIES variable (replacing PACKAGENAME
-> appropriately) is used to tell buildroot to build these dependencies
-> first. Setting this variable in a manual Makefile (non-autotools based),
-> does not appear to work.
->  
-> Is there a way to force buildroot to build package dependencies first,
-> without having to convert to an autotools compliant Makefile?
+> Any chance to see this in mainline?
 
-As you later pointed out, it just a matter of doing:
+Yes, I don't see any reason why it couldn't be merged. We just need to
+wait for Peter to look at this and merge it.
 
-yourpackage: yourdependency thetargetofyourpackage
-
-However, do you have any reason for not using the AUTOTARGETS or
-GENTARGETS infrastructures ? The <pkg>_DEPENDENCIES variable works with
-both.
-
-If your package is not autotools-based, you should definitely use the
-GENTARGETS infrastructure. Manual Makefiles are no longer accepted in
-Buildroot, and we're in the process of convering all existing packages
-to GENTARGETS or AUTOTARGETS.
-
-Don't hesitate to ask for any detail if needed.
-
-Thanks!
+Thanks for your contribution and patience,
 
 Thomas
 -- 
