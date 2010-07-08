@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 Jul 2010 13:45:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 2185] New: pixman can't apply
+Date: Thu,  8 Jul 2010 13:57:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 2185] pixman can't apply
 	pixman-0.10.0-no-tests.patch
-Message-ID: <bug-2185-163@https.bugs.busybox.net/>
+In-Reply-To: <bug-2185-163@https.bugs.busybox.net/>
+References: <bug-2185-163@https.bugs.busybox.net/>
+Message-ID: <20100708135736.7833882794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,49 +13,23 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2185
 
-           Summary: pixman can't apply pixman-0.10.0-no-tests.patch
-           Product: buildroot
-           Version: 2010.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: bourgeois at bertin.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Strange, it works here (git version):
 
-
-Created attachment 2185
-  --> https://bugs.busybox.net/attachment.cgi?id=2185
-my config file
-
-I've got this error when I made my config :
-
+$ make
 >>> pixman 0.17.6 Extracting
 >>> pixman 0.17.6 Patching package/pixman
 
 Applying pixman-0.10.0-no-tests.patch using plaintext: 
-can't find file to patch at input line 3
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|--- a/Makefile.in.orig 2008-05-23 14:04:37.000000000 +0000
-|+++ b/Makefile.in      2008-05-23 14:04:50.000000000 +0000
---------------------------
-File to patch: 
+patching file Makefile.in
+Hunk #1 succeeded at 211 with fuzz 1 (offset 13 lines).
+for file in config.guess config.sub; do for i in $(find
+/home/peko/source/buildroot/output/build/pixman-0.17.6 -name $file); do cp
+package/gnuconfig/$file $i; done; done
+>>>   Patching libtool
 
-
-It appears that Makefile.in doesn't exist in my output/build/pixman-0.17.6 .
-This Makefile.in is produced after a ./autogen.sh then I set
-PIXMAN_AUTORECONF=YES in the pixman.mk but this solution doesn't work neither.
-AUTORECONF is execute as a POST_PATCH_HOOKS and the patch fails before reaching
-the AUTORECONF hook.
-
-What is the good solution ? Fix Makefile.autoconf.in to process AUTORECONF as a
-POST_EXTRACT_HOOKS or run ./autogen.sh manually ?
+If you have a look in pixman-0.17.6.tar.gz, then you'll see it has a
+Makefile.in. Could you try rm -rf output/build/pixman* and try again?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
