@@ -1,34 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 Jul 2010 17:22:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 2167] Bump busybox to 1.17.0, convert to gentargets,
- drop 1.12, deprecate 1.13 and 1.15
-In-Reply-To: <bug-2167-163@https.bugs.busybox.net/>
-References: <bug-2167-163@https.bugs.busybox.net/>
-Message-ID: <20100708172233.C90E682794@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu,  8 Jul 2010 22:08:46 +0200
+Subject: [Buildroot] [PATCH] ext-toolchains: fix libnss_*.so installation
+	with external glibc
+Message-ID: <1278619726-17555-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2167
+Commit 7192668 introduced a wrong spelling of BR2_TOOLCHAIN_EXTERNAL_GLIBC
+that prevented libnss_files.so and libnss_dns.so from being installed.
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #2173|0                           |1
-        is obsolete|                            |
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Created attachment 2191
-  --> https://bugs.busybox.net/attachment.cgi?id=2191
-Bump busybox to 1.17.0, convert to gentargets, drop 1.12, deprecate 1.13 and
-1.15
-
-Rebased to latest git.
-
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 9ad1e31..40e3a52 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -281,7 +281,7 @@ check_cross_compiler_exists = \
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+ LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCLIBC),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
