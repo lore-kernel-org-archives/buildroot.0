@@ -1,7 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] Rework sysroot option handling
-Message-ID: <20100708115825.71E508269B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libsvgtiny: remove
+	TARGET_CONFIGURE_ENV
+Message-ID: <20100708115827.134638269B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,66 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc67c7f4dc3b3dbd0c71c2917373deab70f75b7a
+commit: http://git.buildroot.net/buildroot/commit/?id=0b569356d7e14dd78068309f1863272f6db09223
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The external toolchain and internal toolchain cases both need to use
-the --sysroot option, and they have almost identical
-LDFLAGS/CFLAGS/CXXFLAGS definition, so we can factorize these
-definitions.
+TARGET_CONFIG_ENV got removed in e721a7c07 (Merge TARGET_CONFIGURE_ENV
+into TARGET_CONFIGURE_OPTS), so remove it from the recent libsvgtiny
+package as well.
 
-Moreover, the --isysroot option is implied by --sysroot so there's no
-need to specify both.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in   |   16 +++-------------
- toolchain/Makefile.in |    2 --
- 2 files changed, 3 insertions(+), 15 deletions(-)
+ package/libsvgtiny/libsvgtiny.mk |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 734af03..e4aa220 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -77,23 +77,13 @@ ifeq ($(BR2_LARGEFILE),y)
- TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index 5e53346..ed73195 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -21,33 +21,31 @@ $(DL_DIR)/$(LIBSVGTINY_SOURCE):
+ LIBSVGTINY_TARGET_SOURCE := $(DL_DIR)/$(LIBSVGTINY_SOURCE)
  
--
--#########################################################################
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
--TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
--TARGET_CXXFLAGS=$(TARGET_CFLAGS)
--TARGET_CFLAGS+= $(BR2_SYSROOT) $(BR2_ISYSROOT)
--TARGET_LDFLAGS+= $(BR2_SYSROOT)
-+endif
+ define LIBSVGTINY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
+-		 $(MAKE) -C $(@D) PREFIX=/usr
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr
+ endef
  
--#########################################################################
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--TARGET_CFLAGS+=--sysroot=$(STAGING_DIR)/
-+TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib --sysroot=$(STAGING_DIR)
-+TARGET_CFLAGS+=--sysroot=$(STAGING_DIR)
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
--TARGET_LDFLAGS=--sysroot=$(STAGING_DIR)/
--TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
--endif
--#########################################################################
+ define LIBSVGTINY_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) install
+ endef
  
- # Compute GNU_TARGET_NAME and REAL_GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-linux
-diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
-index 5d0e5a1..e5fae1f 100644
---- a/toolchain/Makefile.in
-+++ b/toolchain/Makefile.in
-@@ -15,8 +15,6 @@ BR2_SYSROOT_TARGET_DESTDIR=DESTDIR=$(TARGET_DIR)/
- BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/
- BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
- BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
--BR2_SYSROOT=--sysroot=$(STAGING_DIR)/
--BR2_ISYSROOT=-isysroot $(STAGING_DIR)
+ define LIBSVGTINY_UNINSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) uninstall
+ endef
  
- # gcc has a bunch of needed stuff....
- include toolchain/gcc/Makefile.in
+ define LIBSVGTINY_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ define LIBSVGTINY_UNINSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) uninstall
+ endef
+ 
+ define LIBSVGTINY_CLEAN_CMDS
+-	$(TARGET_CONFIGURE_ENV) $(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) clean
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) clean
+ endef
+ 
+ $(eval $(call GENTARGETS,package,libsvgtiny))
 -- 
 1.7.1
