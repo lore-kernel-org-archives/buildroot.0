@@ -1,47 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Jul 2010 09:30:39 +0200
-Subject: [Buildroot] [git commit master 1/1] Makefile.package.in: allow
- packages to override download step
-In-Reply-To: <4C34E1E7.6040605@lucaceresoli.net>
-References: <20100701153712.9DCD6821E8@busybox.osuosl.org>
-	<20100701180447.3477a6fa@surf> <4C34E1E7.6040605@lucaceresoli.net>
-Message-ID: <20100708093039.7406f9d3@surf>
+Date: Thu, 8 Jul 2010 09:31:45 +0200
+Subject: [Buildroot] [PATCH] linux: rebuild after reconfiguring kernel
+In-Reply-To: <0D753D10438DA54287A00B02708426976373A92CA9@AUSP01VMBX24.collaborationhost.net>
+References: <201007061130.52946.hartleys@visionengravers.com>
+	<20100707140932.63e1eb19@surf>
+	<0D753D10438DA54287A00B02708426976373A92CA9@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <20100708093145.4bc1d0b9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 07 Jul 2010 22:21:59 +0200
-Luca Ceresoli <luca@lucaceresoli.net> wrote:
+On Wed, 7 Jul 2010 15:11:50 -0500
+H Hartley Sweeten <hartleys@visionengravers.com> wrote:
 
-> It's a good feature to have, but I agree with Thomas about the way to 
-> implement it. As I proposed in the discussion about "Getting package 
-> sources from git/svn/bzr", I'd rather make the DOWNLOAD command 
-> overridable in package/Makefile.package.in, like this:
+> > Unless I'm missing something, this change is going to create a
+> > linux26-menuconfig file or a linux26-xconfig file, which is not
+> > correct, and is not going to retrigger the build step of the kernel.
 > 
-> @@ -118,19 +118,19 @@
->  # Retrieve the archive
->  $(BUILD_DIR)/%/.stamp_downloaded:
->  # support make source-check/external-deps
->  ifeq ($(SPIDER),)
->  # Only show the download message if it isn't already downloaded
->  	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
->  		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
->  		$(call MESSAGE,"Downloading")
->  endif
-> -	$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE))
-> +	$($(PKG)_DOWNLOAD_CMDS)
->  	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
-> 
-> 
-> where of course $(PKG)_DOWNLOAD_CMDS would default to $(call DOWNLOAD,...).
-> 
-> Would such a patch be applied, if I wrote one?
+> Argh... Your correct.  The .stamp_configured file is the one that needs touched.
 
-There's another approach currently being developed: integrate support
-for Git/SVN directly into the infrastructure. I hope to see the patch
-for this coming pretty soon.
+Right.
+
+> > Which exact issue are you facing ? Can you provide an example ?
+> 
+> Your correct, when the .config file is changed the kernel does rebuild.
+> 
+> The strange thing is, yesterday it didn't work and I haven't changed anything.
+> I would do:
+> 
+> $ make linux26-menuconfig
+> 
+> Change something in the config, then:
+> 
+> $ make
+> 
+> Or
+> 
+> $ make linux26
+> 
+> And the kernel would not rebuild.  But if I did:
+> 
+> $ touch output/build/linux-2.6.34/.stamp_configured
+> $ make
+> 
+> It would.
+> 
+> Oh well, it's working now...
+
+Strange. If you manage to reproduce something like this, don't hesitate
+to tell us.
+
+Thanks,
 
 Thomas
 -- 
