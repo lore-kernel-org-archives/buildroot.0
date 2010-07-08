@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 8 Jul 2010 13:57:12 +0200
-Subject: [Buildroot] [git commit master 1/1] xcb-util: add dependency on
-	host-gperf
-Message-ID: <20100708115824.6C8A9826D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Remove *_FOR_TARGET variables
+	from TARGET_CONFIGURE_OPTS
+Message-ID: <20100708115825.AE3848269B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=def6e3fd144a677d0b666a97ebc31a8be21b8ebd
+commit: http://git.buildroot.net/buildroot/commit/?id=359090e693846cc62b9390363e79b5d7afb83eee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gperf on the host is needed, since it is used by xcb-util to generate
-a perfect hash function.
+Those variables are not standard.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xcb-util/xcb-util.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Makefile.in |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
-index 51b753e..b0dabd8 100644
---- a/package/x11r7/xcb-util/xcb-util.mk
-+++ b/package/x11r7/xcb-util/xcb-util.mk
-@@ -7,6 +7,7 @@ XCB_UTIL_VERSION = 0.3.6
- XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
- XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
- XCB_UTIL_LIBTOOL_PATCH = NO
-+XCB_UTIL_DEPENDENCIES = host-gperf
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xcb-util))
- 
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0fc8deb..0d80a2a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -193,11 +193,6 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		CXXFLAGS_FOR_BUILD="$(HOST_CXXFLAGS)" \
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+-		AR_FOR_TARGET="$(TARGET_AR)" \
+-		AS_FOR_TARGET="$(TARGET_AS)" \
+-		CC_FOR_TARGET="$(TARGET_CC)" \
+-		LD_FOR_TARGET="$(TARGET_LD)" \
+-		NM_FOR_TARGET="$(TARGET_NM)" \
+ 		DEFAULT_ASSEMBLER="$(TARGET_AS)" \
+ 		DEFAULT_LINKER="$(TARGET_LD)" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
 -- 
 1.7.1
