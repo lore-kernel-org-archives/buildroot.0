@@ -1,31 +1,39 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Thu, 08 Jul 2010 22:18:44 +0200
-Subject: [Buildroot] Mgetty in Buildroot config?
-In-Reply-To: <4C34816B.6010606@terawatt.fr>
-References: <4C34816B.6010606@terawatt.fr>
-Message-ID: <4C3632A4.9080608@gmx.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 8 Jul 2010 23:06:53 +0200
+Subject: [Buildroot] [git commit master 1/1] ext-toolchains: fix libnss_*.so
+	installation with external glibc
+Message-ID: <20100708210709.3637E82794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 07.07.2010 15:30, schrieb Damien Borie:
-> Hello everybody!
->
-> I have a little problem : I'm trying to install mgetty in my
-> distribution, because I must use a serial modem. But I don't find mgetty
-> option in config file and in buildroot menuconfig. I'm a bit surprises
-> because I thought it was a common software. So I wonder if I'm just
-> blind not to find it, or if mgetty isn't include in Buildroot for now.
-> In this case, is there any patch to add it, or must I compile it myself ?
-> I see in the mailing list archive that some thread talk about mgetty, so
-> I concluded that it's possible to add it...
->
-Hi Damien,
 
-I think busybox provides a leightweight getty applet. Maybe it is 
-sufficient for your needs.
+commit: http://git.buildroot.net/buildroot/commit/?id=e766f13d1707ff77a2f6d0d22664a35bc275128a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Regards,
-Marcus
+Commit 7192668 introduced a wrong spelling of BR2_TOOLCHAIN_EXTERNAL_GLIBC
+that prevented libnss_files.so and libnss_dns.so from being installed.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 9ad1e31..40e3a52 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -281,7 +281,7 @@ check_cross_compiler_exists = \
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+ LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCLIBC),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+ 
+-- 
+1.7.1
