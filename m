@@ -1,23 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Jul 2010 06:57:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 2197] classpath should depends on IPv6
-In-Reply-To: <bug-2197-163@https.bugs.busybox.net/>
-References: <bug-2197-163@https.bugs.busybox.net/>
-Message-ID: <20100709065718.538D5827B2@busybox.osuosl.org>
+From: JNY <jny0@hotmail.com>
+Date: Fri, 9 Jul 2010 00:07:14 -0700 (PDT)
+Subject: [Buildroot]  buildroot, busybox and kernal config
+Message-ID: <29108217.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2197
 
---- Comment #2 from Anthoine Bourgeois <bourgeois@bertin.fr>  ---
-Created attachment 2203
-  --> https://bugs.busybox.net/attachment.cgi?id=2203
-classpath Config.in patch
-
+I have used buildroot several times before, but never with busybox.  I have
+been given the 3 above config files, and need to use buildroot to make a
+working system.  In the past all I've had to do is 'make menuconfig', point
+to the buildroot.config file, to load the previous project's settings, alter
+them according to the new project, save and 'make'.  I've followed the
+instructions to do the same thing using 'make busybox-menuconfig' loading
+the busybox.config, and saving.  I'm slightly unsure what to do with the
+kernal.config file, and what to do next.  Any help would be recieved
+gratefully. 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+View this message in context: http://old.nabble.com/buildroot%2C-busybox-and-kernal-config-tp29108217p29108217.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
