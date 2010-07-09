@@ -1,46 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 9 Jul 2010 14:55:02 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain/gcc: cleanup
-	softfloat selection
-Message-ID: <20100709130908.5A33382575@busybox.osuosl.org>
+From: Karl Krach <mailinglists@blueSpirit.la>
+Date: Fri, 09 Jul 2010 16:26:57 +0200
+Subject: [Buildroot] libQt3Support.so missing in image on target
+Message-ID: <l5ao4x.2pwoka@webmail.variomedia.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard <jacmet@uclibc.org> schrieb:
+>  Karl> Second, I run from time to time in the problem, that I
+>  Karl> remove the build
+>  Karl> directory on reconfigure/recompile but not the libraries
+>  Karl> from the STATING_DIR
+>  Karl> - this would be a tiny (but nice) feature.
+> 
+>  Karl> Thanks a lot,
+> 
+> Isn't that what the qt-clean target is for? What is the use case exactly?
+>
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ac85536640cdcf3fd0df2f48487b9b02f2f31c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We don't have a BR2_SOFT_FLOAT_FP option, and -mfloat-abi should also
-be used for big endian ARM.
+No, the clean just cleans the build directory. But a target qt-uninstall would
+be nice - it would remove all libraries, header files etc. from the
+staging_dir (toolchain dir). This would be a better idea, than my previous
+patch - in the case that we document it :)
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gcc/Makefile.in |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
-index 19c97d1..0dcd803 100644
---- a/toolchain/gcc/Makefile.in
-+++ b/toolchain/gcc/Makefile.in
-@@ -19,15 +19,11 @@ endif
+--- Makefile_original	2010-07-09 16:16:48.000000000 +0200
++++ Makefile	2010-07-09 16:23:45.000000000 +0200
+@@ -324,6 +324,7 @@
  
- ifeq ($(BR2_SOFT_FLOAT),y)
- SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
--ifeq ($(BR2_SOFT_FLOAT_FP),y)
--TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
--else # no fp at all
--ifeq ($(BR2_arm),y) # only set float-abi for arm
-+ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
- TARGET_SOFT_FLOAT:=-mfloat-abi=soft
- else
- TARGET_SOFT_FLOAT:=-msoft-float
- endif
--endif
- ARCH_FPU_SUFFIX:=_nofpu
- else # no softfloat support
- SOFT_FLOAT_CONFIG_OPTION:=
--- 
-1.7.1
+ TARGETS+=erase-fakeroots
+ 
++TARGETS_UNINSTALL:=$(patsubst %,%-uninstall,$(TARGETS))
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -346,7 +347,7 @@
+ 
+ .PHONY: all world dirs clean distclean source \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+-	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
++	$(TARGETS_UNINSTALL) $(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE)
+\
+ 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 
+@@ -601,6 +602,8 @@
+ 	@echo 'Cleaning:'
+ 	@echo '  clean                  - delete all files created by build'
+ 	@echo '  distclean              - delete all non-source files (including
+.config)'
++	@echo '  <package>-clean        - delete all files created by build of
+<package>'
++	@echo '  <package>-uninstall    - remove installation files of <package>'
+ 	@echo
+ 	@echo 'Build:'
+ 	@echo '  all                    - make world'
