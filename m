@@ -1,75 +1,68 @@
-From: Andy Gibbs <andyg1001@hotmail.co.uk>
-Date: Fri, 9 Jul 2010 12:00:48 +0200
-Subject: [Buildroot] Crosstool/Buildroot integration issue
-References: <BLU0-SMTP11A24568AF672F1DE458A4E7B30@phx.gbl>
-	<201007071919.28956.yann.morin.1998__5616.15332630954$1278523238$gmane$org@anciens.enib.fr>
-Message-ID: <BLU0-SMTP635B56CA30CCF7399EC9D7E7B50@phx.gbl>
+From: Karl Krach <mailinglists@blueSpirit.la>
+Date: Fri, 09 Jul 2010 14:32:57 +0200
+Subject: [Buildroot] libQt3Support.so missing in image on target
+Message-ID: <l5aiux.md2l92@webmail.variomedia.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, July 07, 2010 7:19 PM, Yann E. MORIN wrote:
 
-> Well, I'd rather we had something like:
-> - in menuconfig:
->    () Additional dirs to copy from sysroot
->      Help:
->        This is a space-separated list of paths that you want to copy
->        from the sysroot to the target. Make the paths relative to the
->        sysroot. Example:
->          /usr/lib/gconv /usr/include
->
-> - and in ext-tool.mk (to replace your changes, above):
->  $(Q)for d in $(BR_EXT_TOOL_DIRS_EXTRA); do \
->        if [ -d "$(ARCH_SYSROOT_DIR)$${d}" ]; then
->          mkdir -p "$(TARGET_DIR)$${d}"
->          cp -a "$${d}/." "$(TARGET_DIR)${d}/."
->        else
->          echo "No such directory '$${d}' whiel trying to copy from 
-> sysroot"
->        fi
->      done
->
-> But that's just my 2-cent advice...
->
+Hello,
 
-You know the more I think about it, the more I like this sort of approach. 
-I understand Thomas' view that dependencies should be automatic as much as 
-possible, but the more I look into it, the more I think that buildroot could 
-also benefit from some "advanced" setting to allow additional files and 
-folders to be copied across.
+I would like to commit two patches. First, if you install qt3support the
+libQt3Support.so is only installed to the STAGING_DIR but missing in the
+TARGET_DIR - thus on the target.
 
-Beyond the 'gconv' folder mentioned in this thread, there are other 
-libraries, binaries and miscellaneous text files that could (should in my 
-case) also be copied across from the sys-root folder depending on the target 
-system's requirements.
+Second, I run from time to time in the problem, that I remove the build
+directory on reconfigure/recompile but not the libraries from the STATING_DIR
+- this would be a tiny (but nice) feature.
 
-I've attached to this post a snippet of bash script that I now run prior to 
-the buildroot process to copy across the missing files and folders that 
-buildroot doesn't itself copy.  There is some duplication - for example, the 
-script copies /lib/libnss_*.so* since buildroot only copies two of these 
-files, and not the libnss_compat.so that my system needs.
+Thanks a lot,
 
-Maybe this can form the basis of an "advanced" copy function inside 
-buildroot?  The files list would then obviously be changed to a 
-configuration variable for the user, rather than a static list.  To my mind, 
-it makes sense to do this since buildroot cannot necessarily know or detect 
-all the necessary dependencies, and what may be dependencies in one case may 
-not be in the general case, and it certainly doesn't make sense to do a 
-blanket copy of the whole sys-root directory.
+Karl
 
-If there is interest in this, and it seems an appropriate route to take, 
-I'll happily put together a proposal patch...
 
-Cheers
-Andy
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: copy
-Type: application/octet-stream
-Size: 1317 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100709/07e8e775/attachment.obj>
+--- package/qt/qt.mk_original	2010-07-09 11:01:27.000000000 +0200
++++ package/qt/qt.mk_qt3support	2010-07-09 14:24:02.000000000 +0200
+@@ -418,6 +418,9 @@
+ ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
+ QT_LIBS+= qt-scripttools
+ endif
++ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
++QT_LIBS+= qt-qt3support
++endif
+ 
+ QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++/qmake.conf
+ 
+@@ -597,6 +600,10 @@
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQtScriptTools.so.* $(TARGET_DIR)/usr/lib/
+ endif
+ 
++qt-qt3support: $(STAGING_DIR)/usr/lib/libQtCore.la
++ifeq ($(BR2_PACKAGE_QT_SHARED),y)
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt3Support.so.* $(TARGET_DIR)/usr/lib/
++endif
+ 
+ $(TARGET_DIR)/usr/lib/libQtCore.so.4: $(STAGING_DIR)/usr/lib/libQtCore.la
+$(QT_LIBS)
+ 	# Strip all installed libs
+
+
+
+
+
+
+
+--- package/qt/qt.mk_qt3support	2010-07-09 14:24:02.000000000 +0200
++++ package/qt/qt.mk_recompile	2010-07-09 14:26:09.000000000 +0200
+@@ -520,6 +520,7 @@
+ 		-nomake demos \
+ 	)
+ 	touch $@
++	rm -rf $(STAGING_DIR)/usr/lib/libQt*
+ 
+ $(QT_TARGET_DIR)/.compiled: $(QT_TARGET_DIR)/.configured
+ 	$(MAKE) -C $(QT_TARGET_DIR)
