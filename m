@@ -1,43 +1,55 @@
-From: Mohamed Mohamed Nour El-Din <eng.mohamed.nour.eldin@gmail.com>
-Date: Fri, 9 Jul 2010 02:55:21 +0300
-Subject: [Buildroot] Buildroot & wireless
-Message-ID: <AANLkTilq5KHsvMKOgoulB8lt35Ko7GjBHWexKQffzdUx@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  9 Jul 2010 06:25:28 +0000 (UTC)
+Subject: [Buildroot] [Bug 2191] New: linux-fusion build fail
+Message-ID: <bug-2191-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2191
+
+           Summary: linux-fusion build fail
+           Product: buildroot
+           Version: 2010.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jordan.pan.yh at renesas.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
 Hi,
-i built a system using buildroot to run on a mini2440 board with kernel
-2.6.32
-i installed wireless tools & dhclient with the system
-i got a realtek 8187B usb wireless card, i installed its driver from the
-kernel configuration & i used it on the board
-the problem is that i can't access the internet
-the board can see the LAN & i could bing a machine on the same network, but
-no internet access
 
-using dhcp (wlan0 is the interface name):
-ifconfig wlan0 down
-dhclient -r  wlan0
-ifconfig wlan0 up
-iwconfig wlan0 essid "3Com"
-iwconfig wlan0 mode Managed
-dhclient wlan0
+My buildroot version is 2010.05. When I enable linux-fusion package in the
+build list, below error will appear ---
 
-using static ip:
-ifconfig wlan0 down
-dhclient -r  wlan0
-ifconfig wlan0 192.168.1.131 netmask 255.255.255.0 up
-route add default gw 192.168.1.1
-iwconfig wlan0 essid "3Com"
-iwconfig wlan0 mode Managed
-& i added "nameserver 192.168.100.2" to /etc/resolv.conf
+-------------
+make[1]: Entering directory
+`/opt/projects/bsp-v3.0.2-retw/src/buildroot-2010.05/output/build/linux-fusion-8.1.1'
+make[1]: *** No rule to make target `headers_install'.  Stop.
+make[1]: Leaving directory
+`/opt/projects/bsp-v3.0.2-retw/src/buildroot-2010.05/output/build/linux-fusion-8.1.1'
+------------
 
-is this right or enough to get the wifi working?
+Review the make option for the linux-fusion package, there is no
+headers_install option in the Makefile.
 
-thnx a lot,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100709/90603c1b/attachment-0001.html>
+My build target is for SHx processor. To confirm it is the same issue, then I
+rebuild the buildroot with ARM processor again. The result is same.
+
+Does anybody know how to fix it?
+
+Thanks & Best Regards
+Jordan
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
