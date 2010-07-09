@@ -1,7 +1,7 @@
 From: JNY <jny0@hotmail.com>
-Date: Fri, 9 Jul 2010 00:07:14 -0700 (PDT)
+Date: Fri, 9 Jul 2010 00:07:35 -0700 (PDT)
 Subject: [Buildroot]  buildroot, busybox and kernal config
-Message-ID: <29108217.post@talk.nabble.com>
+Message-ID: <29108097.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,5 +19,5 @@ the busybox.config, and saving.  I'm slightly unsure what to do with the
 kernal.config file, and what to do next.  Any help would be recieved
 gratefully. 
 -- 
-View this message in context: http://old.nabble.com/buildroot%2C-busybox-and-kernal-config-tp29108217p29108217.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+View this message in context: http://old.nabble.com/buildroot%2C-busybox-and-kernal-config-tp29108097p29108097.html
+Sent from the BuildRoot mailing list archive at Nabble.com.
