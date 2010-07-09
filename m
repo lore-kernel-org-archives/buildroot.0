@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 9 Jul 2010 14:55:02 +0200
-Subject: [Buildroot] [git commit master 1/1] qt: install qt3 support lib to
-	target if enabled
-Message-ID: <20100709130908.8120A82575@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain/gcc: cleanup
+	softfloat selection
+Message-ID: <20100709130908.5A33382575@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=57120f08a62bd97716e5456d8dffdf8f3b5e63eb
+commit: http://git.buildroot.net/buildroot/commit/?id=0ac85536640cdcf3fd0df2f48487b9b02f2f31c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Karl Krach <mailinglists@blueSpirit.la>
+We don't have a BR2_SOFT_FLOAT_FP option, and -mfloat-abi should also
+be used for big endian ARM.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ toolchain/gcc/Makefile.in |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e2ebbb2..b4b6b29 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -418,6 +418,9 @@ endif
- ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
- QT_LIBS+= qt-scripttools
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index 19c97d1..0dcd803 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -19,15 +19,11 @@ endif
+ 
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ SOFT_FLOAT_CONFIG_OPTION:=--with-float=soft
+-ifeq ($(BR2_SOFT_FLOAT_FP),y)
+-TARGET_SOFT_FLOAT:=-mfloat-abi=softfp
+-else # no fp at all
+-ifeq ($(BR2_arm),y) # only set float-abi for arm
++ifeq ($(BR2_arm)$(BR2_armeb),y) # only set float-abi for arm
+ TARGET_SOFT_FLOAT:=-mfloat-abi=soft
+ else
+ TARGET_SOFT_FLOAT:=-msoft-float
  endif
-+ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
-+QT_LIBS+= qt-qt3support
-+endif
- 
- QT_QMAKE_CONF:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++/qmake.conf
- 
-@@ -597,6 +600,10 @@ ifeq ($(BR2_PACKAGE_QT_SHARED),y)
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQtScriptTools.so.* $(TARGET_DIR)/usr/lib/
- endif
- 
-+qt-qt3support: $(STAGING_DIR)/usr/lib/libQtCore.la
-+ifeq ($(BR2_PACKAGE_QT_SHARED),y)
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt3Support.so.* $(TARGET_DIR)/usr/lib/
-+endif
- 
- $(TARGET_DIR)/usr/lib/libQtCore.so.4: $(STAGING_DIR)/usr/lib/libQtCore.la $(QT_LIBS)
- 	# Strip all installed libs
+-endif
+ ARCH_FPU_SUFFIX:=_nofpu
+ else # no softfloat support
+ SOFT_FLOAT_CONFIG_OPTION:=
 -- 
 1.7.1
