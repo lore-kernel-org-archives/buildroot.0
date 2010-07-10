@@ -1,7 +1,7 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Sat, 10 Jul 2010 11:01:18 -0700
-Subject: [Buildroot] [PATCH] Add support for uclibc NPTL toolchain.
-Message-ID: <1278784878-17641-1-git-send-email-raj.khem@gmail.com>
+Date: Sat, 10 Jul 2010 13:08:40 -0700
+Subject: [Buildroot] [PATCH][v2] Add support for uclibc NPTL toolchain.
+Message-ID: <1278792520-9241-1-git-send-email-raj.khem@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -1301,7 +1301,7 @@ index cb203a0..8ee737b 100644
  # UCLIBC_MJN3_ONLY is not set
 -
 diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index ce1396a..4c3da61 100644
+index ce1396a..f3eb0d9 100644
 --- a/toolchain/uClibc/uclibc.mk
 +++ b/toolchain/uClibc/uclibc.mk
 @@ -16,11 +16,12 @@ UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
@@ -1336,7 +1336,7 @@ index ce1396a..4c3da61 100644
  	touch $@
  
 -$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_initial) $(LIBFLOAT_TARGET)
-+$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLOAT_TARGET)
++$(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured gcc_intermediate $(LIBFLOAT_TARGET)
  	$(MAKE1) -C $(UCLIBC_DIR) \
  		ARCH="$(UCLIBC_TARGET_ARCH)" \
  		PREFIX= \
@@ -1354,7 +1354,7 @@ index ce1396a..4c3da61 100644
  	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
  
 -uclibc-configured: kernel-headers $(UCLIBC_DIR)/.configured
-+uclibc-configured: $(gcc_initial) kernel-headers $(UCLIBC_DIR)/.configured
++uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
  
  uclibc-configured-source: uclibc-source
  
