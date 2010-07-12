@@ -1,29 +1,28 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Sun, 11 Jul 2010 21:45:36 +0200
-Subject: [Buildroot] mkfs.xfs without xfs library - not possible to create
-	xfsfs
-Message-ID: <4C3A1F60.7050009@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Jul 2010 10:13:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 2161] [SECURITY] Update libpng to 1.2.44
+In-Reply-To: <bug-2161-163@https.bugs.busybox.net/>
+References: <bug-2161-163@https.bugs.busybox.net/>
+Message-ID: <20100712101346.5191B81F91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi mailinglist,
+https://bugs.busybox.net/show_bug.cgi?id=2161
 
-I tried to create an xfs filesystem. Unfortunatly there is a library 
-missing. I looked around in the configuration menu, but all I found were 
-the xfsprogs. Under libraries/filesystem there is no xfslib either.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-$ ./sbin/mkfs.xfs
-./sbin/mkfs.xfs: can't load library 'libxfs.so.0'
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Did I forget to include something?
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
-Regards,
-Marcus
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100711/d599de17/attachment.ksh>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
