@@ -1,139 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 12 Jul 2010 16:53:18 +0200
-Subject: [Buildroot] [git commit master 1/1] qt: fix
-	javscriptcore/multimedia build with uClibc
-Message-ID: <20100712145553.F3E1982925@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 12 Jul 2010 22:46:11 +0200
+Subject: [Buildroot] [PATCH 0/5] Preparatory work on toolchains - v3
+Message-ID: <1278967576-11399-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All!
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a67a62c296103f50bff9f9e6bcfb90def2b8d62e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+These are preparatory work on toolchain, laying ground to later add
+crosstool-NG as a backend. Currently, these are rather an RFC, even
+if it works OK for me.
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt-4.6.2-pthread_getattr_np.patch |  109 ++++++++++++++++++++++++++
- 1 files changed, 109 insertions(+), 0 deletions(-)
- create mode 100644 package/qt/qt-4.6.2-pthread_getattr_np.patch
+Changes since v2:
+- rebased againts latest tree
+- enhance commit message for 3rd patch
 
-diff --git a/package/qt/qt-4.6.2-pthread_getattr_np.patch b/package/qt/qt-4.6.2-pthread_getattr_np.patch
-new file mode 100644
-index 0000000..7678185
---- /dev/null
-+++ b/package/qt/qt-4.6.2-pthread_getattr_np.patch
-@@ -0,0 +1,109 @@
-+Add pthred_getattr_np / phread_attr_getstrack alternatives for uClibc
-+
-+Based on https://dev.openwrt.org/log/packages/Xorg/lib/qt4/patches/100-fix-webkit-for-uclibc.patch?rev=20371
-+
-+Signed-off-by: Johan Sagaert <sagaert.johan@skynet.be>
-+--- qt-everywhere-opensource-src-4.6.2/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp	2010-02-11 16:55:20.000000000 +0100
-++++ qt-everywhere-opensource-src-4.6.2JS/src/3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp	2010-05-23 10:49:29.000000000 +0200
-+@@ -74,6 +74,22 @@
-+ #endif
-+ #include <unistd.h>
-+ 
-++#if defined(QT_LINUXBASE)
-++#include <dlfcn.h>
-++#endif
-++
-++#if defined(__UCLIBC__)
-++// versions of uClibc 0.9.31 and below do not have
-++// pthread_getattr_np or pthread_attr_getstack.
-++#if __UCLIBC_MAJOR__ == 0 && \
-++    (__UCLIBC_MINOR__ < 9 || \
-++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
-++#define UCLIBC_USE_PROC_SELF_MAPS 1
-++#include <stdio_ext.h>
-++extern int *__libc_stack_end;
-++#endif
-++#endif
-++
-+ #if PLATFORM(SOLARIS)
-+ #include <thread.h>
-+ #else
-+@@ -667,16 +683,59 @@ static inline void* currentThreadStackBa
-+     get_thread_info(find_thread(NULL), &threadInfo);
-+     return threadInfo.stack_end;
-+ #elif PLATFORM(UNIX)
-++#ifdef UCLIBC_USE_PROC_SELF_MAPS
-++    // Read /proc/self/maps and locate the line whose address
-++    // range contains __libc_stack_end.
-++    FILE *file = fopen("/proc/self/maps", "r");
-++    if (!file)
-++        return 0;
-++    __fsetlocking(file, FSETLOCKING_BYCALLER);
-++    char *line = NULL;
-++    size_t lineLen = 0;
-++    while (!feof_unlocked(file)) {
-++        if (getdelim(&line, &lineLen, '\n', file) <= 0)
-++            break;
-++
-++        long from;
-++        long to;
-++        if (sscanf (line, "%lx-%lx", &from, &to) != 2)
-++            continue;
-++        if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
-++            fclose(file);
-++            free(line);
-++#ifdef _STACK_GROWS_UP
-++            return (void *)from;
-++#else
-++            return (void *)to;
-++#endif
-++        }
-++    }
-++    fclose(file);
-++    free(line);
-++    return 0;
-++	#else
-+     static void* stackBase = 0;
-+     static size_t stackSize = 0;
-+     static pthread_t stackThread;
-+     pthread_t thread = pthread_self();
-+     if (stackBase == 0 || thread != stackThread) {
-++
-++#if defined(QT_LINUXBASE)
-++        // LinuxBase is missing pthread_getattr_np - resolve it once at runtime instead
-++        // see http://bugs.linuxbase.org/show_bug.cgi?id=2364
-++        typedef int (*GetAttrPtr)(pthread_t, pthread_attr_t *);
-++        static int (*pthread_getattr_np_ptr)(pthread_t, pthread_attr_t *) = 0;
-++        if (!pthread_getattr_np_ptr)
-++            *(void **)&pthread_getattr_np_ptr = dlsym(RTLD_DEFAULT, "pthread_getattr_np");
-++#endif
-+         pthread_attr_t sattr;
-+         pthread_attr_init(&sattr);
-+ #if HAVE(PTHREAD_NP_H) || PLATFORM(NETBSD)
-+         // e.g. on FreeBSD 5.4, neundorf@kde.org
-+         pthread_attr_get_np(thread, &sattr);
-++#elif defined(QT_LINUXBASE)
-++        if (pthread_getattr_np_ptr)
-++            pthread_getattr_np_ptr(thread, &sattr);
-+ #else
-+         // FIXME: this function is non-portable; other POSIX systems may have different np alternatives
-+         pthread_getattr_np(thread, &sattr);
-+@@ -688,6 +747,7 @@ static inline void* currentThreadStackBa
-+         stackThread = thread;
-+     }
-+     return static_cast<char*>(stackBase) + stackSize;
-++#endif
-+ #elif PLATFORM(WINCE)
-+     if (g_stackBase)
-+         return g_stackBase;
-+--- qt-everywhere-opensource-src-4.6.2/src/3rdparty/webkit/JavaScriptCore/runtime/Collector.cpp	2010-02-11 16:55:17.000000000 +0100
-++++ qt-everywhere-opensource-src-4.6.2JS/src/3rdparty/webkit/JavaScriptCore/runtime/Collector.cpp	2010-05-23 01:41:06.000000000 +0200
-+@@ -83,7 +83,7 @@
-+ // pthread_getattr_np or pthread_attr_getstack.
-+ #if __UCLIBC_MAJOR__ == 0 && \
-+     (__UCLIBC_MINOR__ < 9 || \
-+-    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 30))
-++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
-+ #define UCLIBC_USE_PROC_SELF_MAPS 1
-+ #include <stdio_ext.h>
-+ extern int *__libc_stack_end;
--- 
-1.7.1
+Changes since v1:
+- rebased against latest tree
+- patches formatted to detect renames/copies
+
+Yann E. MORIN (5):
+      toolchain: move helper functions from external toolchain
+      toolchain: rename external toolchain dir
+      toolchain: move makefile includes
+      toolchain: move buildroot config files
+      toolchain: rename base target for external toolchains
+
+ Makefile                                           |   17 +-
+ toolchain/Config.in                                |   16 +-
+ toolchain/external-toolchain/ext-tool.mk           |  356 --------------------
+ toolchain/helpers.mk                               |  244 ++++++++++++++
+ toolchain/toolchain-buildroot.mk                   |   12 +
+ .../{Config.in.1 => toolchain-buildroot/Config.in} |    2 +-
+ toolchain/toolchain-buildroot/Config.in.2          |   37 ++
+ toolchain/{Config.in.2 => toolchain-common.in}     |   46 +--
+ toolchain/toolchain-external.mk                    |   14 +
+ .../Config.in                                      |    0
+ .../Config.in.2                                    |    0
+ toolchain/toolchain-external/ext-tool.mk           |  115 +++++++
+ 12 files changed, 440 insertions(+), 419 deletions(-)
+ delete mode 100644 toolchain/external-toolchain/ext-tool.mk
+ create mode 100644 toolchain/helpers.mk
+ create mode 100644 toolchain/toolchain-buildroot.mk
+ rename toolchain/{Config.in.1 => toolchain-buildroot/Config.in} (82%)
+ create mode 100644 toolchain/toolchain-buildroot/Config.in.2
+ rename toolchain/{Config.in.2 => toolchain-common.in} (84%)
+ create mode 100644 toolchain/toolchain-external.mk
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in (100%)
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in.2 (100%)
+ create mode 100644 toolchain/toolchain-external/ext-tool.mk
