@@ -1,29 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Jul 2010 11:36:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 2167] Bump busybox to 1.17.0, convert to gentargets,
- drop 1.12, deprecate 1.13 and 1.15
-In-Reply-To: <bug-2167-163@https.bugs.busybox.net/>
-References: <bug-2167-163@https.bugs.busybox.net/>
-Message-ID: <20100712113636.DC5D382905@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 12 Jul 2010 13:32:38 +0200
+Subject: [Buildroot] [git commit master 1/1] busybox: add 1.17.0,
+	convert to gentargets, drop 1.12, deprecate 1.13 and 1.15
+Message-ID: <20100712113642.B7A3B82905@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2167
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=3169aae85ef4b26aec667376b0559b38582ccf52
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Closes #2167
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Converted with a small fix for the CONFIG_ID=y workaround - Thanks
+[Peter: fix CONFIG_ID workaround for old uClibcs]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Patch is too large, so refusing to show it
