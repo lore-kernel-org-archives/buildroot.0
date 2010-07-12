@@ -1,81 +1,44 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Mon, 12 Jul 2010 22:52:55 +0200
-Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
-Message-ID: <4C3B80A7.1040305@gmx.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 12 Jul 2010 23:30:47 +0200
+Subject: [Buildroot] [PATCH/RFC] Download sources from Git (and more)
+Message-ID: <1278970252-23007-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi mailinglist,
+Hi,
 
-I use the kernel version 2.6.33.6 without any problems. But since I 
-updated to the newer version 2.6.34.1 I'm not able to use a custom 
-config anymore.
+this patchset is a tentative generalization of the DOWNLOAD macro, as
+recently discussed in mailing-list, in order to allow BR to obtain
+package sources not only as tar files from http/ftp, but also using
+other protocols.
 
-I loaded the old config into the kernel menuconfig and stored it as new 
-file linux-2.6.34.1.config. When I launched the overall make process the 
-kernel patches were applied fine, but the process runs into text mode 
-configuration:
+I borrowed some pieces of code from Quotient Remainder's patch, but this
+approach is substiatially different.
 
-...
- >>>   Configuring kernel
-cp 
-"target/device/sheevaplug/SeagateDockStar/SeagateDockStar-linux-2.6.34.1.config" 
-/home/ossy/buildroot/buildroot-dev/output/build/linux-2.
-6.34.1/.config
-/home/ossy/buildroot/buildroot-dev/output/toolchain/bin/sed -i -e 
-"/CONFIG_AEABI/d" /home/ossy/buildroot/buildroot-dev/output/build/linux-2.
-6.34.1/.config
-echo "CONFIG_AEABI=y" >> 
-/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1/.config
-/home/ossy/buildroot/buildroot-dev/output/toolchain/bin/sed -i -e 
-"/CONFIG_IPV6/d" /home/ossy/buildroot/buildroot-dev/output/build/linux-2.6
-.34.1/.config
-echo "# CONFIG_IPV6 is not set" >> 
-/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1/.config
-/home/ossy/buildroot/buildroot-dev/output/toolchain/bin/sed -i -e 
-"/CONFIG_BLK_DEV_INITRD/d" /home/ossy/buildroot/buildroot-dev/output/build
-/linux-2.6.34.1/.config
-echo "# CONFIG_BLK_DEV_INITRD is not set" >> 
-/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1/.config
-/home/ossy/buildroot/buildroot-dev/output/toolchain/bin/sed -i -e 
-"/CONFIG_INITRAMFS_SOURCE/d" /home/ossy/buildroot/buildroot-dev/output/bui
-ld/linux-2.6.34.1/.config
-echo "CONFIG_INITRAMFS_SOURCE=\"\"" >> 
-/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1/.config
-PATH="/home/ossy/buildroot/buildroot-dev/output/host/bin:/home/ossy/buildroot/buildroot-dev/output/host/usr/bin:/home/ossy/buildroot/buildro
-ot-dev/output/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/games" 
-PERLLIB="/home/ossy/buildroot/buildroot-dev/output/host/usr/lib/perl"
-/usr/bin/make -j2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm 
-INSTALL_MOD_PATH=/home/ossy/buildroot/buildroot-dev/output/target 
-CROSS_COMPI
-LE=/home/ossy/buildroot/buildroot-dev/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi- 
-LDFLAGS="-L/home/ossy/buildroot/buildroot-dev/
-output/staging/lib 
--L/home/ossy/buildroot/buildroot-dev/output/staging/usr/lib" 
-LZMA="/home/ossy/buildroot/buildroot-dev/output/host/usr/bin
-/lzma" -C /home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1 
-oldconfig
-make[1]: Entering directory 
-`/home/ossy/buildroot/buildroot-dev/output/build/linux-2.6.34.1'
-scripts/kconfig/conf -o arch/arm/Kconfig
-*
-* Restart config...
-*
-*
-* Enable the block layer
-*
-Enable the block layer (BLOCK) [Y/?] y
-   Support for large (2TB+) block devices and files (LBDAF) [Y/n/?] (NEW)
+The feature list is short: I deliberately wanted to be minimalistic
+but set up a clean infrastructure that can be extended later.
 
+Even though these patches are quite polished, please consider them as
+a proposal for discussion. If there is general consensus about the way
+I propose, I'll be glad to add a bit of user documentation as well.
 
-Why is the configuration restarted? The config file was well copied from 
-custom directory to output/build/linuxsrc/.config.
-So why should I restart configuration in textmode?
+In the first two patches I prepare the ground by making the download
+infrastructure more general. The DOWNLOAD function is replaced by a
+per-package $(PKG)_DOWNLOAD, whose value is computed automatically
+from the site URL but can be overridden. The good old wget system is
+modified to fit in the new framework.
 
-Thanks for your help.
+In the third and fourth commit I add DOWNLOAD_GIT, which is relatively
+straightforward given the whole infrastructure is already in place.
+The place where the repository should be cloned might not be appreciated,
+but I definitely think it should go in output/, as it is part of
+buildroot's -well- output, not of the package "recipe".
 
-Regards,
-Marcus
+The last patch is surely *not* meant to be committed. It's just a
+minimalistic example of a package downloaded via Git, and would be
+replaced by user docs as stated above.
+
+Luca
