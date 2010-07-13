@@ -1,26 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Jul 2010 08:53:23 +0200
-Subject: [Buildroot] [PATCH 2/2] Add target skeleton for Alix2d3
-In-Reply-To: <20100712204834.17842.49951.stgit@darius-desktop>
-References: <20100712204654.17842.63829.stgit@darius-desktop>
-	<20100712204834.17842.49951.stgit@darius-desktop>
-Message-ID: <20100713085323.56fa2157@surf>
+Date: Tue, 13 Jul 2010 08:55:16 +0200
+Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
+In-Reply-To: <4C3B80A7.1040305@gmx.net>
+References: <4C3B80A7.1040305@gmx.net>
+Message-ID: <20100713085516.5a5c8d26@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marcus,
 
-Could you highlight the differences between this skeleton and the
-default skeleton that we have ?
+On Mon, 12 Jul 2010 22:52:55 +0200
+Ossy <ossy1980@gmx.net> wrote:
 
-I'm currently looking at cleaning up the board support, and we have a
-profusion of target skeleton, for which the differences with the
-default one aren't really obvious. It would be great to identify what
-these differences are, to see if we can limit the profusion of full
-target skeletons in the mainline Buildroot.
+> Hi mailinglist,
+> 
+> I use the kernel version 2.6.33.6 without any problems. But since I 
+> updated to the newer version 2.6.34.1 I'm not able to use a custom 
+> config anymore.
+> 
+> I loaded the old config into the kernel menuconfig and stored it as
+> new file linux-2.6.34.1.config. When I launched the overall make
+> process the kernel patches were applied fine, but the process runs
+> into text mode configuration:
+
+Thanks for your report. Could you provide a step-by-step procedure to
+reproduce the problem from scratch ?
 
 Thanks,
 
