@@ -1,90 +1,34 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Tue, 13 Jul 2010 13:30:54 +0200
-Subject: [Buildroot] [PATCH 2/4] Implement basic non-wget download
- methods
-In-Reply-To: <L5HQ26$43638E1C3E30A4E7BE70EACE614B0470@aruba.it>
-References: <L5HQ26$43638E1C3E30A4E7BE70EACE614B0470@aruba.it>
-Message-ID: <20100713113054.GB16232@bulix.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Tue, 13 Jul 2010 14:11:59 +0200
+Subject: [Buildroot] [PATCH] Bump Flex patch version.
+Message-ID: <1279023119-2045-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-* Luca Ceresoli <list@lucaceresoli.net> [2010-07-13 11:51:42]:
+Version 9 is no more available on Debian FTP.
 
-> > diff --git a/Makefile b/Makefile
-> > index 2e49a6b..65b43f1 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -249,6 +249,7 @@ SVN_UP:=$(call qstrip,$(BR2_SVN_UP)) $(QUIET)
-> >   BZR_CO:=$(call qstrip,$(BR2_BZR_CO)) $(QUIET)
-> >   BZR_UP:=$(call qstrip,$(BR2_BZR_UP)) $(QUIET)
-> >   GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
-> > +GIT_CO:=$(call qstrip,$(BR2_GIT_CO)) $(QUIET)
-> Now I would rename GIT to GIT_CLONE to make the difference clear.
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/flex/flex.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I aimed for the least modifications here. But if the consensus is on having
-GIT_CLONE and GIT_CO, I'll change it.
-
-> >   ################################################################################
-> > +# The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a working copy of
-> > +# the source repository for their corresponding SCM, checkouting the requested
-> checkouting -> checking out
-
-Fixed
-
-> Your overall approach is very clean and easy to extend to other VCSs.
-> 
-> The flip side of this generality is that for each new version that one
-> wants to download it requires a new git clone or svn checkout. This
-> takes much more bandwidth (and disk space) than git pull or svn update.
-> Think about big repos such as Linux.
-
-Indeed. But as I understand it, versions for packages don't change that
-often. I agree that when they do, you end up downloading more stuff to
-clone the full repository again instead of just updating.
-
-But support for git fetch and svn update can easily be added later down
-the road if this becomes a real and frequent issue.
-
-> > +$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-> > +$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
-> I don't like saving in $(DL_DIR). That is a directory that I keep with
-> care so I don't have to re-download everything if I wipe buildroot and
-> start off again, and I also appreciate the chance of having it on a
-> shared storage so that different developers or different hosts save
-> bandwidth and time. So I wouldn't like it to be polluted with repository
-> clones.
-> 
-> IMHO in your proposed infrastructure the clones should go in a place
-> where `make clean` removes them. After all you never reuse them (you
-> reuse the tarball instead).
-
-I think you missed the 'rm' line in VCS_PACK_SOURCE. Working copies are
-not kept around. I archive them with tar --exclude-vcs, and delete the
-working copy directory so only the archive remains for the extract phase
-to use.
-
-So you can still have a shared download directories with the archives
-you need in there, even for VCS sourced packages, and Buildroot will
-know where to find them and will use them. For example for Tremor, a
-tremor-16259.tar.gz archive will be created in DL_DIR, and subsequent
-builds will use this directly (unless TREMOR_VERSION changed of course).
-
-
-Regards,
-- Maxime
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 43e7d57..ad35548 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ FLEX_VERSION:=2.5.35
+-FLEX_PATCH_VERSION:=9
++FLEX_PATCH_VERSION:=9.1
+ FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
+ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
+ FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
 -- 
-Maxime Petazzoni <http://www.bulix.org>
- ``One by one, the penguins took away my sanity.''
-Linux kernel and software developer at MontaVista Software
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100713/c53b59b3/attachment.pgp>
+1.6.0.4
