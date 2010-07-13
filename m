@@ -1,47 +1,89 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Tue, 13 Jul 2010 21:27:52 +0200
-Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
-In-Reply-To: <000f01cb226b$51f11430$f5d33c90$@pauljones.id.au>
-References: <4C3B80A7.1040305@gmx.net> <20100713085516.5a5c8d26@surf>
-	<000f01cb226b$51f11430$f5d33c90$@pauljones.id.au>
-Message-ID: <4C3CBE38.2010400@gmx.net>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Tue, 13 Jul 2010 22:14:18 +0200
+Subject: [Buildroot] [PATCH/RFC] Download sources from Git (and more)
+In-Reply-To: <1279032219.2887.78.camel@dubciaranr1.verifone.com>
+References: <1278970252-23007-1-git-send-email-luca@lucaceresoli.net>
+	<1279032219.2887.78.camel@dubciaranr1.verifone.com>
+Message-ID: <4C3CC91A.1060502@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 13.07.2010 11:11, schrieb Paul Jones:
->>> I use the kernel version 2.6.33.6 without any problems. But since I
->>> updated to the newer version 2.6.34.1 I'm not able to use a custom
->>> config anymore.
->>>
->>> I loaded the old config into the kernel menuconfig and stored it as
->>> new file linux-2.6.34.1.config. When I launched the overall make
->>> process the kernel patches were applied fine, but the process runs
->>> into text mode configuration:
+Quotient Remainder wrote:
+> Ar Luan, 2010-07-12 ag 23:30 +0200, scr?obh Luca Ceresoli:
+>   
+>> Hi,
 >>
->> Thanks for your report. Could you provide a step-by-step procedure to
->> reproduce the problem from scratch ?
-I changed the brconfig from kernel 2.6.33.x to 2.6.34.x. I loaded my 
-custom kernel configuration into the linux menuconfig and stored it as 
-new file. Obviously this not sufficient to migrate from one config 
-version to another (I remember once in time it was, maybe 2.4.x days?).
+>> this patchset is a tentative generalization of the DOWNLOAD macro, as
+>> recently discussed in mailing-list, in order to allow BR to obtain
+>> package sources not only as tar files from http/ftp, but also using
+>> other protocols.
+>>
+>> I borrowed some pieces of code from Quotient Remainder's patch, but this
+>> approach is substiatially different.
+>>
+>> The feature list is short: I deliberately wanted to be minimalistic
+>> but set up a clean infrastructure that can be extended later.
+>>
+>> Even though these patches are quite polished, please consider them as
+>> a proposal for discussion. If there is general consensus about the way
+>> I propose, I'll be glad to add a bit of user documentation as well.
+>>
+>> In the first two patches I prepare the ground by making the download
+>> infrastructure more general. The DOWNLOAD function is replaced by a
+>> per-package $(PKG)_DOWNLOAD, whose value is computed automatically
+>> from the site URL but can be overridden. The good old wget system is
+>> modified to fit in the new framework.
+>>
+>> In the third and fourth commit I add DOWNLOAD_GIT, which is relatively
+>> straightforward given the whole infrastructure is already in place.
+>> The place where the repository should be cloned might not be appreciated,
+>> but I definitely think it should go in output/, as it is part of
+>> buildroot's -well- output, not of the package "recipe".
+>>
+>> The last patch is surely *not* meant to be committed. It's just a
+>> minimalistic example of a package downloaded via Git, and would be
+>> replaced by user docs as stated above.
+>>
+>> Luca
+>>     
+>
+> I personally quite like the approach here and think it's more flexible
+> than the patch set from Maxime, but have two questions.
+>
+>  - Why not make the usual tarball in $(DL_DIR) with "git archive
+> --format=tar ... | gzip > $(DL_DIR)/..." instead of the self-described
+> "hack" of skipping the extraction step?  I suppose it's slightly faster
+> since you avoid the compression and decompression time but that mightn't
+> be too significant.  I just wonder if the skipping of this stage may
+> have some side effects especially if packages have custom extraction
+> steps.
+>   
+That would be very simple, and probably cleaner as you noted.
+I think it's worth doing after all, since it would save download time for
+example after `make clean`.
+I'll code it as time permits.
+
+>  - Do you see any way of making it possible to use the clone as the
+> actual working copy used by buildroot?  That is, if I clone a repository
+> (as opposed to archive) and then want to make changes, I can edit the
+> source and build/test the change in-place (in output/build/package/) .
+> As it stands with this patch set, I think it would be necessary to make
+> a change in the source in $(PKG_NAME).git/, commit the change, note the
+> new version, change the package version in package/Makefile to the same
+> and make will then copy an entire snapshot to a new
+> build-dir/pkg-newversion/.
+>   
+This would certainly be useful, but hard to couple with the current
+buildroot structure, as Thomas pointed out in this thread. A discussion
+would be needed before such a thing.
+
+Luca
 
 >
-> Isn't that just make oldconfig running? What happens if you press enter to
-> give the default answer to every question?
-Paul is absolutly right. I gave the default answer to every question 
-(only a few...) and wrote this config back to 
-mycustomlinuxconf-2.6.34.x.config.
-
-The next time I do not expect to answer questions on the commandline 
-during overall make process.
-
-Thanks both for your help.
-
-Regards,
-Marcus
-
-@Thomas: Please note my patch for making u-boot (correcting two typos) 
-from 7.7.2010 . The fix is very straight forward (only two changed lines).
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
