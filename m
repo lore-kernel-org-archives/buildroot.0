@@ -1,29 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Jul 2010 18:22:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 729] sstrip creates corrupted headers
-In-Reply-To: <bug-729-163@https.bugs.busybox.net/>
-References: <bug-729-163@https.bugs.busybox.net/>
-Message-ID: <20100713182234.AF6BD82927@busybox.osuosl.org>
+From: Ossy <ossy1980@gmx.net>
+Date: Tue, 13 Jul 2010 21:27:52 +0200
+Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
+In-Reply-To: <000f01cb226b$51f11430$f5d33c90$@pauljones.id.au>
+References: <4C3B80A7.1040305@gmx.net> <20100713085516.5a5c8d26@surf>
+	<000f01cb226b$51f11430$f5d33c90$@pauljones.id.au>
+Message-ID: <4C3CBE38.2010400@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=729
+Am 13.07.2010 11:11, schrieb Paul Jones:
+>>> I use the kernel version 2.6.33.6 without any problems. But since I
+>>> updated to the newer version 2.6.34.1 I'm not able to use a custom
+>>> config anymore.
+>>>
+>>> I loaded the old config into the kernel menuconfig and stored it as
+>>> new file linux-2.6.34.1.config. When I launched the overall make
+>>> process the kernel patches were applied fine, but the process runs
+>>> into text mode configuration:
+>>
+>> Thanks for your report. Could you provide a step-by-step procedure to
+>> reproduce the problem from scratch ?
+I changed the brconfig from kernel 2.6.33.x to 2.6.34.x. I loaded my 
+custom kernel configuration into the linux menuconfig and stored it as 
+new file. Obviously this not sufficient to migrate from one config 
+version to another (I remember once in time it was, maybe 2.4.x days?).
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+>
+> Isn't that just make oldconfig running? What happens if you press enter to
+> give the default answer to every question?
+Paul is absolutly right. I gave the default answer to every question 
+(only a few...) and wrote this config back to 
+mycustomlinuxconf-2.6.34.x.config.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+The next time I do not expect to answer questions on the commandline 
+during overall make process.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Quite likely fixed by
-http://git.buildroot.net/buildroot/commit/?id=c0e307b848d8de23e6f10a179c4f240c023c8b82
+Thanks both for your help.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+Marcus
+
+@Thomas: Please note my patch for making u-boot (correcting two typos) 
+from 7.7.2010 . The fix is very straight forward (only two changed lines).
