@@ -1,39 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Jul 2010 08:55:16 +0200
-Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
-In-Reply-To: <4C3B80A7.1040305@gmx.net>
-References: <4C3B80A7.1040305@gmx.net>
-Message-ID: <20100713085516.5a5c8d26@surf>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Tue, 13 Jul 2010 09:15:01 +0200
+Subject: [Buildroot] [PATCH 1/4] Remove the spider feature
+In-Reply-To: <1279005304-8780-1-git-send-email-maxime.petazzoni@bulix.org>
+References: <1279005304-8780-1-git-send-email-maxime.petazzoni@bulix.org>
+Message-ID: <1279005304-8780-2-git-send-email-maxime.petazzoni@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcus,
+In preparation for the re-work of the DOWNLOAD helper to support
+multiple download methods and protocols, the spider feature used with
+wget is removed for now until it is re-implemented on top of the new
+download methods.
 
-On Mon, 12 Jul 2010 22:52:55 +0200
-Ossy <ossy1980@gmx.net> wrote:
+Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+---
+ Makefile                    |    7 +++----
+ package/Makefile.package.in |   10 ----------
+ package/mpfr/mpfr.mk        |    2 --
+ 3 files changed, 3 insertions(+), 16 deletions(-)
 
-> Hi mailinglist,
-> 
-> I use the kernel version 2.6.33.6 without any problems. But since I 
-> updated to the newer version 2.6.34.1 I'm not able to use a custom 
-> config anymore.
-> 
-> I loaded the old config into the kernel menuconfig and stored it as
-> new file linux-2.6.34.1.config. When I launched the overall make
-> process the kernel patches were applied fine, but the process runs
-> into text mode configuration:
-
-Thanks for your report. Could you provide a step-by-step procedure to
-reproduce the problem from scratch ?
-
-Thanks,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index d6bcb36..2e49a6b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -243,7 +243,7 @@ ifeq ($(ARCH),xtensa)
+ ARCH:=$(ARCH)_$(call qstrip,$(BR2_xtensa_core_name))
+ endif
+ 
+-WGET:=$(call qstrip,$(BR2_WGET)) $(SPIDER) $(QUIET)
++WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
+ SVN_CO:=$(call qstrip,$(BR2_SVN_CO)) $(QUIET)
+ SVN_UP:=$(call qstrip,$(BR2_SVN_UP)) $(QUIET)
+ BZR_CO:=$(call qstrip,$(BR2_BZR_CO)) $(QUIET)
+@@ -431,11 +431,10 @@ endif
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 
+ _source-check:
+-	$(MAKE) SPIDER=--spider source
++	@echo "TODO $@"
+ 
+ external-deps:
+-	@$(MAKE) -Bs BR2_WGET=$(TOPDIR)/toolchain/wget-show-external-deps.sh \
+-		SPIDER=--spider source
++	@echo "TODO $@"
+ 
+ show-targets:
+ 	@echo $(TARGETS)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index c476de9..b21741f 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -81,16 +81,11 @@ TERM_RESET := $(shell tput rmso)
+ # $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
+ ################################################################################
+ 
+-# support make source-check/external-deps
+-ifneq ($(SPIDER),)
+-DOWNLOAD=$(WGET) -P $(DL_DIR) $(1)/$(2)
+-else
+ define DOWNLOAD
+ 	$(Q)test -e $(DL_DIR)/$(2) || \
+ 	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
+ 	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
+ endef
+-endif
+ 
+ # Utility programs used to build packages
+ TAR ?= tar
+@@ -117,19 +112,14 @@ endef
+ 
+ # Retrieve the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
+-# support make source-check/external-deps
+-ifeq ($(SPIDER),)
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
+ 		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
+ 		$(call MESSAGE,"Downloading")
+-endif
+ 	$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE))
+ 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
+-ifeq ($(SPIDER),)
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+-endif
+ 
+ # Unpack the archive
+ $(BUILD_DIR)/%/.stamp_extracted:
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index a7834dd..b7b80a5 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
+@@ -21,10 +21,8 @@ MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE)
+ 
+ $(MPFR_PATCH_SOURCE):
+ 	$(call DOWNLOAD,$(MPFR_SITE),$(MPFR_PATCH))
+-ifeq ($(SPIDER),) # this breaks source-check/external-deps
+ 	mv $(DL_DIR)/$(MPFR_PATCH) $@
+ endif
+-endif
+ 
+ $(DL_DIR)/$(MPFR_SOURCE):
+ 	 $(call DOWNLOAD,$(MPFR_SITE),$(MPFR_SOURCE))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.3.3.346.g8a41d
