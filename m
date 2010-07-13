@@ -1,26 +1,29 @@
-From: Rossi Mario <cammello@gmail.com>
-Date: Tue, 13 Jul 2010 20:09:30 +0200
-Subject: [Buildroot] How to build xipImage?
-Message-ID: <AANLkTil6Ynz6Ab5p-uPRd1AFB7L98L2TtC2YeYmnN25j@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Jul 2010 18:17:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 2149] xterm build failure
+In-Reply-To: <bug-2149-163@https.bugs.busybox.net/>
+References: <bug-2149-163@https.bugs.busybox.net/>
+Message-ID: <20100713181721.07070825A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=2149
 
-I'm trying to build an xipImage.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-In  linux26-menuconfig  i enabled  "Kernel Execute In Place from ROM" but
-when compiling it, there is an error  "Kernel configured for XIP etc etc"
-"Only the xipImage target etc".
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-How can i set this values if in "kernel binary format" there is not it?
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=d0169fda2144ef5dfe25e801d58a227ed119a38c
 
-Must i enable or disable some other things?
-
-Sorry for my bad english.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100713/6676769c/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
