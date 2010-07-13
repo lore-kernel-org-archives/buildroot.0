@@ -1,278 +1,43 @@
-From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Tue, 13 Jul 2010 14:13:33 +0530
-Subject: [Buildroot] BR:Qt doesn't compile
-In-Reply-To: <AANLkTilS9pLCoV5S6u-EfrLsUuQT80XGfK2DvyY5nmxb@mail.gmail.com>
-References: <AANLkTilS9pLCoV5S6u-EfrLsUuQT80XGfK2DvyY5nmxb@mail.gmail.com>
-Message-ID: <AANLkTikno_ERe_IGYmRO_pam7rtFDBAf34Nk_Vuta3qz@mail.gmail.com>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 13 Jul 2010 19:11:01 +1000
+Subject: [Buildroot] Problems with custom config of kernel 2.6.34.1
+In-Reply-To: <20100713085516.5a5c8d26@surf>
+References: <4C3B80A7.1040305@gmx.net> <20100713085516.5a5c8d26@surf>
+Message-ID: <000f01cb226b$51f11430$f5d33c90$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not compiling still after disabling:-
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Tuesday, 13 July 2010 4:55 PM
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Problems with custom config of kernel 2.6.34.1
+> 
+> Hello Marcus,
+> 
+> On Mon, 12 Jul 2010 22:52:55 +0200
+> Ossy <ossy1980@gmx.net> wrote:
+> 
+> > Hi mailinglist,
+> >
+> > I use the kernel version 2.6.33.6 without any problems. But since I
+> > updated to the newer version 2.6.34.1 I'm not able to use a custom
+> > config anymore.
+> >
+> > I loaded the old config into the kernel menuconfig and stored it as
+> > new file linux-2.6.34.1.config. When I launched the overall make
+> > process the kernel patches were applied fine, but the process runs
+> > into text mode configuration:
+> 
+> Thanks for your report. Could you provide a step-by-step procedure to
+> reproduce the problem from scratch ?
 
-# BR2_PACKAGE_QT_MYSQL is not set
-BR2_PACKAGE_MYSQL_CLIENT=y
+Isn't that just make oldconfig running? What happens if you press enter to
+give the default answer to every question?
 
-compiling itemviews/qtableview.cpp
-compiling itemviews/qlistwidget.cpp
-rm -f libQtGui.so.4.6.2 libQtGui.so libQtGui.so.4 libQtGui.so.4.6
-linking ../../lib/libQtGui.so.4.6.2
-.obj/release-shared-emb-arm/qpathclipper.o: file not recognized: File
-truncated
-collect2: ld returned 1 exit status
-make[2]: *** [../../lib/libQtGui.so.4.6.2] Error 1
-make[2]: Leaving directory
-`/home/noy/buildroot/output/build/qt-everywhere-opens
-ource-src-4.6.2/src/gui'
-make[1]: *** [sub-gui-make_default-ordered] Error 2
-make[1]: Leaving directory
-`/home/noy/buildroot/output/build/qt-everywhere-opens
-ource-src-4.6.2'
-make: ***
-[/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/.compiled]
- Error 2
 
-regards
-
-Nataraj
-
-On Tue, Jul 13, 2010 at 11:57 AM, Nataraj S Narayan <natarajsn@gmail.com>wrote:
-
-> Hi
->
-> #make qt
->
-> Creating qmake. Please wait...
-> make[1]: Entering directory
-> `/home/noy/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/qmake'
-> make[1]: Leaving directory
-> `/home/noy/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/qmake'
-> MySQL support cannot be enabled due to functionality tests!
->  Turn on verbose messaging (-v) to ./configure to see the final report.
->  If you believe this message is in error you may use the continue
->  switch (-continue) to ./configure to continue.
-> make: ***
-> [/buildroot/output/build/qt-everywhere-opensource-src-4.6.2/.configured]
-> Error 101
->
-> # Automatically generated make config: don't edit
-> BR2_HAVE_DOT_CONFIG=y
-> BR2_arm=y
-> BR2_arm926t=y
-> BR2_ARM_EABI=y
-> BR2_TARGET_ATMEL=y
-> BR2_TARGET_AT91=y
-> BR2_TARGET_ATMEL_ALL=y
-> BR2_TARGET_AT91SAM9263=y
-> BR2_TARGET_AT91SAM9263EK=y
-> BR2_TARGET_AT91_ADVANCED_INFO=y
-> # Secondary locations
-> BR2_SOURCEFORGE_MIRROR="easynews"
-> BR2_STRIP_strip=y
-> BR2_OPTIMIZE_S=y
-> BR2_CONFIG_CACHE=y
-> BR2_TOOLCHAIN_BUILDROOT=y
-> BR2_KERNEL_HEADERS_2_6_33=y
-> BR2_UCLIBC_VERSION_0_9_31=y
-> BR2_BINUTILS_VERSION_2_20=y
-> BR2_GCC_VERSION_4_3_X=y
-> BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-> BR2_GCC_SHARED_LIBGCC=y
-> BR2_GCC_ENABLE_TLS=y
-> BR2_LARGEFILE=y
-> BR2_INET_RPC=y
-> BR2_ENABLE_LOCALE=y
-> BR2_ENABLE_LOCALE_PURGE=y
-> BR2_NEEDS_GETTEXT=y
-> BR2_NEEDS_GETTEXT_IF_LOCALE=y
-> BR2_USE_WCHAR=y
-> BR2_PREFER_SOFT_FLOAT=y
-> BR2_SOFT_FLOAT=y
-> BR2_USE_SSP=y
-> BR2_PTHREADS=y
-> BR2_GCC_CROSS_CXX=y
-> BR2_INSTALL_LIBSTDCPP=y
-> BR2_MKLIBS=y
-> BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
-> BR2_PACKAGE_BUSYBOX=y
-> BR2_BUSYBOX_VERSION_1_16_X=y
-> BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
-> BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.16.x.config"
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> BR2_PACKAGE_ALSA_LIB=y
-> BR2_PACKAGE_ALSA_LIB_ALOAD=y
-> BR2_PACKAGE_ALSA_LIB_MIXER=y
-> BR2_PACKAGE_ALSA_LIB_PCM=y
-> BR2_PACKAGE_ALSA_LIB_RAWMIDI=y
-> BR2_PACKAGE_ALSA_LIB_HWDEP=y
-> BR2_PACKAGE_ALSA_LIB_SEQ=y
-> BR2_PACKAGE_ALSA_LIB_ALISP=y
-> BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS=y
-> BR2_PACKAGE_ALSA_UTILS=y
-> BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-> BR2_PACKAGE_ALSA_UTILS_ALSACTL=y
-> BR2_PACKAGE_ALSA_UTILS_ALSAMIXER=y
-> BR2_PACKAGE_ALSA_UTILS_APLAY=y
-> BR2_PACKAGE_ALSA_UTILS_ARECORD=y
-> BR2_PACKAGE_GSTREAMER=y
-> BR2_PACKAGE_GSTREAMER_LIBXML2=y
-> BR2_PACKAGE_GST_PLUGINS_BASE=y
-> # dependency-less plugins
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOCONVERT=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TYPEFIND=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOSCALE=y
-> BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME=y
-> # plugins with external dependencies (there may be more available)
-> BR2_PACKAGE_GST_PLUGINS_GOOD=y
-> # dependency-less plugins
-> BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AVI=y
-> BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE=y
-> BR2_PACKAGE_LIBMAD=y
-> BR2_PACKAGE_MPG123=y
-> BR2_PACKAGE_MPLAYER=y
-> BR2_PACKAGE_STRACE=y
-> # native toolchain needs development files in target filesystem
-> BR2_PACKAGE_GETTEXT=y
-> BR2_PACKAGE_LIBINTL=y
-> BR2_PACKAGE_SDL=y
-> BR2_PACKAGE_SDL_FBCON=y
-> BR2_PACKAGE_SDL_IMAGE=y
-> BR2_PACKAGE_SDL_IMAGE_BMP=y
-> BR2_PACKAGE_SDL_IMAGE_GIF=y
-> BR2_PACKAGE_SDL_IMAGE_JPEG=y
-> BR2_PACKAGE_QT=y
-> BR2_PACKAGE_QT_SHARED=y
-> BR2_PACKAGE_QT_LICENSE_APPROVED=y
-> BR2_PACKAGE_QT_GUI_MODULE=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_1=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_4=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_8=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_12=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_15=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_16=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_18=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_24=y
-> BR2_PACKAGE_QT_PIXEL_DEPTH_32=y
-> BR2_PACKAGE_QT_FONT_MICRO=y
-> BR2_PACKAGE_QT_FONT_FIXED=y
-> BR2_PACKAGE_QT_FONT_HELVETICA=y
-> BR2_PACKAGE_QT_NOFREETYPE=y
-> BR2_PACKAGE_QT_NOJPEG=y
-> BR2_PACKAGE_QT_NOPNG=y
-> BR2_PACKAGE_QT_NOTIFF=y
-> BR2_PACKAGE_QT_QTZLIB=y
-> BR2_PACKAGE_QT_SQL_MODULE=y
-> BR2_PACKAGE_QT_MYSQL=y
-> BR2_PACKAGE_QT_SQLITE=y
-> BR2_PACKAGE_QT_GFX_LINUXFB=y
-> BR2_PACKAGE_QT_MOUSE_LINUXINPUT=y
-> BR2_PACKAGE_QT_MOUSE_TSLIB=y
-> # Keyboard drivers
-> BR2_PACKAGE_QT_KEYBOARD_LINUXINPUT=y
-> BR2_PACKAGE_QT_XML=y
-> BR2_PACKAGE_QT_NETWORK=y
-> BR2_PACKAGE_QT_JAVASCRIPTCORE=y
-> BR2_PACKAGE_QT_SCRIPT=y
-> BR2_PACKAGE_DBUS=y
-> BR2_DBUS_EXPAT=y
-> BR2_PACKAGE_DBUS_GLIB=y
-> BR2_PACKAGE_HOTPLUG=y
-> BR2_PACKAGE_HWDATA=y
-> BR2_PACKAGE_MTD=y
-> BR2_PACKAGE_MTD_FLASHCP=y
-> BR2_PACKAGE_MTD_FLASH_ERASE=y
-> BR2_PACKAGE_MTD_FLASH_ERASEALL=y
-> BR2_PACKAGE_MTD_FLASH_INFO=y
-> BR2_PACKAGE_MTD_FLASH_LOCK=y
-> BR2_PACKAGE_MTD_FLASH_OTP_DUMP=y
-> BR2_PACKAGE_MTD_FLASH_OTP_INFO=y
-> BR2_PACKAGE_MTD_FLASH_UNLOCK=y
-> BR2_PACKAGE_MTD_FTL_CHECK=y
-> BR2_PACKAGE_MTD_FTL_FORMAT=y
-> BR2_PACKAGE_MTD_JFFS2DUMP=y
-> BR2_PACKAGE_MTD_MKFSJFFS2=y
-> BR2_PACKAGE_MTD_MTD_DEBUG=y
-> BR2_PACKAGE_MTD_NANDDUMP=y
-> BR2_PACKAGE_MTD_NANDTEST=y
-> BR2_PACKAGE_MTD_NANDWRITE=y
-> BR2_PACKAGE_MTD_NFTLDUMP=y
-> BR2_PACKAGE_MTD_NFTL_FORMAT=y
-> BR2_PACKAGE_MTD_MTDINFO=y
-> BR2_PACKAGE_MTD_UBIATTACH=y
-> BR2_PACKAGE_MTD_UBICRC32=y
-> BR2_PACKAGE_MTD_UBIDETACH=y
-> BR2_PACKAGE_MTD_UBIFORMAT=y
-> BR2_PACKAGE_MTD_UBIMKVOL=y
-> BR2_PACKAGE_MTD_UBINFO=y
-> BR2_PACKAGE_MTD_UBINIZE=y
-> BR2_PACKAGE_MTD_UBIRENAME=y
-> BR2_PACKAGE_MTD_UBIRMVOL=y
-> BR2_PACKAGE_MTD_UBIRSVOL=y
-> BR2_PACKAGE_MTD_UBIUPDATEVOL=y
-> BR2_PACKAGE_UDEV=y
-> BR2_PACKAGE_UDEV_UTILS=y
-> BR2_PACKAGE_UDEV_VOLUME_ID=y
-> BR2_PACKAGE_UDEV_SCSI_ID=y
-> BR2_PACKAGE_UDEV_PATH_ID=y
-> BR2_PACKAGE_UDEV_FIRMWARE_SH=y
-> BR2_PACKAGE_LZO=y
-> BR2_PACKAGE_ZLIB=y
-> # Crypto
-> BR2_PACKAGE_OPENSSL=y
-> BR2_PACKAGE_MYSQL_CLIENT=y
-> BR2_PACKAGE_SQLITE=y
-> # Filesystem
-> BR2_PACKAGE_FONTCONFIG=y
-> BR2_PACKAGE_FREETYPE=y
-> BR2_PACKAGE_JPEG=y
-> BR2_PACKAGE_LIBPNG=y
-> BR2_PACKAGE_PIXMAN=y
-> BR2_PACKAGE_TSLIB=y
-> BR2_PACKAGE_LIBUSB=y
-> BR2_PACKAGE_LIBUSB_COMPAT=y
-> BR2_PACKAGE_LIBPCAP=y
-> BR2_PACKAGE_LIBGLIB2=y
-> BR2_PACKAGE_LIBOIL=y
-> BR2_PACKAGE_NCURSES=y
-> BR2_PACKAGE_NCURSES_TARGET_PANEL=y
-> BR2_PACKAGE_NCURSES_TARGET_FORM=y
-> BR2_PACKAGE_NCURSES_TARGET_MENU=y
-> BR2_PACKAGE_NEWT=y
-> BR2_PACKAGE_READLINE=y
-> BR2_PACKAGE_SLANG=y
-> BR2_PACKAGE_EXPAT=y
-> BR2_PACKAGE_LIBXML2=y
-> BR2_PACKAGE_ISC_DHCP=y
-> BR2_PACKAGE_DHCP_CLIENT=y
-> BR2_PACKAGE_ETHTOOL=y
-> BR2_PACKAGE_LRZSZ=y
-> BR2_PACKAGE_MIIDIAG=y
-> BR2_PACKAGE_OPENSSH=y
-> BR2_PACKAGE_PPPD=y
-> BR2_PACKAGE_PPPD_FILTER=y
-> # System tools
-> # Target filesystem options
-> BR2_TARGET_ROOTFS_EXT2=y
-> BR2_TARGET_ROOTFS_EXT2_SQUASH=y
-> BR2_TARGET_ROOTFS_EXT2_NONE=y
-> BR2_TARGET_ROOTFS_JFFS2=y
-> BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K=y
-> BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
-> BR2_TARGET_ROOTFS_JFFS2_LE=y
-> BR2_TARGET_ROOTFS_UBIFS=y
-> BR2_TARGET_ROOTFS_UBIFS_RT_LZO=y
-> BR2_TARGET_ROOTFS_UBIFS_NONE=y
->
-> regards
->
-> Nataraj
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100713/280e7be9/attachment-0001.html>
+Paul.
