@@ -1,44 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Jul 2010 21:08:26 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: fix version detection
-	and get rid of unneeded double CFLAGS/LDFLAGS
-Message-ID: <20100714190919.CD55B82973@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Jul 2010 16:29:49 -0300
+Subject: [Buildroot] ncurses: build freezes without error with v5.7
+In-Reply-To: <1279123755.7058.242.camel@cabbage.rehill.info>
+References: <1279123755.7058.242.camel@cabbage.rehill.info>
+Message-ID: <4C3E102D.50105@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 07/14/2010 01:09 PM, Quotient Remainder wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1acd72a1ab7b1f9cac453d29ec55a6676a16f15b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> The following appears when I try to build with ncurses enabled.  No
+> error is displayed but the tic command never returns.  "top" shows that
+> tic is using 100% of CPU time.  I've let it run for 20 minutes or more
+> and it doesn't progress any further.
+> BR is current: c0e307b848d8de23e6f10a179c4f240c023c8b82.
+> Toolchain is external, CodeSourcery ARM GNU/Linux 2009q3-67.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/u-boot/u-boot.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
-
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 37ed215..c21166f 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -35,7 +35,7 @@ U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN) $(MKIMAGE)
- U_BOOT_ARCH=$(KERNEL_ARCH)
- 
- # u-boot in the past used arch=ppc for powerpc
--ifneq ($(findstring x200,$(UBOOT_VERSION))$(findstring x2010.03,$(UBOOT_VERSION)),)
-+ifneq ($(findstring x200,x$(U_BOOT_VERSION))$(findstring x2010.03,x$(U_BOOT_VERSION)),)
- U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
- endif
- 
-@@ -81,8 +81,6 @@ ifeq ($(U_BOOT_BOARD_NAME),)
- 	$(error NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
- endif
- 	$(TARGET_CONFIGURE_OPTS)		\
--		CFLAGS="$(TARGET_CFLAGS)"	\
--		LDFLAGS="$(TARGET_LDFLAGS)"	\
- 		$(U_BOOT_CONFIGURE_OPTS) \
- 		$(MAKE) -C $(U_BOOT_DIR)	\
- 		$(U_BOOT_BOARD_NAME)_config
--- 
-1.7.1
+Try this patch from gentoo:
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-libs/ncurses/files/ncurses-5.7-tic-cross-detection.patch?revision=1.1
+Sounds a lot like your problem.
+Regards.
