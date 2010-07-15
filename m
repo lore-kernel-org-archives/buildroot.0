@@ -1,39 +1,64 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Thu, 15 Jul 2010 22:06:43 +1000
-Subject: [Buildroot] ncurses: build freezes without error with v5.7
-In-Reply-To: <1279192188.6184.2.camel@dubciaranr1.verifone.com>
-References: <1279123755.7058.242.camel@cabbage.rehill.info> 
-	<4C3E102D.50105@zacarias.com.ar>
-	<1279192188.6184.2.camel@dubciaranr1.verifone.com>
-Message-ID: <AANLkTinsUwFgYEaRhtAwzO2I5Y2frnUunmtzBKTSveF9@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 Jul 2010 12:46:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 2221] Qt does not compile (dependencies not taken
+ into account?)
+In-Reply-To: <bug-2221-163@https.bugs.busybox.net/>
+References: <bug-2221-163@https.bugs.busybox.net/>
+Message-ID: <20100715124615.4644882A57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 15, 2010 at 9:09 PM, Quotient Remainder
-<quotientvremainder@gmail.com> wrote:
-> Unfortunately it doesn't work, still stuck at the same place, though the
-> patch has changed the variable list passed.
->
-> ? ? ? ?DESTDIR=/home/crehill/obair/buildroot.org/output/staging \
-> ? ? ? ? ? ? ? ?prefix=/usr \
-> ? ? ? ? ? ? ? ?exec_prefix=/usr \
-> ? ? ? ? ? ? ? ?bindir=/usr/bin \
-> ? ? ? ? ? ? ? ?top_srcdir=.. \
-> ? ? ? ? ? ? ? ?srcdir=. \
-> ? ? ? ? ? ? ? ?datadir=/usr/share \
-> ? ? ? ? ? ? ? ?ticdir=/usr/share/terminfo \
-> ? ? ? ? ? ? ? ?source=terminfo.tmp \
-> ? ? ? ? ? ? ? ?cross_compiling="yes" \
-> ? ? ? ? ? ? ? ?/bin/sh ./run_tic.sh
-> ? ? ? ?** Building terminfo database, please wait...
-> ? ? ? ?Running tic to install /home/crehill/obair/buildroot.org/output/staging/usr/share/terminfo ...
+https://bugs.busybox.net/show_bug.cgi?id=2221
 
-I don't know if this is helpful or not, but can you run strace -p
-$(pidof tic) and show the result?  That might tell us what tic is
-doing.  In addition, you may consider adding "set -x" to run_tic.sh.
-That will tell us how tic is being invoked.
+Luca Ceresoli <luca.ceresoli@tiscali.it> changed:
 
-Mitch.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |luca.ceresoli at tiscali.it
+
+--- Comment #1 from Luca Ceresoli <luca.ceresoli@tiscali.it>  ---
+This patch seems to solve both Nataraj's and my issue.
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index e2ebbb2..4bfd67a 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -115,6 +115,7 @@ QT_CONFIGURE += -no-gfx-multiscreen
+ endif
+ ifeq ($(BR2_PACKAGE_QT_GFX_DIRECTFB),y)
+ QT_CONFIGURE += -qt-gfx-directfb
++QT_DEP_LIBS+=directfb
+ else
+ QT_CONFIGURE += -no-gfx-directfb
+ endif
+@@ -273,6 +274,7 @@ QT_CONFIGURE+= -qt-sql-ibase
+ endif
+ ifeq ($(BR2_PACKAGE_QT_MYSQL),y)
+ QT_CONFIGURE+= -qt-sql-mysql
++QT_DEP_LIBS+=mysql
+ endif
+ ifeq ($(BR2_PACKAGE_QT_ODBC),y)
+ QT_CONFIGURE+= -qt-sql-odbc
+
+I could compile buildroot, but I'm not sure this patch really solves the bug.
+Given this is a precedence problem I could just have been lucky with make.
+
+In fact the value of QT_DEP_LIBS is used only once (line 608):
+
+ qt: $(QT_DEP_LIBS) $(TARGET_DIR)/usr/lib/libQtCore.so.4
+
+Which does *not* force make to build the libs before libQtCore.so.4.
+According to the makefile, the unpack/config/compile and the following
+libQtCore.so.4 steps do not depend on $(QT_DEP_LIBS).
+
+Am I missing something?
+
+Luca
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
