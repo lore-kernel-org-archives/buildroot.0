@@ -1,28 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Jul 2010 22:03:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 2191] linux-fusion build fail
-In-Reply-To: <bug-2191-163@https.bugs.busybox.net/>
-References: <bug-2191-163@https.bugs.busybox.net/>
-Message-ID: <20100716220311.0F82F82B55@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Jul 2010 00:02:13 +0200
+Subject: [Buildroot] [git commit master 1/1] linux-fusion: use install
+	target instead of headers_install
+Message-ID: <20100716220328.328B882B55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2191
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=0d42aba5426138379399331070d0b9a6ea784569
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+The headers_install target no longer exists in the Makefile, the
+installation of headers is done by the install target.
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed by pulling Thomas' linux-fusion branch in git.
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ package/linux-fusion/linux-fusion.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index c9ebed7..54f53a3 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -37,7 +37,7 @@ define LINUX_FUSION_INSTALL_STAGING_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		$(LINUX_FUSION_MAKE_OPTS) \
+ 		INSTALL_MOD_PATH=$(STAGING_DIR) \
+-		-C $(@D) headers_install
++		-C $(@D) install
+ endef
+ 
+ define LINUX_FUSION_INSTALL_TARGET_CMDS
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
