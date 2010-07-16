@@ -1,26 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Jul 2010 21:48:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 2221] Qt does not compile (dependencies not taken
- into account?)
-In-Reply-To: <bug-2221-163@https.bugs.busybox.net/>
-References: <bug-2221-163@https.bugs.busybox.net/>
-Message-ID: <20100716214836.EBB7882A80@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 16 Jul 2010 23:55:30 +0200
+Subject: [Buildroot] [git commit master 1/1] qt: fix directfb dependency
+Message-ID: <20100716215736.DEA9382A80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2221
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I've handled the mysql part of the problem in the patch
-http://lists.busybox.net/pipermail/buildroot/2010-July/036122.html, which is
-part of a pull request I hope Peter will merge soon.
+commit: http://git.buildroot.net/buildroot/commit/?id=b922151c25a5b0a2e5555700e0a809779809e436
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The DirectFB part of the problem remains to be fixed, though.
+Closes #2221
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES          |    1 +
+ package/qt/qt.mk |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 35e7fde..e1f8a0e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -59,6 +59,7 @@
+ 	#2155: Compression lzo don't set for ubifs
+ 	#2166: [SECURITY] Update libpng to 1.2.44
+ 	#2167: Bump busybox to 1.17.0, convert to gentargets, drop 1.12, ...
++	#2221: Qt does not compile (dependencies not taken into account?)
+ 
+ 2010.05, Released May 30th, 2010:
+ 
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index b4b6b29..dd43ae0 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -115,6 +115,7 @@ QT_CONFIGURE += -no-gfx-multiscreen
+ endif
+ ifeq ($(BR2_PACKAGE_QT_GFX_DIRECTFB),y)
+ QT_CONFIGURE += -qt-gfx-directfb
++QT_DEP_LIBS+=directfb
+ else
+ QT_CONFIGURE += -no-gfx-directfb
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
