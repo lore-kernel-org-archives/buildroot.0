@@ -1,55 +1,99 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Fri, 16 Jul 2010 10:25:06 +0100
-Subject: [Buildroot] ncurses: build freezes without error with v5.7
-In-Reply-To: <AANLkTikfJUKA0Y1Wv8iJ2Wa8w4IspA5wY-WkhBmkWueV@mail.gmail.com>
-References: <1279123755.7058.242.camel@cabbage.rehill.info>
-	<4C3E102D.50105@zacarias.com.ar>
-	<1279192188.6184.2.camel@dubciaranr1.verifone.com>
-	<AANLkTinsUwFgYEaRhtAwzO2I5Y2frnUunmtzBKTSveF9@mail.gmail.com>
-	<1279202763.3572.22.camel@dubciaranr1.verifone.com>
-	<AANLkTiks30hgwzuxxsGuxSPsP2iO1S7b1avRHCV9JllD@mail.gmail.com>
-	<1279205058.3572.29.camel@dubciaranr1.verifone.com>
-	<AANLkTiknnWawF0mRHGu73MxCCuAcGpYWxK-i-uaUKXub@mail.gmail.com>
-	<1279212734.3572.42.camel@dubciaranr1.verifone.com>
-	<AANLkTikfJUKA0Y1Wv8iJ2Wa8w4IspA5wY-WkhBmkWueV@mail.gmail.com>
-Message-ID: <1279272306.3572.93.camel@dubciaranr1.verifone.com>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Fri, 16 Jul 2010 12:39:02 +0200
+Subject: [Buildroot] [PATCH 2/4] Implement basic non-wget download
+ methods
+In-Reply-To: <1279108920.7058.123.camel@cabbage.rehill.info>
+References: <L5HQ26$43638E1C3E30A4E7BE70EACE614B0470@aruba.it>
+	<20100713113054.GB16232@bulix.org>
+	<1279108920.7058.123.camel@cabbage.rehill.info>
+Message-ID: <20100716103902.GF16232@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar Aoine, 2010-07-16 ag 11:28 +1000, scr?obh Mitch Davis:
-> If you're keen you can grab the debug RPM and use rpm2cpio to extract
-> the contents, then point gdb at it.  It would be nice to know the line
-> of code at 0x0055d2e5...
+* Quotient Remainder <quotientvremainder@gmail.com> [2010-07-14 13:02:00]:
+
+> > > > +GIT_CO:=$(call qstrip,$(BR2_GIT_CO)) $(QUIET)
+> > > Now I would rename GIT to GIT_CLONE to make the difference clear.
+> > 
+> > I aimed for the least modifications here. But if the consensus is on having
+> > GIT_CLONE and GIT_CO, I'll change it.
 > 
-        $ gdb
-        ...
-        (gdb) set debug-file-directory /home/qvr/debuginfo/fs/usr/lib/debug
-        (gdb) file /usr/bin/tic
-        Reading symbols from /usr/bin/tic...Reading symbols from /home/qvr/debuginfo/fs/usr/lib/debug/usr/bin/tic.debug...done.
-        done.
-        (gdb) run -x -s -o /home/qvr/obair/buildroot.org/output/staging/usr/share/terminfo terminfo.tmp
-        Starting program: /usr/bin/tic -x -s -o /home/qvr/obair/buildroot.org/output/staging/usr/share/terminfo terminfo.tmp
-        
-        Program received signal SIGINT, Interrupt.
-        adjust_cancels (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:351
-        351	../../ncurses/tinfo/alloc_ttype.c: No such file or directory.
-        	in ../../ncurses/tinfo/alloc_ttype.c
-        (gdb) bt
-        #0  adjust_cancels (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:351
-        #1  0x0055d2e5 in _nc_align_termtype (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:415
-        #2  0x0055bcb6 in _nc_merge_entry (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_entry.c:239
-        #3  0x0056061a in _nc_resolve_uses2 (fullresolve=<value optimized out>, literal=<value optimized out>) at ../../ncurses/tinfo/comp_parse.c:398
-        #4  0x0804b913 in main (argc=6, argv=0xbfb073f4) at ../../progs/tic.c:692
+> In a broader sense what are these configuration options for?  Is it to
+> allow adding switches (e.g. git checkout -f) to the commands or is it to
+> allow specifying the path to the executable
+> (e.g. /usr/bin/svn, /opt/git4.0-pre/bin/git)?
+> If it's the first case, I'd side with GIT_CLONE and GIT_CO.  If it's the
+> second case, I'd leave it as GIT but get rid of the GIT_CO and just put
+> the actual command in Makefile.package.in.  Is is likely that they will
+> ever differ from "clone" or "checkout" anyway?
 
-And on for a second run:
+I don't really know what they are for. Maybe some "older" Buildroot
+developers could give us some details there. Because you're right, git
+clone will most likely remain git clone. But having the option to use a
+specific path is usefull, in which case I'd leave only GIT="git". But
+then the same would apply to SVN_CO/SVN_UP where we should only keep
+SVN="svn".
 
-        (gdb) bt
-        #0  _nc_find_ext_name (tp=<value optimized out>, name=<value optimized out>, token_type=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:205
-        #1  0x0055cd72 in adjust_cancels (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:359
-        #2  0x0055d2e5 in _nc_align_termtype (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_ttype.c:415
-        #3  0x0055bcb6 in _nc_merge_entry (to=<value optimized out>, from=<value optimized out>) at ../../ncurses/tinfo/alloc_entry.c:239
-        #4  0x0056061a in _nc_resolve_uses2 (fullresolve=<value optimized out>, literal=<value optimized out>) at ../../ncurses/tinfo/comp_parse.c:398
-        #5  0x0804b913 in main (argc=6, argv=0xbfe6d554) at ../../progs/tic.c:692
+Thoughts?
+
+> I have to agree with Maxime here, $(DL_DIR) seems the right place for
+> these directories and the creation of the tarball in $(DL_DIR)
+> integrates nicely with the existing infrastructure.  I would prefer the
+> use of "git archive"/"svn export" instead of plain "tar" here though.  I
+> feel it's better to use the VCS native facility than relying on the
+> installed version of tar to know about the particulars of the VCS
+> metainformation.
+
+Makes sense. I'm more used to --exclude-vcs because I don't have to
+remember the different syntax of all VCS, especially for the ones I
+don't use frequently like Bzr, Mercurial, etc.
+
+I'll change that in my next resend.
+
+> In addition, when tar is not used, the name of the cloned directory need
+> not be tied to the version; a prefix can be specified in the archive
+> command or exporting done to a temporary directory.  $($(PKG)_BASE_NAME)
+> can just be $($(PKG)_NAME).$($(PKG)_SITE_METHOD) or similar.
+> 
+> The result is that the working copy can be left in $(DL_DIR) so it's
+> available for updating at a later time; I would leave out the "rm" line
+> so re-use is possible.  It could be regarded as a kind of hook to help
+> the possible future feature (discussed in the other thread) of using BR
+> as a development environment.
+
+Although this would work fairly well for Git repository, it is not the
+case for Subversion repositories, especially if the PGK_SITE changes to
+point to a different tag, in which case you need to svn switch
+--relocate, etc.
+
+I think it's best for now to go with the current method of checking out,
+creating the tarball and removing the working copy, and later work on
+how/where to keep the working copies and using them efficiently for
+updates. This makes the incremental changes smaller and easier to deal
+with. Not necessarily in terms of code, but also in terms of the
+discussions around it.
+
+> Another feature not present in this is the guessing of the download
+> scheme/protocol from the URI (in Luca's patch).  It seems to fit in
+> nicely with this patch without significant modification and adds that
+> extra bit of flexibility while falling back to sensible defaults, in my
+> opinion.
+
+It does indeed fit very nicely with my patch, so I'll go ahead and
+integrate it in my next resend.
+
+- Maxime
+-- 
+Maxime Petazzoni <http://www.bulix.org>
+ ``One by one, the penguins took away my sanity.''
+Linux kernel and software developer at MontaVista Software
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100716/091183f7/attachment.pgp>
