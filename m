@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jul 2010 23:45:42 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-fusion: use install target instead of
-	headers_install
-In-Reply-To: <cover.1279316732.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1279316732.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0d42aba5426138379399331070d0b9a6ea784569.1279316732.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Jul 2010 23:45:41 +0200
+Subject: [Buildroot] [pull request] Pull request for branch linux-fusion-fix
+Message-ID: <cover.1279316732.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The headers_install target no longer exists in the Makefile, the
-installation of headers is done by the install target.
+The following changes since commit a67a62c296103f50bff9f9e6bcfb90def2b8d62e:
+  Sagaert Johan (1):
+        qt: fix javscriptcore/multimedia build with uClibc
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
----
- package/linux-fusion/linux-fusion.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+are available in the git repository at:
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index c9ebed7..54f53a3 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -37,7 +37,7 @@ define LINUX_FUSION_INSTALL_STAGING_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
- 		$(LINUX_FUSION_MAKE_OPTS) \
- 		INSTALL_MOD_PATH=$(STAGING_DIR) \
--		-C $(@D) headers_install
-+		-C $(@D) install
- endef
- 
- define LINUX_FUSION_INSTALL_TARGET_CMDS
+  git://git.busybox.net/~tpetazzoni/git/buildroot linux-fusion-fix
+
+Thomas Petazzoni (2):
+      linux-fusion: use install target instead of headers_install
+      linux-fusion: many fixes
+
+ package/directfb/Config.in                         |    2 +-
+ package/linux-fusion/Config.in                     |    2 +-
+ .../linux-fusion-8.1.1-missing-include.patch       |   17 ++++++++
+ package/linux-fusion/linux-fusion.mk               |   43 ++++++-------------
+ 4 files changed, 33 insertions(+), 31 deletions(-)
+ create mode 100644 package/linux-fusion/linux-fusion-8.1.1-missing-include.patch
+
+Thanks,
 -- 
-1.7.0.4
+Thomas Petazzoni
