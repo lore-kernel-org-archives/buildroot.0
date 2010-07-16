@@ -1,54 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Jul 2010 11:18:06 +0200
-Subject: [Buildroot] [pull request] Pull request for branch misc-build-fixes
-Message-ID: <cover.1279271862.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Jul 2010 11:18:10 +0200
+Subject: [Buildroot] [PATCH 4/5] Fix Qt build with MySQL
+In-Reply-To: <cover.1279271862.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1279271862.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7981bbb912a703ae5cc52fe990768b47c17c4a72.1279271863.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit a67a62c296103f50bff9f9e6bcfb90def2b8d62e:
-  Sagaert Johan (1):
-        qt: fix javscriptcore/multimedia build with uClibc
+Several issues were preventing the Qt MySQL support to build properly:
 
-are available in the git repository at:
+ * In Config.sql.in, missing selection of the MYSQL_CLIENT package
+   when the Qt MySQL driver is enabled
 
-  git://git.busybox.net/~tpetazzoni/git/buildroot misc-build-fixes
+ * In qt.mk :
+    - Missing dependency on mysql_client
+    - As MySQL installs headers in $(STAGING_DIR)/usr/include/mysql
+      and libs in $(STAGING_DIR)/usr/lib/mysql, additional -I and -L
+      options need to be passed.
 
-Thomas Petazzoni (5):
-      Bump dhcp to 4.1.1-P1 and convert to autotools
-      Update defconfigs after DHCP option rename
-      Bump MySQL to 5.1.47 and fix build
-      Fix Qt build with MySQL
-      sdl: fix build of other sdl components
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt/Config.sql.in |    1 +
+ package/qt/qt.mk         |   14 +++++++++++---
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
- configs/arm_toolchain_defconfig                    |    2 +-
- configs/at91rm9200df_ext_bare_defconfig            |    2 +-
- configs/at91sam9260dfc_ext_bare_defconfig          |    2 +-
- configs/at91sam9260pf_defconfig                    |    2 +-
- configs/at91sam9261ek_ext_bare_defconfig           |    2 +-
- configs/at91sam9263ek_ext_bare_defconfig           |    2 +-
- configs/at91sam9g20dfc_ext_bare_defconfig          |    2 +-
- configs/atstk100x_defconfig                        |    2 +-
- configs/kb9202_defconfig                           |    2 +-
- configs/v100sc2_defconfig                          |    2 +-
- package/dhcp/Config.in                             |    8 +-
- package/dhcp/dhcp.mk                               |  126 ++----
- package/dhcp/dhcp_xecute.patch                     |  452 --------------------
- .../mysql_client-5.1.47-ac_cache_check.patch       |  151 +++++++
- ...ql_client-5.1.47-configure-ps-cache-check.patch |   35 ++
- ...ysql_client-5.1.47-use-new-readline-iface.patch |   17 +
- package/mysql_client/mysql_client.mk               |   18 +-
- package/qt/Config.sql.in                           |    1 +
- package/qt/qt.mk                                   |   14 +-
- package/sdl/sdl.mk                                 |   14 +-
- 20 files changed, 290 insertions(+), 566 deletions(-)
- delete mode 100644 package/dhcp/dhcp_xecute.patch
- create mode 100644 package/mysql_client/mysql_client-5.1.47-ac_cache_check.patch
- create mode 100644 package/mysql_client/mysql_client-5.1.47-configure-ps-cache-check.patch
- create mode 100644 package/mysql_client/mysql_client-5.1.47-use-new-readline-iface.patch
-
-Thanks,
+diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
+index 2ce8d79..0c17c1a 100644
+--- a/package/qt/Config.sql.in
++++ b/package/qt/Config.sql.in
+@@ -6,6 +6,7 @@ menuconfig BR2_PACKAGE_QT_SQL_MODULE
+ if BR2_PACKAGE_QT_SQL_MODULE
+ config BR2_PACKAGE_QT_MYSQL
+ 	bool "MySQL Driver"
++	select BR2_PACKAGE_MYSQL_CLIENT
+ 	help
+ 	  Build MySQL driver
+ 	  If unsure, say n.
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index b4b6b29..c144901 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -18,6 +18,10 @@ QT_SITE:=http://get.qt.nokia.com/qt/source
+ QT_CAT:=$(ZCAT)
+ QT_TARGET_DIR:=$(BUILD_DIR)/qt-everywhere-opensource-src-$(QT_VERSION)
+ 
++QT_TARGET_CFLAGS=$(TARGET_CFLAGS)
++QT_TARGET_CXXFLAGS=$(TARGET_CXXFLAGS)
++QT_TARGET_LDFLAGS=$(TARGET_LDFLAGS)
++
+ QT_CONFIGURE:=#empty
+ 
+ ifeq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+@@ -273,6 +277,10 @@ QT_CONFIGURE+= -qt-sql-ibase
+ endif
+ ifeq ($(BR2_PACKAGE_QT_MYSQL),y)
+ QT_CONFIGURE+= -qt-sql-mysql
++QT_DEP_LIBS+=mysql_client
++QT_TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include/mysql
++QT_TARGET_CXXFLAGS+=-I$(STAGING_DIR)/usr/include/mysql
++QT_TARGET_LDFLAGS+=-L$(STAGING_DIR)/usr/lib/mysql
+ endif
+ ifeq ($(BR2_PACKAGE_QT_ODBC),y)
+ QT_CONFIGURE+= -qt-sql-odbc
+@@ -487,9 +495,9 @@ endif
+ 	$(call QT_QMAKE_SET,OBJCOPY,$(TARGET_OBJCOPY))
+ 	$(call QT_QMAKE_SET,RANLIB,$(TARGET_RANLIB))
+ 	$(call QT_QMAKE_SET,STRIP,$(TARGET_STRIP))
+-	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_CFLAGS))
+-	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_CXXFLAGS))
+-	$(call QT_QMAKE_SET,LFLAGS,$(TARGET_LDFLAGS))
++	$(call QT_QMAKE_SET,CFLAGS,$(QT_TARGET_CFLAGS))
++	$(call QT_QMAKE_SET,CXXFLAGS,$(QT_TARGET_CXXFLAGS))
++	$(call QT_QMAKE_SET,LFLAGS,$(QT_TARGET_LDFLAGS))
+ 	-[ -f $(QT_QCONFIG_FILE) ] && cp $(QT_QCONFIG_FILE) \
+ 		$(QT_TARGET_DIR)/$(QT_QCONFIG_FILE_LOCATION)
+ # Don't use TARGET_CONFIGURE_OPTS here, qmake would be compiled for the target
 -- 
-Thomas Petazzoni
+1.7.0.4
