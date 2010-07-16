@@ -1,17 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Jul 2010 21:58:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 2221] Qt does not compile (dependencies not taken
- into account?)
-In-Reply-To: <bug-2221-163@https.bugs.busybox.net/>
-References: <bug-2221-163@https.bugs.busybox.net/>
-Message-ID: <20100716215828.6F04582A80@busybox.osuosl.org>
+Date: Fri, 16 Jul 2010 22:03:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 2191] linux-fusion build fail
+In-Reply-To: <bug-2191-163@https.bugs.busybox.net/>
+References: <bug-2191-163@https.bugs.busybox.net/>
+Message-ID: <20100716220311.0F82F82B55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2221
+https://bugs.busybox.net/show_bug.cgi?id=2191
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
@@ -21,10 +20,7 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
          Resolution|                            |FIXED
 
 --- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git, thanks!
-
-The QT_DEP_LIBS is correct because of the way we build stuff in BR (single
-threaded toplevel make).
+Fixed by pulling Thomas' linux-fusion branch in git.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
