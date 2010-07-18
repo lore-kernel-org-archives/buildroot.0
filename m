@@ -1,74 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Jul 2010 23:15:55 +0200
-Subject: [Buildroot] [git commit master 1/1] fs: add option to define path
-	to custom rootfs skeleton
-Message-ID: <20100718211633.27FAF8279C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Jul 2010 23:22:46 +0200
+Subject: [Buildroot] [PATCH 2/4] Implement basic non-wget download
+	methods
+In-Reply-To: <20100716103902.GF16232@bulix.org> (Maxime Petazzoni's message of
+	"Fri, 16 Jul 2010 12:39:02 +0200")
+References: <L5HQ26$43638E1C3E30A4E7BE70EACE614B0470@aruba.it>
+	<20100713113054.GB16232@bulix.org>
+	<1279108920.7058.123.camel@cabbage.rehill.info>
+	<20100716103902.GF16232@bulix.org>
+Message-ID: <871vb0wkm1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Maxime" == Maxime Petazzoni <maxime.petazzoni@bulix.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b3a43f4e336d1af90200f5f34b931d09119e1e5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Dmytro Milinevskyy <milinevskyy@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile     |    4 ++++
- fs/Config.in |   23 +++++++++++++++++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+ >> In a broader sense what are these configuration options for?  Is it to
+ >> allow adding switches (e.g. git checkout -f) to the commands or is it to
+ >> allow specifying the path to the executable
+ >> (e.g. /usr/bin/svn, /opt/git4.0-pre/bin/git)?
+ >> If it's the first case, I'd side with GIT_CLONE and GIT_CO.  If it's the
+ >> second case, I'd leave it as GIT but get rid of the GIT_CO and just put
+ >> the actual command in Makefile.package.in.  Is is likely that they will
+ >> ever differ from "clone" or "checkout" anyway?
 
-diff --git a/Makefile b/Makefile
-index 59151cc..744cae4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -367,6 +367,10 @@ $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)/usr/include
- 	@mkdir -p $(STAGING_DIR)/usr/bin
- 
-+ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
-+TARGET_SKELETON=$(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
-+endif
-+
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
-diff --git a/fs/Config.in b/fs/Config.in
-index 6865eea..188e815 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -23,6 +23,29 @@ config BR2_ROOTFS_DEVICE_TABLE
-          to the makedevs utility to create all the special device
-          files in the target filesystem.
- 
-+choice
-+	prompt "Root FS skeleton"
-+
-+config BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "default target skeleton"
-+	help
-+	  Use default target skeleton
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM
-+	bool "custom target skeleton"
-+	help
-+	  Use custom target skeleton.
-+
-+endchoice
-+
-+if BR2_ROOTFS_SKELETON_CUSTOM
-+config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-+	string "custom target skeleton path"
-+	default "fs/skeleton"
-+	help
-+	  Path custom target skeleton.
-+endif
-+
- source "fs/cramfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/ext2/Config.in"
+ Maxime> I don't really know what they are for. Maybe some "older" Buildroot
+ Maxime> developers could give us some details there. Because you're right, git
+ Maxime> clone will most likely remain git clone. But having the option to use a
+ Maxime> specific path is usefull, in which case I'd leave only GIT="git". But
+ Maxime> then the same would apply to SVN_CO/SVN_UP where we should only keep
+ Maxime> SVN="svn".
+
+Yes, they are really old and not used (besides SVN_CO) - Feel free to
+clean this up while making these changes.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
