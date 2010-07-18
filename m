@@ -1,25 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jul 2010 23:41:14 +0200
-Subject: [Buildroot] [git commit master 1/1] neon: explicit path to
-	xml2-config
-Message-ID: <20100718214236.46568807FA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Jul 2010 00:05:08 +0200
+Subject: [Buildroot] [PATCH] Bump Flex patch version.
+In-Reply-To: <1279023119-2045-1-git-send-email-julien.boibessot@free.fr>
+	(julien boibessot's message of "Tue, 13 Jul 2010 14:11:59 +0200")
+References: <1279023119-2045-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87pqykv42z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a2dabe9d53e6c361ecdeaba0431ef74a9ad297c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> Version 9 is no more available on Debian FTP.
 
-Now that $(STAGING_DIR)/usr/bin is not in the PATH, we need to
-explicit the path to such tools.
+Committed, thanks.
 
-This might also fix bug 1393 since by expliciting the path to
-xml2-config, we'll force neon ./configure to choose our xml2-config
-and not the one of the host.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Patch is too large, so refusing to show it
+-- 
+Bye, Peter Korsgaard
