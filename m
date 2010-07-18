@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 18 Jul 2010 22:46:06 +0200
-Subject: [Buildroot] [git commit master 1/1] Match whole words when changing
-	.config options
-Message-ID: <20100718204733.7C25182BB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] CHANGES: #387 / #729 are
+	resolved
+Message-ID: <20100718204733.59F6A82BB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +10,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0383d48a5e61db900171ae74d4d2dfe30c420d04
+commit: http://git.buildroot.net/buildroot/commit/?id=ad36fcdda0de654e7da5ba84015b92e48a576e69
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make KCONFIG_{ENABLE,DISABLE,SET}_OPT match whole words only.
-Fixes that BR_INET_IPV6 enables CONFIG_IPV6 in the kernel's
-.config, but also nukes everything with "CONFIG_IPV6" in its name, e.g.
-CONFIG_IPV6_PRIVACY.  This in turn causes any IPv6 options in a custom
-kernel .config to be lost and oldconfig going interactive.
-
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ CHANGES |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index c476de9..d76b791 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -41,17 +41,17 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
-      $(__tmp))
+diff --git a/CHANGES b/CHANGES
+index db8bf16..e6fbe35 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -30,9 +30,11 @@
+ 	Issues resolved (http://bugs.uclibc.org):
  
- define KCONFIG_ENABLE_OPT
--       $(SED) "/$(1)/d" $(2)
-+       $(SED) "/\\<$(1)\\>/d" $(2)
-        echo "$(1)=y" >> $(2)
- endef
- 
- define KCONFIG_SET_OPT
--       $(SED) "/$(1)/d" $(3)
-+       $(SED) "/\\<$(1)\\>/d" $(3)
-        echo "$(1)=$(2)" >> $(3)
- endef
- 
- define KCONFIG_DISABLE_OPT
--       $(SED) "/$(1)/d" $(2)
-+       $(SED) "/\\<$(1)\\>/d" $(2)
-        echo "# $(1) is not set" >> $(2)
- endef
- 
+ 	#361:  linux kernel configuration choice works incorrectly
++	#387:  Tremor not installed to toolchain
+ 	#401:  new package: ffmpeg
+ 	#475:  uImage target for U-boot failed generating
+ 	#583:  build fails with external x86_64 toolchain
++	#729:  sstrip creates corrupted headers
+ 	#835:  Package Dataflashboot-1.05 does not compile with buildroot...
+ 	#1213: Move .config into output directory
+ 	#1753: lmbench: convert to generic package infrastructure
 -- 
 1.7.1
