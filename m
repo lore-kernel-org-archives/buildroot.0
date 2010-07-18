@@ -1,72 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Jul 2010 22:21:59 +0200
-Subject: [Buildroot] [git commit master 1/1] Atmel/atstk100*: make /etc/mtab
-	a symlink to /proc/mounts
-Message-ID: <20100718202311.9840082B7F@busybox.osuosl.org>
+From: Malte Starostik <m-starostik@versanet.de>
+Date: Sun, 18 Jul 2010 22:16:46 +0200
+Subject: [Buildroot] [PATCH 1/2] Match whole words when changing .config
+	options
+Message-ID: <1279484207-1692-1-git-send-email-m-starostik@versanet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=58ddb37e216ae1545e9933a51e90a3fdeb10a5c4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Closes #2233
-
-To match the other skeletons.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Make KCONFIG_{ENABLE,DISABLE,SET}_OPT match whole words only.
+Fixes that BR_INET_IPV6 enables CONFIG_IPV6 in the kernel's
+.config, but also nukes everything with "CONFIG_IPV6" in its name, e.g.
+CONFIG_IPV6_PRIVACY.  This in turn causes any IPv6 options in a custom
+kernel .config to be lost and oldconfig going interactive.
 ---
- CHANGES                                            |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
- mode change 100644 => 120000 target/device/Atmel/atstk1005/target_skeleton/etc/mtab
- mode change 100644 => 120000 target/device/Atmel/atstk100x/target_skeleton/etc/mtab
+ package/Makefile.package.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index f752f52..db8bf16 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -65,6 +65,7 @@
- 	#2167: Bump busybox to 1.17.0, convert to gentargets, drop 1.12, ...
- 	#2191: linux-fusion build fail
- 	#2221: Qt does not compile (dependencies not taken into account?)
-+	#2233: Atmel atstk target skeletons have /etc/mtab as a file, not ...
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index c476de9..d76b791 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -41,17 +41,17 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
+      $(__tmp))
  
- 2010.05, Released May 30th, 2010:
+ define KCONFIG_ENABLE_OPT
+-       $(SED) "/$(1)/d" $(2)
++       $(SED) "/\\<$(1)\\>/d" $(2)
+        echo "$(1)=y" >> $(2)
+ endef
  
-diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/mtab b/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
-deleted file mode 100644
-index e1c2045..0000000
---- a/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
-+++ /dev/null
-@@ -1 +0,0 @@
--../proc/mounts
-\ No newline at end of file
-diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/mtab b/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
-new file mode 120000
-index 0000000..e1c2045
---- /dev/null
-+++ b/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
-@@ -0,0 +1 @@
-+../proc/mounts
-\ No newline at end of file
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab b/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
-deleted file mode 100644
-index e1c2045..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
-+++ /dev/null
-@@ -1 +0,0 @@
--../proc/mounts
-\ No newline at end of file
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab b/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
-new file mode 120000
-index 0000000..e1c2045
---- /dev/null
-+++ b/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
-@@ -0,0 +1 @@
-+../proc/mounts
-\ No newline at end of file
+ define KCONFIG_SET_OPT
+-       $(SED) "/$(1)/d" $(3)
++       $(SED) "/\\<$(1)\\>/d" $(3)
+        echo "$(1)=$(2)" >> $(3)
+ endef
+ 
+ define KCONFIG_DISABLE_OPT
+-       $(SED) "/$(1)/d" $(2)
++       $(SED) "/\\<$(1)\\>/d" $(2)
+        echo "# $(1) is not set" >> $(2)
+ endef
+ 
 -- 
 1.7.1
