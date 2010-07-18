@@ -1,24 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Jul 2010 23:15:41 +0200
-Subject: [Buildroot] [PATCH 0/2] skeleton reorganization patchset
-In-Reply-To: <AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
-	(Dmytro Milinevskyy's message of "Tue, 6 Jul 2010 18:58:02 +0300")
-References: <4c1933c5.0b4ddf0a.0de4.6a7a@mx.google.com>
-	<20100617230209.5274a34a@surf>
-	<AANLkTiluhTWCJ80AeuQrDzlKIGbYrZrMl_yjwZ79C8IH@mail.gmail.com>
-Message-ID: <87630cwkxu.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Jul 2010 23:15:55 +0200
+Subject: [Buildroot] [git commit master 1/1] move default skeleton to fs/
+	and drop busybox skeleton
+Message-ID: <20100718211633.07FFE8279C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dmytro" == Dmytro Milinevskyy <milinevskyy@gmail.com> writes:
 
- Dmytro> Hi!
- Dmytro> Any chance to see this in mainline?
+commit: http://git.buildroot.net/buildroot/commit/?id=d9119c0bc55de95967b3de67be1fc49101a9d896
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, committed both - Sorry for the slow response.
+[Peter: fixup patch, adjust for busybox.mk changes]
+Signed-off-by: Dmytro Milinevskyy <milinevskyy@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
