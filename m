@@ -1,35 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Jul 2010 21:30:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 949] compile with debug info
-In-Reply-To: <bug-949-163@https.bugs.busybox.net/>
-References: <bug-949-163@https.bugs.busybox.net/>
-Message-ID: <20100718213002.B7838807F5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Jul 2010 23:30:24 +0200
+Subject: [Buildroot] [PATCH 1/2] neon: explicit path to xml2-config
+In-Reply-To: <cover.1279488610.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1279488610.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4a2dabe9d53e6c361ecdeaba0431ef74a9ad297c.1279488610.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=949
+Now that $(STAGING_DIR)/usr/bin is not in the PATH, we need to
+explicit the path to such tools.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+This might also fix bug 1393 since by expliciting the path to
+xml2-config, we'll force neon ./configure to choose our xml2-config
+and not the one of the host.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/neon/neon.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I'm sorry but here, I don't see any -g option being added when "build with
-debug info" is disabled.
-
-I'm therefore marking the bug as "works for me", but if you have a specific
-example illustrating the problem, do not hesitate to reopen the bug and to
-provide more details.
-
-Thanks!
-
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index ed5f999..e942f87 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -14,6 +14,7 @@ NEON_DEPENDENCIES:=host-pkg-config
+ ifeq ($(BR2_PACKAGE_NEON_LIBXML2),y)
+ NEON_CONF_OPT+=--with-libxml2=yes
+ NEON_CONF_OPT+=--with-expat=no
++NEON_CONF_ENV+=ac_cv_prog_XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
+ NEON_DEPENDENCIES+=libxml2
+ endif
+ ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
