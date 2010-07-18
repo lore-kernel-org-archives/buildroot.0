@@ -1,30 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Jul 2010 20:35:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 387] Tremor not installed to toolchain
-In-Reply-To: <bug-387-163@https.bugs.busybox.net/>
-References: <bug-387-163@https.bugs.busybox.net/>
-Message-ID: <20100718203536.953B982BB1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Jul 2010 22:43:35 +0200
+Subject: [Buildroot] [PATCH 1/2] Match whole words when changing .config
+	options
+In-Reply-To: <1279484207-1692-1-git-send-email-m-starostik@versanet.de> (Malte
+	Starostik's message of "Sun, 18 Jul 2010 22:16:46 +0200, Sun,
+	18 Jul 2010 22:16:48 +0200")
+References: <1279484207-1692-1-git-send-email-m-starostik@versanet.de>
+Message-ID: <87aapowmfc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=387
+>>>>> "Malte" == Malte Starostik <m-starostik@versanet.de> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Malte> Make KCONFIG_{ENABLE,DISABLE,SET}_OPT match whole words only.
+ Malte> Fixes that BR_INET_IPV6 enables CONFIG_IPV6 in the kernel's
+ Malte> .config, but also nukes everything with "CONFIG_IPV6" in its name, e.g.
+ Malte> CONFIG_IPV6_PRIVACY.  This in turn causes any IPv6 options in a custom
+ Malte> kernel .config to be lost and oldconfig going interactive.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
-         Resolution|                            |FIXED
+Committed both, thanks.
 
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  ---
-I believe this is resolved by Svens addition of the
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TREMOR option (63dd44dbcdc6eb8) - If not,
-please reopen the bug.
+In the future, don't forget to sign off on your patches (use -s).
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
