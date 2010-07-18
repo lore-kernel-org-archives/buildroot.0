@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jul 2010 18:47:57 +0200
-Subject: [Buildroot] [git commit master 1/1] qt: fix mysql dependency
- and disable unavailable sql drivers
-In-Reply-To: <20100716215737.0F39682A80@busybox.osuosl.org>
-References: <20100716215737.0F39682A80@busybox.osuosl.org>
-Message-ID: <20100718184757.01b055f8@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Jul 2010 17:00:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 1261] The getline() in
+ output/build/linux-2.6.28/scripts/unifdef.c in buildroot is buggy
+In-Reply-To: <bug-1261-163@https.bugs.busybox.net/>
+References: <bug-1261-163@https.bugs.busybox.net/>
+Message-ID: <20100718170039.B2E6482BA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=1261
 
-On Fri, 16 Jul 2010 23:55:30 +0200
-Peter Korsgaard <jacmet@sunsite.dk> wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> We don't have the needed dependencies in BR for most of the SQL
-> drivers, so mark those options as broken.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |WONTFIX
 
-I had already sent a fix for the Qt->MySQL dependency on Friday, at
-11:18 AM, together with a bump of the MySQL version (which allows MySQL
-to actually build here) and other fixes as well.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+This is not a Buildroot bug, but rather a know bug when using old versions of
+the kernel in newer distributions. I don't think there's anything Buildroot can
+do to fix this.
 
-I will rebase my changes on top of yours and resend.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
