@@ -1,29 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 Jul 2010 23:30:23 +0200
-Subject: [Buildroot] [pull request] Pull request for branch other-build-fixes
-Message-ID: <cover.1279488610.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Jul 2010 23:30:25 +0200
+Subject: [Buildroot] [PATCH 2/2] alsa-lib: make sure to only look in
+	STAGING_DIR for Python includes
+In-Reply-To: <cover.1279488610.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1279488610.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <538773a66f2e71ac29cf799e3249737dd6903c8e.1279488610.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 1eb59f598f52b65b3d3adfcf74729091e95015f0:
-  Peter Korsgaard (1):
-        CHANGES: #2191 is resolved
+Even though we pass a -I option to tell alsa-lib to look for Python
+includes in the STAGING_DIR, alsa-lib build process still looks in
+/usr/include for some stuff, causing bug #321.
 
-are available in the git repository at:
+This fix is the one suggested by Ulf Samuelsson in bug #321, and
+allows to make alsa-lib with Python support to build properly on a 64
+bits machine with python-dev installed on the host. Without this fix,
+the build fails with exactly the same problem that Ulf reported.
 
-  git://git.busybox.net/~tpetazzoni/git/buildroot other-build-fixes
-
-Thomas Petazzoni (2):
-      neon: explicit path to xml2-config
-      alsa-lib: make sure to only look in STAGING_DIR for Python includes
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/multimedia/alsa-lib/alsa-lib.mk |    4 +++-
- package/neon/neon.mk                    |    1 +
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Thanks,
+diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
+index 1f120c6..6e4c575 100644
+--- a/package/multimedia/alsa-lib/alsa-lib.mk
++++ b/package/multimedia/alsa-lib/alsa-lib.mk
+@@ -54,7 +54,9 @@ ALSA_LIB_CFLAGS+=-DAVR32_INLINE_BUG
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PYTHON),y)
+-ALSA_LIB_CONF_OPT += --with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR)
++ALSA_LIB_CONF_OPT += \
++	--with-pythonlibs=-lpython$(PYTHON_VERSION_MAJOR) \
++	--with-pythonincludes=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+ ALSA_LIB_CFLAGS+=-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
+ ALSA_LIB_DEPENDENCIES = libpython
+ else
 -- 
-Thomas Petazzoni
+1.7.0.4
