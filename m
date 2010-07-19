@@ -1,65 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Jul 2010 00:17:09 +0200
-Subject: [Buildroot] [git commit master 1/1] ipsec-tools: replace sysv3
-	legacy functions with modern equivalents
-Message-ID: <20100718221729.8D99580800@busybox.osuosl.org>
+From: Mitch Davis <mjd+buildroot@afork.com>
+Date: Mon, 19 Jul 2010 11:50:54 +1000
+Subject: [Buildroot] [PATCH 5/5] toolchain: rename base target for
+	external toolchains
+In-Reply-To: <1278967576-11399-6-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1278967576-11399-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<1278967576-11399-6-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <AANLkTimlLPyUd1RuH0ReU45-4m_r7CANO8Rk7ERht22W@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Jul 13, 2010 at 6:46 AM, Yann E. MORIN
+<yann.morin.1998@anciens.enib.fr> wrote:
+> It is misleeading to name the external toolchain make target 'uclibc', as
+> external toolchains can be based on other C libraries (eg. glibc or eglibc).
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c835c3006b46b0dea9bbdadc1a2aa820744c8bf9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I understand your point about uclibc not being a suitable generic
+name, but I'm not sure toolchain-prepare is the ideal name.  To me,
+what this target does is guarantees the presence of the C run time
+library (whether that be uClibc, glibc, etc).  Might "c-rtl" or
+similar be a better name?  (Of course, in order to generate the RTL,
+the toolchain will need to be there, as usual).
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ipsec-tools/ipsec-tools-susv3-legacy.patch |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 package/ipsec-tools/ipsec-tools-susv3-legacy.patch
+I can also imagine a scenario where one is building such a minimal
+system that one needs the toolchain, but not the RTL.  What are good
+target names to guarantee the toolchain, and the RTL, as separate
+targets?
 
-diff --git a/package/ipsec-tools/ipsec-tools-susv3-legacy.patch b/package/ipsec-tools/ipsec-tools-susv3-legacy.patch
-new file mode 100644
-index 0000000..ea98505
---- /dev/null
-+++ b/package/ipsec-tools/ipsec-tools-susv3-legacy.patch
-@@ -0,0 +1,35 @@
-+Replaces sysv3 legacy functions with modern equivalents.
-+
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+Index: ipsec-tools-0.7.3/src/racoon/pfkey.c
-+===================================================================
-+--- ipsec-tools-0.7.3.orig/src/racoon/pfkey.c	2010-07-12 14:46:52.000000000 +0200
-++++ ipsec-tools-0.7.3/src/racoon/pfkey.c	2010-07-12 15:01:39.000000000 +0200
-+@@ -3008,12 +3008,12 @@
-+ 				struct sockaddr *paddr;
-+ 
-+ 				paddr = (struct sockaddr *)(xisr + 1);
-+-				bcopy(paddr, &(*p_isr)->saidx.src,
-++				memmove(&(*p_isr)->saidx.src, paddr,
-+ 					sysdep_sa_len(paddr));
-+ 
-+ 				paddr = (struct sockaddr *)((caddr_t)paddr
-+ 							+ sysdep_sa_len(paddr));
-+-				bcopy(paddr, &(*p_isr)->saidx.dst,
-++				memmove(&(*p_isr)->saidx.dst, paddr,
-+ 					sysdep_sa_len(paddr));
-+ 			}
-+ 
-+Index: ipsec-tools-0.7.3/src/racoon/racoonctl.c
-+===================================================================
-+--- ipsec-tools-0.7.3.orig/src/racoon/racoonctl.c	2010-07-12 14:49:51.000000000 +0200
-++++ ipsec-tools-0.7.3/src/racoon/racoonctl.c	2010-07-12 15:00:52.000000000 +0200
-+@@ -785,7 +785,7 @@
-+ 		errx(1, "cannot read source address");
-+ 
-+ 	/* We get "ip[port]" strip the port */
-+-	if ((idx = index(srcaddr, '[')) == NULL) 
-++	if ((idx = strchr(srcaddr, '[')) == NULL)
-+ 		errx(1, "unexpected source address format");
-+ 	*idx = '\0';
-+ 
--- 
-1.7.1
+Mitch.
