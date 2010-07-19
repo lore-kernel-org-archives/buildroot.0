@@ -1,30 +1,29 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Mon, 19 Jul 2010 08:25:01 +0200
-Subject: [Buildroot] [PATCH] Fix default skeleton path
-Message-ID: <1279520701-29156-1-git-send-email-m-starostik@versanet.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Jul 2010 08:35:33 +0200
+Subject: [Buildroot] [git commit master 1/1] neon: explicit path to
+ xml2-config
+In-Reply-To: <20100718214236.46568807FA@busybox.osuosl.org>
+References: <20100718214236.46568807FA@busybox.osuosl.org>
+Message-ID: <20100719083533.15ec73fa@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 18 Jul 2010 23:41:14 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/Makefile b/Makefile
-index 744cae4..f6e02bc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -271,7 +271,7 @@ STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
- TARGET_DIR:=$(BASE_DIR)/target
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
--TARGET_SKELETON=$(BASE_DIR)/fs/skeleton
-+TARGET_SKELETON=$(TOPDIR)/fs/skeleton
- 
- BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
- 
+> Patch is too large, so refusing to show it
+
+ ?!?
+
+The patch was a one-liner:
+http://git.buildroot.net/buildroot/commit/?id=4a2dabe9d53e6c361ecdeaba0431ef74a9ad297c
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
