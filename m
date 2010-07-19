@@ -1,21 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Jul 2010 06:58:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 847] Compiling target-gcc v4.4 fails with
- "libc.so.0: cannot open shared object file: No such file or directory"
-In-Reply-To: <bug-847-163@https.bugs.busybox.net/>
-References: <bug-847-163@https.bugs.busybox.net/>
-Message-ID: <20100719065838.979F582B43@busybox.osuosl.org>
+Date: Mon, 19 Jul 2010 07:02:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 321] alsa-lib uses host include files for python
+ which breaks builds on 64 bit Linux
+In-Reply-To: <bug-321-163@https.bugs.busybox.net/>
+References: <bug-321-163@https.bugs.busybox.net/>
+Message-ID: <20100719070246.4FC2F82B45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=847
+https://bugs.busybox.net/show_bug.cgi?id=321
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Do you still have the problem with Buildroot 2010.05 ? If so, could you attach
-your .config file to allow us to reproduce the issue ?
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=538773a66f2e71ac29cf799e3249737dd6903c8e.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
