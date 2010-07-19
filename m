@@ -1,29 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Jul 2010 08:35:33 +0200
-Subject: [Buildroot] [git commit master 1/1] neon: explicit path to
- xml2-config
-In-Reply-To: <20100718214236.46568807FA@busybox.osuosl.org>
-References: <20100718214236.46568807FA@busybox.osuosl.org>
-Message-ID: <20100719083533.15ec73fa@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Jul 2010 06:58:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 847] Compiling target-gcc v4.4 fails with
+ "libc.so.0: cannot open shared object file: No such file or directory"
+In-Reply-To: <bug-847-163@https.bugs.busybox.net/>
+References: <bug-847-163@https.bugs.busybox.net/>
+Message-ID: <20100719065838.979F582B43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 18 Jul 2010 23:41:14 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=847
 
-> Patch is too large, so refusing to show it
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Do you still have the problem with Buildroot 2010.05 ? If so, could you attach
+your .config file to allow us to reproduce the issue ?
 
- ?!?
-
-The patch was a one-liner:
-http://git.buildroot.net/buildroot/commit/?id=4a2dabe9d53e6c361ecdeaba0431ef74a9ad297c
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
