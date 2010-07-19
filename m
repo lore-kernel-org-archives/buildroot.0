@@ -1,28 +1,38 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Mon, 19 Jul 2010 13:22:55 +1000
-Subject: [Buildroot] Steps to add a new board
-In-Reply-To: <AB12B32E73474741A2C5361C433A44DE01E98C50@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-References: <AB12B32E73474741A2C5361C433A44DE01E38E6B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-	<AB12B32E73474741A2C5361C433A44DE01E98C50@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-Message-ID: <AANLkTikacBG0msGZD29wzagS928qeS1wqcGKfrO4565d@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Jul 2010 07:15:49 +0200
+Subject: [Buildroot] Full config files for each board are yucky.
+In-Reply-To: <AANLkTimWP0NejW9l0IQSazcaldVaJu0dySV8bGsqh3Wo@mail.gmail.com>
+	(Mitch Davis's message of "Mon, 19 Jul 2010 12:29:36 +1000")
+References: <AANLkTimWP0NejW9l0IQSazcaldVaJu0dySV8bGsqh3Wo@mail.gmail.com>
+Message-ID: <87hbjwuk56.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 6, 2010 at 11:29 PM, Phil Edworthy
-<Phil.Edworthy@renesas.com> wrote:
->
-> Just wondering if anyone had any comments or suggestions regarding my
-> questions?
+>>>>> "Mitch" == Mitch Davis <mjd+buildroot@afork.com> writes:
 
-Hi Phil,
+Hi,
 
-There have been some recent discussions about buildroot and external
-toolchains that may be helpful to you.  Please have a look at the
-mailing list archive.
+ Mitch> <rant>That *every* defconfig file needs to be changed indicates a
+ Mitch> failing of the present system, where we have pre-canned config files
+ Mitch> for every board, that need ongoing maintenance whenever something in
+ Mitch> the Kconfig files change.</rant>
 
-Hope this helps,
+Agreed, I was thinking of running Uwe's reduce script:
 
-Mitch.
+http://lkml.org/lkml/2010/7/13/134
+
+ Mitch> I have an alternative config system where every board inherits config
+ Mitch> options from something else (ultimately the defaults in the config
+ Mitch> system), then a board can turn on and off and set options which are
+ Mitch> relevant to that board.  BR2_GIT would only need to be changed in one
+ Mitch> place, if at all.  I'll clean it up and publish it, if anyone's
+ Mitch> interested...
+
+What would that buy us compared to Uwe's script? Would that involve
+significant changes to package/config making updates harder?
+
+-- 
+Bye, Peter Korsgaard
