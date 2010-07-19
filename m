@@ -1,39 +1,89 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Mon, 19 Jul 2010 14:58:14 +0100
-Subject: [Buildroot] ncurses: build freezes without error with v5.7
-In-Reply-To: <AANLkTinBrPzbnhxeTqzYFg11JTE9PD7vdRATqiLN9Ts3@mail.gmail.com>
-References: <1279123755.7058.242.camel@cabbage.rehill.info>
-	<4C3E102D.50105@zacarias.com.ar>
-	<1279192188.6184.2.camel@dubciaranr1.verifone.com>
-	<AANLkTinsUwFgYEaRhtAwzO2I5Y2frnUunmtzBKTSveF9@mail.gmail.com>
-	<1279202763.3572.22.camel@dubciaranr1.verifone.com>
-	<AANLkTiks30hgwzuxxsGuxSPsP2iO1S7b1avRHCV9JllD@mail.gmail.com>
-	<1279205058.3572.29.camel@dubciaranr1.verifone.com>
-	<AANLkTiknnWawF0mRHGu73MxCCuAcGpYWxK-i-uaUKXub@mail.gmail.com>
-	<1279212734.3572.42.camel@dubciaranr1.verifone.com>
-	<AANLkTikfJUKA0Y1Wv8iJ2Wa8w4IspA5wY-WkhBmkWueV@mail.gmail.com>
-	<1279272306.3572.93.camel@dubciaranr1.verifone.com>
-	<AANLkTim6BMXBWILqIwNMe02j3PDl9TAWhT1n_pkUdBBI@mail.gmail.com>
-	<1279288154.15465.18.camel@dubciaranr1.verifone.com>
-	<1279535505.22010.3.camel@dubciaranr1.verifone.com>
-	<AANLkTinBrPzbnhxeTqzYFg11JTE9PD7vdRATqiLN9Ts3@mail.gmail.com>
-Message-ID: <1279547894.23370.7.camel@dubciaranr1.verifone.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Jul 2010 16:01:28 +0200
+Subject: [Buildroot] [git commit master 1/1] avahi: bump version
+Message-ID: <20100719140228.BC70F82B73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar Luan, 2010-07-19 ag 21:39 +1000, scr?obh Mitch Davis:
-> On Mon, Jul 19, 2010 at 8:31 PM, Quotient Remainder
-> <quotientvremainder@gmail.com> wrote:
-> >
-> > OK, thanks for the tips, I'll either stick with 5.6 for now or do as you
-> > say.
-> 
-> I had a look, let me see if I get this right: this is only a problem
-> with ncurses 5.7, because ncurses 5.6 works fine for you?
-> 
 
-The original problem - tic freezing - only happens with 5.7, yes.
-The rebuild problem happens with both 5.6 and 5.7.
+commit: http://git.buildroot.net/buildroot/commit/?id=4e302ac83d89fd370cab96ffa30ad406dd104ec0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                           |    2 +-
+ package/avahi/avahi-disable-systemd-support.patch |   22 +++++++++++++++++++++
+ package/avahi/avahi.mk                            |    4 ++-
+ 3 files changed, 26 insertions(+), 2 deletions(-)
+ create mode 100644 package/avahi/avahi-disable-systemd-support.patch
+
+diff --git a/CHANGES b/CHANGES
+index f30da84..59b4a6f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -14,7 +14,7 @@
+ 	New packages: cgilua, copas, coxpcall, ffmpeg, libsvgtiny,
+ 	luafilesystem, luasocket, rings, wsapi, xavante, xterm
+ 
+-	Updated/fixed packages: alsa-lib, berkeleydb, bash, blackbox,
++	Updated/fixed packages: alsa-lib, avahi, berkeleydb, bash, blackbox,
+ 	busybox, bzip2, cdrkit, cmake, dash, dhcp, dialog, diffutils,
+ 	distcc, dmalloc, dnsmasq, dropbear, e2fsprogs, fbv, file, flex,
+ 	fontconfig, gawk, gstreamer, gzip, intltool, ipsec-tools,
+diff --git a/package/avahi/avahi-disable-systemd-support.patch b/package/avahi/avahi-disable-systemd-support.patch
+new file mode 100644
+index 0000000..909795a
+--- /dev/null
++++ b/package/avahi/avahi-disable-systemd-support.patch
+@@ -0,0 +1,22 @@
++[PATCH] avahi-daemon: disable systemd support
++
++Disable systemd support as it isn't needed for BR, and uses SOCK_CLOEXEC
++which isn't available on uClibc.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ avahi-daemon/sd-daemon.h |    1 +
++ 1 file changed, 1 insertion(+)
++
++Index: avahi-0.6.27/avahi-daemon/sd-daemon.h
++===================================================================
++--- avahi-0.6.27.orig/avahi-daemon/sd-daemon.h
+++++ avahi-0.6.27/avahi-daemon/sd-daemon.h
++@@ -66,6 +66,7 @@ extern "C" {
++ 
++   See sd-daemon(7) for more information.
++ */
+++#define DISABLE_SYSTEMD /* no systemd support in BR */
++ 
++ #if __GNUC__ >= 4
++ #define _sd_printf_attr_(a,b) __attribute__ ((format (printf, a, b)))
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 66e2e63..fa05de3 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -10,9 +10,10 @@
+ # either version 2.1 of the License, or (at your option) any
+ # later version.
+ 
+-AVAHI_VERSION = 0.6.23
++AVAHI_VERSION = 0.6.27
+ AVAHI_SOURCE = avahi-$(AVAHI_VERSION).tar.gz
+ AVAHI_SITE = http://www.avahi.org/download/
++AVAHI_LIBTOOL_PATCH = NO
+ AVAHI_INSTALL_STAGING = YES
+ AVAHI_INSTALL_TARGET = YES
+ 
+@@ -71,6 +72,7 @@ AVAHI_CONF_OPT = --localstatedir=/var \
+ 		--disable-gdbm \
+ 		--disable-python-dbus \
+ 		--disable-pygtk \
++		--disable-gtk3 \
+ 		--disable-mono \
+ 		--disable-monodoc \
+ 		--disable-stack-protector \
+-- 
+1.7.1
