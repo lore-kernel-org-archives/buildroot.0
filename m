@@ -1,32 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Jul 2010 13:06:32 +0200
-Subject: [Buildroot] App won't run on target machine
-In-Reply-To: <29213471.post@talk.nabble.com> (JNY's message of "Tue, 20 Jul
-	2010 03:34:10 -0700 (PDT)")
-References: <29213471.post@talk.nabble.com>
-Message-ID: <877hkqjttz.fsf@macbook.be.48ers.dk>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Tue, 20 Jul 2010 13:33:02 +0200
+Subject: [Buildroot] [RESEND/PATCH] Git/Svn downloaders
+Message-ID: <1279625588-26570-1-git-send-email-maxime.petazzoni@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JNY" == JNY  <jny0@hotmail.com> writes:
+Hi,
 
- JNY> Hi,
- JNY> I have an embedded linux system which is loaded from a bootable USB.
- JNY> The kernel was built using Buildroot.  When configuring Buildroot, an
- JNY> app is built at the same time.  When this app is run, it works fine.
- JNY> I've recently noticed a few bugs in the app, and have therefore
- JNY> recompiled the code (with said bugs rectified), but now the app won't
- JNY> run.  As an experiment I wrote another app called test which would
- JNY> print text to the screen, and this won't run either.  Is it necessary
- JNY> for me to rebuild from Buildroot every time I want to fix a bug?  I
- JNY> would have thought that as long as the recompilation is done on a
- JNY> Linux system, it should work on another.  Both apps are written in c,
- JNY> and the test app only uses stdio.h.
+Integrating the feedback from the first series sent last week, here comes the
+promised resend.
 
-You are using the buildroot cross compiler to recompile, right?
+What changed from the first batch?
 
--- 
-Bye, Peter Korsgaard
+  - the BR2_GIT, BR2_SVN_CO and BR2_SVN_UP configuration options have been
+    cleaned up into BR2_GIT="git" and BR2_SVN="svn" and the defconfig files
+    updated (I know there has been some discussion about the defconfigs
+    recently on the list... this seems to be a hot subject in the community
+    right now :-)
+
+  - the download method autodetection from the URI scheme has been added,
+    taken from Luca's patch and integrated into mine.
+
+  - tar --exclude-cvs is no longer used, in favor of per-VCS techniques:
+      * `git archive --format=tar ... | gzip -c ...` for Git
+      * `svn export ... && tar czf ...` for Subversion
+
+  - libsvgtiny now benefits from the download method autodetection
+
+
+Once we get to a general consensus that these are good improvements, I'll start
+looking more actively on how to bring back the "spider"/source-check feature,
+which hopefully shouldn't be to much trouble.
+
+Regards,
+- Maxime
