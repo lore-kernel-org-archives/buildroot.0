@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Jul 2010 08:45:25 +0200
-Subject: [Buildroot] make linux26-menuconfig
-In-Reply-To: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au> (Paul Jones's
-	message of "Tue, 20 Jul 2010 15:42:41 +1000")
-References: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au>
-Message-ID: <87oce2k5x6.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Jul 2010 08:45:45 +0200
+Subject: [Buildroot] [git commit master 1/1] linux: linux26-{menu, x,
+	g}config needs host-sed
+Message-ID: <20100720064714.6470682B80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Jones <paul@pauljones.id.au> writes:
 
- Paul> I?m not sure if this is a bug or not, so I thought I?d ask here.
- Paul> I just spent the last 20 mins trying to figure out why make linux26-menuconfig
- Paul> didn?t work ? it was because I was running it immediately after make
- Paul> menuconfig, so /output/toolchain/bin/sed didn?t yet exist.
+commit: http://git.buildroot.net/buildroot/commit/?id=c9ff3273eb94078ad342d0a3e08e1757bced2afa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, the linux26-menuconfig target was missing a dependency on host-sed
-(like uclibc-menuconfig has) - Thanks.
+Similar to how it's done for uclibc-menuconfig.
 
+Reported-by: Paul Jones <paul@pauljones.id.au>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 593a1b4..a3e5a0c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -137,7 +137,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+ 
+ linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
+ 
+-linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
++linux26-menuconfig linux26-xconfig linux26-gconfig: host-sed dirs $(LINUX26_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
+ 
+ # Support for rebuilding the kernel after the initramfs file list has
 -- 
-Bye, Peter Korsgaard
+1.7.1
