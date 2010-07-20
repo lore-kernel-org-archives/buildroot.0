@@ -1,33 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Jul 2010 09:19:55 +0200
-Subject: [Buildroot] [git commit master 1/1] CHANGES: #2251 resolved
-Message-ID: <20100720072016.6050082B68@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 Jul 2010 07:41:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 2245] Netcat does not work due to incorrect
+ assumptions about signed chars.
+In-Reply-To: <bug-2245-163@https.bugs.busybox.net/>
+References: <bug-2245-163@https.bugs.busybox.net/>
+Message-ID: <20100720074103.B6FD88265B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2245
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f16e542ae019b2dc2612ef1f60477b98f4f41ae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--- Comment #4 from Nick Leverton <nick@leverton.org>  ---
+Hi, thankyou for the commit.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+To be honest I missed that busybox implements nc - except my subconscious
+obviously remembered since I mis-filed this bug in the first place !  Thanks,
+I'll check out its features to see if it can do what I need.
 
-diff --git a/CHANGES b/CHANGES
-index 1386a77..29e5cdc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -71,6 +71,7 @@
- 	#2221: Qt does not compile (dependencies not taken into account?)
- 	#2233: Atmel atstk target skeletons have /etc/mtab as a file, not ...
- 	#2245: Netcat does not work due to incorrect assumptions about signed..
-+	#2251: directory output/build after make *_defconfig not found
- 
- 2010.05, Released May 30th, 2010:
- 
+I was looking for a netcat version which is flag-compatible with OpenBSD netcat
+to ease the porting of some scripts.  I needed -k (keep listening after first
+connection closes) so I've been through the various netcats to check how they
+behaved without that option.  GNU netcat doesn't have -k, but since it's in the
+tree already I figured I might as well submit the fix to make it run.
+
+I've now got BSD netcat on my target anyway, the Debian patches to build it
+under Linux work pretty well for buildroot too.  I can submit the package if
+you are at all interested in having a third nc implementation in buildroot  ...
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
