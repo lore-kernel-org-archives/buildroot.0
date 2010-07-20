@@ -1,46 +1,57 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 20 Jul 2010 21:57:38 +0200
-Subject: [Buildroot] Issue with Xfbdev and keyboard
-In-Reply-To: <002101cb27db$e17e6830$a47b3890$@pauljones.id.au>
-References: <20100720085516.0f7b0887@surf>
-	<002101cb27db$e17e6830$a47b3890$@pauljones.id.au>
-Message-ID: <1279655858.28633.68.camel@coalu.atr>
+From: Ossy <ossy1980@gmx.net>
+Date: Tue, 20 Jul 2010 23:22:42 +0200
+Subject: [Buildroot] xfsprogs 3.0.3 without libxfs in rootfs
+Message-ID: <4C4613A2.90006@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mardi 20 juillet 2010 ? 17:19 +1000, Paul Jones a ?crit :
-> > -----Original Message-----
-> > From: buildroot-bounces at busybox.net [mailto:buildroot-
-> > bounces at busybox.net] On Behalf Of Thomas Petazzoni
-> > Sent: Tuesday, 20 July 2010 4:55 PM
-> > To: buildroot at uclibc.org
-> > Subject: [Buildroot] Issue with Xfbdev and keyboard
-> > 
-> > Hello,
-> > 
-> > I'm trying to use our Xfbdev X.org server, but it unfortunately complains
-> on
-> > startup with:
-> > 
-> > ==========================================================
-> > =========
-> > (EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/base
-> > XKB: Failed to compile keymap
-> > Keyboard initialization failed. This could be a missing or incorrect setup
-> of
-> > xkeyboard-config
-> > ==========================================================
-> > =========
-> 
-> 
-> >From memory I had the same trouble when building for ARM. X86 seemed to work
-> without it though.
-> 
+Hi mailinglist,
 
-Same requirement with xephyr using the lastest xorg release.
+Since xfsprogs 3.0.3 doesn't build the required xfslib in the current 
+tree. I tried to bump to the newer version.
+I figured out, that that br uses the old util-linux and not 
+util-linux-ng. According to the debian package info, xfsprogs 3.1.2 
+needs at least util-linux-ng 2.16. So I ran a green try with the 
+util-linux-ng patch I've found in the mailinglist archives:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/16587/match=util+linux+ng
 
--- 
-Lionel Landwerlin
+Unfortunatly the build fails, because make claims about an unknown 
+option "--sysroot":
+/usr/bin/make -j2 \
+                 -C 
+/home/ossy/buildroot/buildroot-dev/output/build/util-linux-ng-2.16 \
+                 ARCH=arm \
+ 
+CC=/home/ossy/buildroot/buildroot-dev/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc 
+--sysroot=/home/ossy/buildr
+oot/buildroot-dev/output/staging \
+                 OPT="-Os -pipe -Os  -mtune=arm926ej-s -march=armv5te 
+-mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURC
+E -D_FILE_OFFSET_BITS=64 
+-I/home/ossy/buildroot/buildroot-dev/output/staging/usr/include 
+-I/home/ossy/buildroot/buildroot-dev/output/staging
+/include" \
+                 HAVE_SLANG="NO"
+/usr/bin/make: Unbekannte Option 
+?--sysroot=/home/ossy/buildroot/buildroot-dev/output/staging?
+
+It is the same make, used for all the other packages....
+
+Further output complains about x64 compilation in addition:
+This program built for x86_64-pc-linux-gnu
+make: *** 
+[/home/ossy/buildroot/buildroot-dev/output/build/util-linux-ng-2.16/misc-utils/chkdupexe] 
+Fehler 2
+
+I hardly see any differences in config.log compared to other 
+successfully compiled packages.
+
+I'm building on debian squeeze amd64 for target armv5TE.
+
+Thanks for any hint.
+
+Regards,
+Marcus
