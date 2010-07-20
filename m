@@ -1,68 +1,46 @@
-From: Darcy Watkins <DWatkins@tranzeo.com>
-Date: Tue, 20 Jul 2010 12:44:22 -0700
-Subject: [Buildroot] Deprecate rp-pppoe package
-In-Reply-To: <4C45EF4E.1000501@zacarias.com.ar>
-References: <1278436093.12234.11.camel@localhost.localdomain>
-	<4C45EF4E.1000501@zacarias.com.ar>
-Message-ID: <D61182AC8012EA4EBC531B3AF23BE1099C8208@tranzeo-mail2.12stewart.tranzeo.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 20 Jul 2010 21:57:38 +0200
+Subject: [Buildroot] Issue with Xfbdev and keyboard
+In-Reply-To: <002101cb27db$e17e6830$a47b3890$@pauljones.id.au>
+References: <20100720085516.0f7b0887@surf>
+	<002101cb27db$e17e6830$a47b3890$@pauljones.id.au>
+Message-ID: <1279655858.28633.68.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I'll take that on early August when I get back from vacation.  I'll need
-to set up to repeat the test case and probably want to also try it out
-on a couple of other processors I have available (an ARM11 MX31 and an
-x86 Atom as well as the PPC405).  And of course, upgrade the version
-etc.
-
-Buildroot doesn't have the freeradius client in it, so I'll probably
-have to add that as well.
-
-
-Regards,
-
-Darcy
-
-
------Original Message-----
-From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
-Sent: Tuesday, July 20, 2010 11:48 AM
-To: Darcy Watkins
-Cc: buildroot
-Subject: [Spam Bayesian - ] - Re: [Buildroot] Deprecate rp-pppoe package
-- Bayesian Filter detected spam
-
-On 07/06/2010 02:08 PM, Darcy L. Watkins wrote:
-
-> Hello,
+Le mardi 20 juillet 2010 ? 17:19 +1000, Paul Jones a ?crit :
+> > -----Original Message-----
+> > From: buildroot-bounces at busybox.net [mailto:buildroot-
+> > bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> > Sent: Tuesday, 20 July 2010 4:55 PM
+> > To: buildroot at uclibc.org
+> > Subject: [Buildroot] Issue with Xfbdev and keyboard
+> > 
+> > Hello,
+> > 
+> > I'm trying to use our Xfbdev X.org server, but it unfortunately complains
+> on
+> > startup with:
+> > 
+> > ==========================================================
+> > =========
+> > (EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/base
+> > XKB: Failed to compile keymap
+> > Keyboard initialization failed. This could be a missing or incorrect setup
+> of
+> > xkeyboard-config
+> > ==========================================================
+> > =========
 > 
-> Before you remove the rp-pppoe package from buildroot, I have a
-> question.  Does the pppoe plugin for pppd include the access
-> concentrator (AC) support in it as well?
 > 
-> I ask this because most people only care about the client side and
-don't
-> think much about the server side you connect it to.
+> >From memory I had the same trouble when building for ARM. X86 seemed to work
+> without it though.
 > 
-> A while back, I cross compiled the AC functionality of rp-pppoe on
-> powerpc, added a freeradius client and demo'd a simple embedded AC on
-an
-> AMCC Taihu involving, a private LAN, freeradius running on a server
-> machine and a windows PC running its PPPoE client.  I was able to
-> advertise numerous "services" from the Taihu and have the PC be able
-to
-> select and connect to them using PPPoE sessions.
-> 
-> Regards,
-> 
-> Darcy
 
-Hi.
-Hmm we might keep rp-pppoe for server-side functionality.
-Do you feel like migrating the package to the latest infrastructure and
-updating to the latest version?
-Regards.
+Same requirement with xephyr using the lastest xorg release.
+
+-- 
+Lionel Landwerlin
