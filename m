@@ -1,30 +1,62 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Tue, 20 Jul 2010 10:13:40 +1000
-Subject: [Buildroot] [PATCH 5/5] toolchain: rename base target for
-	external toolchains
-In-Reply-To: <201007192249.00218.yann.morin.1998@anciens.enib.fr>
-References: <1278967576-11399-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<1278967576-11399-6-git-send-email-yann.morin.1998@anciens.enib.fr> 
-	<AANLkTimlLPyUd1RuH0ReU45-4m_r7CANO8Rk7ERht22W@mail.gmail.com> 
-	<201007192249.00218.yann.morin.1998@anciens.enib.fr>
-Message-ID: <AANLkTima_gfr1zxHQtUWn4qwlGIVtwSCeMYPqZMNGz4G@mail.gmail.com>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 20 Jul 2010 15:42:41 +1000
+Subject: [Buildroot] make linux26-menuconfig
+Message-ID: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 20, 2010 at 6:48 AM, Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> wrote:
->
-> Maybe smthg like:
-> fill-me-that-fscking-staging-and-target-with-the-fscking-runtime-from-toolchain-and-dont-forget-headers-and-statics-for-staging-please-oh-and-build-the-toolchain-if-needed-while-youre-at-it-if-you-dont-care-you-are-such-a-lovely-pet
+I'm not sure if this is a bug or not, so I thought I'd ask here.
 
-Got my vote :-)
+ 
 
-Seriously, how about just "c"?  The idea being that once you've made
-that target, you can build things written in C.  After all, we already
-have packages with dependencies of "php", "python", "lua" and
-"microperl"...
+I just spent the last 20 mins trying to figure out why make
+linux26-menuconfig didn't work - it was because I was running it immediately
+after make menuconfig, so /output/toolchain/bin/sed didn't yet exist.
 
-Mitch.
+ 
+
+Should there be a warning or something if someone tries to do this? It was
+very confusing.
+
+ 
+
+>>>   Downloading kernel
+
+mkdir -p /media/dev/buildroot-tut/output/build/linux-custom
+
+touch /media/dev/buildroot-tut/output/build/linux-custom/.stamp_downloaded
+
+>>>   Extracting kernel
+
+mkdir -p /media/dev/buildroot-tut/output/build/linux-custom
+
+>>>   Patching kernel
+
+>>>   Configuring kernel
+
+cp "./configs/mini2440_kernelconfig"
+/media/dev/buildroot-tut/output/build/linux-custom/.config
+
+/media/dev/buildroot-tut/output/toolchain/bin/sed -i -e
+"/\\<CONFIG_AEABI\\>/d"
+/media/dev/buildroot-tut/output/build/linux-custom/.config
+
+/bin/sh: /media/dev/buildroot-tut/output/toolchain/bin/sed: No such file or
+directory
+
+make: ***
+[/media/dev/buildroot-tut/output/build/linux-custom/.stamp_configured] Error
+127
+
+ 
+
+ 
+
+Paul.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100720/959f11a5/attachment.html>
