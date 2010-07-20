@@ -1,34 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 Jul 2010 06:18:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 2245] Netcat does not work due to incorrect
- assumptions about signed chars.
-In-Reply-To: <bug-2245-163@https.bugs.busybox.net/>
-References: <bug-2245-163@https.bugs.busybox.net/>
-Message-ID: <20100720061826.F23E9821DE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Jul 2010 08:45:25 +0200
+Subject: [Buildroot] make linux26-menuconfig
+In-Reply-To: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au> (Paul Jones's
+	message of "Tue, 20 Jul 2010 15:42:41 +1000")
+References: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au>
+Message-ID: <87oce2k5x6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2245
+>>>>> "Paul" == Paul Jones <paul@pauljones.id.au> writes:
 
-Nick Leverton <nick@leverton.org> changed:
+ Paul> I?m not sure if this is a bug or not, so I thought I?d ask here.
+ Paul> I just spent the last 20 mins trying to figure out why make linux26-menuconfig
+ Paul> didn?t work ? it was because I was running it immediately after make
+ Paul> menuconfig, so /output/toolchain/bin/sed didn?t yet exist.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |buildroot at uclibc.org,
-                   |                            |nick at leverton.org
-          Component|Other                       |Other
-            Version|1.16.x                      |2010.05
-         AssignedTo|unassigned at busybox.net      |unassigned at buildroot.uclibc
-                   |                            |.org
-            Product|Busybox                     |buildroot
-
---- Comment #2 from Nick Leverton <nick@leverton.org>  ---
-I apologise, I meant to file it under buildroot.  My mistake.
+Yes, the linux26-menuconfig target was missing a dependency on host-sed
+(like uclibc-menuconfig has) - Thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
