@@ -1,38 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Jul 2010 08:45:45 +0200
-Subject: [Buildroot] [git commit master 1/1] linux: linux26-{menu, x,
-	g}config needs host-sed
-Message-ID: <20100720064714.6470682B80@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Jul 2010 08:55:16 +0200
+Subject: [Buildroot] Issue with Xfbdev and keyboard
+Message-ID: <20100720085516.0f7b0887@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9ff3273eb94078ad342d0a3e08e1757bced2afa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'm trying to use our Xfbdev X.org server, but it unfortunately
+complains on startup with:
 
-Similar to how it's done for uclibc-menuconfig.
+===================================================================
+(EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/base
+XKB: Failed to compile keymap
+Keyboard initialization failed. This could be a missing or incorrect
+setup of xkeyboard-config
+===================================================================
 
-Reported-by: Paul Jones <paul@pauljones.id.au>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+And indeed, I haven't compiled xkeyboard-config. However, it seems to
+me that in the past, all the keymap mess wasn't necessary by default.
+Is this a behaviour change in X.org server ? If xkeyboard-config is
+really mandatory, then it should become a dependency of xserver_xorg.
+Any hints on this ?
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 593a1b4..a3e5a0c 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -137,7 +137,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 
- linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
- 
--linux26-menuconfig linux26-xconfig linux26-gconfig: $(LINUX26_DIR)/.stamp_configured
-+linux26-menuconfig linux26-xconfig linux26-gconfig: host-sed dirs $(LINUX26_DIR)/.stamp_configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
- 
- # Support for rebuilding the kernel after the initramfs file list has
+To solve this, I enabled the compilation of xkeyboard-config, which
+needs xkbcomp on the host, so I added a dependency on
+host-xapp_xkbcomp. But unfortunately, host-xapp_xkbcomp would depend on
+host-xlib_libX11, which we until now managed to avoid building. And in
+turn host-xlib_libX11 would depend on quite a few things, which would
+give the following dependency chain:
+
+ xkeyboard-config
+   |
+   |-> host-xapp_xkbcomp
+         |
+         |-> host_xlib_libX11
+              |
+              |-> host-libxcb
+              |-> host-xutil_util-macros
+              |-> host-xlib_xtrans (already built)
+              |-> host-xlib_libXau
+              |-> host-xlib_libXdmcp
+              |-> host-xproto_kbproto
+              |-> host-xproto_xproto (already built)
+              |-> host-xproto_xextproto
+              |-> host-xproto_inputproto
+              |-> host-xproto_xf86bigfontproto
+              |-> host-xproto_bigreqsproto
+              |-> host-xproto_xcmiscproto
+
+Do we want to go down this road ?
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
