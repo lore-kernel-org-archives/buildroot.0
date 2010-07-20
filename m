@@ -1,22 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 Jul 2010 15:32:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 2125] libXfont build fail
-In-Reply-To: <bug-2125-163@https.bugs.busybox.net/>
-References: <bug-2125-163@https.bugs.busybox.net/>
-Message-ID: <20100720153213.5824F82B81@busybox.osuosl.org>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 20 Jul 2010 17:46:19 +0200
+Subject: [Buildroot] Taking ages to build
+In-Reply-To: <29215921.post@talk.nabble.com>
+References: <29215921.post@talk.nabble.com>
+Message-ID: <AANLkTilIqSXvJ7RhP7_nDB_DJ2wWOtzd3tR4PeuYHDL8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2125
+Hello,
 
---- Comment #3 from jsteckli at os.inf.tu-dresden.de  ---
-Seems that I cannot reproduce this on Ubuntu. I destroyed the Gentoo where I
-initially experienced this bug. You might as well close this bug for now.
+we need more information, at least buildroot version and config file.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+
+--
+Lionel Landwerlin
+
+On Tue, Jul 20, 2010 at 5:28 PM, JNY <jny0@hotmail.com> wrote:
+>
+> Hi,
+> I'm building an output using Buildroot, and it's taking ages. ?I expected it
+> to take up to an hour, and so far it's been double that. ?It also seems to
+> me that I've seen some of the same prompts scrolling up the screen over and
+> over. ?Is it possible that Buildroot is stuck in a loop?
+> Cheers.
+> --
+> View this message in context: http://old.nabble.com/Taking-ages-to-build-tp29215921p29215921.html
+> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
