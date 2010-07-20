@@ -1,54 +1,68 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Jul 2010 21:35:24 +0200
-Subject: [Buildroot] [git commit master 1/1] libdrm: needs LARGEFILE support
-Message-ID: <20100720193540.8E2E982B8B@busybox.osuosl.org>
+From: Darcy Watkins <DWatkins@tranzeo.com>
+Date: Tue, 20 Jul 2010 12:44:22 -0700
+Subject: [Buildroot] Deprecate rp-pppoe package
+In-Reply-To: <4C45EF4E.1000501@zacarias.com.ar>
+References: <1278436093.12234.11.camel@localhost.localdomain>
+	<4C45EF4E.1000501@zacarias.com.ar>
+Message-ID: <D61182AC8012EA4EBC531B3AF23BE1099C8208@tranzeo-mail2.12stewart.tranzeo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f242065eff73480932f3b9ef0c8d0da3651a10c6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'll take that on early August when I get back from vacation.  I'll need
+to set up to repeat the test case and probably want to also try it out
+on a couple of other processors I have available (an ARM11 MX31 and an
+x86 Atom as well as the PPC405).  And of course, upgrade the version
+etc.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                  |    2 +-
- package/libdrm/Config.in |    4 ++++
- 2 files changed, 5 insertions(+), 1 deletions(-)
+Buildroot doesn't have the freeradius client in it, so I'll probably
+have to add that as well.
 
-diff --git a/CHANGES b/CHANGES
-index 29e5cdc..b182077 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -18,7 +18,7 @@
- 	busybox, bzip2, cdrkit, cmake, dash, dhcp, dialog, diffutils,
- 	distcc, dmalloc, dnsmasq, dropbear, e2fsprogs, fbv, file, flex,
- 	fontconfig, gawk, gstreamer, gzip, intltool, ipsec-tools,
--	iptables, libart, libcgi, libfuse, libgpg-error, libidn,
-+	iptables, libart, libcgi, libdrm, libfuse, libgpg-error, libidn,
- 	liblockfile, libpng, links, linux-fusion, lmbench, lrzsz,
- 	make, module-init-tools, mysql_client, nbd, ncurses, neon,
- 	netcat, netperf, ntfsprogs, openssl, php, qt, quagga, sqlite,
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index ab8c2d8..d68f9d5 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBDRM
- 	bool "libdrm"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_XPROTO_GLPROTO
- 	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
- 	select BR2_PACKAGE_XLIB_LIBXXF86VM
-@@ -12,3 +13,6 @@ config BR2_PACKAGE_LIBDRM
- 	  Direct Rendering Manager
- 
- 	  http://dri.freedesktop.org/libdrm/
-+
-+comment "libdrm requires a toolchain with LARGEFILE support"
-+	depends on BR2_PACKAGE_XORG7 && !BR2_LARGEFILE
--- 
-1.7.1
+
+Regards,
+
+Darcy
+
+
+-----Original Message-----
+From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
+Sent: Tuesday, July 20, 2010 11:48 AM
+To: Darcy Watkins
+Cc: buildroot
+Subject: [Spam Bayesian - ] - Re: [Buildroot] Deprecate rp-pppoe package
+- Bayesian Filter detected spam
+
+On 07/06/2010 02:08 PM, Darcy L. Watkins wrote:
+
+> Hello,
+> 
+> Before you remove the rp-pppoe package from buildroot, I have a
+> question.  Does the pppoe plugin for pppd include the access
+> concentrator (AC) support in it as well?
+> 
+> I ask this because most people only care about the client side and
+don't
+> think much about the server side you connect it to.
+> 
+> A while back, I cross compiled the AC functionality of rp-pppoe on
+> powerpc, added a freeradius client and demo'd a simple embedded AC on
+an
+> AMCC Taihu involving, a private LAN, freeradius running on a server
+> machine and a windows PC running its PPPoE client.  I was able to
+> advertise numerous "services" from the Taihu and have the PC be able
+to
+> select and connect to them using PPPoE sessions.
+> 
+> Regards,
+> 
+> Darcy
+
+Hi.
+Hmm we might keep rp-pppoe for server-side functionality.
+Do you feel like migrating the package to the latest infrastructure and
+updating to the latest version?
+Regards.
