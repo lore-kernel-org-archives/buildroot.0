@@ -1,62 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Jul 2010 08:55:16 +0200
-Subject: [Buildroot] Issue with Xfbdev and keyboard
-Message-ID: <20100720085516.0f7b0887@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Jul 2010 08:59:36 +0200
+Subject: [Buildroot] [git commit master 1/1] netcat: fix logic for archs
+	with unsigned chars
+Message-ID: <20100720065956.B2B5382B80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I'm trying to use our Xfbdev X.org server, but it unfortunately
-complains on startup with:
+commit: http://git.buildroot.net/buildroot/commit/?id=6c387f2e691293df096349af0f08c071d6f21a65
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-===================================================================
-(EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/base
-XKB: Failed to compile keymap
-Keyboard initialization failed. This could be a missing or incorrect
-setup of xkeyboard-config
-===================================================================
+Closes #2245
 
-And indeed, I haven't compiled xkeyboard-config. However, it seems to
-me that in the past, all the keymap mess wasn't necessary by default.
-Is this a behaviour change in X.org server ? If xkeyboard-config is
-really mandatory, then it should become a dependency of xserver_xorg.
-Any hints on this ?
+Signed-off-by: Nick Leverton <nick@leverton.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                            |    5 ++-
+ .../netcat/netcat-0.7.1-signed-bit-counting.patch  |   30 ++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 2 deletions(-)
+ create mode 100644 package/netcat/netcat-0.7.1-signed-bit-counting.patch
 
-To solve this, I enabled the compilation of xkeyboard-config, which
-needs xkbcomp on the host, so I added a dependency on
-host-xapp_xkbcomp. But unfortunately, host-xapp_xkbcomp would depend on
-host-xlib_libX11, which we until now managed to avoid building. And in
-turn host-xlib_libX11 would depend on quite a few things, which would
-give the following dependency chain:
-
- xkeyboard-config
-   |
-   |-> host-xapp_xkbcomp
-         |
-         |-> host_xlib_libX11
-              |
-              |-> host-libxcb
-              |-> host-xutil_util-macros
-              |-> host-xlib_xtrans (already built)
-              |-> host-xlib_libXau
-              |-> host-xlib_libXdmcp
-              |-> host-xproto_kbproto
-              |-> host-xproto_xproto (already built)
-              |-> host-xproto_xextproto
-              |-> host-xproto_inputproto
-              |-> host-xproto_xf86bigfontproto
-              |-> host-xproto_bigreqsproto
-              |-> host-xproto_xcmiscproto
-
-Do we want to go down this road ?
-
-Thomas
+diff --git a/CHANGES b/CHANGES
+index 59b4a6f..1386a77 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -21,8 +21,8 @@
+ 	iptables, libart, libcgi, libfuse, libgpg-error, libidn,
+ 	liblockfile, libpng, links, linux-fusion, lmbench, lrzsz,
+ 	make, module-init-tools, mysql_client, nbd, ncurses, neon,
+-	netperf, ntfsprogs, openssl, php, qt, quagga, sqlite, sdl,
+-	sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
++	netcat, netperf, ntfsprogs, openssl, php, qt, quagga, sqlite,
++	sdl, sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
+ 	usbutils, xkeyboard-config, xserver_xorg-server, xvkbd
+ 
+ 	Removed packages: modutils, portage, rxvt
+@@ -70,6 +70,7 @@
+ 	#2191: linux-fusion build fail
+ 	#2221: Qt does not compile (dependencies not taken into account?)
+ 	#2233: Atmel atstk target skeletons have /etc/mtab as a file, not ...
++	#2245: Netcat does not work due to incorrect assumptions about signed..
+ 
+ 2010.05, Released May 30th, 2010:
+ 
+diff --git a/package/netcat/netcat-0.7.1-signed-bit-counting.patch b/package/netcat/netcat-0.7.1-signed-bit-counting.patch
+new file mode 100644
+index 0000000..e29da31
+--- /dev/null
++++ b/package/netcat/netcat-0.7.1-signed-bit-counting.patch
+@@ -0,0 +1,30 @@
++# Fix the endian-specific bit-counting code so that it works.
++# SF:1068324 "netcat_flag_count() fix"
++#   http://sourceforge.net/tracker/?func=detail&aid=1205729&group_id=52204&atid=466046
++# SF:1205729 "doen't work on arm linux platform":
++#   http://sourceforge.net/tracker/?func=detail&aid=1068324&group_id=52204&atid=466046
++
++Index: netcat-0.7.1/src/flagset.c
++===================================================================
++--- netcat-0.7.1.orig/src/flagset.c	2010-07-19 13:51:46.000000000 +0100
+++++ netcat-0.7.1/src/flagset.c	2010-07-19 13:52:27.000000000 +0100
++@@ -134,7 +134,7 @@
++ 
++ int netcat_flag_count(void)
++ {
++-  register char c;
+++  register unsigned char c;
++   register int i;
++   int ret = 0;
++ 
++@@ -154,8 +154,8 @@
++ 	Assumed that the bit number 1 is the sign, and that we will shift the
++ 	bit 1 (or the bit that takes its place later) until the the most right,
++ 	WHY it has to keep the wrong sign? */
++-      ret -= (c >> 7);
++-      c <<= 1;
+++      ret += c&1;
+++      c>>=1;
++     }
++   }
++ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
