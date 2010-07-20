@@ -1,41 +1,42 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Tue, 20 Jul 2010 17:19:22 +1000
-Subject: [Buildroot] Issue with Xfbdev and keyboard
-In-Reply-To: <20100720085516.0f7b0887@surf>
-References: <20100720085516.0f7b0887@surf>
-Message-ID: <002101cb27db$e17e6830$a47b3890$@pauljones.id.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 Jul 2010 07:19:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 2251] directory output/build after make
+	*_defconfig not found
+In-Reply-To: <bug-2251-163@https.bugs.busybox.net/>
+References: <bug-2251-163@https.bugs.busybox.net/>
+Message-ID: <20100720071947.871DC82B68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Thomas Petazzoni
-> Sent: Tuesday, 20 July 2010 4:55 PM
-> To: buildroot at uclibc.org
-> Subject: [Buildroot] Issue with Xfbdev and keyboard
-> 
-> Hello,
-> 
-> I'm trying to use our Xfbdev X.org server, but it unfortunately complains
-on
-> startup with:
-> 
-> ==========================================================
-> =========
-> (EE) XKB: Couldn't open rules file /usr/share/X11/xkb/rules/base
-> XKB: Failed to compile keymap
-> Keyboard initialization failed. This could be a missing or incorrect setup
-of
-> xkeyboard-config
-> ==========================================================
-> =========
+https://bugs.busybox.net/show_bug.cgi?id=2251
 
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-From memory I had the same trouble when building for ARM. X86 seemed to work
-without it though.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+I believe this was fixed by c9ff3273eb94:
 
-Paul.
+commit c9ff3273eb94078ad342d0a3e08e1757bced2afa
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Tue Jul 20 08:45:45 2010 +0200
+
+    linux: linux26-{menu,x,g}config needs host-sed
+
+    Similar to how it's done for uclibc-menuconfig.
+
+    Reported-by: Paul Jones <paul@pauljones.id.au>
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+It works here atleast. If not, please reopen the bug report with more info.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
