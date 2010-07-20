@@ -1,20 +1,22 @@
-From: JNY <jny0@hotmail.com>
-Date: Tue, 20 Jul 2010 08:28:24 -0700 (PDT)
-Subject: [Buildroot]  Taking ages to build
-Message-ID: <29215921.post@talk.nabble.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 Jul 2010 15:32:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 2125] libXfont build fail
+In-Reply-To: <bug-2125-163@https.bugs.busybox.net/>
+References: <bug-2125-163@https.bugs.busybox.net/>
+Message-ID: <20100720153213.5824F82B81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2125
 
-Hi,
-I'm building an output using Buildroot, and it's taking ages.  I expected it
-to take up to an hour, and so far it's been double that.  It also seems to
-me that I've seen some of the same prompts scrolling up the screen over and
-over.  Is it possible that Buildroot is stuck in a loop?
-Cheers.
+--- Comment #3 from jsteckli at os.inf.tu-dresden.de  ---
+Seems that I cannot reproduce this on Ubuntu. I destroyed the Gentoo where I
+initially experienced this bug. You might as well close this bug for now.
+
 -- 
-View this message in context: http://old.nabble.com/Taking-ages-to-build-tp29215921p29215921.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
