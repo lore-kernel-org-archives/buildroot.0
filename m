@@ -1,62 +1,38 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Tue, 20 Jul 2010 15:42:41 +1000
-Subject: [Buildroot] make linux26-menuconfig
-Message-ID: <001a01cb27ce$6015d1a0$204174e0$@pauljones.id.au>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Tue, 20 Jul 2010 07:48:19 +0200
+Subject: [Buildroot] [PATCH 2/4] Implement basic non-wget download
+	methods
+In-Reply-To: <871vb0wkm1.fsf@macbook.be.48ers.dk>
+References: <L5HQ26$43638E1C3E30A4E7BE70EACE614B0470@aruba.it>
+	<20100713113054.GB16232@bulix.org>
+	<1279108920.7058.123.camel@cabbage.rehill.info>
+	<20100716103902.GF16232@bulix.org>
+	<871vb0wkm1.fsf@macbook.be.48ers.dk>
+Message-ID: <20100720054819.GI16232@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not sure if this is a bug or not, so I thought I'd ask here.
+* Peter Korsgaard <jacmet@uclibc.org> [2010-07-18 23:22:46]:
 
- 
+> Yes, they are really old and not used (besides SVN_CO) - Feel free to
+> clean this up while making these changes.
 
-I just spent the last 20 mins trying to figure out why make
-linux26-menuconfig didn't work - it was because I was running it immediately
-after make menuconfig, so /output/toolchain/bin/sed didn't yet exist.
+Ok. I'll try to resend an updated series today or tomorrow.
 
- 
+Thanks for the review,
+- Maxime
 
-Should there be a warning or something if someone tries to do this? It was
-very confusing.
-
- 
-
->>>   Downloading kernel
-
-mkdir -p /media/dev/buildroot-tut/output/build/linux-custom
-
-touch /media/dev/buildroot-tut/output/build/linux-custom/.stamp_downloaded
-
->>>   Extracting kernel
-
-mkdir -p /media/dev/buildroot-tut/output/build/linux-custom
-
->>>   Patching kernel
-
->>>   Configuring kernel
-
-cp "./configs/mini2440_kernelconfig"
-/media/dev/buildroot-tut/output/build/linux-custom/.config
-
-/media/dev/buildroot-tut/output/toolchain/bin/sed -i -e
-"/\\<CONFIG_AEABI\\>/d"
-/media/dev/buildroot-tut/output/build/linux-custom/.config
-
-/bin/sh: /media/dev/buildroot-tut/output/toolchain/bin/sed: No such file or
-directory
-
-make: ***
-[/media/dev/buildroot-tut/output/build/linux-custom/.stamp_configured] Error
-127
-
- 
-
- 
-
-Paul.
-
+-- 
+Maxime Petazzoni <http://www.bulix.org>
+ ``One by one, the penguins took away my sanity.''
+Linux kernel and software developer at MontaVista Software
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100720/959f11a5/attachment.html>
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100720/8fddfc8d/attachment-0001.pgp>
