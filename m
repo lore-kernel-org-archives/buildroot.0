@@ -1,36 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 Jul 2010 07:41:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 2245] Netcat does not work due to incorrect
- assumptions about signed chars.
-In-Reply-To: <bug-2245-163@https.bugs.busybox.net/>
-References: <bug-2245-163@https.bugs.busybox.net/>
-Message-ID: <20100720074103.B6FD88265B@busybox.osuosl.org>
+From: JNY <jny0@hotmail.com>
+Date: Tue, 20 Jul 2010 03:34:10 -0700 (PDT)
+Subject: [Buildroot]  App won't run on target machine
+Message-ID: <29213471.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2245
 
---- Comment #4 from Nick Leverton <nick@leverton.org>  ---
-Hi, thankyou for the commit.
-
-To be honest I missed that busybox implements nc - except my subconscious
-obviously remembered since I mis-filed this bug in the first place !  Thanks,
-I'll check out its features to see if it can do what I need.
-
-I was looking for a netcat version which is flag-compatible with OpenBSD netcat
-to ease the porting of some scripts.  I needed -k (keep listening after first
-connection closes) so I've been through the various netcats to check how they
-behaved without that option.  GNU netcat doesn't have -k, but since it's in the
-tree already I figured I might as well submit the fix to make it run.
-
-I've now got BSD netcat on my target anyway, the Debian patches to build it
-under Linux work pretty well for buildroot too.  I can submit the package if
-you are at all interested in having a third nc implementation in buildroot  ...
-
+Hi,
+I have an embedded linux system which is loaded from a bootable USB.
+The kernel was built using Buildroot.  When configuring Buildroot, an
+app is built at the same time.  When this app is run, it works fine.
+I've recently noticed a few bugs in the app, and have therefore
+recompiled the code (with said bugs rectified), but now the app won't
+run.  As an experiment I wrote another app called test which would
+print text to the screen, and this won't run either.  Is it necessary
+for me to rebuild from Buildroot every time I want to fix a bug?  I
+would have thought that as long as the recompilation is done on a
+Linux system, it should work on another.  Both apps are written in c,
+and the test app only uses stdio.h.
+Regards, 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+View this message in context: http://old.nabble.com/App-won%27t-run-on-target-machine-tp29213471p29213471.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
