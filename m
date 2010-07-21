@@ -1,23 +1,35 @@
-From: JNY <jny0@hotmail.com>
-Date: Wed, 21 Jul 2010 05:44:59 -0700 (PDT)
-Subject: [Buildroot] Build failed with Error 1 and Error 2
-In-Reply-To: <20100721113838.271898f7@surf>
-References: <29222293.post@talk.nabble.com> <20100721085235.7f682c11@surf>
-	<29222695.post@talk.nabble.com> <20100721113838.271898f7@surf>
-Message-ID: <29225269.post@talk.nabble.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 21 Jul 2010 13:26:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 2245] nc need to support -k (multiple listen) BSD
+	extension
+In-Reply-To: <bug-2245-163@https.bugs.busybox.net/>
+References: <bug-2245-163@https.bugs.busybox.net/>
+Message-ID: <20100721132635.B9E1082A6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2245
 
-Version 2010.02 sorted it.  Would you still like the log file ( rm -rf
-output/ make 2>&1 | tee build.log)?
+Denys Vlasenko <vda.linux@googlemail.com> changed:
 
-Many thanks, you've saved me a lot of head-aches.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+          Component|Other                       |Other
+            Version|2010.05                     |1.16.x
+         AssignedTo|unassigned at buildroot.uclibc |unassigned at busybox.net
+                   |.org                        |
+            Product|buildroot                   |Busybox
+            Summary|Netcat does not work due to |nc need to support -k
+                   |incorrect assumptions about |(multiple listen) BSD
+                   |signed chars.               |extension
 
+--- Comment #6 from Denys Vlasenko <vda.linux@googlemail.com>  ---
+Hijacking this bug for my own evil plans :D
 
 -- 
-View this message in context: http://old.nabble.com/Build-failed-with-Error-1-and-Error-2-tp29222293p29225269.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
