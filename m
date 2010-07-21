@@ -1,41 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 21 Jul 2010 09:53:51 +0200
-Subject: [Buildroot] [git commit master 1/1] xserver: dri support is only
-	for the modular server
-Message-ID: <20100721075441.77C1382A41@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Jul 2010 11:38:38 +0200
+Subject: [Buildroot] Build failed with Error 1 and Error 2
+In-Reply-To: <29222695.post@talk.nabble.com>
+References: <29222293.post@talk.nabble.com> <20100721085235.7f682c11@surf>
+	<29222695.post@talk.nabble.com>
+Message-ID: <20100721113838.271898f7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bbf552993397ece696272f1f75fa47af110a005
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 21 Jul 2010 00:32:51 -0700 (PDT)
+JNY <jny0@hotmail.com> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+> BR2_VERSION="2010.02"
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index e32215f..f3ffea9 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -121,10 +121,14 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
- XSERVER_XORG_SERVER_CONF_OPT += --disable-composite
- endif
- 
-+ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
- ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
- XSERVER_XORG_SERVER_CONF_OPT += --enable-dri2
- endif
-+else
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-dri2
-+endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libXScrnSaver
+Would it be possible to use the latest Buildroot stable version, i.e
+2010.05 ?
+
+> BR2_KERNEL_HEADERS_2_6_32=y
+> # BR2_KERNEL_HEADERS_VERSION is not set
+> # BR2_KERNEL_HEADERS_SNAP is not set
+> BR2_DEFAULT_KERNEL_HEADERS="2.6.32.9"
+
+In 2010.02, we have the patch for the kernel headers to fix the issue
+you are seeing.
+
+I tested your .config with 2010.02 and it builds just fine.
+
+Could you please send use the full build log, by doing something like:
+
+ rm -rf output/
+ make 2>&1 | tee build.log
+
+And put the resulting build.log online somewhere ?
+
+Thanks,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
