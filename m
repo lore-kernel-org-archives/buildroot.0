@@ -1,39 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 21 Jul 2010 23:45:36 +0200
-Subject: [Buildroot] [git commit master 1/1] php: pdo mysql extension needs
-	C++ support in toolchain
-Message-ID: <20100721214609.E20B682C1D@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 21 Jul 2010 19:02:31 -0300
+Subject: [Buildroot] AVR32 is broken (toolchain)
+Message-ID: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68fe213daa83dee8f4ee54e1878c2b893e81912b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+     I was able to track it down to this commit:
+8e8103bfb55a814d68eabb51afebfb35c3e7cec8
+     The toolchain builds right before it, but doesn't after.
+     I'm trying to figure it out, but I'm not very experienced with
+the toolchain build or git, so it's taking me quite a while. Perhaps
+someone with more experience could take a look at the issue?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/php/Config.ext |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+     It's reproductible with make atngw100_defconfig
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 0f5b982..d95b19e 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -167,8 +167,12 @@ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE_EXTERNAL
- config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- 	bool "PDO_MySQL"
- 	depends on BR2_PACKAGE_PHP_EXT_PDO
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	help
- 	  PDO driver for MySQL
- 
-+comment "PDO_MySQL requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP && BR2_PACKAGE_PHP_EXT_PDO
-+
- endmenu
--- 
-1.7.1
+Kind Regards,
+     Thiago A. Correa
