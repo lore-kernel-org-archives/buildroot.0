@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jul 2010 08:52:35 +0200
-Subject: [Buildroot] Build failed with Error 1 and Error 2
-In-Reply-To: <29222293.post@talk.nabble.com>
-References: <29222293.post@talk.nabble.com>
-Message-ID: <20100721085235.7f682c11@surf>
+Date: Wed, 21 Jul 2010 08:58:22 +0200
+Subject: [Buildroot] xfsprogs 3.0.3 without libxfs in rootfs
+In-Reply-To: <4C4613A2.90006@gmx.net>
+References: <4C4613A2.90006@gmx.net>
+Message-ID: <20100721085822.5d2a34ae@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,61 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 20 Jul 2010 23:23:50 -0700 (PDT)
-JNY <jny0@hotmail.com> wrote:
+On Tue, 20 Jul 2010 23:22:42 +0200
+Ossy <ossy1980@gmx.net> wrote:
 
-> After many hours (around 4) of running, my buildroot ultimately
-> failed with the following errors, any ideas?
+> Since xfsprogs 3.0.3 doesn't build the required xfslib in the current 
+> tree. I tried to bump to the newer version.
+> I figured out, that that br uses the old util-linux and not 
+> util-linux-ng. According to the debian package info, xfsprogs 3.1.2 
+> needs at least util-linux-ng 2.16.
 
-Could you please post your .config ? Unless you've enabled dozens and
-dozens of packages and have a slow machine, a build of four hours looks
-a bit suspicious. If you're beginning with Buildroot, I would first
-recommend you to build a basic system with just Busybox enabled, and
-see how it works, before going on with building a more complicated
-system.
+Good. We really need to upgrade to util-linux-ng. It has been on my
+TODO-list for a while, but I haven't managed to find the time for this.
 
-> /home/JB/Apps/buildroot-2010.05/output/staging/usr/include/scsi/scsi.h:148:
-> error: expected specifier-qualifier-list before 'u8'
-> /home/JB/Apps/buildroot-2010.05/output/staging/usr/include/scsi/scsi.h:
-> In function 'scsi_varlen_cdb_length':
-> /home/JB/Apps/buildroot-2010.05/output/staging/usr/include/scsi/scsi.h:159:
-> error: 'struct scsi_varlen_cdb_hdr' has no member named
-> 'additional_cdb_length'
+> So I ran a green try with the 
+> util-linux-ng patch I've found in the mailinglist archives:
+> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/16587/match=util+linux+ng
 
-Yes, this is a breakage in the kernel headers. The
-linux-*-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-patch didn't get applied to your kernel headers when building the
-toolchain.
+This patch doesn't use the AUTOTARGETS infrastructure to build
+util-linux-ng, which is bad.
 
-Can you please post your .config so that we know which version of the
-kernel headers you're using ?
+> Unfortunatly the build fails, because make claims about an unknown 
+> option "--sysroot":
+> /usr/bin/make -j2 \
+>                  -C 
+> /home/ossy/buildroot/buildroot-dev/output/build/util-linux-ng-2.16 \
+>                  ARCH=arm \
+>  
+> CC=/home/ossy/buildroot/buildroot-dev/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc 
+> --sysroot=/home/ossy/buildr
+> oot/buildroot-dev/output/staging \
+>                  OPT="-Os -pipe -Os  -mtune=arm926ej-s -march=armv5te 
+> -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURC E -D_FILE_OFFSET_BITS=64 
+> -I/home/ossy/buildroot/buildroot-dev/output/staging/usr/include 
+> -I/home/ossy/buildroot/buildroot-dev/output/staging
+> /include" \
+>                  HAVE_SLANG="NO"
+> /usr/bin/make: Unbekannte Option 
+> ?--sysroot=/home/ossy/buildroot/buildroot-dev/output/staging?
+> 
+> It is the same make, used for all the other packages....
 
-Thanks,
+For a quick fix, replace:
+
+	CC=$(TARGET_CC)
+
+by
+
+	CC="$(TARGET_CC)"
+
+This should solve the "unknown --sysroot option" problem that you're
+having.
+
+But clearly the correct fix is to switch to AUTOTARGETS.
+
+Cheers,
 
 Thomas
 -- 
