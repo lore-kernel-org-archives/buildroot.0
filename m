@@ -1,52 +1,39 @@
-From: luca at lucaceresoli.net <luca@lucaceresoli.net>
-Date: Wed, 21 Jul 2010 23:20:59 +0200
-Subject: [Buildroot] [PATCH] qt: fix alsa-lib dependency
-Message-ID: <1279747259-10054-1-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 21 Jul 2010 23:45:36 +0200
+Subject: [Buildroot] [git commit master 1/1] php: pdo mysql extension needs
+	C++ support in toolchain
+Message-ID: <20100721214609.E20B682C1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Luca Ceresoli <luca@lucaceresoli.net>
 
-If BR2_PACKAGE_QT_AUDIO_BACKEND=y, QtMultimedia requires the audio backend
-to be already in staging in order to compile.
-The backend is system-dependent, but since buildroot builds Linux systems
-only, it is safe to assume that the it will be always ALSA.
+commit: http://git.buildroot.net/buildroot/commit/?id=68fe213daa83dee8f4ee54e1878c2b893e81912b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/Config.in |    3 ++-
- package/qt/qt.mk     |    1 +
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/php/Config.ext |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index b09d642..93a8ab1 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -311,8 +311,9 @@ config BR2_PACKAGE_QT_MULTIMEDIA
- config BR2_PACKAGE_QT_AUDIO_BACKEND
- 	bool "QtMultimedia Audio backend"
- 	depends on BR2_PACKAGE_QT_MULTIMEDIA
-+	select BR2_PACKAGE_ALSA_LIB
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 0f5b982..d95b19e 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -167,8 +167,12 @@ config BR2_PACKAGE_PHP_EXT_PDO_SQLITE_EXTERNAL
+ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+ 	bool "PDO_MySQL"
+ 	depends on BR2_PACKAGE_PHP_EXT_PDO
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_MYSQL_CLIENT
  	help
--	  Build the platform audio backend into QtMultimedia if available
-+	  Build the ALSA audio backend into QtMultimedia
+ 	  PDO driver for MySQL
  
- config BR2_PACKAGE_QT_SVG
- 	bool "SVG Module"
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 864e79b..baf6539 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -312,6 +312,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_QT_AUDIO_BACKEND),y)
- QT_CONFIGURE+= -audio-backend
-+QT_DEP_LIBS+=alsa-lib
- else
- QT_CONFIGURE+= -no-audio-backend
- endif
++comment "PDO_MySQL requires a toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP && BR2_PACKAGE_PHP_EXT_PDO
++
+ endmenu
 -- 
-1.5.4.3
+1.7.1
