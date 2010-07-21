@@ -1,66 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Jul 2010 20:59:06 +0200
-Subject: [Buildroot] grub compilation issue (x86_64 target)
-In-Reply-To: <AANLkTik8QvNu_1RxKW3gkNS5nTbrODJFd9shl6AaqPwA@mail.gmail.com>
-References: <AANLkTik8QvNu_1RxKW3gkNS5nTbrODJFd9shl6AaqPwA@mail.gmail.com>
-Message-ID: <20100721205906.22d1e269@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 21 Jul 2010 21:06:13 +0200
+Subject: [Buildroot] [git commit master 1/1] alsamixergui: needs C++ support
+	for fltk
+Message-ID: <20100721190651.C4C0F82DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 21 Jul 2010 08:11:24 -0700
-vbr vbr <vvvg77@gmail.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=884c7c6b99838b409418585132732630e3c38a82
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> There seems to be a compilation issue in the grub area with
-> buildroot's latest code (git) with x86_64 target. (or maybe it's just
-> my setup) After googling a little bit, the type of error shown in the
-> config.log seems to indicate a missing library.
-> I attached the config log and my buildroot config.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                        |   19 ++++++++++---------
+ package/alsamixergui/Config.in |    4 ++++
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
-Yes, this is due to the fact that Grub uses the x86_64
-cross-compilation toolchain with the -m32 gcc switch, in order to
-produce 32 bits binaries. Unfortunately, the toolchain that Buildroot
-produces is a pure 64 bits toolchain, so it cannot support the -m32
-switch.
-
-I see four possible solutions to this :
-
- *) Extend the Buildroot toolchain build system so that it can produce
-    a 32/64 bits multilib toolchain that supports -m32. As embedded on
-    x86_64 is very uncommon, I'm not sure we'll find someone who is
-    interested to work on this.
-
- *) Extend Crosstool-NG so that it can produce such a 32/64 bits
-    toolchain and then use it as an external toolchain. I've started to
-    work on multilib support for Crosstool-NG, but it's far from being
-    ready at the moment.
-
- *) Somehow make Buildroot generate two toolchains, a 32 bits one used
-    to compile Grub, and a 64 bits toolchain to compile all the rest.
-    Since would involve fairly large and complicated modifications,
-    which I'm not sure we're ready to do for such a untypical use-case.
-
- *) Mark Grub as broken on x86_64 so that it cannot be compiled. I
-    think this is the solution we're going to choose. Grub can always
-    be compiled outside of Buildroot, and the build of bootloaders is
-    not the biggest added value of embedded build systems such as
-    Buildroot anyway.
-
-Just out of curiosity, what is your use case for using Buildroot on a
-x86_64 machine ? Is it just for experimenting/playing, or are they real
-embedded products out there using x86_64 and that have footprint
-requirements that make using Buildroot an interesting thing compared to
-using full-blown distributions ?
-
-Thanks,
-
-Thomas
+diff --git a/CHANGES b/CHANGES
+index b182077..28fc5be 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -14,15 +14,16 @@
+ 	New packages: cgilua, copas, coxpcall, ffmpeg, libsvgtiny,
+ 	luafilesystem, luasocket, rings, wsapi, xavante, xterm
+ 
+-	Updated/fixed packages: alsa-lib, avahi, berkeleydb, bash, blackbox,
+-	busybox, bzip2, cdrkit, cmake, dash, dhcp, dialog, diffutils,
+-	distcc, dmalloc, dnsmasq, dropbear, e2fsprogs, fbv, file, flex,
+-	fontconfig, gawk, gstreamer, gzip, intltool, ipsec-tools,
+-	iptables, libart, libcgi, libdrm, libfuse, libgpg-error, libidn,
+-	liblockfile, libpng, links, linux-fusion, lmbench, lrzsz,
+-	make, module-init-tools, mysql_client, nbd, ncurses, neon,
+-	netcat, netperf, ntfsprogs, openssl, php, qt, quagga, sqlite,
+-	sdl, sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
++	Updated/fixed packages: alsa-lib, alsamixergui, avahi,
++	berkeleydb, bash, blackbox, busybox, bzip2, cdrkit, cmake,
++	dash, dhcp, dialog, diffutils, distcc, dmalloc, dnsmasq,
++	dropbear, e2fsprogs, fbv, file, flex, fontconfig, gawk,
++	gstreamer, gzip, intltool, ipsec-tools, iptables, libart,
++	libcgi, libdrm, libfuse, libgpg-error, libidn, liblockfile,
++	libpng, links, linux-fusion, lmbench, lrzsz, make,
++	module-init-tools, mysql_client, nbd, ncurses, neon, netcat,
++	netperf, ntfsprogs, openssl, php, qt, quagga, sqlite, sdl,
++	sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
+ 	usbutils, xkeyboard-config, xserver_xorg-server, xvkbd
+ 
+ 	Removed packages: modutils, portage, rxvt
+diff --git a/package/alsamixergui/Config.in b/package/alsamixergui/Config.in
+index 5a31b20..5b53e6a 100644
+--- a/package/alsamixergui/Config.in
++++ b/package/alsamixergui/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_ALSAMIXERGUI
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_ALSA_LIB
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_FLTK
+ 	bool "alsamixergui"
+ 	help
+ 	  A nice GUI mixer for Alsa using fltk
+ 
+ 	  http://www.iua.upf.es/~mdeboer/projects/alsamixergui/
++
++comment "alsamixergui requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP && BR2_PACKAGE_XORG7 && BR2_PACKAGE_ALSA_LIB
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
