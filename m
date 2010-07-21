@@ -1,39 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Jul 2010 11:51:35 -0300
-Subject: [Buildroot] issue with ppp
-In-Reply-To: <4C2E50E9.4090305@tiedyenetworks.com>
-References: <4C2E50E9.4090305@tiedyenetworks.com>
-Message-ID: <4C470977.2060809@zacarias.com.ar>
+Date: Wed, 21 Jul 2010 12:00:26 -0300
+Subject: [Buildroot] ppp
+In-Reply-To: <4C30BFE5.4080902@tiedyenetworks.com>
+References: <4C30BFE5.4080902@tiedyenetworks.com>
+Message-ID: <4C470B8A.7030402@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/2010 05:49 PM, mike wrote:
+On 07/04/2010 02:07 PM, mike wrote:
 
-> Hi,
-> 
->   In my buildroot, I'd already bumped to 2.4.5 and fixed a number of
-> things. Radiusclient files aren't being installed by the buildroot
-> makefile and it's also missing 1 plug in, radrealms, which my version
-> does handle now. Not to be a total dweeb but what would be the best way
-> to merge and submit some of these fixes to buildroot without corrupting
-> my local tree?
-> 
+>    Related to ppp, rp-pppoe also shouldn't be depreciated since
+> pppoe-server is so useful, and in fact should be updated as well. I have
+> a fixed package for that too as well as some feature additions to
+> support pppoe intermediate agent tags. For ppp I also have support for
+> gigawords (radius accounting, 64bit ints instead of 32). Does buildroot
+> want original author only pristine packages without feature
+> enhancements, or will it accept package submissions with additional
+> patches?
 > Mike-
 
-Hi.
-Sorry i didn't look into this sooner, was a bit busy with other things.
-Give my patch a try, it will (hopefully) install all the radius plugins
-and configuration files when enabled by the new configuration option.
-It also converts the package to gentargets infrastructure since it's
-really not autotargets.
-Usually the best way to get patches merged is to send them to the
-mailing list or the bug tracker. If they are correct and work they'll
-usually get incorporated for the next release time permitting so.
+Yes, rp-pppoe has a use as server-side pppoe.
+To get it back into shape it needs to get converted to autotargets
+(right now it's an old-style package and we want to get rid of those)
+and also upgraded to the latest version.
+Features can be accepted if the upstream maintainer(s) of the package
+accepts them too for a future release.
+Patches that fix bugs are always welcome. They should be reported
+upstream too.
 Regards.
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-pppd-radius.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100721/667c30fe/attachment.ksh>
