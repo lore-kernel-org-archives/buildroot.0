@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 22 Jul 2010 13:08:24 +0200
-Subject: [Buildroot] [git commit master 1/1] xavante: needs largefile
-	support (for luafilesystem)
-Message-ID: <20100722110847.8975C82DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] wsapi: needs largefile support
+	(for luafilesystem)
+Message-ID: <20100722110847.2A7F582DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8330dd11e7caebbafea5e6e9e3c702d6cd5843b0
+commit: http://git.buildroot.net/buildroot/commit/?id=5af328d2dd289736670ecde6f4515ca953859b83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And at the same time use select for the lua shared library dependency.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xavante/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/wsapi/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/xavante/Config.in b/package/xavante/Config.in
-index 7a3535a..a1b47c3 100644
---- a/package/xavante/Config.in
-+++ b/package/xavante/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XAVANTE
- 	bool "xavante"
--	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 3621648..472bbfc 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WSAPI
+ 	bool "wsapi"
 +	depends on BR2_LARGEFILE # luafilesystem
-+	select BR2_PACKAGE_LUA_SHARED_LIBRARY
- 	select BR2_PACKAGE_CGILUA
- 	select BR2_PACKAGE_COPAS
  	select BR2_PACKAGE_COXPCALL
-@@ -12,3 +13,6 @@ config BR2_PACKAGE_XAVANTE
- 	  architecture based on URI mapped handlers.
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	select BR2_PACKAGE_RINGS
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_WSAPI
+ 	  API that abstracts the web server from Lua web applications.
  
- 	  http://keplerproject.github.com/xavante/
+ 	  http://keplerproject.github.com/wsapi/
 +
-+comment "xavante requires a toolchain with LARGEFILE support"
++comment "wsapi requires a toolchain with LARGEFILE support"
 +	depends on !BR2_LARGEFILE
 -- 
 1.7.1
