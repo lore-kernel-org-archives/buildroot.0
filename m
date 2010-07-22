@@ -1,42 +1,51 @@
-From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
-Date: Thu, 22 Jul 2010 04:57:23 +0200
-Subject: [Buildroot] AVR32 is broken (toolchain)
-In-Reply-To: <AANLkTikKS2AppP8zpPudDFbKvchDZvlpfQeTb-TKKvT2@mail.gmail.com>
-References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
-	<201007220352.37255.PeterHuewe@gmx.de>
-	<AANLkTikKS2AppP8zpPudDFbKvchDZvlpfQeTb-TKKvT2@mail.gmail.com>
-Message-ID: <201007220457.24834.PeterHuewe@gmx.de>
+From: falls huang <falls.huang@gmail.com>
+Date: Thu, 22 Jul 2010 16:05:49 +0800
+Subject: [Buildroot] [PATCH] add new arch for arm cortex-a9
+Message-ID: <AANLkTikzk8tsG3_5yH0nb5l9YL8h2Ma_e2DhNmhlgpuZ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter 	> I'll have a look into it - currently the code still compiles :)
-Thiago 	> What do you mean it still compiles?
-This just means that my machine is a little bit slow and it takes awhile to 
-compile buildroot.
+--- Config.in.arch      2010-07-22 03:54:18.080361833 -0400
++++ Config.in.arch.old  2010-07-22 03:54:33.632350886 -0400
+@@ -81,11 +81,9 @@
+        bool "arm1176jz-s"
+ config BR2_arm1176jzf_s
+        bool "arm1176jzf-s"
+-comment "cortex-A8/A9 needs gcc >= 4.4.x"
++comment "cortex-A8 needs gcc >= 4.4.x"
+ config BR2_cortex_a8
+        bool "cortex-A8"
+-config BR2_cortex_a9
+-       bool "cortex-A9"
+ config BR2_sa110
+        bool "sa110"
+ config BR2_sa1100
+@@ -602,7 +600,6 @@
+        default arm1176jz-s     if BR2_arm1176jz_s
+        default arm1176jzf-s    if BR2_arm1176jzf_s
+        default cortex-a8       if BR2_cortex_a8
+-       default cortex-a9       if BR2_cortex_a9
+        default strongarm110    if BR2_sa110
+        default strongarm1100   if BR2_sa1100
+        default xscale          if BR2_xscale
+@@ -719,7 +716,6 @@
+        default armv6zk         if BR2_arm1176jz_s
+        default armv6zk         if BR2_arm1176jzf_s
+        default armv7-a         if BR2_cortex_a8
+-       default armv7-a         if BR2_cortex_a9
+        default armv4           if BR2_sa110
+        default armv4           if BR2_sa1100
+        default armv5te         if BR2_xscale
 
 
-Thiago > I get an error building the toolchain, something along the lines of:
-Thiago > make[3]: *** Waiting for unfinished jobs....
-Thiago > /root/buildroot-head/output/toolchain/gcc-4.2.2-avr32-2.1.5-
-final/./gcc/as:
-Thiago > line 2: exec: --: invalid option
-Thiago> exec: usage: exec [-cl] [-a name] [command [arguments ...]] 
-[redirection
-Thiago >  ...] make[3]: *** [crtbeginS.o] Error 1
+------------------
+Best Regards
+wqkong
 
-Yeah - I can reproduce this issue.
 
-However I got another error first (something like avr32-.....-ar: command not 
-found). But I got the same error after adding the 
-        AR_FOR_BUILD="$(HOSTAR)" \
-        AR_FOR_TARGET="$(TARGET_AR)" \
- lines again.
-
-Currently I'm trying compiling a version of BR with and without the changes in 
-Thomas' commit - tomorrow I'll compare the output :)
-
-Thanks,
-Peter
+--
+Regards
+Falls Huang
