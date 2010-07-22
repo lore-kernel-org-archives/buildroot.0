@@ -1,39 +1,43 @@
-From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
-Date: Thu, 22 Jul 2010 03:52:36 +0200
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Wed, 21 Jul 2010 23:29:03 -0300
 Subject: [Buildroot] AVR32 is broken (toolchain)
-In-Reply-To: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
+In-Reply-To: <201007220352.37255.PeterHuewe@gmx.de>
 References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
-Message-ID: <201007220352.37255.PeterHuewe@gmx.de>
+	<201007220352.37255.PeterHuewe@gmx.de>
+Message-ID: <AANLkTikKS2AppP8zpPudDFbKvchDZvlpfQeTb-TKKvT2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Donnerstag 22 Juli 2010 00:02:31 schrieb Thiago A. Corr?a:
-> Hi,
-> 
->      I was able to track it down to this commit:
-> 8e8103bfb55a814d68eabb51afebfb35c3e7cec8
->      The toolchain builds right before it, but doesn't after.
->      I'm trying to figure it out, but I'm not very experienced with
-> the toolchain build or git, so it's taking me quite a while. Perhaps
-> someone with more experience could take a look at the issue?
-> 
->      It's reproductible with make atngw100_defconfig
-> 
-> Kind Regards,
->      Thiago A. Correa
+Hi Peter,
+
+2010/7/21 Peter H?we <PeterHuewe@gmx.de>:
+>
+> thanks for reporting this issue.
+> I'll have a look into it - currently the code still compiles :)
+
+What do you mean it still compiles?
+I get an error building the toolchain, something along the lines of:
+
+make[3]: *** Waiting for unfinished jobs....
+/root/buildroot-head/output/toolchain/gcc-4.2.2-avr32-2.1.5-final/./gcc/as:
+line 2: exec: --: invalid option
+exec: usage: exec [-cl] [-a name] [command [arguments ...]] [redirection ...]
+make[3]: *** [crtbeginS.o] Error 1
 
 
-Hi,
+> Meanwhile, maybe you could post the results of the build, i.e. the build
+> failure / error messages here, or use a pasting service like
+> http://dpaste.com/ and then post the link here.
+>
 
-thanks for reporting this issue.
-I'll have a look into it - currently the code still compiles :)
+This is what my ssh window had in it's buffer: http://dpaste.com/220727/
 
-Meanwhile, maybe you could post the results of the build, i.e. the build 
-failure / error messages here, or use a pasting service like 
-http://dpaste.com/ and then post the link here.
+I can get a full log if needed. I get this with HEAD and
+8e8103bfb55a814d68eabb51afebfb35c3e7cec8
+But not with 4fdecac9d692b8d6f071ba6ad938b6ad68b675fd
 
 Thanks,
-Peter
+    Thiago A. Correa
