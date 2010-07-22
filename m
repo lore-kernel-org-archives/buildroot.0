@@ -1,27 +1,26 @@
-From: JNY <jny0@hotmail.com>
-Date: Thu, 22 Jul 2010 08:55:32 -0700 (PDT)
-Subject: [Buildroot]  GetTime() no longer works after toolchain rebuild
-Message-ID: <29238584.post@talk.nabble.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 22 Jul 2010 18:15:25 +0200
+Subject: [Buildroot] [PATCHv3] Let busybox build system do it's magic on
+	CFLAGS
+In-Reply-To: <4C484C90.8060100@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Thu, 22 Jul 2010 10:50:08 -0300")
+References: <4C484C90.8060100@zacarias.com.ar>
+Message-ID: <87ocdzijc2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
-I've recently rebuilt a toolchain, and now when I recompile some old (c)
-code, the GetTime() isn't recognised.  The code compiles, and runs (mostly)
-on the target architecture.  The GetTime() function isn't one I recognise
-(as I inherited the code), and believe I must have missed something when
-rebuilding the toolchain.  Any ideas what library this belongs to, and what
-I have to do to get it working again.
+ Gustavo> Take 3: avoid cluttering TARGET_MAKE_ENV for everyone.
+ Gustavo> No coffee morning is a bad morning.
+ Gustavo> Fix busybox package to pass CFLAGS as make env rather than opt,
+ Gustavo> otherwise busybox's build system won't tweak them (which is a good thing).
+ Gustavo> Thanks to Thomas Petazzoni for noticing!
 
-The function isn't doing much, but, after commenting it out, other things in
-the code no longer work, and I believe some (maybe all) of them will start
-working once I get this one sorted.  Either way, this'll be a step in the
-right direction.
-Regards
+Committed, thanks.
+
 -- 
-View this message in context: http://old.nabble.com/GetTime%28%29-no-longer-works-after-toolchain-rebuild-tp29238584p29238584.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Bye, Peter Korsgaard
