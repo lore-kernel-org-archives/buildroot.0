@@ -1,17 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 22 Jul 2010 12:50:54 -0300
-Subject: [Buildroot] [PATCH] Migrate iostat to gentargets
-Message-ID: <4C4868DE.1080805@zacarias.com.ar>
+From: JNY <jny0@hotmail.com>
+Date: Thu, 22 Jul 2010 08:55:32 -0700 (PDT)
+Subject: [Buildroot]  GetTime() no longer works after toolchain rebuild
+Message-ID: <29238584.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Migrate iostat to gentargets.
-Also make the cpu counting routine more reliable (for ARM it's
-"Processor" in cpuinfo rather than "processor").
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-iostat-gentargets.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100722/b46af356/attachment.ksh>
+
+Hi,
+I've recently rebuilt a toolchain, and now when I recompile some old (c)
+code, the GetTime() isn't recognised.  The code compiles, and runs (mostly)
+on the target architecture.  The GetTime() function isn't one I recognise
+(as I inherited the code), and believe I must have missed something when
+rebuilding the toolchain.  Any ideas what library this belongs to, and what
+I have to do to get it working again.
+
+The function isn't doing much, but, after commenting it out, other things in
+the code no longer work, and I believe some (maybe all) of them will start
+working once I get this one sorted.  Either way, this'll be a step in the
+right direction.
+Regards
+-- 
+View this message in context: http://old.nabble.com/GetTime%28%29-no-longer-works-after-toolchain-rebuild-tp29238584p29238584.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
