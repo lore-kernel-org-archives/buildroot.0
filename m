@@ -1,64 +1,120 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 22 Jul 2010 00:22:22 +0200
-Subject: [Buildroot] [git commit master 1/1] dash: fix build of native
-	helpers
-Message-ID: <20100721222317.9A58982C1D@busybox.osuosl.org>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Thu, 22 Jul 2010 10:33:57 +1000
+Subject: [Buildroot] grub compilation issue (x86_64 target)
+In-Reply-To: <AANLkTimZA8B9Cik3gf-tHmDo9l10wq7Nv-WFIEzY6iaH@mail.gmail.com>
+References: <AANLkTik8QvNu_1RxKW3gkNS5nTbrODJFd9shl6AaqPwA@mail.gmail.com>	<20100721205906.22d1e269@surf>
+	<AANLkTimZA8B9Cik3gf-tHmDo9l10wq7Nv-WFIEzY6iaH@mail.gmail.com>
+Message-ID: <036b01cb2935$952fe2a0$bf8fa7e0$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Could you just use the 32bit x86 rather than the x86_64? I do this myself
+for testing and it works fine.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbcc06c3bbcd92e48f8f91cd47bc70d71594b291
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../dash-0.5.5.1-no-config.h-for-helpers.patch     |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 package/dash/dash-0.5.5.1-no-config.h-for-helpers.patch
+ 
 
-diff --git a/package/dash/dash-0.5.5.1-no-config.h-for-helpers.patch b/package/dash/dash-0.5.5.1-no-config.h-for-helpers.patch
-new file mode 100644
-index 0000000..9fd449c
---- /dev/null
-+++ b/package/dash/dash-0.5.5.1-no-config.h-for-helpers.patch
-@@ -0,0 +1,35 @@
-+[PATCH] Don't include config.h when building helpers using the native compiler
-+
-+config.h contains settings for the cross compiler (most importantly
-+32/64bit versions of functions), so don't include it when calling the
-+native compiler to build the helpers.
-+
-+Otherwise we get build errors like:
-+
-+/usr/bin/gcc -include ../config.h -DBSD=1 -DSHELL -DIFS_BROKEN  -g -O2 -Wall    -o mkinit mkinit.c
-+In file included from /usr/include/sys/stat.h:107,
-+                 from /usr/include/fcntl.h:38,
-+                 from mkinit.c:50:
-+/usr/include/bits/stat.h:117: error: redefinition of ???struct stat???
-+In file included from /usr/include/fcntl.h:38,
-+                 from mkinit.c:50:
-+/usr/include/sys/stat.h:504: error: redefinition of ???stat???
-+/usr/include/sys/stat.h:455: note: previous definition of ???stat??? was here
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/Makefile.in |    1 -
-+ 1 file changed, 1 deletion(-)
-+
-+Index: dash-0.5.5.1/src/Makefile.in
-+===================================================================
-+--- dash-0.5.5.1.orig/src/Makefile.in
-++++ dash-0.5.5.1/src/Makefile.in
-+@@ -165,7 +165,6 @@ COMMON_CPPFLAGS = \
-+ AM_CFLAGS = $(COMMON_CFLAGS)
-+ AM_CPPFLAGS = $(COMMON_CPPFLAGS)
-+ AM_CFLAGS_FOR_BUILD = -g -O2 $(COMMON_CFLAGS) 
-+-AM_CPPFLAGS_FOR_BUILD = $(COMMON_CPPFLAGS)
-+ COMPILE_FOR_BUILD = \
-+ 	$(CC_FOR_BUILD) $(AM_CPPFLAGS_FOR_BUILD) $(CPPFLAGS_FOR_BUILD) \
-+ 	$(AM_CFLAGS_FOR_BUILD) $(CFLAGS_FOR_BUILD) 
--- 
-1.7.1
+Paul.
+
+ 
+
+ 
+
+From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net]
+On Behalf Of vbr vbr
+Sent: Thursday, 22 July 2010 5:09 AM
+To: Thomas Petazzoni
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] grub compilation issue (x86_64 target)
+
+ 
+
+Thanks for the quick answer. 
+
+Just playing to see the feasability of using buildroot as a diagnostic OS on
+x86_64 servers. It is not meant to be the real OS running on these servers.
+
+One thing I am confused about is that ISO support was added recently for
+x86_64 targets in buildroot and it seems that ISO requires grub (from
+menuconfig). If grub is not supported, then ISO can't be supported either
+for x86_64. Also, I am pretty sure that grub was building fine on buildroot
+2010.05 for x86_64. I could check that again.
+
+Thanks
+Vincent
+
+
+
+On Wed, Jul 21, 2010 at 11:59 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+
+Hello,
+
+
+On Wed, 21 Jul 2010 08:11:24 -0700
+vbr vbr <vvvg77@gmail.com> wrote:
+
+> There seems to be a compilation issue in the grub area with
+> buildroot's latest code (git) with x86_64 target. (or maybe it's just
+> my setup) After googling a little bit, the type of error shown in the
+> config.log seems to indicate a missing library.
+> I attached the config log and my buildroot config.
+
+Yes, this is due to the fact that Grub uses the x86_64
+cross-compilation toolchain with the -m32 gcc switch, in order to
+produce 32 bits binaries. Unfortunately, the toolchain that Buildroot
+produces is a pure 64 bits toolchain, so it cannot support the -m32
+switch.
+
+I see four possible solutions to this :
+
+ *) Extend the Buildroot toolchain build system so that it can produce
+   a 32/64 bits multilib toolchain that supports -m32. As embedded on
+   x86_64 is very uncommon, I'm not sure we'll find someone who is
+   interested to work on this.
+
+ *) Extend Crosstool-NG so that it can produce such a 32/64 bits
+   toolchain and then use it as an external toolchain. I've started to
+   work on multilib support for Crosstool-NG, but it's far from being
+   ready at the moment.
+
+ *) Somehow make Buildroot generate two toolchains, a 32 bits one used
+   to compile Grub, and a 64 bits toolchain to compile all the rest.
+   Since would involve fairly large and complicated modifications,
+   which I'm not sure we're ready to do for such a untypical use-case.
+
+ *) Mark Grub as broken on x86_64 so that it cannot be compiled. I
+   think this is the solution we're going to choose. Grub can always
+   be compiled outside of Buildroot, and the build of bootloaders is
+   not the biggest added value of embedded build systems such as
+   Buildroot anyway.
+
+Just out of curiosity, what is your use case for using Buildroot on a
+x86_64 machine ? Is it just for experimenting/playing, or are they real
+embedded products out there using x86_64 and that have footprint
+requirements that make using Buildroot an interesting thing compared to
+using full-blown distributions ?
+
+Thanks,
+
+Thomas
+--
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100722/b1520fcd/attachment.html>
