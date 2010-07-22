@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 22 Jul 2010 13:08:24 +0200
-Subject: [Buildroot] [git commit master 1/1] webif: needs busybox (httpd)
-Message-ID: <20100722110848.8CAC182DFD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] luafilesystem: tweak Config.in
+Message-ID: <20100722110847.4A27682DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,38 +9,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3358928225a658c0e1a7ad8c7e990571544395f7
+commit: http://git.buildroot.net/buildroot/commit/?id=164d1dc0207372c448f2814f014085187e084cc3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Print a comment if largefile isn't available, and use select rather than
+depends for the lua shared library option.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                 |    2 +-
- package/webif/Config.in |    1 +
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/luafilesystem/Config.in |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 40b92c4..20294f5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -24,7 +24,7 @@
- 	lmbench, lrzsz, ltrace, make, module-init-tools, mplayer,
- 	mysql_client, nbd, ncurses, neon, netcat, netperf, ntfsprogs,
- 	openssl, php, qt, quagga, sqlite, sdl, sdl_mixer, sdl_sound,
--	sdl_ttf, squashfs, thttpd, tn5250, tremor, usbutils,
-+	sdl_ttf, squashfs, thttpd, tn5250, tremor, usbutils, webif,
- 	xkeyboard-config, xserver_xorg-server, xvkbd
- 
- 	Removed packages: modutils, portage, rxvt
-diff --git a/package/webif/Config.in b/package/webif/Config.in
-index 4ec9a26..56ed545 100644
---- a/package/webif/Config.in
-+++ b/package/webif/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WEBIF
- 	bool "webif - Status Console"
-+	depends on BR2_PACKAGE_BUSYBOX # httpd
- 	select BR2_PACKAGE_HASERL
+diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
+index ba63878..6cb6c24 100644
+--- a/package/luafilesystem/Config.in
++++ b/package/luafilesystem/Config.in
+@@ -1,9 +1,12 @@
+ config BR2_PACKAGE_LUAFILESYSTEM
+ 	bool "luafilesystem"
+ 	depends on BR2_LARGEFILE
+-	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
++	select BR2_PACKAGE_LUA_SHARED_LIBRARY
  	help
- 	  A web interface for showing different network status. This package
+ 	  LuaFileSystem offers a portable way to access
+ 	  the underlying directory structure and file attributes.
+ 
+ 	  http://luaforge.net/projects/luafilesystem/
++
++comment "luafilesystem requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
 -- 
 1.7.1
