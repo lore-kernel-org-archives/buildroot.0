@@ -1,118 +1,76 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Thu, 22 Jul 2010 10:59:09 +0200
-Subject: [Buildroot] [PATCH] Purge libglib2 dev files from target
-Message-ID: <1279789149-16142-1-git-send-email-m-starostik@versanet.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 22 Jul 2010 13:08:24 +0200
+Subject: [Buildroot] [git commit master 1/1] ltrace: fix build without
+	USE_DEMANGLE
+Message-ID: <20100722110847.0C66D82DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Don't install libglib2 development binaries and to target unless
-  BR2_HAVE_DEVFILES is set
-* Don't install gdb plugins unless BR2_TARGET_GDB is set
-* Remove $(TARGET_DIR)/usr/share/aclocal from target-finalize when not
-  installing devfiles
-* Same for /usr/share/gdb in the absence of BR2_TARGET_GDB
-* Remove some redundant cleanup from individual packages
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
+commit: http://git.buildroot.net/buildroot/commit/?id=80890ab0ec1218d83c19b9fcab0e98a913380747
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                          |    5 ++++-
- package/gettext/gettext.mk        |    2 --
- package/libglib2/libglib2.mk      |   20 ++++++++++++++++++++
- package/libxml2/libxml2.mk        |    3 +--
- package/multimedia/speex/speex.mk |    2 +-
- 5 files changed, 26 insertions(+), 6 deletions(-)
+ CHANGES                                            |    8 +++---
+ ...ltrace-0.5-fix-build-without-USE_DEMANGLE.patch |   27 ++++++++++++++++++++
+ 2 files changed, 31 insertions(+), 4 deletions(-)
+ create mode 100644 package/ltrace/ltrace-0.5-fix-build-without-USE_DEMANGLE.patch
 
-diff --git a/Makefile b/Makefile
-index f6e02bc..0ee03b8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -395,10 +395,13 @@ target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
- else
--	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib/pkgconfig
-+	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/aclocal
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- endif
-+ifneq ($(BR2_HAVE_PACKAGE_GDB),y)
-+	rm -rf $(TARGET_DIR)/usr/share/gdb
-+endif
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
- 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 80215c8..2b308c8 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -135,8 +135,6 @@ gettext-dirclean:
- gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
- 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GETTEXT_DIR) install
- 	chmod +x $(TARGET_DIR)/usr/lib/libintl.so* # identify as needing to be stripped
--	rm -rf $(addprefix $(TARGET_DIR),/usr/share/aclocal /usr/include/libintl.h)
--	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/include
+diff --git a/CHANGES b/CHANGES
+index a67effe..6600eee 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -20,10 +20,10 @@
+ 	dropbear, e2fsprogs, fbv, file, flex, fontconfig, gawk,
+ 	gstreamer, gzip, intltool, ipsec-tools, iptables, libart,
+ 	libcgi, libdrm, libfuse, libgpg-error, libidn, liblockfile,
+-	libpng, lighttpd, links, linux-fusion, lmbench, lrzsz, make,
+-	module-init-tools, mysql_client, nbd, ncurses, neon, netcat,
+-	netperf, ntfsprogs, openssl, php, qt, quagga, sqlite, sdl,
+-	sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
++	libpng, lighttpd, links, linux-fusion, lmbench, lrzsz, ltrace,
++	make, module-init-tools, mysql_client, nbd, ncurses, neon,
++	netcat, netperf, ntfsprogs, openssl, php, qt, quagga, sqlite,
++	sdl, sdl_mixer, sdl_sound, sdl_ttf, squashfs, tn5250, tremor,
+ 	usbutils, xkeyboard-config, xserver_xorg-server, xvkbd
  
- $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
- 	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.so* \
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 43b1a89..d7cd828 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -68,6 +68,26 @@ LIBGLIB2_CONF_OPT += --with-libiconv=gnu
- LIBGLIB2_DEPENDENCIES+=libiconv
- endif
- 
-+define LIBGLIB2_REMOVE_DEV_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/glib-2.0
-+	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gettext
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
-+endef
+ 	Removed packages: modutils, portage, rxvt
+diff --git a/package/ltrace/ltrace-0.5-fix-build-without-USE_DEMANGLE.patch b/package/ltrace/ltrace-0.5-fix-build-without-USE_DEMANGLE.patch
+new file mode 100644
+index 0000000..180f688
+--- /dev/null
++++ b/package/ltrace/ltrace-0.5-fix-build-without-USE_DEMANGLE.patch
+@@ -0,0 +1,27 @@
++[PATCH] ltrace: fix build when USE_DEMANGLE isn't enabled
 +
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
-+endif
++summary.c unconditionally calls my_demangle(), which is only available
++when USE_DEMANGLE is enabled (which requires libiberty).
 +
-+define LIBGLIB2_REMOVE_GDB_FILES
-+	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
-+endef
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ summary.c |    5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+ifneq ($(BR2_PACKAGE_GDB),y)
-+LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libglib2))
- $(eval $(call AUTOTARGETS,package,libglib2,host))
- 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 3a3e007..8f25136 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -34,8 +34,7 @@ $(eval $(call AUTOTARGETS,package,libxml2,host))
- $(LIBXML2_HOOK_POST_INSTALL):
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
- 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
--	rm -rf $(TARGET_DIR)/usr/share/aclocal
- 	touch $@
- 
- # libxml2 for the host
--LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
-\ No newline at end of file
-+LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
-diff --git a/package/multimedia/speex/speex.mk b/package/multimedia/speex/speex.mk
-index 6943ad7..e246b24 100644
---- a/package/multimedia/speex/speex.mk
-+++ b/package/multimedia/speex/speex.mk
-@@ -32,5 +32,5 @@ $(SPEEX_TARGET_BUILD): $(SPEEX_TARGET_CONFIGURE)
- 	$(Q)touch $@
- 
- $(SPEEX_HOOK_POST_INSTALL): $(SPEEX_TARGET_INSTALL_TARGET)
--	rm -rf $(TARGET_DIR)/usr/share/doc/speex $(TARGET_DIR)/usr/share/aclocal
-+	rm -rf $(TARGET_DIR)/usr/share/doc/speex
- 	touch $@
++Index: ltrace-0.5/summary.c
++===================================================================
++--- ltrace-0.5.orig/summary.c
+++++ ltrace-0.5/summary.c
++@@ -83,7 +83,12 @@ void show_summary(void)
++ 		       (int)entries[i].tv.tv_sec, (int)entries[i].tv.tv_usec,
++ 		       (unsigned long int)(c / entries[i].count),
++ 		       entries[i].count,
+++#ifdef USE_DEMANGLE
++ 		       opt_C ? my_demangle(entries[i].name) : entries[i].name);
+++#else
+++		       entries[i].name);
+++#endif
+++
++ 	}
++ 	printf
++ 	    ("------ ----------- ----------- --------- --------------------\n");
 -- 
 1.7.1
