@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Jul 2010 23:18:50 +0200
-Subject: [Buildroot] AVR32 is broken (toolchain)
-In-Reply-To: <AANLkTi=x4Ez1ZimcV4Nc3aCym=+K=ds9zUaM0uae_RWa@mail.gmail.com>
-References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
-	<201007220352.37255.PeterHuewe@gmx.de>
-	<AANLkTikKS2AppP8zpPudDFbKvchDZvlpfQeTb-TKKvT2@mail.gmail.com>
-	<201007220457.24834.PeterHuewe@gmx.de>
-	<20100722141715.7bbc4963@surf> <20100722171035.0e656a6c@surf>
-	<AANLkTi=x4Ez1ZimcV4Nc3aCym=+K=ds9zUaM0uae_RWa@mail.gmail.com>
-Message-ID: <20100723231850.636bfab9@surf>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 24 Jul 2010 03:46:44 +0200
+Subject: [Buildroot] [PATCH] Purge libglib2 dev files from target
+In-Reply-To: <1279789149-16142-1-git-send-email-m-starostik@versanet.de>
+References: <1279789149-16142-1-git-send-email-m-starostik@versanet.de>
+Message-ID: <1279936004.30974.17.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 23 Jul 2010 16:12:56 -0300
-Thiago A. Corr?a <thiago.correa@gmail.com> wrote:
+Le jeudi 22 juillet 2010 ? 11:03 +0200, Malte Starostik a ?crit :
+> * Don't install libglib2 development binaries and to target unless
+>   BR2_HAVE_DEVFILES is set
+> * Don't install gdb plugins unless BR2_TARGET_GDB is set
+> * Remove $(TARGET_DIR)/usr/share/aclocal from target-finalize when not
+>   installing devfiles
+> * Same for /usr/share/gdb in the absence of BR2_TARGET_GDB
+> * Remove some redundant cleanup from individual packages
+> 
+> Signed-off-by: Malte Starostik <m-starostik@versanet.de>
 
->    I can't find his patch in the archives. Could you forward his patch
-> or provide a link?
+Maybe you can split your patch in two. One part which would be related
+to strip the debug files, the second would be related to strip dev files
+(aclocal directories).
 
-It's already in Git (committed yesterday)
+> +
+> +define LIBGLIB2_REMOVE_GDB_FILES
+> +	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
+> +	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
+> +endef
+> +
 
- http://git.buildroot.net/buildroot/commit/?id=d8a41bb5364461dd62a96fbc384649edd259c485
+Why using rmdir ? rm -rf isn't good enough ?
 
->    Your patch worked fine for me and now I'm able to build the
-> toolchain.
+Otherwise looks good ! :)
 
-Great!
+Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
 
-I will make some more testing with my patch and I'll push it soon.
+Regards,
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Lionel Landwerlin
