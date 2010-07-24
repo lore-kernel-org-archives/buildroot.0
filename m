@@ -1,40 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 24 Jul 2010 20:34:03 +0200
-Subject: [Buildroot] [git commit master 1/1] xserver-xorg: disable SDL
-	kdrive server
-Message-ID: <20100724183541.B50758262E@busybox.osuosl.org>
+From: Malte Starostik <m-starostik@versanet.de>
+Date: Sat, 24 Jul 2010 21:29:54 +0200
+Subject: [Buildroot] [Corrected - my bad][PATCH] Remove gdb plugins from
+	target
+In-Reply-To: <20100724195818.4b7c0bd6@surf>
+References: <20100724195818.4b7c0bd6@surf>
+Message-ID: <1279999794-9385-1-git-send-email-m-starostik@versanet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Don't install gdb plugins unless BR2_TARGET_GDB is set
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c03cab1430326beea676ce25b1abd20b45b42568
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Otherwise the build breaks if the SDL package is enabled, as xserver's
-configure script detects SDL support, but doesn't find our sdl-config
-script, so linking fails.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Malte Starostik <m-starostik@versanet.de>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Makefile                     |    3 +++
+ package/libglib2/libglib2.mk |    9 +++++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f3ffea9..7c12d24 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -70,7 +70,8 @@ XSERVER_XORG_SERVER_CONF_OPT += --disable-xorg
+diff --git a/Makefile b/Makefile
+index 0123e97..f8af6bd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -399,6 +399,9 @@ else
+ 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
+ endif
++ifneq ($(BR2_PACKAGE_GDB),y)
++	rm -rf $(TARGET_DIR)/usr/share/gdb
++endif
+ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6a43829..d7cd828 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -79,6 +79,15 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
+ LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
  endif
  
- ifeq ($(BR2_PACKAGE_XSERVER_tinyx),y)
--XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive --enable-xfbdev --disable-glx --disable-dri
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive --enable-xfbdev \
-+		--disable-glx --disable-dri --disable-xsdl
- else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
- endif
++define LIBGLIB2_REMOVE_GDB_FILES
++	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
++endef
++
++ifneq ($(BR2_PACKAGE_GDB),y)
++LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
++endif
++
+ $(eval $(call AUTOTARGETS,package,libglib2))
+ $(eval $(call AUTOTARGETS,package,libglib2,host))
+ 
 -- 
 1.7.1
