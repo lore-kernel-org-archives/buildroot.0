@@ -1,31 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Jul 2010 19:59:38 +0200
-Subject: [Buildroot] [PATCH 2/3] Purge libglib2 dev files from target
-In-Reply-To: <1279970474-15052-2-git-send-email-m-starostik@versanet.de>
-References: <201007241319.49745.m-starostik@versanet.de>
-	<1279970474-15052-2-git-send-email-m-starostik@versanet.de>
-Message-ID: <20100724195938.089ecbb4@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 24 Jul 2010 20:34:03 +0200
+Subject: [Buildroot] [git commit master 1/1] xserver-xorg: disable SDL
+	kdrive server
+Message-ID: <20100724183541.B50758262E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 24 Jul 2010 13:21:13 +0200
-Malte Starostik <m-starostik@versanet.de> wrote:
 
-> * Don't install libglib2 development binaries and to target unless
->   BR2_HAVE_DEVFILES is set
-> 
-> Signed-off-by: Malte Starostik <m-starostik@versanet.de>
+commit: http://git.buildroot.net/buildroot/commit/?id=c03cab1430326beea676ce25b1abd20b45b42568
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Otherwise the build breaks if the SDL package is enabled, as xserver's
+configure script detects SDL support, but doesn't find our sdl-config
+script, so linking fails.
 
-Thanks,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Thomas
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index f3ffea9..7c12d24 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -70,7 +70,8 @@ XSERVER_XORG_SERVER_CONF_OPT += --disable-xorg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_tinyx),y)
+-XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive --enable-xfbdev --disable-glx --disable-dri
++XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive --enable-xfbdev \
++		--disable-glx --disable-dri --disable-xsdl
+ else
+ XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
