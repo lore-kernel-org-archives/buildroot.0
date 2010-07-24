@@ -1,56 +1,46 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Sat, 24 Jul 2010 13:21:14 +0200
-Subject: [Buildroot] [PATCH 3/3] Remove gdb plugins from target
-In-Reply-To: <201007241319.49745.m-starostik@versanet.de>
-References: <201007241319.49745.m-starostik@versanet.de>
-Message-ID: <1279970474-15052-3-git-send-email-m-starostik@versanet.de>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Sat, 24 Jul 2010 15:07:14 +0300
+Subject: [Buildroot] [PATCH] add new arch for arm cortex-a9
+In-Reply-To: <AANLkTikzk8tsG3_5yH0nb5l9YL8h2Ma_e2DhNmhlgpuZ@mail.gmail.com>
+References: <AANLkTikzk8tsG3_5yH0nb5l9YL8h2Ma_e2DhNmhlgpuZ@mail.gmail.com>
+Message-ID: <4C4AD772.4040605@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Don't install gdb plugins unless BR2_TARGET_GDB is set
+On 07/22/2010 11:05 AM, falls huang wrote:
+> --- Config.in.arch      2010-07-22 03:54:18.080361833 -0400
+> +++ Config.in.arch.old  2010-07-22 03:54:33.632350886 -0400
+> @@ -81,11 +81,9 @@
+>          bool "arm1176jz-s"
+>   config BR2_arm1176jzf_s
+>          bool "arm1176jzf-s"
+> -comment "cortex-A8/A9 needs gcc>= 4.4.x"
+> +comment "cortex-A8 needs gcc>= 4.4.x"
+>   config BR2_cortex_a8
+>          bool "cortex-A8"
+> -config BR2_cortex_a9
+> -       bool "cortex-A9"
+>   config BR2_sa110
+>          bool "sa110"
+>   config BR2_sa1100
+> @@ -602,7 +600,6 @@
+>          default arm1176jz-s     if BR2_arm1176jz_s
+>          default arm1176jzf-s    if BR2_arm1176jzf_s
+>          default cortex-a8       if BR2_cortex_a8
+> -       default cortex-a9       if BR2_cortex_a9
+>          default strongarm110    if BR2_sa110
+>          default strongarm1100   if BR2_sa1100
+>          default xscale          if BR2_xscale
+> @@ -719,7 +716,6 @@
+>          default armv6zk         if BR2_arm1176jz_s
+>          default armv6zk         if BR2_arm1176jzf_s
+>          default armv7-a         if BR2_cortex_a8
+> -       default armv7-a         if BR2_cortex_a9
+>          default armv4           if BR2_sa110
+>          default armv4           if BR2_sa1100
+>          default armv5te         if BR2_xscale
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- Makefile                     |    3 +++
- package/libglib2/libglib2.mk |    9 +++++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 0123e97..0ee03b8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -399,6 +399,9 @@ else
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- endif
-+ifneq ($(BR2_HAVE_PACKAGE_GDB),y)
-+	rm -rf $(TARGET_DIR)/usr/share/gdb
-+endif
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
- 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 6a43829..d7cd828 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -79,6 +79,15 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- endif
- 
-+define LIBGLIB2_REMOVE_GDB_FILES
-+	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
-+endef
-+
-+ifneq ($(BR2_PACKAGE_GDB),y)
-+LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libglib2))
- $(eval $(call AUTOTARGETS,package,libglib2,host))
- 
--- 
-1.7.1
+Your patch is backwards and you should add Signed-off-by line.
