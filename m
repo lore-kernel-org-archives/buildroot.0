@@ -1,57 +1,43 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Sat, 24 Jul 2010 21:29:54 +0200
-Subject: [Buildroot] [Corrected - my bad][PATCH] Remove gdb plugins from
-	target
-In-Reply-To: <20100724195818.4b7c0bd6@surf>
-References: <20100724195818.4b7c0bd6@surf>
-Message-ID: <1279999794-9385-1-git-send-email-m-starostik@versanet.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 25 Jul 2010 16:53:48 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	genautotargets-conversion
+Message-ID: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Don't install gdb plugins unless BR2_TARGET_GDB is set
+The following changes since commit 3435c1afb58307240be8e4607b5bb7d239fac4e9:
+  Peter Korsgaard (1):
+        kconfig: implement KCONFIG_PROBABILITY for rand{,package}config
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- Makefile                     |    3 +++
- package/libglib2/libglib2.mk |    9 +++++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+are available in the git repository at:
 
-diff --git a/Makefile b/Makefile
-index 0123e97..f8af6bd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -399,6 +399,9 @@ else
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- endif
-+ifneq ($(BR2_PACKAGE_GDB),y)
-+	rm -rf $(TARGET_DIR)/usr/share/gdb
-+endif
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/man
- 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 6a43829..d7cd828 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -79,6 +79,15 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- endif
- 
-+define LIBGLIB2_REMOVE_GDB_FILES
-+	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
-+endef
-+
-+ifneq ($(BR2_PACKAGE_GDB),y)
-+LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libglib2))
- $(eval $(call AUTOTARGETS,package,libglib2,host))
- 
+  git://git.busybox.net/~tpetazzoni/git/buildroot genautotargets-conversion
+
+Thomas Petazzoni (4):
+      ltrace: convert to gentargets and bump to 0.5.3
+      tftpd: convert to autotargets
+      setserial: convert to autotargets and fix bug 2269
+      Deprecate pcmcia and microwin packages
+
+ package/ltrace/ltrace-0.5-00-susv3-legacy.patch    |   11 --
+ package/ltrace/ltrace-0.5.3-configure-fixes.patch  |  128 ++++++++++++++++++++
+ package/ltrace/ltrace-0.5.3-susv3-legacy.patch     |   20 +++
+ package/ltrace/ltrace.mk                           |   90 ++++-----------
+ package/microwin/Config.in                         |    2 +
+ package/pcmcia/Config.in                           |    2 +
+ .../setserial-2.17-build-system-fix.patch          |   28 +++++
+ package/setserial/setserial.mk                     |   16 ++-
+ package/tftpd/tftpd.mk                             |   83 ++-----------
+ 9 files changed, 220 insertions(+), 160 deletions(-)
+ delete mode 100644 package/ltrace/ltrace-0.5-00-susv3-legacy.patch
+ create mode 100644 package/ltrace/ltrace-0.5.3-configure-fixes.patch
+ create mode 100644 package/ltrace/ltrace-0.5.3-susv3-legacy.patch
+ create mode 100644 package/setserial/setserial-2.17-build-system-fix.patch
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
