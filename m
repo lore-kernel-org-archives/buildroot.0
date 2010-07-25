@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 25 Jul 2010 16:53:50 +0200
-Subject: [Buildroot] [PATCH 2/4] tftpd: convert to autotargets
+Date: Sun, 25 Jul 2010 16:53:49 +0200
+Subject: [Buildroot] [PATCH 1/4] ltrace: convert to gentargets and bump to
+	0.5.3
 In-Reply-To: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5339f1411f2fe6dd04e08e999193b04106b2b44f.1280069623.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7c14ee2454357a87b856cf91a43aad751a95b331.1280069623.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,252 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tftpd/tftpd.mk |   83 +++++------------------------------------------
- 1 files changed, 9 insertions(+), 74 deletions(-)
+ package/ltrace/ltrace-0.5-00-susv3-legacy.patch   |   11 --
+ package/ltrace/ltrace-0.5.3-configure-fixes.patch |  128 +++++++++++++++++++++
+ package/ltrace/ltrace-0.5.3-susv3-legacy.patch    |   20 +++
+ package/ltrace/ltrace.mk                          |   90 ++++-----------
+ 4 files changed, 170 insertions(+), 79 deletions(-)
+ delete mode 100644 package/ltrace/ltrace-0.5-00-susv3-legacy.patch
+ create mode 100644 package/ltrace/ltrace-0.5.3-configure-fixes.patch
+ create mode 100644 package/ltrace/ltrace-0.5.3-susv3-legacy.patch
 
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 795aab6..c4242f1 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -3,79 +3,14 @@
- # tftpd
+diff --git a/package/ltrace/ltrace-0.5-00-susv3-legacy.patch b/package/ltrace/ltrace-0.5-00-susv3-legacy.patch
+deleted file mode 100644
+index 7518124..0000000
+--- a/package/ltrace/ltrace-0.5-00-susv3-legacy.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- ltrace-0.5.orig/read_config_file.c	2006-02-20 22:48:07.000000000 +0100
+-+++ ltrace-0.5/read_config_file.c	2007-10-02 12:18:21.000000000 +0200
+-@@ -57,7 +57,7 @@
+- 
+- 	while (tmp->name) {
+- 		if (!strncmp(*str, tmp->name, strlen(tmp->name))
+--		    && index(" ,)#", *(*str + strlen(tmp->name)))) {
+-+		    && strchr(" ,)#", *(*str + strlen(tmp->name)))) {
+- 			*str += strlen(tmp->name);
+- 			return tmp->pt;
+- 		}
+diff --git a/package/ltrace/ltrace-0.5.3-configure-fixes.patch b/package/ltrace/ltrace-0.5.3-configure-fixes.patch
+new file mode 100644
+index 0000000..8d95883
+--- /dev/null
++++ b/package/ltrace/ltrace-0.5.3-configure-fixes.patch
+@@ -0,0 +1,128 @@
++Fix several issues with the configure script:
++
++ * Allow option values to contains equal signs, like
++   CC="/foo/arm-linux-gcc --sysroot=/foobar/usr"
++
++ * Parse the option before doing the tests so that CC/CFLAGS can be
++   used during the tests.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure |   72 +++++++++++++++++++++++++++++++-------------------------------
++ 1 file changed, 37 insertions(+), 35 deletions(-)
++
++Index: ltrace-0.5.3/configure
++===================================================================
++--- ltrace-0.5.3.orig/configure
+++++ ltrace-0.5.3/configure
++@@ -6,6 +6,38 @@
++   exit 1
++ fi
++ 
+++CC=gcc
+++CPPFLAGS=' -I /usr/include/libelf'
+++CFLAGS='-g -O2'
+++LIBS='-lelf '
+++INSTALL='/usr/bin/install -c'
+++iquote='-iquote '
+++iquoteend=''
+++
+++prefix=/usr/local
+++sysconfdir='${prefix}/etc'
+++bindir='${prefix}/bin'
+++mandir='${prefix}/share/man'
+++docdir='${prefix}/share/doc/ltrace'
+++for x_option
+++do
+++  if test -n "$x_prev"; then
+++    eval $x_prev=\$x_option
+++    x_prev=
+++    continue
+++  fi
+++  case $x_option in
+++    --*=* | *=*)
+++      x_var=`echo $x_option | sed 's/^--//' | sed 's/=.*//'`
+++      x_val=`echo $x_option | sed 's/^[^=]*=//'`
+++      eval $x_var=\"$x_val\"
+++      ;;
+++    --*)
+++      x_prev=`echo $x_option | sed 's/^--//'`
+++      ;;
+++  esac
+++done
+++
++ echo -n "checking package name... "
++ PACKAGE_NAME='ltrace'
++ echo $PACKAGE_NAME
++@@ -30,9 +62,10 @@
++   return cplus_demangle();
++ }
++ EOF
++-if gcc conftest.c -liberty 2>/dev/null
+++if $CC $CFLAGS conftest.c -liberty 2>/dev/null
++ then
++   HAVE_LIBIBERTY=1
+++  LIBS="$LIBS -liberty"
++   echo "yes"
++ else
++   unset HAVE_LIBIBERTY
++@@ -48,9 +81,10 @@
++   return __cxa_demangle();
++ }
++ EOF
++-if gcc conftest.c -lsupc++ 2>/dev/null
+++if $CC $CFLAGS conftest.c -lsupc++ 2>/dev/null
++ then
++   HAVE_LIBSUPC__=1
+++  LIBS="$LIBS -lsupc++"
++   echo "yes"
++ else
++   unset HAVE_LIBSUPC__
++@@ -67,7 +101,7 @@
++   return 0;
++ }
++ EOF
++-if gcc conftest.c 2>/dev/null
+++if $CC $CFLAGS conftest.c 2>/dev/null
++ then
++   HAVE_ELF_C_READ_MMAP=1
++   echo "yes"
++@@ -77,38 +111,6 @@
++ fi
++ rm -f conftest.c a.out
++ 
++-CC=gcc
++-CPPFLAGS=' -I /usr/include/libelf'
++-CFLAGS='-g -O2'
++-LIBS='-lelf -lsupc++ -liberty '
++-INSTALL='/usr/bin/install -c'
++-iquote='-iquote '
++-iquoteend=''
++-
++-prefix=/usr/local
++-sysconfdir='${prefix}/etc'
++-bindir='${prefix}/bin'
++-mandir='${prefix}/share/man'
++-docdir='${prefix}/share/doc/ltrace'
++-for x_option
++-do
++-  if test -n "$x_prev"; then
++-    eval $x_prev=\$x_option
++-    x_prev=
++-    continue
++-  fi
++-  case $x_option in
++-    --*=* | *=*)
++-      x_var=`echo $x_option | sed 's/^--//' | sed 's/=.*//'`
++-      x_val=`echo $x_option | sed 's/^.*=//'`
++-      eval $x_var=$x_val
++-      ;;
++-    --*)
++-      x_prev=`echo $x_option | sed 's/^--//'`
++-      ;;
++-  esac
++-done
++-
++ echo "configure: creating Makefile"
++ #
++ # Makefile.in -> Makefile
+diff --git a/package/ltrace/ltrace-0.5.3-susv3-legacy.patch b/package/ltrace/ltrace-0.5.3-susv3-legacy.patch
+new file mode 100644
+index 0000000..4c9bb8a
+--- /dev/null
++++ b/package/ltrace/ltrace-0.5.3-susv3-legacy.patch
+@@ -0,0 +1,20 @@
++Use the strchr() function instead of the legacy index() function.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ read_config_file.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: ltrace-0.5.3/read_config_file.c
++===================================================================
++--- ltrace-0.5.3.orig/read_config_file.c
+++++ ltrace-0.5.3/read_config_file.c
++@@ -83,7 +83,7 @@
++ 
++ 	while (tmp->name) {
++ 		if (!strncmp(*str, tmp->name, strlen(tmp->name))
++-				&& index(" ,()#*;012345[", *(*str + strlen(tmp->name)))) {
+++				&& strchr(" ,()#*;012345[", *(*str + strlen(tmp->name)))) {
++ 			*str += strlen(tmp->name);
++ 			return lookup_prototype(tmp->pt);
++ 		}
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 4a6811d..756ef7e 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -3,13 +3,11 @@
+ # ltrace
  #
  #############################################################
--TFTP_HPA_VERSION:=0.40
--TFTP_HPA_SOURCE:=tftp-hpa-$(TFTP_HPA_VERSION).tar.bz2
--TFTP_HPA_SITE:=$(BR2_KERNEL_MIRROR)/software/network/tftp/
--TFTP_HPA_DIR:=$(BUILD_DIR)/tftp-hpa-$(TFTP_HPA_VERSION)
--TFTP_HPA_CAT:=$(BZCAT)
--TFTP_HPA_BINARY:=tftpd/tftpd
--TFTP_HPA_TARGET_BINARY:=usr/sbin/in.tftpd
-+TFTPD_VERSION  = 5.0
-+TFTPD_SOURCE   = tftp-hpa-$(TFTPD_VERSION).tar.bz2
-+TFTPD_SITE     = $(BR2_KERNEL_MIRROR)/software/network/tftp/
-+TFTPD_CONF_OPT = --without-tcpwrappers
+-LTRACE_VERSION=0.5
+-LTRACE_SOURCE=ltrace_$(LTRACE_VERSION).orig.tar.gz
+-LTRACE_PATCH=ltrace_$(LTRACE_VERSION)-3.1.diff.gz
+-LTRACE_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/ltrace
+-LTRACE_DIR=$(BUILD_DIR)/ltrace-$(LTRACE_VERSION)
+-LTRACE_BINARY=ltrace
+-LTRACE_TARGET_BINARY=usr/bin/ltrace
++LTRACE_VERSION      = 0.5.3
++LTRACE_SOURCE       = ltrace_$(LTRACE_VERSION).orig.tar.gz
++LTRACE_PATCH        = ltrace_$(LTRACE_VERSION)-2.1.diff.gz
++LTRACE_SITE         = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/ltrace
++LTRACE_DEPENDENCIES = libelf
  
--$(DL_DIR)/$(TFTP_HPA_SOURCE):
--	 $(call DOWNLOAD,$(TFTP_HPA_SITE),$(TFTP_HPA_SOURCE))
-+define TFTPD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
-+	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
+ # ltrace uses arch=ppc for powerpc
+ LTRACE_ARCH:=$(KERNEL_ARCH:powerpc=ppc)
+@@ -17,71 +15,27 @@ ifeq ("$(strip $(ARCH))","armeb")
+ LTRACE_ARCH:=arm
+ endif
+ 
+-$(DL_DIR)/$(LTRACE_SOURCE):
+-	$(call DOWNLOAD,$(LTRACE_SITE),$(LTRACE_SOURCE))
++define LTRACE_CONFIGURE_CMDS
++	(cd $(@D) ; ./configure 		\
++		--prefix=/usr			\
++		CC='$(TARGET_CC)' 		\
++		CFLAGS='$(TARGET_CFLAGS)')
 +endef
  
--tftpd-source: $(DL_DIR)/$(TFTP_HPA_SOURCE)
+-ifneq ($(LTRACE_PATCH),)
+-LTRACE_PATCH_FILE:=$(DL_DIR)/$(LTRACE_PATCH)
+-$(LTRACE_PATCH_FILE):
+-	$(call DOWNLOAD,$(LTRACE_SITE),$(LTRACE_PATCH))
++define LTRACE_BUILD_CMDS
++	$(MAKE) -C $(@D) ARCH=$(LTRACE_ARCH)
++endef
+ 
+-else
+-LTRACE_PATCH_FILE:=
+-endif
 -
--$(TFTP_HPA_DIR)/.unpacked: $(DL_DIR)/$(TFTP_HPA_SOURCE)
--	$(TFTP_HPA_CAT) $(DL_DIR)/$(TFTP_HPA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(TFTP_HPA_DIR) package/tftpd/ tftpd\*.patch
--	touch $(TFTP_HPA_DIR)/.unpacked
+-$(LTRACE_DIR)/.patched: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_PATCH_FILE)
+-	$(ZCAT) $(DL_DIR)/$(LTRACE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-ifneq ($(LTRACE_PATCH),)
+-	$(ZCAT) $(LTRACE_PATCH_FILE) | patch -p1 -d $(LTRACE_DIR)
+-endif
+-	toolchain/patch-kernel.sh $(LTRACE_DIR) package/ltrace ltrace\*.patch
+-	$(CONFIG_UPDATE) $(@D)
+-	chmod +x $(LTRACE_DIR)/configure
+-	touch $@
 -
--$(TFTP_HPA_DIR)/.configured: $(TFTP_HPA_DIR)/.unpacked
--	(cd $(TFTP_HPA_DIR); rm -rf config.cache; \
+-$(LTRACE_DIR)/.configured: $(LTRACE_DIR)/.patched
+-	(cd $(LTRACE_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
 -		./configure $(QUIET) \
@@ -58,56 +266,51 @@ index 795aab6..c4242f1 100644
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
 -		$(DISABLE_LARGEFILE) \
--		--without-tcpwrappers \
 -	)
--	touch $(TFTP_HPA_DIR)/.configured
+-	touch $@
 -
--$(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY): $(TFTP_HPA_DIR)/.configured
--	$(MAKE) -C $(TFTP_HPA_DIR)
+-$(LTRACE_DIR)/$(LTRACE_BINARY): $(LTRACE_DIR)/.configured
+-	$(MAKE) ARCH=$(LTRACE_ARCH) -C $(LTRACE_DIR)
 -
--# This stuff is needed to work around GNU make deficiencies
--$(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY): $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY)
--	@if [ -L $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY) ]; then \
--		rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); fi
--	@if [ ! -f $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) -o $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY) \
--	-ot $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) ]; then \
--	    set -x; \
--	    rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); \
--	    cp -a $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); fi
--	@if [ ! -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa ]; then \
--		$(INSTALL) -m 0755 package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d; \
--	fi
+-$(TARGET_DIR)/$(LTRACE_TARGET_BINARY): $(LTRACE_DIR)/$(LTRACE_BINARY)
+-	#$(MAKE) DESTDIR=$(TARGET_DIR) ARCH=$(LTRACE_ARCH)  -C $(LTRACE_DIR) install
+-	$(INSTALL) -D $(LTRACE_DIR)/$(LTRACE_BINARY) $@
+ ifeq ($(BR2_HAVE_DOCUMENTATION),y)
+-	$(INSTALL) -D $(LTRACE_DIR)/ltrace.1 \
++define LTRACE_INSTALL_DOCUMENTATION
++	$(INSTALL) -D $(@D)/ltrace.1 \
+ 		$(TARGET_DIR)/usr/share/man/man1/ltrace.1
++endef
+ endif
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
 -
--tftpd: $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY)
+-ltrace: libelf $(TARGET_DIR)/$(LTRACE_TARGET_BINARY)
+ 
+-ltrace-source: $(DL_DIR)/$(LTRACE_SOURCE) $(LTRACE_PATCH_FILE)
++define LTRACE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/ltrace $(TARGET_DIR)/usr/bin
++	$(LTRACE_INSTALL_DOCUMENTATION)
++endef
+ 
+-ltrace-clean:
+-	-$(MAKE) -C $(LTRACE_DIR) clean
+-	rm -f $(LTRACE_DIR)/$(LTRACE_BINARY) \
+-		$(TARGET_DIR)/usr/share/man/man1/ltrace.1*
 -
--tftpd-clean:
--	rm -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
--	rm -f $(TARGET_DIR)/usr/sbin/in.tftpd
--	-$(MAKE) -C $(TFTP_HPA_DIR) clean
--
--tftpd-dirclean:
--	rm -rf $(TFTP_HPA_DIR)
+-ltrace-dirclean:
+-	rm -rf $(LTRACE_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_TFTPD),y)
--TARGETS+=tftpd
+-ifeq ($(BR2_PACKAGE_LTRACE),y)
+-TARGETS+=ltrace
 -endif
-+$(eval $(call AUTOTARGETS,package,tftpd))
++$(eval $(call GENTARGETS,package,ltrace))
 \ No newline at end of file
 -- 
 1.7.0.4
