@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 26 Jul 2010 11:10:03 +0200
-Subject: [Buildroot] [git commit master 1/1] diffutils: fix build with
-	uClibc 0.9.31
-Message-ID: <20100726091059.D853480407@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] busybox: bump 1.17.x version
+Message-ID: <20100726091100.10D3E80407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,67 +9,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fb9dc0beaa7775c8f612ab997a5ce2a2402a37b
+commit: http://git.buildroot.net/buildroot/commit/?id=deb51ad988ebd110c8ad8fe19d3d72473df29d0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/diffutils/diffutils-2.8.1-__mempcpy.patch |   47 +++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/diffutils/diffutils-2.8.1-__mempcpy.patch
 
-diff --git a/package/diffutils/diffutils-2.8.1-__mempcpy.patch b/package/diffutils/diffutils-2.8.1-__mempcpy.patch
-new file mode 100644
-index 0000000..94144c1
---- /dev/null
-+++ b/package/diffutils/diffutils-2.8.1-__mempcpy.patch
-@@ -0,0 +1,47 @@
-+[PATCH] diffutils: Don't use glibc specific __mempcpy
-+
-+The configure script checks for mempcpy, but the code uses the (glibc
-+specific) __mempcpy instead. Fix it to use mempcpy which is more
-+portable.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>x
-+---
-+ lib/getopt.c |    4 ++--
-+ lib/regex.c  |    2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+Index: diffutils-2.8.1/lib/getopt.c
-+===================================================================
-+--- diffutils-2.8.1.orig/lib/getopt.c
-++++ diffutils-2.8.1/lib/getopt.c
-+@@ -334,7 +334,7 @@ exchange (argv)
-+ 	nonoption_flags_len = nonoption_flags_max_len = 0;
-+       else
-+ 	{
-+-	  memset (__mempcpy (new_str, __getopt_nonoption_flags,
-++	  memset (mempcpy (new_str, __getopt_nonoption_flags,
-+ 			     nonoption_flags_max_len),
-+ 		  '\0', top + 1 - nonoption_flags_max_len);
-+ 	  nonoption_flags_max_len = top + 1;
-+@@ -445,7 +445,7 @@ _getopt_initialize (argc, argv, optstrin
-+ 	      if (__getopt_nonoption_flags == NULL)
-+ 		nonoption_flags_max_len = -1;
-+ 	      else
-+-		memset (__mempcpy (__getopt_nonoption_flags, orig_str, len),
-++		memset (mempcpy (__getopt_nonoption_flags, orig_str, len),
-+ 			'\0', nonoption_flags_max_len - len);
-+ 	    }
-+ 	}
-+Index: diffutils-2.8.1/lib/regex.c
-+===================================================================
-+--- diffutils-2.8.1.orig/lib/regex.c
-++++ diffutils-2.8.1/lib/regex.c
-+@@ -8314,7 +8314,7 @@ regerror (errcode, preg, errbuf, errbuf_
-+       if (msg_size > errbuf_size)
-+         {
-+ #if defined HAVE_MEMPCPY || defined _LIBC
-+-	  *((char *) __mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
-++	  *((char *) mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
-+ #else
-+           memcpy (errbuf, msg, errbuf_size - 1);
-+           errbuf[errbuf_size - 1] = 0;
--- 
-1.7.1
+Patch is too large, so refusing to show it
