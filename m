@@ -1,36 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 Jul 2010 14:44:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 1231] (sparc) Linux kernel fails to build
-In-Reply-To: <bug-1231-163@https.bugs.busybox.net/>
-References: <bug-1231-163@https.bugs.busybox.net/>
-Message-ID: <20100726144438.7363C82928@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Jul 2010 16:51:25 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	mark-arch-as-broken
+Message-ID: <cover.1280155876.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1231
+The following changes since commit 3435c1afb58307240be8e4607b5bb7d239fac4e9:
+  Peter Korsgaard (1):
+        kconfig: implement KCONFIG_PROBABILITY for rand{,package}config
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+are available in the git repository at:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+  git://git.busybox.net/~tpetazzoni/git/buildroot mark-arch-as-broken
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-As Sparc isn't really what we could call a CPU architecture widely used in
-embedded systems, the core Buildroot team is not really willing to spend time
-fixing Sparc related issues (we already have tons of other issues on more
-important embedded architectures like ARM, PowerPC, MIPS, AVR32 and others).
-So, unless someone (you ?) steps in with a fix for this, we are not going to
-fix it.
+Thomas Petazzoni (1):
+      Deprecate the Alpha, IA64, Sparc and Sparc64 support
 
-We will probably mark the sparc and sparc64 architectures as deprecated in
-Buildroot some day.
+ target/Config.in.arch |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
