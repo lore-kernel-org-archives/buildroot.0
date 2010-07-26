@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 27 Jul 2010 00:52:13 +0200
-Subject: [Buildroot] [git commit master 1/1] tftpd: convert to autotargets
-Message-ID: <20100726225418.D0E6282DC3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Improvements to the package
+	conversion status script
+Message-ID: <20100726225418.0E27882DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,123 +10,209 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ca30174bff85592d3f4f2636b54ca5155671afe
+commit: http://git.buildroot.net/buildroot/commit/?id=f978f2249d2c420a3e4eb5bd804ca524380f1ae2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                |    4 +-
- package/tftpd/tftpd.mk |   83 +++++------------------------------------------
- 2 files changed, 11 insertions(+), 76 deletions(-)
+ scripts/pkg-stats |  119 ++++++++++++++++++++++++++++++++++-------------------
+ 1 files changed, 77 insertions(+), 42 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index abaa7af..d03b434 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -28,8 +28,8 @@
- 	linux-fusion, lmbench, lrzsz, ltrace, make, module-init-tools,
- 	mplayer, mysql_client, nbd, ncurses, neon, netcat, netperf,
- 	ntfsprogs, openssl, php, qt, quagga, sqlite, sdl, sdl_mixer,
--	sdl_sound, sdl_ttf, squashfs, swfdec, thttpd, tn5250, tremor,
--	usbutils, webif, wireless_tools, xkeyboard-config,
-+	sdl_sound, sdl_ttf, squashfs, swfdec, tftpd, thttpd, tn5250,
-+	tremor, usbutils, webif, wireless_tools, xkeyboard-config,
- 	xserver_xorg-server, xvkbd
+diff --git a/scripts/pkg-stats b/scripts/pkg-stats
+index 1174ef0..01af89d 100755
+--- a/scripts/pkg-stats
++++ b/scripts/pkg-stats
+@@ -36,6 +36,12 @@ td {
+ td.centered {
+   text-align: center;
+ }
++tr.wrong td {
++  background: #ff9a69;
++}
++tr.correct td {
++  background: #d2ffc4;
++}
+ </style>
+ </head>
  
- 	Removed packages: modutils, portage, rxvt
-diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
-index 795aab6..c3b9e1d 100644
---- a/package/tftpd/tftpd.mk
-+++ b/package/tftpd/tftpd.mk
-@@ -3,79 +3,14 @@
- # tftpd
- #
- #############################################################
--TFTP_HPA_VERSION:=0.40
--TFTP_HPA_SOURCE:=tftp-hpa-$(TFTP_HPA_VERSION).tar.bz2
--TFTP_HPA_SITE:=$(BR2_KERNEL_MIRROR)/software/network/tftp/
--TFTP_HPA_DIR:=$(BUILD_DIR)/tftp-hpa-$(TFTP_HPA_VERSION)
--TFTP_HPA_CAT:=$(BZCAT)
--TFTP_HPA_BINARY:=tftpd/tftpd
--TFTP_HPA_TARGET_BINARY:=usr/sbin/in.tftpd
-+TFTPD_VERSION  = 5.0
-+TFTPD_SOURCE   = tftp-hpa-$(TFTPD_VERSION).tar.bz2
-+TFTPD_SITE     = $(BR2_KERNEL_MIRROR)/software/network/tftp/
-+TFTPD_CONF_OPT = --without-tcpwrappers
+@@ -78,12 +84,7 @@ for i in $(find package/ -name '*.mk') ; do
+ 	continue
+     fi
  
--$(DL_DIR)/$(TFTP_HPA_SOURCE):
--	 $(call DOWNLOAD,$(TFTP_HPA_SITE),$(TFTP_HPA_SOURCE))
-+define TFTPD_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/tftpd/tftpd $(TARGET_DIR)/usr/sbin/tftpd
-+	$(INSTALL) -D package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d/
-+endef
+-    found=0
+-
+-    echo "<tr>"
+-    echo "<td>$cnt</td>"
+     cnt=$((cnt+1))
+-    echo "<td>$i</td>"
  
--tftpd-source: $(DL_DIR)/$(TFTP_HPA_SOURCE)
+     is_auto_host=0
+     is_auto_target=0
+@@ -92,18 +93,74 @@ for i in $(find package/ -name '*.mk') ; do
+     is_manual_target=0
+     is_manual_host=0
+ 
+-    echo "<td class=\"centered\">"
+     if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
+ 	is_auto_host=1
++    fi
++
++    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++	is_auto_target=1
++    fi
++
++    if grep -E "\(call GENTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++	is_pkg_host=1
++    fi
++
++    if grep -E "\(call GENTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++	is_pkg_target=1
++    fi
++
++    pkg=$(basename $i)
++    pkg=${pkg%.mk}
++
++    if grep "^host-$pkg:" $i > /dev/null ; then
++	is_manual_host=1
++    fi
++
++    if test $is_pkg_target -eq 0 -a $is_auto_target -eq 0 ; then
++	is_manual_target=1
++    fi
++
++    tasks=""
++
++    if [ $is_manual_target -eq 1 ] ; then
++	if grep "/configure" $i > /dev/null ; then
++	    tasks=$tasks"<li>convert package to autotools ?</li>"
++	    convert_to_target_autotools=$((convert_to_target_autotools+1))
++	else
++	    tasks=$tasks"<li>convert to generic target</li>"
++	    convert_to_generic_target=$((convert_to_generic_target+1))
++	fi
++    fi
++
++    if [ $is_manual_host -eq 1 ]; then
++	if grep "/configure" $i > /dev/null ; then
++	    tasks=$tasks"<li>convert package to autotools ?</li>"
++	    convert_to_host_autotools=$((convert_to_host_autotools+1))
++	else
++	    tasks=$tasks"<li>convert to generic host</li>"
++	    convert_to_generic_host=$((convert_to_generic_host+1))
++	fi
++    fi
++
++    if test -n "$tasks" ; then
++	echo "<tr class=\"wrong\">"
++    else
++	echo "<tr class=\"correct\">"
++    fi
++
++    echo "<td>$cnt</td>"
++    echo "<td>$i</td>"
++
++    echo "<td class=\"centered\">"
++    if [ $is_auto_host -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+     fi
++    echo "</td>"
+ 
+     echo "<td class=\"centered\">"
+-    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
+-	found=1
+-	is_auto_target=1
++    if [ $is_auto_target -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+@@ -111,9 +168,7 @@ for i in $(find package/ -name '*.mk') ; do
+     echo "</td>"
+ 
+     echo "<td class=\"centered\">"
+-    if grep -E "\(call GENTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
+-	found=1
+-	is_pkg_host=1
++    if [ $is_pkg_host -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+@@ -121,22 +176,15 @@ for i in $(find package/ -name '*.mk') ; do
+     echo "</td>"
+ 
+     echo "<td class=\"centered\">"
+-    if grep -E "\(call GENTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
+-	found=1
+-	is_pkg_target=1
++    if [ $is_pkg_target -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+     fi
+     echo "</td>"
+ 
+-    pkg=$(basename $i)
+-    pkg=${pkg%.mk}
 -
--$(TFTP_HPA_DIR)/.unpacked: $(DL_DIR)/$(TFTP_HPA_SOURCE)
--	$(TFTP_HPA_CAT) $(DL_DIR)/$(TFTP_HPA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(TFTP_HPA_DIR) package/tftpd/ tftpd\*.patch
--	touch $(TFTP_HPA_DIR)/.unpacked
--
--$(TFTP_HPA_DIR)/.configured: $(TFTP_HPA_DIR)/.unpacked
--	(cd $(TFTP_HPA_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
--		$(DISABLE_LARGEFILE) \
--		--without-tcpwrappers \
--	)
--	touch $(TFTP_HPA_DIR)/.configured
--
--$(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY): $(TFTP_HPA_DIR)/.configured
--	$(MAKE) -C $(TFTP_HPA_DIR)
--
--# This stuff is needed to work around GNU make deficiencies
--$(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY): $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY)
--	@if [ -L $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY) ]; then \
--		rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); fi
--	@if [ ! -f $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) -o $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY) \
--	-ot $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) ]; then \
--	    set -x; \
--	    rm -f $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); \
--	    cp -a $(TFTP_HPA_DIR)/$(TFTP_HPA_BINARY) $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY); fi
--	@if [ ! -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa ]; then \
--		$(INSTALL) -m 0755 package/tftpd/S80tftpd-hpa $(TARGET_DIR)/etc/init.d; \
+     echo "<td class=\"centered\">"
+-    if grep "^host-$pkg:" $i > /dev/null ; then
+-	found=1
+-	is_manual_host=1
++    if [ $is_manual_host -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+@@ -144,9 +192,7 @@ for i in $(find package/ -name '*.mk') ; do
+     echo "</td>"
+ 
+     echo "<td class=\"centered\">"
+-    if test $is_pkg_target -eq 0 -a $is_auto_target -eq 0 ; then
+-	found=1
+-	is_manual_target=1
++    if [ $is_manual_target -eq 1 ] ; then
+ 	echo "<b>YES</b>"
+     else
+ 	echo "NO"
+@@ -155,22 +201,7 @@ for i in $(find package/ -name '*.mk') ; do
+ 
+     echo "<td>"
+     echo "<ul>"
+-    if grep "/configure" $i > /dev/null ; then
+-	echo "<li>convert package to autotools ?</li>"
+-	convert_to_autotools=$((convert_to_autotools+1))
+-    else
+-	if [ $is_manual_target -eq 1 ]; then
+-	    echo "<li>convert to generic target</li>"
+-	    convert_to_generic_target=$((convert_to_generic_target+1))
 -	fi
--
--tftpd: $(TARGET_DIR)/$(TFTP_HPA_TARGET_BINARY)
--
--tftpd-clean:
--	rm -f $(TARGET_DIR)/etc/init.d/S80tftpd-hpa
--	rm -f $(TARGET_DIR)/usr/sbin/in.tftpd
--	-$(MAKE) -C $(TFTP_HPA_DIR) clean
--
--tftpd-dirclean:
--	rm -rf $(TFTP_HPA_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_TFTPD),y)
--TARGETS+=tftpd
--endif
-+$(eval $(call AUTOTARGETS,package,tftpd))
+-	if [ $is_manual_host -eq 1 ]; then
+-	    echo "<li>convert to generic host</li>"
+-	    convert_to_generic_host=$((convert_to_generic_host+1))
+-	fi
+-    fi
+-    if [ $found -eq 0 ] ; then
+-	echo "<li>look manually</li>"
+-    fi
++    echo $tasks
+     echo "</ul>"
+     echo "</td>"
+ 
+@@ -189,8 +220,12 @@ echo "<td>Packages to convert to generic host</td>"
+ echo "<td>$convert_to_generic_host</td>"
+ echo "</tr>"
+ echo "<tr>"
+-echo "<td>Packages to convert to autotools</td>"
+-echo "<td>$convert_to_autotools</td>"
++echo "<td>Packages to convert to target autotools</td>"
++echo "<td>$convert_to_target_autotools</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>Packages to convert to host autotools</td>"
++echo "<td>$convert_to_host_autotools</td>"
+ echo "</tr>"
+ echo "<tr>"
+ echo "<td>TOTAL</td>"
 -- 
 1.7.1
