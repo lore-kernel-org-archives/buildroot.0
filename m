@@ -1,42 +1,25 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Mon, 26 Jul 2010 19:32:39 +0200
-Subject: [Buildroot] [PATCH 4/6] Implement basic non-wget download
- methods
-In-Reply-To: <1280164454.22687.6.camel@dubciaranr1.verifone.com>
-References: <1279625588-26570-1-git-send-email-maxime.petazzoni@bulix.org>
-	<1279625588-26570-5-git-send-email-maxime.petazzoni@bulix.org>
-	<1280164454.22687.6.camel@dubciaranr1.verifone.com>
-Message-ID: <20100726173239.GJ21488@bulix.org>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Mon, 26 Jul 2010 21:46:34 +0200
+Subject: [Buildroot] [PATCH] qt: fix alsa-lib dependency
+In-Reply-To: <1279747259-10054-1-git-send-email-luca@lucaceresoli.net>
+References: <1279747259-10054-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <4C4DE61A.7070101@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Quotient Remainder <quotientvremainder@gmail.com> [2010-07-26 18:14:14]:
+luca at lucaceresoli.net wrote:
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> If BR2_PACKAGE_QT_AUDIO_BACKEND=y, QtMultimedia requires the audio backend
+> to be already in staging in order to compile.
+> The backend is system-dependent, but since buildroot builds Linux systems
+> only, it is safe to assume that the it will be always ALSA.
+>   
 
-> Maxime, if I'm reading this right, the package source archive gets
-> created in the downloaded directory $($(PKG)_DL_DIR) instead of
-> $(DL_DIR) and so gets removed as soon as it's created by the "rm
-> -rf ...".
-> The following patch to your patch may be needed.
-
-Nice catch! I'll fix my patch series.
-
-It seems this won't get into 2010.08 anyway, so I'll have the time to
-work on the spider/source-check/external-deps features for the next
-release too.
+Peter, are you considering this for 2010.08?
 
 Thanks,
-- Maxime
--- 
-Maxime Petazzoni <http://www.bulix.org>
- ``One by one, the penguins took away my sanity.''
-Linux kernel and software developer at MontaVista Software
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100726/d97915b7/attachment.pgp>
+Luca
