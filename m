@@ -1,34 +1,51 @@
-From: JNY <jny0@hotmail.com>
-Date: Mon, 26 Jul 2010 00:49:37 -0700 (PDT)
-Subject: [Buildroot] GetTime() no longer works after toolchain rebuild
-In-Reply-To: <20100724194745.12aa8889@surf>
-References: <29238584.post@talk.nabble.com>
-	<AANLkTikKay6hseM5TaLwOuBTci4YqXUn+YhQTrg0o9YT@mail.gmail.com>
-	<20100724194745.12aa8889@surf>
-Message-ID: <29264057.post@talk.nabble.com>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Mon, 26 Jul 2010 10:25:12 +0200
+Subject: [Buildroot] [RESEND/PATCH] Git/Svn downloaders
+In-Reply-To: <4C475ED4.1040808@lucaceresoli.net>
+References: <1279625588-26570-1-git-send-email-maxime.petazzoni@bulix.org>
+	<4C475ED4.1040808@lucaceresoli.net>
+Message-ID: <20100726082512.GD21488@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Luca Ceresoli <list@lucaceresoli.net> [2010-07-21 22:55:48]:
 
-Hi People,
+> Maxime Petazzoni ha scritto:
+> >Hi,
+> >
+> >Integrating the feedback from the first series sent last week,
+> >here comes the
+> >promised resend.
+> Based on the discussions so far, I think this is a good starting point.
+> 
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-OK, GetTime() is irrellivent (and as I suspected, shouldn't actually be
-there).  I started debugging by hand (dropping in printf's here and there -
-I really should get a handle on GDB some time soon).  After one of the
-recompiles, it managed to get to a point it hadn't previously.  Now
-everytime I change the code, and recompile, it runs on the target machine. 
-I'm not really sure why it started working, but that's exactly what I did; a
-few recompiles, and kah-boom, I was in business!
+Thanks. What's next to get these patches integrated? Do I need to make
+my git tree available and send a pull request, or are the patches
+enough?
 
-Thanks for showing an interest.  Maybe others have experianced similar
-things.  I'm slightly soncerned, as I didn't actually do anything (much) to
-banish the demon, so cannot rule out the rearing its head again.
+> >Once we get to a general consensus that these are good
+> >improvements, I'll start
+> >looking more actively on how to bring back the
+> >"spider"/source-check feature,
+> >which hopefully shouldn't be to much trouble.
+> I'm not using it, so I can't judge whether this is a problem or not.
 
-Regards,
-JNY
+I'll start another thread on the spider/source-check features so we all
+agree on what they should be doing before I start implementing anything.
+
+- Maxime
 -- 
-View this message in context: http://old.nabble.com/GetTime%28%29-no-longer-works-after-toolchain-rebuild-tp29238584p29264057.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Maxime Petazzoni <http://www.bulix.org>
+ ``One by one, the penguins took away my sanity.''
+Linux kernel and software developer at MontaVista Software
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100726/21614583/attachment.pgp>
