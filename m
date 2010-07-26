@@ -1,40 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jul 2010 00:50:58 +0200
-Subject: [Buildroot] [PATCH 3/4] setserial: convert to autotargets and
-	fix bug 2269
-In-Reply-To: <e6ef954e507703efcbbe4e6a9bff18cb1d8e2cbb.1280069623.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 25 Jul 2010 16:53:51 +0200")
-References: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
-	<cover.1280069623.git.thomas.petazzoni@free-electrons.com>
-	<e6ef954e507703efcbbe4e6a9bff18cb1d8e2cbb.1280069623.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87wrshdfhp.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 26 Jul 2010 23:06:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 2269] setserial causes make error
+In-Reply-To: <bug-2269-163@https.bugs.busybox.net/>
+References: <bug-2269-163@https.bugs.busybox.net/>
+Message-ID: <20100726230631.B913E834AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2269
 
- Thomas> +Index: setserial-2.17/Makefile.in
- Thomas> +===================================================================
- Thomas> +--- setserial-2.17.orig/Makefile.in
- Thomas> ++++ setserial-2.17/Makefile.in
- Thomas> +@@ -26,9 +26,11 @@
- Thomas> + 	nroff -man setserial.8 > setserial.cat
- Thomas> + 
- Thomas> + install: setserial setserial.8
- Thomas> +-	$(INSTALL_PROGRAM) setserial $(DESTDIR)/bin
- Thomas> ++	mkdir -p $(DESTDIR)/usr/bin
- Thomas> ++	$(INSTALL_PROGRAM) setserial $(DESTDIR)/usr/bin
- Thomas> + 	$(STRIP) $(DESTDIR)/bin/setserial
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-That strip should go.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-You're also not renaming setserial-tiocghayesesp-build-fix.patch, so
-we're back with 5a2844c748.
-
-Other than that it looks good.
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+fixed in git by Thomas' commit, thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
