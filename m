@@ -1,38 +1,40 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Tue, 27 Jul 2010 00:52:13 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: fix custom patch dir
-	handling
-Message-ID: <20100726225417.D6A3B82DC3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Jul 2010 00:50:58 +0200
+Subject: [Buildroot] [PATCH 3/4] setserial: convert to autotargets and
+	fix bug 2269
+In-Reply-To: <e6ef954e507703efcbbe4e6a9bff18cb1d8e2cbb.1280069623.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 25 Jul 2010 16:53:51 +0200")
+References: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
+	<cover.1280069623.git.thomas.petazzoni@free-electrons.com>
+	<e6ef954e507703efcbbe4e6a9bff18cb1d8e2cbb.1280069623.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87wrshdfhp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98d5a8bcd0e51cc4060d73bc238cf25ae8457869
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> +Index: setserial-2.17/Makefile.in
+ Thomas> +===================================================================
+ Thomas> +--- setserial-2.17.orig/Makefile.in
+ Thomas> ++++ setserial-2.17/Makefile.in
+ Thomas> +@@ -26,9 +26,11 @@
+ Thomas> + 	nroff -man setserial.8 > setserial.cat
+ Thomas> + 
+ Thomas> + install: setserial setserial.8
+ Thomas> +-	$(INSTALL_PROGRAM) setserial $(DESTDIR)/bin
+ Thomas> ++	mkdir -p $(DESTDIR)/usr/bin
+ Thomas> ++	$(INSTALL_PROGRAM) setserial $(DESTDIR)/usr/bin
+ Thomas> + 	$(STRIP) $(DESTDIR)/bin/setserial
 
-Signed-off-by: Ossy <ossy1980@gmx.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/u-boot/u-boot.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+That strip should go.
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 60a4676..9eeea1d 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -77,8 +77,8 @@ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) boot/u-boot \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
--ifneq ($(qstrip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
--	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(U_BOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
-+ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),"")
-+	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
- endif
- 	touch $@
- 
+You're also not renaming setserial-tiocghayesesp-build-fix.patch, so
+we're back with 5a2844c748.
+
+Other than that it looks good.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
