@@ -1,64 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Jul 2010 18:15:11 +0200
-Subject: [Buildroot] [PATCH 1/1] Deprecate the Alpha,
-	IA64 and Sparc64 support
-In-Reply-To: <cover.1280160874.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1280160874.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b81b1626425651ac1f0db553dad145f05934d973.1280160874.git.thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 26 Jul 2010 18:40:06 +0200
+Subject: [Buildroot] Buildroot licence for commercial product
+In-Reply-To: <4C4DAE9A.4030402@terawatt.fr>
+References: <4C4D5B7F.7020606@terawatt.fr> <20100726134259.2e2f5fc9@surf>
+	<4C4DAE9A.4030402@terawatt.fr>
+Message-ID: <201007261840.06451.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those architectures don't exist anymore (Alpha, IA64) or aren't widely
-used for embedded systems running Linux. Moreover, no clear Buildroot
-maintainer has stepped in to maintain these architectures, so it's
-better to not pretend that we support them.
+Damien, All,
 
-The goal is to mark them as deprecated in 2010.08 and remove them in
-2010.11.
+On Monday 26 July 2010 17:49:46 Damien Borie wrote:
+> I don't know how I will give access to all licences text, copyright, and 
+> source code, as the system is closed and nobody can connect to it except 
+> us...
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- target/Config.in.arch |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+The easiest, IMHO, is to have a leaflet listing all packages you identified
+and the name of the license that applies to each of them, plus the full text
+for each license.
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 62721c9..db822fb 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -6,6 +6,9 @@ choice
- 
- config BR2_alpha
- 	bool "alpha"
-+	# Alpha does not exist anymore and has never been used in
-+	# embedded systems, so we'll remove support for it.
-+	depends on BR2_DEPRECATED
- 	depends on BROKEN # no threads, shared libs, gcc psignal compile errors
- config BR2_arm
- 	bool "arm"
-@@ -18,6 +21,9 @@ config BR2_cris
- 	bool "cris"
- config BR2_ia64
- 	bool "ia64"
-+	# IA64 almost does not exist anymore and has never been used
-+	# in embedded systems, so we'll remove support for it.
-+	depends on BR2_DEPRECATED
- 	depends on BROKEN # uclibc linker errors
- config BR2_i386
- 	bool "i386"
-@@ -37,6 +43,11 @@ config BR2_sh64
- config BR2_sparc
- 	bool "sparc"
- config BR2_sparc64
-+	# Sparc64 isn't really used in embedded systems, and in the
-+	# cases where it is used, Linux doesn't seem to be common, and
-+	# as of today we don't have a maintainer in Buildroot who
-+	# wants to take care of the sparc support.
-+	depends on BR2_DEPRECATED
- 	bool "sparc64"
- config BR2_x86_64
- 	bool "x86_64"
+Then, for GPL-licensed (and similar licensed) packages, you can provide
+access to the complete and corresponding source code on-line, eg. on a
+FTP server. Bundling a CD with your product would be ultimate, and very
+well regarded.
+
+As a side note, be extra carefull about the toolchain, as parts of it will
+end up on the target. Examples are the C library file (eg. libc.so.0,
+libm.so.0, ...) and others (eg. libgcc.so.0 from gcc, ...). So you should
+also count those packages in.
+
+All this is from a non-lawyer, so you'd better check with yours.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.0.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
