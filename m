@@ -1,61 +1,76 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Mon, 26 Jul 2010 10:47:53 +0200
-Subject: [Buildroot] Re-implementing the spider/source-check targets
-Message-ID: <20100726084752.GE21488@bulix.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 26 Jul 2010 11:10:03 +0200
+Subject: [Buildroot] [git commit master 1/1] diffutils: fix build with
+	uClibc 0.9.31
+Message-ID: <20100726091059.D853480407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-With my patch series to implement non-WGET downloads, I stubbed out the
-spider and source-check targets since they didn't integrate very nicely
-with the download mechanism anymore.
+commit: http://git.buildroot.net/buildroot/commit/?id=9fb9dc0beaa7775c8f612ab997a5ce2a2402a37b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-But we obviously need to bring these features back, so I wish to start a
-quick discussion on what they are supposed to do.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/diffutils/diffutils-2.8.1-__mempcpy.patch |   47 +++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/diffutils/diffutils-2.8.1-__mempcpy.patch
 
-
-As I understand it, the spider target downloads everything so that all
-the tarballs are available for later use. This is useful too for
-creating the BR2 backup site.
-
-The source-check feature would be to only check that the remote source
-is available. This is done with the wierdly named --spider option of
-wget. For the VCS, we can use `{svn,git} ls` to check that the remote
-repository is available and accessible.
-
-
-Onto the implementation now. I think we should restrict the
-implementation of these two features to GENTARGETS package, which would
-hopefully help accelerate the migration of the remaining packages to the
-new architecture (by the way is there a list of the packages still using
-the "old system", to get an idea of which are left to update, and which
-ones, so I can eventually contribute a few?).
-
-The spider feature should be rather easy to implement: we just need
-$(BUILD_DIR)/%/.stamp_downloaded for each package in the config.
-
-For source-check, we need "checkers" for each download method. Then we
-need a phony target (we don't want to create a stamp or anything here)
-that'll dispatch to the checkers. I'm not sure how we want to show the
-results, if we should fail on the first unavailable package source, etc.
-Feedback/ideas here is very welcome!
-
-
-Regards,
-- Maxime
-
+diff --git a/package/diffutils/diffutils-2.8.1-__mempcpy.patch b/package/diffutils/diffutils-2.8.1-__mempcpy.patch
+new file mode 100644
+index 0000000..94144c1
+--- /dev/null
++++ b/package/diffutils/diffutils-2.8.1-__mempcpy.patch
+@@ -0,0 +1,47 @@
++[PATCH] diffutils: Don't use glibc specific __mempcpy
++
++The configure script checks for mempcpy, but the code uses the (glibc
++specific) __mempcpy instead. Fix it to use mempcpy which is more
++portable.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>x
++---
++ lib/getopt.c |    4 ++--
++ lib/regex.c  |    2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++Index: diffutils-2.8.1/lib/getopt.c
++===================================================================
++--- diffutils-2.8.1.orig/lib/getopt.c
+++++ diffutils-2.8.1/lib/getopt.c
++@@ -334,7 +334,7 @@ exchange (argv)
++ 	nonoption_flags_len = nonoption_flags_max_len = 0;
++       else
++ 	{
++-	  memset (__mempcpy (new_str, __getopt_nonoption_flags,
+++	  memset (mempcpy (new_str, __getopt_nonoption_flags,
++ 			     nonoption_flags_max_len),
++ 		  '\0', top + 1 - nonoption_flags_max_len);
++ 	  nonoption_flags_max_len = top + 1;
++@@ -445,7 +445,7 @@ _getopt_initialize (argc, argv, optstrin
++ 	      if (__getopt_nonoption_flags == NULL)
++ 		nonoption_flags_max_len = -1;
++ 	      else
++-		memset (__mempcpy (__getopt_nonoption_flags, orig_str, len),
+++		memset (mempcpy (__getopt_nonoption_flags, orig_str, len),
++ 			'\0', nonoption_flags_max_len - len);
++ 	    }
++ 	}
++Index: diffutils-2.8.1/lib/regex.c
++===================================================================
++--- diffutils-2.8.1.orig/lib/regex.c
+++++ diffutils-2.8.1/lib/regex.c
++@@ -8314,7 +8314,7 @@ regerror (errcode, preg, errbuf, errbuf_
++       if (msg_size > errbuf_size)
++         {
++ #if defined HAVE_MEMPCPY || defined _LIBC
++-	  *((char *) __mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
+++	  *((char *) mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
++ #else
++           memcpy (errbuf, msg, errbuf_size - 1);
++           errbuf[errbuf_size - 1] = 0;
 -- 
-Maxime Petazzoni <http://www.bulix.org>
- ``One by one, the penguins took away my sanity.''
-Linux kernel and software developer at MontaVista Software
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100726/8323a572/attachment-0001.pgp>
+1.7.1
