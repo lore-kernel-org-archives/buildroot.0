@@ -1,41 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Jul 2010 15:10:41 +0200
-Subject: [Buildroot] [git commit master 1/1] flex: fix configure cache issue
-	with BR2_NEEDS_GETTEXT
-Message-ID: <20100726131117.1FEA281F53@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Jul 2010 15:15:13 +0200
+Subject: [Buildroot] [pull request] Pull request for branch pkg-script-fix
+Message-ID: <cover.1280150104.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The following changes since commit 3435c1afb58307240be8e4607b5bb7d239fac4e9:
+  Peter Korsgaard (1):
+        kconfig: implement KCONFIG_PROBABILITY for rand{,package}config
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3da3c338773021406a76e17f37ba7b9c1650b8b4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+are available in the git repository at:
 
-Flex doesn't NEED gettext/libintl, but it's configure script checks for it,
-so make sure those a built before flex, otherwise flex will populate
-tgt-config.cache with invalid values, breaking the build of other packages
-needing it (like libglib2).
+  git://git.busybox.net/~tpetazzoni/git/buildroot pkg-script-fix
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/flex/flex.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+Thomas Petazzoni (1):
+      Improvements to the package conversion status script
 
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index ad35548..41c9505 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -10,6 +10,9 @@ FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
- FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
- FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
- FLEX_INSTALL_STAGING=YES
-+FLEX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
-+	$(if $(BR2_PACKAGE_LIBINTL),libintl)
- 
- # lex -> flex
- define FLEX_INSTALL_LEX
+ scripts/pkg-stats |  119 ++++++++++++++++++++++++++++++++++-------------------
+ 1 files changed, 77 insertions(+), 42 deletions(-)
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
