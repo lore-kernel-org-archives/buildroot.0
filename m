@@ -1,170 +1,80 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Jul 2010 12:07:22 +0200
-Subject: [Buildroot] [git commit master 1/1] wireless_tools: Migrate to
-	gentargets and fixes
-Message-ID: <20100726100842.3DE3083496@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 Jul 2010 13:42:59 +0200
+Subject: [Buildroot] Buildroot licence for commercial product
+In-Reply-To: <4C4D5B7F.7020606@terawatt.fr>
+References: <4C4D5B7F.7020606@terawatt.fr>
+Message-ID: <20100726134259.2e2f5fc9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Damien,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7b5fd80c4d3695341d16b85e9960fb8fd8a9fa6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Warning: I am not a lawyer. I am not a licensing expert.
 
-Rename it from wireless-tools to wireless_tools to match upstream.
-Make it install manpages.
+On Mon, 26 Jul 2010 11:55:11 +0200
+Damien Borie <dbe@terawatt.fr> wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                            |    3 +-
- package/Config.in                                  |    2 +-
- package/wireless-tools/wireless-tools.mk           |   58 --------------------
- .../{wireless-tools => wireless_tools}/Config.in   |    0
- .../wireless_tools-29-remove-bzero.patch}          |    0
- package/wireless_tools/wireless_tools.mk           |   30 ++++++++++
- 6 files changed, 33 insertions(+), 60 deletions(-)
- delete mode 100644 package/wireless-tools/wireless-tools.mk
- rename package/{wireless-tools => wireless_tools}/Config.in (100%)
- rename package/{wireless-tools/wireless_tools.29-remove-bzero.patch => wireless_tools/wireless_tools-29-remove-bzero.patch} (100%)
- create mode 100644 package/wireless_tools/wireless_tools.mk
+> We distribute a product which system is a Linux built with Buildroot.
+> I have some question about Buildroot use for a commercial product :
+> - as the system has been made with Buildroot, must I mention
+> Buildroot with a url, display the licence or something like that in
+> my application?
 
-diff --git a/CHANGES b/CHANGES
-index 64a60b3..aeaef6f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -25,7 +25,8 @@
- 	mplayer, mysql_client, nbd, ncurses, neon, netcat, netperf,
- 	ntfsprogs, openssl, php, qt, quagga, sqlite, sdl, sdl_mixer,
- 	sdl_sound, sdl_ttf, squashfs, swfdec, thttpd, tn5250, tremor,
--	usbutils, webif, xkeyboard-config, xserver_xorg-server, xvkbd
-+	usbutils, webif, wireless_tools, xkeyboard-config,
-+	xserver_xorg-server, xvkbd
- 
- 	Removed packages: modutils, portage, rxvt
- 
-diff --git a/package/Config.in b/package/Config.in
-index fe96939..6b3616a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -435,7 +435,7 @@ source "package/webif/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/wget/Config.in"
- endif
--source "package/wireless-tools/Config.in"
-+source "package/wireless_tools/Config.in"
- source "package/wpa_supplicant/Config.in"
- 
- endmenu
-diff --git a/package/wireless-tools/wireless-tools.mk b/package/wireless-tools/wireless-tools.mk
-deleted file mode 100644
-index 9c16ff8..0000000
---- a/package/wireless-tools/wireless-tools.mk
-+++ /dev/null
-@@ -1,58 +0,0 @@
--#############################################################
--#
--# wireless-tools - Wireless Tools
--#
--#############################################################
--
--# This Makefile only work with the multicall version of Wireless Tools,
--# which is available in 28-pre3 and later...
--# Jean II
--# v28.pre3 -> earliest possible
--WIRELESS_TOOLS_VERSION:=29
--WIRELESS_TOOLS_SUBVER:=
--
--WIRELESS_TOOLS_SOURCE_URL:=http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/
--WIRELESS_TOOLS_SOURCE:=wireless_tools.$(WIRELESS_TOOLS_VERSION)$(WIRELESS_TOOLS_SUBVER).tar.gz
--WIRELESS_TOOLS_BUILD_DIR=$(BUILD_DIR)/wireless_tools.$(WIRELESS_TOOLS_VERSION)
--
--$(DL_DIR)/$(WIRELESS_TOOLS_SOURCE):
--	 $(call DOWNLOAD,$(WIRELESS_TOOLS_SOURCE_URL),$(WIRELESS_TOOLS_SOURCE))
--
--$(WIRELESS_TOOLS_BUILD_DIR)/.unpacked: $(DL_DIR)/$(WIRELESS_TOOLS_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(WIRELESS_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(WIRELESS_TOOLS_BUILD_DIR) package/wireless-tools/ \*.patch
--	sed -i -e s:'strip':'$(STRIPCMD)':g $(WIRELESS_TOOLS_BUILD_DIR)/Makefile
--	touch $(WIRELESS_TOOLS_BUILD_DIR)/.unpacked
--
--$(WIRELESS_TOOLS_BUILD_DIR)/.configured: $(WIRELESS_TOOLS_BUILD_DIR)/.unpacked
--	touch $(WIRELESS_TOOLS_BUILD_DIR)/.configured
--
--$(WIRELESS_TOOLS_BUILD_DIR)/iwmulticall: $(WIRELESS_TOOLS_BUILD_DIR)/.configured
--	$(MAKE) -C $(WIRELESS_TOOLS_BUILD_DIR) \
--		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--		iwmulticall
--
--$(TARGET_DIR)/sbin/iwconfig: $(WIRELESS_TOOLS_BUILD_DIR)/iwmulticall
--	$(MAKE) -C $(WIRELESS_TOOLS_BUILD_DIR) \
--		PREFIX="$(TARGET_DIR)" \
--		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--		install-iwmulticall
--
--wireless-tools: $(TARGET_DIR)/sbin/iwconfig
--
--wireless-tools-source: $(DL_DIR)/$(WIRELESS_TOOLS_SOURCE)
--
--wireless-tools-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(WIRELESS_TOOLS_BUILD_DIR) uninstall
--	-$(MAKE) -C $(WIRELESS_TOOLS_BUILD_DIR) clean
--
--wireless-tools-dirclean:
--	rm -rf $(WIRELESS_TOOLS_BUILD_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
--TARGETS+=wireless-tools
--endif
-diff --git a/package/wireless-tools/Config.in b/package/wireless_tools/Config.in
-similarity index 100%
-rename from package/wireless-tools/Config.in
-rename to package/wireless_tools/Config.in
-diff --git a/package/wireless-tools/wireless_tools.29-remove-bzero.patch b/package/wireless_tools/wireless_tools-29-remove-bzero.patch
-similarity index 100%
-rename from package/wireless-tools/wireless_tools.29-remove-bzero.patch
-rename to package/wireless_tools/wireless_tools-29-remove-bzero.patch
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-new file mode 100644
-index 0000000..0707808
---- /dev/null
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -0,0 +1,30 @@
-+#############################################################
-+#
-+# wireless_tools
-+#
-+#############################################################
-+
-+WIRELESS_TOOLS_VERSION = 29
-+WIRELESS_TOOLS_SITE = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
-+WIRELESS_TOOLS_SOURCE = wireless_tools.$(WIRELESS_TOOLS_VERSION).tar.gz
-+
-+define WIRELESS_TOOLS_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		iwmulticall
-+endef
-+
-+define WIRELESS_TOOLS_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+	rm -f $(@D)/iwmulticall
-+endef
-+
-+define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" install-iwmulticall
-+	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
-+endef
-+
-+define WIRELESS_TOOLS_UNINSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" uninstall
-+endef
-+
-+$(eval $(call GENTARGETS,package,wireless_tools))
+As Buildroot by itself isn't distributed, my understanding is that the
+license doesn't require you to mention and distribute Buildroot
+together with your product.
+
+However, the GPL says (section 3) :
+
+ ?
+The source code for a work means the preferred form of the work for
+making modifications to it. For an executable work, complete source
+code means all the source code for all modules it contains, plus any
+associated interface definition files, plus the scripts used to control
+compilation and installation of the executable. 
+ ?
+
+And maybe we might see Buildroot as a part of the "scripts used to
+control compilation and installation" of other GPL executables (Linux
+kernel, Busybox and others).
+
+I think we already had this discussion on the Buildroot list sometime
+ago, and I think the consensus was that the main Buildroot contributors
+considered that there was no distribution of Buildroot when selling a
+product whose firmware was built using Buildroot and that consequently,
+mentionning Buildroot and distributing its source code wasn't required.
+
+> - I saw in another thread, if I understood well, that I must mention 
+> licence and source code for all modules of the distribution. But what 
+> does it means exactly? Must I put in my product file system every
+> source code and licence of every installed programs? Must I put a
+> visible link in my main application or can I only put everything in
+> the file system without a clear access?
+
+It depends on the individual license of each of the modules in your
+distribution. There will probably be GPL parts, LGPL parts, MIT/X11/BSD
+parts and parts under other licenses. Each license has its own set of
+requirements associated to the act of distribution.
+
+Generally speaking, for a GPLv2 module such as the Linux kernel or
+Busybox, the requirements are well detailed in section 3 of the licence
+(see http://www.gnu.org/licenses/old-licenses/gpl-2.0.html). You may
+also be interested by the "Distribution of programs released under the
+GNU licenses" section of the GPL FAQ, at
+http://www.gnu.org/licenses/gpl-faq.html. You may also want to have a
+look at the Practical Guide to GPL Compliance
+<http://www.softwarefreedom.org/resources/2008/compliance-guide.html>.
+
+In terms of distribution, the LGPL license have fairly similar
+requirements to the GPL. MIT/X11/BSD and other non-copyleft licenses
+have fewer requirements, they basically only require attribution.
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
