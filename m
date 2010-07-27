@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 27 Jul 2010 10:02:06 +0200
-Subject: [Buildroot] [git commit master 1/1] diffutils: fix configure cache
-	issue with BR2_NEEDS_GETTEXT
-Message-ID: <20100727200331.1F6FC826B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] at: fix configure cache issue
+	with flex
+Message-ID: <20100727200331.5B3B7826B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03bb359cb7c3bae307b6facc45aa95ccfaedfb48
+commit: http://git.buildroot.net/buildroot/commit/?id=c43f21339e9417b5f6939e04e02089b445581102
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Like flex, diffutils doesn't NEED gettext/libintl, but it's configure script
-checks for it, so make sure those a built before diffutils, otherwise it
-will populate tgt-config.cache with invalid values, breaking the build of
-other packages needing it (like libglib2).
+Make sure flex is built before at if enabled, so it correctly detects
+it and doesn't populate tgt-config.cache with invalid values.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/diffutils/diffutils.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ CHANGES          |    2 +-
+ package/at/at.mk |    2 ++
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index c0b3830..6ce71c9 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -9,6 +9,10 @@ DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+diff --git a/CHANGES b/CHANGES
+index 5aa39fb..2d3d32b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -18,7 +18,7 @@
+ 	New packages: cgilua, copas, coxpcall, ffmpeg, libsvgtiny,
+ 	luafilesystem, luasocket, rings, wsapi, xavante, xterm
  
- DIFFUTILS_INSTALL_STAGING = YES
+-	Updated/fixed packages: alsa-lib, alsamixergui, avahi,
++	Updated/fixed packages: alsa-lib, alsamixergui, at, avahi,
+ 	berkeleydb, bash, blackbox, busybox, bzip2, cdrkit, cmake,
+ 	dash, dhcp, dialog, diffutils, distcc, dmalloc, dnsmasq,
+ 	dropbear, e2fsprogs, fbv, file, flex, fontconfig, gawk, gmpc,
+diff --git a/package/at/at.mk b/package/at/at.mk
+index 3eb99a4..57b7847 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -12,6 +12,8 @@ AT_INSTALL_TARGET = YES
+ # no install-strip / install-exec
+ AT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
-+DIFFUTILS_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
-+	$(if $(BR2_PACKAGE_LIBINTL),libintl)
++AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex)
 +
- DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
- 		ac_fsusage_space=yes \
- 		fu_cv_sys_stat_statfs2_bsize=yes \
+ AT_CONF_OPT = \
+         --with-jobdir=/var/spool/cron/atjobs \
+         --with-atspool=/var/spool/cron/atspool \
 -- 
 1.7.1
