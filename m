@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 23:06:16 +0200
-Subject: [Buildroot] [git commit master 1/1] binutils,
-	gcc: use correct --prefix
-Message-ID: <20100727210656.9ED1E835A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain: Remove now-unused
+	variables
+Message-ID: <20100727210656.C5558835A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,17 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ae84ac85ff72a861e8c276ba4e650e1e9ba7982
+commit: http://git.buildroot.net/buildroot/commit/?id=c7f180eca5eb35f2973cf0c89e1d047e090e02af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The cross binutils and cross gcc are actually going to be executed
-from $(STAGING_DIR)/usr, so the correct prefix is $(STAGING_DIR)/usr
-and not /usr.
+The variable BR2_SYSROOT_STAGING_DESTDIR is no longer used, since now
+the prefix for gcc is already set to the correct location.
 
-This also fixes what is known as the "AVR32 toolchain build failure",
-which was due to the fact that the prefix directory wasn't writable
-(since it was /usr).
+The variable BR2_SYSROOT_TARGET_DESTDIR was already unused.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/Makefile.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
+index e5fae1f..d1af877 100644
+--- a/toolchain/Makefile.in
++++ b/toolchain/Makefile.in
+@@ -10,8 +10,6 @@ else
+ MULTILIB:=--disable-multilib
+ endif
+ 
+-BR2_SYSROOT_STAGING_DESTDIR=DESTDIR=$(STAGING_DIR)/
+-BR2_SYSROOT_TARGET_DESTDIR=DESTDIR=$(TARGET_DIR)/
+ BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/
+ BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
+ BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
+-- 
+1.7.1
