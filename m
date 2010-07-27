@@ -1,49 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 21:18:45 +0200
-Subject: [Buildroot] build failed - cannot stat libz.so*
-In-Reply-To: <20100727190310.GA10996@merkur.ravnborg.org>
-References: <20100727190310.GA10996@merkur.ravnborg.org>
-Message-ID: <20100727211845.1941d75a@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Jul 2010 19:24:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 901] new package: gpsd
+In-Reply-To: <bug-901-163@https.bugs.busybox.net/>
+References: <bug-901-163@https.bugs.busybox.net/>
+Message-ID: <20100727192438.65D51834CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+https://bugs.busybox.net/show_bug.cgi?id=901
 
-On Tue, 27 Jul 2010 21:03:10 +0200
-Sam Ravnborg <sam@ravnborg.org> wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> While trying to do a sparc build of buildroot I hit
-> the following issue:
-> 
-> cp: cannot stat
-> `/home/sam/devel/buildroot.git/output/build/zlib-1.2.3/libz.so*': No
-> such file or directory make: ***
-> [/home/sam/devel/buildroot.git/output/build/zlib-1.2.3/.stamp_staging_installed]
-> Error 1
-> 
-> I checked and there is no lib*.so file in that dir.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
 
-Yes, because your configuration has :
-
-BR2_PREFER_STATIC_LIB=y
-
-which isn't the default value, and we don't test static libraries very
-often. The zlib package is relatively easy to fix with regard to this
-problem.
-
-However, I'm really not sure that it will work properly with other
-packages.
-
-Do you have a particular reason for using static libraries ?
-
-Peter, do we want to support static libraries ?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
