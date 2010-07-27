@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 20:18:57 +0200
-Subject: [Buildroot] [pull request] Pull request for branch fix-gcc-on-target
-Message-ID: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 20:18:59 +0200
+Subject: [Buildroot] [PATCH 2/4] target-gcc: fix build
+In-Reply-To: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f43054d841c82c121c4fd8c1e6604888233b6d10.1280254559.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Now that $(STAGING_DIR)/usr/bin is no longer in the PATH, we need to
+pass the absolute paths to $(TARGET_CC) when building the target gcc
+compiler.
 
-Here are a few patches concerning target-gcc. One of them is a build
-fix (issue reported by rfs on IRC), the other ones are minor
-improvements.
+This commit fixes the target gcc build problem reported on the list. I
+have successfully been able to build a target gcc for ARM, use it to
+compile a hello world application on the target and run this
+application.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/gcc/gcc-uclibc-4.x.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-The following changes since commit e475cf0309f11078202ade5019fcf49f58a60eed:
-  Thomas Petazzoni (1):
-        Deprecate pcmcia and microwin packages
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot fix-gcc-on-target
-
-Thomas Petazzoni (4):
-      target-gcc: Get rid of TARGET_GCC_FLAGS
-      target-gcc: fix build
-      target-gcc: no need to strip binaries, remove .la files and doc
-      target-gcc: remove useless copies of gcc
-
- toolchain/gcc/Makefile.in       |    5 -----
- toolchain/gcc/gcc-uclibc-4.x.mk |   19 +++++++++----------
- 2 files changed, 9 insertions(+), 15 deletions(-)
-
-Thanks,
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index cfbe616..52b20e9 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -397,6 +397,8 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
+ 		CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+ 		CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+ 		BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
++		GCC_FOR_TARGET="$(TARGET_CC)" \
++		CC_FOR_TARGET="$(TARGET_CC)" \
+ 		$(GCC_SRC_DIR)/configure $(QUIET) \
+ 		--prefix=/usr \
+ 		--build=$(GNU_HOST_NAME) \
 -- 
-Thomas Petazzoni
+1.7.0.4
