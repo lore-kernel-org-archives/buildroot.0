@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] midori: make sure it can't be
-	selected if webkit can't be enabled
-Message-ID: <20100727210247.80981835A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] package: add libgail package
+Message-ID: <20100727210246.15D41835A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +9,139 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b14fe9ca62e03cac3e034ca846acf2a2d9207a2
+commit: http://git.buildroot.net/buildroot/commit/?id=4e9424088bc1a7300a5e613cba30d8e662508274
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/midori/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+This package include a patch for directfb support. This patch has been
+proposed for upstream integration
+(https://bugzilla.gnome.org/show_bug.cgi?id=614199).
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index f9117ea..95a0afb 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -3,7 +3,12 @@ config BR2_PACKAGE_MIDORI
- 	select BR2_PACKAGE_WEBKIT
- 	select BR2_PACKAGE_LIBSEXY
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_INSTALL_LIBSTDCPP # webkit
-+	depends on BR2_USE_WCHAR	 # webkit
- 	help
- 	  Midori is a lightweight web browser based on WebKit
- 
- 	  http://software.twotoasts.de/?page=midori
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+---
+ package/Config.in                                  |    1 +
+ package/libgail/Config.in                          |   18 ++++++++
+ .../libgail-1.22.3-Relax-X11-dependencies.patch    |   42 ++++++++++++++++++++
+ package/libgail/libgail.mk                         |   26 ++++++++++++
+ 4 files changed, 87 insertions(+), 0 deletions(-)
+ create mode 100644 package/libgail/Config.in
+ create mode 100644 package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
+ create mode 100644 package/libgail/libgail.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index f6a3f34..2b68cab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -267,6 +267,7 @@ source "package/gtk2-themes/Config.in"
+ source "package/jpeg/Config.in"
+ source "package/libart/Config.in"
+ source "package/libdrm/Config.in"
++source "package/libgail/Config.in"
+ source "package/libglade/Config.in"
+ source "package/libgtk12/Config.in"
+ source "package/libgtk2/Config.in"
+diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+new file mode 100644
+index 0000000..ba74795
+--- /dev/null
++++ b/package/libgail/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBGAIL
++	bool "libgail"
++	depends on BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_PANGO
++	help
++	  GAIL provides accessibility support for gtk+ and
++	  libgnomecanvas by implementing AtkObjects for widgets in
++	  gtk+ and libgnomecanvas.
 +
-+comment "midori requires C++, WCHAR in toolchain and libgtk2"
-+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_PACKAGE_LIBGTK2
++	  The GAIL library is a GTK+ module. For example, if the
++	  module is loaded in a program which calls
++	  gtk_widget_get_accessible() for a GtkEntry an instance of
++	  GailEntry is returned. This module is normally used with the
++	  atk-bridge GTK+ module from at-spi to allow an assistive
++	  technology, e.g a screenreader, to query or drive the
++	  program.
++
++	  http://developer.gnome.org/projects/gap
+diff --git a/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch b/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
+new file mode 100644
+index 0000000..97e5656
+--- /dev/null
++++ b/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
+@@ -0,0 +1,42 @@
++From cca72c48b5643fa62e1d55b7b181e147f5ba7fe9 Mon Sep 17 00:00:00 2001
++From: Lionel Landwerlin <llandwerlin@gmail.com>
++Date: Sun, 28 Mar 2010 21:47:38 +0200
++Subject: [PATCH] Relax X11 dependency
++
++Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
++---
++ configure.in      |    4 +++-
++ gail/gailwindow.c |    2 +-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/configure.in b/configure.in
++index 3801655..abaf417 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -86,7 +86,9 @@ GTK_REQUIRED_VERSION=2.9.4
++ PKG_CHECK_MODULES(DEP, $ATK_PACKAGES >= $ATK_REQUIRED_VERSION \
++ 	$GTK_PACKAGES >= $GTK_REQUIRED_VERSION)
++ 
++-if test "$gail_native_win32" != "yes"; then
+++AC_ARG_ENABLE(x, [      --disable-x     disable x11 backend ],x11_backend=no,x11_backend=yes)
+++
+++if test "$gail_native_win32" != "yes" -a "$x11_backend" != "no"; then
++ 
++ PKG_CHECK_MODULES(X, x11, :, [
++ # pkg-config modules not found (only present since X11R7 aka Xorg); use
++diff --git a/gail/gailwindow.c b/gail/gailwindow.c
++index 616b25e..add454b 100644
++--- a/gail/gailwindow.c
+++++ b/gail/gailwindow.c
++@@ -1071,7 +1071,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
++   return get_window_zorder (widget->window);
++ }
++ 
++-#elif defined (GDK_WINDOWING_WIN32)
+++#elif defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_DIRECTFB)
++ 
++ static gint
++ gail_window_get_mdi_zorder (AtkComponent *component)
++-- 
++1.7.0.2
++
+diff --git a/package/libgail/libgail.mk b/package/libgail/libgail.mk
+new file mode 100644
+index 0000000..ef08b66
+--- /dev/null
++++ b/package/libgail/libgail.mk
+@@ -0,0 +1,26 @@
++#############################################################
++#
++# libgail
++#
++#############################################################
++LIBGAIL_VERSION_MAJOR = 1.22
++LIBGAIL_VERSION_MINOR = 3
++LIBGAIL_VERSION = $(LIBGAIL_VERSION_MAJOR).$(LIBGAIL_VERSION_MINOR)
++LIBGAIL_SOURCE = gail-$(LIBGAIL_VERSION).tar.bz2
++LIBGAIL_SITE = http://ftp.gnome.org/pub/gnome/sources/gail/$(LIBGAIL_VERSION_MAJOR)
++
++LIBGAIL_AUTORECONF = YES
++LIBGAIL_LIBTOOL_PATCH = NO
++LIBGAIL_INSTALL_STAGING = YES
++LIBGAIL_INSTALL_TARGET = YES
++
++LIBGAIL_CONF_OPT = --enable-shared \
++		--enable-static
++
++ifneq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++LIBGAIL_CONF_OPT += --disable-x
++endif
++
++LIBGAIL_DEPENDENCIES = host-pkg-config libgtk2 pango
++
++$(eval $(call AUTOTARGETS,package,libgail))
 -- 
 1.7.1
