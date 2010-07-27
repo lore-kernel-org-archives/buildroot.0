@@ -1,30 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jul 2010 23:24:16 +0200
-Subject: [Buildroot] [PATCH 1/1] Deprecate the Alpha,
-	IA64 and Sparc64 support
-In-Reply-To: <b81b1626425651ac1f0db553dad145f05934d973.1280160874.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 26 Jul 2010 18:15:11 +0200")
-References: <cover.1280160874.git.thomas.petazzoni@free-electrons.com>
-	<cover.1280160874.git.thomas.petazzoni@free-electrons.com>
-	<b81b1626425651ac1f0db553dad145f05934d973.1280160874.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pqy8bou7.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Jul 2010 21:27:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 829] Webkit r44552 needs libXt
+In-Reply-To: <bug-829-163@https.bugs.busybox.net/>
+References: <bug-829-163@https.bugs.busybox.net/>
+Message-ID: <20100727212756.B72CA835A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=829
 
- Thomas> Those architectures don't exist anymore (Alpha, IA64) or aren't widely
- Thomas> used for embedded systems running Linux. Moreover, no clear Buildroot
- Thomas> maintainer has stepped in to maintain these architectures, so it's
- Thomas> better to not pretend that we support them.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
- Thomas> The goal is to mark them as deprecated in 2010.08 and remove them in
- Thomas> 2010.11.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Committed, thanks.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=6e231c18f8678466ef39e1332f15f1c9fc01265e
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
