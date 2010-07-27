@@ -1,34 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Jul 2010 00:46:17 +0200
-Subject: [Buildroot] [PATCH 3/3] Bump samba to 3.3.13 [CVE-2010-2063]
+Date: Wed, 28 Jul 2010 00:46:16 +0200
+Subject: [Buildroot] [PATCH 2/3] Remove unused X11_PREFIX option
 In-Reply-To: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <018c77a5486525adcec6a0994ce7a5aa6e654a5c.1280270762.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ef2c11e51a08383c4a3bbd370e12e1db4875a447.1280270762.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/kb9202_defconfig  |    1 -
+ configs/v100sc2_defconfig |    1 -
+ package/Makefile.in       |    4 ----
+ package/x11r7/Config.in   |    7 -------
+ 4 files changed, 0 insertions(+), 13 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 39968a9..1c59070 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -3,7 +3,7 @@
- # samba
- #
- #############################################################
--SAMBA_VERSION:=3.3.12
-+SAMBA_VERSION:=3.3.13
- SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
- SAMBA_SITE:=http://samba.org/samba/ftp/stable/
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 2895d8a..40c6d18 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -551,7 +551,6 @@ BR2_PACKAGE_XSERVER_none=y
+ # BR2_PACKAGE_XSERVER_x11r7 is not set
+ # BR2_PACKAGE_XSERVER_xorg is not set
+ # BR2_PACKAGE_XSERVER_tinyx is not set
+-BR2_X11_PREFIX="/usr"
  
+ #
+ # X libraries and helper libraries
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index 80f194a..ca261ee 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -568,7 +568,6 @@ BR2_PACKAGE_QT_OPENSSL=y
+ # BR2_PACKAGE_XSERVER_none is not set
+ # BR2_PACKAGE_XSERVER_xorg is not set
+ # BR2_PACKAGE_XSERVER_tinyx is not set
+-BR2_X11_PREFIX="/usr"
+ # BR2_PACKAGE_XORG7 is not set
+ 
+ #
+diff --git a/package/Makefile.in b/package/Makefile.in
+index fc53a1b..36f2f24 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -292,9 +292,5 @@ else
+ ENABLE_DEBUG:=
+ endif
+ 
+-# X Windowing system
+-
+-X11_PREFIX:=$(call qstrip,$(BR2_X11_PREFIX))
+-
+ include package/Makefile.autotools.in
+ include package/Makefile.package.in
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index b93cc90..c0c0043 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -29,13 +29,6 @@ config BR2_PACKAGE_XSERVER_tinyx
+ 
+ endchoice
+ 
+-config BR2_X11_PREFIX
+-	string
+-	default "/usr/X11R6"	if BR2_PACKAGE_XSERVER_xorg
+-	default "/usr"		if BR2_PACKAGE_XSERVER_tinyx
+-	help
+-	  X11 apps root location
+-
+ menu "X11R7 Servers"
+ 	source package/x11r7/xserver_xorg-server/Config.in
+ endmenu
 -- 
 1.7.0.4
