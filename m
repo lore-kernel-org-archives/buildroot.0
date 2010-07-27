@@ -1,29 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jul 2010 20:55:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 1405] WebKit fails to build because
- pthread_getattr_np is not implemented in uClibc
-In-Reply-To: <bug-1405-163@https.bugs.busybox.net/>
-References: <bug-1405-163@https.bugs.busybox.net/>
-Message-ID: <20100727205550.AE6AC8349A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 23:02:20 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	avr32-toolchain-fix
+Message-ID: <cover.1280264418.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1405
+Hello,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+This is the fix for the AVR32 toolchain build problem, but it makes a
+change that impacts all other architectures as well. Instead of using
+an incorrect --prefix=/usr for binutils and gcc, we use the correct
+--prefix=$(STAGING_DIR)/usr.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+With this fix in place, I can build the AVR32 toolchain and an AVR32
+system with Busybox and DirectFB. However, I couldn't test it as I
+don't have ARV32 hardware and Qemu doesn't support AVR32.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git, thanks
+I have also tested an ARM internal Buildroot toolchain + DirectFB, it
+builds and runs in Qemu. I also tested an ARM external Buildroot
+toolchain + DirectFB system, it builds and runs in Qemu as well.
 
+Thanks,
+
+Thomas
+
+The following changes since commit f2860bbc8ea6ff959b91eaa8919177d273ee4497:
+  Peter Korsgaard (1):
+        Merge branch 'fix-gxx-on-target' of git://git.busybox.net/~tpetazzoni/git/buildroot
+
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot avr32-toolchain-fix
+
+Thomas Petazzoni (3):
+      binutils,gcc: use correct --prefix
+      toolchain: Remove now-unused variables
+      toolchain: remove redundant and incorrect --with-build-time-tools option
+
+ toolchain/Makefile.in           |    2 --
+ toolchain/binutils/binutils.mk  |    6 ++----
+ toolchain/gcc/Makefile.in       |    2 --
+ toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++--
+ 4 files changed, 4 insertions(+), 10 deletions(-)
+
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
