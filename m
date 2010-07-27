@@ -1,34 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jul 2010 21:32:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 1741] external toolchain linking error
-In-Reply-To: <bug-1741-163@https.bugs.busybox.net/>
-References: <bug-1741-163@https.bugs.busybox.net/>
-Message-ID: <20100727213226.F16CC83639@busybox.osuosl.org>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Tue, 27 Jul 2010 23:33:09 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+Message-ID: <201007272333.09640.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1741
+I've started a new thread, since it seems not related to avr32 in particular.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I'm using the atngw100_defconfig on my 64-bit gentoo system with a gcc 4.1.2
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+PH >> configure: loading cache /avr/buildroot/output/build/host-config.cache
+PH >> configure: Configuring LZO 2.03
+PH >> checking build system type... (cached) x86_64-unknown-linux-gnu
+PH >> checking host system type... (cached) x86_64-unknown-linux-gnu
+PH >> checking target system type... config.sub: missing argument
+PH >> Try `config.sub --help' for more information.
 
---- Comment #16 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Even though I didn't reproduce the /lib/libc.so.0 failure during the gettext
-build as our reporter did,
-http://git.buildroot.net/buildroot/commit/?id=3c77bab2eeace3ee675bd745ca335fa3dd1630bb
-fixes a similar problem. So I think this bug has been fixed now.
+TP > It sounds like the autoconf host-config.cache has been filled with an
+TP > empty value for --target.
+ 
+TP > Can you show the contents
+TP > of /avr/buildroot/output/build/host-config.cache after the failure, and
+TP> can you post the *full* build log somewhere ?
 
-If you manage to reproduce the bug with the current Buildroot Git, please
-reopen this bug.
+I've gzipped the whole build log (from a fresh git clone) and uploaded it to 
+http://www.hs-augsburg.de/~phuewe/typescript2.gz (498K, unzipped 8,8Mb)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+The contens of the host-config.cache can be found at
+http://paste.pocoo.org/show/242433/
+
+
+Thanks,
+Peter
