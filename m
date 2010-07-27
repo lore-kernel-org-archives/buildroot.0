@@ -1,21 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jul 2010 15:43:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
-In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
-References: <bug-635-163@https.bugs.busybox.net/>
-Message-ID: <20100727154313.5810E835C3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 20:18:58 +0200
+Subject: [Buildroot] [PATCH 1/4] target-gcc: Get rid of TARGET_GCC_FLAGS
+In-Reply-To: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5e8e1cdb608499dc620d88af32033adca72e5645.1280254559.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
+This variable is used only once, so let's just hardcode its value at
+its call site.
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Please provide your Buildroot .config to allow us to reproduce the issue.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/gcc/Makefile.in       |    5 -----
+ toolchain/gcc/gcc-uclibc-4.x.mk |    5 ++++-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index 0dcd803..4278bdb 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -50,11 +50,6 @@ EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARG
+ #EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
+ endif
+ 
+-TARGET_GCC_FLAGS= CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-	CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-	CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+-	BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)"
+-
+ ifeq ($(BR2_PACKAGE_GCC_TARGET),y)
+ EXTRA_TARGET_GCC_CONFIG_OPTIONS:=
+ 
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 081e906..cfbe616 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -393,7 +393,10 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
+ 	(cd $(GCC_BUILD_DIR3); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		$(TARGET_GCC_FLAGS) \
++		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
++		CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
++		CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
++		BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
+ 		$(GCC_SRC_DIR)/configure $(QUIET) \
+ 		--prefix=/usr \
+ 		--build=$(GNU_HOST_NAME) \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
