@@ -1,25 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jul 2010 19:24:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 901] new package: gpsd
-In-Reply-To: <bug-901-163@https.bugs.busybox.net/>
-References: <bug-901-163@https.bugs.busybox.net/>
-Message-ID: <20100727192438.65D51834CE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 27 Jul 2010 10:02:06 +0200
+Subject: [Buildroot] [git commit master 1/1] diffutils: fix configure cache
+	issue with BR2_NEEDS_GETTEXT
+Message-ID: <20100727200331.1F6FC826B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=901
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=03bb359cb7c3bae307b6facc45aa95ccfaedfb48
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
-                   |.org                        |
+Like flex, diffutils doesn't NEED gettext/libintl, but it's configure script
+checks for it, so make sure those a built before diffutils, otherwise it
+will populate tgt-config.cache with invalid values, breaking the build of
+other packages needing it (like libglib2).
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/diffutils/diffutils.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index c0b3830..6ce71c9 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -9,6 +9,10 @@ DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+ 
+ DIFFUTILS_INSTALL_STAGING = YES
+ 
++DIFFUTILS_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
++	$(if $(BR2_PACKAGE_LIBINTL),libintl)
++
+ DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
+ 		ac_fsusage_space=yes \
+ 		fu_cv_sys_stat_statfs2_bsize=yes \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
