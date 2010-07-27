@@ -1,40 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 23:06:16 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain: Remove now-unused
-	variables
-Message-ID: <20100727210656.C5558835A8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Jul 2010 23:07:06 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	avr32-toolchain-fix
+In-Reply-To: <cover.1280264418.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 27 Jul 2010 23:02:20 +0200")
+References: <cover.1280264418.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8739v4d479.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7f180eca5eb35f2973cf0c89e1d047e090e02af
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> Hello,
+ Thomas> This is the fix for the AVR32 toolchain build problem, but it makes a
+ Thomas> change that impacts all other architectures as well. Instead of using
+ Thomas> an incorrect --prefix=/usr for binutils and gcc, we use the correct
+ Thomas> --prefix=$(STAGING_DIR)/usr.
 
-The variable BR2_SYSROOT_STAGING_DESTDIR is no longer used, since now
-the prefix for gcc is already set to the correct location.
+ Thomas> With this fix in place, I can build the AVR32 toolchain and an AVR32
+ Thomas> system with Busybox and DirectFB. However, I couldn't test it as I
+ Thomas> don't have ARV32 hardware and Qemu doesn't support AVR32.
 
-The variable BR2_SYSROOT_TARGET_DESTDIR was already unused.
+ Thomas> I have also tested an ARM internal Buildroot toolchain + DirectFB, it
+ Thomas> builds and runs in Qemu. I also tested an ARM external Buildroot
+ Thomas> toolchain + DirectFB system, it builds and runs in Qemu as well.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/Makefile.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+Pulled and pushed, thanks!
 
-diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
-index e5fae1f..d1af877 100644
---- a/toolchain/Makefile.in
-+++ b/toolchain/Makefile.in
-@@ -10,8 +10,6 @@ else
- MULTILIB:=--disable-multilib
- endif
- 
--BR2_SYSROOT_STAGING_DESTDIR=DESTDIR=$(STAGING_DIR)/
--BR2_SYSROOT_TARGET_DESTDIR=DESTDIR=$(TARGET_DIR)/
- BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/
- BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
- BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
 -- 
-1.7.1
+Bye, Peter Korsgaard
