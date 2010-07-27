@@ -1,87 +1,37 @@
-From: Philippe Reynes <tremyfr@yahoo.fr>
-Date: Tue, 27 Jul 2010 22:16:11 +0000 (GMT)
-Subject: [Buildroot] buildroot and sh4
-In-Reply-To: <212181.52672.qm@web23104.mail.ird.yahoo.com>
-Message-ID: <297538.71443.qm@web29501.mail.ird.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Jul 2010 00:46:14 +0200
+Subject: [Buildroot] [pull request] Pull request for branch various-things
+Message-ID: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+The following changes since commit d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278:
+  Paul Jones (1):
+        zlib: Bump to 1.2.5
 
-I've done a new version of the sh4 patch, you could find it her: 
-http://ryu.zarb.org/~trem/buildroot/0001-Add-a-qemu-device-target-sh4-r2d.patch
+are available in the git repository at:
 
-I've added a sh4_defconfig in the config directory as asked by Thomas.
+  git://git.busybox.net/~tpetazzoni/git/buildroot various-things
 
-Philippe
+Gustavo Zacarias (2):
+      Convert net-snmp to autotargets
+      Bump samba to 3.3.13 [CVE-2010-2063]
 
+Thomas Petazzoni (1):
+      Remove unused X11_PREFIX option
 
---- En date de?: Sam 3.7.10, Philippe Reynes <tremyfr@yahoo.fr> a ?crit?:
+ configs/kb9202_defconfig   |    1 -
+ configs/v100sc2_defconfig  |    1 -
+ package/Makefile.in        |    4 -
+ package/netsnmp/Config.in  |    5 --
+ package/netsnmp/netsnmp.mk |  172 ++++++++++----------------------------------
+ package/samba/samba.mk     |    2 +-
+ package/x11r7/Config.in    |    7 --
+ 7 files changed, 39 insertions(+), 153 deletions(-)
 
-De: Philippe Reynes <tremyfr@yahoo.fr>
-Objet: Re: [Buildroot] buildroot and sh4
-?: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Phil Edworthy" <Phil.Edworthy@renesas.com>
-Date: Samedi 3 juillet 2010, 12h52
-
-Hi,
-
-First, sorry for this late answer.
-
-I've done a little patch that add a qemu device target for sh4. You could find it here : http://zarb.org/~trem/buildroot/add_qemu_sh4_r2d_target.patch
-
-regards,
-Philippe
-
---- En date de?: Lun 7.6.10, Phil Edworthy <Phil.Edworthy@renesas.com> a ?crit?:
-
-De: Phil Edworthy <Phil.Edworthy@renesas.com>
-Objet: RE: [Buildroot] buildroot and sh4
-?: "Philippe Reynes" <tremyfr@yahoo.fr>, buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-Date: Lundi 7 juin 2010, 11h14
-
-
-
-
- 
- 
-
-
-
-
-
-
-BTW, I have successfully used a
-CodeSourcery external toolchain with Buildroot on sh4 (MS7724 development
-board). I?m currently waiting for git access via http before creating patches
-for this?  
-
- ? 
-
-Phil 
-
-
-
- 
-
-
-
-
-
-
-
-      
------La pi?ce jointe associ?e suit-----
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-      
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100727/6f732418/attachment-0001.html>
+Thanks,
+-- 
+Thomas Petazzoni
