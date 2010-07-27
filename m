@@ -1,110 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 16:46:24 +0200
-Subject: [Buildroot] [PATCH 15/16] webkit: Fix build failure on uClibc
+Date: Tue, 27 Jul 2010 16:46:25 +0200
+Subject: [Buildroot] [PATCH 16/16] Create <tuple>/lib -> <sysroot>/lib
+	symlink before installing cross gcc
 In-Reply-To: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <59b5bf16543c94b3efd4641d1bb587aeb18e73af.1280241791.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2cdac810e3fa4ee0b5752d2fd9dd4d439732617a.1280241791.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc does not define pthread_getattr_np(), so we need to workaround
-this using a patch.
+This commit solves bug #1051. The problem in this bug in that WebKit
+compiles a sample C program, which uses WebKit. As WebKit is written
+in C++, even though the program it built with CROSS-gcc, it must be
+linked with libstdc++. However, CROSS-gcc can't find the libstdc++ has
+it's hidden inside <sysroot>/<tuple>/lib.
 
-Fixes bug #1405.
+Therefore, this commit creates a symbolic link <sysroot>/<tuple>/lib
+-> <sysroot>/lib before running the CROSS-gcc installation. While this
+may look like a hack, this is the solution used by both Crosstool-NG
+and OpenWRT.
+
+Moreover, with this symbolic link in place, I think bug #1741 may also
+be solved. The problem in this bug is that the linker tries to link
+against /lib/libc.so.0. This is due to the fact that the linker finds
+a libc.so script file in the original toolchain location and not
+inside the copy of the toolchain sysroot in $(STAGING_DIR). As the
+script file is found outside of the current toolchain sysroot, ld
+considers the script has non-sysrooted, and therefore doesn't prefix
+all paths found in the script file (such as /lib/libc.so.0) with the
+sysroot path, leading to the failure.
+
+So, in details, this commit :
+
+ * Adds a BR2_ARCH_IS_64 invisible config knob that is used to know if
+   the arch is a 64 bits architecture or not.
+
+ * Creates the <sysroot>/<tuple>/lib -> <sysroot>/lib symbolic link,
+   and the <sysroot>/<tuple>/lib64 -> <sysroot>/lib64 symbolic link if
+   needed.
+
+ * Fixes the external toolchain sysroot detection code so that the
+   'sed' replacement is done *after* the readlink -f evaluation.
+
+I have tested this by building ARM, x86 and x86_64 toolchains with
+Buildroot, and then use these toolchains as external toolchains to
+build a full X.org/Gtk/WebKit/Midori stack. I have also done a
+complete ARM Buildroot internal toolchain build with the same full
+X.org/Gtk/WebKit/Midori stack.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../webkit/webkit-1.2.3-pthread_getattr_np.patch   |   79 ++++++++++++++++++++
- 1 files changed, 79 insertions(+), 0 deletions(-)
- create mode 100644 package/webkit/webkit-1.2.3-pthread_getattr_np.patch
+ target/Config.in.arch                    |    5 +++++
+ toolchain/external-toolchain/ext-tool.mk |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk          |    8 ++++++--
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkit/webkit-1.2.3-pthread_getattr_np.patch b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
-new file mode 100644
-index 0000000..b71c878
---- /dev/null
-+++ b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
-@@ -0,0 +1,79 @@
-+Patch WebKit because pthread_getattr_np is not implemented in uClibc
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 62721c9..3efebb8 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -1,3 +1,6 @@
++config BR2_ARCH_IS_64
++       bool
 +
-+Define UCLIBC_USE_PROC_SELF_MAPS etc. as a workaround for uClibc. This
-+code was in the qtoipa webkit but appears to have been removed from
-+more recent versions of webkit.
-+
-+See: http://bugreports.qt.nokia.com/browse/QTBUG-6551
-+Credit for fix: http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=545066#545066
-+
-+Signed-off-by: Paul Jones <paul@pauljones.id.au>
-+
-+Index: webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp
-+===================================================================
-+--- webkit-1.2.3.orig/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:16:19.000000000 +0200
-++++ webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:25:02.000000000 +0200
-+@@ -75,6 +75,18 @@
-+ #endif
-+ #include <unistd.h>
-+ 
-++#if defined(__UCLIBC__)
-++// versions of uClibc 0.9.31 and below do not have
-++// pthread_getattr_np or pthread_attr_getstack.
-++#if __UCLIBC_MAJOR__ == 0 &&					\
-++  (__UCLIBC_MINOR__ < 9 ||					\
-++   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
-++#define UCLIBC_USE_PROC_SELF_MAPS 1
-++#include <stdio_ext.h>
-++extern int *__libc_stack_end;
-++#endif
-++#endif
-++
-+ #if OS(SOLARIS)
-+ #include <thread.h>
-+ #else
-+@@ -610,6 +622,36 @@
-+     get_thread_info(find_thread(NULL), &threadInfo);
-+     return threadInfo.stack_end;
-+ #elif OS(UNIX)
-++#ifdef UCLIBC_USE_PROC_SELF_MAPS
-++    // Read /proc/self/maps and locate the line whose address
-++    // range contains __libc_stack_end.
-++    FILE *file = fopen("/proc/self/maps", "r");
-++    if (!file)
-++      return 0;
-++    __fsetlocking(file, FSETLOCKING_BYCALLER);
-++    char *line = NULL;
-++    size_t lineLen = 0;
-++    while (!feof_unlocked(file)) {
-++      if (getdelim(&line, &lineLen, '\n', file) <= 0)
-++	break;
-++      long from;
-++      long to;
-++      if (sscanf (line, "%lx-%lx", &from, &to) != 2)
-++	continue;
-++      if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
-++	fclose(file);
-++	free(line);
-++#ifdef _STACK_GROWS_UP
-++	return (void *)from;
-++#else
-++	return (void *)to;
-++#endif
-++      }
-++    }
-++    fclose(file);
-++    free(line);
-++    return 0;
-++#else 
-+     static void* stackBase = 0;
-+     static size_t stackSize = 0;
-+     static pthread_t stackThread;
-+@@ -631,6 +673,7 @@
-+         stackThread = thread;
-+     }
-+     return static_cast<char*>(stackBase) + stackSize;
-++#endif
-+ #elif OS(WINCE)
-+     if (g_stackBase)
-+         return g_stackBase;
+ choice
+ 	prompt "Target Architecture"
+ 	default BR2_i386
+@@ -38,8 +41,10 @@ config BR2_sparc
+ 	bool "sparc"
+ config BR2_sparc64
+ 	bool "sparc64"
++	select BR2_ARCH_IS_64
+ config BR2_x86_64
+ 	bool "x86_64"
++	select BR2_ARCH_IS_64
+ config BR2_xtensa
+ 	bool "xtensa"
+ endchoice
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 40e3a52..8be86f5 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -306,7 +306,7 @@ endif # ! no threads
+ TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC))
+ SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
+ ifeq ($(SYSROOT_DIR),)
+-SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
++SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;')
+ endif
+ 
+ # Now, find if the toolchain specifies a sub-directory for the
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 081e906..981026f 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -261,8 +261,11 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+ 	mkdir -p $(GCC_BUILD_DIR2)
+ 	# Important! Required for limits.h to be fixed.
+ 	ln -snf ../include/ $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
+-	#-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+-	#ln -snf ../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
++	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
++	mkdir -p $(STAGING_DIR)/lib
++	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
++	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
++	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
+ 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		$(GCC_SRC_DIR)/configure $(QUIET) \
+@@ -307,6 +310,7 @@ $(GCC_BUILD_DIR2)/.installed: $(GCC_BUILD_DIR2)/.compiled
+ 		fi; \
+ 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
+ 		rmdir "$(STAGING_DIR)/lib64"; \
++		rm "$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64";\
+ 	fi
+ 	# Strip the host binaries
+ ifeq ($(GCC_STRIP_HOST_BINARIES),true)
 -- 
 1.7.0.4
