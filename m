@@ -1,82 +1,50 @@
-From: Karl Krach <mailinglists@blueSpirit.la>
-Date: Tue, 27 Jul 2010 16:55:21 +0200
-Subject: [Buildroot] Busybox: crt1.o: No such file (CONFIG_EXTRA_CFLAGS)
-Message-ID: <l681g9.6u5jdn@webmail.variomedia.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 17:17:54 +0200
+Subject: [Buildroot] AVR32 is broken (toolchain)
+In-Reply-To: <201007270314.15113.PeterHuewe@gmx.de>
+References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
+	<AANLkTi=x4Ez1ZimcV4Nc3aCym=+K=ds9zUaM0uae_RWa@mail.gmail.com>
+	<20100723231850.636bfab9@surf>
+	<201007270314.15113.PeterHuewe@gmx.de>
+Message-ID: <20100727171754.59da191e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter,
 
-I'd like to submit a patch for a minor bug.
+On Tue, 27 Jul 2010 03:14:14 +0200
+Peter H?we <PeterHuewe@gmx.de> wrote:
 
-My problem: My busybox.conf is in the svn repository. When I compile the
-Buildroot and my sysroot has changed, I get this ugly linker error:
+> I just tried to compile the atngw100_defconfig using your patch and
+> the latest git repo but unfortunately it fails while building host-lzo
+> 
+> >>> host-lzo 2.03 Configuring
 
-/path/to/toolchain/usr/bin-ccache/../lib/gcc/powerpc-unknown-linux-uclibc/4.4.4/../../../../powerpc-unknown-linux-uclibc/bin/ld:
-   crt1.o: No such file: No such file or directory
+host-lzo is built for the host, so it's quite unlikely that any AVR32
+change can have an impact on it.
 
-Google just tells you, that your gcc specs are wrong. But the reason is, that
-the linker cmd includes "--sysroot" twice - once with the old and once with
-the new sysroot.
+> configure: loading cache /avr/buildroot/output/build/host-config.cache
+> configure: Configuring LZO 2.03
+> checking build system type... (cached) x86_64-unknown-linux-gnu
+> checking host system type... (cached) x86_64-unknown-linux-gnu
+> checking target system type... config.sub: missing argument
+> Try `config.sub --help' for more information.
 
-Question: Why do we compile Busybox with overwritten EXTRA_LDFLAGS, but leave
-the CONFIG_EXTRA_CFLAGS untouched?
+It sounds like the autoconf host-config.cache has been filled with an
+empty value for --target.
 
-The patch would fix this,
+Can you show the contents
+of /avr/buildroot/output/build/host-config.cache after the failure, and
+can you post the *full* build log somewhere ?
 
-Thanks, Charly
+Thanks,
 
-
-
---- buildroot-orig/package/busybox/busybox.mk	2010-07-26 18:52:13.000000000
--0400
-+++ buildroot/package/busybox/busybox.mk	2010-07-27 10:38:40.000000000 -0400
-@@ -122,16 +122,17 @@
- 
- define BUSYBOX_BUILD_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
--		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
-+		PREFIX="$(TARGET_DIR)" CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" CROSS_COMPILE="$(TARGET_CROSS)" \
-+		-C $(@D)
- endef
- 
- ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
- define BUSYBOX_INSTALL_BINARY
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
--		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
--		-C $(@D) install
-+		PREFIX="$(TARGET_DIR)" CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CONFIG_PREFIX="$(TARGET_DIR)" -C $(@D) install
- endef
- else
- define BUSYBOX_INSTALL_BINARY
-@@ -146,16 +147,16 @@
- 
- define BUSYBOX_UNINSTALL_TARGET_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
--		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
--		-C $(@D) uninstall
-+		PREFIX="$(TARGET_DIR)" CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CONFIG_PREFIX="$(TARGET_DIR)" -C $(@D) uninstall
- endef
- 
- define BUSYBOX_CLEAN_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
--		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
--		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
--		-C $(@D) clean
-+		PREFIX="$(TARGET_DIR)" CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+		EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" CROSS_COMPILE="$(TARGET_CROSS)" \
-+		CONFIG_PREFIX="$(TARGET_DIR)" -C $(@D) clean
- endef
- 
- $(eval $(call GENTARGETS,package,busybox))
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
