@@ -1,7 +1,8 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] package: add libgail package
-Message-ID: <20100727210246.15D41835A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] webkit: Fix build failure on
+	uClibc
+Message-ID: <20100727210247.C5DCB83609@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,139 +10,104 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e9424088bc1a7300a5e613cba30d8e662508274
+commit: http://git.buildroot.net/buildroot/commit/?id=56151c6b938de8fe33b516992d71e02519783e8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package include a patch for directfb support. This patch has been
-proposed for upstream integration
-(https://bugzilla.gnome.org/show_bug.cgi?id=614199).
+uClibc does not define pthread_getattr_np(), so we need to workaround
+this using a patch.
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Fixes bug #1405.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/libgail/Config.in                          |   18 ++++++++
- .../libgail-1.22.3-Relax-X11-dependencies.patch    |   42 ++++++++++++++++++++
- package/libgail/libgail.mk                         |   26 ++++++++++++
- 4 files changed, 87 insertions(+), 0 deletions(-)
- create mode 100644 package/libgail/Config.in
- create mode 100644 package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
- create mode 100644 package/libgail/libgail.mk
+ .../webkit/webkit-1.2.3-pthread_getattr_np.patch   |   79 ++++++++++++++++++++
+ 1 files changed, 79 insertions(+), 0 deletions(-)
+ create mode 100644 package/webkit/webkit-1.2.3-pthread_getattr_np.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index f6a3f34..2b68cab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -267,6 +267,7 @@ source "package/gtk2-themes/Config.in"
- source "package/jpeg/Config.in"
- source "package/libart/Config.in"
- source "package/libdrm/Config.in"
-+source "package/libgail/Config.in"
- source "package/libglade/Config.in"
- source "package/libgtk12/Config.in"
- source "package/libgtk2/Config.in"
-diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+diff --git a/package/webkit/webkit-1.2.3-pthread_getattr_np.patch b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
 new file mode 100644
-index 0000000..ba74795
+index 0000000..b71c878
 --- /dev/null
-+++ b/package/libgail/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBGAIL
-+	bool "libgail"
-+	depends on BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_PANGO
-+	help
-+	  GAIL provides accessibility support for gtk+ and
-+	  libgnomecanvas by implementing AtkObjects for widgets in
-+	  gtk+ and libgnomecanvas.
++++ b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
+@@ -0,0 +1,79 @@
++Patch WebKit because pthread_getattr_np is not implemented in uClibc
 +
-+	  The GAIL library is a GTK+ module. For example, if the
-+	  module is loaded in a program which calls
-+	  gtk_widget_get_accessible() for a GtkEntry an instance of
-+	  GailEntry is returned. This module is normally used with the
-+	  atk-bridge GTK+ module from at-spi to allow an assistive
-+	  technology, e.g a screenreader, to query or drive the
-+	  program.
++Define UCLIBC_USE_PROC_SELF_MAPS etc. as a workaround for uClibc. This
++code was in the qtoipa webkit but appears to have been removed from
++more recent versions of webkit.
 +
-+	  http://developer.gnome.org/projects/gap
-diff --git a/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch b/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
-new file mode 100644
-index 0000000..97e5656
---- /dev/null
-+++ b/package/libgail/libgail-1.22.3-Relax-X11-dependencies.patch
-@@ -0,0 +1,42 @@
-+From cca72c48b5643fa62e1d55b7b181e147f5ba7fe9 Mon Sep 17 00:00:00 2001
-+From: Lionel Landwerlin <llandwerlin@gmail.com>
-+Date: Sun, 28 Mar 2010 21:47:38 +0200
-+Subject: [PATCH] Relax X11 dependency
++See: http://bugreports.qt.nokia.com/browse/QTBUG-6551
++Credit for fix: http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=545066#545066
 +
-+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-+---
-+ configure.in      |    4 +++-
-+ gail/gailwindow.c |    2 +-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
++Signed-off-by: Paul Jones <paul@pauljones.id.au>
 +
-+diff --git a/configure.in b/configure.in
-+index 3801655..abaf417 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -86,7 +86,9 @@ GTK_REQUIRED_VERSION=2.9.4
-+ PKG_CHECK_MODULES(DEP, $ATK_PACKAGES >= $ATK_REQUIRED_VERSION \
-+ 	$GTK_PACKAGES >= $GTK_REQUIRED_VERSION)
++Index: webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp
++===================================================================
++--- webkit-1.2.3.orig/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:16:19.000000000 +0200
+++++ webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:25:02.000000000 +0200
++@@ -75,6 +75,18 @@
++ #endif
++ #include <unistd.h>
 + 
-+-if test "$gail_native_win32" != "yes"; then
-++AC_ARG_ENABLE(x, [      --disable-x     disable x11 backend ],x11_backend=no,x11_backend=yes)
+++#if defined(__UCLIBC__)
+++// versions of uClibc 0.9.31 and below do not have
+++// pthread_getattr_np or pthread_attr_getstack.
+++#if __UCLIBC_MAJOR__ == 0 &&					\
+++  (__UCLIBC_MINOR__ < 9 ||					\
+++   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
+++#define UCLIBC_USE_PROC_SELF_MAPS 1
+++#include <stdio_ext.h>
+++extern int *__libc_stack_end;
+++#endif
+++#endif
 ++
-++if test "$gail_native_win32" != "yes" -a "$x11_backend" != "no"; then
-+ 
-+ PKG_CHECK_MODULES(X, x11, :, [
-+ # pkg-config modules not found (only present since X11R7 aka Xorg); use
-+diff --git a/gail/gailwindow.c b/gail/gailwindow.c
-+index 616b25e..add454b 100644
-+--- a/gail/gailwindow.c
-++++ b/gail/gailwindow.c
-+@@ -1071,7 +1071,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
-+   return get_window_zorder (widget->window);
-+ }
-+ 
-+-#elif defined (GDK_WINDOWING_WIN32)
-++#elif defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_DIRECTFB)
-+ 
-+ static gint
-+ gail_window_get_mdi_zorder (AtkComponent *component)
-+-- 
-+1.7.0.2
-+
-diff --git a/package/libgail/libgail.mk b/package/libgail/libgail.mk
-new file mode 100644
-index 0000000..ef08b66
---- /dev/null
-+++ b/package/libgail/libgail.mk
-@@ -0,0 +1,26 @@
-+#############################################################
-+#
-+# libgail
-+#
-+#############################################################
-+LIBGAIL_VERSION_MAJOR = 1.22
-+LIBGAIL_VERSION_MINOR = 3
-+LIBGAIL_VERSION = $(LIBGAIL_VERSION_MAJOR).$(LIBGAIL_VERSION_MINOR)
-+LIBGAIL_SOURCE = gail-$(LIBGAIL_VERSION).tar.bz2
-+LIBGAIL_SITE = http://ftp.gnome.org/pub/gnome/sources/gail/$(LIBGAIL_VERSION_MAJOR)
-+
-+LIBGAIL_AUTORECONF = YES
-+LIBGAIL_LIBTOOL_PATCH = NO
-+LIBGAIL_INSTALL_STAGING = YES
-+LIBGAIL_INSTALL_TARGET = YES
-+
-+LIBGAIL_CONF_OPT = --enable-shared \
-+		--enable-static
-+
-+ifneq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+LIBGAIL_CONF_OPT += --disable-x
-+endif
-+
-+LIBGAIL_DEPENDENCIES = host-pkg-config libgtk2 pango
-+
-+$(eval $(call AUTOTARGETS,package,libgail))
++ #if OS(SOLARIS)
++ #include <thread.h>
++ #else
++@@ -610,6 +622,36 @@
++     get_thread_info(find_thread(NULL), &threadInfo);
++     return threadInfo.stack_end;
++ #elif OS(UNIX)
+++#ifdef UCLIBC_USE_PROC_SELF_MAPS
+++    // Read /proc/self/maps and locate the line whose address
+++    // range contains __libc_stack_end.
+++    FILE *file = fopen("/proc/self/maps", "r");
+++    if (!file)
+++      return 0;
+++    __fsetlocking(file, FSETLOCKING_BYCALLER);
+++    char *line = NULL;
+++    size_t lineLen = 0;
+++    while (!feof_unlocked(file)) {
+++      if (getdelim(&line, &lineLen, '\n', file) <= 0)
+++	break;
+++      long from;
+++      long to;
+++      if (sscanf (line, "%lx-%lx", &from, &to) != 2)
+++	continue;
+++      if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
+++	fclose(file);
+++	free(line);
+++#ifdef _STACK_GROWS_UP
+++	return (void *)from;
+++#else
+++	return (void *)to;
+++#endif
+++      }
+++    }
+++    fclose(file);
+++    free(line);
+++    return 0;
+++#else 
++     static void* stackBase = 0;
++     static size_t stackSize = 0;
++     static pthread_t stackThread;
++@@ -631,6 +673,7 @@
++         stackThread = thread;
++     }
++     return static_cast<char*>(stackBase) + stackSize;
+++#endif
++ #elif OS(WINCE)
++     if (g_stackBase)
++         return g_stackBase;
 -- 
 1.7.1
