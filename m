@@ -1,49 +1,87 @@
-From: Peter Huewe <PeterHuewe@gmx.de>
-Date: Wed, 28 Jul 2010 00:20:05 +0200
-Subject: [Buildroot] Configuring host-lzo fails
-In-Reply-To: <20100727235653.0d2215eb@surf>
-References: <201007272333.09640.PeterHuewe@gmx.de>
-	<20100727235653.0d2215eb@surf>
-Message-ID: <201007280020.05811.PeterHuewe@gmx.de>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Tue, 27 Jul 2010 22:16:11 +0000 (GMT)
+Subject: [Buildroot] buildroot and sh4
+In-Reply-To: <212181.52672.qm@web23104.mail.ird.yahoo.com>
+Message-ID: <297538.71443.qm@web29501.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, 
-> I was also able to reproduce the issue. 
-good - makes it easier to track down ;)
+Hi all,
 
-> Thanks. As I could reproduce, I've started to investigate the problem.
-> I've summarized my findings at
-> http://free-electrons.com/~thomas/pub/autoconf-issue.txt, but I don't
-> have a clear solution yet.
-> 
-> As a temporary fix, you can probably try something like :
-> 
-> HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME)
-> 
-> in package/lzo/lzo.mk.
-> 
+I've done a new version of the sh4 patch, you could find it her: 
+http://ryu.zarb.org/~trem/buildroot/0001-Add-a-qemu-device-target-sh4-r2d.patch
 
-I tried your temporary and it works - however I made following observation.
-0)  rm -rf /buildroot/output/build/host-lzo-2.03/  buildroot/output/build/host-config.cache
-1) Add HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME) to package/lzo/lzo.mk
-2) make
---> host lzo builds fine
+I've added a sh4_defconfig in the config directory as asked by Thomas.
 
-3) rm -rf /buildroot/output/build/host-lzo-2.03/  buildroot/output/build/host-config.cache
-4) remove HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME) from package/lzo/lzo.mk
-5) make
---> host lzo builds perfectly fine too!
-
-Any Ideas? 
-Since I've removed the cache, we don't have a cached value here.
+Philippe
 
 
-Thanks,
-Peter
+--- En date de?: Sam 3.7.10, Philippe Reynes <tremyfr@yahoo.fr> a ?crit?:
+
+De: Philippe Reynes <tremyfr@yahoo.fr>
+Objet: Re: [Buildroot] buildroot and sh4
+?: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Phil Edworthy" <Phil.Edworthy@renesas.com>
+Date: Samedi 3 juillet 2010, 12h52
+
+Hi,
+
+First, sorry for this late answer.
+
+I've done a little patch that add a qemu device target for sh4. You could find it here : http://zarb.org/~trem/buildroot/add_qemu_sh4_r2d_target.patch
+
+regards,
+Philippe
+
+--- En date de?: Lun 7.6.10, Phil Edworthy <Phil.Edworthy@renesas.com> a ?crit?:
+
+De: Phil Edworthy <Phil.Edworthy@renesas.com>
+Objet: RE: [Buildroot] buildroot and sh4
+?: "Philippe Reynes" <tremyfr@yahoo.fr>, buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+Date: Lundi 7 juin 2010, 11h14
 
 
-btw.: the german umlaut in my name (?) is usually converted to ue, strange german language thing ;)
+
+
+ 
+ 
+
+
+
+
+
+
+BTW, I have successfully used a
+CodeSourcery external toolchain with Buildroot on sh4 (MS7724 development
+board). I?m currently waiting for git access via http before creating patches
+for this?  
+
+ ? 
+
+Phil 
+
+
+
+ 
+
+
+
+
+
+
+
+      
+-----La pi?ce jointe associ?e suit-----
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+      
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100727/6f732418/attachment-0001.html>
