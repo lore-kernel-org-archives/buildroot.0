@@ -1,37 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 16:46:22 +0200
-Subject: [Buildroot] [PATCH 13/16] midori: make sure it can't be selected if
-	webkit can't be enabled
+Date: Tue, 27 Jul 2010 16:46:24 +0200
+Subject: [Buildroot] [PATCH 15/16] webkit: Fix build failure on uClibc
 In-Reply-To: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <77df7c138ac9cdd6ec53b2f765deea5ade30faf9.1280241791.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <59b5bf16543c94b3efd4641d1bb587aeb18e73af.1280241791.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+uClibc does not define pthread_getattr_np(), so we need to workaround
+this using a patch.
+
+Fixes bug #1405.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/midori/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ .../webkit/webkit-1.2.3-pthread_getattr_np.patch   |   79 ++++++++++++++++++++
+ 1 files changed, 79 insertions(+), 0 deletions(-)
+ create mode 100644 package/webkit/webkit-1.2.3-pthread_getattr_np.patch
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index f9117ea..b0557db 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -3,7 +3,12 @@ config BR2_PACKAGE_MIDORI
- 	select BR2_PACKAGE_WEBKIT
- 	select BR2_PACKAGE_LIBSEXY
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_INSTALL_LIBSTDCPP # webkit
-+	depends on BR2_USE_WCHAR	 # webkit
- 	help
- 	  Midori is a lightweight web browser based on WebKit
- 
- 	  http://software.twotoasts.de/?page=midori
+diff --git a/package/webkit/webkit-1.2.3-pthread_getattr_np.patch b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
+new file mode 100644
+index 0000000..b71c878
+--- /dev/null
++++ b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
+@@ -0,0 +1,79 @@
++Patch WebKit because pthread_getattr_np is not implemented in uClibc
 +
-+comment "midori requires a toolchain with C++ support and WCHAR enabled"
-+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++Define UCLIBC_USE_PROC_SELF_MAPS etc. as a workaround for uClibc. This
++code was in the qtoipa webkit but appears to have been removed from
++more recent versions of webkit.
++
++See: http://bugreports.qt.nokia.com/browse/QTBUG-6551
++Credit for fix: http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=545066#545066
++
++Signed-off-by: Paul Jones <paul@pauljones.id.au>
++
++Index: webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp
++===================================================================
++--- webkit-1.2.3.orig/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:16:19.000000000 +0200
+++++ webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:25:02.000000000 +0200
++@@ -75,6 +75,18 @@
++ #endif
++ #include <unistd.h>
++ 
+++#if defined(__UCLIBC__)
+++// versions of uClibc 0.9.31 and below do not have
+++// pthread_getattr_np or pthread_attr_getstack.
+++#if __UCLIBC_MAJOR__ == 0 &&					\
+++  (__UCLIBC_MINOR__ < 9 ||					\
+++   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
+++#define UCLIBC_USE_PROC_SELF_MAPS 1
+++#include <stdio_ext.h>
+++extern int *__libc_stack_end;
+++#endif
+++#endif
+++
++ #if OS(SOLARIS)
++ #include <thread.h>
++ #else
++@@ -610,6 +622,36 @@
++     get_thread_info(find_thread(NULL), &threadInfo);
++     return threadInfo.stack_end;
++ #elif OS(UNIX)
+++#ifdef UCLIBC_USE_PROC_SELF_MAPS
+++    // Read /proc/self/maps and locate the line whose address
+++    // range contains __libc_stack_end.
+++    FILE *file = fopen("/proc/self/maps", "r");
+++    if (!file)
+++      return 0;
+++    __fsetlocking(file, FSETLOCKING_BYCALLER);
+++    char *line = NULL;
+++    size_t lineLen = 0;
+++    while (!feof_unlocked(file)) {
+++      if (getdelim(&line, &lineLen, '\n', file) <= 0)
+++	break;
+++      long from;
+++      long to;
+++      if (sscanf (line, "%lx-%lx", &from, &to) != 2)
+++	continue;
+++      if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
+++	fclose(file);
+++	free(line);
+++#ifdef _STACK_GROWS_UP
+++	return (void *)from;
+++#else
+++	return (void *)to;
+++#endif
+++      }
+++    }
+++    fclose(file);
+++    free(line);
+++    return 0;
+++#else 
++     static void* stackBase = 0;
++     static size_t stackSize = 0;
++     static pthread_t stackThread;
++@@ -631,6 +673,7 @@
++         stackThread = thread;
++     }
++     return static_cast<char*>(stackBase) + stackSize;
+++#endif
++ #elif OS(WINCE)
++     if (g_stackBase)
++         return g_stackBase;
 -- 
 1.7.0.4
