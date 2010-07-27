@@ -1,39 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Jul 2010 10:53:09 +0200
-Subject: [Buildroot] [PATCH 3/4] setserial: convert to autotargets and
-	fix bug 2269
-In-Reply-To: <20100727103506.629d9469@surf> (Thomas Petazzoni's message of
-	"Tue, 27 Jul 2010 10:35:06 +0200")
-References: <cover.1280069623.git.thomas.petazzoni@free-electrons.com>
-	<cover.1280069623.git.thomas.petazzoni@free-electrons.com>
-	<e6ef954e507703efcbbe4e6a9bff18cb1d8e2cbb.1280069623.git.thomas.petazzoni@free-electrons.com>
-	<87wrshdfhp.fsf@macbook.be.48ers.dk> <20100727103506.629d9469@surf>
-Message-ID: <87k4ohcnm2.fsf@macbook.be.48ers.dk>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Tue, 27 Jul 2010 11:36:17 +0100
+Subject: [Buildroot] Evaluation of make variables
+Message-ID: <1280226977.22687.37.camel@dubciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello all,
+I've run into a similar problem now a few times where lines inside
+define variables are not being evaluated in make context but in shell
+context.
+An example, I was trying to convert U-Boot's makefile to genpackage.
+Here is an excerpt.
+---
+define U_BOOT_POST_PATCH_HOOK_CUSTOM
+	echo -e "\n\n\n\nU_BOOT_POST_PATCH_HOOK_CUSTOM.\n\n\n"
+ifneq ($(qstrip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+	toolchain/patch-kernel.sh $(@D) $(U_BOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
+endif
+endef # U_BOOT_POST_PATCH_HOOK_CUSTOM.
 
-Hi,
-
- Thomas> + install: setserial setserial.8
- Thomas> +-	$(INSTALL_PROGRAM) setserial $(DESTDIR)/bin
- Thomas> ++	mkdir -p $(DESTDIR)/usr/bin
- Thomas> ++	$(INSTALL_PROGRAM) setserial $(DESTDIR)/usr/bin
- Thomas> + 	$(STRIP) $(DESTDIR)/bin/setserial
- >> 
- >> That strip should go.
-
- Thomas> Well, it was here in the setserial Makefile. While I agree that we
- Thomas> shouldn't explicitly add strip commands in Buildroot .mk files, I don't
- Thomas> think it's worth the effort removing those strip commands from within
- Thomas> the package.
-
-No, but it was stripping bin/setserial, not usr/bin/setserial.
+U_BOOT_POST_PATCH_HOOKS+=U_BOOT_POST_PATCH_HOOK_CUSTOM
+---
 
 
--- 
-Bye, Peter Korsgaard
+
+The output is then:
+---
+$ make V=1 u_boot
+...
+echo -e "\n\n\n\nU_BOOT_POST_PATCH_HOOK_CUSTOM.\n\n\n"
+
+
+
+
+U_BOOT_POST_PATCH_HOOK_CUSTOM.
+
+
+
+ifneq (,)
+/bin/sh: -c: line 0: syntax error near unexpected token `,'
+/bin/sh: -c: line 0: `ifneq (,)'
+make: *** [/home/crehill/obair/buildroot.org/output/build/u_boot-HEAD/.stamp_patched] Error 2
+---
+
+
+
+As you can see, the "ifneq" is being passed to the shell, where it is
+meaningless.
+Is it the indentation of the line:
+        $(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+in package/Makefile.package.in that causes it to be passed to the shell
+instead of being taken as make instructions?
+
+
+If I unindent that line I get an error:
+---
+$ make V=1 u_boot
+package/Makefile.package.in:209: *** commands commence before first target.  Stop.
+---
+
+So, is there any way of using ifdef/ifeq/ifneq in the a "define"
+variable that is used as a command?
