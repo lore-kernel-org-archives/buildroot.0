@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 20:19:00 +0200
-Subject: [Buildroot] [PATCH 3/4] target-gcc: no need to strip binaries,
-	remove .la files and doc
-In-Reply-To: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1280254559.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4e62eeed193e2c90bfbca52a28efaa1c2f5cd327.1280254559.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 20:21:43 +0200
+Subject: [Buildroot] question on gcc compile options
+In-Reply-To: <159319.72678.qm@web57206.mail.re3.yahoo.com>
+References: <159319.72678.qm@web57206.mail.re3.yahoo.com>
+Message-ID: <20100727202143.59c750a1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is done in a global way by the target-finalize target of the main
-Makefile.
+Hello Arun,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    9 ---------
- 1 files changed, 0 insertions(+), 9 deletions(-)
+On Fri, 16 Jul 2010 00:20:53 -0700 (PDT)
+Salvat <slvt1234@yahoo.com> wrote:
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 52b20e9..5dec86c 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -445,15 +445,6 @@ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR3)/.compiled
- 	# Remove broken specs file (cross compile flag is set).
- 	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
- 
--	-(cd $(TARGET_DIR)/bin && find -type f | xargs $(STRIPCMD) > /dev/null 2>&1)
--	-(cd $(TARGET_DIR)/usr/bin && find -type f | xargs $(STRIPCMD) > /dev/null 2>&1)
--	-(cd $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR) && $(STRIPCMD) cc1 cc1plus collect2 > /dev/null 2>&1)
--	-(cd $(TARGET_DIR)/usr/lib && $(STRIPCMD) libstdc++.so.*.*.* > /dev/null 2>&1)
--	-(cd $(TARGET_DIR)/lib && $(STRIPCMD) libgcc_s*.so.*.*.* > /dev/null 2>&1)
--	#
--	rm -f $(TARGET_DIR)/usr/lib/*.la*
--	#rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--	#	$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
- 	# Work around problem of missing syslimits.h
- 	if [ ! -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h ]; then \
- 		echo "warning: working around missing syslimits.h"; \
+> Hello,?? ? ? ?I am using buildroot-2009.02 to build a toolchain for
+> mips platform. When I compile my code with the toolchain, I notice
+> that there are many options passed to mipsel-linux-gcc; specifically
+> the -ffunction-sections option. I would like to turn off that option.
+> Can anyone point to me how to control the options sent to gcc.
+> thanks,arun
+
+Buildroot 2009.02 is very old, are you able to use a more recent
+version, such as 2010.05 ?
+
+Nothing in Buildroot is passing -ffunction-sections. So it is a
+particular package that adds this option to the CFLAGS.
+
+In particular, Busybox makes use of this -ffunction-sections. So if you
+really don't want this option to be used, you have to look at each
+package individually. Do you have any strong reason for not wanting
+this option ?
+
+Regards,
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
