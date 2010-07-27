@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 16:46:20 +0200
-Subject: [Buildroot] [PATCH 11/16] xserver: tell the X server where fonts
-	are installed
+Date: Tue, 27 Jul 2010 16:46:22 +0200
+Subject: [Buildroot] [PATCH 13/16] midori: make sure it can't be selected if
+	webkit can't be enabled
 In-Reply-To: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280241791.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <351075dd5a255e5d56c834c680501b248aa83221.1280241791.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <77df7c138ac9cdd6ec53b2f765deea5ade30faf9.1280241791.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All fonts are installed in /usr/share/fonts/X11 and not in
-/usr/lib/X11/fonts/ where the X server looks by default.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/midori/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index f3ffea9..57dbc2e 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -60,7 +60,8 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- 		--disable-xnest --disable-xephyr --disable-xvfb \
- 		--with-builder-addr=buildroot at uclibc.org \
--		CFLAGS="-I$(STAGING_DIR)/usr/include/pixman-1"
-+		CFLAGS="-I$(STAGING_DIR)/usr/include/pixman-1" \
-+		--with-fontdir=/usr/share/fonts/X11/
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index f9117ea..b0557db 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -3,7 +3,12 @@ config BR2_PACKAGE_MIDORI
+ 	select BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_LIBSEXY
+ 	depends on BR2_PACKAGE_LIBGTK2
++	depends on BR2_INSTALL_LIBSTDCPP # webkit
++	depends on BR2_USE_WCHAR	 # webkit
+ 	help
+ 	  Midori is a lightweight web browser based on WebKit
  
- ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
- XSERVER_XORG_SERVER_CONF_OPT += --enable-xorg --disable-glx
+ 	  http://software.twotoasts.de/?page=midori
++
++comment "midori requires a toolchain with C++ support and WCHAR enabled"
++        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
 -- 
 1.7.0.4
