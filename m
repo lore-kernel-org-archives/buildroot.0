@@ -1,35 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 27 Jul 2010 22:11:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 1675] GMP Error during buildroot make process
-In-Reply-To: <bug-1675-163@https.bugs.busybox.net/>
-References: <bug-1675-163@https.bugs.busybox.net/>
-Message-ID: <20100727221110.B3E8B8358A@busybox.osuosl.org>
+From: Peter Huewe <PeterHuewe@gmx.de>
+Date: Wed, 28 Jul 2010 00:20:05 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+In-Reply-To: <20100727235653.0d2215eb@surf>
+References: <201007272333.09640.PeterHuewe@gmx.de>
+	<20100727235653.0d2215eb@surf>
+Message-ID: <201007280020.05811.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1675
+Hi Thomas, 
+> I was also able to reproduce the issue. 
+good - makes it easier to track down ;)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> Thanks. As I could reproduce, I've started to investigate the problem.
+> I've summarized my findings at
+> http://free-electrons.com/~thomas/pub/autoconf-issue.txt, but I don't
+> have a clear solution yet.
+> 
+> As a temporary fix, you can probably try something like :
+> 
+> HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME)
+> 
+> in package/lzo/lzo.mk.
+> 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+I tried your temporary and it works - however I made following observation.
+0)  rm -rf /buildroot/output/build/host-lzo-2.03/  buildroot/output/build/host-config.cache
+1) Add HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME) to package/lzo/lzo.mk
+2) make
+--> host lzo builds fine
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Building GMP for the host is something that happens every time someone builds a
-toolchain with Buildroot, so it's something that works, at least in the common
-configurations that we test. Since the bug was reported more than two months
-ago, the reporter hasn't posted the Buildroot configuration, so we have no way
-of reproducing the issue.
+3) rm -rf /buildroot/output/build/host-lzo-2.03/  buildroot/output/build/host-config.cache
+4) remove HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME) from package/lzo/lzo.mk
+5) make
+--> host lzo builds perfectly fine too!
 
-Therefore, let's mark it as WORKSFORME. Sameer, if you can still reproduce the
-issue, please reopen the bug and attach your Buildroot configuration.
+Any Ideas? 
+Since I've removed the cache, we don't have a cached value here.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+
+Thanks,
+Peter
+
+
+btw.: the german umlaut in my name (?) is usually converted to ue, strange german language thing ;)
