@@ -1,53 +1,57 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Wed, 28 Jul 2010 00:07:37 +0200
-Subject: [Buildroot] help in converting util-linux-ng to autotargets
-Message-ID: <4C4F58A9.50309@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 28 Jul 2010 00:08:12 +0200
+Subject: [Buildroot] [PATCH 0/4] Preparatory work on toolchains - v4
+Message-ID: <1280268496-5959-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi mailinglist,
+Hello All!
 
-I was able to convince a recent version of util-linux-ng (1.17.2) to 
-compile for my target which is arm926t.
+These are preparatory work on toolchain, laying ground to later add
+crosstool-NG as a backend.
 
-After the compilation I find several arm 32bit elfs in 
-output/build/util-linux-ng-2.17.
+Changes since v3:
+- rebased against latest tree
+- removed patch #5 (rename base makefile target) as there's issue
+  with it
 
-I have three unclear issues for now:
+Changes since v2:
+- rebased againts latest tree
+- enhance commit message for 3rd patch
 
-A)
-What do I do with the placeholder scripts from libtool?
-Sometimes I find a libtool script instead of the expected binary. The 
-binary itself is located in the corresponding .libs directory.
-Do I need to install both - placeholder skript and binary out of .libs?
+Changes since v1:
+- rebased against latest tree
+- patches formatted to detect renames/copies
 
-B)
-How do I define the $(INSTALL)-part in the *mk-file for autotargets?
-I found this or similar example:
-define UTIL_LINUX_NG_INSTALL_TARGET_CMDS
-        $(INSTALL) -D $(@D)/usr/bin/chkdupexe 
-$(TARGET_DIR)/usr/sbin/chkdupexe
-endef
+Yann E. MORIN (4):
+      toolchain: move helper functions from external toolchain
+      toolchain: rename external toolchain dir
+      toolchain: move makefile includes
+      toolchain: move buildroot config files
 
-Do I need to know every location of every binary out of util-linux-ng to 
-install it from output/build/util-linux-ng-2.17 to STAGING-DIR?
-This is quite a lot. With the old variant a make install (into 
-STAGING_DIR) would be sufficnet I guess.
-I'm a bit lazy. Do I need to define a line for every binary copy to 
-staging? How would it look like?
-
-C)
-I like to build the libraries libblkid and libuuid and install them in 
-the target fs. I found a link, the .a and .so variants in 
-output/build/somedir. Which one do I need to isntall? Is it neccessary 
-to copy the symlink from libuuid.so->libuuid.so.VERSION to the target fs?
-
-
-Thanks for any hint.
-
-
-Kind regards,
-Marcus
+ Makefile                                           |   15 +-
+ toolchain/Config.in                                |   16 +-
+ toolchain/external-toolchain/ext-tool.mk           |  356 --------------------
+ toolchain/helpers.mk                               |  244 ++++++++++++++
+ toolchain/toolchain-buildroot.mk                   |   12 +
+ .../{Config.in.1 => toolchain-buildroot/Config.in} |    2 +-
+ toolchain/toolchain-buildroot/Config.in.2          |   37 ++
+ toolchain/{Config.in.2 => toolchain-common.in}     |   46 +--
+ toolchain/toolchain-external.mk                    |   14 +
+ .../Config.in                                      |    0
+ .../Config.in.2                                    |    0
+ toolchain/toolchain-external/ext-tool.mk           |  115 +++++++
+ 12 files changed, 439 insertions(+), 418 deletions(-)
+ delete mode 100644 toolchain/external-toolchain/ext-tool.mk
+ create mode 100644 toolchain/helpers.mk
+ create mode 100644 toolchain/toolchain-buildroot.mk
+ rename toolchain/{Config.in.1 => toolchain-buildroot/Config.in} (82%)
+ create mode 100644 toolchain/toolchain-buildroot/Config.in.2
+ rename toolchain/{Config.in.2 => toolchain-common.in} (84%)
+ create mode 100644 toolchain/toolchain-external.mk
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in (100%)
+ rename toolchain/{external-toolchain => toolchain-external}/Config.in.2 (100%)
+ create mode 100644 toolchain/toolchain-external/ext-tool.mk
