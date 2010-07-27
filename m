@@ -1,124 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] Create <tuple>/lib ->
-	<sysroot>/lib symlink before installing cross gcc
-Message-ID: <20100727210247.EBCA0835A7@busybox.osuosl.org>
+Date: Tue, 27 Jul 2010 23:02:23 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain: remove redundant and incorrect
+	--with-build-time-tools option
+In-Reply-To: <cover.1280264418.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1280264418.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <460ba963acb17df043f412e5c01fda250da6b410.1280264418.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This option is already part of the gcc configure options through the
+BR2_CONFIGURE_BUILD_TOOLS variable (in toolchain/Makefile.in).
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c77bab2eeace3ee675bd745ca335fa3dd1630bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit solves bug #1051. The problem in this bug in that WebKit
-compiles a sample C program, which uses WebKit. As WebKit is written
-in C++, even though the program it built with CROSS-gcc, it must be
-linked with libstdc++. However, CROSS-gcc can't find the libstdc++ has
-it's hidden inside <sysroot>/<tuple>/lib.
-
-Therefore, this commit creates a symbolic link <sysroot>/<tuple>/lib
--> <sysroot>/lib before running the CROSS-gcc installation. While this
-may look like a hack, this is the solution used by both Crosstool-NG
-and OpenWRT.
-
-Moreover, with this symbolic link in place, I think bug #1741 may also
-be solved. The problem in this bug is that the linker tries to link
-against /lib/libc.so.0. This is due to the fact that the linker finds
-a libc.so script file in the original toolchain location and not
-inside the copy of the toolchain sysroot in $(STAGING_DIR). As the
-script file is found outside of the current toolchain sysroot, ld
-considers the script has non-sysrooted, and therefore doesn't prefix
-all paths found in the script file (such as /lib/libc.so.0) with the
-sysroot path, leading to the failure.
-
-So, in details, this commit :
-
- * Adds a BR2_ARCH_IS_64 invisible config knob that is used to know if
-   the arch is a 64 bits architecture or not.
-
- * Creates the <sysroot>/<tuple>/lib -> <sysroot>/lib symbolic link,
-   and the <sysroot>/<tuple>/lib64 -> <sysroot>/lib64 symbolic link if
-   needed.
-
- * Fixes the external toolchain sysroot detection code so that the
-   'sed' replacement is done *after* the readlink -f evaluation.
-
-I have tested this by building ARM, x86 and x86_64 toolchains with
-Buildroot, and then use these toolchains as external toolchains to
-build a full X.org/Gtk/WebKit/Midori stack. I have also done a
-complete ARM Buildroot internal toolchain build with the same full
-X.org/Gtk/WebKit/Midori stack.
+Additionnally, the value that was passed in the AVR32 specific case
+was incorrect: it was $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin
+instead of $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch                    |    5 +++++
- toolchain/external-toolchain/ext-tool.mk |    2 +-
- toolchain/gcc/gcc-uclibc-4.x.mk          |    8 ++++++--
- 3 files changed, 12 insertions(+), 3 deletions(-)
+ toolchain/gcc/Makefile.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 62721c9..3efebb8 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -1,3 +1,6 @@
-+config BR2_ARCH_IS_64
-+       bool
-+
- choice
- 	prompt "Target Architecture"
- 	default BR2_i386
-@@ -38,8 +41,10 @@ config BR2_sparc
- 	bool "sparc"
- config BR2_sparc64
- 	bool "sparc64"
-+	select BR2_ARCH_IS_64
- config BR2_x86_64
- 	bool "x86_64"
-+	select BR2_ARCH_IS_64
- config BR2_xtensa
- 	bool "xtensa"
- endchoice
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
-index 40e3a52..8be86f5 100644
---- a/toolchain/external-toolchain/ext-tool.mk
-+++ b/toolchain/external-toolchain/ext-tool.mk
-@@ -306,7 +306,7 @@ endif # ! no threads
- TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC))
- SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
- ifeq ($(SYSROOT_DIR),)
--SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a |sed -r -e 's:usr/lib/libc\.a::;'))
-+SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;')
+diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
+index 4278bdb..9537e9d 100644
+--- a/toolchain/gcc/Makefile.in
++++ b/toolchain/gcc/Makefile.in
+@@ -46,8 +46,6 @@ endif
+ ifeq ($(BR2_avr32),y)
+ EXTRA_GCC_CONFIG_OPTIONS+=--disable-libmudflap
+ SOFT_FLOAT_CONFIG_OPTION:=
+-EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/bin \
+-#EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
  endif
  
- # Now, find if the toolchain specifies a sub-directory for the
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 081e906..981026f 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -261,8 +261,11 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 	mkdir -p $(GCC_BUILD_DIR2)
- 	# Important! Required for limits.h to be fixed.
- 	ln -snf ../include/ $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
--	#-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
--	#ln -snf ../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
-+	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
-+	mkdir -p $(STAGING_DIR)/lib
-+	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
-+	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
-+	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
- 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		$(GCC_SRC_DIR)/configure $(QUIET) \
-@@ -307,6 +310,7 @@ $(GCC_BUILD_DIR2)/.installed: $(GCC_BUILD_DIR2)/.compiled
- 		fi; \
- 		mv "$(STAGING_DIR)/lib64/"* "$(STAGING_DIR)/lib/"; \
- 		rmdir "$(STAGING_DIR)/lib64"; \
-+		rm "$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64";\
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
+ ifeq ($(BR2_PACKAGE_GCC_TARGET),y)
 -- 
-1.7.1
+1.7.0.4
