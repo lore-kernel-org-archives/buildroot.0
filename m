@@ -1,207 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Jul 2010 23:52:58 +0200
-Subject: [Buildroot] [git commit master 1/1] zlib: Bump to 1.2.5
-Message-ID: <20100727215334.4DEA583458@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Jul 2010 23:56:53 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+In-Reply-To: <201007272333.09640.PeterHuewe@gmx.de>
+References: <201007272333.09640.PeterHuewe@gmx.de>
+Message-ID: <20100727235653.0d2215eb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Peter,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 27 Jul 2010 23:33:09 +0200
+Peter H?we <PeterHuewe@gmx.de> wrote:
 
-Closes #1981
+> I've started a new thread, since it seems not related to avr32 in
+> particular.
 
-Signed-off-by: Paul Jones <paul@pauljones.id.au>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                                 |    3 +-
- package/zlib/zlib-1.2.1-configure.patch |  103 -------------------------------
- package/zlib/zlib-arflags.patch         |   21 ------
- package/zlib/zlib.mk                    |    3 +-
- 4 files changed, 3 insertions(+), 127 deletions(-)
- delete mode 100644 package/zlib/zlib-1.2.1-configure.patch
- delete mode 100644 package/zlib/zlib-arflags.patch
+Yep.
 
-diff --git a/CHANGES b/CHANGES
-index 8a8c8bb..ea577b5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -36,7 +36,7 @@
- 	setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf, sqlite,
- 	squashfs, swfdec, tftpd, thttpd, tn5250, tremor, usbutils,
- 	webif, webkit, wireless_tools, xkeyboard-config,
--	xserver_xorg-server, xvkbd
-+	xserver_xorg-server, xvkbd, zlib
- 
- 	Removed packages: libgail, modutils, portage, rxvt
- 
-@@ -72,6 +72,7 @@
- 	#1951: Bump openssl to 0.9.8o
- 	#1957: Bump sqlite to 3.6.23.1
- 	#1975: Package removal/deprecation
-+	#1981: zlib: bump to 1.2.5
- 	#1987: intltool: Fix spelling mistake
- 	#1993: Bump bash to 4.1.7(1) and migrate to autotargets
- 	#1999: Typo in path checking
-diff --git a/package/zlib/zlib-1.2.1-configure.patch b/package/zlib/zlib-1.2.1-configure.patch
-deleted file mode 100644
-index ccd67ca..0000000
---- a/package/zlib/zlib-1.2.1-configure.patch
-+++ /dev/null
-@@ -1,103 +0,0 @@
----- zlib/configure
--+++ zlib/configure
--@@ -160,8 +160,8 @@
-- if test $shared -eq 1; then
--   echo Checking for shared library support...
--   # we must test in two steps (cc then ld), required at least on SunOS 4.x
---  if test "`($CC -c $SFLAGS $test.c) 2>&1`" = "" &&
---     test "`($LDSHARED -o $test$shared_ext $test.o) 2>&1`" = ""; then
--+  if ($CC -c $SFLAGS $test.c) 2>>config.log &&
--+     ($LDSHARED -o $test$shared_ext $test.o) 2>>config.log; then
--     CFLAGS="$SFLAGS"
--     LIBS="$LIBS $SHAREDLIBV"
--     echo Building shared library $SHAREDLIBV with $CC.
--@@ -185,7 +185,7 @@
-- #include <unistd.h>
-- int main() { return 0; }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   sed < zconf.in.h "/HAVE_UNISTD_H/s%0%1%" > zconf.h
--   echo "Checking for unistd.h... Yes."
-- else
--@@ -208,7 +208,7 @@
-- }
-- EOF
-- 
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   echo "Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf()"
-- 
--   cat > $test.c <<EOF
--@@ -232,7 +232,7 @@
-- }
-- EOF
-- 
---  if test "`($CC $CFLAGS -o $test $test.c) 2>&1`" = ""; then
--+  if ($CC $CFLAGS -o $test $test.c) 2>>config.log; then
--     echo "Checking for vsnprintf() in stdio.h... Yes."
-- 
--     cat >$test.c <<EOF
--@@ -257,7 +257,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of vsnprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_vsnprintf_void"
--@@ -295,7 +295,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of vsprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_vsprintf_void"
--@@ -325,7 +325,7 @@
-- }
-- EOF
-- 
---  if test "`($CC $CFLAGS -o $test $test.c) 2>&1`" = ""; then
--+  if ($CC $CFLAGS -o $test $test.c) 2>>config.log; then
--     echo "Checking for snprintf() in stdio.h... Yes."
-- 
--     cat >$test.c <<EOF
--@@ -344,7 +344,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of snprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_snprintf_void"
--@@ -376,7 +376,7 @@
-- }
-- EOF
-- 
---    if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+    if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--       echo "Checking for return value of sprintf()... Yes."
--     else
--       CFLAGS="$CFLAGS -DHAS_sprintf_void"
--@@ -392,7 +392,7 @@
-- #include <errno.h>
-- int main() { return 0; }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   echo "Checking for errno.h... Yes."
-- else
--   echo "Checking for errno.h... No."
--@@ -407,7 +407,7 @@
--   return mmap((caddr_t)0, (off_t)0, PROT_READ, MAP_SHARED, 0, (off_t)0);
-- }
-- EOF
---if test "`($CC -c $CFLAGS $test.c) 2>&1`" = ""; then
--+if ($CC -c $CFLAGS $test.c) 2>>config.log; then
--   CFLAGS="$CFLAGS -DUSE_MMAP"
--   echo Checking for mmap support... Yes.
-- else
-diff --git a/package/zlib/zlib-arflags.patch b/package/zlib/zlib-arflags.patch
-deleted file mode 100644
-index f9dae52..0000000
---- a/package/zlib/zlib-arflags.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
----- zlib-1.2.3/Makefile.in
--+++ zlib-1.2.3/Makefile.in
--@@ -33,7 +33,8 @@
-- SHAREDLIBV=libz.so.1.2.3
-- SHAREDLIBM=libz.so.1
-- 
---AR=ar rc
--+AR=ar
--+ARFLAGS=rc
-- RANLIB=ranlib
-- TAR=tar
-- SHELL=/bin/sh
--@@ -68,7 +69,7 @@
-- 	fi
-- 
-- libz.a: $(OBJS) $(OBJA)
---	$(AR) $@ $(OBJS) $(OBJA)
--+	$(AR) $(ARFLAGS) $@ $(OBJS) $(OBJA)
-- 	-@ ($(RANLIB) $@ || true) >/dev/null 2>&1
-- 
-- match.o: match.S
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 3144ae9..ad5eda7 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -3,7 +3,7 @@
- # zlib
- #
- #############################################################
--ZLIB_VERSION:=1.2.3
-+ZLIB_VERSION:=1.2.5
- ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
- ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- ZLIB_INSTALL_STAGING=YES
-@@ -24,7 +24,6 @@ define ZLIB_CONFIGURE_CMDS
- 		./configure \
- 		$(ZLIB_SHARED) \
- 		--prefix=/usr \
--		--exec-prefix=$(STAGING_DIR)/usr/bin \
- 		--libdir=$(STAGING_DIR)/usr/lib \
- 		--includedir=$(STAGING_DIR)/usr/include \
- 	)
+> I'm using the atngw100_defconfig on my 64-bit gentoo system with a
+> gcc 4.1.2
+
+I was also able to reproduce the issue.
+
+> I've gzipped the whole build log (from a fresh git clone) and
+> uploaded it to http://www.hs-augsburg.de/~phuewe/typescript2.gz
+> (498K, unzipped 8,8Mb)
+> 
+> The contens of the host-config.cache can be found at
+> http://paste.pocoo.org/show/242433/
+
+Thanks. As I could reproduce, I've started to investigate the problem.
+I've summarized my findings at
+http://free-electrons.com/~thomas/pub/autoconf-issue.txt, but I don't
+have a clear solution yet.
+
+As a temporary fix, you can probably try something like :
+
+HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME)
+
+in package/lzo/lzo.mk.
+
+Regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
