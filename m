@@ -1,50 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 17:17:54 +0200
-Subject: [Buildroot] AVR32 is broken (toolchain)
-In-Reply-To: <201007270314.15113.PeterHuewe@gmx.de>
-References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
-	<AANLkTi=x4Ez1ZimcV4Nc3aCym=+K=ds9zUaM0uae_RWa@mail.gmail.com>
-	<20100723231850.636bfab9@surf>
-	<201007270314.15113.PeterHuewe@gmx.de>
-Message-ID: <20100727171754.59da191e@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Jul 2010 15:30:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
+In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
+References: <bug-635-163@https.bugs.busybox.net/>
+Message-ID: <20100727153002.24940835C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+https://bugs.busybox.net/show_bug.cgi?id=635
 
-On Tue, 27 Jul 2010 03:14:14 +0200
-Peter H?we <PeterHuewe@gmx.de> wrote:
+S?rgio <sergio@sergiomb.no-ip.org> changed:
 
-> I just tried to compile the atngw100_defconfig using your patch and
-> the latest git repo but unfortunately it fails while building host-lzo
-> 
-> >>> host-lzo 2.03 Configuring
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|WORKSFORME                  |
 
-host-lzo is built for the host, so it's quite unlikely that any AVR32
-change can have an impact on it.
+--- Comment #4 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+Have have this show stopper also , with from today buildroot git version.
 
-> configure: loading cache /avr/buildroot/output/build/host-config.cache
-> configure: Configuring LZO 2.03
-> checking build system type... (cached) x86_64-unknown-linux-gnu
-> checking host system type... (cached) x86_64-unknown-linux-gnu
-> checking target system type... config.sub: missing argument
-> Try `config.sub --help' for more information.
+Making all in text-utils
+(...)
+In file included from more.c:56:
+buildroot/output/staging/usr/include/a.out.h:1:25: error: linux/a.out.h: No
+such file or directory
+more.c: In function 'magic':
+more.c:507: error: 'OMAGIC' undeclared (first use in this function)
+more.c:507: error: (Each undeclared identifier is reported only once
+more.c:507: error: for each function it appears in.)
+more.c:508: error: 'NMAGIC' undeclared (first use in this function)
+more.c:509: error: 'ZMAGIC' undeclared (first use in this function)
+make[3]: *** [more.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[3]: Leaving directory
+`buildroot/output/build/util-linux-2.13-pre7/text-utils'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `buildroot/output/build/util-linux-2.13-pre7'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `buildroot/output/build/util-linux-2.13-pre7'
+make: *** [buildroot/output/build/util-linux-2.13-pre7/misc-utils/chkdupexe]
+Error 2
 
-It sounds like the autoconf host-config.cache has been filled with an
-empty value for --target.
+furthermore I do a couple of commands like cd .. , cd - (or I wait sometime
+?!), do a make , and make forget this package and go to the finish , but never
+built the more binary and others.
 
-Can you show the contents
-of /avr/buildroot/output/build/host-config.cache after the failure, and
-can you post the *full* build log somewhere ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
