@@ -1,7 +1,8 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] atk: bump to 1.30
-Message-ID: <20100727210245.C1919835A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] midori: make sure it can't be
+	selected if webkit can't be enabled
+Message-ID: <20100727210247.80981835A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e10c45be3d70953df2e6c63b3f0226d3ba705d8e
+commit: http://git.buildroot.net/buildroot/commit/?id=0b14fe9ca62e03cac3e034ca846acf2a2d9207a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/atk/atk.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/midori/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index e357f49..6f3a3b6 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -3,11 +3,13 @@
- # atk
- #
- #############################################################
--ATK_VERSION = 1.22.0
-+ATK_VERSION_MAJOR = 1.30
-+ATK_VERSION = $(ATK_VERSION_MAJOR).0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.bz2
--ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/1.22/
-+ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)/
- ATK_INSTALL_STAGING = YES
- ATK_INSTALL_TARGET = YES
-+ATK_LIBTOOL_PATCH = NO
- ATK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index f9117ea..95a0afb 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -3,7 +3,12 @@ config BR2_PACKAGE_MIDORI
+ 	select BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_LIBSEXY
+ 	depends on BR2_PACKAGE_LIBGTK2
++	depends on BR2_INSTALL_LIBSTDCPP # webkit
++	depends on BR2_USE_WCHAR	 # webkit
+ 	help
+ 	  Midori is a lightweight web browser based on WebKit
  
- ATK_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes \
+ 	  http://software.twotoasts.de/?page=midori
++
++comment "midori requires C++, WCHAR in toolchain and libgtk2"
++        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_PACKAGE_LIBGTK2
 -- 
 1.7.1
