@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] webkit: Fix build failure on
-	uClibc
-Message-ID: <20100727210247.C5DCB83609@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xkeyboard-config: add
+	dependency on host-xapp_xkbcomp
+Message-ID: <20100727210247.0FE9B835A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,104 +10,200 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56151c6b938de8fe33b516992d71e02519783e8e
+commit: http://git.buildroot.net/buildroot/commit/?id=ee363f5231462014fa21350514a1d7613f39ae88
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc does not define pthread_getattr_np(), so we need to workaround
-this using a patch.
+In order to get xkeyboard-config to build, it needs xkbcomp to be
+built on the host, i.e host-xapp_xkbcomp. In turn, xapp_xkbcomp needs
+xlib_libX11 and xlib_libxkbfile, which in turn need a few libraries.
 
-Fixes bug #1405.
+This commit adds all the relevant dependencies to build everything
+that is needed to get xkeyboard-config to build correctly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../webkit/webkit-1.2.3-pthread_getattr_np.patch   |   79 ++++++++++++++++++++
- 1 files changed, 79 insertions(+), 0 deletions(-)
- create mode 100644 package/webkit/webkit-1.2.3-pthread_getattr_np.patch
+ package/x11r7/libxcb/libxcb.mk                     |    3 +++
+ package/x11r7/pthread-stubs/pthread-stubs.mk       |    1 +
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    2 ++
+ package/x11r7/xcb-proto/xcb-proto.mk               |    1 +
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
+ package/x11r7/xlib_libX11/xlib_libX11.mk           |    3 +++
+ package/x11r7/xlib_libXau/xlib_libXau.mk           |    4 ++++
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    4 ++++
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    4 ++++
+ .../x11r7/xproto_inputproto/xproto_inputproto.mk   |    1 +
+ package/x11r7/xproto_kbproto/xproto_kbproto.mk     |    1 +
+ .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    1 +
+ package/x11r7/xproto_xextproto/xproto_xextproto.mk |    1 +
+ .../xproto_xf86bigfontproto.mk                     |    1 +
+ .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    1 +
+ 15 files changed, 29 insertions(+), 1 deletions(-)
 
-diff --git a/package/webkit/webkit-1.2.3-pthread_getattr_np.patch b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
-new file mode 100644
-index 0000000..b71c878
---- /dev/null
-+++ b/package/webkit/webkit-1.2.3-pthread_getattr_np.patch
-@@ -0,0 +1,79 @@
-+Patch WebKit because pthread_getattr_np is not implemented in uClibc
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 4f9b323..bfeceab 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -16,5 +16,8 @@ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+ HOST_PYTHON_VERSION=$(shell python --version 2>&1 | sed 's/Python \([0-9]\.[^\.]\).*/\1/')
+ LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb XCBPROTO_XCBPYTHONDIR=$(STAGING_DIR)/usr/lib/python$(HOST_PYTHON_VERSION)/site-packages
+ 
++HOST_LIBXCB_DEPENDENCIES = host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp host-xlib_libXau
 +
-+Define UCLIBC_USE_PROC_SELF_MAPS etc. as a workaround for uClibc. This
-+code was in the qtoipa webkit but appears to have been removed from
-+more recent versions of webkit.
+ $(eval $(call AUTOTARGETS,package/x11r7,libxcb))
++$(eval $(call AUTOTARGETS,package/x11r7,libxcb,host))
+ 
+diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
+index f40332a..3ee7ec1 100644
+--- a/package/x11r7/pthread-stubs/pthread-stubs.mk
++++ b/package/x11r7/pthread-stubs/pthread-stubs.mk
+@@ -11,4 +11,5 @@ PTHREAD_STUBS_LIBTOOL_PATCH = NO
+ PTHREAD_STUBS_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs))
++$(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs,host))
+ 
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 6082c56..e9f7174 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+@@ -9,5 +9,7 @@ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_AUTORECONF = NO
+ XAPP_XKBCOMP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
++HOST_XAPP_XKBCOMP_DEPENDENCIES = host-xlib_libX11 host-xlib_libxkbfile
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xapp_xkbcomp))
++$(eval $(call AUTOTARGETS,package/x11r7,xapp_xkbcomp,host))
+diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
+index a3d029c..153cc0d 100644
+--- a/package/x11r7/xcb-proto/xcb-proto.mk
++++ b/package/x11r7/xcb-proto/xcb-proto.mk
+@@ -10,4 +10,5 @@ XCB_PROTO_SITE = http://xcb.freedesktop.org/dist/
+ XCB_PROTO_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xcb-proto))
++$(eval $(call AUTOTARGETS,package/x11r7,xcb-proto,host))
+ 
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index eb790b8..e398d30 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -10,7 +10,7 @@ XKEYBOARD_CONFIG_AUTORECONF = NO
+ XKEYBOARD_CONFIG_INSTALL_STAGING = NO
+ XKEYBOARD_CONFIG_INSTALL_TARGET = YES
+ XKEYBOARD_CONFIG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+-XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool
++XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool host-xapp_xkbcomp
+ 
+ XKEYBOARD_CONFIG_CONF_OPT = GMSGFMT=/usr/bin/msgfmt
+ 
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index b9c18d0..575aa67 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -18,7 +18,10 @@ XLIB_LIBX11_CONF_OPT = \
+ 	--with-keysymdef=$(STAGING_DIR)/usr/include/X11/keysymdef.h \
+ 	--disable-specs
+ 
++HOST_XLIB_LIBX11_DEPENDENCIES = host-xproto_xextproto host-libxcb host-xutil_util-macros host-xlib_xtrans host-xlib_libXau host-xlib_libXdmcp host-xproto_kbproto host-xproto_xproto host-xproto_xextproto host-xproto_inputproto host-xproto_xf86bigfontproto xproto_bigreqsproto host-xproto_xcmiscproto
 +
-+See: http://bugreports.qt.nokia.com/browse/QTBUG-6551
-+Credit for fix: http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=545066#545066
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
+ 
+ # src/util/makekeys is executed at build time to generate ks_tables.h, so
+ # it should get compiled for the host. The libX11 makefile unfortunately
+diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
+index d5f6814..ad6a0e5 100644
+--- a/package/x11r7/xlib_libXau/xlib_libXau.mk
++++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+@@ -13,4 +13,8 @@ XLIB_LIBXAU_INSTALL_STAGING = YES
+ XLIB_LIBXAU_DEPENDENCIES = xutil_util-macros xproto_xproto
+ XLIB_LIBXAU_CONF_OPT = --enable-shared --disable-static
+ 
++HOST_XLIB_LIBXAU_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
++HOST_XLIB_LIBXAU_CONF_OPT = --enable-shared --disable-static
 +
-+Signed-off-by: Paul Jones <paul@pauljones.id.au>
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXau))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXau,host))
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+index 40b8058..eef3a5e 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+@@ -13,4 +13,8 @@ XLIB_LIBXDMCP_INSTALL_STAGING = YES
+ XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
+ XLIB_LIBXDMCP_CONF_OPT = --enable-shared --disable-static
+ 
++HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
++HOST_XLIB_LIBXDMCP_CONF_OPT = --enable-shared --disable-static
 +
-+Index: webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp
-+===================================================================
-+--- webkit-1.2.3.orig/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:16:19.000000000 +0200
-++++ webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:25:02.000000000 +0200
-+@@ -75,6 +75,18 @@
-+ #endif
-+ #include <unistd.h>
-+ 
-++#if defined(__UCLIBC__)
-++// versions of uClibc 0.9.31 and below do not have
-++// pthread_getattr_np or pthread_attr_getstack.
-++#if __UCLIBC_MAJOR__ == 0 &&					\
-++  (__UCLIBC_MINOR__ < 9 ||					\
-++   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
-++#define UCLIBC_USE_PROC_SELF_MAPS 1
-++#include <stdio_ext.h>
-++extern int *__libc_stack_end;
-++#endif
-++#endif
-++
-+ #if OS(SOLARIS)
-+ #include <thread.h>
-+ #else
-+@@ -610,6 +622,36 @@
-+     get_thread_info(find_thread(NULL), &threadInfo);
-+     return threadInfo.stack_end;
-+ #elif OS(UNIX)
-++#ifdef UCLIBC_USE_PROC_SELF_MAPS
-++    // Read /proc/self/maps and locate the line whose address
-++    // range contains __libc_stack_end.
-++    FILE *file = fopen("/proc/self/maps", "r");
-++    if (!file)
-++      return 0;
-++    __fsetlocking(file, FSETLOCKING_BYCALLER);
-++    char *line = NULL;
-++    size_t lineLen = 0;
-++    while (!feof_unlocked(file)) {
-++      if (getdelim(&line, &lineLen, '\n', file) <= 0)
-++	break;
-++      long from;
-++      long to;
-++      if (sscanf (line, "%lx-%lx", &from, &to) != 2)
-++	continue;
-++      if (from <= (long)__libc_stack_end && (long)__libc_stack_end < to) {
-++	fclose(file);
-++	free(line);
-++#ifdef _STACK_GROWS_UP
-++	return (void *)from;
-++#else
-++	return (void *)to;
-++#endif
-++      }
-++    }
-++    fclose(file);
-++    free(line);
-++    return 0;
-++#else 
-+     static void* stackBase = 0;
-+     static size_t stackSize = 0;
-+     static pthread_t stackThread;
-+@@ -631,6 +673,7 @@
-+         stackThread = thread;
-+     }
-+     return static_cast<char*>(stackBase) + stackSize;
-++#endif
-+ #elif OS(WINCE)
-+     if (g_stackBase)
-+         return g_stackBase;
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXdmcp))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXdmcp,host))
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+index 7b6de7e..e71b36b 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+@@ -12,4 +12,8 @@ XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+ XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xproto_kbproto
+ XLIB_LIBXKBFILE_CONF_OPT = --enable-shared --disable-static
+ 
++HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xproto_kbproto
++HOST_XLIB_LIBXKBFILE_CONF_OPT = --enable-shared --disable-static
++
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libxkbfile))
++$(eval $(call AUTOTARGETS,package/x11r7,xlib_libxkbfile,host))
+diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+index d83ba7e..825ebed 100644
+--- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
++++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+@@ -12,3 +12,4 @@ XPROTO_INPUTPROTO_INSTALL_STAGING = YES
+ XPROTO_INPUTPROTO_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_inputproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_inputproto,host))
+diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.mk b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+index 802bae4..ecdabf1 100644
+--- a/package/x11r7/xproto_kbproto/xproto_kbproto.mk
++++ b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
+@@ -12,3 +12,4 @@ XPROTO_KBPROTO_INSTALL_STAGING = YES
+ XPROTO_KBPROTO_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_kbproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_kbproto,host))
+diff --git a/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk b/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
+index 9c85d9f..1846f20 100644
+--- a/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
++++ b/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
+@@ -12,3 +12,4 @@ XPROTO_XCMISCPROTO_INSTALL_STAGING = YES
+ XPROTO_XCMISCPROTO_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_xcmiscproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_xcmiscproto,host))
+diff --git a/package/x11r7/xproto_xextproto/xproto_xextproto.mk b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
+index 6b880b4..1fd39c9 100644
+--- a/package/x11r7/xproto_xextproto/xproto_xextproto.mk
++++ b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
+@@ -12,3 +12,4 @@ XPROTO_XEXTPROTO_INSTALL_STAGING = YES
+ XPROTO_XEXTPROTO_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_xextproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_xextproto,host))
+diff --git a/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
+index fda78e2..1872873 100644
+--- a/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
++++ b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
+@@ -12,3 +12,4 @@ XPROTO_XF86BIGFONTPROTO_INSTALL_STAGING = YES
+ XPROTO_XF86BIGFONTPROTO_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xproto_xf86bigfontproto))
++$(eval $(call AUTOTARGETS,package/x11r7,xproto_xf86bigfontproto,host))
+diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.mk b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
+index 648136e..b600a46 100644
+--- a/package/x11r7/xutil_util-macros/xutil_util-macros.mk
++++ b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
+@@ -12,3 +12,4 @@ XUTIL_UTIL_MACROS_INSTALL_STAGING = YES
+ XUTIL_UTIL_MACROS_INSTALL_TARGET = NO
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xutil_util-macros))
++$(eval $(call AUTOTARGETS,package/x11r7,xutil_util-macros,host))
 -- 
 1.7.1
