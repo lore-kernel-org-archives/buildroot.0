@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 22:43:04 +0200
-Subject: [Buildroot] [git commit master 1/1] target-gcc: Get rid of
-	TARGET_GCC_FLAGS
-Message-ID: <20100727204322.E064883471@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] target-gcc: no need to strip
+	binaries, remove .la files and doc
+Message-ID: <20100727204323.3D8E983471@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e8e1cdb608499dc620d88af32033adca72e5645
+commit: http://git.buildroot.net/buildroot/commit/?id=4e62eeed193e2c90bfbca52a28efaa1c2f5cd327
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This variable is used only once, so let's just hardcode its value at
-its call site.
+This is done in a global way by the target-finalize target of the main
+Makefile.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/Makefile.in       |    5 -----
- toolchain/gcc/gcc-uclibc-4.x.mk |    5 ++++-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ toolchain/gcc/gcc-uclibc-4.x.mk |    9 ---------
+ 1 files changed, 0 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/gcc/Makefile.in b/toolchain/gcc/Makefile.in
-index 0dcd803..4278bdb 100644
---- a/toolchain/gcc/Makefile.in
-+++ b/toolchain/gcc/Makefile.in
-@@ -50,11 +50,6 @@ EXTRA_GCC_CONFIG_OPTIONS+=--with-build-time-tools=$(STAGING_DIR)/$(REAL_GNU_TARG
- #EXTRA_GCC_CONFIG_OPTIONS+=--with-as=$(TARGET_CROSS)as
- endif
- 
--TARGET_GCC_FLAGS= CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
--	CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
--	CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
--	BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)"
--
- ifeq ($(BR2_PACKAGE_GCC_TARGET),y)
- EXTRA_TARGET_GCC_CONFIG_OPTIONS:=
- 
 diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 081e906..cfbe616 100644
+index 52b20e9..5dec86c 100644
 --- a/toolchain/gcc/gcc-uclibc-4.x.mk
 +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -393,7 +393,10 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
- 	(cd $(GCC_BUILD_DIR3); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
--		$(TARGET_GCC_FLAGS) \
-+		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
-+		CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
-+		CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
-+		BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
- 		$(GCC_SRC_DIR)/configure $(QUIET) \
- 		--prefix=/usr \
- 		--build=$(GNU_HOST_NAME) \
+@@ -445,15 +445,6 @@ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR3)/.compiled
+ 	# Remove broken specs file (cross compile flag is set).
+ 	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
+ 
+-	-(cd $(TARGET_DIR)/bin && find -type f | xargs $(STRIPCMD) > /dev/null 2>&1)
+-	-(cd $(TARGET_DIR)/usr/bin && find -type f | xargs $(STRIPCMD) > /dev/null 2>&1)
+-	-(cd $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR) && $(STRIPCMD) cc1 cc1plus collect2 > /dev/null 2>&1)
+-	-(cd $(TARGET_DIR)/usr/lib && $(STRIPCMD) libstdc++.so.*.*.* > /dev/null 2>&1)
+-	-(cd $(TARGET_DIR)/lib && $(STRIPCMD) libgcc_s*.so.*.*.* > /dev/null 2>&1)
+-	#
+-	rm -f $(TARGET_DIR)/usr/lib/*.la*
+-	#rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-	#	$(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	# Work around problem of missing syslimits.h
+ 	if [ ! -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h ]; then \
+ 		echo "warning: working around missing syslimits.h"; \
 -- 
 1.7.1
