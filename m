@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 27 Jul 2010 23:01:29 +0200
-Subject: [Buildroot] [git commit master 1/1] xkeyboard-config: add
-	dependency on host-xapp_xkbcomp
-Message-ID: <20100727210247.0FE9B835A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] webkit: bump to webkitgtk 1.2.3
+Message-ID: <20100727210246.3B5F9835A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,200 +9,305 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee363f5231462014fa21350514a1d7613f39ae88
+commit: http://git.buildroot.net/buildroot/commit/?id=760c2d172628fbc03c6e0cd06c831d141907b223
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In order to get xkeyboard-config to build, it needs xkbcomp to be
-built on the host, i.e host-xapp_xkbcomp. In turn, xapp_xkbcomp needs
-xlib_libX11 and xlib_libxkbfile, which in turn need a few libraries.
-
-This commit adds all the relevant dependencies to build everything
-that is needed to get xkeyboard-config to build correctly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/libxcb/libxcb.mk                     |    3 +++
- package/x11r7/pthread-stubs/pthread-stubs.mk       |    1 +
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    2 ++
- package/x11r7/xcb-proto/xcb-proto.mk               |    1 +
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- package/x11r7/xlib_libX11/xlib_libX11.mk           |    3 +++
- package/x11r7/xlib_libXau/xlib_libXau.mk           |    4 ++++
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    4 ++++
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    4 ++++
- .../x11r7/xproto_inputproto/xproto_inputproto.mk   |    1 +
- package/x11r7/xproto_kbproto/xproto_kbproto.mk     |    1 +
- .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    1 +
- package/x11r7/xproto_xextproto/xproto_xextproto.mk |    1 +
- .../xproto_xf86bigfontproto.mk                     |    1 +
- .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    1 +
- 15 files changed, 29 insertions(+), 1 deletions(-)
+ package/webkit/Config.in                           |    5 +-
+ package/webkit/gtk-doc.make                        |  173 --------------------
+ ...webkit-1.2.3-fix-build-issue-with-old-gtk.patch |   22 +++
+ package/webkit/webkit-r30267-trunc.patch           |   11 --
+ package/webkit/webkit.mk                           |   20 +--
+ 5 files changed, 29 insertions(+), 202 deletions(-)
+ delete mode 100644 package/webkit/gtk-doc.make
+ create mode 100644 package/webkit/webkit-1.2.3-fix-build-issue-with-old-gtk.patch
+ delete mode 100644 package/webkit/webkit-r30267-trunc.patch
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 4f9b323..bfeceab 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -16,5 +16,8 @@ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
- HOST_PYTHON_VERSION=$(shell python --version 2>&1 | sed 's/Python \([0-9]\.[^\.]\).*/\1/')
- LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb XCBPROTO_XCBPYTHONDIR=$(STAGING_DIR)/usr/lib/python$(HOST_PYTHON_VERSION)/site-packages
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index b0d69d7..c1ade50 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_ENCHANT
+ 	select BR2_PACKAGE_LIBSOUP
+ 	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_LIBGAIL
+ 	help
+ 	  WebKit is an open source, standards compliant web browser engine.
  
-+HOST_LIBXCB_DEPENDENCIES = host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp host-xlib_libXau
+@@ -19,5 +20,5 @@ config BR2_PACKAGE_WEBKIT
+ 
+ 	  http://webkit.org/
+ 
+-comment "webkit requires a toolchain with C++ support and WCHAR enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++comment "webkit requires C++, WCHAR in toolchain and libgtk2"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_PACKAGE_LIBGTK2
+diff --git a/package/webkit/gtk-doc.make b/package/webkit/gtk-doc.make
+deleted file mode 100644
+index 354ffb7..0000000
+--- a/package/webkit/gtk-doc.make
++++ /dev/null
+@@ -1,173 +0,0 @@
+-# -*- mode: makefile -*-
+-
+-####################################
+-# Everything below here is generic #
+-####################################
+-
+-if GTK_DOC_USE_LIBTOOL
+-GTKDOC_CC = $(LIBTOOL) --mode=compile $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-GTKDOC_LD = $(LIBTOOL) --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS)
+-else
+-GTKDOC_CC = $(CC) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+-GTKDOC_LD = $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS)
+-endif
+-
+-# We set GPATH here; this gives us semantics for GNU make
+-# which are more like other make's VPATH, when it comes to
+-# whether a source that is a target of one rule is then
+-# searched for in VPATH/GPATH.
+-#
+-GPATH = $(srcdir)
+-
+-TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
+-
+-EXTRA_DIST = 				\
+-	$(content_files)		\
+-	$(HTML_IMAGES)			\
+-	$(DOC_MAIN_SGML_FILE)		\
+-	$(DOC_MODULE)-sections.txt	\
+-	$(DOC_MODULE)-overrides.txt
+-
+-DOC_STAMPS=scan-build.stamp tmpl-build.stamp sgml-build.stamp html-build.stamp \
+-	   $(srcdir)/tmpl.stamp $(srcdir)/sgml.stamp $(srcdir)/html.stamp
+-
+-SCANOBJ_FILES = 		 \
+-	$(DOC_MODULE).args 	 \
+-	$(DOC_MODULE).hierarchy  \
+-	$(DOC_MODULE).interfaces \
+-	$(DOC_MODULE).prerequisites \
+-	$(DOC_MODULE).signals
+-
+-REPORT_FILES = \
+-	$(DOC_MODULE)-undocumented.txt \
+-	$(DOC_MODULE)-undeclared.txt \
+-	$(DOC_MODULE)-unused.txt
+-
+-CLEANFILES = $(SCANOBJ_FILES) $(REPORT_FILES) $(DOC_STAMPS)
+-
+-if ENABLE_GTK_DOC
+-all-local: html-build.stamp
+-else
+-all-local:
+-endif
+-
+-docs: html-build.stamp
+-
+-#### scan ####
+-
+-scan-build.stamp: $(HFILE_GLOB) $(CFILE_GLOB)
+-	@echo 'gtk-doc: Scanning header files'
+-	@-chmod -R u+w $(srcdir)
+-	cd $(srcdir) && \
+-	  gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(SCAN_OPTIONS) $(EXTRA_HFILES)
+-	if grep -l '^..*$$' $(srcdir)/$(DOC_MODULE).types > /dev/null 2>&1 ; then \
+-	    CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj $(SCANGOBJ_OPTIONS) --module=$(DOC_MODULE) --output-dir=$(srcdir) ; \
+-	else \
+-	    cd $(srcdir) ; \
+-	    for i in $(SCANOBJ_FILES) ; do \
+-               test -f $$i || touch $$i ; \
+-	    done \
+-	fi
+-	touch scan-build.stamp
+-
+-$(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt: scan-build.stamp
+-	@true
+-
+-#### templates ####
+-
+-tmpl-build.stamp: $(DOC_MODULE)-decl.txt $(SCANOBJ_FILES) $(DOC_MODULE)-sections.txt $(DOC_MODULE)-overrides.txt
+-	@echo 'gtk-doc: Rebuilding template files'
+-	@-chmod -R u+w $(srcdir)
+-	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE) $(MKTMPL_OPTIONS)
+-	touch tmpl-build.stamp
+-
+-tmpl.stamp: tmpl-build.stamp
+-	@true
+-
+-tmpl/*.sgml:
+-	@true
+-
+-
+-#### xml ####
+-
+-sgml-build.stamp: tmpl.stamp $(HFILE_GLOB) $(CFILE_GLOB) $(DOC_MODULE)-sections.txt $(srcdir)/tmpl/*.sgml $(expand_content_files)
+-	@echo 'gtk-doc: Building XML'
+-	@-chmod -R u+w $(srcdir)
+-	cd $(srcdir) && \
+-	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --output-format=xml --expand-content-files="$(expand_content_files)" --main-sgml-file=$(DOC_MAIN_SGML_FILE) $(MKDB_OPTIONS)
+-	touch sgml-build.stamp
+-
+-sgml.stamp: sgml-build.stamp
+-	@true
+-
+-#### html ####
+-
+-html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
+-	@echo 'gtk-doc: Building HTML'
+-	@-chmod -R u+w $(srcdir)
+-	rm -rf $(srcdir)/html
+-	mkdir $(srcdir)/html
+-	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
+-	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
+-	@echo 'gtk-doc: Fixing cross-references'
+-	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
+-	touch html-build.stamp
+-
+-##############
+-
+-clean-local:
+-	rm -f *~ *.bak
+-	rm -rf .libs
+-
+-distclean-local:
+-	cd $(srcdir) && \
+-	  rm -rf xml $(REPORT_FILES) \
+-	         $(DOC_MODULE)-decl-list.txt $(DOC_MODULE)-decl.txt
+-
+-maintainer-clean-local: clean
+-	cd $(srcdir) && rm -rf xml html
+-
+-install-data-local:
+-	-installfiles=`echo $(srcdir)/html/*`; \
+-	if test "$$installfiles" = '$(srcdir)/html/*'; \
+-	then echo '-- Nothing to install' ; \
+-	else \
+-	  $(mkinstalldirs) $(DESTDIR)$(TARGET_DIR); \
+-	  for i in $$installfiles; do \
+-	    echo '-- Installing '$$i ; \
+-	    $(INSTALL_DATA) $$i $(DESTDIR)$(TARGET_DIR); \
+-	  done; \
+-	  echo '-- Installing $(srcdir)/html/index.sgml' ; \
+-	  $(INSTALL_DATA) $(srcdir)/html/index.sgml $(DESTDIR)$(TARGET_DIR) || :; \
+-	  which gtkdoc-rebase >/dev/null && \
+-	    gtkdoc-rebase --relative --dest-dir=$(DESTDIR) --html-dir=$(DESTDIR)$(TARGET_DIR) ; \
+-	fi
+-	
+-
+-uninstall-local:
+-	rm -f $(DESTDIR)$(TARGET_DIR)/*
+-
+-#
+-# Require gtk-doc when making dist
+-#
+-if ENABLE_GTK_DOC
+-dist-check-gtkdoc:
+-else
+-dist-check-gtkdoc:
+-	@echo "*** gtk-doc must be installed and enabled in order to make dist"
+-	@false
+-endif
+-
+-dist-hook: dist-check-gtkdoc dist-hook-local
+-	mkdir $(distdir)/tmpl
+-	mkdir $(distdir)/xml
+-	mkdir $(distdir)/html
+-	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
+-	-cp $(srcdir)/xml/*.xml $(distdir)/xml
+-	cp $(srcdir)/html/* $(distdir)/html
+-	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
+-	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
+-	cd $(distdir) && rm -f $(DISTCLEANFILES)
+-	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+-
+-.PHONY : dist-hook-local docs
+diff --git a/package/webkit/webkit-1.2.3-fix-build-issue-with-old-gtk.patch b/package/webkit/webkit-1.2.3-fix-build-issue-with-old-gtk.patch
+new file mode 100644
+index 0000000..2b20bae
+--- /dev/null
++++ b/package/webkit/webkit-1.2.3-fix-build-issue-with-old-gtk.patch
+@@ -0,0 +1,22 @@
++The WebKit code conditionally calls getRootCoords() when the Gtk
++version is old (i.e < 2.17.3), but fails to declare the prototype of
++this function (which is implemented after its call site). This build
++failure has probably been missed due to the fact that not many people
++try to compile recent WebKit versions with old Gtk.
 +
- $(eval $(call AUTOTARGETS,package/x11r7,libxcb))
-+$(eval $(call AUTOTARGETS,package/x11r7,libxcb,host))
- 
-diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
-index f40332a..3ee7ec1 100644
---- a/package/x11r7/pthread-stubs/pthread-stubs.mk
-+++ b/package/x11r7/pthread-stubs/pthread-stubs.mk
-@@ -11,4 +11,5 @@ PTHREAD_STUBS_LIBTOOL_PATCH = NO
- PTHREAD_STUBS_INSTALL_STAGING = YES
- 
- $(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs))
-+$(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs,host))
- 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 6082c56..e9f7174 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-@@ -9,5 +9,7 @@ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_AUTORECONF = NO
- XAPP_XKBCOMP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
-+HOST_XAPP_XKBCOMP_DEPENDENCIES = host-xlib_libX11 host-xlib_libxkbfile
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_xkbcomp))
-+$(eval $(call AUTOTARGETS,package/x11r7,xapp_xkbcomp,host))
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index a3d029c..153cc0d 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
-@@ -10,4 +10,5 @@ XCB_PROTO_SITE = http://xcb.freedesktop.org/dist/
- XCB_PROTO_INSTALL_STAGING = YES
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xcb-proto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xcb-proto,host))
- 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index eb790b8..e398d30 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -10,7 +10,7 @@ XKEYBOARD_CONFIG_AUTORECONF = NO
- XKEYBOARD_CONFIG_INSTALL_STAGING = NO
- XKEYBOARD_CONFIG_INSTALL_TARGET = YES
- XKEYBOARD_CONFIG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
--XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool
-+XKEYBOARD_CONFIG_DEPENDENCIES = host-intltool host-xapp_xkbcomp
- 
- XKEYBOARD_CONFIG_CONF_OPT = GMSGFMT=/usr/bin/msgfmt
- 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index b9c18d0..575aa67 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -18,7 +18,10 @@ XLIB_LIBX11_CONF_OPT = \
- 	--with-keysymdef=$(STAGING_DIR)/usr/include/X11/keysymdef.h \
- 	--disable-specs
- 
-+HOST_XLIB_LIBX11_DEPENDENCIES = host-xproto_xextproto host-libxcb host-xutil_util-macros host-xlib_xtrans host-xlib_libXau host-xlib_libXdmcp host-xproto_kbproto host-xproto_xproto host-xproto_xextproto host-xproto_inputproto host-xproto_xf86bigfontproto xproto_bigreqsproto host-xproto_xcmiscproto
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
++Index: webkit-1.2.3/WebKitTools/DumpRenderTree/gtk/EventSender.cpp
++===================================================================
++--- webkit-1.2.3.orig/WebKitTools/DumpRenderTree/gtk/EventSender.cpp	2010-07-19 20:42:27.000000000 +0200
+++++ webkit-1.2.3/WebKitTools/DumpRenderTree/gtk/EventSender.cpp	2010-07-19 20:42:57.000000000 +0200
++@@ -86,6 +86,9 @@
++ static void sendOrQueueEvent(GdkEvent event);
++ static void dispatchEvent(GdkEvent event);
++ static guint getStateFlags();
+++#if !GTK_CHECK_VERSION(2,17,3)
+++static void getRootCoords(GtkWidget* view, int* rootX, int* rootY);
+++#endif
++ 
++ static JSValueRef getDragModeCallback(JSContextRef context, JSObjectRef object, JSStringRef propertyName, JSValueRef* exception)
++ {
+diff --git a/package/webkit/webkit-r30267-trunc.patch b/package/webkit/webkit-r30267-trunc.patch
+deleted file mode 100644
+index 0cc7ca2..0000000
+--- a/package/webkit/webkit-r30267-trunc.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/JavaScriptCore/wtf/MathExtras.h	2008-02-04 21:09:08.000000000 -0500
+-+++ b/JavaScriptCore/wtf/MathExtras.h	2008-02-11 13:31:28.000000000 -0500
+-@@ -75,6 +75,8 @@ inline bool signbit(double x) { return x
+- 
+- #endif
+- 
+-+inline double trunc(double num) { return num > 0 ? floor(num) : ceil(num); }
+-+
+- #if COMPILER(MSVC)
+- 
+- inline bool isinf(double num) { return !_finite(num) && !_isnan(num); }
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index fc355ce..648ba31 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -3,16 +3,15 @@
+ # webkit
+ #
+ #############################################################
+-WEBKIT_VERSION = r44552
+-WEBKIT_SOURCE = WebKit-$(WEBKIT_VERSION).tar.bz2
+-WEBKIT_SITE = http://nightly.webkit.org/files/trunk/src/
++WEBKIT_VERSION = 1.2.3
++WEBKIT_SOURCE = webkit-$(WEBKIT_VERSION).tar.gz
++WEBKIT_SITE = http://www.webkitgtk.org
  
- # src/util/makekeys is executed at build time to generate ks_tables.h, so
- # it should get compiled for the host. The libX11 makefile unfortunately
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index d5f6814..ad6a0e5 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-@@ -13,4 +13,8 @@ XLIB_LIBXAU_INSTALL_STAGING = YES
- XLIB_LIBXAU_DEPENDENCIES = xutil_util-macros xproto_xproto
- XLIB_LIBXAU_CONF_OPT = --enable-shared --disable-static
+ WEBKIT_INSTALL_STAGING = YES
+-WEBKIT_INSTALL_TARGET = YES
+ WEBKIT_LIBTOOL_PATCH = NO
  
-+HOST_XLIB_LIBXAU_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
-+HOST_XLIB_LIBXAU_CONF_OPT = --enable-shared --disable-static
-+
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXau))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXau,host))
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 40b8058..eef3a5e 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -13,4 +13,8 @@ XLIB_LIBXDMCP_INSTALL_STAGING = YES
- XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
- XLIB_LIBXDMCP_CONF_OPT = --enable-shared --disable-static
+ WEBKIT_DEPENDENCIES = host-flex host-gperf icu curl libxml2 libxslt	\
+-			libgtk2 sqlite enchant libsoup jpeg
++			libgtk2 sqlite enchant libsoup jpeg libgail
  
-+HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
-+HOST_XLIB_LIBXDMCP_CONF_OPT = --enable-shared --disable-static
-+
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXdmcp))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libXdmcp,host))
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-index 7b6de7e..e71b36b 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-@@ -12,4 +12,8 @@ XLIB_LIBXKBFILE_INSTALL_STAGING = YES
- XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xproto_kbproto
- XLIB_LIBXKBFILE_CONF_OPT = --enable-shared --disable-static
+ WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config
  
-+HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xproto_kbproto
-+HOST_XLIB_LIBXKBFILE_CONF_OPT = --enable-shared --disable-static
-+
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libxkbfile))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libxkbfile,host))
-diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-index d83ba7e..825ebed 100644
---- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-+++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-@@ -12,3 +12,4 @@ XPROTO_INPUTPROTO_INSTALL_STAGING = YES
- XPROTO_INPUTPROTO_INSTALL_TARGET = NO
+@@ -28,15 +27,4 @@ endif
  
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_inputproto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_inputproto,host))
-diff --git a/package/x11r7/xproto_kbproto/xproto_kbproto.mk b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
-index 802bae4..ecdabf1 100644
---- a/package/x11r7/xproto_kbproto/xproto_kbproto.mk
-+++ b/package/x11r7/xproto_kbproto/xproto_kbproto.mk
-@@ -12,3 +12,4 @@ XPROTO_KBPROTO_INSTALL_STAGING = YES
- XPROTO_KBPROTO_INSTALL_TARGET = NO
+ WEBKIT_CONF_OPT += --disable-video
  
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_kbproto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_kbproto,host))
-diff --git a/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk b/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
-index 9c85d9f..1846f20 100644
---- a/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
-+++ b/package/x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk
-@@ -12,3 +12,4 @@ XPROTO_XCMISCPROTO_INSTALL_STAGING = YES
- XPROTO_XCMISCPROTO_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_xcmiscproto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_xcmiscproto,host))
-diff --git a/package/x11r7/xproto_xextproto/xproto_xextproto.mk b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
-index 6b880b4..1fd39c9 100644
---- a/package/x11r7/xproto_xextproto/xproto_xextproto.mk
-+++ b/package/x11r7/xproto_xextproto/xproto_xextproto.mk
-@@ -12,3 +12,4 @@ XPROTO_XEXTPROTO_INSTALL_STAGING = YES
- XPROTO_XEXTPROTO_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_xextproto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_xextproto,host))
-diff --git a/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
-index fda78e2..1872873 100644
---- a/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
-+++ b/package/x11r7/xproto_xf86bigfontproto/xproto_xf86bigfontproto.mk
-@@ -12,3 +12,4 @@ XPROTO_XF86BIGFONTPROTO_INSTALL_STAGING = YES
- XPROTO_XF86BIGFONTPROTO_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xproto_xf86bigfontproto))
-+$(eval $(call AUTOTARGETS,package/x11r7,xproto_xf86bigfontproto,host))
-diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.mk b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-index 648136e..b600a46 100644
---- a/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-+++ b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
-@@ -12,3 +12,4 @@ XUTIL_UTIL_MACROS_INSTALL_STAGING = YES
- XUTIL_UTIL_MACROS_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xutil_util-macros))
-+$(eval $(call AUTOTARGETS,package/x11r7,xutil_util-macros,host))
+-define WEBKIT_AUTOGEN_PATCH
+-$(SED) 's%ACLOCAL_FLAGS=.*%ACLOCAL_FLAGS="-I autotools -I $(STAGING_DIR)/usr/share/aclocal"%' $(WEBKIT_DIR)/autogen.sh
+-$(SED) 's/AUTOMAKE_FLAGS=.*/AUTOMAKE_FLAGS="--foreign --add-missing --copy"/' $(WEBKIT_DIR)/autogen.sh
+-$(SED) 's/LIBTOOLIZE_FLAGS=.*/LIBTOOLIZE_FLAGS="--force --automake --copy"/' $(WEBKIT_DIR)/autogen.sh
+-cp package/webkit/gtk-doc.make $(WEBKIT_DIR)/
+-# Don't run the configure step yet
+-cd $(WEBKIT_DIR); $(HOST_CONFIGURE_OPTS) AUTOGEN_CONFIGURE_ARGS=--version ./autogen.sh
+-endef
+-
+-WEBKIT_POST_EXTRACT_HOOKS += WEBKIT_AUTOGEN_PATCH
+-
+ $(eval $(call AUTOTARGETS,package,webkit))
 -- 
 1.7.1
