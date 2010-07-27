@@ -1,53 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 23:56:53 +0200
-Subject: [Buildroot] Configuring host-lzo fails
-In-Reply-To: <201007272333.09640.PeterHuewe@gmx.de>
-References: <201007272333.09640.PeterHuewe@gmx.de>
-Message-ID: <20100727235653.0d2215eb@surf>
+From: Ossy <ossy1980@gmx.net>
+Date: Wed, 28 Jul 2010 00:07:37 +0200
+Subject: [Buildroot] help in converting util-linux-ng to autotargets
+Message-ID: <4C4F58A9.50309@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi mailinglist,
 
-On Tue, 27 Jul 2010 23:33:09 +0200
-Peter H?we <PeterHuewe@gmx.de> wrote:
+I was able to convince a recent version of util-linux-ng (1.17.2) to 
+compile for my target which is arm926t.
 
-> I've started a new thread, since it seems not related to avr32 in
-> particular.
+After the compilation I find several arm 32bit elfs in 
+output/build/util-linux-ng-2.17.
 
-Yep.
+I have three unclear issues for now:
 
-> I'm using the atngw100_defconfig on my 64-bit gentoo system with a
-> gcc 4.1.2
+A)
+What do I do with the placeholder scripts from libtool?
+Sometimes I find a libtool script instead of the expected binary. The 
+binary itself is located in the corresponding .libs directory.
+Do I need to install both - placeholder skript and binary out of .libs?
 
-I was also able to reproduce the issue.
+B)
+How do I define the $(INSTALL)-part in the *mk-file for autotargets?
+I found this or similar example:
+define UTIL_LINUX_NG_INSTALL_TARGET_CMDS
+        $(INSTALL) -D $(@D)/usr/bin/chkdupexe 
+$(TARGET_DIR)/usr/sbin/chkdupexe
+endef
 
-> I've gzipped the whole build log (from a fresh git clone) and
-> uploaded it to http://www.hs-augsburg.de/~phuewe/typescript2.gz
-> (498K, unzipped 8,8Mb)
-> 
-> The contens of the host-config.cache can be found at
-> http://paste.pocoo.org/show/242433/
+Do I need to know every location of every binary out of util-linux-ng to 
+install it from output/build/util-linux-ng-2.17 to STAGING-DIR?
+This is quite a lot. With the old variant a make install (into 
+STAGING_DIR) would be sufficnet I guess.
+I'm a bit lazy. Do I need to define a line for every binary copy to 
+staging? How would it look like?
 
-Thanks. As I could reproduce, I've started to investigate the problem.
-I've summarized my findings at
-http://free-electrons.com/~thomas/pub/autoconf-issue.txt, but I don't
-have a clear solution yet.
+C)
+I like to build the libraries libblkid and libuuid and install them in 
+the target fs. I found a link, the .a and .so variants in 
+output/build/somedir. Which one do I need to isntall? Is it neccessary 
+to copy the symlink from libuuid.so->libuuid.so.VERSION to the target fs?
 
-As a temporary fix, you can probably try something like :
 
-HOST_LZO_CONF_OPT = --target=$(GNU_HOST_NAME)
+Thanks for any hint.
 
-in package/lzo/lzo.mk.
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Kind regards,
+Marcus
