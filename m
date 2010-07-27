@@ -1,49 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Jul 2010 22:34:26 +0200
-Subject: [Buildroot] [PATCH 1/1] target-g++: fix build
-In-Reply-To: <cover.1280262826.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1280262826.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <454b70d03afd45a9f78976b93051c61b80ab245d.1280262826.git.thomas.petazzoni@free-electrons.com>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Tue, 27 Jul 2010 22:39:45 +0200
+Subject: [Buildroot] AVR32 is broken (toolchain)
+In-Reply-To: <20100722171035.0e656a6c@surf>
+References: <AANLkTinBXtX-xDYtM5V8pTrwNpkDKBHSpz9MKnQ8mypa@mail.gmail.com>
+	<20100722141715.7bbc4963@surf> <20100722171035.0e656a6c@surf>
+Message-ID: <201007272239.45547.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just as we did to fix target-gcc, pass CXX_FOR_TARGET when building
-target g++, and remove useless copies of g++ and c++.
+Am Donnerstag 22 Juli 2010 17:10:35 schrieb Thomas Petazzoni:
+> BTW, if there are people working at Atmel on this list, it'd be great...
 
-Tested on ARM by compiling a simple C++ program using <iostream> on
-the target and running it.
+Maybe CC or write to avr32 at atmel.com ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+> On the Atmel website, it is possible to download a single zip file that
+> contains tarballs for gcc, gdb, binutils and newlib. Having that in a
+> single zip file is very unpractical for build systems like Buildroot.
+Yeah. But since I guess it is all gpl licenced software, wouldn't it be 
+possible for the buildroot team to download the zip, repack it in single zips 
+and host/mirror them on the buildroot mirrors? Or atleast the toolchain parts 
+of the zip?
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 9720ed3..6e767ac 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -399,6 +399,7 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR3)/.prepared
- 		BOOT_CFLAGS="$(TARGET_CFLAGS) $(TARGET_SOFT_FLOAT)" \
- 		GCC_FOR_TARGET="$(TARGET_CC)" \
- 		CC_FOR_TARGET="$(TARGET_CC)" \
-+		CXX_FOR_TARGET="$(TARGET_CXX)" \
- 		$(GCC_SRC_DIR)/configure $(QUIET) \
- 		--prefix=/usr \
- 		--build=$(GNU_HOST_NAME) \
-@@ -445,8 +446,10 @@ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR3)/.compiled
- 	# Remove broken specs file (cross compile flag is set).
- 	rm -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/specs
- 
--	# Remove useless copies of gcc
-+	# Remove useless copies of gcc, c++, g++
- 	rm -f $(TARGET_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc*
-+	rm -f $(TARGET_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++*
-+	rm -f $(TARGET_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++*
- 
- 	# Work around problem of missing syslimits.h
- 	if [ ! -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h ]; then \
--- 
-1.7.0.4
+I know it's not a good option, but maybe it would ease the life of the 
+buildroot devs (i.e. you and peter :P)
+
+>Moreover, having to register on the website (name, address, phone
+> number and all the stuff) is even more inconvenient.
+
+I know that form, and even if it looks like it is mandatory, it is not, just 
+click continue - even hotlinking would be possible.
+
+Thanks,
+Peter
