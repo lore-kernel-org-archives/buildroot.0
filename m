@@ -1,7 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 Date: Wed, 28 Jul 2010 16:27:09 +0200
-Subject: [Buildroot] [git commit master 1/1] Remove unused X11_PREFIX option
-Message-ID: <20100728152234.0A68F826C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain: move helper
+	functions from external toolchain
+Message-ID: <20100728152234.8883A83667@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,72 +10,535 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef2c11e51a08383c4a3bbd370e12e1db4875a447
+commit: http://git.buildroot.net/buildroot/commit/?id=ed181aeedb4d478f789f81525bd8c93025ba7a29
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/kb9202_defconfig  |    1 -
- configs/v100sc2_defconfig |    1 -
- package/Makefile.in       |    4 ----
- package/x11r7/Config.in   |    7 -------
- 4 files changed, 0 insertions(+), 13 deletions(-)
+The helper functions used for external toolchains may also be useful
+to alternate toolchain backends (currently, the external toolchain is
+the sole user).
 
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index 2895d8a..40c6d18 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -551,7 +551,6 @@ BR2_PACKAGE_XSERVER_none=y
- # BR2_PACKAGE_XSERVER_x11r7 is not set
- # BR2_PACKAGE_XSERVER_xorg is not set
- # BR2_PACKAGE_XSERVER_tinyx is not set
--BR2_X11_PREFIX="/usr"
- 
- #
- # X libraries and helper libraries
-diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index 80f194a..ca261ee 100644
---- a/configs/v100sc2_defconfig
-+++ b/configs/v100sc2_defconfig
-@@ -568,7 +568,6 @@ BR2_PACKAGE_QT_OPENSSL=y
- # BR2_PACKAGE_XSERVER_none is not set
- # BR2_PACKAGE_XSERVER_xorg is not set
- # BR2_PACKAGE_XSERVER_tinyx is not set
--BR2_X11_PREFIX="/usr"
- # BR2_PACKAGE_XORG7 is not set
- 
- #
-diff --git a/package/Makefile.in b/package/Makefile.in
-index fc53a1b..36f2f24 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -292,9 +292,5 @@ else
- ENABLE_DEBUG:=
+Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile                                 |    1 +
+ toolchain/external-toolchain/ext-tool.mk |  241 -----------------------------
+ toolchain/helpers.mk                     |  244 ++++++++++++++++++++++++++++++
+ 3 files changed, 245 insertions(+), 241 deletions(-)
+ create mode 100644 toolchain/helpers.mk
+
+diff --git a/Makefile b/Makefile
+index a864aae..b1d5079 100644
+--- a/Makefile
++++ b/Makefile
+@@ -307,6 +307,7 @@ include toolchain/mklibs/mklibs.mk
+ include toolchain/sstrip/sstrip.mk
+ include toolchain/uClibc/uclibc.mk
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
++include toolchain/helpers.mk
+ include toolchain/*/*.mk
  endif
  
--# X Windowing system
--
--X11_PREFIX:=$(call qstrip,$(BR2_X11_PREFIX))
--
- include package/Makefile.autotools.in
- include package/Makefile.package.in
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index b93cc90..c0c0043 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -29,13 +29,6 @@ config BR2_PACKAGE_XSERVER_tinyx
+diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/external-toolchain/ext-tool.mk
+index 8be86f5..7e4645d 100644
+--- a/toolchain/external-toolchain/ext-tool.mk
++++ b/toolchain/external-toolchain/ext-tool.mk
+@@ -37,247 +37,6 @@
+ #  cross-compiler binaries remains external, all libraries and headers
+ #  are imported into the Buildroot tree.
  
- endchoice
- 
--config BR2_X11_PREFIX
--	string
--	default "/usr/X11R6"	if BR2_PACKAGE_XSERVER_xorg
--	default "/usr"		if BR2_PACKAGE_XSERVER_tinyx
--	help
--	  X11 apps root location
+-#
+-# Copy a toolchain library and its symbolic links from the sysroot
+-# directory to the target directory. Also optionaly strips the
+-# library.
+-#
+-# Most toolchains have their libraries either in /lib or /usr/lib
+-# relative to their ARCH_SYSROOT_DIR. Buildroot toolchains, however,
+-# have basic libraries in /lib, and libstdc++/libgcc_s in
+-# /usr/<target-name>/lib(64).
+-#
+-# $1: arch specific sysroot directory
+-# $2: library name
+-# $3: destination directory of the libary, relative to $(TARGET_DIR)
+-# $4: strip (y|n), default is to strip
+-#
+-copy_toolchain_lib_root = \
+-	ARCH_SYSROOT_DIR="$(strip $1)"; \
+-	LIB="$(strip $2)"; \
+-	DESTDIR="$(strip $3)" ; \
+-	STRIP="$(strip $4)"; \
+- \
+-	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
+-		find -L . -path "./lib/$${LIB}.*"     -o \
+-			  -path "./usr/lib/$${LIB}.*" -o \
+-			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
+-		)` ; \
+-	for FILE in $${LIBS} ; do \
+-		LIB=`basename $${FILE}`; \
+-		LIBDIR=`dirname $${FILE}` ; \
+-		while test \! -z "$${LIB}"; do \
+-			FULLPATH="$${ARCH_SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
+-			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
+-			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+-			if test -h $${FULLPATH} ; then \
+-				cp -d $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/; \
+-			elif test -f $${FULLPATH}; then \
+-				$(INSTALL) -D -m0755 $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
+-				case "$${STRIP}" in \
+-				(0 | n | no) \
+-;; \
+-				(*) \
+-					$(TARGET_CROSS)strip "$(TARGET_DIR)/$${DESTDIR}/$${LIB}"; \
+-;; \
+-				esac; \
+-			else \
+-				exit -1; \
+-			fi; \
+-			LIB="`readlink $${FULLPATH}`"; \
+-		done; \
+-	done; \
+- \
+-	echo -n
 -
- menu "X11R7 Servers"
- 	source package/x11r7/xserver_xorg-server/Config.in
- endmenu
+-#
+-# Copy the full external toolchain sysroot directory to the staging
+-# dir. The operation of this function is rendered a little bit
+-# complicated by the support for multilib toolchains.
+-#
+-# We start by copying etc, lib, sbin and usr from the sysroot of the
+-# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
+-# allows to import into the staging directory the C library and
+-# companion libraries for the correct architecture variant. We
+-# explictly only copy etc, lib, sbin and usr since other directories
+-# might exist for other architecture variants (on Codesourcery
+-# toolchain, the sysroot for the default architecture variant contains
+-# the armv4t and thumb2 subdirectories, which are the sysroot for the
+-# corresponding architecture variants), and we don't want to import
+-# them.
+-#
+-# Then, if the selected architecture variant is not the default one
+-# (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
+-#
+-#  * Import the header files from the default architecture
+-#    variant. Header files are typically shared between the sysroots
+-#    for the different architecture variants. If we use the
+-#    non-default one, header files were not copied by the previous
+-#    step, so we copy them here from the sysroot of the default
+-#    architecture variant.
+-#
+-#  * Create a symbolic link that matches the name of the subdirectory
+-#    for the architecture variant in the original sysroot. This is
+-#    required as the compiler will by default look in
+-#    sysroot_dir/arch_variant/ for libraries and headers, when the
+-#    non-default architecture variant is used. Without this, the
+-#    compiler fails to find libraries and headers.
+-#
+-# $1: main sysroot directory of the toolchain
+-# $2: arch specific sysroot directory of the toolchain
+-# $3: arch specific subdirectory in the sysroot
+-#
+-copy_toolchain_sysroot = \
+-	SYSROOT_DIR="$(strip $1)"; \
+-	ARCH_SYSROOT_DIR="$(strip $2)"; \
+-	ARCH_SUBDIR="$(strip $3)"; \
+-	for i in etc lib sbin usr ; do \
+-		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+-		fi ; \
+-	done ; \
+-	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+-		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+-			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+-		fi ; \
+-		ln -s . $(STAGING_DIR)/$(ARCH_SUBDIR) ; \
+-	fi ; \
+-	find $(STAGING_DIR) -type d | xargs chmod 755
+-
+-#
+-# Create lib64 -> lib and usr/lib64 -> usr/lib symbolic links in the
+-# target and staging directories. This is needed for some 64 bits
+-# toolchains such as the Crosstool-NG toolchains, for which the path
+-# to the dynamic loader and other libraries is /lib64, but the
+-# libraries are stored in /lib.
+-#
+-create_lib64_symlinks = \
+-	(cd $(TARGET_DIR) ;      ln -s lib lib64) ; \
+-	(cd $(TARGET_DIR)/usr ;  ln -s lib lib64) ; \
+-	(cd $(STAGING_DIR) ;     ln -s lib lib64) ; \
+-	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
+-
+-#
+-# Check the availability of a particular glibc feature. We assume that
+-# all Buildroot toolchain options are supported by glibc, so we just
+-# check that they are enabled.
+-#
+-# $1: Buildroot option name
+-# $2: feature description
+-#
+-check_glibc_feature = \
+-	if [ x$($(1)) != x"y" ] ; then \
+-		echo "$(2) available in C library, please enable $(1)" ; \
+-		exit 1 ; \
+-	fi
+-
+-#
+-# Check the correctness of a glibc external toolchain configuration.
+-#  1. Check that the C library selected in Buildroot matches the one
+-#     of the external toolchain
+-#  2. Check that all the C library-related features are enabled in the
+-#     config, since glibc always supports all of them
+-#
+-# $1: sysroot directory
+-#
+-check_glibc = \
+-	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
+-		echo "Incorrect selection of the C library"; \
+-		exit -1; \
+-	fi; \
+-	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
+-	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
+-	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
+-	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
+-	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
+-	$(call check_glibc_feature,BR2_PROGRAM_INVOCATION,Program invocation support)
+-
+-#
+-# Check the conformity of Buildroot configuration with regard to the
+-# uClibc configuration of the external toolchain, for a particular
+-# feature.
+-#
+-# $1: uClibc macro name
+-# $2: Buildroot option name
+-# $3: uClibc config file
+-# $4: feature description
+-#
+-check_uclibc_feature = \
+-	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
+-	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} == x"y" ] ; then \
+-		echo "$(4) available in C library, please enable $(2)" ; \
+-		exit 1 ; \
+-	fi ; \
+-	if [ x$($(2)) == x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
+-		echo "$(4) not available in C library, please disable $(2)" ; \
+-		exit 1 ; \
+-	fi
+-
+-#
+-# Check the correctness of a uclibc external toolchain configuration
+-#  1. Check that the C library selected in Buildroot matches the one
+-#     of the external toolchain
+-#  2. Check that the features enabled in the Buildroot configuration
+-#     match the features available in the uClibc of the external
+-#     toolchain
+-#
+-# $1: sysroot directory
+-#
+-check_uclibc = \
+-	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
+-		echo "Incorrect selection of the C library"; \
+-		exit -1; \
+-	fi; \
+-	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+-	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support) ;\
+-
+-#
+-# Check that the Buildroot configuration of the ABI matches the
+-# configuration of the external toolchain.
+-#
+-check_arm_abi = \
+-	EXT_TOOLCHAIN_TARGET=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Target | cut -f2 -d ' ') ; \
+-	if echo $${EXT_TOOLCHAIN_TARGET} | grep -q 'eabi$$' ; then \
+-		EXT_TOOLCHAIN_ABI="eabi" ; \
+-	else \
+-		EXT_TOOLCHAIN_ABI="oabi" ; \
+-	fi ; \
+-	if [ x$(BR2_ARM_OABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "eabi" ] ; then \
+-		echo "Incorrect ABI setting" ; \
+-		exit 1 ; \
+-	fi ; \
+-	if [ x$(BR2_ARM_EABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "oabi" ] ; then \
+-		echo "Incorrect ABI setting" ; \
+-		exit 1 ; \
+-	fi ; \
+-
+-#
+-# Check that the external toolchain supports C++
+-#
+-check_cplusplus = \
+-	$(TARGET_CXX) -v > /dev/null 2>&1 ; \
+-	if test $$? -ne 0 ; then \
+-		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
+-		exit 1 ; \
+-	fi ; \
+-
+-#
+-# Check that the cross-compiler given in the configuration exists
+-#
+-check_cross_compiler_exists = \
+-	$(TARGET_CC) -v > /dev/null 2>&1 ; \
+-	if test $$? -ne 0 ; then \
+-		echo "Cannot execute cross-compiler '$(TARGET_CC)'" ; \
+-		exit 1 ; \
+-	fi ; \
+-
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
+ LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+new file mode 100644
+index 0000000..5c87d2b
+--- /dev/null
++++ b/toolchain/helpers.mk
+@@ -0,0 +1,244 @@
++# This Makefile fragment declares helper functions, usefull to handle
++# non- buildroot-built toolchains, eg. purely external toolchains or
++# toolchains (internally) built using crosstool-NG.
++
++#
++# Copy a toolchain library and its symbolic links from the sysroot
++# directory to the target directory. Also optionaly strips the
++# library.
++#
++# Most toolchains have their libraries either in /lib or /usr/lib
++# relative to their ARCH_SYSROOT_DIR. Buildroot toolchains, however,
++# have basic libraries in /lib, and libstdc++/libgcc_s in
++# /usr/<target-name>/lib(64).
++#
++# $1: arch specific sysroot directory
++# $2: library name
++# $3: destination directory of the libary, relative to $(TARGET_DIR)
++# $4: strip (y|n), default is to strip
++#
++copy_toolchain_lib_root = \
++	ARCH_SYSROOT_DIR="$(strip $1)"; \
++	LIB="$(strip $2)"; \
++	DESTDIR="$(strip $3)" ; \
++	STRIP="$(strip $4)"; \
++ \
++	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
++		find -L . -path "./lib/$${LIB}.*"     -o \
++			  -path "./usr/lib/$${LIB}.*" -o \
++			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
++		)` ; \
++	for FILE in $${LIBS} ; do \
++		LIB=`basename $${FILE}`; \
++		LIBDIR=`dirname $${FILE}` ; \
++		while test \! -z "$${LIB}"; do \
++			FULLPATH="$${ARCH_SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
++			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
++			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
++			if test -h $${FULLPATH} ; then \
++				cp -d $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/; \
++			elif test -f $${FULLPATH}; then \
++				$(INSTALL) -D -m0755 $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
++				case "$${STRIP}" in \
++				(0 | n | no) \
++;; \
++				(*) \
++					$(TARGET_CROSS)strip "$(TARGET_DIR)/$${DESTDIR}/$${LIB}"; \
++;; \
++				esac; \
++			else \
++				exit -1; \
++			fi; \
++			LIB="`readlink $${FULLPATH}`"; \
++		done; \
++	done; \
++ \
++	echo -n
++
++#
++# Copy the full external toolchain sysroot directory to the staging
++# dir. The operation of this function is rendered a little bit
++# complicated by the support for multilib toolchains.
++#
++# We start by copying etc, lib, sbin and usr from the sysroot of the
++# selected architecture variant (as pointed by ARCH_SYSROOT_DIR). This
++# allows to import into the staging directory the C library and
++# companion libraries for the correct architecture variant. We
++# explictly only copy etc, lib, sbin and usr since other directories
++# might exist for other architecture variants (on Codesourcery
++# toolchain, the sysroot for the default architecture variant contains
++# the armv4t and thumb2 subdirectories, which are the sysroot for the
++# corresponding architecture variants), and we don't want to import
++# them.
++#
++# Then, if the selected architecture variant is not the default one
++# (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
++#
++#  * Import the header files from the default architecture
++#    variant. Header files are typically shared between the sysroots
++#    for the different architecture variants. If we use the
++#    non-default one, header files were not copied by the previous
++#    step, so we copy them here from the sysroot of the default
++#    architecture variant.
++#
++#  * Create a symbolic link that matches the name of the subdirectory
++#    for the architecture variant in the original sysroot. This is
++#    required as the compiler will by default look in
++#    sysroot_dir/arch_variant/ for libraries and headers, when the
++#    non-default architecture variant is used. Without this, the
++#    compiler fails to find libraries and headers.
++#
++# $1: main sysroot directory of the toolchain
++# $2: arch specific sysroot directory of the toolchain
++# $3: arch specific subdirectory in the sysroot
++#
++copy_toolchain_sysroot = \
++	SYSROOT_DIR="$(strip $1)"; \
++	ARCH_SYSROOT_DIR="$(strip $2)"; \
++	ARCH_SUBDIR="$(strip $3)"; \
++	for i in etc lib sbin usr ; do \
++		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
++			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++		fi ; \
++	done ; \
++	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
++		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
++			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
++		fi ; \
++		ln -s . $(STAGING_DIR)/$(ARCH_SUBDIR) ; \
++	fi ; \
++	find $(STAGING_DIR) -type d | xargs chmod 755
++
++#
++# Create lib64 -> lib and usr/lib64 -> usr/lib symbolic links in the
++# target and staging directories. This is needed for some 64 bits
++# toolchains such as the Crosstool-NG toolchains, for which the path
++# to the dynamic loader and other libraries is /lib64, but the
++# libraries are stored in /lib.
++#
++create_lib64_symlinks = \
++	(cd $(TARGET_DIR) ;      ln -s lib lib64) ; \
++	(cd $(TARGET_DIR)/usr ;  ln -s lib lib64) ; \
++	(cd $(STAGING_DIR) ;     ln -s lib lib64) ; \
++	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
++
++#
++# Check the availability of a particular glibc feature. We assume that
++# all Buildroot toolchain options are supported by glibc, so we just
++# check that they are enabled.
++#
++# $1: Buildroot option name
++# $2: feature description
++#
++check_glibc_feature = \
++	if [ x$($(1)) != x"y" ] ; then \
++		echo "$(2) available in C library, please enable $(1)" ; \
++		exit 1 ; \
++	fi
++
++#
++# Check the correctness of a glibc external toolchain configuration.
++#  1. Check that the C library selected in Buildroot matches the one
++#     of the external toolchain
++#  2. Check that all the C library-related features are enabled in the
++#     config, since glibc always supports all of them
++#
++# $1: sysroot directory
++#
++check_glibc = \
++	SYSROOT_DIR="$(strip $1)"; \
++	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
++		echo "Incorrect selection of the C library"; \
++		exit -1; \
++	fi; \
++	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
++	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
++	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
++	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
++	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
++	$(call check_glibc_feature,BR2_PROGRAM_INVOCATION,Program invocation support)
++
++#
++# Check the conformity of Buildroot configuration with regard to the
++# uClibc configuration of the external toolchain, for a particular
++# feature.
++#
++# $1: uClibc macro name
++# $2: Buildroot option name
++# $3: uClibc config file
++# $4: feature description
++#
++check_uclibc_feature = \
++	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
++	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} == x"y" ] ; then \
++		echo "$(4) available in C library, please enable $(2)" ; \
++		exit 1 ; \
++	fi ; \
++	if [ x$($(2)) == x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
++		echo "$(4) not available in C library, please disable $(2)" ; \
++		exit 1 ; \
++	fi
++
++#
++# Check the correctness of a uclibc external toolchain configuration
++#  1. Check that the C library selected in Buildroot matches the one
++#     of the external toolchain
++#  2. Check that the features enabled in the Buildroot configuration
++#     match the features available in the uClibc of the external
++#     toolchain
++#
++# $1: sysroot directory
++#
++check_uclibc = \
++	SYSROOT_DIR="$(strip $1)"; \
++	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
++		echo "Incorrect selection of the C library"; \
++		exit -1; \
++	fi; \
++	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
++	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support) ;\
++
++#
++# Check that the Buildroot configuration of the ABI matches the
++# configuration of the external toolchain.
++#
++check_arm_abi = \
++	EXT_TOOLCHAIN_TARGET=$(shell LANG=C $(TARGET_CC) -v 2>&1 | grep ^Target | cut -f2 -d ' ') ; \
++	if echo $${EXT_TOOLCHAIN_TARGET} | grep -q 'eabi$$' ; then \
++		EXT_TOOLCHAIN_ABI="eabi" ; \
++	else \
++		EXT_TOOLCHAIN_ABI="oabi" ; \
++	fi ; \
++	if [ x$(BR2_ARM_OABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "eabi" ] ; then \
++		echo "Incorrect ABI setting" ; \
++		exit 1 ; \
++	fi ; \
++	if [ x$(BR2_ARM_EABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "oabi" ] ; then \
++		echo "Incorrect ABI setting" ; \
++		exit 1 ; \
++	fi ; \
++
++#
++# Check that the external toolchain supports C++
++#
++check_cplusplus = \
++	$(TARGET_CXX) -v > /dev/null 2>&1 ; \
++	if test $$? -ne 0 ; then \
++		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
++		exit 1 ; \
++	fi ; \
++
++#
++# Check that the cross-compiler given in the configuration exists
++#
++check_cross_compiler_exists = \
++	$(TARGET_CC) -v > /dev/null 2>&1 ; \
++	if test $$? -ne 0 ; then \
++		echo "Cannot execute cross-compiler '$(TARGET_CC)'" ; \
++		exit 1 ; \
++	fi ; \
 -- 
 1.7.1
