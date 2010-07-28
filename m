@@ -1,34 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jul 2010 17:21:24 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	deprecate-gtk-on-dfb
-In-Reply-To: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 28 Jul 2010 12:15:06 +0200")
-References: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <878w4vfx8r.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 28 Jul 2010 16:27:09 +0200
+Subject: [Buildroot] [git commit master 1/1] Bump samba to 3.3.13
+	[CVE-2010-2063]
+Message-ID: <20100728152234.33A0C8345A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> As we discussed, here is the commit that deprecates Gtk on
- Thomas> DirectFB. This should probably be noted in the CHANGES file as well.
+commit: http://git.buildroot.net/buildroot/commit/?id=018c77a5486525adcec6a0994ce7a5aa6e654a5c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Thomas
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> The following changes since commit d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278:
- Thomas>   Paul Jones (1):
- Thomas>         zlib: Bump to 1.2.5
-
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot deprecate-gtk-on-dfb
-
-Pulled and pushed, thanks!
-
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 39968a9..1c59070 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -3,7 +3,7 @@
+ # samba
+ #
+ #############################################################
+-SAMBA_VERSION:=3.3.12
++SAMBA_VERSION:=3.3.13
+ SAMBA_SOURCE:=samba-$(SAMBA_VERSION).tar.gz
+ SAMBA_SITE:=http://samba.org/samba/ftp/stable/
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.1
