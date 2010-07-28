@@ -1,29 +1,36 @@
-From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
-Date: Wed, 28 Jul 2010 02:14:27 +0200
-Subject: [Buildroot] Configuring host-lzo fails
-In-Reply-To: <201007280020.05811.PeterHuewe@gmx.de>
-References: <201007272333.09640.PeterHuewe@gmx.de>
-	<20100727235653.0d2215eb@surf>
-	<201007280020.05811.PeterHuewe@gmx.de>
-Message-ID: <201007280214.28103.PeterHuewe@gmx.de>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Wed, 28 Jul 2010 00:11:36 -0700
+Subject: [Buildroot] [PATCH 0/3] Add support for uclibc NPTL toolchain.
+Message-ID: <1280301099-5930-1-git-send-email-raj.khem@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mittwoch 28 Juli 2010 00:20:05 schrieb Peter Huewe:
-Hi Thomas,
+Hi
 
-please also note that Ossy has reported this issue on Friday at 11:18pm CEST
+The following set of patches is a revised list of nptl build
+sequence support in BR internal toolchain.
 
-"[Buildroot] lzof 2.03 fails building with activated configuration cache"
+First patch includes the patch suggested by Peter to have
+proper dependency on gcc-intermediate and it is rebased on
+current master.
 
-Ossy > I was wondering why the ACC Conformance check of te compiler fails for 
-Ossy > lzof and is successful for some others. I switched of the configration 
-Ossy > cache and the lzof package did NOT compile.
-Ossy > Please see my config attached. For reproducing this error, turn on the 
-Ossy > config cache again.
+second patch lets uclibc compile in new sequence.
+0.9.28.x should not use gcc newer than 4.2.x it will
+not build
 
-Thanks,
-Peter
+Third patch lets gcc 4.2.4 compile for arm architecture
+as BR uses --with-abi option.
+
+I can build toolchains with following combos
+
+0.9.28.3+gcc 4.2.4 
+0.9.29+gcc 4.2.4
+uclibc-snapshot/nptl + gcc 4.4.4
+
+Please apply if ok
+
+Thanks
+-Khem
