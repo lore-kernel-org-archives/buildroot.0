@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Jul 2010 12:15:06 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	deprecate-gtk-on-dfb
-Message-ID: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Jul 2010 12:15:07 +0200
+Subject: [Buildroot] [PATCH 1/1] libgtk2: mark DirectFB backend as deprecated
+In-Reply-To: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ad520824a2d9070e379851079a3ad8f7b20bcccd.1280312079.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libgtk2 on DirectFB is deprecated because it is no longer supported in
+recent versions of Gtk. We will remove support for Gtk over DirectFB
+in the next Buildroot version unless support for DirectFB in mainline
+Gtk is improved in the mean time.
 
-As we discussed, here is the commit that deprecates Gtk on
-DirectFB. This should probably be noted in the CHANGES file as well.
-
-Thomas
-
-The following changes since commit d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278:
-  Paul Jones (1):
-        zlib: Bump to 1.2.5
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot deprecate-gtk-on-dfb
-
-Thomas Petazzoni (1):
-      libgtk2: mark DirectFB backend as deprecated
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/libgtk2/Config.in |    7 ++++++-
  1 files changed, 6 insertions(+), 1 deletions(-)
 
-Thanks,
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index 5eec77a..3d15f4c 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -6,7 +6,12 @@ config BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_CAIRO_PDF
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PANGO
+-	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
++	# libgtk2 on DirectFB is deprecated because it is no longer
++	# supported in recent versions of Gtk. We will remove support
++	# for Gtk over DirectFB in the next Buildroot version unless
++	# support for DirectFB in mainline Gtk is improved in the mean
++	# time.
++	depends on BR2_PACKAGE_XORG7||(BR2_PACKAGE_DIRECTFB && BR2_DEPRECATED)
+ 	depends on BR2_USE_WCHAR # glib2
+ 	help
+ 	  The GTK+ version 2 graphical user interface library
 -- 
-Thomas Petazzoni
+1.7.0.4
