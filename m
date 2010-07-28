@@ -1,23 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jul 2010 17:20:20 +0200
-Subject: [Buildroot] [PATCH 0/4] Preparatory work on toolchains - v4
-In-Reply-To: <1280268496-5959-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Wed, 28 Jul 2010 00:08:12 +0200")
-References: <1280268496-5959-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87hbjjfxaj.fsf@macbook.be.48ers.dk>
+Date: Wed, 28 Jul 2010 17:21:24 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	deprecate-gtk-on-dfb
+In-Reply-To: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 28 Jul 2010 12:15:06 +0200")
+References: <cover.1280312079.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878w4vfx8r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Yann> Hello All!
- Yann> These are preparatory work on toolchain, laying ground to later add
- Yann> crosstool-NG as a backend.
+ Thomas> Hello,
+ Thomas> As we discussed, here is the commit that deprecates Gtk on
+ Thomas> DirectFB. This should probably be noted in the CHANGES file as well.
 
-Committed, thanks!
+ Thomas> Thomas
+
+ Thomas> The following changes since commit d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278:
+ Thomas>   Paul Jones (1):
+ Thomas>         zlib: Bump to 1.2.5
+
+ Thomas> are available in the git repository at:
+
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot deprecate-gtk-on-dfb
+
+Pulled and pushed, thanks!
 
 -- 
 Bye, Peter Korsgaard
