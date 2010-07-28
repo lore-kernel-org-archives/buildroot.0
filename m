@@ -1,33 +1,49 @@
 From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Wed, 28 Jul 2010 12:06:14 +0200
-Subject: [Buildroot] [PATCH 9/9] Revert "Makefile.package.in: allow packages
-	to override download step"
+Date: Wed, 28 Jul 2010 12:06:11 +0200
+Subject: [Buildroot] [PATCH 6/9] Use the normal download method for
+	libsvgtiny
 In-Reply-To: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
 References: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
-Message-ID: <1280311574-8017-10-git-send-email-maxime.petazzoni@bulix.org>
+Message-ID: <1280311574-8017-7-git-send-email-maxime.petazzoni@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 48cf66f1a2e2c501abeee98b7a2268b0d6d2010d.
----
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Now that the generic download method supports Subversion, fall back to
+the normal usage of AUTOTARGETS for libsvgtiny.
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 73cffd3..4e0b2ed 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -402,7 +402,7 @@ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
- $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
- $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
--$(2)_TARGET_SOURCE ?=		$$($(2)_DIR)/.stamp_downloaded
-+$(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
- $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
- $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+---
+ package/libsvgtiny/libsvgtiny.mk |   11 +----------
+ 1 files changed, 1 insertions(+), 10 deletions(-)
+
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index b559e52..d9ac41b 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -6,20 +6,11 @@
+ 
+ LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
+ LIBSVGTINY_VERSION = 9800
+-LIBSVGTINY_SVNDIR = libsvgtiny-svn-r$(LIBSVGTINY_VERSION)
+-LIBSVGTINY_SOURCE = $(LIBSVGTINY_SVNDIR).tar.bz2
++
+ LIBSVGTINY_INSTALL_STAGING = YES
+ LIBSVGTINY_INSTALL_TARGET = YES
+ LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkg-config
+ 
+-$(DL_DIR)/$(LIBSVGTINY_SOURCE):
+-	$(SVN_CO) -r $(LIBSVGTINY_VERSION) $(LIBSVGTINY_SITE) $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
+-	tar -cv -C $(BUILD_DIR) $(LIBSVGTINY_SVNDIR) | bzip2 - -c > $@
+-	rm -rf $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
+-
+-# use custom download step
+-LIBSVGTINY_TARGET_SOURCE := $(DL_DIR)/$(LIBSVGTINY_SOURCE)
+-
+ define LIBSVGTINY_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr
+ endef
 -- 
 1.6.3.3.346.g8a41d
