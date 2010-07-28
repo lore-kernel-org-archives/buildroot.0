@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Jul 2010 17:21:01 +0200
+Date: Wed, 28 Jul 2010 17:22:08 +0200
 Subject: [Buildroot] [pull request] Pull request for branch
-	various-things
-In-Reply-To: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 28 Jul 2010 00:46:14 +0200")
-References: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87d3u7fx9e.fsf@macbook.be.48ers.dk>
+	gcc-remove-options
+In-Reply-To: <cover.1280311803.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 28 Jul 2010 12:10:11 +0200")
+References: <cover.1280311803.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874ofjfx7j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,9 +20,10 @@ To: buildroot@busybox.net
 
  Thomas> are available in the git repository at:
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot various-things
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot gcc-remove-options
 
-Pulled and pushed, thanks!
+Looks good, but this conflicts with Yanns' cleanup - Could you rebase
+against head please?
 
 -- 
 Bye, Peter Korsgaard
