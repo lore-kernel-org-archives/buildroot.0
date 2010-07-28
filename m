@@ -1,42 +1,33 @@
-From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
-Date: Wed, 28 Jul 2010 19:02:42 +0200
-Subject: [Buildroot] configure looks in /usr for ncurses headers?
-Message-ID: <201007281902.43312.PeterHuewe@gmx.de>
+From: Ossy <ossy1980@gmx.net>
+Date: Wed, 28 Jul 2010 20:59:52 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+In-Reply-To: <201007280214.28103.PeterHuewe@gmx.de>
+References: <201007272333.09640.PeterHuewe@gmx.de>	<20100727235653.0d2215eb@surf>	<201007280020.05811.PeterHuewe@gmx.de>
+	<201007280214.28103.PeterHuewe@gmx.de>
+Message-ID: <4C507E28.90407@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Am 28.07.2010 02:14, schrieb Peter H?we:
+> Am Mittwoch 28 Juli 2010 00:20:05 schrieb Peter Huewe:
+> Hi Thomas,
+>
+> please also note that Ossy has reported this issue on Friday at 11:18pm CEST
+>
+> "[Buildroot] lzof 2.03 fails building with activated configuration cache"
+>
+> Ossy>  I was wondering why the ACC Conformance check of te compiler fails for
+> Ossy>  lzof and is successful for some others. I switched of the configration
+> Ossy>  cache and the lzof package did NOT compile.
+> Ossy>  Please see my config attached. For reproducing this error, turn on the
+> Ossy>  config cache again.
+>
+True. I already ran into the same trap. Just to correct my mail from 
+Friday: The package does NOT compile with ACTIVATED configuration cache. 
+I switched the cache off and it was fine.
 
-today I tried to bump the pidgin/finch multimessenger to version 2.7.2 which 
-was released several days ago.
-
-But before I tried to bump the version, I tried to build the 2.7.1 version 
-I've submitted about a month ago - but (as almost expected) the build failed 
-with the following message:
-
-checking for initscr in -lncursesw... (cached) yes
-checking for update_panels in -lpanelw... (cached) yes
-checking /usr/include/ncursesw/ncurses.h usability... no
-checking /usr/include/ncursesw/ncurses.h presence... no
-checking for /usr/include/ncursesw/ncurses.h... no
-checking /usr/include/ncurses.h usability... yes
-checking /usr/include/ncurses.h presence... yes
-checking for /usr/include/ncurses.h... yes
-checking if /usr/include/ncurses.h supports wide characters... no
-configure: error:
-
-Finch will not be built. You need to install ncursesw (or ncurses) and its 
-development headers.
-
-
-Why does configure (now) look in /usr/include and not 
-.../buildroot/output/staging/usr/include ?
-
-Or is /usr/include correct? - if yes why could I build the package back then 
-and not now? (same source version of pidgin, no changes in config)
-
-Thanks,
-Peter
+Regards,
+Marcus
