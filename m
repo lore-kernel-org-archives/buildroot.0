@@ -1,49 +1,51 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Wed, 28 Jul 2010 12:06:11 +0200
-Subject: [Buildroot] [PATCH 6/9] Use the normal download method for
-	libsvgtiny
-In-Reply-To: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
-References: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
-Message-ID: <1280311574-8017-7-git-send-email-maxime.petazzoni@bulix.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Jul 2010 12:10:11 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	gcc-remove-options
+Message-ID: <cover.1280311803.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the generic download method supports Subversion, fall back to
-the normal usage of AUTOTARGETS for libsvgtiny.
+The following changes since commit d47c73ee9ba3ab9a5f6a113047e3a4aae1afd278:
+  Paul Jones (1):
+        zlib: Bump to 1.2.5
 
-Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
----
- package/libsvgtiny/libsvgtiny.mk |   11 +----------
- 1 files changed, 1 insertions(+), 10 deletions(-)
+are available in the git repository at:
 
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index b559e52..d9ac41b 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -6,20 +6,11 @@
- 
- LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
- LIBSVGTINY_VERSION = 9800
--LIBSVGTINY_SVNDIR = libsvgtiny-svn-r$(LIBSVGTINY_VERSION)
--LIBSVGTINY_SOURCE = $(LIBSVGTINY_SVNDIR).tar.bz2
-+
- LIBSVGTINY_INSTALL_STAGING = YES
- LIBSVGTINY_INSTALL_TARGET = YES
- LIBSVGTINY_DEPENDENCIES = libxml2 host-gperf host-pkg-config
- 
--$(DL_DIR)/$(LIBSVGTINY_SOURCE):
--	$(SVN_CO) -r $(LIBSVGTINY_VERSION) $(LIBSVGTINY_SITE) $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
--	tar -cv -C $(BUILD_DIR) $(LIBSVGTINY_SVNDIR) | bzip2 - -c > $@
--	rm -rf $(BUILD_DIR)/$(LIBSVGTINY_SVNDIR)
--
--# use custom download step
--LIBSVGTINY_TARGET_SOURCE := $(DL_DIR)/$(LIBSVGTINY_SOURCE)
--
- define LIBSVGTINY_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr
- endef
+  git://git.busybox.net/~tpetazzoni/git/buildroot gcc-remove-options
+
+Thomas Petazzoni (2):
+      gcc: remove option on SJLJ exceptions
+      toolchain: remove multilib
+
+ configs/arm_toolchain_defconfig      |    2 --
+ configs/at91rm9200df_defconfig       |    2 --
+ configs/at91sam9260dfc_defconfig     |    2 --
+ configs/at91sam9260pf_defconfig      |    2 --
+ configs/at91sam9261ek_defconfig      |    2 --
+ configs/at91sam9263ek_defconfig      |    2 --
+ configs/at91sam9g20dfc_defconfig     |    2 --
+ configs/atngw100-base_defconfig      |    2 --
+ configs/atngw100_defconfig           |    2 --
+ configs/atstk1005_defconfig          |    2 --
+ configs/atstk100x_defconfig          |    2 --
+ configs/i386_defconfig               |    2 --
+ configs/i686_defconfig               |    2 --
+ configs/integrator926_defconfig      |    2 --
+ configs/integrator926_huge_defconfig |    2 --
+ configs/kb9202_defconfig             |    2 --
+ configs/v100sc2_defconfig            |    2 --
+ toolchain/Config.in.2                |    5 -----
+ toolchain/Makefile.in                |    6 ------
+ toolchain/binutils/binutils.mk       |    2 --
+ toolchain/gcc/Config.in              |    8 --------
+ toolchain/gcc/Makefile.in            |    4 ----
+ toolchain/gcc/gcc-uclibc-4.x.mk      |    7 +------
+ 23 files changed, 1 insertions(+), 65 deletions(-)
+
+Thanks,
 -- 
-1.6.3.3.346.g8a41d
+Thomas Petazzoni
