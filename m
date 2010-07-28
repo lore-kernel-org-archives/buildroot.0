@@ -1,33 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Jul 2010 19:14:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
-In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
-References: <bug-635-163@https.bugs.busybox.net/>
-Message-ID: <20100728191428.BC75D834D3@busybox.osuosl.org>
+Date: Wed, 28 Jul 2010 21:37:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 2263] Bump samba to 3.3.13 [CVE-2010-2063]
+In-Reply-To: <bug-2263-163@https.bugs.busybox.net/>
+References: <bug-2263-163@https.bugs.busybox.net/>
+Message-ID: <20100728213737.E96AD835A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
+https://bugs.busybox.net/show_bug.cgi?id=2263
 
---- Comment #6 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-Created attachment 2269
-  --> https://bugs.busybox.net/attachment.cgi?id=2269
-last .config
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-(In reply to comment #5)
-> Please provide your Buildroot .config to allow us to reproduce the issue.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-linux/a.out.h seems to belongs to kernel headers and I don't have a kernel
-cross-compiled. which make more.c depends on kernel-headers, because needs 3
-constants ?! OMAGIC NMAGIC ZMAGIC. 
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Merged in
+http://git.buildroot.net/buildroot/commit/?id=018c77a5486525adcec6a0994ce7a5aa6e654a5c
 
-I got a CPU "core i5", which I can compile this in more or less one hour , 
-I need do 2 or 3 times :
-make flush
-make
+Thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
