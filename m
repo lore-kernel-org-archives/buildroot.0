@@ -1,109 +1,135 @@
 From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Wed, 28 Jul 2010 12:06:06 +0200
-Subject: [Buildroot] [PATCH 1/9] Remove the spider feature
+Date: Wed, 28 Jul 2010 12:06:09 +0200
+Subject: [Buildroot] [PATCH 4/9] Implement basic non-wget download methods
 In-Reply-To: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
 References: <1280311574-8017-1-git-send-email-maxime.petazzoni@bulix.org>
-Message-ID: <1280311574-8017-2-git-send-email-maxime.petazzoni@bulix.org>
+Message-ID: <1280311574-8017-5-git-send-email-maxime.petazzoni@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for the re-work of the DOWNLOAD helper to support
-multiple download methods and protocols, the spider feature used with
-wget is removed for now until it is re-implemented on top of the new
-download methods.
+Packages can now be sourced from Git and Subversion repositories. The
+download method will be autodetected from the URI (git://, svn://, etc).
+If the repository is accessed through http(s), you can force the
+download method by setting a _SITE_METHOD variable to either 'git' or
+'svn', respectively and without the quotes.
+
+The package's _VERSION variable defines which commit, revision, tag or
+branch should be checked out. For Git, it can be HEAD, a commit ID, a
+tag name or branch name (anything that can be checked out with `git
+checkout`). For Subversion, it must be a revision number, or HEAD.
 
 Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
 ---
- Makefile                    |    7 +++----
- package/Makefile.package.in |   10 ----------
- package/mpfr/mpfr.mk        |    2 --
- 3 files changed, 3 insertions(+), 16 deletions(-)
+ package/Makefile.package.in |   68 ++++++++++++++++++++++++++++++++++++++++--
+ 1 files changed, 64 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index a864aae..2ed9de3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -243,7 +243,7 @@ ifeq ($(ARCH),xtensa)
- ARCH:=$(ARCH)_$(call qstrip,$(BR2_xtensa_core_name))
- endif
- 
--WGET:=$(call qstrip,$(BR2_WGET)) $(SPIDER) $(QUIET)
-+WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
- SVN_CO:=$(call qstrip,$(BR2_SVN_CO)) $(QUIET)
- SVN_UP:=$(call qstrip,$(BR2_SVN_UP)) $(QUIET)
- BZR_CO:=$(call qstrip,$(BR2_BZR_CO)) $(QUIET)
-@@ -440,11 +440,10 @@ endif
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
- _source-check:
--	$(MAKE) SPIDER=--spider source
-+	@echo "TODO $@"
- 
- external-deps:
--	@$(MAKE) -Bs BR2_WGET=$(TOPDIR)/toolchain/wget-show-external-deps.sh \
--		SPIDER=--spider source
-+	@echo "TODO $@"
- 
- show-targets:
- 	@echo $(TARGETS)
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index d76b791..ba0fd84 100644
+index ba0fd84..5444472 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -81,16 +81,11 @@ TERM_RESET := $(shell tput rmso)
- # $(call DOWNLOAD,$(FOO_SITE),$(FOO_SOURCE))
- ################################################################################
+@@ -69,6 +69,35 @@ TERM_BOLD := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
  
--# support make source-check/external-deps
--ifneq ($(SPIDER),)
--DOWNLOAD=$(WGET) -P $(DL_DIR) $(1)/$(2)
--else
+ ################################################################################
++# The DOWNLOAD_{GIT,SVN} helpers are in charge of getting a working copy of
++# the source repository for their corresponding SCM, checking out the requested
++# version / commit / tag, and create an archive out of it.
++################################################################################
++
++define DOWNLOAD_GIT
++	pushd $(DL_DIR) > /dev/null && \
++	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
++	pushd $($(PKG)_BASE_NAME) > /dev/null && \
++	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
++		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
++	popd > /dev/null && \
++	rm -rf $($(PKG)_DL_DIR) && \
++	popd > /dev/null
++endef
++
++define DOWNLOAD_SVN
++	pushd $(DL_DIR) > /dev/null && \
++	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
++	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
++	rm -rf $($(PKG)_DL_DIR) && \
++	popd > /dev/null
++endef
++
++define DOWNLOAD_WGET
++	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
++endef
++
++################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
+ # 2) Download site
+@@ -83,8 +112,20 @@ TERM_RESET := $(shell tput rmso)
+ 
  define DOWNLOAD
  	$(Q)test -e $(DL_DIR)/$(2) || \
- 	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
- 	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
+-	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
+-	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
++	(if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
++		$(call DOWNLOAD_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
++	fi ; \
++	if test -n "$(1)" ; then \
++		case "$($(PKG)_SITE_METHOD)" in \
++			git) $(DOWNLOAD_GIT) && exit ;; \
++			svn) $(DOWNLOAD_SVN) && exit ;; \
++			*) $(call DOWNLOAD_WGET,$(1),$(2)) && exit ;; \
++		esac ; \
++	fi ; \
++	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
++		$(call DOWNLOAD_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
++	fi ; \
++	exit 1)
  endef
--endif
  
  # Utility programs used to build packages
- TAR ?= tar
-@@ -117,19 +112,14 @@ endef
- 
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
--# support make source-check/external-deps
--ifeq ($(SPIDER),)
- # Only show the download message if it isn't already downloaded
- 	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
- 		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
- 		$(call MESSAGE,"Downloading")
--endif
- 	$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE))
- 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
--ifeq ($(SPIDER),)
- 	$(Q)mkdir -p $(@D)
- 	$(Q)touch $@
--endif
- 
- # Unpack the archive
- $(BUILD_DIR)/%/.stamp_extracted:
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index a7834dd..b7b80a5 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -21,10 +21,8 @@ MPFR_PATCH_SOURCE:=$(DL_DIR)/$(MPFR_PATCH_FILE)
- 
- $(MPFR_PATCH_SOURCE):
- 	$(call DOWNLOAD,$(MPFR_SITE),$(MPFR_PATCH))
--ifeq ($(SPIDER),) # this breaks source-check/external-deps
- 	mv $(DL_DIR)/$(MPFR_PATCH) $@
+@@ -244,13 +285,23 @@ ifndef $(2)_VERSION
+  endif
  endif
--endif
  
- $(DL_DIR)/$(MPFR_SOURCE):
- 	 $(call DOWNLOAD,$(MPFR_SITE),$(MPFR_SOURCE))
+-$(2)_DIR			=  $$(BUILD_DIR)/$(1)-$$($(2)_VERSION)
++# Keep the package version that may contain forward slashes in the _DL_VERSION
++# variable, then replace all forward slashes ('/') by underscores ('_') to
++# sanitize the package version that is used in paths, directory and file names.
++# Forward slashes may appear in the package's version when pointing to a
++# version control system branch or tag, for example remotes/origin/1_10_stable.
++$(2)_DL_VERSION	= $($(2)_VERSION)
++$(2)_VERSION = $(subst /,_,$($(2)_VERSION))
++
++$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
++$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
++$(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ 
+ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $($(3)_SOURCE)
+  else
+-  $(2)_SOURCE			?= $(1)-$$($(2)_VERSION).tar.gz
++  $(2)_SOURCE			?= $$($(2)_BASE_NAME).tar.gz
+  endif
+ endif
+ 
+@@ -269,6 +320,15 @@ ifndef $(2)_SITE
+  endif
+ endif
+ 
++ifndef $(2)_SITE_METHOD
++ ifdef $(3)_SITE_METHOD
++  $(2)_SITE_METHOD = $($(3)_SITE_METHOD)
++ else
++	# Try automatic detection using the scheme part of the URI
++	$(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(2)_SITE))))
++ endif
++endif
++
+ $(2)_DEPENDENCIES		?=
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_TARGET		?= YES
 -- 
 1.6.3.3.346.g8a41d
