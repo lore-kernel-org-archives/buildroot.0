@@ -1,27 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Jul 2010 14:15:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 2131] Add OpenMP support to the toolchain
-In-Reply-To: <bug-2131-163@https.bugs.busybox.net/>
-References: <bug-2131-163@https.bugs.busybox.net/>
-Message-ID: <20100728141515.6C58E83495@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Jul 2010 17:20:20 +0200
+Subject: [Buildroot] [PATCH 0/4] Preparatory work on toolchains - v4
+In-Reply-To: <1280268496-5959-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Wed, 28 Jul 2010 00:08:12 +0200")
+References: <1280268496-5959-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87hbjjfxaj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2131
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
---- Comment #2 from Will Newton <will.newton@gmail.com>  ---
-(In reply to comment #1)
-> I'm not sure about OpenMP. What would be the use case of this in an embedded
-> scenario ?
+ Yann> Hello All!
+ Yann> These are preparatory work on toolchain, laying ground to later add
+ Yann> crosstool-NG as a backend.
 
-The actual use this was put into our local tree was to build OpenCV which can
-use OpenMP out of the box. It's only really useful on SMP systems but I think
-there are quite a few of those around these days.
+Committed, thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
