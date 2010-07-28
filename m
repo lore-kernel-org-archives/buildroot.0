@@ -1,78 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Jul 2010 00:46:16 +0200
-Subject: [Buildroot] [PATCH 2/3] Remove unused X11_PREFIX option
-In-Reply-To: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1280270762.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ef2c11e51a08383c4a3bbd370e12e1db4875a447.1280270762.git.thomas.petazzoni@free-electrons.com>
+From: Peter =?iso-8859-1?q?H=FCwe?= <PeterHuewe@gmx.de>
+Date: Wed, 28 Jul 2010 02:14:27 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+In-Reply-To: <201007280020.05811.PeterHuewe@gmx.de>
+References: <201007272333.09640.PeterHuewe@gmx.de>
+	<20100727235653.0d2215eb@surf>
+	<201007280020.05811.PeterHuewe@gmx.de>
+Message-ID: <201007280214.28103.PeterHuewe@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/kb9202_defconfig  |    1 -
- configs/v100sc2_defconfig |    1 -
- package/Makefile.in       |    4 ----
- package/x11r7/Config.in   |    7 -------
- 4 files changed, 0 insertions(+), 13 deletions(-)
+Am Mittwoch 28 Juli 2010 00:20:05 schrieb Peter Huewe:
+Hi Thomas,
 
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index 2895d8a..40c6d18 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -551,7 +551,6 @@ BR2_PACKAGE_XSERVER_none=y
- # BR2_PACKAGE_XSERVER_x11r7 is not set
- # BR2_PACKAGE_XSERVER_xorg is not set
- # BR2_PACKAGE_XSERVER_tinyx is not set
--BR2_X11_PREFIX="/usr"
- 
- #
- # X libraries and helper libraries
-diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index 80f194a..ca261ee 100644
---- a/configs/v100sc2_defconfig
-+++ b/configs/v100sc2_defconfig
-@@ -568,7 +568,6 @@ BR2_PACKAGE_QT_OPENSSL=y
- # BR2_PACKAGE_XSERVER_none is not set
- # BR2_PACKAGE_XSERVER_xorg is not set
- # BR2_PACKAGE_XSERVER_tinyx is not set
--BR2_X11_PREFIX="/usr"
- # BR2_PACKAGE_XORG7 is not set
- 
- #
-diff --git a/package/Makefile.in b/package/Makefile.in
-index fc53a1b..36f2f24 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -292,9 +292,5 @@ else
- ENABLE_DEBUG:=
- endif
- 
--# X Windowing system
--
--X11_PREFIX:=$(call qstrip,$(BR2_X11_PREFIX))
--
- include package/Makefile.autotools.in
- include package/Makefile.package.in
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index b93cc90..c0c0043 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -29,13 +29,6 @@ config BR2_PACKAGE_XSERVER_tinyx
- 
- endchoice
- 
--config BR2_X11_PREFIX
--	string
--	default "/usr/X11R6"	if BR2_PACKAGE_XSERVER_xorg
--	default "/usr"		if BR2_PACKAGE_XSERVER_tinyx
--	help
--	  X11 apps root location
--
- menu "X11R7 Servers"
- 	source package/x11r7/xserver_xorg-server/Config.in
- endmenu
--- 
-1.7.0.4
+please also note that Ossy has reported this issue on Friday at 11:18pm CEST
+
+"[Buildroot] lzof 2.03 fails building with activated configuration cache"
+
+Ossy > I was wondering why the ACC Conformance check of te compiler fails for 
+Ossy > lzof and is successful for some others. I switched of the configration 
+Ossy > cache and the lzof package did NOT compile.
+Ossy > Please see my config attached. For reproducing this error, turn on the 
+Ossy > config cache again.
+
+Thanks,
+Peter
