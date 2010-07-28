@@ -1,8 +1,8 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 28 Jul 2010 16:27:09 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain: rename external
-	toolchain dir
-Message-ID: <20100728152234.B17998345A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update with changes
+	from the 'various-things' branch
+Message-ID: <20100728152235.400BB8345A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f78ea9fcf02f427695cdd3310bfd76e5c3919569
+commit: http://git.buildroot.net/buildroot/commit/?id=1acb1ac34be36f0f7ba1309ce16d5beb9e503bba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rename the external toolchain directory.
-When new backends are here, it will be easier to sort them out
-if they are all prefixed the same way.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/Config.in                                |    4 ++--
- .../Config.in                                      |    0
- .../Config.in.2                                    |    0
- .../ext-tool.mk                                    |    0
- 4 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/{external-toolchain => toolchain-external}/Config.in (100%)
- rename toolchain/{external-toolchain => toolchain-external}/Config.in.2 (100%)
- rename toolchain/{external-toolchain => toolchain-external}/ext-tool.mk (100%)
+ CHANGES |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index ee94143..52b9d8b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -17,7 +17,7 @@ config BR2_TOOLCHAIN_EXTERNAL
- endchoice
+diff --git a/CHANGES b/CHANGES
+index ea577b5..2b5aab6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -32,10 +32,10 @@
+ 	libidn, liblockfile, libpng, libsoup, lighttpd, links,
+ 	linux-fusion, lmbench, lrzsz, ltrace, make, midori,
+ 	module-init-tools, mplayer, mysql_client, nbd, ncurses, neon,
+-	netcat, netperf, ntfsprogs, openssl, pango, php, qt, quagga,
+-	setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf, sqlite,
+-	squashfs, swfdec, tftpd, thttpd, tn5250, tremor, usbutils,
+-	webif, webkit, wireless_tools, xkeyboard-config,
++	netcat, netperf, netsnmp, ntfsprogs, openssl, pango, php, qt,
++	quagga,	samba, setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf,
++	sqlite,	squashfs, swfdec, tftpd, thttpd, tn5250, tremor,
++	usbutils, webif, webkit, wireless_tools, xkeyboard-config,
+ 	xserver_xorg-server, xvkbd, zlib
  
- source "toolchain/Config.in.1"
--source "toolchain/external-toolchain/Config.in"
-+source "toolchain/toolchain-external/Config.in"
- 
- # we want gdb config in the middle of both source and external
- # toolchains, but mconf won't let us source the same file twice,
-@@ -26,6 +26,6 @@ source "toolchain/gdb/Config.in"
- comment "Common Toolchain Options"
- 
- source "toolchain/Config.in.2"
--source "toolchain/external-toolchain/Config.in.2"
-+source "toolchain/toolchain-external/Config.in.2"
- 
- endmenu
-diff --git a/toolchain/external-toolchain/Config.in b/toolchain/toolchain-external/Config.in
-similarity index 100%
-rename from toolchain/external-toolchain/Config.in
-rename to toolchain/toolchain-external/Config.in
-diff --git a/toolchain/external-toolchain/Config.in.2 b/toolchain/toolchain-external/Config.in.2
-similarity index 100%
-rename from toolchain/external-toolchain/Config.in.2
-rename to toolchain/toolchain-external/Config.in.2
-diff --git a/toolchain/external-toolchain/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-similarity index 100%
-rename from toolchain/external-toolchain/ext-tool.mk
-rename to toolchain/toolchain-external/ext-tool.mk
+ 	Removed packages: libgail, modutils, portage, rxvt
 -- 
 1.7.1
