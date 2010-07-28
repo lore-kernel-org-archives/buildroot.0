@@ -1,27 +1,20 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 28 Jul 2010 14:07:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 859] Add (head of) nptl branch to list of uClibc
-	versions
-In-Reply-To: <bug-859-163@https.bugs.busybox.net/>
-References: <bug-859-163@https.bugs.busybox.net/>
-Message-ID: <20100728140751.EC6EC83664@busybox.osuosl.org>
+Date: Wed, 28 Jul 2010 14:08:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 2131] Add OpenMP support to the toolchain
+In-Reply-To: <bug-2131-163@https.bugs.busybox.net/>
+References: <bug-2131-163@https.bugs.busybox.net/>
+Message-ID: <20100728140846.570E183664@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=859
+https://bugs.busybox.net/show_bug.cgi?id=2131
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |jacmet at uclibc.org
-                   |.org                        |
-
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-This is currently being handled by Peter, with a patch from Khem.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+I'm not sure about OpenMP. What would be the use case of this in an embedded
+scenario ?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
