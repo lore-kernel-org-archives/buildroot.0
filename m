@@ -1,11 +1,11 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 29 Jul 2010 10:09:40 -0500
+Date: Thu, 29 Jul 2010 10:11:59 -0500
 Subject: [Buildroot] [PATCH 1/2] gcc: remove option on SJLJ exceptions
 In-Reply-To: <20100729163008.468a211e@surf>
 References: <cover.1280385006.git.thomas.petazzoni@free-electrons.com>
 	<201007290718.59051.minimod@morethan.org>
 	<20100729163008.468a211e@surf>
-Message-ID: <201007291009.42670.minimod@morethan.org>
+Message-ID: <201007291012.02631.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -36,10 +36,9 @@ On Thu July 29 2010, Thomas Petazzoni wrote:
 > Are more complicated cases likely to make a difference ?
 > 
 
-Unknown.
-
-The prior tests where on MIPS-32, and limited in scope to the simple
-tests included in this thread.
+It might make a difference if you compile it with C++ rather than C
+Lua is written in "clean C" it will compile with either compiler and
+when used as an extension library for C++ usually is compiled with C++
 
 Mike
 > Regards,
