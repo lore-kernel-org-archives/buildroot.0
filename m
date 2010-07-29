@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:44 +0200
-Subject: [Buildroot] [PATCH 01/19] dependencies: add svn as a mandatory tool
+Date: Thu, 29 Jul 2010 23:48:49 +0200
+Subject: [Buildroot] [PATCH 06/19] libiconv: add an error when both libiconv
+	and locale are enabled
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3b207de011d13042b589031061bbe0d940e7b204.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a302e3aaa0a7e4eec1a82143efbbd09629b499ea.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that two packages (tremor and libsvgtiny) are being downloaded
-from svn, svn becomes a mandatory tool to run Buildroot.
+This error should never show up if all Buildroot dependencies are
+correct. However, rather than failing horribly later on, catch this
+particular case early on and error out.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/dependencies/dependencies.sh |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/libiconv/libiconv.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index 96f843f..b3822ef 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -137,13 +137,15 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
- fi;
- 
- # Check that a few mandatory programs are installed
--for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python ; do
-+for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python svn ; do
-     if ! which $prog > /dev/null ; then
- 	/bin/echo -e "\nYou must install '$prog' on your build machine";
- 	if test $prog = "makeinfo" ; then
- 	    /bin/echo -e "makeinfo is usually part of the texinfo package in your distribution\n"
- 	elif test $prog = "msgfmt" ; then
- 	    /bin/echo -e "msgfmt is usually part of the gettext package in your distribution\n"
-+	elif test $prog = "svn" ; then
-+	    /bin/echo -e "svn is usually part of the subversion package in your distribution\n"
- 	else
- 	    /bin/echo -e "\n"
- 	fi
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index cc40cd4..a3f762a 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -23,3 +23,10 @@ ifneq ($(BR2_ENABLE_DEBUG),y)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
+ endif
+ 	touch $@
++
++# Configurations where the toolchain supports locales and the libiconv
++# package is enabled are incorrect, because the toolchain already
++# provides libiconv functionality, and having both confuses packages.
++ifeq ($(BR2_PACKAGE_LIBICONV)$(BR2_ENABLE_LOCALE),yy)
++$(error Libiconv should never be enabled when the toolchain supports locales. Report this failure to Buildroot developers)
++endif
 -- 
 1.7.0.4
