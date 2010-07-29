@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 15:04:52 +0200
+Date: Thu, 29 Jul 2010 16:30:08 +0200
 Subject: [Buildroot] [PATCH 1/2] gcc: remove option on SJLJ exceptions
-In-Reply-To: <201007290747.44044.minimod@morethan.org>
+In-Reply-To: <201007290718.59051.minimod@morethan.org>
 References: <cover.1280385006.git.thomas.petazzoni@free-electrons.com>
+	<20100729133837.5680e0c2@surf>
 	<201007290659.39124.minimod@morethan.org>
-	<20100729143016.07c9a2f0@surf>
-	<201007290747.44044.minimod@morethan.org>
-Message-ID: <20100729150452.312a0883@surf>
+	<201007290718.59051.minimod@morethan.org>
+Message-ID: <20100729163008.468a211e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Michael,
 
-On Thu, 29 Jul 2010 07:47:41 -0500
+On Thu, 29 Jul 2010 07:18:56 -0500
 "Michael S. Zick" <minimod@morethan.org> wrote:
 
-> > Sorry, I couldn't find the postings you're refering to. Do you have
-> > a pointer ?
-> 
-> No I don't have a pointer handy.
+> mszick at wolf466:~$ lua
+> Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+> > bye = function() return os.exit("String Value") end
+> > bye()
+> stdin:1: bad argument #1 to 'exit' (number expected, got string)
+> stack traceback:
+>         [C]: in function 'exit'
+>         stdin:1: in function 'bye'
+>         stdin:1: in main chunk
+>         [C]: ?
 
-Ok. I looked in the archives for all messages with "lua" in the subject
-since March 2008, and I didn't found one.
+With the current Buildroot git (i.e, without SJLJ exceptions), I built
+an ARM system with Lua, and made your test under Qemu. I had the exact
+same output, with the exact same stack trace.
 
-> Look for one of the threads that you terminated discussion with a:
-> 
-> "If you don't like it, you can hire commercial support for it from my
-> firm."
-> 
-> It may even be the same thread where the ethics of using an "Open
-> Source Project" as a "loss leader" to gain commercial customers was
-> discussed.
+Are more complicated cases likely to make a difference ?
 
-Ah, ah, I now understand why you're so aggressive against me :-)
-
-Please read that very thread again, and see how offensive you were
-against the volunteers working on Buildroot. Just as you are in the
-current thread, for no reason.
-
-I think we're both trying to make Buildroot better, on a volunteer
-basis. So let's do so in a nice and friendly atmosphere, no ?
+Regards,
 
 Thomas
 -- 
