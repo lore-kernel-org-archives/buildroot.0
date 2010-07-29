@@ -1,48 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:55 +0200
-Subject: [Buildroot] [PATCH 12/19] samba: remove swat documentation when not
-	needed
+Date: Thu, 29 Jul 2010 23:48:48 +0200
+Subject: [Buildroot] [PATCH 05/19] xerces: fix dependency on iconv
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9e06a8561665feb2c41e7a608b6849ac49ef0265.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <aad29b55a8851dec26399e37f2b87c0b38c98fc3.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When SWAT (the Web administration tool of Samba) is enabled, which is
-the default when one enables samba in Buildroot, a lot of
-documentation gets installed in /usr/swat (~15 MB). This patch fixes
-this by removing the documentation when BR2_HAVE_DOCUMENTATION is not
-set.
+All "select BR2_PACKAGE_LIBICONV" must use the "if !BR2_ENABLE_LOCALE"
+condition, otherwise we can end up with a toolchain suppoting locales
+*and* the libiconv package being compiled, which confuses other
+packages. Example with glib:
+
+gconvert.c:52:2: error: #error GNU libiconv in use but included
+iconv.h not from libiconv
+
+In addition to that, in xerces.mk, we add the dependency on libiconv
+when it is available, to make sure it gets compiled before xerces.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ package/xerces/Config.in |    2 +-
+ package/xerces/xerces.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 1c59070..44f7fde 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -161,6 +161,17 @@ $(SAMBA_HOOK_POST_INSTALL):
- 	# remove unneeded
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_))
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_TXTTARGETS_))
-+ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+	# Remove the documentation
-+	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
-+	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
-+	rm -rf $(TARGET_DIR)/usr/swat/using_samba/
-+	# Removing the welcome.html file will make swat default to
-+	# welcome-no-samba-doc.html
-+	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
-+endif
-+endif
- 	# strip binaries
- 	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_y))
- 	# install start/stop script
+diff --git a/package/xerces/Config.in b/package/xerces/Config.in
+index 85bd96c..123f0c1 100644
+--- a/package/xerces/Config.in
++++ b/package/xerces/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_XERCES
+ 	bool "xerces-c++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBICONV
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Xerces-C++ is a validating XML parser written in portable C++.
+ 
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 9f77be6..8a1f693 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -87,7 +87,7 @@ $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY): $(STAGING_DIR)/usr/lib/$(LIBXERCES_BI
+ 	cp -a $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY)* $(TARGET_DIR)/usr/lib
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
+-xerces: $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
++xerces: $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
+ xerces-bin: $(XERCES_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
 -- 
 1.7.0.4
