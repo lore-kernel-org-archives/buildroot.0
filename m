@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 29 Jul 2010 14:25:45 +0200
-Subject: [Buildroot] [git commit master 1/1] CHANGES: #2257 / #2263 are
-	resolved
-Message-ID: <20100729122626.309388367F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] netsnmp: depend on openssl when
+	the package is on to ensure build order
+Message-ID: <20100729122626.695EA8367F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c271d5269675bce9c37747b97885cf5ef16d83a
+commit: http://git.buildroot.net/buildroot/commit/?id=7bfc9e464cf448f83b06953f1b26a150539b3960
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The netsnmp package should depend on openssl when using it.
+Otherwise netsnmp might get built before openssl and poison the
+configure cache since it's not a mandatory dependency.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/netsnmp/netsnmp.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d4d70a6..0fb23a9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -94,6 +94,8 @@
- 	#2233: Atmel atstk target skeletons have /etc/mtab as a file, not ...
- 	#2245: Netcat does not work due to incorrect assumptions about signed..
- 	#2251: directory output/build after make *_defconfig not found
-+	#2257: Convert netsnmp package to autotargets
-+	#2263: Bump samba to 3.3.13
- 	#2269: setserial causes make error
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 8f8bc76..7c9367a 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -28,6 +28,7 @@ endif
  
- 2010.05, Released May 30th, 2010:
+ # OpenSSL
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	NETSNMP_DEPENDENCIES += openssl
+ 	NETSNMP_CONF_OPT += \
+ 		--with-openssl=$(STAGING_DIR)/usr/include/openssl
+ else
 -- 
 1.7.1
