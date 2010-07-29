@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:49:01 +0200
-Subject: [Buildroot] [PATCH 18/19] xerces: fix download location
-In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <96451c62fa97815b5f4f3fcc8b9765d021b6011f.1280440124.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 29 Jul 2010 23:50:27 +0200
+Subject: [Buildroot] [git commit master 1/1] linux: bump 2.6.34.x version
+Message-ID: <20100729215231.C3C0C83697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apache.jumper.nu does not work anymore, so use archive.apache.org
-instead.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=9d42e194760c8872e787d8920043e42e38b6ac88
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xerces/xerces.mk |    2 +-
+ linux/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 8a1f693..fd0417d 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -5,7 +5,7 @@
- #############################################################
- XERCES_VERSION:=3.0.1
- XERCES_SOURCE:=xerces-c-$(XERCES_VERSION).tar.gz
--XERCES_SITE:=http://apache.jumper.nu/xerces/c/3/sources/
-+XERCES_SITE:=http://archive.apache.org/dist/xerces/c/3/sources/
- XERCES_CAT:=$(ZCAT)
- XERCES_DIR:=$(BUILD_DIR)/xerces-c-$(XERCES_VERSION)
- LIBXERCES_BINARY:=libxerces-c-3.0.so
+diff --git a/linux/Config.in b/linux/Config.in
+index 948d713..3909f89 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "2.6.34" if BR2_LINUX_KERNEL_2_6_34
++	default "2.6.34.1" if BR2_LINUX_KERNEL_2_6_34
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-1.7.0.4
+1.7.1
