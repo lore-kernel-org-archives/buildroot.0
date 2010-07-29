@@ -1,110 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:47:33 +0200
-Subject: [Buildroot] Buildroot licence for commercial product
-In-Reply-To: <4C4DAE9A.4030402@terawatt.fr>
-References: <4C4D5B7F.7020606@terawatt.fr> <20100726134259.2e2f5fc9@surf>
-	<4C4DAE9A.4030402@terawatt.fr>
-Message-ID: <20100729234733.2edde266@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 29 Jul 2010 23:47:44 +0200
+Subject: [Buildroot] [git commit master 1/1] busybox: 1.17.1 mktemp fix
+Message-ID: <20100729214845.5948E83697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Damien,
 
-On Mon, 26 Jul 2010 17:49:46 +0200
-Damien Borie <dbe@terawatt.fr> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=a10c15320803028a53e181dcb48f55e1a9d64051
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I have read this today, and I've made a list of all package in my 
-> buildroot tree. I'm sure some of them are not installed, or not
-> used,, because they where selected for some tests and never deleted...
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../busybox-1.17.1/busybox-1.17.1-mktemp.patch     |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
 
-Normally, "make external-deps" is supposed to tell you everything
-Buildroot downloads to build the target system.
-
-> So I got 9 package under ISC and 3 under BSD which only need to
-> include the licence text. Then 3 under BSD which need an
-> acknowledgement.
-
-By acknowledgement, I assume you mean the 4-clause BSD license, which
-says:
-
-"
-3. All advertising materials mentioning features or use of this software
-   must display the following acknowledgement:
-   This product includes software developed by the <organization>.
-"
-
-I must confess I'm not sure in practice how one is supposed to respect
-this requirement.
-
-> Zlib and OpenSSL got special licences which need
-> acknowledgements too.
-
-The Zlib license does not seem to have an advertising clause like the
-4-clause BSD license. The acknowledgement is only appreciated:
-
-"
-    1. The origin of this software must not be misrepresented; you must
-not claim that you wrote the original software. If you use this software
-in a product, an acknowledgment in the product documentation would
-be appreciated but is not required.
-"
-
-In the OpenSSL license, you're correct, there is an acknowledgement
-clause as well.
-
-> 2 LGPL which need the licence text, and one of them (QT) needs to
-> allow to modify QT version.
-
-I am not sure what you mean here about QT.
-
-Moreover, with the LGPL, you not only have to provide the licence text,
-but also the complete source code of the LGPL component. See section 4
-of http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html (if the LGPL
-license version is indeed 2.1).
-
-> And finally 13 GPL, 10 without Buildroot ncurses and fakeroot, which 
-> need to give access to the source code.
-
-Right, and the licence text.
-
-> Ho, and mgetty for which I don't find the licence...
-> And, I forget all X11 packages...Xserver Xorg is under BSD-like 
-> licences, so I can just put the text. But I didn't look for all the
-> sub packages and libraries...
-
-Yeah, this is where "make external-deps" can help.
-
-> I don't know how I will give access to all licences text, copyright,
-> and source code, as the system is closed and nobody can connect to it
-> except us...
-
-I think a fairly sane and reasonable way is :
-
- * To create a webpage that lists all the free software components that
-   you've used in your device, the version of these components, the
-   modifications you made to these components (patches), the licence of
-   these components. All with a link to the tarball of each component,
-   hosted on your server and a link to the full license text.
-
- * To add to your product a simple paper that contains the list of the
-   components, their license, and a link to the webpage mentionned
-   before.
-
-This way, you're transparent on what your device contains in terms of
-free software, which license it is under, and you give the full source
-code for all of them.
-
-Of course, I am not a lawyer, so the suggestions above are not legal
-advice.
-
-Regards,
-
-Thomas
+diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
+new file mode 100644
+index 0000000..557e337
+--- /dev/null
++++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
+@@ -0,0 +1,12 @@
++diff -urpN busybox-1.17.1/debianutils/mktemp.c busybox-1.17.1-mktemp/debianutils/mktemp.c
++--- busybox-1.17.1/debianutils/mktemp.c	2010-07-25 00:12:56.000000000 +0200
+++++ busybox-1.17.1-mktemp/debianutils/mktemp.c	2010-07-27 08:21:26.000000000 +0200
++@@ -50,7 +50,7 @@ int mktemp_main(int argc UNUSED_PARAM, c
++ 	opts = getopt32(argv, "dqtp:", &path);
++ 
++ 	chp = argv[optind] ? argv[optind] : xstrdup("tmp.XXXXXX");
++-	if (chp[0] != '/' || (opts & 8))
+++	if (!strchr(chp, '/') || (opts & 8))
++ 		chp = concat_path_file(path, chp);
++ 
++ 	if (opts & 1) { /* -d */
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
