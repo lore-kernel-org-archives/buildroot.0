@@ -1,87 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:49:00 +0200
-Subject: [Buildroot] [PATCH 17/19] libcurl: bump version to fix build issue
+Date: Thu, 29 Jul 2010 23:48:50 +0200
+Subject: [Buildroot] [PATCH 07/19] libeXosip: add dependency on
+	host-pkg-config and remove useless flags
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <28ac3c6785961411af29a9d22388697610b55667.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d2e5763e529e4ed387e30854f80e801273ecdbaf.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ./configure script of libcurl includes <arpa_inet.h> instead of
-<arpa/inet.h> when testing for inet_pton(). The test fails, but it
-doesn't prevent libcurl to build as it can work without inet_pton().
+When libeXosip fails to use pkg-config to find libosip, it defaults to
+thinking that libosip is installed in $(prefix)/lib and
+$(prefix)/include, which is of course wrong. There was an attempt to
+fix this by passing OSIP_CFLAGS and OSIP_LIBS variables to libeXosip
+./configure script, but it still does not work:
 
-However, it fills the configure cache with the fact that inet_pton()
-does not exist. And later, tcpreplay reads this from the configure
-cache and fails to build, because tcpreplay really need inet_pton().
+checking pkg-config is at least version 0.9.0... ./configure: line 21035: /home/test/outputs/test-41/host/usr/bin/pkg-config: No such file or directory
+no
+checking for OSIP... configure: WARNING: assuming osip can be found in -I${prefix}/include and -L${exec_prefix}/lib
 
-Unfortunately, just fixing the .m4 file doesn't work because the
-autoreconfiguration of the package fails. Since the fix for this
-problem is already upstream, the easiest solution is therefore to bump
-libcurl.
-
-The libcurl-7.19.2-fix-ssl-no-verbose.patch patch is no longer needed.
-
-Since we're patching a m4 file, we must autoreconfigure the package.
+Therefore, the correct fix is to depend on host-pkg-config.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libcurl-7.19.2-fix-ssl-no-verbose.patch        |   25 --------------------
- package/libcurl/libcurl.mk                         |    3 +-
- 2 files changed, 2 insertions(+), 26 deletions(-)
- delete mode 100644 package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
+ package/libeXosip2/libeXosip2.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch b/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
-deleted file mode 100644
-index b15ed96..0000000
---- a/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--ssluse.c: fix build breakage with --with-ssl --disable-verbose
--
--Revision 1.206 of ssluse.c removed the prefix argument to asn1_output,
--but it is still referenced in the CURL_DISABLE_VERBOSE_STRINGS case.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- lib/ssluse.c |    4 ----
-- 1 file changed, 4 deletions(-)
--
--Index: curl-7.19.2/lib/ssluse.c
--===================================================================
----- curl-7.19.2.orig/lib/ssluse.c
--+++ curl-7.19.2/lib/ssluse.c
--@@ -923,10 +923,6 @@
--   int i;
--   int year=0,month=0,day=0,hour=0,minute=0,second=0;
-- 
---#ifdef CURL_DISABLE_VERBOSE_STRINGS
---  (void)prefix;
---#endif
---
--   i=tm->length;
--   asn1_string=(const char *)tm->data;
-- 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 863c301..488df04 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -3,11 +3,12 @@
- # libcurl
- #
- #############################################################
--LIBCURL_VERSION = 7.19.2
-+LIBCURL_VERSION = 7.21.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download/
- LIBCURL_INSTALL_STAGING = YES
- LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
-+LIBCURL_LIBTOOL_PATCH = NO
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 7f282b7..30eac9f 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -22,8 +22,6 @@ $(LIBEXOSIP2_DIR)/.configured: $(LIBEXOSIP2_DIR)/.unpacked
+ 	(cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		OSIP_CFLAGS="$(TARGET_CFLAGS)" \
+-		OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
+ 		./configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -73,7 +71,7 @@ $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
+ 
+ 
+-libeXosip2: libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
++libeXosip2: host-pkg-config libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
+ 
+ libeXosip2-source: $(DL_DIR)/$(LIBEXOSIP2_SOURCE)
+ 
 -- 
 1.7.0.4
