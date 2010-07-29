@@ -1,40 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Jul 2010 23:47:44 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: 1.17.1 mktemp fix
-Message-ID: <20100729214845.5948E83697@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Jul 2010 23:48:43 +0200
+Subject: [Buildroot] [pull request] Pull request for branch fixes-20100729
+Message-ID: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The following changes since commit 7bfc9e464cf448f83b06953f1b26a150539b3960:
+  Gustavo Zacarias (1):
+        netsnmp: depend on openssl when the package is on to ensure build order
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a10c15320803028a53e181dcb48f55e1a9d64051
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+are available in the git repository at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../busybox-1.17.1/busybox-1.17.1-mktemp.patch     |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
+  git://git.busybox.net/~tpetazzoni/git/buildroot fixes-20100729
 
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
-new file mode 100644
-index 0000000..557e337
---- /dev/null
-+++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
-@@ -0,0 +1,12 @@
-+diff -urpN busybox-1.17.1/debianutils/mktemp.c busybox-1.17.1-mktemp/debianutils/mktemp.c
-+--- busybox-1.17.1/debianutils/mktemp.c	2010-07-25 00:12:56.000000000 +0200
-++++ busybox-1.17.1-mktemp/debianutils/mktemp.c	2010-07-27 08:21:26.000000000 +0200
-+@@ -50,7 +50,7 @@ int mktemp_main(int argc UNUSED_PARAM, c
-+ 	opts = getopt32(argv, "dqtp:", &path);
-+ 
-+ 	chp = argv[optind] ? argv[optind] : xstrdup("tmp.XXXXXX");
-+-	if (chp[0] != '/' || (opts & 8))
-++	if (!strchr(chp, '/') || (opts & 8))
-+ 		chp = concat_path_file(path, chp);
-+ 
-+ 	if (opts & 1) { /* -d */
+Thomas Petazzoni (19):
+      dependencies: add svn as a mandatory tool
+      oprofile: disable with external toolchain
+      Fix computation of REAL_GNU_TARGET_NAME
+      gdb: disallow GDB_HOST on external toolchain builds
+      xerces: fix dependency on iconv
+      libiconv: add an error when both libiconv and locale are enabled
+      libeXosip: add dependency on host-pkg-config and remove useless flags
+      cdrkit: fix TARGET_CC/TARGET_CFLAGS for CMake
+      dmalloc: pass -fPIC when compiling
+      speech-tools: fix build failure by using Debian version and patches
+      avahi: pkg-config is needed
+      samba: remove swat documentation when not needed
+      u-boot: fix custom patch handling
+      linux: more mistake detection
+      cairo: PDF support is needed when SVG support is enabled
+      toolchain: mark uClibc 0.9.31 + locale + C++ as broken
+      libcurl: bump version to fix build issue
+      xerces: fix download location
+      xerces: only add -liconv when locale are disabled
+
+ boot/u-boot/u-boot.mk                              |    2 +-
+ linux/linux.mk                                     |   13 ++++
+ package/Makefile.in                                |   11 +++-
+ package/avahi/avahi.mk                             |    2 +-
+ package/cairo/Config.in                            |    1 +
+ package/cdrkit/cdrkit.mk                           |   14 ++++-
+ package/dmalloc/dmalloc-5.4.3-add-fpic.patch       |   60 ++++++++++++++++++++
+ .../libcurl-7.19.2-fix-ssl-no-verbose.patch        |   25 --------
+ package/libcurl/libcurl.mk                         |    3 +-
+ package/libeXosip2/libeXosip2.mk                   |    4 +-
+ package/libiconv/libiconv.mk                       |    7 ++
+ .../festival/speech-tools/speech-tools.mk          |   17 +++++-
+ package/oprofile/Config.in                         |    4 +
+ package/samba/samba.mk                             |   11 ++++
+ package/xerces/Config.in                           |    2 +-
+ package/xerces/xerces.mk                           |   10 ++-
+ toolchain/dependencies/dependencies.sh             |    4 +-
+ toolchain/gdb/Config.in                            |    3 +
+ toolchain/toolchain-common.in                      |    4 +
+ 19 files changed, 154 insertions(+), 43 deletions(-)
+ create mode 100644 package/dmalloc/dmalloc-5.4.3-add-fpic.patch
+ delete mode 100644 package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
