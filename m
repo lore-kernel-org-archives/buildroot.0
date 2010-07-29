@@ -1,57 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:48 +0200
-Subject: [Buildroot] [PATCH 05/19] xerces: fix dependency on iconv
+Date: Thu, 29 Jul 2010 23:48:47 +0200
+Subject: [Buildroot] [PATCH 04/19] gdb: disallow GDB_HOST on external
+	toolchain builds
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <aad29b55a8851dec26399e37f2b87c0b38c98fc3.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d328fef63c7fb3b499a05e4b6cb7c32b795881ea.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All "select BR2_PACKAGE_LIBICONV" must use the "if !BR2_ENABLE_LOCALE"
-condition, otherwise we can end up with a toolchain suppoting locales
-*and* the libiconv package being compiled, which confuses other
-packages. Example with glib:
+The cross-gdb is supposed to be part of the external toolchain, so
+Buildroot does not need to build it. Moreover, GDB_HOST build
+currently fail with:
 
-gconvert.c:52:2: error: #error GNU libiconv in use but included
-iconv.h not from libiconv
+ln -snf ../../bin/arm-unknown-linux-gnueabi-gdb \
+                /home/test/outputs/test-48/staging/usr/arm-unknown-linux-gnueabi/bin/gdb
+ln: creating symbolic link `/home/test/outputs/test-48/staging/usr/arm-unknown-linux-gnueabi/bin/gdb': No such file or directory
 
-In addition to that, in xerces.mk, we add the dependency on libiconv
-when it is available, to make sure it gets compiled before xerces.
+And even worse: they overwrite the cross-gdb of the external
+toolchain!
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xerces/Config.in |    2 +-
- package/xerces/xerces.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/gdb/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 85bd96c..123f0c1 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_XERCES
- 	bool "xerces-c++"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_LIBICONV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index 09701c7..edd8715 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -18,6 +18,9 @@ config BR2_PACKAGE_GDB_SERVER
+ 
+ config BR2_PACKAGE_GDB_HOST
+ 	bool "Build gdb for the Host"
++	# cross-gdb is supposed to be part of the external
++	# toolchain. And the build currently fails.
++	depends on !BR2_TOOLCHAIN_EXTERNAL
  	help
- 	  Xerces-C++ is a validating XML parser written in portable C++.
- 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 9f77be6..8a1f693 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -87,7 +87,7 @@ $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY): $(STAGING_DIR)/usr/lib/$(LIBXERCES_BI
- 	cp -a $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY)* $(TARGET_DIR)/usr/lib
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
- 
--xerces: $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
-+xerces: $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
- 
- xerces-bin: $(XERCES_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 	    Build gdb to run on the host to debug programs run on the target.
  
 -- 
 1.7.0.4
