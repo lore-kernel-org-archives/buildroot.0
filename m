@@ -1,53 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:59 +0200
-Subject: [Buildroot] [PATCH 16/19] toolchain: mark uClibc 0.9.31 + locale +
-	C++ as broken
+Date: Thu, 29 Jul 2010 23:49:00 +0200
+Subject: [Buildroot] [PATCH 17/19] libcurl: bump version to fix build issue
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <60f945e47a15e10f0e777f69b05492b6f7ba918d.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <28ac3c6785961411af29a9d22388697610b55667.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It fails to build with:
+The ./configure script of libcurl includes <arpa_inet.h> instead of
+<arpa/inet.h> when testing for inet_pton(). The test fails, but it
+doesn't prevent libcurl to build as it can work without inet_pton().
 
-ctype_members.cc: In constructor 'std::ctype_byname<_CharT>::ctype_byname(const char*, size_t) [with _CharT = char]':
-ctype_members.cc:59: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-ctype_members.cc:60: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-ctype_members.cc:61: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-make[5]: *** [ctype_members.lo] Error 1
+However, it fills the configure cache with the fact that inet_pton()
+does not exist. And later, tcpreplay reads this from the configure
+cache and fails to build, because tcpreplay really need inet_pton().
+
+Unfortunately, just fixing the .m4 file doesn't work because the
+autoreconfiguration of the package fails. Since the fix for this
+problem is already upstream, the easiest solution is therefore to bump
+libcurl.
+
+The libcurl-7.19.2-fix-ssl-no-verbose.patch patch is no longer needed.
+
+Since we're patching a m4 file, we must autoreconfigure the package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ .../libcurl-7.19.2-fix-ssl-no-verbose.patch        |   25 --------------------
+ package/libcurl/libcurl.mk                         |    3 +-
+ 2 files changed, 2 insertions(+), 26 deletions(-)
+ delete mode 100644 package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index bea0c7c..3c70f9c 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -157,6 +157,7 @@ config BR2_GCC_CROSS_CXX
- config BR2_INSTALL_LIBSTDCPP
- 	bool "Build/install c++ compiler and libstdc++?"
- 	select BR2_GCC_CROSS_CXX
-+	depends on !(BR2_avr32 && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31)
- 	help
- 	  If you are building your own toolchain and want to build and install
- 	  the C++ compiler and library then you need to enable this option.
-@@ -164,6 +165,9 @@ config BR2_INSTALL_LIBSTDCPP
- 	  support and you want to use the compiler / library then you need 
- 	  to select this option.
+diff --git a/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch b/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
+deleted file mode 100644
+index b15ed96..0000000
+--- a/package/libcurl/libcurl-7.19.2-fix-ssl-no-verbose.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-ssluse.c: fix build breakage with --with-ssl --disable-verbose
+-
+-Revision 1.206 of ssluse.c removed the prefix argument to asn1_output,
+-but it is still referenced in the CURL_DISABLE_VERBOSE_STRINGS case.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- lib/ssluse.c |    4 ----
+- 1 file changed, 4 deletions(-)
+-
+-Index: curl-7.19.2/lib/ssluse.c
+-===================================================================
+---- curl-7.19.2.orig/lib/ssluse.c
+-+++ curl-7.19.2/lib/ssluse.c
+-@@ -923,10 +923,6 @@
+-   int i;
+-   int year=0,month=0,day=0,hour=0,minute=0,second=0;
+- 
+--#ifdef CURL_DISABLE_VERBOSE_STRINGS
+--  (void)prefix;
+--#endif
+--
+-   i=tm->length;
+-   asn1_string=(const char *)tm->data;
+- 
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 863c301..488df04 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -3,11 +3,12 @@
+ # libcurl
+ #
+ #############################################################
+-LIBCURL_VERSION = 7.19.2
++LIBCURL_VERSION = 7.21.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download/
+ LIBCURL_INSTALL_STAGING = YES
+ LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
++LIBCURL_LIBTOOL_PATCH = NO
  
-+comment "C++ support broken in uClibc 0.9.31 with locale enabled"
-+	depends on BR2_avr32 && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31
-+
- config BR2_TARGET_OPTIMIZATION
- 	string "Target Optimizations"
- 	default "-pipe"
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBCURL_DEPENDENCIES += openssl
 -- 
 1.7.0.4
