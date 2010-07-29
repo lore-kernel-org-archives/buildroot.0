@@ -1,63 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:51 +0200
-Subject: [Buildroot] [PATCH 08/19] cdrkit: fix TARGET_CC/TARGET_CFLAGS for
-	CMake
+Date: Thu, 29 Jul 2010 23:48:53 +0200
+Subject: [Buildroot] [PATCH 10/19] speech-tools: fix build failure by using
+	Debian version and patches
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0eae20b7be89bc76225a15c7238ff0c809259ac3.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0a67e7714706f260ae017f2b2807ddc64eab944a.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the reorganization of the variables in package/Makefile.in,
-TARGET_CC and TARGET_CXX now directly contain the --sysroot= option in
-addition to the compiler path. This is due to some ./configure scripts
-using just $(TARGET_CC) for some tests instead of $(TARGET_CC)
-$(TARGET_CFLAGS).
-
-However, in the case of CMake, this fails as CMake really only wants
-the path of the compiler in its CMAKE_C_COMPILER and
-CMAKE_CXX_COMPILER variables. So here, we recompute proper values for
-CMake by removing the --sysroot option from the compiler variables and
-re-adding it to the flags variables.
+The upstream version of speech-tools does not build with GCC >= 4.3,
+mainly due to changes in how C++ headers are included. This is fixed
+in Debian, so let's use the Debian version and patches.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cdrkit/cdrkit.mk |   14 +++++++++++---
- 1 files changed, 11 insertions(+), 3 deletions(-)
+ .../festival/speech-tools/speech-tools.mk          |   17 ++++++++++++++---
+ 1 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index f7e21b0..a0ce9cb 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -11,15 +11,23 @@ else
- CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
- endif
- 
-+# CMake doesn't support having the --sysroot option directly in the
-+# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
-+CDRKIT_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
-+CDRKIT_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
-+CDRKIT_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-+CDRKIT_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
+diff --git a/package/multimedia/festival/speech-tools/speech-tools.mk b/package/multimedia/festival/speech-tools/speech-tools.mk
+index 0aa44cc..66bd308 100644
+--- a/package/multimedia/festival/speech-tools/speech-tools.mk
++++ b/package/multimedia/festival/speech-tools/speech-tools.mk
+@@ -3,9 +3,11 @@
+ # speech-tools
+ #
+ #############################################################
+-SPEECH_TOOLS_VERSION = 1.2.96-beta
+-SPEECH_TOOLS_SOURCE = speech_tools-$(SPEECH_TOOLS_VERSION).tar.gz
+-SPEECH_TOOLS_SITE = http://festvox.org/packed/festival/1.96
 +
- define CDRKIT_CONFIGURE_CMDS
-  -mkdir $(@D)/build
-  (cd $(@D)/build ; \
- 	$(HOST_DIR)/usr/bin/cmake .. \
- 		-Wno-dev \
- 		-DCMAKE_SYSTEM_NAME:STRING="Linux" \
--		-DCMAKE_C_COMPILER:FILEPATH="$(TARGET_CC)" \
--		-DCMAKE_CXX_COMPILER:FILEPATH="$(TARGET_CXX)" \
--		-DCMAKE_C_FLAGS:STRING="$(TARGET_CFLAGS)" \
-+		-DCMAKE_C_COMPILER:FILEPATH="$(CDRKIT_TARGET_CC)" \
-+		-DCMAKE_CXX_COMPILER:FILEPATH="$(CDRKIT_TARGET_CXX)" \
-+		-DCMAKE_C_FLAGS:STRING="$(CDRKIT_TARGET_CFLAGS)" \
-+		-DCMAKE_CXX_FLAGS:STRING="$(CDRKIT_TARGET_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
- 		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
- 		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
++SPEECH_TOOLS_VERSION = 1.2.96~beta
++SPEECH_TOOLS_SOURCE = speech-tools_$(SPEECH_TOOLS_VERSION).orig.tar.gz
++SPEECH_TOOLS_PATCH = speech-tools_$(SPEECH_TOOLS_VERSION)-6.diff.gz
++SPEECH_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/speech-tools/
+ SPEECH_TOOLS_AUTORECONF = NO
+ SPEECH_TOOLS_INSTALL_STAGING = NO
+ SPEECH_TOOLS_INSTALL_TARGET = YES
+@@ -14,6 +16,15 @@ SPEECH_TOOLS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) in
+ SPEECH_TOOLS_CONF_OPT =
+ SPEECH_TOOLS_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)"
+ 
++define SPEECH_TOOLS_DEBIAN_PATCH_APPLY
++	# Use the order of the quilt patch series to apply the patches
++	for p in $$(cat $(@D)/debian/patches/series) ; do \
++                toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches $$p; \
++        done
++endef
++
++SPEECH_TOOLS_POST_PATCH_HOOKS += SPEECH_TOOLS_DEBIAN_PATCH_APPLY
++
+ SPEECH_TOOLS_DEPENDENCIES = ncurses
+ 
+ $(eval $(call AUTOTARGETS,package/multimedia/festival,speech-tools))
 -- 
 1.7.0.4
