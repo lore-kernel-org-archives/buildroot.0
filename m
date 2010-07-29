@@ -1,54 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:50 +0200
-Subject: [Buildroot] [PATCH 07/19] libeXosip: add dependency on
-	host-pkg-config and remove useless flags
+Date: Thu, 29 Jul 2010 23:49:02 +0200
+Subject: [Buildroot] [PATCH 19/19] xerces: only add -liconv when locale are
+	disabled
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d2e5763e529e4ed387e30854f80e801273ecdbaf.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e7584697f24d0bc6fc660703d97a38598cb76690.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libeXosip fails to use pkg-config to find libosip, it defaults to
-thinking that libosip is installed in $(prefix)/lib and
-$(prefix)/include, which is of course wrong. There was an attempt to
-fix this by passing OSIP_CFLAGS and OSIP_LIBS variables to libeXosip
-./configure script, but it still does not work:
-
-checking pkg-config is at least version 0.9.0... ./configure: line 21035: /home/test/outputs/test-41/host/usr/bin/pkg-config: No such file or directory
-no
-checking for OSIP... configure: WARNING: assuming osip can be found in -I${prefix}/include and -L${exec_prefix}/lib
-
-Therefore, the correct fix is to depend on host-pkg-config.
+The iconv library can only be present when locale are disabled in the
+toolchain. When locale are enabled in the toolchain, iconv is directly
+implemented by the C library.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libeXosip2/libeXosip2.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/xerces/xerces.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 7f282b7..30eac9f 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -22,8 +22,6 @@ $(LIBEXOSIP2_DIR)/.configured: $(LIBEXOSIP2_DIR)/.unpacked
- 	(cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
--		OSIP_CFLAGS="$(TARGET_CFLAGS)" \
--		OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
- 		./configure $(QUIET) \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-@@ -73,7 +71,7 @@ $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index fd0417d..1dcc10a 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -39,6 +39,10 @@ XERCES_APPS:= \
  
+ XERCES_INCLUDES:=/usr/include/xercesc
  
++ifneq ($(BR2_ENABLE_LOCALE),y)
++XERCES_MAKE_OPT=LIBS="-liconv"
++endif
++
+ $(DL_DIR)/$(XERCES_SOURCE):
+ 	 $(call DOWNLOAD,$(XERCES_SITE),$(XERCES_SOURCE))
  
--libeXosip2: libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
-+libeXosip2: host-pkg-config libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
+@@ -74,7 +78,7 @@ $(XERCES_DIR)/.configured: $(XERCES_DIR)/.unpacked
+ 	touch $@
  
- libeXosip2-source: $(DL_DIR)/$(LIBEXOSIP2_SOURCE)
+ $(XERCES_DIR)/src/.libs/$(LIBXERCES_BINARY): $(XERCES_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBS="-liconv" -C $(XERCES_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(XERCES_MAKE_OPT) -C $(XERCES_DIR)
  
+ $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY): $(XERCES_DIR)/src/.libs/$(LIBXERCES_BINARY)
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
 -- 
 1.7.0.4
