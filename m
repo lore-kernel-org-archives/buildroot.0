@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Jul 2010 23:48:54 +0200
-Subject: [Buildroot] [PATCH 11/19] avahi: pkg-config is needed
+Date: Thu, 29 Jul 2010 23:48:58 +0200
+Subject: [Buildroot] [PATCH 15/19] cairo: PDF support is needed when SVG
+	support is enabled
 In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9abe052f0438ea106274dd3dcbe34736460245a5.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e014e3da09e99222a1ff4ebb9c3f3433e8de65be.1280440124.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As soon as PostScript, PNG or SVG support is enabled, PDF support is
+required for Cairo to build properly. Otherwise, you get build
+failures such as:
+
+.libs/cairo-type3-glyph-surface.o: In function `_cairo_type3_glyph_surface_set_stream':
+/home/thomas/local/buildroot-dl/cairo-1.8.10/src/cairo-type3-glyph-surface.c:337: undefined reference to `_cairo_pdf_operators_set_stream'
+/home/thomas/local/buildroot-dl/cairo-1.8.10/src/cairo-type3-glyph-surface.c:337: undefined reference to `_cairo_pdf_operators_set_stream'
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/avahi/avahi.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cairo/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index fa05de3..8e2d14f 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -84,7 +84,7 @@ AVAHI_CONF_OPT = --localstatedir=/var \
- 		--with-autoipd-user=default \
- 		--with-autoipd-group=default
+diff --git a/package/cairo/Config.in b/package/cairo/Config.in
+index 752f615..19c4723 100644
+--- a/package/cairo/Config.in
++++ b/package/cairo/Config.in
+@@ -30,5 +30,6 @@ config BR2_PACKAGE_CAIRO_PNG
+ config BR2_PACKAGE_CAIRO_SVG
+ 	bool "svg support"
+ 	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_CAIRO_PDF
  
--AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool
-+AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool host-pkg-config
- 
- ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
- AVAHI_DEPENDENCIES += libdaemon
+ endif
 -- 
 1.7.0.4
