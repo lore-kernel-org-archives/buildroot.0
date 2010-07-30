@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] speech-tools: fix build failure
-	by using Debian version and patches
-Message-ID: <20100730082547.2117D836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xerces: only add -liconv when
+	locale are disabled
+Message-ID: <20100730082548.826E9836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +10,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a67e7714706f260ae017f2b2807ddc64eab944a
+commit: http://git.buildroot.net/buildroot/commit/?id=e7584697f24d0bc6fc660703d97a38598cb76690
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The upstream version of speech-tools does not build with GCC >= 4.3,
-mainly due to changes in how C++ headers are included. This is fixed
-in Debian, so let's use the Debian version and patches.
+The iconv library can only be present when locale are disabled in the
+toolchain. When locale are enabled in the toolchain, iconv is directly
+implemented by the C library.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../festival/speech-tools/speech-tools.mk          |   17 ++++++++++++++---
- 1 files changed, 14 insertions(+), 3 deletions(-)
+ package/xerces/xerces.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/festival/speech-tools/speech-tools.mk b/package/multimedia/festival/speech-tools/speech-tools.mk
-index 0aa44cc..66bd308 100644
---- a/package/multimedia/festival/speech-tools/speech-tools.mk
-+++ b/package/multimedia/festival/speech-tools/speech-tools.mk
-@@ -3,9 +3,11 @@
- # speech-tools
- #
- #############################################################
--SPEECH_TOOLS_VERSION = 1.2.96-beta
--SPEECH_TOOLS_SOURCE = speech_tools-$(SPEECH_TOOLS_VERSION).tar.gz
--SPEECH_TOOLS_SITE = http://festvox.org/packed/festival/1.96
-+
-+SPEECH_TOOLS_VERSION = 1.2.96~beta
-+SPEECH_TOOLS_SOURCE = speech-tools_$(SPEECH_TOOLS_VERSION).orig.tar.gz
-+SPEECH_TOOLS_PATCH = speech-tools_$(SPEECH_TOOLS_VERSION)-6.diff.gz
-+SPEECH_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/speech-tools/
- SPEECH_TOOLS_AUTORECONF = NO
- SPEECH_TOOLS_INSTALL_STAGING = NO
- SPEECH_TOOLS_INSTALL_TARGET = YES
-@@ -14,6 +16,15 @@ SPEECH_TOOLS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) in
- SPEECH_TOOLS_CONF_OPT =
- SPEECH_TOOLS_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)"
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index fd0417d..1dcc10a 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -39,6 +39,10 @@ XERCES_APPS:= \
  
-+define SPEECH_TOOLS_DEBIAN_PATCH_APPLY
-+	# Use the order of the quilt patch series to apply the patches
-+	for p in $$(cat $(@D)/debian/patches/series) ; do \
-+                toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches $$p; \
-+        done
-+endef
-+
-+SPEECH_TOOLS_POST_PATCH_HOOKS += SPEECH_TOOLS_DEBIAN_PATCH_APPLY
-+
- SPEECH_TOOLS_DEPENDENCIES = ncurses
+ XERCES_INCLUDES:=/usr/include/xercesc
  
- $(eval $(call AUTOTARGETS,package/multimedia/festival,speech-tools))
++ifneq ($(BR2_ENABLE_LOCALE),y)
++XERCES_MAKE_OPT=LIBS="-liconv"
++endif
++
+ $(DL_DIR)/$(XERCES_SOURCE):
+ 	 $(call DOWNLOAD,$(XERCES_SITE),$(XERCES_SOURCE))
+ 
+@@ -74,7 +78,7 @@ $(XERCES_DIR)/.configured: $(XERCES_DIR)/.unpacked
+ 	touch $@
+ 
+ $(XERCES_DIR)/src/.libs/$(LIBXERCES_BINARY): $(XERCES_DIR)/.configured
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBS="-liconv" -C $(XERCES_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(XERCES_MAKE_OPT) -C $(XERCES_DIR)
+ 
+ $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY): $(XERCES_DIR)/src/.libs/$(LIBXERCES_BINARY)
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
 -- 
 1.7.1
