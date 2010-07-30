@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] avahi: pkg-config is needed
-Message-ID: <20100730082547.48F37836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: fix custom patch
+	handling
+Message-ID: <20100730082547.9A0E3836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9abe052f0438ea106274dd3dcbe34736460245a5
+commit: http://git.buildroot.net/buildroot/commit/?id=af0a3d1cde4a65ee2487c5e042dc40fd346c5340
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When U-Boot is enabled and no custom patch directory has been set,
+then the current test:
+
+  ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),"")
+
+works. However, when U-Boot is not enabled, but still gets compiled
+because mkimage is needed to build the kernel,
+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is completely empty. It does not
+even have quotes. So the test in fact needs to be:
+
+ ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/avahi/avahi.mk |    2 +-
+ boot/u-boot/u-boot.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index fa05de3..8e2d14f 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -84,7 +84,7 @@ AVAHI_CONF_OPT = --localstatedir=/var \
- 		--with-autoipd-user=default \
- 		--with-autoipd-group=default
- 
--AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool
-+AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool host-pkg-config
- 
- ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
- AVAHI_DEPENDENCIES += libdaemon
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index 9eeea1d..7b6b2ce 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -77,7 +77,7 @@ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) boot/u-boot \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch \
+ 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
+-ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),"")
++ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+ 	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
+ endif
+ 	touch $@
 -- 
 1.7.1
