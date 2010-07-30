@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] xerces: fix dependency on iconv
-Message-ID: <20100730082546.5540E836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] linux: more mistake detection
+Message-ID: <20100730082547.C1741836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aad29b55a8851dec26399e37f2b87c0b38c98fc3
+commit: http://git.buildroot.net/buildroot/commit/?id=af5dc83da448ac6f911741d1a51ce315cb052057
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All "select BR2_PACKAGE_LIBICONV" must use the "if !BR2_ENABLE_LOCALE"
-condition, otherwise we can end up with a toolchain suppoting locales
-*and* the libiconv package being compiled, which confuses other
-packages. Example with glib:
+Just as we do for U-Boot, error out in the Linux kernel makefile when
+the defconfig name or the configuration file path are not
+correct. What prompted me to implement this was a report on IRC from
+an user using BR 2010.05 and not understand why the kernel build
+process was failing. It was because he just forgot to set the path of
+the configuration file.
 
-gconvert.c:52:2: error: #error GNU libiconv in use but included
-iconv.h not from libiconv
-
-In addition to that, in xerces.mk, we add the dependency on libiconv
-when it is available, to make sure it gets compiled before xerces.
+Of course, it doesn't catch all mistakes (like pointing to a
+non-existing defconfig or to a non-existing configuration file), but
+it at least catches basic mistakes.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xerces/Config.in |    2 +-
- package/xerces/xerces.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.mk |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 85bd96c..123f0c1 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_XERCES
- 	bool "xerces-c++"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_LIBICONV
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Xerces-C++ is a validating XML parser written in portable C++.
- 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 9f77be6..8a1f693 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -87,7 +87,7 @@ $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY): $(STAGING_DIR)/usr/lib/$(LIBXERCES_BI
- 	cp -a $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY)* $(TARGET_DIR)/usr/lib
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
- 
--xerces: $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
-+xerces: $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
- 
- xerces-bin: $(XERCES_DIR)/usr/lib/$(LIBXERCES_BINARY)
- 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a3e5a0c..3fc259c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -160,3 +160,16 @@ linux26-rebuild-with-initramfs: $(LINUX26_DIR)/.stamp_initramfs_rebuilt
+ ifeq ($(BR2_LINUX_KERNEL),y)
+ TARGETS+=linux26
+ endif
++
++# Checks to give errors that the user can understand
++ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
++$(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
++endif
++endif
++
++ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
++ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
++$(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
++endif
++endif
+\ No newline at end of file
 -- 
 1.7.1
