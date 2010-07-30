@@ -1,69 +1,56 @@
-From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Fri, 30 Jul 2010 12:31:49 +0530
-Subject: [Buildroot] BR on FreeBSD
-In-Reply-To: <AANLkTikMQtr83OBZ=-f1DvH-XnTLfdstQeQtwN-E3j1R@mail.gmail.com>
-References: <AANLkTikMQtr83OBZ=-f1DvH-XnTLfdstQeQtwN-E3j1R@mail.gmail.com>
-Message-ID: <AANLkTi=3u+sD8TFOSkWVb_JKw=4Vod8L0o=apmbA=yqn@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Jul 2010 10:02:23 +0200
+Subject: [Buildroot] [git commit master 1/1] gcc: move <tuple>/lib* symlink
+	handling up to gcc-intermediate
+Message-ID: <20100730081549.BE2A28367D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
 
-Also,
+commit: http://git.buildroot.net/buildroot/commit/?id=18abd4aa94cd59240b90257c95877c0ea2fd1796
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I had to copy  '/bin/mktemp' from debian to '/usr/bin' in FreeBSD to get to
-this.
+The <tuple>/lib* symlinking added by 3c77bab2eeace needs to
+be moved up to the gcc-intermediate step now the NPTL stuff is merged,
+otherwise 64bit builds fails (lib64 already created).
 
-regards
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/gcc/gcc-uclibc-4.x.mk |   12 +++++-------
+ 1 files changed, 5 insertions(+), 7 deletions(-)
 
-Nataraj
-
-On Fri, Jul 30, 2010 at 12:27 PM, Nataraj S Narayan <natarajsn@gmail.com>wrote:
-
-> Hi
->
-> Was trying BR compile on a FreeBSD 8.0 machine. Getting the following:-
->
-> [root at freebsd /usr/buildroot]# gmake --debug
-> GNU Make 3.81
-> Copyright (C) 2006  Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.
-> There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-> PARTICULAR PURPOSE.
->
-> This program built for i386-portbld-freebsd7.1
-> Reading makefiles...
-> Updating goal targets....
->  File `all' does not exist.
->    File `world' does not exist.
->      File `dependencies' does not exist.
->        File `host-sed' does not exist.
->          File `use-sed-host-binary' does not exist.
->         Must remake target `use-sed-host-binary'.
->         Successfully remade target file `use-sed-host-binary'.
->       Must remake target `host-sed'.
->       Successfully remade target file `host-sed'.
->     Must remake target `dependencies'.
-> [: make:: bad number
-> [: make:: bad number
-> -e \nYou must install 'bash' on your build machine\n
-> gmake: *** [dependencies] Error 1
-> [root at freebsd /usr/buildroot]# bash
-> [root at freebsd /usr/buildroot]# gmake
-> [: make:: bad number
-> [: make:: bad number
-> -e \nYou must install 'bash' on your build machine\n
-> gmake: *** [dependencies] Error 1
->
-> But then I do have bash installed and working.
->
-> regards
->
-> Nataraj
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100730/bb956902/attachment.html>
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 0b7fd48..f17b73f 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -259,6 +259,11 @@ GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
+ 
+ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+ 	mkdir -p $(GCC_BUILD_DIR2)
++	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
++	mkdir -p $(STAGING_DIR)/lib
++	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
++	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
++	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
+ 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		$(GCC_DIR)/configure $(QUIET) \
+@@ -334,13 +339,6 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+ 	mkdir -p $(GCC_BUILD_DIR3)
+ 	# Important! Required for limits.h to be fixed.
+ 	ln -snf ../include/ $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
+-	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+-	mkdir -p $(STAGING_DIR)/lib
+-	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+-	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
+-	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
+-	#-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+-	#ln -snf ../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+ 	(cd $(GCC_BUILD_DIR3); rm -rf config.cache; \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		$(GCC_SRC_DIR)/configure $(QUIET) \
+-- 
+1.7.1
