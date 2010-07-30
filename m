@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] u-boot: fix custom patch
-	handling
-Message-ID: <20100730082547.9A0E3836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libeXosip: add dependency on
+	host-pkg-config and remove useless flags
+Message-ID: <20100730082546.A260B836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af0a3d1cde4a65ee2487c5e042dc40fd346c5340
+commit: http://git.buildroot.net/buildroot/commit/?id=d2e5763e529e4ed387e30854f80e801273ecdbaf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When U-Boot is enabled and no custom patch directory has been set,
-then the current test:
+When libeXosip fails to use pkg-config to find libosip, it defaults to
+thinking that libosip is installed in $(prefix)/lib and
+$(prefix)/include, which is of course wrong. There was an attempt to
+fix this by passing OSIP_CFLAGS and OSIP_LIBS variables to libeXosip
+./configure script, but it still does not work:
 
-  ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),"")
+checking pkg-config is at least version 0.9.0... ./configure: line 21035: /home/test/outputs/test-41/host/usr/bin/pkg-config: No such file or directory
+no
+checking for OSIP... configure: WARNING: assuming osip can be found in -I${prefix}/include and -L${exec_prefix}/lib
 
-works. However, when U-Boot is not enabled, but still gets compiled
-because mkimage is needed to build the kernel,
-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is completely empty. It does not
-even have quotes. So the test in fact needs to be:
-
- ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+Therefore, the correct fix is to depend on host-pkg-config.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/u-boot.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libeXosip2/libeXosip2.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 9eeea1d..7b6b2ce 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -77,7 +77,7 @@ $(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) boot/u-boot \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch \
- 		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
--ifneq ($(strip $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),"")
-+ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
- 	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
- endif
- 	touch $@
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 7f282b7..30eac9f 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -22,8 +22,6 @@ $(LIBEXOSIP2_DIR)/.configured: $(LIBEXOSIP2_DIR)/.unpacked
+ 	(cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+-		OSIP_CFLAGS="$(TARGET_CFLAGS)" \
+-		OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
+ 		./configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -73,7 +71,7 @@ $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
+ 
+ 
+ 
+-libeXosip2: libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
++libeXosip2: host-pkg-config libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
+ 
+ libeXosip2-source: $(DL_DIR)/$(LIBEXOSIP2_SOURCE)
+ 
 -- 
 1.7.1
