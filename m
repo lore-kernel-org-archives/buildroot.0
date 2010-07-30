@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] cdrkit: fix
-	TARGET_CC/TARGET_CFLAGS for CMake
-Message-ID: <20100730082546.C8EFB836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xerces: fix dependency on iconv
+Message-ID: <20100730082546.5540E836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,56 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0eae20b7be89bc76225a15c7238ff0c809259ac3
+commit: http://git.buildroot.net/buildroot/commit/?id=aad29b55a8851dec26399e37f2b87c0b38c98fc3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the reorganization of the variables in package/Makefile.in,
-TARGET_CC and TARGET_CXX now directly contain the --sysroot= option in
-addition to the compiler path. This is due to some ./configure scripts
-using just $(TARGET_CC) for some tests instead of $(TARGET_CC)
-$(TARGET_CFLAGS).
+All "select BR2_PACKAGE_LIBICONV" must use the "if !BR2_ENABLE_LOCALE"
+condition, otherwise we can end up with a toolchain suppoting locales
+*and* the libiconv package being compiled, which confuses other
+packages. Example with glib:
 
-However, in the case of CMake, this fails as CMake really only wants
-the path of the compiler in its CMAKE_C_COMPILER and
-CMAKE_CXX_COMPILER variables. So here, we recompute proper values for
-CMake by removing the --sysroot option from the compiler variables and
-re-adding it to the flags variables.
+gconvert.c:52:2: error: #error GNU libiconv in use but included
+iconv.h not from libiconv
+
+In addition to that, in xerces.mk, we add the dependency on libiconv
+when it is available, to make sure it gets compiled before xerces.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cdrkit/cdrkit.mk |   14 +++++++++++---
- 1 files changed, 11 insertions(+), 3 deletions(-)
+ package/xerces/Config.in |    2 +-
+ package/xerces/xerces.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index f7e21b0..a0ce9cb 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -11,15 +11,23 @@ else
- CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
- endif
+diff --git a/package/xerces/Config.in b/package/xerces/Config.in
+index 85bd96c..123f0c1 100644
+--- a/package/xerces/Config.in
++++ b/package/xerces/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_XERCES
+ 	bool "xerces-c++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_LIBICONV
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Xerces-C++ is a validating XML parser written in portable C++.
  
-+# CMake doesn't support having the --sysroot option directly in the
-+# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
-+CDRKIT_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
-+CDRKIT_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
-+CDRKIT_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-+CDRKIT_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
-+
- define CDRKIT_CONFIGURE_CMDS
-  -mkdir $(@D)/build
-  (cd $(@D)/build ; \
- 	$(HOST_DIR)/usr/bin/cmake .. \
- 		-Wno-dev \
- 		-DCMAKE_SYSTEM_NAME:STRING="Linux" \
--		-DCMAKE_C_COMPILER:FILEPATH="$(TARGET_CC)" \
--		-DCMAKE_CXX_COMPILER:FILEPATH="$(TARGET_CXX)" \
--		-DCMAKE_C_FLAGS:STRING="$(TARGET_CFLAGS)" \
-+		-DCMAKE_C_COMPILER:FILEPATH="$(CDRKIT_TARGET_CC)" \
-+		-DCMAKE_CXX_COMPILER:FILEPATH="$(CDRKIT_TARGET_CXX)" \
-+		-DCMAKE_C_FLAGS:STRING="$(CDRKIT_TARGET_CFLAGS)" \
-+		-DCMAKE_CXX_FLAGS:STRING="$(CDRKIT_TARGET_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
- 		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
- 		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 9f77be6..8a1f693 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -87,7 +87,7 @@ $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY): $(STAGING_DIR)/usr/lib/$(LIBXERCES_BI
+ 	cp -a $(STAGING_DIR)/usr/lib/$(LIBXERCES_BINARY)* $(TARGET_DIR)/usr/lib
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
+-xerces: $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
++xerces: $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
+ xerces-bin: $(XERCES_DIR)/usr/lib/$(LIBXERCES_BINARY)
+ 
 -- 
 1.7.1
