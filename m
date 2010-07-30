@@ -1,25 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jul 2010 10:47:37 +0200
-Subject: [Buildroot] [Corrected - my bad][PATCH] Remove gdb plugins from
-	target
-In-Reply-To: <1279999794-9385-1-git-send-email-m-starostik@versanet.de> (Malte
-	Starostik's message of "Sat, 24 Jul 2010 21:29:54 +0200, Sat,
-	24 Jul 2010 21:29:56 +0200")
-References: <20100724195818.4b7c0bd6@surf>
-	<1279999794-9385-1-git-send-email-m-starostik@versanet.de>
-Message-ID: <8739v1l5jq.fsf@macbook.be.48ers.dk>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 30 Jul 2010 10:37:43 +0100
+Subject: [Buildroot] [PATCH 01/19] dependencies: add svn as a mandatory
+	tool
+In-Reply-To: <3b207de011d13042b589031061bbe0d940e7b204.1280440124.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
+	<3b207de011d13042b589031061bbe0d940e7b204.1280440124.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <AANLkTikhhj6v0Z0+kG1sgXQWz9FXurOJ2Z50nTNfCfZL@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Malte" == Malte Starostik <m-starostik@versanet.de> writes:
+On Thu, Jul 29, 2010 at 10:48 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Now that two packages (tremor and libsvgtiny) are being downloaded
+> from svn, svn becomes a mandatory tool to run Buildroot.
 
- Malte> * Don't install gdb plugins unless BR2_TARGET_GDB is set
- Malte> Signed-off-by: Malte Starostik <m-starostik@versanet.de>
+Hi Thomas,
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+It seems like this might be a big dependency for people to install,
+particularly if they do not use these packages. Would it be better to
+make only those packages that require it depend on svn?
