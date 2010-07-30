@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] CHANGES: update with changes
-	from fixes-20100729 branch
-Message-ID: <20100730082548.E60FC836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xerces: fix download location
+Message-ID: <20100730082548.5C594836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac9ee0b5e53cd1109747404ad2c8e949c4d95ca0
+commit: http://git.buildroot.net/buildroot/commit/?id=96451c62fa97815b5f4f3fcc8b9765d021b6011f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   19 ++++++++++---------
- 1 files changed, 10 insertions(+), 9 deletions(-)
+apache.jumper.nu does not work anymore, so use archive.apache.org
+instead.
 
-diff --git a/CHANGES b/CHANGES
-index b52aaa2..ad36054 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -32,15 +32,16 @@
- 	dnsmasq, dropbear, e2fsprogs, fbv, file, flex, fontconfig,
- 	gawk, gmpc, gnuchess, gst-plugins-base, gst-plugins-good,
- 	gstreamer, gzip, icu, intltool, iostat, ipsec-tools, iptables,
--	iw, libart, libcgi, libdrm, libfuse, libglib2, libgpg-error,
--	libidn, liblockfile, libpng, libsoup, lighttpd, links,
--	linux-fusion, lmbench, lrzsz, ltrace, make, midori,
--	module-init-tools, mplayer, mysql_client, nbd, ncurses, neon,
--	netcat, netperf, netsnmp, ntfsprogs, openssl, pango, php, qt,
--	quagga,	samba, setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf,
--	sqlite,	squashfs, swfdec, tftpd, thttpd, tn5250, tremor,
--	usbutils, webif, webkit, wireless_tools, xkeyboard-config,
--	xserver_xorg-server, xvkbd, zlib
-+	iw, libart, libcgi, libcurl, libdrm, libeXosip, libfuse,
-+	libglib2, libgpg-error, libiconv, libidn, liblockfile, libpng,
-+	libsoup, lighttpd, links, linux-fusion, lmbench, lrzsz,
-+	ltrace, make, midori, module-init-tools, mplayer,
-+	mysql_client, nbd, ncurses, neon, netcat, netperf, netsnmp,
-+	ntfsprogs, openssl, oprofile, pango, php, qt, quagga, samba,
-+	setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf, speech-tools,
-+	sqlite, squashfs, swfdec, tftpd, thttpd, tn5250, tremor,
-+	usbutils, webif, webkit, wireless_tools, xerces,
-+	xkeyboard-config, xserver_xorg-server, xvkbd, zlib
- 
- 	Removed packages: libgail, modutils, portage, rxvt
- 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xerces/xerces.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 8a1f693..fd0417d 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ XERCES_VERSION:=3.0.1
+ XERCES_SOURCE:=xerces-c-$(XERCES_VERSION).tar.gz
+-XERCES_SITE:=http://apache.jumper.nu/xerces/c/3/sources/
++XERCES_SITE:=http://archive.apache.org/dist/xerces/c/3/sources/
+ XERCES_CAT:=$(ZCAT)
+ XERCES_DIR:=$(BUILD_DIR)/xerces-c-$(XERCES_VERSION)
+ LIBXERCES_BINARY:=libxerces-c-3.0.so
 -- 
 1.7.1
