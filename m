@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] Fix computation of
-	REAL_GNU_TARGET_NAME
-Message-ID: <20100730082546.0789D836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libiconv: add an error when
+	both libiconv and locale are enabled
+Message-ID: <20100730082546.7A918836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,59 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ece1f4225ce2af0a274943753d9c2e7ced5d3262
+commit: http://git.buildroot.net/buildroot/commit/?id=a302e3aaa0a7e4eec1a82143efbbd09629b499ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The current computation of REAL_GNU_TARGET_NAME is incorrect for
-non-ARM glibc platforms because it generates something such as
-mipsel-unknown-linux- as the REAL_GNU_TARGET_NAME.
-
-So we correct this by :
-
- * Adding "gnu" in the suffix when glibc is used, so that in the
-   previous case we will have mipsel-unknown-linux-gnu
-
- * Improving the ARM_EABI code to correctly append "eabi" when glibc
-   is selected, so that we have arm-unknown-linux-gnueabi, and to
-   append "gnueabi" when uclibc is selected, so that we have
-   arm-unknown-linux-uclibcgnueabi. The little trick here is that LIBC
-   and ABI aren't completely orthogonal on ARM.
-
-This fixes problems such as :
-
-checking host system type... Invalid configuration
-`mipsel-unknown-linux-': machine `mipsel-unknown-linux' not recognized
+This error should never show up if all Buildroot dependencies are
+correct. However, rather than failing horribly later on, catch this
+particular case early on and error out.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |   11 ++++++++++-
- 1 files changed, 10 insertions(+), 1 deletions(-)
+ package/libiconv/libiconv.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 36f2f24..bb2aafa 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -93,11 +93,20 @@ LIBC=uclibc
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- LIBC=uclibc
- else
--LIBC=
-+LIBC=gnu
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index cc40cd4..a3f762a 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -23,3 +23,10 @@ ifneq ($(BR2_ENABLE_DEBUG),y)
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
  endif
- 
-+# The ABI suffix is a bit special on ARM, as it needs to be
-+# -uclibcgnueabi for uClibc EABI, -uclibc for uClibc OABI, -gnueabi
-+# for glibc EABI and -gnu for glibc OABI. This means that the LIBC and
-+# ABI aren't strictly orthogonal, which explains why we need the test
-+# on LIBC below.
- ifeq ($(BR2_ARM_EABI),y)
-+ifeq ($(LIBC),uclibc)
- ABI=gnueabi
-+else
-+ABI=eabi
+ 	touch $@
++
++# Configurations where the toolchain supports locales and the libiconv
++# package is enabled are incorrect, because the toolchain already
++# provides libiconv functionality, and having both confuses packages.
++ifeq ($(BR2_PACKAGE_LIBICONV)$(BR2_ENABLE_LOCALE),yy)
++$(error Libiconv should never be enabled when the toolchain supports locales. Report this failure to Buildroot developers)
 +endif
- endif
- 
- REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
 -- 
 1.7.1
