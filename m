@@ -1,45 +1,96 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 30 Jul 2010 10:46:36 +0100
-Subject: [Buildroot] [PATCH 01/19] dependencies: add svn as a mandatory
-	tool
-In-Reply-To: <20100730114233.21156c3c@surf>
-References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-	<3b207de011d13042b589031061bbe0d940e7b204.1280440124.git.thomas.petazzoni@free-electrons.com>
-	<AANLkTikhhj6v0Z0+kG1sgXQWz9FXurOJ2Z50nTNfCfZL@mail.gmail.com>
-	<20100730114233.21156c3c@surf>
-Message-ID: <AANLkTinLo-Q-pe_93+9jhwURYVdbXbmc9df0L3WuD3kO@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Jul 2010 12:35:45 +0200
+Subject: [Buildroot] [git commit master 1/1] update for 2010.08-rc1
+Message-ID: <20100730105054.C5F0183685@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 30, 2010 at 10:42 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Fri, 30 Jul 2010 10:37:43 +0100
-> Will Newton <will.newton@gmail.com> wrote:
->
->> It seems like this might be a big dependency for people to install,
->> particularly if they do not use these packages. Would it be better to
->> make only those packages that require it depend on svn?
->
-> For the moment, we haven't entered the game in which we try to narrow
-> host dependencies to the particular package(s) that require it, just
-> because it was easier not to do so. Maybe it's time to change this, I
-> don't know.
->
-> However, it's sure that entering this game means adding yet another
-> level of configurability that is relatively hard to test (i.e checking
-> that each individual package properly lists all its mandatory
-> dependencies).
->
-> But I understand that having to install SVN (and later Git) is a bit
-> overkill.
 
-I was thinking maybe we could make the svn download action print an
-error if svn wasn't installed (and likewise for git etc.).
+commit: http://git.buildroot.net/buildroot/commit/?id=2ef83b42b97e7a098c9bef34109c5a8896a17b76
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In some ways that wouldn't be as neat because you wouldn't just be
-able to enable any package and have it build out of the box, but it
-would make the dependency management easier for people who are
-shipping buildroot as a development environment (aka me ;-).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    2 +-
+ Config.in          |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index a39a2fb..8308673 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2010.08, Not released yet:
++2010.08-rc1, Released July 30th, 2010:
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Config.in b/Config.in
+index 6adfe49..bcf9feb 100644
+--- a/Config.in
++++ b/Config.in
+@@ -8,7 +8,7 @@ config BR2_HAVE_DOT_CONFIG
+ 
+ config BR2_VERSION
+ 	string
+-	default "2010.08-git"
++	default "2010.08-rc1"
+ 
+ source "target/Config.in.arch"
+ source "target/device/Config.in"
+diff --git a/docs/download.html b/docs/download.html
+index ff6dd2d..241c48e 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -13,15 +13,15 @@ here:<p>
+ or
+ <a href="/downloads/buildroot-2010.05.tar.bz2">buildroot-2010.05.tar.bz2</a>.
+ <p>
+-<!--
+-The latest release candidate is <b>2010.05-rc3</b>, which can be
++
++The latest release candidate is <b>2010.08-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2010.05-rc3.tar.gz">buildroot-2010.05-rc3.tar.gz</a>
++<a href="/downloads/buildroot-2010.08-rc1.tar.gz">buildroot-2010.08-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2010.05-rc3.tar.bz2">buildroot-2010.05-rc3.tar.bz2</a>.
++<a href="/downloads/buildroot-2010.08-rc1.tar.bz2">buildroot-2010.08-rc1.tar.bz2</a>.
+ <p>
+--->
++
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index afab7be..f8412a0 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -6,6 +6,19 @@
+ 
+ <ul>
+ 
++  <li><b>30 July 2010 -- 2010.08-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08_rc1">CHANGES</a>
++    file for details.
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.08-rc1.tar.bz2">2010.08-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>30 May 2010 -- 2010.05 released</b>
+ 
+     <p>The stable 2010.05 release is out - Thanks to everyone
+-- 
+1.7.1
