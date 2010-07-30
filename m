@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] libiconv: add an error when
-	both libiconv and locale are enabled
-Message-ID: <20100730082546.7A918836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] avahi: pkg-config is needed
+Message-ID: <20100730082547.48F37836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a302e3aaa0a7e4eec1a82143efbbd09629b499ea
+commit: http://git.buildroot.net/buildroot/commit/?id=9abe052f0438ea106274dd3dcbe34736460245a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This error should never show up if all Buildroot dependencies are
-correct. However, rather than failing horribly later on, catch this
-particular case early on and error out.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libiconv/libiconv.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/avahi/avahi.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index cc40cd4..a3f762a 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -23,3 +23,10 @@ ifneq ($(BR2_ENABLE_DEBUG),y)
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
- endif
- 	touch $@
-+
-+# Configurations where the toolchain supports locales and the libiconv
-+# package is enabled are incorrect, because the toolchain already
-+# provides libiconv functionality, and having both confuses packages.
-+ifeq ($(BR2_PACKAGE_LIBICONV)$(BR2_ENABLE_LOCALE),yy)
-+$(error Libiconv should never be enabled when the toolchain supports locales. Report this failure to Buildroot developers)
-+endif
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index fa05de3..8e2d14f 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -84,7 +84,7 @@ AVAHI_CONF_OPT = --localstatedir=/var \
+ 		--with-autoipd-user=default \
+ 		--with-autoipd-group=default
+ 
+-AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool
++AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-intltool host-pkg-config
+ 
+ ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
+ AVAHI_DEPENDENCIES += libdaemon
 -- 
 1.7.1
