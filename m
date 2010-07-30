@@ -1,35 +1,53 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 29 Jul 2010 19:12:39 -0700
-Subject: [Buildroot] [PATCH 0/3] Add support for uclibc NPTL toolchain.
-In-Reply-To: <87bp9qm7df.fsf@macbook.be.48ers.dk>
-References: <1280301099-5930-1-git-send-email-raj.khem@gmail.com> 
-	<877hkee1vu.fsf@macbook.be.48ers.dk>
-	<AANLkTi=OKZZMFPpyiC+4jjnEVtYhmSA4_4Avxd97uZU8@mail.gmail.com> 
-	<87bp9qm7df.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikoL=ctDvXU8i4T1bW0__3QcSm0nAq+4YrKphUg@mail.gmail.com>
+From: Nataraj S Narayan <natarajsn@gmail.com>
+Date: Fri, 30 Jul 2010 12:27:23 +0530
+Subject: [Buildroot] BR on FreeBSD
+Message-ID: <AANLkTikMQtr83OBZ=-f1DvH-XnTLfdstQeQtwN-E3j1R@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 29, 2010 at 12:10 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Khem" == Khem Raj <raj.khem@gmail.com> writes:
->
-> ?Khem> Thx.hmmm thats ok however you still need to make a change to get
-> ?Khem> .29 working which is change the 'headers' target to
-> ?Khem> 'install_headers'
->
-> Hmm, no - We only ever special cased 0.9.28 (install_dev vs
-> install_headers) - Is that what you are referring to?
->
+Hi
 
-no. I was referring to something which you already have in the patch
-so we are good.
-I was referring to having install_headers in target instead of headers
-as I had in my patch earlier
-which would not have worked with .29
+Was trying BR compile on a FreeBSD 8.0 machine. Getting the following:-
 
-> --
-> Bye, Peter Korsgaard
->
+[root at freebsd /usr/buildroot]# gmake --debug
+GNU Make 3.81
+Copyright (C) 2006  Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+This program built for i386-portbld-freebsd7.1
+Reading makefiles...
+Updating goal targets....
+ File `all' does not exist.
+   File `world' does not exist.
+     File `dependencies' does not exist.
+       File `host-sed' does not exist.
+         File `use-sed-host-binary' does not exist.
+        Must remake target `use-sed-host-binary'.
+        Successfully remade target file `use-sed-host-binary'.
+      Must remake target `host-sed'.
+      Successfully remade target file `host-sed'.
+    Must remake target `dependencies'.
+[: make:: bad number
+[: make:: bad number
+-e \nYou must install 'bash' on your build machine\n
+gmake: *** [dependencies] Error 1
+[root at freebsd /usr/buildroot]# bash
+[root at freebsd /usr/buildroot]# gmake
+[: make:: bad number
+[: make:: bad number
+-e \nYou must install 'bash' on your build machine\n
+gmake: *** [dependencies] Error 1
+
+But then I do have bash installed and working.
+
+regards
+
+Nataraj
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100730/c3a47f09/attachment.html>
