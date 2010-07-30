@@ -1,28 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jul 2010 10:25:33 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	fixes-20100729
-In-Reply-To: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Thu, 29 Jul 2010 23:48:43 +0200")
-References: <cover.1280440124.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fwz1l6ki.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Jul 2010 10:24:08 +0200
+Subject: [Buildroot] [git commit master 1/1] dependencies: add svn as a
+	mandatory tool
+Message-ID: <20100730082545.AF305836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 7bfc9e464cf448f83b06953f1b26a150539b3960:
- Thomas>   Gustavo Zacarias (1):
- Thomas>         netsnmp: depend on openssl when the package is on to ensure build order
+commit: http://git.buildroot.net/buildroot/commit/?id=3b207de011d13042b589031061bbe0d940e7b204
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+Now that two packages (tremor and libsvgtiny) are being downloaded
+from svn, svn becomes a mandatory tool to run Buildroot.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot fixes-20100729
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Pulled and pushed, thanks!
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
