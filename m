@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] libeXosip: add dependency on
-	host-pkg-config and remove useless flags
-Message-ID: <20100730082546.A260B836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] cairo: PDF support is needed
+	when SVG support is enabled
+Message-ID: <20100730082547.E7D19836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2e5763e529e4ed387e30854f80e801273ecdbaf
+commit: http://git.buildroot.net/buildroot/commit/?id=e014e3da09e99222a1ff4ebb9c3f3433e8de65be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libeXosip fails to use pkg-config to find libosip, it defaults to
-thinking that libosip is installed in $(prefix)/lib and
-$(prefix)/include, which is of course wrong. There was an attempt to
-fix this by passing OSIP_CFLAGS and OSIP_LIBS variables to libeXosip
-./configure script, but it still does not work:
+As soon as PostScript, PNG or SVG support is enabled, PDF support is
+required for Cairo to build properly. Otherwise, you get build
+failures such as:
 
-checking pkg-config is at least version 0.9.0... ./configure: line 21035: /home/test/outputs/test-41/host/usr/bin/pkg-config: No such file or directory
-no
-checking for OSIP... configure: WARNING: assuming osip can be found in -I${prefix}/include and -L${exec_prefix}/lib
-
-Therefore, the correct fix is to depend on host-pkg-config.
+.libs/cairo-type3-glyph-surface.o: In function `_cairo_type3_glyph_surface_set_stream':
+/home/thomas/local/buildroot-dl/cairo-1.8.10/src/cairo-type3-glyph-surface.c:337: undefined reference to `_cairo_pdf_operators_set_stream'
+/home/thomas/local/buildroot-dl/cairo-1.8.10/src/cairo-type3-glyph-surface.c:337: undefined reference to `_cairo_pdf_operators_set_stream'
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libeXosip2/libeXosip2.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/cairo/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 7f282b7..30eac9f 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -22,8 +22,6 @@ $(LIBEXOSIP2_DIR)/.configured: $(LIBEXOSIP2_DIR)/.unpacked
- 	(cd $(LIBEXOSIP2_DIR); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
--		OSIP_CFLAGS="$(TARGET_CFLAGS)" \
--		OSIP_LIBS="-L$(STAGING_DIR)/usr/lib -losip2 -losipparser2" \
- 		./configure $(QUIET) \
- 		--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-@@ -73,7 +71,7 @@ $(TARGET_DIR)/usr/bin/sip_reg: $(STAGING_DIR)/usr/bin/sip_reg
+diff --git a/package/cairo/Config.in b/package/cairo/Config.in
+index 752f615..19c4723 100644
+--- a/package/cairo/Config.in
++++ b/package/cairo/Config.in
+@@ -30,5 +30,6 @@ config BR2_PACKAGE_CAIRO_PNG
+ config BR2_PACKAGE_CAIRO_SVG
+ 	bool "svg support"
+ 	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_CAIRO_PDF
  
- 
- 
--libeXosip2: libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
-+libeXosip2: host-pkg-config libosip2 $(TARGET_DIR)/usr/lib/libeXosip2.so
- 
- libeXosip2-source: $(DL_DIR)/$(LIBEXOSIP2_SOURCE)
- 
+ endif
 -- 
 1.7.1
