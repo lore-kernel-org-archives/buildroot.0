@@ -1,79 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Jul 2010 13:03:03 +0200
-Subject: [Buildroot] Buildroot 2010.08-rc1 released (and ponies!)
-Message-ID: <87y6ctjkpk.fsf@macbook.be.48ers.dk>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Fri, 30 Jul 2010 16:41:07 +0100
+Subject: [Buildroot] Evaluation of make variables
+In-Reply-To: <20100730103354.1c7f1a0f@surf>
+References: <1280226977.22687.37.camel@dubciaranr1.verifone.com>
+	<20100727134209.5fddfa7b@surf>
+	<1280231693.22687.47.camel@dubciaranr1.verifone.com>
+	<20100730103354.1c7f1a0f@surf>
+Message-ID: <1280504467.17479.12.camel@dubciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Ar Aoine, 2010-07-30 ag 10:33 +0200, scr?obh Thomas Petazzoni:
+> As we discussed in another thread (if I remember correctly), I'm not
+> sure the gentargets infrastructure is appropriate for building the
+> kernel and bootloaders. But definitely, some sort of infrastructure
+> for building these would be good.
+> 
 
-Buildroot 2010.08-rc1 is released - Go download it at:
+It was actually your previous post in this thread, but I understand;
+you're "a little" busy these days. ;-)
 
-http://buildroot.net/downloads/buildroot-2010.08-rc1.tar.gz
+> > Is this an inherent limitation of the make syntax or specific to the
+> > layout of the buildroot makefiles?
+> 
+> Inherent limitation of the make syntax. Try a simple test.mk file that
+> does:
+> 
+> FOOBAR=y
+> 
+> define BARFOO
+> ifeq ($(FOOBAR),y)
+> 	echo "Hello World"
+> endif
+> endef
+> 
+> all:
+> 	$(BARFOO)
+> 
+> it doesn't work, while:
 
-or
+Yes and I wouldn't expect it to work.  but if I leave the top part the
+same and just change to:
 
-http://buildroot.net/downloads/buildroot-2010.08-rc1.tar.bz2
+all:
+$(BARFOO)
 
-Or get it from Git:
+i.e. don't indent the $(BARFOO) line, the thinking being that the
+variable would just get textually replaced by its value.
+make then gives a missing separator error and this is what I don't
+understand.  What separator is expected?
 
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2010.05..
-   153  Peter Korsgaard
-   150  Thomas Petazzoni
-    35  Gustavo Zacarias
-    18  cmchao
-     8  Luca Ceresoli
-     7  Paul Jones
-     6  Lionel Landwerlin
-     6  Malte Starostik
-     4  Yann E. MORIN
-     3  Julien Boibessot
-     2  Dmytro Milinevskyy
-     2  Khem Raj
-     2  Nick Leverton
-     2  Peter Huewe
-     1  Baruch Siach
-     1  Bj?rn Forsman
-     1  Daniel Hobi
-     1  Darius Augulis
-     1  H Hartley Sweeten
-     1  Karl Krach
-     1  Kelvin Cheung
-     1  Ossy
-     1  Sagaert Johan
-     1  Slava Zanko
-     1  Thiago A. Correa
-     1  Will Wagner
-
-And especially thanks to Thomas Petazzoni for resolving a lot of
-bugzilla issues - We were able to resolve 65 issues during this
-development cycle.
-
-We had a lot of cleanup happening this time: Bootloaders and Linux
-kernel handling was reworked and lots of packages converted to
-AUTOTARGETS/GENTARGETS. On the toolchain side we now have support for
-(snapshot) NPTL handling in uClibc.
-Buildroot can now be configured through the GTK-based 'make gconfig'.
-A number of older packages and rarely used architectures have been
-marked as broken, and will be removed during the 2010.11 development
-cycle unless someone steps up to support them.
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08_rc1
-
-Notice: I'll be away for the next 3 weeks, so don't expect fast
-replies or new release candidates during that time. Thomas has
-promised to collect fixes and send them to me once I get back - Thanks
-for that.
-
--- 
-Bye, Peter Korsgaard
+Then we look at the definition of GENTARGETS_INNER, which is used in a
+target rule and it includes ifeq, etc.  What's special about that?  I
+presume it's the $(eval ...) that changes its context in some way.
