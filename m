@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 30 Jul 2010 10:24:08 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain: mark uClibc 0.9.31 +
-	locale + C++ as broken
-Message-ID: <20100730082548.22837836C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update with changes
+	from fixes-20100729 branch
+Message-ID: <20100730082548.E60FC836C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,46 +10,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60f945e47a15e10f0e777f69b05492b6f7ba918d
+commit: http://git.buildroot.net/buildroot/commit/?id=ac9ee0b5e53cd1109747404ad2c8e949c4d95ca0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It fails to build with:
-
-ctype_members.cc: In constructor 'std::ctype_byname<_CharT>::ctype_byname(const char*, size_t) [with _CharT = char]':
-ctype_members.cc:59: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-ctype_members.cc:60: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-ctype_members.cc:61: error: invalid use of incomplete type 'struct __uclibc_locale_struct'
-/home/test/avr32-br/usr/avr32-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85: error: forward declaration of 'struct __uclibc_locale_struct'
-make[5]: *** [ctype_members.lo] Error 1
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-common.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ CHANGES |   19 ++++++++++---------
+ 1 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index bea0c7c..3c70f9c 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -157,6 +157,7 @@ config BR2_GCC_CROSS_CXX
- config BR2_INSTALL_LIBSTDCPP
- 	bool "Build/install c++ compiler and libstdc++?"
- 	select BR2_GCC_CROSS_CXX
-+	depends on !(BR2_avr32 && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31)
- 	help
- 	  If you are building your own toolchain and want to build and install
- 	  the C++ compiler and library then you need to enable this option.
-@@ -164,6 +165,9 @@ config BR2_INSTALL_LIBSTDCPP
- 	  support and you want to use the compiler / library then you need 
- 	  to select this option.
+diff --git a/CHANGES b/CHANGES
+index b52aaa2..ad36054 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -32,15 +32,16 @@
+ 	dnsmasq, dropbear, e2fsprogs, fbv, file, flex, fontconfig,
+ 	gawk, gmpc, gnuchess, gst-plugins-base, gst-plugins-good,
+ 	gstreamer, gzip, icu, intltool, iostat, ipsec-tools, iptables,
+-	iw, libart, libcgi, libdrm, libfuse, libglib2, libgpg-error,
+-	libidn, liblockfile, libpng, libsoup, lighttpd, links,
+-	linux-fusion, lmbench, lrzsz, ltrace, make, midori,
+-	module-init-tools, mplayer, mysql_client, nbd, ncurses, neon,
+-	netcat, netperf, netsnmp, ntfsprogs, openssl, pango, php, qt,
+-	quagga,	samba, setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf,
+-	sqlite,	squashfs, swfdec, tftpd, thttpd, tn5250, tremor,
+-	usbutils, webif, webkit, wireless_tools, xkeyboard-config,
+-	xserver_xorg-server, xvkbd, zlib
++	iw, libart, libcgi, libcurl, libdrm, libeXosip, libfuse,
++	libglib2, libgpg-error, libiconv, libidn, liblockfile, libpng,
++	libsoup, lighttpd, links, linux-fusion, lmbench, lrzsz,
++	ltrace, make, midori, module-init-tools, mplayer,
++	mysql_client, nbd, ncurses, neon, netcat, netperf, netsnmp,
++	ntfsprogs, openssl, oprofile, pango, php, qt, quagga, samba,
++	setserial, sdl, sdl_mixer, sdl_sound, sdl_ttf, speech-tools,
++	sqlite, squashfs, swfdec, tftpd, thttpd, tn5250, tremor,
++	usbutils, webif, webkit, wireless_tools, xerces,
++	xkeyboard-config, xserver_xorg-server, xvkbd, zlib
  
-+comment "C++ support broken in uClibc 0.9.31 with locale enabled"
-+	depends on BR2_avr32 && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31
-+
- config BR2_TARGET_OPTIMIZATION
- 	string "Target Optimizations"
- 	default "-pipe"
+ 	Removed packages: libgail, modutils, portage, rxvt
+ 
 -- 
 1.7.1
