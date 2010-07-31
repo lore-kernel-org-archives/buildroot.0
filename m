@@ -1,130 +1,66 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 30 Jul 2010 22:44:29 -0700
-Subject: [Buildroot] BR compile on FreeBSD
-In-Reply-To: <AANLkTiks7OCXF8VVY2u7bWtzvPSvYzoN0HEDX2YdobQy@mail.gmail.com>
-References: <AANLkTiks7OCXF8VVY2u7bWtzvPSvYzoN0HEDX2YdobQy@mail.gmail.com>
-Message-ID: <AANLkTi=bzZ3vNO7AeoC984QZwpehX+MSwshvGRD3Vsep@mail.gmail.com>
+From: Ossy <ossy1980@gmx.net>
+Date: Sat, 31 Jul 2010 15:03:55 +0200
+Subject: [Buildroot] xfsprogs 3.0.3 without libxfs in rootfs
+In-Reply-To: <4C532C78.90703@gmx.net>
+References: <4C4613A2.90006@gmx.net>	<20100721085822.5d2a34ae@surf>	<4C4B1C9E.8010600@gmx.net>	<20100730104355.14bb2068@surf>
+	<4C532C78.90703@gmx.net>
+Message-ID: <4C541F3B.80802@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 30, 2010 at 10:35 PM, Nataraj S Narayan <natarajsn@gmail.com> wrote:
-> Hi
+Am 30.07.2010 21:48, schrieb Ossy:
+> Am 30.07.2010 10:43, schrieb Thomas Petazzoni:
+>> In terms of Makefile, nothing else needs to be done than just the final:
+>>
+>> $(eval $(call AUTOTARGETS,package,util-linux-ng))
+>>
+>> in the util-linux-ng.mk file.
+>>
 >
-> Please don't get cranky about this. I feel BSDs are best for cross compile.
-> Two Linux boxes with Lenny, one compiles BR perfectly and other gives all
-> sort of troubles on a git clone and .config from the first - iconv issues,
-> libglib issues, i am fed up.
+> Currently it compiles well with recent git tree and gcc 4.3.5 for armv5te.
 
-well try to have sane environments having same distro does not mean
-you have same
-environment.
+Since util-linux-ng compiles and succesfully installs, I gave 
+xfsprogs-3.1.2 a try. Surprisingly it compiles well for armv5te with gcc 
+4.3.5. The binaries found in output/build/xfsprogs-3.1.2 are 32bit 
+binaries for ARM. But here comes the problem ->
+"No rule to make install-strip":
+ >>> xfsprogs 3.1.2 Installing to target
+/usr/bin/make -j2 
+DESTDIR=/home/ossy/buildroot/buildroot-dev/output/target  install-strip 
+-C /home/ossy/buildroot/buildroot-dev/output/build/xfsprogs-3.1.2/
+make[1]: Entering directory 
+`/home/ossy/buildroot/buildroot-dev/output/build/xfsprogs-3.1.2'
+make[1]: *** Keine Regel, um ?install-strip? zu erstellen.  Schluss.
+make[1]: Leaving directory 
+`/home/ossy/buildroot/buildroot-dev/output/build/xfsprogs-3.1.2'
+make: *** 
+[/home/ossy/buildroot/buildroot-dev/output/build/xfsprogs-3.1.2/.stamp_target_installed] 
+Fehler 2
 
->
-> Getting the following on FreeBSD:-
+In fact I can't find a target install-strip in the makefile of 
+output/build/xfsprogs-3.1.2.
+Should autotargets have generated such a target?
 
-You could disable BR2_ENABLE_LOCALE if not needed.
+My xfsprogs.mk looks very simple an does not include a install-strip 
+commando:
+#############################################################
+XFSPROGS_VERSION = 3.1.2
+XFSPROGS_SOURCE  = xfsprogs-$(XFSPROGS_VERSION).tar.gz
+XFSPROGS_SITE    = ftp://oss.sgi.com/projects/xfs/cmd_tars
+XFSPROGS_DEPENDENCIES = util-linux-ng
+XFSPROGS_LIBTOOL_PATCH = NO
+XFSPROGS_CONF_OPT     = --enable-shared \
+                         --enable-gettext=no \
+                         ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
+$(eval $(call AUTOTARGETS,package,xfsprogs))
 
->
-> gmake[1]: Entering directory `/usr/buildroot/output/toolchain/uClibc-0.9.31'
-> ? HOSTCC extra/locale/gen_locale
-> In file included from extra/locale/gen_locale.c:13:
-> extra/locale/c8tables.h:23:1: error: unterminated #ifdef
-> extra/locale/gen_locale.c: In function 'do_lc_time':
-> extra/locale/gen_locale.c:954: error: 'ERA_YEAR' undeclared (first use in
-> this function)
-> extra/locale/gen_locale.c:954: error: (Each undeclared identifier is
-> reported only once
-> extra/locale/gen_locale.c:954: error: for each function it appears in.)
-> extra/locale/gen_locale.c: In function 'lc_numeric_S':
-> extra/locale/gen_locale.c:986: error: 'GROUPING' undeclared (first use in
-> this function)
-> extra/locale/gen_locale.c: In function 'do_lc_numeric':
-> extra/locale/gen_locale.c:1056: error: 'GROUPING' undeclared (first use in
-> this function)
-> extra/locale/gen_locale.c:1083:2: warning: #warning fix the char entries for
-> monetary... target signedness of char may be different!
-> extra/locale/gen_locale.c: In function 'lc_monetary_S':
-> extra/locale/gen_locale.c:1114: error: 'MON_GROUPING' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c: In function 'do_lc_monetary':
-> extra/locale/gen_locale.c:1184: error: 'INT_CURR_SYMBOL' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1185: error: 'CURRENCY_SYMBOL' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1186: error: 'MON_DECIMAL_POINT' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1187: error: 'MON_THOUSANDS_SEP' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1188: error: 'MON_GROUPING' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1189: error: 'POSITIVE_SIGN' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1190: error: 'NEGATIVE_SIGN' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1191: error: 'INT_FRAC_DIGITS' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1192: error: 'FRAC_DIGITS' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1193: error: 'P_CS_PRECEDES' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1194: error: 'P_SEP_BY_SPACE' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1195: error: 'N_CS_PRECEDES' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1196: error: 'N_SEP_BY_SPACE' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1197: error: 'P_SIGN_POSN' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1198: error: 'N_SIGN_POSN' undeclared (first use
-> in this function)
-> extra/locale/gen_locale.c:1199: error: 'INT_P_CS_PRECEDES' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1200: error: 'INT_P_SEP_BY_SPACE' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1201: error: 'INT_N_CS_PRECEDES' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1202: error: 'INT_N_SEP_BY_SPACE' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1203: error: 'INT_P_SIGN_POSN' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c:1204: error: 'INT_N_SIGN_POSN' undeclared (first
-> use in this function)
-> extra/locale/gen_locale.c: In function 'do_lc_ctype':
-> extra/locale/gen_locale.c:1322: error: '_NL_CTYPE_OUTDIGIT0_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1323: error: '_NL_CTYPE_OUTDIGIT1_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1324: error: '_NL_CTYPE_OUTDIGIT2_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1325: error: '_NL_CTYPE_OUTDIGIT3_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1326: error: '_NL_CTYPE_OUTDIGIT4_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1327: error: '_NL_CTYPE_OUTDIGIT5_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1328: error: '_NL_CTYPE_OUTDIGIT6_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1329: error: '_NL_CTYPE_OUTDIGIT7_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1330: error: '_NL_CTYPE_OUTDIGIT8_MB' undeclared
-> (first use in this function)
-> extra/locale/gen_locale.c:1331: error: '_NL_CTYPE_OUTDIGIT9_MB' undeclared
-> (first use in this function)
-> gmake[1]: *** [extra/locale/gen_locale] Error 1
-> gmake[1]: Leaving directory `/usr/buildroot/output/toolchain/uClibc-0.9.31'
-> gmake: *** [/usr/buildroot/output/toolchain/uClibc-0.9.31/.configured] Error
-> 2
->
->
-> regards
->
-> Nataraj
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+The deflated xfsprogs in output/build/xfsprogs-3.1.2 does not contain a 
+file with content "install-strip".
+
+Where did I misconfigure the new xfsprogs.mk for using autotargets?
+
+Regards,
+Marcus
