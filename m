@@ -1,54 +1,66 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Thu, 1 Jul 2010 08:22:55 +1000
-Subject: [Buildroot] Kernel build process
-In-Reply-To: <20100630185824.095c6ad0@surf>
-References: <002401cb1843$dc1e2670$945a7350$@pauljones.id.au>
-	<20100630185824.095c6ad0@surf>
-Message-ID: <000f01cb18a2$d4f5fad0$7ee1f070$@pauljones.id.au>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sun, 1 Aug 2010 15:23:03 -0700
+Subject: [Buildroot] build of gcc 4.3.5 broken with
+ BR2_GCC_USE_SJLJ_EXCEPTIONS
+In-Reply-To: <20100727203043.74441c59@surf>
+References: <4C48BF3D.4040301@gmx.net>
+	<201007230005.22462.yann.morin.1998@anciens.enib.fr>
+	<20100727203043.74441c59@surf>
+Message-ID: <20100801222303.GC30928@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Thomas Petazzoni
-> Sent: Thursday, 1 July 2010 2:58 AM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] Kernel build process
+On (27/07/10 20:30), Thomas Petazzoni wrote:
+> On Fri, 23 Jul 2010 00:05:22 +0200
+> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 > 
-> >
-> > 3)      Add code to ignore copying config file if "Configuration file
-> > path" is still blank and just continue compiling the kernel with the
-> > default options.
-> >
-> > That way it should be obvious to any beginners what the options do,
-> > and if they are not set (ie left as default) the build will still be
-> > able to continue.
+> > Marcus, All,
+> > 
+> > On Thursday 22 July 2010 23:59:25 Ossy wrote:
+> > > I don't need this particular option (BR2_GCC_USE_SJLJ_EXCEPTIONS)
+> > > but anyway my buildroot version (current git tree) wasn't able to
+> > > build 4.3.5-final with BR2_GCC_USE_SJLJ_EXCEPTIONS=y. After
+> > > deactivating it everything was fine again.
+> > 
+> > Yes, it happens too for me with armeb. Other archs are fine for me
+> > with sjlj enabled.
+> > 
+> > I did not dig up why, so I /simply/ turn off sjlj for ermeb.
 > 
-> I'm not sure about this last part, though. What kind of "default options"
-will
-> the kernel select ? Just a random set of options for the architecture
-selected
-> ? Yes for x86 this will do something more or less sensible, but for other
-> embedded architectures such as ARM, there's no such thing as a "default
-set
-> of options that makes sense".
-> 
-> So I'd prefer to detect the fact that the configuration file path option
-has
-> been left empty, and abort the build by showing an explicit and clear
-error
-> message about this.
-> 
-> Same could be done for the defconfig option.
-> 
-> What do you think ?
+> Does having this BR2_GCC_USE_SJLJ_EXCEPTIONS option makes sense ? In
+> which case would this be useful ?
 
-Good point. I guess if we tell the user to run "make linux26-menuconfig"
-that would be just as good.
+It makes sense if you are using older compilers and when DWARF unwinding
+did not work completely. But otherwise its slow in performance and probably
+can be replaced with dwarf2 exceptions I think hpux is one which does not
+support dwarf2 exception per gcc sources.
+sjlj handles exceptions faster but also adds burden of calling setjmp in 
+non excepting case therefore slowing down the execution but code is
+smaller.
 
+I think you could leave this option in but dont make it default.
 
-
-Paul.
+> 
+> According to http://choices.cs.uiuc.edu/exceptions.pdf, the default
+> mechanism used by g++ for exceptions is faster and better than SJLJ.
+> 
+> If there are only corner use cases, I'm all for getting rid of this
+> option in BR. Advanced users can always use
+> BR2_EXTRA_GCC_CONFIG_OPTIONS to add --enable-sjlj-exceptions to the gcc
+> configuration if they want.
+> 
+> Thoughts ?
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
