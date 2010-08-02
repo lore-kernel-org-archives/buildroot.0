@@ -1,52 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Aug 2010 17:14:01 +0200
-Subject: [Buildroot] Correct way to check for clock_gettime()
-In-Reply-To: <20100802051736.GC30548@gmx.de>
-References: <20100730135118.45adcc67@surf>
-	<AANLkTi=7t2kQXj96nktqEd=T3zDOvBXQDrjXW+u7FpG0@mail.gmail.com>
-	<20100802033353.281d9bc8@surf> <20100802051736.GC30548@gmx.de>
-Message-ID: <20100802171401.7b9809de@surf>
+From: Damien Borie <dbe@terawatt.fr>
+Date: Mon, 02 Aug 2010 17:29:57 +0200
+Subject: [Buildroot] Auto standby after 10 minutes, what origin?
+In-Reply-To: <4BC2109B.20300@free.fr>
+References: <w2k2facd6dc1004110431idf465b71za05aef84eed86ad4@mail.gmail.com>		<4BC1BBBD.3000703@free.fr>	<x2i2facd6dc1004110814y1471cf44k16cb92c325242833@mail.gmail.com>
+	<4BC2109B.20300@free.fr>
+Message-ID: <4C56E475.20603@terawatt.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ralf,
+Hello,
 
-Thanks a lot for your feedback!
+I made a distribution for a PDX 089T with a Vortex CPU. Everything works 
+fine, but, after 10 minutes, I always have an automatic standby. It 
+comes with Xorg started and also in console without any X server.
+So I conclude it isn't a Xorg configuration problem.
+But, where does this standby could come from? Kernel configuration? 
+Hardware?
+I thought somebody here might have already encountered the problem...
 
-On Mon, 2 Aug 2010 07:17:36 +0200
-Ralf Wildenhues <Ralf.Wildenhues@gmx.de> wrote:
+Thanks.
 
-> * Thomas Petazzoni wrote on Mon, Aug 02, 2010 at 03:33:53AM CEST:
-> > So the ability of sharing the cache between execution of
-> > different configure scripts is a documented feature. Is it just
-> > that in reality it doesn't work that well ?
-> 
-> You should be able to modify both configure scripts in a way so that
-> it works again; and in this particular example it should be done.
-> Getting this approach to scale can be a lot of work though.
+Damien Borie
 
-Is this approach "officially" supported by autoconf ? If I fix one of
-the configure.{in,ac} script and try to get the change merged upstream,
-it's an important argument to know if the change is done to comply with
-a general rule of configure.{in,ac} and not a specific hack.
+TERAWATT / AENERGIA S.A.S.
+ZA DUBOSCOA
+64990 Villefranque
+FRANCE 
 
-Moreover, as Steffen asked later in the thread, in the particular case
-I've presented in the original mail of this thread, what would be the
-correct fix ?
-
-I have also other cases of configure cache misuse by two independent
-packages. I'm often able to track down the cause of the problem, but
-I'm not autoconf-ed enough to know which is the correct fix. May I
-present those other cases to the list ?
-
-Thanks again for your inputs,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+tel : +33 (0)5 59 44 26 08
+fax : +33 (0)5 59 31 15 11 
