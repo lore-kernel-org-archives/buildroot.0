@@ -1,56 +1,51 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Mon,  2 Aug 2010 23:08:15 +0200
-Subject: [Buildroot] [PATCH 1/2] ntfsprogs: add option to include ntfsmount
-Message-ID: <1280783296-18965-1-git-send-email-m-starostik@versanet.de>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Mon, 2 Aug 2010 14:15:49 -0700
+Subject: [Buildroot] Incorrect selection of the C library Error
+In-Reply-To: <AANLkTi=UxWwfu99d519USYQV-YnNyXZbSXbdPmrVpsC4@mail.gmail.com>
+References: <AANLkTi=UxWwfu99d519USYQV-YnNyXZbSXbdPmrVpsC4@mail.gmail.com>
+Message-ID: <20100802211549.GC2302@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently libfuse is added as a build time dependency for ntfsprogs if
-it is included in the target, which makes ntfsmount available. However,
-that binary is never installed.
-This adds a config option to explicitly request mount support and if so,
-pulls in libfuse as a dependency.
+On (02/08/10 20:51), anthony henderson wrote:
+> Hi all,
+> I've just started using buildroot to cross compile some packages I need that
+> are bundled with it.  I have to use the cross compiler provided via the
+> vendor (cirrus gcc 4.11 arm 920T build) so I set up for ARM and 920T then I
+> set toolchain->type to external and toolchain -> path to my compiler path,
+> /ArmDevelopment/crosscompiler/4.1.1-920t and set path->external toolchain
+> prefix to arm-linux.  I then make, when I make I get an error Incorrect ABI
+> setting, to be exact
+> 
+> Checking external toolchain settings
+> Incorrect ABI setting
+> make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
+> Error 1
+> 
+> Some searching showed I needed to change target ABI to OBI, I did this and
+                                                          ^
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- package/ntfsprogs/Config.in    |    7 +++++++
- package/ntfsprogs/ntfsprogs.mk |    3 ++-
- 2 files changed, 9 insertions(+), 1 deletions(-)
+OABI I guess.
 
-diff --git a/package/ntfsprogs/Config.in b/package/ntfsprogs/Config.in
-index 836a2b6..eff1ddc 100644
---- a/package/ntfsprogs/Config.in
-+++ b/package/ntfsprogs/Config.in
-@@ -7,5 +7,12 @@ config BR2_PACKAGE_NTFSPROGS
- 
- 	  http://www.linux-ntfs.org/
- 
-+config BR2_PACKAGE_NTFSPROGS_NTFSMOUNT
-+	bool "ntfsmount"
-+	depends on BR2_PACKAGE_NTFSPROGS
-+	select BR2_PACKAGE_LIBFUSE
-+	help
-+	  include support for mounting NTFS filesystems, requires libfuse
-+	  
- comment "ntfsprogs requires a toolchain with WCHAR and LARGEFILE support"
- 	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
-diff --git a/package/ntfsprogs/ntfsprogs.mk b/package/ntfsprogs/ntfsprogs.mk
-index 2046d29..895a324 100644
---- a/package/ntfsprogs/ntfsprogs.mk
-+++ b/package/ntfsprogs/ntfsprogs.mk
-@@ -12,8 +12,9 @@ NTFSPROGS_INSTALL_STAGING:=yes
- NTFSPROGS_BIN:=ntfscat ntfscluster ntfscmp ntfsfix ntfsinfo ntfsls
- NTFSPROGS_SBIN:=ntfsclone ntfscp ntfslabel ntfsresize ntfsundelete mkntfs
- 
--ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+ifeq ($(BR2_PACKAGE_NTFSPROGS_NTFSMOUNT),y)
- NTFSPROGS_DEPENDENCIES += libfuse
-+NTFSPROGS_BIN += ntfsmount
- endif
- 
- $(eval $(call AUTOTARGETS,package,ntfsprogs))
--- 
-1.7.1
+> got the following error when I tried to make, Incorrect selection of the C
+> library, to be exact
+> 
+> Checking external toolchain settings
+> Incorrect selection of the C library
+> make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
+> Error 255
+> 
+> I tried setting toolchain->external c lib to both uclibc and glibc but
+> neither helped, can anyone point me in the right direction.
+> Thanks
+> 
+> -- 
+> Regards Tony
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
