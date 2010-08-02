@@ -1,66 +1,67 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Sun, 1 Aug 2010 15:23:03 -0700
-Subject: [Buildroot] build of gcc 4.3.5 broken with
- BR2_GCC_USE_SJLJ_EXCEPTIONS
-In-Reply-To: <20100727203043.74441c59@surf>
-References: <4C48BF3D.4040301@gmx.net>
-	<201007230005.22462.yann.morin.1998@anciens.enib.fr>
-	<20100727203043.74441c59@surf>
-Message-ID: <20100801222303.GC30928@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Aug 2010 03:33:53 +0200
+Subject: [Buildroot] Correct way to check for clock_gettime()
+In-Reply-To: <AANLkTi=7t2kQXj96nktqEd=T3zDOvBXQDrjXW+u7FpG0@mail.gmail.com>
+References: <20100730135118.45adcc67@surf>
+	<AANLkTi=7t2kQXj96nktqEd=T3zDOvBXQDrjXW+u7FpG0@mail.gmail.com>
+Message-ID: <20100802033353.281d9bc8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On (27/07/10 20:30), Thomas Petazzoni wrote:
-> On Fri, 23 Jul 2010 00:05:22 +0200
-> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
-> 
-> > Marcus, All,
-> > 
-> > On Thursday 22 July 2010 23:59:25 Ossy wrote:
-> > > I don't need this particular option (BR2_GCC_USE_SJLJ_EXCEPTIONS)
-> > > but anyway my buildroot version (current git tree) wasn't able to
-> > > build 4.3.5-final with BR2_GCC_USE_SJLJ_EXCEPTIONS=y. After
-> > > deactivating it everything was fine again.
-> > 
-> > Yes, it happens too for me with armeb. Other archs are fine for me
-> > with sjlj enabled.
-> > 
-> > I did not dig up why, so I /simply/ turn off sjlj for ermeb.
-> 
-> Does having this BR2_GCC_USE_SJLJ_EXCEPTIONS option makes sense ? In
-> which case would this be useful ?
+Hello Dave,
 
-It makes sense if you are using older compilers and when DWARF unwinding
-did not work completely. But otherwise its slow in performance and probably
-can be replaced with dwarf2 exceptions I think hpux is one which does not
-support dwarf2 exception per gcc sources.
-sjlj handles exceptions faster but also adds burden of calling setjmp in 
-non excepting case therefore slowing down the execution but code is
-smaller.
+Thanks for your feedback!
 
-I think you could leave this option in but dont make it default.
+On Fri, 30 Jul 2010 20:03:28 +0000
+Dave Hart <davehart@gmail.com> wrote:
 
+> Neither, I'm afraid.  On their own, both work correctly, including
+> with a configuration cache file.  The error is in sharing the
+> configuration cache across independently-maintained packages that are
+> not designed to share a cache.  I think if you continue sharing the
+> cache across independent packages, you will continue to expose
+> problems like this over time.
 > 
-> According to http://choices.cs.uiuc.edu/exceptions.pdf, the default
-> mechanism used by g++ for exceptions is faster and better than SJLJ.
-> 
-> If there are only corner use cases, I'm all for getting rid of this
-> option in BR. Advanced users can always use
-> BR2_EXTRA_GCC_CONFIG_OPTIONS to add --enable-sjlj-exceptions to the gcc
-> configuration if they want.
-> 
-> Thoughts ?
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> I am sympathetic to your desire to share the cache.  I do test builds
+> on some remarkably slow machines, including one which takes nearly 20
+> minutes of configure runs for the NTP package (and its SNTP
+> subpackage) without a primed cache.  I invested a good bit of work to
+> make sure NTP's configure.ac files use the cache properly to ensure I
+> can re-use caches over time, including adding a versioning mechanism
+> to purge the cache automatically after a change invalidating old
+> cached results.  I wish I had a better answer to offer, but I think
+> you simply need to ensure the two packages are not sharing a cache,
+> which means ensuring they are not nested under a common configure
+> script, and invoking them with different --cache-file options.
+
+Obviously, for Buildroot, the main advantage of cache files is if we
+can share them between packages. A given package is rarely built twice.
+
+However, the documentation of Autoconf seems to say quite the
+oppositive than what you're saying. See
+http://www.gnu.org/software/hello/manual/autoconf/Cache-Files.html,
+which says:
+
+"The site initialization script can specify a site-wide cache file to
+use, instead of the usual per-program cache. In this case, the cache
+file gradually accumulates information whenever someone runs a new
+configure script. (Running configure merges the new cache results with
+the existing cache file.) This may cause problems, however, if the
+system configuration (e.g., the installed libraries or compilers)
+changes and the stale cache file is not deleted."
+
+So the ability of sharing the cache between execution of
+different configure scripts is a documented feature. Is it just that in
+reality it doesn't work that well ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
