@@ -1,42 +1,31 @@
-From: anthony henderson <development@fair-games.com>
-Date: Mon, 2 Aug 2010 20:51:14 +0100
-Subject: [Buildroot] Incorrect selection of the C library Error
-Message-ID: <AANLkTi=UxWwfu99d519USYQV-YnNyXZbSXbdPmrVpsC4@mail.gmail.com>
+From: Malte Starostik <m-starostik@versanet.de>
+Date: Mon,  2 Aug 2010 23:08:16 +0200
+Subject: [Buildroot] [PATCH 2/2] ntfsprogs needs host-pkg-config
+In-Reply-To: <1280783296-18965-1-git-send-email-m-starostik@versanet.de>
+References: <1280783296-18965-1-git-send-email-m-starostik@versanet.de>
+Message-ID: <1280783296-18965-2-git-send-email-m-starostik@versanet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-I've just started using buildroot to cross compile some packages I need that
-are bundled with it.  I have to use the cross compiler provided via the
-vendor (cirrus gcc 4.11 arm 920T build) so I set up for ARM and 920T then I
-set toolchain->type to external and toolchain -> path to my compiler path,
-/ArmDevelopment/crosscompiler/4.1.1-920t and set path->external toolchain
-prefix to arm-linux.  I then make, when I make I get an error Incorrect ABI
-setting, to be exact
+Signed-off-by: Malte Starostik <m-starostik@versanet.de>
+---
+ package/ntfsprogs/ntfsprogs.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Checking external toolchain settings
-Incorrect ABI setting
-make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
-Error 1
-
-Some searching showed I needed to change target ABI to OBI, I did this and
-got the following error when I tried to make, Incorrect selection of the C
-library, to be exact
-
-Checking external toolchain settings
-Incorrect selection of the C library
-make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
-Error 255
-
-I tried setting toolchain->external c lib to both uclibc and glibc but
-neither helped, can anyone point me in the right direction.
-Thanks
-
+diff --git a/package/ntfsprogs/ntfsprogs.mk b/package/ntfsprogs/ntfsprogs.mk
+index 895a324..ecda40e 100644
+--- a/package/ntfsprogs/ntfsprogs.mk
++++ b/package/ntfsprogs/ntfsprogs.mk
+@@ -8,6 +8,7 @@ NTFSPROGS_SOURCE:=ntfsprogs-$(NTFSPROGS_VERSION).tar.gz
+ NTFSPROGS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-ntfs/
+ NTFSPROGS_CONF_OPT:=--disable-gnome-vfs --program-prefix="" --disable-crypto
+ NTFSPROGS_INSTALL_STAGING:=yes
++NTFSPROGS_DEPENDENCIES:=host-pkg-config
+ 
+ NTFSPROGS_BIN:=ntfscat ntfscluster ntfscmp ntfsfix ntfsinfo ntfsls
+ NTFSPROGS_SBIN:=ntfsclone ntfscp ntfslabel ntfsresize ntfsundelete mkntfs
 -- 
-Regards Tony
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100802/66fc6b86/attachment-0001.html>
+1.7.1
