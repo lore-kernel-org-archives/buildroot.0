@@ -1,31 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 3 Aug 2010 11:20:14 +0200
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 3 Aug 2010 21:14:11 +1000
 Subject: [Buildroot] Generate root password at build
 In-Reply-To: <4C57DB6D.20800@fpga-art.de>
 References: <4C57DB6D.20800@fpga-art.de>
-Message-ID: <201008031120.14512.yann.morin.1998@anciens.enib.fr>
+Message-ID: <001701cb32fd$011fff60$035ffe20$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lars, All,
-
-On Tuesday 03 August 2010 110341 Lars Lockenvitz wrote:
-> I'm looking for an option in Buildroot (version 2010.05) to set an root 
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Lars Lockenvitz
+> Sent: Tuesday, 3 August 2010 7:04 PM
+> To: buildroot at uclibc.org
+> Subject: [Buildroot] Generate root password at build
+> 
+> Hello,
+> 
+> I'm looking for an option in Buildroot (version 2010.05) to set an root
 > password, that will be generate at build.
 > Is there a possibility?
+> 
+> Or does someone know a way via script?
 
-man 1 mkpasswd
+This would be a very good feature to have in menuconfig. If I knew how to do
+it I'd implement it myself!
 
-Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Paul.
