@@ -1,51 +1,43 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Mon, 2 Aug 2010 14:15:49 -0700
-Subject: [Buildroot] Incorrect selection of the C library Error
-In-Reply-To: <AANLkTi=UxWwfu99d519USYQV-YnNyXZbSXbdPmrVpsC4@mail.gmail.com>
-References: <AANLkTi=UxWwfu99d519USYQV-YnNyXZbSXbdPmrVpsC4@mail.gmail.com>
-Message-ID: <20100802211549.GC2302@gmail.com>
+From: Nataraj S Narayan <natarajsn@gmail.com>
+Date: Tue, 3 Aug 2010 10:11:21 +0530
+Subject: [Buildroot] BR:libiconv issues on Lenny host
+Message-ID: <AANLkTinFDDJzA8-wEMzp6ht--qH0cmnmh0acNFpTF4LZ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On (02/08/10 20:51), anthony henderson wrote:
-> Hi all,
-> I've just started using buildroot to cross compile some packages I need that
-> are bundled with it.  I have to use the cross compiler provided via the
-> vendor (cirrus gcc 4.11 arm 920T build) so I set up for ARM and 920T then I
-> set toolchain->type to external and toolchain -> path to my compiler path,
-> /ArmDevelopment/crosscompiler/4.1.1-920t and set path->external toolchain
-> prefix to arm-linux.  I then make, when I make I get an error Incorrect ABI
-> setting, to be exact
-> 
-> Checking external toolchain settings
-> Incorrect ABI setting
-> make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
-> Error 1
-> 
-> Some searching showed I needed to change target ABI to OBI, I did this and
-                                                          ^
+Hi
 
-OABI I guess.
+The following error pops up often after a 'make' but goes away after a
+"dpkg-reconfigure recode"
 
-> got the following error when I tried to make, Incorrect selection of the C
-> library, to be exact
-> 
-> Checking external toolchain settings
-> Incorrect selection of the C library
-> make: *** [/root/buildroot-2010.05/output/stamps/ext-toolchain-installed]
-> Error 255
-> 
-> I tried setting toolchain->external c lib to both uclibc and glibc but
-> neither helped, can anyone point me in the right direction.
-> Thanks
-> 
-> -- 
-> Regards Tony
+# Build the host utils. Need to add an install target...
+/usr/bin/make -j1 -C /windows/buildroot/output/toolchain/uClibc-0.9.31/utils
+\
+PREFIX=/windows/buildroot/output/staging \
+HOSTCC="/usr/bin/gcc" \
+hostutils
+make[1]: Entering directory
+`/windows/buildroot/output/toolchain/uClibc-0.9.31/utils'
+HOSTCC utils/ldconfig.host
+HOSTCC utils/ldd.host
+HOSTCC utils/iconv.host
+/tmp/ccQqR1sV.o: In function `main':
+iconv.c:(.text+0x1da): undefined reference to `libiconv_open'
+iconv.c:(.text+0x2c8): undefined reference to `libiconv'
+iconv.c:(.text+0x3c8): undefined reference to `libiconv_close'
+collect2: ld returned 1 exit status
+make[1]: *** [../utils/iconv.host] Error 1
+make[1]: Leaving directory
+`/windows/buildroot/output/toolchain/uClibc-0.9.31/utils'
+make: *** [/windows/buildroot/output/staging/usr/lib/libc.a] Error 2
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+regards
+
+Nataraj
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100803/da9b7fce/attachment.html>
