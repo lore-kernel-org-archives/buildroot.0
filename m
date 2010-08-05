@@ -1,39 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Aug 2010 15:34:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 2359] New: [luafilesystem] remove LARGE_FILE
-	constraint
-Message-ID: <bug-2359-163@https.bugs.busybox.net/>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu,  5 Aug 2010 18:46:24 +0200
+Subject: [Buildroot] [PATCH 1/2] kexec: update to version 2.0.2 and update
+	download location
+Message-ID: <1281026784-20324-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2359
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/kexec/kexec.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-           Summary: [luafilesystem] remove LARGE_FILE constraint
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: francois.perrad at gadz.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created attachment 2311
-  --> https://bugs.busybox.net/attachment.cgi?id=2311
-fix
-
-the attached patch removes the LARGE_FILE constraint for the package
-LuaFileSystem in 2010.08-rc1.
-
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 154ebf8..f10b1e0 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -3,9 +3,9 @@
+ # kexec
+ #
+ #############################################################
+-KEXEC_VERSION = 2.0.1
++KEXEC_VERSION = 2.0.2
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
+-KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
++KEXEC_SITE = http://www.kernel.org/pub/linux/utils/kernel/kexec/
+ # no install-strip/install-exec
+ KEXEC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
