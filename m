@@ -1,20 +1,42 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Fri, 6 Aug 2010 21:52:55 +1000
-Subject: [Buildroot] [RFC] [PATHC] Added splashy package update
-In-Reply-To: <AANLkTimkUu0UDnEEvh7eHLYpwE=P4qufPgYf11+ODeXk@mail.gmail.com>
-References: <AANLkTimkUu0UDnEEvh7eHLYpwE=P4qufPgYf11+ODeXk@mail.gmail.com>
-Message-ID: <AANLkTinvOwPm+MGXEj5hPGrknZp1RzZtW-h35RXqOh5M@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  6 Aug 2010 13:30:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 2365] New: [lua] add new patches
+Message-ID: <bug-2365-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 6, 2010 at 9:25 PM, Belisko Marek <marek.belisko@gmail.com> wrote:
-> Signed-off-by: Marek Belisko <marek.belisko@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=2365
 
-Reviewed-by: Mitch Davis <mjd@afork.com>
+           Summary: [lua] add new patches
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: francois.perrad at gadz.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Looks good Marek!
 
-Mitch.
+Created attachment 2317
+  --> https://bugs.busybox.net/attachment.cgi?id=2317
+new patches
+
+Official Lua patches are on http://www.lua.org/bugs.html.
+
+The attached patch adds 2 latest patches (bug7 & bug8).
+Old patches from http://www.lua.org/bugs.html are renamed with prefix lua-bug.
+
+Unrenamed patches are BuildRoot specific.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
