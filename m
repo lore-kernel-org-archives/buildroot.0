@@ -1,65 +1,46 @@
-From: Piet Delaney <pdelaney@tensilica.com>
-Date: Fri, 6 Aug 2010 21:53:19 -0700
-Subject: [Buildroot] Xtensa Patch to allow Xtensa ARCH to start building on
- virgin clone of uclibc buildroot tree.
-Message-ID: <4C5CE6BF.9050602@tensilica.com>
+From: anthony henderson <development@fair-games.com>
+Date: Sat, 7 Aug 2010 17:10:42 +0100
+Subject: [Buildroot] can't create /dev/ttys0 on cirrus ARM EP93XX
+Message-ID: <AANLkTikvxE-my1WWLsNAYZnXRY6RiP-NtyxpgsNoCyN6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Would you review at this patch.
+Hi all,
+I've built a new rootfs for a cirrus logic EP93XX chip, the rootfs provided
+is very old and no extras cross compiled software (directfb etc).
 
-It's derived from you last stable tag 2010.05. I've attached it and show below:
+So I've ran buildroot for the ARM 920T.  All seems fine.  As the board has
+no keyboard ect development is done via serial port.  This is set in the old
+rootfs from etc/initab via
+ttyAM0::askfirst:-/bin/sh
 
-Signed-off-by: Pete Delaney <piet@tensilica.com>
----
-  toolchain/gcc/gcc-uclibc-4.x.mk |   10 +++++-----
-  1 files changed, 5 insertions(+), 5 deletions(-)
+I tried to start the new rootfs, but it appears to want to start from video
+command prompt.  So I copied the inittab from the old working system to the
+new rootfs, this gave an error finding ttyAM0.
+On searching the new rootfs I can see dev doesn't have this node.  I can see
+ttyS0, so I thought this might be used?  I tried changing the command to
+ttyS0::askfirst:-/bin/sh.  But all this shows on screen is
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index f17b73f..51f47e2 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -25,11 +25,6 @@ else
-   GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
-  endif
+/bin/'sh: can't create /dev/ttyS0: No such device or address.
 
--ifneq ($(filter xtensa%,$(ARCH)),)
--include target/xtensa/patch.in
--GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
--endif
--
-  GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
-  GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
-  GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
-@@ -37,6 +32,11 @@ GCC_CAT:=$(BZCAT)
-  GCC_STRIP_HOST_BINARIES:=nope
-  GCC_SRC_DIR:=$(GCC_DIR)
 
-+ifneq ($(filter xtensa%,$(ARCH)),)
-+include target/xtensa/patch.in
-+GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
-+endif
-+
-  # Branding works on >= 4.3
-  ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
-  BUILDROOT_VERSION_STRING=$(call qstrip,$(BR2_VERSION))
+While my pc serial port just keeps repeating
+
+ /bin/'sh: can't create /dev/ttyS0: No such device or address.
+/bin/'sh: can't create /dev/ttyS0: No such device or address.
+...
+
+Can anyone advise.  I new to embedded Linux so am finding information hard
+to come by.  Thanks in advance :)
+
+
+
+
 -- 
-1.6.0.6
-
-This is the 1st patch I've added to your tree that I've cloned and added here:
-
-	http://git.linux-xtensa.org/cgi-bin/git.cgi?p=buildroot/buildroot-uclibc.git;a=commit;h=bd793839521c3c8254662922eb3ed174df8f4958
-
-We would like to get our Buildroot environment up-to-date.
-
--piet
+Regards Tony
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001--XTENSA-Move-xtensa-code-so-it-can-use-GCC_PATCH_DI.patch
-Type: text/x-patch
-Size: 1306 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100806/0a77e33a/attachment.bin>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100807/09b7c6af/attachment.html>
