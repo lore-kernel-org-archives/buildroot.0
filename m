@@ -1,42 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Aug 2010 22:50:32 +0200
-Subject: [Buildroot] [PATCH 0/2] Add support for Alix2d3 board from PC
-	Engines
-In-Reply-To: <4C5C5EB1.4020500@gmail.com>
-References: <20100712204654.17842.63829.stgit@darius-desktop>
-	<4C5C5EB1.4020500@gmail.com>
-Message-ID: <20100806225032.669dfa12@surf>
+From: Piet Delaney <pdelaney@tensilica.com>
+Date: Fri, 6 Aug 2010 21:53:19 -0700
+Subject: [Buildroot] Xtensa Patch to allow Xtensa ARCH to start building on
+ virgin clone of uclibc buildroot tree.
+Message-ID: <4C5CE6BF.9050602@tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Would you review at this patch.
 
-On Fri, 06 Aug 2010 22:12:49 +0300
-Darius Augulis <augulis.darius@gmail.com> wrote:
+It's derived from you last stable tag 2010.05. I've attached it and show below:
 
-> Did anybody review it? Maybe it's ready to merge it to main line?
+Signed-off-by: Pete Delaney <piet@tensilica.com>
+---
+  toolchain/gcc/gcc-uclibc-4.x.mk |   10 +++++-----
+  1 files changed, 5 insertions(+), 5 deletions(-)
 
-As 2010.08-rc1 has been released, only bug fixes will be merged until
-the release of 2010.08.
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index f17b73f..51f47e2 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -25,11 +25,6 @@ else
+   GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
+  endif
 
-My top-priority item for 2010.11 is to cleanup the board support in
-Buildroot (I already have a stack of patches started on this topic). As
-part of this effort, I intend to merge all pending contributions that
-add board support.
+-ifneq ($(filter xtensa%,$(ARCH)),)
+-include target/xtensa/patch.in
+-GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
+-endif
+-
+  GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
+  GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
+  GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
+@@ -37,6 +32,11 @@ GCC_CAT:=$(BZCAT)
+  GCC_STRIP_HOST_BINARIES:=nope
+  GCC_SRC_DIR:=$(GCC_DIR)
 
-However, I don't consider this one as ready, as it adds a new complete
-target skeleton for just a new Grub configuration, as discussed a week
-ago on the list. We need to find a different solution to this than
-duplicating the target skeleton.
-
-Thanks,
-
-Thomas
++ifneq ($(filter xtensa%,$(ARCH)),)
++include target/xtensa/patch.in
++GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
++endif
++
+  # Branding works on >= 4.3
+  ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
+  BUILDROOT_VERSION_STRING=$(call qstrip,$(BR2_VERSION))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.6.0.6
+
+This is the 1st patch I've added to your tree that I've cloned and added here:
+
+	http://git.linux-xtensa.org/cgi-bin/git.cgi?p=buildroot/buildroot-uclibc.git;a=commit;h=bd793839521c3c8254662922eb3ed174df8f4958
+
+We would like to get our Buildroot environment up-to-date.
+
+-piet
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001--XTENSA-Move-xtensa-code-so-it-can-use-GCC_PATCH_DI.patch
+Type: text/x-patch
+Size: 1306 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100806/0a77e33a/attachment.bin>
