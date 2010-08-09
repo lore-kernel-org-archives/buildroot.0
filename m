@@ -1,38 +1,52 @@
-From: James Ronald <james.ronald@gmail.com>
-Date: Mon, 9 Aug 2010 10:18:14 -0400
-Subject: [Buildroot] Building external i586 ARM cross toolchain on x64
-	Linux
-In-Reply-To: <i3hrp5$nia$1@dough.gmane.org>
-References: <AANLkTik6X-qDUV4Uxf6x7FfBwZG6SinA7gzFC+18Aefa@mail.gmail.com>
-	<i3hrp5$nia$1@dough.gmane.org>
-Message-ID: <AANLkTi=cJmoQ=45zMBcS2pQeyEENWgtXtic8=Z-U8TLT@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Aug 2010 16:18:26 +0200
+Subject: [Buildroot] setting a driver in directfb through buildroot
+In-Reply-To: <AANLkTi=_+g2q3yxoF+hH18vYPsWZXFq25nYwUf118WQ1@mail.gmail.com>
+References: <AANLkTi=_+g2q3yxoF+hH18vYPsWZXFq25nYwUf118WQ1@mail.gmail.com>
+Message-ID: <20100809161826.319e58f3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 6, 2010 at 4:36 PM, Grant Edwards <grant.b.edwards@gmail.com>wrote:
+Hello Anthony,
 
-> On 2010-08-06, James Ronald <james.ronald@gmail.com> wrote:
->
-> > Building such on 32 bit Linux distribution works great but I would like
-> to
-> > switch to using a 64 bit Linux distribution and still be able to build an
-> > 32bit (i586) external (portable) tool chain.
->
-> I don't know why the procedure would be any different.  What exactly
-> failed?
->
+On Mon, 9 Aug 2010 13:05:25 +0100
+anthony henderson <development@fair-games.com> wrote:
 
-Grant,
+> I hope someone can help me out on this.
+> I've compiled my rootfs in build root with directfb set.  I'm using a cirrus
+> logic FB93xx, which as far as I can see it has a driver.  I can't see any
+> way of setting the driver in make menuconfig.  I can however see in the
+> directory buildroot/package/directfb a file called config.in.  Can I set
+> here?  If so can anyone tell me what to put in for the EP93XX driver, I
+> can't find anything documented?  I have tried setting from my ARM system
+> using the directfb-config  with
+> directfb-config --graphics=ep93xx.  This doesn't work.  I just says driver
+> none.
+> 
+> I think I need the correct driver as directfb examples are crashing with
+> directfbcreate(&dfb) initialization error!
 
-Buildroot will automatically build a 64 bit cross toolchain when run on 64
-bit Linux and a 32 bit cross toolchain when run on 32 bit Linux.  I am
-asking if there is a buildroot "preferred method" or "best practice" for
-building a 32 bit cross toolchain on on 64 bit Linux.
+I've cooked the attached patch to allow a Buildroot option to enable
+the DirectFB ep9x driver. Could you apply the patch to Buildroot, enable
+the BR2_PACKAGE_DIRECTFB_EP9X option, and rebuild ?
 
-- Jim
+Note: I haven't tested the patch, so it may not work.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100809/e19e22ef/attachment.html>
+A non-text attachment was scrubbed...
+Name: 0001-Add-support-for-DirectFB-EP9x-driver.patch
+Type: text/x-patch
+Size: 1320 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100809/0469523e/attachment.bin>
