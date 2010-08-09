@@ -1,42 +1,58 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Sun, 8 Aug 2010 20:39:22 +1000
-Subject: [Buildroot] ALSA on the EP93XX
-In-Reply-To: <AANLkTin-Qp4fxZDnnyfAeyTigZ9rDpQ2gwu2Nah7XRzM@mail.gmail.com>
-References: <AANLkTin-Qp4fxZDnnyfAeyTigZ9rDpQ2gwu2Nah7XRzM@mail.gmail.com>
-Message-ID: <AANLkTikVCzWKCtfhK6vXhSC7VTSj=-dcw5=bBaE_sUWB@mail.gmail.com>
+From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
+Date: Mon, 09 Aug 2010 09:16:46 +0200
+Subject: [Buildroot] kernel header patches
+In-Reply-To: <4C5BF511.8070704@gmx.net>
+References: <4C567B5D.70600@fh-kl.de> <4C5BF511.8070704@gmx.net>
+Message-ID: <4C5FAB5E.1090901@fh-kl.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 8, 2010 at 7:32 PM, anthony henderson
-<development@fair-games.com> wrote:
+
+
+Ossy schrieb:
+> Am 02.08.2010 10:01, schrieb Patrick Ziegler:
+>>
+>> Is there an official way to apply patches to the kernel headers and
+>> kernel sources depending on the board ?
+>>
+> For my Board I need to apply some minor patches to the kernel. My
+> configuration looks like this:
 >
-> I've selected from make menuconfig
-> audi video libs....
-> |______> alsa
-> ?????????? |__> directory with ALSA /dev/snd
-> ?????????????????? build PCMplugins ALL
-> ?????????????????? build control plugins ALL
-> ????????????????? aload
-> ????????????????? mixer
-> ???????????????? pcm
-> ???????????????? rawmidi
-> ???????????????? etc
+> Location of patches in project tree:
+> target/device/sheevaplug/SeagateDockStar/kernel-patches/
+> -> linux-2.6.34-0001-ABC.patch
+> -> linux-2.6.34-0002-XYZ.patch
+> -> DONOTUSENOW-linux-2.6.34-0002-XYZTesting.patch
+>
+> .config includes:
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="target/device/sheevaplug/SeagateDockStar/SeagateDockStar-linux-2.6.34.1.config"
+>
+> BR2_LINUX_KERNEL_PATCH="target/device/sheevaplug/SeagateDockStar/kernel-patches/"
+>
+>
+> The patches were correctly applied during kernel compilation via
+> buildroot.
 
-These are the user-space ALSA components, such as libasound.  Check to
-see that the kernel drivers for your hardware are being compiled.  If
-your kernel has ALSA sound support, and if the drivers are loaded (if
-they are compiled as kernel modules, make sure they've been loaded -
-check /proc/modules), you'll have a /proc/asound/cards file, and
-catting that file should show your sound hardware.
+Thanks, but unfortunately this works only for the kernel compilation not
+for the kernel headers.
 
-> I know my board kernel has sound as the provided rootfs will play it using
-> aplay
+-- 
 
-Try running the aplay command via "strace".  This will show you the
-device files and shared libraries it's using.  That may give you some
-clues as to how this app is working (however poorly).
+Dipl.-Inf. (FH) Patrick Ziegler
 
-Mitch.
+University Of Applied Sciences
+Kaiserslautern
+
+Amerikastrasse 1
+D-66482 Zweibruecken
+Germany
+
+Phone:	+49 6332 914 526
+Mail:	patrick.ziegler at fh-kl.de
+
+http://www.fh-kl.de
+http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
