@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Aug 2010 20:25:56 +0200
-Subject: [Buildroot] Building external i586 ARM cross toolchain on x64
- Linux
-In-Reply-To: <i3p3rq$ve8$1@dough.gmane.org>
-References: <AANLkTik6X-qDUV4Uxf6x7FfBwZG6SinA7gzFC+18Aefa@mail.gmail.com>
-	<i3hrp5$nia$1@dough.gmane.org>
-	<AANLkTi=cJmoQ=45zMBcS2pQeyEENWgtXtic8=Z-U8TLT@mail.gmail.com>
-	<i3p3rq$ve8$1@dough.gmane.org>
-Message-ID: <20100810202556.5835c406@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Aug 2010 21:59:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 779] uClibc (re)building fail
+In-Reply-To: <bug-779-163@https.bugs.busybox.net/>
+References: <bug-779-163@https.bugs.busybox.net/>
+Message-ID: <20100810215906.17FDE8731D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 9 Aug 2010 14:37:47 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=779
 
-> If what you want to do is use Buildroot on architecture A to build a
-> compiler to run on architecture B for for a target with architecture
-> C, then that's called a "Canadian Cross", and I don't think buildroot
-> will do that (unless there's some special case in gcc/binutils for the
-> IA32 and AMD64 architectures).
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Yes, we don't support Canadian Cross builds in Buildroot.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Regards,
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+I finally took the time to try to reproduce the issue today. So what I did is :
 
-Thomas
+ 1) Build an ARM OABI toolchain + Busybox system, was successful
+ 2) Touched uClibc .config file
+ 3) Restarted the build, and it was successful again
+
+In other words: I haven't been able to reproduce the issue you're describing.
+Since the bug has been opened quite a long time ago, it might be possible that
+we fixed it in the mean time. Or that I didn't managed to reproduce it because
+I didn't fully understand the reproduction procedure detailed below.
+
+As the bug is rather old and since I didn't manage to reproduce it, I'll close
+it as WORKSFORME. However, Peter, if you can still reproduce it, do not
+hesitate to reopen the bug, and attach your Buildroot .config file. Thanks !
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
