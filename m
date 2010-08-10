@@ -1,30 +1,33 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Aug 2010 17:25:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 635] util-linux fails to build in 2009.08
-In-Reply-To: <bug-635-163@https.bugs.busybox.net/>
-References: <bug-635-163@https.bugs.busybox.net/>
-Message-ID: <20100810172543.D537C87390@busybox.osuosl.org>
+Date: Tue, 10 Aug 2010 17:28:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 687] Are AT91 patches supplied with
+ Buildroot-2009.08 out of date?
+In-Reply-To: <bug-687-163@https.bugs.busybox.net/>
+References: <bug-687-163@https.bugs.busybox.net/>
+Message-ID: <20100810172801.5904B87390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=635
+https://bugs.busybox.net/show_bug.cgi?id=687
 
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|REOPENED                    |RESOLVED
+             Status|ASSIGNED                    |RESOLVED
          Resolution|                            |FIXED
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I have added a fix for the util-linux build failure on MIPS reported in this
-bug to my for-2010.08 branch. See
-http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.08&id=55f70939b839cd5ad826ea01fcb6d363d63ee15d.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+At the end of the bug report, there isn't really a precise report of a
+particular issue, except that the Buildroot user is going to contact Atmel for
+support.
 
-This branch will be pushed to Peter before the 2010.08 release.
+I'm therefore closing this bug, but Steve, if you're still having issues with
+Buildroot, feel free to reopen it, or to open other bugs with reports of the
+issues you're facing.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
