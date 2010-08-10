@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Aug 2010 20:24:38 +0200
-Subject: [Buildroot] setting a driver in directfb through buildroot
-In-Reply-To: <AANLkTi=dGUe==EGMm8HdjynxcbFtjdpTudrry=2E9FbH@mail.gmail.com>
-References: <AANLkTi=_+g2q3yxoF+hH18vYPsWZXFq25nYwUf118WQ1@mail.gmail.com>
-	<20100809161826.319e58f3@surf>
-	<AANLkTi=dGUe==EGMm8HdjynxcbFtjdpTudrry=2E9FbH@mail.gmail.com>
-Message-ID: <20100810202438.2840b43e@surf>
+Date: Tue, 10 Aug 2010 20:25:56 +0200
+Subject: [Buildroot] Building external i586 ARM cross toolchain on x64
+ Linux
+In-Reply-To: <i3p3rq$ve8$1@dough.gmane.org>
+References: <AANLkTik6X-qDUV4Uxf6x7FfBwZG6SinA7gzFC+18Aefa@mail.gmail.com>
+	<i3hrp5$nia$1@dough.gmane.org>
+	<AANLkTi=cJmoQ=45zMBcS2pQeyEENWgtXtic8=Z-U8TLT@mail.gmail.com>
+	<i3p3rq$ve8$1@dough.gmane.org>
+Message-ID: <20100810202556.5835c406@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, 9 Aug 2010 14:37:47 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-On Tue, 10 Aug 2010 09:05:33 +0100
-anthony henderson <development@fair-games.com> wrote:
+> If what you want to do is use Buildroot on architecture A to build a
+> compiler to run on architecture B for for a target with architecture
+> C, then that's called a "Canadian Cross", and I don't think buildroot
+> will do that (unless there's some special case in gcc/binutils for the
+> IA32 and AMD64 architectures).
 
-> Thankyou Thomas,  the patch adds the driver to the menucofig, however I
-> still can't get directfb or sdl to work.  I'll keep on test and try to find
-> out why.
+Yes, we don't support Canadian Cross builds in Buildroot.
 
-Well, I don't have any hardware to test the driver, therefore I have
-absolutely no idea whether the driver works or not. If you're sure that
-your DirectFB configuration and your kernel configuration are correct,
-then you could ask the DirectFB developers directly.
-
-Best regards,
+Regards,
 
 Thomas
 -- 
