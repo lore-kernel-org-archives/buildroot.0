@@ -1,69 +1,49 @@
-From: anthony henderson <development@fair-games.com>
-Date: Tue, 10 Aug 2010 09:05:33 +0100
-Subject: [Buildroot] setting a driver in directfb through buildroot
-In-Reply-To: <20100809161826.319e58f3@surf>
-References: <AANLkTi=_+g2q3yxoF+hH18vYPsWZXFq25nYwUf118WQ1@mail.gmail.com>
-	<20100809161826.319e58f3@surf>
-Message-ID: <AANLkTi=dGUe==EGMm8HdjynxcbFtjdpTudrry=2E9FbH@mail.gmail.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 10 Aug 2010 13:22:50 +0100
+Subject: [Buildroot] Build failure with 2010.08-rc1
+Message-ID: <AANLkTikDrKuuL2q6Mp_rL-MFVg4nBoTMJeHiGAXFJoM-@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thankyou Thomas,  the patch adds the driver to the menucofig, however I
-still can't get directfb or sdl to work.  I'll keep on test and try to find
-out why.
+Hi,
 
-On 9 August 2010 15:18, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+buildroot 2010.08-rc1 is failing to build for me part way through the
+initial gcc build.
 
-> Hello Anthony,
->
-> On Mon, 9 Aug 2010 13:05:25 +0100
-> anthony henderson <development@fair-games.com> wrote:
->
-> > I hope someone can help me out on this.
-> > I've compiled my rootfs in build root with directfb set.  I'm using a
-> cirrus
-> > logic FB93xx, which as far as I can see it has a driver.  I can't see any
-> > way of setting the driver in make menuconfig.  I can however see in the
-> > directory buildroot/package/directfb a file called config.in.  Can I set
-> > here?  If so can anyone tell me what to put in for the EP93XX driver, I
-> > can't find anything documented?  I have tried setting from my ARM system
-> > using the directfb-config  with
-> > directfb-config --graphics=ep93xx.  This doesn't work.  I just says
-> driver
-> > none.
-> >
-> > I think I need the correct driver as directfb examples are crashing with
-> > directfbcreate(&dfb) initialization error!
->
-> I've cooked the attached patch to allow a Buildroot option to enable
-> the DirectFB ep9x driver. Could you apply the patch to Buildroot, enable
-> the BR2_PACKAGE_DIRECTFB_EP9X option, and rebuild ?
->
-> Note: I haven't tested the patch, so it may not work.
->
-> Regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4-initial/./gcc/xgcc
+-B/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4-initial/./gcc/
+-B/home/ldap/wnewton/src/metag-buildroot2/output/build/staging_dir/usr/metag-unknown-linux-uclibc/bin/
+-B/home/ldap/wnewton/src/metag-buildroot2/output/build/staging_dir/usr/metag-unknown-linux-uclibc/lib/
+-isystem /home/ldap/wnewton/src/metag-buildroot2/output/build/staging_dir/usr/metag-unknown-linux-uclibc/include
+-isystem /home/ldap/wnewton/src/metag-buildroot2/output/build/staging_dir/usr/metag-unknown-linux-uclibc/sys-include
+-O2  -g -Os -DIN_GCC -DCROSS_COMPILE   -W -Wall -Wwrite-strings
+-Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition
+-isystem ./include  -fomit-frame-pointer -fPIC -g0 -DHAVE_GTHR_DEFAULT
+-DIN_LIBGCC2 -D__GCC_FLOAT_NOT_NEEDED -Dinhibit_libc -I. -I.
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/.
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/../include
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/../libcpp/include
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gmp/include
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/mpfr/include
+-I/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/../libdecnumber
+-I../libdecnumber  -fexceptions -c
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/unwind-dw2.c
+-o libgcc/./unwind-dw2.o
+In file included from ./gthr-default.h:1,
+                 from
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/gthr.h:114,
+                 from
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/unwind-dw2.c:42:
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/gthr-posix.h:43:21:
+error: pthread.h: No such file or directory
+/home/ldap/wnewton/src/metag-buildroot2/output/toolchain/gcc-4.2.4/gcc/gthr-posix.h:44:20:
+error: unistd.h: No such file or directory
 
-
-
--- 
-Regards Tony
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100810/119a37b0/attachment.html>
+Which appears to be caused by trying to build gcc without headers. I
+assume the configure --with-newlib is intended to build against the
+newlib headers? How is this intended to work as by default gcc does
+not ship with newlib?
