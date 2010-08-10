@@ -1,32 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Aug 2010 17:30:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 777] Microperl doesn't build - Unterminated quoted
- string in makedepend.SH
-In-Reply-To: <bug-777-163@https.bugs.busybox.net/>
-References: <bug-777-163@https.bugs.busybox.net/>
-Message-ID: <20100810173038.530F387390@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Aug 2010 20:24:38 +0200
+Subject: [Buildroot] setting a driver in directfb through buildroot
+In-Reply-To: <AANLkTi=dGUe==EGMm8HdjynxcbFtjdpTudrry=2E9FbH@mail.gmail.com>
+References: <AANLkTi=_+g2q3yxoF+hH18vYPsWZXFq25nYwUf118WQ1@mail.gmail.com>
+	<20100809161826.319e58f3@surf>
+	<AANLkTi=dGUe==EGMm8HdjynxcbFtjdpTudrry=2E9FbH@mail.gmail.com>
+Message-ID: <20100810202438.2840b43e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=777
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Tue, 10 Aug 2010 09:05:33 +0100
+anthony henderson <development@fair-games.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+> Thankyou Thomas,  the patch adds the driver to the menucofig, however I
+> still can't get directfb or sdl to work.  I'll keep on test and try to find
+> out why.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-As I can't reproduce the reported issue and since there has been no information
-for more than six months, I'm closing this bug. However, Thomas, if you're
-still having the issue, don't hesitate to reopen the bug with a Buildroot
-.config file that would allow us to reproduce the problem. Thanks!
+Well, I don't have any hardware to test the driver, therefore I have
+absolutely no idea whether the driver works or not. If you're sure that
+your DirectFB configuration and your kernel configuration are correct,
+then you could ask the DirectFB developers directly.
 
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
