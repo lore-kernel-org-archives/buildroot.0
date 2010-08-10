@@ -1,32 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Aug 2010 16:07:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 2359] [luafilesystem] remove LARGE_FILE constraint
-In-Reply-To: <bug-2359-163@https.bugs.busybox.net/>
-References: <bug-2359-163@https.bugs.busybox.net/>
-Message-ID: <20100810160730.EF8CA873E3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Aug 2010 18:23:38 +0200
+Subject: [Buildroot] Build failure with 2010.08-rc1
+In-Reply-To: <AANLkTikMVTNWWPhg1N_30m1MsLmuSv6yjya7j76oW_v4@mail.gmail.com>
+References: <AANLkTikDrKuuL2q6Mp_rL-MFVg4nBoTMJeHiGAXFJoM-@mail.gmail.com>
+	<AANLkTikMVTNWWPhg1N_30m1MsLmuSv6yjya7j76oW_v4@mail.gmail.com>
+Message-ID: <20100810182338.5c2b987c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2359
+On Tue, 10 Aug 2010 14:23:35 +0100
+Will Newton <will.newton@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> This problem appears to only affect gcc 4.2.4.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
-                   |.org                        |
+Interesting. I'm 100% sure that 2 weeks ago, gcc 4.2.2 for AVR32 was
+building correctly. And with today's Git, it doesn't build, failing
+with the exact same error message you're having.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Let's get the opinion of Gustavo, who is following our Lua packages in
-Buildroot.
+I'm currently retrying the build with the Git as it was two weeks ago
+and will start bisecting. I'm kind of suspecting the changes made to
+the gcc build procedure to support NPTL in uClibc.
 
-Fran?ois, has the patch against luafilesystem that you're proposing been
-proposed to upstream ?
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
