@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Aug 2010 16:41:28 +0000 (UTC)
+Date: Wed, 11 Aug 2010 16:37:31 +0000 (UTC)
 Subject: [Buildroot] [Bug 2389] Generate a Makefile wrapper in $(O)
 In-Reply-To: <bug-2389-163@https.bugs.busybox.net/>
 References: <bug-2389-163@https.bugs.busybox.net/>
-Message-ID: <20100811164128.DA949873FE@busybox.osuosl.org>
+Message-ID: <20100811163731.2EFF58738D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +16,7 @@ Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at anciens.eni
-                   |.org                        |b.fr
+   Target Milestone|---                         |2010.11
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
