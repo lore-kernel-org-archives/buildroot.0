@@ -1,50 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Aug 2010 13:15:30 +0200
-Subject: [Buildroot] Linux from file in buildroot with external toolchain
-In-Reply-To: <BLU0-SMTP746AC14EB6D66389DECA50E7D90@phx.gbl>
-References: <BLU0-SMTP746AC14EB6D66389DECA50E7D90@phx.gbl>
-Message-ID: <20100811131530.39a0f6b2@surf>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 11 Aug 2010 14:43:26 +0100
+Subject: [Buildroot] Build failure with 2010.08-rc1
+In-Reply-To: <20100810182338.5c2b987c@surf>
+References: <AANLkTikDrKuuL2q6Mp_rL-MFVg4nBoTMJeHiGAXFJoM-@mail.gmail.com>
+	<AANLkTikMVTNWWPhg1N_30m1MsLmuSv6yjya7j76oW_v4@mail.gmail.com>
+	<20100810182338.5c2b987c@surf>
+Message-ID: <AANLkTi=O6T5Moy50MCccGEx=_fL5KHLJ3bv39ogGn6AK@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Aug 10, 2010 at 5:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 10 Aug 2010 14:23:35 +0100
+> Will Newton <will.newton@gmail.com> wrote:
+>
+>> This problem appears to only affect gcc 4.2.4.
+>
+> Interesting. I'm 100% sure that 2 weeks ago, gcc 4.2.2 for AVR32 was
+> building correctly. And with today's Git, it doesn't build, failing
+> with the exact same error message you're having.
+>
+> I'm currently retrying the build with the Git as it was two weeks ago
+> and will start bisecting. I'm kind of suspecting the changes made to
+> the gcc build procedure to support NPTL in uClibc.
 
-On Fri, 11 Jun 2010 14:56:35 +0200
-"Andy Gibbs" <andyg1001@hotmail.co.uk> wrote:
+Hi Thomas,
 
-> I am using buildroot 2010.05 with an external toolchain (actually 
-> crosstool-ng) and I am finding it very difficult to find the setting to take 
-> the linux source code from a local file.  If I use the buildroot toolchain 
-> instead, then under the Toolchain menu and Kernel Headers sub-menu I can 
-> select a local linux snapshot and then, under the Kernal menu select to use 
-> the same linux version as used for the headers.  This works.
-> 
-> However, when using the external toolchain, it doesn't seem possible to do 
-> this -- I expect that I have missed something really obvious, but a good 
-> while Googling, trying things and failing, and I can't find it.
-> 
-> Can anyone point me right?
+The attached hacky patch allows it to build a bit further, although it
+now blows up with an error later in the build. I think it's unrelated
+however:
 
-Well, if you're using an external toolchain, then the selection of
-which kernel headers to use when building the toolchain is done when
-building the external toolchain (i.e, in your case, inside Crosstool
-NG). Once the toolchain is built, you cannot change the kernel headers
-used to build the toolchain, which explains why Buildroot does not
-offer such an option when using an external toolchain.
+/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/./gcc/xgcc
+-shared-libgcc -B/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/./gcc
+-nostdinc++ -L/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/i686-unknown-linux-uclibc/libstdc++-v3/src
+-L/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/i686-unknown-linux-uclibc/libstdc++-v3/src/.libs
+-B/home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/bin/
+-B/home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/lib/
+-isystem /home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/include
+-isystem /home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/sys-include
+-I/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/i686-unknown-linux-uclibc/libstdc++-v3/include/i686-unknown-linux-uclibc
+-I/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/i686-unknown-linux-uclibc/libstdc++-v3/include
+-I/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4/libstdc++-v3/libsupc++
+-fno-implicit-templates -Wall -Wextra -Wwrite-strings -Wcast-qual
+-fdiagnostics-show-location=once -ffunction-sections -fdata-sections
+-g -Os -c ctype_members.cc  -fPIC -DPIC -o .libs/ctype_members.o
+ctype_members.cc: In constructor
+'std::ctype_byname<_CharT>::ctype_byname(const char*, size_t) [with
+_CharT = char]':
+ctype_members.cc:59: error: invalid use of incomplete type 'struct
+__uclibc_locale_struct'
+/home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85:
+error: forward declaration of 'struct __uclibc_locale_struct'
+ctype_members.cc:60: error: invalid use of incomplete type 'struct
+__uclibc_locale_struct'
+/home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85:
+error: forward declaration of 'struct __uclibc_locale_struct'
+ctype_members.cc:61: error: invalid use of incomplete type 'struct
+__uclibc_locale_struct'
+/home/ldap/wnewton/src/git/buildroot/output/staging/usr/i686-unknown-linux-uclibc/sys-include/bits/uClibc_locale.h:85:
+error: forward declaration of 'struct __uclibc_locale_struct'
+make[5]: *** [ctype_members.lo] Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[5]: Leaving directory
+`/home/ldap/wnewton/src/git/buildroot/output/toolchain/gcc-4.2.4-final/i686-unknown-linux-uclibc/libstdc++-v3/src'
 
-However, you can still select whichever kernel version you want for the
-real kernel build.
-
-Does this answers your question ?
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Time to turn off uClibc locales I think...
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gcc_4_2_4.patch
+Type: text/x-patch
+Size: 2501 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100811/d1602301/attachment.bin>
