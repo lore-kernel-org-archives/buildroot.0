@@ -1,26 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Aug 2010 18:02:26 +0200
-Subject: [Buildroot] [PATCH] Update busybox 1.17.1 fixes
-In-Reply-To: <4C62AE85.1070004@zacarias.com.ar>
-References: <4C62AE85.1070004@zacarias.com.ar>
-Message-ID: <20100811180226.3fc4f541@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Aug 2010 16:37:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 2389] New: Generate a Makefile wrapper in $(O)
+Message-ID: <bug-2389-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 11 Aug 2010 11:07:01 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2389
 
-> Update busybox 1.17.1 patches:
-> New shell_common fix and sed fix.
+           Summary: Generate a Makefile wrapper in $(O)
+           Product: buildroot
+           Version: 2010.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Thanks, applied to my for-2010.08 branch.
 
-Thomas
+As suggested by Yann E. Morin, it'd be nice to generate a Makefile wrapper in
+the $(O) directory, just as the kernel does.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
