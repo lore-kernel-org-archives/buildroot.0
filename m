@@ -1,25 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 12 Aug 2010 11:37:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 2371] QT MYSQL Module does not build
-In-Reply-To: <bug-2371-163@https.bugs.busybox.net/>
-References: <bug-2371-163@https.bugs.busybox.net/>
-Message-ID: <20100812113717.16DB28742A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 12 Aug 2010 09:42:56 -0300
+Subject: [Buildroot] [PATCH] Bump kernel & headers to latest stable version
+Message-ID: <4C63EC50.3080904@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2371
 
---- Comment #4 from Paul Jones <paul@pauljones.id.au>  ---
-The output from before was with the -v option enabled.
+Bump the headers to the latest stable versions:
+2.6.27.47 -> 50
+2.6.32.16 -> 18
+2.6.33.6 -> 7
+2.6.34.1 -> 3
 
-I just tried compiling on another near identical machine also running Gentoo
-and I didn't get the error, so I assume it must just be something amiss on this
-machine. I'll keep looking, everything else compiles fine.
+Bump kernel to latest stable version, 2.6.34.1 -> 3
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Keep 2.6.35 out for the next release.
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-kernel-2010.08.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100812/f82ffe0c/attachment.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot-kernel-headers-2010.08.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100812/f82ffe0c/attachment-0001.ksh>
