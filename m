@@ -1,49 +1,83 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Thu, 12 Aug 2010 17:48:52 +0100
-Subject: [Buildroot] make source: missing dir and incorrect dependency with
- external toolchain
-Message-ID: <1281631732.14333.88.camel@cabbage.rehill.info>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Thu, 12 Aug 2010 15:34:44 -0700
+Subject: [Buildroot] [PATCH] gcc 4.2.4: Fix builds for i686 when headers are
+	not present.
+Message-ID: <1281652484-27944-1-git-send-email-raj.khem@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-having done "make distclean", followed by "make ..._defconfig", I did
-"make source".  The toolchain is external, ARM glibc (gcc 4.4.1).  Host
-gcc is 4.4.4.
+with this I could reproduce this issue. Here is a patch for gcc
+that will get you over this hump drop it into toolchain/gcc/4.2.4/
+and rebuild the first problem will be ok. The problem with locales
+is a separate issue and is not related to the toolchain build
+sequence change.
 
-The first problem is that $(DL_DIR) does not get created so there is a
-failure when it is needed.
+If this works Then consider applying this patch to BR
 
-Secondly when I do "mkdir dl" and "make source" again I get an error
-when an attempt is made to download gcc because GCC_VERSION is empty (it
-should not be downloading this at all since the toolchain is external):
 
-        test -e /home/qvr/obair/buildroot.org/dl/gcc-.tar.bz2 || for site in  "http://ftp.gnu.org/pub/gnu"/gcc/gcc- http://sources.buildroot.net/; do wget --passive-ftp -nd   -P /home/qvr/obair/buildroot.org/dl $site/gcc-.tar.bz2 && exit; done
-        --2010-08-12 17:14:20--  http://ftp.gnu.org/pub/gnu/gcc/gcc-/gcc-.tar.bz2
-        Resolving ftp.gnu.org... 140.186.70.20
-        Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
-        HTTP request sent, awaiting response... 404 Not Found
-        2010-08-12 17:14:20 ERROR 404: Not Found.
-        
-        --2010-08-12 17:14:20--  http://sources.buildroot.net//gcc-.tar.bz2
-        Resolving sources.buildroot.net... 88.198.64.109
-        Connecting to sources.buildroot.net|88.198.64.109|:80... connected.
-        HTTP request sent, awaiting response... 404 Not Found
-        2010-08-12 17:14:20 ERROR 404: Not Found.
-        
-        make: *** [/home/qvr/obair/buildroot.org/dl/gcc-.tar.bz2] Error 1
-        
-I'm not certain which target it's actually processing that pulls in gcc
-but whatever it is, it succeeds in downloading gmp and mpfr archives
-before attempting gcc.  The next package to be processed in the plain
-"make" case is host-module-init-tools, followed by host-automake,
-host-autoconf and host-m4.
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ .../gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch    |   49 ++++++++++++++++++++
+ 1 files changed, 49 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
 
-The attempted gcc download does not occur when a straight "make" is
-executed so I presume that something is dependent on the toolchain being
-copied over in the early stages.
-
-Any ideas?
+diff --git a/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch b/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
+new file mode 100644
+index 0000000..9a7c909
+--- /dev/null
++++ b/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
+@@ -0,0 +1,49 @@
++--- gcc-4.2.4/gcc/unwind-sjlj.c.khem	2010-08-11 12:45:28.000000000 -0700
+++++ gcc-4.2.4/gcc/unwind-sjlj.c	2010-08-11 12:45:50.000000000 -0700
++@@ -28,6 +28,8 @@
++    Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
++    02110-1301, USA.  */
++ 
+++#ifndef inhibit_libc
+++
++ #include "tconfig.h"
++ #include "tsystem.h"
++ #include "coretypes.h"
++@@ -326,3 +328,4 @@ uw_identify_context (struct _Unwind_Cont
++ #include "unwind.inc"
++ 
++ #endif /* USING_SJLJ_EXCEPTIONS */
+++#endif
++--- gcc-4.2.4/gcc/unwind-dw2.c.khem	2010-08-11 12:42:45.000000000 -0700
+++++ gcc-4.2.4/gcc/unwind-dw2.c	2010-08-11 12:43:17.000000000 -0700
++@@ -28,6 +28,8 @@
++    Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
++    02110-1301, USA.  */
++ 
+++#ifndef inhibit_libc
+++
++ #include "tconfig.h"
++ #include "tsystem.h"
++ #include "coretypes.h"
++@@ -1537,3 +1539,5 @@ alias (_Unwind_SetIP);
++ #endif
++ 
++ #endif /* !USING_SJLJ_EXCEPTIONS */
+++#endif
+++
++--- gcc-4.2.4/gcc/unwind-dw2-fde-glibc.c.khem	2010-08-11 12:44:25.000000000 -0700
+++++ gcc-4.2.4/gcc/unwind-dw2-fde-glibc.c	2010-08-11 12:44:48.000000000 -0700
++@@ -29,6 +29,8 @@
++    segment and dl_iterate_phdr to avoid register/deregister calls at
++    DSO load/unload.  */
++ 
+++#ifndef inhibit_libc
+++
++ #ifndef _GNU_SOURCE
++ #define _GNU_SOURCE 1
++ #endif
++@@ -438,3 +440,4 @@ _Unwind_Find_FDE (void *pc, struct dwarf
++ #if defined (USE_GAS_SYMVER) && defined (SHARED) && defined (USE_LIBUNWIND_EXCEPTIONS)
++ alias (_Unwind_Find_FDE);
++ #endif
+++#endif
+-- 
+1.7.0.4
