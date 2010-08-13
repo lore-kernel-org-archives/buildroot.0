@@ -1,31 +1,31 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Fri, 13 Aug 2010 19:54:20 +0100
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 14 Aug 2010 00:52:14 +0200
 Subject: [Buildroot] linux26 in package dependency does not build linux
 In-Reply-To: <1281725350.13866.77.camel@dubciaranr1.verifone.com>
 References: <1281725350.13866.77.camel@dubciaranr1.verifone.com>
-Message-ID: <1281725660.13866.80.camel@dubciaranr1.verifone.com>
+Message-ID: <1281739934.9379.4.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BTW, "./scripts/graph-depends" shows the the dependencies are being
-recognised.
-
-And:
-$ make kmod-example-show-depends
-linux26
-
-
+Le vendredi 13 ao?t 2010 ? 19:49 +0100, Quotient Remainder a ?crit :
 > I'm adding some support for building external kernel modules for linux
 > in buildroot and have added the patches below.  It's work in progress
 > and currently doesn't have an install stage but that'll come when I get
 > over this hurdle.
+
+Good idea.
+
 > 
 > The idea is to have a minimal per-module makefile with common
 > definitions in package/kmod/kmod-common.mk.  The idea seems to work and
 > the requisite targets get set up.
+
+Why not creating package/Makefile.kmod instead of
+package/kmod/kmod-common.mk ? We already have a few .mk files there.
+
 > The problem is that building a module requires a configured kernel
 > source.
 > I thought adding a prerequisite of "linux26" in the module makefile (via
@@ -95,6 +95,13 @@ linux26
 > +define KMOD_$(call UPPERCASE,$(1))_CLEAN_CMDS
 > +	$(MAKE) -C $$(@D) KDIR=$$(LINUX26_DIR) clean
 > +endef # KMOD_$(call UPPERCASE,$(1))_CLEAN_CMDS.
+
+Have you tried to cross compile for another architecture ?
+Because I can't see where you're adding the CROSS_COMPILE parameter.
+
+linux/linux.mk defines a LINUX26_MAKE_FLAGS variable, maybe you would
+like to use it.
+
 > +
 > +$(eval $(call GENTARGETS,package/kmod,kmod-$(1)))
 > +
@@ -133,4 +140,8 @@ linux26
 > +include package/kmod/kmod-common.mk
 > +include package/kmod/*/*.mk
 > 
-> 
+
+Regards,
+
+-- 
+Lionel Landwerlin
