@@ -1,40 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Aug 2010 12:42:37 +0200
-Subject: [Buildroot] [PATCH] Bump kernel & headers to latest stable
- version
-In-Reply-To: <4C63EC50.3080904@zacarias.com.ar>
-References: <4C63EC50.3080904@zacarias.com.ar>
-Message-ID: <20100813124237.6a917118@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 13 Aug 2010 10:52:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 2239] netcat package installs its binary to target
+ as avr32-linux-netcat
+In-Reply-To: <bug-2239-163@https.bugs.busybox.net/>
+References: <bug-2239-163@https.bugs.busybox.net/>
+Message-ID: <20100813105227.BE83E87456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 12 Aug 2010 09:42:56 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2239
 
-> Bump the headers to the latest stable versions:
-> 2.6.27.47 -> 50
-> 2.6.32.16 -> 18
-> 2.6.33.6 -> 7
-> 2.6.34.1 -> 3
-> 
-> Bump kernel to latest stable version, 2.6.34.1 -> 3
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-As said on IRC, this one was missing the modifications on the SCSI
-headers patch, so I've merged your next version.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-FWIW, two days ago, this patch has been merged upstream:
-http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=083c8c1e60e5c27a277e87dbeb6b89b47937559f.
-So 2.6.35 should be the last kernel version on which we will suffer
-this long-standing problem.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Thanks Denys for forwarding the bug. Thanks Nick for the report.
 
-Cheers,
+The bug has been fixed in my for-2010.08, that will be pushed to Peter before
+the 2010.08 release. See
+http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.08.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
