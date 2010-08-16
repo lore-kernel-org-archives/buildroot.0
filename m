@@ -1,59 +1,73 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Mon, 16 Aug 2010 11:54:36 +0100
-Subject: [Buildroot] linux26 in package dependency does not build linux
-In-Reply-To: <1281739934.9379.4.camel@coalu.atr>
-References: <1281725350.13866.77.camel@dubciaranr1.verifone.com>
-	<1281739934.9379.4.camel@coalu.atr>
-Message-ID: <1281956076.13866.97.camel@dubciaranr1.verifone.com>
+From: Ossy <ossy1980@gmx.net>
+Date: Mon, 16 Aug 2010 19:57:51 +0200
+Subject: [Buildroot] Modifying boot scripts in buildroot's output
+In-Reply-To: <29415478.post@talk.nabble.com>
+References: <29415478.post@talk.nabble.com>
+Message-ID: <4C697C1F.9050304@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar Sath, 2010-08-14 ag 00:52 +0200, scr?obh Lionel Landwerlin:
+Am 12.08.2010 09:16, schrieb JNY:
+>
+> I've noticed a slight problem with the boot scripts when I install my target
+> with buildroot's output.  I know how to modify the scripts by hand after
+> installing, but would prefer buildroot's output contain the modified
+> scripts, so on installation, the scripts are correct.  I didn't (knowingly)
+> configure these scripts, so I assume it's done in the background somewhere.
+>
+If this is a general problem for ALL target builds and prevent future 
+rootfs from beeing bootable, you should describe your problem for the 
+mailinglist. Maybe it should be fixed in the main target_skeleton.
 
-> Why not creating package/Makefile.kmod instead of
-> package/kmod/kmod-common.mk ? We already have a few .mk files there.
-> 
+But I assume, you like to override the default scripts of the "built-in" 
+target_skeleton. My configuration looks like this:
+ossy at debian-virtual:~/buildroot/buildroot-dev$ ll 
+target/device/sheevaplug/SeagateDockStar/target_skeleton/
+insgesamt 0
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 bin
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 boot
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 config
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 dev
+drwxr-xr-x  7 ossy ossy 141  8. Aug 22:34 etc
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 home
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 lib
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 mnt
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 opt
+drwxr-xr-x  2 ossy ossy  92 18. Mai 22:19 root
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 sbin
+drwxr-xr-x  2 ossy ossy  19 18. Mai 22:19 sys
+drwxr-xr-x  2 ossy ossy  24 18. Mai 22:19 tmp
+drwxr-xr-x  2 ossy ossy  19  6. Aug 22:14 usr
+drwxr-xr-x 10 ossy ossy  94 18. Mai 22:19 var
 
-A lowly contributor such as myself would not dare to dream of the
-dizzying heights of adding a second-level makefile.  ;-}
-But yes, given that it's just a couple of macro definitions it probably
-should be as you say.
+ossy at debian-virtual:~/buildroot/buildroot-dev$ ls -la 
+target/device/sheevaplug/SeagateDockStar/target_skeleton/bin/
+insgesamt 4
+drwxr-xr-x  2 ossy ossy   19 18. Mai 22:19 .
+drwxr-xr-x 17 ossy ossy 4096 18. Mai 22:19 ..
+-rw-r--r--  1 ossy ossy    0 18. Mai 22:19 .empty
 
-> > The problem is that building a module requires a configured kernel
-> > source.
-> > I thought adding a prerequisite of "linux26" in the module makefile (via
-> > kmod-common.mk) would cause linux to be built and so overcome this but
-> > it is not being built before the modules.
-> > 
-> > I see that linux-fusion has linux26 in its dependency list and that
-> > seems to work so my idea shouldn't be that far-fetched.
-> > Any idea what I'm doing wrong?
-...
 
-> > +define KMOD_$(call UPPERCASE,$(1))_BUILD_CMDS
-> > +# Pass KDIR to package makefile so it can reference kernel.
-> > +	$(MAKE) -C $$(@D) KDIR=$$(LINUX26_DIR)
-> > +endef # KMOD_$(call UPPERCASE,$(1))_BUILD_CMDS.
-> > +
-...
-> Have you tried to cross compile for another architecture ?
-> Because I can't see where you're adding the CROSS_COMPILE parameter.
-> linux/linux.mk defines a LINUX26_MAKE_FLAGS variable, maybe you would
-> like to use it.
+All directories which to not differ from the default have such an 
+".empty" stamp in it.
+I wanted to modify the inittab in order to modify the default boot 
+behaviour a bit. So I put MY modified inittab in:
+ossy at debian-virtual:~/buildroot/buildroot-dev$ ls -la 
+target/device/sheevaplug/SeagateDockStar/target_skeleton/etc/inittab
+-rw-r--r-- 1 ossy ossy 1480  8. Aug 16:32 
+target/device/sheevaplug/SeagateDockStar/target_skeleton/etc/inittab
 
-You're right, I forgot this this out.  Actually, I'm cross-compiling all
-the time (for ARM on x86) but I cheated and added a config.mk in the
-kernel source that sets up ARCH, CROSS_COMPILE and INSTALL_MOD_*.  These
-should disappear when I get BR working.
+I advised the buildroot mechanism to use a customised target skeleton:
+ossy at debian-virtual:~/buildroot/buildroot-dev$ grep target_skeleton .config
+BR2_ROOTFS_SKELETON_CUSTOM_PATH="$(BOARD_PATH)/target_skeleton"
+(where board-path is target/device/sheevaplug/SeagateDockStar/ )
 
-> Regards,
-> 
-> -- 
-> Lionel Landwerlin
+The resulting rootfs includes the default content where a .empty stamp 
+is present, but it includes my modified inittab from 
+target/device/sheevaplug/SeagateDockStar/target_skeleton/etc/.
 
-Thanks for the above advice but I'm still left wondering about my main
-question: why isn't the LINUX26 dependency causing the kernel to be
-built first?
+Regards,
+Marcus
