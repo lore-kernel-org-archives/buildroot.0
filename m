@@ -1,67 +1,57 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Tue, 17 Aug 2010 11:54:11 +0100
-Subject: [Buildroot] linux26 in package dependency does not build linux
-In-Reply-To: <1281956076.13866.97.camel@dubciaranr1.verifone.com>
-References: <1281725350.13866.77.camel@dubciaranr1.verifone.com>
-	<1281739934.9379.4.camel@coalu.atr>
-	<1281956076.13866.97.camel@dubciaranr1.verifone.com>
-Message-ID: <1282042451.5782.2.camel@dubciaranr1.verifone.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Aug 2010 14:10:45 +0300
+Subject: [Buildroot] ldconfig errors
+In-Reply-To: <000501cb3def$b74a9eb0$25dfdc10$@pauljones.id.au>
+References: <000501cb3def$b74a9eb0$25dfdc10$@pauljones.id.au>
+Message-ID: <20100817111045.GC9631@jasper.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BTW, is this the correct place to post these questions (this and my
-"make source" question from last week) or should I be logging a report
-in Bugzilla instead?
+Hi Paul,
 
-Ar Luan, 2010-08-16 ag 11:54 +0100, scr?obh Quotient Remainder:
-> Ar Sath, 2010-08-14 ag 00:52 +0200, scr?obh Lionel Landwerlin:
+On Tue, Aug 17, 2010 at 07:36:47PM +1000, Paul Jones wrote:
+> I seem to have run into the ldconfig error while using a crosstool-ng
+> external toolchain (uclibc based). I remember this being discussed a while
+> back but can't seem to find a solution, short of using an internal
+> toolchain.
 > 
-> > Why not creating package/Makefile.kmod instead of
-> > package/kmod/kmod-common.mk ? We already have a few .mk files there.
-> > 
+> This is the error:
 > 
-> A lowly contributor such as myself would not dare to dream of the
-> dizzying heights of adding a second-level makefile.  ;-}
-> But yes, given that it's just a couple of macro definitions it probably
-> should be as you say.
+> if [ -x
+> "/media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnue
+> abi-ldconfig" ]; \
 > 
-> > > The problem is that building a module requires a configured kernel
-> > > source.
-> > > I thought adding a prerequisite of "linux26" in the module makefile (via
-> > > kmod-common.mk) would cause linux to be built and so overcome this but
-> > > it is not being built before the modules.
-> > > 
-> > > I see that linux-fusion has linux26 in its dependency list and that
-> > > seems to work so my idea shouldn't be that far-fetched.
-> > > Any idea what I'm doing wrong?
-> ...
+>         then \
 > 
-> > > +define KMOD_$(call UPPERCASE,$(1))_BUILD_CMDS
-> > > +# Pass KDIR to package makefile so it can reference kernel.
-> > > +	$(MAKE) -C $$(@D) KDIR=$$(LINUX26_DIR)
-> > > +endef # KMOD_$(call UPPERCASE,$(1))_BUILD_CMDS.
-> > > +
-> ...
-> > Have you tried to cross compile for another architecture ?
-> > Because I can't see where you're adding the CROSS_COMPILE parameter.
-> > linux/linux.mk defines a LINUX26_MAKE_FLAGS variable, maybe you would
-> > like to use it.
+>  
+> /media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnuea
+> bi-ldconfig -r /media/dev/buildroot-arm/output/target 2>/dev/null; \
 > 
-> You're right, I forgot this this out.  Actually, I'm cross-compiling all
-> the time (for ARM on x86) but I cheated and added a config.mk in the
-> kernel source that sets up ARCH, CROSS_COMPILE and INSTALL_MOD_*.  These
-> should disappear when I get BR working.
+>         else \
 > 
-> > Regards,
-> > 
-> > -- 
-> > Lionel Landwerlin
+>                 /sbin/ldconfig -r /media/dev/buildroot-arm/output/target
+> 2>/dev/null; \
 > 
-> Thanks for the above advice but I'm still left wondering about my main
-> question: why isn't the LINUX26 dependency causing the kernel to be
-> built first?
+>         fi
 > 
+> make: *** [target-finalize] Error 1
 > 
+> I can't use the host version unless I run as root. This is on a Gentoo
+> x86_64 host with ARM target.
+> 
+> Any suggestions?
+
+See http://lists.busybox.net/pipermail/buildroot/2010-June/035443.html and 
+http://lists.busybox.net/pipermail/buildroot/2010-August/036726.html.
+
+I hope this helps.
+
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
