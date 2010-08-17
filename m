@@ -1,57 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Aug 2010 14:10:45 +0300
-Subject: [Buildroot] ldconfig errors
-In-Reply-To: <000501cb3def$b74a9eb0$25dfdc10$@pauljones.id.au>
-References: <000501cb3def$b74a9eb0$25dfdc10$@pauljones.id.au>
-Message-ID: <20100817111045.GC9631@jasper.tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Aug 2010 17:19:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
+ build on MIPS because is missing -ldl
+In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
+References: <bug-2395-163@https.bugs.busybox.net/>
+Message-ID: <20100817171937.E7D7588D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+https://bugs.busybox.net/show_bug.cgi?id=2395
 
-On Tue, Aug 17, 2010 at 07:36:47PM +1000, Paul Jones wrote:
-> I seem to have run into the ldconfig error while using a crosstool-ng
-> external toolchain (uclibc based). I remember this being discussed a while
-> back but can't seem to find a solution, short of using an internal
-> toolchain.
+--- Comment #4 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+(In reply to comment #3)
+> > I reported, just after do a make clean , make clean is that enough ?
 > 
-> This is the error:
-> 
-> if [ -x
-> "/media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnue
-> abi-ldconfig" ]; \
-> 
->         then \
-> 
->  
-> /media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnuea
-> bi-ldconfig -r /media/dev/buildroot-arm/output/target 2>/dev/null; \
-> 
->         else \
-> 
->                 /sbin/ldconfig -r /media/dev/buildroot-arm/output/target
-> 2>/dev/null; \
-> 
->         fi
-> 
-> make: *** [target-finalize] Error 1
-> 
-> I can't use the host version unless I run as root. This is on a Gentoo
-> x86_64 host with ARM target.
-> 
-> Any suggestions?
+> 'make clean' is indeed enough. Please put the full build log online somewhere.
+> As I can't reproduce the issue, if you don't provide a full build log so that I
+> can start the investigation, 
 
-See http://lists.busybox.net/pipermail/buildroot/2010-June/035443.html and 
-http://lists.busybox.net/pipermail/buildroot/2010-August/036726.html.
+ok , I will put it don't worry , I am in holidays and this is only a hobby ...
+give me 2 days please. 
 
-I hope this helps.
+> I will unfortunately have no other option than
+> closing this bug because of missing information.
+> 
+> You can also try to reproduce by disabling BR2_CONFIG_CACHE (by default it is
+> enabled). I'm fairly strongly suspecting a configure cache issue.
 
-baruch
+ok I will check that.  
+
+thanks,
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
