@@ -1,39 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Aug 2010 20:26:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
- build on MIPS because is missing -ldl
-In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
-References: <bug-2395-163@https.bugs.busybox.net/>
-Message-ID: <20100816202621.7EAA588D2D@busybox.osuosl.org>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Tue, 17 Aug 2010 19:36:47 +1000
+Subject: [Buildroot] ldconfig errors
+Message-ID: <000501cb3def$b74a9eb0$25dfdc10$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2395
+Hi,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-> I reported, just after do a make clean , make clean is that enough ?
+ 
 
-'make clean' is indeed enough. Please put the full build log online somewhere.
-As I can't reproduce the issue, if you don't provide a full build log so that I
-can start the investigation, I will unfortunately have no other option than
-closing this bug because of missing information.
+I seem to have run into the ldconfig error while using a crosstool-ng
+external toolchain (uclibc based). I remember this being discussed a while
+back but can't seem to find a solution, short of using an internal
+toolchain.
 
-You can also try to reproduce by disabling BR2_CONFIG_CACHE (by default it is
-enabled). I'm fairly strongly suspecting a configure cache issue.
+This is the error:
 
-> > the Makefiles are
-> > generated files, and the fact that -ldl is needed or not should be detected by
-> > the ./configure script.
-> 
-> ./configure is the file that I should try to patch ?
+if [ -x
+"/media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnue
+abi-ldconfig" ]; \
 
-No. configure is also generated. For the error you're describing, there should
-be nothing to patch. It should just work.
+        then \
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+ 
+/media/dev/arm-unknown-linux-uclibcgnueabi/bin/arm-unknown-linux-uclibcgnuea
+bi-ldconfig -r /media/dev/buildroot-arm/output/target 2>/dev/null; \
+
+        else \
+
+                /sbin/ldconfig -r /media/dev/buildroot-arm/output/target
+2>/dev/null; \
+
+        fi
+
+make: *** [target-finalize] Error 1
+
+ 
+
+I can't use the host version unless I run as root. This is on a Gentoo
+x86_64 host with ARM target.
+
+Any suggestions?
+
+ 
+
+ 
+
+Paul.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100817/2a83cca4/attachment.html>
