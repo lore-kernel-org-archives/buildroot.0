@@ -1,40 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Aug 2010 17:19:37 +0000 (UTC)
-Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
- build on MIPS because is missing -ldl
-In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
-References: <bug-2395-163@https.bugs.busybox.net/>
-Message-ID: <20100817171937.E7D7588D89@busybox.osuosl.org>
+From: Daniel Hobi <daniel.hobi@schmid-telecom.ch>
+Date: Wed, 18 Aug 2010 10:09:56 +0200
+Subject: [Buildroot] [PATCH] graph-depends: fix return value of
+	get_all_depends
+Message-ID: <1282118996-27502-1-git-send-email-daniel.hobi@schmid-telecom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2395
+This simplifies handling of that return value and allows to graph
+packages without dependencies in PKG_MODE which was failing with:
 
---- Comment #4 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-(In reply to comment #3)
-> > I reported, just after do a make clean , make clean is that enough ?
-> 
-> 'make clean' is indeed enough. Please put the full build log online somewhere.
-> As I can't reproduce the issue, if you don't provide a full build log so that I
-> can start the investigation, 
+Traceback (most recent call last):
+  File "scripts/graph-depends", line 150, in <module>
+    for dep in set(dependencies):
+TypeError: 'NoneType' object is not iterable
 
-ok , I will put it don't worry , I am in holidays and this is only a hobby ...
-give me 2 days please. 
+Signed-off-by: Daniel Hobi <daniel.hobi@schmid-telecom.ch>
+---
+ scripts/graph-depends |   14 +++++---------
+ 1 files changed, 5 insertions(+), 9 deletions(-)
 
-> I will unfortunately have no other option than
-> closing this bug because of missing information.
-> 
-> You can also try to reproduce by disabling BR2_CONFIG_CACHE (by default it is
-> enabled). I'm fairly strongly suspecting a configure cache issue.
-
-ok I will check that.  
-
-thanks,
-
+diff --git a/scripts/graph-depends b/scripts/graph-depends
+index 4d82282..06d8afa 100755
+--- a/scripts/graph-depends
++++ b/scripts/graph-depends
+@@ -86,7 +86,7 @@ def get_all_depends(pkg):
+ 
+     # We already have the dependencies for this package
+     if pkg in allpkgs:
+-        return
++        return dependencies
+     allpkgs.append(pkg)
+     depends = get_depends(pkg)
+ 
+@@ -96,11 +96,11 @@ def get_all_depends(pkg):
+     # the user.
+     if depends == None:
+         unknownpkgs.append(pkg)
+-        return
++        return dependencies
+ 
+     # This package has no dependency.
+     if depends == []:
+-        return
++        return dependencies
+ 
+     # Add dependencies to the list of dependencies
+     for dep in depends:
+@@ -108,9 +108,7 @@ def get_all_depends(pkg):
+ 
+     # Recurse into the dependencies
+     for dep in depends:
+-        newdeps = get_all_depends(dep)
+-        if newdeps != None:
+-            dependencies += newdeps
++        dependencies += get_all_depends(dep)
+ 
+     return dependencies
+ 
+@@ -133,9 +131,7 @@ if mode == FULL_MODE:
+                 tg == 'target-generic-hostname':
+             continue
+         dependencies.append(('all', tg))
+-        deps = get_all_depends(tg)
+-        if deps != None:
+-            dependencies += deps
++        dependencies += get_all_depends(tg)
+ 
+ # In pkg mode, start directly with get_all_depends() on the requested
+ # package
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.2.1
