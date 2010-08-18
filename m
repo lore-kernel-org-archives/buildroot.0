@@ -1,25 +1,34 @@
-From: aurele.traynard at laposte.net <aurele.traynard@laposte.net>
-Date: Wed, 18 Aug 2010 14:07:49 +0200 (CEST)
-Subject: [Buildroot] [BuildRoot] : __isoc99_sscanf when compiling X11
-Message-ID: <27584480.9721.1282133269537.JavaMail.www@wwinf8202>
+From: Ossy <ossy1980@gmx.net>
+Date: Wed, 18 Aug 2010 23:34:06 +0200
+Subject: [Buildroot] Configuring host-lzo fails
+In-Reply-To: <20100813122600.3d227eb3@surf>
+References: <201007272333.09640.PeterHuewe@gmx.de>
+	<20100813122600.3d227eb3@surf>
+Message-ID: <4C6C51CE.5020409@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hello,
+Am 13.08.2010 12:26, schrieb Thomas Petazzoni:
+> This is fixed in my for-2010.08 branch, the specific commit being
+> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.08&id=fee182d20d9b1876436c9673744ae6312a40e889.
+>
+> If you have the time to test this branch and report whether it also
+> fixes the problem for you, it'd be nice.
+Hi,
 
-I am new and French so be indulgent. I am working on a "arm Xscale processor" with a code sourcery gnu toolchain, and when i had compile X11 for the first time I had this error :? "undefined reference to `__isoc99_sscanf'" in the makekeys.c file.
-to solve the problem i just add "#define _GNU_SOURCE" in the file.
-I havent found any other solution to this problem.
-I use buildroot-2010.05
+I applied this patch
+http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=fee182d20d9b1876436c9673744ae6312a40e889
+to the current git tree on my drive. This time I did not encounter a 
+problem with host-lzo, but host-zlib ran into an error ("zlib.a not 
+present"). After make flush with a consecutive make, the systembuild 
+went on without problems.
 
-have a nice day
+I'm not sure if this is a problem "behind" host-lzo (which was solved by 
+the former make flush for host-lzo) or a new problem caused by the patch 
+fee182d20d9b1876436c9673744ae6312a40e889.
 
-
-Une messagerie gratuite, garantie ? vie et des services en plus, ?a vous tente ?
-Je cr?e ma bo?te mail www.laposte.net
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100818/e1b94265/attachment.html>
+Regards,
+Marcus
