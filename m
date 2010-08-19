@@ -1,34 +1,23 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Wed, 18 Aug 2010 23:34:06 +0200
-Subject: [Buildroot] Configuring host-lzo fails
-In-Reply-To: <20100813122600.3d227eb3@surf>
-References: <201007272333.09640.PeterHuewe@gmx.de>
-	<20100813122600.3d227eb3@surf>
-Message-ID: <4C6C51CE.5020409@gmx.net>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 18 Aug 2010 19:43:37 -0500
+Subject: [Buildroot] package/hotplug
+Message-ID: <0D753D10438DA54287A00B0270842697643E62F9E6@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 13.08.2010 12:26, schrieb Thomas Petazzoni:
-> This is fixed in my for-2010.08 branch, the specific commit being
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.08&id=fee182d20d9b1876436c9673744ae6312a40e889.
->
-> If you have the time to test this branch and report whether it also
-> fixes the problem for you, it'd be nice.
-Hi,
+Hello all,
 
-I applied this patch
-http://git.buildroot.net/~tpetazzoni/git/buildroot/patch/?id=fee182d20d9b1876436c9673744ae6312a40e889
-to the current git tree on my drive. This time I did not encounter a 
-problem with host-lzo, but host-zlib ran into an error ("zlib.a not 
-present"). After make flush with a consecutive make, the systembuild 
-went on without problems.
+I am trying to get USB memory stick hotplugging to work on my busybox system.  I
+would like to be able to attach a memory stick and have the system auto mount the
+drive.
 
-I'm not sure if this is a problem "behind" host-lzo (which was solved by 
-the former make flush for host-lzo) or a new problem caused by the patch 
-fee182d20d9b1876436c9673744ae6312a40e889.
+I assumed that I would need to enable hotplug package to do this but it is normally
+disabled by BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.  I have looked thru the busybox
+configuration and can't find anything that would replace the hotplug app.  Did I
+overlook something?
 
 Regards,
-Marcus
+Hartley
