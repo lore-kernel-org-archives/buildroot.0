@@ -1,42 +1,27 @@
-From: Darcy Watkins <dwatkins@tranzeo.com>
-Date: Thu, 19 Aug 2010 12:19:17 -0700
-Subject: [Buildroot] [PATCH] pppd.mk installs radattr.so twice and omits
-	radrealms.so
-Message-ID: <1282245557.29366.8.camel@tr-pentomino>
+From: JNY <jny0@hotmail.com>
+Date: Fri, 20 Aug 2010 07:48:13 -0700 (PDT)
+Subject: [Buildroot]  How to get gdb in the image
+Message-ID: <29492552.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-In the pppd.mk (for pppd package) the radattr.so plugin (for radiua) is
-installed twice (the second install overwriting the first) but the
-radrealms.so plugin is omitted from the install.  This appears to be a
-copy-paste error.
+Hi,
 
-Below is patch that corrects this.
+I need gdb on my target, so selected the gdb options available to me in
+buildroot (Toolchain->Build gdb degugger for the target, Toolchain->Build
+gdb server for the target, Toolchain->Build gdb for the host, Toolchain->GDB
+Debugger Version 6.8).  I then re-made, and installed the output image, but
+still gdb is not recognised on the target after installation.
 
-signed-off by: Darcy Watkins <dwatkins@tranzeo.com>
-
-Index: buildroot-2010.08_powerpc/package/pppd/pppd.mk
-===================================================================
---- buildroot-2010.08_powerpc.orig/package/pppd/pppd.mk
-+++ buildroot-2010.08_powerpc/package/pppd/pppd.mk
-@@ -55,8 +55,8 @@ $(PPPD_TARGET_INSTALL_TARGET):
- 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
- 	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radius.so \
- 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radius.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radattr.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
-+	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radrealms.so \
-+		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radrealms.so
- 	for m in $(PPPD_MANPAGES); do \
- 		$(INSTALL) -m 644 -D $(PPPD_DIR)/$$m/$$m.8 \
- 			$(TARGET_DIR)/usr/share/man/man8/$$m.8; \
-
+Any ideas would be received with thanks (and admiration - don't know if
+flattery will help, but I figure it's worth a shot ;-))
 
 Regards,
-
-Darcy
+JNY
+-- 
+View this message in context: http://old.nabble.com/How-to-get-gdb-in-the-image-tp29492552p29492552.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
