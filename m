@@ -1,34 +1,91 @@
-From: Ossy <ossy1980@gmx.net>
-Date: Sat, 21 Aug 2010 16:41:30 +0200
-Subject: [Buildroot] Configuring host-lzo fails
-In-Reply-To: <4C6C51CE.5020409@gmx.net>
-References: <201007272333.09640.PeterHuewe@gmx.de>	<20100813122600.3d227eb3@surf>
-	<4C6C51CE.5020409@gmx.net>
-Message-ID: <4C6FE59A.8020306@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Aug 2010 16:45:47 +0200
+Subject: [Buildroot] [PATCH] GStreamer: xorg support
+In-Reply-To: <4C6FCC33.8040206@marretta.com>
+References: <4C6FCC33.8040206@marretta.com>
+Message-ID: <20100821164547.54340abc@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 18.08.2010 23:34, schrieb Ossy:
-> Am 13.08.2010 12:26, schrieb Thomas Petazzoni:
->> This is fixed in my for-2010.08 branch, the specific commit being
->> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.08&id=fee182d20d9b1876436c9673744ae6312a40e889.
->>
->>
->> If you have the time to test this branch and report whether it also
->> fixes the problem for you, it'd be nice.
->
- > [host-zlib error]
->
-The same patch applied, I ran into an error with expat today:
-configure: error: no acceptable ld found in $PATH
-make: *** 
-[/home/ossy/buildroot/buildroot-dev/output/build/expat-2.0.1/.stamp_configured] 
-Fehler 1
+Hello Massimiliano,
 
-After make flush; make the system build went on without problems.
+On Sat, 21 Aug 2010 14:53:07 +0200
+Massimiliano Marretta <max@marretta.com> wrote:
+
+>   I add support for xorg and upgrade version for mp3 issue.
+
+Thanks!
+
+However, your patch cannot be applied because it has several issues :
+
+ * It is word-wrapped, probably because of your e-mail client
+   (Thunderbird)
+
+ * It does not have the proper Git format (it is not an unified diff,
+   it lacks a description, etc.)
+
+Could you prepare a Git patch for this ?
+
+In just a nutshell, here is how you can generate your first Git
+patches :
+
+ 1. Install git
+
+    Under Debian/Ubuntu: sudo aptitude install git
+
+ 2. Clone the Buildroot git repository
+
+    git clone git://git.busybox.net/buildroot
+
+ 3. Configure git by writing the following ~/.gitconfig file
+
+===START OF FILE================================
+[user]
+        name = Massimiliano Marretta
+        email = max at marretta.com
+
+[sendemail]
+	smtpserver = your-smtp-server.com
+===END   OF FILE================================
+
+ 4. Create your local branch for your work
+
+    cd buildroot
+    git branch gstreamer-xorg-and-mp3
+
+ 5. Switch to your branch
+
+    git checkout gstreamer-xorg-and-mp3
+
+ 6. Make a change
+
+    vi/emacs yourfile
+
+ 7. Commit it
+
+    git commit -a -s
+
+    and enter a meaningful commit log
+
+ 8. Go back at step 6 and 7 for all other changes. Each logical change
+    should be split in a separated commit.
+
+ 9. Send your changes to the mailing list
+
+    git send-email --to buildroot at uclibc.org master
+
+Of course, this a just a quick recipe on how to use Git. You'll find
+more details in the dozens of documentation and tutorials available on
+the Web.
 
 Regards,
-Marcus
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
