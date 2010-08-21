@@ -1,91 +1,191 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Aug 2010 16:45:47 +0200
-Subject: [Buildroot] [PATCH] GStreamer: xorg support
-In-Reply-To: <4C6FCC33.8040206@marretta.com>
-References: <4C6FCC33.8040206@marretta.com>
-Message-ID: <20100821164547.54340abc@surf>
+From: Massimiliano Marretta <max@marretta.com>
+Date: Sat, 21 Aug 2010 17:21:37 +0200
+Subject: [Buildroot] [PATCH] Add xorg support and upgrade for mp3 issue.
+Message-ID: <1282404097-12535-1-git-send-email-max@marretta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Massimiliano,
+Signed-off-by: Massimiliano Marretta <max@marretta.com>
+---
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 +-
+ .../gst-plugins-base/gst-plugins-base.mk           |   19 ++++++++--
+ .../gst-plugins-good/gst-plugins-good.mk           |   18 ++++++++--
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
+ ....10.25-fix-unaligned-detectiob-for-x86-64.patch |   36 --------------------
+ package/multimedia/gstreamer/gstreamer.mk          |    2 +-
+ 6 files changed, 32 insertions(+), 47 deletions(-)
+ delete mode 100644 package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
 
-On Sat, 21 Aug 2010 14:53:07 +0200
-Massimiliano Marretta <max@marretta.com> wrote:
-
->   I add support for xorg and upgrade version for mp3 issue.
-
-Thanks!
-
-However, your patch cannot be applied because it has several issues :
-
- * It is word-wrapped, probably because of your e-mail client
-   (Thunderbird)
-
- * It does not have the proper Git format (it is not an unified diff,
-   it lacks a description, etc.)
-
-Could you prepare a Git patch for this ?
-
-In just a nutshell, here is how you can generate your first Git
-patches :
-
- 1. Install git
-
-    Under Debian/Ubuntu: sudo aptitude install git
-
- 2. Clone the Buildroot git repository
-
-    git clone git://git.busybox.net/buildroot
-
- 3. Configure git by writing the following ~/.gitconfig file
-
-===START OF FILE================================
-[user]
-        name = Massimiliano Marretta
-        email = max at marretta.com
-
-[sendemail]
-	smtpserver = your-smtp-server.com
-===END   OF FILE================================
-
- 4. Create your local branch for your work
-
-    cd buildroot
-    git branch gstreamer-xorg-and-mp3
-
- 5. Switch to your branch
-
-    git checkout gstreamer-xorg-and-mp3
-
- 6. Make a change
-
-    vi/emacs yourfile
-
- 7. Commit it
-
-    git commit -a -s
-
-    and enter a meaningful commit log
-
- 8. Go back at step 6 and 7 for all other changes. Each logical change
-    should be split in a separated commit.
-
- 9. Send your changes to the mailing list
-
-    git send-email --to buildroot at uclibc.org master
-
-Of course, this a just a quick recipe on how to use Git. You'll find
-more details in the dozens of documentation and tutorials available on
-the Web.
-
-Regards,
-
-Thomas
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index 7a059c1..558262d 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-bad
+ #
+ #############################################################
+-GST_PLUGINS_BAD_VERSION = 0.10.14
++GST_PLUGINS_BAD_VERSION = 0.10.19
+ GST_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST_PLUGINS_BAD_VERSION).tar.bz2
+ GST_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST_PLUGINS_BAD_LIBTOOL_PATCH = NO
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index 91d9f1b..f2db783 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-base
+ #
+ #############################################################
+-GST_PLUGINS_BASE_VERSION = 0.10.25
++GST_PLUGINS_BASE_VERSION = 0.10.30
+ GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.bz2
+ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST_PLUGINS_BASE_INSTALL_STAGING = YES
+@@ -18,16 +18,27 @@ GST_PLUGINS_BASE_CONF_ENV =
+ 
+ GST_PLUGINS_BASE_CONF_OPT = \
+ 		--disable-examples \
+-		--disable-x \
+-		--disable-xvideo \
+-		--disable-xshm \
+ 		--disable-oggtest \
+ 		--disable-vorbistest \
+ 		--disable-freetypetest
+ 
++
++
++
+ GST_PLUGINS_BASE_DEPENDENCIES = gstreamer liboil \
+ 		$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib)
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST_PLUGINS_BASE_DEPENDENCIES += xserver_xorg-server
++GST_PLUGINS_BASE_CONF_OPT += --enable-x \
++		--enable-xvideo \
++		--enable-xshm
++else
++GST_PLUGINS_BASE_CONF_OPT += --disable-x \
++		--disable-xvideo \
++		--disable-xshm
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ADDER),y)
+ GST_PLUGINS_BASE_CONF_OPT += --enable-adder
+ else
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index c44bdff..e801948 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-good
+ #
+ #############################################################
+-GST_PLUGINS_GOOD_VERSION = 0.10.16
++GST_PLUGINS_GOOD_VERSION = 0.10.24
+ GST_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST_PLUGINS_GOOD_VERSION).tar.bz2
+ GST_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST_PLUGINS_GOOD_LIBTOOL_PATCH = NO
+@@ -16,9 +16,6 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		--disable-osx_audio \
+ 		--disable-osx_video \
+ 		--disable-gst_v4l2 \
+-		--disable-x \
+-		--disable-xshm \
+-		--disable-xvideo \
+ 		--disable-aalib \
+ 		--disable-aalibtest \
+ 		--disable-esd \
+@@ -28,6 +25,19 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 
+ GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST_PLUGINS_BASE_DEPENDENCIES += xserver_xorg-server
++GST_PLUGINS_BASE_CONF_OPT += --enable-x \
++		--enable-x \
++		--enable-xvideo \
++		--enable-xshm
++else
++GST_PLUGINS_BASE_CONF_OPT += --disable-x \
++		--disable-x \
++		--disable-xvideo \
++		--disable-xshm
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
+ GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
+diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+index c87451f..c6dc6c6 100644
+--- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-ugly
+ #
+ #############################################################
+-GST_PLUGINS_UGLY_VERSION = 0.10.10
++GST_PLUGINS_UGLY_VERSION = 0.10.15
+ GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.bz2
+ GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST_PLUGINS_UGLY_LIBTOOL_PATCH = NO
+diff --git a/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch b/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
+deleted file mode 100644
+index 1635fe7..0000000
+--- a/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-[PATCH] gst-arch.m4: fix unaligned detection for x86-64 when cross compiling
+-
+-Submitted upstream at https://bugzilla.gnome.org/show_bug.cgi?id=607317
+-
+-Commit 4221e9dc (amd64/x86_64 allows unaligned memory access too) added
+-x86-64 to the unaligned access whitelist, but missed the trailing
+-wildcards, so the test never succeeds (host is something like
+-x86_64-unknown-linux-gnu).
+-
+-When building natively, this isn't a big deal as the AC_TRY_RUN test
+-correctly detects it, but that doesn't work when cross compiling so
+-the build dies with:
+-
+-configure: error: cannot run test program while cross compiling
+-See `config.log' for more details.
+-
+-Fix it by adding the trailing wildcards.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: gstreamer-0.10.25/configure
+-===================================================================
+---- gstreamer-0.10.25.orig/configure
+-+++ gstreamer-0.10.25/configure
+-@@ -15655,7 +15655,7 @@ $as_echo_n "checking if unaligned memory
+-         $as_echo_n "(blacklisted) " >&6
+-         as_cv_unaligned_access=no
+- 	;;
+--      i?86*|x86_64|amd64|powerpc*|m68k*|cris*)
+-+      i?86*|x86_64*|amd64*|powerpc*|m68k*|cris*)
+-         $as_echo_n "(whitelisted) " >&6
+-         as_cv_unaligned_access=yes
+- 	;;
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 49ac0df..0fe8265 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -3,7 +3,7 @@
+ # gstreamer
+ #
+ #############################################################
+-GSTREAMER_VERSION = 0.10.25
++GSTREAMER_VERSION = 0.10.30
+ GSTREAMER_SOURCE = gstreamer-$(GSTREAMER_VERSION).tar.bz2
+ GSTREAMER_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
