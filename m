@@ -1,59 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Aug 2010 12:51:56 +0200
-Subject: [Buildroot] [PATCH 04/20] Detect early if an UTF-8 locale is needed
+Date: Sun, 22 Aug 2010 12:51:58 +0200
+Subject: [Buildroot] [PATCH 06/20] Mark CRIS architecture as deprecated
 In-Reply-To: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <01c1279f9f8764520aeb683fc3f269f928f3e3d7.1282471311.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e5621b427c9c923bffdeeb5f568eb7abb36c109b.1282471311.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Check in toolchain/dependencies/dependencies.sh if an UTF-8 locale is
-properly present on the system before trying to build a locale enabled
-toolchain. As this test is only needed when a locale enabled toolchain
-is going to be built, we pass the configuration file path to the
-dependencies.sh script so that it can grep for the current value of
-various options.
+The CRIS architecture support in Buildroot hasn't been updated since a
+long time. Even a toolchain with recent kernel headers does not build
+due to missing patches.
+
+Moreover, the CRIS architecture has been discontinued by Axis, as
+visible at http://www.axis.com/products/dev/index.htm. We will remove
+it from Buildroot at the next release cycle.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/dependencies/dependencies.mk |    1 +
- toolchain/dependencies/dependencies.sh |   12 ++++++++++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+ target/Config.in.arch |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/dependencies/dependencies.mk b/toolchain/dependencies/dependencies.mk
-index d500424..b334811 100644
---- a/toolchain/dependencies/dependencies.mk
-+++ b/toolchain/dependencies/dependencies.mk
-@@ -16,6 +16,7 @@ endif
- dependencies: host-sed $(DEPENDENCIES_HOST_PREREQ)
- 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
- 		HOST_SED_DIR="$(HOST_SED_DIR)" \
-+		CONFIG_FILE="$(CONFIG_DIR)/.config" \
- 		$(TOPDIR)/toolchain/dependencies/dependencies.sh
- 
- dependencies-source:
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index b3822ef..b47e9d8 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -152,3 +152,15 @@ for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio p
- 	exit 1;
-     fi
- done
-+
-+if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
-+   grep ^BR2_ENABLE_LOCALE=y       $CONFIG_FILE > /dev/null ; then
-+   if ! which locale > /dev/null ; then
-+       /bin/echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
-+       exit 1 ;
-+   fi
-+   if ! locale -a | grep -i utf8$ ; then
-+       /bin/echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
-+       exit 1 ;
-+   fi
-+fi
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index d3a4025..ce64068 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -22,6 +22,11 @@ config BR2_avr32
+ 	select BR2_SOFT_FLOAT
+ config BR2_cris
+ 	bool "cris"
++	# The CRIS architecture from Axis has been deprecated by the
++	# manufacturer. No units are sold after July 2010, and support
++	# will end in July 2011. Moreover, CRIS support in Buildroot
++	# has not been updated since a long time.
++	depends on BR2_DEPRECATED
+ config BR2_ia64
+ 	bool "ia64"
+ 	# IA64 almost does not exist anymore and has never been used
 -- 
 1.7.0.4
