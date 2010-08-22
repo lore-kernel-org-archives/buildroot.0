@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Aug 2010 12:52:08 +0200
-Subject: [Buildroot] [PATCH 16/20] Add new patches Lua upstream patches
-	rename old ones
+Date: Sun, 22 Aug 2010 12:52:09 +0200
+Subject: [Buildroot] [PATCH 17/20] luafilesystem: remove LARGE_FILE
+	constraint
 In-Reply-To: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7c807d20f50b4e28547e0daf5a8f49d179ed2a56.1282471311.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <091c73280af8c863677829024ad667d22ed43161.1282471311.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,93 +13,142 @@ To: buildroot@busybox.net
 
 From: Francois Perrad <francois.perrad@gadz.org>
 
-Several new upstream patches against the latest version of Lua have
-appeared on http://www.lua.org/bugs.html. This commit adds them to
-Buildroot, and also renames the other patches to have a coherent patch
-naming: lua-bugX, where X is the identifier of the bug as visible on
-http://www.lua.org/bugs.html. Note that bug 1 and 2 are not associated
-with patches, which explains why the first patch is labeled lua-bug3.
+Add a patch to luafilesystem so that it builds correctly when large
+files are not supported. This allows to remove the dependency of
+luafilesystem on large file support on the toolchain. Packages such as
+cgilua, wsapi and xavante, which depend on luafilesystem, also get
+their dependency on large file support removed.
 
-Fixes bug #2365.
+Fixes bug #2359.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...ion.patch => lua-bug3-boolean_expression.patch} |    0
- .../lua/{lua-table.patch => lua-bug4-table.patch}  |    0
- ..._getfenv.patch => lua-bug5-debug_getfenv.patch} |    0
- ...ormance.patch => lua-bug6-gc_performance.patch} |    0
- package/lua/lua-bug7-string_format.patch           |   20 ++++++++++++++++++++
- package/lua/lua-bug8-io_read.patch                 |   14 ++++++++++++++
- 6 files changed, 34 insertions(+), 0 deletions(-)
- rename package/lua/{lua-boolean_expression.patch => lua-bug3-boolean_expression.patch} (100%)
- rename package/lua/{lua-table.patch => lua-bug4-table.patch} (100%)
- rename package/lua/{lua-debug_getfenv.patch => lua-bug5-debug_getfenv.patch} (100%)
- rename package/lua/{lua-gc_performance.patch => lua-bug6-gc_performance.patch} (100%)
- create mode 100644 package/lua/lua-bug7-string_format.patch
- create mode 100644 package/lua/lua-bug8-io_read.patch
+ package/cgilua/Config.in                           |    4 ----
+ package/luafilesystem/Config.in                    |    6 +-----
+ .../luafilesystem-without_large_file.patch         |   20 ++++++++++++++++++++
+ package/luafilesystem/luafilesystem.mk             |    6 +++++-
+ package/wsapi/Config.in                            |    4 ----
+ package/xavante/Config.in                          |    4 ----
+ 6 files changed, 26 insertions(+), 18 deletions(-)
+ create mode 100644 package/luafilesystem/luafilesystem-without_large_file.patch
 
-diff --git a/package/lua/lua-boolean_expression.patch b/package/lua/lua-bug3-boolean_expression.patch
-similarity index 100%
-rename from package/lua/lua-boolean_expression.patch
-rename to package/lua/lua-bug3-boolean_expression.patch
-diff --git a/package/lua/lua-table.patch b/package/lua/lua-bug4-table.patch
-similarity index 100%
-rename from package/lua/lua-table.patch
-rename to package/lua/lua-bug4-table.patch
-diff --git a/package/lua/lua-debug_getfenv.patch b/package/lua/lua-bug5-debug_getfenv.patch
-similarity index 100%
-rename from package/lua/lua-debug_getfenv.patch
-rename to package/lua/lua-bug5-debug_getfenv.patch
-diff --git a/package/lua/lua-gc_performance.patch b/package/lua/lua-bug6-gc_performance.patch
-similarity index 100%
-rename from package/lua/lua-gc_performance.patch
-rename to package/lua/lua-bug6-gc_performance.patch
-diff --git a/package/lua/lua-bug7-string_format.patch b/package/lua/lua-bug7-string_format.patch
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index a74e49f..b43ba97 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CGILUA
+ 	bool "cgilua"
+-	depends on BR2_LARGEFILE
+ 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	help
+@@ -8,6 +7,3 @@ config BR2_PACKAGE_CGILUA
+ 	  and manipulating input data from Web forms.
+ 
+ 	  http://luaforge.net/projects/cgilua/
+-
+-comment "cgilua requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
+diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
+index 6cb6c24..edcb414 100644
+--- a/package/luafilesystem/Config.in
++++ b/package/luafilesystem/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_LUAFILESYSTEM
+ 	bool "luafilesystem"
+-	depends on BR2_LARGEFILE
+ 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  LuaFileSystem offers a portable way to access
+ 	  the underlying directory structure and file attributes.
+ 
+-	  http://luaforge.net/projects/luafilesystem/
+-
+-comment "luafilesystem requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++	  http://keplerproject.github.com/luafilesystem/
+diff --git a/package/luafilesystem/luafilesystem-without_large_file.patch b/package/luafilesystem/luafilesystem-without_large_file.patch
 new file mode 100644
-index 0000000..68f3197
+index 0000000..b1f41c0
 --- /dev/null
-+++ b/package/lua/lua-bug7-string_format.patch
++++ b/package/luafilesystem/luafilesystem-without_large_file.patch
 @@ -0,0 +1,20 @@
-+--- lua-5.1.4.orig/src/lstrlib.c	2008/07/11 17:27:21	1.132.1.4
-++++ lua-5.1.4/src/lstrlib.c	2010/05/14 15:12:53
-+@@ -754,6 +754,7 @@
++diff --git a/src/lfs.c b/src/lfs.c
++index 85f01e3..ed49f50 100644
++--- a/src/lfs.c
+++++ b/src/lfs.c
++@@ -22,13 +22,13 @@
 + 
++ #ifndef _WIN32
++ #ifndef _AIX
++-#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
+++//#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
++ #else
++ #define _LARGE_FILES 1 /* AIX */
++ #endif
++ #endif
 + 
-+ static int str_format (lua_State *L) {
-++  int top = lua_gettop(L);
-+   int arg = 1;
-+   size_t sfl;
-+   const char *strfrmt = luaL_checklstring(L, arg, &sfl);
-+@@ -768,7 +769,8 @@
-+     else { /* format item */
-+       char form[MAX_FORMAT];  /* to store the format (`%...') */
-+       char buff[MAX_ITEM];  /* to store the formatted item */
-+-      arg++;
-++      if (++arg > top)
-++        luaL_argerror(L, arg, "no value");
-+       strfrmt = scanformat(L, strfrmt, form);
-+       switch (*strfrmt++) {
-+         case 'c': {
-diff --git a/package/lua/lua-bug8-io_read.patch b/package/lua/lua-bug8-io_read.patch
-new file mode 100644
-index 0000000..fb56bcf
---- /dev/null
-+++ b/package/lua/lua-bug8-io_read.patch
-@@ -0,0 +1,14 @@
-+--- lua-5.1.4.orig/src/liolib.c	2008/01/18 17:47:43	2.73.1.3
-++++ lua-5.1.4.orig/src/liolib.c	2010/05/14 15:29:29
-+@@ -276,7 +276,10 @@
-+     lua_pushnumber(L, d);
-+     return 1;
-+   }
-+-  else return 0;  /* read fails */
-++  else {
-++    lua_pushnil(L);  /* "result" to be removed */
-++    return 0;  /* read fails */
-++  }
-+ }
++-#define _LARGEFILE64_SOURCE
+++//#define _LARGEFILE64_SOURCE
 + 
-+ 
++ #include <errno.h>
++ #include <stdio.h>
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index a27080c..e688734 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -8,8 +8,12 @@ LUAFILESYSTEM_VERSION = 1.5.0
+ LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
+ LUAFILESYSTEM_DEPENDENCIES = lua
+ 
++ifeq ($(BR2_LARGEFILE),y)
++LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE
++endif
++
+ define LUAFILESYSTEM_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
++	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) $(LFS_CFLAGS) -fPIC"
+ endef
+ 
+ define LUAFILESYSTEM_INSTALL_TARGET_CMDS
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 472bbfc..3621648 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_WSAPI
+ 	bool "wsapi"
+-	depends on BR2_LARGEFILE # luafilesystem
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	select BR2_PACKAGE_RINGS
+@@ -8,6 +7,3 @@ config BR2_PACKAGE_WSAPI
+ 	  API that abstracts the web server from Lua web applications.
+ 
+ 	  http://keplerproject.github.com/wsapi/
+-
+-comment "wsapi requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
+index a1b47c3..a7df530 100644
+--- a/package/xavante/Config.in
++++ b/package/xavante/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XAVANTE
+ 	bool "xavante"
+-	depends on BR2_LARGEFILE # luafilesystem
+ 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_CGILUA
+ 	select BR2_PACKAGE_COPAS
+@@ -13,6 +12,3 @@ config BR2_PACKAGE_XAVANTE
+ 	  architecture based on URI mapped handlers.
+ 
+ 	  http://keplerproject.github.com/xavante/
+-
+-comment "xavante requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
 -- 
 1.7.0.4
