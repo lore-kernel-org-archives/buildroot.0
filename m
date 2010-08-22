@@ -1,80 +1,166 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Aug 2010 12:51:55 +0200
-Subject: [Buildroot] [PATCH 03/20] Make uClibc gen_wc8bit shows an error
-	when no locale support available
+Date: Sun, 22 Aug 2010 12:51:57 +0200
+Subject: [Buildroot] [PATCH 05/20] Add the traditional
+	powerpc-link-with-math-lib patch to gcc 4.4.4
 In-Reply-To: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9088b71f451260e1e94a242a3b92141ab853275f.1282471311.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0fa2a04417d5dc65ecbd9eca39401b8d09558d0b.1282471311.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When no UTF-8 locale is available on the host system, uClibc can't
-generate some stuff it needs to compile a C library with locale
-support. Unfortunately, as gen_wc8bit message is shown on stdout and
-the stdout of gen_wc8bit is redirected to a file, the user don't see
-anything, as reported at
-http://lists.busybox.net/pipermail/buildroot/2010-May/034177.html.
-
-Those two patches fix the problem for uClibc 0.9.31 and 0.9.30.3. It
-has been submitted upstream:
- http://lists.uclibc.org/pipermail/uclibc/2010-August/044256.html
+Patch taken from Crosstool-NG patchset.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uClibc-0.9.30.3-fix-error-locale-utf-8.patch   |   17 +++++++++++++++++
- .../uClibc-0.9.31-fix-error-locale-utf-8.patch     |   17 +++++++++++++++++
- 2 files changed, 34 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.30.3-fix-error-locale-utf-8.patch
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-fix-error-locale-utf-8.patch
+ .../powerpc-link-with-math-lib.patch.conditional   |  137 ++++++++++++++++++++
+ 1 files changed, 137 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
 
-diff --git a/toolchain/uClibc/uClibc-0.9.30.3-fix-error-locale-utf-8.patch b/toolchain/uClibc/uClibc-0.9.30.3-fix-error-locale-utf-8.patch
+diff --git a/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
 new file mode 100644
-index 0000000..2fe6c50
+index 0000000..3fe8757
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.30.3-fix-error-locale-utf-8.patch
-@@ -0,0 +1,17 @@
-+---
-+ extra/locale/gen_wc8bit.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++++ b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
+@@ -0,0 +1,137 @@
++http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
 +
-+Index: uClibc-0.9.30.3/extra/locale/gen_wc8bit.c
-+===================================================================
-+--- uClibc-0.9.30.3.orig/extra/locale/gen_wc8bit.c
-++++ uClibc-0.9.30.3/extra/locale/gen_wc8bit.c
-+@@ -119,7 +119,7 @@
-+ 		}
-+ 
-+  locale_failure:
-+-		printf("could not find a UTF8 locale ... please enable en_US.UTF-8\n");
-++		fprintf(stderr, "could not find a UTF8 locale ... please enable en_US.UTF-8\n");
-+ 		return EXIT_FAILURE;
-+  locale_success:
-+ 		pclose(fp);
-diff --git a/toolchain/uClibc/uClibc-0.9.31-fix-error-locale-utf-8.patch b/toolchain/uClibc/uClibc-0.9.31-fix-error-locale-utf-8.patch
-new file mode 100644
-index 0000000..1305add
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-fix-error-locale-utf-8.patch
-@@ -0,0 +1,17 @@
-+---
-+ extra/locale/gen_wc8bit.c |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++On glibc the libc.so carries a copy of the math function copysignl() but
++on uClibc math functions like copysignl() live in libm. Since libgcc_s
++contains unresolved symbols, any attempt to link against libgcc_s
++without explicitely specifying -lm fails, resulting in a broken
++bootstrap of the compiler.
 +
-+Index: uClibc-0.9.31/extra/locale/gen_wc8bit.c
-+===================================================================
-+--- uClibc-0.9.31.orig/extra/locale/gen_wc8bit.c
-++++ uClibc-0.9.31/extra/locale/gen_wc8bit.c
-+@@ -120,7 +120,7 @@
-+ 		}
++
++diff -rdup gcc-4.4.0.old/gcc/config/t-slibgcc-elf-ver gcc-4.4.0/gcc/config/t-slibgcc-elf-ver
++
++diff -durN gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver gcc-4.4.4/gcc/config/t-slibgcc-elf-ver
++--- gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver	2010-01-04 16:13:08.000000000 +0100
+++++ gcc-4.4.4/gcc/config/t-slibgcc-elf-ver	2010-05-16 19:38:36.000000000 +0200
++@@ -9,7 +9,7 @@
++ SHLIB_OBJS = @shlib_objs@
++ SHLIB_DIR = @multilib_dir@
++ SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
++-SHLIB_LC = -lc
+++SHLIB_LC = @libgcc_libm@ -lc
++ SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
++ SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
++ 	$$(DESTDIR)$$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
++diff -durN gcc-4.4.4.orig/libgcc/Makefile.in gcc-4.4.4/libgcc/Makefile.in
++--- gcc-4.4.4.orig/libgcc/Makefile.in	2009-04-10 01:23:07.000000000 +0200
+++++ gcc-4.4.4/libgcc/Makefile.in	2010-05-16 19:38:36.000000000 +0200
++@@ -39,6 +39,7 @@
++ decimal_float = @decimal_float@
++ enable_decimal_float = @enable_decimal_float@
++ fixed_point = @fixed_point@
+++LIBGCC_LIBM = @LIBGCC_LIBM@
 + 
-+  locale_failure:
-+-		printf("could not find a UTF8 locale ... please enable en_US.UTF-8\n");
-++		fprintf(stderr, "could not find a UTF8 locale ... please enable en_US.UTF-8\n");
-+ 		return EXIT_FAILURE;
-+  locale_success:
-+ 		pclose(fp);
++ host_noncanonical = @host_noncanonical@
++ 
++@@ -787,9 +788,10 @@
++ 		@multilib_dir@,$(MULTIDIR),$(subst \
++ 		@shlib_objs@,$(objects),$(subst \
++ 		@shlib_base_name@,libgcc_s,$(subst \
+++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
++ 		@shlib_map_file@,$(mapfile),$(subst \
++ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
++-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
+++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
++ 
++ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
++ 	# @multilib_flags@ is still needed because this may use
++diff -durN gcc-4.4.4.orig/libgcc/configure gcc-4.4.4/libgcc/configure
++--- gcc-4.4.4.orig/libgcc/configure	2008-11-20 18:13:01.000000000 +0100
+++++ gcc-4.4.4/libgcc/configure	2010-05-16 19:38:36.000000000 +0200
++@@ -272,7 +272,7 @@
++ PACKAGE_BUGREPORT=''
++ 
++ ac_unique_file="static-object.mk"
++-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
+++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
++ ac_subst_files=''
++ ac_pwd=`pwd`
++ 
++@@ -3547,6 +3547,39 @@
++ fi
++ 
++ 
+++# On powerpc libgcc_s references copysignl which is a libm function but
+++# glibc apparently also provides it via libc as opposed to uClibc where
+++# it lives in libm.
+++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
+++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
+++if test "${libgcc_cv_copysignl_lib+set}" = set; then
+++  echo $ECHO_N "(cached) $ECHO_C" >&6
+++else
+++
+++    echo '#include <features.h>' > conftest.c
+++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+++    libgcc_cv_copysignl_lib="-lc"
+++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
+++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+++  (eval $ac_try) 2>&5
+++  ac_status=$?
+++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+++  (exit $ac_status); }; }
+++    then
+++	libgcc_cv_copysignl_lib="-lm"
+++    fi
+++    rm -f conftest.*
+++
+++fi
+++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
+++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
+++
+++case /${libgcc_cv_copysignl_lib}/ in
+++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+++  *) LIBGCC_LIBM= ;;
+++esac
+++
+++
++ # Conditionalize the makefile for this target machine.
++ tmake_file_=
++ for f in ${tmake_file}
++@@ -4267,6 +4300,7 @@
++ s, at fixed_point@,$fixed_point,;t t
++ s, at vis_hide@,$vis_hide,;t t
++ s, at set_have_cc_tls@,$set_have_cc_tls,;t t
+++s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
++ s, at tmake_file@,$tmake_file,;t t
++ s, at extra_parts@,$extra_parts,;t t
++ s, at asm_hidden_op@,$asm_hidden_op,;t t
++diff -durN gcc-4.4.4.orig/libgcc/configure.ac gcc-4.4.4/libgcc/configure.ac
++--- gcc-4.4.4.orig/libgcc/configure.ac	2008-11-20 18:13:01.000000000 +0100
+++++ gcc-4.4.4/libgcc/configure.ac	2010-05-16 19:38:36.000000000 +0200
++@@ -223,6 +223,27 @@
++ fi
++ AC_SUBST(set_have_cc_tls)
++ 
+++# On powerpc libgcc_s references copysignl which is a libm function but
+++# glibc apparently also provides it via libc as opposed to uClibc where
+++# it lives in libm.
+++AC_CACHE_CHECK
+++  libgcc_cv_copysignl_lib,
+++    echo '#include <features.h>' > conftest.c
+++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+++    libgcc_cv_copysignl_lib="-lc"
+++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
+++    then
+++	libgcc_cv_copysignl_lib="-lm"
+++    fi
+++    rm -f conftest.*
+++  ])
+++
+++case /${libgcc_cv_copysignl_lib}/ in
+++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+++  *) LIBGCC_LIBM= ;;
+++esac
+++AC_SUBST(LIBGCC_LIBM)
+++
++ # Conditionalize the makefile for this target machine.
++ tmake_file_=
++ for f in ${tmake_file}
 -- 
 1.7.0.4
