@@ -1,35 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 22 Aug 2010 11:23:40 +0200
-Subject: [Buildroot] disable fpu
-In-Reply-To: <29503725.post@talk.nabble.com>
-References: <29503725.post@talk.nabble.com>
-Message-ID: <201008221123.40921.yann.morin.1998@anciens.enib.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Aug 2010 10:13:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 2371] QT MYSQL Module does not build when MySQL
+ installed on the host
+In-Reply-To: <bug-2371-163@https.bugs.busybox.net/>
+References: <bug-2371-163@https.bugs.busybox.net/>
+Message-ID: <20100822101349.492B383294@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jny, All,
+https://bugs.busybox.net/show_bug.cgi?id=2371
 
-On Sunday 22 August 2010 10:40:53 JNY wrote:
-> The image I've produced is for a kernel with requires fpu, but the CPU does
-> not have this feature.  How can I alter the configuration to build an image
-> which doesn't require fpu?
+--- Comment #8 from Paul Jones <paul@pauljones.id.au>  ---
+Sorry for the delay.
 
-In the menuconfig, go to:
-  Toolchain -->
+Distro is Gentoo on x86_64 with mysql server + client installed.
+Buildroot is latest git, using both internal or external crosstool-ng uClibc
+toolchain (one at a time though...)
+Problem occurs with QTe version 4.6.2 and 4.6.3
 
-And select:
-  [*] Use software floating point by default
+This is the output from config.tests/mysql
 
-Regards,
-Yann E. MORIN.
+peejay at desktop
+/media/dev/buildroot-arm/output/build/qt-everywhere-opensource-src-4.6.3/config.tests/unix/mysql
+$ make -n
+echo compiling mysql.cpp &&
+/media/dev/buildroot-arm/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-g++
+--sysroot=/media/dev/buildroot-arm/output/staging -c -pipe -O2 -mtune=arm920t
+-march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-I/media/dev/buildroot-arm/output/staging/usr/include
+-I/media/dev/buildroot-arm/output/staging/include -O2 -Wall -W 
+-I../../../mkspecs/qws/linux-arm-g++ -I. -I/usr/include/mysql
+-I/media/dev/buildroot-arm/output/staging/usr/include/mysql -o mysql.o
+mysql.cpp
+echo linking mysql &&
+/media/dev/buildroot-arm/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-g++
+--sysroot=/media/dev/buildroot-arm/output/staging
+-L/media/dev/buildroot-arm/output/staging/lib
+-L/media/dev/buildroot-arm/output/staging/usr/lib -Wl,-O1 -o mysql mysql.o    
+-L/usr/lib64/mysql -lz -lcrypt -lnsl -lm -L/usr/lib64 -lssl -lcrypto
+-L/media/dev/buildroot-arm/output/staging/usr/lib/mysql -lmysqlclient 
+peejay at desktop
+/media/dev/buildroot-arm/output/build/qt-everywhere-opensource-src-4.6.3/config.tests/unix/mysql
+$ make
+compiling mysql.cpp
+linking mysql
+/usr/lib64/mysql/libmysqlclient.so: file not recognized: File format not
+recognized
+collect2: ld returned 1 exit status
+make: *** [mysql] Error 1
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
