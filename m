@@ -1,55 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Aug 2010 00:01:59 +0200
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 22 Aug 2010 02:36:52 +0200
 Subject: [Buildroot] Stuff for the next release (2010.11)
-In-Reply-To: <20100821173633.GA27302@merkur.ravnborg.org>
+In-Reply-To: <20100821184657.6f49a80f@surf>
 References: <20100821184657.6f49a80f@surf>
-	<20100821173633.GA27302@merkur.ravnborg.org>
-Message-ID: <20100822000159.04f432dc@surf>
+Message-ID: <1282437412.1242.128.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+Hello,
 
-On Sat, 21 Aug 2010 19:36:33 +0200
-Sam Ravnborg <sam@ravnborg.org> wrote:
+I'm joining Thomas to write a little about the work I'm doing on
+Buildroot and that could be part of the next release (2010.11).
 
-> For the record we are working on making the integration
-> easier for non-kernel projects utilizing kconfig.
+I started to work on package generation about 1 month ago
+(http://potipota.net/cgi-bin/cgit.cgi/buildroot/log/?h=package-generation). The idea behind this is to generate a per package "tarball" of what is getting installed in the staging/target directories. This way, we could easily :
+        * uninstall packages, by removing all files listed in the
+        tarballs
+        * generate packages in ipk (or whatever) format to easily update
+        our rootfs ;)
+After having been able to tarball some of the packages, I realized that
+it won't work without important modifications about how we deal with
+libtooled packages and more particulary with libraries compiled with
+libtool. Indeed, to be able to cross compiled library with libtool, we
+currently use 2 tricks :
+        * a libtool patch to fix some cross compilation problems with
+        libtool
+        * we edit all .la files to replace the path to the libraries
+        (ie. /usr/lib by $(STAGING_DIR)/usr/lib)
+This second point is the main problem I'm facing to generate correct
+tarballs at the moment, and it also led me to investigate the problem we
+have with libtool.
 
-Yes, I've followed parts of the discussion about this, and that's very
-good news. I think other projects, such as Crosstool-NG, Busybox,
-PTXdist, uClibc and all users of kconfig will greatly benefit from this.
+I started to rework the way we work with libtool about 2 weeks ago
+(http://potipota.net/cgi-bin/cgit.cgi/buildroot/log/?h=new-libtool-at-work).
+Here is at quick list of impacts :
+        * it is now required to run autoreconf on all the libtooled
+        packages
+        * we can get rid of adding -L$(STAGING_DIR)/lib -L
+        $(STAGING_DIR)/usr/lib to LDFLAGS
+        * the libtool patch isn't used anymore
+At the moment I'm having something that work, but in a limited
+configuration (with glibc external toolchains). The sum of modified code
+is quite small at the moment, but it has a significant impact on a lot
+of packages (everything using libtool, which means probably most of the
+libraries). I will give an update later on the list to detail the
+remaining problems.
 
-> In headlines that is:
-> - Make CONFIG_ prefix configurable at buildtime
->   Basically adding -DCONFIG_=BR2_ will do the trick
-> 
-> - Use mainmenu entry as headline in the frontends
-> 
-> - Drop "kernel" from all help texts
->   So there is no longer any "kernel" texts hardcoded
-> 
-> I guess a few other nits I forgot.
-> 
-> I hope this is merged in next merge window - but no promises.
-
-Ok. I'll try to update our package/config stuff against the mainline
-kernel regularly, so that we can take advantage from this work.
-
-FWIW, we also have other patches to scripts/kconfig besides
-s/kernel/Buildroot/ and the change of the prefix. We have some stuff to
-support the fact that the .config file and all related generated files
-must be in the output directory in the case of an out-of-tree build. I
-haven't look at those changes in detail, they were implemented by Peter.
+All this stuff is in ugly/not-complete state at the moment, but I hope
+to complete the libtool stuff pretty soon.
 
 Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Lionel Landwerlin
