@@ -1,59 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 22 Aug 2010 10:13:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 2371] QT MYSQL Module does not build when MySQL
- installed on the host
-In-Reply-To: <bug-2371-163@https.bugs.busybox.net/>
-References: <bug-2371-163@https.bugs.busybox.net/>
-Message-ID: <20100822101349.492B383294@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Aug 2010 12:51:53 +0200
+Subject: [Buildroot] [PATCH 01/20] Fix util-linux build on MIPS
+In-Reply-To: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <55f70939b839cd5ad826ea01fcb6d363d63ee15d.1282471311.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2371
+As reported in bug #635, util-linux doesn't build due to missing
+constant definitions related to the a.out binary format. We fix this
+by hardcoding these constant definitions, as done in newer versions of
+util-linux.
 
---- Comment #8 from Paul Jones <paul@pauljones.id.au>  ---
-Sorry for the delay.
+Obviously, the long term fix is to upgrade to util-linux-ng, but this
+is probably not acceptable for 2010.08.
 
-Distro is Gentoo on x86_64 with mysql server + client installed.
-Buildroot is latest git, using both internal or external crosstool-ng uClibc
-toolchain (one at a time though...)
-Problem occurs with QTe version 4.6.2 and 4.6.3
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...linux-2.13-pre17-hardcode-a-out-constants.patch |   41 ++++++++++++++++++++
+ 1 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/util-linux/util-linux-2.13-pre17-hardcode-a-out-constants.patch
 
-This is the output from config.tests/mysql
-
-peejay at desktop
-/media/dev/buildroot-arm/output/build/qt-everywhere-opensource-src-4.6.3/config.tests/unix/mysql
-$ make -n
-echo compiling mysql.cpp &&
-/media/dev/buildroot-arm/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-g++
---sysroot=/media/dev/buildroot-arm/output/staging -c -pipe -O2 -mtune=arm920t
--march=armv4t -mabi=aapcs-linux -msoft-float -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/media/dev/buildroot-arm/output/staging/usr/include
--I/media/dev/buildroot-arm/output/staging/include -O2 -Wall -W 
--I../../../mkspecs/qws/linux-arm-g++ -I. -I/usr/include/mysql
--I/media/dev/buildroot-arm/output/staging/usr/include/mysql -o mysql.o
-mysql.cpp
-echo linking mysql &&
-/media/dev/buildroot-arm/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-g++
---sysroot=/media/dev/buildroot-arm/output/staging
--L/media/dev/buildroot-arm/output/staging/lib
--L/media/dev/buildroot-arm/output/staging/usr/lib -Wl,-O1 -o mysql mysql.o    
--L/usr/lib64/mysql -lz -lcrypt -lnsl -lm -L/usr/lib64 -lssl -lcrypto
--L/media/dev/buildroot-arm/output/staging/usr/lib/mysql -lmysqlclient 
-peejay at desktop
-/media/dev/buildroot-arm/output/build/qt-everywhere-opensource-src-4.6.3/config.tests/unix/mysql
-$ make
-compiling mysql.cpp
-linking mysql
-/usr/lib64/mysql/libmysqlclient.so: file not recognized: File format not
-recognized
-collect2: ld returned 1 exit status
-make: *** [mysql] Error 1
-
+diff --git a/package/util-linux/util-linux-2.13-pre17-hardcode-a-out-constants.patch b/package/util-linux/util-linux-2.13-pre17-hardcode-a-out-constants.patch
+new file mode 100644
+index 0000000..b115c41
+--- /dev/null
++++ b/package/util-linux/util-linux-2.13-pre17-hardcode-a-out-constants.patch
+@@ -0,0 +1,41 @@
++Hardcode a.out related constants
++
++The OMAGIC, NMAGIC and ZMAGIC constants, related to the legacy a.out
++binary format, are no longer available in the headers of all
++architectures, due to this binary format being deprecated. For that
++reason, util-linux fails to build.
++
++We therefore take the approach used in newer versions of
++util-linux-ng: hardcoding those values. See
++http://git.kernel.org/?p=utils/util-linux-ng/util-linux-ng.git;a=commitdiff;h=e9eb4dad0ece03914f67f6d1ded74cfbbe694ba4
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ text-utils/more.c |    7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++Index: util-linux-2.13-pre7/text-utils/more.c
++===================================================================
++--- util-linux-2.13-pre7.orig/text-utils/more.c
+++++ util-linux-2.13-pre7/text-utils/more.c
++@@ -53,7 +53,6 @@
++ #include <sys/stat.h>
++ #include <sys/file.h>
++ #include <sys/wait.h>
++-#include <a.out.h>
++ #include <locale.h>
++ #include "xstrncpy.h"
++ #include "nls.h"
++@@ -504,9 +503,9 @@
++ 
++ 	if (fread(twobytes, 2, 1, f) == 1) {
++ 		switch(twobytes[0] + (twobytes[1]<<8)) {
++-		case OMAGIC:	/* 0407 */
++-		case NMAGIC:	/* 0410 */
++-		case ZMAGIC:	/* 0413 */
+++		case 0407:	/* a.out obj */
+++		case 0410:	/* a.out exec */
+++		case 0413:	/* a.out demand exec */
++ 		case 0405:
++ 		case 0411:
++ 		case 0177545:
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
