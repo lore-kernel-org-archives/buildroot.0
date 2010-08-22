@@ -1,43 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Aug 2010 13:03:19 +0200
-Subject: [Buildroot] About cygwin
-In-Reply-To: <AANLkTinY8Ko+8=1yu0-AMUcP16rawcb=YydUhYh=RSh3@mail.gmail.com>
-References: <AANLkTikn0oGbsQFbPg-JeX7=5EnY-3AyYpVNPk7qkYkh@mail.gmail.com>
-	<AANLkTinY8Ko+8=1yu0-AMUcP16rawcb=YydUhYh=RSh3@mail.gmail.com>
-Message-ID: <20100822130319.2cb6e9e3@surf>
+From: Darius Augulis <augulis.darius@gmail.com>
+Date: Sun, 22 Aug 2010 19:19:57 +0300
+Subject: [Buildroot] [PATCH 0/2] Add support for Alix2d3 board from PC
+	Engines
+In-Reply-To: <20100806225032.669dfa12@surf>
+References: <20100712204654.17842.63829.stgit@darius-desktop>	<4C5C5EB1.4020500@gmail.com>
+	<20100806225032.669dfa12@surf>
+Message-ID: <4C714E2D.3050907@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Aug 2010 10:27:25 +1000
-Mitch Davis <mjd+buildroot@afork.com> wrote:
 
-> Disclaimer: I may be wrong as I'm not part of buildroot team, just
-> trying to help.
 
-You're correct: we don't support Cygwin. I'm not personally interested
-by adding Cygwin support to Buildroot, and I think that trying to do
-embedded Linux development inside Cygwin doesn't make sense, you'd
-better use Linux on your development workstation.
+Hello,
 
-Now, if someone steps in and wants to improve Buildroot to support
-Cygwin, why not, but we'll have to see how invasive the changes are. I
-don't think we want to merge invasive Cygwin-specific changes if no-one
-is going to maintain them on the long term. As none of the current main
-Buildroot contributors use Windows and Cygwin, Cygwin support is
-probably going to be broken quite often by mistake due to improvements
-we make to Buildroot. 
+On 08/06/2010 11:50 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Fri, 06 Aug 2010 22:12:49 +0300
+> Darius Augulis<augulis.darius-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>  wrote:
+>
+>> Did anybody review it? Maybe it's ready to merge it to main line?
+>
+> As 2010.08-rc1 has been released, only bug fixes will be merged until
+> the release of 2010.08.
+>
+> My top-priority item for 2010.11 is to cleanup the board support in
+> Buildroot (I already have a stack of patches started on this topic). As
+> part of this effort, I intend to merge all pending contributions that
+> add board support.
+>
+> However, I don't consider this one as ready, as it adds a new complete
+> target skeleton for just a new Grub configuration, as discussed a week
+> ago on the list. We need to find a different solution to this than
+> duplicating the target skeleton.
 
-Of course, that's my own personal point of view, not the one of the
-Buildroot project as a whole.
+I have another similar patch adding other device support, also with 
+skeleton...
+One possible solution could be directory per device containing ONLY 
+specific and custom files to particular device. Some script should copy 
+these files to output rootfs directory after copying default skeleton 
+files (rewriting existing ones if needed). In this case, default 
+skeleton would be the same for all devices.
+What do you think about such idea?
 
-Regards,
+Darius.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+> Thanks,
+>
+> Thomas
