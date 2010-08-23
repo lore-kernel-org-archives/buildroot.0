@@ -1,39 +1,312 @@
-From: Massimiliano Marretta <max@marretta.com>
-Date: Mon, 23 Aug 2010 08:17:37 +0200
-Subject: [Buildroot] buildroot Digest, Vol 50, Issue 40
-In-Reply-To: <mailman.15688.1282475011.17863.buildroot@busybox.net>
-References: <mailman.15688.1282475011.17863.buildroot@busybox.net>
-Message-ID: <4C721281.4010901@marretta.com>
+From: Darcy Watkins <dwatkins@tranzeo.com>
+Date: Mon, 23 Aug 2010 07:52:47 -0700
+Subject: [Buildroot] [PATCH] Re:  Deprecate rp-pppoe package
+In-Reply-To: <D61182AC8012EA4EBC531B3AF23BE1099C8208@tranzeo-mail2.12stewart.tranzeo.com>
+References: <1278436093.12234.11.camel@localhost.localdomain>
+	<4C45EF4E.1000501@zacarias.com.ar>
+	<D61182AC8012EA4EBC531B3AF23BE1099C8208@tranzeo-mail2.12stewart.tranzeo.com>
+Message-ID: <1282575167.18213.51.camel@tr-pentomino>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Sorry for my bad english.
+Here are first pass patches for more current (and server side) rp-pppoe
+support in buildroot.  Summary of changes below...
 
-On 08/22/10 13:03, buildroot-request at busybox.net wrote:
-> Hello Massimiliano,
->
-> Thanks for reworking the patch with Git. I have a couple of comments,
-> though. First, does the X.org support needs to be part of the same
-> patch as the version bump ? In other words, shouldn't this be split in
-> several smaller patches (one to bump the versions, one to add X.org
-> support) ?
-Yes the two changes are independent. I try to explain.
+1.  The pppd.mk change for radrealms.so I sent to the list Aug 19th
+2.  Update rp-pppoe package from version 3.8 to version 3.10
+3.  Add the pppoe server binaries to the target (pppoe-server,
+    pppoe-relay and pppoe-sniff)
+4.  Changes to tarball name, the upstream URL and no downloaded patch.
+     - The newer tarball was not on the mirror site that it was
+       pointing to by default so I pointed it to Roaring Pengiun's
+       site.  (Not sure how correct this is - perhaps it should
+       change back once the mirror site is updated).
+5.  Buildroot rp-pppoe package patch carry forwards / updates
+     - add support to use the kernel plugin (new patch)
+     - update to use with pppd 2.4.5
+     - c/f the pack bitfields patch
+     - drop the autoreconf patch (already in rp-pppoe ver 3.10)
 
-My needs is to use Qt in X.org environment with phonon gstreamer backend.
-For this purpose is necessary to enable X.org support in gstreamer.
-With the old gstreamer version, phonon have some problem to retrieve 
-time information from mp3 files.
-The gstreamer upgrade resolve this problem.
-Now I recreate the separate patch.
+Note:  I am only including the changes and additions here.  If you apply
+this to your buildroot, you should manually remove the two
+package/rp-pppoe/rp-pppoe-3.8-* patches to get rid of them.  It didn't
+make sense for me to attach additional 100's of k bytes of patch that
+only serves to delete the two files.
 
-> It would be good to add a little bit more details in the commit log:
-> what does the X.org support brings, and what mp3 issue is being fixed
-> by the version bump ?
->
-> Other comments below.
-/
-/
+I tried this on a PowerPC 405EP based target board with two Ethernet
+ports.  I setup eth0 as TCP/IP on LAN with a radius server and eth1 to
+act as an access concentrator (pppoe server) to a Windows PC.  I ran two
+instances of pppoe-server, one advertising a service called "local" set
+up to authenticate using the board's Linux login / password scheme, and
+the other advertising a service called "radius" to authenticate via the
+radius server connected via eth0.
+
+I was able to "dial-up" connect the PC (using PPPoE) using either
+service, obtain IP address from pool range corresponding to each
+service, and ping through to the PC running the radius server.  I tried
+both user space pppoe deamon and the kernel plugin - both worked.
+
+I have not updated the rp-pppoe.mk to the new infrastructure yet.  (I
+have to study this first and thought it best to get the substance
+available for comment before working on the final touch ups on
+packaging).
+
+Hopefully this can make it in time for 2010.08 release (if not then the
+2010.11 release) and remove the deprecated status from the rp-pppoe
+package.
+
+Note: This patch applies against the 2010.08-rc1 tarball but since
+nothing has changed in the rp-pppoe package lately, it will probably
+also work with the latest git as well.  (Don't forget to delete the old
+version 3.8 patch files yourself).
+
+
+Regards,
+
+Darcy
+
+
+signed-off by: Darcy Watkins <dwatkins@tranzeo.com>
+
+Index: buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe-3.10-002-krn-plugin.patch
+===================================================================
+--- /dev/null
++++ buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe-3.10-002-krn-plugin.patch
+@@ -0,0 +1,34 @@
++--- rp-pppoe-3.10/src/configure.theorig  2008-02-05 13:57:15.000000000 -0800
+++++ rp-pppoe-3.10/src/configure  2008-02-05 13:24:36.000000000 -0800
++@@ -6151,7 +6151,7 @@ modprobe ppp_synctty > /dev/null 2>&1
++ modprobe pppoe > /dev/null 2>&1
++ fi
++ if test "$cross_compiling" = yes; then
++-  ac_cv_linux_kernel_pppoe=no; $ECHO "cross-compiling, default: "
+++  ac_cv_linux_kernel_pppoe=yes; $ECHO "cross-compiling, default: "
++ else
++   cat >conftest.$ac_ext <<_ACEOF
++ /* confdefs.h.  */
++--- rp-pppoe-3.10/src/pppoe-server.c.theorig     2006-04-02 07:29:42.000000000 -0700
+++++ rp-pppoe-3.10/src/pppoe-server.c     2008-02-05 13:52:15.000000000 -0800
++@@ -20,6 +20,9 @@ static char const RCSID[] =
++ 
++ #include "config.h"
++ 
+++/* Patched hack to make this cross compile */
+++#define HAVE_LINUX_KERNEL_PPPOE 1
+++
++ #if defined(HAVE_NETPACKET_PACKET_H) || defined(HAVE_LINUX_IF_PACKET_H)
++ #define _POSIX_SOURCE 1 /* For sigaction defines */
++ #endif
++--- rp-pppoe-3.10/src/Makefile.in.theorig	2008-02-06 06:59:11.000000000 -0800
+++++ rp-pppoe-3.10/src/Makefile.in	2008-02-06 07:24:50.000000000 -0800
++@@ -48,7 +48,7 @@ PPPD_PATH=@PPPD@
++ @LIC_MAKEFILE_INCLUDE@
++ 
++ # Kernel-mode plugin gets installed here.
++-PLUGIN_DIR=/etc/ppp/plugins
+++PLUGIN_DIR=/usr/lib/pppd/2.4.5
++ PLUGIN_PATH=$(PLUGIN_DIR)/rp-pppoe.so
++ 
++ # Configuration file paths
+Index: buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe.mk
+===================================================================
+--- buildroot-2010.08_powerpc.orig/package/rp-pppoe/rp-pppoe.mk
++++ buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe.mk
+@@ -3,33 +3,21 @@
+ # rp-pppoe
+ #
+ #############################################################
+-RP_PPPOE_VERSION:=3.8
+-RP_PPPOE_SOURCE:=rp-pppoe_$(RP_PPPOE_VERSION).orig.tar.gz
+-RP_PPPOE_PATCH:=rp-pppoe_$(RP_PPPOE_VERSION)-3.diff.gz
+-RP_PPPOE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/r/rp-pppoe
++RP_PPPOE_VERSION:=3.10
++RP_PPPOE_SOURCE:=rp-pppoe-$(RP_PPPOE_VERSION).tar.gz
++RP_PPPOE_SITE:=http://www.roaringpenguin.com/files/download
+ RP_PPPOE_TOPDIR:=$(BUILD_DIR)/rp-pppoe-$(RP_PPPOE_VERSION)
+ RP_PPPOE_DIR:=$(BUILD_DIR)/rp-pppoe-$(RP_PPPOE_VERSION)/src
+ RP_PPPOE_CAT:=$(ZCAT)
+ RP_PPPOE_BINARY:=pppoe
++RP_PPPOE_SERVER_BINARY_SUFFIXES:=-server -relay -sniff
+ RP_PPPOE_TARGET_BINARY:=usr/sbin/pppoe
+ 
+ $(DL_DIR)/$(RP_PPPOE_SOURCE):
+ 	$(call DOWNLOAD,$(RP_PPPOE_SITE),$(RP_PPPOE_SOURCE))
+ 
+-ifneq ($(RP_PPPOE_PATCH),)
+-RP_PPPOE_PATCH_FILE:=$(DL_DIR)/$(RP_PPPOE_PATCH)
+-$(RP_PPPOE_PATCH_FILE):
+-	$(call DOWNLOAD,$(RP_PPPOE_SITE),$(RP_PPPOE_PATCH))
+-endif
+-
+ $(RP_PPPOE_TOPDIR)/.unpacked: $(DL_DIR)/$(RP_PPPOE_SOURCE) $(RP_PPPOE_PATCH_FILE)
+ 	$(RP_PPPOE_CAT) $(DL_DIR)/$(RP_PPPOE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-ifneq ($(RP_PPPOE_PATCH),)
+-	(cd $(RP_PPPOE_TOPDIR) && $(RP_PPPOE_CAT) $(DL_DIR)/$(RP_PPPOE_PATCH) | patch -p1)
+-	if [ -d $(RP_PPPOE_TOPDIR)/debian/patches ]; then \
+-		toolchain/patch-kernel.sh $(RP_PPPOE_TOPDIR) $(RP_PPPOE_TOPDIR)/debian/patches \*.patch; \
+-	fi
+-endif
+ 	toolchain/patch-kernel.sh $(RP_PPPOE_TOPDIR) package/rp-pppoe/ rp-pppoe\*.patch
+ 	touch $@
+ 
+@@ -38,6 +26,7 @@ $(RP_PPPOE_TOPDIR)/.configured: $(RP_PPP
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		rpppoe_cv_pack_bitfields=normal \
++		PPPD_H=$(PPPD_DIR)/pppd/pppd.h \
+ 		./configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -53,6 +42,9 @@ $(RP_PPPOE_DIR)/$(RP_PPPOE_BINARY): $(RP
+ 
+ $(TARGET_DIR)/$(RP_PPPOE_TARGET_BINARY): $(RP_PPPOE_DIR)/$(RP_PPPOE_BINARY)
+ 	cp -dpf $(RP_PPPOE_DIR)/$(RP_PPPOE_BINARY) $@
++	for ff in $(RP_PPPOE_SERVER_BINARY_SUFFIXES) ; do \
++		cp -dpf $(RP_PPPOE_DIR)/$(RP_PPPOE_BINARY)$$ff $(TARGET_DIR)/$(RP_PPPOE_TARGET_BINARY)$$ff ; \
++	done
+ ifeq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	mkdir -p $(TARGET_DIR)/usr/share/man/man8
+ 	$(INSTALL) -m 644 $(RP_PPPOE_TOPDIR)/man/pppoe.8 $(TARGET_DIR)/usr/share/man/man8/pppoe.8
+Index: buildroot-2010.08_powerpc/package/rp-pppoe/Config.in
+===================================================================
+--- buildroot-2010.08_powerpc.orig/package/rp-pppoe/Config.in
++++ buildroot-2010.08_powerpc/package/rp-pppoe/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_RP_PPPOE
+-	bool "pppoe"
+-	depends on BR2_DEPRECATED
++	bool "rp-pppoe"
++	depends on BR2_PACKAGE_PPPD
+ 	help
+ 	  An implementation of the Point-to-point protocol over Ethernet.
++	  Has userspace client and server deamons.  You likely only need
++	  this package if you are implementing the pppoe server that will
++	  service other pppoe client devices.  Otherwise the normal client
++	  functionality already exists in the pppd package (and kernel).
+ 
+ 	  http://www.roaringpenguin.com/pppoe.html
+Index: buildroot-2010.08_powerpc/package/pppd/pppd.mk
+===================================================================
+--- buildroot-2010.08_powerpc.orig/package/pppd/pppd.mk
++++ buildroot-2010.08_powerpc/package/pppd/pppd.mk
+@@ -55,8 +55,8 @@ $(PPPD_TARGET_INSTALL_TARGET):
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
+ 	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radius.so \
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radius.so
+-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radattr.so \
+-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
++	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radrealms.so \
++		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radrealms.so
+ 	for m in $(PPPD_MANPAGES); do \
+ 		$(INSTALL) -m 644 -D $(PPPD_DIR)/$$m/$$m.8 \
+ 			$(TARGET_DIR)/usr/share/man/man8/$$m.8; \
+Index: buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe-3.10-001-configure-bitfield.patch
+===================================================================
+--- /dev/null
++++ buildroot-2010.08_powerpc/package/rp-pppoe/rp-pppoe-3.10-001-configure-bitfield.patch
+@@ -0,0 +1,34 @@
++--- rp-pppoe-3.10.orig/src/configure.in	2006-04-02 16:29:42.000000000 +0200
+++++ rp-pppoe-3.10/src/configure.in	2007-08-24 11:51:04.000000000 +0200
++@@ -231,6 +231,7 @@ esac
++ 
++ dnl Figure out packing order of structures
++ AC_MSG_CHECKING([packing order of bit fields])
+++if test "x$rpppoe_cv_pack_bitfields" = "x" ; then
++ AC_TRY_RUN([
++ union foo {
++     struct bar {
++@@ -254,8 +255,8 @@ main(void)
++ 	return 2;
++     }
++ }], rpppoe_cv_pack_bitfields=normal, rpppoe_cv_pack_bitfields=rev,
++-$ECHO "no defaults for cross-compiling"; exit 0)
++-
+++$ECHO "no defaults for cross-compiling")
+++fi
++ if test "$rpppoe_cv_pack_bitfields" = "rev" ; then
++ 	AC_MSG_RESULT(reversed)
++ 	AC_DEFINE(PACK_BITFIELDS_REVERSED)
++--- rp-pppoe-3.10.orig/src/configure	2010-08-20 10:46:39.000000000 -0700
+++++ rp-pppoe-3.10/src/configure	2010-08-20 11:02:16.000000000 -0700
++@@ -6272,7 +6272,9 @@ esac
++ { echo "$as_me:$LINENO: checking packing order of bit fields" >&5
++ echo $ECHO_N "checking packing order of bit fields... $ECHO_C" >&6; }
++ if test "$cross_compiling" = yes; then
++-  $ECHO "no defaults for cross-compiling"; exit 0
+++if test "x$rpppoe_cv_pack_bitfields" = "x" ; then
+++  $ECHO "no defaults for cross-compiling"
+++fi
++ else
++   cat >conftest.$ac_ext <<_ACEOF
++ /* confdefs.h.  */
+
+
+
+delete...
+   package/rp-pppoe/rp-pppoe-3.8-001-configure-bitfield.patch
+   package/rp-pppoe/rp-pppoe-3.8-002-autoreconf.patch
+
+
+
+
+On Tue, 2010-07-20@12:44 -0700, Darcy Watkins wrote:
+> Hi,
+> 
+> I'll take that on early August when I get back from vacation.  I'll need
+> to set up to repeat the test case and probably want to also try it out
+> on a couple of other processors I have available (an ARM11 MX31 and an
+> x86 Atom as well as the PPC405).  And of course, upgrade the version
+> etc.
+> 
+> Buildroot doesn't have the freeradius client in it, so I'll probably
+> have to add that as well.
+> 
+> 
+> Regards,
+> 
+> Darcy
+> 
+> 
+> -----Original Message-----
+> From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
+> Sent: Tuesday, July 20, 2010 11:48 AM
+> To: Darcy Watkins
+> Cc: buildroot
+> Subject: [Spam Bayesian - ] - Re: [Buildroot] Deprecate rp-pppoe package
+> - Bayesian Filter detected spam
+> 
+> On 07/06/2010 02:08 PM, Darcy L. Watkins wrote:
+> 
+> > Hello,
+> > 
+> > Before you remove the rp-pppoe package from buildroot, I have a
+> > question.  Does the pppoe plugin for pppd include the access
+> > concentrator (AC) support in it as well?
+> > 
+> > I ask this because most people only care about the client side and
+> don't
+> > think much about the server side you connect it to.
+> > 
+> > A while back, I cross compiled the AC functionality of rp-pppoe on
+> > powerpc, added a freeradius client and demo'd a simple embedded AC on
+> an
+> > AMCC Taihu involving, a private LAN, freeradius running on a server
+> > machine and a windows PC running its PPPoE client.  I was able to
+> > advertise numerous "services" from the Taihu and have the PC be able
+> to
+> > select and connect to them using PPPoE sessions.
+> > 
+> > Regards,
+> > 
+> > Darcy
+> 
+> Hi.
+> Hmm we might keep rp-pppoe for server-side functionality.
+> Do you feel like migrating the package to the latest infrastructure and
+> updating to the latest version?
+> Regards.
