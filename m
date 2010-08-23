@@ -1,52 +1,53 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 23 Aug 2010 02:06:46 +0000 (UTC)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Aug 2010 07:18:37 +0200
 Subject: [Buildroot] About cygwin
+In-Reply-To: <20100822130319.2cb6e9e3@surf> (Thomas Petazzoni's message of
+	"Sun, 22 Aug 2010 13:03:19 +0200")
 References: <AANLkTikn0oGbsQFbPg-JeX7=5EnY-3AyYpVNPk7qkYkh@mail.gmail.com>
 	<AANLkTinY8Ko+8=1yu0-AMUcP16rawcb=YydUhYh=RSh3@mail.gmail.com>
 	<20100822130319.2cb6e9e3@surf>
-Message-ID: <i4sl3m$ori$1@dough.gmane.org>
+Message-ID: <877hjhkitu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-08-22, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Sat, 14 Aug 2010 10:27:25 +1000
-> Mitch Davis <mjd+buildroot@afork.com> wrote:
->
->> Disclaimer: I may be wrong as I'm not part of buildroot team, just
->> trying to help.
->
-> You're correct: we don't support Cygwin. I'm not personally
-> interested by adding Cygwin support to Buildroot, and I think that
-> trying to do embedded Linux development inside Cygwin doesn't make
-> sense, you'd better use Linux on your development workstation.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I've spent time supporting devlopment for eCos under Cygwin using Gnu
-toolchains.  It's painful.  It's a minor miracle that Cygwin works at
-all, and it's a major miracle that it works as well as it does.  But
-it's still a constant, nagging souce of issues.
+Hi,
 
-> Now, if someone steps in and wants to improve Buildroot to support
-> Cygwin, why not,
+ Thomas> You're correct: we don't support Cygwin. I'm not personally interested
+ Thomas> by adding Cygwin support to Buildroot, and I think that trying to do
+ Thomas> embedded Linux development inside Cygwin doesn't make sense, you'd
+ Thomas> better use Linux on your development workstation.
 
-Because somebody who wants to do that is missing more than a few
-clues.  I'd be rather wary of any changes they make.  1/2 :)
+ Thomas> Now, if someone steps in and wants to improve Buildroot to support
+ Thomas> Cygwin, why not, but we'll have to see how invasive the changes are. I
+ Thomas> don't think we want to merge invasive Cygwin-specific changes if no-one
+ Thomas> is going to maintain them on the long term. As none of the current main
+ Thomas> Buildroot contributors use Windows and Cygwin, Cygwin support is
+ Thomas> probably going to be broken quite often by mistake due to improvements
+ Thomas> we make to Buildroot. 
 
-> but we'll have to see how invasive the changes are. I don't think we
-> want to merge invasive Cygwin-specific changes if no-one is going to
-> maintain them on the long term. As none of the current main Buildroot
-> contributors use Windows and Cygwin, Cygwin support is probably going
-> to be broken quite often by mistake due to improvements we make to
-> Buildroot. 
->
-> Of course, that's my own personal point of view, not the one of the
-> Buildroot project as a whole.
+ Thomas> Of course, that's my own personal point of view, not the one of the
+ Thomas> Buildroot project as a whole.
 
-Wanting to do Linux development under Windows instead of Linux is just
-plain nuts.  Even installing Linux on a VM is easier and will work a
-lot better.
+FYI, I agree totally with the above. There's a few other reasons why
+using Linux instead of Cygwin is a good idea:
+
+- Windows (and in term Cygwin) has a few hardcoded magic file names
+  (comN.*, con.*, prn.*, ..), which breaks horrible when packages have
+  source files like con.c
+
+- Cygwin is SLOW. It's >5 years since I last used it, but back then it
+  was around 40x slower than Linux for configure/make/make install style
+  stuff.
+
+- A lot of the issues people have when they start working on embedded
+  Linux systems are Linux questions rather than anything specific to
+  embedded. The best way to learn Linux is IMHO just using it as much as
+  possible.
 
 -- 
-Grant
+Bye, Peter Korsgaard
