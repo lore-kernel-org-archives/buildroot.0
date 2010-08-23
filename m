@@ -1,86 +1,39 @@
-From: Nataraj S Narayan <natarajsn@gmail.com>
-Date: Mon, 23 Aug 2010 11:47:25 +0530
-Subject: [Buildroot] About cygwin
-In-Reply-To: <877hjhkitu.fsf@macbook.be.48ers.dk>
-References: <AANLkTikn0oGbsQFbPg-JeX7=5EnY-3AyYpVNPk7qkYkh@mail.gmail.com>
-	<AANLkTinY8Ko+8=1yu0-AMUcP16rawcb=YydUhYh=RSh3@mail.gmail.com>
-	<20100822130319.2cb6e9e3@surf> <877hjhkitu.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTi=nctPxZ9b6MnS2H1LCcaTV97Td-0jgn=eF195J@mail.gmail.com>
+From: Massimiliano Marretta <max@marretta.com>
+Date: Mon, 23 Aug 2010 08:17:37 +0200
+Subject: [Buildroot] buildroot Digest, Vol 50, Issue 40
+In-Reply-To: <mailman.15688.1282475011.17863.buildroot@busybox.net>
+References: <mailman.15688.1282475011.17863.buildroot@busybox.net>
+Message-ID: <4C721281.4010901@marretta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
 
-How about trying out BR on FreeBSD? I do lots of my cross compilation to
-arm-linux on Freebsd. I find it gives least of suprises.
+Sorry for my bad english.
 
- Whereas on a debian  Lenny, for Example , as I mentioned in a previous
-mail, I need to do a 'dpkg-reconfigure  recode'  almost always before I
-"make" on BR, to prevent the libiconv errors from appearing. But I do have
-another Lenny setup with BR which shows none of these issues.
+On 08/22/10 13:03, buildroot-request at busybox.net wrote:
+> Hello Massimiliano,
+>
+> Thanks for reworking the patch with Git. I have a couple of comments,
+> though. First, does the X.org support needs to be part of the same
+> patch as the version bump ? In other words, shouldn't this be split in
+> several smaller patches (one to bump the versions, one to add X.org
+> support) ?
+Yes the two changes are independent. I try to explain.
 
-regards
+My needs is to use Qt in X.org environment with phonon gstreamer backend.
+For this purpose is necessary to enable X.org support in gstreamer.
+With the old gstreamer version, phonon have some problem to retrieve 
+time information from mp3 files.
+The gstreamer upgrade resolve this problem.
+Now I recreate the separate patch.
 
-Nataraj
-
-
-
-On Mon, Aug 23, 2010 at 10:48 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> writes:
+> It would be good to add a little bit more details in the commit log:
+> what does the X.org support brings, and what mp3 issue is being fixed
+> by the version bump ?
 >
-> Hi,
->
->  Thomas> You're correct: we don't support Cygwin. I'm not personally
-> interested
->  Thomas> by adding Cygwin support to Buildroot, and I think that trying to
-> do
->  Thomas> embedded Linux development inside Cygwin doesn't make sense, you'd
->  Thomas> better use Linux on your development workstation.
->
->  Thomas> Now, if someone steps in and wants to improve Buildroot to support
->  Thomas> Cygwin, why not, but we'll have to see how invasive the changes
-> are. I
->  Thomas> don't think we want to merge invasive Cygwin-specific changes if
-> no-one
->  Thomas> is going to maintain them on the long term. As none of the current
-> main
->  Thomas> Buildroot contributors use Windows and Cygwin, Cygwin support is
->  Thomas> probably going to be broken quite often by mistake due to
-> improvements
->  Thomas> we make to Buildroot.
->
->  Thomas> Of course, that's my own personal point of view, not the one of
-> the
->  Thomas> Buildroot project as a whole.
->
-> FYI, I agree totally with the above. There's a few other reasons why
-> using Linux instead of Cygwin is a good idea:
->
-> - Windows (and in term Cygwin) has a few hardcoded magic file names
->  (comN.*, con.*, prn.*, ..), which breaks horrible when packages have
->  source files like con.c
->
-> - Cygwin is SLOW. It's >5 years since I last used it, but back then it
->  was around 40x slower than Linux for configure/make/make install style
->  stuff.
->
-> - A lot of the issues people have when they start working on embedded
->  Linux systems are Linux questions rather than anything specific to
->  embedded. The best way to learn Linux is IMHO just using it as much as
->  possible.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100823/128f4414/attachment.html>
+> Other comments below.
+/
+/
