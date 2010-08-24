@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Aug 2010 09:31:58 +0200
-Subject: [Buildroot] [PATCH 14/20] netcat: prevent build system from
- adding a prefix to binaries
-In-Reply-To: <87r5hpuyvc.fsf@macbook.be.48ers.dk>
+Date: Tue, 24 Aug 2010 09:33:38 +0200
+Subject: [Buildroot] [PATCH 10/20] libglib2: add patch to rework
+ clock_gettime() test
+In-Reply-To: <8739u5khpg.fsf@macbook.be.48ers.dk>
 References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
 	<cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-	<86047c4c4a4d951bfe590291c88a3d5b3f911180.1282471311.git.thomas.petazzoni@free-electrons.com>
-	<87r5hpuyvc.fsf@macbook.be.48ers.dk>
-Message-ID: <20100824093158.76c1f8af@surf>
+	<7dfc97b926288b402f07f49c2464cf9fd48edbdd.1282471311.git.thomas.petazzoni@free-electrons.com>
+	<8739u5khpg.fsf@macbook.be.48ers.dk>
+Message-ID: <20100824093338.60d49ec5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Aug 2010 17:34:15 +0200
+On Mon, 23 Aug 2010 07:42:51 +0200
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> Does that work?
+> Thanks! It would be good to have a summary of the above in the patch
+> header itself.
 
-Yes, it did work.
+Ok, done, and pushed at the same location.
 
-> Elsewhere we always use --program-prefix=''.
+> Have you sent this upstream?
 
-Ok, will use this.
+As discussed on IRC, no, not yet. I am not sure the fix is 100%
+correct, and I had no feedback about it on the autoconf mailing list. I
+can still try to push it upstream to libglib2 anyway, but I'm not sure
+how to explain why it's their package that is broken and not the other
+one filling the configuration cache.
 
-> While we're at it a bit of whitespace would increase readability,
-> imho.
-
-I've pushed a new version of the branch with those two fixes.
-
-Thanks,
+Regards,
 
 Thomas
 -- 
