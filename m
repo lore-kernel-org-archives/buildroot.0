@@ -1,60 +1,40 @@
-From: Darcy Watkins <DWatkins@tranzeo.com>
-Date: Mon, 23 Aug 2010 13:14:57 -0700
-Subject: [Buildroot] [PATCH] Re:  Deprecate rp-pppoe package
-In-Reply-To: <4C72BD44.9020707@zacarias.com.ar>
-References: <1278436093.12234.11.camel@localhost.localdomain>	
-	<4C45EF4E.1000501@zacarias.com.ar>	
-	<D61182AC8012EA4EBC531B3AF23BE1099C8208@tranzeo-mail2.12stewart.tranzeo.com>	
-	<1282575167.18213.51.camel@tr-pentomino>
-	<1282583821.613.17.camel@tr-pentomino>
-	<4C72BD44.9020707@zacarias.com.ar>
-Message-ID: <D61182AC8012EA4EBC531B3AF23BE1099C87C2@tranzeo-mail2.12stewart.tranzeo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Aug 2010 09:31:58 +0200
+Subject: [Buildroot] [PATCH 14/20] netcat: prevent build system from
+ adding a prefix to binaries
+In-Reply-To: <87r5hpuyvc.fsf@macbook.be.48ers.dk>
+References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
+	<cover.1282471311.git.thomas.petazzoni@free-electrons.com>
+	<86047c4c4a4d951bfe590291c88a3d5b3f911180.1282471311.git.thomas.petazzoni@free-electrons.com>
+	<87r5hpuyvc.fsf@macbook.be.48ers.dk>
+Message-ID: <20100824093158.76c1f8af@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I notice that the missing radrealms.so is mentioned in your referenced
-post.  I'd suggest at least getting the fix to pppd.mk included for the
-2010.08 even though the rest is more likely to be held off.
+On Mon, 23 Aug 2010 17:34:15 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-I posted the fix (by itself) at:
+> Does that work?
 
-http://lists.busybox.net/pipermail/buildroot/2010-August/036839.html
+Yes, it did work.
 
-Setting up and running a pppoe server daemon requires a number of
-specifically tailored config files.  I didn't include any of mine since
-they are specific to my test setup on my desk (they have specific IP
-addresses, realm names, user IDs, shared secrets, etc).
+> Elsewhere we always use --program-prefix=''.
 
-Regards,
+Ok, will use this.
 
-Darcy
+> While we're at it a bit of whitespace would increase readability,
+> imho.
 
+I've pushed a new version of the branch with those two fixes.
 
------Original Message-----
-From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
-Sent: Monday, August 23, 2010 11:26 AM
-To: Darcy Watkins
-Cc: buildroot
-Subject: Re: [PATCH] Re: [Buildroot] Deprecate rp-pppoe package
+Thanks,
 
-On 08/23/2010 02:17 PM, Darcy Watkins wrote:
-
-> Same as before except now uses the new autotools infrastructure in
-> buildroot (the patch to rp-pppoe.mk is different from last time).
-> 
-> Regards,
-> 
-> Darcy
-
-I still like my previously posted solution to pppd:
-http://lists.busybox.net/pipermail/buildroot/2010-July/036269.html
-It gives the option to install the radius plugins with the necessary
-dictionary files and converts it to gentargets.
-I'll give your rp-ppppoe update a spin later.
-It's unlikely these changes will go in for 2010.08 since we're already
-at release candidate stage, which makes it a nice chance to get things
-right to the last bit for next release.
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
