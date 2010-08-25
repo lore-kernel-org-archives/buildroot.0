@@ -1,24 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Aug 2010 17:12:37 +0200
-Subject: [Buildroot] [pull request] Pull request for branch for-2010.08
-In-Reply-To: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 22 Aug 2010 12:51:52 +0200")
-References: <cover.1282471311.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mxsawwt6.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 25 Aug 2010 17:30:38 +0200
+Subject: [Buildroot] [git commit master 1/1] CHANGES: libgail is new,
+	not removed
+Message-ID: <20100825153142.A746389016@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello Peter, hello all,
- Thomas> Here is the stack of patches I've accumulated for the 2010.08
- Thomas> release. They either fix bugs reported by users, fix various build
- Thomas> issues, or deprecate things such as the Cris architecture.
+commit: http://git.buildroot.net/buildroot/commit/?id=2c31d745ac08e620d143cc266e2b7113754a8787
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pulled and pushed, thanks!
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index 8308673..09efdb0 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -24,7 +24,7 @@
+ 	during the 2010.11 development cycle.
+ 
+ 	New packages: cgilua, copas, coxpcall, ffmpeg, libsvgtiny,
+-	luafilesystem, luasocket, rings, wsapi, xavante, xterm
++	libgail, luafilesystem, luasocket, rings, wsapi, xavante, xterm
+ 
+ 	Updated/fixed packages: alsa-lib, alsamixergui, at, atk,
+ 	avahi, berkeleydb, bash, blackbox, busybox, bzip2, cairo,
+@@ -43,7 +43,7 @@
+ 	usbutils, webif, webkit, wireless_tools, xerces,
+ 	xkeyboard-config, xserver_xorg-server, xvkbd, zlib
+ 
+-	Removed packages: libgail, modutils, portage, rxvt
++	Removed packages: modutils, portage, rxvt
+ 
+ 	Deprecated packages: dillo, libglib12, libgtk12, microwin, pcmcia
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.1
