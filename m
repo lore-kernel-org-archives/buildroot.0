@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 25 Aug 2010 17:30:38 +0200
-Subject: [Buildroot] [git commit master 1/1] Add the traditional
-	powerpc-link-with-math-lib patch to gcc 4.4.4
-Message-ID: <20100825153143.8A36689016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] lzo: fix host-lzo build failure
+	when config cache is filled
+Message-ID: <20100825153144.C0CCC89016@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,159 +10,485 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fa2a04417d5dc65ecbd9eca39401b8d09558d0b
+commit: http://git.buildroot.net/buildroot/commit/?id=7fe50869fb98d045cca7a21ebb695f17aa2afd1a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch taken from Crosstool-NG patchset.
+When the configuration cache has been filled with a value for
+ac_cv_host, host-lzo fails to detect the target system name. This is
+due to misbehaving code in the ./configure script. Therefore, we need
+to autoreconf the package, which in turn requires :
+
+ * a little fix to the configure.ac file
+ * a little fix to src/Makefile.am
+ * an extraction of important parts of aclocal.m4 into acinclude.m4
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../powerpc-link-with-math-lib.patch.conditional   |  137 ++++++++++++++++++++
- 1 files changed, 137 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
+ package/lzo/lzo-2.03-acinclude-m4.patch     |  377 +++++++++++++++++++++++++++
+ package/lzo/lzo-2.03-fix-configure-ac.patch |   21 ++
+ package/lzo/lzo-2.03-fix-makefile-am.patch  |   24 ++
+ package/lzo/lzo.mk                          |    6 +
+ 4 files changed, 428 insertions(+), 0 deletions(-)
+ create mode 100644 package/lzo/lzo-2.03-acinclude-m4.patch
+ create mode 100644 package/lzo/lzo-2.03-fix-configure-ac.patch
+ create mode 100644 package/lzo/lzo-2.03-fix-makefile-am.patch
 
-diff --git a/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
+diff --git a/package/lzo/lzo-2.03-acinclude-m4.patch b/package/lzo/lzo-2.03-acinclude-m4.patch
 new file mode 100644
-index 0000000..3fe8757
+index 0000000..8f860f4
 --- /dev/null
-+++ b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
-@@ -0,0 +1,137 @@
-+http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
++++ b/package/lzo/lzo-2.03-acinclude-m4.patch
+@@ -0,0 +1,377 @@
++The lzo tarball only contains an aclocal.m4, which is the result from
++running aclocal. Unfortunately, it lacks the acinclude.m4 file which
++would allow us to do an autoreconf of the package. Therefore, this
++patch extracts from aclocal.m4 the parts that are specific to this lzo
++package, and put them into an acinclude.m4 so that autoreconf on this
++package will work.
 +
-+On glibc the libc.so carries a copy of the math function copysignl() but
-+on uClibc math functions like copysignl() live in libm. Since libgcc_s
-+contains unresolved symbols, any attempt to link against libgcc_s
-+without explicitely specifying -lm fails, resulting in a broken
-+bootstrap of the compiler.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ acinclude.m4 |  360 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 360 insertions(+)
 +
-+
-+diff -rdup gcc-4.4.0.old/gcc/config/t-slibgcc-elf-ver gcc-4.4.0/gcc/config/t-slibgcc-elf-ver
-+
-+diff -durN gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver gcc-4.4.4/gcc/config/t-slibgcc-elf-ver
-+--- gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver	2010-01-04 16:13:08.000000000 +0100
-++++ gcc-4.4.4/gcc/config/t-slibgcc-elf-ver	2010-05-16 19:38:36.000000000 +0200
-+@@ -9,7 +9,7 @@
-+ SHLIB_OBJS = @shlib_objs@
-+ SHLIB_DIR = @multilib_dir@
-+ SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
-+-SHLIB_LC = -lc
-++SHLIB_LC = @libgcc_libm@ -lc
-+ SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
-+ SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
-+ 	$$(DESTDIR)$$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
-+diff -durN gcc-4.4.4.orig/libgcc/Makefile.in gcc-4.4.4/libgcc/Makefile.in
-+--- gcc-4.4.4.orig/libgcc/Makefile.in	2009-04-10 01:23:07.000000000 +0200
-++++ gcc-4.4.4/libgcc/Makefile.in	2010-05-16 19:38:36.000000000 +0200
-+@@ -39,6 +39,7 @@
-+ decimal_float = @decimal_float@
-+ enable_decimal_float = @enable_decimal_float@
-+ fixed_point = @fixed_point@
-++LIBGCC_LIBM = @LIBGCC_LIBM@
-+ 
-+ host_noncanonical = @host_noncanonical@
-+ 
-+@@ -787,9 +788,10 @@
-+ 		@multilib_dir@,$(MULTIDIR),$(subst \
-+ 		@shlib_objs@,$(objects),$(subst \
-+ 		@shlib_base_name@,libgcc_s,$(subst \
-++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-+ 		@shlib_map_file@,$(mapfile),$(subst \
-+ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
-+-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
-++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-+ 
-+ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-+ 	# @multilib_flags@ is still needed because this may use
-+diff -durN gcc-4.4.4.orig/libgcc/configure gcc-4.4.4/libgcc/configure
-+--- gcc-4.4.4.orig/libgcc/configure	2008-11-20 18:13:01.000000000 +0100
-++++ gcc-4.4.4/libgcc/configure	2010-05-16 19:38:36.000000000 +0200
-+@@ -272,7 +272,7 @@
-+ PACKAGE_BUGREPORT=''
-+ 
-+ ac_unique_file="static-object.mk"
-+-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-+ ac_subst_files=''
-+ ac_pwd=`pwd`
-+ 
-+@@ -3547,6 +3547,39 @@
-+ fi
-+ 
-+ 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
-++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
-++if test "${libgcc_cv_copysignl_lib+set}" = set; then
-++  echo $ECHO_N "(cached) $ECHO_C" >&6
-++else
++Index: lzo-2.03/acinclude.m4
++===================================================================
++--- /dev/null
+++++ lzo-2.03/acinclude.m4
++@@ -0,0 +1,360 @@
+++# /***********************************************************************
+++# // standard ACC macros
+++# ************************************************************************/
 ++
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
-++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-++  (eval $ac_try) 2>&5
-++  ac_status=$?
-++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-++  (exit $ac_status); }; }
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
+++AC_DEFUN([mfx_ACC_CHECK_ENDIAN], [
+++AC_C_BIGENDIAN([AC_DEFINE(ACC_ABI_BIG_ENDIAN,1,[Define to 1 if your machine is big endian.])],[AC_DEFINE(ACC_ABI_LITTLE_ENDIAN,1,[Define to 1 if your machine is little endian.])])
+++])#
 ++
+++AC_DEFUN([mfx_ACC_CHECK_HEADERS], [
+++AC_HEADER_TIME
+++AC_CHECK_HEADERS([assert.h ctype.h dirent.h errno.h fcntl.h float.h limits.h malloc.h memory.h setjmp.h signal.h stdarg.h stddef.h stdint.h stdio.h stdlib.h string.h strings.h time.h unistd.h utime.h sys/mman.h sys/resource.h sys/stat.h sys/time.h sys/types.h sys/wait.h])
+++])#
+++
+++AC_DEFUN([mfx_ACC_CHECK_FUNCS], [
+++AC_CHECK_FUNCS(access alloca atexit atoi atol chmod chown clock_getcpuclockid clock_getres clock_gettime ctime difftime fstat getenv getpagesize getrusage gettimeofday gmtime isatty localtime longjmp lstat memcmp memcpy memmove memset mkdir mktime mmap mprotect munmap qsort raise rmdir setjmp signal snprintf strcasecmp strchr strdup strerror strftime stricmp strncasecmp strnicmp strrchr strstr time umask utime vsnprintf)
+++])#
+++
+++
+++AC_DEFUN([mfx_ACC_CHECK_SIZEOF], [
+++AC_CHECK_SIZEOF(short)
+++AC_CHECK_SIZEOF(int)
+++AC_CHECK_SIZEOF(long)
+++
+++AC_CHECK_SIZEOF(long long)
+++AC_CHECK_SIZEOF(__int16)
+++AC_CHECK_SIZEOF(__int32)
+++AC_CHECK_SIZEOF(__int64)
+++
+++AC_CHECK_SIZEOF(void *)
+++AC_CHECK_SIZEOF(size_t)
+++AC_CHECK_SIZEOF(ptrdiff_t)
+++])#
+++
+++
+++# /***********************************************************************
+++# // Check for ACC_conformance
+++# ************************************************************************/
+++
+++AC_DEFUN([mfx_ACC_ACCCHK], [
+++mfx_tmp=$1
+++mfx_save_CPPFLAGS=$CPPFLAGS
+++dnl in Makefile.in $(INCLUDES) will be before $(CPPFLAGS), so we mimic this here
+++test "X$mfx_tmp" = "X" || CPPFLAGS="$mfx_tmp $CPPFLAGS"
+++
+++AC_MSG_CHECKING([whether your compiler passes the ACC conformance test])
+++
+++AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+++[[#define ACC_CONFIG_NO_HEADER 1
+++#include "acc/acc.h"
+++#include "acc/acc_incd.h"
+++#undef ACCCHK_ASSERT
+++#define ACCCHK_ASSERT(expr)     ACC_COMPILE_TIME_ASSERT_HEADER(expr)
+++#include "acc/acc_chk.ch"
+++#undef ACCCHK_ASSERT
+++static void test_acc_compile_time_assert(void) {
+++#define ACCCHK_ASSERT(expr)     ACC_COMPILE_TIME_ASSERT(expr)
+++#include "acc/acc_chk.ch"
+++#undef ACCCHK_ASSERT
+++}
+++#undef NDEBUG
+++#include <assert.h>
+++static int test_acc_run_time_assert(int r) {
+++#define ACCCHK_ASSERT(expr)     assert(expr);
+++#include "acc/acc_chk.ch"
+++#undef ACCCHK_ASSERT
+++return r;
+++}
+++]], [[
+++test_acc_compile_time_assert();
+++if (test_acc_run_time_assert(1) != 1) return 1;
+++]]
+++)])
+++
+++mfx_tmp=FAILED
+++_AC_COMPILE_IFELSE([], [mfx_tmp=yes])
+++rm -f conftest.$ac_ext conftest.$ac_objext
+++
+++CPPFLAGS=$mfx_save_CPPFLAGS
+++
+++AC_MSG_RESULT([$mfx_tmp])
+++case x$mfx_tmp in
+++  xpassed | xyes) ;;
+++  *)
+++    AC_MSG_NOTICE([])
+++    AC_MSG_NOTICE([Your compiler failed the ACC conformance test - for details see ])
+++    AC_MSG_NOTICE([`config.log'. Please check that log file and consider sending])
+++    AC_MSG_NOTICE([a patch or bug-report to <${PACKAGE_BUGREPORT}>.])
+++    AC_MSG_NOTICE([Thanks for your support.])
+++    AC_MSG_NOTICE([])
+++    AC_MSG_ERROR([ACC conformance test failed. Stop.])
+++dnl    AS_EXIT
+++    ;;
+++esac
+++])# mfx_ACC_ACCCHK
+++
+++
+++# /***********************************************************************
+++# // Check for ACC_conformance
+++# ************************************************************************/
+++
+++AC_DEFUN([mfx_MINIACC_ACCCHK], [
+++mfx_tmp=$1
+++mfx_save_CPPFLAGS=$CPPFLAGS
+++dnl in Makefile.in $(INCLUDES) will be before $(CPPFLAGS), so we mimic this here
+++test "X$mfx_tmp" = "X" || CPPFLAGS="$mfx_tmp $CPPFLAGS"
+++
+++AC_MSG_CHECKING([whether your compiler passes the ACC conformance test])
+++
+++AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+++[[#define ACC_CONFIG_NO_HEADER 1
+++#define ACC_WANT_ACC_INCD_H 1
+++#include $2
+++
+++#define ACC_WANT_ACC_CHK_CH 1
+++#undef ACCCHK_ASSERT
+++#define ACCCHK_ASSERT(expr)     ACC_COMPILE_TIME_ASSERT_HEADER(expr)
+++#include $2
+++
+++#define ACC_WANT_ACC_CHK_CH 1
+++#undef ACCCHK_ASSERT
+++#define ACCCHK_ASSERT(expr)     ACC_COMPILE_TIME_ASSERT(expr)
+++static void test_acc_compile_time_assert(void) {
+++#include $2
+++}
+++
+++#undef NDEBUG
+++#include <assert.h>
+++#define ACC_WANT_ACC_CHK_CH 1
+++#undef ACCCHK_ASSERT
+++#define ACCCHK_ASSERT(expr)  assert(expr);
+++static int test_acc_run_time_assert(int r) {
+++#include $2
+++return r;
+++}
+++]], [[
+++test_acc_compile_time_assert();
+++if (test_acc_run_time_assert(1) != 1) return 1;
+++]]
+++)])
+++
+++mfx_tmp=FAILED
+++_AC_COMPILE_IFELSE([], [mfx_tmp=yes])
+++rm -f conftest.$ac_ext conftest.$ac_objext
+++
+++CPPFLAGS=$mfx_save_CPPFLAGS
+++
+++AC_MSG_RESULT([$mfx_tmp])
+++case x$mfx_tmp in
+++  xpassed | xyes) ;;
+++  *)
+++    AC_MSG_NOTICE([])
+++    AC_MSG_NOTICE([Your compiler failed the ACC conformance test - for details see ])
+++    AC_MSG_NOTICE([`config.log'. Please check that log file and consider sending])
+++    AC_MSG_NOTICE([a patch or bug-report to <${PACKAGE_BUGREPORT}>.])
+++    AC_MSG_NOTICE([Thanks for your support.])
+++    AC_MSG_NOTICE([])
+++    AC_MSG_ERROR([ACC conformance test failed. Stop.])
+++dnl    AS_EXIT
+++    ;;
+++esac
+++])# mfx_MINIACC_ACCCHK
+++
+++
+++
+++# serial 1
+++
+++AC_DEFUN([mfx_PROG_CPPFLAGS], [
+++AC_MSG_CHECKING([whether the C preprocessor needs special flags])
+++
+++AC_LANG_CONFTEST([AC_LANG_PROGRAM(
+++[[#include <limits.h>
+++#if (32767 >= 4294967295ul) || (65535u >= 4294967295ul)
+++#  include "your C preprocessor is broken 1"
+++#elif (0xffffu == 0xfffffffful)
+++#  include "your C preprocessor is broken 2"
+++#elif (32767 >= ULONG_MAX) || (65535u >= ULONG_MAX)
+++#  include "your C preprocessor is broken 3"
+++#endif
+++]], [[ ]]
+++)])
+++
+++mfx_save_CPPFLAGS=$CPPFLAGS
+++mfx_tmp=ERROR
+++for mfx_arg in "" -no-cpp-precomp
+++do
+++  CPPFLAGS="$mfx_arg $mfx_save_CPPFLAGS"
+++  _AC_COMPILE_IFELSE([],
+++[mfx_tmp=$mfx_arg
+++break])
+++done
+++CPPFLAGS=$mfx_save_CPPFLAGS
+++rm -f conftest.$ac_ext conftest.$ac_objext
+++case x$mfx_tmp in
+++  x)
+++    AC_MSG_RESULT([none needed]) ;;
+++  xERROR)
+++    AC_MSG_RESULT([ERROR])
+++    AC_MSG_ERROR([your C preprocessor is broken - for details see config.log])
+++    ;;
+++  *)
+++    AC_MSG_RESULT([$mfx_tmp])
+++    CPPFLAGS="$mfx_tmp $CPPFLAGS"
+++    ;;
+++esac
+++])# mfx_PROG_CPPFLAGS
+++
+++# serial 3
+++
+++AC_DEFUN([mfx_CHECK_HEADER_SANE_LIMITS_H], [
+++AC_CACHE_CHECK([whether limits.h is sane],
+++mfx_cv_header_sane_limits_h,
+++[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <limits.h>
+++#if (32767 >= 4294967295ul) || (65535u >= 4294967295ul)
+++#  if defined(__APPLE__) && defined(__GNUC__)
+++#    error "your preprocessor is broken - use compiler option -no-cpp-precomp"
+++#  else
+++#    include "your preprocessor is broken"
+++#  endif
+++#endif
+++#define MFX_0xffff          0xffff
+++#define MFX_0xffffffffL     4294967295ul
+++#if !defined(CHAR_BIT) || (CHAR_BIT != 8)
+++#  include "error CHAR_BIT"
+++#endif
+++#if !defined(UCHAR_MAX)
+++#  include "error UCHAR_MAX 1"
+++#endif
+++#if !defined(USHRT_MAX)
+++#  include "error USHRT_MAX 1"
+++#endif
+++#if !defined(UINT_MAX)
+++#  include "error UINT_MAX 1"
+++#endif
+++#if !defined(ULONG_MAX)
+++#  include "error ULONG_MAX 1"
+++#endif
+++#if !defined(SHRT_MAX)
+++#  include "error SHRT_MAX 1"
+++#endif
+++#if !defined(INT_MAX)
+++#  include "error INT_MAX 1"
+++#endif
+++#if !defined(LONG_MAX)
+++#  include "error LONG_MAX 1"
+++#endif
+++#if (UCHAR_MAX < 1)
+++#  include "error UCHAR_MAX 2"
+++#endif
+++#if (USHRT_MAX < 1)
+++#  include "error USHRT_MAX 2"
+++#endif
+++#if (UINT_MAX < 1)
+++#  include "error UINT_MAX 2"
+++#endif
+++#if (ULONG_MAX < 1)
+++#  include "error ULONG_MAX 2"
+++#endif
+++#if (UCHAR_MAX < 0xff)
+++#  include "error UCHAR_MAX 3"
+++#endif
+++#if (USHRT_MAX < MFX_0xffff)
+++#  include "error USHRT_MAX 3"
+++#endif
+++#if (UINT_MAX < MFX_0xffff)
+++#  include "error UINT_MAX 3"
+++#endif
+++#if (ULONG_MAX < MFX_0xffffffffL)
+++#  include "error ULONG_MAX 3"
+++#endif
+++#if (USHRT_MAX > UINT_MAX)
+++#  include "error USHRT_MAX vs UINT_MAX"
+++#endif
+++#if (UINT_MAX > ULONG_MAX)
+++#  include "error UINT_MAX vs ULONG_MAX"
+++#endif
+++]], [[
+++#if (USHRT_MAX == MFX_0xffff)
+++{ typedef char a_short2a[1 - 2 * !(sizeof(short) == 2)]; }
+++#elif (USHRT_MAX >= MFX_0xffff)
+++{ typedef char a_short2b[1 - 2 * !(sizeof(short) > 2)]; }
+++#endif
+++#if (UINT_MAX == MFX_0xffff)
+++{ typedef char a_int2a[1 - 2 * !(sizeof(int) == 2)]; }
+++#elif (UINT_MAX >= MFX_0xffff)
+++{ typedef char a_int2b[1 - 2 * !(sizeof(int) > 2)]; }
+++#endif
+++#if (ULONG_MAX == MFX_0xffff)
+++{ typedef char a_long2a[1 - 2 * !(sizeof(long) == 2)]; }
+++#elif (ULONG_MAX >= MFX_0xffff)
+++{ typedef char a_long2b[1 - 2 * !(sizeof(long) > 2)]; }
+++#endif
+++#if !defined(_CRAY1) /* CRAY PVP systems */
+++#if (USHRT_MAX == MFX_0xffffffffL)
+++{ typedef char a_short4a[1 - 2 * !(sizeof(short) == 4)]; }
+++#elif (USHRT_MAX >= MFX_0xffffffffL)
+++{ typedef char a_short4b[1 - 2 * !(sizeof(short) > 4)]; }
+++#endif
+++#endif /* _CRAY1 */
+++#if (UINT_MAX == MFX_0xffffffffL)
+++{ typedef char a_int4a[1 - 2 * !(sizeof(int) == 4)]; }
+++#elif (UINT_MAX >= MFX_0xffffffffL)
+++{ typedef char a_int4b[1 - 2 * !(sizeof(int) > 4)]; }
+++#endif
+++#if (ULONG_MAX == MFX_0xffffffffL)
+++{ typedef char a_long4a[1 - 2 * !(sizeof(long) == 4)]; }
+++#elif (ULONG_MAX >= MFX_0xffffffffL)
+++{ typedef char a_long4b[1 - 2 * !(sizeof(long) > 4)]; }
+++#endif
+++]])],
+++[mfx_cv_header_sane_limits_h=yes],
+++[mfx_cv_header_sane_limits_h=no])])
+++])
+++
+++# /***********************************************************************
+++# // standard
+++# ************************************************************************/
+++
+++AC_DEFUN([mfx_LZO_CHECK_ENDIAN], [
+++AC_C_BIGENDIAN([AC_DEFINE(LZO_ABI_BIG_ENDIAN,1,[Define to 1 if your machine is big endian.])],[AC_DEFINE(LZO_ABI_LITTLE_ENDIAN,1,[Define to 1 if your machine is little endian.])])
+++])#
+++
+++
+++# /***********************************************************************
+++# //
+++# ************************************************************************/
+++
+++dnl more types which are not yet covered by ACC
+++
+++AC_DEFUN([mfx_CHECK_SIZEOF], [
+++AC_CHECK_SIZEOF(__int32)
+++AC_CHECK_SIZEOF(intmax_t)
+++AC_CHECK_SIZEOF(uintmax_t)
+++AC_CHECK_SIZEOF(intptr_t)
+++AC_CHECK_SIZEOF(uintptr_t)
+++
+++AC_CHECK_SIZEOF(float)
+++AC_CHECK_SIZEOF(double)
+++AC_CHECK_SIZEOF(long double)
+++
+++AC_CHECK_SIZEOF(dev_t)
+++AC_CHECK_SIZEOF(fpos_t)
+++AC_CHECK_SIZEOF(mode_t)
+++AC_CHECK_SIZEOF(off_t)
+++AC_CHECK_SIZEOF(ssize_t)
+++AC_CHECK_SIZEOF(time_t)
+++])#
+++
+++
+++
+++AC_DEFUN([mfx_CHECK_LIB_WINMM], [
+++if test "X$GCC" = Xyes; then
+++case $host_os in
+++cygwin* | mingw* | pw32*)
+++     test "X$LIBS" != "X" && LIBS="$LIBS "
+++     LIBS="${LIBS}-lwinmm" ;;
+++*)
+++     ;;
+++esac
 ++fi
-++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
-++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
-+@@ -4267,6 +4300,7 @@
-+ s, at fixed_point@,$fixed_point,;t t
-+ s, at vis_hide@,$vis_hide,;t t
-+ s, at set_have_cc_tls@,$set_have_cc_tls,;t t
-++s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
-+ s, at tmake_file@,$tmake_file,;t t
-+ s, at extra_parts@,$extra_parts,;t t
-+ s, at asm_hidden_op@,$asm_hidden_op,;t t
-+diff -durN gcc-4.4.4.orig/libgcc/configure.ac gcc-4.4.4/libgcc/configure.ac
-+--- gcc-4.4.4.orig/libgcc/configure.ac	2008-11-20 18:13:01.000000000 +0100
-++++ gcc-4.4.4/libgcc/configure.ac	2010-05-16 19:38:36.000000000 +0200
-+@@ -223,6 +223,27 @@
-+ fi
-+ AC_SUBST(set_have_cc_tls)
+++])#
+diff --git a/package/lzo/lzo-2.03-fix-configure-ac.patch b/package/lzo/lzo-2.03-fix-configure-ac.patch
+new file mode 100644
+index 0000000..26aece7
+--- /dev/null
++++ b/package/lzo/lzo-2.03-fix-configure-ac.patch
+@@ -0,0 +1,21 @@
++_AC_SRCPATHS doesn't exist in autoconf, _AC_SRCDIRS should be used
++instead according to many reports found by Google.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: lzo-2.03/configure.ac
++===================================================================
++--- lzo-2.03.orig/configure.ac
+++++ lzo-2.03/configure.ac
++@@ -48,7 +48,7 @@
++ AM_MAINTAINER_MODE
 + 
-++# On powerpc libgcc_s references copysignl which is a libm function but
-++# glibc apparently also provides it via libc as opposed to uClibc where
-++# it lives in libm.
-++AC_CACHE_CHECK
-++  libgcc_cv_copysignl_lib,
-++    echo '#include <features.h>' > conftest.c
-++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
-++    libgcc_cv_copysignl_lib="-lc"
-++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
-++    then
-++	libgcc_cv_copysignl_lib="-lm"
-++    fi
-++    rm -f conftest.*
-++  ])
-++
-++case /${libgcc_cv_copysignl_lib}/ in
-++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
-++  *) LIBGCC_LIBM= ;;
-++esac
-++AC_SUBST(LIBGCC_LIBM)
-++
-+ # Conditionalize the makefile for this target machine.
-+ tmake_file_=
-+ for f in ${tmake_file}
++ if test -z "$ac_abs_top_srcdir"; then
++-    _AC_SRCPATHS(.)
+++    _AC_SRCDIRS(.)
++ fi
++ if test -r .Conf.settings1; then
++     . ./.Conf.settings1
+diff --git a/package/lzo/lzo-2.03-fix-makefile-am.patch b/package/lzo/lzo-2.03-fix-makefile-am.patch
+new file mode 100644
+index 0000000..9f23e40
+--- /dev/null
++++ b/package/lzo/lzo-2.03-fix-makefile-am.patch
+@@ -0,0 +1,24 @@
++Makefile.am is not allowed to override CFLAGS/CPPFLAGS, it must use
++AM_CFLAGS and AM_CPPFLAGS. This is needed in order for autoreconf to
++work on this package.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/Makefile.am |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++Index: lzo-2.03/src/Makefile.am
++===================================================================
++--- lzo-2.03.orig/src/Makefile.am
+++++ lzo-2.03/src/Makefile.am
++@@ -7,8 +7,8 @@
++ SUFFIXES = .S
++ 
++ INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)
++-CPPFLAGS = $(LZO_CPPFLAGS) $(configure_CPPFLAGS) $(LZO_EXTRA_CPPFLAGS)
++-CFLAGS = $(LZO_CFLAGS) $(configure_CFLAGS) $(LZO_EXTRA_CFLAGS)
+++AM_CPPFLAGS = $(LZO_CPPFLAGS) $(configure_CPPFLAGS) $(LZO_EXTRA_CPPFLAGS)
+++AM_CFLAGS = $(LZO_CFLAGS) $(configure_CFLAGS) $(LZO_EXTRA_CFLAGS)
++ 
++ lib_LTLIBRARIES = liblzo2.la
++ 
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index ed30056..bfa6679 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -7,6 +7,12 @@ LZO_VERSION:=2.03
+ LZO_SOURCE:=lzo-$(LZO_VERSION).tar.gz
+ LZO_SITE:=http://www.oberhumer.com/opensource/lzo/download
+ LZO_AUTORECONF = NO
++
++# lzo's configure was generated by an old autoconf, and the
++# AC_CANONICAL_TARGET check fails in host-lzo when the cache has been
++# filled with ac_cv_build and ac_cv_host.
++HOST_LZO_AUTORECONF = YES
++
+ LZO_INSTALL_STAGING = YES
+ LZO_INSTALL_TARGET = YES
+ LZO_INSTALL_STAGING_OPT = CC="$(TARGET_CC)" DESTDIR=$(STAGING_DIR) install
 -- 
 1.7.1
