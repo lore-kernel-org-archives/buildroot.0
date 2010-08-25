@@ -1,7 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 25 Aug 2010 17:30:38 +0200
-Subject: [Buildroot] [git commit master 1/1] Update busybox 1.17.1 fixes
-Message-ID: <20100825153144.2A07D89016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add the traditional
+	powerpc-link-with-math-lib patch to gcc 4.4.4
+Message-ID: <20100825153143.8A36689016@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,116 +10,159 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a22d4082eac385cf5386f19d8c9207ee1fd381c1
+commit: http://git.buildroot.net/buildroot/commit/?id=0fa2a04417d5dc65ecbd9eca39401b8d09558d0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New shell_common fix and sed fix.
+Patch taken from Crosstool-NG patchset.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../busybox-1.17.1/busybox-1.17.1-sed.patch        |   66 ++++++++++++++++++++
- .../busybox-1.17.1/busybox-1.17.1-shell.patch      |   19 ++++++
- 2 files changed, 85 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
+ .../powerpc-link-with-math-lib.patch.conditional   |  137 ++++++++++++++++++++
+ 1 files changed, 137 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
 
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
+diff --git a/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
 new file mode 100644
-index 0000000..1b523c2
+index 0000000..3fe8757
 --- /dev/null
-+++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
-@@ -0,0 +1,66 @@
-+diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
-+--- busybox-1.17.1/editors/sed.c	2010-07-06 04:25:53.000000000 +0200
-++++ busybox-1.17.1-sed/editors/sed.c	2010-08-01 04:15:39.000000000 +0200
-+@@ -61,6 +61,10 @@
-+ #include "libbb.h"
-+ #include "xregex.h"
++++ b/toolchain/gcc/4.4.4/powerpc-link-with-math-lib.patch.conditional
+@@ -0,0 +1,137 @@
++http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
++
++On glibc the libc.so carries a copy of the math function copysignl() but
++on uClibc math functions like copysignl() live in libm. Since libgcc_s
++contains unresolved symbols, any attempt to link against libgcc_s
++without explicitely specifying -lm fails, resulting in a broken
++bootstrap of the compiler.
++
++
++diff -rdup gcc-4.4.0.old/gcc/config/t-slibgcc-elf-ver gcc-4.4.0/gcc/config/t-slibgcc-elf-ver
++
++diff -durN gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver gcc-4.4.4/gcc/config/t-slibgcc-elf-ver
++--- gcc-4.4.4.orig/gcc/config/t-slibgcc-elf-ver	2010-01-04 16:13:08.000000000 +0100
+++++ gcc-4.4.4/gcc/config/t-slibgcc-elf-ver	2010-05-16 19:38:36.000000000 +0200
++@@ -9,7 +9,7 @@
++ SHLIB_OBJS = @shlib_objs@
++ SHLIB_DIR = @multilib_dir@
++ SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
++-SHLIB_LC = -lc
+++SHLIB_LC = @libgcc_libm@ -lc
++ SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
++ SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
++ 	$$(DESTDIR)$$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
++diff -durN gcc-4.4.4.orig/libgcc/Makefile.in gcc-4.4.4/libgcc/Makefile.in
++--- gcc-4.4.4.orig/libgcc/Makefile.in	2009-04-10 01:23:07.000000000 +0200
+++++ gcc-4.4.4/libgcc/Makefile.in	2010-05-16 19:38:36.000000000 +0200
++@@ -39,6 +39,7 @@
++ decimal_float = @decimal_float@
++ enable_decimal_float = @enable_decimal_float@
++ fixed_point = @fixed_point@
+++LIBGCC_LIBM = @LIBGCC_LIBM@
 + 
-++enum {
-++	OPT_in_place = 1 << 0,
-++};
++ host_noncanonical = @host_noncanonical@
++ 
++@@ -787,9 +788,10 @@
++ 		@multilib_dir@,$(MULTIDIR),$(subst \
++ 		@shlib_objs@,$(objects),$(subst \
++ 		@shlib_base_name@,libgcc_s,$(subst \
+++		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
++ 		@shlib_map_file@,$(mapfile),$(subst \
++ 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
++-		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
+++		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
++ 
++ libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
++ 	# @multilib_flags@ is still needed because this may use
++diff -durN gcc-4.4.4.orig/libgcc/configure gcc-4.4.4/libgcc/configure
++--- gcc-4.4.4.orig/libgcc/configure	2008-11-20 18:13:01.000000000 +0100
+++++ gcc-4.4.4/libgcc/configure	2010-05-16 19:38:36.000000000 +0200
++@@ -272,7 +272,7 @@
++ PACKAGE_BUGREPORT=''
++ 
++ ac_unique_file="static-object.mk"
++-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
+++ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
++ ac_subst_files=''
++ ac_pwd=`pwd`
++ 
++@@ -3547,6 +3547,39 @@
++ fi
++ 
++ 
+++# On powerpc libgcc_s references copysignl which is a libm function but
+++# glibc apparently also provides it via libc as opposed to uClibc where
+++# it lives in libm.
+++echo "$as_me:$LINENO: checking for library containing copysignl" >&5
+++echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
+++if test "${libgcc_cv_copysignl_lib+set}" = set; then
+++  echo $ECHO_N "(cached) $ECHO_C" >&6
+++else
 ++
-+ /* Each sed command turns into one of these structures. */
-+ typedef struct sed_cmd_s {
-+ 	/* Ordered by alignment requirements: currently 36 bytes on x86 */
-+@@ -938,8 +942,11 @@ static void process_files(void)
-+ 
-+ 		if (matched) {
-+ 			/* once matched, "n,xxx" range is dead, disabling it */
-+-			if (sed_cmd->beg_line > 0)
-++			if (sed_cmd->beg_line > 0
-++			 && !(option_mask32 & OPT_in_place) /* but not for -i */
-++			) {
-+ 				sed_cmd->beg_line = -2;
-++			}
-+ 			sed_cmd->in_match = !(
-+ 				/* has the ending line come, or is this a single address command? */
-+ 				(sed_cmd->end_line ?
-+@@ -1270,9 +1277,6 @@ static void add_cmd_block(char *cmdstr)
-+ int sed_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
-+ int sed_main(int argc UNUSED_PARAM, char **argv)
-+ {
-+-	enum {
-+-		OPT_in_place = 1 << 0,
-+-	};
-+ 	unsigned opt;
-+ 	llist_t *opt_e, *opt_f;
-+ 	int status = EXIT_SUCCESS;
-+@@ -1292,6 +1296,7 @@ int sed_main(int argc UNUSED_PARAM, char
-+ 	opt_e = opt_f = NULL;
-+ 	opt_complementary = "e::f::" /* can occur multiple times */
-+ 	                    "nn"; /* count -n */
-++	/* -i must be first, to match OPT_in_place definition */
-+ 	opt = getopt32(argv, "irne:f:", &opt_e, &opt_f,
-+ 			    &G.be_quiet); /* counter for -n */
-+ 	//argc -= optind;
-+diff -urpN busybox-1.17.1/testsuite/sed.tests busybox-1.17.1-sed/testsuite/sed.tests
-+--- busybox-1.17.1/testsuite/sed.tests	2010-07-06 04:25:54.000000000 +0200
-++++ busybox-1.17.1-sed/testsuite/sed.tests	2010-08-01 04:19:26.000000000 +0200
-+@@ -270,11 +270,16 @@ testing "sed a cmd ended by double backs
-+ 	| two \\
-+ '
-+ 
-+-# fisrt three lines are deleted; 4th line is matched and printed by "2,3" and by "4" ranges
-++# first three lines are deleted; 4th line is matched and printed by "2,3" and by "4" ranges
-+ testing "sed with N skipping lines past ranges on next cmds" \
-+ 	"sed -n '1{N;N;d};1p;2,3p;3p;4p'" \
-+ 	"4\n4\n" "" "1\n2\n3\n4\n"
-+ 
-++testing "sed -i with address modifies all files, not only first" \
-++	"cp input input2; sed -i -e '1s/foo/bar/' input input2 && cat input input2; rm input2" \
-++	"bar\nbar\n" "foo\n" ""
+++    echo '#include <features.h>' > conftest.c
+++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+++    libgcc_cv_copysignl_lib="-lc"
+++    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
+++  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+++  (eval $ac_try) 2>&5
+++  ac_status=$?
+++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+++  (exit $ac_status); }; }
+++    then
+++	libgcc_cv_copysignl_lib="-lm"
+++    fi
+++    rm -f conftest.*
+++
+++fi
+++echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
+++echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
+++
+++case /${libgcc_cv_copysignl_lib}/ in
+++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+++  *) LIBGCC_LIBM= ;;
+++esac
 ++
 ++
-+ # testing "description" "arguments" "result" "infile" "stdin"
++ # Conditionalize the makefile for this target machine.
++ tmake_file_=
++ for f in ${tmake_file}
++@@ -4267,6 +4300,7 @@
++ s, at fixed_point@,$fixed_point,;t t
++ s, at vis_hide@,$vis_hide,;t t
++ s, at set_have_cc_tls@,$set_have_cc_tls,;t t
+++s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
++ s, at tmake_file@,$tmake_file,;t t
++ s, at extra_parts@,$extra_parts,;t t
++ s, at asm_hidden_op@,$asm_hidden_op,;t t
++diff -durN gcc-4.4.4.orig/libgcc/configure.ac gcc-4.4.4/libgcc/configure.ac
++--- gcc-4.4.4.orig/libgcc/configure.ac	2008-11-20 18:13:01.000000000 +0100
+++++ gcc-4.4.4/libgcc/configure.ac	2010-05-16 19:38:36.000000000 +0200
++@@ -223,6 +223,27 @@
++ fi
++ AC_SUBST(set_have_cc_tls)
 + 
-+ exit $FAILCOUNT
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
-index 04adc8f..5279b12 100644
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
-+++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
-@@ -84,3 +84,22 @@ diff -urpN busybox-1.17.1/shell/hush_test/hush-trap/signal7.tests busybox-1.17.1
- +&& test x"$REAL_CHILD" = x"$PARENTS_IDEA_OF_CHILD"
- +echo "Bug detected: $?"
- +}
-+diff -urpN busybox-1.17.1/shell/shell_common.c busybox-1.17.1-shell/shell/shell_common.c
-+--- busybox-1.17.1/shell/shell_common.c	2010-07-06 04:25:54.000000000 +0200
-++++ busybox-1.17.1-shell/shell/shell_common.c	2010-07-27 08:41:43.000000000 +0200
-+@@ -428,9 +428,14 @@ shell_builtin_ulimit(char **argv)
-+ 						val <<= l->factor_shift;
-+ 					}
-+ //bb_error_msg("opt %c val_str:'%s' val:%lld", opt_char, val_str, (long long)val);
-++					/* from man bash: "If neither -H nor -S
-++					 * is specified, both the soft and hard
-++					 * limits are set. */
-++					if (!opts)
-++						opts = OPT_hard + OPT_soft;
-+ 					if (opts & OPT_hard)
-+ 						limit.rlim_max = val;
-+-					if ((opts & OPT_soft) || opts == 0)
-++					if (opts & OPT_soft)
-+ 						limit.rlim_cur = val;
-+ //bb_error_msg("setrlimit(%d, %lld, %lld)", l->cmd, (long long)limit.rlim_cur, (long long)limit.rlim_max);
-+ 					if (setrlimit(l->cmd, &limit) < 0) {
+++# On powerpc libgcc_s references copysignl which is a libm function but
+++# glibc apparently also provides it via libc as opposed to uClibc where
+++# it lives in libm.
+++AC_CACHE_CHECK
+++  libgcc_cv_copysignl_lib,
+++    echo '#include <features.h>' > conftest.c
+++    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
+++    libgcc_cv_copysignl_lib="-lc"
+++    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
+++    then
+++	libgcc_cv_copysignl_lib="-lm"
+++    fi
+++    rm -f conftest.*
+++  ])
+++
+++case /${libgcc_cv_copysignl_lib}/ in
+++  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
+++  *) LIBGCC_LIBM= ;;
+++esac
+++AC_SUBST(LIBGCC_LIBM)
+++
++ # Conditionalize the makefile for this target machine.
++ tmake_file_=
++ for f in ${tmake_file}
 -- 
 1.7.1
