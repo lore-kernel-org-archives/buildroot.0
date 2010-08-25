@@ -1,27 +1,66 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Wed, 25 Aug 2010 21:16:55 +0200
-Subject: [Buildroot] [PATCH] add directory buildroot-config to VCS ignore
-	list
-Message-ID: <1282763815-6085-1-git-send-email-marcus.osdoba@googlemail.com>
+From: Choi, David <David.Choi@Micrel.Com>
+Date: Wed, 25 Aug 2010 14:41:40 -0700
+Subject: [Buildroot] uImage build error
+Message-ID: <C43529A246480145B0A6D0234BDB0F0D481DAC@MELANITE.micrel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
----
- package/config/.gitignore |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Hi all,
 
-diff --git a/package/config/.gitignore b/package/config/.gitignore
-index 1ea18a2..fbaa3e8 100644
---- a/package/config/.gitignore
-+++ b/package/config/.gitignore
-@@ -7,3 +7,4 @@
- /lex.zconf.c
- /zconf.hash.c
- /zconf.tab.c
-+/buildroot-config
--- 
-1.7.1
+ 
+
+I am new to buildroot. The version that I use is v2010.05(stable
+version)
+
+ 
+
+As you see the attached, I almost the default value except mips(little
+endian mode).
+
+My Linux version is 2.6.33.5(default version) and configuration is
+tb0229_defconfig.
+
+ 
+
+Whenever I have tried to build uImage, I have gotten an error message
+saying "make[1]: *** No rule to make target `uImage`. Stop.
+
+(Even though I have tried with v2010.08(rc1), I had the same error
+message)
+
+ 
+
+ 
+
+Any comment will be highly appreciated.
+
+ 
+
+ 
+
+Regards,
+
+David J. Choi
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100825/f82b877f/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux-2.6.33.5.config
+Type: application/octet-stream
+Size: 27679 bytes
+Desc: linux-2.6.33.5.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100825/f82b877f/attachment-0002.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot2010-05.config
+Type: application/octet-stream
+Size: 17543 bytes
+Desc: buildroot2010-05.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100825/f82b877f/attachment-0003.obj>
