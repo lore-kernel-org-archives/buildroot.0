@@ -1,8 +1,7 @@
-From: Francois Perrad <francois.perrad@gadz.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 25 Aug 2010 17:30:38 +0200
-Subject: [Buildroot] [git commit master 1/1] luafilesystem: remove
-	LARGE_FILE constraint
-Message-ID: <20100825153145.F0C4B89016@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] busybox: additional 1.17.1 fixes
+Message-ID: <20100825153146.EB8D489016@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,145 +9,249 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6c4ce6cef9f260226081f043b4f03dd4b0ad949
+commit: http://git.buildroot.net/buildroot/commit/?id=9ed8308d58e931ca1d34e27b2b54d7ac70d7fe89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to luafilesystem so that it builds correctly when large
-files are not supported. This allows to remove the dependency of
-luafilesystem on large file support on the toolchain. Packages such as
-cgilua, wsapi and xavante, which depend on luafilesystem, also get
-their dependency on large file support removed.
-
-Fixes bug #2359.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cgilua/Config.in                           |    4 ----
- package/luafilesystem/Config.in                    |    6 +-----
- .../luafilesystem-without_large_file.patch         |   20 ++++++++++++++++++++
- package/luafilesystem/luafilesystem.mk             |    6 +++++-
- package/wsapi/Config.in                            |    4 ----
- package/xavante/Config.in                          |    4 ----
- 6 files changed, 26 insertions(+), 18 deletions(-)
- create mode 100644 package/luafilesystem/luafilesystem-without_large_file.patch
+ .../busybox-1.17.1/busybox-1.17.1-grep.patch       |   39 +++++++++++++
+ .../busybox-1.17.1/busybox-1.17.1-make.patch       |   32 ++++++++++
+ .../busybox-1.17.1/busybox-1.17.1-mdev.patch       |   49 ++++++++++++++++
+ .../busybox-1.17.1/busybox-1.17.1-sed.patch        |   61 ++++++++++++++++++--
+ 4 files changed, 176 insertions(+), 5 deletions(-)
+ create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
+ create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
+ create mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
 
-diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
-index a74e49f..b43ba97 100644
---- a/package/cgilua/Config.in
-+++ b/package/cgilua/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_CGILUA
- 	bool "cgilua"
--	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
- 	select BR2_PACKAGE_LUAFILESYSTEM
- 	help
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_CGILUA
- 	  and manipulating input data from Web forms.
- 
- 	  http://luaforge.net/projects/cgilua/
--
--comment "cgilua requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
-index 6cb6c24..edcb414 100644
---- a/package/luafilesystem/Config.in
-+++ b/package/luafilesystem/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_LUAFILESYSTEM
- 	bool "luafilesystem"
--	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
- 	help
- 	  LuaFileSystem offers a portable way to access
- 	  the underlying directory structure and file attributes.
- 
--	  http://luaforge.net/projects/luafilesystem/
--
--comment "luafilesystem requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+	  http://keplerproject.github.com/luafilesystem/
-diff --git a/package/luafilesystem/luafilesystem-without_large_file.patch b/package/luafilesystem/luafilesystem-without_large_file.patch
+diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
 new file mode 100644
-index 0000000..b1f41c0
+index 0000000..f8fc25d
 --- /dev/null
-+++ b/package/luafilesystem/luafilesystem-without_large_file.patch
-@@ -0,0 +1,20 @@
-+diff --git a/src/lfs.c b/src/lfs.c
-+index 85f01e3..ed49f50 100644
-+--- a/src/lfs.c
-++++ b/src/lfs.c
-+@@ -22,13 +22,13 @@
++++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
+@@ -0,0 +1,39 @@
++diff -urpN busybox-1.17.1/findutils/grep.c busybox-1.17.1-grep/findutils/grep.c
++--- busybox-1.17.1/findutils/grep.c	2010-07-06 04:25:54.000000000 +0200
+++++ busybox-1.17.1-grep/findutils/grep.c	2010-08-23 02:37:08.000000000 +0200
++@@ -461,15 +461,19 @@ static int grep_file(FILE *file)
++ 						if (found)
++ 							print_line(gl->pattern, strlen(gl->pattern), linenum, ':');
++ 					} else while (1) {
+++						unsigned start = gl->matched_range.rm_so;
++ 						unsigned end = gl->matched_range.rm_eo;
+++						unsigned len = end - start;
++ 						char old = line[end];
++ 						line[end] = '\0';
++-						print_line(line + gl->matched_range.rm_so,
++-								end - gl->matched_range.rm_so,
++-								linenum, ':');
+++						/* Empty match is not printed: try "echo test | grep -o ''" */
+++						if (len != 0)
+++							print_line(line + start, len, linenum, ':');
++ 						if (old == '\0')
++ 							break;
++ 						line[end] = old;
+++						if (len == 0)
+++							end++;
++ #if !ENABLE_EXTRA_COMPAT
++ 						if (regexec(&gl->compiled_regex, line + end,
++ 								1, &gl->matched_range, REG_NOTBOL) != 0)
++diff -urpN busybox-1.17.1/testsuite/grep.tests busybox-1.17.1-grep/testsuite/grep.tests
++--- busybox-1.17.1/testsuite/grep.tests	2010-07-06 04:25:54.000000000 +0200
+++++ busybox-1.17.1-grep/testsuite/grep.tests	2010-08-23 02:37:08.000000000 +0200
++@@ -98,5 +98,9 @@ testing "grep -o does not loop forever" 
++ 	'grep -o "[^/]*$"' \
++ 	"test\n" \
++ 	"" "/var/test\n"
+++testing "grep -o does not loop forever on zero-length match" \
+++	'grep -o "" | head -n1' \
+++	"" \
+++	"" "test\n"
 + 
-+ #ifndef _WIN32
-+ #ifndef _AIX
-+-#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
-++//#define _FILE_OFFSET_BITS 64 /* Linux, Solaris and HP-UX */
-+ #else
-+ #define _LARGE_FILES 1 /* AIX */
-+ #endif
-+ #endif
++ exit $FAILCOUNT
+diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
+new file mode 100644
+index 0000000..6177696
+--- /dev/null
++++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
+@@ -0,0 +1,32 @@
++diff -urpN busybox-1.17.1/Makefile busybox-1.17.1-make/Makefile
++--- busybox-1.17.1/Makefile	2010-07-25 00:13:44.000000000 +0200
+++++ busybox-1.17.1-make/Makefile	2010-08-22 09:30:33.000000000 +0200
++@@ -433,7 +433,12 @@ ifeq ($(config-targets),1)
++ -include $(srctree)/arch/$(ARCH)/Makefile
++ export KBUILD_DEFCONFIG
 + 
-+-#define _LARGEFILE64_SOURCE
-++//#define _LARGEFILE64_SOURCE
++-config %config: scripts_basic outputmakefile gen_build_files FORCE
+++config: scripts_basic outputmakefile gen_build_files FORCE
+++	$(Q)mkdir -p include
+++	$(Q)$(MAKE) $(build)=scripts/kconfig $@
+++	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
+++
+++%config: scripts_basic outputmakefile gen_build_files FORCE
++ 	$(Q)mkdir -p include
++ 	$(Q)$(MAKE) $(build)=scripts/kconfig $@
++ 	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
++@@ -1285,9 +1290,13 @@ endif
++ 	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
 + 
-+ #include <errno.h>
-+ #include <stdio.h>
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index a27080c..e688734 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -8,8 +8,12 @@ LUAFILESYSTEM_VERSION = 1.5.0
- LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
- LUAFILESYSTEM_DEPENDENCIES = lua
- 
-+ifeq ($(BR2_LARGEFILE),y)
-+LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE
-+endif
-+
- define LUAFILESYSTEM_BUILD_CMDS
--	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) $(LFS_CFLAGS) -fPIC"
- endef
- 
- define LUAFILESYSTEM_INSTALL_TARGET_CMDS
-diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
-index 472bbfc..3621648 100644
---- a/package/wsapi/Config.in
-+++ b/package/wsapi/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_WSAPI
- 	bool "wsapi"
--	depends on BR2_LARGEFILE # luafilesystem
- 	select BR2_PACKAGE_COXPCALL
- 	select BR2_PACKAGE_LUAFILESYSTEM
- 	select BR2_PACKAGE_RINGS
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_WSAPI
- 	  API that abstracts the web server from Lua web applications.
- 
- 	  http://keplerproject.github.com/wsapi/
--
--comment "wsapi requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-diff --git a/package/xavante/Config.in b/package/xavante/Config.in
-index a1b47c3..a7df530 100644
---- a/package/xavante/Config.in
-+++ b/package/xavante/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_XAVANTE
- 	bool "xavante"
--	depends on BR2_LARGEFILE # luafilesystem
- 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
- 	select BR2_PACKAGE_CGILUA
- 	select BR2_PACKAGE_COPAS
-@@ -13,6 +12,3 @@ config BR2_PACKAGE_XAVANTE
- 	  architecture based on URI mapped handlers.
- 
- 	  http://keplerproject.github.com/xavante/
--
--comment "xavante requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
++ # Modules
++-/ %/: prepare scripts FORCE
+++%/: prepare scripts FORCE
++ 	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
++ 	$(build)=$(build-dir)
+++/: prepare scripts FORCE
+++	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
+++	$(build)=$(build-dir)
+++
++ %.ko: prepare scripts FORCE
++ 	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1)   \
++ 	$(build)=$(build-dir) $(@:.ko=.o)
+diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
+new file mode 100644
+index 0000000..71c7abd
+--- /dev/null
++++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
+@@ -0,0 +1,49 @@
++diff -urpN busybox-1.17.1/testsuite/mdev.tests busybox-1.17.1-mdev/testsuite/mdev.tests
++--- busybox-1.17.1/testsuite/mdev.tests	2010-07-06 04:25:54.000000000 +0200
+++++ busybox-1.17.1-mdev/testsuite/mdev.tests	2010-08-23 02:38:21.000000000 +0200
++@@ -38,6 +38,16 @@ brw-rw---- 1 0 0 8,0 sda
++ SKIP=
++ 
++ # continuing to use directory structure from prev test
+++optional STATIC FEATURE_MDEV_CONF FEATURE_LS_TIMESTAMPS FEATURE_LS_USERNAME
+++testing "mdev deletes /block/sda" \
+++	"env - PATH=$PATH ACTION=remove DEVPATH=/block/sda chroot mdev.testdir /mdev 2>&1;
+++	ls -ln mdev.testdir/dev | $FILTER_LS" \
+++"\
+++" \
+++	"" ""
+++SKIP=
+++
+++# continuing to use directory structure from prev test
++ rm -rf mdev.testdir/dev/*
++ echo ".* 1:1 666" >mdev.testdir/etc/mdev.conf
++ echo "sda 2:2 444" >>mdev.testdir/etc/mdev.conf
++diff -urpN busybox-1.17.1/util-linux/mdev.c busybox-1.17.1-mdev/util-linux/mdev.c
++--- busybox-1.17.1/util-linux/mdev.c	2010-07-06 04:25:54.000000000 +0200
+++++ busybox-1.17.1-mdev/util-linux/mdev.c	2010-08-23 02:38:21.000000000 +0200
++@@ -132,6 +132,7 @@ static void make_device(char *path, int 
++ 			major = -1;
++ 		}
++ 	}
+++	/* else: for delete, -1 still deletes the node, but < -1 suppresses that */
++ 
++ 	/* Determine device name, type, major and minor */
++ 	device_name = (char*) bb_basename(path);
++@@ -279,7 +280,7 @@ static void make_device(char *path, int 
++ 				if (aliaslink == '!' && s == a+1) {
++ 					val = st;
++ 					/* "!": suppress node creation/deletion */
++-					major = -1;
+++					major = -2;
++ 				}
++ 				else if (aliaslink == '>' || aliaslink == '=') {
++ 					val = st;
++@@ -379,7 +380,7 @@ static void make_device(char *path, int 
++ 				free(command);
++ 			}
++ 
++-			if (delete && major >= 0) {
+++			if (delete && major >= -1) {
++ 				if (ENABLE_FEATURE_MDEV_RENAME && alias) {
++ 					if (aliaslink == '>')
++ 						unlink(device_name);
+diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
+index 1b523c2..f65aebe 100644
+--- a/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
++++ b/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
+@@ -1,6 +1,6 @@
+ diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
+ --- busybox-1.17.1/editors/sed.c	2010-07-06 04:25:53.000000000 +0200
+-+++ busybox-1.17.1-sed/editors/sed.c	2010-08-01 04:15:39.000000000 +0200
+++++ busybox-1.17.1-sed/editors/sed.c	2010-08-17 02:05:27.000000000 +0200
+ @@ -61,6 +61,10 @@
+  #include "libbb.h"
+  #include "xregex.h"
+@@ -25,7 +25,36 @@ diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
+  			sed_cmd->in_match = !(
+  				/* has the ending line come, or is this a single address command? */
+  				(sed_cmd->end_line ?
+-@@ -1270,9 +1277,6 @@ static void add_cmd_block(char *cmdstr)
++@@ -985,6 +992,8 @@ static void process_files(void)
++ 		}
++ 
++ 		/* actual sedding */
+++		//bb_error_msg("pattern_space:'%s' next_line:'%s' cmd:%c",
+++		//pattern_space, next_line, sed_cmd->cmd);
++ 		switch (sed_cmd->cmd) {
++ 
++ 		/* Print line number */
++@@ -1111,10 +1120,16 @@ static void process_files(void)
++ 		{
++ 			int len;
++ 			/* If no next line, jump to end of script and exit. */
+++			/* http://www.gnu.org/software/sed/manual/sed.html:
+++			 * "Most versions of sed exit without printing anything
+++			 * when the N command is issued on the last line of
+++			 * a file. GNU sed prints pattern space before exiting
+++			 * unless of course the -n command switch has been
+++			 * specified. This choice is by design."
+++			 */
++ 			if (next_line == NULL) {
++-				free(next_line);
++-				next_line = NULL;
++-				goto discard_line;
+++				//goto discard_line;
+++				goto discard_commands; /* GNU behavior */
++ 			}
++ 			/* Append next_line, read new next_line. */
++ 			len = strlen(pattern_space);
++@@ -1270,9 +1285,6 @@ static void add_cmd_block(char *cmdstr)
+  int sed_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
+  int sed_main(int argc UNUSED_PARAM, char **argv)
+  {
+@@ -35,7 +64,7 @@ diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
+  	unsigned opt;
+  	llist_t *opt_e, *opt_f;
+  	int status = EXIT_SUCCESS;
+-@@ -1292,6 +1296,7 @@ int sed_main(int argc UNUSED_PARAM, char
++@@ -1292,6 +1304,7 @@ int sed_main(int argc UNUSED_PARAM, char
+  	opt_e = opt_f = NULL;
+  	opt_complementary = "e::f::" /* can occur multiple times */
+  	                    "nn"; /* count -n */
+@@ -45,8 +74,30 @@ diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
+  	//argc -= optind;
+ diff -urpN busybox-1.17.1/testsuite/sed.tests busybox-1.17.1-sed/testsuite/sed.tests
+ --- busybox-1.17.1/testsuite/sed.tests	2010-07-06 04:25:54.000000000 +0200
+-+++ busybox-1.17.1-sed/testsuite/sed.tests	2010-08-01 04:19:26.000000000 +0200
+-@@ -270,11 +270,16 @@ testing "sed a cmd ended by double backs
+++++ busybox-1.17.1-sed/testsuite/sed.tests	2010-08-17 02:05:27.000000000 +0200
++@@ -80,10 +80,18 @@ test x"$SKIP_KNOWN_BUGS" = x"" && {
++ # Query: how does this interact with no newline at EOF?
++ testing "sed n (flushes pattern space, terminates early)" "sed -e 'n;p'" \
++ 	"a\nb\nb\nc\n" "" "a\nb\nc\n"
++-# N does _not_ flush pattern space, therefore c is still in there @ script end.
++-testing "sed N (doesn't flush pattern space when terminating)" "sed -e 'N;p'" \
++-	"a\nb\na\nb\nc\n" "" "a\nb\nc\n"
++ }
+++# non-GNU sed: N does _not_ flush pattern space, therefore c is eaten @ script end
+++# GNU sed: N flushes pattern space, therefore c is printed too @ script end
+++testing "sed N (flushes pattern space (GNU behavior))" "sed -e 'N;p'" \
+++	"a\nb\na\nb\nc\n" "" "a\nb\nc\n"
+++
+++testing "sed N test2" "sed ':a;N;s/\n/ /;ta'" \
+++	"a b c\n" "" "a\nb\nc\n"
+++
+++testing "sed N test3" "sed 'N;s/\n/ /'" \
+++	"a b\nc\n" "" "a\nb\nc\n"
+++
++ testing "sed address match newline" 'sed "/b/N;/b\\nc/i woo"' \
++ 	"a\nwoo\nb\nc\nd\n" "" "a\nb\nc\nd\n"
++ 
++@@ -270,11 +278,16 @@ testing "sed a cmd ended by double backs
+  	| two \\
+  '
+  
 -- 
 1.7.1
