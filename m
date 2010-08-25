@@ -1,95 +1,133 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Wed, 25 Aug 2010 11:29:42 +0200
-Subject: [Buildroot] mini 2440 config nfs problems
-In-Reply-To: <20100825092435.GF28629@jasper.tkos.co.il>
-References: <AANLkTikb76LCoPYX93MntAG-dKWerjfBACHkQaOQs2wh@mail.gmail.com>
-	<20100825090820.GE28629@jasper.tkos.co.il>
-	<AANLkTim=ebkMvT=kZTobqF_u6g6faWUCBDGTR4EW4eBn@mail.gmail.com>
-	<20100825092435.GF28629@jasper.tkos.co.il>
-Message-ID: <AANLkTik8nUGEM6UQ=fQq_CivDz6sFtArC7TWeYjkMJNJ@mail.gmail.com>
+From: Massimiliano Marretta <max@marretta.com>
+Date: Wed, 25 Aug 2010 11:58:13 +0200
+Subject: [Buildroot] [PATCH 2/2] GStreamer: upgrade to resolve mp3 issue.
+	with the previeus version in Qt phonon gstreamer backand the
+	mp3 time info is missing. In the new version the unaligned
+	detection fix for x86-64 already present.
+Message-ID: <1282730293-12902-2-git-send-email-max@marretta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 25, 2010 at 11:24 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Belisko,
->
-> On Wed, Aug 25, 2010 at 11:16:03AM +0200, Belisko Marek wrote:
->> On Wed, Aug 25, 2010 at 11:08 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > Hi Belisko,
->> > On Wed, Aug 25, 2010 at 10:48:09AM +0200, Belisko Marek wrote:
->> >> playing with buildroot (2010.08_rc1) to build complete system for my
->> >> mini 2440 board.
->> >> I was able to build kernel and rootfs correctly but when I try to
->> >> mount rootfs over nfs it
->> >> always hangs with :
->> >>
->> >> Freeing init memory: 120K
->> >> Kernel panic - not syncing: Attempted to kill init!
->> >
->> > We need more info:
->> >
->
-> [snip]
->
->> eth0: link down
->> IP-Config: Complete:
->> ? ? ?device=eth0, addr=10.146.1.195, mask=255.255.255.0, gw=255.255.255.255,
->> ? ? ?host=mini2440, domain=, nis-domain=(none),
->> ? ? ?bootserver=10.146.1.21, rootserver=10.146.1.21, rootpath=
->> Looking up port of RPC 100003/2 on 10.146.1.21
->> eth0: link up, 100Mbps, full-duplex, lpa 0x45E1
->> Looking up port of RPC 100005/1 on 10.146.1.21
->> VFS: Mounted root (nfs filesystem) on device 0:13.
->> Freeing init memory: 120K
->> Kernel panic - not syncing: Attempted to kill init!
->
-> Try to add user_debug=31 to your kernel command line, and post the kernel
-> messages at this point.
-Freeing init memory: 120K
-linuxrc (1): undefined instruction: pc=40002360
-Code: e51bc038 e5967004 e58dc000 e59bc004 (e12fff3c)
-Kernel panic - not syncing: Attempted to kill init!
-[<c002b748>] (unwind_backtrace+0x0/0xec) from [<c02ea548>] (panic+0x38/0xcc)
-[<c02ea548>] (panic+0x38/0xcc) from [<c003caa0>] (do_exit+0x60/0x588)
-[<c003caa0>] (do_exit+0x60/0x588) from [<c003d04c>] (do_group_exit+0x84/0xb8)
-[<c003d04c>] (do_group_exit+0x84/0xb8) from [<c004704c>]
-(get_signal_to_deliver+0x2f4/0x330)
-[<c004704c>] (get_signal_to_deliver+0x2f4/0x330) from [<c0029044>]
-(do_notify_resume+0x6c/0x5c4)
-[<c0029044>] (do_notify_resume+0x6c/0x5c4) from [<c0026f2c>]
-(work_pending+0x1c/0x20)
->
-> baruch
->
->> [<c002b748>] (unwind_backtrace+0x0/0xec) from [<c02ea548>] (panic+0x38/0xcc)
->> [<c02ea548>] (panic+0x38/0xcc) from [<c003caa0>] (do_exit+0x60/0x588)
->> [<c003caa0>] (do_exit+0x60/0x588) from [<c003d04c>] (do_group_exit+0x84/0xb8)
->> [<c003d04c>] (do_group_exit+0x84/0xb8) from [<c004704c>]
->> (get_signal_to_deliver+0x2f4/0x330)
->> [<c004704c>] (get_signal_to_deliver+0x2f4/0x330) from [<c0029044>]
->> (do_notify_resume+0x6c/0x5c4)
->> [<c0029044>] (do_notify_resume+0x6c/0x5c4) from [<c0026f2c>]
->> (work_pending+0x1c/0x20)
->
-> --
-> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ~. .~ ? Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
-> ? - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
+Signed-off-by: Massimiliano Marretta <max@marretta.com>
+---
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 +-
+ .../gst-plugins-base/gst-plugins-base.mk           |    2 +-
+ .../gst-plugins-good/gst-plugins-good.mk           |    2 +-
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
+ ....10.25-fix-unaligned-detectiob-for-x86-64.patch |   36 --------------------
+ package/multimedia/gstreamer/gstreamer.mk          |    2 +-
+ 6 files changed, 5 insertions(+), 41 deletions(-)
+ delete mode 100644 package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
 
-Marek
-
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index 7a059c1..558262d 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-bad
+ #
+ #############################################################
+-GST_PLUGINS_BAD_VERSION = 0.10.14
++GST_PLUGINS_BAD_VERSION = 0.10.19
+ GST_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST_PLUGINS_BAD_VERSION).tar.bz2
+ GST_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST_PLUGINS_BAD_LIBTOOL_PATCH = NO
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index fcffe28..6418d17 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-base
+ #
+ #############################################################
+-GST_PLUGINS_BASE_VERSION = 0.10.25
++GST_PLUGINS_BASE_VERSION = 0.10.30
+ GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.bz2
+ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST_PLUGINS_BASE_INSTALL_STAGING = YES
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index c11b865..39e1c0a 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-good
+ #
+ #############################################################
+-GST_PLUGINS_GOOD_VERSION = 0.10.16
++GST_PLUGINS_GOOD_VERSION = 0.10.24
+ GST_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST_PLUGINS_GOOD_VERSION).tar.bz2
+ GST_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST_PLUGINS_GOOD_LIBTOOL_PATCH = NO
+diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+index c87451f..c6dc6c6 100644
+--- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-ugly
+ #
+ #############################################################
+-GST_PLUGINS_UGLY_VERSION = 0.10.10
++GST_PLUGINS_UGLY_VERSION = 0.10.15
+ GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.bz2
+ GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST_PLUGINS_UGLY_LIBTOOL_PATCH = NO
+diff --git a/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch b/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
+deleted file mode 100644
+index 1635fe7..0000000
+--- a/package/multimedia/gstreamer/gstreamer-0.10.25-fix-unaligned-detectiob-for-x86-64.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-[PATCH] gst-arch.m4: fix unaligned detection for x86-64 when cross compiling
+-
+-Submitted upstream at https://bugzilla.gnome.org/show_bug.cgi?id=607317
+-
+-Commit 4221e9dc (amd64/x86_64 allows unaligned memory access too) added
+-x86-64 to the unaligned access whitelist, but missed the trailing
+-wildcards, so the test never succeeds (host is something like
+-x86_64-unknown-linux-gnu).
+-
+-When building natively, this isn't a big deal as the AC_TRY_RUN test
+-correctly detects it, but that doesn't work when cross compiling so
+-the build dies with:
+-
+-configure: error: cannot run test program while cross compiling
+-See `config.log' for more details.
+-
+-Fix it by adding the trailing wildcards.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: gstreamer-0.10.25/configure
+-===================================================================
+---- gstreamer-0.10.25.orig/configure
+-+++ gstreamer-0.10.25/configure
+-@@ -15655,7 +15655,7 @@ $as_echo_n "checking if unaligned memory
+-         $as_echo_n "(blacklisted) " >&6
+-         as_cv_unaligned_access=no
+- 	;;
+--      i?86*|x86_64|amd64|powerpc*|m68k*|cris*)
+-+      i?86*|x86_64*|amd64*|powerpc*|m68k*|cris*)
+-         $as_echo_n "(whitelisted) " >&6
+-         as_cv_unaligned_access=yes
+- 	;;
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 49ac0df..0fe8265 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -3,7 +3,7 @@
+ # gstreamer
+ #
+ #############################################################
+-GSTREAMER_VERSION = 0.10.25
++GSTREAMER_VERSION = 0.10.30
+ GSTREAMER_SOURCE = gstreamer-$(GSTREAMER_VERSION).tar.bz2
+ GSTREAMER_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER_INSTALL_STAGING = YES
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+1.7.1
