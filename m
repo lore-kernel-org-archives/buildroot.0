@@ -1,67 +1,121 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Aug 2010 17:47:43 +0200
-Subject: [Buildroot] [git commit master 1/1] qt: fix sysroot confusion in
-	./configure
-Message-ID: <20100826155043.D16038905D@busybox.osuosl.org>
+From: Daniel Lodos <daniel.lodos@hab.desoft.cu>
+Date: Thu, 26 Aug 2010 12:27:02 -0500
+Subject: [Buildroot] linux-fusion 8.1.1 Installing to target Errors
+Message-ID: <4C76A3E6.1090005@hab.desoft.cu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi am trying to MAKE the configured Buildroot but its interrupted at the 
+point shown below. Previosly i got the headers_install error that i 
+solved modifying some config.in and mk on directfb and linux_fusion files.
+how can i solve the problem?
+Thanks in advance
+Daniel Lodos
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b415edef35094310aa89dcfc7f694f1c07dea14
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qt's configure script is getting confused now that we're passing --sysroot=
-in QMAKE_CC / QMAKE_CXX, causing misdetection of features and runtime
-breakage.
-
-Fix it by passing --sysroot in CFLAGS/CXXFLAGS instead.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES          |    2 +-
- package/qt/qt.mk |    8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 5658b61..2d244bc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -16,7 +16,7 @@
- 	added.
- 
- 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
--	luafilesystem, lzo, netcat, php, sysvinit, util-linux
-+	luafilesystem, lzo, netcat, php, qt, sysvinit, util-linux
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index baf6539..eb1ef0f 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -483,16 +483,16 @@ ifneq ($(BR2_INET_IPV6),y)
- 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QT_TARGET_DIR)/configure
- endif
- 	# Fix compiler path
--	$(call QT_QMAKE_SET,CC,$(TARGET_CC))
--	$(call QT_QMAKE_SET,CXX,$(TARGET_CXX))
-+	$(call QT_QMAKE_SET,CC,$(filter-out --sysroot=%,$(TARGET_CC)))
-+	$(call QT_QMAKE_SET,CXX,$(filter-out --sysroot=%,$(TARGET_CXX)))
- 	$(call QT_QMAKE_SET,LINK,$(TARGET_CXX))
- 	$(call QT_QMAKE_SET,LINK_SHLIB,$(TARGET_CXX))
- 	$(call QT_QMAKE_SET,AR,$(TARGET_AR) cqs)
- 	$(call QT_QMAKE_SET,OBJCOPY,$(TARGET_OBJCOPY))
- 	$(call QT_QMAKE_SET,RANLIB,$(TARGET_RANLIB))
- 	$(call QT_QMAKE_SET,STRIP,$(TARGET_STRIP))
--	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_CFLAGS))
--	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_CXXFLAGS))
-+	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_SYSROOT_OPT) $(TARGET_CFLAGS))
-+	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_SYSROOT_OPT) $(TARGET_CXXFLAGS))
- 	$(call QT_QMAKE_SET,LFLAGS,$(TARGET_LDFLAGS))
- 	-[ -f $(QT_QCONFIG_FILE) ] && cp $(QT_QCONFIG_FILE) \
- 		$(QT_TARGET_DIR)/$(QT_QCONFIG_FILE_LOCATION)
--- 
-1.7.1
+ >>> linux-fusion 8.1.1 Installing to target
+/usr/bin/make -j2 
+PATH="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/toolchain/bin:/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/bin:/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/bin:/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/sbin/:/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/bin:/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin:/home/daniel/Desktop/Embedded/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games" 
+AR="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ar" 
+AS="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-as" 
+LD="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ld" 
+NM="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-nm" 
+CC="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc 
+-Os -pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/include 
+--sysroot=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/ -isysroot 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+GCC="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc 
+-Os -pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/include 
+--sysroot=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/ -isysroot 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+CPP="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-cpp 
+-Os -pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/include 
+--sysroot=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/ -isysroot 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+CXX="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-g++ 
+-Os -pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/include 
+--sysroot=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/ -isysroot 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+FC="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-gfortran 
+" 
+RANLIB="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ranlib" 
+STRIP="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-strip" 
+OBJCOPY="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-objcopy" 
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" 
+CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" 
+CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld" 
+LD_FOR_BUILD="/usr/bin/ld" 
+CFLAGS_FOR_BUILD="-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/include" 
+CXXFLAGS_FOR_BUILD="-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/include" 
+LDFLAGS_FOR_BUILD="-L/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/lib 
+-L/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/lib" 
+FCFLAGS_FOR_BUILD="" 
+AR_FOR_TARGET="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ar" 
+AS_FOR_TARGET="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-as" 
+CC_FOR_TARGET="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-gcc" 
+LD_FOR_TARGET="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ld" 
+NM_FOR_TARGET="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-nm" 
+DEFAULT_ASSEMBLER="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-as" 
+DEFAULT_LINKER="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc-ld" 
+PKG_CONFIG_SYSROOT_DIR="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+PKG_CONFIG="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/bin/pkg-config" 
+PKG_CONFIG_PATH="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/lib/pkgconfig:" 
+PERLLIB="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/host/usr/lib/perl" 
+STAGING_DIR="/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging" 
+CXX=false KERNEL_VERSION= 
+KERNEL_BUILD=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34 
+KERNEL_SOURCE=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34 
+SYSROOT=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/target 
+ARCH=i386 
+CROSS_COMPILE=/home/daniel/Desktop/Embedded/buildroot-2010.05/output/staging/usr/bin/i686-unknown-linux-uclibc- 
+KERNEL_MODLIB=/lib/modules//kernel -C 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1 
+install
+expr: syntax error
+make[1]: Entering directory 
+`/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1'
+rm -f linux/drivers/char/fusion/Makefile
+ln -s Makefile-2. linux/drivers/char/fusion/Makefile
+/usr/bin/make -C 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34 \
+         CPPFLAGS=" -D__KERNEL__ -I`pwd`/linux/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34/include 
+-I/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34/include 
+" \
+         SUBDIRS=`pwd`/linux/drivers/char/fusion modules
+make[2]: Entering directory 
+`/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34'
+scripts/Makefile.build:44: 
+/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1/linux/drivers/char/fusion/Makefile: 
+No such file or directory
+make[3]: *** No rule to make target 
+`/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1/linux/drivers/char/fusion/Makefile'.  
+Stop.
+make[2]: *** 
+[_module_/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1/linux/drivers/char/fusion] 
+Error 2
+make[2]: Leaving directory 
+`/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-2.6.34'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory 
+`/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1'
+make: *** 
+[/home/daniel/Desktop/Embedded/buildroot-2010.05/output/build/linux-fusion-8.1.1/.stamp_target_installed] 
+Error 2
