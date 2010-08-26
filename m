@@ -1,49 +1,23 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Wed, 25 Aug 2010 23:54:03 +0200
-Subject: [Buildroot] uImage build error
-In-Reply-To: <C43529A246480145B0A6D0234BDB0F0D481DAC@MELANITE.micrel.com>
-References: <C43529A246480145B0A6D0234BDB0F0D481DAC@MELANITE.micrel.com>
-Message-ID: <4C7590FB.1000700@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Aug 2010 08:19:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 2353] [lua] fix build with 2010.08-rc1
+In-Reply-To: <bug-2353-163@https.bugs.busybox.net/>
+References: <bug-2353-163@https.bugs.busybox.net/>
+Message-ID: <20100826081902.B7B0189059@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Am 25.08.2010 23:41, schrieb Choi, David:
->
-> Hi all,
->
-> I am new to buildroot. The version that I use is v2010.05(stable version)
->
-> As you see the attached, I almost the default value except mips(little 
-> endian mode).
->
-> My Linux version is 2.6.33.5(default version) and configuration is 
-> tb0229_defconfig.
->
-> Whenever I have tried to build uImage, I have gotten an error message 
-> saying "make[1]: *** No rule to make target `uImage`. Stop.
->
-> (Even though I have tried with v2010.08(rc1), I had the same error 
-> message)
->
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=2353
 
-Make sure to run 2010.08(rc1) or higher (there were some patches in the 
-past concerning kernel image building). Please activate the U-Boot 
-bootloader. This should compile a mkimage which will be needed for 
-creating an uImage.
- >make menuconfig (activate u-boot and/or kernel building if you want this)
- >make
+--- Comment #6 from Fran?ois Perrad <francois.perrad@gadz.org>  ---
+Created attachment 2371
+  --> https://bugs.busybox.net/attachment.cgi?id=2371
+patch only for warnings
 
-( Are you trying to run make uImage after deflating? This is not the 
-linux kernel. Buildroot is an independant project.
-Please read docu page first:
-http://buildroot.uclibc.org/downloads/buildroot.html )
-
-Regards,
-Marcus
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100825/1925be16/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
