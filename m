@@ -1,41 +1,67 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Aug 2010 12:00:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
- build on MIPS because is missing -ldl
-In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
-References: <bug-2395-163@https.bugs.busybox.net/>
-Message-ID: <20100826120058.73E898905E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Aug 2010 17:47:43 +0200
+Subject: [Buildroot] [git commit master 1/1] qt: fix sysroot confusion in
+	./configure
+Message-ID: <20100826155043.D16038905D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2395
 
---- Comment #5 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-(In reply to comment #4)
-> (In reply to comment #3)
-> > > I reported, just after do a make clean , make clean is that enough ?
-> > 
-> > 'make clean' is indeed enough. Please put the full build log online somewhere.
-> > As I can't reproduce the issue, if you don't provide a full build log so that I
-> > can start the investigation, 
-> 
-> ok , I will put it don't worry , I am in holidays and this is only a hobby ...
-> give me 2 days please. 
-> 
-> > I will unfortunately have no other option than
-> > closing this bug because of missing information.
-> > 
-> > You can also try to reproduce by disabling BR2_CONFIG_CACHE (by default it is
-> > enabled). I'm fairly strongly suspecting a configure cache issue.
-> 
-> ok I will check that.  
+commit: http://git.buildroot.net/buildroot/commit/?id=0b415edef35094310aa89dcfc7f694f1c07dea14
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After disable BR2_CONFIG_CACHE, I don't have this issue anymore ...
+qt's configure script is getting confused now that we're passing --sysroot=
+in QMAKE_CC / QMAKE_CXX, causing misdetection of features and runtime
+breakage.
 
+Fix it by passing --sysroot in CFLAGS/CXXFLAGS instead.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES          |    2 +-
+ package/qt/qt.mk |    8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 5658b61..2d244bc 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -16,7 +16,7 @@
+ 	added.
+ 
+ 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
+-	luafilesystem, lzo, netcat, php, sysvinit, util-linux
++	luafilesystem, lzo, netcat, php, qt, sysvinit, util-linux
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index baf6539..eb1ef0f 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -483,16 +483,16 @@ ifneq ($(BR2_INET_IPV6),y)
+ 	$(SED) 's/^CFG_IPV6IFNAME=auto/CFG_IPV6IFNAME=no/' $(QT_TARGET_DIR)/configure
+ endif
+ 	# Fix compiler path
+-	$(call QT_QMAKE_SET,CC,$(TARGET_CC))
+-	$(call QT_QMAKE_SET,CXX,$(TARGET_CXX))
++	$(call QT_QMAKE_SET,CC,$(filter-out --sysroot=%,$(TARGET_CC)))
++	$(call QT_QMAKE_SET,CXX,$(filter-out --sysroot=%,$(TARGET_CXX)))
+ 	$(call QT_QMAKE_SET,LINK,$(TARGET_CXX))
+ 	$(call QT_QMAKE_SET,LINK_SHLIB,$(TARGET_CXX))
+ 	$(call QT_QMAKE_SET,AR,$(TARGET_AR) cqs)
+ 	$(call QT_QMAKE_SET,OBJCOPY,$(TARGET_OBJCOPY))
+ 	$(call QT_QMAKE_SET,RANLIB,$(TARGET_RANLIB))
+ 	$(call QT_QMAKE_SET,STRIP,$(TARGET_STRIP))
+-	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_CFLAGS))
+-	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_CXXFLAGS))
++	$(call QT_QMAKE_SET,CFLAGS,$(TARGET_SYSROOT_OPT) $(TARGET_CFLAGS))
++	$(call QT_QMAKE_SET,CXXFLAGS,$(TARGET_SYSROOT_OPT) $(TARGET_CXXFLAGS))
+ 	$(call QT_QMAKE_SET,LFLAGS,$(TARGET_LDFLAGS))
+ 	-[ -f $(QT_QCONFIG_FILE) ] && cp $(QT_QCONFIG_FILE) \
+ 		$(QT_TARGET_DIR)/$(QT_QCONFIG_FILE_LOCATION)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
