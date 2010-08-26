@@ -1,45 +1,41 @@
-From: Paul Jones <paul@pauljones.id.au>
-Date: Thu, 26 Aug 2010 21:45:56 +1000
-Subject: [Buildroot] compile qt application in buildroot
-In-Reply-To: <AANLkTimBKaew98N3URzVddTPCXo+xCtyL4aZk3fEiP9c@mail.gmail.com>
-References: <AANLkTimBKaew98N3URzVddTPCXo+xCtyL4aZk3fEiP9c@mail.gmail.com>
-Message-ID: <002701cb4514$3fe7a800$bfb6f800$@pauljones.id.au>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Aug 2010 12:00:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
+ build on MIPS because is missing -ldl
+In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
+References: <bug-2395-163@https.bugs.busybox.net/>
+Message-ID: <20100826120058.73E898905E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Belisko Marek
-> Sent: Thursday, 26 August 2010 9:18 PM
-> To: buildroot at uclibc.org
-> Subject: [Buildroot] compile qt application in buildroot
-> 
-> Hi,
-> 
-> I have successfully compile qt-embedded-4.6.2 in buildroot and I'm trying
-to
-> compile my custom qt application manually what is not easy.
-> 
-> I have an idea to integrate compilation to buildroot but not sure if this
-will
-> work (calling qmake ...).
-> 
-> It is possible to do it in that way or is there any example available how
-to
-> cross compile custom application using buildroot which use qt-embedded?
+https://bugs.busybox.net/show_bug.cgi?id=2395
 
-To do it manually change to your program directory and run
-buildroot/output/staging/usr/bin/qmake
-That will create a Makefile with all the cross-compile details, then just
-run make.
-You could also create a package to do this automatically.
+--- Comment #5 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+(In reply to comment #4)
+> (In reply to comment #3)
+> > > I reported, just after do a make clean , make clean is that enough ?
+> > 
+> > 'make clean' is indeed enough. Please put the full build log online somewhere.
+> > As I can't reproduce the issue, if you don't provide a full build log so that I
+> > can start the investigation, 
+> 
+> ok , I will put it don't worry , I am in holidays and this is only a hobby ...
+> give me 2 days please. 
+> 
+> > I will unfortunately have no other option than
+> > closing this bug because of missing information.
+> > 
+> > You can also try to reproduce by disabling BR2_CONFIG_CACHE (by default it is
+> > enabled). I'm fairly strongly suspecting a configure cache issue.
+> 
+> ok I will check that.  
 
-Speaking of that, does anyone know a way to copy program source to package
-build rather than putting it into a tarball/git?
+After disable BR2_CONFIG_CACHE, I don't have this issue anymore ...
 
-
-Cheers,
-Paul.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
