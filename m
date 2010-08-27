@@ -1,9 +1,9 @@
 From: W.P. <laurentp@wp.pl>
-Date: Fri, 27 Aug 2010 22:16:20 +0200
+Date: Fri, 27 Aug 2010 22:17:51 +0200
 Subject: [Buildroot] [OT?]Re:  SDL instead of DirectFB
 In-Reply-To: <4C76BE36.7040904@hab.desoft.cu>
 References: <4C76BE36.7040904@hab.desoft.cu>
-Message-ID: <4C781D14.5090601@wp.pl>
+Message-ID: <4C781D6F.1030008@wp.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
