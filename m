@@ -1,25 +1,26 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Fri, 27 Aug 2010 16:50:31 +0000 (UTC)
-Subject: [Buildroot] systemtap support?
-Message-ID: <i58qcn$k3i$1@dough.gmane.org>
+From: W.P. <laurentp@wp.pl>
+Date: Fri, 27 Aug 2010 22:16:20 +0200
+Subject: [Buildroot] [OT?]Re:  SDL instead of DirectFB
+In-Reply-To: <4C76BE36.7040904@hab.desoft.cu>
+References: <4C76BE36.7040904@hab.desoft.cu>
+Message-ID: <4C781D14.5090601@wp.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've figured out how to cross-compile a systemtap script ( generating
-a kernel module for the target).  Now I need to build "staprun" for
-the target.
+U?ytkownik Daniel Lodos napisa?:
+> I am trying to make a linux that supports java swings. Java requires
+> X11 in linux for the graphics. I was trying to install DirectFB but
+> there where a lot of errors. Can I use SDL instead of DirectFB for
+> this purpose?
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+There is already a system with: Linux kernel, Java, FB support -> Android.
+[this may be OT but may be useful for someone]
 
-Has anybody got a recipe for that?
-
-I found a thread from a couple years ago indicating that somebody was
-working on it, but haven't seen anything since:
-
-  http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/9037
-
--- 
-Grant Edwards               grant.b.edwards        Yow! if it GLISTENS,
-                                  at               gobble it!!
-                              gmail.com            
+W.P.
