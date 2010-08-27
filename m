@@ -1,44 +1,70 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 Aug 2010 13:18:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 2449] New: Minor fixes for squashfs makefile and
- correct PowerPC e500 setting in uclibc config
-Message-ID: <bug-2449-163@https.bugs.busybox.net/>
+From: Choi, David <David.Choi@Micrel.Com>
+Date: Fri, 27 Aug 2010 07:40:00 -0700
+Subject: [Buildroot] uImage build error
+In-Reply-To: <20100827100125.21e2ccc8@surf>
+References: <C43529A246480145B0A6D0234BDB0F0D481DAC@MELANITE.micrel.com><4C7590FB.1000700@googlemail.com><C43529A246480145B0A6D0234BDB0F0D481DAD@MELANITE.micrel.com>
+	<20100827100125.21e2ccc8@surf>
+Message-ID: <C43529A246480145B0A6D0234BDB0F0D481DAE@MELANITE.micrel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2449
+Hello Thomas & all,
 
-           Summary: Minor fixes for squashfs makefile and correct PowerPC
-                    e500 setting in uclibc config
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: realloc at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thank you. I got it.
+
+Regards,
+David J. Choi
 
 
-Created attachment 2383
-  --> https://bugs.busybox.net/attachment.cgi?id=2383
-squashfs typo fix, uclibc e500 config fix
+-----Original Message-----
+From: buildroot-bounces@busybox.net
+[mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
+Sent: Friday, August 27, 2010 1:01 AM
+To: buildroot at busybox.net
+Subject: Re: [Buildroot] uImage build error
 
-* Because of type squashfs makefile was ignoring endian option
+Hello David,
 
-* Empty uClibc config path caused error during build. Now if the option is
-empty it takes the default config for selected version.
+On Thu, 26 Aug 2010 17:26:09 -0700
+"Choi, David" <David.Choi@Micrel.Com> wrote:
 
-* PowerPC E500 arch option was not set correctly in uclibc config.
+> Thank you for your e-mail. Basically I understand Buildroot is an
+> independent from linux kernel, as you pointed out in your previous
+> e-mail.
+> 
+> The reason I posted the question is that users can select [kernel
+> binary format] from [make menuconfig] in the buildroot of
+> v2010.08-rc1.  
+> 
+> As I need u-boot and linux kernel, I put the need information properly
+> from the [make menuconfig]. When I choose vmlinux as a kernel binary
+> format,
+> 
+> I can see the root file system, kernel and u-boot in the output/image
+> direcoty(rootfs.initcramfs, u-boot.bin and vmlinux.bin).
+> 
+> But when I change uImage as a kernel binary format, there is an error
+> message( make[1]: ***No rule to make target uImage. Stop).
 
+From your previous post, I understand that you are building for MIPS.
+However, the kernel doesn't provide a "make uImage" target for the MIPS
+architecture: you have to produce the mkimage'd kernel manually.
+
+On the Buildroot side, we should just prevent you from selecting
+"uImage" if the architecture does not support it.
+
+Cheers,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
