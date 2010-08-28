@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 29 Aug 2010 00:14:40 +0200
-Subject: [Buildroot] [git commit master 1/1] fs/squashfs: fix endianness
-	typo for squashfs3
-Message-ID: <20100828221609.F002B87345@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] uClibc: fix ppc e500 handling
+Message-ID: <20100828221610.2A0B687345@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +9,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62b4c67b094131db9d1f715a5cef0fd042396338
+commit: http://git.buildroot.net/buildroot/commit/?id=e8fdc08dc39ea28e5e098f696477e4a13f4ebd94
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Closes #2449
 
 Signed-off-by: Stanislav Bogatyrev <bogatyrev_stanislav@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                 |    2 ++
- fs/squashfs/squashfs.mk |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ CHANGES                    |    1 +
+ toolchain/uClibc/uclibc.mk |    8 +-------
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 2d244bc..86a2cc2 100644
+index 86a2cc2..c18edab 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -15,6 +15,8 @@
- 	Toolchain: fixed gcc 4.2.x build after uClibc NPTL support got
- 	added.
+@@ -24,6 +24,7 @@
  
-+	fs: old-style squashfs for big endian archs fixed.
-+
- 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
- 	luafilesystem, lzo, netcat, php, qt, sysvinit, util-linux
+ 	#635:  util-linux fails to build in 2009.08
+ 	#2239: netcat package installs its binary to target as avr32-linux...
++	#2449: Minor fixes for squashfs makefile and correct PowerPC e500 ...
  
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index a904182..6117de6 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -10,7 +10,7 @@ else
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs3
+ 2010.08-rc1, Released July 30th, 2010:
  
- ifeq ($(BR2_ENDIAN),"BIG")
--ROOTFS_SQUASHF_ARGS=-be
-+ROOTFS_SQUASHFS_ARGS=-be
- else
- ROOTFS_SQUASHFS_ARGS=-le
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index b9ef551..4fb9393 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -217,13 +217,7 @@ ifeq ($(UCLIBC_TARGET_ARCH),sparc)
+ 	$(SED) 's/^.*$(UCLIBC_SPARC_TYPE)[^B].*/$(UCLIBC_SPARC_TYPE)=y/g' $(UCLIBC_DIR)/.oldconfig
  endif
+ ifeq ($(UCLIBC_TARGET_ARCH),powerpc)
+-ifeq ($(BR2_powerpc_8540),y)
+-	TARGET_POWERPC_CORE_E500:=y
+-endif
+-ifeq ($(BR2_powerpc_e500mc),y)
+-	TARGET_POWERPC_CORE_E500:=y
+-endif
+-ifeq ($(TARGET_POWERPC_CORE_E500),y)
++ifeq ($(BR2_powerpc_8540)$(BR2_powerpc_e500mc),y)
+ 	/bin/echo "# CONFIG_CLASSIC is not set" >> $(UCLIBC_DIR)/.oldconfig
+ 	/bin/echo "CONFIG_E500=y" >> $(UCLIBC_DIR)/.oldconfig
+ else
 -- 
 1.7.1
