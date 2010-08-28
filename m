@@ -1,25 +1,30 @@
-From: Zakaria Elqotbi <zakaria.elqotbi@openwide.fr>
-Date: Sat, 28 Aug 2010 16:07:34 +0200 (CEST)
-Subject: [Buildroot] timezone support for external toolchain
-In-Reply-To: <1799638130.13061.1283001548749.JavaMail.root@zimbra2.corp.accelance.fr>
-Message-ID: <1445849161.13086.1283004454607.JavaMail.root@zimbra2.corp.accelance.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 28 Aug 2010 22:15:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 2449] Minor fixes for squashfs makefile and
+ correct PowerPC e500 setting in uclibc config
+In-Reply-To: <bug-2449-163@https.bugs.busybox.net/>
+References: <bug-2449-163@https.bugs.busybox.net/>
+Message-ID: <20100828221545.C5A7687345@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Folks,
+https://bugs.busybox.net/show_bug.cgi?id=2449
 
-I add support for timezone in external-toolchain, i've tested this with stlinux23 toolchain.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Regards
---
-Zakaria
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-External-Toolchain-support-of-timezone.patch
-Type: text/x-patch
-Size: 5594 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100828/933b3a6f/attachment.bin>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+thanks, committed squashfs and uclibc e500 fix. I'm not convinced about the
+uclibc config workaround (atleast this close to a release)
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
