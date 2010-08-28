@@ -1,30 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 28 Aug 2010 22:15:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 2449] Minor fixes for squashfs makefile and
- correct PowerPC e500 setting in uclibc config
-In-Reply-To: <bug-2449-163@https.bugs.busybox.net/>
-References: <bug-2449-163@https.bugs.busybox.net/>
-Message-ID: <20100828221545.C5A7687345@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 29 Aug 2010 00:14:40 +0200
+Subject: [Buildroot] [git commit master 1/1] fs/squashfs: fix endianness
+	typo for squashfs3
+Message-ID: <20100828221609.F002B87345@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2449
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=62b4c67b094131db9d1f715a5cef0fd042396338
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Stanislav Bogatyrev <bogatyrev_stanislav@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                 |    2 ++
+ fs/squashfs/squashfs.mk |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-thanks, committed squashfs and uclibc e500 fix. I'm not convinced about the
-uclibc config workaround (atleast this close to a release)
-
+diff --git a/CHANGES b/CHANGES
+index 2d244bc..86a2cc2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -15,6 +15,8 @@
+ 	Toolchain: fixed gcc 4.2.x build after uClibc NPTL support got
+ 	added.
+ 
++	fs: old-style squashfs for big endian archs fixed.
++
+ 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
+ 	luafilesystem, lzo, netcat, php, qt, sysvinit, util-linux
+ 
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index a904182..6117de6 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -10,7 +10,7 @@ else
+ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs3
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+-ROOTFS_SQUASHF_ARGS=-be
++ROOTFS_SQUASHFS_ARGS=-be
+ else
+ ROOTFS_SQUASHFS_ARGS=-le
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
