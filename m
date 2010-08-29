@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Aug 2010 11:40:08 +0200
-Subject: [Buildroot] [PATCH] Add Atme at91sam9m10ekes, l at91sam9m10g45ek,
- at91sam9g10ek, at91sam9rlek boards support.
-In-Reply-To: <C83D7CE8356557448A893798C8F9931D0610679E@frimb01.corp.atmel.com>
-References: <C83D7CE8356557448A893798C8F9931D0610679E@frimb01.corp.atmel.com>
-Message-ID: <20100829114008.2a546ca4@surf>
+Date: Sun, 29 Aug 2010 11:58:12 +0200
+Subject: [Buildroot] [git commit master 1/1] Config.in: mark
+ BR2_CONFIG_CACHE as experimental and disable by default
+In-Reply-To: <20100825153147.4915689016@busybox.osuosl.org>
+References: <20100825153147.4915689016@busybox.osuosl.org>
+Message-ID: <20100829115812.17ac0bb5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Josh,
+Hello,
 
-On Mon, 23 Aug 2010 07:27:32 +0200
-"Wu, Josh" <Josh.wu@atmel.com> wrote:
+On Wed, 25 Aug 2010 17:30:38 +0200
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-> Since in the Buildroot there are many AT91 boards support are out of
-> date. I add this patch to support AT91SAM9M10EKES, AT91SAM9M10G45EK
-> and other old boards like 9G10EK, 9RLEK.
+> commit:
+> http://git.buildroot.net/buildroot/commit/?id=b680672ad1b1c45e23cf89ddb217616274d68dee
+> branch:
+> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> It seems in the next release Buildroot will change a lot in the
-> board's structure. I hope 2010.08 can support the AT91 latest board.
+> As it is known to break with certain package combinations.
 
-I think it's too late for those patches to go in, but I'll let Peter
-decide.
+Can we take some sort of official decision about this ? Supporting the
+configuration cache thing is not just having an option or not, it's
+also all the patches that we're adding to fix the issues found here and
+there (libglib2, lzo, etc.).
 
-Whatever happens to these patches for 2010.08, I intend to upgrade the
-support for Atmel boards as part of the work I'm doing on board
-cleanup, as you've noticed. I will take these patches into account
-while doing this cleanup effort.
+If we decide to completely drop the configuration cache, then we can
+remove these patches (and since they often patch the configure.{in,ac}
+files, those patches involved adding <pkg>_AUTORECONF = YES to the
+package).
 
-Thanks!
+However, if we intend to keep it in the hope to re-enable it
+by default in the future, we have to keep these patches, and put some
+effort in fixing all other issues that we face with the configuration
+cache enabled.
+
+Cheers,
 
 Thomas
 -- 
