@@ -1,26 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 29 Aug 2010 09:23:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 1747] external toolchain does not include mtd-util
-	headers
-In-Reply-To: <bug-1747-163@https.bugs.busybox.net/>
-References: <bug-1747-163@https.bugs.busybox.net/>
-Message-ID: <20100829092312.699848A2DC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Aug 2010 11:26:34 +0200
+Subject: [Buildroot] systemtap support?
+In-Reply-To: <i58qcn$k3i$1@dough.gmane.org>
+References: <i58qcn$k3i$1@dough.gmane.org>
+Message-ID: <20100829112634.759fa328@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1747
+Hello Grant,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I've tried to build U-Boot fw_printenv utility in Buildroot using a internal
-Buildroot toolchain and it just works. Could you post the Buildroot
-configuration that fails for you ?
+On Fri, 27 Aug 2010 16:50:31 +0000 (UTC)
+Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-Thanks!
+> I've figured out how to cross-compile a systemtap script ( generating
+> a kernel module for the target).  Now I need to build "staprun" for
+> the target.
+> 
+> Has anybody got a recipe for that?
+> 
+> I found a thread from a couple years ago indicating that somebody was
+> working on it, but haven't seen anything since:
+> 
+>   http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/9037
 
+I'm not aware of anything recent concerning the integration of
+SystemTap into Buildroot. Feel free to work on this and submit your
+patches!
+
+Regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
