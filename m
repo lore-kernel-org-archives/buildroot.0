@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Darcy Watkins <dwatkins@tranzeo.com>
 Date: Sun, 29 Aug 2010 23:24:07 +0200
-Subject: [Buildroot] [git commit master 1/1] Makefile: fix
-	source/source-check/external-deps with O=
-Message-ID: <20100829212918.DBFA78A2D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] pppd.mk installs radattr.so
+	twice and omits radrealms.so
+Message-ID: <20100829212918.B34B48A2D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,72 +10,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de846f6e043bf6fe13fb387cd92585a7a70913a7
+commit: http://git.buildroot.net/buildroot/commit/?id=b6207627b4d20628ca0491377f17c5f3c91627d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Based on patch by Will Wagner <will_wagner@carallon.com>.
+In pppd.mk the radattr.so plugin (for radiua) is installed twice (the second
+install overwriting the first) but the radrealms.so plugin is omitted from
+the install. This appears to be a copy-paste error.
 
-Now that the .config is located in the output directory when O=<dir>
-is used, we have to pass the O= option to make for
-source/source-check/external-deps to get them to look in the right place
-for the .config.
+Below is patch that corrects this.
 
-Fix it by introducing an EXTRAMAKEARGS variable and use it whenever we
-call back into the toplevel Makefile.
-
+signed-off by: Darcy Watkins <dwatkins@tranzeo.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |   14 ++++++--------
- 1 files changed, 6 insertions(+), 8 deletions(-)
+ CHANGES              |    2 +-
+ package/pppd/pppd.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 291badf..d37d81f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -59,6 +59,8 @@ MAKEOVERRIDES =
- # To really make O go away, we have to override it.
- override O:=$(O)
- CONFIG_DIR:=$(O)
-+# we need to pass O= everywhere we call back into the toplevel makefile
-+EXTRAMAKEARGS = O=$(O)
- endif
+diff --git a/CHANGES b/CHANGES
+index 317e9e6..8550b6f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -18,7 +18,7 @@
+ 	fs: old-style squashfs for big endian archs fixed.
  
- # $(shell find . -name *_defconfig |sed 's/.*\///')
-@@ -432,11 +434,11 @@ endif
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
+-	luafilesystem, lzo, netcat, php, proftpd, qt, samba,
++	luafilesystem, lzo, netcat, php, pppd, proftpd, qt, samba,
+ 	startup-notification, sysvinit, util-linux
  
- _source-check:
--	$(MAKE) SPIDER=--spider source
-+	$(MAKE) $(EXTRAMAKEARGS) SPIDER=--spider source
- 
- external-deps:
- 	@$(MAKE) -Bs BR2_WGET=$(TOPDIR)/toolchain/wget-show-external-deps.sh \
--		SPIDER=--spider source
-+		$(EXTRAMAKEARGS) SPIDER=--spider source
- 
- show-targets:
- 	@echo $(TARGETS)
-@@ -558,7 +560,7 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf
- 
- # check if download URLs are outdated
- source-check: allyesconfig
--	$(MAKE) _source-check
-+	$(MAKE) $(EXTRAMAKEARGS) _source-check
- 
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
-@@ -585,11 +587,7 @@ flush:
- 
- %_defconfig: $(TOPDIR)/configs/%_defconfig
- 	cp $^ $(CONFIG_DIR)/.config
--ifeq ($(O),output)
--	@$(MAKE) oldconfig
--else
--	@$(MAKE) O=$(O) oldconfig
--endif
-+	@$(MAKE) $(EXTRAMAKEARGS) oldconfig
- 
- configured: dirs host-sed kernel-headers uclibc-config busybox-config linux26-config
- 
+ 	Removed packages: stunnel
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 9d081f2..35fd451 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -55,8 +55,8 @@ $(PPPD_TARGET_INSTALL_TARGET):
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
+ 	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radius.so \
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radius.so
+-	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radattr.so \
+-		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
++	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radrealms.so \
++		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radrealms.so
+ 	for m in $(PPPD_MANPAGES); do \
+ 		$(INSTALL) -m 644 -D $(PPPD_DIR)/$$m/$$m.8 \
+ 			$(TARGET_DIR)/usr/share/man/man8/$$m.8; \
 -- 
 1.7.1
