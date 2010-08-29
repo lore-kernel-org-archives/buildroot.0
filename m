@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 29 Aug 2010 21:51:07 +0200
-Subject: [Buildroot] [git commit master 1/1] samba: avahi support needs
-	avahi-daemon / dbus
-Message-ID: <20100829195129.A4E2F8A301@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] startup-notification: fix typo
+	in dependencies line
+Message-ID: <20100829195129.7EF7E8A2D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c06b3891ff9ff2f6780e7547a54d2688dafa016c
+commit: http://git.buildroot.net/buildroot/commit/?id=96c607c93a7a532d5a80329e2838fe131c1f2461
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-./configure checks for libavahi-client.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                 |    2 +-
- package/samba/Config.in |    7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ CHANGES                                            |    3 ++-
+ .../startup-notification/startup-notification.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 0b24e51..e68adf0 100644
+index c18edab..0b24e51 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -18,7 +18,7 @@
+@@ -18,7 +18,8 @@
  	fs: old-style squashfs for big endian archs fixed.
  
  	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
--	luafilesystem, lzo, netcat, php, qt, startup-notification,
-+	luafilesystem, lzo, netcat, php, qt, samba, startup-notification,
- 	sysvinit, util-linux
+-	luafilesystem, lzo, netcat, php, qt, sysvinit, util-linux
++	luafilesystem, lzo, netcat, php, qt, startup-notification,
++	sysvinit, util-linux
  
  	Issues resolved (http://bugs.uclibc.org):
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index a7a0b34..58a84f3 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -241,12 +241,13 @@ config BR2_PACKAGE_SAMBA_AVAHI
- 	bool "support avahi"
- 	default y
- 	depends on BR2_PACKAGE_SAMBA
--	depends on BR2_PACKAGE_AVAHI
-+	depends on BR2_PACKAGE_AVAHI_DAEMON
-+	depends on BR2_PACKAGE_DBUS
- 	help
- 	  Include support for avahi
  
--comment "support avahi - disabled (requires avahi)"
--	depends on !BR2_PACKAGE_AVAHI
-+comment "support avahi - disabled (requires avahi-daemon/dbus)"
-+	depends on !BR2_PACKAGE_AVAHI_DAEMON || !BR2_PACKAGE_DBUS
+diff --git a/package/startup-notification/startup-notification.mk b/package/startup-notification/startup-notification.mk
+index f70fcc1..ec4a895 100644
+--- a/package/startup-notification/startup-notification.mk
++++ b/package/startup-notification/startup-notification.mk
+@@ -9,7 +9,7 @@ STARTUP_NOTIFICATION_SITE = http://freedesktop.org/software/startup-notification
+ STARTUP_NOTIFICATION_AUTORECONF = NO
+ STARTUP_NOTIFICATION_INSTALL_STAGING = YES
+ STARTUP_NOTIFICATION_INSTALL_TARGET = YES
+-STARTUP_NOTIFICATION = xlib_libX11
++STARTUP_NOTIFICATION_DEPENDENCIES = xlib_libX11
  
- config BR2_PACKAGE_SAMBA_GAMIN
- 	bool "support gamin"
+ STARTUP_NOTIFICATION_CONF_ENV = lf_cv_sane_realloc=yes
+ 
 -- 
 1.7.1
