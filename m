@@ -1,40 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Aug 2010 11:26:34 +0200
-Subject: [Buildroot] systemtap support?
-In-Reply-To: <i58qcn$k3i$1@dough.gmane.org>
-References: <i58qcn$k3i$1@dough.gmane.org>
-Message-ID: <20100829112634.759fa328@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 Aug 2010 09:28:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 2461] wireless_tools: install shared library if
+	needed
+In-Reply-To: <bug-2461-163@https.bugs.busybox.net/>
+References: <bug-2461-163@https.bugs.busybox.net/>
+Message-ID: <20100829092853.853F38A2DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Grant,
+https://bugs.busybox.net/show_bug.cgi?id=2461
 
-On Fri, 27 Aug 2010 16:50:31 +0000 (UTC)
-Grant Edwards <grant.b.edwards@gmail.com> wrote:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Thanks. Just for reference, for which use case do you need this shared library
+on the target ?
 
-> I've figured out how to cross-compile a systemtap script ( generating
-> a kernel module for the target).  Now I need to build "staprun" for
-> the target.
-> 
-> Has anybody got a recipe for that?
-> 
-> I found a thread from a couple years ago indicating that somebody was
-> working on it, but haven't seen anything since:
-> 
->   http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/9037
-
-I'm not aware of anything recent concerning the integration of
-SystemTap into Buildroot. Feel free to work on this and submit your
-patches!
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
