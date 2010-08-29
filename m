@@ -1,27 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Aug 2010 11:30:56 +0200
-Subject: [Buildroot] SDL instead of DirectFB
-In-Reply-To: <4C76BE36.7040904@hab.desoft.cu>
-References: <4C76BE36.7040904@hab.desoft.cu>
-Message-ID: <20100829113056.1e212d5c@surf>
+Date: Sun, 29 Aug 2010 11:40:08 +0200
+Subject: [Buildroot] [PATCH] Add Atme at91sam9m10ekes, l at91sam9m10g45ek,
+ at91sam9g10ek, at91sam9rlek boards support.
+In-Reply-To: <C83D7CE8356557448A893798C8F9931D0610679E@frimb01.corp.atmel.com>
+References: <C83D7CE8356557448A893798C8F9931D0610679E@frimb01.corp.atmel.com>
+Message-ID: <20100829114008.2a546ca4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+Hello Josh,
 
-On Thu, 26 Aug 2010 14:19:18 -0500
-Daniel Lodos <daniel.lodos@hab.desoft.cu> wrote:
+On Mon, 23 Aug 2010 07:27:32 +0200
+"Wu, Josh" <Josh.wu@atmel.com> wrote:
 
-> I am trying to make a linux that supports java swings. Java requires
-> X11 in linux for the graphics. I was trying to install DirectFB but
-> there where a lot of errors. Can I use SDL instead of DirectFB for
-> this purpose?
+> Since in the Buildroot there are many AT91 boards support are out of
+> date. I add this patch to support AT91SAM9M10EKES, AT91SAM9M10G45EK
+> and other old boards like 9G10EK, 9RLEK.
+> 
+> It seems in the next release Buildroot will change a lot in the
+> board's structure. I hope 2010.08 can support the AT91 latest board.
 
-Typically, if you're using X11, DirectFB is not needed. Why would you
-need both ?
+I think it's too late for those patches to go in, but I'll let Peter
+decide.
+
+Whatever happens to these patches for 2010.08, I intend to upgrade the
+support for Atmel boards as part of the work I'm doing on board
+cleanup, as you've noticed. I will take these patches into account
+while doing this cleanup effort.
+
+Thanks!
 
 Thomas
 -- 
