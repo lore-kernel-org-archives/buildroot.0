@@ -1,8 +1,8 @@
-From: Simon Pasch <fpasch@googlemail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 29 Aug 2010 23:36:46 +0200
-Subject: [Buildroot] [git commit master 1/1] initramfs: Don't overwrite
-	$(TARGET_DIR)/init if it exists
-Message-ID: <20100829213822.1B1A38A2D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] luafilesystems: unbreak builds
+	with largefile support
+Message-ID: <20100829213822.434438A2D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4cdcc3680c5dc551fa563b2133ca83c55967495
+commit: http://git.buildroot.net/buildroot/commit/?id=8e32ec9a1fa9a520017594b38c6e261e2c5f490d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #2443
+A typo was introduced in e6c4ce6c (luafilesystem: remove LARGE_FILE
+constraint), breaking the build when largefile support was enabled.
 
-Allow use of custom init scripts.
-
-Signed-off-by: Simon Pasch <fpasch@googlemail.com>
+Reported-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                   |    1 +
- fs/initramfs/initramfs.mk |    5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/luafilesystem/luafilesystem.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 8550b6f..7ab4aa4 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -27,6 +27,7 @@
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index e688734..5f1119a 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -9,7 +9,7 @@ LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
+ LUAFILESYSTEM_DEPENDENCIES = lua
  
- 	#635:  util-linux fails to build in 2009.08
- 	#2239: netcat package installs its binary to target as avr32-linux...
-+	#2443: Initramfs: Don't overwrite $(TARGET_DIR)/init if it exists
- 	#2449: Minor fixes for squashfs makefile and correct PowerPC e500 ...
- 
- 2010.08-rc1, Released July 30th, 2010:
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index e6d004e..30969a4 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -13,8 +13,9 @@ INITRAMFS_TARGET:= #nothing
+ ifeq ($(BR2_LARGEFILE),y)
+-LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE
++LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
  endif
  
- define ROOTFS_INITRAMFS_INIT_SYMLINK
--	rm -f $(TARGET_DIR)/init
--	ln -s sbin/init $(TARGET_DIR)/init
-+	if [ ! -e $(TARGET_DIR)/init ]; then \
-+		ln -s sbin/init $(TARGET_DIR)/init; \
-+	fi
- endef
- 
- ROOTFS_INITRAMFS_PRE_GEN_HOOKS += ROOTFS_INITRAMFS_INIT_SYMLINK
+ define LUAFILESYSTEM_BUILD_CMDS
 -- 
 1.7.1
