@@ -1,23 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 29 Aug 2010 09:28:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 2461] wireless_tools: install shared library if
-	needed
-In-Reply-To: <bug-2461-163@https.bugs.busybox.net/>
-References: <bug-2461-163@https.bugs.busybox.net/>
-Message-ID: <20100829092853.853F38A2DC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Aug 2010 11:30:56 +0200
+Subject: [Buildroot] SDL instead of DirectFB
+In-Reply-To: <4C76BE36.7040904@hab.desoft.cu>
+References: <4C76BE36.7040904@hab.desoft.cu>
+Message-ID: <20100829113056.1e212d5c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2461
+Hello Daniel,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Thanks. Just for reference, for which use case do you need this shared library
-on the target ?
+On Thu, 26 Aug 2010 14:19:18 -0500
+Daniel Lodos <daniel.lodos@hab.desoft.cu> wrote:
 
+> I am trying to make a linux that supports java swings. Java requires
+> X11 in linux for the graphics. I was trying to install DirectFB but
+> there where a lot of errors. Can I use SDL instead of DirectFB for
+> this purpose?
+
+Typically, if you're using X11, DirectFB is not needed. Why would you
+need both ?
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
