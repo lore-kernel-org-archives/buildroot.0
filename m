@@ -1,44 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Aug 2010 20:27:49 +0200
-Subject: [Buildroot] [git commit master 1/1] Config.in: mark
-	BR2_CONFIG_CACHE as experimental and disable by default
-In-Reply-To: <20100829115812.17ac0bb5@surf> (Thomas Petazzoni's message of
-	"Sun, 29 Aug 2010 11:58:12 +0200")
-References: <20100825153147.4915689016@busybox.osuosl.org>
-	<20100829115812.17ac0bb5@surf>
-Message-ID: <87eidhz32y.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 29 Aug 2010 21:51:07 +0200
+Subject: [Buildroot] [git commit master 1/1] proftpd: breaks with parallel
+	builds
+Message-ID: <20100829195129.C4DD78A2D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> On Wed, 25 Aug 2010 17:30:38 +0200
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=6ef440ba0d1a0754c07db26ddb77ab81a0d401de
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> commit:
- >> http://git.buildroot.net/buildroot/commit/?id=b680672ad1b1c45e23cf89ddb217616274d68dee
- >> branch:
- >> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> As it is known to break with certain package combinations.
+The proftpd build system has a race condition, which may break the build
+with high -j<level> values (libsupp.a isn't built by the time it is needed).
 
+Fix it by using MAKE1 instead.
 
- Thomas> Can we take some sort of official decision about this ?
- Thomas> Supporting the configuration cache thing is not just having an
- Thomas> option or not, it's also all the patches that we're adding to
- Thomas> fix the issues found here and there (libglib2, lzo, etc.).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    4 ++--
+ package/proftpd/proftpd.mk |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-It would be nice to keep it, but I honestly think the only realistic
-option is to get rid of it completely.
-
-I'll keep the patches for now for 2010.08, but we can start removing
-stuff afterwards.
-
-Unless anyone disagrees?
-
+diff --git a/CHANGES b/CHANGES
+index e68adf0..5d0b940 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -18,8 +18,8 @@
+ 	fs: old-style squashfs for big endian archs fixed.
+ 
+ 	Updated/fixed packages: busybox, imagemagick, libglib2, lua,
+-	luafilesystem, lzo, netcat, php, qt, samba, startup-notification,
+-	sysvinit, util-linux
++	luafilesystem, lzo, netcat, php, proftpd, qt, samba,
++	startup-notification, sysvinit, util-linux
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 7404d83..11ef1ef 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -52,9 +52,9 @@ $(PROFTPD_DIR)/.configured: $(PROFTPD_DIR)/.unpacked
+ 	touch $@
+ 
+ $(PROFTPD_DIR)/$(PROFTPD_BINARY): $(PROFTPD_DIR)/.configured
+-	$(MAKE) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" \
++	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" \
+ 		-C $(PROFTPD_DIR)/lib/libcap _makenames
+-	$(MAKE) -C $(PROFTPD_DIR)
++	$(MAKE1) -C $(PROFTPD_DIR)
+ 
+ $(TARGET_DIR)/$(PROFTPD_TARGET_BINARY): $(PROFTPD_DIR)/$(PROFTPD_BINARY)
+ 	cp -dpf $(PROFTPD_DIR)/$(PROFTPD_BINARY) \
 -- 
-Bye, Peter Korsgaard
+1.7.1
