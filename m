@@ -1,53 +1,30 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Sun, 29 Aug 2010 22:52:22 +0200
-Subject: [Buildroot] luafilesystems breaks build in current git tree
-Message-ID: <4C7AC886.2080709@googlemail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Aug 2010 23:09:40 +0200
+Subject: [Buildroot] [PATCH] pppd.mk installs radattr.so twice and omits
+	radrealms.so
+In-Reply-To: <1282245557.29366.8.camel@tr-pentomino> (Darcy Watkins's message
+	of "Thu, 19 Aug 2010 12:19:17 -0700")
+References: <1282245557.29366.8.camel@tr-pentomino>
+Message-ID: <87aao5yvl7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hello mailinglist,
+>>>>> "Darcy" == Darcy Watkins <dwatkins@tranzeo.com> writes:
 
-I'm pretty sure, that I was able to compile the package luafilesystem 
-without any problems with 2010-08-rc1.
-Even after make flush and removing the output-build directory I 
-encounter the following error:
+ Darcy> Hello,
+ Darcy> In the pppd.mk (for pppd package) the radattr.so plugin (for radiua) is
+ Darcy> installed twice (the second install overwriting the first) but the
+ Darcy> radrealms.so plugin is omitted from the install.  This appears to be a
+ Darcy> copy-paste error.
 
- >>> luafilesystem 1.5.0 Extracting
- >>> luafilesystem 1.5.0 Patching package/luafilesystem
+ Darcy> Below is patch that corrects this.
 
-Applying luafilesystem-without_large_file.patch using plaintext:
-patching file src/lfs.c
- >>> luafilesystem 1.5.0 Configuring
- >>> luafilesystem 1.5.0 Building
-/usr/bin/make -j2 -C 
-/home/ossy/buildroot/buildroot-dev/output/build/luafilesystem-1.5.0 
-CC="/home/ossy/buildroot/buildroot-dev/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc 
---sysroot=/home/ossy/buildroot/buildroot-dev/output/staging" CFLAGS="-Os 
--pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux 
--msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
--D_FILE_OFFSET_BITS=64 
--I/home/ossy/buildroot/buildroot-dev/output/staging/usr/include 
--I/home/ossy/buildroot/buildroot-dev/output/staging/include 
--D_FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE -fPIC"
-make[1]: Entering directory 
-`/home/ossy/buildroot/buildroot-dev/output/build/luafilesystem-1.5.0'
-/home/ossy/buildroot/buildroot-dev/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc 
---sysroot=/home/ossy/buildroot/buildroot-dev/output/staging -Os -pipe 
--Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float 
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 
--I/home/ossy/buildroot/buildroot-dev/output/staging/usr/include 
--I/home/ossy/buildroot/buildroot-dev/output/staging/include 
--D_FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE -fPIC   -c -o src/lfs.o src/lfs.c
-arm-unknown-linux-uclibcgnueabi-gcc: _LARGEFILE64_SOURCE: No such file 
-or directory
-make[1]: *** [src/lfs.o] Fehler 1
+ Darcy> signed-off by: Darcy Watkins <dwatkins@tranzeo.com>
 
+Committed, thanks!
 
-Since I spotted some commits concerning uClibs, maybe we have a 
-regression here.
-
-Regards,
-Marcus
+-- 
+Bye, Peter Korsgaard
