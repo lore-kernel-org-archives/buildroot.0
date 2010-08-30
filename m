@@ -1,33 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 30 Aug 2010 10:42:55 +0200
-Subject: [Buildroot] [git commit master 1/1] CHANGES: #2395 is resolved
-Message-ID: <20100830084321.CCB518A327@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Aug 2010 10:51:26 +0200
+Subject: [Buildroot] [pull request] Pull request for branch for-2010.08-2
+Message-ID: <cover.1283158281.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The following changes since commit e8fdc08dc39ea28e5e098f696477e4a13f4ebd94:
+  Stanislav Bogatyrev (1):
+        uClibc: fix ppc e500 handling
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eba7132f3a37dc41ee9e0e1a7b9d7b5878c7b04f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+are available in the git repository at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.08-2
 
-diff --git a/CHANGES b/CHANGES
-index 6de37aa..3cc7171 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -28,6 +28,7 @@
- 
- 	#635:  util-linux fails to build in 2009.08
- 	#2239: netcat package installs its binary to target as avr32-linux...
-+	#2395: libglib2-2.24.1 and libxml2-2.7.7 fails build on MIPS because...
- 	#2443: Initramfs: Don't overwrite $(TARGET_DIR)/init if it exists
- 	#2449: Minor fixes for squashfs makefile and correct PowerPC e500 ...
- 
+Thomas Petazzoni (2):
+      Add the patch fixing gcc 4.2.4 to gcc 4.2.2
+      kismet: fix build when none of client, server or drone are selected
+
+ package/kismet/kismet.mk                           |    7 ++-
+ .../1001-gcc-4.2.x-inhibit-libc.patch              |   49 ++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 3 deletions(-)
+ create mode 100644 toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
