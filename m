@@ -1,29 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 30 Aug 2010 08:43:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 2395] libglib2-2.24.1 and libxml2-2.7.7 fails
- build on MIPS because is missing -ldl
-In-Reply-To: <bug-2395-163@https.bugs.busybox.net/>
-References: <bug-2395-163@https.bugs.busybox.net/>
-Message-ID: <20100830084314.93EA68A327@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Aug 2010 10:42:55 +0200
+Subject: [Buildroot] [git commit master 1/1] CHANGES: #2395 is resolved
+Message-ID: <20100830084321.CCB518A327@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2395
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=eba7132f3a37dc41ee9e0e1a7b9d7b5878c7b04f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org>  ---
-closing now that we have disabled shared config.cache by default.
-
+diff --git a/CHANGES b/CHANGES
+index 6de37aa..3cc7171 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -28,6 +28,7 @@
+ 
+ 	#635:  util-linux fails to build in 2009.08
+ 	#2239: netcat package installs its binary to target as avr32-linux...
++	#2395: libglib2-2.24.1 and libxml2-2.7.7 fails build on MIPS because...
+ 	#2443: Initramfs: Don't overwrite $(TARGET_DIR)/init if it exists
+ 	#2449: Minor fixes for squashfs makefile and correct PowerPC e500 ...
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
