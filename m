@@ -1,10 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Aug 2010 15:36:56 +0200
-Subject: [Buildroot] [PATCH] packages/atk: fix Makefile
-In-Reply-To: <1283174513-10574-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Mon, 30 Aug 2010 15:21:53 +0200")
-References: <1283174513-10574-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87fwxwxlvr.fsf@macbook.be.48ers.dk>
+Date: Mon, 30 Aug 2010 15:37:09 +0200
+Subject: [Buildroot] package/atk/atk.mk:43: *** recipe commences before
+	first target. Stop.
+In-Reply-To: <201008301505.03304.yann.morin.1998@anciens.enib.fr> (Yann
+	E. MORIN's message of "Mon, 30 Aug 2010 15:05:03 +0200")
+References: <4C7B99D5.9010703@jdines.net>
+	<201008301505.03304.yann.morin.1998@anciens.enib.fr>
+Message-ID: <87bp8kxlve.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +15,15 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
- Yann> Reported-by: "James J. Dines" <jdines@jdines.net>
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
- Yann> ---
- Yann>  package/atk/atk.mk |    2 +-
- Yann>  1 files changed, 1 insertions(+), 1 deletions(-)
+ Yann> James, All,
+ Yann> On Monday 30 August 2010 13:45:25 James J. Dines wrote:
+ >> I am getting the error in the subject line.  I have tried this both from
+ Yann> [--SNIP--]
+ >> Does anyone know what might be causing this?
+
+ Yann> Please see the attached patch.
+
+ Yann> Peter, I'll send a proper patch shortly if you want.
 
 Committed, thanks!
 
