@@ -1,105 +1,76 @@
-From: James J. Dines <jdines@jdines.net>
-Date: Mon, 30 Aug 2010 16:21:55 -0400
-Subject: [Buildroot] Make 3.82 does behave differently than make
- 3.81	for sure, but ...
-In-Reply-To: <8739tvyip6.fsf@macbook.be.48ers.dk>
-References: <4C7B99D5.9010703@jdines.net>
-	<87bp8kxlve.fsf@macbook.be.48ers.dk>	<4C7BC441.3010006@jdines.net>	<201008301701.22856.yann.morin.1998@anciens.enib.fr>	<4C7BD1D6.5070100@jdines.net>	<20100830163153.GA12776@merkur.ravnborg.org>
-	<8739tvyip6.fsf@macbook.be.48ers.dk>
-Message-ID: <4C7C12E3.30005@jdines.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Aug 2010 22:52:01 +0200
+Subject: [Buildroot] [git commit master 1/1] xstroke: fix dependencies
+Message-ID: <20100830205310.19F2E8A324@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
 
-On 08/30/2010 04:00 PM, Peter Korsgaard wrote:
->>>>>> "Sam" == Sam Ravnborg <sam@ravnborg.org> writes:
-> 
-> Hi,
-> 
->  Sam> make 3.81 accept the following:
-> 
->  Sam> foo foo%: bar
->  Sam> 	command
-> 
->  Sam> With make 3.82 you need to split this up as:
-> 
->  Sam> foo: bar
->  Sam> 	command
-> 
->  Sam> foo%: bar
->  Sam> 	command
-> 
-> Yeah, saw the kernel changes passing by. I haven't had time to test
-> building with make 3.82 yet though (it's not in Debian yet), so we might
-> have something similar lingering around somewhere ..
-> 
+commit: http://git.buildroot.net/buildroot/commit/?id=40f8f3ff1d7582e1a2d92c707a57582e7dccbb54
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I am really interested to hear your results, because I just bought this
-new 8 core machine and set it up this weekend.  So far everything has
-worked great, but there is always this nagging worry that I have
-something set up wrong and I will have to post back to the list stating
-that I was an idiot and missed something :-)
+xstroke doesn't need docker, but it does need libXft/Xtst/Xpm.
 
-In any case, untarring buildroot-2010.05, doing a make defconfig
-followed by a make clean seems like a set of steps that should go off
-without a hitch (it certainly does on my other machine) but it fails
-with make 3.82 for me anyway :-(
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    2 +-
+ package/xstroke/Config.in  |    8 +++-----
+ package/xstroke/xstroke.mk |    5 +----
+ 3 files changed, 5 insertions(+), 10 deletions(-)
 
-
-
-jdines at hydra buildroot-2010.05 ] ls
-CHANGES    configs/  docs/  Makefile  scripts/  TODO
-Config.in  COPYING   fs/    package/  target/   toolchain/
-[jdines at hydra buildroot-2010.05 ] make defconfig
-make CC="/usr/bin/gcc" -C package/config conf
-make[1]: Entering directory
-`/home/jdines/Build/buildroot-2010.05/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
- -g -O2 -MM *.c > .depend 2>/dev/null || :
-make[1]: Leaving directory
-`/home/jdines/Build/buildroot-2010.05/package/config'
-make[1]: Entering directory
-`/home/jdines/Build/buildroot-2010.05/package/config'
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
- -g -O2  -c conf.c -o conf.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
- -g -O2  -c kxgettext.c -o kxgettext.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
- -g -O2 -I. -c zconf.tab.c -o zconf.tab.o
-/usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
- -g -O2  conf.o  zconf.tab.o -lncurses -o conf
-make[1]: Leaving directory
-`/home/jdines/Build/buildroot-2010.05/package/config'
-#
-# configuration written to .config
-#
-#
-# make dependencies written to .auto.deps
-# ATTENTION buildroot devels!
-# See top of this file before playing with this auto-preprequisites!
-#
-[jdines at hydra buildroot-2010.05 ] make clean
-package/atk/atk.mk:43: *** recipe commences before first target.  Stop.
-[jdines at hydra buildroot-2010.05 ] view Makefile
-[jdines at hydra buildroot-2010.05 ] ls
-CHANGES    configs/  docs/  Makefile  package/  target/  toolchain/
-Config.in  COPYING   fs/    output/   scripts/  TODO
-[jdines at hydra buildroot-2010.05 ] make clean
-package/atk/atk.mk:43: *** recipe commences before first target.  Stop.
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.10 (GNU/Linux)
-
-iQEcBAEBAgAGBQJMfBLYAAoJECSpOhdQESq66n4IAJ86+yxdo+MbQjsWAvnVuLwr
-Dbd6DRg0SjOO/ScxxOm5cdRa501lDOFqwWh1Pz09NKGMbGz7flw7BagE6+/dLfCe
-S+75uhXkbI4hTvvpspd7XIaqXUr6FQmlmWQvIerDyaTjRxwNHCjeoRaWXo2/AnpY
-rfHcUSOYUfw+1akIPu9Z0/5wwMRB7DlVpecChQ88ePhiMWmQ6PFrKDiXZkCJJfDq
-R0gxrWasjbVf0F3429d3NUneseJLjXxUqnhcZt1aNOri+oFR0OBlElPaHuCjTTPJ
-Kml2qSrSkylGGEVieP93YCY3P4EalpnHwGWWBPQLBSjAlWs4/ZYVM6dzlSOpTew=
-=KCGa
------END PGP SIGNATURE-----
+diff --git a/CHANGES b/CHANGES
+index d9607c2..904a92f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
+ 
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: atk
++	Updated/fixed packages: atk, xstroke
+ 
+ 2010.08-rc2, Released August 30th, 2010:
+ 
+diff --git a/package/xstroke/Config.in b/package/xstroke/Config.in
+index 3d68b3e..5589fe6 100644
+--- a/package/xstroke/Config.in
++++ b/package/xstroke/Config.in
+@@ -1,12 +1,10 @@
+ config BR2_PACKAGE_XSTROKE
+ 	bool "xstroke"
+ 	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_USE_WCHAR # glib2
+-	select BR2_PACKAGE_DOCKER
++	select BR2_PACKAGE_XLIB_LIBXFT
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XLIB_LIBXPM
+ 	help
+ 	  Handwriting recognition for X
+ 
+ 	  http://avr32linux.org/twiki/pub/Main/XStroke
+-
+-comment "xstroke requires a toolchain with WCHAR support"
+-	depends on BR2_PACKAGE_XORG7 && !BR2_USE_WCHAR
+diff --git a/package/xstroke/xstroke.mk b/package/xstroke/xstroke.mk
+index bfe66cc..920ed9c 100644
+--- a/package/xstroke/xstroke.mk
++++ b/package/xstroke/xstroke.mk
+@@ -6,12 +6,9 @@
+ XSTROKE_VERSION = 0.6
+ XSTROKE_SOURCE = xstroke-$(XSTROKE_VERSION).tar.gz
+ XSTROKE_SITE = http://avr32linux.org/twiki/pub/Main/XStroke
+-XSTROKE_AUTORECONF = NO
+-XSTROKE_INSTALL_STAGING = NO
+-XSTROKE_INSTALL_TARGET = YES
+ XSTROKE_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+-XSTROKE_DEPENDENCIES = xserver_xorg-server
++XSTROKE_DEPENDENCIES = xlib_libXft xlib_libXtst xlib_libXpm
+ 
+ $(eval $(call AUTOTARGETS,package,xstroke))
+ 
+-- 
+1.7.1
