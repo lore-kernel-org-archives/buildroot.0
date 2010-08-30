@@ -1,14 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Aug 2010 23:15:18 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix ldconfig call in target-finalize
-In-Reply-To: <cover.1283202909.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1283202909.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4ccde7fabbeb41472a0e662be4bc60707e099a02.1283202909.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Aug 2010 23:34:21 +0200
+Subject: [Buildroot] [git commit master 1/1] Fix ldconfig call in
+	target-finalize
+Message-ID: <20100830213456.DED878A32E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+commit: http://git.buildroot.net/buildroot/commit/?id=4ccde7fabbeb41472a0e662be4bc60707e099a02
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Recent versions of ldconfig require the directory /var/lib/ldconfig,
 otherwise they bail out with an error. Moreover, having a
@@ -54,4 +57,4 @@ index d37d81f..462d974 100644
  		$(TARGET_DIR)/etc/br-version
  
 -- 
-1.7.0.4
+1.7.1
