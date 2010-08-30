@@ -1,60 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Aug 2010 23:34:21 +0200
-Subject: [Buildroot] [git commit master 1/1] Fix ldconfig call in
-	target-finalize
-Message-ID: <20100830213456.DED878A32E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 30 Aug 2010 23:35:01 +0200
+Subject: [Buildroot] [pull request] Pull request for branch for-2010.08-3
+In-Reply-To: <cover.1283202909.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 30 Aug 2010 23:15:17 +0200")
+References: <cover.1283202909.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87tymbwzqy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ccde7fabbeb41472a0e662be4bc60707e099a02
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The following changes since commit 4973632207fd496199298191ada01c8c8ec2bee7:
+ Thomas>   Yann E. MORIN (1):
+ Thomas>         packages/atk: fix Makefile
 
-Recent versions of ldconfig require the directory /var/lib/ldconfig,
-otherwise they bail out with an error. Moreover, having a
-/etc/ld.so.conf file also avoids a warning.
+ Thomas> are available in the git repository at:
 
-In addition to this, we remove the redirection of stderr, so that
-errors remain visible to the user.
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.08-3
 
-Thanks to Baruch Siach, Andy Gibbs and Darcy Watkins for investigating
-the issue and proposing solutions.
+Pulled, thanks!
 
-This fixes the build on recent distributions such as Fedora 13 or
-Gentoo.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index d37d81f..462d974 100644
---- a/Makefile
-+++ b/Makefile
-@@ -400,13 +400,17 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- endif
- 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
-+	mkdir -p $(TARGET_DIR)/etc
-+	# Mandatory configuration file and auxilliary cache directory
-+	# for recent versions of ldconfig
-+	touch $(TARGET_DIR)/etc/ld.so.conf
-+	mkdir -p $(TARGET_DIR)/var/cache/ldconfig
- 	if [ -x "$(TARGET_CROSS)ldconfig" ]; \
- 	then \
--		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR) 2>/dev/null; \
-+		$(TARGET_CROSS)ldconfig -r $(TARGET_DIR); \
- 	else \
--		/sbin/ldconfig -r $(TARGET_DIR) 2>/dev/null; \
-+		/sbin/ldconfig -r $(TARGET_DIR); \
- 	fi
--	mkdir -p $(TARGET_DIR)/etc
- 	echo $(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion) > \
- 		$(TARGET_DIR)/etc/br-version
- 
 -- 
-1.7.1
+Bye, Peter Korsgaard
