@@ -1,79 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Aug 2010 10:51:27 +0200
-Subject: [Buildroot] [PATCH 1/2] Add the patch fixing gcc 4.2.4 to gcc 4.2.2
+Date: Mon, 30 Aug 2010 10:51:28 +0200
+Subject: [Buildroot] [PATCH 2/2] kismet: fix build when none of client,
+	server or drone are selected
 In-Reply-To: <cover.1283158281.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1283158281.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <53020c806929cbb57e9702bf3c9ad0d06b582a19.1283158281.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3c73c7d04ee5b5d2f1a3d88a22bd7eafeb7b1629.1283158281.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch introduced by commit
-1ed2e4fffd0d852e62bc98e92045a132f24c37d8 must also be added to gcc
-4.2.2 to let the AVR32 toolchain build properly.
+Random package configuration can trigger the selection of kismet, but
+neither of client, server or drone suboptions. In this case, the
+KISMET_TARGET_BINARIES variable is empty, leading to failure during
+the installation stage.
+
+At the same time, we remove the useless stripping of the installed
+binaries, since this is done globally by the Buildroot infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../1001-gcc-4.2.x-inhibit-libc.patch              |   49 ++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
+ package/kismet/kismet.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch b/toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
-new file mode 100644
-index 0000000..9a7c909
---- /dev/null
-+++ b/toolchain/gcc/4.2.2-avr32-2.1.5/1001-gcc-4.2.x-inhibit-libc.patch
-@@ -0,0 +1,49 @@
-+--- gcc-4.2.4/gcc/unwind-sjlj.c.khem	2010-08-11 12:45:28.000000000 -0700
-++++ gcc-4.2.4/gcc/unwind-sjlj.c	2010-08-11 12:45:50.000000000 -0700
-+@@ -28,6 +28,8 @@
-+    Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
-+    02110-1301, USA.  */
-+ 
-++#ifndef inhibit_libc
-++
-+ #include "tconfig.h"
-+ #include "tsystem.h"
-+ #include "coretypes.h"
-+@@ -326,3 +328,4 @@ uw_identify_context (struct _Unwind_Cont
-+ #include "unwind.inc"
-+ 
-+ #endif /* USING_SJLJ_EXCEPTIONS */
-++#endif
-+--- gcc-4.2.4/gcc/unwind-dw2.c.khem	2010-08-11 12:42:45.000000000 -0700
-++++ gcc-4.2.4/gcc/unwind-dw2.c	2010-08-11 12:43:17.000000000 -0700
-+@@ -28,6 +28,8 @@
-+    Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
-+    02110-1301, USA.  */
-+ 
-++#ifndef inhibit_libc
-++
-+ #include "tconfig.h"
-+ #include "tsystem.h"
-+ #include "coretypes.h"
-+@@ -1537,3 +1539,5 @@ alias (_Unwind_SetIP);
-+ #endif
-+ 
-+ #endif /* !USING_SJLJ_EXCEPTIONS */
-++#endif
-++
-+--- gcc-4.2.4/gcc/unwind-dw2-fde-glibc.c.khem	2010-08-11 12:44:25.000000000 -0700
-++++ gcc-4.2.4/gcc/unwind-dw2-fde-glibc.c	2010-08-11 12:44:48.000000000 -0700
-+@@ -29,6 +29,8 @@
-+    segment and dl_iterate_phdr to avoid register/deregister calls at
-+    DSO load/unload.  */
-+ 
-++#ifndef inhibit_libc
-++
-+ #ifndef _GNU_SOURCE
-+ #define _GNU_SOURCE 1
-+ #endif
-+@@ -438,3 +440,4 @@ _Unwind_Find_FDE (void *pc, struct dwarf
-+ #if defined (USE_GAS_SYMVER) && defined (SHARED) && defined (USE_LIBUNWIND_EXCEPTIONS)
-+ alias (_Unwind_Find_FDE);
-+ #endif
-++#endif
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 1b61ddd..6135c88 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -33,18 +33,19 @@ $(eval $(call AUTOTARGETS,package,kismet))
+ 
+ $(KISMET_TARGET_INSTALL_TARGET):
+ 	$(call MESSAGE,"Installing")
++ifdef KISMET_TARGET_BINARIES
+ 	$(INSTALL) -m 755 $(addprefix $(KISMET_DIR)/, $(KISMET_TARGET_BINARIES)) $(TARGET_DIR)/usr/bin
++endif
+ ifdef KISMET_TARGET_CONFIGS
+ 	$(INSTALL) -m 644 $(addprefix $(KISMET_DIR)/conf/, $(KISMET_TARGET_CONFIGS)) $(TARGET_DIR)/etc
+ endif
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/usr/bin/, $(KISMET_TARGET_BINARIES))
+-endif
+ 	touch $@
+ 
+ $(KISMET_TARGET_UNINSTALL):
+ 	$(call MESSAGE,"Uninstalling")
++ifdef KISMET_TARGET_BINARIES
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(KISMET_TARGET_BINARIES))
++endif
+ ifdef KISMET_TARGET_CONFIGS
+ 	rm -f $(addprefix $(TARGET_DIR)/etc/, $(KISMET_TARGET_CONFIGS))
+ endif
 -- 
 1.7.0.4
