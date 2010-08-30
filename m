@@ -1,36 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Aug 2010 16:20:02 +0200
-Subject: [Buildroot] [PATCH 4/4] Fix externals-deps and source-check
-	when building out of tree
-In-Reply-To: <4C7BB4D7.4020909@carallon.com> (William Wagner's message of
-	"Mon, 30 Aug 2010 14:40:39 +0100")
-References: <1282732120-1561-1-git-send-email-will_wagner@carallon.com>
-	<8762ytyuqc.fsf@macbook.be.48ers.dk> <4C7BB4D7.4020909@carallon.com>
-Message-ID: <877hj8xjvx.fsf@macbook.be.48ers.dk>
+From: James J. Dines <jdines@jdines.net>
+Date: Mon, 30 Aug 2010 10:46:25 -0400
+Subject: [Buildroot] package/atk/atk.mk:43: *** recipe commences before
+ first target. Stop.
+In-Reply-To: <87bp8kxlve.fsf@macbook.be.48ers.dk>
+References: <4C7B99D5.9010703@jdines.net>	<201008301505.03304.yann.morin.1998@anciens.enib.fr>
+	<87bp8kxlve.fsf@macbook.be.48ers.dk>
+Message-ID: <4C7BC441.3010006@jdines.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "William" == William Wagner <will_wagner@carallon.com> writes:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Hi,
+On 08/30/2010 09:37 AM, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+> 
+>  Yann> James, All,
+>  Yann> On Monday 30 August 2010 13:45:25 James J. Dines wrote:
+>  >> I am getting the error in the subject line.  I have tried this both from
+>  Yann> [--SNIP--]
+>  >> Does anyone know what might be causing this?
+> 
+>  Yann> Please see the attached patch.
+> 
+>  Yann> Peter, I'll send a proper patch shortly if you want.
+> 
+> Committed, thanks!
+> 
 
- William> Ok, I'll take a look at your fix to see what I did wrong!
+That patch indeed gets things rolling.  For further edification it
+appears that there are some semantic changes in the parser for make 3.82
+as the same tree builds fine with make 3.81.  It seems like it is
+similar to this problem that Sam Ravnborg uncovered and patched (kernel
+commit in the kernel Makefile 31110ebbec8688c6e9597b641101afc94e1c762a
+)
+ (See http://permalink.gmane.org/gmane.linux.kernel/1026412 for details)
 
-The problem is that if you always pass O=<dir>, then it will look in
-output/.config instead of ./.config when the user isn't using O=<dir>
+I'm not sure how you guys handle regressions, but it seems like we make
+3.82 users may look forward to experiencing other related problems so it
+would be best to understand it fully.  Can anyone offer a good/thorough
+explanation of what is going on by any chance, or do I have to figure it
+out the old fashioned way?
 
- >> I see your patch is named 4/4, but I don't see any other patches from
- >> you around that day - Was that just a mistake or did they get lost
- >> somehow?
- >> 
- William> Was putting together some other patches for new packages, thought I'd
- William> send them after this release. Still not quite got the hang of git
- William> send-email.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
 
-Ok.
-
--- 
-Bye, Peter Korsgaard
+iQEcBAEBAgAGBQJMe8Q2AAoJECSpOhdQESq6LkwH/3MM1pQSXcGrEhRujzOL6Oy0
+m+PRc+113B8UCcj8Cdf3iMpCD+b47gyB4cDf/nhpmXJxh7V6id3kD4mt2mk9dwR4
+UIW6VTVNJZhQiCUyI4C5r7zvbtiyb2v+eFYPxll+VqQuvhmLo5DJla/klYJuC/MX
+yfhxmEzoiUxX2FaLagp6xT14WlY4KkXmGfKqZsv2oIv6fOZZwbYjuMTM5dA6OimA
+xeyA7O71VjXr3X7iAuRttkuggPrktIJa/cl7Tk2AD4jWGXd5kekmunx6MNuj04VH
+RWyHeP0aX7EEu0XVNXAVHSUECXTmdlZD9WVTpHZoEjwDvKq0flNVFNOZ4ufUZ4Y=
+=X5Gx
+-----END PGP SIGNATURE-----
