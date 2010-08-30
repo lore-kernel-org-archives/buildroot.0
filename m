@@ -1,47 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Aug 2010 10:14:54 +0200
-Subject: [Buildroot] Ncurses and --disable-static
-In-Reply-To: <4C7B4E69.7080105@hydrix.com> (Ian's message of "Mon, 30 Aug 2010
-	16:23:37 +1000")
-References: <4C7B4E69.7080105@hydrix.com>
-Message-ID: <87wrr8y0sh.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Aug 2010 10:15:29 +0200
+Subject: [Buildroot] [git commit master 1/1] ncurses: get rid of unused
+	BR2_PACKAGE_NCURSES_TARGET_HEADERS handling
+Message-ID: <20100830081755.E8DFF88E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ian" == Ian  <reg-ian.ridley-buildroot@hydrix.com> writes:
 
- Ian> A little question for anyone out there:
- Ian> The makefile for ncurses contains the following:
+commit: http://git.buildroot.net/buildroot/commit/?id=78c67b6ce4fae9a1c43632e7562c7c67379b1a74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The option was removed from Config.in in 58508f39c (ncurses: remove
+dedicated target-headers option), so remove it from the makefile as
+well.
 
- Ian>     ifneq ($(BR2_PACKAGE_NCURSES_TARGET_HEADERS),y)
- Ian>     NCURSES_CONF_OPT += --disable-static
- Ian>     endif
+Reported-by: Ian <reg-ian.ridley-buildroot@hydrix.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                    |    2 +-
+ package/ncurses/ncurses.mk |    7 ++-----
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
- Ian> but BR2_PACKAGE_NCURSES_TARGET_HEADERS is no longer defined in the ncurses'
- Ian> Config.in, this was removed in a change to using BR2_HAVE_DEVFILES to decide to
- Ian> install headers in the target (see commit 58508f3 by Peter Korsgaard).
-
- Ian> Now as a result of this ncurses is now always configured with
- Ian> --disable-static, even when BR2_HAVE_DEVFILES is set to "y".
-
-Thanks for informing us.
-
- Ian> So my question is should "--disable-stable" be added to NCURSES_CONF_OPT:
-
- Ian>  1. always,
- Ian>  2. never, or
- Ian>  3. when BR2_HAVE_DEVFILES is "y" (instead of using
- Ian>     BR2_PACKAGE_NCURSES_TARGET_HEADERS).
-
-Either always or never. We have a mix of enable/disable-static in the
-tree, so we don't have a clear winner, but as we have been using always
-for almost 1 year now, and it cuts down on compilation time I'm going to
-go with "always".
-
-Thanks.
+diff --git a/CHANGES b/CHANGES
+index b6e58ac..6de37aa 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -19,7 +19,7 @@
+ 
+ 	Updated/fixed packages: busybox, gst-plugins-base,
+ 	imagemagick, libgail, libglib2, libgtk2, lua, luafilesystem,
+-	lzo, netcat, pango, php, pppd, proftpd, qt, samba,
++	lzo, ncurses, netcat, pango, php, pppd, proftpd, qt, samba,
+ 	startup-notification, swfdec, sysvinit, util-linux
+ 
+ 	Removed packages: stunnel
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index ee101f3..0a49887 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -40,11 +40,8 @@ NCURSES_CONF_OPT = \
+ 	--enable-echo \
+ 	--enable-const \
+ 	--enable-overwrite \
+-	--enable-broken_linker
+-
+-ifneq ($(BR2_PACKAGE_NCURSES_TARGET_HEADERS),y)
+-NCURSES_CONF_OPT += --disable-static
+-endif
++	--enable-broken_linker \
++	--disable-static
+ 
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
 -- 
-Bye, Peter Korsgaard
+1.7.1
