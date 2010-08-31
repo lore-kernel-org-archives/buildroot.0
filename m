@@ -1,63 +1,38 @@
 From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 31 Aug 2010 18:39:01 +0000 (UTC)
-Subject: [Buildroot] libssp missing from target
-References: <i5j4vi$oj9$1@dough.gmane.org> <20100831200709.11d5a800@surf>
-Message-ID: <i5ji85$mrr$2@dough.gmane.org>
+Date: Tue, 31 Aug 2010 20:54:04 +0000 (UTC)
+Subject: [Buildroot] Debug symbols in staging, but stripped on target?
+Message-ID: <i5jq5c$s5d$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-08-31, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> On Tue, 31 Aug 2010 14:52:34 +0000 (UTC)
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> I just added a package (systemtap) that uses libssp.  I find libssp.so
->> et al. are present in output/staging/lib but missing from
->> output/target/lib. Is there something I need to do in my package
->> makefile to tell buildroot that my package needs libssp to be copied
->> from staging into target?
->
-> What is libssp?
+I need to do some debugging of a package's application, so I need
+debugging symbols enabled for that package.
 
-I don't really know.  Here are the text symbols it defines:
+The only option I can find that appears related is
 
- __chk_fail
- __stack_chk_fail
- __stack_chk_fail_local
- __gets_chk
- __memcpy_chk
- __memmove_chk
- __mempcpy_chk
- __memset_chk
- __stpcpy_chk
- __strcat_chk
- __strcpy_chk
- __strncat_chk
- __strncpy_chk
+  BR2_ENABLE_DEBUG
 
-My guess is it's some internal uClibc stuff.
+There are a couple issues with that:
 
-> Who needs it (besides systemtap)
+ 1) It enables debug symbols for all packages, and I only want them
+    for one.
 
-Nothing that I happen to be building (as far as I know).
+ 2) It apprently disables stripping of target executables.  I don't
+    have room (nor any use) for debugging symbols on the target -- I
+    only need them on the development host (e.g. in the staging
+    directory).
 
-> and for what?
+It also appears to force BR2_PACKAGE_GDB_SERVER.  What if I'm using an
+external toolchain that provides my gdb server?
 
-I don't know.  Does it matter?
+Is there any way to enable debugging symbols for just one package?
 
-> It seems to exist in uClibc toolchains, but not in glibc toolchains.
-
-OK.
-
-Why not run "ldd" on the binaries in output/target/bin and
-output/target/usr/bin and just copy whatever libraries they need?
-
-Does buildroot need to know exactly for what a library is used by each
-binary?
+Can the target binaries still be stripped?
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! I want to kill
-                                  at               everyone here with a cute
-                              gmail.com            colorful Hydrogen Bomb!!
+Grant Edwards               grant.b.edwards        Yow! I didn't order any
+                                  at               WOO-WOO ... Maybe a YUBBA
+                              gmail.com            ... But no WOO-WOO!
