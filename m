@@ -1,73 +1,24 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Mon, 30 Aug 2010 18:31:44 -0700
+From: Mitch Davis <mjd+buildroot@afork.com>
+Date: Tue, 31 Aug 2010 12:00:28 +1000
 Subject: [Buildroot] No compiler is embedded to the file system.
 In-Reply-To: <BLU118-W21A6465BFFC320F704EC54D68A0@phx.gbl>
 References: <BLU118-W21A6465BFFC320F704EC54D68A0@phx.gbl>
-Message-ID: <AANLkTimqJSsgXW_CU=vPSRYFbDTpogPmyBRtupBSLr4z@mail.gmail.com>
+Message-ID: <AANLkTi=uFnF5Hwueqi1u-L_Zks=y6c9EKZBueK7FgK_6@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 30, 2010 at 6:04 PM, mohammed dahdouh <meodou@hotmail.com> wrote:
-> Hi all,
-> It s the first time I use buildroot. I m trying to use to build a toolchain
-> for an sh4 target and using bionic (android libc).
-> I started with testing with sh4 cross compile toolchain using uclibc, I have
-> followed the documentation? but in the generated file system there is no
-> compiler (I cannot find a gcc, cc.. binaries ):
+Hi,
 
-usually people use cross compilers in small embedded systems and there
-is less need
-for putting the toolchain on the target plus it will require quite a
-bit of storage
+On Tue, Aug 31, 2010 at 11:04 AM, mohammed dahdouh <meodou@hotmail.com> wrote:
+> in the generated file system there is no compiler (I cannot find a gcc, cc.. binaries ):
 
-I would have expected it to appear in Package Selection for Target ->
-Development Tools
-or some such but seems it does not.
+In addition to what Khem Raj wrote, there is a compiler, but it's for
+running on your PC, not running on the host.  It's in output/staging,
+not output/target.
 
-> Here a listing of the target file system (same is the generated image after
-> mounting)
-> "
-> ls output/target/usr/*
->
-> output/target/usr/bin:
-> [???????? bzcat??? cut??????? eject?????? free???? ipcrm???? less
-> nohup???? readlink???? setsid???? tee???? traceroute? uudecode? whoami
-> [[??????? chrt???? dc???????? env???????? fuser??? ipcs????? logger
-> nslookup? realpath???? sha1sum??? telnet? tty???????? uuencode? xargs
-> ar??????? chvt???? deallocvt? ether-wake? head???? killall?? logname
-> od??????? renice?????? sha256sum? test??? uniq??????? vlock???? yes
-> arping??? cksum??? diff?????? expr??????? hexdump? killall5? lzmacat
-> openvt??? reset??????? sha512sum? tftp??? unix2dos??? wc
-> awk?????? clear??? dirname??? fdformat??? hostid?? last????? md5sum
-> passwd??? resize?????? sort?????? time??? unlzma????? wget
-> basename? cmp????? dos2unix?? find??????? id?????? ldd?????? mesg
-> patch???? seq????????? strings??? top???? unzip?????? which
-> bunzip2?? crontab? du???????? fold??????? install? length??? mkfifo
-> printf??? setkeycodes? tail?????? tr????? uptime????? who
->
-> output/target/usr/lib:
->
-> output/target/usr/sbin:
-> chroot? crond? dnsd? inetd? loadfont? rdate? readprofile? setlogcons
->
-> output/target/usr/share:
-> udhcpc
-> "
-> I tested also running without modifying any thing in the make menuconfig
-> (i386) but no way, the file system doesnt contain any compiler.
-> Am I missing something in the make menuconfig? I m sure to choose :
-> Toolchain -> Toolchain type (Buildroot toolchain)-> Buildroot toolchain,
-> then running a make, when it finished without errors but no c compiler is
-> found.
-> Best Regards,
-> Mohammed
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Why do you need the compiler to run on your target?
+
+Mitch.
