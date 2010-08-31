@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Aug 2010 20:07:09 +0200
+Date: Tue, 31 Aug 2010 20:05:44 +0200
 Subject: [Buildroot] libssp missing from target
-In-Reply-To: <i5j4vi$oj9$1@dough.gmane.org>
+In-Reply-To: <i5ja47$il4$1@dough.gmane.org>
 References: <i5j4vi$oj9$1@dough.gmane.org>
-Message-ID: <20100831200709.11d5a800@surf>
+	<i5ja47$il4$1@dough.gmane.org>
+Message-ID: <20100831200544.47337e47@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 31 Aug 2010 14:52:34 +0000 (UTC)
+On Tue, 31 Aug 2010 16:20:23 +0000 (UTC)
 Grant Edwards <grant.b.edwards@gmail.com> wrote:
 
-> I just added a package (systemtap) that uses libssp.  I find libssp.so
-> et al. are present in output/staging/lib but missing from
-> output/target/lib. Is there something I need to do in my package
-> makefile to tell buildroot that my package needs libssp to be copied
-> from staging into target?
+> I just enabled building of gdbserver for the target, and now it's
+> missing a libarary on the target as well (libthread_db).
+> 
+> How do I tell buildroot to copy to output/target the libraires
+> required by the binaries in output/target/usr/bin?
 
-What is libssp ? Who needs it (besides systemtap) and for what ?
+Assuming you're using an external toolchain, libthread_db should
+already be added to the target by the following snippet in
+toolchain/toolchain-external/ext-tool.mk :
 
-It seems to exist in uClibc toolchains, but not in glibc toolchains.
-
-Regards,
+ifneq ($(BR2_PTHREADS_NONE),y)
+LIB_EXTERNAL_LIBS+=libpthread.so
+ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+LIB_EXTERNAL_LIBS+=libthread_db.so
+endif # gdbserver
+endif # ! no threads
 
 Thomas
 -- 
