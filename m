@@ -1,49 +1,35 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Wed, 01 Sep 2010 10:45:38 +0100
-Subject: [Buildroot] make source: missing dir and incorrect dependency
- with external toolchain
-In-Reply-To: <201009011117.12920.yann.morin.1998@anciens.enib.fr>
-References: <1281631732.14333.88.camel@cabbage.rehill.info>
-	<1283330943.5097.6.camel@dubciaranr1.verifone.com>
-	<20100901085720.GE11476@bulix.org>
-	<201009011117.12920.yann.morin.1998@anciens.enib.fr>
-Message-ID: <1283334338.5097.14.camel@dubciaranr1.verifone.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  1 Sep 2010 11:47:06 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/remove-deprecated-arch
+Message-ID: <cover.1283334416.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar C?ad, 2010-09-01 ag 11:17 +0200, scr?obh Yann E. MORIN:
-> Quotient, Maxime, All,
-> 
-> In fact, that .mk can be used even for external toolchain, as it is also
-> responsible for building the native toolchain that runs on the target,
-> if you selected it.
-> 
-> The issue is in this case:
-> - external toolchain used
->   --> verion selection for gcc, binutils... is not available
-> - native toolchain on target is selected
->   --> wants to download gcc
-> 
-> Quotient, is that your situation?
+The following changes since commit 4973632207fd496199298191ada01c8c8ec2bee7:
+  Yann E. MORIN (1):
+        packages/atk: fix Makefile
 
-No, I'm not building a native toolchain.
-From .config:
+are available in the git repository at:
 
-	# BR2_HAVE_DEVFILES is not set
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/remove-deprecated-arch
 
-Therefore I cannot (and do not want to) select BR2_PACKAGE_GCC_TARGET.
+Thomas Petazzoni (2):
+      Remove architectures marked as deprecated
+      Remove code specific to removed architectures
 
-> The proper way to fix it would be to show gcc/binutils/... version
-> selection in this case.
-> 
-> > I'm not sure how to make it not use it when using an external toolchain
-> > though, a big if/endif on the whole file seems dirty-ish, at best.
-> 
-> Nope, that's not possible, as explained above. We have to be smarter! ;-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+ fs/jffs2/Config.in            |    4 +-
+ package/liboil/liboil.mk      |    3 -
+ package/ltrace/Config.in      |    2 +-
+ package/openssl/openssl.mk    |    3 -
+ target/Config.in.arch         |  130 +++--------------------------------------
+ toolchain/gcc/Config.in       |    2 +-
+ toolchain/toolchain-common.in |    1 -
+ 7 files changed, 13 insertions(+), 132 deletions(-)
+
+Thanks,
+-- 
+Thomas Petazzoni
