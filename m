@@ -1,38 +1,49 @@
-From: JNY <jny0@hotmail.com>
-Date: Wed, 1 Sep 2010 02:35:51 -0700 (PDT)
-Subject: [Buildroot]  EXT2-fs error
-Message-ID: <29591683.post@talk.nabble.com>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Wed, 01 Sep 2010 10:45:38 +0100
+Subject: [Buildroot] make source: missing dir and incorrect dependency
+ with external toolchain
+In-Reply-To: <201009011117.12920.yann.morin.1998@anciens.enib.fr>
+References: <1281631732.14333.88.camel@cabbage.rehill.info>
+	<1283330943.5097.6.camel@dubciaranr1.verifone.com>
+	<20100901085720.GE11476@bulix.org>
+	<201009011117.12920.yann.morin.1998@anciens.enib.fr>
+Message-ID: <1283334338.5097.14.camel@dubciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ar C?ad, 2010-09-01 ag 11:17 +0200, scr?obh Yann E. MORIN:
+> Quotient, Maxime, All,
+> 
+> In fact, that .mk can be used even for external toolchain, as it is also
+> responsible for building the native toolchain that runs on the target,
+> if you selected it.
+> 
+> The issue is in this case:
+> - external toolchain used
+>   --> verion selection for gcc, binutils... is not available
+> - native toolchain on target is selected
+>   --> wants to download gcc
+> 
+> Quotient, is that your situation?
 
-Hi,
+No, I'm not building a native toolchain.
+From .config:
 
-I keep getting the following error when trying to access files on my target
-system:
+	# BR2_HAVE_DEVFILES is not set
 
-EXT2-fs error (device hda1): ext2_lookup: deleteed inode referenced: 31372
+Therefore I cannot (and do not want to) select BR2_PACKAGE_GCC_TARGET.
 
-(the inode reference number changes depending upon what file I'm
-interrogating)
-
-If I try to e2fsck /dev/hda1, I get the following warning:
-
-/dev/hda1 is mounted.
-WARNING!!! Running e2fsck on a mounted filesystem mat cause SEVERE
-filesystem demage.
-
-The device is zeroed with dd before installation, which is done from a USB
-stick containing the image.  What point is good to e2fsck (before
-installaion of the image or after)?  How do I unmount hda1 (which is a flash
-drive, and the only storage device on the system), or should I just do so
-mounted?
-
-Regards,
-JNY
--- 
-View this message in context: http://old.nabble.com/EXT2-fs-error-tp29591683p29591683.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+> The proper way to fix it would be to show gcc/binutils/... version
+> selection in this case.
+> 
+> > I'm not sure how to make it not use it when using an external toolchain
+> > though, a big if/endif on the whole file seems dirty-ish, at best.
+> 
+> Nope, that's not possible, as explained above. We have to be smarter! ;-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
