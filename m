@@ -1,35 +1,66 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Wed, 1 Sep 2010 12:38:06 +1000
-Subject: [Buildroot] No compiler is embedded to the file system.
-In-Reply-To: <BLU118-W2785FD86090F0EF9B015FAD68B0@phx.gbl>
-References: <BLU118-W21A6465BFFC320F704EC54D68A0@phx.gbl>
-	<AANLkTi=uFnF5Hwueqi1u-L_Zks=y6c9EKZBueK7FgK_6@mail.gmail.com>
-	<BLU118-W2785FD86090F0EF9B015FAD68B0@phx.gbl>
-Message-ID: <AANLkTikBS9+gXAwnR1QwmqNoqYaQ9V_QQub3xwBbng6R@mail.gmail.com>
+From: Madhusudan Madhusudan <coolmadhus@gmail.com>
+Date: Wed, 1 Sep 2010 11:23:51 +0530
+Subject: [Buildroot] arm-unknown-linux-uclibcgnueabi-ld: no machine record
+	defined
+Message-ID: <AANLkTimZ9c9j1RxjxRUVY8=MfKvDrfvVv7mNGarVSsfz@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 1, 2010 at 12:31 PM, mohammed dahdouh <meodou@hotmail.com> wrote:
-> Hi,
-> First, Thanks for the reply.I misunderstood the documentation in fact I was
-> expecting a cross compiler there. My understanding was that the buildroot is
-> an independent File system containing cross compile toolchain. While the
-> cross-compile toolchain should? available in out/staging. I m compiling
-> again to check that.
-> Btw what is the difference between the options : "external toolchain" and
-> "buildroot toolchain"?
+Hi all,
+            I am using buildroot-2010.08 for omapl138 - hawkboard.When iam
+trying to build the kernel image,i get a message
+*arm-unknown-linux-uclibcgnueabi-ld:
+no machine record defined .*The build sequence is also mentioned
+below.Kindly reply.
 
-With "buildroot toolchain", the compiler, run-time libraries and so
-forth will be built by buildroot for buildroot to use when
-cross-compiling packages.  Sometimes however, a board vendor supplies
-a modified toolchain (or even worse, just binaries).  In this case,
-one can point buildroot to use a pre-compiled toolchain.
-
-In addition, builds from scratch are much faster if buildroot doesn't
-have to build the toolchain, so one can build a toolchain using
-buildroot, then refer to this later as an external toolchain.
-
-Mitch.
+Thanks & Regards
+Madhu
+----------------------------------------------------------------------------------------------------------------------------
+make[1]: Entering directory
+`/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/build/linux-2.6.34.1'
+  CHK     include/linux/version.h
+  CHK     include/generated/utsrelease.h
+make[2]: `include/generated/mach-types.h' is up to date.
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  LD      init/built-in.o
+  LD      .tmp_vmlinux1
+/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-ld:
+no machine record defined
+/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-ld:
+no machine record defined
+/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-ld:
+no machine record defined
+drivers/built-in.o: In function `musb_stop':
+hid-quirks.c:(.text+0x925a8): undefined reference to `musb_platform_disable'
+drivers/built-in.o: In function `musb_shutdown':
+hid-quirks.c:(.text+0x92644): undefined reference to `musb_platform_disable'
+drivers/built-in.o: In function `musb_mode_store':
+hid-quirks.c:(.text+0x92930): undefined reference to
+`musb_platform_set_mode'
+drivers/built-in.o: In function `musb_start':
+hid-quirks.c:(.text+0x93334): undefined reference to `musb_platform_enable'
+drivers/built-in.o: In function `musb_probe':
+hid-quirks.c:(.init.text+0x4f30): undefined reference to
+`musb_platform_init'
+hid-quirks.c:(.init.text+0x4f94): undefined reference to
+`musb_platform_disable'
+hid-quirks.c:(.init.text+0x5790): undefined reference to
+`musb_platform_exit'
+make[1]: *** [.tmp_vmlinux1] Error 1
+make[1]: Leaving directory
+`/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/build/linux-2.6.34.1'
+make: ***
+[/home/jagadish/bl_root_test/buildroot-2010.08-rc1/output/build/linux-2.6.34.1/.stamp_compiled]
+Error 2
+[jagadish at LinuxPC buildroot-2010.08-rc1]$
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100901/9504edc5/attachment.html>
