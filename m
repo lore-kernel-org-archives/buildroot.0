@@ -1,101 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  1 Sep 2010 14:04:59 +0200
-Subject: [Buildroot] [PATCH 07/11] Makefile: use long options names for the
-	'conf' utility
+Date: Wed,  1 Sep 2010 14:05:01 +0200
+Subject: [Buildroot] [PATCH 09/11] Add support for savedefconfig
 In-Reply-To: <cover.1283342666.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1283342666.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <abba28ac7d0cf1c1a83c5c240c45df7716fea6be.1283342666.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e1b1a18ab63ae3ef4eeb7f7cb4406a9cfbb12035.1283342666.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The short option names have been removed as they were starting to
-cause too much confusion. See
-http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=4062f1a4c030157216dc8932e27131975cf7253c
-for details.
+savedefconfig allows to create a minimal defconfig file from an
+existing configuration. For example :
+
+ make O=/path/to/some/buildroot/build/directory savedefconfig
+
+will generate a minimal 'defconfig' file in the main Buildroot source
+directory.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |   18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ Makefile |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index fd46972..77e0fc7 100644
+index abe1aa0..c897db7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -508,25 +508,25 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf
- 	mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -o $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --oldconfig $(CONFIG_CONFIG_IN)
+@@ -29,7 +29,7 @@ CONFIG=package/config
+ DATE:=$(shell date +%Y%m%d)
  
- randconfig: $(BUILD_DIR)/buildroot-config/conf
+ noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+-	defconfig %_defconfig allyesconfig allnoconfig release \
++	defconfig %_defconfig savedefconfig allyesconfig allnoconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	source-check help
+ 
+@@ -547,6 +547,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf
  	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -r $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --randconfig $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
  
- allyesconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -y $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allyesconfig $(CONFIG_CONFIG_IN)
- 
- allnoconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -n $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allnoconfig $(CONFIG_CONFIG_IN)
- 
- randpackageconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -534,7 +534,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -r $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --randconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 
- allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf
-@@ -543,7 +543,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -y $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allyesconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 
- allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf
-@@ -552,20 +552,20 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -n $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allnoconfig $(CONFIG_CONFIG_IN)
- 	@rm -f $(CONFIG_DIR)/.config.nopkg
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -d $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --defconfig $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -D $(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
- 
++savedefconfig: $(BUILD_DIR)/buildroot-config/conf
++	@mkdir -p $(BUILD_DIR)/buildroot-config
++	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(TOPDIR)/defconfig $(CONFIG_CONFIG_IN)
++
  # check if download URLs are outdated
  source-check: allyesconfig
+ 	$(MAKE) $(EXTRAMAKEARGS) _source-check
 -- 
 1.7.0.4
