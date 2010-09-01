@@ -1,55 +1,27 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Wed, 01 Sep 2010 09:49:03 +0100
-Subject: [Buildroot] make source: missing dir and incorrect dependency
- with external toolchain
-In-Reply-To: <1281631732.14333.88.camel@cabbage.rehill.info>
-References: <1281631732.14333.88.camel@cabbage.rehill.info>
-Message-ID: <1283330943.5097.6.camel@dubciaranr1.verifone.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 1 Sep 2010 09:56:53 +0100
+Subject: [Buildroot] libssp missing from target
+In-Reply-To: <20100831200709.11d5a800@surf>
+References: <i5j4vi$oj9$1@dough.gmane.org>
+	<20100831200709.11d5a800@surf>
+Message-ID: <AANLkTimmeDgV5FV3ow0vC8z40n=K5Ty9zP2HH9g7O0D+@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(hopeful bump, now that the release is done)
+On Tue, Aug 31, 2010 at 7:07 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 31 Aug 2010 14:52:34 +0000 (UTC)
+> Grant Edwards <grant.b.edwards@gmail.com> wrote:
+>
+>> I just added a package (systemtap) that uses libssp. ?I find libssp.so
+>> et al. are present in output/staging/lib but missing from
+>> output/target/lib. Is there something I need to do in my package
+>> makefile to tell buildroot that my package needs libssp to be copied
+>> from staging into target?
+>
+> What is libssp ? Who needs it (besides systemtap) and for what ?
 
-Ar D?ar, 2010-08-12 ag 17:48 +0100, scr?obh Quotient Remainder:
-> Hello,
-> having done "make distclean", followed by "make ..._defconfig", I did
-> "make source".  The toolchain is external, ARM glibc (gcc 4.4.1).  Host
-> gcc is 4.4.4.
-> 
-> The first problem is that $(DL_DIR) does not get created so there is a
-> failure when it is needed.
-> 
-> Secondly when I do "mkdir dl" and "make source" again I get an error
-> when an attempt is made to download gcc because GCC_VERSION is empty (it
-> should not be downloading this at all since the toolchain is external):
-> 
->         test -e /home/qvr/obair/buildroot.org/dl/gcc-.tar.bz2 || for site in  "http://ftp.gnu.org/pub/gnu"/gcc/gcc- http://sources.buildroot.net/; do wget --passive-ftp -nd   -P /home/qvr/obair/buildroot.org/dl $site/gcc-.tar.bz2 && exit; done
->         --2010-08-12 17:14:20--  http://ftp.gnu.org/pub/gnu/gcc/gcc-/gcc-.tar.bz2
->         Resolving ftp.gnu.org... 140.186.70.20
->         Connecting to ftp.gnu.org|140.186.70.20|:80... connected.
->         HTTP request sent, awaiting response... 404 Not Found
->         2010-08-12 17:14:20 ERROR 404: Not Found.
->         
->         --2010-08-12 17:14:20--  http://sources.buildroot.net//gcc-.tar.bz2
->         Resolving sources.buildroot.net... 88.198.64.109
->         Connecting to sources.buildroot.net|88.198.64.109|:80... connected.
->         HTTP request sent, awaiting response... 404 Not Found
->         2010-08-12 17:14:20 ERROR 404: Not Found.
->         
->         make: *** [/home/qvr/obair/buildroot.org/dl/gcc-.tar.bz2] Error 1
->         
-> I'm not certain which target it's actually processing that pulls in gcc
-> but whatever it is, it succeeds in downloading gmp and mpfr archives
-> before attempting gcc.  The next package to be processed in the plain
-> "make" case is host-module-init-tools, followed by host-automake,
-> host-autoconf and host-m4.
-> 
-> The attempted gcc download does not occur when a straight "make" is
-> executed so I presume that something is dependent on the toolchain being
-> copied over in the early stages.
-> 
-> Any ideas?
-> 
+I believe it's part of gcc, used for stack checking.
