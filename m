@@ -1,24 +1,25 @@
-From: JNY <jny0@hotmail.com>
-Date: Thu, 2 Sep 2010 04:29:07 -0700 (PDT)
-Subject: [Buildroot]  hwclock again
-Message-ID: <29603222.post@talk.nabble.com>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Thu, 2 Sep 2010 13:42:48 +0200
+Subject: [Buildroot] hwclock again
+In-Reply-To: <29603222.post@talk.nabble.com>
+References: <29603222.post@talk.nabble.com>
+Message-ID: <AANLkTim5AseSa3e9zxb-7EfyLkNhfkDQNm0vX9GHqnHD@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Hi,
 
-I've enabled 
-CONFIG_RTC=y
-CONFIG_GEN_RTC=y
-in linux-2.6.32.9.config and set the environment variable to read this file. 
-After building and installing, I still get '/dev/misc/rtc': No such file or
-directory when I use hwclock.
+On Thu, Sep 2, 2010 at 13:29, JNY <jny0@hotmail.com> wrote:
+> After building and installing, I still get '/dev/misc/rtc': No such file or
+> directory when I use hwclock.
 
-Why won't the hwclock work?
--- 
-View this message in context: http://old.nabble.com/hwclock-again-tp29603222p29603222.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Just to check...
+Do you have such a device (/dev/misc/rtc) in the target file system?
+
+Regards,
+Anders
+
+(I'm resending, as I missed to CC the mailinglist).
