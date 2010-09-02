@@ -1,51 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Sep 2010 23:50:37 +0200
-Subject: [Buildroot] Gaisler sparc-leon
-In-Reply-To: <20100902144444.cynij0yn3mw0ooc0@webmail.bluegenesis.com>
-	(konrad@gaisler.com's message of "Thu, 02 Sep 2010 14:44:44 -0400")
-References: <20100902144444.cynij0yn3mw0ooc0@webmail.bluegenesis.com>
-Message-ID: <87hbi7vmqa.fsf@macbook.be.48ers.dk>
+From: Mitch Davis <mjd+buildroot@afork.com>
+Date: Fri, 3 Sep 2010 09:46:15 +1000
+Subject: [Buildroot] RFC: Getting rid of old-style hooks
+In-Reply-To: <20100902161058.4ea7d8df@surf>
+References: <20100902161058.4ea7d8df@surf>
+Message-ID: <AANLkTind8dB_urC0OS_4eip1sUkchbRd1g8Nynsprram@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "konrad" == konrad  <konrad@gaisler.com> writes:
+On Fri, Sep 3, 2010 at 12:10 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> (Sorry, long presentation, the question is at the end)
+>
+> I've started working on getting rid of the old-style hooks, i.e the
+> hooks defined this way :
 
-Hi Konrad,
+> However, I have a question concerning these new style hooks. Since we
+> can't use make conditionals inside variable definitions, it is not
+> possible to write:
 
- konrad> Hello everybody,
- konrad> Currently at Aeroflex Gaisler we are running a old
- konrad> Snapgear 2.0 dist. Now we are searching for a replacement
- konrad> and got from "Sam Ravnborg" <sam@ravnborg.org> the
- konrad> hint to use buildroot that we intend to switch to now. 
- konrad> Aeroflex Gaisler is marketing the OpenSource Leon3 processor
- konrad> (that is distributed as a vhdl model and can be synthesized
- konrad> by the user). The Leon3 processor is a fully SparcV8 conformant
- konrad> processor that support also a SRMMU. Linux is ported on
- konrad> it and the Leon Port is included in the recent kernels. 
- konrad> Currently I also try to submit patches for the Leon3 settings to
- konrad> GCC? and sent a copyleft assignment to FSF so I hope
- konrad> the Leon3 cpu will be in the 4.5.x toolchains soon. 
+Is it possible to avoid conditional defines altogether by using
+computed variable names?
 
-Ahh yes, I remember looking at Leon3 a number of years ago..
+I am not an expert in this and I admit I haven't read your email
+entirely or understand completely the problem you're trying to solve,
+but in general, conditional makefile fragments can be replaced by code
+using computed variable names.
 
- konrad> From Sam Ravnborg I heard that there is the thought to
- konrad> take away the sparc port from buildroot, I would like to vote
- konrad> not doing so. In the future we plan to activly develop the Sparc
- konrad> branch of uclibc and buildroot, test and submit patches. 
- konrad> On Monday I'll submit 4.4.3 patch and sparc config settings patch
- konrad> to add a leon cpu build... 
+I will take this as an example:
 
-The problem with Sparc was that noone was interested in maintaining it /
-had access to hw to test stuff, and various issues with uClibc / gcc.
+> define FOOBAR_REMOVE_STUFF
+> ? ? ? ?rm $(TARGET_DIR)/usr/bin/foo
+> ifneq($(FOOBAR_INSTALL_BAR),y)
+> ? ? ? ?rm $(TARGET_DIR)/usr/bin/bar
+> endif
+> endef
 
-I have no issues keeping Sparc support if the situation changes, but
-there isn't much sense in pretending to support Sparc if it doesn't
-really work.
+I'm not an expert at this, but what about something like:
 
-So I'll keep it for now and see what happens..
+FOOBAR_INSTALL_BAR_y := rm $(TARGET_DIR)/usr/bin/bar
 
--- 
-Bye, Peter Korsgaard
+define FOOBAR_REMOVE_STUFF
+       rm $(TARGET_DIR)/usr/bin/foo
+       $(FOOBAR_INSTALL_BAR_$(FOOBAR_INSTALL_BAR))
+endef
+
+This is just a proof of concept which ignores the question of whether
+this is what you want to do.  And the variable names I've picked are
+quite clumsy.
+
+This also might mean you don't need to use defines.  Instead, you can
+put these commands into a variable.
+
+Hmm, water's quite deep here, I'll swim back to shore now :-)
+
+Mitch.
