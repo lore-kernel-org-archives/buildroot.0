@@ -1,29 +1,33 @@
-From: JNY <jny0@hotmail.com>
-Date: Thu, 2 Sep 2010 04:50:51 -0700 (PDT)
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Sep 2010 14:02:03 +0200
 Subject: [Buildroot] hwclock again
-In-Reply-To: <AANLkTim5AseSa3e9zxb-7EfyLkNhfkDQNm0vX9GHqnHD@mail.gmail.com>
+In-Reply-To: <29603222.post@talk.nabble.com>
 References: <29603222.post@talk.nabble.com>
-	<AANLkTim5AseSa3e9zxb-7EfyLkNhfkDQNm0vX9GHqnHD@mail.gmail.com>
-Message-ID: <29603393.post@talk.nabble.com>
+Message-ID: <20100902140203.1cf3a8e6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 2 Sep 2010 04:29:07 -0700 (PDT)
+JNY <jny0@hotmail.com> wrote:
 
-just to check...
-Do you have such a device (/dev/misc/rtc) in the target file system?
+> I've enabled 
+> CONFIG_RTC=y
+> CONFIG_GEN_RTC=y
+> in linux-2.6.32.9.config and set the environment variable to read
+> this file. After building and installing, I still get
+> '/dev/misc/rtc': No such file or directory when I use hwclock.
+> 
+> Why won't the hwclock work?
 
-Regards,
-Anders
+Because nobody created /dev/misc/rtc. By default, Buildroot uses a
+static /dev, so you have to manually add the missing device files.
 
--------------------
-
-I have two targets target_skeleton, and target_busybox_skeleton (both
-contained in target/generic), neither of which contain /dev/misc/rtc. 
-However, neither contain ttyS0, and that ends up on the system when it's
-loaded, and works.  What's going on?
+Thomas
 -- 
-View this message in context: http://old.nabble.com/hwclock-again-tp29603222p29603393.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
