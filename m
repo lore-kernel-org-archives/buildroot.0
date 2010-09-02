@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Sep 2010 14:02:03 +0200
-Subject: [Buildroot] hwclock again
-In-Reply-To: <29603222.post@talk.nabble.com>
-References: <29603222.post@talk.nabble.com>
-Message-ID: <20100902140203.1cf3a8e6@surf>
+Date: Thu, 2 Sep 2010 14:03:40 +0200
+Subject: [Buildroot] [RESEND/PATCH] Git/Svn downloaders
+In-Reply-To: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org>
+References: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org>
+Message-ID: <20100902140340.5fb956d9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2 Sep 2010 04:29:07 -0700 (PDT)
-JNY <jny0@hotmail.com> wrote:
+Hello,
 
-> I've enabled 
-> CONFIG_RTC=y
-> CONFIG_GEN_RTC=y
-> in linux-2.6.32.9.config and set the environment variable to read
-> this file. After building and installing, I still get
-> '/dev/misc/rtc': No such file or directory when I use hwclock.
+On Thu,  2 Sep 2010 12:09:43 +0200
+Maxime Petazzoni <maxime.petazzoni@bulix.org> wrote:
+
+> Now that Buildroot 2010.08 is out (nice work on the release by the
+> way!), I've rebased my patchset for Git and Subversion downloaders on
+> the latest HEAD.
 > 
-> Why won't the hwclock work?
+> I've also renamed SPIDER_MODE to DL_MODE, which better represents
+> what this variable is for (per Thomas' recommendation).
 
-Because nobody created /dev/misc/rtc. By default, Buildroot uses a
-static /dev, so you have to manually add the missing device files.
+FWIW, I've pushed this patch set at:
+
+ http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2010.11/download-rework
 
 Thomas
 -- 
