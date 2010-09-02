@@ -1,18 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 02 Sep 2010 11:23:16 -0300
-Subject: [Buildroot] [PATCH] Fix berkeleydb download
-Message-ID: <4C7FB354.5080008@zacarias.com.ar>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Thu, 2 Sep 2010 16:22:40 +0100
+Subject: [Buildroot] gdb / gdbserver 6.8 does not stop at breakpoint since
+	buildroot 2010.05
+Message-ID: <DF9B554AA3564BFB942A3ABC5820C6FD@AP366>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+With 2009.08, 2009.11 and 2010.02 releases I have been able to successfully
+use the buildroot built host gdb to remotely debug applications on a
+buildroot built system running gdbserver.  However since 2010.05 release
+(same with 2010.08) while gdb will talk to gdbserver it does not stop at
+breakpoints and the application being debugged on the target just runs.  I
+have been using gdb from within Eclipse however I can also see this from the
+command line gdb:
 
-Sleepycat is now owned by oracle so the old site is gone.
-Fix the download site.
+GNU gdb 6.8-debian
+Copyright (C) 2008 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i486-linux-gnu"...
+(gdb) show sysroot
+The current system root is
+"/home/apmdev/dx/buildroot-2010.08/output/staging/".
+(gdb) break main
+Breakpoint 1 at 0x8048739: file ../main.c, line 6.
+(gdb) target remote 192.9.200.98:2345
+Remote debugging using 192.9.200.98:2345
+[New Thread 1213]
+0xb7776828 in _start ()
+   from /home/apmdev/dx/buildroot-2010.08/output/staging/lib/ld-uClibc.so.0
+(gdb) continue
+Continuing.
 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: buildroot-bdb-download.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100902/27344ee4/attachment-0001.ksh>
+And that is it, it never stops at the breakpoint ... no errors are given.
+The target gdbserver at this point just runs the application.
+
+For the host gdb I am running /output/toolchain/gdbhost6.8/gdb/gdb.  I have
+used a .gdbinit file that contains only the single line "set sysroot
+/home/apmdev/dx/buildroot-2010.08/output/staging/".
+
+I assume nobody else is having this problem?
+
+I appreciate that lots of stuff changes between releases e.g. kernel
+versions, gcc versions, various packages etc however I could not see
+anything obvious in the mailing list to do with the gdb.
+
+I have hit a dead end on this so any suggestions of things to try would be
+appreciated!
+ 
+Regards,
+
+
+
+Will
