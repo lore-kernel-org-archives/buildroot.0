@@ -1,61 +1,61 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 2 Sep 2010 16:22:40 +0100
-Subject: [Buildroot] gdb / gdbserver 6.8 does not stop at breakpoint since
-	buildroot 2010.05
-Message-ID: <DF9B554AA3564BFB942A3ABC5820C6FD@AP366>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  2 Sep 2010 19:24:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 2503] New: Microperl fails build on MIPS
+Message-ID: <bug-2503-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With 2009.08, 2009.11 and 2010.02 releases I have been able to successfully
-use the buildroot built host gdb to remotely debug applications on a
-buildroot built system running gdbserver.  However since 2010.05 release
-(same with 2010.08) while gdb will talk to gdbserver it does not stop at
-breakpoints and the application being debugged on the target just runs.  I
-have been using gdb from within Eclipse however I can also see this from the
-command line gdb:
+https://bugs.busybox.net/show_bug.cgi?id=2503
 
-GNU gdb 6.8-debian
-Copyright (C) 2008 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later
-<http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "i486-linux-gnu"...
-(gdb) show sysroot
-The current system root is
-"/home/apmdev/dx/buildroot-2010.08/output/staging/".
-(gdb) break main
-Breakpoint 1 at 0x8048739: file ../main.c, line 6.
-(gdb) target remote 192.9.200.98:2345
-Remote debugging using 192.9.200.98:2345
-[New Thread 1213]
-0xb7776828 in _start ()
-   from /home/apmdev/dx/buildroot-2010.08/output/staging/lib/ld-uClibc.so.0
-(gdb) continue
-Continuing.
-
-And that is it, it never stops at the breakpoint ... no errors are given.
-The target gdbserver at this point just runs the application.
-
-For the host gdb I am running /output/toolchain/gdbhost6.8/gdb/gdb.  I have
-used a .gdbinit file that contains only the single line "set sysroot
-/home/apmdev/dx/buildroot-2010.08/output/staging/".
-
-I assume nobody else is having this problem?
-
-I appreciate that lots of stuff changes between releases e.g. kernel
-versions, gcc versions, various packages etc however I could not see
-anything obvious in the mailing list to do with the gdb.
-
-I have hit a dead end on this so any suggestions of things to try would be
-appreciated!
- 
-Regards,
+           Summary: Microperl fails build on MIPS
+           Product: buildroot
+           Version: 2009.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: sergio at sergiomb.no-ip.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
+Created attachment 2431
+  --> https://bugs.busybox.net/attachment.cgi?id=2431
+dot config
 
-Will
+with buildroot 2010.08 version, I add some new packages to my .config ,
+make 
+# we need to build a perl for the host just for Errno.pm
+(cd /home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8; \
+         chmod a+x ext/util/make_ext; \
+         ext/util/make_ext nonxs Errno MAKE="/usr/bin/make" \
+        )
+
+        Making Errno (nonxs)
+ext/util/make_ext: line 122: ../../miniperl: No such file or directory
+Warning: No Makefile!
+make[1]: Entering directory
+`/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8/ext/Errno'
+make[1]: *** No rule to make target `config'.  Stop.
+make[1]: Leaving directory
+`/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8/ext/Errno'
+/usr/bin/make config failed, continuing anyway...
+make[1]: Entering directory
+`/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8/ext/Errno'
+make[1]: *** No rule to make target `all'.  Stop.
+make[1]: Leaving directory
+`/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8/ext/Errno'
+make: ***
+[/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8/.configured]
+Error 2
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
