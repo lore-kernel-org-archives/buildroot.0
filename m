@@ -1,74 +1,69 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 2 Sep 2010 07:37:43 -0500
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Sep 2010 14:50:15 +0200
 Subject: [Buildroot] [PATCH 4/8] Implement basic non-wget download
-	methods
-In-Reply-To: <1283422191-30926-5-git-send-email-maxime.petazzoni@bulix.org>
+ methods
+In-Reply-To: <201009020737.45906.minimod@morethan.org>
 References: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org>
 	<1283422191-30926-5-git-send-email-maxime.petazzoni@bulix.org>
-Message-ID: <201009020737.45906.minimod@morethan.org>
+	<201009020737.45906.minimod@morethan.org>
+Message-ID: <20100902145015.7e646a8b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu September 2 2010, Maxime Petazzoni wrote:
-> Packages can now be sourced from Git and Subversion repositories. The
-> download method will be autodetected from the URI (git://, svn://, etc).
-> If the repository is accessed through http(s), you can force the
-> download method by setting a _SITE_METHOD variable to either 'git' or
-> 'svn', respectively and without the quotes.
->
+On Thu, 2 Sep 2010 07:37:43 -0500
+"Michael S. Zick" <minimod@morethan.org> wrote:
 
-For the cases where the protocol scheme does not appear in the URI that
-the user would input (such as private repository access via ssl) -
-
-Will that _SITE_METHOD variable be able to override the autodetection?
-
-Hmm...  In case any reader hasn't encountered this private repository access method. . . .
-
-Both git and hg (Mercurial) can use ssl/ssh to identify users with access to a repository.
-I do not know about svn, never studied or used it that much.
-In the case of git, the following is the _only_ way to identify private users:
-(Since git does not accept a ssh:// scheme in its command parse.)
-
-The user, in their, ~/.ssh/config file, establishes an identity shortcut, similar to:
-
-# Service user - access to private, access controlled repositories of user hgadm
-host hguser
-  user hgadm
-  hostname hg.minimodding.com
-  port 22
-  IdentitiesOnly yes
-  IdentityFile ~/.ssh/hg.minimod/hgusr_id_rsa
-
-Where the entry for IdentityFile is the path and file name to the user's private key
-that matches the user's remote public key on file with the repository access control system.
-
-As usee by a person or by a script, the "hguser" appears instead of the scheme and authority 
-fields of the URI.  
-Hence, there is no scheme for a script to parse and control any "autodetect" process.
-
-The GIT add-on package, Gitolite, does private repository authentication this way;
-http://progit.org/book/ch4-8.html
-
-The Mercurial access control package I am working on myself uses a similar authentication process.
-Other private repository access controls will work in a similar manner due to the structure of
-operation of remote ssh.
-
-The reader can find additional information on private hg repository access, starting at:
-http://hg.minimodding.com/repos/lua/luahg.hg/
-Navigate to the /doc directory;
-Select the example_install.pdf file;
-Click "raw" in the listing header to grab the current pdf file in your pdf viewer;
-See section 2.2.6 - Client Authority Shortcuts.
-
-Sorry for the handsprings but the project isn't yet completed and published other than as above.
-
-Mike
-> The package's _VERSION variable defines which commit, revision, tag or
-> branch should be checked out. For Git, it can be HEAD, a commit ID, a
-> tag name or branch name (anything that can be checked out with `git
-> checkout`). For Subversion, it must be a revision number, or HEAD.
+> For the cases where the protocol scheme does not appear in the URI
+> that the user would input (such as private repository access via ssl)
+> -
 > 
-> Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+> Will that _SITE_METHOD variable be able to override the autodetection?
+
+Yes :
+
++ifndef $(2)_SITE_METHOD
++ ifdef $(3)_SITE_METHOD
++  $(2)_SITE_METHOD = $($(3)_SITE_METHOD)
++ else
++	# Try automatic detection using the scheme part of the URI
++	$(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call
+qstrip,$($(2)_SITE))))
++ endif
++endif
+
+So, if FOOBAR_SITE_METHOD is already defined, nothing happens. What
+this thing does is :
+
+ 1. Define HOST_FOOBAR_SITE_METHOD to FOOBAR_SITE_METHOD if
+    FOOBAR_SITE_METHOD is defined but not HOST_FOOBAR_SITE_METHOD
+
+ 2. Define (HOST_)FOOBAR_SITE_METHOD to an autodected scheme is
+    (HOST_)FOOBAR_SITE_METHOD is not defined.
+
+So whenever FOOBAR_SITE_METHOD is defined, it will take precedence over
+the autodetection.
+
+> Both git and hg (Mercurial) can use ssl/ssh to identify users with
+> access to a repository. I do not know about svn, never studied or
+> used it that much. In the case of git, the following is the _only_
+> way to identify private users: (Since git does not accept a ssh://
+> scheme in its command parse.)
+
+I must be missing something: I'm using
+ssh://uclibc.org/home/tpetazzoni/git/buildroot.git as a Git URL to push
+things to my private Buildroot repository hosted at uclibc.org.
+
+As far as I see, Gitolite introduces per-branch or per-tag permissions,
+but plain Git already allows per-repository permissions. No ?
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
