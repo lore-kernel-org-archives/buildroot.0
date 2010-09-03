@@ -1,61 +1,35 @@
 From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Fri, 3 Sep 2010 09:46:15 +1000
-Subject: [Buildroot] RFC: Getting rid of old-style hooks
-In-Reply-To: <20100902161058.4ea7d8df@surf>
-References: <20100902161058.4ea7d8df@surf>
-Message-ID: <AANLkTind8dB_urC0OS_4eip1sUkchbRd1g8Nynsprram@mail.gmail.com>
+Date: Fri, 3 Sep 2010 15:56:57 +1000
+Subject: [Buildroot] EXT2-fs error
+In-Reply-To: <29591683.post@talk.nabble.com>
+References: <29591683.post@talk.nabble.com>
+Message-ID: <AANLkTinkKu2UKogqR2fRE7Mk-ojEFkXy2MPqPHhW_jZC@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 3, 2010 at 12:10 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+On Wed, Sep 1, 2010 at 7:35 PM, JNY <jny0@hotmail.com> wrote:
 >
-> (Sorry, long presentation, the question is at the end)
->
-> I've started working on getting rid of the old-style hooks, i.e the
-> hooks defined this way :
+> (which is a flash
+> drive, and the only storage device on the system)
 
-> However, I have a question concerning these new style hooks. Since we
-> can't use make conditionals inside variable definitions, it is not
-> possible to write:
+Out of curiosity, a USB flash device, or CF, or NAND flash, or ?
 
-Is it possible to avoid conditional defines altogether by using
-computed variable names?
+> or should I just do so mounted?
 
-I am not an expert in this and I admit I haven't read your email
-entirely or understand completely the problem you're trying to solve,
-but in general, conditional makefile fragments can be replaced by code
-using computed variable names.
+If you have to do it when the FS is mounted, you may want to remount
+it as read-write before you do the fsck:
 
-I will take this as an example:
+  mount -o remount,ro /
 
-> define FOOBAR_REMOVE_STUFF
-> ? ? ? ?rm $(TARGET_DIR)/usr/bin/foo
-> ifneq($(FOOBAR_INSTALL_BAR),y)
-> ? ? ? ?rm $(TARGET_DIR)/usr/bin/bar
-> endif
-> endef
+Then after the fsck, reboot.
 
-I'm not an expert at this, but what about something like:
+> I don't have a file called rootfs.ext2.  I have the following files:
+> rootfs.i486.tar
+> rootfs.i486.tar.bz2
 
-FOOBAR_INSTALL_BAR_y := rm $(TARGET_DIR)/usr/bin/bar
-
-define FOOBAR_REMOVE_STUFF
-       rm $(TARGET_DIR)/usr/bin/foo
-       $(FOOBAR_INSTALL_BAR_$(FOOBAR_INSTALL_BAR))
-endef
-
-This is just a proof of concept which ignores the question of whether
-this is what you want to do.  And the variable names I've picked are
-quite clumsy.
-
-This also might mean you don't need to use defines.  Instead, you can
-put these commands into a variable.
-
-Hmm, water's quite deep here, I'll swim back to shore now :-)
+Which of these files are you transferring to the flash device, and how?
 
 Mitch.
