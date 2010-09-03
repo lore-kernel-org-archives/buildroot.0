@@ -1,41 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Sep 2010 16:50:06 +0200
-Subject: [Buildroot] Gaisler sparc-leon
-In-Reply-To: <20100903091327.v01tegjghcqso4oo@webmail.bluegenesis.com>
-	(konrad@gaisler.com's message of "Fri, 03 Sep 2010 09:13:27 -0400")
-References: <20100903091327.v01tegjghcqso4oo@webmail.bluegenesis.com>
-Message-ID: <878w3ivq3l.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Sep 2010 17:03:23 +0200
+Subject: [Buildroot] About Git through SSH
+In-Reply-To: <201009030937.31967.minimod@morethan.org>
+References: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org>
+	<201009030730.57559.minimod@morethan.org>
+	<20100903150459.059d682a@surf>
+	<201009030937.31967.minimod@morethan.org>
+Message-ID: <20100903170323.3b5a8e6f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "konrad" == konrad  <konrad@gaisler.com> writes:
+On Fri, 3 Sep 2010 09:37:29 -0500
+"Michael S. Zick" <minimod@morethan.org> wrote:
 
-Hi,
+> I support users back to the oldest, commonly used, git versions -
+> Where I define that as the version in the current Debian stable
+> release.
+> 
+> So the commentary in the gitolite release still applies to older git
+> versions. http://packages.debian.org/lenny/git-core
+> 
+> Somewhere between v1.5 and v1.7 they must have added parsing "ssh://"
+> to the git client.
+> 
+> You might want to add a comment in the "Minimum Software
+> Requirements" of Buildroot, to go along with the addition of the user
+> specified scheme feature for the case of "git xxx ssh://..."
+> style URIs
+> 
+> Might cut down on the end-user puzzlement of: "Why doesn't this work
+> for me?"
+> 
+> Note: I think the change happened at v1.6 but I haven't checked to be
+> certain.
 
- konrad> My shortterm goal is to get buildroot to build a linux image
- konrad> with romfs that includes libc shared and some more advanced app
- konrad> like a ssh. That should cover/test already a lot
- konrad> functionality. So far in snapgear 2.0 we only used uClibc
- konrad> static, we had made quite a few patches to uclibc, didnt submit
- konrad> them to the uclibc though. It was also a fairly old uclibc that
- konrad> we used, it seems that uclibc has gotten better in the meantime
- konrad> (while we sticked still to the old version...). I think that if
- konrad> Gaisler would switch to buildroot and Leon users would start
- konrad> using it the sparc the sparc part would be maintained and
- konrad> running.I'll press this now and will post my results
+In Buildroot, I think only publicly-available Git trees will be used as
+the source URL for packages, and such trees usually use the git:// or
+http:// schemes rather than ssh://, which is usually used for a
+private, read-write access to a repo.
 
-Ok, good - Shared linking on sparc indeed used to be broken as far as I
-remember.
+Regards,
 
- konrad> Ps: Note at the side: If no hardware is available the
- konrad> evaluation version of the sparcleon simulator called TSIM can
- konrad> be used, so that non sparc users can run/test/verify too. ?
-
-What about something a bit more standard like qemu-system-sparc? We're
-already using qemu to test E.G. arm.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
