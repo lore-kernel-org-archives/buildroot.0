@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Sep 2010 18:58:31 +0200
-Subject: [Buildroot] About Git through SSH
-In-Reply-To: <000c01cb4bd0$088c14f0$19a43ed0$@pauljones.id.au>
-References: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org>
-	<201009030730.57559.minimod@morethan.org>
-	<20100903150459.059d682a@surf>
-	<201009030937.31967.minimod@morethan.org>
-	<20100903170323.3b5a8e6f@surf>
-	<000c01cb4bd0$088c14f0$19a43ed0$@pauljones.id.au>
-Message-ID: <20100904185831.78af11ca@surf>
+Date: Sat, 4 Sep 2010 18:59:52 +0200
+Subject: [Buildroot] [PATCH] bump kernel headers to latest stable
+In-Reply-To: <1283608961-5802-1-git-send-email-Marcus.Osdoba@googlemail.com>
+References: <1283608961-5802-1-git-send-email-Marcus.Osdoba@googlemail.com>
+Message-ID: <20100904185952.009cdb85@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 4 Sep 2010 11:25:15 +1000
-"Paul Jones" <paul@pauljones.id.au> wrote:
+Hello,
 
-> By the way, why does the source get converted to a tar.gz after the
-> git tree is cloned? It's quite annoying because to rebuild the
-> package you have to delete the tar.gz file as well as the build
-> directory to force downloading of the latest source.
+On Sat,  4 Sep 2010 16:02:41 +0200
+marcus.osdoba at googlemail.com wrote:
 
-I agree that this is not optimal, but this is the solution that best
-follows the way Buildroot works currently. If we don't do this, where
-should Buildroot do the clone ? In the $(BUILD_DIR) which gets deleted
-by make clean ? Or in $(DL_DIR) in a directory form and then we need to
-do a "cp" to the $(BUILD_DIR) when doing the build ?
+> From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+> 
+> Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
 
-In a second step, it'd be nice to be able to tell Buildroot that for
-this or that package, instead of being responsible for
-downloading/extracting it, it should just grab it from a given
-location. This is, IMHO, a change needed to make Buildroot more usable
-during the development phase, but it needs quite a bit of reflection
-and discussion.
+Good, but you also need to adjust the
+scsi-use-__uX-types-for-headers-exported-to-user-space.patch for the
+different kernel versions.
 
-Cheers,
+Could you take care of this and resend a patch ?
+
+Thanks!
 
 Thomas
 -- 
