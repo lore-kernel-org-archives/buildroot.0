@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 5 Sep 2010 22:52:22 +0200
-Subject: [Buildroot] [git commit master 1/1] Remove unnecessary ugly hacks
-	in package/config
-Message-ID: <20100905213833.75ED88A4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add support for the new nconf
+	configuration tool
+Message-ID: <20100905213833.3C3B98A4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,137 +10,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=723f01dafa2fe577e823711ebaa4656224a4fffa
+commit: http://git.buildroot.net/buildroot/commit/?id=8b6585a9d3adf35179c988a10edd16ffc2c15346
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Those hacks should not be needed and they even make "mconf" fail to
-save the configuration file in $(CONFIG_DIR).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/config/conf.c                              |    4 --
- package/config/mconf.c                             |    2 +-
- .../patches/13-use-conf-write-autoconf.patch       |   53 --------------------
- package/config/patches/series                      |    1 -
- package/config/qconf.cc                            |    2 -
- 5 files changed, 1 insertions(+), 61 deletions(-)
- delete mode 100644 package/config/patches/13-use-conf-write-autoconf.patch
+ Makefile                                           |   10 +++++++++-
+ package/config/Makefile                            |    3 +++
+ .../patches/06-br-build-system-integration.patch   |   19 +++++++++++++------
+ 3 files changed, 25 insertions(+), 7 deletions(-)
 
-diff --git a/package/config/conf.c b/package/config/conf.c
-index 2449ca0..2062b57 100644
---- a/package/config/conf.c
-+++ b/package/config/conf.c
-@@ -640,10 +640,6 @@ int main(int ac, char **av)
- 			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
- 			exit(1);
- 		}
--		if (conf_write_autoconf()) {
--			fprintf(stderr, _("\n*** Error during update of the Buildroot configuration.\n\n"));
--			return 1;
--		}
- 	}
- 	return 0;
- }
-diff --git a/package/config/mconf.c b/package/config/mconf.c
-index 317e478..3d1ed3a 100644
---- a/package/config/mconf.c
-+++ b/package/config/mconf.c
-@@ -862,6 +862,6 @@ int main(int ac, char **av)
- 			"\n\n"));
- 	}
+diff --git a/Makefile b/Makefile
+index 73d9335..fd46972 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@ CONFIG_CONFIG_IN=Config.in
+ CONFIG=package/config
+ DATE:=$(shell date +%Y%m%d)
  
--	return conf_write_autoconf();
-+	return 0;
- }
+-noconfig_targets:=menuconfig gconfig xconfig config oldconfig randconfig \
++noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+ 	source-check help
+@@ -490,6 +490,14 @@ menuconfig: $(BUILD_DIR)/buildroot-config/mconf
+ 		test -f $(CONFIG_DIR)/.config.cmd || rm -f $(CONFIG_DIR)/.config; \
+ 	fi
  
-diff --git a/package/config/patches/13-use-conf-write-autoconf.patch b/package/config/patches/13-use-conf-write-autoconf.patch
-deleted file mode 100644
-index 8297dd9..0000000
---- a/package/config/patches/13-use-conf-write-autoconf.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
-----
-- conf.c   |    4 ++++
-- mconf.c  |    2 +-
-- qconf.cc |    2 ++
-- 3 files changed, 7 insertions(+), 1 deletion(-)
--
--Index: config.new/conf.c
--===================================================================
----- config.new.orig/conf.c
--+++ config.new/conf.c
--@@ -641,6 +641,10 @@
-- 			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
-- 			exit(1);
-- 		}
--+		if (conf_write_autoconf()) {
--+			fprintf(stderr, _("\n*** Error during update of the Buildroot configuration.\n\n"));
--+			return 1;
--+		}
-- 	}
-- 	return 0;
-- }
--Index: config.new/mconf.c
--===================================================================
----- config.new.orig/mconf.c
--+++ config.new/mconf.c
--@@ -862,6 +862,6 @@
-- 			"\n\n"));
-- 	}
-- 
---	return 0;
--+	return conf_write_autoconf();
-- }
-- 
--Index: config.new/qconf.cc
--===================================================================
----- config.new.orig/qconf.cc
--+++ config.new/qconf.cc
--@@ -1612,6 +1612,7 @@
-- {
-- 	if (!conf_get_changed()) {
-- 		e->accept();
--+		conf_write_autoconf();
-- 		return;
-- 	}
-- 	QMessageBox mb("qconf", _("Save configuration?"), QMessageBox::Warning,
--@@ -1622,6 +1623,7 @@
-- 	switch (mb.exec()) {
-- 	case QMessageBox::Yes:
-- 		conf_write(NULL);
--+		conf_write_autoconf();
-- 	case QMessageBox::No:
-- 		e->accept();
-- 		break;
-diff --git a/package/config/patches/series b/package/config/patches/series
-index 997befd..defdf58 100644
---- a/package/config/patches/series
-+++ b/package/config/patches/series
-@@ -8,5 +8,4 @@
- 10-br-build-system.patch
- 11-use-mktemp-for-lxdialog.patch
- 12-fix-glade-file-path.patch
--13-use-conf-write-autoconf.patch
- 14-support-out-of-tree-config.patch
-diff --git a/package/config/qconf.cc b/package/config/qconf.cc
-index 0fe8fd4..bbda3c8 100644
---- a/package/config/qconf.cc
-+++ b/package/config/qconf.cc
-@@ -1612,7 +1612,6 @@ void ConfigMainWindow::closeEvent(QCloseEvent* e)
- {
- 	if (!conf_get_changed()) {
- 		e->accept();
--		conf_write_autoconf();
- 		return;
- 	}
- 	QMessageBox mb("qconf", _("Save configuration?"), QMessageBox::Warning,
-@@ -1623,7 +1622,6 @@ void ConfigMainWindow::closeEvent(QCloseEvent* e)
- 	switch (mb.exec()) {
- 	case QMessageBox::Yes:
- 		conf_write(NULL);
--		conf_write_autoconf();
- 	case QMessageBox::No:
- 		e->accept();
- 		break;
++nconfig: $(BUILD_DIR)/buildroot-config/nconf
++	@mkdir -p $(BUILD_DIR)/buildroot-config
++	@if ! KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
++		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< $(CONFIG_CONFIG_IN); then \
++		test -f $(CONFIG_DIR)/.config.cmd || rm -f $(CONFIG_DIR)/.config; \
++	fi
++
+ config: $(BUILD_DIR)/buildroot-config/conf
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+diff --git a/package/config/Makefile b/package/config/Makefile
+index 7e199bc..d8d44b0 100644
+--- a/package/config/Makefile
++++ b/package/config/Makefile
+@@ -177,6 +177,9 @@ hostprogs-y := conf qconf gconf kxgettext
+ ifeq ($(MAKECMDGOALS),nconfig)
+ 	hostprogs-y += nconf
+ endif
++ifeq ($(findstring nconf,$(MAKECMDGOALS)),nconf)
++       hostprogs-y += nconf
++endif
+ 
+ ifeq ($(MAKECMDGOALS),menuconfig)
+ 	hostprogs-y += mconf
+diff --git a/package/config/patches/06-br-build-system-integration.patch b/package/config/patches/06-br-build-system-integration.patch
+index a2e634f..128bbc0 100644
+--- a/package/config/patches/06-br-build-system-integration.patch
++++ b/package/config/patches/06-br-build-system-integration.patch
+@@ -1,12 +1,19 @@
+ ---
+- Makefile |   11 ++++++++++-
+- 1 file changed, 10 insertions(+), 1 deletion(-)
++ Makefile |   14 +++++++++++++-
++ 1 file changed, 13 insertions(+), 1 deletion(-)
+ 
+-Index: config.new/Makefile
++Index: config/Makefile
+ ===================================================================
+---- config.new.orig/Makefile
+-+++ config.new/Makefile
+-@@ -181,14 +181,23 @@
++--- config.orig/Makefile
+++++ config/Makefile
++@@ -177,18 +177,30 @@
++ ifeq ($(MAKECMDGOALS),nconfig)
++ 	hostprogs-y += nconf
++ endif
+++ifeq ($(findstring nconf,$(MAKECMDGOALS)),nconf)
+++       hostprogs-y += nconf
+++endif
++ 
+  ifeq ($(MAKECMDGOALS),menuconfig)
+  	hostprogs-y += mconf
+  endif
 -- 
 1.7.1
