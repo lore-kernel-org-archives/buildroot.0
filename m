@@ -1,37 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  5 Sep 2010 16:44:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 2521] New: Can't compile sdl_mixer,
-	mikmod.h can't be found
-Message-ID: <bug-2521-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 05 Sep 2010 22:45:13 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/kconfig-upgrade
+In-Reply-To: <cover.1283342666.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 1 Sep 2010 14:04:52 +0200")
+References: <cover.1283342666.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87occbudgm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2521
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-           Summary: Can't compile sdl_mixer, mikmod.h can't be found
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: dandart at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Thomas> The following changes since commit 4973632207fd496199298191ada01c8c8ec2bee7:
+ Thomas>   Yann E. MORIN (1):
+ Thomas>         packages/atk: fix Makefile
 
+ Thomas> are available in the git repository at:
 
-mikmod.h can't be found:
-http://pastebin.com/MZd00gsd
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/kconfig-upgrade
 
-but I have it in /usr/include, plus libmikmod2-dev.
+Pulled, thanks!
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
