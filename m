@@ -1,68 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  4 Sep 2010 23:36:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 2503] Microperl fails build on MIPS
-In-Reply-To: <bug-2503-163@https.bugs.busybox.net/>
-References: <bug-2503-163@https.bugs.busybox.net/>
-Message-ID: <20100904233626.940538A416@busybox.osuosl.org>
+From: Paul Jones <paul@pauljones.id.au>
+Date: Sun, 5 Sep 2010 11:50:34 +1000
+Subject: [Buildroot] About Git through SSH
+In-Reply-To: <20100904185831.78af11ca@surf>
+References: <1283422191-30926-1-git-send-email-maxime.petazzoni@bulix.org><201009030730.57559.minimod@morethan.org><20100903150459.059d682a@surf><201009030937.31967.minimod@morethan.org><20100903170323.3b5a8e6f@surf><000c01cb4bd0$088c14f0$19a43ed0$@pauljones.id.au>
+	<20100904185831.78af11ca@surf>
+Message-ID: <001201cb4c9c$bc402280$34c06780$@pauljones.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2503
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Thomas Petazzoni
+> Sent: Sunday, 5 September 2010 2:59 AM
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] About Git through SSH
+> 
+> On Sat, 4 Sep 2010 11:25:15 +1000
+> "Paul Jones" <paul@pauljones.id.au> wrote:
+> 
+> > By the way, why does the source get converted to a tar.gz after the
+> > git tree is cloned? It's quite annoying because to rebuild the package
+> > you have to delete the tar.gz file as well as the build directory to
+> > force downloading of the latest source.
+> 
+> I agree that this is not optimal, but this is the solution that best
+follows the
+> way Buildroot works currently. If we don't do this, where should Buildroot
+do
+> the clone ? In the $(BUILD_DIR) which gets deleted by make clean ? Or in
+> $(DL_DIR) in a directory form and then we need to do a "cp" to the
+> $(BUILD_DIR) when doing the build ?
 
-S?rgio <sergio@sergiomb.no-ip.org> changed:
+I was just thinking clone it to $(BUILD_DIR), but on further thought I can
+imagine that also would be annoying if your source was rather large.
+Perhaps we could put an option in the makefile to force a clone everytime
+the package is rebuilt?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2009.11                     |2009.08
+> In a second step, it'd be nice to be able to tell Buildroot that for this
+or that
+> package, instead of being responsible for downloading/extracting it, it
+should
+> just grab it from a given location. This is, IMHO, a change needed to make
+> Buildroot more usable during the development phase, but it needs quite a
+> bit of reflection and discussion.
 
---- Comment #1 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-Same problem has been reported on 
-http://lists.busybox.net/pipermail/buildroot/2009-October/029989.html 
-but no conclusion.
-
-Looking for thread, found this: 
-
-/usr/lib64/ccache/gcc -L/usr/local/lib -o miniperl \
-            miniperlmain.o opmini.o libperl.a 
-libperl.a(pp.o): In function `Perl_pp_int':
-pp.c:(.text+0x9d41): undefined reference to `floor'
-pp.c:(.text+0x9d61): undefined reference to `ceil'
-libperl.a(pp.o): In function `Perl_pp_sqrt':
-pp.c:(.text+0x9ec1): undefined reference to `sqrt'
-libperl.a(pp.o): In function `Perl_pp_log':
-pp.c:(.text+0x9fc9): undefined reference to `log'
-libperl.a(pp.o): In function `Perl_pp_exp':
-pp.c:(.text+0xa153): undefined reference to `exp'
-libperl.a(pp.o): In function `Perl_pp_cos':
-pp.c:(.text+0xa493): undefined reference to `cos'
-libperl.a(pp.o): In function `Perl_pp_sin':
-pp.c:(.text+0xa5f3): undefined reference to `sin'
-libperl.a(pp.o): In function `Perl_pp_atan2':
-pp.c:(.text+0xa7cd): undefined reference to `atan2'
-libperl.a(pp.o): In function `Perl_pp_modulo':
-pp.c:(.text+0xccb4): undefined reference to `floor'
-pp.c:(.text+0xccea): undefined reference to `floor'
-pp.c:(.text+0xcd4e): undefined reference to `fmod'
-libperl.a(pp.o): In function `Perl_pp_pow':
-pp.c:(.text+0xd35a): undefined reference to `pow'
-libperl.a(pp_pack.o): In function `S_pack_rec':
-pp_pack.c:(.text+0x21bc): undefined reference to `floor'
-pp_pack.c:(.text+0x21ef): undefined reference to `floor'
-collect2: ld returned 1 exit status
-make[1]: *** [miniperl] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make[1]: Leaving directory
-`/home/sergio/hardware/moviecube/buildroot/output/build/perl-5.8.8'
-
-
-which is solved by add -lm 
-/usr/lib64/ccache/gcc -L/usr/local/lib -o miniperl miniperlmain.o opmini.o
-libperl.a
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+That would be great.
