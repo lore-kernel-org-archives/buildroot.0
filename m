@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 5 Sep 2010 22:52:22 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: Bump to 1.17.2
-Message-ID: <20100905213835.43DA88A4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] busybox: additional 1.17.2 fixes
+Message-ID: <20100905213835.61D418A4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,466 +9,645 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f661b023ab0bff19575992126d4646c8c8de7d6c
+commit: http://git.buildroot.net/buildroot/commit/?id=45b776f2017550d4c4740a595345a9ac34a2040e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    2 +
- package/busybox/Config.in                          |    2 +-
- .../busybox-1.17.1/busybox-1.17.1-grep.patch       |   39 -------
- .../busybox-1.17.1/busybox-1.17.1-make.patch       |   32 ------
- .../busybox-1.17.1/busybox-1.17.1-mdev.patch       |   49 --------
- .../busybox-1.17.1/busybox-1.17.1-mktemp.patch     |   12 --
- .../busybox-1.17.1/busybox-1.17.1-sed.patch        |  117 --------------------
- .../busybox-1.17.1/busybox-1.17.1-shell.patch      |  105 ------------------
- .../busybox-1.17.2/busybox-1.17.2-compat.patch     |   15 +++
- 9 files changed, 18 insertions(+), 355 deletions(-)
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
- delete mode 100644 package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
- create mode 100644 package/busybox/busybox-1.17.2/busybox-1.17.2-compat.patch
+ .../busybox-1.17.2/busybox-1.17.2-hush.patch       |  122 +++++
+ .../busybox-1.17.2/busybox-1.17.2-lineedit.patch   |  495 ++++++++++++++++++++
+ 2 files changed, 617 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
+ create mode 100644 package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
 
-diff --git a/CHANGES b/CHANGES
-index 76eb105..03bc5f4 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,6 +5,8 @@
- 	Kconfig infrastructure rebased against 2.6.36-rc1, bringing
- 	misc fixes + nconfig and savedefconfig targets.
- 
-+	Updated/fixed packages: busybox
-+
- 2010.08: Released August 31th, 2010:
- 
- 	Fixes all over the tree.
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index fc34259..8227443 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -45,7 +45,7 @@ config BR2_BUSYBOX_VERSION
- 	default "1.14.4"	if BR2_BUSYBOX_VERSION_1_14_X
- 	default "1.15.3"	if BR2_BUSYBOX_VERSION_1_15_X
- 	default "1.16.2"	if BR2_BUSYBOX_VERSION_1_16_X
--	default "1.17.1"	if BR2_BUSYBOX_VERSION_1_17_X
-+	default "1.17.2"	if BR2_BUSYBOX_VERSION_1_17_X
- 
- config BR2_PACKAGE_BUSYBOX_FULLINSTALL
- 	bool "Run BusyBox's own full installation"
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
-deleted file mode 100644
-index f8fc25d..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-grep.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--diff -urpN busybox-1.17.1/findutils/grep.c busybox-1.17.1-grep/findutils/grep.c
----- busybox-1.17.1/findutils/grep.c	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-grep/findutils/grep.c	2010-08-23 02:37:08.000000000 +0200
--@@ -461,15 +461,19 @@ static int grep_file(FILE *file)
-- 						if (found)
-- 							print_line(gl->pattern, strlen(gl->pattern), linenum, ':');
-- 					} else while (1) {
--+						unsigned start = gl->matched_range.rm_so;
-- 						unsigned end = gl->matched_range.rm_eo;
--+						unsigned len = end - start;
-- 						char old = line[end];
-- 						line[end] = '\0';
---						print_line(line + gl->matched_range.rm_so,
---								end - gl->matched_range.rm_so,
---								linenum, ':');
--+						/* Empty match is not printed: try "echo test | grep -o ''" */
--+						if (len != 0)
--+							print_line(line + start, len, linenum, ':');
-- 						if (old == '\0')
-- 							break;
-- 						line[end] = old;
--+						if (len == 0)
--+							end++;
-- #if !ENABLE_EXTRA_COMPAT
-- 						if (regexec(&gl->compiled_regex, line + end,
-- 								1, &gl->matched_range, REG_NOTBOL) != 0)
--diff -urpN busybox-1.17.1/testsuite/grep.tests busybox-1.17.1-grep/testsuite/grep.tests
----- busybox-1.17.1/testsuite/grep.tests	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-grep/testsuite/grep.tests	2010-08-23 02:37:08.000000000 +0200
--@@ -98,5 +98,9 @@ testing "grep -o does not loop forever" 
-- 	'grep -o "[^/]*$"' \
-- 	"test\n" \
-- 	"" "/var/test\n"
--+testing "grep -o does not loop forever on zero-length match" \
--+	'grep -o "" | head -n1' \
--+	"" \
--+	"" "test\n"
-- 
-- exit $FAILCOUNT
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
-deleted file mode 100644
-index 6177696..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-make.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--diff -urpN busybox-1.17.1/Makefile busybox-1.17.1-make/Makefile
----- busybox-1.17.1/Makefile	2010-07-25 00:13:44.000000000 +0200
--+++ busybox-1.17.1-make/Makefile	2010-08-22 09:30:33.000000000 +0200
--@@ -433,7 +433,12 @@ ifeq ($(config-targets),1)
-- -include $(srctree)/arch/$(ARCH)/Makefile
-- export KBUILD_DEFCONFIG
-- 
---config %config: scripts_basic outputmakefile gen_build_files FORCE
--+config: scripts_basic outputmakefile gen_build_files FORCE
--+	$(Q)mkdir -p include
--+	$(Q)$(MAKE) $(build)=scripts/kconfig $@
--+	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
--+
--+%config: scripts_basic outputmakefile gen_build_files FORCE
-- 	$(Q)mkdir -p include
-- 	$(Q)$(MAKE) $(build)=scripts/kconfig $@
-- 	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
--@@ -1285,9 +1290,13 @@ endif
-- 	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
-- 
-- # Modules
---/ %/: prepare scripts FORCE
--+%/: prepare scripts FORCE
-- 	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
-- 	$(build)=$(build-dir)
--+/: prepare scripts FORCE
--+	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1) \
--+	$(build)=$(build-dir)
--+
-- %.ko: prepare scripts FORCE
-- 	$(Q)$(MAKE) KBUILD_MODULES=$(if $(CONFIG_MODULES),1)   \
-- 	$(build)=$(build-dir) $(@:.ko=.o)
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
-deleted file mode 100644
-index 71c7abd..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-mdev.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--diff -urpN busybox-1.17.1/testsuite/mdev.tests busybox-1.17.1-mdev/testsuite/mdev.tests
----- busybox-1.17.1/testsuite/mdev.tests	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-mdev/testsuite/mdev.tests	2010-08-23 02:38:21.000000000 +0200
--@@ -38,6 +38,16 @@ brw-rw---- 1 0 0 8,0 sda
-- SKIP=
-- 
-- # continuing to use directory structure from prev test
--+optional STATIC FEATURE_MDEV_CONF FEATURE_LS_TIMESTAMPS FEATURE_LS_USERNAME
--+testing "mdev deletes /block/sda" \
--+	"env - PATH=$PATH ACTION=remove DEVPATH=/block/sda chroot mdev.testdir /mdev 2>&1;
--+	ls -ln mdev.testdir/dev | $FILTER_LS" \
--+"\
--+" \
--+	"" ""
--+SKIP=
--+
--+# continuing to use directory structure from prev test
-- rm -rf mdev.testdir/dev/*
-- echo ".* 1:1 666" >mdev.testdir/etc/mdev.conf
-- echo "sda 2:2 444" >>mdev.testdir/etc/mdev.conf
--diff -urpN busybox-1.17.1/util-linux/mdev.c busybox-1.17.1-mdev/util-linux/mdev.c
----- busybox-1.17.1/util-linux/mdev.c	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-mdev/util-linux/mdev.c	2010-08-23 02:38:21.000000000 +0200
--@@ -132,6 +132,7 @@ static void make_device(char *path, int 
-- 			major = -1;
-- 		}
-- 	}
--+	/* else: for delete, -1 still deletes the node, but < -1 suppresses that */
-- 
-- 	/* Determine device name, type, major and minor */
-- 	device_name = (char*) bb_basename(path);
--@@ -279,7 +280,7 @@ static void make_device(char *path, int 
-- 				if (aliaslink == '!' && s == a+1) {
-- 					val = st;
-- 					/* "!": suppress node creation/deletion */
---					major = -1;
--+					major = -2;
-- 				}
-- 				else if (aliaslink == '>' || aliaslink == '=') {
-- 					val = st;
--@@ -379,7 +380,7 @@ static void make_device(char *path, int 
-- 				free(command);
-- 			}
-- 
---			if (delete && major >= 0) {
--+			if (delete && major >= -1) {
-- 				if (ENABLE_FEATURE_MDEV_RENAME && alias) {
-- 					if (aliaslink == '>')
-- 						unlink(device_name);
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
-deleted file mode 100644
-index 557e337..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-mktemp.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -urpN busybox-1.17.1/debianutils/mktemp.c busybox-1.17.1-mktemp/debianutils/mktemp.c
----- busybox-1.17.1/debianutils/mktemp.c	2010-07-25 00:12:56.000000000 +0200
--+++ busybox-1.17.1-mktemp/debianutils/mktemp.c	2010-07-27 08:21:26.000000000 +0200
--@@ -50,7 +50,7 @@ int mktemp_main(int argc UNUSED_PARAM, c
-- 	opts = getopt32(argv, "dqtp:", &path);
-- 
-- 	chp = argv[optind] ? argv[optind] : xstrdup("tmp.XXXXXX");
---	if (chp[0] != '/' || (opts & 8))
--+	if (!strchr(chp, '/') || (opts & 8))
-- 		chp = concat_path_file(path, chp);
-- 
-- 	if (opts & 1) { /* -d */
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
-deleted file mode 100644
-index f65aebe..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-sed.patch
-+++ /dev/null
-@@ -1,117 +0,0 @@
--diff -urpN busybox-1.17.1/editors/sed.c busybox-1.17.1-sed/editors/sed.c
----- busybox-1.17.1/editors/sed.c	2010-07-06 04:25:53.000000000 +0200
--+++ busybox-1.17.1-sed/editors/sed.c	2010-08-17 02:05:27.000000000 +0200
--@@ -61,6 +61,10 @@
-- #include "libbb.h"
-- #include "xregex.h"
-- 
--+enum {
--+	OPT_in_place = 1 << 0,
--+};
--+
-- /* Each sed command turns into one of these structures. */
-- typedef struct sed_cmd_s {
-- 	/* Ordered by alignment requirements: currently 36 bytes on x86 */
--@@ -938,8 +942,11 @@ static void process_files(void)
-- 
-- 		if (matched) {
-- 			/* once matched, "n,xxx" range is dead, disabling it */
---			if (sed_cmd->beg_line > 0)
--+			if (sed_cmd->beg_line > 0
--+			 && !(option_mask32 & OPT_in_place) /* but not for -i */
--+			) {
-- 				sed_cmd->beg_line = -2;
--+			}
-- 			sed_cmd->in_match = !(
-- 				/* has the ending line come, or is this a single address command? */
-- 				(sed_cmd->end_line ?
--@@ -985,6 +992,8 @@ static void process_files(void)
-- 		}
-- 
-- 		/* actual sedding */
--+		//bb_error_msg("pattern_space:'%s' next_line:'%s' cmd:%c",
--+		//pattern_space, next_line, sed_cmd->cmd);
-- 		switch (sed_cmd->cmd) {
-- 
-- 		/* Print line number */
--@@ -1111,10 +1120,16 @@ static void process_files(void)
-- 		{
-- 			int len;
-- 			/* If no next line, jump to end of script and exit. */
--+			/* http://www.gnu.org/software/sed/manual/sed.html:
--+			 * "Most versions of sed exit without printing anything
--+			 * when the N command is issued on the last line of
--+			 * a file. GNU sed prints pattern space before exiting
--+			 * unless of course the -n command switch has been
--+			 * specified. This choice is by design."
--+			 */
-- 			if (next_line == NULL) {
---				free(next_line);
---				next_line = NULL;
---				goto discard_line;
--+				//goto discard_line;
--+				goto discard_commands; /* GNU behavior */
-- 			}
-- 			/* Append next_line, read new next_line. */
-- 			len = strlen(pattern_space);
--@@ -1270,9 +1285,6 @@ static void add_cmd_block(char *cmdstr)
-- int sed_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
-- int sed_main(int argc UNUSED_PARAM, char **argv)
-- {
---	enum {
---		OPT_in_place = 1 << 0,
---	};
-- 	unsigned opt;
-- 	llist_t *opt_e, *opt_f;
-- 	int status = EXIT_SUCCESS;
--@@ -1292,6 +1304,7 @@ int sed_main(int argc UNUSED_PARAM, char
-- 	opt_e = opt_f = NULL;
-- 	opt_complementary = "e::f::" /* can occur multiple times */
-- 	                    "nn"; /* count -n */
--+	/* -i must be first, to match OPT_in_place definition */
-- 	opt = getopt32(argv, "irne:f:", &opt_e, &opt_f,
-- 			    &G.be_quiet); /* counter for -n */
-- 	//argc -= optind;
--diff -urpN busybox-1.17.1/testsuite/sed.tests busybox-1.17.1-sed/testsuite/sed.tests
----- busybox-1.17.1/testsuite/sed.tests	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-sed/testsuite/sed.tests	2010-08-17 02:05:27.000000000 +0200
--@@ -80,10 +80,18 @@ test x"$SKIP_KNOWN_BUGS" = x"" && {
-- # Query: how does this interact with no newline@EOF?
-- testing "sed n (flushes pattern space, terminates early)" "sed -e 'n;p'" \
-- 	"a\nb\nb\nc\n" "" "a\nb\nc\n"
---# N does _not_ flush pattern space, therefore c is still in there @ script end.
---testing "sed N (doesn't flush pattern space when terminating)" "sed -e 'N;p'" \
---	"a\nb\na\nb\nc\n" "" "a\nb\nc\n"
-- }
--+# non-GNU sed: N does _not_ flush pattern space, therefore c is eaten @ script end
--+# GNU sed: N flushes pattern space, therefore c is printed too @ script end
--+testing "sed N (flushes pattern space (GNU behavior))" "sed -e 'N;p'" \
--+	"a\nb\na\nb\nc\n" "" "a\nb\nc\n"
--+
--+testing "sed N test2" "sed ':a;N;s/\n/ /;ta'" \
--+	"a b c\n" "" "a\nb\nc\n"
--+
--+testing "sed N test3" "sed 'N;s/\n/ /'" \
--+	"a b\nc\n" "" "a\nb\nc\n"
--+
-- testing "sed address match newline" 'sed "/b/N;/b\\nc/i woo"' \
-- 	"a\nwoo\nb\nc\nd\n" "" "a\nb\nc\nd\n"
-- 
--@@ -270,11 +278,16 @@ testing "sed a cmd ended by double backs
-- 	| two \\
-- '
-- 
---# fisrt three lines are deleted; 4th line is matched and printed by "2,3" and by "4" ranges
--+# first three lines are deleted; 4th line is matched and printed by "2,3" and by "4" ranges
-- testing "sed with N skipping lines past ranges on next cmds" \
-- 	"sed -n '1{N;N;d};1p;2,3p;3p;4p'" \
-- 	"4\n4\n" "" "1\n2\n3\n4\n"
-- 
--+testing "sed -i with address modifies all files, not only first" \
--+	"cp input input2; sed -i -e '1s/foo/bar/' input input2 && cat input input2; rm input2" \
--+	"bar\nbar\n" "foo\n" ""
--+
--+
-- # testing "description" "arguments" "result" "infile" "stdin"
-- 
-- exit $FAILCOUNT
-diff --git a/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch b/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
-deleted file mode 100644
-index 5279b12..0000000
---- a/package/busybox/busybox-1.17.1/busybox-1.17.1-shell.patch
-+++ /dev/null
-@@ -1,105 +0,0 @@
--diff -urpN busybox-1.17.1/shell/ash.c busybox-1.17.1-shell/shell/ash.c
----- busybox-1.17.1/shell/ash.c	2010-07-25 00:12:43.000000000 +0200
--+++ busybox-1.17.1-shell/shell/ash.c	2010-07-25 13:09:32.000000000 +0200
--@@ -4515,6 +4515,7 @@ clear_traps(void)
-- 			INT_ON;
-- 		}
-- 	}
--+	may_have_traps = 0;
-- }
-- 
-- /* Lives far away from here, needed for forkchild */
--diff -urpN busybox-1.17.1/shell/ash_test/ash-signals/signal7.right busybox-1.17.1-shell/shell/ash_test/ash-signals/signal7.right
----- busybox-1.17.1/shell/ash_test/ash-signals/signal7.right	1970-01-01 01:00:00.000000000 +0100
--+++ busybox-1.17.1-shell/shell/ash_test/ash-signals/signal7.right	2010-07-25 13:09:32.000000000 +0200
--@@ -0,0 +1 @@
--+Bug detected: 0
--diff -urpN busybox-1.17.1/shell/ash_test/ash-signals/signal7.tests busybox-1.17.1-shell/shell/ash_test/ash-signals/signal7.tests
----- busybox-1.17.1/shell/ash_test/ash-signals/signal7.tests	1970-01-01 01:00:00.000000000 +0100
--+++ busybox-1.17.1-shell/shell/ash_test/ash-signals/signal7.tests	2010-07-25 13:09:32.000000000 +0200
--@@ -0,0 +1,18 @@
--+bug() {
--+	trap : exit
--+	# Bug was causing sh to be run in subshell,
--+	# as if this line is replaced with (sh -c ...; exit $?) &
--+	# here:
--+	sh -c 'echo REAL_CHILD=$$' &
--+	echo PARENTS_IDEA_OF_CHILD=$!
--+	wait  # make sure bkgd shell completes
--+}
--+
--+bug | {
--+while read varval; do
--+	eval $varval
--+done
--+test x"$REAL_CHILD" != x"" \
--+&& test x"$REAL_CHILD" = x"$PARENTS_IDEA_OF_CHILD"
--+echo "Bug detected: $?"
--+}
--diff -urpN busybox-1.17.1/shell/hush.c busybox-1.17.1-shell/shell/hush.c
----- busybox-1.17.1/shell/hush.c	2010-07-25 00:12:43.000000000 +0200
--+++ busybox-1.17.1-shell/shell/hush.c	2010-07-25 13:09:32.000000000 +0200
--@@ -3901,8 +3901,6 @@ static void insert_bg_job(struct pipe *p
-- 
-- 	if (G_interactive_fd)
-- 		printf("[%d] %d %s\n", job->jobid, job->cmds[0].pid, job->cmdtext);
---	/* Last command's pid goes to $! */
---	G.last_bg_pid = job->cmds[job->num_cmds - 1].pid;
-- 	G.last_jobid = job->jobid;
-- }
-- 
--@@ -4825,6 +4823,8 @@ static int run_list(struct pipe *pi)
-- 				if (G.run_list_level == 1)
-- 					insert_bg_job(pi);
-- #endif
--+				/* Last command's pid goes to $! */
--+				G.last_bg_pid = pi->cmds[pi->num_cmds - 1].pid;
-- 				G.last_exitcode = rcode = EXIT_SUCCESS;
-- 				debug_printf_exec(": cmd&: exitcode EXIT_SUCCESS\n");
-- 			} else {
--diff -urpN busybox-1.17.1/shell/hush_test/hush-trap/signal7.right busybox-1.17.1-shell/shell/hush_test/hush-trap/signal7.right
----- busybox-1.17.1/shell/hush_test/hush-trap/signal7.right	1970-01-01 01:00:00.000000000 +0100
--+++ busybox-1.17.1-shell/shell/hush_test/hush-trap/signal7.right	2010-07-25 13:09:32.000000000 +0200
--@@ -0,0 +1 @@
--+Bug detected: 0
--diff -urpN busybox-1.17.1/shell/hush_test/hush-trap/signal7.tests busybox-1.17.1-shell/shell/hush_test/hush-trap/signal7.tests
----- busybox-1.17.1/shell/hush_test/hush-trap/signal7.tests	1970-01-01 01:00:00.000000000 +0100
--+++ busybox-1.17.1-shell/shell/hush_test/hush-trap/signal7.tests	2010-07-25 13:09:32.000000000 +0200
--@@ -0,0 +1,18 @@
--+bug() {
--+	trap : exit
--+	# Bug was causing sh to be run in subshell,
--+	# as if this line is replaced with (sh -c ...; exit $?) &
--+	# here:
--+	sh -c 'echo REAL_CHILD=$$' &
--+	echo PARENTS_IDEA_OF_CHILD=$!
--+	wait  # make sure bkgd shell completes
--+}
--+
--+bug | {
--+while read varval; do
--+	eval $varval
--+done
--+test x"$REAL_CHILD" != x"" \
--+&& test x"$REAL_CHILD" = x"$PARENTS_IDEA_OF_CHILD"
--+echo "Bug detected: $?"
--+}
--diff -urpN busybox-1.17.1/shell/shell_common.c busybox-1.17.1-shell/shell/shell_common.c
----- busybox-1.17.1/shell/shell_common.c	2010-07-06 04:25:54.000000000 +0200
--+++ busybox-1.17.1-shell/shell/shell_common.c	2010-07-27 08:41:43.000000000 +0200
--@@ -428,9 +428,14 @@ shell_builtin_ulimit(char **argv)
-- 						val <<= l->factor_shift;
-- 					}
-- //bb_error_msg("opt %c val_str:'%s' val:%lld", opt_char, val_str, (long long)val);
--+					/* from man bash: "If neither -H nor -S
--+					 * is specified, both the soft and hard
--+					 * limits are set. */
--+					if (!opts)
--+						opts = OPT_hard + OPT_soft;
-- 					if (opts & OPT_hard)
-- 						limit.rlim_max = val;
---					if ((opts & OPT_soft) || opts == 0)
--+					if (opts & OPT_soft)
-- 						limit.rlim_cur = val;
-- //bb_error_msg("setrlimit(%d, %lld, %lld)", l->cmd, (long long)limit.rlim_cur, (long long)limit.rlim_max);
-- 					if (setrlimit(l->cmd, &limit) < 0) {
-diff --git a/package/busybox/busybox-1.17.2/busybox-1.17.2-compat.patch b/package/busybox/busybox-1.17.2/busybox-1.17.2-compat.patch
+diff --git a/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch b/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
 new file mode 100644
-index 0000000..3388969
+index 0000000..3bcb5f3
 --- /dev/null
-+++ b/package/busybox/busybox-1.17.2/busybox-1.17.2-compat.patch
-@@ -0,0 +1,15 @@
-+diff -urpN busybox-1.17.2/networking/libiproute/iplink.c busybox-1.17.2-compat/networking/libiproute/iplink.c
-+--- busybox-1.17.2/networking/libiproute/iplink.c	2010-08-23 02:44:35.000000000 +0200
-++++ busybox-1.17.2-compat/networking/libiproute/iplink.c	2010-08-30 23:31:12.000000000 +0200
-+@@ -15,6 +15,11 @@
-+ #include "rt_names.h"
-+ #include "utils.h"
++++ b/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
+@@ -0,0 +1,122 @@
++diff -urpN busybox-1.17.2/shell/hush.c busybox-1.17.2-hush/shell/hush.c
++--- busybox-1.17.2/shell/hush.c	2010-08-23 02:45:15.000000000 +0200
+++++ busybox-1.17.2-hush/shell/hush.c	2010-09-04 19:44:57.381391123 +0200
++@@ -1853,7 +1853,7 @@ static void o_addblock_duplicate_backsla
++ 	while (len) {
++ 		o_addchr(o, *str);
++ 		if (*str++ == '\\'
++-		 && (*str != '*' && *str != '?' && *str != '[')
+++//		 && (*str != '*' && *str != '?' && *str != '[')
++ 		) {
++ 			o_addchr(o, '\\');
++ 		}
++@@ -2834,18 +2834,22 @@ static NOINLINE int expand_vars_to_list(
++ 	return n;
++ }
 + 
-++#ifndef IFLA_LINKINFO
-++# define IFLA_LINKINFO 18
-++# define IFLA_INFO_KIND 1
-++#endif
++-static char **expand_variables(char **argv, int or_mask)
+++enum {
+++	EXPVAR_FLAG_GLOB = 0x200,
+++	EXPVAR_FLAG_ESCAPE_VARS = 0x100,
+++	EXPVAR_FLAG_SINGLEWORD = 0x80, /* must be 0x80 */
+++};
+++static char **expand_variables(char **argv, unsigned or_mask)
++ {
++ 	int n;
++ 	char **list;
++ 	char **v;
++ 	o_string output = NULL_O_STRING;
++ 
++-	if (or_mask & 0x100) {
++-		output.o_escape = 1; /* protect against globbing for "$var" */
++-		/* (unquoted $var will temporarily switch it off) */
++-		output.o_glob = 1;
++-	}
+++	/* protect against globbing for "$var"? */
+++	/* (unquoted $var will temporarily switch it off) */
+++	output.o_escape = 1 & (or_mask / EXPVAR_FLAG_ESCAPE_VARS);
+++	output.o_glob = 1 & (or_mask / EXPVAR_FLAG_GLOB);
++ 
++ 	n = 0;
++ 	v = argv;
++@@ -2863,13 +2867,13 @@ static char **expand_variables(char **ar
++ 
++ static char **expand_strvec_to_strvec(char **argv)
++ {
++-	return expand_variables(argv, 0x100);
+++	return expand_variables(argv, EXPVAR_FLAG_GLOB | EXPVAR_FLAG_ESCAPE_VARS);
++ }
++ 
++ #if ENABLE_HUSH_BASH_COMPAT
++ static char **expand_strvec_to_strvec_singleword_noglob(char **argv)
++ {
++-	return expand_variables(argv, 0x80);
+++	return expand_variables(argv, EXPVAR_FLAG_SINGLEWORD);
++ }
++ #endif
++ 
++@@ -2909,15 +2913,15 @@ static char **expand_strvec_to_strvec_si
++ #endif
++ 
++ /* Used for expansion of right hand of assignments */
++-/* NB: should NOT do globbing! "export v=/bin/c*; env | grep ^v=" outputs
++- * "v=/bin/c*" */
+++/* NB: should NOT do globbing!
+++ * "export v=/bin/c*; env | grep ^v=" outputs "v=/bin/c*" */
++ static char *expand_string_to_string(const char *str)
++ {
++ 	char *argv[2], **list;
++ 
++ 	argv[0] = (char*)str;
++ 	argv[1] = NULL;
++-	list = expand_variables(argv, 0x80); /* 0x80: singleword expansion */
+++	list = expand_variables(argv, EXPVAR_FLAG_ESCAPE_VARS | EXPVAR_FLAG_SINGLEWORD);
++ 	if (HUSH_DEBUG)
++ 		if (!list[0] || list[1])
++ 			bb_error_msg_and_die("BUG in varexp2");
++@@ -2933,7 +2937,7 @@ static char* expand_strvec_to_string(cha
++ {
++ 	char **list;
++ 
++-	list = expand_variables(argv, 0x80);
+++	list = expand_variables(argv, EXPVAR_FLAG_SINGLEWORD);
++ 	/* Convert all NULs to spaces */
++ 	if (list[0]) {
++ 		int n = 1;
++diff -urpN busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.right busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.right
++--- busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.right	1970-01-01 01:00:00.000000000 +0100
+++++ busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.right	2010-09-04 19:44:57.382391186 +0200
++@@ -0,0 +1,9 @@
+++b1=-qwerty-t-\-"---z-*-?-
+++b1=-qwerty-t-\-"---z-*-?-
+++b2=-$a-\t-\\-\"-\--\z-\*-\?-
+++b2=-$a-\t-\\-\"-\--\z-\*-\?-
+++c=-$a-\t-\\-\"-\--\z-\*-\?-
+++c=-$a-\t-\\-\"-\--\z-\*-\?-
+++c=-$a-\t-\\-\"-\--\z-\*-\?-
+++c=-$a-\t-\\-\"-\--\z-\*-\?-
+++Done: 0
++diff -urpN busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.tests busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.tests
++--- busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.tests	1970-01-01 01:00:00.000000000 +0100
+++++ busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.tests	2010-09-04 19:44:57.382391186 +0200
++@@ -0,0 +1,20 @@
+++# Test for correct handling of backslashes
+++a=qwerty
 ++
-+ /* taken from linux/sockios.h */
-+ #define SIOCSIFNAME	0x8923		/* set interface name */
+++b=-$a-\t-\\-\"-\--\z-\*-\?-
+++echo b1=$b
+++echo "b1=$b"
+++b='-$a-\t-\\-\"-\--\z-\*-\?-'
+++echo b2=$b
+++echo "b2=$b"
+++
+++c=$b
+++echo "c=$c"
+++c=${b}
+++echo "c=$c"
+++c="$b"
+++echo "c=$c"
+++c="${b}"
+++echo "c=$c"
+++
+++echo "Done: $?"
+diff --git a/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch b/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
+new file mode 100644
+index 0000000..02bb3f0
+--- /dev/null
++++ b/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
+@@ -0,0 +1,495 @@
++diff -urpN busybox-1.17.2/libbb/lineedit.c busybox-1.17.2-lineedit/libbb/lineedit.c
++--- busybox-1.17.2/libbb/lineedit.c	2010-08-23 02:44:35.000000000 +0200
+++++ busybox-1.17.2-lineedit/libbb/lineedit.c	2010-09-02 12:45:22.987709229 +0200
++@@ -156,7 +156,6 @@ struct lineedit_statics {
 + 
++ 	/* Formerly these were big buffers on stack: */
++ #if ENABLE_FEATURE_TAB_COMPLETION
++-	char exe_n_cwd_tab_completion__dirbuf[MAX_LINELEN];
++ 	char input_tab__matchBuf[MAX_LINELEN];
++ 	int16_t find_match__int_buf[MAX_LINELEN + 1]; /* need to have 9 bits at least */
++ 	int16_t find_match__pos_buf[MAX_LINELEN + 1];
++@@ -235,6 +234,8 @@ static unsigned save_string(char *dst, u
++ 	while (dstpos < maxsize) {
++ 		wchar_t wc;
++ 		int n = srcpos;
+++
+++		/* Convert up to 1st invalid byte (or up to end) */
++ 		while ((wc = command_ps[srcpos]) != 0
++ 		    && !unicode_is_raw_byte(wc)
++ 		) {
++@@ -247,6 +248,7 @@ static unsigned save_string(char *dst, u
++ 		dstpos += n;
++ 		if (wc == 0) /* usually is */
++ 			break;
+++
++ 		/* We do have invalid byte here! */
++ 		command_ps[srcpos] = wc; /* restore it */
++ 		srcpos++;
++@@ -608,53 +610,56 @@ static void add_match(char *matched)
++ }
++ 
++ #if ENABLE_FEATURE_USERNAME_COMPLETION
++-static void username_tab_completion(char *ud, char *with_shash_flg)
+++/* Replace "~user/..." with "/homedir/...".
+++ * The parameter is malloced, free it or return it
+++ * unchanged if no user is matched.
+++ */
+++static char *username_path_completion(char *ud)
++ {
++ 	struct passwd *entry;
+++	char *tilde_name = ud;
+++	char *home = NULL;
+++
+++	ud++; /* skip ~ */
+++	if (*ud == '/') {       /* "~/..." */
+++		home = home_pwd_buf;
+++	} else {
+++		/* "~user/..." */
+++		ud = strchr(ud, '/');
+++		*ud = '\0';           /* "~user" */
+++		entry = getpwnam(tilde_name + 1);
+++		*ud = '/';            /* restore "~user/..." */
+++		if (entry)
+++			home = entry->pw_dir;
+++	}
+++	if (home) {
+++		ud = concat_path_file(home, ud);
+++		free(tilde_name);
+++		tilde_name = ud;
+++	}
+++	return tilde_name;
+++}
+++
+++/* ~use<tab> - find all users with this prefix */
+++static NOINLINE void username_completion(const char *ud)
+++{
+++	/* Using _r function to avoid pulling in static buffers */
+++	char line_buff[256];
+++	struct passwd pwd;
+++	struct passwd *result;
++ 	int userlen;
++ 
++-	ud++;                           /* ~user/... to user/... */
+++	ud++; /* skip ~ */
++ 	userlen = strlen(ud);
++ 
++-	if (with_shash_flg) {           /* "~/..." or "~user/..." */
++-		char *sav_ud = ud - 1;
++-		char *home = NULL;
++-
++-		if (*ud == '/') {       /* "~/..."     */
++-			home = home_pwd_buf;
++-		} else {
++-			/* "~user/..." */
++-			char *temp;
++-			temp = strchr(ud, '/');
++-			*temp = '\0';           /* ~user\0 */
++-			entry = getpwnam(ud);
++-			*temp = '/';            /* restore ~user/... */
++-			ud = temp;
++-			if (entry)
++-				home = entry->pw_dir;
++-		}
++-		if (home) {
++-			if ((userlen + strlen(home) + 1) < MAX_LINELEN) {
++-				/* /home/user/... */
++-				sprintf(sav_ud, "%s%s", home, ud);
++-			}
++-		}
++-	} else {
++-		/* "~[^/]*" */
++-		/* Using _r function to avoid pulling in static buffers */
++-		char line_buff[256];
++-		struct passwd pwd;
++-		struct passwd *result;
++-
++-		setpwent();
++-		while (!getpwent_r(&pwd, line_buff, sizeof(line_buff), &result)) {
++-			/* Null usernames should result in all users as possible completions. */
++-			if (/*!userlen || */ strncmp(ud, pwd.pw_name, userlen) == 0) {
++-				add_match(xasprintf("~%s/", pwd.pw_name));
++-			}
+++	setpwent();
+++	while (!getpwent_r(&pwd, line_buff, sizeof(line_buff), &result)) {
+++		/* Null usernames should result in all users as possible completions. */
+++		if (/*!userlen || */ strncmp(ud, pwd.pw_name, userlen) == 0) {
+++			add_match(xasprintf("~%s/", pwd.pw_name));
++ 		}
++-		endpwent();
++ 	}
+++	endpwent();
++ }
++ #endif  /* FEATURE_COMMAND_USERNAME_COMPLETION */
++ 
++@@ -664,22 +669,19 @@ enum {
++ 	FIND_FILE_ONLY = 2,
++ };
++ 
++-static int path_parse(char ***p, int flags)
+++static int path_parse(char ***p)
++ {
++ 	int npth;
++ 	const char *pth;
++ 	char *tmp;
++ 	char **res;
++ 
++-	/* if not setenv PATH variable, to search cur dir "." */
++-	if (flags != FIND_EXE_ONLY)
++-		return 1;
++-
++ 	if (state->flags & WITH_PATH_LOOKUP)
++ 		pth = state->path_lookup;
++ 	else
++ 		pth = getenv("PATH");
++-	/* PATH=<empty> or PATH=:<empty> */
+++
+++	/* PATH="" or PATH=":"? */
++ 	if (!pth || !pth[0] || LONE_CHAR(pth, ':'))
++ 		return 1;
++ 
++@@ -689,12 +691,13 @@ static int path_parse(char ***p, int fla
++ 		tmp = strchr(tmp, ':');
++ 		if (!tmp)
++ 			break;
++-		if (*++tmp == '\0')
+++		tmp++;
+++		if (*tmp == '\0')
++ 			break;  /* :<empty> */
++ 		npth++;
++ 	}
++ 
++-	res = xmalloc(npth * sizeof(char*));
+++	*p = res = xmalloc(npth * sizeof(res[0]));
++ 	res[0] = tmp = xstrdup(pth);
++ 	npth = 1;
++ 	while (1) {
++@@ -706,100 +709,96 @@ static int path_parse(char ***p, int fla
++ 			break; /* :<empty> */
++ 		res[npth++] = tmp;
++ 	}
++-	*p = res;
++ 	return npth;
++ }
++ 
++ static void exe_n_cwd_tab_completion(char *command, int type)
++ {
++-	DIR *dir;
++-	struct dirent *next;
++-	struct stat st;
++ 	char *path1[1];
++ 	char **paths = path1;
++ 	int npaths;
++ 	int i;
++-	char *found;
++-	char *pfind = strrchr(command, '/');
++-/*	char dirbuf[MAX_LINELEN]; */
++-#define dirbuf (S.exe_n_cwd_tab_completion__dirbuf)
+++	char *pfind;
+++	char *dirbuf = NULL;
++ 
++ 	npaths = 1;
++ 	path1[0] = (char*)".";
++ 
++-	if (pfind == NULL) {
++-		/* no dir, if flags==EXE_ONLY - get paths, else "." */
++-		npaths = path_parse(&paths, type);
+++	pfind = strrchr(command, '/');
+++	if (!pfind) {
+++		if (type == FIND_EXE_ONLY)
+++			npaths = path_parse(&paths);
++ 		pfind = command;
++ 	} else {
+++		/* point to 'l' in "..../last_component" */
+++		pfind++;
++ 		/* dirbuf = ".../.../.../" */
++-		safe_strncpy(dirbuf, command, (pfind - command) + 2);
+++		dirbuf = xstrndup(command, pfind - command);
++ #if ENABLE_FEATURE_USERNAME_COMPLETION
++ 		if (dirbuf[0] == '~')   /* ~/... or ~user/... */
++-			username_tab_completion(dirbuf, dirbuf);
+++			dirbuf = username_path_completion(dirbuf);
++ #endif
++-		paths[0] = dirbuf;
++-		/* point to 'l' in "..../last_component" */
++-		pfind++;
+++		path1[0] = dirbuf;
++ 	}
++ 
++ 	for (i = 0; i < npaths; i++) {
+++		DIR *dir;
+++		struct dirent *next;
+++		struct stat st;
+++		char *found;
+++
++ 		dir = opendir(paths[i]);
++ 		if (!dir)
++ 			continue; /* don't print an error */
++ 
++ 		while ((next = readdir(dir)) != NULL) {
++-			int len1;
++-			const char *str_found = next->d_name;
+++			const char *name_found = next->d_name;
++ 
++-			/* matched? */
++-			if (strncmp(str_found, pfind, strlen(pfind)))
+++			/* .../<tab>: bash 3.2.0 shows dotfiles, but not . and .. */
+++			if (!pfind[0] && DOT_OR_DOTDOT(name_found))
++ 				continue;
++-			/* not see .name without .match */
++-			if (*str_found == '.' && *pfind == '\0') {
++-				if (NOT_LONE_CHAR(paths[i], '/') || str_found[1])
++-					continue;
++-				str_found = ""; /* only "/" */
++-			}
++-			found = concat_path_file(paths[i], str_found);
++-			/* hmm, remove in progress? */
+++			/* match? */
+++			if (strncmp(name_found, pfind, strlen(pfind)) != 0)
+++				continue; /* no */
+++
+++			found = concat_path_file(paths[i], name_found);
++ 			/* NB: stat() first so that we see is it a directory;
++ 			 * but if that fails, use lstat() so that
++ 			 * we still match dangling links */
++ 			if (stat(found, &st) && lstat(found, &st))
++-				goto cont;
++-			/* find with dirs? */
++-			if (paths[i] != dirbuf)
++-				strcpy(found, next->d_name); /* only name */
+++				goto cont; /* hmm, remove in progress? */
++ 
++-			len1 = strlen(found);
++-			found = xrealloc(found, len1 + 2);
++-			found[len1] = '\0';
++-			found[len1+1] = '\0';
+++			/* save only name if we scan PATH */
+++			if (paths[i] != dirbuf)
+++				strcpy(found, name_found);
++ 
++ 			if (S_ISDIR(st.st_mode)) {
+++				unsigned len1 = strlen(found);
++ 				/* name is a directory */
++ 				if (found[len1-1] != '/') {
+++					found = xrealloc(found, len1 + 2);
++ 					found[len1] = '/';
+++					found[len1 + 1] = '\0';
++ 				}
++ 			} else {
++-				/* not put found file if search only dirs for cd */
+++				/* skip files if looking for dirs only (example: cd) */
++ 				if (type == FIND_DIR_ONLY)
++ 					goto cont;
++ 			}
++-			/* Add it to the list */
+++			/* add it to the list */
++ 			add_match(found);
++ 			continue;
++  cont:
++ 			free(found);
++ 		}
++ 		closedir(dir);
++-	}
+++	} /* for every path */
+++
++ 	if (paths != path1) {
++ 		free(paths[0]); /* allocated memory is only in first member */
++ 		free(paths);
++ 	}
++-#undef dirbuf
+++	free(dirbuf);
++ }
++ 
++ /* QUOT is used on elements of int_buf[], which are bytes,
++@@ -812,15 +811,20 @@ static void exe_n_cwd_tab_completion(cha
++ /* is must be <= in */
++ static void collapse_pos(int is, int in)
++ {
++-	memmove(int_buf+is, int_buf+in, (MAX_LINELEN+1-in)*sizeof(int_buf[0]));
++-	memmove(pos_buf+is, pos_buf+in, (MAX_LINELEN+1-in)*sizeof(pos_buf[0]));
+++	memmove(int_buf+is, int_buf+in, (MAX_LINELEN+1-in) * sizeof(int_buf[0]));
+++	memmove(pos_buf+is, pos_buf+in, (MAX_LINELEN+1-in) * sizeof(pos_buf[0]));
++ }
++-static NOINLINE int find_match(char *matchBuf, int *len_with_quotes)
+++/* On entry, matchBuf contains everything up to cursor@the moment <tab>
+++ * was pressed. This function looks at it, figures out what part of it
+++ * constitutes the command/file/directory prefix to use for completion,
+++ * and rewrites matchBuf to contain only that part.
+++ */
+++static NOINLINE int build_match_prefix(char *matchBuf, int *len_with_quotes)
++ {
++ 	int i, j;
++ 	int command_mode;
++ 	int c, c2;
++-/*	Were local, but it uses too much stack */
+++/*	Were local, but it used too much stack */
++ /*	int16_t int_buf[MAX_LINELEN + 1]; */
++ /*	int16_t pos_buf[MAX_LINELEN + 1]; */
++ 
++@@ -860,22 +864,23 @@ static NOINLINE int find_match(char *mat
++ 	}
++ 
++ 	/* skip commands with arguments if line has commands delimiters */
++-	/* ';' ';;' '&' '|' '&&' '||' but `>&' `<&' `>|' */
+++	/* ';' ';;' '&' '|' '&&' '||' but '>&' '<&' '>|' */
++ 	for (i = 0; int_buf[i]; i++) {
+++		int n;
++ 		c = int_buf[i];
++ 		c2 = int_buf[i + 1];
++ 		j = i ? int_buf[i - 1] : -1;
++-		command_mode = 0;
+++		n = 0;
++ 		if (c == ';' || c == '&' || c == '|') {
++-			command_mode = 1 + (c == c2);
+++			n = 1 + (c == c2);
++ 			if (c == '&') {
++ 				if (j == '>' || j == '<')
++-					command_mode = 0;
+++					n = 0;
++ 			} else if (c == '|' && j == '>')
++-				command_mode = 0;
+++				n = 0;
++ 		}
++-		if (command_mode) {
++-			collapse_pos(0, i + command_mode);
+++		if (n) {
+++			collapse_pos(0, i + n);
++ 			i = -1;  /* hack incremet */
++ 		}
++ 	}
++@@ -943,8 +948,8 @@ static NOINLINE int find_match(char *mat
++ 			}
++ 		}
++ 	}
++-	for (i = 0; int_buf[i]; i++)
++-		/* "strlen" */;
+++	for (i = 0; int_buf[i]; i++) /* quasi-strlen(int_buf) */
+++		continue;
++ 	/* find last word */
++ 	for (--i; i >= 0; i--) {
++ 		c = int_buf[i];
++@@ -955,7 +960,7 @@ static NOINLINE int find_match(char *mat
++ 	}
++ 	/* skip first not quoted '\'' or '"' */
++ 	for (i = 0; int_buf[i] == '\'' || int_buf[i] == '"'; i++)
++-		/*skip*/;
+++		continue;
++ 	/* collapse quote or unquote // or /~ */
++ 	while ((int_buf[i] & ~QUOT) == '/'
++ 	 && ((int_buf[i+1] & ~QUOT) == '/' || (int_buf[i+1] & ~QUOT) == '~')
++@@ -1058,13 +1063,20 @@ static void input_tab(smallint *lastWasT
++ 
++ 		/* Make a local copy of the string --
++ 		 * up to the position of the cursor */
+++#if !ENABLE_UNICODE_SUPPORT
++ 		save_string(matchBuf, cursor + 1);
++-#if ENABLE_UNICODE_SUPPORT
++-		cursor_mb = strlen(matchBuf);
+++#else
+++		{
+++			CHAR_T wc = command_ps[cursor];
+++			command_ps[cursor] = 0;
+++			save_string(matchBuf, MAX_LINELEN);
+++			command_ps[cursor] = wc;
+++			cursor_mb = strlen(matchBuf);
+++		}
++ #endif
++ 		tmp = matchBuf;
++ 
++-		find_type = find_match(matchBuf, &recalc_pos);
+++		find_type = build_match_prefix(matchBuf, &recalc_pos);
++ 
++ 		/* Free up any memory already allocated */
++ 		free_tab_completion_data();
++@@ -1074,7 +1086,7 @@ static void input_tab(smallint *lastWasT
++ 		 * then try completing this word as a username. */
++ 		if (state->flags & USERNAME_COMPLETION)
++ 			if (matchBuf[0] == '~' && strchr(matchBuf, '/') == NULL)
++-				username_tab_completion(matchBuf, NULL);
+++				username_completion(matchBuf);
++ #endif
++ 		/* Try to match any executable in our path and everything
++ 		 * in the current working directory */
++@@ -1083,7 +1095,7 @@ static void input_tab(smallint *lastWasT
++ 		/* Sort, then remove any duplicates found */
++ 		if (matches) {
++ 			unsigned i;
++-			int n = 0;
+++			unsigned n = 0;
++ 			qsort_string_vector(matches, num_matches);
++ 			for (i = 0; i < num_matches - 1; ++i) {
++ 				if (matches[i] && matches[i+1]) { /* paranoia */
++@@ -1095,14 +1107,14 @@ static void input_tab(smallint *lastWasT
++ 					}
++ 				}
++ 			}
++-			matches[n] = matches[i];
++-			num_matches = n + 1;
+++			matches[n++] = matches[i];
+++			num_matches = n;
++ 		}
++ 		/* Did we find exactly one match? */
++-		if (!matches || num_matches > 1) { /* no */
+++		if (num_matches != 1) { /* no */
++ 			beep();
++ 			if (!matches)
++-				return;         /* not found */
+++				return; /* no matches at all */
++ 			/* find minimal match */
++ 			tmp1 = xstrdup(matches[0]);
++ 			for (tmp = tmp1; *tmp; tmp++) {
++@@ -1113,13 +1125,14 @@ static void input_tab(smallint *lastWasT
++ 					}
++ 				}
++ 			}
++-			if (*tmp1 == '\0') {        /* have unique */
++-				free(tmp1);
+++			if (*tmp1 == '\0') { /* have unique pfx? */
+++				free(tmp1); /* no */
++ 				return;
++ 			}
++ 			tmp = add_quote_for_spec_chars(tmp1);
++ 			free(tmp1);
++-		} else {                        /* one match */
+++			len_found = strlen(tmp);
+++		} else {                        /* exactly one match */
++ 			tmp = add_quote_for_spec_chars(matches[0]);
++ 			/* for next completion current found */
++ 			*lastWasTab = FALSE;
++@@ -1127,11 +1140,10 @@ static void input_tab(smallint *lastWasT
++ 			len_found = strlen(tmp);
++ 			if (tmp[len_found-1] != '/') {
++ 				tmp[len_found] = ' ';
++-				tmp[len_found+1] = '\0';
+++				tmp[++len_found] = '\0';
++ 			}
++ 		}
++ 
++-		len_found = strlen(tmp);
++ #if !ENABLE_UNICODE_SUPPORT
++ 		/* have space to place the match? */
++ 		/* The result consists of three parts with these lengths: */
++@@ -1164,7 +1176,10 @@ static void input_tab(smallint *lastWasT
++ 				sprintf(&command[cursor_mb - recalc_pos], "%s%s", tmp, matchBuf);
++ 				command_len = load_string(command, S.maxsize);
++ 				/* write out the matched command */
++-				redraw(cmdedit_y, command_len - len);
+++				/* paranoia: load_string can return 0 on conv error,
+++				 * prevent passing len = (0 - 12) to redraw */
+++				len = command_len - len;
+++				redraw(cmdedit_y, len >= 0 ? len : 0);
++ 			}
++ 		}
++ #endif
++diff -urpN busybox-1.17.2/libbb/unicode.c busybox-1.17.2-lineedit/libbb/unicode.c
++--- busybox-1.17.2/libbb/unicode.c	2010-08-23 02:44:35.000000000 +0200
+++++ busybox-1.17.2-lineedit/libbb/unicode.c	2010-09-02 12:23:52.062709133 +0200
++@@ -131,7 +131,7 @@ size_t FAST_FUNC wcstombs(char *dest, co
++ 		size_t len = wcrtomb_internal(tbuf, wc);
++ 
++ 		if (len > n)
++-			len = n;
+++			break;
++ 		memcpy(dest, tbuf, len);
++ 		if (wc == L'\0')
++ 			return org_n - n;
 -- 
 1.7.1
