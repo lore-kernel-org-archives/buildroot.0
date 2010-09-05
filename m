@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 5 Sep 2010 22:52:22 +0200
-Subject: [Buildroot] [git commit master 1/1] Remove CONFIG_DEFCONFIG
-Message-ID: <20100905213832.6813D8A4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Clean up our patches against
+	kconfig
+Message-ID: <20100905213832.C75998A4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,47 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc9dba1509242bb9d2b2c4aa43ff3a019f02bc20
+commit: http://git.buildroot.net/buildroot/commit/?id=7c524dd0b683e1e8fac4e4084ac7678576bfbe07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There's no need to have a .defconfig, when you run make menuconfig,
-make xconfig or anything else for the first time, it will just start
-with the default configuration anyway. This is what the kernel does.
+Our kconfig-to-buildroot2.patch hasn't been kept up to date with all
+the changes made into package/config, and a single patch wasn't very
+practical to maintain all our changes. Therefore, this commit adds a
+package/config/patches directory, which contains a Quilt series of
+patches that correspond to our modifications to the kconfig mechanism.
+
+The huge kconfig-to-buildroot2.patch has been split into 16 smaller
+patches. The purpose of some of the modifications has been clearly
+identified, while some others were not identified.
+
+The 16 patches together do match exactly the old
+kconfig-to-buildroot2.patch. We have been very careful in making sure
+that we wouldn't loose any of our modifications.
+
+The only modifications made are :
+
+ * Instead of renaming the kernel Makefile to Makefile.kconfig and
+   naming the Buildroot Makefile just 'Makefile', we instead keep the
+   original package/config/Makefile from the kernel
+   scripts/kconfig/Makefile and name the Buildroot Makefile
+   package/config/Makefile.br. The main Buildroot Makefile is modified
+   accordingly.
+
+ * The documentation README.buildroot2 is updated to explain how to
+   upgrade to a newer version of scripts/kconfig.
+
+ * The kconfig-language.txt documentation is removed, as anybody can
+   easily find it in the kernel sources so there's no need to
+   duplicate it here.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d37d81f..e3cebe2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -25,7 +25,6 @@
- # absolute path
- TOPDIR:=$(shell pwd)
- CONFIG_CONFIG_IN=Config.in
--CONFIG_DEFCONFIG=.defconfig
- CONFIG=package/config
- DATE:=$(shell date +%Y%m%d)
- 
-@@ -465,9 +464,6 @@ export HOSTCFLAGS
- $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
- 	$(MAKE) CC="$(HOSTCC)" obj=$(@D) -C $(CONFIG) $(@F)
--	- at if [ ! -f $(CONFIG_DIR)/.config ]; then \
--		cp $(CONFIG_DEFCONFIG) $(CONFIG_DIR)/.config; \
--	fi
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -513,7 +509,6 @@ randconfig: $(BUILD_DIR)/buildroot-config/conf
- 		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -r $(CONFIG_CONFIG_IN)
- 
- allyesconfig: $(BUILD_DIR)/buildroot-config/conf
--	cat $(CONFIG_DEFCONFIG) > $(CONFIG_DIR)/.config
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
--- 
-1.7.1
+Patch is too large, so refusing to show it
