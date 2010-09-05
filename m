@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 5 Sep 2010 22:52:22 +0200
-Subject: [Buildroot] [git commit master 1/1] Add support for the new nconf
-	configuration tool
-Message-ID: <20100905213833.3C3B98A4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Makefile: use long options
+	names for the 'conf' utility
+Message-ID: <20100905213833.A55BB8A4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +10,94 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b6585a9d3adf35179c988a10edd16ffc2c15346
+commit: http://git.buildroot.net/buildroot/commit/?id=abba28ac7d0cf1c1a83c5c240c45df7716fea6be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The short option names have been removed as they were starting to
+cause too much confusion. See
+http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=4062f1a4c030157216dc8932e27131975cf7253c
+for details.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                                           |   10 +++++++++-
- package/config/Makefile                            |    3 +++
- .../patches/06-br-build-system-integration.patch   |   19 +++++++++++++------
- 3 files changed, 25 insertions(+), 7 deletions(-)
+ Makefile |   18 +++++++++---------
+ 1 files changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 73d9335..fd46972 100644
+index fd46972..77e0fc7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -28,7 +28,7 @@ CONFIG_CONFIG_IN=Config.in
- CONFIG=package/config
- DATE:=$(shell date +%Y%m%d)
+@@ -508,25 +508,25 @@ oldconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -o $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --oldconfig $(CONFIG_CONFIG_IN)
  
--noconfig_targets:=menuconfig gconfig xconfig config oldconfig randconfig \
-+noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	source-check help
-@@ -490,6 +490,14 @@ menuconfig: $(BUILD_DIR)/buildroot-config/mconf
- 		test -f $(CONFIG_DIR)/.config.cmd || rm -f $(CONFIG_DIR)/.config; \
- 	fi
- 
-+nconfig: $(BUILD_DIR)/buildroot-config/nconf
-+	@mkdir -p $(BUILD_DIR)/buildroot-config
-+	@if ! KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
-+		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
-+		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< $(CONFIG_CONFIG_IN); then \
-+		test -f $(CONFIG_DIR)/.config.cmd || rm -f $(CONFIG_DIR)/.config; \
-+	fi
-+
- config: $(BUILD_DIR)/buildroot-config/conf
+ randconfig: $(BUILD_DIR)/buildroot-config/conf
  	@mkdir -p $(BUILD_DIR)/buildroot-config
  	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
-diff --git a/package/config/Makefile b/package/config/Makefile
-index 7e199bc..d8d44b0 100644
---- a/package/config/Makefile
-+++ b/package/config/Makefile
-@@ -177,6 +177,9 @@ hostprogs-y := conf qconf gconf kxgettext
- ifeq ($(MAKECMDGOALS),nconfig)
- 	hostprogs-y += nconf
- endif
-+ifeq ($(findstring nconf,$(MAKECMDGOALS)),nconf)
-+       hostprogs-y += nconf
-+endif
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -r $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --randconfig $(CONFIG_CONFIG_IN)
  
- ifeq ($(MAKECMDGOALS),menuconfig)
- 	hostprogs-y += mconf
-diff --git a/package/config/patches/06-br-build-system-integration.patch b/package/config/patches/06-br-build-system-integration.patch
-index a2e634f..128bbc0 100644
---- a/package/config/patches/06-br-build-system-integration.patch
-+++ b/package/config/patches/06-br-build-system-integration.patch
-@@ -1,12 +1,19 @@
- ---
-- Makefile |   11 ++++++++++-
-- 1 file changed, 10 insertions(+), 1 deletion(-)
-+ Makefile |   14 +++++++++++++-
-+ 1 file changed, 13 insertions(+), 1 deletion(-)
+ allyesconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -y $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allyesconfig $(CONFIG_CONFIG_IN)
  
--Index: config.new/Makefile
-+Index: config/Makefile
- ===================================================================
----- config.new.orig/Makefile
--+++ config.new/Makefile
--@@ -181,14 +181,23 @@
-+--- config.orig/Makefile
-++++ config/Makefile
-+@@ -177,18 +177,30 @@
-+ ifeq ($(MAKECMDGOALS),nconfig)
-+ 	hostprogs-y += nconf
-+ endif
-++ifeq ($(findstring nconf,$(MAKECMDGOALS)),nconf)
-++       hostprogs-y += nconf
-++endif
-+ 
-  ifeq ($(MAKECMDGOALS),menuconfig)
-  	hostprogs-y += mconf
-  endif
+ allnoconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -n $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allnoconfig $(CONFIG_CONFIG_IN)
+ 
+ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+@@ -534,7 +534,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -r $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --randconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf
+@@ -543,7 +543,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -y $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allyesconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf
+@@ -552,20 +552,20 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -n $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --allnoconfig $(CONFIG_CONFIG_IN)
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 
+ defconfig: $(BUILD_DIR)/buildroot-config/conf
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -d $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --defconfig $(CONFIG_CONFIG_IN)
+ 
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 		KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+-		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< -D $(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
++		BUILDROOT_CONFIG=$(CONFIG_DIR)/.config $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
+ # check if download URLs are outdated
+ source-check: allyesconfig
 -- 
 1.7.1
