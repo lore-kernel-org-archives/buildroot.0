@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 5 Sep 2010 22:52:22 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: additional 1.17.2 fixes
-Message-ID: <20100905213835.61D418A4A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] kconfig: remove CONFIG_
+	references in search/help
+Message-ID: <20100905213835.26B698A4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,645 +10,216 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45b776f2017550d4c4740a595345a9ac34a2040e
+commit: http://git.buildroot.net/buildroot/commit/?id=bfa9e9e2bd8b4d3f0dcc29c461ba5b061bc5d738
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We use BR2_*, not CONFIG_* - So remove references to CONFIG_ in search/help
+windows.
+
+Long term we should probably consider doing s/^BR2_/CONFIG_/ to get rid
+of all this though.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox-1.17.2/busybox-1.17.2-hush.patch       |  122 +++++
- .../busybox-1.17.2/busybox-1.17.2-lineedit.patch   |  495 ++++++++++++++++++++
- 2 files changed, 617 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
- create mode 100644 package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
+ CHANGES                                            |    5 ++
+ package/config/mconf.c                             |    3 +-
+ package/config/menu.c                              |    2 +-
+ .../patches/01-kconfig-kernel-to-buildroot.patch   |   66 +++++++++++--------
+ 4 files changed, 45 insertions(+), 31 deletions(-)
 
-diff --git a/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch b/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
-new file mode 100644
-index 0000000..3bcb5f3
---- /dev/null
-+++ b/package/busybox/busybox-1.17.2/busybox-1.17.2-hush.patch
-@@ -0,0 +1,122 @@
-+diff -urpN busybox-1.17.2/shell/hush.c busybox-1.17.2-hush/shell/hush.c
-+--- busybox-1.17.2/shell/hush.c	2010-08-23 02:45:15.000000000 +0200
-++++ busybox-1.17.2-hush/shell/hush.c	2010-09-04 19:44:57.381391123 +0200
-+@@ -1853,7 +1853,7 @@ static void o_addblock_duplicate_backsla
-+ 	while (len) {
-+ 		o_addchr(o, *str);
-+ 		if (*str++ == '\\'
-+-		 && (*str != '*' && *str != '?' && *str != '[')
-++//		 && (*str != '*' && *str != '?' && *str != '[')
-+ 		) {
-+ 			o_addchr(o, '\\');
-+ 		}
-+@@ -2834,18 +2834,22 @@ static NOINLINE int expand_vars_to_list(
-+ 	return n;
-+ }
-+ 
-+-static char **expand_variables(char **argv, int or_mask)
-++enum {
-++	EXPVAR_FLAG_GLOB = 0x200,
-++	EXPVAR_FLAG_ESCAPE_VARS = 0x100,
-++	EXPVAR_FLAG_SINGLEWORD = 0x80, /* must be 0x80 */
-++};
-++static char **expand_variables(char **argv, unsigned or_mask)
-+ {
-+ 	int n;
-+ 	char **list;
-+ 	char **v;
-+ 	o_string output = NULL_O_STRING;
-+ 
-+-	if (or_mask & 0x100) {
-+-		output.o_escape = 1; /* protect against globbing for "$var" */
-+-		/* (unquoted $var will temporarily switch it off) */
-+-		output.o_glob = 1;
-+-	}
-++	/* protect against globbing for "$var"? */
-++	/* (unquoted $var will temporarily switch it off) */
-++	output.o_escape = 1 & (or_mask / EXPVAR_FLAG_ESCAPE_VARS);
-++	output.o_glob = 1 & (or_mask / EXPVAR_FLAG_GLOB);
-+ 
-+ 	n = 0;
-+ 	v = argv;
-+@@ -2863,13 +2867,13 @@ static char **expand_variables(char **ar
-+ 
-+ static char **expand_strvec_to_strvec(char **argv)
-+ {
-+-	return expand_variables(argv, 0x100);
-++	return expand_variables(argv, EXPVAR_FLAG_GLOB | EXPVAR_FLAG_ESCAPE_VARS);
-+ }
-+ 
-+ #if ENABLE_HUSH_BASH_COMPAT
-+ static char **expand_strvec_to_strvec_singleword_noglob(char **argv)
-+ {
-+-	return expand_variables(argv, 0x80);
-++	return expand_variables(argv, EXPVAR_FLAG_SINGLEWORD);
-+ }
-+ #endif
-+ 
-+@@ -2909,15 +2913,15 @@ static char **expand_strvec_to_strvec_si
-+ #endif
-+ 
-+ /* Used for expansion of right hand of assignments */
-+-/* NB: should NOT do globbing! "export v=/bin/c*; env | grep ^v=" outputs
-+- * "v=/bin/c*" */
-++/* NB: should NOT do globbing!
-++ * "export v=/bin/c*; env | grep ^v=" outputs "v=/bin/c*" */
-+ static char *expand_string_to_string(const char *str)
-+ {
-+ 	char *argv[2], **list;
-+ 
-+ 	argv[0] = (char*)str;
-+ 	argv[1] = NULL;
-+-	list = expand_variables(argv, 0x80); /* 0x80: singleword expansion */
-++	list = expand_variables(argv, EXPVAR_FLAG_ESCAPE_VARS | EXPVAR_FLAG_SINGLEWORD);
-+ 	if (HUSH_DEBUG)
-+ 		if (!list[0] || list[1])
-+ 			bb_error_msg_and_die("BUG in varexp2");
-+@@ -2933,7 +2937,7 @@ static char* expand_strvec_to_string(cha
-+ {
-+ 	char **list;
-+ 
-+-	list = expand_variables(argv, 0x80);
-++	list = expand_variables(argv, EXPVAR_FLAG_SINGLEWORD);
-+ 	/* Convert all NULs to spaces */
-+ 	if (list[0]) {
-+ 		int n = 1;
-+diff -urpN busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.right busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.right
-+--- busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.right	1970-01-01 01:00:00.000000000 +0100
-++++ busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.right	2010-09-04 19:44:57.382391186 +0200
-+@@ -0,0 +1,9 @@
-++b1=-qwerty-t-\-"---z-*-?-
-++b1=-qwerty-t-\-"---z-*-?-
-++b2=-$a-\t-\\-\"-\--\z-\*-\?-
-++b2=-$a-\t-\\-\"-\--\z-\*-\?-
-++c=-$a-\t-\\-\"-\--\z-\*-\?-
-++c=-$a-\t-\\-\"-\--\z-\*-\?-
-++c=-$a-\t-\\-\"-\--\z-\*-\?-
-++c=-$a-\t-\\-\"-\--\z-\*-\?-
-++Done: 0
-+diff -urpN busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.tests busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.tests
-+--- busybox-1.17.2/shell/hush_test/hush-vars/var_unbackslash.tests	1970-01-01 01:00:00.000000000 +0100
-++++ busybox-1.17.2-hush/shell/hush_test/hush-vars/var_unbackslash.tests	2010-09-04 19:44:57.382391186 +0200
-+@@ -0,0 +1,20 @@
-++# Test for correct handling of backslashes
-++a=qwerty
-++
-++b=-$a-\t-\\-\"-\--\z-\*-\?-
-++echo b1=$b
-++echo "b1=$b"
-++b='-$a-\t-\\-\"-\--\z-\*-\?-'
-++echo b2=$b
-++echo "b2=$b"
-++
-++c=$b
-++echo "c=$c"
-++c=${b}
-++echo "c=$c"
-++c="$b"
-++echo "c=$c"
-++c="${b}"
-++echo "c=$c"
-++
-++echo "Done: $?"
-diff --git a/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch b/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
-new file mode 100644
-index 0000000..02bb3f0
---- /dev/null
-+++ b/package/busybox/busybox-1.17.2/busybox-1.17.2-lineedit.patch
-@@ -0,0 +1,495 @@
-+diff -urpN busybox-1.17.2/libbb/lineedit.c busybox-1.17.2-lineedit/libbb/lineedit.c
-+--- busybox-1.17.2/libbb/lineedit.c	2010-08-23 02:44:35.000000000 +0200
-++++ busybox-1.17.2-lineedit/libbb/lineedit.c	2010-09-02 12:45:22.987709229 +0200
-+@@ -156,7 +156,6 @@ struct lineedit_statics {
-+ 
-+ 	/* Formerly these were big buffers on stack: */
-+ #if ENABLE_FEATURE_TAB_COMPLETION
-+-	char exe_n_cwd_tab_completion__dirbuf[MAX_LINELEN];
-+ 	char input_tab__matchBuf[MAX_LINELEN];
-+ 	int16_t find_match__int_buf[MAX_LINELEN + 1]; /* need to have 9 bits at least */
-+ 	int16_t find_match__pos_buf[MAX_LINELEN + 1];
-+@@ -235,6 +234,8 @@ static unsigned save_string(char *dst, u
-+ 	while (dstpos < maxsize) {
-+ 		wchar_t wc;
-+ 		int n = srcpos;
-++
-++		/* Convert up to 1st invalid byte (or up to end) */
-+ 		while ((wc = command_ps[srcpos]) != 0
-+ 		    && !unicode_is_raw_byte(wc)
-+ 		) {
-+@@ -247,6 +248,7 @@ static unsigned save_string(char *dst, u
-+ 		dstpos += n;
-+ 		if (wc == 0) /* usually is */
-+ 			break;
-++
-+ 		/* We do have invalid byte here! */
-+ 		command_ps[srcpos] = wc; /* restore it */
-+ 		srcpos++;
-+@@ -608,53 +610,56 @@ static void add_match(char *matched)
-+ }
-+ 
-+ #if ENABLE_FEATURE_USERNAME_COMPLETION
-+-static void username_tab_completion(char *ud, char *with_shash_flg)
-++/* Replace "~user/..." with "/homedir/...".
-++ * The parameter is malloced, free it or return it
-++ * unchanged if no user is matched.
-++ */
-++static char *username_path_completion(char *ud)
-+ {
-+ 	struct passwd *entry;
-++	char *tilde_name = ud;
-++	char *home = NULL;
-++
-++	ud++; /* skip ~ */
-++	if (*ud == '/') {       /* "~/..." */
-++		home = home_pwd_buf;
-++	} else {
-++		/* "~user/..." */
-++		ud = strchr(ud, '/');
-++		*ud = '\0';           /* "~user" */
-++		entry = getpwnam(tilde_name + 1);
-++		*ud = '/';            /* restore "~user/..." */
-++		if (entry)
-++			home = entry->pw_dir;
-++	}
-++	if (home) {
-++		ud = concat_path_file(home, ud);
-++		free(tilde_name);
-++		tilde_name = ud;
-++	}
-++	return tilde_name;
-++}
-++
-++/* ~use<tab> - find all users with this prefix */
-++static NOINLINE void username_completion(const char *ud)
-++{
-++	/* Using _r function to avoid pulling in static buffers */
-++	char line_buff[256];
-++	struct passwd pwd;
-++	struct passwd *result;
-+ 	int userlen;
-+ 
-+-	ud++;                           /* ~user/... to user/... */
-++	ud++; /* skip ~ */
-+ 	userlen = strlen(ud);
-+ 
-+-	if (with_shash_flg) {           /* "~/..." or "~user/..." */
-+-		char *sav_ud = ud - 1;
-+-		char *home = NULL;
-+-
-+-		if (*ud == '/') {       /* "~/..."     */
-+-			home = home_pwd_buf;
-+-		} else {
-+-			/* "~user/..." */
-+-			char *temp;
-+-			temp = strchr(ud, '/');
-+-			*temp = '\0';           /* ~user\0 */
-+-			entry = getpwnam(ud);
-+-			*temp = '/';            /* restore ~user/... */
-+-			ud = temp;
-+-			if (entry)
-+-				home = entry->pw_dir;
-+-		}
-+-		if (home) {
-+-			if ((userlen + strlen(home) + 1) < MAX_LINELEN) {
-+-				/* /home/user/... */
-+-				sprintf(sav_ud, "%s%s", home, ud);
-+-			}
-+-		}
-+-	} else {
-+-		/* "~[^/]*" */
-+-		/* Using _r function to avoid pulling in static buffers */
-+-		char line_buff[256];
-+-		struct passwd pwd;
-+-		struct passwd *result;
-+-
-+-		setpwent();
-+-		while (!getpwent_r(&pwd, line_buff, sizeof(line_buff), &result)) {
-+-			/* Null usernames should result in all users as possible completions. */
-+-			if (/*!userlen || */ strncmp(ud, pwd.pw_name, userlen) == 0) {
-+-				add_match(xasprintf("~%s/", pwd.pw_name));
-+-			}
-++	setpwent();
-++	while (!getpwent_r(&pwd, line_buff, sizeof(line_buff), &result)) {
-++		/* Null usernames should result in all users as possible completions. */
-++		if (/*!userlen || */ strncmp(ud, pwd.pw_name, userlen) == 0) {
-++			add_match(xasprintf("~%s/", pwd.pw_name));
-+ 		}
-+-		endpwent();
-+ 	}
-++	endpwent();
-+ }
-+ #endif  /* FEATURE_COMMAND_USERNAME_COMPLETION */
-+ 
-+@@ -664,22 +669,19 @@ enum {
-+ 	FIND_FILE_ONLY = 2,
-+ };
-+ 
-+-static int path_parse(char ***p, int flags)
-++static int path_parse(char ***p)
-+ {
-+ 	int npth;
-+ 	const char *pth;
-+ 	char *tmp;
-+ 	char **res;
-+ 
-+-	/* if not setenv PATH variable, to search cur dir "." */
-+-	if (flags != FIND_EXE_ONLY)
-+-		return 1;
-+-
-+ 	if (state->flags & WITH_PATH_LOOKUP)
-+ 		pth = state->path_lookup;
-+ 	else
-+ 		pth = getenv("PATH");
-+-	/* PATH=<empty> or PATH=:<empty> */
-++
-++	/* PATH="" or PATH=":"? */
-+ 	if (!pth || !pth[0] || LONE_CHAR(pth, ':'))
-+ 		return 1;
-+ 
-+@@ -689,12 +691,13 @@ static int path_parse(char ***p, int fla
-+ 		tmp = strchr(tmp, ':');
-+ 		if (!tmp)
-+ 			break;
-+-		if (*++tmp == '\0')
-++		tmp++;
-++		if (*tmp == '\0')
-+ 			break;  /* :<empty> */
-+ 		npth++;
-+ 	}
-+ 
-+-	res = xmalloc(npth * sizeof(char*));
-++	*p = res = xmalloc(npth * sizeof(res[0]));
-+ 	res[0] = tmp = xstrdup(pth);
-+ 	npth = 1;
-+ 	while (1) {
-+@@ -706,100 +709,96 @@ static int path_parse(char ***p, int fla
-+ 			break; /* :<empty> */
-+ 		res[npth++] = tmp;
-+ 	}
-+-	*p = res;
-+ 	return npth;
-+ }
-+ 
-+ static void exe_n_cwd_tab_completion(char *command, int type)
-+ {
-+-	DIR *dir;
-+-	struct dirent *next;
-+-	struct stat st;
-+ 	char *path1[1];
-+ 	char **paths = path1;
-+ 	int npaths;
-+ 	int i;
-+-	char *found;
-+-	char *pfind = strrchr(command, '/');
-+-/*	char dirbuf[MAX_LINELEN]; */
-+-#define dirbuf (S.exe_n_cwd_tab_completion__dirbuf)
-++	char *pfind;
-++	char *dirbuf = NULL;
-+ 
-+ 	npaths = 1;
-+ 	path1[0] = (char*)".";
-+ 
-+-	if (pfind == NULL) {
-+-		/* no dir, if flags==EXE_ONLY - get paths, else "." */
-+-		npaths = path_parse(&paths, type);
-++	pfind = strrchr(command, '/');
-++	if (!pfind) {
-++		if (type == FIND_EXE_ONLY)
-++			npaths = path_parse(&paths);
-+ 		pfind = command;
-+ 	} else {
-++		/* point to 'l' in "..../last_component" */
-++		pfind++;
-+ 		/* dirbuf = ".../.../.../" */
-+-		safe_strncpy(dirbuf, command, (pfind - command) + 2);
-++		dirbuf = xstrndup(command, pfind - command);
-+ #if ENABLE_FEATURE_USERNAME_COMPLETION
-+ 		if (dirbuf[0] == '~')   /* ~/... or ~user/... */
-+-			username_tab_completion(dirbuf, dirbuf);
-++			dirbuf = username_path_completion(dirbuf);
-+ #endif
-+-		paths[0] = dirbuf;
-+-		/* point to 'l' in "..../last_component" */
-+-		pfind++;
-++		path1[0] = dirbuf;
-+ 	}
-+ 
-+ 	for (i = 0; i < npaths; i++) {
-++		DIR *dir;
-++		struct dirent *next;
-++		struct stat st;
-++		char *found;
-++
-+ 		dir = opendir(paths[i]);
-+ 		if (!dir)
-+ 			continue; /* don't print an error */
-+ 
-+ 		while ((next = readdir(dir)) != NULL) {
-+-			int len1;
-+-			const char *str_found = next->d_name;
-++			const char *name_found = next->d_name;
-+ 
-+-			/* matched? */
-+-			if (strncmp(str_found, pfind, strlen(pfind)))
-++			/* .../<tab>: bash 3.2.0 shows dotfiles, but not . and .. */
-++			if (!pfind[0] && DOT_OR_DOTDOT(name_found))
-+ 				continue;
-+-			/* not see .name without .match */
-+-			if (*str_found == '.' && *pfind == '\0') {
-+-				if (NOT_LONE_CHAR(paths[i], '/') || str_found[1])
-+-					continue;
-+-				str_found = ""; /* only "/" */
-+-			}
-+-			found = concat_path_file(paths[i], str_found);
-+-			/* hmm, remove in progress? */
-++			/* match? */
-++			if (strncmp(name_found, pfind, strlen(pfind)) != 0)
-++				continue; /* no */
-++
-++			found = concat_path_file(paths[i], name_found);
-+ 			/* NB: stat() first so that we see is it a directory;
-+ 			 * but if that fails, use lstat() so that
-+ 			 * we still match dangling links */
-+ 			if (stat(found, &st) && lstat(found, &st))
-+-				goto cont;
-+-			/* find with dirs? */
-+-			if (paths[i] != dirbuf)
-+-				strcpy(found, next->d_name); /* only name */
-++				goto cont; /* hmm, remove in progress? */
-+ 
-+-			len1 = strlen(found);
-+-			found = xrealloc(found, len1 + 2);
-+-			found[len1] = '\0';
-+-			found[len1+1] = '\0';
-++			/* save only name if we scan PATH */
-++			if (paths[i] != dirbuf)
-++				strcpy(found, name_found);
-+ 
-+ 			if (S_ISDIR(st.st_mode)) {
-++				unsigned len1 = strlen(found);
-+ 				/* name is a directory */
-+ 				if (found[len1-1] != '/') {
-++					found = xrealloc(found, len1 + 2);
-+ 					found[len1] = '/';
-++					found[len1 + 1] = '\0';
-+ 				}
-+ 			} else {
-+-				/* not put found file if search only dirs for cd */
-++				/* skip files if looking for dirs only (example: cd) */
-+ 				if (type == FIND_DIR_ONLY)
-+ 					goto cont;
-+ 			}
-+-			/* Add it to the list */
-++			/* add it to the list */
-+ 			add_match(found);
-+ 			continue;
-+  cont:
-+ 			free(found);
-+ 		}
-+ 		closedir(dir);
-+-	}
-++	} /* for every path */
-++
-+ 	if (paths != path1) {
-+ 		free(paths[0]); /* allocated memory is only in first member */
-+ 		free(paths);
-+ 	}
-+-#undef dirbuf
-++	free(dirbuf);
-+ }
-+ 
-+ /* QUOT is used on elements of int_buf[], which are bytes,
-+@@ -812,15 +811,20 @@ static void exe_n_cwd_tab_completion(cha
-+ /* is must be <= in */
-+ static void collapse_pos(int is, int in)
-+ {
-+-	memmove(int_buf+is, int_buf+in, (MAX_LINELEN+1-in)*sizeof(int_buf[0]));
-+-	memmove(pos_buf+is, pos_buf+in, (MAX_LINELEN+1-in)*sizeof(pos_buf[0]));
-++	memmove(int_buf+is, int_buf+in, (MAX_LINELEN+1-in) * sizeof(int_buf[0]));
-++	memmove(pos_buf+is, pos_buf+in, (MAX_LINELEN+1-in) * sizeof(pos_buf[0]));
-+ }
-+-static NOINLINE int find_match(char *matchBuf, int *len_with_quotes)
-++/* On entry, matchBuf contains everything up to cursor@the moment <tab>
-++ * was pressed. This function looks at it, figures out what part of it
-++ * constitutes the command/file/directory prefix to use for completion,
-++ * and rewrites matchBuf to contain only that part.
-++ */
-++static NOINLINE int build_match_prefix(char *matchBuf, int *len_with_quotes)
-+ {
-+ 	int i, j;
-+ 	int command_mode;
-+ 	int c, c2;
-+-/*	Were local, but it uses too much stack */
-++/*	Were local, but it used too much stack */
-+ /*	int16_t int_buf[MAX_LINELEN + 1]; */
-+ /*	int16_t pos_buf[MAX_LINELEN + 1]; */
-+ 
-+@@ -860,22 +864,23 @@ static NOINLINE int find_match(char *mat
-+ 	}
-+ 
-+ 	/* skip commands with arguments if line has commands delimiters */
-+-	/* ';' ';;' '&' '|' '&&' '||' but `>&' `<&' `>|' */
-++	/* ';' ';;' '&' '|' '&&' '||' but '>&' '<&' '>|' */
-+ 	for (i = 0; int_buf[i]; i++) {
-++		int n;
-+ 		c = int_buf[i];
-+ 		c2 = int_buf[i + 1];
-+ 		j = i ? int_buf[i - 1] : -1;
-+-		command_mode = 0;
-++		n = 0;
-+ 		if (c == ';' || c == '&' || c == '|') {
-+-			command_mode = 1 + (c == c2);
-++			n = 1 + (c == c2);
-+ 			if (c == '&') {
-+ 				if (j == '>' || j == '<')
-+-					command_mode = 0;
-++					n = 0;
-+ 			} else if (c == '|' && j == '>')
-+-				command_mode = 0;
-++				n = 0;
-+ 		}
-+-		if (command_mode) {
-+-			collapse_pos(0, i + command_mode);
-++		if (n) {
-++			collapse_pos(0, i + n);
-+ 			i = -1;  /* hack incremet */
-+ 		}
-+ 	}
-+@@ -943,8 +948,8 @@ static NOINLINE int find_match(char *mat
-+ 			}
-+ 		}
-+ 	}
-+-	for (i = 0; int_buf[i]; i++)
-+-		/* "strlen" */;
-++	for (i = 0; int_buf[i]; i++) /* quasi-strlen(int_buf) */
-++		continue;
-+ 	/* find last word */
-+ 	for (--i; i >= 0; i--) {
-+ 		c = int_buf[i];
-+@@ -955,7 +960,7 @@ static NOINLINE int find_match(char *mat
-+ 	}
-+ 	/* skip first not quoted '\'' or '"' */
-+ 	for (i = 0; int_buf[i] == '\'' || int_buf[i] == '"'; i++)
-+-		/*skip*/;
-++		continue;
-+ 	/* collapse quote or unquote // or /~ */
-+ 	while ((int_buf[i] & ~QUOT) == '/'
-+ 	 && ((int_buf[i+1] & ~QUOT) == '/' || (int_buf[i+1] & ~QUOT) == '~')
-+@@ -1058,13 +1063,20 @@ static void input_tab(smallint *lastWasT
-+ 
-+ 		/* Make a local copy of the string --
-+ 		 * up to the position of the cursor */
-++#if !ENABLE_UNICODE_SUPPORT
-+ 		save_string(matchBuf, cursor + 1);
-+-#if ENABLE_UNICODE_SUPPORT
-+-		cursor_mb = strlen(matchBuf);
-++#else
-++		{
-++			CHAR_T wc = command_ps[cursor];
-++			command_ps[cursor] = 0;
-++			save_string(matchBuf, MAX_LINELEN);
-++			command_ps[cursor] = wc;
-++			cursor_mb = strlen(matchBuf);
-++		}
-+ #endif
-+ 		tmp = matchBuf;
-+ 
-+-		find_type = find_match(matchBuf, &recalc_pos);
-++		find_type = build_match_prefix(matchBuf, &recalc_pos);
-+ 
-+ 		/* Free up any memory already allocated */
-+ 		free_tab_completion_data();
-+@@ -1074,7 +1086,7 @@ static void input_tab(smallint *lastWasT
-+ 		 * then try completing this word as a username. */
-+ 		if (state->flags & USERNAME_COMPLETION)
-+ 			if (matchBuf[0] == '~' && strchr(matchBuf, '/') == NULL)
-+-				username_tab_completion(matchBuf, NULL);
-++				username_completion(matchBuf);
-+ #endif
-+ 		/* Try to match any executable in our path and everything
-+ 		 * in the current working directory */
-+@@ -1083,7 +1095,7 @@ static void input_tab(smallint *lastWasT
-+ 		/* Sort, then remove any duplicates found */
-+ 		if (matches) {
-+ 			unsigned i;
-+-			int n = 0;
-++			unsigned n = 0;
-+ 			qsort_string_vector(matches, num_matches);
-+ 			for (i = 0; i < num_matches - 1; ++i) {
-+ 				if (matches[i] && matches[i+1]) { /* paranoia */
-+@@ -1095,14 +1107,14 @@ static void input_tab(smallint *lastWasT
-+ 					}
-+ 				}
-+ 			}
-+-			matches[n] = matches[i];
-+-			num_matches = n + 1;
-++			matches[n++] = matches[i];
-++			num_matches = n;
-+ 		}
-+ 		/* Did we find exactly one match? */
-+-		if (!matches || num_matches > 1) { /* no */
-++		if (num_matches != 1) { /* no */
-+ 			beep();
-+ 			if (!matches)
-+-				return;         /* not found */
-++				return; /* no matches at all */
-+ 			/* find minimal match */
-+ 			tmp1 = xstrdup(matches[0]);
-+ 			for (tmp = tmp1; *tmp; tmp++) {
-+@@ -1113,13 +1125,14 @@ static void input_tab(smallint *lastWasT
-+ 					}
-+ 				}
-+ 			}
-+-			if (*tmp1 == '\0') {        /* have unique */
-+-				free(tmp1);
-++			if (*tmp1 == '\0') { /* have unique pfx? */
-++				free(tmp1); /* no */
-+ 				return;
-+ 			}
-+ 			tmp = add_quote_for_spec_chars(tmp1);
-+ 			free(tmp1);
-+-		} else {                        /* one match */
-++			len_found = strlen(tmp);
-++		} else {                        /* exactly one match */
-+ 			tmp = add_quote_for_spec_chars(matches[0]);
-+ 			/* for next completion current found */
-+ 			*lastWasTab = FALSE;
-+@@ -1127,11 +1140,10 @@ static void input_tab(smallint *lastWasT
-+ 			len_found = strlen(tmp);
-+ 			if (tmp[len_found-1] != '/') {
-+ 				tmp[len_found] = ' ';
-+-				tmp[len_found+1] = '\0';
-++				tmp[++len_found] = '\0';
-+ 			}
-+ 		}
-+ 
-+-		len_found = strlen(tmp);
-+ #if !ENABLE_UNICODE_SUPPORT
-+ 		/* have space to place the match? */
-+ 		/* The result consists of three parts with these lengths: */
-+@@ -1164,7 +1176,10 @@ static void input_tab(smallint *lastWasT
-+ 				sprintf(&command[cursor_mb - recalc_pos], "%s%s", tmp, matchBuf);
-+ 				command_len = load_string(command, S.maxsize);
-+ 				/* write out the matched command */
-+-				redraw(cmdedit_y, command_len - len);
-++				/* paranoia: load_string can return 0 on conv error,
-++				 * prevent passing len = (0 - 12) to redraw */
-++				len = command_len - len;
-++				redraw(cmdedit_y, len >= 0 ? len : 0);
-+ 			}
-+ 		}
-+ #endif
-+diff -urpN busybox-1.17.2/libbb/unicode.c busybox-1.17.2-lineedit/libbb/unicode.c
-+--- busybox-1.17.2/libbb/unicode.c	2010-08-23 02:44:35.000000000 +0200
-++++ busybox-1.17.2-lineedit/libbb/unicode.c	2010-09-02 12:23:52.062709133 +0200
-+@@ -131,7 +131,7 @@ size_t FAST_FUNC wcstombs(char *dest, co
-+ 		size_t len = wcrtomb_internal(tbuf, wc);
-+ 
-+ 		if (len > n)
-+-			len = n;
-++			break;
-+ 		memcpy(dest, tbuf, len);
-+ 		if (wc == L'\0')
-+ 			return org_n - n;
+diff --git a/CHANGES b/CHANGES
+index 3501504..76eb105 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,5 +1,10 @@
+ 2010.11, Not yet released:
+ 
++	Fixes all over the tree.
++
++	Kconfig infrastructure rebased against 2.6.36-rc1, bringing
++	misc fixes + nconfig and savedefconfig targets.
++
+ 2010.08: Released August 31th, 2010:
+ 
+ 	Fixes all over the tree.
+diff --git a/package/config/mconf.c b/package/config/mconf.c
+index 3d1ed3a..c0903dd 100644
+--- a/package/config/mconf.c
++++ b/package/config/mconf.c
+@@ -315,8 +315,7 @@ static void search_conf(void)
+ again:
+ 	dialog_clear();
+ 	dres = dialog_inputbox(_("Search Configuration Parameter"),
+-			      _("Enter CONFIG_ (sub)string to search for "
+-				"(with or without \"CONFIG\")"),
++			      _("Enter (sub)string to search for"),
+ 			      10, 75, "");
+ 	switch (dres) {
+ 	case 0:
+diff --git a/package/config/menu.c b/package/config/menu.c
+index 4fb5902..7f3b797 100644
+--- a/package/config/menu.c
++++ b/package/config/menu.c
+@@ -566,7 +566,7 @@ void menu_get_ext_help(struct menu *menu, struct gstr *help)
+ 
+ 	if (menu_has_help(menu)) {
+ 		if (sym->name) {
+-			str_printf(help, "CONFIG_%s:\n\n", sym->name);
++			str_printf(help, "%s:\n\n", sym->name);
+ 			str_append(help, _(menu_get_help(menu)));
+ 			str_append(help, "\n");
+ 		}
+diff --git a/package/config/patches/01-kconfig-kernel-to-buildroot.patch b/package/config/patches/01-kconfig-kernel-to-buildroot.patch
+index 4e4354a..f77a54c 100644
+--- a/package/config/patches/01-kconfig-kernel-to-buildroot.patch
++++ b/package/config/patches/01-kconfig-kernel-to-buildroot.patch
+@@ -3,16 +3,16 @@
+  confdata.c          |   12 ++++--------
+  gconf.c             |    4 ++--
+  gconf.glade         |    2 +-
+- mconf.c             |   35 +++++++++++++++++------------------
++ mconf.c             |   38 ++++++++++++++++++--------------------
+  qconf.cc            |    4 ++--
+  zconf.tab.c_shipped |    2 +-
+  zconf.y             |    2 +-
+- 8 files changed, 34 insertions(+), 39 deletions(-)
++ 8 files changed, 35 insertions(+), 41 deletions(-)
+ 
+-Index: config.new/conf.c
++Index: config/conf.c
+ ===================================================================
+---- config.new.orig/conf.c
+-+++ config.new/conf.c
++--- config.orig/conf.c
+++++ config/conf.c
+ @@ -508,8 +508,8 @@
+  		name = conf_get_configname();
+  		if (stat(name, &tmpstat)) {
+@@ -56,10 +56,10 @@ Index: config.new/conf.c
+  			exit(1);
+  		}
+  	}
+-Index: config.new/confdata.c
++Index: config/confdata.c
+ ===================================================================
+---- config.new.orig/confdata.c
+-+++ config.new/confdata.c
++--- config.orig/confdata.c
+++++ config/confdata.c
+ @@ -579,7 +579,7 @@
+  	if (!out)
+  		return 1;
+@@ -109,10 +109,10 @@ Index: config.new/confdata.c
+  
+  	for_all_symbols(i, sym) {
+  		sym_calc_value(sym);
+-Index: config.new/gconf.c
++Index: config/gconf.c
+ ===================================================================
+---- config.new.orig/gconf.c
+-+++ config.new/gconf.c
++--- config.orig/gconf.c
+++++ config/gconf.c
+ @@ -210,8 +210,8 @@
+  					  /*"style", PANGO_STYLE_OBLIQUE, */
+  					  NULL);
+@@ -124,10 +124,10 @@ Index: config.new/gconf.c
+  	gtk_window_set_title(GTK_WINDOW(main_wnd), title);
+  
+  	gtk_widget_show(main_wnd);
+-Index: config.new/gconf.glade
++Index: config/gconf.glade
+ ===================================================================
+---- config.new.orig/gconf.glade
+-+++ config.new/gconf.glade
++--- config.orig/gconf.glade
+++++ config/gconf.glade
+ @@ -5,7 +5,7 @@
+  
+  <widget class="GtkWindow" id="window1">
+@@ -137,10 +137,10 @@ Index: config.new/gconf.glade
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_NONE</property>
+    <property name="modal">False</property>
+-Index: config.new/mconf.c
++Index: config/mconf.c
+ ===================================================================
+---- config.new.orig/mconf.c
+-+++ config.new/mconf.c
++--- config.orig/mconf.c
+++++ config/mconf.c
+ @@ -25,10 +25,9 @@
+  static const char mconf_readme[] = N_(
+  "Overview\n"
+@@ -220,7 +220,17 @@ Index: config.new/mconf.c
+  		        config_filename, sym_get_string_value(sym));
+  	if (size >= sizeof(menu_backtitle))
+  		menu_backtitle[sizeof(menu_backtitle)-1] = '\0';
+-@@ -834,7 +833,7 @@
++@@ -316,8 +315,7 @@
++ again:
++ 	dialog_clear();
++ 	dres = dialog_inputbox(_("Search Configuration Parameter"),
++-			      _("Enter CONFIG_ (sub)string to search for "
++-				"(with or without \"CONFIG\")"),
+++			      _("Enter (sub)string to search for"),
++ 			      10, 75, "");
++ 	switch (dres) {
++ 	case 0:
++@@ -834,7 +832,7 @@
+  		if (conf_get_changed())
+  			res = dialog_yesno(NULL,
+  					   _("Do you wish to save your "
+@@ -229,7 +239,7 @@ Index: config.new/mconf.c
+  					     "<ESC><ESC> to continue."),
+  					   6, 60);
+  		else
+-@@ -846,20 +845,20 @@
++@@ -846,20 +844,20 @@
+  	case 0:
+  		if (conf_write(filename)) {
+  			fprintf(stderr, _("\n\n"
+@@ -255,10 +265,10 @@ Index: config.new/mconf.c
+  			"\n\n"));
+  	}
+  
+-Index: config.new/qconf.cc
++Index: config/qconf.cc
+ ===================================================================
+---- config.new.orig/qconf.cc
+-+++ config.new/qconf.cc
++--- config.orig/qconf.cc
+++++ config/qconf.cc
+ @@ -1263,8 +1263,8 @@
+  	char title[256];
+  
+@@ -270,10 +280,10 @@ Index: config.new/qconf.cc
+  	setCaption(title);
+  
+  	width = configSettings->readNumEntry("/window width", d->width() - 64);
+-Index: config.new/zconf.tab.c_shipped
++Index: config/zconf.tab.c_shipped
+ ===================================================================
+---- config.new.orig/zconf.tab.c_shipped
+-+++ config.new/zconf.tab.c_shipped
++--- config.orig/zconf.tab.c_shipped
+++++ config/zconf.tab.c_shipped
+ @@ -2224,7 +2224,7 @@
+  	modules_sym = sym_lookup(NULL, 0);
+  	modules_sym->type = S_BOOLEAN;
+@@ -283,10 +293,10 @@ Index: config.new/zconf.tab.c_shipped
+  
+  #if YYDEBUG
+  	if (getenv("ZCONF_DEBUG"))
+-Index: config.new/zconf.y
++Index: config/zconf.y
+ ===================================================================
+---- config.new.orig/zconf.y
+-+++ config.new/zconf.y
++--- config.orig/zconf.y
+++++ config/zconf.y
+ @@ -479,7 +479,7 @@
+  	modules_sym = sym_lookup(NULL, 0);
+  	modules_sym->type = S_BOOLEAN;
 -- 
 1.7.1
