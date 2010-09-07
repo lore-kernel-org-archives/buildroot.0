@@ -1,58 +1,32 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Tue,  7 Sep 2010 20:37:24 +0200
-Subject: [Buildroot] [PATCH] bump cups 1.3 to latest patchlevel 1.3.11
-Message-ID: <1283884644-4871-1-git-send-email-marcus.osdoba@googlemail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 7 Sep 2010 20:41:03 +0000 (UTC)
+Subject: [Buildroot] OT: how to do upgrades with ipkg?
+Message-ID: <i6680v$ahj$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-version 1.4.x is the recent stable
+First, my apologies.  This isn't directly related to buildroot, but
+I'm hoping somebody might know the answer (there doesn't seem to be an
+ipkg mailing list).
 
-Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
----
- package/cups/cups-no-tests-man.patch |    4 ++--
- package/cups/cups.mk                 |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+When using ipkg to manage field-installed pacakges, how do you upgrade
+a package?  For example, let's say I've got foobar version 0.1
+installed.  Now I have foobar_0.2_arm.ipk at hand on the target.  How
+do I upgrade?
 
-diff --git a/package/cups/cups-no-tests-man.patch b/package/cups/cups-no-tests-man.patch
-index 567c801..65389ec 100644
---- a/package/cups/cups-no-tests-man.patch
-+++ b/package/cups/cups-no-tests-man.patch
-@@ -5,9 +5,9 @@
-  #
-  
- -DIRS	=	cups backend berkeley cgi-bin filter locale man monitor \
---		notifier $(PDFTOPS) scheduler systemv test \
-+-		notifier scheduler systemv test \
- +DIRS	=	cups backend berkeley cgi-bin filter locale monitor \
--+		notifier $(PDFTOPS) scheduler systemv \
-++		notifier scheduler systemv \
-  		$(PHPDIR) \
-  		conf data doc $(FONTS) ppd templates
-  
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 776fb57..cd854e4 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -3,7 +3,7 @@
- # cups
- #
- ################################################################################
--CUPS_VERSION = 1.3.9
-+CUPS_VERSION = 1.3.11
- CUPS_NAME = cups-$(CUPS_VERSION)
- CUPS_DIR = $(BUILD_DIR)/$(CUPS_NAME)
- CUPS_SITE = http://ftp.easysw.com/pub/cups/$(CUPS_VERSION)
-@@ -97,7 +97,7 @@ $(CUPS_DIR)/.configured: $(CUPS_DIR)/.unpacked
- 
- $(CUPS_DIR)/.compiled: $(CUPS_DIR)/.configured
- 	$(MAKE) CFLAGS="$(CUPS_CFLAGS)" -C $(CUPS_DIR) cups backend berkeley cgi-bin filter \
--	locale monitor notifier pdftops scheduler systemv scripting/php \
-+	locale monitor notifier scheduler systemv scripting/php \
- 	conf data doc fonts ppd templates
- 	touch $@
- 
+The "ipkg upgrade" command doesn't seem relevent -- it won't accept a
+path to an .ipk file.  There are no "feeds" in my system.  All packages
+are explicitly uploaded to the target and installed.
+
+Do you just do this?
+
+  ipkg remove foobar
+  ipkg install foobar_0.2_arm.ipk
+
 -- 
-1.7.1
+Grant Edwards               grant.b.edwards        Yow! It's a hole all the
+                                  at               way to downtown Burbank!
+                              gmail.com            
