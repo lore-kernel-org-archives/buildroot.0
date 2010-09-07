@@ -1,71 +1,36 @@
-From: Joachim Pihl <joachim.pihl@sensordevelopments.com>
-Date: Tue, 07 Sep 2010 15:19:02 +0200
-Subject: [Buildroot] AVR32 kernel install bug
-In-Reply-To: <20100907150948.4de996e3@surf>
-References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
-Message-ID: <op.viny90lpsev97k@joachim-lappis>
+From: James J. Dines <jdines@jdines.net>
+Date: Tue, 07 Sep 2010 09:23:41 -0400
+Subject: [Buildroot] Why is extfs filesystem mandatory?
+Message-ID: <4C863CDD.8020805@jdines.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 07 Sep 2010 15:09:48 +0200, Thomas Petazzoni  
-<thomas.petazzoni@free-electrons.com> wrote:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-> Hello,
->
-> On Tue, 07 Sep 2010 13:54:46 +0200
-> "Joachim Pihl" <joachim.pihl@sensordevelopments.com> wrote:
->
->> Trying to build defconfig for ATNGW100 AVR32 card, and having this
->> problem (after moving to uClibc 0.9.30 to avoid asm/unaligned.h
->> problem):
->
-> Ah, so the toolchain didn't build with uClibc 0.9.31 ? Strange, I
-> thought I tested this. Will try to reproduce.
+While trying to build a large system I keep getting an error stating
+that there is no room left on the device during the generation of the
+ext2 filesystem.  It is my understanding that this is due to a hard
+upper limit imposed by the genext2fs utility.
 
-Nope, it bombed out just like reported in December 2009. I have been  
-fiddling in-between other stuff today, so I may be that I am a bit  
-confused about what I did when for what reason, but the closest I have  
-come to making it through a full build is with U-boot 2009.08 and uClibc  
-0.9.30. Both were downgraded due to compile errors that I found fixes for  
-on this list.
+This would not be an issue for me if I could simply disable said step,
+however there seems to be no way to disable generation of the ext2
+filesystem in the menuconfig.
 
-This is all with 2010.08 that I downloaded this morning.
-
->> >>>   Installing kernel
->> cp
->> /home/joachim/buildroot-2010.08/output/build/linux-2.6.34.1/arch/avr32/boot/uImage
->> /home/joachim/buildroot-2010.08/output/images
->> cp: cannot stat
->> `/home/joachim/buildroot-2010.08/output/build/linux-2.6.34.1/arch/avr32/boot/uImage':
->> No such file or directory
->> make: ***
->> [/home/joachim/buildroot-2010.08/output/build/linux-2.6.34.1/.stamp_installed]
->> Error 1
->>
->> uImage can actually be found in
->> /home/joachim/buildroot-2010.08/output/build/linux-2.6.34.1/arch/avr32/boot/images/,
->> so there seems to be a difference of opinion between two or more
->> scripts here. Building on Ubuntu 10.04LTS
->
-> Thanks for the report! I've pushed an untested fix at
-> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.11/kernel-image-formats&id=4b682d0fb9c3a6276267a875a0e3bb7e0c49e91d.
->
-> It's in my kernel-image-formats branch that I will push sooner or later
-> to Peter.
->
-> Thanks,
->
-> Thomas
+Is there a reason why this cannot be disabled?
 
 
--- 
-Joachim Pihl
-Development engineer
-SENSOR DEVELOPMENTS AS
-Tlf: +47 913 39 891
-Nordre Kuller?d 21
-NO-3241 Sandefjord
-NORWAY
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iQEcBAEBAgAGBQJMhjzbAAoJECSpOhdQESq64l8H/3+Plqt92ABJfCB+JJy93mfo
+PXxYko6l37BtYcbFOWFxZ8H1yvrTzXvB86Wz2ffXtAfU+n1HqOMp0Z7P7puZplJ1
+ppDbXTIyu2cS+EKLIFnLoSLX6Tr0jNdoUMP2vfU6/SsSDZzmutuudMU6RrdULbPG
+YXUChySFxUjXfhnFZxHCUPcdbsxk9CVFZIn1CJjslSsnLDBOtdqAE5F6N/HL8IxF
+NeLkwk2T/wkB47e9KIDeTWc05CMMeeZKYIbqvs6LX3WecP7gYiU+vEZxIea3ezL5
+pruS596+ntpM4u8n1xppzvMvPE4CLRQpgo8oVnZZaFiBjBsbVIOoiP5go++8tZ8=
+=8cMM
+-----END PGP SIGNATURE-----
