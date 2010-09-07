@@ -1,24 +1,40 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Tue, 07 Sep 2010 17:53:41 +0100
-Subject: [Buildroot] Why is extfs filesystem mandatory?
-In-Reply-To: <4C8669B3.4030209@jdines.net>
-References: <4C863CDD.8020805@jdines.net> <20100907165546.06ed2a29@surf>
-	<4C8669B3.4030209@jdines.net>
-Message-ID: <1283878421.11196.7.camel@dubciaranr1.verifone.com>
+From: JNY <jny0@hotmail.com>
+Date: Tue, 7 Sep 2010 09:58:21 -0700 (PDT)
+Subject: [Buildroot] EXT2-fs error
+In-Reply-To: <29591683.post@talk.nabble.com>
+References: <29591683.post@talk.nabble.com>
+Message-ID: <29641601.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar M?irt, 2010-09-07 ag 12:34 -0400, scr?obh James J. Dines:
 
-> In the menuconfig, under "Target Filesystems" I have an asterisk
-> surrounded by dashes, i.e.:
-> 
-> - -*- ext2 root filesystem
+> Out of curiosity, a USB flash device, or CF, or NAND flash, or ?
 
-Do you have ISO9660 FS enabled by any chance?
+Not sure about the USB stick, but the flash device (see below) on the target
+is NAND.
 
-From the help for ext2:
-Selected by: BR2_TARGET_ROOTFS_ISO9660 && (BR2_i386 || BR2_x86_64) && BR2_LINUX_KERNEL
+To clear up any confusion: 
+-USB stick is the means of transfering the image
+-flash device is the target device memory
+
+>> I don't have a file called rootfs.ext2.  I have the following files:
+>> rootfs.i486.tar
+>> rootfs.i486.tar.bz2
+
+>Which of these files are you transferring to the flash device, and how?
+I'm transfering the bzImage file to the flash device, and referencing it
+with grub.
+
+The USB stick always comes up clean when I e2fsck both partitions (even with
+a force -f).
+
+Is it possible that when the file system is created by Buildroot, that it
+could need some kind of fsck, before it is transfered to the USB stick?
+
+
+-- 
+View this message in context: http://old.nabble.com/EXT2-fs-error-tp29591683p29641601.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
