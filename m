@@ -1,40 +1,49 @@
-From: JNY <jny0@hotmail.com>
-Date: Tue, 7 Sep 2010 09:58:21 -0700 (PDT)
-Subject: [Buildroot] EXT2-fs error
-In-Reply-To: <29591683.post@talk.nabble.com>
-References: <29591683.post@talk.nabble.com>
-Message-ID: <29641601.post@talk.nabble.com>
+From: James J. Dines <jdines@jdines.net>
+Date: Tue, 07 Sep 2010 13:42:47 -0400
+Subject: [Buildroot] Why is extfs filesystem mandatory?
+In-Reply-To: <1283878421.11196.7.camel@dubciaranr1.verifone.com>
+References: <4C863CDD.8020805@jdines.net> <20100907165546.06ed2a29@surf>	
+	<4C8669B3.4030209@jdines.net>
+	<1283878421.11196.7.camel@dubciaranr1.verifone.com>
+Message-ID: <4C867997.1050309@jdines.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-> Out of curiosity, a USB flash device, or CF, or NAND flash, or ?
+On 09/07/2010 12:53 PM, Quotient Remainder wrote:
+> Ar M?irt, 2010-09-07 ag 12:34 -0400, scr?obh James J. Dines:
+> 
+>> In the menuconfig, under "Target Filesystems" I have an asterisk
+>> surrounded by dashes, i.e.:
+>>
+>> - -*- ext2 root filesystem
+> 
+> Do you have ISO9660 FS enabled by any chance?
+> 
+> From the help for ext2:
+> Selected by: BR2_TARGET_ROOTFS_ISO9660 && (BR2_i386 || BR2_x86_64) && BR2_LINUX_KERNEL
+> 
+> 
+Yes, that was the issue.  I have to admit I feel a bit foolish having
+not looked more closely at the dependencies by choosong the help option,
+but on the other hand I cannot imagine why this dependency exists.
+Obviously one can have an iso image without having an ext2 filesystem,
+or there would be no such thing as an iso image for Windows.
 
-Not sure about the USB stick, but the flash device (see below) on the target
-is NAND.
+Or am I missing something?
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
 
-To clear up any confusion: 
--USB stick is the means of transfering the image
--flash device is the target device memory
-
->> I don't have a file called rootfs.ext2.  I have the following files:
->> rootfs.i486.tar
->> rootfs.i486.tar.bz2
-
->Which of these files are you transferring to the flash device, and how?
-I'm transfering the bzImage file to the flash device, and referencing it
-with grub.
-
-The USB stick always comes up clean when I e2fsck both partitions (even with
-a force -f).
-
-Is it possible that when the file system is created by Buildroot, that it
-could need some kind of fsck, before it is transfered to the USB stick?
-
-
--- 
-View this message in context: http://old.nabble.com/EXT2-fs-error-tp29591683p29641601.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+iQEcBAEBAgAGBQJMhnmWAAoJECSpOhdQESq67zsH/RobUwNThApVjeWikX29G9MK
+qyS2Kiggg8c2DV6FKeOmwBPvDgTe1QxGnGdxAPG0SgWj+GPd2mVMiha7ZaGZR+tB
+cEhtVBeTeDexelV8K+XLvTq3e6cLAVJ2uEuX7sc/L+P1aHlbgEdXc9MdTlUSnkic
+xQ4CPX5MvrXyJXimGPipb7PUjS2u6g7rDCqhsrbFeN7B/nE1vlGDcxYCEeWRoi01
+ww8KtcuaGPwKw/c5bKXEED42rkQoPQWeCvZdAZauH1IEJ6K8cIKxMft+xnBDMeDJ
+/tdrhQLK1Q9scNqrTGEwZ/lwPrm8pL5VwxPZvPk9DH6g8eu0bvLK56V0Q7xJ6jQ=
+=foEH
+-----END PGP SIGNATURE-----
