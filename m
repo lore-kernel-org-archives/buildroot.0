@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Sep 2010 16:55:46 +0200
-Subject: [Buildroot] Why is extfs filesystem mandatory?
-In-Reply-To: <4C863CDD.8020805@jdines.net>
-References: <4C863CDD.8020805@jdines.net>
-Message-ID: <20100907165546.06ed2a29@surf>
+Date: Tue, 7 Sep 2010 16:56:50 +0200
+Subject: [Buildroot] AVR32 kernel install bug
+In-Reply-To: <op.viny90lpsev97k@joachim-lappis>
+References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
+	<op.viny90lpsev97k@joachim-lappis>
+Message-ID: <20100907165650.7cf10d65@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 07 Sep 2010 15:19:02 +0200
+"Joachim Pihl" <joachim.pihl@sensordevelopments.com> wrote:
 
-On Tue, 07 Sep 2010 09:23:41 -0400
-"James J. Dines" <jdines@jdines.net> wrote:
-
-> While trying to build a large system I keep getting an error stating
-> that there is no room left on the device during the generation of the
-> ext2 filesystem.  It is my understanding that this is due to a hard
-> upper limit imposed by the genext2fs utility.
-
-Hum, interesting. It is not the first time we have report from people
-saying that fairly big filesystems cause failures while generating the
-ext2 image. I don't know if it's a genext2fs problem, or if it's our
-script that computes the number of inodes and blocks needed that does
-something wrong. Would be good if someone could have a look into this.
-
-> This would not be an issue for me if I could simply disable said step,
-> however there seems to be no way to disable generation of the ext2
-> filesystem in the menuconfig.
+> >> Trying to build defconfig for ATNGW100 AVR32 card, and having this
+> >> problem (after moving to uClibc 0.9.30 to avoid asm/unaligned.h
+> >> problem):
+> >
+> > Ah, so the toolchain didn't build with uClibc 0.9.31 ? Strange, I
+> > thought I tested this. Will try to reproduce.
 > 
-> Is there a reason why this cannot be disabled?
+> Nope, it bombed out just like reported in December 2009. I have been  
+> fiddling in-between other stuff today, so I may be that I am a bit  
+> confused about what I did when for what reason, but the closest I
+> have come to making it through a full build is with U-boot 2009.08
+> and uClibc 0.9.30. Both were downgraded due to compile errors that I
+> found fixes for on this list.
 
-make menuconfig
- -> Target filesystem options
-   -> disable 'ext2 root filesystem'
+At what step exactly do you get the failure ?
 
-Works here. It doesn't work for you ?
+The best is if you could provide a .config file for Buildroot 2010.08
+that shows the failure.
 
-Regards,
+Thanks!
 
 Thomas
 -- 
