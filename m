@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Sep 2010 23:07:54 +0200
-Subject: [Buildroot] [PATCH] Upgrade iptables to 1.4.9.1
-In-Reply-To: <4C7E46C4.20905@zacarias.com.ar> (Gustavo Zacarias's message of
-	"Wed, 01 Sep 2010 09:27:48 -0300")
-References: <4C7E46C4.20905@zacarias.com.ar>
-Message-ID: <87hbi1dzyt.fsf@macbook.be.48ers.dk>
+Date: Tue, 07 Sep 2010 23:06:00 +0200
+Subject: [Buildroot] [PATCH] Upgrade openvpn to 2.1.2
+In-Reply-To: <4C7E4689.6040703@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Wed, 01 Sep 2010 09:26:49 -0300")
+References: <4C7E4689.6040703@zacarias.com.ar>
+Message-ID: <87pqwpe01z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Upgrade iptables to version 1.4.9.1.
- Gustavo> Adds support for new kernel 2.6.35 features.
+ Gustavo> Upgrade to openvpn version 2.1.2.
 
 Committed, thanks.
 
