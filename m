@@ -1,61 +1,29 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Wed, 08 Sep 2010 15:22:09 +0100
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 08 Sep 2010 16:29:15 +0200
 Subject: [Buildroot] mdev handling
 In-Reply-To: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
+	(Yegor Yefremov's message of "Wed, 8 Sep 2010 16:07:52 +0200")
 References: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
-Message-ID: <4C879C11.3090603@carallon.com>
+Message-ID: <87occ8cnr8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  On 08/09/2010 15:07, Yegor Yefremov wrote:
-> AFAIK mdev activation leads only to adding this binary to the rootfs
-> tree. What about starting script? Would it make sense to create
-> /etc/init.d/S1mdev with the following content:
->
-> #!/bin/sh
-> #
-> # Start the mdev....
-> #
->
-> case "$1" in
->    start)
->          echo "Starting mdev..."
->          echo /sbin/mdev>  /proc/sys/kernel/hotplug
->          /sbin/mdev -s
->          ;;
->    stop)
-> .......
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-This is what I do on every project I use with mdev, seems like adding an 
-option would be good
+ Yegor> AFAIK mdev activation leads only to adding this binary to the rootfs
+ Yegor> tree. What about starting script? Would it make sense to create
+ Yegor> /etc/init.d/S1mdev with the following content:
 
-> echo /sbin/mdev>  /proc/sys/kernel/hotplug - only if such an option
-> selected. fstab should be also changed to have
->
-> tmpfs           /dev           tmpfs    size=1M          0      0
->
-> added. (The size should be much smaller, this is only for testing)
+ Yegor> tmpfs           /dev           tmpfs    size=1M          0      0
 
-Again these two sound like sensible options.
+ Yegor> added. (The size should be much smaller, this is only for testing)
 
-Regards
-Will
+ Yegor> What do you think about this?
 
-> What do you think about this?
->
-> Regards,
-> Yegor
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Isn't this largely obsolete now we have devtmpfs?
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Bye, Peter Korsgaard
