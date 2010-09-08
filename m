@@ -1,42 +1,20 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  8 Sep 2010 09:26:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 2533] New: xserver_xorg-server: Enable glx,
-	if mesa3d is built
-Message-ID: <bug-2533-163@https.bugs.busybox.net/>
+Date: Wed,  8 Sep 2010 09:33:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 2461] wireless_tools: install shared library if
+	needed
+In-Reply-To: <bug-2461-163@https.bugs.busybox.net/>
+References: <bug-2461-163@https.bugs.busybox.net/>
+Message-ID: <20100908093347.D6BB38A53A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2533
+https://bugs.busybox.net/show_bug.cgi?id=2461
 
-           Summary: xserver_xorg-server: Enable glx, if mesa3d is built
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: All
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created attachment 2443
-  --> https://bugs.busybox.net/attachment.cgi?id=2443
-Patch
-
-My hardware platform has OpenGL support and therefore needs mesa3d and the
-glx-extension within X.
-
-The attached patch makes the glx-extension automatically setable if mesa3d is
-built.
-
-Frederik Pasch
+--- Comment #2 from Simon Pasch <fpasch@googlemail.com>  ---
+We're checking the interface state with iw_get_basic_config()...
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
