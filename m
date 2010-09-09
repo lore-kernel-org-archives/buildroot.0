@@ -1,39 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 9 Sep 2010 11:01:52 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Sep 2010 12:19:02 +0200
 Subject: [Buildroot] mdev handling
-In-Reply-To: <87occ8cnr8.fsf@macbook.be.48ers.dk>
+In-Reply-To: <AANLkTikYk3m7bJXa4r6yY3CEW6xOxhtr9w2Ea62=WhZv@mail.gmail.com>
 References: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
 	<87occ8cnr8.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikYk3m7bJXa4r6yY3CEW6xOxhtr9w2Ea62=WhZv@mail.gmail.com>
+	<AANLkTikYk3m7bJXa4r6yY3CEW6xOxhtr9w2Ea62=WhZv@mail.gmail.com>
+Message-ID: <20100909121902.0b5c3bc7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ?Yegor> AFAIK mdev activation leads only to adding this binary to the rootfs
-> ?Yegor> tree. What about starting script? Would it make sense to create
-> ?Yegor> /etc/init.d/S1mdev with the following content:
->
-> ?Yegor> tmpfs ? ? ? ? ? /dev ? ? ? ? ? tmpfs ? ?size=1M ? ? ? ? ?0 ? ? ?0
->
-> ?Yegor> added. (The size should be much smaller, this is only for testing)
->
-> ?Yegor> What do you think about this?
->
-> Isn't this largely obsolete now we have devtmpfs?
+On Thu, 9 Sep 2010 11:01:52 +0200
+Yegor Yefremov <yegorslists@googlemail.com> wrote:
 
-Yes, it is working like a charm. You live and learn.
+> But the creation of an init.d script is still worth implementing?
+> 
+> I'd suggest to make an option "Target filesystem options"->"Device
+> creation" and then
+>  "Target filesystem options"->"Device creation"->"static" and as
+> suboption "device table file"
+>  "Target filesystem options"->"Device creation"->"dynmic" and as
+> suboptions "udev" and "mdev"
+>  and then something with hotplugging
 
-But the creation of an init.d script is still worth implementing?
+Here is what I have on my personal TODO list:
 
-I'd suggest to make an option "Target filesystem options"->"Device
-creation" and then
- "Target filesystem options"->"Device creation"->"static" and as
-suboption "device table file"
- "Target filesystem options"->"Device creation"->"dynmic" and as
-suboptions "udev" and "mdev"
- and then something with hotplugging
+ "Add an option to select the creation mode of device files :
 
-Regards,
-Yegor
+   * Static with a device table
+   * Using devtmfs
+   * Using mdev
+   * Using udev
+ "
+
+Of course, if someone wants to remove an item from my TODO list, that'd
+be very nice !
+
+Cheers,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
