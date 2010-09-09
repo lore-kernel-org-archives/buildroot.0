@@ -1,54 +1,131 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 08 Sep 2010 17:07:33 +0200
-Subject: [Buildroot] mdev handling
-In-Reply-To: <201009081648.41500.yann.morin.1998@anciens.enib.fr> (Yann
-	E. MORIN's message of "Wed, 8 Sep 2010 16:48:41 +0200")
-References: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
-	<87occ8cnr8.fsf@macbook.be.48ers.dk>
-	<201009081648.41500.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87k4mwclze.fsf@macbook.be.48ers.dk>
+From: Aurele Traynard <aurele.traynard@laposte.net>
+Date: Thu, 9 Sep 2010 10:27:30 +0200
+Subject: [Buildroot] troubles with intltool
+Message-ID: <AANLkTikqwN4vkKaXWrA0SiGTwoYUYrST8vggtUwRVJRN@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+hello,
 
-Hi,
+I am trying to build an image with X11, an I am experimenting some problems
+with intltool
+the problem is when the script call /usr/bin/perl -e "require XML::Parser"
+i tried to use the following command : /usr/bin/perl -e "require
+XML::Parser"  to know what is the problem but it says nothing...
+could someone help, me next is the report
 
- >> Isn't this largely obsolete now we have devtmpfs?
+thanks,
+Aur?le
 
- Yann> Well, devtmpfs has a static naming scheme, default permissions for device
- Yann> nodes, so it is not sufficient by itself. As the help entry for devtmpfs
- Yann> states:
- Yann>  "It provides a fully functional /dev directory, where usually
- Yann>   udev runs on top, managing permissions and adding meaningful
- Yann>   symlinks."
-
-True, but it is fine for most small embedded systems as well (E.G. the
-target group of buildroot). Most of these are root only so you just want
-the device nodes of the hw you have available.
-
-But yes, it can certainly be used with mdev as well (you basically just
-get rid of the slow mdev -s at startup).
-
- Yann> Even better, embedded system have a mostly static set of devices, thus a
- Yann> mostly static set of entries in /dev, and those can go to flash. Entries
- Yann> for removeable devices (eg. usb sticks) can still go there. Thus you gain
- Yann> both in flash (no space used by any code, kerenl or userland) and in RAM
- Yann> (no space used by devtmpfs/tmpfs/ramfs/... and VFS entries).
-
-The devtmpfs code is very small if you already have ramfs/tmpfs (and
-most likely you do), so the size difference between devtmpfs and static
-/dev is really down in the noise.
-
- Yann> Really, devtmpfs and mdev/udev are for desktop, where the set of
- Yann> devices is to easily divergent, IMHO...
-
-Depends on what you want to do. You fairly often see embedded devicess
-that react when you plug in a usb device. For that, mdev (or other
-hotplug scripts) are pretty nice.
-
--- 
-Bye, Peter Korsgaard
+>>> xkeyboard-config 1.8 Configuring
+(cd /media/disk3/buildroot-2010.08/output/build/xkeyboard-config-1.8/ && rm
+-rf config.cache &&
+PATH="/media/disk3/buildroot-2010.08/output/host/bin:/media/disk3/buildroot-2010.08/output/host/usr/bin:/media/disk3/buildroot-2010.08/output/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/games"
+AR="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-ar"
+AS="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-as"
+LD="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-ld
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+NM="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-nm"
+CC="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+GCC="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+CPP="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-cpp
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+CXX="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-g++
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+FC="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gfortran
+--sysroot=/media/disk3/buildroot-2010.08/output/staging"
+RANLIB="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-ranlib"
+STRIP="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-strip"
+OBJCOPY="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-objcopy"
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
+CXX_FOR_BUILD="/usr/bin/g++" FC_FOR_BUILD="/usr/bin/ld"
+LD_FOR_BUILD="/usr/bin/ld"
+CFLAGS_FOR_BUILD="-I/media/disk3/buildroot-2010.08/output/host/include
+-I/media/disk3/buildroot-2010.08/output/host/usr/include"
+CXXFLAGS_FOR_BUILD="-I/media/disk3/buildroot-2010.08/output/host/include
+-I/media/disk3/buildroot-2010.08/output/host/usr/include"
+LDFLAGS_FOR_BUILD="-L/media/disk3/buildroot-2010.08/output/host/lib
+-L/media/disk3/buildroot-2010.08/output/host/usr/lib
+-Wl,-rpath,/media/disk3/buildroot-2010.08/output/host/usr/lib"
+FCFLAGS_FOR_BUILD=""
+DEFAULT_ASSEMBLER="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-as"
+DEFAULT_LINKER="/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-ld
+--sysroot=/media/disk3/buildroot-2010.08/output/staging" CFLAGS="-pipe -Os
+-mtune=xscale -march=armv5te -mabi=aapcs-linux -msoft-float
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+CXXFLAGS="-pipe -Os  -mtune=xscale -march=armv5te -mabi=aapcs-linux
+-msoft-float -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64"
+LDFLAGS="-L/media/disk3/buildroot-2010.08/output/staging/lib
+-L/media/disk3/buildroot-2010.08/output/staging/usr/lib" FCFLAGS=""
+PKG_CONFIG_SYSROOT_DIR="/media/disk3/buildroot-2010.08/output/staging"
+PKG_CONFIG="/media/disk3/buildroot-2010.08/output/host/usr/bin/pkg-config"
+PKG_CONFIG_PATH="/media/disk3/buildroot-2010.08/output/staging/usr/lib/pkgconfig:"
+PERLLIB="/media/disk3/buildroot-2010.08/output/host/usr/lib/perl"
+STAGING_DIR="/media/disk3/buildroot-2010.08/output/staging" CXX=false
+ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes
+ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes
+gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes
+ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes
+ac_cv_c_bigendian=no  ./configure  --target=arm-linux --host=arm-linux
+--build=i686-pc-linux-gnu --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc
+--disable-gtk-doc     GMSGFMT=/usr/bin/msgfmt )
+configure: WARNING: unrecognized options: --disable-gtk-doc
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for arm-linux-strip...
+/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-strip
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for xkbcomp...
+/media/disk3/buildroot-2010.08/output/host/usr/bin/xkbcomp
+checking whether NLS is requested... yes
+checking for style of include used by make... GNU
+checking for arm-linux-gcc...
+/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging accepts -g... yes
+checking for /usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging option to accept ISO
+C89... none needed
+checking dependency style of
+/usr/local/arm/arm-2010q1/bin/arm-none-linux-gnueabi-gcc
+--sysroot=/media/disk3/buildroot-2010.08/output/staging... none
+checking for intltool >= 0.30... 0.40.6 found
+checking for intltool-update...
+/media/disk3/buildroot-2010.08/output/host/usr/bin/intltool-update
+checking for intltool-merge...
+/media/disk3/buildroot-2010.08/output/host/usr/bin/intltool-merge
+checking for intltool-extract...
+/media/disk3/buildroot-2010.08/output/host/usr/bin/intltool-extract
+checking for xgettext... /usr/bin/xgettext
+checking for msgmerge... /usr/bin/msgmerge
+checking for msgfmt... /usr/bin/msgfmt
+checking for gmsgfmt... /usr/bin/msgfmt
+checking for perl... /usr/bin/perl
+checking for perl >= 5.8.1... 5.10.0
+checking for XML::Parser... configure: error: XML::Parser perl module is
+required for intltool
+make: ***
+[/media/disk3/buildroot-2010.08/output/build/xkeyboard-config-1.8/.stamp_configured]
+Erreur 127
+user at debdev:/media/disk3/buildroot-2010.08$ /usr/bin/perl -e "require
+XML::Parser"
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100909/72563513/attachment.html>
