@@ -1,21 +1,21 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 9 Sep 2010 15:27:02 +0200
-Subject: [Buildroot] [PATCH] enable terminal type configuration for
-	inittab
-In-Reply-To: <AANLkTikT3ePxWGquiKyncrRqs9QsifkHv9vTfe_j8=2x@mail.gmail.com>
-References: <AANLkTikT3ePxWGquiKyncrRqs9QsifkHv9vTfe_j8=2x@mail.gmail.com>
-Message-ID: <AANLkTik1=+wm_g2X-H2F93Q88Nxnao9gVG2R7=q7=nY_@mail.gmail.com>
+Date: Thu, 9 Sep 2010 15:47:56 +0200
+Subject: [Buildroot] [PATCH] add custom tty name to inittab
+Message-ID: <AANLkTim2CYj3W--SoD8FgJAhz56fPtFF6-DVMBa1wDQy@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I've made a patch to be able to configure terminal type for inittab
-> along with baudrate and tty* device. What about making tty device
-> definition just a string? There some more device names like ttyATx for
-> Atmel etc.?
+Added new menu item to specify a custom port for inittab
 
-The easiest way were just to add custom entry as for erase size of JFFS2 image.
-
+Regards,
 Yegor
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0003-add-custom-tty-name.patch
+Type: application/octet-stream
+Size: 1202 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100909/0fe61513/attachment.obj>
