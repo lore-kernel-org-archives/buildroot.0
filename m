@@ -1,28 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 10 Sep 2010 09:51:43 +0200
-Subject: [Buildroot] mdev handling
-In-Reply-To: <AANLkTinEhbNCj-GXSRzrsRRSLQw10XYNkmCua=i5GMPs@mail.gmail.com>
-	(Yegor Yefremov's message of "Fri, 10 Sep 2010 09:40:49 +0200")
-References: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
-	<87occ8cnr8.fsf@macbook.be.48ers.dk>
-	<AANLkTikYk3m7bJXa4r6yY3CEW6xOxhtr9w2Ea62=WhZv@mail.gmail.com>
-	<20100909121902.0b5c3bc7@surf>
-	<AANLkTinEhbNCj-GXSRzrsRRSLQw10XYNkmCua=i5GMPs@mail.gmail.com>
-Message-ID: <87mxrqave8.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Sep 2010 10:10:41 +0200
+Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
+In-Reply-To: <AANLkTinKvq=qae=abuVaRh_hAnENe4RA_U0Ti+BupCwO@mail.gmail.com>
+References: <1284064132-21384-1-git-send-email-marcus.osdoba@googlemail.com>
+	<1284064132-21384-2-git-send-email-marcus.osdoba@googlemail.com>
+	<AANLkTinKvq=qae=abuVaRh_hAnENe4RA_U0Ti+BupCwO@mail.gmail.com>
+Message-ID: <20100910101041.2b54bfa3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+Hello Belisko,
 
-Hi,
+On Fri, 10 Sep 2010 07:07:36 +0200
+Belisko Marek <marek.belisko@gmail.com> wrote:
 
- Yegor> udev has dependency BUSYBOX_SHOW_OTHERS. Is it because of mdev?
+> To be honest I post patch for transmission 4 months ago and also
+> splashy package month ago
+> and the're still not in the release. Why?
 
-Yes, mdev is a "replacement" of udev. This is done for a number of
-packages. You can argue about udev/mdev, as mdev doesn't have the same
-user interface as udev, but that's how it is today atleast.
+We also have an enhancement bug since quite some time about
+transmission: https://bugs.busybox.net/show_bug.cgi?id=743. Sorry about
+this delay/lack of reaction on those topics.
+
+Belisko, Marcus, could you take the of those three proposals, and
+submit a new version of the patch ? I promess to take care of it and
+make sure it gets merged.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
