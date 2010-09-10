@@ -1,26 +1,46 @@
-From: Phil Edworthy <Phil.Edworthy@renesas.com>
-Date: Fri, 10 Sep 2010 13:59:53 +0100
-Subject: [Buildroot] [PATCH] Fix 'make source' when used with external
-	toolchains
-Message-ID: <AB12B32E73474741A2C5361C433A44DE021912DD@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Sep 2010 16:15:01 +0200
+Subject: [Buildroot] AVR32 kernel install bug
+In-Reply-To: <op.vitc9tjfsev97k@joachim-lappis>
+References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
+	<op.vis0txzcsev97k@joachim-lappis>
+	<op.vitc9tjfsev97k@joachim-lappis>
+Message-ID: <20100910161501.7f692bf3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When you do 'make source', Buildroot unconditionally downloads gcc and
-binutils/mpfr. When using an external toolchain, BR2_GCC_VERSION isn't set
-so the download fails. 
+Hello Joachim,
 
-This patch makes the download conditional.
+Thanks for all your tests!
 
-Regards
-Phil
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Fix-make-source-when-used-with-external-toolchains.patch
-Type: application/octet-stream
-Size: 2003 bytes
-Desc: 0001-Fix-make-source-when-used-with-external-toolchains.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100910/3a3dc6a9/attachment.obj>
+On Fri, 10 Sep 2010 13:09:19 +0200
+"Joachim Pihl" <joachim.pihl@sensordevelopments.com> wrote:
+
+> I have found two packages to be problematic: gdb for target does not  
+> compile for AVR32, gdbserver and host gdb is OK. Also, U-boot 2010.06
+> does not compile (asm/unaligned.h error). 2010.03 compiles just fine.
+
+For gdb on the target, we can probably mark it as not available on
+AVR32. Having gdb on the target is not a very common need anyway. It's
+on my TODO-list to upgrade the AVR32 toolchain that we have, it would
+also upgrade the gcc version, but I'm not sure it's going to fix the
+gdb on target problem.
+
+Concerning U-Boot, we have a patch called:
+  u-boot-2010.03-fix-avr32.patch
+in boot/u-boot/, which adds an include of <asm-generic/unaligned.h>.
+
+Maybe this patch just needs to be ported over to U-Boot 2010.06, or
+even better, pushed in upstream U-Boot ?
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
