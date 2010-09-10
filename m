@@ -1,46 +1,49 @@
-From: Joachim Pihl <joachim.pihl@sensordevelopments.com>
-Date: Fri, 10 Sep 2010 13:09:19 +0200
-Subject: [Buildroot] AVR32 kernel install bug
-In-Reply-To: <op.vis0txzcsev97k@joachim-lappis>
-References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
-	<op.vis0txzcsev97k@joachim-lappis>
-Message-ID: <op.vitc9tjfsev97k@joachim-lappis>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 10 Sep 2010 13:21:06 +0200
+Subject: [Buildroot] [git commit master 1/1] usbutils: bump to 0.90
+Message-ID: <20100910112128.57B0A8A5F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Sep 2010 08:40:35 +0200, Joachim Pihl  
-<joachim.pihl@sensordevelopments.com> wrote:
 
-> On Tue, 07 Sep 2010 15:09:48 +0200, Thomas Petazzoni  
-> <thomas.petazzoni@free-electrons.com> wrote:
->
->> Hello,
->>
->> On Tue, 07 Sep 2010 13:54:46 +0200
->> "Joachim Pihl" <joachim.pihl@sensordevelopments.com> wrote:
->>
->>> Trying to build defconfig for ATNGW100 AVR32 card, and having this
->>> problem (after moving to uClibc 0.9.30 to avoid asm/unaligned.h
->>> problem):
->>
->> Ah, so the toolchain didn't build with uClibc 0.9.31 ? Strange, I
->> thought I tested this. Will try to reproduce.
->
-> Now it worked, for some reason. Will now try to build it back into  
-> all-defaults and see where the problem really is...
+commit: http://git.buildroot.net/buildroot/commit/?id=33070528796dafe90ebab836356fea03f2dc24f9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have found two packages to be problematic: gdb for target does not  
-compile for AVR32, gdbserver and host gdb is OK. Also, U-boot 2010.06 does  
-not compile (asm/unaligned.h error). 2010.03 compiles just fine.
+Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                      |    2 +-
+ package/usbutils/usbutils.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index 9d1677a..70459d2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -6,7 +6,7 @@
+ 	misc fixes + nconfig and savedefconfig targets.
+ 
+ 	Updated/fixed packages: berkeleydb, busybox, dropbear,
+-	iptables, kismet, openvpn, qt
++	iptables, kismet, openvpn, qt, usbutils
+ 
+ 2010.08: Released August 31th, 2010:
+ 
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index f095297..0f82128 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-USBUTILS_VERSION = 0.87
++USBUTILS_VERSION = 0.90
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
+ 
 -- 
-Joachim Pihl
-Development engineer
-SENSOR DEVELOPMENTS AS
-Tlf: +47 913 39 891
-Nordre Kuller?d 21
-NO-3241 Sandefjord
-NORWAY
+1.7.1
