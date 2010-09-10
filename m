@@ -1,32 +1,49 @@
-From: icemanpro <icemanpro@gmail.com>
-Date: Fri, 10 Sep 2010 14:18:07 +0800
-Subject: [Buildroot] How can I boot my custom system?
-Message-ID: <AANLkTintTd3-7T8ODcFnL470RnkKa8RebjiQHpGJZDKj@mail.gmail.com>
+From: Joachim Pihl <joachim.pihl@sensordevelopments.com>
+Date: Fri, 10 Sep 2010 08:40:35 +0200
+Subject: [Buildroot] AVR32 kernel install bug
+In-Reply-To: <20100907150948.4de996e3@surf>
+References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
+Message-ID: <op.vis0txzcsev97k@joachim-lappis>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, everyone
+On Tue, 07 Sep 2010 15:09:48 +0200, Thomas Petazzoni  
+<thomas.petazzoni@free-electrons.com> wrote:
 
- I download buildroot on Fedora 13 and
+> Hello,
+>
+> On Tue, 07 Sep 2010 13:54:46 +0200
+> "Joachim Pihl" <joachim.pihl@sensordevelopments.com> wrote:
+>
+>> Trying to build defconfig for ATNGW100 AVR32 card, and having this
+>> problem (after moving to uClibc 0.9.30 to avoid asm/unaligned.h
+>> problem):
+>
+> Ah, so the toolchain didn't build with uClibc 0.9.31 ? Strange, I
+> thought I tested this. Will try to reproduce.
 
-1) tar -xvzf buildroot-2010.08.tar.gz
-
-2) cd buildroot-2010.08
-
-3) make menuconfig
-- no changes at all made to default options
-- save on exit
-
-4) make --> OK. rootfs.ext2 created in output/images
+Now it worked, for some reason. Will now try to build it back into  
+all-defaults and see where the problem really is...
 
 
-Now,it this finish? How to boot my custom system?
+>
+> Thanks for the report! I've pushed an untested fix at
+> http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.11/kernel-image-formats&id=4b682d0fb9c3a6276267a875a0e3bb7e0c49e91d.
+>
+> It's in my kernel-image-formats branch that I will push sooner or later
+> to Peter.
+
+Patch confirmed to be working.
 
 
-sorry my poor English.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100910/8229d658/attachment.html>
+-- 
+Joachim Pihl
+Development engineer
+SENSOR DEVELOPMENTS AS
+Tlf: +47 913 39 891
+Nordre Kuller?d 21
+NO-3241 Sandefjord
+NORWAY
