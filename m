@@ -1,33 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 Sep 2010 13:29:41 +0200
-Subject: [Buildroot] [PATCH] Convert pppd to gentargets,
-	fix broken compilation with newer headers, fix radius support
-In-Reply-To: <4C8549E0.5010600@zacarias.com.ar> (Gustavo Zacarias's message of
-	"Mon, 06 Sep 2010 17:06:56 -0300")
-References: <4C8549E0.5010600@zacarias.com.ar>
-Message-ID: <87wrqtalay.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Sep 2010 12:51:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 2551] New: [PATCH] native toolchain in the target
+ filesystem fails
+Message-ID: <bug-2551-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2551
 
-Hi,
+           Summary: [PATCH] native toolchain in the target filesystem
+                    fails
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: arpinf at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Gustavo> Obsoletes all my previous pppd patches.
- Gustavo> * Convert pppd to gentargets
- Gustavo> * Properly support radius plugin by installing dictionaries
- Gustavo> * Fix broken compilation with 2.6.35 kernel headers (L2TP plugin breaks)
 
-Thanks - A few comments:
+Created attachment 2449
+  --> https://bugs.busybox.net/attachment.cgi?id=2449
+Patch to fix native toolchain in target filesystem
 
- Gustavo> diff --git a/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch b/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch
+Buildroot version: 2010.08
+Host: x86_64
+Target: i686
 
-Please add a git-like patch header explaining what the patch fixes
-including your signed-off-by, and if applicable it's upstream status.
+Selecting:
+Package Selection for the target  --->
+    Development tools  --->
+        [*] native toolchain in the target filesystem
 
+Fails with:
+mkdir -p /home/illuminate/buildroot-2010.08/output/toolchain/gcc-4.4.4-final
+touch
+/home/illuminate/buildroot-2010.08/output/build/gcc-4.4.4-target/.prepared
+touch: cannot touch
+`/home/illuminate/buildroot-2010.08/output/build/gcc-4.4.4-target/.prepared':
+No such file or directory
+make: ***
+[/home/illuminate/buildroot-2010.08/output/build/gcc-4.4.4-target/.prepared]
+Error 1
+
+Cause:
+Creating the .prepared file in a missing directory.
+$(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed
+$(GCC_TARGET_PREREQ)
+        mkdir -p $(GCC_BUILD_DIR3)
+
+fixed by changing $(GCC_BUILD_DIR3) to $(GCC_BUILD_DIR4)
+
+
+Included fix in the patch.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
