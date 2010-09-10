@@ -1,118 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Sep 2010 08:55:12 +0200
-Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
-In-Reply-To: <1284064132-21384-2-git-send-email-marcus.osdoba@googlemail.com>
-References: <1284064132-21384-1-git-send-email-marcus.osdoba@googlemail.com>
-	<1284064132-21384-2-git-send-email-marcus.osdoba@googlemail.com>
-Message-ID: <20100910085512.4aa82926@surf>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 10 Sep 2010 09:40:49 +0200
+Subject: [Buildroot] mdev handling
+In-Reply-To: <20100909121902.0b5c3bc7@surf>
+References: <AANLkTi=XLJvtakS=nKMYyybTJdtoVvgaA3NFkBSMivHu@mail.gmail.com>
+	<87occ8cnr8.fsf@macbook.be.48ers.dk>
+	<AANLkTikYk3m7bJXa4r6yY3CEW6xOxhtr9w2Ea62=WhZv@mail.gmail.com>
+	<20100909121902.0b5c3bc7@surf>
+Message-ID: <AANLkTinEhbNCj-GXSRzrsRRSLQw10XYNkmCua=i5GMPs@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcus,
+>> But the creation of an init.d script is still worth implementing?
+>>
+>> I'd suggest to make an option "Target filesystem options"->"Device
+>> creation" and then
+>> ?"Target filesystem options"->"Device creation"->"static" and as
+>> suboption "device table file"
+>> ?"Target filesystem options"->"Device creation"->"dynmic" and as
+>> suboptions "udev" and "mdev"
+>> ?and then something with hotplugging
+>
+> Here is what I have on my personal TODO list:
+>
+> ?"Add an option to select the creation mode of device files :
+>
+> ? * Static with a device table
+> ? * Using devtmfs
+> ? * Using mdev
+> ? * Using udev
+> ?"
 
-On Thu,  9 Sep 2010 22:28:52 +0200
-Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
+udev has dependency BUSYBOX_SHOW_OTHERS. Is it because of mdev?
 
->  fs/skeleton/var/transmission         |    1 +
-
-I'd prefer not to add this to the generic skeleton, and instead have
-the Transmission installation process create this symlink.
-
-> --- /dev/null
-> +++ b/package/transmission/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_TRANSMISSION
-> +	bool "transmission"
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBEVENT
-> +	default n
-
-default n is not needed, as this is the default.
-
-> +	help
-> +	  transmission - Transmission BitTorrent Client
-> +
-> +config BR2_PACKAGE_TRANSMISSION_CLI
-> +	bool "transmissioncli"
-> +	depends on BR2_PACKAGE_TRANSMISSION
-> +	default no
-
-Not needed.
-
-> +	help
-> +	  Install transmission command line interface.
-> +
-> +config BR2_PACKAGE_TRANSMISSION_REMOTE
-> +	bool "transmission-remote"
-> +	depends on BR2_PACKAGE_TRANSMISSION
-> +	default yes
-
-I'm not sure "default yes" works, we use "default y" everywhere.
-
-> +	help
-> +	  Install transmission remote management tool.
-> +	if [ ! -z "$NET_INTERFACE" ]; then
-> +		# poll network interface
-> +		IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> +		IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> +		while [ -z "$IP_ADDR" ]
-> +		do
-> +			sleep 5
-> +			IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> +			IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> +		done
-
-Hum, this will stall the boot process quite a bit. We don't have any
-other solution ?
-
-(I think for the initial introduction of transmission to Buildroot,
-it's ok, since it won't be a regression, but in the long run, having
-such scripts doesn't really look nice).
-
-> +++ b/package/transmission/transmission.mk
-> @@ -0,0 +1,32 @@
-> +#############################################################
-> +#
-> +# transmission
-> +#
-> +#############################################################
-> +#
-> +#
-> +TRANSMISSION_VERSION=2.04
-> +TRANSMISSION_SOURCE=transmission-$(TRANSMISSION_VERSION).tar.bz2
-> +TRANSMISSION_SITE=http://mirrors.m0k.org/transmission/files/
-> +TRANSMISSION_LIBTOOL_PATCH=NO
-> +TRANSMISSION_DEPENDENCIES= host-pkg-config host-intltool zlib openssl libcurl libevent
-> +
-> +TRANSMISSION_CONF_OPT = --prefix=/usr \
-
-Remove --prefix=/usr, that's the default.
-
-> +			--localstatedir=/var/transmission \
-> +			--disable-gtk \
-> +			--disable-libnotify \
-> +			--enable-daemon \
-> +			--with-zlib=$(STAGING_DIR) \
-> +			$(DISABLE_NLS) \
-> +			$(DISABLE_LARGEFILE)
-
-Remove $(DISABLE_NLS) and $(DISABLE_LARGEFILE), that's the default.
-
-To know what the default options are, look at:
- http://git.buildroot.net/buildroot/tree/package/Makefile.autotools.in#n88
-
-The rest looks good to me.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
