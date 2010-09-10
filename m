@@ -1,49 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 10 Sep 2010 13:21:06 +0200
-Subject: [Buildroot] [git commit master 1/1] usbutils: bump to 0.90
-Message-ID: <20100910112128.57B0A8A5F5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 10 Sep 2010 13:21:37 +0200
+Subject: [Buildroot] [PATCH] bump usb utils to latest version 0.90
+In-Reply-To: <1283884284-4353-1-git-send-email-marcus.osdoba@googlemail.com>
+	(Marcus Osdoba's message of "Tue, 7 Sep 2010 20:31:24 +0200")
+References: <1283884284-4353-1-git-send-email-marcus.osdoba@googlemail.com>
+Message-ID: <878w39c08u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Marcus" == Marcus Osdoba <marcus.osdoba@googlemail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33070528796dafe90ebab836356fea03f2dc24f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Marcus> Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
+ Marcus> ---
+ Marcus>  package/usbutils/usbutils.mk |    2 +-
+ Marcus>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                      |    2 +-
- package/usbutils/usbutils.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/CHANGES b/CHANGES
-index 9d1677a..70459d2 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,7 +6,7 @@
- 	misc fixes + nconfig and savedefconfig targets.
- 
- 	Updated/fixed packages: berkeleydb, busybox, dropbear,
--	iptables, kismet, openvpn, qt
-+	iptables, kismet, openvpn, qt, usbutils
- 
- 2010.08: Released August 31th, 2010:
- 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index f095297..0f82128 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--USBUTILS_VERSION = 0.87
-+USBUTILS_VERSION = 0.90
- USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
- USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
- 
 -- 
-1.7.1
+Bye, Peter Korsgaard
