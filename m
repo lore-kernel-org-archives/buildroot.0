@@ -1,74 +1,53 @@
-From: Aurele Traynard <aurele.traynard@laposte.net>
-Date: Fri, 10 Sep 2010 16:17:26 +0200
-Subject: [Buildroot] troubles with intltool
-In-Reply-To: <20100909105838.5ae25c27@surf>
-References: <AANLkTikqwN4vkKaXWrA0SiGTwoYUYrST8vggtUwRVJRN@mail.gmail.com>
-	<20100909105838.5ae25c27@surf>
-Message-ID: <AANLkTin+PxSeuX_kTy6n=yYkf1keqqMdXormidcRWzcA@mail.gmail.com>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Fri, 10 Sep 2010 15:34:32 +0100
+Subject: [Buildroot] [PATCH] Fix 'make source' when used with external
+ toolchains
+In-Reply-To: <AB12B32E73474741A2C5361C433A44DE021912DD@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+References: <AB12B32E73474741A2C5361C433A44DE021912DD@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+Message-ID: <1284129272.3193.279.camel@dubciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Ar Aoine, 2010-09-10 ag 13:59 +0100, scr?obh Phil Edworthy:
+> When you do 'make source', Buildroot unconditionally downloads gcc and
+> binutils/mpfr. When using an external toolchain, BR2_GCC_VERSION isn't set
+> so the download fails. 
+> 
+> This patch makes the download conditional.
 
-i think i found the problem : i cant compile under fedora 7 but i tried with
-Debian 5.0.4 and it works fine...
-sory to disturb you
-thanks a lot for your help
+This is great and does seem to work.  I had done a long and rambling
+diagnosis and had figured out that this was the problem.
+I was about to send to the list for proposed solutions because I feared
+that just disabling the specific lines wasn't the right approach.
 
-Aurele
+The one observation I have is that if I patch like this:
 
+diff --git a/Makefile b/Makefile
+index 462d974..88e17d1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -437,6 +437,10 @@ endif
+ 
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 
++show-source-targets:
++	@echo Targets: $(TARGETS_SOURCE)
++	@echo Host: $(HOST_SOURCE)
++
+ _source-check:
+ 	$(MAKE) $(EXTRAMAKEARGS) SPIDER=--spider source
+ 
 
-2010/9/9 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+and do "make show-source-targets", I get this
 
->
->
-> Hello,
->
-> On Thu, 9 Sep 2010 10:27:30 +0200
-> Aurele Traynard <aurele.traynard@laposte.net> wrote:
->
-> > I am trying to build an image with X11, an I am experimenting some
-> > problems with intltool
-> > the problem is when the script call /usr/bin/perl -e "require
-> > XML::Parser" i tried to use the following command : /usr/bin/perl -e
-> > "require XML::Parser"  to know what is the problem but it says
-> > nothing... could someone help, me next is the report
->
-> I've just tested, and xkeyboard-config builds fine here.
-> xkeyboard-config has a dependency on host-intltool, which itself has a
-> dependency on host-libxml-parser-perl.
->
-> And as you can see, we are properly passing:
->  PERLLIB="/media/disk3/buildroot-2010.08/output/host/usr/lib/perl"
-> to the xkeyboard-config ./configure script.
->
-> Can you check
-> in /media/disk3/buildroot-2010.08/output/host/usr/lib/perl if
-> libxml-parser-perl is installed ?
->
-> Could you restart the build from scratch and keep the full build log:
->  make 2>&1 | tee build.log
-> and then put online somewhere the full build log and your Buildroot
-> configuration ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100910/6b536c9a/attachment.html>
+$ make show-targets show-source-targets
+busybox target-finalize target-generic-hostname target-generic-issue ext2-root erase-fakeroots
+Targets: busybox-source target-finalize-source target-generic-hostname-source target-generic-issue-source ext2-root-source erase-fakeroots-source uclibc-source
+Host:
+
+i.e. uclibc-source is in the target list for "make source".
+
+Does this have the potential to cause a problem?
