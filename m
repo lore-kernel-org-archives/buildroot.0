@@ -1,46 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Sep 2010 15:21:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 2557] New: [PATCH] mkfs.xfs complains about
-	missing libxfs.so.0
-Message-ID: <bug-2557-163@https.bugs.busybox.net/>
+From: Phil Edworthy <Phil.Edworthy@renesas.com>
+Date: Fri, 10 Sep 2010 16:25:37 +0100
+Subject: [Buildroot] [PATCH] Fix 'make source' when used with external
+	toolchains
+In-Reply-To: <1284129272.3193.279.camel@dubciaranr1.verifone.com>
+References: <AB12B32E73474741A2C5361C433A44DE021912DD@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+	<1284129272.3193.279.camel@dubciaranr1.verifone.com>
+Message-ID: <AB12B32E73474741A2C5361C433A44DE0219146B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2557
+Hi,
 
-           Summary: [PATCH] mkfs.xfs complains about missing libxfs.so.0
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: arpinf at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Ar Aoine, 2010-09-10 ag 13:59 +0100, scr?obh Phil Edworthy:
+> > When you do 'make source', Buildroot unconditionally downloads gcc and
+> > binutils/mpfr. When using an external toolchain, BR2_GCC_VERSION isn't
+> set
+> > so the download fails.
+> >
+> > This patch makes the download conditional.
+> 
+> This is great and does seem to work.  I had done a long and rambling
+> diagnosis and had figured out that this was the problem.
+> I was about to send to the list for proposed solutions because I feared
+> that just disabling the specific lines wasn't the right approach.
+
+It seemed like the simplest approach at the time!
 
 
-Created attachment 2455
-  --> https://bugs.busybox.net/attachment.cgi?id=2455
-Fixes missing libs with xfsprogs
+> The one observation I have is that if I patch like this:
+> 
+> diff --git a/Makefile b/Makefile
+> index 462d974..88e17d1 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -437,6 +437,10 @@ endif
+> 
+>  source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+> 
+> +show-source-targets:
+> +	@echo Targets: $(TARGETS_SOURCE)
+> +	@echo Host: $(HOST_SOURCE)
+> +
+>  _source-check:
+>  	$(MAKE) $(EXTRAMAKEARGS) SPIDER=--spider source
+> 
+> 
+> and do "make show-source-targets", I get this
+> 
+> $ make show-targets show-source-targets
+> busybox target-finalize target-generic-hostname target-generic-issue ext2-
+> root erase-fakeroots
+> Targets: busybox-source target-finalize-source target-generic-hostname-
+> source target-generic-issue-source ext2-root-source erase-fakeroots-source
+> uclibc-source
+> Host:
+> 
+> i.e. uclibc-source is in the target list for "make source".
+> 
+> Does this have the potential to cause a problem?
 
-Buildroot version: 2010.08
-Host: x86_64
-Target: i686
+Hmm, I only tested this against glibc... 
 
-When compling xfsprogs the xfs libs are not copied by the make install target.
+uclibc-source is only used in uclibc.mk & this is entirely enclosed by 'ifeq
+($(BR2_TOOLCHAIN_BUILDROOT),y)' so I don?t think this will be a problem.
 
-Added the copy comand to the package/xfsprogs/xfsprogs.mk file.
+Unfortunately I'm not around for the next week so I can't check this. I also
+don?t have a uclibc external toolchain... 
 
-See attached patch.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Phil
