@@ -1,48 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Sep 2010 10:52:01 +0200
-Subject: [Buildroot] Build error "cannot find -lc"
-In-Reply-To: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>
-References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>
-Message-ID: <20100911105201.176d1396@surf>
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Sat, 11 Sep 2010 10:54:37 +0200
+Subject: [Buildroot] New util-linux-ng and running version of xfsprogs 3.1.3
+Message-ID: <1284195279-6225-1-git-send-email-marcus.osdoba@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Shortly I submitted patches for util-linux-ng and xfsprogs. Please feel free to test them
+and check the coding "standards" of br.
 
-On Sat, 11 Sep 2010 07:16:46 +0900
-S W <sw18@hotmail.co.jp> wrote:
+I read, that integrating util-linux-ng is one goal for further development.
+This patch would be a big step into this direction.
 
-> I am using Buildroot-2010.08 to create a arm-linux kernel,
-> but I encountered an error message like
-> /usr/bin/ld: cannot find -lc
-> 
-> And I attached the whole output message with this email.
-> 
-> Would anyone please give me any advice?
+I reported an xfslib not found error some weeks ago (this was reported yesterday again - not by me).
+This xfsprogs 3.1.3 patch would resolve this newly reported issue, too.
 
-Which distro are you using ?
-
-Here, host-module-init-tools is trying to link statically the insmod
-program, so it needs the static version of the C library, which does
-not seem to be avaible on your system.
-
-Some distributions (especially RPM based distro it seems, like
-RedHat, Fedora, Mandriva and OpenSuse) ship this as a separate package,
-sometimes named "glibc-static" or something similar. Anyhow, you should
-have a "libc.a" file, either in /lib or /usr/lib, for this to work.
-Just find the package of your distro that contains it.
-
-Can you check this out, and report to us, so that we can implement
-something to warn out users about this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks and kind regards,
+Marcus
