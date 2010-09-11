@@ -1,148 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Sep 2010 19:01:33 +0200
-Subject: [Buildroot] [PATCH 1/2] introducing util-linux-ng as
- replacement for util-linux
-In-Reply-To: <1284195279-6225-2-git-send-email-marcus.osdoba@googlemail.com>
-References: <1284195279-6225-1-git-send-email-marcus.osdoba@googlemail.com>
-	<1284195279-6225-2-git-send-email-marcus.osdoba@googlemail.com>
-Message-ID: <20100911190133.460ab01f@surf>
+From: S W <sw18@hotmail.co.jp>
+Date: Sun, 12 Sep 2010 03:09:02 +0900
+Subject: [Buildroot] Build error "cannot find -lc"
+In-Reply-To: <20100911105201.176d1396@surf>
+References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>,
+	<20100911105201.176d1396@surf>
+Message-ID: <KAW101-W3400321E421A55939E3C979B750@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Sat, 11 Sep 2010 10:54:38 +0200
-Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
+Hi Thomas
 
-> mark util-linux as deprecated since next version (util-linux-ng) is available
-> some basic components of utillinuxng can be switched of (--disable-<> in configure step)
-> this patch uses version 2.17.2 of util-linux-ng
+ 
 
-Thanks for doing this !
+Thank you so much for your prompt response!
 
->  ...0001-replace-bcopy-bzero-index-and-rindex.patch |  418 ++++++++++++++++++++
->  .../0002-Allow-linking-with-uClibc.patch           |   26 ++
+I am using Fedora 12, which I installed from a live CD.
 
-Are those two patches submitted upstream ?
+ 
 
-> --- /dev/null
-> +++ b/package/util-linux-ng/Config.in
-> @@ -0,0 +1,47 @@
-> +config BR2_PACKAGE_UTIL_LINUX_NG
-> +	bool "util-linux-ng"
-> +	depends on (BR2_PROGRAM_INVOCATION && BR2_LARGEFILE)
-> +	help
-> +	  Fork of util-linux which consists of essential Linux utilities.
-> +
-> +	  Things like mkfs, mkswap, swapon, fdisk, mount, dmesg, etc...
-> +	  http://userweb.kernel.org/~kzak/util-linux-ng/
-> +
-> +comment "util-linux-ng requires a toolchain with PROGRAM_INVOCATION support"
-> +	depends on !BR2_PROGRAM_INVOCATION
-> +
-> +comment "util-linux-ng requires a toolchain with LARGEFILE support"
-> +	depends on !BR2_LARGEFILE
+I will try it on Monday. And I will post my results once
 
-The 'old' util-linux version also needed gettext when locale support was
-enabled. It isn't the case with this new version ?
+I have update information.
 
-> +if BR2_PACKAGE_UTIL_LINUX_NG
-> +comment "utils selection"
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_NG_LIBBLKID
-> +	bool "The library and tools for blkid support."
-> +	help
-> +	 This package provides the recent blkid support 
-> +	 (parallel versions exist in e2fsprogs and busybox)
 
-Tab + 2 spaces before each line of the help text.
+ Thanks!
 
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID
-> +	bool "The library and tools for uuid support."
-> +	help
-> +	 This package provides the recent uuid support 
-> +	 (parallel versions exist in e2fsprogs and busybox)
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_NG_MOUNT_UTILS
-> +	bool "Devices mount/unmounting utilities"
-> +	depends on BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID && BR2_PACKAGE_UTIL_LINUX_NG_LIBBLKID
-> +	help
-> +	 This package contains utilities to mount/unmount devices.
-> +	 Also provided by busybox.
-
-So, shouldn't it be hidden when BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is no ?
-
-> +config BR2_PACKAGE_UTIL_LINUX_NG_FSCK
-> +	bool "Filesystem check"
-> +	depends on BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID && BR2_PACKAGE_UTIL_LINUX_NG_LIBBLKID
-> +	help
-> +	 Linux mainstream filesystem check.
-> +	 Also provided by busybox.
-
-Ditto.
-
-> +#############################################################
-> +#
-> +# UTIL_LINUX_NG
-> +#
-> +#############################################################
-> +UTIL_LINUX_NG_VERSION=2.17.2
-> +UTIL_LINUX_NG_MAJORVERSION=2.17
-
-Minor thing:
-
-UTIL_LINUX_NG_VERSION=$(UTIL_LINUX_NG_MAJORVERSION).2
-
-> +UTIL_LINUX_NG_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/util-linux-ng/v$(UTIL_LINUX_NG_MAJORVERSION)
-> +UTIL_LINUX_NG_SOURCE=util-linux-ng-$(UTIL_LINUX_NG_VERSION).tar.bz2
-> +#UTIL_LINUX_NG_INSTALL_STAGING = YES
-> +UTIL_LINUX_NG_CONF_OPT=--disable-use-tty-group \
-> +                       --enable-shared \
-> +                       --without-libiconv-prefix \
-> +                       --without-libintl-prefix \
-> +                       --disable-rpath \
-> +                       --disable-nls \
-
-Not needed, the options already contains $(DISABLE_NLS), which will
-contain the right value depending on whether we want NLS support or not.
-
-> +                       --disable-schedutils \
-> +                       --disable-doc
-> +
-> +UTIL_LINUX_NG_DEPENDENCIES=e2fsprogs
-> +UTIL_LINUX_NG_LIBTOOL_PATCH = NO
-
-Minor: please be consistent with regard to the spaces. Either no spaces
-before and after =, or spaces before and after. My preference is for
-having spaces, but that's just my own.
-
-> +# make util-linux-ng win over links to busybox binary
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> +  UTIL_LINUX_NG_DEPENDENCIES+=busybox
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NCURSES),y)
-> +  ifneq ($(BR2_USE_WCHAR),y)
-> +    UTIL_LINUX_NG_CONF_OPT+=--with-ncurses
-
-Sounds strange. When wide char is not available, you need to enable
-ncurses ? Why ?
-
-It also lacks:
-
-UTIL_LINUX_NG_DEPENDENCIES += curses
-
-The rest seems ok to me.
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Terry
+> Date: Sat, 11 Sep 2010 10:52:01 +0200
+> From: thomas.petazzoni at free-electrons.com
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Build error "cannot find -lc"
+> 
+> Hello,
+> 
+> On Sat, 11 Sep 2010 07:16:46 +0900
+> S W <sw18@hotmail.co.jp> wrote:
+> 
+> > I am using Buildroot-2010.08 to create a arm-linux kernel,
+> > but I encountered an error message like
+> > /usr/bin/ld: cannot find -lc
+> > 
+> > And I attached the whole output message with this email.
+> > 
+> > Would anyone please give me any advice?
+> 
+> Which distro are you using ?
+> 
+> Here, host-module-init-tools is trying to link statically the insmod
+> program, so it needs the static version of the C library, which does
+> not seem to be avaible on your system.
+> 
+> Some distributions (especially RPM based distro it seems, like
+> RedHat, Fedora, Mandriva and OpenSuse) ship this as a separate package,
+> sometimes named "glibc-static" or something similar. Anyhow, you should
+> have a "libc.a" file, either in /lib or /usr/lib, for this to work.
+> Just find the package of your distro that contains it.
+> 
+> Can you check this out, and report to us, so that we can implement
+> something to warn out users about this ?
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+ 		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100912/b121e367/attachment.html>
