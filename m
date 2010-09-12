@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:29 +0200
-Subject: [Buildroot] [PATCH 43/74] gawk: convert old-style hook to new-style
-	hook
+Date: Sun, 12 Sep 2010 19:42:30 +0200
+Subject: [Buildroot] [PATCH 44/74] lighttpd: use correct step override method
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2d30d8f4ebd4a8f4a259e214a96aab0f7124501f.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7d6e7bcc26d84846838a493d3c10e254ae824552.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gawk/gawk.mk |   17 +++++++++--------
- 1 files changed, 9 insertions(+), 8 deletions(-)
+ package/lighttpd/lighttpd.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 7ed7f9d..8a544d8 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -8,18 +8,19 @@ GAWK_VERSION = 3.1.8
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_TARGET_BINS = awk gawk igawk pgawk
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 3ac1f07..e6f913c 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -44,11 +44,10 @@ else
+ LIGHTTPD_CONF_OPT += --without-pcre
+ endif
  
--$(eval $(call AUTOTARGETS,package,gawk))
--$(eval $(call AUTOTARGETS,package,gawk,host))
+-$(eval $(call AUTOTARGETS,package,lighttpd))
 -
--$(GAWK_HOOK_POST_INSTALL): $(GAWK_TARGET_INSTALL_TARGET)
-+define GAWK_CREATE_SYMLINK
- 	ln -sf /usr/bin/gawk $(TARGET_DIR)/usr/bin/awk
--	touch $@
-+endef
-+
-+GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
- 
--$(GAWK_TARGET_UNINSTALL):
+-$(LIGHTTPD_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define GAWK_UNINSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GAWK_TARGET_BINS))
- 	rm -f $(TARGET_DIR)/usr/share/info/gawk*.info
- 	rm -f $(TARGET_DIR)/usr/share/man/man*/*gawk.1
- 	rm -rf $(TARGET_DIR)/usr/libexec/awk
- 	rm -rf $(TARGET_DIR)/usr/share/awk
--	rm -f $(GAWK_TARGET_INSTALL_TARGET) $(GAWK_HOOK_POST_INSTALL)
++define LIGHTTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
+ 	rm -rf $(TARGET_DIR)/usr/lib/lighttpd
+-	rm -f $(LIGHTTPD_TARGET_INSTALL_TARGET) $(LIGHTTPD_HOOK_POST_INSTALL)
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,gawk))
-+$(eval $(call AUTOTARGETS,package,gawk,host))
++$(eval $(call AUTOTARGETS,package,lighttpd))
 -- 
 1.7.0.4
