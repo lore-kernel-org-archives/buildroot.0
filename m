@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:41:57 +0200
-Subject: [Buildroot] [PATCH 11/74] php: convert old-style hooks to new-style
-	hooks
+Date: Sun, 12 Sep 2010 19:41:59 +0200
+Subject: [Buildroot] [PATCH 13/74] jpeg: convert old-style hooks to
+	new-style hooks
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c692a3e44348b70153210733bd7d0c82028f8973.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0f5fae2a69b399a81bbef3d8467468f466f2c0ef.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.mk |   17 ++++++++++-------
- 1 files changed, 10 insertions(+), 7 deletions(-)
+ package/jpeg/jpeg.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 9396311..68b0b5f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -166,23 +166,26 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
- endif
- endif
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index c3754d4..9a4512c 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -29,8 +29,10 @@ JPEG_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ JPEG_LIBTOOL_PATCH = NO
+ JPEG_CONF_OPT = --without-x --enable-shared --enable-static
  
--$(eval $(call AUTOTARGETS,package,php))
+-$(eval $(call AUTOTARGETS,package,jpeg))
 -
--$(PHP_HOOK_POST_INSTALL):
-+define PHP_INSTALL_FIXUP
- 	rm -rf $(TARGET_DIR)/usr/lib/php
- 	rm -f $(TARGET_DIR)/usr/bin/phpize
- 	rm -f $(TARGET_DIR)/usr/bin/php-config
- 	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
- 		$(INSTALL) -m 0755 $(BR2_PACKAGE_PHP_CONFIG) $(TARGET_DIR)/etc/php.ini; fi
+-$(JPEG_HOOK_POST_INSTALL):
++define JPEG_REMOVE_USELESS_TOOLS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtrans rdjpgcom wrjpgcom)
 -	touch $@
 +endef
 +
-+PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
- 
--$(PHP_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define PHP_UNINSTALL_STAGING_CMDS
- 	rm -rf $(STAGING_DIR)/usr/include/php
- 	rm -rf $(STAGING_DIR)/usr/lib/php
- 	rm -f $(STAGING_DIR)/usr/bin/php*
- 	rm -f $(STAGING_DIR)/usr/share/man/man1/php*.1
-+endef
++JPEG_POST_INSTALL_TARGET_HOOKS += JPEG_REMOVE_USELESS_TOOLS
 +
-+define PHP_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/etc/php.ini
- 	rm -f $(TARGET_DIR)/usr/bin/php*
--	rm -f $(PHP_TARGET_INSTALL_TARGET) $(PHP_HOOK_POST_INSTALL)
-+endef
- 
-+$(eval $(call AUTOTARGETS,package,php))
++$(eval $(call AUTOTARGETS,package,jpeg))
 -- 
 1.7.0.4
