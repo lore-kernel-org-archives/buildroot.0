@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:18 +0200
-Subject: [Buildroot] [PATCH 32/74] squid: convert old-style hook to
-	new-style hook
+Date: Sun, 12 Sep 2010 19:42:19 +0200
+Subject: [Buildroot] [PATCH 33/74] tiff: use correct construct to override
+	target installation
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <62df009e47bb0f850989aaba24b08d06d5b03305.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0958e6109c9ed8c82342d17a1205e3c4b8baa3f0.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We also remove the stripping, as it is already done globally.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/tiff/tiff.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 6e94d50..6254b84 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -23,13 +23,15 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	SQUID_DEPENDENCIES += openssl
- endif
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 8db215e..ca6f562 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -17,10 +17,8 @@ TIFF_CONF_OPT = \
  
--$(eval $(call AUTOTARGETS,package,squid))
+ TIFF_DEPENDENCIES = host-pkg-config zlib jpeg
+ 
+-$(eval $(call AUTOTARGETS,package,tiff))
 -
--$(SQUID_HOOK_POST_INSTALL):
-+define SQUID_CLEANUP_TARGET
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, \
- 		RunCache RunAccel)
- 	rm -f $(addprefix $(TARGET_DIR)/etc/, \
- 		cachemgr.conf mime.conf.default squid.conf.default)
- 	rm -f $(TARGET_DIR)/usr/libexec/cachemgr.cgi
- 	rm -f $(TARGET_DIR)/usr/share/mib.txt
+-$(TIFF_TARGET_INSTALL_TARGET):
+-	-cp -a $(TIFF_DIR)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so
 -	touch $@
++define TIFF_INSTALL_TARGET_CMDS
++	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
 +endef
-+
-+SQUID_POST_INSTALL_TARGET_HOOKS += SQUID_CLEANUP_TARGET
-+
-+$(eval $(call AUTOTARGETS,package,squid))
+ 
++$(eval $(call AUTOTARGETS,package,tiff))
 -- 
 1.7.0.4
