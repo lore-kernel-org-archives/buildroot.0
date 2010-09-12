@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Sep 2010 23:23:30 +0200
-Subject: [Buildroot] [PATCH 14/74] sdl_sound: convert old-style hooks to
-	new-style hooks
-In-Reply-To: <3d595a601606534bac4db9dd8ff0e9ca22beeafd.1284312638.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 19:42:00 +0200")
+Date: Sun, 12 Sep 2010 23:30:01 +0200
+Subject: [Buildroot] [PATCH 18/74] usbutils: convert old-style hook to
+	new-style hook
+In-Reply-To: <fcab98c31bd05bfa294fd9705275832e4256dcb1.1284312638.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 19:42:04 +0200")
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 	<cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-	<3d595a601606534bac4db9dd8ff0e9ca22beeafd.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87iq2ak65p.fsf@macbook.be.48ers.dk>
+	<fcab98c31bd05bfa294fd9705275832e4256dcb1.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87eicyk5uu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,32 +18,36 @@ To: buildroot@busybox.net
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  Thomas> ---
- Thomas>  package/sdl_sound/sdl_sound.mk |   23 +++++++++++++----------
- Thomas>  1 files changed, 13 insertions(+), 10 deletions(-)
+ Thomas>  package/usbutils/usbutils.mk |   30 +++++++++++++++++++++++-------
+ Thomas>  1 files changed, 23 insertions(+), 7 deletions(-)
 
- 
- Thomas> -# target shared libs doesn't get removed by make uninstall if the .la files
- Thomas> -# are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
- Thomas> -$(SDL_SOUND_TARGET_UNINSTALL):
- Thomas> -	$(call MESSAGE,"Uninstalling")
- Thomas> +define SDL_SOUND_UNINSTALL_STAGING_CMDS
- Thomas>  	$(MAKE) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
- Thomas> -	rm -f $(@D)/.stamp_staging_installed
+ Thomas>  	rm -f $(TARGET_DIR)/usr/share/pkgconfig/usbutils.pc
+ Thomas> -ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
  Thomas> +endef
  Thomas> +
- Thomas> +# target shared libs doesn't get removed by make uninstall if the .la
- Thomas> +# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
- Thomas> +define SDL_SOUND_UNINSTALL_TARGET_CMDS
- Thomas>  	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
- Thomas>  	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
- Thomas> -	rm -f $(SDL_SOUND_TARGET_INSTALL_TARGET) $(SDL_SOUND_HOOK_POST_INSTALL)
+ Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_TARGET_CLEANUP
+ Thomas> +
+ Thomas> +define USBUTILS_REMOVE_UNCOMPRESSED_IDS
+ Thomas>  	rm -f $(TARGET_DIR)/usr/share/usb.ids
+ Thomas> -else
  Thomas> +endef
  Thomas> +
- Thomas> +$(eval $(call AUTOTARGETS,package,sdl_sound))
+ Thomas> +define USBUTILS_REMOVE_COMPRESSED_IDS
+ Thomas>  	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
+ Thomas> +endef
+ Thomas> +
+ Thomas> +ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+ Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_UNCOMPRESSED_IDS
+ Thomas> +else
+ Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_COMPRESSED_IDS
+ Thomas>  endif
 
-As far as I can see you don't need to override the staging uninstall. If
-a situation like this is common, then we should probably provide hooks
-in the standard uninstall targets like we have for the other targets.
+I know this was how it was done before as well, but are you sure this is
+correct? It would make more sense if the .gz was used when the ZLIB
+support was enabled.
+
+Perhaps we should just simplify it and use
+rm -f $(TARGET_DIR)/usr/share/usb.ids*
 
 -- 
 Bye, Peter Korsgaard
