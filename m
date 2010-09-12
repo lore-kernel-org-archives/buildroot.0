@@ -1,143 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 12 Sep 2010 23:58:06 +0200
-Subject: [Buildroot] [PATCH] Makefile: add a Makefile wrapper in the $(O)
-	dir - closes #2389
-Message-ID: <1284328686-30651-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Sep 2010 00:24:10 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/remove-deprecated-packages
+In-Reply-To: <cover.1284316268.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 20:33:12 +0200")
+References: <cover.1284316268.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r5gy7g8l.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-If building out-of-tree, add a Makefile wrapper that calls-out
-to the real Makefile with proper args.
+ Thomas> Hello,
+ Thomas> This set of patches removes five packages that were marked as
+ Thomas> deprecated and to be removed in the release notes of 2010.08 :
 
-Avoids having to pass -C and O= every time we call make.
+ Thomas>  * The GTK 1.x stack, and its only user in Buildroot, the Dillo web
+ Thomas>    browser. Newer versions of Dillo use FLTK 2, if someone needs it,
+ Thomas>    we can package it.
 
-This is highly inspired from how the Linux kernel does it, and
-portions of it have been used.
+ Thomas>  * The pcmcia-cs package, which is useless with 2.6 kernels.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
----
- Makefile           |   18 ++++++++++++++++--
- scripts/mkmakefile |   50 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 66 insertions(+), 2 deletions(-)
- create mode 100644 scripts/mkmakefile
+ Thomas> Peter: the libgtk12 removal contains a patch that has a line longer
+ Thomas> than 998, so if you apply the patch using the e-mail sent to the list,
+ Thomas> it may not work. Instead, could you pull the branch directly from
+ Thomas> git.busybox.net ?
 
-diff --git a/Makefile b/Makefile
-index 1ab446d..1f36fb8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -45,6 +45,7 @@ space:=$(empty) $(empty)
- ifneq ("$(origin O)", "command line")
- O:=output
- CONFIG_DIR:=$(TOPDIR)
-+NEED_WRAPPER=
- else
- # other packages might also support Linux-style out of tree builds
- # with the O=<dir> syntax (E.G. Busybox does). As make automatically
-@@ -60,6 +61,7 @@ override O:=$(O)
- CONFIG_DIR:=$(O)
- # we need to pass O= everywhere we call back into the toplevel makefile
- EXTRAMAKEARGS = O=$(O)
-+NEED_WRAPPER=y
- endif
- 
- # $(shell find . -name *_defconfig |sed 's/.*\///')
-@@ -335,7 +337,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- world: prepare dependencies dirs $(BASE_TARGETS) $(TARGETS_ALL)
- 
- 
--.PHONY: all world dirs clean distclean source \
-+.PHONY: all world dirs clean distclean source outputmakefile \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
- 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-@@ -465,7 +467,7 @@ all: menuconfig
- HOSTCFLAGS=$(CFLAGS_FOR_BUILD)
- export HOSTCFLAGS
- 
--$(BUILD_DIR)/buildroot-config/%onf:
-+$(BUILD_DIR)/buildroot-config/%onf: |outputmakefile
- 	mkdir -p $(@D)/lxdialog
- 	$(MAKE) CC="$(HOSTCC)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
- 
-@@ -571,6 +573,18 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- # Cleanup and misc junk
- #
- #############################################################
-+
-+ifeq ($(NEED_WRAPPER),y)
-+# outputmakefile generates a Makefile in the output directory, if using a
-+# separate output directory. This allows convenient use of make in the
-+# output directory.
-+outputmakefile:
-+	$(Q)$(SHELL) $(TOPDIR)/scripts/mkmakefile $(CURDIR) $(O)
-+else
-+outputmakefile:
-+	@true
-+endif
-+
- clean:
- 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
- 		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR)
-diff --git a/scripts/mkmakefile b/scripts/mkmakefile
-new file mode 100644
-index 0000000..b2b3555
---- /dev/null
-+++ b/scripts/mkmakefile
-@@ -0,0 +1,50 @@
-+#!/bin/sh
-+# Generates a small Makefile used in the root of the output
-+# directory, to allow make to be started from there.
-+# The Makefile also allow for more convinient build of external modules
-+
-+# Usage
-+# $1 - Kernel src directory
-+# $2 - Output directory
-+
-+
-+test ! -r $2/Makefile -o -O $2/Makefile || exit 0
-+# Only overwrite automatically generated Makefiles
-+# (so we do not overwrite buildroot Makefile)
-+if test -e $2/Makefile && ! grep -E "^# Buildroot Makefile wrapper$" $2/Makefile >/dev/null 2>&1
-+then
-+        exit 0
-+fi
-+
-+cat << EOF > $2/.Makefile
-+# Buildroot Makefile wrapper
-+# Automatically generated by $0: don't edit
-+
-+lastword = \$(word \$(words \$(1)),\$(1))
-+makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
-+
-+MAKEARGS := -C $1
-+MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
-+
-+MAKEFLAGS += --no-print-directory
-+
-+.PHONY: all \$(MAKECMDGOALS)
-+
-+all     := \$(filter-out all Makefile,\$(MAKECMDGOALS))
-+
-+all:
-+	\$(MAKE) \$(MAKEARGS) \$(all)
-+
-+Makefile:;
-+
-+\$(all) %/: all
-+	@:
-+EOF
-+
-+if ! cmp $2/.Makefile $2/Makefile >/dev/null 2>&1; then
-+    echo "  GEN    Makefile"
-+    rm -f $2/Makefile
-+    mv $2/.Makefile $2/Makefile
-+else
-+    rm -f $2/.Makefile
-+fi
+Pulled and pushed, thanks!
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
