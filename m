@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:41:52 +0200
-Subject: [Buildroot] [PATCH 06/74] libxslt: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:41:51 +0200
+Subject: [Buildroot] [PATCH 05/74] libungif: convert old-style hook to
 	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1c8e89f4ce9a13fb1050426e3f31a3e23598b125.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <90710e0c228c29a9e871db331dd84524c9e510ea.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxslt/libxslt.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/libungif/libungif.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index e77663d..5437e29 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -32,12 +32,13 @@ HOST_LIBXSLT_CONF_OPT = --enable-shared \
+diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
+index 466a72c..d8dc814 100644
+--- a/package/libungif/libungif.mk
++++ b/package/libungif/libungif.mk
+@@ -17,8 +17,10 @@ LIBUNGIF_BINS = gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifburst gifclip \
+ 		gifrsize gifspnge giftext gifwedge icon2gif raw2gif rgb2gif   \
+ 		text2gif
  
- HOST_LIBXSLT_DEPENDENCIES = host-libxml2
- 
--$(eval $(call AUTOTARGETS,package,libxslt))
--$(eval $(call AUTOTARGETS,package,libxslt,host))
+-$(eval $(call AUTOTARGETS,package,libungif))
 -
--$(LIBXSLT_HOOK_POST_INSTALL):
-+define LIBXSLT_XSLT_CONFIG_FIXUP
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
- 	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xslt-config
- 	$(SED) "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" $(STAGING_DIR)/usr/bin/xslt-config
+-$(LIBUNGIF_HOOK_POST_INSTALL):
++define LIBUNGIF_BINS_CLEANUP
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(LIBUNGIF_BINS))
 -	touch $@
 +endef
- 
-+LIBXSLT_POST_INSTALL_STAGING_HOOKS += LIBXSLT_XSLT_CONFIG_FIXUP
 +
-+$(eval $(call AUTOTARGETS,package,libxslt))
-+$(eval $(call AUTOTARGETS,package,libxslt,host))
++LIBUNGIF_POST_INSTALL_TARGET_HOOKS += LIBUNGIF_BINS_CLEANUP
++
++$(eval $(call AUTOTARGETS,package,libungif))
 -- 
 1.7.0.4
