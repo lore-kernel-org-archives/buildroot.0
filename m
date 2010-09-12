@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 23:10:48 +0200
-Subject: [Buildroot] How can I boot my custom system?
-In-Reply-To: <AANLkTintTd3-7T8ODcFnL470RnkKa8RebjiQHpGJZDKj@mail.gmail.com>
-References: <AANLkTintTd3-7T8ODcFnL470RnkKa8RebjiQHpGJZDKj@mail.gmail.com>
-Message-ID: <20100912231048.22c246eb@surf>
+Date: Sun, 12 Sep 2010 23:12:51 +0200
+Subject: [Buildroot] troubles with intltool
+In-Reply-To: <AANLkTin+PxSeuX_kTy6n=yYkf1keqqMdXormidcRWzcA@mail.gmail.com>
+References: <AANLkTikqwN4vkKaXWrA0SiGTwoYUYrST8vggtUwRVJRN@mail.gmail.com>
+	<20100909105838.5ae25c27@surf>
+	<AANLkTin+PxSeuX_kTy6n=yYkf1keqqMdXormidcRWzcA@mail.gmail.com>
+Message-ID: <20100912231251.6b8bb2f5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Sep 2010 14:18:07 +0800
-icemanpro <icemanpro@gmail.com> wrote:
+On Fri, 10 Sep 2010 16:17:26 +0200
+Aurele Traynard <aurele.traynard@laposte.net> wrote:
 
->  I download buildroot on Fedora 13 and
-> 
-> 1) tar -xvzf buildroot-2010.08.tar.gz
-> 
-> 2) cd buildroot-2010.08
-> 
-> 3) make menuconfig
-> - no changes at all made to default options
-> - save on exit
-> 
-> 4) make --> OK. rootfs.ext2 created in output/images
-> 
-> 
-> Now,it this finish? How to boot my custom system?
+> i think i found the problem : i cant compile under fedora 7 but i tried with
+> Debian 5.0.4 and it works fine...
+> sory to disturb you
 
-It depends. You can boot it on real hardware, you can boot in a virtual
-machine emulator such as Qemu.
+Well, I usually care about distro compatibility issues, but Fedora 7 is
+a bit old now (it has been released in May 2007).
 
-However, by default, Buildroot does not configure and build a kernel
-for you, so you'll have to tell it to build a kernel for the hardware
-you are targeting.
-
-Without more precisions from you, it's hard to give a detailed set of
-steps to follow.
+If you're interested, we can dig this a little bit further to find a
+fix, or we can just ignore the problem, assuming that Fedora 7 is too
+old for us to support.
 
 Regards,
 
