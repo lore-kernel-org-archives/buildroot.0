@@ -1,69 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:28 +0200
-Subject: [Buildroot] [PATCH 42/74] kismet: use correct step override method
+Date: Sun, 12 Sep 2010 19:42:29 +0200
+Subject: [Buildroot] [PATCH 43/74] gawk: convert old-style hook to new-style
+	hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5c421dde681467f10bc70c0d7a3863e63152ff60.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2d30d8f4ebd4a8f4a259e214a96aab0f7124501f.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kismet/kismet.mk |   30 ++++++++++++++++++++++--------
- 1 files changed, 22 insertions(+), 8 deletions(-)
+ package/gawk/gawk.mk |   17 +++++++++--------
+ 1 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index de66ee6..482c7db 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -29,24 +29,38 @@ ifeq ($(BR2_PACKAGE_KISMET_DRONE),y)
- 	KISMET_TARGET_CONFIGS += kismet_drone.conf
- endif
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 7ed7f9d..8a544d8 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -8,18 +8,19 @@ GAWK_VERSION = 3.1.8
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_TARGET_BINS = awk gawk igawk pgawk
  
--$(eval $(call AUTOTARGETS,package,kismet))
+-$(eval $(call AUTOTARGETS,package,gawk))
+-$(eval $(call AUTOTARGETS,package,gawk,host))
 -
--$(KISMET_TARGET_INSTALL_TARGET):
--	$(call MESSAGE,"Installing")
- ifdef KISMET_TARGET_BINARIES
-+define KISMET_INSTALL_TARGET_BINARIES
- 	$(INSTALL) -m 755 $(addprefix $(KISMET_DIR)/, $(KISMET_TARGET_BINARIES)) $(TARGET_DIR)/usr/bin
-+endef
- endif
-+
- ifdef KISMET_TARGET_CONFIGS
-+define KISMET_INSTALL_TARGET_CONFIGS
- 	$(INSTALL) -m 644 $(addprefix $(KISMET_DIR)/conf/, $(KISMET_TARGET_CONFIGS)) $(TARGET_DIR)/etc
-+endef
- endif
+-$(GAWK_HOOK_POST_INSTALL): $(GAWK_TARGET_INSTALL_TARGET)
++define GAWK_CREATE_SYMLINK
+ 	ln -sf /usr/bin/gawk $(TARGET_DIR)/usr/bin/awk
 -	touch $@
++endef
++
++GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
  
--$(KISMET_TARGET_UNINSTALL):
+-$(GAWK_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define KISMET_INSTALL_TARGET_CMDS
-+	$(KISMET_INSTALL_TARGET_BINARIES)
-+	$(KISMET_INSTALL_TARGET_CONFIGS)
++define GAWK_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GAWK_TARGET_BINS))
+ 	rm -f $(TARGET_DIR)/usr/share/info/gawk*.info
+ 	rm -f $(TARGET_DIR)/usr/share/man/man*/*gawk.1
+ 	rm -rf $(TARGET_DIR)/usr/libexec/awk
+ 	rm -rf $(TARGET_DIR)/usr/share/awk
+-	rm -f $(GAWK_TARGET_INSTALL_TARGET) $(GAWK_HOOK_POST_INSTALL)
 +endef
 +
- ifdef KISMET_TARGET_BINARIES
-+define KISMET_UNINSTALL_TARGET_BINARIES
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(KISMET_TARGET_BINARIES))
-+endef
- endif
-+
- ifdef KISMET_TARGET_CONFIGS
-+define KISMET_UNINSTALL_TARGET_CONFIGS
- 	rm -f $(addprefix $(TARGET_DIR)/etc/, $(KISMET_TARGET_CONFIGS))
-+endef
- endif
--	rm -f $(KISMET_TARGET_INSTALL_TARGET) $(KISMET_HOOK_POST_INSTALL)
-+
-+define KISMET_UNINSTALL_TARGET_CMDS
-+	$(KISMET_UNINSTALL_TARGET_BINARIES)
-+	$(KISMET_UNINSTALL_TARGET_CONFIGS)
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,kismet))
++$(eval $(call AUTOTARGETS,package,gawk))
++$(eval $(call AUTOTARGETS,package,gawk,host))
 -- 
 1.7.0.4
