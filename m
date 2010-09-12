@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:11 +0200
-Subject: [Buildroot] [PATCH 25/74] libpng: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:42:12 +0200
+Subject: [Buildroot] [PATCH 26/74] libdnet: convert old-style hook to
 	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20528a8449c85f5eb7e1ec829c50c6b23fda2c61.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <84d37d15e3edc028ff6f1d2b5e2071024d6e1ef5.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpng/libpng.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/libdnet/libdnet.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index a81d951..5608f4f 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -14,14 +14,15 @@ LIBPNG_DEPENDENCIES = host-pkg-config zlib
- HOST_LIBPNG_CONF_OPT = --without-libpng-compat
- HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 28304be..eb67b05 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -24,9 +24,11 @@ LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(TARGET_DIR) INSTALL_S
+ LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
+ endif
  
--$(eval $(call AUTOTARGETS,package,libpng))
--$(eval $(call AUTOTARGETS,package,libpng,host))
--
--$(LIBPNG_HOOK_POST_INSTALL):
-+define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
- 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
- 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng12\',g" \
- 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
- 		$(STAGING_DIR)/usr/bin/libpng12-config
--	touch $@
+-$(eval $(call AUTOTARGETS,package,libdnet))
++# Needed for autoreconf to work properly
++define LIBDNET_FIXUP_ACINCLUDE_M4
++	ln -sf config/acinclude.m4 $(@D)
 +endef
  
-+LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
-+
-+$(eval $(call AUTOTARGETS,package,libpng))
-+$(eval $(call AUTOTARGETS,package,libpng,host))
+-$(LIBDNET_HOOK_POST_EXTRACT):
+-	ln -sf config/acinclude.m4 $(LIBDNET_DIR)
+-	touch $@
++LIBDNET_POST_EXTRACT_HOOKS += LIBDNET_FIXUP_ACINCLUDE_M4
+ 
++$(eval $(call AUTOTARGETS,package,libdnet))
 -- 
 1.7.0.4
