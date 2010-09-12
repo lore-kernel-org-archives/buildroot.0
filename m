@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:31 +0200
-Subject: [Buildroot] [PATCH 45/74] netperf: use correct step override method
+Date: Sun, 12 Sep 2010 19:42:32 +0200
+Subject: [Buildroot] [PATCH 46/74] hostapd: use correct step override method
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b88c394685f3c77219da743d6e0c434312712cf4.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f129a680fafc48d329d551590d7e0fa6208e49a0.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,123 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netperf/netperf.mk |   18 ++++++++----------
- 1 files changed, 8 insertions(+), 10 deletions(-)
+ package/hostapd/hostapd.mk |   78 ++++++++++++++++++++++++-------------------
+ 1 files changed, 43 insertions(+), 35 deletions(-)
 
-diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
-index d198eee..6bf9b5c 100644
---- a/package/netperf/netperf.mk
-+++ b/package/netperf/netperf.mk
-@@ -8,18 +8,16 @@ NETPERF_VERSION = 2.4.5
- NETPERF_SITE = ftp://ftp.netperf.org/netperf
- NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index bde3766..d826030 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -12,47 +12,52 @@ HOSTAPD_DEPENDENCIES = libnl
  
--$(eval $(call AUTOTARGETS,package,netperf))
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	HOSTAPD_DEPENDENCIES += openssl
++	# OpenSSL is required for EXTRA_EAP and/or WPS
++	# We take care of that in Config.in
++define HOSTAPD_OPENSSL_CONF
++	echo "CONFIG_CRYPTO=internal" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_TLS=internal" >>$(HOSTAPD_CONFIG)
++endef
+ endif
+ 
+-$(eval $(call AUTOTARGETS,package,hostapd))
 -
--$(NETPERF_TARGET_INSTALL_TARGET):
+-$(HOSTAPD_TARGET_CONFIGURE):
+-	cp $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/defconfig $(HOSTAPD_CONFIG)
+-	$(SED) "s/\/local//" $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/Makefile
+-	echo "CFLAGS += $(TARGET_CFLAGS)" >>$(HOSTAPD_CONFIG)
+-	echo "LDFLAGS += $(TARGET_LDFLAGS)" >>$(HOSTAPD_CONFIG)
+-	echo "CC = $(TARGET_CC)" >>$(HOSTAPD_CONFIG)
+-# IPv6
+ ifneq ($(BR2_INET_IPV6),y)
++define HOSTAPD_IPV6_CONF
+ 	$(SED) "s/CONFIG_IPV6=y//" $(HOSTAPD_CONFIG)
++endef
+ endif
+-# EAP
+-	echo "CONFIG_EAP_AKA=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_AKA_PRIME=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_GPSK=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_GPSK_SHA256=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_PAX=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_PSK=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_SAKE=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_EAP_SIM=y" >>$(HOSTAPD_CONFIG)
++
+ ifneq ($(BR2_PACKAGE_HOSTAPD_EXTRA_EAP),y)
++define HOSTAPD_EXTRA_EAP_CONF
+ 	$(SED) "s/CONFIG_EAP_MSCHAPV2=y//" $(HOSTAPD_CONFIG)
+ 	$(SED) "s/CONFIG_EAP_PEAP=y//" $(HOSTAPD_CONFIG)
+ 	$(SED) "s/CONFIG_EAP_TLS=y//" $(HOSTAPD_CONFIG)
+ 	$(SED) "s/CONFIG_EAP_TTLS=y//" $(HOSTAPD_CONFIG)
++endef
+ endif
+-# OpenSSL is required for EXTRA_EAP and/or WPS
+-# We take care of that in Config.in
+-ifneq ($(BR2_PACKAGE_OPENSSL),y)
+-	echo "CONFIG_CRYPTO=internal" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(HOSTAPD_CONFIG)
+-	echo "CONFIG_TLS=internal" >>$(HOSTAPD_CONFIG)
+-endif
+-# WPS
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_WPS),y)
++define HOSTAPD_WPS_CONF
+ 	echo "CONFIG_WPS=y" >>$(HOSTAPD_CONFIG)
+ 	echo "CONFIG_WPS_UPNP=y" >>$(HOSTAPD_CONFIG)
++endef
+ endif
++
++define HOSTAPD_CONFIGURE_CMDS
++	cp $(@D)/$(HOSTAPD_SUBDIR)/defconfig $(HOSTAPD_CONFIG)
++	$(SED) "s/\/local//" $(@D)/$(HOSTAPD_SUBDIR)/Makefile
++	echo "CFLAGS += $(TARGET_CFLAGS)" >>$(HOSTAPD_CONFIG)
++	echo "LDFLAGS += $(TARGET_LDFLAGS)" >>$(HOSTAPD_CONFIG)
++	echo "CC = $(TARGET_CC)" >>$(HOSTAPD_CONFIG)
++# EAP
++	echo "CONFIG_EAP_AKA=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_AKA_PRIME=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_GPSK=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_GPSK_SHA256=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_PAX=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_PSK=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_SAKE=y" >>$(HOSTAPD_CONFIG)
++	echo "CONFIG_EAP_SIM=y" >>$(HOSTAPD_CONFIG)
+ # Drivers
+ 	echo "CONFIG_DRIVER_WIRED=y" >>$(HOSTAPD_CONFIG)
+ 	echo "CONFIG_DRIVER_PRISM54=y" >>$(HOSTAPD_CONFIG)
+@@ -62,19 +67,22 @@ endif
+ 	echo "CONFIG_IEEE80211R=y" >>$(HOSTAPD_CONFIG)
+ 	echo "CONFIG_IEEE80211W=y" >>$(HOSTAPD_CONFIG)
+ 	echo "CONFIG_RADIUS_SERVER=y" >>$(HOSTAPD_CONFIG)
+-	touch $@
++	$(HOSTAPD_OPENSSL_CONF)
++	$(HOSTAPD_IPV6_CONF)
++	$(HOSTAPD_EXTRA_EAP_CONF)
++	$(HOSTAPD_WPS_CONF)
++endef
+ 
+-$(HOSTAPD_TARGET_INSTALL_TARGET):
 -	$(call MESSAGE,"Installing to target")
--	$(INSTALL) -m 0755 $(NETPERF_DIR)/src/netperf \
-+define NETPERF_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/src/netperf \
- 		$(TARGET_DIR)/usr/bin/netperf
--	$(INSTALL) -m 0755 $(NETPERF_DIR)/src/netserver \
-+	$(INSTALL) -m 0755 $(@D)/src/netserver \
- 		$(TARGET_DIR)/usr/bin/netserver
+-	$(INSTALL) -m 0755 $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/hostapd \
++define HOSTAPD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/$(HOSTAPD_SUBDIR)/hostapd \
+ 		$(TARGET_DIR)/usr/sbin
+-	$(INSTALL) -m 0755 $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/hostapd_cli \
++	$(INSTALL) -m 0755 $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
+ 		$(TARGET_DIR)/usr/bin
 -	touch $@
 +endef
  
--$(NETPERF_TARGET_UNINSTALL):
+-$(HOSTAPD_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define NETPERF_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/netperf
- 	rm -f $(TARGET_DIR)/usr/bin/netserver
--	rm -f $(NETPERF_TARGET_INSTALL_TARGET) $(NETPERF_HOOK_POST_INSTALL)
++define HOSTAPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/hostapd
+ 	rm -f $(TARGET_DIR)/usr/bin/hostapd
+-	rm -f $(HOSTAPD_TARGET_INSTALL_TARGET) $(HOSTAPD_HOOK_POST_INSTALL)
 +endef
-+
-+$(eval $(call AUTOTARGETS,package,netperf))
+ 
++$(eval $(call AUTOTARGETS,package,hostapd))
 -- 
 1.7.0.4
