@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:05 +0200
-Subject: [Buildroot] [PATCH 19/74] liboil: convert old-style hook to
-	new-style hook
+Date: Sun, 12 Sep 2010 19:42:07 +0200
+Subject: [Buildroot] [PATCH 21/74] libgtk2: convert old-style hook to
+	new-style
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f80d06457279c27689fddcb7ef110f30547f4d7b.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <39c781f33a7cf486c4872181cce8451913d06407.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liboil/liboil.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/libgtk2/libgtk2.mk |   12 +++++++-----
+ 1 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/liboil/liboil.mk b/package/liboil/liboil.mk
-index 1bb412f..4681282 100644
---- a/package/liboil/liboil.mk
-+++ b/package/liboil/liboil.mk
-@@ -35,9 +35,10 @@ endif
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 1e732d0..d669622 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -119,6 +119,13 @@ else
+ LIBGTK2_CONF_OPT += --disable-cups
+ endif
  
- LIBOIL_DEPENDENCIES = $(LIBOIL_GLIB_DEP)
- 
--$(eval $(call AUTOTARGETS,package,liboil))
--
--$(LIBOIL_HOOK_POST_INSTALL):
--	# Remove useless bugreport program from the target
-+define LIBOIL_TARGET_CLEANUP
- 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
--	touch $@
++define LIBGTK2_POST_INSTALL_TWEAKS
++	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
++	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
 +endef
 +
-+LIBOIL_POST_INSTALL_TARGET_HOOKS += LIBOIL_TARGET_CLEANUP
++LIBGTK2_POST_INSTALL_TARGET_HOOKS += LIBGTK_POST_INSTALL_TWEAKS
 +
-+$(eval $(call AUTOTARGETS,package,liboil))
+ # We do not build a full version of libgtk2 for the host, because that
+ # requires compiling Cairo, Pango, ATK and X.org for the
+ # host. Therefore, we patch it to remove dependencies, and we hack the
+@@ -155,8 +162,3 @@ endef
+ 
+ $(eval $(call AUTOTARGETS,package,libgtk2))
+ $(eval $(call AUTOTARGETS,package,libgtk2,host))
+-
+-$(LIBGTK2_HOOK_POST_INSTALL):
+-	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
+-	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
+-	touch $@
 -- 
 1.7.0.4
