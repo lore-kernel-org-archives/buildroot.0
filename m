@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:38 +0200
-Subject: [Buildroot] [PATCH 52/74] less: use correct step override method
+Date: Sun, 12 Sep 2010 19:42:39 +0200
+Subject: [Buildroot] [PATCH 53/74] iptables: convert old-style hook to
+	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0d5cf75df62825209e134841f0e82f205a0a8c87.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <56993a53805dafa1dbd3a11d450c3a5c8ae39e6c.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/less/less.mk |   17 +++++++----------
- 1 files changed, 7 insertions(+), 10 deletions(-)
+ package/iptables/iptables.mk |   28 +++++++++++++++++++---------
+ 1 files changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/package/less/less.mk b/package/less/less.mk
-index bae1cf6..6f985ed 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -8,15 +8,12 @@ LESS_VERSION = 436
- LESS_SITE = http://www.greenwoodsoftware.com/less
- LESS_DEPENDENCIES = ncurses
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 0b7dae1..21146bc 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -16,24 +16,34 @@ endif
+ IPTABLES_AUTORECONF = YES
+ IPTABLES_LIBTOOL_PATCH = NO
  
--$(eval $(call AUTOTARGETS,package,less))
+-$(eval $(call AUTOTARGETS,package,iptables))
 -
--$(LESS_TARGET_INSTALL_TARGET):
--	$(call MESSAGE,"Installing to target")
--	$(INSTALL) -m 0755 $(LESS_DIR)/less \
--		$(TARGET_DIR)/usr/bin/less
--	touch $@
-+define LESS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
-+endef
- 
--$(LESS_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define LESS_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/less
--	rm -f $(LESS_TARGET_INSTALL_TARGET) $(LESS_HOOK_POST_INSTALL)
+-$(IPTABLES_HOOK_POST_INSTALL): $(IPTABLES_TARGET_INSTALL_TARGET)
++define IPTABLES_TARGET_SYMLINK_CREATE
+ 	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables
+ 	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-save
+ 	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-restore
+-ifeq ($(BR2_INET_IPV6),y)
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,less))
++define IPTABLES_TARGET_IPV6_SYMLINK_CREATE
+ 	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables
+ 	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
+ 	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
+-else
++endef
++
++define IPTABLES_TARGET_IPV6_REMOVE
+ 	rm -f $(TARGET_DIR)/usr/lib/libip6tc.*
++endef
++
++IPTABLES_POST_INSTALL_TARGET_HOOKS += IPTABLES_TARGET_SYMLINK_CREATE
++
++ifeq ($(BR2_INET_IPV6),y)
++IPTABLES_POST_INSTALL_TARGET_HOOKS += IPTABLES_TARGET_IPV6_SYMLINK_CREATE
++else
++IPTABLES_POST_INSTALL_TARGET_HOOKS += IPTABLES_TARGET_IPV6_REMOVE
+ endif
+-	touch $@
+ 
+-$(IPTABLES_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define IPTABLES_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/iptables-xml
+ 	rm -f $(TARGET_DIR)/usr/sbin/iptables* $(TARGET_DIR)/usr/sbin/ip6tables*
+ 	rm -rf $(TARGET_DIR)/usr/lib/xtables
+-	rm -f $(IPTABLES_TARGET_INSTALL_TARGET) $(IPTABLES_HOOK_POST_INSTALL)
++endef
++
++$(eval $(call AUTOTARGETS,package,iptables))
 -- 
 1.7.0.4
