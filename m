@@ -1,81 +1,55 @@
-From: S W <sw18@hotmail.co.jp>
-Date: Sun, 12 Sep 2010 03:09:02 +0900
-Subject: [Buildroot] Build error "cannot find -lc"
-In-Reply-To: <20100911105201.176d1396@surf>
-References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>,
-	<20100911105201.176d1396@surf>
-Message-ID: <KAW101-W3400321E421A55939E3C979B750@phx.gbl>
+From: =?ISO-8859-1?Q?Santi_L=F3pez?= <lopezsanti99@gmail.com>
+Date: Sun, 12 Sep 2010 08:37:46 +0200
+Subject: [Buildroot] Access usb devices from buildroot
+Message-ID: <AANLkTimDsQD=fzYMzVrFxEO8NUYnqQqCx-ZGa-0NH3Ws@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hi Thomas
-
- 
-
-Thank you so much for your prompt response!
-
-I am using Fedora 12, which I installed from a live CD.
-
- 
-
-I will try it on Monday. And I will post my results once
-
-I have update information.
+Hi!
 
 
- Thanks!
 
-Terry
-> Date: Sat, 11 Sep 2010 10:52:01 +0200
-> From: thomas.petazzoni at free-electrons.com
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] Build error "cannot find -lc"
-> 
-> Hello,
-> 
-> On Sat, 11 Sep 2010 07:16:46 +0900
-> S W <sw18@hotmail.co.jp> wrote:
-> 
-> > I am using Buildroot-2010.08 to create a arm-linux kernel,
-> > but I encountered an error message like
-> > /usr/bin/ld: cannot find -lc
-> > 
-> > And I attached the whole output message with this email.
-> > 
-> > Would anyone please give me any advice?
-> 
-> Which distro are you using ?
-> 
-> Here, host-module-init-tools is trying to link statically the insmod
-> program, so it needs the static version of the C library, which does
-> not seem to be avaible on your system.
-> 
-> Some distributions (especially RPM based distro it seems, like
-> RedHat, Fedora, Mandriva and OpenSuse) ship this as a separate package,
-> sometimes named "glibc-static" or something similar. Anyhow, you should
-> have a "libc.a" file, either in /lib or /usr/lib, for this to work.
-> Just find the package of your distro that contains it.
-> 
-> Can you check this out, and report to us, so that we can implement
-> something to warn out users about this ?
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
- 		 	   		  
+I have a doubt about the usb devices under buildroot.
+
+
+
+I?m working with the last release, the ?2010.08?. I successfully created an
+image under the cramfs format.
+
+I?m able to boot with this image using the same kernel that use my host
+machine, a complete kernel from the distribution.
+
+
+
+I?m using an usb stick. I can boot without any problem.
+
+
+
+But I can?t mount this usb stick for see other partitions or another stick
+in other usb port.
+
+
+
+The /var/log/messages don?t reflect any change when I connect a new usb
+stick.
+
+
+
+At boot time, the original usb stick is detected as /dev/sda1, but, once in
+the console, I can?t mount this unit.
+
+
+
+I forget something in the buildroot configuration?
+
+
+
+Thanks in advance,
+
+Santi L?pez.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100912/b121e367/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100912/5cb07364/attachment.html>
