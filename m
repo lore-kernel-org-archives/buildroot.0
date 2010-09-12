@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:21 +0200
-Subject: [Buildroot] [PATCH 35/74] at: convert old-style hook to new-style
-	hook
+Date: Sun, 12 Sep 2010 19:42:23 +0200
+Subject: [Buildroot] [PATCH 37/74] ncftp: use correct way of overriding steps
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0fe621d1ded3611958b29f8a7a7ffd7ba9fdf685.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0de10bf4915ba1efe482486705adc36cfa52cfa8.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +12,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/at/at.mk |   15 ++++++++-------
- 1 files changed, 8 insertions(+), 7 deletions(-)
+ package/ncftp/ncftp.mk |   23 +++++++++--------------
+ 1 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/package/at/at.mk b/package/at/at.mk
-index 57b7847..3799790 100644
---- a/package/at/at.mk
-+++ b/package/at/at.mk
-@@ -21,14 +21,13 @@ AT_CONF_OPT = \
-         --with-daemon_groupname=root \
- 	SENDMAIL=/usr/sbin/sendmail
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 757cc6e..f3f4780 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -23,6 +23,8 @@ endif
  
--$(eval $(call AUTOTARGETS,package,at))
+ ifeq ($(BR2_PACKAGE_NCFTP_BATCH),y)
+ NCFTP_TARGET_BINS+=ncftpbatch
++NCFTP_INSTALL_NCFTP_BATCH = \
++	ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_BOOKMARKS),y)
+@@ -30,20 +32,13 @@ NCFTP_TARGET_BINS+=ncftpbookmarks
+ NCFTP_DEPENDENCIES:=ncurses
+ endif
+ 
+-$(eval $(call AUTOTARGETS,package,ncftp))
 -
--$(AT_HOOK_POST_INSTALL): $(AT_TARGET_INSTALL_TARGET)
-+define AT_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
+-$(NCFTP_TARGET_INSTALL_TARGET):
+-	$(call MESSAGE,"Installing to target")
++define NCFTP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(addprefix $(NCFTP_DIR)/bin/, $(NCFTP_TARGET_BINS)) $(TARGET_DIR)/usr/bin
+-ifeq ($(BR2_PACKAGE_NCFTP_BATCH),y)
+-	ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
+-endif
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/usr/bin/, $(NCFTP_TARGET_BINS))
+-endif
 -	touch $@
++	$(NCFTP_INSTALL_NCFTP_BATCH)
 +endef
-+
-+AT_POST_INSTALL_TARGET_HOOKS += AT_INSTALL_INITSCRIPT
  
--$(AT_TARGET_UNINSTALL):
+-$(NCFTP_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define AT_UNINSTALL_TARGET_CMDS
- 	rm -rf $(addprefix $(TARGET_DIR),/usr/lib/atspool \
- 					 /usr/lib/atjobs \
- 					 /etc/at.deny \
-@@ -40,4 +39,6 @@ $(AT_TARGET_UNINSTALL):
- 					 /usr/sbin/atrun)
- 	rm -f $(addprefix $(TARGET_DIR)/usr/man/man*/, \
- 		at.1 atq.1 atrm.1 batch.1 at_allow.5 at_deny.5 atd.8 atrun.8)
--	rm -f $(AT_TARGET_INSTALL_TARGET) $(AT_HOOK_POST_INSTALL)
++define NCFTP_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(NCFTP_TARGET_BINS) ncftpspooler)
+-	rm -f $(NCFTP_TARGET_INSTALL_TARGET)
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,at))
++$(eval $(call AUTOTARGETS,package,ncftp))
 -- 
 1.7.0.4
