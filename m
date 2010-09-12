@@ -1,58 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:00 +0200
-Subject: [Buildroot] [PATCH 14/74] sdl_sound: convert old-style hooks to
+Date: Sun, 12 Sep 2010 19:42:01 +0200
+Subject: [Buildroot] [PATCH 15/74] freetype: convert old-style hooks to
 	new-style hooks
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3d595a601606534bac4db9dd8ff0e9ca22beeafd.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <da07989b17cbdd4f12576e8ac982c4f7d8540d7b.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The strip of the library is also removed, since this is done globally.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sdl_sound/sdl_sound.mk |   23 +++++++++++++----------
- 1 files changed, 13 insertions(+), 10 deletions(-)
+ package/freetype/freetype.mk |   20 +++++++++++++-------
+ 1 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 3a6b7e7..9234ab6 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -41,20 +41,23 @@ else
- SDL_SOUND_CONF_OPT += --disable-mmx
- endif
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index f19b854..5a88cca 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -15,17 +15,23 @@ FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
  
--$(eval $(call AUTOTARGETS,package,sdl_sound))
-+define SDL_SOUND_REMOVE_PLAYSOUND
-+	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
+ HOST_FREETYPE_DEPENDENCIES = host-pkg-config
+ 
+-$(eval $(call AUTOTARGETS,package,freetype))
+-$(eval $(call AUTOTARGETS,package,freetype,host))
+-
+-$(FREETYPE_HOOK_POST_INSTALL):
++define FREETYPE_FREETYPE_CONFIG_STAGING_FIXUP
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/freetype2\',g" \
+ 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+ 		$(STAGING_DIR)/usr/bin/freetype-config
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libfreetype.so
+-ifneq ($(BR2_HAVE_DEVFILES),y)
 +endef
- 
- ifneq ($(BR2_PACKAGE_SDL_SOUND_PLAYSOUND),y)
--$(SDL_SOUND_HOOK_POST_INSTALL):
--	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
++
++FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FREETYPE_CONFIG_STAGING_FIXUP
++
++define FREETYPE_FREETYPE_CONFIG_TARGET_REMOVE
+ 	rm -f $(TARGET_DIR)/usr/bin/freetype-config
++endef
++
++ifneq ($(BR2_HAVE_DEVFILES),y)
++FREETYPE_POST_INSTALL_TARGET_HOOKS += FREETYPE_FREETYPE_CONFIG_TARGET_REMOVE
+ endif
 -	touch $@
-+SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
- endif
- 
--# target shared libs doesn't get removed by make uninstall if the .la files
--# are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
--$(SDL_SOUND_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define SDL_SOUND_UNINSTALL_STAGING_CMDS
- 	$(MAKE) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
--	rm -f $(@D)/.stamp_staging_installed
-+endef
 +
-+# target shared libs doesn't get removed by make uninstall if the .la
-+# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
-+define SDL_SOUND_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
- 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
--	rm -f $(SDL_SOUND_TARGET_INSTALL_TARGET) $(SDL_SOUND_HOOK_POST_INSTALL)
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,sdl_sound))
++$(eval $(call AUTOTARGETS,package,freetype))
++$(eval $(call AUTOTARGETS,package,freetype,host))
 -- 
 1.7.0.4
