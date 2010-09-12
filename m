@@ -1,53 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Sep 2010 23:30:01 +0200
-Subject: [Buildroot] [PATCH 18/74] usbutils: convert old-style hook to
-	new-style hook
-In-Reply-To: <fcab98c31bd05bfa294fd9705275832e4256dcb1.1284312638.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 19:42:04 +0200")
-References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-	<cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-	<fcab98c31bd05bfa294fd9705275832e4256dcb1.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87eicyk5uu.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Sep 2010 21:32:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 2389] Generate a Makefile wrapper in $(O)
+In-Reply-To: <bug-2389-163@https.bugs.busybox.net/>
+References: <bug-2389-163@https.bugs.busybox.net/>
+Message-ID: <20100912213227.CFFA48A651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2389
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/usbutils/usbutils.mk |   30 +++++++++++++++++++++++-------
- Thomas>  1 files changed, 23 insertions(+), 7 deletions(-)
+Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
 
- Thomas>  	rm -f $(TARGET_DIR)/usr/share/pkgconfig/usbutils.pc
- Thomas> -ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
- Thomas> +endef
- Thomas> +
- Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_TARGET_CLEANUP
- Thomas> +
- Thomas> +define USBUTILS_REMOVE_UNCOMPRESSED_IDS
- Thomas>  	rm -f $(TARGET_DIR)/usr/share/usb.ids
- Thomas> -else
- Thomas> +endef
- Thomas> +
- Thomas> +define USBUTILS_REMOVE_COMPRESSED_IDS
- Thomas>  	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
- Thomas> +endef
- Thomas> +
- Thomas> +ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
- Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_UNCOMPRESSED_IDS
- Thomas> +else
- Thomas> +USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_COMPRESSED_IDS
- Thomas>  endif
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #2341|0                           |1
+        is obsolete|                            |
 
-I know this was how it was done before as well, but are you sure this is
-correct? It would make more sense if the .gz was used when the ZLIB
-support was enabled.
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
+Created attachment 2461
+  --> https://bugs.busybox.net/attachment.cgi?id=2461
+Install a Makefile wrapper in $(O)
 
-Perhaps we should just simplify it and use
-rm -f $(TARGET_DIR)/usr/share/usb.ids*
+The patch has been cleanup a bit, and rebased on-top of current tree.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
