@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:19 +0200
-Subject: [Buildroot] [PATCH 33/74] tiff: use correct construct to override
-	target installation
+Date: Sun, 12 Sep 2010 19:42:20 +0200
+Subject: [Buildroot] [PATCH 34/74] bridge: remove useless strip and use
+	correct definition for uninstall
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0958e6109c9ed8c82342d17a1205e3c4b8baa3f0.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9785f71c7a7a0eebf496d45e516b83c8019f6468.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We also remove the stripping, as it is already done globally.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tiff/tiff.mk |   10 ++++------
- 1 files changed, 4 insertions(+), 6 deletions(-)
+ package/bridge-utils/bridge.mk |   17 ++++-------------
+ 1 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 8db215e..ca6f562 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -17,10 +17,8 @@ TIFF_CONF_OPT = \
+diff --git a/package/bridge-utils/bridge.mk b/package/bridge-utils/bridge.mk
+index 925de06..1d633dd 100644
+--- a/package/bridge-utils/bridge.mk
++++ b/package/bridge-utils/bridge.mk
+@@ -13,18 +13,9 @@ BRIDGE_INSTALL_TARGET:=YES
+ BRIDGE_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) install
+ BRIDGE_CONF_OPT:=--with-linux-headers=$(LINUX_HEADERS_DIR)
  
- TIFF_DEPENDENCIES = host-pkg-config zlib jpeg
- 
--$(eval $(call AUTOTARGETS,package,tiff))
+-$(eval $(call AUTOTARGETS,package,bridge))
 -
--$(TIFF_TARGET_INSTALL_TARGET):
--	-cp -a $(TIFF_DIR)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-# bridge has no install-strip target
+-$(BRIDGE_HOOK_POST_INSTALL): $(BRIDGE_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/brctl
 -	touch $@
-+define TIFF_INSTALL_TARGET_CMDS
-+	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+-endif
+-
+-# bridge has no uninstall target
+-$(BRIDGE_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define BRIDGE_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
+ 		include/libbridge.h man/man8/brctl.8 sbin/brctl)
+-	rm -f $(BRIDGE_TARGET_INSTALL_TARGET) $(BRIDGE_HOOK_POST_INSTALL)
 +endef
- 
-+$(eval $(call AUTOTARGETS,package,tiff))
++
++$(eval $(call AUTOTARGETS,package,bridge))
 -- 
 1.7.0.4
