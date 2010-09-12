@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:03 +0200
-Subject: [Buildroot] [PATCH 17/74] mysql_client: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:42:05 +0200
+Subject: [Buildroot] [PATCH 19/74] liboil: convert old-style hook to
 	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d31100d7e80278f673f74ed36c16a65f4fd27e9e.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f80d06457279c27689fddcb7ef110f30547f4d7b.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mysql_client/mysql_client.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/liboil/liboil.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index 377df89..6a89a52 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -32,8 +32,10 @@ MYSQL_CLIENT_CONF_OPT = \
- 	--enable-thread-safe-client \
- 	$(ENABLE_DEBUG)
+diff --git a/package/liboil/liboil.mk b/package/liboil/liboil.mk
+index 1bb412f..4681282 100644
+--- a/package/liboil/liboil.mk
++++ b/package/liboil/liboil.mk
+@@ -35,9 +35,10 @@ endif
  
--$(eval $(call AUTOTARGETS,package,mysql_client))
+ LIBOIL_DEPENDENCIES = $(LIBOIL_GLIB_DEP)
+ 
+-$(eval $(call AUTOTARGETS,package,liboil))
 -
--$(MYSQL_CLIENT_HOOK_POST_INSTALL):
-+define MYSQL_CLIENT_REMOVE_TEST_PROGS
- 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+-$(LIBOIL_HOOK_POST_INSTALL):
+-	# Remove useless bugreport program from the target
++define LIBOIL_TARGET_CLEANUP
+ 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
 -	touch $@
 +endef
 +
-+MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_REMOVE_TEST_PROGS
++LIBOIL_POST_INSTALL_TARGET_HOOKS += LIBOIL_TARGET_CLEANUP
 +
-+$(eval $(call AUTOTARGETS,package,mysql_client))
++$(eval $(call AUTOTARGETS,package,liboil))
 -- 
 1.7.0.4
