@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:56 +0200
-Subject: [Buildroot] [PATCH 70/74] strace: convert to new style hook
+Date: Sun, 12 Sep 2010 19:42:57 +0200
+Subject: [Buildroot] [PATCH 71/74] tcpdump: remove useless stripping
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d2b7b19a5707def8a03f009ab69d511f99cbe339.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <19f9348bec29779c365645d00c33cc76b83a72b3.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/strace/strace.mk |   18 ++++++++++++------
- 1 files changed, 12 insertions(+), 6 deletions(-)
+ package/tcpdump/tcpdump.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 3d50879..13d1557 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -14,14 +14,20 @@ STRACE_CONF_ENV:= ac_cv_header_linux_if_packet_h=yes \
- 		  ac_cv_header_linux_netlink_h=yes \
- 	          $(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 183df94..0b9236d 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -17,8 +17,3 @@ TCPDUMP_CONF_OPT:=--without-crypto \
+ TCPDUMP_DEPENDENCIES:=zlib libpcap
  
--$(eval $(call AUTOTARGETS,package,strace))
+ $(eval $(call AUTOTARGETS,package,tcpdump))
 -
--$(STRACE_HOOK_POST_INSTALL): $(STRACE_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/strace
-+define STRACE_REMOVE_STRACE_GRAPH
- 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
--ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
-+endef
-+
-+STRACE_POST_INSTALL_TARGET_HOOKS += STRACE_REMOVE_STRACE_GRAPH
-+
-+define STRACE_INSTALL_TOOLCHAIN_TARGET_UTILS
- 	mkdir -p $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils
- 	install -c $(TARGET_DIR)/usr/bin/strace \
- 		$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils/strace
-+endef
-+
-+ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
-+STRACE_POST_INSTALL_TARGET_HOOKS += STRACE_INSTALL_TOOLCHAIN_TARGET_UTILS
- endif
+-$(TCPDUMP_HOOK_POST_INSTALL): $(TCPDUMP_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/tcpdump
 -	touch $@
-+
-+$(eval $(call AUTOTARGETS,package,strace))
+-
 -- 
 1.7.0.4
