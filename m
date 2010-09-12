@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:04 +0200
-Subject: [Buildroot] [PATCH 18/74] usbutils: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:42:03 +0200
+Subject: [Buildroot] [PATCH 17/74] mysql_client: convert old-style hook to
 	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fcab98c31bd05bfa294fd9705275832e4256dcb1.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d31100d7e80278f673f74ed36c16a65f4fd27e9e.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/usbutils/usbutils.mk |   30 +++++++++++++++++++++++-------
- 1 files changed, 23 insertions(+), 7 deletions(-)
+ package/mysql_client/mysql_client.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 0f82128..508ca0d 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -14,18 +14,34 @@ else
- 	USBUTILS_CONF_OPT = --disable-zlib
- endif
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 377df89..6a89a52 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -32,8 +32,10 @@ MYSQL_CLIENT_CONF_OPT = \
+ 	--enable-thread-safe-client \
+ 	$(ENABLE_DEBUG)
  
--$(eval $(call AUTOTARGETS,package,usbutils))
+-$(eval $(call AUTOTARGETS,package,mysql_client))
 -
--$(USBUTILS_HOOK_POST_INSTALL):
-+define USBUTILS_TARGET_CLEANUP
- 	rm -f $(TARGET_DIR)/usr/bin/usb-devices
- 	rm -f $(TARGET_DIR)/usr/sbin/update-usbids.sh
- 	rm -f $(TARGET_DIR)/usr/share/pkgconfig/usbutils.pc
--ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
-+endef
-+
-+USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_TARGET_CLEANUP
-+
-+define USBUTILS_REMOVE_UNCOMPRESSED_IDS
- 	rm -f $(TARGET_DIR)/usr/share/usb.ids
--else
-+endef
-+
-+define USBUTILS_REMOVE_COMPRESSED_IDS
- 	rm -f $(TARGET_DIR)/usr/share/usb.ids.gz
-+endef
-+
-+ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
-+USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_UNCOMPRESSED_IDS
-+else
-+USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_COMPRESSED_IDS
- endif
--ifneq ($(BR2_HAVE_DEVFILES),y)
-+
-+define USBUTILS_REMOVE_DEVFILES
- 	rm -f $(TARGET_DIR)/usr/bin/libusb-config
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+USBUTILS_POST_INSTALL_TARGET_HOOKS += USBUTILS_REMOVE_DEVFILES
- endif
+-$(MYSQL_CLIENT_HOOK_POST_INSTALL):
++define MYSQL_CLIENT_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
 -	touch $@
++endef
 +
-+$(eval $(call AUTOTARGETS,package,usbutils))
++MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_REMOVE_TEST_PROGS
++
++$(eval $(call AUTOTARGETS,package,mysql_client))
 -- 
 1.7.0.4
