@@ -1,59 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:26 +0200
-Subject: [Buildroot] [PATCH 40/74] dmraid: remove useless strip and use
-	correct step override method
+Date: Sun, 12 Sep 2010 19:42:27 +0200
+Subject: [Buildroot] [PATCH 41/74] alsa-lib: use correct step override method
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <020e028108d53c14ae257c8a643aa2d22ac00f4a.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <879465e040214d77238c7d42fcbad148a6580f8b.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the target installation step, do not rely on the package being
-installed in the staging directory, as it may not be true. So the
-dmraid binary is directly taken from the build directory.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dmraid/dmraid.mk |   24 +++++++-----------------
- 1 files changed, 7 insertions(+), 17 deletions(-)
+ package/multimedia/alsa-lib/alsa-lib.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 93d6561..ccd6a36 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -12,23 +12,13 @@ DMRAID_MAKE = $(MAKE1)
- DMRAID_DEPENDENCIES:=lvm2
- DMRAID_INSTALL_STAGING:=yes
+diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
+index 6e4c575..c1a2b1a 100644
+--- a/package/multimedia/alsa-lib/alsa-lib.mk
++++ b/package/multimedia/alsa-lib/alsa-lib.mk
+@@ -72,15 +72,16 @@ ALSA_LIB_CONF_ENV = CFLAGS="$(ALSA_LIB_CFLAGS)" \
+ # the above doesn't work with shared config.cache
+ ALSA_LIB_USE_CONFIG_CACHE = NO
  
--$(eval $(call AUTOTARGETS,package,dmraid))
+-$(eval $(call AUTOTARGETS,package/multimedia,alsa-lib))
 -
--$(DMRAID_TARGET_INSTALL_TARGET): $(DMRAID_TARGET_INSTALL_STAGING)
--	$(call MESSAGE,"Installing to target")
--	$(INSTALL) -m 0755 $(STAGING_DIR)/usr/sbin/dmraid $(TARGET_DIR)/usr/sbin
-+define DMRAID_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/$(DMRAID_SUBDIR)/tools/dmraid $(TARGET_DIR)/usr/sbin
- 	$(INSTALL) -m 0755 package/dmraid/dmraid.init $(TARGET_DIR)/etc/init.d/dmraid
--	touch $@
--
--ifeq ($(BR2_ENABLE_DEBUG),)
--$(DMRAID_HOOK_POST_INSTALL): $(DMRAID_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/dmraid
--	touch $@
--endif
+-$(ALSA_LIB_TARGET_UNINSTALL):
++define ALSA_LIB_UNINSTALL_TARGET_CMDS
+ 	-rm -f $(TARGET_DIR)/usr/lib/libasound.so*
+ 	-rm -rf $(TARGET_DIR)/usr/lib/alsa-lib
+ 	-rm -rf $(TARGET_DIR)/usr/share/alsa
 +endef
  
--$(DMRAID_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
--#	makefile has no uninstall target..
--#	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(DMRAID_DIR) uninstall
-+define DMRAID_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/dmraid $(TARGET_DIR)/etc/init.d/dmraid
--	rm -f $(DMRAID_TARGET_INSTALL_TARGET) $(DMRAID_HOOK_POST_INSTALL)
+-$(ALSA_LIB_TARGET_CLEAN):
++define ALSA_LIB_UNINSTALL_STAGING_CMDS
+ 	-rm -f $(STAGING_DIR)/usr/lib/libasound.*
+ 	-rm -rf $(STAGING_DIR)/usr/lib/alsa-lib
+ 	-rm -rf $(STAGING_DIR)/usr/share/alsa
 +endef
-+
-+$(eval $(call AUTOTARGETS,package,dmraid))
+ 
++$(eval $(call AUTOTARGETS,package/multimedia,alsa-lib))
 -- 
 1.7.0.4
