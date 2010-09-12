@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:41:48 +0200
-Subject: [Buildroot] [PATCH 02/74] libglade: convert old-style hook to
-	new-style hook
+Date: Sun, 12 Sep 2010 19:41:49 +0200
+Subject: [Buildroot] [PATCH 03/74] tn5250: remove old-style hook usage and
+	step override
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <428b533655e3f134b5cfeb40948360eab968d50c.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d1b11c16f0620d426a36bf4e10f5bc8ce4d33040.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglade/libglade.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/tn5250/tn5250.mk |   15 ++++++++-------
+ 1 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
-index 31a579e..67e621b 100644
---- a/package/libglade/libglade.mk
-+++ b/package/libglade/libglade.mk
-@@ -9,9 +9,11 @@ LIBGLADE_SITE = http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/
- LIBGLADE_INSTALL_STAGING = YES
- LIBGLADE_DEPENDENCIES = host-pkg-config libglib2 libgtk2 atk libxml2
+diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
+index ac9c1f1..63c6c6c 100644
+--- a/package/tn5250/tn5250.mk
++++ b/package/tn5250/tn5250.mk
+@@ -16,16 +16,17 @@ else
+ 	TN5250_CONF_OPT += --without-ssl
+ endif
  
--$(eval $(call AUTOTARGETS,package,libglade))
+-$(eval $(call AUTOTARGETS,package,tn5250))
 -
--$(LIBGLADE_HOOK_POST_INSTALL):
-+define LIBGLADE_INSTALL_FIX
- 	rm -rf $(TARGET_DIR)/usr/share/xml/libglade \
- 	       $(TARGET_DIR)/usr/bin/libglade-convert
+-$(TN5250_HOOK_POST_INSTALL):
++define TN5250_INSTALL_FIXES
+ 	rm -f $(TARGET_DIR)/usr/bin/5250keys
+ 	rm -f $(TARGET_DIR)/usr/bin/xt5250
 -	touch $@
 +endef
 +
-+LIBGLADE_POST_INSTALL_TARGET_HOOKS += LIBGLADE_INSTALL_FIX
++TN5250_POST_INSTALL_TARGET_HOOKS += TN5250_INSTALL_FIXES
+ 
+-$(TN5250_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define TN5250_UNINSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(TN5250_DIR)
+ 	rm -f $(TARGET_DIR)/usr/lib/lib5250.*
+ 	rm -rf $(TARGET_DIR)/usr/share/tn5250
+-	rm -f $(TN5250_TARGET_INSTALL_TARGET) $(TN5250_HOOK_POST_INSTALL)
++endef
 +
-+$(eval $(call AUTOTARGETS,package,libglade))
++$(eval $(call AUTOTARGETS,package,tn5250))
 -- 
 1.7.0.4
