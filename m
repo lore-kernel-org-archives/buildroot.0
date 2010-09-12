@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:16 +0200
-Subject: [Buildroot] [PATCH 30/74] xlib_libX11: convert old-style hooks to
-	new-style hooks
+Date: Sun, 12 Sep 2010 19:42:15 +0200
+Subject: [Buildroot] [PATCH 29/74] e2fsprogs: convert old-style hooks to
+	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1976fc5f244cd04027b3a6f0d6b7ab1a29306f7d.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cfe2c192d17c44291490c120d8bb33eeed2662e8.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,97 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk |   18 +++++++++++-------
- 1 files changed, 11 insertions(+), 7 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |   61 +++++++++++++++++++++++++++------------
+ 1 files changed, 42 insertions(+), 19 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 575aa67..c95d654 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -20,20 +20,24 @@ XLIB_LIBX11_CONF_OPT = \
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 78bf21c..f525804 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -30,9 +30,6 @@ define HOST_E2FSPROGS_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+ endef
  
- HOST_XLIB_LIBX11_DEPENDENCIES = host-xproto_xextproto host-libxcb host-xutil_util-macros host-xlib_xtrans host-xlib_libXau host-xlib_libXdmcp host-xproto_kbproto host-xproto_xproto host-xproto_xextproto host-xproto_inputproto host-xproto_xf86bigfontproto xproto_bigreqsproto host-xproto_xcmiscproto
- 
--$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
--$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
+-$(eval $(call AUTOTARGETS,package,e2fsprogs))
+-$(eval $(call AUTOTARGETS,package,e2fsprogs,host))
 -
- # src/util/makekeys is executed at build time to generate ks_tables.h, so
- # it should get compiled for the host. The libX11 makefile unfortunately
- # doesn't know about cross compilation so this doesn't work.
- # Long term, we should probably teach it about HOSTCC / HOST_CFLAGS, but for
- # now simply disable the src/util Makefile and build makekeys by hand in
- # advance
--$(XLIB_LIBX11_HOOK_POST_EXTRACT):
-+define XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
- 	echo '' > $(@D)/src/util/Makefile.am
--	touch $@
-+endef
-+
-+XLIB_LIBX11_POST_EXTRACT_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
+ # binaries to keep or remove
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += usr/sbin/badblocks
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BLKID) += usr/sbin/blkid
+@@ -68,32 +65,58 @@ E2FSPROGS_TXTTARGETS_ = \
+ 	usr/sbin/findfs \
+ 	usr/sbin/tune2fs
  
--$(XLIB_LIBX11_HOOK_POST_CONFIGURE):
-+define XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
- 	cd $(@D)/src/util && $(HOSTCC) $(HOSTCFLAGS) \
- 		-I$(STAGING_DIR)/usr/include -o makekeys makekeys.c
--	touch $@
+-$(E2FSPROGS_HOOK_POST_INSTALL):
+-	$(call MESSAGE,"Post installing")
+-	# remove unneeded
++define E2FSPROGS_TARGET_REMOVE_UNNEEDED
+ 	rm -f $(addprefix $(TARGET_DIR)/, $(E2FSPROGS_BINTARGETS_))
+ 	rm -f $(addprefix $(TARGET_DIR)/, $(E2FSPROGS_TXTTARGETS_))
+-	# make symlinks
 +endef
 +
-+XLIB_LIBX11_POST_CONFIGURE_HOOKS += XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_REMOVE_UNNEEDED
 +
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
++define E2FSPROGS_TARGET_MKE2FS_SYMLINKS
++	ln -sf mke2fs $(TARGET_DIR)/usr/sbin/mkfs.ext2
++	ln -sf mke2fs $(TARGET_DIR)/usr/sbin/mkfs.ext3
++	ln -sf mke2fs $(TARGET_DIR)/usr/sbin/mkfs.ext4
++	ln -sf mke2fs $(TARGET_DIR)/usr/sbin/mkfs.ext4dev
++endef
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_MKE2FS),y)
+-	ln -sf mke2fs ${TARGET_DIR}/usr/sbin/mkfs.ext2
+-	ln -sf mke2fs ${TARGET_DIR}/usr/sbin/mkfs.ext3
+-	ln -sf mke2fs ${TARGET_DIR}/usr/sbin/mkfs.ext4
+-	ln -sf mke2fs ${TARGET_DIR}/usr/sbin/mkfs.ext4dev
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_MKE2FS_SYMLINKS
+ endif
++
++define E2FSPROGS_TARGET_E2FSCK_SYMLINKS
++	ln -sf e2fsck $(TARGET_DIR)/usr/sbin/fsck.ext2
++	ln -sf e2fsck $(TARGET_DIR)/usr/sbin/fsck.ext3
++	ln -sf e2fsck $(TARGET_DIR)/usr/sbin/fsck.ext4
++	ln -sf e2fsck $(TARGET_DIR)/usr/sbin/fsck.ext4dev
++endef
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+-	ln -sf e2fsck ${TARGET_DIR}/usr/sbin/fsck.ext2
+-	ln -sf e2fsck ${TARGET_DIR}/usr/sbin/fsck.ext3
+-	ln -sf e2fsck ${TARGET_DIR}/usr/sbin/fsck.ext4
+-	ln -sf e2fsck ${TARGET_DIR}/usr/sbin/fsck.ext4dev
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
+ endif
++
++define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
++	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
++endef
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_TUNE2FS),y)
+-	ln -sf e2label ${TARGET_DIR}/usr/sbin/tune2fs
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+ endif
++
++define E2FSPROGS_TARGET_FINDFS_SYMLINK
++	ln -sf e2label $(TARGET_DIR)/usr/sbin/findfs
++endef
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_FINDFS),y)
+-	ln -sf e2label ${TARGET_DIR}/usr/sbin/findfs
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FINDFS_SYMLINK
+ endif
++
++define E2FSPROGS_STAGING_LIBUUID_INSTALL
++	install -D $(@D)/lib/uuid/uuid.h $(STAGING_DIR)/usr/include/uuid/uuid.h
++endef
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBUUID),y)
+-	install -D ${E2FSPROGS_SRCDIR}/lib/uuid/uuid.h ${STAGING_DIR}/usr/include/uuid/uuid.h
++E2FSPROGS_POST_INSTALL_STAGING_HOOKS += E2FSPROGS_STAGING_LIBUUID_INSTALL
+ endif
+-	touch $@
+ 
++$(eval $(call AUTOTARGETS,package,e2fsprogs))
++$(eval $(call AUTOTARGETS,package,e2fsprogs,host))
 -- 
 1.7.0.4
