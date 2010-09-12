@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:54 +0200
-Subject: [Buildroot] [PATCH 68/74] pcre: convert to new style hook
+Date: Sun, 12 Sep 2010 19:42:56 +0200
+Subject: [Buildroot] [PATCH 70/74] strace: convert to new style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8112567cb30a0e7101b59059fdbbc41972c90550.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d2b7b19a5707def8a03f009ab69d511f99cbe339.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pcre/pcre.mk |   18 ++++++++++++------
+ package/strace/strace.mk |   18 ++++++++++++------
  1 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 290e534..d2a1331 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -13,14 +13,20 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- PCRE_CONF_OPT = --disable-cpp
- endif
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 3d50879..13d1557 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -14,14 +14,20 @@ STRACE_CONF_ENV:= ac_cv_header_linux_if_packet_h=yes \
+ 		  ac_cv_header_linux_netlink_h=yes \
+ 	          $(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
  
--$(eval $(call AUTOTARGETS,package,pcre))
+-$(eval $(call AUTOTARGETS,package,strace))
 -
--$(PCRE_HOOK_POST_INSTALL): $(PCRE_TARGET_INSTALL_TARGET)
-+define PCRE_STAGING_PCRE_CONFIG_FIXUP
- 	$(SED) 's,^prefix=.*,prefix=$(STAGING_DIR)/usr,' \
- 		-e 's,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,' \
- 		$(STAGING_DIR)/usr/bin/pcre-config
--	rm -rf $(TARGET_DIR)/usr/share/doc/pcre
--ifneq ($(BR2_HAVE_DEVFILES),y)
+-$(STRACE_HOOK_POST_INSTALL): $(STRACE_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/strace
++define STRACE_REMOVE_STRACE_GRAPH
+ 	rm -f $(TARGET_DIR)/usr/bin/strace-graph
+-ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
 +endef
 +
-+PCRE_POST_INSTALL_STAGING_HOOKS += PCRE_STAGING_PCRE_CONFIG_FIXUP
++STRACE_POST_INSTALL_TARGET_HOOKS += STRACE_REMOVE_STRACE_GRAPH
 +
-+define PCRE_TARGET_REMOVE_PCRE_CONFIG
- 	rm -f $(TARGET_DIR)/usr/bin/pcre-config
++define STRACE_INSTALL_TOOLCHAIN_TARGET_UTILS
+ 	mkdir -p $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils
+ 	install -c $(TARGET_DIR)/usr/bin/strace \
+ 		$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils/strace
 +endef
 +
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+PCRE_POST_INSTALL_TARGET_HOOKS += PCRE_TARGET_REMOVE_PCRE_CONFIG
++ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
++STRACE_POST_INSTALL_TARGET_HOOKS += STRACE_INSTALL_TOOLCHAIN_TARGET_UTILS
  endif
 -	touch $@
 +
-+$(eval $(call AUTOTARGETS,package,pcre))
++$(eval $(call AUTOTARGETS,package,strace))
 -- 
 1.7.0.4
