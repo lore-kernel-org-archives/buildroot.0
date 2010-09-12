@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:30 +0200
-Subject: [Buildroot] [PATCH 44/74] lighttpd: use correct step override method
+Date: Sun, 12 Sep 2010 19:42:31 +0200
+Subject: [Buildroot] [PATCH 45/74] netperf: use correct step override method
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7d6e7bcc26d84846838a493d3c10e254ae824552.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b88c394685f3c77219da743d6e0c434312712cf4.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/lighttpd.mk |    9 ++++-----
- 1 files changed, 4 insertions(+), 5 deletions(-)
+ package/netperf/netperf.mk |   18 ++++++++----------
+ 1 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 3ac1f07..e6f913c 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -44,11 +44,10 @@ else
- LIGHTTPD_CONF_OPT += --without-pcre
- endif
+diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+index d198eee..6bf9b5c 100644
+--- a/package/netperf/netperf.mk
++++ b/package/netperf/netperf.mk
+@@ -8,18 +8,16 @@ NETPERF_VERSION = 2.4.5
+ NETPERF_SITE = ftp://ftp.netperf.org/netperf
+ NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
  
--$(eval $(call AUTOTARGETS,package,lighttpd))
+-$(eval $(call AUTOTARGETS,package,netperf))
 -
--$(LIGHTTPD_TARGET_UNINSTALL):
+-$(NETPERF_TARGET_INSTALL_TARGET):
+-	$(call MESSAGE,"Installing to target")
+-	$(INSTALL) -m 0755 $(NETPERF_DIR)/src/netperf \
++define NETPERF_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/src/netperf \
+ 		$(TARGET_DIR)/usr/bin/netperf
+-	$(INSTALL) -m 0755 $(NETPERF_DIR)/src/netserver \
++	$(INSTALL) -m 0755 $(@D)/src/netserver \
+ 		$(TARGET_DIR)/usr/bin/netserver
+-	touch $@
++endef
+ 
+-$(NETPERF_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
- 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
- 	rm -rf $(TARGET_DIR)/usr/lib/lighttpd
--	rm -f $(LIGHTTPD_TARGET_INSTALL_TARGET) $(LIGHTTPD_HOOK_POST_INSTALL)
++define NETPERF_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/netperf
+ 	rm -f $(TARGET_DIR)/usr/bin/netserver
+-	rm -f $(NETPERF_TARGET_INSTALL_TARGET) $(NETPERF_HOOK_POST_INSTALL)
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,lighttpd))
++$(eval $(call AUTOTARGETS,package,netperf))
 -- 
 1.7.0.4
