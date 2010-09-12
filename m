@@ -1,56 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:10 +0200
-Subject: [Buildroot] [PATCH 24/74] libiconv: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:42:11 +0200
+Subject: [Buildroot] [PATCH 25/74] libpng: convert old-style hook to
 	new-style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <375b14fbeb876aaa550f0bfee013a15ca4191202.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20528a8449c85f5eb7e1ec829c50c6b23fda2c61.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to that, remove useless stripping since it is done
-globally.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libiconv/libiconv.mk |   20 +++++++++++---------
- 1 files changed, 11 insertions(+), 9 deletions(-)
+ package/libpng/libpng.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index a3f762a..c56a986 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -12,17 +12,19 @@ LIBICONV_INSTALL_TARGET = YES
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index a81d951..5608f4f 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -14,14 +14,15 @@ LIBPNG_DEPENDENCIES = host-pkg-config zlib
+ HOST_LIBPNG_CONF_OPT = --without-libpng-compat
+ HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
  
- LIBICONV_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--$(eval $(call AUTOTARGETS,package,libiconv))
-+# Remove not used preloadable libiconv.so
-+define LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
-+	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
-+endef
- 
--$(LIBICONV_HOOK_POST_INSTALL):
--	# Remove not used preloadable libiconv.so
-+define LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
- 	rm -f $(STAGING_DIR)/usr/lib/preloadable_libiconv.so
--	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
--ifneq ($(BR2_ENABLE_DEBUG),y)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libiconv.so.*
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
--endif
+-$(eval $(call AUTOTARGETS,package,libpng))
+-$(eval $(call AUTOTARGETS,package,libpng,host))
+-
+-$(LIBPNG_HOOK_POST_INSTALL):
++define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng12\',g" \
+ 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+ 		$(STAGING_DIR)/usr/bin/libpng12-config
 -	touch $@
 +endef
-+
-+LIBICONV_POST_INSTALL_TARGET_HOOKS += LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
-+LIBICONV_POST_INSTALL_STAGING_HOOKS += LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
-+
-+$(eval $(call AUTOTARGETS,package,libiconv))
  
- # Configurations where the toolchain supports locales and the libiconv
- # package is enabled are incorrect, because the toolchain already
++LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
++
++$(eval $(call AUTOTARGETS,package,libpng))
++$(eval $(call AUTOTARGETS,package,libpng,host))
 -- 
 1.7.0.4
