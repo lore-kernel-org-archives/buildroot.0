@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:41:56 +0200
-Subject: [Buildroot] [PATCH 10/74] samba: convert old-style hooks to
-	new-style hooks
+Date: Sun, 12 Sep 2010 19:41:57 +0200
+Subject: [Buildroot] [PATCH 11/74] php: convert old-style hooks to new-style
+	hooks
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e8ba6a5119ce025c351380a942f3a399d78fb9a7.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c692a3e44348b70153210733bd7d0c82028f8973.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |   29 +++++++++++++++++------------
- 1 files changed, 17 insertions(+), 12 deletions(-)
+ package/php/php.mk |   17 ++++++++++-------
+ 1 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 44f7fde..141c690 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -85,9 +85,6 @@ SAMBA_UNINSTALL_TARGET_OPT = \
- 	$(if $(BR2_PACKAGE_SAMBA_SWAT),uninstallswat)
- 
- 
--$(eval $(call AUTOTARGETS,package,samba))
--
--
- # binaries to keep
- SAMBA_BINTARGETS_y = \
- 	usr/sbin/smbd \
-@@ -155,14 +152,14 @@ SAMBA_TXTTARGETS_ = \
- SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_FINDSMB) += usr/bin/findsmb
- SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_SMBTAR) += usr/bin/smbtar
- 
--
--$(SAMBA_HOOK_POST_INSTALL):
--	$(call MESSAGE,"Post installing")
--	# remove unneeded
-+define SAMBA_REMOVE_UNNEEDED_BINARIES
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_))
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_TXTTARGETS_))
--ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
--ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+endef
-+
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
-+
-+define SAMBA_REMOVE_SWAT_DOCUMENTATION
- 	# Remove the documentation
- 	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
- 	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
-@@ -170,10 +167,15 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	# Removing the welcome.html file will make swat default to
- 	# welcome-no-samba-doc.html
- 	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
-+endef
-+
-+ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 9396311..68b0b5f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -166,23 +166,26 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
  endif
  endif
--	# strip binaries
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_y))
-+
-+define SAMBA_INSTALL_INITSCRIPTS_CONFIG
- 	# install start/stop script
- 	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
- 		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
-@@ -182,5 +184,8 @@ endif
- 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
- 		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
- 	fi
--	$(Q)touch $@
+ 
+-$(eval $(call AUTOTARGETS,package,php))
+-
+-$(PHP_HOOK_POST_INSTALL):
++define PHP_INSTALL_FIXUP
+ 	rm -rf $(TARGET_DIR)/usr/lib/php
+ 	rm -f $(TARGET_DIR)/usr/bin/phpize
+ 	rm -f $(TARGET_DIR)/usr/bin/php-config
+ 	if [ ! -f $(TARGET_DIR)/etc/php.ini ]; then \
+ 		$(INSTALL) -m 0755 $(BR2_PACKAGE_PHP_CONFIG) $(TARGET_DIR)/etc/php.ini; fi
+-	touch $@
 +endef
 +
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
++PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
  
-+$(eval $(call AUTOTARGETS,package,samba))
+-$(PHP_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define PHP_UNINSTALL_STAGING_CMDS
+ 	rm -rf $(STAGING_DIR)/usr/include/php
+ 	rm -rf $(STAGING_DIR)/usr/lib/php
+ 	rm -f $(STAGING_DIR)/usr/bin/php*
+ 	rm -f $(STAGING_DIR)/usr/share/man/man1/php*.1
++endef
++
++define PHP_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/etc/php.ini
+ 	rm -f $(TARGET_DIR)/usr/bin/php*
+-	rm -f $(PHP_TARGET_INSTALL_TARGET) $(PHP_HOOK_POST_INSTALL)
++endef
+ 
++$(eval $(call AUTOTARGETS,package,php))
 -- 
 1.7.0.4
