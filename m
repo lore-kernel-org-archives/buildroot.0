@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 23:12:51 +0200
-Subject: [Buildroot] troubles with intltool
-In-Reply-To: <AANLkTin+PxSeuX_kTy6n=yYkf1keqqMdXormidcRWzcA@mail.gmail.com>
-References: <AANLkTikqwN4vkKaXWrA0SiGTwoYUYrST8vggtUwRVJRN@mail.gmail.com>
-	<20100909105838.5ae25c27@surf>
-	<AANLkTin+PxSeuX_kTy6n=yYkf1keqqMdXormidcRWzcA@mail.gmail.com>
-Message-ID: <20100912231251.6b8bb2f5@surf>
+Date: Sun, 12 Sep 2010 23:15:46 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/dont-force-no-initramfs
+Message-ID: <cover.1284326139.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Sep 2010 16:17:26 +0200
-Aurele Traynard <aurele.traynard@laposte.net> wrote:
+The following changes since commit 33070528796dafe90ebab836356fea03f2dc24f9:
+  Marcus Osdoba (1):
+        usbutils: bump to 0.90
 
-> i think i found the problem : i cant compile under fedora 7 but i tried with
-> Debian 5.0.4 and it works fine...
-> sory to disturb you
+are available in the git repository at:
 
-Well, I usually care about distro compatibility issues, but Fedora 7 is
-a bit old now (it has been released in May 2007).
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/dont-force-no-initramfs
 
-If you're interested, we can dig this a little bit further to find a
-fix, or we can just ignore the problem, assuming that Fedora 7 is too
-old for us to support.
+Thomas Petazzoni (1):
+      linux: don't force no initramfs
 
-Regards,
+ linux/linux.mk |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-Thomas
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
