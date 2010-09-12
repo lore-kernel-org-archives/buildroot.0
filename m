@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:50 +0200
-Subject: [Buildroot] [PATCH 64/74] metacity: use new style hook
+Date: Sun, 12 Sep 2010 19:42:49 +0200
+Subject: [Buildroot] [PATCH 63/74] libpcap: remove useless stripping
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b4271fbba371d1fc4d6ceac08b638bd4664cf0f8.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6cf3ec38b886f82df5576ce1146931e9eafcb154.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/metacity/metacity.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/libpcap/libpcap.mk |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
-index 44cde54..9d91efe 100644
---- a/package/metacity/metacity.mk
-+++ b/package/metacity/metacity.mk
-@@ -18,8 +18,10 @@ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 801b15e..b14a6f7 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -19,10 +19,3 @@ LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(
+ LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
  
- METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
- 
--$(eval $(call AUTOTARGETS,package,metacity))
+ $(eval $(call AUTOTARGETS,package,libpcap))
 -
--$(METACITY_HOOK_POST_INSTALL): $(METACITY_TARGET_INSTALL_TARGET)
-+define METACITY_INSTALL_XSESSION
- 	install -D package/metacity/Xsession $(TARGET_DIR)/etc/X11/Xsession
+-$(LIBPCAP_HOOK_POST_INSTALL): $(LIBPCAP_TARGET_INSTALL_TARGET)
+-ifeq ($(BR2_PREFER_STATIC_LIB),)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(wildcard $(TARGET_DIR)/usr/lib/libpcap.so*)
+-endif
 -	touch $@
-+endef
-+
-+METACITY_POST_INSTALL_TARGET_HOOKS += METACITY_INSTALL_XSESSION
-+
-+$(eval $(call AUTOTARGETS,package,metacity))
+-
 -- 
 1.7.0.4
