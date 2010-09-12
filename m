@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:49 +0200
-Subject: [Buildroot] [PATCH 63/74] libpcap: remove useless stripping
+Date: Sun, 12 Sep 2010 19:42:48 +0200
+Subject: [Buildroot] [PATCH 62/74] kexec: convert to new style hook
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6cf3ec38b886f82df5576ce1146931e9eafcb154.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0355eb522b0ab354df6262c8ef72e56403720d5b.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpcap/libpcap.mk |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/kexec/kexec.mk |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 801b15e..b14a6f7 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -19,10 +19,3 @@ LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(
- LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 4367885..5081ee8 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -16,12 +16,10 @@ else
+ KEXEC_CONF_OPT += --without-zlib
+ endif
  
- $(eval $(call AUTOTARGETS,package,libpcap))
+-$(eval $(call AUTOTARGETS,package,kexec))
 -
--$(LIBPCAP_HOOK_POST_INSTALL): $(LIBPCAP_TARGET_INSTALL_TARGET)
--ifeq ($(BR2_PREFER_STATIC_LIB),)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(wildcard $(TARGET_DIR)/usr/lib/libpcap.so*)
+-$(KEXEC_HOOK_POST_INSTALL): $(KEXEC_TARGET_INSTALL_TARGET)
+-ifneq ($(BR2_ENABLE_DEBUG),y)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/kexec
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/kdump
 -endif
++define KEXEC_REMOVE_LIB_TOOLS
+ 	rm -rf $(TARGET_DIR)/usr/lib/kexec-tools
 -	touch $@
--
++endef
++
++KEXEC_POST_INSTALL_TARGET_HOOKS += KEXEC_REMOVE_LIB_TOOLS
++
++$(eval $(call AUTOTARGETS,package,kexec))
 -- 
 1.7.0.4
