@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:42:07 +0200
-Subject: [Buildroot] [PATCH 21/74] libgtk2: convert old-style hook to
+Date: Sun, 12 Sep 2010 19:42:06 +0200
+Subject: [Buildroot] [PATCH 20/74] libcurl: convert old-style hook to
 	new-style
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <39c781f33a7cf486c4872181cce8451913d06407.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fa6c7989acb94e4df7ab42cec252d946e8fb0c43.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |   12 +++++++-----
- 1 files changed, 7 insertions(+), 5 deletions(-)
+ package/libcurl/libcurl.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 1e732d0..d669622 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -119,6 +119,13 @@ else
- LIBGTK2_CONF_OPT += --disable-cups
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 488df04..782bfb3 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -23,12 +23,14 @@ else
+ LIBCURL_CONF_OPT += --without-ssl
  endif
  
-+define LIBGTK2_POST_INSTALL_TWEAKS
-+	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
-+	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
+-$(eval $(call AUTOTARGETS,package,libcurl))
+-
+-$(LIBCURL_HOOK_POST_INSTALL):
++define LIBCURL_TARGET_CLEANUP
+ 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
+ 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
+-	touch $@
 +endef
 +
-+LIBGTK2_POST_INSTALL_TARGET_HOOKS += LIBGTK_POST_INSTALL_TWEAKS
++LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
 +
- # We do not build a full version of libgtk2 for the host, because that
- # requires compiling Cairo, Pango, ATK and X.org for the
- # host. Therefore, we patch it to remove dependencies, and we hack the
-@@ -155,8 +162,3 @@ endef
++$(eval $(call AUTOTARGETS,package,libcurl))
  
- $(eval $(call AUTOTARGETS,package,libgtk2))
- $(eval $(call AUTOTARGETS,package,libgtk2,host))
--
--$(LIBGTK2_HOOK_POST_INSTALL):
--	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
--	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
--	touch $@
+ curl: libcurl
+ curl-clean: libcurl-clean
 -- 
 1.7.0.4
