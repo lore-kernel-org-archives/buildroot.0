@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Sep 2010 19:41:49 +0200
-Subject: [Buildroot] [PATCH 03/74] tn5250: remove old-style hook usage and
+Date: Sun, 12 Sep 2010 19:41:47 +0200
+Subject: [Buildroot] [PATCH 01/74] bind: remove old-style hook usage and
 	step override
 In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d1b11c16f0620d426a36bf4e10f5bc8ce4d33040.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50f8b80f2abf4e7fd0572500af064cb5ce25fba6.1284312638.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tn5250/tn5250.mk |   15 ++++++++-------
- 1 files changed, 8 insertions(+), 7 deletions(-)
+ package/bind/bind.mk |   23 ++++++++++++++---------
+ 1 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
-index ac9c1f1..63c6c6c 100644
---- a/package/tn5250/tn5250.mk
-+++ b/package/tn5250/tn5250.mk
-@@ -16,16 +16,17 @@ else
- 	TN5250_CONF_OPT += --without-ssl
- endif
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index e57f267..8e4867a 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -27,21 +27,26 @@ BIND_CONF_OPT =	\
+ 		--disable-epoll \
+ 		--disable-threads
  
--$(eval $(call AUTOTARGETS,package,tn5250))
+-$(eval $(call AUTOTARGETS,package,bind))
 -
--$(TN5250_HOOK_POST_INSTALL):
-+define TN5250_INSTALL_FIXES
- 	rm -f $(TARGET_DIR)/usr/bin/5250keys
- 	rm -f $(TARGET_DIR)/usr/bin/xt5250
+-$(BIND_HOOK_POST_INSTALL):
++define BIND_TARGET_INSTALL_FIXES
+ 	rm -f $(TARGET_DIR)/usr/bin/isc-config.sh
+-ifneq ($(BR2_PACKAGE_BIND_TOOLS),y)
++	$(INSTALL) -m 0755 -D package/bind/bind.sysvinit $(TARGET_DIR)/etc/init.d/S81named
++endef
++
++BIND_POST_INSTALL_TARGET_HOOKS += BIND_TARGET_INSTALL_FIXES
++
++define BIND_TARGET_REMOVE_TOOLS
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/bin/, $(BIND_TARGET_BINS))
++endef
++
++ifneq ($(BR2_PACKAGE_BIND_TOOLS),y)
++BIND_POST_INSTALL_TARGET_HOOKS += BIND_TARGET_REMOVE_TOOLS
+ endif
+-	$(INSTALL) -m 0755 -D package/bind/bind.sysvinit $(TARGET_DIR)/etc/init.d/S81named
 -	touch $@
-+endef
-+
-+TN5250_POST_INSTALL_TARGET_HOOKS += TN5250_INSTALL_FIXES
  
--$(TN5250_TARGET_UNINSTALL):
+-$(BIND_TARGET_UNINSTALL):
 -	$(call MESSAGE,"Uninstalling")
-+define TN5250_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(TN5250_DIR)
- 	rm -f $(TARGET_DIR)/usr/lib/lib5250.*
- 	rm -rf $(TARGET_DIR)/usr/share/tn5250
--	rm -f $(TN5250_TARGET_INSTALL_TARGET) $(TN5250_HOOK_POST_INSTALL)
++define BIND_UNINSTALL_TARGET_CMDS
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SBINS))
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/bin/, $(BIND_TARGET_BINS))
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/lib/, $(BIND_TARGET_LIBS))
+ 	rm -f $(TARGET_DIR)/etc/init.d/S81named
+-	rm -f $(BIND_TARGET_INSTALL_TARGET) $(BIND_HOOK_POST_INSTALL)
 +endef
-+
-+$(eval $(call AUTOTARGETS,package,tn5250))
+ 
++$(eval $(call AUTOTARGETS,package,bind))
 -- 
 1.7.0.4
