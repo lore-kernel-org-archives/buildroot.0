@@ -1,9 +1,9 @@
 From: Chih-Min Chao <cmchao@gmail.com>
-Date: Mon, 13 Sep 2010 23:12:13 +0800
-Subject: [Buildroot] [PATCH 3/5] libopenal : new package
+Date: Mon, 13 Sep 2010 23:12:14 +0800
+Subject: [Buildroot] [PATCH 4/5] bluez : new package
 In-Reply-To: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
 References: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1284390735-2261-4-git-send-email-cmchao@gmail.com>
+Message-ID: <1284390735-2261-5-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
 ---
- package/multimedia/Config.in              |    1 +
- package/multimedia/libopenal/Config.in    |    8 ++++++
- package/multimedia/libopenal/libopenal.mk |   39 +++++++++++++++++++++++++++++
- 3 files changed, 48 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/libopenal/Config.in
- create mode 100644 package/multimedia/libopenal/libopenal.mk
+ package/Config.in       |    1 +
+ package/bluez/Config.in |   11 +++++++++++
+ package/bluez/bluez.mk  |   16 ++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/bluez/Config.in
+ create mode 100644 package/bluez/bluez.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 3b0eec5..17e84b2 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -17,6 +17,7 @@ source "package/multimedia/libmad/Config.in"
- source "package/multimedia/libmms/Config.in"
- source "package/multimedia/libmpd/Config.in"
- source "package/multimedia/libogg/Config.in"
-+source "package/multimedia/libopenal/Config.in"
- source "package/multimedia/libsndfile/Config.in"
- source "package/multimedia/libtheora/Config.in"
- source "package/multimedia/libvorbis/Config.in"
-diff --git a/package/multimedia/libopenal/Config.in b/package/multimedia/libopenal/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 2209b55..e8922c9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -353,6 +353,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/boa/Config.in"
+ endif
+ source "package/bind/Config.in"
++source "package/bluez/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
+ source "package/ctorrent/Config.in"
+diff --git a/package/bluez/Config.in b/package/bluez/Config.in
 new file mode 100644
-index 0000000..7262708
+index 0000000..d80933e
 --- /dev/null
-+++ b/package/multimedia/libopenal/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBOPENAL
-+	bool "libopenal"
++++ b/package/bluez/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BLUEZ
++	bool "bluez"
++	depends on BR2_PACKAGE_DBUS_GLIB
 +	help
-+	  OpenAL is a cross-platform 3D audio API appropriate
-+	  for use with gaming applications and many other types
-+	  of audio applications
++	  BlueZ provides support for the core Bluetooth layers and protocols.
++	  It is flexible, efficient and uses a modular implementation.
 +
-+	  http://connect.creativelabs.com/openal/default.aspx
-diff --git a/package/multimedia/libopenal/libopenal.mk b/package/multimedia/libopenal/libopenal.mk
++	  http://www.bluez.org/
++
++comment "bluez requires dbus-glib2 package
++	depends on !BR2_PACKAGE_DBUS_GLIB
+diff --git a/package/bluez/bluez.mk b/package/bluez/bluez.mk
 new file mode 100644
-index 0000000..e2b8c97
+index 0000000..39339c5
 --- /dev/null
-+++ b/package/multimedia/libopenal/libopenal.mk
-@@ -0,0 +1,39 @@
-+LIBOPENAL_VERSION=1.12.854
-+LIBOPENAL_SOURCE=openal-soft-$(LIBOPENAL_VERSION).tar.bz2
-+LIBOPENAL_SITE=http://kcat.strangesoft.net/openal-releases
-+LIBOPENAL_DEPENDENCIES= host-cmake
++++ b/package/bluez/bluez.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# Bluez
++#
++#############################################################
++BLUEZ_VERSION:=4.71
++BLUEZ_SOURCE:=bluez-$(BLUEZ_VERSION).tar.gz
++BLUEZ_SITE:=http://www.kernel.org/pub/linux/bluetooth
++BLUEZ_LIBTOOL_PATCH:=NO
++BLUEZ_INSTALL_STAGING:=NO
++BLUEZ_INSTALL_TARGET:=YES
++BLUEZ_DEPENDENCIES:= dbus-glib
 +
-+# CMake doesn't support having the --sysroot option directly in the
-+# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
-+LIBOPENAL_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
-+LIBOPENAL_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
-+LIBOPENAL_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-+LIBOPENAL_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
++BLUEZ_CONF_OPT:= --enable-tools --disable-static --enable-shared
 +
-+define LIBOPENAL_CONFIGURE_CMDS
-+ -mkdir $(@D)/build
-+ (cd $(@D)/build ; \
-+	$(HOST_DIR)/usr/bin/cmake .. \
-+		-Wno-dev \
-+		-DCMAKE_SYSTEM_NAME:STRING="Linux" \
-+		-DCMAKE_C_COMPILER:FILEPATH="$(LIBOPENAL_TARGET_CC)" \
-+		-DCMAKE_CXX_COMPILER:FILEPATH="$(LIBOPENAL_TARGET_CXX)" \
-+		-DCMAKE_C_FLAGS:STRING="$(LIBOPENAL_TARGET_CFLAGS)" \
-+		-DCMAKE_CXX_FLAGS:STRING="$(LIBOPENAL_TARGET_CXXFLAGS)" \
-+		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
-+		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
-+		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
-+		-DCMAKE_FIND_ROOT_PATH:PATH="$(STAGING_DIR)" \
-+		-DCMAKE_INSTALL_PREFIX:PATH="$(TARGET_DIR)" \
-+ )
-+endef
-+
-+define LIBOPENAL_BUILD_CMDS
-+ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build
-+endef
-+
-+define LIBOPENAL_INSTALL_TARGET_CMDS
-+ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build install
-+endef
-+
-+$(eval $(call GENTARGETS,package,libopenal))
++$(eval $(call AUTOTARGETS,package,bluez))
 -- 
 1.7.0.4
