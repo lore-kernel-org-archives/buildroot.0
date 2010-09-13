@@ -1,220 +1,100 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Mon, 13 Sep 2010 20:07:16 +0200
-Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
-In-Reply-To: <1284401236-731-1-git-send-email-marcus.osdoba@googlemail.com>
-References: <1284401236-731-1-git-send-email-marcus.osdoba@googlemail.com>
-Message-ID: <1284401236-731-2-git-send-email-marcus.osdoba@googlemail.com>
+From: S W <sw18@hotmail.co.jp>
+Date: Tue, 14 Sep 2010 05:16:37 +0900
+Subject: [Buildroot] Build error: No rule to make target
+ `ubootboard_config'
+In-Reply-To: <20100913203030.527a8293@surf>
+References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>,
+	<20100911105201.176d1396@surf>,
+	<KAW101-W3400321E421A55939E3C979B750@phx.gbl>,
+	<KAW101-W663381351DE5AA588F11B19B770@phx.gbl>,
+	<20100913203030.527a8293@surf>
+Message-ID: <KAW101-W29624180977A0A1CC4A5979B770@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the client has an excellent webinterface
-and seems to be ideal for headless systems,
-according to some user voices
-the package ctorrent segfaults quite often and consumes more resources
 
-Based on work by: Kelvin Cheung <keguang.zhang@gmail.com>
+Hi Thomas
 
-Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
----
- package/Config.in                    |    1 +
- package/transmission/Config.in       |   21 ++++++++
- package/transmission/S92transmission |   88 ++++++++++++++++++++++++++++++++++
- package/transmission/transmission.mk |   49 +++++++++++++++++++
- 4 files changed, 159 insertions(+), 0 deletions(-)
- create mode 100644 package/transmission/Config.in
- create mode 100644 package/transmission/S92transmission
- create mode 100644 package/transmission/transmission.mk
+Thank you so much for your nice explanation!
+Yes I have misunderstood about ARM. 
+Like you said, it is a general architecture.
 
-diff --git a/package/Config.in b/package/Config.in
-index d60d8ef..17386ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -427,6 +427,7 @@ source "package/thttpd/Config.in"
- source "package/tinyhttpd/Config.in"
- endif
- source "package/tn5250/Config.in"
-+source "package/transmission/Config.in"
- source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/vpnc/Config.in"
-diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-new file mode 100644
-index 0000000..f634f8b
---- /dev/null
-+++ b/package/transmission/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_TRANSMISSION
-+	bool "transmission"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBEVENT
-+	help
-+	  Transmission is a cross-platform BitTorrent client.
-+
-+config BR2_PACKAGE_TRANSMISSION_CLI
-+	bool "transmissioncli"
-+	depends on BR2_PACKAGE_TRANSMISSION
-+	help
-+	  Install transmission command line interface.
-+
-+config BR2_PACKAGE_TRANSMISSION_REMOTE
-+	bool "transmission-remote"
-+	depends on BR2_PACKAGE_TRANSMISSION
-+	default y
-+	help
-+	  Install transmission remote management tool.
-diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-new file mode 100644
-index 0000000..9c15aae
---- /dev/null
-+++ b/package/transmission/S92transmission
-@@ -0,0 +1,88 @@
-+#!/bin/sh
-+if [ ! -z "$2" ]; then
-+	TRANSMISSION_ARGS="$2"
-+else
-+	TRANSMISSION_ARGS=""
-+fi
-+
-+if [ ! -z "$3" ]; then
-+	NET_INTERFACE="$3"
-+else
-+	NET_INTERFACE=""
-+fi
-+
-+DESC="bittorrent client"
-+NAME=transmission-daemon
-+DAEMON=$(which $NAME)
-+SCRIPTNAME=/etc/init.d/$0
-+
-+[ -x "$DAEMON" ] || exit 0
-+
-+do_start()
-+{
-+	if [ ! -z "$NET_INTERFACE" ]; then
-+		# poll network interface
-+		IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-+		IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-+		while [ -z "$IP_ADDR" ]
-+		do
-+			sleep 5
-+			IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-+			IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-+		done
-+	fi
-+	if [ -z "$TRANSMISSION_ARGS" ]; then
-+		start-stop-daemon -S -b -x ${DAEMON}
-+	else
-+		start-stop-daemon -S -b -x ${DAEMON} -- ${TRANSMISSION_ARGS}
-+	fi
-+	return $?
-+}
-+
-+do_stop()
-+{
-+	start-stop-daemon -K -b -x ${DAEMON}
-+	return $?
-+}
-+
-+case "$1" in
-+	start)
-+		echo "Starting $DESC" "$NAME..."
-+		do_start
-+		case "$?" in
-+			0) echo "   Start $DESC $NAME: SUCCESS" ;;
-+			*)
-+				echo "   Start $DESC $NAME: FAILED"
-+				exit 3
-+				;;
-+		esac
-+		;;
-+	stop)
-+		echo "Stopping $DESC $NAME..."
-+		do_stop
-+		case "$?" in
-+			0) echo "   Stop $DESC $NAME: SUCCESS" ;;
-+			*)
-+				echo "   Stop $DESC $NAME: FAILED"
-+				exit 3
-+				;;
-+		esac
-+		;;
-+	restart|force-reload)
-+		echo "Restarting $DESC $NAME..."
-+		do_stop
-+		sleep 2
-+		do_start
-+		case "$?" in
-+			0) echo "   Restart $DESC $NAME: SUCCESS" ;;
-+			*)
-+				echo "   Restart $DESC $NAME: FAILED: couldn't start $NAME"
-+				exit 3
-+				;;
-+		esac
-+		;;
-+	*)
-+		echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-+		exit 3
-+		;;
-+esac
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-new file mode 100644
-index 0000000..d50129a
---- /dev/null
-+++ b/package/transmission/transmission.mk
-@@ -0,0 +1,49 @@
-+#############################################################
-+#
-+# transmission
-+#
-+#############################################################
-+TRANSMISSION_VERSION=2.04
-+TRANSMISSION_SOURCE=transmission-$(TRANSMISSION_VERSION).tar.bz2
-+TRANSMISSION_SITE=http://mirrors.m0k.org/transmission/files/
-+TRANSMISSION_LIBTOOL_PATCH=NO
-+TRANSMISSION_DEPENDENCIES= host-pkg-config host-intltool zlib openssl libcurl libevent
-+
-+TRANSMISSION_CONF_OPT = --disable-gtk \
-+			--disable-libnotify \
-+			--enable-daemon \
-+			--localstatedir=/var/transmission-statedir \
-+			--with-zlib=$(STAGING_DIR) \
-+
-+ifneq ($(BR2_PACKAGE_TRANSMISSION_CLI),y)
-+TRANSMISSION_CONF_OPT += --disable-cli
-+else
-+TRANSMISSION_CONF_OPT += --enable-cli
-+endif
-+
-+
-+ifneq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-+TRANSMISSION_CONF_OPT += --disable-remote
-+endif
-+ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-+define TRANSMISSION_INITDSKRIPT_INSTALL
-+	# install start/stop script
-+	$(call MESSAGE,"Installing S92transmission init script")
-+	if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
-+		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-+		$(TARGET_DIR)/etc/init.d/S92transmission; \
-+	fi
-+	$(Q)touch $@
-+endef
-+TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INITDSKRIPT_INSTALL
-+endif
-+
-+
-+define TRANSMISSION_STATEDIRLINK_INSTALL
-+	$(call MESSAGE,"Creating link for transmission statedirectory")
-+	ln -sf /tmp/transmission $(TARGET_DIR)/var/transmission-statedir
-+endef
-+TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_STATEDIRLINK_INSTALL
-+
-+
-+$(eval $(call AUTOTARGETS,package,transmission))
--- 
-1.7.1
+I will figure out the hardware board name from my headquater company.
+
+But I have a doubt about the boads that U-Boot can deal with.
+You told me that there thousands of different boards. But how
+can U-Boot know these board names? And how can U-Boot know
+there are new boards that come out?
+
+Thanks
+Terry
+
+> Date: Mon, 13 Sep 2010 20:30:30 +0200
+> From: thomas.petazzoni at free-electrons.com
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Build error: No rule to make target `ubootboard_config'
+> 
+> On Tue, 14 Sep 2010 02:51:42 +0900
+> S W <sw18@hotmail.co.jp> wrote:
+> 
+> > I am trying to build a Uboot loader for ARM.
+> 
+> "ARM" is a very general core architecture. There are dozens of
+> companies building processors based on the ARM architecture, producing
+> hundreds of different processors, used in thousands of different boards.
+> 
+> So "building U-Boot for ARM" is not precise enough, and it's definitely
+> the thing that you seem to misunderstand.
+> 
+> > If I leave the "U-boot board name" as blank,
+> > there is an error as "NO U-Boot board name set. 
+> > Check your BR2_TARGET_UBOOT_BOARDNAME setting."
+> 
+> Yes, U-Boot needs to be configured by providing the name of the board
+> you are targeting. See 
+> 
+> > But if I input the U-Boot board name as a name like "ubootboard",
+> > I encountered another error "No rule to make target
+> > `ubootboard_config".
+> 
+> Obviously it seems you're misunderstanding a bit what this is all about.
+> "ubootboard" is not a valid board name. See include/configs/ in U-Boot
+> sources for the valid board names in U-Boot.
+> 
+> Try "at91sam9263ek" as a board name. U-Boot will compile properly...
+> but will very likely not work on your hardware, unless it is the
+> AT91SAM9263-EK board (which is an evaluation kit of the AT91SAM9263
+> CPU, sold by Atmel).
+> 
+> > How I create the build rule for U-Boot board?
+> 
+> Two choices :
+> 
+>  *) U-Boot is already ported to your hardware. In that case, you only
+>     need to find what file in include/configs/ in the U-Boot sources
+>     correspond to the board that you have.
+> 
+>  *) U-Boot is not already ported to your hardware. Then it's a lot more
+>     work since you'll have to do the porting by yourself.
+> 
+> I repeat my question: on which hardware do you want to run U-Boot ?
+> 
+> Regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+ 		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100914/60b12f8b/attachment.html>
