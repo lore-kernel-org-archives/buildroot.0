@@ -1,26 +1,46 @@
-From: Madhusudan Madhusudan <coolmadhus@gmail.com>
-Date: Sun, 12 Sep 2010 20:33:35 -0700
-Subject: [Buildroot] Login prompt problem
-Message-ID: <AANLkTin1u2FGn6o2ZqhtgoRR9qgJfNoi18xGCmu4v6A4@mail.gmail.com>
+From: Joachim Pihl <joachim.pihl@sensordevelopments.com>
+Date: Mon, 13 Sep 2010 07:36:09 +0200
+Subject: [Buildroot] AVR32 kernel install bug
+In-Reply-To: <20100910161501.7f692bf3@surf>
+References: <op.vinvdkgksev97k@joachim-lappis> <20100907150948.4de996e3@surf>
+	<op.vis0txzcsev97k@joachim-lappis>
+	<op.vitc9tjfsev97k@joachim-lappis> <20100910161501.7f692bf3@surf>
+Message-ID: <op.viyhujc1sev97k@joachim-lappis>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi friends,
-               I have generated a root file system and kernel image for
-Omapl138.I load the kernel image followed by root FS of ext2 type.After
-loading it identifies  the file system and gives us the login prompt..Here
-comes the problem,what should we give over here??
+On Fri, 10 Sep 2010 16:15:01 +0200, Thomas Petazzoni  
+<thomas.petazzoni@free-electrons.com> wrote:
 
-default,root etc when tried, it accepts and displays the banner information
-and goes back to Login prompt again..
+> For gdb on the target, we can probably mark it as not available on
+> AVR32. Having gdb on the target is not a very common need anyway. It's
+> on my TODO-list to upgrade the AVR32 toolchain that we have, it would
+> also upgrade the gcc version, but I'm not sure it's going to fix the
+> gdb on target problem.
 
-Any suggestions related to this will be of great help to me.
+Try, and if it doesn't work then disable gdb on target. It's sometimes  
+nice to have gdb on board (e.g. when you get access to the device through  
+a firewall only), but not a must for me right now.
+>
+> Concerning U-Boot, we have a patch called:
+>   u-boot-2010.03-fix-avr32.patch
+> in boot/u-boot/, which adds an include of <asm-generic/unaligned.h>.
+>
+> Maybe this patch just needs to be ported over to U-Boot 2010.06, or
+> even better, pushed in upstream U-Boot ?
 
-Thanks & Regards
-Sudan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100912/eccdb78f/attachment.html>
+It is unlikely to go away all by itself, so upstream is really the only  
+sensible way to go. The patch is there and it works, so why not make sure  
+the mainstream absorbs it?
+
+-- 
+Joachim Pihl
+Development engineer
+SENSOR DEVELOPMENTS AS
+Tlf: +47 913 39 891
+Nordre Kuller?d 21
+NO-3241 Sandefjord
+NORWAY
