@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Sep 2010 08:50:50 +0200
-Subject: [Buildroot] [PATCH 4/8] Implement basic non-wget download methods
+Date: Mon, 13 Sep 2010 08:50:49 +0200
+Subject: [Buildroot] [PATCH 3/8] Update defconfigs with new VCS config
+	options
 In-Reply-To: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <993e51bc22f508fbaf39c5c49fd0595fc5c56013.1284360382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9eddd31df3ae821e8ff39e31e2ee1b39ca3891c3.1284360382.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,127 +13,454 @@ To: buildroot@busybox.net
 
 From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
 
-Packages can now be sourced from Git and Subversion repositories. The
-download method will be autodetected from the URI (git://, svn://, etc).
-If the repository is accessed through http(s), you can force the
-download method by setting a _SITE_METHOD variable to either 'git' or
-'svn', respectively and without the quotes.
-
-The package's _VERSION variable defines which commit, revision, tag or
-branch should be checked out. For Git, it can be HEAD, a commit ID, a
-tag name or branch name (anything that can be checked out with `git
-checkout`). For Subversion, it must be a revision number, or HEAD.
-
 Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   68 ++++++++++++++++++++++++++++++++++++++++--
- 1 files changed, 64 insertions(+), 4 deletions(-)
+ configs/arm_toolchain_defconfig           |    5 ++---
+ configs/at91rm9200df_defconfig            |    5 ++---
+ configs/at91rm9200df_ext_bare_defconfig   |    5 ++---
+ configs/at91rm9200df_ext_defconfig        |    5 ++---
+ configs/at91sam9260dfc_defconfig          |    5 ++---
+ configs/at91sam9260dfc_ext_bare_defconfig |    5 ++---
+ configs/at91sam9260dfc_ext_defconfig      |    5 ++---
+ configs/at91sam9261ek_defconfig           |    5 ++---
+ configs/at91sam9261ek_ext_bare_defconfig  |    5 ++---
+ configs/at91sam9261ek_ext_defconfig       |    5 ++---
+ configs/at91sam9263ek_defconfig           |    5 ++---
+ configs/at91sam9263ek_ext_bare_defconfig  |    5 ++---
+ configs/at91sam9263ek_ext_defconfig       |    5 ++---
+ configs/at91sam9g20dfc_defconfig          |    5 ++---
+ configs/at91sam9g20dfc_ext_bare_defconfig |    5 ++---
+ configs/at91sam9g20dfc_ext_defconfig      |    5 ++---
+ configs/atngw100-base_defconfig           |    5 ++---
+ configs/atngw100_defconfig                |    5 ++---
+ configs/atstk1005_defconfig               |    5 ++---
+ configs/atstk100x_defconfig               |    5 ++---
+ configs/i386_defconfig                    |    5 ++---
+ configs/i686_defconfig                    |    5 ++---
+ configs/integrator926_defconfig           |    5 ++---
+ configs/integrator926_huge_defconfig      |    5 ++---
+ configs/kb9202_defconfig                  |    5 ++---
+ configs/v100sc2_defconfig                 |    5 ++---
+ 26 files changed, 52 insertions(+), 78 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index ba0fd84..5444472 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -69,6 +69,35 @@ TERM_BOLD := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
- 
- ################################################################################
-+# The DOWNLOAD_{GIT,SVN} helpers are in charge of getting a working copy of
-+# the source repository for their corresponding SCM, checking out the requested
-+# version / commit / tag, and create an archive out of it.
-+################################################################################
-+
-+define DOWNLOAD_GIT
-+	pushd $(DL_DIR) > /dev/null && \
-+	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-+	pushd $($(PKG)_BASE_NAME) > /dev/null && \
-+	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-+		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-+	popd > /dev/null && \
-+	rm -rf $($(PKG)_DL_DIR) && \
-+	popd > /dev/null
-+endef
-+
-+define DOWNLOAD_SVN
-+	pushd $(DL_DIR) > /dev/null && \
-+	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-+	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
-+	rm -rf $($(PKG)_DL_DIR) && \
-+	popd > /dev/null
-+endef
-+
-+define DOWNLOAD_WGET
-+	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
-+endef
-+
-+################################################################################
- # DOWNLOAD -- Download helper. Will try to download source from:
- # 1) BR2_PRIMARY_SITE if enabled
- # 2) Download site
-@@ -83,8 +112,20 @@ TERM_RESET := $(shell tput rmso)
- 
- define DOWNLOAD
- 	$(Q)test -e $(DL_DIR)/$(2) || \
--	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
--	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
-+	(if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-+		$(call DOWNLOAD_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
-+	fi ; \
-+	if test -n "$(1)" ; then \
-+		case "$($(PKG)_SITE_METHOD)" in \
-+			git) $(DOWNLOAD_GIT) && exit ;; \
-+			svn) $(DOWNLOAD_SVN) && exit ;; \
-+			*) $(call DOWNLOAD_WGET,$(1),$(2)) && exit ;; \
-+		esac ; \
-+	fi ; \
-+	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-+		$(call DOWNLOAD_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
-+	fi ; \
-+	exit 1)
- endef
- 
- # Utility programs used to build packages
-@@ -244,13 +285,23 @@ ifndef $(2)_VERSION
-  endif
- endif
- 
--$(2)_DIR			=  $$(BUILD_DIR)/$(1)-$$($(2)_VERSION)
-+# Keep the package version that may contain forward slashes in the _DL_VERSION
-+# variable, then replace all forward slashes ('/') by underscores ('_') to
-+# sanitize the package version that is used in paths, directory and file names.
-+# Forward slashes may appear in the package's version when pointing to a
-+# version control system branch or tag, for example remotes/origin/1_10_stable.
-+$(2)_DL_VERSION	= $($(2)_VERSION)
-+$(2)_VERSION = $(subst /,_,$($(2)_VERSION))
-+
-+$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-+$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
-+$(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
- 
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $($(3)_SOURCE)
-  else
--  $(2)_SOURCE			?= $(1)-$$($(2)_VERSION).tar.gz
-+  $(2)_SOURCE			?= $$($(2)_BASE_NAME).tar.gz
-  endif
- endif
- 
-@@ -269,6 +320,15 @@ ifndef $(2)_SITE
-  endif
- endif
- 
-+ifndef $(2)_SITE_METHOD
-+ ifdef $(3)_SITE_METHOD
-+  $(2)_SITE_METHOD = $($(3)_SITE_METHOD)
-+ else
-+	# Try automatic detection using the scheme part of the URI
-+	$(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(2)_SITE))))
-+ endif
-+endif
-+
- $(2)_DEPENDENCIES		?=
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_TARGET		?= YES
+diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
+index bd6f3e2..632906b 100644
+--- a/configs/arm_toolchain_defconfig
++++ b/configs/arm_toolchain_defconfig
+@@ -131,9 +131,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+index 727a6ea..b7e1260 100644
+--- a/configs/at91rm9200df_defconfig
++++ b/configs/at91rm9200df_defconfig
+@@ -136,9 +136,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91rm9200df_ext_bare_defconfig b/configs/at91rm9200df_ext_bare_defconfig
+index fec2c04..20eb6a7 100644
+--- a/configs/at91rm9200df_ext_bare_defconfig
++++ b/configs/at91rm9200df_ext_bare_defconfig
+@@ -131,9 +131,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91rm9200df_ext_defconfig b/configs/at91rm9200df_ext_defconfig
+index c73e372..7383a53 100644
+--- a/configs/at91rm9200df_ext_defconfig
++++ b/configs/at91rm9200df_ext_defconfig
+@@ -142,9 +142,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index de002c4..715f070 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -149,9 +149,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9260dfc_ext_bare_defconfig b/configs/at91sam9260dfc_ext_bare_defconfig
+index 540eef6..f3c17ed 100644
+--- a/configs/at91sam9260dfc_ext_bare_defconfig
++++ b/configs/at91sam9260dfc_ext_bare_defconfig
+@@ -131,9 +131,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9260dfc_ext_defconfig b/configs/at91sam9260dfc_ext_defconfig
+index 91cdedd..6dc741a 100644
+--- a/configs/at91sam9260dfc_ext_defconfig
++++ b/configs/at91sam9260dfc_ext_defconfig
+@@ -150,9 +150,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index 0a1fc51..64b50c8 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -152,9 +152,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9261ek_ext_bare_defconfig b/configs/at91sam9261ek_ext_bare_defconfig
+index ab8851f..b83e0a7 100644
+--- a/configs/at91sam9261ek_ext_bare_defconfig
++++ b/configs/at91sam9261ek_ext_bare_defconfig
+@@ -134,9 +134,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9261ek_ext_defconfig b/configs/at91sam9261ek_ext_defconfig
+index 6ebe9fd..de01e49 100644
+--- a/configs/at91sam9261ek_ext_defconfig
++++ b/configs/at91sam9261ek_ext_defconfig
+@@ -153,9 +153,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+index d293108..41795d0 100644
+--- a/configs/at91sam9263ek_defconfig
++++ b/configs/at91sam9263ek_defconfig
+@@ -150,9 +150,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9263ek_ext_bare_defconfig b/configs/at91sam9263ek_ext_bare_defconfig
+index 2578b95..40f0fe5 100644
+--- a/configs/at91sam9263ek_ext_bare_defconfig
++++ b/configs/at91sam9263ek_ext_bare_defconfig
+@@ -133,9 +133,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9263ek_ext_defconfig b/configs/at91sam9263ek_ext_defconfig
+index 843b0fb..f537e9f 100644
+--- a/configs/at91sam9263ek_ext_defconfig
++++ b/configs/at91sam9263ek_ext_defconfig
+@@ -152,9 +152,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
+index a9347a8..0bae9ba 100644
+--- a/configs/at91sam9g20dfc_defconfig
++++ b/configs/at91sam9g20dfc_defconfig
+@@ -150,9 +150,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9g20dfc_ext_bare_defconfig b/configs/at91sam9g20dfc_ext_bare_defconfig
+index 49a5124..ab0b725 100644
+--- a/configs/at91sam9g20dfc_ext_bare_defconfig
++++ b/configs/at91sam9g20dfc_ext_bare_defconfig
+@@ -131,9 +131,8 @@ BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/at91sam9g20dfc_ext_defconfig b/configs/at91sam9g20dfc_ext_defconfig
+index bd96723..aeb8973 100644
+--- a/configs/at91sam9g20dfc_ext_defconfig
++++ b/configs/at91sam9g20dfc_ext_defconfig
+@@ -150,9 +150,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KER
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
+index 116f671..0c85ea8 100644
+--- a/configs/atngw100-base_defconfig
++++ b/configs/atngw100-base_defconfig
+@@ -84,9 +84,8 @@ BR2_TARGET_AVR32_ATNGW100_BASE=y
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 50c376b..d1c43ba 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -69,11 +69,10 @@ BR2_TARGET_AVR32_ATNGW100=y
+ # Commands
+ #
+ BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
++BR2_SVN="svn"
+ BR2_BZR_CO="bzr co"
+ BR2_BZR_UP="bzr up"
+-BR2_GIT="git clone"
++BR2_GIT="git"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+index d95b666..16af8ba 100644
+--- a/configs/atstk1005_defconfig
++++ b/configs/atstk1005_defconfig
+@@ -82,9 +82,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-avr32/kernel-patches-$(BR2_K
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index 3069f6a..8bb771d 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -83,9 +83,8 @@ BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-avr32/kernel-patches-$(BR2_K
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/i386_defconfig b/configs/i386_defconfig
+index e30ec3f..fb03076 100644
+--- a/configs/i386_defconfig
++++ b/configs/i386_defconfig
+@@ -85,9 +85,8 @@ BR2_TARGET_I686=y
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/i686_defconfig b/configs/i686_defconfig
+index 916454d..1a657db 100644
+--- a/configs/i686_defconfig
++++ b/configs/i686_defconfig
+@@ -85,9 +85,8 @@ BR2_TARGET_I686=y
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
+index 3d82ba2..0b4c219 100644
+--- a/configs/integrator926_defconfig
++++ b/configs/integrator926_defconfig
+@@ -81,9 +81,8 @@ BR2_BOARD_PATH="target/device/ARMLTD/$(BR2_BOARD_NAME)"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+index ca13339..2d5c352 100644
+--- a/configs/integrator926_huge_defconfig
++++ b/configs/integrator926_huge_defconfig
+@@ -81,9 +81,8 @@ BR2_BOARD_PATH="target/device/ARMLTD/$(BR2_BOARD_NAME)"
+ # Build options
+ #
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
+index 4f392ab..1e1fcc8 100644
+--- a/configs/kb9202_defconfig
++++ b/configs/kb9202_defconfig
+@@ -92,9 +92,8 @@ BR2_TARGET_ARM=y
+ #
+ BR2_PRIMARY_SITE=""
+ BR2_WGET="wget --passive-ftp -nd"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="gzip -d -c"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
+diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
+index c82e7d7..8e9f96e 100644
+--- a/configs/v100sc2_defconfig
++++ b/configs/v100sc2_defconfig
+@@ -63,9 +63,8 @@ BR2_TARGET_VALKA_V100SC2=y
+ #
+ BR2_PRIMARY_SITE=""
+ BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
+-BR2_SVN_CO="svn co"
+-BR2_SVN_UP="svn up"
+-BR2_GIT="git clone"
++BR2_SVN="svn"
++BR2_GIT="git"
+ BR2_ZCAT="zcat"
+ BR2_BZCAT="bzcat"
+ BR2_TAR_OPTIONS=""
 -- 
 1.7.0.4
