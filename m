@@ -1,32 +1,33 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 13 Sep 2010 14:32:38 +0000 (UTC)
-Subject: [Buildroot] gdb and external toolchain
-References: <4C8E2777.7030202@carallon.com>
-Message-ID: <i6lcm5$cas$1@dough.gmane.org>
+From: Chih-Min Chao <cmchao@gmail.com>
+Date: Mon, 13 Sep 2010 23:12:11 +0800
+Subject: [Buildroot] [PATCH 1/5] iperf : bump to 2.0.5
+In-Reply-To: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
+References: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
+Message-ID: <1284390735-2261-2-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-09-13, William Wagner <will_wagner@carallon.com> wrote:
 
-> I'm using an external toolchain and want to get gdbserver onto my 
-> target. I've seen the patch by Thomas that says that gdb host and 
-> gdbserver should be provided by the external toolchain and I have set
-> crosstools-ng to build them both.
+Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
+---
+ package/iperf/iperf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-As long as they're built from compatible versions of GDB source, it
-doens't matter who provides what.  I use gdbserver built by Buildroot
-and gdb built by crosstool-ng.
-
-> The question I have is is there any mechanism to copy the gdbserver 
-> executable built with crosstools into the target directory. I can't
-> find anything that should be doing this. I can just copy the file
-> over manually but was thinking I should add support for this to
-> buildroot.  Any suggestions on how to do this?
-
-Add gdbserver to the files copied in toolchain/external-toolchain/ext-tool.mk?
-
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index 3f8e3fc..843b53b 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -3,7 +3,7 @@
+ # iperf
+ #
+ #############################################################
+-IPERF_VERSION = 2.0.4
++IPERF_VERSION = 2.0.5
+ IPERF_SOURCE = iperf-$(IPERF_VERSION).tar.gz
+ IPERF_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/iperf
+ 
 -- 
-Grant
+1.7.0.4
