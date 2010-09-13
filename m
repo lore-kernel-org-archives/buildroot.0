@@ -1,84 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Sep 2010 10:55:20 +0200
-Subject: [Buildroot] [PATCH 5/8] Use the normal download method for
- Tremor
-In-Reply-To: <1284367351.1742.29.camel@sven>
-References: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
-	<91f2599d9b9f069f719f5577ae44d987ccd58649.1284360382.git.thomas.petazzoni@free-electrons.com>
-	<1284367351.1742.29.camel@sven>
-Message-ID: <20100913105520.1a2ed8b8@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Sep 2010 11:22:31 +0200
+Subject: [Buildroot] EXT2-fs error
+In-Reply-To: <SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl> (Johnny Beardsmore's
+	message of "Mon, 13 Sep 2010 08:45:56 +0000")
+References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>
+	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>
+	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>
+	<20100913102031.03481d63@surf>
+	<SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>
+Message-ID: <87mxrm6lrc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+>>>>> "Johnny" == Johnny Beardsmore <jny0@hotmail.com> writes:
 
-On Mon, 13 Sep 2010 10:42:31 +0200
-Sven Neumann <s.neumann@raumfeld.com> wrote:
+ Johnny> My understanding of running e2fsck is that it should only be
+ Johnny> done on an unmounted file system (or setting to read-only, but
+ Johnny> I've never actually done this).  I've only ever run it on hda
+ Johnny> (usually a hard disk or flash drive) or sda (usually a usb
+ Johnny> stick) after a umount.  For me to e2fsck on the build machine
+ Johnny> means that I'm applying it to files on a mounted file system,
+ Johnny> not a complete unmounted drive.  This is where I'm getting
+ Johnny> confused.
 
-> will this new code still try to access a tarball in the dl directory and
-> then try to get a tarball from the primary mirror before it actually
-> tries to get the snapshot from the SVN repository?
+Here it works:
 
-Yes, this is exactly what it does. In patch 4/8 :
+tar jxf buildroot-2010.08.tar.bz2
+cd buildroot-2010.08
+make menuconfig (don't change anything, exit and save)
+make
+/sbin/e2fsck -f output/images/rootfs.ext2
+e2fsck 1.41.9 (22-Aug-2009)
+Filesystem did not have a UUID; generating one.
 
-+define DOWNLOAD_GIT
-+	pushd $(DL_DIR) > /dev/null && \
-+	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-+	pushd $($(PKG)_BASE_NAME) > /dev/null && \
-+	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-+		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-+	popd > /dev/null && \
-+	rm -rf $($(PKG)_DL_DIR) && \
-+	popd > /dev/null
-+endef
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
 
-Does the git clone and then creates a tarball stored in $(DL_DIR).
+output/images/rootfs.ext2: ***** FILE SYSTEM WAS MODIFIED *****
+output/images/rootfs.ext2: 504/896 files (0.4% non-contiguous), 1268/3568 blocks
 
-And then:
-
- define DOWNLOAD
- 	$(Q)test -e $(DL_DIR)/$(2) || \
--	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
--	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
-+	(if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-+		$(call DOWNLOAD_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
-+	fi ; \
-+	if test -n "$(1)" ; then \
-+		case "$($(PKG)_SITE_METHOD)" in \
-+			git) $(DOWNLOAD_GIT) && exit ;; \
-+			svn) $(DOWNLOAD_SVN) && exit ;; \
-+			*) $(call DOWNLOAD_WGET,$(1),$(2)) && exit ;; \
-+		esac ; \
-+	fi ; \
-+	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-+		$(call DOWNLOAD_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
-+	fi ; \
-+	exit 1)
- endef
-
-First checks if BR2_PRIMARY_SITE is set, and if yes, tries to fetch the
-tarball from here. Only if it's not available from the primary site, we
-go to actually fetching using git, svn or wget from the project
-official location.
-
-Does this sounds ok for you ?
-
-> IMO it is very important that it continues to work that way. I don't
-> want our nightly builds to pull snapshots from the SVN repository over
-> and over again. This wastes bandwidth, slows down the builds and breaks
-> the build every so often (if the SVN server is unreachable).
-
-Absolutely, this is why SVN and Git fetch methods have been implemented
-to be as similar as the existing tarball download method.
-
-Thanks for your feedback,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
