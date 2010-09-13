@@ -1,68 +1,84 @@
-From: Johnny Beardsmore <jny0@hotmail.com>
-Date: Mon, 13 Sep 2010 08:45:56 +0000
-Subject: [Buildroot] EXT2-fs error
-In-Reply-To: <20100913102031.03481d63@surf>
-References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>,
-	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>,
-	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>,
-	<20100913102031.03481d63@surf>
-Message-ID: <SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Sep 2010 10:55:20 +0200
+Subject: [Buildroot] [PATCH 5/8] Use the normal download method for
+ Tremor
+In-Reply-To: <1284367351.1742.29.camel@sven>
+References: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
+	<91f2599d9b9f069f719f5577ae44d987ccd58649.1284360382.git.thomas.petazzoni@free-electrons.com>
+	<1284367351.1742.29.camel@sven>
+Message-ID: <20100913105520.1a2ed8b8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Sven,
 
-My understanding of running e2fsck is that it should only be done on an
-unmounted file system (or setting to read-only, but I've never actually
-done this).  I've only ever run it on hda (usually a hard disk or flash
-drive) or sda (usually a usb stick) after a umount.  For me to e2fsck
-on the build machine means that I'm applying it to files on a mounted
-file system, not a complete unmounted drive.  This is where I'm getting
-confused.
+On Mon, 13 Sep 2010 10:42:31 +0200
+Sven Neumann <s.neumann@raumfeld.com> wrote:
 
+> will this new code still try to access a tarball in the dl directory and
+> then try to get a tarball from the primary mirror before it actually
+> tries to get the snapshot from the SVN repository?
 
+Yes, this is exactly what it does. In patch 4/8 :
 
-I'm obviously lacking some fundermental understanding of what e2fsck
-does.  I know to run it when advised to after repartitionning (entire)
-drives with fdisk, and if I don't then sooner or later, inode errors
-start popping up, and data gets lost.  I'm getting the advisory on
-start-up and as I'd expect, I'm getting inode errors on occasion.  What
-I can't seem to do is use the fix I'd normally apply.
++define DOWNLOAD_GIT
++	pushd $(DL_DIR) > /dev/null && \
++	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
++	pushd $($(PKG)_BASE_NAME) > /dev/null && \
++	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
++		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
++	popd > /dev/null && \
++	rm -rf $($(PKG)_DL_DIR) && \
++	popd > /dev/null
++endef
 
-> Date: Mon, 13 Sep 2010 10:20:31 +0200
-> From: thomas.petazzoni at free-electrons.com
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] EXT2-fs error
-> 
-> Hello,
-> 
-> On Mon, 13 Sep 2010 07:51:55 +0000
-> Johnny Beardsmore <jny0@hotmail.com> wrote:
-> 
-> > 1) e2fsck the rootfs file on the build machine.  This creates an error thus:
-> 
-> Yann Morin has already told you that you are trying to run e2fsck on a
-> tarball. A tarball is not an ext2 image, so obviously it cannot work.
-> 
-> What you're doing is exactly as if your trying to run an image
-> verification program on a text document. It doesn't work because it
-> makes no sense to try it in the first place.
-> 
-> Regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100913/dc32184d/attachment.html>
+Does the git clone and then creates a tarball stored in $(DL_DIR).
+
+And then:
+
+ define DOWNLOAD
+ 	$(Q)test -e $(DL_DIR)/$(2) || \
+-	for site in $(call qstrip,$(BR2_PRIMARY_SITE)) $(1) $(call qstrip,$(BR2_BACKUP_SITE)); \
+-	do $(WGET) -P $(DL_DIR) $$site/$(2) && exit; done
++	(if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
++		$(call DOWNLOAD_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
++	fi ; \
++	if test -n "$(1)" ; then \
++		case "$($(PKG)_SITE_METHOD)" in \
++			git) $(DOWNLOAD_GIT) && exit ;; \
++			svn) $(DOWNLOAD_SVN) && exit ;; \
++			*) $(call DOWNLOAD_WGET,$(1),$(2)) && exit ;; \
++		esac ; \
++	fi ; \
++	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
++		$(call DOWNLOAD_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
++	fi ; \
++	exit 1)
+ endef
+
+First checks if BR2_PRIMARY_SITE is set, and if yes, tries to fetch the
+tarball from here. Only if it's not available from the primary site, we
+go to actually fetching using git, svn or wget from the project
+official location.
+
+Does this sounds ok for you ?
+
+> IMO it is very important that it continues to work that way. I don't
+> want our nightly builds to pull snapshots from the SVN repository over
+> and over again. This wastes bandwidth, slows down the builds and breaks
+> the build every so often (if the SVN server is unreachable).
+
+Absolutely, this is why SVN and Git fetch methods have been implemented
+to be as similar as the existing tarball download method.
+
+Thanks for your feedback,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
