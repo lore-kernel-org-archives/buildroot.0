@@ -1,47 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Sep 2010 19:47:02 +0200
-Subject: [Buildroot] Build error "cannot find -lc"
-In-Reply-To: <KAW101-W44BEAE1114E33C6DD47BD39B770@phx.gbl>
-References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>
-	<20100911105201.176d1396@surf>
+From: S W <sw18@hotmail.co.jp>
+Date: Tue, 14 Sep 2010 02:51:42 +0900
+Subject: [Buildroot] Build error: No rule to make target `ubootboard_config'
+In-Reply-To: <KAW101-W3400321E421A55939E3C979B750@phx.gbl>
+References: <KAW101-W9A50593711791769ABB3C9B740@phx.gbl>, ,
+	<20100911105201.176d1396@surf>,
 	<KAW101-W3400321E421A55939E3C979B750@phx.gbl>
-	<KAW101-W44BEAE1114E33C6DD47BD39B770@phx.gbl>
-Message-ID: <20100913194702.51831574@surf>
+Message-ID: <KAW101-W663381351DE5AA588F11B19B770@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 14 Sep 2010 02:37:22 +0900
-S W <sw18@hotmail.co.jp> wrote:
+Hi 
 
-> I checked the /lib and /usr/lib, but I couldn't find 
-> glibc.a file. 
-> So I did "yum install glibc-static" to install the libc.a file.
-> Now it is OK with this problem.
+I am trying to build a Uboot loader for ARM.
+If I leave the "U-boot board name" as blank,
+there is an error as "NO U-Boot board name set. 
+Check your BR2_TARGET_UBOOT_BOARDNAME setting."
 
-Ok, thanks.
+But if I input the U-Boot board name as a name like "ubootboard",
+I encountered another error "No rule to make target `ubootboard_config".
 
-Peter, what can we do about this ? Should we enforce the fact that
-glibc-static is installed globally ? Or just if host-module-init-tools
-is going to be compiled ?
+I attached the error message with this email.
 
-> But I encountered another problem when I tried to build
-> Uboot loader, which is "No rule to make target `ubootboard_config'".
-> ubootboard_config is the name for Uboot loader.
-> I think I have to send another email for this issue.
+How I create the build rule for U-Boot board?
 
-You have incorrectly set the BR2_TARGET_UBOOT_BOARDNAME. It must be set
-to a board name that is valid in U-Boot. Which board are you targeting ?
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks 
+Terry
+ 		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100914/a5b3ad04/attachment-0001.html>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: errmsg.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100914/a5b3ad04/attachment-0001.txt>
