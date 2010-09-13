@@ -1,9 +1,9 @@
 From: Chih-Min Chao <cmchao@gmail.com>
-Date: Mon, 13 Sep 2010 23:12:14 +0800
-Subject: [Buildroot] [PATCH 4/5] bluez : new package
+Date: Mon, 13 Sep 2010 23:12:15 +0800
+Subject: [Buildroot] [PATCH 5/5] dbus : bump to 1.2.24
 In-Reply-To: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
 References: <1284390735-2261-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1284390735-2261-5-git-send-email-cmchao@gmail.com>
+Message-ID: <1284390735-2261-6-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
 ---
- package/Config.in       |    1 +
- package/bluez/Config.in |   11 +++++++++++
- package/bluez/bluez.mk  |   16 ++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/bluez/Config.in
- create mode 100644 package/bluez/bluez.mk
+ package/dbus/dbus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2209b55..e8922c9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -353,6 +353,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/boa/Config.in"
- endif
- source "package/bind/Config.in"
-+source "package/bluez/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
- source "package/ctorrent/Config.in"
-diff --git a/package/bluez/Config.in b/package/bluez/Config.in
-new file mode 100644
-index 0000000..d80933e
---- /dev/null
-+++ b/package/bluez/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_BLUEZ
-+	bool "bluez"
-+	depends on BR2_PACKAGE_DBUS_GLIB
-+	help
-+	  BlueZ provides support for the core Bluetooth layers and protocols.
-+	  It is flexible, efficient and uses a modular implementation.
-+
-+	  http://www.bluez.org/
-+
-+comment "bluez requires dbus-glib2 package
-+	depends on !BR2_PACKAGE_DBUS_GLIB
-diff --git a/package/bluez/bluez.mk b/package/bluez/bluez.mk
-new file mode 100644
-index 0000000..39339c5
---- /dev/null
-+++ b/package/bluez/bluez.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# Bluez
-+#
-+#############################################################
-+BLUEZ_VERSION:=4.71
-+BLUEZ_SOURCE:=bluez-$(BLUEZ_VERSION).tar.gz
-+BLUEZ_SITE:=http://www.kernel.org/pub/linux/bluetooth
-+BLUEZ_LIBTOOL_PATCH:=NO
-+BLUEZ_INSTALL_STAGING:=NO
-+BLUEZ_INSTALL_TARGET:=YES
-+BLUEZ_DEPENDENCIES:= dbus-glib
-+
-+BLUEZ_CONF_OPT:= --enable-tools --disable-static --enable-shared
-+
-+$(eval $(call AUTOTARGETS,package,bluez))
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index e93738e..c9fb339 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -3,7 +3,7 @@
+ # dbus
+ #
+ #############################################################
+-DBUS_VERSION = 1.2.16
++DBUS_VERSION = 1.2.24
+ DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
+ DBUS_LIBTOOL_PATCH = NO
 -- 
 1.7.0.4
