@@ -1,47 +1,42 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 14 Sep 2010 14:20:07 +0000 (UTC)
-Subject: [Buildroot] gdb and external toolchain
-References: <4C8E2777.7030202@carallon.com>
-	<AANLkTimDzh0kHMk2fjBqMzW8r5r3EAk==q+A7QsH6S9L@mail.gmail.com>
-	<4C8F7ADB.6070601@carallon.com>
-Message-ID: <i6o0an$7it$1@dough.gmane.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Sep 2010 16:37:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 2563] New: [PATCH] cairo: Expose the configure
+ option to disable some floating-point math
+Message-ID: <bug-2563-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-09-14, William Wagner <will_wagner@carallon.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2563
 
-[...]
-> http://sourceware.org/gdb/wiki/FAQ
->
-> It says that gdb needs un stripped libpthread and libthread_db
-> libraries to work. I'm not sure if this is on the target with
-> gdbserver or on the host running gdb.
+           Summary: [PATCH] cairo: Expose the configure option to disable
+                    some floating-point math
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: Paul.Burton at imgtec.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-The latter.  I've never had any issues debugging stripped libraries 
-and binaries on the target.
 
-> Currently buildroot strips the libraries on the target.
+Created attachment 2467
+  --> https://bugs.busybox.net/attachment.cgi?id=2467
+Exposes cairos --disable-some-floating-point configure option
 
-That should work fine.
-
-> I've never had a problem debugging with an internal buildroot
-> toolchain so presumably buildroot is correct in stripping the
-> libraries on the target.
-
-Yes.
-
-> Has anyone seen this before and able to point me in the right
-> direction?
-
-The only two things I know about are making sure the libraries are
-built with debugging symbols, and then making sure gdb can find them
-(by setting the solib-absolute-prefix option in gdb).
+Cairo has a configure option to disable some code paths which make heavy use of
+floating point math. On systems without hardware floating point, this can
+improve performance. This patch exposes that option in the buildroot
+configuration.
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! I have seen these EGG
-                                  at               EXTENDERS in my Supermarket
-                              gmail.com            ... I have read the
-                                                   INSTRUCTIONS ...
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
