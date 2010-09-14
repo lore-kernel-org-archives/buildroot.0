@@ -1,9 +1,9 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Mon, 13 Sep 2010 20:40:30 -0700
-Subject: [Buildroot] [PATCH 03/21] autoconf: bump to 2.67
+Date: Mon, 13 Sep 2010 20:40:32 -0700
+Subject: [Buildroot] [PATCH 05/21] bison: bump to 2.4.3
 In-Reply-To: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
 References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1284435648-15238-3-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1284435648-15238-5-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- CHANGES                                            |    5 ++-
- ...toconf-2.65-fix-m4-detection-test-on-dash.patch |   36 --------------------
- package/autoconf/autoconf.mk                       |    2 +-
- 3 files changed, 4 insertions(+), 39 deletions(-)
- delete mode 100644 package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
+ CHANGES                                            |    4 ++--
+ .../bison/bison-2.4.3-00-spawn-sched_param.patch   |   12 ++++++++++++
+ package/bison/bison.mk                             |    2 +-
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+ create mode 100644 package/bison/bison-2.4.3-00-spawn-sched_param.patch
 
 diff --git a/CHANGES b/CHANGES
-index 7b5875c..6abd5c0 100644
+index 381e628..3783dd1 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -7,8 +7,9 @@
- 
+@@ -8,8 +8,8 @@
  	Toolchain: ARM cortex A9 support
  
--	Updated/fixed packages: alsa-lib, alsa-utils, berkeleydb, busybox,
--	dropbear, iptables, kismet, openvpn, qt, usbutils
-+	Updated/fixed packages: alsa-lib, alsa-utils, autoconf, 
-+	berkeleydb, busybox, dropbear, iptables, kismet, openvpn, qt,
-+	usbutils
+ 	Updated/fixed packages: alsa-lib, alsa-utils, autoconf, automake,
+-	berkeleydb, busybox, dropbear, iptables, kismet, openvpn, qt,
+-	usbutils
++	berkeleydb, bison, busybox, dropbear, iptables, kismet, openvpn,
++	qt, usbutils
  
  	Removed packages: dillo, libglib12, libgtk12, microwin, pcmcia
  
-diff --git a/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch b/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
-deleted file mode 100644
-index 35f99b2..0000000
---- a/package/autoconf/autoconf-2.65-fix-m4-detection-test-on-dash.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Patch taken upstream at
--http://git.savannah.gnu.org/cgit/autoconf.git/commit/?id=7f75858f577f11a844781764f30cd42cfe8a5669,
--with the following modifications:
--
-- * Changes to NEWS file removed to avoid conflicts
--
-- * Changes also made manually to the generated configure
--   script. Otherwise, host-autoconf is needed to compile
--   host-autoconf !
--
--Index: autoconf-2.65.old/configure
--===================================================================
----- autoconf-2.65.old.orig/configure	2009-12-15 16:11:05.175566911 +0100
--+++ autoconf-2.65.old/configure	2009-12-15 16:11:37.739562146 +0100
--@@ -2380,7 +2380,7 @@
--       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
--       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
--       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
---      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
--+      && test -z "`$as_echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
--       && test -f conftest.m4f \
--       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
--       rm -f conftest.m4f
--Index: autoconf-2.65.old/m4/m4.m4
--===================================================================
----- autoconf-2.65.old.orig/m4/m4.m4	2009-12-15 16:11:05.207566124 +0100
--+++ autoconf-2.65.old/m4/m4.m4	2009-12-15 16:11:18.595562030 +0100
--@@ -29,7 +29,7 @@
--       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)'
--       ac_snippet=${ac_snippet}pat'subst(a,\(b\)\|\(a\),\1)d'nl
--       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
---      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
--+      && test -z "`AS_ECHO([$ac_snippet]) | $ac_path_M4 --trace=mac 2>&1`" \
--       && test -f conftest.m4f \
--       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
--       rm -f conftest.m4f],
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 8794466..b1fc52d 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
+diff --git a/package/bison/bison-2.4.3-00-spawn-sched_param.patch b/package/bison/bison-2.4.3-00-spawn-sched_param.patch
+new file mode 100644
+index 0000000..850ac9e
+--- /dev/null
++++ b/package/bison/bison-2.4.3-00-spawn-sched_param.patch
+@@ -0,0 +1,12 @@
++diff -durpN a/lib/spawn.in.h b/lib/spawn.in.h
++--- a/lib/spawn.in.h    2010-01-28 05:04:07.000000000 -0800
+++++ b/lib/spawn.in.h      2010-02-27 23:10:41.000000000 -0800
++@@ -31,7 +31,7 @@
++ 
++ /* Get definitions of 'struct sched_param' and 'sigset_t'.
++    But avoid namespace pollution on glibc systems.  */
++-#ifndef __GLIBC__
+++#if 1
++ # include <sched.h>
++ # include <signal.h>
++ #endif
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 9e28e85..075a078 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
 @@ -3,7 +3,7 @@
- # autoconf
+ # bison
  #
  #############################################################
--AUTOCONF_VERSION = 2.65
-+AUTOCONF_VERSION = 2.67
- AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.bz2
- AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+-BISON_VERSION:=2.3
++BISON_VERSION:=2.4.3
+ BISON_SOURCE:=bison-$(BISON_VERSION).tar.bz2
+ BISON_SITE:=$(BR2_GNU_MIRROR)/bison
  
 -- 
 1.7.2.3
