@@ -1,47 +1,35 @@
-From: Neil Benn <neil.benn@ziath.com>
-Date: Wed, 15 Sep 2010 10:52:36 -0700
-Subject: [Buildroot] Video4Linux2 on Buildroot
-Message-ID: <AANLkTi==QwxYUbO6JKUSu_dw6sR3=gi9TdiQHbZmH9XN@mail.gmail.com>
+From: William Wagner <will_wagner@carallon.com>
+Date: Wed, 15 Sep 2010 19:17:03 +0100
+Subject: [Buildroot] external toolchain question
+Message-ID: <4C910D9F.2060308@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+  Hello,
 
-        I've been trying to get an ARM kernal and rootfs compiled using
-buildroot for my beagleboard (I'll do Gumstix as well later on).  I pulled
-down buildroot and built the base example without much messing about.  I
-could not find anything to enable video4linux2 in the buildroot menuconfig
-so I compiled thinking I could change it in the kernel menuconfig but I
-cnanot find it there either.  Does anyone know how I can bring in
-video4linux2 support into the build from buildroot?
+I'm trying to get a crosstool-ng toolchain working and running into a 
+few problems. One thing I found with c++ support was that libstdc++ was 
+being copied into target/usr/lib but it was located in staging/lib.
 
- Thanks for your help.
+It seems like this commit 
+http://git.buildroot.net/buildroot/commit/?id=ecb7642cce36bc68d93f0eee677adc7da538228d 
+explicitly moved it in the target. The comment appears to be for an 
+external buildroot toolchain not a crosstools toochain. Is that why it 
+works for some people? For my crosstools toolchain it seemed that moving 
+it fixed my problem.
 
-Cheers,
+As an aside what is the status of using a buildroot generated toolchain 
+as an external toolchain? Any instructions anywhere on how to do it?
 
-Neil
+Thanks
+Will
 
 -- 
--- 
-
-Neil Benn Msc
-Director
-Ziath Ltd
-Phone :+44 (0)7508 107942
-Website - http://www.ziath.com
-
-IMPORTANT NOTICE:  This message, including any attached documents, is
-intended only for the use of the individual or entity to which it is
-addressed, and may contain information that is privileged, confidential and
-exempt from disclosure under applicable law.  If the reader of this message
-is not the intended recipient, or the employee or agent responsible for
-delivering the message to the intended recipient, you are hereby notified
-that any dissemination, distribution or copying of this communication is
-strictly prohibited. If you have received this communication in error,
-please notify Ziath Ltd immediately by email at info at ziath.com. Thank you.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100915/0238b48b/attachment.html>
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
