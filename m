@@ -1,35 +1,32 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Wed, 15 Sep 2010 19:17:03 +0100
-Subject: [Buildroot] external toolchain question
-Message-ID: <4C910D9F.2060308@carallon.com>
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Wed, 15 Sep 2010 20:36:30 +0200
+Subject: [Buildroot] make lzo not find utime.h
+In-Reply-To: <AANLkTikwGZ5sB6p873bDt8m-UVaAikMJjQ3U=5N-h2GF@mail.gmail.com>
+References: <AANLkTikwGZ5sB6p873bDt8m-UVaAikMJjQ3U=5N-h2GF@mail.gmail.com>
+Message-ID: <4C91122E.60400@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hello,
+  Am 14.09.2010 12:18, schrieb icemanpro:
+> Hi, everyone
+>
+>   I "make i686_defconfig" in buildroot directory.and when make lzotest
+> has an error:"error: utime.h: No such file or directory"
+>
+> how to fix this bug?
+>
+Hi,
+try to run "make flush;make"
+maybe there are some misconfigured values if you use the configuration 
+cache.
+The usual order of commands is
+make i686_defconfig
+make
+Did you launch make lzo right after make i686_... ?
+What version of buildroot do you run - 2010.08?
 
-I'm trying to get a crosstool-ng toolchain working and running into a 
-few problems. One thing I found with c++ support was that libstdc++ was 
-being copied into target/usr/lib but it was located in staging/lib.
-
-It seems like this commit 
-http://git.buildroot.net/buildroot/commit/?id=ecb7642cce36bc68d93f0eee677adc7da538228d 
-explicitly moved it in the target. The comment appears to be for an 
-external buildroot toolchain not a crosstools toochain. Is that why it 
-works for some people? For my crosstools toolchain it seemed that moving 
-it fixed my problem.
-
-As an aside what is the status of using a buildroot generated toolchain 
-as an external toolchain? Any instructions anywhere on how to do it?
-
-Thanks
-Will
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Regards,
+Marcus
