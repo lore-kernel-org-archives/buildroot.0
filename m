@@ -1,115 +1,50 @@
-From: Martin Banky <Martin.Banky@gmail.com>
-Date: Wed, 15 Sep 2010 03:13:32 -0700
-Subject: [Buildroot] [PATCH 04/21] automake: bump to 1.11.1
-In-Reply-To: <AANLkTimHo5pfm8k5PPFFsXu3f5365wb9GcHX2FqZc9BY@mail.gmail.com>
-References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-	<1284435648-15238-4-git-send-email-Martin.Banky@gmail.com>
-	<AANLkTimBfCzPQVFfX_TFNeLGqxD2umi=oHgFKUw93Au3@mail.gmail.com>
-	<AANLkTikUqL45y=t=eiTf8VuTgwC5TzxDThNK0i8UZkC_@mail.gmail.com>
-	<AANLkTimHo5pfm8k5PPFFsXu3f5365wb9GcHX2FqZc9BY@mail.gmail.com>
-Message-ID: <AANLkTi=kQFLXTZsk8KdXMLyN9q3RjJ8ubDCQ8L5w-7bX@mail.gmail.com>
+From: Johnny Beardsmore <jny0@hotmail.com>
+Date: Wed, 15 Sep 2010 11:07:51 +0000
+Subject: [Buildroot] EXT2-fs error
+In-Reply-To: <87mxrm6lrc.fsf@macbook.be.48ers.dk>
+References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>,
+	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>,
+	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>,
+	<20100913102031.03481d63@surf>,
+	<SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>,
+	<87mxrm6lrc.fsf@macbook.be.48ers.dk>
+Message-ID: <SNT119-W4750F1F26C2613C40FB5C82790@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lionel,
-     Thanks! I'll try it out after I get some sleep, and see how it works.
-Martin
 
-On Wed, Sep 15, 2010 at 2:10 AM, Lionel Landwerlin <llandwerlin@gmail.com>wrote:
+> Here it works:
+> 
+> tar jxf buildroot-2010.08.tar.bz2
+> cd buildroot-2010.08
+> make menuconfig (don't change anything, exit and save)
+> make
+> /sbin/e2fsck -f output/images/rootfs.ext2
+> e2fsck 1.41.9 (22-Aug-2009)
+> Filesystem did not have a UUID; generating one.
+> 
+> Pass 1: Checking inodes, blocks, and sizes
+> Pass 2: Checking directory structure
+> Pass 3: Checking directory connectivity
+> Pass 4: Checking reference counts
+> Pass 5: Checking group summary information
+> 
+> output/images/rootfs.ext2: ***** FILE SYSTEM WAS MODIFIED *****
+> output/images/rootfs.ext2: 504/896 files (0.4% non-contiguous), 1268/3568 blocks
+> 
+> -- 
+> Bye, Peter Korsgaard
 
-> There is a first try here :
->
->
-> http://git.potipota.net/cgi-bin/cgit.cgi/buildroot/log/?h=new-libtool-at-work
->
-> It's based on libtool 2.2.6b, but I'm confident it will work with 2.2.10
-> too.
-> It's not finished and should not work very well with packages using
-> gettext with uclibc.
-> I've some more work done in private to handle this issue, I could
-> release it later today/night.
->
-> Regards,
->
-> --
-> Lionel Landwerlin
->
-> On Wed, Sep 15, 2010 at 4:58 AM, Martin Banky <Martin.Banky@gmail.com>
-> wrote:
-> > Lionel,
-> >      Do you have a public repository that I could pull from or a patch
-> set?
-> > I was just trying to upgrade libtool to 2.2.10, and am having issues. I'd
-> > like to not duplicate work if possible.
-> > Martin
-> >
-> > On Tue, Sep 14, 2010 at 1:51 AM, Lionel Landwerlin <
-> llandwerlin at gmail.com>
-> > wrote:
-> >>
-> >> I'm still working on a new libtool version to be integrated in
-> buildroot.
-> >> Amongst others things, automake 1.10.3 is required. So far I've been
-> >> able to build a rootfs including glib/libsoup/gstreamer/directfb with
-> >> automake 1.11, so...
-> >>
-> >> Acked-by: Lionel Landwerlin <llandwerlin@gmail.com>
-> >>
-> >> On Tue, Sep 14, 2010 at 5:40 AM, Martin Banky <martin.banky@gmail.com>
-> >> wrote:
-> >> > Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
-> >> > ---
-> >> >  CHANGES                      |    2 +-
-> >> >  package/automake/automake.mk |    2 +-
-> >> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >> >
-> >> > diff --git a/CHANGES b/CHANGES
-> >> > index 6abd5c0..381e628 100644
-> >> > --- a/CHANGES
-> >> > +++ b/CHANGES
-> >> > @@ -7,7 +7,7 @@
-> >> >
-> >> >        Toolchain: ARM cortex A9 support
-> >> >
-> >> > -       Updated/fixed packages: alsa-lib, alsa-utils, autoconf,
-> >> > +       Updated/fixed packages: alsa-lib, alsa-utils, autoconf,
-> >> > automake,
-> >> >        berkeleydb, busybox, dropbear, iptables, kismet, openvpn, qt,
-> >> >        usbutils
-> >> >
-> >> > diff --git a/package/automake/automake.mk b/package/automake/
-> automake.mk
-> >> > index 46bb773..a7d81ff 100644
-> >> > --- a/package/automake/automake.mk
-> >> > +++ b/package/automake/automake.mk
-> >> > @@ -3,7 +3,7 @@
-> >> >  # automake
-> >> >  #
-> >> >  #############################################################
-> >> > -AUTOMAKE_VERSION = 1.10
-> >> > +AUTOMAKE_VERSION = 1.11.1
-> >> >  AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.bz2
-> >> >  AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
-> >> >
-> >> > --
-> >> > 1.7.2.3
-> >> >
-> >> > _______________________________________________
-> >> > buildroot mailing list
-> >> > buildroot at busybox.net
-> >> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
+Hi,
+I don't have a rootfs.ext2 in my output/images/.  I have rootfs.i486.tar and rootfs.i486.tar.bz2.  After un-taring these, I get /usr/sbin/mkfs.ext2 and /usr/sbin/fsck.ext2.  What could I be doing differently?
+Regards,
+JNY
+
+
+ 		 	   		  
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100915/735a1410/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100915/a6663ec5/attachment-0001.html>
