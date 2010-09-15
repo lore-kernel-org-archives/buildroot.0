@@ -1,47 +1,109 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Wed, 15 Sep 2010 21:33:08 +0200
-Subject: [Buildroot] external toolchain question
-In-Reply-To: <201009152050.27019.yann.morin.1998@anciens.enib.fr>
-References: <4C910D9F.2060308@carallon.com> <4C911336.6060003@googlemail.com>
-	<201009152050.27019.yann.morin.1998@anciens.enib.fr>
-Message-ID: <4C911F74.7040506@googlemail.com>
+From: Neil Benn <neil.benn@ziath.com>
+Date: Wed, 15 Sep 2010 20:36:38 +0100
+Subject: [Buildroot] Video4Linux2 on Buildroot
+In-Reply-To: <AANLkTikimpgCvtmXqtAX_AHN6dFeucpxpRQ-AEzae8D5@mail.gmail.com>
+References: <AANLkTi==QwxYUbO6JKUSu_dw6sR3=gi9TdiQHbZmH9XN@mail.gmail.com>
+	<AANLkTikimpgCvtmXqtAX_AHN6dFeucpxpRQ-AEzae8D5@mail.gmail.com>
+Message-ID: <AANLkTi=xniyL6QpNcQSmi2pjRMF24p0mSzHLAf8jOSFf@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Am 15.09.2010 20:50, schrieb Yann E. MORIN:
-> Marcus, All,
+Hello,
+
+        Thanks, I made the mistake of not clicking the Y but pressing
+return.
+
+Cheers,
+
+Neil
+
+On 15 September 2010 19:23, Pierre-Luc Simard
+<pierreluc.simard@admetric.ca>wrote:
+
+> Hello Neil,
 >
-> On Wednesday 15 September 2010 20:40:54 Marcus Osdoba wrote:
->> Personally I didn't yet try out crosstool-ng because the current
->> patchlevel of buildroot is a higher one (e.g. gcc 4.3.4 vs 4.3.5).
-> Hmmm... crosstool-NG has gcc-4.4.3, and even 4.4.4 and 4.5.x in
-> experimental status.
+> V4L2 is indeed in your kernel configuration. It's under Device Drivers--->
+> Multimedia support ---> Video For Linux
+>
+> Cheers,
+>
+> Pierre-Luc
 >
 >
-Sorry, I didn't want to dispraise your work. Crosstool-ng is amazing!
+> On Wed, Sep 15, 2010 at 1:52 PM, Neil Benn <neil.benn@ziath.com> wrote:
+>
+>> Hello,
+>>
+>>         I've been trying to get an ARM kernal and rootfs compiled using
+>> buildroot for my beagleboard (I'll do Gumstix as well later on).  I pulled
+>> down buildroot and built the base example without much messing about.  I
+>> could not find anything to enable video4linux2 in the buildroot menuconfig
+>> so I compiled thinking I could change it in the kernel menuconfig but I
+>> cnanot find it there either.  Does anyone know how I can bring in
+>> video4linux2 support into the build from buildroot?
+>>
+>>  Thanks for your help.
+>>
+>> Cheers,
+>>
+>> Neil
+>>
+>> --
+>> --
+>>
+>> Neil Benn Msc
+>> Director
+>> Ziath Ltd
+>> Phone :+44 (0)7508 107942
+>> Website - http://www.ziath.com
+>>
+>> IMPORTANT NOTICE:  This message, including any attached documents, is
+>> intended only for the use of the individual or entity to which it is
+>> addressed, and may contain information that is privileged, confidential and
+>> exempt from disclosure under applicable law.  If the reader of this message
+>> is not the intended recipient, or the employee or agent responsible for
+>> delivering the message to the intended recipient, you are hereby notified
+>> that any dissemination, distribution or copying of this communication is
+>> strictly prohibited. If you have received this communication in error,
+>> please notify Ziath Ltd immediately by email at info at ziath.com. Thank
+>> you.
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-But I had a quick look into it and figured out:
-BR has 4.3.5 since June 2010 and 4.4.4 since May 2010.
-The crosstool-ng version 1.8.1 provides 4.3.4 and 4.4.3 as default. With 
-experimental activated no 4.3.5 either.
-The eglibc points to 2.10 (2.11stable/2.12exp) and glibc to 2.9 
-(2.11.2stable/2.12exp).
-So my overall (subjective) impression was that br has currently a higher 
-patchlevel.
 
 
-By the way, I completely agree with Peters opinion that crosstool-ng 
-could provide "better" toolchains while br focusses on it's maintask. 
-Crosstool-ng is designed to generate toolchains as a specialised tool - 
-really great. I saw that integration of ct-ng in br (or more intuitive 
-config wrapper) is quite a long time on the agenda. I think it would be 
-very eligible to see it in br.
-What is the current status of this idea?
+-- 
+-- 
 
-Thanks for your great work.
+Neil Benn Msc
+Director
+Ziath Ltd
+Phone :+44 (0)7508 107942
+Website - http://www.ziath.com
 
-Regards,
-Marcus
+IMPORTANT NOTICE:  This message, including any attached documents, is
+intended only for the use of the individual or entity to which it is
+addressed, and may contain information that is privileged, confidential and
+exempt from disclosure under applicable law.  If the reader of this message
+is not the intended recipient, or the employee or agent responsible for
+delivering the message to the intended recipient, you are hereby notified
+that any dissemination, distribution or copying of this communication is
+strictly prohibited. If you have received this communication in error,
+please notify Ziath Ltd immediately by email at info at ziath.com. Thank you.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100915/f823dfe7/attachment.html>
