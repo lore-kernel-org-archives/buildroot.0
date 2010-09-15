@@ -1,62 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Sep 2010 21:19:03 +0200
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Wed, 15 Sep 2010 21:33:08 +0200
 Subject: [Buildroot] external toolchain question
-In-Reply-To: <4C910D9F.2060308@carallon.com>
-References: <4C910D9F.2060308@carallon.com>
-Message-ID: <20100915211903.6097235c@surf>
+In-Reply-To: <201009152050.27019.yann.morin.1998@anciens.enib.fr>
+References: <4C910D9F.2060308@carallon.com> <4C911336.6060003@googlemail.com>
+	<201009152050.27019.yann.morin.1998@anciens.enib.fr>
+Message-ID: <4C911F74.7040506@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Sep 2010 19:17:03 +0100
-William Wagner <will_wagner@carallon.com> wrote:
+  Am 15.09.2010 20:50, schrieb Yann E. MORIN:
+> Marcus, All,
+>
+> On Wednesday 15 September 2010 20:40:54 Marcus Osdoba wrote:
+>> Personally I didn't yet try out crosstool-ng because the current
+>> patchlevel of buildroot is a higher one (e.g. gcc 4.3.4 vs 4.3.5).
+> Hmmm... crosstool-NG has gcc-4.4.3, and even 4.4.4 and 4.5.x in
+> experimental status.
+>
+>
+Sorry, I didn't want to dispraise your work. Crosstool-ng is amazing!
 
-> I'm trying to get a crosstool-ng toolchain working and running into a 
-> few problems. One thing I found with c++ support was that libstdc++
-> was being copied into target/usr/lib but it was located in
-> staging/lib.
+But I had a quick look into it and figured out:
+BR has 4.3.5 since June 2010 and 4.4.4 since May 2010.
+The crosstool-ng version 1.8.1 provides 4.3.4 and 4.4.3 as default. With 
+experimental activated no 4.3.5 either.
+The eglibc points to 2.10 (2.11stable/2.12exp) and glibc to 2.9 
+(2.11.2stable/2.12exp).
+So my overall (subjective) impression was that br has currently a higher 
+patchlevel.
 
-What's inside staging/ is just a bare copy of the toolchain sysroot. As
-the toolchain sysroot organization depends on the toolchain, libstdc++
-might be located in lib/ or usr/lib in staging.
 
-For the target, I thought that it'd be a good idea to have it under
-usr/lib regardless of whether it was in lib/ or usr/lib/ in the staging
-directory. This is because "essential" applications do not usually
-depend on libstdc++, so the natural location for libsdc++ is usr/lib.
+By the way, I completely agree with Peters opinion that crosstool-ng 
+could provide "better" toolchains while br focusses on it's maintask. 
+Crosstool-ng is designed to generate toolchains as a specialised tool - 
+really great. I saw that integration of ct-ng in br (or more intuitive 
+config wrapper) is quite a long time on the agenda. I think it would be 
+very eligible to see it in br.
+What is the current status of this idea?
 
-Is it causing any sort of problem for you ?
-
-> As an aside what is the status of using a buildroot generated
-> toolchain as an external toolchain?
-
-It should work, my testing environment includes :
-
- * CodeSourcery toolchains (ARM, PowerPC, MIPS, sh)
- * Buildroot external toolchains (x86, ARM, AVR32, mipsel,
-   powerpc, sh)
- * Crosstool-NG external toolchains (ARM glibc, ARM uclibc, i586
-   uclibc, mips uclibc, powerpc uclibc)
-
-All those toolchains work, at least in the cases I've tested, of course.
-
-> Any instructions anywhere on how to do it?
-
- * Select architecture
- * In Build options, change the staging dir location to where you want
-   the toolchain to be installed 
- * Disable the Busybox package
- * Disable the ext2 filesystem generation
-
-That should be it.
+Thanks for your great work.
 
 Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Marcus
