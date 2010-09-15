@@ -1,31 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 15 Sep 2010 20:50:26 +0200
-Subject: [Buildroot] external toolchain question
-In-Reply-To: <4C911336.6060003@googlemail.com>
-References: <4C910D9F.2060308@carallon.com> <4C911336.6060003@googlemail.com>
-Message-ID: <201009152050.27019.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 15 Sep 2010 21:17:52 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: don't force no initramfs
+In-Reply-To: <c04f9e9d7019744ced2f2abe198118ad1c23a819.1284326139.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 23:15:47 +0200")
+References: <cover.1284326139.git.thomas.petazzoni@free-electrons.com>
+	<cover.1284326139.git.thomas.petazzoni@free-electrons.com>
+	<c04f9e9d7019744ced2f2abe198118ad1c23a819.1284326139.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874odq7r4v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcus, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wednesday 15 September 2010 20:40:54 Marcus Osdoba wrote:
-> Personally I didn't yet try out crosstool-ng because the current 
-> patchlevel of buildroot is a higher one (e.g. gcc 4.3.4 vs 4.3.5).
+ Thomas> When initramfs was not selected as a root filesystem, we forcefully
+ Thomas> disabled the initramfs in the kernel configuration.
 
-Hmmm... crosstool-NG has gcc-4.4.3, and even 4.4.4 and 4.5.x in
-experimental status.
+ Thomas> However, it prevents an user from manually managing its initramfs, as
+ Thomas> we override the option he has set in his kernel configuration
+ Thomas> file. There's no real reason to do so: when initramfs is not selected
+ Thomas> as the root filesystem, just don't touch initramfs related options in
+ Thomas> the kernel configuration.
 
-Regards,
-Yann E. MORIN.
+ Thomas> Problem reported by Sergey Naumov <sknaumov@gmail.com>.
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
