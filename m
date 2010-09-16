@@ -1,35 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Sep 2010 14:31:16 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/remove-oldstyle-hooks
-In-Reply-To: <20100916141400.2db7af25@surf> (Thomas Petazzoni's message of
-	"Thu, 16 Sep 2010 14:14:00 +0200")
-References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
-	<87y6b16hs7.fsf@macbook.be.48ers.dk> <20100916141400.2db7af25@surf>
-Message-ID: <87tylp6faj.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 16 Sep 2010 15:35:23 +0200
+Subject: [Buildroot] [git commit master 1/1] sdl_sound: cleanup uninstall
+	handling
+Message-ID: <20100916133818.BCD4F8B3A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=e7895986de4ec8819dbb7da4b939d8daec6606a2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Pulled and pushed, thanks a lot!
+SDL_SOUND_SUBDIR doesn't exist, so the staging uninstall handling is
+equivalent to the default one.
 
- Thomas> Thanks!
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdl_sound/sdl_sound.mk |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
- Thomas> Hum, ok, but you had comments on patches 14, 18 and 40, which I was
- Thomas> fixing yesterday evening. So am I supposed to fix them separatly now
- Thomas> that you pulled the whole series ?
-
-Ohh, sorry - I waited a few days, but didn't see it getting fixed, so I
-pulled and fixed it myself.
-
-My comment on patch 18 was wrong, but I've fixed the other two (just
-doing a test compile with dmraid now to verify).
-
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 9234ab6..bd94a62 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -49,14 +49,10 @@ ifneq ($(BR2_PACKAGE_SDL_SOUND_PLAYSOUND),y)
+ SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
+ endif
+ 
+-define SDL_SOUND_UNINSTALL_STAGING_CMDS
+-	$(MAKE) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
+-endef
+-
+ # target shared libs doesn't get removed by make uninstall if the .la
+ # files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
+ define SDL_SOUND_UNINSTALL_TARGET_CMDS
+-	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
++	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)
+ 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.1
