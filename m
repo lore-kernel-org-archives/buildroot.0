@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Sep 2010 14:14:49 +0200
-Subject: [Buildroot] external toolchain question
-In-Reply-To: <4C920255.80602@carallon.com>
-References: <4C910D9F.2060308@carallon.com> <20100915211903.6097235c@surf>
-	<4C91CF3F.5050007@carallon.com> <20100916110442.29178d68@surf>
-	<4C920255.80602@carallon.com>
-Message-ID: <20100916141449.27016940@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 Sep 2010 14:31:16 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/remove-oldstyle-hooks
+In-Reply-To: <20100916141400.2db7af25@surf> (Thomas Petazzoni's message of
+	"Thu, 16 Sep 2010 14:14:00 +0200")
+References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
+	<87y6b16hs7.fsf@macbook.be.48ers.dk> <20100916141400.2db7af25@surf>
+Message-ID: <87tylp6faj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Sep 2010 12:41:09 +0100
-William Wagner <will_wagner@carallon.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> We could change copy_toolchain_lib_root so that it puts the libraries
-> in the corresponding location it finds them in rather than currently 
-> searching in three locations but always copying to the specified one.
+Hi,
 
-Absolutely. That's what the code was doing prior to
-ecb7642cce36bc68d93f0eee677adc7da538228d.
+ >> Pulled and pushed, thanks a lot!
 
-Thomas
+ Thomas> Thanks!
+
+ Thomas> Hum, ok, but you had comments on patches 14, 18 and 40, which I was
+ Thomas> fixing yesterday evening. So am I supposed to fix them separatly now
+ Thomas> that you pulled the whole series ?
+
+Ohh, sorry - I waited a few days, but didn't see it getting fixed, so I
+pulled and fixed it myself.
+
+My comment on patch 18 was wrong, but I've fixed the other two (just
+doing a test compile with dmraid now to verify).
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
