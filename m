@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] dropbear: convert old-style
-	hook and commands to new-style
-Message-ID: <20100916113825.94AC38AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] lite: convert old-style hook to
+	new-style hook
+Message-ID: <20100916113825.BC2A18AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,72 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbcec2b28e0ac732e81569f7d0237a9b866dfed8
+commit: http://git.buildroot.net/buildroot/commit/?id=c42d2a3afe5e988d5cb2eab7581ed5fb66cb3f29
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dropbear/dropbear.mk |   40 ++++++++++++++++++++--------------------
- 1 files changed, 20 insertions(+), 20 deletions(-)
+ package/lite/lite.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index ec678d7..0b0d4c7 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -17,34 +17,34 @@ DROPBEAR_CONF_ENV = ac_cv_type_struct_sockaddr_storage=yes
- DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
- 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
+diff --git a/package/lite/lite.mk b/package/lite/lite.mk
+index 881c43b..678be86 100644
+--- a/package/lite/lite.mk
++++ b/package/lite/lite.mk
+@@ -12,12 +12,14 @@ LITE_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/l
+ LITE_CONF_ENV = DFB_CFLAGS=-I$(STAGING_DIR)/usr/include/directfb
+ LITE_DEPENDENCIES = directfb
  
--$(eval $(call AUTOTARGETS,package,dropbear))
-+define DROPBEAR_DISABLE_XAUTH
-+	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
-+endef
-+
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ADJUST_OPTIONS
-+
-+define DROPBEAR_DISABLE_REVERSE_DNS
-+	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' $(@D)/options.h
-+endef
- 
--$(DROPBEAR_HOOK_POST_EXTRACT):
--	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(DROPBEAR_DIR)/options.h
- ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
--	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' \
--		$(DROPBEAR_DIR)/options.h
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
- endif
--	touch $@
+-$(eval $(call AUTOTARGETS,package,lite))
 -
--$(DROPBEAR_TARGET_INSTALL_TARGET):
--	$(call MESSAGE,"Installing to target")
--	$(INSTALL) -m 755 $(DROPBEAR_DIR)/dropbearmulti \
--		$(TARGET_DIR)/usr/sbin/dropbear
--	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dbclient
--	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dropbearkey
--	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dropbearconvert
--	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/scp
--	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/ssh
-+
-+define DROPBEAR_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
-+	for f in $(DROPBEAR_TARGET_BINS); do \
-+		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
-+	done
- 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
- 		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
- 	fi
+-$(LITE_HOOK_POST_INSTALL):
++define LITE_FINALIZE_INSTALL
+ 	$(INSTALL) -d $(TARGET_DIR)/usr/share/LiTE/examples/
+ 	$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/truetype/
+-	$(INSTALL) -m0644 $(LITE_DIR)/data/*.png $(TARGET_DIR)/usr/share/LiTE/
+-	$(INSTALL) -m0644 $(LITE_DIR)/examples/*.png $(TARGET_DIR)/usr/share/LiTE/examples/
+-	$(INSTALL) -m0644 $(LITE_DIR)/fonts/*.ttf $(TARGET_DIR)/usr/share/fonts/truetype/
 -	touch $@
++	$(INSTALL) -m0644 $(@D)/data/*.png $(TARGET_DIR)/usr/share/LiTE/
++	$(INSTALL) -m0644 $(@D)/examples/*.png $(TARGET_DIR)/usr/share/LiTE/examples/
++	$(INSTALL) -m0644 $(@D)/fonts/*.ttf $(TARGET_DIR)/usr/share/fonts/truetype/
 +endef
- 
--$(DROPBEAR_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define DROPBEAR_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/dropbear
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(DROPBEAR_TARGET_BINS))
- 	rm -f $(TARGET_DIR)/etc/init.d/S50dropbear
--	rm -f $(DROPBEAR_TARGET_INSTALL_TARGET) $(DROPBEAR_HOOK_POST_INSTALL)
-+endef
- 
-+$(eval $(call AUTOTARGETS,package,dropbear))
++
++LITE_POST_INSTALL_TARGET_HOOKS += LITE_FINALIZE_INSTALL
++
++$(eval $(call AUTOTARGETS,package,lite))
 -- 
 1.7.1
