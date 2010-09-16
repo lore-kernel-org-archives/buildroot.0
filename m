@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] haserl: convert to new style
-	hook
-Message-ID: <20100916113832.2C58F8AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] neon: remove useless stripping
+Message-ID: <20100916113833.59B278AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23ad529cb5426435490a3eb68c4ef5840da8a613
+commit: http://git.buildroot.net/buildroot/commit/?id=ccc6ef6c171c188863f1d5350c8037ea1a2e5fee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/haserl/haserl.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/neon/neon.mk |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 257a257..53b5548 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -22,9 +22,10 @@ ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
- 	HASERL_DEPENDENCIES += lua
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index e942f87..285d49f 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -47,10 +47,3 @@ NEON_CONF_OPT+=--without-ssl
  endif
  
--$(eval $(call AUTOTARGETS,package,haserl))
+ $(eval $(call AUTOTARGETS,package,neon))
 -
--# haserl 0.8.0 installs unneeded examples to /usr/share/haserl - remove them
--$(HASERL_HOOK_POST_INSTALL): $(HASERL_TARGET_INSTALL_TARGET)
-+define HASERL_REMOVE_EXAMPLES
- 	rm -rf $(TARGET_DIR)/usr/share/haserl
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-# neon doesn't have an install-strip target, so do it afterwards
+-$(NEON_HOOK_POST_INSTALL): $(NEON_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libneon.so
 -	touch $@
-+endef
-+
-+HASERL_POST_INSTALL_TARGET_HOOKS += HASERL_REMOVE_EXAMPLES
-+
-+$(eval $(call AUTOTARGETS,package,haserl))
+-endif
 -- 
 1.7.1
