@@ -1,63 +1,68 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 16 Sep 2010 19:47:01 +0200
-Subject: [Buildroot] /etc/ld.so.conf and /etc/ld.so.conf.d in buildroot
- target skeleton
-In-Reply-To: <AANLkTim=o6+2+jBXk0NAOv7md5TkK_V1tW9bcmsWfBER@mail.gmail.com>
-References: <AANLkTimEShvTw0M4Yt4dGE3BbxbX4q4RQ5tfbc-BJ7rb@mail.gmail.com>
-	<AANLkTi=LRi8OJTNY-3_q0_c=qcO4yv-sQoaJr=w=F=sf@mail.gmail.com>
-	<AANLkTim=o6+2+jBXk0NAOv7md5TkK_V1tW9bcmsWfBER@mail.gmail.com>
-Message-ID: <1284659221.12897.414.camel@coalu.atr>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Thu, 16 Sep 2010 10:56:59 -0700
+Subject: [Buildroot] [PATCH 2/5] Added the ability to patch ltmain.sh
+ based on version
+In-Reply-To: <AANLkTinjL1a6dXK5u=z7Nj0rLA6ZobY_JbWQ4OfW3NRd@mail.gmail.com>
+References: <1284592794-13254-1-git-send-email-Martin.Banky@gmail.com>
+	<1284592794-13254-2-git-send-email-Martin.Banky@gmail.com>
+	<AANLkTinjL1a6dXK5u=z7Nj0rLA6ZobY_JbWQ4OfW3NRd@mail.gmail.com>
+Message-ID: <AANLkTinWDayoXR7jfiWHoRWy8QsuSRv8wSKJQ0Wdq-3=@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well buildroot does support external toolchains, including a glibc one.
+I did it this way to save time. Autoreconf takes a fair amount of time to
+run for each package that would need it. I agree that it would be a good way
+to handle the issue. if it didn't take so much time.
 
-Regards,
+On Thu, Sep 16, 2010 at 2:05 AM, Lionel Landwerlin <llandwerlin@gmail.com>wrote:
 
---
-Lionel Landwerlin
-
-Le jeudi 16 septembre 2010 ? 19:30 +0200, Thomas De Schampheleire a
-?crit :
-> Hi,
-> 
-> On Thu, Sep 16, 2010 at 1:41 PM, Lionel Landwerlin
-> <llandwerlin@gmail.com> wrote:
-> > Yeah, having a an ld.so.conf which includes every files within
-> > /etc/ld.so.conf.d/*.conf would be great !
-> 
-> Unfortunately, it seems that uClibc ldconfig does not support
-> 'include' statements in ld.so.conf.
-> 
-> Based on this observation, I'd say that directory ld.so.conf.d is only
-> relevant in case of glibc, is that correct? Why then is it in the
-> skeleton?
-> 
-> Thanks,
-> Thomas
-> 
+> I understand this is an easy fix to handle the libtool linkage problem.
+> But instead of providing a different patch for each libtool version,
+> wouldn't
+> it be better to directly patch the libtool package, and then activate
+> autoreconfiguration on packages which need a libtool script able to
+> cross compile ?
+>
+> On Thu, Sep 16, 2010 at 1:19 AM, Martin Banky <martin.banky@gmail.com>
+> wrote:
+> > There are two versions of ltmain.sh in use in the buildroot system, 1.5.x
+> and
+> > 2.2.x. buildroot-libtool.patch would only patch 1.5.x, which meant that
+> for
+> > 2.2.x, a separate patch for the affected package had to be maintained.
+> Modified
+> > Makefile.autotools.in to check the version of ltmain.sh and apply the
+> correct
+> > patch.
+> > ---
+> >  package/Makefile.autotools.in                      |   27 ++++++--
+> >  package/buildroot-libtool-v1.5.patch               |   69
+> ++++++++++++++++++++
+> >  package/buildroot-libtool-v2.2.patch               |   53
+> +++++++++++++++
+> >  package/buildroot-libtool.patch                    |   69
+> --------------------
+> >  .../libdeamon-0.14-buildroot-libtool.patch         |   53
+> ---------------
+> >  .../libogg/libogg-1.2.0-buildroot-libtool.patch    |   53
+> ---------------
+> >  .../libvorbis-1.3.1-buildroot-libtool.patch        |   53
+> ---------------
+> >  7 files changed, 143 insertions(+), 234 deletions(-)
+> >  create mode 100644 package/buildroot-libtool-v1.5.patch
+> >  create mode 100644 package/buildroot-libtool-v2.2.patch
+> >  delete mode 100644 package/buildroot-libtool.patch
+> >  delete mode 100644
+> package/libdaemon/libdeamon-0.14-buildroot-libtool.patch
+> >  delete mode 100644
+> package/multimedia/libogg/libogg-1.2.0-buildroot-libtool.patch
+> >  delete mode 100644
+> package/multimedia/libvorbis/libvorbis-1.3.1-buildroot-libtool.patch
 > >
-> > Regards,
-> >
-> > --
-> > Lionel Landwerlin
-> >
-> > On Thu, Sep 16, 2010 at 1:28 PM, Thomas De Schampheleire
-> > <patrickdepinguin+buildroot@gmail.com> wrote:
-> >> Hello,
-> >>
-> >> In the buildroot target skeleton exists a directory ld.so.conf.d, but
-> >> no file ld.so.conf.
-> >> The ld.so.conf.d directory is not parsed, unless you include the files
-> >> there from ld.so.conf, like so:
-> >>
-> >> include /etc/ld.so.conf.d/*.conf
-> >>
-> >> I am wondering why this is the case. Shouldn't there be a skeleton
-> >> /etc/ld.so.conf file?
-> >> If not, how is /etc/ld.so.conf.d supposed to be used?
-> >>
-> >
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100916/3b6239da/attachment.html>
