@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libxml2: convert old-style hook
-	to new-style hook
-Message-ID: <20100916113826.750338AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libiconv: convert old-style
+	hook to new-style hook
+Message-ID: <20100916113825.E62D58AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +10,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c648785b933fe86531906832b81e21e54ddd10ca
+commit: http://git.buildroot.net/buildroot/commit/?id=375b14fbeb876aaa550f0bfee013a15ca4191202
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In addition to that, remove useless stripping since it is done
+globally.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxml2/libxml2.mk |   12 +++++++-----
- 1 files changed, 7 insertions(+), 5 deletions(-)
+ package/libiconv/libiconv.mk |   20 +++++++++++---------
+ 1 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 8f25136..820f465 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -22,6 +22,13 @@ LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
- 		--without-debugging --without-python \
- 		--without-threads
+diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
+index a3f762a..c56a986 100644
+--- a/package/libiconv/libiconv.mk
++++ b/package/libiconv/libiconv.mk
+@@ -12,17 +12,19 @@ LIBICONV_INSTALL_TARGET = YES
  
-+define LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
-+	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+ LIBICONV_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ 
+-$(eval $(call AUTOTARGETS,package,libiconv))
++# Remove not used preloadable libiconv.so
++define LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
++	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
++endef
+ 
+-$(LIBICONV_HOOK_POST_INSTALL):
+-	# Remove not used preloadable libiconv.so
++define LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
+ 	rm -f $(STAGING_DIR)/usr/lib/preloadable_libiconv.so
+-	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
+-ifneq ($(BR2_ENABLE_DEBUG),y)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libiconv.so.*
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
+-endif
+-	touch $@
 +endef
 +
-+LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
++LIBICONV_POST_INSTALL_TARGET_HOOKS += LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
++LIBICONV_POST_INSTALL_STAGING_HOOKS += LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
 +
- HOST_LIBXML2_DEPENDENCIES = host-pkg-config
++$(eval $(call AUTOTARGETS,package,libiconv))
  
- HOST_LIBXML2_CONF_OPT = \
-@@ -31,10 +38,5 @@ HOST_LIBXML2_CONF_OPT = \
- $(eval $(call AUTOTARGETS,package,libxml2))
- $(eval $(call AUTOTARGETS,package,libxml2,host))
- 
--$(LIBXML2_HOOK_POST_INSTALL):
--	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
--	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
--	touch $@
--
- # libxml2 for the host
- LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
+ # Configurations where the toolchain supports locales and the libiconv
+ # package is enabled are incorrect, because the toolchain already
 -- 
 1.7.1
