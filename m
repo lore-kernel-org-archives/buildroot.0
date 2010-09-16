@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] pango: convert old-style hook
-	to new-style hook
-Message-ID: <20100916113822.F02658AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] sdl_sound: convert old-style
+	hooks to new-style hooks
+Message-ID: <20100916113823.EDCC78AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=918978d4ad82f9c4caaad30ec8fbcd8db0171f57
+commit: http://git.buildroot.net/buildroot/commit/?id=3d595a601606534bac4db9dd8ff0e9ca22beeafd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/pango.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/sdl_sound/sdl_sound.mk |   23 +++++++++++++----------
+ 1 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 875c0bc..dc04b55 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -54,8 +54,10 @@ else
-         PANGO_CONF_OPT += --without-x
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 3a6b7e7..9234ab6 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -41,20 +41,23 @@ else
+ SDL_SOUND_CONF_OPT += --disable-mmx
  endif
  
--$(eval $(call AUTOTARGETS,package,pango))
--
--$(PANGO_HOOK_POST_INSTALL):
-+define PANGO_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
+-$(eval $(call AUTOTARGETS,package,sdl_sound))
++define SDL_SOUND_REMOVE_PLAYSOUND
++	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
++endef
+ 
+ ifneq ($(BR2_PACKAGE_SDL_SOUND_PLAYSOUND),y)
+-$(SDL_SOUND_HOOK_POST_INSTALL):
+-	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
 -	touch $@
++SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
+ endif
+ 
+-# target shared libs doesn't get removed by make uninstall if the .la files
+-# are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
+-$(SDL_SOUND_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define SDL_SOUND_UNINSTALL_STAGING_CMDS
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
+-	rm -f $(@D)/.stamp_staging_installed
 +endef
 +
-+PANGO_POST_INSTALL_TARGET_HOOKS += PANGO_INSTALL_INITSCRIPT
++# target shared libs doesn't get removed by make uninstall if the .la
++# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
++define SDL_SOUND_UNINSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
+ 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
+-	rm -f $(SDL_SOUND_TARGET_INSTALL_TARGET) $(SDL_SOUND_HOOK_POST_INSTALL)
++endef
 +
-+$(eval $(call AUTOTARGETS,package,pango))
++$(eval $(call AUTOTARGETS,package,sdl_sound))
 -- 
 1.7.1
