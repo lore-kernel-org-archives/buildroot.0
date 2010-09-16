@@ -1,41 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 16 Sep 2010 09:56:16 +0200
-Subject: [Buildroot] [git commit master 1/1] kernel-headers: bump 2.6.34.x
-	version
-Message-ID: <20100916075848.DC68A8A666@busybox.osuosl.org>
+From: William Wagner <will_wagner@carallon.com>
+Date: Thu, 16 Sep 2010 09:03:11 +0100
+Subject: [Buildroot] external toolchain question
+In-Reply-To: <20100915211903.6097235c@surf>
+References: <4C910D9F.2060308@carallon.com> <20100915211903.6097235c@surf>
+Message-ID: <4C91CF3F.5050007@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+  On 15/09/2010 20:19, Thomas Petazzoni wrote:
+> On Wed, 15 Sep 2010 19:17:03 +0100
+> William Wagner<will_wagner@carallon.com>  wrote:
+>
+>> I'm trying to get a crosstool-ng toolchain working and running into a
+>> few problems. One thing I found with c++ support was that libstdc++
+>> was being copied into target/usr/lib but it was located in
+>> staging/lib.
+> What's inside staging/ is just a bare copy of the toolchain sysroot. As
+> the toolchain sysroot organization depends on the toolchain, libstdc++
+> might be located in lib/ or usr/lib in staging.
+>
+> For the target, I thought that it'd be a good idea to have it under
+> usr/lib regardless of whether it was in lib/ or usr/lib/ in the staging
+> directory. This is because "essential" applications do not usually
+> depend on libstdc++, so the natural location for libsdc++ is usr/lib.
+>
+> Is it causing any sort of problem for you ?
+With libstdc++ in /usr/lib on target but /lib in staging I was getting 
+an error in gdb when it tried to load libstdc++, moving the library 
+fixed the problem.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa87ac99c56750eb5d626a785169e6df5407cc96
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    2 +-
- ...types-for-headers-exported-to-user-space.patch} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.34.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.34.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
-
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 7391d97..bee5044 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -62,7 +62,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.31.14"	if BR2_KERNEL_HEADERS_2_6_31
- 	default "2.6.32.21"	if BR2_KERNEL_HEADERS_2_6_32
- 	default "2.6.33.7"	if BR2_KERNEL_HEADERS_2_6_33
--	default "2.6.34.6"	if BR2_KERNEL_HEADERS_2_6_34
-+	default "2.6.34.7"	if BR2_KERNEL_HEADERS_2_6_34
- 	default "2.6.35.4"	if BR2_KERNEL_HEADERS_2_6_35
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-2.6.34.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.34.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.34.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.34.7-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
-1.7.1
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
