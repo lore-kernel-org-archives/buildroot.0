@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] xlib_libX11: convert old-style
-	hooks to new-style hooks
-Message-ID: <20100916113826.D49FE8AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libnl: remove useless strip and
+	use correct step override
+Message-ID: <20100916113828.7197E8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1976fc5f244cd04027b3a6f0d6b7ab1a29306f7d
+commit: http://git.buildroot.net/buildroot/commit/?id=4dfe998b3252ac55e2c56e106e9f090b951191c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk |   18 +++++++++++-------
- 1 files changed, 11 insertions(+), 7 deletions(-)
+ package/libnl/libnl.mk |   13 ++++---------
+ 1 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 575aa67..c95d654 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -20,20 +20,24 @@ XLIB_LIBX11_CONF_OPT = \
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 1a66746..ccedd22 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -10,13 +10,8 @@ LIBNL_SITE = http://distfiles.gentoo.org/distfiles
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
  
- HOST_XLIB_LIBX11_DEPENDENCIES = host-xproto_xextproto host-libxcb host-xutil_util-macros host-xlib_xtrans host-xlib_libXau host-xlib_libXdmcp host-xproto_kbproto host-xproto_xproto host-xproto_xextproto host-xproto_inputproto host-xproto_xf86bigfontproto xproto_bigreqsproto host-xproto_xcmiscproto
- 
--$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
--$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
+-$(eval $(call AUTOTARGETS,package,libnl))
 -
- # src/util/makekeys is executed at build time to generate ks_tables.h, so
- # it should get compiled for the host. The libX11 makefile unfortunately
- # doesn't know about cross compilation so this doesn't work.
- # Long term, we should probably teach it about HOSTCC / HOST_CFLAGS, but for
- # now simply disable the src/util Makefile and build makekeys by hand in
- # advance
--$(XLIB_LIBX11_HOOK_POST_EXTRACT):
-+define XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
- 	echo '' > $(@D)/src/util/Makefile.am
+-$(LIBNL_HOOK_POST_INSTALL): $(LIBNL_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl.so*
 -	touch $@
+-
+-$(LIBNL_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define LIBNL_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
+-	rm -f $(LIBNL_TARGET_INSTALL_TARGET) $(LIBNL_HOOK_POST_INSTALL)
 +endef
 +
-+XLIB_LIBX11_POST_EXTRACT_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
- 
--$(XLIB_LIBX11_HOOK_POST_CONFIGURE):
-+define XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
- 	cd $(@D)/src/util && $(HOSTCC) $(HOSTCFLAGS) \
- 		-I$(STAGING_DIR)/usr/include -o makekeys makekeys.c
--	touch $@
-+endef
-+
-+XLIB_LIBX11_POST_CONFIGURE_HOOKS += XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
-+
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11))
-+$(eval $(call AUTOTARGETS,package/x11r7,xlib_libX11,host))
++$(eval $(call AUTOTARGETS,package,libnl))
 -- 
 1.7.1
