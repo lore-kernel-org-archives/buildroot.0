@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] openvpn: use correct step
-	override method
-Message-ID: <20100916113831.275E98AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libpcap: remove useless
+	stripping
+Message-ID: <20100916113832.A916D8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=138212a1046fb4a63d28a88bf6f53b71e35a281b
+commit: http://git.buildroot.net/buildroot/commit/?id=6cf3ec38b886f82df5576ce1146931e9eafcb154
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvpn/openvpn.mk |   16 +++++++---------
- 1 files changed, 7 insertions(+), 9 deletions(-)
+ package/libpcap/libpcap.mk |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 714938b..8d99cab 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -26,20 +26,18 @@ else
- 	OPENVPN_CONF_OPT += --disable-crypto --disable-ssl
- endif
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 801b15e..b14a6f7 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -19,10 +19,3 @@ LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(
+ LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
  
--$(eval $(call AUTOTARGETS,package,openvpn))
+ $(eval $(call AUTOTARGETS,package,libpcap))
 -
--$(OPENVPN_TARGET_INSTALL_TARGET):
--	$(call MESSAGE,"Installing")
--	$(INSTALL) -m 755 $(OPENVPN_DIR)/openvpn \
-+define OPENVPN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/openvpn \
- 		$(TARGET_DIR)/usr/sbin/openvpn
- 	if [ ! -f $(TARGET_DIR)/etc/init.d/openvpn ]; then \
- 		$(INSTALL) -m 755 -D package/openvpn/openvpn.init \
- 			$(TARGET_DIR)/etc/init.d/openvpn; \
- 	fi
+-$(LIBPCAP_HOOK_POST_INSTALL): $(LIBPCAP_TARGET_INSTALL_TARGET)
+-ifeq ($(BR2_PREFER_STATIC_LIB),)
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(wildcard $(TARGET_DIR)/usr/lib/libpcap.so*)
+-endif
 -	touch $@
-+endef
- 
--$(OPENVPN_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define OPENVPN_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/openvpn
- 	rm -f $(TARGET_DIR)/etc/init.d/openvpn
--	rm -f $(OPENVPN_TARGET_INSTALL_TARGET) $(OPENVPN_HOOK_POST_INSTALL)
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,openvpn))
+-
 -- 
 1.7.1
