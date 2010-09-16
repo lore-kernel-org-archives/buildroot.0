@@ -1,58 +1,39 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Thu, 16 Sep 2010 12:41:09 +0100
-Subject: [Buildroot] external toolchain question
-In-Reply-To: <20100916110442.29178d68@surf>
-References: <4C910D9F.2060308@carallon.com>
-	<20100915211903.6097235c@surf>	<4C91CF3F.5050007@carallon.com>
-	<20100916110442.29178d68@surf>
-Message-ID: <4C920255.80602@carallon.com>
+From: Mitch Davis <mjd+buildroot@afork.com>
+Date: Thu, 16 Sep 2010 21:57:58 +1000
+Subject: [Buildroot] EXT2-fs error
+In-Reply-To: <SNT119-W14BE5B1259FD7FD3BF9A8E827A0@phx.gbl>
+References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>
+	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>
+	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>
+	<20100913102031.03481d63@surf>
+	<SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>
+	<87mxrm6lrc.fsf@macbook.be.48ers.dk>
+	<SNT119-W4750F1F26C2613C40FB5C82790@phx.gbl>
+	<20100915133124.604f8b74@surf>
+	<SNT119-W19D1DBCD197B0F139037EA82790@phx.gbl>
+	<20100915190725.459aaca8@surf>
+	<SNT119-W315E2AFFA66E576AA7F27A827A0@phx.gbl>
+	<1284627065.4173.2221.camel@station1.ormlab.com>
+	<SNT119-W38B5142DB23D37AEB445A827A0@phx.gbl>
+	<233D327176C4471A9A40B36BC1B4EB35@AP366>
+	<SNT119-W14BE5B1259FD7FD3BF9A8E827A0@phx.gbl>
+Message-ID: <AANLkTinRm_mY0wWuLrzZn=wsKo39US11F36v5hgjH_MM@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  On 16/09/2010 10:04, Thomas Petazzoni wrote:
-> On Thu, 16 Sep 2010 09:03:11 +0100
-> William Wagner<will_wagner@carallon.com>  wrote:
->
->> With libstdc++ in /usr/lib on target but /lib in staging I was
->> getting an error in gdb when it tried to load libstdc++, moving the
->> library fixed the problem.
-> Hum, right, ok.
->
-> The old behaviour was to find each library in staging/ and then copy it
-> to the same location in target/. Unfortunately, it was causing problems
-> with Buildroot toolchains, because in those, libstdc++ was neither in
-> lib/ or in usr/lib, but in usr/<tuple>/lib. Therefore, I moved to a
-> strategy that consists in having a fixed destination for the library on
-> the target filesystem. This was implemented by
-> ecb7642cce36bc68d93f0eee677adc7da538228d.
->
-> However, later on, to fix other issues, also related to libstdc++, I
-> modified the build procedure for Buildroot toolchains so that a
-> <tuple>/lib ->  lib/ is created, as other toolchain building systems are
-> doing. This was implemented in
-> 3c77bab2eeace3ee675bd745ca335fa3dd1630bb. The result is that libstdc++
-> is back into a usual location in Buildroot toolchains, so we could in
-> fact more or less revert ecb7642cce36bc68d93f0eee677adc7da538228d and
-> make sure that libraries are at the same location in both staging/ and
-> target/. I'll cook a patch for this.
+On Thu, Sep 16, 2010 at 9:14 PM, Johnny Beardsmore <jny0@hotmail.com> wrote:
+> I'm definitely only working with one rw partition.? It seems the two
+> partition idea would be my best way forward at this stage.? I'll figure this
+> out and see it it resolves my problem.
 
-Have now also tried a code sourcery toolchain which puts libstdc++ in 
-/usr/lib and if they don't match again get the error.
+You could ask GRUB to load a RAM disk.  The programs in the RAM disk
+could do the image copying to the flash FS.  After the copy, the flash
+FS can be mounted, and a "pivot" done across to it.  Then the RAM disk
+could be thrown away.
 
-We could change copy_toolchain_lib_root so that it puts the libraries in 
-the corresponding location it finds them in rather than currently 
-searching in three locations but always copying to the specified one.
+Just a thought...
 
-> Thanks for the report!
->
-> Thomas
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Mitch.
