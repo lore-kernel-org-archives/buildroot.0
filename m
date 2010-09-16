@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] shared-mime-info: convert
-	old-style hook to new-style hook
-Message-ID: <20100916113824.6BCA98AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] liboil: convert old-style hook
+	to new-style hook
+Message-ID: <20100916113825.06E8B8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4cb198b9710531e0a4ccf5d3f835427daeecaad
+commit: http://git.buildroot.net/buildroot/commit/?id=f80d06457279c27689fddcb7ef110f30547f4d7b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We don't want to use 'make DESTDIR=$(TARGET_DIR) install' as we only
-want the MIME database to be installed on the target. So we simply
-override the target installation command.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shared-mime-info/shared-mime-info.mk |   13 ++++++-------
- 1 files changed, 6 insertions(+), 7 deletions(-)
+ package/liboil/liboil.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 487d4b2..6abfa75 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -8,7 +8,7 @@ SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
- SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
+diff --git a/package/liboil/liboil.mk b/package/liboil/liboil.mk
+index 1bb412f..4681282 100644
+--- a/package/liboil/liboil.mk
++++ b/package/liboil/liboil.mk
+@@ -35,9 +35,10 @@ endif
  
- SHARED_MIME_INFO_INSTALL_STAGING = YES
--SHARED_MIME_INFO_INSTALL_TARGET = NO
-+SHARED_MIME_INFO_INSTALL_TARGET = YES
+ LIBOIL_DEPENDENCIES = $(LIBOIL_GLIB_DEP)
  
- SHARED_MIME_INFO_AUTORECONF = NO
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
-@@ -21,14 +21,13 @@ HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
- HOST_SHARED_MIME_INFO_CONF_OPT = \
- 	--disable-update-mimedb
- 
-+define SHARED_MIME_INFO_INSTALL_TARGET_CMDS
-+	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
-+	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+-$(eval $(call AUTOTARGETS,package,liboil))
+-
+-$(LIBOIL_HOOK_POST_INSTALL):
+-	# Remove useless bugreport program from the target
++define LIBOIL_TARGET_CLEANUP
+ 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
+-	touch $@
 +endef
 +
- $(eval $(call AUTOTARGETS,package,shared-mime-info))
- $(eval $(call AUTOTARGETS,package,shared-mime-info,host))
- 
- # shared-mime-info for the host
- SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
--
--# update the shared-mime-info database in the target
--$(SHARED_MIME_INFO_HOOK_POST_INSTALL):
--	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
--	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
--	touch $@
++LIBOIL_POST_INSTALL_TARGET_HOOKS += LIBOIL_TARGET_CLEANUP
++
++$(eval $(call AUTOTARGETS,package,liboil))
 -- 
 1.7.1
