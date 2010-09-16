@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] sdl_sound: convert old-style
-	hooks to new-style hooks
-Message-ID: <20100916113823.EDCC78AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] taglib: convert old-style hook
+	to new-style hook
+Message-ID: <20100916113822.C13F58AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d595a601606534bac4db9dd8ff0e9ca22beeafd
+commit: http://git.buildroot.net/buildroot/commit/?id=e3077bc8225ef10361f1b81b93d3eafc35bd2e55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sdl_sound/sdl_sound.mk |   23 +++++++++++++----------
- 1 files changed, 13 insertions(+), 10 deletions(-)
+ package/multimedia/taglib/taglib.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 3a6b7e7..9234ab6 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -41,20 +41,23 @@ else
- SDL_SOUND_CONF_OPT += --disable-mmx
- endif
+diff --git a/package/multimedia/taglib/taglib.mk b/package/multimedia/taglib/taglib.mk
+index 2620b97..e5433a4 100644
+--- a/package/multimedia/taglib/taglib.mk
++++ b/package/multimedia/taglib/taglib.mk
+@@ -16,10 +16,12 @@ TAGLIB_CONF_ENV = \
  
--$(eval $(call AUTOTARGETS,package,sdl_sound))
-+define SDL_SOUND_REMOVE_PLAYSOUND
-+	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
+ TAGLIB_CONF_OPT = --disable-libsuffix --program-prefix=''
+ 
+-$(eval $(call AUTOTARGETS,package/multimedia,taglib))
++define TAGLIB_REMOVE_DEVFILE
++	rm -f $(TARGET_DIR)/usr/bin/taglib-config
 +endef
  
- ifneq ($(BR2_PACKAGE_SDL_SOUND_PLAYSOUND),y)
--$(SDL_SOUND_HOOK_POST_INSTALL):
--	rm $(addprefix $(TARGET_DIR)/usr/bin/,playsound playsound_simple)
+ ifneq ($(BR2_HAVE_DEVFILES),y)
+-$(TAGLIB_HOOK_POST_INSTALL):
+-	rm -f $(TARGET_DIR)/usr/bin/taglib-config
 -	touch $@
-+SDL_SOUND_POST_INSTALL_TARGET_HOOKS += SDL_SOUND_REMOVE_PLAYSOUND
++TAGLIB_POST_INSTALL_TARGET_HOOKS += TAGLIB_REMOVE_DEVFILE
  endif
- 
--# target shared libs doesn't get removed by make uninstall if the .la files
--# are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
--$(SDL_SOUND_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define SDL_SOUND_UNINSTALL_STAGING_CMDS
- 	$(MAKE) DESTDIR=$(STAGING_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
--	rm -f $(@D)/.stamp_staging_installed
-+endef
 +
-+# target shared libs doesn't get removed by make uninstall if the .la
-+# files are removed (E.G. if BR2_HAVE_DEVFILES isn't set)
-+define SDL_SOUND_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(@D)/$(SDL_SOUND_SUBDIR)
- 	rm -f $(TARGET_DIR)/usr/lib/libSDL_sound*so*
--	rm -f $(SDL_SOUND_TARGET_INSTALL_TARGET) $(SDL_SOUND_HOOK_POST_INSTALL)
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,sdl_sound))
++$(eval $(call AUTOTARGETS,package/multimedia,taglib))
 -- 
 1.7.1
