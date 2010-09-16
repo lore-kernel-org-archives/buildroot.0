@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] ifplugd: convert to new style
-	hook
-Message-ID: <20100916113832.619328AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] pcre: convert to new style hook
+Message-ID: <20100916113833.9D5578AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0437f157ba87fcd239a8a5381b53cf23d8f0d7a6
+commit: http://git.buildroot.net/buildroot/commit/?id=8112567cb30a0e7101b59059fdbbc41972c90550
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ifplugd/ifplugd.mk |   18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ package/pcre/pcre.mk |   18 ++++++++++++------
+ 1 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 945d366..5e66cea 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -16,20 +16,20 @@ IFPLUGD_CONF_OPT = --disable-lynx
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 290e534..d2a1331 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -13,14 +13,20 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ PCRE_CONF_OPT = --disable-cpp
+ endif
  
- IFPLUGD_DEPENDENCIES = libdaemon
- 
--$(eval $(call AUTOTARGETS,package,ifplugd))
+-$(eval $(call AUTOTARGETS,package,pcre))
 -
--$(IFPLUGD_HOOK_POST_INSTALL): $(IFPLUGD_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/ifplugd
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/ifplugstatus
-+define IFPLUGD_INSTALL_FIXUP
- 	$(INSTALL) -d $(TARGET_DIR)/etc/ifplugd
- 	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
--		$(INSTALL) $(IFPLUGD_DIR)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
-+		$(INSTALL) $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
- 		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- 	fi
--	$(INSTALL) -m 0755 $(IFPLUGD_DIR)/conf/ifplugd.action \
-+	$(INSTALL) -m 0755 $(@D)/conf/ifplugd.action \
- 		$(TARGET_DIR)/etc/ifplugd/
--	$(INSTALL) -m 0755 $(IFPLUGD_DIR)/conf/ifplugd.init \
-+	$(INSTALL) -m 0755 $(@D)/conf/ifplugd.init \
- 		$(TARGET_DIR)/etc/init.d/S45ifplugd
- 	# don't use bash for init script
- 	$(SED) 's^/bin/bash^/bin/sh^g' $(TARGET_DIR)/etc/init.d/S45ifplugd
--	touch $@
+-$(PCRE_HOOK_POST_INSTALL): $(PCRE_TARGET_INSTALL_TARGET)
++define PCRE_STAGING_PCRE_CONFIG_FIXUP
+ 	$(SED) 's,^prefix=.*,prefix=$(STAGING_DIR)/usr,' \
+ 		-e 's,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,' \
+ 		$(STAGING_DIR)/usr/bin/pcre-config
+-	rm -rf $(TARGET_DIR)/usr/share/doc/pcre
+-ifneq ($(BR2_HAVE_DEVFILES),y)
 +endef
 +
-+IFPLUGD_POST_INSTALL_TARGET_HOOKS += IFPLUGD_INSTALL_FIXUP
++PCRE_POST_INSTALL_STAGING_HOOKS += PCRE_STAGING_PCRE_CONFIG_FIXUP
 +
-+$(eval $(call AUTOTARGETS,package,ifplugd))
++define PCRE_TARGET_REMOVE_PCRE_CONFIG
+ 	rm -f $(TARGET_DIR)/usr/bin/pcre-config
++endef
++
++ifneq ($(BR2_HAVE_DEVFILES),y)
++PCRE_POST_INSTALL_TARGET_HOOKS += PCRE_TARGET_REMOVE_PCRE_CONFIG
+ endif
+-	touch $@
++
++$(eval $(call AUTOTARGETS,package,pcre))
 -- 
 1.7.1
