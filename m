@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libpng: convert old-style hook
-	to new-style hook
-Message-ID: <20100916113826.2E9528AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] tiff: use correct construct to
+	override target installation
+Message-ID: <20100916113827.6207B8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20528a8449c85f5eb7e1ec829c50c6b23fda2c61
+commit: http://git.buildroot.net/buildroot/commit/?id=0958e6109c9ed8c82342d17a1205e3c4b8baa3f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We also remove the stripping, as it is already done globally.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpng/libpng.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/tiff/tiff.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index a81d951..5608f4f 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -14,14 +14,15 @@ LIBPNG_DEPENDENCIES = host-pkg-config zlib
- HOST_LIBPNG_CONF_OPT = --without-libpng-compat
- HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 8db215e..ca6f562 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -17,10 +17,8 @@ TIFF_CONF_OPT = \
  
--$(eval $(call AUTOTARGETS,package,libpng))
--$(eval $(call AUTOTARGETS,package,libpng,host))
+ TIFF_DEPENDENCIES = host-pkg-config zlib jpeg
+ 
+-$(eval $(call AUTOTARGETS,package,tiff))
 -
--$(LIBPNG_HOOK_POST_INSTALL):
-+define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
- 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
- 		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng12\',g" \
- 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
- 		$(STAGING_DIR)/usr/bin/libpng12-config
+-$(TIFF_TARGET_INSTALL_TARGET):
+-	-cp -a $(TIFF_DIR)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtiff.so
 -	touch $@
++define TIFF_INSTALL_TARGET_CMDS
++	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
 +endef
  
-+LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
-+
-+$(eval $(call AUTOTARGETS,package,libpng))
-+$(eval $(call AUTOTARGETS,package,libpng,host))
++$(eval $(call AUTOTARGETS,package,tiff))
 -- 
 1.7.1
