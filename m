@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libpcap: remove useless
-	stripping
-Message-ID: <20100916113832.A916D8AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] squid: convert old-style hook
+	to new-style hook
+Message-ID: <20100916113827.38CC68AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cf3ec38b886f82df5576ce1146931e9eafcb154
+commit: http://git.buildroot.net/buildroot/commit/?id=62df009e47bb0f850989aaba24b08d06d5b03305
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpcap/libpcap.mk |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/squid/squid.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 801b15e..b14a6f7 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -19,10 +19,3 @@ LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(
- LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6e94d50..6254b84 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -23,13 +23,15 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	SQUID_DEPENDENCIES += openssl
+ endif
  
- $(eval $(call AUTOTARGETS,package,libpcap))
+-$(eval $(call AUTOTARGETS,package,squid))
 -
--$(LIBPCAP_HOOK_POST_INSTALL): $(LIBPCAP_TARGET_INSTALL_TARGET)
--ifeq ($(BR2_PREFER_STATIC_LIB),)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(wildcard $(TARGET_DIR)/usr/lib/libpcap.so*)
--endif
+-$(SQUID_HOOK_POST_INSTALL):
++define SQUID_CLEANUP_TARGET
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, \
+ 		RunCache RunAccel)
+ 	rm -f $(addprefix $(TARGET_DIR)/etc/, \
+ 		cachemgr.conf mime.conf.default squid.conf.default)
+ 	rm -f $(TARGET_DIR)/usr/libexec/cachemgr.cgi
+ 	rm -f $(TARGET_DIR)/usr/share/mib.txt
 -	touch $@
--
++endef
++
++SQUID_POST_INSTALL_TARGET_HOOKS += SQUID_CLEANUP_TARGET
++
++$(eval $(call AUTOTARGETS,package,squid))
 -- 
 1.7.1
