@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libgtk2: convert old-style hook
-	to new-style
-Message-ID: <20100916113825.6E1D08AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libxml2: convert old-style hook
+	to new-style hook
+Message-ID: <20100916113826.750338AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,40 +10,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=39c781f33a7cf486c4872181cce8451913d06407
+commit: http://git.buildroot.net/buildroot/commit/?id=c648785b933fe86531906832b81e21e54ddd10ca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |   12 +++++++-----
+ package/libxml2/libxml2.mk |   12 +++++++-----
  1 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 1e732d0..d669622 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -119,6 +119,13 @@ else
- LIBGTK2_CONF_OPT += --disable-cups
- endif
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 8f25136..820f465 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -22,6 +22,13 @@ LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
+ 		--without-debugging --without-python \
+ 		--without-threads
  
-+define LIBGTK2_POST_INSTALL_TWEAKS
-+	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
-+	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
++define LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
++	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
++	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
 +endef
 +
-+LIBGTK2_POST_INSTALL_TARGET_HOOKS += LIBGTK_POST_INSTALL_TWEAKS
++LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
 +
- # We do not build a full version of libgtk2 for the host, because that
- # requires compiling Cairo, Pango, ATK and X.org for the
- # host. Therefore, we patch it to remove dependencies, and we hack the
-@@ -155,8 +162,3 @@ endef
+ HOST_LIBXML2_DEPENDENCIES = host-pkg-config
  
- $(eval $(call AUTOTARGETS,package,libgtk2))
- $(eval $(call AUTOTARGETS,package,libgtk2,host))
--
--$(LIBGTK2_HOOK_POST_INSTALL):
--	$(INSTALL) -m 755 package/libgtk2/S26libgtk2 $(TARGET_DIR)/etc/init.d/
--	rm -rf $(TARGET_DIR)/usr/share/gtk-2.0/demo $(TARGET_DIR)/usr/bin/gtk-demo
+ HOST_LIBXML2_CONF_OPT = \
+@@ -31,10 +38,5 @@ HOST_LIBXML2_CONF_OPT = \
+ $(eval $(call AUTOTARGETS,package,libxml2))
+ $(eval $(call AUTOTARGETS,package,libxml2,host))
+ 
+-$(LIBXML2_HOOK_POST_INSTALL):
+-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+-	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
 -	touch $@
+-
+ # libxml2 for the host
+ LIBXML2_HOST_BINARY:=$(HOST_DIR)/usr/bin/xmllint
 -- 
 1.7.1
