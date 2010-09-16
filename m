@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] docker: remove useless post
-	install stripping hook
-Message-ID: <20100916113831.8F6618AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] gvfs: convert to new style hook,
+	remove useless stripping
+Message-ID: <20100916113831.F21AB8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=523394b782be51ab8490853b2b6e7ec8353d4ca0
+commit: http://git.buildroot.net/buildroot/commit/?id=7811b05c9be41bfe67068d71c90bb28c54165efd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/docker/docker.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/gvfs/gvfs.mk |   14 ++++++--------
+ 1 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/docker/docker.mk b/package/docker/docker.mk
-index 5e38653..5b4cd3a 100644
---- a/package/docker/docker.mk
-+++ b/package/docker/docker.mk
-@@ -22,7 +22,3 @@ DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
- DOCKER_DEPENDENCIES = host-pkg-config libglib2 xserver_xorg-server
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 64e6df4..7638f54 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -69,12 +69,10 @@ else
+ GVFS_CONF_OPT += --disable-samba
+ endif
  
- $(eval $(call AUTOTARGETS,package,docker))
+-$(eval $(call AUTOTARGETS,package,gvfs))
 -
--$(DOCKER_HOOK_POST_INSTALL): $(DOCKER_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/docker
+-$(GVFS_HOOK_POST_INSTALL): $(GVFS_TARGET_INSTALL_TARGET)
++define GVFS_REMOVE_USELESS_BINARY
+ 	rm $(TARGET_DIR)/usr/bin/gvfs-less
+-ifneq ($(BR2_ENABLE_DEBUG),y)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/gvfs*
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/libexec/gvfs*
+-endif
 -	touch $@
++endef
++
++GVFS_POST_INSTALL_TARGET_HOOKS += GVFS_REMOVE_USELESS_BINARY
++
++$(eval $(call AUTOTARGETS,package,gvfs))
 -- 
 1.7.1
