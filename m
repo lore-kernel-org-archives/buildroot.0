@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] liboil: convert old-style hook
+Subject: [Buildroot] [git commit master 1/1] libdnet: convert old-style hook
 	to new-style hook
-Message-ID: <20100916113825.06E8B8AB99@busybox.osuosl.org>
+Message-ID: <20100916113826.50F198AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f80d06457279c27689fddcb7ef110f30547f4d7b
+commit: http://git.buildroot.net/buildroot/commit/?id=84d37d15e3edc028ff6f1d2b5e2071024d6e1ef5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liboil/liboil.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/libdnet/libdnet.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/liboil/liboil.mk b/package/liboil/liboil.mk
-index 1bb412f..4681282 100644
---- a/package/liboil/liboil.mk
-+++ b/package/liboil/liboil.mk
-@@ -35,9 +35,10 @@ endif
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 28304be..eb67b05 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -24,9 +24,11 @@ LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(TARGET_DIR) INSTALL_S
+ LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
+ endif
  
- LIBOIL_DEPENDENCIES = $(LIBOIL_GLIB_DEP)
- 
--$(eval $(call AUTOTARGETS,package,liboil))
--
--$(LIBOIL_HOOK_POST_INSTALL):
--	# Remove useless bugreport program from the target
-+define LIBOIL_TARGET_CLEANUP
- 	rm -f $(TARGET_DIR)/usr/bin/oil-bugreport
--	touch $@
+-$(eval $(call AUTOTARGETS,package,libdnet))
++# Needed for autoreconf to work properly
++define LIBDNET_FIXUP_ACINCLUDE_M4
++	ln -sf config/acinclude.m4 $(@D)
 +endef
-+
-+LIBOIL_POST_INSTALL_TARGET_HOOKS += LIBOIL_TARGET_CLEANUP
-+
-+$(eval $(call AUTOTARGETS,package,liboil))
+ 
+-$(LIBDNET_HOOK_POST_EXTRACT):
+-	ln -sf config/acinclude.m4 $(LIBDNET_DIR)
+-	touch $@
++LIBDNET_POST_EXTRACT_HOOKS += LIBDNET_FIXUP_ACINCLUDE_M4
+ 
++$(eval $(call AUTOTARGETS,package,libdnet))
 -- 
 1.7.1
