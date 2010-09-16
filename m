@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libiconv: convert old-style
-	hook to new-style hook
-Message-ID: <20100916113825.E62D58AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] dropbear: convert old-style
+	hook and commands to new-style
+Message-ID: <20100916113825.94AC38AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=375b14fbeb876aaa550f0bfee013a15ca4191202
+commit: http://git.buildroot.net/buildroot/commit/?id=dbcec2b28e0ac732e81569f7d0237a9b866dfed8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-In addition to that, remove useless stripping since it is done
-globally.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libiconv/libiconv.mk |   20 +++++++++++---------
- 1 files changed, 11 insertions(+), 9 deletions(-)
+ package/dropbear/dropbear.mk |   40 ++++++++++++++++++++--------------------
+ 1 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index a3f762a..c56a986 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -12,17 +12,19 @@ LIBICONV_INSTALL_TARGET = YES
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index ec678d7..0b0d4c7 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -17,34 +17,34 @@ DROPBEAR_CONF_ENV = ac_cv_type_struct_sockaddr_storage=yes
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+ 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
  
- LIBICONV_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
--$(eval $(call AUTOTARGETS,package,libiconv))
-+# Remove not used preloadable libiconv.so
-+define LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
-+	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
+-$(eval $(call AUTOTARGETS,package,dropbear))
++define DROPBEAR_DISABLE_XAUTH
++	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
++endef
++
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ADJUST_OPTIONS
++
++define DROPBEAR_DISABLE_REVERSE_DNS
++	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' $(@D)/options.h
 +endef
  
--$(LIBICONV_HOOK_POST_INSTALL):
--	# Remove not used preloadable libiconv.so
-+define LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
- 	rm -f $(STAGING_DIR)/usr/lib/preloadable_libiconv.so
--	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
--ifneq ($(BR2_ENABLE_DEBUG),y)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libiconv.so.*
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libcharset.so.*
--endif
+-$(DROPBEAR_HOOK_POST_EXTRACT):
+-	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(DROPBEAR_DIR)/options.h
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
+-	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' \
+-		$(DROPBEAR_DIR)/options.h
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
+ endif
+-	touch $@
+-
+-$(DROPBEAR_TARGET_INSTALL_TARGET):
+-	$(call MESSAGE,"Installing to target")
+-	$(INSTALL) -m 755 $(DROPBEAR_DIR)/dropbearmulti \
+-		$(TARGET_DIR)/usr/sbin/dropbear
+-	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dbclient
+-	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dropbearkey
+-	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/dropbearconvert
+-	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/scp
+-	ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/ssh
++
++define DROPBEAR_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
++	for f in $(DROPBEAR_TARGET_BINS); do \
++		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
++	done
+ 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50dropbear ]; then \
+ 		$(INSTALL) -m 0755 -D package/dropbear/S50dropbear $(TARGET_DIR)/etc/init.d/S50dropbear; \
+ 	fi
 -	touch $@
 +endef
-+
-+LIBICONV_POST_INSTALL_TARGET_HOOKS += LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
-+LIBICONV_POST_INSTALL_STAGING_HOOKS += LIBICONV_STAGING_REMOVE_PRELOADABLE_LIBS
-+
-+$(eval $(call AUTOTARGETS,package,libiconv))
  
- # Configurations where the toolchain supports locales and the libiconv
- # package is enabled are incorrect, because the toolchain already
+-$(DROPBEAR_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define DROPBEAR_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/dropbear
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(DROPBEAR_TARGET_BINS))
+ 	rm -f $(TARGET_DIR)/etc/init.d/S50dropbear
+-	rm -f $(DROPBEAR_TARGET_INSTALL_TARGET) $(DROPBEAR_HOOK_POST_INSTALL)
++endef
+ 
++$(eval $(call AUTOTARGETS,package,dropbear))
 -- 
 1.7.1
