@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] samba: convert old-style hooks
-	to new-style hooks
-Message-ID: <20100916113823.2A7E48AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] mysql_client: convert old-style
+	hook to new-style hook
+Message-ID: <20100916113824.9D9198AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8ba6a5119ce025c351380a942f3a399d78fb9a7
+commit: http://git.buildroot.net/buildroot/commit/?id=d31100d7e80278f673f74ed36c16a65f4fd27e9e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |   29 +++++++++++++++++------------
- 1 files changed, 17 insertions(+), 12 deletions(-)
+ package/mysql_client/mysql_client.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 44f7fde..141c690 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -85,9 +85,6 @@ SAMBA_UNINSTALL_TARGET_OPT = \
- 	$(if $(BR2_PACKAGE_SAMBA_SWAT),uninstallswat)
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 377df89..6a89a52 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -32,8 +32,10 @@ MYSQL_CLIENT_CONF_OPT = \
+ 	--enable-thread-safe-client \
+ 	$(ENABLE_DEBUG)
  
- 
--$(eval $(call AUTOTARGETS,package,samba))
+-$(eval $(call AUTOTARGETS,package,mysql_client))
 -
--
- # binaries to keep
- SAMBA_BINTARGETS_y = \
- 	usr/sbin/smbd \
-@@ -155,14 +152,14 @@ SAMBA_TXTTARGETS_ = \
- SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_FINDSMB) += usr/bin/findsmb
- SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_SMBTAR) += usr/bin/smbtar
- 
--
--$(SAMBA_HOOK_POST_INSTALL):
--	$(call MESSAGE,"Post installing")
--	# remove unneeded
-+define SAMBA_REMOVE_UNNEEDED_BINARIES
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_))
- 	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_TXTTARGETS_))
--ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
--ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+-$(MYSQL_CLIENT_HOOK_POST_INSTALL):
++define MYSQL_CLIENT_REMOVE_TEST_PROGS
+ 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+-	touch $@
 +endef
 +
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
++MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_REMOVE_TEST_PROGS
 +
-+define SAMBA_REMOVE_SWAT_DOCUMENTATION
- 	# Remove the documentation
- 	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
- 	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
-@@ -170,10 +167,15 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	# Removing the welcome.html file will make swat default to
- 	# welcome-no-samba-doc.html
- 	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
-+endef
-+
-+ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
- endif
- endif
--	# strip binaries
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_y))
-+
-+define SAMBA_INSTALL_INITSCRIPTS_CONFIG
- 	# install start/stop script
- 	@if [ ! -f $(TARGET_DIR)/etc/init.d/S91smb ]; then \
- 		$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb; \
-@@ -182,5 +184,8 @@ endif
- 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
- 		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
- 	fi
--	$(Q)touch $@
-+endef
-+
-+SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_INITSCRIPTS_CONFIG
- 
-+$(eval $(call AUTOTARGETS,package,samba))
++$(eval $(call AUTOTARGETS,package,mysql_client))
 -- 
 1.7.1
