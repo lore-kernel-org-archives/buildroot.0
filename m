@@ -1,26 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 16 Sep 2010 13:28:39 +0200
-Subject: [Buildroot] /etc/ld.so.conf and /etc/ld.so.conf.d in buildroot
-	target skeleton
-Message-ID: <AANLkTimEShvTw0M4Yt4dGE3BbxbX4q4RQ5tfbc-BJ7rb@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 Sep 2010 13:37:28 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/remove-oldstyle-hooks
+In-Reply-To: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 12 Sep 2010 19:41:46 +0200")
+References: <cover.1284312638.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y6b16hs7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-In the buildroot target skeleton exists a directory ld.so.conf.d, but
-no file ld.so.conf.
-The ld.so.conf.d directory is not parsed, unless you include the files
-there from ld.so.conf, like so:
+ Thomas> Hello,
+ Thomas> First of all, I would like to apologize for the huge patch bomb, but I
+ Thomas> thought that having each change as a separate commit was better to
+ Thomas> ease the review process than making a single, Buildroot-wide commit.
 
-include /etc/ld.so.conf.d/*.conf
+ Thomas> This set of commits converts all AUTOTARGETS packages to the new
+ Thomas> conventions. In the following sections, I detail the three conventions
+ Thomas> that I've enforced through these commits:
 
-I am wondering why this is the case. Shouldn't there be a skeleton
-/etc/ld.so.conf file?
-If not, how is /etc/ld.so.conf.d supposed to be used?
+Pulled and pushed, thanks a lot!
 
-Thanks,
-Thomas
+-- 
+Bye, Peter Korsgaard
