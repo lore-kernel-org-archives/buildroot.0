@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] libnl: remove useless strip and
-	use correct step override
-Message-ID: <20100916113828.7197E8AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] alsa-lib: use correct step
+	override method
+Message-ID: <20100916113828.B61A68AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4dfe998b3252ac55e2c56e106e9f090b951191c6
+commit: http://git.buildroot.net/buildroot/commit/?id=879465e040214d77238c7d42fcbad148a6580f8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnl/libnl.mk |   13 ++++---------
- 1 files changed, 4 insertions(+), 9 deletions(-)
+ package/multimedia/alsa-lib/alsa-lib.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 1a66746..ccedd22 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -10,13 +10,8 @@ LIBNL_SITE = http://distfiles.gentoo.org/distfiles
- LIBNL_INSTALL_STAGING = YES
- LIBNL_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
+index 6e4c575..c1a2b1a 100644
+--- a/package/multimedia/alsa-lib/alsa-lib.mk
++++ b/package/multimedia/alsa-lib/alsa-lib.mk
+@@ -72,15 +72,16 @@ ALSA_LIB_CONF_ENV = CFLAGS="$(ALSA_LIB_CFLAGS)" \
+ # the above doesn't work with shared config.cache
+ ALSA_LIB_USE_CONFIG_CACHE = NO
  
--$(eval $(call AUTOTARGETS,package,libnl))
+-$(eval $(call AUTOTARGETS,package/multimedia,alsa-lib))
 -
--$(LIBNL_HOOK_POST_INSTALL): $(LIBNL_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnl.so*
--	touch $@
--
--$(LIBNL_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define LIBNL_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
--	rm -f $(LIBNL_TARGET_INSTALL_TARGET) $(LIBNL_HOOK_POST_INSTALL)
+-$(ALSA_LIB_TARGET_UNINSTALL):
++define ALSA_LIB_UNINSTALL_TARGET_CMDS
+ 	-rm -f $(TARGET_DIR)/usr/lib/libasound.so*
+ 	-rm -rf $(TARGET_DIR)/usr/lib/alsa-lib
+ 	-rm -rf $(TARGET_DIR)/usr/share/alsa
 +endef
-+
-+$(eval $(call AUTOTARGETS,package,libnl))
+ 
+-$(ALSA_LIB_TARGET_CLEAN):
++define ALSA_LIB_UNINSTALL_STAGING_CMDS
+ 	-rm -f $(STAGING_DIR)/usr/lib/libasound.*
+ 	-rm -rf $(STAGING_DIR)/usr/lib/alsa-lib
+ 	-rm -rf $(STAGING_DIR)/usr/share/alsa
++endef
+ 
++$(eval $(call AUTOTARGETS,package/multimedia,alsa-lib))
 -- 
 1.7.1
