@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] mysql_client: convert old-style
-	hook to new-style hook
-Message-ID: <20100916113824.9D9198AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] shared-mime-info: convert
+	old-style hook to new-style hook
+Message-ID: <20100916113824.6BCA98AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d31100d7e80278f673f74ed36c16a65f4fd27e9e
+commit: http://git.buildroot.net/buildroot/commit/?id=b4cb198b9710531e0a4ccf5d3f835427daeecaad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We don't want to use 'make DESTDIR=$(TARGET_DIR) install' as we only
+want the MIME database to be installed on the target. So we simply
+override the target installation command.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mysql_client/mysql_client.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/shared-mime-info/shared-mime-info.mk |   13 ++++++-------
+ 1 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index 377df89..6a89a52 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -32,8 +32,10 @@ MYSQL_CLIENT_CONF_OPT = \
- 	--enable-thread-safe-client \
- 	$(ENABLE_DEBUG)
+diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
+index 487d4b2..6abfa75 100644
+--- a/package/shared-mime-info/shared-mime-info.mk
++++ b/package/shared-mime-info/shared-mime-info.mk
+@@ -8,7 +8,7 @@ SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
+ SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
  
--$(eval $(call AUTOTARGETS,package,mysql_client))
--
--$(MYSQL_CLIENT_HOOK_POST_INSTALL):
-+define MYSQL_CLIENT_REMOVE_TEST_PROGS
- 	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
--	touch $@
+ SHARED_MIME_INFO_INSTALL_STAGING = YES
+-SHARED_MIME_INFO_INSTALL_TARGET = NO
++SHARED_MIME_INFO_INSTALL_TARGET = YES
+ 
+ SHARED_MIME_INFO_AUTORECONF = NO
+ SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
+@@ -21,14 +21,13 @@ HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
+ HOST_SHARED_MIME_INFO_CONF_OPT = \
+ 	--disable-update-mimedb
+ 
++define SHARED_MIME_INFO_INSTALL_TARGET_CMDS
++	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
++	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
 +endef
 +
-+MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_REMOVE_TEST_PROGS
-+
-+$(eval $(call AUTOTARGETS,package,mysql_client))
+ $(eval $(call AUTOTARGETS,package,shared-mime-info))
+ $(eval $(call AUTOTARGETS,package,shared-mime-info,host))
+ 
+ # shared-mime-info for the host
+ SHARED_MIME_INFO_HOST_BINARY:=$(HOST_DIR)/usr/bin/update-mime-database
+-
+-# update the shared-mime-info database in the target
+-$(SHARED_MIME_INFO_HOOK_POST_INSTALL):
+-	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+-	$(INSTALL) -D $(STAGING_DIR)/usr/share/mime/mime.cache $(TARGET_DIR)/usr/share/mime/mime.cache
+-	touch $@
 -- 
 1.7.1
