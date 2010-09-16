@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] dbus: convert old-style hook to
-	new-style hook
-Message-ID: <20100916113831.6DF598AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] ncftp: use correct way of
+	overriding steps
+Message-ID: <20100916113828.0A1818AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +10,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3dbdbda0b8aca70f5bed1e249b6709a2611160f5
+commit: http://git.buildroot.net/buildroot/commit/?id=0de10bf4915ba1efe482486705adc36cfa52cfa8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk |   37 +++++++++++++++++++++++--------------
- 1 files changed, 23 insertions(+), 14 deletions(-)
+ package/ncftp/ncftp.mk |   23 +++++++++--------------
+ 1 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index e93738e..141cf69 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -49,6 +49,29 @@ else
- DBUS_CONF_OPT += --without-x
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 757cc6e..f3f4780 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -23,6 +23,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_BATCH),y)
+ NCFTP_TARGET_BINS+=ncftpbatch
++NCFTP_INSTALL_NCFTP_BATCH = \
++	ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
  endif
  
-+# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
-+define DBUS_REMOVE_VAR_LIB_DBUS
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+endef
-+
-+DBUS_POST_BUILD_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
-+
-+define DBUS_REMOVE_DEVFILES
-+	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
-+endif
-+
-+define DBUS_INSTALL_TARGET_FIXUP
-+	rm -rf $(TARGET_DIR)/var/lib/dbus
-+	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
-+	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
-+endef
-+
-+DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
-+
- HOST_DBUS_DEPENDENCIES = host-pkg-config host-expat
- HOST_DBUS_CONF_OPT = \
- 		--with-dbus-user=dbus \
-@@ -73,17 +96,3 @@ HOST_DBUS_POST_INSTALL_HOOKS += HOST_DBUS_GEN_INTROSPECT
+ ifeq ($(BR2_PACKAGE_NCFTP_BOOKMARKS),y)
+@@ -30,20 +32,13 @@ NCFTP_TARGET_BINS+=ncftpbookmarks
+ NCFTP_DEPENDENCIES:=ncurses
+ endif
  
- $(eval $(call AUTOTARGETS,package,dbus))
- $(eval $(call AUTOTARGETS,package,dbus,host))
+-$(eval $(call AUTOTARGETS,package,ncftp))
 -
--# fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
--$(DBUS_HOOK_POST_BUILD): $(DBUS_TARGET_BUILD)
--	rm -rf $(TARGET_DIR)/var/lib/dbus
--	touch $@
--
--$(DBUS_HOOK_POST_INSTALL): $(DBUS_TARGET_INSTALL_TARGET)
--ifneq ($(BR2_HAVE_DEVFILES),y)
--	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+-$(NCFTP_TARGET_INSTALL_TARGET):
+-	$(call MESSAGE,"Installing to target")
++define NCFTP_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(addprefix $(NCFTP_DIR)/bin/, $(NCFTP_TARGET_BINS)) $(TARGET_DIR)/usr/bin
+-ifeq ($(BR2_PACKAGE_NCFTP_BATCH),y)
+-	ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
 -endif
--	rm -rf $(TARGET_DIR)/var/lib/dbus
--	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
--	$(INSTALL) -m 0755 package/dbus/S30dbus $(TARGET_DIR)/etc/init.d
+-ifeq ($(BR2_ENABLE_DEBUG),)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(addprefix $(TARGET_DIR)/usr/bin/, $(NCFTP_TARGET_BINS))
+-endif
 -	touch $@
++	$(NCFTP_INSTALL_NCFTP_BATCH)
++endef
+ 
+-$(NCFTP_TARGET_UNINSTALL):
+-	$(call MESSAGE,"Uninstalling")
++define NCFTP_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(NCFTP_TARGET_BINS) ncftpspooler)
+-	rm -f $(NCFTP_TARGET_INSTALL_TARGET)
++endef
++
++$(eval $(call AUTOTARGETS,package,ncftp))
 -- 
 1.7.1
