@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] avahi: convert old-style hook
-	to new-style hook
-Message-ID: <20100916113822.143EB8AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libungif: convert old-style
+	hook to new-style hook
+Message-ID: <20100916113822.3F42B8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28025091919e3e0dfb99a39e9f6afde46764b8ab
+commit: http://git.buildroot.net/buildroot/commit/?id=90710e0c228c29a9e871db331dd84524c9e510ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/avahi/avahi.mk |   24 ++++++++++++++++++------
- 1 files changed, 18 insertions(+), 6 deletions(-)
+ package/libungif/libungif.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 8e2d14f..e1bebd9 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -137,19 +137,31 @@ AVAHI_DEPENDENCIES += libintl
- AVAHI_MAKE_OPT = LIBS=-lintl
- endif
+diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
+index 466a72c..d8dc814 100644
+--- a/package/libungif/libungif.mk
++++ b/package/libungif/libungif.mk
+@@ -17,8 +17,10 @@ LIBUNGIF_BINS = gif2epsn gif2ps gif2rgb gif2x11 gifasm gifbg gifburst gifclip \
+ 		gifrsize gifspnge giftext gifwedge icon2gif raw2gif rgb2gif   \
+ 		text2gif
  
--$(eval $(call AUTOTARGETS,package,avahi))
+-$(eval $(call AUTOTARGETS,package,libungif))
 -
--$(AVAHI_HOOK_POST_INSTALL):
-+define AVAHI_REMOVE_INITSCRIPT
- 	rm -rf $(TARGET_DIR)/etc/init.d/avahi-*
--ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
-+endef
-+
-+AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_INITSCRIPT
-+
-+define AVAHI_INSTALL_AUTOIPD
- 	rm -rf $(TARGET_DIR)/etc/dhcp3/
- 	$(INSTALL) -D -m 0755 package/avahi/busybox-udhcpc-default.script $(TARGET_DIR)/usr/share/udhcpc/default.script
- 	$(INSTALL) -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/
- 	rm -f $(TARGET_DIR)/var/lib/avahi-autoipd
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/lib
- 	ln -sf /tmp/avahi-autoipd $(TARGET_DIR)/var/lib/avahi-autoipd
-+endef
-+
-+ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
-+AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_AUTOIPD
- endif
--ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-+
-+define AVAHI_INSTALL_DAEMON_INITSCRIPT
- 	$(INSTALL) -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/
-+endef
-+
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-+AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_DAEMON_INITSCRIPT
- endif
+-$(LIBUNGIF_HOOK_POST_INSTALL):
++define LIBUNGIF_BINS_CLEANUP
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(LIBUNGIF_BINS))
 -	touch $@
++endef
 +
-+$(eval $(call AUTOTARGETS,package,avahi))
++LIBUNGIF_POST_INSTALL_TARGET_HOOKS += LIBUNGIF_BINS_CLEANUP
++
++$(eval $(call AUTOTARGETS,package,libungif))
 -- 
 1.7.1
