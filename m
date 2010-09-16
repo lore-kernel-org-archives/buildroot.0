@@ -1,18 +1,19 @@
 From: Johnny Beardsmore <jny0@hotmail.com>
-Date: Thu, 16 Sep 2010 06:50:44 +0000
-Subject: [Buildroot] EXT2-fs error
-In-Reply-To: <20100915190725.459aaca8@surf>
-References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>,
-	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>,
-	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>,
-	<20100913102031.03481d63@surf>,
-	<SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>,
-	<87mxrm6lrc.fsf@macbook.be.48ers.dk>,
-	<SNT119-W4750F1F26C2613C40FB5C82790@phx.gbl>,
-	<20100915133124.604f8b74@surf>,
-	<SNT119-W19D1DBCD197B0F139037EA82790@phx.gbl>,
-	<20100915190725.459aaca8@surf>
-Message-ID: <SNT119-W315E2AFFA66E576AA7F27A827A0@phx.gbl>
+Date: Thu, 16 Sep 2010 07:01:12 +0000
+Subject: [Buildroot] FW:  EXT2-fs error
+In-Reply-To: <SNT119-W315E2AFFA66E576AA7F27A827A0@phx.gbl>
+References: <29591683.post@talk.nabble.com> <29641651.post@talk.nabble.com>, ,
+	<SNT119-W3039C61443ADF5E85164F582730@phx.gbl>, ,
+	<SNT119-W26A1FD2D4331730D164D2C82770@phx.gbl>, ,
+	<20100913102031.03481d63@surf>, ,
+	<SNT119-W9D3C2902126B58DEE9A1282770@phx.gbl>, ,
+	<87mxrm6lrc.fsf@macbook.be.48ers.dk>, ,
+	<SNT119-W4750F1F26C2613C40FB5C82790@phx.gbl>, ,
+	<20100915133124.604f8b74@surf>, ,
+	<SNT119-W19D1DBCD197B0F139037EA82790@phx.gbl>, ,
+	<20100915190725.459aaca8@surf>,
+	<SNT119-W315E2AFFA66E576AA7F27A827A0@phx.gbl>
+Message-ID: <SNT119-W554C523F135D7507BD31F4827A0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +21,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> I don't want to be/seem rude, but it seems you lack some really basic
+ > I don't want to be/seem rude, but it seems you lack some really basic
 > embedded Linux knowledge. May I suggest to order and read a book such
 > as Building Embedded Linux Systems [1] ?
 > 
@@ -38,4 +39,8 @@ I believe this is quite a simple problem to fix - I just can't figure this one o
  		 	   		  
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100916/e800bb05/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100916/1358c0d9/attachment.html>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: ATT00001
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100916/1358c0d9/attachment.ksh>
