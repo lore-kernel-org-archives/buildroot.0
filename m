@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] neon: remove useless stripping
-Message-ID: <20100916113833.59B278AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] metacity: use new style hook
+Message-ID: <20100916113832.DAD858AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccc6ef6c171c188863f1d5350c8037ea1a2e5fee
+commit: http://git.buildroot.net/buildroot/commit/?id=b4271fbba371d1fc4d6ceac08b638bd4664cf0f8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/neon/neon.mk |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/metacity/metacity.mk |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index e942f87..285d49f 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -47,10 +47,3 @@ NEON_CONF_OPT+=--without-ssl
- endif
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 44cde54..9d91efe 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -18,8 +18,10 @@ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
  
- $(eval $(call AUTOTARGETS,package,neon))
+ METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
+ 
+-$(eval $(call AUTOTARGETS,package,metacity))
 -
--ifeq ($(BR2_ENABLE_DEBUG),)
--# neon doesn't have an install-strip target, so do it afterwards
--$(NEON_HOOK_POST_INSTALL): $(NEON_TARGET_INSTALL_TARGET)
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libneon.so
+-$(METACITY_HOOK_POST_INSTALL): $(METACITY_TARGET_INSTALL_TARGET)
++define METACITY_INSTALL_XSESSION
+ 	install -D package/metacity/Xsession $(TARGET_DIR)/etc/X11/Xsession
 -	touch $@
--endif
++endef
++
++METACITY_POST_INSTALL_TARGET_HOOKS += METACITY_INSTALL_XSESSION
++
++$(eval $(call AUTOTARGETS,package,metacity))
 -- 
 1.7.1
