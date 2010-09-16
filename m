@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 16 Sep 2010 13:36:00 +0200
-Subject: [Buildroot] [git commit master 1/1] nbd: use new style hook
-Message-ID: <20100916113833.318078AB99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] tcpdump: remove useless
+	stripping
+Message-ID: <20100916113834.2D10B8AB99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d8ed998de6af8e3baf8ea9889a334f532c3e3eb
+commit: http://git.buildroot.net/buildroot/commit/?id=19f9348bec29779c365645d00c33cc76b83a72b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nbd/nbd.mk |   16 ++++++++++------
- 1 files changed, 10 insertions(+), 6 deletions(-)
+ package/tcpdump/tcpdump.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index fa8dd4f..a09b10b 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -10,13 +10,17 @@ NBD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
- NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
- NBD_DEPENDENCIES = libglib2
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 183df94..0b9236d 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -17,8 +17,3 @@ TCPDUMP_CONF_OPT:=--without-crypto \
+ TCPDUMP_DEPENDENCIES:=zlib libpcap
  
--$(eval $(call AUTOTARGETS,package,nbd))
+ $(eval $(call AUTOTARGETS,package,tcpdump))
 -
--$(NBD_HOOK_POST_INSTALL): $(NBD_TARGET_INSTALL_TARGET)
- ifneq ($(BR2_NBD_CLIENT),y)
--	rm -f $(TARGET_DIR)/usr/sbin/nbd-client
-+	NBD_TOREMOVE += nbd-client
- endif
- ifneq ($(BR2_NBD_SERVER),y)
--	rm -f $(TARGET_DIR)/usr/bin/nbd-server
-+	NBD_TOREMOVE += nbd-server
- endif
+-$(TCPDUMP_HOOK_POST_INSTALL): $(TCPDUMP_TARGET_INSTALL_TARGET)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/sbin/tcpdump
 -	touch $@
-+
-+define NBD_CLEANUP_AFTER_INSTALL
-+	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(NBD_TOREMOVE))
-+endef
-+
-+NBD_POST_INSTALL_TARGET_HOOKS += NBD_CLEANUP_AFTER_INSTALL
-+
-+$(eval $(call AUTOTARGETS,package,nbd))
+-
 -- 
 1.7.1
