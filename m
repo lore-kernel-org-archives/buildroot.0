@@ -1,35 +1,25 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 17 Sep 2010 10:20:05 +0200
-Subject: [Buildroot] [PATCH 1/1] Customize device creation
-In-Reply-To: <4C8F4957.5030309@visionsystems.de>
-References: <4C8F4957.5030309@visionsystems.de>
-Message-ID: <AANLkTingPts2HHfEnGW8Jz6L7BSg+-BMU9NvQfD-0854@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 17 Sep 2010 14:11:47 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/download-rework
+In-Reply-To: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 13 Sep 2010 08:50:46 +0200")
+References: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87fwx8603g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Create menu entry to select device creation method:
->
-> - static method uses device table as before
-> - devtmpfs method enables this feature in kernel
-> - mdev method adds mdev starting script to the file system
-> ?and selects mdev itself for installation
-> - udev method selects udev for installation
->
-> All dynamic methods are base on devtmpfs, so one doesn't
-> need to care about /dev folder.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Found one issue: the device_table.txt creates also 4 folders in /etc/network
+ Thomas> Hello,
+ Thomas> Here is a pull request for Maxime's work on cleaning up the download
+ Thomas> code and adding support for Git and SVN download. After
+ Thomas> review/testing, I've added my Signed-off-by to those patches.
 
-if-down.d/
-if-post-down.d/
-if-pre-up.d/
-if-up.d/
+Pulled and pushed, thanks both of you.
 
-so if one of the dynamic methods is chosen the folders won't be
-created. Could these folders be added to fs/skeleton?
-
-Regards,
-Yegor
+-- 
+Bye, Peter Korsgaard
