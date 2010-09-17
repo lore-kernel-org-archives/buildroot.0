@@ -1,9 +1,9 @@
 From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
-Date: Fri, 17 Sep 2010 10:59:57 -0700
-Subject: [Buildroot] [PATCH 12/17] TI Framework Components
+Date: Fri, 17 Sep 2010 10:59:52 -0700
+Subject: [Buildroot] [PATCH 07/17] TI's DSP/BIOS v5 Kernel
 In-Reply-To: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
 References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
-Message-ID: <1284746402-19186-13-git-send-email-pierreluc.simard@admetric.ca>
+Message-ID: <1284746402-19186-8-git-send-email-pierreluc.simard@admetric.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,76 +11,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/ti/Config.in                               |    1 +
- package/ti/ti-framework-components/Config.in       |    6 +++
- .../ti-framework-components.mk                     |   34 ++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/ti/ti-framework-components/Config.in
- create mode 100644 package/ti/ti-framework-components/ti-framework-components.mk
+ package/ti/Config.in                |    1 +
+ package/ti/ti-dspbios/Config.in     |    6 ++++
+ package/ti/ti-dspbios/ti-dspbios.mk |   46 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 package/ti/ti-dspbios/Config.in
+ create mode 100644 package/ti/ti-dspbios/ti-dspbios.mk
 
 diff --git a/package/ti/Config.in b/package/ti/Config.in
-index 1cd1cf3..d766e20 100644
+index e8b6197..834d467 100644
 --- a/package/ti/Config.in
 +++ b/package/ti/Config.in
-@@ -49,5 +49,6 @@ source "package/ti/ti-dmai/Config.in"
- source "package/ti/ti-dspbios/Config.in"
- source "package/ti/ti-dvsdk-dm365/Config.in"
- source "package/ti/ti-edma3lld/Config.in"
-+source "package/ti/ti-framework-components/Config.in"
+@@ -39,6 +39,7 @@ endchoice
  
- endif
-diff --git a/package/ti/ti-framework-components/Config.in b/package/ti/ti-framework-components/Config.in
+ comment "Target components"
+ source "package/ti/ti-codecs-omap3/Config.in"
++source "package/ti/ti-dspbios/Config.in"
+ 
+ comment "Staging tools"
+ source "package/ti/ti-biosutils/Config.in"
+diff --git a/package/ti/ti-dspbios/Config.in b/package/ti/ti-dspbios/Config.in
 new file mode 100644
-index 0000000..9a6df1a
+index 0000000..38ebf23
 --- /dev/null
-+++ b/package/ti/ti-framework-components/Config.in
++++ b/package/ti/ti-dspbios/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_TI_FRAMEWORK_COMPONENTS
-+	bool "TI Framework Components"
-+	depends on BR2_PACKAGE_TI_PLATFORM_omap3	
++config BR2_PACKAGE_TI_DSPBIOS
++	bool "DSP/BIOS v5 Kernel"
++	depends on BR2_PACKAGE_TI_PLATFORM_omap3
 +	help
-+      TI Framework Components
-+      http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/fc
-diff --git a/package/ti/ti-framework-components/ti-framework-components.mk b/package/ti/ti-framework-components/ti-framework-components.mk
++	  TI DSP/BIOS v5 Kernel
++	  http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios
+\ No newline at end of file
+diff --git a/package/ti/ti-dspbios/ti-dspbios.mk b/package/ti/ti-dspbios/ti-dspbios.mk
 new file mode 100644
-index 0000000..dbfaa0d
+index 0000000..7461f10
 --- /dev/null
-+++ b/package/ti/ti-framework-components/ti-framework-components.mk
-@@ -0,0 +1,34 @@
++++ b/package/ti/ti-dspbios/ti-dspbios.mk
+@@ -0,0 +1,46 @@
 +################################################################################
 +#
-+# ti-framework-components
++# ti-dspbios
 +#
 +################################################################################
-+TI_FRAMEWORK_COMPONENTS_VERSION:=2.25.02.06
-+TI_FRAMEWORK_COMPONENTS_FILE_VERSION:=2_25_02_06
-+TI_FRAMEWORK_COMPONENTS_SOURCE:=framework_components_$(TI_FRAMEWORK_COMPONENTS_FILE_VERSION),lite.tar.gz
-+TI_FRAMEWORK_COMPONENTS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/fc/$(TI_FRAMEWORK_COMPONENTS_FILE_VERSION)/exports
-+TI_FRAMEWORK_COMPONENTS_DIR:=$(BUILD_DIR)/ti-framework-components-$(TI_FRAMEWORK_COMPONENTS_VERSION)
++TI_DSPBIOS_VERSION:=5.41.04.18
++TI_DSPBIOS_FILE_VERSION:=5_41_04_18
 +
-+TI_FRAMEWORK_COMPONENTS_INSTALL_TARGET = NO
-+TI_FRAMEWORK_COMPONENTS_INSTALL_STAGING = YES
++TI_DSPBIOS_SOURCE:=ti-bios-$(TI_DSPBIOS_VERSION).tar.gz
++TI_DSPBIOS_SOURCE_BIN:=bios_setuplinux_$(TI_DSPBIOS_FILE_VERSION).bin
++TI_DSPBIOS_SOURCE_BIN_FOLDER:=bios_$(TI_DSPBIOS_FILE_VERSION)
++TI_DSPBIOS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios/$(TI_DSPBIOS_FILE_VERSION)/exports
 +
-+TI_FRAMEWORK_COMPONENTS_INSTALL_DIR:=$(STAGING_DIR)/ti/framework-components-$(TI_FRAMEWORK_COMPONENTS_VERSION)
++TI_DSPBIOS_DIR:=$(BUILD_DIR)/ti-dspbios-$(TI_DSPBIOS_VERSION)
++
++TI_DSPBIOS_INSTALL_TARGET = NO
++TI_DSPBIOS_INSTALL_STAGING = YES
++
++TI_DSPBIOS_INSTALL_DIR:=$(STAGING_DIR)/ti/dspbios-$(TI_DSPBIOS_VERSION)
 +
 +
-+$(DL_DIR)/$(TI_FRAMEWORK_COMPONENTS_SOURCE):
-+	$(call DOWNLOAD,$(TI_FRAMEWORK_COMPONENTS_SITE),$(TI_FRAMEWORK_COMPONENTS_SOURCE))
++$(DL_DIR)/$(TI_DSPBIOS_SOURCE):
++	$(call DOWNLOAD,$(TI_DSPBIOS_SITE),$(TI_DSPBIOS_SOURCE_BIN))
++	chmod +x $(DL_DIR)/$(TI_DSPBIOS_SOURCE_BIN)
++	$(DL_DIR)/$(TI_DSPBIOS_SOURCE_BIN) --S --prefix $(DL_DIR)
++	find $(DL_DIR)/$(TI_DSPBIOS_SOURCE_BIN_FOLDER) -type f -not -readable -exec sudo chmod gou+r {} \;
++	find $(DL_DIR)/$(TI_DSPBIOS_SOURCE_BIN_FOLDER) -type d -not -executable -exec sudo chmod gou+rx {} \;
++	(cd $(DL_DIR); \
++		tar -czf $(TI_DSPBIOS_SOURCE) $(TI_DSPBIOS_SOURCE_BIN_FOLDER)\
++	)
++	rm -rf $(DL_DIR)/$(TI_DSPBIOS_SOURCE_BIN_FOLDER)
 +
-+define TI_FRAMEWORK_COMPONENTS_INSTALL_STAGING_CMDS
-+	mkdir -p $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
-+	cp -pPrf $(TI_FRAMEWORK_COMPONENTS_DIR)/* $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
-+	chmod -R +w $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
++define TI_DSPBIOS_INSTALL_STAGING_CMDS
++	mkdir -p $(TI_DSPBIOS_INSTALL_DIR)
++	cp -r $(TI_DSPBIOS_DIR)/* $(TI_DSPBIOS_INSTALL_DIR)
++	chmod -R +w $(TI_DSPBIOS_INSTALL_DIR)	
 +endef
 +
-+define TI_FRAMEWORK_COMPONENTS_UNINSTALL_STAGING_CMDS
-+	rm -rf $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
++define TI_DSPBIOS_UNINSTALL_STAGING_CMDS
++	rm -rf $(TI_DSPBIOS_INSTALL_DIR)
 +endef
 +
 +
-+ti-framework-components-source: $(DL_DIR)/$(TI_FRAMEWORK_COMPONENTS_SOURCE)
++ti-dspbios-source: $(DL_DIR)/$(TI_DSPBIOS_SOURCE)
 +
-+$(eval $(call GENTARGETS,package/ti,ti-framework-components))
++$(eval $(call GENTARGETS,package/ti,ti-dspbios))
 \ No newline at end of file
 -- 
 1.7.0.4
