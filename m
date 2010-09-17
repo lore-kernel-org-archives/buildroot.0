@@ -1,9 +1,9 @@
 From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
-Date: Fri, 17 Sep 2010 11:00:00 -0700
-Subject: [Buildroot] [PATCH 15/17] TI's Local Power Manager (LPM)
+Date: Fri, 17 Sep 2010 10:59:47 -0700
+Subject: [Buildroot] [PATCH 02/17] TI's DSP/BIOS Utilities
 In-Reply-To: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
 References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
-Message-ID: <1284746402-19186-16-git-send-email-pierreluc.simard@admetric.ca>
+Message-ID: <1284746402-19186-3-git-send-email-pierreluc.simard@admetric.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,154 +11,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/ti/Config.in                               |    1 +
- package/ti/ti-local-power-manager/Config.in        |   11 +++
- .../ti-local-power-manager-kmalloc.patch           |   14 +++
- .../ti-local-power-manager.mk                      |   85 ++++++++++++++++++++
- 4 files changed, 111 insertions(+), 0 deletions(-)
- create mode 100644 package/ti/ti-local-power-manager/Config.in
- create mode 100644 package/ti/ti-local-power-manager/ti-local-power-manager-kmalloc.patch
- create mode 100644 package/ti/ti-local-power-manager/ti-local-power-manager.mk
+ package/ti/Config.in                    |    2 +-
+ package/ti/ti-biosutils/Config.in       |    6 ++++++
+ package/ti/ti-biosutils/ti-biosutils.mk |   28 ++++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 1 deletions(-)
+ create mode 100644 package/ti/ti-biosutils/Config.in
+ create mode 100644 package/ti/ti-biosutils/ti-biosutils.mk
 
 diff --git a/package/ti/Config.in b/package/ti/Config.in
-index 7ede23a..474e0a9 100644
+index 14b0225..9b65bce 100644
 --- a/package/ti/Config.in
 +++ b/package/ti/Config.in
-@@ -42,6 +42,7 @@ source "package/ti/ti-codecs-omap3/Config.in"
- source "package/ti/ti-dsplink/Config.in"
- source "package/ti/ti-gst-plugin/Config.in"
- source "package/ti/ti-linuxutils/Config.in"
-+source "package/ti/ti-local-power-manager/Config.in"
+@@ -40,6 +40,6 @@ endchoice
+ comment "Target components"
  
  comment "Staging tools"
- source "package/ti/ti-biosutils/Config.in"
-diff --git a/package/ti/ti-local-power-manager/Config.in b/package/ti/ti-local-power-manager/Config.in
+-
++source "package/ti/ti-biosutils/Config.in"
+ 
+ endif
+diff --git a/package/ti/ti-biosutils/Config.in b/package/ti/ti-biosutils/Config.in
 new file mode 100644
-index 0000000..a7bd264
+index 0000000..8b24bfc
 --- /dev/null
-+++ b/package/ti/ti-local-power-manager/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_TI_LOCAL_POWER_MANAGER
-+	bool "Local Power Manager (LPM)"
-+	depends on BR2_PACKAGE_TI_PLATFORM_omap3530 || BR2_PACKAGE_TI_PLATFORM_dm6446
-+	select BR2_PACKAGE_TI_DSPLINK
-+	select BR2_PACKAGE_TI_XDCTOOLS
++++ b/package/ti/ti-biosutils/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TI_BIOSUTILS
++	depends on BR2_PACKAGE_TI_PLATFORM_omap3
++	bool "DSP/BIOS Utilities"
 +	help
-+	  TI Local Power Manager (LPM)
-+	  http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/lpm	
-+	  
-+	  Currently only make and install the lpm kernel module. 
-+	  And you will need to add a startup script to load the kernel module...
-diff --git a/package/ti/ti-local-power-manager/ti-local-power-manager-kmalloc.patch b/package/ti/ti-local-power-manager/ti-local-power-manager-kmalloc.patch
++      TI DSP/BIOS Utilities"
++      http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/Bios_Utils
+diff --git a/package/ti/ti-biosutils/ti-biosutils.mk b/package/ti/ti-biosutils/ti-biosutils.mk
 new file mode 100644
-index 0000000..7b836ef
+index 0000000..19dfeda
 --- /dev/null
-+++ b/package/ti/ti-local-power-manager/ti-local-power-manager-kmalloc.patch
-@@ -0,0 +1,14 @@
-+diff -rupN a/packages/ti/bios/power/modules/omap3530/lpm/lpm_driver.c b/packages/ti/bios/power/modules/omap3530/lpm/lpm_driver.c
-+--- a/packages/ti/bios/power/modules/omap3530/lpm/lpm_driver.c	2010-04-30 13:19:43.000000000 -0700
-++++ b/packages/ti/bios/power/modules/omap3530/lpm/lpm_driver.c	2010-08-20 07:16:45.378243681 -0700
-+@@ -41,6 +41,10 @@
-+ #endif
-+ #include <linux/io.h>
-+ 
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34)
-++#include <linux/slab.h>
-++#endif
-++
-+ #include "lpm_driver.h"
-+ #include "lpm_dev.h"
-+ 
-diff --git a/package/ti/ti-local-power-manager/ti-local-power-manager.mk b/package/ti/ti-local-power-manager/ti-local-power-manager.mk
-new file mode 100644
-index 0000000..84c4876
---- /dev/null
-+++ b/package/ti/ti-local-power-manager/ti-local-power-manager.mk
-@@ -0,0 +1,85 @@
++++ b/package/ti/ti-biosutils/ti-biosutils.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# ti-local-power-manager
++# ti-biosutils
 +#
 +################################################################################
-+TI_LOCAL_POWER_MANAGER_VERSION:=1.24.02.09
-+TI_LOCAL_POWER_MANAGER_FILE_VERSION:=1_24_02_09
-+TI_LOCAL_POWER_MANAGER_SOURCE = local_power_manager_linux_$(TI_LOCAL_POWER_MANAGER_FILE_VERSION).tar.gz
-+TI_LOCAL_POWER_MANAGER_SITE=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/lpm/$(TI_LOCAL_POWER_MANAGER_FILE_VERSION)/exports
-+TI_LOCAL_POWER_MANAGER_DIR:=$(BUILD_DIR)/ti-local-power-manager-$(TI_LOCAL_POWER_MANAGER_VERSION)
++TI_BIOSUTILS_VERSION:=1.02.02.02
++TI_BIOSUTILS_FILE_VERSION_MAJOR:=1_02_02
++TI_BIOSUTILS_FILE_VERSION:=$(TI_BIOSUTILS_FILE_VERSION_MAJOR)_02
++TI_BIOSUTILS_SOURCE:=biosutils_$(TI_BIOSUTILS_FILE_VERSION_MAJOR).tar.gz
++TI_BIOSUTILS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/Bios_Utils/$(TI_BIOSUTILS_FILE_VERSION)/exports
++TI_BIOSUTILS_DIR:=$(BUILD_DIR)/ti-biosutils-$(TI_BIOSUTILS_VERSION)
 +
-+TI_LOCAL_POWER_MANAGER_INSTALL_STAGING = YES
++TI_BIOSUTILS_INSTALL_TARGET = NO
++TI_BIOSUTILS_INSTALL_STAGING = YES
 +
-+TI_LOCAL_POWER_MANAGER_DEPENDENCIES = ti-xdctools ti-dsplink linux26
++TI_BIOSUTILS_INSTALL_DIR:=$(STAGING_DIR)/ti/biosutils-$(TI_BIOSUTILS_VERSION)
 +
-+TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR=$(STAGING_DIR)/ti/local-power-manager-$(TI_LOCAL_POWER_MANAGER_VERSION)
-+
-+TI_LOCAL_POWER_MANAGER_PLATFORM=UNDEFINED
-+TI_LOCAL_POWER_MANAGER_XDC_PLATFORM=UNDEFINED
-+TI_LOCAL_POWER_MANAGER_XDC_PLATFORM_DIR=UNDEFINED
-+ifeq ($(BR2_PACKAGE_TI_PLATFORM_omap3),y)
-+	TI_LOCAL_POWER_MANAGER_PLATFORM=omap3530
-+	TI_LOCAL_POWER_MANAGER_XDC_PLATFORM=ti.platforms.evm3530
-+	TI_LOCAL_POWER_MANAGER_XDC_PLATFORM_DIR=ti_platforms_evm3530
-+endif
-+ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm6446),y)
-+	TI_LOCAL_POWER_MANAGER_PLATFORM=dm6446
-+	TI_LOCAL_POWER_MANAGER_XDC_PLATFORM=ti.platforms.evmDM6446
-+	TI_LOCAL_POWER_MANAGER_XDC_PLATFORM_DIR=ti_platforms_evmDM6446
-+endif
-+
-+define TI_LOCAL_POWER_MANAGER_CONFIG
-+	/* Generated by ti-local-power-manager.inc OE recipe */
-+	var Build = xdc.useModule('xdc.bld.BuildEnvironment');
-+	var GCArmv5T = xdc.useModule('gnu.targets.arm.GCArmv5T');
-+	GCArmv5T.LONGNAME = "$(TARGET_CC)";
-+	GCArmv5T.rootDir = "$(TARGET_CROSS)";
-+	GCArmv5T.ccOpts.prefix += " -Wall -fno-strict-aliasing ";
-+	GCArmv5T.lnkOpts.suffix = GCArmv5T.lnkOpts.suffix.replace("-lstdc++", "");
-+	GCArmv5T.lnkOpts.suffix += " -lpthread ";
-+	GCArmv5T.platform = null;
-+	GCArmv5T.platforms = [ "$(TI_LOCAL_POWER_MANAGER_XDC_PLATFORM)" ];
-+	/* remove unused profiles */
-+	delete GCArmv5T.profiles[\"coverage\"];
-+	delete GCArmv5T.profiles[\"profile\"];
-+	Build.targets.\$add(GCArmv5T);
-+endef
-+export TI_LOCAL_POWER_MANAGER_CONFIG
-+
-+define TI_LOCAL_POWER_MANAGER_CONFIGURE_CMDS
-+	@echo  "$$TI_LOCAL_POWER_MANAGER_CONFIG" > $(@D)/config.bld
-+	(cd $(TI_LOCAL_POWER_MANAGER_DIR); XDCPATH=$(TI_XDCTOOLS_INSTALL_DIR) $(TI_XDCTOOLS_INSTALL_DIR)/xdc .make -PR .)
-+	(cd $(TI_LOCAL_POWER_MANAGER_DIR); XDCPATH=$(TI_XDCTOOLS_INSTALL_DIR) $(TI_XDCTOOLS_INSTALL_DIR)/xdc clean -PR .)
++define TI_BIOSUTILS_INSTALL_STAGING_CMDS
++	mkdir -p $(TI_BIOSUTILS_INSTALL_DIR)
++	cp -r $(TI_BIOSUTILS_DIR)/* $(TI_BIOSUTILS_INSTALL_DIR)
++	chmod -R +w $(TI_BIOSUTILS_INSTALL_DIR)
 +endef
 +
-+define TI_LOCAL_POWER_MANAGER_BUILD_CMDS
-+	# Build the gpp user space library
-+ 	$(MAKE) -C $(@D)/packages/ti/bios/power/modules/$(TI_LOCAL_POWER_MANAGER_PLATFORM)/lpm \
-+		DSPLINK_REPO=$(TI_DSPLINK_INSTALL_STAGING_DIR) \
-+  	LINUXKERNEL_INSTALL_DIR="$(BUILD_DIR)/linux-$(LINUX26_VERSION)" \
-+		MVTOOL_PREFIX="$(TARGET_CROSS)" \
-+  		clean default
-+	#TODO: Build the user space library
-+	#TODO: Build the utilities (lpmON/OFF)
-+	# (cd $(@D); XDCPATH=$(TI_XDCTOOLS_INSTALL_DIR) $(TI_XDCTOOLS_INSTALL_DIR)/xdc -PR .)
++define TI_BIOSUTILS_UNINSTALL_STAGING_CMDS
++	rm -rf $(TI_BIOSUTILS_INSTALL_DIR)
 +endef
 +
-+define TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_CMDS
-+	# Install/Stage the Source Tree
-+	$(INSTALL) -d $(TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR)
-+	cp -a $(TI_LOCAL_POWER_MANAGER_DIR)/* $(TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR)
-+	chmod -R +w $(TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR)
-+endef
-+
-+define TI_LOCAL_POWER_MANAGER_INSTALL_TARGET_CMDS
-+	# Install the kernel module 
-+	$(INSTALL) -d $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/kernel/drivers/dsp
-+	$(INSTALL) -m 0644 $(TI_LOCAL_POWER_MANAGER_DIR)/packages/ti/bios/power/modules/$(TI_LOCAL_POWER_MANAGER_PLATFORM)/lpm/*.ko $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/kernel/drivers/dsp
-+	#TODO: Install the Utilities
-+	# install -d $(TARGET_DIR)/usr/lib/ti-lpm-utils
-+	# install -m 0755 $(TI_LOCAL_POWER_MANAGER_DIR)/packages/ti/bios/power/utils/bin/$(TI_LOCAL_POWER_MANAGER_XDC_PLATFORM_DIR)/linux/release/* $(TARGET_DIR)/usr/lib/ti-lpm-utils
-+endef
-+
-+$(eval $(call GENTARGETS,package/ti,ti-local-power-manager))
-+
++$(eval $(call GENTARGETS,package/ti,ti-biosutils))
+\ No newline at end of file
 -- 
 1.7.0.4
