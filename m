@@ -1,9 +1,9 @@
 From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
-Date: Fri, 17 Sep 2010 10:59:50 -0700
-Subject: [Buildroot] [PATCH 05/17] TI Codecs for the OMAP3 processor
+Date: Fri, 17 Sep 2010 11:00:02 -0700
+Subject: [Buildroot] [PATCH 17/17] XDCtools
 In-Reply-To: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
 References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
-Message-ID: <1284746402-19186-6-git-send-email-pierreluc.simard@admetric.ca>
+Message-ID: <1284746402-19186-18-git-send-email-pierreluc.simard@admetric.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,125 +11,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/ti/Config.in                          |    1 +
- package/ti/ti-codecs-omap3/Config.in          |   10 +++
- package/ti/ti-codecs-omap3/ti-codecs-omap3.mk |   79 +++++++++++++++++++++++++
- 3 files changed, 90 insertions(+), 0 deletions(-)
- create mode 100644 package/ti/ti-codecs-omap3/Config.in
- create mode 100644 package/ti/ti-codecs-omap3/ti-codecs-omap3.mk
+ package/ti/Config.in                  |    1 +
+ package/ti/ti-xdctools/Config.in      |    6 ++++
+ package/ti/ti-xdctools/ti-xdctools.mk |   48 +++++++++++++++++++++++++++++++++
+ 3 files changed, 55 insertions(+), 0 deletions(-)
+ create mode 100644 package/ti/ti-xdctools/Config.in
+ create mode 100644 package/ti/ti-xdctools/ti-xdctools.mk
 
 diff --git a/package/ti/Config.in b/package/ti/Config.in
-index e371782..b6179cb 100644
+index fc18534..0674bc1 100644
 --- a/package/ti/Config.in
 +++ b/package/ti/Config.in
-@@ -38,6 +38,7 @@ choice
- endchoice
+@@ -54,5 +54,6 @@ source "package/ti/ti-dvsdk-dm365/Config.in"
+ source "package/ti/ti-edma3lld/Config.in"
+ source "package/ti/ti-framework-components/Config.in"
+ source "package/ti/ti-xdais/Config.in"
++source "package/ti/ti-xdctools/Config.in"
  
- comment "Target components"
-+source "package/ti/ti-codecs-omap3/Config.in"
- 
- comment "Staging tools"
- source "package/ti/ti-biosutils/Config.in"
-diff --git a/package/ti/ti-codecs-omap3/Config.in b/package/ti/ti-codecs-omap3/Config.in
+ endif
+diff --git a/package/ti/ti-xdctools/Config.in b/package/ti/ti-xdctools/Config.in
 new file mode 100644
-index 0000000..84181f6
+index 0000000..ffc9188
 --- /dev/null
-+++ b/package/ti/ti-codecs-omap3/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_TI_CODECS_OMAP3
-+	bool "TI DSP Codecs"
++++ b/package/ti/ti-xdctools/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TI_XDCTOOLS
 +	depends on BR2_PACKAGE_TI_PLATFORM_omap3
-+	depends on BR2_PACKAGE_TI_CODEC_ENGINE
-+	select BR2_PACKAGE_TI_XDCTOOLS
-+	select BR2_PACKAGE_TI_LINUXUTILS
-+	select BR2_PACKAGE_TI_LOCAL_POWER_MANAGER
++	bool "XDCtools"
 +	help
-+	  TI Codecs for the OMAP3
-+	  http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent
-diff --git a/package/ti/ti-codecs-omap3/ti-codecs-omap3.mk b/package/ti/ti-codecs-omap3/ti-codecs-omap3.mk
++      XDCtools (RTSC - Real Time Software Components - http://rtsc.eclipse.org)
++      http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/rtsc
+diff --git a/package/ti/ti-xdctools/ti-xdctools.mk b/package/ti/ti-xdctools/ti-xdctools.mk
 new file mode 100644
-index 0000000..db28b2e
+index 0000000..28972fe
 --- /dev/null
-+++ b/package/ti/ti-codecs-omap3/ti-codecs-omap3.mk
-@@ -0,0 +1,79 @@
++++ b/package/ti/ti-xdctools/ti-xdctools.mk
+@@ -0,0 +1,48 @@
 +################################################################################
 +#
-+# ti-codecs-omap3
++# ti-xdctools
 +#
 +################################################################################
-+TI_CODECS_OMAP3_VERSION:=1.01.00
-+TI_CODECS_OMAP3_FILE_VERSION:=1_01_00
-+TI_CODECS_OMAP3_SOURCE:=ti-codecs-omap3-$(TI_CODEC_VERSION).tar.gz
-+TI_CODECS_OMAP3_SOURCE_BIN:=cs1omap3530_setupLinux_$(TI_CODECS_OMAP3_FILE_VERSION)-prebuilt-dvsdk3.01.00.10.bin
-+TI_CODECS_OMAP3_SOURCE_BIN_FOLDER:=cs1omap3530_$(TI_CODECS_OMAP3_FILE_VERSION)
-+TI_CODECS_OMAP3_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_tii/dvsdk/dvsdk_3_01/3_01_00_10/exports
-+TI_CODECS_OMAP3_DIR:=$(BUILD_DIR)/ti-codecs-omap3-$(TI_CODECS_OMAP3_VERSION)
++TI_XDCTOOLS_VERSION:=3.20.01.51
++TI_XDCTOOLS_FILE_VERSION:=3_20_01_51
 +
-+TI_CODECS_OMAP3_INSTALL_STAGING_DIR:=$(STAGING_DIR)/ti/codecs-$(TI_CODECS_OMAP3_VERSION)
-+TI_CODECS_OMAP3_INSTALL_TARGET_DIR:=/usr/lib/ti-codecs-omap3-server
++TI_XDCTOOLS_SOURCE:=ti-xdctools-$(TI_XDCTOOLS_VERSION).tar.gz
++TI_XDCTOOLS_SOURCE_BIN:=xdctools_setuplinux_$(TI_XDCTOOLS_FILE_VERSION).bin
++TI_XDCTOOLS_SOURCE_BIN_FOLDER:=xdctools_$(TI_XDCTOOLS_FILE_VERSION)
++TI_XDCTOOLS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/rtsc/$(TI_XDCTOOLS_FILE_VERSION)/exports
++TI_XDCTOOLS_DIR:=$(BUILD_DIR)/ti-xdctools-$(TI_XDCTOOLS_VERSION)
 +
-+TI_CODECS_OMAP3_DEPENDENCIES = \
-+	ti-cgt6x \
-+	ti-xdctools \
-+	ti-dspbios \
-+	ti-codec-engine \
-+	ti-linuxutils \
-+	ti-local-power-manager
++TI_XDCTOOLS_INSTALL_TARGET = NO
++TI_XDCTOOLS_INSTALL_STAGING = YES
 +
-+TI_CODECS_OMAP3_DSPSUFFIX=x64P
++TI_XDCTOOLS_INSTALL_DIR:=$(STAGING_DIR)/ti/xdctools-$(TI_XDCTOOLS_VERSION)
 +
-+TI_CODECS_OMAP3_MAKE_ARGS = \
-+	CE_INSTALL_DIR="$(TI_CODEC_ENGINE_INSTALL_STAGING_DIR)" \
-+	FC_INSTALL_DIR="$(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)" \
-+	XDAIS_INSTALL_DIR="$(TI_XDAIS_INSTALL_DIR)" \
-+	BIOSUTILS_INSTALL_DIR="$(TI_BIOSUTILS_INSTALL_DIR)" \
-+	LINK_INSTALL_DIR="$(TI_DSPLINK_INSTALL_STAGING_DIR)" \
-+	CMEM_INSTALL_DIR="$(TI_LINUXUTILS_INSTALL_STAGING_DIR)" \
-+	LPM_INSTALL_DIR="$(TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR)" \
-+	BIOS_INSTALL_DIR="$(TI_DSPBIOS_INSTALL_DIR)" \
-+	CODEGEN_INSTALL_DIR="$(TI_CGT6X_INSTALL_DIR)" \
-+	XDC_INSTALL_DIR="$(TI_XDCTOOLS_INSTALL_DIR)" \
-+	CODEC_INSTALL_DIR="$(TI_CODECS_OMAP3_DIR)" \
-+	XDCARGS="prod"
 +
-+$(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE):
-+	$(call DOWNLOAD,$(TI_CODECS_OMAP3_SITE),$(TI_CODECS_OMAP3_SOURCE_BIN))
-+	chmod +x $(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE_BIN)
-+	$(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE_BIN) -Y --prefix $(DL_DIR)
-+	find $(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE_BIN_FOLDER) -type f -not -readable -exec sudo chmod gou+r {} \;
-+	find $(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE_BIN_FOLDER) -type d -not -executable -exec sudo chmod gou+rx {} \;
++
++$(DL_DIR)/$(TI_XDCTOOLS_SOURCE):
++	$(call DOWNLOAD,$(TI_XDCTOOLS_SITE),$(TI_XDCTOOLS_SOURCE_BIN))
++	chmod +x $(DL_DIR)/$(TI_XDCTOOLS_SOURCE_BIN)
++	$(DL_DIR)/$(TI_XDCTOOLS_SOURCE_BIN) --S --prefix $(DL_DIR)
++	find $(DL_DIR)/$(TI_XDCTOOLS_SOURCE_BIN_FOLDER) -type f -not -readable -exec sudo chmod gou+r {} \;
++	find $(DL_DIR)/$(TI_XDCTOOLS_SOURCE_BIN_FOLDER) -type d -not -executable -exec sudo chmod gou+rx {} \;
 +	(cd $(DL_DIR); \
-+		tar -czf $(TI_CODECS_OMAP3_SOURCE) $(TI_CODECS_OMAP3_SOURCE_BIN_FOLDER)\
++		tar -czf $(TI_XDCTOOLS_SOURCE) $(TI_XDCTOOLS_SOURCE_BIN_FOLDER)\
 +	)
-+	rm -rf $(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE_BIN_FOLDER)
++	rm -rf $(DL_DIR)/$(TI_XDCTOOLS_SOURCE_BIN_FOLDER)
 +
-+
-+define TI_CODECS_OMAP3_CONFIGURE_CMDS
-+	$(MAKE) -C $(@D) $(TI_CODECS_OMAP3_MAKE_ARGS) clean
++# It's install to the staging dir simply for consistency.
++# Since it's a binary package it really does not need to be compiled or anything else.
++define TI_XDCTOOLS_INSTALL_STAGING_CMDS
++	mkdir -p $(TI_XDCTOOLS_INSTALL_DIR)
++	cp -r $(@D)/* $(TI_XDCTOOLS_INSTALL_DIR)
++	chmod -R +w $(TI_XDCTOOLS_INSTALL_DIR)
 +endef
 +
-+define TI_CODECS_OMAP3_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TI_CODECS_OMAP3_MAKE_ARGS) all
++define TI_XDCTOOLS_UNINSTALL_STAGING_CMDS
++	rm -rf $(TI_XDCTOOLS_INSTALL_DIR)
 +endef
 +
-+define TI_CODECS_OMAP3_INSTALL_STAGING_CMDS
-+	mkdir -p $(TI_CODECS_OMAP3_INSTALL_STAGING_DIR)
-+	cp -a $(@D)/* $(TI_CODECS_OMAP3_INSTALL_STAGING_DIR)
-+	chmod -R +w $(TI_CODECS_OMAP3_INSTALL_STAGING_DIR)
-+endef
++ti-xdctools-source: $(DL_DIR)/$(TI_XDCTOOLS_SOURCE)
 +
-+define TI_CODECS_OMAP3_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d $(TARGET_DIR)$(TI_CODECS_OMAP3_INSTALL_TARGET_DIR);
-+	find $(@D) -name "*.$(TI_CODECS_OMAP3_DSPSUFFIX)" -exec $(INSTALL) {} $(TARGET_DIR)$(TI_CODECS_OMAP3_INSTALL_TARGET_DIR) \; -print ;
-+endef
 +
-+define TI_CODECS_OMAP3_UNINSTALL_STAGING_CMDS
-+	rm -rf $(TI_CODECS_OMAP3_INSTALL_STAGING_DIR)
-+endef
-+
-+ti-codecs-omap3-source: $(DL_DIR)/$(TI_CODECS_OMAP3_SOURCE)
-+
-+$(eval $(call GENTARGETS,package/ti,ti-codecs-omap3))
-+
++$(eval $(call GENTARGETS,package/ti,ti-xdctools))
+\ No newline at end of file
 -- 
 1.7.0.4
