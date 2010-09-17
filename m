@@ -1,9 +1,9 @@
 From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
-Date: Fri, 17 Sep 2010 10:59:47 -0700
-Subject: [Buildroot] [PATCH 02/17] TI's DSP/BIOS Utilities
+Date: Fri, 17 Sep 2010 10:59:57 -0700
+Subject: [Buildroot] [PATCH 12/17] TI Framework Components
 In-Reply-To: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
 References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
-Message-ID: <1284746402-19186-3-git-send-email-pierreluc.simard@admetric.ca>
+Message-ID: <1284746402-19186-13-git-send-email-pierreluc.simard@admetric.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,71 +11,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/ti/Config.in                    |    2 +-
- package/ti/ti-biosutils/Config.in       |    6 ++++++
- package/ti/ti-biosutils/ti-biosutils.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+), 1 deletions(-)
- create mode 100644 package/ti/ti-biosutils/Config.in
- create mode 100644 package/ti/ti-biosutils/ti-biosutils.mk
+ package/ti/Config.in                               |    1 +
+ package/ti/ti-framework-components/Config.in       |    6 +++
+ .../ti-framework-components.mk                     |   34 ++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/ti/ti-framework-components/Config.in
+ create mode 100644 package/ti/ti-framework-components/ti-framework-components.mk
 
 diff --git a/package/ti/Config.in b/package/ti/Config.in
-index 14b0225..9b65bce 100644
+index 1cd1cf3..d766e20 100644
 --- a/package/ti/Config.in
 +++ b/package/ti/Config.in
-@@ -40,6 +40,6 @@ endchoice
- comment "Target components"
- 
- comment "Staging tools"
--
-+source "package/ti/ti-biosutils/Config.in"
+@@ -49,5 +49,6 @@ source "package/ti/ti-dmai/Config.in"
+ source "package/ti/ti-dspbios/Config.in"
+ source "package/ti/ti-dvsdk-dm365/Config.in"
+ source "package/ti/ti-edma3lld/Config.in"
++source "package/ti/ti-framework-components/Config.in"
  
  endif
-diff --git a/package/ti/ti-biosutils/Config.in b/package/ti/ti-biosutils/Config.in
+diff --git a/package/ti/ti-framework-components/Config.in b/package/ti/ti-framework-components/Config.in
 new file mode 100644
-index 0000000..8b24bfc
+index 0000000..9a6df1a
 --- /dev/null
-+++ b/package/ti/ti-biosutils/Config.in
++++ b/package/ti/ti-framework-components/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_TI_BIOSUTILS
-+	depends on BR2_PACKAGE_TI_PLATFORM_omap3
-+	bool "DSP/BIOS Utilities"
++config BR2_PACKAGE_TI_FRAMEWORK_COMPONENTS
++	bool "TI Framework Components"
++	depends on BR2_PACKAGE_TI_PLATFORM_omap3	
 +	help
-+      TI DSP/BIOS Utilities"
-+      http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/Bios_Utils
-diff --git a/package/ti/ti-biosutils/ti-biosutils.mk b/package/ti/ti-biosutils/ti-biosutils.mk
++      TI Framework Components
++      http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/fc
+diff --git a/package/ti/ti-framework-components/ti-framework-components.mk b/package/ti/ti-framework-components/ti-framework-components.mk
 new file mode 100644
-index 0000000..19dfeda
+index 0000000..dbfaa0d
 --- /dev/null
-+++ b/package/ti/ti-biosutils/ti-biosutils.mk
-@@ -0,0 +1,28 @@
++++ b/package/ti/ti-framework-components/ti-framework-components.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+# ti-biosutils
++# ti-framework-components
 +#
 +################################################################################
-+TI_BIOSUTILS_VERSION:=1.02.02.02
-+TI_BIOSUTILS_FILE_VERSION_MAJOR:=1_02_02
-+TI_BIOSUTILS_FILE_VERSION:=$(TI_BIOSUTILS_FILE_VERSION_MAJOR)_02
-+TI_BIOSUTILS_SOURCE:=biosutils_$(TI_BIOSUTILS_FILE_VERSION_MAJOR).tar.gz
-+TI_BIOSUTILS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/Bios_Utils/$(TI_BIOSUTILS_FILE_VERSION)/exports
-+TI_BIOSUTILS_DIR:=$(BUILD_DIR)/ti-biosutils-$(TI_BIOSUTILS_VERSION)
++TI_FRAMEWORK_COMPONENTS_VERSION:=2.25.02.06
++TI_FRAMEWORK_COMPONENTS_FILE_VERSION:=2_25_02_06
++TI_FRAMEWORK_COMPONENTS_SOURCE:=framework_components_$(TI_FRAMEWORK_COMPONENTS_FILE_VERSION),lite.tar.gz
++TI_FRAMEWORK_COMPONENTS_SITE:=http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/fc/$(TI_FRAMEWORK_COMPONENTS_FILE_VERSION)/exports
++TI_FRAMEWORK_COMPONENTS_DIR:=$(BUILD_DIR)/ti-framework-components-$(TI_FRAMEWORK_COMPONENTS_VERSION)
 +
-+TI_BIOSUTILS_INSTALL_TARGET = NO
-+TI_BIOSUTILS_INSTALL_STAGING = YES
++TI_FRAMEWORK_COMPONENTS_INSTALL_TARGET = NO
++TI_FRAMEWORK_COMPONENTS_INSTALL_STAGING = YES
 +
-+TI_BIOSUTILS_INSTALL_DIR:=$(STAGING_DIR)/ti/biosutils-$(TI_BIOSUTILS_VERSION)
++TI_FRAMEWORK_COMPONENTS_INSTALL_DIR:=$(STAGING_DIR)/ti/framework-components-$(TI_FRAMEWORK_COMPONENTS_VERSION)
 +
-+define TI_BIOSUTILS_INSTALL_STAGING_CMDS
-+	mkdir -p $(TI_BIOSUTILS_INSTALL_DIR)
-+	cp -r $(TI_BIOSUTILS_DIR)/* $(TI_BIOSUTILS_INSTALL_DIR)
-+	chmod -R +w $(TI_BIOSUTILS_INSTALL_DIR)
++
++$(DL_DIR)/$(TI_FRAMEWORK_COMPONENTS_SOURCE):
++	$(call DOWNLOAD,$(TI_FRAMEWORK_COMPONENTS_SITE),$(TI_FRAMEWORK_COMPONENTS_SOURCE))
++
++define TI_FRAMEWORK_COMPONENTS_INSTALL_STAGING_CMDS
++	mkdir -p $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
++	cp -pPrf $(TI_FRAMEWORK_COMPONENTS_DIR)/* $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
++	chmod -R +w $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
 +endef
 +
-+define TI_BIOSUTILS_UNINSTALL_STAGING_CMDS
-+	rm -rf $(TI_BIOSUTILS_INSTALL_DIR)
++define TI_FRAMEWORK_COMPONENTS_UNINSTALL_STAGING_CMDS
++	rm -rf $(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)
 +endef
 +
-+$(eval $(call GENTARGETS,package/ti,ti-biosutils))
++
++ti-framework-components-source: $(DL_DIR)/$(TI_FRAMEWORK_COMPONENTS_SOURCE)
++
++$(eval $(call GENTARGETS,package/ti,ti-framework-components))
 \ No newline at end of file
 -- 
 1.7.0.4
