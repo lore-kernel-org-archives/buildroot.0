@@ -1,25 +1,246 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Fri, 17 Sep 2010 20:03:03 +0200
-Subject: [Buildroot] How to rebuild the kernel only
-In-Reply-To: <4C93A950.90901@signaturealpha.com>
-References: <4C93A950.90901@signaturealpha.com>
-Message-ID: <4C93AD57.1020604@googlemail.com>
+From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
+Date: Fri, 17 Sep 2010 10:59:49 -0700
+Subject: [Buildroot] [PATCH 04/17] TI's Codec Engine for TI ARM/DSP
+	processors
+In-Reply-To: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
+References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
+Message-ID: <1284746402-19186-5-git-send-email-pierreluc.simard@admetric.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Am 17.09.2010 19:45, schrieb Marc Leclerc:
->  Hi,
->
-> any option to only rebuild the kernel (bsImage) ?
->
-Yes. Outside buildroot ;-)
-It's not possible to make clean and compile ONLY the kernel afterwards. 
-The whole selected userland and/or toolchains will be rebuilt.
-It is of course possible to download the kernel sources and bake the 
-kernel yourself on your host.
+---
+ package/ti/Config.in                          |    1 +
+ package/ti/ti-codec-engine/Config.in          |   21 +++
+ package/ti/ti-codec-engine/ti-codec-engine.mk |  178 +++++++++++++++++++++++++
+ 3 files changed, 200 insertions(+), 0 deletions(-)
+ create mode 100644 package/ti/ti-codec-engine/Config.in
+ create mode 100644 package/ti/ti-codec-engine/ti-codec-engine.mk
 
-Regards,
-Marcus
+diff --git a/package/ti/Config.in b/package/ti/Config.in
+index 8abb6d7..e371782 100644
+--- a/package/ti/Config.in
++++ b/package/ti/Config.in
+@@ -42,5 +42,6 @@ comment "Target components"
+ comment "Staging tools"
+ source "package/ti/ti-biosutils/Config.in"
+ source "package/ti/ti-cgt6x/Config.in"
++source "package/ti/ti-codec-engine/Config.in"
+ 
+ endif
+diff --git a/package/ti/ti-codec-engine/Config.in b/package/ti/ti-codec-engine/Config.in
+new file mode 100644
+index 0000000..4f4566e
+--- /dev/null
++++ b/package/ti/ti-codec-engine/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_TI_CODEC_ENGINE
++	bool "Codec Engine"
++	depends on BR2_PACKAGE_TI_PLATFORM_omap3 
++	# Could probably be used for || BR2_PACKAGE_TI_PLATFORM_dm6446
++	select BR2_PACKAGE_TI_LOCAL_POWER_MANAGER
++	select BR2_PACKAGE_TI_FRAMEWORK_COMPONENTS
++	select BR2_PACKAGE_TI_XDAIS
++	select BR2_PACKAGE_TI_XDCTOOLS
++	select BR2_PACKAGE_TI_LINUXUTILS
++	select BR2_PACKAGE_TI_DSPBIOS
++	select BR2_PACKAGE_TI_DSPLINK
++	select BR2_PACKAGE_TI_BIOSUTILS
++	select BR2_PACKAGE_TI_CGT6X
++	select BR2_PACKAGE_TI_EDMA3LLD
++	help
++	  Codec Engine for TI ARM/DSP processors
++	  http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ce
++
++config BR2_PACKAGE_TI_CODEC_ENGINE_EXAMPLES
++	bool "Install Codec Engine examples on target"
++	depends on BR2_PACKAGE_TI_CODEC_ENGINE
+\ No newline at end of file
+diff --git a/package/ti/ti-codec-engine/ti-codec-engine.mk b/package/ti/ti-codec-engine/ti-codec-engine.mk
+new file mode 100644
+index 0000000..9e8a522
+--- /dev/null
++++ b/package/ti/ti-codec-engine/ti-codec-engine.mk
+@@ -0,0 +1,178 @@
++################################################################################
++#
++# ti-codec-engine
++#
++################################################################################
++TI_CODEC_ENGINE_VERSION:=2.25.05.16
++TI_CODEC_ENGINE_FILE_VERSION:=2_25_05_16
++TI_CODEC_ENGINE_SOURCE = codec_engine_$(TI_CODEC_ENGINE_FILE_VERSION),lite.tar.gz
++TI_CODEC_ENGINE_SITE = http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ce/$(TI_CODEC_ENGINE_FILE_VERSION)/exports
++TI_CODEC_ENGINE_DIR:=$(BUILD_DIR)/ti-codec-engine-$(TI_CODEC_ENGINE_VERSION)
++
++TI_CODEC_ENGINE_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_TI_CODEC_ENGINE_EXAMPLES),y)
++	TI_CODEC_ENGINE_INSTALL_TARGET = YES
++else
++	TI_CODEC_ENGINE_INSTALL_TARGET = NO
++endif
++
++TI_CODEC_ENGINE_DEPENDENCIES = \
++	ti-framework-components \
++	ti-xdais \
++	ti-xdctools \
++	ti-linuxutils \
++	ti-dspbios \
++	ti-cgt6x \
++	ti-biosutils \
++	ti-edma3lld \
++
++TI_CODEC_ENGINE_INSTALL_STAGING_DIR=$(STAGING_DIR)/ti/codec-engine-$(TI_CODEC_ENGINE_VERSION)
++TI_CODEC_ENGINE_INSTALL_TARGET_DIR=$(TARGET_DIR)/usr/lib/ti-codec-engine
++
++TI_CODEC_ENGINE_PLATFORM=UNDEFINED
++TI_CODEC_ENGINE_DSP="UNDEFINED"
++TI_CODEC_ENGINE_GPPOS="LINUX_GCC"
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_omap3),y)
++	TI_CODEC_ENGINE_DEVICE=OMAP3530
++	TI_CODEC_ENGINE_PROGRAMS="APP_CLIENT DSP_SERVER"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++	TI_CODEC_ENGINE_DEPENDENCIES += ti-local-power-manager ti-dsplink
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm6446),y)
++	TI_CODEC_ENGINE_DEVICE=DM6446
++	TI_CODEC_ENGINE_PROGRAMS="APP_CLIENT DSP_SERVER"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++	TI_CODEC_ENGINE_DEPENDENCIES += ti-local-power-manager  ti-dsplink
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm6467),y)
++	TI_CODEC_ENGINE_DEVICE=DM6467
++	TI_CODEC_ENGINE_PROGRAMS="APP_CLIENT DSP_SERVER"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm355),y)
++	TI_CODEC_ENGINE_DEVICE=DM355
++	TI_CODEC_ENGINE_PROGRAMS="APP_LOCAL"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm365),y)
++	TI_CODEC_ENGINE_DEVICE=DM365
++	TI_CODEC_ENGINE_PROGRAMS="APP_LOCAL"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_dm368),y)
++	#TODO: Verify if DM365 applies to DM368
++	TI_CODEC_ENGINE_DEVICE=DM365
++	TI_CODEC_ENGINE_PROGRAMS="APP_LOCAL"
++	TI_CODEC_ENGINE_DSPSUFFIX=x64P
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_omapl137),y)
++	TI_CODEC_ENGINE_DEVICE=OMAPL137
++	TI_CODEC_ENGINE_PROGRAMS="APP_CLIENT DSP_SERVER"
++	TI_CODEC_ENGINE_DSPSUFFIX=x674
++endif
++ifeq ($(BR2_PACKAGE_TI_PLATFORM_omapl138),y)
++	TI_CODEC_ENGINE_DEVICE=OMAPL138
++	TI_CODEC_ENGINE_PROGRAMS="APP_CLIENT DSP_SERVER"
++	TI_CODEC_ENGINE_DSPSUFFIX=x674
++endif
++
++TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS =	\
++	DEVICES=$(TI_CODEC_ENGINE_DEVICE) \
++	GPPOS=$(TI_CODEC_ENGINE_GPPOS) \
++	PROGRAMS=$(TI_CODEC_ENGINE_PROGRAMS) \
++	CE_INSTALL_DIR="$(TI_CODEC_ENGINE_DIR)" \
++	XDC_INSTALL_DIR="$(TI_XDCTOOLS_INSTALL_DIR)" \
++	BIOS_INSTALL_DIR="$(TI_DSPBIOS_INSTALL_DIR)" \
++	BIOSUTILS_INSTALL_DIR="$(TI_BIOSUTILS_INSTALL_DIR)" \
++	DSPLINK_INSTALL_DIR="$(TI_DSPLINK_INSTALL_STAGING_DIR)" \
++	XDAIS_INSTALL_DIR="$(TI_XDAIS_INSTALL_DIR)" \
++	FC_INSTALL_DIR="$(TI_FRAMEWORK_COMPONENTS_INSTALL_DIR)" \
++	CMEM_INSTALL_DIR="$(TI_LINUXUTILS_INSTALL_STAGING_DIR)" \
++	LPM_INSTALL_DIR="$(TI_LOCAL_POWER_MANAGER_INSTALL_STAGING_DIR)" \
++	EDMA3_LLD_INSTALL_DIR="$(TI_EDMA3LLD_INSTALL_DIR)" \
++	CGTOOLS_V5T=$(dir $(TARGET_CROSS)) \
++	CGTOOLS_C64P="$(TI_CGT6X_INSTALL_DIR)" \
++	CGTOOLS_C674="$(TI_CGT6X_INSTALL_DIR)"
++
++
++ifeq ($(BR2_PACKAGE_TI_CODEC_ENGINE_EXAMPLES),y)
++	TI_CODEC_ENGINE_CONFIGURE_CMDS += TI_CODEC_ENGINE_EXAMPLE_CONFIGURE_CMDS
++	TI_CODEC_ENGINE_BUILD_CMDS += TI_CODEC_ENGINE_EXAMPLE_BUILD_CMDS
++	TI_CODEC_ENGINE_INSTALL_TARGET_CMDS += TI_CODEC_ENGINE_EXAMPLE_INSTALL_TARGET_CMDS
++endif
++
++
++define TI_CODEC_ENGINE_INSTALL_STAGING_CMDS
++	$(INSTALL) -d $(TI_CODEC_ENGINE_INSTALL_STAGING_DIR)
++	cp -a $(@D)/* $(TI_CODEC_ENGINE_INSTALL_STAGING_DIR)
++	$(INSTALL) -R +w $(TI_CODEC_ENGINE_INSTALL_STAGING_DIR)
++endef
++
++define TI_CODEC_ENGINE_EXAMPLE_CONFIGURE_CMDS
++	sed -i  \
++    -e s:arm-none-linux-gnueabi-:$(notdir $(TARGET_CROSS))-:g \
++    $(@D)/examples/xdcpaths.mak
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/codecs $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) .make clean
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/extensions $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) .make clean
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/servers $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) .make clean
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/apps $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) .make clean
++endef
++
++define TI_CODEC_ENGINE_EXAMPLE_BUILD_CMDS
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/codecs $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) all
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/extensions $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) all
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/servers $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) all
++	$(MAKE) -C $(@D)/examples/ti/sdo/ce/examples/apps $(TI_CODEC_ENGINE_CONFIGURE_MAKE_ARGS) all
++endef
++
++define TI_CODEC_ENGINE_EXAMPLE_INSTALL_TARGET_CMDS
++	$(INSTALL) -d $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR); \
++	if [ -e $(@D)/examples/apps/system_files/$(TI_CODEC_ENGINE_DEVICE)/loadmodules.sh ]; then \
++		cp $(@D)/examples/apps/system_files/$(TI_CODEC_ENGINE_DEVICE)/loadmodules.sh $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR); \
++	elif [ -e $(@D)/loadmodules.sh ]; then \
++		cp $(@D)/loadmodules.sh $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR); \
++	fi ;\
++	i_find=`find $(@D) -name "*.$(TI_CODEC_ENGINE_DSPSUFFIX)"` ; \
++	for i in $$i_find; do \
++		i_dir=`dirname $$i | cut -f3 -d /`; \
++		echo Installing $$i TO $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/$$i_dir ; \
++		$(INSTALL) -d $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++		$(INSTALL) $$i $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++	done ; \
++	i_find=`find $(@D) -name "*.xv5T"` ; \
++	for i in $$i_find; do \
++		i_dir=`dirname $$i | cut -f3 -d /`; \
++		echo Installing $$i TO $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/$$i_dir ; \
++	  	$(INSTALL) -d $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++	  	$(INSTALL) $$i $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++	done; \
++	i_find=`find $(@D) -name "*.dat"` ; \
++	for i in $$i_find; do \
++		i_dir=`dirname $$i | cut -f3 -d /`; \
++		echo Installing $$i TO $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/$$i_dir ; \
++	  	$(INSTALL) -d $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++	  	$(INSTALL) $$i $(TI_CODEC_ENGINE_INSTALL_TARGET_DIR)/ti-codec-engine-examples/servers/`dirname $$i | cut -f3 -d /` ; \
++	done; \
++
++	#TODO: Clean up this section. It's basically a cut&paste and should be optional all together.
++	# For each directory, softlink to the app server, except special cases
++	# cd ${D}/${installdir}/ti-codec-engine-examples
++	# for i in $(find . -type d | grep -v servers); do
++	# 	{
++	# 	pwd
++	# 	cd ${D}/${installdir}/ti-codec-engine-examples/$i
++	# 	if [ $(basename $i) == "audio1_ires" ] ; then 
++	# 		ln -s ../servers/audio1_ires/audio1_ires.${DSPSUFFIX}
++	# 	elif [ $(basename $i) == "server_api_example" ] ; then
++	# 		ln -s ../servers/server_api_example/audio_copy.${DSPSUFFIX}
++	#                 elif [ $(basename $i) != "." ] ; then
++	# 		ln -s ../servers/all_codecs/all.${DSPSUFFIX}
++	# 	else
++	# 		echo Skipping $i
++	# 	fi
++	# 	}
++	# done
++endef
++
++$(eval $(call GENTARGETS,package/ti,ti-codec-engine))
++
+-- 
+1.7.0.4
