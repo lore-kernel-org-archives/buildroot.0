@@ -1,25 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Sep 2010 14:11:47 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/download-rework
-In-Reply-To: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 13 Sep 2010 08:50:46 +0200")
-References: <cover.1284360382.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fwx8603g.fsf@macbook.be.48ers.dk>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Fri, 17 Sep 2010 14:09:48 +0200
+Subject: [Buildroot] [git commit master 1/1] Remove the spider feature
+Message-ID: <20100917121159.5CB0E8B3CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is a pull request for Maxime's work on cleaning up the download
- Thomas> code and adding support for Git and SVN download. After
- Thomas> review/testing, I've added my Signed-off-by to those patches.
+commit: http://git.buildroot.net/buildroot/commit/?id=07b2af1a45c5276125b54d64f839fdcd660d602d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pulled and pushed, thanks both of you.
+In preparation for the re-work of the DOWNLOAD helper to support
+multiple download methods and protocols, the spider feature used with
+wget is removed for now until it is re-implemented on top of the new
+download methods.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Patch is too large, so refusing to show it
