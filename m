@@ -1,79 +1,57 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sat, 18 Sep 2010 19:59:48 +0200
-Subject: [Buildroot] [PATCH 6/7] sysstat: bump to 9.1.5 and comply with new
-	libtool policy
+Date: Sat, 18 Sep 2010 19:59:45 +0200
+Subject: [Buildroot] [PATCH 3/7] tslib: Fix installation with new autotools
+	policy
 In-Reply-To: <1284832789-22631-1-git-send-email-llandwerlin@gmail.com>
 References: <1284832789-22631-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1284832789-22631-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1284832789-22631-4-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <lionel.landwerlin@pace.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Signed-off-by: Lionel Landwerlin <lionel.landwerlin@pace.com>
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- ...t-9.5.1-add-missing-lintl-to-linker-flags.patch |   25 ++++++++++++++++++++
- package/sysstat/sysstat.mk                         |    8 +----
- 2 files changed, 27 insertions(+), 6 deletions(-)
- create mode 100644 package/sysstat/sysstat-9.5.1-add-missing-lintl-to-linker-flags.patch
+ package/tslib/tslib-1.0-newer-libtool-fix.patch |   11 +++++++++++
+ package/tslib/tslib.mk                          |    2 --
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 100644 package/tslib/tslib-1.0-newer-libtool-fix.patch
 
-diff --git a/package/sysstat/sysstat-9.5.1-add-missing-lintl-to-linker-flags.patch b/package/sysstat/sysstat-9.5.1-add-missing-lintl-to-linker-flags.patch
+diff --git a/package/tslib/tslib-1.0-newer-libtool-fix.patch b/package/tslib/tslib-1.0-newer-libtool-fix.patch
 new file mode 100644
-index 0000000..d9b7cf0
+index 0000000..f08d4b6
 --- /dev/null
-+++ b/package/sysstat/sysstat-9.5.1-add-missing-lintl-to-linker-flags.patch
-@@ -0,0 +1,25 @@
-+From fff3734146edf3ff6e2627dba729aa30d1faf8da Mon Sep 17 00:00:00 2001
-+From: Lionel Landwerlin <lionel.landwerlin@pace.com>
-+Date: Fri, 17 Sep 2010 17:10:17 +0200
-+Subject: [PATCH] Add missing -lintl to linker flags
-+
-+Signed-off-by: Lionel Landwerlin <lionel.landwerlin@pace.com>
-+---
-+ Makefile.in |    1 +
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 5dac5c7..6821cce 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -87,6 +87,7 @@ REQUIRE_NLS = -DUSE_NLS -DPACKAGE=\"$(PACKAGE)\" -DLOCALEDIR=\"$(NLS_DIR)\"
-+ endif
-+ ifdef REQUIRE_NLS
-+    DFLAGS += $(REQUIRE_NLS)
-++   LFLAGS += -lintl
-+ endif
-+ INSTALL_CRON = @INSTALL_CRON@
-+ CRON_OWNER = @CRON_OWNER@
-+-- 
-+1.6.0.6
-+
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 324580e..846eeec 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,17 +4,13 @@
- #
- #############################################################
++++ b/package/tslib/tslib-1.0-newer-libtool-fix.patch
+@@ -0,0 +1,11 @@
++--- tslib-1.0/configure.ac~	2010-03-25 15:59:55.000000000 +0100
+++++ tslib-1.0/configure.ac	2010-03-25 15:59:55.000000000 +0100
++@@ -168,7 +168,7 @@
++         AS_HELP_STRING([--with-plugindir=ARG],
++                 [Where to look for plugins (default=${libdir}/ts)]),
++         [PLUGIN_DIR=$withval],
++-        [PLUGIN_DIR='${libdir}/ts/'])
+++        [PLUGIN_DIR='${libdir}/ts'])
++ AC_MSG_RESULT($PLUGIN_DIR)
++ AC_SUBST(PLUGIN_DIR)
++ 
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index edde0b6..b6a224d 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -10,11 +10,9 @@ TSLIB_AUTORECONF = YES
+ TSLIB_LIBTOOL_PATCH = NO
+ TSLIB_INSTALL_STAGING = YES
+ TSLIB_INSTALL_TARGET = YES
+-TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
  
--SYSSTAT_VERSION = 9.0.5
-+SYSSTAT_VERSION = 9.1.5
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard/
--SYSSTAT_AUTORECONF = NO
--SYSSTAT_LIBTOOL_PATCH = NO
- SYSSTAT_INSTALL_STAGING = NO
- SYSSTAT_INSTALL_TARGET = YES
+ TSLIB_CONF_OPT = \
+ 	--enable-shared	\
+-	--prefix=/usr	\
+ 	--sysconfdir=/etc
  
--# Should be --disable-man-group, it might be a little mistake in the
--# configure.in script.
--SYSSTAT_CONF_OPT = --enable-man-group
-+SYSSTAT_CONF_OPT = --disable-man-group
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- SYSSTAT_CONF_OPT += --disable-documentation
- endif
+ $(eval $(call AUTOTARGETS,package,tslib))
 -- 
 1.7.1
