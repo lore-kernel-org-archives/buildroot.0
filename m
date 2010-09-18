@@ -1,52 +1,31 @@
-From: Martin Banky <Martin.Banky@gmail.com>
-Date: Sat, 18 Sep 2010 13:54:31 -0700
-Subject: [Buildroot] [PATCH 01/21] alsa-lib: bump to 1.0.23
-In-Reply-To: <20100918190053.5084ed78@surf>
-References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-	<20100918190053.5084ed78@surf>
-Message-ID: <AANLkTinS_aaoVnpizZ4KVuMihwXjqdzGFwBsk7VGMS4i@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 18 Sep 2010 22:59:59 +0200
+Subject: [Buildroot] [PATCH 2/3] zlib: Fix build
+In-Reply-To: <AANLkTina7PCqWDL8=TL+kQv89=bnEj40Mw7dtrY5fF9a@mail.gmail.com>
+	(Martin Banky's message of "Sat, 18 Sep 2010 13:48:11 -0700")
+References: <1284812207-31798-1-git-send-email-llandwerlin@gmail.com>
+	<1284812207-31798-3-git-send-email-llandwerlin@gmail.com>
+	<8739t66ca0.fsf@macbook.be.48ers.dk>
+	<AANLkTina7PCqWDL8=TL+kQv89=bnEj40Mw7dtrY5fF9a@mail.gmail.com>
+Message-ID: <87vd624vjk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-     Yes, I kind of figured that out after I started doing some pulls, and
-got conflicts regarding the CHANGES file. I'll repost the patch set with the
-changes that you asked for.
+>>>>> "Martin" == Martin Banky <Martin.Banky@gmail.com> writes:
 
-Martin
+ Martin> Peter,
 
-On Sat, Sep 18, 2010 at 10:00 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+ Martin> ???? I can confirm that it was reliably breaking for me with
+ Martin> parallel builds.  The error message would say that it couldn't
+ Martin> find libz.a, I think during linking. I would restart the build
+ Martin> process, and it would finish just fine after that. I wish I had
+ Martin> known about the MAKE1 option. I guess I should have rtfm a
+ Martin> little better.
 
-> Hello Martin,
->
-> On Mon, 13 Sep 2010 20:40:28 -0700
-> Martin Banky <martin.banky@gmail.com> wrote:
->
-> > Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
->
-> Please don't make any change to the CHANGES file. Those changes are
-> causing all sort of unnecessary conflicts. Only Peter, Buildroot
-> maintainer, does the updates to this file.
->
-> Could you repost your patch set with all those changes removed ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100918/6fbf1872/attachment.html>
+Hmm, interesting. I still haven't seen it here, but OK.
+
+-- 
+Bye, Peter Korsgaard
