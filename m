@@ -1,25 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Sep 2010 19:03:26 +0200
-Subject: [Buildroot] [PATCH 09/21] gmp: bump to 5.0.1
-In-Reply-To: <1284435648-15238-9-git-send-email-Martin.Banky@gmail.com>
+Date: Sat, 18 Sep 2010 19:19:44 +0200
+Subject: [Buildroot] [PATCH 18/21] ntp: convert to autotargets and bump
+ to 4.2.6p2
+In-Reply-To: <1284435648-15238-18-git-send-email-Martin.Banky@gmail.com>
 References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-	<1284435648-15238-9-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20100918190326.40e2090d@surf>
+	<1284435648-15238-18-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20100918191944.612fee30@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Sep 2010 20:40:36 -0700
+Hello !
+
+On Mon, 13 Sep 2010 20:40:45 -0700
 Martin Banky <martin.banky@gmail.com> wrote:
 
-> +	(cd $(GMP_TARGET_DIR); rm -rf config.cache; cp $(GMP_DIR)/longlong.h $(GMP_DIR)/gmp-impl.h ./; \
+> +config BR2_PACKAGE_NTP_NTP-KEYGEN
 
-Why ? Even if it's really needed, a little bit of explanation in the
-commit log would help.
+Please don't use the dash character in configuration options. This
+should be BR2_PACKAGE_NTP_KEYGEN or BR2_PACKAGE_NTP_NTP_KEYGEN.
 
-Thanks!
+> +NTP_DIR = $(BUILD_DIR)/ntp-$(NTP_VERSION)
+
+Not needed.
+
+> +NTP_CAT = $(ZCAT)
+
+Not needed.
+
+>  ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
+> +define NTP_INSTALL_SNTP
+>  	install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
+> +endef
+> +endif
+
+Instead of $(NTP_DIR), use $(@D).
+
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_NTP-KEYGEN),y)
+> +define NTP_INSTALL_NTP-KEYGEN
+> +	install -m 755 $(NTP_DIR)/util/ntp-keygen $(TARGET_DIR)/usr/bin/ntp-keygen
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
+> +define NTP_INSTALL_NTP-WAIT
+> +	install -m 755 $(NTP_DIR)/scripts/ntp-wait $(TARGET_DIR)/usr/bin/ntp-wait
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_NTPDC),y)
+> +define NTP_INSTALL_NTPDC
+> +	install -m 755 $(NTP_DIR)/ntpdc/ntpdc $(TARGET_DIR)/usr/bin/ntpdc
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_NTPQ),y)
+> +define NTP_INSTALL_NTPQ
+> +	install -m 755 $(NTP_DIR)/ntpq/ntpq $(TARGET_DIR)/usr/bin/ntpq
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_NTPTRACE),y)
+> +define NTP_INSTALL_NTPTRACE
+> +	install -m 755 $(NTP_DIR)/scripts/ntptrace $(TARGET_DIR)/usr/bin/ntptrace
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NTP_TICKADJ),y)
+> +define NTP_INSTALL_TICKADJ
+> +	install -m 755 $(NTP_DIR)/util/tickadj $(TARGET_DIR)/usr/bin/tickadj
+> +endef
+>  endif
+> +
+> +define NTP_INSTALL_TARGET_CMDS
+> +	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
+> +	$(NTP_INSTALL_SNTP)
+> +	$(NTP_INSTALL_NTP-KEYGEN)
+> +	$(NTP_INSTALL_NTP-WAIT)
+> +	$(NTP_INSTALL_NTPDC)
+> +	$(NTP_INSTALL_NTPQ)
+> +	$(NTP_INSTALL_NTPTRACE)
+> +	$(NTP_INSTALL_TICKADJ)
+
+Humm, you could rewrite this this way:
+
+NTP_INSTALL_BIN_FILES =
+ifeq ($(BR2_PACKAGE_NTP_NTP_KEYGEN),y)
+NTP_INSTALL_BIN_FILES += util/ntp-keygen
+endif
+ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
+NTP_INSTALL_BIN_FILES += scripts/ntp-wait
+endif
+...
+
+and then :
+
+define NTP_INSTALL_TARGET_CMDS
+	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
+	test -z "$(NTP_INSTALL_BIN_FILES)" || install -m 755 $(addprefix $(@D),$(NTP_INSTALL_BIN_FILES)) $(TARGET_DIR)/usr/bin/
+endif
+
+and finally :
+
+define NTP_UNINSTALL_TARGET_CMDS
+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(NTP_INSTALL_BIN_FILES))
+endif
+
+Regards,
 
 Thomas
 -- 
