@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Sep 2010 14:54:14 +0200
-Subject: [Buildroot] [PATCH 1/3] package: drop special case for
- target-install with BR2_ENABLE_DEBUG
-In-Reply-To: <1284812207-31798-2-git-send-email-llandwerlin@gmail.com>
-References: <1284812207-31798-1-git-send-email-llandwerlin@gmail.com>
-	<1284812207-31798-2-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100918145414.197a874c@surf>
+Date: Sat, 18 Sep 2010 19:00:53 +0200
+Subject: [Buildroot] [PATCH 01/21] alsa-lib: bump to 1.0.23
+In-Reply-To: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20100918190053.5084ed78@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Martin,
 
-On Sat, 18 Sep 2010 14:16:45 +0200
-llandwerlin at gmail.com wrote:
+On Mon, 13 Sep 2010 20:40:28 -0700
+Martin Banky <martin.banky@gmail.com> wrote:
 
-> install-exec isn't used anymore
+> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 
-This is going to conflict with another patch I'm doing, which removes
-the use of install-strip when BR2_ENABLE_DEBUG is set.
+Please don't make any change to the CHANGES file. Those changes are
+causing all sort of unnecessary conflicts. Only Peter, Buildroot
+maintainer, does the updates to this file.
 
-I'll try to merge them.
+Could you repost your patch set with all those changes removed ?
+
+Thanks,
 
 Thomas
 -- 
