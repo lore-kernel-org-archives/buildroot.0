@@ -1,31 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 18 Sep 2010 22:59:59 +0200
-Subject: [Buildroot] [PATCH 2/3] zlib: Fix build
-In-Reply-To: <AANLkTina7PCqWDL8=TL+kQv89=bnEj40Mw7dtrY5fF9a@mail.gmail.com>
-	(Martin Banky's message of "Sat, 18 Sep 2010 13:48:11 -0700")
-References: <1284812207-31798-1-git-send-email-llandwerlin@gmail.com>
-	<1284812207-31798-3-git-send-email-llandwerlin@gmail.com>
-	<8739t66ca0.fsf@macbook.be.48ers.dk>
-	<AANLkTina7PCqWDL8=TL+kQv89=bnEj40Mw7dtrY5fF9a@mail.gmail.com>
-Message-ID: <87vd624vjk.fsf@macbook.be.48ers.dk>
+Date: Sat, 18 Sep 2010 23:05:03 +0200
+Subject: [Buildroot] [PATCH] host tools: create the host sed in
+	$(O)/host/
+In-Reply-To: <20100914080235.2345b253@surf> (Thomas Petazzoni's message of
+	"Tue, 14 Sep 2010 08:02:35 +0200")
+References: <1284420434-22718-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<20100914080235.2345b253@surf>
+Message-ID: <87r5gq4vb4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Banky <Martin.Banky@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Martin> Peter,
+ Thomas> Hello,
+ Thomas> On Tue, 14 Sep 2010 01:27:14 +0200
+ Thomas> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
- Martin> ???? I can confirm that it was reliably breaking for me with
- Martin> parallel builds.  The error message would say that it couldn't
- Martin> find libz.a, I think during linking. I would restart the build
- Martin> process, and it would finish just fine after that. I wish I had
- Martin> known about the MAKE1 option. I guess I should have rtfm a
- Martin> little better.
+ >> The host sed does not belong to $(O)toolchain/ but
+ >> really belongs to $(O)/host/
 
-Hmm, interesting. I still haven't seen it here, but OK.
+ Thomas> In my opinion, the host-sed does not belong anywhere, we could just use
+ Thomas> the real host sed, and remove all the crap to detect if the host sed is
+ Thomas> good or not, the symlinking stuff, etc.
+
+Agreed. Care to make a patch?
 
 -- 
 Bye, Peter Korsgaard
