@@ -1,119 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Sep 2010 19:19:44 +0200
-Subject: [Buildroot] [PATCH 18/21] ntp: convert to autotargets and bump
- to 4.2.6p2
-In-Reply-To: <1284435648-15238-18-git-send-email-Martin.Banky@gmail.com>
-References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-	<1284435648-15238-18-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20100918191944.612fee30@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Sep 2010 17:36:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 2563] [PATCH] cairo: Expose the configure option
+ to disable some floating-point math
+In-Reply-To: <bug-2563-163@https.bugs.busybox.net/>
+References: <bug-2563-163@https.bugs.busybox.net/>
+Message-ID: <20100918173624.EF4FE8B3D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello !
+https://bugs.busybox.net/show_bug.cgi?id=2563
 
-On Mon, 13 Sep 2010 20:40:45 -0700
-Martin Banky <martin.banky@gmail.com> wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> +config BR2_PACKAGE_NTP_NTP-KEYGEN
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |INVALID
 
-Please don't use the dash character in configuration options. This
-should be BR2_PACKAGE_NTP_KEYGEN or BR2_PACKAGE_NTP_NTP_KEYGEN.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Ok, therefore closing the bug. Don't hesitate to reopen when/if a later version
+of Cairo really support such an option. Thanks!
 
-> +NTP_DIR = $(BUILD_DIR)/ntp-$(NTP_VERSION)
-
-Not needed.
-
-> +NTP_CAT = $(ZCAT)
-
-Not needed.
-
->  ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
-> +define NTP_INSTALL_SNTP
->  	install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
-> +endef
-> +endif
-
-Instead of $(NTP_DIR), use $(@D).
-
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_NTP-KEYGEN),y)
-> +define NTP_INSTALL_NTP-KEYGEN
-> +	install -m 755 $(NTP_DIR)/util/ntp-keygen $(TARGET_DIR)/usr/bin/ntp-keygen
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
-> +define NTP_INSTALL_NTP-WAIT
-> +	install -m 755 $(NTP_DIR)/scripts/ntp-wait $(TARGET_DIR)/usr/bin/ntp-wait
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_NTPDC),y)
-> +define NTP_INSTALL_NTPDC
-> +	install -m 755 $(NTP_DIR)/ntpdc/ntpdc $(TARGET_DIR)/usr/bin/ntpdc
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_NTPQ),y)
-> +define NTP_INSTALL_NTPQ
-> +	install -m 755 $(NTP_DIR)/ntpq/ntpq $(TARGET_DIR)/usr/bin/ntpq
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_NTPTRACE),y)
-> +define NTP_INSTALL_NTPTRACE
-> +	install -m 755 $(NTP_DIR)/scripts/ntptrace $(TARGET_DIR)/usr/bin/ntptrace
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NTP_TICKADJ),y)
-> +define NTP_INSTALL_TICKADJ
-> +	install -m 755 $(NTP_DIR)/util/tickadj $(TARGET_DIR)/usr/bin/tickadj
-> +endef
->  endif
-> +
-> +define NTP_INSTALL_TARGET_CMDS
-> +	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
-> +	$(NTP_INSTALL_SNTP)
-> +	$(NTP_INSTALL_NTP-KEYGEN)
-> +	$(NTP_INSTALL_NTP-WAIT)
-> +	$(NTP_INSTALL_NTPDC)
-> +	$(NTP_INSTALL_NTPQ)
-> +	$(NTP_INSTALL_NTPTRACE)
-> +	$(NTP_INSTALL_TICKADJ)
-
-Humm, you could rewrite this this way:
-
-NTP_INSTALL_BIN_FILES =
-ifeq ($(BR2_PACKAGE_NTP_NTP_KEYGEN),y)
-NTP_INSTALL_BIN_FILES += util/ntp-keygen
-endif
-ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
-NTP_INSTALL_BIN_FILES += scripts/ntp-wait
-endif
-...
-
-and then :
-
-define NTP_INSTALL_TARGET_CMDS
-	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
-	test -z "$(NTP_INSTALL_BIN_FILES)" || install -m 755 $(addprefix $(@D),$(NTP_INSTALL_BIN_FILES)) $(TARGET_DIR)/usr/bin/
-endif
-
-and finally :
-
-define NTP_UNINSTALL_TARGET_CMDS
-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(NTP_INSTALL_BIN_FILES))
-endif
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
