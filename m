@@ -1,53 +1,24 @@
-From: Martin Banky <Martin.Banky@gmail.com>
-Date: Sat, 18 Sep 2010 17:35:29 -0700
-Subject: [Buildroot] [PATCH 09/21] gmp: bump to 5.0.1
-In-Reply-To: <20100918190326.40e2090d@surf>
-References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
-	<1284435648-15238-9-git-send-email-Martin.Banky@gmail.com>
-	<20100918190326.40e2090d@surf>
-Message-ID: <AANLkTikWC9jReaZUyLeDeMXwoO90dgSrvbjiu17yHW_E@mail.gmail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 19 Sep 2010 03:32:10 +0200
+Subject: [Buildroot] [PATCH 3/3] gettext: bump to 0.18.1.1
+In-Reply-To: <1284813490-32442-4-git-send-email-llandwerlin@gmail.com>
+References: <1284813490-32442-1-git-send-email-llandwerlin@gmail.com>
+	<1284813490-32442-4-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1284859930.12897.544.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-     Per the INSTALL file in mpfr:
-"As gmp-impl.h and longlong.h are only in the GMP source directory,
-you first need to copy these files to the build directory if it is
-different (there may be other workarounds, such as setting $CPPFLAGS
-to search the GMP source directory)."
-I will change the commit log to reflect this, when I resubmit the patch set
-with the other asked for changes.
+I'm sorry, but this patch does not seem to work well in all situations.
+I'm having problems with "dumb" configuration where we select libglib
+which requires libintl to work, but we don't have a toolchain with
+locales...
 
-Martin
+I will resend a patch without this problem.
 
-On Sat, Sep 18, 2010 at 10:03 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Regards,
 
-> On Mon, 13 Sep 2010 20:40:36 -0700
-> Martin Banky <martin.banky@gmail.com> wrote:
->
-> > +     (cd $(GMP_TARGET_DIR); rm -rf config.cache; cp
-> $(GMP_DIR)/longlong.h $(GMP_DIR)/gmp-impl.h ./; \
->
-> Why ? Even if it's really needed, a little bit of explanation in the
-> commit log would help.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100918/333e0d67/attachment.html>
+-- 
+Lionel Landwerlin
