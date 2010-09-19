@@ -1,273 +1,381 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sat, 18 Sep 2010 19:53:41 -0700
-Subject: [Buildroot] [PATCH 19/21] openssl: bump to 1.0.0a
+Date: Sat, 18 Sep 2010 19:53:40 -0700
+Subject: [Buildroot] [PATCH 18/21] ntp: convert to autotargets and bump to
+	4.2.6p2
 In-Reply-To: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
 References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1284864823-18993-20-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1284864823-18993-19-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also added additional options for ntp and fixed a build issue when IPv6 support
+is not available.
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../openssl/openssl-1.0.0a-do-not-build-docs.patch |   13 +++++
- .../openssl-1.0.0a-dont-force-large-file.patch     |   19 +++++++
- package/openssl/openssl-1.0.0a-optional-ipv6.patch |   20 +++++++
- package/openssl/openssl-do-not-build-docs.patch    |   13 -----
- .../openssl/openssl-dont-force-large-file.patch    |   19 -------
- package/openssl/openssl-nofips.patch               |   12 ----
- package/openssl/openssl-optional-ipv6.patch        |   55 --------------------
- package/openssl/openssl-uclibc-susv3-legacy.patch  |   18 ------
- package/openssl/openssl.mk                         |    7 ++-
- 9 files changed, 56 insertions(+), 120 deletions(-)
- create mode 100644 package/openssl/openssl-1.0.0a-do-not-build-docs.patch
- create mode 100644 package/openssl/openssl-1.0.0a-dont-force-large-file.patch
- create mode 100644 package/openssl/openssl-1.0.0a-optional-ipv6.patch
- delete mode 100644 package/openssl/openssl-do-not-build-docs.patch
- delete mode 100644 package/openssl/openssl-dont-force-large-file.patch
- delete mode 100644 package/openssl/openssl-nofips.patch
- delete mode 100644 package/openssl/openssl-optional-ipv6.patch
- delete mode 100644 package/openssl/openssl-uclibc-susv3-legacy.patch
+ package/ntp/Config.in                   |   44 +++++++++++
+ package/ntp/ntp-4.2.4_p5-adjtimex.patch |   33 --------
+ package/ntp/ntp-4.2.4_p5-nano.patch     |   36 ---------
+ package/ntp/ntp-4.2.6_p2-adjtimex.patch |   33 ++++++++
+ package/ntp/ntp-optional-ipv6.patch     |   24 ------
+ package/ntp/ntp.mk                      |  122 +++++++++++++------------------
+ 6 files changed, 128 insertions(+), 164 deletions(-)
+ delete mode 100644 package/ntp/ntp-4.2.4_p5-adjtimex.patch
+ delete mode 100644 package/ntp/ntp-4.2.4_p5-nano.patch
+ create mode 100644 package/ntp/ntp-4.2.6_p2-adjtimex.patch
+ delete mode 100644 package/ntp/ntp-optional-ipv6.patch
 
-diff --git a/package/openssl/openssl-1.0.0a-do-not-build-docs.patch b/package/openssl/openssl-1.0.0a-do-not-build-docs.patch
-new file mode 100644
-index 0000000..329efbe
---- /dev/null
-+++ b/package/openssl/openssl-1.0.0a-do-not-build-docs.patch
-@@ -0,0 +1,13 @@
-+Dont waste time building manpages if we're not going to use em.
-+
-+--- openssl/Makefile.org
-++++ openssl/Makefile.org
-+@@ -492,7 +492,7 @@
-+ dist_pem_h:
-+ 	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
-+ 
-+-install: all install_docs install_sw
-++install: all install_sw
-+ 
-+ install_sw:
-+ 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
-diff --git a/package/openssl/openssl-1.0.0a-dont-force-large-file.patch b/package/openssl/openssl-1.0.0a-dont-force-large-file.patch
-new file mode 100644
-index 0000000..5b04656
---- /dev/null
-+++ b/package/openssl/openssl-1.0.0a-dont-force-large-file.patch
-@@ -0,0 +1,19 @@
-+[patch]: bss_file.c: don't force largefile mode
-+---
-+ crypto/bio/bss_file.c |    3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+Index: openssl-0.9.8g/crypto/bio/bss_file.c
-+===================================================================
-+--- openssl-0.9.8g.orig/crypto/bio/bss_file.c
-++++ openssl-0.9.8g/crypto/bio/bss_file.c
-+@@ -78,9 +78,6 @@
-+  * sequential access of large files without extra "magic" comprise *BSD,
-+  * Darwin, IRIX...
-+  */
-+-#ifndef _FILE_OFFSET_BITS
-+-#define _FILE_OFFSET_BITS 64
-+-#endif
-+ #endif
-+ 
-+ #include <stdio.h>
-diff --git a/package/openssl/openssl-1.0.0a-optional-ipv6.patch b/package/openssl/openssl-1.0.0a-optional-ipv6.patch
-new file mode 100644
-index 0000000..667d00f
---- /dev/null
-+++ b/package/openssl/openssl-1.0.0a-optional-ipv6.patch
-@@ -0,0 +1,20 @@
-+[PATCH] openssl: fix build without IPv6 support
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ crypto/bio/bss_dgram.c |   10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+Index: openssl-0.9.8n/crypto/bio/bss_dgram.c
-+===================================================================
-+--- openssl-0.9.8n.orig/crypto/bio/bss_dgram.c
-++++ openssl-0.9.8n/crypto/bio/bss_dgram.c
-+@@ -61,6 +61,8 @@
-+ 
-+ #include <stdio.h>
-+ #include <errno.h>
-++#include <features.h>
-++
-+ #define USE_SOCKETS
-+ #include "cryptlib.h"
-+ 
-diff --git a/package/openssl/openssl-do-not-build-docs.patch b/package/openssl/openssl-do-not-build-docs.patch
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index 6213141..85633ba 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -11,3 +11,47 @@ config BR2_PACKAGE_NTP_SNTP
+ 	depends on BR2_PACKAGE_NTP
+ 	help
+ 	  Simple network time protocol program
++	  
++config BR2_PACKAGE_NTP_NTP_KEYGEN
++	bool "ntp-keygen"
++	depends on BR2_PACKAGE_NTP
++	help
++	  Create a NTP host key
++	  
++config BR2_PACKAGE_NTP_NTP_WAIT
++	bool "ntp-wait"
++	select BR2_PACKAGE_MICROPERL
++	depends on BR2_PACKAGE_NTP
++	help
++	  ntp-wait waits until the locally running ntpd is in state 4
++	  (synchronized). This could be useful at boot time, to delay the
++	  boot sequence until after "ntpd -g" has set the time.
++	  
++config BR2_PACKAGE_NTP_NTPDC
++	bool "ntpdc"
++	depends on BR2_PACKAGE_NTP
++	help
++	  The ntpdc utility program is used to query an NTP daemon about
++	  its current state and to request changes in that state.
++	  
++config BR2_PACKAGE_NTP_NTPQ
++	bool "ntpq"
++	depends on BR2_PACKAGE_NTP
++	help
++	  The ntpq utility program is used to query NTP servers requesting
++	  information about current state and/or changes in that state.
++	  
++config BR2_PACKAGE_NTP_NTPTRACE
++	bool "ntptrace"
++	select BR2_PACKAGE_MICROPERL
++	depends on BR2_PACKAGE_NTP
++	help
++	  ntptrace is a perl script that uses the ntpq utility program to
++	  follow the chain of NTP servers from a given host back to the
++	  primary time source
++	  
++config BR2_PACKAGE_NTP_TICKADJ
++	bool "tickadj"
++	depends on BR2_PACKAGE_NTP
++	help
++	  set time-related kernel variables
+diff --git a/package/ntp/ntp-4.2.4_p5-adjtimex.patch b/package/ntp/ntp-4.2.4_p5-adjtimex.patch
 deleted file mode 100644
-index 135a9d3..0000000
---- a/package/openssl/openssl-do-not-build-docs.patch
+index 40625fa..0000000
+--- a/package/ntp/ntp-4.2.4_p5-adjtimex.patch
 +++ /dev/null
-@@ -1,13 +0,0 @@
--Dont waste time building manpages if we're not going to use em.
+@@ -1,33 +0,0 @@
+-https://support.ntp.org/bugs/show_bug.cgi?id=769
+-http://bugs.gentoo.org/254030
 -
----- openssl/Makefile.org
--+++ openssl/Makefile.org
--@@ -792,7 +792,7 @@
-- dist_pem_h:
-- 	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
+---- ntp/util/tickadj.c
+-+++ ntp/util/tickadj.c
+-@@ -21,7 +21,8 @@
+- # include <unistd.h>
+- #endif /* HAVE_UNISTD_H */
 - 
---install: all install_docs install_sw
--+install: all install_sw
+--#ifdef HAVE___ADJTIMEX		/* Linux */
+-+/* proper handling here has been moved to upstream ntp bugzilla */
+-+#ifdef linux
 - 
-- install_sw:
-- 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
-diff --git a/package/openssl/openssl-dont-force-large-file.patch b/package/openssl/openssl-dont-force-large-file.patch
+- #include <sys/timex.h>
+- struct timex txc;
+-@@ -91,7 +92,7 @@
+- 	}
+- 
+- 	if (!errflg) {
+--		if (__adjtimex(&txc) < 0)
+-+		if (adjtimex(&txc) < 0)
+- 			perror("adjtimex");
+- 		else if (!quiet)
+- 			printf("tick     = %ld\ntick_adj = %d\n",
+-@@ -146,7 +147,7 @@
+- #endif
+- 	}
+-     
+--	if (__adjtimex(&txc) < 0)
+-+	if (adjtimex(&txc) < 0)
+- 	{
+- 		perror("adjtimex");
+- 	}
+diff --git a/package/ntp/ntp-4.2.4_p5-nano.patch b/package/ntp/ntp-4.2.4_p5-nano.patch
 deleted file mode 100644
-index 5b04656..0000000
---- a/package/openssl/openssl-dont-force-large-file.patch
+index f4097ee..0000000
+--- a/package/ntp/ntp-4.2.4_p5-nano.patch
 +++ /dev/null
-@@ -1,19 +0,0 @@
--[patch]: bss_file.c: don't force largefile mode
-----
-- crypto/bio/bss_file.c |    3 ---
-- 1 file changed, 3 deletions(-)
+@@ -1,36 +0,0 @@
+-Fixes the MOD_NANO build failure
 -
--Index: openssl-0.9.8g/crypto/bio/bss_file.c
+-ntp_loopfilter.c: In function 'local_clock':
+-ntp_loopfilter.c:571: error: 'MOD_NANO' undeclared (first use in this function)
+-ntp_loopfilter.c:571: error: (Each undeclared identifier is reported only once
+-ntp_loopfilter.c:571: error: for each function it appears in.)
+-ntp_loopfilter.c: In function 'loop_config':
+-ntp_loopfilter.c:896: error: 'MOD_NANO' undeclared (first use in this function)
+-
+-Taken from
+-http://cvs.fedoraproject.org/viewvc/devel/ntp/ntp-4.2.4p7-nano.patch?revision=1.1&content-type=text/plain&view=co
+-
+-See the discussion at
+-https://bugs.launchpad.net/ubuntu/+source/ntp/+bug/412242 for more
+-details and links. The below fix is not a correct fix, but only a
+-workaround. The real fix required changes to kernel/libc headers.
+-
+-Index: ntp-4.2.4p5/include/ntp_syscall.h
 -===================================================================
----- openssl-0.9.8g.orig/crypto/bio/bss_file.c
--+++ openssl-0.9.8g/crypto/bio/bss_file.c
--@@ -78,9 +78,6 @@
--  * sequential access of large files without extra "magic" comprise *BSD,
--  * Darwin, IRIX...
--  */
---#ifndef _FILE_OFFSET_BITS
---#define _FILE_OFFSET_BITS 64
---#endif
+---- ntp-4.2.4p5.orig/include/ntp_syscall.h	2010-05-14 17:34:48.000000000 +0200
+-+++ ntp-4.2.4p5/include/ntp_syscall.h	2010-05-14 17:35:13.000000000 +0200
+-@@ -14,6 +14,14 @@
+- # include <sys/timex.h>
 - #endif
 - 
-- #include <stdio.h>
-diff --git a/package/openssl/openssl-nofips.patch b/package/openssl/openssl-nofips.patch
+-+#if defined(ADJ_NANO) && !defined(MOD_NANO)
+-+#define MOD_NANO ADJ_NANO
+-+#endif
+-+
+-+#if defined(ADJ_TAI) && !defined(MOD_TAI)
+-+#define MOD_TAI ADJ_TAI
+-+#endif
+-+
+- #ifndef NTP_SYSCALLS_LIBC
+- #ifdef NTP_SYSCALLS_STD
+- # define ntp_adjtime(t)		syscall(SYS_ntp_adjtime, (t))
+diff --git a/package/ntp/ntp-4.2.6_p2-adjtimex.patch b/package/ntp/ntp-4.2.6_p2-adjtimex.patch
+new file mode 100644
+index 0000000..40625fa
+--- /dev/null
++++ b/package/ntp/ntp-4.2.6_p2-adjtimex.patch
+@@ -0,0 +1,33 @@
++https://support.ntp.org/bugs/show_bug.cgi?id=769
++http://bugs.gentoo.org/254030
++
++--- ntp/util/tickadj.c
+++++ ntp/util/tickadj.c
++@@ -21,7 +21,8 @@
++ # include <unistd.h>
++ #endif /* HAVE_UNISTD_H */
++ 
++-#ifdef HAVE___ADJTIMEX		/* Linux */
+++/* proper handling here has been moved to upstream ntp bugzilla */
+++#ifdef linux
++ 
++ #include <sys/timex.h>
++ struct timex txc;
++@@ -91,7 +92,7 @@
++ 	}
++ 
++ 	if (!errflg) {
++-		if (__adjtimex(&txc) < 0)
+++		if (adjtimex(&txc) < 0)
++ 			perror("adjtimex");
++ 		else if (!quiet)
++ 			printf("tick     = %ld\ntick_adj = %d\n",
++@@ -146,7 +147,7 @@
++ #endif
++ 	}
++     
++-	if (__adjtimex(&txc) < 0)
+++	if (adjtimex(&txc) < 0)
++ 	{
++ 		perror("adjtimex");
++ 	}
+diff --git a/package/ntp/ntp-optional-ipv6.patch b/package/ntp/ntp-optional-ipv6.patch
 deleted file mode 100644
-index 0edea3e..0000000
---- a/package/openssl/openssl-nofips.patch
+index 20d6edf..0000000
+--- a/package/ntp/ntp-optional-ipv6.patch
 +++ /dev/null
-@@ -1,12 +0,0 @@
--diff -Nura openssl-0.9.8k/Makefile.org openssl-0.9.8k.nofips/Makefile.org
----- openssl-0.9.8k/Makefile.org	2009-03-03 20:40:29.000000000 -0200
--+++ openssl-0.9.8k.nofips/Makefile.org	2009-03-26 09:50:27.000000000 -0300
--@@ -131,7 +131,7 @@
-- 
-- BASEADDR=
-- 
---DIRS=   crypto fips ssl engines apps test tools
--+DIRS=   crypto ssl engines apps test tools
-- SHLIBDIRS= crypto ssl fips
-- 
-- # dirs in crypto to build
-diff --git a/package/openssl/openssl-optional-ipv6.patch b/package/openssl/openssl-optional-ipv6.patch
-deleted file mode 100644
-index 2876058..0000000
---- a/package/openssl/openssl-optional-ipv6.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--[PATCH] openssl: fix build without IPv6 support
+@@ -1,24 +0,0 @@
+-[PATCH] ntpd: fix build without ipv6 support
+-
+-ntp_io.c was checkin the non-existing DISABLE_IPV6 define rather
+-than WANT_IPV6 as defined in config.h, breaking the build if
+-the toolchain doesn't have ipv6 support.
 -
 -Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ----
-- crypto/bio/bss_dgram.c |   10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--Index: openssl-0.9.8n/crypto/bio/bss_dgram.c
--===================================================================
----- openssl-0.9.8n.orig/crypto/bio/bss_dgram.c
--+++ openssl-0.9.8n/crypto/bio/bss_dgram.c
--@@ -61,6 +61,12 @@
-- 
-- #include <stdio.h>
-- #include <errno.h>
--+#include <features.h>
--+
--+#if defined(__UCLIBC__) && !defined (__UCLIBC_HAS_IPV6__)
--+#define NO_IPV6
--+#endif
--+
-- #define USE_SOCKETS
-- #include "cryptlib.h"
-- 
--@@ -429,12 +435,14 @@ static long dgram_ctrl(BIO *b, int cmd,
-- 				&sockopt_val, sizeof(sockopt_val))) < 0)
-- 				perror("setsockopt");
-- 			break;
--+#ifndef NO_IPV6
-- 		case AF_INET6:
-- 			sockopt_val = IPV6_PMTUDISC_DO;
-- 			if ((ret = setsockopt(b->num, IPPROTO_IPV6, IPV6_MTU_DISCOVER,
-- 				&sockopt_val, sizeof(sockopt_val))) < 0)
-- 				perror("setsockopt");
-- 			break;
--+#endif
-- 		default:
-- 			ret = -1;
-- 			break;
--@@ -470,6 +478,7 @@ static long dgram_ctrl(BIO *b, int cmd,
-- 				ret = data->mtu;
-- 				}
-- 			break;
--+#ifndef NO_IPV6
-- 		case AF_INET6:
-- 			if ((ret = getsockopt(b->num, IPPROTO_IPV6, IPV6_MTU, (void *)&sockopt_val,
-- 				&sockopt_len)) < 0 || sockopt_val < 0)
--@@ -485,6 +494,7 @@ static long dgram_ctrl(BIO *b, int cmd,
-- 				ret = data->mtu;
-- 				}
-- 			break;
--+#endif
-- 		default:
-- 			ret = 0;
-- 			break;
-diff --git a/package/openssl/openssl-uclibc-susv3-legacy.patch b/package/openssl/openssl-uclibc-susv3-legacy.patch
-deleted file mode 100644
-index eb1d277..0000000
---- a/package/openssl/openssl-uclibc-susv3-legacy.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--sys/timeb.h / ftime are legacy, so don't enable them for uClibc 
-----
-- apps/speed.c |    2 +-
+- ntpd/ntp_io.c |    2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--Index: openssl-0.9.8g/apps/speed.c
+-Index: ntp-4.2.4p5/ntpd/ntp_io.c
 -===================================================================
----- openssl-0.9.8g.orig/apps/speed.c
--+++ openssl-0.9.8g/apps/speed.c
--@@ -113,7 +113,7 @@
-- #elif !defined(OPENSSL_SYS_MSDOS) && !defined(OPENSSL_SYS_VXWORKS) && (!defined(OPENSSL_SYS_VMS) || defined(__DECC))
-- # define TIMES
-- #endif
---#if !defined(_UNICOS) && !defined(__OpenBSD__) && !defined(sgi) && !defined(__FreeBSD__) && !(defined(__bsdi) || defined(__bsdi__)) && !defined(_AIX) && !defined(OPENSSL_SYS_MPE) && !defined(__NetBSD__) && !defined(OPENSSL_SYS_VXWORKS) /* FIXME */
--+#if !defined(_UNICOS) && !defined(__OpenBSD__) && !defined(sgi) && !defined(__FreeBSD__) && !(defined(__bsdi) || defined(__bsdi__)) && !defined(_AIX) && !defined(OPENSSL_SYS_MPE) && !defined(__NetBSD__) && !defined(OPENSSL_SYS_VXWORKS) && !defined(__UCLIBC__) /* FIXME */
-- # define TIMEB
-- #endif
+---- ntp-4.2.4p5.orig/ntpd/ntp_io.c
+-+++ ntp-4.2.4p5/ntpd/ntp_io.c
+-@@ -55,7 +55,7 @@
+-  * Set up some macros to look for IPv6 and IPv6 multicast
+-  */
 - 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index edbfe8b..123fa40 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -3,12 +3,13 @@
- # openssl
+--#if defined(ISC_PLATFORM_HAVEIPV6) && !defined(DISABLE_IPV6)
+-+#if defined(ISC_PLATFORM_HAVEIPV6) && defined(WANT_IPV6)
+- 
+- #define INCLUDE_IPV6_SUPPORT
+- 
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 78a4d2c..d813b2a 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -3,91 +3,71 @@
+ # ntp
  #
  #############################################################
--OPENSSL_VERSION:=0.9.8o
--OPENSSL_SITE:=http://www.openssl.org/source
-+OPENSSL_VERSION = 1.0.0a
-+OPENSSL_SOURCE = openssl-$(OPENSSL_VERSION).tar.gz
-+OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+-NTP_VERSION:=4.2.4p5
+-NTP_SOURCE:=ntp-$(NTP_VERSION).tar.gz
+-NTP_SITE:=http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2
+-NTP_DIR:=$(BUILD_DIR)/ntp-$(NTP_VERSION)
+-NTP_CAT:=$(ZCAT)
+-NTP_BINARY:=ntpdate/ntpdate
+-NTP_TARGET_BINARY:=usr/bin/ntpdate
++NTP_VERSION = 4.2.6p2
++NTP_SOURCE = ntp-$(NTP_VERSION).tar.gz
++NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2
  
--OPENSSL_TARGET_ARCH=generic32
-+OPENSSL_TARGET_ARCH = generic32
+-$(DL_DIR)/$(NTP_SOURCE):
+-	$(call DOWNLOAD,$(NTP_SITE),$(NTP_SOURCE))
++NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
  
- # Some architectures are optimized in OpenSSL
- ifeq ($(ARCH),ia64)
+-ntp-source: $(DL_DIR)/$(NTP_SOURCE)
+-
+-$(NTP_DIR)/.patched: $(DL_DIR)/$(NTP_SOURCE)
+-	$(NTP_CAT) $(DL_DIR)/$(NTP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(NTP_DIR) package/ntp/ ntp\*.patch
+-	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," \
+-		$(NTP_DIR)/ntpd/refclock_pcf.c
+-	$(SED) '/[[:space:](]index[[:space:]]*(/s/[[:space:]]*index[[:space:]]*(/ strchr(/g' $(NTP_DIR)/libisc/*.c $(NTP_DIR)/arlib/sample.c
+-	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(NTP_DIR)/ntpd/*.c
+-	#$(SED) 's/\(^#[[:space:]]*include[[:space:]]*<sys\/var.h>\)/\/\/ \1/' $(NTP_DIR)/util/tickadj.c
+-	$(CONFIG_UPDATE) $(NTP_DIR)
+-	$(CONFIG_UPDATE) $(NTP_DIR)/sntp
+-	touch $@
++ifneq ($(BR2_INET_IPV6),y)
++NTP_CONF_ENV += isc_cv_have_in6addr_any=no
++endif
+ 
+-$(NTP_DIR)/.configured: $(NTP_DIR)/.patched
+-	(cd $(NTP_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_lib_md5_MD5Init=no \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
+-		$(DISABLE_IPV6) \
+-		--with-shared \
++NTP_CONF_OPT = --with-shared \
+ 		--program-transform-name=s,,, \
+ 		--without-crypto \
+-		--disable-tickadj \
+-	)
+-	touch $@
++		--disable-tickadj
+ 
+-$(NTP_DIR)/$(NTP_BINARY): $(NTP_DIR)/.configured
+-	$(MAKE) -C $(NTP_DIR)
++define NTP_PATCH_FIXUPS
++	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
++	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
++endef
+ 
+-$(TARGET_DIR)/$(NTP_TARGET_BINARY): $(NTP_DIR)/$(NTP_BINARY)
+-	install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
+-	install -m 755 $(NTP_DIR)/$(NTP_BINARY) $(TARGET_DIR)/$(NTP_TARGET_BINARY)
+ ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
+-	install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
++NTP_INSTALL_BIN_FILES += sntp/sntp
++endif
++
++ifeq ($(BR2_PACKAGE_NTP_NTP_KEYGEN),y)
++NTP_INSTALL_BIN_FILES += util/ntp-keygen
++endif
++
++ifeq ($(BR2_PACKAGE_NTP_NTP_WAIT),y)
++NTP_INSTALL_BIN_FILES += scripts/ntp-wait
+ endif
++
++ifeq ($(BR2_PACKAGE_NTP_NTPDC),y)
++NTP_INSTALL_BIN_FILES += ntpdc/ntpdc
++endif
++
++ifeq ($(BR2_PACKAGE_NTP_NTPQ),y)
++NTP_INSTALL_BIN_FILES += ntpq/ntpq
++endif
++
++ifeq ($(BR2_PACKAGE_NTP_NTPTRACE),y)
++NTP_INSTALL_BIN_FILES += scripts/ntptrace
++endif
++
++ifeq ($(BR2_PACKAGE_NTP_TICKADJ),y)
++NTP_INSTALL_BIN_FILES += util/tickadj
++endif
++
++define NTP_INSTALL_TARGET_CMDS
++	install -m 755 $(@D)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
++	test -z "$(NTP_INSTALL_BIN_FILES)" || install -m 755 $(addprefix $(@D),$(NTP_INSTALL_BIN_FILES)) $(TARGET_DIR)/usr/bin/
+ 	install -m 755 package/ntp/ntp.sysvinit $(TARGET_DIR)/etc/init.d/S49ntp
+ 	@if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
+ 		install -m 755 -d $(TARGET_DIR)/etc/default ; \
+ 		install -m 644 package/ntp/ntpd.etc.default $(TARGET_DIR)/etc/default/ntpd ; \
+ 	fi
++endef
+ 
+-ntp: $(TARGET_DIR)/$(NTP_TARGET_BINARY)
+-
+-ntp-clean:
+-	rm -f $(TARGET_DIR)/usr/sbin/ntpd $(TARGET_DIR)/usr/bin/sntp \
+-		$(TARGET_DIR)/etc/init.d/S49ntp \
+-		$(TARGET_DIR)/$(NTP_TARGET_BINARY)
+-	-$(MAKE) -C $(NTP_DIR) clean
++define NTP_UNINSTALL_TARGET_CMDS
++	rm $(TARGET_DIR)/usr/sbin/ntpd
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(NTP_INSTALL_BIN_FILES))
++	rm $(TARGET_DIR)/etc/init.d/S49ntp
++	rm $(TARGET_DIR)/etc/default/ntpd
++endef
+ 
+-ntp-dirclean:
+-	rm -rf $(NTP_DIR)
++NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_NTP),y)
+-TARGETS+=ntp
+-endif
++$(eval $(call AUTOTARGETS,package,ntp))
 -- 
 1.7.2.3
