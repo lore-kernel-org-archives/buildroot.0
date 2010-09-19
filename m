@@ -1,33 +1,78 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Sun, 19 Sep 2010 12:22:57 +0200
-Subject: [Buildroot] my todo list
-Message-ID: <4C95E481.6020401@googlemail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 19 Sep 2010 12:44:12 +0200
+Subject: [Buildroot] /etc/ld.so.conf and /etc/ld.so.conf.d in buildroot
+ target skeleton
+In-Reply-To: <1284659221.12897.414.camel@coalu.atr>
+References: <AANLkTimEShvTw0M4Yt4dGE3BbxbX4q4RQ5tfbc-BJ7rb@mail.gmail.com>
+	<AANLkTi=LRi8OJTNY-3_q0_c=qcO4yv-sQoaJr=w=F=sf@mail.gmail.com>
+	<AANLkTim=o6+2+jBXk0NAOv7md5TkK_V1tW9bcmsWfBER@mail.gmail.com>
+	<1284659221.12897.414.camel@coalu.atr>
+Message-ID: <AANLkTi=0_3BUjZ-gww3Kz99Y1dfvBcoNebrWX_fwE+u2@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi mailinglist,
+On Thu, Sep 16, 2010 at 7:47 PM, Lionel Landwerlin
+<llandwerlin@gmail.com> wrote:
+> Well buildroot does support external toolchains, including a glibc one.
 
-Just to prevent redundant work, here is my planning list:
+Agreed, but since this is not the default, why is there an
+ld.so.conf.d directory in the default skeleton? In my opinion, this is
+confusing.
+Having an empty ld.so.conf file would be clearer to buildroot users.
 
-P1
-- be ready for corrections on util-linux-NG and xfsprogs after your reviews
-- be ready for corrections on transmission bittorrent client after your 
-review
+Best regards,
+Thomas
 
-P2
-- cups 1.3 installs in lib64 (which prevents correct work on the target) 
-and is outdated, since I like to run my dockstar as a printserver I will 
-take care of migrating to autotargets and make cups 1.4 to install 
-correctly for 32bit targets
-
-P3
-- current python is rather outdated (version from 2006?) - it's in my 
-field of view to upgrade to a recent 2.6 version
-- webif is an old version (2006?) and is very router specific - luci 
-seems to be good replacement, but there seems too much work to do...
-
-Regards,
-Marcus
+>
+> Regards,
+>
+> --
+> Lionel Landwerlin
+>
+> Le jeudi 16 septembre 2010 ? 19:30 +0200, Thomas De Schampheleire a
+> ?crit :
+>> Hi,
+>>
+>> On Thu, Sep 16, 2010 at 1:41 PM, Lionel Landwerlin
+>> <llandwerlin@gmail.com> wrote:
+>> > Yeah, having a an ld.so.conf which includes every files within
+>> > /etc/ld.so.conf.d/*.conf would be great !
+>>
+>> Unfortunately, it seems that uClibc ldconfig does not support
+>> 'include' statements in ld.so.conf.
+>>
+>> Based on this observation, I'd say that directory ld.so.conf.d is only
+>> relevant in case of glibc, is that correct? Why then is it in the
+>> skeleton?
+>>
+>> Thanks,
+>> Thomas
+>>
+>> >
+>> > Regards,
+>> >
+>> > --
+>> > Lionel Landwerlin
+>> >
+>> > On Thu, Sep 16, 2010 at 1:28 PM, Thomas De Schampheleire
+>> > <patrickdepinguin+buildroot@gmail.com> wrote:
+>> >> Hello,
+>> >>
+>> >> In the buildroot target skeleton exists a directory ld.so.conf.d, but
+>> >> no file ld.so.conf.
+>> >> The ld.so.conf.d directory is not parsed, unless you include the files
+>> >> there from ld.so.conf, like so:
+>> >>
+>> >> include /etc/ld.so.conf.d/*.conf
+>> >>
+>> >> I am wondering why this is the case. Shouldn't there be a skeleton
+>> >> /etc/ld.so.conf file?
+>> >> If not, how is /etc/ld.so.conf.d supposed to be used?
+>> >>
+>> >
+>
+>
+>
