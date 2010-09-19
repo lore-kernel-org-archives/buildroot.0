@@ -1,26 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Sep 2010 22:44:06 +0200
-Subject: [Buildroot] m4 seems to have a dependency to WCHAR-SUPPORT
-In-Reply-To: <4C8FE64E.8090508@googlemail.com> (Marcus Osdoba's message of
-	"Tue, 14 Sep 2010 23:17:02 +0200")
-References: <4C8FE64E.8090508@googlemail.com>
-Message-ID: <87eicp4g6h.fsf@macbook.be.48ers.dk>
+Date: Sun, 19 Sep 2010 22:45:24 +0200
+Subject: [Buildroot] [PATCH 21/21] BugFix - m4 - Fixed Missing wint_t
+	typedef When There Is No WChar Support
+In-Reply-To: <1284435648-15238-21-git-send-email-Martin.Banky@gmail.com>
+	(Martin Banky's message of "Mon, 13 Sep 2010 20:40:48 -0700")
+References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+	<1284435648-15238-21-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <87aand4g4b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcus" == Marcus Osdoba <marcus.osdoba@googlemail.com> writes:
+>>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
 
- Marcus>  Hello mailinglist,
- Marcus> I'm trying to build a rootfs without WCHAR support for util-linux-ng
- Marcus> integration test purposes.
- Marcus> It seems, that m4 has a dependency to WCHAR.
- Marcus> The build breaks with current git tree and deactivated WCHAR
- Marcus> support. I'm pretty sure that it worked before unselecting WCHAR.
+ Martin> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 
-Thanks, fixed (or rather marked) in git.
+Thanks, but I find this too hackish. M4 is not a package typically
+needed on really small systems, so just depending on WCHAR is cleaner
+imho.
 
 -- 
 Bye, Peter Korsgaard
