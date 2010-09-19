@@ -1,9 +1,7 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 20 Sep 2010 02:42:57 +0300
-Subject: [Buildroot] [PATCH 3/5] Add gst-dsp package
-In-Reply-To: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
-References: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1284939779-32754-4-git-send-email-felipe.contreras@gmail.com>
+Date: Mon, 20 Sep 2010 02:44:40 +0300
+Subject: [Buildroot] [PATCH] Add kbd package
+Message-ID: <1284939880-455-1-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +10,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 ---
- package/multimedia/Config.in          |    1 +
- package/multimedia/gst-dsp/Config.in  |    8 ++++++++
- package/multimedia/gst-dsp/gst-dsp.mk |   15 +++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-dsp/Config.in
- create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ package/Config.in     |    1 +
+ package/kbd/Config.in |    6 ++++++
+ package/kbd/kdb.mk    |    5 +++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
+ create mode 100644 package/kbd/Config.in
+ create mode 100644 package/kbd/kdb.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index c84962d..c921346 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -5,6 +5,7 @@ source "package/multimedia/aumix/Config.in"
- source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
-+source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
-diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 2209b55..5a7a4ce 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -167,6 +167,7 @@ source "package/hwdata/Config.in"
+ source "package/i2c-tools/Config.in"
+ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
++source "package/kbd/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/makedevs/Config.in"
+diff --git a/package/kbd/Config.in b/package/kbd/Config.in
 new file mode 100644
-index 0000000..c4d1033
+index 0000000..5a6b4cd
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GST_DSP
-+	bool "gst-dsp"
-+	depends on BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_TIDSP_BINARIES
++++ b/package/kbd/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KBD
++	bool "kbd"
 +	help
-+	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
++	  Keytable files and keyboard utilities.
 +
-+	  http://code.google.com/p/gst-dsp/
-diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
++	  ftp://ftp.kernel.org/pub/linux/utils/kbd/
+diff --git a/package/kbd/kdb.mk b/package/kbd/kdb.mk
 new file mode 100644
-index 0000000..12ca5d8
+index 0000000..5b794a9
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/gst-dsp.mk
-@@ -0,0 +1,15 @@
-+GST_DSP_VERSION=0.8.0
-+GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
-+GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
++++ b/package/kbd/kdb.mk
+@@ -0,0 +1,5 @@
++KBD_VERSION = 1.15.2
++KBD_SOURCE = kbd-$(KBD_VERSION).tar.gz
++KBD_SITE = ftp://ftp.kernel.org/pub/linux/utils/kbd
 +
-+define GST_DSP_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
-+endef
-+
-+define GST_DSP_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+GST_DSP_DEPENDENCIES = gstreamer
-+
-+$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
++$(eval $(call AUTOTARGETS,package,kbd))
 -- 
 1.7.3
