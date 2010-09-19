@@ -1,11 +1,12 @@
 From: Martin Banky <Martin.Banky@gmail.com>
-Date: Sun, 19 Sep 2010 09:51:50 -0700
-Subject: [Buildroot] [PATCH 19/21] openssl: bump to 1.0.0a
-In-Reply-To: <4C95E051.4010507@googlemail.com>
+Date: Sun, 19 Sep 2010 10:05:42 -0700
+Subject: [Buildroot] [PATCH 21/21] BugFix - m4 - Fixed Missing wint_t
+ typedef When There Is No WChar Support
+In-Reply-To: <4C95DEB4.9010700@googlemail.com>
 References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
-	<1284864823-18993-20-git-send-email-Martin.Banky@gmail.com>
-	<4C95E051.4010507@googlemail.com>
-Message-ID: <AANLkTik2f=4p9jfBuuQ+3P1vq6wu6EjM15nUke-J4RO3@mail.gmail.com>
+	<1284864823-18993-22-git-send-email-Martin.Banky@gmail.com>
+	<4C95DEB4.9010700@googlemail.com>
+Message-ID: <AANLkTikbtHTJHrtARu3B136385MXrzFOPP80ZGOeztOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +14,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Marcus,
-     I hadn't heard about any compatibility problems between the two
-versions. I thought that 1.0.0a was just the next increment of openssl, and
-not a "forked" version. I would be interested if you could point me to where
-you had seen the information about the problems with 1.0. I've been running
-1.0.0, since it first came out, and then upgraded to 1.0.0.a. There are at
-least two packages that I'm using that need openssl (dropbear and qt) that
-have been working just fine.
+     It is on my todo list.
 
 Martin
 
-On Sun, Sep 19, 2010 at 3:05 AM, Marcus Osdoba <marcus.osdoba@googlemail.com
+On Sun, Sep 19, 2010 at 2:58 AM, Marcus Osdoba <marcus.osdoba@googlemail.com
 > wrote:
 
 >  Am 19.09.2010 04:53, schrieb Martin Banky:
 >
+>  When uClibc is configured without wchar support, wint_t does not get
+>> defined.
+>>
 >> Signed-off-by: Martin Banky<Martin.Banky@gmail.com>
 >> ---
->> [...]
 >>
 > Hi Martin,
 >
-> Again just my comments about new openssl.
+> These are just my comments on m4.
 >
-> Somewhere I read, that openssl 1.0 is not in all cases compatible to
-> openssl 0.9.8.
-> Some package combinations need to have both versions installed in parallel.
-> Maybe it is to early to upgrade to 1.0 as a complete replacement for 0.9 ->
-> - we can wait until all upstream packages are able to cope with 1.0 (I
-> don't know which are working fine and which need former version)
-> - provide both versions (1.0 and 0.9) in parallel
-> - maybe it is safe to replace 0.9 with 1.0 - but who will make the test
-> with all userland packages...?
+> I figured out, that the m4 package is rather old. Maybe it is better to
+> migrate to a newer version. I had a look into the recent one and read wchar
+> everywhere....
+> So I guess the new version will be dependant from WCHAR in any case.
 >
-> Just my thoughts about it...
->
+> I don't know if it's better to
+> - upgrade to new version
+> - make currently integrated one dependant from WCHAR
+> - include your patch and keep currently integrated version
 >
 > Regards,
 > Marcus
@@ -58,4 +52,4 @@ On Sun, Sep 19, 2010 at 3:05 AM, Marcus Osdoba <marcus.osdoba@googlemail.com
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100919/09a6af2f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100919/cb980c0f/attachment.html>
