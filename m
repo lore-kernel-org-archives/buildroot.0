@@ -1,67 +1,99 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sat, 18 Sep 2010 19:53:31 -0700
-Subject: [Buildroot] [PATCH 09/21] gmp: bump to 5.0.1
+Date: Sat, 18 Sep 2010 19:53:35 -0700
+Subject: [Buildroot] [PATCH 13/21] libvorbis: bump to 1.3.1
 In-Reply-To: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
 References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1284864823-18993-10-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1284864823-18993-14-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed gmp.mk to copy gmp-impl.h and longlong.h to the gmp build directory per
-the INSTALL file instructions for mpfr.
-
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/gmp/Config.in |    2 +-
- package/gmp/gmp.mk    |    6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../libvorbis-1.3.1-buildroot-libtool.patch        |   53 ++++++++++++++++++++
+ package/multimedia/libvorbis/libvorbis.mk          |    3 +-
+ 2 files changed, 55 insertions(+), 1 deletions(-)
+ create mode 100644 package/multimedia/libvorbis/libvorbis-1.3.1-buildroot-libtool.patch
 
-diff --git a/package/gmp/Config.in b/package/gmp/Config.in
-index 74596f8..9520506 100644
---- a/package/gmp/Config.in
-+++ b/package/gmp/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBGMP
- 	help
- 	  GNU Multiple Precision Arithmetic Library.
- 
--	  http://www.swox.com/gmp/
-+	  http://gmplib.org/
- 
- 
- config BR2_PACKAGE_LIBGMP_HEADERS
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index a3488b8..4efd88b 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -3,7 +3,7 @@
- # gmp
+diff --git a/package/multimedia/libvorbis/libvorbis-1.3.1-buildroot-libtool.patch b/package/multimedia/libvorbis/libvorbis-1.3.1-buildroot-libtool.patch
+new file mode 100644
+index 0000000..5697bf1
+--- /dev/null
++++ b/package/multimedia/libvorbis/libvorbis-1.3.1-buildroot-libtool.patch
+@@ -0,0 +1,53 @@
++--- a/ltmain.sh	2006-03-11 13:49:04.000000000 -0500
+++++ b/ltmain.sh	2008-04-30 09:55:28.000000000 -0400
++@@ -2239,8 +2239,11 @@ func_mode_install ()
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  test "$inst_prefix_dir" = "$destdir" && \
++-	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
+++	  #
+++	  # This breaks install into our staging area.  -PB
+++	  #
+++	  # test "$inst_prefix_dir" = "$destdir" && \
+++	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
++@@ -5739,8 +5742,14 @@ func_mode_link ()
++ 	    absdir="$abs_ladir"
++ 	    libdir="$abs_ladir"
++ 	  else
++-	    dir="$libdir"
++-	    absdir="$libdir"
+++            # Adding 'libdir' from the .la file to our library search paths
+++            # breaks crosscompilation horribly.  We cheat here and don't add
+++            # it, instead adding the path where we found the .la.  -CL
+++	    dir="$abs_ladir"
+++	    absdir="$abs_ladir"
+++	    libdir="$abs_ladir"
+++	    #dir="$libdir"
+++	    #absdir="$libdir"
++ 	  fi
++ 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
++ 	else
++@@ -5891,7 +5900,7 @@ func_mode_link ()
++ 	  *)
++ 	    if test "$installed" = no; then
++ 	      notinst_deplibs="$notinst_deplibs $lib"
++-	      need_relink=yes
+++	      need_relink=no
++ 	    fi
++ 	    ;;
++ 	  esac
++@@ -8373,6 +8382,10 @@ func_mode_link ()
++ 	    # Replace all uninstalled libtool libraries with the installed ones
++ 	    newdependency_libs=
++ 	    for deplib in $dependency_libs; do
+++              # Replacing uninstalled with installed can easily break crosscompilation,
+++              # since the installed path is generally the wrong architecture.  -CL
+++              newdependency_libs="$newdependency_libs $deplib"
+++              continue
++ 	      case $deplib in
++ 	      *.la)
++ 		func_basename "$deplib"
+diff --git a/package/multimedia/libvorbis/libvorbis.mk b/package/multimedia/libvorbis/libvorbis.mk
+index 9a060d9..e735b52 100644
+--- a/package/multimedia/libvorbis/libvorbis.mk
++++ b/package/multimedia/libvorbis/libvorbis.mk
+@@ -4,12 +4,13 @@
  #
  #############################################################
--GMP_VERSION:=4.2.4
-+GMP_VERSION:=5.0.1
- GMP_SOURCE:=gmp-$(GMP_VERSION).tar.bz2
- GMP_SITE:=$(BR2_GNU_MIRROR)/gmp
- GMP_CAT:=$(BZCAT)
-@@ -11,7 +11,7 @@ GMP_DIR:=$(TOOLCHAIN_DIR)/gmp-$(GMP_VERSION)
- GMP_TARGET_DIR:=$(BUILD_DIR)/gmp-$(GMP_VERSION)
- GMP_BINARY:=libgmp$(LIBTGTEXT)
- GMP_HOST_BINARY:=libgmp$(HOST_LIBEXT)
--GMP_LIBVERSION:=3.4.4
-+GMP_LIBVERSION:=10.0.1
  
- # this is a workaround for a bug in GMP, please see
- # http://gmplib.org/list-archives/gmp-devel/2006-April/000618.html
-@@ -32,7 +32,7 @@ $(GMP_DIR)/.unpacked: $(DL_DIR)/$(GMP_SOURCE)
+-LIBVORBIS_VERSION = 1.2.3
++LIBVORBIS_VERSION = 1.3.1
+ LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.gz
+ LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis/$(LIBVORBIS-SOURCE)
+ LIBVORBIS_AUTORECONF = NO
+ LIBVORBIS_INSTALL_STAGING = YES
+ LIBVORBIS_INSTALL_TARGET = YES
++LIBVORBIS_LIBTOOL_PATCH = no
  
- $(GMP_TARGET_DIR)/.configured: $(GMP_DIR)/.unpacked
- 	mkdir -p $(GMP_TARGET_DIR)
--	(cd $(GMP_TARGET_DIR); rm -rf config.cache; \
-+	(cd $(GMP_TARGET_DIR); rm -rf config.cache; cp $(GMP_DIR)/longlong.h $(GMP_DIR)/gmp-impl.h ./; \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
- 		$(GMP_CPP_FLAGS) \
+ LIBVORBIS_CONF_OPT = --disable-oggtest
+ 
 -- 
 1.7.2.3
