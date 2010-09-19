@@ -1,62 +1,62 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 20 Sep 2010 02:42:55 +0300
-Subject: [Buildroot] [PATCH 1/5] gstreamer: remove unnecessary feature
+Date: Mon, 20 Sep 2010 02:42:56 +0300
+Subject: [Buildroot] [PATCH 2/5] Add tidsp-binaries package
 In-Reply-To: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
 References: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1284939779-32754-2-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1284939779-32754-3-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 0.10.11 the binary-registry was added, on 0.10.12 the libxml2
-dependency was dropped when binary-registry was used, on 0.10.18 the
-binary-registry was made default, and on 0.10.23 it was the only option.
-
-So, libxml2 is not needed any more for the registry.
-
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 ---
- package/multimedia/gstreamer/Config.in    |    6 ------
- package/multimedia/gstreamer/gstreamer.mk |   10 ++--------
- 2 files changed, 2 insertions(+), 14 deletions(-)
+ package/multimedia/Config.in                       |    1 +
+ package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/tidsp-binaries/Config.in
+ create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
 
-diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
-index a3ce859..7de904c 100644
---- a/package/multimedia/gstreamer/Config.in
-+++ b/package/multimedia/gstreamer/Config.in
-@@ -9,9 +9,3 @@ config BR2_PACKAGE_GSTREAMER
- 
- comment "gstreamer requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
--
--config BR2_PACKAGE_GSTREAMER_LIBXML2
--	bool "require libxml2 for registry and load/save"
--	default y
--	select BR2_PACKAGE_LIBXML2
--	depends on BR2_PACKAGE_GSTREAMER
-diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
-index 49ac0df..d689619 100644
---- a/package/multimedia/gstreamer/gstreamer.mk
-+++ b/package/multimedia/gstreamer/gstreamer.mk
-@@ -19,15 +19,9 @@ endif
- GSTREAMER_CONF_OPT = \
- 		--disable-examples \
- 		--disable-tests \
--		--disable-failing-tests
-+		--disable-failing-tests \
-+		--disable-loadsave
- 
- GSTREAMER_DEPENDENCIES = libglib2 host-pkg-config
- 
--ifeq ($(BR2_PACKAGE_GSTREAMER_LIBXML2),y)
--GSTREAMER_DEPENDENCIES += libxml2
--else
--GSTREAMER_CONF_OPT += \
--	--disable-loadsave
--endif
--
- $(eval $(call AUTOTARGETS,package/multimedia,gstreamer))
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 3b0eec5..c84962d 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -25,6 +25,7 @@ source "package/multimedia/mpg123/Config.in"
+ source "package/multimedia/mplayer/Config.in"
+ source "package/multimedia/speex/Config.in"
+ source "package/multimedia/swfdec/Config.in"
++source "package/multimedia/tidsp-binaries/Config.in"
+ source "package/multimedia/festival/Config.in"
+ source "package/multimedia/taglib/Config.in"
+ source "package/multimedia/tremor/Config.in"
+diff --git a/package/multimedia/tidsp-binaries/Config.in b/package/multimedia/tidsp-binaries/Config.in
+new file mode 100644
+index 0000000..2d50b62
+--- /dev/null
++++ b/package/multimedia/tidsp-binaries/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TIDSP_BINARIES
++	bool "tidsp-binaries"
++	help
++	  TI OMAP3 DSP algorithms.
++
++	  https://gforge.ti.com/gf/project/openmax/
+diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+new file mode 100644
+index 0000000..5dc9205
+--- /dev/null
++++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+@@ -0,0 +1,9 @@
++TIDSP_BINARIES_VERSION=23.i3.8
++TIDSP_BINARIES_SOURCE=tidsp-binaries-$(TIDSP_BINARIES_VERSION).tar.gz
++TIDSP_BINARIES_SITE:=http://gst-dsp.googlecode.com/files/
++
++define TIDSP_BINARIES_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(call GENTARGETS,package/multimedia,tidsp-binaries))
 -- 
 1.7.3
