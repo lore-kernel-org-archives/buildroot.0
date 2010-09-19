@@ -1,112 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 19 Sep 2010 16:39:24 +0200
-Subject: [Buildroot] /etc/ld.so.conf and /etc/ld.so.conf.d in buildroot
- target skeleton
-In-Reply-To: <1284895170.12897.546.camel@coalu.atr>
-References: <AANLkTimEShvTw0M4Yt4dGE3BbxbX4q4RQ5tfbc-BJ7rb@mail.gmail.com>
-	<AANLkTi=LRi8OJTNY-3_q0_c=qcO4yv-sQoaJr=w=F=sf@mail.gmail.com>
-	<AANLkTim=o6+2+jBXk0NAOv7md5TkK_V1tW9bcmsWfBER@mail.gmail.com>
-	<1284659221.12897.414.camel@coalu.atr>
-	<AANLkTi=0_3BUjZ-gww3Kz99Y1dfvBcoNebrWX_fwE+u2@mail.gmail.com>
-	<1284895170.12897.546.camel@coalu.atr>
-Message-ID: <AANLkTi=V6mNKXRM=c5KJHugtVyqai3At-sp5fQ8mFiTu@mail.gmail.com>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Sun, 19 Sep 2010 09:51:50 -0700
+Subject: [Buildroot] [PATCH 19/21] openssl: bump to 1.0.0a
+In-Reply-To: <4C95E051.4010507@googlemail.com>
+References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
+	<1284864823-18993-20-git-send-email-Martin.Banky@gmail.com>
+	<4C95E051.4010507@googlemail.com>
+Message-ID: <AANLkTik2f=4p9jfBuuQ+3P1vq6wu6EjM15nUke-J4RO3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Marcus,
+     I hadn't heard about any compatibility problems between the two
+versions. I thought that 1.0.0a was just the next increment of openssl, and
+not a "forked" version. I would be interested if you could point me to where
+you had seen the information about the problems with 1.0. I've been running
+1.0.0, since it first came out, and then upgraded to 1.0.0.a. There are at
+least two packages that I'm using that need openssl (dropbear and qt) that
+have been working just fine.
 
-On Sun, Sep 19, 2010 at 1:19 PM, Lionel Landwerlin
-<llandwerlin@gmail.com> wrote:
-> Indeed...
+Martin
+
+On Sun, Sep 19, 2010 at 3:05 AM, Marcus Osdoba <marcus.osdoba@googlemail.com
+> wrote:
+
+>  Am 19.09.2010 04:53, schrieb Martin Banky:
 >
-> Maybe the might be created after the skeleton copy. If we're using a
-> uclibc toolchain, then create a single ld.so.conf file, otherwise create
-> an ld.so.conf.d directory and with a ld.so.conf file including *.conf
-> files from ld.so.conf.d.
+>> Signed-off-by: Martin Banky<Martin.Banky@gmail.com>
+>> ---
+>> [...]
+>>
+> Hi Martin,
 >
-> What do think ?
-
-That looks like a good solution.
-In case of uClibc though, the parsing of ld.so.conf is a configurable
-option (LDSO_CACHE_SUPPORT), so before generating an ld.so.conf we
-should check whether that option is set.
-
-Best regards,
-Thomas
-
+> Again just my comments about new openssl.
+>
+> Somewhere I read, that openssl 1.0 is not in all cases compatible to
+> openssl 0.9.8.
+> Some package combinations need to have both versions installed in parallel.
+> Maybe it is to early to upgrade to 1.0 as a complete replacement for 0.9 ->
+> - we can wait until all upstream packages are able to cope with 1.0 (I
+> don't know which are working fine and which need former version)
+> - provide both versions (1.0 and 0.9) in parallel
+> - maybe it is safe to replace 0.9 with 1.0 - but who will make the test
+> with all userland packages...?
+>
+> Just my thoughts about it...
+>
 >
 > Regards,
+> Marcus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> --
-> Lionel Landwerlin
->
-> Le dimanche 19 septembre 2010 ? 12:44 +0200, Thomas De Schampheleire a
-> ?crit :
->> On Thu, Sep 16, 2010 at 7:47 PM, Lionel Landwerlin
->> <llandwerlin@gmail.com> wrote:
->> > Well buildroot does support external toolchains, including a glibc one.
->>
->> Agreed, but since this is not the default, why is there an
->> ld.so.conf.d directory in the default skeleton? In my opinion, this is
->> confusing.
->> Having an empty ld.so.conf file would be clearer to buildroot users.
->>
->> Best regards,
->> Thomas
->>
->> >
->> > Regards,
->> >
->> > --
->> > Lionel Landwerlin
->> >
->> > Le jeudi 16 septembre 2010 ? 19:30 +0200, Thomas De Schampheleire a
->> > ?crit :
->> >> Hi,
->> >>
->> >> On Thu, Sep 16, 2010 at 1:41 PM, Lionel Landwerlin
->> >> <llandwerlin@gmail.com> wrote:
->> >> > Yeah, having a an ld.so.conf which includes every files within
->> >> > /etc/ld.so.conf.d/*.conf would be great !
->> >>
->> >> Unfortunately, it seems that uClibc ldconfig does not support
->> >> 'include' statements in ld.so.conf.
->> >>
->> >> Based on this observation, I'd say that directory ld.so.conf.d is only
->> >> relevant in case of glibc, is that correct? Why then is it in the
->> >> skeleton?
->> >>
->> >> Thanks,
->> >> Thomas
->> >>
->> >> >
->> >> > Regards,
->> >> >
->> >> > --
->> >> > Lionel Landwerlin
->> >> >
->> >> > On Thu, Sep 16, 2010 at 1:28 PM, Thomas De Schampheleire
->> >> > <patrickdepinguin+buildroot@gmail.com> wrote:
->> >> >> Hello,
->> >> >>
->> >> >> In the buildroot target skeleton exists a directory ld.so.conf.d, but
->> >> >> no file ld.so.conf.
->> >> >> The ld.so.conf.d directory is not parsed, unless you include the files
->> >> >> there from ld.so.conf, like so:
->> >> >>
->> >> >> include /etc/ld.so.conf.d/*.conf
->> >> >>
->> >> >> I am wondering why this is the case. Shouldn't there be a skeleton
->> >> >> /etc/ld.so.conf file?
->> >> >> If not, how is /etc/ld.so.conf.d supposed to be used?
->> >> >>
->> >> >
->> >
->> >
->> >
->
->
->
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100919/09a6af2f/attachment.html>
