@@ -1,184 +1,218 @@
 From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Sun, 19 Sep 2010 10:21:15 +0200
-Subject: [Buildroot] [PATCH 2/2] updated xfsprogs to version 3.1.3
-In-Reply-To: <1284884475-2390-1-git-send-email-marcus.osdoba@googlemail.com>
-References: <1284884475-2390-1-git-send-email-marcus.osdoba@googlemail.com>
-Message-ID: <1284884475-2390-3-git-send-email-marcus.osdoba@googlemail.com>
+Date: Sun, 19 Sep 2010 10:23:24 +0200
+Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
+Message-ID: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this version needs some uuidlibrary
-it works with the one of e2fsprogs xor util-linux-ng
+the client has an excellent webinterface
+and seems to be ideal for headless systems,
+the statedirectory is stored in /var/transmission which links to tmp,
+the user should provide a writable config direcory
 
-xfs is known to have problems on architectures with VIVT cache like ARM
+Based on work by: Kelvin Cheung <keguang.zhang@gmail.com>
 
 Signed-off-by: Marcus Osdoba <marcus.osdoba@googlemail.com>
 ---
- package/xfsprogs/Config.in   |   14 ++++-
- package/xfsprogs/xfsprogs.mk |  118 ++++++++++--------------------------------
- 2 files changed, 39 insertions(+), 93 deletions(-)
+ package/Config.in                    |    1 +
+ package/transmission/Config.in       |   21 ++++++++
+ package/transmission/S92transmission |   88 ++++++++++++++++++++++++++++++++++
+ package/transmission/transmission.mk |   49 +++++++++++++++++++
+ 4 files changed, 159 insertions(+), 0 deletions(-)
+ create mode 100644 package/transmission/Config.in
+ create mode 100644 package/transmission/S92transmission
+ create mode 100644 package/transmission/transmission.mk
 
-diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
-index 12bc69e..1062395 100644
---- a/package/xfsprogs/Config.in
-+++ b/package/xfsprogs/Config.in
-@@ -2,14 +2,22 @@
- comment "Note that xfsprogs needs a toolchain with UCLIBC_SV4_DEPRECATED and UCLIBC_HAS_OBSOLETE_BSD_SIGNAL enabled"
- 	depends on BR2_PACKAGE_XFSPROGS
- 
-+comment "Note that some skripts of xfsprogs need getopts() support in the shell"
-+	depends on BR2_PACKAGE_XFSPROGS
-+
- comment "xfsprogs requires a toolchain with LARGEFILE support"
--        depends on !BR2_LARGEFILE
-+	depends on !BR2_LARGEFILE
-+
-+comment "the XFS filesystem still does not have the same stablity than on non VIVT-cache platforms"
-+	depends on BR2_arm
-+
-+comment "xfsprogs requires at least on UUID library (from e2fsprogs or from util-linux-ng)"
-+	depends on !( BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID || BR2_PACKAGE_E2FSPROGS_LIBUUID )
- 
- config BR2_PACKAGE_XFSPROGS
- 	bool "xfsprogs"
- 	depends on BR2_LARGEFILE
--	select BR2_PACKAGE_E2FSPROGS
--	select BR2_PACKAGE_E2FSPROGS_LIBUUID
-+	depends on ( BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID || BR2_PACKAGE_E2FSPROGS_LIBUUID )
- 	help
- 	  The XFS file system utilities and libraries
- 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 866e9b2..f2a80dc 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -3,96 +3,34 @@
- # xfsprogs
- #
- #############################################################
--XFSPROGS_VERSION:=3.0.3
--XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VERSION).tar.gz
--XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
--XFSPROGS_DIR=$(BUILD_DIR)/xfsprogs-$(XFSPROGS_VERSION)
--XFSPROGS_CAT:=$(ZCAT)
--XFSPROGS_BINARY:=mkfs/mkfs.xfs
--XFSPROGS_TARGET_BINARY:=sbin/mkfs.xfs
--
--XFSPROGS_STRIP:= fsck/fsck.xfs mkfile/xfs_mkfile rtcp/xfs_rtcp
--XFSPROGS_STRIP_LIBDEP:= \
--	copy/xfs_copy db/xfs_db growfs/xfs_growfs io/xfs_io \
--	logprint/xfs_logprint mkfs/fstyp mkfs/mkfs.xfs \
--	repair/xfs_repair quota/xfs_quota
--
--$(DL_DIR)/$(XFSPROGS_SOURCE):
--	 $(call DOWNLOAD,$(XFSPROGS_SITE),$(XFSPROGS_SOURCE))
--
--xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
--
--$(XFSPROGS_DIR)/.unpacked: $(DL_DIR)/$(XFSPROGS_SOURCE)
--	$(XFSPROGS_CAT) $(DL_DIR)/$(XFSPROGS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(XFSPROGS_DIR) package/xfsprogs/ xfsprogs\*.patch
--	touch $(XFSPROGS_DIR)/.unpacked
--
--#XFSPROGS_CONFIG_SHARED:=--disable-shared
--XFSPROGS_CONFIG_SHARED:=--enable-shared
--
--$(XFSPROGS_DIR)/.configured: $(XFSPROGS_DIR)/.unpacked
--	(cd $(XFSPROGS_DIR); rm -rf config.cache; \
--		ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
--		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" \
--		INSTALL_USER=$(shell whoami) \
--		INSTALL_GROUP=$(shell groups | cut -d" " -f1) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--exec-prefix=/ \
--		--enable-gettext=no \
--		$(XFSPROGS_CONFIG_SHARED) \
--	)
--	touch $(XFSPROGS_DIR)/.configured
--
--$(XFSPROGS_DIR)/$(XFSPROGS_BINARY): $(XFSPROGS_DIR)/.configured
--	$(MAKE1) PATH=$(TARGET_PATH) CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
--		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" -C $(XFSPROGS_DIR)
--ifeq ($(XFSPROGS_CONFIG_SHARED),--enable-shared)
--	( \
--		cd $(XFSPROGS_DIR); \
--		$(STRIPCMD) $(XFSPROGS_STRIP); \
--		$(STRIPCMD) $(join $(dir $(XFSPROGS_STRIP_LIBDEP)), \
--				$(addprefix .libs/,$(notdir $(XFSPROGS_STRIP_LIBDEP)))) \
--	)
--	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/.libs/lib*.so.*.*
--else
--	( \
--		cd $(XFSPROGS_DIR); \
--		$(STRIPCMD) $(XFSPROGS_STRIP) $(XFSPROGS_STRIP_LIBDEP) \
--	)
--	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/lib*.so.*.*
-+XFSPROGS_VERSION = 3.1.3
-+XFSPROGS_SOURCE  = xfsprogs-$(XFSPROGS_VERSION).tar.gz
-+XFSPROGS_SITE    = ftp://oss.sgi.com/projects/xfs/cmd_tars
-+XFSPROGS_LIBTOOL_PATCH = NO
-+XFSPROGS_CONF_OPT     = --enable-shared \
-+                        --enable-gettext=no \
-+                        --enable-lib64=no \
-+                        INSTALL_USER=default \
-+                        INSTALL_GROUP=default \
-+                        ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
-+XFSPROGS_INSTALL_STAGING = NO
-+XFSPROGS_INSTALL_TARGET = YES
-+XFSPROGS_INSTALL_TARGET_OPT = DIST_ROOT=$(TARGET_DIR) install
-+
-+# disable gettext by default, otherwise:  "undefined reference to `libintl_gettext'"
-+#ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+#  XFSPROGS_DEPENDENCIES += gettext
-+#  XFSPROGS_CONF_OPT     += --enable-gettext=yes
-+#else
-+#  XFSPROGS_CONF_OPT     += --enable-gettext=no
-+#endif
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_NG_LIBUUID),y)
-+  XFSPROGS_DEPENDENCIES = util-linux-ng
-+endif
-+ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBUUID),y)
-+  XFSPROGS_DEPENDENCIES = e2fsprogs
+diff --git a/package/Config.in b/package/Config.in
+index 2209b55..9a63828 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -420,6 +420,7 @@ source "package/thttpd/Config.in"
+ source "package/tinyhttpd/Config.in"
  endif
--	touch -c $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
--
--$(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
--	$(MAKE1) PATH=$(TARGET_PATH) \
--	    DIST_ROOT=$(TARGET_DIR) \
--	    exec-prefix=/ \
--	    -C $(XFSPROGS_DIR) install
--	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
--
--xfsprogs: e2fsprogs $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
--
--xfsprogs-clean:
--	rm -f $(TARGET_DIR)/bin/xfs_* $(TARGET_DIR)/sbin/xfs_* $(TARGET_DIR)/sbin/*.xfs
--	rm -f $(TARGET_DIR)/usr/lib/libhandle.so*
--	rm -f $(TARGET_DIR)/usr/lib/libdisk.so* $(TARGET_DIR)/usr/lib/libxfs.so*
--	-$(MAKE1) -C $(XFSPROGS_DIR) clean
- 
--xfsprogs-dirclean:
--	rm -rf $(XFSPROGS_DIR)
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_XFSPROGS),y)
--TARGETS+=xfsprogs
--endif
-+$(eval $(call AUTOTARGETS,package,xfsprogs))
+ source "package/tn5250/Config.in"
++source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
+ source "package/vpnc/Config.in"
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+new file mode 100644
+index 0000000..f634f8b
+--- /dev/null
++++ b/package/transmission/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_TRANSMISSION
++	bool "transmission"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBEVENT
++	help
++	  Transmission is a cross-platform BitTorrent client.
++
++config BR2_PACKAGE_TRANSMISSION_CLI
++	bool "transmissioncli"
++	depends on BR2_PACKAGE_TRANSMISSION
++	help
++	  Install transmission command line interface.
++
++config BR2_PACKAGE_TRANSMISSION_REMOTE
++	bool "transmission-remote"
++	depends on BR2_PACKAGE_TRANSMISSION
++	default y
++	help
++	  Install transmission remote management tool.
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+new file mode 100644
+index 0000000..9c15aae
+--- /dev/null
++++ b/package/transmission/S92transmission
+@@ -0,0 +1,88 @@
++#!/bin/sh
++if [ ! -z "$2" ]; then
++	TRANSMISSION_ARGS="$2"
++else
++	TRANSMISSION_ARGS=""
++fi
++
++if [ ! -z "$3" ]; then
++	NET_INTERFACE="$3"
++else
++	NET_INTERFACE=""
++fi
++
++DESC="bittorrent client"
++NAME=transmission-daemon
++DAEMON=$(which $NAME)
++SCRIPTNAME=/etc/init.d/$0
++
++[ -x "$DAEMON" ] || exit 0
++
++do_start()
++{
++	if [ ! -z "$NET_INTERFACE" ]; then
++		# poll network interface
++		IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
++		IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
++		while [ -z "$IP_ADDR" ]
++		do
++			sleep 5
++			IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
++			IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
++		done
++	fi
++	if [ -z "$TRANSMISSION_ARGS" ]; then
++		start-stop-daemon -S -b -x ${DAEMON}
++	else
++		start-stop-daemon -S -b -x ${DAEMON} -- ${TRANSMISSION_ARGS}
++	fi
++	return $?
++}
++
++do_stop()
++{
++	start-stop-daemon -K -b -x ${DAEMON}
++	return $?
++}
++
++case "$1" in
++	start)
++		echo "Starting $DESC" "$NAME..."
++		do_start
++		case "$?" in
++			0) echo "   Start $DESC $NAME: SUCCESS" ;;
++			*)
++				echo "   Start $DESC $NAME: FAILED"
++				exit 3
++				;;
++		esac
++		;;
++	stop)
++		echo "Stopping $DESC $NAME..."
++		do_stop
++		case "$?" in
++			0) echo "   Stop $DESC $NAME: SUCCESS" ;;
++			*)
++				echo "   Stop $DESC $NAME: FAILED"
++				exit 3
++				;;
++		esac
++		;;
++	restart|force-reload)
++		echo "Restarting $DESC $NAME..."
++		do_stop
++		sleep 2
++		do_start
++		case "$?" in
++			0) echo "   Restart $DESC $NAME: SUCCESS" ;;
++			*)
++				echo "   Restart $DESC $NAME: FAILED: couldn't start $NAME"
++				exit 3
++				;;
++		esac
++		;;
++	*)
++		echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
++		exit 3
++		;;
++esac
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+new file mode 100644
+index 0000000..b571c7d
+--- /dev/null
++++ b/package/transmission/transmission.mk
+@@ -0,0 +1,49 @@
++#############################################################
++#
++# transmission
++#
++#############################################################
++TRANSMISSION_VERSION=2.04
++TRANSMISSION_SOURCE=transmission-$(TRANSMISSION_VERSION).tar.bz2
++TRANSMISSION_SITE=http://mirrors.m0k.org/transmission/files/
++TRANSMISSION_LIBTOOL_PATCH=NO
++TRANSMISSION_DEPENDENCIES= host-pkg-config host-intltool zlib openssl libcurl libevent
++
++TRANSMISSION_CONF_OPT = --disable-gtk \
++			--disable-libnotify \
++			--enable-daemon \
++			--localstatedir=/var/transmission-statedir \
++			--with-zlib=$(STAGING_DIR) \
++
++ifneq ($(BR2_PACKAGE_TRANSMISSION_CLI),y)
++TRANSMISSION_CONF_OPT += --disable-cli
++else
++TRANSMISSION_CONF_OPT += --enable-cli
++endif
++
++
++ifneq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
++TRANSMISSION_CONF_OPT += --disable-remote
++endif
++ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
++define TRANSMISSION_INITDSKRIPT_INSTALL
++	# install start/stop script
++	$(call MESSAGE,"Installing S92transmission init script")
++	if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
++		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
++		$(TARGET_DIR)/etc/init.d/S92transmission; \
++	fi
++	$(Q)touch $@
++endef
++TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INITDSKRIPT_INSTALL
++endif
++
++
++define TRANSMISSION_STATEDIRLINK_INSTALL
++	$(call MESSAGE,"Creating link for transmission statedirectory")
++	ln -sf /tmp $(TARGET_DIR)/var/transmission-statedir
++endef
++TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_STATEDIRLINK_INSTALL
++
++
++$(eval $(call AUTOTARGETS,package,transmission))
 -- 
 1.7.1
