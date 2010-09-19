@@ -1,58 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 19 Sep 2010 21:54:07 +0200
-Subject: [Buildroot] [PATCH 0/2] Add crosstool-NG toolchain backend
-Message-ID: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Date: Sun, 19 Sep 2010 21:54:08 +0200
+Subject: [Buildroot] [PATCH 1/2] host tools: create the host sed in
+	$(O)/host/
+In-Reply-To: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1284926049-9882-2-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The host sed does not belong to $(O)toolchain/ but
+really belongs to $(O)/host/
 
-This series adds support to use crosstool-NG as a backend to generate
-the toolchain used by buildroot.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ package/sed/sed.mk |    8 +++-----
+ 1 files changed, 3 insertions(+), 5 deletions(-)
 
-  [PATCH 1/2] host tools: create the host sed in $(O)/host/
-  [PATCH 2/2] toolchain: add new toolchain backend: crosstool-NG
-
-Changes since v0 (last status report):
-- use lower-case in new file names (Thomas on IRC)
-- do not rebuild the toolchain if related options did not changed
-
-The first patch fixes the location of the host sed, so it does not get
-removed by crosstool-NG when building the toolchain. This is needed
-because crostool-NG wipes-out the toolchain installation directory before
-building the toolchain. In the end, the host-sed will probably entirely
-go away, but this is not the subject of the series, and can come later.
-
-The second patch adds the crosstool-NG backend proper.  The idea idea to
-treat the toolchain as if it was an external toolchain, except that it
-is not pre-built.
-
-I've tried to split the second patch into smaller chunks, but I was not
-sure it would make sense to do so, as it is a self-contained change.
-It is a huge hunk, but the core of it is located in a single hunk, that
-adds the toolchain build.
-
-Although the implementation is fully functional, some work remains that
-is not really essential to building the toolchain. Most notably, sanity
-checks are not yet performed on the configuration, and some target-related
-options are not yet passed down from the buildroot configuration to the
-corresponding crosstool-NG options.
-
-As has been looked over in the previous status report, here is the
-left-over work that remains to be done:
-
-- use latest stable release of crostool-NG: 1.8.1
-- switch to generic package infrastructure, if possible
-- push more options down to crosstool-NG
-- sanity-check the toolchain configuration
-- warn the user when he/she made changes in crosstool-NG's config
-  that confilct with options from buildroot
-- stress-test...
-
-Thanks for your attention! I am open for any comment on this series. :-)
-
-Regards,
-Yann E. MORIN.
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index c393dd9..deae71d 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -7,7 +7,7 @@ SED_VERSION:=4.2.1
+ SED_SOURCE:=sed-$(SED_VERSION).tar.gz
+ SED_SITE:=$(BR2_GNU_MIRROR)/sed
+ SED_CAT:=$(ZCAT)
+-SED_DIR1:=$(TOOLCHAIN_DIR)/sed-$(SED_VERSION)
++SED_DIR1:=$(HOST_DIR)/sed-$(SED_VERSION)
+ SED_DIR2:=$(BUILD_DIR)/sed-$(SED_VERSION)
+ SED_BINARY:=sed/sed
+ SED_TARGET_BINARY:=bin/sed
+@@ -15,7 +15,7 @@ ifeq ($(BR2_LARGEFILE),y)
+ SED_CPPFLAGS=-D_FILE_OFFSET_BITS=64
+ endif
+ #HOST_SED_DIR:=$(STAGING_DIR)
+-HOST_SED_DIR:=$(TOOLCHAIN_DIR)
++HOST_SED_DIR:=$(HOST_DIR)
+ SED:=$(HOST_SED_DIR)/bin/sed -i -e
+ HOST_SED_BINARY:=$(shell package/sed/sedcheck.sh)
+ HOST_SED_IF_ANY=$(shell toolchain/dependencies/check-host-sed.sh)
+@@ -33,9 +33,7 @@ sed-source: $(DL_DIR)/$(SED_SOURCE)
+ #
+ #############################################################
+ $(SED_DIR1)/.unpacked: $(DL_DIR)/$(SED_SOURCE)
+-	mkdir -p $(TOOLCHAIN_DIR)
+-	mkdir -p $(HOST_SED_DIR)/bin
+-	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
++	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(HOST_DIR) $(TAR_OPTIONS) -
+ 	toolchain/patch-kernel.sh $(SED_DIR1) package/sed/ configure.patch
+ 	$(CONFIG_UPDATE) $(SED_DIR1)/config
+ 	touch $@
+-- 
+1.7.1
