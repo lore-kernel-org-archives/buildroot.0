@@ -1,41 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 19 Sep 2010 22:56:56 +0200
-Subject: [Buildroot] Integration of crosstool-NG as backend - Status
-	report. And patch! :-)
-In-Reply-To: <8762y14fzb.fsf@macbook.be.48ers.dk>
-References: <201009152339.40967.yann.morin.1998@anciens.enib.fr>
-	<8762y14fzb.fsf@macbook.be.48ers.dk>
-Message-ID: <201009192256.56369.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 19 Sep 2010 23:22:24 +0200
+Subject: [Buildroot] [git commit master 1/1] udev: don't hide if busybox is
+	enabled
+Message-ID: <20100919212409.5D4888B421@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
 
-On Sunday 19 September 2010 22:48:24 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
->  Yann> Here is a quick summary on the integration of crosstool-NG as a backend
->  Yann> to generate toolchains in lieu of the internal mechanism.
-> Sounds very good, thanks!
+commit: http://git.buildroot.net/buildroot/commit/?id=c1df74fbcaccfe76493b9e769f9bf1c4ff25f1ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cheers! ;-)
+udev is hidden by default (because of BR2_PACKAGE_BUSYBOX_SHOW_OTHERS),
+but other packages (hal + usbmount) tries to select it, which gives
+warnings if it isn't visible.
 
-> I'll take a closer look at the patch early next week.
+To fix this, simply make it always visible. To call mdev an equivalent
+of udev is also stretching the truth anyway.
 
-I've submitted an updated version that fixes some blockers:
-  http://lists.busybox.net/pipermail/buildroot/2010-September/037717.html
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES           |    2 +-
+ package/Config.in |    3 ---
+ 2 files changed, 1 insertions(+), 4 deletions(-)
 
-Please be sure to review this revised version! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/CHANGES b/CHANGES
+index e6baf69..53923b0 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -23,7 +23,7 @@
+ 	neon, netperf, ntfsprogs, openntpd, openssh, openvpn, oprofile,
+ 	pango, pcre, php, prboom, radvd, qt, samba, sdl_sound,
+ 	shared-mime-info, speex, sqlite, strace, taglib, tcpdump,
+-	tiff, tn5250, udpcast, usbutils, which, xlib_libX11
++	tiff, tn5250, udev, udpcast, usbutils, which, xlib_libX11
+ 
+ 	Removed packages: dillo, libglib12, libgtk12, microwin,
+ 	pcmcia
+diff --git a/package/Config.in b/package/Config.in
+index 2209b55..f9a0405 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -186,10 +186,7 @@ source "package/squashfs/Config.in"
+ source "package/squashfs3/Config.in"
+ source "package/sshfs/Config.in"
+ source "package/sysstat/Config.in"
+-if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-# mdev
+ source "package/udev/Config.in"
+-endif
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.1
