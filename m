@@ -1,9 +1,9 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 20 Sep 2010 02:42:59 +0300
-Subject: [Buildroot] [PATCH 5/5] Add gst-omapfb package
+Date: Mon, 20 Sep 2010 02:42:57 +0300
+Subject: [Buildroot] [PATCH 3/5] Add gst-dsp package
 In-Reply-To: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
 References: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1284939779-32754-6-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1284939779-32754-4-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +12,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 ---
- package/multimedia/Config.in                |    1 +
- package/multimedia/gst-omapfb/Config.in     |    7 +++++++
- package/multimedia/gst-omapfb/gst-omapfb.mk |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-omapfb/Config.in
- create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
+ package/multimedia/Config.in          |    1 +
+ package/multimedia/gst-dsp/Config.in  |    8 ++++++++
+ package/multimedia/gst-dsp/gst-dsp.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-dsp/Config.in
+ create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index c921346..ab3ce90 100644
+index c84962d..c921346 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -6,6 +6,7 @@ source "package/multimedia/flac/Config.in"
+@@ -5,6 +5,7 @@ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/flac/Config.in"
  source "package/multimedia/ffmpeg/Config.in"
  source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
-+source "package/multimedia/gst-omapfb/Config.in"
++source "package/multimedia/gst-dsp/Config.in"
  source "package/multimedia/gst-plugins-base/Config.in"
  source "package/multimedia/gst-plugins-good/Config.in"
  source "package/multimedia/gst-plugins-bad/Config.in"
-diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
+diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
 new file mode 100644
-index 0000000..e4a62c0
+index 0000000..c4d1033
 --- /dev/null
-+++ b/package/multimedia/gst-omapfb/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_GST_OMAPFB
-+	bool "gst-omapfb"
++++ b/package/multimedia/gst-dsp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GST_DSP
++	bool "gst-dsp"
 +	depends on BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  GStreamer plug-in to use OMAP framebuffer.
++	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
 +
-+	  http://github.com/felipec/gst-omapfb
-diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
++	  http://code.google.com/p/gst-dsp/
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
 new file mode 100644
-index 0000000..e370c4e
+index 0000000..12ca5d8
 --- /dev/null
-+++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
 @@ -0,0 +1,15 @@
-+GST_OMAPFB_VERSION=1.0
-+GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
-+GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
++GST_DSP_VERSION=0.8.0
++GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
++GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define GST_OMAPFB_BUILD_CMDS
++define GST_DSP_BUILD_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+define GST_OMAPFB_INSTALL_TARGET_CMDS
++define GST_DSP_INSTALL_TARGET_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+GST_OMAPFB_DEPENDENCIES = gstreamer
++GST_DSP_DEPENDENCIES = gstreamer
 +
-+$(eval $(call GENTARGETS,package/multimedia,gst-omapfb))
++$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
 -- 
 1.7.3
