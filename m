@@ -1,9 +1,9 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sat, 18 Sep 2010 19:53:34 -0700
-Subject: [Buildroot] [PATCH 12/21] libogg: bump to 1.2.0
+Date: Sat, 18 Sep 2010 19:53:24 -0700
+Subject: [Buildroot] [PATCH 02/21] alsa-utils: bump to 1.0.23
 In-Reply-To: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
 References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1284864823-18993-13-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1284864823-18993-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,88 +12,146 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../libogg/libogg-1.2.0-buildroot-libtool.patch    |   53 ++++++++++++++++++++
- package/multimedia/libogg/libogg.mk                |    3 +-
- 2 files changed, 55 insertions(+), 1 deletions(-)
- create mode 100644 package/multimedia/libogg/libogg-1.2.0-buildroot-libtool.patch
+ ...tils-1.0.18-check-if-__use_bsd-is-defined.patch |   13 -------------
+ .../alsa-utils-1.0.18-fix-intl-support.patch       |   11 -----------
+ .../alsa-utils-1.0.18-fix_sysv_legacy.patch        |   20 --------------------
+ .../alsa-utils/alsa-utils-1.0.18-remove_man.patch  |   11 -----------
+ .../alsa-utils-1.0.23-fix-intl-support.patch       |   11 +++++++++++
+ .../alsa-utils/alsa-utils-1.0.23-remove_man.patch  |   11 +++++++++++
+ package/multimedia/alsa-utils/alsa-utils.mk        |    2 +-
+ 7 files changed, 23 insertions(+), 56 deletions(-)
+ delete mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.18-check-if-__use_bsd-is-defined.patch
+ delete mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.18-fix-intl-support.patch
+ delete mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch
+ delete mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch
+ create mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.23-fix-intl-support.patch
+ create mode 100644 package/multimedia/alsa-utils/alsa-utils-1.0.23-remove_man.patch
 
-diff --git a/package/multimedia/libogg/libogg-1.2.0-buildroot-libtool.patch b/package/multimedia/libogg/libogg-1.2.0-buildroot-libtool.patch
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.18-check-if-__use_bsd-is-defined.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.18-check-if-__use_bsd-is-defined.patch
+deleted file mode 100644
+index f0d3209..0000000
+--- a/package/multimedia/alsa-utils/alsa-utils-1.0.18-check-if-__use_bsd-is-defined.patch
++++ /dev/null
+@@ -1,13 +0,0 @@
+-Index: alsa-utils-1.0.18/alsactl/init_sysdeps.c
+-===================================================================
+---- alsa-utils-1.0.18.orig/alsactl/init_sysdeps.c	2008-12-01 08:27:16.000000000 +0100
+-+++ alsa-utils-1.0.18/alsactl/init_sysdeps.c	2008-12-01 08:27:22.000000000 +0100
+-@@ -17,7 +17,7 @@
+-  *
+-  */
+- 
+--#ifdef __GLIBC__
+-+#if defined(__GLIBC__) && !defined(__USE_BSD)
+- static size_t strlcpy(char *dst, const char *src, size_t size)
+- {
+- 	size_t bytes = 0;
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix-intl-support.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix-intl-support.patch
+deleted file mode 100644
+index 317c472..0000000
+--- a/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix-intl-support.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/seq/aseqnet/Makefile.in
+-+++ b/seq/aseqnet/Makefile.in
+-@@ -252,7 +252,7 @@ clean-binPROGRAMS:
+- 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+- aseqnet$(EXEEXT): $(aseqnet_OBJECTS) $(aseqnet_DEPENDENCIES) 
+- 	@rm -f aseqnet$(EXEEXT)
+--	$(LINK) $(aseqnet_LDFLAGS) $(aseqnet_OBJECTS) $(aseqnet_LDADD) $(LIBS)
+-+	$(LINK) $(aseqnet_LDFLAGS) $(aseqnet_OBJECTS) $(aseqnet_LDADD) $(LIBS) $(INTLLIBS)
+- 
+- mostlyclean-compile:
+- 	-rm -f *.$(OBJEXT)
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch
+deleted file mode 100644
+index c6135b4..0000000
+--- a/package/multimedia/alsa-utils/alsa-utils-1.0.18-fix_sysv_legacy.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+---- a/alsactl/init_parse.c	2009-01-15 10:44:48.000000000 +0000
+-+++ b/alsactl/init_parse.c	2009-01-15 10:46:41.000000000 +0000
+-@@ -381,7 +381,7 @@ static int set_ctl_value(struct space *s
+- 				snd_ctl_elem_value_set_integer(space->ctl_value, idx, val);
+- 			} else if (items > 2 && value[items-2] == 'd' && value[items-1] == 'B') {
+- 				val = strtol(value, NULL, 0) * 100;
+--				if ((pos2 = index(value, '.')) != NULL) {
+-+				if ((pos2 = strchr(value, '.')) != NULL) {
+- 					if (isdigit(*(pos2-1)) && isdigit(*(pos2-2))) {
+- 						if (val < 0)
+- 							val -= strtol(pos2 + 1, NULL, 0);
+-@@ -1253,7 +1253,7 @@ static char *new_root_dir(const char *fi
+- 
+- 	res = strdup(filename);
+- 	if (res) {
+--		tmp = rindex(res, '/');
+-+		tmp = strrchr(res, '/');
+- 		if (tmp)
+- 			*tmp = '\0';
+- 	}
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch
+deleted file mode 100644
+index a7d4679..0000000
+--- a/package/multimedia/alsa-utils/alsa-utils-1.0.18-remove_man.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/alsactl/Makefile.in	2009-01-15 10:59:38.000000000 +0000
+-+++ b/alsactl/Makefile.in	2009-01-15 10:59:34.000000000 +0000
+-@@ -204,7 +204,7 @@ sharedstatedir = @sharedstatedir@
+- sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- SUBDIRS = init
+--man_MANS = alsactl.1 alsactl_init.7
+-+man_MANS = alsactl.1
+- EXTRA_DIST = alsactl.1 alsactl_init.xml
+- alsactl_SOURCES = alsactl.c state.c utils.c init_parse.c
+- noinst_HEADERS = alsactl.h list.h init_sysdeps.c init_utils_string.c init_utils_run.c init_sysfs.c
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.23-fix-intl-support.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.23-fix-intl-support.patch
 new file mode 100644
-index 0000000..5697bf1
+index 0000000..317c472
 --- /dev/null
-+++ b/package/multimedia/libogg/libogg-1.2.0-buildroot-libtool.patch
-@@ -0,0 +1,53 @@
-+--- a/ltmain.sh	2006-03-11 13:49:04.000000000 -0500
-++++ b/ltmain.sh	2008-04-30 09:55:28.000000000 -0400
-+@@ -2239,8 +2239,11 @@ func_mode_install ()
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  test "$inst_prefix_dir" = "$destdir" && \
-+-	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  #
-++	  # test "$inst_prefix_dir" = "$destdir" && \
-++	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
++++ b/package/multimedia/alsa-utils/alsa-utils-1.0.23-fix-intl-support.patch
+@@ -0,0 +1,11 @@
++--- a/seq/aseqnet/Makefile.in
+++++ b/seq/aseqnet/Makefile.in
++@@ -252,7 +252,7 @@ clean-binPROGRAMS:
++ 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
++ aseqnet$(EXEEXT): $(aseqnet_OBJECTS) $(aseqnet_DEPENDENCIES) 
++ 	@rm -f aseqnet$(EXEEXT)
++-	$(LINK) $(aseqnet_LDFLAGS) $(aseqnet_OBJECTS) $(aseqnet_LDADD) $(LIBS)
+++	$(LINK) $(aseqnet_LDFLAGS) $(aseqnet_OBJECTS) $(aseqnet_LDADD) $(LIBS) $(INTLLIBS)
 + 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+@@ -5739,8 +5742,14 @@ func_mode_link ()
-+ 	    absdir="$abs_ladir"
-+ 	    libdir="$abs_ladir"
-+ 	  else
-+-	    dir="$libdir"
-+-	    absdir="$libdir"
-++            # Adding 'libdir' from the .la file to our library search paths
-++            # breaks crosscompilation horribly.  We cheat here and don't add
-++            # it, instead adding the path where we found the .la.  -CL
-++	    dir="$abs_ladir"
-++	    absdir="$abs_ladir"
-++	    libdir="$abs_ladir"
-++	    #dir="$libdir"
-++	    #absdir="$libdir"
-+ 	  fi
-+ 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
-+ 	else
-+@@ -5891,7 +5900,7 @@ func_mode_link ()
-+ 	  *)
-+ 	    if test "$installed" = no; then
-+ 	      notinst_deplibs="$notinst_deplibs $lib"
-+-	      need_relink=yes
-++	      need_relink=no
-+ 	    fi
-+ 	    ;;
-+ 	  esac
-+@@ -8373,6 +8382,10 @@ func_mode_link ()
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++              # Replacing uninstalled with installed can easily break crosscompilation,
-++              # since the installed path is generally the wrong architecture.  -CL
-++              newdependency_libs="$newdependency_libs $deplib"
-++              continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		func_basename "$deplib"
-diff --git a/package/multimedia/libogg/libogg.mk b/package/multimedia/libogg/libogg.mk
-index 02b1976..406de05 100644
---- a/package/multimedia/libogg/libogg.mk
-+++ b/package/multimedia/libogg/libogg.mk
-@@ -3,12 +3,13 @@
- # libogg
++ mostlyclean-compile:
++ 	-rm -f *.$(OBJEXT)
+diff --git a/package/multimedia/alsa-utils/alsa-utils-1.0.23-remove_man.patch b/package/multimedia/alsa-utils/alsa-utils-1.0.23-remove_man.patch
+new file mode 100644
+index 0000000..34b14ca
+--- /dev/null
++++ b/package/multimedia/alsa-utils/alsa-utils-1.0.23-remove_man.patch
+@@ -0,0 +1,11 @@
++--- a/alsactl/Makefile.in	2009-01-15 10:59:38.000000000 +0000
+++++ b/alsactl/Makefile.in	2009-01-15 10:59:34.000000000 +0000
++@@ -217,7 +217,7 @@ sharedstatedir = @sharedstatedir@
++ target_alias = @target_alias@
++ xmlto = @xmlto@
++ SUBDIRS = init
++-man_MANS = alsactl.1 $(am__append_1)
+++man_MANS = alsactl.1
++ EXTRA_DIST = alsactl.1 alsactl_init.xml
++ alsactl_SOURCES = alsactl.c state.c utils.c init_parse.c
++ noinst_HEADERS = alsactl.h list.h init_sysdeps.c init_utils_string.c init_utils_run.c init_sysfs.c
+diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
+index 3d1b0ef..20f682a 100644
+--- a/package/multimedia/alsa-utils/alsa-utils.mk
++++ b/package/multimedia/alsa-utils/alsa-utils.mk
+@@ -3,7 +3,7 @@
+ # alsa-utils
  #
  #############################################################
--LIBOGG_VERSION = 1.1.4
-+LIBOGG_VERSION = 1.2.0
- LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.gz
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
- LIBOGG_AUTORECONF = NO
- LIBOGG_INSTALL_STAGING = YES
- LIBOGG_INSTALL_TARGET = YES
-+LIBOGG_LIBTOOL_PATCH = no
- 
- LIBOGG_DEPENDENCIES = host-pkg-config
- 
+-ALSA_UTILS_VERSION:=1.0.22
++ALSA_UTILS_VERSION:=1.0.23
+ ALSA_UTILS_SOURCE:=alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE:=ftp://ftp.alsa-project.org/pub/utils
+ ALSA_UTILS_DIR:=$(BUILD_DIR)/alsa-utils-$(ALSA_UTILS_VERSION)
 -- 
 1.7.2.3
