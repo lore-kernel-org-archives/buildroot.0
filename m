@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Sep 2010 22:48:24 +0200
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 19 Sep 2010 22:56:56 +0200
 Subject: [Buildroot] Integration of crosstool-NG as backend - Status
 	report. And patch! :-)
-In-Reply-To: <201009152339.40967.yann.morin.1998@anciens.enib.fr> (Yann
-	E. MORIN's message of "Wed, 15 Sep 2010 23:39:40 +0200")
+In-Reply-To: <8762y14fzb.fsf@macbook.be.48ers.dk>
 References: <201009152339.40967.yann.morin.1998@anciens.enib.fr>
-Message-ID: <8762y14fzb.fsf@macbook.be.48ers.dk>
+	<8762y14fzb.fsf@macbook.be.48ers.dk>
+Message-ID: <201009192256.56369.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Peter, All,
 
- Yann> Hello All!
+On Sunday 19 September 2010 22:48:24 Peter Korsgaard wrote:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+>  Yann> Here is a quick summary on the integration of crosstool-NG as a backend
+>  Yann> to generate toolchains in lieu of the internal mechanism.
+> Sounds very good, thanks!
 
- Yann> Here is a quick summary on the integration of crosstool-NG as a backend
- Yann> to generate toolchains in lieu of the internal mechanism.
+Cheers! ;-)
 
- Yann> After the code-shifting and generalisations pushed in the latest
- Yann> stable of buildroot, I continued working on the backend stuff. It
- Yann> has been delayed a little bit while I was on holidays, but I
- Yann> resumed early last week. So...
+> I'll take a closer look at the patch early next week.
 
-Sounds very good, thanks!
+I've submitted an updated version that fixes some blockers:
+  http://lists.busybox.net/pipermail/buildroot/2010-September/037717.html
 
-I'll take a closer look at the patch early next week.
+Please be sure to review this revised version! ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
