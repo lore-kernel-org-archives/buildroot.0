@@ -1,58 +1,53 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 19 Sep 2010 01:21:15 +0200
-Subject: [Buildroot] [PATCH] Fix <PKG_NAME>_VERSION variable setup
-Message-ID: <1284852075-17257-1-git-send-email-llandwerlin@gmail.com>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Sat, 18 Sep 2010 17:35:29 -0700
+Subject: [Buildroot] [PATCH 09/21] gmp: bump to 5.0.1
+In-Reply-To: <20100918190326.40e2090d@surf>
+References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+	<1284435648-15238-9-git-send-email-Martin.Banky@gmail.com>
+	<20100918190326.40e2090d@surf>
+Message-ID: <AANLkTikWC9jReaZUyLeDeMXwoO90dgSrvbjiu17yHW_E@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+Thomas,
+     Per the INSTALL file in mpfr:
+"As gmp-impl.h and longlong.h are only in the GMP source directory,
+you first need to copy these files to the build directory if it is
+different (there may be other workarounds, such as setting $CPPFLAGS
+to search the GMP source directory)."
+I will change the commit log to reflect this, when I resubmit the patch set
+with the other asked for changes.
 
-Commit 993e51bc22f508fbaf39c5c49fd0595fc5c56013 introduced a problem
-to compute <PKG_NAME>_VERSION variable when PKG_NAME start with
-'HOST_'.
+Martin
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
----
- package/Makefile.package.in |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+On Sat, Sep 18, 2010 at 10:03 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 58a9a51..377df65 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -337,22 +337,22 @@ define GENTARGETS_INNER
- $(2)_TYPE                       =  $(5)
- $(2)_NAME			=  $(1)
- 
-+# Keep the package version that may contain forward slashes in the _DL_VERSION
-+# variable, then replace all forward slashes ('/') by underscores ('_') to
-+# sanitize the package version that is used in paths, directory and file names.
-+# Forward slashes may appear in the package's version when pointing to a
-+# version control system branch or tag, for example remotes/origin/1_10_stable.
-+$(2)_DL_VERSION	= $($(2)_VERSION)
- ifndef $(2)_VERSION
-  ifdef $(3)_VERSION
-   $(2)_VERSION = $($(3)_VERSION)
-  else
-   $(2)_VERSION = undefined
-  endif
-+else
-+ $(2)_VERSION = $(subst /,_,$($(2)_VERSION))
- endif
- 
--# Keep the package version that may contain forward slashes in the _DL_VERSION
--# variable, then replace all forward slashes ('/') by underscores ('_') to
--# sanitize the package version that is used in paths, directory and file names.
--# Forward slashes may appear in the package's version when pointing to a
--# version control system branch or tag, for example remotes/origin/1_10_stable.
--$(2)_DL_VERSION	= $($(2)_VERSION)
--$(2)_VERSION = $(subst /,_,$($(2)_VERSION))
--
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
--- 
-1.7.1
+> On Mon, 13 Sep 2010 20:40:36 -0700
+> Martin Banky <martin.banky@gmail.com> wrote:
+>
+> > +     (cd $(GMP_TARGET_DIR); rm -rf config.cache; cp
+> $(GMP_DIR)/longlong.h $(GMP_DIR)/gmp-impl.h ./; \
+>
+> Why ? Even if it's really needed, a little bit of explanation in the
+> commit log would help.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100918/333e0d67/attachment.html>
