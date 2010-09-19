@@ -1,9 +1,9 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 20 Sep 2010 02:42:56 +0300
-Subject: [Buildroot] [PATCH 2/5] Add tidsp-binaries package
+Date: Mon, 20 Sep 2010 02:42:58 +0300
+Subject: [Buildroot] [PATCH 4/5] Add dsp-tools package
 In-Reply-To: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
 References: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1284939779-32754-3-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1284939779-32754-5-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
- .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
- 3 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/tidsp-binaries/Config.in
- create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
+ package/Config.in              |    1 +
+ package/dsp-tools/Config.in    |    7 +++++++
+ package/dsp-tools/dsp-tools.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/dsp-tools/Config.in
+ create mode 100644 package/dsp-tools/dsp-tools.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 3b0eec5..c84962d 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -25,6 +25,7 @@ source "package/multimedia/mpg123/Config.in"
- source "package/multimedia/mplayer/Config.in"
- source "package/multimedia/speex/Config.in"
- source "package/multimedia/swfdec/Config.in"
-+source "package/multimedia/tidsp-binaries/Config.in"
- source "package/multimedia/festival/Config.in"
- source "package/multimedia/taglib/Config.in"
- source "package/multimedia/tremor/Config.in"
-diff --git a/package/multimedia/tidsp-binaries/Config.in b/package/multimedia/tidsp-binaries/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 2209b55..8fee423 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -466,6 +466,7 @@ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+ endif
++source "package/dsp-tools/Config.in"
+ endmenu
+ 
+ menu "Text editors and viewers"
+diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
 new file mode 100644
-index 0000000..2d50b62
+index 0000000..c37d76c
 --- /dev/null
-+++ b/package/multimedia/tidsp-binaries/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_TIDSP_BINARIES
-+	bool "tidsp-binaries"
++++ b/package/dsp-tools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DSP_TOOLS
++	bool "dsp-tools"
++	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  TI OMAP3 DSP algorithms.
++	  Utilities for TI OMAP3 DSP.
 +
-+	  https://gforge.ti.com/gf/project/openmax/
-diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
++	  http://github.com/felipec/dsp-tools
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
 new file mode 100644
-index 0000000..5dc9205
+index 0000000..39d11d6
 --- /dev/null
-+++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
-@@ -0,0 +1,9 @@
-+TIDSP_BINARIES_VERSION=23.i3.8
-+TIDSP_BINARIES_SOURCE=tidsp-binaries-$(TIDSP_BINARIES_VERSION).tar.gz
-+TIDSP_BINARIES_SITE:=http://gst-dsp.googlecode.com/files/
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -0,0 +1,13 @@
++DSP_TOOLS_VERSION=2.0
++DSP_TOOLS_SOURCE=dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
++DSP_TOOLS_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define TIDSP_BINARIES_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
++define DSP_TOOLS_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+$(eval $(call GENTARGETS,package/multimedia,tidsp-binaries))
++define DSP_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(call GENTARGETS,package,dsp-tools))
 -- 
 1.7.3
