@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 20 Sep 2010 22:35:16 +0200
-Subject: [Buildroot] [git commit master 1/1] lzma: mark old package as
-	deprecated
-Message-ID: <20100920203550.A5D678B3CF@busybox.osuosl.org>
+Date: Mon, 20 Sep 2010 23:00:32 +0200
+Subject: [Buildroot] [git commit master 1/1] kernel-headers: bump 2.6.32.x
+	stable version
+Message-ID: <20100920210102.A40B47FBF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=06d0378954e77c185e017fae68a1a85ffc15342c
+commit: http://git.buildroot.net/buildroot/commit/?id=a85024991b51d7de9276e2ee1088ae654739b189
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-xz-utils should be used instead nowadays.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                |    2 ++
- package/lzma/Config.in |    3 ++-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-diff --git a/CHANGES b/CHANGES
-index 1127f89..ccc6007 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -30,6 +30,8 @@
- 	tcpdump, tiff, tn5250, udev, udpcast, usbmount, usbutils,
- 	which, xlib_libX11, zlib
- 
-+	Deprecated packages: lzma
-+
- 	Removed packages: dillo, libglib12, libgtk12, microwin,
- 	pcmcia
- 
-diff --git a/package/lzma/Config.in b/package/lzma/Config.in
-index ab1ea59..4904721 100644
---- a/package/lzma/Config.in
-+++ b/package/lzma/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LZMA
- 	bool "lzma"
- 	depends on BR2_GCC_CROSS_CXX
-+	depends on BR2_DEPRECATED
- 	help
- 	  Lempel Ziv compression method (LZMA) is a compression
- 	  algorithm with high compression ratio.
-@@ -8,4 +9,4 @@ config BR2_PACKAGE_LZMA
- 	  http://tukaani.org/lzma/
- 
- comment "lzma requires a toolchain with C++ support"
--        depends on !BR2_GCC_CROSS_CXX
-+        depends on !BR2_GCC_CROSS_CXX && BR2_DEPRECATED
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index bee5044..ca416f9 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,7 +60,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
+ 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6.31.14"	if BR2_KERNEL_HEADERS_2_6_31
+-	default "2.6.32.21"	if BR2_KERNEL_HEADERS_2_6_32
++	default "2.6.32.22"	if BR2_KERNEL_HEADERS_2_6_32
+ 	default "2.6.33.7"	if BR2_KERNEL_HEADERS_2_6_33
+ 	default "2.6.34.7"	if BR2_KERNEL_HEADERS_2_6_34
+ 	default "2.6.35.4"	if BR2_KERNEL_HEADERS_2_6_35
+diff --git a/toolchain/kernel-headers/linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
 1.7.1
