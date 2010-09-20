@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 20 Sep 2010 23:26:09 +0200
-Subject: [Buildroot] [PATCH 4/4] package/tcl: fix for POSIX compliance
+Date: Mon, 20 Sep 2010 23:26:06 +0200
+Subject: [Buildroot] [PATCH 1/4] toolchain: fix helpers for POSIX compliance
 In-Reply-To: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1285017969-32280-5-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1285017969-32280-2-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,40 @@ Revert to using one, as stated in POSIX 1003.1-2008.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/tcl/tcl.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/helpers.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index edcc441..cf46811 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -15,10 +15,10 @@ TCL_CONF_OPT = \
- 
- define TCL_POST_INSTALL_CLEANUP
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
--	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" == "y" ]; then \
-+	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
- 	rm -Rf $(TARGET_DIR)/usr/lib/tcl8.4/encoding/*; \
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5c87d2b..05d43e7 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -170,11 +170,11 @@ check_glibc = \
+ #
+ check_uclibc_feature = \
+ 	IS_IN_LIBC=`grep -q "\#define $(1) 1" $(3) && echo y` ; \
+-	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} == x"y" ] ; then \
++	if [ x$($(2)) != x"y" -a x$${IS_IN_LIBC} = x"y" ] ; then \
+ 		echo "$(4) available in C library, please enable $(2)" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if [ x$($(2)) == x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
++	if [ x$($(2)) = x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
+ 		echo "$(4) not available in C library, please disable $(2)" ; \
+ 		exit 1 ; \
  	fi
--	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" == "y" ]; then \
-+	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
- 	rm -f $(TARGET_DIR)/usr/bin/tclsh8.4; \
- 	fi
- endef
+@@ -214,11 +214,11 @@ check_arm_abi = \
+ 	else \
+ 		EXT_TOOLCHAIN_ABI="oabi" ; \
+ 	fi ; \
+-	if [ x$(BR2_ARM_OABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "eabi" ] ; then \
++	if [ x$(BR2_ARM_OABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "eabi" ] ; then \
+ 		echo "Incorrect ABI setting" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if [ x$(BR2_ARM_EABI) == x"y" -a $${EXT_TOOLCHAIN_ABI} == "oabi" ] ; then \
++	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
+ 		echo "Incorrect ABI setting" ; \
+ 		exit 1 ; \
+ 	fi ; \
 -- 
 1.7.1
