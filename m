@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 20 Sep 2010 22:05:39 +0200
-Subject: [Buildroot] [git commit master 1/1] package: add xz-utils package
-Message-ID: <20100920200706.EDF938B4FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] squashfs: add lzma support
+Message-ID: <20100920200707.36B9D8B4FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,82 +9,121 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d380d51427e90fd32fd2a72be4c2abf3b5085750
+commit: http://git.buildroot.net/buildroot/commit/?id=ed4ca35a1a5996569b1a1d769cb080c5f1fd62c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And try to select a sane default compression algorithm.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES              |    2 ++
- package/Config.in    |    1 +
- package/xz/Config.in |   14 ++++++++++++++
- package/xz/xz.mk     |   13 +++++++++++++
- 4 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/xz/Config.in
- create mode 100644 package/xz/xz.mk
+ fs/squashfs/Config.in        |    3 +++
+ fs/squashfs/squashfs.mk      |    4 ++++
+ package/squashfs/Config.in   |    6 ++++++
+ package/squashfs/squashfs.mk |   29 ++++++++++++++++++++---------
+ 4 files changed, 33 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7ae67d9..1127f89 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,6 +15,8 @@
- 	Download handling reworked and support for git/svn downloads
- 	added.
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index 20aac08..85416be 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -31,6 +31,9 @@ choice
+ config BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+        bool "gzip"
  
-+	New packages: xz
++config BR2_TARGET_ROOTFS_SQUASHFS4_LZMA
++       bool "lzma"
 +
- 	Updated/fixed packages: alsa-lib, at, avahi, berkeleydb, bind,
- 	bmon, bridge-utils, busybox, dbus, dmraid, docker, dropbear,
- 	e2fsprogs, expat, freetype, gawk, gvfs, haserl, hostapd,
-diff --git a/package/Config.in b/package/Config.in
-index f9a0405..ce6057b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -13,6 +13,7 @@ source "package/gzip/Config.in"
+ config BR2_TARGET_ROOTFS_SQUASHFS4_LZO
+        bool "lzo"
+ 
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 311a3ee..7efe979 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -10,8 +10,12 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lzo
+ else
++ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZMA),y)
++ROOTFS_SQUASHFS_ARGS += -comp lzma
++else
+ ROOTFS_SQUASHFS_ARGS += -comp gzip
  endif
- source "package/lzop/Config.in"
- source "package/lzma/Config.in"
-+source "package/xz/Config.in"
- endmenu
++endif
  
- menu "Debugging, profiling and benchmark"
-diff --git a/package/xz/Config.in b/package/xz/Config.in
-new file mode 100644
-index 0000000..50116f2
---- /dev/null
-+++ b/package/xz/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_XZ
-+	bool "xz-utils"
-+	help
-+	  XZ is the successor to the Lempel-Ziv/Markov-chain Algorithm
-+	  compression format, which provides memory-hungry but powerful
-+	  compression (often better than bzip2) and fast, easy decompression.
+ else
+ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs3
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index e975185..39cb7f3 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -15,6 +15,12 @@ config BR2_PACKAGE_SQUASHFS_GZIP
+        help
+          Support GZIP compression algorithm
+ 
++config BR2_PACKAGE_SQUASHFS_LZMA
++       bool "lzma support"
++       select BR2_PACKAGE_XZ
++       help
++         Support LZMA compression algorithm
 +
-+	  This package provides the command line tools for working with XZ
-+	  compression, including xz, unxz, xzcat, xzgrep, and so on. They can
-+	  also handle the older LZMA format, and if invoked via appropriate
-+	  symlinks will emulate the behavior of the commands in the lzma
-+	  package.
+ config BR2_PACKAGE_SQUASHFS_LZO
+        bool "lzo support"
+        select BR2_PACKAGE_LZO
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 0332d60..7cbec32 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -3,30 +3,41 @@ SQUASHFS_SOURCE=squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/squashfs
+ 
+ # no libattr/xz in BR
+-SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0 XZ_SUPPORT=0
++SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
+ 
+-# we need atleast one compresser, so use gzip if lzo isn't enabled
+-ifeq ($(BR2_PACKAGE_SQUASHFS_GZIP)$(if $(BR2_PACKAGE_SQUASHFS_LZO),,y),y)
+-SQUASHFS_DEPENDENCIES += zlib
+-SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=1
++# we need atleast one compresser, so use gzip if none are enabled
++ifeq ($(BR2_PACKAGE_SQUASHFS_GZIP)$(BR2_PACKAGE_SQUASHFS_LZO)$(BR2_PACKAGE_SQUASHFS_LZMA),)
++BR2_PACKAGE_SQUASHFS_GZIP=y
++endif
 +
-+	  http://tukaani.org/xz/
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-new file mode 100644
-index 0000000..7490f77
---- /dev/null
-+++ b/package/xz/xz.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# xz-utils
-+#
-+#############################################################
-+XZ_VERSION = 4.999.9beta
-+XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
-+XZ_SITE = http://tukaani.org/xz/
-+XZ_INSTALL_STAGING = YES
-+XZ_LIBTOOL_PATCH = NO
++ifeq ($(BR2_PACKAGE_SQUASHFS_LZMA),y)
++SQUASHFS_DEPENDENCIES += xz
++SQUASHFS_MAKE_ARGS += XZ_SUPPORT=1 COMP_DEFAULT=lzma
+ else
+-SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0 COMP_DEFAULT=lzo
++SQUASHFS_MAKE_ARGS += XZ_SUPPORT=0
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZO),y)
+ SQUASHFS_DEPENDENCIES += lzo
+-SQUASHFS_MAKE_ARGS += LZO_SUPPORT=1
++SQUASHFS_MAKE_ARGS += LZO_SUPPORT=1 COMP_DEFAULT=lzo
+ else
+ SQUASHFS_MAKE_ARGS += LZO_SUPPORT=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SQUASHFS_GZIP),y)
++SQUASHFS_DEPENDENCIES += zlib
++SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=1 COMP_DEFAULT=gzip
++else
++SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
++endif
 +
-+$(eval $(call AUTOTARGETS,package,xz))
-+$(eval $(call AUTOTARGETS,package,xz,host))
+ 
+-HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo
++HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo host-xz
+ 
+ # no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+ 	XATTR_SUPPORT=0 \
+-	XZ_SUPPORT=0    \
++	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
+ 	LZO_SUPPORT=1
+ 
 -- 
 1.7.1
