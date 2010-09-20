@@ -1,56 +1,44 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 20 Sep 2010 02:44:40 +0300
-Subject: [Buildroot] [PATCH] Add kbd package
-Message-ID: <1284939880-455-1-git-send-email-felipe.contreras@gmail.com>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Sun, 19 Sep 2010 17:37:01 -0700
+Subject: [Buildroot] [PATCH 21/21] BugFix - m4 - Fixed Missing wint_t
+ typedef When There Is No WChar Support
+In-Reply-To: <87aand4g4b.fsf@macbook.be.48ers.dk>
+References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+	<1284435648-15238-21-git-send-email-Martin.Banky@gmail.com>
+	<87aand4g4b.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTikzNG+2t9KgpkXXQJDpdRsbh6wq81UANg3CvAbL@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
----
- package/Config.in     |    1 +
- package/kbd/Config.in |    6 ++++++
- package/kbd/kdb.mk    |    5 +++++
- 3 files changed, 12 insertions(+), 0 deletions(-)
- create mode 100644 package/kbd/Config.in
- create mode 100644 package/kbd/kdb.mk
+Peter,
+     Not a problem, I just thought I would share my fixes for the type of
+system that I'm building. I'm trying to build a target compiler system,
+because I have some very complicated builds that I have to do. I have a very
+tweaked build of Qt that is hard enough to do in a native environment, let
+alone in buildroot. I also have software that I'm developing(at last count
+about 15 packages), that would be too much work to convert to buildroot. For
+me, it is just easier to have a native compiler to do these things. Also, I
+have not had a chance to test the latest version of m4, so maybe that will
+fix things. I'll let you know, it's on my todo list.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2209b55..5a7a4ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -167,6 +167,7 @@ source "package/hwdata/Config.in"
- source "package/i2c-tools/Config.in"
- source "package/input-tools/Config.in"
- source "package/iostat/Config.in"
-+source "package/kbd/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lvm2/Config.in"
- source "package/makedevs/Config.in"
-diff --git a/package/kbd/Config.in b/package/kbd/Config.in
-new file mode 100644
-index 0000000..5a6b4cd
---- /dev/null
-+++ b/package/kbd/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KBD
-+	bool "kbd"
-+	help
-+	  Keytable files and keyboard utilities.
-+
-+	  ftp://ftp.kernel.org/pub/linux/utils/kbd/
-diff --git a/package/kbd/kdb.mk b/package/kbd/kdb.mk
-new file mode 100644
-index 0000000..5b794a9
---- /dev/null
-+++ b/package/kbd/kdb.mk
-@@ -0,0 +1,5 @@
-+KBD_VERSION = 1.15.2
-+KBD_SOURCE = kbd-$(KBD_VERSION).tar.gz
-+KBD_SITE = ftp://ftp.kernel.org/pub/linux/utils/kbd
-+
-+$(eval $(call AUTOTARGETS,package,kbd))
--- 
-1.7.3
+Martin
+
+On Sun, Sep 19, 2010 at 1:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
+>
+>  Martin> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+>
+> Thanks, but I find this too hackish. M4 is not a package typically
+> needed on really small systems, so just depending on WCHAR is cleaner
+> imho.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100919/e7dcc064/attachment-0001.html>
