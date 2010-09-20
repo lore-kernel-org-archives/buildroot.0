@@ -1,41 +1,100 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 20 Sep 2010 23:00:32 +0200
-Subject: [Buildroot] [git commit master 1/1] kernel-headers: bump 2.6.32.x
-	stable version
-Message-ID: <20100920210102.A40B47FBF3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 20 Sep 2010 23:26:07 +0200
+Subject: [Buildroot] [PATCH 2/4] skeleton: fix atstk1005,
+	ststk100x and atngw100 for POSIX compliance
+In-Reply-To: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1285017969-32280-3-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Using two '=' for string comparison is a bashism.
+Revert to using one, as stated in POSIX 1003.1-2008.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a85024991b51d7de9276e2ee1088ae654739b189
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/kernel-headers/Config.in                 |    2 +-
- ...types-for-headers-exported-to-user-space.patch} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ .../atngw100/target_skeleton/etc/init.d/S99gpio    |    6 +++---
+ .../atstk1005/target_skeleton/etc/init.d/S99gpio   |    6 +++---
+ .../atstk100x/target_skeleton/etc/init.d/S99gpio   |    6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index bee5044..ca416f9 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -60,7 +60,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.29.6"	if BR2_KERNEL_HEADERS_2_6_29
- 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
- 	default "2.6.31.14"	if BR2_KERNEL_HEADERS_2_6_31
--	default "2.6.32.21"	if BR2_KERNEL_HEADERS_2_6_32
-+	default "2.6.32.22"	if BR2_KERNEL_HEADERS_2_6_32
- 	default "2.6.33.7"	if BR2_KERNEL_HEADERS_2_6_33
- 	default "2.6.34.7"	if BR2_KERNEL_HEADERS_2_6_34
- 	default "2.6.35.4"	if BR2_KERNEL_HEADERS_2_6_35
-diff --git a/toolchain/kernel-headers/linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.32.21-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.32.22-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
+index ea07784..3a17740 100755
+--- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
++++ b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
+@@ -8,9 +8,9 @@ fi
+ 
+ BOARD=`cat /etc/release | cut -d ' ' -f1`
+ 
+-if [ "${BOARD}" == "" ]; then
++if [ "${BOARD}" = "" ]; then
+ 	echo "none";
+-elif [ "${BOARD}" == "NGW100" ]; then
++elif [ "${BOARD}" = "NGW100" ]; then
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  boot LED: "
+@@ -111,7 +111,7 @@ elif [ "${BOARD}" == "NGW100" ]; then
+ 		echo "failed"
+ 		exit 1
+ 	fi
+-elif [ "${BOARD}" == "STK1000" ]; then # end NGW100
++elif [ "${BOARD}" = "STK1000" ]; then # end NGW100
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  switches: "
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
+index 967761a..7c07f28 100644
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
++++ b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
+@@ -8,9 +8,9 @@ fi
+ 
+ BOARD=`cat /etc/release | cut -d ' ' -f1`
+ 
+-if [ "${BOARD}" == "" ]; then
++if [ "${BOARD}" = "" ]; then
+ 	echo "none";
+-elif [ "${BOARD}" == "NGW" ]; then
++elif [ "${BOARD}" = "NGW" ]; then
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  boot LED: "
+@@ -111,7 +111,7 @@ elif [ "${BOARD}" == "NGW" ]; then
+ 		echo "failed"
+ 		exit 1
+ 	fi
+-elif [ "${BOARD}" == "STK1000" ]; then # end NGW
++elif [ "${BOARD}" = "STK1000" ]; then # end NGW
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  switches: "
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+index 967761a..7c07f28 100644
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
++++ b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+@@ -8,9 +8,9 @@ fi
+ 
+ BOARD=`cat /etc/release | cut -d ' ' -f1`
+ 
+-if [ "${BOARD}" == "" ]; then
++if [ "${BOARD}" = "" ]; then
+ 	echo "none";
+-elif [ "${BOARD}" == "NGW" ]; then
++elif [ "${BOARD}" = "NGW" ]; then
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  boot LED: "
+@@ -111,7 +111,7 @@ elif [ "${BOARD}" == "NGW" ]; then
+ 		echo "failed"
+ 		exit 1
+ 	fi
+-elif [ "${BOARD}" == "STK1000" ]; then # end NGW
++elif [ "${BOARD}" = "STK1000" ]; then # end NGW
+ 	echo "'${BOARD}'"
+ 
+ 	echo -n "  switches: "
 -- 
 1.7.1
