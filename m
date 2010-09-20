@@ -1,32 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 20 Sep 2010 23:26:05 +0200
-Subject: [Buildroot] [ Patch 0/4] Fix for POSIX compliance
-Message-ID: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Date: Mon, 20 Sep 2010 23:26:09 +0200
+Subject: [Buildroot] [PATCH 4/4] package/tcl: fix for POSIX compliance
+In-Reply-To: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1285017969-32280-5-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Using two '=' for string comparison is a bashism.
+Revert to using one, as stated in POSIX 1003.1-2008.
 
-This series adds fixes for POSIX 1003.1-2008 compliance in some shell
-scripts, with respect to string comparison. POSIX says that string
-comparison in test(1) is done using a sing '='; using two is a bashism.
-See:
-  http://www.opengroup.org/onlinepubs/9699919799/utilities/test.html
-  man 1 test
-  man 1 bash
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ package/tcl/tcl.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-  [PATCH 1/4] toolchain: fix helpers for POSIX compliance
-  [PATCH 2/4] skeleton: fix atstk1005, ststk100x and atngw100 for POSIX [...]
-  [PATCH 3/4] scripts: fix for POSIX compliance
-  [PATCH 4/4] package/tcl: fix for POSIX compliance
-
-Totally untested (I lack the proper Atmel hardware, at least), but should be
-harmless.
-
-Note: I have done no other compliance checking at all, only string comparison.
-
-Regards,
-Yann E. MORIN.
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index edcc441..cf46811 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -15,10 +15,10 @@ TCL_CONF_OPT = \
+ 
+ define TCL_POST_INSTALL_CLEANUP
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" == "y" ]; then \
++	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
+ 	rm -Rf $(TARGET_DIR)/usr/lib/tcl8.4/encoding/*; \
+ 	fi
+-	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" == "y" ]; then \
++	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
+ 	rm -f $(TARGET_DIR)/usr/bin/tclsh8.4; \
+ 	fi
+ endef
+-- 
+1.7.1
