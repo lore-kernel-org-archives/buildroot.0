@@ -1,37 +1,33 @@
-From: herve <herve@viva-vous.net>
-Date: Tue, 21 Sep 2010 11:10:56 +0200
-Subject: [Buildroot] new to the list
-Message-ID: <4C9876A0.7070908@viva-vous.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Sep 2010 09:38:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 2617] Pixman 0.19.2 & Cairo 1.10.0
+In-Reply-To: <bug-2617-163@https.bugs.busybox.net/>
+References: <bug-2617-163@https.bugs.busybox.net/>
+Message-ID: <20100921093840.5E5968B5D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+https://bugs.busybox.net/show_bug.cgi?id=2617
 
-I am new to the list and i'll try to use buildroot with the eken m001 
-mid with a VIA MW8505 600MHz cpu, it comes with android 1.6 and linux 
-kernel 2.6.29. I fouind on the web a "debian rom" working so linux is 
-possible on it, everythong working.
+Paul Burton <Paul.Burton@imgtec.com> changed:
 
-I download the tarball, extract it and run make menuconfig. the 
-compilation process stop somewere with :
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #2509|0                           |1
+        is obsolete|                            |
 
-rm /home/herve/plus/buildroot/output/build/buildroot-config/zconf.tab.c
-make[1]: quittant le r?pertoire ? 
-/home/herve/plus/buildroot/package/config ?
-/bin/bash: 
-/home/herve/plus/buildroot/output/build/buildroot-config/mconf: 
-Permission non accord?e
+--- Comment #2 from Paul Burton <Paul.Burton@imgtec.com>  ---
+Created attachment 2521
+  --> https://bugs.busybox.net/attachment.cgi?id=2521
+Update pixman to 0.19.2, take 2
 
+This is a slightly cleaner version of the pixman patch in that it updates the
+no tests patch against the current version too.
 
-
-the same with 2010.08 and the latest snapshot, root or regular user.
-
-i am on debian squeeze/sid what can i do, or read, in order to achieve 
-this ?
-
-thanks
-
-herv?
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
