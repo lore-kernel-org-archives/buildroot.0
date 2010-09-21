@@ -1,57 +1,46 @@
-From: Pierre-Luc Simard <pierreluc.simard@admetric.ca>
-Date: Tue, 21 Sep 2010 08:41:40 -0400
-Subject: [Buildroot] new to the list
-In-Reply-To: <4C9876A0.7070908@viva-vous.net>
-References: <4C9876A0.7070908@viva-vous.net>
-Message-ID: <AANLkTiknjXr-8JAAMJPGfLQ2-PsakMyo5gHD4QFUNpB2@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 21 Sep 2010 15:45:41 +0200
+Subject: [Buildroot] Fail to automatically create if-scripts dirs
+Message-ID: <4C98B705.5080704@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bonjour Herv?,
+For the case of creating devices via mdev/udev I wanted to create those missing dirs in 
 
-Wild guess here; but would it be possible that your home directory
-is mounted with the noexec flag? (check the output of the mount command)
+output/target/etc/network/
 
-Pierre-Luc
+Here is what I'm doing:
 
-On Tue, Sep 21, 2010 at 5:10 AM, herve <herve@viva-vous.net> wrote:
+Index: b/fs/common.mk
+===================================================================
+--- a/fs/common.mk	2010-09-21 15:35:52.000000000 +0200
++++ b/fs/common.mk	2010-09-21 15:39:31.000000000 +0200
+@@ -33,6 +33,7 @@
+ 
+ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
+ ROOTFS_DEVICE_TABLE = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
++NET_DIRS = if-down.d if-post-down.d if-post-down.d if-up.d
+ 
+ define ROOTFS_TARGET_INTERNAL
+ 
+@@ -45,6 +46,10 @@
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLE),)
+ 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(ROOTFS_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++else
++	for i in $(NET_DIRS) ; do \
++		[ -d $(TARGET_DIR)/etc/network/$$i ] || mkdir $(TARGET_DIR)/etc/network/$$i; \
++	done
+ endif
+ 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+ 	chmod a+x $(FAKEROOT_SCRIPT)
 
-> Hello
->
-> I am new to the list and i'll try to use buildroot with the eken m001 mid
-> with a VIA MW8505 600MHz cpu, it comes with android 1.6 and linux kernel
-> 2.6.29. I fouind on the web a "debian rom" working so linux is possible on
-> it, everythong working.
->
-> I download the tarball, extract it and run make menuconfig. the compilation
-> process stop somewere with :
->
-> rm /home/herve/plus/buildroot/output/build/buildroot-config/zconf.tab.c
-> make[1]: quittant le r?pertoire ? /home/herve/plus/buildroot/package/config
-> ?
-> /bin/bash: /home/herve/plus/buildroot/output/build/buildroot-config/mconf:
-> Permission non accord?e
->
->
->
-> the same with 2010.08 and the latest snapshot, root or regular user.
->
-> i am on debian squeeze/sid what can i do, or read, in order to achieve this
-> ?
->
-> thanks
->
-> herv?
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100921/7c4d988b/attachment.html>
+As result the folders will not be created and even if I replace test & mkdir with echo $$i, I can just see 4 blank lines, but $$i doesn't show the value it should. 
+
+What am I doing wrong?
+
+Regards,
+Yegor
