@@ -1,51 +1,46 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Tue, 21 Sep 2010 10:00:16 +0800
-Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
-In-Reply-To: <4C95DD81.2090105@googlemail.com>
-References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
-	<4C95DD81.2090105@googlemail.com>
-Message-ID: <AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Sep 2010 07:51:18 +0100
+Subject: [Buildroot] /etc/ld.so.conf and /etc/ld.so.conf.d in buildroot
+ target skeleton
+In-Reply-To: <AANLkTi=V6mNKXRM=c5KJHugtVyqai3At-sp5fQ8mFiTu@mail.gmail.com>
+References: <AANLkTimEShvTw0M4Yt4dGE3BbxbX4q4RQ5tfbc-BJ7rb@mail.gmail.com>
+	<AANLkTi=LRi8OJTNY-3_q0_c=qcO4yv-sQoaJr=w=F=sf@mail.gmail.com>
+	<AANLkTim=o6+2+jBXk0NAOv7md5TkK_V1tW9bcmsWfBER@mail.gmail.com>
+	<1284659221.12897.414.camel@coalu.atr>
+	<AANLkTi=0_3BUjZ-gww3Kz99Y1dfvBcoNebrWX_fwE+u2@mail.gmail.com>
+	<1284895170.12897.546.camel@coalu.atr>
+	<AANLkTi=V6mNKXRM=c5KJHugtVyqai3At-sp5fQ8mFiTu@mail.gmail.com>
+Message-ID: <20100921075118.5a58154a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcus,
+Hello,
 
-I have tried the patch.
-It works fine.
+On Sun, 19 Sep 2010 16:39:24 +0200
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
 
-2010/9/19 Marcus Osdoba <marcus.osdoba@googlemail.com>
+> That looks like a good solution.
+> In case of uClibc though, the parsing of ld.so.conf is a configurable
+> option (LDSO_CACHE_SUPPORT), so before generating an ld.so.conf we
+> should check whether that option is set.
 
->  Am 19.09.2010 10:23, schrieb Marcus Osdoba:
->
->> the client has an excellent webinterface
->> and seems to be ideal for headless systems,
->> the statedirectory is stored in /var/transmission which links to tmp,
->> the user should provide a writable config direcory
->>
->> Based on work by: Kelvin Cheung<keguang.zhang@gmail.com>
->>
->> Signed-off-by: Marcus Osdoba<marcus.osdoba@googlemail.com>
->> ---
->> [...]
->>
-> Hi Marek and Kelvin,
->
-> Are you able to test the new patch for your targets and send some
-> (hopefully) positive test results in reply to this patch on the mailinglist.
-> Maybe this would fasten the inclusion into upcoming release 2010.11.
->
-> Regards,
-> Marcus
->
+We don't really support any other uClibc configuration than the one we
+ship in toolchain/uClibc/uClibc-x.y.z.config. If an user changes the
+configuration we provide, (s)he has to be ready for some build
+breakage, because we are testing the build of all packages only with
+this specific uClibc configuration. I don't think we can sanely enter
+the game that would consist in handling all possible uClibc
+configurations to know which packages need what.
 
+Concerning LDSO cache, the LDSO_CACHE_SUPPORT is disabled in our
+default configuration.
 
-
+Thomas
 -- 
-Best Regards!
-Kelvin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100921/afbea320/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
