@@ -1,24 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Sep 2010 21:27:01 +0200
-Subject: [Buildroot] [PATCH 1/1] ntp: convert to autotargets and bump to
-	4.2.6p2
-In-Reply-To: <1285019663-30160-2-git-send-email-Martin.Banky@gmail.com>
-	(Martin Banky's message of "Mon, 20 Sep 2010 14:54:23 -0700")
-References: <1285019663-30160-1-git-send-email-Martin.Banky@gmail.com>
-	<1285019663-30160-2-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <87vd5yc2yi.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Sep 2010 20:37:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 2581] [PATCH] libmms: Update to 0.6,
+ and patch to work on architectures without unaligned data access
+In-Reply-To: <bug-2581-163@https.bugs.busybox.net/>
+References: <bug-2581-163@https.bugs.busybox.net/>
+Message-ID: <20100921203700.F19CA827C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2581
 
- Martin> Also added additional options for ntp and fixed a build issue
- Martin> when IPv6 support is not available.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Thanks, committed with minor changes.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
