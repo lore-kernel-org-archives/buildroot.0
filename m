@@ -1,171 +1,139 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Sep 2010 22:35:52 +0200
-Subject: [Buildroot] [git commit master 1/1] libmms: bump version,
-	add patch for architectures without unaligned access
-Message-ID: <20100921203712.1A10F832D6@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 22 Sep 2010 00:25:52 +0200
+Subject: [Buildroot] [PATCH] Makefile: generate a Makefile wrapper in $(O)
+Message-ID: <1285107952-24098-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+If building out-of-tree, add a Makefile wrapper that calls-out
+to the real Makefile with proper args.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e09414034418ef3ef6a6bb3af54c77c5599f79e4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Avoids having to pass -C and O= every time we call make.
 
-Closes #2581
+This is highly inspired from how the Linux kernel does it, and
+portions of it have been used.
 
-Signed-off-by: Paul Burton <Paul.Burton@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- CHANGES                                            |   20 +++--
- .../libmms-prevent-unaligned-dereferences.patch    |   84 ++++++++++++++++++++
- package/multimedia/libmms/libmms.mk                |    4 +-
- 3 files changed, 98 insertions(+), 10 deletions(-)
- create mode 100644 package/multimedia/libmms/libmms-prevent-unaligned-dereferences.patch
+ Makefile           |   18 +++++++++++++++-
+ scripts/mkmakefile |   50 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7f94a0f..404b454 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -21,20 +21,24 @@
- 	bmon, bridge-utils, busybox, dbus, dmraid, docker, dropbear,
- 	e2fsprogs, expat, freetype, gawk, gvfs, haserl, hostapd,
- 	ifplugd, iptables, jpeg, kexec, kismet, less, libcurl,
--	libdnet, libevent, libglade, libgtk2, libiconv, libidn, libnl,
--	liboil, libpcap, libpng, libungif, libxml2, libxslt, lighttpd,
--	lite, m4, mdadm, metacity, mysql_client, nano, nbd, ncftp,
--	neon, netperf, ntfsprogs, ntp, openntpd, openssh, openvpn,
--	oprofile, pango, pcre, php, prboom, radvd, qt, samba, sdl_sound,
--	shared-mime-info, speex, sqlite, squashfs, strace, taglib,
--	tcpdump, tiff, tn5250, udev, udpcast, usbmount, usbutils,
--	which, xlib_libX11, zlib
-+	libdnet, libevent, libglade, libgtk2, libiconv, libidn,
-+	libmms, libnl, liboil, libpcap, libpng, libungif, libxml2,
-+	libxslt, lighttpd, lite, m4, mdadm, metacity, mysql_client,
-+	nano, nbd, ncftp, neon, netperf, ntfsprogs, ntp, openntpd,
-+	openssh, openvpn, oprofile, pango, pcre, php, prboom, radvd,
-+	qt, samba, sdl_sound, shared-mime-info, speex, sqlite,
-+	squashfs, strace, taglib, tcpdump, tiff, tn5250, udev,
-+	udpcast, usbmount, usbutils, which, xlib_libX11, zlib
+diff --git a/Makefile b/Makefile
+index faa802b..ec425c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -45,6 +45,7 @@ space:=$(empty) $(empty)
+ ifneq ("$(origin O)", "command line")
+ O:=output
+ CONFIG_DIR:=$(TOPDIR)
++NEED_WRAPPER=
+ else
+ # other packages might also support Linux-style out of tree builds
+ # with the O=<dir> syntax (E.G. Busybox does). As make automatically
+@@ -60,6 +61,7 @@ override O:=$(O)
+ CONFIG_DIR:=$(O)
+ # we need to pass O= everywhere we call back into the toplevel makefile
+ EXTRAMAKEARGS = O=$(O)
++NEED_WRAPPER=y
+ endif
  
- 	Deprecated packages: lzma
+ # $(shell find . -name *_defconfig |sed 's/.*\///')
+@@ -324,7 +326,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: prepare dependencies dirs $(BASE_TARGETS) $(TARGETS_ALL)
  
- 	Removed packages: dillo, libglib12, libgtk12, microwin,
- 	pcmcia
  
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#2581: libmms: Update to 0.6, and patch to work on architectures...
-+
- 2010.08: Released August 31th, 2010:
+-.PHONY: all world dirs clean distclean source \
++.PHONY: all world dirs clean distclean source outputmakefile \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+ 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+@@ -453,7 +455,7 @@ all: menuconfig
+ HOSTCFLAGS=$(CFLAGS_FOR_BUILD)
+ export HOSTCFLAGS
  
- 	Fixes all over the tree.
-diff --git a/package/multimedia/libmms/libmms-prevent-unaligned-dereferences.patch b/package/multimedia/libmms/libmms-prevent-unaligned-dereferences.patch
-new file mode 100644
-index 0000000..9c606eb
---- /dev/null
-+++ b/package/multimedia/libmms/libmms-prevent-unaligned-dereferences.patch
-@@ -0,0 +1,84 @@
-+From 4fd16633a8c379971425f7fd482152f163b09158 Mon Sep 17 00:00:00 2001
-+From: Paul Burton <Paul.Burton@imgtec.com>
-+Date: Fri, 17 Sep 2010 14:08:57 +0100
-+Subject: [PATCH] Endianness macros should not dereference unaligned pointers
-+
-+The LE_*/BE_* macros previously worked by casting the pointer passed to them to a pointer to the correct integer type, then dereferencing it. This will not work on architectures which don't allow unaligned data access. Instead, access one byte at a time and shift to form the value.
-+---
-+ src/bswap.h |   59 +++++++++++++++++++++++++++++++++++++++++++----------------
-+ 1 files changed, 43 insertions(+), 16 deletions(-)
-+
-+diff --git a/src/bswap.h b/src/bswap.h
-+index b731da7..59e8716 100644
-+--- a/src/bswap.h
-++++ b/src/bswap.h
-+@@ -21,23 +21,50 @@
-+  */
-+ 
-+ 
-+-/* Go cheap now, will rip out glib later. *Sigh* */
-+-#include <glib.h>
-+-
-+-/* NOTE:
-+- * Now, to clear up confusion: LE_XX means "from LE to native, XX bits wide"
-+- * I know it's not very clear naming (tell me about it, I
-+- * misinterpreted in first version and caused bad nasty bug, *sigh*),
-+- * but that's inherited code, will clean up as things go
-+- * Oh, and one more thing -- they take *pointers*, not actual ints
-+- */
-++#include <stdint.h>
-++
-++#define SWAP_ENDIAN_16(val) \
-++	(val[1] | (val[0] << 8))
-++#define SWAP_ENDIAN_32(val) \
-++	(val[3] | (val[2] << 8) | (val[1] << 16) | (val[0] << 24))
-++#define SWAP_ENDIAN_64(val) \
-++	(val[7] | (val[6] << 8) | (val[5] << 16) | (val[4] << 24) | \
-++	((uint64_t)val[3] << 32) | ((uint64_t)val[2] << 40) | \
-++	((uint64_t)val[1] << 48) | ((uint64_t)val[0] << 56))
-++
-++#define SAME_ENDIAN_16(val) \
-++	(val[0] | (val[1] << 8))
-++#define SAME_ENDIAN_32(val) \
-++	(val[0] | (val[1] << 8) | (val[2] << 16) | (val[3] << 24))
-++#define SAME_ENDIAN_64(val) \
-++	(val[0] | (val[1] << 8) | (val[2] << 16) | (val[3] << 24) | \
-++	((uint64_t)val[4] << 32) | ((uint64_t)val[5] << 40) | \
-++	((uint64_t)val[6] << 48) | ((uint64_t)val[7] << 56))
-++
-++#ifndef WORDS_BIGENDIAN
-++
-++/* Little endian */
-++
-++#define LE_16(val) SAME_ENDIAN_16(((uint8_t *)(val)))
-++#define LE_32(val) SAME_ENDIAN_32(((uint8_t *)(val)))
-++#define LE_64(val) SAME_ENDIAN_64(((uint8_t *)(val)))
-++#define BE_16(val) SWAP_ENDIAN_16(((uint8_t *)(val)))
-++#define BE_32(val) SWAP_ENDIAN_32(((uint8_t *)(val)))
-++#define BE_64(val) SWAP_ENDIAN_64(((uint8_t *)(val)))
-++
-++#elif WORDS_BIGENDIAN == 1
-++
-++/* Big endian */
-+ 
-+-#define LE_16(val) (GINT16_FROM_LE (*((u_int16_t*)(val))))
-+-#define BE_16(val) (GINT16_FROM_BE (*((u_int16_t*)(val))))
-+-#define LE_32(val) (GINT32_FROM_LE (*((u_int32_t*)(val))))
-+-#define BE_32(val) (GINT32_FROM_BE (*((u_int32_t*)(val))))
-++#define LE_16(val) SWAP_ENDIAN_16(((uint8_t *)(val)))
-++#define LE_32(val) SWAP_ENDIAN_32(((uint8_t *)(val)))
-++#define LE_64(val) SWAP_ENDIAN_64(((uint8_t *)(val)))
-++#define BE_16(val) SAME_ENDIAN_16(((uint8_t *)(val)))
-++#define BE_32(val) SAME_ENDIAN_32(((uint8_t *)(val)))
-++#define BE_64(val) SAME_ENDIAN_64(((uint8_t *)(val)))
-+ 
-+-#define LE_64(val) (GINT64_FROM_LE (*((u_int64_t*)(val))))
-+-#define BE_64(val) (GINT64_FROM_BE (*((u_int64_t*)(val))))
-++#else
-++#error Unknown endianness!
-++#endif
-+ 
-+ #endif /* BSWAP_H_INCLUDED */
-+-- 
-+1.7.2.2
-+
-diff --git a/package/multimedia/libmms/libmms.mk b/package/multimedia/libmms/libmms.mk
-index 489bf0d..a8f4527 100644
---- a/package/multimedia/libmms/libmms.mk
-+++ b/package/multimedia/libmms/libmms.mk
-@@ -3,9 +3,9 @@
- # libmms
+-$(BUILD_DIR)/buildroot-config/%onf:
++$(BUILD_DIR)/buildroot-config/%onf: |outputmakefile
+ 	mkdir -p $(@D)/lxdialog
+ 	$(MAKE) CC="$(HOSTCC)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
+ 
+@@ -559,6 +561,18 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ # Cleanup and misc junk
  #
  #############################################################
--LIBMMS_VERSION = 0.4
-+LIBMMS_VERSION = 0.6
- LIBMMS_SOURCE = libmms-$(LIBMMS_VERSION).tar.gz
--LIBMMS_SITE = http://launchpad.net/libmms/trunk/$(LIBMMS_VERSION)/+download
-+LIBMMS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libmms
- 
- LIBMMS_AUTORECONF = NO
- LIBMMS_LIBTOOL_PATCH = NO
++
++ifeq ($(NEED_WRAPPER),y)
++# outputmakefile generates a Makefile in the output directory, if using a
++# separate output directory. This allows convenient use of make in the
++# output directory.
++outputmakefile:
++	$(Q)$(SHELL) $(TOPDIR)/scripts/mkmakefile $(CURDIR) $(O)
++else
++outputmakefile:
++	@true
++endif
++
+ clean:
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR)
+diff --git a/scripts/mkmakefile b/scripts/mkmakefile
+new file mode 100644
+index 0000000..b2b3555
+--- /dev/null
++++ b/scripts/mkmakefile
+@@ -0,0 +1,50 @@
++#!/bin/sh
++# Generates a small Makefile used in the root of the output
++# directory, to allow make to be started from there.
++# The Makefile also allow for more convinient build of external modules
++
++# Usage
++# $1 - Kernel src directory
++# $2 - Output directory
++
++
++test ! -r $2/Makefile -o -O $2/Makefile || exit 0
++# Only overwrite automatically generated Makefiles
++# (so we do not overwrite buildroot Makefile)
++if test -e $2/Makefile && ! grep -E "^# Buildroot Makefile wrapper$" $2/Makefile >/dev/null 2>&1
++then
++        exit 0
++fi
++
++cat << EOF > $2/.Makefile
++# Buildroot Makefile wrapper
++# Automatically generated by $0: don't edit
++
++lastword = \$(word \$(words \$(1)),\$(1))
++makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
++
++MAKEARGS := -C $1
++MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
++
++MAKEFLAGS += --no-print-directory
++
++.PHONY: all \$(MAKECMDGOALS)
++
++all     := \$(filter-out all Makefile,\$(MAKECMDGOALS))
++
++all:
++	\$(MAKE) \$(MAKEARGS) \$(all)
++
++Makefile:;
++
++\$(all) %/: all
++	@:
++EOF
++
++if ! cmp $2/.Makefile $2/Makefile >/dev/null 2>&1; then
++    echo "  GEN    Makefile"
++    rm -f $2/Makefile
++    mv $2/.Makefile $2/Makefile
++else
++    rm -f $2/.Makefile
++fi
 -- 
 1.7.1
