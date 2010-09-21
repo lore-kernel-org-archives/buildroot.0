@@ -1,61 +1,146 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Sep 2010 19:38:42 +0200
-Subject: [Buildroot] [git commit master 1/1] configs/i?86_defconfig: fix
-	uClibc version / config file
-Message-ID: <20100921173954.461B18B5C3@busybox.osuosl.org>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Tue, 21 Sep 2010 10:39:40 -0700
+Subject: [Buildroot] [PATCH 18/21] ntp: convert to autotargets and bump
+	to 4.2.6p2
+In-Reply-To: <20100918191944.612fee30@surf>
+References: <1284435648-15238-1-git-send-email-Martin.Banky@gmail.com>
+	<1284435648-15238-18-git-send-email-Martin.Banky@gmail.com>
+	<20100918191944.612fee30@surf>
+Message-ID: <AANLkTik4DS2KdmqwaXrDcPF8soHVi6vn1aFo6PSqfPNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
+     Thank you for the tips! As you can probably tell, I'm new to writing
+makefiles, and have been using the other mk files in buildroot as examples.
+Not always the best way to pick up the proper format for the buildroot
+makefiles. Feel free to point out other issues with my mk files in the
+future. You won't hurt my feelings, and I always appreciate being shown how
+to do it properly.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b899a43bae232b80eb57dfb6e373dc3971f8fed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Martin
 
-As reported on the list.
+On Sat, Sep 18, 2010 at 10:19 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/i386_defconfig |    6 +++---
- configs/i686_defconfig |    6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/configs/i386_defconfig b/configs/i386_defconfig
-index 2e1bf06..672b694 100644
---- a/configs/i386_defconfig
-+++ b/configs/i386_defconfig
-@@ -151,10 +151,10 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
- #
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not set
--BR2_UCLIBC_VERSION_0_9_30_1=y
-+BR2_UCLIBC_VERSION_0_9_31=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30.1"
--BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
-+BR2_UCLIBC_VERSION_STRING="0.9.31"
-+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
- # BR2_PTHREAD_DEBUG is not set
- # BR2_PROGRAM_INVOCATION is not set
- # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
-diff --git a/configs/i686_defconfig b/configs/i686_defconfig
-index fe249fa..5b1b56f 100644
---- a/configs/i686_defconfig
-+++ b/configs/i686_defconfig
-@@ -151,10 +151,10 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
- #
- # BR2_UCLIBC_VERSION_0_9_29 is not set
- # BR2_UCLIBC_VERSION_0_9_30 is not set
--BR2_UCLIBC_VERSION_0_9_30_1=y
-+BR2_UCLIBC_VERSION_0_9_31=y
- # BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30.1"
--BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
-+BR2_UCLIBC_VERSION_STRING="0.9.31"
-+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
- # BR2_PTHREAD_DEBUG is not set
- # BR2_PROGRAM_INVOCATION is not set
- # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
--- 
-1.7.1
+> Hello !
+>
+> On Mon, 13 Sep 2010 20:40:45 -0700
+> Martin Banky <martin.banky@gmail.com> wrote:
+>
+> > +config BR2_PACKAGE_NTP_NTP-KEYGEN
+>
+> Please don't use the dash character in configuration options. This
+> should be BR2_PACKAGE_NTP_KEYGEN or BR2_PACKAGE_NTP_NTP_KEYGEN.
+>
+> > +NTP_DIR = $(BUILD_DIR)/ntp-$(NTP_VERSION)
+>
+> Not needed.
+>
+> > +NTP_CAT = $(ZCAT)
+>
+> Not needed.
+>
+> >  ifeq ($(BR2_PACKAGE_NTP_SNTP),y)
+> > +define NTP_INSTALL_SNTP
+> >       install -m 755 $(NTP_DIR)/sntp/sntp $(TARGET_DIR)/usr/bin/sntp
+> > +endef
+> > +endif
+>
+> Instead of $(NTP_DIR), use $(@D).
+>
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_NTP-KEYGEN),y)
+> > +define NTP_INSTALL_NTP-KEYGEN
+> > +     install -m 755 $(NTP_DIR)/util/ntp-keygen
+> $(TARGET_DIR)/usr/bin/ntp-keygen
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
+> > +define NTP_INSTALL_NTP-WAIT
+> > +     install -m 755 $(NTP_DIR)/scripts/ntp-wait
+> $(TARGET_DIR)/usr/bin/ntp-wait
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_NTPDC),y)
+> > +define NTP_INSTALL_NTPDC
+> > +     install -m 755 $(NTP_DIR)/ntpdc/ntpdc $(TARGET_DIR)/usr/bin/ntpdc
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_NTPQ),y)
+> > +define NTP_INSTALL_NTPQ
+> > +     install -m 755 $(NTP_DIR)/ntpq/ntpq $(TARGET_DIR)/usr/bin/ntpq
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_NTPTRACE),y)
+> > +define NTP_INSTALL_NTPTRACE
+> > +     install -m 755 $(NTP_DIR)/scripts/ntptrace
+> $(TARGET_DIR)/usr/bin/ntptrace
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_NTP_TICKADJ),y)
+> > +define NTP_INSTALL_TICKADJ
+> > +     install -m 755 $(NTP_DIR)/util/tickadj
+> $(TARGET_DIR)/usr/bin/tickadj
+> > +endef
+> >  endif
+> > +
+> > +define NTP_INSTALL_TARGET_CMDS
+> > +     install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
+> > +     $(NTP_INSTALL_SNTP)
+> > +     $(NTP_INSTALL_NTP-KEYGEN)
+> > +     $(NTP_INSTALL_NTP-WAIT)
+> > +     $(NTP_INSTALL_NTPDC)
+> > +     $(NTP_INSTALL_NTPQ)
+> > +     $(NTP_INSTALL_NTPTRACE)
+> > +     $(NTP_INSTALL_TICKADJ)
+>
+> Humm, you could rewrite this this way:
+>
+> NTP_INSTALL_BIN_FILES =
+> ifeq ($(BR2_PACKAGE_NTP_NTP_KEYGEN),y)
+> NTP_INSTALL_BIN_FILES += util/ntp-keygen
+> endif
+> ifeq ($(BR2_PACKAGE_NTP_NTP-WAIT),y)
+> NTP_INSTALL_BIN_FILES += scripts/ntp-wait
+> endif
+> ...
+>
+> and then :
+>
+> define NTP_INSTALL_TARGET_CMDS
+>        install -m 755 $(NTP_DIR)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd
+>        test -z "$(NTP_INSTALL_BIN_FILES)" || install -m 755 $(addprefix
+> $(@D),$(NTP_INSTALL_BIN_FILES)) $(TARGET_DIR)/usr/bin/
+> endif
+>
+> and finally :
+>
+> define NTP_UNINSTALL_TARGET_CMDS
+>        rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(NTP_INSTALL_BIN_FILES))
+> endif
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100921/89ca7665/attachment-0001.html>
