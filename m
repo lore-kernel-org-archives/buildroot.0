@@ -1,46 +1,48 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 21 Sep 2010 15:45:41 +0200
-Subject: [Buildroot] Fail to automatically create if-scripts dirs
-Message-ID: <4C98B705.5080704@visionsystems.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 21 Sep 2010 12:18:44 +0200
+Subject: [Buildroot] [git commit master 1/1] kernel-headers/linux: bump
+	2.6.35.x stable version
+Message-ID: <20100921143036.87ADF8B440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the case of creating devices via mdev/udev I wanted to create those missing dirs in 
 
-output/target/etc/network/
+commit: http://git.buildroot.net/buildroot/commit/?id=386c55dbba5464ff777e149e2266b90943e53157
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Here is what I'm doing:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in                    |    2 +-
+ toolchain/kernel-headers/Config.in |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Index: b/fs/common.mk
-===================================================================
---- a/fs/common.mk	2010-09-21 15:35:52.000000000 +0200
-+++ b/fs/common.mk	2010-09-21 15:39:31.000000000 +0200
-@@ -33,6 +33,7 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index 9752e69..c8c34b4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_2_6_35
  
- FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
- ROOTFS_DEVICE_TABLE = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
-+NET_DIRS = if-down.d if-post-down.d if-post-down.d if-up.d
+ config BR2_LINUX_KERNEL_2_6_35
+-	bool "2.6.35.4"
++	bool "2.6.35.5"
  
- define ROOTFS_TARGET_INTERNAL
- 
-@@ -45,6 +46,10 @@
- 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
- ifneq ($(ROOTFS_DEVICE_TABLE),)
- 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(ROOTFS_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-+else
-+	for i in $(NET_DIRS) ; do \
-+		[ -d $(TARGET_DIR)/etc/network/$$i ] || mkdir $(TARGET_DIR)/etc/network/$$i; \
-+	done
- endif
- 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
- 	chmod a+x $(FAKEROOT_SCRIPT)
-
-As result the folders will not be created and even if I replace test & mkdir with echo $$i, I can just see 4 blank lines, but $$i doesn't show the value it should. 
-
-What am I doing wrong?
-
-Regards,
-Yegor
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index ca416f9..025e6a3 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,6 +63,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.32.22"	if BR2_KERNEL_HEADERS_2_6_32
+ 	default "2.6.33.7"	if BR2_KERNEL_HEADERS_2_6_33
+ 	default "2.6.34.7"	if BR2_KERNEL_HEADERS_2_6_34
+-	default "2.6.35.4"	if BR2_KERNEL_HEADERS_2_6_35
++	default "2.6.35.5"	if BR2_KERNEL_HEADERS_2_6_35
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.7.1
