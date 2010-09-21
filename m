@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Sep 2010 16:54:55 +0200
-Subject: [Buildroot] [git commit master 1/1] linux: really bump default
-	version to 2.6.35.5
-Message-ID: <20100921145558.91AF78B440@busybox.osuosl.org>
+Date: Tue, 21 Sep 2010 19:38:42 +0200
+Subject: [Buildroot] [git commit master 1/1] configs/i?86_defconfig: fix
+	uClibc version / config file
+Message-ID: <20100921173954.461B18B5C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a7e9e8f2eac9dd0144ecd1cb8a21704aab9cc23
+commit: http://git.buildroot.net/buildroot/commit/?id=6b899a43bae232b80eb57dfb6e373dc3971f8fed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As reported on the list.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ configs/i386_defconfig |    6 +++---
+ configs/i686_defconfig |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c8c34b4..497a02e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -52,7 +52,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "2.6.35.4"
-+	default "2.6.35.5"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "2.6.35.4" if BR2_LINUX_KERNEL_2_6_35
-+	default "2.6.35.5" if BR2_LINUX_KERNEL_2_6_35
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/configs/i386_defconfig b/configs/i386_defconfig
+index 2e1bf06..672b694 100644
+--- a/configs/i386_defconfig
++++ b/configs/i386_defconfig
+@@ -151,10 +151,10 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ #
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not set
+-BR2_UCLIBC_VERSION_0_9_30_1=y
++BR2_UCLIBC_VERSION_0_9_31=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
++BR2_UCLIBC_VERSION_STRING="0.9.31"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+diff --git a/configs/i686_defconfig b/configs/i686_defconfig
+index fe249fa..5b1b56f 100644
+--- a/configs/i686_defconfig
++++ b/configs/i686_defconfig
+@@ -151,10 +151,10 @@ BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+ #
+ # BR2_UCLIBC_VERSION_0_9_29 is not set
+ # BR2_UCLIBC_VERSION_0_9_30 is not set
+-BR2_UCLIBC_VERSION_0_9_30_1=y
++BR2_UCLIBC_VERSION_0_9_31=y
+ # BR2_UCLIBC_VERSION_SNAPSHOT is not set
+-BR2_UCLIBC_VERSION_STRING="0.9.30.1"
+-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
++BR2_UCLIBC_VERSION_STRING="0.9.31"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
+ # BR2_PTHREAD_DEBUG is not set
+ # BR2_PROGRAM_INVOCATION is not set
+ # BR2_UCLIBC_INSTALL_TEST_SUITE is not set
 -- 
 1.7.1
