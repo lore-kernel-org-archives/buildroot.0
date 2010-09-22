@@ -1,56 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Sep 2010 00:00:33 +0100
-Subject: [Buildroot] [PATCH] Add pcs-lite package to buildroot.
-In-Reply-To: <AANLkTinyYg2p72sarSbRWfxXqZVg_WpvvfQMVdk8ryMw@mail.gmail.com>
-References: <AANLkTinyYg2p72sarSbRWfxXqZVg_WpvvfQMVdk8ryMw@mail.gmail.com>
-Message-ID: <20100923000033.05e9e9e5@surf>
+Date: Thu, 23 Sep 2010 00:05:30 +0100
+Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
+In-Reply-To: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
+References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
+Message-ID: <20100923000530.049479ea@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi !
+On Sun, 19 Sep 2010 10:23:24 +0200
+Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
 
-On Wed, 22 Sep 2010 09:53:50 +0200
-Belisko Marek <marek.belisko@gmail.com> wrote:
+> +		IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
+> +		IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
+> +		while [ -z "$IP_ADDR" ]
+> +		do
+> +			sleep 5
+> +			IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
+> +			IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
+> +		done
 
-> +source "package/pcs-lite/Config.in"
-> +#source "package/pcsc-tools/Config.in"
+I'm still not a big fan of this loop. There's really no other solution ?
 
-Keep this commented line for the patch on pcsc-tools.
+> +	start)
+> +		echo "Starting $DESC" "$NAME..."
+> +		do_start
+> +		case "$?" in
+> +			0) echo "   Start $DESC $NAME: SUCCESS" ;;
+> +			*)
+> +				echo "   Start $DESC $NAME: FAILED"
+> +				exit 3
+> +				;;
+> +		esac
+> +		;;
 
-> +#############################################################
-> +#
-> +# pcs-lite
-> +#
-> +#############################################################
-> +PCS_LITE_VERSION = 1.6.4
-> +PCS_LITE_SOURCE = pcs-lite-$(PCS_LITE_VERSION).tar.bz2
-> +PCS_LITE_SITE = https://alioth.debian.org/frs/download.php/3337
-> +PCS_LITE_AUTORECONF = NO
+I don't think we have all this message printing handling in other S??*
+scripts, could you simplify this a little bit, for example to make it
+similar to package/dropbear/S50dropbear ?
 
-Not needed (that's the default).
+> +ifneq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
+> +TRANSMISSION_CONF_OPT += --disable-remote
+> +endif
 
-> +PCS_LITE_INSTALL_STAGING = NO
+Add a new line here.
 
-Not needed (that's the default).
+> +ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
+> +define TRANSMISSION_INITDSKRIPT_INSTALL
 
-> +PCS_LITE_INSTALL_TARGET = YES
+INITDSKRIPT looks strange. INIT_SCRIPT instead ?
 
-Not needed (that's the default).
+> +	# install start/stop script
+> +	$(call MESSAGE,"Installing S92transmission init script")
+> +	if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
+> +		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
+> +		$(TARGET_DIR)/etc/init.d/S92transmission; \
+> +	fi
+> +	$(Q)touch $@
 
-> +PCS_LITE_CONF_OPT = --disable-libhal
-> +
-> +PCS_LITE_DEPENDENCIES = uclibc libusb
+The touch here is not needed.
 
-The dependency on 'uclibc' should be removed. Buildroot already knows
-that the toolchain should be built prior to any user package.
+Otherwise, looks good to me. Care to fix these and resend an updated
+version ?
 
-If you depend on libusb, then your package should "select
-BR2_PACKAGE_LIBUSB" in its Config.in file.
-
-Regards,
+Thanks a lot for all your efforts and your patience!
 
 Thomas
 -- 
