@@ -1,70 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Sep 2010 00:05:30 +0100
+Date: Thu, 23 Sep 2010 00:06:54 +0100
 Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
-In-Reply-To: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
+In-Reply-To: <4C9A6667.90603@googlemail.com>
 References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
-Message-ID: <20100923000530.049479ea@surf>
+	<4C95DD81.2090105@googlemail.com>
+	<AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
+	<4C9A6667.90603@googlemail.com>
+Message-ID: <20100923000654.01071f41@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Sep 2010 10:23:24 +0200
+On Wed, 22 Sep 2010 22:26:15 +0200
 Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
 
-> +		IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> +		IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> +		while [ -z "$IP_ADDR" ]
-> +		do
-> +			sleep 5
-> +			IFCONFIG_OUTPUT=`ifconfig $NET_INTERFACE`
-> +			IP_ADDR=`expr match "$IFCONFIG_OUTPUT" '.*inet addr:\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*'`
-> +		done
+> Is a positive test sufficient for you to have a closer look at it?
 
-I'm still not a big fan of this loop. There's really no other solution ?
+Yes, of course! I just send a review.
 
-> +	start)
-> +		echo "Starting $DESC" "$NAME..."
-> +		do_start
-> +		case "$?" in
-> +			0) echo "   Start $DESC $NAME: SUCCESS" ;;
-> +			*)
-> +				echo "   Start $DESC $NAME: FAILED"
-> +				exit 3
-> +				;;
-> +		esac
-> +		;;
+> Just for the protocol, transmission build breaks with activated 
+> config-cache. If I use it, I have to remove 
+> outbut/build/transmission-2.04 and run make flush;make.
 
-I don't think we have all this message printing handling in other S??*
-scripts, could you simplify this a little bit, for example to make it
-similar to package/dropbear/S50dropbear ?
+The configuration cache has been disabled by default since just before
+the release of 2010.08. The current consensus seems to be that we
+should simply get rid of this option completely, because it cannot be
+really reliable.
 
-> +ifneq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-> +TRANSMISSION_CONF_OPT += --disable-remote
-> +endif
+Speed-up in the build process can come from parallel building of
+different packages, but this needs some quite heavy changes in our
+package infrastructure.
 
-Add a new line here.
-
-> +ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-> +define TRANSMISSION_INITDSKRIPT_INSTALL
-
-INITDSKRIPT looks strange. INIT_SCRIPT instead ?
-
-> +	# install start/stop script
-> +	$(call MESSAGE,"Installing S92transmission init script")
-> +	if [ ! -f $(TARGET_DIR)/etc/init.d/S92transmission ]; then \
-> +		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-> +		$(TARGET_DIR)/etc/init.d/S92transmission; \
-> +	fi
-> +	$(Q)touch $@
-
-The touch here is not needed.
-
-Otherwise, looks good to me. Care to fix these and resend an updated
-version ?
-
-Thanks a lot for all your efforts and your patience!
+Regards,
 
 Thomas
 -- 
