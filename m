@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Sep 2010 00:06:54 +0100
-Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
-In-Reply-To: <4C9A6667.90603@googlemail.com>
-References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
-	<4C95DD81.2090105@googlemail.com>
-	<AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
-	<4C9A6667.90603@googlemail.com>
-Message-ID: <20100923000654.01071f41@surf>
+Date: Thu, 23 Sep 2010 00:09:22 +0100
+Subject: [Buildroot] Introduction of mpd into buildroot ?
+In-Reply-To: <AANLkTimZa473TfBgFhoXMhR_fiusyduFvdo-YuMzs84T@mail.gmail.com>
+References: <AANLkTimZa473TfBgFhoXMhR_fiusyduFvdo-YuMzs84T@mail.gmail.com>
+Message-ID: <20100923000922.57de215a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Sep 2010 22:26:15 +0200
-Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
+Hello Yoann,
 
-> Is a positive test sufficient for you to have a closer look at it?
 
-Yes, of course! I just send a review.
+On Wed, 22 Sep 2010 14:45:49 +0200
+Yoann Sculo <yoann.sculo@gmail.com> wrote:
 
-> Just for the protocol, transmission build breaks with activated 
-> config-cache. If I use it, I have to remove 
-> outbut/build/transmission-2.04 and run make flush;make.
+> First, I'd like to have your opinion about pkg-config files. libmad-0.15.1
+> for example doesn't provide the small file mad.pc
+> This is surprising, It does'nt seem to be distributed with libmad sources.
+> The probem is I need actually this file to compile mpd. Adding it manually,
+> works fine.
+> 
+> So I would be inclined to create a patch into package/multimedia/libmad to
+> add this file during mpd installation. Is it the better way to do this ?
 
-The configuration cache has been disabled by default since just before
-the release of 2010.08. The current consensus seems to be that we
-should simply get rid of this option completely, because it cannot be
-really reliable.
+Yes, sounds good. An even better thing would be to create such a patch
+*and* to submit it to the upstream libmad project so that hopefully a
+future version of libmad will contain the pkg-config file.
 
-Speed-up in the build process can come from parallel building of
-different packages, but this needs some quite heavy changes in our
-package infrastructure.
+> Well, if mpd has never been added into buildroot I'm interested to work on
+> it.
 
-Regards,
+I haven't heard of any effort to package mpd, so feel free to work on
+it!
+
+Thanks,
 
 Thomas
 -- 
