@@ -1,49 +1,60 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 22 Sep 2010 20:52:20 +0000 (UTC)
-Subject: [Buildroot] Building fw_printenv (u-boot utility) for target?
-References: <i7decv$4q1$1@dough.gmane.org> <87ocbpa53t.fsf@macbook.be.48ers.dk>
-Message-ID: <i7dqa4$sde$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Sep 2010 00:00:33 +0100
+Subject: [Buildroot] [PATCH] Add pcs-lite package to buildroot.
+In-Reply-To: <AANLkTinyYg2p72sarSbRWfxXqZVg_WpvvfQMVdk8ryMw@mail.gmail.com>
+References: <AANLkTinyYg2p72sarSbRWfxXqZVg_WpvvfQMVdk8ryMw@mail.gmail.com>
+Message-ID: <20100923000033.05e9e9e5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2010-09-22, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Grant Edwards <grant.b.edwards@gmail.com> writes:
->
->> I want fw_printenv on my target, and it would be convenient if
->> buildroot built it and set up the relvent links.  But, AFAICT, I
->> can't have buildroot build the fw_printenv utility without having it
->> do a complete build of U-Boot.  I don't have any need/desire for
->> buildroot to build the bootloader itself, I only need the fw_printenv
->> linux app for the target.  Is that possible with buildroot?
->
-> Currently not, is it a big deal to build u-boot as well?
+Hi !
 
-Mainly it's a hassle because it adds quite a bit to the build time.
+On Wed, 22 Sep 2010 09:53:50 +0200
+Belisko Marek <marek.belisko@gmail.com> wrote:
 
-Currently, I change my rootfs far more often than I change the U-Boot
-sources or configuration.  Doing a U-Boot rebuild every time I change
-my root filesystem wastes a lot of time.
+> +source "package/pcs-lite/Config.in"
+> +#source "package/pcsc-tools/Config.in"
 
-> The reason for this is mainly that fw_printenv isn't available
-> seperately, so we would need to double quite a lot of the u-boot
-> handling if we were to move it to a seperate package, and they are
-> most of the time used together.
+Keep this commented line for the patch on pcsc-tools.
 
-That makes sense.
+> +#############################################################
+> +#
+> +# pcs-lite
+> +#
+> +#############################################################
+> +PCS_LITE_VERSION = 1.6.4
+> +PCS_LITE_SOURCE = pcs-lite-$(PCS_LITE_VERSION).tar.bz2
+> +PCS_LITE_SITE = https://alioth.debian.org/frs/download.php/3337
+> +PCS_LITE_AUTORECONF = NO
 
->> Or should I just build fw_printenv separately and stick it into the
->> filesystem using the custom package?
->
-> That's naturally an option as well.
+Not needed (that's the default).
 
-I guess I'll stick with that.
+> +PCS_LITE_INSTALL_STAGING = NO
 
-Thanks.
+Not needed (that's the default).
 
+> +PCS_LITE_INSTALL_TARGET = YES
+
+Not needed (that's the default).
+
+> +PCS_LITE_CONF_OPT = --disable-libhal
+> +
+> +PCS_LITE_DEPENDENCIES = uclibc libusb
+
+The dependency on 'uclibc' should be removed. Buildroot already knows
+that the toolchain should be built prior to any user package.
+
+If you depend on libusb, then your package should "select
+BR2_PACKAGE_LIBUSB" in its Config.in file.
+
+Regards,
+
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! Do you guys know we
-                                  at               just passed thru a BLACK
-                              gmail.com            HOLE in space?
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
