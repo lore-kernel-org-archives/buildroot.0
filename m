@@ -1,30 +1,32 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 23 Sep 2010 22:24:40 +0200
-Subject: [Buildroot] keyboard layout
-Message-ID: <A2BFBDD6B1FE41D5BCD383D03938FE9F@apexjs>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 23 Sep 2010 23:04:49 +0200
+Subject: [Buildroot] [PATCH] Makefile: generate a Makefile wrapper in
+	$(O)
+In-Reply-To: <1285107952-24098-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Wed, 22 Sep 2010 00:25:52 +0200")
+References: <1285107952-24098-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <871v8k893i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-I used buildroot to build for an advantech board all is running, but just
-have a problem with the console 
-My keyboard is AZERTY but the console keyboard (PS/2) is querty.
-How do i setup the right keyboard ?
-I looked around a bit and see differences betheen standard distros.
-I know i need to use loadkeys , but there it stops.
- 
-when loading a keymap file from my debian distro i get an eeror : not a
-valid binary keymap
- 
-Not really a buildroot issue, but maybe something to add to the target rfs 
- 
-Some hints anyone?
- 
-Johan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100923/54ca022b/attachment-0001.html>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+
+ Yann> If building out-of-tree, add a Makefile wrapper that calls-out
+ Yann> to the real Makefile with proper args.
+
+ Yann> Avoids having to pass -C and O= every time we call make.
+
+Nice, looks good.
+
+ Yann> This is highly inspired from how the Linux kernel does it, and
+ Yann> portions of it have been used.
+
+Why only portions? Can't we use it all? That would make updating easier
+in the future. Related to this, mkmakefile got updated in the kernel
+back in August to support make 3.82, care to resync?
+
+-- 
+Bye, Peter Korsgaard
