@@ -1,34 +1,25 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 25 Sep 2010 13:52:40 +0200
-Subject: [Buildroot] [PATCH 00/01] Just a heads up about libtool 2.4
-In-Reply-To: <1285400034-17267-1-git-send-email-Martin.Banky@gmail.com>
-References: <1285400034-17267-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285415560.27944.13.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Sep 2010 14:14:50 +0200
+Subject: [Buildroot] "make menuconfig" possibly broken in git master
+In-Reply-To: <AANLkTimzWbLUWA+28XdSa+28oPDHdpJnVODso_VTRv9m@mail.gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Sat,
+	25 Sep 2010 13:21:52 +0200")
+References: <AANLkTimzWbLUWA+28XdSa+28oPDHdpJnVODso_VTRv9m@mail.gmail.com>
+Message-ID: <87mxr66mv9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 25 septembre 2010 ? 00:33 -0700, Martin Banky a ?crit :
-> I've only tested this on my config settings, so far, and it works for me. I'll
-> be doing some more testing over the next week or so.
-> 
-> Martin
-> 
-> [PATCH 01/01] libtool: bump to 2.4 - now with sysroot support
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
-That's great ! I haven't paid attention to the libtool releases...
+ Bj?rn> Hi all,
+ Bj?rn> My buildroot git master tree fails to "make menuconfig" because of
+ Bj?rn> "zconf.tab.c:181: error: conflicting types for ?symbol_hash?":
 
-But just bumping libtool isn't enough to use the sysroot feature from
-our libtool. You've get ride of the -L$(STAGING_DIR)/lib and -L
-$(STAGING_DIR)/usr/lib option we add, and also remove the SED pass we
-make on the .la files.
+Strange - Could you try the the same with a recent linux kernel
+(E.G. 2.6.36-rc5)?
 
-And still, you need to autoreconf package you want to use our libtool
-version. Otherwise packages are stuck with the shipped libtool script.
-
-Best regards,
-
---
-Lionel
+-- 
+Bye, Peter Korsgaard
