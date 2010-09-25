@@ -1,19 +1,16 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Fri, 24 Sep 2010 13:13:57 -0500
-Subject: [Buildroot] Building a package for gdb debugging
-Message-ID: <0D753D10438DA54287A00B027084269764451B9DB7@AUSP01VMBX24.collaborationhost.net>
+From: Martin Banky <martin.banky@gmail.com>
+Date: Sat, 25 Sep 2010 00:33:53 -0700
+Subject: [Buildroot] [PATCH 00/01] Just a heads up about libtool 2.4
+Message-ID: <1285400034-17267-1-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+I've only tested this on my config settings, so far, and it works for me. I'll
+be doing some more testing over the next week or so.
 
-I need to build a package for debugging a segfault with gdb.  Is there an
-easy way to pass the -g switch so that gcc compiles the program with
-debugging flags?  Also, how can I keep the final executable from being
-stripped?
+Martin
 
-Thanks,
-Hartley
+[PATCH 01/01] libtool: bump to 2.4 - now with sysroot support
