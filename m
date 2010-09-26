@@ -1,9 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:02 -0700
-Subject: [Buildroot] [PATCH 11/18] gadgets-test: convert to gentargets
+Date: Sun, 26 Sep 2010 00:14:04 -0700
+Subject: [Buildroot] [PATCH 13/18] hdparm: convert to gentargets and bump to
+	9.32
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-11-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-13-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +13,78 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/gadgetfs-test/gadgetfs-test.mk |   46 +++++++++-----------------------
- 1 files changed, 13 insertions(+), 33 deletions(-)
+ package/hdparm/hdparm.mk    |   61 +++++++++++++++---------------------------
+ package/hdparm/hdparm.patch |   12 --------
+ 2 files changed, 22 insertions(+), 51 deletions(-)
+ delete mode 100644 package/hdparm/hdparm.patch
 
-diff --git a/package/gadgetfs-test/gadgetfs-test.mk b/package/gadgetfs-test/gadgetfs-test.mk
-index e3ab95e..c72588d 100644
---- a/package/gadgetfs-test/gadgetfs-test.mk
-+++ b/package/gadgetfs-test/gadgetfs-test.mk
-@@ -5,47 +5,27 @@
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index cc747eb..a39d43b 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -3,51 +3,34 @@
+ # hdparm
+ #
  #############################################################
- GADGETFS_TEST_SOURCE=gadgetfs-test.tar.bz2
- GADGETFS_TEST_SITE=http://avr32linux.org/twiki/pub/Main/GadgetFsTest/
--GADGETFS_TEST_DIR=$(BUILD_DIR)/gadgetfs-test
+-HDPARM_VERSION:=7.7
+-HDPARM_SOURCE:=hdparm-$(HDPARM_VERSION).tar.gz
+-HDPARM_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
+-HDPARM_CAT:=$(ZCAT)
+-HDPARM_DIR:=$(BUILD_DIR)/hdparm-$(HDPARM_VERSION)
+-HDPARM_BINARY:=hdparm
+-HDPARM_TARGET_BINARY:=sbin/hdparm
 -
--GADGETFS_TEST_MAKEOPTS:=CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
- 
- ifeq ($(BR2_PACKAGE_GADGETFS_TEST_USE_AIO),y)
--GADGETFS_TEST_MAKEOPTS+=USE_AIO=y
-+GADGETFS_DEPENDENCIES = libaio
- endif
- 
--$(DL_DIR)/$(GADGETFS_TEST_SOURCE):
--	$(call DOWNLOAD,$(GADGETFS_TEST_SITE),$(GADGETFS_TEST_SOURCE))
+-$(DL_DIR)/$(HDPARM_SOURCE):
+-	 $(call DOWNLOAD,$(HDPARM_SITE),$(HDPARM_SOURCE))
 -
--$(GADGETFS_TEST_DIR)/.unpacked: $(DL_DIR)/$(GADGETFS_TEST_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(GADGETFS_TEST_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(GADGETFS_TEST_DIR) package/gadgetfs-test gadgetfs-test\*.patch
+-hdparm-source: $(DL_DIR)/$(HDPARM_SOURCE)
+-
+-$(HDPARM_DIR)/.unpacked: $(DL_DIR)/$(HDPARM_SOURCE)
+-	$(HDPARM_CAT) $(DL_DIR)/$(HDPARM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(HDPARM_DIR) package/hdparm \*.patch
 -	touch $@
 -
--$(GADGETFS_TEST_DIR)/gadgetfs-test: $(GADGETFS_TEST_DIR)/.unpacked
--	$(MAKE) -C $(GADGETFS_TEST_DIR) $(GADGETFS_TEST_MAKEOPTS)
--
--$(TARGET_DIR)/usr/bin/gadgetfs-test: $(GADGETFS_TEST_DIR)/gadgetfs-test
--	$(MAKE) -C $(GADGETFS_TEST_DIR) DESTDIR=$(TARGET_DIR) prefix=/usr install
-+GADGETFS_TEST_MAKEOPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+-$(HDPARM_DIR)/$(HDPARM_BINARY): $(HDPARM_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(HDPARM_DIR) \
++HDPARM_VERSION = 9.32
++HDPARM_SOURCE = hdparm-$(HDPARM_VERSION).tar.gz
++HDPARM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
++HDPARM_BINARY = hdparm
++HDPARM_TARGET_BINARY = sbin/hdparm
++
++define HDPARM_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)"
++endef
  
- ifeq ($(BR2_PACKAGE_GADGETFS_TEST_USE_AIO),y)
--gadgetfs-test: libaio $(TARGET_DIR)/usr/bin/gadgetfs-test
--else
--gadgetfs-test: $(TARGET_DIR)/usr/bin/gadgetfs-test
-+GADGETFS_TEST_MAKEOPTS+=USE_AIO=y
+-$(TARGET_DIR)/$(HDPARM_TARGET_BINARY): $(HDPARM_DIR)/$(HDPARM_BINARY)
+-	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
+-	$(INSTALL) -D -m 0755 $(HDPARM_DIR)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
+ ifeq ($(BR2_HAVE_DOCUMENTATION),y)
+-	$(INSTALL) -D $(HDPARM_DIR)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
++define HDPARM_INSTALL_DOCUMENTATION
++	$(INSTALL) -D $(@D)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
++endef
  endif
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-hdparm: $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
  
--gadgetfs-test-source: $(DL_DIR)/$(GADGETFS_TEST_SOURCE)
-+define GADGETFS_TEST_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS)
+-hdparm-clean:
+-	-$(MAKE) -C $(HDPARM_DIR) clean
++define HDPARM_INSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
++	$(INSTALL) -D -m 0755 $(@D)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
++	$(HDPARM_INSTALL_DOCUMENTATION)
 +endef
  
--gadgetfs-test-clean:
--	-$(MAKE) -C $(GADGETFS_TEST_DIR) $(GADGETFS_TEST_MAKEOPTS) clean
-+define GADGETFS_TEST_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr install
-+endef
- 
--gadgetfs-test-dirclean:
--	rm -rf $(GADGETFS_TEST_DIR)
-+define GADGETFS_TEST_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS) clean
+-hdparm-dirclean:
+-	rm -rf $(HDPARM_DIR)
++define HDPARM_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
 +endef
  
 -#############################################################
@@ -76,9 +92,27 @@ index e3ab95e..c72588d 100644
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_GADGETFS_TEST),y)
--TARGETS+=gadgetfs-test
+-ifeq ($(BR2_PACKAGE_HDPARM),y)
+-TARGETS+=hdparm
 -endif
-+$(eval $(call GENTARGETS,package,gadgetfs-test))
++$(eval $(call GENTARGETS,package,hdparm))
+diff --git a/package/hdparm/hdparm.patch b/package/hdparm/hdparm.patch
+deleted file mode 100644
+index d271eb8..0000000
+--- a/package/hdparm/hdparm.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -ur hdparm-7.6/Makefile hdparm-7.6-patched/Makefile
+---- hdparm-7.6/Makefile	2007-06-07 12:39:24.000000000 -0500
+-+++ hdparm-7.6-patched/Makefile	2007-07-19 12:11:03.000000000 -0500
+-@@ -28,7 +28,7 @@
+- 
+- hdparm: hdparm.h $(OBJS)
+- 	$(CC) $(LDFLAGS) -o hdparm $(OBJS)
+--	strip hdparm
+-+	$(STRIP) hdparm
+-  
+- install: all hdparm.8
+- 	if [ ! -z $(DESTDIR) ]; then $(INSTALL_DIR) $(DESTDIR) ; fi
 -- 
 1.7.3
