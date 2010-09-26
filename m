@@ -1,103 +1,85 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:07 -0700
-Subject: [Buildroot] [PATCH 16/18] lm-sensors: convert to gentargets and
-	bump to 3.1.2
+Date: Sun, 26 Sep 2010 00:14:03 -0700
+Subject: [Buildroot] [PATCH 12/18] hotplug: convert to gentargets
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-16-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-12-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There is one caveat with this, diethotplug-0.5.tar needs to be hosted some
+place. It's not available anywhere that I can find. It's a custome version
+written for buildroot.
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/lm-sensors/lm-sensors.mk |   65 +++++++++++--------------------------
- 1 files changed, 20 insertions(+), 45 deletions(-)
+ package/hotplug/hotplug.mk |   47 +++++++++++++------------------------------
+ 1 files changed, 14 insertions(+), 33 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index 1844f75..22008a4 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -3,58 +3,33 @@
- # lm-sensors
+diff --git a/package/hotplug/hotplug.mk b/package/hotplug/hotplug.mk
+index 0b354a8..04928cc 100644
+--- a/package/hotplug/hotplug.mk
++++ b/package/hotplug/hotplug.mk
+@@ -3,43 +3,24 @@
+ # hotplug support
  #
  #############################################################
--LM_SENSORS_VERSION:=3.0.2
--LM_SENSORS_SOURCE:=lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
--LM_SENSORS_SITE:=http://dl.lm-sensors.org/lm-sensors/releases
--LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
--LM_SENSORS_CAT:=$(BZCAT)
--LM_SENSORS_BINARY:=prog/sensors/sensors
--LM_SENSORS_TARGET_BINARY:=usr/bin/sensors
-+LM_SENSORS_VERSION = 3.1.2
-+LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
-+LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
-+LM_SENSORS_BINARY = prog/sensors/sensors
-+LM_SENSORS_TARGET_BINARY = usr/bin/sensors
+-HOTPLUG_VERSION:=0.5
+-HOTPLUG_SOURCE=package/hotplug/diethotplug-$(HOTPLUG_VERSION).tar
+-HOTPLUG_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+-HOTPLUG_DIR=$(BUILD_DIR)/diethotplug-$(HOTPLUG_VERSION)
+-HOTPLUG_CAT=cat
++HOTPLUG_VERSION = 0.5
++HOTPLUG_SOURCE = package/hotplug/diethotplug-$(HOTPLUG_VERSION).tar
++HOTPLUG_SITE = $(BR2_KERNEL_MIRROR)linux/utils/kernel/hotplug
  
--$(DL_DIR)/$(LM_SENSORS_SOURCE):
--	$(call DOWNLOAD,$(LM_SENSORS_SITE),$(LM_SENSORS_SOURCE))
-+define LM_SENSORS_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) MACHINE=$(KERNEL_ARCH) -C $(@D)
+-$(HOTPLUG_DIR): $(HOTPLUG_SOURCE)
+-	$(HOTPLUG_CAT) $(HOTPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(HOTPLUG_DIR) package/hotplug/ hotplug\*.patch
+-
+-$(HOTPLUG_DIR)/hotplug: $(HOTPLUG_DIR)
++define HOTPLUG_BUILD_CMDS
+ 	$(MAKE) CROSS=$(TARGET_CROSS) DEBUG=false KLIBC=false \
+ 	    KERNEL_INCLUDE_DIR=$(STAGING_DIR)/usr/include \
+-	    TARGET_DIR=$(TARGET_DIR) -C $(HOTPLUG_DIR)
+-	$(STRIPCMD) $(HOTPLUG_DIR)/hotplug
+-	touch -c $(HOTPLUG_DIR)/hotplug
+-
+-$(TARGET_DIR)/sbin/hotplug: $(HOTPLUG_DIR)/hotplug
+-	cp $(HOTPLUG_DIR)/hotplug $(TARGET_DIR)/sbin/hotplug
+-	touch -c $(TARGET_DIR)/sbin/hotplug
++	    TARGET_DIR=$(TARGET_DIR) -C $(@D)
++	$(STRIPCMD) $(@D)/hotplug
 +endef
  
--$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE)
--	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/ lm-sensors\*.patch
--	touch $@
--
--$(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY): $(LM_SENSORS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) MACHINE=$(KERNEL_ARCH)\
--		-C $(LM_SENSORS_DIR)
--
--$(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY): $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY)
-+define LM_SENSORS_INSTALL_TARGET_CMDS
- 	if [ ! -f $(TARGET_DIR)/etc/sensors.conf ]; then \
--		cp -dpf $(LM_SENSORS_DIR)/etc/sensors.conf.eg \
--			$(TARGET_DIR)/etc/sensors.conf; \
--		$(SED) '/^#/d' -e '/^[[:space:]]*$$/d' \
--			$(TARGET_DIR)/etc/sensors.conf; \
-+		cp -dpf $(@D)/etc/sensors.conf.eg $(TARGET_DIR)/etc/sensors.conf; \
-+		$(SED) '/^#/d' -e '/^[[:space:]]*$$/d' $(TARGET_DIR)/etc/sensors.conf; \
- 	fi
--	cp -dpf $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY) $@
--	cp -dpf $(LM_SENSORS_DIR)/lib/libsensors.so* \
--		$(LM_SENSORS_DIR)/lib/libsensors.a $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(@D)/$(LM_SENSORS_BINARY) $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
-+	cp -dpf $(@D)/lib/libsensors.so* \
-+		$(@D)/lib/libsensors.a $(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/lib/libsensors.so*
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
--
--lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(LM_SENSORS_PATCH_FILE)
--
--lm-sensors-unpacked: $(LM_SENSORS_DIR)/.unpacked
--
--lm-sensors: $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
+-hotplug: $(TARGET_DIR)/sbin/hotplug
++define HOTPLUG_INSTALL_TARGET_CMDS
++	cp $(@D)/hotplug $(TARGET_DIR)/sbin/hotplug
 +endef
  
--lm-sensors-clean:
--	-$(MAKE) -C $(LM_SENSORS_DIR) clean
-+define LM_SENSORS_CLEAN_CMDS
+-hotplug-source: $(HOTPLUG_SOURCE)
+-
+-hotplug-clean:
++define HOTPLUG_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/sbin/hotplug
+-	-$(MAKE) -C $(HOTPLUG_DIR) clean
+-
+-hotplug-dirclean:
+-	rm -rf $(HOTPLUG_DIR)
 +	-$(MAKE) -C $(@D) clean
- 	rm -f $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY) \
- 		$(TARGET_DIR)/usr/lib/libsensors* \
- 		$(TARGET_DIR)/etc/sensors.conf
 +endef
  
--lm-sensors-dirclean:
--	rm -rf $(LM_SENSORS_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
--TARGETS+=lm-sensors
+-ifeq ($(BR2_PACKAGE_HOTPLUG),y)
+-TARGETS+=hotplug
 -endif
-+$(eval $(call GENTARGETS,package,lm-sensors))
++$(eval $(call GENTARGETS,package,hotplug))
 -- 
 1.7.3
