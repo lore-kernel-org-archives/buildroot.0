@@ -1,9 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:00 -0700
-Subject: [Buildroot] [PATCH 09/18] fbset: convert to gentargets
+Date: Sun, 26 Sep 2010 00:14:01 -0700
+Subject: [Buildroot] [PATCH 10/18] fconfig: convert to gentargets and bump
+	to 20080329
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-9-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-10-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +13,263 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/fbset/fbset.mk |   59 +++++++++++++----------------------------------
- 1 files changed, 17 insertions(+), 42 deletions(-)
+ package/fconfig/fconfig-listmode.patch |  177 --------------------------------
+ package/fconfig/fconfig.mk             |   55 +++-------
+ 2 files changed, 17 insertions(+), 215 deletions(-)
+ delete mode 100644 package/fconfig/fconfig-listmode.patch
 
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 32ab4b8..748920d 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -3,49 +3,24 @@
- # fbset
+diff --git a/package/fconfig/fconfig-listmode.patch b/package/fconfig/fconfig-listmode.patch
+deleted file mode 100644
+index e7f2418..0000000
+--- a/package/fconfig/fconfig-listmode.patch
++++ /dev/null
+@@ -1,177 +0,0 @@
+-diff -x.svn -u fconfig/crunchfc.c ../../../snapgear_avila/user/fconfig/crunchfc.c
+---- fconfig/crunchfc.c	2006-03-15 01:18:17.000000000 +1100
+-+++ ../../../snapgear_avila/user/fconfig/crunchfc.c	2007-09-06 13:48:38.000000000 +1000
+-@@ -320,6 +320,48 @@
+- }
+- 
+- /*
+-+ * List known keys.
+-+ */
+-+int8_t list_keys(struct config_data *data)
+-+{
+-+	struct fconfig_key key;
+-+	uint32_t len = data->reallen;
+-+	uint8_t *keyptr = NULL;
+-+	uint8_t *ptr = data->buf+8;
+-+	uint8_t *ptrend = data->buf+len-9;
+-+	printer_t printer;
+-+
+-+	while (ptr < ptrend-4) {
+-+		keyptr = ptr;
+-+		ptr = get_key(ptr, &key);
+-+		if (ptr == NULL) {
+-+			MESSAGE(VERB_LOW, "Error in structure\n");
+-+			return -1;
+-+		}
+-+		if (ptr > ptrend) {
+-+			MESSAGE(VERB_LOW, "Parser went out of struct!\n");
+-+			return -1;
+-+		}
+-+
+-+		if ((key.type == 0) && (key.namelen==0)) {
+-+			MESSAGE(VERB_NORMAL, "EOF reached - key not found\n");
+-+			return -1;
+-+		}
+-+		
+-+		print_key(&key, VERB_HIGH, data->swab);
+-+
+-+		printf("%s: ", key.keyname);
+-+		printer = TYPE_PRINTER(key.type);
+-+		if (printer == NULL) {
+-+			MESSAGE(VERB_LOW, "Printer missing for type %d\n", key.type);
+-+			return -1;
+-+		}	
+-+		printer(key.dataval);
+-+		printf("\n");
+-+	}
+-+}
+-+
+-+/*
+-  * Find a key with given nickname, check its type and set value
+-  * Assumes that verify_fconfig() has been called on 'data' before. 
+-  */
+-diff -x.svn -u fconfig/crunchfc.h ../../../snapgear_avila/user/fconfig/crunchfc.h
+---- fconfig/crunchfc.h	2006-03-15 01:18:17.000000000 +1100
+-+++ ../../../snapgear_avila/user/fconfig/crunchfc.h	2007-09-06 13:48:38.000000000 +1000
+-@@ -31,6 +31,7 @@
+- int8_t verify_fconfig(struct config_data *data);
+- int8_t get_key_value(struct config_data *data, uint8_t *nickname);
+- int8_t set_key_value(struct config_data *data, uint8_t *nickname, void *value);
+-+int8_t list_keys(struct config_data *data);
+- void recalculate_crc(struct config_data *data);
+- 
+- #endif //CRUNCHFC_H
+-diff -x.svn -u fconfig/fconfig.c ../../../snapgear_avila/user/fconfig/fconfig.c
+---- fconfig/fconfig.c	2006-03-15 01:18:18.000000000 +1100
+-+++ ../../../snapgear_avila/user/fconfig/fconfig.c	2007-09-06 13:48:38.000000000 +1000
+-@@ -35,8 +35,9 @@
+- #include <string.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+-+#include <getopt.h>
+- 
+- #include "debug.h"
+- #include "ftypes.h"
+- #include "crunchfc.h"
+- 
+-@@ -72,7 +73,7 @@
+- 	}
+- 
+- 	fputs("Read or write Redboot configuration\n", stdout);
+--	fputs("usage: fconfig [-r|-w] -d dev -n nickname -x value\n", stdout);
+-+	fputs("usage: fconfig [-r|-w|-l] -d dev -n nickname -x value\n", stdout);
+- 	fputs("'dev' may be a char device, block device or a file\n", stdout);
+- 	fputs("Supported types: \n", stdout);
+- 	for (i = 0; i < NUM_TYPES; i++) {
+-@@ -181,7 +182,33 @@
+- 	close_fconfig_handle(data);
+- 	return 0;
+- 
+--exit_fail: 
+-+exit_fail:
+-+	close_fconfig_handle(data);
+-+	return 1;
+-+}
+-+
+-+/*
+-+ * List mode of operation: list parameter values from the configuration.
+-+ */
+-+static int list_mode(struct config_data *data, uint8_t *device)
+-+{
+-+	if (get_fconfig_handle(data, device, O_RDONLY) == NULL) {
+-+		MESSAGE(VERB_LOW, "Could not get a config data handle!\n");
+-+		return 1;
+-+	}
+-+	if (verify_fconfig(data)) {
+-+		MESSAGE(VERB_LOW, "Config verification failed!\n");
+-+		goto exit_fail;
+-+	}
+-+
+-+	if (list_keys(data)) {
+-+		goto exit_fail;
+-+	}
+-+
+-+	close_fconfig_handle(data);
+-+	return 0;
+-+
+-+exit_fail:
+- 	close_fconfig_handle(data);
+- 	return 1;
+- }
+-@@ -189,6 +216,7 @@
+- #define MODE_NONE 0
+- #define MODE_WRITE 1
+- #define MODE_READ 2
+-+#define MODE_LIST 3
+- 
+- /*
+-  * main(). ...nuff said.
+-@@ -202,14 +230,17 @@
+- 	uint8_t *value = NULL;
+- 	uint8_t *device = NULL;
+- 
+--	while ((c = getopt(argc, argv, "hrwvsd:n:x:")) != -1) {
+-+	while ((c = getopt(argc, argv, "hrwlvsd:n:x:")) != -1) {
+- 		switch (c) {
+- 		case 'r':
+- 			mode = MODE_READ;
+- 			break;
+--		case 'w': 
+-+		case 'w':
+- 			mode = MODE_WRITE;
+- 			break;
+-+		case 'l':
+-+			mode = MODE_LIST;
+-+			break;
+- 		case 'n':
+- 			nickname = optarg;
+- 			break;
+-@@ -240,7 +271,7 @@
+- 	MESSAGE(VERB_NORMAL, "Normal verbosity messages are printed.\n");
+- 	MESSAGE(VERB_HIGH, "High verbosity messages are printed.\n");
+- 
+--	if (nickname == NULL) {
+-+	if (nickname == NULL && mode != MODE_LIST) {
+- 		usage();
+- 		exit(1);
+- 	}
+-@@ -251,13 +282,16 @@
+- 	}
+- 
+- 	switch (mode) {
+--		case MODE_WRITE : 
+-+		case MODE_WRITE :
+- 			ret = write_mode(&data, device, nickname, value);
+- 			break;
+--		case MODE_READ : 
+-+		case MODE_READ :
+- 			ret = read_mode(&data, device, nickname);
+- 			break;
+--		default : 
+-+		case MODE_LIST :
+-+			ret = list_mode(&data, device);
+-+			break;
+-+		default :
+- 			MESSAGE(VERB_LOW, "Unknown mode of operation\n");
+- 			usage();
+- 			ret = 1;
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+index 72f6c4a..97d7f24 100644
+--- a/package/fconfig/fconfig.mk
++++ b/package/fconfig/fconfig.mk
+@@ -3,48 +3,27 @@
+ # fconfig
  #
  #############################################################
--FBSET_VERSION:=2.1
--FBSET_SOURCE:=fbset-$(FBSET_VERSION).tar.gz
--FBSET_SITE:=http://users.telenet.be/geertu/Linux/fbdev
--FBSET_DIR:=$(BUILD_DIR)/fbset-$(FBSET_VERSION)
--FBSET_CAT:=$(ZCAT)
--FBSET_BINARY:=fbset
--FBSET_TARGET_BINARY:=usr/sbin/$(FBSET_BINARY)
+-FCONFIG_VERSION:=20060419
+-FCONFIG_SOURCE:=fconfig-$(FCONFIG_VERSION).tar.gz
+-FCONFIG_SITE:=http://andrzejekiert.ovh.org/software/fconfig/
+-FCONFIG_CAT:=$(ZCAT)
+-FCONFIG_DIR:=$(BUILD_DIR)/fconfig
+-FCONFIG_BINARY:=fconfig
+-FCONFIG_TARGET_BINARY:=sbin/fconfig
 -
--$(DL_DIR)/$(FBSET_SOURCE):
--	$(call DOWNLOAD,$(FBSET_SITE),$(FBSET_SOURCE))
+-$(DL_DIR)/$(FCONFIG_SOURCE):
+-	 $(call DOWNLOAD,$(FCONFIG_SITE),$(FCONFIG_SOURCE))
 -
--$(FBSET_DIR)/.unpacked: $(DL_DIR)/$(FBSET_SOURCE)
--	$(FBSET_CAT) $(DL_DIR)/$(FBSET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(FBSET_DIR) package/fbset/ \
--		fbset-$(FBSET_VERSION)\*.patch \
--		fbset-$(FBSET_VERSION)\*.patch.$(ARCH)
+-fconfig-source: $(DL_DIR)/$(FCONFIG_SOURCE)
+-
+-$(FCONFIG_DIR)/.unpacked: $(DL_DIR)/$(FCONFIG_SOURCE)
+-	$(FCONFIG_CAT) $(DL_DIR)/$(FCONFIG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(FCONFIG_DIR) package/fconfig \*.patch
 -	touch $@
 -
--$(FBSET_DIR)/$(FBSET_BINARY): $(FBSET_DIR)/.unpacked
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(FBSET_DIR)
--	touch -c $@
--
--$(TARGET_DIR)/$(FBSET_TARGET_BINARY): $(FBSET_DIR)/$(FBSET_BINARY)
--	$(INSTALL) -m 755 $(FBSET_DIR)/$(FBSET_BINARY) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
-+FBSET_VERSION = 2.1
-+FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
-+FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
-+FBSET_BINARY = fbset
-+FBSET_TARGET_BINARY = usr/sbin/$(FBSET_BINARY)
+-$(FCONFIG_DIR)/$(FCONFIG_BINARY): $(FCONFIG_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(FCONFIG_DIR) \
++FCONFIG_VERSION = 20080329
++FCONFIG_SOURCE = fconfig-$(FCONFIG_VERSION).tar.gz
++FCONFIG_SITE = http://andrzejekiert.ovh.org/software/fconfig/
++FCONFIG_BINARY = fconfig
++FCONFIG_TARGET_BINARY = sbin/fconfig
 +
-+define FBSET_BUILD_CMDS
-+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define FBSET_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/$(FBSET_BINARY) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
--	touch -c $@
--
--fbset: $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
--
--fbset-source: $(DL_DIR)/$(FBSET_SOURCE)
++define FCONFIG_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+ 		LDFLAGS="$(TARGET_LDFLAGS)"
 +endef
  
--fbset-clean:
-+define FBSET_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
--	-$(MAKE) -C $(FBSET_DIR) clean
+-$(TARGET_DIR)/$(FCONFIG_TARGET_BINARY): $(FCONFIG_DIR)/$(FCONFIG_BINARY)
++define FCONFIG_INSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
+-	$(INSTALL) -D -m 0755 $(FCONFIG_DIR)/$(FCONFIG_BINARY) $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-
+-fconfig: $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++	$(INSTALL) -D -m 0755 $(@D)/$(FCONFIG_BINARY) $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
++endef
+ 
+-fconfig-clean:
+-	-$(MAKE) -C $(FCONFIG_DIR) clean
++define FCONFIG_CLEAN_CMDS
 +	-$(MAKE) -C $(@D) clean
+ 	rm -f $(TARGET_DIR)/$(FCONFIG_TARGET_BINARY)
 +endef
  
--fbset-dirclean:
--	rm -rf $(FBSET_DIR)
+-fconfig-dirclean:
+-	rm -rf $(FCONFIG_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_FBSET),y)
--TARGETS+=fbset
+-ifeq ($(BR2_PACKAGE_FCONFIG),y)
+-TARGETS+=fconfig
 -endif
-+$(eval $(call GENTARGETS,package,fbset))
++$(eval $(call GENTARGETS,package,fconfig))
 -- 
 1.7.3
