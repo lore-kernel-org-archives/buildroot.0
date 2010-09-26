@@ -1,10 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:04 -0700
-Subject: [Buildroot] [PATCH 13/18] hdparm: convert to gentargets and bump to
-	9.32
+Date: Sun, 26 Sep 2010 00:14:07 -0700
+Subject: [Buildroot] [PATCH 16/18] lm-sensors: convert to gentargets and
+	bump to 3.1.2
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-13-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-16-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,106 +13,91 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/hdparm/hdparm.mk    |   61 +++++++++++++++---------------------------
- package/hdparm/hdparm.patch |   12 --------
- 2 files changed, 22 insertions(+), 51 deletions(-)
- delete mode 100644 package/hdparm/hdparm.patch
+ package/lm-sensors/lm-sensors.mk |   65 +++++++++++--------------------------
+ 1 files changed, 20 insertions(+), 45 deletions(-)
 
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index cc747eb..a39d43b 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -3,51 +3,34 @@
- # hdparm
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 1844f75..22008a4 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -3,58 +3,33 @@
+ # lm-sensors
  #
  #############################################################
--HDPARM_VERSION:=7.7
--HDPARM_SOURCE:=hdparm-$(HDPARM_VERSION).tar.gz
--HDPARM_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
--HDPARM_CAT:=$(ZCAT)
--HDPARM_DIR:=$(BUILD_DIR)/hdparm-$(HDPARM_VERSION)
--HDPARM_BINARY:=hdparm
--HDPARM_TARGET_BINARY:=sbin/hdparm
--
--$(DL_DIR)/$(HDPARM_SOURCE):
--	 $(call DOWNLOAD,$(HDPARM_SITE),$(HDPARM_SOURCE))
--
--hdparm-source: $(DL_DIR)/$(HDPARM_SOURCE)
--
--$(HDPARM_DIR)/.unpacked: $(DL_DIR)/$(HDPARM_SOURCE)
--	$(HDPARM_CAT) $(DL_DIR)/$(HDPARM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(HDPARM_DIR) package/hdparm \*.patch
+-LM_SENSORS_VERSION:=3.0.2
+-LM_SENSORS_SOURCE:=lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+-LM_SENSORS_SITE:=http://dl.lm-sensors.org/lm-sensors/releases
+-LM_SENSORS_DIR:=$(BUILD_DIR)/lm_sensors-$(LM_SENSORS_VERSION)
+-LM_SENSORS_CAT:=$(BZCAT)
+-LM_SENSORS_BINARY:=prog/sensors/sensors
+-LM_SENSORS_TARGET_BINARY:=usr/bin/sensors
++LM_SENSORS_VERSION = 3.1.2
++LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
++LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
++LM_SENSORS_BINARY = prog/sensors/sensors
++LM_SENSORS_TARGET_BINARY = usr/bin/sensors
+ 
+-$(DL_DIR)/$(LM_SENSORS_SOURCE):
+-	$(call DOWNLOAD,$(LM_SENSORS_SITE),$(LM_SENSORS_SOURCE))
++define LM_SENSORS_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) MACHINE=$(KERNEL_ARCH) -C $(@D)
++endef
+ 
+-$(LM_SENSORS_DIR)/.unpacked: $(DL_DIR)/$(LM_SENSORS_SOURCE)
+-	$(LM_SENSORS_CAT) $(DL_DIR)/$(LM_SENSORS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LM_SENSORS_DIR) package/lm-sensors/ lm-sensors\*.patch
 -	touch $@
 -
--$(HDPARM_DIR)/$(HDPARM_BINARY): $(HDPARM_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(HDPARM_DIR) \
-+HDPARM_VERSION = 9.32
-+HDPARM_SOURCE = hdparm-$(HDPARM_VERSION).tar.gz
-+HDPARM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
-+HDPARM_BINARY = hdparm
-+HDPARM_TARGET_BINARY = sbin/hdparm
-+
-+define HDPARM_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)"
-+endef
- 
--$(TARGET_DIR)/$(HDPARM_TARGET_BINARY): $(HDPARM_DIR)/$(HDPARM_BINARY)
--	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
--	$(INSTALL) -D -m 0755 $(HDPARM_DIR)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
- ifeq ($(BR2_HAVE_DOCUMENTATION),y)
--	$(INSTALL) -D $(HDPARM_DIR)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
-+define HDPARM_INSTALL_DOCUMENTATION
-+	$(INSTALL) -D $(@D)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
-+endef
- endif
+-$(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY): $(LM_SENSORS_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) MACHINE=$(KERNEL_ARCH)\
+-		-C $(LM_SENSORS_DIR)
+-
+-$(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY): $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY)
++define LM_SENSORS_INSTALL_TARGET_CMDS
+ 	if [ ! -f $(TARGET_DIR)/etc/sensors.conf ]; then \
+-		cp -dpf $(LM_SENSORS_DIR)/etc/sensors.conf.eg \
+-			$(TARGET_DIR)/etc/sensors.conf; \
+-		$(SED) '/^#/d' -e '/^[[:space:]]*$$/d' \
+-			$(TARGET_DIR)/etc/sensors.conf; \
++		cp -dpf $(@D)/etc/sensors.conf.eg $(TARGET_DIR)/etc/sensors.conf; \
++		$(SED) '/^#/d' -e '/^[[:space:]]*$$/d' $(TARGET_DIR)/etc/sensors.conf; \
+ 	fi
+-	cp -dpf $(LM_SENSORS_DIR)/$(LM_SENSORS_BINARY) $@
+-	cp -dpf $(LM_SENSORS_DIR)/lib/libsensors.so* \
+-		$(LM_SENSORS_DIR)/lib/libsensors.a $(TARGET_DIR)/usr/lib/
++	cp -dpf $(@D)/$(LM_SENSORS_BINARY) $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
++	cp -dpf $(@D)/lib/libsensors.so* \
++		$(@D)/lib/libsensors.a $(TARGET_DIR)/usr/lib/
+ 	-$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/lib/libsensors.so*
 -	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
 -
--hdparm: $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
- 
--hdparm-clean:
--	-$(MAKE) -C $(HDPARM_DIR) clean
-+define HDPARM_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-+	$(INSTALL) -D -m 0755 $(@D)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-+	$(HDPARM_INSTALL_DOCUMENTATION)
+-lm-sensors-source: $(DL_DIR)/$(LM_SENSORS_SOURCE) $(LM_SENSORS_PATCH_FILE)
+-
+-lm-sensors-unpacked: $(LM_SENSORS_DIR)/.unpacked
+-
+-lm-sensors: $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
++	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY)
 +endef
  
--hdparm-dirclean:
--	rm -rf $(HDPARM_DIR)
-+define HDPARM_CLEAN_CMDS
+-lm-sensors-clean:
+-	-$(MAKE) -C $(LM_SENSORS_DIR) clean
++define LM_SENSORS_CLEAN_CMDS
 +	-$(MAKE) -C $(@D) clean
-+	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
+ 	rm -f $(TARGET_DIR)/$(LM_SENSORS_TARGET_BINARY) \
+ 		$(TARGET_DIR)/usr/lib/libsensors* \
+ 		$(TARGET_DIR)/etc/sensors.conf
 +endef
  
+-lm-sensors-dirclean:
+-	rm -rf $(LM_SENSORS_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_HDPARM),y)
--TARGETS+=hdparm
+-ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+-TARGETS+=lm-sensors
 -endif
-+$(eval $(call GENTARGETS,package,hdparm))
-diff --git a/package/hdparm/hdparm.patch b/package/hdparm/hdparm.patch
-deleted file mode 100644
-index d271eb8..0000000
---- a/package/hdparm/hdparm.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -ur hdparm-7.6/Makefile hdparm-7.6-patched/Makefile
----- hdparm-7.6/Makefile	2007-06-07 12:39:24.000000000 -0500
--+++ hdparm-7.6-patched/Makefile	2007-07-19 12:11:03.000000000 -0500
--@@ -28,7 +28,7 @@
-- 
-- hdparm: hdparm.h $(OBJS)
-- 	$(CC) $(LDFLAGS) -o hdparm $(OBJS)
---	strip hdparm
--+	$(STRIP) hdparm
--  
-- install: all hdparm.8
-- 	if [ ! -z $(DESTDIR) ]; then $(INSTALL_DIR) $(DESTDIR) ; fi
++$(eval $(call GENTARGETS,package,lm-sensors))
 -- 
 1.7.3
