@@ -1,10 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:08 -0700
-Subject: [Buildroot] [PATCH 17/18] lockfile-progs: convert to gentargets and
-	bump to 0.1.15
+Date: Sun, 26 Sep 2010 00:14:09 -0700
+Subject: [Buildroot] [PATCH 18/18] logrotate: convert to gentargets and bump
+	to 3.7.9
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-17-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-18-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,107 +13,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../lockfile-progs-0.1.11-sus3v-legacy.patch       |   11 -----
- .../lockfile-progs-0.1.15-sus3v-legacy.patch       |   11 +++++
- package/lockfile-progs/lockfile-progs.mk           |   47 ++++++--------------
- 3 files changed, 25 insertions(+), 44 deletions(-)
- delete mode 100644 package/lockfile-progs/lockfile-progs-0.1.11-sus3v-legacy.patch
- create mode 100644 package/lockfile-progs/lockfile-progs-0.1.15-sus3v-legacy.patch
+ package/logrotate/logrotate.mk |   57 +++++++++++++++++-----------------------
+ 1 files changed, 24 insertions(+), 33 deletions(-)
 
-diff --git a/package/lockfile-progs/lockfile-progs-0.1.11-sus3v-legacy.patch b/package/lockfile-progs/lockfile-progs-0.1.11-sus3v-legacy.patch
-deleted file mode 100644
-index 8cf552e..0000000
---- a/package/lockfile-progs/lockfile-progs-0.1.11-sus3v-legacy.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- /lockfile-progs.orig.c	2007-10-11 10:32:09.000000000 -0300
--+++ /lockfile-progs.c	2007-10-11 10:32:28.000000000 -0300
--@@ -93,7 +93,7 @@
--     { NULL, 0, NULL, 0 }
--   };
-- 
---  char *cmd_name = rindex(argv[0], '/');
--+  char *cmd_name = strrchr(argv[0], '/');
--   int mail_cmd_p = 0;
-- 
--   if(cmd_name != NULL) {
-diff --git a/package/lockfile-progs/lockfile-progs-0.1.15-sus3v-legacy.patch b/package/lockfile-progs/lockfile-progs-0.1.15-sus3v-legacy.patch
-new file mode 100644
-index 0000000..8cf552e
---- /dev/null
-+++ b/package/lockfile-progs/lockfile-progs-0.1.15-sus3v-legacy.patch
-@@ -0,0 +1,11 @@
-+--- /lockfile-progs.orig.c	2007-10-11 10:32:09.000000000 -0300
-++++ /lockfile-progs.c	2007-10-11 10:32:28.000000000 -0300
-+@@ -93,7 +93,7 @@
-+     { NULL, 0, NULL, 0 }
-+   };
-+ 
-+-  char *cmd_name = rindex(argv[0], '/');
-++  char *cmd_name = strrchr(argv[0], '/');
-+   int mail_cmd_p = 0;
-+ 
-+   if(cmd_name != NULL) {
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
-index 3925ca3..e95fcea 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -3,42 +3,23 @@
- # lockfile-progs
- #
- #############################################################
--LOCKFILE_PROGS_VERSION=0.1.11-0.1
--LOCKFILE_PROGS_SOURCE:=lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
--LOCKFILE_PROGS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
--LOCKFILE_PROGS_CAT:=$(ZCAT)
--LOCKFILE_PROGS_DIR:=$(BUILD_DIR)/lockfile-progs-0.1.11
--LOCKFILE_PROGS_BINARY:=usr/bin/lockfile-create
-+LOCKFILE_PROGS_VERSION = 0.1.15
-+LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
-+LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
-+LOCKFILE_PROGS_BINARY = usr/bin/lockfile-create
- 
--$(DL_DIR)/$(LOCKFILE_PROGS_SOURCE):
--	 $(call DOWNLOAD,$(LOCKFILE_PROGS_SITE),$(LOCKFILE_PROGS_SOURCE))
-+define LOCKFILE_PROGS_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 337fd8e..3a70a50 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -1,42 +1,33 @@
+-LOGROTATE_VERSION:=3.7.7
+-LOGROTATE_SOURCE:=logrotate-$(LOGROTATE_VERSION).tar.gz
+-LOGROTATE_SITE:=https://fedorahosted.org/releases/l/o/logrotate/
+-LOGROTATE_DIR:=$(BUILD_DIR)/logrotate-$(LOGROTATE_VERSION)
+-LOGROTATE_BINARY:=logrotate
+-LOGROTATE_TARGET_BINARY:=usr/sbin/$(LOGROTATE_BINARY)
+-
+-$(DL_DIR)/$(LOGROTATE_SOURCE):
+-	$(call DOWNLOAD,$(LOGROTATE_SITE),$(LOGROTATE_SOURCE))
+-
+-$(LOGROTATE_DIR)/.source: $(DL_DIR)/$(LOGROTATE_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LOGROTATE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LOGROTATE_DIR) package/logrotate/ logrotate\*.patch
+-	touch $@
+-
+-$(LOGROTATE_DIR)/$(LOGROTATE_BINARY): $(LOGROTATE_DIR)/.source
+-	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(LOGROTATE_DIR)
+-
+-$(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY): $(LOGROTATE_DIR)/$(LOGROTATE_BINARY)
+-	$(MAKE) PREFIX=$(TARGET_DIR) -C $(LOGROTATE_DIR) install
++#############################################################
++#
++# logrotate
++#
++#############################################################
++LOGROTATE_VERSION = 3.7.9
++LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
++LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
++LOGROTATE_BINARY = logrotate
++LOGROTATE_TARGET_BINARY = usr/sbin/$(LOGROTATE_BINARY)
++
++LOGROTATE_DEPENDENCIES = popt
++
++define LOGROTATE_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(@D)
++endef
++
++define LOGROTATE_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX=$(TARGET_DIR) -C $(@D) install
+ 	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
+ 		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
+ 	fi
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
 +endef
  
--lockfile-progs-source: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
+-logrotate: popt $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
 -
--$(LOCKFILE_PROGS_DIR)/.unpacked: $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE)
--	$(LOCKFILE_PROGS_CAT) $(DL_DIR)/$(LOCKFILE_PROGS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LOCKFILE_PROGS_DIR) package/lockfile-progs/ \*.patch
--	touch $(LOCKFILE_PROGS_DIR)/.unpacked
+-logrotate-source: $(DL_DIR)/$(LOGROTATE_SOURCE)
 -
--$(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY): $(LOCKFILE_PROGS_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(LOCKFILE_PROGS_DIR)
--	cp -a $(LOCKFILE_PROGS_DIR)/bin/lockfile* $(TARGET_DIR)/usr/bin
-+define LOCKFILE_PROGS_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/bin/lockfile* $(TARGET_DIR)/usr/bin
- 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
-+endef
- 
--lockfile-progs: liblockfile $(TARGET_DIR)/$(LOCKFILE_PROGS_BINARY)
+-logrotate-clean:
++define LOGROTATE_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
+ 	rm -f $(TARGET_DIR)/etc/logrotate.conf
+ 	-rmdir $(TARGET_DIR)/etc/logrotate.d
+-	-$(MAKE) -C $(LOGROTATE_DIR) clean
 -
--lockfile-progs-clean:
-+define LOCKFILE_PROGS_CLEAN_CMDS
- 	-rm -f $(TARGET_DIR)/usr/bin/lockfile-*
--	-$(MAKE) -C $(LOCKFILE_PROGS_DIR) clean
+-logrotate-dirclean:
+-	rm -rf $(LOGROTATE_DIR)
 -
--lockfile-progs-dirclean:
--	rm -rf $(LOCKFILE_PROGS_DIR)
+-ifeq ($(BR2_PACKAGE_LOGROTATE),y)
+-TARGETS+=logrotate
+-endif
 +	-$(MAKE) -C $(@D) clean
 +endef
  
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LOCKFILE_PROGS),y)
--TARGETS+=lockfile-progs
--endif
-+$(eval $(call GENTARGETS,package,lockfile-progs))
++$(eval $(call GENTARGETS,package,logrotate))
 -- 
 1.7.3
