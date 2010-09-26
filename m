@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 26 Sep 2010 22:53:22 +0200
-Subject: [Buildroot] [git commit master 1/1] hwdata: convert to gentargets
-	and bump to 0.230
-Message-ID: <20100926205433.6FBCF8B6D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] logrotate: convert to
+	gentargets and bump to 3.7.9
+Message-ID: <20100926205433.A250A8B6D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,93 +10,110 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=231449e1d5615f7092b49fab65a88f898bc16de3
+commit: http://git.buildroot.net/buildroot/commit/?id=f09275968cac629ea964474b7184be2dad3f1a36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: get rid of unused vars, use install -D]
+[Peter: pass LDFLAGS, remove manpages, get rid _BINARY vars only used once]
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                  |    2 +-
- package/hwdata/hwdata.mk |   51 ++++++++++------------------------------------
- 2 files changed, 12 insertions(+), 41 deletions(-)
+ CHANGES                        |    8 ++--
+ package/logrotate/logrotate.mk |   62 ++++++++++++++++++----------------------
+ 2 files changed, 32 insertions(+), 38 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 26c17e7..4f6ed1e 100644
+index 4f6ed1e..33299a0 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -20,7 +20,7 @@
- 	Updated/fixed packages: alsa-lib, at, avahi, berkeleydb, bind,
- 	bmon, boa, bridge-utils, bsdiff, busybox, dbus, dmraid,
- 	docker, dosfstools, dropbear, e2fsprogs, expat, ezxml, fbset,
--	freetype, gawk, gvfs, haserl, hostapd, ifplugd, iperf,
-+	freetype, gawk, gvfs, haserl, hostapd, hwdata, ifplugd, iperf,
+@@ -24,10 +24,10 @@
  	iproute2, iptables, jpeg, kexec, kismet, less, libcurl,
  	libdnet, libevent, libglade, libgtk2, libiconv, libidn,
  	libmms, libnl, liboil, libpcap, libpng, libungif, libxml2,
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index ed81cd7..7a0cef8 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -3,48 +3,19 @@
- # hwdata
- #
- #############################################################
--HWDATA_VERSION:=0.191
--HWDATA_SOURCE:=hwdata_$(HWDATA_VERSION).orig.tar.gz
--HWDATA_PATCH:=hwdata_$(HWDATA_VERSION)-1.diff.gz
--HWDATA_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata/
--HWDATA_CAT:=$(ZCAT)
--HWDATA_DIR:=$(BUILD_DIR)/hwdata-$(HWDATA_VERSION)
--HWDATA_BINARY:=pci.ids
--HWDATA_TARGET_BINARY:=usr/share/hwdata/pci.ids
-+HWDATA_VERSION = 0.230
-+HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
-+HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
-+HWDATA_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata/
- 
--$(DL_DIR)/$(HWDATA_SOURCE):
--	 $(call DOWNLOAD,$(HWDATA_SITE),$(HWDATA_SOURCE))
-+define HWDATA_INSTALL_TARGET_CMDS
-+	install -D -m 644 $(@D)/pci.ids $(TARGET_DIR)/usr/share/hwdata/pci.ids
-+	install -D -m 644 $(@D)/usb.ids $(TARGET_DIR)/usr/share/hwdata/usb.ids
+-	libxslt, lighttpd, lite, m4, mdadm, metacity, mtd-utils,
+-	mysql_client, nano, nbd, ncftp, neon, netperf, ntfsprogs, ntp,
+-	openntpd, openssh, openvpn, oprofile, pango, pcre, php,
+-	prboom, radvd, qt, samba, sdl_mixer, sdl_sound,
++	libxslt, lighttpd, lite, logrotate, m4, mdadm, metacity,
++	mtd-utils, mysql_client, nano, nbd, ncftp, neon, netperf,
++	ntfsprogs, ntp, openntpd, openssh, openvpn, oprofile, pango,
++	pcre, php, prboom, radvd, qt, samba, sdl_mixer, sdl_sound,
+ 	shared-mime-info, speex, sqlite, squashfs, strace, taglib,
+ 	tcpdump, tiff, tn5250, udev, udpcast, usbmount, usbutils,
+ 	which, xlib_libX11, zlib
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 337fd8e..0e41d6a 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -1,42 +1,36 @@
+-LOGROTATE_VERSION:=3.7.7
+-LOGROTATE_SOURCE:=logrotate-$(LOGROTATE_VERSION).tar.gz
+-LOGROTATE_SITE:=https://fedorahosted.org/releases/l/o/logrotate/
+-LOGROTATE_DIR:=$(BUILD_DIR)/logrotate-$(LOGROTATE_VERSION)
+-LOGROTATE_BINARY:=logrotate
+-LOGROTATE_TARGET_BINARY:=usr/sbin/$(LOGROTATE_BINARY)
+-
+-$(DL_DIR)/$(LOGROTATE_SOURCE):
+-	$(call DOWNLOAD,$(LOGROTATE_SITE),$(LOGROTATE_SOURCE))
+-
+-$(LOGROTATE_DIR)/.source: $(DL_DIR)/$(LOGROTATE_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(LOGROTATE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(LOGROTATE_DIR) package/logrotate/ logrotate\*.patch
+-	touch $@
+-
+-$(LOGROTATE_DIR)/$(LOGROTATE_BINARY): $(LOGROTATE_DIR)/.source
+-	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(LOGROTATE_DIR)
+-
+-$(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY): $(LOGROTATE_DIR)/$(LOGROTATE_BINARY)
+-	$(MAKE) PREFIX=$(TARGET_DIR) -C $(LOGROTATE_DIR) install
++#############################################################
++#
++# logrotate
++#
++#############################################################
++LOGROTATE_VERSION = 3.7.9
++LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
++LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
++
++LOGROTATE_DEPENDENCIES = popt
++
++define LOGROTATE_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LDFLAGS="$(LDFLAGS)" -C $(@D)
++endef
++
++define LOGROTATE_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX=$(TARGET_DIR) -C $(@D) install
+ 	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
+ 		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
+ 	fi
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
 +endef
  
--$(DL_DIR)/$(HWDATA_PATCH):
--	 $(call DOWNLOAD,$(HWDATA_SITE),$(HWDATA_PATCH))
+-logrotate: popt $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
 -
--hwdata-source: $(DL_DIR)/$(HWDATA_SOURCE) $(DL_DIR)/$(HWDATA_PATCH)
+-logrotate-source: $(DL_DIR)/$(LOGROTATE_SOURCE)
 -
--$(HWDATA_DIR)/.unpacked: $(DL_DIR)/$(HWDATA_SOURCE) $(DL_DIR)/$(HWDATA_PATCH)
--	$(HWDATA_CAT) $(DL_DIR)/$(HWDATA_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(HWDATA_DIR) $(DL_DIR) $(HWDATA_PATCH)
--	touch $(HWDATA_DIR)/.unpacked
+-logrotate-clean:
+-	rm -f $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
++define LOGROTATE_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/sbin/logrotate
+ 	rm -f $(TARGET_DIR)/etc/logrotate.conf
+-	-rmdir $(TARGET_DIR)/etc/logrotate.d
+-	-$(MAKE) -C $(LOGROTATE_DIR) clean
 -
--$(TARGET_DIR)/$(HWDATA_TARGET_BINARY): $(HWDATA_DIR)/.unpacked
--	mkdir -p -m 755 $(TARGET_DIR)/usr/share/hwdata
--	cp -a $(HWDATA_DIR)/pci.ids $(TARGET_DIR)/usr/share/hwdata
--	cp -a $(HWDATA_DIR)/usb.ids $(TARGET_DIR)/usr/share/hwdata
--	-touch -c $(TARGET_DIR)/usr/share/hwdata/*
--
--hwdata: $(TARGET_DIR)/$(HWDATA_TARGET_BINARY)
--
--hwdata-clean:
-+define HWDATA_UNINSTALL_TARGET_CMDS
- 	rm -rf $(TARGET_DIR)/usr/share/hwdata
- 	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+-logrotate-dirclean:
+-	rm -rf $(LOGROTATE_DIR)
++	rm -f $(TARGET_DIR)/usr/man/man5/logrotate.conf.5
++	rm -f $(TARGET_DIR)/usr/man/man8/logrotate.8
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/etc/logrotate.d
 +endef
  
--hwdata-dirclean:
--	rm -rf $(HWDATA_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_HWDATA),y)
--TARGETS+=hwdata
+-ifeq ($(BR2_PACKAGE_LOGROTATE),y)
+-TARGETS+=logrotate
 -endif
-+$(eval $(call GENTARGETS,package,hwdata))
++define LOGROTATE_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
+ 
++$(eval $(call GENTARGETS,package,logrotate))
 -- 
 1.7.1
