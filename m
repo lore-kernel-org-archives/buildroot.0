@@ -1,32 +1,157 @@
-From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:19:59 -0700
-Subject: [Buildroot] [PATCH 4/4] autoconf: bump to 2.68
-In-Reply-To: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
-References: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485599-29412-4-git-send-email-Martin.Banky@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 26 Sep 2010 10:56:12 +0200
+Subject: [Buildroot] [PATCH] Makefile: generate a Makefile wrapper in $(O)
+Message-ID: <1285491372-19364-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
----
- package/autoconf/autoconf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+If building out-of-tree, add a Makefile wrapper that calls-out to the real
+Makefile with proper args.
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index b1fc52d..9630550 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -3,7 +3,7 @@
- # autoconf
+Avoids having to pass -C and O= every time we call make.
+
+This is highly inspired from how the Linux kernel does it, and portions of
+it have been used. We can't use exactly the same implementation as the
+kernel does, because:
+
+ - the kernel always overwrites the wrapper at each call: doing so in
+   buildroot makes the kconfig stuff be rebuilt every time;
+
+ - the script writing the wrapper has been expunged of the few lines
+   that were too kernel-related: in buildroot we do not need the version
+   string in the wrapper, and we do not have a patchlevel version;
+
+ - "in-tree build" does not have the same meaning for the kernel and for
+   buildroot: for the kernel, $(O) point to the $(TOPDIR), while for
+   buildroot $(O) points to $(TOPDIR)/output.
+
+For more complete explnanations, see:
+  http://lists.busybox.net/pipermail/buildroot/2010-September/037815.html
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ Makefile           |   18 ++++++++++++++-
+ scripts/mkmakefile |   53 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index faa802b..ec425c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -45,6 +45,7 @@ space:=$(empty) $(empty)
+ ifneq ("$(origin O)", "command line")
+ O:=output
+ CONFIG_DIR:=$(TOPDIR)
++NEED_WRAPPER=
+ else
+ # other packages might also support Linux-style out of tree builds
+ # with the O=<dir> syntax (E.G. Busybox does). As make automatically
+@@ -60,6 +61,7 @@ override O:=$(O)
+ CONFIG_DIR:=$(O)
+ # we need to pass O= everywhere we call back into the toplevel makefile
+ EXTRAMAKEARGS = O=$(O)
++NEED_WRAPPER=y
+ endif
+ 
+ # $(shell find . -name *_defconfig |sed 's/.*\///')
+@@ -324,7 +326,7 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: prepare dependencies dirs $(BASE_TARGETS) $(TARGETS_ALL)
+ 
+ 
+-.PHONY: all world dirs clean distclean source \
++.PHONY: all world dirs clean distclean source outputmakefile \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+ 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+@@ -453,7 +455,7 @@ all: menuconfig
+ HOSTCFLAGS=$(CFLAGS_FOR_BUILD)
+ export HOSTCFLAGS
+ 
+-$(BUILD_DIR)/buildroot-config/%onf:
++$(BUILD_DIR)/buildroot-config/%onf: |outputmakefile
+ 	mkdir -p $(@D)/lxdialog
+ 	$(MAKE) CC="$(HOSTCC)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
+ 
+@@ -559,6 +561,18 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ # Cleanup and misc junk
  #
  #############################################################
--AUTOCONF_VERSION = 2.67
-+AUTOCONF_VERSION = 2.68
- AUTOCONF_SOURCE = autoconf-$(AUTOCONF_VERSION).tar.bz2
- AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
- 
++
++ifeq ($(NEED_WRAPPER),y)
++# outputmakefile generates a Makefile in the output directory, if using a
++# separate output directory. This allows convenient use of make in the
++# output directory.
++outputmakefile:
++	$(Q)$(SHELL) $(TOPDIR)/scripts/mkmakefile $(CURDIR) $(O)
++else
++outputmakefile:
++	@true
++endif
++
+ clean:
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+ 		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR)
+diff --git a/scripts/mkmakefile b/scripts/mkmakefile
+new file mode 100644
+index 0000000..39dd292
+--- /dev/null
++++ b/scripts/mkmakefile
+@@ -0,0 +1,53 @@
++#!/bin/sh
++# Generates a small Makefile used in the root of the output
++# directory, to allow make to be started from there.
++# The Makefile also allow for more convinient build of external modules
++
++# Usage
++# $1 - Kernel src directory
++# $2 - Output directory
++
++
++test ! -r $2/Makefile -o -O $2/Makefile || exit 0
++# Only overwrite automatically generated Makefiles
++# (so we do not overwrite buildroot Makefile)
++if test -e $2/Makefile && ! grep -E "^# Buildroot Makefile wrapper$" $2/Makefile >/dev/null 2>&1
++then
++        exit 0
++fi
++
++cat << EOF > $2/.Makefile
++# Buildroot Makefile wrapper
++# Automatically generated by $0: don't edit
++
++lastword = \$(word \$(words \$(1)),\$(1))
++makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
++
++MAKEARGS := -C $1
++MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
++
++MAKEFLAGS += --no-print-directory
++
++.PHONY: all \$(MAKECMDGOALS)
++
++all     := \$(filter-out all Makefile,\$(MAKECMDGOALS))
++
++all:
++	\$(MAKE) \$(MAKEARGS) \$(all)
++
++Makefile:;
++
++\$(all): all
++	@:
++
++%/: all
++	@:
++EOF
++
++if ! cmp $2/.Makefile $2/Makefile >/dev/null 2>&1; then
++    echo "  GEN    Makefile"
++    rm -f $2/Makefile
++    mv $2/.Makefile $2/Makefile
++else
++    rm -f $2/.Makefile
++fi
 -- 
-1.7.3
+1.7.1
