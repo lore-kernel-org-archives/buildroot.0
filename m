@@ -1,9 +1,9 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:13:59 -0700
-Subject: [Buildroot] [PATCH 08/18] ezxml: convert to gentargets
+Date: Sun, 26 Sep 2010 00:14:00 -0700
+Subject: [Buildroot] [PATCH 09/18] fbset: convert to gentargets
 In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-8-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-9-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +12,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/ezxml/ezxml.mk |   52 +++++++++++++----------------------------------
- 1 files changed, 15 insertions(+), 37 deletions(-)
+ package/fbset/fbset.mk |   59 +++++++++++++----------------------------------
+ 1 files changed, 17 insertions(+), 42 deletions(-)
 
-diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
-index 3746b51..e29a7b5 100644
---- a/package/ezxml/ezxml.mk
-+++ b/package/ezxml/ezxml.mk
-@@ -3,45 +3,23 @@
- # ezxml
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 32ab4b8..748920d 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -3,49 +3,24 @@
+ # fbset
  #
  #############################################################
-+EZXML_VERSION = 0.8.6
-+EZXML_SOURCE = ezxml-$(EZXML_VERSION).tar.gz
-+EZXML_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ezxml/
-+EZXML_INSTALL_STAGING=YES
- 
--EZXML_VERSION:=0.8.6
--EZXML_SOURCE:=ezxml-$(EZXML_VERSION).tar.gz
--EZXML_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ezxml/
--EZXML_DIR:=$(BUILD_DIR)/ezxml
+-FBSET_VERSION:=2.1
+-FBSET_SOURCE:=fbset-$(FBSET_VERSION).tar.gz
+-FBSET_SITE:=http://users.telenet.be/geertu/Linux/fbdev
+-FBSET_DIR:=$(BUILD_DIR)/fbset-$(FBSET_VERSION)
+-FBSET_CAT:=$(ZCAT)
+-FBSET_BINARY:=fbset
+-FBSET_TARGET_BINARY:=usr/sbin/$(FBSET_BINARY)
 -
--$(DL_DIR)/$(EZXML_SOURCE):
--	$(call DOWNLOAD,$(EZXML_SITE),$(EZXML_SOURCE))
+-$(DL_DIR)/$(FBSET_SOURCE):
+-	$(call DOWNLOAD,$(FBSET_SITE),$(FBSET_SOURCE))
 -
--$(EZXML_DIR)/.unpacked: $(DL_DIR)/$(EZXML_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(EZXML_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(EZXML_DIR) package/ezxml/ ezxml-$(EZXML_VERSION)\*.patch
+-$(FBSET_DIR)/.unpacked: $(DL_DIR)/$(FBSET_SOURCE)
+-	$(FBSET_CAT) $(DL_DIR)/$(FBSET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(FBSET_DIR) package/fbset/ \
+-		fbset-$(FBSET_VERSION)\*.patch \
+-		fbset-$(FBSET_VERSION)\*.patch.$(ARCH)
 -	touch $@
 -
--$(EZXML_DIR)/.configured: $(EZXML_DIR)/.unpacked
--	touch $@
+-$(FBSET_DIR)/$(FBSET_BINARY): $(FBSET_DIR)/.unpacked
+-	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(FBSET_DIR)
+-	touch -c $@
 -
--$(EZXML_DIR)/libezxml.a: $(EZXML_DIR)/.configured
-+define EZXML_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" AR=$(TARGET_AR) \
--	-f GNUmakefile -C $(EZXML_DIR)
+-$(TARGET_DIR)/$(FBSET_TARGET_BINARY): $(FBSET_DIR)/$(FBSET_BINARY)
+-	$(INSTALL) -m 755 $(FBSET_DIR)/$(FBSET_BINARY) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
++FBSET_VERSION = 2.1
++FBSET_SOURCE = fbset-$(FBSET_VERSION).tar.gz
++FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
++FBSET_BINARY = fbset
++FBSET_TARGET_BINARY = usr/sbin/$(FBSET_BINARY)
++
++define FBSET_BUILD_CMDS
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define FBSET_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 $(@D)/$(FBSET_BINARY) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
+-	touch -c $@
 -
--$(STAGING_DIR)/usr/lib/libezxml.a: $(EZXML_DIR)/libezxml.a
--	cp $(EZXML_DIR)/ezxml.h $(STAGING_DIR)/usr/include
--	cp $(EZXML_DIR)/libezxml.a $(STAGING_DIR)/usr/lib
-+	-f GNUmakefile -C $(@D)
+-fbset: $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
+-
+-fbset-source: $(DL_DIR)/$(FBSET_SOURCE)
 +endef
  
--ezxml: $(STAGING_DIR)/usr/lib/libezxml.a
-+define EZXML_INSTALL_STAGING_CMDS
-+	cp $(@D)/ezxml.h $(STAGING_DIR)/usr/include
-+	cp $(@D)/libezxml.a $(STAGING_DIR)/usr/lib
+-fbset-clean:
++define FBSET_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/$(FBSET_TARGET_BINARY)
+-	-$(MAKE) -C $(FBSET_DIR) clean
++	-$(MAKE) -C $(@D) clean
 +endef
  
--ezxml-source: $(DL_DIR)/$(EZXML_SOURCE)
-+define EZXML_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) -f GNUmakefile clean
-+endef
- 
--ezxml-clean:
--	-$(MAKE) -C $(EZXML_DIR) -f GNUmakefile clean
+-fbset-dirclean:
+-	rm -rf $(FBSET_DIR)
 -
--ezxml-dirclean:
--	rm -rf $(EZXML_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_EZXML),y)
--TARGETS+=ezxml
+-ifeq ($(BR2_PACKAGE_FBSET),y)
+-TARGETS+=fbset
 -endif
-+$(eval $(call GENTARGETS,package,ezxml))
++$(eval $(call GENTARGETS,package,fbset))
 -- 
 1.7.3
