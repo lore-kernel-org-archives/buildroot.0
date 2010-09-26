@@ -1,92 +1,105 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:13:52 -0700
-Subject: [Buildroot] [PATCH 01/18] acpid: convert to gentargets and bump to
-	2.0.6
-Message-ID: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
+Date: Sun, 26 Sep 2010 00:13:53 -0700
+Subject: [Buildroot] [PATCH 02/18] axel: convert to gentargets and bump to
+	2.4
+In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
+References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485249-29212-2-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, added acpi_listen to the target. It was being stripped, but not copied.
-
-acpi_listen is a simple shell-friendly tool which connects to acpid and listens
-for events. When an event occurs, acpi_listen will print it on stdout.
-
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/acpid/acpid.mk |   57 +++++++++++++++--------------------------------
- 1 files changed, 18 insertions(+), 39 deletions(-)
+ package/axel/axel.mk |   67 ++++++++++++++++++++-----------------------------
+ 1 files changed, 27 insertions(+), 40 deletions(-)
 
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index 73c2fb8..d66a4cd 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -3,46 +3,25 @@
- # acpid
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 8891795..5c7ed23 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -3,53 +3,40 @@
+ # axel
  #
  #############################################################
--ACPID_VERSION:=1.0.8
--ACPID_DIR=$(BUILD_DIR)/acpid-$(ACPID_VERSION)
--ACPID_SOURCE=acpid_$(ACPID_VERSION).orig.tar.gz
--ACPID_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/a/acpid
+-AXEL_VERSION:=1.1
+-AXEL_SOURCE:=axel-$(AXEL_VERSION).tar.gz
+-AXEL_SITE:=http://alioth.debian.org/frs/download.php/2287
+-AXEL_CAT:=$(ZCAT)
+-AXEL_DIR:=$(BUILD_DIR)/axel-$(AXEL_VERSION)
+-AXEL_BINARY:=axel
+-AXEL_TARGET_BINARY:=usr/bin/axel
++AXEL_VERSION = 2.4
++AXEL_SOURCE = axel-$(AXEL_VERSION).tar.gz
++AXEL_SITE = https://alioth.debian.org/frs/download.php/3015
+ 
+-$(DL_DIR)/$(AXEL_SOURCE):
+-	 $(call DOWNLOAD,$(AXEL_SITE),$(AXEL_SOURCE))
 -
--$(DL_DIR)/$(ACPID_SOURCE):
--	$(call DOWNLOAD,$(ACPID_SITE),$(ACPID_SOURCE))
+-axel-source: $(DL_DIR)/$(AXEL_SOURCE)
 -
--$(ACPID_DIR)/.unpacked: $(DL_DIR)/$(ACPID_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(ACPID_SOURCE) | tar -C $(BUILD_DIR) -xvf -
--	toolchain/patch-kernel.sh $(ACPID_DIR) package/acpid/ acpid-$(ACPID_VERSION)\*.patch
--	touch $(ACPID_DIR)/.unpacked
--
--$(ACPID_DIR)/acpid: $(ACPID_DIR)/.unpacked
--	$(MAKE) CC="$(TARGET_CC)" -C $(ACPID_DIR)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(ACPID_DIR)/acpid
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $(ACPID_DIR)/acpi_listen
--	touch -c $(ACPID_DIR)/acpid $(ACPID_DIR)/acpi_listen
--
--$(TARGET_DIR)/usr/sbin/acpid: $(ACPID_DIR)/acpid
--	cp -a $(ACPID_DIR)/acpid $(TARGET_DIR)/usr/sbin/acpid
-+ACPID_VERSION = 2.0.6
-+ACPID_SOURCE = acpid_$(ACPID_VERSION).orig.tar.gz
-+ACPID_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/a/acpid
-+
-+define ACPID_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(@D)/acpid
-+	$(STRIPCMD) $(STRIP_STRIP_ALL) $(@D)/acpi_listen
-+endef
-+
-+define ACPID_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/acpid $(TARGET_DIR)/usr/sbin/acpid
-+	cp -a $(@D)/acpi_listen $(TARGET_DIR)/usr/bin/acpi_listen
- 	mkdir -p $(TARGET_DIR)/etc/acpi/events
- 	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" > $(TARGET_DIR)/etc/acpi/events/powerbtn
--	touch -c $(TARGET_DIR)/usr/sbin/acpid
--
--acpid: $(TARGET_DIR)/usr/sbin/acpid
--
--acpid-source: $(DL_DIR)/$(ACPID_SOURCE)
+-$(AXEL_DIR)/.unpacked: $(DL_DIR)/$(AXEL_SOURCE)
+-	$(AXEL_CAT) $(DL_DIR)/$(AXEL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	#toolchain/patch-kernel.sh $(AXEL_DIR) package/axel axel\*.patch
+-	touch $@
++ifneq ($(BR2_ENABLE_LOCALE),y)
++AXEL_DISABLE_I18N=--i18n=0
++endif
+ 
+-$(AXEL_DIR)/Makefile.settings: $(AXEL_DIR)/.unpacked
+-	(cd $(AXEL_DIR); \
+-		./configure --i18n=0 --prefix=/usr \
++define AXEL_CONFIGURE_CMDS
++	(cd $(@D); \
++		./configure \
++			--prefix=/usr \
++			$(AXEL_DISABLE_I18N) \
+ 	)
+-	touch $@
 +endef
  
--acpid-clean:
--	-$(MAKE) -C $(ACPID_DIR) clean
-+define ACPID_CLEAN_CMDS
+-$(AXEL_DIR)/$(AXEL_BINARY): $(AXEL_DIR)/Makefile.settings
+-	$(MAKE) CC="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" -C $(AXEL_DIR)
++define AXEL_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" -C $(@D)
++endef
+ 
+-$(TARGET_DIR)/$(AXEL_TARGET_BINARY): $(AXEL_DIR)/$(AXEL_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(AXEL_DIR) install-bin
+ ifeq ($(BR2_HAVE_DOCUMENTATION),y)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(AXEL_DIR) install-man
++define AXEL_INSTALL_DOCUMENTATION
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-man
++endef
+ endif
+ 
+-axel: $(TARGET_DIR)/$(AXEL_TARGET_BINARY)
++define AXEL_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install-bin
++	$(AXEL_INSTALL_DOCUMENTATION)
++endef
+ 
+-axel-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(AXEL_DIR) uninstall
+-	-$(MAKE) -C $(AXEL_DIR) clean
++define AXEL_CLEAN_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
 +	-$(MAKE) -C $(@D) clean
 +endef
  
--acpid-dirclean:
--	rm -rf $(ACPID_DIR)
+-axel-dirclean:
+-	rm -rf $(AXEL_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_ACPID),y)
--TARGETS+=acpid
+-ifeq ($(BR2_PACKAGE_AXEL),y)
+-TARGETS+=axel
 -endif
-+$(eval $(call GENTARGETS,package,acpid))
++$(eval $(call GENTARGETS,package,axel))
 -- 
 1.7.3
