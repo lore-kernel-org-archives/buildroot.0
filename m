@@ -1,10 +1,7 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:14:09 -0700
-Subject: [Buildroot] [PATCH 18/18] logrotate: convert to gentargets and bump
-	to 3.7.9
-In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285485249-29212-18-git-send-email-Martin.Banky@gmail.com>
+Date: Sun, 26 Sep 2010 00:19:56 -0700
+Subject: [Buildroot] [PATCH 1/4] ccache: bump to 3.1
+Message-ID: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,79 +10,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/logrotate/logrotate.mk |   57 +++++++++++++++++-----------------------
- 1 files changed, 24 insertions(+), 33 deletions(-)
+ toolchain/ccache/ccache-3.1-cannot-find-ar.patch |   11 +++++++++++
+ toolchain/ccache/ccache.mk                       |   17 +++++++++--------
+ 2 files changed, 20 insertions(+), 8 deletions(-)
+ create mode 100644 toolchain/ccache/ccache-3.1-cannot-find-ar.patch
 
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index 337fd8e..3a70a50 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -1,42 +1,33 @@
--LOGROTATE_VERSION:=3.7.7
--LOGROTATE_SOURCE:=logrotate-$(LOGROTATE_VERSION).tar.gz
--LOGROTATE_SITE:=https://fedorahosted.org/releases/l/o/logrotate/
--LOGROTATE_DIR:=$(BUILD_DIR)/logrotate-$(LOGROTATE_VERSION)
--LOGROTATE_BINARY:=logrotate
--LOGROTATE_TARGET_BINARY:=usr/sbin/$(LOGROTATE_BINARY)
--
--$(DL_DIR)/$(LOGROTATE_SOURCE):
--	$(call DOWNLOAD,$(LOGROTATE_SITE),$(LOGROTATE_SOURCE))
--
--$(LOGROTATE_DIR)/.source: $(DL_DIR)/$(LOGROTATE_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(LOGROTATE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LOGROTATE_DIR) package/logrotate/ logrotate\*.patch
--	touch $@
--
--$(LOGROTATE_DIR)/$(LOGROTATE_BINARY): $(LOGROTATE_DIR)/.source
--	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(LOGROTATE_DIR)
--
--$(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY): $(LOGROTATE_DIR)/$(LOGROTATE_BINARY)
--	$(MAKE) PREFIX=$(TARGET_DIR) -C $(LOGROTATE_DIR) install
-+#############################################################
-+#
-+# logrotate
-+#
-+#############################################################
-+LOGROTATE_VERSION = 3.7.9
-+LOGROTATE_SOURCE = logrotate-$(LOGROTATE_VERSION).tar.gz
-+LOGROTATE_SITE = https://fedorahosted.org/releases/l/o/logrotate/
-+LOGROTATE_BINARY = logrotate
-+LOGROTATE_TARGET_BINARY = usr/sbin/$(LOGROTATE_BINARY)
-+
-+LOGROTATE_DEPENDENCIES = popt
-+
-+define LOGROTATE_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS)" -C $(@D)
-+endef
-+
-+define LOGROTATE_INSTALL_TARGET_CMDS
-+	$(MAKE) PREFIX=$(TARGET_DIR) -C $(@D) install
- 	if [ ! -f $(TARGET_DIR)/etc/logrotate.conf ]; then \
- 		$(INSTALL) -m 0644 package/logrotate/logrotate.conf $(TARGET_DIR)/etc/logrotate.conf; \
- 	fi
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/logrotate.d
-+endef
+diff --git a/toolchain/ccache/ccache-3.1-cannot-find-ar.patch b/toolchain/ccache/ccache-3.1-cannot-find-ar.patch
+new file mode 100644
+index 0000000..a5b3b3f
+--- /dev/null
++++ b/toolchain/ccache/ccache-3.1-cannot-find-ar.patch
+@@ -0,0 +1,11 @@
++--- a/configure	2010-09-16 10:01:09.000000000 -0700
+++++ b/configure	2010-09-23 20:14:34.000000000 -0700
++@@ -3347,7 +3347,7 @@ else
++   AR="$ac_cv_prog_AR"
++ fi
++ 
++-if test -z "$ac_ct_AR"; then
+++if test -z "$AR"; then
++     as_fn_error "cannot find ar" "$LINENO" 5
++ fi
++ 
+diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
+index 01d18fb..1fe24fe 100644
+--- a/toolchain/ccache/ccache.mk
++++ b/toolchain/ccache/ccache.mk
+@@ -3,14 +3,14 @@
+ # build ccache to make recompiles faster on the build system
+ #
+ #############################################################
+-CCACHE_VER:=3.0.1
+-CCACHE_SITE:=http://samba.org/ftp/ccache
+-CCACHE_SOURCE:=ccache-$(CCACHE_VER).tar.gz
+-CCACHE_DIR1:=$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)
+-CCACHE_DIR2:=$(BUILD_DIR)/ccache-$(CCACHE_VER)
+-CCACHE_CAT:=$(ZCAT)
+-CCACHE_BINARY:=ccache
+-CCACHE_TARGET_BINARY:=usr/bin/ccache
++CCACHE_VER = 3.1
++CCACHE_SITE = http://samba.org/ftp/ccache
++CCACHE_SOURCE = ccache-$(CCACHE_VER).tar.gz
++CCACHE_DIR1 = $(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)
++CCACHE_DIR2 = $(BUILD_DIR)/ccache-$(CCACHE_VER)
++CCACHE_CAT = $(ZCAT)
++CCACHE_BINARY = ccache
++CCACHE_TARGET_BINARY = usr/bin/ccache
  
--logrotate: popt $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
--
--logrotate-source: $(DL_DIR)/$(LOGROTATE_SOURCE)
--
--logrotate-clean:
-+define LOGROTATE_CLEAN_CMDS
- 	rm -f $(TARGET_DIR)/$(LOGROTATE_TARGET_BINARY)
- 	rm -f $(TARGET_DIR)/etc/logrotate.conf
- 	-rmdir $(TARGET_DIR)/etc/logrotate.d
--	-$(MAKE) -C $(LOGROTATE_DIR) clean
--
--logrotate-dirclean:
--	rm -rf $(LOGROTATE_DIR)
--
--ifeq ($(BR2_PACKAGE_LOGROTATE),y)
--TARGETS+=logrotate
--endif
-+	-$(MAKE) -C $(@D) clean
-+endef
+ $(DL_DIR)/$(CCACHE_SOURCE):
+ 	$(call DOWNLOAD,$(CCACHE_SITE),$(CCACHE_SOURCE))
+@@ -141,6 +141,7 @@ $(CCACHE_DIR2)/.unpacked: $(DL_DIR)/$(CCACHE_SOURCE)
+ 	touch $@
  
-+$(eval $(call GENTARGETS,package,logrotate))
+ $(CCACHE_DIR2)/.patched: $(CCACHE_DIR2)/.unpacked
++	toolchain/patch-kernel.sh $(CCACHE_DIR2) toolchain/ccache/ \*.patch
+ 	touch $@
+ 
+ $(CCACHE_DIR2)/.configured: $(CCACHE_DIR2)/.patched
 -- 
 1.7.3
