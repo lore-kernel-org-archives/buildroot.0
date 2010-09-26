@@ -1,7 +1,9 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sun, 26 Sep 2010 00:19:56 -0700
-Subject: [Buildroot] [PATCH 1/4] ccache: bump to 3.1
-Message-ID: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
+Date: Sun, 26 Sep 2010 00:19:58 -0700
+Subject: [Buildroot] [PATCH 3/4] libpng: bump to 1.4.4
+In-Reply-To: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
+References: <1285485599-29412-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285485599-29412-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,62 +12,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- toolchain/ccache/ccache-3.1-cannot-find-ar.patch |   11 +++++++++++
- toolchain/ccache/ccache.mk                       |   17 +++++++++--------
- 2 files changed, 20 insertions(+), 8 deletions(-)
- create mode 100644 toolchain/ccache/ccache-3.1-cannot-find-ar.patch
+ package/libpng/libpng.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/ccache/ccache-3.1-cannot-find-ar.patch b/toolchain/ccache/ccache-3.1-cannot-find-ar.patch
-new file mode 100644
-index 0000000..a5b3b3f
---- /dev/null
-+++ b/toolchain/ccache/ccache-3.1-cannot-find-ar.patch
-@@ -0,0 +1,11 @@
-+--- a/configure	2010-09-16 10:01:09.000000000 -0700
-++++ b/configure	2010-09-23 20:14:34.000000000 -0700
-+@@ -3347,7 +3347,7 @@ else
-+   AR="$ac_cv_prog_AR"
-+ fi
-+ 
-+-if test -z "$ac_ct_AR"; then
-++if test -z "$AR"; then
-+     as_fn_error "cannot find ar" "$LINENO" 5
-+ fi
-+ 
-diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
-index 01d18fb..1fe24fe 100644
---- a/toolchain/ccache/ccache.mk
-+++ b/toolchain/ccache/ccache.mk
-@@ -3,14 +3,14 @@
- # build ccache to make recompiles faster on the build system
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 5608f4f..82b88da 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -3,23 +3,22 @@
+ # libpng (Portable Network Graphic library)
  #
  #############################################################
--CCACHE_VER:=3.0.1
--CCACHE_SITE:=http://samba.org/ftp/ccache
--CCACHE_SOURCE:=ccache-$(CCACHE_VER).tar.gz
--CCACHE_DIR1:=$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)
--CCACHE_DIR2:=$(BUILD_DIR)/ccache-$(CCACHE_VER)
--CCACHE_CAT:=$(ZCAT)
--CCACHE_BINARY:=ccache
--CCACHE_TARGET_BINARY:=usr/bin/ccache
-+CCACHE_VER = 3.1
-+CCACHE_SITE = http://samba.org/ftp/ccache
-+CCACHE_SOURCE = ccache-$(CCACHE_VER).tar.gz
-+CCACHE_DIR1 = $(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)
-+CCACHE_DIR2 = $(BUILD_DIR)/ccache-$(CCACHE_VER)
-+CCACHE_CAT = $(ZCAT)
-+CCACHE_BINARY = ccache
-+CCACHE_TARGET_BINARY = usr/bin/ccache
+-LIBPNG_VERSION:=1.2.44
++LIBPNG_VERSION = 1.4.4
++LIBPNG_SERIES = 14
+ LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
+ LIBPNG_LIBTOOL_PATCH = NO
+ LIBPNG_INSTALL_STAGING = YES
+-LIBPNG_CONF_OPT = --without-libpng-compat
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
  
- $(DL_DIR)/$(CCACHE_SOURCE):
- 	$(call DOWNLOAD,$(CCACHE_SITE),$(CCACHE_SOURCE))
-@@ -141,6 +141,7 @@ $(CCACHE_DIR2)/.unpacked: $(DL_DIR)/$(CCACHE_SOURCE)
- 	touch $@
+-HOST_LIBPNG_CONF_OPT = --without-libpng-compat
+ HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
  
- $(CCACHE_DIR2)/.patched: $(CCACHE_DIR2)/.unpacked
-+	toolchain/patch-kernel.sh $(CCACHE_DIR2) toolchain/ccache/ \*.patch
- 	touch $@
+ define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
+-		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng12\',g" \
++		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include/libpng$(LIBPNG_SERIES)\',g" \
+ 		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
+-		$(STAGING_DIR)/usr/bin/libpng12-config
++		$(STAGING_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config
+ endef
  
- $(CCACHE_DIR2)/.configured: $(CCACHE_DIR2)/.patched
+ LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
 -- 
 1.7.3
