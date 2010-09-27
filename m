@@ -1,30 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Sep 2010 11:00:10 +0200
-Subject: [Buildroot] Building a package for gdb debugging
-In-Reply-To: <0D753D10438DA54287A00B027084269764451B9DB7@AUSP01VMBX24.collaborationhost.net>
-References: <0D753D10438DA54287A00B027084269764451B9DB7@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <20100927110010.5fea74b9@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Sep 2010 10:07:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 2647] New: makedevs package lacks support for
+ 16-bit major/minor numbers
+Message-ID: <bug-2647-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Sep 2010 13:13:57 -0500
-H Hartley Sweeten <hartleys@visionengravers.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=2647
 
-> I need to build a package for debugging a segfault with gdb.  Is there an
-> easy way to pass the -g switch so that gcc compiles the program with
-> debugging flags?  Also, how can I keep the final executable from being
-> stripped?
+           Summary: makedevs package lacks support for 16-bit major/minor
+                    numbers
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: matt at console-pimps.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Enable BR2_ENABLE_DEBUG.
 
-Regards,
+The attached patch adds support for creating device nodes with 16-bit
+major/minor numbers.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
