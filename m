@@ -1,48 +1,30 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Mon, 27 Sep 2010 10:53:36 +0200
-Subject: [Buildroot] [PATCH 1/4] Added new menu item to specify a custom
-	port for /etc/inittab
-In-Reply-To: <4C9C54A9.20803@visionsystems.de>
-References: <4C9C54A9.20803@visionsystems.de>
-Message-ID: <4CA05B90.30704@visionsystems.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Sep 2010 11:00:10 +0200
+Subject: [Buildroot] Building a package for gdb debugging
+In-Reply-To: <0D753D10438DA54287A00B027084269764451B9DB7@AUSP01VMBX24.collaborationhost.net>
+References: <0D753D10438DA54287A00B027084269764451B9DB7@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <20100927110010.5fea74b9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 24 Sep 2010 13:13:57 -0500
+H Hartley Sweeten <hartleys@visionengravers.com> wrote:
 
----
- target/generic/Config.in |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+> I need to build a package for debugging a segfault with gdb.  Is there an
+> easy way to pass the -g switch so that gcc compiles the program with
+> debugging flags?  Also, how can I keep the final executable from being
+> stripped?
 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 54ff1d6..286b0a3 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -102,8 +102,16 @@ config BR2_TARGET_GENERIC_GETTY_TTYCPM2
- config BR2_TARGET_GENERIC_GETTY_TTYCPM3
- 	bool "ttyCPM3"
- 	depends on BR2_powerpc
-+config BR2_TARGET_GENERIC_GETTY_CUSTOM
-+	bool "Select custom port"
-+
- endchoice
- 
-+config BR2_TARGET_GENERIC_GETTY_CUSTOM_PORT
-+	string "Port"
-+	depends on BR2_TARGET_GENERIC_GETTY_CUSTOM
-+	default ""
-+
- config BR2_TARGET_GENERIC_GETTY_PORT
- 	string
- 	default "#ttyS0"	if BR2_TARGET_GENERIC_GETTY_NONE
-@@ -134,6 +142,7 @@ config BR2_TARGET_GENERIC_GETTY_PORT
- 	default "ttyCPM1"	if BR2_TARGET_GENERIC_GETTY_TTYCPM1
- 	default "ttyCPM2"	if BR2_TARGET_GENERIC_GETTY_TTYCPM2
- 	default "ttyCPM3"	if BR2_TARGET_GENERIC_GETTY_TTYCPM3
-+	default $(BR2_TARGET_GENERIC_GETTY_CUSTOM_PORT) if BR2_TARGET_GENERIC_GETTY_CUSTOM
- 
- choice
- 	prompt "Baudrate to use"
+Enable BR2_ENABLE_DEBUG.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
