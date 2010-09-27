@@ -1,24 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Sep 2010 10:15:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 2647] makedevs package lacks support for 16-bit
- major/minor numbers
-In-Reply-To: <bug-2647-163@https.bugs.busybox.net/>
-References: <bug-2647-163@https.bugs.busybox.net/>
-Message-ID: <20100927101533.6BBD58B6EF@busybox.osuosl.org>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Mon, 27 Sep 2010 15:29:39 +0300
+Subject: [Buildroot] [PATCH 0/5] GStreamer patches for OMAP3
+In-Reply-To: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
+References: <1284939779-32754-1-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <AANLkTincM++w9nMwNUVLQq_xH4vPv-C73=PFF9W6Fib1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2647
+Hi,
 
---- Comment #1 from Matt Fleming <matt@console-pimps.org>  ---
-Created attachment 2539
-  --> https://bugs.busybox.net/attachment.cgi?id=2539
-patch to handle 16-bit minors
+On Mon, Sep 20, 2010 at 2:42 AM, Felipe Contreras
+<felipe.contreras@gmail.com> wrote:
+> The first patch is a bit of improvement for GStreamer, the next two enable TI's
+> OMAP3 DSP (by using tidspbridge driver), the fourth ist some tools to test the
+> afforementioned DSP, and the final one is another video sink optimized for
+> OMAP.
+>
+> I've tested these on a Nokia N900, but should work on any OMAP3 device.
+
+Ping? Is there anything wrong with these?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Felipe Contreras
