@@ -1,135 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Sep 2010 23:24:11 +0200
-Subject: [Buildroot] [git commit master 1/1] hdparm: convert to gentargets
-	and bump to 9.32
-Message-ID: <20100927212428.A72B88B6F3@busybox.osuosl.org>
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Mon, 27 Sep 2010 23:46:52 +0200
+Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
+In-Reply-To: <AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
+References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
+	<4C95DD81.2090105@googlemail.com>
+	<AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
+Message-ID: <4CA110CC.8030009@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+  Am 21.09.2010 04:00, schrieb Kelvin Cheung:
+> Hi Marcus,
+>
+> I have tried the patch.
+> It works fine.
+Hi Kelvin,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a19ee499bec80d896c0e23c21ae206c6a2d91bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I don't know why, but the transmission daemon is not able to create the 
+temporary torrent and resume file.
+All other config files were written without problems in the given 
+config-dir. I haven't forwarded a specific port to the machine where 
+embedded transmission runs on - until now.
+Why won't transmssion write the temporary files? Or is it correct 
+behaviour? I'm confused about "Couldn't save & Success" in the same 
+status line.
 
-[Peter: remove stripping, get rid of _BINARY variables]
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                     |    2 +-
- package/hdparm/hdparm.mk    |   59 +++++++++++++++---------------------------
- package/hdparm/hdparm.patch |   12 --------
- 3 files changed, 22 insertions(+), 51 deletions(-)
- delete mode 100644 package/hdparm/hdparm.patch
+Did you encounter similar errors with your installation?
 
-diff --git a/CHANGES b/CHANGES
-index a446905..6e6539c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -25,7 +25,7 @@
- 	bootutils, bridge-utils, bsdiff, busybox, dbus, dmraid,
- 	docker, dosfstools, dropbear, e2fsprogs, expat, ezxml, fbset,
- 	ffmpeg, freetype, gamin, gawk, gperf, gtk2-themes, gtkperf,
--	gvfs, haserl, hostapd, hwdata, ifplugd, iperf, iproute2,
-+	gvfs, haserl, hdparm, hostapd, hwdata, ifplugd, iperf, iproute2,
- 	iptables, jpeg, kexec, kismet, less, libcgi, libcurl, libdnet,
- 	libevent, libglade, libgtk2, libiconv, libidn, libmms, libnl,
- 	liboil, libpcap, libpng, libtool, libungif, libxml2, libxslt,
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index cc747eb..02d76a9 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -3,51 +3,34 @@
- # hdparm
- #
- #############################################################
--HDPARM_VERSION:=7.7
--HDPARM_SOURCE:=hdparm-$(HDPARM_VERSION).tar.gz
--HDPARM_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
--HDPARM_CAT:=$(ZCAT)
--HDPARM_DIR:=$(BUILD_DIR)/hdparm-$(HDPARM_VERSION)
--HDPARM_BINARY:=hdparm
--HDPARM_TARGET_BINARY:=sbin/hdparm
-+HDPARM_VERSION = 9.32
-+HDPARM_SOURCE = hdparm-$(HDPARM_VERSION).tar.gz
-+HDPARM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
- 
--$(DL_DIR)/$(HDPARM_SOURCE):
--	 $(call DOWNLOAD,$(HDPARM_SITE),$(HDPARM_SOURCE))
--
--hdparm-source: $(DL_DIR)/$(HDPARM_SOURCE)
--
--$(HDPARM_DIR)/.unpacked: $(DL_DIR)/$(HDPARM_SOURCE)
--	$(HDPARM_CAT) $(DL_DIR)/$(HDPARM_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(HDPARM_DIR) package/hdparm \*.patch
--	touch $@
--
--$(HDPARM_DIR)/$(HDPARM_BINARY): $(HDPARM_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(HDPARM_DIR) \
-+define HDPARM_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)"
-+endef
- 
--$(TARGET_DIR)/$(HDPARM_TARGET_BINARY): $(HDPARM_DIR)/$(HDPARM_BINARY)
--	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
--	$(INSTALL) -D -m 0755 $(HDPARM_DIR)/$(HDPARM_BINARY) $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
- ifeq ($(BR2_HAVE_DOCUMENTATION),y)
--	$(INSTALL) -D $(HDPARM_DIR)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
-+define HDPARM_INSTALL_DOCUMENTATION
-+	$(INSTALL) -D $(@D)/hdparm.8 $(TARGET_DIR)/usr/share/man/man8/hdparm.8
-+endef
- endif
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
- 
--hdparm: $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-+define HDPARM_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/hdparm $(TARGET_DIR)/sbin/hdparm
-+	$(HDPARM_INSTALL_DOCUMENTATION)
-+endef
- 
--hdparm-clean:
--	-$(MAKE) -C $(HDPARM_DIR) clean
--	rm -f $(TARGET_DIR)/$(HDPARM_TARGET_BINARY)
-+define HDPARM_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/sbin/hdparm
-+	rm -f $(TARGET_DIR)/usr/share/man/man8/hdparm.8
-+endef
- 
--hdparm-dirclean:
--	rm -rf $(HDPARM_DIR)
-+define HDPARM_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_HDPARM),y)
--TARGETS+=hdparm
--endif
-+$(eval $(call GENTARGETS,package,hdparm))
-diff --git a/package/hdparm/hdparm.patch b/package/hdparm/hdparm.patch
-deleted file mode 100644
-index d271eb8..0000000
---- a/package/hdparm/hdparm.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -ur hdparm-7.6/Makefile hdparm-7.6-patched/Makefile
----- hdparm-7.6/Makefile	2007-06-07 12:39:24.000000000 -0500
--+++ hdparm-7.6-patched/Makefile	2007-07-19 12:11:03.000000000 -0500
--@@ -28,7 +28,7 @@
-- 
-- hdparm: hdparm.h $(OBJS)
-- 	$(CC) $(LDFLAGS) -o hdparm $(OBJS)
---	strip hdparm
--+	$(STRIP) hdparm
--  
-- install: all hdparm.8
-- 	if [ ! -z $(DESTDIR) ]; then $(INSTALL_DIR) $(DESTDIR) ; fi
--- 
-1.7.1
+Btw: Thomas preferres another solution for the init-d skript (without 
+sleep 5 init). I wasn't able to figure out clearly, why and where the 
+IP_ADDR variable is used, so I'm experimenting with the "official" 
+init-d-skript from the transmission wiki.
+Would this be a problem in your eyes?
+
+Kind regards,
+Marcus
+
+
+$ /usr/bin/transmission-daemon -f -a 192.168.1.* --config-dir=/data
+[23:32:24.095] Transmission 2.04 (11151) started (session.c:622)
+[23:32:24.097] RPC Server Adding address to whitelist: 192.168.1.* 
+(rpc-server.c:767)
+[23:32:24.100] RPC Server Serving RPC and Web requests on port 9091 
+(rpc-server.c:940)
+[23:32:24.102] RPC Server Whitelist enabled (rpc-server.c:944)
+[23:32:24.104] DHT Generating new id (tr-dht.c:378)
+[23:32:24.106] Port Forwarding (NAT-PMP) initnatpmp succeeded (0) 
+(natpmp.c:67)
+[23:32:24.108] Port Forwarding (NAT-PMP) sendpublicaddressrequest 
+succeeded (2) (natpmp.c:67)
+[23:32:24.110] Using settings from "/data" (daemon.c:443)
+[23:32:24.113] Saved "/data/settings.json" (bencode.c:1651)
+[23:32:25.116] Port Forwarding (UPnP) Found Internet Gateway Device 
+"http://192.168.1.1:49000/upnp/control/WANIPConn1" (upnp.c:113)
+[23:32:25.118] Port Forwarding (UPnP) Local Address is "192.168.1.254" 
+(upnp.c:115)
+[23:32:25.120] Port Forwarding (UPnP) Port forwarding through 
+"http://192.168.1.1:49000/upnp/control/WANIPConn1", service 
+"urn:schemas-upnp-org:service:WANIPConnection:1".  (local address: 
+192.168.1.254:51413) (upnp.c:202)
+[23:32:25.123] Port Forwarding State changed from "Not forwarded" to 
+"Starting" (port-forwarding.c:89)
+[23:32:31.126] Port Forwarding State changed from "Starting" to "???" 
+(port-forwarding.c:89)
+[23:32:59.130] DHT Attempting bootstrap from dht.transmissionbt.com 
+(tr-dht.c:234)
+[23:33:16.135] Couldn't save file 
+"/data/torrents/evbarmcd-5.0.2.iso.9fe3ef5b5a32e862.torrent": Success 
+(bencode.c:1663)
+[23:33:34.139] evbarmcd-5.0.2.iso Starting DHT announce (poor, 9 nodes) 
+(tr-dht.c:669)
+[23:34:23.146] Couldn't save file 
+"/data/resume/evbarmcd-5.0.2.iso.9fe3ef5b5a32e862.resume": Success 
+(bencode.c:1663)
+[23:35:04.151] evbarmcd-5.0.2.iso Removing torrent (torrent.c:1557)
+[23:35:04.154] evbarmcd-5.0.2.iso Pausing (torrent.c:1513)
+Closing transmission session... done.
