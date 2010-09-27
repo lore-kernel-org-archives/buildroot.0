@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 27 Sep 2010 22:34:11 +0200
-Subject: [Buildroot] [git commit master 1/1] docs/buildroot.html: minor
-	tweaks
-Message-ID: <20100927203433.A1F6D8B6D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] docs/buildroot.html: document
+	Makefile wrapper in output dir
+Message-ID: <20100927203433.C9AFF8B6D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +10,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=677ae6f6a5554d9ce1162bb472c489df41ca2c8e
+commit: http://git.buildroot.net/buildroot/commit/?id=1110062e465354fdee9ee887024f4a58783533c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- We have gconfig as well nowadays
-- Variables like BUILDROOT_DL_DIR can also be set permanently in the
-  environment, and not just passed to make every time.
+For out-of-tree builds.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/buildroot.html |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/buildroot.html |   17 ++++++++++++++++-
+ 1 files changed, 16 insertions(+), 1 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 6d4f17c..edb75b1 100644
+index edb75b1..b7a8641 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -260,7 +260,7 @@ or
- 
-     <p>If you intend to do an offline build and just want to download
-     all sources that you previously selected in the configurator
--    (<i>menuconfig</i> or <i>xconfig</i>), then issue:</p>
-+    (<i>menuconfig</i>, <i>xconfig</i> or <i>gconfig</i>), then issue:</p>
- <pre>
-  $ make source
+@@ -278,15 +278,30 @@ or
+  $ make O=/tmp/build
  </pre>
-@@ -291,7 +291,7 @@ or
+ 
++    <p>Or:</p>
++
++<pre>
++ $ cd /tmp/build; make O=$PWD -C path/to/buildroot
++</pre>
++
+     <p>All the output files will be located under
+     <code>/tmp/build</code>.</p>
+ 
+     <p>When using out-of-tree builds, the Buildroot
+-    <code>.config</code> and  temporary files are also stored in the
++    <code>.config</code> and temporary files are also stored in the
+     output directory. This means that you can safely run multiple
+     builds in parallel using the same source tree as long as they use
+     unique output directories.</p>
+ 
++    <p>For ease of use, Buildroot generates a Makefile wrapper in the
++    output directory - So after the first run, you no longer need to
++    pass <code>O=..</code> and <code>-C ..</code>, simply run (in the
++    output directory):</p>
++
++<pre>
++ $ make &lt;target&gt;
++</pre>
++
+     <h3><a name="environment_variables" id="environment_variables"></a>
      Environment variables</h3>
  
-     <p>Buildroot also honors some environment variables when they are passed
--    to <code>make</code>:</p>
-+    to <code>make</code> or set in the environment:</p>
-     <ul>
-     <li><code>HOSTCXX</code>, the host C++ compiler to use</li>
-     <li><code>HOSTCC</code>, the host C compiler to use</li>
 -- 
 1.7.1
