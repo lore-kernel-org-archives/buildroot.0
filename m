@@ -1,25 +1,16 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 28 Sep 2010 09:54:19 +0200
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 28 Sep 2010 10:24:09 +0200
 Subject: [Buildroot] menuconfig fails to compile
 In-Reply-To: <4CA19CB9.2040107@gmail.com>
 References: <4CA19CB9.2040107@gmail.com>
-Message-ID: <AANLkTinKz3nXR7pd64NDUoiX+JA5GUr9H4nFErrwt4rE@mail.gmail.com>
+Message-ID: <AANLkTingyY5_95jqW77PV5x3g0qAu1Saud6Fuu32ZSz5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Again, this is due to the kconfig update, you have to cleanup your
-repository to fix that.
-
-Regards,
-
---
-Lionel Landwerlin
-
-On Tue, Sep 28, 2010 at 9:43 AM, Paulius Zaleckas
-<paulius.zaleckas@gmail.com> wrote:
+On 28 September 2010 09:43, Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
 > I have just did git pull and now menuconfig fails to compile:
 >
 > [paulius at pauliusz buildroot]$ make
@@ -57,8 +48,12 @@ On Tue, Sep 28, 2010 at 9:43 AM, Paulius Zaleckas
 > make[1]: Leaving directory `/home/paulius/buildroot'
 > make: *** [/home/paulius/buildroot/output/build/buildroot-config/auto.conf]
 > Error 2
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+
+I just had the same issue. To fix it:
+
+  rm package/config/zconf.tab.c
+
+and rebuild.
+
+Best regards,
+Bj?rn Forsman
