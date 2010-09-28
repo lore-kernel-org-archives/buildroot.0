@@ -1,64 +1,198 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Sep 2010 19:40:24 +0200
-Subject: [Buildroot] [PATCH 4/4] Add network scripting folders to
- fs/skeleton
-In-Reply-To: <4C9C55C5.907@visionsystems.de>
-References: <4C9C54A9.20803@visionsystems.de>
-	<4C9C54FC.4040609@visionsystems.de>
-	<4C9C553E.8040105@visionsystems.de>
-	<4C9C558A.7050009@visionsystems.de> <4C9C55C5.907@visionsystems.de>
-Message-ID: <20100928194024.2ccf72e8@surf>
+Date: Tue, 28 Sep 2010 22:36:52 +0200
+Subject: [Buildroot] Libtool work: a tentative summary
+Message-ID: <20100928223652.6dc72083@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Sep 2010 09:39:49 +0200
-Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
+Hello,
 
-> Those folders by device_table.txt. If using the dynamic device creation method
-> these folders will be missing.
+There has recently been quite some work done around libtool handling in
+Buildroot, in the form of two proposals done by Martin Banky and Lionel
+Landwerlin. Those two proposals are quite different and we need to make
+a choice between them. This e-mail tries to summarize the libtool
+problem, how it is currently handled in Buildroot, the technical
+proposals made by Martin and Lionel with their respective advantages
+and drawbacks. Martin and Lionel are obviously invited to comment on
+those (and the rest of this e-mail as well).
 
-"Those folders are currently created by device_table.txt"...
+Libtool problems
+================
 
-Ok on the principle, but if those directories are now part of the
-skeleton, they should be removed from the device_table.txt file.
+Libtool problems in cross-compilation mode are well-known. The
+famous http://www.metastatic.org/text/libtool.html lists most of the
+problems, and some hacks to solve them.
 
-However, looking at device_table.txt, I also see that it does a few
-things not related to device files :
+Basically, Libtool does not understand the fact that we may be building
+a root filesystem in a different place than "/", and keeps looking
+in /usr/lib for libraries.
 
-/dev            d       755     0       0       -       -       -       -       -
-/dev/pts        d       755     0       0       -       -       -       -       -
-/dev/shm        d       755     0       0       -       -       -       -       -
-/tmp            d       1777    0       0       -       -       -       -       -
-/etc            d       755     0       0       -       -       -       -       -
-/home/default   d       2755    1000    1000    -       -       -       -       -
-#<name>                                 <type>  <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
-/bin/busybox                            f       4755    0       0       -       -       -       -       -
-/etc/shadow                             f       600     0       0       -       -       -       -       -
-/etc/passwd                             f       644     0       0       -       -       -       -       -
-/etc/network/if-up.d                    d       755     0       0       -       -       -       -       -
-/etc/network/if-pre-up.d                d       755     0       0       -       -       -       -       -
-/etc/network/if-down.d                  d       755     0       0       -       -       -       -       -
-/etc/network/if-post-down.d             d       755     0       0       -       -       -       -       -
-/usr/share/udhcpc/default.script        f       755     0       0	-       -       -       -       -
+It is worth noting that libtool 2.4 has finally introduced a --sysroot
+argument which should finally solve those problems. However, until
+libtool 2.4 is picked up by most packages, we will have to live with
+the libtool problems for quite some time. See
+http://lists.gnu.org/archive/html/libtool/2010-09/msg00082.html.
 
-For each of those lines, what will replace the usage of the device
-table ? For things like proper access rights
-for /etc/shadow, /etc/passwd, setuid for Busybox binary, proper flags
-for /tmp, maybe we have no other choices than using a device table.
+Current Buildroot solution
+==========================
 
-In that case, we could use a split device table :
+The current Buildroot solution consists in two mechanisms :
 
- * One used in all cases
+ *) Apply the package/buildroot-libtool.patch to packages when
+    <pkg>_LIBTOOL_PATCH is YES. This is the default value for
+    autotools-based packages.
 
- * One used only in the static device case. Buildroot would concatenate
-   this one to the previous one before doing the root filesystem generation.
+    This patch directly modifies the ltmain.sh script, which will be
+    used to generate the libtool script in the package as configure
+    time.
 
-Thoughts ?
+    This patch only works with libtool 1.5.x, but a number of packages
+    are now using libtool 2.2.x, so more and more packages are doing
+    <pkg>_LIBTOOL_PATCH=NO to disable the patch. This works for most
+    packages but not for others (example: I'm bumping GTK to 2.20 and
+    it needs a patch for the ltmain.sh script which has been generated
+    by libtool 2.2.x)
 
-Regards,
+ *) Modify the .la files installed by Buildroot in order to add
+    $(STAGING_DIR) at the beginning of the "libdir" paths.
+
+Martin Banky proposal
+=====================
+
+Martin Banky has sent a proposal to improve libtool handling in
+Buildroot on September 16th. See
+http://lists.busybox.net/pipermail/buildroot/2010-September/037505.html
+and the following 4 e-mails from Martin.
+
+Basically, Martin's proposal is to continue with the current solution
+to the libtool problem, but to clean it up a bit and to extend it to
+libtool 2.2.
+
+This patch set has 3 main components :
+
+ *) Simplify the existing package/buildroot-libtool.patch by removing
+    useless chunks
+
+ *) Rename package/buildroot-libtool.patch to
+    package/buildroot-libtool-v1.5.patch, add a new
+    package/buildroot-libtool-v2.2.patch. Those two patches
+    respectively modify the ltmain.sh generated by libtool 1.5 and 2.2.
+    Then the Autotools infrastructure is modified to apply one patch or
+    the other depending on which libtool version the package is using.
+
+ *) The remaining modifications remove libtool-related patches in
+    various packages that have become useless thanks to the previous
+    patches.
+
+Advantages of this approach :
+
+ *) We're keeping the current solution and only cleanup/extend it to
+    work with recent libtool versions. This is good from a
+    "conservative" point of view.
+
+ *) As today, we don't need to autoreconf all autotools-based packages
+    just to fix the libtool issue.
+
+Drawbacks of this approach :
+
+ *) We may have similar issues with future versions of libtool, even if
+    the addition of --sysroot to libtool 2.4 probably means that libtool
+    1.5 and 2.2 will remain the only two versions of libtool causing
+    problems in widespread use.
+
+ *) It keeps the current solution, which is a bit ugly: modify scripts
+    that are generated, and hack the .la files.
+
+ *) It modifies the .la by adding informations relative to
+    $(STAGING_DIR), which may cause problems if we want to generate
+    packages (.ipkg) or if we would like to allow users to relocate the
+    Buildroot staging directory.
+
+Lionel Landwerlin proposal
+==========================
+
+Lionel Landwerlin has sent a proposal to improve libtool handling in
+Buildroot on September, 18th. See
+http://lists.busybox.net/pipermail/buildroot/2010-September/037663.html
+for the mailing list post.
+
+Basically, Lionel's proposal is to patch libtool itself to make it
+sysroot-capable and then autoreconfigure all autotools-based packages
+to make them use the fixed libtool version.
+
+Lionel's proposal is relatively complicated because in order for the
+patch on libtool to take effect, libtool itself needs to be
+autoreconfigured, which in turn requires libtool. So Lionel has
+introduced a host-libtool-host package, which is an unmodified libtool,
+installed in a new $(HOST_HOST_DIR) directory. He later uses that
+host-libtool-host to autoreconfigure the host-libtool (which has been
+previously patched to understand sysroot related things).
+host-libtool-host will be kept for the autoreconfiguration of host
+packages, while host-libtool is used for the autoreconfiguration of
+target packages. (If your head hasn't exploded yet, keep reading,
+otherwise, take a break and come back in 10 minutes). This is what the
+first patch in Lionel patch set does. The other patches are only minor
+related changes.
+
+Advantages of this approach :
+
+ *) We no longer arbitrarly patch ltmain.sh in every package, with the
+    need to carry libtool-version-specific patches.
+
+ *) We no longer need to modify the .la files.
+
+ *) The approach seems cleaner.
+
+ *) It is closer to what we could have with libtool 2.4, except that
+    libtool 2.4 wouldn't need to be patch as it already supports
+    --sysroot by default. Therefore, a large part of the complexity of
+    this patch set could be removed (since we wouldn't have to
+    autoreconfigure libtool itself). However, we'd still need to
+    autoreconfigure all autotools-based packages (see below). I know
+    Lionel has started experimenting with libtool 2.4, as can be seen
+    on
+    http://lists.gnu.org/archive/html/bug-libtool/2010-09/msg00064.html
+
+Drawbacks of this approach :
+
+ *) We need to autoreconfigure *ALL* autotools-based packages. This may
+    be an issue for two reasons: 1/ speed, 2/ packages for which
+    autoreconfiguration does not work properly (yes those packages
+    should be fixed, but anyway, this may add some work to us).
+    Obviously, as packages will start using libtool 2.4 by default,
+    this shouldn't be a problem, but we all know that it's going to
+    take years before everybody moves to that newer libtool version.
+
+ *) The HOST_HOST_DIR thing and the host-libtool-host as it is
+    implemented today is pretty ugly. I'd rather have a either single
+    libtool installed in $(HOST_DIR), which work for both the
+    autoreconfiguration of host and target packages, or have two
+    libtools installed in $(HOST_DIR), on for host packages (just named
+    'libtool') and another for target packages (named 'cross-libtool'
+    or something similar).
+
+Conclusion
+==========
+
+Therefore, the choice seems to be between :
+
+ * A conservative solution, only extending what we have today, with
+   limited changes and impact, but keeping the existing hacks in place.
+
+ * A radically different solution, with wider changes, more in line
+   with libtool future, but requiring an autoreconfiguration of all
+   packages that will not have libtool 2.4 by default.
+
+In my opinion, we should settle on a solution before mid-october, in
+order to merge it before the end of october and give us enough time for
+testing before the release at the end of november. Considering how much
+time Martin and Lionel have dedicated to this issue, I think that their
+respective work deserve some attention.
+
+Thoughts ? Comments ?
 
 Thomas
 -- 
