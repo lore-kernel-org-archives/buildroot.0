@@ -1,55 +1,35 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 28 Sep 2010 14:52:56 +0300
-Subject: [Buildroot] [PATCH] matchbox-common was missing in Config.in
-Message-ID: <20100928115256.10084.99758.stgit@localhost6.localdomain6>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 28 Sep 2010 14:03:51 +0200
+Subject: [Buildroot] [git commit master 1/1] docs/news.html: typo,
+	fix Thomas' family name
+Message-ID: <20100928120428.B27EA8B6EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While at it add option to install PDA style desktop folders.
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=a70d443483b360a0cc0ca1759e9a410b7855dbe8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
+ docs/news.html |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- package/matchbox/Config.in                         |   10 ++++++++++
- .../matchbox/matchbox-common/matchbox-common.mk    |    4 ++++
- 2 files changed, 14 insertions(+), 0 deletions(-)
-
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 43189ca..e4b6149 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -22,6 +22,16 @@ config BR2_PACKAGE_MATCHBOX_DESKTOP
- 	help
- 	  A PDA style application launcher or 'item browser'.
+diff --git a/docs/news.html b/docs/news.html
+index 8bfc226..43beac8 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -17,7 +17,7 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-September/037930.html">announcement</a>
+     for more info.</p>
  
-+config BR2_PACKAGE_MATCHBOX_COMMON
-+	bool "Matchbox session common files"
-+	depends on BR2_PACKAGE_MATCHBOX && BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
-+	help
-+	  Common desktop folders and matchbox-session script.
-+
-+config BR2_PACKAGE_MATCHBOX_COMMON_PDA
-+	bool "PDA style desktop folders"
-+	depends on BR2_PACKAGE_MATCHBOX_COMMON
-+
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "Matchbox Virtual Keyboard"
- 	depends on BR2_PACKAGE_MATCHBOX
-diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-index 81a1729..d35d11b 100644
---- a/package/matchbox/matchbox-common/matchbox-common.mk
-+++ b/package/matchbox/matchbox-common/matchbox-common.mk
-@@ -9,6 +9,10 @@ MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
- MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
- MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
+-    <p>Thanks to Thomas Petazzon for taking care of the practical
++    <p>Thanks to Thomas Petazzoni for taking care of the practical
+     arrangements.</p>
  
-+ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
-+	MATCHBOX_COMMON_CONF_OPT += --enable-pda-folders
-+endif
-+
- #############################################################
- 
- $(eval $(call AUTOTARGETS,package/matchbox,matchbox-common))
+   <li><b>31 August 2010 -- 2010.08 released</b>
+-- 
+1.7.1
