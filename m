@@ -1,35 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Sep 2010 19:19:03 +0200
-Subject: [Buildroot] [PATCH] Option to disable mouse cursor in QT
-In-Reply-To: <39650.1285687128@iddad.fr>
-References: <39650.1285687128@iddad.fr>
-Message-ID: <20100928191903.7ef394b1@surf>
+Date: Tue, 28 Sep 2010 19:26:29 +0200
+Subject: [Buildroot] [PATCH 1/4] Added new menu item to specify a custom
+ port for /etc/inittab
+In-Reply-To: <4CA05B90.30704@visionsystems.de>
+References: <4C9C54A9.20803@visionsystems.de> <4CA05B90.30704@visionsystems.de>
+Message-ID: <20100928192629.1717d83c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jean,
+Hello,
 
-On Tue, 28 Sep 2010 17:18:48 +0200
-<jean@iddad.fr> wrote:
-
-> My company is developing a touch screen product and we are using QT. Because of the touch
-> screen, I don't want to display any mouse pointer/cursor so I patched
-> buildroot to disable it at configuration time. As touchscreens become more and more common
-> some other people may need this patch as well, so here it is:
-
-Sounds like a good thing to have.
-
-Could you format your patch as an unified diff, and add the proper
-description + signed-off-by-line ? This would allow us to keep proper
-attribution on the patch. If you're not interested by being directly
-attributed the work of this patch, I can also merge it manually.
-
-Regards,
+Would people cry/complain if instead of the following patch we simply
+replace the TARGET_GENERIC_GETTY_PORT parameter by a single free-form
+text-field ?
 
 Thomas
+
+On Mon, 27 Sep 2010 10:53:36 +0200
+Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
+
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> ---
+>  target/generic/Config.in |    9 +++++++++
+>  1 files changed, 9 insertions(+), 0 deletions(-)
+> 
+> diff --git a/target/generic/Config.in b/target/generic/Config.in
+> index 54ff1d6..286b0a3 100644
+> --- a/target/generic/Config.in
+> +++ b/target/generic/Config.in
+> @@ -102,8 +102,16 @@ config BR2_TARGET_GENERIC_GETTY_TTYCPM2
+>  config BR2_TARGET_GENERIC_GETTY_TTYCPM3
+>  	bool "ttyCPM3"
+>  	depends on BR2_powerpc
+> +config BR2_TARGET_GENERIC_GETTY_CUSTOM
+> +	bool "Select custom port"
+> +
+>  endchoice
+>  
+> +config BR2_TARGET_GENERIC_GETTY_CUSTOM_PORT
+> +	string "Port"
+> +	depends on BR2_TARGET_GENERIC_GETTY_CUSTOM
+> +	default ""
+> +
+>  config BR2_TARGET_GENERIC_GETTY_PORT
+>  	string
+>  	default "#ttyS0"	if BR2_TARGET_GENERIC_GETTY_NONE
+> @@ -134,6 +142,7 @@ config BR2_TARGET_GENERIC_GETTY_PORT
+>  	default "ttyCPM1"	if BR2_TARGET_GENERIC_GETTY_TTYCPM1
+>  	default "ttyCPM2"	if BR2_TARGET_GENERIC_GETTY_TTYCPM2
+>  	default "ttyCPM3"	if BR2_TARGET_GENERIC_GETTY_TTYCPM3
+> +	default $(BR2_TARGET_GENERIC_GETTY_CUSTOM_PORT) if BR2_TARGET_GENERIC_GETTY_CUSTOM
+>  
+>  choice
+>  	prompt "Baudrate to use"
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
