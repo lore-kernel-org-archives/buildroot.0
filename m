@@ -1,59 +1,48 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 28 Sep 2010 10:24:09 +0200
-Subject: [Buildroot] menuconfig fails to compile
-In-Reply-To: <4CA19CB9.2040107@gmail.com>
-References: <4CA19CB9.2040107@gmail.com>
-Message-ID: <AANLkTingyY5_95jqW77PV5x3g0qAu1Saud6Fuu32ZSz5@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Sep 2010 10:37:03 +0200
+Subject: [Buildroot] Buildroot Developer Day at ELCE, October 29th
+Message-ID: <20100928103703.6df01d77@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 September 2010 09:43, Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
-> I have just did git pull and now menuconfig fails to compile:
->
-> [paulius at pauliusz buildroot]$ make
-> /usr/bin/make -j2 ?silentoldconfig
-> make[1]: Entering directory `/home/paulius/buildroot'
-> mkdir -p /home/paulius/buildroot/output/build/buildroot-config/lxdialog
-> /usr/bin/make CC="/usr/bin/gcc"
-> obj=/home/paulius/buildroot/output/build/buildroot-config -C package/config
-> -f Makefile.br conf
-> make[2]: Entering directory `/home/paulius/buildroot/package/config'
-> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
-> ?-I/home/paulius/buildroot/output/build/buildroot-config -g -O2 -MM *.c >
-> /home/paulius/buildroot/output/build/buildroot-config/.depend 2>/dev/null ||
-> :
-> make[2]: Leaving directory `/home/paulius/buildroot/package/config'
-> make[2]: Entering directory `/home/paulius/buildroot/package/config'
-> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
-> ?-I/home/paulius/buildroot/output/build/buildroot-config -g -O2 ?-c conf.c
-> -o /home/paulius/buildroot/output/build/buildroot-config/conf.o
-> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
-> ?-I/home/paulius/buildroot/output/build/buildroot-config -g -O2 ?-c
-> kxgettext.c -o
-> /home/paulius/buildroot/output/build/buildroot-config/kxgettext.o
-> /usr/bin/gcc -I/usr/include/ncurses -DCURSES_LOC="<ncurses.h>" -DLOCALE
-> ?-I/home/paulius/buildroot/output/build/buildroot-config -g -O2 -I. -c
-> zconf.tab.c -o
-> /home/paulius/buildroot/output/build/buildroot-config/zconf.tab.o
-> zconf.tab.c:181: error: conflicting types for ?symbol_hash?
-> lkc_proto.h:27: note: previous declaration of ?symbol_hash? was here
-> make[2]: ***
-> [/home/paulius/buildroot/output/build/buildroot-config/zconf.tab.o] Error 1
-> make[2]: Leaving directory `/home/paulius/buildroot/package/config'
-> make[1]: *** [/home/paulius/buildroot/output/build/buildroot-config/conf]
-> Error 2
-> make[1]: Leaving directory `/home/paulius/buildroot'
-> make: *** [/home/paulius/buildroot/output/build/buildroot-config/auto.conf]
-> Error 2
+Hello,
 
-I just had the same issue. To fix it:
+As announced in June [1], we are organizing a "Buildroot Developer Day"
+in Cambridge, UK, on Friday 29th October. This date and location has
+been choosen because it is just after the Embedded Linux Conference
+Europe event [2].
 
-  rm package/config/zconf.tab.c
+This Buildroot Developer Day is open to Buildroot developers, and will
+allow to discuss Buildroot current issues, Buildroot future, etc. Even
+if you can't make it to the event, feel free to share your ideas and
+wishes about Buildroot before that date so that your suggestions can be
+discussed during the Developer Day.
 
-and rebuild.
+For the moment, I've noted the participation of :
 
-Best regards,
-Bj?rn Forsman
+ 1. Peter Korsgaard
+ 2. Yann E. Morin
+ 3. Lionel Landwerlin
+ 4. Thomas Petazzoni
+
+We have a few places available, so don't hesitate to candidate if
+you're an active Buildroot developer/contributor/user.
+
+The event will take place at CB2 Bistro <http://www.cb2bistro.com/>,
+and will start at 10 AM (the time at which CB2 opens). This place will
+offer us: free Internet access, possibility of drinks and lunch.
+
+Regards,
+
+Thomas
+
+[1] http://lists.busybox.net/pipermail/buildroot/2010-June/035491.html
+[2] http://www.embeddedlinuxconference.com/elc_europe10/index.html
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
