@@ -1,46 +1,55 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Tue, 28 Sep 2010 14:52:15 +0300
-Subject: [Buildroot] [PATCH] xterm: should select libXaw and bump to latest
-	version
-Message-ID: <20100928115214.10039.12962.stgit@localhost6.localdomain6>
+Date: Tue, 28 Sep 2010 14:52:56 +0300
+Subject: [Buildroot] [PATCH] matchbox-common was missing in Config.in
+Message-ID: <20100928115256.10084.99758.stgit@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+While at it add option to install PDA style desktop folders.
+
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- package/xterm/Config.in |    1 +
- package/xterm/xterm.mk  |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/matchbox/Config.in                         |   10 ++++++++++
+ .../matchbox/matchbox-common/matchbox-common.mk    |    4 ++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-index da3e9fe..9473fad 100644
---- a/package/xterm/Config.in
-+++ b/package/xterm/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XTERM
- 	bool "xterm"
-+	select BR2_PACKAGE_XLIB_LIBXAW
- 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 43189ca..e4b6149 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -22,6 +22,16 @@ config BR2_PACKAGE_MATCHBOX_DESKTOP
  	help
- 	  xterm terminal emulator
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index b07eda4..8952e24 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,10 +4,10 @@
- #
+ 	  A PDA style application launcher or 'item browser'.
+ 
++config BR2_PACKAGE_MATCHBOX_COMMON
++	bool "Matchbox session common files"
++	depends on BR2_PACKAGE_MATCHBOX && BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
++	help
++	  Common desktop folders and matchbox-session script.
++
++config BR2_PACKAGE_MATCHBOX_COMMON_PDA
++	bool "PDA style desktop folders"
++	depends on BR2_PACKAGE_MATCHBOX_COMMON
++
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Matchbox Virtual Keyboard"
+ 	depends on BR2_PACKAGE_MATCHBOX
+diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
+index 81a1729..d35d11b 100644
+--- a/package/matchbox/matchbox-common/matchbox-common.mk
++++ b/package/matchbox/matchbox-common/matchbox-common.mk
+@@ -9,6 +9,10 @@ MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
+ MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
+ MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
+ 
++ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
++	MATCHBOX_COMMON_CONF_OPT += --enable-pda-folders
++endif
++
  #############################################################
  
--XTERM_VERSION:=259
-+XTERM_VERSION:=262
- XTERM_SOURCE:=xterm-$(XTERM_VERSION).tgz
- XTERM_SITE:=ftp://invisible-island.net/xterm
--XTERM_DEPENDENCIES = xserver_xorg-server
-+XTERM_DEPENDENCIES = xserver_xorg-server xlib_libXaw
- XTERM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(call AUTOTARGETS,package,xterm))
+ $(eval $(call AUTOTARGETS,package/matchbox,matchbox-common))
