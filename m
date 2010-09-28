@@ -1,56 +1,41 @@
-From: jean at iddad.fr <jean@iddad.fr>
-Date: Tue, 28 Sep 2010 17:18:48 +0200
-Subject: [Buildroot] [PATCH] Option to disable mouse cursor in QT
-Message-ID: <39650.1285687128@iddad.fr>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 28 Sep 2010 18:25:23 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain: add new toolchain backend:
+	crosstool-NG
+In-Reply-To: <1284926049-9882-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<1284926049-9882-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <201009281825.23741.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi,
+All,
 
-My company is developing a touch screen product and we are using QT. Because of the touch screen, I don't want to display any mouse pointer/cursor so I patched buildroot to disable it at configuration time.
-As touchscreens become more and more common some other people may need this patch as well, so here it is:
+On Sunday 19 September 2010 21:54:09 Yann E. MORIN wrote:
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+> ---
+>  Makefile                                           |    4 +-
+>  package/Makefile.in                                |    2 +
+>  toolchain/Config.in                                |    9 +
+>  ...chain-external.mk => toolchain-crosstool-ng.mk} |    4 +-
+>  toolchain/toolchain-crosstool-ng/Config.in         |   60 +++
+>  .../toolchain-crosstool-ng/crosstool-ng.config     |  360 +++++++++++++++
+>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |  275 +++++++++++
+>  .../uClibc.config}                                 |  126 +++---
+>  8 files changed, 773 insertions(+), 67 deletions(-)
 
-diff -crB buildroot-2010.08/package/qt/Config.in buildroot-2010.08-patched/package/qt/Config.in
-*** buildroot-2010.08/package/qt/Config.in 2010-08-31 23:07:06.000000000 +0100
---- buildroot-2010.08-patched/package/qt/Config.in 2010-09-28 08:56:31.000000000 +0100
-***************
-*** 373,376 ****
---- 373,384 ----
-Build the Qt Script Tools module.
-if unsure, say n.
-
-+ config BR2_PACKAGE_QT_CURSOR
-+ bool "Mouse Cursor"
-+ default y
-+ help
-+ Enables the mouse cursor.
-+ If using a touchscreen, say n to prevent the cursor from being displayed.
-+
-+
-endif # BR2_PACKAGE_QT
-diff -crB buildroot-2010.08/package/qt/qt.mk buildroot-2010.08-patched/package/qt/qt.mk
-*** buildroot-2010.08/package/qt/qt.mk 2010-08-31 23:07:06.000000000 +0100
---- buildroot-2010.08-patched/package/qt/qt.mk 2010-09-28 08:56:54.000000000 +0100
-***************
-*** 371,376 ****
---- 371,382 ----
-QT_CONFIGURE += -no-pch
-endif
-
-+ ifeq ($(BR2_PACKAGE_QT_CURSOR),y)
-+ QT_CONFIGURE+= -feature-CURSOR
-+ else
-+ QT_CONFIGURE+= -no-feature-CURSOR
-+ endif
-+
-BR2_PACKAGE_QT_EMB_PLATFORM:=$(call qstrip,$(BR2_PACKAGE_QT_EMB_PLATFORM))
-
-# x86x86fix
-
+Ping? ;-)
 
 Regards,
+Yann E. MORIN.
 
-Jean
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
