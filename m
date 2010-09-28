@@ -1,31 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 28 Sep 2010 18:38:46 +0200
-Subject: [Buildroot] [ Patch 0/4] Fix for POSIX compliance
-In-Reply-To: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <201009281838.46148.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Sep 2010 19:19:03 +0200
+Subject: [Buildroot] [PATCH] Option to disable mouse cursor in QT
+In-Reply-To: <39650.1285687128@iddad.fr>
+References: <39650.1285687128@iddad.fr>
+Message-ID: <20100928191903.7ef394b1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello Jean,
 
-On Monday 20 September 2010 23:26:05 Yann E. MORIN wrote:
-> This series adds fixes for POSIX 1003.1-2008 compliance in some shell
-> scripts, with respect to string comparison. POSIX says that string
-> comparison in test(1) is done using a sing '='; using two is a bashism.
+On Tue, 28 Sep 2010 17:18:48 +0200
+<jean@iddad.fr> wrote:
 
-Ping? ;-)
+> My company is developing a touch screen product and we are using QT. Because of the touch
+> screen, I don't want to display any mouse pointer/cursor so I patched
+> buildroot to disable it at configuration time. As touchscreens become more and more common
+> some other people may need this patch as well, so here it is:
+
+Sounds like a good thing to have.
+
+Could you format your patch as an unified diff, and add the proper
+description + signed-off-by-line ? This would allow us to keep proper
+attribution on the patch. If you're not interested by being directly
+attributed the work of this patch, I can also merge it manually.
 
 Regards,
-Yann E. MORIN.
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
