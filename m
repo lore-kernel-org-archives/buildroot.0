@@ -1,32 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Sep 2010 00:27:31 +0200
-Subject: [Buildroot] [PATCH] Makefile: Force make to run serially in the
- top-level Makefile
-In-Reply-To: <1285710658-17096-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1285710658-17096-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <20100929002731.3e624f9d@surf>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Wed, 29 Sep 2010 01:26:20 +0200
+Subject: [Buildroot] Libtool work: a tentative summary
+In-Reply-To: <20100928223652.6dc72083@surf>
+References: <20100928223652.6dc72083@surf>
+Message-ID: <1285716380.27944.302.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thanks a lot to Thomas, for having made this summary.
 
-On Tue, 28 Sep 2010 23:50:58 +0200
-"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
-
-> The top-level Makefile can be executed in parallel, as it causes problems.
-> We can force make to be not parallel.
+Le mardi 28 septembre 2010 ? 22:36 +0200, Thomas Petazzoni a ?crit :
 > 
-> It's been reported many times, and recent discussions on IRC with kos_tom,
-> and user nick-named knee, led to this patch.
+> Drawbacks of this approach :
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+>  *) We need to autoreconfigure *ALL* autotools-based packages. This may
+>     be an issue for two reasons: 1/ speed, 2/ packages for which
+>     autoreconfiguration does not work properly (yes those packages
+>     should be fixed, but anyway, this may add some work to us).
+>     Obviously, as packages will start using libtool 2.4 by default,
+>     this shouldn't be a problem, but we all know that it's going to
+>     take years before everybody moves to that newer libtool version.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+To be correct, autoreconfigure would not apply to all autotools-based
+packages, but just to autotools-based ones using libtool. For example,
+the at package which uses autotools, wouldn't require to be
+autoreconfigured to work properly.
+I confess that packages using libtool represent the majority of the
+packages, and surely the most complex ones to autoreconfigure.
+
+Regards,
+
+--
+Lionel Landwerlin
