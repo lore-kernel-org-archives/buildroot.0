@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Sep 2010 13:12:21 +0200
-Subject: [Buildroot] On internal vs. external toolchains
-In-Reply-To: <AANLkTikZEe+tS3WtxULNLNq80QrVRy0U5XWzneRcHRnw@mail.gmail.com>
-References: <20100928223652.6dc72083@surf>
-	<AANLkTi=Sf1+acAXfCgJcTv+4Yrtw0nEH+_Ugv3+0dVk0@mail.gmail.com>
-	<20100929105151.76bd6230@surf>
-	<AANLkTikZEe+tS3WtxULNLNq80QrVRy0U5XWzneRcHRnw@mail.gmail.com>
-Message-ID: <20100929131221.0a5e9c1b@surf>
+Date: Wed, 29 Sep 2010 13:23:54 +0200
+Subject: [Buildroot] [PATCH 1/6] coreutils: converted to autotarget
+In-Reply-To: <1285296904-25793-1-git-send-email-Martin.Banky@gmail.com>
+References: <1285296904-25793-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20100929132354.69c0efed@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 29 Sep 2010 14:01:23 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+Hello Martin,
 
-> > Are you using internal toolchain or external toolchain ?
-> 
-> internal
+On Thu, 23 Sep 2010 19:54:59 -0700
+Martin Banky <martin.banky@gmail.com> wrote:
 
-Then you could probably save ~20-30% of your build time by using an
-external toolchain (generated either by Buildroot itself, Crosstool-NG
-or using a ready-to-use CodeSourcery toolchain).
+> +#COREUTILS_SITE = ftp://alpha.gnu.org/gnu/coreutils/
 
-Regards,
+Remove this line.
+
+> +BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
+> +	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+> +	uname join
+
+The variable namespace is completely global in Buildroot, so I'd prefer
+to see this variable prefixed with COREUTILS_
+
+> +ifneq ($(BR2_ENABLE_LOCALE),y)
+> +define COREUTILS_REMOVE_LOCALE
+> +	rm -rf $(TARGET_DIR)/share/locale
+> +endef
+> +COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_REMOVE_LOCALE
+
+Not needed, the top-level Makefile takes care of this.
+
+Thanks!
 
 Thomas
 -- 
