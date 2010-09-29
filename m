@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Sep 2010 09:03:19 +0200
-Subject: [Buildroot] [PATCH 4/7] bison: add host rules
-In-Reply-To: <1284832789-22631-5-git-send-email-llandwerlin@gmail.com>
-References: <1284832789-22631-1-git-send-email-llandwerlin@gmail.com>
-	<1284832789-22631-5-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20100929090319.70706501@surf>
+Date: Wed, 29 Sep 2010 10:22:43 +0200
+Subject: [Buildroot] [PATCH] introducing transmission bittorrent client
+In-Reply-To: <4CA110CC.8030009@googlemail.com>
+References: <1284884604-2433-1-git-send-email-marcus.osdoba@googlemail.com>
+	<4C95DD81.2090105@googlemail.com>
+	<AANLkTi=D9f0qz=DsgeX-hwZPwxvSsp-nncS+r0BiqP0y@mail.gmail.com>
+	<4CA110CC.8030009@googlemail.com>
+Message-ID: <20100929102243.4b4a1d2b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Sep 2010 19:59:46 +0200
-llandwerlin at gmail.com wrote:
+On Mon, 27 Sep 2010 23:46:52 +0200
+Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
 
-> +$(eval $(call AUTOTARGETS,package,bison,host))
+> Btw: Thomas preferres another solution for the init-d skript (without 
+> sleep 5 init). I wasn't able to figure out clearly, why and where the 
+> IP_ADDR variable is used, so I'm experimenting with the "official" 
+> init-d-skript from the transmission wiki.
+> Would this be a problem in your eyes?
 
-Bison is part of our set of mandatory dependencies on the host, as
-checked in toolchain/dependencies/dependencies.sh. Therefore,
-host-bison shouldn't be needed.
+Well, for the moment, we can keep this loop. Fix the other problems
+mentionned in my latest review, and resend a new version. We'll merge
+that one.
 
-However, flex is also part of the mandatory dependencies on the host,
-but we still have a couple of package that depend on host-flex.
-Interesting.
+Thanks!
 
 Thomas
 -- 
