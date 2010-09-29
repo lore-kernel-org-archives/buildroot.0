@@ -1,48 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Sep 2010 10:51:51 +0200
-Subject: [Buildroot] Libtool work: a tentative summary
-In-Reply-To: <AANLkTi=Sf1+acAXfCgJcTv+4Yrtw0nEH+_Ugv3+0dVk0@mail.gmail.com>
-References: <20100928223652.6dc72083@surf>
-	<AANLkTi=Sf1+acAXfCgJcTv+4Yrtw0nEH+_Ugv3+0dVk0@mail.gmail.com>
-Message-ID: <20100929105151.76bd6230@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Sep 2010 12:36:08 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2010.11/kernel-image-formats
+In-Reply-To: <cover.1285712084.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 29 Sep 2010 00:15:09 +0200")
+References: <cover.1285712084.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871v8c25wn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Paulius,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 29 Sep 2010 11:32:29 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+ Thomas> Hello,
+ Thomas> Two relatively minor improvements to the kernel build infrastructure.
 
-> I would go for a conservative solution.
-> The main reason here is compile speed.
-> Currently my configuration takes ~1 hour to compile on my 4x3.4GHz
-> machine with DDR3 RAM...
+ Thomas> Thomas
 
-Are you using internal toolchain or external toolchain ?
+ Thomas> The following changes since commit 3e5e39a8a25a4a085afe08bdcf46933c8d569ed7:
+ Thomas>   Peter Korsgaard (1):
+ Thomas>         barebox/u-boot/linux: don't error out on missing config when make source
 
-> The worst part here is that autoreconfigure and ./configure scripts doesn't
-> scale on multicore CPU :(
-> So adding a lot more autoreconfigure usage would drastically reduce
-> build time.
+ Thomas> are available in the git repository at:
 
-Thanks for your feedback.
+ Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/kernel-image-formats
 
-For what it's worth, I've started to experiment the modification of our
-package infrastructure in order to use real file targets instead of
-phony targets for the steps sequencing (download -> extract -> patch ->
-configure, etc.). This is one of the requirements to be able to do
-top-level parallel builds, which I think, definitely becomes necessary
-to parallelize the autoreconf/configure steps of packages. This is
-however a lot of work, and I don't expect this to be ready anytime soon.
+Pulled, thanks!
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
