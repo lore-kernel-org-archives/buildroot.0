@@ -1,43 +1,39 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Wed, 29 Sep 2010 11:32:29 +0300
-Subject: [Buildroot] Libtool work: a tentative summary
-In-Reply-To: <20100928223652.6dc72083@surf>
-References: <20100928223652.6dc72083@surf>
-Message-ID: <AANLkTi=Sf1+acAXfCgJcTv+4Yrtw0nEH+_Ugv3+0dVk0@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 29 Sep 2010 10:31:30 +0200
+Subject: [Buildroot] [PATCH 2/4] Enable terminal type configuration for
+ /etc/inittab
+In-Reply-To: <20100928192828.2fb6ac19@surf>
+References: <4C9C54A9.20803@visionsystems.de>	<4C9C54FC.4040609@visionsystems.de>	<4C9C553E.8040105@visionsystems.de>
+	<20100928192828.2fb6ac19@surf>
+Message-ID: <4CA2F962.7080004@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 28, 2010 at 11:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[...]
-> Conclusion
-> ==========
+ Am 28.09.2010 19:28, schrieb Thomas Petazzoni:
+> On Fri, 24 Sep 2010 09:37:34 +0200
+> Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
 >
-> Therefore, the choice seems to be between :
+>> diff --git a/target/generic/Config.in b/target/generic/Config.in
+>> index 286b0a3..e7b2c9f 100644
+>> --- a/target/generic/Config.in
+>> +++ b/target/generic/Config.in
+>> @@ -164,6 +164,12 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+>>  	bool "115200"
+>>  endchoice
+>>  
+>> +config BR2_TARGET_GENERIC_GETTY_TERMINAL_TYPE
+>> +	string "Terminal type"
+>> +	default "vt100"
+>> +	help
+>> +		Specify a terminal type like vt100, linux etc.
+> Need only one tab + 2 spaces for the indentation of the help text.
 >
-> ?* A conservative solution, only extending what we have today, with
-> ? limited changes and impact, but keeping the existing hacks in place.
->
-> ?* A radically different solution, with wider changes, more in line
-> ? with libtool future, but requiring an autoreconfiguration of all
-> ? packages that will not have libtool 2.4 by default.
->
-> In my opinion, we should settle on a solution before mid-october, in
-> order to merge it before the end of october and give us enough time for
-> testing before the release at the end of november. Considering how much
-> time Martin and Lionel have dedicated to this issue, I think that their
-> respective work deserve some attention.
->
-> Thoughts ? Comments ?
+> Just out of curiosity, in what cases isn't vt100 an appropriate value ?
 
-I would go for a conservative solution.
-The main reason here is compile speed.
-Currently my configuration takes ~1 hour to compile on my 4x3.4GHz
-machine with DDR3 RAM...
-The worst part here is that autoreconfigure and ./configure scripts doesn't
-scale on multicore CPU :(
-So adding a lot more autoreconfigure usage would drastically reduce
-build time.
+Good question. We just use TERM=linux for our Debian installations, so I wanted to do it also for Buildroot. But you're right vt100 should be sufficient, that's why I made it default, so the old behavior is preserved.
+
+Best regards,
+Yegor
