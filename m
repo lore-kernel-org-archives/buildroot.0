@@ -1,8 +1,8 @@
 From: Martin Banky <martin.banky@gmail.com>
 Date: Wed, 29 Sep 2010 22:40:31 +0200
-Subject: [Buildroot] [git commit master 1/1] gadgets-test: convert to
-	gentargets
-Message-ID: <20100929204137.CF60B8B6E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] liberation: convert to
+	gentargets and bump to 1.06.0.20100721
+Message-ID: <20100929204138.003D48B770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,106 +10,104 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aca1958b8be478532d5043c80d17b8e64b0592b2
+commit: http://git.buildroot.net/buildroot/commit/?id=ed947b383ff45ec992b8d51a858e475abd0c6f73
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix aio dependency, add uninstall]
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                |   12 ++++----
- package/gadgetfs-test/gadgetfs-test.mk |   49 ++++++++++----------------------
- 2 files changed, 21 insertions(+), 40 deletions(-)
+ CHANGES                          |   24 +++++++++++-----------
+ package/liberation/liberation.mk |   39 ++++++++-----------------------------
+ 2 files changed, 21 insertions(+), 42 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 80c6a0f..88267a1 100644
+index 88267a1..907eab1 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -24,12 +24,12 @@
- 	automake, avahi, axel, beecrypt, berkeleydb, bind, bmon, boa,
- 	bootutils, bridge-utils, bsdiff, busybox, dbus, dmraid,
- 	docker, dosfstools, dropbear, e2fsprogs, expat, ezxml, fbset,
--	fconfig, ffmpeg, freetype, gamin, gawk, gperf, gtk2-themes,
--	gtkperf, gvfs, haserl, hdparm, hostapd, hwdata, ifplugd,
--	iperf, iproute2, iptables, jpeg, kexec, kismet, less, libcgi,
--	libcurl, libdaemon, libdnet, libevent, libglade, libgtk2,
--	libiconv, libidn, libmms, libnl, liboil, libpcap, libpng,
--	libtool, libungif, libxml2, libxslt, lighttpd, lite,
-+	fconfig, ffmpeg, freetype, gadgetfs-test, gamin, gawk, gperf,
-+	gtk2-themes, gtkperf, gvfs, haserl, hdparm, hostapd, hwdata,
-+	ifplugd, iperf, iproute2, iptables, jpeg, kexec, kismet, less,
-+	libcgi, libcurl, libdaemon, libdnet, libevent, libglade,
-+	libgtk2, libiconv, libidn, libmms, libnl, liboil, libpcap,
-+	libpng, libtool, libungif, libxml2, libxslt, lighttpd, lite,
- 	lm-sensors, logrotate, m4, mdadm, mesa3d, metacity, mtd-utils,
- 	mysql_client, nano, nbd, ncftp, neon, netperf, netsnmp,
- 	ng-spice-rework, ntfsprogs, ntp, openntpd, openssh, openvpn,
-diff --git a/package/gadgetfs-test/gadgetfs-test.mk b/package/gadgetfs-test/gadgetfs-test.mk
-index e3ab95e..1464ec1 100644
---- a/package/gadgetfs-test/gadgetfs-test.mk
-+++ b/package/gadgetfs-test/gadgetfs-test.mk
-@@ -5,47 +5,28 @@
+@@ -27,18 +27,18 @@
+ 	fconfig, ffmpeg, freetype, gadgetfs-test, gamin, gawk, gperf,
+ 	gtk2-themes, gtkperf, gvfs, haserl, hdparm, hostapd, hwdata,
+ 	ifplugd, iperf, iproute2, iptables, jpeg, kexec, kismet, less,
+-	libcgi, libcurl, libdaemon, libdnet, libevent, libglade,
+-	libgtk2, libiconv, libidn, libmms, libnl, liboil, libpcap,
+-	libpng, libtool, libungif, libxml2, libxslt, lighttpd, lite,
+-	lm-sensors, logrotate, m4, mdadm, mesa3d, metacity, mtd-utils,
+-	mysql_client, nano, nbd, ncftp, neon, netperf, netsnmp,
+-	ng-spice-rework, ntfsprogs, ntp, openntpd, openssh, openvpn,
+-	oprofile, pango, patch, pcre, php, pkg-config, prboom, radvd,
+-	rdesktop, ruby, qt, samba, sawman, sdl_mixer, sdl_sound,
+-	setserial, shared-mime-info, speex, sqlite, squashfs, strace,
+-	sylpheed, taglib, tcpdump, thttpd, tiff, tn5250, udev,
+-	udpcast, usbmount, usbutils, vsftpd, vtun, which,
+-	wpa_supplicant,
++	libcgi, libcurl, libdaemon, libdnet, liberation, libevent,
++	libglade, libgtk2, libiconv, libidn, libmms, libnl, liboil,
++	libpcap, libpng, libtool, libungif, libxml2, libxslt,
++	lighttpd, lite, lm-sensors, logrotate, m4, mdadm, mesa3d,
++	metacity, mtd-utils, mysql_client, nano, nbd, ncftp, neon,
++	netperf, netsnmp, ng-spice-rework, ntfsprogs, ntp, openntpd,
++	openssh, openvpn, oprofile, pango, patch, pcre, php,
++	pkg-config, prboom, radvd, rdesktop, ruby, qt, samba, sawman,
++	sdl_mixer, sdl_sound, setserial, shared-mime-info, speex,
++	sqlite, squashfs, strace, sylpheed, taglib, tcpdump, thttpd,
++	tiff, tn5250, udev, udpcast, usbmount, usbutils, vsftpd, vtun,
++	which, wpa_supplicant,
+ 	xdriver_xf86-input-{acecad,aiptek,evdev,joystick,keyboard},
+ 	xdriver-xf86-input-{mouse,synaptics,vmmouse,void},
+ 	xdriver-xf86-video-{apm,ark,ast,ati,chips,cirrus,dummy,fbdev},
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index ad65670..89987d6 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -3,40 +3,19 @@
+ # liberation
+ #
  #############################################################
- GADGETFS_TEST_SOURCE=gadgetfs-test.tar.bz2
- GADGETFS_TEST_SITE=http://avr32linux.org/twiki/pub/Main/GadgetFsTest/
--GADGETFS_TEST_DIR=$(BUILD_DIR)/gadgetfs-test
+-LIBERATION_VERSION = 1.04
++LIBERATION_VERSION = 1.06.0.20100721
+ LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
+-LIBERATION_SOURCE = liberation-fonts-$(LIBERATION_VERSION).tar.gz
+-LIBERATION_DIR = $(BUILD_DIR)/liberation-fonts-$(LIBERATION_VERSION)
+-LIBERATION_CAT:=$(ZCAT)
+-LIBERATION_TARGET_DIR:=$(TARGET_DIR)/usr/share/fonts/liberation
++LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
  
--GADGETFS_TEST_MAKEOPTS:=CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
-+GADGETFS_TEST_MAKEOPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
+-$(DL_DIR)/$(LIBERATION_SOURCE):
+-	$(call DOWNLOAD,$(LIBERATION_SITE),$(LIBERATION_SOURCE))
++LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
  
- ifeq ($(BR2_PACKAGE_GADGETFS_TEST_USE_AIO),y)
-+GADGETFS_TEST_DEPENDENCIES = libaio
- GADGETFS_TEST_MAKEOPTS+=USE_AIO=y
- endif
- 
--$(DL_DIR)/$(GADGETFS_TEST_SOURCE):
--	$(call DOWNLOAD,$(GADGETFS_TEST_SITE),$(GADGETFS_TEST_SOURCE))
-+define GADGETFS_TEST_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS)
-+endef
- 
--$(GADGETFS_TEST_DIR)/.unpacked: $(DL_DIR)/$(GADGETFS_TEST_SOURCE)
--	$(BZCAT) $(DL_DIR)/$(GADGETFS_TEST_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(GADGETFS_TEST_DIR) package/gadgetfs-test gadgetfs-test\*.patch
+-liberation-source: $(DL_DIR)/$(LIBERATION_SOURCE)
+-
+-$(LIBERATION_DIR)/.unpacked: $(DL_DIR)/$(LIBERATION_SOURCE)
+-	$(LIBERATION_CAT) $(DL_DIR)/$(LIBERATION_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
 -	touch $@
-+define GADGETFS_TEST_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr install
+-
+-$(LIBERATION_TARGET_DIR)/LiberationMono-Bold.ttf: $(LIBERATION_DIR)/.unpacked
++define LIBERATION_INSTALL_TARGET_CMDS
+ 	mkdir -p $(LIBERATION_TARGET_DIR)
+-	$(INSTALL) -m0644 $(LIBERATION_DIR)/*.ttf $(LIBERATION_TARGET_DIR)
+-	touch -c $@
++	$(INSTALL) -m 644 $(@D)/*.ttf $(LIBERATION_TARGET_DIR)
 +endef
  
--$(GADGETFS_TEST_DIR)/gadgetfs-test: $(GADGETFS_TEST_DIR)/.unpacked
--	$(MAKE) -C $(GADGETFS_TEST_DIR) $(GADGETFS_TEST_MAKEOPTS)
-+define GADGETFS_TEST_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/bin/gadgetfs-test
+-liberation: $(LIBERATION_TARGET_DIR)/LiberationMono-Bold.ttf
+-
+-liberation-clean:
++define LIBERATION_CLEAN_CMDS
+ 	rm -rf $(LIBERATION_TARGET_DIR)
 +endef
  
--$(TARGET_DIR)/usr/bin/gadgetfs-test: $(GADGETFS_TEST_DIR)/gadgetfs-test
--	$(MAKE) -C $(GADGETFS_TEST_DIR) DESTDIR=$(TARGET_DIR) prefix=/usr install
-+define GADGETFS_TEST_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS) clean
-+endef
- 
--ifeq ($(BR2_PACKAGE_GADGETFS_TEST_USE_AIO),y)
--gadgetfs-test: libaio $(TARGET_DIR)/usr/bin/gadgetfs-test
--else
--gadgetfs-test: $(TARGET_DIR)/usr/bin/gadgetfs-test
--endif
--
--gadgetfs-test-source: $(DL_DIR)/$(GADGETFS_TEST_SOURCE)
--
--gadgetfs-test-clean:
--	-$(MAKE) -C $(GADGETFS_TEST_DIR) $(GADGETFS_TEST_MAKEOPTS) clean
--
--gadgetfs-test-dirclean:
--	rm -rf $(GADGETFS_TEST_DIR)
+-liberation-dirclean:
+-	rm -rf $(LIBERATION_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_GADGETFS_TEST),y)
--TARGETS+=gadgetfs-test
+-ifeq ($(BR2_PACKAGE_LIBERATION),y)
+-TARGETS+=liberation
 -endif
-+$(eval $(call GENTARGETS,package,gadgetfs-test))
++$(eval $(call GENTARGETS,package,liberation))
 -- 
 1.7.1
