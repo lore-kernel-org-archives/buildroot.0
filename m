@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 29 Sep 2010 22:40:31 +0200
-Subject: [Buildroot] [git commit master 1/1] libdaemon; bump version
-Message-ID: <20100929204137.8B2988B6E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] lockfile-progs: cleanup
+	install/uninstall
+Message-ID: <20100929204138.620958B7A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,81 +10,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=799c1328234bca5c39249ee0fea7cc614c0be680
+commit: http://git.buildroot.net/buildroot/commit/?id=ccb974d7ea4a63ba3423e6bd7d91c18d02ea4fde
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Install/uninstall all programs (including mail-*), and use install -D
+to copy to target.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                        |   27 ++++++++++++++-------------
- package/libdaemon/libdaemon.mk |   18 +++++++++---------
- 2 files changed, 23 insertions(+), 22 deletions(-)
+ package/lockfile-progs/lockfile-progs.mk |   13 +++++++++++--
+ 1 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 6e6539c..345b927 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -25,19 +25,20 @@
- 	bootutils, bridge-utils, bsdiff, busybox, dbus, dmraid,
- 	docker, dosfstools, dropbear, e2fsprogs, expat, ezxml, fbset,
- 	ffmpeg, freetype, gamin, gawk, gperf, gtk2-themes, gtkperf,
--	gvfs, haserl, hdparm, hostapd, hwdata, ifplugd, iperf, iproute2,
--	iptables, jpeg, kexec, kismet, less, libcgi, libcurl, libdnet,
--	libevent, libglade, libgtk2, libiconv, libidn, libmms, libnl,
--	liboil, libpcap, libpng, libtool, libungif, libxml2, libxslt,
--	lighttpd, lite, lm-sensors, logrotate, m4, mdadm, mesa3d,
--	metacity, mtd-utils, mysql_client, nano, nbd, ncftp, neon,
--	netperf, netsnmp, ng-spice-rework, ntfsprogs, ntp, openntpd,
--	openssh, openvpn, oprofile, pango, patch, pcre, php,
--	pkg-config, prboom, radvd, rdesktop, ruby, qt, samba, sawman,
--	sdl_mixer, sdl_sound, setserial, shared-mime-info, speex,
--	sqlite, squashfs, strace, sylpheed, taglib, tcpdump, thttpd,
--	tiff, tn5250, udev, udpcast, usbmount, usbutils, vsftpd, vtun,
--	which, wpa_supplicant,
-+	gvfs, haserl, hdparm, hostapd, hwdata, ifplugd, iperf,
-+	iproute2, iptables, jpeg, kexec, kismet, less, libcgi,
-+	libcurl, libdaemon, libdnet, libevent, libglade, libgtk2,
-+	libiconv, libidn, libmms, libnl, liboil, libpcap, libpng,
-+	libtool, libungif, libxml2, libxslt, lighttpd, lite,
-+	lm-sensors, logrotate, m4, mdadm, mesa3d, metacity, mtd-utils,
-+	mysql_client, nano, nbd, ncftp, neon, netperf, netsnmp,
-+	ng-spice-rework, ntfsprogs, ntp, openntpd, openssh, openvpn,
-+	oprofile, pango, patch, pcre, php, pkg-config, prboom, radvd,
-+	rdesktop, ruby, qt, samba, sawman, sdl_mixer, sdl_sound,
-+	setserial, shared-mime-info, speex, sqlite, squashfs, strace,
-+	sylpheed, taglib, tcpdump, thttpd, tiff, tn5250, udev,
-+	udpcast, usbmount, usbutils, vsftpd, vtun, which,
-+	wpa_supplicant,
- 	xdriver_xf86-input-{acecad,aiptek,evdev,joystick,keyboard},
- 	xdriver-xf86-input-{mouse,synaptics,vmmouse,void},
- 	xdriver-xf86-video-{apm,ark,ast,ati,chips,cirrus,dummy,fbdev},
-diff --git a/package/libdaemon/libdaemon.mk b/package/libdaemon/libdaemon.mk
-index 7a9d5c8..9a78bff 100644
---- a/package/libdaemon/libdaemon.mk
-+++ b/package/libdaemon/libdaemon.mk
-@@ -4,15 +4,15 @@
- #
- #############################################################
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index c7b5565..f8d8cee 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -7,16 +7,25 @@ LOCKFILE_PROGS_VERSION = 0.1.15
+ LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
+ LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
  
--LIBDAEMON_VERSION:=0.13
--LIBDAEMON_SOURCE:=libdaemon-$(LIBDAEMON_VERSION).tar.gz
--LIBDAEMON_SITE:=http://0pointer.de/lennart/projects/libdaemon/
--LIBDAEMON_AUTORECONF:=no
--LIBDAEMON_INSTALL_STAGING:=YES
--LIBDAEMON_INSTALL_TARGET:=YES
--LIBDAEMON_CONF_ENV:=ac_cv_func_setpgrp_void=no
--LIBDAEMON_CONF_OPT:=--disable-lynx 
-+LIBDAEMON_VERSION = 0.14
-+LIBDAEMON_SOURCE = libdaemon-$(LIBDAEMON_VERSION).tar.gz
-+LIBDAEMON_SITE = http://0pointer.de/lennart/projects/libdaemon/
-+LIBDAEMON_AUTORECONF = NO
-+LIBDAEMON_LIBTOOL_PATCH = NO
-+LIBDAEMON_INSTALL_STAGING = YES
-+LIBDAEMON_CONF_ENV = ac_cv_func_setpgrp_void=no
-+LIBDAEMON_CONF_OPT = --disable-lynx
++LOCKFILE_BINS = \
++	$(addprefix lockfile-,check create remove touch) \
++	$(addprefix mail-,lock touchlock unlock)
++
+ define LOCKFILE_PROGS_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
  
--LIBDAEMON_DEPENDENCIES:=host-pkg-config
-+LIBDAEMON_DEPENDENCIES = host-pkg-config
+ define LOCKFILE_PROGS_INSTALL_TARGET_CMDS
+-	cp -a $(@D)/bin/lockfile* $(TARGET_DIR)/usr/bin
++	for i in $(LOCKFILE_BINS); do \
++		install -D -m 755 $(@D)/bin/$$i $(TARGET_DIR)/usr/bin/$$i; \
++	done
++endef
++
++define LOCKFILE_PROGS_UNINSTALL_TARGET_CMDS
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(LOCKFILE_BINS))
+ endef
  
- $(eval $(call AUTOTARGETS,package,libdaemon))
+ define LOCKFILE_PROGS_CLEAN_CMDS
+-	-rm -f $(TARGET_DIR)/usr/bin/lockfile-*
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
 -- 
 1.7.1
