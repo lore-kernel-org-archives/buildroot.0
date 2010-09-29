@@ -1,147 +1,91 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 29 Sep 2010 15:37:14 +0200
-Subject: [Buildroot] [PATCH] change getty port configuration
-Message-ID: <4CA3410A.8050603@visionsystems.de>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Wed, 29 Sep 2010 12:59:33 -0700
+Subject: [Buildroot] Libtool work: a tentative summary
+In-Reply-To: <AANLkTikZEe+tS3WtxULNLNq80QrVRy0U5XWzneRcHRnw@mail.gmail.com>
+References: <20100928223652.6dc72083@surf>
+	<AANLkTi=Sf1+acAXfCgJcTv+4Yrtw0nEH+_Ugv3+0dVk0@mail.gmail.com>
+	<20100929105151.76bd6230@surf>
+	<AANLkTikZEe+tS3WtxULNLNq80QrVRy0U5XWzneRcHRnw@mail.gmail.com>
+Message-ID: <AANLkTik068UsF1Pjb+4HOB5j2VUewvcu4vL_sKwBR84r@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_TARGET_GENERIC_GETTY_PORT has now a string type instead of choice.
-This makes port configuration flexible and compact.
+In the libtool heads up patch that I had sent, I didn't include some of the
+preliminary work that I've been doing with libtool 2.4. I've been taking the
+approach of both our methods. I'm autoreconfiguring the packages that don't
+have issues, and patching the others with a modified
+Makefile.autotools.inthat recognizes both 1.5 and 2.2 ltmain.sh files
+and ignores the 2.4 ones.
+If I remember correctly, the packages that I've had issues with
+autoreconfiguring are expat, libusb, and libvorbis. I've not done a full
+package build yet. I feel that Lionel has spent far more time on his
+solution, than I have on mine. For me, I discovered the
+buildroot-libtool.patch issue when I started upgrading some of the packages,
+and didn't want to keep including a v2.2 patch for every package that needed
+it. So, I just came up with this fast and easy method to solve this issue.
+Currently, I'm working on converting the rest of the packages to either
+autotargets or gentargets, and was planning on looking at incorporating
+libtool 2.4 after this. That is, if Lionel hasn't already done something by
+then.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Martin
 
-Index: b/target/generic/Config.in
-===================================================================
---- a/target/generic/Config.in	2010-09-29 10:02:34.000000000 +0200
-+++ b/target/generic/Config.in	2010-09-29 14:48:55.000000000 +0200
-@@ -17,123 +17,11 @@
- 
- if BR2_TARGET_GENERIC_GETTY
- 
--choice
--	prompt "Serial port to run a getty on"
--	default BR2_TARGET_GENERIC_GETTY_TTYS0
-+config BR2_TARGET_GENERIC_GETTY_PORT
-+	string "Serial port to run a getty on"
-+	default "ttyS0"
- 	help
--	  Select a port to run a getty (login prompt) on.
--
--config BR2_TARGET_GENERIC_GETTY_NONE
--	bool "none"
--config BR2_TARGET_GENERIC_GETTY_TTYS0
--	bool "ttyS0"
--config BR2_TARGET_GENERIC_GETTY_TTYS1
--	bool "ttyS1"
--config BR2_TARGET_GENERIC_GETTY_TTYS2
--	bool "ttyS2"
--config BR2_TARGET_GENERIC_GETTY_TTYS3
--	bool "ttyS3"
--config BR2_TARGET_GENERIC_GETTY_TTYAMA0
--	bool "ttyAMA0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA1
--	bool "ttyAMA1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA2
--	bool "ttyAMA2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA3
--	bool "ttyAMA3"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC0
--	bool "ttySAC0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC1
--	bool "ttySAC1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC2
--	bool "ttySAC2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC3
--	bool "ttySAC3"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC0
--	bool "ttymxc0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC1
--	bool "ttymxc1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC2
--	bool "ttymxc2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYUL0
--	bool "ttyUL0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL1
--	bool "ttyUL1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL2
--	bool "ttyUL2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL3
--	bool "ttyUL3"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC0
--	bool "ttyPSC0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC1
--	bool "ttyPSC1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC2
--	bool "ttyPSC2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC3
--	bool "ttyPSC3"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM0
--	bool "ttyCPM0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM1
--	bool "ttyCPM1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM2
--	bool "ttyCPM2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM3
--	bool "ttyCPM3"
--	depends on BR2_powerpc
--endchoice
--
--config BR2_TARGET_GENERIC_GETTY_PORT
--	string
--	default "#ttyS0"	if BR2_TARGET_GENERIC_GETTY_NONE
--	default "ttyS0"		if BR2_TARGET_GENERIC_GETTY_TTYS0
--	default "ttyS1"		if BR2_TARGET_GENERIC_GETTY_TTYS1
--	default "ttyS2"		if BR2_TARGET_GENERIC_GETTY_TTYS2
--	default "ttyS3"		if BR2_TARGET_GENERIC_GETTY_TTYS3
--	default "ttyAMA0"	if BR2_TARGET_GENERIC_GETTY_TTYAMA0
--	default "ttyAMA1"	if BR2_TARGET_GENERIC_GETTY_TTYAMA1
--	default "ttyAMA2"	if BR2_TARGET_GENERIC_GETTY_TTYAMA2
--	default "ttyAMA3"	if BR2_TARGET_GENERIC_GETTY_TTYAMA3
--	default "ttySAC0"	if BR2_TARGET_GENERIC_GETTY_TTYSAC0
--	default "ttySAC1"	if BR2_TARGET_GENERIC_GETTY_TTYSAC1
--	default "ttySAC2"	if BR2_TARGET_GENERIC_GETTY_TTYSAC2
--	default "ttySAC3"	if BR2_TARGET_GENERIC_GETTY_TTYSAC3
--	default "ttymxc0"	if BR2_TARGET_GENERIC_GETTY_TTYMXC0
--	default "ttymxc1"	if BR2_TARGET_GENERIC_GETTY_TTYMXC1
--	default "ttymxc2"	if BR2_TARGET_GENERIC_GETTY_TTYMXC2
--	default "ttyUL0"	if BR2_TARGET_GENERIC_GETTY_TTYUL0
--	default "ttyUL1"	if BR2_TARGET_GENERIC_GETTY_TTYUL1
--	default "ttyUL2"	if BR2_TARGET_GENERIC_GETTY_TTYUL2
--	default "ttyUL3"	if BR2_TARGET_GENERIC_GETTY_TTYUL3
--	default "ttyPSC0"	if BR2_TARGET_GENERIC_GETTY_TTYPSC0
--	default "ttyPSC1"	if BR2_TARGET_GENERIC_GETTY_TTYPSC1
--	default "ttyPSC2"	if BR2_TARGET_GENERIC_GETTY_TTYPSC2
--	default "ttyPSC3"	if BR2_TARGET_GENERIC_GETTY_TTYPSC3
--	default "ttyCPM0"	if BR2_TARGET_GENERIC_GETTY_TTYCPM0
--	default "ttyCPM1"	if BR2_TARGET_GENERIC_GETTY_TTYCPM1
--	default "ttyCPM2"	if BR2_TARGET_GENERIC_GETTY_TTYCPM2
--	default "ttyCPM3"	if BR2_TARGET_GENERIC_GETTY_TTYCPM3
-+	  Specify a port to run a getty (login prompt) on.
- 
- choice
- 	prompt "Baudrate to use"
+On Wed, Sep 29, 2010 at 4:01 AM, Paulius Zaleckas <
+paulius.zaleckas@gmail.com> wrote:
+
+> On Wed, Sep 29, 2010 at 11:51 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Hello Paulius,
+> >
+> > On Wed, 29 Sep 2010 11:32:29 +0300
+> > Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+> >
+> >> I would go for a conservative solution.
+> >> The main reason here is compile speed.
+> >> Currently my configuration takes ~1 hour to compile on my 4x3.4GHz
+> >> machine with DDR3 RAM...
+> >
+> > Are you using internal toolchain or external toolchain ?
+>
+> internal
+>
+> >> The worst part here is that autoreconfigure and ./configure scripts
+> doesn't
+> >> scale on multicore CPU :(
+> >> So adding a lot more autoreconfigure usage would drastically reduce
+> >> build time.
+> >
+> > Thanks for your feedback.
+> >
+> > For what it's worth, I've started to experiment the modification of our
+> > package infrastructure in order to use real file targets instead of
+> > phony targets for the steps sequencing (download -> extract -> patch ->
+> > configure, etc.). This is one of the requirements to be able to do
+> > top-level parallel builds, which I think, definitely becomes necessary
+> > to parallelize the autoreconf/configure steps of packages. This is
+> > however a lot of work, and I don't expect this to be ready anytime soon.
+> >
+> > Regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, Free Electrons
+> > Kernel, drivers, real-time and embedded Linux
+> > development, consulting, training and support.
+> > http://free-electrons.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20100929/ccb86115/attachment.html>
