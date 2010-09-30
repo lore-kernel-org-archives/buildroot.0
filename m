@@ -1,26 +1,31 @@
-From: Barry Bridges <barry@disignconsultants.com>
-Date: Thu, 30 Sep 2010 11:15:24 +0100
-Subject: [Buildroot] Where is Bluez in the config?
-In-Reply-To: <mailman.982.1284576537.2900.buildroot@busybox.net>
-References: <mailman.982.1284576537.2900.buildroot@busybox.net>
-Message-ID: <000901cb6088$65a98ba0$30fca2e0$@com>
+From: Dennis Borgmann <dennis.borgmann@googlemail.com>
+Date: Thu, 30 Sep 2010 13:23:46 +0200
+Subject: [Buildroot] CONFIG_BLK_DEV_INITRD deactivated on automatic build
+Message-ID: <4CA47342.7020405@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
-I have a need to include Bluez into my build and have noticed it nemtioned
-in the mailing list, but can't find it anywhere in the config to build it
-in. What am I missing? Does it need patching into buildroot?
+Hello buildroot-list!
 
+First of all - thank you for the work done for this project. It is
+awesome and I really like it. Straightforward and quick to use.
 
-Many thanks
+I think, I found a bug. If you download buildroot and start configuring
+your project with "make menuconfig" and after that configure the kernel
+with "make linux26-menuconfig", everything seems to be ok. I did give it
+a custom kernel-config named "/tmp/config-2.6.34".
 
-Barry Bridges
--------------- next part --------------
+After running "make", everything seems to be ok, but the resulting
+kernel does not contain the option "CONFIG_BLK_DEV_INITRD". I need to
+manually do a "make linux26-menuconfig" again and rebuild the kernel for
+the resulting kernel to contain this option.
 
-No virus found in this outgoing message.
-Checked by AVG - www.avg.com 
-Version: 9.0.856 / Virus Database: 271.1.1/3167 - Release Date: 09/29/10 20:50:00
+This was a really silly thing to find, took me around one week, because
+you wouldn't think of such a mistake. Could it be, that this is a bug? I
+am using buildroot-2010.08.
+
+Kind regards,
+Dennis
