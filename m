@@ -1,37 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Sep 2010 14:35:19 +0200
-Subject: [Buildroot] [PATCH 1/3] libgtk2: bump to version 2.20.1 and
-	mark Gtk/DirectFB as broken
-In-Reply-To: <20100929082914.3185053a@surf> (Thomas Petazzoni's message of
-	"Wed, 29 Sep 2010 08:29:14 +0200")
-References: <cover.1285711882.git.thomas.petazzoni@free-electrons.com>
-	<ca402fe6cbeeefeb15711d9e7f2390fab54c17b8.1285711883.git.thomas.petazzoni@free-electrons.com>
-	<1285716520.27944.304.camel@coalu.atr> <20100929082914.3185053a@surf>
-Message-ID: <871v8bz9x4.fsf@macbook.be.48ers.dk>
+Date: Thu, 30 Sep 2010 14:36:36 +0200
+Subject: [Buildroot] [PATCH] Makefile: Force make to run serially in the
+	top-level Makefile
+In-Reply-To: <1285710658-17096-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Tue, 28 Sep 2010 23:50:58 +0200")
+References: <1285710658-17096-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87wrq3xvaj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Thomas> On Wed, 29 Sep 2010 01:28:40 +0200
- Thomas> Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+ Yann> The top-level Makefile can be executed in parallel, as it causes problems.
+ Yann> We can force make to be not parallel.
 
- >> Gtk+ 2.22 has been released early this week, it brings back
- >> compiling/quite-good-working DirectFB backend.
- >> 
- >> Would you consider bumping to 2.22 ?
+ Yann> It's been reported many times, and recent discussions on IRC with kos_tom,
+ Yann> and user nick-named knee, led to this patch.
 
- Thomas> Argh, I checked http://www.gtk.org/download-linux.html yesterday, and
- Thomas> it still advertise Gtk 2.20 and Glib 2.24.
-
- Thomas> I will bump those versions, yes, and mark the DirectFB support as
- Thomas> working again.
-
-Ok, I'll put your pull request on hold for now then. Please resend once
-ready.
+Cool, I didn't know .NOTPARALLEL - Thanks, committed.
 
 -- 
 Bye, Peter Korsgaard
