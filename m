@@ -1,39 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 30 Sep 2010 23:20:54 +0200
-Subject: [Buildroot] [PATCH 1/2] host tools: create the host sed in
-	$(O)/host/
-In-Reply-To: <87bp7fx7dw.fsf@macbook.be.48ers.dk>
-References: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<1284926049-9882-2-git-send-email-yann.morin.1998@anciens.enib.fr>
-	<87bp7fx7dw.fsf@macbook.be.48ers.dk>
-Message-ID: <201009302320.54176.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Sep 2010 23:47:35 +0200
+Subject: [Buildroot] [SECURITY][PATCHv2] Bump quagga to 0.99.17
+In-Reply-To: <87k4m3xbc1.fsf@macbook.be.48ers.dk>
+References: <4CA4A278.6040303@zacarias.com.ar>
+	<87ocbfxcsg.fsf@macbook.be.48ers.dk>
+	<4CA4E521.30407@zacarias.com.ar>
+	<87k4m3xbc1.fsf@macbook.be.48ers.dk>
+Message-ID: <20100930234735.4ffdc3ea@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On Thu, 30 Sep 2010 21:47:42 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-On Thursday 30 September 2010 23:12:59 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
->  Yann> The host sed does not belong to $(O)toolchain/ but
->  Yann> really belongs to $(O)/host/
-> Thanks, but this is broken (and so was what we had), so I prefer to just
-> get rid of it - It's not difficult to install a working sed on your
-> build machine.
+> Could someone using the external toolchain (Thomas?) give netsnmp a
+> quick test?
 
-I was expecting we would have to get rid of the host sed stuff, but I did
-not have time to properly do it before I submit the CT-NG backend, so this
-little workaround in the meantime. Thanks for taking care of that!
+I confirm that since Gustavo converted the package to autotargets, the
+previously existing build failures with external toolchain have
+disappeared. I just tested with a recent (a few days) Git, and net-snmp
+built just fine with an external ARM CodeSourcery toolchain.
+
+Now, I have no idea if it actually works, since I don't know how to
+test it. But that's another story :-)
 
 Regards,
-Yann E. MORIN.
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
