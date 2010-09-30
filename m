@@ -1,28 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Sep 2010 14:45:42 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/remove-deprecated-arch
-In-Reply-To: <cover.1283334416.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 1 Sep 2010 11:47:06 +0200")
-References: <cover.1283334416.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87sk0rxuvd.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 Sep 2010 14:44:36 +0200
+Subject: [Buildroot] [git commit master 1/1] CHANGES:
+	alpha/cris/ia64/sparc64 support removed
+Message-ID: <20100930124533.4F11F8B7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 4973632207fd496199298191ada01c8c8ec2bee7:
- Thomas>   Yann E. MORIN (1):
- Thomas>         packages/atk: fix Makefile
+commit: http://git.buildroot.net/buildroot/commit/?id=9f36bd4976ce4fe0e108611ac82a694e434b1b7c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/remove-deprecated-arch
-
-Pulled and pushed, thanks - And sorry for the slow response.
-
+diff --git a/CHANGES b/CHANGES
+index fad49f6..5910bb7 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -18,6 +18,8 @@
+ 	A convenience Makefile wrapper is created when using
+ 	out-of-tree building, similar to how it is done for the kernel.
+ 
++	Alpha, Cris, IA64 and Sparc64 architecture support removed.
++
+ 	New packages: xz
+ 
+ 	Updated/fixed packages: acpid, alsa-lib, argus, at, autoconf,
 -- 
-Bye, Peter Korsgaard
+1.7.1
