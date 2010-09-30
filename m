@@ -1,26 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Sep 2010 22:55:33 +0200
-Subject: [Buildroot] [PATCH 01/18] acpid: convert to gentargets and bump
-	to 2.0.6
-In-Reply-To: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-	(Martin Banky's message of "Sun, 26 Sep 2010 00:13:52 -0700")
-References: <1285485249-29212-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <87bp7gz2uy.fsf@macbook.be.48ers.dk>
+From: Barry Bridges <barry@disignconsultants.com>
+Date: Thu, 30 Sep 2010 11:15:24 +0100
+Subject: [Buildroot] Where is Bluez in the config?
+In-Reply-To: <mailman.982.1284576537.2900.buildroot@busybox.net>
+References: <mailman.982.1284576537.2900.buildroot@busybox.net>
+Message-ID: <000901cb6088$65a98ba0$30fca2e0$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
+Hi All,
+I have a need to include Bluez into my build and have noticed it nemtioned
+in the mailing list, but can't find it anywhere in the config to build it
+in. What am I missing? Does it need patching into buildroot?
 
- Martin> Also, added acpi_listen to the target. It was being stripped, but not copied.
- Martin> acpi_listen is a simple shell-friendly tool which connects to acpid and listens
- Martin> for events. When an event occurs, acpi_listen will print it on stdout.
 
- Martin> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+Many thanks
 
-Committed with minor tweaks, thanks.
+Barry Bridges
+-------------- next part --------------
 
--- 
-Bye, Peter Korsgaard
+No virus found in this outgoing message.
+Checked by AVG - www.avg.com 
+Version: 9.0.856 / Virus Database: 271.1.1/3167 - Release Date: 09/29/10 20:50:00
