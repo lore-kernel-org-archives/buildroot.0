@@ -1,28 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Sep 2010 22:09:30 +0200
-Subject: [Buildroot] [ Patch 0/4] Fix for POSIX compliance
-In-Reply-To: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Mon, 20 Sep 2010 23:26:05 +0200")
-References: <1285017969-32280-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87fwwrxabp.fsf@macbook.be.48ers.dk>
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Thu, 30 Sep 2010 20:38:31 +0200
+Subject: [Buildroot] patch for cups which had some build bugs in former
+	version and update to autotargets
+Message-ID: <1285871912-11737-1-git-send-email-marcus.osdoba@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Hi mailinglist,
 
- Yann> Hello All!
- Yann> This series adds fixes for POSIX 1003.1-2008 compliance in some shell
- Yann> scripts, with respect to string comparison. POSIX says that string
- Yann> comparison in test(1) is done using a sing '='; using two is a bashism.
- Yann> See:
- Yann>   http://www.opengroup.org/onlinepubs/9699919799/utilities/test.html
- Yann>   man 1 test
- Yann>   man 1 bash
+the former version of cups in br installed its libraries under usr/lib64
+(at least if building on 64bit host)
+which made cups not work by plain run through
 
-Committed all 4, thanks!
+this patch coverts cups to autotargets and updates to new version 1.4.4
 
--- 
-Bye, Peter Korsgaard
+furthermore the init.d skript was named cups - inittab launches a skript
+which starts all S* skripts in init.d, so cups need to be prefixed with S?? too
+
+
+Regards,
+Ossy
