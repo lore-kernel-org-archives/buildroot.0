@@ -1,37 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 01 Oct 2010 10:31:55 +0200
-Subject: [Buildroot] [SECURITY][PATCHv2] Bump quagga to 0.99.17
-In-Reply-To: <20100930234735.4ffdc3ea@surf> (Thomas Petazzoni's message of
-	"Thu, 30 Sep 2010 23:47:35 +0200")
-References: <4CA4A278.6040303@zacarias.com.ar>
-	<87ocbfxcsg.fsf@macbook.be.48ers.dk> <4CA4E521.30407@zacarias.com.ar>
-	<87k4m3xbc1.fsf@macbook.be.48ers.dk> <20100930234735.4ffdc3ea@surf>
-Message-ID: <877hi2xqis.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  1 Oct 2010 10:03:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 1357] Add bluez to buildroot system
+In-Reply-To: <bug-1357-163@https.bugs.busybox.net/>
+References: <bug-1357-163@https.bugs.busybox.net/>
+Message-ID: <20101001100342.72FCC8B828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1357
 
- Thomas> On Thu, 30 Sep 2010 21:47:42 +0200
- Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
+Matthijs Benschop <m.benschop@hig.nl> changed:
 
- >> Could someone using the external toolchain (Thomas?) give netsnmp a
- >> quick test?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #1333|0                           |1
+        is obsolete|                            |
 
- Thomas> I confirm that since Gustavo converted the package to autotargets, the
- Thomas> previously existing build failures with external toolchain have
- Thomas> disappeared. I just tested with a recent (a few days) Git, and net-snmp
- Thomas> built just fine with an external ARM CodeSourcery toolchain.
+--- Comment #3 from Matthijs Benschop <m.benschop@hig.nl>  ---
+Created attachment 2545
+  --> https://bugs.busybox.net/attachment.cgi?id=2545
+Add bluez to buildroot
 
- Thomas> Now, I have no idea if it actually works, since I don't know how to
- Thomas> test it. But that's another story :-)
+This is better patch, not having the i386 hardware dependency.
 
-Thanks - Did you also build something using netsnmp
-(E.G. BR2_PACKAGE_QUAGGA_SNMP)? The problem was afaik dependent packages
-not finding netsnmp.
+Tested on arm926.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
