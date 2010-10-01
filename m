@@ -1,56 +1,39 @@
-From: Dennis Borgmann <dennis.borgmann@googlemail.com>
-Date: Fri, 01 Oct 2010 09:30:44 +0200
-Subject: [Buildroot] CONFIG_BLK_DEV_INITRD deactivated on automatic build
-In-Reply-To: <20100930194624.62fdea0e@surf>
-References: <4CA47342.7020405@googlemail.com> <20100930194624.62fdea0e@surf>
-Message-ID: <4CA58E24.9050104@googlemail.com>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Fri, 1 Oct 2010 10:14:19 +0200
+Subject: [Buildroot] libpng install question
+In-Reply-To: <0D753D10438DA54287A00B0270842697644545753B@AUSP01VMBX24.collaborationhost.net>
+References: <0D753D10438DA54287A00B0270842697644545753B@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <AANLkTi=2p=Zesb=ruU5MVfQdJGy7nSG=OL1FPXMFEtd3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-thank you!
+libpng12-config and libpng-config are part of the libpng package, so
+it is normal they are being installed on the target. However they
+shouldn't be installed unless you've selected to installed development
+files in the buildroot config.
+This might be a small regression introduced by this commit :
+http://git.buildroot.org/buildroot/commit/?id=55ade5c7964e15f9b1eba061ab840cc4c25e4e37
+Are you using a recent version of the buildroot's git repository ?
 
-Thomas Petazzoni schrieb:
-> Hello Dennis,
+--
+Lionel Landwerlin
+
+On Fri, Oct 1, 2010 at 2:51 AM, H Hartley Sweeten
+<hartleys@visionengravers.com> wrote:
+> Hello all,
 >
-> On Thu, 30 Sep 2010 13:23:46 +0200
-> Dennis Borgmann <dennis.borgmann@googlemail.com> wrote:
->
->   
->> First of all - thank you for the work done for this project. It is
->> awesome and I really like it. Straightforward and quick to use.
->>
->> I think, I found a bug. If you download buildroot and start
->> configuring your project with "make menuconfig" and after that
->> configure the kernel with "make linux26-menuconfig", everything seems
->> to be ok. I did give it a custom kernel-config named
->> "/tmp/config-2.6.34".
->>
->> After running "make", everything seems to be ok, but the resulting
->> kernel does not contain the option "CONFIG_BLK_DEV_INITRD". I need to
->> manually do a "make linux26-menuconfig" again and rebuild the kernel
->> for the resulting kernel to contain this option.
->>
->> This was a really silly thing to find, took me around one week,
->> because you wouldn't think of such a mistake. Could it be, that this
->> is a bug? I am using buildroot-2010.08.
->>     
->
-> Yes, it was a bug. When "initramfs" isn't used as the target filesystem
-> format, we forcefully disabled the CONFIG_BLK_DEV_INITRD option. This
-> has been fixed post-2010.08, by the following commit:
->
->  http://git.buildroot.net/buildroot/commit/?id=ee3f319249e146d92b093ad8c45a3a908d44236f
->
-> So you can either apply this patch on top of 2010.08, or use the latest
-> Buildroot git. We unfortunately do not maintain "stabilized" versions
-> of Buildroot (such as 2010.08.x) for the moment.
+> I was wondering why libpng12-config and libpng-config are installed to the target.
+> I thought these were host tools?
 >
 > Regards,
+> Hartley
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> Thomas
->   
