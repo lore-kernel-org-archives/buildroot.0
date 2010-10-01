@@ -1,36 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 1 Sep 2010 00:16:32 +0200
-Subject: [Buildroot] [git commit master 1/1] docs/news.html: add 2010.08
-	announcement link
-Message-ID: <20100831221649.F2EA98A3CB@busybox.osuosl.org>
+From: Dennis Borgmann <dennis.borgmann@googlemail.com>
+Date: Fri, 01 Oct 2010 09:30:44 +0200
+Subject: [Buildroot] CONFIG_BLK_DEV_INITRD deactivated on automatic build
+In-Reply-To: <20100930194624.62fdea0e@surf>
+References: <4CA47342.7020405@googlemail.com> <20100930194624.62fdea0e@surf>
+Message-ID: <4CA58E24.9050104@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e34035d033b8f080b0dae2bbd10dead1f97a6b02
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+thank you!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/docs/news.html b/docs/news.html
-index 347d44a..9545b86 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -11,7 +11,8 @@
-     <p>The stable 2010.08 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08">CHANGES</a>
--    file for more details,
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2010-August/037078.html">announcement</a>
-     and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2010.08.tar.bz2">2010.08 release</a>.</p>
- 
--- 
-1.7.1
+Thomas Petazzoni schrieb:
+> Hello Dennis,
+>
+> On Thu, 30 Sep 2010 13:23:46 +0200
+> Dennis Borgmann <dennis.borgmann@googlemail.com> wrote:
+>
+>   
+>> First of all - thank you for the work done for this project. It is
+>> awesome and I really like it. Straightforward and quick to use.
+>>
+>> I think, I found a bug. If you download buildroot and start
+>> configuring your project with "make menuconfig" and after that
+>> configure the kernel with "make linux26-menuconfig", everything seems
+>> to be ok. I did give it a custom kernel-config named
+>> "/tmp/config-2.6.34".
+>>
+>> After running "make", everything seems to be ok, but the resulting
+>> kernel does not contain the option "CONFIG_BLK_DEV_INITRD". I need to
+>> manually do a "make linux26-menuconfig" again and rebuild the kernel
+>> for the resulting kernel to contain this option.
+>>
+>> This was a really silly thing to find, took me around one week,
+>> because you wouldn't think of such a mistake. Could it be, that this
+>> is a bug? I am using buildroot-2010.08.
+>>     
+>
+> Yes, it was a bug. When "initramfs" isn't used as the target filesystem
+> format, we forcefully disabled the CONFIG_BLK_DEV_INITRD option. This
+> has been fixed post-2010.08, by the following commit:
+>
+>  http://git.buildroot.net/buildroot/commit/?id=ee3f319249e146d92b093ad8c45a3a908d44236f
+>
+> So you can either apply this patch on top of 2010.08, or use the latest
+> Buildroot git. We unfortunately do not maintain "stabilized" versions
+> of Buildroot (such as 2010.08.x) for the moment.
+>
+> Regards,
+>
+> Thomas
+>   
