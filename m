@@ -1,17 +1,23 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Thu, 30 Sep 2010 19:51:05 -0500
-Subject: [Buildroot] libpng install question
-Message-ID: <0D753D10438DA54287A00B0270842697644545753B@AUSP01VMBX24.collaborationhost.net>
+From: Martin Banky <martin.banky@gmail.com>
+Date: Thu, 30 Sep 2010 23:32:30 -0700
+Subject: [Buildroot] [PATCH 0/3] change l2tp to xl2tp
+Message-ID: <1285914753-22744-1-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+I'm not sure what format pppd.mk was in, I think it might have been an
+intermediate version, but it wouldn't compile. I heavily reworked this package
+so that it would compile correctly, there were several issues with CFLAGS that
+had to be fixed.
 
-I was wondering why libpng12-config and libpng-config are installed to the target.
-I thought these were host tools?
+l2tp is no longer available on debian's site, but there is a fork called xl2tp
+that is currently being maintained.
 
-Regards,
-Hartley
+Each patch is dependant on the previous patch.
+
+[PATCH 1/3] libpcap: bump to 1.1.1
+[PATCH 2/3] pppd: convert to gentargets
+[PATCH 3/3] l2tp: convert to gentargets and change to xl2tp
