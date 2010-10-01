@@ -1,34 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  1 Oct 2010 10:03:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 1357] Add bluez to buildroot system
-In-Reply-To: <bug-1357-163@https.bugs.busybox.net/>
-References: <bug-1357-163@https.bugs.busybox.net/>
-Message-ID: <20101001100342.72FCC8B828@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 01 Oct 2010 10:41:43 -0300
+Subject: [Buildroot] [SECURITY][PATCHv2] Bump quagga to 0.99.17
+In-Reply-To: <20100930234735.4ffdc3ea@surf>
+References: <4CA4A278.6040303@zacarias.com.ar>	<87ocbfxcsg.fsf@macbook.be.48ers.dk>	<4CA4E521.30407@zacarias.com.ar>	<87k4m3xbc1.fsf@macbook.be.48ers.dk>
+	<20100930234735.4ffdc3ea@surf>
+Message-ID: <4CA5E517.9060000@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1357
+On 09/30/10 18:47, Thomas Petazzoni wrote:
 
-Matthijs Benschop <m.benschop@hig.nl> changed:
+> I confirm that since Gustavo converted the package to autotargets, the
+> previously existing build failures with external toolchain have
+> disappeared. I just tested with a recent (a few days) Git, and net-snmp
+> built just fine with an external ARM CodeSourcery toolchain.
+> 
+> Now, I have no idea if it actually works, since I don't know how to
+> test it. But that's another story :-)
+> 
+> Regards,
+> 
+> Thomas
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #1333|0                           |1
-        is obsolete|                            |
+That's easy actually :)
 
---- Comment #3 from Matthijs Benschop <m.benschop@hig.nl>  ---
-Created attachment 2545
-  --> https://bugs.busybox.net/attachment.cgi?id=2545
-Add bluez to buildroot
+Stick into say /tmp/snmpd.conf:
+com2sec local localhost thepassword
+group MyROGroup v1 local
+group MyROGroup v2c local
+group MyROGroup usm local
+view all included .1 80
+access MyROGroup "" any noauth exact all none none
+access MyRWGroup "" any noauth exact all all none
+syslocation Unknown
+syscontact Unknown
 
-This is better patch, not having the i386 hardware dependency.
-
-Tested on arm926.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Run "snmpd -c /tmp/snmpd.conf".
+And then run "snmpwalk -v 1 -c thepassword localhost".
+You'll get loads of data if snmpd is working ok.
+You can define additional ACLs (com2sec+group) to enable remote access.
