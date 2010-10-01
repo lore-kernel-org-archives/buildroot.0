@@ -1,668 +1,429 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Thu, 30 Sep 2010 23:32:32 -0700
-Subject: [Buildroot] [PATCH 2/3] pppd: convert to gentargets
+Date: Thu, 30 Sep 2010 23:32:33 -0700
+Subject: [Buildroot] [PATCH 3/3] l2tp: convert to gentargets and change to
+	xl2tp
 In-Reply-To: <1285914753-22744-1-git-send-email-Martin.Banky@gmail.com>
 References: <1285914753-22744-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1285914753-22744-3-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1285914753-22744-4-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+l2tp is no longer being developed, and xl2tpd is forked from l2tpd and is
+maintained by Xelerance Corporation.
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/pppd/pppd-2.4.5-define-aligned_u64.patch |   13 +
- package/pppd/pppd-2.4.5-makefile-flags.patch     |  403 ++++++++++++++++++++++
- package/pppd/pppd-2.4.5-man-dir.patch            |   31 ++
- package/pppd/pppd-2.4.5-pppol2tp.patch           |   34 ++
- package/pppd/pppd.mk                             |  107 ++++---
- 5 files changed, 540 insertions(+), 48 deletions(-)
- create mode 100644 package/pppd/pppd-2.4.5-define-aligned_u64.patch
- create mode 100644 package/pppd/pppd-2.4.5-makefile-flags.patch
- create mode 100644 package/pppd/pppd-2.4.5-man-dir.patch
- create mode 100644 package/pppd/pppd-2.4.5-pppol2tp.patch
+ package/Config.in                              |    2 +-
+ package/l2tp/Config.in                         |    7 ---
+ package/l2tp/l2tp-legacy.patch                 |   14 ------
+ package/l2tp/l2tp-no-gnu-extensions.patch      |   33 -------------
+ package/l2tp/l2tp-sanity.patch                 |   49 -------------------
+ package/l2tp/l2tp.mk                           |   60 ------------------------
+ package/l2tp/l2tpd                             |   27 -----------
+ package/xl2tp/Config.in                        |   11 ++++
+ package/xl2tp/xl2tp-1.2.7-legacy.patch         |   14 ++++++
+ package/xl2tp/xl2tp-1.2.7-makefile-flags.patch |   30 ++++++++++++
+ package/xl2tp/xl2tp.mk                         |   33 +++++++++++++
+ package/xl2tp/xl2tpd                           |   27 +++++++++++
+ 12 files changed, 116 insertions(+), 191 deletions(-)
+ delete mode 100644 package/l2tp/Config.in
+ delete mode 100644 package/l2tp/l2tp-legacy.patch
+ delete mode 100644 package/l2tp/l2tp-no-gnu-extensions.patch
+ delete mode 100644 package/l2tp/l2tp-sanity.patch
+ delete mode 100644 package/l2tp/l2tp.mk
+ delete mode 100755 package/l2tp/l2tpd
+ create mode 100644 package/xl2tp/Config.in
+ create mode 100644 package/xl2tp/xl2tp-1.2.7-legacy.patch
+ create mode 100644 package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
+ create mode 100644 package/xl2tp/xl2tp.mk
+ create mode 100755 package/xl2tp/xl2tpd
 
-diff --git a/package/pppd/pppd-2.4.5-define-aligned_u64.patch b/package/pppd/pppd-2.4.5-define-aligned_u64.patch
-new file mode 100644
-index 0000000..7eb0ad1
---- /dev/null
-+++ b/package/pppd/pppd-2.4.5-define-aligned_u64.patch
-@@ -0,0 +1,13 @@
-+Define aligned_u64, because it is not defined in the linux headers.
-+--- a/pppd/sys-linux.c	2010-09-26 23:23:05.000000000 -0700
-++++ b/pppd/sys-linux.c	2010-09-26 23:24:51.000000000 -0700
-+@@ -118,6 +118,10 @@
-+ #include <netinet/in.h>
-+ #include <arpa/inet.h>
-+ 
-++#ifndef aligned_u64
-++#define aligned_u64 unsigned long long __attribute__((aligned(8)))
-++#endif
-++ 
-+ #include <linux/ppp_defs.h>
-+ #include <linux/if_ppp.h>
-diff --git a/package/pppd/pppd-2.4.5-makefile-flags.patch b/package/pppd/pppd-2.4.5-makefile-flags.patch
-new file mode 100644
-index 0000000..9fb457d
---- /dev/null
-+++ b/package/pppd/pppd-2.4.5-makefile-flags.patch
-@@ -0,0 +1,403 @@
-+Preserve the settings that we need, because buildroot clobbers
-+the cflag settings in the various makefiles in pppd.
-+--- a/chat/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/chat/Makefile.linux	2010-09-30 17:53:31.000000000 -0700
-+@@ -21,7 +21,7 @@ chat:	chat.o
-+ 	$(CC) -o chat chat.o
-+ 
-+ chat.o:	chat.c
-+-	$(CC) -c $(CFLAGS) -o chat.o chat.c
-++	$(CC) -c $(CDEFS) $(CFLAGS) -o chat.o chat.c
-+ 
-+ install: chat
-+ 	mkdir -p $(BINDIR) $(MANDIR)
-+
-+--- a/pppd/Makefile.linux	2010-09-30 17:46:46.000000000 -0700
-++++ b/pppd/Makefile.linux	2010-09-30 17:53:28.000000000 -0700
-+@@ -77,26 +77,24 @@ MAXOCTETS=y
-+ 
-+ INCLUDE_DIRS= -I../include
-+ 
-+-COMPILE_FLAGS= -DHAVE_PATHS_H -DIPX_CHANGE -DHAVE_MMAP
-+-
-+-CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS) '-DDESTDIR="@DESTDIR@"'
-++COMPILE_FLAGS= -DHAVE_PATHS_H -DIPX_CHANGE -DHAVE_MMAP -I../include '-DDESTDIR="@DESTDIR@"'
-+ 
-+ ifdef CHAPMS
-+-CFLAGS   += -DCHAPMS=1
-++COMPILE_FLAGS   += -DCHAPMS=1
-+ NEEDDES=y
-+ PPPDOBJS += md4.o chap_ms.o
-+ HEADERS	+= md4.h chap_ms.h
-+ ifdef MSLANMAN
-+-CFLAGS   += -DMSLANMAN=1
-++COMPILE_FLAGS   += -DMSLANMAN=1
-+ endif
-+ ifdef MPPE
-+-CFLAGS   += -DMPPE=1
-++COMPILE_FLAGS   += -DMPPE=1
-+ endif
-+ endif
-+ 
-+ # EAP SRP-SHA1
-+ ifdef USE_SRP
-+-CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
-++COMPILE_FLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
-+ LIBS	+= -lsrp -L/usr/local/ssl/lib -lcrypto
-+ TARGETS	+= srp-entry
-+ EXTRAINSTALL = $(INSTALL) -s -c -m 555 srp-entry $(BINDIR)/srp-entry
-+@@ -113,12 +111,12 @@ PPPDOBJS += sha1.o
-+ endif
-+ 
-+ ifdef HAS_SHADOW
-+-CFLAGS   += -DHAS_SHADOW
-++COMPILE_FLAGS   += -DHAS_SHADOW
-+ #LIBS     += -lshadow $(LIBS)
-+ endif
-+ 
-+ ifneq ($(wildcard /usr/include/crypt.h),)
-+-CFLAGS  += -DHAVE_CRYPT_H=1
-++COMPILE_FLAGS  += -DHAVE_CRYPT_H=1
-+ LIBS	+= -lcrypt
-+ endif
-+ 
-+@@ -126,7 +124,7 @@ ifdef NEEDDES
-+ ifndef USE_CRYPT
-+ LIBS     += -ldes $(LIBS)
-+ else
-+-CFLAGS   += -DUSE_CRYPT=1
-++COMPILE_FLAGS   += -DUSE_CRYPT=1
-+ endif
-+ PPPDOBJS += pppcrypt.o
-+ HEADERS += pppcrypt.h
-+@@ -134,7 +132,7 @@ endif
-+ 
-+ # For "Pluggable Authentication Modules", see ftp.redhat.com:/pub/pam/.
-+ ifdef USE_PAM
-+-CFLAGS   += -DUSE_PAM
-++COMPILE_FLAGS   += -DUSE_PAM
-+ LIBS     += -lpam -ldl
-+ endif
-+ 
-+@@ -143,14 +141,14 @@ ifdef HAVE_MULTILINK
-+ 	# Multilink implies the use of TDB
-+ 	USE_TDB=y
-+ 
-+-	CFLAGS += -DHAVE_MULTILINK
-++	COMPILE_FLAGS += -DHAVE_MULTILINK
-+ 	PPPDSRCS += multilink.c
-+ 	PPPDOBJS += multilink.o
-+ endif
-+ 
-+ # TDB
-+ ifdef USE_TDB
-+-	CFLAGS += -DUSE_TDB=1
-++	COMPILE_FLAGS += -DUSE_TDB=1
-+ 	PPPDSRCS += tdb.c spinlock.c
-+ 	PPPDOBJS += tdb.o spinlock.o
-+ 	HEADERS += tdb.h spinlock.h
-+@@ -159,11 +157,11 @@ endif
-+ # Lock library binary for Linux is included in 'linux' subdirectory.
-+ ifdef LOCKLIB
-+ LIBS     += -llock
-+-CFLAGS   += -DLOCKLIB=1
-++COMPILE_FLAGS   += -DLOCKLIB=1
-+ endif
-+ 
-+ ifdef PLUGIN
-+-CFLAGS	+= -DPLUGIN
-++COMPILE_FLAGS	+= -DPLUGIN
-+ LDFLAGS	+= -Wl,-E
-+ LIBS	+= -ldl
-+ endif
-+@@ -171,7 +169,7 @@ endif
-+ ifdef FILTER
-+ ifneq ($(wildcard /usr/include/pcap-bpf.h),)
-+ LIBS    += -lpcap
-+-CFLAGS  += -DPPP_FILTER
-++COMPILE_FLAGS  += -DPPP_FILTER
-+ endif
-+ endif
-+ 
-+@@ -179,24 +177,27 @@ ifdef HAVE_INET6
-+      PPPDSRCS += ipv6cp.c eui64.c
-+      HEADERS  += ipv6cp.h eui64.h
-+      PPPDOBJS += ipv6cp.o eui64.o
-+-     CFLAGS   += -DINET6=1
-++     COMPILE_FLAGS   += -DINET6=1
-+ endif
-+ 
-+ ifdef CBCP
-+      PPPDSRCS += cbcp.c
-+      PPPDOBJS += cbcp.o
-+-     CFLAGS += -DCBCP_SUPPORT
-++     COMPILE_FLAGS += -DCBCP_SUPPORT
-+      HEADERS += cbcp.h
-+ endif
-+ 
-+ ifdef MAXOCTETS
-+-     CFLAGS += -DMAXOCTETS
-++     COMPILE_FLAGS += -DMAXOCTETS
-+ endif
-+ 
-+ INSTALL= install
-+ 
-+ all: $(TARGETS)
-+ 
-++%.o: %.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
-++
-+ install: pppd
-+ 	mkdir -p $(BINDIR) $(MANDIR)
-+ 	$(EXTRAINSTALL)
-+@@ -206,10 +207,10 @@ install: pppd
-+ 	$(INSTALL) -c -m 444 pppd.8 $(MANDIR)
-+ 
-+ pppd: $(PPPDOBJS)
-+-	$(CC) $(CFLAGS) $(LDFLAGS) -o pppd $(PPPDOBJS) $(LIBS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) $(LDFLAGS) -o pppd $(PPPDOBJS) $(LIBS)
-+ 
-+ srp-entry:	srp-entry.c
-+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ srp-entry.c $(LIBS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) $(LDFLAGS) -o $@ srp-entry.c $(LIBS)
-+ 
-+ install-devel:
-+ 	mkdir -p $(INCDIR)/pppd
-+@@ -219,4 +220,4 @@ clean:
-+ 	rm -f $(PPPDOBJS) $(EXTRACLEAN) $(TARGETS) *~ #* core
-+ 
-+ depend:
-+-	$(CPP) -M $(CFLAGS) $(PPPDSRCS) >.depend
-++	$(CPP) -M $(COMPILE_FLAGS) $(CFLAGS) $(PPPDSRCS) >.depend
-+
-+--- a/pppd/plugins/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppd/plugins/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -1,7 +1,7 @@
-+ #CC	= gcc
-+ COPTS	= -O2 -g
-+-CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
-+-LDFLAGS	= -shared
-++COMPILE_FLAGS	= -I.. -I../../include -fPIC
-++LINK_FLAGS	= -shared
-+ INSTALL	= install
-+ 
-+ DESTDIR = $(INSTROOT)@DESTDIR@
-+@@ -23,7 +23,7 @@ all:	$(PLUGINS)
-+ 	for d in $(SUBDIRS); do $(MAKE) $(MFLAGS) -C $$d all; done
-+ 
-+ %.so: %.c
-+-	$(CC) -o $@ $(LDFLAGS) $(CFLAGS) $^
-++	$(CC) -o $@ $(LINK_FLAGS) $(COMPILE_FLAGS) $(CFLAGS) $^
-+ 
-+ VERSION = $(shell awk -F '"' '/VERSION/ { print $$2; }' ../patchlevel.h)
-+ 
-+@@ -37,5 +37,5 @@ clean:
-+ 	for d in $(SUBDIRS); do $(MAKE) $(MFLAGS) -C $$d clean; done
-+ 
-+ depend:
-+-	$(CPP) -M $(CFLAGS) *.c >.depend
-++	$(CPP) -M $(COMPILE_FLAGS) $(CFLAGS) *.c >.depend
-+ 	for d in $(SUBDIRS); do $(MAKE) $(MFLAGS) -C $$d depend; done
-+
-+--- a/pppd/plugins/pppoatm/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppd/plugins/pppoatm/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -1,6 +1,6 @@
-+ #CC	= gcc
-+ COPTS	= -O2 -g
-+-CFLAGS	= $(COPTS) -I../.. -I../../../include -fPIC
-++COMPILE_FLAGS	= -I../.. -I../../../include -fPIC
-+ LDFLAGS	= -shared
-+ INSTALL	= install
-+ 
-+@@ -24,7 +24,7 @@ PLUGIN_OBJS := pppoatm.o
-+ ifdef HAVE_LIBATM
-+ LIBS := -latm
-+ else
-+-CFLAGS += -I.
-++COMPILE_FLAGS += -I.
-+ PLUGIN_OBJS += text2qos.o text2atm.o misc.o ans.o
-+ LIBS := -lresolv
-+ endif
-+@@ -33,7 +33,7 @@ endif
-+ all: $(PLUGIN)
-+ 
-+ $(PLUGIN): $(PLUGIN_OBJS)
-+-	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o $@ -shared $^ $(LIBS)
-+ 
-+ install: all
-+ 	$(INSTALL) -d -m 755 $(LIBDIR)
-+@@ -43,4 +43,4 @@ clean:
-+ 	rm -f *.o *.so
-+ 
-+ %.o: %.c
-+-	$(CC) $(CFLAGS) -c -o $@ $<
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
-+
-+--- a/pppd/plugins/pppol2tp/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppd/plugins/pppol2tp/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -1,6 +1,6 @@
-+ #CC	= gcc
-+ COPTS	= -O2 -g
-+-CFLAGS	= $(COPTS) -I. -I../.. -I../../../include -fPIC
-++COMPILE_FLAGS	= -I. -I../.. -I../../../include -fPIC
-+ LDFLAGS	= -shared
-+ INSTALL	= install
-+ 
-+@@ -16,7 +16,7 @@ PLUGINS := pppol2tp.so openl2tp.so
-+ all: $(PLUGINS)
-+ 
-+ %.so: %.o
-+-	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o $@ -shared $^ $(LIBS)
-+ 
-+ install: all
-+ 	$(INSTALL) -d -m 755 $(LIBDIR)
-+@@ -26,4 +26,4 @@ clean:
-+ 	rm -f *.o *.so
-+ 
-+ %.o: %.c
-+-	$(CC) $(CFLAGS) -c -o $@ $<
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ $<
-+
-+--- a/pppd/plugins/radius/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppd/plugins/radius/Makefile.linux	2010-09-30 18:29:31.000000000 -0700
-+@@ -12,7 +12,7 @@ VERSION = $(shell awk -F '"' '/VERSION/
-+ INSTALL	= install
-+ 
-+ PLUGIN=radius.so radattr.so radrealms.so
-+-CFLAGS=-I. -I../.. -I../../../include -O2 -fPIC -DRC_LOG_FACILITY=LOG_DAEMON
-++COMPILE_FLAGS = -I. -I../.. -I../../../include -O2 -fPIC -DRC_LOG_FACILITY=LOG_DAEMON
-+ 
-+ # Uncomment the next line to include support for Microsoft's
-+ # MS-CHAP authentication protocol.
-+@@ -23,17 +23,20 @@ MPPE=y
-+ MAXOCTETS=y
-+ 
-+ ifdef CHAPMS
-+-CFLAGS += -DCHAPMS=1
-++COMPILE_FLAGS += -DCHAPMS=1
-+ ifdef MPPE
-+-CFLAGS += -DMPPE=1
-++COMPILE_FLAGS += -DMPPE=1
-+ endif
-+ endif
-+ ifdef MAXOCTETS
-+-CFLAGS += -DMAXOCTETS=1
-++COMPILE_FLAGS += -DMAXOCTETS=1
-+ endif
-+ 
-+ all: $(PLUGIN)
-+ 
-++%.o: %.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
-++
-+ install: all
-+ 	$(INSTALL) -d -m 755 $(LIBDIR)
-+ 	$(INSTALL) -s -c -m 755 radius.so $(LIBDIR)
-+@@ -43,13 +46,13 @@ install: all
-+ 	$(INSTALL) -c -m 444 pppd-radattr.8 $(MANDIR)
-+ 
-+ radius.so: radius.o libradiusclient.a
-+-	$(CC) -o radius.so -shared radius.o libradiusclient.a
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o radius.so -shared radius.o libradiusclient.a
-+ 
-+ radattr.so: radattr.o
-+-	$(CC) -o radattr.so -shared radattr.o
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o radattr.so -shared radattr.o
-+ 
-+ radrealms.so: radrealms.o
-+-	$(CC) -o radrealms.so -shared radrealms.o
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o radrealms.so -shared radrealms.o
-+ 
-+ CLIENTOBJS = avpair.o buildreq.o config.o dict.o ip_util.o \
-+ 	clientid.o sendserver.o lock.o util.o md5.o
-+
-+--- a/pppd/plugins/rp-pppoe/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppd/plugins/rp-pppoe/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -26,20 +26,20 @@ INSTALL	= install
-+ RP_VERSION=3.8p
-+ 
-+ COPTS=-O2 -g
-+-CFLAGS=$(COPTS) -I../../../include '-DRP_VERSION="$(RP_VERSION)"'
-++COMPILE_FLAGS= -I../../../include '-DRP_VERSION="$(RP_VERSION)"'
-+ all: rp-pppoe.so pppoe-discovery
-+ 
-+ pppoe-discovery: pppoe-discovery.o debug.o
-+-	$(CC) -o pppoe-discovery pppoe-discovery.o debug.o
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o pppoe-discovery pppoe-discovery.o debug.o
-+ 
-+ pppoe-discovery.o: pppoe-discovery.c
-+-	$(CC) $(CFLAGS) -c -o pppoe-discovery.o pppoe-discovery.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o pppoe-discovery.o pppoe-discovery.c
-+ 
-+ debug.o: debug.c
-+-	$(CC) $(CFLAGS) -c -o debug.o debug.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o debug.o debug.c
-+ 
-+ rp-pppoe.so: plugin.o discovery.o if.o common.o
-+-	$(CC) -o rp-pppoe.so -shared plugin.o discovery.o if.o common.o
-++	$(CC) $(COMPILE_FLAGS) -o rp-pppoe.so -shared plugin.o discovery.o if.o common.o
-+ 
-+ install: all
-+ 	$(INSTALL) -d -m 755 $(LIBDIR)
-+@@ -51,14 +51,14 @@ clean:
-+ 	rm -f *.o *.so pppoe-discovery
-+ 
-+ plugin.o: plugin.c
-+-	$(CC) $(CFLAGS) -I../../.. -c -o plugin.o -fPIC plugin.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -I../../.. -c -o plugin.o -fPIC plugin.c
-+ 
-+ discovery.o: discovery.c
-+-	$(CC) $(CFLAGS) -I../../.. -c -o discovery.o -fPIC discovery.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -I../../.. -c -o discovery.o -fPIC discovery.c
-+ 
-+ if.o: if.c
-+-	$(CC) $(CFLAGS) -I../../.. -c -o if.o -fPIC if.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -I../../.. -c -o if.o -fPIC if.c
-+ 
-+ common.o: common.c
-+-	$(CC) $(CFLAGS) -I../../.. -c -o common.o -fPIC common.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -I../../.. -c -o common.o -fPIC common.c
-+ 
-+
-+--- a/pppdump/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppdump/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -2,15 +2,18 @@ DESTDIR = $(INSTROOT)@DESTDIR@
-+ BINDIR = $(DESTDIR)/sbin
-+ MANDIR = $(DESTDIR)/share/man/man8
-+ 
-+-CFLAGS= -O -I../include/net
-++COMPILE_FLAGS= -I../include/net
-+ OBJS = pppdump.o bsd-comp.o deflate.o zlib.o
-+ 
-+ INSTALL= install
-+ 
-+ all:	pppdump
-+ 
-++%.o: %.c
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
-++
-+ pppdump: $(OBJS)
-+-	$(CC) -o pppdump $(OBJS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o pppdump $(OBJS)
-+ 
-+ clean:
-+ 	rm -f pppdump $(OBJS) *~
-+
-+--- a/pppstats/Makefile.linux	2009-11-16 15:26:07.000000000 -0700
-++++ b/pppstats/Makefile.linux	2010-09-30 17:59:16.000000000 -0700
-+@@ -26,11 +26,11 @@ install: pppstats
-+ 	$(INSTALL) -c -m 444 pppstats.8 $(MANDIR)
-+ 
-+ pppstats: $(PPPSTATSRCS)
-+-	$(CC) $(CFLAGS) -o pppstats pppstats.c $(LIBS)
-++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -o pppstats pppstats.c $(LIBS)
-+ 
-+ clean:
-+ 	rm -f pppstats *~ #* core
-+ 
-+ depend:
-+-	cpp -M $(CFLAGS) $(PPPSTATSRCS) >.depend
-++	cpp -M $(COMPILE_FLAGS) $(CFLAGS) $(PPPSTATSRCS) >.depend
-+ #	makedepend $(CFLAGS) $(PPPSTATSRCS)
-diff --git a/package/pppd/pppd-2.4.5-man-dir.patch b/package/pppd/pppd-2.4.5-man-dir.patch
-new file mode 100644
-index 0000000..c9434f6
---- /dev/null
-+++ b/package/pppd/pppd-2.4.5-man-dir.patch
-@@ -0,0 +1,31 @@
-+Change the MANDIR variable in the top makefile
-+to match the rest of the makefiles
-+--- a/linux/Makefile.top	2009-11-16 15:26:07.000000000 -0700
-++++ b/linux/Makefile.top	2010-09-30 19:57:19.000000000 -0700
-+@@ -3,7 +3,7 @@
-+ DESTDIR = $(INSTROOT)@DESTDIR@
-+ BINDIR = $(DESTDIR)/sbin
-+ INCDIR = $(DESTDIR)/include
-+-MANDIR = $(DESTDIR)/share/man
-++MANDIR = $(DESTDIR)/share/man/man8
-+ ETCDIR = $(INSTROOT)@SYSCONF@/ppp
-+ 
-+ # uid 0 = root
-+@@ -16,7 +16,7 @@ all:
-+ 	cd pppstats; $(MAKE) $(MFLAGS) all
-+ 	cd pppdump; $(MAKE) $(MFLAGS) all
-+ 
-+-install: $(BINDIR) $(MANDIR)/man8 install-progs install-devel
-++install: $(BINDIR) $(MANDIR) install-progs install-devel
-+ 
-+ install-progs:
-+ 	cd chat; $(MAKE) $(MFLAGS) install
-+@@ -40,7 +40,7 @@ $(ETCDIR)/chap-secrets:
-+ 
-+ $(BINDIR):
-+ 	$(INSTALL) -d -m 755 $@
-+-$(MANDIR)/man8:
-++$(MANDIR):
-+ 	$(INSTALL) -d -m 755 $@
-+ $(ETCDIR):
-+ 	$(INSTALL) -d -m 755 $@
-diff --git a/package/pppd/pppd-2.4.5-pppol2tp.patch b/package/pppd/pppd-2.4.5-pppol2tp.patch
-new file mode 100644
-index 0000000..249789a
---- /dev/null
-+++ b/package/pppd/pppd-2.4.5-pppol2tp.patch
-@@ -0,0 +1,34 @@
-+Per Paul Howarth
-+
-+"...due to ppp bundling a copy of linux/if_pppol2tp.h and this being used in
-+preference to the system one. A recent change in kernel-headers has added a
-+definition of struct pppol2tpv3_addr to this header file, and that definition
-+is needed by linux/if_pppox.h but isn't found when compiling ppp due to the
-+presence of the bundled copy of linux/if_pppol2tp.h. Simplest fix is to add
-+the definition of struct pppol2tpv3_addr to the bundled copy..."
-+
-+See https://bugzilla.redhat.com/show_bug.cgi?id=617625
-+
-+--- ppp-2.4.5/include/linux/if_pppol2tp.h	2009-11-16 22:26:07.000000000 +0000
-++++ ppp-2.4.5/include/linux/if_pppol2tp.h	2010-07-16 22:35:22.000000000 +0100
-+@@ -32,6 +32,20 @@
-+ 	__u16 d_tunnel, d_session;	/* For sending outgoing packets */
-+ };
-+ 
-++/* The L2TPv3 protocol changes tunnel and session ids from 16 to 32
-++ * bits. So we need a different sockaddr structure.
-++ */
-++struct pppol2tpv3_addr {
-++	pid_t	pid;			/* pid that owns the fd.
-++					 * 0 => current */
-++	int	fd;			/* FD of UDP or IP socket to use */
-++
-++	struct sockaddr_in addr;	/* IP address and port to send to */
-++
-++	__u32 s_tunnel, s_session;	/* For matching incoming packets */
-++	__u32 d_tunnel, d_session;	/* For sending outgoing packets */
-++};
-++
-+ /* Socket options:
-+  * DEBUG	- bitmask of debug message categories
-+  * SENDSEQ	- 0 => don't send packets with sequence numbers
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 35fd451..f1249ef 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -3,72 +3,83 @@
- # pppd
- #
- #############################################################
+diff --git a/package/Config.in b/package/Config.in
+index 7a38e7d..94d330c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -370,7 +370,7 @@ source "package/ipsec-tools/Config.in"
+ source "package/iptables/Config.in"
+ source "package/iw/Config.in"
+ source "package/kismet/Config.in"
+-source "package/l2tp/Config.in"
++source "package/xl2tp/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/lighttpd/Config.in"
+ endif
+diff --git a/package/l2tp/Config.in b/package/l2tp/Config.in
+deleted file mode 100644
+index da4f589..0000000
+--- a/package/l2tp/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_L2TP
+-	bool "l2tp"
+-	help
+-	  Layer 2 Tunnelling Protocol (RFC2661).
 -
- PPPD_VERSION = 2.4.5
- PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
- PPPD_SITE = ftp://ftp.samba.org/pub/ppp
-+PPPD_INSTALL_STAGING = YES
+-	  http://sourceforge.net/projects/l2tpd/
+-
+diff --git a/package/l2tp/l2tp-legacy.patch b/package/l2tp/l2tp-legacy.patch
+deleted file mode 100644
+index 39506d8..0000000
+--- a/package/l2tp/l2tp-legacy.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+---- l2tpd-0.70-pre20031121.oorig/osport.h	2004-07-08 22:47:52.000000000 +0200
+-+++ l2tpd-0.70-pre20031121/osport.h	2006-12-28 15:32:50.000000000 +0100
+-@@ -37,4 +37,11 @@
+- 
+- #endif /* defined(SOLARIS) */
+- 
+-+#if defined __UCLIBC__ && !defined UCLIBC_SUSV3_LEGACY_MACROS
+-+# define index(x, y)        strchr(x, y)
+-+# define bcopy(S1, S2, LEN) ((void)memmove(S2, S1, LEN))
+-+# define bzero(S1, LEN)     ((void)memset(S1,  0, LEN))
+-+# define bcmp(S1,S2,LEN)    ((memcmp(S2, S1, LEN)==0)?0:1)
+-+#endif /* defined __UCLIBC__ && !defined UCLIBC_SUSV3_LEGACY_MACROS */
+-+
+- #endif /* _OSPORT_H_ */
+diff --git a/package/l2tp/l2tp-no-gnu-extensions.patch b/package/l2tp/l2tp-no-gnu-extensions.patch
+deleted file mode 100644
+index ef07e26..0000000
+--- a/package/l2tp/l2tp-no-gnu-extensions.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+---- l2tpd-0.70-pre20031121.oorig/avpsend.c	2006-12-28 16:00:26.000000000 +0100
+-+++ l2tpd-0.70-pre20031121/avpsend.c	2006-12-28 16:21:06.000000000 +0100
+-@@ -98,19 +98,26 @@ int add_hostname_avp(struct buffer *buf,
+- 	int sz = 0;
+- 	if(t->lac && t->lac->hostname[0]) {
+- 		strncpy(n,t->lac->hostname, sizeof(n));
+--		sz = strnlen(t->lac->hostname, sizeof(t->lac->hostname));
+-+		sz = strlen(t->lac->hostname);
+-+		if (sz > sizeof(t->lac->hostname))
+-+			sz = sizeof(t->lac->hostname);
+- 	}
+- 	else if(t->lns && t->lns->hostname[0]) {
+- 		strncpy(n,t->lns->hostname, sizeof(n));
+--		sz = strnlen(t->lns->hostname, sizeof(t->lns->hostname));
+-+		sz = strlen(t->lns->hostname);
+-+		if (sz > sizeof(t->lns->hostname))
+-+			sz = sizeof(t->lns->hostname);
+- 	}
+- 	else {
+- 		if(gethostname(n, STRLEN)) {
+- 			strcpy(n,"eriwan");
+- 			sz = 6;
+- 		}
+--		else
+--			sz = strnlen(n, sizeof(n));
+-+		else {
+-+			sz = strlen(n);
+-+			if (sz > sizeof(n))
+-+				sz = sizeof(n);
+-+		}
+- 	}
+- 	if(add_avp(buf, HOSTNAME_AVP, n, sz, 1))
+- 		return 1;
+diff --git a/package/l2tp/l2tp-sanity.patch b/package/l2tp/l2tp-sanity.patch
+deleted file mode 100644
+index 1d0533d..0000000
+--- a/package/l2tp/l2tp-sanity.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-diff -rdup l2tpd-0.70-pre20031121.oorig/avp.c l2tpd-0.70-pre20031121/avp.c
+---- l2tpd-0.70-pre20031121.oorig/avp.c	2006-12-28 16:00:26.000000000 +0100
+-+++ l2tpd-0.70-pre20031121/avp.c	2006-12-28 16:06:43.000000000 +0100
+-@@ -146,6 +146,7 @@ int validate_msgtype_avp(int attr,  stru
+- 	u_int8_t *p = data + sizeof(struct avp_hdr);
+- 	c->msgtype = get16(p);
+- 
+-+#ifdef SANITY
+-     if (t->sanity)
+-     {
+-         /*
+-@@ -293,6 +294,7 @@ int validate_msgtype_avp(int attr,  stru
+-             return -EINVAL;
+-         }
+-     }
+-+#endif
+- 	return 0;
+- }
+- 
+-@@ -301,7 +303,7 @@ int validate_gen_avp(int attr,  struct t
+- 					 void *data, int datalen) {
+- 	(void)data; (void)datalen;
+- 	int i = 0, found = 0;
+--
+-+#ifdef SANITY
+-     if(t->sanity) {
+- 		for(i = 0; i < 8; i++) {
+- 			if(c->msgtype == avps[attr].allowed_states[i])
+-@@ -310,6 +312,7 @@ int validate_gen_avp(int attr,  struct t
+- 		if(!found) 
+- 			return -EINVAL;
+- 	}
+-+#endif
+- 	return 0;
+- }
+- 
+-diff -rdup l2tpd-0.70-pre20031121.oorig/l2tpd.c l2tpd-0.70-pre20031121/l2tpd.c
+---- l2tpd-0.70-pre20031121.oorig/l2tpd.c	2006-12-28 16:00:26.000000000 +0100
+-+++ l2tpd-0.70-pre20031121/l2tpd.c	2006-12-28 16:04:15.000000000 +0100
+-@@ -748,7 +748,9 @@ struct tunnel *new_tunnel ()
+-     tmp->peer.sin_family = AF_INET;
+-     tmp->peer.sin_port = 0;
+-     bzero (&(tmp->peer.sin_addr), sizeof (tmp->peer.sin_addr));
+-+#ifdef SANITY
+-     tmp->sanity = -1;
+-+#endif
+-     tmp->qtid = -1;
+-     tmp->ourfc = ASYNC_FRAMING | SYNC_FRAMING;
+-     tmp->ourbc = 0;
+diff --git a/package/l2tp/l2tp.mk b/package/l2tp/l2tp.mk
+deleted file mode 100644
+index e8b4c79..0000000
+--- a/package/l2tp/l2tp.mk
++++ /dev/null
+@@ -1,60 +0,0 @@
+-#############################################################
+-#
+-# l2tp
+-#
+-#############################################################
+-L2TP_VERSION:=0.70-pre20031121
+-L2TP_SOURCE:=l2tpd_$(L2TP_VERSION).orig.tar.gz
+-L2TP_PATCH:=l2tpd_$(L2TP_VERSION)-2.2.diff.gz
+-L2TP_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/l2tpd/
+-L2TP_DIR:=$(BUILD_DIR)/l2tpd-$(L2TP_VERSION)
+-L2TP_CAT:=$(ZCAT)
+-L2TP_BINARY:=l2tpd
+-L2TP_TARGET_BINARY:=usr/sbin/l2tpd
+-
+-$(DL_DIR)/$(L2TP_SOURCE):
+-	$(call DOWNLOAD,$(L2TP_SITE),$(L2TP_SOURCE))
+-
+-$(DL_DIR)/$(L2TP_PATCH):
+-	$(call DOWNLOAD,$(L2TP_SITE),$(L2TP_PATCH))
+-
+-l2tp-source: $(DL_DIR)/$(L2TP_SOURCE) $(DL_DIR)/$(L2TP_PATCH)
+-
+-$(L2TP_DIR)/.unpacked: $(DL_DIR)/$(L2TP_SOURCE) $(DL_DIR)/$(L2TP_PATCH)
+-	$(L2TP_CAT) $(DL_DIR)/$(L2TP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	-mv -f $(L2TP_DIR).orig $(L2TP_DIR)
+-ifneq ($(L2TP_PATCH),)
+-	(cd $(L2TP_DIR) && $(L2TP_CAT) $(DL_DIR)/$(L2TP_PATCH) | patch -p1)
+-	if [ -d $(L2TP_DIR)/debian/patches ]; then \
+-		toolchain/patch-kernel.sh $(L2TP_DIR) $(L2TP_DIR)/debian/patches \*.patch; \
+-	fi
+-endif
+-	toolchain/patch-kernel.sh $(L2TP_DIR) package/l2tp/ l2tp\*.patch
+-	touch $(L2TP_DIR)/.unpacked
+-
+-$(L2TP_DIR)/$(L2TP_BINARY): $(L2TP_DIR)/.unpacked
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(L2TP_DIR) \
+-		DFLAGS= \
+-		OSFLAGS="-DLINUX -UUSE_KERNEL $(TARGET_CFLAGS) -USANITY"
+-
+-$(TARGET_DIR)/$(L2TP_TARGET_BINARY): $(L2TP_DIR)/$(L2TP_BINARY)
+-	cp -dpf $(L2TP_DIR)/$(L2TP_BINARY) $@
+-	cp -dpf package/l2tp/l2tpd $(TARGET_DIR)/etc/init.d/
+-	$(STRIPCMD) $@
+-
+-l2tp: $(TARGET_DIR)/$(L2TP_TARGET_BINARY)
+-
+-l2tp-clean:
+-	-$(MAKE) -C $(L2TP_DIR) clean
+-	rm -f $(TARGET_DIR)/$(L2TP_TARGET_BINARY)
+-
+-l2tp-dirclean:
+-	rm -rf $(L2TP_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_L2TP),y)
+-TARGETS+=l2tp
+-endif
+diff --git a/package/l2tp/l2tpd b/package/l2tp/l2tpd
+deleted file mode 100755
+index 8bed72d..0000000
+--- a/package/l2tp/l2tpd
++++ /dev/null
+@@ -1,27 +0,0 @@
+-#!/bin/sh
+-#
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin
+-DAEMON=/usr/sbin/l2tpd
+-PIDFILE=/var/run/l2tpd.pid
+-
+-test -f $DAEMON || exit 0
+-
+-case "$1" in
+-  start)
+-    start-stop-daemon -S  -p $PIDFILE -x $DAEMON -- -D &
+-    ;;
+-  stop)
+-    start-stop-daemon -K  -p $PIDFILE -x $DAEMON
+-    ;;
+-  restart|force-reload)
+-    start-stop-daemon -K  -p $PIDFILE -x $DAEMON 
+-    sleep 1
+-    start-stop-daemon -S  -p $PIDFILE -x $DAEMON
+-    ;;
+-  *)
+-    echo "Usage: /etc/init.d/l2tdp {start|stop|restart|force-reload}"
+-    exit 1
+-    ;;
+-esac
+-
+-exit 0
+diff --git a/package/xl2tp/Config.in b/package/xl2tp/Config.in
+new file mode 100644
+index 0000000..8f9d9b1
+--- /dev/null
++++ b/package/xl2tp/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_XL2TP
++	bool "xl2tp"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  Layer 2 Tunnelling Protocol (RFC2661).
 +
-+PPPD_MANPAGES = chat pppd pppdump pppstats
- PPPD_TARGET_BINS = chat pppd pppdump pppstats
--PPPD_MANPAGES = $(if $(BR2_HAVE_DOCUMENTATION),chat pppd pppdump pppstats)
--PPPD_MAKE = $(MAKE) CC="$(TARGET_CC)" COPTS="$(TARGET_CFLAGS)" -C $(PPPD_DIR) $(PPPD_MAKE_OPT)
++	  xl2tpd is an open source implementation of the L2TP tunneling
++	  protocol. xl2tpd is forked from l2tpd and is maintained by
++	  Xelerance Corporation.
 +
-+PPPD_STAGING_INSTALL_OPTS = BINDIR=$(STAGING_DIR)/usr/sbin \
-+		ETCDIR=$(STAGING_DIR)/etc/ppp \
-+		INCDIR=$(STAGING_DIR)/usr/include \
-+		LIBDIR=$(STAGING_DIR)/usr/lib/pppd/$(PPPD_VERSION) \
-+		MANDIR=$(STAGING_DIR)/usr/share/man/man8
++	  http://www.xelerance.com/software/xl2tpd/
+diff --git a/package/xl2tp/xl2tp-1.2.7-legacy.patch b/package/xl2tp/xl2tp-1.2.7-legacy.patch
+new file mode 100644
+index 0000000..39506d8
+--- /dev/null
++++ b/package/xl2tp/xl2tp-1.2.7-legacy.patch
+@@ -0,0 +1,14 @@
++--- l2tpd-0.70-pre20031121.oorig/osport.h	2004-07-08 22:47:52.000000000 +0200
+++++ l2tpd-0.70-pre20031121/osport.h	2006-12-28 15:32:50.000000000 +0100
++@@ -37,4 +37,11 @@
++ 
++ #endif /* defined(SOLARIS) */
++ 
+++#if defined __UCLIBC__ && !defined UCLIBC_SUSV3_LEGACY_MACROS
+++# define index(x, y)        strchr(x, y)
+++# define bcopy(S1, S2, LEN) ((void)memmove(S2, S1, LEN))
+++# define bzero(S1, LEN)     ((void)memset(S1,  0, LEN))
+++# define bcmp(S1,S2,LEN)    ((memcmp(S2, S1, LEN)==0)?0:1)
+++#endif /* defined __UCLIBC__ && !defined UCLIBC_SUSV3_LEGACY_MACROS */
+++
++ #endif /* _OSPORT_H_ */
+diff --git a/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch b/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
+new file mode 100644
+index 0000000..26ca592
+--- /dev/null
++++ b/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
+@@ -0,0 +1,30 @@
++--- xl2tp-1.2.7/Makefile-orig	2010-08-05 15:33:46.000000000 -0700
+++++ xl2tp-1.2.7/Makefile	2010-09-30 22:34:54.000000000 -0700
++@@ -90,7 +90,7 @@ OSFLAGS?= -DLINUX -I$(KERNELSRC)/include
++ 
++ IPFLAGS?= -DIP_ALLOCATION
++ 
++-CFLAGS+= $(DFLAGS) -O2 -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
+++COMPILE_FLAGS+= $(DFLAGS) -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
++ HDRS=l2tp.h avp.h misc.h control.h call.h scheduler.h file.h aaa.h md5.h
++ OBJS=xl2tpd.o pty.o misc.o control.o avp.o call.o network.o avpsend.o scheduler.o file.o aaa.o md5.o
++ SRCS=${OBJS:.o=.c} ${HDRS}
++@@ -105,6 +105,9 @@ MANDIR?=$(DESTDIR)${PREFIX}/share/man
++ 
++ all: $(EXEC) pfc
++ 
+++%.o: %.c
+++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
+++
++ clean:
++ 	rm -f $(OBJS) $(EXEC) pfc.o pfc
++ 
++@@ -112,7 +115,7 @@ $(EXEC): $(OBJS) $(HDRS)
++ 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
++ 
++ pfc:
++-	$(CC) $(CFLAGS) -c contrib/pfc.c
+++	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c contrib/pfc.c
++ 	$(CC) $(LDFLAGS) -lpcap $(LDLIBS) -o pfc pfc.o
++ 
++ romfs:
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+new file mode 100644
+index 0000000..1cbd760
+--- /dev/null
++++ b/package/xl2tp/xl2tp.mk
+@@ -0,0 +1,33 @@
++#############################################################
++#
++# xl2tp
++#
++#############################################################
++XL2TP_VERSION = 1.2.7
++XL2TP_SOURCE = xl2tpd-$(XL2TP_VERSION).tar.gz
++XL2TP_SITE = ftp://ftp.xelerance.com/xl2tpd/
 +
-+PPPD_TARGET_INSTALL_OPTS = BINDIR=$(TARGET_DIR)/usr/sbin \
-+		ETCDIR=$(TARGET_DIR)/etc/ppp \
-+		INCDIR=$(TARGET_DIR)/usr/include \
-+		LIBDIR=$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION) \
-+		MANDIR=$(TARGET_DIR)/usr/share/man/man8
- 
- ifeq ($(BR2_PACKAGE_PPPD_FILTER),y)
--	PPPD_DEPENDENCIES += libpcap
--	PPPD_MAKE_OPT += FILTER=y
-+PPPD_DEPENDENCIES += libpcap
-+else
-+define PPPD_NO_FILTER
-+	$(SED) 's/FILTER=y/#FILTER=y/' $(@D)/pppd/Makefile.linux
-+endef
- endif
- 
- ifeq ($(BR2_INET_IPV6),y)
--	PPPD_MAKE_OPT += HAVE_INET6=y
-+PPPD_MAKE_OPTS += HAVE_INET6=y
- endif
- 
--$(eval $(call AUTOTARGETS,package,pppd))
-+define PPPD_CONFIGURE_CMDS
-+	$(PPPD_NO_FILTER)
-+	(cd $(@D); \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		./configure \
-+	)
-+endef
- 
--$(PPPD_HOOK_POST_EXTRACT):
--	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
--	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	touch $@
-+define PPPD_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" $(PPPD_MAKE_OPTS) -C $(@D)
-+endef
- 
--$(PPPD_TARGET_INSTALL_TARGET):
--	$(call MESSAGE,"Installing to target")
--	for sbin in $(PPPD_TARGET_BINS); do \
--		$(INSTALL) -D $(PPPD_DIR)/$$sbin/$$sbin \
--			$(TARGET_DIR)/usr/sbin/$$sbin; \
--	done
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/minconn.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/minconn.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passprompt.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passprompt.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/passwordfd.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/passwordfd.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppoatm/pppoatm.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppoatm.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/rp-pppoe.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/rp-pppoe.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/rp-pppoe/pppoe-discovery \
--		$(TARGET_DIR)/usr/sbin/pppoe-discovery
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/winbind.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/winbind.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/openl2tp.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/openl2tp.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/pppol2tp.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppol2tp.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radattr.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radattr.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radius.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radius.so
--	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/radius/radrealms.so \
--		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/radrealms.so
-+define PPPD_INSTALL_STAGING_CMDS
-+	$(MAKE) $(PPPD_STAGING_INSTALL_OPTS) -C $(@D) install
-+	$(MAKE) $(PPPD_STAGING_INSTALL_OPTS) -C $(@D) install-etcppp
++XL2TP_DEPENDENCIES = pppd libpcap
++
++define XL2TP_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
 +endef
 +
-+define PPPD_INSTALL_TARGET_CMDS
-+	$(MAKE) $(PPPD_TARGET_INSTALL_OPTS) -C $(@D) install
-+	$(MAKE) $(PPPD_TARGET_INSTALL_OPTS) -C $(@D) install-etcppp
++define XL2TP_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
 +endef
 +
-+define PPPD_UNINSTALL_STAGING_CMDS
-+	rm -f $(addprefix $(STAGING_DIR)/usr/sbin/, $(PPPD_TARGET_BINS))
- 	for m in $(PPPD_MANPAGES); do \
--		$(INSTALL) -m 644 -D $(PPPD_DIR)/$$m/$$m.8 \
--			$(TARGET_DIR)/usr/share/man/man8/$$m.8; \
-+		rm -f $(STAGING_DIR)/usr/share/man/man8/$$m.8; \
- 	done
--	touch $@
-+	rm -rf $(STAGING_DIR)/etc/ppp
-+	rm -rf $(STAGING_DIR)/usr/include/pppd
-+	rm -rf $(STAGING_DIR)/usr/lib/pppd
-+endef
- 
--$(PPPD_TARGET_UNINSTALL):
--	$(call MESSAGE,"Uninstalling")
-+define PPPD_UNINSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(PPPD_TARGET_BINS))
--	rm -f $(TARGET_DIR)/usr/sbin/pppoe-discovery
- 	for m in $(PPPD_MANPAGES); do \
- 		rm -f $(TARGET_DIR)/usr/share/man/man8/$$m.8; \
- 	done
-+	rm -rf $(TARGET_DIR)/etc/ppp
-+	rm -rf $(TARGET_DIR)/usr/include/pppd
- 	rm -rf $(TARGET_DIR)/usr/lib/pppd
--	rm -f $(PPPD_TARGET_INSTALL_TARGET) $(PPPD_HOOK_POST_INSTALL)
++define XL2TP_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/pfc
++	rm -f $(TARGET_DIR)/usr/sbin/xl2tpd
++	rm -f $(TARGET_DIR)/usr/share/man/man1/pfc.1
++	rm -f $(TARGET_DIR)/usr/share/man/man8/xl2tpd.8
++	rm -f $(TARGET_DIR)/usr/share/man/man5/xl2tpd.conf.5
++	rm -f $(TARGET_DIR)/usr/share/man/man5/l2tp-secrets.5
 +endef
 +
-+define PPPD_CLEAN_CMDS
++define XL2TP_CLEAN_CMDS
 +	-$(MAKE) -C $(@D) clean
 +endef
 +
-+$(eval $(call GENTARGETS,package,pppd))
++$(eval $(call GENTARGETS,package,xl2tp))
+diff --git a/package/xl2tp/xl2tpd b/package/xl2tp/xl2tpd
+new file mode 100755
+index 0000000..36c12a2
+--- /dev/null
++++ b/package/xl2tp/xl2tpd
+@@ -0,0 +1,27 @@
++#!/bin/sh
++#
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
++DAEMON=/usr/sbin/xl2tpd
++PIDFILE=/var/run/xl2tpd.pid
++
++test -f $DAEMON || exit 0
++
++case "$1" in
++  start)
++    start-stop-daemon -S  -p $PIDFILE -x $DAEMON -- -D &
++    ;;
++  stop)
++    start-stop-daemon -K  -p $PIDFILE -x $DAEMON
++    ;;
++  restart|force-reload)
++    start-stop-daemon -K  -p $PIDFILE -x $DAEMON 
++    sleep 1
++    start-stop-daemon -S  -p $PIDFILE -x $DAEMON
++    ;;
++  *)
++    echo "Usage: /etc/init.d/xl2tdp {start|stop|restart|force-reload}"
++    exit 1
++    ;;
++esac
++
++exit 0
 -- 
 1.7.3
