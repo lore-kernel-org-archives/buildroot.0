@@ -1,34 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 1 Oct 2010 16:41:05 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain/gdb: fix WCHAR typo
-Message-ID: <20101001144128.796548B819@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 01 Oct 2010 16:44:14 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain: add new toolchain backend:
+	crosstool-NG
+In-Reply-To: <1284926049-9882-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Sun, 19 Sep 2010 21:54:09 +0200")
+References: <1284926049-9882-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<1284926049-9882-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87d3ruvupt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11334624c1e30d3858e15724b57178fbb93136a0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Yann> Signed-off-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gdb/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks a lot!
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index edd8715..b45de9a 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_GDB
- 	    Build the full gdb debugger to run on the target.
- 
- comment "Gdb debugger for the target needs WCHAR support in toolchain"
--	depends on !BR2_USE_WHCAR
-+	depends on !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GDB_SERVER
- 	bool "Build gdb server for the Target"
+I fixed a few minor things (Config.in should be indented with tabs, we
+normally don't use a seperate prompt ".." line, and shuffled the make
+targets around slightly so they follow the logic flow
+(download/extract/patch/configure/build/.. rather than the other way
+around).
+
+I've noticed that you're not propagating some of the toolchain options
+(like wchar) to ct-ng, but we can add that later.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
