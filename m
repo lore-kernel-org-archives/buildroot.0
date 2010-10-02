@@ -1,221 +1,233 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Sat,  2 Oct 2010 13:51:21 -0700
-Subject: [Buildroot] [PATCH 1/2] jpeg: bump to 8b
+Date: Sat,  2 Oct 2010 13:51:22 -0700
+Subject: [Buildroot] [PATCH 2/2] imagemagick: convert to autotargets and
+	bump to 6.6.4
 In-Reply-To: <1286052682-22218-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286052682-22218-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286052682-22218-2-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286052682-22218-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+program-transform-name='s,,,' is needed, otherwise configure defines it as
+$(platform)-$(cpu)-. During install, all executables are prepended with this
+variable.
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/jpeg/jpeg-build.patch   |   99 ---------------------------------------
- package/jpeg/jpeg-libtool.patch |   66 --------------------------
- package/jpeg/jpeg.mk            |    7 +--
- 3 files changed, 3 insertions(+), 169 deletions(-)
- delete mode 100644 package/jpeg/jpeg-build.patch
- delete mode 100644 package/jpeg/jpeg-libtool.patch
+ ....3.4-add-errno-h-if-argz-h-does-not-exist.patch |   11 --
+ ....6.4-add-errno-h-if-argz-h-does-not-exist.patch |   11 ++
+ package/imagemagick/imagemagick.mk                 |  148 ++------------------
+ 3 files changed, 25 insertions(+), 145 deletions(-)
+ delete mode 100644 package/imagemagick/imagemagick-6.3.4-add-errno-h-if-argz-h-does-not-exist.patch
+ create mode 100644 package/imagemagick/imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
 
-diff --git a/package/jpeg/jpeg-build.patch b/package/jpeg/jpeg-build.patch
+diff --git a/package/imagemagick/imagemagick-6.3.4-add-errno-h-if-argz-h-does-not-exist.patch b/package/imagemagick/imagemagick-6.3.4-add-errno-h-if-argz-h-does-not-exist.patch
 deleted file mode 100644
-index 9f3c5c2..0000000
---- a/package/jpeg/jpeg-build.patch
+index a11fdd2..0000000
+--- a/package/imagemagick/imagemagick-6.3.4-add-errno-h-if-argz-h-does-not-exist.patch
 +++ /dev/null
-@@ -1,99 +0,0 @@
--- Respect options from configure (bindir/libdir/etc...)
--- Grab AR from the env instead of hardcoding to 'ar'
--- Fix install to respect $(DESTDIR)
--- Also install jpegint.h #64254
--
----- jpeg/makefile.cfg
--+++ jpeg/makefile.cfg
--@@ -11,13 +11,13 @@
-- # Where to install the programs and man pages.
-- prefix = @prefix@
-- exec_prefix = @exec_prefix@
---bindir = $(exec_prefix)/bin
---libdir = $(exec_prefix)/lib
---includedir = $(prefix)/include
--+bindir = @bindir@
--+libdir = @libdir@
--+includedir = @includedir@
-- binprefix =
-- manprefix =
-- manext = 1
---mandir = $(prefix)/man/man$(manext)
--+mandir = @mandir@/man$(manext)
+@@ -1,11 +0,0 @@
+---- ImageMagick-6.3.4.old/configure	2007-05-12 05:49:25.000000000 +0200
+-+++ ImageMagick-6.3.4.new/configure	2007-05-21 16:53:32.000000000 +0200
+-@@ -9484,6 +9484,8 @@ cat >>conftest.$ac_ext <<_ACEOF
+- /* end confdefs.h.  */
+- #if HAVE_ARGZ_H
+- #  include <argz.h>
+-+#else
+-+#  include <errno.h>
+- #endif
 - 
-- # The name of your C compiler:
-- CC= @CC@
--@@ -60,7 +60,8 @@
-- # directory creation command
-- MKDIR= mkdir
-- # library (.a) file creation command
---AR= ar rc
--+AR = @AR@
--+ARFLAGS = rc
-- # second step in .a creation (use "touch" if not needed)
-- AR2= @RANLIB@
-- # installation program
--@@ -163,7 +164,7 @@
-- # without libtool:
-- libjpeg.a: @A2K_DEPS@ $(LIBOBJECTS)
-- 	$(RM) libjpeg.a
---	$(AR) libjpeg.a  $(LIBOBJECTS)
--+	$(AR) $(ARFLAGS) libjpeg.a  $(LIBOBJECTS)
-- 	$(AR2) libjpeg.a
-- 
-- # with libtool:
--@@ -191,25 +191,29 @@
-- # Installation rules:
-- 
-- install: cjpeg djpeg jpegtran rdjpgcom wrjpgcom @FORCE_INSTALL_LIB@
---	$(INSTALL_PROGRAM) cjpeg $(bindir)/$(binprefix)cjpeg
---	$(INSTALL_PROGRAM) djpeg $(bindir)/$(binprefix)djpeg
---	$(INSTALL_PROGRAM) jpegtran $(bindir)/$(binprefix)jpegtran
---	$(INSTALL_PROGRAM) rdjpgcom $(bindir)/$(binprefix)rdjpgcom
---	$(INSTALL_PROGRAM) wrjpgcom $(bindir)/$(binprefix)wrjpgcom
---	$(INSTALL_DATA) $(srcdir)/cjpeg.1 $(mandir)/$(manprefix)cjpeg.$(manext)
---	$(INSTALL_DATA) $(srcdir)/djpeg.1 $(mandir)/$(manprefix)djpeg.$(manext)
---	$(INSTALL_DATA) $(srcdir)/jpegtran.1 $(mandir)/$(manprefix)jpegtran.$(manext)
---	$(INSTALL_DATA) $(srcdir)/rdjpgcom.1 $(mandir)/$(manprefix)rdjpgcom.$(manext)
---	$(INSTALL_DATA) $(srcdir)/wrjpgcom.1 $(mandir)/$(manprefix)wrjpgcom.$(manext)
--+	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)
--+	$(INSTALL_PROGRAM) cjpeg $(DESTDIR)$(bindir)/$(binprefix)cjpeg
--+	$(INSTALL_PROGRAM) djpeg $(DESTDIR)$(bindir)/$(binprefix)djpeg
--+	$(INSTALL_PROGRAM) jpegtran $(DESTDIR)$(bindir)/$(binprefix)jpegtran
--+	$(INSTALL_PROGRAM) rdjpgcom $(DESTDIR)$(bindir)/$(binprefix)rdjpgcom
--+	$(INSTALL_PROGRAM) wrjpgcom $(DESTDIR)$(bindir)/$(binprefix)wrjpgcom
--+	$(INSTALL_DATA) $(srcdir)/cjpeg.1 $(DESTDIR)$(mandir)/$(manprefix)cjpeg.$(manext)
--+	$(INSTALL_DATA) $(srcdir)/djpeg.1 $(DESTDIR)$(mandir)/$(manprefix)djpeg.$(manext)
--+	$(INSTALL_DATA) $(srcdir)/jpegtran.1 $(DESTDIR)$(mandir)/$(manprefix)jpegtran.$(manext)
--+	$(INSTALL_DATA) $(srcdir)/rdjpgcom.1 $(DESTDIR)$(mandir)/$(manprefix)rdjpgcom.$(manext)
--+	$(INSTALL_DATA) $(srcdir)/wrjpgcom.1 $(DESTDIR)$(mandir)/$(manprefix)wrjpgcom.$(manext)
-- 
-- install-lib: libjpeg.$(A) install-headers
---	$(INSTALL_LIB) libjpeg.$(A) $(libdir)/$(binprefix)libjpeg.$(A)
--+	mkdir -p $(DESTDIR)$(libdir)
--+	$(INSTALL_LIB) libjpeg.$(A) $(DESTDIR)$(libdir)/$(binprefix)libjpeg.$(A)
-- 
-- install-headers: jconfig.h
---	$(INSTALL_DATA) jconfig.h $(includedir)/jconfig.h
---	$(INSTALL_DATA) $(srcdir)/jpeglib.h $(includedir)/jpeglib.h
---	$(INSTALL_DATA) $(srcdir)/jmorecfg.h $(includedir)/jmorecfg.h
---	$(INSTALL_DATA) $(srcdir)/jerror.h $(includedir)/jerror.h
--+	mkdir -p $(DESTDIR)$(includedir)
--+	$(INSTALL_DATA) jconfig.h $(DESTDIR)$(includedir)/jconfig.h
--+	$(INSTALL_DATA) $(srcdir)/jpegint.h $(DESTDIR)$(includedir)/jpegint.h
--+	$(INSTALL_DATA) $(srcdir)/jpeglib.h $(DESTDIR)$(includedir)/jpeglib.h
--+	$(INSTALL_DATA) $(srcdir)/jmorecfg.h $(DESTDIR)$(includedir)/jmorecfg.h
--+	$(INSTALL_DATA) $(srcdir)/jerror.h $(DESTDIR)$(includedir)/jerror.h
-- 
-- clean:
-- 	$(RM) *.o *.lo libjpeg.a libjpeg.la
----- jpeg/configure
--+++ jpeg/configure
--@@ -1777,6 +1777,7 @@
-- s%@CPP@%$CPP%g
-- s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
-- s%@INSTALL_DATA@%$INSTALL_DATA%g
--+s%@AR@%${AR-ar}%g
-- s%@RANLIB@%$RANLIB%g
-- s%@LIBTOOL@%$LIBTOOL%g
-- s%@O@%$O%g
-diff --git a/package/jpeg/jpeg-libtool.patch b/package/jpeg/jpeg-libtool.patch
-deleted file mode 100644
-index 3c4b573..0000000
---- a/package/jpeg/jpeg-libtool.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
----- jpeg/configure
--+++ jpeg/configure
--@@ -1559,7 +1559,7 @@
--   if test "x$LTSTATIC" = xno; then
--     disable_static="--disable-static"
--   fi
---  $srcdir/ltconfig $disable_shared $disable_static $srcdir/ltmain.sh
--+  $srcdir/ltconfig $disable_shared $disable_static $srcdir/ltmain.sh $CHOST
-- fi
-- 
-- # Select memory manager depending on user input.
----- jpeg/ltconfig
--+++ jpeg/ltconfig
--@@ -299,6 +299,7 @@
-- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
-- case "$host_os" in
-- linux-gnu*) ;;
--+linux-uclibc*) ;;
-- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
-- esac
-- 
--@@ -553,7 +553,9 @@
--     # On HP-UX, both CC and GCC only warn that PIC is supported... then they
--     # create non-PIC objects.  So, if there were any warnings, we assume that
--     # PIC is not supported.
--+    # Make sure we only test warnings on HP-UX (pic_flag == +Z) or we can
--+    # easily break Linux builds http://bugs.gentoo.org/70947
---    if test -s conftest.err; then
--+    if test -s conftest.err -a "$pic_flag" = "+Z"; then
--       echo "$ac_t"no 1>&6
--       can_build_shared=no
--       pic_flag=
--@@ -1210,7 +1210,6 @@
--   else
--     # Only the GNU ld.so supports shared libraries on MkLinux.
--     case "$host_cpu" in
---    powerpc*) dynamic_linker=no ;;
--     *) dynamic_linker='Linux ld.so' ;;
--     esac
--   fi
--@@ -1259,6 +1260,25 @@
--   fi
--   ;;
-- 
--+linux-uclibc*)
--+  version_type=linux
--+  need_lib_prefix=no
--+  need_version=no
--+  library_names_spec='${libname}${release}.so.$versuffix ${libname}${release}.so.$major $libname.so'
--+  soname_spec='${libname}${release}.so.$major'
--+  finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
--+  shlibpath_var=LD_LIBRARY_PATH
--+  shlibpath_overrides_runpath=no
--+  deplibs_check_method=pass_all
--+  # This implies no fast_install, which is unacceptable.
--+  # Some rework will be needed to allow for fast_install
--+  # before this can be enabled.
--+  # Note: copied from linux-gnu, and may not be appropriate.
--+  hardcode_into_libs=yes
--+  # Assume using the uClibc dynamic linker.
--+  dynamic_linker="uClibc ld.so"
--+  ;;
--+
-- netbsd* | openbsd*)
--   version_type=sunos
--   library_names_spec='${libname}${release}.so.$versuffix'
-diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
-index 4f08534..1f408a0 100644
---- a/package/jpeg/jpeg.mk
-+++ b/package/jpeg/jpeg.mk
-@@ -20,13 +20,12 @@
- # License along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- # USA
--JPEG_VERSION:=6b
--JPEG_SITE:=ftp://ftp.uu.net/graphics/jpeg/
--JPEG_SOURCE=jpegsrc.v$(JPEG_VERSION).tar.gz
-+JPEG_VERSION = 8b
-+JPEG_SITE = http://www.ijg.org/files/
-+JPEG_SOURCE = jpegsrc.v$(JPEG_VERSION).tar.gz
- JPEG_INSTALL_STAGING = YES
- JPEG_INSTALL_TARGET = YES
- JPEG_LIBTOOL_PATCH = NO
--JPEG_CONF_OPT = --without-x --enable-shared --enable-static
+- typedef error_t ac__type_new_;
+diff --git a/package/imagemagick/imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch b/package/imagemagick/imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
+new file mode 100644
+index 0000000..66a6747
+--- /dev/null
++++ b/package/imagemagick/imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
+@@ -0,0 +1,11 @@
++--- a/configure	2010-09-26 17:05:45.000000000 -0700
+++++ b/configure	2010-09-30 23:47:09.000000000 -0700
++@@ -20354,6 +20354,8 @@ done
++ 
++ ac_fn_c_check_type "$LINENO" "error_t" "ac_cv_type_error_t" "#if defined(HAVE_ARGZ_H)
++ #  include <argz.h>
+++#else
+++#  include <errno.h>
++ #endif
++ "
++ if test "x$ac_cv_type_error_t" = xyes; then :
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 9eb9d69..996abc7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -3,50 +3,21 @@
+ # imagemagick
+ #
+ #############################################################
+-IMAGEMAGICK_MAJOR:=6.4.8
+-IMAGEMAGICK_VERSION:=$(IMAGEMAGICK_MAJOR)-4
+-IMAGEMAGICK_SOURCE:=ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
+-IMAGEMAGICK_SITE:=ftp://ftp.imagemagick.org/pub/ImageMagick
+-IMAGEMAGICK_DIR:=$(BUILD_DIR)/ImageMagick-$(IMAGEMAGICK_VERSION)
+-IMAGEMAGICK_CAT:=$(BZCAT)
+-IMAGEMAGICK_LIB:=$(TARGET_DIR)/usr/lib/libMagickCore.so
++IMAGEMAGICK_MAJOR = 6.6.4
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-8
++IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
++IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
++IMAGEMAGICK_INSTALL_STAGING = YES
  
- define JPEG_REMOVE_USELESS_TOOLS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtrans rdjpgcom wrjpgcom)
+-IMAGEMAGICK_TARGET_BINARIES:=$(TARGET_DIR)/usr/bin/animate
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/compare
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/composite
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/conjure
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/display
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/import
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/mogrify
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/montage
+-IMAGEMAGICK_TARGET_BINARIES+=$(TARGET_DIR)/usr/bin/convert
+-
+-IMAGEMAGICK_COPY:=cp -df --preserve=mode,ownership
+-$(DL_DIR)/$(IMAGEMAGICK_SOURCE):
+-	$(call DOWNLOAD,$(IMAGEMAGICK_SITE),$(IMAGEMAGICK_SOURCE))
+-
+-$(IMAGEMAGICK_DIR)/.unpacked: $(DL_DIR)/$(IMAGEMAGICK_SOURCE)
+-	$(IMAGEMAGICK_CAT) $(DL_DIR)/$(IMAGEMAGICK_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(IMAGEMAGICK_DIR) package/imagemagick/ imagemagick-$(IMAGEMAGICK_VERSION)\*.patch\*
+-	$(CONFIG_UPDATE) $(IMAGEMAGICK_DIR)/config
+-	touch $@
++IMAGEMAGICK_DEPENDENCIES = jpeg tiff
+ 
+ ifeq ($(BR2_LARGEFILE),y)
+-IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=64
++IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+ else
+-IMAGEMAGICK_CONF_OPTS = ac_cv_sys_file_offset_bits=32
++IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=32
+ endif
+ 
+-$(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
+-	(cd $(IMAGEMAGICK_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
++IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+ 		--without-perl \
+ 		--without-wmf \
+ 		--without-xml \
+@@ -60,101 +31,10 @@ $(IMAGEMAGICK_DIR)/.configured: $(IMAGEMAGICK_DIR)/.unpacked
+ 		--without-gslib \
+ 		--without-fpx \
+ 		--without-freetype \
+-		--without-x \
+-		$(IMAGEMAGICK_CONF_OPTS) \
+-	)
+-	touch $@
+-
+-$(IMAGEMAGICK_DIR)/.compiled: $(IMAGEMAGICK_DIR)/.configured
+-	$(MAKE) -C $(IMAGEMAGICK_DIR)
+-	touch $@
+-
+-$(STAGING_DIR)/usr/lib/libMagickCore.a: $(IMAGEMAGICK_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(IMAGEMAGICK_DIR) install
+-	touch -c $@
+-
+-$(IMAGEMAGICK_LIB): $(STAGING_DIR)/usr/lib/libMagickCore.a
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/lib/libMagickWand.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libMagickWand.so*
+-	mkdir -p $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)
+-	$(IMAGEMAGICK_COPY) -r $(STAGING_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR) $(TARGET_DIR)/usr/lib
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/lib/libMagickCore.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(IMAGEMAGICK_LIB)*
+-	touch -c $@
+-
+-$(IMAGEMAGICK_DIR)/.libinstall: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/coders
+-	$(IMAGEMAGICK_DIR)/libtool --finish $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)/modules-Q16/filters
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/animate: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-animate $(TARGET_DIR)/usr/bin/animate
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/animate
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/compare: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-compare $(TARGET_DIR)/usr/bin/compare
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/compare
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/composite: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-composite $(TARGET_DIR)/usr/bin/composite
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/composite
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/conjure: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-conjure $(TARGET_DIR)/usr/bin/conjure
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/conjure
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/display: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-display $(TARGET_DIR)/usr/bin/display
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/display
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/import: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-import $(TARGET_DIR)/usr/bin/import
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/import
+-	touch $@
++		--without-x
+ 
+-$(TARGET_DIR)/usr/bin/mogrify: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-mogrify $(TARGET_DIR)/usr/bin/mogrify
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/mogrify
+-	touch $@
++define ICU_INSTALL_STAGING_CMDS
++	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
++endef
+ 
+-$(TARGET_DIR)/usr/bin/montage: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-montage $(TARGET_DIR)/usr/bin/montage
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/montage
+-	touch $@
+-
+-$(TARGET_DIR)/usr/bin/convert: $(IMAGEMAGICK_LIB)
+-	$(IMAGEMAGICK_COPY) $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-convert $(TARGET_DIR)/usr/bin/convert
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/convert
+-	touch $@
+-
+-imagemagick: jpeg tiff $(IMAGEMAGICK_LIB) \
+-		$(IMAGEMAGICK_DIR)/.libinstall \
+-		$(IMAGEMAGICK_TARGET_BINARIES)
+-
+-imagemagick-source: $(DL_DIR)/$(IMAGEMAGICK_SOURCE)
+-
+-imagemagick-unpacked:$(IMAGEMAGICK_DIR)/.unpacked
+-
+-imagemagick-clean:
+-	for target_binary in $(IMAGEMAGICK_TARGET_BINARIES); do \
+-		rm -f $$target_binary; \
+-	done
+-	rm -rf $(TARGET_DIR)/usr/lib/libMagick*
+-	rm -rf $(TARGET_DIR)/usr/lib/ImageMagick-$(IMAGEMAGICK_MAJOR)
+-	-$(MAKE) -C $(IMAGEMAGICK_DIR) clean
+-
+-imagemagick-dirclean:
+-	rm -rf $(IMAGEMAGICK_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
+-TARGETS+=imagemagick
+-endif
++$(eval $(call AUTOTARGETS,package,imagemagick))
 -- 
 1.7.3.1
