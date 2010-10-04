@@ -1,22 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Oct 2010 11:19:25 +0200
-Subject: [Buildroot] [PATCH] xterm: should select libXaw and bump to
-	latest version
-In-Reply-To: <20100928115214.10039.12962.stgit@localhost6.localdomain6>
-	(Paulius Zaleckas's message of "Tue, 28 Sep 2010 14:52:15 +0300")
-References: <20100928115214.10039.12962.stgit@localhost6.localdomain6>
-Message-ID: <87wrpytiw2.fsf@macbook.be.48ers.dk>
+Date: Mon, 04 Oct 2010 11:32:28 +0200
+Subject: [Buildroot] [PATCH 0/2] libeXosip2: convert to autotargets and
+	bump to 3.3.0
+In-Reply-To: <1286057184-3486-1-git-send-email-Martin.Banky@gmail.com> (Martin
+	Banky's message of "Sat, 2 Oct 2010 15:06:22 -0700")
+References: <1286057184-3486-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <87sk0mtiab.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+>>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
 
- Paulius> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+ Martin> Both patches are needed for this to work properly.
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
