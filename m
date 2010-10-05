@@ -1,36 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Oct 2010 12:08:55 +0200
-Subject: [Buildroot] [git commit master 1/1] hdparm: needs largefile support
-Message-ID: <20101005101042.40C6D8B865@busybox.osuosl.org>
+From: Konrad Eisele <konrad@gaisler.com>
+Date: Tue, 05 Oct 2010 12:48:57 +0200
+Subject: [Buildroot] Sparc Leon patches
+Message-ID: <4CAB0299.2010903@gaisler.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+H,
+I prepared 3 Sparc Leon patches. I'll send them as replay to this mail in
+a minute. In short they do the following.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1d0fae7d0226f044ffab26965213d9785deca27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+0001-config-Add-sparc-leon-processors.-Readd-V7-8-part-of.patch:
+ Add Sparc Leon processors to target config.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/hdparm/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+0003-gcc-patch-Add-patch-for-4.4.5-to-support-Sparc-leon-.patch:
+ Add support for gcc configure option --with-cpu.
 
-diff --git a/package/hdparm/Config.in b/package/hdparm/Config.in
-index 1b57439..32bd247 100644
---- a/package/hdparm/Config.in
-+++ b/package/hdparm/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_HDPARM
- 	bool "hdparm"
-+	depends on BR2_LARGEFILE
- 	help
- 	  hdparm - get/set hard disk parameters for Linux IDE drives.
- 
- 	  http://www.ibiblio.org/pub/Linux/system/hardware/
-+
-+comment "hdparm requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
--- 
-1.7.1
+0002-toolchain-Add-support-for-with-cpu.patch:
+ Add gcc patch for 4.4.5 that enables the Sparc Leon variants.
+
+I hope the formatting is ok.
+
+-- Greetings Konrad
