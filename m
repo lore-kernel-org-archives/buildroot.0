@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Oct 2010 11:17:15 +0200
-Subject: [Buildroot] [PATCH 01/10] input-tools: convert to gentargets
-In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
+Date: Tue, 5 Oct 2010 11:19:43 +0200
+Subject: [Buildroot] [PATCH 06/10] microperl: convert to gentargets
+In-Reply-To: <1286266963-23413-6-git-send-email-Martin.Banky@gmail.com>
 References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20101005111715.6559e7d2@surf>
+	<1286266963-23413-6-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20101005111943.7ed624fa@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks Martin for doing all this conversion work, this is much
-appreciated!
-
-On Tue,  5 Oct 2010 01:22:34 -0700
+On Tue,  5 Oct 2010 01:22:39 -0700
 Martin Banky <martin.banky@gmail.com> wrote:
 
-> +define INPUT_TOOLS_DEBIAN_PATCHES
-> +	if [ -d $(@D)/debian/patches ]; then \
-> +		(cd $(@D)/debian/patches && for i in *; \
-> +		 do $(SED) 's,^\+\+\+ .*joystick-$(INPUT_TOOLS_VERSION)/,+++ joystick-$(INPUT_TOOLS_VERSION)/,' $$i; \
+> +define MICROPERL_CONFIGURE_CMDS
 
-I have seen this in several of your patches, but I don't understand why
-it is here. There are several other packages that do apply the debian
-patches, but such a sed step is not needed.
+I am not a huge huge fan of this, because it's subverting the purpose
+of MICROPERL_CONFIGURE_CMDS to do a more-or-less partial build of
+microperl for the host. Do we really need such a partial build ? If so,
+shouldn't we create a host-microperl package ?
 
-> +define INPUT_TOOLS_BUILD_CMDS
-> +	$(INPUT_TOOLS_DEBIAN_PATCHES)
-
-Even though it doesn't technically make any difference, I'd prefer to
-have this as a post-patch hook.
-
-Thanks!
+Regards,
 
 Thomas
 -- 
