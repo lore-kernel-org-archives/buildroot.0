@@ -1,179 +1,292 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 01:22:34 -0700
-Subject: [Buildroot] [PATCH 01/10] input-tools: convert to gentargets
-Message-ID: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
+Date: Tue,  5 Oct 2010 01:22:35 -0700
+Subject: [Buildroot] [PATCH 02/10] lsof: convert to gentargets and bump to
+	4.84
+In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
+References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286266963-23413-2-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+An explanation is required for this package. The source for this package is an
+archive inside an archive. The gentargets makefile only extracts the first
+archive, but not the second. This causes the patch routine to fail. I hide the
+patches from the gentargets patch routine, and then extract and patch the
+second archive during the configure routine. Also, I've changed the patches to
+no longer point to the sub-directory, which is version dependent.
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../input-tools/input-tools-20051019-rint.patch    |   18 ++++
- package/input-tools/input-tools.mk                 |   97 ++++++++-----------
- package/input-tools/joystick-20051019-rint.patch   |   18 ----
- 3 files changed, 59 insertions(+), 74 deletions(-)
- create mode 100644 package/input-tools/input-tools-20051019-rint.patch
- delete mode 100644 package/input-tools/joystick-20051019-rint.patch
+ package/lsof/_lsof-4.84-makefile.patch             |   14 +++
+ package/lsof/_lsof-4.84-noportmap.patch            |   18 ++++
+ .../lsof/_lsof-4.84-remove-susvlegacy-funcs.patch  |   12 +++
+ package/lsof/lsof-makefile.patch                   |   14 ---
+ package/lsof/lsof-noportmap.patch                  |   18 ----
+ package/lsof/lsof-remove-susvlegacy-funcs.patch    |   12 ---
+ package/lsof/lsof-uclibc.patch                     |   12 ---
+ package/lsof/lsof.mk                               |   86 ++++++++-----------
+ 8 files changed, 80 insertions(+), 106 deletions(-)
+ create mode 100644 package/lsof/_lsof-4.84-makefile.patch
+ create mode 100644 package/lsof/_lsof-4.84-noportmap.patch
+ create mode 100644 package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
+ delete mode 100644 package/lsof/lsof-makefile.patch
+ delete mode 100644 package/lsof/lsof-noportmap.patch
+ delete mode 100644 package/lsof/lsof-remove-susvlegacy-funcs.patch
+ delete mode 100644 package/lsof/lsof-uclibc.patch
 
-diff --git a/package/input-tools/input-tools-20051019-rint.patch b/package/input-tools/input-tools-20051019-rint.patch
+diff --git a/package/lsof/_lsof-4.84-makefile.patch b/package/lsof/_lsof-4.84-makefile.patch
 new file mode 100644
-index 0000000..b2aa13f
+index 0000000..65b1b2e
 --- /dev/null
-+++ b/package/input-tools/input-tools-20051019-rint.patch
++++ b/package/lsof/_lsof-4.84-makefile.patch
+@@ -0,0 +1,14 @@
++diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
++--- a/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
+++++ b/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
++@@ -21,8 +21,8 @@
++ all:	${LIB}
++ 
++ ${LIB}:	${OBJ}
++-	${AR}
++-	${RANLIB}
+++	${AR} cr ${LIB} ${OBJ}
+++	${RANLIB} ${LIB}
++ 
++ clean:	FRC
++ 	rm -f ${LIB} ${OBJ} errs Makefile.bak a.out core
+diff --git a/package/lsof/_lsof-4.84-noportmap.patch b/package/lsof/_lsof-4.84-noportmap.patch
+new file mode 100644
+index 0000000..984e0d8
+--- /dev/null
++++ b/package/lsof/_lsof-4.84-noportmap.patch
 @@ -0,0 +1,18 @@
-+diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
-+--- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
-++++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
-+@@ -141,10 +141,10 @@
-+ 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
-+ 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
-+ 
-+-	results[0] = rint(a);
-+-	results[1] = rint(b);
-+-	results[2] = rint(c*16384.0);
-+-	results[3] = rint(d*16384.0);
-++	results[0] = (int) (a + 0.5);
-++	results[1] = (int) (b + 0.5);
-++	results[2] = (int) (c*16384.0 + 0.5);
-++	results[3] = (int) (d*16384.0 + 0.5);
-+ 
-+ 	return 1;
++--- a/print.c	2006-08-23 13:37:43.000000000 -0600
+++++ b/print.c	2006-08-23 13:38:29.000000000 -0600
++@@ -148,6 +148,7 @@
++ static void
++ fill_portmap()
++ {
+++#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_RPC__)
++ 	char buf[128], *cp, *nm;
++ 	CLIENT *c;
++ 	int h, port, pr;
++@@ -266,6 +267,7 @@
++ 	    Pth[pr][h] = pt;
++ 	}
++ 	clnt_destroy(c);
+++#endif
 + }
-diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
-index 9f5eb19..6553e37 100644
---- a/package/input-tools/input-tools.mk
-+++ b/package/input-tools/input-tools.mk
-@@ -3,64 +3,49 @@
- # input-tools
++ 
++ 
+diff --git a/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch b/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
+new file mode 100644
+index 0000000..fca66ae
+--- /dev/null
++++ b/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
+@@ -0,0 +1,12 @@
++diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
++--- a/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
+++++ b/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
++@@ -616,6 +616,6 @@
++  * zeromem is a macro that uses bzero or memset.
++  */
++ 
++-#define	zeromem(a, l)	bzero(a, l)
+++#define	zeromem(a, l)	memset(a, 0, l)
++ 
++ #endif	/* !defined(LSOF_MACHINE_H) */
++
+diff --git a/package/lsof/lsof-makefile.patch b/package/lsof/lsof-makefile.patch
+deleted file mode 100644
+index 2d4e9d4..0000000
+--- a/package/lsof/lsof-makefile.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+-diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
+---- lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
+-+++ lsof_4.81/lsof_4.81_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
+-@@ -21,8 +21,8 @@
+- all:	${LIB}
+- 
+- ${LIB}:	${OBJ}
+--	${AR}
+--	${RANLIB}
+-+	${AR} cr ${LIB} ${OBJ}
+-+	${RANLIB} ${LIB}
+- 
+- clean:	FRC
+- 	rm -f ${LIB} ${OBJ} errs Makefile.bak a.out core
+diff --git a/package/lsof/lsof-noportmap.patch b/package/lsof/lsof-noportmap.patch
+deleted file mode 100644
+index 4a37db4..0000000
+--- a/package/lsof/lsof-noportmap.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+---- lsof_4.81/lsof_4.81_src/print.orig.c	2006-08-23 13:37:43.000000000 -0600
+-+++ lsof_4.81/lsof_4.81_src/print.c	2006-08-23 13:38:29.000000000 -0600
+-@@ -148,6 +148,7 @@
+- static void
+- fill_portmap()
+- {
+-+#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_RPC__)
+- 	char buf[128], *cp, *nm;
+- 	CLIENT *c;
+- 	int h, port, pr;
+-@@ -266,6 +267,7 @@
+- 	    Pth[pr][h] = pt;
+- 	}
+- 	clnt_destroy(c);
+-+#endif
+- }
+- 
+- 
+diff --git a/package/lsof/lsof-remove-susvlegacy-funcs.patch b/package/lsof/lsof-remove-susvlegacy-funcs.patch
+deleted file mode 100644
+index d1d9371..0000000
+--- a/package/lsof/lsof-remove-susvlegacy-funcs.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
+---- lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
+-+++ lsof_4.81/lsof_4.81_src/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
+-@@ -616,6 +616,6 @@
+-  * zeromem is a macro that uses bzero or memset.
+-  */
+- 
+--#define	zeromem(a, l)	bzero(a, l)
+-+#define	zeromem(a, l)	memset(a, 0, l)
+- 
+- #endif	/* !defined(LSOF_MACHINE_H) */
+-
+diff --git a/package/lsof/lsof-uclibc.patch b/package/lsof/lsof-uclibc.patch
+deleted file mode 100644
+index 797a0ce..0000000
+--- a/package/lsof/lsof-uclibc.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -ru lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h
+---- lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h	2006-03-28 00:57:14.000000000 +0200
+-+++ lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
+-@@ -49,7 +49,7 @@
+- #include <unistd.h>
+- #include <netinet/in.h>
+- 
+--# if	defined(GLIBCV)
+-+# if	defined(GLIBCV) || defined __UCLIBC__
+- #include <netinet/tcp.h>
+- # else	/* !defined(GLIBCV) */
+- #include <linux/tcp.h>
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 8deff15..665ea3d 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -3,68 +3,54 @@
+ # lsof
  #
  #############################################################
-+INPUT_TOOLS_VERSION = 20051019
-+INPUT_TOOLS_SOURCE = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
-+INPUT_TOOLS_PATCH = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
-+INPUT_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
+-LSOF_VERSION:=4.81
+-LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
+-LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+-LSOF_CAT:=$(BZCAT)
+-LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
+-LSOF_BINARY:=lsof
+-LSOF_TARGET_BINARY:=bin/lsof
+-LSOF_INCLUDE:=$(STAGING_DIR)/usr/include
++LSOF_VERSION = 4.84
++LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
++LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
++LSOF_INCLUDE = $(STAGING_DIR)/usr/include
  
--INPUT_TOOLS_VERSION:=20051019
--INPUT_TOOLS_SOURCE:=joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
--INPUT_TOOLS_PATCH:=joystick_$(INPUT_TOOLS_VERSION)-2.diff.gz
--INPUT_TOOLS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
--INPUT_TOOLS_DIR:=$(BUILD_DIR)/joystick-$(INPUT_TOOLS_VERSION).orig
--INPUT_TOOLS_CAT:=$(ZCAT)
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_EVTEST) += evtest
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL) += jscal
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST) += jstest
+-BR2_LSOF_CFLAGS:=
++BR2_LSOF_CFLAGS = 
+ ifeq ($(BR2_LARGEFILE),)
+-BR2_LSOF_CFLAGS+=-U_FILE_OFFSET_BITS
++BR2_LSOF_CFLAGS += -U_FILE_OFFSET_BITS
+ endif
+ ifeq ($(BR2_INET_IPV6),)
+-BR2_LSOF_CFLAGS+=-UHASIPv6
++BR2_LSOF_CFLAGS += -UHASIPv6
+ endif
  
--INPUT_TOOLS_TARGETS-y:=
+-$(DL_DIR)/$(LSOF_SOURCE):
+-	 $(call DOWNLOAD,$(LSOF_SITE),$(LSOF_SOURCE))
 -
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_EVTEST) += evtest
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSCAL) += jscal
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSTEST) += jstest
+-lsof-source: $(DL_DIR)/$(LSOF_SOURCE)
 -
--INPUT_TOOLS_TARGETS := $(addprefix $(TARGET_DIR)/usr/bin/, $(INPUT_TOOLS_TARGETS-y))
--INPUT_TOOLS_SOURCES := $(addprefix $(INPUT_TOOLS_DIR)/utils/, \
--	$(addsuffix .c, $(INPUT_TOOLS_TARGETS-y)))
+-lsof-unpacked: $(LSOF_DIR)/.unpacked
 -
--$(DL_DIR)/$(INPUT_TOOLS_SOURCE):
--	$(call DOWNLOAD,$(INPUT_TOOLS_SITE),$(@F))
+-$(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
+-	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	(cd $(LSOF_DIR);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
+-	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
+-	touch $(LSOF_DIR)/.unpacked
 -
--$(DL_DIR)/$(INPUT_TOOLS_PATCH):
--	$(call DOWNLOAD,$(INPUT_TOOLS_SITE),$(@F))
+-$(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
+-	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" ./Configure linux)
+-	touch $(LSOF_DIR)/.configured
 -
--$(INPUT_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
--	$(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(INPUT_TOOLS_PATCH),)
--	(cd $(INPUT_TOOLS_DIR) && $(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_PATCH) | patch -p1)
-+define INPUT_TOOLS_DEBIAN_PATCHES
-+	if [ -d $(@D)/debian/patches ]; then \
-+		(cd $(@D)/debian/patches && for i in *; \
-+		 do $(SED) 's,^\+\+\+ .*joystick-$(INPUT_TOOLS_VERSION)/,+++ joystick-$(INPUT_TOOLS_VERSION)/,' $$i; \
-+		 done; \
-+		); \
-+		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
-+	fi
+-$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
+ ifeq ($(BR2_USE_WCHAR),)
+-	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
+-	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
++define LSOF_CONFIGURE_WCHAR_FIXUPS
++	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
++	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
 +endef
  endif
--	toolchain/patch-kernel.sh $(INPUT_TOOLS_DIR) package/input-tools/ \*.patch
--	touch $@
--
--$(INPUT_TOOLS_SOURCES): $(INPUT_TOOLS_DIR)/.unpacked
--
--$(INPUT_TOOLS_DIR)/utils/%: $(INPUT_TOOLS_DIR)/utils/%.c
--	$(TARGET_CC) $(TARGET_CFLAGS) -o $@ $^
--
--$(INPUT_TOOLS_TARGETS): $(TARGET_DIR)/usr/bin/%: $(INPUT_TOOLS_DIR)/utils/%
--	cp -dpf $^ $@
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
--
--input-tools: $(INPUT_TOOLS_TARGETS)
++
+ ifeq ($(BR2_ENABLE_LOCALE),)
+-	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
++define LSOF_CONFIGURE_LOCALE_FIXUPS
++	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
++endef
+ endif
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
  
--input-tools-source: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
--
--input-tools-unpacked: $(INPUT_TOOLS_DIR)/.unpacked
--
--input-tools-clean:
--	rm -f $(INPUT_TOOLS_TARGETS)
--
--input-tools-dirclean:
--	rm -rf $(INPUT_TOOLS_DIR)
+-$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY)
+-	cp $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY) $@
+-	$(STRIPCMD) $@
++define LSOF_CONFIGURE_CMDS
++	(cd $(@D);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
++	toolchain/patch-kernel.sh $(@D)/lsof_$(LSOF_VERSION)_src package/lsof \*.patch
++	(cd $(@D)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" ./Configure linux)
++	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
++	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
++endef
+ 
+-lsof: $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
++define LSOF_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(@D)/lsof_$(LSOF_VERSION)_src
++endef
+ 
+-lsof-clean:
+-	-rm -f $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
+-	-$(MAKE) -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src clean
++define LSOF_INSTALL_TARGET_CMDS
++	install -D -m 755 $(@D)/lsof_$(LSOF_VERSION)_src/lsof $(TARGET_DIR)/bin/lsof
++endef
+ 
+-lsof-dirclean:
+-	rm -rf $(LSOF_DIR)
++define LSOF_UNINSTALL_TARGET_CMDS
++	-rm -f $(TARGET_DIR)/bin/lsof
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_INPUT_TOOLS),y)
--TARGETS+=input-tools
+-ifeq ($(BR2_PACKAGE_LSOF),y)
+-TARGETS+=lsof
 -endif
-+define INPUT_TOOLS_BUILD_CMDS
-+	$(INPUT_TOOLS_DEBIAN_PATCHES)
-+	(cd $(@D)/utils; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o evtest evtest.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o inputattach inputattach.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o jscal jscal.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o jstest jstest.c; \
-+	)
++define LSOF_CLEAN_CMDS
++	-$(MAKE) -C $(@D)/lsof_$(LSOF_VERSION)_src clean
 +endef
 +
-+define INPUT_TOOLS_INSTALL_TARGET_CMDS
-+	test -z "$(INPUT_TOOLS_TARGETS_y)" || \
-+	install -m 755 $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y)) $(TARGET_DIR)/usr/bin/
-+endef
-+
-+define INPUT_TOOLS_UNINSTALL_TARGET_CMDS
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(INPUT_TOOLS_TARGETS_y))
-+endef
-+
-+define INPUT_TOOLS_CLEAN_CMDS
-+	rm -f $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y))
-+endef
-+
-+$(eval $(call GENTARGETS,package,input-tools))
-diff --git a/package/input-tools/joystick-20051019-rint.patch b/package/input-tools/joystick-20051019-rint.patch
-deleted file mode 100644
-index b2aa13f..0000000
---- a/package/input-tools/joystick-20051019-rint.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
----- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
--+++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
--@@ -141,10 +141,10 @@
-- 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
-- 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
-- 
---	results[0] = rint(a);
---	results[1] = rint(b);
---	results[2] = rint(c*16384.0);
---	results[3] = rint(d*16384.0);
--+	results[0] = (int) (a + 0.5);
--+	results[1] = (int) (b + 0.5);
--+	results[2] = (int) (c*16384.0 + 0.5);
--+	results[3] = (int) (d*16384.0 + 0.5);
-- 
-- 	return 1;
-- }
++$(eval $(call GENTARGETS,package,lsof))
 -- 
 1.7.3.1
