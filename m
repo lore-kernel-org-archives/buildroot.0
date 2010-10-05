@@ -1,10 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 01:22:41 -0700
-Subject: [Buildroot] [PATCH 08/10] alsa-utils: convert to autotargets and
-	bump to 1.0.23
+Date: Tue,  5 Oct 2010 01:22:43 -0700
+Subject: [Buildroot] [PATCH 10/10] netplug: convert to gentargets and bump
+	to 1.2.9.2
 In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286266963-23413-8-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286266963-23413-10-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,130 +13,158 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/multimedia/alsa-utils/alsa-utils.mk |   96 ++++++---------------------
- 1 files changed, 20 insertions(+), 76 deletions(-)
+ package/netplug/netplug-1.2.9-disable-werror.patch |   22 --------
+ .../netplug/netplug-1.2.9.2-makefile-flags.patch   |   21 ++++++++
+ package/netplug/netplug-socklen-type.patch         |   12 ----
+ package/netplug/netplug.mk                         |   54 ++++++--------------
+ 4 files changed, 36 insertions(+), 73 deletions(-)
+ delete mode 100644 package/netplug/netplug-1.2.9-disable-werror.patch
+ create mode 100644 package/netplug/netplug-1.2.9.2-makefile-flags.patch
+ delete mode 100644 package/netplug/netplug-socklen-type.patch
 
-diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
-index 3d1b0ef..9bac6b8 100644
---- a/package/multimedia/alsa-utils/alsa-utils.mk
-+++ b/package/multimedia/alsa-utils/alsa-utils.mk
-@@ -3,52 +3,23 @@
- # alsa-utils
+diff --git a/package/netplug/netplug-1.2.9-disable-werror.patch b/package/netplug/netplug-1.2.9-disable-werror.patch
+deleted file mode 100644
+index d8a3e15..0000000
+--- a/package/netplug/netplug-1.2.9-disable-werror.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-netplug uses nested functions, and gcc generates a warning that
+-is turned into an error:
+-
+-cc1: warnings being treated as errors
+-if_info.c: In function 'ifsm_scriptdone':
+-if_info.c:289: error: generating trampoline in object (requires executable stack)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: netplug-1.2.9/Makefile
+-===================================================================
+---- netplug-1.2.9.orig/Makefile	2010-05-09 21:07:40.000000000 +0200
+-+++ netplug-1.2.9/Makefile	2010-05-09 21:09:32.000000000 +0200
+-@@ -9,7 +9,7 @@
+- 
+- install_opts :=
+- 
+--CFLAGS += -Wall -Werror -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+-+CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+- 	-DNP_SCRIPT_DIR='"$(scriptdir)"' -ggdb3 -O3 -DNP_VERSION='"$(version)"'
+- 
+- netplugd: config.o netlink.o lib.o if_info.o main.o
+diff --git a/package/netplug/netplug-1.2.9.2-makefile-flags.patch b/package/netplug/netplug-1.2.9.2-makefile-flags.patch
+new file mode 100644
+index 0000000..b2468f8
+--- /dev/null
++++ b/package/netplug/netplug-1.2.9.2-makefile-flags.patch
+@@ -0,0 +1,21 @@
++Preserve the cflags settings, because buildroot clobbers them.
++
++--- a/Makefile	2010-10-05 00:06:38.000000000 -0700
+++++ b/Makefile	2010-10-05 00:15:27.000000000 -0700
++@@ -11,11 +11,14 @@ mandir ?= $(prefix)/usr/share/man
++ 
++ install_opts :=
++ 
++-CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+++NETPLUG_CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
++ 	-DNP_SCRIPT_DIR='"$(scriptdir)"' -ggdb3 -O3 -DNP_VERSION='"$(version)"'
++ 
+++%.o: %.c
+++	$(CC) $(NETPLUG_CFLAGS) $(CFLAGS) -c -o $@ $<
+++
++ netplugd: config.o netlink.o lib.o if_info.o main.o
++-	$(CC) $(LDFLAGS) -o $@ $^
+++	$(CC) $(LDFLAGS) -o $@ $(NETPLUG_CFLAGS) $^
++ 
++ install:
++ 	install -d $(install_opts) -m 755 \
+diff --git a/package/netplug/netplug-socklen-type.patch b/package/netplug/netplug-socklen-type.patch
+deleted file mode 100644
+index 1e36988..0000000
+--- a/package/netplug/netplug-socklen-type.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -ur netplug-1.2.9/netlink.c netplug-1.2.9-patched/netlink.c
+---- netplug-1.2.9/netlink.c	2005-01-07 23:57:09.000000000 -0600
+-+++ netplug-1.2.9-patched/netlink.c	2008-02-27 20:18:09.855767996 -0600
+-@@ -284,7 +284,7 @@
+-         exit(1);
+-     }
+- 
+--    int addr_len = sizeof(addr);
+-+    socklen_t addr_len = sizeof(addr);
+- 
+-     if (getsockname(fd, (struct sockaddr *) &addr, &addr_len) == -1) {
+-         do_log(LOG_ERR, "Could not get socket details: %m");
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index 74fa0c5..a411d86 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -3,51 +3,27 @@
+ # netplug
  #
  #############################################################
--ALSA_UTILS_VERSION:=1.0.22
--ALSA_UTILS_SOURCE:=alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
--ALSA_UTILS_SITE:=ftp://ftp.alsa-project.org/pub/utils
--ALSA_UTILS_DIR:=$(BUILD_DIR)/alsa-utils-$(ALSA_UTILS_VERSION)
--ALSA_UTILS_CAT:=$(BZCAT)
--ALSA_UTILS_BINARY:=alsactl/alsactl
--ALSA_UTILS_TARGET_BINARY:=usr/sbin/alsactl
-+ALSA_UTILS_VERSION = 1.0.23
-+ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
-+ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
-+ALSA_UTILS_INSTALL_STAGING = YES
-+ALSA_UTILS_DEPENDENCIES = alsa-lib \
-+		$(if $(BR2_PACKAGE_NCURSES),ncurses) \
-+		$(if $(BR2_PACKAGE_LIBINTL),libintl) \
-+		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-NETPLUG_VERSION=1.2.9
++NETPLUG_VERSION=1.2.9.2
+ NETPLUG_SOURCE=netplug-$(NETPLUG_VERSION).tar.bz2
+ NETPLUG_SITE=http://www.red-bean.com/~bos/netplug
+-NETPLUG_DIR=$(BUILD_DIR)/netplug-$(NETPLUG_VERSION)
+-NETPLUG_CAT:=$(BZCAT)
+-NETPLUG_BINARY:=netplugd
+-NETPLUG_TARGET_BINARY:=sbin/netplugd
  
--ALSA_UTILS_CONFIGURE_OPTS =
--ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
--ALSA_UTILS_CONFIGURE_OPTS += --disable-alsamixer --disable-alsatest
--endif
--
--$(DL_DIR)/$(ALSA_UTILS_SOURCE):
--	$(call DOWNLOAD,$(ALSA_UTILS_SITE),$(ALSA_UTILS_SOURCE))
--
--$(ALSA_UTILS_DIR)/.unpacked: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
--	$(ALSA_UTILS_CAT) $(DL_DIR)/$(ALSA_UTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/multimedia/alsa-utils/ alsa-utils-$(ALSA_UTILS_VERSION)\*.patch
--	$(CONFIG_UPDATE) $(ALSA_UTILS_DIR)
--	touch $@
-+ALSA_UTILS_CONF_ENV = ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config
- 
--$(ALSA_UTILS_DIR)/.configured: $(ALSA_UTILS_DIR)/.unpacked
--	(cd $(ALSA_UTILS_DIR); rm -f config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
--		ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		$(ALSA_UTILS_CONFIGURE_OPTS) \
--		--disable-xmlto \
--		--with-curses=ncurses \
--	)
--	touch $@
-+ALSA_UTILS_CONF_OPT = --disable-xmlto \
-+		--with-curses=ncurses
- 
--$(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY): $(ALSA_UTILS_DIR)/.configured
--	$(MAKE) CC="$(TARGET_CC)" -C $(ALSA_UTILS_DIR)
--	touch -c $@
--
--ALSA_UTILS_TARGETS_ :=
--ALSA_UTILS_TARGETS_y :=
-+ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
-+ALSA_UTILS__CONF_OPT += --disable-alsamixer --disable-alsatest
-+endif
- 
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
-@@ -65,13 +36,10 @@ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ASEQDUMP) += usr/bin/aseqdump
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ASEQNET) += usr/bin/aseqnet
- ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST) += usr/bin/speaker-test
- 
--$(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY): $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(ALSA_UTILS_DIR) install
--	mkdir -p $(TARGET_DIR)/usr/bin
--	mkdir -p $(TARGET_DIR)/usr/sbin
--	for file in $(ALSA_UTILS_TARGETS_y); do \
--		cp -dpf $(STAGING_DIR)/$$file $(TARGET_DIR)/$$file; \
--	done
-+define ALSA_UTILS_INSTALL_TARGET_CMDS
-+	test -z "$(ALSA_UTILS_INSTALL_FILES_y)" || \
-+		install -D -m 755 $(addprefix $(STAGING_DIR)/,$(ALSA_UTILS_TARGETS_y)) \
-+		$(TARGET_DIR)/usr/bin/
- 	if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ]; then \
- 		mkdir -p $(TARGET_DIR)/usr/share/alsa/speaker-test; \
- 		mkdir -p $(TARGET_DIR)/usr/share/sounds/alsa; \
-@@ -83,30 +51,6 @@ $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY): $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY
- 		rm -rf $(TARGET_DIR)/usr/share/alsa/; \
- 		cp -rdpf $(STAGING_DIR)/usr/share/alsa/ $(TARGET_DIR)/usr/share/alsa/; \
- 	fi
--	touch -c $@
--
--alsa-utils: alsa-lib $(if $(BR2_PACKAGE_NCURSES),ncurses) $(if $(BR2_PACKAGE_LIBINTL),libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
+-$(DL_DIR)/$(NETPLUG_SOURCE):
+-	$(call DOWNLOAD,$(NETPLUG_SITE),$(NETPLUG_SOURCE))
++define NETPLUG_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
 +endef
  
--alsa-utils-unpacked: $(ALSA_UTILS_DIR)/.unpacked
+-netplug-source: $(DL_DIR)/$(NETPLUG_SOURCE)
++define NETPLUG_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
+ 
+-$(NETPLUG_DIR)/.unpacked: $(DL_DIR)/$(NETPLUG_SOURCE)
+-	$(NETPLUG_CAT) $(DL_DIR)/$(NETPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(NETPLUG_DIR) package/netplug/ netplug\*.patch
+-	touch $(NETPLUG_DIR)/.unpacked
 -
--alsa-utils-source: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+-$(NETPLUG_DIR)/$(NETPLUG_BINARY): $(NETPLUG_DIR)/.unpacked
+-	$(MAKE) CC="$(TARGET_CC)" -C $(NETPLUG_DIR)
+-	$(STRIPCMD) $(NETPLUG_DIR)/$(NETPLUG_BINARY)
 -
--alsa-utils-clean:
--	for file in $(ALSA_UTILS_TARGETS_y); do \
--		rm -f $(TARGET_DIR)/$$file; \
--	done
--	for file in $(ALSA_UTILS_TARGETS_); do \
--		rm -f $(TARGET_DIR)/$$file; \
--	done
--	-$(MAKE) -C $(ALSA_UTILS_DIR) clean
+-$(TARGET_DIR)/$(NETPLUG_TARGET_BINARY): $(NETPLUG_DIR)/$(NETPLUG_BINARY)
+-	$(INSTALL) -m 644 -D $(NETPLUG_DIR)/etc/netplugd.conf $(TARGET_DIR)/etc/netplug/netplugd.conf
+-	$(INSTALL) -m 755 -D package/netplug/netplug-script $(TARGET_DIR)/etc/netplug.d/netplug
+-	$(INSTALL) -m 755 -D package/netplug/S29netplug $(TARGET_DIR)/etc/init.d
+-	$(INSTALL) -m 755 -D $(NETPLUG_DIR)/$(NETPLUG_BINARY) $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
 -
--alsa-utils-dirclean:
--	rm -rf $(ALSA_UTILS_DIR)
+-netplug: $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
+-
+-netplug-clean:
+-	rm -f $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
++define NETPLUG_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/sbin/netplugd
+ 	rm -rf $(TARGET_DIR)/etc/netplug*
+ 	rm -f $(TARGET_DIR)/etc/init.d/S*netplug
+-	-$(MAKE) -C $(NETPLUG_DIR) clean
++endef
+ 
+-netplug-dirclean:
+-	rm -rf $(NETPLUG_DIR)
++define NETPLUG_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
--TARGETS+=alsa-utils
+-ifeq ($(BR2_PACKAGE_NETPLUG),y)
+-TARGETS+=netplug
 -endif
-+$(eval $(call AUTOTARGETS,package/multimedia,alsa-utils))
++$(eval $(call GENTARGETS,package,netplug))
 -- 
 1.7.3.1
