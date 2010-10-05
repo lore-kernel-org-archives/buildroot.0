@@ -1,10 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 01:22:40 -0700
-Subject: [Buildroot] [PATCH 07/10] mii-diag: convert to gentargets and bump
-	to 2.11.3
+Date: Tue,  5 Oct 2010 01:22:41 -0700
+Subject: [Buildroot] [PATCH 08/10] alsa-utils: convert to autotargets and
+	bump to 1.0.23
 In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286266963-23413-7-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286266963-23413-8-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,102 +13,130 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/mii-diag/mii-diag.mk |   80 ++++++++++++++++--------------------------
- 1 files changed, 30 insertions(+), 50 deletions(-)
+ package/multimedia/alsa-utils/alsa-utils.mk |   96 ++++++---------------------
+ 1 files changed, 20 insertions(+), 76 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index ba01c0e..8870073 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -3,59 +3,39 @@
- # mii-diag
+diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
+index 3d1b0ef..9bac6b8 100644
+--- a/package/multimedia/alsa-utils/alsa-utils.mk
++++ b/package/multimedia/alsa-utils/alsa-utils.mk
+@@ -3,52 +3,23 @@
+ # alsa-utils
  #
  #############################################################
--MIIDIAG_VERSION:=2.11
--MIIDIAG_DEBIAN_PATCH_LEVEL:=2
--MIIDIAG_SOURCE:=mii-diag_$(MIIDIAG_VERSION).orig.tar.gz
--MIIDIAG_PATCH_FILE=mii-diag_$(MIIDIAG_VERSION)-$(MIIDIAG_DEBIAN_PATCH_LEVEL).diff.gz
--MIIDIAG_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
--MIIDIAG_DIR:=$(BUILD_DIR)/mii-diag-$(MIIDIAG_VERSION)
--MIIDIAG_CAT:=$(ZCAT)
--MIIDIAG_BINARY:=usr/sbin/mii-diag
--
--ifneq ($(MIIDIAG_PATCH_FILE),)
--MIIDIAG_PATCH=$(DL_DIR)/$(MIIDIAG_PATCH_FILE)
--$(MIIDIAG_PATCH):
--	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_PATCH_FILE))
+-ALSA_UTILS_VERSION:=1.0.22
+-ALSA_UTILS_SOURCE:=alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+-ALSA_UTILS_SITE:=ftp://ftp.alsa-project.org/pub/utils
+-ALSA_UTILS_DIR:=$(BUILD_DIR)/alsa-utils-$(ALSA_UTILS_VERSION)
+-ALSA_UTILS_CAT:=$(BZCAT)
+-ALSA_UTILS_BINARY:=alsactl/alsactl
+-ALSA_UTILS_TARGET_BINARY:=usr/sbin/alsactl
++ALSA_UTILS_VERSION = 1.0.23
++ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
++ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
++ALSA_UTILS_INSTALL_STAGING = YES
++ALSA_UTILS_DEPENDENCIES = alsa-lib \
++		$(if $(BR2_PACKAGE_NCURSES),ncurses) \
++		$(if $(BR2_PACKAGE_LIBINTL),libintl) \
++		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+-ALSA_UTILS_CONFIGURE_OPTS =
+-ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
+-ALSA_UTILS_CONFIGURE_OPTS += --disable-alsamixer --disable-alsatest
 -endif
 -
--$(DL_DIR)/$(MIIDIAG_SOURCE):
--	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_SOURCE))
+-$(DL_DIR)/$(ALSA_UTILS_SOURCE):
+-	$(call DOWNLOAD,$(ALSA_UTILS_SITE),$(ALSA_UTILS_SOURCE))
 -
--$(MIIDIAG_DIR)/.unpacked: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
--	mkdir -p $(MIIDIAG_DIR)
--	$(MIIDIAG_CAT) $(DL_DIR)/$(MIIDIAG_SOURCE) | tar --strip 1 -C $(MIIDIAG_DIR) $(TAR_OPTIONS) -
--ifneq ($(MIIDIAG_PATCH_FILE),)
--	(cd $(MIIDIAG_DIR) && $(MIIDIAG_CAT) $(MIIDIAG_PATCH) | patch -p1)
-+MII_DIAG_VERSION = 2.11
-+MII_DIAG_SOURCE = mii-diag_$(MII_DIAG_VERSION).orig.tar.gz
-+MII_DIAG_PATCH = mii-diag_$(MII_DIAG_VERSION)-3.diff.gz
-+MII_DIAG_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
-+
-+ifneq ($(MII_DIAG_PATCH),)
-+define MII_DIAG_DEBIAN_PATCHES
-+	if [ -d $(@D)/debian/patches ]; then \
-+		(cd $(@D)/debian/patches && for i in *; \
-+		 do $(SED) 's,^\+\+\+ .*mii-diag-$(MII_DIAG_VERSION)/,+++ mii-diag-$(MII_DIAG_VERSION)/,' $$i; \
-+		 done; \
-+		); \
-+		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
-+	fi
-+endef
- endif
--	toolchain/patch-kernel.sh $(MIIDIAG_DIR) package/mii-diag/ mii-diag-\*.patch*
+-$(ALSA_UTILS_DIR)/.unpacked: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+-	$(ALSA_UTILS_CAT) $(DL_DIR)/$(ALSA_UTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(ALSA_UTILS_DIR) package/multimedia/alsa-utils/ alsa-utils-$(ALSA_UTILS_VERSION)\*.patch
+-	$(CONFIG_UPDATE) $(ALSA_UTILS_DIR)
 -	touch $@
--
--$(MIIDIAG_DIR)/.configured: $(MIIDIAG_DIR)/.unpacked
++ALSA_UTILS_CONF_ENV = ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config
+ 
+-$(ALSA_UTILS_DIR)/.configured: $(ALSA_UTILS_DIR)/.unpacked
+-	(cd $(ALSA_UTILS_DIR); rm -f config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
+-		ac_cv_prog_ncurses5_config=$(STAGING_DIR)/bin/ncurses5-config \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		$(ALSA_UTILS_CONFIGURE_OPTS) \
+-		--disable-xmlto \
+-		--with-curses=ncurses \
+-	)
 -	touch $@
++ALSA_UTILS_CONF_OPT = --disable-xmlto \
++		--with-curses=ncurses
+ 
+-$(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY): $(ALSA_UTILS_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(ALSA_UTILS_DIR)
+-	touch -c $@
 -
--$(MIIDIAG_DIR)/mii-diag: $(MIIDIAG_DIR)/.configured
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR)
+-ALSA_UTILS_TARGETS_ :=
+-ALSA_UTILS_TARGETS_y :=
++ifneq ($(BR2_PACKAGE_ALSA_UTILS_ALSAMIXER),y)
++ALSA_UTILS__CONF_OPT += --disable-alsamixer --disable-alsatest
++endif
  
--$(TARGET_DIR)/$(MIIDIAG_BINARY): $(MIIDIAG_DIR)/mii-diag
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR) DESTDIR=$(TARGET_DIR) install
--	$(STRIPCMD) $@
--	touch $@
-+define MII_DIAG_BUILD_CMDS
-+	$(MII_DIAG_DEBIAN_PATCHES)
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
-+endef
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACONF) += usr/sbin/alsaconf
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ALSACTL) += usr/sbin/alsactl
+@@ -65,13 +36,10 @@ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ASEQDUMP) += usr/bin/aseqdump
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_ASEQNET) += usr/bin/aseqnet
+ ALSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST) += usr/bin/speaker-test
  
--mii-diag: $(TARGET_DIR)/$(MIIDIAG_BINARY)
-+define MII_DIAG_INSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+endef
- 
--mii-diag-source: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
-+define MII_DIAG_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/sbin/mii-diag
-+endef
- 
--mii-diag-clean:
--	-$(MAKE) -C $(MIIDIAG_DIR) clean
-+define MII_DIAG_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
- 
--mii-diag-dirclean:
--	rm -rf $(MIIDIAG_DIR)
+-$(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY): $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY)
+-	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(ALSA_UTILS_DIR) install
+-	mkdir -p $(TARGET_DIR)/usr/bin
+-	mkdir -p $(TARGET_DIR)/usr/sbin
+-	for file in $(ALSA_UTILS_TARGETS_y); do \
+-		cp -dpf $(STAGING_DIR)/$$file $(TARGET_DIR)/$$file; \
+-	done
++define ALSA_UTILS_INSTALL_TARGET_CMDS
++	test -z "$(ALSA_UTILS_INSTALL_FILES_y)" || \
++		install -D -m 755 $(addprefix $(STAGING_DIR)/,$(ALSA_UTILS_TARGETS_y)) \
++		$(TARGET_DIR)/usr/bin/
+ 	if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ]; then \
+ 		mkdir -p $(TARGET_DIR)/usr/share/alsa/speaker-test; \
+ 		mkdir -p $(TARGET_DIR)/usr/share/sounds/alsa; \
+@@ -83,30 +51,6 @@ $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY): $(ALSA_UTILS_DIR)/$(ALSA_UTILS_BINARY
+ 		rm -rf $(TARGET_DIR)/usr/share/alsa/; \
+ 		cp -rdpf $(STAGING_DIR)/usr/share/alsa/ $(TARGET_DIR)/usr/share/alsa/; \
+ 	fi
+-	touch -c $@
 -
+-alsa-utils: alsa-lib $(if $(BR2_PACKAGE_NCURSES),ncurses) $(if $(BR2_PACKAGE_LIBINTL),libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(TARGET_DIR)/$(ALSA_UTILS_TARGET_BINARY)
++endef
+ 
+-alsa-utils-unpacked: $(ALSA_UTILS_DIR)/.unpacked
+-
+-alsa-utils-source: $(DL_DIR)/$(ALSA_UTILS_SOURCE)
+-
+-alsa-utils-clean:
+-	for file in $(ALSA_UTILS_TARGETS_y); do \
+-		rm -f $(TARGET_DIR)/$$file; \
+-	done
+-	for file in $(ALSA_UTILS_TARGETS_); do \
+-		rm -f $(TARGET_DIR)/$$file; \
+-	done
+-	-$(MAKE) -C $(ALSA_UTILS_DIR) clean
+-
+-alsa-utils-dirclean:
+-	rm -rf $(ALSA_UTILS_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_MIIDIAG),y)
--TARGETS+=mii-diag
+-ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
+-TARGETS+=alsa-utils
 -endif
-+$(eval $(call GENTARGETS,package,mii-diag))
++$(eval $(call AUTOTARGETS,package/multimedia,alsa-utils))
 -- 
 1.7.3.1
