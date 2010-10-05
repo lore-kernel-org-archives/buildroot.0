@@ -1,375 +1,198 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 01:22:38 -0700
-Subject: [Buildroot] [PATCH 05/10] microcom: convert to gentargets
+Date: Tue,  5 Oct 2010 01:22:39 -0700
+Subject: [Buildroot] [PATCH 06/10] microperl: convert to gentargets
 In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286266963-23413-5-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286266963-23413-6-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The microcom archive is a flat archive, so the Makefile.package.in extract
-function fails to extract any files. The $(TAR_STRIP_COMPONENTS)=1 seems to
-strip the file names off.
-
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../microcom/-microcom-102-001-speed-defines.patch |   34 ++++++++
- .../-microcom-102-002-rename-variable-log.patch    |   78 +++++++++++++++++++
- .../microcom/microcom-102-001-speed-defines.patch  |   34 --------
- .../microcom-102-002-rename-variable-log.patch     |   78 -------------------
- package/microcom/microcom.mk                       |   80 +++++--------------
- 5 files changed, 133 insertions(+), 171 deletions(-)
- create mode 100644 package/microcom/-microcom-102-001-speed-defines.patch
- create mode 100644 package/microcom/-microcom-102-002-rename-variable-log.patch
- delete mode 100644 package/microcom/microcom-102-001-speed-defines.patch
- delete mode 100644 package/microcom/microcom-102-002-rename-variable-log.patch
+ package/microperl/microperl.mk |  145 ++++++++++++++-------------------------
+ 1 files changed, 52 insertions(+), 93 deletions(-)
 
-diff --git a/package/microcom/-microcom-102-001-speed-defines.patch b/package/microcom/-microcom-102-001-speed-defines.patch
-new file mode 100644
-index 0000000..b9aece8
---- /dev/null
-+++ b/package/microcom/-microcom-102-001-speed-defines.patch
-@@ -0,0 +1,34 @@
-+diff -rdup microcom-1.02.orig/help.c microcom-1.02/help.c
-+--- microcom-1.02.orig/help.c	2000-07-30 06:15:47.000000000 +0200
-++++ microcom-1.02/help.c	2007-01-19 19:44:19.000000000 +0100
-+@@ -273,12 +273,29 @@ static void help_set_speed(int fd, char 
-+     B19200,
-+     B38400,
-+     B57600,
-++#if defined B115200
-+     B115200,
-++#endif
-++#if defined B230400
-+     B230400,
-++#endif
-++#if defined B460800
-+     B460800
-++#endif
-+   };
-++#undef __STOPCHAR
-++#if defined B115200
-++#define __STOPCHAR 'h'
-++#endif
-++#if defined B230400
-++#define __STOPCHAR 'i'
-++#endif
-++#if defined B460800
-++#define __STOPCHAR 'j'
-++#endif
-+ 
-+-  if (c < 'a' && c > 'j') {
-++
-++  if (c < 'a' && c > __STOPCHAR) {
-+     if (c == '~') {
-+       help_speed();
-+       return;
-diff --git a/package/microcom/-microcom-102-002-rename-variable-log.patch b/package/microcom/-microcom-102-002-rename-variable-log.patch
-new file mode 100644
-index 0000000..8516b56
---- /dev/null
-+++ b/package/microcom/-microcom-102-002-rename-variable-log.patch
-@@ -0,0 +1,78 @@
-+diff -rdup microcom-1.02.speed/help.c microcom-1.02/help.c
-+--- microcom-1.02.speed/help.c	2007-01-19 19:44:19.000000000 +0100
-++++ microcom-1.02/help.c	2007-01-19 19:48:20.000000000 +0100
-+@@ -23,7 +23,7 @@ extern int crnl_mapping; //0 - no mappin
-+ extern int script; /* script active flag */
-+ extern char scr_name[MAX_SCRIPT_NAME]; /* default name of the script */
-+ extern char device[MAX_DEVICE_NAME]; /* serial device name */
-+-extern int log; /* log active flag */
-++extern int log_active; /* log active flag */
-+ extern FILE* flog;   /* log file */
-+ 
-+ static int help_state = 0;
-+@@ -85,7 +85,7 @@ static void help_escape(void) {
-+ 
-+   write(STDOUT_FILENO, str1, strlen(str1));
-+ 
-+-  if (log == 0)
-++  if (log_active == 0)
-+     write(STDOUT_FILENO, "  l - log on             \n", 26);
-+   else
-+     write(STDOUT_FILENO, "  l - log off            \n", 26);
-+@@ -156,11 +156,11 @@ static void help_send_escape(int fd, cha
-+   case 'q': /* quit help */
-+     break;
-+   case 'l': /* log on/off */
-+-    log = (log == 0)? 1: 0;
-+-    if (log) { /* open log file */
-++    log_active = (log_active == 0)? 1: 0;
-++    if (log_active) { /* open log file */
-+       if ((flog = fopen("microcom.log", "a")) == (FILE *)0) {
-+ 	write(STDOUT_FILENO, "Cannot open microcom.log \n", 26);
-+-	log = 0;
-++	log_active = 0;
-+       }
-+     }
-+     else { /* cloase log file */
-+diff -rdup microcom-1.02.speed/microcom.c microcom-1.02/microcom.c
-+--- microcom-1.02.speed/microcom.c	2000-08-27 17:22:47.000000000 +0200
-++++ microcom-1.02/microcom.c	2007-01-19 19:48:37.000000000 +0100
-+@@ -25,7 +25,7 @@ int crnl_mapping; //0 - no mapping, 1 ma
-+ int script = 0; /* script active flag */
-+ char scr_name[MAX_SCRIPT_NAME] = "script.scr"; /* default name of the script */
-+ char device[MAX_DEVICE_NAME]; /* serial device name */
-+-int log = 0; /* log active flag */
-++int log_active = 0; /* log active flag */
-+ FILE* flog;   /* log file */
-+ int  pf = 0;  /* port file descriptor */
-+ struct termios pots; /* old port termios settings to restore */
-+@@ -106,7 +106,7 @@ void main_usage(int exitcode, char *str,
-+ /* restore original terminal settings on exit */
-+ void cleanup_termios(int signal) {
-+   /* cloase the log file first */
-+-  if (log) {
-++  if (log_active) {
-+     fflush(flog);
-+     fclose(flog);
-+   }
-+diff -rdup microcom-1.02.speed/mux.c microcom-1.02/mux.c
-+--- microcom-1.02.speed/mux.c	2000-07-30 06:15:47.000000000 +0200
-++++ microcom-1.02/mux.c	2007-01-19 19:48:48.000000000 +0100
-+@@ -24,7 +24,7 @@
-+ 
-+ extern int script;
-+ extern char scr_name[];
-+-extern int log;
-++extern int log_active;
-+ extern FILE* flog;
-+ 
-+ void mux_clear_sflag(void) {
-+@@ -71,7 +71,7 @@ void mux_loop(int pf) {
-+       i = read(pf, buf, BUFSIZE);
-+       if (i > 0) {
-+ 	write(STDOUT_FILENO, buf, i);
-+-	if (log)
-++	if (log_active)
-+ 	  fwrite(buf, 1, i, flog);
-+ 	if (script) {
-+ 	  i = script_process(S_DCE, buf, i);
-diff --git a/package/microcom/microcom-102-001-speed-defines.patch b/package/microcom/microcom-102-001-speed-defines.patch
-deleted file mode 100644
-index b9aece8..0000000
---- a/package/microcom/microcom-102-001-speed-defines.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--diff -rdup microcom-1.02.orig/help.c microcom-1.02/help.c
----- microcom-1.02.orig/help.c	2000-07-30 06:15:47.000000000 +0200
--+++ microcom-1.02/help.c	2007-01-19 19:44:19.000000000 +0100
--@@ -273,12 +273,29 @@ static void help_set_speed(int fd, char 
--     B19200,
--     B38400,
--     B57600,
--+#if defined B115200
--     B115200,
--+#endif
--+#if defined B230400
--     B230400,
--+#endif
--+#if defined B460800
--     B460800
--+#endif
--   };
--+#undef __STOPCHAR
--+#if defined B115200
--+#define __STOPCHAR 'h'
--+#endif
--+#if defined B230400
--+#define __STOPCHAR 'i'
--+#endif
--+#if defined B460800
--+#define __STOPCHAR 'j'
--+#endif
-- 
---  if (c < 'a' && c > 'j') {
--+
--+  if (c < 'a' && c > __STOPCHAR) {
--     if (c == '~') {
--       help_speed();
--       return;
-diff --git a/package/microcom/microcom-102-002-rename-variable-log.patch b/package/microcom/microcom-102-002-rename-variable-log.patch
-deleted file mode 100644
-index 8516b56..0000000
---- a/package/microcom/microcom-102-002-rename-variable-log.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--diff -rdup microcom-1.02.speed/help.c microcom-1.02/help.c
----- microcom-1.02.speed/help.c	2007-01-19 19:44:19.000000000 +0100
--+++ microcom-1.02/help.c	2007-01-19 19:48:20.000000000 +0100
--@@ -23,7 +23,7 @@ extern int crnl_mapping; //0 - no mappin
-- extern int script; /* script active flag */
-- extern char scr_name[MAX_SCRIPT_NAME]; /* default name of the script */
-- extern char device[MAX_DEVICE_NAME]; /* serial device name */
---extern int log; /* log active flag */
--+extern int log_active; /* log active flag */
-- extern FILE* flog;   /* log file */
-- 
-- static int help_state = 0;
--@@ -85,7 +85,7 @@ static void help_escape(void) {
-- 
--   write(STDOUT_FILENO, str1, strlen(str1));
-- 
---  if (log == 0)
--+  if (log_active == 0)
--     write(STDOUT_FILENO, "  l - log on             \n", 26);
--   else
--     write(STDOUT_FILENO, "  l - log off            \n", 26);
--@@ -156,11 +156,11 @@ static void help_send_escape(int fd, cha
--   case 'q': /* quit help */
--     break;
--   case 'l': /* log on/off */
---    log = (log == 0)? 1: 0;
---    if (log) { /* open log file */
--+    log_active = (log_active == 0)? 1: 0;
--+    if (log_active) { /* open log file */
--       if ((flog = fopen("microcom.log", "a")) == (FILE *)0) {
-- 	write(STDOUT_FILENO, "Cannot open microcom.log \n", 26);
---	log = 0;
--+	log_active = 0;
--       }
--     }
--     else { /* cloase log file */
--diff -rdup microcom-1.02.speed/microcom.c microcom-1.02/microcom.c
----- microcom-1.02.speed/microcom.c	2000-08-27 17:22:47.000000000 +0200
--+++ microcom-1.02/microcom.c	2007-01-19 19:48:37.000000000 +0100
--@@ -25,7 +25,7 @@ int crnl_mapping; //0 - no mapping, 1 ma
-- int script = 0; /* script active flag */
-- char scr_name[MAX_SCRIPT_NAME] = "script.scr"; /* default name of the script */
-- char device[MAX_DEVICE_NAME]; /* serial device name */
---int log = 0; /* log active flag */
--+int log_active = 0; /* log active flag */
-- FILE* flog;   /* log file */
-- int  pf = 0;  /* port file descriptor */
-- struct termios pots; /* old port termios settings to restore */
--@@ -106,7 +106,7 @@ void main_usage(int exitcode, char *str,
-- /* restore original terminal settings on exit */
-- void cleanup_termios(int signal) {
--   /* cloase the log file first */
---  if (log) {
--+  if (log_active) {
--     fflush(flog);
--     fclose(flog);
--   }
--diff -rdup microcom-1.02.speed/mux.c microcom-1.02/mux.c
----- microcom-1.02.speed/mux.c	2000-07-30 06:15:47.000000000 +0200
--+++ microcom-1.02/mux.c	2007-01-19 19:48:48.000000000 +0100
--@@ -24,7 +24,7 @@
-- 
-- extern int script;
-- extern char scr_name[];
---extern int log;
--+extern int log_active;
-- extern FILE* flog;
-- 
-- void mux_clear_sflag(void) {
--@@ -71,7 +71,7 @@ void mux_loop(int pf) {
--       i = read(pf, buf, BUFSIZE);
--       if (i > 0) {
-- 	write(STDOUT_FILENO, buf, i);
---	if (log)
--+	if (log_active)
-- 	  fwrite(buf, 1, i, flog);
-- 	if (script) {
-- 	  i = script_process(S_DCE, buf, i);
-diff --git a/package/microcom/microcom.mk b/package/microcom/microcom.mk
-index f691723..729230e 100644
---- a/package/microcom/microcom.mk
-+++ b/package/microcom/microcom.mk
-@@ -2,70 +2,32 @@
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index bf76fa7..5b18606 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -3,122 +3,81 @@
+ # microperl
  #
- # microcom terminal emulator
- #
--# Maintainer: Tim Riker <Tim@Rikers.org>
--#
  #############################################################
--# Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
--# Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
--#
--# This program is free software; you can redistribute it and/or modify
--# it under the terms of the GNU Library General Public License as
--# published by the Free Software Foundation; either version 2 of the
--# License, or (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful, but
--# WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
--# Library General Public License for more details.
--#
--# You should have received a copy of the GNU Library General Public
--# License along with this program; if not, write to the Free Software
--# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
--# USA
--
--# TARGETS
--# http://microcom.port5.com/m102.tar.gz
--MICROCOM_VERSION:=1.02
--MICROCOM_SITE:=http://buildroot.net/downloads/sources/
--MICROCOM_SOURCE:=m102.tar.gz
--MICROCOM_DIR:=$(BUILD_DIR)/microcom-$(MICROCOM_VERSION)
--
--$(DL_DIR)/$(MICROCOM_SOURCE):
--	$(call DOWNLOAD,$(MICROCOM_SITE),$(MICROCOM_SOURCE))
--
--microcom-source: $(DL_DIR)/$(MICROCOM_SOURCE)
-+MICROCOM_VERSION = 1.02
-+MICROCOM_SOURCE = m102.tar.gz
-+MICROCOM_SITE = http://sources.buildroot.net
+-MICROPERL_MAJ=5
+-MICROPERL_VERSION=$(MICROPERL_MAJ).8.8
++MICROPERL_VERSION=5.8.8
+ MICROPERL_SOURCE=perl-$(MICROPERL_VERSION).tar.bz2
+-MICROPERL_CAT:=$(BZCAT)
+ MICROPERL_SITE=ftp://ftp.cpan.org/pub/CPAN/src/5.0
+-MICROPERL_DIR=$(BUILD_DIR)/perl-$(MICROPERL_VERSION)
  
--$(MICROCOM_DIR)/.unpacked: $(DL_DIR)/$(MICROCOM_SOURCE)
--	mkdir -p $(MICROCOM_DIR)
--	$(ZCAT) $(DL_DIR)/$(MICROCOM_SOURCE) | tar -C $(MICROCOM_DIR) $(TAR_OPTIONS) -
-+define MICROCOM_CONFIGURE_CMDS
-+	$(ZCAT) $(DL_DIR)/$(MICROCOM_SOURCE) | tar -C $(@D) $(TAR_OPTIONS) -
- 	toolchain/patch-kernel.sh $(MICROCOM_DIR) package/microcom/ \*.patch
+-MICROPERL_MODS_DIR=/usr/lib/perl$(MICROPERL_MAJ)/$(MICROPERL_VERSION)
++MICROPERL_MODS_DIR=/usr/lib/perl5/$(MICROPERL_VERSION)
+ MICROPERL_MODS=$(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
++
+ ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
+ MICROPERL_MODS+=File/Basename.pm Errno.pm Config.pm IO/File.pm Symbol.pm \
+ 	SelectSaver.pm IO/Seekable.pm IO/Handle.pm IO.pm XSLoader.pm \
+ 	DynaLoader.pm AutoLoader.pm Carp/Heavy.pm
+ endif
+-$(DL_DIR)/$(MICROPERL_SOURCE):
+-	$(call DOWNLOAD,$(MICROPERL_SITE),$(MICROPERL_SOURCE))
+ 
+-$(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+-	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++define MICROPERL_CONFIGURE_CMDS
+ 	# makedepend contains bashisms
+ 	$(SED) 's~sh ./makedepend~bash ./makedepend~' \
+-		$(MICROPERL_DIR)/Makefile.SH \
+-		$(MICROPERL_DIR)/x2p/Makefile.SH \
+-		$(MICROPERL_DIR)/pod/Makefile.SH
+-	chmod -R u+w $(MICROPERL_DIR)
 -	touch $@
-+	$(SED) 's~gcc~$$(CC)~' -e 's~-O~$$(CFLAGS)~' $(@D)/Makefile
+-
+-$(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
++		$(@D)/Makefile.SH \
++		$(@D)/x2p/Makefile.SH \
++		$(@D)/pod/Makefile.SH
++	chmod -R u+w $(@D)
+ 	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); ./Configure -Dcc=$(HOSTCC) -de  )
+-	touch $@
+-
+-
+-$(MICROPERL_DIR)/.host_configured_and_fixed: $(MICROPERL_DIR)/.host_configured
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/Makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/Makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/makefile
+-	touch $@
+-
+-$(MICROPERL_DIR)/.host_make: $(MICROPERL_DIR)/.host_configured_and_fixed
+-	$(MAKE) -C $(MICROPERL_DIR)		|| echo "An error is expected on make"
+-	touch $@
+-
+-$(MICROPERL_DIR)/.host_make_fixed: $(MICROPERL_DIR)/.host_make
+-	$(MAKE) -C $(MICROPERL_DIR) test	|| echo "An error is expected on make test"
+-	touch $@
+-
+-$(MICROPERL_DIR)/.configured: $(MICROPERL_DIR)/.host_make_fixed
++	(cd $(@D); ./Configure -Dcc=$(HOSTCC) -de  )
++	$(SED) 's/^.*<command-line>.*//g' $(@D)/Makefile
++	$(SED) 's/^.*<command-line>.*//g' $(@D)/x2p/Makefile
++	$(SED) 's/^.*<command-line>.*//g' $(@D)/makefile
++	$(SED) 's/^.*<command-line>.*//g' $(@D)/x2p/makefile
++endef
++
++define MICROPERL_BUILD_CMDS
++	$(MAKE) -C $(@D)		|| echo "An error is expected on make"
++	$(MAKE) -C $(@D) test	|| echo "An error is expected on make test"
+ 	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); \
+-	 chmod a+x ext/util/make_ext; \
+-	 ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))" \
++	(cd $(@D); \
++		chmod a+x ext/util/make_ext; \
++		ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))" \
+ 	)
+-	(cd $(MICROPERL_DIR); \
+-	 chmod u+w uconfig.h; ./uconfig.sh; \
+-	 $(MAKE) -f $(MICROPERL_DIR)/Makefile.micro regen_uconfig; \
+-	 $(SED) 's,PRIVLIB ".*,PRIVLIB "/$(MICROPERL_MODS_DIR)",' \
+-		 -e 's,PRIVLIB_EXP ".*,PRIVLIB_EXP "$(MICROPERL_MODS_DIR)",' \
+-		 -e 's,BIN ".*,BIN "/usr/bin",' \
+-		 ./uconfig.h; \
++	(cd $(@D); \
++		chmod u+w uconfig.h; ./uconfig.sh; \
++		$(MAKE) -f $(@D)/Makefile.micro regen_uconfig; \
++		$(SED) 's,PRIVLIB ".*,PRIVLIB "/$(MICROPERL_MODS_DIR)",' \
++			-e 's,PRIVLIB_EXP ".*,PRIVLIB_EXP "$(MICROPERL_MODS_DIR)",' \
++			-e 's,BIN ".*,BIN "/usr/bin",' \
++			./uconfig.h; \
+ 	)
+-	touch $@
+-
+-$(MICROPERL_DIR)/microperl: $(MICROPERL_DIR)/.configured
+-	$(MAKE) -f $(MICROPERL_DIR)/Makefile.micro CC="$(TARGET_CC)" \
+-		OPTIMIZE="$(TARGET_CFLAGS)" -C $(MICROPERL_DIR)
+-ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
+-	#(cd $(@D); \
+-	# CONFIG=uconfig.h $(SHELL) ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))"; \
+-	#)
+-endif
++	$(MAKE) -f $(@D)/Makefile.micro CC="$(TARGET_CC)" \
++		OPTIMIZE="$(TARGET_CFLAGS)" -C $(@D)
 +endef
  
--$(MICROCOM_DIR)/.configured: $(MICROCOM_DIR)/.unpacked
--	$(SED) 's~gcc~$$(CC)~' -e 's~-O~$$(CFLAGS)~' $(MICROCOM_DIR)/Makefile
--	touch $@
-+define MICROCOM_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+-$(TARGET_DIR)/usr/bin/microperl: $(MICROPERL_DIR)/microperl
+ ifneq ($(MICROPERL_MODS),)
+-	(cd $(MICROPERL_DIR); \
+-	 for i in $(patsubst %,$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/%,$(dir $(MICROPERL_MODS))); do \
+-		[ -d $$i ] || mkdir -p $$i; \
+-	 done; \
+-	 for i in $(MICROPERL_MODS); do \
+-	 cp -dpf $(MICROPERL_DIR)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+-	 done; \
++define MICROPERL_INSTALL_MODS
++	(cd $(@D); \
++		for i in $(patsubst %,$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/%,$(dir $(MICROPERL_MODS))); do \
++			[ -d $$i ] || mkdir -p $$i; \
++		done; \
++		for i in $(MICROPERL_MODS); do \
++			install -D -m 644 $(@D)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
++		done; \
+ 	)
 +endef
- 
--$(MICROCOM_DIR)/microcom: $(MICROCOM_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(MICROCOM_DIR)
+ endif
+-	cp -dpf $(MICROPERL_DIR)/microperl $@
+-ifneq ($(BR2_STRIP_none),y)
 -	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
-+define MICROCOM_INSTALL_TARGET_CMDS
-+	install -D -m 755 $(@D)/microcom $(TARGET_DIR)/usr/bin/microcom
-+endef
+-endif
+-	(cd $(TARGET_DIR)/usr/bin; rm -f perl; ln -s microperl perl;)
  
--$(TARGET_DIR)/usr/bin/microcom: $(MICROCOM_DIR)/microcom
--	install -c $(MICROCOM_DIR)/microcom $(TARGET_DIR)/usr/bin/microcom
-+define MICROCOM_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/microcom
-+endef
- 
--microcom-clean:
--	rm -f $(MICROCOM_DIR)/*.o $(MICROCOM_DIR)/microcom \
--		$(TARGET_DIR)/usr/bin/microcom
-+define MICROCOM_CLEAN_CMDS
-+	rm -f $(@D)/*.o
-+endef
- 
--microcom-dirclean:
--	rm -rf $(MICROCOM_DIR)
+-microperl: $(TARGET_DIR)/usr/bin/microperl
 -
--microcom: $(TARGET_DIR)/usr/bin/microcom
+-microperl-source: $(DL_DIR)/$(MICROPERL_SOURCE)
 -
+-microperl-unpacked: $(MICROPERL_DIR)/.source
+-
+-microperl-config: $(MICROPERL_DIR)/.host_configured
+-
+-microperl-host: $(MICROPERL_DIR)/.host_make
+-
+-microperl-host-fixed: $(MICROPERL_DIR)/.host_make_fixed
++define MICROPERL_INSTALL_TARGET_CMDS
++	$(MICROPERL_INSTALL_MODS)
++	install -D -m 755 $(@D)/microperl $(TARGET_DIR)/usr/bin/microperl
++	(cd $(TARGET_DIR)/usr/bin; rm -f perl; ln -s microperl perl;)
++endef
+ 
+-microperl-clean:
++define MICROPERL_UNINSTALL_TARGET_CMDS
+ 	rm -rf $(TARGET_DIR)/usr/bin/microperl \
+ 		$(TARGET_DIR)/$(MICROPERL_MODS_DIR) $(TARGET_DIR)/usr/bin/perl
+-	-rmdir $(TARGET_DIR)/usr/lib/perl$(MICROPERL_MAJ)
+-	-$(MAKE) -C $(MICROPERL_DIR) -f Makefile.micro clean
++	-rmdir $(TARGET_DIR)/usr/lib/perl5
++endef
+ 
+-microperl-dirclean:
+-	rm -rf $(MICROPERL_DIR)
++define MICROPERL_CLEAN_CMDS
++	-$(MAKE) -C $(@D) -f Makefile.micro clean
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_MICROCOM),y)
--TARGETS+=microcom
+-ifeq ($(BR2_PACKAGE_MICROPERL),y)
+-TARGETS+=microperl
 -endif
-+$(eval $(call GENTARGETS,package,microcom))
++$(eval $(call GENTARGETS,package,microperl))
 -- 
 1.7.3.1
