@@ -1,9 +1,10 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 13:04:36 -0700
-Subject: [Buildroot] [PATCH 1/2] input-tools: convert to gentargets
+Date: Tue,  5 Oct 2010 13:04:37 -0700
+Subject: [Buildroot] [PATCH 2/2] mii-diag: convert to gentargets and bump to
+	2.11.3
 In-Reply-To: <1286309077-26567-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286309077-26567-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286309077-26567-2-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286309077-26567-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,166 +13,102 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../input-tools/input-tools-20051019-rint.patch    |   18 ++++
- package/input-tools/input-tools.mk                 |   88 ++++++++-----------
- package/input-tools/joystick-20051019-rint.patch   |   18 ----
- 3 files changed, 55 insertions(+), 69 deletions(-)
- create mode 100644 package/input-tools/input-tools-20051019-rint.patch
- delete mode 100644 package/input-tools/joystick-20051019-rint.patch
+ package/mii-diag/mii-diag.mk |   79 ++++++++++++++++--------------------------
+ 1 files changed, 30 insertions(+), 49 deletions(-)
 
-diff --git a/package/input-tools/input-tools-20051019-rint.patch b/package/input-tools/input-tools-20051019-rint.patch
-new file mode 100644
-index 0000000..b2aa13f
---- /dev/null
-+++ b/package/input-tools/input-tools-20051019-rint.patch
-@@ -0,0 +1,18 @@
-+diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
-+--- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
-++++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
-+@@ -141,10 +141,10 @@
-+ 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
-+ 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
-+ 
-+-	results[0] = rint(a);
-+-	results[1] = rint(b);
-+-	results[2] = rint(c*16384.0);
-+-	results[3] = rint(d*16384.0);
-++	results[0] = (int) (a + 0.5);
-++	results[1] = (int) (b + 0.5);
-++	results[2] = (int) (c*16384.0 + 0.5);
-++	results[3] = (int) (d*16384.0 + 0.5);
-+ 
-+ 	return 1;
-+ }
-diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
-index 9f5eb19..d4decc0 100644
---- a/package/input-tools/input-tools.mk
-+++ b/package/input-tools/input-tools.mk
-@@ -3,64 +3,50 @@
- # input-tools
+diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+index ba01c0e..8d946ae 100644
+--- a/package/mii-diag/mii-diag.mk
++++ b/package/mii-diag/mii-diag.mk
+@@ -3,59 +3,40 @@
+ # mii-diag
  #
  #############################################################
-+INPUT_TOOLS_VERSION = 20051019
-+INPUT_TOOLS_SOURCE = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
-+INPUT_TOOLS_PATCH = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
-+INPUT_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
- 
--INPUT_TOOLS_VERSION:=20051019
--INPUT_TOOLS_SOURCE:=joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
--INPUT_TOOLS_PATCH:=joystick_$(INPUT_TOOLS_VERSION)-2.diff.gz
--INPUT_TOOLS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
--INPUT_TOOLS_DIR:=$(BUILD_DIR)/joystick-$(INPUT_TOOLS_VERSION).orig
--INPUT_TOOLS_CAT:=$(ZCAT)
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_EVTEST) += evtest
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL) += jscal
-+INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST) += jstest
- 
--INPUT_TOOLS_TARGETS-y:=
+-MIIDIAG_VERSION:=2.11
+-MIIDIAG_DEBIAN_PATCH_LEVEL:=2
+-MIIDIAG_SOURCE:=mii-diag_$(MIIDIAG_VERSION).orig.tar.gz
+-MIIDIAG_PATCH_FILE=mii-diag_$(MIIDIAG_VERSION)-$(MIIDIAG_DEBIAN_PATCH_LEVEL).diff.gz
+-MIIDIAG_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
+-MIIDIAG_DIR:=$(BUILD_DIR)/mii-diag-$(MIIDIAG_VERSION)
+-MIIDIAG_CAT:=$(ZCAT)
+-MIIDIAG_BINARY:=usr/sbin/mii-diag
 -
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_EVTEST) += evtest
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSCAL) += jscal
--INPUT_TOOLS_TARGETS-$(BR2_PACKAGE_INPUT_TOOLS_JSTEST) += jstest
+-ifneq ($(MIIDIAG_PATCH_FILE),)
+-MIIDIAG_PATCH=$(DL_DIR)/$(MIIDIAG_PATCH_FILE)
+-$(MIIDIAG_PATCH):
+-	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_PATCH_FILE))
+-endif
 -
--INPUT_TOOLS_TARGETS := $(addprefix $(TARGET_DIR)/usr/bin/, $(INPUT_TOOLS_TARGETS-y))
--INPUT_TOOLS_SOURCES := $(addprefix $(INPUT_TOOLS_DIR)/utils/, \
--	$(addsuffix .c, $(INPUT_TOOLS_TARGETS-y)))
+-$(DL_DIR)/$(MIIDIAG_SOURCE):
+-	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_SOURCE))
 -
--$(DL_DIR)/$(INPUT_TOOLS_SOURCE):
--	$(call DOWNLOAD,$(INPUT_TOOLS_SITE),$(@F))
--
--$(DL_DIR)/$(INPUT_TOOLS_PATCH):
--	$(call DOWNLOAD,$(INPUT_TOOLS_SITE),$(@F))
--
--$(INPUT_TOOLS_DIR)/.unpacked: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
--	$(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(INPUT_TOOLS_PATCH),)
--	(cd $(INPUT_TOOLS_DIR) && $(INPUT_TOOLS_CAT) $(DL_DIR)/$(INPUT_TOOLS_PATCH) | patch -p1)
-+define INPUT_TOOLS_DEBIAN_PATCHES
+-$(MIIDIAG_DIR)/.unpacked: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
+-	mkdir -p $(MIIDIAG_DIR)
+-	$(MIIDIAG_CAT) $(DL_DIR)/$(MIIDIAG_SOURCE) | tar --strip 1 -C $(MIIDIAG_DIR) $(TAR_OPTIONS) -
+-ifneq ($(MIIDIAG_PATCH_FILE),)
+-	(cd $(MIIDIAG_DIR) && $(MIIDIAG_CAT) $(MIIDIAG_PATCH) | patch -p1)
++MII_DIAG_VERSION = 2.11
++MII_DIAG_SOURCE = mii-diag_$(MII_DIAG_VERSION).orig.tar.gz
++MII_DIAG_PATCH = mii-diag_$(MII_DIAG_VERSION)-3.diff.gz
++MII_DIAG_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
++
++ifneq ($(MII_DIAG_PATCH),)
++define MII_DIAG_DEBIAN_PATCHES
 +	if [ -d $(@D)/debian/patches ]; then \
 +		(cd $(@D)/debian/patches && for i in *; \
-+		 do $(SED) 's,^\+\+\+ .*joystick-$(INPUT_TOOLS_VERSION)/,+++ joystick-$(INPUT_TOOLS_VERSION)/,' $$i; \
++		 do $(SED) 's,^\+\+\+ .*mii-diag-$(MII_DIAG_VERSION)/,+++ mii-diag-$(MII_DIAG_VERSION)/,' $$i; \
 +		 done; \
 +		); \
 +		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
 +	fi
 +endef
  endif
--	toolchain/patch-kernel.sh $(INPUT_TOOLS_DIR) package/input-tools/ \*.patch
+-	toolchain/patch-kernel.sh $(MIIDIAG_DIR) package/mii-diag/ mii-diag-\*.patch*
 -	touch $@
 -
--$(INPUT_TOOLS_SOURCES): $(INPUT_TOOLS_DIR)/.unpacked
- 
--$(INPUT_TOOLS_DIR)/utils/%: $(INPUT_TOOLS_DIR)/utils/%.c
--	$(TARGET_CC) $(TARGET_CFLAGS) -o $@ $^
-+INPUT_TOOLS_POST_PATCH_HOOKS = INPUT_TOOLS_DEBIAN_PATCHES
- 
--$(INPUT_TOOLS_TARGETS): $(TARGET_DIR)/usr/bin/%: $(INPUT_TOOLS_DIR)/utils/%
--	cp -dpf $^ $@
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
-+define INPUT_TOOLS_BUILD_CMDS
-+	(cd $(@D)/utils; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o evtest evtest.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o inputattach inputattach.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o jscal jscal.c; \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o jstest jstest.c; \
-+	)
-+endef
- 
--input-tools: $(INPUT_TOOLS_TARGETS)
-+define INPUT_TOOLS_INSTALL_TARGET_CMDS
-+	test -z "$(INPUT_TOOLS_TARGETS_y)" || \
-+	install -m 755 $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y)) $(TARGET_DIR)/usr/bin/
-+endef
- 
--input-tools-source: $(DL_DIR)/$(INPUT_TOOLS_SOURCE) $(DL_DIR)/$(INPUT_TOOLS_PATCH)
-+define INPUT_TOOLS_UNINSTALL_TARGET_CMDS
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(INPUT_TOOLS_TARGETS_y))
-+endef
- 
--input-tools-unpacked: $(INPUT_TOOLS_DIR)/.unpacked
-+define INPUT_TOOLS_CLEAN_CMDS
-+	rm -f $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y))
-+endef
- 
--input-tools-clean:
--	rm -f $(INPUT_TOOLS_TARGETS)
+-$(MIIDIAG_DIR)/.configured: $(MIIDIAG_DIR)/.unpacked
+-	touch $@
 -
--input-tools-dirclean:
--	rm -rf $(INPUT_TOOLS_DIR)
+-$(MIIDIAG_DIR)/mii-diag: $(MIIDIAG_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR)
+ 
+-$(TARGET_DIR)/$(MIIDIAG_BINARY): $(MIIDIAG_DIR)/mii-diag
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR) DESTDIR=$(TARGET_DIR) install
+-	$(STRIPCMD) $@
+-	touch $@
++MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
+ 
+-mii-diag: $(TARGET_DIR)/$(MIIDIAG_BINARY)
++define MII_DIAG_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
++endef
+ 
+-mii-diag-source: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
++define MII_DIAG_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
+ 
+-mii-diag-clean:
+-	-$(MAKE) -C $(MIIDIAG_DIR) clean
++define MII_DIAG_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/sbin/mii-diag
++endef
+ 
+-mii-diag-dirclean:
+-	rm -rf $(MIIDIAG_DIR)
++define MII_DIAG_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_INPUT_TOOLS),y)
--TARGETS+=input-tools
+-ifeq ($(BR2_PACKAGE_MIIDIAG),y)
+-TARGETS+=mii-diag
 -endif
-+$(eval $(call GENTARGETS,package,input-tools))
-diff --git a/package/input-tools/joystick-20051019-rint.patch b/package/input-tools/joystick-20051019-rint.patch
-deleted file mode 100644
-index b2aa13f..0000000
---- a/package/input-tools/joystick-20051019-rint.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--diff -urN joystick-20051019.orig/utils/jscal.c joystick-20051019/utils/jscal.c
----- joystick-20051019.orig/utils/jscal.c	2004-10-19 09:51:52.000000000 +0200
--+++ joystick-20051019/utils/jscal.c	2009-01-18 10:48:50.000000000 +0100
--@@ -141,10 +141,10 @@
-- 	c = 32767.0 / (inputs.cmin[1] - inputs.cmax[0]);
-- 	d = 32767.0 / (inputs.cmin[2] - inputs.cmax[1]);
-- 
---	results[0] = rint(a);
---	results[1] = rint(b);
---	results[2] = rint(c*16384.0);
---	results[3] = rint(d*16384.0);
--+	results[0] = (int) (a + 0.5);
--+	results[1] = (int) (b + 0.5);
--+	results[2] = (int) (c*16384.0 + 0.5);
--+	results[3] = (int) (d*16384.0 + 0.5);
-- 
-- 	return 1;
-- }
++$(eval $(call GENTARGETS,package,mii-diag))
 -- 
 1.7.3.1
