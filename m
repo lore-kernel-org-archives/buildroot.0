@@ -1,292 +1,191 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 01:22:35 -0700
-Subject: [Buildroot] [PATCH 02/10] lsof: convert to gentargets and bump to
-	4.84
+Date: Tue,  5 Oct 2010 01:22:36 -0700
+Subject: [Buildroot] [PATCH 03/10] lvm2: convert to autotargets and bump to
+	2.02.74
 In-Reply-To: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286266963-23413-2-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286266963-23413-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An explanation is required for this package. The source for this package is an
-archive inside an archive. The gentargets makefile only extracts the first
-archive, but not the second. This causes the patch routine to fail. I hide the
-patches from the gentargets patch routine, and then extract and patch the
-second archive during the configure routine. Also, I've changed the patches to
-no longer point to the sub-directory, which is version dependent.
-
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/lsof/_lsof-4.84-makefile.patch             |   14 +++
- package/lsof/_lsof-4.84-noportmap.patch            |   18 ++++
- .../lsof/_lsof-4.84-remove-susvlegacy-funcs.patch  |   12 +++
- package/lsof/lsof-makefile.patch                   |   14 ---
- package/lsof/lsof-noportmap.patch                  |   18 ----
- package/lsof/lsof-remove-susvlegacy-funcs.patch    |   12 ---
- package/lsof/lsof-uclibc.patch                     |   12 ---
- package/lsof/lsof.mk                               |   86 ++++++++-----------
- 8 files changed, 80 insertions(+), 106 deletions(-)
- create mode 100644 package/lsof/_lsof-4.84-makefile.patch
- create mode 100644 package/lsof/_lsof-4.84-noportmap.patch
- create mode 100644 package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
- delete mode 100644 package/lsof/lsof-makefile.patch
- delete mode 100644 package/lsof/lsof-noportmap.patch
- delete mode 100644 package/lsof/lsof-remove-susvlegacy-funcs.patch
- delete mode 100644 package/lsof/lsof-uclibc.patch
+ package/lvm2/lvm2.mk |  153 +++++++++++++++++---------------------------------
+ 1 files changed, 51 insertions(+), 102 deletions(-)
 
-diff --git a/package/lsof/_lsof-4.84-makefile.patch b/package/lsof/_lsof-4.84-makefile.patch
-new file mode 100644
-index 0000000..65b1b2e
---- /dev/null
-+++ b/package/lsof/_lsof-4.84-makefile.patch
-@@ -0,0 +1,14 @@
-+diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
-+--- a/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
-++++ b/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
-+@@ -21,8 +21,8 @@
-+ all:	${LIB}
-+ 
-+ ${LIB}:	${OBJ}
-+-	${AR}
-+-	${RANLIB}
-++	${AR} cr ${LIB} ${OBJ}
-++	${RANLIB} ${LIB}
-+ 
-+ clean:	FRC
-+ 	rm -f ${LIB} ${OBJ} errs Makefile.bak a.out core
-diff --git a/package/lsof/_lsof-4.84-noportmap.patch b/package/lsof/_lsof-4.84-noportmap.patch
-new file mode 100644
-index 0000000..984e0d8
---- /dev/null
-+++ b/package/lsof/_lsof-4.84-noportmap.patch
-@@ -0,0 +1,18 @@
-+--- a/print.c	2006-08-23 13:37:43.000000000 -0600
-++++ b/print.c	2006-08-23 13:38:29.000000000 -0600
-+@@ -148,6 +148,7 @@
-+ static void
-+ fill_portmap()
-+ {
-++#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_RPC__)
-+ 	char buf[128], *cp, *nm;
-+ 	CLIENT *c;
-+ 	int h, port, pr;
-+@@ -266,6 +267,7 @@
-+ 	    Pth[pr][h] = pt;
-+ 	}
-+ 	clnt_destroy(c);
-++#endif
-+ }
-+ 
-+ 
-diff --git a/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch b/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
-new file mode 100644
-index 0000000..fca66ae
---- /dev/null
-+++ b/package/lsof/_lsof-4.84-remove-susvlegacy-funcs.patch
-@@ -0,0 +1,12 @@
-+diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
-+--- a/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
-++++ b/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
-+@@ -616,6 +616,6 @@
-+  * zeromem is a macro that uses bzero or memset.
-+  */
-+ 
-+-#define	zeromem(a, l)	bzero(a, l)
-++#define	zeromem(a, l)	memset(a, 0, l)
-+ 
-+ #endif	/* !defined(LSOF_MACHINE_H) */
-+
-diff --git a/package/lsof/lsof-makefile.patch b/package/lsof/lsof-makefile.patch
-deleted file mode 100644
-index 2d4e9d4..0000000
---- a/package/lsof/lsof-makefile.patch
-+++ /dev/null
-@@ -1,14 +0,0 @@
--diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
----- lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
--+++ lsof_4.81/lsof_4.81_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
--@@ -21,8 +21,8 @@
-- all:	${LIB}
-- 
-- ${LIB}:	${OBJ}
---	${AR}
---	${RANLIB}
--+	${AR} cr ${LIB} ${OBJ}
--+	${RANLIB} ${LIB}
-- 
-- clean:	FRC
-- 	rm -f ${LIB} ${OBJ} errs Makefile.bak a.out core
-diff --git a/package/lsof/lsof-noportmap.patch b/package/lsof/lsof-noportmap.patch
-deleted file mode 100644
-index 4a37db4..0000000
---- a/package/lsof/lsof-noportmap.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
----- lsof_4.81/lsof_4.81_src/print.orig.c	2006-08-23 13:37:43.000000000 -0600
--+++ lsof_4.81/lsof_4.81_src/print.c	2006-08-23 13:38:29.000000000 -0600
--@@ -148,6 +148,7 @@
-- static void
-- fill_portmap()
-- {
--+#if !defined __UCLIBC__ || (defined __UCLIBC__ && defined __UCLIBC_HAS_RPC__)
-- 	char buf[128], *cp, *nm;
-- 	CLIENT *c;
-- 	int h, port, pr;
--@@ -266,6 +267,7 @@
-- 	    Pth[pr][h] = pt;
-- 	}
-- 	clnt_destroy(c);
--+#endif
-- }
-- 
-- 
-diff --git a/package/lsof/lsof-remove-susvlegacy-funcs.patch b/package/lsof/lsof-remove-susvlegacy-funcs.patch
-deleted file mode 100644
-index d1d9371..0000000
---- a/package/lsof/lsof-remove-susvlegacy-funcs.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
----- lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
--+++ lsof_4.81/lsof_4.81_src/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
--@@ -616,6 +616,6 @@
--  * zeromem is a macro that uses bzero or memset.
--  */
-- 
---#define	zeromem(a, l)	bzero(a, l)
--+#define	zeromem(a, l)	memset(a, 0, l)
-- 
-- #endif	/* !defined(LSOF_MACHINE_H) */
--
-diff --git a/package/lsof/lsof-uclibc.patch b/package/lsof/lsof-uclibc.patch
-deleted file mode 100644
-index 797a0ce..0000000
---- a/package/lsof/lsof-uclibc.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff -ru lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h
----- lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h	2006-03-28 00:57:14.000000000 +0200
--+++ lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
--@@ -49,7 +49,7 @@
-- #include <unistd.h>
-- #include <netinet/in.h>
-- 
---# if	defined(GLIBCV)
--+# if	defined(GLIBCV) || defined __UCLIBC__
-- #include <netinet/tcp.h>
-- # else	/* !defined(GLIBCV) */
-- #include <linux/tcp.h>
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 8deff15..665ea3d 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -3,68 +3,54 @@
- # lsof
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 2bd6b8b..b359b97 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -3,115 +3,64 @@
+ # lvm2
  #
  #############################################################
--LSOF_VERSION:=4.81
--LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
--LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
--LSOF_CAT:=$(BZCAT)
--LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
--LSOF_BINARY:=lsof
--LSOF_TARGET_BINARY:=bin/lsof
--LSOF_INCLUDE:=$(STAGING_DIR)/usr/include
-+LSOF_VERSION = 4.84
-+LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
-+LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+LSOF_INCLUDE = $(STAGING_DIR)/usr/include
- 
--BR2_LSOF_CFLAGS:=
-+BR2_LSOF_CFLAGS = 
- ifeq ($(BR2_LARGEFILE),)
--BR2_LSOF_CFLAGS+=-U_FILE_OFFSET_BITS
-+BR2_LSOF_CFLAGS += -U_FILE_OFFSET_BITS
- endif
- ifeq ($(BR2_INET_IPV6),)
--BR2_LSOF_CFLAGS+=-UHASIPv6
-+BR2_LSOF_CFLAGS += -UHASIPv6
- endif
- 
--$(DL_DIR)/$(LSOF_SOURCE):
--	 $(call DOWNLOAD,$(LSOF_SITE),$(LSOF_SOURCE))
+-# Copyright (C) 2005 by Richard Downer <rdowner@gmail.com>
+-# Derived from work
+-# Copyright (C) 2001-2005 by Erik Andersen <andersen@codepoet.org>
+-# Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
+-#
+-# This program is free software; you can redistribute it and/or modify
+-# it under the terms of the GNU Library General Public License as
+-# published by the Free Software Foundation; either version 2 of the
+-# License, or (at your option) any later version.
+-#
+-# This program is distributed in the hope that it will be useful, but
+-# WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+-# Library General Public License for more details.
+-#
+-# You should have received a copy of the GNU Library General Public
+-# License along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+-# USA
 -
--lsof-source: $(DL_DIR)/$(LSOF_SOURCE)
+-LVM2_BASEVER=2.02
+-LVM2_DMVER=1.02
+-LVM2_PATCH=50
+-LVM2_VERSION=$(LVM2_BASEVER).$(LVM2_PATCH)
+-LVM2_SOURCE:=LVM2.$(LVM2_VERSION).tgz
+-LVM2_SITE:=ftp://sources.redhat.com/pub/lvm2
+-LVM2_CAT:=$(ZCAT)
+-LVM2_DIR:=$(BUILD_DIR)/LVM2.$(LVM2_VERSION)
+-LVM2_SBIN:=lvchange lvcreate lvdisplay lvextend lvm lvmchange lvmdiskscan lvmsadc lvmsar lvreduce lvremove lvrename lvresize lvs lvscan pvchange pvcreate pvdisplay pvmove pvremove pvresize pvs pvscan vgcfgbackup vgcfgrestore vgchange vgck vgconvert vgcreate vgdisplay vgexport vgextend vgimport vgmerge vgmknodes vgreduce vgremove vgrename vgs vgscan vgsplit
+-LVM2_DMSETUP_SBIN:=dmsetup
+-LVM2_LIB:=libdevmapper.so.$(LVM2_DMVER)
+-LVM2_TARGET_SBINS=$(foreach lvm2sbin, $(LVM2_SBIN), $(TARGET_DIR)/sbin/$(lvm2sbin))
+-LVM2_TARGET_DMSETUP_SBINS=$(foreach lvm2sbin, $(LVM2_DMSETUP_SBIN), $(TARGET_DIR)/sbin/$(lvm2sbin))
+-LVM2_TARGET_LIBS=$(foreach lvm2lib, $(LVM2_LIB), $(TARGET_DIR)/lib/$(lvm2lib))
 -
--lsof-unpacked: $(LSOF_DIR)/.unpacked
+-$(DL_DIR)/$(LVM2_SOURCE):
+-	 $(call DOWNLOAD,$(LVM2_SITE),$(LVM2_SOURCE))
 -
--$(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
--	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	(cd $(LSOF_DIR);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
--	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
--	touch $(LSOF_DIR)/.unpacked
+-lvm2-source: $(DL_DIR)/$(LVM2_SOURCE)
 -
--$(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
--	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" ./Configure linux)
--	touch $(LSOF_DIR)/.configured
--
--$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
- ifeq ($(BR2_USE_WCHAR),)
--	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
--	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
-+define LSOF_CONFIGURE_WCHAR_FIXUPS
-+	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+endef
- endif
++LVM2_VERSION = 2.02.74
++LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
++LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
++LVM2_INSTALL_STAGING = YES
 +
- ifeq ($(BR2_ENABLE_LOCALE),)
--	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
-+define LSOF_CONFIGURE_LOCALE_FIXUPS
-+	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+endef
++LVM2_BINS = dmsetup fsadm lvchange lvconvert lvcreate lvdisplay lvextend lvm \
++		lvmchange lvmconf lvmdiskscan lvmdump lvmsadc lvmsar lvreduce lvremove \
++		lvrename lvresize lvs lvscan pvchange pvck pvcreate pvdisplay pvmove \
++		pvremove pvresize pvs pvscan vgcfgbackup vgcfgrestore vgchange vgck \
++		vgconvert vgcreate vgdisplay vgexport vgextend vgimport vgimportclone \
++		vgmerge vgmknodes vgreduce vgremove vgrename vgs vgscan vgsplit
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+-LVM2_DEPENDENCIES+=readline
++LVM2_DEPENDENCIES += readline
+ else
+ # v2.02.44: disable readline usage, or binaries are linked against provider
+ # of "tgetent" (=> ncurses) even if it's not used..
+-LVM2_CONF_OPT+=--disable-readline
++LVM2_CONF_OPT += --disable-readline
  endif
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
  
--$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY)
--	cp $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY) $@
--	$(STRIPCMD) $@
-+define LSOF_CONFIGURE_CMDS
-+	(cd $(@D);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
-+	toolchain/patch-kernel.sh $(@D)/lsof_$(LSOF_VERSION)_src package/lsof \*.patch
-+	(cd $(@D)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" ./Configure linux)
-+	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
-+	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
-+endef
+-
+-$(LVM2_DIR)/.unpacked: $(DL_DIR)/$(LVM2_SOURCE)
+-	$(LVM2_CAT) $(DL_DIR)/$(LVM2_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(LVM2_DIR)/.unpacked
+-
+-$(LVM2_DIR)/.configured: $(LVM2_DIR)/.unpacked
+-	(cd $(LVM2_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		$(DISABLE_NLS) \
+-		$(DISABLE_LARGEFILE) \
+-		--with-user=$(shell id -un) --with-group=$(shell id -gn) \
+-		$(LVM2_CONF_OPT) \
+-	)
+-	touch $(LVM2_DIR)/.configured
+-
+-
+-$(LVM2_DIR)/.built: $(LVM2_DIR)/.configured
+-	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR)
+-	$(MAKE1) -C $(LVM2_DIR) DESTDIR=$(STAGING_DIR) install
+-	# Fixup write permissions so that the files can be overwritten
+-	# several times in the $(TARGET_DIR)
+-	chmod 755 $(STAGING_DIR)/sbin/lvm
+-	chmod 755 $(STAGING_DIR)/sbin/dmsetup
+-	chmod 644 $(STAGING_DIR)/lib/$(LVM2_LIB)
+-	touch $(LVM2_DIR)/.built
+-
+-
+-$(LVM2_TARGET_SBINS) $(LVM2_TARGET_DMSETUP_SBINS): $(LVM2_DIR)/.built
+-	cp -a $(STAGING_DIR)/sbin/$(notdir $@) $@
+-	touch $@
+-
+-$(LVM2_TARGET_LIBS): $(LVM2_DIR)/.built
+-	cp -a $(STAGING_DIR)/lib/$(notdir $@) $@
+-	touch $@
+-
+-
+ ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
+-lvm2: $(LVM2_TARGET_DMSETUP_SBINS) $(LVM2_TARGET_LIBS)
+-else
+-lvm2: $(LVM2_TARGET_SBINS) $(LVM2_TARGET_DMSETUP_SBINS) $(LVM2_TARGET_LIBS)
++LVM2_MAKE_OPT = device-mapper
++LVM2_INSTALL_STAGING_OPT = DESTDIR=$$(STAGING_DIR) device-mapper_install
++LVM2_INSTALL_TARGET_OPT = DESTDIR=$$(STAGING_DIR) device-mapper_install
+ endif
  
--lsof: $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
-+define LSOF_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(@D)/lsof_$(LSOF_VERSION)_src
-+endef
- 
--lsof-clean:
--	-rm -f $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
--	-$(MAKE) -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src clean
-+define LSOF_INSTALL_TARGET_CMDS
-+	install -D -m 755 $(@D)/lsof_$(LSOF_VERSION)_src/lsof $(TARGET_DIR)/bin/lsof
-+endef
- 
--lsof-dirclean:
--	rm -rf $(LSOF_DIR)
-+define LSOF_UNINSTALL_TARGET_CMDS
-+	-rm -f $(TARGET_DIR)/bin/lsof
-+endef
- 
+-
+-lvm2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LVM2_DIR) uninstall
+-	-$(MAKE) -C $(LVM2_DIR) clean
+-
+-lvm2-dirclean:
+-	rm -rf $(LVM2_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LSOF),y)
--TARGETS+=lsof
+-ifeq ($(BR2_PACKAGE_LVM2),y)
+-TARGETS+=lvm2
 -endif
-+define LSOF_CLEAN_CMDS
-+	-$(MAKE) -C $(@D)/lsof_$(LSOF_VERSION)_src clean
++define LVM2_STAGING_FILE_PERMS_FIXUP
++	chmod 755 $(STAGING_DIR)/usr/sbin/lvm
++	chmod 755 $(STAGING_DIR)/usr/sbin/fsadm
++	chmod 755 $(STAGING_DIR)/usr/sbin/dmsetup
++	chmod 755 $(STAGING_DIR)/usr/sbin/lvmconf
++	chmod 755 $(STAGING_DIR)/usr/sbin/lvmdump
++	chmod 755 $(STAGING_DIR)/usr/sbin/vgimportclone
++	chmod 644 $(STAGING_DIR)/usr/lib/libdevmapper.so
 +endef
 +
-+$(eval $(call GENTARGETS,package,lsof))
++LVM2_POST_INSTALL_STAGING_HOOKS += LVM2_STAGING_FILE_PERMS_FIXUP
++
++define LVM2_TARGET_FILE_PERMS_FIXUP
++	chmod 755 $(TARGET_DIR)/usr/sbin/lvm
++	chmod 755 $(TARGET_DIR)/usr/sbin/fsadm
++	chmod 755 $(TARGET_DIR)/usr/sbin/dmsetup
++	chmod 755 $(TARGET_DIR)/usr/sbin/lvmconf
++	chmod 755 $(TARGET_DIR)/usr/sbin/lvmdump
++	chmod 755 $(TARGET_DIR)/usr/sbin/vgimportclone
++	chmod 644 $(TARGET_DIR)/usr/lib/libdevmapper.so
++endef
++
++LVM2_POST_INSTALL_TARGET_HOOKS += LVM2_TARGET_FILE_PERMS_FIXUP
++
++define LVM2_UNINSTALL_STAGING_CMDS
++	rm -f $(addprefix $(STAGING_DIR)/usr/sbin/,$(LVM2_BINS))
++	rm -f $(addprefix $(STAGING_DIR)/usr/lib/,libdevmapper.so*)
++endef
++
++define LVM2_UNINSTALL_TARGET_CMDS
++	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,$(LVM2_BINS))
++	rm -f $(addprefix $(TARGET_DIR)/usr/lib/,libdevmapper.so*)
++endef
++
++$(eval $(call AUTOTARGETS,package,lvm2))
 -- 
 1.7.3.1
