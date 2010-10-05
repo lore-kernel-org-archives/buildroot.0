@@ -1,114 +1,61 @@
-From: Martin Banky <martin.banky@gmail.com>
-Date: Tue,  5 Oct 2010 13:04:37 -0700
-Subject: [Buildroot] [PATCH 2/2] mii-diag: convert to gentargets and bump to
-	2.11.3
-In-Reply-To: <1286309077-26567-1-git-send-email-Martin.Banky@gmail.com>
-References: <1286309077-26567-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286309077-26567-3-git-send-email-Martin.Banky@gmail.com>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Tue, 5 Oct 2010 14:05:54 -0700
+Subject: [Buildroot] [PATCH 05/10] microcom: convert to gentargets
+In-Reply-To: <878w2cs9oo.fsf@macbook.be.48ers.dk>
+References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
+	<1286266963-23413-5-git-send-email-Martin.Banky@gmail.com>
+	<20101005112147.2bc80d0e@surf>
+	<AANLkTim76qFFMTStNN-D_ompE2Bcw+ZeT0aWgBE3bd=e@mail.gmail.com>
+	<878w2cs9oo.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTinZJqbMMdmTRu-EY42FWFjTGkjf8szXqPn3=83c@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
----
- package/mii-diag/mii-diag.mk |   79 ++++++++++++++++--------------------------
- 1 files changed, 30 insertions(+), 49 deletions(-)
+Peter,
+     Yes, I'd be the one to complain ;-) I use it to troubleshoot serial
+port communication issues on my embedded system. It's a fast and dirty way
+to see if I have communication with the microprocessor. Basically it lets me
+know if it's a hardware issue or if it's in my code. But other than that, I
+don't have any other use for it. Also, buildroot is one of the few remaining
+places to host it. Just my 2c's.
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index ba01c0e..8d946ae 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -3,59 +3,40 @@
- # mii-diag
- #
- #############################################################
--MIIDIAG_VERSION:=2.11
--MIIDIAG_DEBIAN_PATCH_LEVEL:=2
--MIIDIAG_SOURCE:=mii-diag_$(MIIDIAG_VERSION).orig.tar.gz
--MIIDIAG_PATCH_FILE=mii-diag_$(MIIDIAG_VERSION)-$(MIIDIAG_DEBIAN_PATCH_LEVEL).diff.gz
--MIIDIAG_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
--MIIDIAG_DIR:=$(BUILD_DIR)/mii-diag-$(MIIDIAG_VERSION)
--MIIDIAG_CAT:=$(ZCAT)
--MIIDIAG_BINARY:=usr/sbin/mii-diag
--
--ifneq ($(MIIDIAG_PATCH_FILE),)
--MIIDIAG_PATCH=$(DL_DIR)/$(MIIDIAG_PATCH_FILE)
--$(MIIDIAG_PATCH):
--	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_PATCH_FILE))
--endif
--
--$(DL_DIR)/$(MIIDIAG_SOURCE):
--	$(call DOWNLOAD,$(MIIDIAG_SITE),$(MIIDIAG_SOURCE))
--
--$(MIIDIAG_DIR)/.unpacked: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
--	mkdir -p $(MIIDIAG_DIR)
--	$(MIIDIAG_CAT) $(DL_DIR)/$(MIIDIAG_SOURCE) | tar --strip 1 -C $(MIIDIAG_DIR) $(TAR_OPTIONS) -
--ifneq ($(MIIDIAG_PATCH_FILE),)
--	(cd $(MIIDIAG_DIR) && $(MIIDIAG_CAT) $(MIIDIAG_PATCH) | patch -p1)
-+MII_DIAG_VERSION = 2.11
-+MII_DIAG_SOURCE = mii-diag_$(MII_DIAG_VERSION).orig.tar.gz
-+MII_DIAG_PATCH = mii-diag_$(MII_DIAG_VERSION)-3.diff.gz
-+MII_DIAG_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
-+
-+ifneq ($(MII_DIAG_PATCH),)
-+define MII_DIAG_DEBIAN_PATCHES
-+	if [ -d $(@D)/debian/patches ]; then \
-+		(cd $(@D)/debian/patches && for i in *; \
-+		 do $(SED) 's,^\+\+\+ .*mii-diag-$(MII_DIAG_VERSION)/,+++ mii-diag-$(MII_DIAG_VERSION)/,' $$i; \
-+		 done; \
-+		); \
-+		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.patch; \
-+	fi
-+endef
- endif
--	toolchain/patch-kernel.sh $(MIIDIAG_DIR) package/mii-diag/ mii-diag-\*.patch*
--	touch $@
--
--$(MIIDIAG_DIR)/.configured: $(MIIDIAG_DIR)/.unpacked
--	touch $@
--
--$(MIIDIAG_DIR)/mii-diag: $(MIIDIAG_DIR)/.configured
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR)
- 
--$(TARGET_DIR)/$(MIIDIAG_BINARY): $(MIIDIAG_DIR)/mii-diag
--	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(MIIDIAG_DIR) DESTDIR=$(TARGET_DIR) install
--	$(STRIPCMD) $@
--	touch $@
-+MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
- 
--mii-diag: $(TARGET_DIR)/$(MIIDIAG_BINARY)
-+define MII_DIAG_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
-+endef
- 
--mii-diag-source: $(DL_DIR)/$(MIIDIAG_SOURCE) $(MIIDIAG_PATCH)
-+define MII_DIAG_INSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+endef
- 
--mii-diag-clean:
--	-$(MAKE) -C $(MIIDIAG_DIR) clean
-+define MII_DIAG_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/sbin/mii-diag
-+endef
- 
--mii-diag-dirclean:
--	rm -rf $(MIIDIAG_DIR)
-+define MII_DIAG_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_MIIDIAG),y)
--TARGETS+=mii-diag
--endif
-+$(eval $(call GENTARGETS,package,mii-diag))
--- 
-1.7.3.1
+Martin
+
+On Tue, Oct 5, 2010 at 12:48 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "Martin" == Martin Banky <Martin.Banky@gmail.com> writes:
+>
+>  Martin> Thomas,
+>
+>  Martin>      I guess I should have explained this better. What I meant
+>  Martin> about microcom being a flat archive, is that when you extract
+>  Martin> it, it does not create a directory for itself. It just sticks
+>  Martin> its files, without a directory being created, in the current
+>  Martin> directory. $(TAR_STRIP_COMPONENTS)=1 is 'Automatically detect
+>  Martin> tar --strip-path/components option', which, equates to either
+>  Martin> --strip-path or --strip-components, depending on the version of
+>  Martin> tar. Per the man page: --strip-components = 'strip NUMBER
+>  Martin> leading components from file names on extraction', which means
+>  Martin> that for microcom, which doesn't have a directory structure, it
+>  Martin> strips all the file names off, so no files actually get
+>  Martin> extracted. This in turn, means that the patch routine does not
+>  Martin> work. Hence, the reason for manually patching microcom. If you
+>  Martin> have a better solution, I'd appreciate it, if you would show
+>  Martin> me, because I couldn't figure one out. I hope this makes more
+>  Martin> sense.
+>
+> Maybe we should just get rid of the microcom package instead? It was
+> integrated into busybox a few years ago, which is also why it was marked
+> as deprecated.
+>
+> I'll remove it later this week unless someone complains.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101005/1f8e186b/attachment-0001.html>
