@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 5 Oct 2010 09:15:06 +0200
-Subject: [Buildroot] [git commit master 1/1] package: add librsvg package
-Message-ID: <20101005071708.723E88B854@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] imagemagick: remove fixed
+	jpeg+tiff dependencies, add optional deps
+Message-ID: <20101005071708.A2E048B854@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,89 +10,107 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31699a57d643cdc473123ff5701bcc33cd0ee4e6
+commit: http://git.buildroot.net/buildroot/commit/?id=246c1f4deabe3872b050eef1cc087d3004c50515
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-librsvg is a svg renderer.
+For fontconfig/freetype/jpeg/libpng/librsvg/libxml2/tiff.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                    |    2 +-
- package/Config.in          |    1 +
- package/librsvg/Config.in  |   14 ++++++++++++++
- package/librsvg/librsvg.mk |   18 ++++++++++++++++++
- 4 files changed, 34 insertions(+), 1 deletions(-)
- create mode 100644 package/librsvg/Config.in
- create mode 100644 package/librsvg/librsvg.mk
+ package/imagemagick/Config.in      |    2 -
+ package/imagemagick/imagemagick.mk |   54 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 49 insertions(+), 7 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index c3f8a9e..4a382a2 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -21,7 +21,7 @@
+diff --git a/package/imagemagick/Config.in b/package/imagemagick/Config.in
+index d6d6d8b..e66ded0 100644
+--- a/package/imagemagick/Config.in
++++ b/package/imagemagick/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_IMAGEMAGICK
+ 	bool "imagemagick"
+-	select BR2_PACKAGE_JPEG
+-	select BR2_PACKAGE_TIFF
+ 	help
+ 	  ImageMagick(R) is a software suite to create, edit, and compose
+ 	  bitmap images. It can read, convert and write images in a variety of
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index f80fe6f..f14adb9 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -10,8 +10,6 @@ IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
+ IMAGEMAGICK_LIBTOOL_PATCH = NO
+ IMAGEMAGICK_INSTALL_STAGING = YES
  
- 	Alpha, Cris, IA64 and Sparc64 architecture support removed.
+-IMAGEMAGICK_DEPENDENCIES = jpeg tiff
+-
+ ifeq ($(BR2_LARGEFILE),y)
+ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+ else
+@@ -21,8 +19,6 @@ endif
+ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+ 		--without-perl \
+ 		--without-wmf \
+-		--without-xml \
+-		--without-rsvg \
+ 		--without-openexr \
+ 		--without-jp2 \
+ 		--without-jbig \
+@@ -31,7 +27,55 @@ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+ 		--without-dps \
+ 		--without-gslib \
+ 		--without-fpx \
+-		--without-freetype \
+ 		--without-x
  
--	New packages: xz
-+	New packages: librsvg, xz
- 
- 	Updated/fixed packages: acpid, alsa-lib, argus, at, autoconf,
- 	automake, avahi, axel, beecrypt, berkeleydb, bind, bmon, boa,
-diff --git a/package/Config.in b/package/Config.in
-index ce6057b..5e08d59 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -263,6 +263,7 @@ source "package/libgail/Config.in"
- source "package/libglade/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-+source "package/librsvg/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-new file mode 100644
-index 0000000..fdb7d31
---- /dev/null
-+++ b/package/librsvg/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBRSVG
-+	bool "librsvg"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_USE_WCHAR # glib2
-+	help
-+	  The rsvg library is an efficient renderer for Scalable
-+	  Vector Graphics (SVG) pictures.
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++IMAGEMAGICK_CONF_OPT += --with-fontconfig
++IMAGEMAGICK_DEPENDENCIES += fontconfig
++else
++IMAGEMAGISK_CONF_OPT += --without-fontconfig
++endif
 +
-+	  http://librsvg.sourceforge.net/
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-new file mode 100644
-index 0000000..98bb25c
---- /dev/null
-+++ b/package/librsvg/librsvg.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# librsvg
-+#
-+#############################################################
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++IMAGEMAGICK_CONF_OPT += --with-freetype
++IMAGEMAGICK_DEPENDENCIES += freetype
++else
++IMAGEMAGISK_CONF_OPT += --without-freetype
++endif
 +
-+LIBRSVG_VERSION_MAJOR:=2.26
-+LIBRSVG_VERSION_MINOR:=3
-+LIBRSVG_VERSION:=$(LIBRSVG_VERSION_MAJOR).$(LIBRSVG_VERSION_MINOR)
-+LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
-+LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
-+LIBRSVG_INSTALL_STAGING = YES
-+LIBRSVG_INSTALL_TARGET = YES
-+LIBRSVG_LIBTOOL_PATCH = NO
-+LIBRSVG_CONF_OPT = --disable-tools
-+LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
++ifeq ($(BR2_PACKAGE_JPEG),y)
++IMAGEMAGICK_CONF_OPT += --with-jpeg
++IMAGEMAGICK_DEPENDENCIES += jpeg
++else
++IMAGEMAGISK_CONF_OPT += --without-jpeg
++endif
 +
-+$(eval $(call AUTOTARGETS,package,librsvg))
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++IMAGEMAGICK_CONF_OPT += --with-png
++IMAGEMAGICK_DEPENDENCIES += libpng
++else
++IMAGEMAGISK_CONF_OPT += --without-png
++endif
++
++ifeq ($(BR2_PACKAGE_LIBRSVG),y)
++IMAGEMAGICK_CONF_OPT += --with-rsvg
++IMAGEMAGICK_DEPENDENCIES += librsvg
++else
++IMAGEMAGISK_CONF_OPT += --without-rsvg
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++IMAGEMAGICK_CONF_OPT += --with-xml
++IMAGEMAGICK_DEPENDENCIES += libxml2
++else
++IMAGEMAGISK_CONF_OPT += --without-xml
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++IMAGEMAGICK_CONF_OPT += --with-tiff
++IMAGEMAGICK_DEPENDENCIES += tiff
++else
++IMAGEMAGISK_CONF_OPT += --without-tiff
++endif
++
+ $(eval $(call AUTOTARGETS,package,imagemagick))
 -- 
 1.7.1
