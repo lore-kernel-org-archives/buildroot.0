@@ -1,25 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  6 Oct 2010 11:19:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 2665] tslib examples doesn't support 24-bit display
-In-Reply-To: <bug-2665-163@https.bugs.busybox.net/>
-References: <bug-2665-163@https.bugs.busybox.net/>
-Message-ID: <20101006111938.83DD48B911@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Oct 2010 13:34:39 +0200
+Subject: [Buildroot] [PATCH 17/21] nano: bump to 2.2.5
+In-Reply-To: <1284864823-18993-18-git-send-email-Martin.Banky@gmail.com>
+	(Martin Banky's message of "Sat, 18 Sep 2010 19:53:39 -0700")
+References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
+	<1284864823-18993-18-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <87pqvnr1v4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2665
+>>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
 
-tajen_junk at hotmail.com changed:
+ Martin> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
