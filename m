@@ -1,35 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Oct 2010 13:38:46 +0200
-Subject: [Buildroot] [git commit master 1/1] nano: bump to 2.2.5
-Message-ID: <20101006113858.055938BE58@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Oct 2010 13:39:00 +0200
+Subject: [Buildroot] [PATCH 08/21] genext2fs: bump to 1.4.1
+In-Reply-To: <1284864823-18993-9-git-send-email-Martin.Banky@gmail.com>
+	(Martin Banky's message of "Sat, 18 Sep 2010 19:53:30 -0700")
+References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
+	<1284864823-18993-9-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <87lj6br1nv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Martin" == Martin Banky <martin.banky@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=475de409fd6ea4d55321edfcac8b142b7abb95d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Martin> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/nano/nano.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 47355a3..5e9824b 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--NANO_VERSION = 2.2.3
-+NANO_VERSION = 2.2.5
- NANO_SITE = http://www.nano-editor.org/dist/v2.2
- NANO_MAKE_ENV = CURSES_LIB="-lncurses"
- NANO_CONF_OPT = --without-slang --enable-tiny
 -- 
-1.7.1
+Bye, Peter Korsgaard
