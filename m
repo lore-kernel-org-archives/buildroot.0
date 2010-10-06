@@ -1,34 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Oct 2010 17:15:56 +0200
-Subject: [Buildroot] [git commit master 1/1] package: add libmpeg2
-In-Reply-To: <20101006155307.574dcfb9@surf> (Thomas Petazzoni's message of
-	"Wed, 6 Oct 2010 15:53:07 +0200")
-References: <20101006103554.2176D8B7C6@busybox.osuosl.org>
-	<20101006155307.574dcfb9@surf>
-Message-ID: <87aamrqrmb.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 6 Oct 2010 17:30:52 +0200
+Subject: [Buildroot] [git commit master 1/1] libmpeg2: fix Config.in
+	indentation/typo
+Message-ID: <20101006153114.C97118BE59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> On Wed, 6 Oct 2010 11:48:58 +0200
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=a268b0528c8a00f84cc5b5240047b91ac281de7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> +config BR2_PACKAGE_LIBMPEG2_BINS
- >> +       bool "mpeg2 binaries"
- >> +       depends on BR2_PACKAGE_LIBMPEG2
- >> +       help
- >> +         Install mpeg2dec, corrupt_mpeg2 and extrac_mpeg2 programs as
- >> +	 well.
+Thanks to Thomas for noticing.
 
- Thomas> Tiny typos here: extracT_mpeg2 and incorrect indentation.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/libmpeg2/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-Argh, you're right - Will fix right away.
-
-Seems I need more coffee.
-
+diff --git a/package/multimedia/libmpeg2/Config.in b/package/multimedia/libmpeg2/Config.in
+index a3fafb0..3694689 100644
+--- a/package/multimedia/libmpeg2/Config.in
++++ b/package/multimedia/libmpeg2/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_LIBMPEG2
+ 	  http://libmpeg2.sourceforge.net/
+ 
+ config BR2_PACKAGE_LIBMPEG2_BINS
+-       bool "mpeg2 binaries"
+-       depends on BR2_PACKAGE_LIBMPEG2
+-       help
+-         Install mpeg2dec, corrupt_mpeg2 and extrac_mpeg2 programs as
+-	 well.
++	bool "mpeg2 binaries"
++	depends on BR2_PACKAGE_LIBMPEG2
++	help
++	  Install mpeg2dec, corrupt_mpeg2 and extract_mpeg2 programs as
++	  well.
 -- 
-Bye, Peter Korsgaard
+1.7.1
