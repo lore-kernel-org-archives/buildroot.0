@@ -1,208 +1,132 @@
-From: Martin Banky <Martin.Banky@gmail.com>
-Date: Tue, 5 Oct 2010 22:55:35 -0700
-Subject: [Buildroot] [PATCH 09/10] mplayer: convert to gentargets
-In-Reply-To: <AANLkTinB19PdEHHv7zfV9p2RwKoCv5_syOZDWQ4wBLhu@mail.gmail.com>
-References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-	<1286266963-23413-9-git-send-email-Martin.Banky@gmail.com>
-	<AANLkTinB19PdEHHv7zfV9p2RwKoCv5_syOZDWQ4wBLhu@mail.gmail.com>
-Message-ID: <AANLkTinOXMMVDgOAGKFJPpsXHkBzmpAHsXC_BtR_cN9A@mail.gmail.com>
+From: Patrik =?iso-8859-1?q?Dahlstr=F6m?= <patrikd@telia.com>
+Date: Wed, 6 Oct 2010 09:45:37 +0200
+Subject: [Buildroot] [PATCH] pcmciautils: added package
+Message-ID: <201010060945.37426.patrikd@telia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 5, 2010 at 8:42 PM, Chih-Min Chao <cmchao@gmail.com> wrote:
+Subject: [PATCH] pcmciautils: added package
+Date: Wednesday 06 October 2010, 09:41:18
+From: "Patrik Dahlstr?m" <risca88@gmail.com>
+To: buildroot at busybox.net
+CC: Patrik Dahlstr?m <patrikd@telia.com>
 
-> On Tue, Oct 5, 2010 at 4:22 PM, Martin Banky <martin.banky@gmail.com>
-> wrote:
-> > Would have bumped the version, but someone smarter than me is going to
-> have to
-> > do it.
-> >
-> > Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
-> > ---
-> >  package/multimedia/mplayer/mplayer.mk |   88
-> +++++++++++---------------------
-> >  1 files changed, 30 insertions(+), 58 deletions(-)
-> >
-> > diff --git a/package/multimedia/mplayer/mplayer.mkb/package/multimedia/mplayer/
-> mplayer.mk
-> > index ac3a67e..a53c687 100644
-> > --- a/package/multimedia/mplayer/mplayer.mk
-> > +++ b/package/multimedia/mplayer/mplayer.mk
-> > @@ -3,67 +3,54 @@
-> >  # mplayer
-> >  #
-> >  #############################################################
-> > -MPLAYER_VERSION:=1.0rc2
-> > -MPLAYER_SOURCE:=MPlayer-$(MPLAYER_VERSION).tar.bz2
-> > -MPLAYER_SITE:=http://www7.mplayerhq.hu/MPlayer/releases
-> > -MPLAYER_DIR:=$(BUILD_DIR)/MPlayer-$(MPLAYER_VERSION)
-> > -MPLAYER_CAT:=$(BZCAT)
-> > -MPLAYER_BINARY:=mplayer
-> > -MPLAYER_TARGET_BINARY:=usr/bin/$(MPLAYER_BINARY)
-> > +MPLAYER_VERSION = 1.0rc2
-> > +MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
-> > +MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
-> >
-> >  MPLAYER_DEPENDENCIES = \
-> >        $(if $(BR2_PACKAGE_LIBMAD),libmad) \
-> >        $(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib)
-> >
-> >  ifeq ($(BR2_ENDIAN),"BIG")
-> > -MPLAYER_ENDIAN:=--enable-big-endian
-> > +MPLAYER_CONF_OPTS += --enable-big-endian
-> >  else
-> > -MPLAYER_ENDIAN:=--disable-big-endian
-> > +MPLAYER_CONF_OPTS += --disable-big-endian
-> >  endif
->
-> How about using  MPLAYER_CONF_OPT += --disable-sdl  rather than
-> creating new var ?
-> >
-> > -# mplayer unfortunately uses --disable-largefileS, so we cannot use
-> > +# mplayer unfortunately uses --disable-largefiles, so we cannot use
-> >  # DISABLE_LARGEFILE
-> >  ifeq ($(BR2_LARGEFILE),y)
-> > -MPLAYER_LARGEFILE:=--enable-largefiles
-> > +MPLAYER_CONF_OPTS += --enable-largefiles
-> >  else
-> >  # dvdread/dvdcss requires largefile support
-> > -MPLAYER_LARGEFILE:=--disable-largefiles \
-> > +MPLAYER_CONF_OPTS += --disable-largefiles \
-> >                   --disable-dvdread-internal \
-> >                   --disable-libdvdcss-internal
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_SDL),y)
-> > -MPLAYER_SDL:=--enable-sdl
-> --with-sdl-config=$(STAGING_DIR)/usr/bin/sdl-config
-> > +MPLAYER_CONF_OPTS += --enable-sdl
-> --with-sdl-config=$(STAGING_DIR)/usr/bin/sdl-config
-> >  MPLAYER_DEPENDENCIES += sdl
-> >  else
-> > -MPLAYER_SDL:=--disable-sdl
-> > +MPLAYER_CONF_OPTS += --disable-sdl
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_FREETYPE),y)
-> > -MPLAYER_FREETYPE:= \
-> > +MPLAYER_CONF_OPTS +=  \
-> >        --enable-freetype \
-> >        --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
-> >  MPLAYER_DEPENDENCIES += freetype
-> >  else
-> > -MPLAYER_FREETYPE:=--disable-freetype
-> > +MPLAYER_CONF_OPTS += --disable-freetype
-> >  endif
-> >
-> >  ifeq ($(BR2_i386),y)
-> >  # This seems to be required to compile some of the inline asm
-> > -MPLAYER_CFLAGS:=-fomit-frame-pointer
-> > +MPLAYER_CFLAGS = -fomit-frame-pointer
-> >  endif
-> >
-> > -$(DL_DIR)/$(MPLAYER_SOURCE):
-> > -       $(call DOWNLOAD,$(MPLAYER_SITE),$(MPLAYER_SOURCE))
-> > -
-> > -$(MPLAYER_DIR)/.unpacked: $(DL_DIR)/$(MPLAYER_SOURCE)
-> > -       $(MPLAYER_CAT) $(DL_DIR)/$(MPLAYER_SOURCE) | tar -C $(BUILD_DIR)
-> $(TAR_OPTIONS) -
-> > -       toolchain/patch-kernel.sh $(MPLAYER_DIR)
-> package/multimedia/mplayer/ mplayer-$(MPLAYER_VERSION)\*.patch\*
-> > -       $(CONFIG_UPDATE) $(MPLAYER_DIR)
-> > -       touch $@
-> > -
-> > -$(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
-> > -       (cd $(MPLAYER_DIR); rm -rf config.cache; \
-> > +define MPLAYER_CONFIGURE_CMDS
-> > +       (cd $(@D); rm -rf config.cache; \
-> >                $(TARGET_CONFIGURE_OPTS) \
-> >                $(TARGET_CONFIGURE_ARGS) \
-> >                CFLAGS="$(TARGET_CFLAGS) $(MPLAYER_CFLAGS)" \
-> > @@ -80,44 +67,29 @@ $(MPLAYER_DIR)/.configured: $(MPLAYER_DIR)/.unpacked
-> >                --charset=UTF-8 \
-> >                --enable-mad \
-> >                --enable-fbdev \
-> > -               $(MPLAYER_ENDIAN) \
-> > -               $(MPLAYER_LARGEFILE) \
-> > -               $(MPLAYER_SDL) \
-> > -               $(MPLAYER_FREETYPE) \
-> > +               $(MPLAYER_CONF_OPTS) \
-> >                --enable-cross-compile \
-> >                --disable-ivtv \
-> >                --disable-tv \
-> >                --disable-live \
-> >                --enable-dynamic-plugins \
-> >        )
-> > -       touch $@
-> > -
-> > -$(MPLAYER_DIR)/$(MPLAYER_BINARY): $(MPLAYER_DIR)/.configured
-> > -       $(MAKE1) -C $(MPLAYER_DIR)
-> > -       touch -c $@
-> > +endef
-> merge target option to (PKG)_CONF_OPT and defining CONFIGURE_CMDS   is
-> not necessary
->
-> >
-> > -$(TARGET_DIR)/$(MPLAYER_TARGET_BINARY): $(MPLAYER_DIR)/$(MPLAYER_BINARY)
-> > -       $(INSTALL) -m 0755 -D $(MPLAYER_DIR)/$(MPLAYER_BINARY)
-> $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> > -       -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-> $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> > -       touch -c $@
-> > +define MPLAYER_BUILD_CMDS
-> > +       $(MAKE1) -C $(@D)
-> > +endef
->
-> is it necessary ?
-> >
-> > -mplayer: $(MPLAYER_DEPENDENCIES) $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> > +define MPLAYER_INSTALL_TARGET_CMDS
-> > +       $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-> > +endef
-> >
-> > -mplayer-source: $(DL_DIR)/$(MPLAYER_SOURCE)
-> > +define MPLAYER_UNINSTALL_TARGET_CMDS
-> > +       $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
-> > +endef
-> >
-> > -mplayer-unpacked: $(MPLAYER_DIR)/.unpacked
-> > +define MPLAYER_CLEAN_CMDS
-> > +       $(MAKE) -C $(@D) clean
-> > +endef
-> >
-> > -mplayer-clean:
-> > -       rm -f $(TARGET_DIR)/$(MPLAYER_TARGET_BINARY)
-> > -       -$(MAKE) -C $(MPLAYER_DIR) clean
-> > -
-> > -mplayer-dirclean:
-> > -       rm -rf $(MPLAYER_DIR)
-> > -#############################################################
-> > -#
-> > -# Toplevel Makefile options
-> > -#
-> > -#############################################################
-> > -ifeq ($(BR2_PACKAGE_MPLAYER),y)
-> > -TARGETS+=mplayer
-> > -endif
-> > +$(eval $(call GENTARGETS,package/multimedia,mplayer))
-> > --
-> > 1.7.3.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-This is a gentargets package, (PKG)_CONF_OPT is only available to
-autotargets. This is why I added the 'S' to the end of the variable name, to
-show that it's not an autotargets package. As for MAKE1, I'm not sure if
-it's necessary, but it was in the original package, so I used it.
+---
+ package/Config.in                  |    1 +
+ package/pcmciautils/Config.in      |   24 +++++++++++++++++++++
+ package/pcmciautils/pcmciautils.mk |   41 
+++++++++++++++++++++++++++++++++++++
+ 3 files changed, 66 insertions(+), 0 deletions(-)
+ create mode 100644 package/pcmciautils/Config.in
+ create mode 100644 package/pcmciautils/pcmciautils.mk
 
-Martin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101005/99239999/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 5e08d59..c75932b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -177,6 +177,7 @@ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
+ source "package/pciutils/Config.in"
++source "package/pcmciautils/Config.in"
+ source "package/setserial/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # busybox has fdisk
+diff --git a/package/pcmciautils/Config.in b/package/pcmciautils/Config.in
+new file mode 100644
+index 0000000..022558a
+--- /dev/null
++++ b/package/pcmciautils/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_PCMCIAUTILS
++	bool "pcmciautils"
++	select BR2_PACKAGE_LIBSYSFS
++	depends on BR2_PACKAGE_UDEV
++	help
++	  Set of tools needed to use PC-card slots usually found in laptops
++
++comment "pcmciautils requires udev"
++	depends on !BR2_PACKAGE_UDEV
++
++if BR2_PACKAGE_PCMCIAUTILS
++
++config BR2_PACKAGE_PCMCIAUTILS_STARTUP
++	bool "Build socket-startup script"
++	default y
++	help
++	  Enable this if you need the socket-startup script
++ 
++	  You don't need it if the socket driver does not select
++	  PCCARD_NONSTATIC -- that is the case for many embedded systems --
++	  and for yenta_socket if the cardbus bridge is either below a
++	  PCI-PCI bridge, or where the PCI bus is not equivalent to the host
++	  bus (e.g. on PPC)
++endif
+diff --git a/package/pcmciautils/pcmciautils.mk 
+b/package/pcmciautils/pcmciautils.mk
+new file mode 100644
+index 0000000..532b5ea
+--- /dev/null
++++ b/package/pcmciautils/pcmciautils.mk
+@@ -0,0 +1,41 @@
++#############################################################
++#
++# pcmciautils
++#
++#############################################################
++PCMCIAUTILS_VERSION:=017
++PCMCIAUTILS_SOURCE:=pcmciautils-$(PCMCIAUTILS_VERSION).tar.gz
++PCMCIAUTILS_SITE:=http://www.kernel.org/pub/linux/utils/kernel/pcmcia/
++PCMCIAUTILS_DEPENDENCIES = libsysfs
++
++ifeq ($(BR2_PACKAGE_PCMCIAUTILS_STARTUP),y)
++	BR2_PACKAGE_PCMCIAUTILS_BUILD_STARTUP=true
++else
++	BR2_PACKAGE_PCMCIAUTILS_BUILD_STARTUP=false
++endif
++
++ifeq ($(BR2_PREFER_STATIC),y)
++	BR2_PACKAGE_PCMCIAUTILS_BUILD_STATIC=true
++else
++	BR2_PACKAGE_PCMCIAUTILS_BUILD_STATIC=false
++endif
++
++define PCMCIAUTILS_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C "$(@D)" \
++		STARTUP=$(BR2_PACKAGE_PCMCIAUTILS_BUILD_STARTUP) \
++		UDEV="true" \
++		STATIC=$(BR2_PACKAGE_PCMCIAUTILS_BUILD_STATIC) \
++		DESTDIR="$(TARGET_DIR)" \
++		HOSTCC="$(HOSTCC)" \
++		V="true"
++endef
++
++define PCMCIAUTILS_INSTALL_TARGET_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C "$(@D)" \
++		DESTDIR="$(TARGET_DIR)" \
++		INSTALL="$(INSTALL)" \
++		INSTALL_PROGRAM="$(INSTALL)" \
++		install
++endef
++
++$(eval $(call GENTARGETS,package,pcmciautils))
+-- 
+1.7.3.1
+
+Hi!
+
+my current mail-provided doesn't play nice with git send-email so I had to 
+send using a different mail and then forward with the mail registered to 
+buildroot mailing list. Sorry for the delay, this patch have been done for a 
+week now.
+
+MvH
+Patrik Dahlstr?m
+Ordf?rande - http://www.studentfiket.com/
+Penga-Mas (Kass?r) - Dalarnas Nation
+
+"Alla djur, utom m?nniskan, vet att livets huvudsakliga mening ?r att njuta av 
+det! --Samuel Butler
