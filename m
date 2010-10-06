@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Oct 2010 10:18:48 +0200
-Subject: [Buildroot] [git commit master 1/1] xapp_xbacklight: needs
-	libXrandr/Xrender
-Message-ID: <20101006081908.84C168B87E@busybox.osuosl.org>
+Date: Wed, 6 Oct 2010 11:48:58 +0200
+Subject: [Buildroot] [git commit master 1/1] imagemagick: fix
+	s/IMAGEMAGISK/IMAGEMAGICK/ typo
+Message-ID: <20101006103553.DDCB88B7C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +10,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73a1f4ba5f53f69173c7e63ae07bb3d5984c68d9
+commit: http://git.buildroot.net/buildroot/commit/?id=259a129e81184b9d5f0fd998a940c7b4943fde81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                          |    2 +-
- package/x11r7/xapp_xbacklight/Config.in          |    2 ++
- package/x11r7/xapp_xbacklight/xapp_xbacklight.mk |    2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ package/imagemagick/imagemagick.mk |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 2fc43b0..c979607 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -43,7 +43,7 @@
- 	shared-mime-info, speex, sqlite, squashfs, strace, sylpheed,
- 	taglib, tcpdump, thttpd, tiff, tn5250, udev, udpcast,
- 	usbmount, usbutils, vsftpd, vtun, which, wpa_supplicant,
--	xapp_twm,
-+	xapp_twm, xapp_xbacklight,
- 	xdriver_xf86-input-{acecad,aiptek,evdev,joystick,keyboard},
- 	xdriver-xf86-input-{mouse,synaptics,vmmouse,void},
- 	xdriver-xf86-video-{apm,ark,ast,ati,chips,cirrus,dummy,fbdev},
-diff --git a/package/x11r7/xapp_xbacklight/Config.in b/package/x11r7/xapp_xbacklight/Config.in
-index 3d727e2..9756235 100644
---- a/package/x11r7/xapp_xbacklight/Config.in
-+++ b/package/x11r7/xapp_xbacklight/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_XAPP_XBACKLIGHT
- 	bool "xbacklight"
- 	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	help
- 	  xbacklight
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-index 03f62b1..9da0c65 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-@@ -8,6 +8,6 @@ XAPP_XBACKLIGHT_VERSION = 1.1.1
- XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.bz2
- XAPP_XBACKLIGHT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XBACKLIGHT_AUTORECONF = NO
--XAPP_XBACKLIGHT_DEPENDENCIES = xlib_libX11
-+XAPP_XBACKLIGHT_DEPENDENCIES = xlib_libX11 xlib_libXrandr xlib_libXrender
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index f14adb9..30158e0 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -33,49 +33,49 @@ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ IMAGEMAGICK_CONF_OPT += --with-fontconfig
+ IMAGEMAGICK_DEPENDENCIES += fontconfig
+ else
+-IMAGEMAGISK_CONF_OPT += --without-fontconfig
++IMAGEMAGICK_CONF_OPT += --without-fontconfig
+ endif
  
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_xbacklight))
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ IMAGEMAGICK_CONF_OPT += --with-freetype
+ IMAGEMAGICK_DEPENDENCIES += freetype
+ else
+-IMAGEMAGISK_CONF_OPT += --without-freetype
++IMAGEMAGICK_CONF_OPT += --without-freetype
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ IMAGEMAGICK_CONF_OPT += --with-jpeg
+ IMAGEMAGICK_DEPENDENCIES += jpeg
+ else
+-IMAGEMAGISK_CONF_OPT += --without-jpeg
++IMAGEMAGICK_CONF_OPT += --without-jpeg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ IMAGEMAGICK_CONF_OPT += --with-png
+ IMAGEMAGICK_DEPENDENCIES += libpng
+ else
+-IMAGEMAGISK_CONF_OPT += --without-png
++IMAGEMAGICK_CONF_OPT += --without-png
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBRSVG),y)
+ IMAGEMAGICK_CONF_OPT += --with-rsvg
+ IMAGEMAGICK_DEPENDENCIES += librsvg
+ else
+-IMAGEMAGISK_CONF_OPT += --without-rsvg
++IMAGEMAGICK_CONF_OPT += --without-rsvg
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ IMAGEMAGICK_CONF_OPT += --with-xml
+ IMAGEMAGICK_DEPENDENCIES += libxml2
+ else
+-IMAGEMAGISK_CONF_OPT += --without-xml
++IMAGEMAGICK_CONF_OPT += --without-xml
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ IMAGEMAGICK_CONF_OPT += --with-tiff
+ IMAGEMAGICK_DEPENDENCIES += tiff
+ else
+-IMAGEMAGISK_CONF_OPT += --without-tiff
++IMAGEMAGICK_CONF_OPT += --without-tiff
+ endif
+ 
+ $(eval $(call AUTOTARGETS,package,imagemagick))
 -- 
 1.7.1
