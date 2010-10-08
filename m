@@ -1,20 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Oct 2010 06:22:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 2677] New: introducing util-linux-ng as
- replacement for util-linux
-Message-ID: <bug-2677-163@https.bugs.busybox.net/>
+Date: Fri,  8 Oct 2010 06:25:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 2683] New: cups does not install correctly to
+	target
+Message-ID: <bug-2683-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2677
+https://bugs.busybox.net/show_bug.cgi?id=2683
 
-           Summary: introducing util-linux-ng as replacement for
-                    util-linux
+           Summary: cups does not install correctly to target
            Product: buildroot
-           Version: unspecified
+           Version: 2010.05
           Platform: All
         OS/Version: Linux
             Status: NEW
@@ -27,12 +26,13 @@ https://bugs.busybox.net/show_bug.cgi?id=2677
    Estimated Hours: 0.0
 
 
-Created attachment 2581
-  --> https://bugs.busybox.net/attachment.cgi?id=2581
-introducing util-linux-NG
+Created attachment 2587
+  --> https://bugs.busybox.net/attachment.cgi?id=2587
+cups 1.4.4 and autotargets
 
-former version of util-linux is rather outdated, this version introduces the
-stable version 2.17.2 used widely in distributions
+cups installs its libraries into user/lib64, the attached patch converts to
+autotargets and updates to newer version 1.4.4, libraries are installed
+correctly, runs well on arm926
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
