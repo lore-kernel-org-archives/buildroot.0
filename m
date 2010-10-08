@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Oct 2010 06:28:02 +0000 (UTC)
+Date: Fri,  8 Oct 2010 06:28:41 +0000 (UTC)
 Subject: [Buildroot] [Bug 2677] introducing util-linux-ng as replacement for
 	util-linux
 In-Reply-To: <bug-2677-163@https.bugs.busybox.net/>
 References: <bug-2677-163@https.bugs.busybox.net/>
-Message-ID: <20101008062802.F12AF8BE9A@busybox.osuosl.org>
+Message-ID: <20101008062841.2CB3F8BE9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,9 +17,8 @@ Ossy <marcus.osdoba@googlemail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-           Priority|P5                          |P4
-   Target Milestone|---                         |2010.11
-           Severity|normal                      |enhancement
+         AssignedTo|unassigned at buildroot.uclibc |marcus.osdoba at googlemail.co
+                   |.org                        |m
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
