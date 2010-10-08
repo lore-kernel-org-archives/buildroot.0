@@ -1,43 +1,30 @@
-From: Massimiliano Marretta <max@marretta.com>
-Date: Thu, 07 Oct 2010 20:19:31 +0200
-Subject: [Buildroot] Xterm: undefined reference to __longjmp_chk
-Message-ID: <4CAE0F33.5000305@marretta.com>
+From: olyvine.chen at logiways.com.cn <olyvine.chen@logiways.com.cn>
+Date: Fri, 08 Oct 2010 12:23:47 +0800
+Subject: [Buildroot] buildroot not support c++ compliing
+Message-ID: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi,
+Dear all,
+        
+  I now try to add package libmusicbrainz to buildroot, but many errors
+happen, such as the following:
 
-I'm using the buildroot 2010.08 version with crosstool-ng toolchain. The 
-target is an x86 i686.
-I receive this error wit xterm compilation:
+*************************************************************************
 
-charproc.o: In function `VTReset':
-charproc.c:(.text+0x2623): undefined reference to `__longjmp_chk'
-main.o: In function `hungtty':
-main.c:(.text+0x867): undefined reference to `__longjmp_chk'
-misc.o: In function `end_vt_mode':
-misc.c:(.text+0x3a3): undefined reference to `__longjmp_chk'
-misc.o: In function `end_tek_mode':
-misc.c:(.text+0x3c7): undefined reference to `__longjmp_chk'
-Tekproc.o: In function `Tinput':
-Tekproc.c:(.text+0x1336): undefined reference to `__longjmp_chk'
-collect2: ld returned 1 exit status
-make[1]: *** [xterm] Error 1
-make[1]: Leaving directory 
-`/srv/source/buildroot-2010.08/output/build/xterm-259'
-make: *** 
-[/srv/source/buildroot-2010.08/output/build/xterm-259/.stamp_built] Error 2
+buildroot/output/build/libmusicbrainz-3.0.2/src/artist.cpp:23:18: error:
+string: No such file or directory
 
-
--- 
-
-Massimiliano Marretta
-Via Zuccola 11
-41015 Nonantola (Mo) - Italy
-tel: +39 347 5340305
-skype: mmarretta
-/mailto:max at marretta.com/
-/web:www.marretta.com/ <http://www.marretta.com>
+*************************************************************************
+  it seems indicate that no c++ library available, then how to enable c
+++ compiling for buildroot? 
+        
+  I enabled glibc via:
+  Toolchain => Toolchain type (External toolchain) => External toolchain
+C library (glibc)
+        
+Kindest regards!
+Olyvine
