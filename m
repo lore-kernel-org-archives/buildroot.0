@@ -1,58 +1,71 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 8 Oct 2010 10:52:40 +0200
-Subject: [Buildroot] buildroot not support c++ compliing
-In-Reply-To: <20101008104411.7a7a2777@surf>
-References: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn>
-	<20101008091844.1afdb502@surf>
-	<1286525870.3703.16.camel@olyvine-desktop.logiways-sz.cn>
-	<20101008104411.7a7a2777@surf>
-Message-ID: <AANLkTikXM6DCteDjN7Sw0O7-2bQWtwFLRdo=YD6bA_64@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 08 Oct 2010 12:26:20 +0200
+Subject: [Buildroot] [PATCH] New package: nuttcp
+Message-ID: <4CAEF1CC.507@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 8, 2010 at 10:44 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Fri, 08 Oct 2010 16:17:50 +0800
-> "olyvine.chen at logiways.com.cn" <olyvine.chen@logiways.com.cn> wrote:
->
->> STLinux's sh4-linux-
->
-> Does this toolchain supports C++ ? Is this toolchain publicly available
-> so that I can test and see what's wrong ?
->
-> Thanks,
->
-> Thomas
-> --
+Add a new TCP/UDP network testing tool, that provides some advanced
+features compared to ttcp.
 
-Thomas,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-There is an installation script here :
-
-http://stlinux.com/pub/stlinux/2.3/install
-
-Other informations related to the toolchain installation on
-debian/ubuntu distros are here :
-
-http://www.stlinux.com/install/ubuntu
-
-There are both stlinux 2.3 and 2.4 version. I might be wrong, but I'm
-pretty sure Olyvine uses the 2.3 version.
-Also the installation page does not mention it, but the toolchain is
-available with glibc or uclibc.
-
-You choice :
-sudo ./install all-sh4-glibc
-or
-sudo ./install all-sh4-uclibc
-
-Olyvine, could give us some details about the exact version of the
-toolchain you're using ?
-
-Regards,
-
---
-Lionel Landwerlin
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in	2010-10-08 11:40:33.000000000 +0200
++++ b/package/Config.in	2010-10-08 11:48:04.000000000 +0200
+@@ -28,6 +28,7 @@
+ source "package/oprofile/Config.in"
+ source "package/strace/Config.in"
+ source "package/valgrind/Config.in"
++source "package/nuttcp/Config.in"
+ endmenu
+ 
+ menu "Development tools"
+Index: b/package/nuttcp/Config.in
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/nuttcp/Config.in	2010-10-08 11:48:04.000000000 +0200
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_NUTTCP
++	bool "nuttcp"
++	help
++	  nuttcp is a TCP/UDP network testing tool, much like iperf
++
+Index: b/package/nuttcp/nuttcp.mk
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/nuttcp/nuttcp.mk	2010-10-08 12:19:08.000000000 +0200
+@@ -0,0 +1,29 @@
++#############################################################
++#
++# nuttcp
++#
++#############################################################
++
++NUTTCP_VERSION = 6.1.2
++NUTTCP_SITE = http://www.lcp.nrl.navy.mil/nuttcp/
++NUTTCP_SOURCE = nuttcp-$(NUTTCP_VERSION).tar.bz2
++
++define NUTTCP_CONFIGURE_CMDS
++	touch $(@D)/.stamp_configured
++endef
++
++define NUTTCP_BUILD_CMDS
++	$(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define NUTTCP_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/nuttcp-$(NUTTCP_VERSION) \
++		$(TARGET_DIR)/usr/bin/nuttcp
++endef
++
++define NUTTCP_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/nuttcp
++endef
++
++$(eval $(call GENTARGETS,package,nuttcp))
++
