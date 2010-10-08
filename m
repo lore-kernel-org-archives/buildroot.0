@@ -1,9 +1,9 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Fri,  8 Oct 2010 01:43:03 -0700
-Subject: [Buildroot] [PATCH 4/9] sed: convert to autotargets
+Date: Fri,  8 Oct 2010 01:43:05 -0700
+Subject: [Buildroot] [PATCH 6/9] slang: convert to gentargets
 In-Reply-To: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286527389-29983-4-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286527389-29983-6-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,110 +12,110 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/sed/sed.mk |   83 ++++++---------------------------------------------
- 1 files changed, 10 insertions(+), 73 deletions(-)
+ package/slang/slang.mk |   93 +++++++++++++++++++++++------------------------
+ 1 files changed, 46 insertions(+), 47 deletions(-)
 
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index d6f53be..1a313eb 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -3,41 +3,11 @@
- # sed
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 43e910b..f6e6eb1 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -3,51 +3,50 @@
+ # slang
  #
  #############################################################
--SED_VERSION:=4.2.1
--SED_SOURCE:=sed-$(SED_VERSION).tar.gz
--SED_SITE:=$(BR2_GNU_MIRROR)/sed
--SED_CAT:=$(ZCAT)
--SED_DIR2:=$(BUILD_DIR)/sed-$(SED_VERSION)
--SED_BINARY:=sed/sed
--SED_TARGET_BINARY:=bin/sed
--ifeq ($(BR2_LARGEFILE),y)
--SED_CPPFLAGS=-D_FILE_OFFSET_BITS=64
--endif
-+SED_VERSION = 4.2.1
-+SED_SOURCE = sed-$(SED_VERSION).tar.gz
-+SED_SITE = $(BR2_GNU_MIRROR)/sed
- 
--$(DL_DIR)/$(SED_SOURCE):
--	mkdir -p $(DL_DIR)
--	$(call DOWNLOAD,$(SED_SITE),$(SED_SOURCE))
+-SLANG_VERSION:=1.4.5
+-SLANG_SOURCE=slang-$(SLANG_VERSION)-mini.tar.bz2
+-SLANG_CAT:=$(BZCAT)
+-SLANG_SITE:=http://www.uclibc.org/
+-SLANG_DIR=$(BUILD_DIR)/slang-$(SLANG_VERSION)-mini
 -
--sed-source: $(DL_DIR)/$(SED_SOURCE)
+-$(DL_DIR)/$(SLANG_SOURCE):
+-	$(call DOWNLOAD,$(SLANG_SITE),$(SLANG_SOURCE))
 -
--$(SED_DIR2)/.unpacked: $(DL_DIR)/$(SED_SOURCE)
--	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	$(CONFIG_UPDATE) $(SED_DIR2)/build-aux
--	touch $@
+-$(SLANG_DIR): $(DL_DIR)/$(SLANG_SOURCE)
+-	$(SLANG_CAT) $(DL_DIR)/$(SLANG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
 -
--$(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
--	(cd $(SED_DIR2); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CPPFLAGS="$(SED_CPPFLAGS)" \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
-+SED_CONF_OPT = --bindir=/usr/bin \
- 		--libdir=/lib \
- 		--libexecdir=/usr/lib \
- 		--sysconfdir=/etc \
-@@ -45,45 +15,12 @@ $(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
- 		--localstatedir=/var \
- 		--mandir=/usr/share/man \
- 		--infodir=/usr/share/info \
--		--include=$(STAGING_DIR)/usr/include \
--		$(DISABLE_NLS) \
--	)
--	touch $@
+-$(SLANG_DIR)/libslang.so: $(SLANG_DIR)
+-	$(MAKE1) CFLAGS="-Os -g -fPIC $(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(SLANG_DIR)
 -
--$(SED_DIR2)/$(SED_BINARY): $(SED_DIR2)/.configured
--	$(MAKE) -C $(SED_DIR2)
--
--# This stuff is needed to work around GNU make deficiencies
--sed-target_binary: $(SED_DIR2)/$(SED_BINARY)
--	@if [ -L $(TARGET_DIR)/$(SED_TARGET_BINARY) ]; then \
--		rm -f $(TARGET_DIR)/$(SED_TARGET_BINARY); \
--	fi
--
--	@if [ ! -f $(SED_DIR2)/$(SED_BINARY) \
--	      -o $(TARGET_DIR)/$(SED_TARGET_BINARY) \
--	      -ot $(SED_DIR2)/$(SED_BINARY) ]; then \
--		set -x; \
--		$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(SED_DIR2) install; \
--		mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/; \
--		rm -rf $(TARGET_DIR)/share/locale; \
--		rm -rf $(TARGET_DIR)/usr/share/doc; \
--	fi
-+		--include=$(STAGING_DIR)/usr/include
- 
--sed: sed-target_binary
-+define SED_MOVE_BINARY
-+	mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/
+-$(STAGING_DIR)/usr/lib/libslang.so.1: $(SLANG_DIR)/libslang.so
+-	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/usr/lib
+-	cp -dpf $(SLANG_DIR)/libslang.so $(STAGING_DIR)/usr/lib
+-	cp -dpf $(SLANG_DIR)/slang.h $(STAGING_DIR)/usr/include
+-	cp -dpf $(SLANG_DIR)/slcurses.h $(STAGING_DIR)/usr/include
++SLANG_VERSION = 1.4.5
++SLANG_SOURCE = slang-$(SLANG_VERSION)-mini.tar.bz2
++SLANG_SITE = http://www.uclibc.org/
++SLANG_INSTALL_STAGING = YES
++
++define SLANG_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
 +endef
- 
--sed-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(SED_DIR2) uninstall
--	-$(MAKE) -C $(SED_DIR2) clean
-+SED_POST_INSTALL_TARGET_HOOKS = SED_MOVE_BINARY
- 
--sed-dirclean:
--	rm -rf $(SED_DIR2)
++
++define SLANG_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(STAGING_DIR)/usr/lib/libslang.a
++	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(STAGING_DIR)/usr/lib/libslang.so
++	$(INSTALL) -D -m 0644 $(@D)/slang.h $(STAGING_DIR)/usr/include/slang.h
++	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(STAGING_DIR)/usr/include/slcurses.h
+ 	(cd $(STAGING_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
+-	touch -c $@
 -
+-$(TARGET_DIR)/usr/lib/libslang.so.1: $(STAGING_DIR)/usr/lib/libslang.so.1
+-	cp -dpf $(STAGING_DIR)/usr/lib/libslang.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libslang.so*
+-
+-slang: $(STAGING_DIR)/usr/lib/libslang.so.1 $(TARGET_DIR)/usr/lib/libslang.so.1
+-
+-slang-source: $(DL_DIR)/$(SLANG_SOURCE)
+-
+-slang-clean:
+-	rm -f $(TARGET_DIR)/usr/lib/libslang.so* $(STAGING_DIR)/usr/lib/libslang.a \
+-		$(STAGING_DIR)/usr/include/slang.h \
+-		$(STAGING_DIR)/usr/include/slcurses.h
+-	-$(MAKE) -C $(SLANG_DIR) clean
+-
+-slang-dirclean:
+-	rm -rf $(SLANG_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SED),y)
--TARGETS+=sed
+-ifeq ($(BR2_PACKAGE_SLANG),y)
+-TARGETS+=slang
 -endif
-+$(eval $(call AUTOTARGETS,package,sed))
++endef
++
++define SLANG_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(TARGET_DIR)/usr/lib/libslang.a
++	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(TARGET_DIR)/usr/lib/libslang.so
++	$(INSTALL) -D -m 0644 $(@D)/slang.h $(TARGET_DIR)/usr/include/slang.h
++	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(TARGET_DIR)/usr/include/slcurses.h
++	(cd $(TARGET_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
++endef
++
++define SLANG_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/usr/lib/libslang.a
++	rm -f $(STAGING_DIR)/usr/lib/libslang.so
++	rm -f $(STAGING_DIR)/usr/lib/libslang.so.1
++	rm -f $(STAGING_DIR)/usr/include/slang.h
++	rm -f $(STAGING_DIR)/usr/include/slcurses.h
++endef
++
++define SLANG_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/libslang.a
++	rm -f $(TARGET_DIR)/usr/lib/libslang.so
++	rm -f $(TARGET_DIR)/usr/lib/libslang.so.1
++	rm -f $(TARGET_DIR)/usr/include/slang.h
++	rm -f $(TARGET_DIR)/usr/include/slcurses.h
++endef
++
++define SLANG_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(call GENTARGETS,package,slang))
 -- 
 1.7.3.1
