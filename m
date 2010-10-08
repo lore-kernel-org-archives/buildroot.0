@@ -1,9 +1,9 @@
 From: Massimiliano Marretta <max@marretta.com>
-Date: Fri, 08 Oct 2010 10:13:23 +0200
+Date: Fri, 08 Oct 2010 10:13:59 +0200
 Subject: [Buildroot] Xterm: undefined reference to __longjmp_chk
 In-Reply-To: <4CAE0F33.5000305@marretta.com>
 References: <4CAE0F33.5000305@marretta.com>
-Message-ID: <4CAED2A3.8030709@marretta.com>
+Message-ID: <4CAED2C7.6010607@marretta.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -53,7 +53,3 @@ tel: +39 347 5340305
 skype: mmarretta
 /mailto:max at marretta.com/
 /web:www.marretta.com/ <http://www.marretta.com>
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101008/ecb527ad/attachment.html>
