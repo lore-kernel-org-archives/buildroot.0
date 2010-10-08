@@ -1,46 +1,26 @@
-From: olyvine.chen at logiways.com.cn <olyvine.chen@logiways.com.cn>
-Date: Fri, 08 Oct 2010 16:17:50 +0800
+From: Phil Edworthy <Phil.Edworthy@renesas.com>
+Date: Fri, 8 Oct 2010 09:28:02 +0100
 Subject: [Buildroot] buildroot not support c++ compliing
-In-Reply-To: <20101008091844.1afdb502@surf>
-References: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn>
-	<20101008091844.1afdb502@surf>
-Message-ID: <1286525870.3703.16.camel@olyvine-desktop.logiways-sz.cn>
+In-Reply-To: <1286525870.3703.16.camel@olyvine-desktop.logiways-sz.cn>
+References: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn><20101008091844.1afdb502@surf>
+	<1286525870.3703.16.camel@olyvine-desktop.logiways-sz.cn>
+Message-ID: <AB12B32E73474741A2C5361C433A44DE022FA7A4@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2010-10-08 at 09:18 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 08 Oct 2010 12:23:47 +0800
-> "olyvine.chen at logiways.com.cn" <olyvine.chen@logiways.com.cn> wrote:
-> 
-> >   I now try to add package libmusicbrainz to buildroot, but many
-> > errors happen, such as the following:
-> > 
-> > *************************************************************************
-> > 
-> > buildroot/output/build/libmusicbrainz-3.0.2/src/artist.cpp:23:18:
-> > error: string: No such file or directory
-> > 
-> > *************************************************************************
-> >   it seems indicate that no c++ library available, then how to enable
-> > c ++ compiling for buildroot? 
-> >         
-> >   I enabled glibc via:
-> >   Toolchain => Toolchain type (External toolchain) => External
-> > toolchain C library (glibc)
-> 
-> Which external toolchain are you using ?
-> 
-> Thomas
+Hi Olyvine,
 
-STLinux's sh4-linux-
--- 
-Kindest regards !
-====================================
-Olyvine Chen, Logiways Shenzhen
-http://www.logiways.com
-====================================
+> > Which external toolchain are you using ?
+> >
+> > Thomas
+> 
+> STLinux's sh4-linux-
+
+I'm using CodeSourcery's sh4 toolchain for Renesas devices, this works fine
+for me. It might be worth trying it:
+http://www.codesourcery.com/sgpp/lite/superh
+
+Phil
