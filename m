@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Oct 2010 06:09:20 +0000 (UTC)
+Date: Fri,  8 Oct 2010 06:10:01 +0000 (UTC)
 Subject: [Buildroot] [Bug 2557] [PATCH] mkfs.xfs complains about missing
 	libxfs.so.0
 In-Reply-To: <bug-2557-163@https.bugs.busybox.net/>
 References: <bug-2557-163@https.bugs.busybox.net/>
-Message-ID: <20101008060920.66DEA8C062@busybox.osuosl.org>
+Message-ID: <20101008061001.3A0388B8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,19 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2557
 
---- Comment #2 from Ossy <marcus.osdoba@googlemail.com>  ---
-Created attachment 2575
-  --> https://bugs.busybox.net/attachment.cgi?id=2575
-xfsprogs 3.1.3 may use util-linux-ng
+Ossy <marcus.osdoba@googlemail.com> changed:
 
-converts to autotargets and uses libuuid
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #2455|0                           |1
+        is obsolete|                            |
+
+--- Comment #3 from Ossy <marcus.osdoba@googlemail.com>  ---
+Comment on attachment 2455
+  --> https://bugs.busybox.net/attachment.cgi?id=2455
+Fixes missing libs with xfsprogs
+
+newer patch uses higher version and converts to autotargets
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
