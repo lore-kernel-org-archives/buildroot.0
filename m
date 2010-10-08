@@ -1,211 +1,181 @@
 From: Martin Banky <martin.banky@gmail.com>
-Date: Fri,  8 Oct 2010 01:43:01 -0700
-Subject: [Buildroot] [PATCH 2/9] pptp-linux: convert to gentargets and bump
-	to 1.7.2
+Date: Fri,  8 Oct 2010 01:43:02 -0700
+Subject: [Buildroot] [PATCH 3/9] proftpd: convert to autotargets and bump to
+	1.3.3b
 In-Reply-To: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
 References: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286527389-29983-2-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <1286527389-29983-3-git-send-email-Martin.Banky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also, added web site to Config.in
+
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- .../pptp-linux-1.7.0-001-susv3-legacy.patch        |   24 ------
- ...tp-linux-1.7.2-000-remove-stropts-include.patch |   15 ++++
- .../pptp-linux-1.7.2-001-susv3-legacy.patch        |   24 ++++++
- package/pptp-linux/pptp-linux.mk                   |   86 +++++--------------
- 4 files changed, 62 insertions(+), 87 deletions(-)
- delete mode 100644 package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
- create mode 100644 package/pptp-linux/pptp-linux-1.7.2-000-remove-stropts-include.patch
- create mode 100644 package/pptp-linux/pptp-linux-1.7.2-001-susv3-legacy.patch
+ package/proftpd/Config.in                          |    1 +
+ ....3.1-fix-kernel-header-capability-version.patch |   12 ---
+ ...3.3b-fix-kernel-header-capability-version.patch |   12 +++
+ package/proftpd/proftpd.mk                         |   83 +++++---------------
+ 4 files changed, 34 insertions(+), 74 deletions(-)
+ delete mode 100644 package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
+ create mode 100644 package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
 
-diff --git a/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch b/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index d495643..abdedc9 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -3,3 +3,4 @@ config BR2_PACKAGE_PROFTPD
+ 	help
+ 	  ProFTPD, a highly configurable FTP server.
+ 
++	  http://www.proftpd.org/
+diff --git a/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
 deleted file mode 100644
-index f41b63f..0000000
---- a/package/pptp-linux/pptp-linux-1.7.0-001-susv3-legacy.patch
+index 2899c7f..0000000
+--- a/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
 +++ /dev/null
-@@ -1,24 +0,0 @@
--diff -rdup pptp-linux-1.7.0/pptp_callmgr.c pptp-linux-1.7.0.orig/pptp_callmgr.c
----- pptp-linux-1.7.0/pptp_callmgr.c	2005-07-28 03:15:11.000000000 +0200
--+++ pptp-linux-1.7.0.orig/pptp_callmgr.c	2007-08-24 09:20:39.000000000 +0200
--@@ -314,7 +314,7 @@ int open_inetsock(struct in_addr inetadd
--         return s;
--     }
--     if (localbind.s_addr != INADDR_NONE) {
---        bzero(&src, sizeof(src));
--+        memset(&src, 0, sizeof(src));
--         src.sin_family = AF_INET;
--         src.sin_addr   = localbind;
--         if (bind(s, (struct sockaddr *) &src, sizeof(src)) != 0) {
--diff -rdup pptp-linux-1.7.0/pptp_gre.c pptp-linux-1.7.0.orig/pptp_gre.c
----- pptp-linux-1.7.0/pptp_gre.c	2005-07-28 03:15:11.000000000 +0200
--+++ pptp-linux-1.7.0.orig/pptp_gre.c	2007-08-24 09:20:56.000000000 +0200
--@@ -81,7 +81,7 @@ int pptp_gre_bind(struct in_addr inetadd
--     int s = socket(AF_INET, SOCK_RAW, PPTP_PROTO);
--     if (s < 0) { warn("socket: %s", strerror(errno)); return -1; }
--     if (localbind.s_addr != INADDR_NONE) {
---        bzero(&loc_addr, sizeof(loc_addr));
--+        memset(&loc_addr, 0, sizeof(loc_addr));
--         loc_addr.sin_family = AF_INET;
--         loc_addr.sin_addr   = localbind;
--         if (bind(s, (struct sockaddr *) &loc_addr, sizeof(loc_addr)) != 0) {
-diff --git a/package/pptp-linux/pptp-linux-1.7.2-000-remove-stropts-include.patch b/package/pptp-linux/pptp-linux-1.7.2-000-remove-stropts-include.patch
+@@ -1,12 +0,0 @@
+---- a/lib/libcap/libcap.h	2008-04-24 19:46:29.475883739 +0200
+-+++ b/lib/libcap/libcap.h	2008-04-24 19:48:31.116088563 +0200
+-@@ -52,7 +52,8 @@
+-  */
+- 
+- #if !defined(_LINUX_CAPABILITY_VERSION) || \
+--            (_LINUX_CAPABILITY_VERSION != 0x19980330)
+-+           ((_LINUX_CAPABILITY_VERSION != 0x19980330) && \
+-+            (_LINUX_CAPABILITY_VERSION != 0x20071026))
+- 
+- # error "Kernel <linux/capability.h> does not match library"
+- # error "file "libcap.h" --> fix and recompile libcap"
+diff --git a/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
 new file mode 100644
-index 0000000..ec38fbe
+index 0000000..4401c9a
 --- /dev/null
-+++ b/package/pptp-linux/pptp-linux-1.7.2-000-remove-stropts-include.patch
-@@ -0,0 +1,15 @@
-+Removed erronous inclusion of stropts.h. 
-+
-+uClibc does not provide support for streaming, and the inclusion of stropts.h
-+is not needed anyway.
-+
-+--- a/pptp_compat.c	2008-05-13 23:33:55.000000000 -0700
-++++ b/pptp_compat.c	2010-10-06 12:11:39.000000000 -0700
-+@@ -7,7 +7,6 @@
-+ #include <fcntl.h>
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+-#include <stropts.h>
-+ #include <stdlib.h>
-+ #include <strings.h>
-+ #include "pptp_compat.h"
-diff --git a/package/pptp-linux/pptp-linux-1.7.2-001-susv3-legacy.patch b/package/pptp-linux/pptp-linux-1.7.2-001-susv3-legacy.patch
-new file mode 100644
-index 0000000..f41b63f
---- /dev/null
-+++ b/package/pptp-linux/pptp-linux-1.7.2-001-susv3-legacy.patch
-@@ -0,0 +1,24 @@
-+diff -rdup pptp-linux-1.7.0/pptp_callmgr.c pptp-linux-1.7.0.orig/pptp_callmgr.c
-+--- pptp-linux-1.7.0/pptp_callmgr.c	2005-07-28 03:15:11.000000000 +0200
-++++ pptp-linux-1.7.0.orig/pptp_callmgr.c	2007-08-24 09:20:39.000000000 +0200
-+@@ -314,7 +314,7 @@ int open_inetsock(struct in_addr inetadd
-+         return s;
-+     }
-+     if (localbind.s_addr != INADDR_NONE) {
-+-        bzero(&src, sizeof(src));
-++        memset(&src, 0, sizeof(src));
-+         src.sin_family = AF_INET;
-+         src.sin_addr   = localbind;
-+         if (bind(s, (struct sockaddr *) &src, sizeof(src)) != 0) {
-+diff -rdup pptp-linux-1.7.0/pptp_gre.c pptp-linux-1.7.0.orig/pptp_gre.c
-+--- pptp-linux-1.7.0/pptp_gre.c	2005-07-28 03:15:11.000000000 +0200
-++++ pptp-linux-1.7.0.orig/pptp_gre.c	2007-08-24 09:20:56.000000000 +0200
-+@@ -81,7 +81,7 @@ int pptp_gre_bind(struct in_addr inetadd
-+     int s = socket(AF_INET, SOCK_RAW, PPTP_PROTO);
-+     if (s < 0) { warn("socket: %s", strerror(errno)); return -1; }
-+     if (localbind.s_addr != INADDR_NONE) {
-+-        bzero(&loc_addr, sizeof(loc_addr));
-++        memset(&loc_addr, 0, sizeof(loc_addr));
-+         loc_addr.sin_family = AF_INET;
-+         loc_addr.sin_addr   = localbind;
-+         if (bind(s, (struct sockaddr *) &loc_addr, sizeof(loc_addr)) != 0) {
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index 8de0832..fd7d118 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -3,76 +3,36 @@
- # pptp-linux
++++ b/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
+@@ -0,0 +1,12 @@
++--- a/lib/libcap/libcap.h	2008-08-22 19:49:48.000000000 -0700
+++++ b/lib/libcap/libcap.h	2010-10-06 15:31:11.000000000 -0700
++@@ -65,7 +65,8 @@ struct _cap_struct {
++  */
++ 
++ #if !defined(_LINUX_CAPABILITY_VERSION_1) || \
++-            (_LINUX_CAPABILITY_VERSION_1 != 0x19980330)
+++            ((_LINUX_CAPABILITY_VERSION_1 != 0x19980330) && \
+++            (_LINUX_CAPABILITY_VERSION_1 != 0x20071026))
++ 
++ # error "Kernel <linux/capability.h> does not match library"
++ # error "file "libcap.h" --> fix and recompile libcap"
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 11ef1ef..191f611 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -3,83 +3,42 @@
+ # proftpd
  #
  #############################################################
--PPTP_LINUX_VERSION:=1.7.0
--PPTP_LINUX_SOURCE:=pptp-linux_$(PPTP_LINUX_VERSION).orig.tar.gz
--#PPTP_LINUX_PATCH:=pptp-linux_$(PPTP_LINUX_VERSION)-2.diff.gz
--PPTP_LINUX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/pptp-linux
--PPTP_LINUX_DIR:=$(BUILD_DIR)/pptp-linux-$(PPTP_LINUX_VERSION).orig
--PPTP_LINUX_CAT:=$(ZCAT)
--PPTP_LINUX_BINARY:=pptp
--PPTP_LINUX_TARGET_BINARY:=usr/sbin/pptp
-+PPTP_LINUX_VERSION = 1.7.2
-+PPTP_LINUX_SOURCE = pptp-linux_$(PPTP_LINUX_VERSION).orig.tar.gz
-+#PPTP_LINUX_PATCH = pptp-linux_$(PPTP_LINUX_VERSION)-6.diff.gz
-+PPTP_LINUX_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/p/pptp-linux
+-PROFTPD_VERSION:=1.3.1
+-PROFTPD_SOURCE:=proftpd-$(PROFTPD_VERSION).tar.bz2
+-PROFTPD_SITE:=ftp://ftp.proftpd.org/distrib/source/
+-PROFTPD_DIR:=$(BUILD_DIR)/proftpd-$(PROFTPD_VERSION)
+-PROFTPD_CAT:=$(BZCAT)
+-PROFTPD_BINARY:=proftpd
+-PROFTPD_TARGET_BINARY:=usr/sbin/proftpd
++PROFTPD_VERSION = 1.3.3b
++PROFTPD_SOURCE = proftpd-$(PROFTPD_VERSION).tar.bz2
++PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source/
  
--$(DL_DIR)/$(PPTP_LINUX_SOURCE):
--	$(call DOWNLOAD,$(PPTP_LINUX_SITE),$(PPTP_LINUX_SOURCE))
--
--ifneq ($(PPTP_LINUX_PATCH),)
--PPTP_LINUX_PATCH_FILE:=$(DL_DIR)/$(PPTP_LINUX_PATCH)
--$(PPTP_LINUX_PATCH_FILE):
--	$(call DOWNLOAD,$(PPTP_LINUX_SITE),$(PPTP_LINUX_PATCH))
+-ifeq ($(BR2_INET_IPV6),y)
+-ENABLE_IPV6:=--enable-ipv6
 -endif
++PROFTPD_CONF_ENV = ac_cv_func_setpgrp_void=yes \
++		ac_cv_func_setgrent_void=yes
+ 
+-$(DL_DIR)/$(PROFTPD_SOURCE):
+-	 $(call DOWNLOAD,$(PROFTPD_SITE),$(PROFTPD_SOURCE))
 -
--$(PPTP_LINUX_DIR)/.unpacked: $(DL_DIR)/$(PPTP_LINUX_SOURCE) $(PPTP_LINUX_PATCH_FILE)
--	$(PPTP_LINUX_CAT) $(DL_DIR)/$(PPTP_LINUX_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
- ifneq ($(PPTP_LINUX_PATCH),)
--	(cd $(PPTP_LINUX_DIR) && $(PPTP_LINUX_CAT) $(DL_DIR)/$(PPTP_LINUX_PATCH) | patch -p1)
--	if [ -d $(PPTP_LINUX_DIR)/debian/patches ]; then \
--		toolchain/patch-kernel.sh $(PPTP_LINUX_DIR) $(PPTP_LINUX_DIR)/debian/patches \*.patch; \
-+define PPTP_LINUX_DEBIAN_PATCHES
-+	if [ -d $(@D)/debian/patches ]; then \
-+		toolchain/patch-kernel.sh $(@D) $(@D)/debian/patches \*.diff; \
- 	fi
-+endef
- endif
--	toolchain/patch-kernel.sh $(PPTP_LINUX_DIR) package/pptp-linux/ pptp-linux\*.patch
+-proftpd-source: $(DL_DIR)/$(PROFTPD_SOURCE)
+-
+-$(PROFTPD_DIR)/.unpacked: $(DL_DIR)/$(PROFTPD_SOURCE)
+-	$(PROFTPD_CAT) $(DL_DIR)/$(PROFTPD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(PROFTPD_DIR)
+-	toolchain/patch-kernel.sh $(PROFTPD_DIR) package/proftpd/ proftpd-$(PROFTPD_VERSION)\*.patch;
 -	touch $@
 -
--$(PPTP_LINUX_DIR)/.configured: $(PPTP_LINUX_DIR)/.unpacked
--	(cd $(PPTP_LINUX_DIR); rm -rf config.cache; \
+-$(PROFTPD_DIR)/.configured: $(PROFTPD_DIR)/.unpacked
+-	(cd $(PROFTPD_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_setpgrp_void=yes \
+-		ac_cv_func_setgrent_void=yes \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
+-		--sysconfdir=/etc \
+-		--localstatedir=/var/run \
++PROFTPD_CONF_OPT = --localstatedir=/var/run \
+ 		--disable-static \
+ 		--disable-curses \
+ 		--disable-ncurses \
+ 		--disable-facl \
+ 		--disable-dso \
+ 		--enable-shadow \
 -		$(DISABLE_LARGEFILE) \
+-		$(ENABLE_IPV6) \
+-		--with-gnu-ld \
 -	)
 -	touch $@
++		--with-gnu-ld
  
--$(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY): $(PPTP_LINUX_DIR)/.unpacked
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIMIZE="$(TARGET_CFLAGS)" \
--		-C $(PPTP_LINUX_DIR)
-+PPTP_LINUX_POST_PATCH_HOOKS = PPTP_LINUX_DEBIAN_PATCHES
- 
--$(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY): $(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY)
--	cp -dpf $(PPTP_LINUX_DIR)/$(PPTP_LINUX_BINARY) $@
--ifeq ($(BR2_HAVE_DOCUMENTATION),y)
--	mkdir -p $(TARGET_DIR)/usr/share/man/man8
--	$(INSTALL) -m 644 $(PPTP_LINUX_DIR)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
--endif
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
-+define PPTP_LINUX_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) OPTIMIZE="$(TARGET_CFLAGS)" -C $(@D)
+-$(PROFTPD_DIR)/$(PROFTPD_BINARY): $(PROFTPD_DIR)/.configured
+-	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" \
+-		-C $(PROFTPD_DIR)/lib/libcap _makenames
+-	$(MAKE1) -C $(PROFTPD_DIR)
++define PROFTPD_MAKENAMES
++	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" -C $(@D)/lib/libcap _makenames
 +endef
  
--pptp-linux: $(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY)
-+define PPTP_LINUX_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/pptp $(TARGET_DIR)/usr/sbin/pptp
-+	$(INSTALL) -D -m 644 $(@D)/pptp.8 $(TARGET_DIR)/usr/share/man/man8/pptp.8
+-$(TARGET_DIR)/$(PROFTPD_TARGET_BINARY): $(PROFTPD_DIR)/$(PROFTPD_BINARY)
+-	cp -dpf $(PROFTPD_DIR)/$(PROFTPD_BINARY) \
+-		$(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
++PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
++
++PROFTPD_MAKE=$(MAKE1)
++
++define PROFTPD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+ 	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
+-		$(INSTALL) -m 0644 -D $(PROFTPD_DIR)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
++		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
+ 	fi
+ 	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d
 +endef
  
--pptp-linux-source: $(DL_DIR)/$(PPTP_LINUX_SOURCE) $(PPTP_LINUX_PATCH_FILE)
-+define PPTP_LINUX_UNINSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
+-proftpd: $(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
+-
+-proftpd-clean:
++define PROFTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
+ 	rm -f $(TARGET_DIR)/etc/init.d/S50proftpd
+ 	rm -f $(TARGET_DIR)/etc/proftpd.conf
+-	-$(MAKE) -C $(PROFTPD_DIR) clean
 +endef
  
--pptp-linux-clean:
--	-$(MAKE) -C $(PPTP_LINUX_DIR) distclean
--	rm -f $(TARGET_DIR)/$(PPTP_LINUX_TARGET_BINARY) \
--		$(TARGET_DIR)/usr/share/man/man8/pptp.8*
-+define PPTP_LINUX_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
- 
--pptp-linux-dirclean:
--	rm -rf $(PPTP_LINUX_DIR)
+-proftpd-dirclean:
+-	rm -rf $(PROFTPD_DIR)
+-
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_PPTP_LINUX),y)
--TARGETS+=pptp-linux
+-ifeq ($(BR2_PACKAGE_PROFTPD),y)
+-TARGETS+=proftpd
 -endif
-+$(eval $(call GENTARGETS,package,pptp-linux))
++$(eval $(call AUTOTARGETS,package,proftpd))
 -- 
 1.7.3.1
