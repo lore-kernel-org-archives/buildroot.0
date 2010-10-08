@@ -1,30 +1,26 @@
-From: olyvine.chen at logiways.com.cn <olyvine.chen@logiways.com.cn>
-Date: Fri, 08 Oct 2010 12:23:47 +0800
-Subject: [Buildroot] buildroot not support c++ compliing
-Message-ID: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  8 Oct 2010 06:01:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 743] Add Transmission bit torrent option to
+	buildroot
+In-Reply-To: <bug-743-163@https.bugs.busybox.net/>
+References: <bug-743-163@https.bugs.busybox.net/>
+Message-ID: <20101008060147.CC10C8C60B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
-        
-  I now try to add package libmusicbrainz to buildroot, but many errors
-happen, such as the following:
+https://bugs.busybox.net/show_bug.cgi?id=743
 
-*************************************************************************
+--- Comment #6 from Ossy <marcus.osdoba@googlemail.com>  ---
+Created attachment 2569
+  --> https://bugs.busybox.net/attachment.cgi?id=2569
+patch for adding transmission 2.04 to br
 
-buildroot/output/build/libmusicbrainz-3.0.2/src/artist.cpp:23:18: error:
-string: No such file or directory
+Obsoletes the former patch for version < 2.04
 
-*************************************************************************
-  it seems indicate that no c++ library available, then how to enable c
-++ compiling for buildroot? 
-        
-  I enabled glibc via:
-  Toolchain => Toolchain type (External toolchain) => External toolchain
-C library (glibc)
-        
-Kindest regards!
-Olyvine
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
