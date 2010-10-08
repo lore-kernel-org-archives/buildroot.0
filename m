@@ -1,9 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Fri,  8 Oct 2010 08:55:06 +0200
-Subject: [Buildroot] [PATCH 4/7] Removed freetype-2.3.9-libdir-la.patch
+Date: Fri,  8 Oct 2010 08:55:07 +0200
+Subject: [Buildroot] [PATCH 5/7] Removed libmpd-0.17.0-libdir-la.patch
 In-Reply-To: <1286520909-3436-1-git-send-email-llandwerlin@gmail.com>
 References: <1286520909-3436-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1286520909-3436-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1286520909-3436-6-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,42 @@ To: buildroot@busybox.net
 
 From: Martin Banky <martin.banky@gmail.com>
 
-Now that freetype.mk has been converted to autotools infrastructure, the patch
-is no longer needed. Autotools will automatically apply the needed patch.
+Now that libmpd.mk has been converted to autotools infrastructure, the patch is
+no longer needed. Autotools will automatically apply the needed patch.
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 ---
- package/freetype/freetype-2.3.9-libdir-la.patch |   81 -----------------------
- package/freetype/freetype.mk                    |    1 -
- 2 files changed, 0 insertions(+), 82 deletions(-)
- delete mode 100644 package/freetype/freetype-2.3.9-libdir-la.patch
+ .../libmpd/libmpd-0.17.0-libdir-la.patch           |   89 --------------------
+ package/multimedia/libmpd/libmpd.mk                |    1 -
+ 2 files changed, 0 insertions(+), 90 deletions(-)
+ delete mode 100644 package/multimedia/libmpd/libmpd-0.17.0-libdir-la.patch
 
-diff --git a/package/freetype/freetype-2.3.9-libdir-la.patch b/package/freetype/freetype-2.3.9-libdir-la.patch
+diff --git a/package/multimedia/libmpd/libmpd-0.17.0-libdir-la.patch b/package/multimedia/libmpd/libmpd-0.17.0-libdir-la.patch
 deleted file mode 100644
-index 76287ef..0000000
---- a/package/freetype/freetype-2.3.9-libdir-la.patch
+index 561a338..0000000
+--- a/package/multimedia/libmpd/libmpd-0.17.0-libdir-la.patch
 +++ /dev/null
-@@ -1,81 +0,0 @@
--diff -urN freetype-2.3.7.orig/builds/unix/ltmain.sh freetype-2.3.7/builds/unix/ltmain.sh
----- freetype-2.3.7.orig/builds/unix/ltmain.sh	2008-09-16 15:55:36.000000000 +0100
--+++ freetype-2.3.7/builds/unix/ltmain.sh	2008-09-22 09:18:36.000000000 +0100
--@@ -1047,8 +1047,9 @@
-- 	# was found and let the user know that the "--tag" command
+@@ -1,89 +0,0 @@
+----
+- ltmain.sh |   39 +++++++++++++++++++++++++++++++++------
+- 1 file changed, 33 insertions(+), 6 deletions(-)
+-
+-Index: libmpd-0.17.0/ltmain.sh
+-===================================================================
+---- libmpd-0.17.0.orig/ltmain.sh
+-+++ libmpd-0.17.0/ltmain.sh
+-@@ -1056,7 +1056,9 @@
 - 	# line option must be used.
 - 	if test -z "$tagname"; then
---	  func_echo "unable to infer tagged configuration"
+- 	  func_echo "unable to infer tagged configuration"
 --	  func_fatal_error "specify a tag with \`--tag'"
--+          func_echo "unable to infer tagged configuration"
--+	  func_echo "$modename: defaulting to \`CC'"
--+	  func_echo "$modename: if this is not correct, specify a tag with \`--tag'"
+-+	  $echo "$modename: defaulting to \`CC'"
+-+	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
+-+#	  func_fatal_error "specify a tag with \`--tag'"
 - #	else
 - #	  func_verbose "using $tagname tagged configuration"
 - 	fi
--@@ -2017,8 +2018,11 @@
+-@@ -2025,8 +2027,13 @@
 - 	  # At present, this check doesn't affect windows .dll's that
 - 	  # are installed into $libdir/../bin (currently, that works fine)
 - 	  # but it's something to keep an eye on.
@@ -51,13 +55,15 @@ index 76287ef..0000000
 --	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
 -+	  #
 -+	  # This breaks install into our staging area.  -PB
--+	  #
--+	  #test "$inst_prefix_dir" = "$destdir" && \
--+	  #  func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
+-+	  # 
+-+	  # if test "$inst_prefix_dir" = "$destdir"; then
+-+	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
+-+	  #   exit $EXIT_FAILURE
+-+	  # fi
 - 
 - 	  if test -n "$inst_prefix_dir"; then
 - 	    # Stick the inst_prefix_dir data into the link command.
--@@ -4885,8 +4889,14 @@
+-@@ -5419,8 +5426,14 @@
 - 	    absdir="$abs_ladir"
 - 	    libdir="$abs_ladir"
 - 	  else
@@ -74,31 +80,33 @@ index 76287ef..0000000
 - 	  fi
 - 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
 - 	else
--@@ -5408,13 +5418,16 @@
-- 		  ;;
-- 		esac
-- 		else
---		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
---		  test -z "$libdir" && \
---		    func_fatal_error "\`$deplib' is not a valid libtool archive"
---		  test "$absdir" != "$libdir" && \
---		    func_warning "\`$deplib' seems to be moved"
---
---		  path="-L$absdir"
--+#       	  This interferes with crosscompilation. -CL
+-@@ -5571,7 +5584,7 @@
+- 	  *)
+- 	    if test "$installed" = no; then
+- 	      notinst_deplibs="$notinst_deplibs $lib"
+--	      need_relink=yes
+-+	      need_relink=no
+- 	    fi
+- 	    ;;
+- 	  esac
+-@@ -5901,6 +5914,16 @@
+- 	    # Add the search paths of all dependency libraries
+- 	    for deplib in $dependency_libs; do
+- 	      case $deplib in
+-+#		This interferes with crosscompilation. -CL
+-+#		else
 -+#		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
--+#		  test -z "$libdir" && \
--+#		    func_fatal_error "\`$deplib' is not a valid libtool archive"
--+#		  test "$absdir" != "$libdir" && \
--+#		    func_warning "\`$deplib' seems to be moved"
--+#
--+#		  path="-L$absdir"
--+        	  path="-L$absdir/$objdir"
--+        	  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
-- 		fi
-- 		;;
-- 	      esac
--@@ -7520,6 +7533,10 @@
+-+#		  if test -z "$libdir"; then
+-+#		    $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
+-+#		    exit 1
+-+#		  fi
+-+#		  if test "$absdir" != "$libdir"; then
+-+#		    $echo "$modename: warning: \`$deplib' seems to be moved" 1>&2
+-+#		  fi
+- 	      -L*) path="$deplib" ;;
+- 	      *.la)
+- 	        func_dirname "$deplib" "" "."
+-@@ -8059,6 +8082,10 @@
 - 	    # Replace all uninstalled libtool libraries with the installed ones
 - 	    newdependency_libs=
 - 	    for deplib in $dependency_libs; do
@@ -109,17 +117,17 @@ index 76287ef..0000000
 - 	      case $deplib in
 - 	      *.la)
 - 		func_basename "$deplib"
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index a2df1d8..c7e5c32 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -6,7 +6,6 @@
- FREETYPE_VERSION = 2.3.12
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
--FREETYPE_LIBTOOL_PATCH = NO
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_INSTALL_TARGET = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
+diff --git a/package/multimedia/libmpd/libmpd.mk b/package/multimedia/libmpd/libmpd.mk
+index 327f61a..47a802a 100644
+--- a/package/multimedia/libmpd/libmpd.mk
++++ b/package/multimedia/libmpd/libmpd.mk
+@@ -7,7 +7,6 @@ LIBMPD_VERSION = 0.17.0
+ LIBMPD_SOURCE = libmpd-$(LIBMPD_VERSION).tar.gz
+ LIBMPD_SITE = http://download.sarine.nl/download/Programs/gmpc/$(LIBMPD_VERSION)/
+ LIBMPD_INSTALL_STAGING = YES
+-LIBMPD_LIBTOOL_PATCH = NO
+ LIBMPD_DEPENDENCIES = libglib2
+ 
+ $(eval $(call AUTOTARGETS,package/multimedia,libmpd))
 -- 
 1.7.1
