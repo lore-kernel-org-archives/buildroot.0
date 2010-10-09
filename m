@@ -1,30 +1,31 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Fri, 08 Oct 2010 21:45:02 +0100
-Subject: [Buildroot] [PATCH 09/10] mplayer: convert to gentargets
-In-Reply-To: <1286266963-23413-9-git-send-email-Martin.Banky@gmail.com>
-References: <1286266963-23413-1-git-send-email-Martin.Banky@gmail.com>
-	<1286266963-23413-9-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <1286570702.7489.46.camel@segulix>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Oct 2010 00:12:37 +0200
+Subject: [Buildroot] [pull request] libtool enhancement v2
+In-Reply-To: <1286621574-10872-1-git-send-email-llandwerlin@gmail.com>
+References: <1286621574-10872-1-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20101010001237.755b5743@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2010-10-05 at 01:22 -0700, Martin Banky wrote:
-> Would have bumped the version, but someone smarter than me is going to
-> have to
-> do it. 
+On Sat,  9 Oct 2010 12:52:47 +0200
+llandwerlin at gmail.com wrote:
 
-yeh , I will ask why we  don't bumped the version to 1.0-RC3 ?
-is because have a big atmel patch ? 
+> Here is a second version of a patch set mostly from Martin Banky to
+> support libtool patching depending on the libtool script version. This
+> also bumps libtool to version 2.2.10, so we can autoreconfigure
+> packages depending on libtool 2.2 versions (gtk+, glib, etc...).
+> 
+> You can pull from :
+>     git://git.potipota.net/buildroot martins-libtool
 
+Not tested, but on the principle:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3293 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101008/0e3184ee/attachment.bin>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
