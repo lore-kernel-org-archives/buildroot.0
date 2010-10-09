@@ -1,70 +1,53 @@
-From: olyvine.chen at logiways.com.cn <olyvine.chen@logiways.com.cn>
-Date: Sat, 09 Oct 2010 17:50:37 +0800
-Subject: [Buildroot] buildroot not support c++ compliing
-In-Reply-To: <AANLkTikXM6DCteDjN7Sw0O7-2bQWtwFLRdo=YD6bA_64@mail.gmail.com>
-References: <1286511827.3703.11.camel@olyvine-desktop.logiways-sz.cn>
-	<20101008091844.1afdb502@surf>
-	<1286525870.3703.16.camel@olyvine-desktop.logiways-sz.cn>
-	<20101008104411.7a7a2777@surf>
-	<AANLkTikXM6DCteDjN7Sw0O7-2bQWtwFLRdo=YD6bA_64@mail.gmail.com>
-Message-ID: <1286617837.25136.2.camel@olyvine-desktop.logiways-sz.cn>
+From: llandwerlin at gmail.com <llandwerlin@gmail.com>
+Date: Sat,  9 Oct 2010 12:52:48 +0200
+Subject: [Buildroot] [PATCH 1/7] BugFix - buildroot-libtool.patch - Removed
+	Useless Code
+In-Reply-To: <1286621574-10872-1-git-send-email-llandwerlin@gmail.com>
+References: <1286621574-10872-1-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1286621574-10872-2-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2010-10-08 at 10:52 +0200, Lionel Landwerlin wrote:
-> On Fri, Oct 8, 2010 at 10:44 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > On Fri, 08 Oct 2010 16:17:50 +0800
-> > "olyvine.chen at logiways.com.cn" <olyvine.chen@logiways.com.cn> wrote:
-> >
-> >> STLinux's sh4-linux-
-> >
-> > Does this toolchain supports C++ ? Is this toolchain publicly available
-> > so that I can test and see what's wrong ?
-> >
-> > Thanks,
-> >
-> > Thomas
-> > --
-> 
-> Thomas,
-> 
-> There is an installation script here :
-> 
-> http://stlinux.com/pub/stlinux/2.3/install
-> 
-> Other informations related to the toolchain installation on
-> debian/ubuntu distros are here :
-> 
-> http://www.stlinux.com/install/ubuntu
-> 
-> There are both stlinux 2.3 and 2.4 version. I might be wrong, but I'm
-> pretty sure Olyvine uses the 2.3 version.
-> Also the installation page does not mention it, but the toolchain is
-> available with glibc or uclibc.
-> 
-> You choice :
-> sudo ./install all-sh4-glibc
-> or
-> sudo ./install all-sh4-uclibc
-> 
-> Olyvine, could give us some details about the exact version of the
-> toolchain you're using ?
-> 
-> Regards,
-> 
-> --
-> Lionel Landwerlin
-> 
+From: Martin Banky <martin.banky@gmail.com>
 
-Thanks you all for your kindly help, now I have found it out it's caused
-by the incomplete of ST distribution.
+The code that was removed only added commented out code. It neither added
+needed code nor commented out existing code.
+
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+---
+ package/buildroot-libtool.patch |   17 -----------------
+ 1 files changed, 0 insertions(+), 17 deletions(-)
+
+diff --git a/package/buildroot-libtool.patch b/package/buildroot-libtool.patch
+index 277719d..57a7c58 100644
+--- a/package/buildroot-libtool.patch
++++ b/package/buildroot-libtool.patch
+@@ -38,23 +38,6 @@
+  	  fi
+  	  # This is a shared library
+  
+-@@ -2889,6 +2896,16 @@ EOF
+- 		esac
+- 		if grep "^installed=no" $deplib > /dev/null; then
+- 		  path="$absdir/$objdir"
+-+#		This interferes with crosscompilation. -CL
+-+#		else
+-+#		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
+-+#		  if test -z "$libdir"; then
+-+#		    $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
+-+#		    exit 1
+-+#		  fi
+-+#		  if test "$absdir" != "$libdir"; then
+-+#		    $echo "$modename: warning: \`$deplib' seems to be moved" 1>&2
+-+#		  fi
+- 		else
+- 		  eval libdir=`${SED} -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
+- 		  if test -z "$libdir"; then
+ @@ -5606,6 +5623,10 @@ fi\
+  	    # Replace all uninstalled libtool libraries with the installed ones
+  	    newdependency_libs=
 -- 
-Kindest regards !
-====================================
-Olyvine Chen, Logiways Shenzhen
-http://www.logiways.com
-====================================
+1.7.1
