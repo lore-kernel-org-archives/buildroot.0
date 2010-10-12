@@ -1,34 +1,39 @@
 From: Maxime Ripard <ripard@archos.com>
-Date: Tue, 12 Oct 2010 10:26:52 +0200
-Subject: [Buildroot] [PATCH 0/4] Move to Python 2.7
-Message-ID: <1286872016-12621-1-git-send-email-ripard@archos.com>
+Date: Tue, 12 Oct 2010 10:26:53 +0200
+Subject: [Buildroot] [PATCH 1/4] python: Move to version 2.7
+In-Reply-To: <1286872016-12621-1-git-send-email-ripard@archos.com>
+References: <1286872016-12621-1-git-send-email-ripard@archos.com>
+Message-ID: <1286872016-12621-2-git-send-email-ripard@archos.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all !
 
-This set of patches replaces the old yet brave python2.4 by the brand new
-long term support python 2.7.
+Signed-off-by: Maxime Ripard <ripard@archos.com>
+---
+ package/python/python.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Note that the last patch is a workaround for a bug opened on the python's
-bugtracker, so it should be removed anytime soon (even though the bug has
-been opened two years ago).
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8721d40..5c85c59 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -3,8 +3,8 @@
+ # python
+ #
+ #############################################################
+-PYTHON_VERSION=2.4.5
+-PYTHON_VERSION_MAJOR=2.4
++PYTHON_VERSION=2.7
++PYTHON_VERSION_MAJOR=2.7
+ PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
+ PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_DIR:=$(BUILD_DIR)/Python-$(PYTHON_VERSION)
+-- 
+1.7.1
 
-The first two patches port existing patches to the new python version and
-the third fix the new breakages when cross-compiling : bytecode generation
-by compileall.py which requires the struct module, not compiled when we
-compile the HOSTPYTHON. The removed part of the code is never executed for
-now, but it could lead to a bug with future versions. The second breakage is
-the long long int detection, which is required to build python, and is always
-evaluated to false when cross-compiling.
-
-[PATCH 1/4] python: Move to version 2.7
-[PATCH 2/4] python: Port the existing patches to python2.7
-[PATCH 3/4] python: Add needed extra patches.
-[PATCH 4/4] python: Fix make install (Workaround python's bug #1669349)
 
 ____________________________________________________________________________
 
