@@ -1,486 +1,103 @@
-From: Maxime Ripard <ripard@archos.com>
-Date: Tue, 12 Oct 2010 10:26:54 +0200
-Subject: [Buildroot] [PATCH 2/4] python: Port the existing patches to
-	python2.7
-In-Reply-To: <1286872016-12621-1-git-send-email-ripard@archos.com>
-References: <1286872016-12621-1-git-send-email-ripard@archos.com>
-Message-ID: <1286872016-12621-3-git-send-email-ripard@archos.com>
+From: Martin Banky <Martin.Banky@gmail.com>
+Date: Tue, 12 Oct 2010 12:37:44 -0700
+Subject: [Buildroot] Changing install location of a package
+In-Reply-To: <0D753D10438DA54287A00B0270842697645097E95E@AUSP01VMBX24.collaborationhost.net>
+References: <0D753D10438DA54287A00B02708426976450782937@AUSP01VMBX24.collaborationhost.net>
+	<AANLkTi=ZZM0xD0-Hwh_HwkAMZ3D+Bwfhz_cp1i-1ACCQ@mail.gmail.com>
+	<0D753D10438DA54287A00B0270842697645097E95E@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <AANLkTinkj28yvxS2YVeSb_YRuzte=jDr0gXmKBYoff48@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Oct 11, 2010 at 12:00 PM, H Hartley Sweeten <
+hartleys@visionengravers.com> wrote:
 
-Signed-off-by: Maxime Ripard <ripard@archos.com>
----
- package/python/python-2.4-001-cross-compile.patch  |  106 --------------------
- package/python/python-2.4-002-cross-compile.patch  |   36 -------
- .../python-2.4-010-disable_modules_and_ssl.patch   |   37 -------
- .../python-2.4-020-gentoo_py_dontcompile.patch     |   18 ----
- package/python/python-2.7-001-cross-compile.patch  |  103 +++++++++++++++++++
- package/python/python-2.7-002-cross-compile.patch  |   36 +++++++
- .../python-2.7-010-disable_modules_and_ssl.patch   |   38 +++++++
- .../python-2.7-020-gentoo_py_dontcompile.patch     |   17 +++
- 8 files changed, 194 insertions(+), 197 deletions(-)
- delete mode 100644 package/python/python-2.4-001-cross-compile.patch
- delete mode 100644 package/python/python-2.4-002-cross-compile.patch
- delete mode 100644 package/python/python-2.4-010-disable_modules_and_ssl.patch
- delete mode 100644 package/python/python-2.4-020-gentoo_py_dontcompile.patch
- create mode 100644 package/python/python-2.7-001-cross-compile.patch
- create mode 100644 package/python/python-2.7-002-cross-compile.patch
- create mode 100644 package/python/python-2.7-010-disable_modules_and_ssl.patch
- create mode 100644 package/python/python-2.7-020-gentoo_py_dontcompile.patch
+> On Sunday, October 10, 2010 2:35 PM, Martin Banky wrote:
+> > On Fri, Oct 8, 2010 at 2:59 PM, H Hartley Sweeten <
+> hartleys at visionengravers.com> wrote:
+> >>
+> >> Is there a way to setup a .mk file for a package to configure and
+> install
+> >> the package into a place other than /bin, /sbin, /usr/bin or /usr/sbin?
+> >> Or is this actually handled internally by the .configure of the
+> package?>
+> >
+> > Yes, you would need to setup the .mk file to install the package into a
+> > different location. It will depend on the package type. If it's an
+> > autotools package, then you will have to do one of two things. The choice
+> > would be based on whether the existing options are acceptable, but just
+> > need to be added to, then add/change (PKG)_CONF_OPT, or the existing
+> > options are not acceptable, then redefine (PKG)_CONFIGURE_CMDS. If it's
+> > a gentargets package, then the only choice you have is to change
+> > (PKG)_CONFIGURE_CMDS. If it's a manual makefile package, then you will
+> > have to add/change the configuration step, if it has one, and/or the
+> > installation step, if necessary. I would suggest that you read
+> > buildroot/docs/buildroot.html. It has a lot of good information about
+> > creating and changing packages.
+>
+> Thanks for the reply.
+>
+> My package is autotools based.  Currently my *.mk looks something like
+> this.
+>
+>
+> FOO_VERSION = 0.0.1
+> FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
+> FOO_SITE = http://dummysite
+> FOO_AUTORECONF = YES
+> FOO_INSTALL_STAGING = NO
+> FOO_INSTALL_TARGET = YES
+>
+> FOO_CONF_OPT = --with-freetype-prefix=$(STAGING_DIR)/usr \
+>                --with-sdl-prefix=$(STAGING_DIR)/usr \
+>                --with-sdl-exec-prefix=$(STAGING_DIR)/usr
+>
+> FOO_DEPENDENCIES = sdl sdl_image
+>
+> $(eval $(call AUTOTARGETS,package,foo))
+>
+>
+> To install the package inro a different location I assume I need to
+> override the
+> --prefix option in the ./configure step.  But this appears to be hardcoded
+> to
+> /usr in Makefile.autotools.in:
+>
+> # Configure package for target
+> define $(2)_CONFIGURE_CMDS
+>        (cd $$($$(PKG)_SRCDIR) && rm -rf config.cache && \
+>        $$(TARGET_CONFIGURE_OPTS) \
+>        $$(TARGET_CONFIGURE_ARGS) \
+>        $$($$(PKG)_CONF_ENV) \
+>        ./configure \
+>                $$(if $$(filter
+> YES,$$($$(PKG)_USE_CONFIG_CACHE)),--cache-file="$(BUILD_DIR)/tgt-config.cache",)
+> \
+>                --target=$$(GNU_TARGET_NAME) \
+>                --host=$$(GNU_TARGET_NAME) \
+>                --build=$$(GNU_HOST_NAME) \
+>                --prefix=/usr \
+>                --exec-prefix=/usr \
+>                --sysconfdir=/etc \
+>                $$(DISABLE_DOCUMENTATION) \
+>                $$(DISABLE_NLS) \
+>                $$(DISABLE_LARGEFILE) \
+>                $$(DISABLE_IPV6) \
+>                $$(QUIET) $$($$(PKG)_CONF_OPT) \
+>        )
+>
+> Will adding --prefix/{somedir} to FOO_CONF_OPT override this?
+>
+> Thanks,
+> Hartley
 
-diff --git a/package/python/python-2.4-001-cross-compile.patch b/package/python/python-2.4-001-cross-compile.patch
-deleted file mode 100644
-index 96e52a6..0000000
---- a/package/python/python-2.4-001-cross-compile.patch
-+++ /dev/null
-@@ -1,106 +0,0 @@
--diff -rduNp Python-2.4.2.orig/Makefile.pre.in Python-2.4.2/Makefile.pre.in
----- Python-2.4.2.orig/Makefile.pre.in	2005-03-29 01:23:01.000000000 +0200
--+++ Python-2.4.2/Makefile.pre.in	2007-01-22 19:37:08.000000000 +0100
--@@ -162,6 +162,7 @@ UNICODE_OBJS=   @UNICODE_OBJS@
-- 
-- PYTHON=		python$(EXE)
-- BUILDPYTHON=	python$(BUILDEXE)
--+HOSTPYTHON=	$(BUILDPYTHON)
-- 
-- # === Definitions added by makesetup ===
-- 
--@@ -188,7 +189,7 @@ GRAMMAR_INPUT=	$(srcdir)/Grammar/Grammar
-- ##########################################################################
-- # Parser
-- PGEN=		Parser/pgen$(EXE)
---
--+HOSTPGEN=	$(PGEN)$(EXE)
-- POBJS=		\
-- 		Parser/acceler.o \
-- 		Parser/grammar1.o \
--@@ -320,8 +321,8 @@ platform: $(BUILDPYTHON)
-- # Build the shared modules
-- sharedmods: $(BUILDPYTHON)
-- 	case $$MAKEFLAGS in \
---	*-s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
---	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
--+	*-s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' $(HOSTPYTHON) -E $(srcdir)/setup.py -q build;; \
--+	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' $(HOSTPYTHON) -E $(srcdir)/setup.py build;; \
-- 	esac
-- 
-- # buildno should really depend on something like LIBRARY_SRC
--@@ -442,7 +443,7 @@ Modules/ccpython.o: $(srcdir)/Modules/cc
-- 
-- 
-- $(GRAMMAR_H) $(GRAMMAR_C): $(PGEN) $(GRAMMAR_INPUT)
---		-$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
--+		-$(HOSTPGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
-- 
-- $(PGEN):	$(PGENOBJS)
-- 		$(CC) $(OPT) $(LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
--@@ -719,19 +720,19 @@ libinstall:	$(BUILDPYTHON) $(srcdir)/Lib
-- 	done
-- 	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
-- 	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
---		./$(BUILDPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
--+		$(HOSTPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
-- 		-d $(LIBDEST) -f \
-- 		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
-- 	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
---		./$(BUILDPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
--+		$(HOSTPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
-- 		-d $(LIBDEST) -f \
-- 		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
-- 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
---		./$(BUILDPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
--+		$(HOSTPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
-- 		-d $(LIBDEST)/site-packages -f \
-- 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-- 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
---		./$(BUILDPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
--+		$(HOSTPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
-- 		-d $(LIBDEST)/site-packages -f \
-- 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-- 
--@@ -826,7 +827,7 @@ libainstall:	all
-- # Install the dynamically loadable modules
-- # This goes into $(exec_prefix)
-- sharedinstall:
---	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
--+	$(RUNSHARED) $(HOSTPYTHON) -E $(srcdir)/setup.py install \
-- 	   	--prefix=$(prefix) \
-- 		--install-scripts=$(BINDIR) \
-- 		--install-platlib=$(DESTSHARED) \
--diff -rduNp Python-2.4.2.orig/setup.py Python-2.4.2/setup.py
----- Python-2.4.2.orig/setup.py	2005-03-09 23:27:24.000000000 +0100
--+++ Python-2.4.2/setup.py	2007-01-22 19:37:08.000000000 +0100
--@@ -204,6 +204,7 @@ class PyBuildExt(build_ext):
--         try:
--             imp.load_dynamic(ext.name, ext_filename)
--         except ImportError, why:
--+            return
--             self.announce('*** WARNING: renaming "%s" since importing it'
--                           ' failed: %s' % (ext.name, why), level=3)
--             assert not self.inplace
--@@ -239,8 +240,6 @@ class PyBuildExt(build_ext):
-- 
--     def detect_modules(self):
--         # Ensure that /usr/local is always used
---        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
---        add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
-- 
--         # Add paths to popular package managers on OS X/darwin
--         if sys.platform == "darwin":
--@@ -251,12 +250,6 @@ class PyBuildExt(build_ext):
--             add_dir_to_list(self.compiler.library_dirs, '/opt/local/lib')
--             add_dir_to_list(self.compiler.include_dirs, '/opt/local/include')
-- 
---        if os.path.normpath(sys.prefix) != '/usr':
---            add_dir_to_list(self.compiler.library_dirs,
---                            sysconfig.get_config_var("LIBDIR"))
---            add_dir_to_list(self.compiler.include_dirs,
---                            sysconfig.get_config_var("INCLUDEDIR"))
---
--         try:
--             have_unicode = unicode
--         except NameError:
-diff --git a/package/python/python-2.4-002-cross-compile.patch b/package/python/python-2.4-002-cross-compile.patch
-deleted file mode 100644
-index 207335a..0000000
---- a/package/python/python-2.4-002-cross-compile.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
----- Python-2.4.2-001/setup.py	2007-01-23 16:18:37.000000000 +0100
--+++ Python-2.4.2/setup.py	2007-01-23 16:26:43.000000000 +0100
--@@ -239,7 +239,18 @@
--         return sys.platform
-- 
--     def detect_modules(self):
---        # Ensure that /usr/local is always used
--+        try:
--+            modules_include_dirs = os.environ["PYTHON_MODULES_INCLUDE"].split()
--+        except KeyError:
--+            modules_include_dirs = ['/usr/include']
--+        try:
--+            modules_lib_dirs = os.environ["PYTHON_MODULES_LIB"].split()
--+        except KeyError:
--+            modules_lib_dirs = ['/usr/lib']
--+        for dir in modules_include_dirs:
--+                add_dir_to_list(self.compiler.include_dirs, dir)
--+        for dir in modules_lib_dirs:
--+                add_dir_to_list(self.compiler.library_dirs, dir)
-- 
--         # Add paths to popular package managers on OS X/darwin
--         if sys.platform == "darwin":
--@@ -258,11 +269,8 @@
--         # lib_dirs and inc_dirs are used to search for files;
--         # if a file is found in one of those directories, it can
--         # be assumed that no additional -I,-L directives are needed.
---        lib_dirs = self.compiler.library_dirs + [
---            '/lib64', '/usr/lib64',
---            '/lib', '/usr/lib',
---            ]
---        inc_dirs = self.compiler.include_dirs + ['/usr/include']
--+        lib_dirs = self.compiler.library_dirs
--+        inc_dirs = self.compiler.include_dirs
--         exts = []
-- 
--         platform = self.get_platform()
-diff --git a/package/python/python-2.4-010-disable_modules_and_ssl.patch b/package/python/python-2.4-010-disable_modules_and_ssl.patch
-deleted file mode 100644
-index a690eae..0000000
---- a/package/python/python-2.4-010-disable_modules_and_ssl.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--diff -rduNp Python-2.4.2-002/setup.py Python-2.4.2/setup.py
----- Python-2.4.2-002/setup.py	2007-01-22 19:41:47.000000000 +0100
--+++ Python-2.4.2/setup.py	2007-01-22 19:47:25.000000000 +0100
--@@ -15,7 +15,14 @@ from distutils.command.install import in
-- from distutils.command.install_lib import install_lib
-- 
-- # This global variable is used to hold the list of modules to be disabled.
---disabled_module_list = []
--+try:
--+	disabled_module_list = os.environ["PYTHON_DISABLE_MODULES"].split()
--+except KeyError:
--+	disabled_module_list = []
--+try:
--+	disable_ssl = os.environ["PYTHON_DISABLE_SSL"]
--+except KeyError:
--+	disable_ssl = 0
-- 
-- def add_dir_to_list(dirlist, dir):
--     """Add the directory 'dir' to the list 'dirlist' (at the front) if
--@@ -247,6 +254,7 @@ class PyBuildExt(build_ext):
--         return sys.platform
-- 
--     def detect_modules(self):
--+        global disable_ssl
--         try:
--             modules_include_dirs = os.environ["PYTHON_MODULES_INCLUDE"].split()
--         except KeyError:
--@@ -468,7 +476,8 @@ class PyBuildExt(build_ext):
--                                      ] )
-- 
--         if (ssl_incs is not None and
---            ssl_libs is not None):
--+            ssl_libs is not None and
--+			not disable_ssl):
--             exts.append( Extension('_ssl', ['_ssl.c'],
--                                    include_dirs = ssl_incs,
--                                    library_dirs = ssl_libs,
-diff --git a/package/python/python-2.4-020-gentoo_py_dontcompile.patch b/package/python/python-2.4-020-gentoo_py_dontcompile.patch
-deleted file mode 100644
-index 6e634be..0000000
---- a/package/python/python-2.4-020-gentoo_py_dontcompile.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--diff -rduNp Python-2.4.2-010/Python/import.c Python-2.4.2/Python/import.c
----- Python-2.4.2-010/Python/import.c	2005-09-14 20:15:03.000000000 +0200
--+++ Python-2.4.2/Python/import.c	2007-01-22 19:49:18.000000000 +0100
--@@ -822,8 +822,12 @@ static void
-- write_compiled_module(PyCodeObject *co, char *cpathname, long mtime)
-- {
-- 	FILE *fp;
---
---	fp = open_exclusive(cpathname);
--+   char *py_dontcompile = getenv("PYTHON_DONTCOMPILE");
--+   
--+   if (!py_dontcompile) 
--+     fp = open_exclusive(cpathname);
--+   else
--+     fp = NULL;
-- 	if (fp == NULL) {
-- 		if (Py_VerboseFlag)
-- 			PySys_WriteStderr(
-diff --git a/package/python/python-2.7-001-cross-compile.patch b/package/python/python-2.7-001-cross-compile.patch
-new file mode 100644
-index 0000000..d9ac115
---- /dev/null
-+++ b/package/python/python-2.7-001-cross-compile.patch
-@@ -0,0 +1,103 @@
-+diff -rduNp Python-2.7.orig/Makefile.pre.in Python-2.7/Makefile.pre.in
-+--- Python-2.7.orig/Makefile.pre.in	2010-04-12 02:10:46.000000000 +0200
-++++ Python-2.7/Makefile.pre.in	2010-09-21 16:46:07.000000000 +0200
-+@@ -404,8 +404,8 @@ platform: $(BUILDPYTHON)
-+ # Build the shared modules
-+ sharedmods: $(BUILDPYTHON)
-+ 	@case $$MAKEFLAGS in \
-+-	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' LDFLAGS='$(LDFLAGS)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
-+-	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' LDFLAGS='$(LDFLAGS)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
-++	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' LDFLAGS='$(LDFLAGS)' OPT='$(OPT)' $(HOSTPYTHON) -E $(srcdir)/setup.py -q build;; \
-++	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' LDFLAGS='$(LDFLAGS)' OPT='$(OPT)' $(HOSTPYTHON) -E $(srcdir)/setup.py build;; \
-+ 	esac
-+ 
-+ # Build static library
-+@@ -538,7 +538,7 @@ Modules/python.o: $(srcdir)/Modules/pyth
-+ 
-+ $(GRAMMAR_H) $(GRAMMAR_C): $(PGEN) $(GRAMMAR_INPUT)
-+ 		-@$(INSTALL) -d Include
-+-		-$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
-++		-$(HOSTPGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
-+ 
-+ $(PGEN):	$(PGENOBJS)
-+ 		$(CC) $(OPT) $(LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
-+@@ -920,25 +920,25 @@ libinstall:	build_all $(srcdir)/Lib/$(PL
-+ 	done
-+ 	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
-+ 	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+-		./$(BUILDPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
-++		$(HOSTPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
-+ 		-d $(LIBDEST) -f \
-+ 		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
-+ 		$(DESTDIR)$(LIBDEST)
-+ 	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-+-		./$(BUILDPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
-++		$(HOSTPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
-+ 		-d $(LIBDEST) -f \
-+ 		-x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
-+ 		$(DESTDIR)$(LIBDEST)
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
-+-		./$(BUILDPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
-++		$(HOSTPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
-+ 		-d $(LIBDEST)/site-packages -f \
-+ 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-+-		./$(BUILDPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
-++		$(HOSTPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
-+ 		-d $(LIBDEST)/site-packages -f \
-+ 		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-+ 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-+-		./$(BUILDPYTHON) -Wi -t -c "import lib2to3.pygram, lib2to3.patcomp;lib2to3.patcomp.PatternCompiler()"
-++		$(HOSTPYTHON) -Wi -t -c "import lib2to3.pygram, lib2to3.patcomp;lib2to3.patcomp.PatternCompiler()"
-+ 
-+ # Create the PLATDIR source directory, if one wasn't distributed..
-+ $(srcdir)/Lib/$(PLATDIR):
-+@@ -1043,7 +1043,7 @@ libainstall:	all python-config
-+ # Install the dynamically loadable modules
-+ # This goes into $(exec_prefix)
-+ sharedinstall:
-+-	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
-++	$(RUNSHARED) $(HOSTPYTHON) -E $(srcdir)/setup.py install \
-+ 	   	--prefix=$(prefix) \
-+ 		--install-scripts=$(BINDIR) \
-+ 		--install-platlib=$(DESTSHARED) \
-+diff -rduNp Python-2.7.orig/setup.py Python-2.7/setup.py
-+--- Python-2.7.orig/setup.py	2010-06-27 14:36:16.000000000 +0200
-++++ Python-2.7/setup.py	2010-09-21 16:59:59.000000000 +0200
-+@@ -310,9 +310,9 @@ class PyBuildExt(build_ext):
-+         try:
-+             imp.load_dynamic(ext.name, ext_filename)
-+         except ImportError, why:
-+-            self.failed.append(ext.name)
-+-            self.announce('*** WARNING: renaming "%s" since importing it'
-+-                          ' failed: %s' % (ext.name, why), level=3)
-++            self.announce('*** WARNING: Importing "%s" failed, probably '
-++                          'because of cross-compilation' % ext.name, level=3)
-++            return
-+             assert not self.inplace
-+             basename, tail = os.path.splitext(ext_filename)
-+             newname = basename + "_failed" + tail
-+@@ -346,10 +346,6 @@ class PyBuildExt(build_ext):
-+         return sys.platform
-+ 
-+     def detect_modules(self):
-+-        # Ensure that /usr/local is always used
-+-        add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
-+-        add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
-+-
-+         # Add paths specified in the environment variables LDFLAGS and
-+         # CPPFLAGS for header and library files.
-+         # We must get the values from the Makefile and not the environment
-+@@ -384,12 +380,6 @@ class PyBuildExt(build_ext):
-+                     for directory in reversed(options.dirs):
-+                         add_dir_to_list(dir_list, directory)
-+ 
-+-        if os.path.normpath(sys.prefix) != '/usr':
-+-            add_dir_to_list(self.compiler.library_dirs,
-+-                            sysconfig.get_config_var("LIBDIR"))
-+-            add_dir_to_list(self.compiler.include_dirs,
-+-                            sysconfig.get_config_var("INCLUDEDIR"))
-+-
-+         try:
-+             have_unicode = unicode
-+         except NameError:
-diff --git a/package/python/python-2.7-002-cross-compile.patch b/package/python/python-2.7-002-cross-compile.patch
-new file mode 100644
-index 0000000..b1b8770
---- /dev/null
-+++ b/package/python/python-2.7-002-cross-compile.patch
-@@ -0,0 +1,36 @@
-+diff -rduNp Python-2.7.orig/setup.py Python-2.7/setup.py
-+--- Python-2.7.orig/setup.py	2010-09-21 17:15:31.000000000 +0200
-++++ Python-2.7/setup.py	2010-09-21 17:20:46.000000000 +0200
-+@@ -346,6 +346,18 @@ class PyBuildExt(build_ext):
-+         return sys.platform
-+ 
-+     def detect_modules(self):
-++        try:
-++            modules_include_dirs = os.environ["PYTHON_MODULES_INCLUDE"].split()
-++        except KeyError:
-++            modules_include_dirs = ['/usr/include']
-++        try:
-++            modules_lib_dirs = os.environ["PYTHON_MODULES_LIB"].split()
-++        except KeyError:
-++            modules_include_dirs = ['/usr/lib']
-++        for dir in modules_include_dirs:
-++            add_dir_to_list(self.compiler.include_dirs, dir)
-++        for dir in modules_lib_dirs:
-++            add_dir_to_list(self.compiler.library_dirs, dir)
-+         # Add paths specified in the environment variables LDFLAGS and
-+         # CPPFLAGS for header and library files.
-+         # We must get the values from the Makefile and not the environment
-+@@ -388,11 +400,8 @@ class PyBuildExt(build_ext):
-+         # lib_dirs and inc_dirs are used to search for files;
-+         # if a file is found in one of those directories, it can
-+         # be assumed that no additional -I,-L directives are needed.
-+-        lib_dirs = self.compiler.library_dirs + [
-+-            '/lib64', '/usr/lib64',
-+-            '/lib', '/usr/lib',
-+-            ]
-+-        inc_dirs = self.compiler.include_dirs + ['/usr/include']
-++        lib_dirs = self.compiler.library_dirs
-++        inc_dirs = self.compiler.include_dirs
-+         exts = []
-+         missing = []
-+ 
-diff --git a/package/python/python-2.7-010-disable_modules_and_ssl.patch b/package/python/python-2.7-010-disable_modules_and_ssl.patch
-new file mode 100644
-index 0000000..6593ed6
---- /dev/null
-+++ b/package/python/python-2.7-010-disable_modules_and_ssl.patch
-@@ -0,0 +1,38 @@
-+diff -rduNp Python-2.7.orig/setup.py Python-2.7/setup.py
-+--- Python-2.7.orig/setup.py	2010-09-21 17:31:52.000000000 +0200
-++++ Python-2.7/setup.py	2010-09-21 17:35:20.000000000 +0200
-+@@ -21,7 +21,15 @@ from distutils.spawn import find_executa
-+ COMPILED_WITH_PYDEBUG = hasattr(sys, 'gettotalrefcount')
-+ 
-+ # This global variable is used to hold the list of modules to be disabled.
-+-disabled_module_list = []
-++try:
-++    disabled_module_list = os.environ["PYTHON_DISABLE_MODULES"].split()
-++except KeyError:
-++    disabled_module_list = list()
-++
-++try:
-++    disable_ssl = os.environ["PYTHON_DISABLE_SSL"]
-++except KeyError:
-++    disable_ssl = 0
-+ 
-+ def add_dir_to_list(dirlist, dir):
-+     """Add the directory 'dir' to the list 'dirlist' (at the front) if
-+@@ -346,6 +354,7 @@ class PyBuildExt(build_ext):
-+         return sys.platform
-+ 
-+     def detect_modules(self):
-++        global disable_ssl
-+         try:
-+             modules_include_dirs = os.environ["PYTHON_MODULES_INCLUDE"].split()
-+         except KeyError:
-+@@ -685,7 +694,8 @@ class PyBuildExt(build_ext):
-+                                      ] )
-+ 
-+         if (ssl_incs is not None and
-+-            ssl_libs is not None):
-++            ssl_libs is not None and
-++            not disable_ssl):
-+             exts.append( Extension('_ssl', ['_ssl.c'],
-+                                    include_dirs = ssl_incs,
-+                                    library_dirs = ssl_libs,
-diff --git a/package/python/python-2.7-020-gentoo_py_dontcompile.patch b/package/python/python-2.7-020-gentoo_py_dontcompile.patch
-new file mode 100644
-index 0000000..36e35e1
---- /dev/null
-+++ b/package/python/python-2.7-020-gentoo_py_dontcompile.patch
-@@ -0,0 +1,17 @@
-+diff -rduNp Python-2.7.orig/Python/import.c Python-2.7/Python/import.c
-+--- Python-2.7.orig/Python/import.c	2010-09-30 12:05:53.000000000 +0200
-++++ Python-2.7/Python/import.c	2010-09-30 12:20:38.000000000 +0200
-+@@ -886,7 +886,12 @@ write_compiled_module(PyCodeObject *co,
-+     mode_t mode = srcstat->st_mode & ~S_IXUSR & ~S_IXGRP & ~S_IXOTH;
-+ #endif
-+ 
-+-    fp = open_exclusive(cpathname, mode);
-++    char *py_dontcompile = getenv("PYTHON_DONTCOMPILE");
-++
-++    if (!py_dontcompile)
-++      fp = open_exclusive(cpathname, mode);
-++    else
-++      fp = NULL;
-+     if (fp == NULL) {
-+         if (Py_VerboseFlag)
-+             PySys_WriteStderr(
--- 
-1.7.1
+Hartley,
+     No, you'll need to redefine (PKG)_CONFIGURE_CMDS.
 
-
-____________________________________________________________________________
-
-This  email  and any  files  transmitted  with it are  confidential  and are
-intended solely  for the use of the individual  or entity to which  they are
-addressed.  Access to this e-mail by anyone else is unauthorised. If you are
-not the  intended recipient,  any disclosure,  copying,  distribution or any
-action taken or omitted to be taken in reliance on it, is prohibited. E-mail
-messages are not necessarily secure.  Archos does not accept  responsibility
-for any changes made to this message after it was sent.
+Martin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101012/6fc435a0/attachment.html>
