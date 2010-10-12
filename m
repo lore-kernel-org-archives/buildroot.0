@@ -1,81 +1,34 @@
 From: Maxime Ripard <ripard@archos.com>
-Date: Tue, 12 Oct 2010 10:26:55 +0200
-Subject: [Buildroot] [PATCH 3/4] python: Add needed extra patches.
-In-Reply-To: <1286872016-12621-1-git-send-email-ripard@archos.com>
-References: <1286872016-12621-1-git-send-email-ripard@archos.com>
-Message-ID: <1286872016-12621-4-git-send-email-ripard@archos.com>
+Date: Tue, 12 Oct 2010 10:26:52 +0200
+Subject: [Buildroot] [PATCH 0/4] Move to Python 2.7
+Message-ID: <1286872016-12621-1-git-send-email-ripard@archos.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all !
 
-Signed-off-by: Maxime Ripard <ripard@archos.com>
----
- .../python-2.7-030-fix-long-long-format.patch      |   12 ++++++++
- .../python-2.7-040-bytecode-generation-fix.patch   |   30 ++++++++++++++++++++
- 2 files changed, 42 insertions(+), 0 deletions(-)
- create mode 100644 package/python/python-2.7-030-fix-long-long-format.patch
- create mode 100644 package/python/python-2.7-040-bytecode-generation-fix.patch
+This set of patches replaces the old yet brave python2.4 by the brand new
+long term support python 2.7.
 
-diff --git a/package/python/python-2.7-030-fix-long-long-format.patch b/package/python/python-2.7-030-fix-long-long-format.patch
-new file mode 100644
-index 0000000..19f299f
---- /dev/null
-+++ b/package/python/python-2.7-030-fix-long-long-format.patch
-@@ -0,0 +1,12 @@
-+diff -rduNp Python-2.7.orig/configure Python-2.7/configure
-+--- Python-2.7.orig/configure	2010-09-30 12:05:54.000000000 +0200
-++++ Python-2.7/configure	2010-09-30 12:12:30.000000000 +0200
-+@@ -13517,7 +13517,7 @@ $as_echo_n "checking for %lld and %llu p
-+   $as_echo_n "(cached) " >&6
-+ else
-+   if test "$cross_compiling" = yes; then :
-+-  ac_cv_have_long_long_format=no
-++  ac_cv_have_long_long_format=yes
-+ else
-+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-+ /* end confdefs.h.  */
-diff --git a/package/python/python-2.7-040-bytecode-generation-fix.patch b/package/python/python-2.7-040-bytecode-generation-fix.patch
-new file mode 100644
-index 0000000..9c2ae63
---- /dev/null
-+++ b/package/python/python-2.7-040-bytecode-generation-fix.patch
-@@ -0,0 +1,30 @@
-+Index: Python-2.7/Lib/compileall.py
-+===================================================================
-+--- Python-2.7.orig/Lib/compileall.py	(r??vision 84276)
-++++ Python-2.7/Lib/compileall.py	(copie de travail)
-+@@ -14,7 +14,6 @@
-+ import os
-+ import sys
-+ import py_compile
-+-import struct
-+ import imp
-+ 
-+ __all__ = ["compile_dir","compile_file","compile_path"]
-+@@ -83,17 +82,6 @@
-+     if os.path.isfile(fullname):
-+         head, tail = name[:-3], name[-3:]
-+         if tail == '.py':
-+-            if not force:
-+-                try:
-+-                    mtime = int(os.stat(fullname).st_mtime)
-+-                    expect = struct.pack('<4sl', imp.get_magic(), mtime)
-+-                    cfile = fullname + (__debug__ and 'c' or 'o')
-+-                    with open(cfile, 'rb') as chandle:
-+-                        actual = chandle.read(8)
-+-                    if expect == actual:
-+-                        return success
-+-                except IOError:
-+-                    pass
-+             if not quiet:
-+                 print 'Compiling', fullname, '...'
-+             try:
--- 
-1.7.1
+Note that the last patch is a workaround for a bug opened on the python's
+bugtracker, so it should be removed anytime soon (even though the bug has
+been opened two years ago).
 
+The first two patches port existing patches to the new python version and
+the third fix the new breakages when cross-compiling : bytecode generation
+by compileall.py which requires the struct module, not compiled when we
+compile the HOSTPYTHON. The removed part of the code is never executed for
+now, but it could lead to a bug with future versions. The second breakage is
+the long long int detection, which is required to build python, and is always
+evaluated to false when cross-compiling.
+
+[PATCH 1/4] python: Move to version 2.7
+[PATCH 2/4] python: Port the existing patches to python2.7
+[PATCH 3/4] python: Add needed extra patches.
+[PATCH 4/4] python: Fix make install (Workaround python's bug #1669349)
 
 ____________________________________________________________________________
 
