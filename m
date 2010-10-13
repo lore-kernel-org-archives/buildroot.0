@@ -1,39 +1,37 @@
-From: Giriprasad Deviprasad <g_pr21@yahoo.in>
-Date: Wed, 13 Oct 2010 16:12:04 +0530 (IST)
-Subject: [Buildroot] Gtk on Arm
-In-Reply-To: <AANLkTikDGchiLkpU0vEiWJGOD7BbCq1CUzu5UHOM4AUN@mail.gmail.com>
-Message-ID: <939698.12556.qm@web95715.mail.in.yahoo.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 13 Oct 2010 09:06:19 -0300
+Subject: [Buildroot] mkfs.jffs2 image is not usable
+In-Reply-To: <0D753D10438DA54287A00B02708426976450A64C87@AUSP01VMBX24.collaborationhost.net>
+References: <0D753D10438DA54287A00B02708426976450A64C87@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <4CB5A0BB.2040106@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I enabled WCHAR and C++, build errors as :
-/bin/sh ./config.charset 'arm-unknown-linux-gnu' > t-charset.alias
-In file included from mbchar.h:285,
-???????????????? from mbchar.c:22:
-wcwidth.h:62: error: expected ')' before 'wc'
-In file included from mbchar.c:22:
-mbchar.h:294: error: expected specifier-qualifier-list before 'wchar_t'
-mbchar.h: In function 'mb_copy':
-mbchar.h:390: error: 'mbchar_t' has no member named 'buf'
-mbchar.h:392: error: 'mbchar_t' has no member named 'buf'
-mbchar.h:392: error: 'mbchar_t' has no member named 'buf'
-mbchar.h:393: error: 'mbchar_t' has no member named 'buf'
-mbchar.h:399: error: 'mbchar_t' has no member named 'wc'
-mbchar.h:399: error: 'mbchar_t' has no member named 'wc'
-make[5]: *** [mbchar.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-mv t-charset.alias charset.alias
+On 10/13/10 01:53, H Hartley Sweeten wrote:
 
-Isn't this line saying anything to you?
- 
-  ? ?              -*-
- libpng                                                               
+> I also tried installing the mtd utils locally on my Debian system and then
+> created the jffs2 image using /usr/sbin/mkfs.jffs2.  This image is the
+> same size as the one manually created using the $(HOST_DIR) one, but the
+> files are very different.  When I boot with that image I don't get any
+> error messages by the kernel boot hangs after:
+> 
+> Freeing init memory: 208K
+> 
+> Can anyone offer some ideas of suggestions?
+> 
+> Thanks,
+> Hartley
 
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101013/f3a8a22b/attachment.html>
+Did you check that the flash geometry (page size / erase size) match the
+flash device on your board? That would make the jffs2 image different in
+content but not much in size as you see.
+It's the "flash type" option in buildroot.
+Parallel flash = NOR.
+AT45 = SPI DataFlash from Atmel.
+NAND flash = the usual these days.
+Or you can go the custom way if one of the predetermined values doesn't
+match your flash device.
+Regards.
