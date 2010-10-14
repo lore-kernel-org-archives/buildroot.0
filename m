@@ -1,37 +1,16 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Oct 2010 23:06:49 +0200
-Subject: [Buildroot] mkfs.jffs2 image is not usable
-In-Reply-To: <0D753D10438DA54287A00B02708426976450C42946@AUSP01VMBX24.collaborationhost.net>
-	(H. Hartley Sweeten's message of "Thu, 14 Oct 2010 15:46:17 -0500")
-References: <0D753D10438DA54287A00B02708426976450A64C87@AUSP01VMBX24.collaborationhost.net>
-	<4CB5A0BB.2040106@zacarias.com.ar>
-	<0D753D10438DA54287A00B02708426976450B0AF44@AUSP01VMBX24.collaborationhost.net>
-	<87y6a0edbw.fsf@macbook.be.48ers.dk>
-	<0D753D10438DA54287A00B02708426976450C42946@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <87tykoeb6e.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Thu, 14 Oct 2010 18:32:58 -0500
+Subject: [Buildroot] GnuPG
+Message-ID: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+Hello all,
 
- H> On Thursday, October 14, 2010 1:20 PM, Peter Korsgaard wrote:
- >>>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
- >>> 
- >>> Suggestions?
+Does anyone had a Buildroot package for GnuPG?
 
- >> You could also try going back to mtd-1.3.1, E.G. reverting
- >> a9b783379271e - Maybe something is broken upstream?
-
- H> That fixed the problem.
-
- H> Reverting a9b783379271e allows me to create a jffs2 that works.
-
-Ok, care to report the issue on the linux-mtd list?
-
-http://lists.infradead.org/mailman/listinfo/linux-mtd/
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Hartley
