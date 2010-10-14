@@ -1,45 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 Oct 2010 21:40:47 +0200
-Subject: [Buildroot] [git commit master 1/1] prboom: re-add big endian fixup
-Message-ID: <20101014194137.3D4C58D1EA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Oct 2010 22:17:05 +0200
+Subject: [Buildroot] mkfs.jffs2 image is not usable
+In-Reply-To: <0D753D10438DA54287A00B02708426976450B0AF44@AUSP01VMBX24.collaborationhost.net>
+	(H. Hartley Sweeten's message of "Wed, 13 Oct 2010 14:07:15 -0500")
+References: <0D753D10438DA54287A00B02708426976450A64C87@AUSP01VMBX24.collaborationhost.net>
+	<4CB5A0BB.2040106@zacarias.com.ar>
+	<0D753D10438DA54287A00B02708426976450B0AF44@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <8739s8fs1q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f8f3c92c634e5041769e608a64b680dfc074c80
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Seems I misread configure.ac, the endianness detection is only used when
-not cross compiling.
+ H> The flash geometry settings should be the same as when I made the
+ H> jffs2 image that does work.  But, for the record, the flash is a
+ H> parallel 4kB pagesize and 128 kB erase size.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/games/prboom/prboom.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ H> sudo modprobe mtd
+ H> sudo modprobe jffs2
+ H> sudo modprobe mtdram totalsize=32768 erase_size=256
 
-diff --git a/package/games/prboom/prboom.mk b/package/games/prboom/prboom.mk
-index a8c7f65..3a50fd5 100644
---- a/package/games/prboom/prboom.mk
-+++ b/package/games/prboom/prboom.mk
-@@ -19,6 +19,16 @@ PRBOOM_CONF_OPT = \
- 		--disable-sdltest \
- 		--disable-gl
- 
-+# endianness detection isn't used when cross compiling
-+define PRBOOM_BIG_ENDIAN_FIXUP
-+	$(SED) 's,.*#undef WORDS_BIGENDIAN.*,#define WORDS_BIGENDIAN 1,g' \
-+		$(PRBOOM_DIR)/config.h
-+endef
-+
-+ifeq ($(BR2_ENDIAN),"BIG")
-+PRBOOM_POST_CONFIGURE_HOOKS += PRBOOM_BIG_ENDIAN_FIXUP
-+endif
-+
- define PRBOOM_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/src/prboom $(TARGET_DIR)/usr/games/prboom
- 	$(INSTALL) -D $(@D)/src/prboom-game-server $(TARGET_DIR)/usr/games/prboom-game-server
+You should use the same erase_size here, E.G. 128KB.
+
+ H> Suggestions?
+
+Not really, do you have an old (working) image? If so, you could compare
+the jffs2dump output of those.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
