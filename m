@@ -1,36 +1,29 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 15 Oct 2010 17:15:30 -0400
-Subject: [Buildroot] [PATCH] toolchain: do not require full path
-Message-ID: <1287177330-15527-1-git-send-email-vapier@gentoo.org>
+Date: Fri, 15 Oct 2010 17:17:40 -0400
+Subject: [Buildroot] [PATCH] gitignore: add ..config.tmp
+Message-ID: <1287177460-15599-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the toolchain can be found via $PATH, then requiring the full path to
-it is unnecessary.
-
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/Makefile.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ .gitignore |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 85e6550..fb09083 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -116,7 +116,11 @@ TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
-+ifneq ($(TOOLCHAIN_EXTERNAL_PATH),)
- TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+else
-+TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+endif
- else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-
- endif
+diff --git a/.gitignore b/.gitignore
+index a736c4d..18588e8 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -3,6 +3,7 @@
+ /.auto.deps
+ /.config.cmd
+ /.config.old
++/..config.tmp
+ /.config
+ *.depend
+ *.o
 -- 
 1.7.3.1
