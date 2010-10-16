@@ -1,42 +1,56 @@
-From: Daniele Salvatore Albano - Lavoro <info@daccii.it>
-Date: Sat, 16 Oct 2010 12:44:58 +0200
-Subject: [Buildroot] Stops on missing rules for uclib_target nedded for
-	gcc_target
-Message-ID: <4CB9822A.3020007@daccii.it>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sat, 16 Oct 2010 14:34:34 +0200
+Subject: [Buildroot] [PATCH] Makefile: generate a Makefile wrapper in
+ $(O)
+In-Reply-To: <1285491372-19364-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1285491372-19364-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1287232474.3927.190.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi,
+Yann,
 
-i'm trying to compile toolchain for the target using crosstools-ng 
-trought buildroot, enabling Development Tools -> native toolchain in the 
-target filesystem, but i get the error reported in the subject
+I'm having a problem with the last buildroot on git. I'm not sure this
+is related to your patches.
+In a clean buildroot repository (no output directory already present),
+if you do :
+	$ make menuconfig 
 
-Here the compile log
-http://pastebin.com/KjBt4NZf
+The .config files are created in the root of the buildroot tree instead
+of in the output/ directory.
 
-Here ct and br config files
-http://pastebin.com/WjF1Zw1V        crosstools-ng
-http://pastie.org/1225315                  buildroot
+I might be wrong, but I was used to the second behavior.
+Could you check this isn't a problem introduced by your patches ?
+Otherwise I will try figure this out later.
 
-If i drop that options it goes ahead without problem.
+Thanks,
 
-Thank you,
+--
+Lionel Landwerlin
 
-
-Best Regards,
-Daniele Salvatore Albano
-
--- 
-Daniele Salvatore Albano
-Consulente Informatico
-http://www.daccii.it
-
-Servizi:
-- Sviluppo di software di rete e standalone in C# e siti web PHP;
-- Realizzazione di sistemi embedded con Buildroot;
-- Realizzazione di CD di installazione di Ubuntu/Debian personalizzati;
-- Installazione e Amministrazione sistemi basati su Debian, Ubuntu, CentOS e Fedora.
+Le dimanche 26 septembre 2010 ? 10:56 +0200, Yann E. MORIN a ?crit :
+> If building out-of-tree, add a Makefile wrapper that calls-out to the real
+> Makefile with proper args.
+> 
+> Avoids having to pass -C and O= every time we call make.
+> 
+> This is highly inspired from how the Linux kernel does it, and portions of
+> it have been used. We can't use exactly the same implementation as the
+> kernel does, because:
+> 
+>  - the kernel always overwrites the wrapper at each call: doing so in
+>    buildroot makes the kconfig stuff be rebuilt every time;
+> 
+>  - the script writing the wrapper has been expunged of the few lines
+>    that were too kernel-related: in buildroot we do not need the version
+>    string in the wrapper, and we do not have a patchlevel version;
+> 
+>  - "in-tree build" does not have the same meaning for the kernel and for
+>    buildroot: for the kernel, $(O) point to the $(TOPDIR), while for
+>    buildroot $(O) points to $(TOPDIR)/output.
+> 
+> For more complete explnanations, see:
+>   http://lists.busybox.net/pipermail/buildroot/2010-September/037815.html
