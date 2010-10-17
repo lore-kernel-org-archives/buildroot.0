@@ -1,29 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 Oct 2010 21:35:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 2707] Can't compile linux kernel using buildroot +
-	crosstool-ng
-In-Reply-To: <bug-2707-163@https.bugs.busybox.net/>
-References: <bug-2707-163@https.bugs.busybox.net/>
-Message-ID: <20101017213505.F00EF8D2F6@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sun, 17 Oct 2010 18:34:52 -0400
+Subject: [Buildroot] [git commit master 1/1] toolchain: do not require
+	full path
+In-Reply-To: <87wrphcane.fsf@macbook.be.48ers.dk>
+References: <20101016204702.67E958D282@busybox.osuosl.org>
+	<201010161810.44330.vapier@gentoo.org>
+	<87wrphcane.fsf@macbook.be.48ers.dk>
+Message-ID: <201010171834.52640.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2707
+On Sunday, October 17, 2010 07:37:57 Peter Korsgaard wrote:
+>>Mike Frysinger writes:
+>> On Saturday, October 16, 2010 17:14:20 Peter Korsgaard wrote:
+>>> Thanks, but please don't commit to the buildroot tree directly. We use
+>>> a setup like the kernel, so send patches/pull requests like everyone
+>>> else.
+>>
+>> np.  there didnt seem to be any developer documentation that
+>> explained this, nor did people comment on my patches.
+> 
+> I'm doing my best, but I know there's quite a backlog at the moment. If
+> you follow the list you will see me commenting on patching and
+> committing several times a week though.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+i merely highlighted the logic behind my actions.  i didnt say "you must fix 
+this right now!".
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+> Regarding documentation, http://buildroot.net/git.html does state:
+> 
+> Because you've only been granted anonymous access to the tree, you won't
+> be able to commit any changes. Changes can be submitted for inclusion by
+> posting them to the buildroot mailing list or to the Bug and Patch
+> Tracking System.
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed by moving KERNEL_ARCH to the toplevel Makefile, thanks.
+"can" is not the same thing as "must", plus that applies to "anonymous 
+access".  neither of which i am restricted by (otherwise my push would have 
+been rejected).
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+maybe my admin state on the box implicitly grants me the permissions today, 
+although i was a large buildroot developer in the past before you took over.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101017/b96d2bd8/attachment.pgp>
