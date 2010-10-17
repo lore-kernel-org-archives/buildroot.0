@@ -1,45 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 Oct 2010 10:00:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 2707] Can't compile linux kernel using buildroot +
-	crosstool-ng
-In-Reply-To: <bug-2707-163@https.bugs.busybox.net/>
-References: <bug-2707-163@https.bugs.busybox.net/>
-Message-ID: <20101017100045.166A48D2FC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Oct 2010 13:37:57 +0200
+Subject: [Buildroot] [git commit master 1/1] toolchain: do not require
+	full path
+In-Reply-To: <201010161810.44330.vapier@gentoo.org> (Mike Frysinger's message
+	of "Sat, 16 Oct 2010 18:10:43 -0400")
+References: <20101016204702.67E958D282@busybox.osuosl.org>
+	<871v7pet77.fsf@macbook.be.48ers.dk>
+	<201010161810.44330.vapier@gentoo.org>
+Message-ID: <87wrphcane.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2707
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at anciens.eni
-                   |                            |b.fr
+ Mike> On Saturday, October 16, 2010 17:14:20 Peter Korsgaard wrote:
+ >> Thanks, but please don't commit to the buildroot tree directly. We use a
+ >> setup like the kernel, so send patches/pull requests like everyone else.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
-Philippe, All,
+ Mike> np.  there didnt seem to be any developer documentation that
+ Mike> explained this, nor did people comment on my patches.
 
-I believe the correct way would be to declare KERNEL_ARCH somewhere else.
+I'm doing my best, but I know there's quite a backlog at the moment. If
+you follow the list you will see me commenting on patching and
+committing several times a week though.
 
-First, the crosstool-NG backend does not need stuff from kernel-headers.mk, so
-there is no reason to include it.
+Regarding documentation, http://buildroot.net/git.html does state:
 
-Second, KERNEL_ARCH is not specific to the kernel-headers used to build the
-toolchain, even the internal toolchain backend. Indeed, it is used by a few
-other components: the kernel itself, but also U-Boot, barebox, linux-fusion,
-ltrace, lm-sensors, pciutils, and bizarely enough, busybox.
+Because you've only been granted anonymous access to the tree, you won't
+be able to commit any changes. Changes can be submitted for inclusion by
+posting them to the buildroot mailing list or to the Bug and Patch
+Tracking System. 
 
-That's why I believe KERNEL_ARCH should be moved out of kernel-headers, and to
-a common place.
-
-Regards,
-Yann E. MORIN.
+Which I agree could be clearer.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
