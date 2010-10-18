@@ -1,33 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 18 Oct 2010 15:38:01 -0300
-Subject: [Buildroot] [pull request] libtool enhancement v2
-In-Reply-To: <20101010001237.755b5743@surf>
-References: <1286621574-10872-1-git-send-email-llandwerlin@gmail.com>
-	<20101010001237.755b5743@surf>
-Message-ID: <4CBC9409.9000709@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Oct 2010 22:42:59 +0200
+Subject: [Buildroot] [git commit master 1/1] alsa-lib: bump version
+Message-ID: <20101018204329.CA2A18D2F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/10 19:12, Thomas Petazzoni wrote:
 
-> On Sat,  9 Oct 2010 12:52:47 +0200
-> llandwerlin at gmail.com wrote:
-> 
->> Here is a second version of a patch set mostly from Martin Banky to
->> support libtool patching depending on the libtool script version. This
->> also bumps libtool to version 2.2.10, so we can autoreconfigure
->> packages depending on libtool 2.2 versions (gtk+, glib, etc...).
->>
->> You can pull from :
->>     git://git.potipota.net/buildroot martins-libtool
-> 
-> Not tested, but on the principle:
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=01d7afdc929256f14e3662294b2710c336ae5b5f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes gst-plugins-base build issue.
 
-Tested with a couple arm/powerpc builds, no issues so far.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/alsa-lib/alsa-lib.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
+index 5447b6c..ee9d9bc 100644
+--- a/package/multimedia/alsa-lib/alsa-lib.mk
++++ b/package/multimedia/alsa-lib/alsa-lib.mk
+@@ -3,7 +3,7 @@
+ # alsa-lib
+ #
+ #############################################################
+-ALSA_LIB_VERSION = 1.0.22
++ALSA_LIB_VERSION = 1.0.23
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_INSTALL_STAGING = YES
+-- 
+1.7.1
