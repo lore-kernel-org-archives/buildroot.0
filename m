@@ -1,33 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Oct 2010 09:10:26 +0200
-Subject: [Buildroot] [git commit master 1/1] toolchain: do not require
-	full path
-In-Reply-To: <201010171834.52640.vapier@gentoo.org> (Mike Frysinger's message
-	of "Sun, 17 Oct 2010 18:34:52 -0400")
-References: <20101016204702.67E958D282@busybox.osuosl.org>
-	<201010161810.44330.vapier@gentoo.org>
-	<87wrphcane.fsf@macbook.be.48ers.dk>
-	<201010171834.52640.vapier@gentoo.org>
-Message-ID: <87iq103rj1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Oct 2010 11:30:31 +0200
+Subject: [Buildroot] [git commit master 1/1] haserl: bump 0.9.x version
+Message-ID: <20101018093103.2CBB78C9AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=60f52cbd7469a09cc046f1d7cbe01dab5de28700
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Mike> maybe my admin state on the box implicitly grants me the
- Mike> permissions today, although i was a large buildroot developer in
- Mike> the past before you took over.  -mike
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/haserl/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Indeed. You (and Berhard and a few other admins) are also in the
-buildroot group for safety reasons.
-
-I'm grateful of your contributions now and in the past - Just that we're
-using a different development flow now than in the svn ghetto days.
-
+diff --git a/package/haserl/Config.in b/package/haserl/Config.in
+index a8d2ee5..23101c4 100644
+--- a/package/haserl/Config.in
++++ b/package/haserl/Config.in
+@@ -38,4 +38,4 @@ endchoice
+ config BR2_PACKAGE_HASERL_VERSION
+ 	string
+ 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_X
+-	default "0.9.26"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
++	default "0.9.27"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
 -- 
-Bye, Peter Korsgaard
+1.7.1
