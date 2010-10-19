@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Oct 2010 22:42:59 +0200
-Subject: [Buildroot] [git commit master 1/1] alsa-lib: bump version
-Message-ID: <20101018204329.CA2A18D2F9@busybox.osuosl.org>
+Date: Tue, 19 Oct 2010 09:47:25 +0200
+Subject: [Buildroot] [git commit master 1/1] wpa_supplicant: unbreak dbus
+	support after 0.7.3 bump
+Message-ID: <20101019074752.E548B8D281@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01d7afdc929256f14e3662294b2710c336ae5b5f
+commit: http://git.buildroot.net/buildroot/commit/?id=daf11d57975abd672e74bd60bf397a8a05d07366
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes gst-plugins-base build issue.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/alsa-lib/alsa-lib.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
-index 5447b6c..ee9d9bc 100644
---- a/package/multimedia/alsa-lib/alsa-lib.mk
-+++ b/package/multimedia/alsa-lib/alsa-lib.mk
-@@ -3,7 +3,7 @@
- # alsa-lib
- #
- #############################################################
--ALSA_LIB_VERSION = 1.0.22
-+ALSA_LIB_VERSION = 1.0.23
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_INSTALL_STAGING = YES
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index a47a42b..bfd20ab 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -90,10 +90,10 @@ endif
+ 
+ define WPA_SUPPLICANT_INSTALL_DBUS
+ 	$(INSTALL) -D \
+-	  $(@D)/wpa_supplicant/dbus-wpa_supplicant.conf \
++	  $(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
+ 	  $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+ 	$(INSTALL) -D \
+-	  $(@D)/wpa_supplicant/dbus-wpa_supplicant.service \
++	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
+ 	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+ endef
+ 
 -- 
 1.7.1
