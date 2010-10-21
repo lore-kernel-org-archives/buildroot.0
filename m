@@ -1,32 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Oct 2010 10:43:19 +0200
-Subject: [Buildroot] GPIO
-In-Reply-To: <SNT119-W45EBAC8F8EBBF3D046BA77825D0@phx.gbl> (Johnny
-	Beardsmore's message of "Thu, 21 Oct 2010 08:29:13 +0000")
-References: <SNT119-W45EBAC8F8EBBF3D046BA77825D0@phx.gbl>
-Message-ID: <87wrpc0wd4.fsf@macbook.be.48ers.dk>
+From: Neal Peacock <neal@coinfree.com>
+Date: Thu, 21 Oct 2010 17:03:19 -0400
+Subject: [Buildroot] Firmware Loading
+Message-ID: <9F13A3F8731E4CB9B825A924ACC0A6A3@RnD>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Johnny" == Johnny Beardsmore <jny0@hotmail.com> writes:
+I realize this is kind of an old post but I think I'm having the same
+trouble
+with the carl9170 driver on my embedded system.  Could you post how you
+setup udev to handle the firmware loading?  I tried echoing udevd into the
+proc/sys/kernel/hotplug and all and I know I have the .sh script in place
+but nothing seems to be happening and firmware loads always time out.
 
- Johnny> Hi,
- Johnny> I product I worked on a while ago has returned to haunt me.
+Thanks.
 
- Johnny> Essentially, I need support for a GPIO port on a pc-104.  I've
- Johnny> perused the configuration settings in Buioldroot, but wasn't
- Johnny> able to spot anything that looked suitable.  Is it, and has
- Johnny> anyone any experience with doing so?
+Andrew Wiley-2 wrote:
+>
+> On Sat, Jan 16, 2010 at 7:29 AM, Michael S. Zick
+> <minimod@morethan.org>wrote:
+>>
+>> Perhaps update the mdev configuration file?
+>> It ships empty, it has to, too installation specific to pre-define
+>> anything.
+>>
+>> mdev --help
+>> will start you off; continue as required with the command descriptions -
+>> if loaded on your machine during the build or at the busybox web-site.
+>>
+>
+> Well, I wound up just going with udev, call me lazy if you like, but it
+> works for me. My board runs off a flash drive, so space isn't an issue. I
+> won't generally be adding or removing devices after startup, so
+> performance
+> isn't really an issue either, but I may wind up swapping out devices that
+> are connected at boot time, so udev seemed like a better solution for my
+> setup.
+>
+> Thanks,
+> Andrew
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-That's a kernel question rather than an issue about userspace rootfs
-configuration.
 
-Have a look at the gpio options in the kernel and Documentation/gpio.txt
-in the kernel sources for information of how to access them through
-sysfs.
 
--- 
-Bye, Peter Korsgaard
+--
+Neal Peacock
+VP of Product Development
+Coin Free LLC
+407-657-5971
