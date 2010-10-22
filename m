@@ -1,23 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Oct 2010 16:53:20 +0200
-Subject: [Buildroot] Can't compile lsof: no rpc.h ?
-In-Reply-To: <201010221553.14210.dargaud@lpsc.in2p3.fr> (Guillaume Dargaud's
-	message of "Fri, 22 Oct 2010 15:53:14 +0200")
-References: <201010221340.41660.dargaud@lpsc.in2p3.fr>
-	<201010221553.14210.dargaud@lpsc.in2p3.fr>
-Message-ID: <87sjzy1dpb.fsf@macbook.be.48ers.dk>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 22 Oct 2010 17:19:23 -0400
+Subject: [Buildroot] [git commit master 1/1] toolchain: do not require
+	full path
+In-Reply-To: <871v7pet77.fsf@macbook.be.48ers.dk>
+References: <20101016204702.67E958D282@busybox.osuosl.org>
+	<871v7pet77.fsf@macbook.be.48ers.dk>
+Message-ID: <201010221719.23905.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
+On Saturday, October 16, 2010 17:14:20 Peter Korsgaard wrote:
+> Thanks, but please don't commit to the buildroot tree directly. We use a
+> setup like the kernel, so send patches/pull requests like everyone else.
 
- Guillaume> Sorry about that, a make clean solved it.
-
-Good. I was just about to ask you if you had enabled the RPC option
-without recompiling the toolchain, because it works here.
-
--- 
-Bye, Peter Korsgaard
+what about branches ?  i dont see a problem with letting people 
+create/maintain/push their own branches.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101022/6f3b91f2/attachment.pgp>
