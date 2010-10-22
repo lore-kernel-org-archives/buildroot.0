@@ -1,30 +1,38 @@
-From: Mitch Davis <mjd+buildroot@afork.com>
-Date: Fri, 22 Oct 2010 09:36:59 +1100
-Subject: [Buildroot] Firmware Loading
-In-Reply-To: <9F13A3F8731E4CB9B825A924ACC0A6A3@RnD>
-References: <9F13A3F8731E4CB9B825A924ACC0A6A3@RnD>
-Message-ID: <AANLkTimXjTqcxPAWovUrU=vwFk2n8mEwQ-p6W4am8SAs@mail.gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 22 Oct 2010 13:40:41 +0200
+Subject: [Buildroot] Can't compile lsof: no rpc.h ?
+Message-ID: <201010221340.41660.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 22, 2010 at 8:03 AM, Neal Peacock <neal@coinfree.com> wrote:
-> I realize this is kind of an old post but I think I'm having the same
-> trouble
-> with the carl9170 driver on my embedded system. ?Could you post how you
-> setup udev to handle the firmware loading? ?I tried echoing udevd into the
-> proc/sys/kernel/hotplug and all and I know I have the .sh script in place
-> but nothing seems to be happening and firmware loads always time out.
+Hello all,
+I can't compile lmbench or lsof, it complains that it cannot find rpc.h...
+RPC is enabled in the .config
 
-If you add this to the .sh file:
+/home/dargaud/Devel/buildroot-2010.08/output/staging/usr/bin/powerpc-unknown-
+linux-uclibc-gcc --
+sysroot=/home/dargaud/Devel/buildroot-2010.08/output/staging -pipe -Os  -
+mtune=405 -msoft-float -
+I/home/dargaud/Devel/buildroot-2010.08/output/staging/usr/include -
+I/home/dargaud/Devel/buildroot-2010.08/output/staging/include   -c -o isfn.o 
+isfn.c
+In file included from ../lsof.h:195,
+                 from isfn.c:67:
+../dlsof.h:59:21: error: rpc/rpc.h: No such file or directory
+../dlsof.h:60:27: error: rpc/pmap_prot.h: No such file or directory
+make[2]: *** [isfn.o] Error 1
+make[2]: Leaving directory 
+`/home/dargaud/Devel/buildroot-2010.08/output/build/lsof_4.81/lsof_4.81_src/lib'
+make[1]: *** [lib/liblsof.a] Error 2
+make[1]: Leaving directory 
+`/home/dargaud/Devel/buildroot-2010.08/output/build/lsof_4.81/lsof_4.81_src'
+make: *** 
+[/home/dargaud/Devel/buildroot-2010.08/output/build/lsof_4.81/lsof_4.81_src/lsof] 
+Error 2
 
-  date >> /tmp/dates.txt
-
-Does /tmp/dates.txt change after the event?
-
-If you create a shell script with a similar "date" line into
-/proc/sys/kernel/hotplug, does dates.txt change?
-
-Mitch.
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
