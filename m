@@ -1,8 +1,8 @@
 From: Martin Banky <martin.banky@gmail.com>
 Date: Sat, 23 Oct 2010 14:53:08 +0200
 Subject: [Buildroot] [git commit master 1/1] buildroot.html: html code
-	clean-up and other issues - Part2
-Message-ID: <20101023143215.8EE5D8D3C7@busybox.osuosl.org>
+	clean-up and other issues - Part1
+Message-ID: <20101023143215.52ABD8D41F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b504fe1f6f67bd2d12107c4c00248cb63a35e27
+commit: http://git.buildroot.net/buildroot/commit/?id=8113c8162bb78cc5a7081ee1cfa46ffe28ec6368
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The current DocType declaration was incorrect. It is neither xhtml strict nor
