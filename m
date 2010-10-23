@@ -1,89 +1,181 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Oct 2010 13:34:55 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/gtk-bump
-Message-ID: <cover.1287833623.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Oct 2010 13:34:57 +0200
+Subject: [Buildroot] [PATCH 02/12] Added the ability to patch ltmain.sh
+	based on version
+In-Reply-To: <cover.1287833623.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1287833623.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <83af822f7b28169b096d592027e97c55cc83eb27.1287833623.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Martin Banky <martin.banky@gmail.com>
 
-Here is a stack of patches that gathers:
+There are two versions of ltmain.sh in use in the buildroot system, 1.5.x and
+2.2.x. buildroot-libtool.patch would only patch 1.5.x, which meant that for
+2.2.x, a separate patch for the affected package had to be maintained. Modified
+Makefile.autotools.in to check the version of ltmain.sh and apply the correct
+patch.
 
- * libtool fixes from Martin Banky
- * libtool bump from Lionel Landwerlin
- * glib/gtk bump from myself
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.autotools.in                      |   23 +++++--
+ ...-libtool.patch => buildroot-libtool-v1.5.patch} |    0
+ ...-libtool.patch => buildroot-libtool-v2.2.patch} |   77 +++++++++-----------
+ 3 files changed, 53 insertions(+), 47 deletions(-)
+ copy package/{buildroot-libtool.patch => buildroot-libtool-v1.5.patch} (100%)
+ rename package/{buildroot-libtool.patch => buildroot-libtool-v2.2.patch} (51%)
 
-I've successfully built and tested the gtk-demo application with both
-the X.org and DirectFB backends, using a uClibc Buildroot ARM toolchain.
-
-Regards,
-
-Thomas
-
-The following changes since commit 2b721e9c11fae9bd3a836da19d679949e0788283:
-  Peter Korsgaard (1):
-        toolchain-crosstool-ng: fix arch for powerpc
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/gtk-bump
-
-Lionel Landwerlin (2):
-      libtool: bump to 2.2.10
-      libtool: avoid to patch ltmain.sh script in host-libtool package
-
-Martin Banky (5):
-      BugFix - buildroot-libtool.patch - Removed Useless Code
-      Added the ability to patch ltmain.sh based on version
-      Removed expat-libdir-la.patch
-      Removed freetype-2.3.9-libdir-la.patch
-      Removed libmpd-0.17.0-libdir-la.patch
-
-Thomas Petazzoni (5):
-      package: add gdk-pixbuf package (splitted out from GTK+)
-      libgtk2: bump to version 2.22.0 and undeprecate Gtk/DirectFB
-      libglib2: bump version to 2.26.0
-      pango: bump version to 1.28.2
-      libglib2: remove fix-clock-gettime patch
-
- package/Config.in                                  |    1 +
- package/Makefile.autotools.in                      |   23 ++-
- ...-libtool.patch => buildroot-libtool-v1.5.patch} |   17 --
- ...ibdir-la.patch => buildroot-libtool-v2.2.patch} |   53 +---
- package/expat/expat-libdir-la.patch                |   77 ------
- package/expat/expat.mk                             |    1 -
- package/freetype/freetype-2.3.9-libdir-la.patch    |   81 ------
- package/freetype/freetype.mk                       |    1 -
- package/gdk-pixbuf/Config.in                       |   12 +
- package/gdk-pixbuf/gdk-pixbuf.mk                   |   51 ++++
- .../libglib2-fix-clock-gettime-check.patch         |   51 ----
- package/libglib2/libglib2-mkenums-nowarn.patch     |   14 +-
- package/libglib2/libglib2-optional-ipv6.patch      |   12 +-
- package/libglib2/libglib2.mk                       |    5 +-
- package/libgtk2/Config.in                          |    9 +-
- ... host-libgtk2-2.20.1-reduce-dependencies.patch} |  140 ++++-------
- package/libgtk2/libgtk2-2.12.6-configure.patch     |  256 --------------------
- package/libgtk2/libgtk2-2.12.6-no-tests.patch      |   11 -
- package/libgtk2/libgtk2.mk                         |   15 +-
- package/libtool/libtool.mk                         |    4 +-
- package/multimedia/libmpd/libmpd.mk                |    1 -
- package/pango/pango.mk                             |    2 +-
- 22 files changed, 178 insertions(+), 659 deletions(-)
- rename package/{buildroot-libtool.patch => buildroot-libtool-v1.5.patch} (81%)
- rename package/{multimedia/libmpd/libmpd-0.17.0-libdir-la.patch => buildroot-libtool-v2.2.patch} (56%)
- delete mode 100644 package/expat/expat-libdir-la.patch
- delete mode 100644 package/freetype/freetype-2.3.9-libdir-la.patch
- create mode 100644 package/gdk-pixbuf/Config.in
- create mode 100644 package/gdk-pixbuf/gdk-pixbuf.mk
- delete mode 100644 package/libglib2/libglib2-fix-clock-gettime-check.patch
- rename package/libgtk2/{host-libgtk2-2.12.12-reduce-dependencies.patch => host-libgtk2-2.20.1-reduce-dependencies.patch} (50%)
- delete mode 100644 package/libgtk2/libgtk2-2.12.6-configure.patch
- delete mode 100644 package/libgtk2/libgtk2-2.12.6-no-tests.patch
-
-Thanks,
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 589079b..87c3092 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -139,10 +139,16 @@ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ #
+ define LIBTOOL_PATCH_HOOK
+ 	@$(call MESSAGE,"Patching libtool")
+-	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES" -a \
+-	"$$($$(PKG)_AUTORECONF)" != "YES"; then \
+-	for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+-		toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool.patch; \
++	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES" \
++		-a "$$($$(PKG)_AUTORECONF)" != "YES"; then \
++		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
++			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
++			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++			if test $$$${ltmain_version} = '1.5'; then \
++				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v1.5.patch; \
++			elif test $$$${ltmain_version} = "2.2"; then\
++				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v2.2.patch; \
++			fi \
+ 		done \
+ 	fi
+ endef
+@@ -158,9 +164,14 @@ endif
+ define AUTORECONF_HOOK
+ 	@$(call MESSAGE,"Autoreconfiguring")
+ 	$(Q)cd $$($$(PKG)_SRCDIR) && $(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
+-	$(Q)if test "$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
++	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+-		toolchain/patch-kernel.sh $${i%/*} package buildroot-libtool.patch; \
++			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | sed 's/\([0-9].[0-9]*\).*/\1/'`; \
++			if test $$$${ltmain_version} = "1.5"; then \
++				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v1.5.patch; \
++			elif test $$$${ltmain_version} = "2.2"; then\
++				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v2.2.patch; \
++			fi \
+ 		done \
+ 	fi
+ endef
+diff --git a/package/buildroot-libtool.patch b/package/buildroot-libtool-v1.5.patch
+similarity index 100%
+copy from package/buildroot-libtool.patch
+copy to package/buildroot-libtool-v1.5.patch
+diff --git a/package/buildroot-libtool.patch b/package/buildroot-libtool-v2.2.patch
+similarity index 51%
+rename from package/buildroot-libtool.patch
+rename to package/buildroot-libtool-v2.2.patch
+index 57a7c58..0df00ae 100644
+--- a/package/buildroot-libtool.patch
++++ b/package/buildroot-libtool-v2.2.patch
+@@ -1,18 +1,31 @@
+---- a/ltmain.sh	2006-03-11 13:49:04.000000000 -0500
+-+++ b/ltmain.sh	2008-04-30 09:55:28.000000000 -0400
+-@@ -273,8 +273,9 @@ func_infer_tag ()
++--- a/ltmain.sh	2009-11-16 06:23:18.000000000 -0700
+++++ b/ltmain.sh	2010-09-18 20:25:06.000000000 -0700
++@@ -1048,8 +1048,8 @@ func_infer_tag ()
++ 	# was found and let the user know that the "--tag" command
+  	# line option must be used.
+  	if test -z "$tagname"; then
+- 	  $echo "$modename: unable to infer tagged configuration"
+--	  $echo "$modename: specify a tag with \`--tag'" 1>&2
+--	  exit $EXIT_FAILURE
+-+	  $echo "$modename: defaulting to \`CC'"
+-+	  $echo "$modename: if this is not correct, specify a tag with \`--tag'"
+-+#	  exit $EXIT_FAILURE
+- #        else
+- #          $echo "$modename: using $tagname tagged configuration"
++-	  func_echo "unable to infer tagged configuration"
++-	  func_fatal_error "specify a tag with \`--tag'"
+++	  func_echo "defaulting to \`CC'"
+++	  func_echo "if this is not correct, specify a tag with \`--tag'"
++ #	else
++ #	  func_verbose "using $tagname tagged configuration"
+  	fi
+-@@ -2407,8 +2408,14 @@ EOF
++@@ -2018,8 +2018,11 @@ func_mode_install ()
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  test "$inst_prefix_dir" = "$destdir" && \
++-	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
+++	  #
+++	  # This breaks install into our staging area.  -PB
+++	  #
+++	  # test "$inst_prefix_dir" = "$destdir" && \
+++	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
++@@ -5412,8 +5415,14 @@ func_mode_link ()
+  	    absdir="$abs_ladir"
+  	    libdir="$abs_ladir"
+  	  else
+@@ -29,16 +42,16 @@
+  	  fi
+  	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
+  	else
+-@@ -2545,7 +2552,7 @@ EOF
+- 	   { test "$use_static_libs" = no || test -z "$old_library"; }; then
+- 	  if test "$installed" = no; then
+- 	    notinst_deplibs="$notinst_deplibs $lib"
+--	    need_relink=yes
+-+	    need_relink=no
+- 	  fi
+- 	  # This is a shared library
+- 
+-@@ -5606,6 +5623,10 @@ fi\
++@@ -5564,7 +5573,7 @@ func_mode_link ()
++ 	  *)
++ 	    if test "$installed" = no; then
++ 	      notinst_deplibs="$notinst_deplibs $lib"
++-	      need_relink=yes
+++	      need_relink=no
++ 	    fi
++ 	    ;;
++ 	  esac
++@@ -8052,6 +8061,10 @@ EOF
+  	    # Replace all uninstalled libtool libraries with the installed ones
+  	    newdependency_libs=
+  	    for deplib in $dependency_libs; do
+@@ -48,22 +61,4 @@
+ +              continue
+  	      case $deplib in
+  	      *.la)
+- 		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
+-@@ -5927,10 +5948,13 @@ relink_command=\"$relink_command\""
+- 	  # At present, this check doesn't affect windows .dll's that
+- 	  # are installed into $libdir/../bin (currently, that works fine)
+- 	  # but it's something to keep an eye on.
+--	  if test "$inst_prefix_dir" = "$destdir"; then
+--	    $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
+--	    exit $EXIT_FAILURE
+--	  fi
+-+	  #
+-+	  # This breaks install into our staging area.  -PB
+-+	  # 
+-+	  # if test "$inst_prefix_dir" = "$destdir"; then
+-+	  #   $echo "$modename: error: cannot install \`$file' to a directory not ending in $libdir" 1>&2
+-+	  #   exit $EXIT_FAILURE
+-+	  # fi
+- 
+- 	  if test -n "$inst_prefix_dir"; then
+- 	    # Stick the inst_prefix_dir data into the link command.
++ 		func_basename "$deplib"
 -- 
-Thomas Petazzoni
+1.7.0.4
