@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 23 Oct 2010 14:53:08 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: 1.17.3 sort fix
-Message-ID: <20101023143216.33E1A8D3C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] linux: default to 2.6.36
+Message-ID: <20101023143216.A58E68D3C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6644da4087264e51136854b65c2b153ceac5fd07
+commit: http://git.buildroot.net/buildroot/commit/?id=f3da7498566b20c0efcea758a3cbedb37920761c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox-1.17.3/busybox-1.17.3-sort.patch       |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.17.3/busybox-1.17.3-sort.patch
+ linux/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/busybox/busybox-1.17.3/busybox-1.17.3-sort.patch b/package/busybox/busybox-1.17.3/busybox-1.17.3-sort.patch
-new file mode 100644
-index 0000000..ebc9bf9
---- /dev/null
-+++ b/package/busybox/busybox-1.17.3/busybox-1.17.3-sort.patch
-@@ -0,0 +1,12 @@
-+diff -urpN busybox-1.17.3/coreutils/sort.c busybox-1.17.3-sort/coreutils/sort.c
-+--- busybox-1.17.3/coreutils/sort.c	2010-10-09 21:57:13.000000000 +0200
-++++ busybox-1.17.3-sort/coreutils/sort.c	2010-10-20 15:17:35.320293543 +0200
-+@@ -412,7 +412,7 @@ int sort_main(int argc UNUSED_PARAM, cha
-+ #if ENABLE_FEATURE_SORT_BIG
-+ 	/* Open output file _after_ we read all input ones */
-+ 	if (option_mask32 & FLAG_o)
-+-		xmove_fd(xopen3(str_o, O_WRONLY, 0666), STDOUT_FILENO);
-++		xmove_fd(xopen3(str_o, O_WRONLY|O_CREAT|O_TRUNC, 0666), STDOUT_FILENO);
-+ #endif
-+ 	flag = (option_mask32 & FLAG_z) ? '\0' : '\n';
-+ 	for (i = 0; i < linecount; i++)
+diff --git a/linux/Config.in b/linux/Config.in
+index 1e015b7..5191d01 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
+ #
+ choice
+ 	prompt "Kernel version"
+-	default BR2_LINUX_KERNEL_2_6_35
++	default BR2_LINUX_KERNEL_2_6_36
+ 
+-config BR2_LINUX_KERNEL_2_6_35
+-	bool "2.6.35.6"
++config BR2_LINUX_KERNEL_2_6_36
++	bool "2.6.36"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -52,7 +52,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "2.6.35.6"
++	default "2.6.36"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "2.6.35.6" if BR2_LINUX_KERNEL_2_6_35
++	default "2.6.36" if BR2_LINUX_KERNEL_2_6_36
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.1
