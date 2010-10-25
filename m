@@ -1,22 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 Oct 2010 13:33:43 +0200
-Subject: [Buildroot] [PATCH] Fix 2.6.36 kernel version in menuconfig
-	string
-In-Reply-To: <20101025112615.12023.17661.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Mon, 25 Oct 2010 14:26:15 +0300")
-References: <20101025112615.12023.17661.stgit@localhost.localdomain>
-Message-ID: <87ocaibj6w.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Oct 2010 12:57:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 2725] New: Buildroot overrides kernel config
+Message-ID: <bug-2725-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2725
 
- Paulius> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+           Summary: Buildroot overrides kernel config
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: chromy at asix.cz
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Ups, thanks - Committed.
+
+Buildroot overrides certain directives in kernel configuration.
+
+Example: when doing a clean build, unless BR2_TARGET_ROOTFS_INITRAMFS in
+Buildroot's config file is set, kernel is built without initramfs support
+despite it was enabled in file referenced by
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE.
+
+On the other hand if BR2_TARGET_ROOTFS_INITRAMFS is set, kernel image contains
+complete root filesytem.
+
+This is unacceptable - this way it is a problem to build kernel with initramfs
+support but without actual filesystem embedded in the kernel, Buildroot shall
+not be such invasive when custom configuration file is provided.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
