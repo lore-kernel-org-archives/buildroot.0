@@ -1,35 +1,28 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Tue, 26 Oct 2010 18:27:04 +0100
-Subject: [Buildroot] ncurses should have libtinfo.so
-Message-ID: <1288114024.13545.6.camel@segulix>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 26 Oct 2010 20:55:38 -0300
+Subject: [Buildroot] [pull request] ethtool, gpsd, libnl, portmap, pptp,
+ readline, rp-pppoe, netsnmp
+Message-ID: <4CC76A7A.4060404@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
-First, I saw that you fix vsftpd, thanks
 
-About ncurses , IRC xdialog needs libtinfo.so, so ncurses should be
-compile with libtinfo.so
+ethtool: bump to version 2.6.35
+gpsd: new package
+libnl: fix minor memleak, properly install library (.so wasn't +x so
+strip didn't strip - now smaller)
+portmap: bump to version 6.0, convert to autotargets
+pptp: bump to version 1.7.2, convert to gentargets
+readline: bump to version 6.1
+rp-pppoe: convert to autotargets, bump to 3.10 and undeprecate
+netsnmp: bump to version 5.6, make it a bit smaller
 
-in attach is my propose patch 
+Enjoy.
 
-Thanks, 
--- 
-S?rgio M. B.
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ncurses.patch
-Type: text/x-patch
-Size: 595 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101026/b3085e98/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101026/b3085e98/attachment-0001.bin>
+An embedded and charset-unspecified text was scrubbed...
+Name: pull-request.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101026/02cf34e2/attachment.txt>
