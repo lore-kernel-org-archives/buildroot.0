@@ -1,30 +1,19 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Oct 2010 12:04:19 +0200
-Subject: [Buildroot] [PATCH] Fix libgtk2 post install hook regression
-In-Reply-To: <20101025190834.3163.39351.stgit@localhost.localdomain>
+From: Marc Leclerc <marc-leclerc@signaturealpha.com>
+Date: Tue, 26 Oct 2010 07:50:56 -0400
+Subject: [Buildroot] Timezone
+In-Reply-To: <20101026120419.668b53d7@surf>
 References: <20101025190834.3163.39351.stgit@localhost.localdomain>
-Message-ID: <20101026120419.668b53d7@surf>
+	<20101026120419.668b53d7@surf>
+Message-ID: <4CC6C0A0.6050605@signaturealpha.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Mon, 25 Oct 2010 22:08:34 +0300
-Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
+Any options to have my system on UTC by default. As of default it is on 
+MDT (Mountain Daylight)
 
-> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-
-Thanks, merged into my gtk-bump branch, and pushed to my personal repo
-(waiting for Peter to merge this branch).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards
