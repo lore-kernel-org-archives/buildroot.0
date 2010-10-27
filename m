@@ -1,28 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Oct 2010 20:55:38 -0300
-Subject: [Buildroot] [pull request] ethtool, gpsd, libnl, portmap, pptp,
- readline, rp-pppoe, netsnmp
-Message-ID: <4CC76A7A.4060404@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 27 Oct 2010 14:18:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 2737] New: buildroot configuration tool crashing
+ when the path exceeds 128 characters
+Message-ID: <bug-2737-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2737
 
-ethtool: bump to version 2.6.35
-gpsd: new package
-libnl: fix minor memleak, properly install library (.so wasn't +x so
-strip didn't strip - now smaller)
-portmap: bump to version 6.0, convert to autotargets
-pptp: bump to version 1.7.2, convert to gentargets
-readline: bump to version 6.1
-rp-pppoe: convert to autotargets, bump to 3.10 and undeprecate
-netsnmp: bump to version 5.6, make it a bit smaller
+           Summary: buildroot configuration tool crashing when the path
+                    exceeds 128 characters
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: honyakeprt at centrum.cz
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Enjoy.
 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: pull-request.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101026/02cf34e2/attachment.txt>
+Created attachment 2629
+  --> https://bugs.busybox.net/attachment.cgi?id=2629
+quick fix
+
+Install the buildroot to a directory, where the path length exceed 128
+characters. Try to run "make oldconfig", the configuration tool is crashing
+with message buffer overflow detected. The tool "make menuconfig" is probably
+crashing as well.
+
+The buggy file is located here:
+..../package/config/confdata.c
+Function:
+int conf_write(const char *name) 
+uses arrays of size 128B for path.
+
+
+Am sending you quick fix, which is working for us.
+
+Regars
+
+JK
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
