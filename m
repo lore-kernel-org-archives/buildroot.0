@@ -1,151 +1,177 @@
-From: Sasha Yohananov <yohananov@gmail.com>
-Date: Thu, 28 Oct 2010 15:51:52 +0200
-Subject: [Buildroot] Is there any chance to compile old buildroot on new
-	distro
-In-Reply-To: <AANLkTikxaFCN8SHXQFw_BEJMUN9Xe=hQE1yZHkJxE6ea@mail.gmail.com>
-References: <AANLkTi=CA_91mHxqKye2wPsRVGkOe2Zm2W1LnMGdk_OA@mail.gmail.com>
-	<AANLkTi=j+qQ7Gq+pA1T4ANRLP_J7ZmEwytKCKx9-MF74@mail.gmail.com>
-	<AANLkTikejZmUR+QPFOHKDM4W0nhB-yxkDX8+KX5LLLzr@mail.gmail.com>
-	<AANLkTimOVKA5nq2rKDo_cJBHWCDFuh2tgYNNhAYQcD7i@mail.gmail.com>
-	<AANLkTikxaFCN8SHXQFw_BEJMUN9Xe=hQE1yZHkJxE6ea@mail.gmail.com>
-Message-ID: <AANLkTin7av9um-pwQ+ik19O46qTqjL_1wdf-mqFunu2q@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 Oct 2010 14:07:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 2743] New: buildroot-2010.08 forgets to include
+ /lib/* into rootfs.ext2
+Message-ID: <bug-2743-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paulius, Peter,
-a lot of thanks for your responses.
+https://bugs.busybox.net/show_bug.cgi?id=2743
 
-Paulius, 'glibc-static' really helped and despite of errors in some of
-packages (php5) it compiled at long last.
+           Summary: buildroot-2010.08 forgets to include /lib/* into
+                    rootfs.ext2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: sludgeas at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Peter, I guess the buildroot I hold is one of the versions came on
-August-December 2008.
-I got it from sub-contractor with some changes my company ordered and
-started working on it on January 2009.
-I tried to find all over the code any clue of version but unfortunately I
-found nothing.
 
-Thank you ever so much
-Sasha.
+get buildroot-2010.08 to build a rootfs for ARM926T and you will end up without
+/lib/* in the rootfs.ext2 (so if you bake it from there, your system is borked
+(i.e. the famous -sh: xxx: not found errors)). To fix this, you can find your
+uclibs et al. at ./output/target/lib/*
+
+my #-stripped .config:
+BR2_HAVE_DOT_CONFIG=y
+BR2_VERSION="2010.08"
+BR2_arm=y
+BR2_arm926t=y
+
+BR2_ARM_TYPE="ARM926T"
+BR2_ARM_EABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_TUNE="arm926ej-s"
+BR2_GCC_TARGET_ARCH="armv5te"
+BR2_GCC_TARGET_ABI="aapcs-linux"
 
 
-On Thu, Oct 28, 2010 at 2:15 PM, Paulius Zaleckas <
-paulius.zaleckas@gmail.com> wrote:
+BR2_TARGET_GENERIC_HOSTNAME="br_20101028"
+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot, 20101028"
+BR2_TARGET_GENERIC_GETTY=y
+BR2_TARGET_GENERIC_GETTY_TTYS0=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+BR2_TARGET_GENERIC_GETTY_BAUDRATE="115200"
 
-> On Thu, Oct 28, 2010 at 2:53 PM, Sasha Yohananov <yohananov@gmail.com>
-> wrote:
-> >
-> >
-> > On Thu, Oct 28, 2010 at 10:09 AM, Paulius Zaleckas
-> > <paulius.zaleckas@gmail.com> wrote:
-> >>
-> >> On Thu, Oct 28, 2010 at 11:00 AM, Sasha Yohananov <yohananov@gmail.com>
-> >> wrote:
-> >> >
-> >> > Dear buildroot experts,
-> >> > For about 2 years I work on some commercial project (access control)
-> >> > based
-> >> > on buildroot-2008.11.
-> >> > HW details are:
-> >> > CPU - ARM926EJ-S rev 5 (v5l)
-> >> > Board - Atmel AT91SAM9260-EK
-> >> > Former Host - Fedora 9.
-> >> > Current Host - Fedora 13
-> >> > After some initial tuning it compiled and produced everything that
-> >> > needed
-> >> > (all images) excellently, but recently I was silly enough to upgrade
-> my
-> >> > host's distribution to Fedora 13.
-> >> > Now I'm in trouble, I can't compile it at all. It fails at
-> the beginning
-> >> > of
-> >> > the process, I guess the are conflicts between old kernel's headers
-> and
-> >> > new
-> >> > glibc definitions.
-> >> > I understand that my buildroot is quite old but unfortunately I have
-> to
-> >> > continue with it for some time.
-> >> > Is there any chance to compile it on new distribution?
-> >> > There are some details of my configuration and new distro tools:
-> >> > uname -a
-> >> > Linux riln-ls 2.6.33.3-85.fc13.i686.PAE #1 SMP Thu May 6 18:27:11 UTC
-> >> > 2010
-> >> > i686 i686 i386 GNU/Linux
-> >> > gcc --version
-> >> > gcc (GCC) 4.4.4 20100503 (Red Hat 4.4.4-2)
-> >> > Copyright (C) 2010 Free Software Foundation, Inc.
-> >> > This is free software; see the source for copying conditions.  There
-> is
-> >> > NO
-> >> > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
-> >> > PURPOSE.
-> >> > gcc -###
-> >> > Using built-in specs.
-> >> > Target: i686-redhat-linux
-> >> > Configured with: ../configure --prefix=/usr --mandir=/usr/share/man
-> >> > --infodir=/usr/share/info
-> >> > --with-bugurl=http://bugzilla.redhat.com/bugzilla
-> >> > --enable-bootstrap --enable-shared --enable-threads=posix
-> >> > --enable-checking=release --with-system-zlib --enable-__cxa_atexit
-> >> > --disable-libunwind-exceptions --enable-gnu-unique-object
-> >> > --enable-languages=c,c++,objc,obj-c++,java,fortran,ada
-> >> > --enable-java-awt=gtk
-> >> > --disable-dssi
-> --with-java-home=/usr/lib/jvm/java-1.5.0-gcj-1.5.0.0/jre
-> >> > --enable-libgcj-multifile --enable-java-maintainer-mode
-> >> > --with-ecj-jar=/usr/share/java/eclipse-ecj.jar
-> >> > --disable-libjava-multilib
-> >> > --with-ppl --with-cloog --with-tune=generic --with-arch=i686
-> >> > --build=i686-redhat-linux
-> >> > Thread model: posix
-> >> > gcc version 4.4.4 20100503 (Red Hat 4.4.4-2) (GCC)
-> >> >
-> >> > /lib/libc.so.6
-> >> > GNU C Library stable release version 2.12.1, by Roland McGrath et al.
-> >> > Copyright (C) 2010 Free Software Foundation, Inc.
-> >> > This is free software; see the source for copying conditions.
-> >> > There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
-> >> > PARTICULAR PURPOSE.
-> >> > Compiled by GNU CC version 4.4.4 20100630 (Red Hat 4.4.4-10).
-> >> > Compiled on a Linux 2.6.34 system on 2010-10-19.
-> >> > Available extensions:
-> >> > The C stubs add-on version 2.1.2.
-> >> > crypt add-on version 2.1 by Michael Glad and others
-> >> > GNU Libidn by Simon Josefsson
-> >> > Native POSIX Threads Library by Ulrich Drepper et al
-> >> > BIND-8.2.3-T5B
-> >> > RT using linux kernel aio
-> >> > libc ABIs: UNIQUE IFUNC
-> >> > For bug reporting instructions, please see:
-> >> > <http://www.gnu.org/software/libc/bugs.html>.
-> >> >
-> >> > Config and build log files are attached.
-> >> > Thank you in advance,
-> >> > Sasha.
-> >>
-> >> You need a patch for kernel:
-> >>
-> >>
-> http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=patch;h=d15bd1067b1fcb2b7250d22bc0c7c7fea0b759f7
-> >
-> >
-> >
-> > Paulius, thank you a lot for your quick response.
-> >
-> > I patched the kernel and then I could proceed up to
-> module-init-tools-3.2.2
-> > compilation.
-> > Now the linker complains on absence of 'c' library.
-> > I'm getting confused, is it standard c library, it is looking for?
-> > Is there any way to fix it?
->
-> If I remember correctly you need static glibc library:
-> yum install glibc-static
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101028/ca073a70/attachment.html>
+
+BR2_WGET="wget --passive-ftp -nd"
+BR2_SVN_CO="svn co"
+BR2_SVN_UP="svn up"
+BR2_BZR_CO="bzr co"
+BR2_BZR_UP="bzr up"
+BR2_GIT="git clone"
+BR2_ZCAT="gzip -d -c"
+BR2_BZCAT="bzcat"
+BR2_TAR_OPTIONS=""
+BR2_DL_DIR="$(TOPDIR)/dl"
+BR2_STAGING_DIR="$(BASE_DIR)/staging"
+
+BR2_PRIMARY_SITE=""
+BR2_BACKUP_SITE="http://sources.buildroot.net/"
+BR2_SOURCEFORGE_MIRROR="easynews"
+BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
+BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+BR2_JLEVEL=4
+BR2_STRIP_strip=y
+BR2_OPTIMIZE_S=y
+BR2_PREFER_STATIC_LIB=y
+
+
+BR2_TOOLCHAIN_BUILDROOT=y
+
+BR2_KERNEL_HEADERS_2_6_32=y
+BR2_DEFAULT_KERNEL_HEADERS="2.6.32.18"
+
+BR2_UCLIBC_VERSION_0_9_31=y
+BR2_UCLIBC_VERSION_STRING="0.9.31"
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
+
+BR2_BINUTILS_VERSION_2_20_1=y
+BR2_BINUTILS_VERSION="2.20.1"
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
+
+BR2_GCC_VERSION_4_4_X=y
+BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
+BR2_GCC_VERSION="4.4.4"
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+
+
+BR2_NEEDS_GETTEXT=y
+BR2_PREFER_SOFT_FLOAT=y
+BR2_SOFT_FLOAT=y
+BR2_PTHREADS_OLD=y
+BR2_TARGET_OPTIMIZATION="-pipe"
+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
+
+BR2_PACKAGE_BUSYBOX=y
+BR2_BUSYBOX_VERSION_1_17_X=y
+BR2_BUSYBOX_VERSION="1.17.1"
+BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.17.x.config"
+
+
+BR2_PACKAGE_AUTOCONF=y
+BR2_PACKAGE_AUTOMAKE=y
+BR2_PACKAGE_FAKEROOT=y
+
+
+BR2_PACKAGE_MAKE=y
+BR2_PACKAGE_LIBTOOL=y
+
+
+BR2_PACKAGE_DIRECTFB=y
+BR2_PACKAGE_DIRECTFB_LINUXINPUT=y
+BR2_PACKAGE_DIRECTFB_KEYBOARD=y
+BR2_PACKAGE_DIRECTFB_PS2MOUSE=y
+BR2_PACKAGE_DIRECTFB_SERIALMOUSE=y
+BR2_PACKAGE_DIRECTFB_TSLIB=y
+BR2_PACKAGE_DIRECTFB_GIF=y
+BR2_PACKAGE_DIRECTFB_JPEG=y
+BR2_PACKAGE_DIRECTFB_PNG=y
+BR2_PACKAGE_DIRECTFB_EXAMPLES=y
+BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE=y
+BR2_PACKAGE_FBDUMP=y
+
+
+BR2_PACKAGE_MAKEDEVS=y
+
+
+BR2_PACKAGE_MICROPERL=y
+BR2_PACKAGE_MICROPERL_MODULES=""
+
+
+BR2_PACKAGE_ZLIB=y
+
+
+BR2_PACKAGE_FREETYPE=y
+BR2_PACKAGE_JPEG=y
+
+BR2_PACKAGE_LIBPNG=y
+
+
+BR2_PACKAGE_TSLIB=y
+BR2_PACKAGE_LIBUSB=y
+
+
+BR2_PACKAGE_NCURSES=y
+
+
+BR2_PACKAGE_NANO=y
+
+BR2_ROOTFS_POST_BUILD_SCRIPT=""
+BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt"
+BR2_ROOTFS_SKELETON_DEFAULT=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
+BR2_TARGET_ROOTFS_EXT2_INODES=0
+BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
+BR2_TARGET_ROOTFS_EXT2_SQUASH=y
+BR2_TARGET_ROOTFS_EXT2_NONE=y
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
