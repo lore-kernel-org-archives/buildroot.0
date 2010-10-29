@@ -1,38 +1,51 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Fri, 29 Oct 2010 11:51:55 +0200
-Subject: [Buildroot] Dockstar (kirkwood derivative) support for buildroot
-Message-ID: <4CCA993B.6040309@googlemail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 29 Oct 2010 13:29:01 +0200
+Subject: [Buildroot] [git commit master 1/1] kernel-headers: bump 2.6.32.x /
+	2.6.35.x stable versions
+Message-ID: <20101029113000.640DC8D388@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mailinglist,
 
-I often worked after closing time to bring dockstar support into 
-buildroot. I have a lot of images which boot smoothly and mount over 
-nfs. If anyone is interested, I like to share my work with other 
-dockstar owners:
-http://gitorious.org/dockstar (repo: mynas)
+commit: http://git.buildroot.net/buildroot/commit/?id=00381f6599c99e6d118aec0cc30a47aa1d6db922
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patchset is not very well documented/quick and dirty, but should 
-work with some manual work steps.
-Most of the special board configuration is outside the buildroot tree. 
-Only one target/device/ file is patched.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.32.24-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.32.25-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ rename toolchain/kernel-headers/{linux-2.6.35.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-Unfortunatly I got stuck at the point, where I had to configure all 
-packages on my own. The "distributional" work is too much to overcome in 
-rational time (after closing time) for one person. I gave one of the 
-Buildroot "children?" or "cousins?" a try: OpenWRT. The packages are 
-already configured to meet each other. I think buildroot is more 
-interesting for very specialized tasks due to its generic principle. You 
-can bloat it up to meet any of your requirements, but this costs time. 
-In other projects, you have to follow their design, which may not work 
-with your needs...
-
-Anyway, if someone likes to try out the combination dockstar+buildroot, 
-the gitorious repo above would be a good starting point.
-
-Kind regards,
-Ossy
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index ef35827..d3cde76 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -59,10 +59,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.30.10"	if BR2_KERNEL_HEADERS_2_6_30
+ 	default "2.6.31.14"	if BR2_KERNEL_HEADERS_2_6_31
+-	default "2.6.32.24"	if BR2_KERNEL_HEADERS_2_6_32
++	default "2.6.32.25"	if BR2_KERNEL_HEADERS_2_6_32
+ 	default "2.6.33.7"	if BR2_KERNEL_HEADERS_2_6_33
+ 	default "2.6.34.7"	if BR2_KERNEL_HEADERS_2_6_34
+-	default "2.6.35.6"	if BR2_KERNEL_HEADERS_2_6_35
++	default "2.6.35.8"	if BR2_KERNEL_HEADERS_2_6_35
+ 	default "2.6.36"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-2.6.32.24-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.32.25-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.32.24-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.32.25-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+diff --git a/toolchain/kernel-headers/linux-2.6.35.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.35.6-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.35.8-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+-- 
+1.7.1
