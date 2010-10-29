@@ -1,60 +1,82 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 29 Oct 2010 13:32:02 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: additional 1.17.3 fixes
-Message-ID: <20101029113229.03E988D388@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 29 Oct 2010 14:18:27 +0100
+Subject: [Buildroot] CFLAGS_FOR_BUILD compiler flags
+Message-ID: <AANLkTim12PLkFLjAZw08vJTM5VjUWCDYPSHXM9u8cOWY@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19e306338e7fa8fb840f93eccdce897e387739c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It looks like something changed with the flags passed when building
+toolchains. In older buildroots it seems we passed "-g -O2"
+explicitly:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+$ grep CFLAGS_FOR_BUILD toolchain/gcc/gcc-uclibc-3.x.mk
+CFLAGS_FOR_BUILD="-g -O2 $(HOST_CFLAGS)" \
+CFLAGS_FOR_BUILD="-g -O2 $(HOST_CFLAGS)" \
+CFLAGS_FOR_BUILD="-g -O2 $(HOST_CFLAGS)" \
+
+Now we use TARGET_CONFIGURE_OPTS, which sets CFLAGS_FOR_BUILD for us:
+
+$ grep CFLAGS_FOR_BUILD package/Makefile.in
+CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+FCFLAGS_FOR_BUILD="$(HOST_FCFLAGS)" \
+
+But without the -g -O2 being added. This results in the toolchain
+being built without optimisations, which makes it a bit slower than it
+otherwise would be (although I expect it makes building the toolchain
+faster!).
+
+CFLAGS_FOR_BUILD is currently defaulted in the top-level Makefile but
+then not used. Perhaps a patch like the below would be the right thing
+to do? Comments?
+
 ---
- .../busybox-1.17.3/busybox-1.17.3-dnsd.patch       |   12 ++++++++++++
- .../busybox-1.17.3/busybox-1.17.3-unicode.patch    |   12 ++++++++++++
- 2 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.17.3/busybox-1.17.3-dnsd.patch
- create mode 100644 package/busybox/busybox-1.17.3/busybox-1.17.3-unicode.patch
 
-diff --git a/package/busybox/busybox-1.17.3/busybox-1.17.3-dnsd.patch b/package/busybox/busybox-1.17.3/busybox-1.17.3-dnsd.patch
-new file mode 100644
-index 0000000..b135c14
---- /dev/null
-+++ b/package/busybox/busybox-1.17.3/busybox-1.17.3-dnsd.patch
-@@ -0,0 +1,12 @@
-+diff -urpN busybox-1.17.3/networking/dnsd.c busybox-1.17.3-dnsd/networking/dnsd.c
-+--- busybox-1.17.3/networking/dnsd.c	2010-10-09 21:57:14.000000000 +0200
-++++ busybox-1.17.3-dnsd/networking/dnsd.c	2010-10-29 00:37:43.066043841 +0200
-+@@ -388,7 +388,7 @@ static int process_packet(struct dns_ent
-+ 	query_len = strlen(query_string) + 1;
-+ 	/* may be unaligned! */
-+ 	unaligned_type_class = (void *)(query_string + query_len);
-+-	query_len += sizeof(unaligned_type_class);
-++	query_len += sizeof(*unaligned_type_class);
-+ 	/* where to append answer block */
-+ 	answb = (void *)(unaligned_type_class + 1);
-+ 
-diff --git a/package/busybox/busybox-1.17.3/busybox-1.17.3-unicode.patch b/package/busybox/busybox-1.17.3/busybox-1.17.3-unicode.patch
-new file mode 100644
-index 0000000..dc3b02e
---- /dev/null
-+++ b/package/busybox/busybox-1.17.3/busybox-1.17.3-unicode.patch
-@@ -0,0 +1,12 @@
-+diff -urpN busybox-1.17.3/libbb/unicode.c busybox-1.17.3-unicode/libbb/unicode.c
-+--- busybox-1.17.3/libbb/unicode.c	2010-10-09 21:58:13.000000000 +0200
-++++ busybox-1.17.3-unicode/libbb/unicode.c	2010-10-29 00:48:36.951494079 +0200
-+@@ -1006,7 +1006,7 @@ static char* FAST_FUNC unicode_conv_to_p
-+ 			}
-+ 		}
-+ 		if (stats)
-+-			stats->byte_count = stats->unicode_count = (d - dst);
-++			stats->byte_count = stats->unicode_count = stats->unicode_width = (d - dst);
-+ 		return dst;
-+ 	}
-+ 
+Set a default set of flags (-g -O2) for the host tools, this
+prevents the tools from being built without optimisation which
+improves build times considerably.
+
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+---
+ Makefile |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 462d974..c711f22 100644
+--- a/Makefile
++++ b/Makefile
+@@ -144,14 +144,14 @@ HOSTLD:=$(shell which $(HOSTLD) || type -p
+$(HOSTLD) || echo ld)
+ HOSTLN:=$(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
+ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+
+-ifndef CFLAGS_FOR_BUILD
+-CFLAGS_FOR_BUILD:=-g -O2
++ifndef HOST_CFLAGS
++HOST_CFLAGS:=-g -O2
+ endif
+-ifndef CXXFLAGS_FOR_BUILD
+-CXXFLAGS_FOR_BUILD:=-g -O2
++ifndef HOST_CXXFLAGS
++HOST_CXXFLAGS:=-g -O2
+ endif
+-ifndef FCFLAGS_FOR_BUILD
+-FCFLAGS_FOR_BUILD:=-g -O2
++ifndef HOST_FCFLAGS
++HOST_FCFLAGS:=-g -O2
+ endif
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+
 -- 
-1.7.1
+1.7.2.2
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Makefile-Default-values-of-HOST_CFLAGS-_CXXFLAGS-and.patch
+Type: text/x-patch
+Size: 1219 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101029/b3fb61c4/attachment.bin>
