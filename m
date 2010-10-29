@@ -1,31 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Oct 2010 20:11:56 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/gtk-bump
-In-Reply-To: <cover.1287833623.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sat, 23 Oct 2010 13:34:55 +0200")
-References: <cover.1287833623.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87eib8dg2b.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Oct 2010 20:06:24 +0200
+Subject: [Buildroot] [git commit master 1/1] pango: bump version to 1.28.2
+Message-ID: <20101029181143.841FE8D41D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is a stack of patches that gathers:
+commit: http://git.buildroot.net/buildroot/commit/?id=493c54b9c252ce1ed7305f5186b8ec940a7e2314
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas>  * libtool fixes from Martin Banky
- Thomas>  * libtool bump from Lionel Landwerlin
- Thomas>  * glib/gtk bump from myself
+This is a mechanical bump, no other changes involved.
 
- Thomas> I've successfully built and tested the gtk-demo application
- Thomas> with both the X.org and DirectFB backends, using a uClibc
- Thomas> Buildroot ARM toolchain.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pango/pango.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Pulled and pushed, thanks everyone!
-
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index dc04b55..373eb8b 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ PANGO_VERSION_MAJOR = 1.28
+-PANGO_VERSION_MINOR = 0
++PANGO_VERSION_MINOR = 2
+ PANGO_VERSION = $(PANGO_VERSION_MAJOR).$(PANGO_VERSION_MINOR)
+ 
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.bz2
 -- 
-Bye, Peter Korsgaard
+1.7.1
