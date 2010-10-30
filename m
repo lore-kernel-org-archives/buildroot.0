@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 29 Oct 2010 21:20:09 +0200
-Subject: [Buildroot] java support in buildroot
-In-Reply-To: <AANLkTins6w3F0edPkF4Tp_J8jCOoJgH+ePqm=oabZNWG@mail.gmail.com>
-	(Don Smyth's message of "Sat, 23 Oct 2010 23:38:13 -0700")
-References: <AANLkTins6w3F0edPkF4Tp_J8jCOoJgH+ePqm=oabZNWG@mail.gmail.com>
-Message-ID: <8739rodcwm.fsf@macbook.be.48ers.dk>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Sat, 30 Oct 2010 20:26:09 +0300
+Subject: [Buildroot] [PATCH] libgtk2: Fix pixbuf loaders cache file
+	generation
+Message-ID: <20101030172608.28962.85426.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Don" == Don Smyth <dsmyth@signett.com> writes:
+After libgtk was bumped to 2.22.0 default loacation of
+pixbuf loaders cache changed.
+Use --update-cache flag for gdk-pixbuf-query-loaders
+which does waht we need.
 
- Don> I have java support working in buildroot using an external toolchain
- Don> (CodeSourcery Lite arm) (jamvm, classpath & concierge) with minor
- Don> changes to the jamvm and concierge package makefiles.
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
- Don> Is that sufficient to keep java support in buildroot (I see that it is
- Don> marked broken and scheduled to be removed)?
+ package/libgtk2/S26libgtk2 |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
- Don> The problem with jamvm and classpath under the native buildroot
- Don> toolchain seems to be with building against uClibc -- my external
- Don> toolchain is glibc. Should also work with a ct-ng toolchain configured
- Don> for glibc.
-
-Ahh, thats good to hear.
-
- Don> I can submit the patches if anyone else would find this useful.
-
-Yes please.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgtk2/S26libgtk2 b/package/libgtk2/S26libgtk2
+index da5cc6e..4a6cb43 100644
+--- a/package/libgtk2/S26libgtk2
++++ b/package/libgtk2/S26libgtk2
+@@ -2,13 +2,13 @@
+ #
+ # run pgdk-pixbuf-query-loaders if needed
+ 
+-FILE=/etc/gtk-2.0/gdk-pixbuf.loaders
++FILE=/etc/gdk-loaders-cache.exists
+ 
+ case "$1" in
+     start|"")
+ 	if [ ! -f "$FILE" ] ; then
+-	    mkdir -p /etc/gtk-2.0
+-	    /usr/bin/gdk-pixbuf-query-loaders > "$FILE"
++	    /usr/bin/gdk-pixbuf-query-loaders --update-cache
++	    touch $FILE
+ 	fi
+ 	;;
+     stop)
