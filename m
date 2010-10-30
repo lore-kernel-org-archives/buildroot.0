@@ -1,8 +1,8 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Sat, 30 Oct 2010 20:26:09 +0300
-Subject: [Buildroot] [PATCH] libgtk2: Fix pixbuf loaders cache file
+Date: Sat, 30 Oct 2010 20:29:12 +0300
+Subject: [Buildroot] [PATCH v2] libgtk2: Fix pixbuf loaders cache file
 	generation
-Message-ID: <20101030172608.28962.85426.stgit@localhost.localdomain>
+Message-ID: <20101030172912.29024.35348.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +17,19 @@ which does waht we need.
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- package/libgtk2/S26libgtk2 |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgtk2/S26libgtk2 |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/package/libgtk2/S26libgtk2 b/package/libgtk2/S26libgtk2
-index da5cc6e..4a6cb43 100644
+index da5cc6e..037746d 100644
 --- a/package/libgtk2/S26libgtk2
 +++ b/package/libgtk2/S26libgtk2
-@@ -2,13 +2,13 @@
+@@ -2,13 +2,12 @@
  #
  # run pgdk-pixbuf-query-loaders if needed
  
 -FILE=/etc/gtk-2.0/gdk-pixbuf.loaders
-+FILE=/etc/gdk-loaders-cache.exists
++FILE=/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
  
  case "$1" in
      start|"")
@@ -37,7 +37,6 @@ index da5cc6e..4a6cb43 100644
 -	    mkdir -p /etc/gtk-2.0
 -	    /usr/bin/gdk-pixbuf-query-loaders > "$FILE"
 +	    /usr/bin/gdk-pixbuf-query-loaders --update-cache
-+	    touch $FILE
  	fi
  	;;
      stop)
