@@ -1,42 +1,43 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Sat, 30 Oct 2010 20:29:12 +0300
-Subject: [Buildroot] [PATCH v2] libgtk2: Fix pixbuf loaders cache file
-	generation
-Message-ID: <20101030172912.29024.35348.stgit@localhost.localdomain>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 31 Oct 2010 17:35:09 +0100
+Subject: [Buildroot] [PATCH 1/8] Makefile: move .NOTPARALLEL
+In-Reply-To: <1288542916-21883-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1288542916-21883-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1288542916-21883-2-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After libgtk was bumped to 2.22.0 default loacation of
-pixbuf loaders cache changed.
-Use --update-cache flag for gdk-pixbuf-query-loaders
-which does waht we need.
+Move it down, users should not mess with it.
 
-Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
+ Makefile |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
- package/libgtk2/S26libgtk2 |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/libgtk2/S26libgtk2 b/package/libgtk2/S26libgtk2
-index da5cc6e..037746d 100644
---- a/package/libgtk2/S26libgtk2
-+++ b/package/libgtk2/S26libgtk2
-@@ -2,13 +2,12 @@
+diff --git a/Makefile b/Makefile
+index efc42ff..3780fe6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -18,13 +18,14 @@
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  #
- # run pgdk-pixbuf-query-loaders if needed
  
--FILE=/etc/gtk-2.0/gdk-pixbuf.loaders
-+FILE=/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
- 
- case "$1" in
-     start|"")
- 	if [ ! -f "$FILE" ] ; then
--	    mkdir -p /etc/gtk-2.0
--	    /usr/bin/gdk-pixbuf-query-loaders > "$FILE"
-+	    /usr/bin/gdk-pixbuf-query-loaders --update-cache
- 	fi
- 	;;
-     stop)
+-# This top-level Makefile can *not* be executed in parallel
+-.NOTPARALLEL:
+-
+ #--------------------------------------------------------------
+ # Just run 'make menuconfig', configure stuff, then run 'make'.
+ # You shouldn't need to mess with anything beyond this point...
+ #--------------------------------------------------------------
++
++# This top-level Makefile can *not* be executed in parallel
++.NOTPARALLEL:
++
+ # absolute path
+ TOPDIR:=$(shell pwd)
+ CONFIG_CONFIG_IN=Config.in
+-- 
+1.7.1
