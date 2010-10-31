@@ -1,39 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 31 Oct 2010 17:35:12 +0100
-Subject: [Buildroot] [PATCH 4/8] Makefile: compute the version string for
-	all to use
-In-Reply-To: <1288542916-21883-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1288542916-21883-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1288542916-21883-5-git-send-email-yann.morin.1998@anciens.enib.fr>
+Date: Sun, 31 Oct 2010 17:35:08 +0100
+Subject: [Buildroot] Refactor handling of the version string
+Message-ID: <1288542916-21883-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages use the buildroot version string (to set thier own version string).
-Computing the version string globally will makes it easy for them to use it
-instead of re-computing it in every packages.
+Hello All!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
----
- Makefile |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+This patchset computes a universally-available version string for packages
+to use.
 
-diff --git a/Makefile b/Makefile
-index 8d53778..d6a7628 100644
---- a/Makefile
-+++ b/Makefile
-@@ -35,6 +35,10 @@ CONFIG_CONFIG_IN=Config.in
- CONFIG=package/config
- DATE:=$(shell date +%Y%m%d)
- 
-+# Compute the full local version string so packages can use it as-is
-+# Need to export it, so it can be got from environment in children (eg. mconf)
-+export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/scripts/setlocalversion)
-+
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--- 
-1.7.1
+The so-available version string contains the current buildroot version,
+and if the local buildroot tree is a git clone, then a git signature is
+appended.
+
+Converted users:
+- menuconfig, to show the version in the main title, and save the
+  version string in the commented headers of .config
+- /etc/br-version on the target
+- toolchains will push that version string in the gcc pkg-version
+
+    [PATCH 1/8] Makefile: move .NOTPARALLEL
+    [PATCH 2/8] Makefile: move version string from Config.in into Makefile
+    [PATCH 3/8] package/config: update quilt series
+    [PATCH 4/8] Makefile: compute the version string for all to use
+    [PATCH 5/8] Makefile: use global version string in /etc/br-version
+    [PATCH 6/8] config: use global version string
+    [PATCH 7/8] toolchain/internal: use global BR2 version string for gcc version string
+    [PATCH 8/8] toolchain/crosstool-ng: use global BR2 version string
+
+Regards,
+Yann E. MORIN.
