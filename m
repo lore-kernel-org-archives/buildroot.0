@@ -1,28 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 31 Oct 2010 21:35:21 +0100
-Subject: [Buildroot] [PATCH v2] libgtk2: Fix pixbuf loaders cache file
-	generation
-In-Reply-To: <20101030172912.29024.35348.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Sat, 30 Oct 2010 20:29:12 +0300")
-References: <20101030172912.29024.35348.stgit@localhost.localdomain>
-Message-ID: <87y69eaynq.fsf@macbook.be.48ers.dk>
+From: Malte Starostik <m-starostik@versanet.de>
+Date: Mon,  1 Nov 2010 01:05:55 +0100
+Subject: [Buildroot] [PATCH] Add linux26-nconfig target
+Message-ID: <1288569955-2507-1-git-send-email-m-starostik@versanet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
+Works just like linux26-menuconfig et al.
 
- Paulius> After libgtk was bumped to 2.22.0 default loacation of
- Paulius> pixbuf loaders cache changed.
- Paulius> Use --update-cache flag for gdk-pixbuf-query-loaders
- Paulius> which does waht we need.
+Signed-off-by: Malte Starostik <m-starostik@versanet.de>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks!
-
-We should propbably rename / move this initscript to gdk-pixbuf instead
-though.
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7f7bb05..9a66282 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -138,7 +138,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+ 
+ linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
+ 
+-linux26-menuconfig linux26-xconfig linux26-gconfig: dirs $(LINUX26_DIR)/.stamp_configured
++linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX26_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
+ 
+ # Support for rebuilding the kernel after the initramfs file list has
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
