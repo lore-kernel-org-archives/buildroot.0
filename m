@@ -1,32 +1,60 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Mon,  1 Nov 2010 01:05:55 +0100
-Subject: [Buildroot] [PATCH] Add linux26-nconfig target
-Message-ID: <1288569955-2507-1-git-send-email-m-starostik@versanet.de>
+From: Michael Trimarchi <trimarchimichael@yahoo.it>
+Date: Mon, 1 Nov 2010 09:40:30 +0000 (GMT)
+Subject: [Buildroot] at91sam9260 alsa problem
+Message-ID: <855007.40683.qm@web29601.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Works just like linux26-menuconfig et al.
+Hi all
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I have compiled the linux kernel (2.6.29) with EABI option disable so the 
+expected compiled option is:
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7f7bb05..9a66282 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -138,7 +138,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 
- linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
- 
--linux26-menuconfig linux26-xconfig linux26-gconfig: dirs $(LINUX26_DIR)/.stamp_configured
-+linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX26_DIR)/.stamp_configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
- 
- # Support for rebuilding the kernel after the initramfs file list has
--- 
-1.7.2.2
+-mpcu=apcs-gnu
+
+I have the same compiled option in buildroot and now the amixer and alsamixer 
+works but aplay and arecord
+
+report this error:
+
+set_params:  Channels count non available
+
+Compile the kernel using eabi and oabi compatible give different error.
+
+This is the relevant part of buildroot config
+
+BR2_ARM_TYPE="GENERIC_ARM"
+# BR2_ARM_EABI is not set
+BR2_ARM_OABI=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ABI="apcs-gnu"
+
+#
+# Target options
+#
+
+#
+# Preset Devices
+#
+# BR2_TARGET_ARMLTD is not set
+BR2_BOARD_NAME="at91sam9260dfc"
+BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
+
+and this is the relevant part of the kernel
+
+# CONFIG_AEABI is not set
+
+With other combination I can use playback and record facilites but the mixer 
+doesn't
+work for the size of the parameteres during kernel syscall
+
+Best regards
+Michael Trimarchi
+
+
+
+      
