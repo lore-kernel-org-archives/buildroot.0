@@ -1,38 +1,184 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Tue,  2 Nov 2010 02:18:17 +0100
-Subject: [Buildroot] [PATCH] Prohibit config cache for host-libtool
-Message-ID: <1288660697-7641-1-git-send-email-m-starostik@versanet.de>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 2 Nov 2010 13:47:18 +0100
+Subject: [Buildroot] adding a package,
+ make stops with no rule to make target `/.stamp_downloaded'
+In-Reply-To: <D59C59453D0EDC43832490B6DADFAECF021F110E@XMB-RCD-214.cisco.com>
+References: <D59C59453D0EDC43832490B6DADFAECF021F110E@XMB-RCD-214.cisco.com>
+Message-ID: <AANLkTi=BkZgsWs0OpgtTbAzGvi4RKKYVH=-9soHb4M=y@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes this one when building from scratch:
-libtool: link: (cd libltdl/.libs && /usr/bin/gcc -O2
-		 -I/home/malte/devel/buildroot/output/host/include
-		 -I/home/malte/devel/buildroot/output/host/usr/include
-		 -c -fno-builtin  -fPIC -DPIC "libltdlS.c")
-libltdlS.c:26: error: 'lt_ptr' undeclared here (not in a function)
-libltdlS.c:26: error: expected '}' before numeric constant
-make[3]: *** [libltdl/libltdl.la] Fehler 1
+Hello Kenneth,
 
-Signed-off-by: Malte Starostik <m-starostik@versanet.de>
----
- package/libtool/libtool.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+It seems your buildroot version has more modifications than just this
+new webkitdfb package.
+I can't see anything wrong in your webkitdfb.mk file, so providing a
+tarball of your setup (even stripped) could help a lot.
 
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 60fee9f..8f89c7d 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -17,6 +17,7 @@ endef
- HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_CUSTOM_INSTALL
- 
- HOST_LIBTOOL_LIBTOOL_PATCH = NO
-+HOST_LIBTOOL_USE_CONFIG_CACHE = NO
- 
- $(eval $(call AUTOTARGETS,package,libtool))
- $(eval $(call AUTOTARGETS,package,libtool,host))
--- 
-1.7.2.2
+Regards,
+
+--
+Lionel Landwerlin
+
+On Mon, Nov 1, 2010 at 6:06 PM, Kenneth Rogers -X (kenroger - Apex
+Systems, Inc. at Cisco) <kenroger@cisco.com> wrote:
+> Hi,
+>
+> I'm trying to add a package to the buildroot we're using, it's version
+> 2010.02 and I don't think I can easily change that part.
+>
+> I read the directions and copied the webkit package to try to make a
+> webkitdfb package.
+>
+> Here's the output from make:
+>
+> make
+> rm -rf
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/buildroot-config
+> mkdir -p /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build
+> cp -dpRf package/config/buildroot-config
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/buildroot-config
+> cd
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/boost_1_42_0
+> && ?/home/kenroger/svn/chameleon-platform/trunk/buildroot/bin/bjam -d2
+> --prefix=/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/local
+> --build-dir=. --layout=system ?--with-thread --with-system --with-regex
+> --with-python ?--with-filesystem --with-iostreams --with-date_time
+> --toolset=gcc ?'-sBUILD=release shared multi/single' -sNO_COMPRESSION=1
+> link=shared runtime-link=shared install install
+> warning: Building Boost.Regex with the optional Unicode/ICU support
+> disabled.
+> note: Please refer to the Boost.Regex documentation for more information
+> note: this is a strictly optional feature.
+> ....patience...
+> ....patience...
+> ....found 17274 targets...
+> cd
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/boost_1_42_0
+> && cp *.pc
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/lib/pkgconfig/
+> mkdir -p
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr/local/lib/
+> cp
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/local/lib/libboost_*.so*
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr/local/lib/
+> touch
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/boost_1_42_0/.installed
+> cp -dpr
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/Python-2.6.4/libpython2.6.so.*
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/lib
+> (\
+> ? ? ? ? cd
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/lib
+> ; \
+> ? ? ? ? rm -f libpython2.6.so ; \
+> ? ? ? ? ln -s `basename ?\`ls libpython*.so.*\`` libpython2.6.so \
+> ? ? ? ? )
+> /usr/bin/make -j4 -C
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29
+> \
+>
+> ?PREFIX="/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr" \
+> ? ? ? ? CC=/usr/local/cisco-x86/toolchain/current/bin/i686-cm-linux-gcc
+> CFLAGS=" -O0 ?--sysroot
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/" \
+> ? ? ? ? install-iwmulticall ? ?\
+>
+> make[1]: Entering directory
+> `/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29'
+> install -m 755 -d
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr/sbin/
+> install -m 755 iwmulticall
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr/sbin//iwconfig
+> ( cd
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/target/usr/sbin/
+> ; \
+> ? ? ? ln -f -s iwconfig iwlist ; \
+> ? ? ? ln -f -s iwconfig iwspy ; \
+> ? ? ? ln -f -s iwconfig iwpriv ; \
+> ? ? ? ln -f -s iwconfig iwgetid )
+> make[1]: Leaving directory
+> `/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29'
+> /usr/bin/make -j4 -C
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29
+> \
+>
+> ?PREFIX="/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr" \
+> ? ? ? ? CC=/usr/local/cisco-x86/toolchain/current/bin/i686-cm-linux-gcc
+> CFLAGS=" -O0 ?--sysroot
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/" \
+> ? ? ? ? install-hdr
+> make[1]: Entering directory
+> `/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29'
+> install -m 755 -d
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/include/
+> install -m 644 iwlib.h
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/include/
+> install -m 644 wireless.h
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging/usr/include/
+> make[1]: Leaving directory
+> `/home/kenroger/svn/chameleon-platform/trunk/buildroot/output/build/wireless_tools.29'
+> find
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging
+> -type f -name "*.la" -exec rm {} \;
+> find
+> /home/kenroger/svn/chameleon-platform/trunk/buildroot/output/staging
+> -name "*.la" -exec rm {} \;
+> make: *** No rule to make target `/.stamp_downloaded', needed by
+> `webkitdfb-source'. ?Stop.
+>
+>
+> Here's the webkitdfb.mk file:
+> #############################################################
+> #
+> # webkitdfb
+> #
+> #############################################################
+> WEBKITDFB_VERSION = r51967
+> WEBKITDFB_SOURCE = WebKit-$(WEBKITDFB_VERSION)-dfb.tar.bz2
+> WEBKITDFB_SITE = http://directfb.org/downloads/Libs/
+>
+> WEBKITDFB_INSTALL_STAGING = YES
+> WEBKITDFB_INSTALL_TARGET = YES
+> WEBKITDFB_LIBTOOL_PATCH = NO
+>
+> WEBKITDFB_DEPENDENCIES = host-flex host-gperf icu libxml2 libxslt ? ?\
+> ? ? ? ? ? ? libgtk2 sqlite enchant libsoup
+>
+> WEBKITDFB_CONF_OPT = --with-target=directfb
+>
+> WEBKITDFB_CONF_OPT += --disable-video
+> WEBKITDFB_CONF_ENV += icu_config=$(STAGING_DIR)/usr/bin/icu-config
+> WEBKITDFB_CONF_ENV +=
+> PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/local/lib/pkgconfig"
+>
+> define WEBKITDFB_AUTOGEN_PATCH
+> $(SED) 's%ACLOCAL_FLAGS=.*%ACLOCAL_FLAGS="-I autotools -I
+> $(STAGING_DIR)/usr/share/aclocal"%' $(WEBKITDFB_DIR)/autogen.sh
+> $(SED) 's/AUTOMAKE_FLAGS=.*/AUTOMAKE_FLAGS="--foreign --add-missing
+> --copy"/' $(WEBKITDFB_DIR)/autogen.sh
+> $(SED) 's/LIBTOOLIZE_FLAGS=.*/LIBTOOLIZE_FLAGS="--force --automake
+> --copy"/' $(WEBKITDFB_DIR)/autogen.sh
+> cp package/webkitdfb/gtk-doc.make $(WEBKITDFB_DIR)/
+> # Don't run the configure step yet
+> cd $(WEBKITDFB_DIR); $(HOST_CONFIGURE_OPTS)
+> AUTOGEN_CONFIGURE_ARGS=--version ./autogen.sh
+> endef
+>
+> WEBKITDFB_POST_EXTRACT_HOOKS += WEBKITDFB_AUTOGEN_PATCH
+>
+> $(eval $(call AUTOTARGETS,package,webkitdfb))
+>
+>
+> Any ideas?
+>
+> Thanks,
+> Ken R.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
