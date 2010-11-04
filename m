@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Nov 2010 15:36:33 +0000 (UTC)
+Date: Thu,  4 Nov 2010 16:06:30 +0000 (UTC)
 Subject: [Buildroot] [Bug 2767] Build for lsof broken in buildroot-2010.08
 In-Reply-To: <bug-2767-163@https.bugs.busybox.net/>
 References: <bug-2767-163@https.bugs.busybox.net/>
-Message-ID: <20101104153633.7C0F18DAC1@busybox.osuosl.org>
+Message-ID: <20101104160630.2A9CE8DAFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,38 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2767
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I've tried to build lsof today, but it fails because the FTP server rejects
-anonymous logins:
+--- Comment #3 from Andy Gibbs <andyg1001@hotmail.co.uk>  ---
+Thomas,
 
+I do get it downloading, but it I believe it picks it up from the
+sources.buildroot.org mirror instead of the ftp site, so maybe best to change
+to the debian distribution site.
 
---2010-11-04 16:28:39-- 
-ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof//lsof_4.81.tar.bz2
-           => `/home/thomas/local/buildroot-dl/lsof_4.81.tar.bz2'
-Resolving lsof.itap.purdue.edu... 128.210.7.20
-Connecting to lsof.itap.purdue.edu|128.210.7.20|:21... connected.
-Logging in as anonymous ... 
-Error in server greeting.
-Retrying.
+Regarding the use of CFLAGS, inside the Makefile is defined:
 
-Does it work for you ? If not, we should switch to using the tarball made
-available by Debian, as we do for some other packages.
+CFLAGS= ${CDEFS} ${INCL} ${DEP} ${DEBUG}
 
-Moreover, I'm not terribly happy with the approach. If Buildroot passes some
-CFLAGS, it's done with reason, so those CFLAGS should be taken into account,
-not overriden by the package build logic. So rather than having the CFLAGS
-passed on the command line ignored, I'd prefer to see them *added* to the
-internal package CFLAGS.
+which expands to
+
+CFLAGS= ${CDEF} ${CFGF} ${DINC} ${CFGD} ${CFGDN} ${DEBUG}
+
+Now when make is invoked, buildroot's CFLAGS are passed via DEBUG:
+
+$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C
+$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
+
+However, if TARGET_CONFIGURE_OPTS also holds CFLAGS, then the CFLAGS declared
+inside the Makefile is overridden and all the additional flags that are
+required (e.g. from CFGF) are lost.
+
+This is why I have patched it to put the "override" keyword ahead of the
+Makefile's CFLAGS declaration.  Buildroot's CFLAGS are still sent forward, via
+DEBUG, so that's not a problem.
+
+Does this explain the situation better?
+
+Cheers
+Andy
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
