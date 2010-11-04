@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Nov 2010 20:35:05 +0100
-Subject: [Buildroot] [git commit master 1/1] lsof: stop overriding
- CFLAGS in build
-In-Reply-To: <BLU0-SMTP1368DBCA5159307B5213EDFE74B0@phx.gbl>
-References: <20101104161748.EC2E68DAC1@busybox.osuosl.org>
-	<20101104173941.2966c58b@surf>
-	<BLU0-SMTP1368DBCA5159307B5213EDFE74B0@phx.gbl>
-Message-ID: <20101104203505.65c0c12e@surf>
+From: Dmitry Ivanov <vonami@gmail.com>
+Date: Fri, 5 Nov 2010 00:03:39 +0300
+Subject: [Buildroot] Default extract commands fail for kerberos
+Message-ID: <AANLkTi=0Tkj7L8q7n7YtAzyjHa_QY4MAGWvjKacr8Rn5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 4 Nov 2010 18:09:59 +0100
-Andy Gibbs <andyg1001@hotmail.co.uk> wrote:
+Hello, buildroot,
 
-> I wasn't able to find the patch you reference, but I downloaded 4.84 and
-> scanning over it quickly, I believe the patch just committed is still
-> required.  If you can point me to the patch bumping to 4.84, then I will do
-> some testing, if you wish.
+I'm working on a recipe for kerberos and I faced a problem with
+extracting the sources. The problem is, if I rely on the default
+extraction commands the kerberos sources got eaten by tar.
 
-http://lists.busybox.net/pipermail/buildroot/2010-October/038111.html
+The downloaded tarball krb5-1.6.3-signed.tar doesn't contain the
+source files directly. Instead, there are 2 files inside:
+krb5-1.6.3.tar.gz and krb5-1.6.3.tar.gz.asc. Obviously, tar
+--strip-components=1 removes those 2 files leaving the build dir
+empty.
 
-If you can test and report, that would be great.
+I guess it would be useful to be able to overwrite the default
+extraction commands via LIBFOO_EXTRACT_CMDS.
 
-Thanks,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Dmitry Ivanov
