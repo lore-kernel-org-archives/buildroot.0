@@ -1,38 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Nov 2010 19:16:43 +0100
-Subject: [Buildroot] [git commit master 1/1] Config.in: wget: default to 3
-	retries
-Message-ID: <20101104181806.CAC828B77F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Nov 2010 19:28:16 +0100
+Subject: [Buildroot] [PATCH 1/1] Remove INITRAMFS_TARGET variable
+In-Reply-To: <ba1423a20cd11aadc3ab175bf5710a1a763bf544.1288887683.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Thu, 4 Nov 2010 17:21:28 +0100")
+References: <cover.1288887683.git.thomas.petazzoni@free-electrons.com>
+	<cover.1288887683.git.thomas.petazzoni@free-electrons.com>
+	<ba1423a20cd11aadc3ab175bf5710a1a763bf544.1288887683.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87iq0d6j0f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6871b16531e7d36fc02d095d31fb82b8a6b50fe0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> This used to be needed when the filesystem code was rewritten,
+ Thomas> but not the Linux compilation code. Now that the Linux
+ Thomas> compilation code has been rewritten, the mechanism to ensure
+ Thomas> that initramfs gets built *before* the kernel so that it can be
+ Thomas> integrated is different, and this INITRAMFS_TARGET variable is
+ Thomas> no longer used.
 
-Wget's builtin default of 20 retries before the backup site is used is
-pretty excessive when a server is down.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/Config.in b/Config.in
-index b37102d..b5d4084 100644
---- a/Config.in
-+++ b/Config.in
-@@ -19,7 +19,7 @@ menu "Commands"
- 
- config BR2_WGET
- 	string "Wget command"
--	default "wget --passive-ftp -nd"
-+	default "wget --passive-ftp -nd -t 3"
- 
- config BR2_SVN
- 	string "Subversion (svn) command"
 -- 
-1.7.1
+Bye, Peter Korsgaard
