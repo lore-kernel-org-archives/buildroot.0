@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 5 Nov 2010 00:02:04 +0100
-Subject: [Buildroot] [git commit master 1/1] gst-plugins-base: tighten alsa
-	dependency
-Message-ID: <20101104230332.8D8838DB53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] rng-tools: new package
+Message-ID: <20101104230334.D83768DB53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,86 +9,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96ddeacb6034c3119da6c9de3fd26114ff31e4d1
+commit: http://git.buildroot.net/buildroot/commit/?id=ca3c06f55fab150c458c9a976bbad0c7c1c96871
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-alsa support needs pcm+mixer support in alsa, but this isn't checked by
-configure, so do it in the .mk instead.
-
+[Peter: fix dependencies]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |   37 ++++++++++---------
- .../gst-plugins-base/gst-plugins-base.mk           |   10 ++++-
- 2 files changed, 27 insertions(+), 20 deletions(-)
+ CHANGES                        |    2 +-
+ package/Config.in              |    1 +
+ package/rng-tools/Config.in    |    7 +++++++
+ package/rng-tools/rng-tools.mk |   13 +++++++++++++
+ 4 files changed, 22 insertions(+), 1 deletions(-)
+ create mode 100644 package/rng-tools/Config.in
+ create mode 100644 package/rng-tools/rng-tools.mk
 
 diff --git a/CHANGES b/CHANGES
-index 6ca25bd..cc22bac 100644
+index 019ce09..f9ab2b8 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -29,24 +29,25 @@
- 	bootutils, bridge-utils, bsdiff, busybox, cvs, dbus, directfb,
- 	dmraid, docker, dosfstools, dropbear, e2fsprogs, expat, ezxml,
- 	fbset, fconfig, ffmpeg, freetype, gadgetfs-test, gamin, gawk,
--	genext2fs, gperf, gst-plugins-ugly, gtk2-themes, gtkperf,
--	gvfs, haserl, hdparm, hostapd, hwdata, ifplugd, imagemagick,
--	iperf, ipsec-tools, iproute2, iptables, iw, jpeg, kexec,
--	kismet, less, libcgi, libcurl, libdaemon, libdnet, liberation,
--	libevent, libeXosip2, libglade, libgtk2, libiconv, libidn,
--	libintl, libmms, libmpd, libnl, liboil, libosip2, libpcap,
--	libpng, libtool, libungif, libxml2, libxslt, lighttpd, lite,
--	lm-sensors, lockfile-progs, logrotate, m4, mdadm, mesa3d,
--	metacity, mplayer, mtd-utils, mysql_client, nano, nbd, ncftp,
--	neon, netperf, netsnmp, ng-spice-rework, ntfsprogs, ntp,
--	openntpd, openssh, openssl, openvpn, oprofile, pango, patch,
--	pcre, php, pkg-config, pppd, prboom, radvd, rdesktop, ruby,
--	qt, quagga, samba, sawman, sdl_mixer, sdl_sound, setserial,
--	shared-mime-info, speex, sqlite, squashfs,
--	startup-notification, strace, sylpheed, taglib, tcpdump,
--	thttpd, tiff, tn5250, torsmo, udev, udpcast, usbmount,
--	usbutils, vsftpd, vtun, which, wpa_supplicant, xapp_twm,
--	xapp_xbacklight, xapp_xcursorgen, xapp_xinput, xapp_xmore,
-+	genext2fs, gperf, gst-plugins-base, gst-plugins-ugly,
-+	gtk2-themes, gtkperf, gvfs, haserl, hdparm, hostapd, hwdata,
-+	ifplugd, imagemagick, iperf, ipsec-tools, iproute2, iptables,
-+	iw, jpeg, kexec, kismet, less, libcgi, libcurl, libdaemon,
-+	libdnet, liberation, libevent, libeXosip2, libglade, libgtk2,
-+	libiconv, libidn, libintl, libmms, libmpd, libnl, liboil,
-+	libosip2, libpcap, libpng, libtool, libungif, libxml2,
-+	libxslt, lighttpd, lite, lm-sensors, lockfile-progs,
-+	logrotate, m4, mdadm, mesa3d, metacity, mplayer, mtd-utils,
-+	mysql_client, nano, nbd, ncftp, neon, netperf, netsnmp,
-+	ng-spice-rework, ntfsprogs, ntp, openntpd, openssh, openssl,
-+	openvpn, oprofile, pango, patch, pcre, php, pkg-config, pppd,
-+	prboom, radvd, rdesktop, ruby, qt, quagga, samba, sawman,
-+	sdl_mixer, sdl_sound, setserial, shared-mime-info, speex,
-+	sqlite, squashfs, startup-notification, strace, sylpheed,
-+	taglib, tcpdump, thttpd, tiff, tn5250, torsmo, udev, udpcast,
-+	usbmount, usbutils, vsftpd, vtun, which, wpa_supplicant,
-+	xapp_twm, xapp_xbacklight, xapp_xcursorgen, xapp_xinput,
-+	xapp_xmore,
- 	xdriver_xf86-input-{acecad,aiptek,evdev,joystick,keyboard},
- 	xdriver-xf86-input-{mouse,synaptics,vmmouse,void},
- 	xdriver-xf86-video-{apm,ark,ast,ati,chips,cirrus,dummy,fbdev},
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index 91d9f1b..e91d5fc 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -25,8 +25,14 @@ GST_PLUGINS_BASE_CONF_OPT = \
- 		--disable-vorbistest \
- 		--disable-freetypetest
+@@ -22,7 +22,7 @@
+ 	Alpha, Cris, IA64 and Sparc64 architecture support removed.
  
--GST_PLUGINS_BASE_DEPENDENCIES = gstreamer liboil \
--		$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib)
-+GST_PLUGINS_BASE_DEPENDENCIES = gstreamer liboil
+ 	New packages: argp-standalone, gdk-pixbuf, gpsd, gst-ffmpeg,
+-	libmpeg2, librsvg, rrdtool, xz
++	libmpeg2, librsvg, rng-tools, rrdtool, xz
+ 
+ 	Updated/fixed packages: acpid, alsa-lib, argus, at, autoconf,
+ 	automake, avahi, axel, beecrypt, berkeleydb, bind, bmon, boa,
+diff --git a/package/Config.in b/package/Config.in
+index a86b6b3..4e61ea9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -182,6 +182,7 @@ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
+ source "package/pciutils/Config.in"
++source "package/rng-tools/Config.in"
+ source "package/setserial/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # busybox has fdisk
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+new file mode 100644
+index 0000000..e6dcf9d
+--- /dev/null
++++ b/package/rng-tools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RNG_TOOLS
++	bool "rng-tools"
++	select BR2_PACKAGE_ARGP_STANDALONE
++	help
++	  Daemon to use hardware random number generators.
 +
-+# alsa support needs pcm+mixer support, but configure fails to check for it
-+ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
-+GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
-+else
-+GST_PLUGINS_BASE_CONF_OPT += --disable-alsa
-+endif
- 
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ADDER),y)
- GST_PLUGINS_BASE_CONF_OPT += --enable-adder
++	  http://sourceforge.net/projects/gkernel/
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+new file mode 100644
+index 0000000..755f4f8
+--- /dev/null
++++ b/package/rng-tools/rng-tools.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# rng-tools
++#
++#############################################################
++
++RNG_TOOLS_VERSION = 3
++RNG_TOOLS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gkernel
++RNG_TOOLS_CONF_ENV = LIBS="-largp"
++RNG_TOOLS_USE_CONFIG_CACHE = NO
++RNG_TOOLS_DEPENDENCIES = argp-standalone
++
++$(eval $(call AUTOTARGETS,package,rng-tools))
 -- 
 1.7.1
