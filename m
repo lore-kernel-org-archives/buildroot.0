@@ -1,34 +1,51 @@
 From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Thu, 04 Nov 2010 10:58:39 +0200
-Subject: [Buildroot] [PATCH 2/2] Bump xinit to 1.2.1
-In-Reply-To: <20101104085833.30286.42896.stgit@localhost.localdomain>
-References: <20101104085833.30286.42896.stgit@localhost.localdomain>
-Message-ID: <20101104085839.30286.70400.stgit@localhost.localdomain>
+Date: Thu, 04 Nov 2010 11:00:14 +0200
+Subject: [Buildroot] [PATCH RESEND] package/config: .gitignore cleanup
+Message-ID: <20101104090013.31541.33883.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now all configure generated files go to output directory.
+
 Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 ---
 
- package/x11r7/xapp_xinit/xapp_xinit.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/config/.gitignore |   24 ------------------------
+ 1 files changed, 0 insertions(+), 24 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
-index 40f68ec..52105c2 100644
---- a/package/x11r7/xapp_xinit/xapp_xinit.mk
-+++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/config/.gitignore b/package/config/.gitignore
+index 106bc12..2694c9a 100644
+--- a/package/config/.gitignore
++++ b/package/config/.gitignore
+@@ -1,28 +1,4 @@
  #
- ################################################################################
- 
--XAPP_XINIT_VERSION = 1.0.5
-+XAPP_XINIT_VERSION = 1.2.1
- XAPP_XINIT_SOURCE = xinit-$(XAPP_XINIT_VERSION).tar.bz2
- XAPP_XINIT_SITE = http://xorg.freedesktop.org/releases/individual/app
--XAPP_XINIT_AUTORECONF = NO
- XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
- 
- $(eval $(call AUTOTARGETS,package/x11r7,xapp_xinit))
+-# Generated files
+-#
+-config*
+-lex.*.c
+-*.tab.c
+-*.tab.h
+-zconf.hash.c
+-*.moc
+-lkc_defs.h
+-gconf.glade.h
+-*.pot
+-*.mo
+-
+-#
+-# configuration programs
+-#
+-conf
+-mconf
+-nconf
+-qconf
+-gconf
+-kxgettext
+-
+-#
+ # Quilt is being used to handle the patch series
+ #
+ .pc
