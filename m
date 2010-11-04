@@ -1,49 +1,26 @@
-From: William Wagner <will_wagner@carallon.com>
-Date: Thu, 04 Nov 2010 16:51:39 +0000
-Subject: [Buildroot] [PATCH] Repair initramfs dependancies after move to
- fs
-In-Reply-To: <20101104171659.3aaa4f94@surf>
-References: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
-	<20101104171659.3aaa4f94@surf>
-Message-ID: <4CD2E49B.2070402@carallon.com>
+From: Andy Gibbs <andyg1001@hotmail.co.uk>
+Date: Thu, 4 Nov 2010 18:09:59 +0100
+Subject: [Buildroot] [git commit master 1/1] lsof: stop overriding
+	CFLAGS in build
+References: <20101104161748.EC2E68DAC1@busybox.osuosl.org>
+	<20101104173941.2966c58b@surf>
+Message-ID: <BLU0-SMTP1368DBCA5159307B5213EDFE74B0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/11/2010 16:16, Thomas Petazzoni wrote:
-> Hello Will,
+On Thursday, November 04, 2010 5:39 PM, Thomas Petazzoni wrote:
+
+> What about "[PATCH 02/10] lsof: convert to gentargets and bump to
+> 4.84" ?
 >
-> I'm replying on this old patch that I acked back in April. But I now
-> have one question. While I still agree on the changes on
-> target/linux/Makefile* (now linux/linux.mk), I don't understand why the
-> following change was needed:
->
->> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
->> index 4a205d1..9aaf1b0 100644
->> --- a/fs/initramfs/initramfs.mk
->> +++ b/fs/initramfs/initramfs.mk
->> @@ -6,6 +6,12 @@
->>   #
->>   #############################################################
->>
->> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
->> +INITRAMFS_TARGET:=initramfs-root
->> +else
->> +INITRAMFS_TARGET:= #nothing
->> +endif
-> the INITRAMFS_TARGET variable isn't used anywhere in the current git.
-> Isn't this code useless ? (I think it is, but I'd like to be sure).
 
-Yes I think you are right. It looks like this was only needed with the 
-old kernel build sequence, the new linux/linux.mk doesn't need it.
+I wasn't able to find the patch you reference, but I downloaded 4.84 and
+scanning over it quickly, I believe the patch just committed is still
+required.  If you can point me to the patch bumping to 4.84, then I will do
+some testing, if you wish.
 
-Will
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Cheers
+Andy
