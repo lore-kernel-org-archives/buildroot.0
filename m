@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 5 Nov 2010 00:02:04 +0100
-Subject: [Buildroot] [git commit master 1/1] gpsd: new package
-Message-ID: <20101104230334.4BDF18DB53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] portmap: bump to version 6.0,
+	convert to autotargets
+Message-ID: <20101104230333.660458DB53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,552 +10,847 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e823375330a81d7f40ab3874fbedf82f2d0e6e3
+commit: http://git.buildroot.net/buildroot/commit/?id=2f152f6d6dd37b8cab87c482260a8465b86381d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: fix uninstall target]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                              |    2 +-
- package/Config.in                    |    1 +
- package/gpsd/Config.in               |  238 ++++++++++++++++++++++++++++++++++
- package/gpsd/S50gpsd                 |   40 ++++++
- package/gpsd/gpsd-fix-libgpsmm.patch |   23 ++++
- package/gpsd/gpsd.mk                 |  179 +++++++++++++++++++++++++
- 6 files changed, 482 insertions(+), 1 deletions(-)
- create mode 100644 package/gpsd/Config.in
- create mode 100644 package/gpsd/S50gpsd
- create mode 100644 package/gpsd/gpsd-fix-libgpsmm.patch
- create mode 100644 package/gpsd/gpsd.mk
+ CHANGES                                          |   16 +-
+ package/portmap/Config.in                        |    2 +-
+ package/portmap/portmap-01-5beta.patch           |   80 -----
+ package/portmap/portmap-02-4.0-malloc.patch      |  338 ----------------------
+ package/portmap/portmap-4.0-cleanup.patch        |   85 ------
+ package/portmap/portmap-4.0-rpc_user.patch       |   59 ----
+ package/portmap/portmap-4.0-sigpipe.patch        |   12 -
+ package/portmap/portmap-5b-include-errno_h.patch |   18 --
+ package/portmap/portmap-5b-optional-tcpd.patch   |   38 ---
+ package/portmap/portmap-6.0-tcpd.patch           |   18 ++
+ package/portmap/portmap.mk                       |   69 ++---
+ 11 files changed, 55 insertions(+), 680 deletions(-)
+ delete mode 100644 package/portmap/portmap-01-5beta.patch
+ delete mode 100644 package/portmap/portmap-02-4.0-malloc.patch
+ delete mode 100644 package/portmap/portmap-4.0-cleanup.patch
+ delete mode 100644 package/portmap/portmap-4.0-rpc_user.patch
+ delete mode 100644 package/portmap/portmap-4.0-sigpipe.patch
+ delete mode 100644 package/portmap/portmap-5b-include-errno_h.patch
+ delete mode 100644 package/portmap/portmap-5b-optional-tcpd.patch
+ create mode 100644 package/portmap/portmap-6.0-tcpd.patch
 
 diff --git a/CHANGES b/CHANGES
-index d0bc137..57511fd 100644
+index d754ad9..41600a6 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -21,7 +21,7 @@
+@@ -40,14 +40,14 @@
+ 	logrotate, m4, mdadm, mesa3d, metacity, mplayer, mtd-utils,
+ 	mysql_client, nano, nbd, ncftp, neon, netperf, netsnmp,
+ 	ng-spice-rework, ntfsprogs, ntp, openntpd, openssh, openssl,
+-	openvpn, oprofile, pango, patch, pcre, php, pkg-config, pppd,
+-	prboom, radvd, rdesktop, readline, ruby, qt, quagga, samba,
+-	sawman, sdl_mixer, sdl_sound, setserial, shared-mime-info,
+-	speex, sqlite, squashfs, startup-notification, strace,
+-	sylpheed, taglib, tcpdump, thttpd, tiff, tn5250, torsmo, udev,
+-	udpcast, usbmount, usbutils, vsftpd, vtun, which,
+-	wpa_supplicant, xapp_twm, xapp_xbacklight, xapp_xcursorgen,
+-	xapp_xinput, xapp_xmore,
++	openvpn, oprofile, pango, patch, pcre, php, pkg-config,
++	portmap, pppd, prboom, radvd, rdesktop, readline, ruby, qt,
++	quagga, samba, sawman, sdl_mixer, sdl_sound, setserial,
++	shared-mime-info, speex, sqlite, squashfs,
++	startup-notification, strace, sylpheed, taglib, tcpdump,
++	thttpd, tiff, tn5250, torsmo, udev, udpcast, usbmount,
++	usbutils, vsftpd, vtun, which, wpa_supplicant, xapp_twm,
++	xapp_xbacklight, xapp_xcursorgen, xapp_xinput, xapp_xmore,
+ 	xdriver_xf86-input-{acecad,aiptek,evdev,joystick,keyboard},
+ 	xdriver-xf86-input-{mouse,synaptics,vmmouse,void},
+ 	xdriver-xf86-video-{apm,ark,ast,ati,chips,cirrus,dummy,fbdev},
+diff --git a/package/portmap/Config.in b/package/portmap/Config.in
+index 41b38e9..1f22ab6 100644
+--- a/package/portmap/Config.in
++++ b/package/portmap/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_PORTMAP
+ 	help
+ 	  The standard portmapper for RPC services.
  
- 	Alpha, Cris, IA64 and Sparc64 architecture support removed.
+-	  ftp://ftp.porcupine.org/pub/security/index.html
++	  http://neil.brown.name/portmap/
  
--	New packages: gdk-pixbuf, gst-ffmpeg, libmpeg2, librsvg,
-+	New packages: gdk-pixbuf, gpsd, gst-ffmpeg, libmpeg2, librsvg,
- 	rrdtool, xz
- 
- 	Updated/fixed packages: acpid, alsa-lib, argus, at, autoconf,
-diff --git a/package/Config.in b/package/Config.in
-index 3b38775..fb415d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -162,6 +162,7 @@ source "package/fis/Config.in"
- source "package/gadgetfs-test/Config.in"
- source "package/genext2fs/Config.in"
- source "package/genromfs/Config.in"
-+source "package/gpsd/Config.in"
- source "package/gvfs/Config.in"
- source "package/hal/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+ comment "portmap requires a toolchain with 'Enable RPC' selected"
+ 	depends on !BR2_INET_RPC
+diff --git a/package/portmap/portmap-01-5beta.patch b/package/portmap/portmap-01-5beta.patch
+deleted file mode 100644
+index 7681822..0000000
+--- a/package/portmap/portmap-01-5beta.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+---- p/from_local.c
+-+++ p/from_local.c	2000/02/28 15:10:25
+-@@ -46,6 +46,7 @@
+- #include <sys/types.h>
+- #include <sys/socket.h>
+- #include <stdio.h>
+-+#include <stdlib.h>
+- #include <netdb.h>
+- #include <netinet/in.h>
+- #include <net/if.h>
+---- p/Makefile
+-+++ p/Makefile	2000/02/28 15:10:25
+-@@ -8,7 +8,7 @@
+- # if you disagree. See `man 3 syslog' for examples. Some syslog versions
+- # do not provide this flexibility.
+- #
+--FACILITY=LOG_MAIL
+-+FACILITY=LOG_AUTH
+- 
+- # To disable tcp-wrapper style access control, comment out the following
+- # macro definitions.  Access control can also be turned off by providing
+-@@ -71,7 +71,7 @@
+- # With verbose logging on, HP-UX 9.x and AIX 4.1 leave zombies behind when
+- # SIGCHLD is not ignored. Enable next macro for a fix.
+- #
+--# ZOMBIES = -DIGNORE_SIGCHLD	# AIX 4.x, HP-UX 9.x
+-+ZOMBIES = -DIGNORE_SIGCHLD	# AIX 4.x, HP-UX 9.x
+- 
+- # Uncomment the following macro if your system does not have u_long.
+- #
+-@@ -81,11 +81,15 @@
+- # libwrap.a object library. WRAP_DIR should specify the directory with
+- # that library.
+- 
+--WRAP_DIR= ../tcp_wrappers
+-+WRAP_DIR= /usr/lib
+- 
+- # Auxiliary object files that may be missing from your C library.
+- #
+--AUX	= daemon.o strerror.o
+-+AUX	= # daemon.o strerror.o
+-+
+-+LIBS	= -lwrap -lutil
+-+NSARCHS	= 
+-+O	= -Wall -O2 -pipe
+- 
+- # NEXTSTEP is a little different. The following seems to work with NS 3.2
+- #
+-@@ -99,7 +103,7 @@
+- 
+- # Comment out if your compiler talks ANSI and understands const
+- #
+--CONST   = -Dconst=
+-+#CONST   = -Dconst=
+- 
+- ### End of configurable stuff.
+- ##############################
+-@@ -109,7 +113,7 @@
+- COPT	= $(CONST) -Dperror=xperror $(HOSTS_ACCESS) $(CHECK_PORT) \
+- 	$(SYS) -DFACILITY=$(FACILITY) $(ULONG) $(ZOMBIES) $(SA_LEN) \
+- 	$(LOOPBACK) $(SETPGRP)
+--CFLAGS	= $(COPT) -O $(NSARCHS)
+-+CFLAGS	= $(COPT) $(O) $(NSARCHS)
+- OBJECTS	= portmap.o pmap_check.o from_local.o $(AUX)
+- 
+- all:	portmap pmap_dump pmap_set
+---- p/portmap.c
+-+++ p/portmap.c	2000/02/28 15:10:25
+-@@ -182,9 +182,8 @@
+- 		exit(1);
+- 	}
+- 
+--#ifdef LOG_MAIL
+--	openlog("portmap", debugging ? LOG_PID | LOG_PERROR : LOG_PID,
+--	    FACILITY);
+-+#ifdef FACILITY
+-+	openlog("portmap", debugging ? LOG_PID | LOG_PERROR : LOG_PID, FACILITY);
+- #else
+- 	openlog("portmap", debugging ? LOG_PID | LOG_PERROR : LOG_PID);
+- #endif
+diff --git a/package/portmap/portmap-02-4.0-malloc.patch b/package/portmap/portmap-02-4.0-malloc.patch
+deleted file mode 100644
+index db3bf09..0000000
+--- a/package/portmap/portmap-02-4.0-malloc.patch
++++ /dev/null
+@@ -1,338 +0,0 @@
+-diff -urN portmap_4/daemon.c portmap_4.new/daemon.c
+---- portmap_4/daemon.c	Thu Jun 11 13:53:12 1992
+-+++ portmap_4.new/daemon.c	Mon Nov 29 18:37:28 1999
+-@@ -35,7 +35,9 @@
+- static char sccsid[] = "@(#)daemon.c	5.3 (Berkeley) 12/28/90";
+- #endif /* LIBC_SCCS and not lint */
+- 
+-+#include <sys/types.h>
+- #include <fcntl.h>
+-+#include <unistd.h>
+- 
+- /* From unistd.h */
+- #define STDIN_FILENO	0
+-@@ -44,7 +46,7 @@
+- 
+- /* From paths.h */
+- #define _PATH_DEVNULL	"/dev/null"
+--
+-+int
+- daemon(nochdir, noclose)
+- 	int nochdir, noclose;
+- {
+-diff -urN portmap_4/from_local.c portmap_4.new/from_local.c
+---- portmap_4/from_local.c	Fri May 31 06:52:58 1996
+-+++ portmap_4.new/from_local.c	Tue Nov 30 01:21:27 1999
+-@@ -46,12 +46,14 @@
+- #include <sys/types.h>
+- #include <sys/socket.h>
+- #include <stdio.h>
+--#include <stdlib.h>
+-+#include <unistd.h>
+- #include <netdb.h>
+- #include <netinet/in.h>
+- #include <net/if.h>
+- #include <sys/ioctl.h>
+- #include <syslog.h>
+-+#include <stdlib.h>
+-+#include <string.h>
+- 
+- #ifndef TRUE
+- #define	TRUE	1
+-@@ -95,7 +98,7 @@
+- }
+- 
+- /* find_local - find all IP addresses for this host */
+--
+-+int
+- find_local()
+- {
+-     struct ifconf ifc;
+-@@ -153,7 +156,7 @@
+- }
+- 
+- /* from_local - determine whether request comes from the local system */
+--
+-+int
+- from_local(addr)
+- struct sockaddr_in *addr;
+- {
+-diff -urN portmap_4/pmap_check.c portmap_4.new/pmap_check.c
+---- portmap_4/pmap_check.c	Sun Nov 21 11:59:01 1993
+-+++ portmap_4.new/pmap_check.c	Tue Nov 30 01:19:37 1999
+-@@ -34,7 +34,7 @@
+- #ifndef lint
+- static char sccsid[] = "@(#) pmap_check.c 1.6 93/11/21 20:58:59";
+- #endif
+--
+-+#include <unistd.h>
+- #include <rpc/rpc.h>
+- #include <rpc/pmap_prot.h>
+- #include <syslog.h>
+-@@ -66,6 +66,9 @@
+- 
+- /* A handful of macros for "readability". */
+- 
+-+/* coming from libwrap.a (tcp_wrappers) */
+-+extern int hosts_ctl(char *daemon, char *name, char *addr, char *user);
+-+
+- #define	good_client(a) hosts_ctl("portmap", "", inet_ntoa(a->sin_addr), "")
+- 
+- #define	legal_port(a,p) \
+-@@ -104,6 +107,7 @@
+- 
+- /* check_default - additional checks for NULL, DUMP, GETPORT and unknown */
+- 
+-+int
+- check_default(addr, proc, prog)
+- struct sockaddr_in *addr;
+- u_long  proc;
+-@@ -121,7 +125,7 @@
+- }
+- 
+- /* check_privileged_port - additional checks for privileged-port updates */
+--
+-+int
+- check_privileged_port(addr, proc, prog, port)
+- struct sockaddr_in *addr;
+- u_long  proc;
+-@@ -147,6 +147,6 @@
+- 
+- #ifdef LOOPBACK_SETUNSET
+--
+-+int
+- check_setunset(xprt, ludp_xprt, ltcp_xprt, proc, prog, port)
+- SVCXPRT *xprt;
+- SVCXPRT *ludp_xprt;
+-@@ -173,6 +174,6 @@
+- 
+- #else
+--
+-+int
+- check_setunset(addr, proc, prog, port)
+- struct sockaddr_in *addr;
+- u_long  proc;
+-@@ -160,7 +164,7 @@
+- }
+- 
+- /* check_callit - additional checks for forwarded requests */
+--
+-+int
+- check_callit(addr, proc, prog, aproc)
+- struct sockaddr_in *addr;
+- u_long  proc;
+-@@ -213,13 +217,13 @@
+-     };
+-     struct proc_map *procp;
+-     static struct proc_map procmap[] = {
+--	PMAPPROC_CALLIT, "callit",
+--	PMAPPROC_DUMP, "dump",
+--	PMAPPROC_GETPORT, "getport",
+--	PMAPPROC_NULL, "null",
+--	PMAPPROC_SET, "set",
+--	PMAPPROC_UNSET, "unset",
+--	0, 0,
+-+	{ PMAPPROC_CALLIT, "callit"},
+-+	{ PMAPPROC_DUMP, "dump"},
+-+	{ PMAPPROC_GETPORT, "getport"},
+-+	{ PMAPPROC_NULL, "null"},
+-+	{ PMAPPROC_SET, "set"},
+-+	{ PMAPPROC_UNSET, "unset"},
+-+	{ 0, 0},
+-     };
+- 
+-     /*
+-@@ -233,7 +237,7 @@
+- 
+- 	if (prognum == 0) {
+- 	    progname = "";
+--	} else if (rpc = getrpcbynumber((int) prognum)) {
+-+	} else if ((rpc = getrpcbynumber((int) prognum))) {
+- 	    progname = rpc->r_name;
+- 	} else {
+- 	    sprintf(progname = progbuf, "%lu", prognum);
+-diff -urN portmap_4/pmap_dump.c portmap_4.new/pmap_dump.c
+---- portmap_4/pmap_dump.c	Thu Jun 11 13:53:16 1992
+-+++ portmap_4.new/pmap_dump.c	Tue Nov 30 01:22:07 1999
+-@@ -22,7 +22,7 @@
+- #include <rpc/pmap_prot.h>
+- 
+- static char *protoname();
+--
+-+int
+- main(argc, argv)
+- int     argc;
+- char  **argv;
+-diff -urN portmap_4/pmap_set.c portmap_4.new/pmap_set.c
+---- portmap_4/pmap_set.c	Thu Jun 11 13:53:17 1992
+-+++ portmap_4.new/pmap_set.c	Tue Nov 30 01:23:49 1999
+-@@ -17,6 +17,9 @@
+- #include <rpc/rpc.h>
+- #include <rpc/pmap_clnt.h>
+- 
+-+int parse_line(char *buf, u_long *, u_long *, int *, unsigned *); 
+-+
+-+int
+- main(argc, argv)
+- int     argc;
+- char  **argv;
+-@@ -42,7 +45,7 @@
+- }
+- 
+- /* parse_line - convert line to numbers */
+--
+-+int
+- parse_line(buf, prog, vers, prot, port)
+- char   *buf;
+- u_long *prog;
+-diff -urN portmap_4/portmap.c portmap_4.new/portmap.c
+---- portmap_4/portmap.c	Fri May 31 06:52:59 1996
+-+++ portmap_4.new/portmap.c	Tue Nov 30 01:01:32 1999
+-@@ -83,6 +83,7 @@
+- #include <rpc/rpc.h>
+- #include <rpc/pmap_prot.h>
+- #include <stdio.h>
+-+#include <unistd.h>
+- #include <syslog.h>
+- #include <netdb.h>
+- #include <sys/socket.h>
+-@@ -128,6 +129,7 @@
+- 
+- #include "pmap_check.h"
+- 
+-+int
+- main(argc, argv)
+- 	int argc;
+- 	char **argv;
+-@@ -229,6 +231,7 @@
+- 	svc_run();
+- 	syslog(LOG_ERR, "run_svc returned unexpectedly");
+- 	abort();
+-+	/* never reached */
+- }
+- 
+- #ifndef lint
+-@@ -290,7 +293,7 @@
+- 		 */
+- 		/* remote host authorization check */
+- 		check_default(svc_getcaller(xprt), rqstp->rq_proc, (u_long) 0);
+--		if (!svc_sendreply(xprt, xdr_void, (caddr_t)0) && debugging) {
+-+		if (!svc_sendreply(xprt, (xdrproc_t)xdr_void, (caddr_t)0) && debugging) {
+- 			abort();
+- 		}
+- 		break;
+-@@ -299,7 +302,7 @@
+- 		/*
+- 		 * Set a program,version to port mapping
+- 		 */
+--		if (!svc_getargs(xprt, xdr_pmap, &reg))
+-+		if (!svc_getargs(xprt, (xdrproc_t)xdr_pmap, (caddr_t)&reg))
+- 			svcerr_decode(xprt);
+- 		else {
+- 			/* reject non-local requests, protect priv. ports */
+-@@ -341,7 +344,7 @@
+- 				ans = 1;
+- 			}
+- 		done:
+--			if ((!svc_sendreply(xprt, xdr_int, (caddr_t)&ans)) &&
+-+			if ((!svc_sendreply(xprt, (xdrproc_t)xdr_int, (caddr_t)&ans)) &&
+- 			    debugging) {
+- 				(void) fprintf(stderr, "svc_sendreply\n");
+- 				abort();
+-@@ -353,7 +356,7 @@
+- 		/*
+- 		 * Remove a program,version to port mapping.
+- 		 */
+--		if (!svc_getargs(xprt, xdr_pmap, &reg))
+-+		if (!svc_getargs(xprt, (xdrproc_t)xdr_pmap, (caddr_t)&reg))
+- 			svcerr_decode(xprt);
+- 		else {
+- 			ans = 0;
+-@@ -387,7 +390,7 @@
+- 					prevpml->pml_next = pml;
+- 				free(t);
+- 			}
+--			if ((!svc_sendreply(xprt, xdr_int, (caddr_t)&ans)) &&
+-+			if ((!svc_sendreply(xprt, (xdrproc_t)xdr_int, (caddr_t)&ans)) &&
+- 			    debugging) {
+- 				(void) fprintf(stderr, "svc_sendreply\n");
+- 				abort();
+-@@ -399,7 +402,7 @@
+- 		/*
+- 		 * Lookup the mapping for a program,version and return its port
+- 		 */
+--		if (!svc_getargs(xprt, xdr_pmap, &reg))
+-+		if (!svc_getargs(xprt, (xdrproc_t)xdr_pmap, (caddr_t)&reg))
+- 			svcerr_decode(xprt);
+- 		else {
+- 			/* remote host authorization check */
+-@@ -414,7 +417,7 @@
+- 				port = fnd->pml_map.pm_port;
+- 			else
+- 				port = 0;
+--			if ((!svc_sendreply(xprt, xdr_int, (caddr_t)&port)) &&
+-+			if ((!svc_sendreply(xprt, (xdrproc_t)xdr_int, (caddr_t)&port)) &&
+- 			    debugging) {
+- 				(void) fprintf(stderr, "svc_sendreply\n");
+- 				abort();
+-@@ -426,7 +429,7 @@
+- 		/*
+- 		 * Return the current set of mapped program,version
+- 		 */
+--		if (!svc_getargs(xprt, xdr_void, NULL))
+-+		if (!svc_getargs(xprt, (xdrproc_t)xdr_void, NULL))
+- 			svcerr_decode(xprt);
+- 		else {
+- 			/* remote host authorization check */
+-@@ -437,7 +440,7 @@
+- 			} else {
+- 				p = pmaplist;
+- 			}
+--			if ((!svc_sendreply(xprt, xdr_pmaplist,
+-+			if ((!svc_sendreply(xprt, (xdrproc_t)xdr_pmaplist,
+- 			    (caddr_t)&p)) && debugging) {
+- 				(void) fprintf(stderr, "svc_sendreply\n");
+- 				abort();
+-@@ -481,7 +484,7 @@
+- 	struct encap_parms *epp;
+- {
+- 
+--	return (xdr_bytes(xdrs, &(epp->args), &(epp->arglen), ARGSIZE));
+-+	return (xdr_bytes(xdrs, &(epp->args), (u_int *)&(epp->arglen), ARGSIZE));
+- }
+- 
+- struct rmtcallargs {
+-@@ -585,7 +588,7 @@
+- 	timeout.tv_sec = 5;
+- 	timeout.tv_usec = 0;
+- 	a.rmt_args.args = buf;
+--	if (!svc_getargs(xprt, xdr_rmtcall_args, &a))
+-+	if (!svc_getargs(xprt, (xdrproc_t)xdr_rmtcall_args, (caddr_t)&a))
+- 		return;
+- 	/* host and service access control */
+- 	if (!check_callit(svc_getcaller(xprt), 
+-@@ -614,9 +617,9 @@
+- 			   au->aup_uid, au->aup_gid, au->aup_len, au->aup_gids);
+- 		}
+- 		a.rmt_port = (u_long)port;
+--		if (clnt_call(client, a.rmt_proc, xdr_opaque_parms, &a,
+--		    xdr_len_opaque_parms, &a, timeout) == RPC_SUCCESS) {
+--			svc_sendreply(xprt, xdr_rmtcall_result, (caddr_t)&a);
+-+		if (clnt_call(client, a.rmt_proc, (xdrproc_t)xdr_opaque_parms, (caddr_t)&a,
+-+		    (xdrproc_t)xdr_len_opaque_parms, (caddr_t)&a, timeout) == RPC_SUCCESS) {
+-+			svc_sendreply(xprt, (xdrproc_t)xdr_rmtcall_result, (caddr_t)&a);
+- 		}
+- 		AUTH_DESTROY(client->cl_auth);
+- 		clnt_destroy(client);
+-
+-+--------------------------------------------------------------------+
+-| Ste'phane ERANIAN                       | Email eranian at hpl.hp.com |
+-| Hewlett-Packard Laboratories            |                          |
+-| 1501, Page Mill Road MS 1U-15           |                          |
+-| Palo  Alto, CA 94303-096                |                          |
+-| USA                                     |                          |
+-| Tel : (650) 857-7174                    |                          |
+-| Fax : (650) 857-5548                    |                          |
+-+--------------------------------------------------------------------+
+-
+-
+diff --git a/package/portmap/portmap-4.0-cleanup.patch b/package/portmap/portmap-4.0-cleanup.patch
+deleted file mode 100644
+index 2e005af..0000000
+--- a/package/portmap/portmap-4.0-cleanup.patch
++++ /dev/null
+@@ -1,85 +0,0 @@
+-Some cleanup for my last patch.
+-
+-
+--- 
+-H.J. Lu (hjl at gnu.org)
+---
+---- portmap_4/pmap_check.c.hostname	Wed May 10 10:23:35 2000
+-+++ portmap_4/pmap_check.c	Wed May 10 11:03:22 2000
+-@@ -35,6 +35,7 @@
+- static char sccsid[] = "@(#) pmap_check.c 1.6 93/11/21 20:58:59";
+- #endif
+- #include <unistd.h>
+-+#include <string.h>
+- #include <rpc/rpc.h>
+- #include <rpc/pmap_prot.h>
+- #include <syslog.h>
+-@@ -69,8 +70,6 @@ int     deny_severity = LOG_WARNING;
+- /* coming from libwrap.a (tcp_wrappers) */
+- extern int hosts_ctl(char *daemon, char *name, char *addr, char *user);
+- 
+--#define	good_client(a) hosts_ctl("portmap", "", inet_ntoa(a->sin_addr), "")
+--
+- #define reserved_port(p) (IPPORT_RESERVED/2 < (p) && (p) < IPPORT_RESERVED)
+- 
+- #define unreserved_port(p) (IPPORT_RESERVED <= (p) && (p) != NFS_PORT)
+-@@ -88,6 +87,59 @@ extern int hosts_ctl(char *daemon, char 
+- 
+- #define log_client(addr, proc, prog) \
+-   logit(allow_severity, addr, proc, prog, "")
+-+
+-+#ifdef HOSTS_ACCESS
+-+static int
+-+good_client(addr)
+-+struct sockaddr_in *addr;
+-+{
+-+    struct hostent *hp;
+-+    char **sp;
+-+    char *tmpname;
+-+
+-+    /* Check the IP address first. */
+-+    if (hosts_ctl("portmap", "", inet_ntoa(addr->sin_addr), ""))
+-+	return 1;
+-+
+-+    /* Check the hostname. */
+-+    hp = gethostbyaddr ((const char *) &(addr->sin_addr),
+-+			sizeof (addr->sin_addr), AF_INET);
+-+
+-+    if (!hp)
+-+	return 0;
+-+
+-+    /* must make sure the hostent is authorative. */
+-+    tmpname = alloca (strlen (hp->h_name) + 1);
+-+    strcpy (tmpname, hp->h_name);
+-+    hp = gethostbyname(tmpname);
+-+    if (hp) {
+-+	/* now make sure the "addr->sin_addr" is on the list */
+-+	for (sp = hp->h_addr_list ; *sp ; sp++) {
+-+	    if (memcmp(*sp, &(addr->sin_addr), hp->h_length)==0)
+-+		break;
+-+	}
+-+	if (!*sp)
+-+	    /* it was a FAKE. */
+-+	    return 0;
+-+    }
+-+    else
+-+	   /* never heard of it. misconfigured DNS? */
+-+	   return 0;
+-+
+-+   /* Check the official name first. */
+-+   if (hosts_ctl("portmap", "", hp->h_name, ""))
+-+	return 1;
+-+
+-+   /* Check aliases. */
+-+   for (sp = hp->h_aliases; *sp ; sp++) {
+-+	if (hosts_ctl("portmap", "", *sp, ""))
+-+	    return 1;
+-+   }
+-+
+-+   /* No match */
+-+   return 0;
+-+}
+-+#endif
+- 
+- /* check_startup - additional startup code */
+- 
+diff --git a/package/portmap/portmap-4.0-rpc_user.patch b/package/portmap/portmap-4.0-rpc_user.patch
+deleted file mode 100644
+index 6ef0736..0000000
+--- a/package/portmap/portmap-4.0-rpc_user.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-diff -urN portmap_4/daemon.c portmap_4.new/daemon.c
+---- portmap_4/daemon.c	Thu Aug  3 18:07:22 2000
+-+++ portmap_4.new/daemon.c	Fri Aug  4 08:45:25 2000
+-@@ -35,6 +35,7 @@
+- static char sccsid[] = "@(#)daemon.c	5.3 (Berkeley) 12/28/90";
+- #endif /* LIBC_SCCS and not lint */
+- 
+-+#include <stdlib.h>
+- #include <sys/types.h>
+- #include <fcntl.h>
+- #include <unistd.h>
+-diff -urN portmap_4/pmap_check.c portmap_4.new/pmap_check.c
+---- portmap_4/pmap_check.c	Thu Aug  3 18:07:22 2000
+-+++ portmap_4.new/pmap_check.c	Thu Aug  3 18:29:51 2000
+-@@ -40,6 +40,8 @@
+- #include <rpc/pmap_prot.h>
+- #include <syslog.h>
+- #include <netdb.h>
+-+#include <pwd.h>
+-+#include <sys/types.h>
+- #include <sys/signal.h>
+- #ifdef SYSV40
+- #include <netinet/in.h>
+-@@ -149,11 +151,32 @@
+-     /*
+-      * Give up root privileges so that we can never allocate a privileged
+-      * port when forwarding an rpc request.
+-+     *
+-+     * Fix 8/3/00 Philipp Knirsch: First lookup our rpc user. If we find it,
+-+     * switch to that uid, otherwise simply resue the old bin user and print
+-+     * out a warning in syslog.
+-      */
+--    if (setuid(1) == -1) {
+--	syslog(LOG_ERR, "setuid(1) failed: %m");
+--	exit(1);
+-+
+-+    struct passwd *pwent;
+-+
+-+    pwent = getpwnam("rpc");
+-+    if (pwent == NULL) {
+-+        syslog(LOG_WARNING, "user rpc not found, reverting to user bin");
+-+        if (setuid(1) == -1) {
+-+            syslog(LOG_ERR, "setuid(1) failed: %m");
+-+            exit(1);
+-+        }
+-     }
+-+    else {
+-+        if (setuid(pwent->pw_uid) == -1) {
+-+            syslog(LOG_WARNING, "setuid() to rpc user failed: %m");
+-+            if (setuid(1) == -1) {
+-+                syslog(LOG_ERR, "setuid(1) failed: %m");
+-+                exit(1);
+-+            }
+-+        }
+-+    }
+-+
+-     (void) signal(SIGINT, toggle_verboselog);
+- }
+- 
+diff --git a/package/portmap/portmap-4.0-sigpipe.patch b/package/portmap/portmap-4.0-sigpipe.patch
+deleted file mode 100644
+index dba7cf4..0000000
+--- a/package/portmap/portmap-4.0-sigpipe.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- portmap_4/portmap.c.sigpipe	Sun Feb 11 17:45:11 2001
+-+++ portmap_4/portmap.c	Sun Feb 11 17:45:51 2001
+-@@ -228,6 +228,9 @@
+- #else
+- 	(void)signal(SIGCHLD, reap);
+- #endif
+-+        /* Dying on SIGPIPE doesn't help anyone */
+-+        (void)signal(SIGPIPE, SIG_IGN);
+-+          
+- 	svc_run();
+- 	syslog(LOG_ERR, "run_svc returned unexpectedly");
+- 	abort();
+diff --git a/package/portmap/portmap-5b-include-errno_h.patch b/package/portmap/portmap-5b-include-errno_h.patch
+deleted file mode 100644
+index a440e61..0000000
+--- a/package/portmap/portmap-5b-include-errno_h.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+---- portmap_5beta/portmap.c.orig	2002-12-31 22:13:17.000000000 +0200
+-+++ portmap_5beta/portmap.c	2002-12-31 22:13:50.000000000 +0200
+-@@ -97,6 +97,7 @@
+- 
+- extern char *strerror();
+- #include <stdlib.h>
+-+#include <errno.h>
+- 
+- #ifndef LOG_PERROR
+- #define LOG_PERROR 0
+-@@ -124,7 +125,6 @@
+- static void callit();
+- struct pmaplist *pmaplist;
+- int debugging = 0;
+--extern int errno;
+- 
+- #include "pmap_check.h"
+- 
+diff --git a/package/portmap/portmap-5b-optional-tcpd.patch b/package/portmap/portmap-5b-optional-tcpd.patch
+deleted file mode 100644
+index d5b79f2..0000000
+--- a/package/portmap/portmap-5b-optional-tcpd.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+---- portmap/Makefile.orig	2004-10-31 01:54:48.073875024 -0400
+-+++ portmap/Makefile	2004-10-31 01:54:58.395305928 -0400
+-@@ -15,8 +15,6 @@
+- # no access control tables. The local system, since it runs the portmap
+- # daemon, is always treated as an authorized host.
+- 
+--HOSTS_ACCESS= -DHOSTS_ACCESS
+--WRAP_LIB = $(WRAP_DIR)/libwrap.a
+- 
+- # Comment out if your RPC library does not allocate privileged ports for
+- # requests from processes with root privilege, or the new portmap will
+-@@ -87,7 +85,7 @@
+- #
+- AUX	= # daemon.o strerror.o
+- 
+--LIBS	= -lwrap -lutil
+-+LIBS	= -lutil
+- NSARCHS	= 
+- O	= -Wall -O2 -pipe
+- 
+-@@ -110,7 +108,7 @@
+- 
+- SHELL	= /bin/sh
+- 
+--COPT	= $(CONST) -Dperror=xperror $(HOSTS_ACCESS) $(CHECK_PORT) \
+-+COPT	= $(CONST) -Dperror=xperror $(CHECK_PORT) \
+- 	$(SYS) -DFACILITY=$(FACILITY) $(ULONG) $(ZOMBIES) $(SA_LEN) \
+- 	$(LOOPBACK) $(SETPGRP)
+- CFLAGS	= $(COPT) $(O) $(NSARCHS)
+-@@ -118,7 +116,7 @@
+- 
+- all:	portmap pmap_dump pmap_set
+- 
+--portmap: $(OBJECTS) $(WRAP_DIR)/libwrap.a
+-+portmap: $(OBJECTS)
+- 	$(CC) $(CFLAGS) -o $@ $(OBJECTS) $(WRAP_LIB) $(LIBS)
+- 
+- pmap_dump: pmap_dump.c
+diff --git a/package/portmap/portmap-6.0-tcpd.patch b/package/portmap/portmap-6.0-tcpd.patch
 new file mode 100644
-index 0000000..543f205
+index 0000000..c6af8f8
 --- /dev/null
-+++ b/package/gpsd/Config.in
-@@ -0,0 +1,238 @@
-+config BR2_PACKAGE_GPSD
-+	bool "gpsd"
-+	help
-+	 gpsd is a service daemon that monitors one or more GPSes or AIS
-+	  receivers attached to a host computer through serial or USB ports,
-+	  making all data on the location/course/velocity of the sensors
-+	  available to be queried on TCP port 2947 of the host computer.
++++ b/package/portmap/portmap-6.0-tcpd.patch
+@@ -0,0 +1,18 @@
++Enable compile without tcp-wrappers
 +
-+	  http://gpsd.berlios.de/
++Patch by Timothy Redaelli <drizzt@gentoo.org>
 +
-+config BR2_PACKAGE_GPSD_DEVICES
-+	string "Where to look for GPSes"
-+	default "/dev/ttyS1"
-+	depends on BR2_PACKAGE_GPSD
++http://bugs.gentoo.org/178242
 +
-+menu "Features"
-+	depends on BR2_PACKAGE_GPSD
-+
-+config BR2_PACKAGE_GPSD_TIMING
-+	bool "latency timing support"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_CLIENT_DEBUG
-+	bool "client debugging support"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_OLDSTYLE
-+	bool "oldstyle (pre-JSON) protocol support"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_PROFILING
-+	bool "profiling support"
-+
-+config BR2_PACKAGE_GPSD_NTP_SHM
-+	bool "NTP time hinting support"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_PPS
-+	bool "PPS time syncing support"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_PPS_ON_CTS
-+	bool "PPS pulse on CTS rather than DCD"
-+	depends on BR2_PACKAGE_GPSD_PPS
-+
-+config BR2_PACKAGE_GPSD_USER
-+	bool "GPSD privilege revocation user"
-+config BR2_PACKAGE_GPSD_USER_VALUE
-+	string ""
-+	default "nobody"
-+	depends on BR2_PACKAGE_GPSD_USER
-+
-+config BR2_PACKAGE_GPSD_GROUP
-+	bool "GPSD privilege revocation group"
-+config BR2_PACKAGE_GPSD_GROUP_VALUE
-+	string ""
-+	default "nobody"
-+	depends on BR2_PACKAGE_GPSD_GROUP
-+
-+config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
-+	bool "compile with fixed serial port speed"
-+config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE
-+	string ""
-+	default "9600"
-+	depends on BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
-+
-+config BR2_PACKAGE_GPSD_MAX_CLIENT
-+	bool "compile with limited maximum clients"
-+config BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE
-+	string "compile with limited maximum clients"
-+	default "10"
-+	depends on BR2_PACKAGE_GPSD_MAX_CLIENT
-+
-+config BR2_PACKAGE_GPSD_MAX_DEV
-+	bool "compile with maximum allowed devices"
-+config BR2_PACKAGE_GPSD_MAX_DEV_VALUE
-+	string "compile with maximum allowed devices"
-+	default "2"
-+	depends on BR2_PACKAGE_GPSD_MAX_DEV
-+
-+config BR2_PACKAGE_GPSD_RECONFIGURE
-+	bool "allow gpsd to change device settings"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_CONTROLSEND
-+	bool "allow gpsctl/gpsmon to change device settings"
-+	default y
-+
-+config BR2_PACKAGE_GPSD_RAW
-+	bool "enable raw measurement processing"
-+
-+config BR2_PACKAGE_GPSD_SQUELCH
-+	bool "squelch gpsd_report and gpsd_hexdump to save cpu"
-+
-+endmenu
-+
-+menu "Protocols"
-+	depends on BR2_PACKAGE_GPSD
-+
-+config BR2_PACKAGE_GPSD_ASHTECH
-+	bool "Ashtech"
-+	default y
-+	help
-+	  Ashtech support
-+
-+config BR2_PACKAGE_GPSD_AIVDM
-+	bool "Aivdm"
-+	default y
-+	help
-+	  Aivdm support
-+
-+config BR2_PACKAGE_GPSD_EARTHMATE
-+	bool "Earthmate"
-+	default y
-+	help
-+	  DeLorme EarthMate Zodiac support
-+
-+config BR2_PACKAGE_GPSD_EVERMORE
-+	bool "EverMore"
-+	default y
-+	help
-+	  EverMore binary support
-+
-+config BR2_PACKAGE_GPSD_FV18
-+	bool "FV-18"
-+	default y
-+	help
-+	  San Jose Navigation FV-18 support
-+
-+config BR2_PACKAGE_GPSD_GARMIN
-+	bool "Garmin (kernel)"
-+	default y
-+	help
-+	  Garmin kernel driver support
-+
-+config BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT
-+	bool "Garmin (simple text)"
-+	default n
-+	help
-+	  Garmin Simple Text support
-+
-+config BR2_PACKAGE_GPSD_GPSCLOCK
-+	bool "GPSClock"
-+	default y
-+	help
-+	  GPSClock support
-+
-+config BR2_PACKAGE_GPSD_ITRAX
-+	bool "iTrax"
-+	default y
-+	help
-+	  iTrax support
-+
-+config BR2_PACKAGE_MTK3301
-+	bool "MTK-3301"
-+	default y
-+	help
-+	  Mediatek MTK-3301 support
-+
-+config BR2_PACKAGE_GPSD_NMEA
-+	bool "NMEA"
-+	default y
-+	help
-+	  Generic NMEA support
-+
-+config BR2_PACKAGE_GPSD_NTRIP
-+	bool "NTRIP"
-+	default y
-+	help
-+	  NTRIP support
-+
-+config BR2_PACKAGE_GPSD_NAVCOM
-+	bool "Navcom"
-+	default y
-+	help
-+	  Navcom binary support
-+
-+config BR2_PACKAGE_GPSD_OCEANSERVER
-+	bool "OceanServer"
-+	default y
-+	help
-+	  OceanServer Digital Compass support
-+
-+config BR2_PACKAGE_GPSD_ONCORE
-+	bool "OnCore"
-+	default y
-+	help
-+	  OnCore support
-+
-+config BR2_PACKAGE_GPSD_RTCM104V2
-+	bool "RTCM104 v2"
-+	default y
-+	help
-+	  RTCM104 v2 support
-+
-+config BR2_PACKAGE_GPSD_RTCM104V3
-+	bool "RTCM104 v3"
-+	default y
-+	help
-+	  RTCM104 v3 support
-+
-+config BR2_PACKAGE_GPSD_SIRF
-+	bool "SiRF"
-+	default y
-+	help
-+	  SiRF binary support
-+
-+config BR2_PACKAGE_GPSD_SUPERSTAR2
-+	bool "SuperStarII"
-+	default y
-+	help
-+	  Novatel SuperStarII binary support
-+
-+config BR2_PACKAGE_GPSD_TRIMBLE_TSIP
-+	bool "Trimble TSIP"
-+	default y
-+	help
-+	  Trimble TSIP support
-+
-+config BR2_PACKAGE_GPSD_TRIPMATE
-+	bool "TripMate"
-+	default y
-+	help
-+	  Delorme TripMate support
-+
-+config BR2_PACKAGE_GPSD_TRUE_NORTH
-+	bool "True North Technologies"
-+	default n
-+	help
-+	  True North Technologies support
-+
-+config BR2_PACKAGE_GPSD_UBX
-+	bool "UBX"
-+	default y
-+	help
-+	  uBlox UBX binary support
-+
-+endmenu
-diff --git a/package/gpsd/S50gpsd b/package/gpsd/S50gpsd
-new file mode 100644
-index 0000000..31727eb
---- /dev/null
-+++ b/package/gpsd/S50gpsd
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+#
-+# Starts the gps daemon.
-+#
-+
-+NAME=gpsd
-+DAEMON=/usr/sbin/$NAME
-+DEVICES=/dev/ttyS1
-+PIDFILE=/var/run/$NAME.pid
-+
-+start() {
-+        echo -n "Starting $NAME: "
-+        start-stop-daemon -S -q -p $PIDFILE --exec $DAEMON -- -P $PIDFILE $DEVICES && echo "OK" || echo "Failed"
-+}
-+stop() {
-+        echo -n "Stopping $NAME: "
-+        start-stop-daemon -K -q -p $PIDFILE && echo "OK" || echo "Failed"
-+        rm -f $PIDFILE
-+}
-+restart() {
-+        stop
-+        start
-+}
-+
-+case "$1" in
-+  start)
-+        start
-+        ;;
-+  stop)
-+        stop
-+        ;;
-+  restart|reload)
-+        restart
-+        ;;
-+  *)
-+        echo $"Usage: $0 {start|stop|restart}"
-+        exit 1
-+esac
-+
-+exit $?
-diff --git a/package/gpsd/gpsd-fix-libgpsmm.patch b/package/gpsd/gpsd-fix-libgpsmm.patch
-new file mode 100644
-index 0000000..893965e
---- /dev/null
-+++ b/package/gpsd/gpsd-fix-libgpsmm.patch
-@@ -0,0 +1,23 @@
-+diff -Nura gpsd-2.95.orig/Makefile.in gpsd-2.95.x/Makefile.in
-+--- gpsd-2.95.orig/Makefile.in	2010-07-13 19:48:24.000000000 -0300
-++++ gpsd-2.95.x/Makefile.in	2010-07-27 17:40:28.902568874 -0300
-+@@ -546,7 +546,7 @@
-+ libgps_VERSION__REVISION = 0
-+ libgps_VERSION_AGE = 0
-+ libgps_VERSION_NUMBER = $(libgps_VERSION_AGE):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE)
-+-libgps_la_LDFLAGS = -version-number $(libgps_VERSION_CURRENT):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE)
-++libgps_la_LDFLAGS = -version-number $(libgps_VERSION_CURRENT):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE) $(LDFLAGS)
-+ lib_LTLIBRARIES = libgps.la libgpsd.la
-+ libgps_SONAME = $(shell expr $(libgps_VERSION_CURRENT) - $(libgps_VERSION_AGE))
-+ libgps_VERSION = $(libgps_SONAME).$(libgps_VERSION_AGE).$(libgps_VERSION__REVISION)
-+@@ -612,8 +612,8 @@
-+ libgpsd_la_SOURCES = $(libgpsd_c_sources) $(libgpsd_h_sources) \
-+ 				driver_rtcm2.h packet_states.h
++--- portmap_6.0/pmap_check.c
+++++ portmap_6.0/pmap_check.c
++@@ -44,7 +44,9 @@
++ #include <netinet/in.h>
++ #include <rpc/rpcent.h>
++ #endif
+++#ifdef HOSTS_ACCESS
++ #include <tcpd.h>
+++#endif
++ #include <arpa/inet.h>
++ #include <grp.h>
 + 
-+- at LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link gcc $(libgps_la_LDFLAGS) -o $@
-+- at LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link g++ $(libgps_la_LDFLAGS) -o $@
-++ at LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link $(CC) $(libgps_la_LDFLAGS) -o $@
-++ at LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link $(CXX) $(libgps_la_LDFLAGS) -o $@
-+ nodist_libgpsd_la_SOURCES = packet_names.h ais_json.i
-+ libgps_la_LIBADD = $(LIBM) $(LIBC) $(LIBNSL) $(LIBSOCKET) $(LIBPTHREAD)
-+ libgpsd_la_LIBADD = $(LIBM) $(LIBC) $(LIBNSL) $(LIBSOCKET) $(LIBPTHREAD) $(BLUEZ_LIBS) libgps.la
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-new file mode 100644
-index 0000000..71fe89e
---- /dev/null
-+++ b/package/gpsd/gpsd.mk
-@@ -0,0 +1,179 @@
-+#############################################################
-+#
-+# gpsd
-+#
-+#############################################################
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index 0132c72..dba6155 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -3,45 +3,32 @@
+ # portmap
+ #
+ #############################################################
+-PORTMAP_VERSION:=5b
+-PORTMAP_SOURCE:=portmap_$(PORTMAP_VERSION)eta.tar.gz
+-PORTMAP_SITE:=ftp://ftp.porcupine.org/pub/security/
+-PORTMAP_DIR:=$(BUILD_DIR)/portmap_$(PORTMAP_VERSION)eta
+-PORTMAP_CAT:=$(ZCAT)
+-PORTMAP_BINARY:=portmap
+-PORTMAP_TARGET_BINARY:=sbin/portmap
+ 
+-$(DL_DIR)/$(PORTMAP_SOURCE):
+-	$(call DOWNLOAD,$(PORTMAP_SITE),$(PORTMAP_SOURCE))
+-
+-portmap-source: $(DL_DIR)/$(PORTMAP_SOURCE)
+-
+-$(PORTMAP_DIR)/.unpacked: $(DL_DIR)/$(PORTMAP_SOURCE)
+-	$(PORTMAP_CAT) $(DL_DIR)/$(PORTMAP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(PORTMAP_DIR) package/portmap/ portmap\*.patch
+-	touch $(PORTMAP_DIR)/.unpacked
+-
+-$(PORTMAP_DIR)/$(PORTMAP_BINARY): $(PORTMAP_DIR)/.unpacked
+-	$(MAKE) CC="$(TARGET_CC)" O="$(TARGET_CFLAGS)" -C $(PORTMAP_DIR)
+-
+-$(TARGET_DIR)/$(PORTMAP_TARGET_BINARY): $(PORTMAP_DIR)/$(PORTMAP_BINARY)
+-	$(INSTALL) -D $(PORTMAP_DIR)/$(PORTMAP_BINARY) $(TARGET_DIR)/$(PORTMAP_TARGET_BINARY)
+-	$(INSTALL) -m 0755 package/portmap/S13portmap $(TARGET_DIR)/etc/init.d
+-
+-portmap: $(TARGET_DIR)/$(PORTMAP_TARGET_BINARY)
+-
+-portmap-clean:
+-	rm -f $(TARGET_DIR)/$(PORTMAP_TARGET_BINARY)
+-	rm -f $(TARGET_DIR)/etc/init.d/S13portmap
+-	-$(MAKE) -C $(PORTMAP_DIR) clean
+-
+-portmap-dirclean:
+-	rm -rf $(PORTMAP_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_PORTMAP),y)
+-TARGETS+=portmap
+-endif
++PORTMAP_VERSION = 6.0
++PORTMAP_SOURCE = portmap-$(PORTMAP_VERSION).tgz
++PORTMAP_SITE = http://neil.brown.name/portmap
++PORTMAP_SBINS = portmap pmap_dump pmap_set
 +
-+GPSD_VERSION = 2.95
-+GPSD_SITE = http://download.berlios.de/gpsd
-+GPSD_INSTALL_STAGING = YES
-+GPSD_CONF_OPT = --disable-static
-+GPSD_LIBTOOL_PATCH = NO
-+GPSD_USE_CONFIG_CACHE = NO
-+GPSD_TARGET_BINS = cgps gpsctl gpsdecode gpsmon gpspipe gpxlogger lcdgps
-+
-+# Build libgpsmm if we've got C++
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+	GPSD_CONF_OPT += --enable-libgpsmm LDFLAGS="$(TARGET_LDFLAGS) -lstdc++"
-+else
-+	GPSD_CONF_OPT += --disable-libgpsmm
-+endif
-+
-+# If libusb is available build it before so the package can use it
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+	GPSD_DEPENDENCIES += libusb
-+endif
-+
-+ifeq ($(strip $(BR2_PACKAGE_DBUS)),y)
-+	GPSD_CONF_OPT += --enable-dbus
-+	GPSD_DEPENDENCIES += dbus dbus-glib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+	GPSD_DEPENDENCIES += ncurses
-+endif
-+
-+# Protocol support
-+ifneq ($(BR2_PACKAGE_GPSD_ASHTECH),y)
-+	GPSD_CONF_OPT += --disable-ashtech
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_AIVDM),y)
-+	GPSD_CONF_OPT += --disable-aivdm
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_EARTHMATE),y)
-+	GPSD_CONF_OPT += --disable-earthmate
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_EVERMORE),y)
-+	GPSD_CONF_OPT += --disable-evermore
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_FV18),y)
-+	GPSD_CONF_OPT += --disable-fv18
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_GARMIN),y)
-+	GPSD_CONF_OPT += --disable-garmin
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT),y)
-+	GPSD_CONF_OPT += --enable-garmintxt
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_GPSCLOCK),y)
-+	GPSD_CONF_OPT += --disable-gpsclock
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_ITRAX),y)
-+	GPSD_CONF_OPT += --disable-itrax
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_MTK3301),y)
-+	GPSD_CONF_OPT += --disable-mtk3301
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_NMEA),y)
-+	GPSD_CONF_OPT += --disable-nmea
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_NTRIP),y)
-+	GPSD_CONF_OPT += --disable-ntrip
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_NAVCOM),y)
-+	GPSD_CONF_OPT += --disable-navcom
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_OCEANSERVER),y)
-+	GPSD_CONF_OPT += --disable-oceanserver
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_ONCORE),y)
-+	GPSD_CONF_OPT += --disable-oncore
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_RTCM104V2),y)
-+	GPSD_CONF_OPT += --disable-rtcm104v2
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_RTCM104V3),y)
-+	GPSD_CONF_OPT += --disable-rtcm104v3
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
-+	GPSD_CONF_OPT += --disable-sirf
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_SUPERSTAR2),y)
-+	GPSD_CONF_OPT += --disable-superstar2
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_TRIMBLE_TSIP),y)
-+	GPSD_CONF_OPT += --disable-tsip
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_TRIPMATE),y)
-+	GPSD_CONF_OPT += --disable-tripmate
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_TRUE_NORTH),y)
-+	GPSD_CONF_OPT += --enable-tnt
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_UBX),y)
-+	GPSD_CONF_OPT += --disable-ubx
-+endif
-+
-+# Features
-+ifneq ($(BR2_PACKAGE_GPSD_NTP_SHM),y)
-+	GPSD_CONF_OPT += --disable-ntpshm
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_PPS),y)
-+	GPSD_CONF_OPT += --disable-pps
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_PPS_ON_CTS),y)
-+	GPSD_CONF_OPT += --enable-pps-on-cts
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_SQUELCH),y)
-+	GPSD_CONF_OPT += --enable-squelch
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_RECONFIGURE),y)
-+	GPSD_CONF_OPT += --disable-reconfigure
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_CONTROLSEND),y)
-+	GPSD_CONF_OPT += --disable-controlsend
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_RAW),y)
-+	GPSD_CONF_OPT += --enable-raw
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_OLDSTYLE),y)
-+	GPSD_CONF_OPT += --disable-oldstyle
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
-+	GPSD_CONF_OPT += --enable-profiling
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_TIMING),y)
-+	GPSD_CONF_OPT += --disable-timing
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_CLIENT_DEBUG),y)
-+	GPSD_CONF_OPT += --disable-clientdebug
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_USER),y)
-+	GPSD_CONF_OPT += --enable-gpsd-user=$(BR2_PACKAGE_GPSD_USER_VALUE)
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_GROUP),y)
-+	GPSD_CONF_OPT += --enable-gpsd-group=$(BR2_PACKAGE_GPSD_GROUP_VALUE)
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED),y)
-+	GPSD_CONF_OPT += --enable-fixed-port-speed=$(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE)
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_MAX_CLIENT),y)
-+	GPSD_CONF_OPT += --enable-max-clients=$(BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE)
-+endif
-+ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
-+	GPSD_CONF_OPT += --enable-max-devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
-+endif
-+
-+define GPSD_BUILDS_CMDS
-+	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(GPSD_DIR)/libtool
-+	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(GPSD_DIR)/libtool
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all libgpsmm
++define PORTMAP_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D) NO_TCP_WRAPPER=1
 +endef
 +
-+define GPSD_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
-+		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
-+		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
-+	fi
++define PORTMAP_INSTALL_TARGET_CMDS
++	for sbin in $(PORTMAP_SBINS); do \
++		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
++	done
++	$(INSTALL) -D $(@D)/portmap.man \
++		$(TARGET_DIR)/usr/share/man/man8/portmap.8
++	$(INSTALL) -D $(@D)/pmap_dump.8 \
++		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
++	$(INSTALL) -D $(@D)/pmap_set.8 \
++		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
 +endef
 +
-+define GPSD_UNINSTALL_TARGET_CMDS
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GPSD_TARGET_BINS))
-+	rm -f $(TARGET_DIR)/usr/lib/libgps.*
-+	rm -f $(TARGET_DIR)/usr/lib/libgpsd.*
-+	rm -f $(TARGET_DIR)/usr/sbin/gpsd
-+	rm -f $(TARGET_DIR)/etc/init.d/S50gpsd
++define PORTMAP_UNINSTALL_TARGET_CMDS
++	rm -f $(addprefix $(TARGET_DIR)/sbin/,$(PORTMAP_SBINS))
++	rm -f $(addprefix $(TARGET_DIR)/usr/share/man/man8/, \
++		$(addsuffix .8,$(PORTMAP_SBINS)))
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,gpsd))
++$(eval $(call GENTARGETS,package,portmap))
 -- 
 1.7.1
