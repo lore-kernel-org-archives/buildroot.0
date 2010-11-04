@@ -1,10 +1,9 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  4 Nov 2010 03:50:21 +0100
-Subject: [Buildroot] [PATCH 02/12] rsync: drop special case now managed in
-	Makefile.package.in
+Date: Thu,  4 Nov 2010 03:50:22 +0100
+Subject: [Buildroot] [PATCH 03/12] autotools: fix MESSAGE calls
 In-Reply-To: <1288839031-24277-1-git-send-email-llandwerlin@gmail.com>
 References: <1288839031-24277-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1288839031-24277-3-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1288839031-24277-4-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +14,30 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/rsync/rsync.mk |   11 +++--------
- 1 files changed, 3 insertions(+), 8 deletions(-)
+ package/Makefile.autotools.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index e1bb28e..d7c2ccd 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -9,14 +9,9 @@ RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
- RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
- RSYNC_INSTALL_STAGING:=NO
- RSYNC_INSTALL_TARGET:=YES
--RSYNC_CONF_OPT=$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
--ifeq ($(BR2_ENABLE_DEBUG),y)
--RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
--			  install
--else
--RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
--			  STRIPPROG="$(TARGET_STRIP)" install-strip
--endif
-+
-+RSYNC_MAKE_ENV = STRIPPROG="$(STRIPCMD)"
-+
- RSYNC_CONF_OPT:=--with-included-popt
- 
- $(eval $(call AUTOTARGETS,package,rsync))
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 87c3092..b24c2b1 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -138,7 +138,7 @@ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	@$(call MESSAGE,"Patching libtool")
++	@$$(call MESSAGE,"Patching libtool")
+ 	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES" \
+ 		-a "$$($$(PKG)_AUTORECONF)" != "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+@@ -162,7 +162,7 @@ endif
+ # Hook to autoreconf the package if needed
+ #
+ define AUTORECONF_HOOK
+-	@$(call MESSAGE,"Autoreconfiguring")
++	@$$(call MESSAGE,"Autoreconfiguring")
+ 	$(Q)cd $$($$(PKG)_SRCDIR) && $(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
+ 	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
 -- 
 1.7.2.3
