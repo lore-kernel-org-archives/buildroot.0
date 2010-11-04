@@ -1,44 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  4 Nov 2010 17:21:28 +0100
-Subject: [Buildroot] [PATCH 1/1] Remove INITRAMFS_TARGET variable
-In-Reply-To: <cover.1288887683.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1288887683.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ba1423a20cd11aadc3ab175bf5710a1a763bf544.1288887683.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Nov 2010 17:39:41 +0100
+Subject: [Buildroot] [git commit master 1/1] lsof: stop overriding
+ CFLAGS in build
+In-Reply-To: <20101104161748.EC2E68DAC1@busybox.osuosl.org>
+References: <20101104161748.EC2E68DAC1@busybox.osuosl.org>
+Message-ID: <20101104173941.2966c58b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This used to be needed when the filesystem code was rewritten, but not
-the Linux compilation code. Now that the Linux compilation code has
-been rewritten, the mechanism to ensure that initramfs gets built
-*before* the kernel so that it can be integrated is different, and
-this INITRAMFS_TARGET variable is no longer used.
+On Thu, 4 Nov 2010 17:15:18 +0100
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-See f507921d391bb2578261a9e45c003e72302dc67a for details.
+> commit: http://git.buildroot.net/buildroot/commit/?id=44b170e104a6acc527fbcaee19ce63e8e51ea279
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Closes #2767
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/initramfs/initramfs.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+What about "[PATCH 02/10] lsof: convert to gentargets and bump to
+4.84" ?
 
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index 30969a4..dd6aa94 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -6,12 +6,6 @@
- #
- #############################################################
- 
--ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--INITRAMFS_TARGET:=initramfs-root
--else
--INITRAMFS_TARGET:= #nothing
--endif
--
- define ROOTFS_INITRAMFS_INIT_SYMLINK
- 	if [ ! -e $(TARGET_DIR)/init ]; then \
- 		ln -s sbin/init $(TARGET_DIR)/init; \
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
