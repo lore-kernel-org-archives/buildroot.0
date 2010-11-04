@@ -1,28 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  4 Nov 2010 16:17:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 2767] Build for lsof broken in buildroot-2010.08
-In-Reply-To: <bug-2767-163@https.bugs.busybox.net/>
-References: <bug-2767-163@https.bugs.busybox.net/>
-Message-ID: <20101104161708.0289B8DAC1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Nov 2010 17:16:59 +0100
+Subject: [Buildroot] [PATCH] Repair initramfs dependancies after move to
+ fs
+In-Reply-To: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
+References: <1271687689-344-1-git-send-email-will_wagner@carallon.com>
+Message-ID: <20101104171659.3aaa4f94@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2767
+Hello Will,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+I'm replying on this old patch that I acked back in April. But I now
+have one question. While I still agree on the changes on
+target/linux/Makefile* (now linux/linux.mk), I don't understand why the
+following change was needed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+> index 4a205d1..9aaf1b0 100644
+> --- a/fs/initramfs/initramfs.mk
+> +++ b/fs/initramfs/initramfs.mk
+> @@ -6,6 +6,12 @@
+>  #
+>  #############################################################
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+> +INITRAMFS_TARGET:=initramfs-root
+> +else
+> +INITRAMFS_TARGET:= #nothing
+> +endif
 
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
+the INITRAMFS_TARGET variable isn't used anywhere in the current git.
+Isn't this code useless ? (I think it is, but I'd like to be sure).
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
