@@ -1,9 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  4 Nov 2010 03:50:20 +0100
-Subject: [Buildroot] [PATCH 01/12] sh: add /dev/ttyASx console devices
+Date: Thu,  4 Nov 2010 03:50:21 +0100
+Subject: [Buildroot] [PATCH 02/12] rsync: drop special case now managed in
+	Makefile.package.in
 In-Reply-To: <1288839031-24277-1-git-send-email-llandwerlin@gmail.com>
 References: <1288839031-24277-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1288839031-24277-2-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1288839031-24277-3-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +15,30 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- target/generic/Config.in |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ package/rsync/rsync.mk |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 54ff1d6..f5d8286 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -45,6 +45,18 @@ config BR2_TARGET_GENERIC_GETTY_TTYAMA2
- config BR2_TARGET_GENERIC_GETTY_TTYAMA3
- 	bool "ttyAMA3"
- 	depends on BR2_arm
-+config BR2_TARGET_GENERIC_GETTY_TTYAS0
-+	bool "ttyAS0"
-+	depends on BR2_sh
-+config BR2_TARGET_GENERIC_GETTY_TTYAS1
-+	bool "ttyAS1"
-+	depends on BR2_sh
-+config BR2_TARGET_GENERIC_GETTY_TTYAS2
-+	bool "ttyAS2"
-+	depends on BR2_sh
-+config BR2_TARGET_GENERIC_GETTY_TTYAS3
-+	bool "ttyAS3"
-+	depends on BR2_sh
- config BR2_TARGET_GENERIC_GETTY_TTYSAC0
- 	bool "ttySAC0"
- 	depends on BR2_arm
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index e1bb28e..d7c2ccd 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -9,14 +9,9 @@ RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
+ RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
+ RSYNC_INSTALL_STAGING:=NO
+ RSYNC_INSTALL_TARGET:=YES
+-RSYNC_CONF_OPT=$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
+-			  install
+-else
+-RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
+-			  STRIPPROG="$(TARGET_STRIP)" install-strip
+-endif
++
++RSYNC_MAKE_ENV = STRIPPROG="$(STRIPCMD)"
++
+ RSYNC_CONF_OPT:=--with-included-popt
+ 
+ $(eval $(call AUTOTARGETS,package,rsync))
 -- 
 1.7.2.3
