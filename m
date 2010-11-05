@@ -1,65 +1,138 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 5 Nov 2010 14:30:23 +0100
-Subject: [Buildroot] [PATCH 11/12] directfb: bump to 1.4.10
-In-Reply-To: <87hbfw3pb2.fsf@macbook.be.48ers.dk>
-References: <1288839031-24277-1-git-send-email-llandwerlin@gmail.com>
-	<1288839031-24277-12-git-send-email-llandwerlin@gmail.com>
-	<87hbfw3pb2.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikTS__-Px2HgH9AKX_ybQC1oK=hA+N5KOft9zxz@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 5 Nov 2010 14:34:29 +0100
+Subject: [Buildroot] [git commit master 1/1] sed: convert to autotargets
+Message-ID: <20101105133442.1C10A8DBB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Nov 5, 2010 at 1:52 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "llandwerlin" == llandwerlin ?<llandwerlin@gmail.com> writes:
->
-> ?llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> ?llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-> ?llandwerlin> ---
-> ?llandwerlin> ?package/directfb/directfb.mk | ? ?2 +-
-> ?llandwerlin> ?1 files changed, 1 insertions(+), 1 deletions(-)
->
-> ?llandwerlin> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-> ?llandwerlin> index e4b6d90..2703677 100644
-> ?llandwerlin> --- a/package/directfb/directfb.mk
-> ?llandwerlin> +++ b/package/directfb/directfb.mk
-> ?llandwerlin> @@ -4,7 +4,7 @@
-> ?llandwerlin> ?#
-> ?llandwerlin> ?#############################################################
-> ?llandwerlin> ?DIRECTFB_VERSION_MAJOR:=1.4
-> ?llandwerlin> -DIRECTFB_VERSION:=1.4.5
-> ?llandwerlin> +DIRECTFB_VERSION:=$(DIRECTFB_VERSION_MAJOR).10
->
-> I'm getting build breakage with:
->
-> libtool: link: /scratch/peko/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
-> ?--sysroot=/scratch/peko/staging -I/scratch/peko/staging/usr/include/freetype2 -
-> O3 -ffast-math -pipe -pipe -Os -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linu
-> x -msoft-float -I/scratch/peko/staging/usr/include -I/scratch/peko/staging/inclu
-> de -D_GNU_SOURCE -finstrument-functions -std=gnu99 -Werror-implicit-function-dec
-> laration -o .libs/dfbinspector dfbinspector.o ?-L/scratch/peko/staging/lib -L/sc
-> ratch/peko/staging/usr/lib ../src/.libs/libdirectfb.so ../lib/fusion/.libs/libfu
-> sion.so ../lib/direct/.libs/libdirect.so -ldl -lpthread -Wl,-rpath -Wl,/usr/lib
-> ../src/.libs/libdirectfb.so: undefined reference to `sqrt'
-> collect2: ld returned 1 exit status
-> make[3]: *** [dfbg] Error 1
->
-> We seem to be dropping -lm.
->
-> Any idea why? If not, then I'll revert the patch as I would like to put
-> out -rc1 this weekend.
->
 
-I issue has been discussed on the directfb mailing list indeed.
-I haven't seen it with glibc...
+commit: http://git.buildroot.net/buildroot/commit/?id=c107a15e92c642ab81737b3faf58345e692feadf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If you're about reverting it, you also have to revert the sawman bump.
-I think I can add a patch to force -lm for now, I will send this patch
-tonight. Can you wait for it ?
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    2 +-
+ package/sed/sed.mk |   83 ++++++---------------------------------------------
+ 2 files changed, 11 insertions(+), 74 deletions(-)
 
-Regards,
-
---
-Lionel Landwerlin
+diff --git a/CHANGES b/CHANGES
+index 1fdca97..7e841aa 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -46,7 +46,7 @@
+ 	openssl, openvpn, oprofile, pango, patch, pcre, php,
+ 	pkg-config, portmap, pppd, pptp-linux, prboom, proftpd, radvd,
+ 	rdesktop, readline, rp-pppoe, ruby, qt, quagga, samba, sawman,
+-	sdl_mixer, sdl_sound, setserial, shared-mime-info, speex,
++	sdl_mixer, sdl_sound, sed, setserial, shared-mime-info, speex,
+ 	sqlite, squashfs, startup-notification, strace, sylpheed,
+ 	sysstat, taglib, tcpdump, thttpd, tiff, tn5250, torsmo, udev,
+ 	udpcast, usbmount, usbutils, vsftpd, vtun, which,
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index d6f53be..1a313eb 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -3,41 +3,11 @@
+ # sed
+ #
+ #############################################################
+-SED_VERSION:=4.2.1
+-SED_SOURCE:=sed-$(SED_VERSION).tar.gz
+-SED_SITE:=$(BR2_GNU_MIRROR)/sed
+-SED_CAT:=$(ZCAT)
+-SED_DIR2:=$(BUILD_DIR)/sed-$(SED_VERSION)
+-SED_BINARY:=sed/sed
+-SED_TARGET_BINARY:=bin/sed
+-ifeq ($(BR2_LARGEFILE),y)
+-SED_CPPFLAGS=-D_FILE_OFFSET_BITS=64
+-endif
++SED_VERSION = 4.2.1
++SED_SOURCE = sed-$(SED_VERSION).tar.gz
++SED_SITE = $(BR2_GNU_MIRROR)/sed
+ 
+-$(DL_DIR)/$(SED_SOURCE):
+-	mkdir -p $(DL_DIR)
+-	$(call DOWNLOAD,$(SED_SITE),$(SED_SOURCE))
+-
+-sed-source: $(DL_DIR)/$(SED_SOURCE)
+-
+-$(SED_DIR2)/.unpacked: $(DL_DIR)/$(SED_SOURCE)
+-	$(SED_CAT) $(DL_DIR)/$(SED_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(SED_DIR2)/build-aux
+-	touch $@
+-
+-$(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
+-	(cd $(SED_DIR2); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CPPFLAGS="$(SED_CPPFLAGS)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
++SED_CONF_OPT = --bindir=/usr/bin \
+ 		--libdir=/lib \
+ 		--libexecdir=/usr/lib \
+ 		--sysconfdir=/etc \
+@@ -45,45 +15,12 @@ $(SED_DIR2)/.configured: $(SED_DIR2)/.unpacked
+ 		--localstatedir=/var \
+ 		--mandir=/usr/share/man \
+ 		--infodir=/usr/share/info \
+-		--include=$(STAGING_DIR)/usr/include \
+-		$(DISABLE_NLS) \
+-	)
+-	touch $@
+-
+-$(SED_DIR2)/$(SED_BINARY): $(SED_DIR2)/.configured
+-	$(MAKE) -C $(SED_DIR2)
+-
+-# This stuff is needed to work around GNU make deficiencies
+-sed-target_binary: $(SED_DIR2)/$(SED_BINARY)
+-	@if [ -L $(TARGET_DIR)/$(SED_TARGET_BINARY) ]; then \
+-		rm -f $(TARGET_DIR)/$(SED_TARGET_BINARY); \
+-	fi
+-
+-	@if [ ! -f $(SED_DIR2)/$(SED_BINARY) \
+-	      -o $(TARGET_DIR)/$(SED_TARGET_BINARY) \
+-	      -ot $(SED_DIR2)/$(SED_BINARY) ]; then \
+-		set -x; \
+-		$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(SED_DIR2) install; \
+-		mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/; \
+-		rm -rf $(TARGET_DIR)/share/locale; \
+-		rm -rf $(TARGET_DIR)/usr/share/doc; \
+-	fi
++		--include=$(STAGING_DIR)/usr/include
+ 
+-sed: sed-target_binary
++define SED_MOVE_BINARY
++	mv $(TARGET_DIR)/usr/bin/sed $(TARGET_DIR)/bin/
++endef
+ 
+-sed-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(SED_DIR2) uninstall
+-	-$(MAKE) -C $(SED_DIR2) clean
++SED_POST_INSTALL_TARGET_HOOKS = SED_MOVE_BINARY
+ 
+-sed-dirclean:
+-	rm -rf $(SED_DIR2)
+-
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_SED),y)
+-TARGETS+=sed
+-endif
++$(eval $(call AUTOTARGETS,package,sed))
+-- 
+1.7.1
