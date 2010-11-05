@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 5 Nov 2010 14:34:29 +0100
-Subject: [Buildroot] [git commit master 1/1] slang: convert to gentargets
-Message-ID: <20101105133442.79A308DBB0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] proftpd: convert to autotargets
+	and bump to 1.3.3b
+Message-ID: <20101105133441.E0C1F8DBB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,132 +10,189 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d925fc790d4c469861df7918bfee63f4043ffbc
+commit: http://git.buildroot.net/buildroot/commit/?id=ed720e8825fb028c262bff5bdf9a85eb41df95ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also, added web site to Config.in
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                |    4 +-
- package/slang/slang.mk |   93 +++++++++++++++++++++++------------------------
- 2 files changed, 48 insertions(+), 49 deletions(-)
+ CHANGES                                            |    2 +-
+ package/proftpd/Config.in                          |    1 +
+ ....3.1-fix-kernel-header-capability-version.patch |   12 ---
+ ...3.3b-fix-kernel-header-capability-version.patch |   12 +++
+ package/proftpd/proftpd.mk                         |   83 +++++---------------
+ 5 files changed, 35 insertions(+), 75 deletions(-)
+ delete mode 100644 package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
+ create mode 100644 package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
 
 diff --git a/CHANGES b/CHANGES
-index 94d13d3..7089561 100644
+index 889f787..1fdca97 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -46,8 +46,8 @@
+@@ -44,7 +44,7 @@
+ 	mtd-utils, mysql_client, nano, nbd, ncftp, neon, netperf,
+ 	netsnmp, ng-spice-rework, ntfsprogs, ntp, openntpd, openssh,
  	openssl, openvpn, oprofile, pango, patch, pcre, php,
- 	pkg-config, portmap, pppd, pptp-linux, prboom, proftpd, radvd,
+-	pkg-config, portmap, pppd, pptp-linux, prboom, radvd,
++	pkg-config, portmap, pppd, pptp-linux, prboom, proftpd, radvd,
  	rdesktop, readline, rp-pppoe, ruby, qt, quagga, samba, sawman,
--	sdl_mixer, sdl_sound, sed, setserial, shared-mime-info, speex,
--	sqlite, squashfs, startup-notification, strace, sylpheed,
-+	sdl_mixer, sdl_sound, sed, setserial, shared-mime-info, slang,
-+	speex, sqlite, squashfs, startup-notification, strace, sylpheed,
- 	sysstat, taglib, tcpdump, thttpd, tiff, tn5250, torsmo, udev,
- 	udpcast, usbmount, usbutils, vsftpd, vtun, which,
- 	wpa_supplicant, xapp_twm, xapp_xbacklight, xapp_xcursorgen,
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 43e910b..f6e6eb1 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -3,51 +3,50 @@
- # slang
+ 	sdl_mixer, sdl_sound, setserial, shared-mime-info, speex,
+ 	sqlite, squashfs, startup-notification, strace, sylpheed,
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index d495643..abdedc9 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -3,3 +3,4 @@ config BR2_PACKAGE_PROFTPD
+ 	help
+ 	  ProFTPD, a highly configurable FTP server.
+ 
++	  http://www.proftpd.org/
+diff --git a/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
+deleted file mode 100644
+index 2899c7f..0000000
+--- a/package/proftpd/proftpd-1.3.1-fix-kernel-header-capability-version.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- a/lib/libcap/libcap.h	2008-04-24 19:46:29.475883739 +0200
+-+++ b/lib/libcap/libcap.h	2008-04-24 19:48:31.116088563 +0200
+-@@ -52,7 +52,8 @@
+-  */
+- 
+- #if !defined(_LINUX_CAPABILITY_VERSION) || \
+--            (_LINUX_CAPABILITY_VERSION != 0x19980330)
+-+           ((_LINUX_CAPABILITY_VERSION != 0x19980330) && \
+-+            (_LINUX_CAPABILITY_VERSION != 0x20071026))
+- 
+- # error "Kernel <linux/capability.h> does not match library"
+- # error "file "libcap.h" --> fix and recompile libcap"
+diff --git a/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
+new file mode 100644
+index 0000000..4401c9a
+--- /dev/null
++++ b/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
+@@ -0,0 +1,12 @@
++--- a/lib/libcap/libcap.h	2008-08-22 19:49:48.000000000 -0700
+++++ b/lib/libcap/libcap.h	2010-10-06 15:31:11.000000000 -0700
++@@ -65,7 +65,8 @@ struct _cap_struct {
++  */
++ 
++ #if !defined(_LINUX_CAPABILITY_VERSION_1) || \
++-            (_LINUX_CAPABILITY_VERSION_1 != 0x19980330)
+++            ((_LINUX_CAPABILITY_VERSION_1 != 0x19980330) && \
+++            (_LINUX_CAPABILITY_VERSION_1 != 0x20071026))
++ 
++ # error "Kernel <linux/capability.h> does not match library"
++ # error "file "libcap.h" --> fix and recompile libcap"
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 11ef1ef..191f611 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -3,83 +3,42 @@
+ # proftpd
  #
  #############################################################
--SLANG_VERSION:=1.4.5
--SLANG_SOURCE=slang-$(SLANG_VERSION)-mini.tar.bz2
--SLANG_CAT:=$(BZCAT)
--SLANG_SITE:=http://www.uclibc.org/
--SLANG_DIR=$(BUILD_DIR)/slang-$(SLANG_VERSION)-mini
+-PROFTPD_VERSION:=1.3.1
+-PROFTPD_SOURCE:=proftpd-$(PROFTPD_VERSION).tar.bz2
+-PROFTPD_SITE:=ftp://ftp.proftpd.org/distrib/source/
+-PROFTPD_DIR:=$(BUILD_DIR)/proftpd-$(PROFTPD_VERSION)
+-PROFTPD_CAT:=$(BZCAT)
+-PROFTPD_BINARY:=proftpd
+-PROFTPD_TARGET_BINARY:=usr/sbin/proftpd
++PROFTPD_VERSION = 1.3.3b
++PROFTPD_SOURCE = proftpd-$(PROFTPD_VERSION).tar.bz2
++PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source/
+ 
+-ifeq ($(BR2_INET_IPV6),y)
+-ENABLE_IPV6:=--enable-ipv6
+-endif
++PROFTPD_CONF_ENV = ac_cv_func_setpgrp_void=yes \
++		ac_cv_func_setgrent_void=yes
+ 
+-$(DL_DIR)/$(PROFTPD_SOURCE):
+-	 $(call DOWNLOAD,$(PROFTPD_SITE),$(PROFTPD_SOURCE))
 -
--$(DL_DIR)/$(SLANG_SOURCE):
--	$(call DOWNLOAD,$(SLANG_SITE),$(SLANG_SOURCE))
+-proftpd-source: $(DL_DIR)/$(PROFTPD_SOURCE)
 -
--$(SLANG_DIR): $(DL_DIR)/$(SLANG_SOURCE)
--	$(SLANG_CAT) $(DL_DIR)/$(SLANG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-$(PROFTPD_DIR)/.unpacked: $(DL_DIR)/$(PROFTPD_SOURCE)
+-	$(PROFTPD_CAT) $(DL_DIR)/$(PROFTPD_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(PROFTPD_DIR)
+-	toolchain/patch-kernel.sh $(PROFTPD_DIR) package/proftpd/ proftpd-$(PROFTPD_VERSION)\*.patch;
+-	touch $@
 -
--$(SLANG_DIR)/libslang.so: $(SLANG_DIR)
--	$(MAKE1) CFLAGS="-Os -g -fPIC $(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(SLANG_DIR)
--
--$(STAGING_DIR)/usr/lib/libslang.so.1: $(SLANG_DIR)/libslang.so
--	cp -dpf $(SLANG_DIR)/libslang.a $(STAGING_DIR)/usr/lib
--	cp -dpf $(SLANG_DIR)/libslang.so $(STAGING_DIR)/usr/lib
--	cp -dpf $(SLANG_DIR)/slang.h $(STAGING_DIR)/usr/include
--	cp -dpf $(SLANG_DIR)/slcurses.h $(STAGING_DIR)/usr/include
-+SLANG_VERSION = 1.4.5
-+SLANG_SOURCE = slang-$(SLANG_VERSION)-mini.tar.bz2
-+SLANG_SITE = http://www.uclibc.org/
-+SLANG_INSTALL_STAGING = YES
-+
-+define SLANG_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+-$(PROFTPD_DIR)/.configured: $(PROFTPD_DIR)/.unpacked
+-	(cd $(PROFTPD_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		ac_cv_func_setpgrp_void=yes \
+-		ac_cv_func_setgrent_void=yes \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
+-		--localstatedir=/var/run \
++PROFTPD_CONF_OPT = --localstatedir=/var/run \
+ 		--disable-static \
+ 		--disable-curses \
+ 		--disable-ncurses \
+ 		--disable-facl \
+ 		--disable-dso \
+ 		--enable-shadow \
+-		$(DISABLE_LARGEFILE) \
+-		$(ENABLE_IPV6) \
+-		--with-gnu-ld \
+-	)
+-	touch $@
++		--with-gnu-ld
+ 
+-$(PROFTPD_DIR)/$(PROFTPD_BINARY): $(PROFTPD_DIR)/.configured
+-	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" \
+-		-C $(PROFTPD_DIR)/lib/libcap _makenames
+-	$(MAKE1) -C $(PROFTPD_DIR)
++define PROFTPD_MAKENAMES
++	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" -C $(@D)/lib/libcap _makenames
 +endef
+ 
+-$(TARGET_DIR)/$(PROFTPD_TARGET_BINARY): $(PROFTPD_DIR)/$(PROFTPD_BINARY)
+-	cp -dpf $(PROFTPD_DIR)/$(PROFTPD_BINARY) \
+-		$(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
++PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
 +
-+define SLANG_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(STAGING_DIR)/usr/lib/libslang.a
-+	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(STAGING_DIR)/usr/lib/libslang.so
-+	$(INSTALL) -D -m 0644 $(@D)/slang.h $(STAGING_DIR)/usr/include/slang.h
-+	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(STAGING_DIR)/usr/include/slcurses.h
- 	(cd $(STAGING_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
--	touch -c $@
++PROFTPD_MAKE=$(MAKE1)
++
++define PROFTPD_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+ 	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
+-		$(INSTALL) -m 0644 -D $(PROFTPD_DIR)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
++		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
+ 	fi
+ 	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d
++endef
+ 
+-proftpd: $(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
 -
--$(TARGET_DIR)/usr/lib/libslang.so.1: $(STAGING_DIR)/usr/lib/libslang.so.1
--	cp -dpf $(STAGING_DIR)/usr/lib/libslang.so* $(TARGET_DIR)/usr/lib/
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libslang.so*
--
--slang: $(STAGING_DIR)/usr/lib/libslang.so.1 $(TARGET_DIR)/usr/lib/libslang.so.1
--
--slang-source: $(DL_DIR)/$(SLANG_SOURCE)
--
--slang-clean:
--	rm -f $(TARGET_DIR)/usr/lib/libslang.so* $(STAGING_DIR)/usr/lib/libslang.a \
--		$(STAGING_DIR)/usr/include/slang.h \
--		$(STAGING_DIR)/usr/include/slcurses.h
--	-$(MAKE) -C $(SLANG_DIR) clean
--
--slang-dirclean:
--	rm -rf $(SLANG_DIR)
+-proftpd-clean:
++define PROFTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/$(PROFTPD_TARGET_BINARY)
+ 	rm -f $(TARGET_DIR)/etc/init.d/S50proftpd
+ 	rm -f $(TARGET_DIR)/etc/proftpd.conf
+-	-$(MAKE) -C $(PROFTPD_DIR) clean
++endef
+ 
+-proftpd-dirclean:
+-	rm -rf $(PROFTPD_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_SLANG),y)
--TARGETS+=slang
+-ifeq ($(BR2_PACKAGE_PROFTPD),y)
+-TARGETS+=proftpd
 -endif
-+endef
-+
-+define SLANG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/libslang.a $(TARGET_DIR)/usr/lib/libslang.a
-+	$(INSTALL) -D -m 0755 $(@D)/libslang.so $(TARGET_DIR)/usr/lib/libslang.so
-+	$(INSTALL) -D -m 0644 $(@D)/slang.h $(TARGET_DIR)/usr/include/slang.h
-+	$(INSTALL) -D -m 0644 $(@D)/slcurses.h $(TARGET_DIR)/usr/include/slcurses.h
-+	(cd $(TARGET_DIR)/usr/lib; ln -fs libslang.so libslang.so.1)
-+endef
-+
-+define SLANG_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/lib/libslang.a
-+	rm -f $(STAGING_DIR)/usr/lib/libslang.so
-+	rm -f $(STAGING_DIR)/usr/lib/libslang.so.1
-+	rm -f $(STAGING_DIR)/usr/include/slang.h
-+	rm -f $(STAGING_DIR)/usr/include/slcurses.h
-+endef
-+
-+define SLANG_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/libslang.a
-+	rm -f $(TARGET_DIR)/usr/lib/libslang.so
-+	rm -f $(TARGET_DIR)/usr/lib/libslang.so.1
-+	rm -f $(TARGET_DIR)/usr/include/slang.h
-+	rm -f $(TARGET_DIR)/usr/include/slcurses.h
-+endef
-+
-+define SLANG_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(call GENTARGETS,package,slang))
++$(eval $(call AUTOTARGETS,package,proftpd))
 -- 
 1.7.1
