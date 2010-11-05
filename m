@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
 Date: Fri, 5 Nov 2010 10:27:37 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: GCC 4.5.x support is
-	now added
-Message-ID: <20101105092846.E02338DBA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] automake: bump to 1.11.1
+Message-ID: <20101105092847.3E51B8DBA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3daa9128191d42b19b6a7cd139d0fbfe138615ce
+commit: http://git.buildroot.net/buildroot/commit/?id=c58027b5185701af50df8ea8f1005d81243598ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |    2 +-
+ package/automake/automake.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 56ab11a..fac7738 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -6,7 +6,7 @@
- 	misc fixes + nconfig and savedefconfig targets.
- 
- 	Toolchain: ARM cortex A9 support, experimental crosstool-ng
--	backend.
-+	backend, GCC 4.5.x.
- 
- 	Fs: Squashfs 4.1 with lzo support
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index a33c9f4..e2ff9b2 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -3,7 +3,7 @@
+ # automake
+ #
+ #############################################################
+-AUTOMAKE_VERSION = 1.10
++AUTOMAKE_VERSION = 1.11.1
+ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.bz2
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
  
 -- 
 1.7.1
