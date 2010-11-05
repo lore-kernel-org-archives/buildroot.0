@@ -1,22 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 05 Nov 2010 10:28:07 +0100
-Subject: [Buildroot] [PATCH 2/2] Bump xinit to 1.2.1
-In-Reply-To: <20101104085839.30286.70400.stgit@localhost.localdomain> (Paulius
-	Zaleckas's message of "Thu, 04 Nov 2010 10:58:39 +0200")
-References: <20101104085833.30286.42896.stgit@localhost.localdomain>
-	<20101104085839.30286.70400.stgit@localhost.localdomain>
-Message-ID: <87lj583ys8.fsf@macbook.be.48ers.dk>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Fri, 5 Nov 2010 10:27:37 +0100
+Subject: [Buildroot] [git commit master 1/1] autotools: fix MESSAGE calls
+Message-ID: <20101105092847.1740D8DBA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paulius" == Paulius Zaleckas <paulius.zaleckas@gmail.com> writes:
 
- Paulius> Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=e1317731c89e0460a836e0772f6204827d7ab02b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.autotools.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 87c3092..b24c2b1 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -138,7 +138,7 @@ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+ # Hook to patch libtool to make it work properly for cross-compilation
+ #
+ define LIBTOOL_PATCH_HOOK
+-	@$(call MESSAGE,"Patching libtool")
++	@$$(call MESSAGE,"Patching libtool")
+ 	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES" \
+ 		-a "$$($$(PKG)_AUTORECONF)" != "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+@@ -162,7 +162,7 @@ endif
+ # Hook to autoreconf the package if needed
+ #
+ define AUTORECONF_HOOK
+-	@$(call MESSAGE,"Autoreconfiguring")
++	@$$(call MESSAGE,"Autoreconfiguring")
+ 	$(Q)cd $$($$(PKG)_SRCDIR) && $(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
+ 	$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
 -- 
-Bye, Peter Korsgaard
+1.7.1
