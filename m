@@ -1,26 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Nov 2010 18:00:24 +0100
-Subject: [Buildroot] [PATCH 12/21] libogg: bump to 1.2.0
-In-Reply-To: <1284864823-18993-13-git-send-email-Martin.Banky@gmail.com>
+Date: Fri, 5 Nov 2010 18:01:56 +0100
+Subject: [Buildroot] [PATCH 13/21] libvorbis: bump to 1.3.1
+In-Reply-To: <1284864823-18993-14-git-send-email-Martin.Banky@gmail.com>
 References: <1284864823-18993-1-git-send-email-Martin.Banky@gmail.com>
-	<1284864823-18993-13-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20101105180024.22884576@surf>
+	<1284864823-18993-14-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20101105180156.321da666@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Sep 2010 19:53:34 -0700
+On Sat, 18 Sep 2010 19:53:35 -0700
 Martin Banky <martin.banky@gmail.com> wrote:
 
->  .../libogg/libogg-1.2.0-buildroot-libtool.patch    |   53 ++++++++++++++++++++
+>  .../libvorbis-1.3.1-buildroot-libtool.patch        |   53 ++++++++++++++++++++
 
-This patch is no longer needed, we now have a better libtool patching
-logic that handles properly libtool 2.2. Moreover, version 1.2.1 has
-been released in the mean time.
-
-Regards,
+Same here, not needed anymore.
 
 Thomas
 -- 
