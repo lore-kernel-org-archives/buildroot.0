@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Nov 2010 17:06:20 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 06 Nov 2010 17:11:37 +0100
 Subject: [Buildroot] Results of random configuration builds
-In-Reply-To: <1289052342.3280.19.camel@coalu.atr>
-References: <20101106134454.7769d258@surf> <1289052342.3280.19.camel@coalu.atr>
-Message-ID: <20101106170620.1134224b@surf>
+In-Reply-To: <AANLkTimvA9Tr_Jd8pB1O0_ZtNu6v+tz5cBzGNhgCnME0@mail.gmail.com>
+	(Will Newton's message of "Sat, 6 Nov 2010 15:07:54 +0000")
+References: <20101106134454.7769d258@surf>
+	<AANLkTimvA9Tr_Jd8pB1O0_ZtNu6v+tz5cBzGNhgCnME0@mail.gmail.com>
+Message-ID: <87sjze1lfq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-On Sat, 06 Nov 2010 15:05:42 +0100
-Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+Hi,
 
-> It seems you've strange toolchains :)
-> It seems the glib breakage is due to a compiler not supporting builtin
-> atomic operations, which is strange for x86.
-> I'm not able to reproduce with internal or external glibc/sh4
-> toolchains.
+ Will> I've noticed ltrace breaks quite frequently because it is built from
+ Will> the debian archive, which doesn't guarantee that the package will
+ Will> remain available forever. I wonder whether we should be building
+ Will> anything from the debian archive directly and build from
+ Will> archive.debian.net instead.
 
-I was building for i386, and on i386 the
-__sync_bool_compare_and_swap_4() is not available.
+The archive is normally preferred, but a missing upstream shouldn't
+matter much with the backup mirror (sources.buildroot.net). Is that
+somehow not working for you?
 
-> Can test with the attached patch to apply on glib2 ?
-
-I confirm it fixes the problem on i386 toolchains. I haven't tested
-with my sh4 toolchain, but since the problem is the same, I suspect it
-also fixed the problem.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
