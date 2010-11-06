@@ -1,44 +1,54 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sat, 06 Nov 2010 17:44:27 +0100
-Subject: [Buildroot] Results of random configuration builds
-In-Reply-To: <20101106170620.1134224b@surf>
-References: <20101106134454.7769d258@surf>
-	<1289052342.3280.19.camel@coalu.atr>  <20101106170620.1134224b@surf>
-Message-ID: <1289061867.3280.21.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  6 Nov 2010 18:32:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 2773] New: squid with openssl support needs
+	openssl on the host
+Message-ID: <bug-2773-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le samedi 06 novembre 2010 ? 17:06 +0100, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sat, 06 Nov 2010 15:05:42 +0100
-> Lionel Landwerlin <llandwerlin@gmail.com> wrote:
-> 
-> > It seems you've strange toolchains :)
-> > It seems the glib breakage is due to a compiler not supporting builtin
-> > atomic operations, which is strange for x86.
-> > I'm not able to reproduce with internal or external glibc/sh4
-> > toolchains.
-> 
-> I was building for i386, and on i386 the
-> __sync_bool_compare_and_swap_4() is not available.
-> 
-> > Can test with the attached patch to apply on glib2 ?
-> 
-> I confirm it fixes the problem on i386 toolchains. I haven't tested
-> with my sh4 toolchain, but since the problem is the same, I suspect it
-> also fixed the problem.
-> 
-> Thanks!
+https://bugs.busybox.net/show_bug.cgi?id=2773
 
-I just found it has been reported on the glib bugzilla :
+           Summary: squid with openssl support needs openssl on the host
+           Product: buildroot
+           Version: 2010.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: gustavo at zacarias.com.ar
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-https://bugzilla.gnome.org/show_bug.cgi?id=631353
 
-Regards,
+When squid is compiled with OpenSSL support, openssl for the target is
+correctly build before building squid. However, squid also builds a cf_gen tool
+for the host, but this fails since OpenSSL for the host isn't build. So we
+should add support in the OpenSSL package to build openssl for the host, and
+add host-openssl as a dependency of squid.
 
---
-Lionel Landwerlin
+Here is the relevant part of the build log:
+
+
+/usr/bin/g++ -o cf_gen ./cf_gen.cc \
+                ../lib/util.c ../lib/assert.c \
+                -DNDEBUG -DBUILD_HOST_TOOL -I. -I. -I../include -I../include
+-I../lib/libTrie/include 
+In file included from ./squid.h:354,
+                 from ./cf_gen.cc:51:
+./ssl_support.h:40:25: error: openssl/ssl.h: No such file or directory
+./ssl_support.h:43:25: error: openssl/err.h: No such file or directory
+./ssl_support.h:46:28: error: openssl/engine.h: No such file or directory
+
+To reproduce the problem, uninstall any OpenSSL development files from your
+host machine, and then build squid with openssl support in Buildroot.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
