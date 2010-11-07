@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 7 Nov 2010 19:40:21 +0100
-Subject: [Buildroot] [git commit master 1/1] Makefile: move target-{finalize,
-	purgelocales} after bootloader/linux step
-Message-ID: <20101107184106.10A618DC00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] mpc: fix make dependencies
+Message-ID: <20101107184106.43EC28DC00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64d8e9a0c1e6fffb0085c65b3879a2e327649d7f
+commit: http://git.buildroot.net/buildroot/commit/?id=24c9f8ca706e57dc3ccfd908c54961fb67bd3854
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #2731
-
-Bootloader and Linux kernel steps can add content to the rootfs, so ensure
-the cleanup / postprocess steps are moved after those.
+So the build target isn't always considered out of date.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES  |    1 +
- Makefile |    7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/mpc/mpc.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 1be748b..88e061c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -77,6 +77,7 @@
- 	#2563: [PATCH] cairo: Expose the configure option to disable some...
- 	#2581: libmms: Update to 0.6, and patch to work on architectures...
- 	#2707: Can't compile linux kernel using buildroot + crosstool-ng
-+	#2731: Build order
- 	#2767: Build for lsof broken in buildroot-2010.08
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index 4a65842..41c0ffa 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
+@@ -11,7 +11,7 @@ MPC_DIR:=$(TOOLCHAIN_DIR)/mpc-$(MPC_VERSION)
+ MPC_TARGET_DIR:=$(BUILD_DIR)/mpc-$(MPC_VERSION)
+ MPC_BINARY:=libmpc$(LIBTGTEXT)
+ MPC_HOST_BINARY:=libmpc$(HOST_LIBEXT)
+-MPC_LIBVERSION:=1.0.0
++MPC_LIBVERSION:=2.0.0
  
- 2010.08: Released August 31th, 2010:
-diff --git a/Makefile b/Makefile
-index 18ca8b3..1469e7b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -305,15 +305,16 @@ endif
+ $(DL_DIR)/$(MPC_SOURCE):
+ 	 $(call DOWNLOAD,$(MPC_SITE),$(MPC_SOURCE))
+@@ -43,15 +43,15 @@ $(MPC_TARGET_DIR)/.configured: $(MPC_DIR)/.unpacked
+ 	)
+ 	touch $@
  
- include package/*/*.mk
+-$(MPC_TARGET_DIR)/.libs/$(MPC_BINARY): $(MPC_TARGET_DIR)/.configured
++$(MPC_TARGET_DIR)/src/.libs/$(MPC_BINARY): $(MPC_TARGET_DIR)/.configured
+ 	#$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(MPC_TARGET_DIR)
+ 	$(MAKE) -C $(MPC_TARGET_DIR)
  
-+include boot/common.mk
-+include target/Makefile.in
-+include linux/linux.mk
-+
- TARGETS+=target-finalize
+-$(STAGING_DIR)/usr/lib/$(MPC_BINARY): $(MPC_TARGET_DIR)/.libs/$(MPC_BINARY)
++$(STAGING_DIR)/usr/lib/$(MPC_BINARY): $(MPC_TARGET_DIR)/src/.libs/$(MPC_BINARY)
+ 	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(MPC_TARGET_DIR) install
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(STAGING_DIR)/usr/lib/libmpc$(LIBTGTEXT)*
  
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- TARGETS+=target-purgelocales
- endif
- 
--include boot/common.mk
--include target/Makefile.in
--include linux/linux.mk
- include fs/common.mk
- 
- TARGETS+=erase-fakeroots
+-$(TARGET_DIR)/usr/lib/libmpc.so $(TARGET_DIR)/usr/lib/libmpc.so.$(MPC_LIBVERSION) $(TARGET_DIR)/usr/lib/libmpc.a: $(STAGING_DIR)/usr/lib/$(MPC_BINARY)
++$(TARGET_DIR)/usr/lib/libmpc.so $(TARGET_DIR)/usr/lib/libmpc.so.$(MPC_LIBVERSION): $(STAGING_DIR)/usr/lib/$(MPC_BINARY)
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libmpc$(LIBTGTEXT)* $(TARGET_DIR)/usr/lib/
+ ifeq ($(BR2_PACKAGE_LIBMPC_HEADERS),y)
+ 	test -d $(TARGET_DIR)/usr/include || mkdir -p $(TARGET_DIR)/usr/include
 -- 
 1.7.1
