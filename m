@@ -1,27 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 7 Nov 2010 17:15:11 +0100
-Subject: [Buildroot] [git commit master 1/1] directfb: rename ppc patch so
-	it still gets applied
-Message-ID: <20101107161539.0ECD68A627@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Nov 2010 19:28:10 +0100
+Subject: [Buildroot] buildroot and sh4
+In-Reply-To: <297538.71443.qm@web29501.mail.ird.yahoo.com>
+References: <212181.52672.qm@web23104.mail.ird.yahoo.com>
+	<297538.71443.qm@web29501.mail.ird.yahoo.com>
+Message-ID: <20101107192810.2643ce33@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Philippe,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c9f118e5db8d5c524137fca0375a28f36d44825
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 27 Jul 2010 22:16:11 +0000 (GMT)
+Philippe Reynes <tremyfr@yahoo.fr> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...patch => directfb-1.4.10-ppc-compile-fix.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
- rename package/directfb/{directfb--ppc-compile-fix.patch => directfb-1.4.10-ppc-compile-fix.patch} (100%)
+> I've done a new version of the sh4 patch, you could find it her: 
+> http://ryu.zarb.org/~trem/buildroot/0001-Add-a-qemu-device-target-sh4-r2d.patch
+> 
+> I've added a sh4_defconfig in the config directory as asked by Thomas.
 
-diff --git a/package/directfb/directfb--ppc-compile-fix.patch b/package/directfb/directfb-1.4.10-ppc-compile-fix.patch
-similarity index 100%
-rename from package/directfb/directfb--ppc-compile-fix.patch
-rename to package/directfb/directfb-1.4.10-ppc-compile-fix.patch
+Since I'm almost at the end of the cleanup of the board stuff, I wanted
+to merge your work to add support for a Qemu/SH4 target. Unfortunately,
+the URL above now returns a 404. Do you have this patch still available
+somewhere ?
+
+Thanks!
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
