@@ -1,29 +1,27 @@
-From: Odd Arild Olsen <oao@oao.no>
-Date: Sun, 7 Nov 2010 11:49:47 +0100
-Subject: [Buildroot] running tools on build host?
-Message-ID: <201011071149.48457.oao@oao.no>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 7 Nov 2010 17:15:11 +0100
+Subject: [Buildroot] [git commit master 1/1] directfb: rename ppc patch so
+	it still gets applied
+Message-ID: <20101107161539.0ECD68A627@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have built the gcc/uclibc toolchain and got the files installed in a 
-/usr/local directory. 
 
-I develop for an embedded i386 machine and need uClibc for that.
+commit: http://git.buildroot.net/buildroot/commit/?id=4c9f118e5db8d5c524137fca0375a28f36d44825
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I also wish to execute the compiled programs on the build machine during 
-development. But I have not found any combination of options and environment 
-variables that let me run the program with dynamic linking. The linker always 
-goes to the /lib directory and gets confused by libc6 stuff.   
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...patch => directfb-1.4.10-ppc-compile-fix.patch} |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
+ rename package/directfb/{directfb--ppc-compile-fix.patch => directfb-1.4.10-ppc-compile-fix.patch} (100%)
 
-I can compile and run a statically linked program
-
-And I can compile the program and then copy the executable to the root image, 
-chroot and run it
-
-Are there any way I can set this up so I can run my programs on the build host 
-without copying the toolchain librariess to /lib
-
-oao
+diff --git a/package/directfb/directfb--ppc-compile-fix.patch b/package/directfb/directfb-1.4.10-ppc-compile-fix.patch
+similarity index 100%
+rename from package/directfb/directfb--ppc-compile-fix.patch
+rename to package/directfb/directfb-1.4.10-ppc-compile-fix.patch
+-- 
+1.7.1
