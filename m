@@ -1,18 +1,22 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun,  7 Nov 2010 21:52:13 +0100
-Subject: [Buildroot] [PATCH] directfb: Fix missing -lm flag again
-Message-ID: <1289163133-8637-1-git-send-email-llandwerlin@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 7 Nov 2010 22:04:35 +0100
+Subject: [Buildroot] [git commit master 1/1] directfb: Fix missing -lm flag
+	again
+Message-ID: <20101107214207.D65018DBCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+
+commit: http://git.buildroot.net/buildroot/commit/?id=92171012410b436de66f3c56c8362142c4e7e93e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 (aka fix the fix)
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  ...directfb-1.4.10-add-missing-lm-flag-patch.patch |   86 ++++++++++----------
  1 files changed, 42 insertions(+), 44 deletions(-)
@@ -116,4 +120,4 @@ index 22f91e3..b07f0c5 100644
 +1.7.2.3
  
 -- 
-1.7.2.3
+1.7.1
