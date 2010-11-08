@@ -1,31 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  8 Nov 2010 17:07:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 2773] squid with openssl support needs openssl on
-	the host
-In-Reply-To: <bug-2773-163@https.bugs.busybox.net/>
-References: <bug-2773-163@https.bugs.busybox.net/>
-Message-ID: <20101108170733.4E2318DC49@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 08 Nov 2010 14:09:51 -0300
+Subject: [Buildroot] [pull request] uclibc snapshot config, midori, webkit,
+	bash, squid
+Message-ID: <4CD82EDF.3090808@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2773
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+uclibc snapshot config: avoid stalling and package breakage
+midori: bump and fix with directfb only
+webkit: fix with directfb only
+bash: build fix and update to patchlevel 9
+squid: bump to 3.1.9 (closes bug #2773).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Fix/bump in my repo
-http://repo.or.cz/w/buildroot-gz.git/commitdiff/e79f9914b49eecf523ce469cfe146cde99f1097d
-No need for host-openssl now.
-Give it a spin.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: request-pull.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101108/de5cffa7/attachment.txt>
