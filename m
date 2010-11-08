@@ -1,69 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Nov 2010 10:48:26 +0100
-Subject: [Buildroot] Buildroot 2010.11-rc1 released
-Message-ID: <87tyjsywlx.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 8 Nov 2010 10:52:28 +0100
+Subject: [Buildroot] [git commit master 1/1] docs/news.html: announce
+	2010.11-rc1
+Message-ID: <20101108095245.070EA8DC03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Buildroot 2010.11-rc1 is released - Go download it at:
+commit: http://git.buildroot.net/buildroot/commit/?id=871a302df17329f4b64b8ba36bc2be1c935e7d72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://buildroot.net/downloads/buildroot-2010.11-rc1.tar.gz
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-or
-
-http://buildroot.net/downloads/buildroot-2010.11-rc1.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2010.08..
-   138  Peter Korsgaard
-   104  Thomas Petazzoni
-    37  Martin Banky
-    33  Gustavo Zacarias
-    15  Lionel Landwerlin
-    15  Yann E. MORIN
-     8  Maxime Petazzoni
-     8  Paulius Zaleckas
-     3  Chih-Min Chao
-     2  Mike Frysinger
-     2  Yegor Yefremov
-     1  Andy Gibbs
-     1  Felipe Contreras
-     1  Marcus Osdoba
-     1  Paul Burton
-     1  Paul Jones
-
-And especially thanks to Martin Banky for lots of AUTOTARGET/GENTARGET
-conversions. We're now only missing around 50 packages. This
-conversion isn't only important to ensure package consistency and ease
-maintenance, but it is also an enabled for new features like package
-handling as discussed during the recent Buildroot developer day in
-Cambridge, UK.
-
-Of noteworthy new features we have:
- - Updated kconfig infrastructure with 'nconfig' and 'savedefconfig'
-   support
- - Experimental crosstool-ng toolchain backend and GCC 4.5.x support
- - Generalized download handling and GIT/SVN support
-
-Also notice that we've removed Alpha, Cris, IA64 and Sparc64
-architecture support as announched in the 2010.08 release notes.
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc1
-
-Enjoy!
-
+diff --git a/docs/news.html b/docs/news.html
+index 43beac8..fda9c2b 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -6,6 +6,20 @@
+ 
+ <ul>
+ 
++  <li><b>8 November 2010 -- 2010.11-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc1">CHANGES</a>
++    file for details, and read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2010-November/038645.html">announcement</a>.
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.11-rc1.tar.bz2">2010.11-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>28 September 2010 - Buildroot Developer Day</b>
+ 
+     <p>A <i>Buildroot Developer Day</i> will take place on
 -- 
-Bye, Peter Korsgaard
+1.7.1
