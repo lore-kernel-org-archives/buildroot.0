@@ -1,33 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Nov 2010 18:40:59 +0100
-Subject: [Buildroot] What is procedure for building custom Linux-2.6.36
- from BuildRoot?
-In-Reply-To: <AANLkTin_UbOpJG-j9tK5s13M-2D3o-Ncy2NTkX-MnDmJ@mail.gmail.com>
-References: <20101108163354.35840@gmx.com>
-	<AANLkTin_UbOpJG-j9tK5s13M-2D3o-Ncy2NTkX-MnDmJ@mail.gmail.com>
-Message-ID: <20101109184059.0930340e@surf>
+Date: Tue, 9 Nov 2010 18:43:10 +0100
+Subject: [Buildroot] Buildroot creates broken jffs2 image
+In-Reply-To: <AANLkTi=zp_NcMLOBTK5v+Hc=ryLOwT5YuNg9TXrrtdu=@mail.gmail.com>
+References: <AANLkTi=zp_NcMLOBTK5v+Hc=ryLOwT5YuNg9TXrrtdu=@mail.gmail.com>
+Message-ID: <20101109184310.257314b0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 9 Nov 2010 17:45:40 +0100
-Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+Hello,
 
-> From the buildroot configuration tool, in the kernel submenu, you can
-> select a "custom tarball" kernel (which might be a 2.6.36 in your
-> case) and also a "custom config file".
+On Tue, 9 Nov 2010 16:25:23 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-And to adjust the kernel configuration, you can do:
+> 3) look at the build log and retrieve the mkfs.jffs2 command that
+> buildroot used:
+> echo
+> "	/home/bjornfor/forks/buildroot-skipper/output/host/usr/sbin/mkfs.jffs2
+> -e 0x20000 -p -l -s 0x800 -n
+> -d /home/bjornfor/forks/buildroot-skipper/output/target
+> -o /home/bjornfor/forks/buildroot-skipper/output/images/rootfs.jffs2"
+> >> /home/bjornfor/forks/buildroot-skipper/output/build/_fakeroot.fs
+> 
+> 4) issue the command with *host* mkfs.jffs2 instead (using the exact
+> same arguments):
+> mkfs.jffs2 -e 0x20000 -p -l -s 0x800 -n -d
+> /home/bjornfor/forks/buildroot-skipper/output/target -o
+> /home/bjornfor/forks/buildroot-skipper/output/images/rootfs.jffs2.v2
+> 
+> 5) flash new jffs2 image and mount. This time with *no errors*.
+> 
+> Any ideas on why this is happening?
 
- make linux26-menuconfig
+Not sure, but steps 3) and steps 4) are not identical. In step 3),
+mkfs.jffs2 is called by fakeroot, which first creates the device files.
+In step 4), you don't have anything creating the device files.
 
-or
+Could you try doing step 4 (i.e calling mkfs.jffs2 directly), but by
+calling the mkfs.jffs2 built by Buildroot (in $(HOST_DIR)) ?
 
- make linux26-xconfig
-
-Regards,
+Thanks,
 
 Thomas
 -- 
