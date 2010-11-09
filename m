@@ -1,24 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 09 Nov 2010 13:43:05 -0300
-Subject: [Buildroot] ping: Sparc Leon patches
-In-Reply-To: <4CD80E7E.9020708@gaisler.com>
-References: <4CD80E7E.9020708@gaisler.com>
-Message-ID: <4CD97A19.4020900@zacarias.com.ar>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Tue, 9 Nov 2010 17:45:40 +0100
+Subject: [Buildroot] What is procedure for building custom Linux-2.6.36
+ from BuildRoot?
+In-Reply-To: <20101108163354.35840@gmx.com>
+References: <20101108163354.35840@gmx.com>
+Message-ID: <AANLkTin_UbOpJG-j9tK5s13M-2D3o-Ncy2NTkX-MnDmJ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/10 11:51, Konrad Eisele wrote:
+Hello Charles,
 
-> patches follow
+From the buildroot configuration tool, in the kernel submenu, you can
+select a "custom tarball" kernel (which might be a 2.6.36 in your
+case) and also a "custom config file".
 
-Tested and added to my repo so it probably will be in for 2010.11 as
-discussed with Thomas on IRC.
-One problem i've found is that when i build for a v7 target (doesn't
-matter if it's leon or generic) libgomp in gcc seems to fail badly, is
-it known?
-And do you have patches for other versions of gcc like 4.3.x or 4.5.x to
-include in the future?
-Thanks.
+But if you're going to hack on your kernel, it make sense to make a
+separate build.
+
+Regards,
+
+--
+Lionel Landwerlin
+
+On Mon, Nov 8, 2010 at 5:28 PM, Charles Martel <SingerIsland@gmx.com> wrote:
+> I noticed that BuildRoot will build a linux-2.6.36 kernel using default
+> values.? What is the procedure for building a custom build of the Linux
+> kernel?
+>
+> Specifically, BuildRoot builds SPI Drivers as modules (.ko) by default.? I'd
+> like to have the SPI Drivers built-in (Y instead of M) and also have the
+> UserSpace SPIDEV built.
+>
+> Can this be done from BuildRoot or must I rebuild the Linux kernel after
+> building the BuildRoot filesystem?
+>
+> Also, I had to modify the Makefile to not wipe out the Linux .config file
+> when I execute "make clean".? Is there a better way to store the customized
+> values in Linux .config as part of the BuildRoot build configuration?
+>
+> Thanks.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
