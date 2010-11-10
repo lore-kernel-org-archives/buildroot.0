@@ -1,158 +1,81 @@
-From: Darcy Watkins <dwatkins@tranzeo.com>
-Date: Wed, 10 Nov 2010 08:16:47 -0800
-Subject: [Buildroot] Buildroot Patches I Use [7] - Valgrind Upgrade to 3.6.0
-Message-ID: <1289405807.9910.15.camel@tr-pentomino>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Wed, 10 Nov 2010 18:29:25 +0100
+Subject: [Buildroot] Buildroot creates broken jffs2 image
+In-Reply-To: <20101109184310.257314b0@surf>
+References: <AANLkTi=zp_NcMLOBTK5v+Hc=ryLOwT5YuNg9TXrrtdu=@mail.gmail.com>
+	<20101109184310.257314b0@surf>
+Message-ID: <AANLkTik6UkpFMZV1AR_yCAHiCa-LT8vaZXqcWx+EkzpX@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 9 November 2010 18:43, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 9 Nov 2010 16:25:23 +0100
+> Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+>
+>> 3) look at the build log and retrieve the mkfs.jffs2 command that
+>> buildroot used:
+>> echo
+>> " ? ? /home/bjornfor/forks/buildroot-skipper/output/host/usr/sbin/mkfs.jffs2
+>> -e 0x20000 -p -l -s 0x800 -n
+>> -d /home/bjornfor/forks/buildroot-skipper/output/target
+>> -o /home/bjornfor/forks/buildroot-skipper/output/images/rootfs.jffs2"
+>> >> /home/bjornfor/forks/buildroot-skipper/output/build/_fakeroot.fs
+>>
+>> 4) issue the command with *host* mkfs.jffs2 instead (using the exact
+>> same arguments):
+>> mkfs.jffs2 -e 0x20000 -p -l -s 0x800 -n -d
+>> /home/bjornfor/forks/buildroot-skipper/output/target -o
+>> /home/bjornfor/forks/buildroot-skipper/output/images/rootfs.jffs2.v2
+>>
+>> 5) flash new jffs2 image and mount. This time with *no errors*.
+>>
+>> Any ideas on why this is happening?
+>
+> Not sure, but steps 3) and steps 4) are not identical. In step 3),
+> mkfs.jffs2 is called by fakeroot, which first creates the device files.
+> In step 4), you don't have anything creating the device files.
 
-This patch upgrades to valgrind 3.6.0 and switches to the autotools
-macros that simplify the makefile maintenance.  Only I have one problem.
-I only needed to build valgrind so that something else would complete.
-I don't know much what it is used for or how to use it let alone test
-it.
+True.
 
-Is there anyone interested in taking this on to test drive it?
+> Could you try doing step 4 (i.e calling mkfs.jffs2 directly), but by
+> calling the mkfs.jffs2 built by Buildroot (in $(HOST_DIR)) ?
 
-The patch and instructions are below, but I would like at least one
-additional "signed-off by" vote of confidence to be added to mine before
-submitting/recommending it be merged into buildroot.
+Yes. What I found is that calling HOST_DIR mkfs.jffs2 directly (and
+not in fakeroot) also created a bad image.
 
-Regards,
+However, I just looked at the BR changelog and found this:
 
-Darcy
+$ git log HEAD..origin/master -- package/mtd/
+commit 90660c282298fdb6b09baefe44845b923d9e077f
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Sat Oct 16 22:20:21 2010 +0200
 
----
+    mtd: bump version
 
-Signed-off by: Darcy Watkins <dwatkins@tranzeo.com>
+    For mkfs.jffs2 bugfix.
 
-1.  Apply the patch below (changes package/valgrind/valgrind.mk)
-2.  Manually remove package/valgrind/valgrind-largefile.patch
-3.  Manually remove package/valgrind/valgrind.patch
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-I didn't include steps 2 and 3 in the patch so I could keep the email
-size manageable.
+commit 823aaef1ce9d68e14ff9ac26f38b74139a77f47b
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Fri Oct 15 10:39:23 2010 +0200
 
+    mtd: fix big endian crc calculation
 
-Index: buildroot-2010.02_x86/package/valgrind/valgrind.mk
-===================================================================
---- buildroot-2010.02_x86.orig/package/valgrind/valgrind.mk
-+++ buildroot-2010.02_x86/package/valgrind/valgrind.mk
-@@ -4,85 +4,39 @@
- #
- #############################################################
- 
--VALGRIND_VERSION=3.2.3
--VALGRIND_SITE:=http://valgrind.org/downloads/
--VALGRIND_DIR:=$(BUILD_DIR)/valgrind-$(VALGRIND_VERSION)
--VALGRIND_SOURCE:=valgrind-$(VALGRIND_VERSION).tar.bz2
--VALGRIND_CAT:=$(BZCAT)
--
--$(DL_DIR)/$(VALGRIND_SOURCE):
--	$(call DOWNLOAD,$(VALGRIND_SITE),$(VALGRIND_SOURCE))
--
--$(VALGRIND_DIR)/.unpacked: $(DL_DIR)/$(VALGRIND_SOURCE)
--	$(VALGRIND_CAT) $(DL_DIR)/$(VALGRIND_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $(VALGRIND_DIR)/.unpacked
--
--$(VALGRIND_DIR)/.patched: $(VALGRIND_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(VALGRIND_DIR) package/valgrind/ valgrind\*.patch
--	touch $(VALGRIND_DIR)/.patched
--
--$(VALGRIND_DIR)/.configured: $(VALGRIND_DIR)/.patched
--	(cd $(VALGRIND_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CC="$(TARGET_CC) $(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include" \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		$(DISABLE_NLS) \
--		--without-uiout --disable-valgrindmi \
--		--disable-tui --disable-valgrindtk \
--		--without-x --without-included-gettext \
--		--disable-tls \
--	)
--	touch $(VALGRIND_DIR)/.configured
--
--$(VALGRIND_DIR)/coregrind/valgrind: $(VALGRIND_DIR)/.configured
--	$(MAKE) -C $(VALGRIND_DIR)
--	touch -c $@
--
--$(TARGET_DIR)/usr/bin/valgrind: $(VALGRIND_DIR)/coregrind/valgrind
--	$(MAKE) \
--	    prefix=$(TARGET_DIR)/usr \
--	    exec_prefix=$(TARGET_DIR)/usr \
--	    bindir=$(TARGET_DIR)/usr/bin \
--	    sbindir=$(TARGET_DIR)/usr/sbin \
--	    libexecdir=$(TARGET_DIR)/usr/lib \
--	    datadir=$(TARGET_DIR)/usr/share \
--	    sysconfdir=$(TARGET_DIR)/etc \
--	    sharedstatedir=$(TARGET_DIR)/usr/com \
--	    localstatedir=$(TARGET_DIR)/var \
--	    libdir=$(TARGET_DIR)/usr/lib \
--	    infodir=$(TARGET_DIR)/usr/info \
--	    mandir=$(TARGET_DIR)/usr/man \
--	    includedir=$(TARGET_DIR)/usr/include \
--	    -C $(VALGRIND_DIR) install
-+VALGRIND_VERSION = 3.6.0
-+VALGRIND_SITE = http://valgrind.org/downloads/
-+VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
-+
-+VALGRIND_CONF_ENV = \
-+	ac_cv_file__proc_self_fd=yes \
-+	ac_cv_file__proc_self_exe=yes \
-+	ac_cv_file__proc_self_maps=yes
-+
-+VALGRIND_CONF_OPT = \
-+	--without-uiout \
-+	--disable-valgrindmi \
-+	--disable-tui \
-+	--disable-valgrindtk \
-+	--without-x \
-+	--without-included-gettext \
-+	--disable-tls
-+
-+define VALGRIND_EXTRA_INSTALL
- 	mv $(TARGET_DIR)/usr/bin/valgrind $(TARGET_DIR)/usr/bin/valgrind.bin
- 	cp package/valgrind/uclibc.supp $(TARGET_DIR)/usr/lib/valgrind/
- 	cp package/valgrind/valgrind.sh $(TARGET_DIR)/usr/bin/valgrind
- 	chmod a+x $(TARGET_DIR)/usr/bin/valgrind
--	rm -rf $(TARGET_DIR)/usr/share/doc/valgrind
--	touch -c $@
--
--valgrind: $(TARGET_DIR)/usr/bin/valgrind
-+endef
- 
--valgrind-source: $(DL_DIR)/$(VALGRIND_SOURCE)
-+VALGRIND_POST_TARGET_INSTALL_HOOK += VALGRIND_EXTRA_INSTALL
- 
--valgrind-clean:
--	-$(MAKE) -C $(VALGRIND_DIR) clean
--	-rm -f $(TARGET_DIR)/usr/bin/valgrind*
--	rm -rf $(TARGET_DIR)/usr/lib/valgrind
-+define VALGRIND_EXTRA_UNINSTALL
-+	rm -f $(TARGET_DIR)/usr/bin/valgrind.bin
-+	rm -f $(TARGET_DIR)/usr/bin/valgrind/valgrind.sh
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/uclibc.supp
-+endef
- 
--valgrind-dirclean:
--	rm -rf $(VALGRIND_DIR)
-+VALGRIND_POST_UNINSTALL_TARGET_HOOKS += VALGRIND_EXTRA_UNINSTALL
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_VALGRIND),y)
--TARGETS+=valgrind
--endif
-+$(eval $(call AUTOTARGETS,package,valgrind))
+    Taken from upstream git.
+
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+So I cherry-picked these commits and rebuilt. Now the issue is gone!
+Sweet! But AFAICS, jffs2 is broken for 2010.08 users...
+
+Thanks for your help, Thomas.
+
+Best regards,
+Bj?rn Forsman
