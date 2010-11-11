@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Nov 2010 10:09:43 +0100
-Subject: [Buildroot] Buildroot creates broken jffs2 image
-In-Reply-To: <AANLkTik6UkpFMZV1AR_yCAHiCa-LT8vaZXqcWx+EkzpX@mail.gmail.com>
-References: <AANLkTi=zp_NcMLOBTK5v+Hc=ryLOwT5YuNg9TXrrtdu=@mail.gmail.com>
-	<20101109184310.257314b0@surf>
-	<AANLkTik6UkpFMZV1AR_yCAHiCa-LT8vaZXqcWx+EkzpX@mail.gmail.com>
-Message-ID: <20101111100943.2e2c83a0@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 11 Nov 2010 11:23:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 2797] New: pciutils dependencies on zlib not taken
+	into account
+Message-ID: <bug-2797-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=2797
 
-On Wed, 10 Nov 2010 18:29:25 +0100
-Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+           Summary: pciutils dependencies on zlib not taken into account
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: realloc at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> So I cherry-picked these commits and rebuilt. Now the issue is gone!
-> Sweet! But AFAICS, jffs2 is broken for 2010.08 users...
 
-Ok, good to know. Thanks for digging into this.
+Compilation of pciutils with zlib enabled fails.
+The patch attached fixes this issue.
 
-Concerning 2010.08 users, we don't yet have a process for releasing
-stabilized version of past Buildroot releases. Maybe this will come in
-the future, if someone steps up to do the maintainance.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
