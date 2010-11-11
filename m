@@ -1,121 +1,33 @@
-From: Abhishek Ashtekar <Abhishek.Ashtekar@ubitronix.com>
-Date: Thu, 11 Nov 2010 12:18:39 +0100
-Subject: [Buildroot] Makefile for user applications
-Message-ID: <0C11C5BF0B29FD43A8D0250F711D497F7F6CC9DB5A@ex01-ubitronix.ubitronix.local>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Thu, 11 Nov 2010 16:16:43 +0200
+Subject: [Buildroot] [PATCH] module-init-tools: fix cofigure bug by bumping
+	to 3.12
+Message-ID: <20101111141642.25734.77865.stgit@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+3.11 fails to configure/compile for my host (F14) due to bug
+in ax_enable_builddir.m4
 
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+---
 
+ package/module-init-tools/module-init-tools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I would like to add a precompiled/built application to the Linux 2.6.34.1 running on the at91sam9260ek board.
-
-I have done the following steps
-
-i)  Add  to /package   /package/myapp
-
-ii)  introduce Config.in and myapp.mk and the application binary to the folder
-
-iii) added   "source /package/ myapp/ Config.in"  line to the /package/Config.in and also select it through menuconfig
-
-
-
- Questions:-
-
-
-
- Actually I just want the makefile to copy the binary from the package to /targert/usr/bin
-
- However it goes to download myapp 1.0 Downloading ....... To a sourceforge.net  link and stops.
-
- What exactly do I need to mention in the make file ?
-
-
-
- Pasted below ....
-
-
-
-#############################################################
-
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index 5dfdaad..27d0159 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -3,7 +3,7 @@
+ # module-init-tools
  #
-
- # myapp
-
- #
-
  #############################################################
-
- MYAPP_VERSION = 1.0
-
- MYAPP _BINARY = myapp
-
- MYAPP _TARGET_BINARY =usr/bin/myapp
-
-
-
- MYAPP_INSTALL_TARGET = YES
-
-
-
- define MYAPP_INSTALL_TARGET_CMDS
-
-            $(INSTALL) -D package/myapp/myapp  $(TARGET_DIR)/usr/bin/
-
- endef
-
-
-
- define MYAPP_CLEAN_CMDS
-
-            $(MAKE) -C $(@D) clean
-
-            rm -f $(TARGET_DIR)/usr/bin
-
- endef
-
-
-
- $(eval $(call GENTARGETS,package,myapp))
-
- #############################################################
-
-
-
-Thanks a lot.
-
-
-
-Regards,
-
-Abhi
-
-
-
-
-
-
-
-
-
-__________ Hinweis von ESET NOD32 Antivirus, Signaturdatenbank-Version 5609 (20101111) __________
-
-E-Mail wurde gepr?ft mit ESET NOD32 Antivirus.
-
-http://www.eset.com
-
-
-
-__________ Hinweis von ESET NOD32 Antivirus, Signaturdatenbank-Version 5610 (20101111) __________
-
-E-Mail wurde gepr?ft mit ESET NOD32 Antivirus.
-
-http://www.eset.com
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101111/a0df8aa0/attachment.html>
+-MODULE_INIT_TOOLS_VERSION=3.11
++MODULE_INIT_TOOLS_VERSION=3.12
+ MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+ MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
