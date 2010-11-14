@@ -1,42 +1,27 @@
-From: trem <tremyfr@yahoo.fr>
-Date: Sun, 14 Nov 2010 23:09:03 +0100
-Subject: [Buildroot] buildroot and sh4
-In-Reply-To: <AB12B32E73474741A2C5361C433A44DE024DB430@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-References: <212181.52672.qm@web23104.mail.ird.yahoo.com><297538.71443.qm@web29501.mail.ird.yahoo.com>
-	<20101107192810.2643ce33@surf>
-	<AB12B32E73474741A2C5361C433A44DE024DB430@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
-Message-ID: <4CE05DFF.9050906@yahoo.fr>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Sun, 14 Nov 2010 23:48:30 +0100
+Subject: [Buildroot] linux-fusion compiling error
+In-Reply-To: <655560.19956.qm@web111114.mail.gq1.yahoo.com>
+References: <655560.19956.qm@web111114.mail.gq1.yahoo.com>
+Message-ID: <1289774910.28282.0.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/2010 03:11 PM, Phil Edworthy wrote:
-> Hi Thomas,
->
->    
->> On Tue, 27 Jul 2010 22:16:11 +0000 (GMT)
->> Philippe Reynes<tremyfr@yahoo.fr>  wrote:
->>
->>      
->>> I've done a new version of the sh4 patch, you could find it her:
->>> http://ryu.zarb.org/~trem/buildroot/0001-Add-a-qemu-device-target-sh4-
->>>        
->> r2d.patch
->>      
-> That url works fine for me, though I haven't tried the patch itself.
->
-> Thanks
-> Phil
->    
-Hi all
+Le dimanche 14 novembre 2010 ? 11:13 -0800, Justin Mark a ?crit :
+> Hi,
+> 
+> After I turned on "linux-fusion", I got the an error:
+> "...buildroot/output/build/linux-fusion-8.1.1/linux/drivers/char/fusion/fusiondev.c:1110:
+> 
+> error: unknown field 'ioctl' specified in initializer"
+> Any idea?
+> 
+> BTW, any plan to bump it up to linux-fusion-8.1.2?
+> 
+> Many thanks,
+> 
 
-I've done a new version of the patch based on branch boards-cleanup
-of git://git.busybox.net/~tpetazzoni/git/buildroot
-
-This new patch could be find here :
-http://ryu.zarb.org/~trem/buildroot/0002-Add-a-qemu-device-target-sh4-r2d.patch
-
-regards,
-trem
+Git version has been bumped to 8.1.2, could you give it a try ?
