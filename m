@@ -1,27 +1,25 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Sun, 14 Nov 2010 23:48:30 +0100
-Subject: [Buildroot] linux-fusion compiling error
-In-Reply-To: <655560.19956.qm@web111114.mail.gq1.yahoo.com>
-References: <655560.19956.qm@web111114.mail.gq1.yahoo.com>
-Message-ID: <1289774910.28282.0.camel@coalu.atr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 14 Nov 2010 22:52:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 2809] failed to compile libglib2
+In-Reply-To: <bug-2809-163@https.bugs.busybox.net/>
+References: <bug-2809-163@https.bugs.busybox.net/>
+Message-ID: <20101114225257.E77CD8DEBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dimanche 14 novembre 2010 ? 11:13 -0800, Justin Mark a ?crit :
-> Hi,
-> 
-> After I turned on "linux-fusion", I got the an error:
-> "...buildroot/output/build/linux-fusion-8.1.1/linux/drivers/char/fusion/fusiondev.c:1110:
-> 
-> error: unknown field 'ioctl' specified in initializer"
-> Any idea?
-> 
-> BTW, any plan to bump it up to linux-fusion-8.1.2?
-> 
-> Many thanks,
-> 
+https://bugs.busybox.net/show_bug.cgi?id=2809
 
-Git version has been bumped to 8.1.2, could you give it a try ?
+--- Comment #1 from Lionel Landwerlin <llandwerlin@gmail.com>  ---
+It should be fixed in git :
+
+http://git.buildroot.org/buildroot/commit/?id=6c01ef20ee96f770bf7fc0fede90b3861d529015
+
+Do you have this commit in your tree ?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
