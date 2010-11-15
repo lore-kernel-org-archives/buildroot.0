@@ -1,27 +1,47 @@
-From: Konrad Eisele <konrad@gaisler.com>
-Date: Mon, 15 Nov 2010 10:20:42 +0100
-Subject: [Buildroot] ping: Sparc Leon patches
-In-Reply-To: <4CDC42C9.9080303@zacarias.com.ar>
-References: <4CD80E7E.9020708@gaisler.com> <4CD97A19.4020900@zacarias.com.ar>
-	<4CDA5DE9.4030007@gaisler.com> <4CDC42C9.9080303@zacarias.com.ar>
-Message-ID: <4CE0FB6A.8020909@gaisler.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Nov 2010 16:25:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 2821] New: [PATCH] Patch for JavaScriptCore in
+	QtWebKit module.
+Message-ID: <bug-2821-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Yes, the uclibc patch is huge so it's probably pending approval for the
-> list.
-> Has this patch been sent to the uclibc people to include?
+https://bugs.busybox.net/show_bug.cgi?id=2821
 
-I need to send the patch to the uclibc list. didnt have time to do
-so till now. On my todo list now..
--- Greetings Konrad
+           Summary: [PATCH] Patch for JavaScriptCore in QtWebKit module.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: daniel.nystrom at timeterminal.eu
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> All of this is in my repo for the time being so it's still pending
-> Peter's approval to include in the final release.
-> Thanks.
-> 
-> 
+
+Created attachment 2671
+  --> https://bugs.busybox.net/attachment.cgi?id=2671
+Patch for JavaScriptCore in QtWebKit module
+
+Even though the Qt package already contains a JavaScriptCore patch, it will
+only patch the JSC source QtScript.
+
+WebKit does also contain the source of JavaScriptCore which also needs about
+the same patching to compile on uClibc.
+
+Since the two files do look similar, it could diverge anytime so please keep
+these patches separated in two files.
+
+Patch attached.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
