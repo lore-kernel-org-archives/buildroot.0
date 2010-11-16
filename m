@@ -1,59 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Nov 2010 18:50:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 2833] New: Failed to compile webkit without X11
-Message-ID: <bug-2833-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Nov 2010 20:25:37 +0100
+Subject: [Buildroot] running tools on build host?
+In-Reply-To: <201011071149.48457.oao@oao.no>
+References: <201011071149.48457.oao@oao.no>
+Message-ID: <20101116202537.37f4ab2f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2833
+Hello,
 
-           Summary: Failed to compile webkit without X11
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: oilehus at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Sun, 7 Nov 2010 11:49:47 +0100
+Odd Arild Olsen <oao@oao.no> wrote:
 
+> I have built the gcc/uclibc toolchain and got the files installed in a 
+> /usr/local directory. 
+> 
+> I develop for an embedded i386 machine and need uClibc for that.
+> 
+> I also wish to execute the compiled programs on the build machine during 
+> development. But I have not found any combination of options and environment 
+> variables that let me run the program with dynamic linking. The linker always 
+> goes to the /lib directory and gets confused by libc6 stuff.   
+> 
+> I can compile and run a statically linked program
+> 
+> And I can compile the program and then copy the executable to the root image, 
+> chroot and run it
+> 
+> Are there any way I can set this up so I can run my programs on the build host 
+> without copying the toolchain librariess to /lib
 
-If I want to build webkit with gtk+ and directfb, no X11, I got the following
-errors
+This is a bit clunky, but you could try something like :
 
-In file included from WebCore/bridge/npruntime_internal.h:28,
-                 from WebCore/bridge/npruntime.cpp:31:
-WebCore/bridge/npapi.h:105:26: error: X11/Xlib.h: No such file or directory
-WebCore/bridge/npapi.h:106:27: error: X11/Xutil.h: No such file or directory
-In file included from WebCore/bridge/npruntime.cpp:31:
-WebCore/bridge/npruntime_internal.h:33:31: error: X11/Xresource.h: No such file
-or directory
-In file included from WebCore/bridge/npruntime_internal.h:28,
-                 from WebCore/bridge/npruntime.cpp:31:
-WebCore/bridge/npapi.h:273: error: ISO C++ forbids declaration of 'Display'
-with no type
-WebCore/bridge/npapi.h:273: error: expected ';' before '*' token
-WebCore/bridge/npapi.h:274: error: ISO C++ forbids declaration of 'Visual' with
-no type
-WebCore/bridge/npapi.h:274: error: expected ';' before '*' token
-WebCore/bridge/npapi.h:275: error: 'Colormap' does not name a type
-WebCore/bridge/npapi.h:597: error: 'XEvent' does not name a type
-WebCore/bridge/npapi.h:618: error: 'Region' does not name a type
-WebCore/bridge/npapi.h:865: error: 'NPRegion' has not been declared
-In file included from WebCore/bridge/npruntime_internal.h:29,
-                 from WebCore/bridge/npruntime.cpp:31:
-./WebCore/plugins/npfunctions.h:57: error: 'NPRegion' has not been declared
-make[2]: *** [WebCore/bridge/libwebkit_1_0_la-npruntime.lo] Error 1
-make[2]: *** Waiting for unfinished jobs....
+ gcc -o foobar foobar.c \
+	-Wl,--dynamic-linker=/path/to/your/lib/ld-uClibc.so \
+	-Wl,-rpath=/path/to/your/lib \
+	-Wl,-rpath=/path/to/your/usr/lib
 
+I haven't tried, so I don't know if it really works, but it probably
+should. Running your programs inside a chroot is definitely a better
+solution.
+
+Regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
