@@ -1,70 +1,58 @@
-From: Konrad Eisele <konrad@gaisler.com>
-Date: Wed, 10 Nov 2010 09:55:05 +0100
-Subject: [Buildroot] ping: Sparc Leon patches
-In-Reply-To: <4CD97A19.4020900@zacarias.com.ar>
-References: <4CD80E7E.9020708@gaisler.com> <4CD97A19.4020900@zacarias.com.ar>
-Message-ID: <4CDA5DE9.4030007@gaisler.com>
+From: Phil Edworthy <phil.edworthy@renesas.com>
+Date: Tue, 16 Nov 2010 13:28:09 +0000
+Subject: [Buildroot] [PATCH] gst-plugins-good: Add option for v4l2
+Message-ID: <1289914089-13489-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo Zacarias wrote:
-> On 11/08/10 11:51, Konrad Eisele wrote:
-> 
->> patches follow
-> 
-> Tested and added to my repo so it probably will be in for 2010.11 as
-> discussed with Thomas on IRC.
-> One problem i've found is that when i build for a v7 target (doesn't
-> matter if it's leon or generic) libgomp in gcc seems to fail badly, is
-> it known?
 
-Hi, Uclibc disables shared libraries for V7 by default . Its on my todo list
-to remove this constrains. It shouldnt matter weather V7 or V8
-when creating shared librares.
-For v7 targets I in the meantme use:
-BR2_EXTRA_GCC_CONFIG_OPTIONS="--disable-libgomp"
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ package/multimedia/gst-plugins-good/Config.in      |    3 +++
+ .../gst-plugins-good/gst-plugins-good.mk           |    7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-
-> And do you have patches for other versions of gcc like 4.3.x or 4.5.x to
-> include in the future?
-
-Yes. I'll send the gcc patches to the gcc-patch list also. I
-just got permssion by the fsf.
-I'll also put it on my todo list to add  4.3.x and further patches.
-
--- Thanks Konrad
-
-ps. I appended the 4 patches again. The [4/4] patch that adds
-long double gcc intrinscs support (from glibc) to uclibc didnt
-come through. Maybe because it is too big?...
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-config-Add-sparc-leon-processors.-Readd-V7-8-part-of.patch
-Type: text/x-patch
-Size: 2708 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101110/6a66c6e8/attachment-0004.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-toolchain-Add-support-for-with-cpu.patch
-Type: text/x-patch
-Size: 2638 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101110/6a66c6e8/attachment-0005.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0003-gcc-patch-Add-patch-for-4.4.5-to-support-Sparc-leon-.patch
-Type: text/x-patch
-Size: 9367 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101110/6a66c6e8/attachment-0006.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0004-uclibc-patch-add-sparc-long-double-gcc-intrinsics-to.patch
-Type: text/x-patch
-Size: 267209 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101110/6a66c6e8/attachment-0007.bin>
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index 3b37b5e..dd293e9 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -159,6 +159,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M
+ 	bool "y4m"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2
++	bool "v4l2"
++
+ comment "plugins with external dependencies"
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index c44bdff..62d9d47 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -15,7 +15,6 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		--disable-sunaudio \
+ 		--disable-osx_audio \
+ 		--disable-osx_video \
+-		--disable-gst_v4l2 \
+ 		--disable-x \
+ 		--disable-xshm \
+ 		--disable-xvideo \
+@@ -290,6 +289,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-y4m
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-gst_v4l2
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-gst_v4l2
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-annodex
+ GST_PLUGINS_GOOD_DEPENDENCIES += libxml2
+-- 
+1.7.1
