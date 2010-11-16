@@ -1,35 +1,28 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 16 Nov 2010 09:59:20 -0500
-Subject: [Buildroot] [PATCH] linux: strip installed modules
-Message-ID: <1289919560-2280-1-git-send-email-vapier@gentoo.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Nov 2010 16:09:52 +0100
+Subject: [Buildroot] [PATCH] initramfs: fix symlink test
+In-Reply-To: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
+References: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
+Message-ID: <20101116160952.34c62a20@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The installed kernel modules should have useless build cruft stripped out
-of them.  On my system, a default build went from a very unreasonable 30MB
-to a normal 3MB (on disk) and from 14MB to 3MB when compressed due to the
-info stored in the kernel modules alone.
+On Tue, 16 Nov 2010 09:58:46 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- linux/linux.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> We want to see if the symlink exists which means -L, not if the target
+> of the symlink exists.
+> 
+> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 4a6025c..69cab9f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -135,6 +135,8 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
- 			INSTALL_MOD_PATH=$(TARGET_DIR) modules_install ;		\
-+		find $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED) -type f -name "*o" | \
-+			xargs -r $(TARGET_CROSS)strip -R .comment -R .note -g --strip-unneeded ; \
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
- 	fi
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thomas
 -- 
-1.7.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
