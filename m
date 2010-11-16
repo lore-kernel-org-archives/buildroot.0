@@ -1,51 +1,61 @@
-From: Malte Starostik <m-starostik@versanet.de>
-Date: Tue, 16 Nov 2010 16:27:52 +0100
-Subject: [Buildroot] [PATCH] initramfs: fix symlink test
-In-Reply-To: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
-References: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
-Message-ID: <201011161627.52972.m-starostik@versanet.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Nov 2010 16:59:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 2827] New: qt-4.7.0-pthread_getattr_np.patch
+ invalid for qt 4.6.2, 4.6.3, 4.7.0, 4.7.1
+Message-ID: <bug-2827-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Dienstag, 16. November 2010, 15:58:46 schrieb Mike Frysinger:
-> We want to see if the symlink exists which means -L, not if the target
-> of the symlink exists.
-> 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-> ---
->  fs/initramfs/initramfs.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-> index dd6aa94..594cc34 100644
-> --- a/fs/initramfs/initramfs.mk
-> +++ b/fs/initramfs/initramfs.mk
-> @@ -7,7 +7,7 @@
->  #############################################################
-> 
->  define ROOTFS_INITRAMFS_INIT_SYMLINK
-> -	if [ ! -e $(TARGET_DIR)/init ]; then \
-> +	if [ ! -L $(TARGET_DIR)/init ]; then \
->  		ln -s sbin/init $(TARGET_DIR)/init; \
->  	fi
->  endef
-> @@ -20,4 +20,4 @@ endef
-> 
->  ROOTFS_INITRAMFS_POST_TARGETS += linux26-rebuild-with-initramfs
-> 
-> -$(eval $(call ROOTFS_TARGET,initramfs))
-> \ No newline at end of file
-> +$(eval $(call ROOTFS_TARGET,initramfs))
+https://bugs.busybox.net/show_bug.cgi?id=2827
 
-Ack for not testing if the link target exists, but what if $(TARGET_DIR)/init 
-exists but is not a symlink?  My custom skeleton contains an /init shell 
-script? or is that considered unsupported?
-Maybe something along the lines of
-[ ! -e $(TARGET_DIR)/init -a ! -L $(TARGET_DIR)/init ]
-?
+           Summary: qt-4.7.0-pthread_getattr_np.patch invalid for qt
+                    4.6.2, 4.6.3, 4.7.0, 4.7.1
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: laborer2008 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Regards,
-Malte
+
+Subject.
+
+In new Qt releases "pthread_getattr" used in two files, but patch fixed only
+one:
+
+sergey at host15:~/code/qt-everywhere-opensource-src-4.7.1/src$ grep -R
+pthread_getattr_np *
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp://
+pthread_getattr_np or pthread_attr_getstack.
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:        //
+LinuxBase is missing pthread_getattr_np - resolve it once at runtime instead
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:        static int
+(*pthread_getattr_np_ptr)(pthread_t, pthread_attr_t *) = 0;
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:        if
+(!pthread_getattr_np_ptr)
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:            *(void
+**)&pthread_getattr_np_ptr = dlsym(RTLD_DEFAULT, "pthread_getattr_np");
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:        if
+(pthread_getattr_np_ptr)
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:           
+pthread_getattr_np_ptr(thread, &sattr);
+3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:       
+pthread_getattr_np(thread, &sattr);
+3rdparty/webkit/JavaScriptCore/runtime/Collector.cpp:       
+pthread_getattr_np(thread, &sattr);
+
+patch - from buildroot trunk at this time
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
