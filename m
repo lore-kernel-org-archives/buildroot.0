@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Nov 2010 15:43:04 +0100
-Subject: [Buildroot] [PATCH] u-boot: version bump to 2010.09
-In-Reply-To: <1289916977-29852-1-git-send-email-vapier@gentoo.org>
-References: <1289916977-29852-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101116154304.2ecd963c@surf>
+Date: Tue, 16 Nov 2010 15:48:22 +0100
+Subject: [Buildroot] CTRL+C in menuconfig deletes .config
+In-Reply-To: <201011160923.42622.vapier@gentoo.org>
+References: <201011160923.42622.vapier@gentoo.org>
+Message-ID: <20101116154822.56bea50f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 16 Nov 2010 09:16:17 -0500
+On Tue, 16 Nov 2010 09:23:42 -0500
 Mike Frysinger <vapier@gentoo.org> wrote:
 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+> i dont know why the menuconfig target has this logic:
+>     @if ! $(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN); then \
+>         test -f $(CONFIG_DIR)/.config.cmd || rm -f $(CONFIG_DIR)/.config; \
+>     fi
+> 
+> but it causes severely undesirable behavior.  if i do:
+> 	make menuconfig
+> 	<change some things & save>
+> 	make menuconfig
+> 	<change some things but change my mind and hit CTRL+C>
+> 
+> the build system deletes the .config file.
 
-I already had this scheduled for inclusion in 2011.02, at
-http://git.buildroot.net/~tpetazzoni/git/buildroot/commit/?h=for-2010.11/boards-cleanup&id=9887e37546d8d7965248032e9069965048967976
-(yes, the name of the branch mentions 2010.11, but I didn't had the
-time to complete this work before 2010.11-rc1).
+After a quick dig in Buildroot git history, I found the commit that
+introduced this:
 
-So, if Peter is ok with this bump in 2010.11, your patch gets my:
+commit 153b1beaeb02e1d4780428c0387b7003644e402b
+Author: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date:   Fri Jul 27 12:37:30 2007 +0000
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+    - fix building mconf with curses flags
+    - make sure to rm .config when the first 'make menuconfig' was
+      interrupted and thus no .config.cmd was created.
+
+The test "test -f $(CONFIG_DIR)/.config.cmd" is supposed to prevent the
+behaviour you're seeing, but the thing is that this file no longer
+seems to be generated. I haven't had the time to understand why.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101116/a024cf3b/attachment.pgp>
