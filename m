@@ -1,24 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 16 Nov 2010 09:13:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 2821] [PATCH] Patch for JavaScriptCore in QtWebKit
-	module.
-In-Reply-To: <bug-2821-163@https.bugs.busybox.net/>
-References: <bug-2821-163@https.bugs.busybox.net/>
-Message-ID: <20101116091336.6D22C8E0E8@busybox.osuosl.org>
+Date: Tue, 16 Nov 2010 13:16:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 759] Sysstat build broken without libintl
+In-Reply-To: <bug-759-163@https.bugs.busybox.net/>
+References: <bug-759-163@https.bugs.busybox.net/>
+Message-ID: <20101116131601.A3EBD8DE9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2821
+https://bugs.busybox.net/show_bug.cgi?id=759
 
-Daniel Nystr?m <daniel.nystrom@timeterminal.eu> changed:
+--- Comment #10 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Tried the following combinations:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Priority|P5                          |P1
-   Target Milestone|---                         |2010.11
+internal, mipsel target, no toolchain locale: pass
+internal, arm target, no toolchain locale: pass
+internal, mipsel target, toolchain locale: pass
+internal, mipsel target, toolchain locale + libintl enabled: fail
+
+So it fails WITH libintl (package) enabled.
+
+Try this patch:
+http://repo.or.cz/w/buildroot-gz.git/commitdiff/f15bee3f223921f670581bc43486e2957ed712cf
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
