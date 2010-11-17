@@ -1,29 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Nov 2010 23:04:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 2479] host-module-init-tools 3.11 fails to build
-In-Reply-To: <bug-2479-163@https.bugs.busybox.net/>
-References: <bug-2479-163@https.bugs.busybox.net/>
-Message-ID: <20101117230423.CE6F58E997@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 17 Nov 2010 18:55:43 -0500
+Subject: [Buildroot] [PATCH v2] linux: strip installed modules
+In-Reply-To: <87oc9nad27.fsf@macbook.be.48ers.dk>
+References: <87oc9nad27.fsf@macbook.be.48ers.dk>
+Message-ID: <1290038143-17595-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2479
+The installed kernel modules should have useless build cruft stripped out
+of them.  On my system, a default build went from a very unreasonable 30MB
+to a normal 3MB (on disk) and from 14MB to 3MB when compressed due to the
+info stored in the kernel modules alone.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+v2
+	- move to toplevel finalize target
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Makefile |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-This has been fixed by bumping module-init-tools 3.12. See
-http://git.buildroot.net/buildroot/commit/?id=7be90dae8adc8d98b57dc4bc21630d8671523350
-
+diff --git a/Makefile b/Makefile
+index e569a94..0396e37 100644
+--- a/Makefile
++++ b/Makefile
+@@ -403,6 +403,9 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ endif
+ 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
++	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
++		xargs -r $(STRIPCMD) -R .comment -R .note -g --strip-unneeded
++
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	# Mandatory configuration file and auxilliary cache directory
+ 	# for recent versions of ldconfig
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
