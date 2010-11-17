@@ -1,47 +1,72 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 17 Nov 2010 01:46:22 -0500
-Subject: [Buildroot] [PATCH v2] initramfs: fix init symlink creation
-In-Reply-To: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
-References: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1289976382-22357-1-git-send-email-vapier@gentoo.org>
+Date: Wed, 17 Nov 2010 01:47:11 -0500
+Subject: [Buildroot] [PATCH 1/2] busybox: unify duplicated build steps
+Message-ID: <1289976432-22684-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The -e test will dereference the symlink, so if there is no /bin/init,
-we will constantly try to create the symlink.  So rather than error on
-subsequent runs when the link exists, use the force flag to ln.
+This does set a few more vars in some steps that weren't set before, but
+they should be harmless in the contexts in question.  And the resulting
+save in duplication is nice.
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
-v2
-	- drop the -L change and just recreate the symlink for people
-	  who install their own file at /init
+ package/busybox/busybox.mk |   21 ++++++---------------
+ 1 files changed, 6 insertions(+), 15 deletions(-)
 
- fs/initramfs/initramfs.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-index dd6aa94..73122a8 100644
---- a/fs/initramfs/initramfs.mk
-+++ b/fs/initramfs/initramfs.mk
-@@ -8,7 +8,7 @@
- 
- define ROOTFS_INITRAMFS_INIT_SYMLINK
- 	if [ ! -e $(TARGET_DIR)/init ]; then \
--		ln -s sbin/init $(TARGET_DIR)/init; \
-+		ln -sf sbin/init $(TARGET_DIR)/init; \
- 	fi
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b7f4740..5ef1622 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -123,15 +123,13 @@ endef
+ define BUSYBOX_BUILD_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+ 		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
++		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
++		-C $(BUSYBOX_DIR)
  endef
  
-@@ -20,4 +20,4 @@ endef
+ ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
+ define BUSYBOX_INSTALL_BINARY
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) install
++	$(BUSYBOX_BUILD_CMDS) install
+ endef
+ else
+ define BUSYBOX_INSTALL_BINARY
+@@ -145,24 +143,17 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ endef
  
- ROOTFS_INITRAMFS_POST_TARGETS += linux26-rebuild-with-initramfs
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) uninstall
++	$(BUSYBOX_BUILD_CMDS) uninstall
+ endef
  
--$(eval $(call ROOTFS_TARGET,initramfs))
-\ No newline at end of file
-+$(eval $(call ROOTFS_TARGET,initramfs))
+ define BUSYBOX_CLEAN_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) clean
++	$(BUSYBOX_BUILD_CMDS) clean
+ endef
+ 
+ $(eval $(call GENTARGETS,package,busybox))
+ 
+ busybox-menuconfig:	$(BUSYBOX_DIR)/.stamp_extracted
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) ARCH=$(KERNEL_ARCH) \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(BUSYBOX_DIR) menuconfig
++	$(BUSYBOX_BUILD_CMDS) menuconfig
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
 -- 
 1.7.3.2
