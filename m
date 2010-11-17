@@ -1,38 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Nov 2010 10:44:36 +0100
-Subject: [Buildroot] [PATCH] linux: drop LDFLAGS override
-In-Reply-To: <1289985078-3333-1-git-send-email-vapier@gentoo.org>
-References: <1289985078-3333-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101117104436.3114edb1@surf>
+From: Tamamontu M <tamamontu@yahoo.com.au>
+Date: Wed, 17 Nov 2010 03:10:23 -0800 (PST)
+Subject: [Buildroot] arm-linux-ld: BFD 2.16.1 assertion fail
+Message-ID: <35233.58461.qm@web114620.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Nov 2010 04:11:18 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
+Hi Guys,
 
-> The current linux code overrides LDFLAGS that the kernel itself might
-> be setting up.  Looking at the history, there doesn't seem to be any
-> reason for this override.  It was added in ea8b1fa6a60705 without any
-> logic.
-> 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+This is my post to this mailing list. Let me introduce myself, i have a cirrus logic EP9307 based board, with arm-linux-gcc 3.4 compiler. I am new to linux arm environment.  
 
-The code in linux/linux.mk was more or less loosely inspired from the
-old Linux compilation code, which (I checked) already had this LDFLAGS
-thing, from the very beginning (commit
-453dca995ee437b2f6fc3e0a6e4e2b4317346dae from october 2007). Obviously,
-I don't see why passing TARGET_LDFLAGS is needed, so:
+I am trying to compile fat16 file system (originally based on lpc2148 arm-elf-gcc). After porting it to EP9307, this source code uses std libraries, hence in order to use std libraries I added -L/usr/local/arm/3.4/lib -lc  to LDFLAGS in make file.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+when i try to compile i get an unknown error.
+------------------------------------------------------------------------
+make
+make -C main
+make[1]: Entering directory `/home/pritam/spi_boot_example/SDcard_bootloader_fat16/main'
+arm-linux-gcc -MM -O2 -Wall -fPIC -mcpu=arm9tdmi -I../include -nostdlib head.S main.c print.c spi.c sd_raw.c delay.c rootdir.c partition.c fat16.c    1>.depend
+arm-linux-gcc -O2 -Wall -fPIC -mcpu=arm9tdmi -I../include -nostdlib -r -o mainrom.o head.o main.o print.o spi.o sd_raw.o delay.o rootdir.o partition.o fat16.o   
+make[1]: Leaving directory `/home/pritam/spi_boot_example/SDcard_bootloader_fat16/main'
+arm-linux-ld -nostdlib -T SDcard_bootloader_fat16.lnk -Map SDcard_bootloader_fat16.map -L/usr/local/arm/3.4/lib -lc  -o SDcard_bootloader_fat16.elf main/mainrom.o
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+/usr/local/arm/3.4/lib/libc.so: undefined reference to `main'
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5013
+arm-linux-ld: BFD 2.16.1 assertion fail /opt/buildroot/toolchain_build_arm_nofpu/binutils-2.16.1/bfd/elf32-arm.c:5203
+make: *** [SDcard_bootloader] Segmentation fault
+------------------------------------------------------------------------
 
-Regards,
+I have also attached the make file along with this email. It will be a life save if some one can please tell me what this error is, how to fix it.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks
+Tama
+
+
+      
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Makefile
+Type: application/octet-stream
+Size: 746 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101117/9f575fd1/attachment.obj>
