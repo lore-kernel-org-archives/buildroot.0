@@ -1,41 +1,49 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 17 Nov 2010 18:55:43 -0500
-Subject: [Buildroot] [PATCH v2] linux: strip installed modules
-In-Reply-To: <87oc9nad27.fsf@macbook.be.48ers.dk>
-References: <87oc9nad27.fsf@macbook.be.48ers.dk>
-Message-ID: <1290038143-17595-1-git-send-email-vapier@gentoo.org>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Wed, 17 Nov 2010 23:58:04 +0000
+Subject: [Buildroot] Makefile:904: *** missing separator (did you mean
+ TAB instead of 8 spaces?). Stop.
+In-Reply-To: <1290022488.23841.4.camel@segulix>
+References: <1290022488.23841.4.camel@segulix>
+Message-ID: <1290038284.22677.2.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The installed kernel modules should have useless build cruft stripped out
-of them.  On my system, a default build went from a very unreasonable 30MB
-to a normal 3MB (on disk) and from 14MB to 3MB when compressed due to the
-info stored in the kernel modules alone.
+On Wed, 2010-11-17 at 19:34 +0000, Sergio Monteiro Basto wrote:
+> Hi, 
+> I'm getting this error on a bunch of Makefiles of 
+> /build/gstreamer-0.10.25/
+> 
+> --- /home/sergio/hardware/moviecube/buildroot/output/build/gstreamer-0.10.25/docs/gst/Makefile.old      2010-11-17 19:31:33.328320197 +0000
+> +++ /home/sergio/hardware/moviecube/buildroot/output/build/gstreamer-0.10.25/docs/gst/Makefile  2010-11-17 19:31:39.476773540 +0000
+> @@ -901,7 +901,7 @@
+>         -cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
+>         -cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
+>         cd $(distdir) && rm -f $(DISTCLEANFILES)
+> -        -gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+> +       -gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+>  
+>  .PHONY : dist-hook-local docs
+>  # Tell versions [3.59,3.63) of GNU make to not export all variables.
+> 
+> fix the problem, in vim 
+> with set autoindent
+> type: Ji^M^[
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
-v2
-	- move to toplevel finalize target
 
- Makefile |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+This happens after upgrade to Fedora 14, 
+This also happens with buildroot-2010.08 
+Don't happened with  Fedora 13 and buildroot-2010.08
 
-diff --git a/Makefile b/Makefile
-index e569a94..0396e37 100644
---- a/Makefile
-+++ b/Makefile
-@@ -403,6 +403,9 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- endif
- 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
-+	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-+		xargs -r $(STRIPCMD) -R .comment -R .note -g --strip-unneeded
-+
- 	mkdir -p $(TARGET_DIR)/etc
- 	# Mandatory configuration file and auxilliary cache directory
- 	# for recent versions of ldconfig
--- 
-1.7.3.2
+Thanks,
+
+S?rgio M. B.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101117/3cebe528/attachment-0001.bin>
