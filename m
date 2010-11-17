@@ -1,8 +1,8 @@
-From: Mike Frysinger <vapier@gentoo.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 17 Nov 2010 23:21:45 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain-external: fix
-	indentation in Kconfig
-Message-ID: <20101117222502.AC36B8E964@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] module-init-tools: fix
+	configure bug by bumping to 3.12
+Message-ID: <20101117222502.E37178E964@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50003798b3508d0dbd106938d13e9d834c03f2b7
+commit: http://git.buildroot.net/buildroot/commit/?id=7be90dae8adc8d98b57dc4bc21630d8671523350
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+3.11 fails to configure/compile for my host (F14) due to bug
+in ax_enable_builddir.m4
+
+Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ CHANGES                                        |    2 +-
+ package/module-init-tools/module-init-tools.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index efc8378..a340de6 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -14,9 +14,9 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
- endchoice
+diff --git a/CHANGES b/CHANGES
+index 39b7cd3..b4e003b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
  
- config BR2_TOOLCHAIN_EXTERNAL_STRIP
--        bool
--        default y
--        prompt "Strip shared libraries"
-+	bool
-+	default y
-+	prompt "Strip shared libraries"
- 	help
- 	  Strip shared libraries copied from the external toolchain.
- endif
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: libglib2, qt
++	Updated/fixed packages: libglib2, module-init-tools, qt
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index 5dfdaad..27d0159 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -3,7 +3,7 @@
+ # module-init-tools
+ #
+ #############################################################
+-MODULE_INIT_TOOLS_VERSION=3.11
++MODULE_INIT_TOOLS_VERSION=3.12
+ MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+ MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
 -- 
 1.7.1
