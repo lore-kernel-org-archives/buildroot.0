@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Nov 2010 08:38:56 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: fix indentation in
- Kconfig
-In-Reply-To: <1289976093-22148-1-git-send-email-vapier@gentoo.org>
-References: <1289976093-22148-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101117083856.5a14f48c@surf>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 17 Nov 2010 04:11:18 -0500
+Subject: [Buildroot] [PATCH] linux: drop LDFLAGS override
+Message-ID: <1289985078-3333-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Nov 2010 01:41:33 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
+The current linux code overrides LDFLAGS that the kernel itself might be
+setting up.  Looking at the history, there doesn't seem to be any reason
+for this override.  It was added in ea8b1fa6a60705 without any logic.
 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ linux/linux.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Since it's probably me that introduced this, is there an Emacs user
-that knows how to tell Emacs to use tabs for indentation when in a
-certain mode (I have a kconfig-mode here) ?
-
-Thanks,
-
-Thomas
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 17c4b48..67b68ce 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -31,7 +31,6 @@ LINUX26_MAKE_FLAGS = \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(TARGET_CROSS) \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LZMA="$(LZMA)"
+ ifneq ($(LINUX26_SOURCE_DIR),$(LINUX26_BUILD_DIR))
+ LINUX26_MAKE_FLAGS += O="$(LINUX26_BUILD_DIR)"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.2
