@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Nov 2010 17:16:43 +0100
-Subject: [Buildroot] arm-linux-ld: BFD 2.16.1 assertion fail
-In-Reply-To: <35233.58461.qm@web114620.mail.gq1.yahoo.com>
-References: <35233.58461.qm@web114620.mail.gq1.yahoo.com>
-Message-ID: <20101117171643.3f701458@surf>
+Date: Wed, 17 Nov 2010 17:18:18 +0100
+Subject: [Buildroot] OF FDT compilation support
+In-Reply-To: <AANLkTikeJ-mbrieukd24z7zZi=hCRMNPhMZWP+Okm2oX@mail.gmail.com>
+References: <AANLkTikeJ-mbrieukd24z7zZi=hCRMNPhMZWP+Okm2oX@mail.gmail.com>
+Message-ID: <20101117171818.78c65dda@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello!
 
-On Wed, 17 Nov 2010 03:10:23 -0800 (PST)
-Tamamontu M <tamamontu@yahoo.com.au> wrote:
+On Wed, 17 Nov 2010 14:49:06 +0300
+Stanislav Bogatyrev <realloc@gmail.com> wrote:
 
-> This is my post to this mailing list. Let me introduce myself, i have
-> a cirrus logic EP9307 based board, with arm-linux-gcc 3.4 compiler. I
-> am new to linux arm environment.  
-> 
-> I am trying to compile fat16 file system (originally based on lpc2148
-> arm-elf-gcc). After porting it to EP9307, this source code uses std
-> libraries, hence in order to use std libraries I added
-> -L/usr/local/arm/3.4/lib -lc  to LDFLAGS in make file.
+> Here is a little patch to support OpenFirmware Flattened Device Tree
+> compilation.
+> I didn't found how to do it with vanilla buildroot source, so this is
+> added this to kernel compilation makefile, maybe it's better to put it
+> somewhere else.
 
-How is this related to Buildroot ?
+Thanks!
 
-You should also probably upgrade your toolchain, gcc 3.4 is now very
-old.
+Could you describe a typical use case for this ? I.e, how would a
+Buildroot user make use of this new feature ?
+
+Thanks,
 
 Thomas
 -- 
