@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Nov 2010 21:34:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 2839] New: compile fails in various packages with
- a odd message "error: impossible constraint in 'asm'"
-Message-ID: <bug-2839-163@https.bugs.busybox.net/>
+Date: Wed, 17 Nov 2010 21:44:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
+ message "error: impossible constraint in 'asm'"
+In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
+References: <bug-2839-163@https.bugs.busybox.net/>
+Message-ID: <20101117214408.0CD1F8E97E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,29 +13,21 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2839
 
-           Summary: compile fails in various packages with a odd message
-                    "error: impossible constraint in 'asm'"
-           Product: buildroot
-           Version: 2009.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: sergio at sergiomb.no-ip.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+--- Comment #1 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+Created attachment 2683
+  --> https://bugs.busybox.net/attachment.cgi?id=2683
+dot config of this case
 
+after compile gcc or on first error :
+edit 
+/home/sergio/hardware/moviecube/buildroot/output/staging/usr/include/bits/wordsize.h
 
-Created attachment 2677
-  --> https://bugs.busybox.net/attachment.cgi?id=2677
-make libmad  >& errors.txt
+and change _MIPS_SZPTR by 32 
+which is the correct value.
 
-With buildroot git version , I got several packages which I got this odd errror 
+BTW I Had compile all this with buildroot-2010.08
 
-make libmad  >& errors.txt
+Thanks,
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
