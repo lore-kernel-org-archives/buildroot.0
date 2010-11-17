@@ -1,35 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Nov 2010 21:44:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
- message "error: impossible constraint in 'asm'"
-In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
-References: <bug-2839-163@https.bugs.busybox.net/>
-Message-ID: <20101117214408.0CD1F8E97E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 17 Nov 2010 23:18:53 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: fix indentation in
+	Kconfig
+In-Reply-To: <1289976093-22148-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Wed, 17 Nov 2010 01:41:33 -0500")
+References: <1289976093-22148-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87bp5na90y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2839
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
---- Comment #1 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-Created attachment 2683
-  --> https://bugs.busybox.net/attachment.cgi?id=2683
-dot config of this case
+ Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
-after compile gcc or on first error :
-edit 
-/home/sergio/hardware/moviecube/buildroot/output/staging/usr/include/bits/wordsize.h
-
-and change _MIPS_SZPTR by 32 
-which is the correct value.
-
-BTW I Had compile all this with buildroot-2010.08
-
-Thanks,
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
