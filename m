@@ -1,28 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Nov 2010 06:28:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 2809] failed to compile libglib2
-In-Reply-To: <bug-2809-163@https.bugs.busybox.net/>
-References: <bug-2809-163@https.bugs.busybox.net/>
-Message-ID: <20101117062807.353488E95A@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 17 Nov 2010 01:41:33 -0500
+Subject: [Buildroot] [PATCH] toolchain-external: fix indentation in Kconfig
+Message-ID: <1289976093-22148-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2809
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ toolchain/toolchain-external/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git, thanks
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index efc8378..a340de6 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -14,9 +14,9 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ endchoice
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_STRIP
+-        bool
+-        default y
+-        prompt "Strip shared libraries"
++	bool
++	default y
++	prompt "Strip shared libraries"
+ 	help
+ 	  Strip shared libraries copied from the external toolchain.
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
