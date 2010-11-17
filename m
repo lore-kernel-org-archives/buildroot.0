@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 17 Nov 2010 21:21:28 +0100
-Subject: [Buildroot] [PATCH v2] initramfs: fix init symlink creation
-In-Reply-To: <1289976382-22357-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Wed, 17 Nov 2010 01:46:22 -0500")
-References: <1289919526-2227-1-git-send-email-vapier@gentoo.org>
-	<1289976382-22357-1-git-send-email-vapier@gentoo.org>
-Message-ID: <87sjyzaegn.fsf@macbook.be.48ers.dk>
+Date: Wed, 17 Nov 2010 21:51:44 +0100
+Subject: [Buildroot] [PATCH] linux: strip installed modules
+In-Reply-To: <1289919560-2280-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Tue, 16 Nov 2010 09:59:20 -0500")
+References: <1289919560-2280-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87oc9nad27.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +13,18 @@ To: buildroot@busybox.net
 
 >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Mike> The -e test will dereference the symlink, so if there is no /bin/init,
- Mike> we will constantly try to create the symlink.  So rather than error on
- Mike> subsequent runs when the link exists, use the force flag to ln.
+ Mike> The installed kernel modules should have useless build cruft stripped out
+ Mike> of them.  On my system, a default build went from a very unreasonable 30MB
+ Mike> to a normal 3MB (on disk) and from 14MB to 3MB when compressed due to the
+ Mike> info stored in the kernel modules alone.
 
-Committed, thanks.
+Thanks. We're moving away from per-package stripping though, so I would
+prefer to add it to the toplevel target-finalize step instead though -
+E.G. something like
+
+find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | xargs $(STRIPCMD) ..
+
+Care to adjust the patch to do that instead?
 
 -- 
 Bye, Peter Korsgaard
