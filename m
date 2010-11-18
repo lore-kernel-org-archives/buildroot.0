@@ -1,42 +1,41 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Thu, 18 Nov 2010 05:26:36 -0500
-Subject: [Buildroot] [PATCH] add some simple "config & build" board shortcuts
-Message-ID: <1290075996-31465-1-git-send-email-vapier@gentoo.org>
+Date: Thu, 18 Nov 2010 05:26:51 -0500
+Subject: [Buildroot] [PATCH] gdb: drop local stripping in favor of top level
+Message-ID: <1290076011-31508-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I like to be able to do `make foo` and have buildroot build up an image
-for the board named "foo".  This saves me from having to do a full clean,
-config, and make cycle.  Yes, I am that lazy :P.
+Since the top level takes care of stripping for us, and some file formats
+cannot be stripped safely (like FLAT which will error out), simply punt
+the manual stripping from the gdb package.
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- Makefile |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ toolchain/gdb/gdb.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0396e37..f6d82df 100644
---- a/Makefile
-+++ b/Makefile
-@@ -562,6 +562,11 @@ source-check: allyesconfig
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index c4fef89..54c3905 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -97,7 +97,6 @@ $(GDB_TARGET_DIR)/gdb/gdb: $(GDB_TARGET_DIR)/.configured
+ 	gdb_cv_var_elf=yes \
+ 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-C $(GDB_TARGET_DIR)
+-	$(STRIPCMD) $(GDB_TARGET_DIR)/gdb/gdb
  
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ $(TARGET_DIR)/usr/bin/gdb: $(GDB_TARGET_DIR)/gdb/gdb
+ 	install -c -D $(GDB_TARGET_DIR)/gdb/gdb $(TARGET_DIR)/usr/bin/gdb
+@@ -152,7 +151,6 @@ $(GDB_SERVER_DIR)/.configured: $(GDB_DIR)/.unpacked
+ $(GDB_SERVER_DIR)/gdbserver: $(GDB_SERVER_DIR)/.configured
+ 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-C $(GDB_SERVER_DIR)
+-	$(STRIPCMD) $(GDB_SERVER_DIR)/gdbserver
  
-+%: $(TOPDIR)/configs/%_defconfig
-+	$(MAKE) clean
-+	$(MAKE) $@_defconfig
-+	$(MAKE)
-+
- #############################################################
- #
- # Cleanup and misc junk
-@@ -638,4 +643,3 @@ release:
- 	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
- 
- .PHONY: $(noconfig_targets)
--
+ $(TARGET_DIR)/usr/bin/gdbserver: $(GDB_SERVER_DIR)/gdbserver
+ ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
 -- 
 1.7.3.2
