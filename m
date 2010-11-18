@@ -1,40 +1,45 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 17 Nov 2010 23:00:56 -0500
-Subject: [Buildroot] [PATCH 2/2 v2] busybox: let buildroot handle stripping
-In-Reply-To: <1289976432-22684-2-git-send-email-vapier@gentoo.org>
-References: <1289976432-22684-2-git-send-email-vapier@gentoo.org>
-Message-ID: <1290052856-19294-1-git-send-email-vapier@gentoo.org>
+From: Tamamontu M <tamamontu@yahoo.com.au>
+Date: Wed, 17 Nov 2010 21:46:49 -0800 (PST)
+Subject: [Buildroot] arm-linux-ld: BFD 2.17 assertion fail with
+	arm-linux-gcc 4.1.1
+Message-ID: <964203.74563.qm@web114602.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some ABI's (like FLAT), we cannot strip busybox as the file format
-does not support it and strip will abort with errors like 'File format
-not recognized'.  Since the toplevel already takes care of stripping
-things, simply disable the busybox step.
+Hi Guys, 
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
-v2
-	- drop the strip logic entirely in favor of common toplevel
+I am trying to compile my source code which uses std librarie functions. I have added following option to LDFLAGS in the make file.
 
- package/busybox/busybox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ -L/usr/local/arm/4.1.1-920t/lib -L/usr/local/arm/4.1.1-920t/lib/gcc/arm-linux-uclibc/4.1.1 -lgcc -lc 
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 5ef1622..92d4ab7 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -124,7 +124,7 @@ define BUSYBOX_BUILD_CMDS
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
- 		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
--		-C $(BUSYBOX_DIR)
-+		STRIP=true -C $(BUSYBOX_DIR)
- endef
- 
- ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
--- 
-1.7.3.2
+
+It is giving this error=>  
+-------------------------------------------------------------------------
+make
+
+make -C main
+make[1]: Entering directory `/home/pritam/spi_boot_example/SDcard_bootloader_fat16/main'
+arm-linux-gcc -MM -O2 -Wall -fPIC -mcpu=arm9tdmi -I../include  head.S main.c print.c spi.c sd_raw.c delay.c rootdir.c partition.c fat16.c 1>.depend
+echo $PWD
+/home/pritam/spi_boot_example/SDcard_bootloader_fat16/main
+arm-linux-ld -T SDcard_bootloader_fat16.lnk -Map SDcard_bootloader_fat16.map -L/usr/local/arm/4.1.1-920t/lib -L/usr/local/arm/4.1.1-920t/lib/gcc/arm-linux-uclibc/4.1.1 -lgcc -lc   -r -o mainrom.o head.o main.o print.o spi.o sd_raw.o delay.o rootdir.o partition.o fat16.o     
+make[1]: Leaving directory `/home/pritam/spi_boot_example/SDcard_bootloader_fat16/main'
+arm-linux-ld -T SDcard_bootloader_fat16.lnk -Map SDcard_bootloader_fat16.map -L/usr/local/arm/4.1.1-920t/lib -L/usr/local/arm/4.1.1-920t/lib/gcc/arm-linux-uclibc/4.1.1 -lgcc -lc   -o SDcard_bootloader_fat16.elf main/mainrom.o
+arm-linux-ld: BFD 2.17 assertion fail /opt/buildroot.920t-cc/toolchain_build_arm_nofpu/binutils-2.17/bfd/elf32-arm.c:7214
+make: *** [SDcard_bootloader] Segmentation fault
+-------------------------------------------------------------------------
+
+Initially i was arm-linux-gcc 3.4 that also give similar errors hence I updated the tool chain and tried compiling again. There is only error now as compared to arm-linux-gcc 3.4. 
+
+Can some one please explain why this error is generated. 
+
+Thanks
+Tama
+
+
+
+
+      
