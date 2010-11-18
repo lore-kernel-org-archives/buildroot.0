@@ -1,48 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 18 Nov 2010 11:58:19 +0100
-Subject: [Buildroot] [git commit master 1/1] gdb: drop local stripping in
-	favor of top level
-Message-ID: <20101118105846.199CB8DECD@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 18 Nov 2010 11:58:54 +0100
+Subject: [Buildroot] [PATCH] gdb: drop local stripping in favor of top
+	level
+In-Reply-To: <1290076011-31508-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Thu, 18 Nov 2010 05:26:51 -0500")
+References: <1290076011-31508-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87tyje99u9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4494d72899156cd3204516b5da371c1758efeca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Mike> Since the top level takes care of stripping for us, and some file formats
+ Mike> cannot be stripped safely (like FLAT which will error out), simply punt
+ Mike> the manual stripping from the gdb package.
 
-Since the top level takes care of stripping for us, and some file formats
-cannot be stripped safely (like FLAT which will error out), simply punt
-the manual stripping from the gdb package.
+Committed, thanks.
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gdb/gdb.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index c4fef89..54c3905 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -97,7 +97,6 @@ $(GDB_TARGET_DIR)/gdb/gdb: $(GDB_TARGET_DIR)/.configured
- 	gdb_cv_var_elf=yes \
- 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
- 		-C $(GDB_TARGET_DIR)
--	$(STRIPCMD) $(GDB_TARGET_DIR)/gdb/gdb
- 
- $(TARGET_DIR)/usr/bin/gdb: $(GDB_TARGET_DIR)/gdb/gdb
- 	install -c -D $(GDB_TARGET_DIR)/gdb/gdb $(TARGET_DIR)/usr/bin/gdb
-@@ -152,7 +151,6 @@ $(GDB_SERVER_DIR)/.configured: $(GDB_DIR)/.unpacked
- $(GDB_SERVER_DIR)/gdbserver: $(GDB_SERVER_DIR)/.configured
- 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
- 		-C $(GDB_SERVER_DIR)
--	$(STRIPCMD) $(GDB_SERVER_DIR)/gdbserver
- 
- $(TARGET_DIR)/usr/bin/gdbserver: $(GDB_SERVER_DIR)/gdbserver
- ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
 -- 
-1.7.1
+Bye, Peter Korsgaard
