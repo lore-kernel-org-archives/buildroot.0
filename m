@@ -1,52 +1,104 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Thu, 18 Nov 2010 06:32:20 -0500
-Subject: [Buildroot] [PATCH] add some simple "config & build" board
-	shortcuts
-In-Reply-To: <20101118115910.5261e8af@surf>
-References: <1290075996-31465-1-git-send-email-vapier@gentoo.org>
-	<20101118115910.5261e8af@surf>
-Message-ID: <201011180632.21272.vapier@gentoo.org>
+Date: Thu, 18 Nov 2010 06:51:29 -0500
+Subject: [Buildroot] [PATCH] add support for common ABI options (for FLAT)
+Message-ID: <1290081089-19456-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, November 18, 2010 05:59:10 Thomas Petazzoni wrote:
-> On Thu, 18 Nov 2010 05:26:36 -0500 Mike Frysinger wrote:
-> > I like to be able to do `make foo` and have buildroot build up an image
-> > for the board named "foo".  This saves me from having to do a full clean,
-> > config, and make cycle.  Yes, I am that lazy :P.
-> 
-> I'd prefer not to have this in Buildroot. The general direction we are
-> taking (from my point of view) is to try to *reduce* the number of make
-> targets and the number of ways to use Buildroot, in order to make it
-> easier/simpler to understand for users.
+Buildroot atm assumes shared library support everywhere.  This is not the
+case with FLAT toolchains where everything is static.  So start common ABI
+options to let targets control this behavior.
 
-i dont think this has any real impact on "usability" for new users.  buildroot 
-shouldnt really be forcing people into strict usage patterns to cater to new 
-users while screwing power users.  the existing distro for Blackfin processors 
-has similar targets and gets used quite a bit.
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+note: this depends on the initial Blackfin support patch
 
-> So just like we removed options whose sole purpose was to rename final
-> target images, I think we should not add new make targets that should
-> instead simply be a shell invocation "make clean && make
-> foobar_defconfig && make". In addition to this, I am not sure your
-> implementation correctly passes down the O= argument for out-of-tree
-> builds.
+ target/Config.in.arch                    |   13 +++++++++++++
+ toolchain/helpers.mk                     |   12 +++++++++---
+ toolchain/toolchain-external/ext-tool.mk |    4 ++++
+ 3 files changed, 26 insertions(+), 3 deletions(-)
 
-i dont see any reason why it wouldnt work.  it's using $(MAKE) after all, not 
-`make`, to process the sub-targets, and that, by design, preserves the 
-original make setup.  and if this were true, i dont see how any of the current 
-$(MAKE) usage in the top level Makefile wouldnt also be broken.
-
-also, please maintain proper CC when replying.  not everyone gets e-mail from 
-the buildroot list.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101118/d8d247c0/attachment.pgp>
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 5b3e325..c032e45 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -40,6 +40,15 @@ config BR2_xtensa
+ 	bool "xtensa"
+ endchoice
+ 
++config BR2_ABI_FLAT
++	bool
++	default n
++
++config BR2_ABI_ELF
++	bool
++	default y
++	depends on !BR2_ABI_FLAT
++
+ #
+ # Keep the variants separate, there's no need to clutter everything else.
+ # sh is fairly "special" in this regard, as virtually everyone else has
+@@ -135,12 +144,16 @@ choice
+ 	default BR2_BFIN_FLAT
+ config BR2_BFIN_FDPIC
+ 	bool "FDPIC"
++	select BR2_ABI_ELF
+ config BR2_BFIN_FLAT
+ 	bool "FLAT"
++	select BR2_ABI_FLAT
+ config BR2_BFIN_FLAT_SEP_DATA
+ 	bool "FLAT (Separate data)"
++	select BR2_ABI_FLAT
+ config BR2_BFIN_SHARED_FLAT
+ 	bool "Shared FLAT"
++	select BR2_ABI_FLAT
+ endchoice
+ 
+ choice
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 05d43e7..3b4a603 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -189,12 +189,18 @@ check_uclibc_feature = \
+ #
+ # $1: sysroot directory
+ #
+-check_uclibc = \
+-	SYSROOT_DIR="$(strip $1)"; \
++ifeq ($(BR2_ABI_FLAT),y)
++check_uclibc_ldso = :
++else
++check_uclibc_ldso = \
+ 	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+-	fi; \
++	fi
++endif
++check_uclibc = \
++	SYSROOT_DIR="$(strip $1)"; \
++	$(check_uclibc_ldso); \
+ 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 2501256..8ada29a 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -41,7 +41,11 @@
+ 
+ uclibc: dependencies $(STAMP_DIR)/ext-toolchain-installed
+ 
++ifeq ($(BR2_ABI_FLAT),y)
++LIB_EXTERNAL_LIBS=
++else
+ LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
++endif
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
+-- 
+1.7.3.2
