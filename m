@@ -1,35 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Nov 2010 21:11:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 759] Sysstat build broken without libintl
-In-Reply-To: <bug-759-163@https.bugs.busybox.net/>
-References: <bug-759-163@https.bugs.busybox.net/>
-Message-ID: <20101118211138.9F08E8A46F@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 18 Nov 2010 16:25:58 -0500
+Subject: [Buildroot] [PATCH] auto remove empty /usr/share dir
+Message-ID: <1290115558-8915-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=759
+Often times, the only reason /usr/share exists is because of documentation
+installed into it.  So once we're done cleaning the docs, attempt to rmdir
+/usr/share.  If it's empty, things will work out nicely.
 
---- Comment #13 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-(In reply to comment #12)
-> Try changing...
-> SYSSTAT_CONF_OPT = --disable-man-group
-> to
-> SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
-> and rebuild, does it work now?
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
---disable-sensors (In reply to comment #12)
-> Try changing...
-> SYSSTAT_CONF_OPT = --disable-man-group
-> to
-> SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
-> and rebuild, does it work now?
-
-yes it worked thanks
-
+diff --git a/Makefile b/Makefile
+index 69e4031..4cc62e9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -403,6 +403,7 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
++	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || :
+ endif
+ 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
