@@ -1,33 +1,32 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Thu, 18 Nov 2010 05:37:47 -0500
-Subject: [Buildroot] [PATCH] ignore more patch related files
-Message-ID: <1290076667-32488-1-git-send-email-vapier@gentoo.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Nov 2010 11:46:11 +0100
+Subject: [Buildroot] [PATCH] linux: add shorter shortcuts
+In-Reply-To: <1290075883-30494-1-git-send-email-vapier@gentoo.org>
+References: <1290075883-30494-1-git-send-email-vapier@gentoo.org>
+Message-ID: <20101118114611.70f3c219@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches shouldn't be committed to the top level, and that is where
-`git format-patch` typically operates, so ignore that stuff.
+On Thu, 18 Nov 2010 05:24:43 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- .gitignore |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+> We only have one Linux kernel package, and "linux26-" is an
+> anachronism in today's world.  So add useful "linux-%" shortcuts to
+> the "linux26-%".
+> 
+> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
-diff --git a/.gitignore b/.gitignore
-index 18588e8..685a9c2 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -7,5 +7,8 @@
- /.config
- *.depend
- *.o
-+/*.patch
-+/*.diff
- *.orig
-+*.rej
- *~
+Could you please update the documentation at the same time ? This way,
+we could get rid of the linux26-% targets in next releases.
+
+Thanks,
+
+Thomas
 -- 
-1.7.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
