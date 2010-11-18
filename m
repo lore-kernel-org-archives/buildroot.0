@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Nov 2010 11:53:32 +0100
-Subject: [Buildroot] [PATCH] initial support for Blackfin processors
-In-Reply-To: <1290076044-31558-1-git-send-email-vapier@gentoo.org>
-References: <1290076044-31558-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101118115332.71de42e2@surf>
+Date: Thu, 18 Nov 2010 11:55:29 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: allow vendor-controlled
+ defaults
+In-Reply-To: <1290076101-31697-1-git-send-email-vapier@gentoo.org>
+References: <1290076101-31697-1-git-send-email-vapier@gentoo.org>
+Message-ID: <20101118115529.2f2b57c5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-Nice to see support for Blackfin processors!
-
-On Thu, 18 Nov 2010 05:27:24 -0500
+On Thu, 18 Nov 2010 05:28:21 -0500
 Mike Frysinger <vapier@gentoo.org> wrote:
 
-> diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-> index 86c656d..47657fc 100644
-> --- a/boot/u-boot/Config.in
-> +++ b/boot/u-boot/Config.in
-> @@ -71,6 +71,10 @@ config BR2_TARGET_UBOOT_FORMAT_KWB
->  	depends on BR2_arm
->  	bool "u-boot.kwb (Marvell)"
+> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+> ---
+>  toolchain/toolchain-external/Config.in.2 |   11 +++++++++++
+>  toolchain/toolchain-external/ext-tool.mk |    2 ++
+>  2 files changed, 13 insertions(+), 0 deletions(-)
+
+Could you explain a little bit the rationale behind this ?
+
+> index 7e4645d..2501256 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -37,6 +37,8 @@
+>  #  cross-compiler binaries remains external, all libraries and headers
+>  #  are imported into the Buildroot tree.
 >  
-> +config BR2_TARGET_UBOOT_FORMAT_LDR
-> +	depends on BR2_bfin
-> +	bool "u-boot.ldr"
+> +-include target/device/*/ext-tool.mk
 > +
 
-Maybe make it the default choice when BR2_bfin is enabled ?
+I definitely really don't like this. Could you elaborate a bit on what
+you would like to do ?
 
->  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
-> +ifeq ($(KERNEL_ARCH),blackfin)
-> +LINUX26_IMAGE_NAME=vmImage
-> +else
->  LINUX26_IMAGE_NAME=uImage
-> +endif
-
-That looks strange, if you want uImage, you want uImage, right ? Or is
-Blackfin's vmImage in fact a uImage (in which case a short comment
-above this condition would be nice).
-
->  choice
->  	prompt "Serial port to run a getty on"
-> -	default BR2_TARGET_GENERIC_GETTY_TTYS0
-> +	default BR2_TARGET_GENERIC_GETTY_TTYS0 if !BR2_bfin
-> +	default BR2_TARGET_GENERIC_GETTY_TTYBF0 if BR2_bfin
-
-We are going to move away from this and replace all that stuff by a
-free-form text field. Patches have been posted, but haven't been merged
-yet. As I am reworking board support and system-level configuration, I
-think I'll take care of them.
+Thanks!
 
 Thomas
 -- 
