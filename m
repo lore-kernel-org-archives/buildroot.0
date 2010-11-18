@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Nov 2010 11:56:15 +0100
-Subject: [Buildroot] [PATCH] ignore more patch related files
-In-Reply-To: <1290076667-32488-1-git-send-email-vapier@gentoo.org>
-References: <1290076667-32488-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101118115615.2dd10efc@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 18 Nov 2010 11:58:19 +0100
+Subject: [Buildroot] [git commit master 1/1] CHANGES: #2479 is resolved
+Message-ID: <20101118105845.D87BB8DECD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Nov 2010 05:37:47 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
 
-> Patches shouldn't be committed to the top level, and that is where
-> `git format-patch` typically operates, so ignore that stuff.
-> 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+commit: http://git.buildroot.net/buildroot/commit/?id=84a6f5342ad51045143e7698b676909a4e8ee431
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
+diff --git a/CHANGES b/CHANGES
+index b4e003b..e07c798 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -6,6 +6,7 @@
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
++	#2479: host-module-init-tools 3.11 fails to build
+ 	#2809: failed to compile libglib2
+ 	#2821: [PATCH] Patch for JavaScriptCore in QtWebKit module
+ 	#2827: qt-4.7.0-pthread_getattr_np.patch invalid for qt 4.6...
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
