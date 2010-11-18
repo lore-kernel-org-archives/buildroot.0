@@ -1,46 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Nov 2010 08:37:24 +0100
-Subject: [Buildroot] [PATCH] linux: strip installed modules
-In-Reply-To: <87oc9nad27.fsf@macbook.be.48ers.dk>
-References: <1289919560-2280-1-git-send-email-vapier@gentoo.org>
-	<87oc9nad27.fsf@macbook.be.48ers.dk>
-Message-ID: <20101118083724.50b78d0e@surf>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 18 Nov 2010 05:24:08 -0500
+Subject: [Buildroot] [PATCH 2/2 v2] busybox: let buildroot handle stripping
+In-Reply-To: <1290052856-19294-1-git-send-email-vapier@gentoo.org>
+References: <1290052856-19294-1-git-send-email-vapier@gentoo.org>
+Message-ID: <1290075848-30441-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Nov 2010 21:51:44 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+For some ABI's (like FLAT), we cannot strip busybox as the file format
+does not support it and strip will abort with errors like 'File format
+not recognized'.  Since the toplevel already takes care of stripping
+things, simply disable the busybox step.
 
->  Mike> The installed kernel modules should have useless build cruft stripped out
->  Mike> of them.  On my system, a default build went from a very unreasonable 30MB
->  Mike> to a normal 3MB (on disk) and from 14MB to 3MB when compressed due to the
->  Mike> info stored in the kernel modules alone.
-> 
-> Thanks. We're moving away from per-package stripping though, so I would
-> prefer to add it to the toplevel target-finalize step instead though -
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+v3
+	- pull patch from upstream to allow SKIP_STRIP=y rather than set STRIP=...
 
-Actually, yes and now. The stripping will go back into per-package, but
-inside the package infrastructure instead. This is because we want to
-do all the cleanup (documentation, headers, useless .a and .la files)
-right after the package installation in order to make the "package
-management" stuff work (this is something that Lionel already did in
-his experiments of package management). So it will not be inside each
-package .mk file as it used to be, but it's still going to be done on a
-per-package basis.
+ .../busybox-1.17.3/busybox-1.17.3-skip_strip.patch |   26 ++++++++++++++++++++
+ package/busybox/busybox.mk                         |    2 +-
+ 2 files changed, 27 insertions(+), 1 deletions(-)
+ create mode 100644 package/busybox/busybox-1.17.3/busybox-1.17.3-skip_strip.patch
 
-> find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | xargs $(STRIPCMD) ..
-
-In this particular case, the stripping is very much kernel-specific, so
-I don't see a strong reason of adding this to linux/linux.mk. Except
-maybe packages that do compile additional kernel modules, such as
-linux-fusion (and more could be added).
-
-Thomas
+diff --git a/package/busybox/busybox-1.17.3/busybox-1.17.3-skip_strip.patch b/package/busybox/busybox-1.17.3/busybox-1.17.3-skip_strip.patch
+new file mode 100644
+index 0000000..0c2321e
+--- /dev/null
++++ b/package/busybox/busybox-1.17.3/busybox-1.17.3-skip_strip.patch
+@@ -0,0 +1,26 @@
++From b78d561ec79b6a7c29d14bf49c82b600815b2cc4 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Tue, 16 Nov 2010 09:01:30 -0500
++Subject: [PATCH] allow SKIP_STRIP to be set in the env
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ Makefile.flags |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/Makefile.flags b/Makefile.flags
++index 60bb888..363300b 100644
++--- a/Makefile.flags
+++++ b/Makefile.flags
++@@ -4,7 +4,7 @@
++ 
++ BB_VER = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
++ export BB_VER
++-SKIP_STRIP = n
+++SKIP_STRIP ?= n
++ 
++ # -std=gnu99 needed for [U]LLONG_MAX on some systems
++ CPPFLAGS += $(call cc-option,-std=gnu99,)
++-- 
++1.7.3.2
++
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 5ef1622..fd0be15 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -124,7 +124,7 @@ define BUSYBOX_BUILD_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+ 		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(BUSYBOX_DIR)
++		SKIP_STRIP=y -C $(BUSYBOX_DIR)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.2
