@@ -1,28 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Nov 2010 02:35:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 759] Sysstat build broken without libintl
-In-Reply-To: <bug-759-163@https.bugs.busybox.net/>
-References: <bug-759-163@https.bugs.busybox.net/>
-Message-ID: <20101118023548.B3DE38EB43@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 17 Nov 2010 23:00:56 -0500
+Subject: [Buildroot] [PATCH 2/2 v2] busybox: let buildroot handle stripping
+In-Reply-To: <1289976432-22684-2-git-send-email-vapier@gentoo.org>
+References: <1289976432-22684-2-git-send-email-vapier@gentoo.org>
+Message-ID: <1290052856-19294-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=759
+For some ABI's (like FLAT), we cannot strip busybox as the file format
+does not support it and strip will abort with errors like 'File format
+not recognized'.  Since the toplevel already takes care of stripping
+things, simply disable the busybox step.
 
---- Comment #11 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-Created attachment 2695
-  --> https://bugs.busybox.net/attachment.cgi?id=2695
-make sysstat >& sysstat.log
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+v2
+	- drop the strip logic entirely in favor of common toplevel
 
-I try the patch in previous comment, but I got others errors ...
+ package/busybox/busybox.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-my .config is in https://bugs.busybox.net/attachment.cgi?id=2683 ,
-I use Fedora 14
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 5ef1622..92d4ab7 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -124,7 +124,7 @@ define BUSYBOX_BUILD_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+ 		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(BUSYBOX_DIR)
++		STRIP=true -C $(BUSYBOX_DIR)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX_FULLINSTALL),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
