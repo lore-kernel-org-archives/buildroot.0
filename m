@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Nov 2010 08:31:44 +0100
-Subject: [Buildroot] arm-linux-ld: BFD 2.17 assertion fail with
- arm-linux-gcc 4.1.1
-In-Reply-To: <964203.74563.qm@web114602.mail.gq1.yahoo.com>
-References: <964203.74563.qm@web114602.mail.gq1.yahoo.com>
-Message-ID: <20101118083144.3056445d@surf>
+Date: Thu, 18 Nov 2010 08:32:56 +0100
+Subject: [Buildroot] Makefile:904: *** missing separator (did you mean
+ TAB instead of 8 spaces?). Stop.
+In-Reply-To: <1290038284.22677.2.camel@segulix>
+References: <1290022488.23841.4.camel@segulix>
+	<1290038284.22677.2.camel@segulix>
+Message-ID: <20101118083256.0618dee2@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 17 Nov 2010 21:46:49 -0800 (PST)
-Tamamontu M <tamamontu@yahoo.com.au> wrote:
+On Wed, 17 Nov 2010 23:58:04 +0000
+Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> wrote:
 
-> I am trying to compile my source code which uses std librarie
-> functions. I have added following option to LDFLAGS in the make file.
-> 
->  -L/usr/local/arm/4.1.1-920t/lib
-> -L/usr/local/arm/4.1.1-920t/lib/gcc/arm-linux-uclibc/4.1.1 -lgcc -lc 
+> This happens after upgrade to Fedora 14, 
+> This also happens with buildroot-2010.08 
+> Don't happened with  Fedora 13 and buildroot-2010.08
 
-Where does your toolchain comes from ? It would probably be a good idea
-to upgrade to at least gcc 4.3.x and a more recent version of binutils.
+Could you try the patch at
+http://lists.busybox.net/pipermail/buildroot/2010-November/038615.html
+and tell us whether it fixes the problem for you ?
 
-And again, how is this related to Buildroot ?
+Thanks,
 
 Thomas
 -- 
