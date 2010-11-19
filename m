@@ -1,49 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Nov 2010 16:44:17 +0100
-Subject: [Buildroot] [git commit master 1/1] package/: shared config cache
-	is gone
-Message-ID: <20101119154518.6B2338D407@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 19 Nov 2010 15:53:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
+ message "error: impossible constraint in 'asm'"
+In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
+References: <bug-2839-163@https.bugs.busybox.net/>
+Message-ID: <20101119155326.85D4E8D407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2839
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ece089ede71e8c352985f8faf06b3a9fdf9d202
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-So remove the last references to it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |gustavo at zacarias.com.ar
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gpsd/gpsd.mk           |    1 -
- package/rng-tools/rng-tools.mk |    1 -
- 2 files changed, 0 insertions(+), 2 deletions(-)
+--- Comment #7 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Try using gcc 4.3.x instead of the (experimental) 4.5.x, this will probably fix
+most of your constraint issues.
+Since gcc 4.4+ MIPS became more sensitive to some optimizations thus breaking
+some source code.
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 71fe89e..ab7e921 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -9,7 +9,6 @@ GPSD_SITE = http://download.berlios.de/gpsd
- GPSD_INSTALL_STAGING = YES
- GPSD_CONF_OPT = --disable-static
- GPSD_LIBTOOL_PATCH = NO
--GPSD_USE_CONFIG_CACHE = NO
- GPSD_TARGET_BINS = cgps gpsctl gpsdecode gpsmon gpspipe gpxlogger lcdgps
- 
- # Build libgpsmm if we've got C++
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 755f4f8..9ae5616 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -7,7 +7,6 @@
- RNG_TOOLS_VERSION = 3
- RNG_TOOLS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gkernel
- RNG_TOOLS_CONF_ENV = LIBS="-largp"
--RNG_TOOLS_USE_CONFIG_CACHE = NO
- RNG_TOOLS_DEPENDENCIES = argp-standalone
- 
- $(eval $(call AUTOTARGETS,package,rng-tools))
+libmad is fixed in git.
+libgcrypt will probably be fixed soon (fixed in my tree
+GMP will have to wait IMHO since it's pretty tied up to the internal toolchain.
+I've got a fix for it but don't expect it to ship for the 2010.11 release since
+it's part of an internal toolchain revamp.
+
 -- 
-1.7.2.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
