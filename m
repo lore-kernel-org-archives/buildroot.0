@@ -1,37 +1,24 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Thu, 18 Nov 2010 23:36:01 +0000
-Subject: [Buildroot] Makefile:904: *** missing separator (did you mean
- TAB instead of 8 spaces?). Stop.
-In-Reply-To: <20101118083256.0618dee2@surf>
-References: <1290022488.23841.4.camel@segulix>
-	<1290038284.22677.2.camel@segulix>  <20101118083256.0618dee2@surf>
-Message-ID: <1290123362.1697.12.camel@segulix>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 19 Nov 2010 00:04:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
+ message "error: impossible constraint in 'asm'"
+In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
+References: <bug-2839-163@https.bugs.busybox.net/>
+Message-ID: <20101119000444.6DD268C9FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=2839
 
-On Thu, 2010-11-18 at 08:32 +0100, Thomas Petazzoni wrote:
-> > This happens after upgrade to Fedora 14, 
-> > This also happens with buildroot-2010.08 
-> > Don't happened with  Fedora 13 and buildroot-2010.08
-> 
-> Could you try the patch at
-> http://lists.busybox.net/pipermail/buildroot/2010-November/038615.html
-> and tell us whether it fixes the problem for you ?
+--- Comment #2 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+Created attachment 2701
+  --> https://bugs.busybox.net/attachment.cgi?id=2701
+same compile error for gmp
 
-yes , it fixes the problem (for me) 
-
-Thanks,
 -- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101118/cdfd05a3/attachment.bin>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
