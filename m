@@ -1,39 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Nov 2010 08:57:52 +0100
-Subject: [Buildroot] Makefile:904: *** missing separator (did you mean
- TAB instead of 8 spaces?). Stop.
-In-Reply-To: <1290123362.1697.12.camel@segulix>
-References: <1290022488.23841.4.camel@segulix>
-	<1290038284.22677.2.camel@segulix> <20101118083256.0618dee2@surf>
-	<1290123362.1697.12.camel@segulix>
-Message-ID: <20101119085752.1cf59ad7@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 19 Nov 2010 07:24:15 +0100
+Subject: [Buildroot] [git commit master 1/1] Update uclibc snapshot config
+	to avoid build breakage
+Message-ID: <20101119080414.D14E88D303@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Nov 2010 23:36:01 +0000
-Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> wrote:
 
-> On Thu, 2010-11-18 at 08:32 +0100, Thomas Petazzoni wrote:
-> > > This happens after upgrade to Fedora 14, 
-> > > This also happens with buildroot-2010.08 
-> > > Don't happened with  Fedora 13 and buildroot-2010.08
-> > 
-> > Could you try the patch at
-> > http://lists.busybox.net/pipermail/buildroot/2010-November/038615.html
-> > and tell us whether it fixes the problem for you ?
-> 
-> yes , it fixes the problem (for me) 
+commit: http://git.buildroot.net/buildroot/commit/?id=799a4c307e9b01fc7a05f66211de1b7aa239dde3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter, could you commit Felipe's patch ?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/uClibc/uClibc-snapshot.config |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
+index 43dc3cd..bc3074e 100644
+--- a/toolchain/uClibc/uClibc-snapshot.config
++++ b/toolchain/uClibc/uClibc-snapshot.config
+@@ -107,7 +107,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
+ UCLIBC_SUSV3_LEGACY=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+-# UCLIBC_SUSV4_LEGACY is not set
++UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_HAS_STUBS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
+@@ -115,7 +115,7 @@ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+ UCLIBC_HAS_GETPT=y
+-# UCLIBC_HAS_LIBUTIL is not set
++UCLIBC_HAS_LIBUTIL=y
+ UCLIBC_HAS_TM_EXTENSIONS=y
+ UCLIBC_HAS_TZ_CACHING=y
+ UCLIBC_HAS_TZ_FILE=y
+@@ -160,8 +160,8 @@ UCLIBC_USE_NETLINK=y
+ # UCLIBC_HAS_BSD_RES_CLOSE is not set
+ UCLIBC_HAS_COMPAT_RES_STATE=y
+ # UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
+-# UCLIBC_HAS_LIBRESOLV_STUB is not set
+-# UCLIBC_HAS_LIBNSL_STUB is not set
++UCLIBC_HAS_LIBRESOLV_STUB=y
++UCLIBC_HAS_LIBNSL_STUB=y
+ 
+ #
+ # String and Stdio Support
+@@ -219,6 +219,7 @@ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+ # UCLIBC_HAS_WORDEXP is not set
+ # UCLIBC_HAS_NFTW is not set
++# UCLIBC_HAS_FTW is not set
+ UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
+ # UCLIBC_HAS_UTMPX is not set
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.2
