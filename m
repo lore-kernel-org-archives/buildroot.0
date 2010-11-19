@@ -1,37 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Nov 2010 15:53:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
- message "error: impossible constraint in 'asm'"
-In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
-References: <bug-2839-163@https.bugs.busybox.net/>
-Message-ID: <20101119155326.85D4E8D407@busybox.osuosl.org>
+From: Chris Bisnett <cbisnett@gmail.com>
+Date: Fri, 19 Nov 2010 18:05:14 -0500
+Subject: [Buildroot] Incorrect ARM EABI Version
+Message-ID: <AANLkTikz2QUtNCTHMnnZLy2K6hNTdN5UKsVpKdm=wXCs@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2839
+I have successfully built the armeb-xscale toolchain using the EABI option.
+Running readelf -h on the generated binaries gives OS/ABI of "UNIX - System
+V" and flags reports "Version4 EABI".  Unfortunately I am trying to build
+for a system whose binaries have an OS/ABI of "ARM" and the flags specify
+"GNU EABI".  Is there another setting or option in the buildroot config that
+will produce binaries using the GNU EABI?  Thanks for any help.
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |gustavo at zacarias.com.ar
-
---- Comment #7 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Try using gcc 4.3.x instead of the (experimental) 4.5.x, this will probably fix
-most of your constraint issues.
-Since gcc 4.4+ MIPS became more sensitive to some optimizations thus breaking
-some source code.
-
-libmad is fixed in git.
-libgcrypt will probably be fixed soon (fixed in my tree
-GMP will have to wait IMHO since it's pretty tied up to the internal toolchain.
-I've got a fix for it but don't expect it to ship for the 2010.11 release since
-it's part of an internal toolchain revamp.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+- Chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101119/dd95b83c/attachment.html>
