@@ -1,36 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Nov 2010 00:27:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
- message "error: impossible constraint in 'asm'"
-In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
-References: <bug-2839-163@https.bugs.busybox.net/>
-Message-ID: <20101119002712.DC89A8CA4E@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 18 Nov 2010 23:33:57 -0500
+Subject: [Buildroot] [PATCH] autotools: add with/without and enable/disable
+	helpers
+Message-ID: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2839
+Rather than have to write ugly logic in every package .mk file to check
+a config var and then expand into a --{en,dis}able-foo flag, add helpers
+so code can cleanly expand things.
 
-S?rgio <sergio@sergiomb.no-ip.org> changed:
+A simple example:
+- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+- SDL_MIXER_CONF_OPT += --enable-music-ogg
+- else
+- SDL_MIXER_CONF_OPT += --disable-music-ogg
+- endif
++ SDL_MIXER_CONF_OPT += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #2713|0                           |1
-        is obsolete|                            |
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ package/Makefile.autotools.in |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
---- Comment #6 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-Created attachment 2725
-  --> https://bugs.busybox.net/attachment.cgi?id=2725
-completed compile log for libgcrypt
-
-Again sorry about spam.
-I am sending complete logs instead just the errors on 2nd
-make.
-Hope don't mistakes this time
-
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 7d04e44..08a190b 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -279,3 +279,21 @@ else
+ $(call AUTOTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
+ endif
+ endef
++
++################################################################################
++# AUTOTOOLS HELPERS
++################################################################################
++
++# $(call _USE_CONF,enable,disable,LIB_FFMPEG,video,blah) -> --enable-video=blah if LIB_FFMPEG
++# $(call _USE_CONF,with,without,LIB_FFMPEG,video)        -> --with-video if LIB_FFMPEG
++_USE_CONF = $(shell \
++	opt="$(5)"; test "$${opt:+set}" = "set" && opt="=$${opt}"; \
++	test "$(BR2_$(3))" = "y" \
++		&& echo "--$(1)-$(4)$${opt}" \
++		|| echo "--$(2)-$(4)")
++
++# $(call USE_ENABLE,LIB_FFMPEG,video) => --enable-video if LIB_FFMPEG is set
++USE_ENABLE = $(call _USE_CONF,enable,disable,$(1),$(2),$(3))
++
++# $(call USE_WITH,LIB_FFMPEG,video) => --with-video if LIB_FFMPEG is set
++USE_WITH = $(call _USE_CONF,with,without,$(1),$(2),$(3))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
