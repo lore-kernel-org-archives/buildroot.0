@@ -1,54 +1,46 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 19 Nov 2010 06:24:53 -0500
-Subject: [Buildroot] [PATCH v2] autotools: add with/without and
-	enable/disable helpers
-In-Reply-To: <20101119121326.3185e990@surf>
-References: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
-	<1290162216-30689-1-git-send-email-vapier@gentoo.org>
-	<20101119121326.3185e990@surf>
-Message-ID: <201011190624.54500.vapier@gentoo.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 19 Nov 2010 13:37:59 +0100
+Subject: [Buildroot] [git commit master 1/1] gdb: add source targets for
+	gdbserver/gdbhost
+Message-ID: <20101119123839.6922B8D3B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday, November 19, 2010 06:13:26 Thomas Petazzoni wrote:
-> So typically, one would do:
-> 
-> SDL_MIXER_CONF_OPT += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
-> SDL_MIXER_DEPENDENCIES-$(BR2_PACKAGE_LIBVORBIS) += libvorbis
-> 
-> what about doing something more consistent, like:
-> 
-> SDL_MIXER_CONF_OPT     += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
-> SDL_MIXER_DEPENDENCIES += $(call USE_DEP,PACKAGE_LIBVORBIS,libvorbis)
-> 
-> I know it's a litte bit more characters that the previous solution, but
-> it looks more consistent to me.
 
-personally, i prefer to stick to the kconfig syntax where possible.  the only 
-reason for USE_ENABLE is that we need to expand into different text strings.
+commit: http://git.buildroot.net/buildroot/commit/?id=0826a822b9519fbd5aebf9f7d12d88832b3ddb22
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > +_USE_CONF = $(if $(BR2_$(3)), --$(1)-$(4)$(if $(5),=$(5)),
-> > --$(2)-$(4))
-> 
-> What about testing directly BR2_PACKAGE_$(3), since all packages are
-> prefixed by BR2_PACKAGE_ ?
+So it gets handled by make source / external-deps
 
-if that's the case, then there's no reason
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/gdb/gdb.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-in the original implementation, i avoided making the 2nd argument optional.  
-this was because i'd have to execute tr or something to do lower->upper.  but 
-if it's all in make now, it should be possible to support the syntax:
-	$(call USE_ENABLE,libvorbis)
-the 1st arg would always be passed through the UPPERCASE helper, and hte 2nd 
-arg would default to the 1st.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101119/b054eeb6/attachment.pgp>
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 54c3905..af08d1e 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -162,6 +162,8 @@ endif
+ 
+ gdbserver: $(TARGET_DIR)/usr/bin/gdbserver
+ 
++gdbserver-source: $(DL_DIR)/$(GDB_SOURCE)
++
+ gdbserver-clean:
+ 	-$(MAKE) -C $(GDB_SERVER_DIR) clean
+ 
+@@ -209,6 +211,8 @@ $(TARGET_CROSS)gdb: $(GDB_HOST_DIR)/gdb/gdb
+ 
+ gdbhost: $(TARGET_CROSS)gdb
+ 
++gdbhost-source: $(DL_DIR)/$(GDB_SOURCE)
++
+ gdbhost-clean:
+ 	-$(MAKE) -C $(GDB_HOST_DIR) clean
+ 
+-- 
+1.7.2.2
