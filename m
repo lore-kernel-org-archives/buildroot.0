@@ -1,49 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Nov 2010 15:05:20 +0100
-Subject: [Buildroot] [git commit master 1/1] fs: add extra deps to
-	ROOTFS_*_DEPENDENCIES variables
-Message-ID: <20101119141256.5C3BA8D2FA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 19 Nov 2010 14:45:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 759] Sysstat build broken without libintl
+In-Reply-To: <bug-759-163@https.bugs.busybox.net/>
+References: <bug-759-163@https.bugs.busybox.net/>
+Message-ID: <20101119144508.6FDAB8D3C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=759
 
-commit: http://git.buildroot.net/buildroot/commit/?id=094b2938039d9e12323e2f29a59ce6293411dd28
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Instead of explicitly adding it both places it is used.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/common.mk |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+--- Comment #14 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed in git, thanks
 
-diff --git a/fs/common.mk b/fs/common.mk
-index f9dabab..92be00c 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -36,7 +36,10 @@ ROOTFS_DEVICE_TABLE = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
- 
- define ROOTFS_TARGET_INTERNAL
- 
--$(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot host-makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
-+# extra deps
-+$(eval ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma))
-+
-+$(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
- 	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
- 	rm -f $(FAKEROOT_SCRIPT)
-@@ -62,7 +65,7 @@ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_LZMA),y)
- endif
- 
- rootfs-$(1)-show-depends:
--	@echo $(ROOTFS_$(2)_DEPENDENCIES) host-fakeroot host-makedevs $(if $(BR2_TARGET_ROOTFS_$(2)_LZMA),host-lzma)
-+	@echo $(ROOTFS_$(2)_DEPENDENCIES)
- 
- rootfs-$(1): $(BINARIES_DIR)/rootfs.$(1) $(ROOTFS_$(2)_POST_TARGETS)
- 
 -- 
-1.7.2.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
