@@ -1,128 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Nov 2010 10:56:10 +0100
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 19 Nov 2010 05:07:05 -0500
 Subject: [Buildroot] [PATCH] autotools: add with/without and
- enable/disable helpers
-In-Reply-To: <201011190320.21230.vapier@gentoo.org>
+	enable/disable helpers
+In-Reply-To: <20101119105610.2c393dc1@surf>
 References: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
-	<20101119085518.655d8c0d@surf>
 	<201011190320.21230.vapier@gentoo.org>
-Message-ID: <20101119105610.2c393dc1@surf>
+	<20101119105610.2c393dc1@surf>
+Message-ID: <201011190507.06655.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mike,
+On Friday, November 19, 2010 04:56:10 Thomas Petazzoni wrote:
+> All your patches are well appreciated. However, I feel some
+> aggressiveness in your replies, which I don't really understand. Again,
+> I really do appreciate all those improvements, so can we keep the
+> discussion nice and friendly ?
 
-All your patches are well appreciated. However, I feel some
-aggressiveness in your replies, which I don't really understand. Again,
-I really do appreciate all those improvements, so can we keep the
-discussion nice and friendly ?
+i dont recall injecting aggressiveness into my messages.  i have been told 
+before that my response can be too curt.  not the same, but easy to perceive 
+as the same i guess.  personally i try to minimize word count to focus on 
+subject matter and not get bogged down with essays.
 
-On Fri, 19 Nov 2010 03:20:18 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
-
-> not really.  this is the whole point of make's lazy evaluation.  so
-> unless somewhere the code is wrongly using ":=", these shouldnt be
-> executed unless the configure script in question is actually run.  a
-> simple test on my side says that it is working as i expect -- lazily.
-
-Right. The case I was mentionning was the UPPERCASE macro which was use
-directly in the $(eval $(call AUTOTARGETS,...)) of each package. So,
-this macro was actually evaluated when make was parsing all
-packages .mk files. But that's different from the current case, you're
-right.
-
-> > It'd be nicer if we could use a pure Makefile implementation. What
-> > about a simpler :
+> > > It'd be nicer if we could use a pure Makefile implementation. What
+> > > about a simpler :
+> > > 
+> > > USE_WITH = $(if $(BR2_$(1)),--with-$(2),--without-$(2))
+> > > USE_ENABLE = $(if $(BR2_$(1),--enable-$(2),--disable-$(2)))
 > > 
-> > USE_WITH = $(if $(BR2_$(1)),--with-$(2),--without-$(2))
-> > USE_ENABLE = $(if $(BR2_$(1),--enable-$(2),--disable-$(2)))
+> > this isnt functionally equivalent ... there is no support for the
+> > optional [=val] with the flag
 > 
-> this isnt functionally equivalent ... there is no support for the
-> optional [=val] with the flag
+> It's not that I'm against using the shell, but for this particular
+> macro, the make language seems to be quite appropriate.
 
-Ah, correct, I missed that. So, what about:
+i'm not against doing it in make's native language ... it's just that your 
+solution didnt support everything mine did.  as long as they're functionally 
+equivalent, avoiding mixing two languages (make and shell) is of course a good 
+thing.
 
-USE_WITH = $(if $(BR2_$(1)),       \
-              $(if $(3),           \
-                 --with-$(2)=$(3), \
-                 --with-$(2)       \
-              ),                   \
-              --without-$(2))
+i'm importing work that i've done for another distro, so while it's been 
+heavily tested elsewhere, i wouldnt be surprised if there will be more room 
+for improvements as you've shown here.
 
-USE_ENABLE = $(if $(BR2_$(1)),        \
-                $(if $(3),            \
-                  --enable-$(2)=$(3), \
-                  --enable-$(2)       \
-                ),                    \
-                --disable-$(2))
+> And it'd be nice to add some words in the documentation about this as
+> well (but I can do that later on if you wish).
 
-It's not that I'm against using the shell, but for this particular
-macro, the make language seems to be quite appropriate.
+i'm not terribly familiar with current documentation on the backend
 
-And it'd be nice to add some words in the documentation about this as
-well (but I can do that later on if you wish).
+> > this is due to poor design on the behalf of buildroot.  it really
+> > needs to adopt more Kconfig style and do stuff like:
+> > foo-y =
+> > foo-$(BR2_xxx) += libpng
+> 
+> I'm for sure open to improvements/changes in the package
+> infrastructure. For which variables should we use this ? I'm thinking
+> of all "cumulative" variables.
 
-> this is due to poor design on the behalf of buildroot.  it really
-> needs to adopt more Kconfig style and do stuff like:
-> foo-y =
-> foo-$(BR2_xxx) += libpng
+pretty much everything that uses "+=" that ive seen in buildroot has been a 
+candidate for conversion.
 
-I'm for sure open to improvements/changes in the package
-infrastructure. For which variables should we use this ? I'm thinking
-of all "cumulative" variables. So in the generic infrastructure:
+> Does that sounds like what you're suggesting ?
 
- <pkg>_DEPENDENCIES
- <pkg>_POST_PATCH_HOOKS
- <pkg>_PRE_CONFIGURE_HOOKS
- <pkg>_POST_CONFIGURE_HOOKS
- <pkg>_POST_BUILD_HOOKS
- <pkg>_POST_INSTALL_HOOKS
- <pkg>_POST_INSTALL_STAGING_HOOKS
- <pkg>_POST_INSTALL_TARGET_HOOKS
-
-and for the autotools packages, also:
-
- <pkg>_CONF_ENV
- <pkg>_CONF_OPT
- <pkg>_MAKE_ENV
- <pkg>_MAKE_OPT
- <pkg>_AUTORECONF_OPT
- <pkg>_INSTALL_STAGING_OPT
- <pkg>_INSTALL_TARGET_OPT
- <pkg>_CLEAN_OPT
- <pkg>_UNINSTALL_STAGING_OPT
- <pkg>_UNINSTALL_TARGET_OPT
-
-For all those variable, we would take into account:
-
- <pkg>_<varname> (for compatibility reasons)
-
-and
-
- <pkg>_<varname>-y
-
-Does that sounds like what you're suggesting ?
-
-> and again, please retain cc in replies
-
-Sorry, done this time. But I may well forget again in the future, I'm
-not used to retain cc in replies. Will try my best to not forget it.
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+yes, but i was focusing on the common ones.  TARGETS in the top level and all 
+the dependency related variables.  but it probably makes more sense to just do 
+it for all variables so as to stay consistent.  doing some will probably be a 
+bit confusing for people, and even aggravating when they want one that wasnt 
+converted.
+-mike
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: signature.asc
+Name: not available
 Type: application/pgp-signature
-Size: 198 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101119/17a8b208/attachment.pgp>
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101119/f308615c/attachment.pgp>
