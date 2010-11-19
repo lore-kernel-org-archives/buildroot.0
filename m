@@ -1,579 +1,476 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 19 Nov 2010 07:24:15 +0100
-Subject: [Buildroot] [git commit master 1/1] openssh: bump to version 5.6p1
-Message-ID: <20101119080414.70C3C8D303@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 19 Nov 2010 03:19:06 -0500
+Subject: [Buildroot] [PATCH v2] inetutils: new package for random network
+	tools
+In-Reply-To: <1290145160-21033-1-git-send-email-vapier@gentoo.org>
+References: <1290145160-21033-1-git-send-email-vapier@gentoo.org>
+Message-ID: <1290154746-4278-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=9cadb9aca37e3a295aee2721cafcb8c8b0b074c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- CHANGES                                         |    2 +-
- package/openssh/openssh-drop-SUSv3-legacy.patch |  441 +++++++++++++++++++++++
- package/openssh/openssh.002-SUSv-legacy.patch   |   21 --
- package/openssh/openssh.mk                      |    6 +-
- package/openssh/openssh.patch                   |   37 --
- 5 files changed, 445 insertions(+), 62 deletions(-)
- create mode 100644 package/openssh/openssh-drop-SUSv3-legacy.patch
- delete mode 100644 package/openssh/openssh.002-SUSv-legacy.patch
- delete mode 100644 package/openssh/openssh.patch
+v2
+	- tweak Config style
 
-diff --git a/CHANGES b/CHANGES
-index c73fdbf..a62580e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -3,7 +3,7 @@
- 	Fixes all over the tree.
- 
- 	Updated/fixed packages: libglib2, module-init-tools,
--	mtd-utils, qt
-+	mtd-utils, openssh, qt
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/openssh/openssh-drop-SUSv3-legacy.patch b/package/openssh/openssh-drop-SUSv3-legacy.patch
+note: the inetutils.mk is correct -- read the comment already in the file
+
+ package/Config.in                                  |    1 +
+ package/inetutils/Config.in                        |   31 +++++++++++
+ ...tf-parse-pull-in-features.h-for-__GLIBC__.patch |   27 +++++++++
+ ...rgp-fix-program_invocation_name-detection.patch |   51 +++++++++++++++++
+ package/inetutils/inetutils-1.8-0003-wchar.patch   |   12 ++++
+ ...me-ruserpass-to-avoid-C-library-collision.patch |   58 ++++++++++++++++++++
+ ...detect-__rcmd_errstr-support-in-the-C-lib.patch |   57 +++++++++++++++++++
+ ...e-daemon-from-the-C-library-when-possible.patch |   42 ++++++++++++++
+ .../inetutils-1.8-1004-detect-fork-support.patch   |   54 ++++++++++++++++++
+ package/inetutils/inetutils.mk                     |   35 ++++++++++++
+ 10 files changed, 368 insertions(+), 0 deletions(-)
+ create mode 100644 package/inetutils/Config.in
+ create mode 100644 package/inetutils/inetutils-1.8-0001-printf-parse-pull-in-features.h-for-__GLIBC__.patch
+ create mode 100644 package/inetutils/inetutils-1.8-0002-argp-fix-program_invocation_name-detection.patch
+ create mode 100644 package/inetutils/inetutils-1.8-0003-wchar.patch
+ create mode 100644 package/inetutils/inetutils-1.8-1001-ftp-rename-ruserpass-to-avoid-C-library-collision.patch
+ create mode 100644 package/inetutils/inetutils-1.8-1002-rshd-detect-__rcmd_errstr-support-in-the-C-lib.patch
+ create mode 100644 package/inetutils/inetutils-1.8-1003-use-daemon-from-the-C-library-when-possible.patch
+ create mode 100644 package/inetutils/inetutils-1.8-1004-detect-fork-support.patch
+ create mode 100644 package/inetutils/inetutils.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index d3629ff..0b131a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -373,6 +373,7 @@ source "package/dropbear/Config.in"
+ source "package/ethtool/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/ifplugd/Config.in"
++source "package/inetutils/Config.in"
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
 new file mode 100644
-index 0000000..8299da1
+index 0000000..e459993
 --- /dev/null
-+++ b/package/openssh/openssh-drop-SUSv3-legacy.patch
-@@ -0,0 +1,441 @@
-+Drop SUSv3 legacy fuctions
++++ b/package/inetutils/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_INETUTILS
++	bool "inetutils"
++	help
++	  Inetutils is a collection of common network programs.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++	  http://www.gnu.org/software/inetutils/
++
++if BR2_PACKAGE_INETUTILS
++
++config BR2_PACKAGE_INETUTILS_RCP
++	bool "rcp"
++
++config BR2_PACKAGE_INETUTILS_REXEC
++	bool "rexec"
++
++config BR2_PACKAGE_INETUTILS_REXECD
++	bool "rexecd"
++
++config BR2_PACKAGE_INETUTILS_RLOGIN
++	bool "rlogin"
++
++config BR2_PACKAGE_INETUTILS_RLOGIND
++	bool "rlogind"
++
++config BR2_PACKAGE_INETUTILS_RSH
++	bool "rsh"
++
++config BR2_PACKAGE_INETUTILS_RSHD
++	bool "rshd"
++
++endif
+diff --git a/package/inetutils/inetutils-1.8-0001-printf-parse-pull-in-features.h-for-__GLIBC__.patch b/package/inetutils/inetutils-1.8-0001-printf-parse-pull-in-features.h-for-__GLIBC__.patch
+new file mode 100644
+index 0000000..719a484
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-0001-printf-parse-pull-in-features.h-for-__GLIBC__.patch
+@@ -0,0 +1,27 @@
++From 552a7d64ad4a7188a9b7cd89933ae7caf7ebfe90 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 16:59:14 -0500
++Subject: [PATCH 1/2] printf-parse: pull in features.h for __GLIBC__
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 +---
-+ auth2-jpake.c             |   24 ++++++++++++------------
-+ channels.c                |    6 +++---
-+ clientloop.c              |    4 ++--
-+ jpake.c                   |    6 +++---
-+ monitor.c                 |   18 +++++++++---------
-+ openbsd-compat/port-tun.c |    4 ++--
-+ schnorr.c                 |    6 +++---
-+ session.c                 |    2 +-
-+ sftp-client.c             |    2 +-
-+ ssh-keygen.c              |    2 +-
-+ ssh.c                     |    8 ++++----
-+ sshconnect2.c             |   22 +++++++++++-----------
-+ 12 files changed, 52 insertions(+), 52 deletions(-)
++ lib/printf-parse.h |    3 +++
++ 1 files changed, 3 insertions(+), 0 deletions(-)
 +
-+diff --git a/auth2-jpake.c b/auth2-jpake.c
-+index 5de5506..b34d696 100644
-+--- a/auth2-jpake.c
-++++ b/auth2-jpake.c
-+@@ -173,7 +173,7 @@ derive_rawsalt(const char *username, u_char *rawsalt, u_int len)
-+ 		fatal("%s: not enough bytes for rawsalt (want %u have %u)",
-+ 		    __func__, len, digest_len);
-+ 	memcpy(rawsalt, digest, len);
-+-	bzero(digest, digest_len);
-++	memset(digest, 0, digest_len);
-+ 	xfree(digest);
-+ }
++diff --git a/lib/printf-parse.h b/lib/printf-parse.h
++index 67a4a2a..3bd6152 100644
++--- a/lib/printf-parse.h
+++++ b/lib/printf-parse.h
++@@ -25,6 +25,9 @@
 + 
-+@@ -198,10 +198,10 @@ makesalt(u_int want, const char *user)
-+ 		fatal("%s: want %u", __func__, want);
++ #include "printf-args.h"
 + 
-+ 	derive_rawsalt(user, rawsalt, sizeof(rawsalt));
-+-	bzero(ret, sizeof(ret));
-++	memset(ret, 0, sizeof(ret));
-+ 	for (i = 0; i < want; i++)
-+ 		ret[i] = pw_encode64(rawsalt[i]);
-+-	bzero(rawsalt, sizeof(rawsalt));
-++	memset(rawsalt, 0, sizeof(rawsalt));
+++#ifdef HAVE_FEATURES_H
+++# include <features.h>	/* for __GLIBC__ */
+++#endif
 + 
-+ 	return ret;
-+ }
-+@@ -355,7 +355,7 @@ auth2_jpake_get_pwdata(Authctxt *authctxt, BIGNUM **s,
-+ 	debug3("%s: scheme = %s", __func__, *hash_scheme);
-+ 	JPAKE_DEBUG_BN((*s, "%s: s = ", __func__));
-+ #endif
-+-	bzero(secret, secret_len);
-++	memset(secret, 0, secret_len);
-+ 	xfree(secret);
-+ }
-+ 
-+@@ -396,12 +396,12 @@ auth2_jpake_start(Authctxt *authctxt)
-+ 	packet_send();
-+ 	packet_write_wait();
-+ 
-+-	bzero(hash_scheme, strlen(hash_scheme));
-+-	bzero(salt, strlen(salt));
-++	memset(hash_scheme, 0, strlen(hash_scheme));
-++	memset(salt, 0, strlen(salt));
-+ 	xfree(hash_scheme);
-+ 	xfree(salt);
-+-	bzero(x3_proof, x3_proof_len);
-+-	bzero(x4_proof, x4_proof_len);
-++	memset(x3_proof, 0, x3_proof_len);
-++	memset(x4_proof, 0, x4_proof_len);
-+ 	xfree(x3_proof);
-+ 	xfree(x4_proof);
-+ 
-+@@ -448,8 +448,8 @@ input_userauth_jpake_client_step1(int type, u_int32_t seq, void *ctxt)
-+ 	    &pctx->b,
-+ 	    &x4_s_proof, &x4_s_proof_len));
-+ 
-+-	bzero(x1_proof, x1_proof_len);
-+-	bzero(x2_proof, x2_proof_len);
-++	memset(x1_proof, 0, x1_proof_len);
-++	memset(x2_proof, 0, x2_proof_len);
-+ 	xfree(x1_proof);
-+ 	xfree(x2_proof);
-+ 
-+@@ -463,7 +463,7 @@ input_userauth_jpake_client_step1(int type, u_int32_t seq, void *ctxt)
-+ 	packet_send();
-+ 	packet_write_wait();
-+ 
-+-	bzero(x4_s_proof, x4_s_proof_len);
-++	memset(x4_s_proof, 0, x4_s_proof_len);
-+ 	xfree(x4_s_proof);
-+ 
-+ 	/* Expect step 2 packet from peer */
-+@@ -504,7 +504,7 @@ input_userauth_jpake_client_step2(int type, u_int32_t seq, void *ctxt)
-+ 	    &pctx->k,
-+ 	    &pctx->h_k_sid_sessid, &pctx->h_k_sid_sessid_len));
-+ 
-+-	bzero(x2_s_proof, x2_s_proof_len);
-++	memset(x2_s_proof, 0, x2_s_proof_len);
-+ 	xfree(x2_s_proof);
-+ 
-+ 	if (!use_privsep)
-+diff --git a/channels.c b/channels.c
-+index 1cd5004..89dcfc6 100644
-+--- a/channels.c
-++++ b/channels.c
-+@@ -418,7 +418,7 @@ channel_free(Channel *c)
-+ 		if (cc->abandon_cb != NULL)
-+ 			cc->abandon_cb(c, cc->ctx);
-+ 		TAILQ_REMOVE(&c->status_confirms, cc, entry);
-+-		bzero(cc, sizeof(*cc));
-++		memset(cc, 0, sizeof(*cc));
-+ 		xfree(cc);
-+ 	}
-+ 	if (c->filter_cleanup != NULL && c->filter_ctx != NULL)
-+@@ -2625,7 +2625,7 @@ channel_input_status_confirm(int type, u_int32_t seq, void *ctxt)
-+ 		return;
-+ 	cc->cb(type, c, cc->ctx);
-+ 	TAILQ_REMOVE(&c->status_confirms, cc, entry);
-+-	bzero(cc, sizeof(*cc));
-++	memset(cc, 0, sizeof(*cc));
-+ 	xfree(cc);
-+ }
-+ 
-+@@ -3128,7 +3128,7 @@ channel_connect_ctx_free(struct channel_connect *cctx)
-+ 	xfree(cctx->host);
-+ 	if (cctx->aitop)
-+ 		freeaddrinfo(cctx->aitop);
-+-	bzero(cctx, sizeof(*cctx));
-++	memset(cctx, 0, sizeof(*cctx));
-+ 	cctx->host = NULL;
-+ 	cctx->ai = cctx->aitop = NULL;
-+ }
-+diff --git a/clientloop.c b/clientloop.c
-+index de79793..2d08690 100644
-+--- a/clientloop.c
-++++ b/clientloop.c
-+@@ -533,7 +533,7 @@ client_global_request_reply(int type, u_int32_t seq, void *ctxt)
-+ 		gc->cb(type, seq, gc->ctx);
-+ 	if (--gc->ref_count <= 0) {
-+ 		TAILQ_REMOVE(&global_confirms, gc, entry);
-+-		bzero(gc, sizeof(*gc));
-++		memset(gc, 0, sizeof(*gc));
-+ 		xfree(gc);
-+ 	}
-+ 
-+@@ -823,7 +823,7 @@ process_cmdline(void)
-+ 	int cancel_port;
-+ 	Forward fwd;
-+ 
-+-	bzero(&fwd, sizeof(fwd));
-++	memset(&fwd, 0, sizeof(fwd));
-+ 	fwd.listen_host = fwd.connect_host = NULL;
-+ 
-+ 	leave_raw_mode(force_tty_flag);
-+diff --git a/jpake.c b/jpake.c
-+index cdf65f5..73ba954 100644
-+--- a/jpake.c
-++++ b/jpake.c
-+@@ -104,7 +104,7 @@ jpake_free(struct jpake_ctx *pctx)
-+ #define JPAKE_BUF_CLEAR_FREE(v, l)		\
-+ 	do {					\
-+ 		if ((v) != NULL) {		\
-+-			bzero((v), (l));	\
-++			memset((v), 0, (l));	\
-+ 			xfree(v);		\
-+ 			(v) = NULL;		\
-+ 			(l) = 0;		\
-+@@ -132,7 +132,7 @@ jpake_free(struct jpake_ctx *pctx)
-+ #undef JPAKE_BN_CLEAR_FREE
-+ #undef JPAKE_BUF_CLEAR_FREE
-+ 
-+-	bzero(pctx, sizeof(pctx));
-++	memset(pctx, 0, sizeof(pctx));
-+ 	xfree(pctx);
-+ }
-+ 
-+@@ -437,7 +437,7 @@ jpake_check_confirm(const BIGNUM *k,
-+ 	else if (timingsafe_bcmp(peer_confirm_hash, expected_confirm_hash,
-+ 	    expected_confirm_hash_len) == 0)
-+ 		success = 1;
-+-	bzero(expected_confirm_hash, expected_confirm_hash_len);
-++	memset(expected_confirm_hash, 0, expected_confirm_hash_len);
-+ 	xfree(expected_confirm_hash);
-+ 	debug3("%s: success = %d", __func__, success);
-+ 	return success;
-+diff --git a/monitor.c b/monitor.c
-+index 9eb4e35..0e85b7a 100644
-+--- a/monitor.c
-++++ b/monitor.c
-+@@ -2028,8 +2028,8 @@ mm_answer_jpake_step1(int sock, Buffer *m)
-+ 	debug3("%s: sending step1", __func__);
-+ 	mm_request_send(sock, MONITOR_ANS_JPAKE_STEP1, m);
-+ 
-+-	bzero(x3_proof, x3_proof_len);
-+-	bzero(x4_proof, x4_proof_len);
-++	memset(x3_proof, 0, x3_proof_len);
-++	memset(x4_proof, 0, x4_proof_len);
-+ 	xfree(x3_proof);
-+ 	xfree(x4_proof);
-+ 
-+@@ -2058,8 +2058,8 @@ mm_answer_jpake_get_pwdata(int sock, Buffer *m)
-+ 	debug3("%s: sending pwdata", __func__);
-+ 	mm_request_send(sock, MONITOR_ANS_JPAKE_GET_PWDATA, m);
-+ 
-+-	bzero(hash_scheme, strlen(hash_scheme));
-+-	bzero(salt, strlen(salt));
-++	memset(hash_scheme, 0, strlen(hash_scheme));
-++	memset(salt, 0, strlen(salt));
-+ 	xfree(hash_scheme);
-+ 	xfree(salt);
-+ 
-+@@ -2098,8 +2098,8 @@ mm_answer_jpake_step2(int sock, Buffer *m)
-+ 
-+ 	JPAKE_DEBUG_CTX((pctx, "step2 done in %s", __func__));
-+ 
-+-	bzero(x1_proof, x1_proof_len);
-+-	bzero(x2_proof, x2_proof_len);
-++	memset(x1_proof, 0, x1_proof_len);
-++	memset(x2_proof, 0, x2_proof_len);
-+ 	xfree(x1_proof);
-+ 	xfree(x2_proof);
-+ 
-+@@ -2111,7 +2111,7 @@ mm_answer_jpake_step2(int sock, Buffer *m)
-+ 	debug3("%s: sending step2", __func__);
-+ 	mm_request_send(sock, MONITOR_ANS_JPAKE_STEP2, m);
-+ 
-+-	bzero(x4_s_proof, x4_s_proof_len);
-++	memset(x4_s_proof, 0, x4_s_proof_len);
-+ 	xfree(x4_s_proof);
-+ 
-+ 	monitor_permit(mon_dispatch, MONITOR_REQ_JPAKE_KEY_CONFIRM, 1);
-+@@ -2145,7 +2145,7 @@ mm_answer_jpake_key_confirm(int sock, Buffer *m)
-+ 
-+ 	JPAKE_DEBUG_CTX((pctx, "key_confirm done in %s", __func__));
-+ 
-+-	bzero(x2_s_proof, x2_s_proof_len);
-++	memset(x2_s_proof, 0, x2_s_proof_len);
-+ 	buffer_clear(m);
-+ 
-+ 	/* pctx->k is sensitive, not sent */
-+@@ -2179,7 +2179,7 @@ mm_answer_jpake_check_confirm(int sock, Buffer *m)
-+ 
-+ 	JPAKE_DEBUG_CTX((pctx, "check_confirm done in %s", __func__));
-+ 
-+-	bzero(peer_confirm_hash, peer_confirm_hash_len);
-++	memset(peer_confirm_hash, 0, peer_confirm_hash_len);
-+ 	xfree(peer_confirm_hash);
-+ 
-+ 	buffer_clear(m);
-+diff --git a/openbsd-compat/port-tun.c b/openbsd-compat/port-tun.c
-+index 0d756f7..98332ae 100644
-+--- a/openbsd-compat/port-tun.c
-++++ b/openbsd-compat/port-tun.c
-+@@ -67,7 +67,7 @@ sys_tun_open(int tun, int mode)
-+ 		return (-1);
-+ 	}
-+ 
-+-	bzero(&ifr, sizeof(ifr));	
-++	memset(&ifr, 0, sizeof(ifr));	
-+ 
-+ 	if (mode == SSH_TUNMODE_ETHERNET) {
-+ 		ifr.ifr_flags = IFF_TAP;
-+@@ -215,7 +215,7 @@ sys_tun_infilter(struct Channel *c, char *buf, int len)
-+ 	if (len <= 0 || len > (int)(sizeof(rbuf) - sizeof(*af)))
-+ 		return (-1);
-+ 	ptr = (char *)&rbuf[0];
-+-	bcopy(buf, ptr + sizeof(u_int32_t), len);
-++	memmove(ptr + sizeof(u_int32_t), buf, len);
-+ 	len += sizeof(u_int32_t);
-+ 	af = (u_int32_t *)ptr;
-+ 
-+diff --git a/schnorr.c b/schnorr.c
-+index c17ff32..ec4e41b 100644
-+--- a/schnorr.c
-++++ b/schnorr.c
-+@@ -101,7 +101,7 @@ schnorr_hash(const BIGNUM *p, const BIGNUM *q, const BIGNUM *g,
-+ 	SCHNORR_DEBUG_BN((h, "%s: h = ", __func__));
-+  out:
-+ 	buffer_free(&b);
-+-	bzero(digest, digest_len);
-++	memset(digest, 0, digest_len);
-+ 	xfree(digest);
-+ 	digest_len = 0;
-+ 	if (success == 0)
-+@@ -451,7 +451,7 @@ hash_buffer(const u_char *buf, u_int len, const EVP_MD *md,
-+ 	success = 0;
-+  out:
-+ 	EVP_MD_CTX_cleanup(&evp_md_ctx);
-+-	bzero(digest, sizeof(digest));
-++	memset(digest, 0, sizeof(digest));
-+ 	digest_len = 0;
-+ 	return success;
-+ }
-+@@ -544,7 +544,7 @@ modp_group_free(struct modp_group *grp)
-+ 		BN_clear_free(grp->p);
-+ 	if (grp->q != NULL)
-+ 		BN_clear_free(grp->q);
-+-	bzero(grp, sizeof(*grp));
-++	memset(grp, 0, sizeof(*grp));
-+ 	xfree(grp);
-+ }
-+ 
-+diff --git a/session.c b/session.c
-+index 71e4fbe..70c51f2 100644
-+--- a/session.c
-++++ b/session.c
-+@@ -1895,7 +1895,7 @@ session_unused(int id)
-+ 		fatal("%s: insane session id %d (max %d nalloc %d)",
-+ 		    __func__, id, options.max_sessions, sessions_nalloc);
-+ 	}
-+-	bzero(&sessions[id], sizeof(*sessions));
-++	memset(&sessions[id], 0, sizeof(*sessions));
-+ 	sessions[id].self = id;
-+ 	sessions[id].used = 0;
-+ 	sessions[id].chanid = -1;
-+diff --git a/sftp-client.c b/sftp-client.c
-+index 9dab477..0815b41 100644
-+--- a/sftp-client.c
-++++ b/sftp-client.c
-+@@ -289,7 +289,7 @@ get_decode_statvfs(int fd, struct sftp_statvfs *st, u_int expected_id,
-+ 		    SSH2_FXP_EXTENDED_REPLY, type);
-+ 	}
-+ 
-+-	bzero(st, sizeof(*st));
-++	memset(st, 0, sizeof(*st));
-+ 	st->f_bsize = buffer_get_int64(&msg);
-+ 	st->f_frsize = buffer_get_int64(&msg);
-+ 	st->f_blocks = buffer_get_int64(&msg);
-+diff --git a/ssh-keygen.c b/ssh-keygen.c
-+index d90b1df..d78837a 100644
-+--- a/ssh-keygen.c
-++++ b/ssh-keygen.c
-+@@ -1503,7 +1503,7 @@ parse_absolute_time(const char *s)
-+ 		fatal("Invalid certificate time format %s", s);
-+ 	}
-+ 
-+-	bzero(&tm, sizeof(tm));
-++	memset(&tm, 0, sizeof(tm));
-+ 	if (strptime(buf, fmt, &tm) == NULL)
-+ 		fatal("Invalid certificate time %s", s);
-+ 	if ((tt = mktime(&tm)) < 0)
-+diff --git a/ssh.c b/ssh.c
-+index 4419f76..52a8b5e 100644
-+--- a/ssh.c
-++++ b/ssh.c
-+@@ -1436,8 +1436,8 @@ load_public_identity_files(void)
-+ #endif /* PKCS11 */
-+ 
-+ 	n_ids = 0;
-+-	bzero(identity_files, sizeof(identity_files));
-+-	bzero(identity_keys, sizeof(identity_keys));
-++	memset(identity_files, 0, sizeof(identity_files));
-++	memset(identity_keys, 0, sizeof(identity_keys));
-+ 
-+ #ifdef ENABLE_PKCS11
-+ 	if (options.pkcs11_provider != NULL &&
-+@@ -1511,8 +1511,8 @@ load_public_identity_files(void)
-+ 	memcpy(options.identity_files, identity_files, sizeof(identity_files));
-+ 	memcpy(options.identity_keys, identity_keys, sizeof(identity_keys));
-+ 
-+-	bzero(pwname, strlen(pwname));
-++	memset(pwname, 0, strlen(pwname));
-+ 	xfree(pwname);
-+-	bzero(pwdir, strlen(pwdir));
-++	memset(pwdir, 0, strlen(pwdir));
-+ 	xfree(pwdir);
-+ }
-+diff --git a/sshconnect2.c b/sshconnect2.c
-+index 4c379ae..b5502c2 100644
-+--- a/sshconnect2.c
-++++ b/sshconnect2.c
-+@@ -948,14 +948,14 @@ jpake_password_to_secret(Authctxt *authctxt, const char *crypt_scheme,
-+ 	    &secret, &secret_len) != 0)
-+ 		fatal("%s: hash_buffer", __func__);
-+ 
-+-	bzero(password, strlen(password));
-+-	bzero(crypted, strlen(crypted));
-++	memset(password, 0, strlen(password));
-++	memset(crypted, 0, strlen(crypted));
-+ 	xfree(password);
-+ 	xfree(crypted);
-+ 
-+ 	if ((ret = BN_bin2bn(secret, secret_len, NULL)) == NULL)
-+ 		fatal("%s: BN_bin2bn (secret)", __func__);
-+-	bzero(secret, secret_len);
-++	memset(secret, 0, secret_len);
-+ 	xfree(secret);
-+ 
-+ 	return ret;
-+@@ -992,8 +992,8 @@ input_userauth_jpake_server_step1(int type, u_int32_t seq, void *ctxt)
-+ 
-+ 	/* Obtain password and derive secret */
-+ 	pctx->s = jpake_password_to_secret(authctxt, crypt_scheme, salt);
-+-	bzero(crypt_scheme, strlen(crypt_scheme));
-+-	bzero(salt, strlen(salt));
-++	memset(crypt_scheme, 0, strlen(crypt_scheme));
-++	memset(salt, 0, strlen(salt));
-+ 	xfree(crypt_scheme);
-+ 	xfree(salt);
-+ 	JPAKE_DEBUG_BN((pctx->s, "%s: s = ", __func__));
-+@@ -1008,8 +1008,8 @@ input_userauth_jpake_server_step1(int type, u_int32_t seq, void *ctxt)
-+ 	    &pctx->a,
-+ 	    &x2_s_proof, &x2_s_proof_len);
-+ 
-+-	bzero(x3_proof, x3_proof_len);
-+-	bzero(x4_proof, x4_proof_len);
-++	memset(x3_proof, 0, x3_proof_len);
-++	memset(x4_proof, 0, x4_proof_len);
-+ 	xfree(x3_proof);
-+ 	xfree(x4_proof);
-+ 
-+@@ -1021,7 +1021,7 @@ input_userauth_jpake_server_step1(int type, u_int32_t seq, void *ctxt)
-+ 	packet_put_string(x2_s_proof, x2_s_proof_len);
-+ 	packet_send();
-+ 
-+-	bzero(x2_s_proof, x2_s_proof_len);
-++	memset(x2_s_proof, 0, x2_s_proof_len);
-+ 	xfree(x2_s_proof);
-+ 
-+ 	/* Expect step 2 packet from peer */
-+@@ -1061,7 +1061,7 @@ input_userauth_jpake_server_step2(int type, u_int32_t seq, void *ctxt)
-+ 	    &pctx->k,
-+ 	    &pctx->h_k_cid_sessid, &pctx->h_k_cid_sessid_len);
-+ 
-+-	bzero(x4_s_proof, x4_s_proof_len);
-++	memset(x4_s_proof, 0, x4_s_proof_len);
-+ 	xfree(x4_s_proof);
-+ 
-+ 	JPAKE_DEBUG_CTX((pctx, "confirm sending in %s", __func__));
-+@@ -1725,8 +1725,8 @@ userauth_jpake(Authctxt *authctxt)
-+ 	packet_put_string(x2_proof, x2_proof_len);
-+ 	packet_send();
-+ 
-+-	bzero(x1_proof, x1_proof_len);
-+-	bzero(x2_proof, x2_proof_len);
-++	memset(x1_proof, 0, x1_proof_len);
-++	memset(x2_proof, 0, x2_proof_len);
-+ 	xfree(x1_proof);
-+ 	xfree(x2_proof);
-+ 
++ /* Flags */
++ #define FLAG_GROUP       1      /* ' flag */
 +-- 
-+1.7.2.2
++1.7.3.2
 +
-diff --git a/package/openssh/openssh.002-SUSv-legacy.patch b/package/openssh/openssh.002-SUSv-legacy.patch
-deleted file mode 100644
-index 6aece09..0000000
---- a/package/openssh/openssh.002-SUSv-legacy.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--diff -rdup openssh-4.6p1.oorig/openbsd-compat/port-tun.c openssh-4.6p1/openbsd-compat/port-tun.c
----- openssh-4.6p1.oorig/openbsd-compat/port-tun.c	2006-09-02 07:32:40.000000000 +0200
--+++ openssh-4.6p1/openbsd-compat/port-tun.c	2007-06-28 16:08:42.000000000 +0200
--@@ -66,7 +66,7 @@ sys_tun_open(int tun, int mode)
-- 		return (-1);
-- 	}
-- 
---	bzero(&ifr, sizeof(ifr));	
--+	memset(&ifr, 0, sizeof(ifr));
-- 
-- 	if (mode == SSH_TUNMODE_ETHERNET) {
-- 		ifr.ifr_flags = IFF_TAP;
--@@ -212,7 +212,7 @@ sys_tun_infilter(struct Channel *c, char
-- 	if (len <= 0 || len > (int)(sizeof(rbuf) - sizeof(*af)))
-- 		return (-1);
-- 	ptr = (char *)&rbuf[0];
---	bcopy(buf, ptr + sizeof(u_int32_t), len);
--+	memmove(ptr + sizeof(u_int32_t), buf, len);
-- 	len += sizeof(u_int32_t);
-- 	af = (u_int32_t *)ptr;
-- 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 988815a..236a3a8 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -3,12 +3,12 @@
- # openssh
- #
- #############################################################
--OPENSSH_VERSION=5.1p1
--OPENSSH_SITE=ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- 
-+OPENSSH_VERSION = 5.6p1
-+OPENSSH_SITE = ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)"
- OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
--		--disable-utmpx --disable-wtmp --disable-wtmpx --without-x
-+		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
- 
- OPENSSH_DEPENDENCIES = zlib openssl
- 
-diff --git a/package/openssh/openssh.patch b/package/openssh/openssh.patch
-deleted file mode 100644
-index c678d67..0000000
---- a/package/openssh/openssh.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
----- openssh-3.6.1p1/Makefile.in.orig	2003-03-20 17:34:34.000000000 -0700
--+++ openssh-3.6.1p1/Makefile.in	2003-04-25 17:09:00.000000000 -0600
--@@ -27,7 +27,7 @@
-- RAND_HELPER=$(libexecdir)/ssh-rand-helper
-- PRIVSEP_PATH=@PRIVSEP_PATH@
-- SSH_PRIVSEP_USER=@SSH_PRIVSEP_USER@
---STRIP_OPT=@STRIP_OPT@
--+STRIP_OPT=
-- 
-- PATHS= -DSSHDIR=\"$(sysconfdir)\" \
-- 	-D_PATH_SSH_PROGRAM=\"$(SSH_PROGRAM)\" \
--
----- openssh-4.6p1.oorig/sshd_config	2006-07-24 06:06:47.000000000 +0200
--+++ openssh-4.6p1/sshd_config	2007-06-28 15:58:49.000000000 +0200
--@@ -83,9 +83,11 @@
-- #AllowTcpForwarding yes
-- #GatewayPorts no
-- #X11Forwarding no
--+X11Forwarding yes
-- #X11DisplayOffset 10
-- #X11UseLocalhost yes
-- #PrintMotd yes
--+PrintMotd no
-- #PrintLastLog yes
-- #TCPKeepAlive yes
-- #UseLogin no
--@@ -102,8 +104,12 @@
-- # no default banner path
-- #Banner none
-- 
--+ClientAliveInterval 15
--+ClientAliveCountMax 4
--+AcceptEnv LANG LC_*
--+
-- # override default of no subsystems
-- Subsystem	sftp	/usr/libexec/sftp-server
-- 
+diff --git a/package/inetutils/inetutils-1.8-0002-argp-fix-program_invocation_name-detection.patch b/package/inetutils/inetutils-1.8-0002-argp-fix-program_invocation_name-detection.patch
+new file mode 100644
+index 0000000..a8dd8e3
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-0002-argp-fix-program_invocation_name-detection.patch
+@@ -0,0 +1,51 @@
++From 93dbd3319232613ff8f5f3f08bf5f57b21980ef1 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 17:14:21 -0500
++Subject: [PATCH 2/2] argp: fix program_invocation_name detection
++
++The current program_invocation_name symbol detection fails if the argp.h
++header is missing.  So check for the header first before detecting if the
++symbol exists.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ m4/argp.m4 |   15 +++++++++++++--
++ 1 files changed, 13 insertions(+), 2 deletions(-)
++
++diff --git a/m4/argp.m4 b/m4/argp.m4
++index d3ca5ba..efa562c 100644
++--- a/m4/argp.m4
+++++ b/m4/argp.m4
++@@ -31,8 +31,14 @@ AC_DEFUN([gl_ARGP],
++   # are defined elsewhere. It is improbable that only one of them will
++   # be defined and other not, I prefer to stay on the safe side and to
++   # test each one separately.
+++  AC_CHECK_HEADERS_ONCE([argp.h])
++   AC_MSG_CHECKING([whether program_invocation_name is defined])
++-  AC_TRY_LINK([#include <argp.h>],
+++  AC_TRY_LINK([
+++#include <errno.h>
+++#ifdef HAVE_ARGP_H
+++# include <argp.h>
+++#endif
+++],
++               [ program_invocation_name = "test"; ],
++               [ AC_DEFINE([HAVE_PROGRAM_INVOCATION_NAME], [1],
++                  [Define if program_invocation_name is defined])
++@@ -40,7 +46,12 @@ AC_DEFUN([gl_ARGP],
++               [ AC_MSG_RESULT([no])] )
++ 
++   AC_MSG_CHECKING([whether program_invocation_short_name is defined])
++-  AC_TRY_LINK([#include <argp.h>],
+++  AC_TRY_LINK([
+++#include <errno.h>
+++#ifdef HAVE_ARGP_H
+++# include <argp.h>
+++#endif
+++],
++               [ program_invocation_short_name = "test"; ],
++               [ AC_DEFINE([HAVE_PROGRAM_INVOCATION_SHORT_NAME], [1],
++                  [Define if program_invocation_short_name is defined])
++-- 
++1.7.3.2
++
+diff --git a/package/inetutils/inetutils-1.8-0003-wchar.patch b/package/inetutils/inetutils-1.8-0003-wchar.patch
+new file mode 100644
+index 0000000..21635a7
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-0003-wchar.patch
+@@ -0,0 +1,12 @@
++--- inetutils-1.8/lib/wchar.in.h
+++++ inetutils-1.8/lib/wchar.in.h
++@@ -70,6 +70,9 @@
++ /* The include_next requires a split double-inclusion guard.  */
++ #if @HAVE_WCHAR_H@
++ # @INCLUDE_NEXT@ @NEXT_WCHAR_H@
+++#else
+++# include <stddef.h>
+++# define MB_CUR_MAX 1
++ #endif
++ 
++ #undef _GL_ALREADY_INCLUDING_WCHAR_H
+diff --git a/package/inetutils/inetutils-1.8-1001-ftp-rename-ruserpass-to-avoid-C-library-collision.patch b/package/inetutils/inetutils-1.8-1001-ftp-rename-ruserpass-to-avoid-C-library-collision.patch
+new file mode 100644
+index 0000000..164b47a
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-1001-ftp-rename-ruserpass-to-avoid-C-library-collision.patch
+@@ -0,0 +1,58 @@
++From 4f890adb39b52bc43c578966071625004988e3b8 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 22:11:48 -0500
++Subject: [PATCH 1/4] ftp: rename ruserpass to avoid C library collision
++
++The C library itself defines a "ruserpass" function.  When linking
++statically, it is possible to hit a symbol collision linker error.
++So rename the local ftp version to "remote_userpass".
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ ftp/extern.h    |    2 +-
++ ftp/ftp.c       |    2 +-
++ ftp/ruserpass.c |    2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/ftp/extern.h b/ftp/extern.h
++index 8cdb8aa..037cb61 100644
++--- a/ftp/extern.h
+++++ b/ftp/extern.h
++@@ -119,7 +119,7 @@ void reset (int, char **);
++ void restart (int, char **);
++ void rmthelp (int, char **);
++ void rmtstatus (int, char **);
++-int ruserpass (char *, char **, char **, char **);
+++int remote_userpass (char *, char **, char **, char **);
++ void sendrequest (char *, char *, char *, int);
++ void setascii (int, char **);
++ void setbell (int, char **);
++diff --git a/ftp/ftp.c b/ftp/ftp.c
++index c20ba41..95675cc 100644
++--- a/ftp/ftp.c
+++++ b/ftp/ftp.c
++@@ -251,7 +251,7 @@ login (char *host)
++   int n, aflag = 0;
++ 
++   user = pass = acct = 0;
++-  if (ruserpass (host, &user, &pass, &acct) < 0)
+++  if (remote_userpass (host, &user, &pass, &acct) < 0)
++     {
++       code = -1;
++       return (0);
++diff --git a/ftp/ruserpass.c b/ftp/ruserpass.c
++index 8572b95..c08fbc0 100644
++--- a/ftp/ruserpass.c
+++++ b/ftp/ruserpass.c
++@@ -111,7 +111,7 @@ static struct toktab
++ };
++ 
++ int
++-ruserpass (char *host, char **aname, char **apass, char **aacct)
+++remote_userpass (char *host, char **aname, char **apass, char **aacct)
++ {
++   char *hdir, buf[BUFSIZ], *tmp;
++   char *myname = 0, *mydomain;
++-- 
++1.7.3.2
++
+diff --git a/package/inetutils/inetutils-1.8-1002-rshd-detect-__rcmd_errstr-support-in-the-C-lib.patch b/package/inetutils/inetutils-1.8-1002-rshd-detect-__rcmd_errstr-support-in-the-C-lib.patch
+new file mode 100644
+index 0000000..7eb0ba8
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-1002-rshd-detect-__rcmd_errstr-support-in-the-C-lib.patch
+@@ -0,0 +1,57 @@
++From 730015f060fe76eee615f361a65eb719cdf22eef Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 22:20:39 -0500
++Subject: [PATCH 2/4] rshd: detect __rcmd_errstr support in the C lib
++
++Not all C libraries support __rcmd_errstr, so add a configure test for it.
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ configure.ac |    2 +-
++ src/rshd.c   |    4 ++++
++ 2 files changed, 5 insertions(+), 1 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index c1ac270..79d655c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -587,7 +587,7 @@ AC_CHECK_FUNCS(cfsetspeed cgetent dirfd fchdir flock \
++                setsid setregid setreuid setresgid setresuid setutent_r \
++                sigaction sigvec strchr setproctitle tcgetattr tzset utimes \
++                utime uname \
++-               updwtmp updwtmpx vhangup wait3 wait4 opendir2)
+++               updwtmp updwtmpx vhangup wait3 wait4 opendir2 __rcmd_errstr)
++ 
++ dnl Functions that we will define if necessary.
++ AC_REPLACE_FUNCS(getpass getusershell memcmp memcpy memmove memset \
++diff --git a/src/rshd.c b/src/rshd.c
++index d49facd..9301ef2 100644
++--- a/src/rshd.c
+++++ b/src/rshd.c
++@@ -284,7 +284,9 @@ extern char **environ;
++ void
++ doit (int sockfd, struct sockaddr_in *fromp)
++ {
+++#ifdef HAVE___RCMD_ERRSTR
++   extern char *__rcmd_errstr;	/* syslog hook from libc/net/rcmd.c. */
+++#endif
++   struct hostent *hp;
++   struct passwd *pwd;
++   u_short port;
++@@ -757,11 +759,13 @@ doit (int sockfd, struct sockaddr_in *fromp)
++                      && (iruserok (fromp->sin_addr.s_addr, pwd->pw_uid == 0,
++                                    remuser, locuser)) < 0))
++     {
+++#ifdef HAVE___RCMD_ERRSTR
++       if (__rcmd_errstr)
++ 	syslog (LOG_INFO | LOG_AUTH,
++ 		"%s@%s as %s: permission denied (%s). cmd='%.80s'",
++ 		remuser, hostname, locuser, __rcmd_errstr, cmdbuf);
++       else
+++#endif
++ 	syslog (LOG_INFO | LOG_AUTH,
++ 		"%s@%s as %s: permission denied. cmd='%.80s'",
++ 		remuser, hostname, locuser, cmdbuf);
++-- 
++1.7.3.2
++
+diff --git a/package/inetutils/inetutils-1.8-1003-use-daemon-from-the-C-library-when-possible.patch b/package/inetutils/inetutils-1.8-1003-use-daemon-from-the-C-library-when-possible.patch
+new file mode 100644
+index 0000000..defc696
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-1003-use-daemon-from-the-C-library-when-possible.patch
+@@ -0,0 +1,42 @@
++From 3b9f64c6a668849b37b884a7826885c70b95787b Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 22:24:06 -0500
++Subject: [PATCH 3/4] use daemon from the C library when possible
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ configure.ac          |    2 +-
++ libinetutils/daemon.c |    2 ++
++ 2 files changed, 3 insertions(+), 1 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 79d655c..25cc3db 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -579,7 +579,7 @@ AC_FUNC_MMAP
++ AC_FUNC_MALLOC
++ AC_FUNC_REALLOC
++ 
++-AC_CHECK_FUNCS(bcopy bcmp bzero cfsetspeed cgetent dirfd fchdir flock \
+++AC_CHECK_FUNCS(bcopy bcmp bzero cfsetspeed cgetent daemon dirfd fchdir flock \
++                fpathconf ftruncate \
++ 	       getcwd getmsg getspnam initgroups initsetproctitle killpg \
++                mkstemp ptsname \
++diff --git a/libinetutils/daemon.c b/libinetutils/daemon.c
++index 2156af4..9beb255 100644
++--- a/libinetutils/daemon.c
+++++ b/libinetutils/daemon.c
++@@ -197,8 +197,10 @@ waitdaemon (int nochdir, int noclose, int maxwait)
++   return ppid;
++ }
++ 
+++#ifndef HAVE_DAEMON
++ int
++ daemon (int nochdir, int noclose)
++ {
++   return (waitdaemon (nochdir, noclose, 0) == -1) ? -1 : 0;
++ }
+++#endif
++-- 
++1.7.3.2
++
+diff --git a/package/inetutils/inetutils-1.8-1004-detect-fork-support.patch b/package/inetutils/inetutils-1.8-1004-detect-fork-support.patch
+new file mode 100644
+index 0000000..52234bd
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-1004-detect-fork-support.patch
+@@ -0,0 +1,54 @@
++From 0acaed0d4b2bf9495e71ec4c898733bed2a86be0 Mon Sep 17 00:00:00 2001
++From: Mike Frysinger <vapier@gentoo.org>
++Date: Thu, 18 Nov 2010 22:27:55 -0500
++Subject: [PATCH 4/4] detect fork() support
++
++Linux/nommu systems cannot support a fork(), so add a configure test for
++it so apps can pick that or vfork().
++
++Signed-off-by: Mike Frysinger <vapier@gentoo.org>
++---
++ configure.ac                |    2 +-
++ libinetutils/libinetutils.h |    9 +++++++++
++ 2 files changed, 10 insertions(+), 1 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 25cc3db..98196f4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -580,7 +580,7 @@ AC_FUNC_MALLOC
++ AC_FUNC_REALLOC
++ 
++ AC_CHECK_FUNCS(bcopy bcmp bzero cfsetspeed cgetent daemon dirfd fchdir flock \
++-               fpathconf ftruncate \
+++               fork fpathconf ftruncate \
++ 	       getcwd getmsg getspnam initgroups initsetproctitle killpg \
++                mkstemp ptsname \
++                setegid seteuid setpgid \
++diff --git a/libinetutils/libinetutils.h b/libinetutils/libinetutils.h
++index 19bbde5..86365b0 100644
++--- a/libinetutils/libinetutils.h
+++++ b/libinetutils/libinetutils.h
++@@ -17,6 +17,8 @@
++   You should have received a copy of the GNU General Public License
++   along with this program.  If not, see `http://www.gnu.org/licenses/'. */
++ 
+++#include <config.h>
+++
++ #include "argp-version-etc.h"
++ 
++ void utmp_init (char *line, char *user, char *id);
++@@ -32,3 +34,10 @@ extern const char *default_program_authors[];
++ #define iu_argp_init(name, authors)				\
++   argp_program_bug_address = "<" PACKAGE_BUGREPORT ">";		\
++   argp_version_setup (name, authors);
+++
+++#ifdef HAVE_FORK
+++# define fork_exit(s) exit(s)
+++#else
+++# define fork() vfork()
+++# define fork_exit(s) _exit(s)
+++#endif
++-- 
++1.7.3.2
++
+diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
+new file mode 100644
+index 0000000..e6c8cd9
+--- /dev/null
++++ b/package/inetutils/inetutils.mk
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# inetutils
++#
++#############################################################
++
++INETUTILS_VERSION = 1.8
++INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.gz
++INETUTILS_SITE = $(BR2_GNU_MIRROR)/inetutils/
++# patches update many autotool files, and then we need to touch all
++# the man pages to keep from `help2man` running on the binaries
++INETUTILS_AUTORECONF = YES
++define INETUTILS_AUTORECONF_HOOK
++	touch $(INETUTILS_SRCDIR)/*/*.[0-9]
++endef
++INETUTILS_CONF_OPT = \
++	--libexecdir=/usr/sbin \
++	--program-transform-name= \
++	--without-included-regex \
++	--disable-libls \
++	--disable-servers --disable-clients \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_RCP,rcp) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_REXEC,rexec) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_REXECD,rexecd) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_RLOGIN,rlogin) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_RLOGIND,rlogind) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_RSH,rsh) \
++	$(call USE_ENABLE,PACKAGE_INETUTILS_RSHD,rshd)
++
++$(eval $(call AUTOTARGETS,package,inetutils))
++
++# append after autotools generation so we get autoreconf then touch
++INETUTILS_PRE_CONFIGURE_HOOKS += INETUTILS_AUTORECONF_HOOK
++
++INETUTILS_INSTALL_TARGET_OPT += SUIDMODE="-m 4775"
 -- 
-1.7.2.2
+1.7.3.2
