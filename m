@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Fri, 19 Nov 2010 10:45:03 +0100
-Subject: [Buildroot] [git commit master 1/1] pciutils: compilation failed
-	with zlib enabled because it lacks a dependency
-Message-ID: <20101119094525.53B6E8D2F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] bind: security bump to 9.5.2-p4
+Message-ID: <20101119094525.1AC828D2F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +9,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5edc7338175f8cbbf2d90c5d6be7ccc39bd94e2
+commit: http://git.buildroot.net/buildroot/commit/?id=aa59aeb6b5efda44f5f6f93a913cbda9d6a15576
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #2797
-
-Signed-off-by: Stanislav Bogatyrev <realloc@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                      |    5 +++--
- package/pciutils/pciutils.mk |    1 +
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ CHANGES              |    5 +++--
+ package/bind/bind.mk |    4 +---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 5bd7483..0d67202 100644
+index c3b3a6f..5bd7483 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -3,13 +3,14 @@
+@@ -2,8 +2,9 @@
+ 
  	Fixes all over the tree.
  
- 	Updated/fixed packages: bash, bind, busybox, libglib2, libmad,
--	midori, module-init-tools, mtd-utils, openssh, qt, sqlite,
--	webkit
-+	midori, module-init-tools, mtd-utils, openssh, pciutils, qt,
-+	sqlite, webkit
+-	Updated/fixed packages: bash, busybox, libglib2, libmad, midori,
+-	module-init-tools, mtd-utils, openssh, qt, sqlite, webkit
++	Updated/fixed packages: bash, bind, busybox, libglib2, libmad,
++	midori, module-init-tools, mtd-utils, openssh, qt, sqlite,
++	webkit
  
  	Issues resolved (http://bugs.uclibc.org):
  
- 	#2479: host-module-init-tools 3.11 fails to build
- 	#2785: mtd-utils build fails due to missing libmtd
-+	#2797: pciutils dependencies on zlib not taken into account
- 	#2809: failed to compile libglib2
- 	#2821: [PATCH] Patch for JavaScriptCore in QtWebKit module
- 	#2827: qt-4.7.0-pthread_getattr_np.patch invalid for qt 4.6...
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index a7d9996..6e16300 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -8,6 +8,7 @@ PCIUTILS_VERSION = 3.1.7
- PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- 	PCIUTILS_ZLIB=yes
-+	PCIUTILS_DEPENDENCIES += zlib
- else
- 	PCIUTILS_ZLIB=no
- endif
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 2434086..f402ad1 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,10 +4,8 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.5.2-P2
++BIND_VERSION = 9.5.2-P4
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+-BIND_LIBTOOL_PATCH = NO
+-BIND_INSTALL_STAGING = NO
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+ BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
+ BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
 -- 
 1.7.2.2
