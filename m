@@ -1,57 +1,59 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 19 Nov 2010 05:23:36 -0500
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Nov 2010 12:13:26 +0100
 Subject: [Buildroot] [PATCH v2] autotools: add with/without and
-	enable/disable helpers
-In-Reply-To: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
+ enable/disable helpers
+In-Reply-To: <1290162216-30689-1-git-send-email-vapier@gentoo.org>
 References: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1290162216-30689-1-git-send-email-vapier@gentoo.org>
+	<1290162216-30689-1-git-send-email-vapier@gentoo.org>
+Message-ID: <20101119121326.3185e990@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rather than have to write ugly logic in every package .mk file to check
-a config var and then expand into a --{en,dis}able-foo flag, add helpers
-so code can cleanly expand things.
+Hello,
 
-A simple example:
-- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
-- SDL_MIXER_CONF_OPT += --enable-music-ogg
-- else
-- SDL_MIXER_CONF_OPT += --disable-music-ogg
-- endif
-+ SDL_MIXER_CONF_OPT += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
+On Fri, 19 Nov 2010 05:23:36 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
-v2
-	- rewrite _USE_CONF in make
+> Rather than have to write ugly logic in every package .mk file to check
+> a config var and then expand into a --{en,dis}able-foo flag, add helpers
+> so code can cleanly expand things.
+> 
+> A simple example:
+> - ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+> - SDL_MIXER_CONF_OPT += --enable-music-ogg
+> - else
+> - SDL_MIXER_CONF_OPT += --disable-music-ogg
+> - endif
+> + SDL_MIXER_CONF_OPT += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
 
- package/Makefile.autotools.in |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+So typically, one would do:
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 7d04e44..8f76349 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -279,3 +279,17 @@ else
- $(call AUTOTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
- endif
- endef
-+
-+################################################################################
-+# AUTOTOOLS HELPERS
-+################################################################################
-+
-+# $(call _USE_CONF,enable,disable,LIB_FFMPEG,video,blah) -> --enable-video=blah if LIB_FFMPEG
-+# $(call _USE_CONF,with,without,LIB_FFMPEG,video)        -> --with-video if LIB_FFMPEG
-+_USE_CONF = $(if $(BR2_$(3)), --$(1)-$(4)$(if $(5),=$(5)), --$(2)-$(4))
-+
-+# $(call USE_ENABLE,LIB_FFMPEG,video) => --enable-video if LIB_FFMPEG is set
-+USE_ENABLE = $(call _USE_CONF,enable,disable,$(1),$(2),$(3))
-+
-+# $(call USE_WITH,LIB_FFMPEG,video) => --with-video if LIB_FFMPEG is set
-+USE_WITH = $(call _USE_CONF,with,without,$(1),$(2),$(3))
+SDL_MIXER_CONF_OPT += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
+SDL_MIXER_DEPENDENCIES-$(BR2_PACKAGE_LIBVORBIS) += libvorbis
+
+what about doing something more consistent, like:
+
+SDL_MIXER_CONF_OPT     += $(call USE_ENABLE,PACKAGE_LIBVORBIS,music-ogg)
+SDL_MIXER_DEPENDENCIES += $(call USE_DEP,PACKAGE_LIBVORBIS,libvorbis)
+
+I know it's a litte bit more characters that the previous solution, but
+it looks more consistent to me.
+
+> +# $(call _USE_CONF,enable,disable,LIB_FFMPEG,video,blah) -> --enable-video=blah if LIB_FFMPEG
+> +# $(call _USE_CONF,with,without,LIB_FFMPEG,video)        -> --with-video if LIB_FFMPEG
+> +_USE_CONF = $(if $(BR2_$(3)), --$(1)-$(4)$(if $(5),=$(5)), --$(2)-$(4))
+
+What about testing directly BR2_PACKAGE_$(3), since all packages are
+prefixed by BR2_PACKAGE_ ?
+
+Thanks!
+
+Thomas
 -- 
-1.7.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
