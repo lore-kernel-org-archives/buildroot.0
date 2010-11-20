@@ -1,141 +1,119 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 20 Nov 2010 05:29:34 -0500
-Subject: [Buildroot] [PATCH] toolchain: add an unused ELF library cleaner
-Message-ID: <1290248974-16161-1-git-send-email-vapier@gentoo.org>
+Date: Sat, 20 Nov 2010 05:29:40 -0500
+Subject: [Buildroot] [PATCH] TARGET_CFLAGS: convert to kbuild-y style
+Message-ID: <1290248980-16200-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we install all the shared ELF libraries that are available
-to the toolchain.  Often times, many of these libraries are unused in
-the final build image.  So rather than forcing people to create their
-own hardcoded list of libs they want to remove, add a helper script
-that automatically scans the target rootfs and removes all libraries
-that other ELFs in the rootfs do not need.
-
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- Makefile                      |    6 ++++
- toolchain/toolchain-common.in |    6 ++++
- toolchain/trim-libs.sh        |   67 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 79 insertions(+), 0 deletions(-)
- create mode 100755 toolchain/trim-libs.sh
+ package/Makefile.in |   67 ++++++++++++++------------------------------------
+ 1 files changed, 19 insertions(+), 48 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index e351e79..f4b370f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -406,6 +406,9 @@ $(TARGET_DIR): $(BUILD_DIR)/.root
- erase-fakeroots:
- 	rm -f $(BUILD_DIR)/.fakeroot*
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 971a7ed..e61be79 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -9,78 +9,49 @@ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
  
-+ifeq ($(BR2_INSTALL_ELF_CLEANUP),y)
-+target-finalize: host-pax-utils
-+endif
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-@@ -424,6 +427,9 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || :
+-ifeq ($(BR2_OPTIMIZE_0),y)
+-TARGET_OPTIMIZATION+=-O0
+-endif
+-ifeq ($(BR2_OPTIMIZE_1),y)
+-TARGET_OPTIMIZATION+=-O1
+-endif
+-ifeq ($(BR2_OPTIMIZE_2),y)
+-TARGET_OPTIMIZATION+=-O2
+-endif
+-ifeq ($(BR2_OPTIMIZE_3),y)
+-TARGET_OPTIMIZATION+=-O3
+-endif
+-ifeq ($(BR2_OPTIMIZE_S),y)
+-TARGET_OPTIMIZATION+=-Os
+-endif
+-ifeq ($(BR2_DEBUG_1),y)
+-TARGET_DEBUGGING=-g1
+-endif
+-ifeq ($(BR2_DEBUG_2),y)
+-TARGET_DEBUGGING=-g2
+-endif
+-ifeq ($(BR2_DEBUG_3),y)
+-TARGET_DEBUGGING=-g3
+-endif
+-
+-TARGET_CFLAGS=$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
++TARGET_CFLAGS-$(BR2_OPTIMIZE_0) += -O0
++TARGET_CFLAGS-$(BR2_OPTIMIZE_1) += -O1
++TARGET_CFLAGS-$(BR2_OPTIMIZE_2) += -O2
++TARGET_CFLAGS-$(BR2_OPTIMIZE_3) += -O3
++TARGET_CFLAGS-$(BR2_OPTIMIZE_S) += -Os
++TARGET_CFLAGS-$(BR2_DEBUG_1)    += -g1
++TARGET_CFLAGS-$(BR2_DEBUG_2)    += -g2
++TARGET_CFLAGS-$(BR2_DEBUG_3)    += -g3
+ 
+ CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
+ CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+ 
+ ifneq ($(CC_TARGET_TUNE_),)
+-TARGET_CFLAGS+=-mtune=$(CC_TARGET_TUNE_)
++TARGET_CFLAGS-y += -mtune=$(CC_TARGET_TUNE_)
  endif
-+ifeq ($(BR2_INSTALL_ELF_CLEANUP),y)
-+	PATH="$(HOST_PATH)" toolchain/trim-libs.sh "$(TARGET_DIR)"
-+endif
- 	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db.so*' | \
- 		xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index efb5863..2c8cd0d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -174,6 +174,12 @@ config BR2_INSTALL_LIBSTDCPP
- comment "C++ support broken in uClibc 0.9.31 with locale enabled with gcc 4.2"
- 	depends on !BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31
+ ifneq ($(CC_TARGET_ARCH_),)
+-TARGET_CFLAGS+=-march=$(CC_TARGET_ARCH_)
++TARGET_CFLAGS-y += -march=$(CC_TARGET_ARCH_)
+ endif
+ ifneq ($(CC_TARGET_ABI_),)
+-TARGET_CFLAGS+=-mabi=$(CC_TARGET_ABI_)
++TARGET_CFLAGS-y += -mabi=$(CC_TARGET_ABI_)
+ endif
  
-+config BR2_INSTALL_ELF_CLEANUP
-+	bool "Cull unused ELF shared libraries"
-+	help
-+	  Automatically scan the target rootfs and remove all ELF libraries
-+	  that are not explicitly required by other ELF binaries.
-+
- config BR2_TARGET_OPTIMIZATION
- 	string "Target Optimizations"
- 	default "-pipe"
-diff --git a/toolchain/trim-libs.sh b/toolchain/trim-libs.sh
-new file mode 100755
-index 0000000..b9a2264
---- /dev/null
-+++ b/toolchain/trim-libs.sh
-@@ -0,0 +1,67 @@
-+#!/bin/bash
-+
-+set -e
-+
-+has() { [[ " ${*:2} " == *" "$1" "* ]] ; }
-+
-+v=
-+vecho() { [ -z "$v" ] || echo "$*" ; }
-+
-+if [ -z "${ROMFSDIR}" ] ; then
-+	if [ -d "$1" ] ; then
-+		ROMFSDIR=$1
-+	else
-+		echo "ERROR: no dir specified (arg or \$ROMFSDIR)"
-+		exit 1
-+	fi
-+fi
-+
-+if ! scanelf -V > /dev/null ; then
-+	echo "ERROR: you do not have pax-utils installed"
-+	exit 1
-+fi
-+
-+cd "${ROMFSDIR}"
-+libs=$(scanelf -F'%n#f' -qR bin sbin usr | sed 's:[, ]:\n:g' | sort -u)
-+if [ -z "$libs" ] ; then
-+	# all FLAT system, so leave libs alone
-+	exit 0
-+fi
-+cd lib
-+
-+addlibs() {
-+	newlibs=$( (echo $libs; scanelf -F'%n#f' -qR ${libs}) | sed 's:[, ]:\n:g' | sort -u)
-+	newlibs=$(echo $newlibs)
-+	[ "$newlibs" != "$libs" ] || return 0
-+	libs=$newlibs
-+	addlibs
-+}
-+addlibs
-+
-+# nptl like to dlopen() the libgcc_s.so library but not link against it,
-+# so make sure we do not prune it if we might possibly need it
-+if has "libpthread.so.*" ${libs} ; then
-+	if ! has "libgcc_s.so.*" ${libs} ; then
-+		libs="${libs} $(echo libgcc_s.so.*)"
-+	fi
-+fi
-+
-+(
-+find . -maxdepth 1 -type l -printf '%P\n'
-+find . -maxdepth 1 -type f -printf '%P\n'
-+) | \
-+while read l ; do
-+	if has ${l} ${libs} ; then
-+		if [ -L "${l}" ] ; then
-+			vecho "delinking $l"
-+			cp "$l" "../.$l"
-+			rm "$l"
-+			mv "../.$l" "$l"
-+		else
-+			vecho "keeping $l"
-+		fi
-+	else
-+		vecho "trimming $l"
-+		rm "${l}"
-+	fi
-+done
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-ifeq ($(BR2_x86_64),y)
+-TARGET_CFLAGS+=-fPIC -DPIC
+-endif # PIC for dynamic objects on x86_64
+-endif
+-
+-ifeq ($(BR2_SOFT_FLOAT),y)
+-TARGET_CFLAGS+=-msoft-float
++TARGET_CFLAGS-$(BR2_x86_64) += -fPIC -DPIC
+ endif
+ 
+-ifeq ($(BR2_VFP_FLOAT),y)
+-TARGET_CFLAGS+=-mfpu=vfp
+-endif
++TARGET_CFLAGS-$(BR2_SOFT_FLOAT) += -msoft-float
++TARGET_CFLAGS-$(BR2_VFP_FLOAT) += -mfpu=vfp
+ 
+ # enable VIS for v9a and v9b
+ ifeq ($(findstring y,$(BR2_sparc_v9a)$(BR2_sparc64_v9a)$(BR2_sparc_v9b)$(BR2_sparc64_v9b)),y)
+-TARGET_CFLAGS+=-mvis
++TARGET_CFLAGS-y += -mvis
+ endif
+ 
+ ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_ABI64)),yy)
+-TARGET_CFLAGS+=-fno-pic -mno-abicalls
++TARGET_CFLAGS-y += -fno-pic -mno-abicalls
+ endif
+ 
+-ifeq ($(BR2_LARGEFILE),y)
+-TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-endif
+-
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+-endif
++TARGET_CFLAGS-$(BR2_LARGEFILE) += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++TARGET_CFLAGS-$(BR2_TOOLCHAIN_BUILDROOT) += -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+ 
++TARGET_CFLAGS=$(TARGET_CFLAGS-y)
+ TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ TARGET_SYSROOT_OPT=--sysroot=$(STAGING_DIR)
 -- 
 1.7.3.2
