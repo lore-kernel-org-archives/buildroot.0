@@ -1,9 +1,7 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 20 Nov 2010 01:43:29 -0500
-Subject: [Buildroot] [PATCH v2] whetstone: new benchmark package
-In-Reply-To: <1290233458-23229-1-git-send-email-vapier@gentoo.org>
-References: <1290233458-23229-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1290235409-31995-1-git-send-email-vapier@gentoo.org>
+Date: Sat, 20 Nov 2010 01:52:43 -0500
+Subject: [Buildroot] [PATCH] lsuio: new UIO helper package
+Message-ID: <1290235963-2083-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +10,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
-v2
-	- tweak flag passing when building
-
- package/Config.in              |    1 +
- package/whetstone/Config.in    |    6 ++++++
- package/whetstone/whetstone.mk |   37 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/whetstone/Config.in
- create mode 100644 package/whetstone/whetstone.mk
+ package/Config.in       |    1 +
+ package/lsuio/Config.in |    6 ++++++
+ package/lsuio/lsuio.mk  |   11 +++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/lsuio/Config.in
+ create mode 100644 package/lsuio/lsuio.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0b131a0..407facc 100644
+index fb0dee8..bd348a4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -27,6 +27,7 @@ source "package/memstat/Config.in"
- source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
- source "package/strace/Config.in"
-+source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- endmenu
- 
-diff --git a/package/whetstone/Config.in b/package/whetstone/Config.in
+@@ -177,6 +177,7 @@ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
+ source "package/kbd/Config.in"
+ source "package/lm-sensors/Config.in"
++source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/makedevs/Config.in"
+ source "package/mdadm/Config.in"
+diff --git a/package/lsuio/Config.in b/package/lsuio/Config.in
 new file mode 100644
-index 0000000..7a68160
+index 0000000..675a318
 --- /dev/null
-+++ b/package/whetstone/Config.in
++++ b/package/lsuio/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_WHETSTONE
-+	bool "whetstone"
++config BR2_PACKAGE_LSUIO
++	bool "lsuio"
 +	help
-+	  C Converted Whetstone Double Precision Benchmark
++	  list available userspace I/O (UIO) devices
 +
-+	  http://www.netlib.org/benchmark/
-diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
++	  http://www.osadl.org/UIO.uio.0.html
+diff --git a/package/lsuio/lsuio.mk b/package/lsuio/lsuio.mk
 new file mode 100644
-index 0000000..ab3c147
+index 0000000..2a867b7
 --- /dev/null
-+++ b/package/whetstone/whetstone.mk
-@@ -0,0 +1,37 @@
++++ b/package/lsuio/lsuio.mk
+@@ -0,0 +1,11 @@
 +#############################################################
 +#
-+# whetstone
++# lsuio
 +#
 +#############################################################
 +
-+WHETSTONE_VERSION = 1.2
-+WHETSTONE_SOURCE = whetstone.c
-+WHETSTONE_SITE = http://www.netlib.org/benchmark/
++LSUIO_VERSION = 0.2.0
++LSUIO_SOURCE = lsuio-$(LSUIO_VERSION).tar.gz
++LSUIO_SITE = http://www.osadl.org/projects/downloads/UIO/user
 +
-+define WHETSTONE_BUILD_CMDS
-+	CFLAGS="$(TARGET_CFLAGS) -Wall -DNO_PROTOTYPES=1" \
-+	$(MAKE) \
-+		CC="$(TARGET_CC)" \
-+		LDLIBS="-lm" \
-+		-C $(@D) whetstone
-+endef
-+
-+define WHETSTONE_CLEAN_CMDS
-+	rm -f $(@D)/whetstone
-+endef
-+
-+define WHETSTONE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/whetstone $(TARGET_DIR)/bin/whetstone
-+endef
-+
-+define WHETSTONE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/bin/whetstone
-+endef
-+
-+$(eval $(call GENTARGETS,package,whetstone))
-+
-+$(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
-+	@$(call MESSAGE,"Extracting")
-+	$(Q)mkdir -p $(@D)
-+	$(Q)cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
-+	$(Q)touch $@
++$(eval $(call AUTOTARGETS,package,lsuio))
 -- 
 1.7.3.2
