@@ -1,62 +1,59 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 19 Nov 2010 23:36:37 -0500
-Subject: [Buildroot] [PATCH v2] m4: version bump to 1.4.15
-In-Reply-To: <1289916774-27881-1-git-send-email-vapier@gentoo.org>
-References: <1289916774-27881-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1290227797-9887-1-git-send-email-vapier@gentoo.org>
+Date: Sat, 20 Nov 2010 00:11:14 -0500
+Subject: [Buildroot] [PATCH] toolchain: add a USE_MMU build option
+Message-ID: <1290229874-24193-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Some packages need to know whether the MMU is in play, so add a toolchain
+option to expose the feature to them.
+
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
-v2
-	- include patch from OE for building with uClibc targets
+ toolchain/helpers.mk          |    2 ++
+ toolchain/toolchain-common.in |    7 +++++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
- package/m4/m4-1.4.15-uclibc-sched_param-def.patch |   19 +++++++++++++++++++
- package/m4/m4.mk                                  |    2 +-
- 2 files changed, 20 insertions(+), 1 deletions(-)
- create mode 100644 package/m4/m4-1.4.15-uclibc-sched_param-def.patch
-
-diff --git a/package/m4/m4-1.4.15-uclibc-sched_param-def.patch b/package/m4/m4-1.4.15-uclibc-sched_param-def.patch
-new file mode 100644
-index 0000000..47bdd3d
---- /dev/null
-+++ b/package/m4/m4-1.4.15-uclibc-sched_param-def.patch
-@@ -0,0 +1,19 @@
-+uclibc defines __GLIBC__ but it does not expose struct shed_param as much as glibc
-+and is not needed too per standard. gnulib attempts to use it but we have to account
-+for it because in this case uclibc does not behave like glibc.
-+
-+-Khem
-+
-+Index: m4-1.4.14/lib/spawn.in.h
-+===================================================================
-+--- m4-1.4.14.orig/lib/spawn.in.h	2010-06-01 14:27:59.394242980 -0700
-++++ m4-1.4.14/lib/spawn.in.h	2010-06-01 14:28:28.202332200 -0700
-+@@ -31,7 +31,7 @@
-+ 
-+ /* Get definitions of 'struct sched_param' and 'sigset_t'.
-+    But avoid namespace pollution on glibc systems.  */
-+-#ifndef __GLIBC__
-++#if !defined __GLIBC__ || defined __UCLIBC__
-+ # include <sched.h>
-+ # include <signal.h>
-+ #endif
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 7f2e333..d713b6d 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -3,7 +3,7 @@
- # m4
- #
- #############################################################
--M4_VERSION = 1.4.9
-+M4_VERSION = 1.4.15
- M4_SOURCE = m4-$(M4_VERSION).tar.bz2
- M4_SITE = $(BR2_GNU_MIRROR)/m4
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3b4a603..c2b56b6 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -155,6 +155,7 @@ check_glibc = \
+ 	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
+ 	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
+ 	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
++	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
+ 	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
+ 	$(call check_glibc_feature,BR2_PROGRAM_INVOCATION,Program invocation support)
  
+@@ -206,6 +207,7 @@ check_uclibc = \
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
++	$(call check_uclibc_feature,__UCLIBC_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support) ;\
+ 
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index f67c30a..efb5863 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -78,6 +78,13 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	bool
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ 
++config BR2_USE_MMU
++	bool "Enable MMU support"
++	default y
++	help
++	  If your target has a MMU, you should say Y here.  If you
++	  are unsure, just say Y.
++
+ config BR2_USE_WCHAR
+ 	bool "Enable WCHAR support"
+ 	help
 -- 
 1.7.3.2
