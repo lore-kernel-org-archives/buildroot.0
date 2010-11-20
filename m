@@ -1,40 +1,57 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 19 Nov 2010 21:35:39 -0500
-Subject: [Buildroot] [PATCH] zlib: fix shared lib logic for static-only
-	targets
-Message-ID: <1290220539-11242-1-git-send-email-vapier@gentoo.org>
+Date: Fri, 19 Nov 2010 21:37:59 -0500
+Subject: [Buildroot] [PATCH v3] autotools: add with/without and
+	enable/disable helpers
+In-Reply-To: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
+References: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
+Message-ID: <1290220679-11330-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FLAT targets only support static libraries.  The zlib code atm though
-assumes a libz.so is always created.  So have the install target check
-to see if libz.so exists before trying to install it.
+Rather than have to write ugly logic in every package .mk file to check
+a config var and then expand into a --{en,dis}able-foo flag, add helpers
+so code can cleanly expand things.
 
-While we're here, also punt the package-local stripping.
+A simple example:
+- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+- SDL_MIXER_CONF_OPT += --enable-music-ogg
+- else
+- SDL_MIXER_CONF_OPT += --disable-music-ogg
+- endif
++ SDL_MIXER_CONF_OPT += $(call USE_ENABLE,LIBVORBIS,music-ogg)
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/zlib/zlib.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+v3
+	- absorb the "PACKAGE_" part of config options too
 
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index 751cfc1..a4da4fa 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -72,8 +72,9 @@ endif
- 
- define ZLIB_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib
--	cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libz.so*
-+	if [ -e "$(@D)/libz.so" ]; then \
-+		cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib; \
-+	fi
- 	$(INSTALL) -D $(@D)/libz.a $(TARGET_DIR)/usr/lib/libz.a
- 	$(ZLIB_INSTALL_TARGET_HEADERS)
+ package/Makefile.autotools.in |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 7d04e44..82000c0 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -279,3 +279,17 @@ else
+ $(call AUTOTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
+ endif
  endef
++
++################################################################################
++# AUTOTOOLS HELPERS
++################################################################################
++
++# $(call _USE_CONF,enable,disable,LIB_FFMPEG,video,blah) -> --enable-video=blah if LIB_FFMPEG
++# $(call _USE_CONF,with,without,LIB_FFMPEG,video)        -> --with-video if LIB_FFMPEG
++_USE_CONF = $(if $(BR2_PACKAGE_$(3)), --$(1)-$(4)$(if $(5),=$(5)), --$(2)-$(4))
++
++# $(call USE_ENABLE,LIB_FFMPEG,video) => --enable-video if LIB_FFMPEG is set
++USE_ENABLE = $(call _USE_CONF,enable,disable,$(1),$(2),$(3))
++
++# $(call USE_WITH,LIB_FFMPEG,video) => --with-video if LIB_FFMPEG is set
++USE_WITH = $(call _USE_CONF,with,without,$(1),$(2),$(3))
 -- 
 1.7.3.2
