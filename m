@@ -1,41 +1,28 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 20 Nov 2010 00:27:34 -0500
-Subject: [Buildroot] [PATCH] lrzsz: add lrz/lsz symlinks
-Message-ID: <1290230854-10961-1-git-send-email-vapier@gentoo.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 20 Nov 2010 05:29:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 759] Sysstat build broken without libintl
+In-Reply-To: <bug-759-163@https.bugs.busybox.net/>
+References: <bug-759-163@https.bugs.busybox.net/>
+Message-ID: <20101120052912.042908D345@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many systems support automatic zmodem transfers without needing to first
-manually run the zmodem utils.  But the expectation is to run `lrz` and
-not `rz`.  So install symlinks for lrz->rz and lsz->sz to support this.
+https://bugs.busybox.net/show_bug.cgi?id=759
 
-This also includes a small fix to also remove sz when cleaning.
+S?rgio <sergio@sergiomb.no-ip.org> changed:
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- package/lrzsz/lrzsz.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |VERIFIED
 
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 0b7f4e6..5897916 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -39,10 +39,12 @@ endef
- define LRZSZ_INSTALL_TARGET_CMDS
- 	cp $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
- 	cp $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
-+	ln -s rz $(TARGET_DIR)/usr/bin/lrz
-+	ln -s sz $(TARGET_DIR)/usr/bin/lsz
- endef
- 
- define LRZSZ_CLEAN_CMDS
--	rm -f $(TARGET_DIR)/usr/bin/rz
-+	rm -f $(patsubst %,$(TARGET_DIR)/usr/bin/%,rz sz lrz lsz)
- 	-$(MAKE) -C $(@D) clean
- endef
- 
+--- Comment #15 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+using gcc-4.3 for toolchain , I verified that is fixed for me .
+Thanks,
+
 -- 
-1.7.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
