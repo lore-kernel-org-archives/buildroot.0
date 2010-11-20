@@ -1,45 +1,40 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 19 Nov 2010 18:25:00 -0500
-Subject: [Buildroot] [PATCH v2] autotools: add with/without and
-	enable/disable helpers
-In-Reply-To: <AANLkTikhi1PN3uSMR6Q_4gX3oEmi2Y7pNZhbaaL8PgwM@mail.gmail.com>
-References: <1290141237-30539-1-git-send-email-vapier@gentoo.org>
-	<201011190624.54500.vapier@gentoo.org>
-	<AANLkTikhi1PN3uSMR6Q_4gX3oEmi2Y7pNZhbaaL8PgwM@mail.gmail.com>
-Message-ID: <201011191825.02260.vapier@gentoo.org>
+Date: Fri, 19 Nov 2010 21:35:39 -0500
+Subject: [Buildroot] [PATCH] zlib: fix shared lib logic for static-only
+	targets
+Message-ID: <1290220539-11242-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday, November 19, 2010 07:49:54 Paulius Zaleckas wrote:
-> On Fri, Nov 19, 2010 at 1:24 PM, Mike Frysinger <vapier@gentoo.org> wrote:
-> > On Friday, November 19, 2010 06:13:26 Thomas Petazzoni wrote:
-> >> > +_USE_CONF = $(if $(BR2_$(3)), --$(1)-$(4)$(if $(5),=$(5)),
-> >> > --$(2)-$(4))
-> >> 
-> >> What about testing directly BR2_PACKAGE_$(3), since all packages are
-> >> prefixed by BR2_PACKAGE_ ?
-> > 
-> > if that's the case, then there's no reason
-> > 
-> > in the original implementation, i avoided making the 2nd argument
-> > optional. this was because i'd have to execute tr or something to do
-> > lower->upper.  but if it's all in make now, it should be possible to
-> > support the syntax: $(call USE_ENABLE,libvorbis)
-> > the 1st arg would always be passed through the UPPERCASE helper, and hte
-> > 2nd arg would default to the 1st.
-> 
-> I believe he means BR2_PACKAGE_$(3) instead of BR2_$(3), not to get rid of
-> it.
+FLAT targets only support static libraries.  The zlib code atm though
+assumes a libz.so is always created.  So have the install target check
+to see if libz.so exists before trying to install it.
 
-i know what he meant.  i think you're confusing unrelated threads of thought.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101119/6961619e/attachment-0001.pgp>
+While we're here, also punt the package-local stripping.
+
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ package/zlib/zlib.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 751cfc1..a4da4fa 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -72,8 +72,9 @@ endif
+ 
+ define ZLIB_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libz.so*
++	if [ -e "$(@D)/libz.so" ]; then \
++		cp -dpf $(@D)/libz.so* $(TARGET_DIR)/usr/lib; \
++	fi
+ 	$(INSTALL) -D $(@D)/libz.a $(TARGET_DIR)/usr/lib/libz.a
+ 	$(ZLIB_INSTALL_TARGET_HEADERS)
+ endef
+-- 
+1.7.3.2
