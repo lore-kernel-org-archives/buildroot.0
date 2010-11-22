@@ -1,91 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 22 Nov 2010 10:53:09 +0100
-Subject: [Buildroot] [git commit master 1/1] uClibc: sys/ptrace.h fix for
-	0.9.31 / powerpc so ltrace builds
-Message-ID: <20101122100237.D0C7C8D3D9@busybox.osuosl.org>
+From: Charles Martel <SingerIsland@gmx.com>
+Date: Mon, 22 Nov 2010 10:28:40 -0500
+Subject: [Buildroot] What is procedure for building custom Linux-2.6.36
+ from BuildRoot?
+Message-ID: <20101122152841.117090@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks Thomas and Lionel.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8de970bae3744fe830e96a1ae0c4aff6ce47ba1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../uClibc/uClibc-0.9.31-powerpc-ptrace-fix.patch  |   62 ++++++++++++++++++++
- 1 files changed, 62 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-powerpc-ptrace-fix.patch
+----- Original Message -----
+From: Thomas Petazzoni
+Sent: 11/09/10 12:40 PM
+To: buildroot at busybox.net
+Subject: Re: [Buildroot] What is procedure for building custom Linux-2.6.36 from BuildRoot?
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-powerpc-ptrace-fix.patch b/toolchain/uClibc/uClibc-0.9.31-powerpc-ptrace-fix.patch
-new file mode 100644
-index 0000000..a5cceca
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-powerpc-ptrace-fix.patch
-@@ -0,0 +1,62 @@
-+[PATCH] powerpc: add PTRACE_EVENT_ defines needed by ltrace
-+
-+Equivalent to the common version and kernel headers.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ libc/sysdeps/linux/powerpc/sys/ptrace.h |   41 +++++++++++++++++++++++++++++++-
-+ 1 file changed, 40 insertions(+), 1 deletion(-)
-+
-+Index: uClibc-0.9.31/libc/sysdeps/linux/powerpc/sys/ptrace.h
-+===================================================================
-+--- uClibc-0.9.31.orig/libc/sysdeps/linux/powerpc/sys/ptrace.h
-++++ uClibc-0.9.31/libc/sysdeps/linux/powerpc/sys/ptrace.h
-+@@ -79,8 +79,47 @@ enum __ptrace_request
-+ #define PT_DETACH PTRACE_DETACH
-+ 
-+   /* Continue and stop at the next (return from) syscall.  */
-+-  PTRACE_SYSCALL = 24
-++  PTRACE_SYSCALL = 24,
-+ #define PT_SYSCALL PTRACE_SYSCALL
-++
-++  /* Set ptrace filter options.  */
-++  PTRACE_SETOPTIONS = 0x4200,
-++#define PT_SETOPTIONS PTRACE_SETOPTIONS
-++
-++  /* Get last ptrace message.  */
-++  PTRACE_GETEVENTMSG = 0x4201,
-++#define PT_GETEVENTMSG PTRACE_GETEVENTMSG
-++
-++  /* Get siginfo for process.  */
-++  PTRACE_GETSIGINFO = 0x4202,
-++#define PT_GETSIGINFO PTRACE_GETSIGINFO
-++
-++  /* Set new siginfo for process.  */
-++  PTRACE_SETSIGINFO = 0x4203
-++#define PT_SETSIGINFO PTRACE_SETSIGINFO
-++};
-++
-++
-++/* Options set using PTRACE_SETOPTIONS.  */
-++enum __ptrace_setoptions {
-++  PTRACE_O_TRACESYSGOOD	= 0x00000001,
-++  PTRACE_O_TRACEFORK	= 0x00000002,
-++  PTRACE_O_TRACEVFORK   = 0x00000004,
-++  PTRACE_O_TRACECLONE	= 0x00000008,
-++  PTRACE_O_TRACEEXEC	= 0x00000010,
-++  PTRACE_O_TRACEVFORKDONE = 0x00000020,
-++  PTRACE_O_TRACEEXIT	= 0x00000040,
-++  PTRACE_O_MASK		= 0x0000007f
-++};
-++
-++/* Wait extended result codes for the above trace options.  */
-++enum __ptrace_eventcodes {
-++  PTRACE_EVENT_FORK	= 1,
-++  PTRACE_EVENT_VFORK	= 2,
-++  PTRACE_EVENT_CLONE	= 3,
-++  PTRACE_EVENT_EXEC	= 4,
-++  PTRACE_EVENT_VFORK_DONE = 5,
-++  PTRACE_EVENT_EXIT	= 6
-+ };
-+ 
-+ /* Perform process tracing functions.  REQUEST is one of the values
--- 
-1.7.2.2
+On Tue, 9 Nov 2010 17:45:40 +0100 Lionel Landwerlin <llandwerlin@gmail.com> wrote: > From the buildroot configuration tool, in the kernel submenu, you can > select a "custom tarball" kernel (which might be a 2.6.36 in your > case) and also a "custom config file". And to adjust the kernel configuration, you can do: make linux26-menuconfig or make linux26-xconfig Regards, Thomas -- Thomas Petazzoni, Free Electrons Kernel, drivers, real-time and embedded Linux development, consulting, training and support. http://free-electrons.com _______________________________________________ buildroot mailing list buildroot at busybox.net http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101122/e1d7199f/attachment.html>
