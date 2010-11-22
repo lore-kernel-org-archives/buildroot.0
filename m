@@ -1,43 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Nov 2010 18:33:27 +0100
-Subject: [Buildroot] Question about kernel defconfig
-Message-ID: <20101122183327.1285c439@surf>
+Date: Mon, 22 Nov 2010 18:49:05 +0100
+Subject: [Buildroot] [PATCH] change getty port configuration
+In-Reply-To: <4CA3410A.8050603@visionsystems.de>
+References: <4CA3410A.8050603@visionsystems.de>
+Message-ID: <20101122184905.5638e532@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+On Wed, 29 Sep 2010 15:37:14 +0200
+Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
 
-I am currently working on cleaning up how Buildroot handles board
-configuration [1]. As part of this clean up, I'd like to move away from
-full kernel .config files and instead use minimal kernel configs (only
-non-default options are stored, the kernel configuration files are
-produced with savedefconfig).
+> BR2_TARGET_GENERIC_GETTY_PORT has now a string type instead of choice.
+> This makes port configuration flexible and compact.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-So, for example for the Qemu Versatile platform, I have the kernel
-configuration file visible at
-http://git.buildroot.net/~tpetazzoni/git/buildroot/tree/board/qemu/arm-versatile/linux-2.6.36.config?h=for-2010.11/boards-cleanup&id=8033fd6cbacfa96a3bcfce74caad8c423bf60cd1.
+Thanks, merged into my for-2011.02/boards-cleanup branch. I hope to get
+this branch merged after the 2010.11 release.
 
-When Buildroot configures the kernel, it simply copies the given kernel
-configuration file to .config into the kernel source tree. See
-http://git.buildroot.net/buildroot/tree/linux/linux.mk#n89.
-
-Unfortunately, with those minimal configuration files, the kernel
-"Restart config" and then asks interactively for the value of all
-options not specificied in the minimal configuration file.
-
-I'd like to have the same behaviour the kernel has when using its own
-internal defconfigs files from arch/$(ARCH)/configs. Is this possible ?
-Did I miss something totally obvious ?
-
-Thanks,
+Regards,
 
 Thomas
-
-[1]
-http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2010.11/boards-cleanup
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
