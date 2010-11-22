@@ -1,24 +1,45 @@
-From: Charles Martel <SingerIsland@gmx.com>
-Date: Mon, 22 Nov 2010 10:28:40 -0500
-Subject: [Buildroot] What is procedure for building custom Linux-2.6.36
- from BuildRoot?
-Message-ID: <20101122152841.117090@gmx.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Nov 2010 18:33:27 +0100
+Subject: [Buildroot] Question about kernel defconfig
+Message-ID: <20101122183327.1285c439@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas and Lionel.
+Hello Sam,
 
+I am currently working on cleaning up how Buildroot handles board
+configuration [1]. As part of this clean up, I'd like to move away from
+full kernel .config files and instead use minimal kernel configs (only
+non-default options are stored, the kernel configuration files are
+produced with savedefconfig).
 
------ Original Message -----
-From: Thomas Petazzoni
-Sent: 11/09/10 12:40 PM
-To: buildroot at busybox.net
-Subject: Re: [Buildroot] What is procedure for building custom Linux-2.6.36 from BuildRoot?
+So, for example for the Qemu Versatile platform, I have the kernel
+configuration file visible at
+http://git.buildroot.net/~tpetazzoni/git/buildroot/tree/board/qemu/arm-versatile/linux-2.6.36.config?h=for-2010.11/boards-cleanup&id=8033fd6cbacfa96a3bcfce74caad8c423bf60cd1.
 
-On Tue, 9 Nov 2010 17:45:40 +0100 Lionel Landwerlin <llandwerlin@gmail.com> wrote: > From the buildroot configuration tool, in the kernel submenu, you can > select a "custom tarball" kernel (which might be a 2.6.36 in your > case) and also a "custom config file". And to adjust the kernel configuration, you can do: make linux26-menuconfig or make linux26-xconfig Regards, Thomas -- Thomas Petazzoni, Free Electrons Kernel, drivers, real-time and embedded Linux development, consulting, training and support. http://free-electrons.com _______________________________________________ buildroot mailing list buildroot at busybox.net http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101122/e1d7199f/attachment.html>
+When Buildroot configures the kernel, it simply copies the given kernel
+configuration file to .config into the kernel source tree. See
+http://git.buildroot.net/buildroot/tree/linux/linux.mk#n89.
+
+Unfortunately, with those minimal configuration files, the kernel
+"Restart config" and then asks interactively for the value of all
+options not specificied in the minimal configuration file.
+
+I'd like to have the same behaviour the kernel has when using its own
+internal defconfigs files from arch/$(ARCH)/configs. Is this possible ?
+Did I miss something totally obvious ?
+
+Thanks,
+
+Thomas
+
+[1]
+http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2010.11/boards-cleanup
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
