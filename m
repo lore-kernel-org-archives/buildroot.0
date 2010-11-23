@@ -1,303 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Nov 2010 22:14:17 +0100
-Subject: [Buildroot] Report from the Buildroot Developer Day,
-	29th October 2010
-Message-ID: <20101123221417.0d6867c6@surf>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Tue, 23 Nov 2010 21:16:52 +0000
+Subject: [Buildroot] Makefile:904: *** missing separator (did you mean
+ TAB instead of 8 spaces?). Stop.
+In-Reply-To: <20101119085752.1cf59ad7@surf>
+References: <1290022488.23841.4.camel@segulix>
+	<1290038284.22677.2.camel@segulix> <20101118083256.0618dee2@surf>
+	<1290123362.1697.12.camel@segulix>  <20101119085752.1cf59ad7@surf>
+Message-ID: <1290547013.29265.3.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-A Buildroot Developer Day took place last month, on Friday 29th
-October, right after the Embedded Linux Conference Europe. The people
-who participated to the session are :
-
- * Peter Korsgaard
- * Lionel Landwerlin
- * Yann E. Morin
- * Nicolas Ferre (only the morning)
- * Patrice Vilchez (only the morning)
- * Thomas Petazzoni
-
-This is a personal report from Thomas Petazzoni. It hasn't been
-reviewed by the other participants, so they are kindly invited to
-share their thoughts and corrections.
-
-Board cleanup
-=============
-
-Since Nicolas Ferre and Patrice Vilchez from Atmel were only present
-for the morning, we discussion started by a presentation for Thomas
-Petazzoni on his board cleanup work.
-
-The board cleanup work current status is available at:
-  http://git.buildroot.net/~tpetazzoni/git/buildroot/log/?h=for-2011.02/boards-cleanup
-
-The goal is to cleanup the contents of the target/device directory and
-generally simplify how board support works in Buildroot. This is done
-by:
-
- * Using more kernel defconfigs instead of Buildroot specific kernel
-   configuration
-
- * Using more recent versions of the kernel and bootloader
-
- * Using patches available on the Web instead of patches integrated
-   into the Buildroot source tree (for kernel/U-Boot)
-
- * Using minimal Buildroot defconfig and minimal kernel defconfig, to
-   significantly reduce the size of the configuration files
-
- * Reducing the number of target skeleton. Instead of having separate
-   target skeleton each time a minor modification is needed, the
-   long-term idea is to add more options in Buildroot to tune the
-   target skeleton. For exemple, when one wants to use mdev instead of
-   a simple static /dev directory
-
-The target/device directory is now mostly empty. Board-specific stuff
-is now located in board/<manufacturer>/<board>.
-
-Nicolas and Patrice, who ship Buildroot as one of the development
-environment for the AT91 Atmel evaluation boards, were generally
-satisfied with those changes.
-
-They however, proposed some improvements:
-
- * Add the ability for some key components (kernel, u-boot, etc.) to
-   specify a patch that is in fact a tarball containing multiple
-   patches, stored on http/ftp. This is more practical than the
-   current situation of a single file patch, since most of the time,
-   series of patches needs to be applied.
-
- * Add the ability to specify a space-separated list of patches.
-
-Thomas has voluntered to implement those two changes for the 2011.02
-release.
-
-Libtool issue
-=============
-
-As Lionel Landwerlin was here, we also quickly summarized the state of
-the libtool issue. For the record, the problem is that libtool 1.x and
-2.2 do not support sysroot correctly, so the .la files must be patched
-to include an absolute path to the staging directory.
-
-This isn't a very nice solution, and Lionel proposed on the list to
-patch libtool to fix the problem and then autoreconfigure all packages
-using libtool. Unfortunately, this would significantly increase the
-build time and would be probably be difficult to achieve for some
-packages. For that reason, we have kept the existing solution and just
-extended it for libtool 2.2 (only libtool 1.x was supported at that
-time). This was all done before the meeting.
-
-Libtool 2.4 finally fixes the sysroot problem. So the general
-consensus was that we should keep the current hack for the current
-packages, and hope for the migration to libtool 2.4 to gradually
-happen, reducing the problem progressively.
-
-Crosstool-NG integration
-========================
-
-There was a quick summary of the Crosstool-NG integration done by Yann
-E. Morin. Peter was generally satisfied with this initial integration,
-but wanted to see the IPv6/RPC/locale/etc. options propagated to
-Crosstool-NG configure/build process. Yann agreed that this is lacking
-from the current integration, but he plans to work on this on the
-future. It shouldn't raise any major design issue.
-
-Peter's goal is to gradually replace the Buildroot internal process to
-build toolchains by Crosstool-NG. He currently imagines a one-year
-timeframe before phasing out the Buildroot internal process.
-
-Toolchain cleanup
-=================
-
-The next topic discussed was the cleanup of the toolchain build
-process.
-
-Currently, the cross-compiling toolchain generated by Buildroot is
-installed in $(STAGING_DIR) (both the toolchain binaries and the
-toolchain sysroot). This means that $(STAGING_DIR) contains both
-target binaries and host binaries (the ones of the toolchain). We
-currently advise users to add $(STAGING_DIR)/usr/bin to their PATH to
-get access to the toolchain, but this means that they also get some
-target-specific binaries in their PATH, which isn't good.
-
-So, we agreed on :
-
- * Toolchain components should be built in $(BUILD_DIR) and not inside
-   a specific $(TOOLCHAIN_DIR) directory
-
- * The toolchain should be installed in $(HOST_DIR), with binaries in
-   $(HOST_DIR)/usr/bin and its sysroot in
-   $(HOST_DIR)/usr/<tuple>/sysroot/
-
- * Make $(STAGING_DIR) a symbolic link to
-   $(HOST_DIR)/usr/<tuple>/sysroot, so that libraries/headers gets
-   installed here. $(HOST_DIR) will therefore contain everything
-   that's needed to build applications for the target: both host
-   utilities, target utilities, libraries and headers.
-
-Gustavo Zacarias has already started the implementation of this first
-part. The current status of this work is available from
-git://repo.or.cz/buildroot-gz.git (branch toolchain-rework), but it is
-not yet finalized nor ready.
-
-The external toolchain support would also be modified to copy the
-external toolchain sysroot into $(HOST_DIR)/usr/<tuple>/sysroot.
-
-Then, we would add the feature of generating a SDK from
-Buildroot. First in a simple way :
-
- * Turn the STAGING_DIR kconfig option into a "SDK path" option, and
-   use it as the host dir. It's therefore the responsability of the
-   user to select upfront where the SDK will be located. Buildroot
-   build process will properly install things in there, and have all
-   paths (rpath, libtool paths) adjusted correctly.
-
- * Install into the SDK a small shell script that SDK users can
-   source. This shell script would set the PATH, PKG_CONFIG_PATH,
-   PKG_CONFIG_SYSROOT_DIR environment variables to the appropriate
-   values.
-
-The goal of such SDK is to solve the following common use case. In a
-company, a team of people is responsible of embedded Linux integration
-using Buildroot. This team has all the skills on how to run/use
-Buildroot. Another team is the application development team, and they
-don't want/don't know how to use Buildroot. The first team should just
-provide them a toolchain with all libraries/headers needed to build
-their application and run/debug it on the target. This is the goal of
-the SDK.
-
-Later on, we could improve this by making the SDK relocatable. The
-"SDK path" option would no longer be needed. A "make sdk" target would
-be added to generate a tarball containing the SDK. But since some
-files (notably .la files) contain absolute paths, an installation
-script would be generated inside this tarball, so that users can
-execute this script to install the SDK.
-
-Top-level parallel make
-=======================
-
-One of the idea we tried to reduce the build time was the
-autoconf configuration cache shared by all packages. Unfortunately,
-due to subtle differences between the configure checks of different
-packages, this solution turned out not to be reliable.
-
-Therefore, Thomas Petazzoni has started experiments to make top-level
-parallel make work (i.e be able to use "make -j4" directly). This
-would allow several packages to be downloaded, extracted, configured
-and built simultaneously. Nothing is ready for testing yet, but Thomas
-wanted to inform the other developers of this effort.
-
-Package management
-==================
-
-Lionel Landwerlin has started working on package management for some
-time now. The current status of this work is visible at
-http://git.potipota.net/cgi-bin/cgit.cgi/buildroot/log/?h=package-generation.
-
-What Lionel's work is doing is :
-
- * It overrides STAGING_DIR, TARGET_DIR and HOST_DIR on a per-package
-   basis to install each package staging, target and host files into a
-   separate directory.
-
- * Tarball those directories in order to keep track of which package
-   installed what files
-
- * Extract those tarballs into the STAGING_DIR, TARGET_DIR and
-   HOST_DIR in order to preserve the current behaviour.
-
-For the moment, the goal is not yet to generate packages, but rather
-to know what each package installed. Lionel has also fixed various
-minor issues due to packages not creating all necessary directories in
-STAGING_DIR/TARGET_DIR, making assumptions on them being created by
-previous packages.
-
-We discussed what should be the next steps of this work. The following
-notes documents the TODO-list :
-
- * Implement <pkg>-uninstall in the following way:
-
-    - Removes files of the package from STAGING_DIR, TARGET_DIR and
-      HOST_DIR
-
-    - Removes installation stamp files so that next time one runs
-      "make" the package gets reinstalled to STAGING_DIR, TARGET_DIR
-      and HOST_DIR
-
-    - <pkg>-uninstall is not recursive: it does not take care of
-      packages that depend on the package being uninstalled.
-
- * Implement <pkg>-clean in the following way:
-
-    - Do <pkg>-uninstall
-
-    - Remove the source/build directory of the package, so that next
-      time run is make, the package is re-extracted, re-patched,
-      re-configured, re-built, etc.
-
-    - <pkg>-clean is not recursive: it does not take care of packages
-      that depend on the package being uninstalled.
-
-Once this is done, the $($(PKG)_CLEAN_CMDS),
-$($(PKG)_UNINSTALL_STAGING_CMDS) and $($(PKG)_UNINSTALL_TARGET_CMDS)
-should be removed from all packages: the new mechanism will allow to
-more reliably remove all packages.
-
-Once this is done, the idea is to add a new <pkg>-remove target that
-removes the package and all its reverse depencies (i.e the packages
-depending on it) automatically. For that, after the configuration of a
-given package, add the package name into the reverse dependencies
-files for each package it depends on. The reverse dependency files
-would be $(STAMP_DIR)/.<pkg>.rdeps, with one reverse dependency per
-line.
-
-Then, <pkg>-remove would be implemented as follow:
-
- * Remove files from STAGING_DIR, TARGET_DIR and HOST_DIR using the
-   tarballs created for the package at install time
-
- * Call the <pkg>-remove target of all reverse dependencies (beware of
-   duplicate reverse dependencies)
-
- * Remove the reverse dependency file
-
- * Remove the install stamps of the current package
-
-Finally, in order to automatically remove packages that are no longer
-selected in the configuration (this is the *REAL* goal of all this
-work), the <pkg>-remove target should be added to the
-$(TARGETS_TO_CLEAN) variable for each non-selected package. In the
-top-level Makefile, we would run all targets in $(TARGETS_TO_CLEAN)
-before running the targets in $(TARGETS). Therefore, all unselected
-packages would be removed.
-
-Lionel Landwerlin has voluntered to progress on this work.
-
-Conclusion
-==========
-
-This Developer Day has been very productive in terms of discussion,
-and for some complicated topics, we know have a better understanding
-on what should be implemented and how it should be implemented. The
-participants were all very satisfied of the day spent discussing
-Buildroot future.
-
-The next Buildroot Developer Day will happen on Monday, 7th February
-2011 in Brussels, Belgium. This is just after the FOSDEM conference
-(http://www.fosdem.org). Interested participants are invited to
-contact Peter Korsgaard and Thomas Petazzoni.
-
-Regards,
-
-Thomas
+On Fri, 2010-11-19 at 08:57 +0100, Thomas Petazzoni wrote:
+> On Thu, 18 Nov 2010 23:36:01 +0000
+> Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> wrote:
+> 
+> > On Thu, 2010-11-18 at 08:32 +0100, Thomas Petazzoni wrote:
+> > > > This happens after upgrade to Fedora 14, 
+> > > > This also happens with buildroot-2010.08 
+> > > > Don't happened with  Fedora 13 and buildroot-2010.08
+> > > 
+> > > Could you try the patch at
+> > > http://lists.busybox.net/pipermail/buildroot/2010-November/038615.html
+> > > and tell us whether it fixes the problem for you ?
+> > 
+> > yes , it fixes the problem (for me) 
+> 
+> Peter, could you commit Felipe's patch ?
+> 
+> Thanks!
+
+Hi, should I open a bug with this patch ? 
+
+Thanks, 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+S?rgio M. B.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101123/d69ebd40/attachment.bin>
