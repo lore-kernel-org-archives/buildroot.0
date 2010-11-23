@@ -1,39 +1,24 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 23 Nov 2010 00:20:42 +0100
-Subject: [Buildroot] samba build : location of valid.dat
-Message-ID: <35499A6A25E24CA1BD8013F6FE3CA9AE@apexjs>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 23 Nov 2010 07:21:53 +0100
+Subject: [Buildroot] [PATCH] qt: bump to 4.7.1
+In-Reply-To: <1290464178-2191-1-git-send-email-luca@lucaceresoli.net>
+	(luca@lucaceresoli.net's message of "Mon, 22 Nov 2010 23:16:18 +0100")
+References: <1290464178-2191-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <877hg47e66.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-When trying to get samba running i noticed that the file valid.dat is
-located in the build/staging dir : it should be in the build/target/usr/lib
-directory.
- 
-I tried to fix it, but the samba build/make/install looks a bit too
-complicated so for now i copied it manually. :)
- 
-Regards, Johan
- 
- 
- 
- 
- 
- 
- 
-btw i used samba 3.5.6
- 
-SAMBA_VERSION:=3.5.6
-..
-..
-SAMBA_SUBDIR = source3
- 
- 
-and got rid of the patches.
- 
- 
- 
+>>>>> "luca" == luca  <luca@lucaceresoli.net> writes:
+
+ luca> From: Luca Ceresoli <luca@lucaceresoli.net>
+ luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ luca> ---
+ luca> As this is a bugfix release, I think it should go in 2010.11.
+
+I Agree, committed - Thanks.
+
+-- 
+Bye, Peter Korsgaard
