@@ -1,27 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Nov 2010 22:04:40 +0100
-Subject: [Buildroot] [PATCH v2] linux: strip installed modules
-In-Reply-To: <1290038143-17595-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Wed, 17 Nov 2010 18:55:43 -0500")
-References: <87oc9nad27.fsf@macbook.be.48ers.dk>
-	<1290038143-17595-1-git-send-email-vapier@gentoo.org>
-Message-ID: <87r5ea4emv.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 24 Nov 2010 22:12:13 +0100
+Subject: [Buildroot] [git commit master 1/1] Makefile: really adjust kernel
+	modules strip invocation
+Message-ID: <20101124211242.09EC08D25D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Mike> The installed kernel modules should have useless build cruft
- Mike> stripped out of them.  On my system, a default build went from a
- Mike> very unreasonable 30MB to a normal 3MB (on disk) and from 14MB to
- Mike> 3MB when compressed due to the info stored in the kernel modules
- Mike> alone.
+commit: http://git.buildroot.net/buildroot/commit/?id=7dccbc44a84f371694ab7b38833908125df315d9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed with a small change to not use binutils strip specific options
-(we support sstrip as well).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index cfaa316..a53ef89 100644
+--- a/Makefile
++++ b/Makefile
+@@ -419,7 +419,7 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ endif
+ 	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+-		xargs -r $(STRIPCMD) -R .comment -R .note -g --strip-unneeded
++		xargs -r $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+ 
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	# Mandatory configuration file and auxilliary cache directory
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
