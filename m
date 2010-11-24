@@ -1,36 +1,42 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 24 Nov 2010 16:20:44 -0500
-Subject: [Buildroot] [PATCH v2] linux: strip installed modules
-In-Reply-To: <87r5ea4emv.fsf@macbook.be.48ers.dk>
-References: <87oc9nad27.fsf@macbook.be.48ers.dk>
-	<1290038143-17595-1-git-send-email-vapier@gentoo.org>
-	<87r5ea4emv.fsf@macbook.be.48ers.dk>
-Message-ID: <201011241620.45723.vapier@gentoo.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 24 Nov 2010 22:24:06 +0100
+Subject: [Buildroot] [git commit master 1/1] target-finalize: do not strip
+	libthread_db.so
+Message-ID: <20101124212443.C4DAC8DBB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, November 24, 2010 16:04:40 Peter Korsgaard wrote:
-> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
->  Mike> The installed kernel modules should have useless build cruft
->  Mike> stripped out of them.  On my system, a default build went from a
->  Mike> very unreasonable 30MB to a normal 3MB (on disk) and from 14MB to
->  Mike> 3MB when compressed due to the info stored in the kernel modules
->  Mike> alone.
-> 
-> Committed with a small change to not use binutils strip specific options
-> (we support sstrip as well).
 
-so STRIP_STRIP_UNNEEDED should have those flags added to it for the binutils 
-case ... i'll send a patch to fix that.  otherwise we're leaving a crap in the 
-target fs that only takes up space.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101124/ba504b95/attachment.pgp>
+commit: http://git.buildroot.net/buildroot/commit/?id=c98bc88e3296222a20e59cfb7b9f3ec5aee3be1c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For proper threading debug support, the libthread_db.so library cannot
+be stripped on the target.  This is because the target gdbserver will
+also load up this library at runtime and poke around its symbols.
+
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 86aea91..22ae1d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -418,7 +418,8 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+ endif
+-	find $(TARGET_DIR) -type f -perm +111 | xargs $(STRIPCMD) 2>/dev/null || true
++	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db.so*' | \
++		xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+ 
+-- 
+1.7.2.2
