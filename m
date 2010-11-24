@@ -1,31 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Nov 2010 16:39:57 +0100
-Subject: [Buildroot] [PATCH 6/8] documentation: Reword introduction
- about external toolchains
-In-Reply-To: <201011241548.57471.yann.morin.1998@anciens.enib.fr>
-References: <cover.1290609511.git.thomas.petazzoni@free-electrons.com>
-	<6f4f89fb50275d9eed3bff44bb874649ccd81457.1290609511.git.thomas.petazzoni@free-electrons.com>
-	<201011241548.57471.yann.morin.1998@anciens.enib.fr>
-Message-ID: <20101124163957.7a87bf28@surf>
+Date: Wed, 24 Nov 2010 16:40:28 +0100
+Subject: [Buildroot] [git commit master 1/1] documentation: clarify
+	Buildroot steps
+Message-ID: <20101124154223.51E828DCB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Nov 2010 15:48:57 +0100
-"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
-> > +    <p>It might be useful not to use an already existing toolchain,
-> Are you sure you meant this  ^^^ ?
+commit: http://git.buildroot.net/buildroot/commit/?id=0d2804011b3ac9f1b204bec654a6effeb9e990e1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No :-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/buildroot.html |   11 +++++------
+ 1 files changed, 5 insertions(+), 6 deletions(-)
 
-I've pushed a fixed version. Thanks for the review.
-
-Thomas
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index 0a0114a..0b87bff 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -185,15 +185,14 @@
+     <p>This command will generally perform the following steps:</p>
+     <ul>
+       <li>Download source files (as required)</li>
+-      <li>Configure cross-compile toolchain</li>
+-      <li>Build/install cross-compile toolchain</li>
++      <li>Configure, build and install the cross-compiling toolchain
++      if an internal toolchain is used, or import a toolchain if an
++      external toolchain is used</li>
+       <li>Build/install selected target packages</li>
+-      <li>Build a kernel image</li>
++      <li>Build a kernel image, if selected</li>
++      <li>Build a bootloader image, if selected</li>
+       <li>Create a root filesystem in selected formats</li>
+     </ul>
+-    <p>Some of the above steps might not be performed if they are not
+-    selected in the Buildroot configuration.
+-   </p>
+ 
+     <p>Buildroot output is stored in a single directory, <code>output/</code>.
+     This directory contains several subdirectories:</p>
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.2
