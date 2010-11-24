@@ -1,37 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Nov 2010 20:59:11 +0100
-Subject: [Buildroot] [PATCH v2] zlib: fix shared lib logic for
-	static-only targets
-In-Reply-To: <1290624967.12564.5.camel@segulix> (Sergio Monteiro Basto's
-	message of "Wed, 24 Nov 2010 18:56:06 +0000")
-References: <1290220539-11242-1-git-send-email-vapier@gentoo.org>
-	<1290224711-21643-1-git-send-email-vapier@gentoo.org>
-	<87k4k268yo.fsf@macbook.be.48ers.dk>
-	<1290624967.12564.5.camel@segulix>
-Message-ID: <87y68i4ho0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 24 Nov 2010 21:28:40 +0100
+Subject: [Buildroot] [git commit master 1/1] zlib: don't point
+	libdir/includedir at staging
+Message-ID: <20101124203041.891FC8DECF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergio" == Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=bab71ad4ddf28a8f5af5572c699a438331a63d3a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sergio> hum there is a bug here in git ...
+Fixes 'make install'.
 
- Sergio> cd /home/sergio/hardware/moviecube/buildroot/output/build/zlib-1.2.5
- Sergio> /usr/bin/make -j1
- Sergio> -C /home/sergio/hardware/moviecube/buildroot/output/build/zlib-1.2.5
- Sergio> DESTDIR=/home/sergio/hardware/moviecube/buildroot/output/target install
- Sergio> make: Entering directory
- Sergio> `/home/sergio/hardware/moviecube/buildroot/output/build/zlib-1.2.5'
- Sergio> cp
- Sergio> libz.a /home/sergio/hardware/moviecube/buildroot/output/target/home/sergio/hardware/moviecube/buildroot/output/staging/usr/lib 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/zlib/zlib.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Crap, that's because of the --libdir=$(STAGING_DIR).. I'm afraid I
-tested it without that line and added it back later, will fix asap.
-
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 016752e..58f758b 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -24,8 +24,6 @@ define ZLIB_CONFIGURE_CMDS
+ 		./configure \
+ 		$(ZLIB_SHARED) \
+ 		--prefix=/usr \
+-		--libdir=$(STAGING_DIR)/usr/lib \
+-		--includedir=$(STAGING_DIR)/usr/include \
+ 	)
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
