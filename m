@@ -1,41 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Nov 2010 15:38:37 +0100
-Subject: [Buildroot] [PATCH 3/8] documentation: Remove mention of gcc 3.x
+Date: Wed, 24 Nov 2010 15:38:42 +0100
+Subject: [Buildroot] [PATCH 8/8] documentation: Mention the fact that the
+	skeleton location can be configured
 In-Reply-To: <cover.1290609511.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1290609511.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <167302e722ed84dff2f673d88682444e4d0ef6ac.1290609511.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <43ef939f45894a10b1b0cff7d728a104467372d3.1290609511.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't support gcc 3.x anymore, so get rid of 3.x-specific details
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/buildroot.html |    9 +++------
- 1 files changed, 3 insertions(+), 6 deletions(-)
+ docs/buildroot.html |   21 ++++++++-------------
+ 1 files changed, 8 insertions(+), 13 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 571414b..333ea22 100644
+index 97f5db7..a184e2b 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -676,12 +676,9 @@ endif
-     then to use <code>ARCH-linux-gcc</code>, <code>ARCH-linux-objdump</code>,
-     <code>ARCH-linux-ld</code>, etc.</p>
+@@ -335,19 +335,14 @@
+       completely rebuild your toolchain and tools, these changes will be
+       lost.</li>
  
--    <p><b>Important</b>: do not try to move a gcc-3.x toolchain to another
--    directory &mdash; it won't work because there are some hardcoded paths
--    in the gcc-3.x configuration. If you are using a current gcc-4.x, it is
--    possible to relocate the toolchain &mdash; but then <code>--sysroot</code>
--    must be passed every time the compiler is called to tell where the
--    libraries and header files are.</p>
-+    <p>It is possible to relocate the toolchain &mdash; but
-+    then <code>--sysroot</code> must be passed every time the compiler
-+    is called to tell where the libraries and header files are.</p>
+-      <li>Customize the target filesystem skeleton available under <code>
+-      fs/skeleton/</code>. You can customize configuration files or other
+-      stuff here. However, the full file hierarchy is not yet present
+-      because it's created during the compilation process. Therefore, you
+-      can't do everything on this target filesystem skeleton, but changes to
+-      it do remain even if you completely rebuild the cross-compilation
+-      toolchain and the tools. <br /> You can also customize the <code>
+-      target/generic/device_table.txt</code> file, which is used by the
+-      tools that generate the target filesystem image to properly set
+-      permissions and create device nodes.<br /> These customizations are
+-      deployed into <code>output/target/</code> just before the actual image
+-      is made. Simply rebuilding the image by running make should propagate
+-      any new changes to the image.</li>
++      <li>Create your own <i>target skeleton</i>. You can start with
++      the default skeleton available under <code>fs/skeleton</code>
++      and then customize it to suit your
++      needs. The <code>BR2_ROOTFS_SKELETON_CUSTOM</code>
++      and <code>BR2_ROOTFS_SKELETON_CUSTOM_PATH</code> will allow you
++      to specify the location of your custom skeleton. At build time,
++      the contents of the skeleton are copied to output/target before
++      any package installation.</li>
  
-     <p>It is also possible to generate the Buildroot toolchain in a
-     directory other than <code>output/staging</code> by using the <code>
+       <li>Add support for your own target in Buildroot, so that you
+       have your own target skeleton (see <a href="#board_support">this
 -- 
 1.7.0.4
