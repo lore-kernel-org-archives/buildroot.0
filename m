@@ -1,36 +1,37 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 23 Nov 2010 20:00:44 -0500
-Subject: [Buildroot] [PATCH] toolchain-external: allow vendor-controlled
-	defaults
-In-Reply-To: <20101123223513.67c22630@surf>
-References: <1290076101-31697-1-git-send-email-vapier@gentoo.org>
-	<20101118115529.2f2b57c5@surf> <20101123223513.67c22630@surf>
-Message-ID: <201011232000.45481.vapier@gentoo.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Nov 2010 04:16:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 2839] compile fails in various packages with a odd
+ message "error: impossible constraint in 'asm'"
+In-Reply-To: <bug-2839-163@https.bugs.busybox.net/>
+References: <bug-2839-163@https.bugs.busybox.net/>
+Message-ID: <20101124041652.CA5BD8DC1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, November 23, 2010 16:35:13 Thomas Petazzoni wrote:
-> On Thu, 18 Nov 2010 11:55:29 +0100 Thomas Petazzoni wrote:
-> > > +-include target/device/*/ext-tool.mk
-> > > +
-> > 
-> > I definitely really don't like this. Could you elaborate a bit on what
-> > you would like to do ?
-> 
-> Mike, could you give an example of an ext-tool.mk you are using, for me
-> to better understand what feature you want ?
+https://bugs.busybox.net/show_bug.cgi?id=2839
 
-http://blackfin.uclinux.org/git/?p=users/vapier/buildroot.git;a=blob;f=target/device/AnalogDevices/arch-
-bfin/ext-
-tool.mk;h=e5c1713bc9ddb0a2e5daaf35af3d97188c73272b;hb=1bfab3167398d64b16ac1b8b97f8d90c28f3ec29
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101123/5f6b15c9/attachment.pgp>
+--- Comment #9 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+(In reply to comment #7)
+> Try using gcc 4.3.x instead of the (experimental) 4.5.x, this will probably fix
+> most of your constraint issues.
+> Since gcc 4.4+ MIPS became more sensitive to some optimizations thus breaking
+> some source code.
+> 
+> libmad is fixed in git.
+> libgcrypt will probably be fixed soon (fixed in my tree
+> GMP will have to wait IMHO since it's pretty tied up to the internal toolchain.
+> I've got a fix for it but don't expect it to ship for the 2010.11 release since
+> it's part of an internal toolchain revamp.
+
+After back to gcc 4.3 and with lastest git I had also compile libgcrypt and
+GMP.
+
+so may be we can close the bug has fixed.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
