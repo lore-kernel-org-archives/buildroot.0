@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 24 Nov 2010 16:40:28 +0100
-Subject: [Buildroot] [git commit master 1/1] documentation: Remove mention
-	of gcc 3.x
-Message-ID: <20101124154223.A1B0C8DCB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] documentation: Tell not to use
+	make -jN
+Message-ID: <20101124154223.7BF188DCB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=167302e722ed84dff2f673d88682444e4d0ef6ac
+commit: http://git.buildroot.net/buildroot/commit/?id=f6ec679f7b290489e177457ae40bce28371a8d88
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We don't support gcc 3.x anymore, so get rid of 3.x-specific details
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/buildroot.html |    9 +++------
- 1 files changed, 3 insertions(+), 6 deletions(-)
+ docs/buildroot.html |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 571414b..333ea22 100644
+index 0b87bff..571414b 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -676,12 +676,9 @@ endif
-     then to use <code>ARCH-linux-gcc</code>, <code>ARCH-linux-objdump</code>,
-     <code>ARCH-linux-ld</code>, etc.</p>
+@@ -182,6 +182,12 @@
+  $ make
+ </pre>
  
--    <p><b>Important</b>: do not try to move a gcc-3.x toolchain to another
--    directory &mdash; it won't work because there are some hardcoded paths
--    in the gcc-3.x configuration. If you are using a current gcc-4.x, it is
--    possible to relocate the toolchain &mdash; but then <code>--sysroot</code>
--    must be passed every time the compiler is called to tell where the
--    libraries and header files are.</p>
-+    <p>It is possible to relocate the toolchain &mdash; but
-+    then <code>--sysroot</code> must be passed every time the compiler
-+    is called to tell where the libraries and header files are.</p>
- 
-     <p>It is also possible to generate the Buildroot toolchain in a
-     directory other than <code>output/staging</code> by using the <code>
++    <p>You <b>should never</b> use <code>make -jN</code> with
++    Buildroot: it does not support <i>top-level parallel
++    make</i>. Instead, use the <code>BR2_JLEVEL</code> option to tell
++    Buildroot to run each package compilation with <pre>make
++    -jN</pre>.</p>
++
+     <p>This command will generally perform the following steps:</p>
+     <ul>
+       <li>Download source files (as required)</li>
 -- 
 1.7.2.2
