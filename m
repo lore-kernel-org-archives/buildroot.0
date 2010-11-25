@@ -1,50 +1,59 @@
-From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 25 Nov 2010 11:36:34 +0100
-Subject: [Buildroot] [PATCH] package/Makefile.package.in: Added BZR download
-	support
-Message-ID: <1290681394-29453-1-git-send-email-daniel.nystrom@timeterminal.se>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 25 Nov 2010 12:12:13 +0100
+Subject: [Buildroot] Buildroot 2010.11-rc2 released
+Message-ID: <87vd3l3bea.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Makefile.package.in |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+Hi,
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 816a013..f7e69e7 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -123,6 +123,20 @@ define SHOW_EXTERNAL_DEPS_GIT
- endef
- 
- 
-+define DOWNLOAD_BZR
-+	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-+	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-+endef
-+
-+define SOURCE_CHECK_BZR
-+	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
-+endef
-+
-+define SHOW_EXTERNAL_DEPS_BZR
-+	echo "$($(PKG)_SITE) [bzr: $($(PKG)_DL_VERSION)]"
-+endef
-+
-+
- define DOWNLOAD_SVN
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
-@@ -175,6 +189,7 @@ define DOWNLOAD
- 		case "$($(PKG)_SITE_METHOD)" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
-+			bzr) $($(DL_MODE)_BZR) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
+A bit later than hoped because of vacation and other real life issues
+getting in the way, but:
+
+Buildroot 2010.11-rc2 is released - Go download it at:
+
+http://buildroot.net/downloads/buildroot-2010.11-rc2.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2010.11-rc2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or bug
+tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2010.11_rc1..
+    25  Peter Korsgaard
+    15  Gustavo Zacarias
+     9  Mike Frysinger
+     8  Thomas Petazzoni
+     4  Konrad Eisele
+     2  Paulius Zaleckas
+     1  Frederik Pasch
+     1  Luca Ceresoli
+     1  Stanislav Bogatyrev
+     1  Thomas Rudin
+
+Especially thanks to Gustavo Zacarias for collecting patches while I was
+away.
+
+We had a fair amount of fixes this time and support for the LEON Sparc
+cores.
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc2
+
+Unless something critical shows up, expect the final 2010.11 release
+early next week.
+
+Enjoy!
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
