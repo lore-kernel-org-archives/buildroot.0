@@ -1,26 +1,36 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 25 Nov 2010 14:44:19 +0100
-Subject: [Buildroot] AT91SAM9G20 Buildroot Hangs
-In-Reply-To: <87ipzl34rq.fsf@macbook.be.48ers.dk>
-References: <0C11C5BF0B29FD43A8D0250F711D497F7FB01A662F@ex01-ubitronix.ubitronix.local>
-	<AANLkTikmMd6z05CAzXN+e4AM5R4FvcinKgsDJZEOC1Lo@mail.gmail.com>
-	<0C11C5BF0B29FD43A8D0250F711D497F7FB01A6631@ex01-ubitronix.ubitronix.local>
-	<AANLkTinY7n6ZHH4Ci8A4KwGeZ-5gv0WkTSqY1hPQxuuk@mail.gmail.com>
-	<87ipzl34rq.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTik-C=fn6xV=FbNzCtxZQD0Wb2ty+WqK-v5SF4sq@mail.gmail.com>
+From: Sam Ravnborg <sam@ravnborg.org>
+Date: Thu, 25 Nov 2010 18:21:29 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day,
+	29th	October 2010
+In-Reply-To: <20101123221417.0d6867c6@surf>
+References: <20101123221417.0d6867c6@surf>
+Message-ID: <20101125172129.GA20008@merkur.ravnborg.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ?Paulius> # Put a getty on the serial port
-> ?Paulius> #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+On Tue, Nov 23, 2010 at 10:14:17PM +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> A Buildroot Developer Day took place last month, on Friday 29th
+> October, right after the Embedded Linux Conference Europe. The people
+> who participated to the session are :
+> 
+>  * Peter Korsgaard
+>  * Lionel Landwerlin
+>  * Yann E. Morin
+>  * Nicolas Ferre (only the morning)
+>  * Patrice Vilchez (only the morning)
+>  * Thomas Petazzoni
+> 
+> This is a personal report from Thomas Petazzoni. It hasn't been
+> reviewed by the other participants, so they are kindly invited to
+> share their thoughts and corrections.
 
-Tip: If you like to have a simple shell at the console port specified
-by kernel cmdline, just enter like this in inittab:
+Thought this was a nice write-up so I forwarded it to lwn.net.
+It is in their "Development" page for this weeks edition.
+Requires subscription to see it until next Thursday.
 
-::respawn:-/bin/sh
-
-This will spawn a sh(ell) process at the current console port (but
-won't of course ask for password).
+	Sam
