@@ -1,59 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 25 Nov 2010 12:12:13 +0100
-Subject: [Buildroot] Buildroot 2010.11-rc2 released
-Message-ID: <87vd3l3bea.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 25 Nov 2010 12:14:11 +0100
+Subject: [Buildroot] [git commit master 1/1] docs/news.html: announce
+	2010.11-rc2
+Message-ID: <20101125111434.0CF8481E62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-A bit later than hoped because of vacation and other real life issues
-getting in the way, but:
+commit: http://git.buildroot.net/buildroot/commit/?id=ee5ea7d9cb3e818e1be8a5fe44ed150f1d93ff9d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot 2010.11-rc2 is released - Go download it at:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-http://buildroot.net/downloads/buildroot-2010.11-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2010.11-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or bug
-tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2010.11_rc1..
-    25  Peter Korsgaard
-    15  Gustavo Zacarias
-     9  Mike Frysinger
-     8  Thomas Petazzoni
-     4  Konrad Eisele
-     2  Paulius Zaleckas
-     1  Frederik Pasch
-     1  Luca Ceresoli
-     1  Stanislav Bogatyrev
-     1  Thomas Rudin
-
-Especially thanks to Gustavo Zacarias for collecting patches while I was
-away.
-
-We had a fair amount of fixes this time and support for the LEON Sparc
-cores.
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc2
-
-Unless something critical shows up, expect the final 2010.11 release
-early next week.
-
-Enjoy!
-
+diff --git a/docs/news.html b/docs/news.html
+index fda9c2b..1e82e27 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,17 @@
+ <p>
+ 
+ <ul>
++  <li><b>25 November 2010 -- 2010.11-rc2 released</b>
++
++    <p>RC2 is out with more cleanups and bugfixes, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc2">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2010.11-rc2.tar.bz2">2010.11-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+   <li><b>8 November 2010 -- 2010.11-rc1 released</b>
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
