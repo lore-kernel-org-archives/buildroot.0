@@ -1,24 +1,42 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Nov 2010 18:25:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 2845] dialog 1.1 needs libtinfo from ncurses
-In-Reply-To: <bug-2845-163@https.bugs.busybox.net/>
-References: <bug-2845-163@https.bugs.busybox.net/>
-Message-ID: <20101125182543.C125E8CA3B@busybox.osuosl.org>
+Date: Thu, 25 Nov 2010 18:34:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 2857] New: OBJDUMP definition is missing from
+ TARGET_CONFIGURE_OPTS
+Message-ID: <bug-2857-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2845
+https://bugs.busybox.net/show_bug.cgi?id=2857
 
---- Comment #6 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-(In reply to comment #5)
-> Ok, it seems to be because it ends up looking at your host headers. I've tried
-> to fix that in git, could you give that a try?
+           Summary: OBJDUMP definition is missing from
+                    TARGET_CONFIGURE_OPTS
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mroberto at cpti.cetuc.puc-rio.br
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-It is fixed , but still don't understand why don't we have ncurses with
-libtinfo , seems quite important and powerful lib ...
+
+Created attachment 2737
+  --> https://bugs.busybox.net/attachment.cgi?id=2737
+Patch to fix the missing OBJDUMP definition issue.
+
+The OBJDUMP was missing from TARGET_CONFIGURE_OPTS.
+
+In my case, I had problems when installing a package of my own that had a linux
+kernel module. The call to objdump would fail.
+
+This patch adds it to the proper place in package/Makefile.in.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
