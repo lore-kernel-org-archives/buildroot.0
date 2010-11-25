@@ -1,44 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Nov 2010 18:34:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 2857] New: OBJDUMP definition is missing from
- TARGET_CONFIGURE_OPTS
-Message-ID: <bug-2857-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Nov 2010 20:55:54 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day,
+ 29th October 2010
+In-Reply-To: <20101125172129.GA20008@merkur.ravnborg.org>
+References: <20101123221417.0d6867c6@surf>
+	<20101125172129.GA20008@merkur.ravnborg.org>
+Message-ID: <20101125205554.42aacf9e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2857
+On Thu, 25 Nov 2010 18:21:29 +0100
+Sam Ravnborg <sam@ravnborg.org> wrote:
 
-           Summary: OBJDUMP definition is missing from
-                    TARGET_CONFIGURE_OPTS
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mroberto at cpti.cetuc.puc-rio.br
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Thought this was a nice write-up so I forwarded it to lwn.net.
+> It is in their "Development" page for this weeks edition.
+> Requires subscription to see it until next Thursday.
 
+Thanks for doing this!
 
-Created attachment 2737
-  --> https://bugs.busybox.net/attachment.cgi?id=2737
-Patch to fix the missing OBJDUMP definition issue.
-
-The OBJDUMP was missing from TARGET_CONFIGURE_OPTS.
-
-In my case, I had problems when installing a package of my own that had a linux
-kernel module. The call to objdump would fail.
-
-This patch adds it to the proper place in package/Makefile.in.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
