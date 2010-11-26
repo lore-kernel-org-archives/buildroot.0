@@ -1,29 +1,28 @@
-From: Javier Viguera <javier.viguera@digi.com>
-Date: Fri, 26 Nov 2010 19:26:55 +0100
-Subject: [Buildroot] [PATCH 0/1] Fix libthread_db matching
-Message-ID: <1290796016-2136-1-git-send-email-javier.viguera@digi.com>
+From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Date: Fri, 26 Nov 2010 20:37:32 +0200
+Subject: [Buildroot] handling package souce in .zip file
+Message-ID: <AANLkTinM+8TXLvddMZopiOOV_i-GR2+-z-k8s_6WY_UJ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following patch fixes a little bug with the matching of libthread_db library so it is not stripped. Testing with two different toolchains (one based on glibc and the other on uclibc) shows that the current expression matches the symbolic link while the corrected one matches the real file.
+I want to add package, but its source is available only in zip format :(
 
-$ ls -o */*/sys-root/lib/libthread_db.so*
-arm-cortex_a8-linux-gnueabi/arm-cortex_a8-linux-gnueabi/sys-root/lib/libthread_db.so.1 -> libthread_db-1.0.so
-arm-unknown-linux-uclibcgnueabi/arm-unknown-linux-uclibcgnueabi/sys-root/lib/libthread_db.so.1 -> libthread_db-0.9.30.3.so
+I was thinking how to handle zip, but I don't have preference:
+1. Not generic methods, since this may be the only package with zip:
+a) add possibility to override the whole extraction procedure.
+b) add post download hook, and repackage this zip as tar.
+2. Generic method:
+a) add very hacky INFLATE.zip which will repackage zip as tar.
+b) add special handling for INFLATE.zip without involving tar.
 
-$ ls -o */*/sys-root/lib/libthread_db*.so
-arm-cortex_a8-linux-gnueabi/arm-cortex_a8-linux-gnueabi/sys-root/lib/libthread_db-1.0.so
-arm-unknown-linux-uclibcgnueabi/arm-unknown-linux-uclibcgnueabi/sys-root/lib/libthread_db-0.9.30.3.so
+Repackaging zip as tar is a headache, since it is not possible to
+pipe unzip output to tar. So one has to extract zip to some dir and
+then tar this dir and delete dir after taring.
+Extracting zip without tar is also a little bit problematic since unzip
+has no equivalent option for --strip-path/--strip-components
+So maybe it is not possible to make generic support...
 
-
-Javier Viguera (1):
-  target-finalize: do not strip libthread_db
-
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
---
-1.7.3.2
+What do you guys think?
