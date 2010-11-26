@@ -1,33 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Nov 2010 08:35:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 2845] dialog 1.1 needs libtinfo from ncurses
-In-Reply-To: <bug-2845-163@https.bugs.busybox.net/>
-References: <bug-2845-163@https.bugs.busybox.net/>
-Message-ID: <20101126083550.8A4ED8C9FB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Nov 2010 10:09:00 +0100
+Subject: [Buildroot] [pull request] Pull request for branch for-2010.11/faq
+Message-ID: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2845
+The following changes since commit ee5ea7d9cb3e818e1be8a5fe44ed150f1d93ff9d:
+  Peter Korsgaard (1):
+        docs/news.html: announce 2010.11-rc2
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+are available in the git repository at:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/faq
 
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Ok, resolving - thanks.
-I have no problem with adding an option to add tinfo to the ncurses build, but
-I don't want to add any new features this close to the 2010.11 release.
+Thomas Petazzoni (3):
+      documentation: introduce a FAQ section
+      documentation: add FAQ entry concerning serial port configuration
+      documentation: add FAQ entry about glibc-static issue on Fedora
 
-Could you send a patch adding optional tinfo build (E.G. with a config option)
-to ncurses, then I'll apply post-2010.11 - Thanks
+ docs/buildroot.html |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
 
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
