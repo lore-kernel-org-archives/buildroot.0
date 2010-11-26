@@ -1,53 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Nov 2010 10:09:03 +0100
-Subject: [Buildroot] [PATCH 3/3] documentation: add FAQ entry about
-	glibc-static issue on Fedora
-In-Reply-To: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <706683b8b912aa3304d71652d7a4a74d8b74f58e.1290762534.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 26 Nov 2010 10:23:11 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day,
+	29th	October 2010
+In-Reply-To: <20101125172129.GA20008@merkur.ravnborg.org> (Sam Ravnborg's
+	message of "Thu, 25 Nov 2010 18:21:29 +0100")
+References: <20101123221417.0d6867c6@surf>
+	<20101125172129.GA20008@merkur.ravnborg.org>
+Message-ID: <87bp5c30cg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/buildroot.html |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+>>>>> "Sam" == Sam Ravnborg <sam@ravnborg.org> writes:
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index bb02f17..f471962 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -1599,6 +1599,8 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
-     <ul>
-       <li><a href="#faq-boot-hangs">The boot hangs
-       after <code>Starting network...</code></a></li>
-+      <li><a href="#module-init-tools-doesnt-build">module-init-tools
-+      fails to build with <code>cannot find -lc</code></a></li>
-     </ul>
- 
-     <h3 id="faq-boot-hangs">The boot hangs after <code>Starting
-@@ -1622,6 +1624,19 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
-     the <code>/etc/inittab</code> file of the generated system so that
-     a shell starts on the correct serial port.</p>
- 
-+    <h3 id="module-init-tools-doesnt-build">module-init-tools
-+      fails to build with <code>cannot find -lc</code></h3>
-+
-+    <p>If the build of <i>module-init-tools</i> for the host fails
-+    with:</p>
-+
-+    <pre>/usr/bin/ld: cannot find -lc </pre>
-+
-+    <p>then probably you are running a Fedora (or similar)
-+    distribution, and you should install the <code>glibc-static</code>
-+    package. This is because the <i>module-init-tools</i> build
-+    process wants to link statically against the C library.</p>
-+
-     <h2 id="links">Resources</h2>
- 
-     <p>To learn more about Buildroot you can visit these websites:</p>
+Hi,
+
+ Sam> Thought this was a nice write-up so I forwarded it to lwn.net.  It
+ Sam> is in their "Development" page for this weeks edition.  Requires
+ Sam> subscription to see it until next Thursday.
+
+Thanks!
+
 -- 
-1.7.0.4
+Bye, Peter Korsgaard
