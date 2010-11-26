@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Nov 2010 10:09:01 +0100
-Subject: [Buildroot] [PATCH 1/3] documentation: introduce a FAQ section
+Date: Fri, 26 Nov 2010 10:09:02 +0100
+Subject: [Buildroot] [PATCH 2/3] documentation: add FAQ entry concerning
+	serial port configuration
 In-Reply-To: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <42ddff55d4ab08defc25d8f59a1d41d536ae5fad.1290762533.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5a51a370f0327936b597f106c82d47af5cfbe76a.1290762533.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/buildroot.html |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ docs/buildroot.html |   23 +++++++++++++++++++++++
+ 1 files changed, 23 insertions(+), 0 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 1444612..d9df668 100644
+index d9df668..bb02f17 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -32,6 +32,7 @@
-       <li><a href="#downloaded_packages">Location of downloaded packages</a></li>
-       <li><a href="#add_packages">Adding new packages to Buildroot</a></li>
-       <li><a href="#board_support">Creating your own board support</a></li>
-+      <li><a href="#faq">Frequently asked questions</a></li>
-       <li><a href="#links">Resources</a></li>
+@@ -1597,8 +1597,31 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+     <h2 id="faq">Frequently asked questions</h2>
+ 
+     <ul>
++      <li><a href="#faq-boot-hangs">The boot hangs
++      after <code>Starting network...</code></a></li>
      </ul>
  
-@@ -1593,6 +1594,11 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
-     <p>If you package software that might be useful for other people, don't
-     forget to send a patch to Buildroot developers!</p>
- 
-+    <h2 id="faq">Frequently asked questions</h2>
++    <h3 id="faq-boot-hangs">The boot hangs after <code>Starting
++    network...</code></h3>
 +
-+    <ul>
-+    </ul>
++    <p>If the boot process seems to hang after the following messages
++    (messages not necessarly exactly similar, depending on the list of
++    packages selected):</p>
++
++    <pre>Freeing init memory: 3972K
++Initializing random number generator... done.
++Starting network...
++Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
++
++    <p>then it means that your system is running, but didn't start a
++    shell on the serial console. In order to have the system start a
++    shell on your serial console, you have to go in the Buildroot
++    configuration, <code>Target options</code>, enable <code>Generic
++    serial port config</code>, and select the serial port and speed
++    you would like to use for the shell. This will automatically tune
++    the <code>/etc/inittab</code> file of the generated system so that
++    a shell starts on the correct serial port.</p>
 +
      <h2 id="links">Resources</h2>
  
