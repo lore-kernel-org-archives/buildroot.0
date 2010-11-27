@@ -1,40 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 27 Nov 2010 17:45:10 +0100
-Subject: [Buildroot] [PATCH 07/10] toolchain/crosstool-NG: use locales option
+Date: Sat, 27 Nov 2010 17:45:12 +0100
+Subject: [Buildroot] [PATCH 09/10] toolchain/crosstool-NG: use IPv6 option
 In-Reply-To: <1290876313-15131-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1290876313-15131-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1290876313-15131-8-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1290876313-15131-10-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Push the locales option down to crosstool-NG config
+Push the IPv6 option down to uClibc config
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index f76802e..7aa4acc 100644
+index 1fee16c..8630cb9 100644
 --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
 +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -223,6 +223,14 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
- # uClibc specific options
- ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
+@@ -245,6 +245,13 @@ else
+ CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_LFS)=.*:\# \1 is not set:;
+ endif
  
-+# Handle the locales option
-+ifneq ($(call qstrip,$(BR2_ENABLE_LOCALE)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_LOCALES) is not set:\1=y\n\# CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA is not set:;
-+CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA)=.*:\# \1 is not set:;
++# Handle the IPv6 option
++ifneq ($(call qstrip,$(BR2_INET_IPV6)),)
++CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_IPV6) is not set:\1=y:;
 +else
-+CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES)=.*:\# \1 is not set:;
++CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_IPV6)=.*:\# \1 is not set:;
 +endif
 +
- # Handle the wide-char option
- ifneq ($(call qstrip,$(BR2_USE_WCHAR)),)
- CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_WCHAR) is not set:\1=y:;
+ # Instruct CT-NG's .config where to find the uClibc's .config
+ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_LIBC_UCLIBC_CONFIG_FILE)=.*:\1="$(CTNG_DIR)/libc.config":;
+ 
 -- 
 1.7.1
