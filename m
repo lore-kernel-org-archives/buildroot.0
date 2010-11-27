@@ -1,29 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 27 Nov 2010 21:40:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 2857] OBJDUMP definition is missing from
-	TARGET_CONFIGURE_OPTS
-In-Reply-To: <bug-2857-163@https.bugs.busybox.net/>
-References: <bug-2857-163@https.bugs.busybox.net/>
-Message-ID: <20101127214035.0AC098CA80@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 27 Nov 2010 17:43:12 -0500
+Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
+Message-ID: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2857
+The attempt to fix libthread_db for some targets broke others.  If you
+want to match more libs, you shouldn't do so by breaking others.  The
+correct SONAME is libthread_db.so.#.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Thanks, committed.
-
+diff --git a/Makefile b/Makefile
+index 921630e..3798905 100644
+--- a/Makefile
++++ b/Makefile
+@@ -426,7 +426,7 @@ endif
+ ifeq ($(BR2_INSTALL_ELF_CLEANUP),y)
+ 	PATH="$(HOST_PATH)" toolchain/trim-libs.sh "$(TARGET_DIR)"
+ endif
+-	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so' | \
++	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
+ 		xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
