@@ -1,28 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 27 Nov 2010 21:15:37 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2010.11/faq
-In-Reply-To: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 26 Nov 2010 10:09:00 +0100")
-References: <cover.1290762533.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y68e1q1i.fsf@macbook.be.48ers.dk>
+Date: Sat, 27 Nov 2010 21:41:58 +0100
+Subject: [Buildroot] [PATCH 1/1] target-finalize: do not strip
+	libthread_db
+In-Reply-To: <1290796016-2136-2-git-send-email-javier.viguera@digi.com>
+	(Javier Viguera's message of "Fri, 26 Nov 2010 19:26:56 +0100")
+References: <1290796016-2136-1-git-send-email-javier.viguera@digi.com>
+	<1290796016-2136-2-git-send-email-javier.viguera@digi.com>
+Message-ID: <87tyj21otl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
 
- Thomas> The following changes since commit ee5ea7d9cb3e818e1be8a5fe44ed150f1d93ff9d:
- Thomas>   Peter Korsgaard (1):
- Thomas>         docs/news.html: announce 2010.11-rc2
+ Javier> Fix previous commit not to strip libthread_db library. In the previous
+ Javier> commit the wildcard was incorrectly matching the symbolic link instead
+ Javier> of the real library file.
 
- Thomas> are available in the git repository at:
-
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot for-2010.11/faq
-
-Pulled, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
