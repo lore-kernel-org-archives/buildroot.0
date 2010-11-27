@@ -1,55 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 27 Nov 2010 21:50:45 +0100
-Subject: [Buildroot] [PATCH 05/10] toolchain/crosstool-NG: add C library
-	config munging
-In-Reply-To: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1290891050-18122-6-git-send-email-yann.morin.1998@anciens.enib.fr>
+Date: Sat, 27 Nov 2010 21:50:40 +0100
+Subject: [Buildroot] [PATH 00/10] toolchain/crosstool-NG: fixes before
+	release, v2
+Message-ID: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some C libraries, it can be necessary to push the BR settings
-down to the libc configuration file. Prepare the infrastructure.
+Hello All!
 
-(Note: it will apply only to uClibc for now, and although eglibc
-can also be configured, it is not currently supported)
+This patch series enables building on a minimalistic host (patch 1, tested in
+the same mini-environemnt as Thomas), adds some infrastructure (patches 2-5)
+to be able to push Buildroot options down to uClibc's config (patches 6-10).
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+Changes since v1:
+- use order-only dependencies on host tools
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 48116af..25e12d2 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -93,8 +93,10 @@ $(STAMP_DIR)/ct-ng-toolchain-built: $(CTNG_DIR)/.config
- # - first one for non-path options
- # - second for path options (because they have no prompt, they
- #                            always get set to the default value)
-+# - third for C library .config (if it has one, eg. uClibc)
- CTNG_FIX_DOT_CONFIG_SED       :=
- CTNG_FIX_DOT_CONFIG_PATHS_SED :=
-+CTNG_FIX_DOT_CONFIG_LIBC_SED  :=
- 
- #--------------
- # A few generic functions
-@@ -228,8 +230,12 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_LIBC_UCLIBC_CONFIG_FILE)=.*:\1="$(CTNG_D
- $(STAMP_DIR)/ct-ng-toolchain-built: $(CTNG_DIR)/libc.config
- 
- # And here is how we get this uClibc's .config
--$(CTNG_DIR)/libc.config: $(CTNG_UCLIBC_CONFIG_FILE)
-+$(CTNG_DIR)/libc.config: $(CTNG_UCLIBC_CONFIG_FILE) $(CONFIG_DIR)/.config
-+	-$(Q)cp -a $@ $@.timestamp
- 	$(Q)cp -f $< $@
-+	$(call ctng-fix-dot-config,$@,$(CTNG_FIX_DOT_CONFIG_LIBC_SED))
-+	$(call ctng-check-config-changed,$@,$@.timestamp)
-+	$(Q)rm -f $@.timestamp
- 
- endif # LIBC is uClibc
- 
--- 
-1.7.1
+ [PATCH 01/10] toolchain/crosstool-NG: add dependencies on host- tools
+ [PATCH 02/10] toolchain/crosstool-NG: reorder sed expressions
+ [PATCH 03/10] toolchain/crosstool-NG: use a copy of the uClibc .config
+ [PATCH 04/10] toolchain/crosstool-NG: move munging functions
+ [PATCH 05/10] toolchain/crosstool-NG: add C library config munging
+ [PATCH 06/10] toolchain/crosstool-NG: use wide-char option
+ [PATCH 07/10] toolchain/crosstool-NG: use locales option
+ [PATCH 08/10] toolchain/crosstool-NG: use LFS option
+ [PATCH 09/10] toolchain/crosstool-NG: use IPv6 option
+ [PATCH 10/10] toolchain/crosstool-NG: use RPC option
+
+ toolchain/toolchain-crosstool-ng/001-no-cvs.patch |   15 ++
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk  |  146 ++++++++++++++++-----
+ 2 files changed, 127 insertions(+), 34 deletions(-)
+
+Regards,
+Yann E. MORIN.
