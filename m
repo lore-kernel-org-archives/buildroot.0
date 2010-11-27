@@ -1,113 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 27 Nov 2010 17:45:07 +0100
-Subject: [Buildroot] [PATCH 04/10] toolchain/crosstool-NG: move munging
-	functions
+Date: Sat, 27 Nov 2010 17:45:04 +0100
+Subject: [Buildroot] [PATCH 01/10] toolchain/crosstool-NG: add dependencies
+	on host- tools
 In-Reply-To: <1290876313-15131-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1290876313-15131-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1290876313-15131-5-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1290876313-15131-2-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Depends on:
+- GNU awk       --> host-gawk
+- GNU automake  --> host-automake
+
+Remove dependency on 'cvs'. cvs is used to retrieve newlib,
+which is not supported under Buildroot.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   62 ++++++++++++----------
- 1 files changed, 34 insertions(+), 28 deletions(-)
+ toolchain/toolchain-crosstool-ng/001-no-cvs.patch |   15 +++++++++++++++
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk  |    6 ++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+ create mode 100644 toolchain/toolchain-crosstool-ng/001-no-cvs.patch
 
+diff --git a/toolchain/toolchain-crosstool-ng/001-no-cvs.patch b/toolchain/toolchain-crosstool-ng/001-no-cvs.patch
+new file mode 100644
+index 0000000..fd805d3
+--- /dev/null
++++ b/toolchain/toolchain-crosstool-ng/001-no-cvs.patch
+@@ -0,0 +1,15 @@
++Remove dependency on cvs.
++
++cvs is used to retrieve newlib, which is not supported
++under Buildroot, so cvs is not required.
++
++--- crosstool-ng-1.8.0/configure.orig	2010-11-27 15:43:52.000000000 +0000
+++++ crosstool-ng-1.8.0/configure	2010-11-27 15:44:10.000000000 +0000
++@@ -359,7 +359,6 @@
++              err="'libtool' 1.5.26 or above was not found"
++ has_or_abort prog=stat
++ has_or_abort prog="aria2c curl wget"
++-has_or_abort prog=cvs
++ has_or_abort prog=patch
++ has_or_abort prog=tar
++ has_or_abort prog=gzip
 diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 04e916c..8990368 100644
+index 0812216..990452c 100644
 --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
 +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -96,15 +96,46 @@ $(STAMP_DIR)/ct-ng-toolchain-built: $(CTNG_DIR)/.config
- CTNG_FIX_DOT_CONFIG_SED       :=
- CTNG_FIX_DOT_CONFIG_PATHS_SED :=
+@@ -267,8 +267,10 @@ $(CTNG_DIR)/.patched: $(CTNG_DIR)/.unpacked
+ 	                              \*.patch.$(ARCH)
+ 	$(Q)touch $@
  
-+#--------------
-+# A few generic functions
-+
-+# Munge a config file, given a sed expression
-+# $1: the .config file to munge
-+# $2: the sed expression to apply
-+define ctng-fix-dot-config
-+	$(Q)sed -r -e '$(2)' $(1) >$(1).sed
-+	$(Q)cmp $(1) $(1).sed >/dev/null 2>&1 && rm -f $(1).sed || mv -f $(1).sed $(1)
-+endef
-+
-+# This function checks the .config did actually change
-+# If not changed, then current .config will be touched with reference to the
-+# stamp file. If the configuration did change, nothing is done.
-+# $1: the current .config to check
-+# $2: the time-stamped .config file
-+define ctng-check-config-changed
-+	$(Q)old_md5="$$( grep -v -E '^(#|$$)' $(2) 2>/dev/null  \
-+	                 |md5sum                                \
-+	                 |cut -d ' ' -f 1                       \
-+	               )";                                      \
-+	    new_md5="$$( grep -v -E '^(#|$$)' $(1) 2>/dev/null  \
-+	                 |md5sum                                \
-+	                 |cut -d ' ' -f 1                       \
-+	               )";                                      \
-+	    if [ $${old_md5} = $${new_md5} -a -f $(2) ]; then   \
-+	        touch -r $(2) $(1);                             \
-+	    fi
-+endef
-+
-+#--------------
-+# Massage BR2_ARCH so that it matches CT-NG's ARCH
-+#
- # Note: a lot of the following tricks would become unneeded if one day
- # buildroot and crosstool-NG had matching options, especially for the
- # target description: arch name, bitness, endianness...
--
-+#
- # Note-2: missing conformity check between BR's .config and libc features.
- # Use check_uclibc or check_glibc.
+-$(CTNG_DIR)/.configured: $(CTNG_DIR)/.patched
+-	$(Q)cd $(CTNG_DIR) && ./configure --local
++$(CTNG_DIR)/.configured: host-gawk              \
++                         host-automake          \
++                         $(CTNG_DIR)/.patched
++	$(Q)cd $(CTNG_DIR) && PATH=$(HOST_PATH) ./configure --local
+ 	$(Q)touch $@
  
--#--------------
--# Massage BR2_ARCH so that it matches CT-NG's ARCH
- # Defaults:
- CTNG_ARCH   := $(CTNG_BR2_ARCH)
- CTNG_ENDIAN :=
-@@ -204,12 +235,6 @@ endif # LIBC is uClibc
- 
- #--------------
- # Small functions to shoe-horn the above into crosstool-NG's .config
--# $1: the .config file to munge
--# $2: the sed expression to apply
--define ctng-fix-dot-config
--	$(Q)sed -r -e '$(2)' $(1) >$(1).sed
--	$(Q)cmp $(1) $(1).sed >/dev/null 2>&1 && rm -f $(1).sed || mv -f $(1).sed $(1)
--endef
- 
- # Function to update the .config
- # We first munge the .config to shoe-horn defaults, then we push that unto
-@@ -228,25 +253,6 @@ define ctng-oldconfig
- 	$(call ctng-fix-dot-config,$(1),$(CTNG_FIX_DOT_CONFIG_PATHS_SED))
- endef
- 
--# This function checks the confguration of the toolchain did actually change
--# If not changed, then current .config will be touched with reference to the
--# stamp file. If the configuration did change, nothing is done.
--# $1: the current .config to check
--# $2: the time-stamped .config file
--define ctng-check-config-changed
--	$(Q)old_md5="$$( grep -v -E '^(#|$$)' $(2) 2>/dev/null  \
--	                 |md5sum                                \
--	                 |cut -d ' ' -f 1                       \
--	               )";                                      \
--	    new_md5="$$( grep -v -E '^(#|$$)' $(1) 2>/dev/null  \
--	                 |md5sum                                \
--	                 |cut -d ' ' -f 1                       \
--	               )";                                      \
--	    if [ $${old_md5} = $${new_md5} -a -f $(2) ]; then   \
--	        touch -r $(2) $(1);                             \
--	    fi
--endef
--
- # Default configuration
- # Depends on top-level .config because it has options we have to shoe-horn
- # into crosstool-NG's .config
+ $(CTNG_DIR)/ct-ng: $(CTNG_DIR)/.configured
 -- 
 1.7.1
