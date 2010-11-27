@@ -1,30 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 27 Nov 2010 22:30:04 +0100
-Subject: [Buildroot] [PATH 00/10] toolchain/crosstool-NG: fixes before
-	release, v2
-In-Reply-To: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Sat, 27 Nov 2010 21:50:40 +0100")
-References: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87lj4e1mlf.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 27 Nov 2010 22:36:28 +0100
+Subject: [Buildroot] [git commit master 1/1] documentation: add FAQ entry
+	about glibc-static issue on Fedora
+Message-ID: <20101127214027.79F688CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> Hello All!
+commit: http://git.buildroot.net/buildroot/commit/?id=706683b8b912aa3304d71652d7a4a74d8b74f58e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> This patch series enables building on a minimalistic host (patch
- Yann> 1, tested in the same mini-environemnt as Thomas), adds some
- Yann> infrastructure (patches 2-5) to be able to push Buildroot options
- Yann> down to uClibc's config (patches 6-10).
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/buildroot.html |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-Committed, thanks!
-
- Yann> Changes since v1:
- Yann> - use order-only dependencies on host tools
-
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index bb02f17..f471962 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -1599,6 +1599,8 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+     <ul>
+       <li><a href="#faq-boot-hangs">The boot hangs
+       after <code>Starting network...</code></a></li>
++      <li><a href="#module-init-tools-doesnt-build">module-init-tools
++      fails to build with <code>cannot find -lc</code></a></li>
+     </ul>
+ 
+     <h3 id="faq-boot-hangs">The boot hangs after <code>Starting
+@@ -1622,6 +1624,19 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
+     the <code>/etc/inittab</code> file of the generated system so that
+     a shell starts on the correct serial port.</p>
+ 
++    <h3 id="module-init-tools-doesnt-build">module-init-tools
++      fails to build with <code>cannot find -lc</code></h3>
++
++    <p>If the build of <i>module-init-tools</i> for the host fails
++    with:</p>
++
++    <pre>/usr/bin/ld: cannot find -lc </pre>
++
++    <p>then probably you are running a Fedora (or similar)
++    distribution, and you should install the <code>glibc-static</code>
++    package. This is because the <i>module-init-tools</i> build
++    process wants to link statically against the C library.</p>
++
+     <h2 id="links">Resources</h2>
+ 
+     <p>To learn more about Buildroot you can visit these websites:</p>
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
