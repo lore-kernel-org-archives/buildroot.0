@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 27 Nov 2010 22:36:28 +0100
-Subject: [Buildroot] [git commit master 1/1] documentation: introduce a FAQ
-	section
-Message-ID: <20101127214027.190B68CA80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] qt: tighten webkit dependencies
+Message-ID: <20101127214027.DC0188CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42ddff55d4ab08defc25d8f59a1d41d536ae5fad
+commit: http://git.buildroot.net/buildroot/commit/?id=13a51114c60336def06cfc0a681176ecc7d2fcac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/buildroot.html |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+webkit needs shared library and gui support to build, so make that visible
+in Config.in.
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 1444612..d9df668 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -32,6 +32,7 @@
-       <li><a href="#downloaded_packages">Location of downloaded packages</a></li>
-       <li><a href="#add_packages">Adding new packages to Buildroot</a></li>
-       <li><a href="#board_support">Creating your own board support</a></li>
-+      <li><a href="#faq">Frequently asked questions</a></li>
-       <li><a href="#links">Resources</a></li>
-     </ul>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 1f8633b..af1db6d 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -335,11 +335,16 @@ config BR2_PACKAGE_QT_NETWORK
  
-@@ -1593,6 +1594,11 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
-     <p>If you package software that might be useful for other people, don't
-     forget to send a patch to Buildroot developers!</p>
+ config BR2_PACKAGE_QT_WEBKIT
+ 	bool "WebKit Module"
++	depends on BR2_PACKAGE_QT_SHARED
++	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	depends on BR2_PACKAGE_QT_NETWORK
+ 	help
+ 	  Build the WebKit module.
+ 	  If unsure, say n.
  
-+    <h2 id="faq">Frequently asked questions</h2>
++comment "WebKit needs shared library/gui/network support"
++	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
 +
-+    <ul>
-+    </ul>
-+
-     <h2 id="links">Resources</h2>
- 
-     <p>To learn more about Buildroot you can visit these websites:</p>
+ config BR2_PACKAGE_QT_JAVASCRIPTCORE
+ 	bool "JavaScriptCore JIT compiler"
+ 	help
 -- 
 1.7.2.2
