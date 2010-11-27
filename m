@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Javier Viguera <javier.viguera@digi.com>
 Date: Sat, 27 Nov 2010 22:36:28 +0100
-Subject: [Buildroot] [git commit master 1/1] documentation: add FAQ entry
-	concerning serial port configuration
-Message-ID: <20101127214027.3AD998D1EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] target-finalize: do not strip
+	libthread_db
+Message-ID: <20101127214028.4EE9C8CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a51a370f0327936b597f106c82d47af5cfbe76a
+commit: http://git.buildroot.net/buildroot/commit/?id=69b2cc76b3587a3ed551e7d2e025fd3ea4f33992
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/buildroot.html |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+Fix previous commit not to strip libthread_db library. In the previous
+commit the wildcard was incorrectly matching the symbolic link instead
+of the real library file.
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index d9df668..bb02f17 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -1597,8 +1597,31 @@ LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
-     <h2 id="faq">Frequently asked questions</h2>
- 
-     <ul>
-+      <li><a href="#faq-boot-hangs">The boot hangs
-+      after <code>Starting network...</code></a></li>
-     </ul>
- 
-+    <h3 id="faq-boot-hangs">The boot hangs after <code>Starting
-+    network...</code></h3>
-+
-+    <p>If the boot process seems to hang after the following messages
-+    (messages not necessarly exactly similar, depending on the list of
-+    packages selected):</p>
-+
-+    <pre>Freeing init memory: 3972K
-+Initializing random number generator... done.
-+Starting network...
-+Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
-+
-+    <p>then it means that your system is running, but didn't start a
-+    shell on the serial console. In order to have the system start a
-+    shell on your serial console, you have to go in the Buildroot
-+    configuration, <code>Target options</code>, enable <code>Generic
-+    serial port config</code>, and select the serial port and speed
-+    you would like to use for the shell. This will automatically tune
-+    the <code>/etc/inittab</code> file of the generated system so that
-+    a shell starts on the correct serial port.</p>
-+
-     <h2 id="links">Resources</h2>
- 
-     <p>To learn more about Buildroot you can visit these websites:</p>
+Signed-off-by: Javier Viguera <javier.viguera@digi.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6752aa6..fc165e1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -418,7 +418,7 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+ endif
+-	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db.so*' | \
++	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so' | \
+ 		xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
 -- 
 1.7.2.2
