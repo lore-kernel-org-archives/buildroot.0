@@ -1,8 +1,8 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
 Date: Sat, 27 Nov 2010 22:36:28 +0100
 Subject: [Buildroot] [git commit master 1/1] toolchain/crosstool-NG: use
-	wide-char option
-Message-ID: <20101127214029.82B2C8CA80@busybox.osuosl.org>
+	IPv6 option
+Message-ID: <20101127214029.F22168CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,10 +10,10 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fba6c2d76bf1a53ad587be264bdeeead29ad0090
+commit: http://git.buildroot.net/buildroot/commit/?id=f0e189dcaf150035687e866ca195300d2719642a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Push the wide-char options down to crosstool-NG config
+Push the IPv6 option down to uClibc config
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
@@ -22,18 +22,18 @@ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
  1 files changed, 7 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 25e12d2..2281daf 100644
+index 97224a1..92ed932 100644
 --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
 +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -223,6 +223,13 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
- # uClibc specific options
- ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
+@@ -245,6 +245,13 @@ else
+ CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_LFS)=.*:\# \1 is not set:;
+ endif
  
-+# Handle the wide-char option
-+ifneq ($(call qstrip,$(BR2_USE_WCHAR)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_WCHAR) is not set:\1=y:;
++# Handle the IPv6 option
++ifneq ($(call qstrip,$(BR2_INET_IPV6)),)
++CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_IPV6) is not set:\1=y:;
 +else
-+CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_WCHAR)=.*:\# \1 is not set:;
++CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_IPV6)=.*:\# \1 is not set:;
 +endif
 +
  # Instruct CT-NG's .config where to find the uClibc's .config
