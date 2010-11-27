@@ -1,48 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 27 Nov 2010 22:25:03 +0100
-Subject: [Buildroot] xorg-server not using target cflags
-In-Reply-To: <BAY145-w13F5F6FEBA012526351555C2220@phx.gbl> (Matt Johnson's
-	message of "Fri, 26 Nov 2010 17:42:12 -0700")
-References: <BAY145-w13F5F6FEBA012526351555C2220@phx.gbl>
-Message-ID: <87pqtq1mts.fsf@macbook.be.48ers.dk>
+Date: Sat, 27 Nov 2010 22:30:04 +0100
+Subject: [Buildroot] [PATH 00/10] toolchain/crosstool-NG: fixes before
+	release, v2
+In-Reply-To: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Sat, 27 Nov 2010 21:50:40 +0100")
+References: <1290891050-18122-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87lj4e1mlf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Johnson <mj1856@hotmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Matt> Hello,
- 
- Matt> I'm relatively new to buildroot, but I've had some recent success
- Matt> with most of the system.  However, I have been having problems
- Matt> getting X to run on my target platform, which is a custom s3c2410
- Matt> board. Trying to run Xfbdev always caused an Illegal Instruction
- Matt> error.
- 
- Matt> I'm using a CodeSourcery external toolchain, and it requires
- Matt> -march=armv4t to be supplied, or it builds with armv5t
- Matt> instructions by default.  This hasn't been a problem for most
- Matt> packages, but I found that for the xserver_xorg-server package,
- Matt> none of the CFLAGS were being set properly.
- 
- Matt> I found that the
- Matt> /package/x11r7/xserver_xorg-server/xserver_xorg-server.mk file
- Matt> has overridden the CFLAGS to include the pixman-1 library.  In
- Matt> doing so, it appear that the regular CFLAGS are no longer passed
- Matt> along.  I was able to fix this by including $(TARGET_CFLAGS) as
- Matt> well.  This seems like the best way to resolve the problem
- Matt> properly.
- 
- 
- Matt> I no longer get the Illegal Instruction error, and it appears to launch X properly now.
- 
- 
- Matt> Assuming this fix is ok, please apply the following patch to buildroot to close this bug.
+ Yann> Hello All!
 
-Thanks, committed. Could you in the future use unified diffs (diff -u),
-please? - Or even better use git and 'git format-patch'.
+ Yann> This patch series enables building on a minimalistic host (patch
+ Yann> 1, tested in the same mini-environemnt as Thomas), adds some
+ Yann> infrastructure (patches 2-5) to be able to push Buildroot options
+ Yann> down to uClibc's config (patches 6-10).
+
+Committed, thanks!
+
+ Yann> Changes since v1:
+ Yann> - use order-only dependencies on host tools
 
 -- 
 Bye, Peter Korsgaard
