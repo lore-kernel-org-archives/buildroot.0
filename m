@@ -1,8 +1,7 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+From: Matt Johnson <mj1856@hotmail.com>
 Date: Sat, 27 Nov 2010 22:36:28 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain/crosstool-NG: add
-	dependencies on host- tools
-Message-ID: <20101127214028.9D0768CA80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xserver-xorg: fix CFLAGS
+Message-ID: <20101127214028.714E68CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,66 +9,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee355233bb065e1b035c2942e01efb8c72325c8f
+commit: http://git.buildroot.net/buildroot/commit/?id=936be892ddc956164c9d9e2bf5cd86165cc5d4d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Depends on:
-- GNU awk       --> host-gawk
-- GNU automake  --> host-automake
+Ensure we just append to TARGET_CFLAGS, instead of overriding it.
 
-Remove dependency on 'cvs'. cvs is used to retrieve newlib,
-which is not supported under Buildroot.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Matt Johnson <mj1856@hotmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-crosstool-ng/001-no-cvs.patch |   15 +++++++++++++++
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk  |   10 +++++++++-
- 2 files changed, 24 insertions(+), 1 deletions(-)
- create mode 100644 toolchain/toolchain-crosstool-ng/001-no-cvs.patch
+ CHANGES                                            |    2 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/001-no-cvs.patch b/toolchain/toolchain-crosstool-ng/001-no-cvs.patch
-new file mode 100644
-index 0000000..fd805d3
---- /dev/null
-+++ b/toolchain/toolchain-crosstool-ng/001-no-cvs.patch
-@@ -0,0 +1,15 @@
-+Remove dependency on cvs.
-+
-+cvs is used to retrieve newlib, which is not supported
-+under Buildroot, so cvs is not required.
-+
-+--- crosstool-ng-1.8.0/configure.orig	2010-11-27 15:43:52.000000000 +0000
-++++ crosstool-ng-1.8.0/configure	2010-11-27 15:44:10.000000000 +0000
-+@@ -359,7 +359,6 @@
-+              err="'libtool' 1.5.26 or above was not found"
-+ has_or_abort prog=stat
-+ has_or_abort prog="aria2c curl wget"
-+-has_or_abort prog=cvs
-+ has_or_abort prog=patch
-+ has_or_abort prog=tar
-+ has_or_abort prog=gzip
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 0812216..9a9f272 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -267,8 +267,16 @@ $(CTNG_DIR)/.patched: $(CTNG_DIR)/.unpacked
- 	                              \*.patch.$(ARCH)
- 	$(Q)touch $@
+diff --git a/CHANGES b/CHANGES
+index 0228213..cb1daff 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
  
-+# Use order-only dependencies on host-* as they
-+# are virtual targets with no rules, and so are
-+# considered always remade. But we do not want
-+# to reconfigure and rebuild ct-ng every time
-+# we need to run it...
-+$(CTNG_DIR)/.configured: | host-gawk        \
-+                           host-automake
-+
- $(CTNG_DIR)/.configured: $(CTNG_DIR)/.patched
--	$(Q)cd $(CTNG_DIR) && ./configure --local
-+	$(Q)cd $(CTNG_DIR) && PATH=$(HOST_PATH) ./configure --local
- 	$(Q)touch $@
+ 	 Fixes all over the tree.
  
- $(CTNG_DIR)/ct-ng: $(CTNG_DIR)/.configured
+-	Updated/fixed packages: qt
++	Updated/fixed packages: qt, xserver-xorg
+ 
+ 2010.11-rc2, Released November 25th, 2010:
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 31b23f0..2cf5fb3 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -60,7 +60,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+ 		--disable-xnest --disable-xephyr --disable-xvfb \
+ 		--with-builder-addr=buildroot at uclibc.org \
+-		CFLAGS="-I$(STAGING_DIR)/usr/include/pixman-1" \
++		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
+ 		--with-fontdir=/usr/share/fonts/X11/
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
 -- 
 1.7.2.2
