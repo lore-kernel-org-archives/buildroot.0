@@ -1,30 +1,31 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 28 Nov 2010 17:25:11 -0500
-Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
-In-Reply-To: <8739ql177x.fsf@macbook.be.48ers.dk>
-References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
-	<201011281236.56902.vapier@gentoo.org>
-	<8739ql177x.fsf@macbook.be.48ers.dk>
-Message-ID: <201011281725.12551.vapier@gentoo.org>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun, 28 Nov 2010 17:30:12 -0600
+Subject: [Buildroot] [PATCH 1/1] allow build of syslinux on x86_64
+Message-ID: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday, November 28, 2010 16:14:26 Peter Korsgaard wrote:
-> Again, I know this is probably just you being you, but do take care of
-> your choice of words. To me, this commit message sounds quite
-> aggressive, as if you're upset that Javier's fix broke your
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-truthfully, i am a bit annoyed that Javier or you didnt simply CC me and ask 
-before breaking things.  it isnt like my e-mail is hidden or i'm AFK or 
-otherwise hard to reach.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101128/d7fd9376/attachment.pgp>
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ boot/syslinux/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index c65bc1f..5650f91 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_SYSLINUX
+ 	bool "syslinux"
+-	depends on BR2_i386
++	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  The syslinux bootloader for x86 systems.
+ 	  This includes: syslinux, pxelinux, extlinux.
+-- 
+1.7.3.2
