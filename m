@@ -1,24 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Nov 2010 11:09:06 +0100
-Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
-In-Reply-To: <1290897792-22134-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Sat, 27 Nov 2010 17:43:12 -0500")
-References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
-Message-ID: <87hbf1220t.fsf@macbook.be.48ers.dk>
+Date: Sun, 28 Nov 2010 11:11:12 +0100
+Subject: [Buildroot] xorg-server not using target cflags
+In-Reply-To: <BAY145-w235510FA6AD15BE8E1516BC2230@phx.gbl> (Matt Johnson's
+	message of "Sat, 27 Nov 2010 18:00:38 -0700")
+References: <BAY145-w13F5F6FEBA012526351555C2220@phx.gbl>
+	<87pqtq1mts.fsf@macbook.be.48ers.dk>
+	<BAY145-w235510FA6AD15BE8E1516BC2230@phx.gbl>
+Message-ID: <87d3pp21xb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+>>>>> "Matt" == Matt Johnson <mj1856@hotmail.com> writes:
 
- Mike> The attempt to fix libthread_db for some targets broke others.  If you
- Mike> want to match more libs, you shouldn't do so by breaking others.  The
- Mike> correct SONAME is libthread_db.so.#.
+Hi,
 
-Out of interest, what targets got broken, and how are the libthread_db
-files called?
+ >> Thanks, committed. Could you in the future use unified diffs (diff
+ >> -u), please? - Or even better use git and 'git format-patch'.
+ >> 
+
+ Matt> Will do.  Like I said, I'm new here.  :)
+
+Great.
+ 
+ Matt> BTW - I'm having similar Illegal Instruction problems with
+ Matt> fontconfig and freetype.  I will post back when I have solutions
+ Matt> for those.  I'm all ears if you have suggestions - as I don't see
+ Matt> the same CFLAGS issue as the main xserver package.
+
+I atleast see a CFLAGS override in the fontconfig package, so that might
+be why.
 
 -- 
 Bye, Peter Korsgaard
