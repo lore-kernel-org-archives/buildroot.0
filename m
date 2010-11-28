@@ -1,54 +1,51 @@
-From: trem <tremyfr@yahoo.fr>
-Date: Sun, 28 Nov 2010 21:07:06 +0100
-Subject: [Buildroot] buildroot and sh4
-In-Reply-To: <20101115232620.201bba02@surf>
-References: <212181.52672.qm@web23104.mail.ird.yahoo.com>	<297538.71443.qm@web29501.mail.ird.yahoo.com>	<20101107192810.2643ce33@surf>	<AB12B32E73474741A2C5361C433A44DE024DB430@rte-ben-exch.RTE.ADWIN.RENESAS.COM>	<4CE05DFF.9050906@yahoo.fr>
-	<20101115232620.201bba02@surf>
-Message-ID: <4CF2B66A.8010003@yahoo.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 28 Nov 2010 22:14:26 +0100
+Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
+In-Reply-To: <201011281236.56902.vapier@gentoo.org> (Mike Frysinger's message
+	of "Sun, 28 Nov 2010 12:36:55 -0500")
+References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
+	<87hbf1220t.fsf@macbook.be.48ers.dk>
+	<201011281236.56902.vapier@gentoo.org>
+Message-ID: <8739ql177x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/15/2010 11:26 PM, Thomas Petazzoni wrote:
-> On Sun, 14 Nov 2010 23:09:03 +0100
-> trem<tremyfr@yahoo.fr>  wrote:
->
->    
->> I've done a new version of the patch based on branch boards-cleanup
->> of git://git.busybox.net/~tpetazzoni/git/buildroot
->>
->> This new patch could be find here :
->> http://ryu.zarb.org/~trem/buildroot/0002-Add-a-qemu-device-target-sh4-r2d.patch
->>      
-> This patch does not follow completely the "new" way of adding board
-> support in Buildroot:
->
->   * The kernel configuration file should have been saved using "make
->     savedefconfig" in your kernel directory, so as to have a minimal
->     defconfig instead of this huge defconfig.
->
->   * Similarly, the Buildroot configuration file should have been saved
->     using "make savedefconfig" in your Buildroot directory.
->
-> With this, instead of having several tens of kilobytes of configuration
-> files, you'll have only a few hundred bytes of configuration.
->
-> Thanks !
->
-> Thomas
->    
-Hi
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-I've done a new version of the patch based on 
-git://git.busybox.net/~tpetazzoni/git/buildroot
-branch remotes/origin/for-2011.02/boards-cleanup.
+ Mike> On Sunday, November 28, 2010 05:09:06 Peter Korsgaard wrote:
+ >> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+ Mike> The attempt to fix libthread_db for some targets broke others.  If
+ >> you Mike> want to match more libs, you shouldn't do so by breaking others.
+ >> The Mike> correct SONAME is libthread_db.so.#.
+ >> 
+ >> Out of interest, what targets got broken, and how are the libthread_db
+ >> files called?
 
-The buildroot config and the kernel config use a defconf, so it's very 
-small.
+ Mike> i only care about Blackin targets.  we dont waste space on
+ Mike> symlinks and only install SONAMEs.
 
-This patch could be found here : http://ryu.zarb.org/~trem/buildroot/
+Ok, I naturally don't share this narrow viewpoint. It's not a use case
+for any of the supported archs, but ok, it's easy to support.
 
-regards,
-Philippe
+Again, I know this is probably just you being you, but do take care of
+your choice of words. To me, this commit message sounds quite
+aggressive, as if you're upset that Javier's fix broke your
+nonstandard/unsupported/undocumented setup, which is ofcause pretty
+silly considering that he clearly spent effort on verifying it with
+multiple toolchains and the original commit didn't even work for the
+default configuration.
+
+Anyway, I've fixed up your commit so it applied to master, and committed
+with a somewhat reworked commit message.
+
+ Mike> btw, why is your quoting style so screwed up ?
+
+It's just standard emacs supercite, like I've used for the last 10yrs or
+so. I find it handy in mailing lists when several people participate in
+a discussion.
+
+-- 
+Bye, Peter Korsgaard
