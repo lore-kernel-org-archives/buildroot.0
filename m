@@ -1,31 +1,58 @@
-From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Sun, 28 Nov 2010 17:30:12 -0600
-Subject: [Buildroot] [PATCH 1/1] allow build of syslinux on x86_64
-Message-ID: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Sun, 28 Nov 2010 17:44:03 -0600
+Subject: [Buildroot] sending in patches (potentially lots of them)
+Message-ID: <002b01cb8f56$2394b9e0$6abe2da0$@zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Zuerker <smiley73@users.sourceforge.net>
+Hey,
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
----
- boot/syslinux/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ 
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index c65bc1f..5650f91 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_SYSLINUX
- 	bool "syslinux"
--	depends on BR2_i386
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
+I'm pretty new to git, so please excuse any stupid questions I may have.
+
+ 
+
+I'm currently playing with buildroot to see if we can replace the current
+build system of Devil-Linux with buildroot.
+
+Main reason for this is the ability to support multiple architectures.
+
+ 
+
+As part of this exercise I'll probably have a few patches which others could
+benefit from. 
+
+What is the preferred way of sending them in? I sent one patch via email, I
+hopefully did this right..
+
+ 
+
+I did create a fork of the git repository on sourceforge, which would be
+easily accessible for you guys.
+
+https://sourceforge.net/scm/?type=git
+<https://sourceforge.net/scm/?type=git&group_id=34096> &group_id=34096
+
+ 
+
 -- 
-1.7.3.2
+
+ 
+
+Regards
+
+   Heiko Zuerker
+
+    <http://www.devil-linux.org> http://www.devil-linux.org
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101128/b7a8e627/attachment.html>
