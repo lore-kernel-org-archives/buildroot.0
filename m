@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Nov 2010 12:41:40 +0100
-Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
-In-Reply-To: <201011290621.34143.vapier@gentoo.org> (Mike Frysinger's message
-	of "Mon, 29 Nov 2010 06:21:32 -0500")
-References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
-	<201011281713.11840.vapier@gentoo.org>
-	<87tyj0zhu2.fsf@macbook.be.48ers.dk>
-	<201011290621.34143.vapier@gentoo.org>
-Message-ID: <87vd3gxsp7.fsf@macbook.be.48ers.dk>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Mon, 29 Nov 2010 15:33:47 +0000 (UTC)
+Subject: [Buildroot] [OT] Using CONFIG_INITRAMFS_SOURCE _and_ initrd=<path>?
+Message-ID: <id0h4r$3v3$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+I've been experimenting with using both CONFIG_INITRAMFS_SOURCE at
+kernel build time, and an initrd loaded by the boot loader.  According
+to the mnaual for systemrescuecd:
 
-Hi,
+   With the CONFIG_INITRAMFS_SOURCE option each kernel image contains
+   its own kernel modules. And the initram.igz only contains the
+   common boot scripts and programs which are used by all these
+   kernels. When a kernel boots, both the embedded initramfs and the
+   initram.igz are extracted into memory, then the kernel has all it
+   needs to boot.
 
- Mike> which would be nice to know ... from my point of view, these are
- Mike> simply being ignored with no feedback.  but perhaps this gets
- Mike> back to the buildroot doc not really covering any dev/release
- Mike> processes yet.
+The interesting part is this:
 
-True. We follow the same general structure as a bunch of other projects
-(E.G. Linux, u-boot, barebox, ..).
+   When a kernel boots,  _both_the_embedded_initramfs_and_the_
+   initram.igz_ are extracted into memory
 
-Care to submit a doc patch?
+My experimentation seems to show otherwise, when
+CONFIG_INITRAMFS_SOURCE is enabled in the kernel, the initrd loaded by
+the bootloader into ram and passed to the kernel on the command-line
+is ignored.
 
+Can anybody confirm whether or not you're supposed to be able to use
+both CONFIG_INITRAMFS_SOURCE _and_ an extra-kernel initrd?
+   
 -- 
-Bye, Peter Korsgaard
+Grant Edwards               grant.b.edwards        Yow! Did you move a lot of
+                                  at               KOREAN STEAK KNIVES this
+                              gmail.com            trip, Dingy?
