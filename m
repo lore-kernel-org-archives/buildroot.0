@@ -1,50 +1,57 @@
-From: Paulius Zaleckas <paulius.zaleckas@gmail.com>
-Date: Mon, 29 Nov 2010 22:05:29 +0200
-Subject: [Buildroot] handling package souce in .zip file
-In-Reply-To: <1290814537.14151.55.camel@coalu.atr>
-References: <AANLkTinM+8TXLvddMZopiOOV_i-GR2+-z-k8s_6WY_UJ@mail.gmail.com>	
-	<1290800123.14151.49.camel@coalu.atr>	
-	<AANLkTi==3zifJ5J6eToFRvVTTBvPh0zx2FW=qn_jrXrH@mail.gmail.com>
-	<1290814537.14151.55.camel@coalu.atr>
-Message-ID: <4CF40789.70905@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Nov 2010 21:15:53 +0100
+Subject: [Buildroot] [git commit master 1/1] libgcrypt: bump to version
+	1.4.6 to fix MIPS build issues
+Message-ID: <20101129201620.DCBEF8D34B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/27/2010 01:35 AM, Lionel Landwerlin wrote:
-> Le samedi 27 novembre 2010 ? 01:05 +0200, Paulius Zaleckas a ?crit :
->> On Fri, Nov 26, 2010 at 9:35 PM, Lionel Landwerlin
->> <llandwerlin@gmail.com>  wrote:
->>> What's about this :
->>>
->>> unzip file.zip /tmp/plop
->>> mv /tmp/plop/*/* output/build/myzippkg-0.1/
->>
->> Yes, this is almost what I was thinking, but the problem is that there
->> is no way to override "standard" buildroot extraction step or at least
->> I don't know it (using GENTARGET) :)
->>
->
-> You just need to define a macro per ".ext", just like what we've got for
-> the download macros.
->
-> INFLATE.zip would be the 2 lines above, and for the rest it would be the
-> "bzcat/zcat/cat | tar -C ...".
 
-Yes, but the problem is here:
+commit: http://git.buildroot.net/buildroot/commit/?id=10af218da8c8b00164dd92db12f862f7846a8ea9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-# Unpack the archive
-$(BUILD_DIR)/%/.stamp_extracted:
-	@$(call MESSAGE,"Extracting")
-	$(Q)mkdir -p $(@D)
-	$(Q)$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-# some packages have messed up permissions inside
-	$(Q)chmod -R ug+rw $(@D)
-	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-	$(Q)touch $@
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                        |    2 +-
+ package/libgcrypt/libgcrypt.mk |    8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-As you can see $(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE)
-output is piped to tar...
+diff --git a/CHANGES b/CHANGES
+index f696164..bbf5048 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
+ 
+ 	Fixes all over the tree.
+ 
+-	Updated/fixed packages: qt, tcpdump, xserver-xorg
++	Updated/fixed packages: libgcrypt, qt, tcpdump, xserver-xorg
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 646ad83..a7163ea 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -3,11 +3,11 @@
+ # libgcrypt
+ #
+ #############################################################
+-LIBGCRYPT_VERSION:=1.4.5
+-LIBGCRYPT_SOURCE:=libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+-LIBGCRYPT_SITE:=ftp://ftp.gnupg.org/gcrypt/libgcrypt
++
++LIBGCRYPT_VERSION = 1.4.6
++LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
++LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
+-LIBGCRYPT_INSTALL_TARGET = YES
+ 
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+-- 
+1.7.2.2
