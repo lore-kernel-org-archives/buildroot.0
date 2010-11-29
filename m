@@ -1,8 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Mon, 29 Nov 2010 21:15:53 +0100
-Subject: [Buildroot] [git commit master 1/1] sysstat: forcibly disable
-	sensors to avoid build failures
-Message-ID: <20101129201621.6C23F8D34B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] linux kernel: bump to version
+	2.6.36.1
+Message-ID: <20101129201621.D571D8CA48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +10,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7fbeda8013d74ef9b179d67efd0ec2ac5d271d5
+commit: http://git.buildroot.net/buildroot/commit/?id=372d8f2ae4dbffd6295dd1434bbc05446b0ee23e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                    |    3 ++-
- package/sysstat/sysstat.mk |    2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index bbf5048..fc15f3f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,8 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index 5191d01..f10b34c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_2_6_36
  
- 	Fixes all over the tree.
+ config BR2_LINUX_KERNEL_2_6_36
+-	bool "2.6.36"
++	bool "2.6.36.1"
  
--	Updated/fixed packages: libgcrypt, qt, tcpdump, xserver-xorg
-+	Updated/fixed packages: libgcrypt, qt, sysstat, tcpdump,
-+	xserver-xorg
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -52,7 +52,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "2.6.36"
++	default "2.6.36.1"
  
- 	Issues resolved (http://bugs.uclibc.org):
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
  
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 4f2f663..c5fe5c9 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -7,8 +7,8 @@
- SYSSTAT_VERSION = 9.1.6
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard/
-+SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
- 
--SYSSTAT_CONF_OPT = --disable-man-group
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- SYSSTAT_CONF_OPT += --disable-documentation
- endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "2.6.36" if BR2_LINUX_KERNEL_2_6_36
++	default "2.6.36.1" if BR2_LINUX_KERNEL_2_6_36
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.2.2
