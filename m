@@ -1,31 +1,32 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Mon, 29 Nov 2010 15:35:53 -0600
-Subject: [Buildroot] grub on x86_64
-Message-ID: <20101129153553.27944b3q5acnhxwk@www.home.zuerker.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 29 Nov 2010 18:45:39 -0500
+Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
+In-Reply-To: <87eia3ygqg.fsf@macbook.be.48ers.dk>
+References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
+	<201011291544.27824.vapier@gentoo.org>
+	<87eia3ygqg.fsf@macbook.be.48ers.dk>
+Message-ID: <201011291845.40939.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+On Monday, November 29, 2010 16:14:47 Peter Korsgaard wrote:
+> Yes. There's naturally some scale differences, but we follow the general
+> process:
+> 
+> - Releases every 3 months
+> - Only the maintainer (me) has direct commit access
+> - A period (2 months) after a release the tree is open for new features,
+>   then -rc1 is released and only fixes are accepted.
 
-I'm using an external toolchain (crosstools-ng 1.9.0) and when I try  
-to build grub it fails.
-It seems that grub only builds on x86_64 if you have a multilib system.
-I didn't try building with the buildroot toolchain, since I need glibc.
-
-I tested the build and it works fine on 32 bit.
-
-I also saw that the debian patch is much newer than what's in GIT,  
-I'll send in a patch to take care of both.
-
--- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+OK, i'll adjust my merge expectations accordingly
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101129/dc45dc85/attachment-0001.pgp>
