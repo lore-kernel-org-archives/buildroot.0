@@ -1,36 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Nov 2010 21:47:48 +0100
-Subject: [Buildroot] [git commit master 1/1] boot/syslinux: allow build on
-	x86_64
-Message-ID: <20101129204830.56B3B8D43D@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 29 Nov 2010 15:44:26 -0500
+Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
+In-Reply-To: <87vd3gxsp7.fsf@macbook.be.48ers.dk>
+References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
+	<201011290621.34143.vapier@gentoo.org>
+	<87vd3gxsp7.fsf@macbook.be.48ers.dk>
+Message-ID: <201011291544.27824.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Monday, November 29, 2010 06:41:40 Peter Korsgaard wrote:
+> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+>  Mike> which would be nice to know ... from my point of view, these are
+>  Mike> simply being ignored with no feedback.  but perhaps this gets
+>  Mike> back to the buildroot doc not really covering any dev/release
+>  Mike> processes yet.
+> 
+> True. We follow the same general structure as a bunch of other projects
+> (E.G. Linux, u-boot, barebox, ..).
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87683d7e9c524800f8d90ecfbdc44818430e684f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/syslinux/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index c65bc1f..5650f91 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_SYSLINUX
- 	bool "syslinux"
--	depends on BR2_i386
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
--- 
-1.7.2.2
+by "structure", i'm guessing you mean "release/development process" ?
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101129/b34e914c/attachment.pgp>
