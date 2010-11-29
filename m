@@ -1,36 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Nov 2010 10:24:42 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain/crosstool-NG: use
-	HOST_PATH when building the toolchain
-Message-ID: <20101129092503.9C0FC8D360@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 29 Nov 2010 10:25:01 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: use HOST_PATH when
+	building the toolchain
+In-Reply-To: <1290897842-21811-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Sat, 27 Nov 2010 23:44:02 +0100")
+References: <1290897842-21811-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87d3pozdle.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=512bb3c6d4abd461376668fb2eac7e7e1f3a7ab2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+ Yann> ---
+ Yann>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
+ Yann>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 1e8fa7a..31797c4 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -28,7 +28,7 @@ CTNG_UCLIBC_CONFIG_FILE := $(TOPDIR)/toolchain/toolchain-crosstool-ng/uClibc.con
- # to calling ct-ng.
- # $1: the set of arguments to pass to ct-ng
- define ctng
--$(CTNG_DIR)/ct-ng -C $(CTNG_DIR) --no-print-directory $(1)
-+PATH=$(HOST_PATH) $(CTNG_DIR)/ct-ng -C $(CTNG_DIR) --no-print-directory $(1)
- endef
- 
- #-----------------------------------------------------------------------------
 -- 
-1.7.2.2
+Bye, Peter Korsgaard
