@@ -1,22 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Nov 2010 21:48:35 +0100
-Subject: [Buildroot] [PATCH 1/1] allow build of syslinux on x86_64
-In-Reply-To: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
-	(heiko@zuerker.org's message of "Sun, 28 Nov 2010 17:30:12 -0600")
-References: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
-Message-ID: <87ipzfyhy4.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Nov 2010 21:54:16 +0100
+Subject: [Buildroot] handling package souce in .zip file
+In-Reply-To: <4CF40789.70905@gmail.com>
+References: <AANLkTinM+8TXLvddMZopiOOV_i-GR2+-z-k8s_6WY_UJ@mail.gmail.com>
+	<1290800123.14151.49.camel@coalu.atr>
+	<AANLkTi==3zifJ5J6eToFRvVTTBvPh0zx2FW=qn_jrXrH@mail.gmail.com>
+	<1290814537.14151.55.camel@coalu.atr> <4CF40789.70905@gmail.com>
+Message-ID: <20101129215416.72c2bb65@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "heiko" == heiko  <heiko@zuerker.org> writes:
+On Mon, 29 Nov 2010 22:05:29 +0200
+Paulius Zaleckas <paulius.zaleckas@gmail.com> wrote:
 
- heiko> From: Heiko Zuerker <smiley73@users.sourceforge.net>
- heiko> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+> As you can see $(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE)
+> output is piped to tar...
 
-Committed, thanks.
+This can obviously be changed if needed.
 
+Regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
