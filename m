@@ -1,38 +1,29 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 29 Nov 2010 15:33:47 +0000 (UTC)
-Subject: [Buildroot] [OT] Using CONFIG_INITRAMFS_SOURCE _and_ initrd=<path>?
-Message-ID: <id0h4r$3v3$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Nov 2010 20:23:54 +0100
+Subject: [Buildroot] [PATCH 1/1] allow build of syslinux on x86_64
+In-Reply-To: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
+References: <4001ec02470ab7771b8d4f0b6ddee9e1cc6961ef.1290986952.git.smiley73@users.sourceforge.net>
+Message-ID: <20101129202354.7b41bb6f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been experimenting with using both CONFIG_INITRAMFS_SOURCE at
-kernel build time, and an initrd loaded by the boot loader.  According
-to the mnaual for systemrescuecd:
+On Sun, 28 Nov 2010 17:30:12 -0600
+heiko at zuerker.org wrote:
 
-   With the CONFIG_INITRAMFS_SOURCE option each kernel image contains
-   its own kernel modules. And the initram.igz only contains the
-   common boot scripts and programs which are used by all these
-   kernels. When a kernel boots, both the embedded initramfs and the
-   initram.igz are extracted into memory, then the kernel has all it
-   needs to boot.
+> From: Heiko Zuerker <smiley73@users.sourceforge.net>
+> 
+> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-The interesting part is this:
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-   When a kernel boots,  _both_the_embedded_initramfs_and_the_
-   initram.igz_ are extracted into memory
+Thanks,
 
-My experimentation seems to show otherwise, when
-CONFIG_INITRAMFS_SOURCE is enabled in the kernel, the initrd loaded by
-the bootloader into ram and passed to the kernel on the command-line
-is ignored.
-
-Can anybody confirm whether or not you're supposed to be able to use
-both CONFIG_INITRAMFS_SOURCE _and_ an extra-kernel initrd?
-   
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! Did you move a lot of
-                                  at               KOREAN STEAK KNIVES this
-                              gmail.com            trip, Dingy?
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
