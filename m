@@ -1,32 +1,61 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 29 Nov 2010 18:45:39 -0500
-Subject: [Buildroot] [PATCH] target-finalize: fix libthread_db strip fix
-In-Reply-To: <87eia3ygqg.fsf@macbook.be.48ers.dk>
-References: <1290897792-22134-1-git-send-email-vapier@gentoo.org>
-	<201011291544.27824.vapier@gentoo.org>
-	<87eia3ygqg.fsf@macbook.be.48ers.dk>
-Message-ID: <201011291845.40939.vapier@gentoo.org>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 29 Nov 2010 18:22:20 -0700
+Subject: [Buildroot] [PATCH] Add libsigc++ package
+Message-ID: <201011291822.20672.hartleys@visionengravers.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, November 29, 2010 16:14:47 Peter Korsgaard wrote:
-> Yes. There's naturally some scale differences, but we follow the general
-> process:
-> 
-> - Releases every 3 months
-> - Only the maintainer (me) has direct commit access
-> - A period (2 months) after a release the tree is open for new features,
->   then -rc1 is released and only fixes are accepted.
+Add support for the libsigc++ library.
 
-OK, i'll adjust my merge expectations accordingly
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101129/dc45dc85/attachment-0001.pgp>
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+
+---
+
+diff --git a/package/Config.in b/package/Config.in
+index 03e580a..1f6f7c1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -322,6 +322,7 @@ source "package/libevent/Config.in"
+ source "package/libfloat/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/liboil/Config.in"
++source "package/libsigc++/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+ 
+diff --git a/package/libsigc++/Config.in b/package/libsigc++/Config.in
+new file mode 100644
+index 0000000..8ec674c
+--- /dev/null
++++ b/package/libsigc++/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBSIGC
++	bool "libsigc++"
++	help
++	  libsigc++ implements a typesafe callback system for standard C++.
++	  It allows you to define signals and to connect those signals to
++	  any callback function, either global or a member function,
++	  regardless of whether it is static or virtual.
++
++	  http://libsigc.sourceforge.net/
+diff --git a/package/libsigc++/libsigc.mk b/package/libsigc++/libsigc.mk
+new file mode 100644
+index 0000000..640c803
+--- /dev/null
++++ b/package/libsigc++/libsigc.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# libsigc++
++#
++#############################################################
++LIBSIGC_VERSION = 2.2.8
++LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
++LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
++LIBSIGC_LIBTOOL_PATCH = NO
++LIBSIGC_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS,package,libsigc))
