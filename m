@@ -1,36 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Nov 2010 19:50:04 +0100
-Subject: [Buildroot] [git commit master 1/1] docs/news.html: add 2010.11
-	announce link
-Message-ID: <20101130185037.4E9978D590@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 30 Nov 2010 19:53:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 2869] New: Do not erase source and build
+ directories from the linux kernel build.
+Message-ID: <bug-2869-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2869
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e9c3a387820154fd1355f23c2669072c0c3a5f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+           Summary: Do not erase source and build directories from the
+                    linux kernel build.
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mroberto at cpti.cetuc.puc-rio.br
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/docs/news.html b/docs/news.html
-index c0d9b50..38fbca3 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>The stable 2010.11 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11">CHANGES</a>
--    file for more details,
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2010-November/039135.html">announcement</a>
-     and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2010.11.tar.bz2">2010.11 release</a>.</p>
- 
+Created attachment 2743
+  --> https://bugs.busybox.net/attachment.cgi?id=2743
+Patch to keep the "source" and "build" directories in the linux tree.
+
+When buiding and installing a package that compiles an out-of-the-tree
+kernel module, it is necessary to have the "source" and "build"
+directories on the linux kernel tree. This patch avoids the deletion
+of these directories in linux.mk.
+
 -- 
-1.7.2.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
