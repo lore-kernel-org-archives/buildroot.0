@@ -1,40 +1,23 @@
-From: Patrick Ziegler <patrick.ziegler@fh-kl.de>
-Date: Tue, 30 Nov 2010 11:57:17 +0100
-Subject: [Buildroot] init script for portmap
-Message-ID: <4CF4D88D.3090305@fh-kl.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 30 Nov 2010 13:20:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 1291] Add support for Faraday 526 arm processor
+	(fa526)
+In-Reply-To: <bug-1291-163@https.bugs.busybox.net/>
+References: <bug-1291-163@https.bugs.busybox.net/>
+Message-ID: <20101130132046.DE82A8CA80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=1291
 
-The init script for portmap will not be installed on target after the 
-update to version 6.0 and converting to autotargets. As the init script 
-is still available I'm wondering if this is only a mistake ?
-
-The following line is missing in portmap.mk
-
-$(INSTALL) -m 0755 package/portmap/S13portmap $(TARGET_DIR)/etc/init.d
-
-Regards
-
-Patrick
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Wouldn't it be easier to just add, say, the arm810 which is for all intent and
+purposes the same core in a generic naming?
 
 -- 
-
-Dipl.-Inf. (FH) Patrick Ziegler
-
-University Of Applied Sciences
-Kaiserslautern
-
-Amerikastrasse 1
-D-66482 Zweibruecken
-Germany
-
-Phone:	+49 631 3724 5526
-Mail:	patrick.ziegler at fh-kl.de
-
-http://www.fh-kl.de
-http://www.fh-kl.de/fachbereiche/imst/iuk-knowhow.html
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
