@@ -1,79 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Nov 2010 16:28:41 +0100
-Subject: [Buildroot] [git commit master 1/1] Makefile: introduce KSTRIPCMD
-	to strip kernel modules
-Message-ID: <20101130153051.823D38CA41@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 30 Nov 2010 16:29:11 +0000
+Subject: [Buildroot] [PATCH] oprofile: Don't install binutils in the target
+	filesystem.
+Message-ID: <AANLkTi=qoF_Xq8jNoieWCAQCGR-5VzQaYZV85EO3KfYz@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+oprofile needs libbfd, but does not require all the binutils tools
+installing in the target filesystem. This saves a lot of space
+on the target filesystem.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0dc940cdeeaa1fae3510ff8a1b581f4ecf27b5c4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When sstrip is selected it tries to strip kernel modules too.
-Unfortunately this fails with a "unrecognized program segment header
-size" error thus interrupting the build process.
-
-We introduce a new $(KSTRIPCMD) strip command for this, being a regular
-strip when sstrip is selected and an empty stub when not stripping.
-
-At the same time get rid of the REMOVE_SECTION_* variables, as they are
-only used once.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- Makefile            |    2 +-
- package/Makefile.in |    9 ++++-----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/oprofile/oprofile.mk   |    2 +-
+ toolchain/binutils/binutils.mk |    2 ++
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8dbb026..008bdf3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -421,7 +421,7 @@ endif
- 	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
- 		xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-+		xargs -r $(KSTRIPCMD) || true
- 
- 	mkdir -p $(TARGET_DIR)/etc
- 	# Mandatory configuration file and auxilliary cache directory
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a39dbbc..2ca8c31 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -146,23 +146,22 @@ ifeq ($(BR2_STRIP_strip),y)
- STRIP_DISCARD_ALL:=--discard-all
- STRIP_STRIP_UNNEEDED:=--strip-unneeded
- STRIP_STRIP_ALL:=--strip-all
--REMOVE_SECTION_COMMENT:=--remove-section=.comment
--REMOVE_SECTION_NOTE:=--remove-section=.note
- TARGET_STRIP=$(TARGET_CROSS)strip
--STRIPCMD=$(TARGET_CROSS)strip $(REMOVE_SECTION_COMMENT) $(REMOVE_SECTION_NOTE)
-+STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
-+KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 3be50f2..7281c8f 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -24,7 +24,7 @@ ifeq ($(OPROFILE_ARCH),)
+ OPROFILE_ARCH := $(BR2_ARCH)
  endif
- ifeq ($(BR2_STRIP_sstrip),y)
- STRIP_DISCARD_ALL:=
- STRIP_STRIP_UNNEEDED:=
- STRIP_STRIP_ALL:=
--REMOVE_SECTION_COMMENT:=
--REMOVE_SECTION_NOTE:=
- TARGET_STRIP=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
- STRIPCMD=$(TARGET_STRIP)
-+KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note --strip-unneeded
- endif
- ifeq ($(BR2_STRIP_none),y)
- TARGET_STRIP=true
- STRIPCMD=$(TARGET_STRIP)
-+KSTRIPCMD=$(TARGET_STRIP)
- endif
- INSTALL:=$(shell which install || type -p install)
- FLEX:=$(shell which flex || type -p flex)
+
+-OPROFILE_DEPENDENCIES := popt binutils_target
++OPROFILE_DEPENDENCIES := popt libbfd_target
+
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
+index ef9f644..de8f865 100644
+--- a/toolchain/binutils/binutils.mk
++++ b/toolchain/binutils/binutils.mk
+@@ -172,6 +172,8 @@ endif
+
+ binutils_target: $(BINUTILS_TARGET_PREREQ) $(TARGET_DIR)/usr/bin/ld
+
++libbfd_target: $(BINUTILS_DIR2)/binutils/objdump
++
+ binutils_target-clean:
+ 	-$(MAKE) -C $(BINUTILS_DIR2) clean
+ 	rm -f $(TARGET_DIR)/bin/$(REAL_GNU_TARGET_NAME)* \
 -- 
 1.7.2.2
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-oprofile-Don-t-install-binutils-in-the-target-filesy.patch
+Type: text/x-patch
+Size: 1466 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101130/fed31fce/attachment.bin>
