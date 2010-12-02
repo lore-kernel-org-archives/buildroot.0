@@ -1,50 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  2 Dec 2010 13:44:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 2881] New: Can't build project statically with
- external toolchain
-Message-ID: <bug-2881-163@https.bugs.busybox.net/>
+From: Chris Kerios <ckerios@gmail.com>
+Date: Thu, 2 Dec 2010 11:27:09 -0500
+Subject: [Buildroot] Help - Buildroot-2010.11 Don't know what changed
+Message-ID: <AANLkTimk=w-b3jMs58sFzLG5SVEkybEsQmTVpyuS-P-O@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2881
+Hi,
+I am working with the 2010.11 release on a PC-104 Geode LX w/Compact
+Flash card. Fedora 14.
 
-           Summary: Can't build project statically with external toolchain
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: serj.kalichev at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I built a minimal system with all the defaults, no external toolchain:
 
+Kernel = 2.6.36.1
+uClibc = .9.31.x with .9.31.x.config file
+Busybox = 1.17.x with 1.17.x.config file
+gcc = 4.3.x
+bootloader selected = grub
 
-Created attachment 2749
-  --> https://bugs.busybox.net/attachment.cgi?id=2749
-Don't copy shared libraries to the target dir if BR2_PREFER_STATIC_LIB defined
+I have not added any files/applications to be built, so all that is
+being built is the toolchain, kernel, grub and busybox.  Everything
+downloads and builds fine!
 
-Hello
+The problem is when I copy to flash and boot the system it comes up as
+read-only!  I copy things to the flash as root and preserve all
+permissions, etc.  I've looked at the mailing list and long ago the
+threads said to have the entry in inittab remount the filesystem as RW
+and it should correct the problem.  The issue is my default inittab
+file has this entry in it so I don't understand why I am seeing this.
 
-Buildroot version: 2010.11
+If I execute the command manually from the command line after logging
+in, it mounts the filesystem back as RW just fine.  Also, if I include
+a "rw" on my kernel line in grub.conf the filesystem comes in as RW.
 
-I tried to build minimal busybox-only project for using as initramfs. I use
-external buildroot toolchain. The buildroot copy the .so libraries from
-external toolchain to the target dir unconditionally. But I build busybox
-statically and don't need shared libraries (the size of resulted image is too
-big with unneeded libraries).
+Is this a busybox issue?  I am using all buildroot defaults.  Any
+thoughts or ideas of things I can check?
 
-The attached patch use BR2_PREFER_STATIC_LIB to find out if the project prefer
-static linking and if the static linking is preferred don't copy shared
-libraries to the target dir.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks in advance,
+Chris
