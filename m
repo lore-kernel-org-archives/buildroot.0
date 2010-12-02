@@ -1,25 +1,36 @@
-From: =?koi8-r?B?89TB0sPF1yDl18fFzsnK?= <slayer-gurgen@yandex.ru>
-Date: Thu, 02 Dec 2010 08:53:49 +0300
-Subject: [Buildroot] ifplugd
-Message-ID: <113211291269229@web79.yandex.ru>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  2 Dec 2010 07:48:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 2875] New: Kernel doesn't build Ext2 support
+	out-of-the-box
+Message-ID: <bug-2875-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+https://bugs.busybox.net/show_bug.cgi?id=2875
 
-When i try to build this package for target system, i get this error (at configuration time).
+           Summary: Kernel doesn't build Ext2 support out-of-the-box
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tuukka.pasanen at ilmi.fi
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-..
-checking for strspn... yes
-checking pkg-config is at least version 0.9.0... yes
-checking for LIBDAEMON... yes
-configure: error: missing --with-initdir=DIR
-..
 
-I think that this is little mistake in related Makefile, but i don't know that means option --with-initdir in this case.
+Because kernel doesn't build Ext2 support out-of-the-box if you choose i386 for
+default config you can use iso-image without minor tuning of kernel .config
+file. This should work like initrd thing.
 
-Best regards!
-Evgeny Startsev.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
