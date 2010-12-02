@@ -1,40 +1,25 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 1 Dec 2010 14:44:26 +0000
-Subject: [Buildroot] [PATCH] package/openssh: Use HTTP instead of FTP for
-	source download.
-Message-ID: <AANLkTinqN8rwckydZy7ys2gKsegziwuQJuQChjpU2gAe@mail.gmail.com>
+From: =?koi8-r?B?89TB0sPF1yDl18fFzsnK?= <slayer-gurgen@yandex.ru>
+Date: Thu, 02 Dec 2010 08:53:49 +0300
+Subject: [Buildroot] ifplugd
+Message-ID: <113211291269229@web79.yandex.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HTTP should be more firewall friendly.
+Hello!
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
----
- package/openssh/openssh.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+When i try to build this package for target system, i get this error (at configuration time).
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 236a3a8..82c64d6 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -5,7 +5,7 @@
- #############################################################
+..
+checking for strspn... yes
+checking pkg-config is at least version 0.9.0... yes
+checking for LIBDAEMON... yes
+configure: error: missing --with-initdir=DIR
+..
 
- OPENSSH_VERSION = 5.6p1
--OPENSSH_SITE = ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
-+OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)"
- OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
- 		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
--- 
-1.7.2.2
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-package-openssh-Use-HTTP-instead-of-FTP-for-source-d.patch
-Type: text/x-patch
-Size: 1015 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101201/f31664e4/attachment.bin>
+I think that this is little mistake in related Makefile, but i don't know that means option --with-initdir in this case.
+
+Best regards!
+Evgeny Startsev.
