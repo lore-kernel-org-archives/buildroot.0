@@ -1,595 +1,1227 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  3 Dec 2010 20:16:23 +0100
-Subject: [Buildroot] [PATCH 1/1] ccache: rework ccache management
-In-Reply-To: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <03b95520ec943581129be4cf92a6ea70e661cf6d.1291403746.git.thomas.petazzoni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  3 Dec 2010 16:51:49 -0300
+Subject: [Buildroot] [PATCH] busybox: add 1.18.0, remove 1.13.x and 1.14.x,
+	mark 1.15.x as deprecated
+Message-ID: <1291405910-28686-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * ccache is now a normal package (both for the host and the target).
-
- * ccache option is now part of the "Build options" menu. It will
-   automatically build ccache for the host before building anything,
-   and will use it to cache builds for both host compilations and
-   target compilations.
-
- * bump ccache to 3.1.3
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in                                |    8 ++
- Makefile                                 |   27 +++-
- docs/buildroot.html                      |   26 ++++
- package/Config.in                        |    2 +-
- package/Makefile.in                      |   10 ++-
- package/ccache/Config.in                 |    5 +
- package/ccache/ccache.mk                 |   32 +++++
- toolchain/ccache/Config.in               |   16 ---
- toolchain/ccache/Config.in.2             |   13 --
- toolchain/ccache/ccache.mk               |  196 ------------------------------
- toolchain/dependencies/dependencies.sh   |    2 +-
- toolchain/toolchain-buildroot.mk         |    1 -
- toolchain/toolchain-buildroot/Config.in  |    1 -
- toolchain/toolchain-crosstool-ng.mk      |    1 -
- toolchain/toolchain-external.mk          |    1 -
- toolchain/toolchain-external/ext-tool.mk |    2 +-
- 16 files changed, 103 insertions(+), 240 deletions(-)
- create mode 100644 package/ccache/Config.in
- create mode 100644 package/ccache/ccache.mk
- delete mode 100644 toolchain/ccache/Config.in
- delete mode 100644 toolchain/ccache/Config.in.2
- delete mode 100644 toolchain/ccache/ccache.mk
+ package/busybox/Config.in                          |   20 +-
+ .../busybox-1.18.0/busybox-1.18.0-buildsys.patch   |   21 +
+ .../busybox-1.18.0/busybox-1.18.0-sha.patch        |  118 +++
+ package/busybox/busybox-1.18.x.config              |  986 ++++++++++++++++++++
+ 4 files changed, 1132 insertions(+), 13 deletions(-)
+ create mode 100644 package/busybox/busybox-1.18.0/busybox-1.18.0-buildsys.patch
+ create mode 100644 package/busybox/busybox-1.18.0/busybox-1.18.0-sha.patch
+ create mode 100644 package/busybox/busybox-1.18.x.config
 
-diff --git a/Config.in b/Config.in
-index a41cd3e..f6e894e 100644
---- a/Config.in
-+++ b/Config.in
-@@ -94,6 +94,14 @@ config BR2_JLEVEL
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index e53046e..48ba1c8 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -17,16 +17,9 @@ choice
  	help
- 	  Number of jobs to run simultaneously
+ 	  Select the version of BusyBox you wish to use.
  
-+config BR2_CCACHE
-+	bool "Enable compiler cache"
-+	help
-+	  This option will enable the use of ccache, a compiler
-+	  cache. It will cache the result of previous builds to speed
-+	  up future builds. The cache is stored in
-+	  $HOME/.buildroot-ccache.
+-	config BR2_BUSYBOX_VERSION_1_13_X
+-		bool "BusyBox 1.13.x"
+-		depends on BR2_DEPRECATED
+-
+-	config BR2_BUSYBOX_VERSION_1_14_X
+-		bool "BusyBox 1.14.x"
+-		depends on BR2_DEPRECATED
+-
+ 	config BR2_BUSYBOX_VERSION_1_15_X
+ 		bool "BusyBox 1.15.x"
++		depends on BR2_DEPRECATED
+ 
+ 	config BR2_BUSYBOX_VERSION_1_16_X
+ 		bool "BusyBox 1.16.x"
+@@ -34,6 +27,9 @@ choice
+ 	config BR2_BUSYBOX_VERSION_1_17_X
+ 		bool "BusyBox 1.17.x"
+ 
++	config BR2_BUSYBOX_VERSION_1_18_X
++		bool "BusyBox 1.18.x"
 +
- config BR2_DEPRECATED
- 	bool "Show packages that are deprecated or obsolete"
+ 	config BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 		bool "daily snapshot"
+ 
+@@ -41,11 +37,10 @@ endchoice
+ 
+ config BR2_BUSYBOX_VERSION
+ 	string
+-	default "1.13.4"	if BR2_BUSYBOX_VERSION_1_13_X
+-	default "1.14.4"	if BR2_BUSYBOX_VERSION_1_14_X
+ 	default "1.15.3"	if BR2_BUSYBOX_VERSION_1_15_X
+ 	default "1.16.2"	if BR2_BUSYBOX_VERSION_1_16_X
+ 	default "1.17.4"	if BR2_BUSYBOX_VERSION_1_17_X
++	default "1.18.0"	if BR2_BUSYBOX_VERSION_1_18_X
+ 
+ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+ 	bool "Run BusyBox's own full installation"
+@@ -61,12 +56,11 @@ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+ 
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+-	default "package/busybox/busybox-1.17.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
+-	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_13_X
+-	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_14_X
++	default "package/busybox/busybox-1.18.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 	default "package/busybox/busybox-1.13.x.config" if BR2_BUSYBOX_VERSION_1_15_X
+ 	default "package/busybox/busybox-1.16.x.config" if BR2_BUSYBOX_VERSION_1_16_X
+ 	default "package/busybox/busybox-1.17.x.config" if BR2_BUSYBOX_VERSION_1_17_X
++	default "package/busybox/busybox-1.18.x.config" if BR2_BUSYBOX_VERSION_1_18_X
  	help
-diff --git a/Makefile b/Makefile
-index 596470f..f811cbf 100644
---- a/Makefile
-+++ b/Makefile
-@@ -125,10 +125,13 @@ HOSTAS:=as
- endif
- ifndef HOSTCC
- HOSTCC:=gcc
--else
-+HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
-+HOSTCC_NOCCACHE:=$(HOSTCC)
- endif
- ifndef HOSTCXX
- HOSTCXX:=g++
-+HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
-+HOSTCXX_NOCCACHE:=$(HOSTCXX)
- endif
- ifndef HOSTFC
- HOSTFC:=gfortran
-@@ -147,15 +150,13 @@ HOSTNM:=nm
- endif
- HOSTAR:=$(shell which $(HOSTAR) || type -p $(HOSTAR) || echo ar)
- HOSTAS:=$(shell which $(HOSTAS) || type -p $(HOSTAS) || echo as)
--HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
--HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
- HOSTFC:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo || which g77 || type -p g77 || echo gfortran)
- HOSTCPP:=$(shell which $(HOSTCPP) || type -p $(HOSTCPP) || echo cpp)
- HOSTLD:=$(shell which $(HOSTLD) || type -p $(HOSTLD) || echo ld)
- HOSTLN:=$(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- 
--export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
-+export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD HOSTCC_NOCCACHE
- 
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
-@@ -231,10 +232,15 @@ PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
- # along with the packages to build for the target.
- #
- ##############################################################
-+
-+ifeq ($(BR2_CCACHE),y)
-+BASE_TARGETS += host-ccache
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--BASE_TARGETS:=uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
-+BASE_TARGETS += uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
- else
--BASE_TARGETS:=uclibc
-+BASE_TARGETS += uclibc
- endif
- TARGETS:=
- 
-@@ -276,6 +282,13 @@ TARGET_SKELETON=$(TOPDIR)/fs/skeleton
- 
- BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
- 
-+ifeq ($(BR2_CCACHE),y)
-+CCACHE:=$(HOST_DIR)/usr/bin/ccache
-+CCACHE_CACHE_DIR=$(HOME)/.buildroot-ccache
-+HOSTCC  := $(CCACHE) $(HOSTCC)
-+HOSTCXX := $(CCACHE) $(HOSTCXX)
-+endif
-+
- include toolchain/Makefile.in
- include package/Makefile.in
- 
-@@ -480,7 +493,7 @@ export HOSTCFLAGS
- 
- $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
--	$(MAKE) CC="$(HOSTCC)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
-+	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
- 
- COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index f471962..6d7ee17 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -29,6 +29,7 @@
-       <li><a href="#buildroot_innards">How Buildroot works</a></li>
-       <li><a href="#using_toolchain">Using the uClibc toolchain outside Buildroot</a></li>
-       <li><a href="#external_toolchain">Use an external toolchain</a></li>
-+      <li><a href="#ccache-support">Using <code>ccache</code> in Buildroot</li>
-       <li><a href="#downloaded_packages">Location of downloaded packages</a></li>
-       <li><a href="#add_packages">Adding new packages to Buildroot</a></li>
-       <li><a href="#board_support">Creating your own board support</a></li>
-@@ -681,6 +682,31 @@ endif
-     Build options -&gt; Toolchain and header file location</code> options.
-     This could be useful if the toolchain must be shared with other users.</p>
- 
-+    <h2 id="ccache-support">Using <code>ccache</code> in Buildroot</h2>
-+
-+    <p><a href="http://ccache.samba.org">ccache</a> is a compiler
-+    cache. It stores the object files resulting from each compilation
-+    process, and is able to skip future compilation of the same source
-+    file (with same compiler and same arguments) by using the
-+    pre-existing object files. When doing almost identical builds from
-+    scratch a number of times, it can divide the build time by a
-+    factor of two.</p>
-+
-+    <p><code>ccache</code> support is integrated in Buildroot. You
-+    just have to enable <code>Enable compiler cache</code>
-+    in <code>Build options</code>. This will automatically build
-+    <code>ccache</code> and use it for every host and target
-+    compilation.</p>
-+
-+    <p>The cache is located
-+    in <code>$HOME/.buildroot-ccache</code>. It is stored outside of
-+    Buildroot output directory so that it can be shared by separate
-+    Buildroot builds. If you want to get rid of the cache, simply
-+    remove this directory.</p>
-+
-+    <p>You can get statistics on the cache (its size, number of hits,
-+    misses, etc.) by running <code>make ccache-stats</code>.</p>
-+
-     <h2 id="downloaded_packages">Location of downloaded packages</h2>
- 
-     <p>It might be useful to know that the various tarballs that are
-diff --git a/package/Config.in b/package/Config.in
-index 03e580a..e551c0c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,7 +35,7 @@ source "package/autoconf/Config.in"
- source "package/automake/Config.in"
- source "package/bison/Config.in"
- source "package/bsdiff/Config.in"
--source "toolchain/ccache/Config.in.2"
-+source "package/ccache/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/coreutils/Config.in"
- endif
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2ca8c31..d448a7e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -142,6 +142,14 @@ TARGET_RANLIB   = $(TARGET_CROSS)ranlib
- TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
- TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
- 
-+TARGET_CC_NOCCACHE  := $(TARGET_CC)
-+TARGET_CXX_NOCCACHE := $(TARGET_CXX)
-+
-+ifeq ($(BR2_CCACHE),y)
-+TARGET_CC  := $(CCACHE) $(TARGET_CC)
-+TARGET_CXX := $(CCACHE) $(TARGET_CXX)
-+endif
-+
- ifeq ($(BR2_STRIP_strip),y)
- STRIP_DISCARD_ALL:=--discard-all
- STRIP_STRIP_UNNEEDED:=--strip-unneeded
-@@ -175,7 +183,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -L$(HOST_DIR)/usr/lib -Wl,-rpath,$(HOST_DIR)/
- HOST_PATH=$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(PATH)
- 
- # hostcc version as an integer - E.G. 4.3.2 => 432
--HOSTCC_VERSION:=$(shell $(HOSTCC) --version | \
-+HOSTCC_VERSION:=$(shell $(HOSTCC_NOCCACHE) --version | \
- 	sed -n 's/^.* \([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)[ ]*.*$$/\1\2\3/p')
- 
- TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
-diff --git a/package/ccache/Config.in b/package/ccache/Config.in
+ 	  Some people may wish to use their own modified BusyBox configuration
+ 	  file, and will specify their config file location with this option.
+diff --git a/package/busybox/busybox-1.18.0/busybox-1.18.0-buildsys.patch b/package/busybox/busybox-1.18.0/busybox-1.18.0-buildsys.patch
 new file mode 100644
-index 0000000..a81e699
+index 0000000..c72e4d3
 --- /dev/null
-+++ b/package/ccache/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_CCACHE
-+	bool "ccache"
-+	help
-+	  Compiler Cache
-+	  http://samba.org/ftp/ccache
-\ No newline at end of file
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
++++ b/package/busybox/busybox-1.18.0/busybox-1.18.0-buildsys.patch
+@@ -0,0 +1,21 @@
++diff -urpN busybox-1.18.0/scripts/gen_build_files.sh busybox-1.18.0-buildsys/scripts/gen_build_files.sh
++--- busybox-1.18.0/scripts/gen_build_files.sh	2010-11-22 21:43:22.000000000 +0100
+++++ busybox-1.18.0-buildsys/scripts/gen_build_files.sh	2010-11-24 14:59:47.732712663 +0100
++@@ -18,14 +18,14 @@ generate()
++ 	local src="$1" dst="$2" header="$3" insert="$4"
++ 	#chk "${dst}"
++ 	(
++-		echo "${header}"
+++		printf "%s\n" "${header}"
++ 		if grep -qs '^INSERT$' "${src}"; then
++ 			sed -n '1,/^INSERT$/p' "${src}"
++-			echo "${insert}"
+++			printf "%s\n" "${insert}"
++ 			sed -n '/^INSERT$/,$p' "${src}"
++ 		else
++ 			if [ -n "${insert}" ]; then
++-				echo "ERROR: INSERT line missing in: ${src}" 1>&2
+++				printf "%s\n" "ERROR: INSERT line missing in: ${src}" 1>&2
++ 			fi
++ 			cat "${src}"
++ 		fi
+diff --git a/package/busybox/busybox-1.18.0/busybox-1.18.0-sha.patch b/package/busybox/busybox-1.18.0/busybox-1.18.0-sha.patch
 new file mode 100644
-index 0000000..aed62d7
+index 0000000..3ad66fd
 --- /dev/null
-+++ b/package/ccache/ccache.mk
-@@ -0,0 +1,32 @@
-+#############################################################
++++ b/package/busybox/busybox-1.18.0/busybox-1.18.0-sha.patch
+@@ -0,0 +1,118 @@
++diff -urpN busybox-1.18.0/libbb/pw_encrypt_sha.c busybox-1.18.0-sha/libbb/pw_encrypt_sha.c
++--- busybox-1.18.0/libbb/pw_encrypt_sha.c	2010-11-22 21:43:22.000000000 +0100
+++++ busybox-1.18.0-sha/libbb/pw_encrypt_sha.c	2010-12-01 13:56:24.372704380 +0100
++@@ -3,7 +3,7 @@
++  */
++ 
++ /* Prefix for optional rounds specification.  */
++-static const char str_rounds[] = "rounds=%u$";
+++static const char str_rounds[] ALIGN1 = "rounds=%u$";
++ 
++ /* Maximum salt string length.  */
++ #define SALT_LEN_MAX 16
++@@ -19,8 +19,8 @@ NOINLINE
++ sha_crypt(/*const*/ char *key_data, /*const*/ char *salt_data)
++ {
++ 	void (*sha_begin)(void *ctx) FAST_FUNC;
++-	void (*sha_hash)(const void *buffer, size_t len, void *ctx) FAST_FUNC;
++-	void (*sha_end)(void *resbuf, void *ctx) FAST_FUNC;
+++	void (*sha_hash)(void *ctx, const void *buffer, size_t len) FAST_FUNC;
+++	void (*sha_end)(void *ctx, void *resbuf) FAST_FUNC;
++ 	int _32or64;
++ 
++ 	char *result, *resptr;
++@@ -103,40 +103,40 @@ sha_crypt(/*const*/ char *key_data, /*co
++ 
++ 	/* Add KEY, SALT.  */
++ 	sha_begin(&ctx);
++-	sha_hash(key_data, key_len, &ctx);
++-	sha_hash(salt_data, salt_len, &ctx);
+++	sha_hash(&ctx, key_data, key_len);
+++	sha_hash(&ctx, salt_data, salt_len);
++ 
++ 	/* Compute alternate SHA sum with input KEY, SALT, and KEY.
++ 	   The final result will be added to the first context.  */
++ 	sha_begin(&alt_ctx);
++-	sha_hash(key_data, key_len, &alt_ctx);
++-	sha_hash(salt_data, salt_len, &alt_ctx);
++-	sha_hash(key_data, key_len, &alt_ctx);
++-	sha_end(alt_result, &alt_ctx);
+++	sha_hash(&alt_ctx, key_data, key_len);
+++	sha_hash(&alt_ctx, salt_data, salt_len);
+++	sha_hash(&alt_ctx, key_data, key_len);
+++	sha_end(&alt_ctx, alt_result);
++ 
++ 	/* Add result of this to the other context.  */
++ 	/* Add for any character in the key one byte of the alternate sum.  */
++ 	for (cnt = key_len; cnt > _32or64; cnt -= _32or64)
++-		sha_hash(alt_result, _32or64, &ctx);
++-	sha_hash(alt_result, cnt, &ctx);
+++		sha_hash(&ctx, alt_result, _32or64);
+++	sha_hash(&ctx, alt_result, cnt);
++ 
++ 	/* Take the binary representation of the length of the key and for every
++ 	   1 add the alternate sum, for every 0 the key.  */
++ 	for (cnt = key_len; cnt != 0; cnt >>= 1)
++ 		if ((cnt & 1) != 0)
++-			sha_hash(alt_result, _32or64, &ctx);
+++			sha_hash(&ctx, alt_result, _32or64);
++ 		else
++-			sha_hash(key_data, key_len, &ctx);
+++			sha_hash(&ctx, key_data, key_len);
++ 
++ 	/* Create intermediate result.  */
++-	sha_end(alt_result, &ctx);
+++	sha_end(&ctx, alt_result);
++ 
++ 	/* Start computation of P byte sequence.  */
++ 	/* For every character in the password add the entire password.  */
++ 	sha_begin(&alt_ctx);
++ 	for (cnt = 0; cnt < key_len; ++cnt)
++-		sha_hash(key_data, key_len, &alt_ctx);
++-	sha_end(temp_result, &alt_ctx);
+++		sha_hash(&alt_ctx, key_data, key_len);
+++	sha_end(&alt_ctx, temp_result);
++ 
++ 	/* NB: past this point, raw key_data is not used anymore */
++ 
++@@ -153,8 +153,8 @@ sha_crypt(/*const*/ char *key_data, /*co
++ 	/* For every character in the password add the entire password.  */
++ 	sha_begin(&alt_ctx);
++ 	for (cnt = 0; cnt < 16 + alt_result[0]; ++cnt)
++-		sha_hash(salt_data, salt_len, &alt_ctx);
++-	sha_end(temp_result, &alt_ctx);
+++		sha_hash(&alt_ctx, salt_data, salt_len);
+++	sha_end(&alt_ctx, temp_result);
++ 
++ 	/* NB: past this point, raw salt_data is not used anymore */
++ 
++@@ -174,22 +174,22 @@ sha_crypt(/*const*/ char *key_data, /*co
++ 
++ 		/* Add key or last result.  */
++ 		if ((cnt & 1) != 0)
++-			sha_hash(p_bytes, key_len, &ctx);
+++			sha_hash(&ctx, p_bytes, key_len);
++ 		else
++-			sha_hash(alt_result, _32or64, &ctx);
+++			sha_hash(&ctx, alt_result, _32or64);
++ 		/* Add salt for numbers not divisible by 3.  */
++ 		if (cnt % 3 != 0)
++-			sha_hash(s_bytes, salt_len, &ctx);
+++			sha_hash(&ctx, s_bytes, salt_len);
++ 		/* Add key for numbers not divisible by 7.  */
++ 		if (cnt % 7 != 0)
++-			sha_hash(p_bytes, key_len, &ctx);
+++			sha_hash(&ctx, p_bytes, key_len);
++ 		/* Add key or last result.  */
++ 		if ((cnt & 1) != 0)
++-			sha_hash(alt_result, _32or64, &ctx);
+++			sha_hash(&ctx, alt_result, _32or64);
++ 		else
++-			sha_hash(p_bytes, key_len, &ctx);
+++			sha_hash(&ctx, p_bytes, key_len);
++ 
++-		sha_end(alt_result, &ctx);
+++		sha_end(&ctx, alt_result);
++ 	}
++ 
++ 	/* Append encrypted password to result buffer */
+diff --git a/package/busybox/busybox-1.18.x.config b/package/busybox/busybox-1.18.x.config
+new file mode 100644
+index 0000000..4c43b7a
+--- /dev/null
++++ b/package/busybox/busybox-1.18.x.config
+@@ -0,0 +1,986 @@
 +#
-+# ccache
++# Automatically generated make config: don't edit
++# Busybox version: 1.18.0
++# Tue Nov 30 09:51:07 2010
 +#
-+#############################################################
++CONFIG_HAVE_DOT_CONFIG=y
 +
-+CCACHE_VERSION = 3.1.3
-+CCACHE_SITE    = http://samba.org/ftp/ccache
-+CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
++#
++# Busybox Settings
++#
 +
-+# When ccache is being built for the host, ccache is not yet
-+# available, so we have to use the special C compiler without the
-+# cache.
-+HOST_CCACHE_CONF_ENV = \
-+	CC="$(HOSTCC_NOCCACHE)"
++#
++# General Configuration
++#
++CONFIG_DESKTOP=y
++# CONFIG_EXTRA_COMPAT is not set
++CONFIG_INCLUDE_SUSv2=y
++# CONFIG_USE_PORTABLE_CODE is not set
++CONFIG_PLATFORM_LINUX=y
++CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
++# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
++# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
++CONFIG_SHOW_USAGE=y
++CONFIG_FEATURE_VERBOSE_USAGE=y
++# CONFIG_FEATURE_COMPRESS_USAGE is not set
++CONFIG_FEATURE_INSTALLER=y
++# CONFIG_INSTALL_NO_USR is not set
++# CONFIG_LOCALE_SUPPORT is not set
++# CONFIG_UNICODE_SUPPORT is not set
++# CONFIG_UNICODE_USING_LOCALE is not set
++# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
++CONFIG_SUBST_WCHAR=0
++CONFIG_LAST_SUPPORTED_WCHAR=0
++# CONFIG_UNICODE_COMBINING_WCHARS is not set
++# CONFIG_UNICODE_WIDE_WCHARS is not set
++# CONFIG_UNICODE_BIDI_SUPPORT is not set
++# CONFIG_UNICODE_NEUTRAL_TABLE is not set
++# CONFIG_UNICODE_PRESERVE_BROKEN is not set
++CONFIG_LONG_OPTS=y
++CONFIG_FEATURE_DEVPTS=y
++CONFIG_FEATURE_CLEAN_UP=y
++CONFIG_FEATURE_WTMP=y
++CONFIG_FEATURE_UTMP=y
++# CONFIG_FEATURE_PIDFILE is not set
++CONFIG_FEATURE_SUID=y
++# CONFIG_FEATURE_SUID_CONFIG is not set
++# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
++# CONFIG_SELINUX is not set
++# CONFIG_FEATURE_PREFER_APPLETS is not set
++CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
++CONFIG_FEATURE_SYSLOG=y
++# CONFIG_FEATURE_HAVE_RPC is not set
 +
-+# We directly hardcode the cache location into the binary, as it is
-+# much easier to handle than passing an environment variable.
-+define HOST_CCACHE_FIX_CCACHE_DIR
-+	sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",' $(@D)/ccache.c
-+endef
++#
++# Build Options
++#
++# CONFIG_STATIC is not set
++# CONFIG_PIE is not set
++# CONFIG_NOMMU is not set
++# CONFIG_BUILD_LIBBUSYBOX is not set
++# CONFIG_FEATURE_INDIVIDUAL is not set
++# CONFIG_FEATURE_SHARED_BUSYBOX is not set
++# CONFIG_LFS is not set
++CONFIG_CROSS_COMPILER_PREFIX=""
++CONFIG_EXTRA_CFLAGS=""
 +
-+HOST_CCACHE_POST_CONFIGURE_HOOKS += \
-+	HOST_CCACHE_FIX_CCACHE_DIR
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_DEBUG_PESSIMIZE is not set
++# CONFIG_WERROR is not set
++CONFIG_NO_DEBUG_LIB=y
++# CONFIG_DMALLOC is not set
++# CONFIG_EFENCE is not set
 +
-+$(eval $(call AUTOTARGETS,package,ccache))
-+$(eval $(call AUTOTARGETS,package,ccache,host))
++#
++# Installation Options ("make install" behavior)
++#
++CONFIG_INSTALL_APPLET_SYMLINKS=y
++# CONFIG_INSTALL_APPLET_HARDLINKS is not set
++# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
++# CONFIG_INSTALL_APPLET_DONT is not set
++# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
++# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
++# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
++CONFIG_PREFIX="./_install"
 +
-+ifeq ($(BR2_CCACHE),y)
-+ccache-stats: host-ccache
-+	$(Q)$(CCACHE) -s
-+endif
-\ No newline at end of file
-diff --git a/toolchain/ccache/Config.in b/toolchain/ccache/Config.in
-deleted file mode 100644
-index 6f36650..0000000
---- a/toolchain/ccache/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#
--
--comment "Ccache Options"
--
--config BR2_CCACHE
--	bool "Enable ccache support?"
--	help
--	    Enable ccache support?
--
--config BR2_CCACHE_DIR
--	string "ccache dir location?"
--	depends on BR2_CCACHE
--	default "$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
--	help
--	    Where ccache should store cached files.
--
-diff --git a/toolchain/ccache/Config.in.2 b/toolchain/ccache/Config.in.2
-deleted file mode 100644
-index 6a6c789..0000000
---- a/toolchain/ccache/Config.in.2
-+++ /dev/null
-@@ -1,13 +0,0 @@
--#
--
--config BR2_PACKAGE_CCACHE_TARGET
--	bool "ccache"
--	depends on BR2_PACKAGE_GCC_TARGET
--	help
--	  ccache is a compiler cache. It speeds up recompilation of
--	  C/C++ code by caching previous compiles and detecting when
--	  the same compile is being done again.
--
--	  http://ccache.samba.org
--
--
-diff --git a/toolchain/ccache/ccache.mk b/toolchain/ccache/ccache.mk
-deleted file mode 100644
-index 8e414b2..0000000
---- a/toolchain/ccache/ccache.mk
-+++ /dev/null
-@@ -1,196 +0,0 @@
--#############################################################
--#
--# build ccache to make recompiles faster on the build system
--#
--#############################################################
--CCACHE_VER:=2.4
--CCACHE_SITE:=http://samba.org/ftp/ccache
--CCACHE_SOURCE:=ccache-$(CCACHE_VER).tar.gz
--CCACHE_DIR1:=$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)
--CCACHE_DIR2:=$(BUILD_DIR)/ccache-$(CCACHE_VER)
--CCACHE_CAT:=$(ZCAT)
--CCACHE_BINARY:=ccache
--CCACHE_TARGET_BINARY:=usr/bin/ccache
--
--$(DL_DIR)/$(CCACHE_SOURCE):
--	$(call DOWNLOAD,$(CCACHE_SITE),$(CCACHE_SOURCE))
--
--$(CCACHE_DIR1)/.unpacked: $(DL_DIR)/$(CCACHE_SOURCE)
--	$(CCACHE_CAT) $(DL_DIR)/$(CCACHE_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(CCACHE_DIR1)/.patched: $(CCACHE_DIR1)/.unpacked
--	# WARNING - this will break if the toolchain is moved.
--	# Should probably patch things to use a relative path.
--	$(SED) "s,getenv(\"CCACHE_PATH\"),\"$(STAGING_DIR)/usr/bin-ccache\",g" \
--		$(CCACHE_DIR1)/execute.c
--	# WARNING - this will break if the toolchain build dir is deleted
--	#	when using the default cache dir location.
--	$(SED) "s,getenv(\"CCACHE_DIR\"),\"$(BR2_CCACHE_DIR)\",g" \
--		$(CCACHE_DIR1)/ccache.c
--	mkdir -p $(CCACHE_DIR1)/cache
--	$(CONFIG_UPDATE) $(@D)
--	touch $@
--
--$(CCACHE_DIR1)/.configured: $(CCACHE_DIR1)/.patched
--	mkdir -p $(CCACHE_DIR1)
--	(cd $(CCACHE_DIR1); rm -rf config.cache; \
--		CC="$(HOSTCC)" \
--		$(CCACHE_DIR1)/configure $(QUIET) \
--		--target=$(GNU_HOST_NAME) \
--		--host=$(GNU_HOST_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		$(QUIET) \
--	)
--	touch $@
--
--$(CCACHE_DIR1)/$(CCACHE_BINARY): $(CCACHE_DIR1)/.configured
--	$(MAKE) CC="$(HOSTCC)" -C $(CCACHE_DIR1)
--
--$(STAGING_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR1)/$(CCACHE_BINARY)
--	mkdir -p $(STAGING_DIR)/usr/bin
--	cp $(CCACHE_DIR1)/ccache $(STAGING_DIR)/usr/bin
--	# Keep the actual toolchain binaries in a directory at the same level.
--	# Otherwise, relative paths for include dirs break.
--	mkdir -p $(STAGING_DIR)/usr/bin-ccache
--	(cd $(STAGING_DIR)/usr/bin-ccache; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-gcc; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(GNU_TARGET_NAME)-cc; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-gcc $(REAL_GNU_TARGET_NAME)-cc; \
--	)
--	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc ] && \
--		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc \
--			$(STAGING_DIR)/usr/bin-ccache/
--	(cd $(STAGING_DIR)/usr/bin; \
--		ln -fs ccache $(GNU_TARGET_NAME)-cc; \
--		ln -fs ccache $(GNU_TARGET_NAME)-gcc; \
--		ln -fs ccache $(REAL_GNU_TARGET_NAME)-cc; \
--		ln -fs ccache $(REAL_GNU_TARGET_NAME)-gcc; \
--	)
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++ ] && \
--		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++ \
--			$(STAGING_DIR)/usr/bin-ccache/
--	[ -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++ ] && \
--		mv $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++ \
--			$(STAGING_DIR)/usr/bin-ccache/
--	(cd $(STAGING_DIR)/usr/bin; \
--		ln -fs ccache $(GNU_TARGET_NAME)-c++; \
--		ln -fs ccache $(GNU_TARGET_NAME)-g++;\
--		ln -fs ccache $(REAL_GNU_TARGET_NAME)-c++; \
--		ln -fs ccache $(REAL_GNU_TARGET_NAME)-g++; \
--	)
--	(cd $(STAGING_DIR)/usr/bin-ccache; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-c++ $(GNU_TARGET_NAME)-c++; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-g++; \
--	)
--endif
--
--ccache: gcc $(STAGING_DIR)/$(CCACHE_TARGET_BINARY)
--
--ccache-clean:
--	rm -rf $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc
--	rm -rf $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-gcc
--	rm -rf $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc
--	rm -rf $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
--	if [ -f $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc ]; then \
--		mv $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-gcc \
--			$(STAGING_DIR)/usr/bin/; \
--		(cd $(STAGING_DIR)/usr/bin; \
--			ln -fs $(REAL_GNU_TARGET_NAME)-gcc \
--				$(REAL_GNU_TARGET_NAME)-cc; \
--			ln -fs $(REAL_GNU_TARGET_NAME)-gcc \
--				$(GNU_TARGET_NAME)-cc; \
--			ln -fs $(REAL_GNU_TARGET_NAME)-gcc \
--				$(GNU_TARGET_NAME)-gcc; \
--		); \
--	fi
--	if [ -f $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ ]; then \
--		rm -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-c++; \
--		mv $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-c++ \
--			$(STAGING_DIR)/usr/bin/; \
--	fi
--	if [ -f $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ ]; then \
--		rm -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-g++; \
--		mv $(STAGING_DIR)/usr/bin-ccache/$(REAL_GNU_TARGET_NAME)-g++ \
--			$(STAGING_DIR)/usr/bin/; \
--	fi
--	rm -rf $(STAGING_DIR)/usr/bin-ccache/*
--	(cd $(STAGING_DIR)/usr/bin; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-c++; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(GNU_TARGET_NAME)-g++; \
--		ln -fs $(REAL_GNU_TARGET_NAME)-g++ $(REAL_GNU_TARGET_NAME)-c++; \
--	)
--	-$(MAKE) -C $(CCACHE_DIR1) clean
--
--ccache-dirclean:
--	rm -rf $(CCACHE_DIR1)
--
--
--
--
--#############################################################
--#
--# build ccache for use on the target system
--#
--#############################################################
--
--$(CCACHE_DIR2)/.unpacked: $(DL_DIR)/$(CCACHE_SOURCE)
--	$(CCACHE_CAT) $(DL_DIR)/$(CCACHE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	touch $@
--
--$(CCACHE_DIR2)/.patched: $(CCACHE_DIR2)/.unpacked
--	touch $@
--
--$(CCACHE_DIR2)/.configured: $(CCACHE_DIR2)/.patched
--	mkdir -p $(CCACHE_DIR2)
--	(cd $(CCACHE_DIR2); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(CCACHE_DIR2)/configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--sysconfdir=/etc \
--		$(DISABLE_NLS) \
--		$(QUIET) \
--	)
--	touch $@
--
--$(CCACHE_DIR2)/$(CCACHE_BINARY): $(CCACHE_DIR2)/.configured
--	$(MAKE) -C $(CCACHE_DIR2) CFLAGS="$(TARGET_CFLAGS)"
--
--$(TARGET_DIR)/$(CCACHE_TARGET_BINARY): $(CCACHE_DIR2)/$(CCACHE_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(CCACHE_DIR2) install
--	# put a bunch of symlinks into /bin, since that is earlier
--	# in the default PATH than /usr/bin where gcc lives
--	(cd $(TARGET_DIR)/bin; \
--		ln -fs /usr/bin/ccache cc; \
--		ln -fs /usr/bin/ccache gcc; \
--		ln -fs /usr/bin/ccache c++; \
--		ln -fs /usr/bin/ccache g++; \
--	)
--
--ccache_target: uclibc $(TARGET_DIR)/$(CCACHE_TARGET_BINARY)
--
--ccache_target-sources: $(DL_DIR)/$(CCACHE_SOURCE)
--
--ccache_target-clean:
--	rm -f $(TARGET_DIR)/$(CCACHE_TARGET_BINARY) \
--	      $(addprefix $(TARGET_DIR)/bin/,cc gcc c++ g++)
--	-$(MAKE) -C $(CCACHE_DIR2) clean
--
--ccache_target-dirclean:
--	rm -rf $(CCACHE_DIR2)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_CCACHE),y)
--TARGETS+=ccache
--endif
--ifeq ($(BR2_PACKAGE_CCACHE_TARGET),y)
--TARGETS+=ccache_target
--endif
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index ee21b37..1aa013f 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -79,7 +79,7 @@ if [ $MAKE_MAJOR -lt 3 ] || [ $MAKE_MAJOR -eq 3 -a $MAKE_MINOR -lt 81 ] ; then
- fi;
- 
- # Check host gcc
--COMPILER=$(which $HOSTCC 2> /dev/null)
-+COMPILER=$(which $HOSTCC_NOCCACHE 2> /dev/null)
- if [ -z "$COMPILER" ] ; then
- 	COMPILER=$(which cc 2> /dev/null)
- fi;
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index d879697..44044d7 100644
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -2,7 +2,6 @@
- 
- include toolchain/dependencies/dependencies.mk
- include toolchain/binutils/binutils.mk
--include toolchain/ccache/ccache.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/gdb/gdb.mk
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a9dd192..c458251 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -5,5 +5,4 @@ source "toolchain/kernel-headers/Config.in"
- source "toolchain/uClibc/Config.in"
- source "toolchain/binutils/Config.in"
- source "toolchain/gcc/Config.in"
--source "toolchain/ccache/Config.in"
- endif
-diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
-index 81fce18..1c80300 100644
---- a/toolchain/toolchain-crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng.mk
-@@ -3,7 +3,6 @@
- # Explicit ordering:
- include toolchain/helpers.mk
- include toolchain/binutils/binutils.mk
--include toolchain/ccache/ccache.mk
- include toolchain/dependencies/dependencies.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-index 6f1f641..f90b6f1 100644
---- a/toolchain/toolchain-external.mk
-+++ b/toolchain/toolchain-external.mk
-@@ -2,7 +2,6 @@
- 
- include toolchain/helpers.mk
- include toolchain/binutils/binutils.mk
--include toolchain/ccache/ccache.mk
- include toolchain/dependencies/dependencies.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 7e4645d..53ad636 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -62,7 +62,7 @@ endif # ! no threads
- # could select a multilib variant as we want the "main" sysroot, which
- # contains all variants of the C library in the case of multilib
- # toolchains.
--TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC))
-+TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
- SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
- ifeq ($(SYSROOT_DIR),)
- SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;')
++#
++# Busybox Library Tuning
++#
++CONFIG_PASSWORD_MINLEN=6
++CONFIG_MD5_SIZE_VS_SPEED=2
++# CONFIG_FEATURE_FAST_TOP is not set
++# CONFIG_FEATURE_ETC_NETWORKS is not set
++CONFIG_FEATURE_USE_TERMIOS=y
++CONFIG_FEATURE_EDITING=y
++CONFIG_FEATURE_EDITING_MAX_LEN=1024
++CONFIG_FEATURE_EDITING_VI=y
++CONFIG_FEATURE_EDITING_HISTORY=999
++CONFIG_FEATURE_EDITING_SAVEHISTORY=y
++CONFIG_FEATURE_TAB_COMPLETION=y
++# CONFIG_FEATURE_USERNAME_COMPLETION is not set
++CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
++# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
++CONFIG_FEATURE_NON_POSIX_CP=y
++# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
++CONFIG_FEATURE_COPYBUF_KB=4
++CONFIG_MONOTONIC_SYSCALL=y
++CONFIG_IOCTL_HEX2STR_ERROR=y
++CONFIG_FEATURE_HWIB=y
++
++#
++# Applets
++#
++
++#
++# Archival Utilities
++#
++# CONFIG_FEATURE_SEAMLESS_XZ is not set
++# CONFIG_FEATURE_SEAMLESS_LZMA is not set
++# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
++# CONFIG_FEATURE_SEAMLESS_GZ is not set
++# CONFIG_FEATURE_SEAMLESS_Z is not set
++CONFIG_AR=y
++# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
++CONFIG_FEATURE_AR_CREATE=y
++CONFIG_BUNZIP2=y
++# CONFIG_BZIP2 is not set
++CONFIG_CPIO=y
++# CONFIG_FEATURE_CPIO_O is not set
++# CONFIG_FEATURE_CPIO_P is not set
++# CONFIG_DPKG is not set
++# CONFIG_DPKG_DEB is not set
++# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
++CONFIG_GUNZIP=y
++CONFIG_GZIP=y
++# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
++# CONFIG_LZOP is not set
++# CONFIG_LZOP_COMPR_HIGH is not set
++# CONFIG_RPM2CPIO is not set
++# CONFIG_RPM is not set
++CONFIG_TAR=y
++CONFIG_FEATURE_TAR_CREATE=y
++# CONFIG_FEATURE_TAR_AUTODETECT is not set
++CONFIG_FEATURE_TAR_FROM=y
++# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
++# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
++CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
++CONFIG_FEATURE_TAR_LONG_OPTIONS=y
++CONFIG_FEATURE_TAR_TO_COMMAND=y
++# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
++# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
++# CONFIG_FEATURE_TAR_SELINUX is not set
++# CONFIG_UNCOMPRESS is not set
++CONFIG_UNLZMA=y
++# CONFIG_FEATURE_LZMA_FAST is not set
++CONFIG_LZMA=y
++CONFIG_UNXZ=y
++CONFIG_XZ=y
++CONFIG_UNZIP=y
++
++#
++# Coreutils
++#
++CONFIG_BASENAME=y
++CONFIG_CAT=y
++CONFIG_DATE=y
++CONFIG_FEATURE_DATE_ISOFMT=y
++# CONFIG_FEATURE_DATE_NANO is not set
++CONFIG_FEATURE_DATE_COMPAT=y
++CONFIG_TEST=y
++CONFIG_FEATURE_TEST_64=y
++CONFIG_TR=y
++CONFIG_FEATURE_TR_CLASSES=y
++CONFIG_FEATURE_TR_EQUIV=y
++# CONFIG_BASE64 is not set
++# CONFIG_CAL is not set
++CONFIG_CATV=y
++CONFIG_CHGRP=y
++CONFIG_CHMOD=y
++CONFIG_CHOWN=y
++# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
++CONFIG_CHROOT=y
++CONFIG_CKSUM=y
++# CONFIG_COMM is not set
++CONFIG_CP=y
++# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
++CONFIG_CUT=y
++CONFIG_DD=y
++CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
++# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
++CONFIG_FEATURE_DD_IBS_OBS=y
++CONFIG_DF=y
++# CONFIG_FEATURE_DF_FANCY is not set
++CONFIG_DIRNAME=y
++CONFIG_DOS2UNIX=y
++CONFIG_UNIX2DOS=y
++CONFIG_DU=y
++CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
++CONFIG_ECHO=y
++CONFIG_FEATURE_FANCY_ECHO=y
++CONFIG_ENV=y
++# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
++# CONFIG_EXPAND is not set
++# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
++CONFIG_EXPR=y
++CONFIG_EXPR_MATH_SUPPORT_64=y
++CONFIG_FALSE=y
++CONFIG_FOLD=y
++# CONFIG_FSYNC is not set
++CONFIG_HEAD=y
++CONFIG_FEATURE_FANCY_HEAD=y
++CONFIG_HOSTID=y
++CONFIG_ID=y
++CONFIG_INSTALL=y
++CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
++CONFIG_LENGTH=y
++CONFIG_LN=y
++CONFIG_LOGNAME=y
++CONFIG_LS=y
++CONFIG_FEATURE_LS_FILETYPES=y
++CONFIG_FEATURE_LS_FOLLOWLINKS=y
++CONFIG_FEATURE_LS_RECURSIVE=y
++CONFIG_FEATURE_LS_SORTFILES=y
++CONFIG_FEATURE_LS_TIMESTAMPS=y
++CONFIG_FEATURE_LS_USERNAME=y
++CONFIG_FEATURE_LS_COLOR=y
++CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
++CONFIG_MD5SUM=y
++CONFIG_MKDIR=y
++CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
++CONFIG_MKFIFO=y
++CONFIG_MKNOD=y
++CONFIG_MV=y
++CONFIG_FEATURE_MV_LONG_OPTIONS=y
++CONFIG_NICE=y
++CONFIG_NOHUP=y
++CONFIG_OD=y
++CONFIG_PRINTENV=y
++CONFIG_PRINTF=y
++CONFIG_PWD=y
++CONFIG_READLINK=y
++CONFIG_FEATURE_READLINK_FOLLOW=y
++CONFIG_REALPATH=y
++CONFIG_RM=y
++CONFIG_RMDIR=y
++# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
++CONFIG_SEQ=y
++CONFIG_SHA1SUM=y
++CONFIG_SHA256SUM=y
++CONFIG_SHA512SUM=y
++CONFIG_SLEEP=y
++# CONFIG_FEATURE_FANCY_SLEEP is not set
++# CONFIG_FEATURE_FLOAT_SLEEP is not set
++CONFIG_SORT=y
++CONFIG_FEATURE_SORT_BIG=y
++# CONFIG_SPLIT is not set
++# CONFIG_FEATURE_SPLIT_FANCY is not set
++# CONFIG_STAT is not set
++# CONFIG_FEATURE_STAT_FORMAT is not set
++CONFIG_STTY=y
++# CONFIG_SUM is not set
++CONFIG_SYNC=y
++# CONFIG_TAC is not set
++CONFIG_TAIL=y
++CONFIG_FEATURE_FANCY_TAIL=y
++CONFIG_TEE=y
++CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
++CONFIG_TOUCH=y
++CONFIG_TRUE=y
++CONFIG_TTY=y
++CONFIG_UNAME=y
++# CONFIG_UNEXPAND is not set
++# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
++CONFIG_UNIQ=y
++CONFIG_USLEEP=y
++CONFIG_UUDECODE=y
++CONFIG_UUENCODE=y
++CONFIG_WC=y
++# CONFIG_FEATURE_WC_LARGE is not set
++CONFIG_WHO=y
++CONFIG_WHOAMI=y
++CONFIG_YES=y
++
++#
++# Common options for cp and mv
++#
++CONFIG_FEATURE_PRESERVE_HARDLINKS=y
++
++#
++# Common options for ls, more and telnet
++#
++CONFIG_FEATURE_AUTOWIDTH=y
++
++#
++# Common options for df, du, ls
++#
++CONFIG_FEATURE_HUMAN_READABLE=y
++
++#
++# Common options for md5sum, sha1sum, sha256sum, sha512sum
++#
++CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
++
++#
++# Console Utilities
++#
++CONFIG_CHVT=y
++# CONFIG_FGCONSOLE is not set
++CONFIG_CLEAR=y
++CONFIG_DEALLOCVT=y
++CONFIG_DUMPKMAP=y
++# CONFIG_KBD_MODE is not set
++CONFIG_LOADFONT=y
++CONFIG_LOADKMAP=y
++CONFIG_OPENVT=y
++CONFIG_RESET=y
++CONFIG_RESIZE=y
++CONFIG_FEATURE_RESIZE_PRINT=y
++CONFIG_SETCONSOLE=y
++# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
++# CONFIG_SETFONT is not set
++# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
++CONFIG_DEFAULT_SETFONT_DIR=""
++CONFIG_SETKEYCODES=y
++CONFIG_SETLOGCONS=y
++# CONFIG_SHOWKEY is not set
++
++#
++# Common options for loadfont and setfont
++#
++CONFIG_FEATURE_LOADFONT_PSF2=y
++CONFIG_FEATURE_LOADFONT_RAW=y
++
++#
++# Debian Utilities
++#
++CONFIG_MKTEMP=y
++CONFIG_PIPE_PROGRESS=y
++CONFIG_RUN_PARTS=y
++CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
++# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
++CONFIG_START_STOP_DAEMON=y
++CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
++CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
++CONFIG_WHICH=y
++
++#
++# Editors
++#
++CONFIG_PATCH=y
++CONFIG_AWK=y
++# CONFIG_FEATURE_AWK_LIBM is not set
++CONFIG_CMP=y
++CONFIG_DIFF=y
++# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
++CONFIG_FEATURE_DIFF_DIR=y
++# CONFIG_ED is not set
++CONFIG_SED=y
++CONFIG_VI=y
++CONFIG_FEATURE_VI_MAX_LEN=4096
++CONFIG_FEATURE_VI_8BIT=y
++CONFIG_FEATURE_VI_COLON=y
++CONFIG_FEATURE_VI_YANKMARK=y
++CONFIG_FEATURE_VI_SEARCH=y
++CONFIG_FEATURE_VI_USE_SIGNALS=y
++CONFIG_FEATURE_VI_DOT_CMD=y
++CONFIG_FEATURE_VI_READONLY=y
++CONFIG_FEATURE_VI_SETOPTS=y
++CONFIG_FEATURE_VI_SET=y
++CONFIG_FEATURE_VI_WIN_RESIZE=y
++CONFIG_FEATURE_VI_ASK_TERMINAL=y
++CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
++CONFIG_FEATURE_ALLOW_EXEC=y
++
++#
++# Finding Utilities
++#
++CONFIG_FIND=y
++CONFIG_FEATURE_FIND_PRINT0=y
++CONFIG_FEATURE_FIND_MTIME=y
++CONFIG_FEATURE_FIND_MMIN=y
++CONFIG_FEATURE_FIND_PERM=y
++CONFIG_FEATURE_FIND_TYPE=y
++CONFIG_FEATURE_FIND_XDEV=y
++CONFIG_FEATURE_FIND_MAXDEPTH=y
++CONFIG_FEATURE_FIND_NEWER=y
++# CONFIG_FEATURE_FIND_INUM is not set
++CONFIG_FEATURE_FIND_EXEC=y
++CONFIG_FEATURE_FIND_USER=y
++CONFIG_FEATURE_FIND_GROUP=y
++CONFIG_FEATURE_FIND_NOT=y
++CONFIG_FEATURE_FIND_DEPTH=y
++CONFIG_FEATURE_FIND_PAREN=y
++CONFIG_FEATURE_FIND_SIZE=y
++CONFIG_FEATURE_FIND_PRUNE=y
++# CONFIG_FEATURE_FIND_DELETE is not set
++CONFIG_FEATURE_FIND_PATH=y
++CONFIG_FEATURE_FIND_REGEX=y
++# CONFIG_FEATURE_FIND_CONTEXT is not set
++# CONFIG_FEATURE_FIND_LINKS is not set
++CONFIG_GREP=y
++CONFIG_FEATURE_GREP_EGREP_ALIAS=y
++CONFIG_FEATURE_GREP_FGREP_ALIAS=y
++CONFIG_FEATURE_GREP_CONTEXT=y
++CONFIG_XARGS=y
++# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
++CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
++CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
++CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
++
++#
++# Init Utilities
++#
++# CONFIG_BOOTCHARTD is not set
++# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
++# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
++CONFIG_HALT=y
++# CONFIG_FEATURE_CALL_TELINIT is not set
++CONFIG_TELINIT_PATH=""
++CONFIG_INIT=y
++CONFIG_FEATURE_USE_INITTAB=y
++CONFIG_FEATURE_KILL_REMOVED=y
++CONFIG_FEATURE_KILL_DELAY=0
++CONFIG_FEATURE_INIT_SCTTY=y
++CONFIG_FEATURE_INIT_SYSLOG=y
++CONFIG_FEATURE_EXTRA_QUIET=y
++# CONFIG_FEATURE_INIT_COREDUMPS is not set
++CONFIG_FEATURE_INITRD=y
++CONFIG_INIT_TERMINAL_TYPE="linux"
++CONFIG_MESG=y
++
++#
++# Login/Password Management Utilities
++#
++# CONFIG_ADD_SHELL is not set
++# CONFIG_REMOVE_SHELL is not set
++CONFIG_FEATURE_SHADOWPASSWDS=y
++# CONFIG_USE_BB_PWD_GRP is not set
++# CONFIG_USE_BB_SHADOW is not set
++CONFIG_USE_BB_CRYPT=y
++# CONFIG_USE_BB_CRYPT_SHA is not set
++CONFIG_ADDUSER=y
++# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
++# CONFIG_FEATURE_CHECK_NAMES is not set
++CONFIG_FIRST_SYSTEM_ID=100
++CONFIG_LAST_SYSTEM_ID=999
++CONFIG_ADDGROUP=y
++# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
++# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
++CONFIG_DELUSER=y
++CONFIG_DELGROUP=y
++# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
++CONFIG_GETTY=y
++CONFIG_LOGIN=y
++# CONFIG_PAM is not set
++# CONFIG_LOGIN_SCRIPTS is not set
++CONFIG_FEATURE_NOLOGIN=y
++CONFIG_FEATURE_SECURETTY=y
++CONFIG_PASSWD=y
++CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
++# CONFIG_CRYPTPW is not set
++# CONFIG_CHPASSWD is not set
++CONFIG_SU=y
++CONFIG_FEATURE_SU_SYSLOG=y
++CONFIG_FEATURE_SU_CHECKS_SHELLS=y
++CONFIG_SULOGIN=y
++CONFIG_VLOCK=y
++
++#
++# Linux Ext2 FS Progs
++#
++CONFIG_CHATTR=y
++CONFIG_FSCK=y
++CONFIG_LSATTR=y
++# CONFIG_TUNE2FS is not set
++
++#
++# Linux Module Utilities
++#
++# CONFIG_MODINFO is not set
++# CONFIG_MODPROBE_SMALL is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
++# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
++CONFIG_INSMOD=y
++CONFIG_RMMOD=y
++CONFIG_LSMOD=y
++CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
++CONFIG_MODPROBE=y
++# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
++# CONFIG_DEPMOD is not set
++
++#
++# Options common to multiple modutils
++#
++# CONFIG_FEATURE_2_4_MODULES is not set
++# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
++# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
++# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
++# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
++# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
++CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
++CONFIG_FEATURE_MODUTILS_ALIAS=y
++CONFIG_FEATURE_MODUTILS_SYMBOLS=y
++CONFIG_DEFAULT_MODULES_DIR="/lib/modules"
++CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
++
++#
++# Linux System Utilities
++#
++# CONFIG_BLOCKDEV is not set
++# CONFIG_REV is not set
++# CONFIG_ACPID is not set
++# CONFIG_FEATURE_ACPID_COMPAT is not set
++# CONFIG_BLKID is not set
++CONFIG_DMESG=y
++CONFIG_FEATURE_DMESG_PRETTY=y
++# CONFIG_FBSET is not set
++# CONFIG_FEATURE_FBSET_FANCY is not set
++# CONFIG_FEATURE_FBSET_READMODE is not set
++CONFIG_FDFLUSH=y
++CONFIG_FDFORMAT=y
++# CONFIG_FDISK is not set
++# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
++# CONFIG_FEATURE_FDISK_WRITABLE is not set
++# CONFIG_FEATURE_AIX_LABEL is not set
++# CONFIG_FEATURE_SGI_LABEL is not set
++# CONFIG_FEATURE_SUN_LABEL is not set
++# CONFIG_FEATURE_OSF_LABEL is not set
++# CONFIG_FEATURE_GPT_LABEL is not set
++# CONFIG_FEATURE_FDISK_ADVANCED is not set
++# CONFIG_FINDFS is not set
++# CONFIG_FLOCK is not set
++CONFIG_FREERAMDISK=y
++# CONFIG_FSCK_MINIX is not set
++# CONFIG_MKFS_EXT2 is not set
++# CONFIG_MKFS_MINIX is not set
++# CONFIG_FEATURE_MINIX2 is not set
++# CONFIG_MKFS_REISER is not set
++# CONFIG_MKFS_VFAT is not set
++CONFIG_GETOPT=y
++CONFIG_FEATURE_GETOPT_LONG=y
++CONFIG_HEXDUMP=y
++# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
++# CONFIG_HD is not set
++CONFIG_HWCLOCK=y
++CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
++CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
++CONFIG_IPCRM=y
++CONFIG_IPCS=y
++CONFIG_LOSETUP=y
++CONFIG_LSPCI=y
++CONFIG_LSUSB=y
++CONFIG_MDEV=y
++CONFIG_FEATURE_MDEV_CONF=y
++# CONFIG_FEATURE_MDEV_RENAME is not set
++# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
++CONFIG_FEATURE_MDEV_EXEC=y
++# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
++CONFIG_MKSWAP=y
++# CONFIG_FEATURE_MKSWAP_UUID is not set
++CONFIG_MORE=y
++CONFIG_MOUNT=y
++# CONFIG_FEATURE_MOUNT_FAKE is not set
++# CONFIG_FEATURE_MOUNT_VERBOSE is not set
++# CONFIG_FEATURE_MOUNT_HELPERS is not set
++# CONFIG_FEATURE_MOUNT_LABEL is not set
++# CONFIG_FEATURE_MOUNT_NFS is not set
++CONFIG_FEATURE_MOUNT_CIFS=y
++CONFIG_FEATURE_MOUNT_FLAGS=y
++CONFIG_FEATURE_MOUNT_FSTAB=y
++CONFIG_PIVOT_ROOT=y
++CONFIG_RDATE=y
++# CONFIG_RDEV is not set
++CONFIG_READPROFILE=y
++# CONFIG_RTCWAKE is not set
++# CONFIG_SCRIPT is not set
++# CONFIG_SCRIPTREPLAY is not set
++CONFIG_SETARCH=y
++CONFIG_SWAPONOFF=y
++# CONFIG_FEATURE_SWAPON_PRI is not set
++CONFIG_SWITCH_ROOT=y
++CONFIG_UMOUNT=y
++CONFIG_FEATURE_UMOUNT_ALL=y
++
++#
++# Common options for mount/umount
++#
++CONFIG_FEATURE_MOUNT_LOOP=y
++CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
++# CONFIG_FEATURE_MTAB_SUPPORT is not set
++# CONFIG_VOLUMEID is not set
++# CONFIG_FEATURE_VOLUMEID_EXT is not set
++# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
++# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
++# CONFIG_FEATURE_VOLUMEID_FAT is not set
++# CONFIG_FEATURE_VOLUMEID_HFS is not set
++# CONFIG_FEATURE_VOLUMEID_JFS is not set
++# CONFIG_FEATURE_VOLUMEID_XFS is not set
++# CONFIG_FEATURE_VOLUMEID_NTFS is not set
++# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
++# CONFIG_FEATURE_VOLUMEID_UDF is not set
++# CONFIG_FEATURE_VOLUMEID_LUKS is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
++# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
++# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
++# CONFIG_FEATURE_VOLUMEID_SYSV is not set
++# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
++# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
++
++#
++# Miscellaneous Utilities
++#
++# CONFIG_CONSPY is not set
++# CONFIG_NANDWRITE is not set
++# CONFIG_NANDDUMP is not set
++# CONFIG_UBIATTACH is not set
++# CONFIG_UBIDETACH is not set
++# CONFIG_ADJTIMEX is not set
++# CONFIG_BBCONFIG is not set
++# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
++# CONFIG_BEEP is not set
++CONFIG_FEATURE_BEEP_FREQ=0
++CONFIG_FEATURE_BEEP_LENGTH_MS=0
++# CONFIG_CHAT is not set
++# CONFIG_FEATURE_CHAT_NOFAIL is not set
++# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
++# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
++# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
++# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
++# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
++# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
++CONFIG_CHRT=y
++CONFIG_CROND=y
++# CONFIG_FEATURE_CROND_D is not set
++# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
++CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
++CONFIG_CRONTAB=y
++CONFIG_DC=y
++# CONFIG_FEATURE_DC_LIBM is not set
++# CONFIG_DEVFSD is not set
++# CONFIG_DEVFSD_MODLOAD is not set
++# CONFIG_DEVFSD_FG_NP is not set
++# CONFIG_DEVFSD_VERBOSE is not set
++# CONFIG_FEATURE_DEVFS is not set
++CONFIG_DEVMEM=y
++CONFIG_EJECT=y
++# CONFIG_FEATURE_EJECT_SCSI is not set
++# CONFIG_FBSPLASH is not set
++# CONFIG_FLASHCP is not set
++# CONFIG_FLASH_LOCK is not set
++# CONFIG_FLASH_UNLOCK is not set
++# CONFIG_FLASH_ERASEALL is not set
++# CONFIG_IONICE is not set
++# CONFIG_INOTIFYD is not set
++CONFIG_LAST=y
++CONFIG_FEATURE_LAST_SMALL=y
++# CONFIG_FEATURE_LAST_FANCY is not set
++CONFIG_LESS=y
++CONFIG_FEATURE_LESS_MAXLINES=9999999
++CONFIG_FEATURE_LESS_BRACKETS=y
++CONFIG_FEATURE_LESS_FLAGS=y
++# CONFIG_FEATURE_LESS_MARKS is not set
++CONFIG_FEATURE_LESS_REGEXP=y
++# CONFIG_FEATURE_LESS_WINCH is not set
++# CONFIG_FEATURE_LESS_DASHCMD is not set
++# CONFIG_FEATURE_LESS_LINENUMS is not set
++CONFIG_HDPARM=y
++CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
++# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
++# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
++# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
++CONFIG_MAKEDEVS=y
++# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
++CONFIG_FEATURE_MAKEDEVS_TABLE=y
++# CONFIG_MAN is not set
++CONFIG_MICROCOM=y
++CONFIG_MOUNTPOINT=y
++CONFIG_MT=y
++# CONFIG_RAIDAUTORUN is not set
++# CONFIG_READAHEAD is not set
++# CONFIG_RFKILL is not set
++CONFIG_RUNLEVEL=y
++# CONFIG_RX is not set
++CONFIG_SETSID=y
++CONFIG_STRINGS=y
++# CONFIG_TASKSET is not set
++# CONFIG_FEATURE_TASKSET_FANCY is not set
++CONFIG_TIME=y
++# CONFIG_TIMEOUT is not set
++# CONFIG_TTYSIZE is not set
++# CONFIG_VOLNAME is not set
++# CONFIG_WALL is not set
++CONFIG_WATCHDOG=y
++
++#
++# Networking Utilities
++#
++# CONFIG_NBDCLIENT is not set
++# CONFIG_NC is not set
++# CONFIG_NC_SERVER is not set
++# CONFIG_NC_EXTRA is not set
++# CONFIG_NC_110_COMPAT is not set
++# CONFIG_FEATURE_IPV6 is not set
++# CONFIG_FEATURE_UNIX_LOCAL is not set
++# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
++# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
++# CONFIG_ARP is not set
++CONFIG_ARPING=y
++# CONFIG_BRCTL is not set
++# CONFIG_FEATURE_BRCTL_FANCY is not set
++# CONFIG_FEATURE_BRCTL_SHOW is not set
++CONFIG_DNSD=y
++CONFIG_ETHER_WAKE=y
++# CONFIG_FAKEIDENTD is not set
++# CONFIG_FTPD is not set
++# CONFIG_FEATURE_FTP_WRITE is not set
++# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
++# CONFIG_FTPGET is not set
++# CONFIG_FTPPUT is not set
++# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
++CONFIG_HOSTNAME=y
++# CONFIG_HTTPD is not set
++# CONFIG_FEATURE_HTTPD_RANGES is not set
++# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
++# CONFIG_FEATURE_HTTPD_SETUID is not set
++# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
++# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
++# CONFIG_FEATURE_HTTPD_CGI is not set
++# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
++# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
++# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
++# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
++# CONFIG_FEATURE_HTTPD_PROXY is not set
++# CONFIG_FEATURE_HTTPD_GZIP is not set
++CONFIG_IFCONFIG=y
++CONFIG_FEATURE_IFCONFIG_STATUS=y
++CONFIG_FEATURE_IFCONFIG_SLIP=y
++CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
++CONFIG_FEATURE_IFCONFIG_HW=y
++# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
++# CONFIG_IFENSLAVE is not set
++# CONFIG_IFPLUGD is not set
++CONFIG_IFUPDOWN=y
++CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
++CONFIG_FEATURE_IFUPDOWN_IP=y
++# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
++# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
++CONFIG_FEATURE_IFUPDOWN_IPV4=y
++# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
++CONFIG_FEATURE_IFUPDOWN_MAPPING=y
++# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
++CONFIG_INETD=y
++CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
++CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
++CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
++CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
++CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
++# CONFIG_FEATURE_INETD_RPC is not set
++CONFIG_IP=y
++CONFIG_FEATURE_IP_ADDRESS=y
++CONFIG_FEATURE_IP_LINK=y
++CONFIG_FEATURE_IP_ROUTE=y
++CONFIG_FEATURE_IP_TUNNEL=y
++CONFIG_FEATURE_IP_RULE=y
++CONFIG_FEATURE_IP_SHORT_FORMS=y
++# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
++CONFIG_IPADDR=y
++CONFIG_IPLINK=y
++CONFIG_IPROUTE=y
++CONFIG_IPTUNNEL=y
++CONFIG_IPRULE=y
++# CONFIG_IPCALC is not set
++# CONFIG_FEATURE_IPCALC_FANCY is not set
++# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
++CONFIG_NAMEIF=y
++# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
++CONFIG_NETSTAT=y
++# CONFIG_FEATURE_NETSTAT_WIDE is not set
++# CONFIG_FEATURE_NETSTAT_PRG is not set
++CONFIG_NSLOOKUP=y
++# CONFIG_NTPD is not set
++# CONFIG_FEATURE_NTPD_SERVER is not set
++CONFIG_PING=y
++# CONFIG_PING6 is not set
++CONFIG_FEATURE_FANCY_PING=y
++# CONFIG_PSCAN is not set
++CONFIG_ROUTE=y
++# CONFIG_SLATTACH is not set
++# CONFIG_TCPSVD is not set
++CONFIG_TELNET=y
++CONFIG_FEATURE_TELNET_TTYPE=y
++CONFIG_FEATURE_TELNET_AUTOLOGIN=y
++# CONFIG_TELNETD is not set
++# CONFIG_FEATURE_TELNETD_STANDALONE is not set
++# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
++CONFIG_TFTP=y
++# CONFIG_TFTPD is not set
++
++#
++# Common options for tftp/tftpd
++#
++CONFIG_FEATURE_TFTP_GET=y
++CONFIG_FEATURE_TFTP_PUT=y
++CONFIG_FEATURE_TFTP_BLOCKSIZE=y
++# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
++# CONFIG_TFTP_DEBUG is not set
++CONFIG_TRACEROUTE=y
++# CONFIG_TRACEROUTE6 is not set
++# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
++# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
++# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
++# CONFIG_TUNCTL is not set
++# CONFIG_FEATURE_TUNCTL_UG is not set
++# CONFIG_UDHCPD is not set
++# CONFIG_DHCPRELAY is not set
++# CONFIG_DUMPLEASES is not set
++# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
++CONFIG_DHCPD_LEASES_FILE=""
++CONFIG_UDHCPC=y
++CONFIG_FEATURE_UDHCPC_ARPING=y
++# CONFIG_FEATURE_UDHCP_PORT is not set
++CONFIG_UDHCP_DEBUG=0
++# CONFIG_FEATURE_UDHCP_RFC3397 is not set
++CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
++CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
++CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
++# CONFIG_UDPSVD is not set
++CONFIG_VCONFIG=y
++CONFIG_WGET=y
++CONFIG_FEATURE_WGET_STATUSBAR=y
++CONFIG_FEATURE_WGET_AUTHENTICATION=y
++CONFIG_FEATURE_WGET_LONG_OPTIONS=y
++CONFIG_FEATURE_WGET_TIMEOUT=y
++# CONFIG_ZCIP is not set
++
++#
++# Print Utilities
++#
++# CONFIG_LPD is not set
++# CONFIG_LPR is not set
++# CONFIG_LPQ is not set
++
++#
++# Mail Utilities
++#
++# CONFIG_MAKEMIME is not set
++CONFIG_FEATURE_MIME_CHARSET=""
++# CONFIG_POPMAILDIR is not set
++# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
++# CONFIG_REFORMIME is not set
++# CONFIG_FEATURE_REFORMIME_COMPAT is not set
++# CONFIG_SENDMAIL is not set
++
++#
++# Process Utilities
++#
++# CONFIG_IOSTAT is not set
++# CONFIG_MPSTAT is not set
++# CONFIG_PMAP is not set
++# CONFIG_POWERTOP is not set
++# CONFIG_SMEMCAP is not set
++CONFIG_FREE=y
++CONFIG_FUSER=y
++CONFIG_KILL=y
++CONFIG_KILLALL=y
++CONFIG_KILLALL5=y
++# CONFIG_NMETER is not set
++# CONFIG_PGREP is not set
++CONFIG_PIDOF=y
++CONFIG_FEATURE_PIDOF_SINGLE=y
++CONFIG_FEATURE_PIDOF_OMIT=y
++# CONFIG_PKILL is not set
++CONFIG_PS=y
++CONFIG_FEATURE_PS_WIDE=y
++# CONFIG_FEATURE_PS_TIME is not set
++# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
++# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
++CONFIG_RENICE=y
++CONFIG_BB_SYSCTL=y
++CONFIG_TOP=y
++CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
++CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
++# CONFIG_FEATURE_TOP_SMP_CPU is not set
++# CONFIG_FEATURE_TOP_DECIMALS is not set
++# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
++# CONFIG_FEATURE_TOPMEM is not set
++# CONFIG_FEATURE_SHOW_THREADS is not set
++CONFIG_UPTIME=y
++CONFIG_WATCH=y
++
++#
++# Runit Utilities
++#
++# CONFIG_RUNSV is not set
++# CONFIG_RUNSVDIR is not set
++# CONFIG_FEATURE_RUNSVDIR_LOG is not set
++# CONFIG_SV is not set
++CONFIG_SV_DEFAULT_SERVICE_DIR=""
++# CONFIG_SVLOGD is not set
++# CONFIG_CHPST is not set
++# CONFIG_SETUIDGID is not set
++# CONFIG_ENVUIDGID is not set
++# CONFIG_ENVDIR is not set
++# CONFIG_SOFTLIMIT is not set
++# CONFIG_CHCON is not set
++# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
++# CONFIG_GETENFORCE is not set
++# CONFIG_GETSEBOOL is not set
++# CONFIG_LOAD_POLICY is not set
++# CONFIG_MATCHPATHCON is not set
++# CONFIG_RESTORECON is not set
++# CONFIG_RUNCON is not set
++# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
++# CONFIG_SELINUXENABLED is not set
++# CONFIG_SETENFORCE is not set
++# CONFIG_SETFILES is not set
++# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
++# CONFIG_SETSEBOOL is not set
++# CONFIG_SESTATUS is not set
++
++#
++# Shells
++#
++CONFIG_ASH=y
++CONFIG_ASH_BASH_COMPAT=y
++CONFIG_ASH_JOB_CONTROL=y
++CONFIG_ASH_ALIAS=y
++# CONFIG_ASH_GETOPTS is not set
++CONFIG_ASH_BUILTIN_ECHO=y
++CONFIG_ASH_BUILTIN_PRINTF=y
++CONFIG_ASH_BUILTIN_TEST=y
++CONFIG_ASH_CMDCMD=y
++# CONFIG_ASH_MAIL is not set
++CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
++CONFIG_ASH_RANDOM_SUPPORT=y
++CONFIG_ASH_EXPAND_PRMT=y
++# CONFIG_CTTYHACK is not set
++# CONFIG_HUSH is not set
++# CONFIG_HUSH_BASH_COMPAT is not set
++# CONFIG_HUSH_BRACE_EXPANSION is not set
++# CONFIG_HUSH_HELP is not set
++# CONFIG_HUSH_INTERACTIVE is not set
++# CONFIG_HUSH_SAVEHISTORY is not set
++# CONFIG_HUSH_JOB is not set
++# CONFIG_HUSH_TICK is not set
++# CONFIG_HUSH_IF is not set
++# CONFIG_HUSH_LOOPS is not set
++# CONFIG_HUSH_CASE is not set
++# CONFIG_HUSH_FUNCTIONS is not set
++# CONFIG_HUSH_LOCAL is not set
++# CONFIG_HUSH_RANDOM_SUPPORT is not set
++# CONFIG_HUSH_EXPORT_N is not set
++# CONFIG_HUSH_MODE_X is not set
++# CONFIG_MSH is not set
++CONFIG_FEATURE_SH_IS_ASH=y
++# CONFIG_FEATURE_SH_IS_HUSH is not set
++# CONFIG_FEATURE_SH_IS_NONE is not set
++# CONFIG_FEATURE_BASH_IS_ASH is not set
++# CONFIG_FEATURE_BASH_IS_HUSH is not set
++CONFIG_FEATURE_BASH_IS_NONE=y
++CONFIG_SH_MATH_SUPPORT=y
++# CONFIG_SH_MATH_SUPPORT_64 is not set
++CONFIG_FEATURE_SH_EXTRA_QUIET=y
++# CONFIG_FEATURE_SH_STANDALONE is not set
++# CONFIG_FEATURE_SH_NOFORK is not set
++
++#
++# System Logging Utilities
++#
++CONFIG_SYSLOGD=y
++CONFIG_FEATURE_ROTATE_LOGFILE=y
++CONFIG_FEATURE_REMOTE_LOG=y
++# CONFIG_FEATURE_SYSLOGD_DUP is not set
++CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
++# CONFIG_FEATURE_IPC_SYSLOG is not set
++CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
++# CONFIG_LOGREAD is not set
++# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
++CONFIG_KLOGD=y
++CONFIG_FEATURE_KLOGD_KLOGCTL=y
++CONFIG_LOGGER=y
 -- 
-1.7.0.4
+1.7.2.2
