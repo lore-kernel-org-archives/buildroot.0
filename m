@@ -1,49 +1,44 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sat, 4 Dec 2010 13:34:29 -0600
-Subject: [Buildroot] external toolchain and iconv in libglib2.mk
-In-Reply-To: <1291490772.14151.2488.camel@coalu.atr>
-References: <003201cb93d6$8162a080$8427e180$@zuerker.org>	<1291483060.14151.2478.camel@coalu.atr>	<004501cb93d7$a9c039b0$fd40ad10$@zuerker.org>	<1291484261.14151.2480.camel@coalu.atr>	<004c01cb93e1$d1f3eda0$75dbc8e0$@zuerker.org>
-	<1291490772.14151.2488.camel@coalu.atr>
-Message-ID: <004e01cb93ea$44a07d70$cde17850$@zuerker.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat,  4 Dec 2010 17:44:38 -0500
+Subject: [Buildroot] [PATCH] debugging: do not require no stripping
+Message-ID: <1291502678-22484-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+The stripping options operate on the final image and not the intermediate
+builds, so requiring stripping to be disabled just to enable debugging
+options doesn't make much sense.  Especially when working with gdbserver:
+only the host needs the debugging information to be available.  The board
+can run & debug perfectly fine without it.
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of Lionel Landwerlin
-> Sent: Saturday, December 04, 2010 1:26 PM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] external toolchain and iconv in libglib2.mk
-> 
-> Ok great,
-> 
-> It looks like something is wrong with your host. You do not seem to have
-> libiconv.so on your system, but still your /usr/include/iconv.h defines a
-> _LIBICONV_H.
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Libiconv.so is there
+diff --git a/Config.in b/Config.in
+index a41cd3e..c4d2332 100644
+--- a/Config.in
++++ b/Config.in
+@@ -148,14 +148,14 @@ choice
  
-> So you might have a libc compiled with iconv support, but you're using
-> libiconv's header, that is strange...
-
-Yes that was the issue. I copied iconv.h from glibc and now it works.
+ config BR2_STRIP_strip
+ 	bool "strip"
+-	depends on !BR2_ENABLE_DEBUG && !BR2_ELF2FLT
++	depends on !BR2_ELF2FLT
+ 	help
+ 	  strip   is the normal strip command
  
-> Or maybe even more strange, you've got libc with iconv support and on top
-> of that you've installed libiconv, which is confusing glib...
-> 
-> I'm afraid you'll have to fix your system.
-
-No worries, as long as I know what's going on, I can fix it.
-
-Thanks for your quick help!
-
+ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
+-	depends on !BR2_ENABLE_DEBUG && !BR2_ELF2FLT
++	depends on !BR2_ELF2FLT
+ 	help
+ 	  sstrip  is a strip that discards more than the normal strip
+ 
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+1.7.3.2
