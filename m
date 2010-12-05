@@ -1,32 +1,32 @@
-From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Sun,  5 Dec 2010 09:24:49 -0600
-Subject: [Buildroot] [PATCH] add zisofs-tools to buildroot config
-Message-ID: <d7511b74d51a60fbd941b43c595b6275cc27b122.1291562674.git.smiley73@users.sourceforge.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Dec 2010 20:23:52 +0100
+Subject: [Buildroot] mailinglist settings
+In-Reply-To: <001301cb948c$bbe83240$33b896c0$@zuerker.org>
+References: <001301cb948c$bbe83240$33b896c0$@zuerker.org>
+Message-ID: <20101205202352.7cbc20f9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Zuerker <smiley73@users.sourceforge.net>
+On Sun, 5 Dec 2010 08:57:27 -0600
+"Heiko Zuerker" <heiko@zuerker.org> wrote:
 
+> Would it be possible to set the "Reply-To" for the mailinglist to
+> buildroot at busybox.net ?
+> 
+> This way you don't always have to be manually changing the "To" when
+> replying to the list.
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
----
- package/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+This is a normal setting for a mailing-list. If your mailer is correct,
+it should have a "reply to list" option.
 
-diff --git a/package/Config.in b/package/Config.in
-index 03e580a..678db20 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -14,6 +14,7 @@ endif
- source "package/lzop/Config.in"
- source "package/lzma/Config.in"
- source "package/xz/Config.in"
-+source "package/zisofs-tools/Config.in"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
+Regards,
+
+Thomas
 -- 
-1.7.3.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
