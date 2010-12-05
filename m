@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:52:55 +0100
-Subject: [Buildroot] [PATCH 24/55] board: minify integrator926_defconfig
+Date: Sun,  5 Dec 2010 21:52:56 +0100
+Subject: [Buildroot] [PATCH 25/55] board: remove integrator926_huge_defconfig
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <53ee5139752f7542fcc25e8b340f77f59c729175.1291582351.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7b0226a45f9b970a138fe4b5d68c63a4ef8ba5ba.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+One config per board is enough.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/integrator926_defconfig |  766 +--------------------------------------
- 1 files changed, 10 insertions(+), 756 deletions(-)
+ configs/integrator926_huge_defconfig |  740 ----------------------------------
+ 1 files changed, 0 insertions(+), 740 deletions(-)
+ delete mode 100644 configs/integrator926_huge_defconfig
 
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index 992e1f4..b9e790a 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -1,764 +1,18 @@
+diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
+deleted file mode 100644
+index 238dc26..0000000
+--- a/configs/integrator926_huge_defconfig
++++ /dev/null
+@@ -1,740 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
--# Thu Jan 29 20:53:19 2009
+-# Thu Jan 29 21:05:22 2009
 -#
 -BR2_HAVE_DOT_CONFIG=y
 -BR2_VERSION="2009.02-svn"
 -# BR2_alpha is not set
-+# Architecture
- BR2_arm=y
+-BR2_arm=y
 -# BR2_armeb is not set
 -# BR2_avr32 is not set
 -# BR2_cris is not set
@@ -51,7 +54,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_arm720t is not set
 -# BR2_arm920t is not set
 -# BR2_arm922t is not set
- BR2_arm926t=y
+-BR2_arm926t=y
 -# BR2_arm10t is not set
 -# BR2_arm1136jf_s is not set
 -# BR2_arm1176jz_s is not set
@@ -66,7 +69,7 @@ index 992e1f4..b9e790a 100644
 -BR2_ARCH="arm"
 -BR2_ENDIAN="LITTLE"
 -BR2_GCC_TARGET_TUNE="arm9tdmi"
- 
+-
 -#
 -# Target options
 -#
@@ -86,9 +89,9 @@ index 992e1f4..b9e790a 100644
 -#
 -# ARM Ltd. based Device Support
 -#
--BR2_TARGET_ARM_INTEGRATOR_926=y
--# BR2_TARGET_ARM_INTEGRATOR_926_HUGE is not set
--BR2_BOARD_NAME="integrator926"
+-# BR2_TARGET_ARM_INTEGRATOR_926 is not set
+-BR2_TARGET_ARM_INTEGRATOR_926_HUGE=y
+-BR2_BOARD_NAME="integrator926_huge"
 -BR2_BOARD_PATH="target/device/ARMLTD/$(BR2_BOARD_NAME)"
 -# BR2_TARGET_ATMEL is not set
 -# BR2_TARGET_KWIKBYTE is not set
@@ -128,7 +131,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_FPU_SUFFIX is not set
 -BR2_TOPDIR_PREFIX=""
 -BR2_TOPDIR_SUFFIX=""
--BR2_ROOTFS_PREFIX="rootfs"
+-BR2_ROOTFS_PREFIX="$(BOARD_NAME)-rootfs"
 -BR2_JLEVEL=2
 -# BR2_DEPRECATED is not set
 -# BR2_ENABLE_DEBUG is not set
@@ -218,9 +221,10 @@ index 992e1f4..b9e790a 100644
 -BR2_GCC_VERSION="4.3.2"
 -BR2_TOOLCHAIN_SYSROOT=y
 -BR2_EXTRA_GCC_CONFIG_OPTIONS=""
--# BR2_GCC_CROSS_CXX is not set
+-BR2_GCC_CROSS_CXX=y
 -# BR2_GCC_CROSS_FORTRAN is not set
--# BR2_INSTALL_LIBSTDCPP is not set
+-BR2_INSTALL_LIBSTDCPP=y
+-# BR2_INSTALL_LIBGCJ is not set
 -# BR2_INSTALL_OBJC is not set
 -# BR2_INSTALL_FORTRAN is not set
 -BR2_GCC_SHARED_LIBGCC=y
@@ -244,10 +248,10 @@ index 992e1f4..b9e790a 100644
 -# BR2_MKLIBS is not set
 -# BR2_PACKAGE_SSTRIP_TARGET is not set
 -# BR2_PACKAGE_SSTRIP_HOST is not set
--# BR2_LARGEFILE is not set
--# BR2_INET_IPV6 is not set
--# BR2_INET_RPC is not set
--# BR2_USE_WCHAR is not set
+-BR2_LARGEFILE=y
+-BR2_INET_IPV6=y
+-BR2_INET_RPC=y
+-BR2_USE_WCHAR=y
 -BR2_SOFT_FLOAT=y
 -BR2_TARGET_OPTIMIZATION="-Os -pipe -fwrapv"
 -BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
@@ -274,32 +278,38 @@ index 992e1f4..b9e790a 100644
 -#
 -# The minimum needed to build a uClibc development system
 -#
--# BR2_PACKAGE_FLEX is not set
--# BR2_PACKAGE_GCC_TARGET is not set
--# BR2_PACKAGE_MAKE is not set
+-BR2_PACKAGE_FLEX=y
+-BR2_PACKAGE_FLEX_LIBFL=y
+-BR2_PACKAGE_GCC_TARGET=y
+-BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS=""
+-BR2_PACKAGE_MAKE=y
 -
 -#
 -# Other development stuff
 -#
 -# BR2_PACKAGE_AUTOCONF is not set
 -# BR2_PACKAGE_AUTOMAKE is not set
--# BR2_PACKAGE_BISON is not set
+-BR2_PACKAGE_BISON=y
 -# BR2_PACKAGE_CCACHE_TARGET is not set
+-# BR2_PACKAGE_CVS is not set
 -# BR2_PACKAGE_DISTCC is not set
 -# BR2_PACKAGE_DMALLOC is not set
 -# BR2_PACKAGE_FAKEROOT is not set
--# BR2_PACKAGE_GETTEXT is not set
--# BR2_PACKAGE_LIBINTL is not set
--# BR2_PACKAGE_LIBGMP is not set
+-BR2_PACKAGE_GETTEXT=y
+-# BR2_PACKAGE_GETTEXT_STATIC is not set
+-BR2_PACKAGE_LIBINTL=y
+-BR2_PACKAGE_LIBGMP=y
+-BR2_PACKAGE_LIBGMP_HEADERS=y
 -# BR2_PACKAGE_GPERF is not set
--# BR2_PACKAGE_LIBMPFR is not set
--# BR2_PACKAGE_LIBTOOL is not set
--# BR2_PACKAGE_M4 is not set
--
--#
--# oprofile requires a toolchain with C++ support enabled
--#
--# BR2_PACKAGE_READLINE is not set
+-BR2_PACKAGE_LIBMPFR=y
+-BR2_PACKAGE_LIBMPFR_HEADERS=y
+-BR2_PACKAGE_LIBTOOL=y
+-BR2_PACKAGE_M4=y
+-# BR2_PACKAGE_MPATROL is not set
+-# BR2_PACKAGE_OPROFILE is not set
+-BR2_PACKAGE_READLINE=y
+-BR2_PACKAGE_READLINE_TARGET=y
+-# BR2_PACKAGE_READLINE_HEADERS is not set
 -# BR2_PACKAGE_PCRE is not set
 -
 -#
@@ -313,10 +323,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_CUSTOMIZE is not set
 -# BR2_PACKAGE_FILE is not set
 -# BR2_PACKAGE_GAMIN is not set
--
--#
--# icu requires a toolchain with C++ support and WCHAR enabled
--#
+-# BR2_PACKAGE_ICU is not set
 -# BR2_PACKAGE_KEXEC is not set
 -# BR2_PACKAGE_LIBCONFIG is not set
 -# BR2_PACKAGE_LIBCONFUSE is not set
@@ -331,10 +338,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_LIBOIL is not set
 -# BR2_PACKAGE_LIBSYSFS is not set
 -# BR2_PACKAGE_LOCKFILE_PROGS is not set
--
--#
--# logrotate     - disabled (requires wchar support)
--#
+-# BR2_PACKAGE_LOGROTATE is not set
 -# BR2_PACKAGE_LSOF is not set
 -# BR2_PACKAGE_LTP-TESTSUITE is not set
 -# BR2_PACKAGE_LTRACE is not set
@@ -349,10 +353,7 @@ index 992e1f4..b9e790a 100644
 -#
 -# Database
 -#
--
--#
--# Mysql client requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_MYSQL_CLIENT is not set
 -# BR2_PACKAGE_SQLITE is not set
 -
 -#
@@ -372,23 +373,14 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_ETHTOOL is not set
 -# BR2_PACKAGE_HASERL is not set
 -# BR2_PACKAGE_IFPLUGD is not set
--
--#
--# iperf requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_IPERF is not set
 -# BR2_PACKAGE_IPROUTE2 is not set
--
--#
--# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
--#
+-# BR2_PACKAGE_IPSEC_TOOLS is not set
 -# BR2_PACKAGE_IPTABLES is not set
 -# BR2_PACKAGE_KISMET is not set
 -# BR2_PACKAGE_L2TP is not set
 -# BR2_PACKAGE_LIBCGI is not set
--
--#
--# libcgicc requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_LIBCGICC is not set
 -# BR2_PACKAGE_LIBCURL is not set
 -# BR2_PACKAGE_LIBDNET is not set
 -# BR2_PACKAGE_LIBEXOSIP2 is not set
@@ -409,10 +401,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_NETKITTELNET is not set
 -# BR2_PACKAGE_NETPLUG is not set
 -# BR2_PACKAGE_NETSNMP is not set
--
--#
--# nfs-utils requires a toolchain with 'Enable RPC' selected
--#
+-# BR2_PACKAGE_NFS_UTILS is not set
 -# BR2_PACKAGE_NTP is not set
 -# BR2_PACKAGE_OLSR is not set
 -# BR2_PACKAGE_OPENNTPD is not set
@@ -422,11 +411,9 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_OPENSSL_ENGINES is not set
 -# BR2_PACKAGE_OPENVPN is not set
 -# BR2_PACKAGE_OPENSWAN is not set
--
--#
--# portmap requires a toolchain with 'Enable RPC' selected
--#
+-# BR2_PACKAGE_PORTMAP is not set
 -# BR2_PACKAGE_PPPD is not set
+-# BR2_PACKAGE_RADVD is not set
 -# BR2_PACKAGE_RP_PPPOE is not set
 -# BR2_PACKAGE_PPTP_LINUX is not set
 -# BR2_PACKAGE_PROFTPD is not set
@@ -439,6 +426,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_QUAGGA_RIPD is not set
 -# BR2_PACKAGE_QUAGGA_RIPNGD is not set
 -# BR2_PACKAGE_QUAGGA_OSPFD is not set
+-# BR2_PACKAGE_QUAGGA_OSPF6D is not set
 -# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
 -# BR2_PACKAGE_QUAGGA_ISISD is not set
 -# BR2_PACKAGE_RSYNC is not set
@@ -461,10 +449,7 @@ index 992e1f4..b9e790a 100644
 -#
 -# Hardware handling / blockdevices and filesystem maintenance
 -#
--
--#
--# dbus not available (need expat or libxml2)
--#
+-# BR2_PACKAGE_DBUS is not set
 -# BR2_PACKAGE_DEVMEM2 is not set
 -# BR2_PACKAGE_DM is not set
 -# BR2_PACKAGE_DMRAID is not set
@@ -531,7 +516,11 @@ index 992e1f4..b9e790a 100644
 -#
 -# text rendering libraries
 -#
--# BR2_PACKAGE_NCURSES is not set
+-BR2_PACKAGE_NCURSES=y
+-# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
+-# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
+-# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
+-# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
 -# BR2_PACKAGE_NEWT is not set
 -# BR2_PACKAGE_SLANG is not set
 -
@@ -568,10 +557,7 @@ index 992e1f4..b9e790a 100644
 -#
 -# other GUIs
 -#
--
--#
--# qtopia4 requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_QT is not set
 -BR2_PACKAGE_XSERVER_none=y
 -# BR2_PACKAGE_XSERVER_xorg is not set
 -
@@ -579,10 +565,6 @@ index 992e1f4..b9e790a 100644
 -# xorg requires a toolchain with LOCALE and WCHAR support
 -#
 -# BR2_PACKAGE_XSERVER_tinyx is not set
--
--#
--# tinyx requires a toolchain with WCHAR support
--#
 -
 -#
 -# X libraries and helper libraries
@@ -596,10 +578,7 @@ index 992e1f4..b9e790a 100644
 -# BR2_PACKAGE_FONTCONFIG is not set
 -# BR2_PACKAGE_FREETYPE is not set
 -# BR2_PACKAGE_TSLIB is not set
--
--#
--# webkit requires a toolchain with C++ support and WCHAR enabled
--#
+-# BR2_PACKAGE_WEBKIT is not set
 -
 -#
 -# X Window managers
@@ -632,7 +611,8 @@ index 992e1f4..b9e790a 100644
 -# Compressors / decompressors
 -#
 -# BR2_PACKAGE_LZO is not set
--# BR2_PACKAGE_LZMA is not set
+-BR2_PACKAGE_LZMA=y
+-# BR2_PACKAGE_LZMA_HEADERS is not set
 -# BR2_PACKAGE_LZMA_HOST is not set
 -BR2_PACKAGE_ZLIB=y
 -# BR2_PACKAGE_ZLIB_TARGET_HEADERS is not set
@@ -656,7 +636,7 @@ index 992e1f4..b9e790a 100644
 -#
 -# XML handling
 -#
--# BR2_PACKAGE_EXPAT is not set
+-BR2_PACKAGE_EXPAT=y
 -# BR2_PACKAGE_EZXML is not set
 -# BR2_PACKAGE_LIBXML2 is not set
 -# BR2_PACKAGE_LIBXSLT is not set
@@ -700,39 +680,36 @@ index 992e1f4..b9e790a 100644
 -# BR2_TARGET_ROOTFS_JFFS2 is not set
 -# BR2_TARGET_ROOTFS_UBIFS is not set
 -# BR2_TARGET_ROOTFS_SQUASHFS is not set
--BR2_TARGET_ROOTFS_TAR=y
--BR2_TARGET_ROOTFS_TAR_NONE=y
--# BR2_TARGET_ROOTFS_TAR_GZIP is not set
--# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
--# BR2_TARGET_ROOTFS_TAR_LZMA is not set
--BR2_TARGET_ROOTFS_TAR_OPTIONS=""
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_ROOTFS_CPIO=y
+-BR2_TARGET_ROOTFS_CPIO_NONE=y
+-# BR2_TARGET_ROOTFS_CPIO_GZIP is not set
+-# BR2_TARGET_ROOTFS_CPIO_BZIP2 is not set
+-# BR2_TARGET_ROOTFS_CPIO_LZMA is not set
 -
--# BR2_TARGET_ROOTFS_CPIO is not set
 -# BR2_TARGET_ROOTFS_INITRAMFS is not set
 -# BR2_TARGET_ROOTFS_ROMFS is not set
 -
 -#
 -# bootloader for target device
 -#
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="cp926ejs"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="cp926ejs"
 -BR2_TARGET_UBOOT_2009_01=y
 -# BR2_TARGET_UBOOT_2008_10 is not set
 -BR2_UBOOT_VERSION="2009.01"
 -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
 -# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
 -# BR2_TARGET_UBOOT_TOOL_ENV is not set
-+BR2_TARGET_UBOOT_2010_06=y
- 
+-
 -#
- # Kernel
+-# Kernel
 -#
 -# BR2_KERNEL_none is not set
 -BR2_KERNEL_LINUX_ADVANCED=y
 -# BR2_KERNEL_LINUX is not set
 -BR2_PACKAGE_LINUX=y
--BR2_PACKAGE_LINUX_KCONFIG="target/device/ARMLTD/$(BR2_BOARD_NAME)/$(BR2_BOARD_NAME)-linux26-$(BR2_LINUX26_VERSION).config"
+-BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
 -BR2_PACKAGE_LINUX_FORMAT="uImage"
 -BR2_KERNEL_CURRENT_VERSION="2.6.28.2"
 -BR2_KERNEL_LATEST_2_6_28="2"
@@ -767,11 +744,7 @@ index 992e1f4..b9e790a 100644
 -BR2_LINUX_BSP_PATCH=""
 -BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_CURRENT_VERSION)"
 -BR2_LINUX26_VERSION="$(BR2_KERNEL_CURRENT_VERSION)"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_2_6_35=
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="integrator"
- 
+-
 -#
 -# Linux Kernel Configuration
 -#
@@ -791,8 +764,5 @@ index 992e1f4..b9e790a 100644
 -# BR2_LINUX_COPYTO_TFTPBOOT is not set
 -BR2_LINUX_COPYTO=""
 -# BR2_LINUX_COPY_CONFIGURATION is not set
-+# Filesystem
-+# BR2_TARGET_ROOTFS_EXT2 is not set
-+BR2_TARGET_ROOTFS_TAR=y
 -- 
 1.7.0.4
