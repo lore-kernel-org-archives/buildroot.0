@@ -1,141 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:25 +0100
-Subject: [Buildroot] [PATCH 54/55] board: Add a Qemu mipsel Malta board
+Date: Sun,  5 Dec 2010 21:53:26 +0100
+Subject: [Buildroot] [PATCH 55/55] linux: add KERNEL_ARCH_PATH to fix
+	x86-specific issue
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e1d3afdf1076dd673deb06a9b803cf4e05133d0f.1291582352.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <34c54a5e6cd298f0185a00a85716e23b548e735c.1291582352.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Both i386 and x86_64 architectures are supported by the arch/x86
+directory in the kernel. So, when we copy the kernel configuration
+file to arch/$(KERNEL_ARCH)/configs/, it does not work because
+arch/i386 and arch/x86_64 do not exist.
+
+So, we introduce KERNEL_ARCH_PATH, which is the path to the
+architecture specific directory in the kernel source tree.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/mipsel-malta/linux-2.6.36.config |   77 +++++++++++++++++++++++++++
- board/qemu/mipsel-malta/readme.txt          |    7 +++
- configs/qemu_mipsel_malta_defconfig         |   15 +++++
- 3 files changed, 99 insertions(+), 0 deletions(-)
- create mode 100644 board/qemu/mipsel-malta/linux-2.6.36.config
- create mode 100644 board/qemu/mipsel-malta/readme.txt
- create mode 100644 configs/qemu_mipsel_malta_defconfig
+ linux/linux.mk |   20 ++++++++++++++++----
+ 1 files changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/mipsel-malta/linux-2.6.36.config b/board/qemu/mipsel-malta/linux-2.6.36.config
-new file mode 100644
-index 0000000..b51de4b
---- /dev/null
-+++ b/board/qemu/mipsel-malta/linux-2.6.36.config
-@@ -0,0 +1,77 @@
-+CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS32_R2=y
-+CONFIG_MIPS_MT_SMP=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_HZ_100=y
-+CONFIG_EXPERIMENTAL=y
-+CONFIG_SYSVIPC=y
-+CONFIG_LOG_BUF_SHIFT=15
-+CONFIG_SYSFS_DEPRECATED_V2=y
-+CONFIG_RELAY=y
-+CONFIG_NAMESPACES=y
-+CONFIG_UTS_NS=y
-+CONFIG_IPC_NS=y
-+CONFIG_PID_NS=y
-+# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
-+CONFIG_EMBEDDED=y
-+# CONFIG_SYSCTL_SYSCALL is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_PM=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+# CONFIG_MISC_DEVICES is not set
-+CONFIG_IDE=y
-+CONFIG_BLK_DEV_IDECD=y
-+CONFIG_IDE_GENERIC=y
-+CONFIG_BLK_DEV_GENERIC=y
-+CONFIG_BLK_DEV_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NET_ETHERNET=y
-+CONFIG_NET_PCI=y
-+CONFIG_PCNET32=y
-+# CONFIG_NETDEV_1000 is not set
-+# CONFIG_NETDEV_10000 is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_I8042 is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+# CONFIG_MFD_SUPPORT is not set
-+CONFIG_FB=y
-+CONFIG_FB_CIRRUS=y
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_HID_SUPPORT is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_QUOTA=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_RCU_CPU_STALL_DETECTOR is not set
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-new file mode 100644
-index 0000000..b494976
---- /dev/null
-+++ b/board/qemu/mipsel-malta/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fe2ec37..26674b8 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -44,13 +44,25 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX26_IMAGE_NAME=vmlinux
+ endif
+ 
++# Compute the arch path, since i386 and x86_64 are in arch/x86 and not
++# in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
++# for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
++# defconfig file.
++ifeq ($(KERNEL_ARCH),i386)
++KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/x86
++else ifeq ($(KERNEL_ARCH),x86_64)
++KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/x86
++else
++KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)
++endif
 +
-+ qemu-system-mipsel -M malta -kernel vmlinux -serial stdio -hda rootfs.ext2 -append "root=/dev/hda"
-+
-+The login prompt will appear in the terminal that started Qemu. The
-+graphical window is the framebuffer. No keyboard support has been
-+enabled.
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-new file mode 100644
-index 0000000..b021c1f
---- /dev/null
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -0,0 +1,15 @@
-+# Architecture
-+BR2_mipsel=y
-+BR2_mips_32r2=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX26_IMAGE_PATH=$(LINUX26_DIR)/$(LINUX26_IMAGE_NAME)
+ else
+ ifeq ($(KERNEL_ARCH),avr32)
+-LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/images/$(LINUX26_IMAGE_NAME)
++LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX26_IMAGE_NAME)
+ else
+-LINUX26_IMAGE_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)/boot/$(LINUX26_IMAGE_NAME)
++LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX26_IMAGE_NAME)
+ endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+@@ -92,9 +104,9 @@ $(LINUX26_DIR)/.stamp_configured: $(LINUX26_DIR)/.stamp_patched
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(@D)/arch/$(KERNEL_ARCH)/configs/buildroot_defconfig
++	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+-	rm $(@D)/arch/$(KERNEL_ARCH)/configs/buildroot_defconfig
++	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ endif
+ 	# Our fstab uses tmpfs
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS,$(@D)/.config)
 -- 
 1.7.0.4
