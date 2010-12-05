@@ -1,238 +1,164 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:01 +0100
-Subject: [Buildroot] [PATCH 30/55] board: simplify atngw100 support
+Date: Sun,  5 Dec 2010 21:53:06 +0100
+Subject: [Buildroot] [PATCH 35/55] board: update and minimize
+	atstk100x_defconfig
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0e9f66d42477eec0c2e2c1ba6d2ac6a46040f07f.1291582351.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <654d3bf36e847cc79d4659209eb5ce34f57b4176.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Minimize atngw100_defconfig, remove atngw100-base_defconfig, and
-remove the target skeleton and device table. Instead of having
-complete copies of new target skeletons (making them hard to
-maintain), we should just have a post-build script that
-adds/removes/tweaks the existing target skeleton.
-
-Moreover, most of the tweaks in this target skeleton were for specific
-packages, but the policy now is that board defconfig should just build
-a basic root filesystem with Busybox, and let the user select
-whichever set of packages (s)he wants.
+Use recent U-Boot and kernel version, remove target skeleton and use
+the default one instead, remove useless kernel configuration, busybox
+configuration and device table.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atngw100-base_defconfig                    |  800 --------
- configs/atngw100_defconfig                         |  808 +--------
- .../atngw100-base-linux-2.6.23.config              |  858 --------
- .../atngw100-base-linux-2.6.24.config              | 1153 -----------
- .../Atmel/atngw100-base/busybox-1.11.0.config      |  767 -------
- .../Atmel/atngw100-base/busybox-1.9.1.config       |  767 -------
- target/device/Atmel/atngw100-base/device_table.txt |   56 -
- .../Atmel/atngw100-base/target_skeleton/etc/TZ     |    1 -
- .../Atmel/atngw100-base/target_skeleton/etc/fstab  |    3 -
- .../Atmel/atngw100-base/target_skeleton/etc/group  |   20 -
- .../atngw100-base/target_skeleton/etc/hostname     |    1 -
- .../Atmel/atngw100-base/target_skeleton/etc/hosts  |   12 -
+ configs/atstk100x_defconfig                        |  951 +---------
+ .../atstk100x/atstk100x-linux-2.6.27.13.config     | 1283 ------------
+ .../atstk100x/atstk100x-linux-2.6.28.2.config      | 1332 ------------
+ target/device/Atmel/atstk100x/busybox-1.9.1.config |  767 -------
+ target/device/Atmel/atstk100x/device_table.txt     |  181 --
+ ...-200-gpio_mouse-setup-for-atstk1000-board.patch |  130 --
+ .../device/Atmel/atstk100x/target_skeleton/etc/TZ  |    1 -
+ .../atstk100x/target_skeleton/etc/asound.state     |  108 -
+ .../atstk100x/target_skeleton/etc/default/ntpdate  |    6 -
+ .../atstk100x/target_skeleton/etc/dnsmasq.conf     |  385 ----
+ .../Atmel/atstk100x/target_skeleton/etc/fb.modes   |    5 -
+ .../Atmel/atstk100x/target_skeleton/etc/fstab      |    3 -
+ .../Atmel/atstk100x/target_skeleton/etc/group      |   20 -
+ .../Atmel/atstk100x/target_skeleton/etc/hostname   |    1 -
+ .../Atmel/atstk100x/target_skeleton/etc/hosts      |   12 -
+ .../atstk100x/target_skeleton/etc/hosts.dnsmasq    |  246 ---
+ .../Atmel/atstk100x/target_skeleton/etc/httpd.conf |    2 -
+ .../Atmel/atstk100x/target_skeleton/etc/inetd.conf |    3 -
+ .../target_skeleton/etc/init.d/K20alsa-utils       |   14 -
  .../target_skeleton/etc/init.d/K70sendsig          |    1 -
+ .../atstk100x/target_skeleton/etc/init.d/K80netfs  |    1 -
+ .../target_skeleton/etc/init.d/K85network          |   11 -
+ .../target_skeleton/etc/init.d/K90localfs          |    1 -
  .../target_skeleton/etc/init.d/S00mountvirtfs      |   74 -
  .../target_skeleton/etc/init.d/S01hotplug          |   14 -
  .../target_skeleton/etc/init.d/S02hostname         |   47 -
- .../target_skeleton/etc/init.d/S08syslog           |   24 -
- .../target_skeleton/etc/init.d/S09klog             |   16 -
- .../atngw100-base/target_skeleton/etc/init.d/rcK   |    6 -
- .../atngw100-base/target_skeleton/etc/init.d/rcS   |   11 -
- .../atngw100-base/target_skeleton/etc/inittab      |   27 -
- .../atngw100-base/target_skeleton/etc/mdev.conf    |   49 -
- .../Atmel/atngw100-base/target_skeleton/etc/mtab   |    1 -
- .../target_skeleton/etc/network/interfaces         |    7 -
- .../Atmel/atngw100-base/target_skeleton/etc/passwd |   17 -
- .../atngw100-base/target_skeleton/etc/protocols    |  149 --
- .../atngw100-base/target_skeleton/etc/resolv.conf  |    1 -
- .../atngw100-base/target_skeleton/etc/services     | 2117 --------------------
- .../Atmel/atngw100-base/target_skeleton/etc/shadow |   17 -
- .../Atmel/atngw100-base/target_skeleton/etc/shells |    8 -
- .../Atmel/atngw100/atngw100-linux-2.6.27.13.config | 1284 ------------
- .../Atmel/atngw100/atngw100-linux-2.6.28.2.config  | 1324 ------------
- .../Atmel/atngw100/atngw100-linux-2.6.29.2.config  | 1358 -------------
- target/device/Atmel/atngw100/device_table.txt      |  181 --
- target/device/Atmel/atngw100/jffs2_partitions.txt  |    8 -
- .../device/Atmel/atngw100/target_skeleton/etc/TZ   |    1 -
- .../atngw100/target_skeleton/etc/default/ntpdate   |    6 -
- .../atngw100/target_skeleton/etc/dnsmasq.conf      |  447 -----
- .../Atmel/atngw100/target_skeleton/etc/fstab       |    4 -
- .../Atmel/atngw100/target_skeleton/etc/group       |   20 -
- .../Atmel/atngw100/target_skeleton/etc/hostname    |    1 -
- .../Atmel/atngw100/target_skeleton/etc/hosts       |   11 -
- .../atngw100/target_skeleton/etc/hosts.dnsmasq     |  246 ---
- .../Atmel/atngw100/target_skeleton/etc/httpd.conf  |    2 -
- .../Atmel/atngw100/target_skeleton/etc/inetd.conf  |    3 -
- .../atngw100/target_skeleton/etc/init.d/K70sendsig |    1 -
- .../atngw100/target_skeleton/etc/init.d/K80netfs   |    1 -
- .../atngw100/target_skeleton/etc/init.d/K85network |   11 -
- .../atngw100/target_skeleton/etc/init.d/K90localfs |    1 -
- .../target_skeleton/etc/init.d/S00mountvirtfs      |   74 -
- .../atngw100/target_skeleton/etc/init.d/S01hotplug |   14 -
- .../target_skeleton/etc/init.d/S02hostname         |   47 -
- .../atngw100/target_skeleton/etc/init.d/S08syslog  |   24 -
- .../atngw100/target_skeleton/etc/init.d/S09klog    |   16 -
+ .../target_skeleton/etc/init.d/S03bootsplash       |   25 -
+ .../atstk100x/target_skeleton/etc/init.d/S08syslog |   24 -
+ .../atstk100x/target_skeleton/etc/init.d/S09klog   |   16 -
  .../target_skeleton/etc/init.d/S10modules-init     |   21 -
- .../atngw100/target_skeleton/etc/init.d/S15localfs |   11 -
- .../atngw100/target_skeleton/etc/init.d/S20network |   11 -
- .../atngw100/target_skeleton/etc/init.d/S21dnsmasq |   18 -
- .../target_skeleton/etc/init.d/S22iptables         |   43 -
- .../atngw100/target_skeleton/etc/init.d/S40telnetd |   16 -
- .../atngw100/target_skeleton/etc/init.d/S41inetd   |   16 -
- .../atngw100/target_skeleton/etc/init.d/S42httpd   |   16 -
- .../atngw100/target_skeleton/etc/init.d/S43ntp     |   27 -
- .../atngw100/target_skeleton/etc/init.d/S49netfs   |   11 -
- .../atngw100/target_skeleton/etc/init.d/S99gpio    |  142 --
- .../Atmel/atngw100/target_skeleton/etc/init.d/rcK  |    6 -
- .../Atmel/atngw100/target_skeleton/etc/init.d/rcS  |   11 -
- .../Atmel/atngw100/target_skeleton/etc/inittab     |   27 -
- .../Atmel/atngw100/target_skeleton/etc/mdev.conf   |   49 -
- .../device/Atmel/atngw100/target_skeleton/etc/mtab |    1 -
- .../target_skeleton/etc/network/interfaces         |   15 -
- .../Atmel/atngw100/target_skeleton/etc/ntp.conf    |   49 -
- .../Atmel/atngw100/target_skeleton/etc/passwd      |   18 -
- .../atngw100/target_skeleton/etc/proftpd.conf      |   31 -
- .../Atmel/atngw100/target_skeleton/etc/protocols   |  149 --
- .../Atmel/atngw100/target_skeleton/etc/resolv.conf |    1 -
- .../atngw100/target_skeleton/etc/samba/smb.conf    |  287 ---
- .../atngw100/target_skeleton/etc/samba/smbpasswd   |    1 -
- .../Atmel/atngw100/target_skeleton/etc/services    | 2117 --------------------
- .../Atmel/atngw100/target_skeleton/etc/shadow      |   18 -
- .../Atmel/atngw100/target_skeleton/etc/shells      |    8 -
- .../atngw100/target_skeleton/root/.bash_logout     |    7 -
- .../atngw100/target_skeleton/root/.bash_profile    |   15 -
- .../Atmel/atngw100/target_skeleton/root/.bashrc    |   48 -
+ .../target_skeleton/etc/init.d/S15localfs          |   11 -
+ .../target_skeleton/etc/init.d/S20network          |   11 -
+ .../target_skeleton/etc/init.d/S40telnetd          |   16 -
+ .../atstk100x/target_skeleton/etc/init.d/S41inetd  |   16 -
+ .../atstk100x/target_skeleton/etc/init.d/S42httpd  |   16 -
+ .../atstk100x/target_skeleton/etc/init.d/S43ntp    |   27 -
+ .../atstk100x/target_skeleton/etc/init.d/S49netfs  |   11 -
+ .../target_skeleton/etc/init.d/S50alsa-utils       |   19 -
+ .../atstk100x/target_skeleton/etc/init.d/S99gpio   |  142 --
+ .../atstk100x/target_skeleton/etc/init.d/S99splash |   17 -
+ .../Atmel/atstk100x/target_skeleton/etc/init.d/rcK |    6 -
+ .../Atmel/atstk100x/target_skeleton/etc/init.d/rcS |   11 -
+ .../Atmel/atstk100x/target_skeleton/etc/inittab    |   28 -
+ .../Atmel/atstk100x/target_skeleton/etc/mdev.conf  |   49 -
+ .../Atmel/atstk100x/target_skeleton/etc/modules    |    4 -
+ .../atstk100x/target_skeleton/etc/mplayer.conf     |  129 --
+ .../Atmel/atstk100x/target_skeleton/etc/mtab       |    1 -
+ .../target_skeleton/etc/network/interfaces         |   11 -
+ .../Atmel/atstk100x/target_skeleton/etc/ntp.conf   |   49 -
+ .../Atmel/atstk100x/target_skeleton/etc/passwd     |   18 -
+ .../atstk100x/target_skeleton/etc/proftpd.conf     |   31 -
+ .../Atmel/atstk100x/target_skeleton/etc/protocols  |  149 --
+ .../atstk100x/target_skeleton/etc/resolv.conf      |    1 -
+ .../atstk100x/target_skeleton/etc/samba/smb.conf   |  287 ---
+ .../atstk100x/target_skeleton/etc/samba/smbpasswd  |    1 -
+ .../Atmel/atstk100x/target_skeleton/etc/services   | 2117 --------------------
+ .../Atmel/atstk100x/target_skeleton/etc/shadow     |   18 -
+ .../Atmel/atstk100x/target_skeleton/etc/shells     |    8 -
+ .../atstk100x/target_skeleton/root/.bash_logout    |    7 -
+ .../atstk100x/target_skeleton/root/.bash_profile   |   15 -
+ .../Atmel/atstk100x/target_skeleton/root/.bashrc   |   48 -
  .../usr/share/udhcpc/default.script                |   19 -
- 85 files changed, 9 insertions(+), 16117 deletions(-)
- delete mode 100644 configs/atngw100-base_defconfig
- delete mode 100644 target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.23.config
- delete mode 100644 target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.24.config
- delete mode 100644 target/device/Atmel/atngw100-base/busybox-1.11.0.config
- delete mode 100644 target/device/Atmel/atngw100-base/busybox-1.9.1.config
- delete mode 100644 target/device/Atmel/atngw100-base/device_table.txt
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/TZ
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/fstab
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/group
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/hostname
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/hosts
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/K70sendsig
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S00mountvirtfs
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S01hotplug
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S02hostname
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S08syslog
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S09klog
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcK
- delete mode 100755 target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcS
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/inittab
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/mdev.conf
- delete mode 120000 target/device/Atmel/atngw100-base/target_skeleton/etc/mtab
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/network/interfaces
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/passwd
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/protocols
- delete mode 120000 target/device/Atmel/atngw100-base/target_skeleton/etc/resolv.conf
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/services
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/shadow
- delete mode 100644 target/device/Atmel/atngw100-base/target_skeleton/etc/shells
- delete mode 100644 target/device/Atmel/atngw100/atngw100-linux-2.6.27.13.config
- delete mode 100644 target/device/Atmel/atngw100/atngw100-linux-2.6.28.2.config
- delete mode 100644 target/device/Atmel/atngw100/atngw100-linux-2.6.29.2.config
- delete mode 100644 target/device/Atmel/atngw100/device_table.txt
- delete mode 100644 target/device/Atmel/atngw100/jffs2_partitions.txt
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/bin/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/boot/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/config/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/dev/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/TZ
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/default/ntpdate
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/dnsmasq.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/ethers
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/fstab
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/group
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/hostname
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/hosts
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/hosts.dnsmasq
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/httpd.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S21dnsmasq
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcK
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/inittab
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/modules
- delete mode 120000 target/device/Atmel/atngw100/target_skeleton/etc/mtab
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/network/interfaces
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/ntp.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/passwd
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/proftpd.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/protocols
- delete mode 120000 target/device/Atmel/atngw100/target_skeleton/etc/resolv.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/samba/smb.conf
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/samba/smbpasswd
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/services
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/shadow
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/etc/shells
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/home/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/lib/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/mnt/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/opt/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/root/.bash_history
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/root/.bash_logout
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/root/.bash_profile
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/root/.bashrc
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/root/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/sbin/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/sys/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/tmp/resolv.conf
- delete mode 100755 target/device/Atmel/atngw100/target_skeleton/usr/share/udhcpc/default.script
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/cache/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/lib/pcmcia/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/lock/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/log/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/pcmcia/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/run/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/spool/.empty
- delete mode 100644 target/device/Atmel/atngw100/target_skeleton/var/tmp/.empty
+ 62 files changed, 12 insertions(+), 8966 deletions(-)
+ delete mode 100644 target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
+ delete mode 100644 target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
+ delete mode 100644 target/device/Atmel/atstk100x/busybox-1.9.1.config
+ delete mode 100644 target/device/Atmel/atstk100x/device_table.txt
+ delete mode 100644 target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/TZ
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/fstab
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/group
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hostname
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hosts
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/inittab
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/modules
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
+ delete mode 120000 target/device/Atmel/atstk100x/target_skeleton/etc/mtab
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/passwd
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/protocols
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/services
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/shadow
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/shells
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/sys/.empty
+ delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
 
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-deleted file mode 100644
-index 72bd2cc..0000000
---- a/configs/atngw100-base_defconfig
-+++ /dev/null
-@@ -1,800 +0,0 @@
+diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
+index b4e7f06..35571a0 100644
+--- a/configs/atstk100x_defconfig
++++ b/configs/atstk100x_defconfig
+@@ -1,947 +1,20 @@
 -#
 -# Automatically generated make config: don't edit
--# Tue May 12 20:24:27 2009
+-# Thu Apr 30 04:25:26 2009
 -#
 -BR2_HAVE_DOT_CONFIG=y
--BR2_VERSION="2009.05-rc1"
+-BR2_VERSION="2009.05-svn"
 -# BR2_alpha is not set
 -# BR2_arm is not set
 -# BR2_armeb is not set
--BR2_avr32=y
++# Architecture
+ BR2_avr32=y
 -# BR2_cris is not set
 -# BR2_ia64 is not set
 -# BR2_i386 is not set
@@ -248,7 +174,7 @@ index 72bd2cc..0000000
 -# BR2_x86_64 is not set
 -BR2_ARCH="avr32"
 -BR2_ENDIAN="BIG"
--
+ 
 -#
 -# Target options
 -#
@@ -256,15 +182,15 @@ index 72bd2cc..0000000
 -#
 -# Project Options
 -#
--BR2_PROJECT="atngw100-base"
--BR2_HOSTNAME="atngw100-base.example.net"
--BR2_BANNER="ATNGW100-BASE ($(DATE))"
+-BR2_PROJECT="atstk1002"
+-BR2_HOSTNAME="stk1000.example.net"
+-BR2_BANNER="ATSTK1002 ($(DATE))"
 -
 -#
 -# Preset Devices
 -#
 -# BR2_TARGET_AMD is not set
--BR2_BOARD_NAME="atngw100-base"
+-BR2_BOARD_NAME="atstk100x"
 -BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
 -BR2_TARGET_ATMEL=y
 -
@@ -280,10 +206,10 @@ index 72bd2cc..0000000
 -#
 -# Development board support
 -#
--# BR2_TARGET_AVR32_ATSTK1002 is not set
+-BR2_TARGET_AVR32_ATSTK1002=y
 -# BR2_TARGET_AVR32_ATSTK1005 is not set
 -# BR2_TARGET_AVR32_ATNGW100 is not set
--BR2_TARGET_AVR32_ATNGW100_BASE=y
+-# BR2_TARGET_AVR32_ATNGW100_BASE is not set
 -# BR2_TARGET_AVR32_ATNGW100_EXPANDED is not set
 -
 -#
@@ -293,6 +219,8 @@ index 72bd2cc..0000000
 -#
 -# Secondary locations
 -#
+-BR2_KERNEL_ARCH_PATCH_VERSION="2.6.27.6"
+-BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-avr32/kernel-patches-$(BR2_KERNEL_ARCH_PATCH_VERSION)"
 -# BR2_TARGET_VALKA is not set
 -
 -#
@@ -300,10 +228,7 @@ index 72bd2cc..0000000
 -#
 -# BR2_TARGET_GENERIC_ACCESS_POINT is not set
 -# BR2_TARGET_GENERIC_FIREWALL is not set
--
--#
--# Generic development system requires a toolchain with WCHAR and PROGRAM_INVOCATION support
--#
+-# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
 -
 -#
 -# Build options
@@ -341,9 +266,9 @@ index 72bd2cc..0000000
 -# BR2_STRIP_none is not set
 -# BR2_OPTIMIZE_0 is not set
 -# BR2_OPTIMIZE_1 is not set
--# BR2_OPTIMIZE_2 is not set
+-BR2_OPTIMIZE_2=y
 -# BR2_OPTIMIZE_3 is not set
--BR2_OPTIMIZE_S=y
+-# BR2_OPTIMIZE_S is not set
 -# BR2_PREFER_STATIC_LIB is not set
 -# BR2_HAVE_DOCUMENTATION is not set
 -# BR2_HAVE_DEVFILES is not set
@@ -362,22 +287,22 @@ index 72bd2cc..0000000
 -# BR2_KERNEL_HEADERS_2_6_25 is not set
 -# BR2_KERNEL_HEADERS_2_6_26 is not set
 -# BR2_KERNEL_HEADERS_2_6_27 is not set
--# BR2_KERNEL_HEADERS_2_6_28 is not set
--BR2_KERNEL_HEADERS_2_6_29=y
+-BR2_KERNEL_HEADERS_2_6_28=y
+-# BR2_KERNEL_HEADERS_2_6_29 is not set
 -# BR2_KERNEL_HEADERS_SNAP is not set
--BR2_DEFAULT_KERNEL_HEADERS="2.6.29.2"
+-BR2_DEFAULT_KERNEL_HEADERS="2.6.28.9"
 -
 -#
 -# uClibc Options
 -#
 -# BR2_UCLIBC_VERSION_0_9_29 is not set
--# BR2_UCLIBC_VERSION_0_9_30 is not se
+-# BR2_UCLIBC_VERSION_0_9_30 is not set
 -BR2_UCLIBC_VERSION_0_9_30_1=y
 -# BR2_UCLIBC_VERSION_SNAPSHOT is not set
 -BR2_UCLIBC_VERSION_STRING="0.9.30.1"
 -BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
 -# BR2_PTHREAD_DEBUG is not set
--# BR2_PROGRAM_INVOCATION is not set
+-BR2_PROGRAM_INVOCATION=y
 -# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
 -
 -#
@@ -415,9 +340,9 @@ index 72bd2cc..0000000
 -BR2_GCC_SUPPORTS_SYSROOT=y
 -# BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
 -BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
--# BR2_TOOLCHAIN_SYSROOT is not set
+-BR2_TOOLCHAIN_SYSROOT=y
 -BR2_EXTRA_GCC_CONFIG_OPTIONS=""
--# BR2_GCC_SHARED_LIBGCC is not set
+-BR2_GCC_SHARED_LIBGCC=y
 -
 -#
 -# Ccache Options
@@ -428,8 +353,18 @@ index 72bd2cc..0000000
 -# Gdb Options
 -#
 -# BR2_PACKAGE_GDB is not set
--# BR2_PACKAGE_GDB_SERVER is not set
--# BR2_PACKAGE_GDB_HOST is not set
+-BR2_PACKAGE_GDB_SERVER=y
+-BR2_PACKAGE_GDB_HOST=y
+-# BR2_GDB_VERSION_6_2_1 is not set
+-# BR2_GDB_VERSION_6_3 is not set
+-# BR2_GDB_VERSION_6_4 is not set
+-# BR2_GDB_VERSION_6_5 is not set
+-# BR2_GDB_VERSION_6_6 is not set
+-# BR2_GDB_VERSION_6_7_1 is not set
+-BR2_GDB_VERSION_6_7_1_AVR32_2_1_5=y
+-# BR2_GDB_VERSION_6_8 is not set
+-# BR2_GDB_VERSION_SNAPSHOT is not set
+-BR2_GDB_VERSION="6.7.1-avr32-2.1.5"
 -
 -#
 -# Common Toolchain Options
@@ -437,7 +372,8 @@ index 72bd2cc..0000000
 -BR2_LARGEFILE=y
 -BR2_INET_IPV6=y
 -BR2_INET_RPC=y
--# BR2_ENABLE_LOCALE is not set
+-BR2_ENABLE_LOCALE=y
+-# BR2_ENABLE_LOCALE_PURGE is not set
 -BR2_USE_WCHAR=y
 -BR2_SOFT_FLOAT=y
 -# BR2_USE_SSP is not set
@@ -445,12 +381,13 @@ index 72bd2cc..0000000
 -# BR2_PTHREADS is not set
 -BR2_PTHREADS_OLD=y
 -# BR2_PTHREADS_NATIVE is not set
--# BR2_INSTALL_LIBSTDCPP is not set
+-BR2_GCC_CROSS_CXX=y
+-BR2_INSTALL_LIBSTDCPP=y
 -BR2_TARGET_OPTIMIZATION="-Os -pipe"
 -# BR2_MKLIBS is not set
 -# BR2_PACKAGE_SSTRIP_TARGET is not set
 -# BR2_PACKAGE_SSTRIP_HOST is not set
--# BR2_CROSS_TOOLCHAIN_TARGET_UTILS is not set
+-BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
 -
 -#
 -# Package Selection for the target
@@ -462,15 +399,25 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
 -BR2_BUSYBOX_VERSION="1.14.0"
 -BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
--BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
--# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
+-BR2_PACKAGE_BUSYBOX_CONFIG="target/device/Atmel/atstk100x/busybox-1.9.1.config"
+-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
 -
 -#
 -# The minimum needed to build a uClibc development system
 -#
+-BR2_PACKAGE_BASH=y
+-BR2_PACKAGE_BZIP2=y
+-# BR2_PACKAGE_COREUTILS is not set
+-# BR2_PACKAGE_DIFFUTILS is not set
+-# BR2_PACKAGE_FINDUTILS is not set
 -# BR2_PACKAGE_FLEX is not set
+-# BR2_PACKAGE_GAWK is not set
 -# BR2_PACKAGE_GCC_TARGET is not set
+-# BR2_PACKAGE_GREP is not set
 -# BR2_PACKAGE_MAKE is not set
+-# BR2_PACKAGE_PATCH is not set
+-# BR2_PACKAGE_SED is not set
+-# BR2_PACKAGE_TAR is not set
 -
 -#
 -# Other development stuff
@@ -483,17 +430,14 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_DISTCC is not set
 -# BR2_PACKAGE_DMALLOC is not set
 -# BR2_PACKAGE_FAKEROOT is not set
--# BR2_PACKAGE_GETTEXT is not set
--# BR2_PACKAGE_LIBINTL is not set
+-BR2_PACKAGE_GETTEXT=y
+-BR2_PACKAGE_LIBINTL=y
 -# BR2_PACKAGE_LIBGMP is not set
 -# BR2_PACKAGE_GPERF is not set
 -# BR2_PACKAGE_LIBMPFR is not set
 -# BR2_PACKAGE_LIBTOOL is not set
 -# BR2_PACKAGE_M4 is not set
--
--#
--# oprofile requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_OPROFILE is not set
 -# BR2_PACKAGE_PKG_CONFIG is not set
 -# BR2_PACKAGE_READLINE is not set
 -# BR2_PACKAGE_PCRE is not set
@@ -505,15 +449,15 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_BEECRYPT is not set
 -# BR2_PACKAGE_BERKELEYDB is not set
 -# BR2_PACKAGE_BSDIFF is not set
+-# BR2_PACKAGE_BOOTUTILS is not set
 -# BR2_PACKAGE_CUPS is not set
 -# BR2_PACKAGE_CUSTOMIZE is not set
--# BR2_PACKAGE_FILE is not set
+-# BR2_PACKAGE_DASH is not set
+-BR2_PACKAGE_FILE=y
 -# BR2_PACKAGE_GAMIN is not set
--
--#
--# icu requires a toolchain with C++ support and WCHAR enabled
--#
+-# BR2_PACKAGE_ICU is not set
 -# BR2_PACKAGE_KEXEC is not set
+-# BR2_PACKAGE_LESS is not set
 -# BR2_PACKAGE_LIBCONFIG is not set
 -# BR2_PACKAGE_LIBCONFUSE is not set
 -BR2_PACKAGE_LIBDAEMON=y
@@ -532,22 +476,33 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_LTP-TESTSUITE is not set
 -# BR2_PACKAGE_LTRACE is not set
 -# BR2_PACKAGE_MEMSTAT is not set
+-# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
 -# BR2_PACKAGE_NG_SPICE_REWORK is not set
 -# BR2_PACKAGE_POPT is not set
+-# BR2_PACKAGE_PROCPS is not set
+-# BR2_PACKAGE_PSMISC is not set
 -# BR2_PACKAGE_SCREEN is not set
--# BR2_PACKAGE_SHARED_MIME_INFO is not set
 -# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
--# BR2_PACKAGE_STRACE is not set
+-BR2_PACKAGE_STRACE=y
 -# BR2_PACKAGE_SUDO is not set
+-# BR2_PACKAGE_SYSKLOGD is not set
+-# BR2_PACKAGE_SYSVINIT is not set
+-# BR2_PACKAGE_UTIL-LINUX is not set
+-# BR2_PACKAGE_WHICH is not set
 -
 -#
 -# Database
 -#
+-# BR2_PACKAGE_MYSQL_CLIENT is not set
+-# BR2_PACKAGE_SQLITE is not set
 -
 -#
--# Mysql client requires a toolchain with C++ support enabled
+-# Text editors
 -#
--# BR2_PACKAGE_SQLITE is not set
+-# BR2_PACKAGE_ED is not set
+-# BR2_PACKAGE_NANO is not set
+-# BR2_PACKAGE_UEMACS is not set
+-# BR2_PACKAGE_VIM is not set
 -
 -#
 -# Networking
@@ -561,27 +516,26 @@ index 72bd2cc..0000000
 -BR2_PACKAGE_AVAHI_AUTOIPD=y
 -# BR2_PACKAGE_AVAHI_DAEMON is not set
 -# BR2_PACKAGE_AXEL is not set
+-# BR2_PACKAGE_BOA is not set
 -# BR2_PACKAGE_BIND is not set
 -# BR2_PACKAGE_BRIDGE is not set
+-# BR2_PACKAGE_DHCP is not set
 -# BR2_PACKAGE_DNSMASQ is not set
--# BR2_PACKAGE_DROPBEAR is not set
+-BR2_PACKAGE_DROPBEAR=y
 -# BR2_PACKAGE_ETHTOOL is not set
--# BR2_PACKAGE_HASERL is not set
+-BR2_PACKAGE_HASERL=y
+-# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
+-BR2_PACKAGE_HASERL_VERSION_0_9_X=y
+-BR2_PACKAGE_HASERL_VERSION="0.9.25"
 -# BR2_PACKAGE_IFPLUGD is not set
--
--#
--# iperf requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_IPERF is not set
 -# BR2_PACKAGE_IPROUTE2 is not set
 -# BR2_PACKAGE_IPSEC_TOOLS is not set
 -# BR2_PACKAGE_IPTABLES is not set
 -# BR2_PACKAGE_KISMET is not set
 -# BR2_PACKAGE_L2TP is not set
 -# BR2_PACKAGE_LIBCGI is not set
--
--#
--# libcgicc requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_LIBCGICC is not set
 -# BR2_PACKAGE_LIBCURL is not set
 -# BR2_PACKAGE_LIBDNET is not set
 -# BR2_PACKAGE_LIBEXOSIP2 is not set
@@ -589,32 +543,54 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_LIBPCAP is not set
 -# BR2_PACKAGE_LIBSOUP is not set
 -# BR2_PACKAGE_LIBUPNP is not set
+-BR2_PACKAGE_LIGHTTPD=y
+-
+-#
+-# lighttpd packages
+-#
+-BR2_PACKAGE_LIGHTTPD_OPENSSL=y
+-BR2_PACKAGE_LIGHTTPD_ZLIB=y
+-BR2_PACKAGE_LIGHTTPD_BZIP2=y
+-# BR2_PACKAGE_LIGHTTPD_PCRE is not set
 -# BR2_PACKAGE_LINKS is not set
--# BR2_PACKAGE_LRZSZ is not set
+-BR2_PACKAGE_LRZSZ=y
 -# BR2_PACKAGE_MDNSRESPONDER is not set
 -# BR2_PACKAGE_MIIDIAG is not set
 -# BR2_PACKAGE_MROUTED is not set
 -# BR2_PACKAGE_MUTT is not set
--# BR2_PACKAGE_NBD is not set
--# BR2_PACKAGE_NCFTP is not set
+-BR2_PACKAGE_NBD=y
+-BR2_PACKAGE_NCFTP=y
+-
+-#
+-# ncFTP tools selection
+-#
+-# BR2_PACKAGE_NCFTP_GET is not set
+-# BR2_PACKAGE_NCFTP_PUT is not set
+-# BR2_PACKAGE_NCFTP_LS is not set
+-# BR2_PACKAGE_NCFTP_BATCH is not set
+-# BR2_PACKAGE_NCFTP_BOOKMARKS is not set
 -# BR2_PACKAGE_NEON is not set
+-# BR2_PACKAGE_NETCAT is not set
 -# BR2_PACKAGE_NETKITBASE is not set
 -# BR2_PACKAGE_NETKITTELNET is not set
 -# BR2_PACKAGE_NETPLUG is not set
 -# BR2_PACKAGE_NETSNMP is not set
 -# BR2_PACKAGE_NFS_UTILS is not set
--# BR2_PACKAGE_NTP is not set
+-BR2_PACKAGE_NTP=y
+-# BR2_PACKAGE_NTP_SNTP is not set
 -# BR2_PACKAGE_OLSR is not set
 -# BR2_PACKAGE_OPENNTPD is not set
 -# BR2_PACKAGE_OPENSSH is not set
--# BR2_PACKAGE_OPENSSL is not set
+-BR2_PACKAGE_OPENSSL=y
+-# BR2_PACKAGE_OPENSSL_BIN is not set
+-# BR2_PACKAGE_OPENSSL_ENGINES is not set
 -# BR2_PACKAGE_OPENVPN is not set
--# BR2_PACKAGE_PORTMAP is not set
+-BR2_PACKAGE_PORTMAP=y
 -# BR2_PACKAGE_PPPD is not set
 -# BR2_PACKAGE_RADVD is not set
 -# BR2_PACKAGE_RP_PPPOE is not set
 -# BR2_PACKAGE_PPTP_LINUX is not set
--# BR2_PACKAGE_PROFTPD is not set
+-BR2_PACKAGE_PROFTPD=y
 -
 -#
 -# quagga suite
@@ -627,13 +603,15 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_QUAGGA_OSPF6D is not set
 -# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
 -# BR2_PACKAGE_QUAGGA_ISISD is not set
--# BR2_PACKAGE_RSYNC is not set
+-BR2_PACKAGE_RSYNC=y
 -# BR2_PACKAGE_SAMBA is not set
 -# BR2_PACKAGE_SOCAT is not set
 -# BR2_PACKAGE_STUNNEL is not set
 -# BR2_PACKAGE_TCPDUMP is not set
 -# BR2_PACKAGE_DHCPDUMP is not set
 -# BR2_PACKAGE_TFTPD is not set
+-# BR2_PACKAGE_THTTPD is not set
+-# BR2_PACKAGE_TINYHTTPD is not set
 -# BR2_PACKAGE_TN5250 is not set
 -# BR2_PACKAGE_TTCP is not set
 -# BR2_PACKAGE_UDPCAST is not set
@@ -641,7 +619,8 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_VSFTPD is not set
 -# BR2_PACKAGE_VTUN is not set
 -# BR2_PACKAGE_WEBIF is not set
--# BR2_PACKAGE_WIRELESS_TOOLS is not set
+-# BR2_PACKAGE_WGET is not set
+-BR2_PACKAGE_WIRELESS_TOOLS=y
 -# BR2_PACKAGE_WPA_SUPPLICANT is not set
 -
 -#
@@ -665,6 +644,8 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_LIBFUSE is not set
 -# BR2_PACKAGE_GADGETFS_TEST is not set
 -# BR2_PACKAGE_HAL is not set
+-# BR2_PACKAGE_HDPARM is not set
+-# BR2_PACKAGE_HOTPLUG is not set
 -# BR2_PACKAGE_HWDATA is not set
 -# BR2_PACKAGE_I2C_TOOLS is not set
 -# BR2_PACKAGE_INPUT_TOOLS is not set
@@ -692,23 +673,28 @@ index 72bd2cc..0000000
 -BR2_PACKAGE_MTD_FLASH_ERASE=y
 -BR2_PACKAGE_MTD_FLASH_ERASEALL=y
 -BR2_PACKAGE_MTD_FLASH_INFO=y
--BR2_PACKAGE_MTD_FLASH_LOCK=y
--BR2_PACKAGE_MTD_FLASH_UNLOCK=y
--BR2_PACKAGE_MTD_FTL_CHECK=y
--BR2_PACKAGE_MTD_FTL_FORMAT=y
--BR2_PACKAGE_MTD_JFFS2DUMP=y
--BR2_PACKAGE_MTD_MKFSJFFS2=y
+-# BR2_PACKAGE_MTD_FLASH_LOCK is not set
+-# BR2_PACKAGE_MTD_FLASH_UNLOCK is not set
+-# BR2_PACKAGE_MTD_FTL_CHECK is not set
+-# BR2_PACKAGE_MTD_FTL_FORMAT is not set
+-# BR2_PACKAGE_MTD_JFFS2DUMP is not set
+-# BR2_PACKAGE_MTD_MKFSJFFS2 is not set
 -# BR2_PACKAGE_MTD_MKFSJFFS is not set
 -BR2_PACKAGE_MTD_MTD_DEBUG=y
--BR2_PACKAGE_MTD_NANDDUMP=y
--BR2_PACKAGE_MTD_NANDWRITE=y
+-# BR2_PACKAGE_MTD_NANDDUMP is not set
+-# BR2_PACKAGE_MTD_NANDWRITE is not set
 -# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
 -# BR2_PACKAGE_MTD_NFTLDUMP is not set
--BR2_PACKAGE_MTD_SUMTOOL=y
--# BR2_PACKAGE_NTFS_3G is not set
+-# BR2_PACKAGE_MTD_SUMTOOL is not set
+-
+-#
+-# ntfs-3g requires a toolchain with LARGEFILE and WCHAR support
+-#
 -# BR2_PACKAGE_PCIUTILS is not set
 -# BR2_PACKAGE_SETSERIAL is not set
+-# BR2_PACKAGE_SFDISK is not set
 -# BR2_PACKAGE_SMARTMONTOOLS is not set
+-# BR2_PACKAGE_UDEV is not set
 -# BR2_PACKAGE_USBMOUNT is not set
 -# BR2_PACKAGE_USBUTILS is not set
 -# BR2_PACKAGE_WIPE is not set
@@ -717,7 +703,26 @@ index 72bd2cc..0000000
 -#
 -# Audio and video libraries and applications
 -#
--# BR2_PACKAGE_ALSA_LIB is not set
+-BR2_PACKAGE_ALSA_LIB=y
+-BR2_PACKAGE_ALSA_UTILS=y
+-
+-#
+-# ALSA utils selection
+-#
+-# BR2_PACKAGE_ALSA_UTILS_ALSACONF is not set
+-BR2_PACKAGE_ALSA_UTILS_ALSACTL=y
+-BR2_PACKAGE_ALSA_UTILS_ALSAMIXER=y
+-# BR2_PACKAGE_ALSA_UTILS_AMIDI is not set
+-# BR2_PACKAGE_ALSA_UTILS_AMIXER is not set
+-# BR2_PACKAGE_ALSA_UTILS_APLAY is not set
+-# BR2_PACKAGE_ALSA_UTILS_ARECORD is not set
+-# BR2_PACKAGE_ALSA_UTILS_IECSET is not set
+-# BR2_PACKAGE_ALSA_UTILS_ACONNECT is not set
+-# BR2_PACKAGE_ALSA_UTILS_APLAYMIDI is not set
+-# BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI is not set
+-# BR2_PACKAGE_ALSA_UTILS_ASEQDUMP is not set
+-# BR2_PACKAGE_ALSA_UTILS_ASEQNET is not set
+-# BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST is not set
 -
 -#
 -# asterisk	- disabled (required openssl and mpg123)
@@ -726,7 +731,8 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_FLAC is not set
 -# BR2_PACKAGE_GSTREAMER is not set
 -# BR2_PACKAGE_LIBID3TAG is not set
--# BR2_PACKAGE_LIBMAD is not set
+-BR2_PACKAGE_LIBMAD=y
+-# BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
 -# BR2_PACKAGE_LIBMPD is not set
 -# BR2_PACKAGE_LIBOGG is not set
 -# BR2_PACKAGE_LIBSNDFILE is not set
@@ -734,13 +740,10 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_LIBVORBIS is not set
 -# BR2_PACKAGE_MADPLAY is not set
 -# BR2_PACKAGE_MPG123 is not set
--# BR2_PACKAGE_MPLAYER is not set
+-BR2_PACKAGE_MPLAYER=y
 -# BR2_PACKAGE_SPEEX is not set
 -# BR2_PACKAGE_FESTIVAL is not set
--
--#
--# taglib requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_TAGLIB is not set
 -# BR2_PACKAGE_VLC is not set
 -
 -#
@@ -750,7 +753,11 @@ index 72bd2cc..0000000
 -#
 -# text rendering libraries
 -#
--# BR2_PACKAGE_NCURSES is not set
+-BR2_PACKAGE_NCURSES=y
+-# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
+-# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
+-# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
+-# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
 -# BR2_PACKAGE_NEWT is not set
 -# BR2_PACKAGE_SLANG is not set
 -
@@ -765,11 +772,11 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_DIRECTFB is not set
 -# BR2_PACKAGE_FBDUMP is not set
 -# BR2_PACKAGE_IMAGEMAGICK is not set
--# BR2_PACKAGE_JPEG is not set
+-BR2_PACKAGE_JPEG=y
 -# BR2_PACKAGE_LIBART is not set
--# BR2_PACKAGE_LIBPNG is not set
--# BR2_PACKAGE_LIBUNGIF is not set
--# BR2_PACKAGE_LINUX_FUSION is not set
+-BR2_PACKAGE_LIBPNG=y
+-BR2_PACKAGE_LIBUNGIF=y
+-BR2_PACKAGE_LINUX_FUSION=y
 -# BR2_PACKAGE_PIXMAN is not set
 -# BR2_PACKAGE_SDL is not set
 -# BR2_PACKAGE_TIFF is not set
@@ -781,23 +788,86 @@ index 72bd2cc..0000000
 -#
 -# --> May be broken in busybox
 -#
--# BR2_PACKAGE_FBV is not set
--# BR2_PACKAGE_FBSET is not set
+-BR2_PACKAGE_FBV=y
+-BR2_PACKAGE_FBSET=y
 -
 -#
 -# other GUIs
 -#
+-BR2_PACKAGE_QT=y
+-# BR2_PACKAGE_QT_DEBUG is not set
+-BR2_PACKAGE_QT_SHARED=y
+-# BR2_PACKAGE_QT_STATIC is not set
+-# BR2_PACKAGE_QT_LICENSE_APPROVED is not set
+-# BR2_PACKAGE_QT_QT3SUPPORT is not set
+-BR2_PACKAGE_QT_GUI_MODULE=y
 -
 -#
--# qtopia4 requires a toolchain with C++ support enabled
+-# Pixel depths
 -#
+-
+-#
+-# Deselecting each option leads to Qt's default (8,16,32)
+-#
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_1 is not set
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_4 is not set
+-BR2_PACKAGE_QT_PIXEL_DEPTH_8=y
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_12 is not set
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_15 is not set
+-BR2_PACKAGE_QT_PIXEL_DEPTH_16=y
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_18 is not set
+-# BR2_PACKAGE_QT_PIXEL_DEPTH_24 is not set
+-BR2_PACKAGE_QT_PIXEL_DEPTH_32=y
+-BR2_PACKAGE_QT_GIF=y
+-BR2_PACKAGE_QT_LIBMNG=y
+-BR2_PACKAGE_QT_NOJPEG=y
+-# BR2_PACKAGE_QT_SYSTEMJPEG is not set
+-# BR2_PACKAGE_QT_QTJPEG is not set
+-BR2_PACKAGE_QT_NOPNG=y
+-# BR2_PACKAGE_QT_SYSTEMPNG is not set
+-# BR2_PACKAGE_QT_QTPNG is not set
+-BR2_PACKAGE_QT_NOTIFF=y
+-# BR2_PACKAGE_QT_SYSTEMTIFF is not set
+-# BR2_PACKAGE_QT_QTTIFF is not set
+-BR2_PACKAGE_QT_QTZLIB=y
+-# BR2_PACKAGE_QT_SYSTEMZLIB is not set
+-BR2_PACKAGE_QT_NOFREETYPE=y
+-# BR2_PACKAGE_QT_QTFREETYPE is not set
+-# BR2_PACKAGE_QT_SYSTEMFREETYPE is not set
+-BR2_PACKAGE_QT_EMB_PLATFORM="$(ARCH)"
+-# BR2_PACKAGE_QT_SQL_MODULE is not set
+-
+-#
+-# Graphics drivers
+-#
+-BR2_PACKAGE_QT_GFX_LINUXFB=y
+-# BR2_PACKAGE_QT_GFX_TRANSFORMED is not set
+-# BR2_PACKAGE_QT_GFX_QVFB is not set
+-# BR2_PACKAGE_QT_GFX_VNC is not set
+-# BR2_PACKAGE_QT_GFX_MULTISCREEN is not set
+-
+-#
+-# Mouse drivers
+-#
+-# BR2_PACKAGE_QT_MOUSE_PC is not set
+-# BR2_PACKAGE_QT_MOUSE_BUS is not set
+-# BR2_PACKAGE_QT_MOUSE_LINUXTP is not set
+-# BR2_PACKAGE_QT_MOUSE_YOPY is not set
+-# BR2_PACKAGE_QT_MOUSE_VR41XX is not set
+-# BR2_PACKAGE_QT_MOUSE_TSLIB is not set
+-# BR2_PACKAGE_QT_MOUSE_QVFB is not set
+-# BR2_PACKAGE_QT_PHONON is not set
+-BR2_PACKAGE_QT_XML=y
+-# BR2_PACKAGE_QT_XMLPATTERNS is not set
+-# BR2_PACKAGE_QT_SVG is not set
+-BR2_PACKAGE_QT_NETWORK=y
+-# BR2_PACKAGE_QT_WEBKIT is not set
+-# BR2_PACKAGE_QT_OPENSSL is not set
+-BR2_PACKAGE_QT_SCRIPT=y
+-# BR2_PACKAGE_QT_SCRIPTTOOLS is not set
 -BR2_PACKAGE_XSERVER_none=y
 -# BR2_PACKAGE_XSERVER_xorg is not set
 -# BR2_PACKAGE_XSERVER_tinyx is not set
--
--#
--# xorg requires a toolchain with LOCALE, LARGEFILE and WCHAR support
--#
 -
 -#
 -# X libraries and helper libraries
@@ -807,15 +877,12 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_PANGO is not set
 -# BR2_PACKAGE_LIBDRM is not set
 -# BR2_PACKAGE_LIBERATION is not set
--# BR2_PACKAGE_LIBGLIB2 is not set
+-BR2_PACKAGE_LIBGLIB2=y
 -# BR2_PACKAGE_OPENMOTIF is not set
 -# BR2_PACKAGE_FONTCONFIG is not set
 -# BR2_PACKAGE_FREETYPE is not set
 -# BR2_PACKAGE_TSLIB is not set
--
--#
--# webkit requires a toolchain with C++ support and WCHAR enabled
--#
+-# BR2_PACKAGE_WEBKIT is not set
 -
 -#
 -# X Window managers
@@ -831,7 +898,6 @@ index 72bd2cc..0000000
 -# dillo		- disabled (requires jpeg,libglib12,libgtk12,zlib,libpng and Xorg(7))
 -#
 -# BR2_PACKAGE_GQVIEW is not set
--# BR2_PACKAGE_GOB2 is not set
 -# BR2_PACKAGE_LEAFPAD is not set
 -
 -#
@@ -848,12 +914,10 @@ index 72bd2cc..0000000
 -#
 -# Compressors / decompressors
 -#
+-# BR2_PACKAGE_GZIP is not set
 -BR2_PACKAGE_LZO=y
 -# BR2_PACKAGE_LZOP is not set
--
--#
--# lzma requires a toolchain with C++ support
--#
+-# BR2_PACKAGE_LZMA is not set
 -# BR2_PACKAGE_LZMA_HOST is not set
 -BR2_PACKAGE_ZLIB=y
 -# BR2_PACKAGE_ZLIB_TARGET_HEADERS is not set
@@ -863,6 +927,7 @@ index 72bd2cc..0000000
 -#
 -# BR2_PACKAGE_IPKG is not set
 -# BR2_PACKAGE_PORTAGE is not set
+-# BR2_PACKAGE_RPM is not set
 -
 -#
 -# Interpreter languages / Scripting
@@ -881,10 +946,7 @@ index 72bd2cc..0000000
 -# BR2_PACKAGE_EZXML is not set
 -# BR2_PACKAGE_LIBXML2 is not set
 -# BR2_PACKAGE_LIBXSLT is not set
--
--#
--# xerces-c++ requires a toolchain with C++ support enabled
--#
+-# BR2_PACKAGE_XERCES is not set
 -
 -#
 -# Java
@@ -904,33 +966,28 @@ index 72bd2cc..0000000
 -#
 -# Target filesystem options
 -#
--BR2_ROOTFS_PREFIX="rootfs"
+-BR2_ROOTFS_PREFIX="atstk1002-rootfs"
 -
 -#
 -# filesystem for target device
 -#
--BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atngw100-base/device_table.txt"
+-BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atstk100x/device_table.txt"
+-BR2_ROOTFS_SKELETON_CUSTOM=y
+-BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atstk100x/target_skeleton"
 -# BR2_TARGET_ROOTFS_CRAMFS is not set
 -# BR2_TARGET_ROOTFS_CLOOP is not set
--# BR2_TARGET_ROOTFS_EXT2 is not set
--BR2_TARGET_ROOTFS_JFFS2=y
--# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
--# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
--# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
--BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
--# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
--# BR2_TARGET_ROOTFS_JFFS2_CUSTOM is not set
--BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
--BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
--# BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER is not set
--# BR2_JFFS2_TARGET_SREC is not set
--BR2_TARGET_ROOTFS_JFFS2_PAD=y
--BR2_TARGET_ROOTFS_JFFS2_PADSIZE=0x0
--# BR2_TARGET_ROOTFS_JFFS2_LE is not set
--BR2_TARGET_ROOTFS_JFFS2_BE=y
--# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
+-BR2_TARGET_ROOTFS_EXT2_INODES=0
+-BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
+-BR2_TARGET_ROOTFS_EXT2_SQUASH=y
 -
+-# BR2_TARGET_ROOTFS_EXT2_NONE is not set
+-# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
+-BR2_TARGET_ROOTFS_EXT2_BZIP2=y
+-# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
 -
+-# BR2_TARGET_ROOTFS_JFFS2 is not set
 -# BR2_TARGET_ROOTFS_UBIFS is not set
 -# BR2_TARGET_ROOTFS_SQUASHFS is not set
 -BR2_TARGET_ROOTFS_TAR=y
@@ -947,8 +1004,9 @@ index 72bd2cc..0000000
 -#
 -# bootloader for target device
 -#
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="atngw100"
++# U-Boot
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
 -# BR2_TARGET_UBOOT_2009_03 is not set
 -# BR2_TARGET_UBOOT_2009_01 is not set
 -BR2_TARGET_UBOOT_2008_10=y
@@ -956,824 +1014,6 @@ index 72bd2cc..0000000
 -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
 -# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
 -# BR2_TARGET_UBOOT_TOOL_ENV is not set
--
--#
--# Kernel
--#
--# BR2_KERNEL_none is not set
--BR2_KERNEL_LINUX_ADVANCED=y
--# BR2_KERNEL_LINUX is not set
--BR2_PACKAGE_LINUX=y
--BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-2.6.22.5.config"
--BR2_PACKAGE_LINUX_FORMAT="uImage"
--BR2_KERNEL_CURRENT_VERSION="2.6.29.2"
--BR2_KERNEL_LATEST_2_6_29="2"
--BR2_KERNEL_LATEST_2_6_28="7"
--BR2_KERNEL_LATEST_2_6_27="13"
--BR2_KERNEL_LATEST_2_6_26="8"
--BR2_KERNEL_LATEST_2_6_25="19"
--BR2_KERNEL_LATEST_2_6_24="7"
--BR2_KERNEL_LATEST_2_6_23="17"
--BR2_KERNEL_LATEST_2_6_22="19"
--BR2_KERNEL_LATEST_2_6_21="7"
--BR2_KERNEL_LATEST_2_6_20="21"
--BR2_KERNEL_THIS_VERSION="2.6.29"
--BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6"
--BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
--BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
--# BR2_LINUX_2_6_STABLE is not set
--BR2_LINUX_2_6_29=y
--# BR2_LINUX_2_6_28 is not set
--# BR2_LINUX_2_6_27 is not set
--# BR2_LINUX_2_6_26 is not set
--# BR2_LINUX_2_6_25 is not set
--# BR2_LINUX_2_6_24 is not set
--# BR2_LINUX_2_6_23 is not set
--# BR2_LINUX_2_6_22 is not set
--# BR2_LINUX_2_6_21 is not set
--# BR2_LINUX_2_6_20 is not set
--# BR2_LINUX26_CUSTOM is not set
--
--#
--# Patches
--#
--# BR2_KERNEL_ADD_KERNEL_ORG_PATCH is not set
--# BR2_KERNEL_ARCH_PATCH_ENABLED is not set
--BR2_LINUX_BSP_PATCH=""
--BR2_KERNEL_BASE=y
--BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
--BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
--
--#
--# Linux Kernel Configuration
--#
--BR2_PACKAGE_LINUX_USE_KCONFIG=y
--# BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
--# BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_LINUX_BIN_BZIMAGE is not set
--BR2_LINUX_BIN_UIMAGE=y
--# BR2_LINUX_BIN_VMLINUX is not set
--# BR2_LINUX_BIN_ZIMAGE is not set
--# BR2_LINUX_BIN_CUSTOM is not set
--
--#
--# Destinations for linux kernel binaries
--#
--BR2_LINUX_COPYTO_ROOTFS=y
--# BR2_LINUX_COPYTO_TFTPBOOT is not set
--BR2_LINUX_COPYTO=""
--# BR2_LINUX_COPY_CONFIGURATION is not set
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index 08d111e..85aa94e 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -1,815 +1,25 @@
--#
--# Automatically generated make config: don't edit
--# Mon May 17 00:57:05 2010
--#
--BR2_HAVE_DOT_CONFIG=y
--BR2_VERSION="2010.05-rc2"
--# BR2_alpha is not set
--# BR2_arm is not set
--# BR2_armeb is not set
-+# Architecture
- BR2_avr32=y
--# BR2_cris is not set
--# BR2_ia64 is not set
--# BR2_i386 is not set
--# BR2_m68k is not set
--# BR2_mips is not set
--# BR2_mipsel is not set
--# BR2_powerpc is not set
--# BR2_sh is not set
--# BR2_sh64 is not set
--# BR2_sparc is not set
--# BR2_sparc64 is not set
--# BR2_x86_64 is not set
--# BR2_xtensa is not set
--BR2_ARCH="avr32"
--BR2_ENDIAN="BIG"
- 
--#
--# Target options
--#
--
--#
--# Preset Devices
--#
--BR2_BOARD_NAME="atngw100"
--BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
--BR2_TARGET_ATMEL=y
--
--#
--# Atmel AVR32 Specific Device Support
--#
--BR2_TARGET_AVR32=y
--BR2_TARGET_AT32AP7000=y
--# BR2_TARGET_AT32AP7001 is not set
--# BR2_TARGET_AT32AP7002 is not set
--# BR2_TARGET_AT32AP7200 is not set
--
--#
--# Development board support
--#
--# BR2_TARGET_AVR32_ATSTK1002 is not set
--# BR2_TARGET_AVR32_ATSTK1005 is not set
--BR2_TARGET_AVR32_ATNGW100=y
--# BR2_TARGET_AVR32_ATNGW100_BASE is not set
--
--#
--# Package support
--#
--
--#
--# Secondary locations
--#
--# BR2_TARGET_VALKA is not set
--
--#
--# Build options
--#
--
--#
--# Commands
--#
--BR2_WGET="wget --passive-ftp --retry-connrefused --waitretry=10"
--BR2_SVN="svn"
--BR2_BZR_CO="bzr co"
--BR2_BZR_UP="bzr up"
--BR2_GIT="git"
--BR2_ZCAT="zcat"
--BR2_BZCAT="bzcat"
--BR2_TAR_OPTIONS=""
--BR2_DL_DIR="$(TOPDIR)/dl"
--BR2_STAGING_DIR="$(BASE_DIR)/staging"
--
--#
--# Mirrors and Download locations
--#
--BR2_PRIMARY_SITE=""
--BR2_BACKUP_SITE="http://sources.buildroot.net/"
--BR2_SOURCEFORGE_MIRROR="easynews"
--BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
--BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
--BR2_DEBIAN_MIRROR="http://ftp.debian.org"
--BR2_JLEVEL=2
--# BR2_DEPRECATED is not set
--# BR2_ENABLE_DEBUG is not set
--BR2_STRIP_strip=y
--# BR2_STRIP_sstrip is not set
--# BR2_STRIP_none is not set
--# BR2_OPTIMIZE_0 is not set
--# BR2_OPTIMIZE_1 is not set
--# BR2_OPTIMIZE_2 is not set
--# BR2_OPTIMIZE_3 is not set
--BR2_OPTIMIZE_S=y
--# BR2_PREFER_STATIC_LIB is not set
--# BR2_HAVE_DOCUMENTATION is not set
--# BR2_HAVE_DEVFILES is not set
--
--#
--# Advanced
--#
--
--#
--# Toolchain
--#
--BR2_TOOLCHAIN_BUILDROOT=y
--# BR2_TOOLCHAIN_EXTERNAL is not set
--
--#
--# Kernel Header Options
--#
--# BR2_KERNEL_HEADERS_2_6_27 is not set
--# BR2_KERNEL_HEADERS_2_6_28 is not set
--# BR2_KERNEL_HEADERS_2_6_29 is not set
--# BR2_KERNEL_HEADERS_2_6_30 is not set
--# BR2_KERNEL_HEADERS_2_6_31 is not set
--# BR2_KERNEL_HEADERS_2_6_32 is not set
--BR2_KERNEL_HEADERS_2_6_33=y
--# BR2_KERNEL_HEADERS_VERSION is not set
--# BR2_KERNEL_HEADERS_SNAP is not set
--BR2_DEFAULT_KERNEL_HEADERS="2.6.33.3"
--
--#
--# uClibc Options
--#
--# BR2_UCLIBC_VERSION_0_9_29 is not set
--BR2_UCLIBC_VERSION_0_9_30=y
--# BR2_UCLIBC_VERSION_0_9_31 is not set
--# BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_VERSION_STRING="0.9.30.3"
--BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
--# BR2_PTHREAD_DEBUG is not set
--# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
--
--#
--# Binutils Options
--#
--# BR2_BINUTILS_VERSION_2_17 is not set
--# BR2_BINUTILS_VERSION_2_18 is not set
--BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
--# BR2_BINUTILS_VERSION_2_19 is not set
--# BR2_BINUTILS_VERSION_2_19_1 is not set
--# BR2_BINUTILS_VERSION_2_20 is not set
--# BR2_BINUTILS_VERSION_2_20_1 is not set
--BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
--BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
--
--#
--# GCC Options
--#
--# BR2_GCC_VERSION_4_1_2 is not set
--# BR2_GCC_VERSION_4_2_1 is not set
--# BR2_GCC_VERSION_4_2_2 is not set
--BR2_GCC_VERSION_4_2_2_AVR32_2_1_5=y
--# BR2_GCC_VERSION_4_2_3 is not set
--# BR2_GCC_VERSION_4_2_4 is not set
--# BR2_GCC_VERSION_4_3_2 is not set
--# BR2_GCC_VERSION_4_3_3 is not set
--# BR2_GCC_VERSION_4_3_4 is not set
--# BR2_GCC_VERSION_4_4_X is not set
--# BR2_GCC_VERSION_SNAP is not set
--BR2_GCC_SUPPORTS_SYSROOT=y
--BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
--BR2_TOOLCHAIN_SYSROOT=y
--BR2_EXTRA_GCC_CONFIG_OPTIONS=""
--BR2_GCC_SHARED_LIBGCC=y
--BR2_GCC_ENABLE_TLS=y
--
--#
--# Ccache Options
--#
--BR2_CCACHE=y
--BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
--
--#
--# Gdb Options
--#
--# BR2_PACKAGE_GDB is not set
--
--#
--# Gdb debugger for the target needs WCHAR support in toolchain
--#
--BR2_PACKAGE_GDB_SERVER=y
--BR2_PACKAGE_GDB_HOST=y
--# BR2_GDB_VERSION_6_6 is not set
--# BR2_GDB_VERSION_6_7_1 is not set
--BR2_GDB_VERSION_6_7_1_AVR32_2_1_5=y
--# BR2_GDB_VERSION_6_8 is not set
--# BR2_GDB_VERSION_7_0_1 is not set
--# BR2_GDB_VERSION_7_1 is not set
--BR2_GDB_VERSION="6.7.1-avr32-2.1.5"
--
--#
--# Common Toolchain Options
--#
--BR2_LARGEFILE=y
--BR2_INET_IPV6=y
--BR2_INET_RPC=y
--BR2_ENABLE_LOCALE=y
--# BR2_ENABLE_LOCALE_PURGE is not set
--BR2_USE_WCHAR=y
--BR2_PREFER_SOFT_FLOAT=y
--BR2_SOFT_FLOAT=y
--BR2_USE_SSP=y
--# BR2_PTHREADS_NONE is not set
--# BR2_PTHREADS is not set
--BR2_PTHREADS_OLD=y
--# BR2_PTHREADS_NATIVE is not set
--# BR2_PROGRAM_INVOCATION is not set
--BR2_GCC_CROSS_CXX=y
--BR2_INSTALL_LIBSTDCPP=y
--BR2_TARGET_OPTIMIZATION="-Os -pipe"
--# BR2_MKLIBS is not set
--# BR2_PACKAGE_SSTRIP_TARGET is not set
--# BR2_PACKAGE_SSTRIP_HOST is not set
--BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
--
--#
--# Package Selection for the target
--#
--BR2_PACKAGE_BUSYBOX=y
--# BR2_BUSYBOX_VERSION_1_12_X is not set
--# BR2_BUSYBOX_VERSION_1_13_X is not set
--# BR2_BUSYBOX_VERSION_1_14_X is not set
--# BR2_BUSYBOX_VERSION_1_15_X is not set
--BR2_BUSYBOX_VERSION_1_16_X=y
--# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
--BR2_BUSYBOX_VERSION="1.16.1"
--BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
--BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
--# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
--# BR2_PACKAGE_CUSTOMIZE is not set
--
--#
--# Audio and video libraries and applications
--#
--# BR2_PACKAGE_ALSA_LIB is not set
--# BR2_PACKAGE_AUMIX is not set
--# BR2_PACKAGE_FLAC is not set
--# BR2_PACKAGE_GSTREAMER is not set
--# BR2_PACKAGE_LIBCDAUDIO is not set
--# BR2_PACKAGE_LIBDVDREAD is not set
--# BR2_PACKAGE_LIBDVDNAV is not set
--# BR2_PACKAGE_LIBID3TAG is not set
--# BR2_PACKAGE_LIBMAD is not set
--# BR2_PACKAGE_LIBMMS is not set
--# BR2_PACKAGE_LIBMPD is not set
--# BR2_PACKAGE_LIBOGG is not set
--# BR2_PACKAGE_LIBSNDFILE is not set
--# BR2_PACKAGE_LIBTHEORA is not set
--# BR2_PACKAGE_LIBVORBIS is not set
--# BR2_PACKAGE_MADPLAY is not set
--# BR2_PACKAGE_MPG123 is not set
--# BR2_PACKAGE_MPLAYER is not set
--# BR2_PACKAGE_SPEEX is not set
--# BR2_PACKAGE_SWFDEC is not set
--# BR2_PACKAGE_FESTIVAL is not set
--# BR2_PACKAGE_TAGLIB is not set
--# BR2_PACKAGE_TREMOR is not set
--
--#
--# Compressors and decompressors
--#
--# BR2_PACKAGE_LZOP is not set
--# BR2_PACKAGE_LZMA is not set
--
--#
--# Debugging, profiling and benchmark
--#
--# BR2_PACKAGE_DMALLOC is not set
--# BR2_PACKAGE_KEXEC is not set
--# BR2_PACKAGE_LMBENCH is not set
--# BR2_PACKAGE_LSOF is not set
--# BR2_PACKAGE_MEMSTAT is not set
--# BR2_PACKAGE_NETPERF is not set
--# BR2_PACKAGE_OPROFILE is not set
--BR2_PACKAGE_STRACE=y
--
--#
--# Development tools
--#
--# BR2_PACKAGE_AUTOCONF is not set
--# BR2_PACKAGE_AUTOMAKE is not set
--# BR2_PACKAGE_BISON is not set
--# BR2_PACKAGE_BSDIFF is not set
--# BR2_PACKAGE_CVS is not set
--# BR2_PACKAGE_DISTCC is not set
--# BR2_PACKAGE_FAKEROOT is not set
--# BR2_PACKAGE_FLEX is not set
--
--#
--# native toolchain needs development files in target filesystem
--#
--BR2_PACKAGE_GETTEXT=y
--BR2_PACKAGE_LIBINTL=y
--# BR2_PACKAGE_LIBGMP is not set
--# BR2_PACKAGE_GPERF is not set
--# BR2_PACKAGE_INTLTOOL is not set
--# BR2_PACKAGE_MAKE is not set
--# BR2_PACKAGE_LIBMPFR is not set
--# BR2_PACKAGE_LIBTOOL is not set
--# BR2_PACKAGE_M4 is not set
--# BR2_PACKAGE_PKG_CONFIG is not set
--
--#
--# Games
--#
--# BR2_PACKAGE_GNUCHESS is not set
--# BR2_PACKAGE_PRBOOM is not set
--
--#
--# Graphic libraries and applications (graphic/text)
--#
--
--#
--# graphic libraries
--#
--# BR2_PACKAGE_DIRECTFB is not set
--# BR2_PACKAGE_FBDUMP is not set
--# BR2_PACKAGE_FBV is not set
--# BR2_PACKAGE_IMAGEMAGICK is not set
--# BR2_PACKAGE_LINUX_FUSION is not set
--# BR2_PACKAGE_SDL is not set
--
--#
--# other GUIs
--#
--# BR2_PACKAGE_QT is not set
--# BR2_PACKAGE_XORG7 is not set
--
--#
--# X libraries and helper libraries
--#
--# BR2_PACKAGE_LIBERATION is not set
--
--#
--# X Window managers
--#
--
--#
--# X applications
--#
--# BR2_PACKAGE_GOB2 is not set
--# BR2_PACKAGE_SYLPHEED is not set
--
--#
--# Hardware handling
--#
--# BR2_PACKAGE_CDRKIT is not set
--# BR2_PACKAGE_CRAMFS is not set
--
--#
--# dbus not available (need expat or libxml2)
--#
--# BR2_PACKAGE_DMRAID is not set
--# BR2_PACKAGE_DOSFSTOOLS is not set
--# BR2_PACKAGE_E2FSPROGS is not set
--# BR2_PACKAGE_EEPROG is not set
--# BR2_PACKAGE_FCONFIG is not set
--# BR2_PACKAGE_FIS is not set
--# BR2_PACKAGE_GADGETFS_TEST is not set
--# BR2_PACKAGE_GENEXT2FS is not set
--# BR2_PACKAGE_GENROMFS is not set
--# BR2_PACKAGE_GVFS is not set
--# BR2_PACKAGE_HAL is not set
--# BR2_PACKAGE_HWDATA is not set
--# BR2_PACKAGE_I2C_TOOLS is not set
--# BR2_PACKAGE_INPUT_TOOLS is not set
--# BR2_PACKAGE_IOSTAT is not set
--# BR2_PACKAGE_LM_SENSORS is not set
--# BR2_PACKAGE_LVM2 is not set
--# BR2_PACKAGE_MAKEDEVS is not set
--# BR2_PACKAGE_MDADM is not set
--# BR2_PACKAGE_MEMTESTER is not set
--BR2_PACKAGE_MTD=y
--
--#
--# MTD tools selection
--#
--# BR2_PACKAGE_MTD_DOCFDISK is not set
--# BR2_PACKAGE_MTD_DOC_LOADBIOS is not set
--BR2_PACKAGE_MTD_FLASHCP=y
--BR2_PACKAGE_MTD_FLASH_ERASE=y
--BR2_PACKAGE_MTD_FLASH_ERASEALL=y
--BR2_PACKAGE_MTD_FLASH_INFO=y
--# BR2_PACKAGE_MTD_FLASH_LOCK is not set
--# BR2_PACKAGE_MTD_FLASH_OTP_DUMP is not set
--# BR2_PACKAGE_MTD_FLASH_OTP_INFO is not set
--# BR2_PACKAGE_MTD_FLASH_UNLOCK is not set
--# BR2_PACKAGE_MTD_FTL_CHECK is not set
--# BR2_PACKAGE_MTD_FTL_FORMAT is not set
--# BR2_PACKAGE_MTD_JFFS2DUMP is not set
--# BR2_PACKAGE_MTD_MKFSJFFS2 is not set
--BR2_PACKAGE_MTD_MTD_DEBUG=y
--# BR2_PACKAGE_MTD_NANDDUMP is not set
--BR2_PACKAGE_MTD_NANDTEST=y
--# BR2_PACKAGE_MTD_NANDWRITE is not set
--# BR2_PACKAGE_MTD_NFTLDUMP is not set
--# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
--# BR2_PACKAGE_MTD_RECV_IMAGE is not set
--# BR2_PACKAGE_MTD_RFDDUMP is not set
--# BR2_PACKAGE_MTD_RFDFORMAT is not set
--# BR2_PACKAGE_MTD_SERVE_IMAGE is not set
--# BR2_PACKAGE_MTD_SUMTOOL is not set
--BR2_PACKAGE_MTD_MTDINFO=y
--BR2_PACKAGE_MTD_UBIATTACH=y
--BR2_PACKAGE_MTD_UBICRC32=y
--BR2_PACKAGE_MTD_UBIDETACH=y
--BR2_PACKAGE_MTD_UBIFORMAT=y
--BR2_PACKAGE_MTD_UBIMKVOL=y
--BR2_PACKAGE_MTD_UBINFO=y
--BR2_PACKAGE_MTD_UBINIZE=y
--BR2_PACKAGE_MTD_UBIRENAME=y
--BR2_PACKAGE_MTD_UBIRMVOL=y
--BR2_PACKAGE_MTD_UBIRSVOL=y
--BR2_PACKAGE_MTD_UBIUPDATEVOL=y
--# BR2_PACKAGE_NTFS_3G is not set
--# BR2_PACKAGE_NTFSPROGS is not set
--# BR2_PACKAGE_PCIUTILS is not set
--# BR2_PACKAGE_SETSERIAL is not set
--# BR2_PACKAGE_SMARTMONTOOLS is not set
--# BR2_PACKAGE_SQUASHFS is not set
--# BR2_PACKAGE_SYSSTAT is not set
--# BR2_PACKAGE_USB_MODESWITCH is not set
--# BR2_PACKAGE_USBMOUNT is not set
--# BR2_PACKAGE_USBUTILS is not set
--# BR2_PACKAGE_WIPE is not set
--# BR2_PACKAGE_XFSPROGS is not set
--
--#
--# Interpreter languages and scripting
--#
--BR2_PACKAGE_HASERL=y
--# BR2_PACKAGE_HASERL_WITH_LUA is not set
--# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
--BR2_PACKAGE_HASERL_VERSION_0_9_X=y
--BR2_PACKAGE_HASERL_VERSION="0.9.26"
--# BR2_PACKAGE_LUA is not set
--# BR2_PACKAGE_MICROPERL is not set
--# BR2_PACKAGE_PHP is not set
--# BR2_PACKAGE_PYTHON is not set
--# BR2_PACKAGE_RUBY is not set
--# BR2_PACKAGE_TCL is not set
--
--#
--# Libraries
--#
--
--#
--# Compression and decompression
--#
--# BR2_PACKAGE_LIBARCHIVE is not set
--BR2_PACKAGE_LZO=y
--BR2_PACKAGE_ZLIB=y
--
--#
--# Crypto
--#
--# BR2_PACKAGE_BEECRYPT is not set
--# BR2_PACKAGE_LIBGCRYPT is not set
--# BR2_PACKAGE_LIBGPG_ERROR is not set
--# BR2_PACKAGE_OPENSSL is not set
--
--#
--# Database
--#
--# BR2_PACKAGE_BERKELEYDB is not set
--# BR2_PACKAGE_MYSQL_CLIENT is not set
--# BR2_PACKAGE_SQLITE is not set
--
--#
--# Filesystem
--#
--# BR2_PACKAGE_GAMIN is not set
--# BR2_PACKAGE_LIBCONFIG is not set
--# BR2_PACKAGE_LIBCONFUSE is not set
--# BR2_PACKAGE_LIBFUSE is not set
--# BR2_PACKAGE_LIBLOCKFILE is not set
--# BR2_PACKAGE_LIBSYSFS is not set
--
--#
--# Graphics
--#
--# BR2_PACKAGE_ATK is not set
--# BR2_PACKAGE_CAIRO is not set
--# BR2_PACKAGE_FONTCONFIG is not set
--# BR2_PACKAGE_FREETYPE is not set
--# BR2_PACKAGE_JPEG is not set
--# BR2_PACKAGE_LIBART is not set
--# BR2_PACKAGE_LIBPNG is not set
--# BR2_PACKAGE_LIBUNGIF is not set
--# BR2_PACKAGE_PANGO is not set
--# BR2_PACKAGE_PIXMAN is not set
--# BR2_PACKAGE_TIFF is not set
--# BR2_PACKAGE_WEBKIT is not set
--
--#
--# Hardware handling
--#
--# BR2_PACKAGE_LIBAIO is not set
--# BR2_PACKAGE_LIBRAW1394 is not set
--# BR2_PACKAGE_TSLIB is not set
--# BR2_PACKAGE_LIBUSB is not set
--
--#
--# Java
--#
--# BR2_PACKAGE_CLASSPATH is not set
--
--#
--# Networking
--#
--# BR2_PACKAGE_LIBCGI is not set
--# BR2_PACKAGE_LIBCGICC is not set
--# BR2_PACKAGE_LIBCURL is not set
--# BR2_PACKAGE_LIBDNET is not set
--# BR2_PACKAGE_LIBEXOSIP2 is not set
--# BR2_PACKAGE_LIBIDN is not set
--# BR2_PACKAGE_LIBMICROHTTPD is not set
--# BR2_PACKAGE_NEON is not set
--# BR2_PACKAGE_LIBNL is not set
--# BR2_PACKAGE_LIBPCAP is not set
--# BR2_PACKAGE_LIBOSIP2 is not set
--# BR2_PACKAGE_LIBRSYNC is not set
--# BR2_PACKAGE_LIBSOUP is not set
--# BR2_PACKAGE_LIBUPNP is not set
--
--#
--# Other
--#
--# BR2_PACKAGE_LIBATOMIC_OPS is not set
--# BR2_PACKAGE_LIBCAP is not set
--BR2_PACKAGE_LIBDAEMON=y
--# BR2_PACKAGE_LIBELF is not set
--# BR2_PACKAGE_LIBEVENT is not set
--BR2_PACKAGE_LIBGLIB2=y
--# BR2_PACKAGE_LIBOIL is not set
--# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
--
--#
--# Text and terminal handling
--#
--# BR2_PACKAGE_ENCHANT is not set
--# BR2_PACKAGE_ICU is not set
--BR2_PACKAGE_LIBICONV=y
--# BR2_PACKAGE_NCURSES is not set
--# BR2_PACKAGE_NEWT is not set
--# BR2_PACKAGE_PCRE is not set
--# BR2_PACKAGE_POPT is not set
--# BR2_PACKAGE_READLINE is not set
--# BR2_PACKAGE_SLANG is not set
--
--#
--# XML
--#
--# BR2_PACKAGE_EXPAT is not set
--# BR2_PACKAGE_EZXML is not set
--# BR2_PACKAGE_LIBXML_PARSER_PERL is not set
--# BR2_PACKAGE_LIBXML2 is not set
--# BR2_PACKAGE_LIBXSLT is not set
--# BR2_PACKAGE_XERCES is not set
--
--#
--# Miscellaneous
--#
--# BR2_PACKAGE_SHARED_MIME_INFO is not set
--
--#
--# Networking applications
--#
--# BR2_PACKAGE_ARGUS is not set
--BR2_PACKAGE_AVAHI=y
--BR2_PACKAGE_AVAHI_AUTOIPD=y
--# BR2_PACKAGE_AVAHI_DAEMON is not set
--# BR2_PACKAGE_AXEL is not set
--# BR2_PACKAGE_BIND is not set
--# BR2_PACKAGE_BMON is not set
--BR2_PACKAGE_BRIDGE=y
--# BR2_PACKAGE_CTORRENT is not set
--# BR2_PACKAGE_CUPS is not set
--BR2_PACKAGE_DNSMASQ=y
--BR2_PACKAGE_DNSMASQ_TFTP=y
--BR2_PACKAGE_DNSMASQ_DHCP=y
--# BR2_PACKAGE_DNSMASQ_IDN is not set
--BR2_PACKAGE_DROPBEAR=y
--# BR2_PACKAGE_ETHTOOL is not set
--# BR2_PACKAGE_HOSTAPD is not set
--# BR2_PACKAGE_IFPLUGD is not set
--# BR2_PACKAGE_IPERF is not set
--# BR2_PACKAGE_IPROUTE2 is not set
--# BR2_PACKAGE_IPSEC_TOOLS is not set
--BR2_PACKAGE_IPTABLES=y
--# BR2_PACKAGE_IW is not set
--# BR2_PACKAGE_KISMET is not set
--# BR2_PACKAGE_L2TP is not set
--# BR2_PACKAGE_LINKS is not set
--BR2_PACKAGE_LRZSZ=y
--# BR2_PACKAGE_MIIDIAG is not set
--# BR2_PACKAGE_MROUTED is not set
--# BR2_PACKAGE_MUTT is not set
--BR2_PACKAGE_NBD=y
--BR2_NBD_CLIENT=y
--# BR2_NBD_SERVER is not set
--BR2_PACKAGE_NCFTP=y
--
--#
--# ncFTP tools selection
--#
--# BR2_PACKAGE_NCFTP_GET is not set
--# BR2_PACKAGE_NCFTP_PUT is not set
--# BR2_PACKAGE_NCFTP_LS is not set
--# BR2_PACKAGE_NCFTP_BATCH is not set
--# BR2_PACKAGE_NCFTP_BOOKMARKS is not set
--# BR2_PACKAGE_NETPLUG is not set
--# BR2_PACKAGE_NETSNMP is not set
--# BR2_PACKAGE_NETSTAT_NAT is not set
--# BR2_PACKAGE_NFS_UTILS is not set
--BR2_PACKAGE_NTP=y
--# BR2_PACKAGE_NTP_SNTP is not set
--# BR2_PACKAGE_OLSR is not set
--# BR2_PACKAGE_OPENNTPD is not set
--# BR2_PACKAGE_OPENSSH is not set
--# BR2_PACKAGE_OPENVPN is not set
--BR2_PACKAGE_PORTMAP=y
--# BR2_PACKAGE_PPPD is not set
--# BR2_PACKAGE_RADVD is not set
--# BR2_PACKAGE_RP_PPPOE is not set
--# BR2_PACKAGE_PPTP_LINUX is not set
--BR2_PACKAGE_PROFTPD=y
--# BR2_PACKAGE_QUAGGA is not set
--# BR2_PACKAGE_RSYNC is not set
--# BR2_PACKAGE_SAMBA is not set
--# BR2_PACKAGE_SER2NET is not set
--# BR2_PACKAGE_SOCAT is not set
--# BR2_PACKAGE_SPAWN_FCGI is not set
--# BR2_PACKAGE_SQUID is not set
--# BR2_PACKAGE_STUNNEL is not set
--# BR2_PACKAGE_TCPDUMP is not set
--# BR2_PACKAGE_DHCPDUMP is not set
--# BR2_PACKAGE_TCPREPLAY is not set
--# BR2_PACKAGE_TN5250 is not set
--# BR2_PACKAGE_TTCP is not set
--# BR2_PACKAGE_UDPCAST is not set
--# BR2_PACKAGE_VPNC is not set
--# BR2_PACKAGE_VSFTPD is not set
--# BR2_PACKAGE_VTUN is not set
--# BR2_PACKAGE_WEBIF is not set
--BR2_PACKAGE_WIRELESS_TOOLS=y
--# BR2_PACKAGE_WPA_SUPPLICANT is not set
--
--#
--# Package managers
--#
--# BR2_PACKAGE_IPKG is not set
--# BR2_PACKAGE_PORTAGE is not set
--
--#
--# Shell and utilities
--#
--# BR2_PACKAGE_AT is not set
--# BR2_PACKAGE_DIALOG is not set
--# BR2_PACKAGE_FILE is not set
--# BR2_PACKAGE_LOCKFILE_PROGS is not set
--# BR2_PACKAGE_LOGROTATE is not set
--# BR2_PACKAGE_SCREEN is not set
--# BR2_PACKAGE_SUDO is not set
--# BR2_PACKAGE_WHICH is not set
--
--#
--# System tools
--#
--
--#
--# Text editors and viewers
--#
--# BR2_PACKAGE_ED is not set
--# BR2_PACKAGE_NANO is not set
--# BR2_PACKAGE_UEMACS is not set
--
--#
--# Target filesystem options
--#
--BR2_ROOTFS_POST_BUILD_SCRIPT=""
--BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atngw100/device_table.txt"
--BR2_ROOTFS_SKELETON_CUSTOM=y
--BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atngw100/target_skeleton"
--# BR2_TARGET_ROOTFS_CRAMFS is not set
--# BR2_TARGET_ROOTFS_CLOOP is not set
-+# Filesystems
- # BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_JFFS2=y
--# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
--# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
--# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K is not set
--# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
- BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
--# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
--# BR2_TARGET_ROOTFS_JFFS2_CUSTOM is not set
- BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
- BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
- BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
--# BR2_JFFS2_TARGET_SREC is not set
--# BR2_TARGET_ROOTFS_JFFS2_PAD is not set
--# BR2_TARGET_ROOTFS_JFFS2_LE is not set
- BR2_TARGET_ROOTFS_JFFS2_BE=y
--# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--# BR2_TARGET_ROOTFS_UBIFS is not set
--# BR2_TARGET_ROOTFS_SQUASHFS is not set
- BR2_TARGET_ROOTFS_TAR=y
- BR2_TARGET_ROOTFS_TAR_NONE=y
--# BR2_TARGET_ROOTFS_TAR_GZIP is not set
--# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
--# BR2_TARGET_ROOTFS_TAR_LZMA is not set
--BR2_TARGET_ROOTFS_TAR_OPTIONS=""
--# BR2_TARGET_ROOTFS_CPIO is not set
--# BR2_TARGET_ROOTFS_INITRAMFS is not set
--# BR2_TARGET_ROOTFS_ROMFS is not set
- 
--#
--# Bootloaders
--#
-+# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="atngw100"
--# BR2_TARGET_UBOOT_2010_03 is not set
--# BR2_TARGET_UBOOT_2009_11 is not set
--BR2_TARGET_UBOOT_2009_08=y
--BR2_UBOOT_VERSION="2009.08"
--BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
--# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
--# BR2_TARGET_UBOOT_TOOL_ENV is not set
--BR2_TARGET_UBOOT_NETWORK=y
--BR2_TARGET_UBOOT_SERVERIP="10.175.196.221"
--BR2_TARGET_UBOOT_IPADDR="10.175.196.18"
--BR2_TARGET_UBOOT_GATEWAY="10.175.196.1"
--BR2_TARGET_UBOOT_NETMASK="255.255.255.0"
--BR2_TARGET_UBOOT_ETHADDR="04:25:fe:ed:00:18"
--BR2_TARGET_UBOOT_ETH1ADDR=""
 +BR2_TARGET_UBOOT_2010_09=y
  
 -#
@@ -1783,29 +1023,36 @@ index 08d111e..85aa94e 100644
 -BR2_KERNEL_LINUX_ADVANCED=y
 -# BR2_KERNEL_LINUX is not set
 -BR2_PACKAGE_LINUX=y
--BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-2.6.29.2.config"
+-BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
 -BR2_PACKAGE_LINUX_FORMAT="uImage"
--BR2_KERNEL_CURRENT_VERSION="2.6.33.2"
--BR2_KERNEL_LATEST_2_6_33="2"
--BR2_KERNEL_LATEST_2_6_32="11"
--BR2_KERNEL_LATEST_2_6_31="13"
--BR2_KERNEL_LATEST_2_6_30="10"
--BR2_KERNEL_LATEST_2_6_29="6"
--BR2_KERNEL_LATEST_2_6_28="10"
--BR2_KERNEL_LATEST_2_6_27="46"
--BR2_KERNEL_PATCH_LEVEL="6"
--BR2_KERNEL_NEXT_VERSION="2.6.30"
--BR2_KERNEL_THIS_VERSION="2.6.29"
+-BR2_KERNEL_CURRENT_VERSION="2.6.28.7"
+-BR2_KERNEL_LATEST_2_6_28="7"
+-BR2_KERNEL_LATEST_2_6_27="13"
+-BR2_KERNEL_LATEST_2_6_26="8"
+-BR2_KERNEL_LATEST_2_6_25="19"
+-BR2_KERNEL_LATEST_2_6_24="7"
+-BR2_KERNEL_LATEST_2_6_23="17"
+-BR2_KERNEL_LATEST_2_6_22="19"
+-BR2_KERNEL_LATEST_2_6_21="7"
+-BR2_KERNEL_LATEST_2_6_20="21"
+-BR2_KERNEL_PATCH_LEVEL="13"
+-BR2_KERNEL_NEXT_VERSION="2.6.28"
+-BR2_KERNEL_THIS_VERSION="2.6.27"
 -BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6"
+-BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
+-BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
 -BR2_KERNEL_PATCH_SITE="$(BR2_KERNEL_SITE)"
 -# BR2_LINUX_2_6_STABLE is not set
--# BR2_LINUX_2_6_33 is not set
--# BR2_LINUX_2_6_32 is not set
--# BR2_LINUX_2_6_31 is not set
--# BR2_LINUX_2_6_30 is not set
--BR2_LINUX_2_6_29=y
 -# BR2_LINUX_2_6_28 is not set
--# BR2_LINUX_2_6_27 is not set
+-BR2_LINUX_2_6_27=y
+-# BR2_LINUX_2_6_26 is not set
+-# BR2_LINUX_2_6_25 is not set
+-# BR2_LINUX_2_6_24 is not set
+-# BR2_LINUX_2_6_23 is not set
+-# BR2_LINUX_2_6_22 is not set
+-# BR2_LINUX_2_6_21 is not set
+-# BR2_LINUX_2_6_20 is not set
+-# BR2_LINUX_2_6_29 is not set
 -# BR2_LINUX26_CUSTOM is not set
 -
 -#
@@ -1819,15 +1066,28 @@ index 08d111e..85aa94e 100644
 -# BR2_KERNEL_ADD_RC_PATCH is not set
 -# BR2_KERNEL_ADD_LATEST_SNAPSHOT is not set
 -# BR2_KERNEL_ADD_SNAPSHOT is not set
+-# BR2_KERNEL_ADD_LATEST_MM_PATCH is not set
+-# BR2_KERNEL_ADD_MM_PATCH is not set
 -BR2_KERNEL_ADD_PATCH=y
--# BR2_KERNEL_ARCH_PATCH_ENABLED is not set
+-BR2_KERNEL_ARCH_PATCH_ENABLED=y
+-# BR2_ARCH_AVR32_2_6_28_2 is not set
+-BR2_ARCH_AVR32_2_6_27_6=y
 -BR2_LINUX_BSP_PATCH=""
 -BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
 -BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
 -BR2_KERNEL_BASE=y
 -BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
 -BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION).$(BR2_KERNEL_PATCH_LEVEL)"
--
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.35"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
++
++# Filesystem
++# BR2_TARGET_ROOTFS_EXT2 is not set
++BR2_TARGET_ROOTFS_TAR=y
+ 
 -#
 -# Linux Kernel Configuration
 -#
@@ -1839,6423 +1099,24 @@ index 08d111e..85aa94e 100644
 -# BR2_LINUX_BIN_VMLINUX is not set
 -# BR2_LINUX_BIN_ZIMAGE is not set
 -# BR2_LINUX_BIN_CUSTOM is not set
--
+ 
 -#
 -# Destinations for linux kernel binaries
 -#
 -BR2_LINUX_COPYTO_ROOTFS=y
 -# BR2_LINUX_COPYTO_TFTPBOOT is not set
 -BR2_LINUX_COPYTO=""
--# BR2_LINUX_COPY_CONFIGURATION is not set
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.35"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="atngw100"
-diff --git a/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.23.config b/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.23.config
+-BR2_LINUX_COPY_CONFIGURATION=y
+diff --git a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config b/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
 deleted file mode 100644
-index 0cbe476..0000000
---- a/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.23.config
+index 7fa05cc..0000000
+--- a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
 +++ /dev/null
-@@ -1,858 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Linux kernel version: 2.6.23
--#
--CONFIG_AVR32=y
--CONFIG_GENERIC_GPIO=y
--CONFIG_GENERIC_HARDIRQS=y
--CONFIG_HARDIRQS_SW_RESEND=y
--CONFIG_GENERIC_IRQ_PROBE=y
--CONFIG_RWSEM_GENERIC_SPINLOCK=y
--CONFIG_GENERIC_TIME=y
--# CONFIG_ARCH_HAS_ILOG2_U32 is not set
--# CONFIG_ARCH_HAS_ILOG2_U64 is not set
--CONFIG_GENERIC_HWEIGHT=y
--CONFIG_GENERIC_CALIBRATE_DELAY=y
--CONFIG_GENERIC_BUG=y
--CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
--
--#
--# General setup
--#
--CONFIG_EXPERIMENTAL=y
--CONFIG_BROKEN_ON_SMP=y
--CONFIG_INIT_ENV_ARG_LIMIT=32
--CONFIG_LOCALVERSION=""
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_SWAP=y
--CONFIG_SYSVIPC=y
--CONFIG_SYSVIPC_SYSCTL=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--CONFIG_TASKSTATS=y
--CONFIG_TASK_DELAY_ACCT=y
--# CONFIG_TASK_XACCT is not set
--# CONFIG_USER_NS is not set
--CONFIG_AUDIT=y
--# CONFIG_IKCONFIG is not set
--CONFIG_LOG_BUF_SHIFT=14
--CONFIG_SYSFS_DEPRECATED=y
--CONFIG_RELAY=y
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE=""
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_SYSCTL=y
--CONFIG_EMBEDDED=y
--# CONFIG_SYSCTL_SYSCALL is not set
--CONFIG_KALLSYMS=y
--# CONFIG_KALLSYMS_EXTRA_PASS is not set
--CONFIG_HOTPLUG=y
--CONFIG_PRINTK=y
--CONFIG_BUG=y
--CONFIG_ELF_CORE=y
--# CONFIG_BASE_FULL is not set
--CONFIG_FUTEX=y
--CONFIG_ANON_INODES=y
--CONFIG_EPOLL=y
--CONFIG_SIGNALFD=y
--CONFIG_EVENTFD=y
--CONFIG_SHMEM=y
--CONFIG_VM_EVENT_COUNTERS=y
--# CONFIG_SLUB_DEBUG is not set
--# CONFIG_SLAB is not set
--CONFIG_SLUB=y
--# CONFIG_SLOB is not set
--CONFIG_RT_MUTEXES=y
--# CONFIG_TINY_SHMEM is not set
--CONFIG_BASE_SMALL=1
--# CONFIG_MODULES is not set
--CONFIG_BLOCK=y
--# CONFIG_LBD is not set
--# CONFIG_BLK_DEV_IO_TRACE is not set
--# CONFIG_LSF is not set
--# CONFIG_BLK_DEV_BSG is not set
--
--#
--# IO Schedulers
--#
--CONFIG_IOSCHED_NOOP=y
--# CONFIG_IOSCHED_AS is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--CONFIG_IOSCHED_CFQ=y
--# CONFIG_DEFAULT_AS is not set
--# CONFIG_DEFAULT_DEADLINE is not set
--CONFIG_DEFAULT_CFQ=y
--# CONFIG_DEFAULT_NOOP is not set
--CONFIG_DEFAULT_IOSCHED="cfq"
--
--#
--# System Type and features
--#
--CONFIG_SUBARCH_AVR32B=y
--CONFIG_MMU=y
--CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
--# CONFIG_CPU_AT32AP7001 is not set
--# CONFIG_CPU_AT32AP7002 is not set
--# CONFIG_BOARD_ATSTK1000 is not set
--CONFIG_BOARD_ATNGW100=y
--# CONFIG_BOARD_ATNGW100_I2C_GPIO is not set
--CONFIG_LOADER_U_BOOT=y
--
--#
--# Atmel AVR32 AP options
--#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
--CONFIG_GPIO_DEV=y
--CONFIG_LOAD_ADDRESS=0x10000000
--CONFIG_ENTRY_ADDRESS=0x90000000
--CONFIG_PHYS_OFFSET=0x10000000
--CONFIG_PREEMPT_NONE=y
--# CONFIG_PREEMPT_VOLUNTARY is not set
--# CONFIG_PREEMPT is not set
--# CONFIG_HAVE_ARCH_BOOTMEM_NODE is not set
--# CONFIG_ARCH_HAVE_MEMORY_PRESENT is not set
--# CONFIG_NEED_NODE_MEMMAP_SIZE is not set
--CONFIG_ARCH_FLATMEM_ENABLE=y
--# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
--# CONFIG_ARCH_SPARSEMEM_ENABLE is not set
--CONFIG_SELECT_MEMORY_MODEL=y
--CONFIG_FLATMEM_MANUAL=y
--# CONFIG_DISCONTIGMEM_MANUAL is not set
--# CONFIG_SPARSEMEM_MANUAL is not set
--CONFIG_FLATMEM=y
--CONFIG_FLAT_NODE_MEM_MAP=y
--# CONFIG_SPARSEMEM_STATIC is not set
--CONFIG_SPLIT_PTLOCK_CPUS=4
--# CONFIG_RESOURCES_64BIT is not set
--CONFIG_ZONE_DMA_FLAG=0
--CONFIG_VIRT_TO_BUS=y
--# CONFIG_OWNERSHIP_TRACE is not set
--CONFIG_DW_DMAC=y
--# CONFIG_HZ_100 is not set
--CONFIG_HZ_250=y
--# CONFIG_HZ_300 is not set
--# CONFIG_HZ_1000 is not set
--CONFIG_HZ=250
--CONFIG_CMDLINE=""
--
--#
--# Power managment options
--#
--
--#
--# CPU Frequency scaling
--#
--# CONFIG_CPU_FREQ is not set
--
--#
--# Bus options
--#
--# CONFIG_ARCH_SUPPORTS_MSI is not set
--
--#
--# PCCARD (PCMCIA/CardBus) support
--#
--# CONFIG_PCCARD is not set
--
--#
--# Executable file formats
--#
--CONFIG_BINFMT_ELF=y
--# CONFIG_BINFMT_MISC is not set
--
--#
--# Networking
--#
--CONFIG_NET=y
--
--#
--# Networking options
--#
--CONFIG_PACKET=y
--CONFIG_PACKET_MMAP=y
--CONFIG_UNIX=y
--CONFIG_XFRM=y
--CONFIG_XFRM_USER=y
--# CONFIG_XFRM_SUB_POLICY is not set
--# CONFIG_XFRM_MIGRATE is not set
--CONFIG_NET_KEY=y
--# CONFIG_NET_KEY_MIGRATE is not set
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--# CONFIG_IP_ADVANCED_ROUTER is not set
--CONFIG_IP_FIB_HASH=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--# CONFIG_IP_PNP_BOOTP is not set
--# CONFIG_IP_PNP_RARP is not set
--# CONFIG_NET_IPIP is not set
--# CONFIG_NET_IPGRE is not set
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--# CONFIG_IP_PIMSM_V2 is not set
--# CONFIG_ARPD is not set
--CONFIG_SYN_COOKIES=y
--CONFIG_INET_AH=y
--CONFIG_INET_ESP=y
--CONFIG_INET_IPCOMP=y
--CONFIG_INET_XFRM_TUNNEL=y
--CONFIG_INET_TUNNEL=y
--CONFIG_INET_XFRM_MODE_TRANSPORT=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
--CONFIG_INET_XFRM_MODE_BEET=y
--CONFIG_INET_DIAG=y
--CONFIG_INET_TCP_DIAG=y
--# CONFIG_TCP_CONG_ADVANCED is not set
--CONFIG_TCP_CONG_CUBIC=y
--CONFIG_DEFAULT_TCP_CONG="cubic"
--# CONFIG_TCP_MD5SIG is not set
--CONFIG_IPV6=y
--# CONFIG_IPV6_PRIVACY is not set
--# CONFIG_IPV6_ROUTER_PREF is not set
--# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--CONFIG_INET6_AH=y
--CONFIG_INET6_ESP=y
--CONFIG_INET6_IPCOMP=y
--# CONFIG_IPV6_MIP6 is not set
--CONFIG_INET6_XFRM_TUNNEL=y
--CONFIG_INET6_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
--# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
--# CONFIG_IPV6_TUNNEL is not set
--# CONFIG_IPV6_MULTIPLE_TABLES is not set
--# CONFIG_NETWORK_SECMARK is not set
--# CONFIG_NETFILTER is not set
--# CONFIG_IP_DCCP is not set
--# CONFIG_IP_SCTP is not set
--# CONFIG_TIPC is not set
--# CONFIG_ATM is not set
--# CONFIG_BRIDGE is not set
--# CONFIG_VLAN_8021Q is not set
--# CONFIG_DECNET is not set
--# CONFIG_LLC2 is not set
--# CONFIG_IPX is not set
--# CONFIG_ATALK is not set
--# CONFIG_X25 is not set
--# CONFIG_LAPB is not set
--# CONFIG_ECONET is not set
--# CONFIG_WAN_ROUTER is not set
--
--#
--# QoS and/or fair queueing
--#
--# CONFIG_NET_SCHED is not set
--
--#
--# Network testing
--#
--# CONFIG_NET_PKTGEN is not set
--# CONFIG_HAMRADIO is not set
--# CONFIG_IRDA is not set
--# CONFIG_BT is not set
--# CONFIG_AF_RXRPC is not set
--
--#
--# Wireless
--#
--# CONFIG_CFG80211 is not set
--# CONFIG_WIRELESS_EXT is not set
--# CONFIG_MAC80211 is not set
--# CONFIG_IEEE80211 is not set
--# CONFIG_RFKILL is not set
--# CONFIG_NET_9P is not set
--
--#
--# Device Drivers
--#
--
--#
--# Generic Driver Options
--#
--CONFIG_STANDALONE=y
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--# CONFIG_FW_LOADER is not set
--# CONFIG_SYS_HYPERVISOR is not set
--# CONFIG_CONNECTOR is not set
--CONFIG_MTD=y
--# CONFIG_MTD_DEBUG is not set
--# CONFIG_MTD_CONCAT is not set
--CONFIG_MTD_PARTITIONS=y
--# CONFIG_MTD_REDBOOT_PARTS is not set
--CONFIG_MTD_CMDLINE_PARTS=y
--
--#
--# User Modules And Translation Layers
--#
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLKDEVS=y
--CONFIG_MTD_BLOCK=y
--# CONFIG_FTL is not set
--# CONFIG_NFTL is not set
--# CONFIG_INFTL is not set
--# CONFIG_RFD_FTL is not set
--# CONFIG_SSFDC is not set
--
--#
--# RAM/ROM/Flash chip drivers
--#
--CONFIG_MTD_CFI=y
--# CONFIG_MTD_JEDECPROBE is not set
--CONFIG_MTD_GEN_PROBE=y
--# CONFIG_MTD_CFI_ADV_OPTIONS is not set
--CONFIG_MTD_MAP_BANK_WIDTH_1=y
--CONFIG_MTD_MAP_BANK_WIDTH_2=y
--CONFIG_MTD_MAP_BANK_WIDTH_4=y
--# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
--CONFIG_MTD_CFI_I1=y
--CONFIG_MTD_CFI_I2=y
--# CONFIG_MTD_CFI_I4 is not set
--# CONFIG_MTD_CFI_I8 is not set
--# CONFIG_MTD_CFI_INTELEXT is not set
--CONFIG_MTD_CFI_AMDSTD=y
--# CONFIG_MTD_CFI_STAA is not set
--CONFIG_MTD_CFI_UTIL=y
--# CONFIG_MTD_RAM is not set
--# CONFIG_MTD_ROM is not set
--# CONFIG_MTD_ABSENT is not set
--
--#
--# Mapping drivers for chip access
--#
--# CONFIG_MTD_COMPLEX_MAPPINGS is not set
--CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_PHYSMAP_START=0x80000000
--CONFIG_MTD_PHYSMAP_LEN=0x0
--CONFIG_MTD_PHYSMAP_BANKWIDTH=2
--# CONFIG_MTD_PLATRAM is not set
--
--#
--# Self-contained MTD device drivers
--#
--# CONFIG_MTD_SLRAM is not set
--# CONFIG_MTD_PHRAM is not set
--# CONFIG_MTD_MTDRAM is not set
--# CONFIG_MTD_BLOCK2MTD is not set
--
--#
--# Disk-On-Chip Device Drivers
--#
--# CONFIG_MTD_DOC2000 is not set
--# CONFIG_MTD_DOC2001 is not set
--# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
--# CONFIG_MTD_ONENAND is not set
--
--#
--# UBI - Unsorted block images
--#
--# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
--CONFIG_BLK_DEV=y
--# CONFIG_BLK_DEV_COW_COMMON is not set
--# CONFIG_BLK_DEV_LOOP is not set
--# CONFIG_BLK_DEV_NBD is not set
--# CONFIG_BLK_DEV_RAM is not set
--# CONFIG_CDROM_PKTCDVD is not set
--# CONFIG_ATA_OVER_ETH is not set
--# CONFIG_MISC_DEVICES is not set
--# CONFIG_IDE is not set
--
--#
--# SCSI device support
--#
--# CONFIG_RAID_ATTRS is not set
--# CONFIG_SCSI is not set
--# CONFIG_SCSI_DMA is not set
--# CONFIG_SCSI_NETLINK is not set
--# CONFIG_ATA is not set
--# CONFIG_MD is not set
--CONFIG_NETDEVICES=y
--# CONFIG_NETDEVICES_MULTIQUEUE is not set
--# CONFIG_DUMMY is not set
--# CONFIG_BONDING is not set
--# CONFIG_MACVLAN is not set
--# CONFIG_EQUALIZER is not set
--# CONFIG_TUN is not set
--CONFIG_PHYLIB=y
--
--#
--# MII PHY device drivers
--#
--# CONFIG_MARVELL_PHY is not set
--# CONFIG_DAVICOM_PHY is not set
--# CONFIG_QSEMI_PHY is not set
--# CONFIG_LXT_PHY is not set
--# CONFIG_CICADA_PHY is not set
--# CONFIG_VITESSE_PHY is not set
--# CONFIG_SMSC_PHY is not set
--# CONFIG_BROADCOM_PHY is not set
--# CONFIG_ICPLUS_PHY is not set
--# CONFIG_FIXED_PHY is not set
--CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
--CONFIG_MACB=y
--# CONFIG_NETDEV_1000 is not set
--# CONFIG_NETDEV_10000 is not set
--
--#
--# Wireless LAN
--#
--# CONFIG_WLAN_PRE80211 is not set
--# CONFIG_WLAN_80211 is not set
--# CONFIG_WAN is not set
--# CONFIG_PPP is not set
--# CONFIG_SLIP is not set
--# CONFIG_SHAPER is not set
--# CONFIG_NETCONSOLE is not set
--# CONFIG_NETPOLL is not set
--# CONFIG_NET_POLL_CONTROLLER is not set
--# CONFIG_ISDN is not set
--# CONFIG_PHONE is not set
--
--#
--# Input device support
--#
--# CONFIG_INPUT is not set
--
--#
--# Hardware I/O ports
--#
--# CONFIG_SERIO is not set
--# CONFIG_GAMEPORT is not set
--
--#
--# Character devices
--#
--# CONFIG_VT is not set
--# CONFIG_SERIAL_NONSTANDARD is not set
--
--#
--# Serial drivers
--#
--# CONFIG_SERIAL_8250 is not set
--
--#
--# Non-8250 serial port support
--#
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--# CONFIG_SERIAL_ATMEL_TTYAT is not set
--CONFIG_SERIAL_CORE=y
--CONFIG_SERIAL_CORE_CONSOLE=y
--CONFIG_UNIX98_PTYS=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_IPMI_HANDLER is not set
--CONFIG_WATCHDOG=y
--# CONFIG_WATCHDOG_NOWAYOUT is not set
--
--#
--# Watchdog Device Drivers
--#
--# CONFIG_SOFT_WATCHDOG is not set
--CONFIG_AT32AP700X_WDT=y
--# CONFIG_HW_RANDOM is not set
--# CONFIG_RTC is not set
--# CONFIG_GEN_RTC is not set
--# CONFIG_R3964 is not set
--# CONFIG_RAW_DRIVER is not set
--# CONFIG_TCG_TPM is not set
--# CONFIG_I2C is not set
--
--#
--# SPI support
--#
--# CONFIG_SPI is not set
--# CONFIG_SPI_MASTER is not set
--# CONFIG_W1 is not set
--# CONFIG_POWER_SUPPLY is not set
--# CONFIG_HWMON is not set
--
--#
--# Multifunction device drivers
--#
--# CONFIG_MFD_SM501 is not set
--
--#
--# Multimedia devices
--#
--# CONFIG_VIDEO_DEV is not set
--# CONFIG_DVB_CORE is not set
--# CONFIG_DAB is not set
--
--#
--# Graphics support
--#
--# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
--
--#
--# Display device support
--#
--# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_VGASTATE is not set
--CONFIG_VIDEO_OUTPUT_CONTROL=y
--# CONFIG_FB is not set
--
--#
--# Sound
--#
--# CONFIG_SOUND is not set
--CONFIG_USB_SUPPORT=y
--# CONFIG_USB_ARCH_HAS_HCD is not set
--# CONFIG_USB_ARCH_HAS_OHCI is not set
--# CONFIG_USB_ARCH_HAS_EHCI is not set
--
--#
--# NOTE: USB_STORAGE enables SCSI, and 'SCSI disk support'
--#
--
--#
--# USB Gadget Support
--#
--CONFIG_USB_GADGET=y
--# CONFIG_USB_GADGET_DEBUG_FILES is not set
--CONFIG_USB_GADGET_SELECTED=y
--# CONFIG_USB_GADGET_AMD5536UDC is not set
--CONFIG_USB_GADGET_ATMEL_USBA=y
--CONFIG_USB_ATMEL_USBA=y
--# CONFIG_USB_GADGET_FSL_USB2 is not set
--# CONFIG_USB_GADGET_NET2280 is not set
--# CONFIG_USB_GADGET_PXA2XX is not set
--# CONFIG_USB_GADGET_M66592 is not set
--# CONFIG_USB_GADGET_GOKU is not set
--# CONFIG_USB_GADGET_LH7A40X is not set
--# CONFIG_USB_GADGET_OMAP is not set
--# CONFIG_USB_GADGET_S3C2410 is not set
--# CONFIG_USB_GADGET_AT91 is not set
--# CONFIG_USB_GADGET_DUMMY_HCD is not set
--CONFIG_USB_GADGET_DUALSPEED=y
--# CONFIG_USB_ZERO is not set
--# CONFIG_USB_ETH is not set
--# CONFIG_USB_GADGETFS is not set
--# CONFIG_USB_FILE_STORAGE is not set
--CONFIG_USB_G_SERIAL=y
--# CONFIG_USB_MIDI_GADGET is not set
--CONFIG_MMC=y
--# CONFIG_MMC_DEBUG is not set
--# CONFIG_MMC_UNSAFE_RESUME is not set
--
--#
--# MMC/SD Card Drivers
--#
--CONFIG_MMC_BLOCK=y
--# CONFIG_MMC_BLOCK_BOUNCE is not set
--
--#
--# MMC/SD Host Controller Drivers
--#
--CONFIG_MMC_ATMELMCI=y
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--
--#
--# LED drivers
--#
--CONFIG_LEDS_GPIO=y
--
--#
--# LED Triggers
--#
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_RTC_LIB=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_HCTOSYS=y
--CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
--# CONFIG_RTC_DEBUG is not set
--
--#
--# RTC interfaces
--#
--CONFIG_RTC_INTF_SYSFS=y
--CONFIG_RTC_INTF_PROC=y
--CONFIG_RTC_INTF_DEV=y
--# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
--# CONFIG_RTC_DRV_TEST is not set
--
--#
--# SPI RTC drivers
--#
--
--#
--# Platform RTC drivers
--#
--# CONFIG_RTC_DRV_DS1553 is not set
--# CONFIG_RTC_DRV_STK17TA8 is not set
--# CONFIG_RTC_DRV_DS1742 is not set
--# CONFIG_RTC_DRV_M48T86 is not set
--# CONFIG_RTC_DRV_M48T59 is not set
--# CONFIG_RTC_DRV_V3020 is not set
--
--#
--# on-CPU RTC drivers
--#
--CONFIG_RTC_DRV_AT32AP700X=y
--
--#
--# DMA Engine support
--#
--# CONFIG_DMA_ENGINE is not set
--
--#
--# DMA Clients
--#
--
--#
--# DMA Devices
--#
--
--#
--# Userspace I/O
--#
--# CONFIG_UIO is not set
--
--#
--# File systems
--#
--CONFIG_EXT2_FS=y
--# CONFIG_EXT2_FS_XATTR is not set
--# CONFIG_EXT2_FS_XIP is not set
--CONFIG_EXT3_FS=y
--# CONFIG_EXT3_FS_XATTR is not set
--# CONFIG_EXT4DEV_FS is not set
--CONFIG_JBD=y
--# CONFIG_JBD_DEBUG is not set
--# CONFIG_REISERFS_FS is not set
--# CONFIG_JFS_FS is not set
--# CONFIG_FS_POSIX_ACL is not set
--# CONFIG_XFS_FS is not set
--# CONFIG_GFS2_FS is not set
--# CONFIG_OCFS2_FS is not set
--# CONFIG_MINIX_FS is not set
--# CONFIG_ROMFS_FS is not set
--CONFIG_INOTIFY=y
--CONFIG_INOTIFY_USER=y
--# CONFIG_QUOTA is not set
--# CONFIG_DNOTIFY is not set
--# CONFIG_AUTOFS_FS is not set
--# CONFIG_AUTOFS4_FS is not set
--# CONFIG_FUSE_FS is not set
--
--#
--# CD-ROM/DVD Filesystems
--#
--# CONFIG_ISO9660_FS is not set
--# CONFIG_UDF_FS is not set
--
--#
--# DOS/FAT/NT Filesystems
--#
--CONFIG_FAT_FS=y
--# CONFIG_MSDOS_FS is not set
--CONFIG_VFAT_FS=y
--CONFIG_FAT_DEFAULT_CODEPAGE=850
--CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
--# CONFIG_NTFS_FS is not set
--
--#
--# Pseudo filesystems
--#
--CONFIG_PROC_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_PROC_SYSCTL=y
--CONFIG_SYSFS=y
--CONFIG_TMPFS=y
--# CONFIG_TMPFS_POSIX_ACL is not set
--# CONFIG_HUGETLB_PAGE is not set
--CONFIG_RAMFS=y
--CONFIG_CONFIGFS_FS=y
--
--#
--# Miscellaneous filesystems
--#
--# CONFIG_ADFS_FS is not set
--# CONFIG_AFFS_FS is not set
--# CONFIG_HFS_FS is not set
--# CONFIG_HFSPLUS_FS is not set
--# CONFIG_BEFS_FS is not set
--# CONFIG_BFS_FS is not set
--# CONFIG_EFS_FS is not set
--CONFIG_JFFS2_FS=y
--CONFIG_JFFS2_FS_DEBUG=0
--CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_SUMMARY is not set
--# CONFIG_JFFS2_FS_XATTR is not set
--# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
--CONFIG_JFFS2_ZLIB=y
--CONFIG_JFFS2_RTIME=y
--# CONFIG_JFFS2_RUBIN is not set
--# CONFIG_CRAMFS is not set
--# CONFIG_VXFS_FS is not set
--# CONFIG_HPFS_FS is not set
--# CONFIG_QNX4FS_FS is not set
--# CONFIG_SYSV_FS is not set
--# CONFIG_UFS_FS is not set
--
--#
--# Network File Systems
--#
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--# CONFIG_NFS_V3_ACL is not set
--# CONFIG_NFS_V4 is not set
--# CONFIG_NFS_DIRECTIO is not set
--# CONFIG_NFSD is not set
--CONFIG_ROOT_NFS=y
--CONFIG_LOCKD=y
--CONFIG_LOCKD_V4=y
--CONFIG_NFS_COMMON=y
--CONFIG_SUNRPC=y
--# CONFIG_SUNRPC_BIND34 is not set
--# CONFIG_RPCSEC_GSS_KRB5 is not set
--# CONFIG_RPCSEC_GSS_SPKM3 is not set
--# CONFIG_SMB_FS is not set
--# CONFIG_CIFS is not set
--# CONFIG_NCP_FS is not set
--# CONFIG_CODA_FS is not set
--# CONFIG_AFS_FS is not set
--
--#
--# Partition Types
--#
--# CONFIG_PARTITION_ADVANCED is not set
--CONFIG_MSDOS_PARTITION=y
--
--#
--# Native Language Support
--#
--CONFIG_NLS=y
--CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=y
--# CONFIG_NLS_CODEPAGE_737 is not set
--# CONFIG_NLS_CODEPAGE_775 is not set
--CONFIG_NLS_CODEPAGE_850=y
--# CONFIG_NLS_CODEPAGE_852 is not set
--# CONFIG_NLS_CODEPAGE_855 is not set
--# CONFIG_NLS_CODEPAGE_857 is not set
--# CONFIG_NLS_CODEPAGE_860 is not set
--# CONFIG_NLS_CODEPAGE_861 is not set
--# CONFIG_NLS_CODEPAGE_862 is not set
--# CONFIG_NLS_CODEPAGE_863 is not set
--# CONFIG_NLS_CODEPAGE_864 is not set
--# CONFIG_NLS_CODEPAGE_865 is not set
--# CONFIG_NLS_CODEPAGE_866 is not set
--# CONFIG_NLS_CODEPAGE_869 is not set
--# CONFIG_NLS_CODEPAGE_936 is not set
--# CONFIG_NLS_CODEPAGE_950 is not set
--# CONFIG_NLS_CODEPAGE_932 is not set
--# CONFIG_NLS_CODEPAGE_949 is not set
--# CONFIG_NLS_CODEPAGE_874 is not set
--# CONFIG_NLS_ISO8859_8 is not set
--# CONFIG_NLS_CODEPAGE_1250 is not set
--# CONFIG_NLS_CODEPAGE_1251 is not set
--# CONFIG_NLS_ASCII is not set
--CONFIG_NLS_ISO8859_1=y
--# CONFIG_NLS_ISO8859_2 is not set
--# CONFIG_NLS_ISO8859_3 is not set
--# CONFIG_NLS_ISO8859_4 is not set
--# CONFIG_NLS_ISO8859_5 is not set
--# CONFIG_NLS_ISO8859_6 is not set
--# CONFIG_NLS_ISO8859_7 is not set
--# CONFIG_NLS_ISO8859_9 is not set
--# CONFIG_NLS_ISO8859_13 is not set
--# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
--# CONFIG_NLS_KOI8_R is not set
--# CONFIG_NLS_KOI8_U is not set
--CONFIG_NLS_UTF8=y
--
--#
--# Distributed Lock Manager
--#
--# CONFIG_DLM is not set
--
--#
--# Kernel hacking
--#
--CONFIG_TRACE_IRQFLAGS_SUPPORT=y
--# CONFIG_PRINTK_TIME is not set
--CONFIG_ENABLE_MUST_CHECK=y
--CONFIG_MAGIC_SYSRQ=y
--# CONFIG_UNUSED_SYMBOLS is not set
--# CONFIG_DEBUG_FS is not set
--# CONFIG_HEADERS_CHECK is not set
--# CONFIG_DEBUG_KERNEL is not set
--# CONFIG_DEBUG_BUGVERBOSE is not set
--
--#
--# Security options
--#
--# CONFIG_KEYS is not set
--# CONFIG_SECURITY is not set
--CONFIG_CRYPTO=y
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_HMAC=y
--# CONFIG_CRYPTO_XCBC is not set
--# CONFIG_CRYPTO_NULL is not set
--# CONFIG_CRYPTO_MD4 is not set
--CONFIG_CRYPTO_MD5=y
--CONFIG_CRYPTO_SHA1=y
--# CONFIG_CRYPTO_SHA256 is not set
--# CONFIG_CRYPTO_SHA512 is not set
--# CONFIG_CRYPTO_WP512 is not set
--# CONFIG_CRYPTO_TGR192 is not set
--# CONFIG_CRYPTO_GF128MUL is not set
--# CONFIG_CRYPTO_ECB is not set
--CONFIG_CRYPTO_CBC=y
--# CONFIG_CRYPTO_PCBC is not set
--# CONFIG_CRYPTO_LRW is not set
--# CONFIG_CRYPTO_CRYPTD is not set
--CONFIG_CRYPTO_DES=y
--# CONFIG_CRYPTO_FCRYPT is not set
--# CONFIG_CRYPTO_BLOWFISH is not set
--# CONFIG_CRYPTO_TWOFISH is not set
--# CONFIG_CRYPTO_SERPENT is not set
--# CONFIG_CRYPTO_AES is not set
--# CONFIG_CRYPTO_CAST5 is not set
--# CONFIG_CRYPTO_CAST6 is not set
--# CONFIG_CRYPTO_TEA is not set
--# CONFIG_CRYPTO_ARC4 is not set
--# CONFIG_CRYPTO_KHAZAD is not set
--# CONFIG_CRYPTO_ANUBIS is not set
--CONFIG_CRYPTO_DEFLATE=y
--# CONFIG_CRYPTO_MICHAEL_MIC is not set
--# CONFIG_CRYPTO_CRC32C is not set
--# CONFIG_CRYPTO_CAMELLIA is not set
--# CONFIG_CRYPTO_HW is not set
--
--#
--# Library routines
--#
--CONFIG_BITREVERSE=y
--# CONFIG_CRC_CCITT is not set
--# CONFIG_CRC16 is not set
--# CONFIG_CRC_ITU_T is not set
--CONFIG_CRC32=y
--# CONFIG_CRC7 is not set
--# CONFIG_LIBCRC32C is not set
--CONFIG_AUDIT_GENERIC=y
--CONFIG_ZLIB_INFLATE=y
--CONFIG_ZLIB_DEFLATE=y
--CONFIG_PLIST=y
--CONFIG_HAS_IOMEM=y
--CONFIG_HAS_IOPORT=y
--CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.24.config b/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.24.config
-deleted file mode 100644
-index d0b9c3c..0000000
---- a/target/device/Atmel/atngw100-base/atngw100-base-linux-2.6.24.config
-+++ /dev/null
-@@ -1,1153 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Linux kernel version: 2.6.24
--# Fri Jul  4 12:29:56 2008
--#
--CONFIG_AVR32=y
--CONFIG_GENERIC_GPIO=y
--CONFIG_GENERIC_HARDIRQS=y
--CONFIG_STACKTRACE_SUPPORT=y
--CONFIG_LOCKDEP_SUPPORT=y
--CONFIG_TRACE_IRQFLAGS_SUPPORT=y
--CONFIG_HARDIRQS_SW_RESEND=y
--CONFIG_GENERIC_IRQ_PROBE=y
--CONFIG_RWSEM_GENERIC_SPINLOCK=y
--CONFIG_GENERIC_TIME=y
--# CONFIG_RWSEM_XCHGADD_ALGORITHM is not set
--# CONFIG_ARCH_HAS_ILOG2_U32 is not set
--# CONFIG_ARCH_HAS_ILOG2_U64 is not set
--CONFIG_ARCH_SUPPORTS_OPROFILE=y
--CONFIG_GENERIC_HWEIGHT=y
--CONFIG_GENERIC_CALIBRATE_DELAY=y
--CONFIG_GENERIC_BUG=y
--CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
--
--#
--# General setup
--#
--CONFIG_EXPERIMENTAL=y
--CONFIG_BROKEN_ON_SMP=y
--CONFIG_INIT_ENV_ARG_LIMIT=32
--CONFIG_LOCALVERSION=""
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_SWAP=y
--CONFIG_SYSVIPC=y
--CONFIG_SYSVIPC_SYSCTL=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--# CONFIG_TASKSTATS is not set
--# CONFIG_USER_NS is not set
--# CONFIG_PID_NS is not set
--# CONFIG_AUDIT is not set
--# CONFIG_IKCONFIG is not set
--CONFIG_LOG_BUF_SHIFT=14
--# CONFIG_CGROUPS is not set
--CONFIG_FAIR_GROUP_SCHED=y
--CONFIG_FAIR_USER_SCHED=y
--# CONFIG_FAIR_CGROUP_SCHED is not set
--CONFIG_SYSFS_DEPRECATED=y
--# CONFIG_RELAY is not set
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE=""
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_SYSCTL=y
--CONFIG_EMBEDDED=y
--# CONFIG_SYSCTL_SYSCALL is not set
--CONFIG_KALLSYMS=y
--# CONFIG_KALLSYMS_ALL is not set
--# CONFIG_KALLSYMS_EXTRA_PASS is not set
--CONFIG_HOTPLUG=y
--CONFIG_PRINTK=y
--CONFIG_BUG=y
--CONFIG_ELF_CORE=y
--# CONFIG_BASE_FULL is not set
--CONFIG_FUTEX=y
--CONFIG_ANON_INODES=y
--CONFIG_EPOLL=y
--CONFIG_SIGNALFD=y
--CONFIG_EVENTFD=y
--CONFIG_SHMEM=y
--CONFIG_VM_EVENT_COUNTERS=y
--CONFIG_SLUB_DEBUG=y
--# CONFIG_SLAB is not set
--CONFIG_SLUB=y
--# CONFIG_SLOB is not set
--CONFIG_SLABINFO=y
--CONFIG_RT_MUTEXES=y
--# CONFIG_TINY_SHMEM is not set
--CONFIG_BASE_SMALL=1
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--# CONFIG_MODVERSIONS is not set
--# CONFIG_MODULE_SRCVERSION_ALL is not set
--CONFIG_KMOD=y
--CONFIG_BLOCK=y
--# CONFIG_LBD is not set
--# CONFIG_BLK_DEV_IO_TRACE is not set
--# CONFIG_LSF is not set
--# CONFIG_BLK_DEV_BSG is not set
--
--#
--# IO Schedulers
--#
--CONFIG_IOSCHED_NOOP=y
--# CONFIG_IOSCHED_AS is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--CONFIG_IOSCHED_CFQ=y
--# CONFIG_DEFAULT_AS is not set
--# CONFIG_DEFAULT_DEADLINE is not set
--CONFIG_DEFAULT_CFQ=y
--# CONFIG_DEFAULT_NOOP is not set
--CONFIG_DEFAULT_IOSCHED="cfq"
--
--#
--# System Type and features
--#
--CONFIG_SUBARCH_AVR32B=y
--CONFIG_MMU=y
--CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
--# CONFIG_BOARD_ATSTK1000 is not set
--CONFIG_BOARD_ATNGW100=y
--# CONFIG_BOARD_ATNGW100_I2C_GPIO is not set
--CONFIG_LOADER_U_BOOT=y
--
--#
--# Atmel AVR32 AP options
--#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
--CONFIG_GPIO_DEV=y
--CONFIG_LOAD_ADDRESS=0x10000000
--CONFIG_ENTRY_ADDRESS=0x90000000
--CONFIG_PHYS_OFFSET=0x10000000
--CONFIG_PREEMPT_NONE=y
--# CONFIG_PREEMPT_VOLUNTARY is not set
--# CONFIG_PREEMPT is not set
--# CONFIG_HAVE_ARCH_BOOTMEM_NODE is not set
--# CONFIG_ARCH_HAVE_MEMORY_PRESENT is not set
--# CONFIG_NEED_NODE_MEMMAP_SIZE is not set
--CONFIG_ARCH_FLATMEM_ENABLE=y
--# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
--# CONFIG_ARCH_SPARSEMEM_ENABLE is not set
--CONFIG_SELECT_MEMORY_MODEL=y
--CONFIG_FLATMEM_MANUAL=y
--# CONFIG_DISCONTIGMEM_MANUAL is not set
--# CONFIG_SPARSEMEM_MANUAL is not set
--CONFIG_FLATMEM=y
--CONFIG_FLAT_NODE_MEM_MAP=y
--# CONFIG_SPARSEMEM_STATIC is not set
--# CONFIG_SPARSEMEM_VMEMMAP_ENABLE is not set
--CONFIG_SPLIT_PTLOCK_CPUS=4
--# CONFIG_RESOURCES_64BIT is not set
--CONFIG_ZONE_DMA_FLAG=0
--CONFIG_VIRT_TO_BUS=y
--# CONFIG_OWNERSHIP_TRACE is not set
--# CONFIG_NMI_DEBUGGING is not set
--CONFIG_DW_DMAC=y
--# CONFIG_HZ_100 is not set
--CONFIG_HZ_250=y
--# CONFIG_HZ_300 is not set
--# CONFIG_HZ_1000 is not set
--CONFIG_HZ=250
--CONFIG_CMDLINE=""
--
--#
--# Power management options
--#
--
--#
--# CPU Frequency scaling
--#
--CONFIG_CPU_FREQ=y
--CONFIG_CPU_FREQ_TABLE=y
--# CONFIG_CPU_FREQ_DEBUG is not set
--# CONFIG_CPU_FREQ_STAT is not set
--CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_GOV_POWERSAVE is not set
--CONFIG_CPU_FREQ_GOV_USERSPACE=y
--CONFIG_CPU_FREQ_GOV_ONDEMAND=y
--# CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_AT32AP=y
--
--#
--# Bus options
--#
--# CONFIG_ARCH_SUPPORTS_MSI is not set
--# CONFIG_PCCARD is not set
--
--#
--# Executable file formats
--#
--CONFIG_BINFMT_ELF=y
--# CONFIG_BINFMT_MISC is not set
--
--#
--# Networking
--#
--CONFIG_NET=y
--
--#
--# Networking options
--#
--CONFIG_PACKET=y
--CONFIG_PACKET_MMAP=y
--CONFIG_UNIX=y
--CONFIG_XFRM=y
--CONFIG_XFRM_USER=y
--# CONFIG_XFRM_SUB_POLICY is not set
--# CONFIG_XFRM_MIGRATE is not set
--CONFIG_NET_KEY=y
--# CONFIG_NET_KEY_MIGRATE is not set
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_ASK_IP_FIB_HASH=y
--# CONFIG_IP_FIB_TRIE is not set
--CONFIG_IP_FIB_HASH=y
--# CONFIG_IP_MULTIPLE_TABLES is not set
--# CONFIG_IP_ROUTE_MULTIPATH is not set
--# CONFIG_IP_ROUTE_VERBOSE is not set
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--# CONFIG_IP_PNP_BOOTP is not set
--# CONFIG_IP_PNP_RARP is not set
--# CONFIG_NET_IPIP is not set
--# CONFIG_NET_IPGRE is not set
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--# CONFIG_IP_PIMSM_V2 is not set
--# CONFIG_ARPD is not set
--CONFIG_SYN_COOKIES=y
--CONFIG_INET_AH=y
--CONFIG_INET_ESP=y
--CONFIG_INET_IPCOMP=y
--CONFIG_INET_XFRM_TUNNEL=y
--CONFIG_INET_TUNNEL=y
--CONFIG_INET_XFRM_MODE_TRANSPORT=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
--CONFIG_INET_XFRM_MODE_BEET=y
--# CONFIG_INET_LRO is not set
--CONFIG_INET_DIAG=y
--CONFIG_INET_TCP_DIAG=y
--# CONFIG_TCP_CONG_ADVANCED is not set
--CONFIG_TCP_CONG_CUBIC=y
--CONFIG_DEFAULT_TCP_CONG="cubic"
--# CONFIG_TCP_MD5SIG is not set
--# CONFIG_IP_VS is not set
--CONFIG_IPV6=y
--# CONFIG_IPV6_PRIVACY is not set
--# CONFIG_IPV6_ROUTER_PREF is not set
--# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--CONFIG_INET6_AH=y
--CONFIG_INET6_ESP=y
--CONFIG_INET6_IPCOMP=y
--# CONFIG_IPV6_MIP6 is not set
--CONFIG_INET6_XFRM_TUNNEL=y
--CONFIG_INET6_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
--# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
--# CONFIG_IPV6_TUNNEL is not set
--# CONFIG_IPV6_MULTIPLE_TABLES is not set
--# CONFIG_NETWORK_SECMARK is not set
--CONFIG_NETFILTER=y
--# CONFIG_NETFILTER_DEBUG is not set
--CONFIG_BRIDGE_NETFILTER=y
--
--#
--# Core Netfilter Configuration
--#
--# CONFIG_NETFILTER_NETLINK is not set
--CONFIG_NF_CONNTRACK_ENABLED=m
--CONFIG_NF_CONNTRACK=m
--CONFIG_NF_CT_ACCT=y
--CONFIG_NF_CONNTRACK_MARK=y
--# CONFIG_NF_CONNTRACK_EVENTS is not set
--CONFIG_NF_CT_PROTO_GRE=m
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
--CONFIG_NF_CONNTRACK_AMANDA=m
--CONFIG_NF_CONNTRACK_FTP=m
--CONFIG_NF_CONNTRACK_H323=m
--CONFIG_NF_CONNTRACK_IRC=m
--CONFIG_NF_CONNTRACK_NETBIOS_NS=m
--CONFIG_NF_CONNTRACK_PPTP=m
--CONFIG_NF_CONNTRACK_SANE=m
--CONFIG_NF_CONNTRACK_SIP=m
--CONFIG_NF_CONNTRACK_TFTP=m
--CONFIG_NETFILTER_XTABLES=y
--CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
--# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
--# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
--CONFIG_NETFILTER_XT_TARGET_MARK=m
--CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
--CONFIG_NETFILTER_XT_TARGET_NFLOG=m
--# CONFIG_NETFILTER_XT_TARGET_NOTRACK is not set
--# CONFIG_NETFILTER_XT_TARGET_TRACE is not set
--CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
--CONFIG_NETFILTER_XT_MATCH_COMMENT=m
--CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
--# CONFIG_NETFILTER_XT_MATCH_CONNLIMIT is not set
--CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
--CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
--# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
--# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
--CONFIG_NETFILTER_XT_MATCH_ESP=m
--CONFIG_NETFILTER_XT_MATCH_HELPER=m
--CONFIG_NETFILTER_XT_MATCH_LENGTH=m
--CONFIG_NETFILTER_XT_MATCH_LIMIT=m
--CONFIG_NETFILTER_XT_MATCH_MAC=m
--CONFIG_NETFILTER_XT_MATCH_MARK=m
--CONFIG_NETFILTER_XT_MATCH_POLICY=m
--CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
--# CONFIG_NETFILTER_XT_MATCH_PHYSDEV is not set
--CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
--CONFIG_NETFILTER_XT_MATCH_QUOTA=m
--CONFIG_NETFILTER_XT_MATCH_REALM=m
--# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
--CONFIG_NETFILTER_XT_MATCH_STATE=m
--CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
--CONFIG_NETFILTER_XT_MATCH_STRING=m
--CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
--# CONFIG_NETFILTER_XT_MATCH_TIME is not set
--# CONFIG_NETFILTER_XT_MATCH_U32 is not set
--CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
--
--#
--# IP: Netfilter Configuration
--#
--CONFIG_NF_CONNTRACK_IPV4=m
--CONFIG_NF_CONNTRACK_PROC_COMPAT=y
--# CONFIG_IP_NF_QUEUE is not set
--CONFIG_IP_NF_IPTABLES=m
--CONFIG_IP_NF_MATCH_IPRANGE=m
--CONFIG_IP_NF_MATCH_TOS=m
--CONFIG_IP_NF_MATCH_RECENT=m
--CONFIG_IP_NF_MATCH_ECN=m
--CONFIG_IP_NF_MATCH_AH=m
--CONFIG_IP_NF_MATCH_TTL=m
--CONFIG_IP_NF_MATCH_OWNER=m
--CONFIG_IP_NF_MATCH_ADDRTYPE=m
--CONFIG_IP_NF_FILTER=m
--CONFIG_IP_NF_TARGET_REJECT=m
--CONFIG_IP_NF_TARGET_LOG=m
--# CONFIG_IP_NF_TARGET_ULOG is not set
--CONFIG_NF_NAT=m
--CONFIG_NF_NAT_NEEDED=y
--CONFIG_IP_NF_TARGET_MASQUERADE=m
--CONFIG_IP_NF_TARGET_REDIRECT=m
--CONFIG_IP_NF_TARGET_NETMAP=m
--CONFIG_IP_NF_TARGET_SAME=m
--CONFIG_NF_NAT_SNMP_BASIC=m
--CONFIG_NF_NAT_PROTO_GRE=m
--CONFIG_NF_NAT_FTP=m
--CONFIG_NF_NAT_IRC=m
--CONFIG_NF_NAT_TFTP=m
--CONFIG_NF_NAT_AMANDA=m
--CONFIG_NF_NAT_PPTP=m
--CONFIG_NF_NAT_H323=m
--CONFIG_NF_NAT_SIP=m
--CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_TOS=m
--CONFIG_IP_NF_TARGET_ECN=m
--CONFIG_IP_NF_TARGET_TTL=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
--CONFIG_IP_NF_RAW=m
--CONFIG_IP_NF_ARPTABLES=m
--CONFIG_IP_NF_ARPFILTER=m
--CONFIG_IP_NF_ARP_MANGLE=m
--
--#
--# IPv6: Netfilter Configuration (EXPERIMENTAL)
--#
--CONFIG_NF_CONNTRACK_IPV6=m
--CONFIG_IP6_NF_QUEUE=m
--CONFIG_IP6_NF_IPTABLES=m
--CONFIG_IP6_NF_MATCH_RT=m
--CONFIG_IP6_NF_MATCH_OPTS=m
--CONFIG_IP6_NF_MATCH_FRAG=m
--CONFIG_IP6_NF_MATCH_HL=m
--CONFIG_IP6_NF_MATCH_OWNER=m
--CONFIG_IP6_NF_MATCH_IPV6HEADER=m
--CONFIG_IP6_NF_MATCH_AH=m
--CONFIG_IP6_NF_MATCH_MH=m
--CONFIG_IP6_NF_MATCH_EUI64=m
--CONFIG_IP6_NF_FILTER=m
--CONFIG_IP6_NF_TARGET_LOG=m
--CONFIG_IP6_NF_TARGET_REJECT=m
--CONFIG_IP6_NF_MANGLE=m
--CONFIG_IP6_NF_TARGET_HL=m
--CONFIG_IP6_NF_RAW=m
--
--#
--# Bridge: Netfilter Configuration
--#
--# CONFIG_BRIDGE_NF_EBTABLES is not set
--# CONFIG_IP_DCCP is not set
--# CONFIG_IP_SCTP is not set
--# CONFIG_TIPC is not set
--# CONFIG_ATM is not set
--CONFIG_BRIDGE=m
--CONFIG_VLAN_8021Q=m
--# CONFIG_DECNET is not set
--CONFIG_LLC=m
--# CONFIG_LLC2 is not set
--# CONFIG_IPX is not set
--# CONFIG_ATALK is not set
--# CONFIG_X25 is not set
--# CONFIG_LAPB is not set
--# CONFIG_ECONET is not set
--# CONFIG_WAN_ROUTER is not set
--# CONFIG_NET_SCHED is not set
--CONFIG_NET_CLS_ROUTE=y
--
--#
--# Network testing
--#
--# CONFIG_NET_PKTGEN is not set
--# CONFIG_NET_TCPPROBE is not set
--# CONFIG_HAMRADIO is not set
--# CONFIG_IRDA is not set
--# CONFIG_BT is not set
--# CONFIG_AF_RXRPC is not set
--
--#
--# Wireless
--#
--# CONFIG_CFG80211 is not set
--# CONFIG_WIRELESS_EXT is not set
--# CONFIG_MAC80211 is not set
--# CONFIG_IEEE80211 is not set
--# CONFIG_RFKILL is not set
--# CONFIG_NET_9P is not set
--
--#
--# Device Drivers
--#
--
--#
--# Generic Driver Options
--#
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_STANDALONE=y
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--# CONFIG_FW_LOADER is not set
--# CONFIG_DEBUG_DRIVER is not set
--# CONFIG_DEBUG_DEVRES is not set
--# CONFIG_SYS_HYPERVISOR is not set
--# CONFIG_CONNECTOR is not set
--CONFIG_MTD=y
--# CONFIG_MTD_DEBUG is not set
--# CONFIG_MTD_CONCAT is not set
--CONFIG_MTD_PARTITIONS=y
--# CONFIG_MTD_REDBOOT_PARTS is not set
--CONFIG_MTD_CMDLINE_PARTS=y
--
--#
--# User Modules And Translation Layers
--#
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLKDEVS=y
--CONFIG_MTD_BLOCK=y
--# CONFIG_FTL is not set
--# CONFIG_NFTL is not set
--# CONFIG_INFTL is not set
--# CONFIG_RFD_FTL is not set
--# CONFIG_SSFDC is not set
--# CONFIG_MTD_OOPS is not set
--
--#
--# RAM/ROM/Flash chip drivers
--#
--CONFIG_MTD_CFI=y
--# CONFIG_MTD_JEDECPROBE is not set
--CONFIG_MTD_GEN_PROBE=y
--# CONFIG_MTD_CFI_ADV_OPTIONS is not set
--CONFIG_MTD_MAP_BANK_WIDTH_1=y
--CONFIG_MTD_MAP_BANK_WIDTH_2=y
--CONFIG_MTD_MAP_BANK_WIDTH_4=y
--# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
--CONFIG_MTD_CFI_I1=y
--CONFIG_MTD_CFI_I2=y
--# CONFIG_MTD_CFI_I4 is not set
--# CONFIG_MTD_CFI_I8 is not set
--# CONFIG_MTD_CFI_INTELEXT is not set
--CONFIG_MTD_CFI_AMDSTD=y
--# CONFIG_MTD_CFI_STAA is not set
--CONFIG_MTD_CFI_UTIL=y
--# CONFIG_MTD_RAM is not set
--# CONFIG_MTD_ROM is not set
--# CONFIG_MTD_ABSENT is not set
--
--#
--# Mapping drivers for chip access
--#
--# CONFIG_MTD_COMPLEX_MAPPINGS is not set
--CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_PHYSMAP_START=0x80000000
--CONFIG_MTD_PHYSMAP_LEN=0x0
--CONFIG_MTD_PHYSMAP_BANKWIDTH=2
--# CONFIG_MTD_PLATRAM is not set
--
--#
--# Self-contained MTD device drivers
--#
--CONFIG_MTD_DATAFLASH=y
--# CONFIG_MTD_M25P80 is not set
--# CONFIG_MTD_SLRAM is not set
--# CONFIG_MTD_PHRAM is not set
--# CONFIG_MTD_MTDRAM is not set
--# CONFIG_MTD_BLOCK2MTD is not set
--
--#
--# Disk-On-Chip Device Drivers
--#
--# CONFIG_MTD_DOC2000 is not set
--# CONFIG_MTD_DOC2001 is not set
--# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
--# CONFIG_MTD_ONENAND is not set
--
--#
--# UBI - Unsorted block images
--#
--# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
--CONFIG_BLK_DEV=y
--# CONFIG_BLK_DEV_COW_COMMON is not set
--CONFIG_BLK_DEV_LOOP=m
--# CONFIG_BLK_DEV_CRYPTOLOOP is not set
--CONFIG_BLK_DEV_NBD=m
--CONFIG_BLK_DEV_RAM=m
--CONFIG_BLK_DEV_RAM_COUNT=16
--CONFIG_BLK_DEV_RAM_SIZE=4096
--CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
--# CONFIG_CDROM_PKTCDVD is not set
--# CONFIG_ATA_OVER_ETH is not set
--# CONFIG_MISC_DEVICES is not set
--# CONFIG_IDE is not set
--
--#
--# SCSI device support
--#
--# CONFIG_RAID_ATTRS is not set
--# CONFIG_SCSI is not set
--# CONFIG_SCSI_DMA is not set
--# CONFIG_SCSI_NETLINK is not set
--# CONFIG_ATA is not set
--# CONFIG_MD is not set
--CONFIG_NETDEVICES=y
--# CONFIG_NETDEVICES_MULTIQUEUE is not set
--# CONFIG_DUMMY is not set
--# CONFIG_BONDING is not set
--# CONFIG_MACVLAN is not set
--# CONFIG_EQUALIZER is not set
--CONFIG_TUN=m
--# CONFIG_VETH is not set
--CONFIG_PHYLIB=y
--
--#
--# MII PHY device drivers
--#
--# CONFIG_MARVELL_PHY is not set
--# CONFIG_DAVICOM_PHY is not set
--# CONFIG_QSEMI_PHY is not set
--# CONFIG_LXT_PHY is not set
--# CONFIG_CICADA_PHY is not set
--# CONFIG_VITESSE_PHY is not set
--# CONFIG_SMSC_PHY is not set
--# CONFIG_BROADCOM_PHY is not set
--# CONFIG_ICPLUS_PHY is not set
--# CONFIG_FIXED_PHY is not set
--# CONFIG_MDIO_BITBANG is not set
--CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
--CONFIG_MACB=y
--# CONFIG_IBM_NEW_EMAC_ZMII is not set
--# CONFIG_IBM_NEW_EMAC_RGMII is not set
--# CONFIG_IBM_NEW_EMAC_TAH is not set
--# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
--# CONFIG_B44 is not set
--# CONFIG_NETDEV_1000 is not set
--# CONFIG_NETDEV_10000 is not set
--
--#
--# Wireless LAN
--#
--# CONFIG_WLAN_PRE80211 is not set
--# CONFIG_WLAN_80211 is not set
--# CONFIG_WAN is not set
--CONFIG_PPP=m
--# CONFIG_PPP_MULTILINK is not set
--CONFIG_PPP_FILTER=y
--CONFIG_PPP_ASYNC=m
--# CONFIG_PPP_SYNC_TTY is not set
--CONFIG_PPP_DEFLATE=m
--CONFIG_PPP_BSDCOMP=m
--CONFIG_PPP_MPPE=m
--CONFIG_PPPOE=m
--# CONFIG_PPPOL2TP is not set
--# CONFIG_SLIP is not set
--CONFIG_SLHC=m
--# CONFIG_SHAPER is not set
--# CONFIG_NETCONSOLE is not set
--# CONFIG_NETPOLL is not set
--# CONFIG_NET_POLL_CONTROLLER is not set
--# CONFIG_ISDN is not set
--# CONFIG_PHONE is not set
--
--#
--# Input device support
--#
--# CONFIG_INPUT is not set
--
--#
--# Hardware I/O ports
--#
--# CONFIG_SERIO is not set
--# CONFIG_GAMEPORT is not set
--
--#
--# Character devices
--#
--# CONFIG_VT is not set
--# CONFIG_SERIAL_NONSTANDARD is not set
--
--#
--# Serial drivers
--#
--# CONFIG_SERIAL_8250 is not set
--
--#
--# Non-8250 serial port support
--#
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--# CONFIG_SERIAL_ATMEL_TTYAT is not set
--CONFIG_SERIAL_CORE=y
--CONFIG_SERIAL_CORE_CONSOLE=y
--CONFIG_UNIX98_PTYS=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_IPMI_HANDLER is not set
--# CONFIG_HW_RANDOM is not set
--# CONFIG_RTC is not set
--# CONFIG_GEN_RTC is not set
--# CONFIG_R3964 is not set
--# CONFIG_RAW_DRIVER is not set
--# CONFIG_TCG_TPM is not set
--CONFIG_I2C=m
--CONFIG_I2C_BOARDINFO=y
--CONFIG_I2C_CHARDEV=m
--
--#
--# I2C Algorithms
--#
--CONFIG_I2C_ALGOBIT=m
--# CONFIG_I2C_ALGOPCF is not set
--# CONFIG_I2C_ALGOPCA is not set
--
--#
--# I2C Hardware Bus support
--#
--# CONFIG_I2C_ATMELTWI is not set
--CONFIG_I2C_GPIO=m
--# CONFIG_I2C_OCORES is not set
--# CONFIG_I2C_PARPORT_LIGHT is not set
--# CONFIG_I2C_SIMTEC is not set
--# CONFIG_I2C_TAOS_EVM is not set
--# CONFIG_I2C_STUB is not set
--
--#
--# Miscellaneous I2C Chip support
--#
--# CONFIG_SENSORS_DS1337 is not set
--# CONFIG_SENSORS_DS1374 is not set
--# CONFIG_DS1682 is not set
--# CONFIG_SENSORS_EEPROM is not set
--# CONFIG_SENSORS_PCF8574 is not set
--# CONFIG_SENSORS_PCA9539 is not set
--# CONFIG_SENSORS_PCF8591 is not set
--# CONFIG_SENSORS_MAX6875 is not set
--# CONFIG_SENSORS_TSL2550 is not set
--# CONFIG_I2C_DEBUG_CORE is not set
--# CONFIG_I2C_DEBUG_ALGO is not set
--# CONFIG_I2C_DEBUG_BUS is not set
--# CONFIG_I2C_DEBUG_CHIP is not set
--
--#
--# SPI support
--#
--CONFIG_SPI=y
--# CONFIG_SPI_DEBUG is not set
--CONFIG_SPI_MASTER=y
--
--#
--# SPI Master Controller Drivers
--#
--CONFIG_SPI_ATMEL=y
--# CONFIG_SPI_BITBANG is not set
--
--#
--# SPI Protocol Masters
--#
--# CONFIG_SPI_AT25 is not set
--CONFIG_SPI_SPIDEV=m
--# CONFIG_SPI_TLE62X0 is not set
--# CONFIG_W1 is not set
--# CONFIG_POWER_SUPPLY is not set
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--# CONFIG_WATCHDOG_NOWAYOUT is not set
--
--#
--# Watchdog Device Drivers
--#
--# CONFIG_SOFT_WATCHDOG is not set
--CONFIG_AT32AP700X_WDT=y
--
--#
--# Sonics Silicon Backplane
--#
--CONFIG_SSB_POSSIBLE=y
--# CONFIG_SSB is not set
--
--#
--# Multifunction device drivers
--#
--# CONFIG_MFD_SM501 is not set
--
--#
--# Multimedia devices
--#
--# CONFIG_VIDEO_DEV is not set
--# CONFIG_DVB_CORE is not set
--# CONFIG_DAB is not set
--
--#
--# Graphics support
--#
--# CONFIG_VGASTATE is not set
--# CONFIG_VIDEO_OUTPUT_CONTROL is not set
--# CONFIG_FB is not set
--# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
--
--#
--# Display device support
--#
--# CONFIG_DISPLAY_SUPPORT is not set
--
--#
--# Sound
--#
--# CONFIG_SOUND is not set
--CONFIG_USB_SUPPORT=y
--# CONFIG_USB_ARCH_HAS_HCD is not set
--# CONFIG_USB_ARCH_HAS_OHCI is not set
--# CONFIG_USB_ARCH_HAS_EHCI is not set
--
--#
--# NOTE: USB_STORAGE enables SCSI, and 'SCSI disk support'
--#
--
--#
--# USB Gadget Support
--#
--CONFIG_USB_GADGET=y
--# CONFIG_USB_GADGET_DEBUG is not set
--# CONFIG_USB_GADGET_DEBUG_FILES is not set
--CONFIG_USB_GADGET_SELECTED=y
--# CONFIG_USB_GADGET_AMD5536UDC is not set
--CONFIG_USB_GADGET_ATMEL_USBA=y
--CONFIG_USB_ATMEL_USBA=y
--# CONFIG_USB_GADGET_FSL_USB2 is not set
--# CONFIG_USB_GADGET_NET2280 is not set
--# CONFIG_USB_GADGET_PXA2XX is not set
--# CONFIG_USB_GADGET_M66592 is not set
--# CONFIG_USB_GADGET_GOKU is not set
--# CONFIG_USB_GADGET_LH7A40X is not set
--# CONFIG_USB_GADGET_OMAP is not set
--# CONFIG_USB_GADGET_S3C2410 is not set
--# CONFIG_USB_GADGET_AT91 is not set
--# CONFIG_USB_GADGET_DUMMY_HCD is not set
--CONFIG_USB_GADGET_DUALSPEED=y
--CONFIG_USB_ZERO=m
--CONFIG_USB_ETH=m
--CONFIG_USB_ETH_RNDIS=y
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_FILE_STORAGE=m
--# CONFIG_USB_FILE_STORAGE_TEST is not set
--CONFIG_USB_G_SERIAL=m
--# CONFIG_USB_MIDI_GADGET is not set
--CONFIG_MMC=m
--# CONFIG_MMC_DEBUG is not set
--# CONFIG_MMC_UNSAFE_RESUME is not set
--
--#
--# MMC/SD Card Drivers
--#
--CONFIG_MMC_BLOCK=m
--CONFIG_MMC_BLOCK_BOUNCE=y
--# CONFIG_SDIO_UART is not set
--
--#
--# MMC/SD Host Controller Drivers
--#
--CONFIG_MMC_ATMELMCI=m
--CONFIG_MMC_SPI=m
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--
--#
--# LED drivers
--#
--CONFIG_LEDS_GPIO=y
--
--#
--# LED Triggers
--#
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_RTC_LIB=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_HCTOSYS=y
--CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
--# CONFIG_RTC_DEBUG is not set
--
--#
--# RTC interfaces
--#
--CONFIG_RTC_INTF_SYSFS=y
--CONFIG_RTC_INTF_PROC=y
--CONFIG_RTC_INTF_DEV=y
--# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
--# CONFIG_RTC_DRV_TEST is not set
--
--#
--# I2C RTC drivers
--#
--# CONFIG_RTC_DRV_DS1307 is not set
--# CONFIG_RTC_DRV_DS1374 is not set
--# CONFIG_RTC_DRV_DS1672 is not set
--# CONFIG_RTC_DRV_MAX6900 is not set
--# CONFIG_RTC_DRV_RS5C372 is not set
--# CONFIG_RTC_DRV_ISL1208 is not set
--# CONFIG_RTC_DRV_X1205 is not set
--# CONFIG_RTC_DRV_PCF8563 is not set
--# CONFIG_RTC_DRV_PCF8583 is not set
--# CONFIG_RTC_DRV_M41T80 is not set
--
--#
--# SPI RTC drivers
--#
--# CONFIG_RTC_DRV_RS5C348 is not set
--# CONFIG_RTC_DRV_MAX6902 is not set
--
--#
--# Platform RTC drivers
--#
--# CONFIG_RTC_DRV_DS1553 is not set
--# CONFIG_RTC_DRV_STK17TA8 is not set
--# CONFIG_RTC_DRV_DS1742 is not set
--# CONFIG_RTC_DRV_M48T86 is not set
--# CONFIG_RTC_DRV_M48T59 is not set
--# CONFIG_RTC_DRV_V3020 is not set
--
--#
--# on-CPU RTC drivers
--#
--CONFIG_RTC_DRV_AT32AP700X=y
--
--#
--# Userspace I/O
--#
--# CONFIG_UIO is not set
--
--#
--# File systems
--#
--CONFIG_EXT2_FS=m
--# CONFIG_EXT2_FS_XATTR is not set
--# CONFIG_EXT2_FS_XIP is not set
--CONFIG_EXT3_FS=m
--# CONFIG_EXT3_FS_XATTR is not set
--# CONFIG_EXT4DEV_FS is not set
--CONFIG_JBD=m
--# CONFIG_REISERFS_FS is not set
--# CONFIG_JFS_FS is not set
--# CONFIG_FS_POSIX_ACL is not set
--# CONFIG_XFS_FS is not set
--# CONFIG_GFS2_FS is not set
--# CONFIG_OCFS2_FS is not set
--# CONFIG_MINIX_FS is not set
--# CONFIG_ROMFS_FS is not set
--CONFIG_INOTIFY=y
--CONFIG_INOTIFY_USER=y
--# CONFIG_QUOTA is not set
--# CONFIG_DNOTIFY is not set
--# CONFIG_AUTOFS_FS is not set
--# CONFIG_AUTOFS4_FS is not set
--CONFIG_FUSE_FS=m
--
--#
--# CD-ROM/DVD Filesystems
--#
--# CONFIG_ISO9660_FS is not set
--# CONFIG_UDF_FS is not set
--
--#
--# DOS/FAT/NT Filesystems
--#
--CONFIG_FAT_FS=m
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
--CONFIG_FAT_DEFAULT_CODEPAGE=850
--CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
--# CONFIG_NTFS_FS is not set
--
--#
--# Pseudo filesystems
--#
--CONFIG_PROC_FS=y
--# CONFIG_PROC_KCORE is not set
--CONFIG_PROC_SYSCTL=y
--CONFIG_SYSFS=y
--CONFIG_TMPFS=y
--# CONFIG_TMPFS_POSIX_ACL is not set
--# CONFIG_HUGETLB_PAGE is not set
--CONFIG_CONFIGFS_FS=y
--
--#
--# Miscellaneous filesystems
--#
--# CONFIG_ADFS_FS is not set
--# CONFIG_AFFS_FS is not set
--# CONFIG_HFS_FS is not set
--# CONFIG_HFSPLUS_FS is not set
--# CONFIG_BEFS_FS is not set
--# CONFIG_BFS_FS is not set
--# CONFIG_EFS_FS is not set
--CONFIG_JFFS2_FS=y
--CONFIG_JFFS2_FS_DEBUG=0
--CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_FS_WBUF_VERIFY is not set
--# CONFIG_JFFS2_SUMMARY is not set
--# CONFIG_JFFS2_FS_XATTR is not set
--# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
--CONFIG_JFFS2_ZLIB=y
--# CONFIG_JFFS2_LZO is not set
--CONFIG_JFFS2_RTIME=y
--# CONFIG_JFFS2_RUBIN is not set
--# CONFIG_CRAMFS is not set
--# CONFIG_VXFS_FS is not set
--# CONFIG_HPFS_FS is not set
--# CONFIG_QNX4FS_FS is not set
--# CONFIG_SYSV_FS is not set
--# CONFIG_UFS_FS is not set
--CONFIG_NETWORK_FILESYSTEMS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--# CONFIG_NFS_V3_ACL is not set
--# CONFIG_NFS_V4 is not set
--# CONFIG_NFS_DIRECTIO is not set
--CONFIG_NFSD=m
--CONFIG_NFSD_V3=y
--# CONFIG_NFSD_V3_ACL is not set
--# CONFIG_NFSD_V4 is not set
--CONFIG_NFSD_TCP=y
--CONFIG_ROOT_NFS=y
--CONFIG_LOCKD=y
--CONFIG_LOCKD_V4=y
--CONFIG_EXPORTFS=m
--CONFIG_NFS_COMMON=y
--CONFIG_SUNRPC=y
--# CONFIG_SUNRPC_BIND34 is not set
--# CONFIG_RPCSEC_GSS_KRB5 is not set
--# CONFIG_RPCSEC_GSS_SPKM3 is not set
--CONFIG_SMB_FS=m
--# CONFIG_SMB_NLS_DEFAULT is not set
--CONFIG_CIFS=m
--# CONFIG_CIFS_STATS is not set
--# CONFIG_CIFS_WEAK_PW_HASH is not set
--# CONFIG_CIFS_XATTR is not set
--# CONFIG_CIFS_DEBUG2 is not set
--# CONFIG_CIFS_EXPERIMENTAL is not set
--# CONFIG_NCP_FS is not set
--# CONFIG_CODA_FS is not set
--# CONFIG_AFS_FS is not set
--
--#
--# Partition Types
--#
--# CONFIG_PARTITION_ADVANCED is not set
--CONFIG_MSDOS_PARTITION=y
--CONFIG_NLS=m
--CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=m
--# CONFIG_NLS_CODEPAGE_737 is not set
--# CONFIG_NLS_CODEPAGE_775 is not set
--CONFIG_NLS_CODEPAGE_850=m
--# CONFIG_NLS_CODEPAGE_852 is not set
--# CONFIG_NLS_CODEPAGE_855 is not set
--# CONFIG_NLS_CODEPAGE_857 is not set
--# CONFIG_NLS_CODEPAGE_860 is not set
--# CONFIG_NLS_CODEPAGE_861 is not set
--# CONFIG_NLS_CODEPAGE_862 is not set
--# CONFIG_NLS_CODEPAGE_863 is not set
--# CONFIG_NLS_CODEPAGE_864 is not set
--# CONFIG_NLS_CODEPAGE_865 is not set
--# CONFIG_NLS_CODEPAGE_866 is not set
--# CONFIG_NLS_CODEPAGE_869 is not set
--# CONFIG_NLS_CODEPAGE_936 is not set
--# CONFIG_NLS_CODEPAGE_950 is not set
--# CONFIG_NLS_CODEPAGE_932 is not set
--# CONFIG_NLS_CODEPAGE_949 is not set
--# CONFIG_NLS_CODEPAGE_874 is not set
--# CONFIG_NLS_ISO8859_8 is not set
--# CONFIG_NLS_CODEPAGE_1250 is not set
--# CONFIG_NLS_CODEPAGE_1251 is not set
--# CONFIG_NLS_ASCII is not set
--CONFIG_NLS_ISO8859_1=m
--# CONFIG_NLS_ISO8859_2 is not set
--# CONFIG_NLS_ISO8859_3 is not set
--# CONFIG_NLS_ISO8859_4 is not set
--# CONFIG_NLS_ISO8859_5 is not set
--# CONFIG_NLS_ISO8859_6 is not set
--# CONFIG_NLS_ISO8859_7 is not set
--# CONFIG_NLS_ISO8859_9 is not set
--# CONFIG_NLS_ISO8859_13 is not set
--# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
--# CONFIG_NLS_KOI8_R is not set
--# CONFIG_NLS_KOI8_U is not set
--CONFIG_NLS_UTF8=m
--# CONFIG_DLM is not set
--CONFIG_INSTRUMENTATION=y
--CONFIG_PROFILING=y
--CONFIG_OPROFILE=m
--CONFIG_KPROBES=y
--# CONFIG_MARKERS is not set
--
--#
--# Kernel hacking
--#
--# CONFIG_PRINTK_TIME is not set
--CONFIG_ENABLE_WARN_DEPRECATED=y
--CONFIG_ENABLE_MUST_CHECK=y
--CONFIG_MAGIC_SYSRQ=y
--# CONFIG_UNUSED_SYMBOLS is not set
--# CONFIG_DEBUG_FS is not set
--# CONFIG_HEADERS_CHECK is not set
--CONFIG_DEBUG_KERNEL=y
--# CONFIG_DEBUG_SHIRQ is not set
--CONFIG_DETECT_SOFTLOCKUP=y
--CONFIG_SCHED_DEBUG=y
--# CONFIG_SCHEDSTATS is not set
--# CONFIG_TIMER_STATS is not set
--# CONFIG_SLUB_DEBUG_ON is not set
--# CONFIG_DEBUG_RT_MUTEXES is not set
--# CONFIG_RT_MUTEX_TESTER is not set
--# CONFIG_DEBUG_SPINLOCK is not set
--# CONFIG_DEBUG_MUTEXES is not set
--# CONFIG_DEBUG_LOCK_ALLOC is not set
--# CONFIG_PROVE_LOCKING is not set
--# CONFIG_LOCK_STAT is not set
--# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
--# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
--# CONFIG_DEBUG_KOBJECT is not set
--CONFIG_DEBUG_BUGVERBOSE=y
--# CONFIG_DEBUG_INFO is not set
--# CONFIG_DEBUG_VM is not set
--# CONFIG_DEBUG_LIST is not set
--# CONFIG_DEBUG_SG is not set
--CONFIG_FRAME_POINTER=y
--# CONFIG_FORCED_INLINING is not set
--# CONFIG_BOOT_PRINTK_DELAY is not set
--# CONFIG_RCU_TORTURE_TEST is not set
--# CONFIG_LKDTM is not set
--# CONFIG_FAULT_INJECTION is not set
--# CONFIG_SAMPLES is not set
--
--#
--# Security options
--#
--# CONFIG_KEYS is not set
--# CONFIG_SECURITY is not set
--# CONFIG_SECURITY_FILE_CAPABILITIES is not set
--CONFIG_CRYPTO=y
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_HMAC=y
--# CONFIG_CRYPTO_XCBC is not set
--# CONFIG_CRYPTO_NULL is not set
--# CONFIG_CRYPTO_MD4 is not set
--CONFIG_CRYPTO_MD5=y
--CONFIG_CRYPTO_SHA1=y
--# CONFIG_CRYPTO_SHA256 is not set
--# CONFIG_CRYPTO_SHA512 is not set
--# CONFIG_CRYPTO_WP512 is not set
--# CONFIG_CRYPTO_TGR192 is not set
--# CONFIG_CRYPTO_GF128MUL is not set
--CONFIG_CRYPTO_ECB=m
--CONFIG_CRYPTO_CBC=y
--CONFIG_CRYPTO_PCBC=m
--# CONFIG_CRYPTO_LRW is not set
--# CONFIG_CRYPTO_XTS is not set
--# CONFIG_CRYPTO_CRYPTD is not set
--CONFIG_CRYPTO_DES=y
--# CONFIG_CRYPTO_FCRYPT is not set
--# CONFIG_CRYPTO_BLOWFISH is not set
--# CONFIG_CRYPTO_TWOFISH is not set
--# CONFIG_CRYPTO_SERPENT is not set
--# CONFIG_CRYPTO_AES is not set
--# CONFIG_CRYPTO_CAST5 is not set
--# CONFIG_CRYPTO_CAST6 is not set
--# CONFIG_CRYPTO_TEA is not set
--CONFIG_CRYPTO_ARC4=m
--# CONFIG_CRYPTO_KHAZAD is not set
--# CONFIG_CRYPTO_ANUBIS is not set
--# CONFIG_CRYPTO_SEED is not set
--CONFIG_CRYPTO_DEFLATE=y
--# CONFIG_CRYPTO_MICHAEL_MIC is not set
--# CONFIG_CRYPTO_CRC32C is not set
--# CONFIG_CRYPTO_CAMELLIA is not set
--# CONFIG_CRYPTO_TEST is not set
--# CONFIG_CRYPTO_AUTHENC is not set
--CONFIG_CRYPTO_HW=y
--
--#
--# Library routines
--#
--CONFIG_BITREVERSE=y
--CONFIG_CRC_CCITT=m
--# CONFIG_CRC16 is not set
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC32=y
--CONFIG_CRC7=m
--# CONFIG_LIBCRC32C is not set
--CONFIG_ZLIB_INFLATE=y
--CONFIG_ZLIB_DEFLATE=y
--CONFIG_TEXTSEARCH=y
--CONFIG_TEXTSEARCH_KMP=m
--CONFIG_TEXTSEARCH_BM=m
--CONFIG_TEXTSEARCH_FSM=m
--CONFIG_PLIST=y
--CONFIG_HAS_IOMEM=y
--CONFIG_HAS_IOPORT=y
--CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atngw100-base/busybox-1.11.0.config b/target/device/Atmel/atngw100-base/busybox-1.11.0.config
-deleted file mode 100644
-index 7dd45cd..0000000
---- a/target/device/Atmel/atngw100-base/busybox-1.11.0.config
-+++ /dev/null
-@@ -1,767 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Busybox version: 1.8.2
--# Sun Dec 23 12:11:59 2007
--#
--CONFIG_HAVE_DOT_CONFIG=y
--
--#
--# Busybox Settings
--#
--
--#
--# General Configuration
--#
--# CONFIG_NITPICK is not set
--# CONFIG_DESKTOP is not set
--# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
--# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
--# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
--CONFIG_SHOW_USAGE=y
--CONFIG_FEATURE_VERBOSE_USAGE=y
--# CONFIG_FEATURE_COMPRESS_USAGE is not set
--# CONFIG_FEATURE_INSTALLER is not set
--# CONFIG_LOCALE_SUPPORT is not set
--CONFIG_GETOPT_LONG=y
--CONFIG_FEATURE_DEVPTS=y
--# CONFIG_FEATURE_CLEAN_UP is not set
--# CONFIG_FEATURE_PIDFILE is not set
--CONFIG_FEATURE_SUID=y
--# CONFIG_FEATURE_SUID_CONFIG is not set
--# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
--# CONFIG_SELINUX is not set
--# CONFIG_FEATURE_PREFER_APPLETS is not set
--CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
--CONFIG_FEATURE_SYSLOG=y
--CONFIG_FEATURE_HAVE_RPC=y
--
--#
--# Build Options
--#
--CONFIG_STATIC=y
--CONFIG_BUILD_LIBBUSYBOX=y
--# CONFIG_FEATURE_INDIVIDUAL is not set
--# CONFIG_FEATURE_SHARED_BUSYBOX is not set
--CONFIG_LFS=y
--
--#
--# Debugging Options
--#
--# CONFIG_DEBUG is not set
--# CONFIG_WERROR is not set
--CONFIG_NO_DEBUG_LIB=y
--# CONFIG_DMALLOC is not set
--# CONFIG_EFENCE is not set
--CONFIG_INCLUDE_SUSv2=y
--
--#
--# Installation Options
--#
--# CONFIG_INSTALL_NO_USR is not set
--CONFIG_INSTALL_APPLET_SYMLINKS=y
--# CONFIG_INSTALL_APPLET_HARDLINKS is not set
--# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
--# CONFIG_INSTALL_APPLET_DONT is not set
--# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
--# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
--# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
--CONFIG_PREFIX="/usr/avr32-linux"
--
--#
--# Busybox Library Tuning
--#
--CONFIG_PASSWORD_MINLEN=6
--CONFIG_MD5_SIZE_VS_SPEED=2
--CONFIG_FEATURE_FAST_TOP=y
--# CONFIG_FEATURE_ETC_NETWORKS is not set
--CONFIG_FEATURE_EDITING=y
--CONFIG_FEATURE_EDITING_MAX_LEN=1024
--CONFIG_FEATURE_EDITING_FANCY_KEYS=y
--# CONFIG_FEATURE_EDITING_VI is not set
--CONFIG_FEATURE_EDITING_HISTORY=100
--CONFIG_FEATURE_EDITING_SAVEHISTORY=y
--CONFIG_FEATURE_TAB_COMPLETION=y
--# CONFIG_FEATURE_USERNAME_COMPLETION is not set
--CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
--CONFIG_MONOTONIC_SYSCALL=y
--CONFIG_IOCTL_HEX2STR_ERROR=y
--
--#
--# Applets
--#
--
--#
--# Archival Utilities
--#
--CONFIG_AR=y
--CONFIG_FEATURE_AR_LONG_FILENAMES=y
--CONFIG_BUNZIP2=y
--CONFIG_BZIP2=y
--CONFIG_CPIO=y
--CONFIG_DPKG=y
--CONFIG_DPKG_DEB=y
--# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
--CONFIG_GUNZIP=y
--CONFIG_FEATURE_GUNZIP_UNCOMPRESS=y
--CONFIG_GZIP=y
--CONFIG_RPM2CPIO=y
--CONFIG_RPM=y
--CONFIG_FEATURE_RPM_BZ2=y
--CONFIG_TAR=y
--CONFIG_FEATURE_TAR_CREATE=y
--CONFIG_FEATURE_TAR_BZIP2=y
--CONFIG_FEATURE_TAR_LZMA=y
--CONFIG_FEATURE_TAR_FROM=y
--CONFIG_FEATURE_TAR_GZIP=y
--CONFIG_FEATURE_TAR_COMPRESS=y
--CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY=y
--CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY=y
--CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
--CONFIG_FEATURE_TAR_LONG_OPTIONS=y
--CONFIG_UNCOMPRESS=y
--CONFIG_UNLZMA=y
--CONFIG_FEATURE_LZMA_FAST=y
--CONFIG_UNZIP=y
--
--#
--# Common options for cpio and tar
--#
--# CONFIG_FEATURE_UNARCHIVE_TAPE is not set
--
--#
--# Common options for dpkg and dpkg_deb
--#
--CONFIG_FEATURE_DEB_TAR_GZ=y
--CONFIG_FEATURE_DEB_TAR_BZ2=y
--CONFIG_FEATURE_DEB_TAR_LZMA=y
--
--#
--# Coreutils
--#
--CONFIG_BASENAME=y
--CONFIG_CAL=y
--CONFIG_CAT=y
--CONFIG_CATV=y
--CONFIG_CHGRP=y
--CONFIG_CHMOD=y
--CONFIG_CHOWN=y
--CONFIG_CHROOT=y
--CONFIG_CKSUM=y
--CONFIG_COMM=y
--CONFIG_CP=y
--CONFIG_CUT=y
--CONFIG_DATE=y
--CONFIG_FEATURE_DATE_ISOFMT=y
--CONFIG_DD=y
--CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
--CONFIG_FEATURE_DD_IBS_OBS=y
--CONFIG_DF=y
--CONFIG_DIRNAME=y
--CONFIG_DOS2UNIX=y
--CONFIG_UNIX2DOS=y
--CONFIG_DU=y
--CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
--CONFIG_ECHO=y
--CONFIG_FEATURE_FANCY_ECHO=y
--CONFIG_ENV=y
--CONFIG_FEATURE_ENV_LONG_OPTIONS=y
--CONFIG_EXPAND=y
--CONFIG_FEATURE_EXPAND_LONG_OPTIONS=y
--CONFIG_EXPR=y
--CONFIG_EXPR_MATH_SUPPORT_64=y
--CONFIG_FALSE=y
--CONFIG_FOLD=y
--CONFIG_HEAD=y
--CONFIG_FEATURE_FANCY_HEAD=y
--CONFIG_HOSTID=y
--CONFIG_ID=y
--CONFIG_INSTALL=y
--CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
--CONFIG_LENGTH=y
--CONFIG_LN=y
--CONFIG_LOGNAME=y
--CONFIG_LS=y
--CONFIG_FEATURE_LS_FILETYPES=y
--CONFIG_FEATURE_LS_FOLLOWLINKS=y
--CONFIG_FEATURE_LS_RECURSIVE=y
--CONFIG_FEATURE_LS_SORTFILES=y
--CONFIG_FEATURE_LS_TIMESTAMPS=y
--CONFIG_FEATURE_LS_USERNAME=y
--CONFIG_FEATURE_LS_COLOR=y
--CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
--CONFIG_MD5SUM=y
--CONFIG_MKDIR=y
--CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
--CONFIG_MKFIFO=y
--CONFIG_MKNOD=y
--CONFIG_MV=y
--CONFIG_FEATURE_MV_LONG_OPTIONS=y
--CONFIG_NICE=y
--CONFIG_NOHUP=y
--CONFIG_OD=y
--CONFIG_PRINTENV=y
--CONFIG_PRINTF=y
--CONFIG_PWD=y
--CONFIG_READLINK=y
--CONFIG_FEATURE_READLINK_FOLLOW=y
--CONFIG_REALPATH=y
--CONFIG_RM=y
--CONFIG_RMDIR=y
--CONFIG_SEQ=y
--CONFIG_SHA1SUM=y
--CONFIG_SLEEP=y
--CONFIG_FEATURE_FANCY_SLEEP=y
--CONFIG_SORT=y
--CONFIG_FEATURE_SORT_BIG=y
--CONFIG_SPLIT=y
--CONFIG_FEATURE_SPLIT_FANCY=y
--CONFIG_STAT=y
--CONFIG_FEATURE_STAT_FORMAT=y
--CONFIG_STTY=y
--CONFIG_SUM=y
--CONFIG_SYNC=y
--CONFIG_TAIL=y
--CONFIG_FEATURE_FANCY_TAIL=y
--CONFIG_TEE=y
--CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
--CONFIG_TEST=y
--CONFIG_FEATURE_TEST_64=y
--CONFIG_TOUCH=y
--CONFIG_TR=y
--CONFIG_FEATURE_TR_CLASSES=y
--CONFIG_FEATURE_TR_EQUIV=y
--CONFIG_TRUE=y
--CONFIG_TTY=y
--CONFIG_UNAME=y
--CONFIG_UNEXPAND=y
--CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS=y
--CONFIG_UNIQ=y
--CONFIG_USLEEP=y
--CONFIG_UUDECODE=y
--CONFIG_UUENCODE=y
--CONFIG_WC=y
--CONFIG_FEATURE_WC_LARGE=y
--CONFIG_WHO=y
--CONFIG_WHOAMI=y
--CONFIG_YES=y
--
--#
--# Common options for cp and mv
--#
--CONFIG_FEATURE_PRESERVE_HARDLINKS=y
--
--#
--# Common options for ls, more and telnet
--#
--CONFIG_FEATURE_AUTOWIDTH=y
--
--#
--# Common options for df, du, ls
--#
--CONFIG_FEATURE_HUMAN_READABLE=y
--
--#
--# Common options for md5sum, sha1sum
--#
--CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
--
--#
--# Console Utilities
--#
--CONFIG_CHVT=y
--CONFIG_CLEAR=y
--CONFIG_DEALLOCVT=y
--CONFIG_DUMPKMAP=y
--CONFIG_KBD_MODE=y
--CONFIG_LOADFONT=y
--CONFIG_LOADKMAP=y
--CONFIG_OPENVT=y
--CONFIG_RESET=y
--CONFIG_RESIZE=y
--CONFIG_FEATURE_RESIZE_PRINT=y
--CONFIG_SETCONSOLE=y
--CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS=y
--CONFIG_SETKEYCODES=y
--CONFIG_SETLOGCONS=y
--
--#
--# Debian Utilities
--#
--CONFIG_MKTEMP=y
--# CONFIG_PIPE_PROGRESS is not set
--CONFIG_RUN_PARTS=y
--CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
--# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
--CONFIG_START_STOP_DAEMON=y
--CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
--CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
--CONFIG_WHICH=y
--
--#
--# Editors
--#
--CONFIG_AWK=y
--CONFIG_FEATURE_AWK_MATH=y
--CONFIG_CMP=y
--CONFIG_DIFF=y
--CONFIG_FEATURE_DIFF_BINARY=y
--CONFIG_FEATURE_DIFF_DIR=y
--CONFIG_FEATURE_DIFF_MINIMAL=y
--CONFIG_ED=y
--CONFIG_PATCH=y
--CONFIG_SED=y
--CONFIG_VI=y
--CONFIG_FEATURE_VI_MAX_LEN=1024
--CONFIG_FEATURE_VI_COLON=y
--CONFIG_FEATURE_VI_YANKMARK=y
--CONFIG_FEATURE_VI_SEARCH=y
--CONFIG_FEATURE_VI_USE_SIGNALS=y
--CONFIG_FEATURE_VI_DOT_CMD=y
--CONFIG_FEATURE_VI_READONLY=y
--CONFIG_FEATURE_VI_SETOPTS=y
--CONFIG_FEATURE_VI_SET=y
--CONFIG_FEATURE_VI_WIN_RESIZE=y
--CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
--CONFIG_FEATURE_ALLOW_EXEC=y
--
--#
--# Finding Utilities
--#
--CONFIG_FIND=y
--CONFIG_FEATURE_FIND_PRINT0=y
--CONFIG_FEATURE_FIND_MTIME=y
--CONFIG_FEATURE_FIND_MMIN=y
--CONFIG_FEATURE_FIND_PERM=y
--CONFIG_FEATURE_FIND_TYPE=y
--CONFIG_FEATURE_FIND_XDEV=y
--CONFIG_FEATURE_FIND_MAXDEPTH=y
--CONFIG_FEATURE_FIND_NEWER=y
--CONFIG_FEATURE_FIND_INUM=y
--CONFIG_FEATURE_FIND_EXEC=y
--CONFIG_FEATURE_FIND_USER=y
--CONFIG_FEATURE_FIND_GROUP=y
--CONFIG_FEATURE_FIND_NOT=y
--CONFIG_FEATURE_FIND_DEPTH=y
--CONFIG_FEATURE_FIND_PAREN=y
--CONFIG_FEATURE_FIND_SIZE=y
--CONFIG_FEATURE_FIND_PRUNE=y
--CONFIG_FEATURE_FIND_DELETE=y
--CONFIG_FEATURE_FIND_PATH=y
--CONFIG_FEATURE_FIND_REGEX=y
--# CONFIG_FEATURE_FIND_CONTEXT is not set
--CONFIG_GREP=y
--CONFIG_FEATURE_GREP_EGREP_ALIAS=y
--CONFIG_FEATURE_GREP_FGREP_ALIAS=y
--CONFIG_FEATURE_GREP_CONTEXT=y
--CONFIG_XARGS=y
--CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION=y
--CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
--CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
--CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
--
--#
--# Init Utilities
--#
--CONFIG_INIT=y
--# CONFIG_DEBUG_INIT is not set
--CONFIG_FEATURE_USE_INITTAB=y
--CONFIG_FEATURE_INIT_SCTTY=y
--CONFIG_FEATURE_INIT_SYSLOG=y
--CONFIG_FEATURE_EXTRA_QUIET=y
--# CONFIG_FEATURE_INIT_COREDUMPS is not set
--CONFIG_FEATURE_INITRD=y
--CONFIG_HALT=y
--CONFIG_MESG=y
--
--#
--# Login/Password Management Utilities
--#
--CONFIG_FEATURE_SHADOWPASSWDS=y
--# CONFIG_USE_BB_SHADOW is not set
--# CONFIG_USE_BB_PWD_GRP is not set
--CONFIG_ADDGROUP=y
--CONFIG_FEATURE_ADDUSER_TO_GROUP=y
--CONFIG_DELGROUP=y
--CONFIG_FEATURE_DEL_USER_FROM_GROUP=y
--CONFIG_ADDUSER=y
--CONFIG_DELUSER=y
--CONFIG_GETTY=y
--CONFIG_FEATURE_UTMP=y
--CONFIG_FEATURE_WTMP=y
--CONFIG_LOGIN=y
--# CONFIG_PAM is not set
--CONFIG_LOGIN_SCRIPTS=y
--CONFIG_FEATURE_NOLOGIN=y
--CONFIG_FEATURE_SECURETTY=y
--CONFIG_PASSWD=y
--CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
--# CONFIG_CRYPTPW is not set
--# CONFIG_CHPASSWD is not set
--CONFIG_SU=y
--CONFIG_FEATURE_SU_SYSLOG=y
--CONFIG_FEATURE_SU_CHECKS_SHELLS=y
--CONFIG_SULOGIN=y
--CONFIG_VLOCK=y
--
--#
--# Linux Ext2 FS Progs
--#
--CONFIG_CHATTR=y
--CONFIG_FSCK=y
--CONFIG_LSATTR=y
--
--#
--# Linux Module Utilities
--#
--CONFIG_INSMOD=y
--# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
--# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
--# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
--CONFIG_FEATURE_INSMOD_LOAD_MAP=y
--CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL=y
--CONFIG_RMMOD=y
--CONFIG_LSMOD=y
--CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
--CONFIG_MODPROBE=y
--CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y
--CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y
--
--#
--# Options common to multiple modutils
--#
--CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
--# CONFIG_FEATURE_2_4_MODULES is not set
--CONFIG_FEATURE_2_6_MODULES=y
--# CONFIG_FEATURE_QUERY_MODULE_INTERFACE is not set
--
--#
--# Linux System Utilities
--#
--CONFIG_DMESG=y
--CONFIG_FEATURE_DMESG_PRETTY=y
--CONFIG_FBSET=y
--CONFIG_FEATURE_FBSET_FANCY=y
--CONFIG_FEATURE_FBSET_READMODE=y
--CONFIG_FDFLUSH=y
--CONFIG_FDFORMAT=y
--CONFIG_FDISK=y
--CONFIG_FDISK_SUPPORT_LARGE_DISKS=y
--CONFIG_FEATURE_FDISK_WRITABLE=y
--# CONFIG_FEATURE_AIX_LABEL is not set
--# CONFIG_FEATURE_SGI_LABEL is not set
--# CONFIG_FEATURE_SUN_LABEL is not set
--# CONFIG_FEATURE_OSF_LABEL is not set
--# CONFIG_FEATURE_FDISK_ADVANCED is not set
--# CONFIG_FREERAMDISK is not set
--# CONFIG_FSCK_MINIX is not set
--# CONFIG_MKFS_MINIX is not set
--# CONFIG_FEATURE_MINIX2 is not set
--CONFIG_GETOPT=y
--CONFIG_HEXDUMP=y
--CONFIG_HWCLOCK=y
--# CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS is not set
--# CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS is not set
--CONFIG_IPCRM=y
--CONFIG_IPCS=y
--CONFIG_LOSETUP=y
--CONFIG_MDEV=y
--CONFIG_FEATURE_MDEV_CONF=y
--CONFIG_FEATURE_MDEV_EXEC=y
--CONFIG_FEATURE_MDEV_LOAD_FIRMWARE=y
--CONFIG_MKSWAP=y
--# CONFIG_FEATURE_MKSWAP_V0 is not set
--CONFIG_MORE=y
--CONFIG_FEATURE_USE_TERMIOS=y
--CONFIG_MOUNT=y
--CONFIG_FEATURE_MOUNT_HELPERS=y
--CONFIG_FEATURE_MOUNT_NFS=y
--CONFIG_FEATURE_MOUNT_CIFS=y
--CONFIG_FEATURE_MOUNT_FLAGS=y
--CONFIG_FEATURE_MOUNT_FSTAB=y
--CONFIG_PIVOT_ROOT=y
--CONFIG_RDATE=y
--CONFIG_READPROFILE=y
--CONFIG_SETARCH=y
--CONFIG_SWAPONOFF=y
--CONFIG_SWITCH_ROOT=y
--CONFIG_UMOUNT=y
--CONFIG_FEATURE_UMOUNT_ALL=y
--
--#
--# Common options for mount/umount
--#
--CONFIG_FEATURE_MOUNT_LOOP=y
--CONFIG_FEATURE_MTAB_SUPPORT=y
--
--#
--# Miscellaneous Utilities
--#
--# CONFIG_ADJTIMEX is not set
--CONFIG_BBCONFIG=y
--CONFIG_CHRT=y
--CONFIG_CROND=y
--CONFIG_DEBUG_CROND_OPTION=y
--# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
--CONFIG_CRONTAB=y
--CONFIG_DC=y
--# CONFIG_DEVFSD is not set
--# CONFIG_DEVFSD_MODLOAD is not set
--# CONFIG_DEVFSD_FG_NP is not set
--# CONFIG_DEVFSD_VERBOSE is not set
--# CONFIG_FEATURE_DEVFS is not set
--# CONFIG_EJECT is not set
--CONFIG_LAST=y
--CONFIG_LESS=y
--CONFIG_FEATURE_LESS_MAXLINES=9999999
--CONFIG_FEATURE_LESS_BRACKETS=y
--CONFIG_FEATURE_LESS_FLAGS=y
--CONFIG_FEATURE_LESS_FLAGCS=y
--CONFIG_FEATURE_LESS_MARKS=y
--CONFIG_FEATURE_LESS_REGEXP=y
--CONFIG_HDPARM=y
--CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
--CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET=y
--CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA=y
--CONFIG_MAKEDEVS=y
--# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
--CONFIG_FEATURE_MAKEDEVS_TABLE=y
--CONFIG_MICROCOM=y
--CONFIG_MOUNTPOINT=y
--CONFIG_MT=y
--# CONFIG_RAIDAUTORUN is not set
--# CONFIG_READAHEAD is not set
--CONFIG_RUNLEVEL=y
--CONFIG_RX=y
--CONFIG_STRINGS=y
--CONFIG_SETSID=y
--# CONFIG_TASKSET is not set
--# CONFIG_FEATURE_TASKSET_FANCY is not set
--CONFIG_TIME=y
--CONFIG_TTYSIZE=y
--CONFIG_WATCHDOG=y
--
--#
--# Networking Utilities
--#
--CONFIG_FEATURE_IPV6=y
--# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
--CONFIG_ARP=y
--CONFIG_ARPING=y
--CONFIG_DNSD=y
--CONFIG_ETHER_WAKE=y
--# CONFIG_FAKEIDENTD is not set
--CONFIG_FTPGET=y
--CONFIG_FTPPUT=y
--CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS=y
--CONFIG_HOSTNAME=y
--CONFIG_HTTPD=y
--CONFIG_FEATURE_HTTPD_RANGES=y
--CONFIG_FEATURE_HTTPD_USE_SENDFILE=y
--CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP=y
--CONFIG_FEATURE_HTTPD_SETUID=y
--CONFIG_FEATURE_HTTPD_BASIC_AUTH=y
--CONFIG_FEATURE_HTTPD_AUTH_MD5=y
--CONFIG_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES=y
--CONFIG_FEATURE_HTTPD_CGI=y
--CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR=y
--CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV=y
--CONFIG_FEATURE_HTTPD_ENCODE_URL_STR=y
--CONFIG_FEATURE_HTTPD_ERROR_PAGES=y
--CONFIG_FEATURE_HTTPD_PROXY=y
--CONFIG_IFCONFIG=y
--CONFIG_FEATURE_IFCONFIG_STATUS=y
--# CONFIG_FEATURE_IFCONFIG_SLIP is not set
--# CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ is not set
--CONFIG_FEATURE_IFCONFIG_HW=y
--# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
--CONFIG_IFUPDOWN=y
--CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
--# CONFIG_FEATURE_IFUPDOWN_IP is not set
--# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
--CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN=y
--CONFIG_FEATURE_IFUPDOWN_IPV4=y
--CONFIG_FEATURE_IFUPDOWN_IPV6=y
--# CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
--CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP=y
--CONFIG_INETD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
--CONFIG_FEATURE_INETD_RPC=y
--# CONFIG_IP is not set
--# CONFIG_FEATURE_IP_ADDRESS is not set
--# CONFIG_FEATURE_IP_LINK is not set
--# CONFIG_FEATURE_IP_ROUTE is not set
--# CONFIG_FEATURE_IP_TUNNEL is not set
--# CONFIG_FEATURE_IP_RULE is not set
--# CONFIG_FEATURE_IP_SHORT_FORMS is not set
--# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
--# CONFIG_IPADDR is not set
--# CONFIG_IPLINK is not set
--# CONFIG_IPROUTE is not set
--# CONFIG_IPTUNNEL is not set
--# CONFIG_IPRULE is not set
--# CONFIG_IPCALC is not set
--# CONFIG_FEATURE_IPCALC_FANCY is not set
--# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
--# CONFIG_NAMEIF is not set
--# CONFIG_NC is not set
--# CONFIG_NC_SERVER is not set
--# CONFIG_NC_EXTRA is not set
--CONFIG_NETSTAT=y
--CONFIG_FEATURE_NETSTAT_WIDE=y
--CONFIG_NSLOOKUP=y
--CONFIG_PING=y
--CONFIG_PING6=y
--CONFIG_PSCAN=y
--CONFIG_FEATURE_FANCY_PING=y
--CONFIG_ROUTE=y
--# CONFIG_SLATTACH is not set
--CONFIG_TELNET=y
--CONFIG_FEATURE_TELNET_TTYPE=y
--CONFIG_FEATURE_TELNET_AUTOLOGIN=y
--CONFIG_TELNETD=y
--CONFIG_FEATURE_TELNETD_STANDALONE=y
--CONFIG_TFTP=y
--CONFIG_FEATURE_TFTP_GET=y
--CONFIG_FEATURE_TFTP_PUT=y
--CONFIG_FEATURE_TFTP_BLOCKSIZE=y
--# CONFIG_DEBUG_TFTP is not set
--CONFIG_TRACEROUTE=y
--CONFIG_FEATURE_TRACEROUTE_VERBOSE=y
--# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
--# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
--CONFIG_APP_UDHCPD=y
--# CONFIG_APP_DHCPRELAY is not set
--# CONFIG_APP_DUMPLEASES is not set
--# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
--CONFIG_APP_UDHCPC=y
--# CONFIG_FEATURE_UDHCP_DEBUG is not set
--# CONFIG_FEATURE_RFC3397 is not set
--CONFIG_VCONFIG=y
--CONFIG_WGET=y
--CONFIG_FEATURE_WGET_STATUSBAR=y
--CONFIG_FEATURE_WGET_AUTHENTICATION=y
--# CONFIG_FEATURE_WGET_LONG_OPTIONS is not set
--# CONFIG_ZCIP is not set
--
--#
--# Process Utilities
--#
--CONFIG_FREE=y
--CONFIG_FUSER=y
--CONFIG_KILL=y
--CONFIG_KILLALL=y
--CONFIG_KILLALL5=y
--CONFIG_NMETER=y
--CONFIG_PGREP=y
--CONFIG_PIDOF=y
--CONFIG_FEATURE_PIDOF_SINGLE=y
--CONFIG_FEATURE_PIDOF_OMIT=y
--CONFIG_PKILL=y
--CONFIG_PS=y
--CONFIG_FEATURE_PS_WIDE=y
--CONFIG_RENICE=y
--CONFIG_BB_SYSCTL=y
--CONFIG_TOP=y
--CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
--CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
--CONFIG_FEATURE_TOP_DECIMALS=y
--CONFIG_FEATURE_TOPMEM=y
--CONFIG_UPTIME=y
--CONFIG_WATCH=y
--
--#
--# Shells
--#
--CONFIG_FEATURE_SH_IS_ASH=y
--# CONFIG_FEATURE_SH_IS_HUSH is not set
--# CONFIG_FEATURE_SH_IS_LASH is not set
--# CONFIG_FEATURE_SH_IS_MSH is not set
--# CONFIG_FEATURE_SH_IS_NONE is not set
--CONFIG_ASH=y
--
--#
--# Ash Shell Options
--#
--CONFIG_ASH_JOB_CONTROL=y
--CONFIG_ASH_READ_NCHARS=y
--CONFIG_ASH_READ_TIMEOUT=y
--CONFIG_ASH_ALIAS=y
--CONFIG_ASH_MATH_SUPPORT=y
--CONFIG_ASH_MATH_SUPPORT_64=y
--CONFIG_ASH_GETOPTS=y
--CONFIG_ASH_BUILTIN_ECHO=y
--CONFIG_ASH_BUILTIN_TEST=y
--# CONFIG_ASH_CMDCMD is not set
--# CONFIG_ASH_MAIL is not set
--CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
--# CONFIG_ASH_RANDOM_SUPPORT is not set
--CONFIG_ASH_EXPAND_PRMT=y
--# CONFIG_HUSH is not set
--# CONFIG_HUSH_HELP is not set
--# CONFIG_HUSH_INTERACTIVE is not set
--# CONFIG_HUSH_JOB is not set
--# CONFIG_HUSH_TICK is not set
--# CONFIG_HUSH_IF is not set
--# CONFIG_HUSH_LOOPS is not set
--# CONFIG_LASH is not set
--# CONFIG_MSH is not set
--
--#
--# Bourne Shell Options
--#
--# CONFIG_FEATURE_SH_EXTRA_QUIET is not set
--# CONFIG_FEATURE_SH_STANDALONE is not set
--# CONFIG_CTTYHACK is not set
--
--#
--# System Logging Utilities
--#
--CONFIG_SYSLOGD=y
--CONFIG_FEATURE_ROTATE_LOGFILE=y
--# CONFIG_FEATURE_REMOTE_LOG is not set
--# CONFIG_FEATURE_IPC_SYSLOG is not set
--CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=
--# CONFIG_LOGREAD is not set
--# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
--CONFIG_KLOGD=y
--CONFIG_LOGGER=y
--
--#
--# Runit Utilities
--#
--# CONFIG_RUNSV is not set
--# CONFIG_RUNSVDIR is not set
--# CONFIG_SV is not set
--# CONFIG_SVLOGD is not set
--# CONFIG_CHPST is not set
--# CONFIG_SETUIDGID is not set
--# CONFIG_ENVUIDGID is not set
--# CONFIG_ENVDIR is not set
--# CONFIG_SOFTLIMIT is not set
--# CONFIG_CHCON is not set
--# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
--# CONFIG_GETENFORCE is not set
--# CONFIG_GETSEBOOL is not set
--# CONFIG_LOAD_POLICY is not set
--# CONFIG_MATCHPATHCON is not set
--# CONFIG_RESTORECON is not set
--# CONFIG_RUNCON is not set
--# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
--# CONFIG_SELINUXENABLED is not set
--# CONFIG_SETENFORCE is not set
--# CONFIG_SETFILES is not set
--# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
--# CONFIG_SETSEBOOL is not set
--
--#
--# ipsvd utilities
--#
--# CONFIG_TCPSVD is not set
--# CONFIG_UDPSVD is not set
-diff --git a/target/device/Atmel/atngw100-base/busybox-1.9.1.config b/target/device/Atmel/atngw100-base/busybox-1.9.1.config
-deleted file mode 100644
-index 7dd45cd..0000000
---- a/target/device/Atmel/atngw100-base/busybox-1.9.1.config
-+++ /dev/null
-@@ -1,767 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Busybox version: 1.8.2
--# Sun Dec 23 12:11:59 2007
--#
--CONFIG_HAVE_DOT_CONFIG=y
--
--#
--# Busybox Settings
--#
--
--#
--# General Configuration
--#
--# CONFIG_NITPICK is not set
--# CONFIG_DESKTOP is not set
--# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
--# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
--# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
--CONFIG_SHOW_USAGE=y
--CONFIG_FEATURE_VERBOSE_USAGE=y
--# CONFIG_FEATURE_COMPRESS_USAGE is not set
--# CONFIG_FEATURE_INSTALLER is not set
--# CONFIG_LOCALE_SUPPORT is not set
--CONFIG_GETOPT_LONG=y
--CONFIG_FEATURE_DEVPTS=y
--# CONFIG_FEATURE_CLEAN_UP is not set
--# CONFIG_FEATURE_PIDFILE is not set
--CONFIG_FEATURE_SUID=y
--# CONFIG_FEATURE_SUID_CONFIG is not set
--# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
--# CONFIG_SELINUX is not set
--# CONFIG_FEATURE_PREFER_APPLETS is not set
--CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
--CONFIG_FEATURE_SYSLOG=y
--CONFIG_FEATURE_HAVE_RPC=y
--
--#
--# Build Options
--#
--CONFIG_STATIC=y
--CONFIG_BUILD_LIBBUSYBOX=y
--# CONFIG_FEATURE_INDIVIDUAL is not set
--# CONFIG_FEATURE_SHARED_BUSYBOX is not set
--CONFIG_LFS=y
--
--#
--# Debugging Options
--#
--# CONFIG_DEBUG is not set
--# CONFIG_WERROR is not set
--CONFIG_NO_DEBUG_LIB=y
--# CONFIG_DMALLOC is not set
--# CONFIG_EFENCE is not set
--CONFIG_INCLUDE_SUSv2=y
--
--#
--# Installation Options
--#
--# CONFIG_INSTALL_NO_USR is not set
--CONFIG_INSTALL_APPLET_SYMLINKS=y
--# CONFIG_INSTALL_APPLET_HARDLINKS is not set
--# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
--# CONFIG_INSTALL_APPLET_DONT is not set
--# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
--# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
--# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
--CONFIG_PREFIX="/usr/avr32-linux"
--
--#
--# Busybox Library Tuning
--#
--CONFIG_PASSWORD_MINLEN=6
--CONFIG_MD5_SIZE_VS_SPEED=2
--CONFIG_FEATURE_FAST_TOP=y
--# CONFIG_FEATURE_ETC_NETWORKS is not set
--CONFIG_FEATURE_EDITING=y
--CONFIG_FEATURE_EDITING_MAX_LEN=1024
--CONFIG_FEATURE_EDITING_FANCY_KEYS=y
--# CONFIG_FEATURE_EDITING_VI is not set
--CONFIG_FEATURE_EDITING_HISTORY=100
--CONFIG_FEATURE_EDITING_SAVEHISTORY=y
--CONFIG_FEATURE_TAB_COMPLETION=y
--# CONFIG_FEATURE_USERNAME_COMPLETION is not set
--CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
--CONFIG_MONOTONIC_SYSCALL=y
--CONFIG_IOCTL_HEX2STR_ERROR=y
--
--#
--# Applets
--#
--
--#
--# Archival Utilities
--#
--CONFIG_AR=y
--CONFIG_FEATURE_AR_LONG_FILENAMES=y
--CONFIG_BUNZIP2=y
--CONFIG_BZIP2=y
--CONFIG_CPIO=y
--CONFIG_DPKG=y
--CONFIG_DPKG_DEB=y
--# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
--CONFIG_GUNZIP=y
--CONFIG_FEATURE_GUNZIP_UNCOMPRESS=y
--CONFIG_GZIP=y
--CONFIG_RPM2CPIO=y
--CONFIG_RPM=y
--CONFIG_FEATURE_RPM_BZ2=y
--CONFIG_TAR=y
--CONFIG_FEATURE_TAR_CREATE=y
--CONFIG_FEATURE_TAR_BZIP2=y
--CONFIG_FEATURE_TAR_LZMA=y
--CONFIG_FEATURE_TAR_FROM=y
--CONFIG_FEATURE_TAR_GZIP=y
--CONFIG_FEATURE_TAR_COMPRESS=y
--CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY=y
--CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY=y
--CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
--CONFIG_FEATURE_TAR_LONG_OPTIONS=y
--CONFIG_UNCOMPRESS=y
--CONFIG_UNLZMA=y
--CONFIG_FEATURE_LZMA_FAST=y
--CONFIG_UNZIP=y
--
--#
--# Common options for cpio and tar
--#
--# CONFIG_FEATURE_UNARCHIVE_TAPE is not set
--
--#
--# Common options for dpkg and dpkg_deb
--#
--CONFIG_FEATURE_DEB_TAR_GZ=y
--CONFIG_FEATURE_DEB_TAR_BZ2=y
--CONFIG_FEATURE_DEB_TAR_LZMA=y
--
--#
--# Coreutils
--#
--CONFIG_BASENAME=y
--CONFIG_CAL=y
--CONFIG_CAT=y
--CONFIG_CATV=y
--CONFIG_CHGRP=y
--CONFIG_CHMOD=y
--CONFIG_CHOWN=y
--CONFIG_CHROOT=y
--CONFIG_CKSUM=y
--CONFIG_COMM=y
--CONFIG_CP=y
--CONFIG_CUT=y
--CONFIG_DATE=y
--CONFIG_FEATURE_DATE_ISOFMT=y
--CONFIG_DD=y
--CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
--CONFIG_FEATURE_DD_IBS_OBS=y
--CONFIG_DF=y
--CONFIG_DIRNAME=y
--CONFIG_DOS2UNIX=y
--CONFIG_UNIX2DOS=y
--CONFIG_DU=y
--CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
--CONFIG_ECHO=y
--CONFIG_FEATURE_FANCY_ECHO=y
--CONFIG_ENV=y
--CONFIG_FEATURE_ENV_LONG_OPTIONS=y
--CONFIG_EXPAND=y
--CONFIG_FEATURE_EXPAND_LONG_OPTIONS=y
--CONFIG_EXPR=y
--CONFIG_EXPR_MATH_SUPPORT_64=y
--CONFIG_FALSE=y
--CONFIG_FOLD=y
--CONFIG_HEAD=y
--CONFIG_FEATURE_FANCY_HEAD=y
--CONFIG_HOSTID=y
--CONFIG_ID=y
--CONFIG_INSTALL=y
--CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
--CONFIG_LENGTH=y
--CONFIG_LN=y
--CONFIG_LOGNAME=y
--CONFIG_LS=y
--CONFIG_FEATURE_LS_FILETYPES=y
--CONFIG_FEATURE_LS_FOLLOWLINKS=y
--CONFIG_FEATURE_LS_RECURSIVE=y
--CONFIG_FEATURE_LS_SORTFILES=y
--CONFIG_FEATURE_LS_TIMESTAMPS=y
--CONFIG_FEATURE_LS_USERNAME=y
--CONFIG_FEATURE_LS_COLOR=y
--CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
--CONFIG_MD5SUM=y
--CONFIG_MKDIR=y
--CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
--CONFIG_MKFIFO=y
--CONFIG_MKNOD=y
--CONFIG_MV=y
--CONFIG_FEATURE_MV_LONG_OPTIONS=y
--CONFIG_NICE=y
--CONFIG_NOHUP=y
--CONFIG_OD=y
--CONFIG_PRINTENV=y
--CONFIG_PRINTF=y
--CONFIG_PWD=y
--CONFIG_READLINK=y
--CONFIG_FEATURE_READLINK_FOLLOW=y
--CONFIG_REALPATH=y
--CONFIG_RM=y
--CONFIG_RMDIR=y
--CONFIG_SEQ=y
--CONFIG_SHA1SUM=y
--CONFIG_SLEEP=y
--CONFIG_FEATURE_FANCY_SLEEP=y
--CONFIG_SORT=y
--CONFIG_FEATURE_SORT_BIG=y
--CONFIG_SPLIT=y
--CONFIG_FEATURE_SPLIT_FANCY=y
--CONFIG_STAT=y
--CONFIG_FEATURE_STAT_FORMAT=y
--CONFIG_STTY=y
--CONFIG_SUM=y
--CONFIG_SYNC=y
--CONFIG_TAIL=y
--CONFIG_FEATURE_FANCY_TAIL=y
--CONFIG_TEE=y
--CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
--CONFIG_TEST=y
--CONFIG_FEATURE_TEST_64=y
--CONFIG_TOUCH=y
--CONFIG_TR=y
--CONFIG_FEATURE_TR_CLASSES=y
--CONFIG_FEATURE_TR_EQUIV=y
--CONFIG_TRUE=y
--CONFIG_TTY=y
--CONFIG_UNAME=y
--CONFIG_UNEXPAND=y
--CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS=y
--CONFIG_UNIQ=y
--CONFIG_USLEEP=y
--CONFIG_UUDECODE=y
--CONFIG_UUENCODE=y
--CONFIG_WC=y
--CONFIG_FEATURE_WC_LARGE=y
--CONFIG_WHO=y
--CONFIG_WHOAMI=y
--CONFIG_YES=y
--
--#
--# Common options for cp and mv
--#
--CONFIG_FEATURE_PRESERVE_HARDLINKS=y
--
--#
--# Common options for ls, more and telnet
--#
--CONFIG_FEATURE_AUTOWIDTH=y
--
--#
--# Common options for df, du, ls
--#
--CONFIG_FEATURE_HUMAN_READABLE=y
--
--#
--# Common options for md5sum, sha1sum
--#
--CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
--
--#
--# Console Utilities
--#
--CONFIG_CHVT=y
--CONFIG_CLEAR=y
--CONFIG_DEALLOCVT=y
--CONFIG_DUMPKMAP=y
--CONFIG_KBD_MODE=y
--CONFIG_LOADFONT=y
--CONFIG_LOADKMAP=y
--CONFIG_OPENVT=y
--CONFIG_RESET=y
--CONFIG_RESIZE=y
--CONFIG_FEATURE_RESIZE_PRINT=y
--CONFIG_SETCONSOLE=y
--CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS=y
--CONFIG_SETKEYCODES=y
--CONFIG_SETLOGCONS=y
--
--#
--# Debian Utilities
--#
--CONFIG_MKTEMP=y
--# CONFIG_PIPE_PROGRESS is not set
--CONFIG_RUN_PARTS=y
--CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
--# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
--CONFIG_START_STOP_DAEMON=y
--CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
--CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
--CONFIG_WHICH=y
--
--#
--# Editors
--#
--CONFIG_AWK=y
--CONFIG_FEATURE_AWK_MATH=y
--CONFIG_CMP=y
--CONFIG_DIFF=y
--CONFIG_FEATURE_DIFF_BINARY=y
--CONFIG_FEATURE_DIFF_DIR=y
--CONFIG_FEATURE_DIFF_MINIMAL=y
--CONFIG_ED=y
--CONFIG_PATCH=y
--CONFIG_SED=y
--CONFIG_VI=y
--CONFIG_FEATURE_VI_MAX_LEN=1024
--CONFIG_FEATURE_VI_COLON=y
--CONFIG_FEATURE_VI_YANKMARK=y
--CONFIG_FEATURE_VI_SEARCH=y
--CONFIG_FEATURE_VI_USE_SIGNALS=y
--CONFIG_FEATURE_VI_DOT_CMD=y
--CONFIG_FEATURE_VI_READONLY=y
--CONFIG_FEATURE_VI_SETOPTS=y
--CONFIG_FEATURE_VI_SET=y
--CONFIG_FEATURE_VI_WIN_RESIZE=y
--CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
--CONFIG_FEATURE_ALLOW_EXEC=y
--
--#
--# Finding Utilities
--#
--CONFIG_FIND=y
--CONFIG_FEATURE_FIND_PRINT0=y
--CONFIG_FEATURE_FIND_MTIME=y
--CONFIG_FEATURE_FIND_MMIN=y
--CONFIG_FEATURE_FIND_PERM=y
--CONFIG_FEATURE_FIND_TYPE=y
--CONFIG_FEATURE_FIND_XDEV=y
--CONFIG_FEATURE_FIND_MAXDEPTH=y
--CONFIG_FEATURE_FIND_NEWER=y
--CONFIG_FEATURE_FIND_INUM=y
--CONFIG_FEATURE_FIND_EXEC=y
--CONFIG_FEATURE_FIND_USER=y
--CONFIG_FEATURE_FIND_GROUP=y
--CONFIG_FEATURE_FIND_NOT=y
--CONFIG_FEATURE_FIND_DEPTH=y
--CONFIG_FEATURE_FIND_PAREN=y
--CONFIG_FEATURE_FIND_SIZE=y
--CONFIG_FEATURE_FIND_PRUNE=y
--CONFIG_FEATURE_FIND_DELETE=y
--CONFIG_FEATURE_FIND_PATH=y
--CONFIG_FEATURE_FIND_REGEX=y
--# CONFIG_FEATURE_FIND_CONTEXT is not set
--CONFIG_GREP=y
--CONFIG_FEATURE_GREP_EGREP_ALIAS=y
--CONFIG_FEATURE_GREP_FGREP_ALIAS=y
--CONFIG_FEATURE_GREP_CONTEXT=y
--CONFIG_XARGS=y
--CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION=y
--CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
--CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
--CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
--
--#
--# Init Utilities
--#
--CONFIG_INIT=y
--# CONFIG_DEBUG_INIT is not set
--CONFIG_FEATURE_USE_INITTAB=y
--CONFIG_FEATURE_INIT_SCTTY=y
--CONFIG_FEATURE_INIT_SYSLOG=y
--CONFIG_FEATURE_EXTRA_QUIET=y
--# CONFIG_FEATURE_INIT_COREDUMPS is not set
--CONFIG_FEATURE_INITRD=y
--CONFIG_HALT=y
--CONFIG_MESG=y
--
--#
--# Login/Password Management Utilities
--#
--CONFIG_FEATURE_SHADOWPASSWDS=y
--# CONFIG_USE_BB_SHADOW is not set
--# CONFIG_USE_BB_PWD_GRP is not set
--CONFIG_ADDGROUP=y
--CONFIG_FEATURE_ADDUSER_TO_GROUP=y
--CONFIG_DELGROUP=y
--CONFIG_FEATURE_DEL_USER_FROM_GROUP=y
--CONFIG_ADDUSER=y
--CONFIG_DELUSER=y
--CONFIG_GETTY=y
--CONFIG_FEATURE_UTMP=y
--CONFIG_FEATURE_WTMP=y
--CONFIG_LOGIN=y
--# CONFIG_PAM is not set
--CONFIG_LOGIN_SCRIPTS=y
--CONFIG_FEATURE_NOLOGIN=y
--CONFIG_FEATURE_SECURETTY=y
--CONFIG_PASSWD=y
--CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
--# CONFIG_CRYPTPW is not set
--# CONFIG_CHPASSWD is not set
--CONFIG_SU=y
--CONFIG_FEATURE_SU_SYSLOG=y
--CONFIG_FEATURE_SU_CHECKS_SHELLS=y
--CONFIG_SULOGIN=y
--CONFIG_VLOCK=y
--
--#
--# Linux Ext2 FS Progs
--#
--CONFIG_CHATTR=y
--CONFIG_FSCK=y
--CONFIG_LSATTR=y
--
--#
--# Linux Module Utilities
--#
--CONFIG_INSMOD=y
--# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
--# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
--# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
--CONFIG_FEATURE_INSMOD_LOAD_MAP=y
--CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL=y
--CONFIG_RMMOD=y
--CONFIG_LSMOD=y
--CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
--CONFIG_MODPROBE=y
--CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y
--CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y
--
--#
--# Options common to multiple modutils
--#
--CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
--# CONFIG_FEATURE_2_4_MODULES is not set
--CONFIG_FEATURE_2_6_MODULES=y
--# CONFIG_FEATURE_QUERY_MODULE_INTERFACE is not set
--
--#
--# Linux System Utilities
--#
--CONFIG_DMESG=y
--CONFIG_FEATURE_DMESG_PRETTY=y
--CONFIG_FBSET=y
--CONFIG_FEATURE_FBSET_FANCY=y
--CONFIG_FEATURE_FBSET_READMODE=y
--CONFIG_FDFLUSH=y
--CONFIG_FDFORMAT=y
--CONFIG_FDISK=y
--CONFIG_FDISK_SUPPORT_LARGE_DISKS=y
--CONFIG_FEATURE_FDISK_WRITABLE=y
--# CONFIG_FEATURE_AIX_LABEL is not set
--# CONFIG_FEATURE_SGI_LABEL is not set
--# CONFIG_FEATURE_SUN_LABEL is not set
--# CONFIG_FEATURE_OSF_LABEL is not set
--# CONFIG_FEATURE_FDISK_ADVANCED is not set
--# CONFIG_FREERAMDISK is not set
--# CONFIG_FSCK_MINIX is not set
--# CONFIG_MKFS_MINIX is not set
--# CONFIG_FEATURE_MINIX2 is not set
--CONFIG_GETOPT=y
--CONFIG_HEXDUMP=y
--CONFIG_HWCLOCK=y
--# CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS is not set
--# CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS is not set
--CONFIG_IPCRM=y
--CONFIG_IPCS=y
--CONFIG_LOSETUP=y
--CONFIG_MDEV=y
--CONFIG_FEATURE_MDEV_CONF=y
--CONFIG_FEATURE_MDEV_EXEC=y
--CONFIG_FEATURE_MDEV_LOAD_FIRMWARE=y
--CONFIG_MKSWAP=y
--# CONFIG_FEATURE_MKSWAP_V0 is not set
--CONFIG_MORE=y
--CONFIG_FEATURE_USE_TERMIOS=y
--CONFIG_MOUNT=y
--CONFIG_FEATURE_MOUNT_HELPERS=y
--CONFIG_FEATURE_MOUNT_NFS=y
--CONFIG_FEATURE_MOUNT_CIFS=y
--CONFIG_FEATURE_MOUNT_FLAGS=y
--CONFIG_FEATURE_MOUNT_FSTAB=y
--CONFIG_PIVOT_ROOT=y
--CONFIG_RDATE=y
--CONFIG_READPROFILE=y
--CONFIG_SETARCH=y
--CONFIG_SWAPONOFF=y
--CONFIG_SWITCH_ROOT=y
--CONFIG_UMOUNT=y
--CONFIG_FEATURE_UMOUNT_ALL=y
--
--#
--# Common options for mount/umount
--#
--CONFIG_FEATURE_MOUNT_LOOP=y
--CONFIG_FEATURE_MTAB_SUPPORT=y
--
--#
--# Miscellaneous Utilities
--#
--# CONFIG_ADJTIMEX is not set
--CONFIG_BBCONFIG=y
--CONFIG_CHRT=y
--CONFIG_CROND=y
--CONFIG_DEBUG_CROND_OPTION=y
--# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
--CONFIG_CRONTAB=y
--CONFIG_DC=y
--# CONFIG_DEVFSD is not set
--# CONFIG_DEVFSD_MODLOAD is not set
--# CONFIG_DEVFSD_FG_NP is not set
--# CONFIG_DEVFSD_VERBOSE is not set
--# CONFIG_FEATURE_DEVFS is not set
--# CONFIG_EJECT is not set
--CONFIG_LAST=y
--CONFIG_LESS=y
--CONFIG_FEATURE_LESS_MAXLINES=9999999
--CONFIG_FEATURE_LESS_BRACKETS=y
--CONFIG_FEATURE_LESS_FLAGS=y
--CONFIG_FEATURE_LESS_FLAGCS=y
--CONFIG_FEATURE_LESS_MARKS=y
--CONFIG_FEATURE_LESS_REGEXP=y
--CONFIG_HDPARM=y
--CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
--CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET=y
--CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF=y
--CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA=y
--CONFIG_MAKEDEVS=y
--# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
--CONFIG_FEATURE_MAKEDEVS_TABLE=y
--CONFIG_MICROCOM=y
--CONFIG_MOUNTPOINT=y
--CONFIG_MT=y
--# CONFIG_RAIDAUTORUN is not set
--# CONFIG_READAHEAD is not set
--CONFIG_RUNLEVEL=y
--CONFIG_RX=y
--CONFIG_STRINGS=y
--CONFIG_SETSID=y
--# CONFIG_TASKSET is not set
--# CONFIG_FEATURE_TASKSET_FANCY is not set
--CONFIG_TIME=y
--CONFIG_TTYSIZE=y
--CONFIG_WATCHDOG=y
--
--#
--# Networking Utilities
--#
--CONFIG_FEATURE_IPV6=y
--# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
--CONFIG_ARP=y
--CONFIG_ARPING=y
--CONFIG_DNSD=y
--CONFIG_ETHER_WAKE=y
--# CONFIG_FAKEIDENTD is not set
--CONFIG_FTPGET=y
--CONFIG_FTPPUT=y
--CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS=y
--CONFIG_HOSTNAME=y
--CONFIG_HTTPD=y
--CONFIG_FEATURE_HTTPD_RANGES=y
--CONFIG_FEATURE_HTTPD_USE_SENDFILE=y
--CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP=y
--CONFIG_FEATURE_HTTPD_SETUID=y
--CONFIG_FEATURE_HTTPD_BASIC_AUTH=y
--CONFIG_FEATURE_HTTPD_AUTH_MD5=y
--CONFIG_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES=y
--CONFIG_FEATURE_HTTPD_CGI=y
--CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR=y
--CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV=y
--CONFIG_FEATURE_HTTPD_ENCODE_URL_STR=y
--CONFIG_FEATURE_HTTPD_ERROR_PAGES=y
--CONFIG_FEATURE_HTTPD_PROXY=y
--CONFIG_IFCONFIG=y
--CONFIG_FEATURE_IFCONFIG_STATUS=y
--# CONFIG_FEATURE_IFCONFIG_SLIP is not set
--# CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ is not set
--CONFIG_FEATURE_IFCONFIG_HW=y
--# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
--CONFIG_IFUPDOWN=y
--CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
--# CONFIG_FEATURE_IFUPDOWN_IP is not set
--# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
--CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN=y
--CONFIG_FEATURE_IFUPDOWN_IPV4=y
--CONFIG_FEATURE_IFUPDOWN_IPV6=y
--# CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
--CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP=y
--CONFIG_INETD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
--CONFIG_FEATURE_INETD_RPC=y
--# CONFIG_IP is not set
--# CONFIG_FEATURE_IP_ADDRESS is not set
--# CONFIG_FEATURE_IP_LINK is not set
--# CONFIG_FEATURE_IP_ROUTE is not set
--# CONFIG_FEATURE_IP_TUNNEL is not set
--# CONFIG_FEATURE_IP_RULE is not set
--# CONFIG_FEATURE_IP_SHORT_FORMS is not set
--# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
--# CONFIG_IPADDR is not set
--# CONFIG_IPLINK is not set
--# CONFIG_IPROUTE is not set
--# CONFIG_IPTUNNEL is not set
--# CONFIG_IPRULE is not set
--# CONFIG_IPCALC is not set
--# CONFIG_FEATURE_IPCALC_FANCY is not set
--# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
--# CONFIG_NAMEIF is not set
--# CONFIG_NC is not set
--# CONFIG_NC_SERVER is not set
--# CONFIG_NC_EXTRA is not set
--CONFIG_NETSTAT=y
--CONFIG_FEATURE_NETSTAT_WIDE=y
--CONFIG_NSLOOKUP=y
--CONFIG_PING=y
--CONFIG_PING6=y
--CONFIG_PSCAN=y
--CONFIG_FEATURE_FANCY_PING=y
--CONFIG_ROUTE=y
--# CONFIG_SLATTACH is not set
--CONFIG_TELNET=y
--CONFIG_FEATURE_TELNET_TTYPE=y
--CONFIG_FEATURE_TELNET_AUTOLOGIN=y
--CONFIG_TELNETD=y
--CONFIG_FEATURE_TELNETD_STANDALONE=y
--CONFIG_TFTP=y
--CONFIG_FEATURE_TFTP_GET=y
--CONFIG_FEATURE_TFTP_PUT=y
--CONFIG_FEATURE_TFTP_BLOCKSIZE=y
--# CONFIG_DEBUG_TFTP is not set
--CONFIG_TRACEROUTE=y
--CONFIG_FEATURE_TRACEROUTE_VERBOSE=y
--# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
--# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
--CONFIG_APP_UDHCPD=y
--# CONFIG_APP_DHCPRELAY is not set
--# CONFIG_APP_DUMPLEASES is not set
--# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
--CONFIG_APP_UDHCPC=y
--# CONFIG_FEATURE_UDHCP_DEBUG is not set
--# CONFIG_FEATURE_RFC3397 is not set
--CONFIG_VCONFIG=y
--CONFIG_WGET=y
--CONFIG_FEATURE_WGET_STATUSBAR=y
--CONFIG_FEATURE_WGET_AUTHENTICATION=y
--# CONFIG_FEATURE_WGET_LONG_OPTIONS is not set
--# CONFIG_ZCIP is not set
--
--#
--# Process Utilities
--#
--CONFIG_FREE=y
--CONFIG_FUSER=y
--CONFIG_KILL=y
--CONFIG_KILLALL=y
--CONFIG_KILLALL5=y
--CONFIG_NMETER=y
--CONFIG_PGREP=y
--CONFIG_PIDOF=y
--CONFIG_FEATURE_PIDOF_SINGLE=y
--CONFIG_FEATURE_PIDOF_OMIT=y
--CONFIG_PKILL=y
--CONFIG_PS=y
--CONFIG_FEATURE_PS_WIDE=y
--CONFIG_RENICE=y
--CONFIG_BB_SYSCTL=y
--CONFIG_TOP=y
--CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
--CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
--CONFIG_FEATURE_TOP_DECIMALS=y
--CONFIG_FEATURE_TOPMEM=y
--CONFIG_UPTIME=y
--CONFIG_WATCH=y
--
--#
--# Shells
--#
--CONFIG_FEATURE_SH_IS_ASH=y
--# CONFIG_FEATURE_SH_IS_HUSH is not set
--# CONFIG_FEATURE_SH_IS_LASH is not set
--# CONFIG_FEATURE_SH_IS_MSH is not set
--# CONFIG_FEATURE_SH_IS_NONE is not set
--CONFIG_ASH=y
--
--#
--# Ash Shell Options
--#
--CONFIG_ASH_JOB_CONTROL=y
--CONFIG_ASH_READ_NCHARS=y
--CONFIG_ASH_READ_TIMEOUT=y
--CONFIG_ASH_ALIAS=y
--CONFIG_ASH_MATH_SUPPORT=y
--CONFIG_ASH_MATH_SUPPORT_64=y
--CONFIG_ASH_GETOPTS=y
--CONFIG_ASH_BUILTIN_ECHO=y
--CONFIG_ASH_BUILTIN_TEST=y
--# CONFIG_ASH_CMDCMD is not set
--# CONFIG_ASH_MAIL is not set
--CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
--# CONFIG_ASH_RANDOM_SUPPORT is not set
--CONFIG_ASH_EXPAND_PRMT=y
--# CONFIG_HUSH is not set
--# CONFIG_HUSH_HELP is not set
--# CONFIG_HUSH_INTERACTIVE is not set
--# CONFIG_HUSH_JOB is not set
--# CONFIG_HUSH_TICK is not set
--# CONFIG_HUSH_IF is not set
--# CONFIG_HUSH_LOOPS is not set
--# CONFIG_LASH is not set
--# CONFIG_MSH is not set
--
--#
--# Bourne Shell Options
--#
--# CONFIG_FEATURE_SH_EXTRA_QUIET is not set
--# CONFIG_FEATURE_SH_STANDALONE is not set
--# CONFIG_CTTYHACK is not set
--
--#
--# System Logging Utilities
--#
--CONFIG_SYSLOGD=y
--CONFIG_FEATURE_ROTATE_LOGFILE=y
--# CONFIG_FEATURE_REMOTE_LOG is not set
--# CONFIG_FEATURE_IPC_SYSLOG is not set
--CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=
--# CONFIG_LOGREAD is not set
--# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
--CONFIG_KLOGD=y
--CONFIG_LOGGER=y
--
--#
--# Runit Utilities
--#
--# CONFIG_RUNSV is not set
--# CONFIG_RUNSVDIR is not set
--# CONFIG_SV is not set
--# CONFIG_SVLOGD is not set
--# CONFIG_CHPST is not set
--# CONFIG_SETUIDGID is not set
--# CONFIG_ENVUIDGID is not set
--# CONFIG_ENVDIR is not set
--# CONFIG_SOFTLIMIT is not set
--# CONFIG_CHCON is not set
--# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
--# CONFIG_GETENFORCE is not set
--# CONFIG_GETSEBOOL is not set
--# CONFIG_LOAD_POLICY is not set
--# CONFIG_MATCHPATHCON is not set
--# CONFIG_RESTORECON is not set
--# CONFIG_RUNCON is not set
--# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
--# CONFIG_SELINUXENABLED is not set
--# CONFIG_SETENFORCE is not set
--# CONFIG_SETFILES is not set
--# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
--# CONFIG_SETSEBOOL is not set
--
--#
--# ipsvd utilities
--#
--# CONFIG_TCPSVD is not set
--# CONFIG_UDPSVD is not set
-diff --git a/target/device/Atmel/atngw100-base/device_table.txt b/target/device/Atmel/atngw100-base/device_table.txt
-deleted file mode 100644
-index 56616ed..0000000
---- a/target/device/Atmel/atngw100-base/device_table.txt
-+++ /dev/null
-@@ -1,56 +0,0 @@
--# When building a target filesystem, it is desirable to not have to become
--# root and then run 'mknod' a thousand times. Using a device table you can
--# create device nodes and directories "on the fly".
--#
--# This is a sample device table file for use with genext2fs. You can do all
--# sorts of interesting things with a device table file.  For example, if you
--# want to adjust the permissions on a particular file you can just add an
--# entry like:
--#   /sbin/foobar        f       2755    0       0       -       -       -       -       -
--# and (assuming the file /sbin/foobar exists) it will be made setuid root
--# (regardless of what its permissions are on the host filesystem.
--# Furthermore, you can use a single table entry to create a many device
--# minors. For example, if I wanted to create /dev/hda and /dev/hda[0-15] I
--# could just use the following two table entries:
--#   /dev/hda    b       640     0       0       3       0       0       0       -
--#   /dev/hda    b       640     0       0       3       1       1       1       15
--#
--# Device table entries take the form of:
--# <name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
--# where name is the file name,  type can be one of:
--#       f       A regular file
--#       d       Directory
--#       c       Character special device file
--#       b       Block special device file
--#       p       Fifo (named pipe)
--# uid is the user id for the target file, gid is the group id for the target
--# file.  The rest of the entries (major, minor, etc) apply only to device
--# special files.
--
--#<name>		<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--/dev		d	755	0	0	-	-	-	-	-
--/dev/null	c	666	0	0	1	3	0	0	-
--/dev/console	c	666	0	0	5	1	-	-	-
--
--/tmp		d	1777	0	0	-	-	-	-	-
--/etc		d	755	0	0	-	-	-	-	-
--/sys		d	755	0	0	-	-	-	-	-
--/config		d	755	0	0	-	-	-	-	-
--/proc		d	755	0	0	-	-	-	-	-
--/lost+found	d	700	0	0	-	-	-	-	-
--/var/lock	d	1777	0	0	-	-	-	-	-
--/var/log	d	755	0	0	-	-	-	-	-
--/var/run	d	1777	0	0	-	-	-	-	-
--/var/tmp	d	1777	0	0	-	-	-	-	-
--/home/default	d	2755	1000	1000	-	-	-	-	-
--/media		d	755	0	0	-	-	-	-	-
--/www		d	755	0	0	-	-	-	-	-
--
--#<name>					<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--/bin/busybox				f	4755	0	0	-	-	-	-	-
--/etc/shadow				f	600	0	0	-	-	-	-	-
--/etc/passwd				f	644	0	0	-	-	-	-	-
--/etc/network/if-up.d			d	755	0	0	-	-	-	-	-
--/etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
--/etc/network/if-down.d			d	755	0	0	-	-	-	-	-
--/etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/TZ b/target/device/Atmel/atngw100-base/target_skeleton/etc/TZ
-deleted file mode 100644
-index 36498c4..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/TZ
-+++ /dev/null
-@@ -1 +0,0 @@
--CET1CDT
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/fstab b/target/device/Atmel/atngw100-base/target_skeleton/etc/fstab
-deleted file mode 100644
-index fcf1a78..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/fstab
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# /etc/fstab: static file system information.
--#
--# <file system>	<mount pt>	<type>		<options>	<dump>	<pass>
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/group b/target/device/Atmel/atngw100-base/target_skeleton/etc/group
-deleted file mode 100644
-index cec65da..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/group
-+++ /dev/null
-@@ -1,20 +0,0 @@
--root::0:
--daemon:x:1:
--bin:x:2:
--sys:x:3:
--adm:x:4:
--tty:x:5:
--disk:x:6:
--kmem:x:9:
--wheel:x:10:root
--dialout:x:20:
--utmp:x:43:
--staff:x:50:
--www-data::51:
--ftp::52:
--haldaemon:x:68:
--dbus:x:81:
--audio::101:
--users::500:
--default::1000:
--nogroup::65534:
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/hostname b/target/device/Atmel/atngw100-base/target_skeleton/etc/hostname
-deleted file mode 100644
-index c4100b5..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/hostname
-+++ /dev/null
-@@ -1 +0,0 @@
--at32base.example.net
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/hosts b/target/device/Atmel/atngw100-base/target_skeleton/etc/hosts
-deleted file mode 100644
-index 1f22385..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/hosts
-+++ /dev/null
-@@ -1,12 +0,0 @@
--127.0.0.1   localhost.localdomain localhost
--127.0.1.1   at32base.example.net at32base
--
--# The following lines are desirable for IPv6 capable hosts
--::1     localhost
--::1     ip6-localhost ip6-loopback
--::1     at32base.example.net at32base
--fe00::0 ip6-localnet
--ff00::0 ip6-mcastprefix
--ff02::1 ip6-allnodes
--ff02::2 ip6-allrouters
--ff02::3 ip6-allhosts
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/K70sendsig b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/K70sendsig
-deleted file mode 100755
-index 1a24852..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/K70sendsig
-+++ /dev/null
-@@ -1 +0,0 @@
--#!/bin/sh
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S00mountvirtfs b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S00mountvirtfs
-deleted file mode 100755
-index d9e5c92..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S00mountvirtfs
-+++ /dev/null
-@@ -1,74 +0,0 @@
--#!/bin/sh
--
--MOUNT=/bin/mount
--MKDIR=/bin/mkdir
--
--retval=0
--
--mount_fs()
--{
--	if [ "$1" = "" -o "$2" = "" -o "$3" = "" ]; then
--		return;
--	fi
--
--	if [ "$4" = "" ]; then
--		if ! ${MOUNT} -t $3 $1 $2; then
--			echo "  mount $2 failed"
--			retval=1
--			return 1
--		else
--			echo "  $2 mounted"
--		fi
--	else
--		if ! ${MOUNT} -t $3 -o $4 $1 $2; then
--			echo "  mount $2 failed"
--			retval=1
--			return 1
--		else
--			echo "  $2 mounted"
--		fi
--	fi
--
--	return 0
--}
--
--mkdir_fs()
--{
--	if [ "$1" = "" ]; then
--		return;
--	fi
--
--	if ! ${MKDIR} $1; then
--		echo "  mkdir $1 failed"
--		retval=1
--		return 1
--	else
--		echo "  $1 directory made"
--	fi
--
--	return 0
--}
--
--echo "Mounting virtual filesystems:"
--
--mount_fs proc /proc proc
--mount_fs sys /sys sysfs
--
--if mount_fs dev /dev tmpfs "size=512k,mode=0755"; then
--	mkdir_fs /dev/pts
--	mount_fs pts /dev/pts devpts
--	mkdir_fs /dev/shm
--	# g_serial is not detected by mdev.
--	mknod /dev/ttygserial c 127 0
--fi
--
--mount_fs config /config configfs
--mount_fs tmp /tmp tmpfs
--mount_fs run /var/run tmpfs
--mount_fs log /var/log tmpfs
--
--if [ $retval -ne 0 ]; then
--	echo "  WARNING: not able to mount all virtual file systems"
--fi
--
--exit $retval
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S01hotplug b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S01hotplug
-deleted file mode 100755
-index a30f06a..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S01hotplug
-+++ /dev/null
-@@ -1,14 +0,0 @@
--#! /bin/sh
--
--echo -n "Setting up mdev: "
--set -e
--trap 'echo "failed"' EXIT
--/bin/ln -s /proc/self/fd /dev/fd
--/bin/ln -s /proc/self/fd/0 /dev/stdin
--/bin/ln -s /proc/self/fd/1 /dev/stdout
--/bin/ln -s /proc/self/fd/2 /dev/stderr
--/bin/ln -s /proc/kcore /dev/core
--/bin/echo /sbin/mdev > /proc/sys/kernel/hotplug
--/sbin/mdev -s
--trap - EXIT
--echo "done"
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S02hostname b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S02hostname
-deleted file mode 100755
-index 083d41d..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S02hostname
-+++ /dev/null
-@@ -1,47 +0,0 @@
--#!/bin/sh
--
--PROGRAM=/bin/hostname
--
--echo -n "Setting hostname: "
--[ -x ${PROGRAM} ] || (echo "missing"; exit 0)
--
--if [ -f /etc/hostname ]; then
--	HOST="$(cat /etc/hostname)"
--else
--	HOST="localhost.localdomain"
--fi
--
--start() {
--	if ${PROGRAM} "${HOST}"; then
--		echo "'${HOST}'"
--	else
--		echo "failed"
--		exit 1
--	fi
--}
--
--stop() {
--	return 0
--}
--
--restart() {
--	stop
--	start
--}
--
--case "$1" in
--  start)
--        start
--        ;;
--  stop)
--        stop
--        ;;
--  restart|reload)
--        restart
--        ;;
--  *)
--        echo $"Usage: $0 {start|stop|restart}"
--        exit 1
--esac
--
--exit $?
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S08syslog b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S08syslog
-deleted file mode 100755
-index 58b0592..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S08syslog
-+++ /dev/null
-@@ -1,24 +0,0 @@
--#!/bin/sh
--
--SYSLOGD=/sbin/syslogd
--
--echo -n "Starting syslogd: "
--if [ ! -x "${SYSLOGD}" ]; then
--	echo "missing"
--	exit 1
--fi
--
--if ${SYSLOGD}; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
--
--echo -n "Log messages to syslog: "
--if echo 4 4 1 7 > /proc/sys/kernel/printk; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S09klog b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S09klog
-deleted file mode 100755
-index 1b0028a..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/S09klog
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--KLOGD=/sbin/klogd
--
--echo -n "Starting klogd: "
--if [ ! -x "${KLOGD}" ]; then
--	echo "missing"
--	exit 1
--fi
--
--if ${KLOGD}; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcK b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcK
-deleted file mode 100755
-index 1db1400..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcK
-+++ /dev/null
-@@ -1,6 +0,0 @@
--#!/bin/sh
--
--echo "Shutting down ..."
--for k in /etc/init.d/K*; do
--	$k stop
--done
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcS b/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcS
-deleted file mode 100755
-index 4d80c25..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/init.d/rcS
-+++ /dev/null
-@@ -1,11 +0,0 @@
--#!/bin/sh
--
--for s in /etc/init.d/S*; do
--	if [ -x $s ]; then
--		$s start
--	fi
--done
--
--echo
--echo "NGW100 ready"
--echo
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/inittab b/target/device/Atmel/atngw100-base/target_skeleton/etc/inittab
-deleted file mode 100644
-index 539edb7..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/inittab
-+++ /dev/null
-@@ -1,27 +0,0 @@
--# Inittab for the ATNGW100 development board
--#
--# Note: BusyBox init doesn't support runlevels.  The runlevels field is
--# completely ignored by BusyBox init. If you want runlevels, use sysvinit.
--#
--# Format for each entry: <id>:<runlevels>:<action>:<process>
--#
--# id        == tty to run on, or empty for /dev/console
--# runlevels == ignored
--# action    == one of sysinit, respawn, askfirst, wait, and once
--# process   == program to run
--
--# Run the rcS script after kernel is booted.
--::sysinit:/etc/init.d/rcS
--
--# Run a shell on the first serial port. Comment out if you want a getty instead.
--ttyS0::respawn:-/bin/sh
--
--# Run a shell on the g_serial port (USB gadget device)? This shell will spawn
--# error message if the device is not connected.
--#ttygserial::respawn:-/bin/sh
--
--# Uncomment this to run a getty on the first serial port.
--#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
--
--# Run a script on shutdown.
--::shutdown:/etc/init.d/rcK
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/mdev.conf b/target/device/Atmel/atngw100-base/target_skeleton/etc/mdev.conf
-deleted file mode 100644
-index 7c91ea7..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/mdev.conf
-+++ /dev/null
-@@ -1,49 +0,0 @@
--# mdev.conf for ATNGW100
--#
--# Syntax:
--#  <regexp> <UID>:<GID> <PERM> [{@,$,*} <CMD>]
--#    @: run <CMD> after creating
--#    $: run <CMD> before removal
--#    *: like @ and $ at the same time
--#    <CMD> is run inside /dev using system()
--
--full	0:0	666
--null	0:0	777
--zero	0:0	666
--
--random	0:0	444
--urandom	0:0	444
--
--console	0:5	0600
--kmem	0:9	000
--mem	0:9	0640
--ptmx	0:5	0660
--
--sda.*	0:6	0660
--sdb.*	0:6	0660
--hda.*	0:6	0660
--hdb.*	0:6	0660
--mtd.*	0:6	0660
--mmc.*	0:6	0660
--
--# Move input devices to input directory
--event.*	0:0	0660	@(mkdir -p input&&mv $MDEV input)
--mice	0:0	0660	@(mkdir -p input&&mv $MDEV input)
--mouse.*	0:0	0660	@(mkdir -p input&&mv $MDEV input)
--
--# Move sound devices to sound directory
--pcm.*		0:101	0660	@(mkdir -p snd&&mv $MDEV snd)
--seq		0:101	0660	@(mkdir -p snd&&mv $MDEV snd)
--timer		0:101	0660	@(mkdir -p snd&&mv $MDEV snd)
--control.*	0:101	0660	@(mkdir -p snd&&mv $MDEV snd)
--
--tty	0:5	0660
--tty0.*	0:5	0660
--tty1.*	0:5	0660
--tty2.*	0:5	0660
--tty3.*	0:5	0660
--tty4.*	0:5	0660
--tty5.*	0:5	0660
--tty6.*	0:5	0660
--
--ttyS.*	0:20	640
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/mtab b/target/device/Atmel/atngw100-base/target_skeleton/etc/mtab
-deleted file mode 120000
-index e1c2045..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/mtab
-+++ /dev/null
-@@ -1 +0,0 @@
--../proc/mounts
-\ No newline at end of file
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/network/interfaces b/target/device/Atmel/atngw100-base/target_skeleton/etc/network/interfaces
-deleted file mode 100644
-index add67ee..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/network/interfaces
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# Configure Loopback
--auto lo
--iface lo inet loopback
--
--# Configure Ethernet 0
--#auto eth0
--iface eth0 inet dhcp
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/passwd b/target/device/Atmel/atngw100-base/target_skeleton/etc/passwd
-deleted file mode 100644
-index 1a68e7b..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/passwd
-+++ /dev/null
-@@ -1,17 +0,0 @@
--root:x:0:0:root:/:/bin/sh
--daemon:x:1:1:daemon:/usr/sbin:/bin/sh
--bin:x:2:2:bin:/bin:/bin/sh
--sys:x:3:3:sys:/dev:/bin/sh
--sync:x:4:100:sync:/bin:/bin/sync
--mail:x:8:8:mail:/var/spool/mail:/bin/sh
--proxy:x:13:13:proxy:/bin:/bin/sh
--www-data:x:33:33:www-data:/var/www:/bin/sh
--backup:x:34:34:backup:/var/backups:/bin/sh
--operator:x:37:37:Operator:/var:/bin/sh
--haldaemon:x:68:68:hald:/:/bin/sh
--dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
--ftp:x:50:50:Anonymous FTP user:/home/ftp:/bin/ash
--dnsmasq:x:52:52:dnsmasq:/var/lib/dnsmasq:/bin/false
--sshd:x:110:65534:Operator:/var/run/sshd:/bin/false
--nobody:x:65534:65534:nobody:/nonexistent:/bin/false
--default:x:1000:1000:Default non-root user:/home/default:/bin/sh
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/protocols b/target/device/Atmel/atngw100-base/target_skeleton/etc/protocols
-deleted file mode 100644
-index 1521f39..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/protocols
-+++ /dev/null
-@@ -1,149 +0,0 @@
--# /etc/protocols:
--# $Id: protocols,v 1.3 2001/07/07 07:07:15 nalin Exp $
--#
--# Internet (IP) protocols
--#
--#	from: @(#)protocols	5.1 (Berkeley) 4/17/89
--#
--# Updated for NetBSD based on RFC 1340, Assigned Numbers (July 1992).
--#
--# See also http://www.iana.org/assignments/protocol-numbers
--
--ip	0	IP		# internet protocol, pseudo protocol number
--#hopopt	0	HOPOPT		# hop-by-hop options for ipv6
--icmp	1	ICMP		# internet control message protocol
--igmp	2	IGMP		# internet group management protocol
--ggp	3	GGP		# gateway-gateway protocol
--ipencap	4	IP-ENCAP	# IP encapsulated in IP (officially ``IP'')
--st	5	ST		# ST datagram mode
--tcp	6	TCP		# transmission control protocol
--cbt	7	CBT		# CBT, Tony Ballardie <A.Ballardie@cs.ucl.ac.uk>
--egp	8	EGP		# exterior gateway protocol
--igp	9	IGP		# any private interior gateway (Cisco: for IGRP)
--bbn-rcc	10	BBN-RCC-MON	# BBN RCC Monitoring
--nvp	11	NVP-II		# Network Voice Protocol
--pup	12	PUP		# PARC universal packet protocol
--argus	13	ARGUS		# ARGUS
--emcon	14	EMCON		# EMCON
--xnet	15	XNET		# Cross Net Debugger
--chaos	16	CHAOS		# Chaos
--udp	17	UDP		# user datagram protocol
--mux	18	MUX		# Multiplexing protocol
--dcn	19	DCN-MEAS	# DCN Measurement Subsystems
--hmp	20	HMP		# host monitoring protocol
--prm	21	PRM		# packet radio measurement protocol
--xns-idp	22	XNS-IDP		# Xerox NS IDP
--trunk-1	23	TRUNK-1		# Trunk-1
--trunk-2	24	TRUNK-2		# Trunk-2
--leaf-1	25	LEAF-1		# Leaf-1
--leaf-2	26	LEAF-2		# Leaf-2
--rdp	27	RDP		# "reliable datagram" protocol
--irtp	28	IRTP		# Internet Reliable Transaction Protocol
--iso-tp4	29	ISO-TP4		# ISO Transport Protocol Class 4
--netblt	30	NETBLT		# Bulk Data Transfer Protocol
--mfe-nsp	31	MFE-NSP		# MFE Network Services Protocol
--merit-inp	32	MERIT-INP	# MERIT Internodal Protocol
--sep	33	SEP		# Sequential Exchange Protocol
--3pc	34	3PC		# Third Party Connect Protocol
--idpr	35	IDPR		# Inter-Domain Policy Routing Protocol
--xtp	36	XTP		# Xpress Tranfer Protocol
--ddp	37	DDP		# Datagram Delivery Protocol
--idpr-cmtp	38	IDPR-CMTP	# IDPR Control Message Transport Proto
--tp++	39	TP++		# TP++ Transport Protocol
--il	40	IL		# IL Transport Protocol
--ipv6	41	IPv6		# IPv6
--sdrp	42	SDRP		# Source Demand Routing Protocol
--ipv6-route	43	IPv6-Route 	# Routing Header for IPv6
--ipv6-frag	44	IPv6-Frag	# Fragment Header for IPv6
--idrp	45	IDRP		# Inter-Domain Routing Protocol
--rsvp	46	RSVP		# Resource ReSerVation Protocol
--gre	47	GRE		# Generic Routing Encapsulation
--mhrp	48	MHRP		# Mobile Host Routing Protocol
--bna	49	BNA		# BNA
--ipv6-crypt	50	IPv6-Crypt	# Encryption Header for IPv6
--ipv6-auth	51	IPv6-Auth	# Authentication Header for IPv6
--i-nlsp	52	I-NLSP		# Integrated Net Layer Security TUBA
--swipe	53	SWIPE		# IP with Encryption
--narp	54	NARP		# NBMA Address Resolution Protocol
--mobile	55	MOBILE		# IP Mobility
--tlsp	56	TLSP		# Transport Layer Security Protocol
--skip	57	SKIP		# SKIP
--ipv6-icmp	58	IPv6-ICMP	# ICMP for IPv6
--ipv6-nonxt	59	IPv6-NoNxt	# No Next Header for IPv6
--ipv6-opts	60	IPv6-Opts	# Destination Options for IPv6
--#	61			# any host internal protocol
--cftp	62	CFTP		# CFTP
--#	63			# any local network
--sat-expak	64	SAT-EXPAK	# SATNET and Backroom EXPAK
--kryptolan	65	KRYPTOLAN	# Kryptolan
--rvd	66	RVD		# MIT Remote Virtual Disk Protocol
--ippc	67	IPPC		# Internet Pluribus Packet Core
--#	68			# any distributed file system
--sat-mon	69	SAT-MON		# SATNET Monitoring
--visa	70	VISA		# VISA Protocol
--ipcv	71	IPCV		# Internet Packet Core Utility
--cpnx	72	CPNX		# Computer Protocol Network Executive
--cphb	73	CPHB		# Computer Protocol Heart Beat
--wsn	74	WSN		# Wang Span Network
--pvp	75	PVP		# Packet Video Protocol
--br-sat-mon	76	BR-SAT-MON	# Backroom SATNET Monitoring
--sun-nd	77	SUN-ND		# SUN ND PROTOCOL-Temporary
--wb-mon	78	WB-MON		# WIDEBAND Monitoring
--wb-expak	79	WB-EXPAK	# WIDEBAND EXPAK
--iso-ip	80	ISO-IP		# ISO Internet Protocol
--vmtp	81	VMTP		# Versatile Message Transport
--secure-vmtp	82	SECURE-VMTP	# SECURE-VMTP
--vines	83	VINES		# VINES
--ttp	84	TTP		# TTP
--nsfnet-igp	85	NSFNET-IGP	# NSFNET-IGP
--dgp	86	DGP		# Dissimilar Gateway Protocol
--tcf	87	TCF		# TCF
--eigrp	88	EIGRP		# Enhanced Interior Routing Protocol (Cisco)
--ospf	89	OSPFIGP		# Open Shortest Path First IGP
--sprite-rpc	90	Sprite-RPC	# Sprite RPC Protocol
--larp	91	LARP		# Locus Address Resolution Protocol
--mtp	92	MTP		# Multicast Transport Protocol
--ax.25	93	AX.25		# AX.25 Frames
--ipip	94	IPIP		# Yet Another IP encapsulation
--micp	95	MICP		# Mobile Internetworking Control Pro.
--scc-sp	96	SCC-SP		# Semaphore Communications Sec. Pro.
--etherip	97	ETHERIP		# Ethernet-within-IP Encapsulation
--encap	98	ENCAP		# Yet Another IP encapsulation
--#	99			# any private encryption scheme
--gmtp	100	GMTP		# GMTP
--ifmp	101	IFMP		# Ipsilon Flow Management Protocol
--pnni	102	PNNI		# PNNI over IP
--pim	103	PIM		# Protocol Independent Multicast
--aris	104	ARIS		# ARIS
--scps	105	SCPS		# SCPS
--qnx	106	QNX		# QNX
--a/n	107	A/N		# Active Networks
--ipcomp	108	IPComp		# IP Payload Compression Protocol
--snp	109	SNP		# Sitara Networks Protocol
--compaq-peer	110	Compaq-Peer	# Compaq Peer Protocol
--ipx-in-ip	111	IPX-in-IP	# IPX in IP
--vrrp	112	VRRP		# Virtual Router Redundancy Protocol
--pgm	113	PGM		# PGM Reliable Transport Protocol
--#	114			# any 0-hop protocol
--l2tp	115	L2TP		# Layer Two Tunneling Protocol
--ddx	116	DDX		# D-II Data Exchange
--iatp	117	IATP		# Interactive Agent Transfer Protocol
--stp	118	STP		# Schedule Transfer
--srp	119	SRP		# SpectraLink Radio Protocol
--uti	120	UTI		# UTI
--smp	121	SMP		# Simple Message Protocol
--sm	122	SM		# SM
--ptp	123	PTP		# Performance Transparency Protocol
--isis	124	ISIS		# ISIS over IPv4
--fire	125	FIRE
--crtp	126	CRTP		# Combat Radio Transport Protocol
--crdup	127	CRUDP		# Combat Radio User Datagram
--sscopmce	128	SSCOPMCE
--iplt	129	IPLT
--sps	130	SPS		# Secure Packet Shield
--pipe	131	PIPE		# Private IP Encapsulation within IP
--sctp	132	SCTP		# Stream Control Transmission Protocol
--fc	133	FC		# Fibre Channel
--# rsvp-e2e-ignore	134	RSVP-E2E-IGNORE
--#	134-254			# Unassigned
--#	255			# Reserved
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/resolv.conf b/target/device/Atmel/atngw100-base/target_skeleton/etc/resolv.conf
-deleted file mode 120000
-index 71f6f96..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/resolv.conf
-+++ /dev/null
-@@ -1 +0,0 @@
--../tmp/resolv.conf
-\ No newline at end of file
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/services b/target/device/Atmel/atngw100-base/target_skeleton/etc/services
-deleted file mode 100644
-index e2ffd3d..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/services
-+++ /dev/null
-@@ -1,2117 +0,0 @@
--#
--# Network services, Internet style
--#
--# Note that it is presently the policy of IANA to assign a single well-known
--# port number for both TCP and UDP; hence, most entries here have two entries
--# even if the protocol doesn't support UDP operations.
--#
--# The latest IANA port assignments can be gotten from
--#
--#	http://www.iana.org/assignments/port-numbers
--#
--# The Well Known Ports are those from 0 through 1023.
--# The Registered Ports are those from 1024 through 49151
--# The Dynamic and/or Private Ports are those from 49152 through 65535
--#
--# Kerberos services are for Kerberos v4, and are unofficial.  Sites running
--# v5 should uncomment v5 entries and comment v4 entries.
--#
--# $FreeBSD: src/etc/services,v 1.102.8.1 2006/01/29 11:32:48 maxim Exp $
--#	From: @(#)services	5.8 (Berkeley) 5/9/91
--#
--# WELL KNOWN PORT NUMBERS
--#
--rtmp		  1/ddp	   #Routing Table Maintenance Protocol
--tcpmux		  1/tcp	   #TCP Port Service Multiplexer
--tcpmux		  1/udp	   #TCP Port Service Multiplexer
--nbp		  2/ddp	   #Name Binding Protocol
--compressnet	  2/tcp	   #Management Utility
--compressnet	  2/udp	   #Management Utility
--compressnet	  3/tcp	   #Compression Process
--compressnet	  3/udp	   #Compression Process
--echo		  4/ddp	   #AppleTalk Echo Protocol
--rje		  5/tcp	   #Remote Job Entry
--rje		  5/udp	   #Remote Job Entry
--zip		  6/ddp	   #Zone Information Protocol
--echo		  7/tcp
--echo		  7/udp
--discard		  9/tcp	   sink null
--discard		  9/udp	   sink null
--systat		 11/tcp	   users	#Active Users
--systat		 11/udp	   users	#Active Users
--daytime		 13/tcp
--daytime		 13/udp
--qotd		 17/tcp	   quote	#Quote of the Day
--qotd		 17/udp	   quote	#Quote of the Day
--msp		 18/tcp	   #Message Send Protocol
--msp		 18/udp	   #Message Send Protocol
--chargen		 19/tcp	   ttytst source	#Character Generator
--chargen		 19/udp	   ttytst source	#Character Generator
--ftp-data	 20/tcp	   #File Transfer [Default Data]
--ftp-data	 20/udp	   #File Transfer [Default Data]
--ftp		 21/tcp	   #File Transfer [Control]
--ftp		 21/udp	   #File Transfer [Control]
--ssh		 22/tcp	   #Secure Shell Login
--ssh		 22/udp	   #Secure Shell Login
--telnet		 23/tcp
--telnet		 23/udp
--#		 24/tcp	   any private mail system
--#		 24/udp	   any private mail system
--smtp		 25/tcp	   mail		#Simple Mail Transfer
--smtp		 25/udp	   mail		#Simple Mail Transfer
--nsw-fe		 27/tcp	   #NSW User System FE
--nsw-fe		 27/udp	   #NSW User System FE
--msg-icp		 29/tcp	   #MSG ICP
--msg-icp		 29/udp	   #MSG ICP
--msg-auth	 31/tcp	   #MSG Authentication
--msg-auth	 31/udp	   #MSG Authentication
--dsp		 33/tcp	   #Display Support Protocol
--dsp		 33/udp	   #Display Support Protocol
--#		 35/tcp	   any private printer server
--#		 35/udp	   any private printer server
--time		 37/tcp	   timserver
--time		 37/udp	   timserver
--rap		 38/tcp	   #Route Access Protocol
--rap		 38/udp	   #Route Access Protocol
--rlp		 39/tcp	   resource	#Resource Location Protocol
--rlp		 39/udp	   resource	#Resource Location Protocol
--graphics	 41/tcp
--graphics	 41/udp
--nameserver	 42/tcp	   name		#Host Name Server
--nameserver	 42/udp	   name		#Host Name Server
--nicname		 43/tcp	   whois
--nicname		 43/udp	   whois
--mpm-flags	 44/tcp	   #MPM FLAGS Protocol
--mpm-flags	 44/udp	   #MPM FLAGS Protocol
--mpm		 45/tcp	   #Message Processing Module [recv]
--mpm		 45/udp	   #Message Processing Module [recv]
--mpm-snd		 46/tcp	   #MPM [default send]
--mpm-snd		 46/udp	   #MPM [default send]
--ni-ftp		 47/tcp	   #NI FTP
--ni-ftp		 47/udp	   #NI FTP
--auditd		 48/tcp	   #Digital Audit Daemon
--auditd		 48/udp	   #Digital Audit Daemon
--tacacs		 49/tcp	   #Login Host Protocol (TACACS)
--tacacs		 49/udp	   #Login Host Protocol (TACACS)
--re-mail-ck	 50/tcp	   #Remote Mail Checking Protocol
--re-mail-ck	 50/udp	   #Remote Mail Checking Protocol
--la-maint	 51/tcp	   #IMP Logical Address Maintenance
--la-maint	 51/udp	   #IMP Logical Address Maintenance
--xns-time	 52/tcp	   #XNS Time Protocol
--xns-time	 52/udp	   #XNS Time Protocol
--domain		 53/tcp	   #Domain Name Server
--domain		 53/udp	   #Domain Name Server
--xns-ch		 54/tcp	   #XNS Clearinghouse
--xns-ch		 54/udp	   #XNS Clearinghouse
--isi-gl		 55/tcp	   #ISI Graphics Language
--isi-gl		 55/udp	   #ISI Graphics Language
--xns-auth	 56/tcp	   #XNS Authentication
--xns-auth	 56/udp	   #XNS Authentication
--mtp		 57/tcp	   # deprecated
--#PROBLEMS!==============================================================
--#		 57/tcp	   any private terminal access
--#PROBLEMS!==============================================================
--#		 57/udp	   any private terminal access
--xns-mail	 58/tcp	   #XNS Mail
--xns-mail	 58/udp	   #XNS Mail
--#		 59/tcp	   any private file service
--#		 59/udp	   any private file service
--ni-mail		 61/tcp	   #NI MAIL
--ni-mail		 61/udp	   #NI MAIL
--acas		 62/tcp	   #ACA Services
--acas		 62/udp	   #ACA Services
--whois++		 63/tcp
--whois++		 63/udp
--covia		 64/tcp	   #Communications Integrator (CI)
--covia		 64/udp	   #Communications Integrator (CI)
--tacacs-ds	 65/tcp	   #TACACS-Database Service
--tacacs-ds	 65/udp	   #TACACS-Database Service
--sql*net		 66/tcp	   #Oracle SQL*NET
--sql*net		 66/udp	   #Oracle SQL*NET
--bootps		 67/tcp	   dhcps	#Bootstrap Protocol Server
--bootps		 67/udp	   dhcps	#Bootstrap Protocol Server
--bootpc		 68/tcp	   dhcpc	#Bootstrap Protocol Client
--bootpc		 68/udp	   dhcpc	#Bootstrap Protocol Client
--tftp		 69/tcp	   #Trivial File Transfer
--tftp		 69/udp	   #Trivial File Transfer
--gopher		 70/tcp
--gopher		 70/udp
--netrjs-1	 71/tcp	   #Remote Job Service
--netrjs-1	 71/udp	   #Remote Job Service
--netrjs-2	 72/tcp	   #Remote Job Service
--netrjs-2	 72/udp	   #Remote Job Service
--netrjs-3	 73/tcp	   #Remote Job Service
--netrjs-3	 73/udp	   #Remote Job Service
--netrjs-4	 74/tcp	   #Remote Job Service
--netrjs-4	 74/udp	   #Remote Job Service
--#		 75/tcp	   any private dial out service
--#		 75/udp	   any private dial out service
--deos		 76/tcp	   #Distributed External Object Store
--deos		 76/udp	   #Distributed External Object Store
--netrjs		 77/tcp
--#PROBLEMS!==============================================================
--#		 77/tcp	   any private RJE service
--#PROBLEMS!==============================================================
--#		 77/udp	   any private RJE service
--vettcp		 78/tcp
--vettcp		 78/udp
--finger		 79/tcp
--finger		 79/udp
--http		 80/tcp	   www www-http	#World Wide Web HTTP
--http		 80/udp	   www www-http	#World Wide Web HTTP
--hosts2-ns	 81/tcp	   #HOSTS2 Name Server
--hosts2-ns	 81/udp	   #HOSTS2 Name Server
--xfer		 82/tcp	   #XFER Utility
--xfer		 82/udp	   #XFER Utility
--mit-ml-dev	 83/tcp	   #MIT ML Device
--mit-ml-dev	 83/udp	   #MIT ML Device
--ctf		 84/tcp	   #Common Trace Facility
--ctf		 84/udp	   #Common Trace Facility
--mit-ml-dev	 85/tcp	   #MIT ML Device
--mit-ml-dev	 85/udp	   #MIT ML Device
--mfcobol		 86/tcp	   #Micro Focus Cobol
--mfcobol		 86/udp	   #Micro Focus Cobol
--ttylink		 87/tcp
--#PROBLEMS!===========================================================
--#		 87/tcp	   any private terminal link
--#PROBLEMS!===========================================================
--#		 87/udp	   any private terminal link
--kerberos-sec	 88/tcp	   kerberos	# krb5	# Kerberos (v5)
--kerberos-sec	 88/udp	   kerberos	# krb5	# Kerberos (v5)
--su-mit-tg	 89/tcp	   #SU/MIT Telnet Gateway
--su-mit-tg	 89/udp	   #SU/MIT Telnet Gateway
--dnsix		 90/tcp	   #DNSIX Securit Attribute Token Map
--dnsix		 90/udp	   #DNSIX Securit Attribute Token Map
--mit-dov		 91/tcp	   #MIT Dover Spooler
--mit-dov		 91/udp	   #MIT Dover Spooler
--npp		 92/tcp	   #Network Printing Protocol
--npp		 92/udp	   #Network Printing Protocol
--dcp		 93/tcp	   #Device Control Protocol
--dcp		 93/udp	   #Device Control Protocol
--objcall		 94/tcp	   #Tivoli Object Dispatcher
--objcall		 94/udp	   #Tivoli Object Dispatcher
--supdup		 95/tcp
--supdup		 95/udp
--dixie		 96/tcp	   #DIXIE Protocol Specification
--dixie		 96/udp	   #DIXIE Protocol Specification
--swift-rvf	 97/tcp	   #Swift Remote Virtural File Protocol
--swift-rvf	 97/udp	   #Swift Remote Virtural File Protocol
--tacnews		 98/tcp	   #TAC News, Unofficial: Red Hat linuxconf
--tacnews		 98/udp	   #TAC News, Unofficial: Red Hat linuxconf
--metagram	 99/tcp	   #Metagram Relay
--metagram	 99/udp	   #Metagram Relay
--newacct		100/tcp	   #[unauthorized use]
--hostname	101/tcp	   hostnames	#NIC Host Name Server
--hostname	101/udp	   hostnames	#NIC Host Name Server
--iso-tsap	102/tcp	   tsap		#ISO-TSAP Class 0
--iso-tsap	102/udp	   tsap		#ISO-TSAP Class 0
--gppitnp		103/tcp	   #Genesis Point-to-Point Trans Net
--gppitnp		103/udp	   #Genesis Point-to-Point Trans Net
--acr-nema	104/tcp	   #ACR-NEMA Digital Imag. & Comm. 300
--acr-nema	104/udp	   #ACR-NEMA Digital Imag. & Comm. 300
--csnet-ns	105/tcp	   cso-ns cso	#Mailbox Name Nameserver
--csnet-ns	105/udp	   cso-ns cso	#Mailbox Name Nameserver
--pop3pw		106/tcp	   3com-tsmux	#Eudora compatible PW changer
--3com-tsmux	106/udp
--rtelnet		107/tcp	   #Remote Telnet Service
--rtelnet		107/udp	   #Remote Telnet Service
--snagas		108/tcp	   #SNA Gateway Access Server
--snagas		108/udp	   #SNA Gateway Access Server
--pop2		109/tcp	   postoffice	#Post Office Protocol - Version 2
--pop2		109/udp	   postoffice	#Post Office Protocol - Version 2
--pop3		110/tcp	   #Post Office Protocol - Version 3
--pop3		110/udp	   #Post Office Protocol - Version 3
--sunrpc		111/tcp	   rpcbind	#SUN Remote Procedure Call
--sunrpc		111/udp	   rpcbind	#SUN Remote Procedure Call
--mcidas		112/tcp	   #McIDAS Data Transmission Protocol
--mcidas		112/udp	   #McIDAS Data Transmission Protocol
--auth		113/tcp	   ident tap	#Authentication Service
--auth		113/udp	   ident tap	#Authentication Service
--audionews	114/tcp	   #Audio News Multicast
--audionews	114/udp	   #Audio News Multicast
--sftp		115/tcp	   #Simple File Transfer Protocol
--sftp		115/udp	   #Simple File Transfer Protocol
--ansanotify	116/tcp	   #ANSA REX Notify
--ansanotify	116/udp	   #ANSA REX Notify
--uucp-path	117/tcp	   #UUCP Path Service
--uucp-path	117/udp	   #UUCP Path Service
--sqlserv		118/tcp	   #SQL Services
--sqlserv		118/udp	   #SQL Services
--nntp		119/tcp	   usenet	#Network News Transfer Protocol
--nntp		119/udp	   usenet	#Network News Transfer Protocol
--cfdptkt		120/tcp
--cfdptkt		120/udp
--erpc		121/tcp	   #Encore Expedited Remote Pro.Call
--erpc		121/udp	   #Encore Expedited Remote Pro.Call
--smakynet	122/tcp
--smakynet	122/udp
--ntp		123/tcp	   #Network Time Protocol
--ntp		123/udp	   #Network Time Protocol
--ansatrader	124/tcp	   #ANSA REX Trader
--ansatrader	124/udp	   #ANSA REX Trader
--locus-map	125/tcp	   #Locus PC-Interface Net Map Ser
--locus-map	125/udp	   #Locus PC-Interface Net Map Ser
--unitary		126/tcp	   #Unisys Unitary Login
--unitary		126/udp	   #Unisys Unitary Login
--locus-con	127/tcp	   #Locus PC-Interface Conn Server
--locus-con	127/udp	   #Locus PC-Interface Conn Server
--gss-xlicen	128/tcp	   #GSS X License Verification
--gss-xlicen	128/udp	   #GSS X License Verification
--pwdgen		129/tcp	   #Password Generator Protocol
--pwdgen		129/udp	   #Password Generator Protocol
--cisco-fna	130/tcp	   #cisco FNATIVE
--cisco-fna	130/udp	   #cisco FNATIVE
--cisco-tna	131/tcp	   #cisco TNATIVE
--cisco-tna	131/udp	   #cisco TNATIVE
--cisco-sys	132/tcp	   #cisco SYSMAINT
--cisco-sys	132/udp	   #cisco SYSMAINT
--statsrv		133/tcp	   #Statistics Service
--statsrv		133/udp	   #Statistics Service
--ingres-net	134/tcp	   #INGRES-NET Service
--ingres-net	134/udp	   #INGRES-NET Service
--loc-srv		135/tcp	   epmap	#Location Service
--loc-srv		135/udp	   epmap	#Location Service
--profile		136/tcp	   #PROFILE Naming System
--profile		136/udp	   #PROFILE Naming System
--netbios-ns	137/tcp	   #NETBIOS Name Service
--netbios-ns	137/udp	   #NETBIOS Name Service
--netbios-dgm	138/tcp	   #NETBIOS Datagram Service
--netbios-dgm	138/udp	   #NETBIOS Datagram Service
--netbios-ssn	139/tcp	   #NETBIOS Session Service
--netbios-ssn	139/udp	   #NETBIOS Session Service
--emfis-data	140/tcp	   #EMFIS Data Service
--emfis-data	140/udp	   #EMFIS Data Service
--emfis-cntl	141/tcp	   #EMFIS Control Service
--emfis-cntl	141/udp	   #EMFIS Control Service
--bl-idm		142/tcp	   #Britton-Lee IDM
--bl-idm		142/udp	   #Britton-Lee IDM
--imap		143/tcp	   imap2 imap4	#Interim Mail Access Protocol v2
--imap		143/udp	   imap2 imap4	#Interim Mail Access Protocol v2
--NeWS		144/tcp	   # Window System
--NeWS		144/udp	   # Window System
--#PROBLEMS!==============================================================
--#uma		144/tcp	   #Universal Management Architecture
--#uma		144/udp	   #Universal Management Architecture
--#PROBLEMS!==============================================================
--uaac		145/tcp	   #UAAC Protocol
--uaac		145/udp	   #UAAC Protocol
--iso-tp0		146/tcp
--iso-tp0		146/udp
--iso-ip		147/tcp
--iso-ip		147/udp
--cronus		148/tcp	   jargon	#CRONUS-SUPPORT
--cronus		148/udp	   jargon	#CRONUS-SUPPORT
--aed-512		149/tcp	   #AED 512 Emulation Service
--aed-512		149/udp	   #AED 512 Emulation Service
--sql-net		150/tcp
--sql-net		150/udp
--hems		151/tcp
--hems		151/udp
--bftp		152/tcp	   #Background File Transfer Program
--bftp		152/udp	   #Background File Transfer Program
--sgmp		153/tcp
--sgmp		153/udp
--netsc-prod	154/tcp
--netsc-prod	154/udp
--netsc-dev	155/tcp
--netsc-dev	155/udp
--sqlsrv		156/tcp	   #SQL Service
--sqlsrv		156/udp	   #SQL Service
--knet-cmp	157/tcp	   #KNET/VM Command/Message Protocol
--knet-cmp	157/udp	   #KNET/VM Command/Message Protocol
--pcmail-srv	158/tcp	   #PCMail Server
--pcmail-srv	158/udp	   #PCMail Server
--nss-routing	159/tcp
--nss-routing	159/udp
--sgmp-traps	160/tcp
--sgmp-traps	160/udp
--snmp		161/tcp
--snmp		161/udp
--snmptrap	162/tcp	   snmp-trap
--snmptrap	162/udp	   snmp-trap
--cmip-man	163/tcp	   #CMIP/TCP Manager
--cmip-man	163/udp	   #CMIP/TCP Manager
--cmip-agent	164/tcp	   #CMIP/TCP Agent
--smip-agent	164/udp	   #CMIP/TCP Agent
--xns-courier	165/tcp	   #Xerox
--xns-courier	165/udp	   #Xerox
--s-net		166/tcp	   #Sirius Systems
--s-net		166/udp	   #Sirius Systems
--namp		167/tcp
--namp		167/udp
--rsvd		168/tcp
--rsvd		168/udp
--send		169/tcp
--send		169/udp
--print-srv	170/tcp	   #Network PostScript
--print-srv	170/udp	   #Network PostScript
--multiplex	171/tcp	   #Network Innovations Multiplex
--multiplex	171/udp	   #Network Innovations Multiplex
--cl/1		172/tcp	   #Network Innovations CL/1
--cl/1		172/udp	   #Network Innovations CL/1
--xyplex-mux	173/tcp
--xyplex-mux	173/udp
--mailq		174/tcp
--mailq		174/udp
--vmnet		175/tcp
--vmnet		175/udp
--genrad-mux	176/tcp
--genrad-mux	176/udp
--xdmcp		177/tcp	   #X Display Manager Control Protocol
--xdmcp		177/udp	   #X Display Manager Control Protocol
--NextStep	178/tcp	   nextstep NeXTStep	#NextStep Window Server
--NextStep	178/udp	   nextstep NeXTStep	#NextStep Window Server
--bgp		179/tcp	   #Border Gateway Protocol
--bgp		179/udp	   #Border Gateway Protocol
--ris		180/tcp	   #Intergraph
--ris		180/udp	   #Intergraph
--unify		181/tcp
--unify		181/udp
--audit		182/tcp	   #Unisys Audit SITP
--audit		182/udp	   #Unisys Audit SITP
--ocbinder	183/tcp
--ocbinder	183/udp
--ocserver	184/tcp
--ocserver	184/udp
--remote-kis	185/tcp
--remote-kis	185/udp
--kis		186/tcp	   #KIS Protocol
--kis		186/udp	   #KIS Protocol
--aci		187/tcp	   #Application Communication Interface
--aci		187/udp	   #Application Communication Interface
--mumps		188/tcp	   #Plus Five's MUMPS
--mumps		188/udp	   #Plus Five's MUMPS
--qft		189/tcp	   #Queued File Transport
--qft		189/udp	   #Queued File Transport
--gacp		190/tcp	   #Gateway Access Control Protocol
--gacp		190/udp	   cacp		#Gateway Access Control Protocol
--prospero	191/tcp	   #Prospero Directory Service
--prospero	191/udp	   #Prospero Directory Service
--osu-nms		192/tcp	   #OSU Network Monitoring System
--osu-nms		192/udp	   #OSU Network Monitoring System
--srmp		193/tcp	   #Spider Remote Monitoring Protocol
--srmp		193/udp	   #Spider Remote Monitoring Protocol
--irc		194/tcp	   #Internet Relay Chat Protocol
--irc		194/udp	   #Internet Relay Chat Protocol
--dn6-nlm-aud	195/tcp	   #DNSIX Network Level Module Audit
--dn6-nlm-aud	195/udp	   #DNSIX Network Level Module Audit
--dn6-smm-red	196/tcp	   #DNSIX Session Mgt Module Audit Redir
--dn6-smm-red	196/udp	   #DNSIX Session Mgt Module Audit Redir
--dls		197/tcp	   #Directory Location Service
--dls		197/udp	   #Directory Location Service
--dls-mon		198/tcp	   #Directory Location Service Monitor
--dls-mon		198/udp	   #Directory Location Service Monitor
--smux		199/tcp
--smux		199/udp
--src		200/tcp	   #IBM System Resource Controller
--src		200/udp	   #IBM System Resource Controller
--at-rtmp		201/tcp	   #AppleTalk Routing Maintenance
--at-rtmp		201/udp	   #AppleTalk Routing Maintenance
--at-nbp		202/tcp	   #AppleTalk Name Binding
--at-nbp		202/udp	   #AppleTalk Name Binding
--at-3		203/tcp	   #AppleTalk Unused
--at-3		203/udp	   #AppleTalk Unused
--at-echo		204/tcp	   #AppleTalk Echo
--at-echo		204/udp	   #AppleTalk Echo
--at-5		205/tcp	   #AppleTalk Unused
--at-5		205/udp	   #AppleTalk Unused
--at-zis		206/tcp	   #AppleTalk Zone Information
--at-zis		206/udp	   #AppleTalk Zone Information
--at-7		207/tcp	   #AppleTalk Unused
--at-7		207/udp	   #AppleTalk Unused
--at-8		208/tcp	   #AppleTalk Unused
--at-8		208/udp	   #AppleTalk Unused
--qmtp		209/tcp	   #The Quick Mail Transfer Protocol
--qmtp		209/udp	   #The Quick Mail Transfer Protocol
--#PROBLEMS!==============================================================
--#tam		209/tcp	   #Trivial Authenticated Mail Protocol
--#tam		209/udp	   #Trivial Authenticated Mail Protocol
--#PROBLEMS!==============================================================
--z39.50		210/tcp	   wais		#ANSI Z39.50
--z39.50		210/udp	   wais		#ANSI Z39.50
--914c/g		211/tcp	   #Texas Instruments 914C/G Terminal
--914c/g		211/udp	   #Texas Instruments 914C/G Terminal
--anet		212/tcp	   #ATEXSSTR
--anet		212/udp	   #ATEXSSTR
--ipx		213/tcp
--ipx		213/udp
--vmpwscs		214/tcp
--vmpwscs		214/udp
--softpc		215/tcp	   #Insignia Solutions
--softpc		215/udp	   #Insignia Solutions
--CAIlic		216/tcp	   atls		#Computer Associates Int'l License Server
--CAIlic		216/udp	   atls		#Computer Associates Int'l License Server
--dbase		217/tcp	   #dBASE Unix
--dbase		217/udp	   #dBASE Unix
--mpp		218/tcp	   #Netix Message Posting Protocol
--mpp		218/udp	   #Netix Message Posting Protocol
--uarps		219/tcp	   #Unisys ARPs
--uarps		219/udp	   #Unisys ARPs
--#imap3 at 220 was never used and never should have been allocated. See PR 46294.
--#imap3		220/tcp	   #Interactive Mail Access Protocol v3
--#imap3		220/udp	   #Interactive Mail Access Protocol v3
--fln-spx		221/tcp	   #Berkeley rlogind with SPX auth
--fln-spx		221/udp	   #Berkeley rlogind with SPX auth
--rsh-spx		222/tcp	   #Berkeley rshd with SPX auth
--rsh-spx		222/udp	   #Berkeley rshd with SPX auth
--cdc		223/tcp	   #Certificate Distribution Center
--cdc		223/udp	   #Certificate Distribution Center
--direct		242/tcp
--direct		242/udp
--sur-meas	243/tcp	   #Survey Measurement
--sur-meas	243/udp	   #Survey Measurement
--dayna		244/tcp
--dayna		244/udp
--link		245/tcp
--link		245/udp
--dsp3270		246/tcp	   #Display Systems Protocol
--dsp3270		246/udp	   #Display Systems Protocol
--subntbcst_tftp	247/tcp	   #subntbcst_tftp
--subntbcst_tftp	247/udp	   #subntbcst_tftp
--bhfhs		248/tcp
--bhfhs		248/udp
--#		249-255    reserved
--rap		256/tcp
--rap		256/udp
--set		257/tcp	   #secure electronic transaction
--set		257/udp	   #secure electronic transaction
--yak-chat	258/tcp	   #yak winsock personal chat
--yak-chat	258/udp	   #yak winsock personal chat
--esro-gen	259/tcp	   #efficient short remote operations
--esro-gen	259/udp	   #efficient short remote operations
--openport	260/tcp
--openport	260/udp
--nsiiops		261/tcp	   #iiop name service over tls/ssl
--nsiiops		261/udp	   #iiop name service over tls/ssl
--arcisdms	262/tcp
--arcisdms	262/udp
--hdap		263/tcp
--hdap		263/udp
--bgmp		264/tcp
--bgmp		264/udp
--#		265-279	   unassigned
--http-mgmt	280/tcp
--http-mgmt	280/udp
--personal-link	281/tcp
--personal-link	281/udp
--cableport-ax	282/tcp	   #cable port a/x
--cableport-ax	282/udp	   #cable port a/x
--#		283-307    unassigned
--novastorbakcup	308/tcp	   #novastor backup
--novastorbakcup	308/udp	   #novastor backup
--entrusttime	309/tcp
--entrusttime	309/udp
--bhmds		310/tcp
--bhmds		310/udp
--asip-webadmin	311/tcp	   #appleshare ip webadmin
--asip-webadmin	311/udp	   #appleshare ip webadmin
--vslmp		312/tcp
--vslmp		312/udp
--magenta-logic	313/tcp
--magenta-logic	313/udp
--opalis-robot	314/tcp
--opalis-robot	314/udp
--dpsi		315/tcp
--dpsi		315/udp
--decauth		316/tcp
--decauth		316/udp
--zannet		317/tcp
--zannet		317/udp
--#		318-320	   #unassigned
--pip		321/tcp
--pip		321/udp
--#		322-343	   #unassigned
--pdap		344/tcp	   #Prospero Data Access Protocol
--pdap		344/udp	   #Prospero Data Access Protocol
--pawserv		345/tcp	   #Perf Analysis Workbench
--pawserv		345/udp	   #Perf Analysis Workbench
--zserv		346/tcp	   #Zebra server
--zserv		346/udp	   #Zebra server
--fatserv		347/tcp	   #Fatmen Server
--fatserv		347/udp	   #Fatmen Server
--csi-sgwp	348/tcp	   #Cabletron Management Protocol
--csi-sgwp	348/udp	   #Cabletron Management Protocol
--mftp		349/tcp
--mftp		349/udp
--matip-type-a	350/tcp	   #MATIP Type A
--matip-type-a	350/udp
--matip-type-b	351/tcp	   #MATIP Type B
--matip-type-b	351/udp
--bhoetty		351/tcp	   #unassigned but widespread use
--bhoetty		351/udp	   #unassigned but widespread use
--dtag-ste-sb	352/tcp	   #DTAG
--dtag-ste-sb	352/udp	   #DTAG
--bhoedap4	352/tcp	   #unassigned but widespread use
--bhoedap4	352/udp	   #unassigned but widespread use
--ndsauth		353/tcp
--ndsauth		353/udp
--bh611		354/tcp
--bh611		354/udp
--datex-asn	355/tcp
--datex-asn	355/udp
--cloanto-net-1	356/tcp	   #Cloanto Net 1
--cloanto-net-1	356/udp
--bhevent		357/tcp
--bhevent		357/udp
--shrinkwrap	358/tcp
--shrinkwrap	358/udp
--tenebris_nts	359/tcp	   #Tenebris Network Trace Service
--tenebris_nts	359/udp	   #Tenebris Network Trace Service
--scoi2odialog	360/tcp
--scoi2odialog	360/udp
--semantix	361/tcp
--semantix	361/udp
--srssend		362/tcp	   #SRS Send
--srssend		362/udp	   #SRS Send
--rsvp_tunnel	363/tcp
--rsvp_tunnel	363/udp
--aurora-cmgr	364/tcp
--aurora-cmgr	364/udp
--dtk		365/tcp	   #Deception Tool Kit - Fred Cohen <fc@all.net>
--dtk		365/udp	   #Deception Tool Kit - Fred Cohen <fc@all.net>
--odmr		366/tcp
--odmr		366/udp
--mortgageware	367/tcp
--mortgageware	367/udp
--qbikgdp		368/tcp	   #QbikGDP
--qbikgdp		368/udp
--rpc2portmap	369/tcp
--rpc2portmap	369/udp
--codaauth2	370/tcp
--codaauth2	370/udp
--clearcase	371/tcp
--clearcase	371/udp
--ulistserv	372/tcp	   ulistproc	#Unix Listserv
--ulistserv	372/udp	   ulistproc	#Unix Listserv
--legent-1	373/tcp	   #Legent Corporation (now Computer Associates Intl.)
--legent-1	373/udp	   #Legent Corporation (now Computer Associates Intl.)
--legent-2	374/tcp	   #Legent Corporation (now Computer Associates Intl.)
--legent-2	374/udp	   #Legent Corporation (now Computer Associates Intl.)
--hassle		375/tcp
--hassle		375/udp
--nip		376/tcp	   #Amiga Envoy Network Inquiry Proto
--nip		376/udp	   #Amiga Envoy Network Inquiry Proto
--tnETOS		377/tcp	   #NEC Corporation
--tnETOS		377/udp	   #NEC Corporation
--dsETOS		378/tcp	   #NEC Corporation
--dsETOS		378/udp	   #NEC Corporation
--is99c		379/tcp	   #TIA/EIA/IS-99 modem client
--is99c		379/udp	   #TIA/EIA/IS-99 modem client
--is99s		380/tcp	   #TIA/EIA/IS-99 modem server
--is99s		380/udp	   #TIA/EIA/IS-99 modem server
--hp-collector	381/tcp	   #hp performance data collector
--hp-collector	381/udp	   #hp performance data collector
--hp-managed-node	382/tcp	   #hp performance data managed node
--hp-managed-node	382/udp	   #hp performance data managed node
--hp-alarm-mgr	383/tcp	   #hp performance data alarm manager
--hp-alarm-mgr	383/udp	   #hp performance data alarm manager
--arns		384/tcp	   #A Remote Network Server System
--arns		384/udp	   #A Remote Network Server System
--ibm-app		385/tcp	   #IBM Application
--ibm-app		385/udp	   #IBM Application
--asa		386/tcp	   #ASA Message Router Object Def.
--asa		386/udp	   #ASA Message Router Object Def.
--aurp		387/tcp	   #Appletalk Update-Based Routing Pro.
--aurp		387/udp	   #Appletalk Update-Based Routing Pro.
--unidata-ldm	388/tcp	   #Unidata LDM Version 4
--unidata-ldm	388/udp	   #Unidata LDM Version 4
--ldap		389/tcp	   #Lightweight Directory Access Protocol
--ldap		389/udp	   #Lightweight Directory Access Protocol
--uis		390/tcp
--uis		390/udp
--synotics-relay	391/tcp	   #SynOptics SNMP Relay Port
--synotics-relay	391/udp	   #SynOptics SNMP Relay Port
--synotics-broker	392/tcp	   #SynOptics Port Broker Port
--synotics-broker	392/udp	   #SynOptics Port Broker Port
--dis		393/tcp	   #Data Interpretation System
--dis		393/udp	   #Data Interpretation System
--embl-ndt	394/tcp	   #EMBL Nucleic Data Transfer
--embl-ndt	394/udp	   #EMBL Nucleic Data Transfer
--netcp		395/tcp	   #NETscout Control Protocol
--netcp		395/udp	   #NETscout Control Protocol
--netware-ip	396/tcp	   #Novell Netware over IP
--netware-ip	396/udp	   #Novell Netware over IP
--mptn		397/tcp	   #Multi Protocol Trans. Net.
--mptn		397/udp	   #Multi Protocol Trans. Net.
--kryptolan	398/tcp
--kryptolan	398/udp
--iso-tsap-c2	399/tcp	   #ISO-TSAP Class 2
--iso-tsap-c2	399/udp	   #ISO-TSAP Class 2
--work-sol	400/tcp	   #Workstation Solutions
--work-sol	400/udp	   #Workstation Solutions
--ups		401/tcp	   #Uninterruptible Power Supply
--ups		401/udp	   #Uninterruptible Power Supply
--genie		402/tcp	   #Genie Protocol
--genie		402/udp	   #Genie Protocol
--decap		403/tcp
--decap		403/udp
--nced		404/tcp
--nced		404/udp
--ncld		405/tcp
--ncld		405/udp
--imsp		406/tcp	   #Interactive Mail Support Protocol
--imsp		406/udp	   #Interactive Mail Support Protocol
--timbuktu	407/tcp
--timbuktu	407/udp
--prm-sm		408/tcp	   #Prospero Resource Manager Sys. Man.
--prm-sm		408/udp	   #Prospero Resource Manager Sys. Man.
--prm-nm		409/tcp	   #Prospero Resource Manager Node Man.
--prm-nm		409/udp	   #Prospero Resource Manager Node Man.
--decladebug	410/tcp	   #DECLadebug Remote Debug Protocol
--decladebug	410/udp	   #DECLadebug Remote Debug Protocol
--rmt		411/tcp	   #Remote MT Protocol
--rmt		411/udp	   #Remote MT Protocol
--synoptics-trap	412/tcp	   #Trap Convention Port
--synoptics-trap	412/udp	   #Trap Convention Port
--smsp		413/tcp
--smsp		413/udp
--infoseek	414/tcp
--infoseek	414/udp
--bnet		415/tcp
--bnet		415/udp
--silverplatter	416/tcp
--silverplatter	416/udp
--onmux		417/tcp
--onmux		417/udp
--hyper-g		418/tcp
--hyper-g		418/udp
--ariel1		419/tcp
--ariel1		419/udp
--smpte		420/tcp
--smpte		420/udp
--ariel2		421/tcp
--ariel2		421/udp
--ariel3		422/tcp
--ariel3		422/udp
--opc-job-start	423/tcp	   #IBM Operations Planning and Control Start
--opc-job-start	423/udp	   #IBM Operations Planning and Control Start
--opc-job-track	424/tcp	   #IBM Operations Planning and Control Track
--opc-job-track	424/udp	   #IBM Operations Planning and Control Track
--icad-el		425/tcp
--icad-el		425/udp
--smartsdp	426/tcp
--smartsdp	426/udp
--svrloc		427/tcp	   #Server Location
--svrloc		427/udp	   #Server Location
--ocs_cmu		428/tcp
--ocs_cmu		428/udp
--ocs_amu		429/tcp
--ocs_amu		429/udp
--utmpsd		430/tcp
--utmpsd		430/udp
--utmpcd		431/tcp
--utmpcd		431/udp
--iasd		432/tcp
--iasd		432/udp
--nnsp		433/tcp
--nnsp		433/udp
--mobileip-agent	434/tcp
--mobileip-agent	434/udp
--mobilip-mn	435/tcp
--mobilip-mn	435/udp
--dna-cml		436/tcp
--dna-cml		436/udp
--comscm		437/tcp
--comscm		437/udp
--dsfgw		438/tcp
--dsfgw		438/udp
--dasp		439/tcp
--dasp		439/udp
--sgcp		440/tcp
--sgcp		440/udp
--decvms-sysmgt	441/tcp
--decvms-sysmgt	441/udp
--cvc_hostd	442/tcp
--cvc_hostd	442/udp
--https		443/tcp
--https		443/udp
--snpp		444/tcp	   #Simple Network Paging Protocol
--snpp		444/udp	   #Simple Network Paging Protocol
--#			   [RFC1568]
--microsoft-ds	445/tcp
--microsoft-ds	445/udp
--ddm-rdb		446/tcp
--ddm-rdb		446/udp
--ddm-dfm		447/tcp
--ddm-dfm		447/udp
--ddm-ssl		448/tcp	   ddm-byte
--ddm-ssl		448/udp	   ddm-byte
--as-servermap	449/tcp	   #AS Server Mapper
--as-servermap	449/udp	   #AS Server Mapper
--tserver		450/tcp
--tserver		450/udp
--sfs-smp-net	451/tcp	   #Cray Network Semaphore server
--sfs-smp-net	451/udp	   #Cray Network Semaphore server
--sfs-config	452/tcp	   #Cray SFS config server
--sfs-config	452/udp	   #Cray SFS config server
--creativeserver	453/tcp	   #CreativeServer
--creativeserver	453/udp	   #CreativeServer
--contentserver	454/tcp	   #ContentServer
--contentserver	454/udp	   #ContentServer
--creativepartnr	455/tcp	   #CreativePartnr
--creativepartnr	455/udp	   #CreativePartnr
--macon-tcp	456/tcp
--macon-udp	456/udp
--scohelp		457/tcp
--scohelp		457/udp
--appleqtc	458/tcp	   #apple quick time
--appleqtc	458/udp	   #apple quick time
--ampr-rcmd	459/tcp
--ampr-rcmd	459/udp
--skronk		460/tcp
--skronk		460/udp
--datasurfsrv	461/tcp
--datasurfsrv	461/udp
--datasurfsrvsec	462/tcp
--datasurfsrvsec	462/udp
--alpes		463/tcp
--alpes		463/udp
--#
--kpasswd5	464/tcp	   # Kerberos (v5)
--kpasswd5	464/udp	   # Kerberos (v5)
--#PROBLEMS!==============================================================
--# IANA has offically assigned these two ports as ``kpasswd''
--#kpasswd	464/tcp    # Kerberos (v5)
--#kpasswd	464/udp    # Kerberos (v5)
--#PROBLEMS!==============================================================
--smtps		465/tcp	   #smtp protocol over TLS/SSL (was ssmtp)
--smtps		465/udp	   #smtp protocol over TLS/SSL (was ssmtp)
--digital-vrc	466/tcp
--digital-vrc	466/udp
--mylex-mapd	467/tcp
--mylex-mapd	467/udp
--photuris	468/tcp
--photuris	468/udp
--rcp		469/tcp	   #Radio Control Protocol
--rcp		469/udp	   #Radio Control Protocol
--scx-proxy	470/tcp
--scx-proxy	470/udp
--mondex		471/tcp
--mondex		471/udp
--ljk-login	472/tcp
--ljk-login	472/udp
--hybrid-pop	473/tcp
--hybrid-pop	473/udp
--tn-tl-w1	474/tcp
--tn-tl-w2	474/udp
--tcpnethaspsrv	475/tcp
--tcpnethaspsrv	475/udp
--tn-tl-fd1	476/tcp
--tn-tl-fd1	476/udp
--ss7ns		477/tcp
--ss7ns		477/udp
--spsc		478/tcp
--spsc		478/udp
--iafserver	479/tcp
--iafserver	479/udp
--iafdbase	480/tcp
--iafdbase	480/udp
--ph		481/tcp
--ph		481/udp
--bgs-nsi		482/tcp
--bgs-nsi		482/udp
--ulpnet		483/tcp
--ulpnet		483/udp
--integra-sme	484/tcp	   #Integra Software Management Environment
--integra-sme	484/udp	   #Integra Software Management Environment
--powerburst	485/tcp	   #Air Soft Power Burst
--powerburst	485/udp	   #Air Soft Power Burst
--avian		486/tcp
--avian		486/udp
--saft		487/tcp	   #saft Simple Asynchronous File Transfer
--saft		487/udp	   #saft Simple Asynchronous File Transfer
--gss-http	488/tcp
--gss-http	488/udp
--nest-protocol	489/tcp
--nest-protocol	489/udp
--micom-pfs	490/tcp
--micom-pfs	490/udp
--go-login	491/tcp
--go-login	491/udp
--ticf-1		492/tcp	   #Transport Independent Convergence for FNA
--ticf-1		492/udp	   #Transport Independent Convergence for FNA
--ticf-2		493/tcp	   #Transport Independent Convergence for FNA
--ticf-2		493/udp	   #Transport Independent Convergence for FNA
--pov-ray		494/tcp
--pov-ray		494/udp
--intecourier	495/tcp
--intecourier	495/udp
--pim-rp-disc	496/tcp
--pim-rp-disc	496/udp
--dantz		497/tcp
--dantz		497/udp
--siam		498/tcp
--siam		498/udp
--iso-ill		499/tcp	   #ISO ILL Protocol
--iso-ill		499/udp	   #ISO ILL Protocol
--isakmp		500/tcp
--isakmp		500/udp
--stmf		501/tcp
--stmf		501/udp
--asa-appl-proto	502/tcp
--asa-appl-proto	502/udp
--intrinsa	503/tcp
--intrinsa	503/udp
--citadel		504/tcp
--citadel		504/udp
--mailbox-lm	505/tcp
--mailbox-lm	505/udp
--ohimsrv		506/tcp
--ohimsrv		506/udp
--crs		507/tcp
--crs		507/udp
--xvttp		508/tcp
--xvttp		508/udp
--snare		509/tcp
--snare		509/udp
--fcp		510/tcp	   #FirstClass Protocol
--fcp		510/udp	   #FirstClass Protocol
--passgo		511/tcp
--passgo		511/udp
--#
--# Berkeley-specific services
--#
--exec		512/tcp	   #remote process execution;
--#			   authentication performed using
--#			   passwords and UNIX login names
--biff		512/udp	   comsat	#used by mail system to notify users
--#					of new mail received; currently
--#					receives messages only from
--#					processes on the same machine
--login		513/tcp	   #remote login a la telnet;
--#			   automatic authentication performed
--#			   based on priviledged port numbers
--#			   and distributed data bases which
--#			   identify "authentication domains"
--who		513/udp	   whod		#maintains data bases showing who's
--#					logged in to machines on a local
--#					net and the load average of the
--#					machine
--shell		514/tcp	   cmd		#like exec, but automatic
--#					authentication is performed as for
--#					login server
--syslog		514/udp
--printer		515/tcp	   spooler
--printer		515/udp	   spooler
--videotex	516/tcp
--videotex	516/udp
--talk		517/tcp	   #like tenex link, but across
--#			   machine - unfortunately, doesn't
--#			   use link protocol (this is actually
--#			   just a rendezvous port from which a
--#			   tcp connection is established)
--talk		517/udp	   #like tenex link, but across
--#			   machine - unfortunately, doesn't
--#			   use link protocol (this is actually
--#			   just a rendezvous port from which a
--#			   tcp connection is established)
--ntalk		518/tcp
--ntalk		518/udp
--utime		519/tcp	   unixtime
--utime		519/udp	   unixtime
--efs		520/tcp	   #extended file name server
--router		520/udp	   route routed	#local routing process (on site);
--#					   uses variant of Xerox NS routing
--#					   information protocol
--ripng		521/tcp
--ripng		521/udp
--ulp		522/tcp
--ulp		522/udp
--ibm-db2		523/tcp
--ibm-db2		523/udp
--ncp		524/tcp
--ncp		524/udp
--timed		525/tcp	   timeserver
--timed		525/udp	   timeserver
--tempo		526/tcp	   newdate
--tempo		526/udp	   newdate
--stx		527/tcp	   #Stock IXChange
--stx		527/udp	   #Stock IXChange
--custix		528/tcp	   #Customer IXChange
--custix		528/udp	   #Customer IXChange
--irc-serv	529/tcp
--irc-serv	529/udp
--courier		530/tcp	   rpc
--courier		530/udp	   rpc
--conference	531/tcp	   chat
--conference	531/udp	   chat
--netnews		532/tcp	   readnews
--netnews		532/udp	   readnews
--netwall		533/tcp	   #for emergency broadcasts
--netwall		533/udp	   #for emergency broadcasts
--mm-admin	534/tcp	   #MegaMedia Admin
--mm-admin	534/udp	   #MegaMedia Admin
--iiop		535/tcp
--iiop		535/udp
--opalis-rdv	536/tcp
--opalis-rdv	536/udp
--nmsp		537/tcp	   #Networked Media Streaming Protocol
--nmsp		537/udp	   #Networked Media Streaming Protocol
--gdomap		538/tcp
--gdomap		538/udp
--apertus-ldp	539/tcp	   #Apertus Technologies Load Determination
--apertus-ldp	539/udp	   #Apertus Technologies Load Determination
--uucp		540/tcp	   uucpd
--uucp		540/udp	   uucpd
--uucp-rlogin	541/tcp
--uucp-rlogin	541/udp
--commerce	542/tcp
--commerce	542/udp
--klogin		543/tcp	   # Kerberos (v4/v5)
--klogin		543/udp	   # Kerberos (v4/v5)
--kshell		544/tcp	   krcmd	# Kerberos (v4/v5)
--kshell		544/udp	   krcmd	# Kerberos (v4/v5)
--appleqtcsrvr	545/tcp
--appleqtcsrvr	545/udp
--dhcpv6-client	546/tcp	   #DHCPv6 Client
--dhcpv6-client	546/udp	   #DHCPv6 Client
--dhcpv6-server	547/tcp	   #DHCPv6 Server
--dhcpv6-server	547/udp	   #DHCPv6 Server
--afpovertcp	548/tcp	   #AFP over TCP
--afpovertcp	548/udp	   #AFP over TCP
--idfp		549/tcp
--idfp		549/udp
--new-rwho	550/tcp	   new-who
--new-rwho	550/udp	   new-who
--cybercash	551/tcp
--cybercash	551/udp
--deviceshare	552/tcp
--deviceshare	552/udp
--pirp		553/tcp
--pirp		553/udp
--rtsp		554/tcp	   #Real Time Stream Control Protocol
--rtsp		554/udp	   #Real Time Stream Control Protocol
--dsf		555/tcp
--dsf		555/udp
--remotefs	556/tcp	   rfs rfs_server	# Brunhoff remote filesystem
--remotefs	556/udp	   rfs rfs_server	# Brunhoff remote filesystem
--openvms-sysipc	557/tcp
--openvms-sysipc	557/udp
--sdnskmp		558/tcp
--sdnskmp		558/udp
--teedtap		559/tcp
--teedtap		559/udp
--rmonitor	560/tcp	   rmonitord
--rmonitor	560/udp	   rmonitord
--monitor		561/tcp
--monitor		561/udp
--chshell		562/tcp	   chcmd
--chshell		562/udp	   chcmd
--nntps		563/tcp	   snntp	#nntp protocol over TLS/SSL
--nntps		563/udp	   snntp	#nntp protocol over TLS/SSL
--9pfs		564/tcp	   #plan 9 file service
--9pfs		564/udp	   #plan 9 file service
--whoami		565/tcp
--whoami		565/udp
--streettalk	566/tcp
--banyan-rpc	567/tcp
--banyan-rpc	567/udp
--ms-shuttle	568/tcp	   #Microsoft shuttle
--ms-shuttle	568/udp	   #Microsoft shuttle
--ms-rome		569/tcp	   #Microsoft rome
--ms-rome		569/udp	   #Microsoft rome
--meter		570/tcp	   #demon
--meter		570/udp	   #demon
--umeter		571/tcp	   #udemon
--umeter		571/udp	   #udemon
--sonar		572/tcp
--sonar		572/udp
--banyan-vip	573/tcp
--banyan-vip	573/udp
--ftp-agent	574/tcp	   #FTP Software Agent System
--ftp-agent	574/udp	   #FTP Software Agent System
--vemmi		575/tcp
--vemmi		575/udp
--ipcd		576/tcp
--ipcd		576/udp
--vnas		577/tcp
--vnas		577/udp
--ipdd		578/tcp
--ipdd		578/udp
--decbsrv		579/tcp
--decbsrv		579/udp
--sntp-heartbeat	580/tcp
--sntp-heartbeat	580/udp
--bdp		581/tcp	   #Bundle Discovery Protocol
--bdp		581/udp	   #Bundle Discovery Protocol
--scc-security	582/tcp
--scc-security	582/udp
--philips-vc	583/tcp	   #Philips Video-Conferencing
--philips-vc	583/udp	   #Philips Video-Conferencing
--keyserver	584/tcp
--keyserver	584/udp
--#imap4-ssl at 585 never should have been allocated. See PR 46294.
--#imap4-ssl	585/tcp	   #IMAP4+SSL (use of 585 is not recommended,
--#imap4-ssl	585/udp	   #		use 993 instead)
--password-chg	586/tcp
--password-chg	586/udp
--submission	587/tcp
--submission	587/udp
--cal		588/tcp
--cal		588/udp
--eyelink		589/tcp
--eyelink		589/udp
--tns-cml		590/tcp
--tns-cml		590/udp
--http-alt	591/tcp	   #FileMaker, Inc. - HTTP Alternate (see Port 80)
--http-alt	591/udp	   #FileMaker, Inc. - HTTP Alternate (see Port 80)
--eudora-set	592/tcp
--eudora-set	592/udp
--http-rpc-epmap	593/tcp	   #HTTP RPC Ep Map
--http-rpc-epmap	593/udp	   #HTTP RPC Ep Map
--tpip		594/tcp
--tpip		594/udp
--cab-protocol	595/tcp
--cab-protocol	595/udp
--smsd		596/tcp
--smsd		596/udp
--ptcnameservice	597/tcp	   #PTC Name Service
--ptcnameservice	597/udp	   #PTC Name Service
--sco-websrvrmg3	598/tcp	   #SCO Web Server Manager 3
--sco-websrvrmg3	598/udp	   #SCO Web Server Manager 3
--acp		599/tcp	   #Aeolon Core Protocol
--acp		599/udp	   #Aeolon Core Protocol
--ipcserver	600/tcp	   #Sun IPC server
--ipcserver	600/udp	   #Sun IPC server
--urm		606/tcp	   #Cray Unified Resource Manager
--urm		606/udp	   #Cray Unified Resource Manager
--nqs		607/tcp
--nqs		607/udp
--sift-uft	608/tcp	   #Sender-Initiated/Unsolicited File Transfer
--sift-uft	608/udp	   #Sender-Initiated/Unsolicited File Transfer
--npmp-trap	609/tcp
--npmp-trap	609/udp
--npmp-local	610/tcp
--npmp-local	610/udp
--npmp-gui	611/tcp
--npmp-gui	611/udp
--sshell		614/tcp	   #SSLshell
--sshell		614/udp
--ipp		631/tcp	   #IPP (Internet Printing Protocol)
--ipp		631/udp	   #IPP (Internet Printing Protocol)
--ginad		634/tcp
--ginad		634/udp
--ldaps		636/tcp	   sldap	#ldap protocol over TLS/SSL
--ldaps		636/udp	   sldap
--aodv		654/tcp	   #Ad-Hoc On-Demand Distance Vector Routing Protocol
--aodv		654/udp	   #Ad-Hoc On-Demand Distance Vector Routing Protocol
--mdqs		666/tcp
--mdqs		666/udp
--#PROBLEMS!===============================================
--doom		666/tcp	   #doom Id Software
--doom		666/udp	   #doom Id Software
--#PROBLEMS!===============================================
--acap		674/tcp	   #Application Configuration Access Protocol
--acap		674/udp	   #Application Configuration Access Protocol
--elcsd		704/tcp	   #errlog copy/server daemon
--elcsd		704/udp	   #errlog copy/server daemon
--entrustmanager	709/tcp	   #EntrustManager
--entrustmanager	709/udp	   #EntrustManager
--netviewdm1	729/tcp	   #IBM NetView DM/6000 Server/Client
--netviewdm1	729/udp	   #IBM NetView DM/6000 Server/Client
--netviewdm2	730/tcp	   #IBM NetView DM/6000 send/tcp
--netviewdm2	730/udp	   #IBM NetView DM/6000 send/tcp
--netviewdm3	731/tcp	   #IBM NetView DM/6000 receive/tcp
--netviewdm3	731/udp	   #IBM NetView DM/6000 receive/tcp
--netgw		741/tcp
--netgw		741/udp
--netrcs		742/tcp	   #Network based Rev. Cont. Sys.
--netrcs		742/udp	   #Network based Rev. Cont. Sys.
--flexlm		744/tcp	   #Flexible License Manager
--flexlm		744/udp	   #Flexible License Manager
--fujitsu-dev	747/tcp	   #Fujitsu Device Control
--fujitsu-dev	747/udp	   #Fujitsu Device Control
--ris-cm		748/tcp	   #Russell Info Sci Calendar Manager
--ris-cm		748/udp	   #Russell Info Sci Calendar Manager
--kerberos-adm	749/tcp	   #Kerberos administration (v5)
--kerberos-adm	749/udp	   #Kerberos administration (v5)
--kerberos-iv	750/udp	   kdc		# Kerberos (v4)
--kerberos-iv	750/tcp	   kdc		# Kerberos (v4)
--#PROBLEMS!========================================================
--#rfile		750/tcp
--#loadav		750/udp
--#PROBLEMS!========================================================
--kerberos_master	751/tcp	   # Kerberos `kadmin' (v4)
--kerberos_master	751/udp	   # Kerberos `kadmin' (v4)
--#PROBLEMS!========================================================
--pump		751/tcp
--pump		751/udp
--#PROBLEMS!========================================================
--qrh		752/tcp
--qrh		752/udp
--rrh		753/tcp
--rrh		753/udp
--krb_prop	754/tcp	   krb5_prop	# kerberos/v5 server propagation
--#PROBLEMS!========================================================
--tell		754/tcp	   #send
--#PROBLEMS!========================================================
--tell		754/udp	   #send
--nlogin		758/tcp
--nlogin		758/udp
--con		759/tcp
--con		759/udp
--krbupdate	760/tcp	   kreg		# Kerberos (v4) registration
--#PROBLEMS!========================================================
--ns		760/tcp
--#PROBLEMS!========================================================
--ns		760/udp
--kpasswd		761/tcp	   kpwd		# Kerberos (v4) "passwd"
--#PROBLEMS!========================================================
--rxe		761/tcp
--#PROBLEMS!========================================================
--rxe		761/udp
--quotad		762/tcp
--quotad		762/udp
--cycleserv	763/tcp
--cycleserv	763/udp
--omserv		764/tcp
--omserv		764/udp
--webster		765/tcp
--webster		765/udp
--phonebook	767/tcp	   #phone
--phonebook	767/udp	   #phone
--vid		769/tcp
--vid		769/udp
--cadlock		770/tcp
--cadlock		770/udp
--rtip		771/tcp
--rtip		771/udp
--cycleserv2	772/tcp
--cycleserv2	772/udp
--submit		773/tcp
--notify		773/udp
--rpasswd		774/tcp
--acmaint_dbd	774/udp
--entomb		775/tcp
--acmaint_transd	775/udp
--wpages		776/tcp
--wpages		776/udp
--wpgs		780/tcp
--wpgs		780/udp
--concert		786/tcp
--concert		786/udp
--mdbs_daemon	800/tcp
--mdbs_daemon	800/udp
--device		801/tcp
--device		801/udp
--supfilesrv	871/tcp	   # for SUP
--rsync		873/tcp
--rsync		873/udp
--accessbuilder	888/tcp
--accessbuilder	888/udp
--swat		901/tcp	   # samba web configuration tool
--rndc		953/tcp	   # named's rndc control socket
--ftps-data	989/tcp	   # ftp protocol, data, over TLS/SSL
--ftps-data	989/udp
--ftps		990/tcp	   # ftp protocol, control, over TLS/SSL
--ftps		990/udp
--telnets		992/tcp	   # telnet protocol over TLS/SSL
--telnets		992/udp
--imaps		993/tcp	   # imap4 protocol over TLS/SSL
--imaps		993/udp
--ircs		994/tcp	   # irc protocol over TLS/SSL
--ircs		994/udp
--pop3s		995/tcp	   spop3	# pop3 protocol over TLS/SSL
--pop3s		995/udp	   spop3
--vsinet		996/tcp
--vsinet		996/udp
--maitrd		997/tcp
--maitrd		997/udp
--busboy		998/tcp
--puparp		998/udp
--garcon		999/tcp
--applix		999/udp	   #Applix ac
--puprouter	999/tcp
--puprouter	999/udp
--cadlock2	1000/tcp
--cadlock2	1000/udp
--#
--# REGISTERED PORT NUMBERS
--#
--blackjack	1025/tcp   #network blackjack
--blackjack	1025/udp   #network blackjack
--iad1		1030/tcp   #BBN IAD
--iad1		1030/udp   #BBN IAD
--iad2		1031/tcp   #BBN IAD
--iad2		1031/udp   #BBN IAD
--iad3		1032/tcp   #BBN IAD
--iad3		1032/udp   #BBN IAD
--nim		1058/tcp
--nim		1058/udp
--nimreg		1059/tcp
--nimreg		1059/udp
--instl_boots	1067/tcp   #Installation Bootstrap Proto. Serv.
--instl_boots	1067/udp   #Installation Bootstrap Proto. Serv.
--instl_bootc	1068/tcp   #Installation Bootstrap Proto. Cli.
--instl_bootc	1068/udp   #Installation Bootstrap Proto. Cli.
--socks		1080/tcp
--socks		1080/udp
--ansoft-lm-1	1083/tcp   #Anasoft License Manager
--ansoft-lm-1	1083/udp   #Anasoft License Manager
--ansoft-lm-2	1084/tcp   #Anasoft License Manager
--ansoft-lm-2	1084/udp   #Anasoft License Manager
--webobjects	1085/tcp   #Web Objects
--webobjects	1085/udp   #Web Objects
--kpop		1109/tcp   #Unofficial
--kpop		1109/udp   #Unofficial
--nfsd-status	1110/tcp   #Cluster status info
--nfsd-keepalive	1110/udp   #Client status info
--supfiledbg	1127/tcp   # for SUP
--nfa		1155/tcp   #Network File Access
--nfa		1155/udp   #Network File Access
--phone		1167/udp   #conference calling
--skkserv		1178/tcp   #SKK (kanji input)
--lupa		1212/tcp
--lupa		1212/udp
--nerv		1222/tcp   #SNI R&D network
--nerv		1222/udp   #SNI R&D network
--hermes		1248/tcp
--hermes		1248/udp
--healthd		1281/tcp   #healthd
--healthd		1281/udp   #healthd
--alta-ana-lm	1346/tcp   #Alta Analytics License Manager
--alta-ana-lm	1346/udp   #Alta Analytics License Manager
--bbn-mmc		1347/tcp   #multi media conferencing
--bbn-mmc		1347/udp   #multi media conferencing
--bbn-mmx		1348/tcp   #multi media conferencing
--bbn-mmx		1348/udp   #multi media conferencing
--sbook		1349/tcp   #Registration Network Protocol
--sbook		1349/udp   #Registration Network Protocol
--editbench	1350/tcp   #Registration Network Protocol
--editbench	1350/udp   #Registration Network Protocol
--equationbuilder	1351/tcp   #Digital Tool Works (MIT)
--equationbuilder	1351/udp   #Digital Tool Works (MIT)
--lotusnote	1352/tcp   #Lotus Note
--lotusnote	1352/udp   #Lotus Note
--relief		1353/tcp   #Relief Consulting
--relief		1353/udp   #Relief Consulting
--rightbrain	1354/tcp   #RightBrain Software
--rightbrain	1354/udp   #RightBrain Software
--intuitive-edge	1355/tcp   #Intuitive Edge
--intuitive-edge	1355/udp   #Intuitive Edge
--cuillamartin	1356/tcp   #CuillaMartin Company
--cuillamartin	1356/udp   #CuillaMartin Company
--pegboard	1357/tcp   #Electronic PegBoard
--pegboard	1357/udp   #Electronic PegBoard
--connlcli	1358/tcp
--connlcli	1358/udp
--ftsrv		1359/tcp
--ftsrv		1359/udp
--mimer		1360/tcp
--mimer		1360/udp
--linx		1361/tcp
--linx		1361/udp
--timeflies	1362/tcp
--timeflies	1362/udp
--ndm-requester	1363/tcp   #Network DataMover Requester
--ndm-requester	1363/udp   #Network DataMover Requester
--ndm-server	1364/tcp   #Network DataMover Server
--ndm-server	1364/udp   #Network DataMover Server
--adapt-sna	1365/tcp   #Network Software Associates
--adapt-sna	1365/udp   #Network Software Associates
--netware-csp	1366/tcp   #Novell NetWare Comm Service Platform
--netware-csp	1366/udp   #Novell NetWare Comm Service Platform
--dcs		1367/tcp
--dcs		1367/udp
--screencast	1368/tcp
--screencast	1368/udp
--gv-us		1369/tcp   #GlobalView to Unix Shell
--gv-us		1369/udp   #GlobalView to Unix Shell
--us-gv		1370/tcp   #Unix Shell to GlobalView
--us-gv		1370/udp   #Unix Shell to GlobalView
--fc-cli		1371/tcp   #Fujitsu Config Protocol
--fc-cli		1371/udp   #Fujitsu Config Protocol
--fc-ser		1372/tcp   #Fujitsu Config Protocol
--fc-ser		1372/udp   #Fujitsu Config Protocol
--chromagrafx	1373/tcp
--chromagrafx	1373/udp
--molly		1374/tcp   #EPI Software Systems
--molly		1374/udp   #EPI Software Systems
--bytex		1375/tcp
--bytex		1375/udp
--ibm-pps		1376/tcp   #IBM Person to Person Software
--ibm-pps		1376/udp   #IBM Person to Person Software
--cichlid		1377/tcp   #Cichlid License Manager
--cichlid		1377/udp   #Cichlid License Manager
--elan		1378/tcp   #Elan License Manager
--elan		1378/udp   #Elan License Manager
--dbreporter	1379/tcp   #Integrity Solutions
--dbreporter	1379/udp   #Integrity Solutions
--telesis-licman	1380/tcp   #Telesis Network License Manager
--telesis-licman	1380/udp   #Telesis Network License Manager
--apple-licman	1381/tcp   #Apple Network License Manager
--apple-licman	1381/udp   #Apple Network License Manager
--#udt_os		1382/tcp
--#udt_os		1382/udp
--gwha		1383/tcp   #GW Hannaway Network License Manager
--gwha		1383/udp   #GW Hannaway Network License Manager
--os-licman	1384/tcp   #Objective Solutions License Manager
--os-licman	1384/udp   #Objective Solutions License Manager
--atex_elmd	1385/tcp   #Atex Publishing License Manager
--atex_elmd	1385/udp   #Atex Publishing License Manager
--checksum	1386/tcp   #CheckSum License Manager
--checksum	1386/udp   #CheckSum License Manager
--cadsi-lm	1387/tcp   #Computer Aided Design Software Inc LM
--cadsi-lm	1387/udp   #Computer Aided Design Software Inc LM
--objective-dbc	1388/tcp   #Objective Solutions DataBase Cache
--objective-dbc	1388/udp   #Objective Solutions DataBase Cache
--iclpv-dm	1389/tcp   #Document Manager
--iclpv-dm	1389/udp   #Document Manager
--iclpv-sc	1390/tcp   #Storage Controller
--iclpv-sc	1390/udp   #Storage Controller
--iclpv-sas	1391/tcp   #Storage Access Server
--iclpv-sas	1391/udp   #Storage Access Server
--iclpv-pm	1392/tcp   #Print Manager
--iclpv-pm	1392/udp   #Print Manager
--iclpv-nls	1393/tcp   #Network Log Server
--iclpv-nls	1393/udp   #Network Log Server
--iclpv-nlc	1394/tcp   #Network Log Client
--iclpv-nlc	1394/udp   #Network Log Client
--iclpv-wsm	1395/tcp   #PC Workstation Manager software
--iclpv-wsm	1395/udp   #PC Workstation Manager software
--dvl-activemail	1396/tcp   #DVL Active Mail
--dvl-activemail	1396/udp   #DVL Active Mail
--audio-activmail	1397/tcp   #Audio Active Mail
--audio-activmail	1397/udp   #Audio Active Mail
--video-activmail	1398/tcp   #Video Active Mail
--video-activmail	1398/udp   #Video Active Mail
--cadkey-licman	1399/tcp   #Cadkey License Manager
--cadkey-licman	1399/udp   #Cadkey License Manager
--cadkey-tablet	1400/tcp   #Cadkey Tablet Daemon
--cadkey-tablet	1400/udp   #Cadkey Tablet Daemon
--goldleaf-licman	1401/tcp   #Goldleaf License Manager
--goldleaf-licman	1401/udp   #Goldleaf License Manager
--prm-sm-np	1402/tcp   #Prospero Resource Manager
--prm-sm-np	1402/udp   #Prospero Resource Manager
--prm-nm-np	1403/tcp   #Prospero Resource Manager
--prm-nm-np	1403/udp   #Prospero Resource Manager
--igi-lm		1404/tcp   #Infinite Graphics License Manager
--igi-lm		1404/udp   #Infinite Graphics License Manager
--ibm-res		1405/tcp   #IBM Remote Execution Starter
--ibm-res		1405/udp   #IBM Remote Execution Starter
--netlabs-lm	1406/tcp   #NetLabs License Manager
--netlabs-lm	1406/udp   #NetLabs License Manager
--dbsa-lm		1407/tcp   #DBSA License Manager
--dbsa-lm		1407/udp   #DBSA License Manager
--sophia-lm	1408/tcp   #Sophia License Manager
--sophia-lm	1408/udp   #Sophia License Manager
--here-lm		1409/tcp   #Here License Manager
--here-lm		1409/udp   #Here License Manager
--hiq		1410/tcp   #HiQ License Manager
--hiq		1410/udp   #HiQ License Manager
--af		1411/tcp   #AudioFile
--af		1411/udp   #AudioFile
--innosys		1412/tcp
--innosys		1412/udp
--innosys-acl	1413/tcp
--innosys-acl	1413/udp
--ibm-mqseries	1414/tcp   #IBM MQSeries
--ibm-mqseries	1414/udp   #IBM MQSeries
--dbstar		1415/tcp
--dbstar		1415/udp
--novell-lu6.2	1416/tcp   #Novell LU6.2
--novell-lu6.2	1416/udp   #Novell LU6.2
--timbuktu-srv1	1417/tcp   #Timbuktu Service 1 Port
--timbuktu-srv1	1417/udp   #Timbuktu Service 1 Port
--timbuktu-srv2	1418/tcp   #Timbuktu Service 2 Port
--timbuktu-srv2	1418/udp   #Timbuktu Service 2 Port
--timbuktu-srv3	1419/tcp   #Timbuktu Service 3 Port
--timbuktu-srv3	1419/udp   #Timbuktu Service 3 Port
--timbuktu-srv4	1420/tcp   #Timbuktu Service 4 Port
--timbuktu-srv4	1420/udp   #Timbuktu Service 4 Port
--gandalf-lm	1421/tcp   #Gandalf License Manager
--gandalf-lm	1421/udp   #Gandalf License Manager
--autodesk-lm	1422/tcp   #Autodesk License Manager
--autodesk-lm	1422/udp   #Autodesk License Manager
--essbase		1423/tcp   #Essbase Arbor Software
--essbase		1423/udp   #Essbase Arbor Software
--hybrid		1424/tcp   #Hybrid Encryption Protocol
--hybrid		1424/udp   #Hybrid Encryption Protocol
--zion-lm		1425/tcp   #Zion Software License Manager
--zion-lm		1425/udp   #Zion Software License Manager
--sas-1		1426/tcp   #Satellite-data Acquisition System 1
--sas-1		1426/udp   #Satellite-data Acquisition System 1
--mloadd		1427/tcp   #mloadd monitoring tool
--mloadd		1427/udp   #mloadd monitoring tool
--informatik-lm	1428/tcp   #Informatik License Manager
--informatik-lm	1428/udp   #Informatik License Manager
--nms		1429/tcp   #Hypercom NMS
--nms		1429/udp   #Hypercom NMS
--tpdu		1430/tcp   #Hypercom TPDU
--tpdu		1430/udp   #Hypercom TPDU
--rgtp		1431/tcp   #Reverse Gossip Transport
--rgtp		1431/udp   #Reverse Gossip Transport
--blueberry-lm	1432/tcp   #Blueberry Software License Manager
--blueberry-lm	1432/udp   #Blueberry Software License Manager
--ms-sql-s	1433/tcp   #Microsoft-SQL-Server
--ms-sql-s	1433/udp   #Microsoft-SQL-Server
--ms-sql-m	1434/tcp   #Microsoft-SQL-Monitor
--ms-sql-m	1434/udp   #Microsoft-SQL-Monitor
--ibm-cics	1435/tcp
--ibm-cics	1435/udp
--sas-2		1436/tcp   #Satellite-data Acquisition System 2
--sas-2		1436/udp   #Satellite-data Acquisition System 2
--tabula		1437/tcp
--tabula		1437/udp
--eicon-server	1438/tcp   #Eicon Security Agent/Server
--eicon-server	1438/udp   #Eicon Security Agent/Server
--eicon-x25	1439/tcp   #Eicon X25/SNA Gateway
--eicon-x25	1439/udp   #Eicon X25/SNA Gateway
--eicon-slp	1440/tcp   #Eicon Service Location Protocol
--eicon-slp	1440/udp   #Eicon Service Location Protocol
--cadis-1		1441/tcp   #Cadis License Management
--cadis-1		1441/udp   #Cadis License Management
--cadis-2		1442/tcp   #Cadis License Management
--cadis-2		1442/udp   #Cadis License Management
--ies-lm		1443/tcp   #Integrated Engineering Software
--ies-lm		1443/udp   #Integrated Engineering Software
--marcam-lm	1444/tcp   #Marcam  License Management
--marcam-lm	1444/udp   #Marcam  License Management
--proxima-lm	1445/tcp   #Proxima License Manager
--proxima-lm	1445/udp   #Proxima License Manager
--ora-lm		1446/tcp   #Optical Research Associates License Manager
--ora-lm		1446/udp   #Optical Research Associates License Manager
--apri-lm		1447/tcp   #Applied Parallel Research LM
--apri-lm		1447/udp   #Applied Parallel Research LM
--oc-lm		1448/tcp   #OpenConnect License Manager
--oc-lm		1448/udp   #OpenConnect License Manager
--peport		1449/tcp
--peport		1449/udp
--dwf		1450/tcp   #Tandem Distributed Workbench Facility
--dwf		1450/udp   #Tandem Distributed Workbench Facility
--infoman		1451/tcp   #IBM Information Management
--infoman		1451/udp   #IBM Information Management
--gtegsc-lm	1452/tcp   #GTE Government Systems License Man
--gtegsc-lm	1452/udp   #GTE Government Systems License Man
--genie-lm	1453/tcp   #Genie License Manager
--genie-lm	1453/udp   #Genie License Manager
--interhdl_elmd	1454/tcp   #interHDL License Manager
--interhdl_elmd	1454/udp   #interHDL License Manager
--esl-lm		1455/tcp   #ESL License Manager
--esl-lm		1455/udp   #ESL License Manager
--dca		1456/tcp
--dca		1456/udp
--valisys-lm	1457/tcp   #Valisys License Manager
--valisys-lm	1457/udp   #Valisys License Manager
--nrcabq-lm	1458/tcp   #Nichols Research Corp.
--nrcabq-lm	1458/udp   #Nichols Research Corp.
--proshare1	1459/tcp   #Proshare Notebook Application
--proshare1	1459/udp   #Proshare Notebook Application
--proshare2	1460/tcp   #Proshare Notebook Application
--proshare2	1460/udp   #Proshare Notebook Application
--ibm_wrless_lan	1461/tcp   #IBM Wireless LAN
--ibm_wrless_lan	1461/udp   #IBM Wireless LAN
--world-lm	1462/tcp   #World License Manager
--world-lm	1462/udp   #World License Manager
--nucleus		1463/tcp
--nucleus		1463/udp
--msl_lmd		1464/tcp   #MSL License Manager
--msl_lmd		1464/udp   #MSL License Manager
--pipes		1465/tcp   #Pipes Platform
--pipes		1465/udp   #Pipes Platform  mfarlin at peerlogic.com
--oceansoft-lm	1466/tcp   #Ocean Software License Manager
--oceansoft-lm	1466/udp   #Ocean Software License Manager
--csdmbase	1467/tcp
--csdmbase	1467/udp
--csdm		1468/tcp
--csdm		1468/udp
--aal-lm		1469/tcp   #Active Analysis Limited License Manager
--aal-lm		1469/udp   #Active Analysis Limited License Manager
--uaiact		1470/tcp   #Universal Analytics
--uaiact		1470/udp   #Universal Analytics
--csdmbase	1471/tcp
--csdmbase	1471/udp
--csdm		1472/tcp
--csdm		1472/udp
--openmath	1473/tcp
--openmath	1473/udp
--telefinder	1474/tcp
--telefinder	1474/udp
--taligent-lm	1475/tcp   #Taligent License Manager
--taligent-lm	1475/udp   #Taligent License Manager
--clvm-cfg	1476/tcp
--clvm-cfg	1476/udp
--ms-sna-server	1477/tcp
--ms-sna-server	1477/udp
--ms-sna-base	1478/tcp
--ms-sna-base	1478/udp
--dberegister	1479/tcp
--dberegister	1479/udp
--pacerforum	1480/tcp
--pacerforum	1480/udp
--airs		1481/tcp
--airs		1481/udp
--miteksys-lm	1482/tcp   #Miteksys License Manager
--miteksys-lm	1482/udp   #Miteksys License Manager
--afs		1483/tcp   #AFS License Manager
--afs		1483/udp   #AFS License Manager
--confluent	1484/tcp   #Confluent License Manager
--confluent	1484/udp   #Confluent License Manager
--lansource	1485/tcp
--lansource	1485/udp
--nms_topo_serv	1486/tcp
--nms_topo_serv	1486/udp
--localinfosrvr	1487/tcp
--localinfosrvr	1487/udp
--docstor		1488/tcp
--docstor		1488/udp
--dmdocbroker	1489/tcp
--dmdocbroker	1489/udp
--insitu-conf	1490/tcp
--insitu-conf	1490/udp
--anynetgateway	1491/tcp
--anynetgateway	1491/udp
--stone-design-1	1492/tcp
--stone-design-1	1492/udp
--netmap_lm	1493/tcp
--netmap_lm	1493/udp
--ica		1494/tcp
--ica		1494/udp
--cvc		1495/tcp
--cvc		1495/udp
--liberty-lm	1496/tcp
--liberty-lm	1496/udp
--rfx-lm		1497/tcp
--rfx-lm		1497/udp
--watcom-sql	1498/tcp
--watcom-sql	1498/udp
--fhc		1499/tcp   #Federico Heinz Consultora
--fhc		1499/udp   #Federico Heinz Consultora
--vlsi-lm		1500/tcp   #VLSI License Manager
--vlsi-lm		1500/udp   #VLSI License Manager
--sas-3		1501/tcp   #Satellite-data Acquisition System 3
--sas-3		1501/udp   #Satellite-data Acquisition System 3
--shivadiscovery	1502/tcp   #Shiva
--shivadiscovery	1502/udp   #Shiva
--imtc-mcs	1503/tcp   #Databeam
--imtc-mcs	1503/udp   #Databeam
--evb-elm		1504/tcp   #EVB Software Engineering License Manager
--evb-elm		1504/udp   #EVB Software Engineering License Manager
--funkproxy	1505/tcp   #Funk Software, Inc.
--funkproxy	1505/udp   #Funk Software, Inc.
--utcd		1506/tcp   #Universal Time daemon (utcd)
--utcd		1506/udp   #Universal Time daemon (utcd)
--symplex		1507/tcp
--symplex		1507/udp
--diagmond	1508/tcp
--diagmond	1508/udp
--robcad-lm	1509/tcp   #Robcad, Ltd. License Manager
--robcad-lm	1509/udp   #Robcad, Ltd. License Manager
--mvx-lm		1510/tcp   #Midland Valley Exploration Ltd. Lic. Man.
--mvx-lm		1510/udp   #Midland Valley Exploration Ltd. Lic. Man.
--3l-l1		1511/tcp
--3l-l1		1511/udp
--wins		1512/tcp   #Microsoft's Windows Internet Name Service
--wins		1512/udp   #Microsoft's Windows Internet Name Service
--fujitsu-dtc	1513/tcp   #Fujitsu Systems Business of America, Inc
--fujitsu-dtc	1513/udp   #Fujitsu Systems Business of America, Inc
--fujitsu-dtcns	1514/tcp   #Fujitsu Systems Business of America, Inc
--fujitsu-dtcns	1514/udp   #Fujitsu Systems Business of America, Inc
--ifor-protocol	1515/tcp
--ifor-protocol	1515/udp
--vpad		1516/tcp   #Virtual Places Audio data
--vpad		1516/udp   #Virtual Places Audio data
--vpac		1517/tcp   #Virtual Places Audio control
--vpac		1517/udp   #Virtual Places Audio control
--vpvd		1518/tcp   #Virtual Places Video data
--vpvd		1518/udp   #Virtual Places Video data
--vpvc		1519/tcp   #Virtual Places Video control
--vpvc		1519/udp   #Virtual Places Video control
--atm-zip-office	1520/tcp   #atm zip office
--atm-zip-office	1520/udp   #atm zip office
--ncube-lm	1521/tcp   #nCube License Manager
--ncube-lm	1521/udp   #nCube License Manager
--rna-lm		1522/tcp   #Ricardo North America License Manager
--rna-lm		1522/udp   #Ricardo North America License Manager
--cichild-lm	1523/tcp
--cichild-lm	1523/udp
--ingreslock	1524/tcp   #ingres
--ingreslock	1524/udp   #ingres
--prospero-np	1525/tcp   #Prospero Directory Service non-priv
--prospero-np	1525/udp   #Prospero Directory Service non-priv
--#PROBLEMS!========================================================
--orasrv		1525/tcp   #oracle
--orasrv		1525/udp   #oracle
--#PROBLEMS!========================================================
--pdap-np		1526/tcp   #Prospero Data Access Prot non-priv
--pdap-np		1526/udp   #Prospero Data Access Prot non-priv
--tlisrv		1527/tcp   #oracle
--tlisrv		1527/udp   #oracle
--mciautoreg	1528/tcp
--mciautoreg	1528/udp
--support		1529/tcp   prmsd gnatsd	# cygnus bug tracker
--coauthor	1529/tcp   #oracle
--coauthor	1529/udp   #oracle
--rap-service	1530/tcp
--rap-service	1530/udp
--rap-listen	1531/tcp
--rap-listen	1531/udp
--miroconnect	1532/tcp
--miroconnect	1532/udp
--virtual-places	1533/tcp   #Virtual Places Software
--virtual-places	1533/udp   #Virtual Places Software
--micromuse-lm	1534/tcp
--micromuse-lm	1534/udp
--ampr-info	1535/tcp
--ampr-info	1535/udp
--ampr-inter	1536/tcp
--ampr-inter	1536/udp
--sdsc-lm		1537/tcp
--sdsc-lm		1537/udp
--3ds-lm		1538/tcp
--3ds-lm		1538/udp
--intellistor-lm	1539/tcp   #Intellistor License Manager
--intellistor-lm	1539/udp   #Intellistor License Manager
--rds		1540/tcp
--rds		1540/udp
--rds2		1541/tcp
--rds2		1541/udp
--gridgen-elmd	1542/tcp
--gridgen-elmd	1542/udp
--simba-cs	1543/tcp
--simba-cs	1543/udp
--aspeclmd	1544/tcp
--aspeclmd	1544/udp
--vistium-share	1545/tcp
--vistium-share	1545/udp
--abbaccuray	1546/tcp
--abbaccuray	1546/udp
--laplink		1547/tcp
--laplink		1547/udp
--axon-lm		1548/tcp   #Axon License Manager
--axon-lm		1548/udp   #Axon License Manager
--shivahose	1549/tcp   #Shiva Hose
--shivasound	1549/udp   #Shiva Sound
--3m-image-lm	1550/tcp   #Image Storage license manager 3M Company
--3m-image-lm	1550/udp   #Image Storage license manager 3M Company
--hecmtl-db	1551/tcp
--hecmtl-db	1551/udp
--pciarray	1552/tcp
--pciarray	1552/udp
--issd		1600/tcp
--issd		1600/udp
--# IMPORTANT NOTE: Ports 1645/1646 are the traditional radius ports used by
--# many vendors without obtaining official IANA assignment.  The official
--# assignment is now ports 1812/1813 and users are encouraged to migrate
--# when possible to these new ports.
--#radius		1645/udp   #RADIUS authentication protocol (old)
--#radacct	1646/udp   #RADIUS accounting protocol (old)
--nkd		1650/tcp
--nkd		1650/udp
--shiva_confsrvr	1651/tcp
--shiva_confsrvr	1651/udp
--xnmp		1652/tcp
--xnmp		1652/udp
--netview-aix-1	1661/tcp
--netview-aix-1	1661/udp
--netview-aix-2	1662/tcp
--netview-aix-2	1662/udp
--netview-aix-3	1663/tcp
--netview-aix-3	1663/udp
--netview-aix-4	1664/tcp
--netview-aix-4	1664/udp
--netview-aix-5	1665/tcp
--netview-aix-5	1665/udp
--netview-aix-6	1666/tcp
--netview-aix-6	1666/udp
--netview-aix-7	1667/tcp
--netview-aix-7	1667/udp
--netview-aix-8	1668/tcp
--netview-aix-8	1668/udp
--netview-aix-9	1669/tcp
--netview-aix-9	1669/udp
--netview-aix-10	1670/tcp
--netview-aix-10	1670/udp
--netview-aix-11	1671/tcp
--netview-aix-11	1671/udp
--netview-aix-12	1672/tcp
--netview-aix-12	1672/udp
--l2f		1701/tcp   #l2f
--l2f		1701/udp   #l2f
--l2tp		1701/tcp   #Layer 2 Tunnelling Protocol
--l2tp		1701/udp   #Layer 2 Tunnelling Protocol
--pptp		1723/tcp   #Point-to-point tunnelling protocol
--# IMPORTANT NOTE: See comments for ports 1645/1646 when using older equipment
--radius		1812/udp   #RADIUS authentication protocol (IANA sanctioned)
--radacct		1813/udp   #RADIUS accounting protocol (IANA sanctioned)
--licensedaemon	1986/tcp   #cisco license management
--licensedaemon	1986/udp   #cisco license management
--tr-rsrb-p1	1987/tcp   #cisco RSRB Priority 1 port
--tr-rsrb-p1	1987/udp   #cisco RSRB Priority 1 port
--tr-rsrb-p2	1988/tcp   #cisco RSRB Priority 2 port
--tr-rsrb-p2	1988/udp   #cisco RSRB Priority 2 port
--tr-rsrb-p3	1989/tcp   #cisco RSRB Priority 3 port
--tr-rsrb-p3	1989/udp   #cisco RSRB Priority 3 port
--#PROBLEMS!===================================================
--mshnet		1989/tcp   #MHSnet system
--mshnet		1989/udp   #MHSnet system
--#PROBLEMS!===================================================
--stun-p1		1990/tcp   #cisco STUN Priority 1 port
--stun-p1		1990/udp   #cisco STUN Priority 1 port
--stun-p2		1991/tcp   #cisco STUN Priority 2 port
--stun-p2		1991/udp   #cisco STUN Priority 2 port
--stun-p3		1992/tcp   #cisco STUN Priority 3 port
--stun-p3		1992/udp   #cisco STUN Priority 3 port
--#PROBLEMS!===================================================
--ipsendmsg	1992/tcp
--ipsendmsg	1992/udp
--#PROBLEMS!===================================================
--snmp-tcp-port	1993/tcp   #cisco SNMP TCP port
--snmp-tcp-port	1993/udp   #cisco SNMP TCP port
--stun-port	1994/tcp   #cisco serial tunnel port
--stun-port	1994/udp   #cisco serial tunnel port
--perf-port	1995/tcp   #cisco perf port
--perf-port	1995/udp   #cisco perf port
--tr-rsrb-port	1996/tcp   #cisco Remote SRB port
--tr-rsrb-port	1996/udp   #cisco Remote SRB port
--gdp-port	1997/tcp   #cisco Gateway Discovery Protocol
--gdp-port	1997/udp   #cisco Gateway Discovery Protocol
--x25-svc-port	1998/tcp   #cisco X.25 service (XOT)
--x25-svc-port	1998/udp   #cisco X.25 service (XOT)
--tcp-id-port	1999/tcp   #cisco identification port
--tcp-id-port	1999/udp   #cisco identification port
--callbook	2000/tcp
--callbook	2000/udp
--dc		2001/tcp
--wizard		2001/udp   #curry
--globe		2002/tcp
--globe		2002/udp
--cfingerd	2003/tcp   #GNU finger
--mailbox		2004/tcp
--emce		2004/udp   #CCWS mm conf
--berknet		2005/tcp
--oracle		2005/udp
--invokator	2006/tcp
--raid-cc		2006/udp   #raid
--dectalk		2007/tcp
--raid-am		2007/udp
--conf		2008/tcp
--terminaldb	2008/udp
--news		2009/tcp
--whosockami	2009/udp
--search		2010/tcp
--pipe_server	2010/udp
--raid-cc		2011/tcp   #raid
--servserv	2011/udp
--ttyinfo		2012/tcp
--raid-ac		2012/udp
--raid-am		2013/tcp
--raid-cd		2013/udp
--troff		2014/tcp
--raid-sf		2014/udp
--cypress		2015/tcp
--raid-cs		2015/udp
--bootserver	2016/tcp
--bootserver	2016/udp
--cypress-stat	2017/tcp
--bootclient	2017/udp
--terminaldb	2018/tcp
--rellpack	2018/udp
--whosockami	2019/tcp
--about		2019/udp
--xinupageserver	2020/tcp
--xinupageserver	2020/udp
--servexec	2021/tcp
--xinuexpansion1	2021/udp
--down		2022/tcp
--xinuexpansion2	2022/udp
--xinuexpansion3	2023/tcp
--xinuexpansion3	2023/udp
--xinuexpansion4	2024/tcp
--xinuexpansion4	2024/udp
--ellpack		2025/tcp
--xribs		2025/udp
--scrabble	2026/tcp
--scrabble	2026/udp
--shadowserver	2027/tcp
--shadowserver	2027/udp
--submitserver	2028/tcp
--submitserver	2028/udp
--device2		2030/tcp
--device2		2030/udp
--blackboard	2032/tcp
--blackboard	2032/udp
--glogger		2033/tcp
--glogger		2033/udp
--scoremgr	2034/tcp
--scoremgr	2034/udp
--imsldoc		2035/tcp
--imsldoc		2035/udp
--objectmanager	2038/tcp
--objectmanager	2038/udp
--lam		2040/tcp
--lam		2040/udp
--interbase	2041/tcp
--interbase	2041/udp
--isis		2042/tcp
--isis		2042/udp
--isis-bcast	2043/tcp
--isis-bcast	2043/udp
--rimsl		2044/tcp
--rimsl		2044/udp
--cdfunc		2045/tcp
--cdfunc		2045/udp
--sdfunc		2046/tcp
--sdfunc		2046/udp
--#dls		2047/tcp
--#dls		2047/udp
--dls-monitor	2048/tcp
--dls-monitor	2048/udp
--nfsd		2049/tcp   nfs		# NFS server daemon
--nfsd		2049/udp   nfs		# NFS server daemon
--#PROBLEMS!=============================================================
--#shilp		2049/tcp
--#shilp		2049/udp
--#PROBLEMS!=============================================================
--dlsrpn		2065/tcp   #Data Link Switch Read Port Number
--dlsrpn		2065/udp   #Data Link Switch Read Port Number
--dlswpn		2067/tcp   #Data Link Switch Write Port Number
--dlswpn		2067/udp   #Data Link Switch Write Port Number
--zephyr-clt	2103/udp   #Zephyr serv-hm connection
--zephyr-hm	2104/udp   #Zephyr hostmanager
--#PROBLEMS!=============================================================
--#zephyr-hm-srv	2105/udp   #Zephyr hm-serv connection
--#PROBLEMS!=============================================================
--eklogin		2105/tcp   #Kerberos (v4) encrypted rlogin
--eklogin		2105/udp   #Kerberos (v4) encrypted rlogin
--ekshell		2106/tcp   #Kerberos (v4) encrypted rshell
--ekshell		2106/udp   #Kerberos (v4) encrypted rshell
--rkinit		2108/tcp   #Kerberos (v4) remote initialization
--rkinit		2108/udp   #Kerberos (v4) remote initialization
--ats		2201/tcp   #Advanced Training System Program
--ats		2201/udp   #Advanced Training System Program
--ivs-video	2232/tcp   #IVS Video default
--ivs-video	2232/udp   #IVS Video default
--ivsd		2241/tcp   #IVS Daemon
--ivsd		2241/udp   #IVS Daemon
--pehelp		2307/tcp
--pehelp		2307/udp
--cvspserver	2401/tcp   #CVS network server
--cvspserver	2401/udp   #CVS network server
--venus		2430/tcp   #venus
--venus		2430/udp   #venus
--venus-se	2431/tcp   #venus-se
--venus-se	2431/udp   #venus-se
--codasrv		2432/tcp   #codasrv
--codasrv		2432/udp   #codasrv
--codasrv-se	2433/tcp   #codasrv-se
--codasrv-se	2433/udp   #codasrv-se
--rtsserv		2500/tcp   #Resource Tracking system server
--rtsserv		2500/udp   #Resource Tracking system server
--rtsclient	2501/tcp   #Resource Tracking system client
--rtsclient	2501/udp   #Resource Tracking system client
--hp-3000-telnet	2564/tcp   #HP 3000 NS/VT block mode telnet
--zebrasrv	2600/tcp   #zebra service
--zebra		2601/tcp   #zebra vty
--ripd		2602/tcp   #RIPd vty
--ripngd		2603/tcp   #RIPngd vty
--ospfd		2604/tcp   #OSPFd vty
--bgpd		2605/tcp   #BGPd vty
--ospf6d		2606/tcp   #OSPF6d vty
--dict		2628/tcp   #RFC 2229
--dict		2628/udp   #RFC 2229
--listen		2766/tcp   #System V listener port
--www-dev		2784/tcp   #world wide web - development
--www-dev		2784/udp   #world wide web - development
--eppc		3031/tcp   #Remote AppleEvents/PPC Toolbox
--eppc		3031/udp   #Remote AppleEvents/PPC Toolbox
--NSWS		3049/tcp
--NSWS		3049/udp
--gds_db		3050/tcp   #InterBase Database Remote Protocol
--gds_db		3050/udp   #InterBase Database Remote Protocol
--sj3		3086/tcp   #SJ3 (kanji input)
--vmodem		3141/tcp
--vmodem		3141/udp
--ccmail		3264/tcp   #cc:mail/lotus
--ccmail		3264/udp   #cc:mail/lotus
--dec-notes	3333/tcp   #DEC Notes
--dec-notes	3333/udp   #DEC Notes
--rdp		3389/tcp   #Microsoft Remote Desktop Protocol
--bmap		3421/tcp   #Bull Apprise portmapper
--bmap		3421/udp   #Bull Apprise portmapper
--prsvp		3455/tcp   #RSVP Port
--prsvp		3455/udp   rsvp-encap	#RSVP Port
--vat		3456/tcp   #VAT default data
--vat		3456/udp   #VAT default data
--vat-control	3457/tcp   #VAT default control
--vat-control	3457/udp   #VAT default control
--nut		3493/tcp   #Network UPS Tools
--nut		3493/udp   #Network UPS Tools
--tsp		3653/tcp   #Tunnel Setup Protocol
--tsp		3653/udp   #Tunnel Setup Protocol
--svn		3690/tcp   #Subversion
--svn		3690/udp   #Subversion
--udt_os		3900/tcp   #Unidata UDT OS
--udt_os		3900/udp   #Unidata UDT OS
--mapper-nodemgr	3984/tcp   #MAPPER network node manager
--mapper-nodemgr	3984/udp   #MAPPER network node manager
--mapper-mapethd	3985/tcp   #MAPPER TCP/IP server
--mapper-mapethd	3985/udp   #MAPPER TCP/IP server
--mapper-ws_ethd	3986/tcp   #MAPPER workstation server
--mapper-ws_ethd	3986/udp   #MAPPER workstation server
--netcheque	4008/tcp   #NetCheque accounting
--netcheque	4008/udp   #NetCheque accounting
--lockd		4045/udp   # NFS lock daemon/manager
--lockd		4045/tcp
--nuts_dem	4132/tcp   #NUTS Daemon
--nuts_dem	4132/udp   #NUTS Daemon
--nuts_bootp	4133/tcp   #NUTS Bootp Server
--nuts_bootp	4133/udp   #NUTS Bootp Server
--rwhois		4321/tcp   #Remote Who Is
--rwhois		4321/udp   #Remote Who Is
--unicall		4343/tcp
--unicall		4343/udp
--krb524		4444/tcp
--krb524		4444/udp
--# PROBLEM krb524 assigned the port,
--# PROBLEM nv used it without an assignment
--nv-video	4444/tcp   #NV Video default
--nv-video	4444/udp   #NV Video default
--sae-urn		4500/tcp
--sae-urn		4500/udp
--fax		4557/tcp   #FAX transmission service
--hylafax		4559/tcp   #HylaFAX client-server protocol
--rfa		4672/tcp   #remote file access server
--rfa		4672/udp   #remote file access server
--commplex-main	5000/tcp
--commplex-main	5000/udp
--commplex-link	5001/tcp
--commplex-link	5001/udp
--rfe		5002/tcp   #radio free ethernet
--rfe		5002/udp   #radio free ethernet
--telelpathstart	5010/tcp
--telelpathstart	5010/udp
--telelpathattack	5011/tcp
--telelpathattack	5011/udp
--mmcc		5050/tcp   #multimedia conference control tool
--mmcc		5050/udp   #multimedia conference control tool
--rmonitor_secure	5145/tcp
--rmonitor_secure	5145/udp
--aol		5190/tcp   #America-Online
--aol		5190/udp   #America-Online
--aol-1		5191/tcp   #AmericaOnline1
--aol-1		5191/udp   #AmericaOnline1
--aol-2		5192/tcp   #AmericaOnline2
--aol-2		5192/udp   #AmericaOnline2
--aol-3		5193/tcp   #AmericaOnline3
--aol-3		5193/udp   #AmericaOnline3
--jabber-client	5222/tcp   #Jabber Client Connection
--jabber-client	5222/udp   #Jabber Client Connection
--padl2sim	5236/tcp
--padl2sim	5236/udp
--jabber-server	5269/tcp   #Jabber Server Connection
--jabber-server	5269/udp   #Jabber Server Connection
--hacl-hb		5300/tcp   # HA cluster heartbeat
--hacl-hb		5300/udp   # HA cluster heartbeat
--hacl-gs		5301/tcp   # HA cluster general services
--hacl-gs		5301/udp   # HA cluster general services
--hacl-cfg	5302/tcp   # HA cluster configuration
--hacl-cfg	5302/udp   # HA cluster configuration
--hacl-probe	5303/tcp   # HA cluster probing
--hacl-probe	5303/udp   # HA cluster probing
--hacl-local	5304/tcp
--hacl-local	5304/udp
--hacl-test	5305/tcp
--hacl-test	5305/udp
--cfengine	5308/tcp
--cfengine	5308/udp
--mdns		5353/tcp   #Multicast DNS
--mdns		5353/udp   #Multicast DNS
--postgresql	5432/tcp   #PostgreSQL Database
--postgresql	5432/udp   #PostgreSQL Database
--rplay		5555/udp
--canna		5680/tcp   #Canna (Japanese Input)
--proshareaudio	5713/tcp   #proshare conf audio
--proshareaudio	5713/udp   #proshare conf audio
--prosharevideo	5714/tcp   #proshare conf video
--prosharevideo	5714/udp   #proshare conf video
--prosharedata	5715/tcp   #proshare conf data
--prosharedata	5715/udp   #proshare conf data
--prosharerequest	5716/tcp   #proshare conf request
--prosharerequest	5716/udp   #proshare conf request
--prosharenotify	5717/tcp   #proshare conf notify
--prosharenotify	5717/udp   #proshare conf notify
--cvsup		5999/tcp   #CVSup file transfer/John Polstra/FreeBSD
--x11		6000/tcp   #6000-6063 are assigned to X Window System
--x11		6000/udp
--x11-ssh		6010/tcp   #Unofficial name, for convenience
--x11-ssh		6010/udp
--softcm		6110/tcp   #HP SoftBench CM
--softcm		6110/udp   #HP SoftBench CM
--spc		6111/tcp   #HP SoftBench Sub-Process Control
--spc		6111/udp   #HP SoftBench Sub-Process Control
--meta-corp	6141/tcp   #Meta Corporation License Manager
--meta-corp	6141/udp   #Meta Corporation License Manager
--aspentec-lm	6142/tcp   #Aspen Technology License Manager
--aspentec-lm	6142/udp   #Aspen Technology License Manager
--watershed-lm	6143/tcp   #Watershed License Manager
--watershed-lm	6143/udp   #Watershed License Manager
--statsci1-lm	6144/tcp   #StatSci License Manager - 1
--statsci1-lm	6144/udp   #StatSci License Manager - 1
--statsci2-lm	6145/tcp   #StatSci License Manager - 2
--statsci2-lm	6145/udp   #StatSci License Manager - 2
--lonewolf-lm	6146/tcp   #Lone Wolf Systems License Manager
--lonewolf-lm	6146/udp   #Lone Wolf Systems License Manager
--montage-lm	6147/tcp   #Montage License Manager
--montage-lm	6147/udp   #Montage License Manager
--ricardo-lm	6148/tcp   #Ricardo North America License Manager
--ricardo-lm	6148/udp   #Ricardo North America License Manager
--xdsxdm		6558/tcp
--xdsxdm		6558/udp
--ircd		6667/tcp   #Internet Relay Chat (unoffical)
--acmsoda		6969/tcp
--acmsoda		6969/udp
--afs3-fileserver	7000/tcp   #file server itself
--afs3-fileserver	7000/udp   #file server itself
--afs3-callback	7001/tcp   #callbacks to cache managers
--afs3-callback	7001/udp   #callbacks to cache managers
--afs3-prserver	7002/tcp   #users & groups database
--afs3-prserver	7002/udp   #users & groups database
--afs3-vlserver	7003/tcp   #volume location database
--afs3-vlserver	7003/udp   #volume location database
--afs3-kaserver	7004/tcp   #AFS/Kerberos authentication service
--afs3-kaserver	7004/udp   #AFS/Kerberos authentication service
--afs3-volser	7005/tcp   #volume management server
--afs3-volser	7005/udp   #volume management server
--afs3-errors	7006/tcp   #error interpretation service
--afs3-errors	7006/udp   #error interpretation service
--afs3-bos	7007/tcp   #basic overseer process
--afs3-bos	7007/udp   #basic overseer process
--afs3-update	7008/tcp   #server-to-server updater
--afs3-update	7008/udp   #server-to-server updater
--afs3-rmtsys	7009/tcp   #remote cache manager service
--afs3-rmtsys	7009/udp   #remote cache manager service
--afs3-resserver	7010/tcp   #MR-AFS residence server
--afs3-resserver	7010/udp   #MR-AFS residence server
--ups-onlinet	7010/tcp   #onlinet uninterruptable power supplies
--ups-onlinet	7010/udp   #onlinet uninterruptable power supplies
--afs3-remio	7011/tcp   #MR-AFS remote IO server
--afs3-remio	7011/udp   #MR-AFS remote IO server
--font-service	7100/tcp   #X Font Service
--font-service	7100/udp   #X Font Service
--fodms		7200/tcp   #FODMS FLIP
--fodms		7200/udp   #FODMS FLIP
--dlip		7201/tcp
--dlip		7201/udp
--ftp-proxy	8021/tcp   # FTP proxy
--natd		8668/divert # Network Address Translation
--jetdirect	9100/tcp   #HP JetDirect card
--git		9418/tcp   # Git Version Control System
--man		9535/tcp
--man		9535/udp
--sd		9876/tcp   #Session Director
--sd		9876/udp   #Session Director
--amanda		10080/udp  #Dump server control
--amandaidx	10082/tcp  #Amanda indexing
--amidxtape	10083/tcp  #Amanda tape indexing
--isode-dua	17007/tcp
--isode-dua	17007/udp
--biimenu		18000/tcp  #Beckman Instruments, Inc.
--biimenu		18000/udp  #Beckman Instruments, Inc.
--wnn4		22273/tcp  wnn6		#Wnn4 (Japanese input)
--wnn4_Cn		22289/tcp  wnn6_Cn	#Wnn4 (Chinese input)
--wnn4_Kr		22305/tcp  wnn6_Kr	#Wnn4 (Korean input)
--wnn4_Tw		22321/tcp  wnn6_Tw	#Wnn4 (Taiwanse input)
--wnn6_DS		26208/tcp  #Wnn6 (Dserver)
--dbbrowse	47557/tcp  #Databeam Corporation
--dbbrowse	47557/udp  #Databeam Corporation
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/shadow b/target/device/Atmel/atngw100-base/target_skeleton/etc/shadow
-deleted file mode 100644
-index 4a41602..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/shadow
-+++ /dev/null
-@@ -1,17 +0,0 @@
--root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
--daemon:!:13200:0:99999:7:::
--bin:!:13200:0:99999:7:::
--sys:!:13200:0:99999:7:::
--sync:!:13200:0:99999:7:::
--mail:!:13200:0:99999:7:::
--proxy:!:13200:0:99999:7:::
--www-data:!:13200:0:99999:7:::
--backup:!:13200:0:99999:7:::
--operator:!:13200:0:99999:7:::
--haldaemon:!:13200:0:99999:7:::
--dbus:!:13200:0:99999:7:::
--ftp:!:13200:0:99999:7:::
--dnsmasq:!:13200:0:99999:7:::
--sshd:!:13200:0:99999:7:::
--nobody:!:13200:0:99999:7:::
--default:!:13200:0:99999:7:::
-diff --git a/target/device/Atmel/atngw100-base/target_skeleton/etc/shells b/target/device/Atmel/atngw100-base/target_skeleton/etc/shells
-deleted file mode 100644
-index 6ee110c..0000000
---- a/target/device/Atmel/atngw100-base/target_skeleton/etc/shells
-+++ /dev/null
-@@ -1,8 +0,0 @@
--# /etc/shells: valid login shells
--/bin/ash
--/bin/sh
--/bin/zsh
--/bin/bash
--/usr/bin/zsh
--/usr/bin/bash
--/usr/bin/screen
-diff --git a/target/device/Atmel/atngw100/atngw100-linux-2.6.27.13.config b/target/device/Atmel/atngw100/atngw100-linux-2.6.27.13.config
-deleted file mode 100644
-index 270af0f..0000000
---- a/target/device/Atmel/atngw100/atngw100-linux-2.6.27.13.config
-+++ /dev/null
-@@ -1,1284 +0,0 @@
+@@ -1,1283 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
 -# Linux kernel version: 2.6.27.13
--# Thu Jan 29 21:26:33 2009
+-# Thu Jan 29 21:34:17 2009
 -#
 -CONFIG_AVR32=y
 -CONFIG_GENERIC_GPIO=y
@@ -8288,8 +1149,7 @@ index 270af0f..0000000
 -CONFIG_SYSVIPC=y
 -CONFIG_SYSVIPC_SYSCTL=y
 -CONFIG_POSIX_MQUEUE=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
+-# CONFIG_BSD_PROCESS_ACCT is not set
 -# CONFIG_TASKSTATS is not set
 -# CONFIG_AUDIT is not set
 -# CONFIG_IKCONFIG is not set
@@ -8298,7 +1158,7 @@ index 270af0f..0000000
 -# CONFIG_GROUP_SCHED is not set
 -CONFIG_SYSFS_DEPRECATED=y
 -CONFIG_SYSFS_DEPRECATED_V2=y
--# CONFIG_RELAY is not set
+-CONFIG_RELAY=y
 -# CONFIG_NAMESPACES is not set
 -CONFIG_BLK_DEV_INITRD=y
 -CONFIG_INITRAMFS_SOURCE=""
@@ -8349,7 +1209,7 @@ index 270af0f..0000000
 -CONFIG_MODULES=y
 -# CONFIG_MODULE_FORCE_LOAD is not set
 -CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
+-# CONFIG_MODULE_FORCE_UNLOAD is not set
 -# CONFIG_MODVERSIONS is not set
 -# CONFIG_MODULE_SRCVERSION_ALL is not set
 -CONFIG_KMOD=y
@@ -8388,11 +1248,21 @@ index 270af0f..0000000
 -CONFIG_PLATFORM_AT32AP=y
 -CONFIG_CPU_AT32AP700X=y
 -CONFIG_CPU_AT32AP7000=y
--# CONFIG_BOARD_ATSTK1000 is not set
--CONFIG_BOARD_ATNGW100=y
+-CONFIG_BOARD_ATSTK1000=y
+-# CONFIG_BOARD_ATNGW100 is not set
 -# CONFIG_BOARD_FAVR_32 is not set
 -# CONFIG_BOARD_MIMC200 is not set
--# CONFIG_BOARD_ATNGW100_EVKLCD10X is not set
+-CONFIG_BOARD_ATSTK1002=y
+-# CONFIG_BOARD_ATSTK1003 is not set
+-# CONFIG_BOARD_ATSTK1004 is not set
+-# CONFIG_BOARD_ATSTK1005 is not set
+-# CONFIG_BOARD_ATSTK1006 is not set
+-# CONFIG_BOARD_ATSTK100X_CUSTOM is not set
+-# CONFIG_BOARD_ATSTK100X_SPI1 is not set
+-# CONFIG_BOARD_ATSTK1000_J2_LED is not set
+-# CONFIG_BOARD_ATSTK1000_J2_LED8 is not set
+-# CONFIG_BOARD_ATSTK1000_J2_RGB is not set
+-CONFIG_BOARD_ATSTK1000_EXTDAC=y
 -CONFIG_LOADER_U_BOOT=y
 -
 -#
@@ -8483,41 +1353,33 @@ index 270af0f..0000000
 -CONFIG_PACKET_MMAP=y
 -CONFIG_UNIX=y
 -CONFIG_XFRM=y
--CONFIG_XFRM_USER=y
+-CONFIG_XFRM_USER=m
 -# CONFIG_XFRM_SUB_POLICY is not set
 -# CONFIG_XFRM_MIGRATE is not set
 -# CONFIG_XFRM_STATISTICS is not set
--CONFIG_XFRM_IPCOMP=y
--CONFIG_NET_KEY=y
+-CONFIG_XFRM_IPCOMP=m
+-CONFIG_NET_KEY=m
 -# CONFIG_NET_KEY_MIGRATE is not set
 -CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_ASK_IP_FIB_HASH=y
--# CONFIG_IP_FIB_TRIE is not set
+-# CONFIG_IP_MULTICAST is not set
+-# CONFIG_IP_ADVANCED_ROUTER is not set
 -CONFIG_IP_FIB_HASH=y
--# CONFIG_IP_MULTIPLE_TABLES is not set
--# CONFIG_IP_ROUTE_MULTIPATH is not set
--# CONFIG_IP_ROUTE_VERBOSE is not set
 -CONFIG_IP_PNP=y
 -CONFIG_IP_PNP_DHCP=y
 -# CONFIG_IP_PNP_BOOTP is not set
 -# CONFIG_IP_PNP_RARP is not set
--# CONFIG_NET_IPIP is not set
--# CONFIG_NET_IPGRE is not set
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--# CONFIG_IP_PIMSM_V2 is not set
+-CONFIG_NET_IPIP=m
+-CONFIG_NET_IPGRE=m
 -# CONFIG_ARPD is not set
--CONFIG_SYN_COOKIES=y
--CONFIG_INET_AH=y
--CONFIG_INET_ESP=y
--CONFIG_INET_IPCOMP=y
--CONFIG_INET_XFRM_TUNNEL=y
--CONFIG_INET_TUNNEL=y
--CONFIG_INET_XFRM_MODE_TRANSPORT=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
--CONFIG_INET_XFRM_MODE_BEET=y
+-# CONFIG_SYN_COOKIES is not set
+-CONFIG_INET_AH=m
+-CONFIG_INET_ESP=m
+-# CONFIG_INET_IPCOMP is not set
+-# CONFIG_INET_XFRM_TUNNEL is not set
+-CONFIG_INET_TUNNEL=m
+-CONFIG_INET_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET_XFRM_MODE_TUNNEL=m
+-CONFIG_INET_XFRM_MODE_BEET=m
 -# CONFIG_INET_LRO is not set
 -CONFIG_INET_DIAG=y
 -CONFIG_INET_TCP_DIAG=y
@@ -8525,170 +1387,34 @@ index 270af0f..0000000
 -CONFIG_TCP_CONG_CUBIC=y
 -CONFIG_DEFAULT_TCP_CONG="cubic"
 -# CONFIG_TCP_MD5SIG is not set
--# CONFIG_IP_VS is not set
 -CONFIG_IPV6=y
 -# CONFIG_IPV6_PRIVACY is not set
 -# CONFIG_IPV6_ROUTER_PREF is not set
 -# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--CONFIG_INET6_AH=y
--CONFIG_INET6_ESP=y
--CONFIG_INET6_IPCOMP=y
+-CONFIG_INET6_AH=m
+-CONFIG_INET6_ESP=m
+-CONFIG_INET6_IPCOMP=m
 -# CONFIG_IPV6_MIP6 is not set
--CONFIG_INET6_XFRM_TUNNEL=y
--CONFIG_INET6_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
+-CONFIG_INET6_XFRM_TUNNEL=m
+-CONFIG_INET6_TUNNEL=m
+-CONFIG_INET6_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET6_XFRM_MODE_TUNNEL=m
+-CONFIG_INET6_XFRM_MODE_BEET=m
 -# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
+-CONFIG_IPV6_SIT=m
 -CONFIG_IPV6_NDISC_NODETYPE=y
--# CONFIG_IPV6_TUNNEL is not set
+-CONFIG_IPV6_TUNNEL=m
 -# CONFIG_IPV6_MULTIPLE_TABLES is not set
 -# CONFIG_IPV6_MROUTE is not set
 -# CONFIG_NETWORK_SECMARK is not set
--CONFIG_NETFILTER=y
--# CONFIG_NETFILTER_DEBUG is not set
--CONFIG_NETFILTER_ADVANCED=y
--CONFIG_BRIDGE_NETFILTER=y
--
--#
--# Core Netfilter Configuration
--#
--# CONFIG_NETFILTER_NETLINK_QUEUE is not set
--# CONFIG_NETFILTER_NETLINK_LOG is not set
--CONFIG_NF_CONNTRACK=m
--CONFIG_NF_CT_ACCT=y
--CONFIG_NF_CONNTRACK_MARK=y
--# CONFIG_NF_CONNTRACK_EVENTS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--CONFIG_NF_CT_PROTO_GRE=m
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
--CONFIG_NF_CONNTRACK_AMANDA=m
--CONFIG_NF_CONNTRACK_FTP=m
--CONFIG_NF_CONNTRACK_H323=m
--CONFIG_NF_CONNTRACK_IRC=m
--CONFIG_NF_CONNTRACK_NETBIOS_NS=m
--CONFIG_NF_CONNTRACK_PPTP=m
--CONFIG_NF_CONNTRACK_SANE=m
--CONFIG_NF_CONNTRACK_SIP=m
--CONFIG_NF_CONNTRACK_TFTP=m
--# CONFIG_NF_CT_NETLINK is not set
--CONFIG_NETFILTER_XTABLES=y
--CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
--# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
--# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
--CONFIG_NETFILTER_XT_TARGET_MARK=m
--CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
--CONFIG_NETFILTER_XT_TARGET_NFLOG=m
--# CONFIG_NETFILTER_XT_TARGET_NOTRACK is not set
--# CONFIG_NETFILTER_XT_TARGET_RATEEST is not set
--# CONFIG_NETFILTER_XT_TARGET_TRACE is not set
--CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
--# CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP is not set
--CONFIG_NETFILTER_XT_MATCH_COMMENT=m
--CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
--# CONFIG_NETFILTER_XT_MATCH_CONNLIMIT is not set
--CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
--CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
--# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
--# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
--CONFIG_NETFILTER_XT_MATCH_ESP=m
--CONFIG_NETFILTER_XT_MATCH_HELPER=m
--# CONFIG_NETFILTER_XT_MATCH_IPRANGE is not set
--CONFIG_NETFILTER_XT_MATCH_LENGTH=m
--CONFIG_NETFILTER_XT_MATCH_LIMIT=m
--CONFIG_NETFILTER_XT_MATCH_MAC=m
--CONFIG_NETFILTER_XT_MATCH_MARK=m
--# CONFIG_NETFILTER_XT_MATCH_OWNER is not set
--CONFIG_NETFILTER_XT_MATCH_POLICY=m
--CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
--# CONFIG_NETFILTER_XT_MATCH_PHYSDEV is not set
--CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
--CONFIG_NETFILTER_XT_MATCH_QUOTA=m
--# CONFIG_NETFILTER_XT_MATCH_RATEEST is not set
--CONFIG_NETFILTER_XT_MATCH_REALM=m
--# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
--CONFIG_NETFILTER_XT_MATCH_STATE=m
--CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
--CONFIG_NETFILTER_XT_MATCH_STRING=m
--CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
--# CONFIG_NETFILTER_XT_MATCH_TIME is not set
--# CONFIG_NETFILTER_XT_MATCH_U32 is not set
--CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
--
--#
--# IP: Netfilter Configuration
--#
--CONFIG_NF_CONNTRACK_IPV4=m
--CONFIG_NF_CONNTRACK_PROC_COMPAT=y
--# CONFIG_IP_NF_QUEUE is not set
--CONFIG_IP_NF_IPTABLES=m
--CONFIG_IP_NF_MATCH_RECENT=m
--CONFIG_IP_NF_MATCH_ECN=m
--CONFIG_IP_NF_MATCH_AH=m
--CONFIG_IP_NF_MATCH_TTL=m
--CONFIG_IP_NF_MATCH_ADDRTYPE=m
--CONFIG_IP_NF_FILTER=m
--CONFIG_IP_NF_TARGET_REJECT=m
--CONFIG_IP_NF_TARGET_LOG=m
--# CONFIG_IP_NF_TARGET_ULOG is not set
--CONFIG_NF_NAT=m
--CONFIG_NF_NAT_NEEDED=y
--CONFIG_IP_NF_TARGET_MASQUERADE=m
--CONFIG_IP_NF_TARGET_REDIRECT=m
--CONFIG_IP_NF_TARGET_NETMAP=m
--CONFIG_NF_NAT_SNMP_BASIC=m
--CONFIG_NF_NAT_PROTO_GRE=m
--CONFIG_NF_NAT_FTP=m
--CONFIG_NF_NAT_IRC=m
--CONFIG_NF_NAT_TFTP=m
--CONFIG_NF_NAT_AMANDA=m
--CONFIG_NF_NAT_PPTP=m
--CONFIG_NF_NAT_H323=m
--CONFIG_NF_NAT_SIP=m
--CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_ECN=m
--CONFIG_IP_NF_TARGET_TTL=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
--CONFIG_IP_NF_RAW=m
--CONFIG_IP_NF_ARPTABLES=m
--CONFIG_IP_NF_ARPFILTER=m
--CONFIG_IP_NF_ARP_MANGLE=m
--
--#
--# IPv6: Netfilter Configuration
--#
--CONFIG_NF_CONNTRACK_IPV6=m
--CONFIG_IP6_NF_QUEUE=m
--CONFIG_IP6_NF_IPTABLES=m
--CONFIG_IP6_NF_MATCH_RT=m
--CONFIG_IP6_NF_MATCH_OPTS=m
--CONFIG_IP6_NF_MATCH_FRAG=m
--CONFIG_IP6_NF_MATCH_HL=m
--CONFIG_IP6_NF_MATCH_IPV6HEADER=m
--CONFIG_IP6_NF_MATCH_AH=m
--CONFIG_IP6_NF_MATCH_MH=m
--CONFIG_IP6_NF_MATCH_EUI64=m
--CONFIG_IP6_NF_FILTER=m
--CONFIG_IP6_NF_TARGET_LOG=m
--CONFIG_IP6_NF_TARGET_REJECT=m
--CONFIG_IP6_NF_MANGLE=m
--CONFIG_IP6_NF_TARGET_HL=m
--CONFIG_IP6_NF_RAW=m
--
--#
--# Bridge: Netfilter Configuration
--#
--# CONFIG_BRIDGE_NF_EBTABLES is not set
+-# CONFIG_NETFILTER is not set
 -# CONFIG_IP_DCCP is not set
 -# CONFIG_IP_SCTP is not set
 -# CONFIG_TIPC is not set
 -# CONFIG_ATM is not set
 -CONFIG_STP=m
 -CONFIG_BRIDGE=m
--CONFIG_VLAN_8021Q=m
--# CONFIG_VLAN_8021Q_GVRP is not set
+-# CONFIG_VLAN_8021Q is not set
 -# CONFIG_DECNET is not set
 -CONFIG_LLC=m
 -# CONFIG_LLC2 is not set
@@ -8699,7 +1425,6 @@ index 270af0f..0000000
 -# CONFIG_ECONET is not set
 -# CONFIG_WAN_ROUTER is not set
 -# CONFIG_NET_SCHED is not set
--CONFIG_NET_CLS_ROUTE=y
 -
 -#
 -# Network testing
@@ -8788,7 +1513,7 @@ index 270af0f..0000000
 -#
 -# CONFIG_MTD_COMPLEX_MAPPINGS is not set
 -CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_PHYSMAP_START=0x80000000
+-CONFIG_MTD_PHYSMAP_START=0x8000000
 -CONFIG_MTD_PHYSMAP_LEN=0x0
 -CONFIG_MTD_PHYSMAP_BANKWIDTH=2
 -# CONFIG_MTD_PLATRAM is not set
@@ -8796,8 +1521,9 @@ index 270af0f..0000000
 -#
 -# Self-contained MTD device drivers
 -#
--CONFIG_MTD_DATAFLASH=y
--# CONFIG_MTD_M25P80 is not set
+-CONFIG_MTD_DATAFLASH=m
+-CONFIG_MTD_M25P80=m
+-CONFIG_M25PXX_USE_FAST_READ=y
 -# CONFIG_MTD_SLRAM is not set
 -# CONFIG_MTD_PHRAM is not set
 -# CONFIG_MTD_MTDRAM is not set
@@ -8828,17 +1554,58 @@ index 270af0f..0000000
 -# CONFIG_BLK_DEV_XIP is not set
 -# CONFIG_CDROM_PKTCDVD is not set
 -# CONFIG_ATA_OVER_ETH is not set
--# CONFIG_MISC_DEVICES is not set
+-CONFIG_MISC_DEVICES=y
+-# CONFIG_ATMEL_PWM is not set
+-# CONFIG_ATMEL_TCLIB is not set
+-# CONFIG_EEPROM_93CX6 is not set
+-CONFIG_ATMEL_SSC=m
+-# CONFIG_ENCLOSURE_SERVICES is not set
 -# CONFIG_HAVE_IDE is not set
 -
 -#
 -# SCSI device support
 -#
 -# CONFIG_RAID_ATTRS is not set
--# CONFIG_SCSI is not set
--# CONFIG_SCSI_DMA is not set
+-CONFIG_SCSI=m
+-CONFIG_SCSI_DMA=y
+-# CONFIG_SCSI_TGT is not set
 -# CONFIG_SCSI_NETLINK is not set
--# CONFIG_ATA is not set
+-# CONFIG_SCSI_PROC_FS is not set
+-
+-#
+-# SCSI support type (disk, tape, CD-ROM)
+-#
+-CONFIG_BLK_DEV_SD=m
+-# CONFIG_CHR_DEV_ST is not set
+-# CONFIG_CHR_DEV_OSST is not set
+-CONFIG_BLK_DEV_SR=m
+-# CONFIG_BLK_DEV_SR_VENDOR is not set
+-# CONFIG_CHR_DEV_SG is not set
+-# CONFIG_CHR_DEV_SCH is not set
+-
+-#
+-# Some SCSI devices (e.g. CD jukebox) support multiple LUNs
+-#
+-# CONFIG_SCSI_MULTI_LUN is not set
+-# CONFIG_SCSI_CONSTANTS is not set
+-# CONFIG_SCSI_LOGGING is not set
+-# CONFIG_SCSI_SCAN_ASYNC is not set
+-CONFIG_SCSI_WAIT_SCAN=m
+-
+-#
+-# SCSI Transports
+-#
+-# CONFIG_SCSI_SPI_ATTRS is not set
+-# CONFIG_SCSI_FC_ATTRS is not set
+-# CONFIG_SCSI_ISCSI_ATTRS is not set
+-# CONFIG_SCSI_SAS_LIBSAS is not set
+-# CONFIG_SCSI_SRP_ATTRS is not set
+-# CONFIG_SCSI_LOWLEVEL is not set
+-# CONFIG_SCSI_DH is not set
+-CONFIG_ATA=m
+-# CONFIG_ATA_NONSTANDARD is not set
+-# CONFIG_SATA_PMP is not set
+-# CONFIG_ATA_SFF is not set
 -# CONFIG_MD is not set
 -CONFIG_NETDEVICES=y
 -# CONFIG_DUMMY is not set
@@ -8885,13 +1652,13 @@ index 270af0f..0000000
 -# CONFIG_WAN is not set
 -CONFIG_PPP=m
 -# CONFIG_PPP_MULTILINK is not set
--CONFIG_PPP_FILTER=y
+-# CONFIG_PPP_FILTER is not set
 -CONFIG_PPP_ASYNC=m
 -# CONFIG_PPP_SYNC_TTY is not set
 -CONFIG_PPP_DEFLATE=m
 -CONFIG_PPP_BSDCOMP=m
--CONFIG_PPP_MPPE=m
--CONFIG_PPPOE=m
+-# CONFIG_PPP_MPPE is not set
+-# CONFIG_PPPOE is not set
 -# CONFIG_PPPOL2TP is not set
 -# CONFIG_SLIP is not set
 -CONFIG_SLHC=m
@@ -8904,7 +1671,43 @@ index 270af0f..0000000
 -#
 -# Input device support
 -#
--# CONFIG_INPUT is not set
+-CONFIG_INPUT=m
+-# CONFIG_INPUT_FF_MEMLESS is not set
+-CONFIG_INPUT_POLLDEV=m
+-
+-#
+-# Userland interfaces
+-#
+-CONFIG_INPUT_MOUSEDEV=m
+-CONFIG_INPUT_MOUSEDEV_PSAUX=y
+-CONFIG_INPUT_MOUSEDEV_SCREEN_X=1024
+-CONFIG_INPUT_MOUSEDEV_SCREEN_Y=768
+-# CONFIG_INPUT_JOYDEV is not set
+-CONFIG_INPUT_EVDEV=m
+-# CONFIG_INPUT_EVBUG is not set
+-
+-#
+-# Input Device Drivers
+-#
+-CONFIG_INPUT_KEYBOARD=y
+-# CONFIG_KEYBOARD_ATKBD is not set
+-# CONFIG_KEYBOARD_SUNKBD is not set
+-# CONFIG_KEYBOARD_LKKBD is not set
+-# CONFIG_KEYBOARD_XTKBD is not set
+-# CONFIG_KEYBOARD_NEWTON is not set
+-# CONFIG_KEYBOARD_STOWAWAY is not set
+-CONFIG_KEYBOARD_GPIO=m
+-CONFIG_INPUT_MOUSE=y
+-# CONFIG_MOUSE_PS2 is not set
+-# CONFIG_MOUSE_SERIAL is not set
+-# CONFIG_MOUSE_APPLETOUCH is not set
+-# CONFIG_MOUSE_BCM5974 is not set
+-# CONFIG_MOUSE_VSXXXAA is not set
+-CONFIG_MOUSE_GPIO=m
+-# CONFIG_INPUT_JOYSTICK is not set
+-# CONFIG_INPUT_TABLET is not set
+-# CONFIG_INPUT_TOUCHSCREEN is not set
+-# CONFIG_INPUT_MISC is not set
 -
 -#
 -# Hardware I/O ports
@@ -8973,7 +1776,7 @@ index 270af0f..0000000
 -# Miscellaneous I2C Chip support
 -#
 -# CONFIG_DS1682 is not set
--# CONFIG_AT24 is not set
+-CONFIG_AT24=m
 -# CONFIG_SENSORS_EEPROM is not set
 -# CONFIG_SENSORS_PCF8574 is not set
 -# CONFIG_PCF8575 is not set
@@ -9073,21 +1876,76 @@ index 270af0f..0000000
 -#
 -# CONFIG_VGASTATE is not set
 -# CONFIG_VIDEO_OUTPUT_CONTROL is not set
--# CONFIG_FB is not set
--# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
+-CONFIG_FB=y
+-# CONFIG_FIRMWARE_EDID is not set
+-# CONFIG_FB_DDC is not set
+-CONFIG_FB_CFB_FILLRECT=y
+-CONFIG_FB_CFB_COPYAREA=y
+-CONFIG_FB_CFB_IMAGEBLIT=y
+-# CONFIG_FB_CFB_REV_PIXELS_IN_BYTE is not set
+-# CONFIG_FB_SYS_FILLRECT is not set
+-# CONFIG_FB_SYS_COPYAREA is not set
+-# CONFIG_FB_SYS_IMAGEBLIT is not set
+-# CONFIG_FB_FOREIGN_ENDIAN is not set
+-# CONFIG_FB_SYS_FOPS is not set
+-# CONFIG_FB_SVGALIB is not set
+-# CONFIG_FB_MACMODES is not set
+-# CONFIG_FB_BACKLIGHT is not set
+-# CONFIG_FB_MODE_HELPERS is not set
+-# CONFIG_FB_TILEBLITTING is not set
+-
+-#
+-# Frame buffer hardware drivers
+-#
+-# CONFIG_FB_S1D13XXX is not set
+-CONFIG_FB_ATMEL=y
+-# CONFIG_FB_ATMEL_MPOP is not set
+-# CONFIG_FB_VIRTUAL is not set
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-CONFIG_LCD_CLASS_DEVICE=y
+-CONFIG_LCD_LTV350QV=y
+-# CONFIG_LCD_ILI9320 is not set
+-# CONFIG_LCD_VGG2432A4 is not set
+-# CONFIG_LCD_PLATFORM is not set
+-# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
 -
 -#
 -# Display device support
 -#
 -# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_SOUND is not set
+-# CONFIG_LOGO is not set
+-CONFIG_SOUND=m
+-CONFIG_SND=m
+-CONFIG_SND_TIMER=m
+-CONFIG_SND_PCM=m
+-# CONFIG_SND_SEQUENCER is not set
+-CONFIG_SND_OSSEMUL=y
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-CONFIG_SND_PCM_OSS_PLUGINS=y
+-# CONFIG_SND_DYNAMIC_MINORS is not set
+-# CONFIG_SND_SUPPORT_OLD_API is not set
+-# CONFIG_SND_VERBOSE_PROCFS is not set
+-# CONFIG_SND_VERBOSE_PRINTK is not set
+-# CONFIG_SND_DEBUG is not set
+-CONFIG_SND_DRIVERS=y
+-# CONFIG_SND_DUMMY is not set
+-# CONFIG_SND_MTPAV is not set
+-# CONFIG_SND_SERIAL_U16550 is not set
+-# CONFIG_SND_MPU401 is not set
+-CONFIG_SND_SPI=y
+-CONFIG_SND_AT73C213=m
+-CONFIG_SND_AT73C213_TARGET_BITRATE=48000
+-# CONFIG_SND_SOC is not set
+-# CONFIG_SOUND_PRIME is not set
+-# CONFIG_HID_SUPPORT is not set
 -CONFIG_USB_SUPPORT=y
 -CONFIG_USB_ARCH_HAS_HCD=y
 -CONFIG_USB_ARCH_HAS_OHCI=y
 -CONFIG_USB_ARCH_HAS_EHCI=y
 -# CONFIG_USB is not set
 -# CONFIG_USB_OTG_WHITELIST is not set
--# CONFIG_USB_OTG_BLACKLIST_HUB is not set
+-CONFIG_USB_OTG_BLACKLIST_HUB=y
 -# CONFIG_USB_MUSB_HDRC is not set
 -# CONFIG_USB_GADGET_MUSB_HDRC is not set
 -
@@ -9097,6 +1955,7 @@ index 270af0f..0000000
 -CONFIG_USB_GADGET=y
 -# CONFIG_USB_GADGET_DEBUG is not set
 -# CONFIG_USB_GADGET_DEBUG_FILES is not set
+-# CONFIG_USB_GADGET_DEBUG_FS is not set
 -CONFIG_USB_GADGET_SELECTED=y
 -# CONFIG_USB_GADGET_AMD5536UDC is not set
 -CONFIG_USB_GADGET_ATMEL_USBA=y
@@ -9122,15 +1981,15 @@ index 270af0f..0000000
 -CONFIG_USB_G_SERIAL=m
 -# CONFIG_USB_MIDI_GADGET is not set
 -# CONFIG_USB_G_PRINTER is not set
--# CONFIG_USB_CDC_COMPOSITE is not set
--CONFIG_MMC=m
+-CONFIG_USB_CDC_COMPOSITE=m
+-CONFIG_MMC=y
 -# CONFIG_MMC_DEBUG is not set
 -# CONFIG_MMC_UNSAFE_RESUME is not set
 -
 -#
 -# MMC/SD Card Drivers
 -#
--CONFIG_MMC_BLOCK=m
+-CONFIG_MMC_BLOCK=y
 -CONFIG_MMC_BLOCK_BOUNCE=y
 -# CONFIG_SDIO_UART is not set
 -# CONFIG_MMC_TEST is not set
@@ -9138,26 +1997,28 @@ index 270af0f..0000000
 -#
 -# MMC/SD Host Controller Drivers
 -#
--# CONFIG_MMC_SDHCI is not set
--# CONFIG_MMC_ATMELMCI is not set
+-CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_ATMELMCI=y
+-# CONFIG_MMC_ATMELMCI_DMA is not set
 -CONFIG_MMC_SPI=m
 -# CONFIG_MEMSTICK is not set
 -CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
+-CONFIG_LEDS_CLASS=m
 -
 -#
 -# LED drivers
 -#
--CONFIG_LEDS_GPIO=y
+-# CONFIG_LEDS_PCA9532 is not set
+-CONFIG_LEDS_GPIO=m
 -# CONFIG_LEDS_PCA955X is not set
 -
 -#
 -# LED Triggers
 -#
 -CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
+-CONFIG_LEDS_TRIGGER_TIMER=m
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=m
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
 -# CONFIG_ACCESSIBILITY is not set
 -CONFIG_RTC_LIB=y
 -CONFIG_RTC_CLASS=y
@@ -9215,2688 +2076,38 @@ index 270af0f..0000000
 -#
 -CONFIG_RTC_DRV_AT32AP700X=y
 -# CONFIG_RTC_DRV_AVR32_AST is not set
--# CONFIG_DMADEVICES is not set
+-CONFIG_DMADEVICES=y
+-
+-#
+-# DMA Devices
+-#
+-CONFIG_ATMEL_PDCA=y
+-CONFIG_DW_DMAC=y
+-CONFIG_DMA_ENGINE=y
+-
+-#
+-# DMA Clients
+-#
+-# CONFIG_NET_DMA is not set
+-# CONFIG_DMATEST is not set
 -# CONFIG_UIO is not set
 -
 -#
 -# File systems
 -#
--CONFIG_EXT2_FS=m
+-CONFIG_EXT2_FS=y
 -# CONFIG_EXT2_FS_XATTR is not set
 -# CONFIG_EXT2_FS_XIP is not set
 -CONFIG_EXT3_FS=m
 -# CONFIG_EXT3_FS_XATTR is not set
 -# CONFIG_EXT4DEV_FS is not set
 -CONFIG_JBD=m
--# CONFIG_REISERFS_FS is not set
--# CONFIG_JFS_FS is not set
--# CONFIG_FS_POSIX_ACL is not set
--# CONFIG_XFS_FS is not set
--# CONFIG_OCFS2_FS is not set
--# CONFIG_DNOTIFY is not set
--CONFIG_INOTIFY=y
--CONFIG_INOTIFY_USER=y
--# CONFIG_QUOTA is not set
--# CONFIG_AUTOFS_FS is not set
--# CONFIG_AUTOFS4_FS is not set
--CONFIG_FUSE_FS=m
--
--#
--# CD-ROM/DVD Filesystems
--#
--# CONFIG_ISO9660_FS is not set
--# CONFIG_UDF_FS is not set
--
--#
--# DOS/FAT/NT Filesystems
--#
--CONFIG_FAT_FS=m
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
--CONFIG_FAT_DEFAULT_CODEPAGE=850
--CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
--# CONFIG_NTFS_FS is not set
--
--#
--# Pseudo filesystems
--#
--CONFIG_PROC_FS=y
--# CONFIG_PROC_KCORE is not set
--CONFIG_PROC_SYSCTL=y
--CONFIG_SYSFS=y
--CONFIG_TMPFS=y
--# CONFIG_TMPFS_POSIX_ACL is not set
--# CONFIG_HUGETLB_PAGE is not set
--CONFIG_CONFIGFS_FS=m
--
--#
--# Miscellaneous filesystems
--#
--# CONFIG_ADFS_FS is not set
--# CONFIG_AFFS_FS is not set
--# CONFIG_HFS_FS is not set
--# CONFIG_HFSPLUS_FS is not set
--# CONFIG_BEFS_FS is not set
--# CONFIG_BFS_FS is not set
--# CONFIG_EFS_FS is not set
--CONFIG_JFFS2_FS=y
--CONFIG_JFFS2_FS_DEBUG=0
--CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_FS_WBUF_VERIFY is not set
--# CONFIG_JFFS2_SUMMARY is not set
--# CONFIG_JFFS2_FS_XATTR is not set
--# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
--CONFIG_JFFS2_ZLIB=y
--# CONFIG_JFFS2_LZO is not set
--CONFIG_JFFS2_RTIME=y
--# CONFIG_JFFS2_RUBIN is not set
--# CONFIG_CRAMFS is not set
--# CONFIG_VXFS_FS is not set
--# CONFIG_MINIX_FS is not set
--# CONFIG_OMFS_FS is not set
--# CONFIG_HPFS_FS is not set
--# CONFIG_QNX4FS_FS is not set
--# CONFIG_ROMFS_FS is not set
--# CONFIG_SYSV_FS is not set
--# CONFIG_UFS_FS is not set
--CONFIG_NETWORK_FILESYSTEMS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--# CONFIG_NFS_V3_ACL is not set
--# CONFIG_NFS_V4 is not set
--CONFIG_ROOT_NFS=y
--CONFIG_NFSD=m
--CONFIG_NFSD_V3=y
--# CONFIG_NFSD_V3_ACL is not set
--# CONFIG_NFSD_V4 is not set
--CONFIG_LOCKD=y
--CONFIG_LOCKD_V4=y
--CONFIG_EXPORTFS=m
--CONFIG_NFS_COMMON=y
--CONFIG_SUNRPC=y
--# CONFIG_RPCSEC_GSS_KRB5 is not set
--# CONFIG_RPCSEC_GSS_SPKM3 is not set
--CONFIG_SMB_FS=m
--# CONFIG_SMB_NLS_DEFAULT is not set
--CONFIG_CIFS=m
--# CONFIG_CIFS_STATS is not set
--# CONFIG_CIFS_WEAK_PW_HASH is not set
--# CONFIG_CIFS_XATTR is not set
--# CONFIG_CIFS_DEBUG2 is not set
--# CONFIG_CIFS_EXPERIMENTAL is not set
--# CONFIG_NCP_FS is not set
--# CONFIG_CODA_FS is not set
--# CONFIG_AFS_FS is not set
--
--#
--# Partition Types
--#
--# CONFIG_PARTITION_ADVANCED is not set
--CONFIG_MSDOS_PARTITION=y
--CONFIG_NLS=m
--CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=m
--# CONFIG_NLS_CODEPAGE_737 is not set
--# CONFIG_NLS_CODEPAGE_775 is not set
--CONFIG_NLS_CODEPAGE_850=m
--# CONFIG_NLS_CODEPAGE_852 is not set
--# CONFIG_NLS_CODEPAGE_855 is not set
--# CONFIG_NLS_CODEPAGE_857 is not set
--# CONFIG_NLS_CODEPAGE_860 is not set
--# CONFIG_NLS_CODEPAGE_861 is not set
--# CONFIG_NLS_CODEPAGE_862 is not set
--# CONFIG_NLS_CODEPAGE_863 is not set
--# CONFIG_NLS_CODEPAGE_864 is not set
--# CONFIG_NLS_CODEPAGE_865 is not set
--# CONFIG_NLS_CODEPAGE_866 is not set
--# CONFIG_NLS_CODEPAGE_869 is not set
--# CONFIG_NLS_CODEPAGE_936 is not set
--# CONFIG_NLS_CODEPAGE_950 is not set
--# CONFIG_NLS_CODEPAGE_932 is not set
--# CONFIG_NLS_CODEPAGE_949 is not set
--# CONFIG_NLS_CODEPAGE_874 is not set
--# CONFIG_NLS_ISO8859_8 is not set
--# CONFIG_NLS_CODEPAGE_1250 is not set
--# CONFIG_NLS_CODEPAGE_1251 is not set
--# CONFIG_NLS_ASCII is not set
--CONFIG_NLS_ISO8859_1=m
--# CONFIG_NLS_ISO8859_2 is not set
--# CONFIG_NLS_ISO8859_3 is not set
--# CONFIG_NLS_ISO8859_4 is not set
--# CONFIG_NLS_ISO8859_5 is not set
--# CONFIG_NLS_ISO8859_6 is not set
--# CONFIG_NLS_ISO8859_7 is not set
--# CONFIG_NLS_ISO8859_9 is not set
--# CONFIG_NLS_ISO8859_13 is not set
--# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
--# CONFIG_NLS_KOI8_R is not set
--# CONFIG_NLS_KOI8_U is not set
--CONFIG_NLS_UTF8=m
--# CONFIG_DLM is not set
--
--#
--# Kernel hacking
--#
--# CONFIG_PRINTK_TIME is not set
--CONFIG_ENABLE_WARN_DEPRECATED=y
--CONFIG_ENABLE_MUST_CHECK=y
--CONFIG_FRAME_WARN=1024
--CONFIG_MAGIC_SYSRQ=y
--# CONFIG_UNUSED_SYMBOLS is not set
--# CONFIG_DEBUG_FS is not set
--# CONFIG_HEADERS_CHECK is not set
--CONFIG_DEBUG_KERNEL=y
--# CONFIG_DEBUG_SHIRQ is not set
--CONFIG_DETECT_SOFTLOCKUP=y
--# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
--CONFIG_SCHED_DEBUG=y
--# CONFIG_SCHEDSTATS is not set
--# CONFIG_TIMER_STATS is not set
--# CONFIG_DEBUG_OBJECTS is not set
--# CONFIG_SLUB_DEBUG_ON is not set
--# CONFIG_SLUB_STATS is not set
--# CONFIG_DEBUG_RT_MUTEXES is not set
--# CONFIG_RT_MUTEX_TESTER is not set
--# CONFIG_DEBUG_SPINLOCK is not set
--# CONFIG_DEBUG_MUTEXES is not set
--# CONFIG_DEBUG_LOCK_ALLOC is not set
--# CONFIG_PROVE_LOCKING is not set
--# CONFIG_LOCK_STAT is not set
--# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
--# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
--# CONFIG_DEBUG_KOBJECT is not set
--CONFIG_DEBUG_BUGVERBOSE=y
--# CONFIG_DEBUG_INFO is not set
--# CONFIG_DEBUG_VM is not set
--# CONFIG_DEBUG_WRITECOUNT is not set
--# CONFIG_DEBUG_MEMORY_INIT is not set
--# CONFIG_DEBUG_LIST is not set
--# CONFIG_DEBUG_SG is not set
--CONFIG_FRAME_POINTER=y
--# CONFIG_BOOT_PRINTK_DELAY is not set
--# CONFIG_RCU_TORTURE_TEST is not set
--# CONFIG_KPROBES_SANITY_TEST is not set
--# CONFIG_BACKTRACE_SELF_TEST is not set
--# CONFIG_LKDTM is not set
--# CONFIG_FAULT_INJECTION is not set
--# CONFIG_SAMPLES is not set
--
--#
--# Security options
--#
--# CONFIG_KEYS is not set
--# CONFIG_SECURITY is not set
--# CONFIG_SECURITY_FILE_CAPABILITIES is not set
--CONFIG_CRYPTO=y
--
--#
--# Crypto core or helper
--#
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_AEAD=y
--CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_MANAGER=y
--# CONFIG_CRYPTO_GF128MUL is not set
--# CONFIG_CRYPTO_NULL is not set
--# CONFIG_CRYPTO_CRYPTD is not set
--CONFIG_CRYPTO_AUTHENC=y
--# CONFIG_CRYPTO_TEST is not set
--
--#
--# Authenticated Encryption with Associated Data
--#
--# CONFIG_CRYPTO_CCM is not set
--# CONFIG_CRYPTO_GCM is not set
--# CONFIG_CRYPTO_SEQIV is not set
--
--#
--# Block modes
--#
--CONFIG_CRYPTO_CBC=y
--# CONFIG_CRYPTO_CTR is not set
--# CONFIG_CRYPTO_CTS is not set
--CONFIG_CRYPTO_ECB=m
--# CONFIG_CRYPTO_LRW is not set
--CONFIG_CRYPTO_PCBC=m
--# CONFIG_CRYPTO_XTS is not set
--
--#
--# Hash modes
--#
--CONFIG_CRYPTO_HMAC=y
--# CONFIG_CRYPTO_XCBC is not set
--
--#
--# Digest
--#
--# CONFIG_CRYPTO_CRC32C is not set
--# CONFIG_CRYPTO_MD4 is not set
--CONFIG_CRYPTO_MD5=y
--# CONFIG_CRYPTO_MICHAEL_MIC is not set
--# CONFIG_CRYPTO_RMD128 is not set
--# CONFIG_CRYPTO_RMD160 is not set
--# CONFIG_CRYPTO_RMD256 is not set
--# CONFIG_CRYPTO_RMD320 is not set
--CONFIG_CRYPTO_SHA1=y
--# CONFIG_CRYPTO_SHA256 is not set
--# CONFIG_CRYPTO_SHA512 is not set
--# CONFIG_CRYPTO_TGR192 is not set
--# CONFIG_CRYPTO_WP512 is not set
--
--#
--# Ciphers
--#
--# CONFIG_CRYPTO_AES is not set
--# CONFIG_CRYPTO_ANUBIS is not set
--CONFIG_CRYPTO_ARC4=m
--# CONFIG_CRYPTO_BLOWFISH is not set
--# CONFIG_CRYPTO_CAMELLIA is not set
--# CONFIG_CRYPTO_CAST5 is not set
--# CONFIG_CRYPTO_CAST6 is not set
--CONFIG_CRYPTO_DES=y
--# CONFIG_CRYPTO_FCRYPT is not set
--# CONFIG_CRYPTO_KHAZAD is not set
--# CONFIG_CRYPTO_SALSA20 is not set
--# CONFIG_CRYPTO_SEED is not set
--# CONFIG_CRYPTO_SERPENT is not set
--# CONFIG_CRYPTO_TEA is not set
--# CONFIG_CRYPTO_TWOFISH is not set
--
--#
--# Compression
--#
--CONFIG_CRYPTO_DEFLATE=y
--# CONFIG_CRYPTO_LZO is not set
--CONFIG_CRYPTO_HW=y
--
--#
--# Library routines
--#
--CONFIG_BITREVERSE=y
--# CONFIG_GENERIC_FIND_FIRST_BIT is not set
--# CONFIG_GENERIC_FIND_NEXT_BIT is not set
--CONFIG_CRC_CCITT=m
--# CONFIG_CRC16 is not set
--# CONFIG_CRC_T10DIF is not set
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC32=y
--CONFIG_CRC7=m
--# CONFIG_LIBCRC32C is not set
--CONFIG_ZLIB_INFLATE=y
--CONFIG_ZLIB_DEFLATE=y
--CONFIG_GENERIC_ALLOCATOR=y
--CONFIG_TEXTSEARCH=y
--CONFIG_TEXTSEARCH_KMP=m
--CONFIG_TEXTSEARCH_BM=m
--CONFIG_TEXTSEARCH_FSM=m
--CONFIG_PLIST=y
--CONFIG_HAS_IOMEM=y
--CONFIG_HAS_IOPORT=y
--CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atngw100/atngw100-linux-2.6.28.2.config b/target/device/Atmel/atngw100/atngw100-linux-2.6.28.2.config
-deleted file mode 100644
-index f04ec8e..0000000
---- a/target/device/Atmel/atngw100/atngw100-linux-2.6.28.2.config
-+++ /dev/null
-@@ -1,1324 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Linux kernel version: 2.6.28.2
--# Thu Jan 29 21:24:44 2009
--#
--CONFIG_AVR32=y
--CONFIG_GENERIC_GPIO=y
--CONFIG_GENERIC_HARDIRQS=y
--CONFIG_STACKTRACE_SUPPORT=y
--CONFIG_LOCKDEP_SUPPORT=y
--CONFIG_TRACE_IRQFLAGS_SUPPORT=y
--CONFIG_HARDIRQS_SW_RESEND=y
--CONFIG_GENERIC_IRQ_PROBE=y
--CONFIG_RWSEM_GENERIC_SPINLOCK=y
--CONFIG_GENERIC_TIME=y
--CONFIG_GENERIC_CLOCKEVENTS=y
--# CONFIG_RWSEM_XCHGADD_ALGORITHM is not set
--# CONFIG_ARCH_HAS_ILOG2_U32 is not set
--# CONFIG_ARCH_HAS_ILOG2_U64 is not set
--CONFIG_GENERIC_HWEIGHT=y
--CONFIG_GENERIC_CALIBRATE_DELAY=y
--CONFIG_GENERIC_BUG=y
--CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
--
--#
--# General setup
--#
--CONFIG_EXPERIMENTAL=y
--CONFIG_BROKEN_ON_SMP=y
--CONFIG_INIT_ENV_ARG_LIMIT=32
--CONFIG_LOCALVERSION=""
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_SWAP=y
--CONFIG_SYSVIPC=y
--CONFIG_SYSVIPC_SYSCTL=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--# CONFIG_TASKSTATS is not set
--# CONFIG_AUDIT is not set
--# CONFIG_IKCONFIG is not set
--CONFIG_LOG_BUF_SHIFT=14
--# CONFIG_CGROUPS is not set
--# CONFIG_GROUP_SCHED is not set
--CONFIG_SYSFS_DEPRECATED=y
--CONFIG_SYSFS_DEPRECATED_V2=y
--# CONFIG_RELAY is not set
--# CONFIG_NAMESPACES is not set
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE=""
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_SYSCTL=y
--CONFIG_EMBEDDED=y
--# CONFIG_SYSCTL_SYSCALL is not set
--CONFIG_KALLSYMS=y
--# CONFIG_KALLSYMS_ALL is not set
--# CONFIG_KALLSYMS_EXTRA_PASS is not set
--CONFIG_HOTPLUG=y
--CONFIG_PRINTK=y
--CONFIG_BUG=y
--CONFIG_ELF_CORE=y
--CONFIG_COMPAT_BRK=y
--# CONFIG_BASE_FULL is not set
--CONFIG_FUTEX=y
--CONFIG_ANON_INODES=y
--CONFIG_EPOLL=y
--CONFIG_SIGNALFD=y
--CONFIG_TIMERFD=y
--CONFIG_EVENTFD=y
--CONFIG_SHMEM=y
--CONFIG_AIO=y
--CONFIG_VM_EVENT_COUNTERS=y
--CONFIG_SLUB_DEBUG=y
--# CONFIG_SLAB is not set
--CONFIG_SLUB=y
--# CONFIG_SLOB is not set
--CONFIG_PROFILING=y
--# CONFIG_MARKERS is not set
--CONFIG_OPROFILE=m
--CONFIG_HAVE_OPROFILE=y
--CONFIG_KPROBES=y
--CONFIG_HAVE_KPROBES=y
--CONFIG_HAVE_CLK=y
--# CONFIG_HAVE_GENERIC_DMA_COHERENT is not set
--CONFIG_SLABINFO=y
--CONFIG_RT_MUTEXES=y
--# CONFIG_TINY_SHMEM is not set
--CONFIG_BASE_SMALL=1
--CONFIG_MODULES=y
--# CONFIG_MODULE_FORCE_LOAD is not set
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--# CONFIG_MODVERSIONS is not set
--# CONFIG_MODULE_SRCVERSION_ALL is not set
--CONFIG_KMOD=y
--CONFIG_BLOCK=y
--# CONFIG_LBD is not set
--# CONFIG_BLK_DEV_IO_TRACE is not set
--# CONFIG_LSF is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_BLK_DEV_INTEGRITY is not set
--
--#
--# IO Schedulers
--#
--CONFIG_IOSCHED_NOOP=y
--# CONFIG_IOSCHED_AS is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--CONFIG_IOSCHED_CFQ=y
--# CONFIG_DEFAULT_AS is not set
--# CONFIG_DEFAULT_DEADLINE is not set
--CONFIG_DEFAULT_CFQ=y
--# CONFIG_DEFAULT_NOOP is not set
--CONFIG_DEFAULT_IOSCHED="cfq"
--CONFIG_CLASSIC_RCU=y
--# CONFIG_FREEZER is not set
--
--#
--# System Type and features
--#
--# CONFIG_NO_HZ is not set
--# CONFIG_HIGH_RES_TIMERS is not set
--CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
--CONFIG_SUBARCH_AVR32B=y
--CONFIG_MMU=y
--CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PORTMUX_PIO=y
--CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
--# CONFIG_BOARD_ATSTK1000 is not set
--CONFIG_BOARD_ATNGW100=y
--# CONFIG_BOARD_FAVR_32 is not set
--# CONFIG_BOARD_MIMC200 is not set
--# CONFIG_BOARD_ATNGW100_EVKLCD10X is not set
--CONFIG_LOADER_U_BOOT=y
--
--#
--# Atmel AVR32 AP options
--#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
--CONFIG_LOAD_ADDRESS=0x10000000
--CONFIG_ENTRY_ADDRESS=0x90000000
--CONFIG_PHYS_OFFSET=0x10000000
--CONFIG_PREEMPT_NONE=y
--# CONFIG_PREEMPT_VOLUNTARY is not set
--# CONFIG_PREEMPT is not set
--CONFIG_QUICKLIST=y
--# CONFIG_HAVE_ARCH_BOOTMEM_NODE is not set
--# CONFIG_ARCH_HAVE_MEMORY_PRESENT is not set
--# CONFIG_NEED_NODE_MEMMAP_SIZE is not set
--CONFIG_ARCH_FLATMEM_ENABLE=y
--# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
--# CONFIG_ARCH_SPARSEMEM_ENABLE is not set
--CONFIG_SELECT_MEMORY_MODEL=y
--CONFIG_FLATMEM_MANUAL=y
--# CONFIG_DISCONTIGMEM_MANUAL is not set
--# CONFIG_SPARSEMEM_MANUAL is not set
--CONFIG_FLATMEM=y
--CONFIG_FLAT_NODE_MEM_MAP=y
--CONFIG_PAGEFLAGS_EXTENDED=y
--CONFIG_SPLIT_PTLOCK_CPUS=4
--# CONFIG_RESOURCES_64BIT is not set
--# CONFIG_PHYS_ADDR_T_64BIT is not set
--CONFIG_ZONE_DMA_FLAG=0
--CONFIG_NR_QUICK=2
--CONFIG_VIRT_TO_BUS=y
--CONFIG_UNEVICTABLE_LRU=y
--# CONFIG_OWNERSHIP_TRACE is not set
--# CONFIG_NMI_DEBUGGING is not set
--# CONFIG_HZ_100 is not set
--CONFIG_HZ_250=y
--# CONFIG_HZ_300 is not set
--# CONFIG_HZ_1000 is not set
--CONFIG_HZ=250
--# CONFIG_SCHED_HRTICK is not set
--CONFIG_CMDLINE=""
--
--#
--# Power management options
--#
--# CONFIG_PM is not set
--CONFIG_ARCH_SUSPEND_POSSIBLE=y
--
--#
--# CPU Frequency scaling
--#
--CONFIG_CPU_FREQ=y
--CONFIG_CPU_FREQ_TABLE=y
--# CONFIG_CPU_FREQ_DEBUG is not set
--# CONFIG_CPU_FREQ_STAT is not set
--CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_GOV_POWERSAVE is not set
--CONFIG_CPU_FREQ_GOV_USERSPACE=y
--CONFIG_CPU_FREQ_GOV_ONDEMAND=y
--# CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_AT32AP=y
--
--#
--# Bus options
--#
--# CONFIG_ARCH_SUPPORTS_MSI is not set
--# CONFIG_PCCARD is not set
--
--#
--# Executable file formats
--#
--CONFIG_BINFMT_ELF=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--# CONFIG_HAVE_AOUT is not set
--# CONFIG_BINFMT_MISC is not set
--CONFIG_NET=y
--
--#
--# Networking options
--#
--CONFIG_PACKET=y
--CONFIG_PACKET_MMAP=y
--CONFIG_UNIX=y
--CONFIG_XFRM=y
--CONFIG_XFRM_USER=y
--# CONFIG_XFRM_SUB_POLICY is not set
--# CONFIG_XFRM_MIGRATE is not set
--# CONFIG_XFRM_STATISTICS is not set
--CONFIG_XFRM_IPCOMP=y
--CONFIG_NET_KEY=y
--# CONFIG_NET_KEY_MIGRATE is not set
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_ASK_IP_FIB_HASH=y
--# CONFIG_IP_FIB_TRIE is not set
--CONFIG_IP_FIB_HASH=y
--# CONFIG_IP_MULTIPLE_TABLES is not set
--# CONFIG_IP_ROUTE_MULTIPATH is not set
--# CONFIG_IP_ROUTE_VERBOSE is not set
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--# CONFIG_IP_PNP_BOOTP is not set
--# CONFIG_IP_PNP_RARP is not set
--# CONFIG_NET_IPIP is not set
--# CONFIG_NET_IPGRE is not set
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--# CONFIG_IP_PIMSM_V2 is not set
--# CONFIG_ARPD is not set
--CONFIG_SYN_COOKIES=y
--CONFIG_INET_AH=y
--CONFIG_INET_ESP=y
--CONFIG_INET_IPCOMP=y
--CONFIG_INET_XFRM_TUNNEL=y
--CONFIG_INET_TUNNEL=y
--CONFIG_INET_XFRM_MODE_TRANSPORT=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
--CONFIG_INET_XFRM_MODE_BEET=y
--# CONFIG_INET_LRO is not set
--CONFIG_INET_DIAG=y
--CONFIG_INET_TCP_DIAG=y
--# CONFIG_TCP_CONG_ADVANCED is not set
--CONFIG_TCP_CONG_CUBIC=y
--CONFIG_DEFAULT_TCP_CONG="cubic"
--# CONFIG_TCP_MD5SIG is not set
--CONFIG_IPV6=y
--# CONFIG_IPV6_PRIVACY is not set
--# CONFIG_IPV6_ROUTER_PREF is not set
--# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--CONFIG_INET6_AH=y
--CONFIG_INET6_ESP=y
--CONFIG_INET6_IPCOMP=y
--# CONFIG_IPV6_MIP6 is not set
--CONFIG_INET6_XFRM_TUNNEL=y
--CONFIG_INET6_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
--# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
--CONFIG_IPV6_NDISC_NODETYPE=y
--# CONFIG_IPV6_TUNNEL is not set
--# CONFIG_IPV6_MULTIPLE_TABLES is not set
--# CONFIG_IPV6_MROUTE is not set
--# CONFIG_NETWORK_SECMARK is not set
--CONFIG_NETFILTER=y
--# CONFIG_NETFILTER_DEBUG is not set
--CONFIG_NETFILTER_ADVANCED=y
--CONFIG_BRIDGE_NETFILTER=y
--
--#
--# Core Netfilter Configuration
--#
--# CONFIG_NETFILTER_NETLINK_QUEUE is not set
--# CONFIG_NETFILTER_NETLINK_LOG is not set
--CONFIG_NF_CONNTRACK=m
--CONFIG_NF_CT_ACCT=y
--CONFIG_NF_CONNTRACK_MARK=y
--# CONFIG_NF_CONNTRACK_EVENTS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--CONFIG_NF_CT_PROTO_GRE=m
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
--CONFIG_NF_CONNTRACK_AMANDA=m
--CONFIG_NF_CONNTRACK_FTP=m
--CONFIG_NF_CONNTRACK_H323=m
--CONFIG_NF_CONNTRACK_IRC=m
--CONFIG_NF_CONNTRACK_NETBIOS_NS=m
--CONFIG_NF_CONNTRACK_PPTP=m
--CONFIG_NF_CONNTRACK_SANE=m
--CONFIG_NF_CONNTRACK_SIP=m
--CONFIG_NF_CONNTRACK_TFTP=m
--# CONFIG_NF_CT_NETLINK is not set
--# CONFIG_NETFILTER_TPROXY is not set
--CONFIG_NETFILTER_XTABLES=y
--CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
--# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
--# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
--CONFIG_NETFILTER_XT_TARGET_MARK=m
--CONFIG_NETFILTER_XT_TARGET_NFLOG=m
--CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
--# CONFIG_NETFILTER_XT_TARGET_NOTRACK is not set
--# CONFIG_NETFILTER_XT_TARGET_RATEEST is not set
--# CONFIG_NETFILTER_XT_TARGET_TRACE is not set
--CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
--# CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP is not set
--CONFIG_NETFILTER_XT_MATCH_COMMENT=m
--CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
--# CONFIG_NETFILTER_XT_MATCH_CONNLIMIT is not set
--CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
--CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
--# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
--# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
--CONFIG_NETFILTER_XT_MATCH_ESP=m
--CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
--CONFIG_NETFILTER_XT_MATCH_HELPER=m
--# CONFIG_NETFILTER_XT_MATCH_IPRANGE is not set
--CONFIG_NETFILTER_XT_MATCH_LENGTH=m
--CONFIG_NETFILTER_XT_MATCH_LIMIT=m
--CONFIG_NETFILTER_XT_MATCH_MAC=m
--CONFIG_NETFILTER_XT_MATCH_MARK=m
--CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
--# CONFIG_NETFILTER_XT_MATCH_OWNER is not set
--CONFIG_NETFILTER_XT_MATCH_POLICY=m
--# CONFIG_NETFILTER_XT_MATCH_PHYSDEV is not set
--CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
--CONFIG_NETFILTER_XT_MATCH_QUOTA=m
--# CONFIG_NETFILTER_XT_MATCH_RATEEST is not set
--CONFIG_NETFILTER_XT_MATCH_REALM=m
--# CONFIG_NETFILTER_XT_MATCH_RECENT is not set
--# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
--CONFIG_NETFILTER_XT_MATCH_STATE=m
--CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
--CONFIG_NETFILTER_XT_MATCH_STRING=m
--CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
--# CONFIG_NETFILTER_XT_MATCH_TIME is not set
--# CONFIG_NETFILTER_XT_MATCH_U32 is not set
--# CONFIG_IP_VS is not set
--
--#
--# IP: Netfilter Configuration
--#
--CONFIG_NF_DEFRAG_IPV4=m
--CONFIG_NF_CONNTRACK_IPV4=m
--CONFIG_NF_CONNTRACK_PROC_COMPAT=y
--# CONFIG_IP_NF_QUEUE is not set
--CONFIG_IP_NF_IPTABLES=m
--CONFIG_IP_NF_MATCH_ADDRTYPE=m
--CONFIG_IP_NF_MATCH_AH=m
--CONFIG_IP_NF_MATCH_ECN=m
--CONFIG_IP_NF_MATCH_TTL=m
--CONFIG_IP_NF_FILTER=m
--CONFIG_IP_NF_TARGET_REJECT=m
--CONFIG_IP_NF_TARGET_LOG=m
--# CONFIG_IP_NF_TARGET_ULOG is not set
--CONFIG_NF_NAT=m
--CONFIG_NF_NAT_NEEDED=y
--CONFIG_IP_NF_TARGET_MASQUERADE=m
--CONFIG_IP_NF_TARGET_NETMAP=m
--CONFIG_IP_NF_TARGET_REDIRECT=m
--CONFIG_NF_NAT_SNMP_BASIC=m
--CONFIG_NF_NAT_PROTO_GRE=m
--CONFIG_NF_NAT_FTP=m
--CONFIG_NF_NAT_IRC=m
--CONFIG_NF_NAT_TFTP=m
--CONFIG_NF_NAT_AMANDA=m
--CONFIG_NF_NAT_PPTP=m
--CONFIG_NF_NAT_H323=m
--CONFIG_NF_NAT_SIP=m
--CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
--CONFIG_IP_NF_TARGET_ECN=m
--CONFIG_IP_NF_TARGET_TTL=m
--CONFIG_IP_NF_RAW=m
--CONFIG_IP_NF_ARPTABLES=m
--CONFIG_IP_NF_ARPFILTER=m
--CONFIG_IP_NF_ARP_MANGLE=m
--
--#
--# IPv6: Netfilter Configuration
--#
--CONFIG_NF_CONNTRACK_IPV6=m
--CONFIG_IP6_NF_QUEUE=m
--CONFIG_IP6_NF_IPTABLES=m
--CONFIG_IP6_NF_MATCH_AH=m
--CONFIG_IP6_NF_MATCH_EUI64=m
--CONFIG_IP6_NF_MATCH_FRAG=m
--CONFIG_IP6_NF_MATCH_OPTS=m
--CONFIG_IP6_NF_MATCH_HL=m
--CONFIG_IP6_NF_MATCH_IPV6HEADER=m
--CONFIG_IP6_NF_MATCH_MH=m
--CONFIG_IP6_NF_MATCH_RT=m
--CONFIG_IP6_NF_TARGET_LOG=m
--CONFIG_IP6_NF_FILTER=m
--CONFIG_IP6_NF_TARGET_REJECT=m
--CONFIG_IP6_NF_MANGLE=m
--CONFIG_IP6_NF_TARGET_HL=m
--CONFIG_IP6_NF_RAW=m
--# CONFIG_BRIDGE_NF_EBTABLES is not set
--# CONFIG_IP_DCCP is not set
--# CONFIG_IP_SCTP is not set
--# CONFIG_TIPC is not set
--# CONFIG_ATM is not set
--CONFIG_STP=m
--CONFIG_BRIDGE=m
--# CONFIG_NET_DSA is not set
--CONFIG_VLAN_8021Q=m
--# CONFIG_VLAN_8021Q_GVRP is not set
--# CONFIG_DECNET is not set
--CONFIG_LLC=m
--# CONFIG_LLC2 is not set
--# CONFIG_IPX is not set
--# CONFIG_ATALK is not set
--# CONFIG_X25 is not set
--# CONFIG_LAPB is not set
--# CONFIG_ECONET is not set
--# CONFIG_WAN_ROUTER is not set
--# CONFIG_NET_SCHED is not set
--CONFIG_NET_CLS_ROUTE=y
--
--#
--# Network testing
--#
--# CONFIG_NET_PKTGEN is not set
--# CONFIG_NET_TCPPROBE is not set
--# CONFIG_HAMRADIO is not set
--# CONFIG_CAN is not set
--# CONFIG_IRDA is not set
--# CONFIG_BT is not set
--# CONFIG_AF_RXRPC is not set
--# CONFIG_PHONET is not set
--CONFIG_WIRELESS=y
--# CONFIG_CFG80211 is not set
--CONFIG_WIRELESS_OLD_REGULATORY=y
--# CONFIG_WIRELESS_EXT is not set
--# CONFIG_MAC80211 is not set
--# CONFIG_IEEE80211 is not set
--# CONFIG_RFKILL is not set
--# CONFIG_NET_9P is not set
--
--#
--# Device Drivers
--#
--
--#
--# Generic Driver Options
--#
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_STANDALONE=y
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--# CONFIG_FW_LOADER is not set
--# CONFIG_DEBUG_DRIVER is not set
--# CONFIG_DEBUG_DEVRES is not set
--# CONFIG_SYS_HYPERVISOR is not set
--# CONFIG_CONNECTOR is not set
--CONFIG_MTD=y
--# CONFIG_MTD_DEBUG is not set
--# CONFIG_MTD_CONCAT is not set
--CONFIG_MTD_PARTITIONS=y
--# CONFIG_MTD_REDBOOT_PARTS is not set
--CONFIG_MTD_CMDLINE_PARTS=y
--# CONFIG_MTD_AR7_PARTS is not set
--
--#
--# User Modules And Translation Layers
--#
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLKDEVS=y
--CONFIG_MTD_BLOCK=y
--# CONFIG_FTL is not set
--# CONFIG_NFTL is not set
--# CONFIG_INFTL is not set
--# CONFIG_RFD_FTL is not set
--# CONFIG_SSFDC is not set
--# CONFIG_MTD_OOPS is not set
--
--#
--# RAM/ROM/Flash chip drivers
--#
--CONFIG_MTD_CFI=y
--# CONFIG_MTD_JEDECPROBE is not set
--CONFIG_MTD_GEN_PROBE=y
--# CONFIG_MTD_CFI_ADV_OPTIONS is not set
--CONFIG_MTD_MAP_BANK_WIDTH_1=y
--CONFIG_MTD_MAP_BANK_WIDTH_2=y
--CONFIG_MTD_MAP_BANK_WIDTH_4=y
--# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
--CONFIG_MTD_CFI_I1=y
--CONFIG_MTD_CFI_I2=y
--# CONFIG_MTD_CFI_I4 is not set
--# CONFIG_MTD_CFI_I8 is not set
--# CONFIG_MTD_CFI_INTELEXT is not set
--CONFIG_MTD_CFI_AMDSTD=y
--# CONFIG_MTD_CFI_STAA is not set
--CONFIG_MTD_CFI_UTIL=y
--# CONFIG_MTD_RAM is not set
--# CONFIG_MTD_ROM is not set
--# CONFIG_MTD_ABSENT is not set
--
--#
--# Mapping drivers for chip access
--#
--# CONFIG_MTD_COMPLEX_MAPPINGS is not set
--CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_PHYSMAP_START=0x80000000
--CONFIG_MTD_PHYSMAP_LEN=0x0
--CONFIG_MTD_PHYSMAP_BANKWIDTH=2
--# CONFIG_MTD_PLATRAM is not set
--
--#
--# Self-contained MTD device drivers
--#
--CONFIG_MTD_DATAFLASH=y
--# CONFIG_MTD_DATAFLASH_WRITE_VERIFY is not set
--# CONFIG_MTD_DATAFLASH_OTP is not set
--# CONFIG_MTD_M25P80 is not set
--# CONFIG_MTD_SLRAM is not set
--# CONFIG_MTD_PHRAM is not set
--# CONFIG_MTD_MTDRAM is not set
--# CONFIG_MTD_BLOCK2MTD is not set
--
--#
--# Disk-On-Chip Device Drivers
--#
--# CONFIG_MTD_DOC2000 is not set
--# CONFIG_MTD_DOC2001 is not set
--# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
--# CONFIG_MTD_ONENAND is not set
--
--#
--# UBI - Unsorted block images
--#
--# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
--CONFIG_BLK_DEV=y
--# CONFIG_BLK_DEV_COW_COMMON is not set
--CONFIG_BLK_DEV_LOOP=m
--# CONFIG_BLK_DEV_CRYPTOLOOP is not set
--CONFIG_BLK_DEV_NBD=m
--CONFIG_BLK_DEV_RAM=m
--CONFIG_BLK_DEV_RAM_COUNT=16
--CONFIG_BLK_DEV_RAM_SIZE=4096
--# CONFIG_BLK_DEV_XIP is not set
--# CONFIG_CDROM_PKTCDVD is not set
--# CONFIG_ATA_OVER_ETH is not set
--# CONFIG_MISC_DEVICES is not set
--
--#
--# SCSI device support
--#
--# CONFIG_RAID_ATTRS is not set
--# CONFIG_SCSI is not set
--# CONFIG_SCSI_DMA is not set
--# CONFIG_SCSI_NETLINK is not set
--# CONFIG_ATA is not set
--# CONFIG_MD is not set
--CONFIG_NETDEVICES=y
--# CONFIG_DUMMY is not set
--# CONFIG_BONDING is not set
--# CONFIG_MACVLAN is not set
--# CONFIG_EQUALIZER is not set
--CONFIG_TUN=m
--# CONFIG_VETH is not set
--CONFIG_PHYLIB=y
--
--#
--# MII PHY device drivers
--#
--# CONFIG_MARVELL_PHY is not set
--# CONFIG_DAVICOM_PHY is not set
--# CONFIG_QSEMI_PHY is not set
--# CONFIG_LXT_PHY is not set
--# CONFIG_CICADA_PHY is not set
--# CONFIG_VITESSE_PHY is not set
--# CONFIG_SMSC_PHY is not set
--# CONFIG_BROADCOM_PHY is not set
--# CONFIG_ICPLUS_PHY is not set
--# CONFIG_REALTEK_PHY is not set
--# CONFIG_FIXED_PHY is not set
--# CONFIG_MDIO_BITBANG is not set
--CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
--CONFIG_MACB=y
--# CONFIG_ENC28J60 is not set
--# CONFIG_IBM_NEW_EMAC_ZMII is not set
--# CONFIG_IBM_NEW_EMAC_RGMII is not set
--# CONFIG_IBM_NEW_EMAC_TAH is not set
--# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
--# CONFIG_IBM_NEW_EMAC_NO_FLOW_CTRL is not set
--# CONFIG_IBM_NEW_EMAC_MAL_CLR_ICINTSTAT is not set
--# CONFIG_IBM_NEW_EMAC_MAL_COMMON_ERR is not set
--# CONFIG_B44 is not set
--# CONFIG_NETDEV_1000 is not set
--# CONFIG_NETDEV_10000 is not set
--
--#
--# Wireless LAN
--#
--# CONFIG_WLAN_PRE80211 is not set
--# CONFIG_WLAN_80211 is not set
--# CONFIG_IWLWIFI_LEDS is not set
--# CONFIG_WAN is not set
--CONFIG_PPP=m
--# CONFIG_PPP_MULTILINK is not set
--CONFIG_PPP_FILTER=y
--CONFIG_PPP_ASYNC=m
--# CONFIG_PPP_SYNC_TTY is not set
--CONFIG_PPP_DEFLATE=m
--CONFIG_PPP_BSDCOMP=m
--CONFIG_PPP_MPPE=m
--CONFIG_PPPOE=m
--# CONFIG_PPPOL2TP is not set
--# CONFIG_SLIP is not set
--CONFIG_SLHC=m
--# CONFIG_NETCONSOLE is not set
--# CONFIG_NETPOLL is not set
--# CONFIG_NET_POLL_CONTROLLER is not set
--# CONFIG_ISDN is not set
--# CONFIG_PHONE is not set
--
--#
--# Input device support
--#
--# CONFIG_INPUT is not set
--
--#
--# Hardware I/O ports
--#
--# CONFIG_SERIO is not set
--# CONFIG_GAMEPORT is not set
--
--#
--# Character devices
--#
--# CONFIG_VT is not set
--CONFIG_DEVKMEM=y
--# CONFIG_SERIAL_NONSTANDARD is not set
--
--#
--# Serial drivers
--#
--# CONFIG_SERIAL_8250 is not set
--
--#
--# Non-8250 serial port support
--#
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_SERIAL_ATMEL_PDC=y
--# CONFIG_SERIAL_ATMEL_TTYAT is not set
--CONFIG_SERIAL_CORE=y
--CONFIG_SERIAL_CORE_CONSOLE=y
--CONFIG_UNIX98_PTYS=y
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_IPMI_HANDLER is not set
--# CONFIG_HW_RANDOM is not set
--# CONFIG_R3964 is not set
--# CONFIG_RAW_DRIVER is not set
--# CONFIG_TCG_TPM is not set
--CONFIG_I2C=m
--CONFIG_I2C_BOARDINFO=y
--CONFIG_I2C_CHARDEV=m
--CONFIG_I2C_HELPER_AUTO=y
--CONFIG_I2C_ALGOBIT=m
--
--#
--# I2C Hardware Bus support
--#
--
--#
--# I2C system bus drivers (mostly embedded / system-on-chip)
--#
--CONFIG_I2C_GPIO=m
--# CONFIG_I2C_OCORES is not set
--# CONFIG_I2C_SIMTEC is not set
--
--#
--# External I2C/SMBus adapter drivers
--#
--# CONFIG_I2C_PARPORT_LIGHT is not set
--# CONFIG_I2C_TAOS_EVM is not set
--
--#
--# Other I2C/SMBus bus drivers
--#
--# CONFIG_I2C_PCA_PLATFORM is not set
--# CONFIG_I2C_STUB is not set
--
--#
--# Miscellaneous I2C Chip support
--#
--# CONFIG_DS1682 is not set
--# CONFIG_AT24 is not set
--# CONFIG_SENSORS_EEPROM is not set
--# CONFIG_SENSORS_PCF8574 is not set
--# CONFIG_PCF8575 is not set
--# CONFIG_SENSORS_PCA9539 is not set
--# CONFIG_SENSORS_PCF8591 is not set
--# CONFIG_TPS65010 is not set
--# CONFIG_SENSORS_MAX6875 is not set
--# CONFIG_SENSORS_TSL2550 is not set
--# CONFIG_I2C_DEBUG_CORE is not set
--# CONFIG_I2C_DEBUG_ALGO is not set
--# CONFIG_I2C_DEBUG_BUS is not set
--# CONFIG_I2C_DEBUG_CHIP is not set
--CONFIG_SPI=y
--# CONFIG_SPI_DEBUG is not set
--CONFIG_SPI_MASTER=y
--
--#
--# SPI Master Controller Drivers
--#
--CONFIG_SPI_ATMEL_HAVE_PDC=y
--CONFIG_SPI_ATMEL=y
--# CONFIG_SPI_BITBANG is not set
--
--#
--# SPI Protocol Masters
--#
--# CONFIG_SPI_AT25 is not set
--CONFIG_SPI_SPIDEV=m
--# CONFIG_SPI_TLE62X0 is not set
--CONFIG_ARCH_REQUIRE_GPIOLIB=y
--CONFIG_GPIOLIB=y
--# CONFIG_DEBUG_GPIO is not set
--# CONFIG_GPIO_SYSFS is not set
--
--#
--# Memory mapped GPIO expanders:
--#
--
--#
--# I2C GPIO expanders:
--#
--# CONFIG_GPIO_MAX732X is not set
--# CONFIG_GPIO_PCA953X is not set
--# CONFIG_GPIO_PCF857X is not set
--
--#
--# PCI GPIO expanders:
--#
--
--#
--# SPI GPIO expanders:
--#
--# CONFIG_GPIO_MAX7301 is not set
--# CONFIG_GPIO_MCP23S08 is not set
--# CONFIG_W1 is not set
--# CONFIG_POWER_SUPPLY is not set
--# CONFIG_HWMON is not set
--# CONFIG_THERMAL is not set
--# CONFIG_THERMAL_HWMON is not set
--CONFIG_WATCHDOG=y
--# CONFIG_WATCHDOG_NOWAYOUT is not set
--
--#
--# Watchdog Device Drivers
--#
--# CONFIG_SOFT_WATCHDOG is not set
--# CONFIG_AT32_WDT is not set
--CONFIG_SSB_POSSIBLE=y
--
--#
--# Sonics Silicon Backplane
--#
--# CONFIG_SSB is not set
--
--#
--# Multifunction device drivers
--#
--# CONFIG_MFD_CORE is not set
--# CONFIG_MFD_SM501 is not set
--# CONFIG_HTC_PASIC3 is not set
--# CONFIG_MFD_TMIO is not set
--# CONFIG_MFD_WM8400 is not set
--# CONFIG_MFD_WM8350_I2C is not set
--# CONFIG_REGULATOR is not set
--
--#
--# Multimedia devices
--#
--
--#
--# Multimedia core support
--#
--# CONFIG_VIDEO_DEV is not set
--# CONFIG_DVB_CORE is not set
--# CONFIG_VIDEO_MEDIA is not set
--
--#
--# Multimedia drivers
--#
--# CONFIG_DAB is not set
--
--#
--# Graphics support
--#
--# CONFIG_VGASTATE is not set
--# CONFIG_VIDEO_OUTPUT_CONTROL is not set
--# CONFIG_FB is not set
--# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
--
--#
--# Display device support
--#
--# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_SOUND is not set
--CONFIG_USB_SUPPORT=y
--CONFIG_USB_ARCH_HAS_HCD=y
--# CONFIG_USB_ARCH_HAS_OHCI is not set
--CONFIG_USB_ARCH_HAS_EHCI=y
--# CONFIG_USB is not set
--# CONFIG_USB_OTG_WHITELIST is not set
--# CONFIG_USB_OTG_BLACKLIST_HUB is not set
--# CONFIG_USB_MUSB_HDRC is not set
--# CONFIG_USB_GADGET_MUSB_HDRC is not set
--
--#
--# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed;
--#
--CONFIG_USB_GADGET=y
--# CONFIG_USB_GADGET_DEBUG is not set
--# CONFIG_USB_GADGET_DEBUG_FILES is not set
--CONFIG_USB_GADGET_VBUS_DRAW=2
--CONFIG_USB_GADGET_SELECTED=y
--# CONFIG_USB_GADGET_AT91 is not set
--CONFIG_USB_GADGET_ATMEL_USBA=y
--CONFIG_USB_ATMEL_USBA=y
--# CONFIG_USB_GADGET_FSL_USB2 is not set
--# CONFIG_USB_GADGET_LH7A40X is not set
--# CONFIG_USB_GADGET_OMAP is not set
--# CONFIG_USB_GADGET_PXA25X is not set
--# CONFIG_USB_GADGET_PXA27X is not set
--# CONFIG_USB_GADGET_S3C2410 is not set
--# CONFIG_USB_GADGET_M66592 is not set
--# CONFIG_USB_GADGET_AMD5536UDC is not set
--# CONFIG_USB_GADGET_FSL_QE is not set
--# CONFIG_USB_GADGET_NET2280 is not set
--# CONFIG_USB_GADGET_GOKU is not set
--# CONFIG_USB_GADGET_DUMMY_HCD is not set
--CONFIG_USB_GADGET_DUALSPEED=y
--CONFIG_USB_ZERO=m
--CONFIG_USB_ETH=m
--CONFIG_USB_ETH_RNDIS=y
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_FILE_STORAGE=m
--# CONFIG_USB_FILE_STORAGE_TEST is not set
--CONFIG_USB_G_SERIAL=m
--# CONFIG_USB_MIDI_GADGET is not set
--# CONFIG_USB_G_PRINTER is not set
--# CONFIG_USB_CDC_COMPOSITE is not set
--CONFIG_MMC=m
--# CONFIG_MMC_DEBUG is not set
--# CONFIG_MMC_UNSAFE_RESUME is not set
--
--#
--# MMC/SD/SDIO Card Drivers
--#
--CONFIG_MMC_BLOCK=m
--CONFIG_MMC_BLOCK_BOUNCE=y
--# CONFIG_SDIO_UART is not set
--# CONFIG_MMC_TEST is not set
--
--#
--# MMC/SD/SDIO Host Controller Drivers
--#
--# CONFIG_MMC_SDHCI is not set
--# CONFIG_MMC_ATMELMCI is not set
--CONFIG_MMC_SPI=m
--# CONFIG_MEMSTICK is not set
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--
--#
--# LED drivers
--#
--CONFIG_LEDS_GPIO=y
--# CONFIG_LEDS_PCA955X is not set
--
--#
--# LED Triggers
--#
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
--# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
--# CONFIG_ACCESSIBILITY is not set
--CONFIG_RTC_LIB=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_HCTOSYS=y
--CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
--# CONFIG_RTC_DEBUG is not set
--
--#
--# RTC interfaces
--#
--CONFIG_RTC_INTF_SYSFS=y
--CONFIG_RTC_INTF_PROC=y
--CONFIG_RTC_INTF_DEV=y
--# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
--# CONFIG_RTC_DRV_TEST is not set
--
--#
--# I2C RTC drivers
--#
--# CONFIG_RTC_DRV_DS1307 is not set
--# CONFIG_RTC_DRV_DS1374 is not set
--# CONFIG_RTC_DRV_DS1672 is not set
--# CONFIG_RTC_DRV_MAX6900 is not set
--# CONFIG_RTC_DRV_RS5C372 is not set
--# CONFIG_RTC_DRV_ISL1208 is not set
--# CONFIG_RTC_DRV_X1205 is not set
--# CONFIG_RTC_DRV_PCF8563 is not set
--# CONFIG_RTC_DRV_PCF8583 is not set
--# CONFIG_RTC_DRV_M41T80 is not set
--# CONFIG_RTC_DRV_S35390A is not set
--# CONFIG_RTC_DRV_FM3130 is not set
--# CONFIG_RTC_DRV_RX8581 is not set
--
--#
--# SPI RTC drivers
--#
--# CONFIG_RTC_DRV_M41T94 is not set
--# CONFIG_RTC_DRV_DS1305 is not set
--# CONFIG_RTC_DRV_DS1390 is not set
--# CONFIG_RTC_DRV_MAX6902 is not set
--# CONFIG_RTC_DRV_R9701 is not set
--# CONFIG_RTC_DRV_RS5C348 is not set
--# CONFIG_RTC_DRV_DS3234 is not set
--
--#
--# Platform RTC drivers
--#
--# CONFIG_RTC_DRV_DS1286 is not set
--# CONFIG_RTC_DRV_DS1511 is not set
--# CONFIG_RTC_DRV_DS1553 is not set
--# CONFIG_RTC_DRV_DS1742 is not set
--# CONFIG_RTC_DRV_STK17TA8 is not set
--# CONFIG_RTC_DRV_M48T86 is not set
--# CONFIG_RTC_DRV_M48T35 is not set
--# CONFIG_RTC_DRV_M48T59 is not set
--# CONFIG_RTC_DRV_BQ4802 is not set
--# CONFIG_RTC_DRV_V3020 is not set
--
--#
--# on-CPU RTC drivers
--#
--CONFIG_RTC_DRV_AT32AP700X=y
--# CONFIG_RTC_DRV_AVR32_AST is not set
--# CONFIG_DMADEVICES is not set
--# CONFIG_UIO is not set
--# CONFIG_STAGING is not set
--
--#
--# File systems
--#
--CONFIG_EXT2_FS=m
--# CONFIG_EXT2_FS_XATTR is not set
--# CONFIG_EXT2_FS_XIP is not set
--CONFIG_EXT3_FS=m
--# CONFIG_EXT3_FS_XATTR is not set
--# CONFIG_EXT4_FS is not set
--CONFIG_JBD=m
--# CONFIG_REISERFS_FS is not set
--# CONFIG_JFS_FS is not set
--# CONFIG_FS_POSIX_ACL is not set
--CONFIG_FILE_LOCKING=y
--# CONFIG_XFS_FS is not set
--# CONFIG_OCFS2_FS is not set
--# CONFIG_DNOTIFY is not set
--CONFIG_INOTIFY=y
--CONFIG_INOTIFY_USER=y
--# CONFIG_QUOTA is not set
--# CONFIG_AUTOFS_FS is not set
--# CONFIG_AUTOFS4_FS is not set
--CONFIG_FUSE_FS=m
--
--#
--# CD-ROM/DVD Filesystems
--#
--# CONFIG_ISO9660_FS is not set
--# CONFIG_UDF_FS is not set
--
--#
--# DOS/FAT/NT Filesystems
--#
--CONFIG_FAT_FS=m
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
--CONFIG_FAT_DEFAULT_CODEPAGE=850
--CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
--# CONFIG_NTFS_FS is not set
--
--#
--# Pseudo filesystems
--#
--CONFIG_PROC_FS=y
--# CONFIG_PROC_KCORE is not set
--CONFIG_PROC_SYSCTL=y
--CONFIG_PROC_PAGE_MONITOR=y
--CONFIG_SYSFS=y
--CONFIG_TMPFS=y
--# CONFIG_TMPFS_POSIX_ACL is not set
--# CONFIG_HUGETLB_PAGE is not set
--CONFIG_CONFIGFS_FS=m
--
--#
--# Miscellaneous filesystems
--#
--# CONFIG_ADFS_FS is not set
--# CONFIG_AFFS_FS is not set
--# CONFIG_HFS_FS is not set
--# CONFIG_HFSPLUS_FS is not set
--# CONFIG_BEFS_FS is not set
--# CONFIG_BFS_FS is not set
--# CONFIG_EFS_FS is not set
--CONFIG_JFFS2_FS=y
--CONFIG_JFFS2_FS_DEBUG=0
--CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_FS_WBUF_VERIFY is not set
--# CONFIG_JFFS2_SUMMARY is not set
--# CONFIG_JFFS2_FS_XATTR is not set
--# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
--CONFIG_JFFS2_ZLIB=y
--# CONFIG_JFFS2_LZO is not set
--CONFIG_JFFS2_RTIME=y
--# CONFIG_JFFS2_RUBIN is not set
--# CONFIG_CRAMFS is not set
--# CONFIG_VXFS_FS is not set
--# CONFIG_MINIX_FS is not set
--# CONFIG_OMFS_FS is not set
--# CONFIG_HPFS_FS is not set
--# CONFIG_QNX4FS_FS is not set
--# CONFIG_ROMFS_FS is not set
--# CONFIG_SYSV_FS is not set
--# CONFIG_UFS_FS is not set
--CONFIG_NETWORK_FILESYSTEMS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V3=y
--# CONFIG_NFS_V3_ACL is not set
--# CONFIG_NFS_V4 is not set
--CONFIG_ROOT_NFS=y
--CONFIG_NFSD=m
--CONFIG_NFSD_V3=y
--# CONFIG_NFSD_V3_ACL is not set
--# CONFIG_NFSD_V4 is not set
--CONFIG_LOCKD=y
--CONFIG_LOCKD_V4=y
--CONFIG_EXPORTFS=m
--CONFIG_NFS_COMMON=y
--CONFIG_SUNRPC=y
--# CONFIG_SUNRPC_REGISTER_V4 is not set
--# CONFIG_RPCSEC_GSS_KRB5 is not set
--# CONFIG_RPCSEC_GSS_SPKM3 is not set
--CONFIG_SMB_FS=m
--# CONFIG_SMB_NLS_DEFAULT is not set
--CONFIG_CIFS=m
--# CONFIG_CIFS_STATS is not set
--# CONFIG_CIFS_WEAK_PW_HASH is not set
--# CONFIG_CIFS_XATTR is not set
--# CONFIG_CIFS_DEBUG2 is not set
--# CONFIG_CIFS_EXPERIMENTAL is not set
--# CONFIG_NCP_FS is not set
--# CONFIG_CODA_FS is not set
--# CONFIG_AFS_FS is not set
--
--#
--# Partition Types
--#
--# CONFIG_PARTITION_ADVANCED is not set
--CONFIG_MSDOS_PARTITION=y
--CONFIG_NLS=m
--CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=m
--# CONFIG_NLS_CODEPAGE_737 is not set
--# CONFIG_NLS_CODEPAGE_775 is not set
--CONFIG_NLS_CODEPAGE_850=m
--# CONFIG_NLS_CODEPAGE_852 is not set
--# CONFIG_NLS_CODEPAGE_855 is not set
--# CONFIG_NLS_CODEPAGE_857 is not set
--# CONFIG_NLS_CODEPAGE_860 is not set
--# CONFIG_NLS_CODEPAGE_861 is not set
--# CONFIG_NLS_CODEPAGE_862 is not set
--# CONFIG_NLS_CODEPAGE_863 is not set
--# CONFIG_NLS_CODEPAGE_864 is not set
--# CONFIG_NLS_CODEPAGE_865 is not set
--# CONFIG_NLS_CODEPAGE_866 is not set
--# CONFIG_NLS_CODEPAGE_869 is not set
--# CONFIG_NLS_CODEPAGE_936 is not set
--# CONFIG_NLS_CODEPAGE_950 is not set
--# CONFIG_NLS_CODEPAGE_932 is not set
--# CONFIG_NLS_CODEPAGE_949 is not set
--# CONFIG_NLS_CODEPAGE_874 is not set
--# CONFIG_NLS_ISO8859_8 is not set
--# CONFIG_NLS_CODEPAGE_1250 is not set
--# CONFIG_NLS_CODEPAGE_1251 is not set
--# CONFIG_NLS_ASCII is not set
--CONFIG_NLS_ISO8859_1=m
--# CONFIG_NLS_ISO8859_2 is not set
--# CONFIG_NLS_ISO8859_3 is not set
--# CONFIG_NLS_ISO8859_4 is not set
--# CONFIG_NLS_ISO8859_5 is not set
--# CONFIG_NLS_ISO8859_6 is not set
--# CONFIG_NLS_ISO8859_7 is not set
--# CONFIG_NLS_ISO8859_9 is not set
--# CONFIG_NLS_ISO8859_13 is not set
--# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
--# CONFIG_NLS_KOI8_R is not set
--# CONFIG_NLS_KOI8_U is not set
--CONFIG_NLS_UTF8=m
--# CONFIG_DLM is not set
--
--#
--# Kernel hacking
--#
--# CONFIG_PRINTK_TIME is not set
--CONFIG_ENABLE_WARN_DEPRECATED=y
--CONFIG_ENABLE_MUST_CHECK=y
--CONFIG_FRAME_WARN=1024
--CONFIG_MAGIC_SYSRQ=y
--# CONFIG_UNUSED_SYMBOLS is not set
--# CONFIG_DEBUG_FS is not set
--# CONFIG_HEADERS_CHECK is not set
--CONFIG_DEBUG_KERNEL=y
--# CONFIG_DEBUG_SHIRQ is not set
--CONFIG_DETECT_SOFTLOCKUP=y
--# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
--CONFIG_SCHED_DEBUG=y
--# CONFIG_SCHEDSTATS is not set
--# CONFIG_TIMER_STATS is not set
--# CONFIG_DEBUG_OBJECTS is not set
--# CONFIG_SLUB_DEBUG_ON is not set
--# CONFIG_SLUB_STATS is not set
--# CONFIG_DEBUG_RT_MUTEXES is not set
--# CONFIG_RT_MUTEX_TESTER is not set
--# CONFIG_DEBUG_SPINLOCK is not set
--# CONFIG_DEBUG_MUTEXES is not set
--# CONFIG_DEBUG_LOCK_ALLOC is not set
--# CONFIG_PROVE_LOCKING is not set
--# CONFIG_LOCK_STAT is not set
--# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
--# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
--# CONFIG_DEBUG_KOBJECT is not set
--CONFIG_DEBUG_BUGVERBOSE=y
--# CONFIG_DEBUG_INFO is not set
--# CONFIG_DEBUG_VM is not set
--# CONFIG_DEBUG_WRITECOUNT is not set
--# CONFIG_DEBUG_MEMORY_INIT is not set
--# CONFIG_DEBUG_LIST is not set
--# CONFIG_DEBUG_SG is not set
--CONFIG_FRAME_POINTER=y
--# CONFIG_BOOT_PRINTK_DELAY is not set
--# CONFIG_RCU_TORTURE_TEST is not set
--# CONFIG_RCU_CPU_STALL_DETECTOR is not set
--# CONFIG_KPROBES_SANITY_TEST is not set
--# CONFIG_BACKTRACE_SELF_TEST is not set
--# CONFIG_DEBUG_BLOCK_EXT_DEVT is not set
--# CONFIG_LKDTM is not set
--# CONFIG_FAULT_INJECTION is not set
--
--#
--# Tracers
--#
--# CONFIG_IRQSOFF_TRACER is not set
--# CONFIG_SCHED_TRACER is not set
--# CONFIG_CONTEXT_SWITCH_TRACER is not set
--# CONFIG_BOOT_TRACER is not set
--# CONFIG_DYNAMIC_PRINTK_DEBUG is not set
--# CONFIG_SAMPLES is not set
--
--#
--# Security options
--#
--# CONFIG_KEYS is not set
--# CONFIG_SECURITY is not set
--# CONFIG_SECURITYFS is not set
--# CONFIG_SECURITY_FILE_CAPABILITIES is not set
--CONFIG_CRYPTO=y
--
--#
--# Crypto core or helper
--#
--# CONFIG_CRYPTO_FIPS is not set
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_ALGAPI2=y
--CONFIG_CRYPTO_AEAD=y
--CONFIG_CRYPTO_AEAD2=y
--CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_BLKCIPHER2=y
--CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_HASH2=y
--CONFIG_CRYPTO_RNG2=y
--CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_MANAGER2=y
--# CONFIG_CRYPTO_GF128MUL is not set
--# CONFIG_CRYPTO_NULL is not set
--# CONFIG_CRYPTO_CRYPTD is not set
--CONFIG_CRYPTO_AUTHENC=y
--# CONFIG_CRYPTO_TEST is not set
--
--#
--# Authenticated Encryption with Associated Data
--#
--# CONFIG_CRYPTO_CCM is not set
--# CONFIG_CRYPTO_GCM is not set
--# CONFIG_CRYPTO_SEQIV is not set
--
--#
--# Block modes
--#
--CONFIG_CRYPTO_CBC=y
--# CONFIG_CRYPTO_CTR is not set
--# CONFIG_CRYPTO_CTS is not set
--CONFIG_CRYPTO_ECB=m
--# CONFIG_CRYPTO_LRW is not set
--CONFIG_CRYPTO_PCBC=m
--# CONFIG_CRYPTO_XTS is not set
--
--#
--# Hash modes
--#
--CONFIG_CRYPTO_HMAC=y
--# CONFIG_CRYPTO_XCBC is not set
--
--#
--# Digest
--#
--# CONFIG_CRYPTO_CRC32C is not set
--# CONFIG_CRYPTO_MD4 is not set
--CONFIG_CRYPTO_MD5=y
--# CONFIG_CRYPTO_MICHAEL_MIC is not set
--# CONFIG_CRYPTO_RMD128 is not set
--# CONFIG_CRYPTO_RMD160 is not set
--# CONFIG_CRYPTO_RMD256 is not set
--# CONFIG_CRYPTO_RMD320 is not set
--CONFIG_CRYPTO_SHA1=y
--# CONFIG_CRYPTO_SHA256 is not set
--# CONFIG_CRYPTO_SHA512 is not set
--# CONFIG_CRYPTO_TGR192 is not set
--# CONFIG_CRYPTO_WP512 is not set
--
--#
--# Ciphers
--#
--# CONFIG_CRYPTO_AES is not set
--# CONFIG_CRYPTO_ANUBIS is not set
--CONFIG_CRYPTO_ARC4=m
--# CONFIG_CRYPTO_BLOWFISH is not set
--# CONFIG_CRYPTO_CAMELLIA is not set
--# CONFIG_CRYPTO_CAST5 is not set
--# CONFIG_CRYPTO_CAST6 is not set
--CONFIG_CRYPTO_DES=y
--# CONFIG_CRYPTO_FCRYPT is not set
--# CONFIG_CRYPTO_KHAZAD is not set
--# CONFIG_CRYPTO_SALSA20 is not set
--# CONFIG_CRYPTO_SEED is not set
--# CONFIG_CRYPTO_SERPENT is not set
--# CONFIG_CRYPTO_TEA is not set
--# CONFIG_CRYPTO_TWOFISH is not set
--
--#
--# Compression
--#
--CONFIG_CRYPTO_DEFLATE=y
--# CONFIG_CRYPTO_LZO is not set
--
--#
--# Random Number Generation
--#
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_HW=y
--
--#
--# Library routines
--#
--CONFIG_BITREVERSE=y
--CONFIG_CRC_CCITT=m
--# CONFIG_CRC16 is not set
--# CONFIG_CRC_T10DIF is not set
--CONFIG_CRC_ITU_T=m
--CONFIG_CRC32=y
--CONFIG_CRC7=m
--# CONFIG_LIBCRC32C is not set
--CONFIG_ZLIB_INFLATE=y
--CONFIG_ZLIB_DEFLATE=y
--CONFIG_GENERIC_ALLOCATOR=y
--CONFIG_TEXTSEARCH=y
--CONFIG_TEXTSEARCH_KMP=m
--CONFIG_TEXTSEARCH_BM=m
--CONFIG_TEXTSEARCH_FSM=m
--CONFIG_PLIST=y
--CONFIG_HAS_IOMEM=y
--CONFIG_HAS_IOPORT=y
--CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atngw100/atngw100-linux-2.6.29.2.config b/target/device/Atmel/atngw100/atngw100-linux-2.6.29.2.config
-deleted file mode 100644
-index 4c0931f..0000000
---- a/target/device/Atmel/atngw100/atngw100-linux-2.6.29.2.config
-+++ /dev/null
-@@ -1,1358 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Linux kernel version: 2.6.29.2
--# Wed May 13 05:09:16 2009
--#
--CONFIG_AVR32=y
--CONFIG_GENERIC_GPIO=y
--CONFIG_GENERIC_HARDIRQS=y
--CONFIG_STACKTRACE_SUPPORT=y
--CONFIG_LOCKDEP_SUPPORT=y
--CONFIG_TRACE_IRQFLAGS_SUPPORT=y
--CONFIG_HARDIRQS_SW_RESEND=y
--CONFIG_GENERIC_IRQ_PROBE=y
--CONFIG_RWSEM_GENERIC_SPINLOCK=y
--CONFIG_GENERIC_TIME=y
--CONFIG_GENERIC_CLOCKEVENTS=y
--# CONFIG_RWSEM_XCHGADD_ALGORITHM is not set
--# CONFIG_ARCH_HAS_ILOG2_U32 is not set
--# CONFIG_ARCH_HAS_ILOG2_U64 is not set
--CONFIG_GENERIC_HWEIGHT=y
--CONFIG_GENERIC_CALIBRATE_DELAY=y
--CONFIG_GENERIC_BUG=y
--CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
--
--#
--# General setup
--#
--CONFIG_EXPERIMENTAL=y
--CONFIG_BROKEN_ON_SMP=y
--CONFIG_INIT_ENV_ARG_LIMIT=32
--CONFIG_LOCALVERSION=""
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_SWAP=y
--CONFIG_SYSVIPC=y
--CONFIG_SYSVIPC_SYSCTL=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--# CONFIG_TASKSTATS is not set
--# CONFIG_AUDIT is not set
--
--#
--# RCU Subsystem
--#
--CONFIG_CLASSIC_RCU=y
--# CONFIG_TREE_RCU is not set
--# CONFIG_PREEMPT_RCU is not set
--# CONFIG_TREE_RCU_TRACE is not set
--# CONFIG_PREEMPT_RCU_TRACE is not set
--# CONFIG_IKCONFIG is not set
--CONFIG_LOG_BUF_SHIFT=14
--# CONFIG_GROUP_SCHED is not set
--# CONFIG_CGROUPS is not set
--CONFIG_SYSFS_DEPRECATED=y
--CONFIG_SYSFS_DEPRECATED_V2=y
--# CONFIG_RELAY is not set
--# CONFIG_NAMESPACES is not set
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_INITRAMFS_SOURCE=""
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_SYSCTL=y
--CONFIG_ANON_INODES=y
--CONFIG_EMBEDDED=y
--# CONFIG_SYSCTL_SYSCALL is not set
--CONFIG_KALLSYMS=y
--# CONFIG_KALLSYMS_ALL is not set
--# CONFIG_KALLSYMS_EXTRA_PASS is not set
--CONFIG_HOTPLUG=y
--CONFIG_PRINTK=y
--CONFIG_BUG=y
--CONFIG_ELF_CORE=y
--# CONFIG_BASE_FULL is not set
--CONFIG_FUTEX=y
--CONFIG_EPOLL=y
--CONFIG_SIGNALFD=y
--CONFIG_TIMERFD=y
--CONFIG_EVENTFD=y
--CONFIG_SHMEM=y
--CONFIG_AIO=y
--CONFIG_VM_EVENT_COUNTERS=y
--CONFIG_SLUB_DEBUG=y
--CONFIG_COMPAT_BRK=y
--# CONFIG_SLAB is not set
--CONFIG_SLUB=y
--# CONFIG_SLOB is not set
--CONFIG_PROFILING=y
--CONFIG_TRACEPOINTS=y
--# CONFIG_MARKERS is not set
--CONFIG_OPROFILE=m
--CONFIG_HAVE_OPROFILE=y
--CONFIG_KPROBES=y
--CONFIG_HAVE_KPROBES=y
--CONFIG_HAVE_CLK=y
--# CONFIG_HAVE_GENERIC_DMA_COHERENT is not set
--CONFIG_SLABINFO=y
--CONFIG_RT_MUTEXES=y
--CONFIG_BASE_SMALL=1
--CONFIG_MODULES=y
--# CONFIG_MODULE_FORCE_LOAD is not set
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--# CONFIG_MODVERSIONS is not set
--# CONFIG_MODULE_SRCVERSION_ALL is not set
--CONFIG_BLOCK=y
--# CONFIG_LBD is not set
--# CONFIG_BLK_DEV_IO_TRACE is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_BLK_DEV_INTEGRITY is not set
--
--#
--# IO Schedulers
--#
--CONFIG_IOSCHED_NOOP=y
--# CONFIG_IOSCHED_AS is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--CONFIG_IOSCHED_CFQ=y
--# CONFIG_DEFAULT_AS is not set
--# CONFIG_DEFAULT_DEADLINE is not set
--CONFIG_DEFAULT_CFQ=y
--# CONFIG_DEFAULT_NOOP is not set
--CONFIG_DEFAULT_IOSCHED="cfq"
--# CONFIG_FREEZER is not set
--
--#
--# System Type and features
--#
--# CONFIG_NO_HZ is not set
--# CONFIG_HIGH_RES_TIMERS is not set
--CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
--CONFIG_SUBARCH_AVR32B=y
--CONFIG_MMU=y
--CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
--# CONFIG_BOARD_ATSTK1000 is not set
--CONFIG_BOARD_ATNGW100=y
--# CONFIG_BOARD_HAMMERHEAD is not set
--# CONFIG_BOARD_FAVR_32 is not set
--# CONFIG_BOARD_MIMC200 is not set
--# CONFIG_BOARD_ATNGW100_EVKLCD10X is not set
--CONFIG_LOADER_U_BOOT=y
--
--#
--# Atmel AVR32 AP options
--#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
--CONFIG_LOAD_ADDRESS=0x10000000
--CONFIG_ENTRY_ADDRESS=0x90000000
--CONFIG_PHYS_OFFSET=0x10000000
--CONFIG_PREEMPT_NONE=y
--# CONFIG_PREEMPT_VOLUNTARY is not set
--# CONFIG_PREEMPT is not set
--CONFIG_QUICKLIST=y
--# CONFIG_HAVE_ARCH_BOOTMEM_NODE is not set
--# CONFIG_ARCH_HAVE_MEMORY_PRESENT is not set
--# CONFIG_NEED_NODE_MEMMAP_SIZE is not set
--CONFIG_ARCH_FLATMEM_ENABLE=y
--# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
--# CONFIG_ARCH_SPARSEMEM_ENABLE is not set
--CONFIG_SELECT_MEMORY_MODEL=y
--CONFIG_FLATMEM_MANUAL=y
--# CONFIG_DISCONTIGMEM_MANUAL is not set
--# CONFIG_SPARSEMEM_MANUAL is not set
--CONFIG_FLATMEM=y
--CONFIG_FLAT_NODE_MEM_MAP=y
--CONFIG_PAGEFLAGS_EXTENDED=y
--CONFIG_SPLIT_PTLOCK_CPUS=4
--# CONFIG_PHYS_ADDR_T_64BIT is not set
--CONFIG_ZONE_DMA_FLAG=0
--CONFIG_NR_QUICK=2
--CONFIG_VIRT_TO_BUS=y
--CONFIG_UNEVICTABLE_LRU=y
--# CONFIG_OWNERSHIP_TRACE is not set
--# CONFIG_NMI_DEBUGGING is not set
--# CONFIG_HZ_100 is not set
--CONFIG_HZ_250=y
--# CONFIG_HZ_300 is not set
--# CONFIG_HZ_1000 is not set
--CONFIG_HZ=250
--# CONFIG_SCHED_HRTICK is not set
--CONFIG_CMDLINE=""
--
--#
--# Power management options
--#
--# CONFIG_PM is not set
--CONFIG_ARCH_SUSPEND_POSSIBLE=y
--
--#
--# CPU Frequency scaling
--#
--CONFIG_CPU_FREQ=y
--CONFIG_CPU_FREQ_TABLE=y
--# CONFIG_CPU_FREQ_DEBUG is not set
--# CONFIG_CPU_FREQ_STAT is not set
--CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
--# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
--# CONFIG_CPU_FREQ_GOV_POWERSAVE is not set
--CONFIG_CPU_FREQ_GOV_USERSPACE=y
--CONFIG_CPU_FREQ_GOV_ONDEMAND=y
--# CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
--CONFIG_CPU_FREQ_AT32AP=y
--
--#
--# Bus options
--#
--# CONFIG_ARCH_SUPPORTS_MSI is not set
--# CONFIG_PCCARD is not set
--
--#
--# Executable file formats
--#
--CONFIG_BINFMT_ELF=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--# CONFIG_HAVE_AOUT is not set
--# CONFIG_BINFMT_MISC is not set
--CONFIG_NET=y
--
--#
--# Networking options
--#
--CONFIG_COMPAT_NET_DEV_OPS=y
--CONFIG_PACKET=y
--CONFIG_PACKET_MMAP=y
--CONFIG_UNIX=y
--CONFIG_XFRM=y
--CONFIG_XFRM_USER=y
--# CONFIG_XFRM_SUB_POLICY is not set
--# CONFIG_XFRM_MIGRATE is not set
--# CONFIG_XFRM_STATISTICS is not set
--CONFIG_XFRM_IPCOMP=y
--CONFIG_NET_KEY=y
--# CONFIG_NET_KEY_MIGRATE is not set
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_ASK_IP_FIB_HASH=y
--# CONFIG_IP_FIB_TRIE is not set
--CONFIG_IP_FIB_HASH=y
--# CONFIG_IP_MULTIPLE_TABLES is not set
--# CONFIG_IP_ROUTE_MULTIPATH is not set
--# CONFIG_IP_ROUTE_VERBOSE is not set
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--# CONFIG_IP_PNP_BOOTP is not set
--# CONFIG_IP_PNP_RARP is not set
--# CONFIG_NET_IPIP is not set
--# CONFIG_NET_IPGRE is not set
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--# CONFIG_IP_PIMSM_V2 is not set
--# CONFIG_ARPD is not set
--CONFIG_SYN_COOKIES=y
--CONFIG_INET_AH=y
--CONFIG_INET_ESP=y
--CONFIG_INET_IPCOMP=y
--CONFIG_INET_XFRM_TUNNEL=y
--CONFIG_INET_TUNNEL=y
--CONFIG_INET_XFRM_MODE_TRANSPORT=y
--CONFIG_INET_XFRM_MODE_TUNNEL=y
--CONFIG_INET_XFRM_MODE_BEET=y
--# CONFIG_INET_LRO is not set
--CONFIG_INET_DIAG=y
--CONFIG_INET_TCP_DIAG=y
--# CONFIG_TCP_CONG_ADVANCED is not set
--CONFIG_TCP_CONG_CUBIC=y
--CONFIG_DEFAULT_TCP_CONG="cubic"
--# CONFIG_TCP_MD5SIG is not set
--CONFIG_IPV6=y
--# CONFIG_IPV6_PRIVACY is not set
--# CONFIG_IPV6_ROUTER_PREF is not set
--# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--CONFIG_INET6_AH=y
--CONFIG_INET6_ESP=y
--CONFIG_INET6_IPCOMP=y
--# CONFIG_IPV6_MIP6 is not set
--CONFIG_INET6_XFRM_TUNNEL=y
--CONFIG_INET6_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
--# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
--CONFIG_IPV6_NDISC_NODETYPE=y
--# CONFIG_IPV6_TUNNEL is not set
--# CONFIG_IPV6_MULTIPLE_TABLES is not set
--# CONFIG_IPV6_MROUTE is not set
--# CONFIG_NETWORK_SECMARK is not set
--CONFIG_NETFILTER=y
--# CONFIG_NETFILTER_DEBUG is not set
--CONFIG_NETFILTER_ADVANCED=y
--CONFIG_BRIDGE_NETFILTER=y
--
--#
--# Core Netfilter Configuration
--#
--CONFIG_NETFILTER_NETLINK=m
--# CONFIG_NETFILTER_NETLINK_QUEUE is not set
--CONFIG_NETFILTER_NETLINK_LOG=m
--CONFIG_NF_CONNTRACK=m
--CONFIG_NF_CT_ACCT=y
--CONFIG_NF_CONNTRACK_MARK=y
--# CONFIG_NF_CONNTRACK_EVENTS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--CONFIG_NF_CT_PROTO_GRE=m
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
--CONFIG_NF_CONNTRACK_AMANDA=m
--CONFIG_NF_CONNTRACK_FTP=m
--CONFIG_NF_CONNTRACK_H323=m
--CONFIG_NF_CONNTRACK_IRC=m
--CONFIG_NF_CONNTRACK_NETBIOS_NS=m
--CONFIG_NF_CONNTRACK_PPTP=m
--CONFIG_NF_CONNTRACK_SANE=m
--CONFIG_NF_CONNTRACK_SIP=m
--CONFIG_NF_CONNTRACK_TFTP=m
--# CONFIG_NF_CT_NETLINK is not set
--# CONFIG_NETFILTER_TPROXY is not set
--CONFIG_NETFILTER_XTABLES=y
--CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
--# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
--# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
--CONFIG_NETFILTER_XT_TARGET_MARK=m
--CONFIG_NETFILTER_XT_TARGET_NFLOG=m
--CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
--# CONFIG_NETFILTER_XT_TARGET_NOTRACK is not set
--# CONFIG_NETFILTER_XT_TARGET_RATEEST is not set
--# CONFIG_NETFILTER_XT_TARGET_TRACE is not set
--CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
--# CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP is not set
--CONFIG_NETFILTER_XT_MATCH_COMMENT=m
--CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
--# CONFIG_NETFILTER_XT_MATCH_CONNLIMIT is not set
--CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
--CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
--# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
--# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
--CONFIG_NETFILTER_XT_MATCH_ESP=m
--CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
--CONFIG_NETFILTER_XT_MATCH_HELPER=m
--# CONFIG_NETFILTER_XT_MATCH_IPRANGE is not set
--CONFIG_NETFILTER_XT_MATCH_LENGTH=m
--CONFIG_NETFILTER_XT_MATCH_LIMIT=m
--CONFIG_NETFILTER_XT_MATCH_MAC=m
--CONFIG_NETFILTER_XT_MATCH_MARK=m
--CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
--# CONFIG_NETFILTER_XT_MATCH_OWNER is not set
--CONFIG_NETFILTER_XT_MATCH_POLICY=m
--# CONFIG_NETFILTER_XT_MATCH_PHYSDEV is not set
--CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
--CONFIG_NETFILTER_XT_MATCH_QUOTA=m
--# CONFIG_NETFILTER_XT_MATCH_RATEEST is not set
--CONFIG_NETFILTER_XT_MATCH_REALM=m
--# CONFIG_NETFILTER_XT_MATCH_RECENT is not set
--# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
--CONFIG_NETFILTER_XT_MATCH_STATE=m
--CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
--CONFIG_NETFILTER_XT_MATCH_STRING=m
--CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
--# CONFIG_NETFILTER_XT_MATCH_TIME is not set
--# CONFIG_NETFILTER_XT_MATCH_U32 is not set
--# CONFIG_IP_VS is not set
--
--#
--# IP: Netfilter Configuration
--#
--CONFIG_NF_DEFRAG_IPV4=m
--CONFIG_NF_CONNTRACK_IPV4=m
--CONFIG_NF_CONNTRACK_PROC_COMPAT=y
--# CONFIG_IP_NF_QUEUE is not set
--CONFIG_IP_NF_IPTABLES=m
--CONFIG_IP_NF_MATCH_ADDRTYPE=m
--CONFIG_IP_NF_MATCH_AH=m
--CONFIG_IP_NF_MATCH_ECN=m
--CONFIG_IP_NF_MATCH_TTL=m
--CONFIG_IP_NF_FILTER=m
--CONFIG_IP_NF_TARGET_REJECT=m
--CONFIG_IP_NF_TARGET_LOG=m
--# CONFIG_IP_NF_TARGET_ULOG is not set
--CONFIG_NF_NAT=m
--CONFIG_NF_NAT_NEEDED=y
--CONFIG_IP_NF_TARGET_MASQUERADE=m
--CONFIG_IP_NF_TARGET_NETMAP=m
--CONFIG_IP_NF_TARGET_REDIRECT=m
--CONFIG_NF_NAT_SNMP_BASIC=m
--CONFIG_NF_NAT_PROTO_GRE=m
--CONFIG_NF_NAT_FTP=m
--CONFIG_NF_NAT_IRC=m
--CONFIG_NF_NAT_TFTP=m
--CONFIG_NF_NAT_AMANDA=m
--CONFIG_NF_NAT_PPTP=m
--CONFIG_NF_NAT_H323=m
--CONFIG_NF_NAT_SIP=m
--CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
--CONFIG_IP_NF_TARGET_ECN=m
--CONFIG_IP_NF_TARGET_TTL=m
--CONFIG_IP_NF_RAW=m
--CONFIG_IP_NF_ARPTABLES=m
--CONFIG_IP_NF_ARPFILTER=m
--CONFIG_IP_NF_ARP_MANGLE=m
--
--#
--# IPv6: Netfilter Configuration
--#
--CONFIG_NF_CONNTRACK_IPV6=m
--CONFIG_IP6_NF_QUEUE=m
--CONFIG_IP6_NF_IPTABLES=m
--CONFIG_IP6_NF_MATCH_AH=m
--CONFIG_IP6_NF_MATCH_EUI64=m
--CONFIG_IP6_NF_MATCH_FRAG=m
--CONFIG_IP6_NF_MATCH_OPTS=m
--CONFIG_IP6_NF_MATCH_HL=m
--CONFIG_IP6_NF_MATCH_IPV6HEADER=m
--CONFIG_IP6_NF_MATCH_MH=m
--CONFIG_IP6_NF_MATCH_RT=m
--CONFIG_IP6_NF_TARGET_LOG=m
--CONFIG_IP6_NF_FILTER=m
--CONFIG_IP6_NF_TARGET_REJECT=m
--CONFIG_IP6_NF_MANGLE=m
--CONFIG_IP6_NF_TARGET_HL=m
--CONFIG_IP6_NF_RAW=m
--# CONFIG_BRIDGE_NF_EBTABLES is not set
--# CONFIG_IP_DCCP is not set
--# CONFIG_IP_SCTP is not set
--# CONFIG_TIPC is not set
--# CONFIG_ATM is not set
--CONFIG_STP=m
--CONFIG_BRIDGE=m
--# CONFIG_NET_DSA is not set
--CONFIG_VLAN_8021Q=m
--# CONFIG_VLAN_8021Q_GVRP is not set
--# CONFIG_DECNET is not set
--CONFIG_LLC=m
--# CONFIG_LLC2 is not set
--# CONFIG_IPX is not set
--# CONFIG_ATALK is not set
--# CONFIG_X25 is not set
--# CONFIG_LAPB is not set
--# CONFIG_ECONET is not set
--# CONFIG_WAN_ROUTER is not set
--# CONFIG_NET_SCHED is not set
--CONFIG_NET_CLS_ROUTE=y
--# CONFIG_DCB is not set
--
--#
--# Network testing
--#
--# CONFIG_NET_PKTGEN is not set
--# CONFIG_NET_TCPPROBE is not set
--# CONFIG_HAMRADIO is not set
--# CONFIG_CAN is not set
--# CONFIG_IRDA is not set
--# CONFIG_BT is not set
--# CONFIG_AF_RXRPC is not set
--# CONFIG_PHONET is not set
--CONFIG_WIRELESS=y
--# CONFIG_CFG80211 is not set
--CONFIG_WIRELESS_OLD_REGULATORY=y
--# CONFIG_WIRELESS_EXT is not set
--# CONFIG_LIB80211 is not set
--# CONFIG_MAC80211 is not set
--# CONFIG_WIMAX is not set
--# CONFIG_RFKILL is not set
--# CONFIG_NET_9P is not set
--
--#
--# Device Drivers
--#
--
--#
--# Generic Driver Options
--#
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_STANDALONE=y
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--# CONFIG_FW_LOADER is not set
--# CONFIG_DEBUG_DRIVER is not set
--# CONFIG_DEBUG_DEVRES is not set
--# CONFIG_SYS_HYPERVISOR is not set
--# CONFIG_CONNECTOR is not set
--CONFIG_MTD=y
--# CONFIG_MTD_DEBUG is not set
--# CONFIG_MTD_CONCAT is not set
--CONFIG_MTD_PARTITIONS=y
--# CONFIG_MTD_TESTS is not set
--# CONFIG_MTD_REDBOOT_PARTS is not set
--CONFIG_MTD_CMDLINE_PARTS=y
--# CONFIG_MTD_AR7_PARTS is not set
--
--#
--# User Modules And Translation Layers
--#
--CONFIG_MTD_CHAR=y
--CONFIG_MTD_BLKDEVS=y
--CONFIG_MTD_BLOCK=y
--# CONFIG_FTL is not set
--# CONFIG_NFTL is not set
--# CONFIG_INFTL is not set
--# CONFIG_RFD_FTL is not set
--# CONFIG_SSFDC is not set
--# CONFIG_MTD_OOPS is not set
--
--#
--# RAM/ROM/Flash chip drivers
--#
--CONFIG_MTD_CFI=y
--# CONFIG_MTD_JEDECPROBE is not set
--CONFIG_MTD_GEN_PROBE=y
--# CONFIG_MTD_CFI_ADV_OPTIONS is not set
--CONFIG_MTD_MAP_BANK_WIDTH_1=y
--CONFIG_MTD_MAP_BANK_WIDTH_2=y
--CONFIG_MTD_MAP_BANK_WIDTH_4=y
--# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
--# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
--CONFIG_MTD_CFI_I1=y
--CONFIG_MTD_CFI_I2=y
--# CONFIG_MTD_CFI_I4 is not set
--# CONFIG_MTD_CFI_I8 is not set
--# CONFIG_MTD_CFI_INTELEXT is not set
--CONFIG_MTD_CFI_AMDSTD=y
--# CONFIG_MTD_CFI_STAA is not set
--CONFIG_MTD_CFI_UTIL=y
--# CONFIG_MTD_RAM is not set
--# CONFIG_MTD_ROM is not set
--# CONFIG_MTD_ABSENT is not set
--
--#
--# Mapping drivers for chip access
--#
--# CONFIG_MTD_COMPLEX_MAPPINGS is not set
--CONFIG_MTD_PHYSMAP=y
--# CONFIG_MTD_PHYSMAP_COMPAT is not set
--# CONFIG_MTD_PLATRAM is not set
--
--#
--# Self-contained MTD device drivers
--#
--CONFIG_MTD_DATAFLASH=y
--# CONFIG_MTD_DATAFLASH_WRITE_VERIFY is not set
--# CONFIG_MTD_DATAFLASH_OTP is not set
--# CONFIG_MTD_M25P80 is not set
--# CONFIG_MTD_SLRAM is not set
--# CONFIG_MTD_PHRAM is not set
--# CONFIG_MTD_MTDRAM is not set
--# CONFIG_MTD_BLOCK2MTD is not set
--
--#
--# Disk-On-Chip Device Drivers
--#
--# CONFIG_MTD_DOC2000 is not set
--# CONFIG_MTD_DOC2001 is not set
--# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
--# CONFIG_MTD_ONENAND is not set
--
--#
--# LPDDR flash memory drivers
--#
--# CONFIG_MTD_LPDDR is not set
--
--#
--# UBI - Unsorted block images
--#
--# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
--CONFIG_BLK_DEV=y
--# CONFIG_BLK_DEV_COW_COMMON is not set
--CONFIG_BLK_DEV_LOOP=m
--# CONFIG_BLK_DEV_CRYPTOLOOP is not set
--CONFIG_BLK_DEV_NBD=m
--CONFIG_BLK_DEV_RAM=m
--CONFIG_BLK_DEV_RAM_COUNT=16
--CONFIG_BLK_DEV_RAM_SIZE=4096
--# CONFIG_BLK_DEV_XIP is not set
--# CONFIG_CDROM_PKTCDVD is not set
--# CONFIG_ATA_OVER_ETH is not set
--# CONFIG_MISC_DEVICES is not set
--
--#
--# SCSI device support
--#
--# CONFIG_RAID_ATTRS is not set
--# CONFIG_SCSI is not set
--# CONFIG_SCSI_DMA is not set
--# CONFIG_SCSI_NETLINK is not set
--# CONFIG_ATA is not set
--# CONFIG_MD is not set
--CONFIG_NETDEVICES=y
--# CONFIG_DUMMY is not set
--# CONFIG_BONDING is not set
--# CONFIG_MACVLAN is not set
--# CONFIG_EQUALIZER is not set
--CONFIG_TUN=m
--# CONFIG_VETH is not set
--CONFIG_PHYLIB=y
--
--#
--# MII PHY device drivers
--#
--# CONFIG_MARVELL_PHY is not set
--# CONFIG_DAVICOM_PHY is not set
--# CONFIG_QSEMI_PHY is not set
--# CONFIG_LXT_PHY is not set
--# CONFIG_CICADA_PHY is not set
--# CONFIG_VITESSE_PHY is not set
--# CONFIG_SMSC_PHY is not set
--# CONFIG_BROADCOM_PHY is not set
--# CONFIG_ICPLUS_PHY is not set
--# CONFIG_REALTEK_PHY is not set
--# CONFIG_NATIONAL_PHY is not set
--# CONFIG_STE10XP is not set
--# CONFIG_LSI_ET1011C_PHY is not set
--# CONFIG_FIXED_PHY is not set
--# CONFIG_MDIO_BITBANG is not set
--CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
--CONFIG_MACB=y
--# CONFIG_ENC28J60 is not set
--# CONFIG_DNET is not set
--# CONFIG_IBM_NEW_EMAC_ZMII is not set
--# CONFIG_IBM_NEW_EMAC_RGMII is not set
--# CONFIG_IBM_NEW_EMAC_TAH is not set
--# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
--# CONFIG_IBM_NEW_EMAC_NO_FLOW_CTRL is not set
--# CONFIG_IBM_NEW_EMAC_MAL_CLR_ICINTSTAT is not set
--# CONFIG_IBM_NEW_EMAC_MAL_COMMON_ERR is not set
--# CONFIG_B44 is not set
--# CONFIG_NETDEV_1000 is not set
--# CONFIG_NETDEV_10000 is not set
--
--#
--# Wireless LAN
--#
--# CONFIG_WLAN_PRE80211 is not set
--# CONFIG_WLAN_80211 is not set
--# CONFIG_IWLWIFI_LEDS is not set
--
--#
--# Enable WiMAX (Networking options) to see the WiMAX drivers
--#
--# CONFIG_WAN is not set
--CONFIG_PPP=m
--# CONFIG_PPP_MULTILINK is not set
--CONFIG_PPP_FILTER=y
--CONFIG_PPP_ASYNC=m
--# CONFIG_PPP_SYNC_TTY is not set
--CONFIG_PPP_DEFLATE=m
--CONFIG_PPP_BSDCOMP=m
--CONFIG_PPP_MPPE=m
--CONFIG_PPPOE=m
--# CONFIG_PPPOL2TP is not set
--# CONFIG_SLIP is not set
--CONFIG_SLHC=m
--# CONFIG_NETCONSOLE is not set
--# CONFIG_NETPOLL is not set
--# CONFIG_NET_POLL_CONTROLLER is not set
--# CONFIG_ISDN is not set
--# CONFIG_PHONE is not set
--
--#
--# Input device support
--#
--# CONFIG_INPUT is not set
--
--#
--# Hardware I/O ports
--#
--# CONFIG_SERIO is not set
--# CONFIG_GAMEPORT is not set
--
--#
--# Character devices
--#
--# CONFIG_VT is not set
--CONFIG_DEVKMEM=y
--# CONFIG_SERIAL_NONSTANDARD is not set
--
--#
--# Serial drivers
--#
--# CONFIG_SERIAL_8250 is not set
--
--#
--# Non-8250 serial port support
--#
--CONFIG_SERIAL_ATMEL=y
--CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_SERIAL_ATMEL_PDC=y
--# CONFIG_SERIAL_ATMEL_TTYAT is not set
--CONFIG_SERIAL_CORE=y
--CONFIG_SERIAL_CORE_CONSOLE=y
--CONFIG_UNIX98_PTYS=y
--# CONFIG_DEVPTS_MULTIPLE_INSTANCES is not set
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_IPMI_HANDLER is not set
--# CONFIG_HW_RANDOM is not set
--# CONFIG_R3964 is not set
--# CONFIG_RAW_DRIVER is not set
--# CONFIG_TCG_TPM is not set
--CONFIG_I2C=m
--CONFIG_I2C_BOARDINFO=y
--CONFIG_I2C_CHARDEV=m
--CONFIG_I2C_HELPER_AUTO=y
--CONFIG_I2C_ALGOBIT=m
--
--#
--# I2C Hardware Bus support
--#
--
--#
--# I2C system bus drivers (mostly embedded / system-on-chip)
--#
--CONFIG_I2C_GPIO=m
--# CONFIG_I2C_OCORES is not set
--# CONFIG_I2C_SIMTEC is not set
--
--#
--# External I2C/SMBus adapter drivers
--#
--# CONFIG_I2C_PARPORT_LIGHT is not set
--# CONFIG_I2C_TAOS_EVM is not set
--
--#
--# Other I2C/SMBus bus drivers
--#
--# CONFIG_I2C_PCA_PLATFORM is not set
--# CONFIG_I2C_STUB is not set
--
--#
--# Miscellaneous I2C Chip support
--#
--# CONFIG_DS1682 is not set
--# CONFIG_SENSORS_PCF8574 is not set
--# CONFIG_PCF8575 is not set
--# CONFIG_SENSORS_PCA9539 is not set
--# CONFIG_SENSORS_PCF8591 is not set
--# CONFIG_SENSORS_MAX6875 is not set
--# CONFIG_SENSORS_TSL2550 is not set
--# CONFIG_I2C_DEBUG_CORE is not set
--# CONFIG_I2C_DEBUG_ALGO is not set
--# CONFIG_I2C_DEBUG_BUS is not set
--# CONFIG_I2C_DEBUG_CHIP is not set
--CONFIG_SPI=y
--# CONFIG_SPI_DEBUG is not set
--CONFIG_SPI_MASTER=y
--
--#
--# SPI Master Controller Drivers
--#
--CONFIG_SPI_ATMEL=y
--# CONFIG_SPI_BITBANG is not set
--# CONFIG_SPI_GPIO is not set
--
--#
--# SPI Protocol Masters
--#
--CONFIG_SPI_SPIDEV=m
--# CONFIG_SPI_TLE62X0 is not set
--CONFIG_ARCH_REQUIRE_GPIOLIB=y
--CONFIG_GPIOLIB=y
--# CONFIG_DEBUG_GPIO is not set
--# CONFIG_GPIO_SYSFS is not set
--
--#
--# Memory mapped GPIO expanders:
--#
--
--#
--# I2C GPIO expanders:
--#
--# CONFIG_GPIO_MAX732X is not set
--# CONFIG_GPIO_PCA953X is not set
--# CONFIG_GPIO_PCF857X is not set
--
--#
--# PCI GPIO expanders:
--#
--
--#
--# SPI GPIO expanders:
--#
--# CONFIG_GPIO_MAX7301 is not set
--# CONFIG_GPIO_MCP23S08 is not set
--# CONFIG_W1 is not set
--# CONFIG_POWER_SUPPLY is not set
--# CONFIG_HWMON is not set
--# CONFIG_THERMAL is not set
--# CONFIG_THERMAL_HWMON is not set
--CONFIG_WATCHDOG=y
--# CONFIG_WATCHDOG_NOWAYOUT is not set
--
--#
--# Watchdog Device Drivers
--#
--# CONFIG_SOFT_WATCHDOG is not set
--# CONFIG_AT32AP700X_WDT is not set
--CONFIG_SSB_POSSIBLE=y
--
--#
--# Sonics Silicon Backplane
--#
--# CONFIG_SSB is not set
--
--#
--# Multifunction device drivers
--#
--# CONFIG_MFD_CORE is not set
--# CONFIG_MFD_SM501 is not set
--# CONFIG_HTC_PASIC3 is not set
--# CONFIG_TPS65010 is not set
--# CONFIG_MFD_TMIO is not set
--# CONFIG_MFD_WM8400 is not set
--# CONFIG_MFD_WM8350_I2C is not set
--# CONFIG_MFD_PCF50633 is not set
--# CONFIG_REGULATOR is not set
--
--#
--# Multimedia devices
--#
--
--#
--# Multimedia core support
--#
--# CONFIG_VIDEO_DEV is not set
--# CONFIG_DVB_CORE is not set
--# CONFIG_VIDEO_MEDIA is not set
--
--#
--# Multimedia drivers
--#
--# CONFIG_DAB is not set
--
--#
--# Graphics support
--#
--# CONFIG_VGASTATE is not set
--# CONFIG_VIDEO_OUTPUT_CONTROL is not set
--# CONFIG_FB is not set
--# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
--
--#
--# Display device support
--#
--# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_SOUND is not set
--CONFIG_USB_SUPPORT=y
--# CONFIG_USB_ARCH_HAS_HCD is not set
--# CONFIG_USB_ARCH_HAS_OHCI is not set
--# CONFIG_USB_ARCH_HAS_EHCI is not set
--# CONFIG_USB_OTG_WHITELIST is not set
--# CONFIG_USB_OTG_BLACKLIST_HUB is not set
--# CONFIG_USB_MUSB_HDRC is not set
--# CONFIG_USB_GADGET_MUSB_HDRC is not set
--
--#
--# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed;
--#
--CONFIG_USB_GADGET=y
--# CONFIG_USB_GADGET_DEBUG is not set
--# CONFIG_USB_GADGET_DEBUG_FILES is not set
--# CONFIG_USB_GADGET_DEBUG_FS is not set
--CONFIG_USB_GADGET_VBUS_DRAW=2
--CONFIG_USB_GADGET_SELECTED=y
--# CONFIG_USB_GADGET_AT91 is not set
--CONFIG_USB_GADGET_ATMEL_USBA=y
--CONFIG_USB_ATMEL_USBA=y
--# CONFIG_USB_GADGET_FSL_USB2 is not set
--# CONFIG_USB_GADGET_LH7A40X is not set
--# CONFIG_USB_GADGET_OMAP is not set
--# CONFIG_USB_GADGET_PXA25X is not set
--# CONFIG_USB_GADGET_PXA27X is not set
--# CONFIG_USB_GADGET_S3C2410 is not set
--# CONFIG_USB_GADGET_IMX is not set
--# CONFIG_USB_GADGET_M66592 is not set
--# CONFIG_USB_GADGET_AMD5536UDC is not set
--# CONFIG_USB_GADGET_FSL_QE is not set
--# CONFIG_USB_GADGET_CI13XXX is not set
--# CONFIG_USB_GADGET_NET2280 is not set
--# CONFIG_USB_GADGET_GOKU is not set
--# CONFIG_USB_GADGET_DUMMY_HCD is not set
--CONFIG_USB_GADGET_DUALSPEED=y
--CONFIG_USB_ZERO=m
--CONFIG_USB_ETH=m
--CONFIG_USB_ETH_RNDIS=y
--CONFIG_USB_GADGETFS=m
--CONFIG_USB_FILE_STORAGE=m
--# CONFIG_USB_FILE_STORAGE_TEST is not set
--CONFIG_USB_G_SERIAL=m
--# CONFIG_USB_MIDI_GADGET is not set
--# CONFIG_USB_G_PRINTER is not set
--# CONFIG_USB_CDC_COMPOSITE is not set
--
--#
--# OTG and related infrastructure
--#
--# CONFIG_USB_GPIO_VBUS is not set
--CONFIG_MMC=m
--# CONFIG_MMC_DEBUG is not set
--# CONFIG_MMC_UNSAFE_RESUME is not set
--
--#
--# MMC/SD/SDIO Card Drivers
--#
--CONFIG_MMC_BLOCK=m
--CONFIG_MMC_BLOCK_BOUNCE=y
--# CONFIG_SDIO_UART is not set
--# CONFIG_MMC_TEST is not set
--
--#
--# MMC/SD/SDIO Host Controller Drivers
--#
--# CONFIG_MMC_SDHCI is not set
--# CONFIG_MMC_ATMELMCI is not set
--CONFIG_MMC_SPI=m
--# CONFIG_MEMSTICK is not set
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--
--#
--# LED drivers
--#
--CONFIG_LEDS_GPIO=y
--# CONFIG_LEDS_PCA955X is not set
--
--#
--# LED Triggers
--#
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
--# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
--# CONFIG_ACCESSIBILITY is not set
--CONFIG_RTC_LIB=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_HCTOSYS=y
--CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
--# CONFIG_RTC_DEBUG is not set
--
--#
--# RTC interfaces
--#
--CONFIG_RTC_INTF_SYSFS=y
--CONFIG_RTC_INTF_PROC=y
--CONFIG_RTC_INTF_DEV=y
--# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
--# CONFIG_RTC_DRV_TEST is not set
--
--#
--# I2C RTC drivers
--#
--# CONFIG_RTC_DRV_DS1307 is not set
--# CONFIG_RTC_DRV_DS1374 is not set
--# CONFIG_RTC_DRV_DS1672 is not set
--# CONFIG_RTC_DRV_MAX6900 is not set
--# CONFIG_RTC_DRV_RS5C372 is not set
--# CONFIG_RTC_DRV_ISL1208 is not set
--# CONFIG_RTC_DRV_X1205 is not set
--# CONFIG_RTC_DRV_PCF8563 is not set
--# CONFIG_RTC_DRV_PCF8583 is not set
--# CONFIG_RTC_DRV_M41T80 is not set
--# CONFIG_RTC_DRV_S35390A is not set
--# CONFIG_RTC_DRV_FM3130 is not set
--# CONFIG_RTC_DRV_RX8581 is not set
--
--#
--# SPI RTC drivers
--#
--# CONFIG_RTC_DRV_M41T94 is not set
--# CONFIG_RTC_DRV_DS1305 is not set
--# CONFIG_RTC_DRV_DS1390 is not set
--# CONFIG_RTC_DRV_MAX6902 is not set
--# CONFIG_RTC_DRV_R9701 is not set
--# CONFIG_RTC_DRV_RS5C348 is not set
--# CONFIG_RTC_DRV_DS3234 is not set
--
--#
--# Platform RTC drivers
--#
--# CONFIG_RTC_DRV_DS1286 is not set
--# CONFIG_RTC_DRV_DS1511 is not set
--# CONFIG_RTC_DRV_DS1553 is not set
--# CONFIG_RTC_DRV_DS1742 is not set
--# CONFIG_RTC_DRV_STK17TA8 is not set
--# CONFIG_RTC_DRV_M48T86 is not set
--# CONFIG_RTC_DRV_M48T35 is not set
--# CONFIG_RTC_DRV_M48T59 is not set
--# CONFIG_RTC_DRV_BQ4802 is not set
--# CONFIG_RTC_DRV_V3020 is not set
--
--#
--# on-CPU RTC drivers
--#
--CONFIG_RTC_DRV_AT32AP700X=y
--# CONFIG_DMADEVICES is not set
--# CONFIG_UIO is not set
--# CONFIG_STAGING is not set
--
--#
--# File systems
--#
--CONFIG_EXT2_FS=m
--# CONFIG_EXT2_FS_XATTR is not set
--# CONFIG_EXT2_FS_XIP is not set
--CONFIG_EXT3_FS=m
--# CONFIG_EXT3_FS_XATTR is not set
--# CONFIG_EXT4_FS is not set
--CONFIG_JBD=m
 -# CONFIG_JBD_DEBUG is not set
 -# CONFIG_REISERFS_FS is not set
 -# CONFIG_JFS_FS is not set
 -# CONFIG_FS_POSIX_ACL is not set
--CONFIG_FILE_LOCKING=y
 -# CONFIG_XFS_FS is not set
 -# CONFIG_OCFS2_FS is not set
--# CONFIG_BTRFS_FS is not set
 -# CONFIG_DNOTIFY is not set
 -CONFIG_INOTIFY=y
 -CONFIG_INOTIFY_USER=y
@@ -11917,7 +2128,7 @@ index 4c0931f..0000000
 -CONFIG_FAT_FS=m
 -CONFIG_MSDOS_FS=m
 -CONFIG_VFAT_FS=m
--CONFIG_FAT_DEFAULT_CODEPAGE=850
+-CONFIG_FAT_DEFAULT_CODEPAGE=437
 -CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
 -# CONFIG_NTFS_FS is not set
 -
@@ -11925,15 +2136,17 @@ index 4c0931f..0000000
 -# Pseudo filesystems
 -#
 -CONFIG_PROC_FS=y
--# CONFIG_PROC_KCORE is not set
+-CONFIG_PROC_KCORE=y
 -CONFIG_PROC_SYSCTL=y
--CONFIG_PROC_PAGE_MONITOR=y
 -CONFIG_SYSFS=y
 -CONFIG_TMPFS=y
 -# CONFIG_TMPFS_POSIX_ACL is not set
 -# CONFIG_HUGETLB_PAGE is not set
--CONFIG_CONFIGFS_FS=m
--CONFIG_MISC_FILESYSTEMS=y
+-# CONFIG_CONFIGFS_FS is not set
+-
+-#
+-# Miscellaneous filesystems
+-#
 -# CONFIG_ADFS_FS is not set
 -# CONFIG_AFFS_FS is not set
 -# CONFIG_HFS_FS is not set
@@ -11943,8 +2156,7 @@ index 4c0931f..0000000
 -# CONFIG_EFS_FS is not set
 -CONFIG_JFFS2_FS=y
 -CONFIG_JFFS2_FS_DEBUG=0
--CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_FS_WBUF_VERIFY is not set
+-# CONFIG_JFFS2_FS_WRITEBUFFER is not set
 -# CONFIG_JFFS2_SUMMARY is not set
 -# CONFIG_JFFS2_FS_XATTR is not set
 -# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
@@ -11953,9 +2165,8 @@ index 4c0931f..0000000
 -CONFIG_JFFS2_RTIME=y
 -# CONFIG_JFFS2_RUBIN is not set
 -# CONFIG_CRAMFS is not set
--# CONFIG_SQUASHFS is not set
 -# CONFIG_VXFS_FS is not set
--# CONFIG_MINIX_FS is not set
+-CONFIG_MINIX_FS=m
 -# CONFIG_OMFS_FS is not set
 -# CONFIG_HPFS_FS is not set
 -# CONFIG_QNX4FS_FS is not set
@@ -11968,26 +2179,15 @@ index 4c0931f..0000000
 -# CONFIG_NFS_V3_ACL is not set
 -# CONFIG_NFS_V4 is not set
 -CONFIG_ROOT_NFS=y
--CONFIG_NFSD=m
--CONFIG_NFSD_V3=y
--# CONFIG_NFSD_V3_ACL is not set
--# CONFIG_NFSD_V4 is not set
+-# CONFIG_NFSD is not set
 -CONFIG_LOCKD=y
 -CONFIG_LOCKD_V4=y
--CONFIG_EXPORTFS=m
 -CONFIG_NFS_COMMON=y
 -CONFIG_SUNRPC=y
--# CONFIG_SUNRPC_REGISTER_V4 is not set
 -# CONFIG_RPCSEC_GSS_KRB5 is not set
 -# CONFIG_RPCSEC_GSS_SPKM3 is not set
--CONFIG_SMB_FS=m
--# CONFIG_SMB_NLS_DEFAULT is not set
--CONFIG_CIFS=m
--# CONFIG_CIFS_STATS is not set
--# CONFIG_CIFS_WEAK_PW_HASH is not set
--# CONFIG_CIFS_XATTR is not set
--# CONFIG_CIFS_DEBUG2 is not set
--# CONFIG_CIFS_EXPERIMENTAL is not set
+-# CONFIG_SMB_FS is not set
+-# CONFIG_CIFS is not set
 -# CONFIG_NCP_FS is not set
 -# CONFIG_CODA_FS is not set
 -# CONFIG_AFS_FS is not set
@@ -12002,7 +2202,7 @@ index 4c0931f..0000000
 -CONFIG_NLS_CODEPAGE_437=m
 -# CONFIG_NLS_CODEPAGE_737 is not set
 -# CONFIG_NLS_CODEPAGE_775 is not set
--CONFIG_NLS_CODEPAGE_850=m
+-# CONFIG_NLS_CODEPAGE_850 is not set
 -# CONFIG_NLS_CODEPAGE_852 is not set
 -# CONFIG_NLS_CODEPAGE_855 is not set
 -# CONFIG_NLS_CODEPAGE_857 is not set
@@ -12070,7 +2270,6 @@ index 4c0931f..0000000
 -# CONFIG_LOCK_STAT is not set
 -# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
 -# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
--CONFIG_STACKTRACE=y
 -# CONFIG_DEBUG_KOBJECT is not set
 -CONFIG_DEBUG_BUGVERBOSE=y
 -# CONFIG_DEBUG_INFO is not set
@@ -12079,7 +2278,1322 @@ index 4c0931f..0000000
 -# CONFIG_DEBUG_MEMORY_INIT is not set
 -# CONFIG_DEBUG_LIST is not set
 -# CONFIG_DEBUG_SG is not set
--# CONFIG_DEBUG_NOTIFIERS is not set
+-CONFIG_FRAME_POINTER=y
+-# CONFIG_BOOT_PRINTK_DELAY is not set
+-# CONFIG_RCU_TORTURE_TEST is not set
+-# CONFIG_KPROBES_SANITY_TEST is not set
+-# CONFIG_BACKTRACE_SELF_TEST is not set
+-# CONFIG_LKDTM is not set
+-# CONFIG_FAULT_INJECTION is not set
+-# CONFIG_SAMPLES is not set
+-
+-#
+-# Security options
+-#
+-# CONFIG_KEYS is not set
+-# CONFIG_SECURITY is not set
+-# CONFIG_SECURITY_FILE_CAPABILITIES is not set
+-CONFIG_CRYPTO=y
+-
+-#
+-# Crypto core or helper
+-#
+-CONFIG_CRYPTO_ALGAPI=m
+-CONFIG_CRYPTO_AEAD=m
+-CONFIG_CRYPTO_BLKCIPHER=m
+-CONFIG_CRYPTO_HASH=m
+-CONFIG_CRYPTO_MANAGER=m
+-# CONFIG_CRYPTO_GF128MUL is not set
+-# CONFIG_CRYPTO_NULL is not set
+-# CONFIG_CRYPTO_CRYPTD is not set
+-CONFIG_CRYPTO_AUTHENC=m
+-# CONFIG_CRYPTO_TEST is not set
+-
+-#
+-# Authenticated Encryption with Associated Data
+-#
+-# CONFIG_CRYPTO_CCM is not set
+-# CONFIG_CRYPTO_GCM is not set
+-# CONFIG_CRYPTO_SEQIV is not set
+-
+-#
+-# Block modes
+-#
+-CONFIG_CRYPTO_CBC=m
+-# CONFIG_CRYPTO_CTR is not set
+-# CONFIG_CRYPTO_CTS is not set
+-# CONFIG_CRYPTO_ECB is not set
+-# CONFIG_CRYPTO_LRW is not set
+-# CONFIG_CRYPTO_PCBC is not set
+-# CONFIG_CRYPTO_XTS is not set
+-
+-#
+-# Hash modes
+-#
+-CONFIG_CRYPTO_HMAC=m
+-# CONFIG_CRYPTO_XCBC is not set
+-
+-#
+-# Digest
+-#
+-# CONFIG_CRYPTO_CRC32C is not set
+-# CONFIG_CRYPTO_MD4 is not set
+-CONFIG_CRYPTO_MD5=m
+-# CONFIG_CRYPTO_MICHAEL_MIC is not set
+-# CONFIG_CRYPTO_RMD128 is not set
+-# CONFIG_CRYPTO_RMD160 is not set
+-# CONFIG_CRYPTO_RMD256 is not set
+-# CONFIG_CRYPTO_RMD320 is not set
+-CONFIG_CRYPTO_SHA1=m
+-# CONFIG_CRYPTO_SHA256 is not set
+-# CONFIG_CRYPTO_SHA512 is not set
+-# CONFIG_CRYPTO_TGR192 is not set
+-# CONFIG_CRYPTO_WP512 is not set
+-
+-#
+-# Ciphers
+-#
+-# CONFIG_CRYPTO_AES is not set
+-# CONFIG_CRYPTO_ANUBIS is not set
+-# CONFIG_CRYPTO_ARC4 is not set
+-# CONFIG_CRYPTO_BLOWFISH is not set
+-# CONFIG_CRYPTO_CAMELLIA is not set
+-# CONFIG_CRYPTO_CAST5 is not set
+-# CONFIG_CRYPTO_CAST6 is not set
+-CONFIG_CRYPTO_DES=m
+-# CONFIG_CRYPTO_FCRYPT is not set
+-# CONFIG_CRYPTO_KHAZAD is not set
+-# CONFIG_CRYPTO_SALSA20 is not set
+-# CONFIG_CRYPTO_SEED is not set
+-# CONFIG_CRYPTO_SERPENT is not set
+-# CONFIG_CRYPTO_TEA is not set
+-# CONFIG_CRYPTO_TWOFISH is not set
+-
+-#
+-# Compression
+-#
+-CONFIG_CRYPTO_DEFLATE=m
+-# CONFIG_CRYPTO_LZO is not set
+-# CONFIG_CRYPTO_HW is not set
+-
+-#
+-# Library routines
+-#
+-CONFIG_BITREVERSE=y
+-# CONFIG_GENERIC_FIND_FIRST_BIT is not set
+-# CONFIG_GENERIC_FIND_NEXT_BIT is not set
+-CONFIG_CRC_CCITT=m
+-# CONFIG_CRC16 is not set
+-# CONFIG_CRC_T10DIF is not set
+-CONFIG_CRC_ITU_T=m
+-CONFIG_CRC32=y
+-CONFIG_CRC7=m
+-# CONFIG_LIBCRC32C is not set
+-CONFIG_ZLIB_INFLATE=y
+-CONFIG_ZLIB_DEFLATE=y
+-CONFIG_GENERIC_ALLOCATOR=y
+-CONFIG_PLIST=y
+-CONFIG_HAS_IOMEM=y
+-CONFIG_HAS_IOPORT=y
+-CONFIG_HAS_DMA=y
+diff --git a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config b/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
+deleted file mode 100644
+index 1a2306c..0000000
+--- a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
++++ /dev/null
+@@ -1,1332 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Linux kernel version: 2.6.28.2
+-# Thu Jan 29 21:32:22 2009
+-#
+-CONFIG_AVR32=y
+-CONFIG_GENERIC_GPIO=y
+-CONFIG_GENERIC_HARDIRQS=y
+-CONFIG_STACKTRACE_SUPPORT=y
+-CONFIG_LOCKDEP_SUPPORT=y
+-CONFIG_TRACE_IRQFLAGS_SUPPORT=y
+-CONFIG_HARDIRQS_SW_RESEND=y
+-CONFIG_GENERIC_IRQ_PROBE=y
+-CONFIG_RWSEM_GENERIC_SPINLOCK=y
+-CONFIG_GENERIC_TIME=y
+-CONFIG_GENERIC_CLOCKEVENTS=y
+-# CONFIG_RWSEM_XCHGADD_ALGORITHM is not set
+-# CONFIG_ARCH_HAS_ILOG2_U32 is not set
+-# CONFIG_ARCH_HAS_ILOG2_U64 is not set
+-CONFIG_GENERIC_HWEIGHT=y
+-CONFIG_GENERIC_CALIBRATE_DELAY=y
+-CONFIG_GENERIC_BUG=y
+-CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
+-
+-#
+-# General setup
+-#
+-CONFIG_EXPERIMENTAL=y
+-CONFIG_BROKEN_ON_SMP=y
+-CONFIG_INIT_ENV_ARG_LIMIT=32
+-CONFIG_LOCALVERSION=""
+-# CONFIG_LOCALVERSION_AUTO is not set
+-CONFIG_SWAP=y
+-CONFIG_SYSVIPC=y
+-CONFIG_SYSVIPC_SYSCTL=y
+-CONFIG_POSIX_MQUEUE=y
+-# CONFIG_BSD_PROCESS_ACCT is not set
+-# CONFIG_TASKSTATS is not set
+-# CONFIG_AUDIT is not set
+-# CONFIG_IKCONFIG is not set
+-CONFIG_LOG_BUF_SHIFT=14
+-# CONFIG_CGROUPS is not set
+-# CONFIG_GROUP_SCHED is not set
+-CONFIG_SYSFS_DEPRECATED=y
+-CONFIG_SYSFS_DEPRECATED_V2=y
+-CONFIG_RELAY=y
+-# CONFIG_NAMESPACES is not set
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_INITRAMFS_SOURCE=""
+-CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+-CONFIG_SYSCTL=y
+-CONFIG_EMBEDDED=y
+-# CONFIG_SYSCTL_SYSCALL is not set
+-CONFIG_KALLSYMS=y
+-# CONFIG_KALLSYMS_ALL is not set
+-# CONFIG_KALLSYMS_EXTRA_PASS is not set
+-CONFIG_HOTPLUG=y
+-CONFIG_PRINTK=y
+-CONFIG_BUG=y
+-CONFIG_ELF_CORE=y
+-CONFIG_COMPAT_BRK=y
+-# CONFIG_BASE_FULL is not set
+-CONFIG_FUTEX=y
+-CONFIG_ANON_INODES=y
+-CONFIG_EPOLL=y
+-CONFIG_SIGNALFD=y
+-CONFIG_TIMERFD=y
+-CONFIG_EVENTFD=y
+-CONFIG_SHMEM=y
+-CONFIG_AIO=y
+-CONFIG_VM_EVENT_COUNTERS=y
+-CONFIG_SLUB_DEBUG=y
+-# CONFIG_SLAB is not set
+-CONFIG_SLUB=y
+-# CONFIG_SLOB is not set
+-CONFIG_PROFILING=y
+-# CONFIG_MARKERS is not set
+-CONFIG_OPROFILE=m
+-CONFIG_HAVE_OPROFILE=y
+-CONFIG_KPROBES=y
+-CONFIG_HAVE_KPROBES=y
+-CONFIG_HAVE_CLK=y
+-# CONFIG_HAVE_GENERIC_DMA_COHERENT is not set
+-CONFIG_SLABINFO=y
+-CONFIG_RT_MUTEXES=y
+-# CONFIG_TINY_SHMEM is not set
+-CONFIG_BASE_SMALL=1
+-CONFIG_MODULES=y
+-# CONFIG_MODULE_FORCE_LOAD is not set
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_MODULE_FORCE_UNLOAD is not set
+-# CONFIG_MODVERSIONS is not set
+-# CONFIG_MODULE_SRCVERSION_ALL is not set
+-CONFIG_KMOD=y
+-CONFIG_BLOCK=y
+-# CONFIG_LBD is not set
+-# CONFIG_BLK_DEV_IO_TRACE is not set
+-# CONFIG_LSF is not set
+-# CONFIG_BLK_DEV_BSG is not set
+-# CONFIG_BLK_DEV_INTEGRITY is not set
+-
+-#
+-# IO Schedulers
+-#
+-CONFIG_IOSCHED_NOOP=y
+-# CONFIG_IOSCHED_AS is not set
+-# CONFIG_IOSCHED_DEADLINE is not set
+-CONFIG_IOSCHED_CFQ=y
+-# CONFIG_DEFAULT_AS is not set
+-# CONFIG_DEFAULT_DEADLINE is not set
+-CONFIG_DEFAULT_CFQ=y
+-# CONFIG_DEFAULT_NOOP is not set
+-CONFIG_DEFAULT_IOSCHED="cfq"
+-CONFIG_CLASSIC_RCU=y
+-# CONFIG_FREEZER is not set
+-
+-#
+-# System Type and features
+-#
+-# CONFIG_NO_HZ is not set
+-# CONFIG_HIGH_RES_TIMERS is not set
+-CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
+-CONFIG_SUBARCH_AVR32B=y
+-CONFIG_MMU=y
+-CONFIG_PERFORMANCE_COUNTERS=y
+-CONFIG_PORTMUX_PIO=y
+-CONFIG_PLATFORM_AT32AP=y
+-CONFIG_CPU_AT32AP700X=y
+-CONFIG_CPU_AT32AP7000=y
+-CONFIG_BOARD_ATSTK1000=y
+-# CONFIG_BOARD_ATNGW100 is not set
+-# CONFIG_BOARD_FAVR_32 is not set
+-# CONFIG_BOARD_MIMC200 is not set
+-CONFIG_BOARD_ATSTK1002=y
+-# CONFIG_BOARD_ATSTK1003 is not set
+-# CONFIG_BOARD_ATSTK1004 is not set
+-# CONFIG_BOARD_ATSTK1005 is not set
+-# CONFIG_BOARD_ATSTK1006 is not set
+-# CONFIG_BOARD_ATSTK100X_CUSTOM is not set
+-# CONFIG_BOARD_ATSTK100X_SPI1 is not set
+-# CONFIG_BOARD_ATSTK1000_J2_LED is not set
+-# CONFIG_BOARD_ATSTK1000_J2_LED8 is not set
+-# CONFIG_BOARD_ATSTK1000_J2_RGB is not set
+-CONFIG_BOARD_ATSTK1000_EXTDAC=y
+-CONFIG_LOADER_U_BOOT=y
+-
+-#
+-# Atmel AVR32 AP options
+-#
+-# CONFIG_AP700X_32_BIT_SMC is not set
+-CONFIG_AP700X_16_BIT_SMC=y
+-# CONFIG_AP700X_8_BIT_SMC is not set
+-CONFIG_LOAD_ADDRESS=0x10000000
+-CONFIG_ENTRY_ADDRESS=0x90000000
+-CONFIG_PHYS_OFFSET=0x10000000
+-CONFIG_PREEMPT_NONE=y
+-# CONFIG_PREEMPT_VOLUNTARY is not set
+-# CONFIG_PREEMPT is not set
+-CONFIG_QUICKLIST=y
+-# CONFIG_HAVE_ARCH_BOOTMEM_NODE is not set
+-# CONFIG_ARCH_HAVE_MEMORY_PRESENT is not set
+-# CONFIG_NEED_NODE_MEMMAP_SIZE is not set
+-CONFIG_ARCH_FLATMEM_ENABLE=y
+-# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
+-# CONFIG_ARCH_SPARSEMEM_ENABLE is not set
+-CONFIG_SELECT_MEMORY_MODEL=y
+-CONFIG_FLATMEM_MANUAL=y
+-# CONFIG_DISCONTIGMEM_MANUAL is not set
+-# CONFIG_SPARSEMEM_MANUAL is not set
+-CONFIG_FLATMEM=y
+-CONFIG_FLAT_NODE_MEM_MAP=y
+-CONFIG_PAGEFLAGS_EXTENDED=y
+-CONFIG_SPLIT_PTLOCK_CPUS=4
+-# CONFIG_RESOURCES_64BIT is not set
+-# CONFIG_PHYS_ADDR_T_64BIT is not set
+-CONFIG_ZONE_DMA_FLAG=0
+-CONFIG_NR_QUICK=2
+-CONFIG_VIRT_TO_BUS=y
+-CONFIG_UNEVICTABLE_LRU=y
+-# CONFIG_OWNERSHIP_TRACE is not set
+-# CONFIG_NMI_DEBUGGING is not set
+-# CONFIG_HZ_100 is not set
+-CONFIG_HZ_250=y
+-# CONFIG_HZ_300 is not set
+-# CONFIG_HZ_1000 is not set
+-CONFIG_HZ=250
+-# CONFIG_SCHED_HRTICK is not set
+-CONFIG_CMDLINE=""
+-
+-#
+-# Power management options
+-#
+-# CONFIG_PM is not set
+-CONFIG_ARCH_SUSPEND_POSSIBLE=y
+-
+-#
+-# CPU Frequency scaling
+-#
+-CONFIG_CPU_FREQ=y
+-CONFIG_CPU_FREQ_TABLE=y
+-# CONFIG_CPU_FREQ_DEBUG is not set
+-# CONFIG_CPU_FREQ_STAT is not set
+-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+-# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
+-# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
+-# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+-# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
+-CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
+-# CONFIG_CPU_FREQ_GOV_POWERSAVE is not set
+-CONFIG_CPU_FREQ_GOV_USERSPACE=y
+-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+-# CONFIG_CPU_FREQ_GOV_CONSERVATIVE is not set
+-CONFIG_CPU_FREQ_AT32AP=y
+-
+-#
+-# Bus options
+-#
+-# CONFIG_ARCH_SUPPORTS_MSI is not set
+-# CONFIG_PCCARD is not set
+-
+-#
+-# Executable file formats
+-#
+-CONFIG_BINFMT_ELF=y
+-# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+-# CONFIG_HAVE_AOUT is not set
+-# CONFIG_BINFMT_MISC is not set
+-CONFIG_NET=y
+-
+-#
+-# Networking options
+-#
+-CONFIG_PACKET=y
+-CONFIG_PACKET_MMAP=y
+-CONFIG_UNIX=y
+-CONFIG_XFRM=y
+-CONFIG_XFRM_USER=m
+-# CONFIG_XFRM_SUB_POLICY is not set
+-# CONFIG_XFRM_MIGRATE is not set
+-# CONFIG_XFRM_STATISTICS is not set
+-CONFIG_XFRM_IPCOMP=m
+-CONFIG_NET_KEY=m
+-# CONFIG_NET_KEY_MIGRATE is not set
+-CONFIG_INET=y
+-# CONFIG_IP_MULTICAST is not set
+-# CONFIG_IP_ADVANCED_ROUTER is not set
+-CONFIG_IP_FIB_HASH=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-# CONFIG_IP_PNP_BOOTP is not set
+-# CONFIG_IP_PNP_RARP is not set
+-CONFIG_NET_IPIP=m
+-CONFIG_NET_IPGRE=m
+-# CONFIG_ARPD is not set
+-# CONFIG_SYN_COOKIES is not set
+-CONFIG_INET_AH=m
+-CONFIG_INET_ESP=m
+-# CONFIG_INET_IPCOMP is not set
+-# CONFIG_INET_XFRM_TUNNEL is not set
+-CONFIG_INET_TUNNEL=m
+-CONFIG_INET_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET_XFRM_MODE_TUNNEL=m
+-CONFIG_INET_XFRM_MODE_BEET=m
+-# CONFIG_INET_LRO is not set
+-CONFIG_INET_DIAG=y
+-CONFIG_INET_TCP_DIAG=y
+-# CONFIG_TCP_CONG_ADVANCED is not set
+-CONFIG_TCP_CONG_CUBIC=y
+-CONFIG_DEFAULT_TCP_CONG="cubic"
+-# CONFIG_TCP_MD5SIG is not set
+-CONFIG_IPV6=y
+-# CONFIG_IPV6_PRIVACY is not set
+-# CONFIG_IPV6_ROUTER_PREF is not set
+-# CONFIG_IPV6_OPTIMISTIC_DAD is not set
+-CONFIG_INET6_AH=m
+-CONFIG_INET6_ESP=m
+-CONFIG_INET6_IPCOMP=m
+-# CONFIG_IPV6_MIP6 is not set
+-CONFIG_INET6_XFRM_TUNNEL=m
+-CONFIG_INET6_TUNNEL=m
+-CONFIG_INET6_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET6_XFRM_MODE_TUNNEL=m
+-CONFIG_INET6_XFRM_MODE_BEET=m
+-# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
+-CONFIG_IPV6_SIT=m
+-CONFIG_IPV6_NDISC_NODETYPE=y
+-CONFIG_IPV6_TUNNEL=m
+-# CONFIG_IPV6_MULTIPLE_TABLES is not set
+-# CONFIG_IPV6_MROUTE is not set
+-# CONFIG_NETWORK_SECMARK is not set
+-# CONFIG_NETFILTER is not set
+-# CONFIG_IP_DCCP is not set
+-# CONFIG_IP_SCTP is not set
+-# CONFIG_TIPC is not set
+-# CONFIG_ATM is not set
+-CONFIG_STP=m
+-CONFIG_BRIDGE=m
+-# CONFIG_NET_DSA is not set
+-# CONFIG_VLAN_8021Q is not set
+-# CONFIG_DECNET is not set
+-CONFIG_LLC=m
+-# CONFIG_LLC2 is not set
+-# CONFIG_IPX is not set
+-# CONFIG_ATALK is not set
+-# CONFIG_X25 is not set
+-# CONFIG_LAPB is not set
+-# CONFIG_ECONET is not set
+-# CONFIG_WAN_ROUTER is not set
+-# CONFIG_NET_SCHED is not set
+-
+-#
+-# Network testing
+-#
+-# CONFIG_NET_PKTGEN is not set
+-# CONFIG_NET_TCPPROBE is not set
+-# CONFIG_HAMRADIO is not set
+-# CONFIG_CAN is not set
+-# CONFIG_IRDA is not set
+-# CONFIG_BT is not set
+-# CONFIG_AF_RXRPC is not set
+-# CONFIG_PHONET is not set
+-CONFIG_WIRELESS=y
+-# CONFIG_CFG80211 is not set
+-CONFIG_WIRELESS_OLD_REGULATORY=y
+-# CONFIG_WIRELESS_EXT is not set
+-# CONFIG_MAC80211 is not set
+-# CONFIG_IEEE80211 is not set
+-# CONFIG_RFKILL is not set
+-# CONFIG_NET_9P is not set
+-
+-#
+-# Device Drivers
+-#
+-
+-#
+-# Generic Driver Options
+-#
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_STANDALONE=y
+-# CONFIG_PREVENT_FIRMWARE_BUILD is not set
+-# CONFIG_FW_LOADER is not set
+-# CONFIG_DEBUG_DRIVER is not set
+-# CONFIG_DEBUG_DEVRES is not set
+-# CONFIG_SYS_HYPERVISOR is not set
+-# CONFIG_CONNECTOR is not set
+-CONFIG_MTD=y
+-# CONFIG_MTD_DEBUG is not set
+-# CONFIG_MTD_CONCAT is not set
+-CONFIG_MTD_PARTITIONS=y
+-# CONFIG_MTD_REDBOOT_PARTS is not set
+-CONFIG_MTD_CMDLINE_PARTS=y
+-# CONFIG_MTD_AR7_PARTS is not set
+-
+-#
+-# User Modules And Translation Layers
+-#
+-CONFIG_MTD_CHAR=y
+-CONFIG_MTD_BLKDEVS=y
+-CONFIG_MTD_BLOCK=y
+-# CONFIG_FTL is not set
+-# CONFIG_NFTL is not set
+-# CONFIG_INFTL is not set
+-# CONFIG_RFD_FTL is not set
+-# CONFIG_SSFDC is not set
+-# CONFIG_MTD_OOPS is not set
+-
+-#
+-# RAM/ROM/Flash chip drivers
+-#
+-CONFIG_MTD_CFI=y
+-# CONFIG_MTD_JEDECPROBE is not set
+-CONFIG_MTD_GEN_PROBE=y
+-# CONFIG_MTD_CFI_ADV_OPTIONS is not set
+-CONFIG_MTD_MAP_BANK_WIDTH_1=y
+-CONFIG_MTD_MAP_BANK_WIDTH_2=y
+-CONFIG_MTD_MAP_BANK_WIDTH_4=y
+-# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
+-# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
+-# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
+-CONFIG_MTD_CFI_I1=y
+-CONFIG_MTD_CFI_I2=y
+-# CONFIG_MTD_CFI_I4 is not set
+-# CONFIG_MTD_CFI_I8 is not set
+-# CONFIG_MTD_CFI_INTELEXT is not set
+-CONFIG_MTD_CFI_AMDSTD=y
+-# CONFIG_MTD_CFI_STAA is not set
+-CONFIG_MTD_CFI_UTIL=y
+-# CONFIG_MTD_RAM is not set
+-# CONFIG_MTD_ROM is not set
+-# CONFIG_MTD_ABSENT is not set
+-
+-#
+-# Mapping drivers for chip access
+-#
+-# CONFIG_MTD_COMPLEX_MAPPINGS is not set
+-CONFIG_MTD_PHYSMAP=y
+-CONFIG_MTD_PHYSMAP_START=0x8000000
+-CONFIG_MTD_PHYSMAP_LEN=0x0
+-CONFIG_MTD_PHYSMAP_BANKWIDTH=2
+-# CONFIG_MTD_PLATRAM is not set
+-
+-#
+-# Self-contained MTD device drivers
+-#
+-CONFIG_MTD_DATAFLASH=m
+-# CONFIG_MTD_DATAFLASH_WRITE_VERIFY is not set
+-# CONFIG_MTD_DATAFLASH_OTP is not set
+-CONFIG_MTD_M25P80=m
+-CONFIG_M25PXX_USE_FAST_READ=y
+-# CONFIG_MTD_SLRAM is not set
+-# CONFIG_MTD_PHRAM is not set
+-# CONFIG_MTD_MTDRAM is not set
+-# CONFIG_MTD_BLOCK2MTD is not set
+-
+-#
+-# Disk-On-Chip Device Drivers
+-#
+-# CONFIG_MTD_DOC2000 is not set
+-# CONFIG_MTD_DOC2001 is not set
+-# CONFIG_MTD_DOC2001PLUS is not set
+-# CONFIG_MTD_NAND is not set
+-# CONFIG_MTD_ONENAND is not set
+-
+-#
+-# UBI - Unsorted block images
+-#
+-# CONFIG_MTD_UBI is not set
+-# CONFIG_PARPORT is not set
+-CONFIG_BLK_DEV=y
+-# CONFIG_BLK_DEV_COW_COMMON is not set
+-CONFIG_BLK_DEV_LOOP=m
+-# CONFIG_BLK_DEV_CRYPTOLOOP is not set
+-CONFIG_BLK_DEV_NBD=m
+-CONFIG_BLK_DEV_RAM=m
+-CONFIG_BLK_DEV_RAM_COUNT=16
+-CONFIG_BLK_DEV_RAM_SIZE=4096
+-# CONFIG_BLK_DEV_XIP is not set
+-# CONFIG_CDROM_PKTCDVD is not set
+-# CONFIG_ATA_OVER_ETH is not set
+-CONFIG_MISC_DEVICES=y
+-# CONFIG_ATMEL_PWM is not set
+-# CONFIG_ATMEL_TCLIB is not set
+-# CONFIG_EEPROM_93CX6 is not set
+-# CONFIG_ICS932S401 is not set
+-CONFIG_ATMEL_SSC=m
+-# CONFIG_ENCLOSURE_SERVICES is not set
+-# CONFIG_C2PORT is not set
+-
+-#
+-# SCSI device support
+-#
+-# CONFIG_RAID_ATTRS is not set
+-CONFIG_SCSI=m
+-CONFIG_SCSI_DMA=y
+-# CONFIG_SCSI_TGT is not set
+-# CONFIG_SCSI_NETLINK is not set
+-# CONFIG_SCSI_PROC_FS is not set
+-
+-#
+-# SCSI support type (disk, tape, CD-ROM)
+-#
+-CONFIG_BLK_DEV_SD=m
+-# CONFIG_CHR_DEV_ST is not set
+-# CONFIG_CHR_DEV_OSST is not set
+-CONFIG_BLK_DEV_SR=m
+-# CONFIG_BLK_DEV_SR_VENDOR is not set
+-# CONFIG_CHR_DEV_SG is not set
+-# CONFIG_CHR_DEV_SCH is not set
+-
+-#
+-# Some SCSI devices (e.g. CD jukebox) support multiple LUNs
+-#
+-# CONFIG_SCSI_MULTI_LUN is not set
+-# CONFIG_SCSI_CONSTANTS is not set
+-# CONFIG_SCSI_LOGGING is not set
+-# CONFIG_SCSI_SCAN_ASYNC is not set
+-CONFIG_SCSI_WAIT_SCAN=m
+-
+-#
+-# SCSI Transports
+-#
+-# CONFIG_SCSI_SPI_ATTRS is not set
+-# CONFIG_SCSI_FC_ATTRS is not set
+-# CONFIG_SCSI_ISCSI_ATTRS is not set
+-# CONFIG_SCSI_SAS_LIBSAS is not set
+-# CONFIG_SCSI_SRP_ATTRS is not set
+-# CONFIG_SCSI_LOWLEVEL is not set
+-# CONFIG_SCSI_DH is not set
+-CONFIG_ATA=m
+-# CONFIG_ATA_NONSTANDARD is not set
+-# CONFIG_SATA_PMP is not set
+-# CONFIG_ATA_SFF is not set
+-# CONFIG_MD is not set
+-CONFIG_NETDEVICES=y
+-# CONFIG_DUMMY is not set
+-# CONFIG_BONDING is not set
+-# CONFIG_MACVLAN is not set
+-# CONFIG_EQUALIZER is not set
+-CONFIG_TUN=m
+-# CONFIG_VETH is not set
+-CONFIG_PHYLIB=y
+-
+-#
+-# MII PHY device drivers
+-#
+-# CONFIG_MARVELL_PHY is not set
+-# CONFIG_DAVICOM_PHY is not set
+-# CONFIG_QSEMI_PHY is not set
+-# CONFIG_LXT_PHY is not set
+-# CONFIG_CICADA_PHY is not set
+-# CONFIG_VITESSE_PHY is not set
+-# CONFIG_SMSC_PHY is not set
+-# CONFIG_BROADCOM_PHY is not set
+-# CONFIG_ICPLUS_PHY is not set
+-# CONFIG_REALTEK_PHY is not set
+-# CONFIG_FIXED_PHY is not set
+-# CONFIG_MDIO_BITBANG is not set
+-CONFIG_NET_ETHERNET=y
+-# CONFIG_MII is not set
+-CONFIG_MACB=y
+-# CONFIG_ENC28J60 is not set
+-# CONFIG_IBM_NEW_EMAC_ZMII is not set
+-# CONFIG_IBM_NEW_EMAC_RGMII is not set
+-# CONFIG_IBM_NEW_EMAC_TAH is not set
+-# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
+-# CONFIG_IBM_NEW_EMAC_NO_FLOW_CTRL is not set
+-# CONFIG_IBM_NEW_EMAC_MAL_CLR_ICINTSTAT is not set
+-# CONFIG_IBM_NEW_EMAC_MAL_COMMON_ERR is not set
+-# CONFIG_B44 is not set
+-# CONFIG_NETDEV_1000 is not set
+-# CONFIG_NETDEV_10000 is not set
+-
+-#
+-# Wireless LAN
+-#
+-# CONFIG_WLAN_PRE80211 is not set
+-# CONFIG_WLAN_80211 is not set
+-# CONFIG_IWLWIFI_LEDS is not set
+-# CONFIG_WAN is not set
+-CONFIG_PPP=m
+-# CONFIG_PPP_MULTILINK is not set
+-# CONFIG_PPP_FILTER is not set
+-CONFIG_PPP_ASYNC=m
+-# CONFIG_PPP_SYNC_TTY is not set
+-CONFIG_PPP_DEFLATE=m
+-CONFIG_PPP_BSDCOMP=m
+-# CONFIG_PPP_MPPE is not set
+-# CONFIG_PPPOE is not set
+-# CONFIG_PPPOL2TP is not set
+-# CONFIG_SLIP is not set
+-CONFIG_SLHC=m
+-# CONFIG_NETCONSOLE is not set
+-# CONFIG_NETPOLL is not set
+-# CONFIG_NET_POLL_CONTROLLER is not set
+-# CONFIG_ISDN is not set
+-# CONFIG_PHONE is not set
+-
+-#
+-# Input device support
+-#
+-CONFIG_INPUT=m
+-# CONFIG_INPUT_FF_MEMLESS is not set
+-CONFIG_INPUT_POLLDEV=m
+-
+-#
+-# Userland interfaces
+-#
+-CONFIG_INPUT_MOUSEDEV=m
+-CONFIG_INPUT_MOUSEDEV_PSAUX=y
+-CONFIG_INPUT_MOUSEDEV_SCREEN_X=1024
+-CONFIG_INPUT_MOUSEDEV_SCREEN_Y=768
+-# CONFIG_INPUT_JOYDEV is not set
+-CONFIG_INPUT_EVDEV=m
+-# CONFIG_INPUT_EVBUG is not set
+-
+-#
+-# Input Device Drivers
+-#
+-CONFIG_INPUT_KEYBOARD=y
+-# CONFIG_KEYBOARD_ATKBD is not set
+-# CONFIG_KEYBOARD_SUNKBD is not set
+-# CONFIG_KEYBOARD_LKKBD is not set
+-# CONFIG_KEYBOARD_XTKBD is not set
+-# CONFIG_KEYBOARD_NEWTON is not set
+-# CONFIG_KEYBOARD_STOWAWAY is not set
+-CONFIG_KEYBOARD_GPIO=m
+-CONFIG_INPUT_MOUSE=y
+-# CONFIG_MOUSE_PS2 is not set
+-# CONFIG_MOUSE_SERIAL is not set
+-# CONFIG_MOUSE_APPLETOUCH is not set
+-# CONFIG_MOUSE_BCM5974 is not set
+-# CONFIG_MOUSE_VSXXXAA is not set
+-CONFIG_MOUSE_GPIO=m
+-# CONFIG_INPUT_JOYSTICK is not set
+-# CONFIG_INPUT_TABLET is not set
+-# CONFIG_INPUT_TOUCHSCREEN is not set
+-# CONFIG_INPUT_MISC is not set
+-
+-#
+-# Hardware I/O ports
+-#
+-# CONFIG_SERIO is not set
+-# CONFIG_GAMEPORT is not set
+-
+-#
+-# Character devices
+-#
+-# CONFIG_VT is not set
+-CONFIG_DEVKMEM=y
+-# CONFIG_SERIAL_NONSTANDARD is not set
+-
+-#
+-# Serial drivers
+-#
+-# CONFIG_SERIAL_8250 is not set
+-
+-#
+-# Non-8250 serial port support
+-#
+-CONFIG_SERIAL_ATMEL=y
+-CONFIG_SERIAL_ATMEL_CONSOLE=y
+-CONFIG_SERIAL_ATMEL_PDC=y
+-# CONFIG_SERIAL_ATMEL_TTYAT is not set
+-CONFIG_SERIAL_CORE=y
+-CONFIG_SERIAL_CORE_CONSOLE=y
+-CONFIG_UNIX98_PTYS=y
+-# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_IPMI_HANDLER is not set
+-# CONFIG_HW_RANDOM is not set
+-# CONFIG_R3964 is not set
+-# CONFIG_RAW_DRIVER is not set
+-# CONFIG_TCG_TPM is not set
+-CONFIG_I2C=m
+-CONFIG_I2C_BOARDINFO=y
+-CONFIG_I2C_CHARDEV=m
+-CONFIG_I2C_HELPER_AUTO=y
+-CONFIG_I2C_ALGOBIT=m
+-
+-#
+-# I2C Hardware Bus support
+-#
+-
+-#
+-# I2C system bus drivers (mostly embedded / system-on-chip)
+-#
+-CONFIG_I2C_GPIO=m
+-# CONFIG_I2C_OCORES is not set
+-# CONFIG_I2C_SIMTEC is not set
+-
+-#
+-# External I2C/SMBus adapter drivers
+-#
+-# CONFIG_I2C_PARPORT_LIGHT is not set
+-# CONFIG_I2C_TAOS_EVM is not set
+-
+-#
+-# Other I2C/SMBus bus drivers
+-#
+-# CONFIG_I2C_PCA_PLATFORM is not set
+-# CONFIG_I2C_STUB is not set
+-
+-#
+-# Miscellaneous I2C Chip support
+-#
+-# CONFIG_DS1682 is not set
+-CONFIG_AT24=m
+-# CONFIG_SENSORS_EEPROM is not set
+-# CONFIG_SENSORS_PCF8574 is not set
+-# CONFIG_PCF8575 is not set
+-# CONFIG_SENSORS_PCA9539 is not set
+-# CONFIG_SENSORS_PCF8591 is not set
+-# CONFIG_TPS65010 is not set
+-# CONFIG_SENSORS_MAX6875 is not set
+-# CONFIG_SENSORS_TSL2550 is not set
+-# CONFIG_I2C_DEBUG_CORE is not set
+-# CONFIG_I2C_DEBUG_ALGO is not set
+-# CONFIG_I2C_DEBUG_BUS is not set
+-# CONFIG_I2C_DEBUG_CHIP is not set
+-CONFIG_SPI=y
+-# CONFIG_SPI_DEBUG is not set
+-CONFIG_SPI_MASTER=y
+-
+-#
+-# SPI Master Controller Drivers
+-#
+-CONFIG_SPI_ATMEL_HAVE_PDC=y
+-CONFIG_SPI_ATMEL=y
+-# CONFIG_SPI_BITBANG is not set
+-
+-#
+-# SPI Protocol Masters
+-#
+-# CONFIG_SPI_AT25 is not set
+-CONFIG_SPI_SPIDEV=m
+-# CONFIG_SPI_TLE62X0 is not set
+-CONFIG_ARCH_REQUIRE_GPIOLIB=y
+-CONFIG_GPIOLIB=y
+-# CONFIG_DEBUG_GPIO is not set
+-# CONFIG_GPIO_SYSFS is not set
+-
+-#
+-# Memory mapped GPIO expanders:
+-#
+-
+-#
+-# I2C GPIO expanders:
+-#
+-# CONFIG_GPIO_MAX732X is not set
+-# CONFIG_GPIO_PCA953X is not set
+-# CONFIG_GPIO_PCF857X is not set
+-
+-#
+-# PCI GPIO expanders:
+-#
+-
+-#
+-# SPI GPIO expanders:
+-#
+-# CONFIG_GPIO_MAX7301 is not set
+-# CONFIG_GPIO_MCP23S08 is not set
+-# CONFIG_W1 is not set
+-# CONFIG_POWER_SUPPLY is not set
+-# CONFIG_HWMON is not set
+-# CONFIG_THERMAL is not set
+-# CONFIG_THERMAL_HWMON is not set
+-CONFIG_WATCHDOG=y
+-# CONFIG_WATCHDOG_NOWAYOUT is not set
+-
+-#
+-# Watchdog Device Drivers
+-#
+-# CONFIG_SOFT_WATCHDOG is not set
+-# CONFIG_AT32_WDT is not set
+-CONFIG_SSB_POSSIBLE=y
+-
+-#
+-# Sonics Silicon Backplane
+-#
+-# CONFIG_SSB is not set
+-
+-#
+-# Multifunction device drivers
+-#
+-# CONFIG_MFD_CORE is not set
+-# CONFIG_MFD_SM501 is not set
+-# CONFIG_HTC_PASIC3 is not set
+-# CONFIG_MFD_TMIO is not set
+-# CONFIG_MFD_WM8400 is not set
+-# CONFIG_MFD_WM8350_I2C is not set
+-# CONFIG_REGULATOR is not set
+-
+-#
+-# Multimedia devices
+-#
+-
+-#
+-# Multimedia core support
+-#
+-# CONFIG_VIDEO_DEV is not set
+-# CONFIG_DVB_CORE is not set
+-# CONFIG_VIDEO_MEDIA is not set
+-
+-#
+-# Multimedia drivers
+-#
+-# CONFIG_DAB is not set
+-
+-#
+-# Graphics support
+-#
+-# CONFIG_VGASTATE is not set
+-# CONFIG_VIDEO_OUTPUT_CONTROL is not set
+-CONFIG_FB=y
+-# CONFIG_FIRMWARE_EDID is not set
+-# CONFIG_FB_DDC is not set
+-# CONFIG_FB_BOOT_VESA_SUPPORT is not set
+-CONFIG_FB_CFB_FILLRECT=y
+-CONFIG_FB_CFB_COPYAREA=y
+-CONFIG_FB_CFB_IMAGEBLIT=y
+-# CONFIG_FB_CFB_REV_PIXELS_IN_BYTE is not set
+-# CONFIG_FB_SYS_FILLRECT is not set
+-# CONFIG_FB_SYS_COPYAREA is not set
+-# CONFIG_FB_SYS_IMAGEBLIT is not set
+-# CONFIG_FB_FOREIGN_ENDIAN is not set
+-# CONFIG_FB_SYS_FOPS is not set
+-# CONFIG_FB_SVGALIB is not set
+-# CONFIG_FB_MACMODES is not set
+-# CONFIG_FB_BACKLIGHT is not set
+-# CONFIG_FB_MODE_HELPERS is not set
+-# CONFIG_FB_TILEBLITTING is not set
+-
+-#
+-# Frame buffer hardware drivers
+-#
+-# CONFIG_FB_S1D13XXX is not set
+-CONFIG_FB_ATMEL=y
+-# CONFIG_FB_ATMEL_MPOP is not set
+-# CONFIG_FB_VIRTUAL is not set
+-# CONFIG_FB_METRONOME is not set
+-# CONFIG_FB_MB862XX is not set
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-CONFIG_LCD_CLASS_DEVICE=y
+-CONFIG_LCD_LTV350QV=y
+-# CONFIG_LCD_ILI9320 is not set
+-# CONFIG_LCD_TDO24M is not set
+-# CONFIG_LCD_VGG2432A4 is not set
+-# CONFIG_LCD_PLATFORM is not set
+-# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+-
+-#
+-# Display device support
+-#
+-# CONFIG_DISPLAY_SUPPORT is not set
+-# CONFIG_LOGO is not set
+-CONFIG_SOUND=m
+-CONFIG_SOUND_OSS_CORE=y
+-CONFIG_SND=m
+-CONFIG_SND_TIMER=m
+-CONFIG_SND_PCM=m
+-# CONFIG_SND_SEQUENCER is not set
+-CONFIG_SND_OSSEMUL=y
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-CONFIG_SND_PCM_OSS_PLUGINS=y
+-# CONFIG_SND_DYNAMIC_MINORS is not set
+-# CONFIG_SND_SUPPORT_OLD_API is not set
+-# CONFIG_SND_VERBOSE_PROCFS is not set
+-# CONFIG_SND_VERBOSE_PRINTK is not set
+-# CONFIG_SND_DEBUG is not set
+-CONFIG_SND_DRIVERS=y
+-# CONFIG_SND_DUMMY is not set
+-# CONFIG_SND_MTPAV is not set
+-# CONFIG_SND_SERIAL_U16550 is not set
+-# CONFIG_SND_MPU401 is not set
+-CONFIG_SND_SPI=y
+-CONFIG_SND_AT73C213=m
+-CONFIG_SND_AT73C213_TARGET_BITRATE=48000
+-# CONFIG_SND_SOC is not set
+-# CONFIG_SOUND_PRIME is not set
+-# CONFIG_HID_SUPPORT is not set
+-CONFIG_USB_SUPPORT=y
+-CONFIG_USB_ARCH_HAS_HCD=y
+-# CONFIG_USB_ARCH_HAS_OHCI is not set
+-CONFIG_USB_ARCH_HAS_EHCI=y
+-# CONFIG_USB is not set
+-# CONFIG_USB_OTG_WHITELIST is not set
+-CONFIG_USB_OTG_BLACKLIST_HUB=y
+-# CONFIG_USB_MUSB_HDRC is not set
+-# CONFIG_USB_GADGET_MUSB_HDRC is not set
+-
+-#
+-# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed;
+-#
+-CONFIG_USB_GADGET=y
+-# CONFIG_USB_GADGET_DEBUG is not set
+-# CONFIG_USB_GADGET_DEBUG_FILES is not set
+-# CONFIG_USB_GADGET_DEBUG_FS is not set
+-CONFIG_USB_GADGET_VBUS_DRAW=2
+-CONFIG_USB_GADGET_SELECTED=y
+-# CONFIG_USB_GADGET_AT91 is not set
+-CONFIG_USB_GADGET_ATMEL_USBA=y
+-CONFIG_USB_ATMEL_USBA=y
+-# CONFIG_USB_GADGET_FSL_USB2 is not set
+-# CONFIG_USB_GADGET_LH7A40X is not set
+-# CONFIG_USB_GADGET_OMAP is not set
+-# CONFIG_USB_GADGET_PXA25X is not set
+-# CONFIG_USB_GADGET_PXA27X is not set
+-# CONFIG_USB_GADGET_S3C2410 is not set
+-# CONFIG_USB_GADGET_M66592 is not set
+-# CONFIG_USB_GADGET_AMD5536UDC is not set
+-# CONFIG_USB_GADGET_FSL_QE is not set
+-# CONFIG_USB_GADGET_NET2280 is not set
+-# CONFIG_USB_GADGET_GOKU is not set
+-# CONFIG_USB_GADGET_DUMMY_HCD is not set
+-CONFIG_USB_GADGET_DUALSPEED=y
+-CONFIG_USB_ZERO=m
+-CONFIG_USB_ETH=m
+-CONFIG_USB_ETH_RNDIS=y
+-CONFIG_USB_GADGETFS=m
+-CONFIG_USB_FILE_STORAGE=m
+-# CONFIG_USB_FILE_STORAGE_TEST is not set
+-CONFIG_USB_G_SERIAL=m
+-# CONFIG_USB_MIDI_GADGET is not set
+-# CONFIG_USB_G_PRINTER is not set
+-CONFIG_USB_CDC_COMPOSITE=m
+-CONFIG_MMC=y
+-# CONFIG_MMC_DEBUG is not set
+-# CONFIG_MMC_UNSAFE_RESUME is not set
+-
+-#
+-# MMC/SD/SDIO Card Drivers
+-#
+-CONFIG_MMC_BLOCK=y
+-CONFIG_MMC_BLOCK_BOUNCE=y
+-# CONFIG_SDIO_UART is not set
+-# CONFIG_MMC_TEST is not set
+-
+-#
+-# MMC/SD/SDIO Host Controller Drivers
+-#
+-CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_ATMELMCI=y
+-# CONFIG_MMC_ATMELMCI_DMA is not set
+-CONFIG_MMC_SPI=m
+-# CONFIG_MEMSTICK is not set
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=m
+-
+-#
+-# LED drivers
+-#
+-# CONFIG_LEDS_PCA9532 is not set
+-CONFIG_LEDS_GPIO=m
+-# CONFIG_LEDS_PCA955X is not set
+-
+-#
+-# LED Triggers
+-#
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=m
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=m
+-# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
+-CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
+-# CONFIG_ACCESSIBILITY is not set
+-CONFIG_RTC_LIB=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_HCTOSYS=y
+-CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
+-# CONFIG_RTC_DEBUG is not set
+-
+-#
+-# RTC interfaces
+-#
+-CONFIG_RTC_INTF_SYSFS=y
+-CONFIG_RTC_INTF_PROC=y
+-CONFIG_RTC_INTF_DEV=y
+-# CONFIG_RTC_INTF_DEV_UIE_EMUL is not set
+-# CONFIG_RTC_DRV_TEST is not set
+-
+-#
+-# I2C RTC drivers
+-#
+-# CONFIG_RTC_DRV_DS1307 is not set
+-# CONFIG_RTC_DRV_DS1374 is not set
+-# CONFIG_RTC_DRV_DS1672 is not set
+-# CONFIG_RTC_DRV_MAX6900 is not set
+-# CONFIG_RTC_DRV_RS5C372 is not set
+-# CONFIG_RTC_DRV_ISL1208 is not set
+-# CONFIG_RTC_DRV_X1205 is not set
+-# CONFIG_RTC_DRV_PCF8563 is not set
+-# CONFIG_RTC_DRV_PCF8583 is not set
+-# CONFIG_RTC_DRV_M41T80 is not set
+-# CONFIG_RTC_DRV_S35390A is not set
+-# CONFIG_RTC_DRV_FM3130 is not set
+-# CONFIG_RTC_DRV_RX8581 is not set
+-
+-#
+-# SPI RTC drivers
+-#
+-# CONFIG_RTC_DRV_M41T94 is not set
+-# CONFIG_RTC_DRV_DS1305 is not set
+-# CONFIG_RTC_DRV_DS1390 is not set
+-# CONFIG_RTC_DRV_MAX6902 is not set
+-# CONFIG_RTC_DRV_R9701 is not set
+-# CONFIG_RTC_DRV_RS5C348 is not set
+-# CONFIG_RTC_DRV_DS3234 is not set
+-
+-#
+-# Platform RTC drivers
+-#
+-# CONFIG_RTC_DRV_DS1286 is not set
+-# CONFIG_RTC_DRV_DS1511 is not set
+-# CONFIG_RTC_DRV_DS1553 is not set
+-# CONFIG_RTC_DRV_DS1742 is not set
+-# CONFIG_RTC_DRV_STK17TA8 is not set
+-# CONFIG_RTC_DRV_M48T86 is not set
+-# CONFIG_RTC_DRV_M48T35 is not set
+-# CONFIG_RTC_DRV_M48T59 is not set
+-# CONFIG_RTC_DRV_BQ4802 is not set
+-# CONFIG_RTC_DRV_V3020 is not set
+-
+-#
+-# on-CPU RTC drivers
+-#
+-CONFIG_RTC_DRV_AT32AP700X=y
+-# CONFIG_RTC_DRV_AVR32_AST is not set
+-CONFIG_DMADEVICES=y
+-
+-#
+-# DMA Devices
+-#
+-CONFIG_ATMEL_PDCA=y
+-CONFIG_DW_DMAC=y
+-CONFIG_DMA_ENGINE=y
+-
+-#
+-# DMA Clients
+-#
+-# CONFIG_NET_DMA is not set
+-# CONFIG_DMATEST is not set
+-# CONFIG_UIO is not set
+-# CONFIG_STAGING is not set
+-
+-#
+-# File systems
+-#
+-CONFIG_EXT2_FS=y
+-# CONFIG_EXT2_FS_XATTR is not set
+-# CONFIG_EXT2_FS_XIP is not set
+-CONFIG_EXT3_FS=m
+-# CONFIG_EXT3_FS_XATTR is not set
+-# CONFIG_EXT4_FS is not set
+-CONFIG_JBD=m
+-# CONFIG_JBD_DEBUG is not set
+-# CONFIG_REISERFS_FS is not set
+-# CONFIG_JFS_FS is not set
+-# CONFIG_FS_POSIX_ACL is not set
+-CONFIG_FILE_LOCKING=y
+-# CONFIG_XFS_FS is not set
+-# CONFIG_OCFS2_FS is not set
+-# CONFIG_DNOTIFY is not set
+-CONFIG_INOTIFY=y
+-CONFIG_INOTIFY_USER=y
+-# CONFIG_QUOTA is not set
+-# CONFIG_AUTOFS_FS is not set
+-# CONFIG_AUTOFS4_FS is not set
+-CONFIG_FUSE_FS=m
+-
+-#
+-# CD-ROM/DVD Filesystems
+-#
+-# CONFIG_ISO9660_FS is not set
+-# CONFIG_UDF_FS is not set
+-
+-#
+-# DOS/FAT/NT Filesystems
+-#
+-CONFIG_FAT_FS=m
+-CONFIG_MSDOS_FS=m
+-CONFIG_VFAT_FS=m
+-CONFIG_FAT_DEFAULT_CODEPAGE=437
+-CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
+-# CONFIG_NTFS_FS is not set
+-
+-#
+-# Pseudo filesystems
+-#
+-CONFIG_PROC_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_PROC_SYSCTL=y
+-CONFIG_PROC_PAGE_MONITOR=y
+-CONFIG_SYSFS=y
+-CONFIG_TMPFS=y
+-# CONFIG_TMPFS_POSIX_ACL is not set
+-# CONFIG_HUGETLB_PAGE is not set
+-# CONFIG_CONFIGFS_FS is not set
+-
+-#
+-# Miscellaneous filesystems
+-#
+-# CONFIG_ADFS_FS is not set
+-# CONFIG_AFFS_FS is not set
+-# CONFIG_HFS_FS is not set
+-# CONFIG_HFSPLUS_FS is not set
+-# CONFIG_BEFS_FS is not set
+-# CONFIG_BFS_FS is not set
+-# CONFIG_EFS_FS is not set
+-CONFIG_JFFS2_FS=y
+-CONFIG_JFFS2_FS_DEBUG=0
+-# CONFIG_JFFS2_FS_WRITEBUFFER is not set
+-# CONFIG_JFFS2_SUMMARY is not set
+-# CONFIG_JFFS2_FS_XATTR is not set
+-# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
+-CONFIG_JFFS2_ZLIB=y
+-# CONFIG_JFFS2_LZO is not set
+-CONFIG_JFFS2_RTIME=y
+-# CONFIG_JFFS2_RUBIN is not set
+-# CONFIG_CRAMFS is not set
+-# CONFIG_VXFS_FS is not set
+-CONFIG_MINIX_FS=m
+-# CONFIG_OMFS_FS is not set
+-# CONFIG_HPFS_FS is not set
+-# CONFIG_QNX4FS_FS is not set
+-# CONFIG_ROMFS_FS is not set
+-# CONFIG_SYSV_FS is not set
+-# CONFIG_UFS_FS is not set
+-CONFIG_NETWORK_FILESYSTEMS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V3=y
+-# CONFIG_NFS_V3_ACL is not set
+-# CONFIG_NFS_V4 is not set
+-CONFIG_ROOT_NFS=y
+-# CONFIG_NFSD is not set
+-CONFIG_LOCKD=y
+-CONFIG_LOCKD_V4=y
+-CONFIG_NFS_COMMON=y
+-CONFIG_SUNRPC=y
+-# CONFIG_SUNRPC_REGISTER_V4 is not set
+-# CONFIG_RPCSEC_GSS_KRB5 is not set
+-# CONFIG_RPCSEC_GSS_SPKM3 is not set
+-# CONFIG_SMB_FS is not set
+-# CONFIG_CIFS is not set
+-# CONFIG_NCP_FS is not set
+-# CONFIG_CODA_FS is not set
+-# CONFIG_AFS_FS is not set
+-
+-#
+-# Partition Types
+-#
+-# CONFIG_PARTITION_ADVANCED is not set
+-CONFIG_MSDOS_PARTITION=y
+-CONFIG_NLS=m
+-CONFIG_NLS_DEFAULT="iso8859-1"
+-CONFIG_NLS_CODEPAGE_437=m
+-# CONFIG_NLS_CODEPAGE_737 is not set
+-# CONFIG_NLS_CODEPAGE_775 is not set
+-# CONFIG_NLS_CODEPAGE_850 is not set
+-# CONFIG_NLS_CODEPAGE_852 is not set
+-# CONFIG_NLS_CODEPAGE_855 is not set
+-# CONFIG_NLS_CODEPAGE_857 is not set
+-# CONFIG_NLS_CODEPAGE_860 is not set
+-# CONFIG_NLS_CODEPAGE_861 is not set
+-# CONFIG_NLS_CODEPAGE_862 is not set
+-# CONFIG_NLS_CODEPAGE_863 is not set
+-# CONFIG_NLS_CODEPAGE_864 is not set
+-# CONFIG_NLS_CODEPAGE_865 is not set
+-# CONFIG_NLS_CODEPAGE_866 is not set
+-# CONFIG_NLS_CODEPAGE_869 is not set
+-# CONFIG_NLS_CODEPAGE_936 is not set
+-# CONFIG_NLS_CODEPAGE_950 is not set
+-# CONFIG_NLS_CODEPAGE_932 is not set
+-# CONFIG_NLS_CODEPAGE_949 is not set
+-# CONFIG_NLS_CODEPAGE_874 is not set
+-# CONFIG_NLS_ISO8859_8 is not set
+-# CONFIG_NLS_CODEPAGE_1250 is not set
+-# CONFIG_NLS_CODEPAGE_1251 is not set
+-# CONFIG_NLS_ASCII is not set
+-CONFIG_NLS_ISO8859_1=m
+-# CONFIG_NLS_ISO8859_2 is not set
+-# CONFIG_NLS_ISO8859_3 is not set
+-# CONFIG_NLS_ISO8859_4 is not set
+-# CONFIG_NLS_ISO8859_5 is not set
+-# CONFIG_NLS_ISO8859_6 is not set
+-# CONFIG_NLS_ISO8859_7 is not set
+-# CONFIG_NLS_ISO8859_9 is not set
+-# CONFIG_NLS_ISO8859_13 is not set
+-# CONFIG_NLS_ISO8859_14 is not set
+-# CONFIG_NLS_ISO8859_15 is not set
+-# CONFIG_NLS_KOI8_R is not set
+-# CONFIG_NLS_KOI8_U is not set
+-CONFIG_NLS_UTF8=m
+-# CONFIG_DLM is not set
+-
+-#
+-# Kernel hacking
+-#
+-# CONFIG_PRINTK_TIME is not set
+-CONFIG_ENABLE_WARN_DEPRECATED=y
+-CONFIG_ENABLE_MUST_CHECK=y
+-CONFIG_FRAME_WARN=1024
+-CONFIG_MAGIC_SYSRQ=y
+-# CONFIG_UNUSED_SYMBOLS is not set
+-CONFIG_DEBUG_FS=y
+-# CONFIG_HEADERS_CHECK is not set
+-CONFIG_DEBUG_KERNEL=y
+-# CONFIG_DEBUG_SHIRQ is not set
+-CONFIG_DETECT_SOFTLOCKUP=y
+-# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+-CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
+-CONFIG_SCHED_DEBUG=y
+-# CONFIG_SCHEDSTATS is not set
+-# CONFIG_TIMER_STATS is not set
+-# CONFIG_DEBUG_OBJECTS is not set
+-# CONFIG_SLUB_DEBUG_ON is not set
+-# CONFIG_SLUB_STATS is not set
+-# CONFIG_DEBUG_RT_MUTEXES is not set
+-# CONFIG_RT_MUTEX_TESTER is not set
+-# CONFIG_DEBUG_SPINLOCK is not set
+-# CONFIG_DEBUG_MUTEXES is not set
+-# CONFIG_DEBUG_LOCK_ALLOC is not set
+-# CONFIG_PROVE_LOCKING is not set
+-# CONFIG_LOCK_STAT is not set
+-# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
+-# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
+-# CONFIG_DEBUG_KOBJECT is not set
+-CONFIG_DEBUG_BUGVERBOSE=y
+-# CONFIG_DEBUG_INFO is not set
+-# CONFIG_DEBUG_VM is not set
+-# CONFIG_DEBUG_WRITECOUNT is not set
+-# CONFIG_DEBUG_MEMORY_INIT is not set
+-# CONFIG_DEBUG_LIST is not set
+-# CONFIG_DEBUG_SG is not set
 -CONFIG_FRAME_POINTER=y
 -# CONFIG_BOOT_PRINTK_DELAY is not set
 -# CONFIG_RCU_TORTURE_TEST is not set
@@ -12089,9 +3603,6 @@ index 4c0931f..0000000
 -# CONFIG_DEBUG_BLOCK_EXT_DEVT is not set
 -# CONFIG_LKDTM is not set
 -# CONFIG_FAULT_INJECTION is not set
--CONFIG_NOP_TRACER=y
--CONFIG_RING_BUFFER=y
--CONFIG_TRACING=y
 -
 -#
 -# Tracers
@@ -12100,8 +3611,6 @@ index 4c0931f..0000000
 -# CONFIG_SCHED_TRACER is not set
 -# CONFIG_CONTEXT_SWITCH_TRACER is not set
 -# CONFIG_BOOT_TRACER is not set
--# CONFIG_TRACE_BRANCH_PROFILING is not set
--# CONFIG_FTRACE_STARTUP_TEST is not set
 -# CONFIG_DYNAMIC_PRINTK_DEBUG is not set
 -# CONFIG_SAMPLES is not set
 -
@@ -12118,21 +3627,21 @@ index 4c0931f..0000000
 -# Crypto core or helper
 -#
 -# CONFIG_CRYPTO_FIPS is not set
--CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_ALGAPI2=y
--CONFIG_CRYPTO_AEAD=y
--CONFIG_CRYPTO_AEAD2=y
--CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_BLKCIPHER2=y
--CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_HASH2=y
--CONFIG_CRYPTO_RNG2=y
--CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_MANAGER2=y
+-CONFIG_CRYPTO_ALGAPI=m
+-CONFIG_CRYPTO_ALGAPI2=m
+-CONFIG_CRYPTO_AEAD=m
+-CONFIG_CRYPTO_AEAD2=m
+-CONFIG_CRYPTO_BLKCIPHER=m
+-CONFIG_CRYPTO_BLKCIPHER2=m
+-CONFIG_CRYPTO_HASH=m
+-CONFIG_CRYPTO_HASH2=m
+-CONFIG_CRYPTO_RNG2=m
+-CONFIG_CRYPTO_MANAGER=m
+-CONFIG_CRYPTO_MANAGER2=m
 -# CONFIG_CRYPTO_GF128MUL is not set
 -# CONFIG_CRYPTO_NULL is not set
 -# CONFIG_CRYPTO_CRYPTD is not set
--CONFIG_CRYPTO_AUTHENC=y
+-CONFIG_CRYPTO_AUTHENC=m
 -# CONFIG_CRYPTO_TEST is not set
 -
 -#
@@ -12145,18 +3654,18 @@ index 4c0931f..0000000
 -#
 -# Block modes
 -#
--CONFIG_CRYPTO_CBC=y
+-CONFIG_CRYPTO_CBC=m
 -# CONFIG_CRYPTO_CTR is not set
 -# CONFIG_CRYPTO_CTS is not set
--CONFIG_CRYPTO_ECB=m
+-# CONFIG_CRYPTO_ECB is not set
 -# CONFIG_CRYPTO_LRW is not set
--CONFIG_CRYPTO_PCBC=m
+-# CONFIG_CRYPTO_PCBC is not set
 -# CONFIG_CRYPTO_XTS is not set
 -
 -#
 -# Hash modes
 -#
--CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_HMAC=m
 -# CONFIG_CRYPTO_XCBC is not set
 -
 -#
@@ -12164,13 +3673,13 @@ index 4c0931f..0000000
 -#
 -# CONFIG_CRYPTO_CRC32C is not set
 -# CONFIG_CRYPTO_MD4 is not set
--CONFIG_CRYPTO_MD5=y
+-CONFIG_CRYPTO_MD5=m
 -# CONFIG_CRYPTO_MICHAEL_MIC is not set
 -# CONFIG_CRYPTO_RMD128 is not set
 -# CONFIG_CRYPTO_RMD160 is not set
 -# CONFIG_CRYPTO_RMD256 is not set
 -# CONFIG_CRYPTO_RMD320 is not set
--CONFIG_CRYPTO_SHA1=y
+-CONFIG_CRYPTO_SHA1=m
 -# CONFIG_CRYPTO_SHA256 is not set
 -# CONFIG_CRYPTO_SHA512 is not set
 -# CONFIG_CRYPTO_TGR192 is not set
@@ -12181,12 +3690,12 @@ index 4c0931f..0000000
 -#
 -# CONFIG_CRYPTO_AES is not set
 -# CONFIG_CRYPTO_ANUBIS is not set
--CONFIG_CRYPTO_ARC4=m
+-# CONFIG_CRYPTO_ARC4 is not set
 -# CONFIG_CRYPTO_BLOWFISH is not set
 -# CONFIG_CRYPTO_CAMELLIA is not set
 -# CONFIG_CRYPTO_CAST5 is not set
 -# CONFIG_CRYPTO_CAST6 is not set
--CONFIG_CRYPTO_DES=y
+-CONFIG_CRYPTO_DES=m
 -# CONFIG_CRYPTO_FCRYPT is not set
 -# CONFIG_CRYPTO_KHAZAD is not set
 -# CONFIG_CRYPTO_SALSA20 is not set
@@ -12198,20 +3707,19 @@ index 4c0931f..0000000
 -#
 -# Compression
 -#
--CONFIG_CRYPTO_DEFLATE=y
+-CONFIG_CRYPTO_DEFLATE=m
 -# CONFIG_CRYPTO_LZO is not set
 -
 -#
 -# Random Number Generation
 -#
 -# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_HW=y
+-# CONFIG_CRYPTO_HW is not set
 -
 -#
 -# Library routines
 -#
 -CONFIG_BITREVERSE=y
--CONFIG_GENERIC_FIND_LAST_BIT=y
 -CONFIG_CRC_CCITT=m
 -# CONFIG_CRC16 is not set
 -# CONFIG_CRC_T10DIF is not set
@@ -12222,18 +3730,787 @@ index 4c0931f..0000000
 -CONFIG_ZLIB_INFLATE=y
 -CONFIG_ZLIB_DEFLATE=y
 -CONFIG_GENERIC_ALLOCATOR=y
--CONFIG_TEXTSEARCH=y
--CONFIG_TEXTSEARCH_KMP=m
--CONFIG_TEXTSEARCH_BM=m
--CONFIG_TEXTSEARCH_FSM=m
 -CONFIG_PLIST=y
 -CONFIG_HAS_IOMEM=y
 -CONFIG_HAS_IOPORT=y
 -CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atngw100/device_table.txt b/target/device/Atmel/atngw100/device_table.txt
+diff --git a/target/device/Atmel/atstk100x/busybox-1.9.1.config b/target/device/Atmel/atstk100x/busybox-1.9.1.config
+deleted file mode 100644
+index 7dd45cd..0000000
+--- a/target/device/Atmel/atstk100x/busybox-1.9.1.config
++++ /dev/null
+@@ -1,767 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Busybox version: 1.8.2
+-# Sun Dec 23 12:11:59 2007
+-#
+-CONFIG_HAVE_DOT_CONFIG=y
+-
+-#
+-# Busybox Settings
+-#
+-
+-#
+-# General Configuration
+-#
+-# CONFIG_NITPICK is not set
+-# CONFIG_DESKTOP is not set
+-# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
+-# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
+-# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
+-CONFIG_SHOW_USAGE=y
+-CONFIG_FEATURE_VERBOSE_USAGE=y
+-# CONFIG_FEATURE_COMPRESS_USAGE is not set
+-# CONFIG_FEATURE_INSTALLER is not set
+-# CONFIG_LOCALE_SUPPORT is not set
+-CONFIG_GETOPT_LONG=y
+-CONFIG_FEATURE_DEVPTS=y
+-# CONFIG_FEATURE_CLEAN_UP is not set
+-# CONFIG_FEATURE_PIDFILE is not set
+-CONFIG_FEATURE_SUID=y
+-# CONFIG_FEATURE_SUID_CONFIG is not set
+-# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
+-# CONFIG_SELINUX is not set
+-# CONFIG_FEATURE_PREFER_APPLETS is not set
+-CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
+-CONFIG_FEATURE_SYSLOG=y
+-CONFIG_FEATURE_HAVE_RPC=y
+-
+-#
+-# Build Options
+-#
+-CONFIG_STATIC=y
+-CONFIG_BUILD_LIBBUSYBOX=y
+-# CONFIG_FEATURE_INDIVIDUAL is not set
+-# CONFIG_FEATURE_SHARED_BUSYBOX is not set
+-CONFIG_LFS=y
+-
+-#
+-# Debugging Options
+-#
+-# CONFIG_DEBUG is not set
+-# CONFIG_WERROR is not set
+-CONFIG_NO_DEBUG_LIB=y
+-# CONFIG_DMALLOC is not set
+-# CONFIG_EFENCE is not set
+-CONFIG_INCLUDE_SUSv2=y
+-
+-#
+-# Installation Options
+-#
+-# CONFIG_INSTALL_NO_USR is not set
+-CONFIG_INSTALL_APPLET_SYMLINKS=y
+-# CONFIG_INSTALL_APPLET_HARDLINKS is not set
+-# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
+-# CONFIG_INSTALL_APPLET_DONT is not set
+-# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
+-# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
+-# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
+-CONFIG_PREFIX="/usr/avr32-linux"
+-
+-#
+-# Busybox Library Tuning
+-#
+-CONFIG_PASSWORD_MINLEN=6
+-CONFIG_MD5_SIZE_VS_SPEED=2
+-CONFIG_FEATURE_FAST_TOP=y
+-# CONFIG_FEATURE_ETC_NETWORKS is not set
+-CONFIG_FEATURE_EDITING=y
+-CONFIG_FEATURE_EDITING_MAX_LEN=1024
+-CONFIG_FEATURE_EDITING_FANCY_KEYS=y
+-# CONFIG_FEATURE_EDITING_VI is not set
+-CONFIG_FEATURE_EDITING_HISTORY=100
+-CONFIG_FEATURE_EDITING_SAVEHISTORY=y
+-CONFIG_FEATURE_TAB_COMPLETION=y
+-# CONFIG_FEATURE_USERNAME_COMPLETION is not set
+-CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
+-CONFIG_MONOTONIC_SYSCALL=y
+-CONFIG_IOCTL_HEX2STR_ERROR=y
+-
+-#
+-# Applets
+-#
+-
+-#
+-# Archival Utilities
+-#
+-CONFIG_AR=y
+-CONFIG_FEATURE_AR_LONG_FILENAMES=y
+-CONFIG_BUNZIP2=y
+-CONFIG_BZIP2=y
+-CONFIG_CPIO=y
+-CONFIG_DPKG=y
+-CONFIG_DPKG_DEB=y
+-# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
+-CONFIG_GUNZIP=y
+-CONFIG_FEATURE_GUNZIP_UNCOMPRESS=y
+-CONFIG_GZIP=y
+-CONFIG_RPM2CPIO=y
+-CONFIG_RPM=y
+-CONFIG_FEATURE_RPM_BZ2=y
+-CONFIG_TAR=y
+-CONFIG_FEATURE_TAR_CREATE=y
+-CONFIG_FEATURE_TAR_BZIP2=y
+-CONFIG_FEATURE_TAR_LZMA=y
+-CONFIG_FEATURE_TAR_FROM=y
+-CONFIG_FEATURE_TAR_GZIP=y
+-CONFIG_FEATURE_TAR_COMPRESS=y
+-CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY=y
+-CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY=y
+-CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
+-CONFIG_FEATURE_TAR_LONG_OPTIONS=y
+-CONFIG_UNCOMPRESS=y
+-CONFIG_UNLZMA=y
+-CONFIG_FEATURE_LZMA_FAST=y
+-CONFIG_UNZIP=y
+-
+-#
+-# Common options for cpio and tar
+-#
+-# CONFIG_FEATURE_UNARCHIVE_TAPE is not set
+-
+-#
+-# Common options for dpkg and dpkg_deb
+-#
+-CONFIG_FEATURE_DEB_TAR_GZ=y
+-CONFIG_FEATURE_DEB_TAR_BZ2=y
+-CONFIG_FEATURE_DEB_TAR_LZMA=y
+-
+-#
+-# Coreutils
+-#
+-CONFIG_BASENAME=y
+-CONFIG_CAL=y
+-CONFIG_CAT=y
+-CONFIG_CATV=y
+-CONFIG_CHGRP=y
+-CONFIG_CHMOD=y
+-CONFIG_CHOWN=y
+-CONFIG_CHROOT=y
+-CONFIG_CKSUM=y
+-CONFIG_COMM=y
+-CONFIG_CP=y
+-CONFIG_CUT=y
+-CONFIG_DATE=y
+-CONFIG_FEATURE_DATE_ISOFMT=y
+-CONFIG_DD=y
+-CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
+-CONFIG_FEATURE_DD_IBS_OBS=y
+-CONFIG_DF=y
+-CONFIG_DIRNAME=y
+-CONFIG_DOS2UNIX=y
+-CONFIG_UNIX2DOS=y
+-CONFIG_DU=y
+-CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
+-CONFIG_ECHO=y
+-CONFIG_FEATURE_FANCY_ECHO=y
+-CONFIG_ENV=y
+-CONFIG_FEATURE_ENV_LONG_OPTIONS=y
+-CONFIG_EXPAND=y
+-CONFIG_FEATURE_EXPAND_LONG_OPTIONS=y
+-CONFIG_EXPR=y
+-CONFIG_EXPR_MATH_SUPPORT_64=y
+-CONFIG_FALSE=y
+-CONFIG_FOLD=y
+-CONFIG_HEAD=y
+-CONFIG_FEATURE_FANCY_HEAD=y
+-CONFIG_HOSTID=y
+-CONFIG_ID=y
+-CONFIG_INSTALL=y
+-CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
+-CONFIG_LENGTH=y
+-CONFIG_LN=y
+-CONFIG_LOGNAME=y
+-CONFIG_LS=y
+-CONFIG_FEATURE_LS_FILETYPES=y
+-CONFIG_FEATURE_LS_FOLLOWLINKS=y
+-CONFIG_FEATURE_LS_RECURSIVE=y
+-CONFIG_FEATURE_LS_SORTFILES=y
+-CONFIG_FEATURE_LS_TIMESTAMPS=y
+-CONFIG_FEATURE_LS_USERNAME=y
+-CONFIG_FEATURE_LS_COLOR=y
+-CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
+-CONFIG_MD5SUM=y
+-CONFIG_MKDIR=y
+-CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
+-CONFIG_MKFIFO=y
+-CONFIG_MKNOD=y
+-CONFIG_MV=y
+-CONFIG_FEATURE_MV_LONG_OPTIONS=y
+-CONFIG_NICE=y
+-CONFIG_NOHUP=y
+-CONFIG_OD=y
+-CONFIG_PRINTENV=y
+-CONFIG_PRINTF=y
+-CONFIG_PWD=y
+-CONFIG_READLINK=y
+-CONFIG_FEATURE_READLINK_FOLLOW=y
+-CONFIG_REALPATH=y
+-CONFIG_RM=y
+-CONFIG_RMDIR=y
+-CONFIG_SEQ=y
+-CONFIG_SHA1SUM=y
+-CONFIG_SLEEP=y
+-CONFIG_FEATURE_FANCY_SLEEP=y
+-CONFIG_SORT=y
+-CONFIG_FEATURE_SORT_BIG=y
+-CONFIG_SPLIT=y
+-CONFIG_FEATURE_SPLIT_FANCY=y
+-CONFIG_STAT=y
+-CONFIG_FEATURE_STAT_FORMAT=y
+-CONFIG_STTY=y
+-CONFIG_SUM=y
+-CONFIG_SYNC=y
+-CONFIG_TAIL=y
+-CONFIG_FEATURE_FANCY_TAIL=y
+-CONFIG_TEE=y
+-CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
+-CONFIG_TEST=y
+-CONFIG_FEATURE_TEST_64=y
+-CONFIG_TOUCH=y
+-CONFIG_TR=y
+-CONFIG_FEATURE_TR_CLASSES=y
+-CONFIG_FEATURE_TR_EQUIV=y
+-CONFIG_TRUE=y
+-CONFIG_TTY=y
+-CONFIG_UNAME=y
+-CONFIG_UNEXPAND=y
+-CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS=y
+-CONFIG_UNIQ=y
+-CONFIG_USLEEP=y
+-CONFIG_UUDECODE=y
+-CONFIG_UUENCODE=y
+-CONFIG_WC=y
+-CONFIG_FEATURE_WC_LARGE=y
+-CONFIG_WHO=y
+-CONFIG_WHOAMI=y
+-CONFIG_YES=y
+-
+-#
+-# Common options for cp and mv
+-#
+-CONFIG_FEATURE_PRESERVE_HARDLINKS=y
+-
+-#
+-# Common options for ls, more and telnet
+-#
+-CONFIG_FEATURE_AUTOWIDTH=y
+-
+-#
+-# Common options for df, du, ls
+-#
+-CONFIG_FEATURE_HUMAN_READABLE=y
+-
+-#
+-# Common options for md5sum, sha1sum
+-#
+-CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
+-
+-#
+-# Console Utilities
+-#
+-CONFIG_CHVT=y
+-CONFIG_CLEAR=y
+-CONFIG_DEALLOCVT=y
+-CONFIG_DUMPKMAP=y
+-CONFIG_KBD_MODE=y
+-CONFIG_LOADFONT=y
+-CONFIG_LOADKMAP=y
+-CONFIG_OPENVT=y
+-CONFIG_RESET=y
+-CONFIG_RESIZE=y
+-CONFIG_FEATURE_RESIZE_PRINT=y
+-CONFIG_SETCONSOLE=y
+-CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS=y
+-CONFIG_SETKEYCODES=y
+-CONFIG_SETLOGCONS=y
+-
+-#
+-# Debian Utilities
+-#
+-CONFIG_MKTEMP=y
+-# CONFIG_PIPE_PROGRESS is not set
+-CONFIG_RUN_PARTS=y
+-CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
+-# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
+-CONFIG_START_STOP_DAEMON=y
+-CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
+-CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
+-CONFIG_WHICH=y
+-
+-#
+-# Editors
+-#
+-CONFIG_AWK=y
+-CONFIG_FEATURE_AWK_MATH=y
+-CONFIG_CMP=y
+-CONFIG_DIFF=y
+-CONFIG_FEATURE_DIFF_BINARY=y
+-CONFIG_FEATURE_DIFF_DIR=y
+-CONFIG_FEATURE_DIFF_MINIMAL=y
+-CONFIG_ED=y
+-CONFIG_PATCH=y
+-CONFIG_SED=y
+-CONFIG_VI=y
+-CONFIG_FEATURE_VI_MAX_LEN=1024
+-CONFIG_FEATURE_VI_COLON=y
+-CONFIG_FEATURE_VI_YANKMARK=y
+-CONFIG_FEATURE_VI_SEARCH=y
+-CONFIG_FEATURE_VI_USE_SIGNALS=y
+-CONFIG_FEATURE_VI_DOT_CMD=y
+-CONFIG_FEATURE_VI_READONLY=y
+-CONFIG_FEATURE_VI_SETOPTS=y
+-CONFIG_FEATURE_VI_SET=y
+-CONFIG_FEATURE_VI_WIN_RESIZE=y
+-CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
+-CONFIG_FEATURE_ALLOW_EXEC=y
+-
+-#
+-# Finding Utilities
+-#
+-CONFIG_FIND=y
+-CONFIG_FEATURE_FIND_PRINT0=y
+-CONFIG_FEATURE_FIND_MTIME=y
+-CONFIG_FEATURE_FIND_MMIN=y
+-CONFIG_FEATURE_FIND_PERM=y
+-CONFIG_FEATURE_FIND_TYPE=y
+-CONFIG_FEATURE_FIND_XDEV=y
+-CONFIG_FEATURE_FIND_MAXDEPTH=y
+-CONFIG_FEATURE_FIND_NEWER=y
+-CONFIG_FEATURE_FIND_INUM=y
+-CONFIG_FEATURE_FIND_EXEC=y
+-CONFIG_FEATURE_FIND_USER=y
+-CONFIG_FEATURE_FIND_GROUP=y
+-CONFIG_FEATURE_FIND_NOT=y
+-CONFIG_FEATURE_FIND_DEPTH=y
+-CONFIG_FEATURE_FIND_PAREN=y
+-CONFIG_FEATURE_FIND_SIZE=y
+-CONFIG_FEATURE_FIND_PRUNE=y
+-CONFIG_FEATURE_FIND_DELETE=y
+-CONFIG_FEATURE_FIND_PATH=y
+-CONFIG_FEATURE_FIND_REGEX=y
+-# CONFIG_FEATURE_FIND_CONTEXT is not set
+-CONFIG_GREP=y
+-CONFIG_FEATURE_GREP_EGREP_ALIAS=y
+-CONFIG_FEATURE_GREP_FGREP_ALIAS=y
+-CONFIG_FEATURE_GREP_CONTEXT=y
+-CONFIG_XARGS=y
+-CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION=y
+-CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
+-CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
+-CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
+-
+-#
+-# Init Utilities
+-#
+-CONFIG_INIT=y
+-# CONFIG_DEBUG_INIT is not set
+-CONFIG_FEATURE_USE_INITTAB=y
+-CONFIG_FEATURE_INIT_SCTTY=y
+-CONFIG_FEATURE_INIT_SYSLOG=y
+-CONFIG_FEATURE_EXTRA_QUIET=y
+-# CONFIG_FEATURE_INIT_COREDUMPS is not set
+-CONFIG_FEATURE_INITRD=y
+-CONFIG_HALT=y
+-CONFIG_MESG=y
+-
+-#
+-# Login/Password Management Utilities
+-#
+-CONFIG_FEATURE_SHADOWPASSWDS=y
+-# CONFIG_USE_BB_SHADOW is not set
+-# CONFIG_USE_BB_PWD_GRP is not set
+-CONFIG_ADDGROUP=y
+-CONFIG_FEATURE_ADDUSER_TO_GROUP=y
+-CONFIG_DELGROUP=y
+-CONFIG_FEATURE_DEL_USER_FROM_GROUP=y
+-CONFIG_ADDUSER=y
+-CONFIG_DELUSER=y
+-CONFIG_GETTY=y
+-CONFIG_FEATURE_UTMP=y
+-CONFIG_FEATURE_WTMP=y
+-CONFIG_LOGIN=y
+-# CONFIG_PAM is not set
+-CONFIG_LOGIN_SCRIPTS=y
+-CONFIG_FEATURE_NOLOGIN=y
+-CONFIG_FEATURE_SECURETTY=y
+-CONFIG_PASSWD=y
+-CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+-# CONFIG_CRYPTPW is not set
+-# CONFIG_CHPASSWD is not set
+-CONFIG_SU=y
+-CONFIG_FEATURE_SU_SYSLOG=y
+-CONFIG_FEATURE_SU_CHECKS_SHELLS=y
+-CONFIG_SULOGIN=y
+-CONFIG_VLOCK=y
+-
+-#
+-# Linux Ext2 FS Progs
+-#
+-CONFIG_CHATTR=y
+-CONFIG_FSCK=y
+-CONFIG_LSATTR=y
+-
+-#
+-# Linux Module Utilities
+-#
+-CONFIG_INSMOD=y
+-# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
+-# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
+-# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
+-CONFIG_FEATURE_INSMOD_LOAD_MAP=y
+-CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL=y
+-CONFIG_RMMOD=y
+-CONFIG_LSMOD=y
+-CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
+-CONFIG_MODPROBE=y
+-CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y
+-CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y
+-
+-#
+-# Options common to multiple modutils
+-#
+-CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
+-# CONFIG_FEATURE_2_4_MODULES is not set
+-CONFIG_FEATURE_2_6_MODULES=y
+-# CONFIG_FEATURE_QUERY_MODULE_INTERFACE is not set
+-
+-#
+-# Linux System Utilities
+-#
+-CONFIG_DMESG=y
+-CONFIG_FEATURE_DMESG_PRETTY=y
+-CONFIG_FBSET=y
+-CONFIG_FEATURE_FBSET_FANCY=y
+-CONFIG_FEATURE_FBSET_READMODE=y
+-CONFIG_FDFLUSH=y
+-CONFIG_FDFORMAT=y
+-CONFIG_FDISK=y
+-CONFIG_FDISK_SUPPORT_LARGE_DISKS=y
+-CONFIG_FEATURE_FDISK_WRITABLE=y
+-# CONFIG_FEATURE_AIX_LABEL is not set
+-# CONFIG_FEATURE_SGI_LABEL is not set
+-# CONFIG_FEATURE_SUN_LABEL is not set
+-# CONFIG_FEATURE_OSF_LABEL is not set
+-# CONFIG_FEATURE_FDISK_ADVANCED is not set
+-# CONFIG_FREERAMDISK is not set
+-# CONFIG_FSCK_MINIX is not set
+-# CONFIG_MKFS_MINIX is not set
+-# CONFIG_FEATURE_MINIX2 is not set
+-CONFIG_GETOPT=y
+-CONFIG_HEXDUMP=y
+-CONFIG_HWCLOCK=y
+-# CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS is not set
+-# CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS is not set
+-CONFIG_IPCRM=y
+-CONFIG_IPCS=y
+-CONFIG_LOSETUP=y
+-CONFIG_MDEV=y
+-CONFIG_FEATURE_MDEV_CONF=y
+-CONFIG_FEATURE_MDEV_EXEC=y
+-CONFIG_FEATURE_MDEV_LOAD_FIRMWARE=y
+-CONFIG_MKSWAP=y
+-# CONFIG_FEATURE_MKSWAP_V0 is not set
+-CONFIG_MORE=y
+-CONFIG_FEATURE_USE_TERMIOS=y
+-CONFIG_MOUNT=y
+-CONFIG_FEATURE_MOUNT_HELPERS=y
+-CONFIG_FEATURE_MOUNT_NFS=y
+-CONFIG_FEATURE_MOUNT_CIFS=y
+-CONFIG_FEATURE_MOUNT_FLAGS=y
+-CONFIG_FEATURE_MOUNT_FSTAB=y
+-CONFIG_PIVOT_ROOT=y
+-CONFIG_RDATE=y
+-CONFIG_READPROFILE=y
+-CONFIG_SETARCH=y
+-CONFIG_SWAPONOFF=y
+-CONFIG_SWITCH_ROOT=y
+-CONFIG_UMOUNT=y
+-CONFIG_FEATURE_UMOUNT_ALL=y
+-
+-#
+-# Common options for mount/umount
+-#
+-CONFIG_FEATURE_MOUNT_LOOP=y
+-CONFIG_FEATURE_MTAB_SUPPORT=y
+-
+-#
+-# Miscellaneous Utilities
+-#
+-# CONFIG_ADJTIMEX is not set
+-CONFIG_BBCONFIG=y
+-CONFIG_CHRT=y
+-CONFIG_CROND=y
+-CONFIG_DEBUG_CROND_OPTION=y
+-# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
+-CONFIG_CRONTAB=y
+-CONFIG_DC=y
+-# CONFIG_DEVFSD is not set
+-# CONFIG_DEVFSD_MODLOAD is not set
+-# CONFIG_DEVFSD_FG_NP is not set
+-# CONFIG_DEVFSD_VERBOSE is not set
+-# CONFIG_FEATURE_DEVFS is not set
+-# CONFIG_EJECT is not set
+-CONFIG_LAST=y
+-CONFIG_LESS=y
+-CONFIG_FEATURE_LESS_MAXLINES=9999999
+-CONFIG_FEATURE_LESS_BRACKETS=y
+-CONFIG_FEATURE_LESS_FLAGS=y
+-CONFIG_FEATURE_LESS_FLAGCS=y
+-CONFIG_FEATURE_LESS_MARKS=y
+-CONFIG_FEATURE_LESS_REGEXP=y
+-CONFIG_HDPARM=y
+-CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
+-CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=y
+-CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF=y
+-CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET=y
+-CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF=y
+-CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA=y
+-CONFIG_MAKEDEVS=y
+-# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
+-CONFIG_FEATURE_MAKEDEVS_TABLE=y
+-CONFIG_MICROCOM=y
+-CONFIG_MOUNTPOINT=y
+-CONFIG_MT=y
+-# CONFIG_RAIDAUTORUN is not set
+-# CONFIG_READAHEAD is not set
+-CONFIG_RUNLEVEL=y
+-CONFIG_RX=y
+-CONFIG_STRINGS=y
+-CONFIG_SETSID=y
+-# CONFIG_TASKSET is not set
+-# CONFIG_FEATURE_TASKSET_FANCY is not set
+-CONFIG_TIME=y
+-CONFIG_TTYSIZE=y
+-CONFIG_WATCHDOG=y
+-
+-#
+-# Networking Utilities
+-#
+-CONFIG_FEATURE_IPV6=y
+-# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
+-CONFIG_ARP=y
+-CONFIG_ARPING=y
+-CONFIG_DNSD=y
+-CONFIG_ETHER_WAKE=y
+-# CONFIG_FAKEIDENTD is not set
+-CONFIG_FTPGET=y
+-CONFIG_FTPPUT=y
+-CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS=y
+-CONFIG_HOSTNAME=y
+-CONFIG_HTTPD=y
+-CONFIG_FEATURE_HTTPD_RANGES=y
+-CONFIG_FEATURE_HTTPD_USE_SENDFILE=y
+-CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP=y
+-CONFIG_FEATURE_HTTPD_SETUID=y
+-CONFIG_FEATURE_HTTPD_BASIC_AUTH=y
+-CONFIG_FEATURE_HTTPD_AUTH_MD5=y
+-CONFIG_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES=y
+-CONFIG_FEATURE_HTTPD_CGI=y
+-CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR=y
+-CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV=y
+-CONFIG_FEATURE_HTTPD_ENCODE_URL_STR=y
+-CONFIG_FEATURE_HTTPD_ERROR_PAGES=y
+-CONFIG_FEATURE_HTTPD_PROXY=y
+-CONFIG_IFCONFIG=y
+-CONFIG_FEATURE_IFCONFIG_STATUS=y
+-# CONFIG_FEATURE_IFCONFIG_SLIP is not set
+-# CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ is not set
+-CONFIG_FEATURE_IFCONFIG_HW=y
+-# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
+-CONFIG_IFUPDOWN=y
+-CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
+-# CONFIG_FEATURE_IFUPDOWN_IP is not set
+-# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
+-CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN=y
+-CONFIG_FEATURE_IFUPDOWN_IPV4=y
+-CONFIG_FEATURE_IFUPDOWN_IPV6=y
+-# CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
+-CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP=y
+-CONFIG_INETD=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
+-CONFIG_FEATURE_INETD_RPC=y
+-# CONFIG_IP is not set
+-# CONFIG_FEATURE_IP_ADDRESS is not set
+-# CONFIG_FEATURE_IP_LINK is not set
+-# CONFIG_FEATURE_IP_ROUTE is not set
+-# CONFIG_FEATURE_IP_TUNNEL is not set
+-# CONFIG_FEATURE_IP_RULE is not set
+-# CONFIG_FEATURE_IP_SHORT_FORMS is not set
+-# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
+-# CONFIG_IPADDR is not set
+-# CONFIG_IPLINK is not set
+-# CONFIG_IPROUTE is not set
+-# CONFIG_IPTUNNEL is not set
+-# CONFIG_IPRULE is not set
+-# CONFIG_IPCALC is not set
+-# CONFIG_FEATURE_IPCALC_FANCY is not set
+-# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
+-# CONFIG_NAMEIF is not set
+-# CONFIG_NC is not set
+-# CONFIG_NC_SERVER is not set
+-# CONFIG_NC_EXTRA is not set
+-CONFIG_NETSTAT=y
+-CONFIG_FEATURE_NETSTAT_WIDE=y
+-CONFIG_NSLOOKUP=y
+-CONFIG_PING=y
+-CONFIG_PING6=y
+-CONFIG_PSCAN=y
+-CONFIG_FEATURE_FANCY_PING=y
+-CONFIG_ROUTE=y
+-# CONFIG_SLATTACH is not set
+-CONFIG_TELNET=y
+-CONFIG_FEATURE_TELNET_TTYPE=y
+-CONFIG_FEATURE_TELNET_AUTOLOGIN=y
+-CONFIG_TELNETD=y
+-CONFIG_FEATURE_TELNETD_STANDALONE=y
+-CONFIG_TFTP=y
+-CONFIG_FEATURE_TFTP_GET=y
+-CONFIG_FEATURE_TFTP_PUT=y
+-CONFIG_FEATURE_TFTP_BLOCKSIZE=y
+-# CONFIG_DEBUG_TFTP is not set
+-CONFIG_TRACEROUTE=y
+-CONFIG_FEATURE_TRACEROUTE_VERBOSE=y
+-# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
+-# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
+-CONFIG_APP_UDHCPD=y
+-# CONFIG_APP_DHCPRELAY is not set
+-# CONFIG_APP_DUMPLEASES is not set
+-# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
+-CONFIG_APP_UDHCPC=y
+-# CONFIG_FEATURE_UDHCP_DEBUG is not set
+-# CONFIG_FEATURE_RFC3397 is not set
+-CONFIG_VCONFIG=y
+-CONFIG_WGET=y
+-CONFIG_FEATURE_WGET_STATUSBAR=y
+-CONFIG_FEATURE_WGET_AUTHENTICATION=y
+-# CONFIG_FEATURE_WGET_LONG_OPTIONS is not set
+-# CONFIG_ZCIP is not set
+-
+-#
+-# Process Utilities
+-#
+-CONFIG_FREE=y
+-CONFIG_FUSER=y
+-CONFIG_KILL=y
+-CONFIG_KILLALL=y
+-CONFIG_KILLALL5=y
+-CONFIG_NMETER=y
+-CONFIG_PGREP=y
+-CONFIG_PIDOF=y
+-CONFIG_FEATURE_PIDOF_SINGLE=y
+-CONFIG_FEATURE_PIDOF_OMIT=y
+-CONFIG_PKILL=y
+-CONFIG_PS=y
+-CONFIG_FEATURE_PS_WIDE=y
+-CONFIG_RENICE=y
+-CONFIG_BB_SYSCTL=y
+-CONFIG_TOP=y
+-CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
+-CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
+-CONFIG_FEATURE_TOP_DECIMALS=y
+-CONFIG_FEATURE_TOPMEM=y
+-CONFIG_UPTIME=y
+-CONFIG_WATCH=y
+-
+-#
+-# Shells
+-#
+-CONFIG_FEATURE_SH_IS_ASH=y
+-# CONFIG_FEATURE_SH_IS_HUSH is not set
+-# CONFIG_FEATURE_SH_IS_LASH is not set
+-# CONFIG_FEATURE_SH_IS_MSH is not set
+-# CONFIG_FEATURE_SH_IS_NONE is not set
+-CONFIG_ASH=y
+-
+-#
+-# Ash Shell Options
+-#
+-CONFIG_ASH_JOB_CONTROL=y
+-CONFIG_ASH_READ_NCHARS=y
+-CONFIG_ASH_READ_TIMEOUT=y
+-CONFIG_ASH_ALIAS=y
+-CONFIG_ASH_MATH_SUPPORT=y
+-CONFIG_ASH_MATH_SUPPORT_64=y
+-CONFIG_ASH_GETOPTS=y
+-CONFIG_ASH_BUILTIN_ECHO=y
+-CONFIG_ASH_BUILTIN_TEST=y
+-# CONFIG_ASH_CMDCMD is not set
+-# CONFIG_ASH_MAIL is not set
+-CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
+-# CONFIG_ASH_RANDOM_SUPPORT is not set
+-CONFIG_ASH_EXPAND_PRMT=y
+-# CONFIG_HUSH is not set
+-# CONFIG_HUSH_HELP is not set
+-# CONFIG_HUSH_INTERACTIVE is not set
+-# CONFIG_HUSH_JOB is not set
+-# CONFIG_HUSH_TICK is not set
+-# CONFIG_HUSH_IF is not set
+-# CONFIG_HUSH_LOOPS is not set
+-# CONFIG_LASH is not set
+-# CONFIG_MSH is not set
+-
+-#
+-# Bourne Shell Options
+-#
+-# CONFIG_FEATURE_SH_EXTRA_QUIET is not set
+-# CONFIG_FEATURE_SH_STANDALONE is not set
+-# CONFIG_CTTYHACK is not set
+-
+-#
+-# System Logging Utilities
+-#
+-CONFIG_SYSLOGD=y
+-CONFIG_FEATURE_ROTATE_LOGFILE=y
+-# CONFIG_FEATURE_REMOTE_LOG is not set
+-# CONFIG_FEATURE_IPC_SYSLOG is not set
+-CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=
+-# CONFIG_LOGREAD is not set
+-# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
+-CONFIG_KLOGD=y
+-CONFIG_LOGGER=y
+-
+-#
+-# Runit Utilities
+-#
+-# CONFIG_RUNSV is not set
+-# CONFIG_RUNSVDIR is not set
+-# CONFIG_SV is not set
+-# CONFIG_SVLOGD is not set
+-# CONFIG_CHPST is not set
+-# CONFIG_SETUIDGID is not set
+-# CONFIG_ENVUIDGID is not set
+-# CONFIG_ENVDIR is not set
+-# CONFIG_SOFTLIMIT is not set
+-# CONFIG_CHCON is not set
+-# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
+-# CONFIG_GETENFORCE is not set
+-# CONFIG_GETSEBOOL is not set
+-# CONFIG_LOAD_POLICY is not set
+-# CONFIG_MATCHPATHCON is not set
+-# CONFIG_RESTORECON is not set
+-# CONFIG_RUNCON is not set
+-# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
+-# CONFIG_SELINUXENABLED is not set
+-# CONFIG_SETENFORCE is not set
+-# CONFIG_SETFILES is not set
+-# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
+-# CONFIG_SETSEBOOL is not set
+-
+-#
+-# ipsvd utilities
+-#
+-# CONFIG_TCPSVD is not set
+-# CONFIG_UDPSVD is not set
+diff --git a/target/device/Atmel/atstk100x/device_table.txt b/target/device/Atmel/atstk100x/device_table.txt
 deleted file mode 100644
 index 1b76a30..0000000
---- a/target/device/Atmel/atngw100/device_table.txt
+--- a/target/device/Atmel/atstk100x/device_table.txt
 +++ /dev/null
 @@ -1,181 +0,0 @@
 -# When building a target filesystem, it is desirable to not have to become
@@ -12417,43 +4694,267 @@ index 1b76a30..0000000
 -#/dev/mcd	b	640	0	0	23	0	0	0	-
 -#/dev/optcd	b	640	0	0	17	0	0	0	-
 -
-diff --git a/target/device/Atmel/atngw100/jffs2_partitions.txt b/target/device/Atmel/atngw100/jffs2_partitions.txt
+diff --git a/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch b/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
 deleted file mode 100644
-index 4f7e42c..0000000
---- a/target/device/Atmel/atngw100/jffs2_partitions.txt
+index 365ee49..0000000
+--- a/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
 +++ /dev/null
-@@ -1,8 +0,0 @@
--# Partition setup for ATNGW100.
--#
--# root is a 8 MB NOR flash.
--# usr is a 8 MB serial DataFlash.
--#
--# <mount point>		<mount name>	<page size>	<erase size>	<cleanmarkers>	<device file>	<pad size>
--/			root		0x1000		0x10000		1		1		0x0
--/usr			usr		0x420		0x2100		0		0		0x0
-diff --git a/target/device/Atmel/atngw100/target_skeleton/bin/.empty b/target/device/Atmel/atngw100/target_skeleton/bin/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/boot/.empty b/target/device/Atmel/atngw100/target_skeleton/boot/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/config/.empty b/target/device/Atmel/atngw100/target_skeleton/config/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/dev/.empty b/target/device/Atmel/atngw100/target_skeleton/dev/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/TZ b/target/device/Atmel/atngw100/target_skeleton/etc/TZ
+@@ -1,130 +0,0 @@
+->From 9c5fa914202d20756c56e0c4fd76035ed8f8ced8 Mon Sep 17 00:00:00 2001
+-From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+-Date: Mon, 6 Aug 2007 08:31:14 +0200
+-Subject: [PATCH 1/1] Add gpio_mouse board setup to atstk1000 board
+-
+-This patch adds a gpio_mouse_platform_data to the atstk1000 board code and
+-registers a gpio_mouse platform_device. This will enable a GPIO mouse on header
+-J1 on GPIO of the ATSTK1000 development kit. The board code is enabled/disabled
+-in menuconfig.
+-
+-By connecting J1 (GPIO) to J25 (SWITCH) you can use the following keys to
+-simulate a mouse:
+-
+-SW0: right
+-SW1: down
+-SW2: up
+-SW3: left
+-SW5: right button
+-SW6: middle button
+-SW7: left button
+-
+-Signed-off-by: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
+----
+- arch/avr32/boards/atstk1000/Kconfig     |   16 ++++++++++
+- arch/avr32/boards/atstk1000/atstk1002.c |   48 +++++++++++++++++++++++++++++++
+- 2 files changed, 64 insertions(+), 0 deletions(-)
+-
+-diff --git a/arch/avr32/boards/atstk1000/Kconfig b/arch/avr32/boards/atstk1000/Kconfig
+-index 718578f..d99d4bd 100644
+---- a/arch/avr32/boards/atstk1000/Kconfig
+-+++ b/arch/avr32/boards/atstk1000/Kconfig
+-@@ -52,6 +52,22 @@ config BOARD_ATSTK100X_SPI1
+- 	  GPIO lines and accessed through the J1 jumper block.  Say "y"
+- 	  here to configure that SPI controller.
+- 
+-+config BOARD_ATSTK1002_GPIO_MOUSE
+-+	bool "Configure gpio_mouse on GPIO J1 header"
+-+	depends on !BOARD_ATSTK1002_SW4_CUSTOM
+-+	help
+-+	  Enable gpio_mouse board configuration on GPIO 0 to 7. Connecting a
+-+	  10-pin flat cable from J1 (GPIO) to J25 (SWITCH) will let a user give
+-+	  mouse inputs using the the switches SW0 to SW7.
+-+
+-+	  SW0: right
+-+	  SW1: down
+-+	  SW2: up
+-+	  SW3: left
+-+	  SW5: right button
+-+	  SW6: middle button
+-+	  SW7: left button
+-+
+- config BOARD_ATSTK1000_J2_LED
+- 	bool
+- 	default BOARD_ATSTK1000_J2_LED8 || BOARD_ATSTK1000_J2_RGB
+-diff --git a/arch/avr32/boards/atstk1000/atstk1002.c b/arch/avr32/boards/atstk1000/atstk1002.c
+-index c958fd4..c7560e5 100644
+---- a/arch/avr32/boards/atstk1000/atstk1002.c
+-+++ b/arch/avr32/boards/atstk1000/atstk1002.c
+-@@ -16,6 +16,7 @@
+- #include <linux/types.h>
+- #include <linux/spi/spi.h>
+- #include <linux/spi/at73c213.h>
+-+#include <linux/gpio_mouse.h>
+- 
+- #include <video/atmel_lcdc.h>
+- 
+-@@ -100,6 +101,49 @@ static struct mci_platform_data __initdata mci0_data = {
+- 	.cs		= 4,
+- };
+- 
+-+#ifdef CONFIG_BOARD_ATSTK1002_GPIO_MOUSE
+-+static struct gpio_mouse_platform_data gpio_mouse0_data = {
+-+	.polarity	= GPIO_MOUSE_POLARITY_ACT_LOW,
+-+	{
+-+		{
+-+			.up		= GPIO_PIN_PB(2),
+-+			.down		= GPIO_PIN_PB(1),
+-+			.left		= GPIO_PIN_PB(3),
+-+			.right		= GPIO_PIN_PB(0),
+-+			.bleft		= GPIO_PIN_PB(7),
+-+			.bmiddle	= GPIO_PIN_PB(6),
+-+			.bright		= GPIO_PIN_PB(5),
+-+		},
+-+	},
+-+	.scan_ms	= 10,
+-+};
+-+
+-+static struct platform_device gpio_mouse0_device = {
+-+	.name		= "gpio_mouse",
+-+	.id		= 0,
+-+	.dev		= {
+-+		.platform_data = &gpio_mouse0_data,
+-+	},
+-+};
+-+
+-+static void __init add_device_gpio_mouse0(void)
+-+{
+-+	struct platform_device *pdev = &gpio_mouse0_device;
+-+	struct gpio_mouse_platform_data *data = pdev->dev.platform_data;
+-+
+-+	at32_select_gpio(data->up, 0);
+-+	at32_select_gpio(data->down, 0);
+-+	at32_select_gpio(data->left, 0);
+-+	at32_select_gpio(data->right, 0);
+-+
+-+	at32_select_gpio(data->bleft, 0);
+-+	at32_select_gpio(data->bmiddle, 0);
+-+	at32_select_gpio(data->bright, 0);
+-+
+-+	platform_device_register(pdev);
+-+}
+-+#endif
+-+
+- /*
+-  * The next two functions should go away as the boot loader is
+-  * supposed to initialize the macb address registers with a valid
+-@@ -269,6 +313,10 @@ static int __init atstk1002_init(void)
+- 	atstk1000_setup_j2_leds();
+- 	atstk1002_setup_extdac();
+- 
+-+#ifdef CONFIG_BOARD_ATSTK1002_GPIO_MOUSE
+-+	add_device_gpio_mouse0();
+-+#endif
+-+
+- 	return 0;
+- }
+- postcore_initcall(atstk1002_init);
+--- 
+-1.5.2.3
+-
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/TZ b/target/device/Atmel/atstk100x/target_skeleton/etc/TZ
 deleted file mode 100644
 index 36498c4..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/TZ
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/TZ
 +++ /dev/null
 @@ -1 +0,0 @@
 -CET1CDT
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/default/ntpdate b/target/device/Atmel/atngw100/target_skeleton/etc/default/ntpdate
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state b/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
+deleted file mode 100644
+index 55fb3f0..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
++++ /dev/null
+@@ -1,108 +0,0 @@
+-state.at73c213_0 {
+-	control.1 {
+-		comment.access 'read write'
+-		comment.type INTEGER
+-		comment.count 2
+-		comment.range '0 - 31'
+-		iface MIXER
+-		name 'Master Playback Volume'
+-		value.0 21
+-		value.1 21
+-	}
+-	control.2 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 2
+-		iface MIXER
+-		name 'Master Playback Switch'
+-		value.0 true
+-		value.1 true
+-	}
+-	control.3 {
+-		comment.access 'read write'
+-		comment.type INTEGER
+-		comment.count 2
+-		comment.range '0 - 31'
+-		iface MIXER
+-		name 'PCM Playback Volume'
+-		value.0 21
+-		value.1 21
+-	}
+-	control.4 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 2
+-		iface MIXER
+-		name 'PCM Playback Switch'
+-		value.0 true
+-		value.1 true
+-	}
+-	control.5 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 1
+-		iface MIXER
+-		name 'Mono PA Playback Switch'
+-		value true
+-	}
+-	control.6 {
+-		comment.access 'read write'
+-		comment.type INTEGER
+-		comment.count 1
+-		comment.range '0 - 14'
+-		iface MIXER
+-		name 'PA Playback Volume'
+-		value 10
+-	}
+-	control.7 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 1
+-		iface MIXER
+-		name 'PA High Gain Playback Switch'
+-		value true
+-	}
+-	control.8 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 1
+-		iface MIXER
+-		name 'PA Playback Switch'
+-		value true
+-	}
+-	control.9 {
+-		comment.access 'read write'
+-		comment.type INTEGER
+-		comment.count 1
+-		comment.range '14 - 31'
+-		iface MIXER
+-		name 'Aux Capture Volume'
+-		value 14
+-	}
+-	control.10 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 1
+-		iface MIXER
+-		name 'Aux Capture Switch'
+-		value false
+-	}
+-	control.11 {
+-		comment.access 'read write'
+-		comment.type INTEGER
+-		comment.count 2
+-		comment.range '14 - 31'
+-		iface MIXER
+-		name 'Line Capture Volume'
+-		value.0 14
+-		value.1 14
+-	}
+-	control.12 {
+-		comment.access 'read write'
+-		comment.type BOOLEAN
+-		comment.count 1
+-		iface MIXER
+-		name 'Line Capture Switch'
+-		value false
+-	}
+-}
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate b/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
 deleted file mode 100644
 index 80d8608..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/default/ntpdate
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# servers to check.   (Separate multiple servers with spaces.)
@@ -12462,12 +4963,12 @@ index 80d8608..0000000
 -# additional options for ntpdate
 -#NTPOPTIONS="-v"
 -NTPOPTIONS="-u"
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/dnsmasq.conf b/target/device/Atmel/atngw100/target_skeleton/etc/dnsmasq.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
 deleted file mode 100644
-index 036cc1a..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/dnsmasq.conf
+index 09a3681..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
 +++ /dev/null
-@@ -1,447 +0,0 @@
+@@ -1,385 +0,0 @@
 -# Configuration file for dnsmasq.
 -#
 -# Format is one option per line, legal options are the same
@@ -12581,13 +5082,13 @@ index 036cc1a..0000000
 -# a lease time. If you have more than one network, you will need to
 -# repeat this for each network on which you want to supply DHCP
 -# service.
--dhcp-range=10.0.0.20,10.0.0.254,72h
+-#dhcp-range=192.168.0.50,192.168.0.150,12h
 -
 -# This is an example of a DHCP range where the netmask is given. This
 -# is needed for networks we reach the dnsmasq DHCP server via a relay
 -# agent. If you don't know what a DHCP relay agent is, you probably
 -# don't need to worry about this.
--#dhcp-range=10.0.0.20,10.0.0.254,255.255.255.0,72h
+-dhcp-range=10.0.0.20,10.0.0.254,255.255.255.0,72h
 -
 -# This is an example of a DHCP range with a network-id, so that
 -# some DHCP options may be set only for this network.
@@ -12666,8 +5167,6 @@ index 036cc1a..0000000
 -
 -# Send options to hosts which ask for a DHCP lease.
 -# See RFC 2132 for details of available options.
--# Common options can be given to dnsmasq by name:
--# run "dnsmasq --help dhcp" to get a list.
 -# Note that all the common settings, such as netmask and
 -# broadcast address, DNS server and default route, are given
 -# sane defaults by dnsmasq. You very likely will not need any
@@ -12684,17 +5183,8 @@ index 036cc1a..0000000
 -# router is the same machine as the one running dnsmasq.
 -#dhcp-option=3,1.2.3.4
 -
--# Do the same thing, but using the option name
--#dhcp-option=option:router,1.2.3.4
--
--# Override the default route supplied by dnsmasq and send no default
--# route at all. Note that this only works for the options sent by
--# default (1, 3, 6, 12, 28) the same line will send a zero-length option
--# for all other option numbers.
--#dhcp-option=3
--
 -# Set the NTP time server addresses to 192.168.0.4 and 10.10.0.5
--#dhcp-option=option:ntp-server,192.168.0.4,10.10.0.5
+-#dhcp-option=42,192.168.0.4,10.10.0.5
 -
 -# Set the NTP time server address to be the same machine as
 -# is running dnsmasq
@@ -12715,8 +5205,7 @@ index 036cc1a..0000000
 -
 -# Specify an option which will only be sent to the "red" network
 -# (see dhcp-range for the declaration of the "red" network)
--# Note that the net: part must precede the option: part.
--#dhcp-option = net:red, option:ntp-server, 192.168.1.1
+-#dhcp-option=red,42,192.168.1.1
 -
 -# The following DHCP options set up dnsmasq in the same way as is specified
 -# for the ISC dhcpcd in
@@ -12732,63 +5221,21 @@ index 036cc1a..0000000
 -
 -# Send RFC-3397 DNS domain search DHCP option. WARNING: Your DHCP client
 -# probably doesn't support this......
--#dhcp-option=option:domain-search,eng.apple.com,marketing.apple.com
+-#dhcp-option=119,eng.apple.com,marketing.apple.com
 -
 -# Send RFC-3442 classless static routes (note the netmask encoding)
 -#dhcp-option=121,192.168.1.0/24,1.2.3.4,10.0.0.0/8,5.6.7.8
 -
--# Send vendor-class specific options encapsulated in DHCP option 43.
--# The meaning of the options is defined by the vendor-class so
--# options are sent only when the client supplied vendor class
--# matches the class given here. (A substring match is OK, so "MSFT"
--# matches "MSFT" and "MSFT 5.0"). This example sets the
--# mtftp address to 0.0.0.0 for PXEClients.
+-# Send encapsulated vendor-class specific options. The vendor-class
+-# is sent as DHCP option 60, and all the options marked with the
+-# vendor class are send encapsulated in DHCP option 43. The meaning of
+-# the options is defined by the vendor-class. This example sets the
+-# mtftp address to 0.0.0.0 for PXEClients
 -#dhcp-option=vendor:PXEClient,1,0.0.0.0
 -
--# Send microsoft-specific option to tell windows to release the DHCP lease
--# when it shuts down. Note the "i" flag, to tell dnsmasq to send the
--# value as a four-byte integer - that's what microsoft wants. See
--# http://technet2.microsoft.com/WindowsServer/en/library/a70f1bb7-d2d4-49f0-96d6-4b7414ecfaae1033.mspx?mfr=true
--#dhcp-option=vendor:MSFT,2,1i
--
--# Send the Encapsulated-vendor-class ID needed by some configurations of
--# Etherboot to allow is to recognise the DHCP server.
--#dhcp-option=vendor:Etherboot,60,"Etherboot"
--
--# Send options to PXELinux. Note that we need to send the options even
--# though they don't appear in the parameter request list, so we need
--# to use dhcp-option-force here.
--# See http://syslinux.zytor.com/pxe.php#special for details.
--# Magic number - needed before anything else is recognised
--#dhcp-option-force=208,f1:00:74:7e
--# Configuration file name
--#dhcp-option-force=209,configs/common
--# Path prefix
--#dhcp-option-force=210,/tftpboot/pxelinux/files/
--# Reboot time. (Note 'i' to send 32-bit value)
--#dhcp-option-force=211,30i
--
--# Set the boot filename for BOOTP. You will only need
--# this is you want to boot machines over the network and you will need
--# a TFTP server; either dnsmasq's built in TFTP server or an
--# external one. (See below for how to enable the TFTP server.)
--#dhcp-boot=pxelinux.0
--
--# Enable dnsmasq's built-in TFTP server
--#enable-tftp
--
--# Set the root directory for files availble via FTP.
--#tftp-root=/var/ftpd
--
--# Make the TFTP server more secure: with this set, only files owned by
--# the user dnsmasq is running as will be send over the net.
--#tftp-secure
--
--# Set the boot file name only when the "red" tag is set.
--#dhcp-boot=net:red,pxelinux.red-net
--
--# An example of dhcp-boot with an external server: the name and IP
--# address of the server are given after the filename.
+-# Set the boot filename and tftpd server name and address
+-# for BOOTP. You will only need this is you want to
+-# boot machines over the network.
 -#dhcp-boot=/var/ftpd/pxelinux.0,boothost,192.168.0.3
 -
 -# Set the limit on DHCP leases, the default is 150
@@ -12797,7 +5244,7 @@ index 036cc1a..0000000
 -# The DHCP server needs somewhere on disk to keep its lease database.
 -# This defaults to a sane location, but if you want to change it, use
 -# the line below.
--dhcp-leasefile=/var/lib/misc/dnsmasq.leases
+-dhcp-leasefile=/var/lib/dnsmasq/dnsmasq.leases
 -
 -# Set the DHCP server to authoritative mode. In this mode it will barge in
 -# and take over the lease for any client which broadcasts on the network,
@@ -12887,11 +5334,6 @@ index 036cc1a..0000000
 -# example.com
 -#srv-host=_ldap._tcp.example.com
 -
--# The following line shows how to make dnsmasq serve an arbitrary PTR
--# record. This is useful for DNS-SD. (Note that the
--# domain-name expansion done for SRV records _does_not
--# occur for PTR records.)
--#ptr-record=_http._tcp.dns-sd-services,"New Employee Page._http._tcp.dns-sd-services"
 -
 -# Change the following lines to enable dnsmasq to serve TXT records.
 -# These are used for things like SPF and zeroconf. (Note that the
@@ -12899,7 +5341,7 @@ index 036cc1a..0000000
 -# occur for TXT records.)
 -
 -#Example SPF.
--#txt-record=example.com,"v=spf1 a -all"
+-#txt-record=example.com,v=spf1 a -all
 -
 -#Example zeroconf
 -#txt-record=_http._tcp.example.com,name=value,paper=A4
@@ -12909,29 +5351,33 @@ index 036cc1a..0000000
 -# dnsmasq.
 -#log-queries
 -
--# Log lots of extra information about DHCP transactions.
--#log-dhcp
--
 -# Include a another lot of configuration options.
 -#conf-file=/etc/dnsmasq.more.conf
--#conf-dir=/etc/dnsmasq.d
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/ethers b/target/device/Atmel/atngw100/target_skeleton/etc/ethers
+-
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes b/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
 deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/fstab b/target/device/Atmel/atngw100/target_skeleton/etc/fstab
-deleted file mode 100644
-index 9932b06..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/fstab
+index 5884cca..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
 +++ /dev/null
-@@ -1,4 +0,0 @@
+@@ -1,5 +0,0 @@
+-mode "320x240-68"
+-    # D: 6.891 MHz, H: 17.852 kHz, V: 68.400 Hz
+-    geometry 320 240 320 240 24
+-    timings 145116 17 33 10 10 16 1
+-endmode
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/fstab b/target/device/Atmel/atstk100x/target_skeleton/etc/fstab
+deleted file mode 100644
+index fcf1a78..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/fstab
++++ /dev/null
+@@ -1,3 +0,0 @@
 -# /etc/fstab: static file system information.
 -#
 -# <file system>	<mount pt>	<type>		<options>	<dump>	<pass>
--/dev/mtdblock3	/usr		jffs2		defaults	0	0
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/group b/target/device/Atmel/atngw100/target_skeleton/etc/group
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/group b/target/device/Atmel/atstk100x/target_skeleton/etc/group
 deleted file mode 100644
 index cec65da..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/group
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/group
 +++ /dev/null
 @@ -1,20 +0,0 @@
 -root::0:
@@ -12954,38 +5400,39 @@ index cec65da..0000000
 -users::500:
 -default::1000:
 -nogroup::65534:
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/hostname b/target/device/Atmel/atngw100/target_skeleton/etc/hostname
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hostname b/target/device/Atmel/atstk100x/target_skeleton/etc/hostname
 deleted file mode 100644
-index 847cd47..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/hostname
+index 29a3f1c..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/hostname
 +++ /dev/null
 @@ -1 +0,0 @@
--ngw.example.net
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/hosts b/target/device/Atmel/atngw100/target_skeleton/etc/hosts
+-stk1000.example.net
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts b/target/device/Atmel/atstk100x/target_skeleton/etc/hosts
 deleted file mode 100644
-index 9d8c7b8..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/hosts
+index ef38167..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts
 +++ /dev/null
-@@ -1,11 +0,0 @@
+@@ -1,12 +0,0 @@
 -127.0.0.1   localhost.localdomain localhost
--10.0.0.1    ngw.example.net ngw
+-127.0.1.1   stk1000.example.net stk1000
 -
 -# The following lines are desirable for IPv6 capable hosts
 -::1     localhost
 -::1     ip6-localhost ip6-loopback
+-::1     stk1000.example.net stk1000
 -fe00::0 ip6-localnet
 -ff00::0 ip6-mcastprefix
 -ff02::1 ip6-allnodes
 -ff02::2 ip6-allrouters
 -ff02::3 ip6-allhosts
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/hosts.dnsmasq b/target/device/Atmel/atngw100/target_skeleton/etc/hosts.dnsmasq
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq b/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
 deleted file mode 100644
-index 60bc401..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/hosts.dnsmasq
+index b831444..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
 +++ /dev/null
 @@ -1,246 +0,0 @@
 -# Local server
--10.0.0.1 ngw.example.net
+-10.0.0.1 stk1000.example.net
 -10.0.0.1 hostmaster.example.net
 -10.0.0.1 ftp.example.net
 -10.0.0.1 ns.example.net
@@ -13230,41 +5677,61 @@ index 60bc401..0000000
 -10.0.0.252 dhcp-252.example.net
 -10.0.0.253 dhcp-253.example.net
 -10.0.0.254 dhcp-254.example.net
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/httpd.conf b/target/device/Atmel/atngw100/target_skeleton/etc/httpd.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
 deleted file mode 100644
 index 640f815..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/httpd.conf
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# Allow all trafic
 -A: *
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf b/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
 deleted file mode 100644
-index 02e1b82..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/inetd.conf
+index 23eba79..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -#netbios-ssn	stream	tcp nowait	root.root /usr/sbin/smbd smbd
 -#netbios-ns	dgram	udp wait	root.root /usr/sbin/nmbd nmbd
--swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig
-deleted file mode 100755
+-#swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
+deleted file mode 100644
+index 68f7462..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-PROGRAM=/usr/sbin/alsactl
+-
+-# Exit silently if alsa-utils isn't installed
+-[ -x ${PROGRAM} ] || exit 0
+-
+-echo -n "Saving mixer state: "
+-if ${PROGRAM} store; then
+-	echo "done"
+-else
+-	echo "failed"
+-	exit 1
+-fi
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
+deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K70sendsig
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
+deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K80netfs
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
+deleted file mode 100644
 index d4e8e61..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K85network
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -13278,17 +5745,17 @@ index d4e8e61..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
+deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/K90localfs
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
+deleted file mode 100644
 index d9e5c92..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S00mountvirtfs
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
 +++ /dev/null
 @@ -1,74 +0,0 @@
 -#!/bin/sh
@@ -13365,13 +5832,13 @@ index d9e5c92..0000000
 -fi
 -
 -exit $retval
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug
-deleted file mode 100755
-index a30f06a..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S01hotplug
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
+deleted file mode 100644
+index 15e075b..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
 +++ /dev/null
 @@ -1,14 +0,0 @@
--#! /bin/sh
+-#!/bin/sh
 -
 -echo -n "Setting up mdev: "
 -set -e
@@ -13385,10 +5852,10 @@ index a30f06a..0000000
 -/sbin/mdev -s
 -trap - EXIT
 -echo "done"
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname
-deleted file mode 100755
-index 083d41d..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S02hostname
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
+deleted file mode 100644
+index cf858ed..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
 +++ /dev/null
 @@ -1,47 +0,0 @@
 -#!/bin/sh
@@ -13396,7 +5863,7 @@ index 083d41d..0000000
 -PROGRAM=/bin/hostname
 -
 -echo -n "Setting hostname: "
--[ -x ${PROGRAM} ] || (echo "missing"; exit 0)
+-[ -x ${PROGRAM} ] || (echo " missing"; exit 0)
 -
 -if [ -f /etc/hostname ]; then
 -	HOST="$(cat /etc/hostname)"
@@ -13438,10 +5905,41 @@ index 083d41d..0000000
 -esac
 -
 -exit $?
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
+deleted file mode 100644
+index 21a3a57..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
++++ /dev/null
+@@ -1,25 +0,0 @@
+-#!/bin/sh
+-
+-FBV=/usr/bin/fbv
+-FBSET=/usr/sbin/fbset
+-FBMODEFILE="/etc/fb.modes"
+-SPLASHFILE="/etc/stk1000bootsplash.jpg"
+-
+-echo -n "Bootsplash image: "
+-if [ ! -x "${FBV}" -o ! -x "${FBSET}" -o \
+-		! -f "${SPLASHFILE}" -o ! -f "${FBMODEFILE}" ]; then
+-	echo "missing"
+-	exit 1
+-fi
+-
+-if ! ${FBSET} 320x240-68; then
+-	echo "failed"
+-	exit 1
+-fi
+-
+-${FBV} ${SPLASHFILE} > /dev/null &
+-if [ $? -eq 0 ]; then
+-	echo "loaded"
+-else
+-	echo "failed"
+-fi
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
+deleted file mode 100644
 index 58b0592..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S08syslog
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
 +++ /dev/null
 @@ -1,24 +0,0 @@
 -#!/bin/sh
@@ -13468,10 +5966,10 @@ index 58b0592..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
+deleted file mode 100644
 index 1b0028a..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S09klog
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -13490,10 +5988,10 @@ index 1b0028a..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
+deleted file mode 100644
 index e2cf4e3..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S10modules-init
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
 +++ /dev/null
 @@ -1,21 +0,0 @@
 -#!/bin/sh
@@ -13517,10 +6015,10 @@ index e2cf4e3..0000000
 -		echo "  $module failed"
 -	fi
 -done
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
+deleted file mode 100644
 index a0b5a89..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S15localfs
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -13534,10 +6032,10 @@ index a0b5a89..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
+deleted file mode 100644
 index 06cf8cb..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S20network
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#! /bin/sh
@@ -13551,83 +6049,10 @@ index 06cf8cb..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S21dnsmasq b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S21dnsmasq
-deleted file mode 100755
-index 8ddd149..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S21dnsmasq
-+++ /dev/null
-@@ -1,18 +0,0 @@
--#!/bin/sh
--
--DNSMASQ=/usr/sbin/dnsmasq
--
--echo -n "Starting dnsmasq: "
--if [ ! -x "${DNSMASQ}" ]; then
--	echo "missing"
--	exit 1
--fi
--
--if ${DNSMASQ}; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
--
--exit 0
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables
-deleted file mode 100755
-index 2ccadde..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S22iptables
-+++ /dev/null
-@@ -1,43 +0,0 @@
--#!/bin/sh
--
--IPTABLES=`which iptables`
--
--echo "Enable NAT:"
--echo -n "  IPv4 forwarding: "
--if echo 1 > /proc/sys/net/ipv4/ip_forward; then
--	echo "done"
--else
--	echo "failed"
--	return 1
--fi
--
--echo -n "  iptables postrouting: "
--if [ ! -x "${IPTABLES}" ]; then
--	echo "missing"
--	exit 1
--fi
--
--if ${IPTABLES} -t nat -A POSTROUTING -o eth0 -j MASQUERADE; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
--
--echo -n "  iptables incoming trafic: "
--if ${IPTABLES} -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
--
--echo -n "  iptables outgoung trafic: "
--if ${IPTABLES} -A FORWARD -i eth1 -o eth0 -j ACCEPT; then
--	echo "done"
--else
--	echo "failed"
--	exit 1
--fi
--
--exit 0
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
+deleted file mode 100644
 index e0fd2f2..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S40telnetd
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -13646,10 +6071,10 @@ index e0fd2f2..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
+deleted file mode 100644
 index e485dcc..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S41inetd
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -13668,10 +6093,10 @@ index e485dcc..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
+deleted file mode 100644
 index f8e7813..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S42httpd
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -13690,10 +6115,10 @@ index f8e7813..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
+deleted file mode 100644
 index 69fa4c8..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S43ntp
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
 +++ /dev/null
 @@ -1,27 +0,0 @@
 -#!/bin/sh
@@ -13723,10 +6148,10 @@ index 69fa4c8..0000000
 -	echo "edit NTPSERVERS in /etc/default/ntpdate."
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
+deleted file mode 100644
 index e1e0fbf..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S49netfs
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -13740,10 +6165,35 @@ index e1e0fbf..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
-deleted file mode 100755
-index 3a17740..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/S99gpio
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
+deleted file mode 100644
+index e92e5d8..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
++++ /dev/null
+@@ -1,19 +0,0 @@
+-#!/bin/sh
+-
+-PROGRAM=/usr/sbin/alsactl
+-
+-# Exit silently if alsa-utils isn't installed
+-[ -x ${PROGRAM} ] || exit 0
+-
+-echo -n "Restoring mixer state: "
+-if [ ! -f /etc/asound.state ]; then
+-	echo "missing"
+-	exit 1
+-fi
+-
+-if ${PROGRAM} restore; then
+-	echo "done"
+-else
+-	echo "failed"
+-	exit 1
+-fi
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+deleted file mode 100644
+index 7c07f28..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
 +++ /dev/null
 @@ -1,142 +0,0 @@
 -#!/bin/sh
@@ -13758,7 +6208,7 @@ index 3a17740..0000000
 -
 -if [ "${BOARD}" = "" ]; then
 -	echo "none";
--elif [ "${BOARD}" = "NGW100" ]; then
+-elif [ "${BOARD}" = "NGW" ]; then
 -	echo "'${BOARD}'"
 -
 -	echo -n "  boot LED: "
@@ -13859,7 +6309,7 @@ index 3a17740..0000000
 -		echo "failed"
 -		exit 1
 -	fi
--elif [ "${BOARD}" = "STK1000" ]; then # end NGW100
+-elif [ "${BOARD}" = "STK1000" ]; then # end NGW
 -	echo "'${BOARD}'"
 -
 -	echo -n "  switches: "
@@ -13888,10 +6338,33 @@ index 3a17740..0000000
 -	echo "'${BOARD}'"
 -	echo "  WARNING: no GPIO for this board"
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcK b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcK
-deleted file mode 100755
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
+deleted file mode 100644
+index 47001ad..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
++++ /dev/null
+@@ -1,17 +0,0 @@
+-#!/bin/sh
+-
+-PROGRAM=/usr/bin/fbv
+-SPLASHFILE="/etc/stk1000splash.jpg"
+-
+-echo -n "Splash image: "
+-if [ ! -x "${PROGRAM}" -o ! -f "${SPLASHFILE}" ]; then
+-	echo "missing"
+-	exit 1
+-fi
+-
+-${PROGRAM} ${SPLASHFILE} > /dev/null &
+-if [ $? -eq 0 ]; then
+-	echo "loaded"
+-else
+-	echo "failed"
+-fi
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
+deleted file mode 100644
 index 1db1400..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcK
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -#!/bin/sh
@@ -13900,10 +6373,10 @@ index 1db1400..0000000
 -for k in /etc/init.d/K*; do
 -	$k stop
 -done
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS b/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS
-deleted file mode 100755
-index 4d80c25..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/init.d/rcS
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
+deleted file mode 100644
+index a8ea85c..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -13915,15 +6388,15 @@ index 4d80c25..0000000
 -done
 -
 -echo
--echo "NGW100 ready"
+-echo "STK1000 ready"
 -echo
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/inittab b/target/device/Atmel/atngw100/target_skeleton/etc/inittab
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/inittab b/target/device/Atmel/atstk100x/target_skeleton/etc/inittab
 deleted file mode 100644
-index 539edb7..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/inittab
+index 82672b1..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/inittab
 +++ /dev/null
-@@ -1,27 +0,0 @@
--# Inittab for the ATNGW100 development board
+@@ -1,28 +0,0 @@
+-# Inittab for the ATSTK1000 development board
 -#
 -# Note: BusyBox init doesn't support runlevels.  The runlevels field is
 -# completely ignored by BusyBox init. If you want runlevels, use sysvinit.
@@ -13947,16 +6420,17 @@ index 539edb7..0000000
 -
 -# Uncomment this to run a getty on the first serial port.
 -#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
+-ttyS2::respawn:/sbin/getty -L ttyS2 115200 vt100
 -
 -# Run a script on shutdown.
 -::shutdown:/etc/init.d/rcK
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf b/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
 deleted file mode 100644
-index 7c91ea7..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/mdev.conf
+index 046d0d4..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
 +++ /dev/null
 @@ -1,49 +0,0 @@
--# mdev.conf for ATNGW100
+-# mdev.conf for ATSTK1000
 -#
 -# Syntax:
 -#  <regexp> <UID>:<GID> <PERM> [{@,$,*} <CMD>]
@@ -14005,23 +6479,165 @@ index 7c91ea7..0000000
 -tty6.*	0:5	0660
 -
 -ttyS.*	0:20	640
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/modules b/target/device/Atmel/atngw100/target_skeleton/etc/modules
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/modules b/target/device/Atmel/atstk100x/target_skeleton/etc/modules
 deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/mtab b/target/device/Atmel/atngw100/target_skeleton/etc/mtab
+index 82da2e7..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/modules
++++ /dev/null
+@@ -1,4 +0,0 @@
+-snd-at73c213
+-snd-pcm-oss
+-gpio_mouse
+-mousedev
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
+deleted file mode 100644
+index 45d7d7e..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
++++ /dev/null
+@@ -1,129 +0,0 @@
+-#
+-# MPlayer configuration file
+-#
+-# Configuration files are read system-wide from /usr/local/etc/mplayer.conf
+-# and per user from ~/.mplayer/config, where per-user settings override
+-# system-wide settings, all of which are overrriden by the command line.
+-#
+-# The configuration file settings are the same as the command line
+-# options without the preceding '-'.
+-#
+-# See the CONFIGURATION FILES section in the man page
+-# for a detailed description of the syntax.
+-
+-
+-##################
+-# video settings #
+-##################
+-
+-# Specify default video driver (see -vo help for a list).
+-vo=fbdev2
+-
+-# Direct rendring, skip double buffering for framebuffer device
+-dr=yes
+-
+-# Use SDL video with the aalib subdriver by default.
+-#vo = sdl:aalib
+-
+-# FBdev driver:
+-#
+-# mode to use (read from fb.modes)
+-#fbmode = 640x480-120
+-#
+-# location of the fb.modes file
+-#fbmodeconfig = /etc/fb.modes
+-
+-# Specify your monitor timings for the vesa and fbdev video output drivers.
+-# See /etc/X11/XF86Config for timings. Be careful; if you specify settings
+-# that exceed the capabilities of your monitor, you may damage it.
+-#
+-# horizontal frequency range (k stands for 1000)
+-#monitor-hfreq = 31.5k-50k,70k
+-#
+-# vertical frequency range
+-#monitor-vfreq = 50-90
+-#
+-# dotclock (or pixelclock) range (m stands for 1000000)
+-#monitor-dotclock = 30M-300M
+-
+-# Start in fullscreen mode by default.
+-#fs=yes
+-
+-# Change to a different videomode when going fullscreen.
+-#vm=yes
+-
+-# Override the autodetected color depth, may need 'vm=yes' as well.
+-#bpp=0
+-
+-# Enable software scaling (powerful CPU needed) for video output
+-# drivers that do not support hardware scaling.
+-#zoom=yes
+-
+-# standard monitor size, with square pixels
+-#monitoraspect=4:3
+-
+-# Use this for a widescreen monitor, non-square pixels.
+-#monitoraspect=16:9
+-
+-# Keep the player window on top of all other windows.
+-#ontop=yes
+-
+-
+-##################
+-# audio settings #
+-##################
+-
+-# Specify default audio driver (see -ao help for a list).
+-ao=oss,
+-
+-# Use SDL audio driver with the esd subdriver by default.
+-#ao = sdl:esd
+-
+-# Specify the mixer device.
+-#mixer = /dev/mixer
+-
+-# Resample the sound to 44100Hz with the lavcresample audio filter.
+-#af=lavcresample=44100
+-
+-# Specify default audio codec (see -ac help for a list).
+-ac=mad,
+-
+-
+-##################
+-# other settings #
+-##################
+-
+-# Drop frames to preserve audio/video sync.
+-#framedrop = yes
+-
+-# Specify your preferred skin here (skins are searched for in
+-# /usr/local/share/mplayer/skins/<name> and ~/.mplayer/skins/<name>).
+-#skin = Abyss
+-
+-# Resample the font alphamap.
+-# 0     plain white fonts
+-# 0.75  very narrow black outline (default)
+-# 1     narrow black outline
+-# 10    bold black outline
+-#ffactor = 0.75
+-
+-# cache settings
+-#
+-# Use 8MB input cache by default.
+-#cache = 8192
+-#
+-# Prefill 20% of the cache before starting playback.
+-#cache-min = 20.0
+-#
+-# Prefill 50% of the cache before restarting playback after the cache emptied.
+-#cache-seek-min = 50
+-
+-# DVD: Display English subtitles if available.
+-#slang = en
+-
+-# DVD: Play English audio tracks if available.
+-#alang = en
+-
+-
+-# You can also include other configuration files.
+-#include = /path/to/the/file/you/want/to/include
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab b/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
 deleted file mode 120000
 index e1c2045..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/mtab
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
 +++ /dev/null
 @@ -1 +0,0 @@
 -../proc/mounts
 \ No newline at end of file
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/network/interfaces b/target/device/Atmel/atngw100/target_skeleton/etc/network/interfaces
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces b/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
 deleted file mode 100644
-index 4a382dd..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/network/interfaces
+index a20055c..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,11 +0,0 @@
 -# Configure Loopback
 -auto lo
 -iface lo inet loopback
@@ -14030,17 +6646,13 @@ index 4a382dd..0000000
 -auto eth0
 -iface eth0 inet dhcp
 -
--# Configure Ethernet 1
--auto eth1
--iface eth1 inet static
--	address 10.0.0.1
--	netmask 255.255.255.0
--	network 10.0.0.0
--	broadcast 10.0.0.255
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/ntp.conf b/target/device/Atmel/atngw100/target_skeleton/etc/ntp.conf
+-# Configure Ethernet 1, not enabled by default
+-#auto eth1
+-iface eth1 inet dhcp
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
 deleted file mode 100644
 index d1b0af9..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/ntp.conf
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
 +++ /dev/null
 @@ -1,49 +0,0 @@
 -# /etc/ntp.conf, configuration for ntpd
@@ -14092,10 +6704,10 @@ index d1b0af9..0000000
 -# on the network!
 -#disable auth
 -#broadcastclient
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/passwd b/target/device/Atmel/atngw100/target_skeleton/etc/passwd
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/passwd b/target/device/Atmel/atstk100x/target_skeleton/etc/passwd
 deleted file mode 100644
 index 5e073f6..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/passwd
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/passwd
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -root:x:0:0:root:/:/bin/sh
@@ -14116,13 +6728,13 @@ index 5e073f6..0000000
 -nobody:x:65534:65534:nobody:/nonexistent:/bin/false
 -avr32:x:500:500:Linux User,,,:/home/avr32:/bin/sh
 -default:x:1000:1000:Default non-root user:/home/default:/bin/sh
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/proftpd.conf b/target/device/Atmel/atngw100/target_skeleton/etc/proftpd.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
 deleted file mode 100644
-index 59d0390..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/proftpd.conf
+index 86b447d..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
 +++ /dev/null
 @@ -1,31 +0,0 @@
--ServerName			"ATNGW100 FTP server"
+-ServerName			"ATSTK1002 FTP server"
 -ServerType			standalone
 -DefaultServer			on
 -
@@ -14153,10 +6765,10 @@ index 59d0390..0000000
 -#<Limit SITE_CHMOD>
 -#  DenyAll
 -#</Limit>
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/protocols b/target/device/Atmel/atngw100/target_skeleton/etc/protocols
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/protocols b/target/device/Atmel/atstk100x/target_skeleton/etc/protocols
 deleted file mode 100644
 index 1521f39..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/protocols
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/protocols
 +++ /dev/null
 @@ -1,149 +0,0 @@
 -# /etc/protocols:
@@ -14308,18 +6920,18 @@ index 1521f39..0000000
 -# rsvp-e2e-ignore	134	RSVP-E2E-IGNORE
 -#	134-254			# Unassigned
 -#	255			# Reserved
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/resolv.conf b/target/device/Atmel/atngw100/target_skeleton/etc/resolv.conf
-deleted file mode 120000
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
+deleted file mode 100644
 index 71f6f96..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/resolv.conf
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
 +++ /dev/null
 @@ -1 +0,0 @@
 -../tmp/resolv.conf
 \ No newline at end of file
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/samba/smb.conf b/target/device/Atmel/atngw100/target_skeleton/etc/samba/smb.conf
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
 deleted file mode 100644
-index 13e46e8..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/samba/smb.conf
+index a295718..0000000
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
 +++ /dev/null
 @@ -1,287 +0,0 @@
 -# This is the main Samba configuration file. You should read the
@@ -14350,10 +6962,10 @@ index 13e46e8..0000000
 -   workgroup = AVR32
 -
 -# Network name
--   netbios name = ngw100
+-   netbios name = stk1000
 -
 -# server string is the equivalent of the NT Description field
--   server string = AVR32 NGW100 development kit
+-   server string = AVR32 STK1000 development kit
 -
 -# Security mode. Defines in which mode Samba will operate. Possible
 -# values are share, user, server, domain and ads. Most people will want
@@ -14423,7 +7035,7 @@ index 13e46e8..0000000
 -# Configure Samba to use multiple interfaces
 -# If you have multiple network interfaces then you must list them
 -# here. See the man page for details.
--   interfaces = lo eth1
+-   interfaces = lo eth0
 -
 -   socket options = TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192
 -
@@ -14609,17 +7221,17 @@ index 13e46e8..0000000
 -;   writable = yes
 -;   printable = no
 -;   create mask = 0765
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/samba/smbpasswd b/target/device/Atmel/atngw100/target_skeleton/etc/samba/smbpasswd
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd b/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
 deleted file mode 100644
 index a3fe520..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/samba/smbpasswd
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
 +++ /dev/null
 @@ -1 +0,0 @@
 -root:0:172DC9BBE870E1B6AAD3B435B51404EE:090A846DE05FDBC2D90864D49620FD7C:[U          ]:LCT-4561C217:
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/services b/target/device/Atmel/atngw100/target_skeleton/etc/services
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/services b/target/device/Atmel/atstk100x/target_skeleton/etc/services
 deleted file mode 100644
 index e2ffd3d..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/services
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/services
 +++ /dev/null
 @@ -1,2117 +0,0 @@
 -#
@@ -16739,10 +9351,10 @@ index e2ffd3d..0000000
 -wnn6_DS		26208/tcp  #Wnn6 (Dserver)
 -dbbrowse	47557/tcp  #Databeam Corporation
 -dbbrowse	47557/udp  #Databeam Corporation
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/shadow b/target/device/Atmel/atngw100/target_skeleton/etc/shadow
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/shadow b/target/device/Atmel/atstk100x/target_skeleton/etc/shadow
 deleted file mode 100644
 index d5dc397..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/shadow
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/shadow
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
@@ -16763,10 +9375,10 @@ index d5dc397..0000000
 -nobody:!:13200:0:99999:7:::
 -avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
 -default:!:13200:0:99999:7:::
-diff --git a/target/device/Atmel/atngw100/target_skeleton/etc/shells b/target/device/Atmel/atngw100/target_skeleton/etc/shells
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/shells b/target/device/Atmel/atstk100x/target_skeleton/etc/shells
 deleted file mode 100644
 index 6ee110c..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/etc/shells
+--- a/target/device/Atmel/atstk100x/target_skeleton/etc/shells
 +++ /dev/null
 @@ -1,8 +0,0 @@
 -# /etc/shells: valid login shells
@@ -16777,25 +9389,10 @@ index 6ee110c..0000000
 -/usr/bin/zsh
 -/usr/bin/bash
 -/usr/bin/screen
-diff --git a/target/device/Atmel/atngw100/target_skeleton/home/.empty b/target/device/Atmel/atngw100/target_skeleton/home/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/lib/.empty b/target/device/Atmel/atngw100/target_skeleton/lib/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/mnt/.empty b/target/device/Atmel/atngw100/target_skeleton/mnt/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/opt/.empty b/target/device/Atmel/atngw100/target_skeleton/opt/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/root/.bash_history b/target/device/Atmel/atngw100/target_skeleton/root/.bash_history
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/root/.bash_logout b/target/device/Atmel/atngw100/target_skeleton/root/.bash_logout
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout b/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
 deleted file mode 100644
 index 77ef1f9..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/root/.bash_logout
+--- a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
 +++ /dev/null
 @@ -1,7 +0,0 @@
 -# ~/.bash_logout: executed by bash(1) when login shell exits.
@@ -16805,10 +9402,10 @@ index 77ef1f9..0000000
 -case "`tty`" in
 -    /dev/tty[0-9]*) clear
 -esac
-diff --git a/target/device/Atmel/atngw100/target_skeleton/root/.bash_profile b/target/device/Atmel/atngw100/target_skeleton/root/.bash_profile
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile b/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
 deleted file mode 100644
 index 27bf149..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/root/.bash_profile
+--- a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
 +++ /dev/null
 @@ -1,15 +0,0 @@
 -# .bash_profile
@@ -16826,10 +9423,10 @@ index 27bf149..0000000
 -if [ -f ~/.bashrc ]; then
 -    source ~/.bashrc
 -fi
-diff --git a/target/device/Atmel/atngw100/target_skeleton/root/.bashrc b/target/device/Atmel/atngw100/target_skeleton/root/.bashrc
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc b/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
 deleted file mode 100644
 index d13c8f9..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/root/.bashrc
+--- a/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
 +++ /dev/null
 @@ -1,48 +0,0 @@
 -# ~/.bashrc: executed by bash(1) for non-login interactive shells.
@@ -16880,22 +9477,13 @@ index d13c8f9..0000000
 -    alias calc='calc -Cd '
 -    alias bc='calc -Cd '
 -fi;
-diff --git a/target/device/Atmel/atngw100/target_skeleton/root/.empty b/target/device/Atmel/atngw100/target_skeleton/root/.empty
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/sys/.empty b/target/device/Atmel/atstk100x/target_skeleton/sys/.empty
 deleted file mode 100644
 index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/sbin/.empty b/target/device/Atmel/atngw100/target_skeleton/sbin/.empty
+diff --git a/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script b/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
 deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/sys/.empty b/target/device/Atmel/atngw100/target_skeleton/sys/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/tmp/resolv.conf b/target/device/Atmel/atngw100/target_skeleton/tmp/resolv.conf
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/usr/share/udhcpc/default.script b/target/device/Atmel/atngw100/target_skeleton/usr/share/udhcpc/default.script
-deleted file mode 100755
 index 56cbaf6..0000000
---- a/target/device/Atmel/atngw100/target_skeleton/usr/share/udhcpc/default.script
+--- a/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
 +++ /dev/null
 @@ -1,19 +0,0 @@
 -#!/bin/sh
@@ -16917,29 +9505,5 @@ index 56cbaf6..0000000
 -	fi
 -	;;
 -esac
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/cache/.empty b/target/device/Atmel/atngw100/target_skeleton/var/cache/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/lib/pcmcia/.empty b/target/device/Atmel/atngw100/target_skeleton/var/lib/pcmcia/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/lock/.empty b/target/device/Atmel/atngw100/target_skeleton/var/lock/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/log/.empty b/target/device/Atmel/atngw100/target_skeleton/var/log/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/pcmcia/.empty b/target/device/Atmel/atngw100/target_skeleton/var/pcmcia/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/run/.empty b/target/device/Atmel/atngw100/target_skeleton/var/run/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/spool/.empty b/target/device/Atmel/atngw100/target_skeleton/var/spool/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/target/device/Atmel/atngw100/target_skeleton/var/tmp/.empty b/target/device/Atmel/atngw100/target_skeleton/var/tmp/.empty
-deleted file mode 100644
-index e69de29..0000000
 -- 
 1.7.0.4
