@@ -1,46 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 3 Dec 2010 11:56:58 +0100
-Subject: [Buildroot] [git commit master 1/1] cloop: fix download URL
-Message-ID: <20101205211156.B076E8E11D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 05 Dec 2010 22:23:26 +0100
+Subject: [Buildroot] How to contribute to Buildroot with Git
+In-Reply-To: <20101205154119.15fc07ef@surf> (Thomas Petazzoni's message of
+	"Sun, 5 Dec 2010 15:41:19 +0100")
+References: <20101203113536.38481498@surf>
+	<953244.140.qm@web111110.mail.gq1.yahoo.com>
+	<20101205091724.591e256b@surf>
+	<000c01cb9455$b1f49bc0$15ddd340$@pauljones.id.au>
+	<000f01cb9488$62e132e0$28a398a0$@zuerker.org>
+	<20101205154119.15fc07ef@surf>
+Message-ID: <87ipz7x6b5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9de2a8513e34da0b4e8cd4ea542ee1d449989a8c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> Hello,
+ Thomas> On Sun, 5 Dec 2010 08:26:20 -0600
+ Thomas> "Heiko Zuerker" <heiko@zuerker.org> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    2 +-
- package/cloop/cloop.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> Yes I agree, this would prevent a lot of questions and confusion.
+ >> You can throw it on the website almost as-is.
 
-diff --git a/CHANGES b/CHANGES
-index 04984a6..77ceee0 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,6 +1,6 @@
- 2011.02, Not yet released:
- 
--	Updated/fixed packages:
-+	Updated/fixed packages: cloop
- 
- 2010.11, Released November 30th, 2010:
- 
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index f1c1e1c..0ed9ff0 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -1,6 +1,6 @@
- CLOOP_VERSION=2.631-1
- CLOOP_SOURCE=cloop_$(CLOOP_VERSION).tar.gz
--CLOOP_SITE=http://debian-knoppix.alioth.debian.org/sources/
-+CLOOP_SITE=http://debian-knoppix.alioth.debian.org/packages/sources/cloop
- 
- HOST_CLOOP_DEPENDENCIES = host-zlib
- 
+ Thomas> On one hand, I'm a bit reluctant to have this in the Buildroot
+ Thomas> documentation, as it has nothing specific to Buildroot, it's just
+ Thomas> general Git usage.
+
+ Thomas> On the other hand, it looks like a number of Buildroot potential
+ Thomas> contributors don't really know how to start with Git to send patches
+ Thomas> and contribute. So maybe we should add it to the doc.
+
+Yeah, and it's pretty short, so I think we should add it.
+
 -- 
-1.7.2.2
+Bye, Peter Korsgaard
