@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:52:48 +0100
-Subject: [Buildroot] [PATCH 17/55] board: update and minify
-	at91sam9263ek_defconfig
+Date: Sun,  5 Dec 2010 21:52:49 +0100
+Subject: [Buildroot] [PATCH 18/55] board: update and minify
+	at91sam9261ek_defconfig
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c7bec2d62e43bf29c402dc7cfbca3eedbc7dc7dc.1291582351.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <57e5c5b0f1ef7467a396c3e4543c24438eebdc73.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use modern kernel and U-Boot versions, and get rid of the now useless
-kernel configuration file since we use the kernel defconfig file
-instead.
+Use modern U-Boot and kernel versions, and get rid of the useless
+kernel configuration file, since we now use the kernel defconfig.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91sam9263ek_defconfig                    | 1066 +--------------
- .../at91sam9263ek-linux-2.6.28.2.config            | 1440 --------------------
- 2 files changed, 18 insertions(+), 2488 deletions(-)
- delete mode 100644 target/device/Atmel/at91sam9263ek/at91sam9263ek-linux-2.6.28.2.config
+ configs/at91sam9261ek_defconfig                    | 1069 +--------------
+ .../at91sam9261ek-linux-2.6.28.2.config            | 1432 --------------------
+ 2 files changed, 18 insertions(+), 2483 deletions(-)
+ delete mode 100644 target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.28.2.config
 
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index d75c6fd..acf86ad 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -1,1055 +1,25 @@
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index 2c0b8af..c1ab6be 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -1,1058 +1,25 @@
 -#
 -# Automatically generated make config: don't edit
--# Fri Jan 30 23:59:55 2009
+-# Fri Jan 30 00:18:55 2009
 -#
 -BR2_HAVE_DOT_CONFIG=y
 -BR2_VERSION="2009.02-svn"
@@ -72,7 +71,6 @@ index d75c6fd..acf86ad 100644
 -# BR2_ARM_EABI is not set
 -BR2_ARCH="arm"
 -BR2_ENDIAN="LITTLE"
--BR2_GCC_TARGET_ABI="apcs-gnu"
 +BR2_arm926t=y
  
 -#
@@ -82,15 +80,15 @@ index d75c6fd..acf86ad 100644
 -#
 -# Project Options
 -#
--BR2_PROJECT="at91sam9263ek"
--BR2_HOSTNAME="AT91SAM9263EK"
--BR2_BANNER="Welcome to the Erik's uClibc development environment running on an AT91SAM9263EK"
+-BR2_PROJECT="at91sam9261ek"
+-BR2_HOSTNAME="AT91SAM9261EK"
+-BR2_BANNER="Welcome to the Erik's uClibc development environment running on an AT91SAM9261EK"
 -
 -#
 -# Preset Devices
 -#
 -# BR2_TARGET_ARMLTD is not set
--BR2_BOARD_NAME="at91sam9263ek"
+-BR2_BOARD_NAME="at91sam9261ek"
 -BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
 -BR2_TARGET_ATMEL=y
 -
@@ -110,10 +108,10 @@ index d75c6fd..acf86ad 100644
 -# BR2_TARGET_AT91RM9200 is not set
 -# BR2_TARGET_AT91SAM9260 is not set
 -# BR2_TARGET_AT91SAM9G20 is not set
--# BR2_TARGET_AT91SAM9261 is not set
+-BR2_TARGET_AT91SAM9261=y
 -# BR2_TARGET_AT91SAM9261S is not set
 -# BR2_TARGET_AT91SAM9RL64 is not set
--BR2_TARGET_AT91SAM9263=y
+-# BR2_TARGET_AT91SAM9263 is not set
 -# BR2_TARGET_AT91SAM9G40 is not set
 -# BR2_TARGET_AT91SAM9M10 is not set
 -# BR2_TARGET_AT91SAM9M11 is not set
@@ -132,12 +130,14 @@ index d75c6fd..acf86ad 100644
 -# BR2_TARGET_AT91SAM9G20DFC is not set
 -# BR2_TARGET_AT91SAM9G20EK is not set
 -# BR2_TARGET_AT91SAM9XEEK is not set
--# BR2_TARGET_AT91SAM9261EK is not set
+-BR2_TARGET_AT91SAM9261EK=y
 -# BR2_TARGET_AT91SAM9RL64EK is not set
--BR2_TARGET_AT91SAM9263EK=y
+-# BR2_TARGET_AT91SAM9263EK is not set
 -# BR2_TARGET_AT572D940DCM is not set
 -# BR2_TARGET_AT91CAP9DK is not set
 -# BR2_TARGET_AT91CAP9ADK is not set
+-BR2_TARGET_AT91SAM9261EK_SPIMODE0=y
+-# BR2_TARGET_AT91SAM9261EK_SPIMODE3 is not set
 -# BR2_TARGET_AT91_ADVANCED_INFO is not set
 -
 -#
@@ -148,16 +148,17 @@ index d75c6fd..acf86ad 100644
 -# Secondary locations
 -#
 -BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+-# BR2_TARGET_DATAFLASHBOOT is not set
 +# First stage bootloader
  BR2_TARGET_AT91BOOTSTRAP=y
 -BR2_TARGET_AT91BOOTSTRAP_BOARD="$(BOARD_NAME)"
--# BR2_TARGET_AT91BOOT_DATAFLASH is not set
--BR2_TARGET_AT91BOOT_DATAFLASHCARD=y
+-BR2_TARGET_AT91BOOT_DATAFLASH=y
+-# BR2_TARGET_AT91BOOT_DATAFLASHCARD is not set
 -# BR2_TARGET_AT91BOOT_NANDFLASH is not set
 -# BR2_TARGET_AT91BOOT_FLASH is not set
 -# BR2_TARGET_AT91BOOT_SDCARD is not set
 -# BR2_TARGET_AT91BOOT_EEPROM is not set
--BR2_TARGET_AT91BOOTSTRAP_MEMORY="dataflashcard"
+-BR2_TARGET_AT91BOOTSTRAP_MEMORY="dataflash"
 -BR2_AT91BOOTSTRAP_IMG_SIZE="0x32000"
 -BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT=y
 -# BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM is not set
@@ -206,7 +207,7 @@ index d75c6fd..acf86ad 100644
 -# BR2_FPU_SUFFIX is not set
 -BR2_TOPDIR_PREFIX=""
 -BR2_TOPDIR_SUFFIX=""
--BR2_ROOTFS_PREFIX="at91sam9263ek-NAND"
+-BR2_ROOTFS_PREFIX="at91sam9261ek-NAND"
 -BR2_JLEVEL=2
 -# BR2_DEPRECATED is not set
 -# BR2_ENABLE_DEBUG is not set
@@ -246,7 +247,6 @@ index d75c6fd..acf86ad 100644
 -# BR2_KERNEL_HEADERS_2_6_27 is not set
 -BR2_KERNEL_HEADERS_2_6_28=y
 -# BR2_KERNEL_HEADERS_SNAP is not set
--# BR2_KERNEL_HEADERS_PATCH_DIR is not set
 -BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
 -
 -#
@@ -256,6 +256,11 @@ index d75c6fd..acf86ad 100644
 -BR2_UCLIBC_VERSION_0_9_30=y
 -# BR2_UCLIBC_VERSION_SNAPSHOT is not set
 -BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+-BR2_ENABLE_LOCALE=y
+-# BR2_PTHREADS_NONE is not set
+-# BR2_PTHREADS is not set
+-BR2_PTHREADS_OLD=y
+-# BR2_PTHREADS_NATIVE is not set
 -# BR2_PTHREAD_DEBUG is not set
 -BR2_PROGRAM_INVOCATION=y
 -# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
@@ -292,7 +297,9 @@ index d75c6fd..acf86ad 100644
 -BR2_GCC_VERSION="4.3.2"
 -BR2_TOOLCHAIN_SYSROOT=y
 -BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+-BR2_GCC_CROSS_CXX=y
 -# BR2_GCC_CROSS_FORTRAN is not set
+-BR2_INSTALL_LIBSTDCPP=y
 -# BR2_INSTALL_LIBGCJ is not set
 -# BR2_INSTALL_OBJC is not set
 -# BR2_INSTALL_FORTRAN is not set
@@ -314,24 +321,17 @@ index d75c6fd..acf86ad 100644
 -#
 -# Common Toolchain Options
 -#
--BR2_LARGEFILE=y
--BR2_INET_IPV6=y
--BR2_INET_RPC=y
--BR2_ENABLE_LOCALE=y
--BR2_USE_WCHAR=y
--# BR2_SOFT_FLOAT is not set
--# BR2_PTHREADS_NONE is not set
--# BR2_PTHREADS is not set
--BR2_PTHREADS_OLD=y
--# BR2_PTHREADS_NATIVE is not set
--BR2_GCC_CROSS_CXX=y
--BR2_INSTALL_LIBSTDCPP=y
--BR2_TARGET_OPTIMIZATION="-Os -pipe"
 -# BR2_ELF2FLT is not set
 -# BR2_MKLIBS is not set
 -# BR2_PACKAGE_SSTRIP_TARGET is not set
 -BR2_PACKAGE_SSTRIP_HOST=y
+-BR2_LARGEFILE=y
+-BR2_INET_IPV6=y
+-BR2_INET_RPC=y
+-BR2_USE_WCHAR=y
+-# BR2_SOFT_FLOAT is not set
 -# BR2_VFP_FLOAT is not set
+-BR2_TARGET_OPTIMIZATION="-Os -pipe"
 -BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
 -
 -#
@@ -381,6 +381,8 @@ index d75c6fd..acf86ad 100644
 -# BR2_PACKAGE_M4 is not set
 -# BR2_PACKAGE_OPROFILE is not set
 -BR2_PACKAGE_READLINE=y
+-BR2_PACKAGE_READLINE_TARGET=y
+-# BR2_PACKAGE_READLINE_HEADERS is not set
 -# BR2_PACKAGE_PCRE is not set
 -
 -#
@@ -638,7 +640,7 @@ index d75c6fd..acf86ad 100644
 -# BR2_PACKAGE_ALSA_UTILS_ASEQDUMP is not set
 -# BR2_PACKAGE_ALSA_UTILS_ASEQNET is not set
 -BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-+BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9263ek"
++BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9261ek"
 +BR2_TARGET_AT91BOOTSTRAP_DATAFLASHCARD=y
  
 -#
@@ -657,7 +659,7 @@ index d75c6fd..acf86ad 100644
 -BR2_PACKAGE_LIBVORBIS_TREMOR=y
 -BR2_PACKAGE_MADPLAY=y
 -BR2_PACKAGE_MADPLAY_ALSA=y
--# BR2_PACKAGE_MPG123 is not set
+-BR2_PACKAGE_MPG123=y
 -BR2_PACKAGE_MPG123_ALSA=y
 -BR2_PACKAGE_MPLAYER=y
 -# BR2_PACKAGE_SPEEX is not set
@@ -975,8 +977,8 @@ index d75c6fd..acf86ad 100644
 -BR2_TARGET_U_BOOT_2009_01_ARCH_AT91=y
 -BR2_TARGET_U_BOOT_ARCH_AT91_PATCH_DIR="target/device/Atmel/arch-arm/u-boot/2009.01"
 -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
--BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD=y
--# BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH is not set
+-# BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD is not set
+-BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH=y
 -# BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH is not set
 -# BR2_TARGET_UBOOT_BOOTSOURCE_FLASH is not set
 -# BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD is not set
@@ -998,10 +1000,10 @@ index d75c6fd..acf86ad 100644
 -BR2_TARGET_UBOOT_GATEWAY="10.175.196.1"
 -BR2_TARGET_UBOOT_NETMASK="255.255.255.0"
 -BR2_TARGET_UBOOT_ETHADDR="04:25:fe:ed:00:18"
--BR2_BOOTSOURCE_DATAFLASHCARD=y
+-BR2_BOOTSOURCE_DATAFLASH=y
 -BR2_BOOTSOURCE_NANDFLASH=y
 -BR2_BOOTSOURCE=y
-+BR2_TARGET_UBOOT_BOARDNAME="at91sam9263ek"
++BR2_TARGET_UBOOT_BOARDNAME="at91sam9261ek"
 +BR2_TARGET_UBOOT_2010_06=y
  
 -#
@@ -1095,22 +1097,21 @@ index d75c6fd..acf86ad 100644
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.33"
 +BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.33-at91.patch.gz"
 +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263ek"
++BR2_LINUX_KERNEL_DEFCONFIG="at91sam9261ek"
 +
 +# Filesystem
 +# BR2_TARGET_ROOTFS_EXT2 is not set
 +BR2_TARGET_ROOTFS_TAR=y
-\ No newline at end of file
-diff --git a/target/device/Atmel/at91sam9263ek/at91sam9263ek-linux-2.6.28.2.config b/target/device/Atmel/at91sam9263ek/at91sam9263ek-linux-2.6.28.2.config
+diff --git a/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.28.2.config b/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.28.2.config
 deleted file mode 100644
-index 2ea0cab..0000000
---- a/target/device/Atmel/at91sam9263ek/at91sam9263ek-linux-2.6.28.2.config
+index 12839d9..0000000
+--- a/target/device/Atmel/at91sam9261ek/at91sam9261ek-linux-2.6.28.2.config
 +++ /dev/null
-@@ -1,1440 +0,0 @@
+@@ -1,1432 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
 -# Linux kernel version: 2.6.28.2
--# Thu Jan 29 22:58:59 2009
+-# Thu Jan 29 22:53:19 2009
 -#
 -CONFIG_ARM=y
 -CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -1284,8 +1285,8 @@ index 2ea0cab..0000000
 -#
 -# CONFIG_ARCH_AT91RM9200 is not set
 -# CONFIG_ARCH_AT91SAM9260 is not set
--# CONFIG_ARCH_AT91SAM9261 is not set
--CONFIG_ARCH_AT91SAM9263=y
+-CONFIG_ARCH_AT91SAM9261=y
+-# CONFIG_ARCH_AT91SAM9263 is not set
 -# CONFIG_ARCH_AT91SAM9RL is not set
 -# CONFIG_ARCH_AT91SAM9G20 is not set
 -# CONFIG_ARCH_AT91CAP9 is not set
@@ -1293,18 +1294,14 @@ index 2ea0cab..0000000
 -CONFIG_AT91_PMC_UNIT=y
 -
 -#
--# AT91SAM9263 Board Type
+-# AT91SAM9261 Board Type
 -#
--CONFIG_MACH_AT91SAM9263EK=y
--# CONFIG_MACH_USB_A9263 is not set
--# CONFIG_MACH_CSB737 is not set
--# CONFIG_MACH_TOTEMNOVA is not set
--# CONFIG_MACH_NEOCORE926 is not set
+-CONFIG_MACH_AT91SAM9261EK=y
 -
 -#
 -# AT91 Board Options
 -#
--CONFIG_MTD_AT91_DATAFLASH_CARD=y
+-# CONFIG_MTD_AT91_DATAFLASH_CARD is not set
 -# CONFIG_MTD_NAND_ATMEL_BUSWIDTH_16 is not set
 -
 -#
@@ -1644,10 +1641,9 @@ index 2ea0cab..0000000
 -# CONFIG_CDROM_PKTCDVD is not set
 -# CONFIG_ATA_OVER_ETH is not set
 -CONFIG_MISC_DEVICES=y
--CONFIG_ATMEL_PWM=y
 -# CONFIG_ATMEL_TCLIB is not set
 -# CONFIG_EEPROM_93CX6 is not set
--# CONFIG_ATMEL_SSC is not set
+-CONFIG_ATMEL_SSC=y
 -# CONFIG_ENCLOSURE_SERVICES is not set
 -# CONFIG_C2PORT is not set
 -CONFIG_HAVE_IDE=y
@@ -1720,11 +1716,11 @@ index 2ea0cab..0000000
 -# CONFIG_MDIO_BITBANG is not set
 -CONFIG_NET_ETHERNET=y
 -CONFIG_MII=y
--CONFIG_MACB=y
--# CONFIG_MACB_TX_SRAM is not set
 -# CONFIG_AX88796 is not set
 -# CONFIG_SMC91X is not set
--# CONFIG_DM9000 is not set
+-CONFIG_DM9000=y
+-CONFIG_DM9000_DEBUGLEVEL=4
+-# CONFIG_DM9000_FORCE_SIMPLE_PHY_POLL is not set
 -# CONFIG_ENC28J60 is not set
 -# CONFIG_SMC911X is not set
 -# CONFIG_IBM_NEW_EMAC_ZMII is not set
@@ -1804,7 +1800,6 @@ index 2ea0cab..0000000
 -# CONFIG_TOUCHSCREEN_PENMOUNT is not set
 -# CONFIG_TOUCHSCREEN_TOUCHRIGHT is not set
 -# CONFIG_TOUCHSCREEN_TOUCHWIN is not set
--# CONFIG_TOUCHSCREEN_WM97XX is not set
 -# CONFIG_TOUCHSCREEN_USB_COMPOSITE is not set
 -# CONFIG_TOUCHSCREEN_TOUCHIT213 is not set
 -# CONFIG_INPUT_MISC is not set
@@ -1934,6 +1929,8 @@ index 2ea0cab..0000000
 -# CONFIG_FB_S1D15605 is not set
 -# CONFIG_FB_S1D13XXX is not set
 -CONFIG_FB_ATMEL=y
+-CONFIG_FB_INTSRAM=y
+-# CONFIG_FB_ATMEL_STN is not set
 -# CONFIG_FB_VIRTUAL is not set
 -# CONFIG_FB_METRONOME is not set
 -# CONFIG_FB_MB862XX is not set
@@ -1946,7 +1943,6 @@ index 2ea0cab..0000000
 -# CONFIG_LCD_PLATFORM is not set
 -CONFIG_BACKLIGHT_CLASS_DEVICE=y
 -CONFIG_BACKLIGHT_ATMEL_LCDC=y
--# CONFIG_BACKLIGHT_ATMEL_PWM is not set
 -# CONFIG_BACKLIGHT_CORGI is not set
 -
 -#
@@ -1987,24 +1983,22 @@ index 2ea0cab..0000000
 -# CONFIG_SND_VERBOSE_PROCFS is not set
 -# CONFIG_SND_VERBOSE_PRINTK is not set
 -# CONFIG_SND_DEBUG is not set
--CONFIG_SND_VMASTER=y
--CONFIG_SND_AC97_CODEC=y
 -CONFIG_SND_DRIVERS=y
 -# CONFIG_SND_DUMMY is not set
 -# CONFIG_SND_VIRMIDI is not set
 -# CONFIG_SND_MTPAV is not set
 -# CONFIG_SND_SERIAL_U16550 is not set
 -# CONFIG_SND_MPU401 is not set
--# CONFIG_SND_AC97_POWER_SAVE is not set
 -CONFIG_SND_ARM=y
--CONFIG_SND_AT91_AC97=y
+-# CONFIG_SND_AT91_AC97 is not set
 -CONFIG_SND_SPI=y
+-CONFIG_SND_AT73C213=y
+-CONFIG_SND_AT73C213_TARGET_BITRATE=48000
 -CONFIG_SND_USB=y
 -# CONFIG_SND_USB_AUDIO is not set
 -# CONFIG_SND_USB_CAIAQ is not set
 -# CONFIG_SND_SOC is not set
 -# CONFIG_SOUND_PRIME is not set
--CONFIG_AC97_BUS=y
 -CONFIG_HID_SUPPORT=y
 -CONFIG_HID=y
 -# CONFIG_HID_DEBUG is not set
@@ -2200,7 +2194,6 @@ index 2ea0cab..0000000
 -#
 -# LED drivers
 -#
--CONFIG_LEDS_ATMEL_PWM=y
 -CONFIG_LEDS_GPIO=y
 -
 -#
