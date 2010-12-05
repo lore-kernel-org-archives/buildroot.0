@@ -1,133 +1,333 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 10:25:27 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.02/toolchain-improvements
-Message-ID: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
+Date: Sun,  5 Dec 2010 10:25:28 +0100
+Subject: [Buildroot] [PATCH 01/15] toolchain: Improve C library option
+	selection
+In-Reply-To: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ca79dc87ecbeff3cfc20427c3ec3a54ca3a98c94.1291541115.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Turn BR2_LARGEFILE, BR2_INET_IPV6, BR2_INET_RPC, BR2_USE_WCHAR,
+BR2_ENABLE_LOCALE and BR2_PROGRAM_INVOCATION into hidden options.
 
-Here is a set of patches that mainly improves the toolchain
-configuration and support, with two majors directions :
+Then, for Buildroot toolchains, external toolchains and Crosstool-NG
+toolchains, provide visible options that selects the hidden options.
 
- * Turn BR2_LARGEFILE, BR2_INET_RPC, BR2_INET_RPC and similar options
-   into hidden options, and let the toolchain backends present them as
-   they wish. For example for RPC, xthe Buildroot backend says "Do you
-   want RPC ?" while the external toolchain backend doesn't show the
-   option when glibc is used, or present an option "Does your
-   toolchain has RPC ?" when uclibc is used.
+This allows :
 
-   So really those options should now be called
-   BR2_TOOLCHAIN_HAS_LARGEFILE, BR2_TOOLCHAIN_HAS_INET_RPC, etc, but
-   we kept the old names in this patch series because changing them
-   impacts all packages. This will be done later.
+ * To show a different label and help text in the case of Buildroot
+   toolchain (do you want to enable feature X ?) and in the case of
+   external toolchain (is feature X available in your toolchain ?)
 
-   A first commit handles largefile, rpc, ipv6, locale and program
-   invocation options, and some later commits handle the C++ option
-   and thread options.
+ * To not show any option when a glibc external toolchain is selected
+   (since glibc is assumed to support all of largefile, IPv6, RPC,
+   WCHAR, locale and program invocation) and have them all selected in
+   that case.
 
- * Extend external toolchain with "profiles", i.e well-known external
-   toolchains. For those toolchains, Buildroot can automatically
-   download and install them and will automatically select the
-   appropriate configuration options (C library used, RPC, IPv6,
-   locale, etc.). So an user can know tell Buildroot to use a
-   CodeSourcery toolchain, and Buildroot will do all the job. Such
-   toolchains are extracted in $(O)/external-toolchain, but my intent
-   is to move it to $(O)/toolchain once Gustavoz's toolchain cleanup
-   work is done.
+There is some amount of duplication between Buildroot toolchain config
+options and Crosstool-NG toolchain config options, because kconfig
+doesn't allow to source the same Config.in file twice (even if under
+mutually exclusive conditions). This duplication is more readable that
+the hack that consists in splitting files in multiple pieces.
 
-   This work keeps the ability of doing some more manual things with
-   external toolchains:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-buildroot/Config.in.2  |   50 +++++++++++++++++++++++
+ toolchain/toolchain-common.in              |   57 +++++----------------------
+ toolchain/toolchain-crosstool-ng/Config.in |   53 +++++++++++++++++++++++++
+ toolchain/toolchain-external/Config.in     |   59 ++++++++++++++++++++++++++++
+ 4 files changed, 172 insertions(+), 47 deletions(-)
 
-     - For an external toolchain profile, you can tell Buildroot *not*
-       to download it, and in that case, you must provide Buildroot
-       with the location of the external toolchain.
-
-     - You keep the ability to specify a custom profile, where you
-       will have to tell Buildroot everything: location of the
-       toolchain, toolchain prefix, C library used, etc.
-
-In my opinion, those two directions really make the external
-toolchains easier and simpler to use. One topic left is the gdb
-options, but I decided not to change it, in order to not conflict too
-much with Gustavoz's work.
-
-The rest of the changes are more minor modifications, related to these
-toolchain improvements.
-
-Regards,
-
-Thomas
-
-The following changes since commit 7e9c3a387820154fd1355f23c2669072c0c3a5f7:
-  Peter Korsgaard (1):
-        docs/news.html: add 2010.11 announce link
-
-are available in the git repository at:
-
-  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.02/toolchain-improvements
-
-Thomas Petazzoni (15):
-      toolchain: Improve C library option selection
-      toolchain: remove ending semi-colon in helpers
-      toolchain: add support for external toolchain profiles and download
-      toolchain: remove toolchain-specific stripping
-      toolchain: rework C++ options
-      toolchain: move Stack Protection Support option
-      ltp-testsuite: bump version and use autotargets
-      toolchain: rework thread options
-      toolchain: check that the thread option selection is correct
-      gcc: disable libgomp when thread support is disabled
-      uclibc: add patch for uClibc snapshot to fix build issue
-      toolchain: BR2_NEEDS_GETTEXT must be y when uClibc is used
-      toolchain: expose thread options in the Crosstool-NG backend
-      toolchain: more verbose in crosstool-ng backend
-      package: pass TARGET_MAKE_ENV at install/clean/uninstall steps
-
- Makefile                                           |    3 +-
- package/Makefile.autotools.in                      |   10 +-
- package/Makefile.in                                |   12 +-
- package/dmalloc/dmalloc.mk                         |    6 +-
- package/ltp-testsuite/Config.in                    |   15 +-
- ...tp-testsuite-20101031-disable-controllers.patch |   25 ++
- .../ltp-testsuite-disable-ipv6-tests.patch         |  123 ----------
- .../ltp-testsuite-enable-openposix-for-nptl.patch  |   33 ---
- .../ltp-testsuite-generate-needs-bash.patch        |    8 -
- .../ltp-testsuite-sched-getaffinity.patch          |   11 -
- .../ltp-testsuite-uclibc-syscalls.patch            |   11 -
- package/ltp-testsuite/ltp-testsuite.mk             |   68 +------
- package/lzma/Config.in                             |    4 +-
- package/multimedia/ffmpeg/ffmpeg.mk                |    6 +-
- package/openvpn/openvpn.mk                         |    6 +-
- package/rpm/Config.in                              |    4 +-
- toolchain/Config.in                                |    5 +-
- toolchain/Makefile.in                              |    6 -
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    8 +-
- toolchain/helpers.mk                               |   16 +-
- toolchain/toolchain-buildroot/Config.in.2          |  101 ++++++++
- toolchain/toolchain-common.in                      |  121 ++---------
- toolchain/toolchain-crosstool-ng/Config.in         |   95 ++++++++-
- .../toolchain-crosstool-ng/crosstool-ng.config     |    8 +-
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   25 ++-
- toolchain/toolchain-external/Config.in             |  240 +++++++++++++++++++-
- toolchain/toolchain-external/Config.in.2           |   17 --
- toolchain/toolchain-external/ext-tool.mk           |  212 ++++++++++++------
- ...tconf-only-use-specs-names-when-available.patch |  131 +++++++++++
- toolchain/uClibc/uclibc.mk                         |    2 +-
- 30 files changed, 827 insertions(+), 505 deletions(-)
- create mode 100644 package/ltp-testsuite/ltp-testsuite-20101031-disable-controllers.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-disable-ipv6-tests.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-enable-openposix-for-nptl.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-generate-needs-bash.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-sched-getaffinity.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-uclibc-syscalls.patch
- delete mode 100644 toolchain/toolchain-external/Config.in.2
- create mode 100644 toolchain/uClibc/uClibc.snapshot.getconf-only-use-specs-names-when-available.patch
-
-Thanks,
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 2a17796..d052b84 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -1,6 +1,56 @@
+ # Buildroot backend specific options
+ 
+ if BR2_TOOLCHAIN_BUILDROOT
++
++comment "Toolchain Options"
++
++config BR2_TOOLCHAIN_BUILDROOT_LARGEFILE
++	bool "Enable large file (files > 2 GB) support?"
++	select BR2_LARGEFILE
++	help
++	  Enable this option if you want your toolchain to support
++	  files bigger than 2 GB.
++
++config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
++	bool "Enable IPv6"
++	select BR2_INET_IPV6
++	help
++	  Enable this option if you want your toolchain to support
++	  IPv6.
++
++config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
++	bool "Enable RPC"
++	select BR2_INET_RPC
++	help
++	  Enable this option if you want your toolchain to support
++	  RPC (needed for NFS, for example).
++
++config BR2_TOOLCHAIN_BUILDROOT_WCHAR
++	bool "Enable WCHAR support"
++	select BR2_USE_WCHAR
++	help
++	  Enable this option if you want your toolchain to support
++	  wide characters (i.e characters longer than 8 bits, needed
++	  for locale support).
++
++config BR2_TOOLCHAIN_BUILDROOT_LOCALE
++	bool "Enable toolchain locale/i18n support"
++	select BR2_TOOLCHAIN_BUILDROOT_WCHAR
++	select BR2_ENABLE_LOCALE
++	help
++	  Enable this option if you want your toolchain to support
++	  localization and internationalization.
++
++config BR2_TOOLCHAIN_BUILDROOT_PROGRAM_INVOCATION
++	bool "Enable 'program invocation name'"
++	select BR2_PROGRAM_INVOCATION
++	help
++	  Enable this option if you want your toolchain to support the
++	  GNU-specific program_invocation_name and
++	  program_invocation_short_name strings.  Some GNU packages
++	  (like tar and coreutils) utilize these for extra useful
++	  output, but in general are not required.
++
+ source "toolchain/elf2flt/Config.in"
+ source "toolchain/mklibs/Config.in"
+ source "toolchain/sstrip/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index f67c30a..ea47466 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -5,42 +5,23 @@
+ # so put it here instead
+ source "toolchain/gdb/Config.in"
+ 
+-comment "Common Toolchain Options"
+-
+ config BR2_LARGEFILE
+-	bool "Enable large file (files > 2 GB) support?"
+-	help
+-	  If you are building your own toolchain and you want to 
+-	  support files larger than 2GB then enable this option.
+-	  If you have an external binary toolchain that has been 
+-	  built with large file support (files > 2GB) then enable 
+-	  this option.
++	bool
+ 
+ config BR2_INET_IPV6
+-	bool "Enable IPv6"
+-	help
+-	  If you are building your own toolchain and you want to 
+-	  enable IPV6 support then enable this option.
+-	  If you have an external binary toolchain that has been 
+-	  built with IPV6 support then enable this option.
++	bool
+ 
+ config BR2_INET_RPC
+-	bool "Enable RPC"
+-	help
+-	  Enable RPC. RPC support is needed for nfs.
+-	  If you are building your own toolchain and you want to 
+-	  enable RPC support then enable this option.
+-	  If you have an external binary toolchain that has been 
+-	  built with RPC support then enable this option.
++	bool
++
++config BR2_USE_WCHAR
++	bool
+ 
+ config BR2_ENABLE_LOCALE
+-	bool "Enable toolchain locale/i18n support?"
+-	select BR2_USE_WCHAR
+-	help
+-	  If you are building your own toolchain and you want to 
+-	  enable locale/i18n support then enable this option.
+-	  If you have an external binary toolchain that has been 
+-	  built with locale/i18n support then enable this option.
++	bool
++
++config BR2_PROGRAM_INVOCATION
++	bool
+ 
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+@@ -78,14 +59,6 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	bool
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ 
+-config BR2_USE_WCHAR
+-	bool "Enable WCHAR support"
+-	help
+-	  If you are building your own toolchain and you want to 
+-	  enable WCHAR support then enable this option.
+-	  If you have an external binary toolchain that has been built 
+-	  with WCHAR support then enable this option.
+-
+ config BR2_PREFER_SOFT_FLOAT
+ 	bool
+ 	default y if BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel
+@@ -135,16 +108,6 @@ choice
+ 		depends on BR2_UCLIBC_VERSION_SNAPSHOT
+ endchoice
+ 
+-config BR2_PROGRAM_INVOCATION
+-	bool "Enable 'program invocation name'"
+-	help
+-	  Support for the GNU-specific program_invocation_name and
+-	  program_invocation_short_name strings.  Some GNU packages
+-	  (like tar and coreutils) utilize these for extra useful
+-	  output, but in general are not required.
+-	  If you have an external binary toolchain that has been built
+-	  with program invocation support then enable this option.
+-
+ config BR2_GCC_CROSS_CXX
+ 	bool
+ 	help
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index f9b7e69..db3506e 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -45,6 +45,59 @@ config BR2_TOOLCHAIN_CTNG_CONFIG
+ 	  To finetune your toolchain, you can also call:
+ 	  make ctng-menuconfig
+ 
++if BR2_TOOLCHAIN_CTNG_uClibc
++
++comment "Toolchain Options"
++
++config BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE
++	bool "Enable large file (files > 2 GB) support?"
++	select BR2_LARGEFILE
++	help
++	  Enable this option if you want your toolchain to support
++	  files bigger than 2 GB.
++
++config BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6
++	bool "Enable IPv6"
++	select BR2_INET_IPV6
++	help
++	  Enable this option if you want your toolchain to support
++	  IPv6.
++
++config BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC
++	bool "Enable RPC"
++	select BR2_INET_RPC
++	help
++	  Enable this option if you want your toolchain to support
++	  RPC (needed for NFS, for example).
++
++config BR2_TOOLCHAIN_CTNG_uClibc_WCHAR
++	bool "Enable WCHAR support"
++	select BR2_USE_WCHAR
++	help
++	  Enable this option if you want your toolchain to support
++	  wide characters (i.e characters longer than 8 bits, needed
++	  for locale support).
++
++config BR2_TOOLCHAIN_CTNG_uClibc_LOCALE
++	bool "Enable toolchain locale/i18n support"
++	select BR2_TOOLCHAIN_CTNG_uClibc_WCHAR
++	select BR2_ENABLE_LOCALE
++	help
++	  Enable this option if you want your toolchain to support
++	  localization and internationalization.
++
++config BR2_TOOLCHAIN_CTNG_uClibc_PROGRAM_INVOCATION
++	bool "Enable 'program invocation name'"
++	select BR2_PROGRAM_INVOCATION
++	help
++	  Enable this option if you want your toolchain to support the
++	  GNU-specific program_invocation_name and
++	  program_invocation_short_name strings.  Some GNU packages
++	  (like tar and coreutils) utilize these for extra useful
++	  output, but in general are not required.
++
++endif # BR2_TOOLCHAIN_CTNG_uClibc
++
+ config BR2_TOOLCHAIN_CTNG_STRIP_LIBS
+ 	bool "Strip libs copied to target"
+ 	default !BR2_STRIP_none
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a340de6..f83f2cb 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -10,9 +10,68 @@ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	bool "glibc"
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_INET_RPC
++	select BR2_USE_WCHAR
++	select BR2_ENABLE_LOCALE
++	select BR2_PROGRAM_INVOCATION
+ 
+ endchoice
+ 
++if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++
++config BR2_TOOLCHAIN_EXTERNAL_LARGEFILE
++	bool "Toolchain has large file support ?"
++	select BR2_LARGEFILE
++	help
++	  Select this option if your external toolchain supports
++	  largefile. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
++	bool "Toolchain has IPv6 support ?"
++	select BR2_INET_IPV6
++	help
++	  Select this option if your external toolchain supports
++	  IPv6. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
++	bool "Toolchain has RPC support ?"
++	select BR2_INET_RPC
++	help
++	  Select this option if your external toolchain supports
++	  RPC. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	bool "Toolchain has WCHAR support ?"
++	select BR2_USE_WCHAR
++	help
++	  Select this option if your external toolchain supports
++	  WCHAR. If you don't know, leave the default value, Buildroot
++	  will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_LOCALE
++	bool "Toolchain has locale support ?"
++	select BR2_TOOLCHAIN_EXTERNAL_WCHAR
++	select BR2_ENABLE_LOCALE
++	help
++	  Select this option if your external toolchain has locale
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
++config BR2_TOOLCHAIN_EXTERNAL_PROGRAM_INVOCATION
++	bool "Toolchain has program invocation support ?"
++	select BR2_PROGRAM_INVOCATION
++	help
++	  Select this option if your external toolchain has program
++	  invocation support. If you don't know, leave the default
++	  value, Buildroot will tell you if it's correct or not.
++
++endif
++
+ config BR2_TOOLCHAIN_EXTERNAL_STRIP
+ 	bool
+ 	default y
 -- 
-Thomas Petazzoni
+1.7.0.4
