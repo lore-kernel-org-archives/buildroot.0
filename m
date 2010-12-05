@@ -1,30 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Dec 2010 09:03:12 +0100
-Subject: [Buildroot] DConf
-In-Reply-To: <144644.21305.qm@web111106.mail.gq1.yahoo.com>
-References: <1291509535.24014.2.camel@coalu.atr>
-	<144644.21305.qm@web111106.mail.gq1.yahoo.com>
-Message-ID: <20101205090312.76091a4c@surf>
+Date: Sun, 5 Dec 2010 09:17:24 +0100
+Subject: [Buildroot] How to contribute to Buildroot with Git
+In-Reply-To: <953244.140.qm@web111110.mail.gq1.yahoo.com>
+References: <20101203113536.38481498@surf>
+	<953244.140.qm@web111110.mail.gq1.yahoo.com>
+Message-ID: <20101205091724.591e256b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 4 Dec 2010 16:50:10 -0800 (PST)
+On Sat, 4 Dec 2010 16:09:00 -0800 (PST)
 Justin Mark <oilehus@yahoo.com> wrote:
 
-> when I built libgee with buildroot, it didn't need vala, don't know
-> why their webite said requiring vala.  
+> I can build libgee with buildroot in my workspace, how should I
+> submit the patch for review? post the patch here or directly do it
+> from git? Can someone give me some details since I don't know much
+> about git?
 
-I don't really know Vala, but at least Libgee is *written* in Vala, so
-it means that you need a Vala compiler on your host in order to build
-Libgee. As you can expect users to have a Vala compiler installed,
-you'll have to add a vala compiler package into Buildroot, and make its
-host variant a dependency of Libgee. If you have issues or don't know
-how to do that, we can probably help you.
+The best is to use Git. Here is a simplified version of the Git workflow
+that I use to work with Buildroot:
 
-Regards,
+ 1) Clone (to be done only once)
+
+    git clone git://git.busybox.net/buildroot
+
+ 2) Configure Git (to be done only once)
+
+    Then tell git who you are :
+
+    git config --global user.name "Firstname Lastname"
+    git config --global user.email firstname.lastname at somewhere.com
+
+    And tell git how to send emails :
+
+    git config --global sendemail.smtpserver mysmtpserver
+
+    And to avoid chained reply :
+
+    git config --global sendemail.chainreplyto false
+
+ 3) Create a branch to work on your topic (to be done for every
+    separate topic you'd like to work with)
+
+    git checkout -b mytopic
+
+    Note that this also switches immediatly to the new 'mytopic'
+    branch. You can run 'git branch' at any time to know on which
+    branch you are.
+
+ 4) Make some modifications, for one particuler subtopic (like adding
+    the vala compiler)
+
+ 5) Commit those modifications
+
+    git commit -s -a
+
+    And enter an appropriate commit log.
+
+    If you created new files, add them with "git add".
+
+    Then go back to step 4 for the other changes you want to do, or
+    proceed to step 6 if you're done with your changes.
+
+ 6) Review your changes
+
+    git log -p master..
+
+ 7) Prepare patches for your changes
+
+    git format-patch HEAD
+
+    This will generate a set of 000X-*.patch files in the Buildroot
+    directory
+
+ 8) Send your patches to the list
+
+    git send-email --to buildroot at uclibc.org --compose *.patch
+
+And you're done.
+
+If while reviewing your commits you find that you need to merge some of
+them (because you did some mistakes that you fixed later and you don't
+want the world to know about your mistakes), then you have to use the
+rebasing feature of git:
+
+    git rebase -i master
+
+Git will open up a text editor with the list of your commits. You can
+edit this file to change the order of the commits, or to change the
+action taken on a particular commit (see the file itself for
+documentation on those actions). A typical thing is :
+
+    pick SOMEGITHASH package: add foobar
+    pick SOMEGITHASH package: add barfoo
+    pick SOMEGITHASH I did something wrong in add foobar, merge me
+
+So obviously you want the last commit to be merged into the first one,
+so that nobody knows you did some mistakes during your development. So,
+turn those three lines into the following ones:
+
+    pick SOMEGITHASH package: add foobar
+    fixup SOMEGITHASH I did something wrong in add foobar, merge me
+    pick SOMEGITHASH package: add barfoo
+
+And exit the text editor. Git will reorganize your commits, and you'll
+end up with just two commits.
+
+Don't hesitate to ask questions if you have issues,
 
 Thomas
 -- 
