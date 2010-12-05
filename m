@@ -1,40 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:04 +0100
-Subject: [Buildroot] [PATCH 33/55] board: update and minify
-	at91sam9260dfc_defconfig
+Date: Sun,  5 Dec 2010 21:53:05 +0100
+Subject: [Buildroot] [PATCH 34/55] board: remove support for at91sam9260pf
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d379b2ab0dad6d2ccd19f5297835a7f272b39180.1291582351.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <26b14fbafb7e0ba9bfb0871bc4e729884a188b11.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use recent U-Boot and kernel versions, remove useless kernel
-configuration file.
+It was supposed to be the support for AT91SAM9260 using a parallel
+flash (instead of the usual dataflash). But the provided U-Boot
+configuration at91sam9260pf.h was not used anywhere, and it was any
+unsufficient to add correct support in U-Boot (some changes in U-Boot
+Makefile would also be needed). Additionnally, this configuration has
+not been merged into U-Boot upstream since 2007 (when it was added to
+Buildroot).
+
+Therefore, let's get rid of this configuration. If some users are
+interested, we can re-introduce it properly with their help.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91sam9260dfc_defconfig                   | 1015 +------------
- .../at91sam9260dfc-linux-2.6.28.2.config           | 1640 --------------------
- 2 files changed, 16 insertions(+), 2639 deletions(-)
- delete mode 100644 target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.28.2.config
+ configs/at91sam9260pf_defconfig                    |  639 ---------
+ .../at91sam9260pf-linux-2.6.22.1.config            | 1461 --------------------
+ .../Atmel/at91sam9260pf/busybox-1.6.0.config       |  690 ---------
+ .../Atmel/at91sam9260pf/u-boot/at91sam9260pf.h     |  370 -----
+ 4 files changed, 0 insertions(+), 3160 deletions(-)
+ delete mode 100644 configs/at91sam9260pf_defconfig
+ delete mode 100644 target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config
+ delete mode 100644 target/device/Atmel/at91sam9260pf/busybox-1.6.0.config
+ delete mode 100644 target/device/Atmel/at91sam9260pf/u-boot/at91sam9260pf.h
 
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index e1eac51..d20d89e 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -1,1007 +1,24 @@
+diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
+deleted file mode 100644
+index db716a0..0000000
+--- a/configs/at91sam9260pf_defconfig
++++ /dev/null
+@@ -1,639 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
--# Fri Jan 30 00:14:05 2009
+-# Tue Aug 14 20:34:53 2007
 -#
 -BR2_HAVE_DOT_CONFIG=y
--BR2_VERSION="2009.02-svn"
+-
+-#
+-# Project Options
+-#
+-BR2_PROJECT="at91sam9260pf"
+-BR2_HOSTNAME="AT91SAM9260PF"
+-BR2_BANNER="Welcome to the AT91SAM9260EK running from a parallel flash"
 -# BR2_alpha is not set
-+# Architecture
- BR2_arm=y
+-BR2_arm=y
 -# BR2_armeb is not set
 -# BR2_avr32 is not set
 -# BR2_cris is not set
@@ -45,10 +63,10 @@ index e1eac51..d20d89e 100644
 -# BR2_mipsel is not set
 -# BR2_nios2 is not set
 -# BR2_powerpc is not set
+-# BR2_s390 is not set
 -# BR2_sh is not set
 -# BR2_sh64 is not set
 -# BR2_sparc is not set
--# BR2_sparc64 is not set
 -# BR2_x86_64 is not set
 -BR2_generic_arm=y
 -# BR2_arm7tdmi is not set
@@ -71,116 +89,12 @@ index e1eac51..d20d89e 100644
 -# BR2_ARM_EABI is not set
 -BR2_ARCH="arm"
 -BR2_ENDIAN="LITTLE"
- 
--#
--# Target options
--#
--
--#
--# Project Options
--#
--BR2_PROJECT="at91sam9260dfc"
--BR2_HOSTNAME="at91sam9260dfc"
--BR2_BANNER="Welcome to the Erik's uClibc development environment running on the AT91SAM9260EK"
--
--#
--# Preset Devices
--#
--# BR2_TARGET_ARMLTD is not set
--BR2_BOARD_NAME="at91sam9260dfc"
--BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
--BR2_TARGET_ATMEL=y
--
--#
--# Atmel AT91 Specific Device Support
--#
--BR2_TARGET_AT91=y
--
--#
--# Selection criteria
--#
--BR2_TARGET_ATMEL_ALL=y
--
--#
--# Device Selection
--#
--# BR2_TARGET_AT91RM9200 is not set
--BR2_TARGET_AT91SAM9260=y
--# BR2_TARGET_AT91SAM9G20 is not set
--# BR2_TARGET_AT91SAM9261 is not set
--# BR2_TARGET_AT91SAM9261S is not set
--# BR2_TARGET_AT91SAM9RL64 is not set
--# BR2_TARGET_AT91SAM9263 is not set
--# BR2_TARGET_AT91SAM9G40 is not set
--# BR2_TARGET_AT91SAM9M10 is not set
--# BR2_TARGET_AT91SAM9M11 is not set
--# BR2_TARGET_AT91SAM9XE is not set
--# BR2_TARGET_AT572D940HF is not set
--# BR2_TARGET_AT91CAP9 is not set
--
--#
--# Development Board Selection
--#
--# BR2_TARGET_AT91RM9200DF is not set
--# BR2_TARGET_AT91RM9200EK is not set
--# BR2_TARGET_AT91RM9200DK is not set
--BR2_TARGET_AT91SAM9260DFC=y
--# BR2_TARGET_AT91SAM9260EK is not set
--# BR2_TARGET_AT91SAM9G20DFC is not set
--# BR2_TARGET_AT91SAM9G20EK is not set
--# BR2_TARGET_AT91SAM9XEEK is not set
--# BR2_TARGET_AT91SAM9261EK is not set
--# BR2_TARGET_AT91SAM9RL64EK is not set
--# BR2_TARGET_AT91SAM9263EK is not set
--# BR2_TARGET_AT572D940DCM is not set
--# BR2_TARGET_AT91CAP9DK is not set
--# BR2_TARGET_AT91CAP9ADK is not set
--BR2_TARGET_AT91_ADVANCED_INFO=y
--
--#
--# Package support
--#
--
--#
--# Secondary locations
--#
--BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
-+# First stage bootloader
- BR2_TARGET_AT91BOOTSTRAP=y
- BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
--# BR2_TARGET_AT91BOOT_DATAFLASH is not set
--BR2_TARGET_AT91BOOT_DATAFLASHCARD=y
--# BR2_TARGET_AT91BOOT_NANDFLASH is not set
--# BR2_TARGET_AT91BOOT_FLASH is not set
--# BR2_TARGET_AT91BOOT_SDCARD is not set
--# BR2_TARGET_AT91BOOT_EEPROM is not set
--BR2_TARGET_AT91BOOTSTRAP_MEMORY="dataflashcard"
--BR2_AT91BOOTSTRAP_IMG_SIZE="0x32000"
--BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT=y
--# BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM is not set
--# BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM is not set
--BR2_AT91BOOTSTRAP_JUMP_ADDR="0x23F00000"
--
--#
--# It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)
--#
--# BR2_TARGET_KWIKBYTE is not set
--BR2_KERNEL_ARCH_PATCH_VERSION="2.6.28"
--BR2_KERNEL_ARCH_PATCH_DIR="target/device/Atmel/arch-arm/kernel-patches-$(BR2_KERNEL_ARCH_PATCH_VERSION)"
--
--#
--# Generic System Support
--#
--# BR2_TARGET_GENERIC_ACCESS_POINT is not set
--# BR2_TARGET_GENERIC_FIREWALL is not set
--# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
 -
 -#
 -# Build options
 -#
--BR2_WGET="wget --passive-ftp -nd"
--BR2_SVN="svn"
--BR2_GIT="git"
+-BR2_WGET="wget --passive-ftp"
+-BR2_SVN="svn co"
 -BR2_ZCAT="gzip -d -c"
 -BR2_BZCAT="bzcat"
 -BR2_TAR_OPTIONS=""
@@ -189,108 +103,113 @@ index e1eac51..d20d89e 100644
 -#
 -# Mirrors and Download locations
 -#
--BR2_PRIMARY_SITE=""
--BR2_BACKUP_SITE="http://sources.buildroot.net/"
 -BR2_SOURCEFORGE_MIRROR="easynews"
--BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
--BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
--BR2_DEBIAN_MIRROR="http://ftp.debian.org"
 -
 -#
 -# Atmel Mirrors
 -#
 -BR2_STAGING_DIR="$(BASE_DIR)/staging"
--# BR2_FPU_SUFFIX is not set
 -BR2_TOPDIR_PREFIX=""
--BR2_TOPDIR_SUFFIX=""
--BR2_ROOTFS_PREFIX="at91sam9260dfc-rootfs"
+-BR2_TOPDIR_SUFFIX="wchar"
 -BR2_JLEVEL=2
 -# BR2_DEPRECATED is not set
--# BR2_ENABLE_DEBUG is not set
 -BR2_STRIP_strip=y
 -# BR2_STRIP_sstrip is not set
 -# BR2_STRIP_none is not set
--# BR2_OPTIMIZE_0 is not set
--# BR2_OPTIMIZE_1 is not set
--BR2_OPTIMIZE_2=y
--# BR2_OPTIMIZE_3 is not set
--# BR2_OPTIMIZE_S is not set
 -# BR2_PREFER_STATIC_LIB is not set
--# BR2_HAVE_DOCUMENTATION is not set
--# BR2_HAVE_DEVFILES is not set
 -
 -#
--# Toolchain
+-# Toolchain type
 -#
 -BR2_TOOLCHAIN_BUILDROOT=y
 -# BR2_TOOLCHAIN_EXTERNAL is not set
+-BR2_TOOLCHAIN_NORMAL=y
+-# BR2_TOOLCHAIN_ATMEL_AVR32 is not set
+-
+-#
+-# Toolchain Options
+-#
 -
 -#
 -# Kernel Header Options
 -#
+-# BR2_KERNEL_HEADERS_2_4_25 is not set
+-# BR2_KERNEL_HEADERS_2_4_27 is not set
+-# BR2_KERNEL_HEADERS_2_4_29 is not set
 -# BR2_KERNEL_HEADERS_2_4_31 is not set
--# BR2_KERNEL_HEADERS_2_6_20_4 is not set
+-# BR2_KERNEL_HEADERS_2_6_9 is not set
+-# BR2_KERNEL_HEADERS_2_6_11 is not set
+-# BR2_KERNEL_HEADERS_2_6_12 is not set
+-# BR2_KERNEL_HEADERS_2_6_19_2 is not set
 -# BR2_KERNEL_HEADERS_2_6_20 is not set
--# BR2_KERNEL_HEADERS_2_6_21_5 is not set
 -# BR2_KERNEL_HEADERS_2_6_21 is not set
--# BR2_KERNEL_HEADERS_2_6_22_1 is not set
--# BR2_KERNEL_HEADERS_2_6_22_10 is not set
--# BR2_KERNEL_HEADERS_2_6_22 is not set
--# BR2_KERNEL_HEADERS_2_6_23 is not set
--# BR2_KERNEL_HEADERS_2_6_24 is not set
--# BR2_KERNEL_HEADERS_2_6_25 is not set
--# BR2_KERNEL_HEADERS_2_6_26 is not set
--# BR2_KERNEL_HEADERS_2_6_27 is not set
--BR2_KERNEL_HEADERS_2_6_28=y
--# BR2_KERNEL_HEADERS_SNAP is not set
--BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
+-BR2_KERNEL_HEADERS_2_6_22=y
+-BR2_DEFAULT_KERNEL_HEADERS="2.6.22.1"
 -
 -#
 -# uClibc Options
 -#
--# BR2_UCLIBC_VERSION_0_9_29 is not set
--BR2_UCLIBC_VERSION_0_9_30=y
+-# BR2_UCLIBC_VERSION_0_9_28 is not set
+-BR2_UCLIBC_VERSION_0_9_29=y
 -# BR2_UCLIBC_VERSION_SNAPSHOT is not set
--BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
+-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.29.config"
 -BR2_ENABLE_LOCALE=y
 -# BR2_PTHREADS_NONE is not set
 -# BR2_PTHREADS is not set
 -BR2_PTHREADS_OLD=y
 -# BR2_PTHREADS_NATIVE is not set
 -# BR2_PTHREAD_DEBUG is not set
--BR2_PROGRAM_INVOCATION=y
--# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
 -
 -#
 -# Binutils Options
 -#
--# BR2_BINUTILS_VERSION_2_17 is not set
+-# BR2_BINUTILS_VERSION_2_14_90_0_8 is not set
+-# BR2_BINUTILS_VERSION_2_15 is not set
+-# BR2_BINUTILS_VERSION_2_15_94_0_2_2 is not set
+-# BR2_BINUTILS_VERSION_2_16_1 is not set
+-# BR2_BINUTILS_VERSION_2_16_90_0_3 is not set
+-# BR2_BINUTILS_VERSION_2_16_91_0_5 is not set
+-# BR2_BINUTILS_VERSION_2_16_91_0_6 is not set
+-# BR2_BINUTILS_VERSION_2_16_91_0_7 is not set
+-BR2_BINUTILS_VERSION_2_17=y
+-# BR2_BINUTILS_VERSION_2_17_50_0_2 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_3 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_4 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_5 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_6 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_7 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_8 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_9 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_10 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_12 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_14 is not set
+-# BR2_BINUTILS_VERSION_2_17_50_0_16 is not set
 -# BR2_BINUTILS_VERSION_2_17_50_0_17 is not set
--# BR2_BINUTILS_VERSION_2_18 is not set
--# BR2_BINUTILS_VERSION_2_18_50_0_1 is not set
--# BR2_BINUTILS_VERSION_2_18_50_0_3 is not set
--# BR2_BINUTILS_VERSION_2_18_50_0_6 is not set
--# BR2_BINUTILS_VERSION_2_18_50_0_8 is not set
--# BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
--BR2_BINUTILS_VERSION_2_19=y
--BR2_BINUTILS_VERSION="2.19"
+-BR2_BINUTILS_VERSION="2.17"
 -BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 -
 -#
--# GCC Options
+-# Gcc Options
 -#
+-# BR2_GCC_VERSION_3_3_5 is not set
+-# BR2_GCC_VERSION_3_3_6 is not set
+-# BR2_GCC_VERSION_3_4_2 is not set
+-# BR2_GCC_VERSION_3_4_3 is not set
+-# BR2_GCC_VERSION_3_4_4 is not set
+-# BR2_GCC_VERSION_3_4_5 is not set
 -# BR2_GCC_VERSION_3_4_6 is not set
+-# BR2_GCC_VERSION_4_0_0 is not set
+-# BR2_GCC_VERSION_4_0_1 is not set
+-# BR2_GCC_VERSION_4_0_2 is not set
+-# BR2_GCC_VERSION_4_0_3 is not set
 -# BR2_GCC_VERSION_4_0_4 is not set
+-# BR2_GCC_VERSION_4_1_0 is not set
+-# BR2_GCC_VERSION_4_1_1 is not set
 -# BR2_GCC_VERSION_4_1_2 is not set
--# BR2_GCC_VERSION_4_2_1 is not set
--# BR2_GCC_VERSION_4_2_2 is not set
--# BR2_GCC_VERSION_4_2_3 is not set
--# BR2_GCC_VERSION_4_2_4 is not set
--# BR2_GCC_VERSION_4_3_1 is not set
--BR2_GCC_VERSION_4_3_2=y
--BR2_GCC_SUPPORTS_SYSROOT=y
--BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
--BR2_GCC_VERSION="4.3.2"
+-# BR2_GCC_VERSION_4_2_0 is not set
+-BR2_GCC_VERSION_4_2_1=y
+-# BR2_GCC_IS_SNAP is not set
+-BR2_GCC_VERSION="4.2.1"
 -BR2_TOOLCHAIN_SYSROOT=y
 -BR2_EXTRA_GCC_CONFIG_OPTIONS=""
 -BR2_GCC_CROSS_CXX=y
@@ -305,29 +224,23 @@ index e1eac51..d20d89e 100644
 -# Ccache Options
 -#
 -BR2_CCACHE=y
--BR2_CCACHE_DIR="$(TOOLCHAIN_DIR)/ccache-$(CCACHE_VER)/cache"
 -
 -#
 -# Gdb Options
 -#
 -# BR2_PACKAGE_GDB is not set
--BR2_PACKAGE_GDB_SERVER=y
+-# BR2_PACKAGE_GDB_SERVER is not set
 -# BR2_PACKAGE_GDB_HOST is not set
--# BR2_GDB_VERSION_6_2_1 is not set
--# BR2_GDB_VERSION_6_3 is not set
--# BR2_GDB_VERSION_6_4 is not set
--# BR2_GDB_VERSION_6_5 is not set
--# BR2_GDB_VERSION_6_6 is not set
--# BR2_GDB_VERSION_6_7_1 is not set
--BR2_GDB_VERSION_6_8=y
--# BR2_GDB_VERSION_SNAPSHOT is not set
--BR2_GDB_VERSION="6.8"
+-
+-#
+-# elf2flt
+-#
+-# BR2_ELF2FLT is not set
+-# BR2_MKLIBS is not set
 -
 -#
 -# Common Toolchain Options
 -#
--# BR2_ELF2FLT is not set
--# BR2_MKLIBS is not set
 -BR2_PACKAGE_SSTRIP_TARGET=y
 -BR2_PACKAGE_SSTRIP_HOST=y
 -BR2_LARGEFILE=y
@@ -335,193 +248,172 @@ index e1eac51..d20d89e 100644
 -BR2_INET_RPC=y
 -BR2_USE_WCHAR=y
 -# BR2_SOFT_FLOAT is not set
--# BR2_VFP_FLOAT is not set
 -BR2_TARGET_OPTIMIZATION="-Os -pipe"
 -BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y
 -
 -#
 -# Package Selection for the target
 -#
+-
+-#
+-# The default minimal system
+-#
 -BR2_PACKAGE_BUSYBOX=y
+-# BR2_BUSYBOX_VERSION_1_0_1 is not set
+-# BR2_BUSYBOX_VERSION_1_1_3 is not set
 -# BR2_BUSYBOX_VERSION_1_2_2_1 is not set
--# BR2_BUSYBOX_VERSION_1_6_1 is not set
--# BR2_BUSYBOX_VERSION_1_7_X is not set
--# BR2_BUSYBOX_VERSION_1_8_X is not set
--# BR2_BUSYBOX_VERSION_1_9_X is not set
--# BR2_BUSYBOX_VERSION_1_10_X is not set
--# BR2_BUSYBOX_VERSION_1_11_X is not set
--# BR2_BUSYBOX_VERSION_1_12_X is not set
+-# BR2_BUSYBOX_VERSION_1_4_0 is not set
+-# BR2_BUSYBOX_VERSION_1_4_1 is not set
+-# BR2_BUSYBOX_VERSION_1_4_2 is not set
+-# BR2_BUSYBOX_VERSION_1_5_0 is not set
+-# BR2_BUSYBOX_VERSION_1_5_1 is not set
+-# BR2_BUSYBOX_VERSION_1_6_0 is not set
 -BR2_BUSYBOX_VERSION_1_13_X=y
 -# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
--BR2_BUSYBOX_VERSION="1.13.2"
--BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
+-BR2_BUSYBOX_VERSION="1.13.4"
+-BR2_PACKAGE_BUSYBOX_INSTALL_SYMLINKS=y
 -BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
--# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
+-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
 -
 -#
 -# The minimum needed to build a uClibc development system
 -#
--# BR2_PACKAGE_FLEX is not set
+-BR2_PACKAGE_BASH=y
+-BR2_PACKAGE_BZIP2=y
+-BR2_PACKAGE_COREUTILS=y
+-BR2_PACKAGE_DIFFUTILS=y
+-BR2_PACKAGE_ED=y
+-BR2_PACKAGE_FINDUTILS=y
+-BR2_PACKAGE_FLEX=y
+-BR2_PACKAGE_FLEX_LIBFL=y
+-BR2_PACKAGE_GAWK=y
 -# BR2_PACKAGE_GCC_TARGET is not set
--# BR2_PACKAGE_MAKE is not set
+-# BR2_PACKAGE_GREP is not set
+-BR2_PACKAGE_MAKE=y
+-BR2_PACKAGE_PATCH=y
+-BR2_PACKAGE_SED=y
+-BR2_PACKAGE_TAR=y
 -
 -#
 -# Other development stuff
 -#
--# BR2_PACKAGE_AUTOCONF is not set
--# BR2_PACKAGE_AUTOMAKE is not set
--# BR2_PACKAGE_BISON is not set
+-BR2_PACKAGE_AUTOCONF=y
+-BR2_PACKAGE_AUTOMAKE=y
+-BR2_PACKAGE_BISON=y
 -# BR2_PACKAGE_CCACHE_TARGET is not set
 -# BR2_PACKAGE_CVS is not set
--# BR2_PACKAGE_DISTCC is not set
--# BR2_PACKAGE_DMALLOC is not set
+-BR2_PACKAGE_DISTCC=y
+-BR2_PACKAGE_DMALLOC=y
+-BR2_PACKAGE_EXPAT=y
 -# BR2_PACKAGE_FAKEROOT is not set
 -BR2_PACKAGE_GETTEXT=y
 -# BR2_PACKAGE_GETTEXT_STATIC is not set
 -BR2_PACKAGE_LIBINTL=y
 -# BR2_PACKAGE_LIBGMP is not set
--# BR2_PACKAGE_GPERF is not set
 -# BR2_PACKAGE_LIBMPFR is not set
--# BR2_PACKAGE_LIBTOOL is not set
--# BR2_PACKAGE_M4 is not set
--# BR2_PACKAGE_OPROFILE is not set
+-BR2_PACKAGE_LIBTOOL=y
+-BR2_PACKAGE_M4=y
 -BR2_PACKAGE_READLINE=y
 -BR2_PACKAGE_READLINE_TARGET=y
--# BR2_PACKAGE_READLINE_HEADERS is not set
--# BR2_PACKAGE_PCRE is not set
+-# BR2_PACKAGE_XERCES is not set
 -
 -#
 -# Other stuff
 -#
 -BR2_PACKAGE_AT=y
--# BR2_PACKAGE_BEECRYPT is not set
 -# BR2_PACKAGE_BERKELEYDB is not set
 -# BR2_PACKAGE_BSDIFF is not set
--# BR2_PACKAGE_CUPS is not set
 -# BR2_PACKAGE_CUSTOMIZE is not set
--# BR2_PACKAGE_FILE is not set
--# BR2_PACKAGE_GAMIN is not set
--# BR2_PACKAGE_ICU is not set
+-# BR2_PACKAGE_DASH is not set
+-BR2_PACKAGE_FILE=y
 -# BR2_PACKAGE_KEXEC is not set
--# BR2_PACKAGE_LIBCONFIG is not set
--# BR2_PACKAGE_LIBCONFUSE is not set
--BR2_PACKAGE_LIBDAEMON=y
+-BR2_PACKAGE_LESS=y
+-# BR2_PACKAGE_LIBDAEMON is not set
 -# BR2_PACKAGE_LIBELF is not set
--BR2_PACKAGE_LIBEVENT=y
--BR2_PACKAGE_LIBGCRYPT=y
--BR2_PACKAGE_LIBGPG_ERROR=y
--BR2_PACKAGE_LIBICONV=y
--# BR2_PACKAGE_LIBIDN is not set
--BR2_PACKAGE_LIBLOCKFILE=y
--# BR2_PACKAGE_LIBOIL is not set
--# BR2_PACKAGE_LIBSYSFS is not set
--BR2_PACKAGE_LOCKFILE_PROGS=y
--# BR2_PACKAGE_LOGROTATE is not set
+-# BR2_PACKAGE_LIBEVENT is not set
+-# BR2_PACKAGE_LIBFLOAT is not set
+-# BR2_PACKAGE_LIBGCRYPT is not set
+-# BR2_PACKAGE_LIBGPG_ERROR is not set
+-# BR2_PACKAGE_LIBLOCKFILE is not set
+-BR2_PACKAGE_LIBSYSFS=y
+-BR2_PACKAGE_LIBXML2=y
+-# BR2_PACKAGE_LIBXML2_TARGET_HEADERS is not set
+-# BR2_PACKAGE_LOCKFILE_PROGS is not set
 -# BR2_PACKAGE_LSOF is not set
 -# BR2_PACKAGE_LTP-TESTSUITE is not set
--# BR2_PACKAGE_LTRACE is not set
--# BR2_PACKAGE_MEMSTAT is not set
--# BR2_PACKAGE_NG_SPICE_REWORK is not set
--# BR2_PACKAGE_POPT is not set
--# BR2_PACKAGE_SCREEN is not set
--# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
--# BR2_PACKAGE_STRACE is not set
--# BR2_PACKAGE_SUDO is not set
--
--#
--# Database
--#
--# BR2_PACKAGE_MYSQL_CLIENT is not set
+-# BR2_PACKAGE_LTT is not set
+-BR2_PACKAGE_MICROCOM=y
+-BR2_PACKAGE_MODULE_INIT_TOOLS=y
+-BR2_PACKAGE_NANO=y
+-# BR2_PACKAGE_PORTAGE is not set
+-# BR2_PACKAGE_PROCPS is not set
+-# BR2_PACKAGE_PSMISC is not set
 -# BR2_PACKAGE_SQLITE is not set
--
--#
--# Networking
--#
--
--#
--# Networking applications
--#
+-BR2_PACKAGE_STRACE=y
+-BR2_PACKAGE_SUDO=y
+-# BR2_PACKAGE_SYSKLOGD is not set
+-# BR2_PACKAGE_SYSVINIT is not set
+-# BR2_PACKAGE_TINYLOGIN is not set
+-BR2_PACKAGE_UEMACS=y
+-BR2_PACKAGE_UTIL-LINUX_NG=y
+-BR2_PACKAGE_WHICH=y
+-BR2_NETWORK_SUPPORT=y
 -# BR2_PACKAGE_ARGUS is not set
--BR2_PACKAGE_AVAHI=y
--BR2_PACKAGE_AVAHI_AUTOIPD=y
--# BR2_PACKAGE_AVAHI_DAEMON is not set
--BR2_PACKAGE_AXEL=y
+-# BR2_PACKAGE_AVAHI is not set
+-# BR2_PACKAGE_BOA is not set
 -# BR2_PACKAGE_BIND is not set
 -# BR2_PACKAGE_BRIDGE is not set
--# BR2_PACKAGE_DNSMASQ is not set
+-# BR2_PACKAGE_CURL is not set
+-# BR2_PACKAGE_LIBCURL is not set
+-BR2_PACKAGE_DHCP=y
+-# BR2_PACKAGE_DHCP_SERVER is not set
+-# BR2_PACKAGE_DHCP_RELAY is not set
+-BR2_PACKAGE_DHCP_CLIENT=y
+-BR2_PACKAGE_DNSMASQ=y
 -BR2_PACKAGE_DROPBEAR=y
 -BR2_PACKAGE_ETHTOOL=y
--BR2_PACKAGE_HASERL=y
--# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
--BR2_PACKAGE_HASERL_VERSION_0_9_X=y
--BR2_PACKAGE_HASERL_VERSION="0.9.25"
--BR2_PACKAGE_IFPLUGD=y
--# BR2_PACKAGE_IPERF is not set
+-# BR2_PACKAGE_HASERL is not set
+-# BR2_PACKAGE_HOSTAP is not set
+-BR2_PACKAGE_IPERF=y
 -# BR2_PACKAGE_IPROUTE2 is not set
--
--#
--# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
--#
+-BR2_PACKAGE_IPSEC_TOOLS=y
+-BR2_PACKAGE_IPSEC_TOOLS_ADMINPORT=y
+-# BR2_PACKAGE_IPSEC_TOOLS_NATT is not set
+-# BR2_PACKAGE_IPSEC_TOOLS_FRAG is not set
+-BR2_PACKAGE_IPSEC_TOOLS_STATS=y
+-BR2_PACKAGE_IPSEC_TOOLS_IPV6=y
+-BR2_PACKAGE_IPSEC_TOOLS_READLINE=y
+-BR2_PACKAGE_IPSEC_TOOLS_LIBS=y
 -BR2_PACKAGE_IPTABLES=y
--# BR2_PACKAGE_KISMET is not set
--BR2_PACKAGE_L2TP=y
--BR2_PACKAGE_LIBCGI=y
+-# BR2_PACKAGE_L2TP is not set
+-# BR2_PACKAGE_LIBCGI is not set
 -# BR2_PACKAGE_LIBCGICC is not set
--# BR2_PACKAGE_LIBCURL is not set
--BR2_PACKAGE_LIBDNET=y
--# BR2_PACKAGE_LIBDNET_PYTHON is not set
--# BR2_PACKAGE_LIBEXOSIP2 is not set
--# BR2_PACKAGE_LIBOSIP2 is not set
 -BR2_PACKAGE_LIBPCAP=y
--BR2_PACKAGE_LIBUPNP=y
 -# BR2_PACKAGE_LINKS is not set
 -BR2_PACKAGE_LRZSZ=y
--# BR2_PACKAGE_MDNSRESPONDER is not set
--BR2_PACKAGE_MICROCOM=y
--# BR2_PACKAGE_MIIDIAG is not set
+-BR2_PACKAGE_MDNSRESPONDER=y
+-BR2_PACKAGE_MDNSRESPONDER_UTILS=y
 -# BR2_PACKAGE_MROUTED is not set
--# BR2_PACKAGE_MUTT is not set
 -# BR2_PACKAGE_NBD is not set
--BR2_PACKAGE_NCFTP=y
--
--#
--# ncFTP tools selection
--#
--BR2_PACKAGE_NCFTP_GET=y
--BR2_PACKAGE_NCFTP_PUT=y
--BR2_PACKAGE_NCFTP_LS=y
--BR2_PACKAGE_NCFTP_BATCH=y
--# BR2_PACKAGE_NCFTP_SPOOLER is not set
--# BR2_PACKAGE_NCFTP_BOOKMARKS is not set
--# BR2_PACKAGE_NEON is not set
+-# BR2_PACKAGE_NCFTP is not set
+-# BR2_PACKAGE_NETCAT is not set
 -# BR2_PACKAGE_NETKITBASE is not set
 -# BR2_PACKAGE_NETKITTELNET is not set
--BR2_PACKAGE_NETPLUG=y
--BR2_PACKAGE_NETSNMP=y
--BR2_PACKAGE_NFS_UTILS=y
--
--#
--# NFS utilities selection
--#
--BR2_PACKAGE_NFS_UTILS_RPCDEBUG=y
--BR2_PACKAGE_NFS_UTILS_RPC_LOCKD=y
--BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD=y
+-# BR2_PACKAGE_NETPLUG is not set
+-# BR2_PACKAGE_NETSNMP is not set
+-# BR2_PACKAGE_NFS_UTILS is not set
 -BR2_PACKAGE_NTP=y
 -# BR2_PACKAGE_NTP_SNTP is not set
--# BR2_PACKAGE_OLSR is not set
 -# BR2_PACKAGE_OPENNTPD is not set
--BR2_PACKAGE_OPENSSH=y
+-# BR2_PACKAGE_OPENSSH is not set
 -BR2_PACKAGE_OPENSSL=y
--BR2_PACKAGE_OPENSSL_BIN=y
--# BR2_PACKAGE_OPENSSL_ENGINES is not set
--BR2_PACKAGE_OPENVPN=y
+-# BR2_PACKAGE_OPENSSL_TARGET_HEADERS is not set
+-# BR2_PACKAGE_OPENVPN is not set
 -# BR2_PACKAGE_OPENSWAN is not set
 -BR2_PACKAGE_PORTMAP=y
--BR2_PACKAGE_PPPD=y
--# BR2_PACKAGE_RADVD is not set
--BR2_PACKAGE_RP_PPPOE=y
--# BR2_PACKAGE_PPTP_LINUX is not set
+-# BR2_PACKAGE_PPPD is not set
 -# BR2_PACKAGE_PROFTPD is not set
+-# BR2_PACKAGE_QUAGGA is not set
 -
 -#
 -# quagga suite
@@ -534,224 +426,111 @@ index e1eac51..d20d89e 100644
 -# BR2_PACKAGE_QUAGGA_OSPF6D is not set
 -# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
 -# BR2_PACKAGE_QUAGGA_ISISD is not set
--BR2_PACKAGE_RSYNC=y
--BR2_PACKAGE_SAMBA=y
--
--#
--# Samba tools selection
--#
--BR2_PACKAGE_SAMBA_CIFS=y
--BR2_PACKAGE_SAMBA_EVENTLOGADM=y
-+BR2_TARGET_AT91BOOTSTRAP_DATAFLASHCARD=y
- 
--#
--# findsmb       - disabled (requires nmblookup, smbclient and perl)
--#
--BR2_PACKAGE_SAMBA_NET=y
--BR2_PACKAGE_SAMBA_NMBD=y
--BR2_PACKAGE_SAMBA_NMBLOOKUP=y
--BR2_PACKAGE_SAMBA_NTLM_AUTH=y
--BR2_PACKAGE_SAMBA_PDBEDIT=y
--BR2_PACKAGE_SAMBA_PROFILES=y
--BR2_PACKAGE_SAMBA_RPCCLIENT=y
--BR2_PACKAGE_SAMBA_SMBCACLS=y
--BR2_PACKAGE_SAMBA_SMBCLIENT=y
--BR2_PACKAGE_SAMBA_SMBCONTROL=y
--BR2_PACKAGE_SAMBA_SMBCQUOTAS=y
--BR2_PACKAGE_SAMBA_SMBGET=y
--BR2_PACKAGE_SAMBA_SMBPASSWD=y
--BR2_PACKAGE_SAMBA_SMBSPOOL=y
--BR2_PACKAGE_SAMBA_SMBSTATUS=y
--BR2_PACKAGE_SAMBA_SMBTREE=y
--BR2_PACKAGE_SAMBA_SWAT=y
--BR2_PACKAGE_SAMBA_SMBTAR=y
--BR2_PACKAGE_SAMBA_TDB=y
--BR2_PACKAGE_SAMBA_TESTPARM=y
--BR2_PACKAGE_SAMBA_WINBINDD=y
--BR2_PACKAGE_SAMBA_WBINFO=y
+-# BR2_PACKAGE_RSYNC is not set
+-# BR2_PACKAGE_SAMBA is not set
 -BR2_PACKAGE_SOCAT=y
--BR2_PACKAGE_SOCAT_PREDEF_CRDLY_SHIFT="9"
--BR2_PACKAGE_SOCAT_PREDEF_TABDLY_SHIFT="11"
--BR2_PACKAGE_SOCAT_PREDEF_CSIZE_SHIFT="4"
--BR2_PACKAGE_STUNNEL=y
--# BR2_PACKAGE_TCPDUMP is not set
--# BR2_PACKAGE_DHCPDUMP is not set
--BR2_PACKAGE_TFTPD=y
+-# BR2_PACKAGE_STUNNEL is not set
+-BR2_PACKAGE_TCPDUMP=y
+-BR2_PACKAGE_DHCPDUMP=y
+-# BR2_PACKAGE_TFTPD is not set
+-# BR2_PACKAGE_LIGHTTPD is not set
+-# BR2_PACKAGE_THTTPD is not set
+-# BR2_PACKAGE_TINYHTTPD is not set
 -# BR2_PACKAGE_TN5250 is not set
 -# BR2_PACKAGE_TTCP is not set
--# BR2_PACKAGE_UDPCAST is not set
--BR2_PACKAGE_VPNC=y
--# BR2_PACKAGE_VSFTPD is not set
--BR2_PACKAGE_VTUN=y
--# BR2_PACKAGE_WEBIF is not set
+-# BR2_PACKAGE_VPNC is not set
+-# BR2_PACKAGE_VTUN is not set
+-BR2_PACKAGE_WGET=y
 -# BR2_PACKAGE_WIRELESS_TOOLS is not set
--
--#
--# Hardware handling / blockdevices and filesystem maintenance
--#
--BR2_PACKAGE_DBUS=y
--BR2_DBUS_EXPAT=y
--# BR2_DBUS_LIBXML2 is not set
--# BR2_PACKAGE_DBUS_GLIB is not set
--BR2_PACKAGE_DEVMEM2=y
--BR2_PACKAGE_DM=y
+-BR2_BLOCKDEV_SUPPORT=y
+-# BR2_PACKAGE_DBUS is not set
+-# BR2_PACKAGE_DM is not set
 -# BR2_PACKAGE_DMRAID is not set
--BR2_PACKAGE_E2FSPROGS=y
--BR2_PACKAGE_E2FSPROGS_BADBLOCKS=y
--BR2_PACKAGE_E2FSPROGS_BLKID=y
--BR2_PACKAGE_E2FSPROGS_CHATTR=y
--BR2_PACKAGE_E2FSPROGS_DUMPE2FS=y
--BR2_PACKAGE_E2FSPROGS_E2FSCK=y
--BR2_PACKAGE_E2FSPROGS_E2LABEL=y
--BR2_PACKAGE_E2FSPROGS_FILEFRAG=y
--BR2_PACKAGE_E2FSPROGS_FINDFS=y
--BR2_PACKAGE_E2FSPROGS_FSCK=y
--BR2_PACKAGE_E2FSPROGS_LOGSAVE=y
--BR2_PACKAGE_E2FSPROGS_LSATTR=y
--BR2_PACKAGE_E2FSPROGS_MKE2FS=y
--BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND=y
--BR2_PACKAGE_E2FSPROGS_TUNE2FS=y
--BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
--# BR2_PACKAGE_EEPROG is not set
--# BR2_PACKAGE_FCONFIG is not set
--# BR2_PACKAGE_FIS is not set
--# BR2_PACKAGE_LIBFUSE is not set
+-# BR2_PACKAGE_E2FSPROGS is not set
 -# BR2_PACKAGE_GADGETFS_TEST is not set
 -# BR2_PACKAGE_HAL is not set
+-# BR2_PACKAGE_HDPARM is not set
+-# BR2_PACKAGE_HOTPLUG is not set
 -# BR2_PACKAGE_HWDATA is not set
--# BR2_PACKAGE_I2C_TOOLS is not set
--BR2_PACKAGE_INPUT_TOOLS=y
--BR2_PACKAGE_INPUT_TOOLS_EVTEST=y
--BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH=y
--BR2_PACKAGE_INPUT_TOOLS_JSCAL=y
--BR2_PACKAGE_INPUT_TOOLS_JSTEST=y
 -# BR2_PACKAGE_IOSTAT is not set
 -# BR2_PACKAGE_LIBAIO is not set
 -# BR2_PACKAGE_LIBRAW1394 is not set
--BR2_PACKAGE_LIBUSB=y
--# BR2_PACKAGE_LM_SENSORS is not set
+-# BR2_PACKAGE_LIBUSB is not set
 -# BR2_PACKAGE_LVM2 is not set
 -# BR2_PACKAGE_MDADM is not set
 -# BR2_PACKAGE_MEMTESTER is not set
--BR2_PACKAGE_MKDOSFS=y
--BR2_PACKAGE_MTD=y
--# BR2_PACKAGE_MTD_UTILS is not set
--BR2_PACKAGE_MTD_20061007=y
--# BR2_PACKAGE_MTD_20050122 is not set
--# BR2_PACKAGE_MTD_UTILS_GIT is not set
+-# BR2_PACKAGE_MKDOSFS is not set
+-# BR2_PACKAGE_MTD is not set
+-# BR2_PACKAGE_PCIUTILS is not set
+-# BR2_PACKAGE_RAIDTOOLS is not set
+-# BR2_PACKAGE_SETSERIAL is not set
+-# BR2_PACKAGE_SFDISK is not set
+-# BR2_PACKAGE_SMARTMONTOOLS is not set
+-BR2_PACKAGE_UDEV=y
+-BR2_PACKAGE_UDEV_UTILS=y
 -
 -#
--# MTD tools selection
+-# Extra udev tools
 -#
--BR2_PACKAGE_MTD_DOCFDISK=y
--BR2_PACKAGE_MTD_DOC_LOADBIOS=y
--BR2_PACKAGE_MTD_FLASHCP=y
--BR2_PACKAGE_MTD_FLASH_ERASE=y
--BR2_PACKAGE_MTD_FLASH_ERASEALL=y
--BR2_PACKAGE_MTD_FLASH_INFO=y
--BR2_PACKAGE_MTD_FLASH_LOCK=y
--BR2_PACKAGE_MTD_FLASH_UNLOCK=y
--BR2_PACKAGE_MTD_FTL_CHECK=y
--BR2_PACKAGE_MTD_FTL_FORMAT=y
--BR2_PACKAGE_MTD_JFFS2DUMP=y
--BR2_PACKAGE_MTD_MKFSJFFS2=y
--BR2_PACKAGE_MTD_MKFSJFFS=y
--BR2_PACKAGE_MTD_MTD_DEBUG=y
--BR2_PACKAGE_MTD_NANDDUMP=y
--BR2_PACKAGE_MTD_NANDWRITE=y
--BR2_PACKAGE_MTD_NFTL_FORMAT=y
--BR2_PACKAGE_MTD_NFTLDUMP=y
--BR2_PACKAGE_MTD_SUMTOOL=y
--# BR2_PACKAGE_NTFS-3G is not set
--# BR2_PACKAGE_PCIUTILS is not set
--BR2_PACKAGE_SETSERIAL=y
--# BR2_PACKAGE_SMARTMONTOOLS is not set
--BR2_PACKAGE_UDEV_VOLUME_ID=y
--BR2_PACKAGE_UDEV_SCSI_ID=y
--BR2_PACKAGE_USBMOUNT=y
--BR2_PACKAGE_USBUTILS=y
+-# BR2_PACKAGE_UDEV_VOLUME_ID is not set
+-# BR2_PACKAGE_UDEV_SCSI_ID is not set
+-# BR2_PACKAGE_USBMOUNT is not set
+-# BR2_PACKAGE_USBUTILS is not set
 -# BR2_PACKAGE_WIPE is not set
 -# BR2_PACKAGE_XFSPROGS is not set
--
--#
--# Audio and video libraries and applications
--#
+-BR2_AUDIO_SUPPORT=y
 -# BR2_PACKAGE_ALSA_LIB is not set
--
--#
--# asterisk	- disabled (required openssl and mpg123)
--#
--BR2_PACKAGE_AUMIX=y
--BR2_PACKAGE_GSTREAMER=y
--# BR2_PACKAGE_GST_PLUGINS_BASE is not set
--# BR2_PACKAGE_GST_PLUGINS_GOOD is not set
--# BR2_PACKAGE_GST_PLUGINS_UGLY is not set
--BR2_PACKAGE_LIBID3TAG=y
--BR2_PACKAGE_LIBMAD=y
--# BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
--BR2_PACKAGE_LIBMPD=y
--BR2_PACKAGE_LIBOGG=y
+-# BR2_PACKAGE_ASTERISK is not set
+-# BR2_PACKAGE_AUMIX is not set
+-# BR2_PACKAGE_LIBMAD is not set
 -# BR2_PACKAGE_LIBSNDFILE is not set
--# BR2_PACKAGE_LIBTHEORA is not set
--# BR2_PACKAGE_LIBVORBIS is not set
--BR2_PACKAGE_MADPLAY=y
+-# BR2_PACKAGE_MADPLAY is not set
 -# BR2_PACKAGE_MPG123 is not set
--BR2_PACKAGE_MPLAYER=y
--BR2_PACKAGE_SPEEX=y
--BR2_PACKAGE_SPEEX_ARM_GENERIC=y
--# BR2_PACKAGE_FESTIVAL is not set
--# BR2_PACKAGE_VLC is not set
--
--#
--# Graphic libraries and applications (graphic/text)
--#
+-BR2_GRAPHIC_SUPPORT=y
 -
 -#
 -# text rendering libraries
 -#
 -BR2_PACKAGE_NCURSES=y
--# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
--# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
--# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
 -# BR2_PACKAGE_NCURSES_TARGET_HEADERS is not set
--# BR2_PACKAGE_NEWT is not set
--# BR2_PACKAGE_SLANG is not set
+-BR2_PACKAGE_NEWT=y
+-BR2_PACKAGE_SLANG=y
 -
 -#
 -# text rendering applications
 -#
--# BR2_PACKAGE_DIALOG is not set
+-BR2_PACKAGE_DIALOG=y
 -
 -#
 -# graphic libraries
 -#
--# BR2_PACKAGE_DIRECTFB is not set
--# BR2_PACKAGE_FBDUMP is not set
+-BR2_PACKAGE_DIRECTFB=y
+-BR2_PACKAGE_DIRECTFB_MULTI=y
+-BR2_PACKAGE_LINUX_FUSION=y
 -# BR2_PACKAGE_IMAGEMAGICK is not set
--# BR2_PACKAGE_JPEG is not set
--# BR2_PACKAGE_LIBART is not set
--# BR2_PACKAGE_LIBPNG is not set
--# BR2_PACKAGE_LIBUNGIF is not set
--# BR2_PACKAGE_LINUX_FUSION is not set
--# BR2_PACKAGE_PIXMAN is not set
--# BR2_PACKAGE_SDL is not set
--# BR2_PACKAGE_TIFF is not set
+-BR2_PACKAGE_JPEG=y
+-BR2_PACKAGE_LIBPNG=y
+-BR2_PACKAGE_LIBUNGIF=y
+-BR2_PACKAGE_SDL=y
+-BR2_PACKAGE_TIFF=y
 -
 -#
 -# busybox graphic applications
 -#
 -
 -#
--# --> May be broken in busybox
+-# --> (May be broken in busybox)
 -#
--# BR2_PACKAGE_FBV is not set
--# BR2_PACKAGE_FBSET is not set
+-BR2_PACKAGE_FBV=y
+-BR2_PACKAGE_FBSET=y
 -
 -#
 -# other GUIs
 -#
+-# BR2_PACKAGE_QTE is not set
 -# BR2_PACKAGE_QT is not set
 -BR2_PACKAGE_XSERVER_none=y
+-# BR2_PACKAGE_XSERVER_x11r7 is not set
 -# BR2_PACKAGE_XSERVER_xorg is not set
 -# BR2_PACKAGE_XSERVER_tinyx is not set
 -
@@ -761,13 +540,10 @@ index e1eac51..d20d89e 100644
 -# BR2_PACKAGE_ATK is not set
 -# BR2_PACKAGE_PANGO is not set
 -# BR2_PACKAGE_LIBDRM is not set
--# BR2_PACKAGE_LIBERATION is not set
--BR2_PACKAGE_LIBGLIB2=y
--# BR2_PACKAGE_OPENMOTIF is not set
--# BR2_PACKAGE_FONTCONFIG is not set
--# BR2_PACKAGE_FREETYPE is not set
--# BR2_PACKAGE_TSLIB is not set
--# BR2_PACKAGE_WEBKIT is not set
+-# BR2_PACKAGE_LIBGLIB2 is not set
+-BR2_PACKAGE_FONTCONFIG=y
+-BR2_PACKAGE_FREETYPE=y
+-BR2_PACKAGE_TSLIB=y
 -
 -#
 -# X Window managers
@@ -777,94 +553,28 @@ index e1eac51..d20d89e 100644
 -#
 -# X applications
 -#
--# BR2_PACKAGE_ALSAMIXERGUI is not set
 -
 -#
--# dillo		- disabled (requires jpeg,libglib12,libgtk12,zlib,libpng and Xorg(7))
+-# Video libraries/codecs and applications
 -#
--# BR2_PACKAGE_GQVIEW is not set
--# BR2_PACKAGE_LEAFPAD is not set
--
--#
--# midori		- disabled (requires Xorg(7))
--#
--# BR2_PACKAGE_PCMANFM is not set
--# BR2_PACKAGE_SYLPHEED is not set
--# BR2_PACKAGE_TORSMO is not set
--# BR2_PACKAGE_X11VNC is not set
--# BR2_PACKAGE_XPDF is not set
--# BR2_PACKAGE_XSTROKE is not set
--# BR2_PACKAGE_XVKBD is not set
--
--#
--# Compressors / decompressors
--#
+-# BR2_PACKAGE_MPLAYER is not set
+-BR2_COMPRESSOR_SUPPORT=y
+-BR2_PACKAGE_GZIP=y
 -BR2_PACKAGE_LZO=y
--# BR2_PACKAGE_LZMA is not set
--# BR2_PACKAGE_LZMA_HOST is not set
+-BR2_PACKAGE_LZMA=y
+-# BR2_PACKAGE_LZMA_HEADERS is not set
+-BR2_PACKAGE_LZMA_HOST=y
 -BR2_PACKAGE_ZLIB=y
 -# BR2_PACKAGE_ZLIB_TARGET_HEADERS is not set
--
--#
--# Package managers
--#
--# BR2_PACKAGE_IPKG is not set
--# BR2_PACKAGE_PORTAGE is not set
--
--#
--# Interpreter languages / Scripting
--#
--# BR2_PACKAGE_LUA is not set
+-BR2_SCRIPTING_SUPPORT=y
 -# BR2_PACKAGE_MICROPERL is not set
--BR2_PACKAGE_PYTHON=y
--# BR2_PACKAGE_PYTHON_DEV is not set
--BR2_PACKAGE_PYTHON_PY_ONLY=y
--# BR2_PACKAGE_PYTHON_PYC_ONLY is not set
--# BR2_PACKAGE_PYTHON_PY_PYC is not set
--
--#
--# The following modules are unusual or require extra libraries
--#
--# BR2_PACKAGE_PYTHON_BSDDB is not set
--BR2_PACKAGE_PYTHON_CODECSCJK=y
--# BR2_PACKAGE_PYTHON_CURSES is not set
--# BR2_PACKAGE_PYTHON_GDBM is not set
--# BR2_PACKAGE_PYTHON_NIS is not set
--# BR2_PACKAGE_PYTHON_PYEXPAT is not set
--# BR2_PACKAGE_PYTHON_READLINE is not set
--# BR2_PACKAGE_PYTHON_SSL is not set
--# BR2_PACKAGE_PYTHON_TKINTER is not set
--BR2_PACKAGE_PYTHON_UNICODEDATA=y
+-# BR2_PACKAGE_PYTHON is not set
 -# BR2_PACKAGE_RUBY is not set
 -# BR2_PACKAGE_TCL is not set
 -# BR2_PACKAGE_PHP is not set
 -
 -#
--# XML handling
--#
--BR2_PACKAGE_EXPAT=y
--# BR2_PACKAGE_EZXML is not set
--BR2_PACKAGE_LIBXML2=y
--# BR2_PACKAGE_LIBXSLT is not set
--# BR2_PACKAGE_XERCES is not set
--
--#
--# Java
--#
--# BR2_PACKAGE_CLASSPATH is not set
--
--#
--# Games
--#
--# BR2_PACKAGE_GNUCHESS is not set
--# BR2_PACKAGE_MAGICCUBE4D is not set
--# BR2_PACKAGE_PRBOOM is not set
--# BR2_PACKAGE_RUBIX is not set
--# BR2_PACKAGE_VICE is not set
--# BR2_PACKAGE_XBOARD is not set
--
--#
--# Target filesystem options
+-# Target Options
 -#
 -
 -#
@@ -886,190 +596,108 @@ index e1eac51..d20d89e 100644
 -# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
 -# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
 -
--BR2_TARGET_ROOTFS_JFFS2=y
--BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
--# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
--# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
--# BR2_TARGET_ROOTFS_JFFS2_FLASH_128 is not set
--# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
--# BR2_TARGET_ROOTFS_JFFS2_CUSTOM is not set
--BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x420
--BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
--BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
--# BR2_JFFS2_TARGET_SREC is not set
--# BR2_TARGET_ROOTFS_JFFS2_PAD is not set
--BR2_TARGET_ROOTFS_JFFS2_LE=y
--# BR2_TARGET_ROOTFS_JFFS2_BE is not set
--# BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
--# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
--
--
--# BR2_TARGET_ROOTFS_UBIFS is not set
+-# BR2_TARGET_ROOTFS_JFFS2 is not set
 -# BR2_TARGET_ROOTFS_SQUASHFS is not set
 -# BR2_TARGET_ROOTFS_TAR is not set
 -# BR2_TARGET_ROOTFS_CPIO is not set
 -# BR2_TARGET_ROOTFS_INITRAMFS is not set
--# BR2_TARGET_ROOTFS_ROMFS is not set
 -
 -#
 -# bootloader for target device
 -#
-+# Second stage bootloader
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="$(BOARD_NAME)"
--BR2_TARGET_UBOOT_2009_01=y
--# BR2_TARGET_UBOOT_2008_10 is not set
--BR2_UBOOT_VERSION="2009.01"
--BR2_TARGET_U_BOOT_2009_01_ARCH_AT91=y
--BR2_TARGET_U_BOOT_ARCH_AT91_PATCH_DIR="target/device/Atmel/arch-arm/u-boot/2009.01"
--BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
--BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASHCARD=y
--# BR2_TARGET_UBOOT_BOOTSOURCE_DATAFLASH is not set
--# BR2_TARGET_UBOOT_BOOTSOURCE_NANDFLASH is not set
--# BR2_TARGET_UBOOT_BOOTSOURCE_FLASH is not set
--# BR2_TARGET_UBOOT_BOOTSOURCE_SDCARD is not set
--# BR2_TARGET_UBOOT_BOOTSOURCE_EEPROM is not set
--BR2_TARGET_UBOOT_BOOTSOURCE="dataflash"
--# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
--# BR2_TARGET_UBOOT_TOOL_ENV is not set
--BR2_TARGET_UBOOT_DATAFLASH_SIZE_8MB=y
--# BR2_TARGET_UBOOT_DATAFLASH_SIZE_4MB is not set
--# BR2_TARGET_UBOOT_DATAFLASH_SIZE_2MB is not set
--# BR2_TARGET_UBOOT_DATAFLASH_SIZE_1MB is not set
--# BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_50MB is not set
--# BR2_TARGET_UBOOT_DATAFLASH_SIZE_0_25MB is not set
--BR2_TARGET_UBOOT_END_OF_FLASH="C083FFFF"
--BR2_TARGET_UBOOT_KERNEL_LOCATION="C0042000"
--BR2_TARGET_UBOOT_NETWORK=y
--BR2_TARGET_UBOOT_SERVERIP="10.175.196.221"
--BR2_TARGET_UBOOT_IPADDR="10.175.196.18"
--BR2_TARGET_UBOOT_GATEWAY="10.175.196.1"
--BR2_TARGET_UBOOT_NETMASK="255.255.255.0"
--BR2_TARGET_UBOOT_ETHADDR="04:25:fe:ed:00:18"
--BR2_BOOTSOURCE_DATAFLASHCARD=y
--BR2_BOOTSOURCE_DATAFLASH=y
--BR2_BOOTSOURCE=y
-+BR2_TARGET_UBOOT_BOARDNAME="at91sam9260ek"
-+BR2_TARGET_UBOOT_2010_06=y
- 
+-
 -#
- # Kernel
+-# Linux Options
 -#
--# BR2_KERNEL_none is not set
--BR2_KERNEL_LINUX_ADVANCED=y
--# BR2_KERNEL_LINUX is not set
 -BR2_PACKAGE_LINUX=y
--BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
--BR2_PACKAGE_LINUX_FORMAT="uImage"
--BR2_KERNEL_CURRENT_VERSION="2.6.28.2"
--BR2_KERNEL_LATEST_2_6_28="2"
--BR2_KERNEL_LATEST_2_6_27="13"
--BR2_KERNEL_LATEST_2_6_26="8"
--BR2_KERNEL_LATEST_2_6_25="19"
--BR2_KERNEL_LATEST_2_6_24="7"
--BR2_KERNEL_LATEST_2_6_23="17"
--BR2_KERNEL_LATEST_2_6_22="19"
--BR2_KERNEL_LATEST_2_6_21="7"
--BR2_KERNEL_LATEST_2_6_20="21"
--BR2_KERNEL_PATCH_LEVEL="$(BR2_KERNEL_MINORLEVEL)"
--BR2_KERNEL_NEXT_VERSION="2.6.29"
--BR2_KERNEL_THIS_VERSION="2.6.28"
--BR2_KERNEL_SITE="http://ftp.kernel.org/pub/linux/kernel/v2.6"
--BR2_MM_PATCH_SITE="http://ftp.kernel.org/pub/linux/kernel/people/akpm/patches/2.6"
--BR2_RC_MM_PATCH_DIR="$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)/2.6.$(BR2_KERNEL_NEXT_VERSION)-rc$(BR2_KERNEL_RC_LEVEL)-mm$(BR2_KERNEL_MM_LEVEL)"
--BR2_KERNEL_PATCH_SITE="$(BR2_KERNEL_SITE)"
--# BR2_LINUX_2_6_STABLE is not set
--BR2_LINUX_2_6_28=y
--# BR2_LINUX_2_6_27 is not set
--# BR2_LINUX_2_6_26 is not set
--# BR2_LINUX_2_6_25 is not set
--# BR2_LINUX_2_6_24 is not set
--# BR2_LINUX_2_6_23 is not set
--# BR2_LINUX_2_6_22 is not set
--# BR2_LINUX_2_6_21 is not set
--# BR2_LINUX_2_6_20 is not set
--# BR2_LINUX_2_6_29 is not set
--# BR2_LINUX26_CUSTOM is not set
+-# BR2_PACKAGE_LINUX_EXPERIMENTAL_CONFIG is not set
+-BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(LINUX26_VERSION).config"
+-BR2_PACKAGE_LINUX_FORMAT="vmlinux"
 -
 -#
--# Patches
+-# Board Support Options
 -#
--BR2_KERNEL_ADD_KERNEL_ORG_PATCH=y
--# BR2_KERNEL_ADD_LATEST is not set
--# BR2_KERNEL_ADD_LATEST_MINORPATCH is not set
--BR2_KERNEL_ADD_MINORPATCH=y
--# BR2_KERNEL_ADD_LATEST_RC_PATCH is not set
--# BR2_KERNEL_ADD_RC_PATCH is not set
--# BR2_KERNEL_ADD_LATEST_SNAPSHOT is not set
--# BR2_KERNEL_ADD_SNAPSHOT is not set
--# BR2_KERNEL_ADD_LATEST_MM_PATCH is not set
--# BR2_KERNEL_ADD_MM_PATCH is not set
--BR2_KERNEL_ADD_PATCH=y
--BR2_KERNEL_MINORLEVEL="2"
--BR2_KERNEL_ARCH_PATCH_ENABLED=y
--BR2_ARCH_AT91_2_6_28=y
--# BR2_ARCH_AT91_2_6_27 is not set
--# BR2_ARCH_AT91_2_6_26 is not set
--# BR2_ARCH_AT91_2_6_25 is not set
--# BR2_ARCH_AT91_2_6_24 is not set
--# BR2_ARCH_AT91_2_6_22 is not set
--BR2_LINUX_BSP_PATCH=""
--BR2_KERNEL_PATCH="patch-$(BR2_DOWNLOAD_LINUX26_VERSION).$(BR2_KERNEL_PATCH_LEVEL).bz2"
--BR2_EXTRA_VERSION=".$(BR2_KERNEL_PATCH_LEVEL)"
--BR2_KERNEL_BASE=y
--BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
--BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION).$(BR2_KERNEL_PATCH_LEVEL)"
+-# BR2_TARGET_ARM is not set
+-BR2_TARGET_ATMEL=y
 -
 -#
--# Linux Kernel Configuration
+-# Atmel AT91 Specific Device Support
 -#
--BR2_PACKAGE_LINUX_USE_KCONFIG=y
--# BR2_PACKAGE_LINUX_USE_DEFCONFIG is not set
--# BR2_PACKAGE_LINUX_USE_XCONFIG is not set
--# BR2_LINUX_BIN_BZIMAGE is not set
--BR2_LINUX_BIN_UIMAGE=y
--# BR2_LINUX_BIN_VMLINUX is not set
--# BR2_LINUX_BIN_ZIMAGE is not set
--# BR2_LINUX_BIN_CUSTOM is not set
+-BR2_TARGET_AT91=y
+-# BR2_TARGET_AT91RM9200 is not set
+-BR2_TARGET_AT91SAM9260=y
+-# BR2_TARGET_AT91SAM9260A is not set
+-# BR2_TARGET_AT91SAM9261 is not set
+-# BR2_TARGET_AT91SAM9261S is not set
+-# BR2_TARGET_AT91SAM9262 is not set
+-# BR2_TARGET_AT91SAM9263 is not set
+-# BR2_TARGET_AT91SAM9XE is not set
+-# BR2_TARGET_AT91RM9200DF is not set
+-# BR2_TARGET_AT91RM9200SE is not set
+-# BR2_TARGET_AT91RM9200EK is not set
+-# BR2_TARGET_AT91RM9200DK is not set
+-BR2_TARGET_AT91SAM9260DFC=y
+-# BR2_TARGET_AT91SAM9260EK is not set
+-# BR2_TARGET_AT91SAM9261EK is not set
+-# BR2_TARGET_AT91SAM9262EK is not set
+-# BR2_TARGET_AT91SAM9263EK is not set
+-# BR2_TARGET_AT91SAM9XEEK is not set
+-BR2_BOARD_NAME="at91sam9260dfc"
+-BR2_TARGET_AT91_ADVANCED_INFO=y
 -
 -#
--# Destinations for linux kernel binaries
+-# Package support
 -#
--# BR2_LINUX_COPYTO_ROOTFS is not set
--BR2_LINUX_COPYTO_TFTPBOOT=y
--BR2_LINUX_COPYTO=""
--BR2_LINUX_COPY_CONFIGURATION=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.33"
-+BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.33-at91.patch.gz"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260ek"
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_EXT2 is not set
-+BR2_TARGET_ROOTFS_TAR=y
-diff --git a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.28.2.config b/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.28.2.config
+-
+-#
+-# Secondary locations
+-#
+-BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6"
+-BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
+-# BR2_TARGET_UBOOT is not set
+-BR2_TARGET_AT91BOOTSTRAP=y
+-# BR2_TARGET_AT91BOOT_DATAFLASH is not set
+-BR2_TARGET_AT91BOOT_DATAFLASHCARD=y
+-# BR2_TARGET_AT91BOOT_NANDFLASH is not set
+-# BR2_TARGET_AT91BOOT_FLASH is not set
+-BR2_TARGET_AT91BOOTSTRAP_MEMORY="dataflashcard"
+-BR2_AT91BOOTSTRAP_IMG_SIZE="0x32000"
+-# BR2_AT91BOOTSTRAP_JUMP_TO_DEFAULT is not set
+-# BR2_AT91BOOTSTRAP_JUMP_TO_HIGH_SDRAM is not set
+-BR2_AT91BOOTSTRAP_JUMP_TO_START_OF_SDRAM=y
+-BR2_AT91BOOTSTRAP_JUMP_ADDR="0x20000000"
+-
+-#
+-# It will be copied to $(BR2_AT91BOOTSTRAP_JUMP_ADDR)
+-#
+-# BR2_TARGET_SHARP is not set
+-
+-#
+-# Generic System Support
+-#
+-# BR2_TARGET_GENERIC_ACCESS_POINT is not set
+-# BR2_TARGET_GENERIC_FIREWALL is not set
+-# BR2_TARGET_GENERIC_DEV_SYSTEM is not set
+diff --git a/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config b/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config
 deleted file mode 100644
-index b0a7b72..0000000
---- a/target/device/Atmel/at91sam9260dfc/at91sam9260dfc-linux-2.6.28.2.config
+index bd1ce9b..0000000
+--- a/target/device/Atmel/at91sam9260pf/at91sam9260pf-linux-2.6.22.1.config
 +++ /dev/null
-@@ -1,1640 +0,0 @@
+@@ -1,1461 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
--# Linux kernel version: 2.6.28.2
--# Thu Jan 29 22:44:55 2009
+-# Linux kernel version: 2.6.22.1
+-# Tue Aug 14 23:42:21 2007
 -#
 -CONFIG_ARM=y
 -CONFIG_SYS_SUPPORTS_APM_EMULATION=y
 -CONFIG_GENERIC_GPIO=y
--CONFIG_GENERIC_TIME=y
--CONFIG_GENERIC_CLOCKEVENTS=y
+-# CONFIG_GENERIC_TIME is not set
+-# CONFIG_GENERIC_CLOCKEVENTS is not set
 -CONFIG_MMU=y
 -# CONFIG_NO_IOPORT is not set
 -CONFIG_GENERIC_HARDIRQS=y
 -CONFIG_STACKTRACE_SUPPORT=y
--CONFIG_HAVE_LATENCYTOP_SUPPORT=y
 -CONFIG_LOCKDEP_SUPPORT=y
 -CONFIG_TRACE_IRQFLAGS_SUPPORT=y
 -CONFIG_HARDIRQS_SW_RESEND=y
@@ -1079,37 +707,35 @@ index b0a7b72..0000000
 -# CONFIG_ARCH_HAS_ILOG2_U64 is not set
 -CONFIG_GENERIC_HWEIGHT=y
 -CONFIG_GENERIC_CALIBRATE_DELAY=y
--CONFIG_GENERIC_HARDIRQS_NO__DO_IRQ=y
+-CONFIG_ZONE_DMA=y
 -CONFIG_VECTORS_BASE=0xffff0000
 -CONFIG_DEFCONFIG_LIST="/lib/modules/$UNAME_RELEASE/.config"
 -
 -#
--# General setup
+-# Code maturity level options
 -#
 -CONFIG_EXPERIMENTAL=y
 -CONFIG_BROKEN_ON_SMP=y
 -CONFIG_INIT_ENV_ARG_LIMIT=32
+-
+-#
+-# General setup
+-#
 -CONFIG_LOCALVERSION=""
 -# CONFIG_LOCALVERSION_AUTO is not set
 -# CONFIG_SWAP is not set
 -CONFIG_SYSVIPC=y
+-# CONFIG_IPC_NS is not set
 -CONFIG_SYSVIPC_SYSCTL=y
 -# CONFIG_POSIX_MQUEUE is not set
 -# CONFIG_BSD_PROCESS_ACCT is not set
 -# CONFIG_TASKSTATS is not set
+-# CONFIG_UTS_NS is not set
 -# CONFIG_AUDIT is not set
 -# CONFIG_IKCONFIG is not set
 -CONFIG_LOG_BUF_SHIFT=14
--# CONFIG_CGROUPS is not set
--# CONFIG_GROUP_SCHED is not set
 -CONFIG_SYSFS_DEPRECATED=y
--CONFIG_SYSFS_DEPRECATED_V2=y
 -# CONFIG_RELAY is not set
--CONFIG_NAMESPACES=y
--# CONFIG_UTS_NS is not set
--# CONFIG_IPC_NS is not set
--# CONFIG_USER_NS is not set
--# CONFIG_PID_NS is not set
 -CONFIG_BLK_DEV_INITRD=y
 -CONFIG_INITRAMFS_SOURCE=""
 -CONFIG_CC_OPTIMIZE_FOR_SIZE=y
@@ -1124,7 +750,6 @@ index b0a7b72..0000000
 -CONFIG_PRINTK=y
 -CONFIG_BUG=y
 -CONFIG_ELF_CORE=y
--CONFIG_COMPAT_BRK=y
 -CONFIG_BASE_FULL=y
 -CONFIG_FUTEX=y
 -CONFIG_ANON_INODES=y
@@ -1133,36 +758,31 @@ index b0a7b72..0000000
 -CONFIG_TIMERFD=y
 -CONFIG_EVENTFD=y
 -CONFIG_SHMEM=y
--CONFIG_AIO=y
 -CONFIG_VM_EVENT_COUNTERS=y
 -CONFIG_SLAB=y
 -# CONFIG_SLUB is not set
 -# CONFIG_SLOB is not set
--# CONFIG_PROFILING is not set
--# CONFIG_MARKERS is not set
--CONFIG_HAVE_OPROFILE=y
--# CONFIG_KPROBES is not set
--CONFIG_HAVE_KPROBES=y
--CONFIG_HAVE_KRETPROBES=y
--CONFIG_HAVE_CLK=y
--CONFIG_HAVE_GENERIC_DMA_COHERENT=y
--CONFIG_SLABINFO=y
 -CONFIG_RT_MUTEXES=y
 -# CONFIG_TINY_SHMEM is not set
 -CONFIG_BASE_SMALL=0
+-
+-#
+-# Loadable module support
+-#
 -CONFIG_MODULES=y
--# CONFIG_MODULE_FORCE_LOAD is not set
 -CONFIG_MODULE_UNLOAD=y
 -# CONFIG_MODULE_FORCE_UNLOAD is not set
 -# CONFIG_MODVERSIONS is not set
 -# CONFIG_MODULE_SRCVERSION_ALL is not set
 -CONFIG_KMOD=y
+-
+-#
+-# Block layer
+-#
 -CONFIG_BLOCK=y
 -# CONFIG_LBD is not set
 -# CONFIG_BLK_DEV_IO_TRACE is not set
 -# CONFIG_LSF is not set
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_BLK_DEV_INTEGRITY is not set
 -
 -#
 -# IO Schedulers
@@ -1176,8 +796,6 @@ index b0a7b72..0000000
 -# CONFIG_DEFAULT_CFQ is not set
 -# CONFIG_DEFAULT_NOOP is not set
 -CONFIG_DEFAULT_IOSCHED="anticipatory"
--CONFIG_CLASSIC_RCU=y
--# CONFIG_FREEZER is not set
 -
 -#
 -# System Type
@@ -1189,6 +807,7 @@ index b0a7b72..0000000
 -CONFIG_ARCH_AT91=y
 -# CONFIG_ARCH_CLPS7500 is not set
 -# CONFIG_ARCH_CLPS711X is not set
+-# CONFIG_ARCH_CO285 is not set
 -# CONFIG_ARCH_EBSA110 is not set
 -# CONFIG_ARCH_EP93XX is not set
 -# CONFIG_ARCH_FOOTBRIDGE is not set
@@ -1202,13 +821,8 @@ index b0a7b72..0000000
 -# CONFIG_ARCH_IXP2000 is not set
 -# CONFIG_ARCH_IXP4XX is not set
 -# CONFIG_ARCH_L7200 is not set
--# CONFIG_ARCH_KIRKWOOD is not set
 -# CONFIG_ARCH_KS8695 is not set
 -# CONFIG_ARCH_NS9XXX is not set
--# CONFIG_ARCH_LOKI is not set
--# CONFIG_ARCH_MV78XX0 is not set
--# CONFIG_ARCH_MXC is not set
--# CONFIG_ARCH_ORION5X is not set
 -# CONFIG_ARCH_PNX4008 is not set
 -# CONFIG_ARCH_PXA is not set
 -# CONFIG_ARCH_RPC is not set
@@ -1218,15 +832,6 @@ index b0a7b72..0000000
 -# CONFIG_ARCH_LH7A40X is not set
 -# CONFIG_ARCH_DAVINCI is not set
 -# CONFIG_ARCH_OMAP is not set
--# CONFIG_ARCH_MSM is not set
--
--#
--# Boot options
--#
--
--#
--# Power management
--#
 -
 -#
 -# Atmel AT91 System-on-Chip
@@ -1236,10 +841,6 @@ index b0a7b72..0000000
 -# CONFIG_ARCH_AT91SAM9261 is not set
 -# CONFIG_ARCH_AT91SAM9263 is not set
 -# CONFIG_ARCH_AT91SAM9RL is not set
--# CONFIG_ARCH_AT91SAM9G20 is not set
--# CONFIG_ARCH_AT91CAP9 is not set
--# CONFIG_ARCH_AT91X40 is not set
--CONFIG_AT91_PMC_UNIT=y
 -
 -#
 -# AT91SAM9260 Variants
@@ -1250,30 +851,19 @@ index b0a7b72..0000000
 -# AT91SAM9260 / AT91SAM9XE Board Type
 -#
 -CONFIG_MACH_AT91SAM9260EK=y
--# CONFIG_MACH_CAM60 is not set
--# CONFIG_MACH_SAM9_L9260 is not set
--# CONFIG_MACH_AFEB9260 is not set
--# CONFIG_MACH_USB_A9260 is not set
--# CONFIG_MACH_QIL_A9260 is not set
 -
 -#
 -# AT91 Board Options
 -#
 -CONFIG_MTD_AT91_DATAFLASH_CARD=y
--# CONFIG_MTD_NAND_ATMEL_BUSWIDTH_16 is not set
+-CONFIG_MTD_NAND_AT91_BUSWIDTH_16=y
 -
 -#
 -# AT91 Feature Selections
 -#
 -CONFIG_AT91_PROGRAMMABLE_CLOCKS=y
--CONFIG_AT91_TIMER_HZ=100
--CONFIG_AT91_EARLY_DBGU=y
--# CONFIG_AT91_EARLY_USART0 is not set
--# CONFIG_AT91_EARLY_USART1 is not set
--# CONFIG_AT91_EARLY_USART2 is not set
--# CONFIG_AT91_EARLY_USART3 is not set
--# CONFIG_AT91_EARLY_USART4 is not set
--# CONFIG_AT91_EARLY_USART5 is not set
+-CONFIG_ATMEL_TCLIB=y
+-# CONFIG_AT91_FIQ is not set
 -
 -#
 -# Processor Type
@@ -1282,7 +872,6 @@ index b0a7b72..0000000
 -CONFIG_CPU_ARM926T=y
 -CONFIG_CPU_32v5=y
 -CONFIG_CPU_ABRT_EV5TJ=y
--CONFIG_CPU_PABRT_NOIFAR=y
 -CONFIG_CPU_CACHE_VIVT=y
 -CONFIG_CPU_COPY_V4WB=y
 -CONFIG_CPU_TLB_V4WBI=y
@@ -1302,40 +891,34 @@ index b0a7b72..0000000
 -#
 -# Bus support
 -#
--# CONFIG_PCI_SYSCALL is not set
 -# CONFIG_ARCH_SUPPORTS_MSI is not set
+-
+-#
+-# PCCARD (PCMCIA/CardBus) support
+-#
 -# CONFIG_PCCARD is not set
 -
 -#
 -# Kernel Features
 -#
--# CONFIG_NO_HZ is not set
--# CONFIG_HIGH_RES_TIMERS is not set
--CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
--CONFIG_VMSPLIT_3G=y
--# CONFIG_VMSPLIT_2G is not set
--# CONFIG_VMSPLIT_1G is not set
--CONFIG_PAGE_OFFSET=0xC0000000
+-# CONFIG_TICK_ONESHOT is not set
 -# CONFIG_PREEMPT is not set
+-# CONFIG_NO_IDLE_HZ is not set
 -CONFIG_HZ=100
 -# CONFIG_AEABI is not set
--CONFIG_ARCH_FLATMEM_HAS_HOLES=y
--# CONFIG_ARCH_SPARSEMEM_DEFAULT is not set
--# CONFIG_ARCH_SELECT_MEMORY_MODEL is not set
+-# CONFIG_ARCH_DISCONTIGMEM_ENABLE is not set
 -CONFIG_SELECT_MEMORY_MODEL=y
 -CONFIG_FLATMEM_MANUAL=y
 -# CONFIG_DISCONTIGMEM_MANUAL is not set
 -# CONFIG_SPARSEMEM_MANUAL is not set
 -CONFIG_FLATMEM=y
 -CONFIG_FLAT_NODE_MEM_MAP=y
--CONFIG_PAGEFLAGS_EXTENDED=y
+-# CONFIG_SPARSEMEM_STATIC is not set
 -CONFIG_SPLIT_PTLOCK_CPUS=4096
 -# CONFIG_RESOURCES_64BIT is not set
--# CONFIG_PHYS_ADDR_T_64BIT is not set
--CONFIG_ZONE_DMA_FLAG=0
--CONFIG_VIRT_TO_BUS=y
--CONFIG_UNEVICTABLE_LRU=y
+-CONFIG_ZONE_DMA_FLAG=1
 -CONFIG_LEDS=y
+-CONFIG_LEDS_TIMER=y
 -CONFIG_LEDS_CPU=y
 -CONFIG_ALIGNMENT_TRAP=y
 -
@@ -1347,11 +930,6 @@ index b0a7b72..0000000
 -CONFIG_CMDLINE="mem=32M console=ttyS0,115200 initrd=0x20410000,3145728 root=/dev/ram0 rw"
 -# CONFIG_XIP_KERNEL is not set
 -# CONFIG_KEXEC is not set
--
--#
--# CPU Power Management
--#
--# CONFIG_CPU_IDLE is not set
 -
 -#
 -# Floating point emulation
@@ -1369,8 +947,6 @@ index b0a7b72..0000000
 -# Userspace binary formats
 -#
 -CONFIG_BINFMT_ELF=y
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_HAVE_AOUT=y
 -# CONFIG_BINFMT_AOUT is not set
 -# CONFIG_BINFMT_MISC is not set
 -# CONFIG_ARTHUR is not set
@@ -1379,7 +955,10 @@ index b0a7b72..0000000
 -# Power management options
 -#
 -# CONFIG_PM is not set
--CONFIG_ARCH_SUSPEND_POSSIBLE=y
+-
+-#
+-# Networking
+-#
 -CONFIG_NET=y
 -
 -#
@@ -1392,7 +971,6 @@ index b0a7b72..0000000
 -# CONFIG_XFRM_USER is not set
 -# CONFIG_XFRM_SUB_POLICY is not set
 -# CONFIG_XFRM_MIGRATE is not set
--# CONFIG_XFRM_STATISTICS is not set
 -# CONFIG_NET_KEY is not set
 -CONFIG_INET=y
 -# CONFIG_IP_MULTICAST is not set
@@ -1410,36 +988,19 @@ index b0a7b72..0000000
 -# CONFIG_INET_ESP is not set
 -# CONFIG_INET_IPCOMP is not set
 -# CONFIG_INET_XFRM_TUNNEL is not set
--CONFIG_INET_TUNNEL=y
+-# CONFIG_INET_TUNNEL is not set
 -CONFIG_INET_XFRM_MODE_TRANSPORT=y
 -CONFIG_INET_XFRM_MODE_TUNNEL=y
 -CONFIG_INET_XFRM_MODE_BEET=y
--# CONFIG_INET_LRO is not set
 -CONFIG_INET_DIAG=y
 -CONFIG_INET_TCP_DIAG=y
 -# CONFIG_TCP_CONG_ADVANCED is not set
 -CONFIG_TCP_CONG_CUBIC=y
 -CONFIG_DEFAULT_TCP_CONG="cubic"
 -# CONFIG_TCP_MD5SIG is not set
--CONFIG_IPV6=y
--# CONFIG_IPV6_PRIVACY is not set
--# CONFIG_IPV6_ROUTER_PREF is not set
--# CONFIG_IPV6_OPTIMISTIC_DAD is not set
--# CONFIG_INET6_AH is not set
--# CONFIG_INET6_ESP is not set
--# CONFIG_INET6_IPCOMP is not set
--# CONFIG_IPV6_MIP6 is not set
+-# CONFIG_IPV6 is not set
 -# CONFIG_INET6_XFRM_TUNNEL is not set
 -# CONFIG_INET6_TUNNEL is not set
--CONFIG_INET6_XFRM_MODE_TRANSPORT=y
--CONFIG_INET6_XFRM_MODE_TUNNEL=y
--CONFIG_INET6_XFRM_MODE_BEET=y
--# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
--CONFIG_IPV6_SIT=y
--CONFIG_IPV6_NDISC_NODETYPE=y
--# CONFIG_IPV6_TUNNEL is not set
--# CONFIG_IPV6_MULTIPLE_TABLES is not set
--# CONFIG_IPV6_MROUTE is not set
 -# CONFIG_NETLABEL is not set
 -# CONFIG_NETWORK_SECMARK is not set
 -# CONFIG_NETFILTER is not set
@@ -1453,7 +1014,6 @@ index b0a7b72..0000000
 -# CONFIG_TIPC is not set
 -# CONFIG_ATM is not set
 -# CONFIG_BRIDGE is not set
--# CONFIG_NET_DSA is not set
 -# CONFIG_VLAN_8021Q is not set
 -# CONFIG_DECNET is not set
 -# CONFIG_LLC2 is not set
@@ -1463,6 +1023,10 @@ index b0a7b72..0000000
 -# CONFIG_LAPB is not set
 -# CONFIG_ECONET is not set
 -# CONFIG_WAN_ROUTER is not set
+-
+-#
+-# QoS and/or fair queueing
+-#
 -# CONFIG_NET_SCHED is not set
 -
 -#
@@ -1470,19 +1034,18 @@ index b0a7b72..0000000
 -#
 -# CONFIG_NET_PKTGEN is not set
 -# CONFIG_HAMRADIO is not set
--# CONFIG_CAN is not set
 -# CONFIG_IRDA is not set
 -# CONFIG_BT is not set
 -# CONFIG_AF_RXRPC is not set
--# CONFIG_PHONET is not set
--CONFIG_WIRELESS=y
+-
+-#
+-# Wireless
+-#
 -# CONFIG_CFG80211 is not set
--CONFIG_WIRELESS_OLD_REGULATORY=y
 -# CONFIG_WIRELESS_EXT is not set
 -# CONFIG_MAC80211 is not set
 -# CONFIG_IEEE80211 is not set
 -# CONFIG_RFKILL is not set
--# CONFIG_NET_9P is not set
 -
 -#
 -# Device Drivers
@@ -1491,15 +1054,16 @@ index b0a7b72..0000000
 -#
 -# Generic Driver Options
 -#
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
 -CONFIG_STANDALONE=y
 -CONFIG_PREVENT_FIRMWARE_BUILD=y
--CONFIG_FW_LOADER=y
--CONFIG_FIRMWARE_IN_KERNEL=y
--CONFIG_EXTRA_FIRMWARE=""
+-# CONFIG_FW_LOADER is not set
 -# CONFIG_DEBUG_DRIVER is not set
 -# CONFIG_DEBUG_DEVRES is not set
 -# CONFIG_SYS_HYPERVISOR is not set
+-
+-#
+-# Connector - unified userspace <-> kernelspace linker
+-#
 -# CONFIG_CONNECTOR is not set
 -CONFIG_MTD=y
 -# CONFIG_MTD_DEBUG is not set
@@ -1508,7 +1072,6 @@ index b0a7b72..0000000
 -# CONFIG_MTD_REDBOOT_PARTS is not set
 -CONFIG_MTD_CMDLINE_PARTS=y
 -# CONFIG_MTD_AFS_PARTS is not set
--# CONFIG_MTD_AR7_PARTS is not set
 -
 -#
 -# User Modules And Translation Layers
@@ -1521,23 +1084,33 @@ index b0a7b72..0000000
 -# CONFIG_INFTL is not set
 -# CONFIG_RFD_FTL is not set
 -# CONFIG_SSFDC is not set
--# CONFIG_MTD_OOPS is not set
 -
 -#
 -# RAM/ROM/Flash chip drivers
 -#
--# CONFIG_MTD_CFI is not set
+-CONFIG_MTD_CFI=y
 -# CONFIG_MTD_JEDECPROBE is not set
--CONFIG_MTD_MAP_BANK_WIDTH_1=y
+-CONFIG_MTD_GEN_PROBE=y
+-CONFIG_MTD_CFI_ADV_OPTIONS=y
+-CONFIG_MTD_CFI_NOSWAP=y
+-# CONFIG_MTD_CFI_BE_BYTE_SWAP is not set
+-# CONFIG_MTD_CFI_LE_BYTE_SWAP is not set
+-CONFIG_MTD_CFI_GEOMETRY=y
+-# CONFIG_MTD_MAP_BANK_WIDTH_1 is not set
 -CONFIG_MTD_MAP_BANK_WIDTH_2=y
 -CONFIG_MTD_MAP_BANK_WIDTH_4=y
 -# CONFIG_MTD_MAP_BANK_WIDTH_8 is not set
 -# CONFIG_MTD_MAP_BANK_WIDTH_16 is not set
 -# CONFIG_MTD_MAP_BANK_WIDTH_32 is not set
 -CONFIG_MTD_CFI_I1=y
--CONFIG_MTD_CFI_I2=y
+-# CONFIG_MTD_CFI_I2 is not set
 -# CONFIG_MTD_CFI_I4 is not set
 -# CONFIG_MTD_CFI_I8 is not set
+-# CONFIG_MTD_OTP is not set
+-CONFIG_MTD_CFI_INTELEXT=y
+-CONFIG_MTD_CFI_AMDSTD=y
+-# CONFIG_MTD_CFI_STAA is not set
+-CONFIG_MTD_CFI_UTIL=y
 -# CONFIG_MTD_RAM is not set
 -# CONFIG_MTD_ROM is not set
 -# CONFIG_MTD_ABSENT is not set
@@ -1546,14 +1119,17 @@ index b0a7b72..0000000
 -# Mapping drivers for chip access
 -#
 -# CONFIG_MTD_COMPLEX_MAPPINGS is not set
+-CONFIG_MTD_PHYSMAP=y
+-CONFIG_MTD_PHYSMAP_START=0x10000000
+-CONFIG_MTD_PHYSMAP_LEN=0
+-CONFIG_MTD_PHYSMAP_BANKWIDTH=2
+-# CONFIG_MTD_ARM_INTEGRATOR is not set
 -# CONFIG_MTD_PLATRAM is not set
 -
 -#
 -# Self-contained MTD device drivers
 -#
 -CONFIG_MTD_DATAFLASH=y
--# CONFIG_MTD_DATAFLASH_WRITE_VERIFY is not set
--# CONFIG_MTD_DATAFLASH_OTP is not set
 -# CONFIG_MTD_M25P80 is not set
 -# CONFIG_MTD_SLRAM is not set
 -# CONFIG_MTD_PHRAM is not set
@@ -1570,26 +1146,34 @@ index b0a7b72..0000000
 -# CONFIG_MTD_NAND_VERIFY_WRITE is not set
 -# CONFIG_MTD_NAND_ECC_SMC is not set
 -# CONFIG_MTD_NAND_MUSEUM_IDS is not set
--# CONFIG_MTD_NAND_GPIO is not set
 -CONFIG_MTD_NAND_IDS=y
 -# CONFIG_MTD_NAND_DISKONCHIP is not set
--# CONFIG_MTD_NAND_ATMEL is not set
+-CONFIG_MTD_NAND_AT91=y
 -# CONFIG_MTD_NAND_NANDSIM is not set
 -# CONFIG_MTD_NAND_PLATFORM is not set
--# CONFIG_MTD_ALAUDA is not set
 -CONFIG_MTD_ONENAND=y
 -CONFIG_MTD_ONENAND_VERIFY_WRITE=y
 -# CONFIG_MTD_ONENAND_GENERIC is not set
 -# CONFIG_MTD_ONENAND_OTP is not set
--# CONFIG_MTD_ONENAND_2X_PROGRAM is not set
--# CONFIG_MTD_ONENAND_SIM is not set
 -
 -#
 -# UBI - Unsorted block images
 -#
 -# CONFIG_MTD_UBI is not set
+-
+-#
+-# Parallel port support
+-#
 -# CONFIG_PARPORT is not set
--CONFIG_BLK_DEV=y
+-
+-#
+-# Plug and Play support
+-#
+-# CONFIG_PNPACPI is not set
+-
+-#
+-# Block devices
+-#
 -# CONFIG_BLK_DEV_COW_COMMON is not set
 -# CONFIG_BLK_DEV_LOOP is not set
 -# CONFIG_BLK_DEV_NBD is not set
@@ -1597,25 +1181,17 @@ index b0a7b72..0000000
 -CONFIG_BLK_DEV_RAM=y
 -CONFIG_BLK_DEV_RAM_COUNT=16
 -CONFIG_BLK_DEV_RAM_SIZE=15360
--# CONFIG_BLK_DEV_XIP is not set
+-CONFIG_BLK_DEV_RAM_BLOCKSIZE=1024
+-# CONFIG_LZMA_INITRD is not set
+-# CONFIG_LZMA_INITRAM_FS is not set
 -# CONFIG_CDROM_PKTCDVD is not set
 -# CONFIG_ATA_OVER_ETH is not set
--CONFIG_MISC_DEVICES=y
--# CONFIG_ATMEL_TCLIB is not set
--# CONFIG_EEPROM_93CX6 is not set
--# CONFIG_ICS932S401 is not set
--CONFIG_ATMEL_SSC=y
--# CONFIG_ENCLOSURE_SERVICES is not set
--# CONFIG_C2PORT is not set
--CONFIG_HAVE_IDE=y
--# CONFIG_IDE is not set
 -
 -#
 -# SCSI device support
 -#
 -# CONFIG_RAID_ATTRS is not set
 -CONFIG_SCSI=y
--CONFIG_SCSI_DMA=y
 -# CONFIG_SCSI_TGT is not set
 -# CONFIG_SCSI_NETLINK is not set
 -CONFIG_SCSI_PROC_FS=y
@@ -1645,21 +1221,29 @@ index b0a7b72..0000000
 -# CONFIG_SCSI_SPI_ATTRS is not set
 -# CONFIG_SCSI_FC_ATTRS is not set
 -# CONFIG_SCSI_ISCSI_ATTRS is not set
+-# CONFIG_SCSI_SAS_ATTRS is not set
 -# CONFIG_SCSI_SAS_LIBSAS is not set
--# CONFIG_SCSI_SRP_ATTRS is not set
--CONFIG_SCSI_LOWLEVEL=y
+-
+-#
+-# SCSI low-level drivers
+-#
 -# CONFIG_ISCSI_TCP is not set
 -# CONFIG_SCSI_DEBUG is not set
--# CONFIG_SCSI_DH is not set
 -# CONFIG_ATA is not set
+-
+-#
+-# Multi-device support (RAID and LVM)
+-#
 -# CONFIG_MD is not set
+-
+-#
+-# Network device support
+-#
 -CONFIG_NETDEVICES=y
 -# CONFIG_DUMMY is not set
 -# CONFIG_BONDING is not set
--# CONFIG_MACVLAN is not set
 -# CONFIG_EQUALIZER is not set
 -# CONFIG_TUN is not set
--# CONFIG_VETH is not set
 -CONFIG_PHYLIB=y
 -
 -#
@@ -1673,27 +1257,16 @@ index b0a7b72..0000000
 -# CONFIG_VITESSE_PHY is not set
 -# CONFIG_SMSC_PHY is not set
 -# CONFIG_BROADCOM_PHY is not set
--# CONFIG_ICPLUS_PHY is not set
--# CONFIG_REALTEK_PHY is not set
 -# CONFIG_FIXED_PHY is not set
--# CONFIG_MDIO_BITBANG is not set
+-
+-#
+-# Ethernet (10 or 100Mbit)
+-#
 -CONFIG_NET_ETHERNET=y
 -CONFIG_MII=y
 -CONFIG_MACB=y
--CONFIG_MACB_TX_SRAM=y
--# CONFIG_AX88796 is not set
 -# CONFIG_SMC91X is not set
 -# CONFIG_DM9000 is not set
--# CONFIG_ENC28J60 is not set
--# CONFIG_SMC911X is not set
--# CONFIG_IBM_NEW_EMAC_ZMII is not set
--# CONFIG_IBM_NEW_EMAC_RGMII is not set
--# CONFIG_IBM_NEW_EMAC_TAH is not set
--# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
--# CONFIG_IBM_NEW_EMAC_NO_FLOW_CTRL is not set
--# CONFIG_IBM_NEW_EMAC_MAL_CLR_ICINTSTAT is not set
--# CONFIG_IBM_NEW_EMAC_MAL_COMMON_ERR is not set
--# CONFIG_B44 is not set
 -CONFIG_NETDEV_1000=y
 -CONFIG_NETDEV_10000=y
 -
@@ -1702,7 +1275,6 @@ index b0a7b72..0000000
 -#
 -# CONFIG_WLAN_PRE80211 is not set
 -# CONFIG_WLAN_80211 is not set
--# CONFIG_IWLWIFI_LEDS is not set
 -
 -#
 -# USB Network Adapters
@@ -1711,6 +1283,7 @@ index b0a7b72..0000000
 -# CONFIG_USB_KAWETH is not set
 -# CONFIG_USB_PEGASUS is not set
 -# CONFIG_USB_RTL8150 is not set
+-# CONFIG_USB_USBNET_MII is not set
 -# CONFIG_USB_USBNET is not set
 -# CONFIG_WAN is not set
 -CONFIG_PPP=y
@@ -1722,12 +1295,16 @@ index b0a7b72..0000000
 -# CONFIG_PPP_BSDCOMP is not set
 -# CONFIG_PPP_MPPE is not set
 -# CONFIG_PPPOE is not set
--# CONFIG_PPPOL2TP is not set
 -# CONFIG_SLIP is not set
 -CONFIG_SLHC=y
+-# CONFIG_SHAPER is not set
 -# CONFIG_NETCONSOLE is not set
 -# CONFIG_NETPOLL is not set
 -# CONFIG_NET_POLL_CONTROLLER is not set
+-
+-#
+-# ISDN subsystem
+-#
 -# CONFIG_ISDN is not set
 -
 -#
@@ -1745,6 +1322,7 @@ index b0a7b72..0000000
 -CONFIG_INPUT_MOUSEDEV_SCREEN_X=240
 -CONFIG_INPUT_MOUSEDEV_SCREEN_Y=320
 -# CONFIG_INPUT_JOYDEV is not set
+-# CONFIG_INPUT_TSDEV is not set
 -CONFIG_INPUT_EVDEV=y
 -# CONFIG_INPUT_EVBUG is not set
 -
@@ -1778,11 +1356,9 @@ index b0a7b72..0000000
 -# Character devices
 -#
 -CONFIG_VT=y
--CONFIG_CONSOLE_TRANSLATIONS=y
 -CONFIG_VT_CONSOLE=y
 -CONFIG_HW_CONSOLE=y
 -# CONFIG_VT_HW_CONSOLE_BINDING is not set
--CONFIG_DEVKMEM=y
 -# CONFIG_SERIAL_NONSTANDARD is not set
 -
 -#
@@ -1795,64 +1371,80 @@ index b0a7b72..0000000
 -#
 -CONFIG_SERIAL_ATMEL=y
 -CONFIG_SERIAL_ATMEL_CONSOLE=y
--CONFIG_SERIAL_ATMEL_PDC=y
 -# CONFIG_SERIAL_ATMEL_TTYAT is not set
 -CONFIG_SERIAL_CORE=y
 -CONFIG_SERIAL_CORE_CONSOLE=y
 -CONFIG_UNIX98_PTYS=y
 -CONFIG_LEGACY_PTYS=y
 -CONFIG_LEGACY_PTY_COUNT=256
+-
+-#
+-# IPMI
+-#
 -# CONFIG_IPMI_HANDLER is not set
+-CONFIG_WATCHDOG=y
+-CONFIG_WATCHDOG_NOWAYOUT=y
+-
+-#
+-# Watchdog Device Drivers
+-#
+-# CONFIG_SOFT_WATCHDOG is not set
+-
+-#
+-# USB-based Watchdog Cards
+-#
+-# CONFIG_USBPCWATCHDOG is not set
 -CONFIG_HW_RANDOM=y
 -# CONFIG_NVRAM is not set
 -# CONFIG_R3964 is not set
 -# CONFIG_RAW_DRIVER is not set
+-
+-#
+-# TPM devices
+-#
 -# CONFIG_TCG_TPM is not set
 -CONFIG_I2C=y
 -CONFIG_I2C_BOARDINFO=y
 -CONFIG_I2C_CHARDEV=y
--CONFIG_I2C_HELPER_AUTO=y
+-
+-#
+-# I2C Algorithms
+-#
+-# CONFIG_I2C_ALGOBIT is not set
+-# CONFIG_I2C_ALGOPCF is not set
+-# CONFIG_I2C_ALGOPCA is not set
 -
 -#
 -# I2C Hardware Bus support
 -#
--
--#
--# I2C system bus drivers (mostly embedded / system-on-chip)
--#
+-CONFIG_I2C_ATMELTWI=y
+-CONFIG_I2C_ATMELTWI_BAUDRATE=100000
+-CONFIG_I2C_AT91=y
 -# CONFIG_I2C_GPIO is not set
 -# CONFIG_I2C_OCORES is not set
--# CONFIG_I2C_SIMTEC is not set
--
--#
--# External I2C/SMBus adapter drivers
--#
 -# CONFIG_I2C_PARPORT_LIGHT is not set
--# CONFIG_I2C_TAOS_EVM is not set
--# CONFIG_I2C_TINY_USB is not set
--
--#
--# Other I2C/SMBus bus drivers
--#
--# CONFIG_I2C_PCA_PLATFORM is not set
+-# CONFIG_I2C_SIMTEC is not set
 -# CONFIG_I2C_STUB is not set
+-# CONFIG_I2C_TINY_USB is not set
 -
 -#
 -# Miscellaneous I2C Chip support
 -#
--# CONFIG_DS1682 is not set
--# CONFIG_AT24 is not set
+-# CONFIG_SENSORS_DS1337 is not set
+-# CONFIG_SENSORS_DS1374 is not set
 -# CONFIG_SENSORS_EEPROM is not set
 -# CONFIG_SENSORS_PCF8574 is not set
--# CONFIG_PCF8575 is not set
 -# CONFIG_SENSORS_PCA9539 is not set
 -# CONFIG_SENSORS_PCF8591 is not set
 -# CONFIG_SENSORS_MAX6875 is not set
--# CONFIG_SENSORS_TSL2550 is not set
 -# CONFIG_I2C_DEBUG_CORE is not set
 -# CONFIG_I2C_DEBUG_ALGO is not set
 -# CONFIG_I2C_DEBUG_BUS is not set
 -# CONFIG_I2C_DEBUG_CHIP is not set
+-
+-#
+-# SPI support
+-#
 -CONFIG_SPI=y
 -# CONFIG_SPI_DEBUG is not set
 -CONFIG_SPI_MASTER=y
@@ -1868,28 +1460,27 @@ index b0a7b72..0000000
 -#
 -# CONFIG_SPI_AT25 is not set
 -CONFIG_SPI_SPIDEV=y
--# CONFIG_SPI_TLE62X0 is not set
+-
+-#
+-# Dallas's 1-wire bus
+-#
 -# CONFIG_W1 is not set
--# CONFIG_POWER_SUPPLY is not set
 -CONFIG_HWMON=y
 -# CONFIG_HWMON_VID is not set
--# CONFIG_SENSORS_AD7414 is not set
+-# CONFIG_SENSORS_ABITUGURU is not set
 -# CONFIG_SENSORS_AD7418 is not set
--# CONFIG_SENSORS_ADCXX is not set
 -# CONFIG_SENSORS_ADM1021 is not set
 -# CONFIG_SENSORS_ADM1025 is not set
 -# CONFIG_SENSORS_ADM1026 is not set
 -# CONFIG_SENSORS_ADM1029 is not set
 -# CONFIG_SENSORS_ADM1031 is not set
 -# CONFIG_SENSORS_ADM9240 is not set
--# CONFIG_SENSORS_ADT7462 is not set
--# CONFIG_SENSORS_ADT7470 is not set
--# CONFIG_SENSORS_ADT7473 is not set
+-# CONFIG_SENSORS_ASB100 is not set
 -# CONFIG_SENSORS_ATXP1 is not set
 -# CONFIG_SENSORS_DS1621 is not set
 -# CONFIG_SENSORS_F71805F is not set
--# CONFIG_SENSORS_F71882FG is not set
--# CONFIG_SENSORS_F75375S is not set
+-# CONFIG_SENSORS_FSCHER is not set
+-# CONFIG_SENSORS_FSCPOS is not set
 -# CONFIG_SENSORS_GL518SM is not set
 -# CONFIG_SENSORS_GL520SM is not set
 -# CONFIG_SENSORS_IT87 is not set
@@ -1904,99 +1495,84 @@ index b0a7b72..0000000
 -# CONFIG_SENSORS_LM87 is not set
 -# CONFIG_SENSORS_LM90 is not set
 -# CONFIG_SENSORS_LM92 is not set
--# CONFIG_SENSORS_LM93 is not set
--# CONFIG_SENSORS_MAX1111 is not set
 -# CONFIG_SENSORS_MAX1619 is not set
 -# CONFIG_SENSORS_MAX6650 is not set
 -# CONFIG_SENSORS_PC87360 is not set
 -# CONFIG_SENSORS_PC87427 is not set
--# CONFIG_SENSORS_DME1737 is not set
 -# CONFIG_SENSORS_SMSC47M1 is not set
 -# CONFIG_SENSORS_SMSC47M192 is not set
 -# CONFIG_SENSORS_SMSC47B397 is not set
--# CONFIG_SENSORS_ADS7828 is not set
--# CONFIG_SENSORS_THMC50 is not set
 -# CONFIG_SENSORS_VT1211 is not set
 -# CONFIG_SENSORS_W83781D is not set
 -# CONFIG_SENSORS_W83791D is not set
 -# CONFIG_SENSORS_W83792D is not set
 -# CONFIG_SENSORS_W83793 is not set
 -# CONFIG_SENSORS_W83L785TS is not set
--# CONFIG_SENSORS_W83L786NG is not set
 -# CONFIG_SENSORS_W83627HF is not set
 -# CONFIG_SENSORS_W83627EHF is not set
 -# CONFIG_HWMON_DEBUG_CHIP is not set
--# CONFIG_THERMAL is not set
--# CONFIG_THERMAL_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_WATCHDOG_NOWAYOUT=y
 -
 -#
--# Watchdog Device Drivers
+-# Misc devices
 -#
--# CONFIG_SOFT_WATCHDOG is not set
--# CONFIG_AT91SAM9X_WATCHDOG is not set
--
--#
--# USB-based Watchdog Cards
--#
--# CONFIG_USBPCWATCHDOG is not set
--CONFIG_SSB_POSSIBLE=y
--
--#
--# Sonics Silicon Backplane
--#
--# CONFIG_SSB is not set
+-CONFIG_ATMEL_SSC=y
 -
 -#
 -# Multifunction device drivers
 -#
--# CONFIG_MFD_CORE is not set
 -# CONFIG_MFD_SM501 is not set
--# CONFIG_HTC_PASIC3 is not set
--# CONFIG_MFD_TMIO is not set
--# CONFIG_MFD_T7L66XB is not set
--# CONFIG_MFD_TC6387XB is not set
--# CONFIG_PMIC_DA903X is not set
--# CONFIG_MFD_WM8400 is not set
--# CONFIG_MFD_WM8350_I2C is not set
+-
+-#
+-# LED devices
+-#
+-CONFIG_NEW_LEDS=y
+-CONFIG_LEDS_CLASS=y
+-
+-#
+-# LED drivers
+-#
+-CONFIG_LEDS_GPIO=y
+-
+-#
+-# LED Triggers
+-#
+-CONFIG_LEDS_TRIGGERS=y
+-CONFIG_LEDS_TRIGGER_TIMER=y
+-CONFIG_LEDS_TRIGGER_HEARTBEAT=y
 -
 -#
 -# Multimedia devices
 -#
--
--#
--# Multimedia core support
--#
 -# CONFIG_VIDEO_DEV is not set
 -# CONFIG_DVB_CORE is not set
--# CONFIG_VIDEO_MEDIA is not set
--
--#
--# Multimedia drivers
--#
 -# CONFIG_DAB is not set
 -
 -#
 -# Graphics support
 -#
--# CONFIG_VGASTATE is not set
--# CONFIG_VIDEO_OUTPUT_CONTROL is not set
--# CONFIG_FB is not set
 -# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
 -
 -#
 -# Display device support
 -#
 -# CONFIG_DISPLAY_SUPPORT is not set
+-# CONFIG_VGASTATE is not set
+-# CONFIG_FB is not set
 -
 -#
 -# Console display driver support
 -#
 -# CONFIG_VGA_CONSOLE is not set
 -CONFIG_DUMMY_CONSOLE=y
+-
+-#
+-# Sound
+-#
 -CONFIG_SOUND=y
--# CONFIG_SOUND_OSS_CORE is not set
+-
+-#
+-# Advanced Linux Sound Architecture
+-#
 -CONFIG_SND=y
 -CONFIG_SND_TIMER=y
 -CONFIG_SND_PCM=y
@@ -2008,69 +1584,64 @@ index b0a7b72..0000000
 -CONFIG_SND_VERBOSE_PROCFS=y
 -# CONFIG_SND_VERBOSE_PRINTK is not set
 -# CONFIG_SND_DEBUG is not set
--CONFIG_SND_DRIVERS=y
+-
+-#
+-# Generic devices
+-#
 -# CONFIG_SND_DUMMY is not set
 -# CONFIG_SND_MTPAV is not set
 -# CONFIG_SND_SERIAL_U16550 is not set
 -# CONFIG_SND_MPU401 is not set
--CONFIG_SND_ARM=y
--# CONFIG_SND_AT91_AC97 is not set
--CONFIG_SND_SPI=y
+-
+-#
+-# ALSA ARM devices
+-#
+-
+-#
+-# SPI devices
+-#
 -CONFIG_SND_AT73C213=y
 -CONFIG_SND_AT73C213_TARGET_BITRATE=48000
--CONFIG_SND_USB=y
+-
+-#
+-# USB devices
+-#
 -# CONFIG_SND_USB_AUDIO is not set
 -# CONFIG_SND_USB_CAIAQ is not set
+-
+-#
+-# System on Chip audio support
+-#
 -CONFIG_SND_SOC=y
--CONFIG_SND_ATMEL_SOC=y
--# CONFIG_SND_SOC_ALL_CODECS is not set
+-CONFIG_SND_AT91_SOC=y
+-
+-#
+-# Open Sound System
+-#
 -# CONFIG_SOUND_PRIME is not set
--CONFIG_HID_SUPPORT=y
+-
+-#
+-# HID Devices
+-#
 -CONFIG_HID=y
 -# CONFIG_HID_DEBUG is not set
--# CONFIG_HIDRAW is not set
 -
 -#
 -# USB Input Devices
 -#
 -CONFIG_USB_HID=y
--# CONFIG_HID_PID is not set
+-# CONFIG_USB_HIDINPUT_POWERBOOK is not set
+-# CONFIG_HID_FF is not set
 -# CONFIG_USB_HIDDEV is not set
 -
 -#
--# Special HID drivers
+-# USB support
 -#
--CONFIG_HID_COMPAT=y
--CONFIG_HID_A4TECH=y
--CONFIG_HID_APPLE=y
--CONFIG_HID_BELKIN=y
--CONFIG_HID_BRIGHT=y
--CONFIG_HID_CHERRY=y
--CONFIG_HID_CHICONY=y
--CONFIG_HID_CYPRESS=y
--CONFIG_HID_DELL=y
--CONFIG_HID_EZKEY=y
--CONFIG_HID_GYRATION=y
--CONFIG_HID_LOGITECH=y
--# CONFIG_LOGITECH_FF is not set
--# CONFIG_LOGIRUMBLEPAD2_FF is not set
--CONFIG_HID_MICROSOFT=y
--CONFIG_HID_MONTEREY=y
--CONFIG_HID_PANTHERLORD=y
--# CONFIG_PANTHERLORD_FF is not set
--CONFIG_HID_PETALYNX=y
--CONFIG_HID_SAMSUNG=y
--CONFIG_HID_SONY=y
--CONFIG_HID_SUNPLUS=y
--# CONFIG_THRUSTMASTER_FF is not set
--# CONFIG_ZEROPLUS_FF is not set
--CONFIG_USB_SUPPORT=y
 -CONFIG_USB_ARCH_HAS_HCD=y
 -CONFIG_USB_ARCH_HAS_OHCI=y
 -# CONFIG_USB_ARCH_HAS_EHCI is not set
 -CONFIG_USB=y
 -CONFIG_USB_DEBUG=y
--# CONFIG_USB_ANNOUNCE_NEW_DEVICES is not set
 -
 -#
 -# Miscellaneous USB options
@@ -2079,45 +1650,34 @@ index b0a7b72..0000000
 -CONFIG_USB_DEVICE_CLASS=y
 -# CONFIG_USB_DYNAMIC_MINORS is not set
 -# CONFIG_USB_OTG is not set
--CONFIG_USB_MON=y
--# CONFIG_USB_WUSB is not set
--# CONFIG_USB_WUSB_CBAF is not set
 -
 -#
 -# USB Host Controller Drivers
 -#
--# CONFIG_USB_C67X00_HCD is not set
 -# CONFIG_USB_ISP116X_HCD is not set
 -CONFIG_USB_OHCI_HCD=y
 -# CONFIG_USB_OHCI_BIG_ENDIAN_DESC is not set
 -# CONFIG_USB_OHCI_BIG_ENDIAN_MMIO is not set
 -CONFIG_USB_OHCI_LITTLE_ENDIAN=y
 -# CONFIG_USB_SL811_HCD is not set
--# CONFIG_USB_R8A66597_HCD is not set
--# CONFIG_USB_HWA_HCD is not set
--# CONFIG_USB_MUSB_HDRC is not set
--# CONFIG_USB_GADGET_MUSB_HDRC is not set
 -
 -#
 -# USB Device Class drivers
 -#
 -# CONFIG_USB_ACM is not set
 -# CONFIG_USB_PRINTER is not set
--# CONFIG_USB_WDM is not set
--# CONFIG_USB_TMC is not set
 -
 -#
--# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed;
+-# NOTE: USB_STORAGE enables SCSI, and 'SCSI disk support'
 -#
 -
 -#
--# see USB_STORAGE Help for more information
+-# may also be needed; see USB_STORAGE Help for more information
 -#
 -CONFIG_USB_STORAGE=y
 -# CONFIG_USB_STORAGE_DEBUG is not set
 -# CONFIG_USB_STORAGE_DATAFAB is not set
 -# CONFIG_USB_STORAGE_FREECOM is not set
--# CONFIG_USB_STORAGE_ISD200 is not set
 -# CONFIG_USB_STORAGE_DPCM is not set
 -# CONFIG_USB_STORAGE_USBAT is not set
 -# CONFIG_USB_STORAGE_SDDR09 is not set
@@ -2126,7 +1686,6 @@ index b0a7b72..0000000
 -# CONFIG_USB_STORAGE_ALAUDA is not set
 -# CONFIG_USB_STORAGE_ONETOUCH is not set
 -# CONFIG_USB_STORAGE_KARMA is not set
--# CONFIG_USB_STORAGE_CYPRESS_ATACB is not set
 -# CONFIG_USB_LIBUSUAL is not set
 -
 -#
@@ -2134,18 +1693,22 @@ index b0a7b72..0000000
 -#
 -# CONFIG_USB_MDC800 is not set
 -# CONFIG_USB_MICROTEK is not set
+-CONFIG_USB_MON=y
 -
 -#
 -# USB port drivers
 -#
+-
+-#
+-# USB Serial Converter support
+-#
 -CONFIG_USB_SERIAL=y
 -# CONFIG_USB_SERIAL_CONSOLE is not set
--# CONFIG_USB_EZUSB is not set
 -CONFIG_USB_SERIAL_GENERIC=y
 -# CONFIG_USB_SERIAL_AIRCABLE is not set
+-# CONFIG_USB_SERIAL_AIRPRIME is not set
 -# CONFIG_USB_SERIAL_ARK3116 is not set
 -# CONFIG_USB_SERIAL_BELKIN is not set
--# CONFIG_USB_SERIAL_CH341 is not set
 -# CONFIG_USB_SERIAL_WHITEHEAT is not set
 -# CONFIG_USB_SERIAL_DIGI_ACCELEPORT is not set
 -# CONFIG_USB_SERIAL_CP2101 is not set
@@ -2160,7 +1723,6 @@ index b0a7b72..0000000
 -# CONFIG_USB_SERIAL_EDGEPORT_TI is not set
 -# CONFIG_USB_SERIAL_GARMIN is not set
 -# CONFIG_USB_SERIAL_IPW is not set
--# CONFIG_USB_SERIAL_IUU is not set
 -# CONFIG_USB_SERIAL_KEYSPAN_PDA is not set
 -# CONFIG_USB_SERIAL_KEYSPAN is not set
 -# CONFIG_USB_SERIAL_KLSI is not set
@@ -2168,11 +1730,8 @@ index b0a7b72..0000000
 -# CONFIG_USB_SERIAL_MCT_U232 is not set
 -# CONFIG_USB_SERIAL_MOS7720 is not set
 -# CONFIG_USB_SERIAL_MOS7840 is not set
--# CONFIG_USB_SERIAL_MOTOROLA is not set
 -# CONFIG_USB_SERIAL_NAVMAN is not set
 -# CONFIG_USB_SERIAL_PL2303 is not set
--# CONFIG_USB_SERIAL_OTI6858 is not set
--# CONFIG_USB_SERIAL_SPCP8X5 is not set
 -# CONFIG_USB_SERIAL_HP4X is not set
 -# CONFIG_USB_SERIAL_SAFE is not set
 -# CONFIG_USB_SERIAL_SIERRAWIRELESS is not set
@@ -2189,7 +1748,7 @@ index b0a7b72..0000000
 -# CONFIG_USB_EMI62 is not set
 -# CONFIG_USB_EMI26 is not set
 -# CONFIG_USB_ADUTUX is not set
--# CONFIG_USB_SEVSEG is not set
+-# CONFIG_USB_AUERSWALD is not set
 -# CONFIG_USB_RIO500 is not set
 -# CONFIG_USB_LEGOTOWER is not set
 -# CONFIG_USB_LCD is not set
@@ -2205,27 +1764,26 @@ index b0a7b72..0000000
 -# CONFIG_USB_TRANCEVIBRATOR is not set
 -# CONFIG_USB_IOWARRIOR is not set
 -# CONFIG_USB_TEST is not set
--# CONFIG_USB_ISIGHTFW is not set
--# CONFIG_USB_VST is not set
+-
+-#
+-# USB DSL modem support
+-#
+-
+-#
+-# USB Gadget Support
+-#
 -CONFIG_USB_GADGET=y
--# CONFIG_USB_GADGET_DEBUG is not set
 -# CONFIG_USB_GADGET_DEBUG_FILES is not set
--CONFIG_USB_GADGET_VBUS_DRAW=2
 -CONFIG_USB_GADGET_SELECTED=y
+-# CONFIG_USB_GADGET_FSL_USB2 is not set
+-# CONFIG_USB_GADGET_NET2280 is not set
+-# CONFIG_USB_GADGET_PXA2XX is not set
+-# CONFIG_USB_GADGET_GOKU is not set
+-# CONFIG_USB_GADGET_LH7A40X is not set
+-# CONFIG_USB_GADGET_ATMEL_USBA is not set
+-# CONFIG_USB_GADGET_OMAP is not set
 -CONFIG_USB_GADGET_AT91=y
 -CONFIG_USB_AT91=y
--# CONFIG_USB_GADGET_ATMEL_USBA is not set
--# CONFIG_USB_GADGET_FSL_USB2 is not set
--# CONFIG_USB_GADGET_LH7A40X is not set
--# CONFIG_USB_GADGET_OMAP is not set
--# CONFIG_USB_GADGET_PXA25X is not set
--# CONFIG_USB_GADGET_PXA27X is not set
--# CONFIG_USB_GADGET_S3C2410 is not set
--# CONFIG_USB_GADGET_M66592 is not set
--# CONFIG_USB_GADGET_AMD5536UDC is not set
--# CONFIG_USB_GADGET_FSL_QE is not set
--# CONFIG_USB_GADGET_NET2280 is not set
--# CONFIG_USB_GADGET_GOKU is not set
 -# CONFIG_USB_GADGET_DUMMY_HCD is not set
 -# CONFIG_USB_GADGET_DUALSPEED is not set
 -# CONFIG_USB_ZERO is not set
@@ -2236,46 +1794,23 @@ index b0a7b72..0000000
 -# CONFIG_USB_FILE_STORAGE_TEST is not set
 -CONFIG_USB_G_SERIAL=m
 -# CONFIG_USB_MIDI_GADGET is not set
--# CONFIG_USB_G_PRINTER is not set
--# CONFIG_USB_CDC_COMPOSITE is not set
 -CONFIG_MMC=y
 -# CONFIG_MMC_DEBUG is not set
 -# CONFIG_MMC_UNSAFE_RESUME is not set
 -
 -#
--# MMC/SD/SDIO Card Drivers
+-# MMC/SD Card Drivers
 -#
 -CONFIG_MMC_BLOCK=y
--CONFIG_MMC_BLOCK_BOUNCE=y
--# CONFIG_SDIO_UART is not set
--# CONFIG_MMC_TEST is not set
 -
 -#
--# MMC/SD/SDIO Host Controller Drivers
+-# MMC/SD Host Controller Drivers
 -#
--# CONFIG_MMC_SDHCI is not set
 -CONFIG_MMC_AT91=y
--# CONFIG_MMC_SPI is not set
--# CONFIG_MEMSTICK is not set
--# CONFIG_ACCESSIBILITY is not set
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
 -
 -#
--# LED drivers
+-# Real Time Clock
 -#
--# CONFIG_LEDS_PCA9532 is not set
--CONFIG_LEDS_GPIO=y
--# CONFIG_LEDS_PCA955X is not set
--
--#
--# LED Triggers
--#
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_TIMER=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
--# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
 -CONFIG_RTC_LIB=y
 -CONFIG_RTC_CLASS=y
 -CONFIG_RTC_HCTOSYS=y
@@ -2295,7 +1830,6 @@ index b0a7b72..0000000
 -# I2C RTC drivers
 -#
 -# CONFIG_RTC_DRV_DS1307 is not set
--# CONFIG_RTC_DRV_DS1374 is not set
 -# CONFIG_RTC_DRV_DS1672 is not set
 -# CONFIG_RTC_DRV_MAX6900 is not set
 -# CONFIG_RTC_DRV_RS5C372 is not set
@@ -2303,44 +1837,25 @@ index b0a7b72..0000000
 -# CONFIG_RTC_DRV_X1205 is not set
 -# CONFIG_RTC_DRV_PCF8563 is not set
 -# CONFIG_RTC_DRV_PCF8583 is not set
--# CONFIG_RTC_DRV_M41T80 is not set
--# CONFIG_RTC_DRV_S35390A is not set
--# CONFIG_RTC_DRV_FM3130 is not set
--# CONFIG_RTC_DRV_RX8581 is not set
 -
 -#
 -# SPI RTC drivers
 -#
--# CONFIG_RTC_DRV_M41T94 is not set
--# CONFIG_RTC_DRV_DS1305 is not set
--# CONFIG_RTC_DRV_DS1390 is not set
--# CONFIG_RTC_DRV_MAX6902 is not set
--# CONFIG_RTC_DRV_R9701 is not set
 -# CONFIG_RTC_DRV_RS5C348 is not set
--# CONFIG_RTC_DRV_DS3234 is not set
+-# CONFIG_RTC_DRV_MAX6902 is not set
 -
 -#
 -# Platform RTC drivers
 -#
 -# CONFIG_RTC_DRV_CMOS is not set
--# CONFIG_RTC_DRV_DS1286 is not set
--# CONFIG_RTC_DRV_DS1511 is not set
 -# CONFIG_RTC_DRV_DS1553 is not set
 -# CONFIG_RTC_DRV_DS1742 is not set
--# CONFIG_RTC_DRV_STK17TA8 is not set
 -# CONFIG_RTC_DRV_M48T86 is not set
--# CONFIG_RTC_DRV_M48T35 is not set
--# CONFIG_RTC_DRV_M48T59 is not set
--# CONFIG_RTC_DRV_BQ4802 is not set
 -# CONFIG_RTC_DRV_V3020 is not set
 -
 -#
 -# on-CPU RTC drivers
 -#
--# CONFIG_RTC_DRV_AT91SAM9 is not set
--# CONFIG_DMADEVICES is not set
--# CONFIG_REGULATOR is not set
--# CONFIG_UIO is not set
 -
 -#
 -# File systems
@@ -2349,17 +1864,19 @@ index b0a7b72..0000000
 -# CONFIG_EXT2_FS_XATTR is not set
 -# CONFIG_EXT2_FS_XIP is not set
 -# CONFIG_EXT3_FS is not set
--# CONFIG_EXT4_FS is not set
+-# CONFIG_EXT4DEV_FS is not set
 -# CONFIG_REISERFS_FS is not set
 -# CONFIG_JFS_FS is not set
 -# CONFIG_FS_POSIX_ACL is not set
--CONFIG_FILE_LOCKING=y
 -# CONFIG_XFS_FS is not set
+-# CONFIG_GFS2_FS is not set
 -# CONFIG_OCFS2_FS is not set
--CONFIG_DNOTIFY=y
+-# CONFIG_MINIX_FS is not set
+-# CONFIG_ROMFS_FS is not set
 -CONFIG_INOTIFY=y
 -CONFIG_INOTIFY_USER=y
 -# CONFIG_QUOTA is not set
+-CONFIG_DNOTIFY=y
 -# CONFIG_AUTOFS_FS is not set
 -# CONFIG_AUTOFS4_FS is not set
 -# CONFIG_FUSE_FS is not set
@@ -2385,11 +1902,11 @@ index b0a7b72..0000000
 -#
 -CONFIG_PROC_FS=y
 -CONFIG_PROC_SYSCTL=y
--CONFIG_PROC_PAGE_MONITOR=y
 -CONFIG_SYSFS=y
 -CONFIG_TMPFS=y
 -# CONFIG_TMPFS_POSIX_ACL is not set
 -# CONFIG_HUGETLB_PAGE is not set
+-CONFIG_RAMFS=y
 -CONFIG_CONFIGFS_FS=y
 -
 -#
@@ -2405,35 +1922,35 @@ index b0a7b72..0000000
 -CONFIG_JFFS2_FS=y
 -CONFIG_JFFS2_FS_DEBUG=0
 -CONFIG_JFFS2_FS_WRITEBUFFER=y
--# CONFIG_JFFS2_FS_WBUF_VERIFY is not set
 -# CONFIG_JFFS2_SUMMARY is not set
 -# CONFIG_JFFS2_FS_XATTR is not set
 -# CONFIG_JFFS2_COMPRESSION_OPTIONS is not set
 -CONFIG_JFFS2_ZLIB=y
--# CONFIG_JFFS2_LZO is not set
 -CONFIG_JFFS2_RTIME=y
 -# CONFIG_JFFS2_RUBIN is not set
 -CONFIG_CRAMFS=y
+-# CONFIG_SQUASHFS is not set
 -# CONFIG_VXFS_FS is not set
--# CONFIG_MINIX_FS is not set
--# CONFIG_OMFS_FS is not set
 -# CONFIG_HPFS_FS is not set
 -# CONFIG_QNX4FS_FS is not set
--# CONFIG_ROMFS_FS is not set
 -# CONFIG_SYSV_FS is not set
 -# CONFIG_UFS_FS is not set
--CONFIG_NETWORK_FILESYSTEMS=y
+-
+-#
+-# Network File Systems
+-#
 -CONFIG_NFS_FS=y
 -CONFIG_NFS_V3=y
 -# CONFIG_NFS_V3_ACL is not set
 -# CONFIG_NFS_V4 is not set
--# CONFIG_ROOT_NFS is not set
+-# CONFIG_NFS_DIRECTIO is not set
 -# CONFIG_NFSD is not set
+-# CONFIG_ROOT_NFS is not set
 -CONFIG_LOCKD=y
 -CONFIG_LOCKD_V4=y
 -CONFIG_NFS_COMMON=y
 -CONFIG_SUNRPC=y
--# CONFIG_SUNRPC_REGISTER_V4 is not set
+-# CONFIG_SUNRPC_BIND34 is not set
 -# CONFIG_RPCSEC_GSS_KRB5 is not set
 -# CONFIG_RPCSEC_GSS_SPKM3 is not set
 -# CONFIG_SMB_FS is not set
@@ -2441,6 +1958,7 @@ index b0a7b72..0000000
 -# CONFIG_NCP_FS is not set
 -# CONFIG_CODA_FS is not set
 -# CONFIG_AFS_FS is not set
+-# CONFIG_9P_FS is not set
 -
 -#
 -# Partition Types
@@ -2463,6 +1981,10 @@ index b0a7b72..0000000
 -# CONFIG_KARMA_PARTITION is not set
 -# CONFIG_EFI_PARTITION is not set
 -# CONFIG_SYSV68_PARTITION is not set
+-
+-#
+-# Native Language Support
+-#
 -CONFIG_NLS=y
 -CONFIG_NLS_DEFAULT="iso8859-1"
 -CONFIG_NLS_CODEPAGE_437=y
@@ -2503,16 +2025,24 @@ index b0a7b72..0000000
 -# CONFIG_NLS_KOI8_R is not set
 -# CONFIG_NLS_KOI8_U is not set
 -# CONFIG_NLS_UTF8 is not set
+-
+-#
+-# Distributed Lock Manager
+-#
 -CONFIG_DLM=y
 -# CONFIG_DLM_DEBUG is not set
+-# CONFIG_AUFS is not set
+-
+-#
+-# Profiling support
+-#
+-# CONFIG_PROFILING is not set
 -
 -#
 -# Kernel hacking
 -#
 -# CONFIG_PRINTK_TIME is not set
--CONFIG_ENABLE_WARN_DEPRECATED=y
 -CONFIG_ENABLE_MUST_CHECK=y
--CONFIG_FRAME_WARN=1024
 -# CONFIG_MAGIC_SYSRQ is not set
 -# CONFIG_UNUSED_SYMBOLS is not set
 -# CONFIG_DEBUG_FS is not set
@@ -2520,12 +2050,8 @@ index b0a7b72..0000000
 -CONFIG_DEBUG_KERNEL=y
 -# CONFIG_DEBUG_SHIRQ is not set
 -CONFIG_DETECT_SOFTLOCKUP=y
--# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
--CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
--CONFIG_SCHED_DEBUG=y
 -# CONFIG_SCHEDSTATS is not set
 -# CONFIG_TIMER_STATS is not set
--# CONFIG_DEBUG_OBJECTS is not set
 -# CONFIG_DEBUG_SLAB is not set
 -# CONFIG_DEBUG_RT_MUTEXES is not set
 -# CONFIG_RT_MUTEX_TESTER is not set
@@ -2533,44 +2059,19 @@ index b0a7b72..0000000
 -CONFIG_DEBUG_MUTEXES=y
 -# CONFIG_DEBUG_LOCK_ALLOC is not set
 -# CONFIG_PROVE_LOCKING is not set
--# CONFIG_LOCK_STAT is not set
 -# CONFIG_DEBUG_SPINLOCK_SLEEP is not set
 -# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
 -# CONFIG_DEBUG_KOBJECT is not set
 -CONFIG_DEBUG_BUGVERBOSE=y
 -# CONFIG_DEBUG_INFO is not set
 -# CONFIG_DEBUG_VM is not set
--# CONFIG_DEBUG_WRITECOUNT is not set
--CONFIG_DEBUG_MEMORY_INIT=y
 -# CONFIG_DEBUG_LIST is not set
--# CONFIG_DEBUG_SG is not set
 -CONFIG_FRAME_POINTER=y
--# CONFIG_BOOT_PRINTK_DELAY is not set
+-CONFIG_FORCED_INLINING=y
 -# CONFIG_RCU_TORTURE_TEST is not set
--# CONFIG_RCU_CPU_STALL_DETECTOR is not set
--# CONFIG_BACKTRACE_SELF_TEST is not set
--# CONFIG_DEBUG_BLOCK_EXT_DEVT is not set
 -# CONFIG_FAULT_INJECTION is not set
--# CONFIG_LATENCYTOP is not set
--# CONFIG_SYSCTL_SYSCALL_CHECK is not set
--CONFIG_HAVE_FUNCTION_TRACER=y
--
--#
--# Tracers
--#
--# CONFIG_FUNCTION_TRACER is not set
--# CONFIG_IRQSOFF_TRACER is not set
--# CONFIG_SCHED_TRACER is not set
--# CONFIG_CONTEXT_SWITCH_TRACER is not set
--# CONFIG_BOOT_TRACER is not set
--# CONFIG_STACK_TRACER is not set
--# CONFIG_DYNAMIC_PRINTK_DEBUG is not set
--# CONFIG_SAMPLES is not set
--CONFIG_HAVE_ARCH_KGDB=y
--# CONFIG_KGDB is not set
 -CONFIG_DEBUG_USER=y
 -# CONFIG_DEBUG_ERRORS is not set
--# CONFIG_DEBUG_STACK_USAGE is not set
 -CONFIG_DEBUG_LL=y
 -# CONFIG_DEBUG_ICEDCC is not set
 -
@@ -2579,104 +2080,55 @@ index b0a7b72..0000000
 -#
 -# CONFIG_KEYS is not set
 -CONFIG_SECURITY=y
--# CONFIG_SECURITYFS is not set
 -# CONFIG_SECURITY_NETWORK is not set
--# CONFIG_SECURITY_FILE_CAPABILITIES is not set
+-CONFIG_SECURITY_CAPABILITIES=y
 -# CONFIG_SECURITY_ROOTPLUG is not set
--CONFIG_SECURITY_DEFAULT_MMAP_MIN_ADDR=0
--CONFIG_CRYPTO=y
 -
 -#
--# Crypto core or helper
+-# Cryptographic options
 -#
--# CONFIG_CRYPTO_FIPS is not set
+-CONFIG_CRYPTO=y
 -CONFIG_CRYPTO_ALGAPI=y
--CONFIG_CRYPTO_ALGAPI2=y
--CONFIG_CRYPTO_AEAD2=y
 -CONFIG_CRYPTO_BLKCIPHER=y
--CONFIG_CRYPTO_BLKCIPHER2=y
 -CONFIG_CRYPTO_HASH=y
--CONFIG_CRYPTO_HASH2=y
--CONFIG_CRYPTO_RNG2=y
 -CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_MANAGER2=y
--# CONFIG_CRYPTO_GF128MUL is not set
+-CONFIG_CRYPTO_HMAC=y
+-# CONFIG_CRYPTO_XCBC is not set
 -CONFIG_CRYPTO_NULL=y
+-CONFIG_CRYPTO_MD4=m
+-CONFIG_CRYPTO_MD5=y
+-CONFIG_CRYPTO_SHA1=m
+-CONFIG_CRYPTO_SHA256=m
+-# CONFIG_CRYPTO_SHA512 is not set
+-# CONFIG_CRYPTO_WP512 is not set
+-# CONFIG_CRYPTO_TGR192 is not set
+-# CONFIG_CRYPTO_GF128MUL is not set
+-# CONFIG_CRYPTO_ECB is not set
+-CONFIG_CRYPTO_CBC=y
+-# CONFIG_CRYPTO_PCBC is not set
+-# CONFIG_CRYPTO_LRW is not set
 -# CONFIG_CRYPTO_CRYPTD is not set
--# CONFIG_CRYPTO_AUTHENC is not set
+-CONFIG_CRYPTO_DES=m
+-# CONFIG_CRYPTO_FCRYPT is not set
+-# CONFIG_CRYPTO_BLOWFISH is not set
+-# CONFIG_CRYPTO_TWOFISH is not set
+-# CONFIG_CRYPTO_SERPENT is not set
+-# CONFIG_CRYPTO_AES is not set
+-# CONFIG_CRYPTO_CAST5 is not set
+-# CONFIG_CRYPTO_CAST6 is not set
+-# CONFIG_CRYPTO_TEA is not set
+-# CONFIG_CRYPTO_ARC4 is not set
+-# CONFIG_CRYPTO_KHAZAD is not set
+-# CONFIG_CRYPTO_ANUBIS is not set
+-# CONFIG_CRYPTO_DEFLATE is not set
+-# CONFIG_CRYPTO_MICHAEL_MIC is not set
+-# CONFIG_CRYPTO_CRC32C is not set
+-# CONFIG_CRYPTO_CAMELLIA is not set
 -# CONFIG_CRYPTO_TEST is not set
 -
 -#
--# Authenticated Encryption with Associated Data
+-# Hardware crypto devices
 -#
--# CONFIG_CRYPTO_CCM is not set
--# CONFIG_CRYPTO_GCM is not set
--# CONFIG_CRYPTO_SEQIV is not set
--
--#
--# Block modes
--#
--CONFIG_CRYPTO_CBC=y
--# CONFIG_CRYPTO_CTR is not set
--# CONFIG_CRYPTO_CTS is not set
--# CONFIG_CRYPTO_ECB is not set
--# CONFIG_CRYPTO_LRW is not set
--# CONFIG_CRYPTO_PCBC is not set
--# CONFIG_CRYPTO_XTS is not set
--
--#
--# Hash modes
--#
--CONFIG_CRYPTO_HMAC=y
--# CONFIG_CRYPTO_XCBC is not set
--
--#
--# Digest
--#
--# CONFIG_CRYPTO_CRC32C is not set
--CONFIG_CRYPTO_MD4=m
--CONFIG_CRYPTO_MD5=y
--# CONFIG_CRYPTO_MICHAEL_MIC is not set
--# CONFIG_CRYPTO_RMD128 is not set
--# CONFIG_CRYPTO_RMD160 is not set
--# CONFIG_CRYPTO_RMD256 is not set
--# CONFIG_CRYPTO_RMD320 is not set
--CONFIG_CRYPTO_SHA1=y
--CONFIG_CRYPTO_SHA256=m
--# CONFIG_CRYPTO_SHA512 is not set
--# CONFIG_CRYPTO_TGR192 is not set
--# CONFIG_CRYPTO_WP512 is not set
--
--#
--# Ciphers
--#
--# CONFIG_CRYPTO_AES is not set
--# CONFIG_CRYPTO_ANUBIS is not set
--# CONFIG_CRYPTO_ARC4 is not set
--# CONFIG_CRYPTO_BLOWFISH is not set
--# CONFIG_CRYPTO_CAMELLIA is not set
--# CONFIG_CRYPTO_CAST5 is not set
--# CONFIG_CRYPTO_CAST6 is not set
--CONFIG_CRYPTO_DES=m
--# CONFIG_CRYPTO_FCRYPT is not set
--# CONFIG_CRYPTO_KHAZAD is not set
--# CONFIG_CRYPTO_SALSA20 is not set
--# CONFIG_CRYPTO_SEED is not set
--# CONFIG_CRYPTO_SERPENT is not set
--# CONFIG_CRYPTO_TEA is not set
--# CONFIG_CRYPTO_TWOFISH is not set
--
--#
--# Compression
--#
--# CONFIG_CRYPTO_DEFLATE is not set
--# CONFIG_CRYPTO_LZO is not set
--
--#
--# Random Number Generation
--#
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_HW=y
 -
 -#
 -# Library routines
@@ -2684,16 +2136,1086 @@ index b0a7b72..0000000
 -CONFIG_BITREVERSE=y
 -CONFIG_CRC_CCITT=y
 -CONFIG_CRC16=m
--# CONFIG_CRC_T10DIF is not set
 -# CONFIG_CRC_ITU_T is not set
 -CONFIG_CRC32=y
--# CONFIG_CRC7 is not set
--CONFIG_LIBCRC32C=y
+-CONFIG_LIBCRC32C=m
 -CONFIG_ZLIB_INFLATE=y
 -CONFIG_ZLIB_DEFLATE=y
 -CONFIG_PLIST=y
 -CONFIG_HAS_IOMEM=y
 -CONFIG_HAS_IOPORT=y
 -CONFIG_HAS_DMA=y
+diff --git a/target/device/Atmel/at91sam9260pf/busybox-1.6.0.config b/target/device/Atmel/at91sam9260pf/busybox-1.6.0.config
+deleted file mode 100644
+index 0dd6eca..0000000
+--- a/target/device/Atmel/at91sam9260pf/busybox-1.6.0.config
++++ /dev/null
+@@ -1,690 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Busybox version: 1.5.0
+-# Wed Mar 14 13:42:28 2007
+-#
+-CONFIG_HAVE_DOT_CONFIG=y
+-
+-#
+-# Busybox Settings
+-#
+-
+-#
+-# General Configuration
+-#
+-CONFIG_NITPICK=y
+-CONFIG_DESKTOP=y
+-CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
+-# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
+-# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
+-CONFIG_SHOW_USAGE=y
+-CONFIG_FEATURE_VERBOSE_USAGE=y
+-# CONFIG_FEATURE_COMPRESS_USAGE is not set
+-CONFIG_FEATURE_INSTALLER=y
+-# CONFIG_LOCALE_SUPPORT is not set
+-CONFIG_GETOPT_LONG=y
+-CONFIG_FEATURE_DEVPTS=y
+-CONFIG_FEATURE_CLEAN_UP=y
+-CONFIG_FEATURE_SUID=y
+-CONFIG_FEATURE_SYSLOG=y
+-# CONFIG_FEATURE_SUID_CONFIG is not set
+-# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
+-# CONFIG_FEATURE_HAVE_RPC is not set
+-# CONFIG_SELINUX is not set
+-# CONFIG_FEATURE_EXEC_PREFER_APPLETS is not set
+-CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
+-
+-#
+-# Build Options
+-#
+-# CONFIG_STATIC is not set
+-# CONFIG_BUILD_LIBBUSYBOX is not set
+-# CONFIG_FEATURE_FULL_LIBBUSYBOX is not set
+-# CONFIG_FEATURE_SHARED_BUSYBOX is not set
+-# CONFIG_LFS is not set
+-CONFIG_BUILD_AT_ONCE=y
+-
+-#
+-# Debugging Options
+-#
+-# CONFIG_DEBUG is not set
+-# CONFIG_WERROR is not set
+-# CONFIG_NO_DEBUG_LIB is not set
+-# CONFIG_DMALLOC is not set
+-# CONFIG_EFENCE is not set
+-CONFIG_INCLUDE_SUSv2=y
+-
+-#
+-# Installation Options
+-#
+-# CONFIG_INSTALL_NO_USR is not set
+-CONFIG_INSTALL_APPLET_SYMLINKS=y
+-# CONFIG_INSTALL_APPLET_HARDLINKS is not set
+-# CONFIG_INSTALL_APPLET_DONT is not set
+-CONFIG_PREFIX="./_install"
+-
+-#
+-# Busybox Library Tuning
+-#
+-CONFIG_PASSWORD_MINLEN=6
+-CONFIG_MD5_SIZE_VS_SPEED=2
+-CONFIG_FEATURE_EDITING=y
+-CONFIG_FEATURE_EDITING_FANCY_KEYS=y
+-CONFIG_FEATURE_EDITING_VI=y
+-CONFIG_FEATURE_EDITING_HISTORY=999
+-CONFIG_FEATURE_EDITING_SAVEHISTORY=y
+-CONFIG_FEATURE_TAB_COMPLETION=y
+-# CONFIG_FEATURE_USERNAME_COMPLETION is not set
+-CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
+-
+-#
+-# Applets
+-#
+-
+-#
+-# Archival Utilities
+-#
+-CONFIG_AR=y
+-# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
+-CONFIG_BUNZIP2=y
+-CONFIG_CPIO=y
+-# CONFIG_DPKG is not set
+-# CONFIG_DPKG_DEB is not set
+-# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
+-CONFIG_GUNZIP=y
+-# CONFIG_FEATURE_GUNZIP_UNCOMPRESS is not set
+-CONFIG_GZIP=y
+-# CONFIG_RPM2CPIO is not set
+-# CONFIG_RPM is not set
+-CONFIG_TAR=y
+-CONFIG_FEATURE_TAR_CREATE=y
+-CONFIG_FEATURE_TAR_BZIP2=y
+-CONFIG_FEATURE_TAR_LZMA=y
+-CONFIG_FEATURE_TAR_FROM=y
+-CONFIG_FEATURE_TAR_GZIP=y
+-# CONFIG_FEATURE_TAR_COMPRESS is not set
+-# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
+-CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
+-CONFIG_FEATURE_TAR_LONG_OPTIONS=y
+-# CONFIG_UNCOMPRESS is not set
+-CONFIG_UNLZMA=y
+-# CONFIG_FEATURE_LZMA_FAST is not set
+-CONFIG_UNZIP=y
+-
+-#
+-# Common options for cpio and tar
+-#
+-# CONFIG_FEATURE_UNARCHIVE_TAPE is not set
+-# CONFIG_FEATURE_DEB_TAR_GZ is not set
+-# CONFIG_FEATURE_DEB_TAR_BZ2 is not set
+-# CONFIG_FEATURE_DEB_TAR_LZMA is not set
+-
+-#
+-# Coreutils
+-#
+-CONFIG_BASENAME=y
+-# CONFIG_CAL is not set
+-CONFIG_CAT=y
+-CONFIG_CATV=y
+-CONFIG_CHGRP=y
+-CONFIG_CHMOD=y
+-CONFIG_CHOWN=y
+-CONFIG_CHROOT=y
+-CONFIG_CKSUM=y
+-CONFIG_CMP=y
+-# CONFIG_COMM is not set
+-CONFIG_CP=y
+-CONFIG_CUT=y
+-CONFIG_DATE=y
+-CONFIG_FEATURE_DATE_ISOFMT=y
+-CONFIG_DD=y
+-CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
+-CONFIG_FEATURE_DD_IBS_OBS=y
+-CONFIG_DF=y
+-CONFIG_DIFF=y
+-CONFIG_FEATURE_DIFF_BINARY=y
+-CONFIG_FEATURE_DIFF_DIR=y
+-# CONFIG_FEATURE_DIFF_MINIMAL is not set
+-CONFIG_DIRNAME=y
+-CONFIG_DOS2UNIX=y
+-CONFIG_UNIX2DOS=y
+-CONFIG_DU=y
+-CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
+-CONFIG_ECHO=y
+-CONFIG_FEATURE_FANCY_ECHO=y
+-CONFIG_ENV=y
+-# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
+-CONFIG_EXPR=y
+-CONFIG_EXPR_MATH_SUPPORT_64=y
+-CONFIG_FALSE=y
+-CONFIG_FOLD=y
+-CONFIG_HEAD=y
+-CONFIG_FEATURE_FANCY_HEAD=y
+-CONFIG_HOSTID=y
+-CONFIG_ID=y
+-CONFIG_INSTALL=y
+-CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
+-CONFIG_LENGTH=y
+-CONFIG_LN=y
+-CONFIG_LOGNAME=y
+-CONFIG_LS=y
+-CONFIG_FEATURE_LS_FILETYPES=y
+-CONFIG_FEATURE_LS_FOLLOWLINKS=y
+-CONFIG_FEATURE_LS_RECURSIVE=y
+-CONFIG_FEATURE_LS_SORTFILES=y
+-CONFIG_FEATURE_LS_TIMESTAMPS=y
+-CONFIG_FEATURE_LS_USERNAME=y
+-CONFIG_FEATURE_LS_COLOR=y
+-CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
+-CONFIG_MD5SUM=y
+-CONFIG_MKDIR=y
+-CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
+-CONFIG_MKFIFO=y
+-CONFIG_MKNOD=y
+-CONFIG_MV=y
+-CONFIG_FEATURE_MV_LONG_OPTIONS=y
+-CONFIG_NICE=y
+-CONFIG_NOHUP=y
+-CONFIG_OD=y
+-CONFIG_PRINTENV=y
+-CONFIG_PRINTF=y
+-CONFIG_PWD=y
+-CONFIG_REALPATH=y
+-CONFIG_RM=y
+-CONFIG_RMDIR=y
+-CONFIG_SEQ=y
+-CONFIG_SHA1SUM=y
+-CONFIG_SLEEP=y
+-# CONFIG_FEATURE_FANCY_SLEEP is not set
+-CONFIG_SORT=y
+-CONFIG_FEATURE_SORT_BIG=y
+-# CONFIG_STAT is not set
+-# CONFIG_FEATURE_STAT_FORMAT is not set
+-CONFIG_STTY=y
+-# CONFIG_SUM is not set
+-CONFIG_SYNC=y
+-CONFIG_TAIL=y
+-CONFIG_FEATURE_FANCY_TAIL=y
+-CONFIG_TEE=y
+-CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
+-CONFIG_TEST=y
+-CONFIG_FEATURE_TEST_64=y
+-CONFIG_TOUCH=y
+-CONFIG_TR=y
+-CONFIG_FEATURE_TR_CLASSES=y
+-CONFIG_FEATURE_TR_EQUIV=y
+-CONFIG_TRUE=y
+-CONFIG_TTY=y
+-CONFIG_UNAME=y
+-CONFIG_UNIQ=y
+-CONFIG_USLEEP=y
+-CONFIG_UUDECODE=y
+-CONFIG_UUENCODE=y
+-CONFIG_WATCH=y
+-CONFIG_WC=y
+-# CONFIG_FEATURE_WC_LARGE is not set
+-CONFIG_WHO=y
+-CONFIG_WHOAMI=y
+-CONFIG_YES=y
+-
+-#
+-# Common options for cp and mv
+-#
+-CONFIG_FEATURE_PRESERVE_HARDLINKS=y
+-
+-#
+-# Common options for ls, more and telnet
+-#
+-CONFIG_FEATURE_AUTOWIDTH=y
+-
+-#
+-# Common options for df, du, ls
+-#
+-CONFIG_FEATURE_HUMAN_READABLE=y
+-
+-#
+-# Common options for md5sum, sha1sum
+-#
+-CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
+-
+-#
+-# Console Utilities
+-#
+-CONFIG_CHVT=y
+-CONFIG_CLEAR=y
+-CONFIG_DEALLOCVT=y
+-CONFIG_DUMPKMAP=y
+-CONFIG_LOADFONT=y
+-CONFIG_LOADKMAP=y
+-CONFIG_OPENVT=y
+-CONFIG_RESET=y
+-CONFIG_RESIZE=y
+-CONFIG_FEATURE_RESIZE_PRINT=y
+-CONFIG_SETCONSOLE=y
+-# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
+-CONFIG_SETKEYCODES=y
+-CONFIG_SETLOGCONS=y
+-
+-#
+-# Debian Utilities
+-#
+-CONFIG_MKTEMP=y
+-CONFIG_PIPE_PROGRESS=y
+-CONFIG_READLINK=y
+-CONFIG_FEATURE_READLINK_FOLLOW=y
+-CONFIG_RUN_PARTS=y
+-CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
+-CONFIG_START_STOP_DAEMON=y
+-CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
+-CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
+-CONFIG_WHICH=y
+-
+-#
+-# Editors
+-#
+-CONFIG_AWK=y
+-CONFIG_FEATURE_AWK_MATH=y
+-# CONFIG_ED is not set
+-CONFIG_PATCH=y
+-CONFIG_SED=y
+-CONFIG_VI=y
+-CONFIG_FEATURE_VI_COLON=y
+-CONFIG_FEATURE_VI_YANKMARK=y
+-CONFIG_FEATURE_VI_SEARCH=y
+-CONFIG_FEATURE_VI_USE_SIGNALS=y
+-CONFIG_FEATURE_VI_DOT_CMD=y
+-CONFIG_FEATURE_VI_READONLY=y
+-CONFIG_FEATURE_VI_SETOPTS=y
+-CONFIG_FEATURE_VI_SET=y
+-CONFIG_FEATURE_VI_WIN_RESIZE=y
+-CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
+-CONFIG_FEATURE_ALLOW_EXEC=y
+-
+-#
+-# Finding Utilities
+-#
+-CONFIG_FIND=y
+-CONFIG_FEATURE_FIND_PRINT0=y
+-CONFIG_FEATURE_FIND_MTIME=y
+-CONFIG_FEATURE_FIND_MMIN=y
+-CONFIG_FEATURE_FIND_PERM=y
+-CONFIG_FEATURE_FIND_TYPE=y
+-CONFIG_FEATURE_FIND_XDEV=y
+-CONFIG_FEATURE_FIND_NEWER=y
+-# CONFIG_FEATURE_FIND_INUM is not set
+-CONFIG_FEATURE_FIND_EXEC=y
+-CONFIG_FEATURE_FIND_USER=y
+-CONFIG_FEATURE_FIND_NOT=y
+-CONFIG_GREP=y
+-CONFIG_FEATURE_GREP_EGREP_ALIAS=y
+-CONFIG_FEATURE_GREP_FGREP_ALIAS=y
+-CONFIG_FEATURE_GREP_CONTEXT=y
+-CONFIG_XARGS=y
+-# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
+-CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
+-CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
+-CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
+-
+-#
+-# Init Utilities
+-#
+-CONFIG_INIT=y
+-# CONFIG_DEBUG_INIT is not set
+-CONFIG_FEATURE_USE_INITTAB=y
+-CONFIG_FEATURE_INIT_SCTTY=y
+-CONFIG_FEATURE_INIT_SYSLOG=y
+-CONFIG_FEATURE_EXTRA_QUIET=y
+-# CONFIG_FEATURE_INIT_COREDUMPS is not set
+-CONFIG_FEATURE_INITRD=y
+-CONFIG_HALT=y
+-CONFIG_MESG=y
+-
+-#
+-# Login/Password Management Utilities
+-#
+-CONFIG_FEATURE_SHADOWPASSWDS=y
+-# CONFIG_USE_BB_SHADOW is not set
+-# CONFIG_USE_BB_PWD_GRP is not set
+-CONFIG_ADDGROUP=y
+-CONFIG_DELGROUP=y
+-CONFIG_ADDUSER=y
+-CONFIG_DELUSER=y
+-CONFIG_GETTY=y
+-CONFIG_FEATURE_UTMP=y
+-CONFIG_FEATURE_WTMP=y
+-CONFIG_LOGIN=y
+-# CONFIG_LOGIN_SCRIPTS is not set
+-CONFIG_FEATURE_SECURETTY=y
+-CONFIG_PASSWD=y
+-CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+-CONFIG_SU=y
+-CONFIG_FEATURE_SU_SYSLOG=y
+-CONFIG_FEATURE_SU_CHECKS_SHELLS=y
+-CONFIG_SULOGIN=y
+-CONFIG_VLOCK=y
+-
+-#
+-# Linux Ext2 FS Progs
+-#
+-CONFIG_CHATTR=y
+-CONFIG_FSCK=y
+-CONFIG_LSATTR=y
+-
+-#
+-# Linux Module Utilities
+-#
+-CONFIG_INSMOD=y
+-# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
+-# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
+-# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
+-CONFIG_FEATURE_INSMOD_LOAD_MAP=y
+-CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL=y
+-CONFIG_RMMOD=y
+-CONFIG_LSMOD=y
+-CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
+-CONFIG_MODPROBE=y
+-CONFIG_FEATURE_MODPROBE_MULTIPLE_OPTIONS=y
+-CONFIG_FEATURE_MODPROBE_FANCY_ALIAS=y
+-
+-#
+-# Options common to multiple modutils
+-#
+-CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
+-# CONFIG_FEATURE_2_4_MODULES is not set
+-CONFIG_FEATURE_2_6_MODULES=y
+-# CONFIG_FEATURE_QUERY_MODULE_INTERFACE is not set
+-
+-#
+-# Linux System Utilities
+-#
+-CONFIG_DMESG=y
+-CONFIG_FEATURE_DMESG_PRETTY=y
+-# CONFIG_FBSET is not set
+-# CONFIG_FEATURE_FBSET_FANCY is not set
+-# CONFIG_FEATURE_FBSET_READMODE is not set
+-CONFIG_FDFLUSH=y
+-CONFIG_FDFORMAT=y
+-# CONFIG_FDISK is not set
+-CONFIG_FDISK_SUPPORT_LARGE_DISKS=y
+-CONFIG_FEATURE_FDISK_WRITABLE=y
+-# CONFIG_FEATURE_AIX_LABEL is not set
+-# CONFIG_FEATURE_SGI_LABEL is not set
+-# CONFIG_FEATURE_SUN_LABEL is not set
+-# CONFIG_FEATURE_OSF_LABEL is not set
+-# CONFIG_FEATURE_FDISK_ADVANCED is not set
+-CONFIG_FREERAMDISK=y
+-# CONFIG_FSCK_MINIX is not set
+-# CONFIG_MKFS_MINIX is not set
+-# CONFIG_FEATURE_MINIX2 is not set
+-CONFIG_GETOPT=y
+-CONFIG_HEXDUMP=y
+-CONFIG_HWCLOCK=y
+-CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
+-CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
+-CONFIG_IPCRM=y
+-CONFIG_IPCS=y
+-CONFIG_LOSETUP=y
+-CONFIG_MDEV=y
+-CONFIG_FEATURE_MDEV_CONF=y
+-CONFIG_FEATURE_MDEV_EXEC=y
+-CONFIG_MKSWAP=y
+-# CONFIG_FEATURE_MKSWAP_V0 is not set
+-CONFIG_MORE=y
+-CONFIG_FEATURE_USE_TERMIOS=y
+-CONFIG_MOUNT=y
+-# CONFIG_FEATURE_MOUNT_NFS is not set
+-CONFIG_FEATURE_MOUNT_CIFS=y
+-CONFIG_FEATURE_MOUNT_FLAGS=y
+-CONFIG_FEATURE_MOUNT_FSTAB=y
+-CONFIG_PIVOT_ROOT=y
+-CONFIG_RDATE=y
+-CONFIG_READPROFILE=y
+-CONFIG_SETARCH=y
+-CONFIG_SWAPONOFF=y
+-CONFIG_SWITCH_ROOT=y
+-CONFIG_UMOUNT=y
+-CONFIG_FEATURE_UMOUNT_ALL=y
+-
+-#
+-# Common options for mount/umount
+-#
+-CONFIG_FEATURE_MOUNT_LOOP=y
+-# CONFIG_FEATURE_MTAB_SUPPORT is not set
+-
+-#
+-# Miscellaneous Utilities
+-#
+-# CONFIG_ADJTIMEX is not set
+-# CONFIG_BBCONFIG is not set
+-CONFIG_CHRT=y
+-CONFIG_CROND=y
+-CONFIG_DEBUG_CROND_OPTION=y
+-# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
+-CONFIG_CRONTAB=y
+-CONFIG_DC=y
+-# CONFIG_DEVFSD is not set
+-# CONFIG_DEVFSD_MODLOAD is not set
+-# CONFIG_DEVFSD_FG_NP is not set
+-# CONFIG_DEVFSD_VERBOSE is not set
+-# CONFIG_FEATURE_DEVFS is not set
+-CONFIG_EJECT=y
+-CONFIG_LAST=y
+-CONFIG_LESS=y
+-CONFIG_FEATURE_LESS_MAXLINES=9999999
+-CONFIG_FEATURE_LESS_BRACKETS=y
+-CONFIG_FEATURE_LESS_FLAGS=y
+-CONFIG_FEATURE_LESS_FLAGCS=y
+-# CONFIG_FEATURE_LESS_MARKS is not set
+-CONFIG_FEATURE_LESS_REGEXP=y
+-CONFIG_HDPARM=y
+-CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
+-# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
+-# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
+-# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
+-# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
+-# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
+-CONFIG_MAKEDEVS=y
+-# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
+-CONFIG_FEATURE_MAKEDEVS_TABLE=y
+-CONFIG_MOUNTPOINT=y
+-CONFIG_MT=y
+-# CONFIG_NMETER is not set
+-# CONFIG_RAIDAUTORUN is not set
+-# CONFIG_READAHEAD is not set
+-CONFIG_RUNLEVEL=y
+-# CONFIG_RX is not set
+-CONFIG_STRINGS=y
+-CONFIG_SETSID=y
+-CONFIG_TASKSET=y
+-CONFIG_FEATURE_TASKSET_FANCY=y
+-CONFIG_TIME=y
+-CONFIG_WATCHDOG=y
+-
+-#
+-# Networking Utilities
+-#
+-# CONFIG_FEATURE_IPV6 is not set
+-# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
+-# CONFIG_ARP is not set
+-CONFIG_ARPING=y
+-CONFIG_DNSD=y
+-CONFIG_ETHER_WAKE=y
+-# CONFIG_FAKEIDENTD is not set
+-# CONFIG_FTPGET is not set
+-# CONFIG_FTPPUT is not set
+-# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
+-CONFIG_HOSTNAME=y
+-# CONFIG_HTTPD is not set
+-# CONFIG_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP is not set
+-# CONFIG_FEATURE_HTTPD_SETUID is not set
+-# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
+-# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
+-# CONFIG_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES is not set
+-# CONFIG_FEATURE_HTTPD_CGI is not set
+-# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
+-# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
+-# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
+-CONFIG_IFCONFIG=y
+-CONFIG_FEATURE_IFCONFIG_STATUS=y
+-CONFIG_FEATURE_IFCONFIG_SLIP=y
+-CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
+-CONFIG_FEATURE_IFCONFIG_HW=y
+-# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
+-CONFIG_IFUPDOWN=y
+-CONFIG_FEATURE_IFUPDOWN_IP=y
+-# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
+-# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
+-CONFIG_FEATURE_IFUPDOWN_IPV4=y
+-# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
+-# CONFIG_FEATURE_IFUPDOWN_IPX is not set
+-CONFIG_FEATURE_IFUPDOWN_MAPPING=y
+-CONFIG_INETD=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
+-CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
+-# CONFIG_FEATURE_INETD_RPC is not set
+-CONFIG_IP=y
+-CONFIG_FEATURE_IP_ADDRESS=y
+-CONFIG_FEATURE_IP_LINK=y
+-CONFIG_FEATURE_IP_ROUTE=y
+-CONFIG_FEATURE_IP_TUNNEL=y
+-CONFIG_FEATURE_IP_RULE=y
+-CONFIG_FEATURE_IP_SHORT_FORMS=y
+-CONFIG_IPADDR=y
+-CONFIG_IPLINK=y
+-CONFIG_IPROUTE=y
+-CONFIG_IPTUNNEL=y
+-CONFIG_IPRULE=y
+-# CONFIG_IPCALC is not set
+-# CONFIG_FEATURE_IPCALC_FANCY is not set
+-# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
+-CONFIG_NAMEIF=y
+-# CONFIG_NC is not set
+-# CONFIG_NC_SERVER is not set
+-# CONFIG_NC_EXTRA is not set
+-CONFIG_NETSTAT=y
+-CONFIG_NSLOOKUP=y
+-CONFIG_PING=y
+-# CONFIG_PING6 is not set
+-CONFIG_FEATURE_FANCY_PING=y
+-CONFIG_ROUTE=y
+-CONFIG_TELNET=y
+-CONFIG_FEATURE_TELNET_TTYPE=y
+-CONFIG_FEATURE_TELNET_AUTOLOGIN=y
+-# CONFIG_TELNETD is not set
+-# CONFIG_FEATURE_TELNETD_STANDALONE is not set
+-CONFIG_TFTP=y
+-CONFIG_FEATURE_TFTP_GET=y
+-CONFIG_FEATURE_TFTP_PUT=y
+-CONFIG_FEATURE_TFTP_BLOCKSIZE=y
+-# CONFIG_DEBUG_TFTP is not set
+-CONFIG_TRACEROUTE=y
+-# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
+-# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
+-# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
+-CONFIG_APP_UDHCPD=y
+-CONFIG_APP_DHCPRELAY=y
+-CONFIG_APP_DUMPLEASES=y
+-CONFIG_APP_UDHCPC=y
+-CONFIG_FEATURE_UDHCP_SYSLOG=y
+-# CONFIG_FEATURE_UDHCP_DEBUG is not set
+-# CONFIG_FEATURE_RFC3397 is not set
+-CONFIG_VCONFIG=y
+-CONFIG_WGET=y
+-CONFIG_FEATURE_WGET_STATUSBAR=y
+-CONFIG_FEATURE_WGET_AUTHENTICATION=y
+-CONFIG_FEATURE_WGET_LONG_OPTIONS=y
+-# CONFIG_ZCIP is not set
+-
+-#
+-# Process Utilities
+-#
+-CONFIG_FREE=y
+-CONFIG_FUSER=y
+-CONFIG_KILL=y
+-CONFIG_KILLALL=y
+-CONFIG_KILLALL5=y
+-CONFIG_PIDOF=y
+-CONFIG_FEATURE_PIDOF_SINGLE=y
+-CONFIG_FEATURE_PIDOF_OMIT=y
+-CONFIG_PS=y
+-CONFIG_FEATURE_PS_WIDE=y
+-CONFIG_RENICE=y
+-CONFIG_BB_SYSCTL=y
+-CONFIG_TOP=y
+-CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
+-CONFIG_UPTIME=y
+-
+-#
+-# Shells
+-#
+-CONFIG_FEATURE_SH_IS_ASH=y
+-# CONFIG_FEATURE_SH_IS_HUSH is not set
+-# CONFIG_FEATURE_SH_IS_LASH is not set
+-# CONFIG_FEATURE_SH_IS_MSH is not set
+-# CONFIG_FEATURE_SH_IS_NONE is not set
+-CONFIG_ASH=y
+-
+-#
+-# Ash Shell Options
+-#
+-CONFIG_ASH_JOB_CONTROL=y
+-CONFIG_ASH_READ_NCHARS=y
+-CONFIG_ASH_READ_TIMEOUT=y
+-CONFIG_ASH_ALIAS=y
+-CONFIG_ASH_MATH_SUPPORT=y
+-CONFIG_ASH_MATH_SUPPORT_64=y
+-# CONFIG_ASH_GETOPTS is not set
+-CONFIG_ASH_BUILTIN_ECHO=y
+-CONFIG_ASH_BUILTIN_TEST=y
+-CONFIG_ASH_CMDCMD=y
+-# CONFIG_ASH_MAIL is not set
+-CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
+-CONFIG_ASH_RANDOM_SUPPORT=y
+-CONFIG_ASH_EXPAND_PRMT=y
+-# CONFIG_HUSH is not set
+-# CONFIG_LASH is not set
+-# CONFIG_MSH is not set
+-
+-#
+-# Bourne Shell Options
+-#
+-CONFIG_FEATURE_SH_EXTRA_QUIET=y
+-# CONFIG_FEATURE_SH_STANDALONE_SHELL is not set
+-
+-#
+-# System Logging Utilities
+-#
+-CONFIG_SYSLOGD=y
+-CONFIG_FEATURE_ROTATE_LOGFILE=y
+-CONFIG_FEATURE_REMOTE_LOG=y
+-# CONFIG_FEATURE_IPC_SYSLOG is not set
+-CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=
+-# CONFIG_LOGREAD is not set
+-# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
+-CONFIG_KLOGD=y
+-CONFIG_LOGGER=y
+-
+-#
+-# Runit Utilities
+-#
+-# CONFIG_RUNSV is not set
+-# CONFIG_RUNSVDIR is not set
+-# CONFIG_SV is not set
+-# CONFIG_SVLOGD is not set
+-# CONFIG_CHPST is not set
+-# CONFIG_SETUIDGID is not set
+-# CONFIG_ENVUIDGID is not set
+-# CONFIG_ENVDIR is not set
+-# CONFIG_SOFTLIMIT is not set
+-# CONFIG_CHCON is not set
+-# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
+-# CONFIG_GETENFORCE is not set
+-# CONFIG_GETSEBOOL is not set
+-# CONFIG_MATCHPATHCON is not set
+-# CONFIG_RUNCON is not set
+-# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
+-# CONFIG_SELINUXENABLED is not set
+-# CONFIG_SETENFORCE is not set
+diff --git a/target/device/Atmel/at91sam9260pf/u-boot/at91sam9260pf.h b/target/device/Atmel/at91sam9260pf/u-boot/at91sam9260pf.h
+deleted file mode 100644
+index dcac08e..0000000
+--- a/target/device/Atmel/at91sam9260pf/u-boot/at91sam9260pf.h
++++ /dev/null
+@@ -1,370 +0,0 @@
+-/*
+- * (C) Copyright 2006
+- * M. Amine SAYA ATMEL Rousset, France.
+- *
+- * Rick Bronson <rick@efn.org>
+- *
+- * Configuration settings for the AT91SAM9260EK board.
+- *
+- * See file CREDITS for list of people who contributed to this
+- * project.
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License as
+- * published by the Free Software Foundation; either version 2 of
+- * the License, or (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program; if not, write to the Free Software
+- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+- * MA 02111-1307 USA
+- */
+-
+-#ifndef __CONFIG_H
+-#define __CONFIG_H
+-
+-#define	CONFIG_HOSTNAME			at91sam9260pf
+-/*
+- * If we are developing, we might want to start armboot from ram
+- * so we MUST NOT initialize critical regs like mem-timing ...
+- */
+-
+-/* ARM asynchronous clock */
+-/* #define AT91C_MAIN_CLOCK		179712000 */	/* from 18.432 MHz crystal (18432000 / 4 * 39) */
+-#define AT91C_MASTER_CLOCK		99300000 	/* peripheral clock (AT91C_MASTER_CLOCK / 3) */
+-/* #define AT91C_MASTER_CLOCK		45174500 */
+-/* #define AT91C_MASTER_CLOCK		44928000 */	/* peripheral clock (AT91C_MASTER_CLOCK / 4) */
+-
+-#define AT91_SLOW_CLOCK			32768	/* slow clock */
+-
+-#define CFG_HZ				1000
+-
+-
+-#define CONFIG_AT91			1
+-
+-#define CONFIG_ARM926EJS		1
+-#define CONFIG_AT91SAM9260		1
+-#define CONFIG_AT91SAM9260EK		1	/* on an AT91SAM9260EK Board	 */
+-
+-#define CONFIG_CMDLINE_TAG		1	/* enable passing of ATAGs	*/
+-#define CONFIG_SETUP_MEMORY_TAGS	1
+-#define CONFIG_INITRD_TAG		1
+-
+-#undef  CONFIG_USE_IRQ				/* we don't need IRQ/FIQ stuff */
+-
+-/* define this to include the functionality of boot.bin in u-boot */
+-#undef	CONFIG_BOOTBINFUNC
+-#undef	CONFIG_SKIP_LOWLEVEL_INIT
+-#define CONFIG_SKIP_RELOCATE_UBOOT
+-#define BOARD_LATE_INIT			1	/* Don't know what this means for now */
+-/*
+- * Size of malloc() pool
+- */
+-#define CFG_MALLOC_LEN			(CFG_ENV_SIZE + 128*1024)
+-#define CFG_GBL_DATA_SIZE		128	/* size in bytes reserved for initial data */
+-
+-
+-/*
+- * Hardware drivers
+- */
+-
+-#define CONFIG_BOOTDELAY		3
+-
+-#undef CONFIG_ENV_OVERWRITE
+-
+-#define CONFIG_COMMANDS					\
+-			((CONFIG_CMD_DFL		| \
+-			  CFG_CMD_NET			| \
+-			  CFG_CMD_PING			| \
+-			  CFG_CMD_ENV			| \
+-			  CFG_CMD_USB			| \
+-			  CFG_CMD_FLASH			| \
+-			  CFG_CMD_AUTOSCRIPT		| \
+-			  CFG_CMD_DHCP			| \
+-			  CFG_CMD_NAND			| \
+-			  CFG_CMD_FAT )			& \
+-			~(CFG_CMD_BDI			| \
+-			  CFG_CMD_IMLS			| \
+-			  CFG_CMD_IMI			| \
+-			  CFG_CMD_FPGA			| \
+-			  CFG_CMD_MISC			| \
+-			  CFG_CMD_LOADS))
+-
+-/* this must be included AFTER the definition of CONFIG_COMMANDS (if any) */
+-#include <cmd_confdefs.h>
+-
+-/* UART Configuration */
+-#define CONFIG_BAUDRATE			115200
+-#define CFG_BAUDRATE_TABLE		{115200 , 19200, 38400, 57600, 9600 }
+-
+-#undef CONFIG_HWFLOW			/* don't include RTS/CTS flow control support	*/
+-#undef CONFIG_MODEM_SUPPORT		/* disable modem initialization stuff */
+-
+-/* Console Configuration */
+-#define CFG_CONSOLE_IS_SERIAL
+-#undef  CFG_CONSOLE_IS_LCD
+-#define CONFIG_AUTO_COMPLETE
+-#define CFG_LONGHELP
+-
+-/* define one of these to choose the DBGU, USART0  or USART1 as console */
+-#define CONFIG_DBGU			1
+-#undef CONFIG_USART0
+-#undef CONFIG_USART1
+-#undef CONFIG_USART2
+-
+-#define CFG_PROMPT			"U-Boot> "	/* Monitor Command Prompt */
+-#define CFG_CBSIZE			256		/* Console I/O Buffer Size */
+-#define CFG_MAXARGS			16		/* max number of command args */
+-#define CFG_PBSIZE			(CFG_CBSIZE+sizeof(CFG_PROMPT)+16) /* Print Buffer Size */
+-
+-/* Ethernet Configuration */
+-#define CONFIG_DRIVER_ETHER		1
+-#define CONFIG_NET_RETRY_COUNT		5000
+-#define CONFIG_TFTP_TIMEOUT		2500	/*250*/
+-#define CONFIG_ETHINIT			1
+-#define CONFIG_OVERWRITE_ETHADDR_ONCE
+-
+-#define CONFIG_AT91C_USE_RMII		1
+-#define AT91C_PHY_ADDR			0
+-#define AT91C_ETH_TIMEOUT		30000
+-
+-/* USB Configuration */
+-#define CONFIG_USB_OHCI			1
+-#define CONFIG_USB_STORAGE		1
+-#define CONFIG_DOS_PARTITION		1
+-#define LITTLEENDIAN			1
+-
+-/* LED Configuration */
+-#define	PIO_ID				AT91C_ID_PIOA
+-#define	PIO_LEDS			AT91C_BASE_PIOA
+-#define	GREEN_LED			AT91C_PIO_PA6
+-#define	GREEN_LED_ON			PIO_CODR
+-#define	GREEN_LED_OFF			PIO_SODR
+-#define	YELLOW_LED			AT91C_PIO_PA9
+-#define	YELLOW_LED_ON			PIO_SODR
+-#define	YELLOW_LED_OFF			PIO_CODR
+-#define	RED_LED				0
+-#define	RED_LED_ON			PIO_CODR
+-#define	RED_LED_OFF			PIO_SODR
+-#define	ALL_LEDS			(GREEN_LED | YELLOW_LED | RED_LED)
+-#define	TIME_SLICE			500000
+-
+-/* Memory Configuration */
+-#define CFG_ENV_OVERWRITE		1
+-#define CONFIG_HAS_DATAFLASH		1
+-#undef  CFG_NO_FLASH			1
+-
+-#define CFG_ENV_IS_IN_FLASH		1
+-#undef  CFG_ENV_IS_IN_DATAFLASH
+-#undef  CFG_ENV_IS_IN_NAND
+-
+-#define	UBOOT_NPCS0
+-#undef  UBOOT_NPCS1
+-#undef  UBOOT_NPCS3
+-
+-#define	SPI_MODE			3
+-
+-/* SDRAMC */
+-#define CONFIG_NR_DRAM_BANKS		1
+-#define PHYS_SDRAM			0x20000000
+-#define PHYS_SDRAM_SIZE			0x4000000  /* 64 megs */
+-
+-#define CFG_MEMTEST_START		PHYS_SDRAM
+-#define CFG_MEMTEST_END			CFG_MEMTEST_START + PHYS_SDRAM_SIZE - 262144
+-
+-/* DataFlash */
+-#define CFG_SPI_WRITE_TOUT		(50*CFG_HZ)
+-
+-/* AC Characteristics */
+-/* DLYBS = tCSS = 250ns min and DLYBCT = tCSH = 250ns */
+-#define DATAFLASH_TCSS			(0x1a << 16)
+-#define DATAFLASH_TCHS			(0x1 << 24)
+-
+-#define CFG_MAX_DATAFLASH_BANKS		2
+-#define CFG_MAX_DATAFLASH_PAGES		16384
+-#define CFG_DATAFLASH_LOGIC_ADDR_CS0	0xC0000000	/* Logical adress for CS0 */
+-#define CFG_DATAFLASH_LOGIC_ADDR_CS1	0xD0000000	/* Logical adress for CS1 */
+-#undef  CFG_DATAFLASH_LOGIC_ADDR_CS3	/* 0xD0000000	*/ /* Logical adress for CS1 */
+-
+-#define CFG_SUPPORT_BLOCK_ERASE		1
+-#define CONFIG_NEW_PARTITION		1
+-#define	NB_DATAFLASH_AREA		6
+-
+-/* Parallel Flash Configuration */
+-#define PHYS_FLASH_1			0x10000000
+-#define PHYS_FLASH_SIZE			0x800000  	/* 8 megs main flash */
+-#define CFG_FLASH_BASE			PHYS_FLASH_1
+-#define CFG_MAX_FLASH_BANKS		1
+-#define CFG_MAX_FLASH_SECT		256
+-#define CFG_FLASH_ERASE_TOUT		(2*CFG_HZ) /* Timeout for Flash Erase */
+-#define CFG_FLASH_WRITE_TOUT		(2*CFG_HZ) /* Timeout for Flash Write */
+-
+-/* NAND Flash Configuration */
+-#define NAND_MAX_CHIPS			1	/* Max number of NAND devices	*/
+-#define CFG_MAX_NAND_DEVICE		1	/* Max number of NAND devices	*/
+-#define SECTORSIZE			512
+-#define CFG_NAND_BASE			0x40000000
+-#define CONFIG_NEW_NAND_CODE
+-
+-#define ADDR_COLUMN			1
+-#define ADDR_PAGE			2
+-#define ADDR_COLUMN_PAGE		3
+-
+-#define NAND_ChipID_UNKNOWN		0x00
+-#define NAND_MAX_FLOORS			1
+-#undef  CFG_NAND_WP
+-
+-/*#define AT91_SMART_MEDIA_ALE		(1 << 21)*/	/* our ALE is AD21 */
+-/*#define AT91_SMART_MEDIA_CLE		(1 << 22)*/	/* our CLE is AD22 */
+-
+-/* SMC Chip Select 3 Timings for NandFlash K9F1216U0A (samsung)
+- * for MASTER_CLOCK = 48000000. They were generated according to 
+- * K9F1216U0A timings and for MASTER_CLOCK = 48000000.
+- * Please refer to SMC section in AT91SAM9261 datasheet to learn how 
+- * to generate these values.
+- */
+- 
+-/*
+-#define AT91C_SM_NWE_SETUP		(0 << 0)		
+-#define AT91C_SM_NCS_WR_SETUP		(0 << 8)		
+-#define AT91C_SM_NRD_SETUP		(0 << 16)		
+-#define AT91C_SM_NCS_RD_SETUP		(0 << 24)		
+-  
+-#define AT91C_SM_NWE_PULSE 		(2 << 0)		
+-#define AT91C_SM_NCS_WR_PULSE		(3 << 8)		
+-#define AT91C_SM_NRD_PULSE		(2 << 16)		
+-#define AT91C_SM_NCS_RD_PULSE		(4 << 24)		
+-  
+-#define AT91C_SM_NWE_CYCLE 		(3 << 0)		
+-#define AT91C_SM_NRD_CYCLE		(5 << 16)		
+-  
+-#define AT91C_SM_TDF	        	(1 << 16)		
+-*/
+-
+-/* SMC Chip Select 3 Timings for NandFlash K9F1216U0A (samsung)
+- * for MASTER_CLOCK = 100000000. They were generated according to 
+- * K9F1216U0A timings and for MASTER_CLOCK = 100000000.
+- * Please refer to SMC section in AT91SAM9261 datasheet to learn how 
+- * to generate these values.
+- */
+-
+-/* These timings are specific to K9F1216U0A (samsung) */
+-/*
+-#define AT91C_SM_NWE_SETUP		(0 << 0)		
+-#define AT91C_SM_NCS_WR_SETUP		(0 << 8)		
+-#define AT91C_SM_NRD_SETUP		(0 << 16)		
+-#define AT91C_SM_NCS_RD_SETUP		(0 << 24)		
+-  
+-#define AT91C_SM_NWE_PULSE 		(3 << 0)		
+-#define AT91C_SM_NCS_WR_PULSE		(3 << 8)		
+-#define AT91C_SM_NRD_PULSE		(4 << 16)		
+-#define AT91C_SM_NCS_RD_PULSE		(4 << 24)		
+-  
+-#define AT91C_SM_NWE_CYCLE 		(5 << 0)		
+-#define AT91C_SM_NRD_CYCLE		(5 << 16)		
+-*/
+-
+-/* These timings are specific to MT29F2G16AAB 256Mb (Micron) 
+- *@MCK = 100 MHZ
+- */
+-
+-/* New NAND commands */
+-#define AT91C_SM_NWE_SETUP		(0 << 0)
+-#define AT91C_SM_NCS_WR_SETUP		(0 << 8)
+-#define AT91C_SM_NRD_SETUP		(0 << 16)
+-#define AT91C_SM_NCS_RD_SETUP		(0 << 24)
+-  
+-#define AT91C_SM_NWE_PULSE		(4 << 0)
+-#define AT91C_SM_NCS_WR_PULSE		(6 << 8)
+-#define AT91C_SM_NRD_PULSE		(3 << 16)
+-#define AT91C_SM_NCS_RD_PULSE		(5 << 24)
+-  
+-#define AT91C_SM_NWE_CYCLE		(6 << 0)
+-#define AT91C_SM_NRD_CYCLE		(5 << 16)
+-
+-#define AT91C_SM_TDF			(1 << 16)		
+-
+-/*#define CONFIG_MTD_DEBUG		1
+-#define CONFIG_MTD_DEBUG_VERBOSE	MTD_DEBUG_LEVEL3
+-*/
+-
+-/* Environment */
+-#ifdef CFG_ENV_IS_IN_NAND
+-#define CFG_ENV_OFFSET			0x60000		/* environment starts here  */
+-#define CFG_ENV_SIZE			0x20000 	/* 1 sector = 128kB */
+-#endif
+-
+-#ifdef CFG_ENV_IS_IN_DATAFLASH
+-#	if	defined(UBOOT_NPCS0)
+-#		define UBOOT_NPCS	CFG_DATAFLASH_LOGIC_ADDR_CS0
+-#	elif	defined(UBOOT_NPCS1)
+-#		define UBOOT_NPCS	CFG_DATAFLASH_LOGIC_ADDR_CS1
+-#	elif	defined(UBOOT_NPCS3)
+-#		define UBOOT_NPCS	CFG_DATAFLASH_LOGIC_ADDR_CS3
+-#	endif
+-
+-#	define CFG_ENV_OFFSET		0x4200
+-#	define CFG_ENV_ADDR		(UBOOT_NPCS + CFG_ENV_OFFSET)
+-#	define CFG_ENV_SIZE		0x2000  /* 0x8000 */
+-#endif
+-
+-#ifdef CFG_ENV_IS_IN_FLASH
+-#	ifdef CONFIG_BOOTBINFUNC
+-#		define CFG_ENV_ADDR	(PHYS_FLASH_1 + 0x60000)  /* after u-boot.bin */
+-#		define CFG_ENV_SIZE	0x10000 /* sectors are 64K here */
+-#	else
+-#		define CFG_ENV_ADDR	(PHYS_FLASH_1 + 0x6000)  /* between boot.bin and u-boot.bin.gz */
+-#		define CFG_ENV_SIZE	0x2000  /* 0x8000 */
+-#	endif
+-#endif
+-
+-#if	CFG_ENV_IS_IN_DATAFLASH | CFG_ENV_IS_IN_FLASH | CFG_ENV_IS_IN_NAND
+-#else
+-#error	"No Environment Defined"
+-#endif
+-
+-#define KERNEL_1_5_MB
+-#define CFG_LOAD_ADDR			0x23f00000  /* default load address */
+-
+-#ifdef CONFIG_BOOTBINFUNC
+-#	define CFG_BOOT_SIZE		0x00 /* 0 KBytes */
+-#	define CFG_U_BOOT_BASE		PHYS_FLASH_1
+-#	define CFG_U_BOOT_SIZE		0x60000 /* 384 KBytes */
+-#else
+-#	define CFG_BOOT_SIZE		0x6000 /* 24 KBytes */
+-#	define CFG_U_BOOT_BASE		(PHYS_FLASH_1 + 0x8000)	/* After 32 kB */
+-#	define CFG_U_BOOT_SIZE		0x38000 /* 224 KBytes */
+-#endif
+-
+-#ifndef __ASSEMBLY__
+-/*-----------------------------------------------------------------------
+- * Board specific extension for bd_info
+- *
+- * This structure is embedded in the global bd_info (bd_t) structure
+- * and can be used by the board specific code (eg board/...)
+- */
+-
+-struct bd_info_ext {
+-	/* helper variable for board environment handling
+-	 *
+-	 * env_crc_valid == 0    =>   uninitialised
+-	 * env_crc_valid  > 0    =>   environment crc in flash is valid
+-	 * env_crc_valid  < 0    =>   environment crc in flash is invalid
+-	 */
+-	int env_crc_valid;
+-};
+-#endif
+-
+-
+-#define CONFIG_STACKSIZE		(32*1024)	/* regular stack */
+-
+-#ifdef CONFIG_USE_IRQ
+-#error CONFIG_USE_IRQ not supported
+-#endif
+-
+-#endif
 -- 
 1.7.0.4
