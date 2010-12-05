@@ -1,164 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:06 +0100
-Subject: [Buildroot] [PATCH 35/55] board: update and minimize
-	atstk100x_defconfig
+Date: Sun,  5 Dec 2010 21:53:07 +0100
+Subject: [Buildroot] [PATCH 36/55] board: remove atstk1005_defconfig
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <654d3bf36e847cc79d4659209eb5ce34f57b4176.1291582351.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <eb4b456cc054cdc0903a5df64946067a1eb489df.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use recent U-Boot and kernel version, remove target skeleton and use
-the default one instead, remove useless kernel configuration, busybox
-configuration and device table.
+Neither the kernel nor U-Boot have support for a 1005 board, so let's
+get rid of this board configuration, the corresponding target
+skeleton, kernel and busybox configuration and device table.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atstk100x_defconfig                        |  951 +---------
- .../atstk100x/atstk100x-linux-2.6.27.13.config     | 1283 ------------
- .../atstk100x/atstk100x-linux-2.6.28.2.config      | 1332 ------------
- target/device/Atmel/atstk100x/busybox-1.9.1.config |  767 -------
- target/device/Atmel/atstk100x/device_table.txt     |  181 --
- ...-200-gpio_mouse-setup-for-atstk1000-board.patch |  130 --
- .../device/Atmel/atstk100x/target_skeleton/etc/TZ  |    1 -
- .../atstk100x/target_skeleton/etc/asound.state     |  108 -
- .../atstk100x/target_skeleton/etc/default/ntpdate  |    6 -
- .../atstk100x/target_skeleton/etc/dnsmasq.conf     |  385 ----
- .../Atmel/atstk100x/target_skeleton/etc/fb.modes   |    5 -
- .../Atmel/atstk100x/target_skeleton/etc/fstab      |    3 -
- .../Atmel/atstk100x/target_skeleton/etc/group      |   20 -
- .../Atmel/atstk100x/target_skeleton/etc/hostname   |    1 -
- .../Atmel/atstk100x/target_skeleton/etc/hosts      |   12 -
- .../atstk100x/target_skeleton/etc/hosts.dnsmasq    |  246 ---
- .../Atmel/atstk100x/target_skeleton/etc/httpd.conf |    2 -
- .../Atmel/atstk100x/target_skeleton/etc/inetd.conf |    3 -
+ configs/atstk1005_defconfig                        |  850 --------
+ .../atstk1005/atstk1005-linux-2.6.27.13.config     | 1522 --------------
+ .../atstk1005/atstk1005-linux-2.6.28.2.config      | 1602 ---------------
+ target/device/Atmel/atstk1005/busybox-1.9.1.config |  767 -------
+ target/device/Atmel/atstk1005/device_table.txt     |  181 --
+ .../device/Atmel/atstk1005/target_skeleton/etc/TZ  |    1 -
+ .../atstk1005/target_skeleton/etc/asound.state     |  108 -
+ .../atstk1005/target_skeleton/etc/default/ntpdate  |    6 -
+ .../atstk1005/target_skeleton/etc/dnsmasq.conf     |  385 ----
+ .../Atmel/atstk1005/target_skeleton/etc/fb.modes   |    5 -
+ .../Atmel/atstk1005/target_skeleton/etc/fstab      |    3 -
+ .../Atmel/atstk1005/target_skeleton/etc/group      |   20 -
+ .../Atmel/atstk1005/target_skeleton/etc/hostname   |    1 -
+ .../Atmel/atstk1005/target_skeleton/etc/hosts      |   12 -
+ .../atstk1005/target_skeleton/etc/hosts.dnsmasq    |  246 ---
+ .../Atmel/atstk1005/target_skeleton/etc/httpd.conf |    2 -
+ .../Atmel/atstk1005/target_skeleton/etc/inetd.conf |    3 -
  .../target_skeleton/etc/init.d/K20alsa-utils       |   14 -
  .../target_skeleton/etc/init.d/K70sendsig          |    1 -
- .../atstk100x/target_skeleton/etc/init.d/K80netfs  |    1 -
+ .../atstk1005/target_skeleton/etc/init.d/K80netfs  |    1 -
  .../target_skeleton/etc/init.d/K85network          |   11 -
  .../target_skeleton/etc/init.d/K90localfs          |    1 -
  .../target_skeleton/etc/init.d/S00mountvirtfs      |   74 -
  .../target_skeleton/etc/init.d/S01hotplug          |   14 -
  .../target_skeleton/etc/init.d/S02hostname         |   47 -
  .../target_skeleton/etc/init.d/S03bootsplash       |   25 -
- .../atstk100x/target_skeleton/etc/init.d/S08syslog |   24 -
- .../atstk100x/target_skeleton/etc/init.d/S09klog   |   16 -
+ .../atstk1005/target_skeleton/etc/init.d/S08syslog |   24 -
+ .../atstk1005/target_skeleton/etc/init.d/S09klog   |   16 -
  .../target_skeleton/etc/init.d/S10modules-init     |   21 -
  .../target_skeleton/etc/init.d/S15localfs          |   11 -
  .../target_skeleton/etc/init.d/S20network          |   11 -
  .../target_skeleton/etc/init.d/S40telnetd          |   16 -
- .../atstk100x/target_skeleton/etc/init.d/S41inetd  |   16 -
- .../atstk100x/target_skeleton/etc/init.d/S42httpd  |   16 -
- .../atstk100x/target_skeleton/etc/init.d/S43ntp    |   27 -
- .../atstk100x/target_skeleton/etc/init.d/S49netfs  |   11 -
+ .../atstk1005/target_skeleton/etc/init.d/S41inetd  |   16 -
+ .../atstk1005/target_skeleton/etc/init.d/S42httpd  |   16 -
+ .../atstk1005/target_skeleton/etc/init.d/S43ntp    |   27 -
+ .../atstk1005/target_skeleton/etc/init.d/S49netfs  |   11 -
  .../target_skeleton/etc/init.d/S50alsa-utils       |   19 -
- .../atstk100x/target_skeleton/etc/init.d/S99gpio   |  142 --
- .../atstk100x/target_skeleton/etc/init.d/S99splash |   17 -
- .../Atmel/atstk100x/target_skeleton/etc/init.d/rcK |    6 -
- .../Atmel/atstk100x/target_skeleton/etc/init.d/rcS |   11 -
- .../Atmel/atstk100x/target_skeleton/etc/inittab    |   28 -
- .../Atmel/atstk100x/target_skeleton/etc/mdev.conf  |   49 -
- .../Atmel/atstk100x/target_skeleton/etc/modules    |    4 -
- .../atstk100x/target_skeleton/etc/mplayer.conf     |  129 --
- .../Atmel/atstk100x/target_skeleton/etc/mtab       |    1 -
+ .../atstk1005/target_skeleton/etc/init.d/S99gpio   |  142 --
+ .../atstk1005/target_skeleton/etc/init.d/S99splash |   17 -
+ .../Atmel/atstk1005/target_skeleton/etc/init.d/rcK |    6 -
+ .../Atmel/atstk1005/target_skeleton/etc/init.d/rcS |   11 -
+ .../Atmel/atstk1005/target_skeleton/etc/inittab    |   28 -
+ .../Atmel/atstk1005/target_skeleton/etc/mdev.conf  |   49 -
+ .../Atmel/atstk1005/target_skeleton/etc/modules    |    4 -
+ .../atstk1005/target_skeleton/etc/mplayer.conf     |  129 --
+ .../Atmel/atstk1005/target_skeleton/etc/mtab       |    1 -
  .../target_skeleton/etc/network/interfaces         |   11 -
- .../Atmel/atstk100x/target_skeleton/etc/ntp.conf   |   49 -
- .../Atmel/atstk100x/target_skeleton/etc/passwd     |   18 -
- .../atstk100x/target_skeleton/etc/proftpd.conf     |   31 -
- .../Atmel/atstk100x/target_skeleton/etc/protocols  |  149 --
- .../atstk100x/target_skeleton/etc/resolv.conf      |    1 -
- .../atstk100x/target_skeleton/etc/samba/smb.conf   |  287 ---
- .../atstk100x/target_skeleton/etc/samba/smbpasswd  |    1 -
- .../Atmel/atstk100x/target_skeleton/etc/services   | 2117 --------------------
- .../Atmel/atstk100x/target_skeleton/etc/shadow     |   18 -
- .../Atmel/atstk100x/target_skeleton/etc/shells     |    8 -
- .../atstk100x/target_skeleton/root/.bash_logout    |    7 -
- .../atstk100x/target_skeleton/root/.bash_profile   |   15 -
- .../Atmel/atstk100x/target_skeleton/root/.bashrc   |   48 -
+ .../Atmel/atstk1005/target_skeleton/etc/ntp.conf   |   49 -
+ .../Atmel/atstk1005/target_skeleton/etc/passwd     |   18 -
+ .../atstk1005/target_skeleton/etc/proftpd.conf     |   31 -
+ .../Atmel/atstk1005/target_skeleton/etc/protocols  |  149 --
+ .../atstk1005/target_skeleton/etc/resolv.conf      |    1 -
+ .../atstk1005/target_skeleton/etc/samba/smb.conf   |  287 ---
+ .../atstk1005/target_skeleton/etc/samba/smbpasswd  |    1 -
+ .../Atmel/atstk1005/target_skeleton/etc/services   | 2117 --------------------
+ .../Atmel/atstk1005/target_skeleton/etc/shadow     |   18 -
+ .../Atmel/atstk1005/target_skeleton/etc/shells     |    8 -
+ .../atstk1005/target_skeleton/root/.bash_logout    |    7 -
+ .../atstk1005/target_skeleton/root/.bash_profile   |   15 -
+ .../Atmel/atstk1005/target_skeleton/root/.bashrc   |   48 -
  .../usr/share/udhcpc/default.script                |   19 -
- 62 files changed, 12 insertions(+), 8966 deletions(-)
- delete mode 100644 target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
- delete mode 100644 target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
- delete mode 100644 target/device/Atmel/atstk100x/busybox-1.9.1.config
- delete mode 100644 target/device/Atmel/atstk100x/device_table.txt
- delete mode 100644 target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/TZ
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/fstab
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/group
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hostname
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hosts
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/inittab
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/modules
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
- delete mode 120000 target/device/Atmel/atstk100x/target_skeleton/etc/mtab
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/passwd
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/protocols
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/services
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/shadow
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/etc/shells
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/sys/.empty
- delete mode 100644 target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
+ 61 files changed, 0 insertions(+), 9256 deletions(-)
+ delete mode 100644 configs/atstk1005_defconfig
+ delete mode 100644 target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.13.config
+ delete mode 100644 target/device/Atmel/atstk1005/atstk1005-linux-2.6.28.2.config
+ delete mode 100644 target/device/Atmel/atstk1005/busybox-1.9.1.config
+ delete mode 100644 target/device/Atmel/atstk1005/device_table.txt
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/TZ
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/asound.state
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/default/ntpdate
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/dnsmasq.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/fb.modes
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/fstab
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/group
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/hostname
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/hosts
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/hosts.dnsmasq
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/httpd.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/inetd.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K20alsa-utils
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K70sendsig
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K80netfs
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K85network
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K90localfs
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S00mountvirtfs
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S01hotplug
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S02hostname
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S03bootsplash
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S08syslog
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S09klog
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S10modules-init
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S15localfs
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S20network
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S40telnetd
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S41inetd
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S42httpd
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S43ntp
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S49netfs
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S50alsa-utils
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99splash
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcK
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcS
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/inittab
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/mdev.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/modules
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/mplayer.conf
+ delete mode 120000 target/device/Atmel/atstk1005/target_skeleton/etc/mtab
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/network/interfaces
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/ntp.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/passwd
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/proftpd.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/protocols
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/resolv.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/samba/smb.conf
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/samba/smbpasswd
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/services
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/shadow
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/etc/shells
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/root/.bash_logout
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/root/.bash_profile
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/root/.bashrc
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/sys/.empty
+ delete mode 100644 target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script
 
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index b4e7f06..35571a0 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -1,947 +1,20 @@
+diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
+deleted file mode 100644
+index d87e103..0000000
+--- a/configs/atstk1005_defconfig
++++ /dev/null
+@@ -1,850 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
--# Thu Apr 30 04:25:26 2009
+-# Sat Jan 31 00:17:40 2009
 -#
 -BR2_HAVE_DOT_CONFIG=y
--BR2_VERSION="2009.05-svn"
+-BR2_VERSION="2009.02-svn"
 -# BR2_alpha is not set
 -# BR2_arm is not set
 -# BR2_armeb is not set
-+# Architecture
- BR2_avr32=y
+-BR2_avr32=y
 -# BR2_cris is not set
 -# BR2_ia64 is not set
 -# BR2_i386 is not set
@@ -174,7 +172,7 @@ index b4e7f06..35571a0 100644
 -# BR2_x86_64 is not set
 -BR2_ARCH="avr32"
 -BR2_ENDIAN="BIG"
- 
+-
 -#
 -# Target options
 -#
@@ -182,15 +180,14 @@ index b4e7f06..35571a0 100644
 -#
 -# Project Options
 -#
--BR2_PROJECT="atstk1002"
--BR2_HOSTNAME="stk1000.example.net"
--BR2_BANNER="ATSTK1002 ($(DATE))"
+-BR2_PROJECT="atstk1005"
+-BR2_HOSTNAME="ATSTK1005"
+-BR2_BANNER="ATNSTK1005 ($(DATE))"
 -
 -#
 -# Preset Devices
 -#
--# BR2_TARGET_AMD is not set
--BR2_BOARD_NAME="atstk100x"
+-BR2_BOARD_NAME="atstk1005"
 -BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)"
 -BR2_TARGET_ATMEL=y
 -
@@ -198,16 +195,16 @@ index b4e7f06..35571a0 100644
 -# Atmel AVR32 Specific Device Support
 -#
 -BR2_TARGET_AVR32=y
--BR2_TARGET_AT32AP7000=y
+-# BR2_TARGET_AT32AP7000 is not set
 -# BR2_TARGET_AT32AP7001 is not set
 -# BR2_TARGET_AT32AP7002 is not set
--# BR2_TARGET_AT32AP7200 is not set
+-BR2_TARGET_AT32AP7200=y
 -
 -#
 -# Development board support
 -#
--BR2_TARGET_AVR32_ATSTK1002=y
--# BR2_TARGET_AVR32_ATSTK1005 is not set
+-# BR2_TARGET_AVR32_ATSTK1002 is not set
+-BR2_TARGET_AVR32_ATSTK1005=y
 -# BR2_TARGET_AVR32_ATNGW100 is not set
 -# BR2_TARGET_AVR32_ATNGW100_BASE is not set
 -# BR2_TARGET_AVR32_ATNGW100_EXPANDED is not set
@@ -258,6 +255,7 @@ index b4e7f06..35571a0 100644
 -# BR2_FPU_SUFFIX is not set
 -BR2_TOPDIR_PREFIX=""
 -BR2_TOPDIR_SUFFIX=""
+-BR2_ROOTFS_PREFIX="rootfs"
 -BR2_JLEVEL=2
 -# BR2_DEPRECATED is not set
 -# BR2_ENABLE_DEBUG is not set
@@ -266,9 +264,9 @@ index b4e7f06..35571a0 100644
 -# BR2_STRIP_none is not set
 -# BR2_OPTIMIZE_0 is not set
 -# BR2_OPTIMIZE_1 is not set
--BR2_OPTIMIZE_2=y
+-# BR2_OPTIMIZE_2 is not set
 -# BR2_OPTIMIZE_3 is not set
--# BR2_OPTIMIZE_S is not set
+-BR2_OPTIMIZE_S=y
 -# BR2_PREFER_STATIC_LIB is not set
 -# BR2_HAVE_DOCUMENTATION is not set
 -# BR2_HAVE_DEVFILES is not set
@@ -282,15 +280,23 @@ index b4e7f06..35571a0 100644
 -#
 -# Kernel Header Options
 -#
+-# BR2_KERNEL_HEADERS_2_4_31 is not set
+-# BR2_KERNEL_HEADERS_2_6_20_4 is not set
+-# BR2_KERNEL_HEADERS_2_6_20 is not set
+-# BR2_KERNEL_HEADERS_2_6_21_5 is not set
+-# BR2_KERNEL_HEADERS_2_6_21 is not set
+-# BR2_KERNEL_HEADERS_2_6_22_1 is not set
+-# BR2_KERNEL_HEADERS_2_6_22_10 is not set
+-# BR2_KERNEL_HEADERS_2_6_22 is not set
 -# BR2_KERNEL_HEADERS_2_6_23 is not set
 -# BR2_KERNEL_HEADERS_2_6_24 is not set
 -# BR2_KERNEL_HEADERS_2_6_25 is not set
 -# BR2_KERNEL_HEADERS_2_6_26 is not set
 -# BR2_KERNEL_HEADERS_2_6_27 is not set
 -BR2_KERNEL_HEADERS_2_6_28=y
--# BR2_KERNEL_HEADERS_2_6_29 is not set
 -# BR2_KERNEL_HEADERS_SNAP is not set
--BR2_DEFAULT_KERNEL_HEADERS="2.6.28.9"
+-BR2_KERNEL_HEADERS_PATCH_DIR=y
+-BR2_DEFAULT_KERNEL_HEADERS="2.6.28.2"
 -
 -#
 -# uClibc Options
@@ -302,7 +308,7 @@ index b4e7f06..35571a0 100644
 -BR2_UCLIBC_VERSION_STRING="0.9.30.1"
 -BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.30.config"
 -# BR2_PTHREAD_DEBUG is not set
--BR2_PROGRAM_INVOCATION=y
+-# BR2_PROGRAM_INVOCATION is not set
 -# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
 -
 -#
@@ -318,7 +324,6 @@ index b4e7f06..35571a0 100644
 -# BR2_BINUTILS_VERSION_2_18_50_0_9 is not set
 -BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1=y
 -# BR2_BINUTILS_VERSION_2_19 is not set
--# BR2_BINUTILS_VERSION_2_19_1 is not set
 -BR2_BINUTILS_VERSION="2.18-avr32-1.0.1"
 -BR2_EXTRA_BINUTILS_CONFIG_OPTIONS=""
 -
@@ -335,8 +340,6 @@ index b4e7f06..35571a0 100644
 -# BR2_GCC_VERSION_4_2_4 is not set
 -# BR2_GCC_VERSION_4_3_1 is not set
 -# BR2_GCC_VERSION_4_3_2 is not set
--# BR2_GCC_VERSION_4_3_3 is not set
--# BR2_GCC_VERSION_4_4_X is not set
 -BR2_GCC_SUPPORTS_SYSROOT=y
 -# BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE is not set
 -BR2_GCC_VERSION="4.2.2-avr32-2.1.5"
@@ -373,10 +376,8 @@ index b4e7f06..35571a0 100644
 -BR2_INET_IPV6=y
 -BR2_INET_RPC=y
 -BR2_ENABLE_LOCALE=y
--# BR2_ENABLE_LOCALE_PURGE is not set
 -BR2_USE_WCHAR=y
 -BR2_SOFT_FLOAT=y
--# BR2_USE_SSP is not set
 -# BR2_PTHREADS_NONE is not set
 -# BR2_PTHREADS is not set
 -BR2_PTHREADS_OLD=y
@@ -393,31 +394,27 @@ index b4e7f06..35571a0 100644
 -# Package Selection for the target
 -#
 -BR2_PACKAGE_BUSYBOX=y
+-# BR2_BUSYBOX_VERSION_1_2_2_1 is not set
+-# BR2_BUSYBOX_VERSION_1_6_1 is not set
+-# BR2_BUSYBOX_VERSION_1_7_X is not set
+-# BR2_BUSYBOX_VERSION_1_8_X is not set
+-# BR2_BUSYBOX_VERSION_1_9_X is not set
+-# BR2_BUSYBOX_VERSION_1_10_X is not set
+-# BR2_BUSYBOX_VERSION_1_11_X is not set
 -# BR2_BUSYBOX_VERSION_1_12_X is not set
--# BR2_BUSYBOX_VERSION_1_13_X is not set
--BR2_BUSYBOX_VERSION_1_14_X=y
+-BR2_BUSYBOX_VERSION_1_13_X=y
 -# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
--BR2_BUSYBOX_VERSION="1.14.0"
+-BR2_BUSYBOX_VERSION="1.13.4"
 -BR2_PACKAGE_BUSYBOX_FULLINSTALL=y
--BR2_PACKAGE_BUSYBOX_CONFIG="target/device/Atmel/atstk100x/busybox-1.9.1.config"
--BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.13.x.config"
+-# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
 -
 -#
 -# The minimum needed to build a uClibc development system
 -#
--BR2_PACKAGE_BASH=y
--BR2_PACKAGE_BZIP2=y
--# BR2_PACKAGE_COREUTILS is not set
--# BR2_PACKAGE_DIFFUTILS is not set
--# BR2_PACKAGE_FINDUTILS is not set
 -# BR2_PACKAGE_FLEX is not set
--# BR2_PACKAGE_GAWK is not set
 -# BR2_PACKAGE_GCC_TARGET is not set
--# BR2_PACKAGE_GREP is not set
 -# BR2_PACKAGE_MAKE is not set
--# BR2_PACKAGE_PATCH is not set
--# BR2_PACKAGE_SED is not set
--# BR2_PACKAGE_TAR is not set
 -
 -#
 -# Other development stuff
@@ -438,7 +435,6 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_LIBTOOL is not set
 -# BR2_PACKAGE_M4 is not set
 -# BR2_PACKAGE_OPROFILE is not set
--# BR2_PACKAGE_PKG_CONFIG is not set
 -# BR2_PACKAGE_READLINE is not set
 -# BR2_PACKAGE_PCRE is not set
 -
@@ -449,15 +445,12 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_BEECRYPT is not set
 -# BR2_PACKAGE_BERKELEYDB is not set
 -# BR2_PACKAGE_BSDIFF is not set
--# BR2_PACKAGE_BOOTUTILS is not set
 -# BR2_PACKAGE_CUPS is not set
 -# BR2_PACKAGE_CUSTOMIZE is not set
--# BR2_PACKAGE_DASH is not set
--BR2_PACKAGE_FILE=y
+-# BR2_PACKAGE_FILE is not set
 -# BR2_PACKAGE_GAMIN is not set
 -# BR2_PACKAGE_ICU is not set
 -# BR2_PACKAGE_KEXEC is not set
--# BR2_PACKAGE_LESS is not set
 -# BR2_PACKAGE_LIBCONFIG is not set
 -# BR2_PACKAGE_LIBCONFUSE is not set
 -BR2_PACKAGE_LIBDAEMON=y
@@ -465,7 +458,7 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_LIBEVENT is not set
 -# BR2_PACKAGE_LIBGCRYPT is not set
 -# BR2_PACKAGE_LIBGPG_ERROR is not set
--# BR2_PACKAGE_LIBICONV is not set
+-BR2_PACKAGE_LIBICONV=y
 -# BR2_PACKAGE_LIBIDN is not set
 -# BR2_PACKAGE_LIBLOCKFILE is not set
 -# BR2_PACKAGE_LIBOIL is not set
@@ -476,33 +469,18 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_LTP-TESTSUITE is not set
 -# BR2_PACKAGE_LTRACE is not set
 -# BR2_PACKAGE_MEMSTAT is not set
--# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
 -# BR2_PACKAGE_NG_SPICE_REWORK is not set
 -# BR2_PACKAGE_POPT is not set
--# BR2_PACKAGE_PROCPS is not set
--# BR2_PACKAGE_PSMISC is not set
 -# BR2_PACKAGE_SCREEN is not set
 -# BR2_PACKAGE_STARTUP_NOTIFICATION is not set
 -BR2_PACKAGE_STRACE=y
 -# BR2_PACKAGE_SUDO is not set
--# BR2_PACKAGE_SYSKLOGD is not set
--# BR2_PACKAGE_SYSVINIT is not set
--# BR2_PACKAGE_UTIL-LINUX is not set
--# BR2_PACKAGE_WHICH is not set
 -
 -#
 -# Database
 -#
 -# BR2_PACKAGE_MYSQL_CLIENT is not set
 -# BR2_PACKAGE_SQLITE is not set
--
--#
--# Text editors
--#
--# BR2_PACKAGE_ED is not set
--# BR2_PACKAGE_NANO is not set
--# BR2_PACKAGE_UEMACS is not set
--# BR2_PACKAGE_VIM is not set
 -
 -#
 -# Networking
@@ -516,11 +494,10 @@ index b4e7f06..35571a0 100644
 -BR2_PACKAGE_AVAHI_AUTOIPD=y
 -# BR2_PACKAGE_AVAHI_DAEMON is not set
 -# BR2_PACKAGE_AXEL is not set
--# BR2_PACKAGE_BOA is not set
 -# BR2_PACKAGE_BIND is not set
--# BR2_PACKAGE_BRIDGE is not set
--# BR2_PACKAGE_DHCP is not set
--# BR2_PACKAGE_DNSMASQ is not set
+-BR2_PACKAGE_BRIDGE=y
+-BR2_PACKAGE_DNSMASQ=y
+-BR2_PACKAGE_DNSMASQ_TFTP=y
 -BR2_PACKAGE_DROPBEAR=y
 -# BR2_PACKAGE_ETHTOOL is not set
 -BR2_PACKAGE_HASERL=y
@@ -530,8 +507,11 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_IFPLUGD is not set
 -# BR2_PACKAGE_IPERF is not set
 -# BR2_PACKAGE_IPROUTE2 is not set
--# BR2_PACKAGE_IPSEC_TOOLS is not set
--# BR2_PACKAGE_IPTABLES is not set
+-
+-#
+-# ipsec-tools	- disabled (requires openssl, flex and the flex library (libfl.a) )
+-#
+-BR2_PACKAGE_IPTABLES=y
 -# BR2_PACKAGE_KISMET is not set
 -# BR2_PACKAGE_L2TP is not set
 -# BR2_PACKAGE_LIBCGI is not set
@@ -541,20 +521,11 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_LIBEXOSIP2 is not set
 -# BR2_PACKAGE_LIBOSIP2 is not set
 -# BR2_PACKAGE_LIBPCAP is not set
--# BR2_PACKAGE_LIBSOUP is not set
--# BR2_PACKAGE_LIBUPNP is not set
--BR2_PACKAGE_LIGHTTPD=y
--
--#
--# lighttpd packages
--#
--BR2_PACKAGE_LIGHTTPD_OPENSSL=y
--BR2_PACKAGE_LIGHTTPD_ZLIB=y
--BR2_PACKAGE_LIGHTTPD_BZIP2=y
--# BR2_PACKAGE_LIGHTTPD_PCRE is not set
+-BR2_PACKAGE_LIBUPNP=y
 -# BR2_PACKAGE_LINKS is not set
 -BR2_PACKAGE_LRZSZ=y
 -# BR2_PACKAGE_MDNSRESPONDER is not set
+-BR2_PACKAGE_MICROCOM=y
 -# BR2_PACKAGE_MIIDIAG is not set
 -# BR2_PACKAGE_MROUTED is not set
 -# BR2_PACKAGE_MUTT is not set
@@ -568,9 +539,9 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_NCFTP_PUT is not set
 -# BR2_PACKAGE_NCFTP_LS is not set
 -# BR2_PACKAGE_NCFTP_BATCH is not set
+-# BR2_PACKAGE_NCFTP_SPOOLER is not set
 -# BR2_PACKAGE_NCFTP_BOOKMARKS is not set
 -# BR2_PACKAGE_NEON is not set
--# BR2_PACKAGE_NETCAT is not set
 -# BR2_PACKAGE_NETKITBASE is not set
 -# BR2_PACKAGE_NETKITTELNET is not set
 -# BR2_PACKAGE_NETPLUG is not set
@@ -581,10 +552,9 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_OLSR is not set
 -# BR2_PACKAGE_OPENNTPD is not set
 -# BR2_PACKAGE_OPENSSH is not set
--BR2_PACKAGE_OPENSSL=y
--# BR2_PACKAGE_OPENSSL_BIN is not set
--# BR2_PACKAGE_OPENSSL_ENGINES is not set
+-# BR2_PACKAGE_OPENSSL is not set
 -# BR2_PACKAGE_OPENVPN is not set
+-# BR2_PACKAGE_OPENSWAN is not set
 -BR2_PACKAGE_PORTMAP=y
 -# BR2_PACKAGE_PPPD is not set
 -# BR2_PACKAGE_RADVD is not set
@@ -604,14 +574,46 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_QUAGGA_WATCHQUAGGA is not set
 -# BR2_PACKAGE_QUAGGA_ISISD is not set
 -BR2_PACKAGE_RSYNC=y
--# BR2_PACKAGE_SAMBA is not set
+-BR2_PACKAGE_SAMBA=y
+-
+-#
+-# Samba tools selection
+-#
+-# BR2_PACKAGE_SAMBA_CIFS is not set
+-# BR2_PACKAGE_SAMBA_EVENTLOGADM is not set
+-
+-#
+-# findsmb       - disabled (requires nmblookup, smbclient and perl)
+-#
+-# BR2_PACKAGE_SAMBA_NET is not set
+-BR2_PACKAGE_SAMBA_NMBD=y
+-# BR2_PACKAGE_SAMBA_NMBLOOKUP is not set
+-# BR2_PACKAGE_SAMBA_NTLM_AUTH is not set
+-# BR2_PACKAGE_SAMBA_PDBEDIT is not set
+-# BR2_PACKAGE_SAMBA_PROFILES is not set
+-# BR2_PACKAGE_SAMBA_RPCCLIENT is not set
+-# BR2_PACKAGE_SAMBA_SMBCACLS is not set
+-# BR2_PACKAGE_SAMBA_SMBCLIENT is not set
+-# BR2_PACKAGE_SAMBA_SMBCONTROL is not set
+-# BR2_PACKAGE_SAMBA_SMBCQUOTAS is not set
+-# BR2_PACKAGE_SAMBA_SMBGET is not set
+-BR2_PACKAGE_SAMBA_SMBPASSWD=y
+-# BR2_PACKAGE_SAMBA_SMBSPOOL is not set
+-# BR2_PACKAGE_SAMBA_SMBSTATUS is not set
+-# BR2_PACKAGE_SAMBA_SMBTREE is not set
+-BR2_PACKAGE_SAMBA_SWAT=y
+-
+-#
+-# smbtar        - disabled (requires smbclient)
+-#
+-# BR2_PACKAGE_SAMBA_TDB is not set
+-# BR2_PACKAGE_SAMBA_TESTPARM is not set
+-# BR2_PACKAGE_SAMBA_WINBINDD is not set
 -# BR2_PACKAGE_SOCAT is not set
 -# BR2_PACKAGE_STUNNEL is not set
 -# BR2_PACKAGE_TCPDUMP is not set
 -# BR2_PACKAGE_DHCPDUMP is not set
 -# BR2_PACKAGE_TFTPD is not set
--# BR2_PACKAGE_THTTPD is not set
--# BR2_PACKAGE_TINYHTTPD is not set
 -# BR2_PACKAGE_TN5250 is not set
 -# BR2_PACKAGE_TTCP is not set
 -# BR2_PACKAGE_UDPCAST is not set
@@ -619,9 +621,7 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_VSFTPD is not set
 -# BR2_PACKAGE_VTUN is not set
 -# BR2_PACKAGE_WEBIF is not set
--# BR2_PACKAGE_WGET is not set
 -BR2_PACKAGE_WIRELESS_TOOLS=y
--# BR2_PACKAGE_WPA_SUPPLICANT is not set
 -
 -#
 -# Hardware handling / blockdevices and filesystem maintenance
@@ -629,10 +629,6 @@ index b4e7f06..35571a0 100644
 -
 -#
 -# dbus not available (need expat or libxml2)
--#
--
--#
--# dbus-glib needs dbus to be compiled with expat support
 -#
 -# BR2_PACKAGE_DEVMEM2 is not set
 -# BR2_PACKAGE_DM is not set
@@ -644,8 +640,6 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_LIBFUSE is not set
 -# BR2_PACKAGE_GADGETFS_TEST is not set
 -# BR2_PACKAGE_HAL is not set
--# BR2_PACKAGE_HDPARM is not set
--# BR2_PACKAGE_HOTPLUG is not set
 -# BR2_PACKAGE_HWDATA is not set
 -# BR2_PACKAGE_I2C_TOOLS is not set
 -# BR2_PACKAGE_INPUT_TOOLS is not set
@@ -686,15 +680,10 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
 -# BR2_PACKAGE_MTD_NFTLDUMP is not set
 -# BR2_PACKAGE_MTD_SUMTOOL is not set
--
--#
--# ntfs-3g requires a toolchain with LARGEFILE and WCHAR support
--#
+-# BR2_PACKAGE_NTFS-3G is not set
 -# BR2_PACKAGE_PCIUTILS is not set
 -# BR2_PACKAGE_SETSERIAL is not set
--# BR2_PACKAGE_SFDISK is not set
 -# BR2_PACKAGE_SMARTMONTOOLS is not set
--# BR2_PACKAGE_UDEV is not set
 -# BR2_PACKAGE_USBMOUNT is not set
 -# BR2_PACKAGE_USBUTILS is not set
 -# BR2_PACKAGE_WIPE is not set
@@ -703,47 +692,28 @@ index b4e7f06..35571a0 100644
 -#
 -# Audio and video libraries and applications
 -#
--BR2_PACKAGE_ALSA_LIB=y
--BR2_PACKAGE_ALSA_UTILS=y
--
--#
--# ALSA utils selection
--#
--# BR2_PACKAGE_ALSA_UTILS_ALSACONF is not set
--BR2_PACKAGE_ALSA_UTILS_ALSACTL=y
--BR2_PACKAGE_ALSA_UTILS_ALSAMIXER=y
--# BR2_PACKAGE_ALSA_UTILS_AMIDI is not set
--# BR2_PACKAGE_ALSA_UTILS_AMIXER is not set
--# BR2_PACKAGE_ALSA_UTILS_APLAY is not set
--# BR2_PACKAGE_ALSA_UTILS_ARECORD is not set
--# BR2_PACKAGE_ALSA_UTILS_IECSET is not set
--# BR2_PACKAGE_ALSA_UTILS_ACONNECT is not set
--# BR2_PACKAGE_ALSA_UTILS_APLAYMIDI is not set
--# BR2_PACKAGE_ALSA_UTILS_ARECORDMIDI is not set
--# BR2_PACKAGE_ALSA_UTILS_ASEQDUMP is not set
--# BR2_PACKAGE_ALSA_UTILS_ASEQNET is not set
--# BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST is not set
+-# BR2_PACKAGE_ALSA_LIB is not set
 -
 -#
 -# asterisk	- disabled (required openssl and mpg123)
 -#
 -# BR2_PACKAGE_AUMIX is not set
--# BR2_PACKAGE_FLAC is not set
 -# BR2_PACKAGE_GSTREAMER is not set
 -# BR2_PACKAGE_LIBID3TAG is not set
--BR2_PACKAGE_LIBMAD=y
--# BR2_PACKAGE_LIBMAD_TARGET_HEADERS is not set
+-# BR2_PACKAGE_LIBMAD is not set
 -# BR2_PACKAGE_LIBMPD is not set
 -# BR2_PACKAGE_LIBOGG is not set
 -# BR2_PACKAGE_LIBSNDFILE is not set
 -# BR2_PACKAGE_LIBTHEORA is not set
--# BR2_PACKAGE_LIBVORBIS is not set
+-
+-#
+-# libvorbis requires the package libogg to build
+-#
 -# BR2_PACKAGE_MADPLAY is not set
 -# BR2_PACKAGE_MPG123 is not set
--BR2_PACKAGE_MPLAYER=y
+-# BR2_PACKAGE_MPLAYER is not set
 -# BR2_PACKAGE_SPEEX is not set
 -# BR2_PACKAGE_FESTIVAL is not set
--# BR2_PACKAGE_TAGLIB is not set
 -# BR2_PACKAGE_VLC is not set
 -
 -#
@@ -772,11 +742,11 @@ index b4e7f06..35571a0 100644
 -# BR2_PACKAGE_DIRECTFB is not set
 -# BR2_PACKAGE_FBDUMP is not set
 -# BR2_PACKAGE_IMAGEMAGICK is not set
--BR2_PACKAGE_JPEG=y
+-# BR2_PACKAGE_JPEG is not set
 -# BR2_PACKAGE_LIBART is not set
--BR2_PACKAGE_LIBPNG=y
--BR2_PACKAGE_LIBUNGIF=y
--BR2_PACKAGE_LINUX_FUSION=y
+-# BR2_PACKAGE_LIBPNG is not set
+-# BR2_PACKAGE_LIBUNGIF is not set
+-# BR2_PACKAGE_LINUX_FUSION is not set
 -# BR2_PACKAGE_PIXMAN is not set
 -# BR2_PACKAGE_SDL is not set
 -# BR2_PACKAGE_TIFF is not set
@@ -788,83 +758,13 @@ index b4e7f06..35571a0 100644
 -#
 -# --> May be broken in busybox
 -#
--BR2_PACKAGE_FBV=y
--BR2_PACKAGE_FBSET=y
+-# BR2_PACKAGE_FBV is not set
+-# BR2_PACKAGE_FBSET is not set
 -
 -#
 -# other GUIs
 -#
--BR2_PACKAGE_QT=y
--# BR2_PACKAGE_QT_DEBUG is not set
--BR2_PACKAGE_QT_SHARED=y
--# BR2_PACKAGE_QT_STATIC is not set
--# BR2_PACKAGE_QT_LICENSE_APPROVED is not set
--# BR2_PACKAGE_QT_QT3SUPPORT is not set
--BR2_PACKAGE_QT_GUI_MODULE=y
--
--#
--# Pixel depths
--#
--
--#
--# Deselecting each option leads to Qt's default (8,16,32)
--#
--# BR2_PACKAGE_QT_PIXEL_DEPTH_1 is not set
--# BR2_PACKAGE_QT_PIXEL_DEPTH_4 is not set
--BR2_PACKAGE_QT_PIXEL_DEPTH_8=y
--# BR2_PACKAGE_QT_PIXEL_DEPTH_12 is not set
--# BR2_PACKAGE_QT_PIXEL_DEPTH_15 is not set
--BR2_PACKAGE_QT_PIXEL_DEPTH_16=y
--# BR2_PACKAGE_QT_PIXEL_DEPTH_18 is not set
--# BR2_PACKAGE_QT_PIXEL_DEPTH_24 is not set
--BR2_PACKAGE_QT_PIXEL_DEPTH_32=y
--BR2_PACKAGE_QT_GIF=y
--BR2_PACKAGE_QT_LIBMNG=y
--BR2_PACKAGE_QT_NOJPEG=y
--# BR2_PACKAGE_QT_SYSTEMJPEG is not set
--# BR2_PACKAGE_QT_QTJPEG is not set
--BR2_PACKAGE_QT_NOPNG=y
--# BR2_PACKAGE_QT_SYSTEMPNG is not set
--# BR2_PACKAGE_QT_QTPNG is not set
--BR2_PACKAGE_QT_NOTIFF=y
--# BR2_PACKAGE_QT_SYSTEMTIFF is not set
--# BR2_PACKAGE_QT_QTTIFF is not set
--BR2_PACKAGE_QT_QTZLIB=y
--# BR2_PACKAGE_QT_SYSTEMZLIB is not set
--BR2_PACKAGE_QT_NOFREETYPE=y
--# BR2_PACKAGE_QT_QTFREETYPE is not set
--# BR2_PACKAGE_QT_SYSTEMFREETYPE is not set
--BR2_PACKAGE_QT_EMB_PLATFORM="$(ARCH)"
--# BR2_PACKAGE_QT_SQL_MODULE is not set
--
--#
--# Graphics drivers
--#
--BR2_PACKAGE_QT_GFX_LINUXFB=y
--# BR2_PACKAGE_QT_GFX_TRANSFORMED is not set
--# BR2_PACKAGE_QT_GFX_QVFB is not set
--# BR2_PACKAGE_QT_GFX_VNC is not set
--# BR2_PACKAGE_QT_GFX_MULTISCREEN is not set
--
--#
--# Mouse drivers
--#
--# BR2_PACKAGE_QT_MOUSE_PC is not set
--# BR2_PACKAGE_QT_MOUSE_BUS is not set
--# BR2_PACKAGE_QT_MOUSE_LINUXTP is not set
--# BR2_PACKAGE_QT_MOUSE_YOPY is not set
--# BR2_PACKAGE_QT_MOUSE_VR41XX is not set
--# BR2_PACKAGE_QT_MOUSE_TSLIB is not set
--# BR2_PACKAGE_QT_MOUSE_QVFB is not set
--# BR2_PACKAGE_QT_PHONON is not set
--BR2_PACKAGE_QT_XML=y
--# BR2_PACKAGE_QT_XMLPATTERNS is not set
--# BR2_PACKAGE_QT_SVG is not set
--BR2_PACKAGE_QT_NETWORK=y
--# BR2_PACKAGE_QT_WEBKIT is not set
--# BR2_PACKAGE_QT_OPENSSL is not set
--BR2_PACKAGE_QT_SCRIPT=y
--# BR2_PACKAGE_QT_SCRIPTTOOLS is not set
+-# BR2_PACKAGE_QT is not set
 -BR2_PACKAGE_XSERVER_none=y
 -# BR2_PACKAGE_XSERVER_xorg is not set
 -# BR2_PACKAGE_XSERVER_tinyx is not set
@@ -873,7 +773,6 @@ index b4e7f06..35571a0 100644
 -# X libraries and helper libraries
 -#
 -# BR2_PACKAGE_ATK is not set
--# BR2_PACKAGE_CAIRO is not set
 -# BR2_PACKAGE_PANGO is not set
 -# BR2_PACKAGE_LIBDRM is not set
 -# BR2_PACKAGE_LIBERATION is not set
@@ -914,9 +813,7 @@ index b4e7f06..35571a0 100644
 -#
 -# Compressors / decompressors
 -#
--# BR2_PACKAGE_GZIP is not set
 -BR2_PACKAGE_LZO=y
--# BR2_PACKAGE_LZOP is not set
 -# BR2_PACKAGE_LZMA is not set
 -# BR2_PACKAGE_LZMA_HOST is not set
 -BR2_PACKAGE_ZLIB=y
@@ -927,7 +824,6 @@ index b4e7f06..35571a0 100644
 -#
 -# BR2_PACKAGE_IPKG is not set
 -# BR2_PACKAGE_PORTAGE is not set
--# BR2_PACKAGE_RPM is not set
 -
 -#
 -# Interpreter languages / Scripting
@@ -966,28 +862,34 @@ index b4e7f06..35571a0 100644
 -#
 -# Target filesystem options
 -#
--BR2_ROOTFS_PREFIX="atstk1002-rootfs"
 -
 -#
 -# filesystem for target device
 -#
--BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atstk100x/device_table.txt"
+-BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atstk1005/device_table.txt"
 -BR2_ROOTFS_SKELETON_CUSTOM=y
--BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atstk100x/target_skeleton"
+-BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atstk1005/target_skeleton"
 -# BR2_TARGET_ROOTFS_CRAMFS is not set
 -# BR2_TARGET_ROOTFS_CLOOP is not set
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
--BR2_TARGET_ROOTFS_EXT2_INODES=0
--BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
--BR2_TARGET_ROOTFS_EXT2_SQUASH=y
+-# BR2_TARGET_ROOTFS_EXT2 is not set
+-BR2_TARGET_ROOTFS_JFFS2=y
+-# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056 is not set
+-# BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_528 is not set
+-# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
+-BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
+-# BR2_TARGET_ROOTFS_JFFS2_FLASH_64 is not set
+-# BR2_TARGET_ROOTFS_JFFS2_CUSTOM is not set
+-BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
+-BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x20000
+-BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+-# BR2_JFFS2_TARGET_SREC is not set
+-# BR2_TARGET_ROOTFS_JFFS2_PAD is not set
+-# BR2_TARGET_ROOTFS_JFFS2_LE is not set
+-BR2_TARGET_ROOTFS_JFFS2_BE=y
+-# BR2_TARGET_ROOTFS_JFFS2_SQUASH is not set
+-# BR2_TARGET_ROOTFS_JFFS2_SUMMARY is not set
 -
--# BR2_TARGET_ROOTFS_EXT2_NONE is not set
--# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
--BR2_TARGET_ROOTFS_EXT2_BZIP2=y
--# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
 -
--# BR2_TARGET_ROOTFS_JFFS2 is not set
 -# BR2_TARGET_ROOTFS_UBIFS is not set
 -# BR2_TARGET_ROOTFS_SQUASHFS is not set
 -BR2_TARGET_ROOTFS_TAR=y
@@ -1004,29 +906,26 @@ index b4e7f06..35571a0 100644
 -#
 -# bootloader for target device
 -#
-+# U-Boot
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="atstk1002"
--# BR2_TARGET_UBOOT_2009_03 is not set
--# BR2_TARGET_UBOOT_2009_01 is not set
--BR2_TARGET_UBOOT_2008_10=y
--BR2_UBOOT_VERSION="2008.10"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="atngw100"
+-BR2_TARGET_UBOOT_2009_01=y
+-# BR2_TARGET_UBOOT_2008_10 is not set
+-BR2_UBOOT_VERSION="2009.01"
 -BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
 -# BR2_TARGET_UBOOT_TOOL_MKIMAGE is not set
 -# BR2_TARGET_UBOOT_TOOL_ENV is not set
-+BR2_TARGET_UBOOT_2010_09=y
- 
+-
 -#
- # Kernel
+-# Kernel
 -#
 -# BR2_KERNEL_none is not set
 -BR2_KERNEL_LINUX_ADVANCED=y
 -# BR2_KERNEL_LINUX is not set
 -BR2_PACKAGE_LINUX=y
--BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX26_VERSION).config"
+-BR2_PACKAGE_LINUX_KCONFIG="$(BR2_BOARD_PATH)/$(BR2_BOARD_NAME)-linux-$(BR2_LINUX_VERSION).config"
 -BR2_PACKAGE_LINUX_FORMAT="uImage"
--BR2_KERNEL_CURRENT_VERSION="2.6.28.7"
--BR2_KERNEL_LATEST_2_6_28="7"
+-BR2_KERNEL_CURRENT_VERSION="2.6.28.2"
+-BR2_KERNEL_LATEST_2_6_28="2"
 -BR2_KERNEL_LATEST_2_6_27="13"
 -BR2_KERNEL_LATEST_2_6_26="8"
 -BR2_KERNEL_LATEST_2_6_25="19"
@@ -1078,16 +977,7 @@ index b4e7f06..35571a0 100644
 -BR2_KERNEL_BASE=y
 -BR2_DOWNLOAD_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION)"
 -BR2_LINUX26_VERSION="$(BR2_KERNEL_THIS_VERSION).$(BR2_KERNEL_PATCH_LEVEL)"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.35"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_EXT2 is not set
-+BR2_TARGET_ROOTFS_TAR=y
- 
+-
 -#
 -# Linux Kernel Configuration
 -#
@@ -1099,24 +989,24 @@ index b4e7f06..35571a0 100644
 -# BR2_LINUX_BIN_VMLINUX is not set
 -# BR2_LINUX_BIN_ZIMAGE is not set
 -# BR2_LINUX_BIN_CUSTOM is not set
- 
+-
 -#
 -# Destinations for linux kernel binaries
 -#
 -BR2_LINUX_COPYTO_ROOTFS=y
 -# BR2_LINUX_COPYTO_TFTPBOOT is not set
 -BR2_LINUX_COPYTO=""
--BR2_LINUX_COPY_CONFIGURATION=y
-diff --git a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config b/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
+-# BR2_LINUX_COPY_CONFIGURATION is not set
+diff --git a/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.13.config b/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.13.config
 deleted file mode 100644
-index 7fa05cc..0000000
---- a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.27.13.config
+index a79abc7..0000000
+--- a/target/device/Atmel/atstk1005/atstk1005-linux-2.6.27.13.config
 +++ /dev/null
-@@ -1,1283 +0,0 @@
+@@ -1,1522 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
 -# Linux kernel version: 2.6.27.13
--# Thu Jan 29 21:34:17 2009
+-# Thu Jan 29 21:43:57 2009
 -#
 -CONFIG_AVR32=y
 -CONFIG_GENERIC_GPIO=y
@@ -1244,23 +1134,24 @@ index 7fa05cc..0000000
 -CONFIG_SUBARCH_AVR32B=y
 -CONFIG_MMU=y
 -CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PORTMUX_PIO=y
+-CONFIG_PORTMUX_GPIO_V2=y
+-CONFIG_TIMER_AST=y
 -CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
+-CONFIG_CPU_AT32AP720X=y
+-CONFIG_CPU_AT32AP7200=y
 -CONFIG_BOARD_ATSTK1000=y
 -# CONFIG_BOARD_ATNGW100 is not set
 -# CONFIG_BOARD_FAVR_32 is not set
 -# CONFIG_BOARD_MIMC200 is not set
--CONFIG_BOARD_ATSTK1002=y
+-# CONFIG_BOARD_ATSTK1002 is not set
 -# CONFIG_BOARD_ATSTK1003 is not set
 -# CONFIG_BOARD_ATSTK1004 is not set
--# CONFIG_BOARD_ATSTK1005 is not set
+-CONFIG_BOARD_ATSTK1005=y
 -# CONFIG_BOARD_ATSTK1006 is not set
 -# CONFIG_BOARD_ATSTK100X_CUSTOM is not set
 -# CONFIG_BOARD_ATSTK100X_SPI1 is not set
--# CONFIG_BOARD_ATSTK1000_J2_LED is not set
--# CONFIG_BOARD_ATSTK1000_J2_LED8 is not set
+-CONFIG_BOARD_ATSTK1000_J2_LED=y
+-CONFIG_BOARD_ATSTK1000_J2_LED8=y
 -# CONFIG_BOARD_ATSTK1000_J2_RGB is not set
 -CONFIG_BOARD_ATSTK1000_EXTDAC=y
 -CONFIG_LOADER_U_BOOT=y
@@ -1268,9 +1159,6 @@ index 7fa05cc..0000000
 -#
 -# Atmel AVR32 AP options
 -#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
 -CONFIG_LOAD_ADDRESS=0x10000000
 -CONFIG_ENTRY_ADDRESS=0x90000000
 -CONFIG_PHYS_OFFSET=0x10000000
@@ -1311,7 +1199,11 @@ index 7fa05cc..0000000
 -#
 -# Power management options
 -#
--# CONFIG_PM is not set
+-CONFIG_PM=y
+-# CONFIG_PM_DEBUG is not set
+-CONFIG_PM_SLEEP=y
+-CONFIG_SUSPEND=y
+-CONFIG_SUSPEND_FREEZER=y
 -CONFIG_ARCH_SUSPEND_POSSIBLE=y
 -
 -#
@@ -1521,7 +1413,7 @@ index 7fa05cc..0000000
 -#
 -# Self-contained MTD device drivers
 -#
--CONFIG_MTD_DATAFLASH=m
+-CONFIG_MTD_DATAFLASH=y
 -CONFIG_MTD_M25P80=m
 -CONFIG_M25PXX_USE_FAST_READ=y
 -# CONFIG_MTD_SLRAM is not set
@@ -1535,19 +1427,35 @@ index 7fa05cc..0000000
 -# CONFIG_MTD_DOC2000 is not set
 -# CONFIG_MTD_DOC2001 is not set
 -# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
+-CONFIG_MTD_NAND=y
+-# CONFIG_MTD_NAND_VERIFY_WRITE is not set
+-# CONFIG_MTD_NAND_ECC_SMC is not set
+-# CONFIG_MTD_NAND_MUSEUM_IDS is not set
+-CONFIG_MTD_NAND_IDS=y
+-# CONFIG_MTD_NAND_DISKONCHIP is not set
+-CONFIG_MTD_NAND_ATMEL=y
+-CONFIG_MTD_NAND_ATMEL_ECC_HW=y
+-# CONFIG_MTD_NAND_ATMEL_ECC_SOFT is not set
+-# CONFIG_MTD_NAND_ATMEL_ECC_NONE is not set
+-# CONFIG_MTD_NAND_NANDSIM is not set
+-# CONFIG_MTD_NAND_PLATFORM is not set
+-# CONFIG_MTD_ALAUDA is not set
 -# CONFIG_MTD_ONENAND is not set
 -
 -#
 -# UBI - Unsorted block images
 -#
 -# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
+-CONFIG_PARPORT=y
+-# CONFIG_PARPORT_GSC is not set
+-# CONFIG_PARPORT_AX88796 is not set
+-# CONFIG_PARPORT_1284 is not set
 -CONFIG_BLK_DEV=y
 -# CONFIG_BLK_DEV_COW_COMMON is not set
 -CONFIG_BLK_DEV_LOOP=m
 -# CONFIG_BLK_DEV_CRYPTOLOOP is not set
 -CONFIG_BLK_DEV_NBD=m
+-CONFIG_BLK_DEV_UB=y
 -CONFIG_BLK_DEV_RAM=m
 -CONFIG_BLK_DEV_RAM_COUNT=16
 -CONFIG_BLK_DEV_RAM_SIZE=4096
@@ -1556,7 +1464,9 @@ index 7fa05cc..0000000
 -# CONFIG_ATA_OVER_ETH is not set
 -CONFIG_MISC_DEVICES=y
 -# CONFIG_ATMEL_PWM is not set
--# CONFIG_ATMEL_TCLIB is not set
+-CONFIG_ATMEL_TCLIB=y
+-CONFIG_ATMEL_TCB_CLKSRC=y
+-CONFIG_ATMEL_TCB_CLKSRC_BLOCK=0
 -# CONFIG_EEPROM_93CX6 is not set
 -CONFIG_ATMEL_SSC=m
 -# CONFIG_ENCLOSURE_SERVICES is not set
@@ -1604,8 +1514,11 @@ index 7fa05cc..0000000
 -# CONFIG_SCSI_DH is not set
 -CONFIG_ATA=m
 -# CONFIG_ATA_NONSTANDARD is not set
--# CONFIG_SATA_PMP is not set
--# CONFIG_ATA_SFF is not set
+-CONFIG_SATA_PMP=y
+-CONFIG_ATA_SFF=y
+-# CONFIG_SATA_MV is not set
+-CONFIG_PATA_AT32=m
+-# CONFIG_PATA_PLATFORM is not set
 -# CONFIG_MD is not set
 -CONFIG_NETDEVICES=y
 -# CONFIG_DUMMY is not set
@@ -1632,7 +1545,7 @@ index 7fa05cc..0000000
 -# CONFIG_FIXED_PHY is not set
 -# CONFIG_MDIO_BITBANG is not set
 -CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
+-CONFIG_MII=y
 -CONFIG_MACB=y
 -# CONFIG_ENC28J60 is not set
 -# CONFIG_IBM_NEW_EMAC_ZMII is not set
@@ -1640,6 +1553,7 @@ index 7fa05cc..0000000
 -# CONFIG_IBM_NEW_EMAC_TAH is not set
 -# CONFIG_IBM_NEW_EMAC_EMAC4 is not set
 -# CONFIG_B44 is not set
+-# CONFIG_NET_POCKET is not set
 -# CONFIG_NETDEV_1000 is not set
 -# CONFIG_NETDEV_10000 is not set
 -
@@ -1649,7 +1563,33 @@ index 7fa05cc..0000000
 -# CONFIG_WLAN_PRE80211 is not set
 -# CONFIG_WLAN_80211 is not set
 -# CONFIG_IWLWIFI_LEDS is not set
+-
+-#
+-# USB Network Adapters
+-#
+-# CONFIG_USB_CATC is not set
+-CONFIG_USB_KAWETH=y
+-# CONFIG_USB_PEGASUS is not set
+-# CONFIG_USB_RTL8150 is not set
+-CONFIG_USB_USBNET=y
+-CONFIG_USB_NET_AX8817X=y
+-CONFIG_USB_NET_CDCETHER=y
+-# CONFIG_USB_NET_DM9601 is not set
+-# CONFIG_USB_NET_GL620A is not set
+-CONFIG_USB_NET_NET1080=y
+-# CONFIG_USB_NET_PLUSB is not set
+-# CONFIG_USB_NET_MCS7830 is not set
+-# CONFIG_USB_NET_RNDIS_HOST is not set
+-CONFIG_USB_NET_CDC_SUBSET=y
+-# CONFIG_USB_ALI_M5632 is not set
+-# CONFIG_USB_AN2720 is not set
+-CONFIG_USB_BELKIN=y
+-CONFIG_USB_ARMLINUX=y
+-# CONFIG_USB_EPSON2888 is not set
+-# CONFIG_USB_KC2190 is not set
+-CONFIG_USB_NET_ZAURUS=y
 -# CONFIG_WAN is not set
+-# CONFIG_PLIP is not set
 -CONFIG_PPP=m
 -# CONFIG_PPP_MULTILINK is not set
 -# CONFIG_PPP_FILTER is not set
@@ -1738,6 +1678,8 @@ index 7fa05cc..0000000
 -CONFIG_SERIAL_CORE_CONSOLE=y
 -CONFIG_UNIX98_PTYS=y
 -# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_PRINTER is not set
+-# CONFIG_PPDEV is not set
 -# CONFIG_IPMI_HANDLER is not set
 -# CONFIG_HW_RANDOM is not set
 -# CONFIG_R3964 is not set
@@ -1763,8 +1705,10 @@ index 7fa05cc..0000000
 -#
 -# External I2C/SMBus adapter drivers
 -#
+-# CONFIG_I2C_PARPORT is not set
 -# CONFIG_I2C_PARPORT_LIGHT is not set
 -# CONFIG_I2C_TAOS_EVM is not set
+-# CONFIG_I2C_TINY_USB is not set
 -
 -#
 -# Other I2C/SMBus bus drivers
@@ -1776,7 +1720,7 @@ index 7fa05cc..0000000
 -# Miscellaneous I2C Chip support
 -#
 -# CONFIG_DS1682 is not set
--CONFIG_AT24=m
+-# CONFIG_AT24 is not set
 -# CONFIG_SENSORS_EEPROM is not set
 -# CONFIG_SENSORS_PCF8574 is not set
 -# CONFIG_PCF8575 is not set
@@ -1796,9 +1740,10 @@ index 7fa05cc..0000000
 -#
 -# SPI Master Controller Drivers
 -#
--CONFIG_SPI_ATMEL_HAVE_PDC=y
 -CONFIG_SPI_ATMEL=y
 -# CONFIG_SPI_BITBANG is not set
+-# CONFIG_SPI_BUTTERFLY is not set
+-# CONFIG_SPI_LM70_LLP is not set
 -
 -#
 -# SPI Protocol Masters
@@ -1840,6 +1785,11 @@ index 7fa05cc..0000000
 -#
 -# CONFIG_SOFT_WATCHDOG is not set
 -# CONFIG_AT32_WDT is not set
+-
+-#
+-# USB-based Watchdog Cards
+-#
+-# CONFIG_USBPCWATCHDOG is not set
 -
 -#
 -# Sonics Silicon Backplane
@@ -1899,7 +1849,7 @@ index 7fa05cc..0000000
 -#
 -# CONFIG_FB_S1D13XXX is not set
 -CONFIG_FB_ATMEL=y
--# CONFIG_FB_ATMEL_MPOP is not set
+-CONFIG_FB_ATMEL_MPOP=y
 -# CONFIG_FB_VIRTUAL is not set
 -CONFIG_BACKLIGHT_LCD_SUPPORT=y
 -CONFIG_LCD_CLASS_DEVICE=y
@@ -1913,11 +1863,16 @@ index 7fa05cc..0000000
 -# Display device support
 -#
 -# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_LOGO is not set
+-CONFIG_LOGO=y
+-CONFIG_LOGO_LINUX_MONO=y
+-CONFIG_LOGO_LINUX_VGA16=y
+-CONFIG_LOGO_LINUX_CLUT224=y
 -CONFIG_SOUND=m
 -CONFIG_SND=m
 -CONFIG_SND_TIMER=m
 -CONFIG_SND_PCM=m
+-CONFIG_SND_HWDEP=m
+-CONFIG_SND_RAWMIDI=m
 -# CONFIG_SND_SEQUENCER is not set
 -CONFIG_SND_OSSEMUL=y
 -CONFIG_SND_MIXER_OSS=m
@@ -1931,27 +1886,184 @@ index 7fa05cc..0000000
 -CONFIG_SND_DRIVERS=y
 -# CONFIG_SND_DUMMY is not set
 -# CONFIG_SND_MTPAV is not set
+-# CONFIG_SND_MTS64 is not set
 -# CONFIG_SND_SERIAL_U16550 is not set
 -# CONFIG_SND_MPU401 is not set
+-# CONFIG_SND_PORTMAN2X4 is not set
 -CONFIG_SND_SPI=y
 -CONFIG_SND_AT73C213=m
 -CONFIG_SND_AT73C213_TARGET_BITRATE=48000
--# CONFIG_SND_SOC is not set
+-CONFIG_SND_USB=y
+-CONFIG_SND_USB_AUDIO=m
+-# CONFIG_SND_USB_CAIAQ is not set
+-CONFIG_SND_SOC=m
+-CONFIG_SND_AT32_SOC=m
 -# CONFIG_SOUND_PRIME is not set
--# CONFIG_HID_SUPPORT is not set
+-CONFIG_HID_SUPPORT=y
+-CONFIG_HID=m
+-# CONFIG_HID_DEBUG is not set
+-# CONFIG_HIDRAW is not set
+-
+-#
+-# USB Input Devices
+-#
+-CONFIG_USB_HID=m
+-# CONFIG_USB_HIDINPUT_POWERBOOK is not set
+-# CONFIG_HID_FF is not set
+-# CONFIG_USB_HIDDEV is not set
+-
+-#
+-# USB HID Boot Protocol drivers
+-#
+-# CONFIG_USB_KBD is not set
+-# CONFIG_USB_MOUSE is not set
 -CONFIG_USB_SUPPORT=y
 -CONFIG_USB_ARCH_HAS_HCD=y
 -CONFIG_USB_ARCH_HAS_OHCI=y
 -CONFIG_USB_ARCH_HAS_EHCI=y
--# CONFIG_USB is not set
+-CONFIG_USB=y
+-# CONFIG_USB_DEBUG is not set
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-
+-#
+-# Miscellaneous USB options
+-#
+-CONFIG_USB_DEVICEFS=y
+-CONFIG_USB_DEVICE_CLASS=y
+-CONFIG_USB_DYNAMIC_MINORS=y
+-# CONFIG_USB_SUSPEND is not set
+-# CONFIG_USB_OTG is not set
 -# CONFIG_USB_OTG_WHITELIST is not set
--CONFIG_USB_OTG_BLACKLIST_HUB=y
+-# CONFIG_USB_OTG_BLACKLIST_HUB is not set
+-CONFIG_USB_MON=y
+-
+-#
+-# USB Host Controller Drivers
+-#
+-# CONFIG_USB_C67X00_HCD is not set
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_ROOT_HUB_TT=y
+-# CONFIG_USB_EHCI_TT_NEWSCHED is not set
+-CONFIG_USB_EHCI_BIG_ENDIAN_MMIO=y
+-CONFIG_USB_EHCI_BIG_ENDIAN_DESC=y
+-# CONFIG_USB_ISP116X_HCD is not set
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_OHCI_BIG_ENDIAN_DESC=y
+-CONFIG_USB_OHCI_BIG_ENDIAN_MMIO=y
+-# CONFIG_USB_OHCI_LITTLE_ENDIAN is not set
+-# CONFIG_USB_SL811_HCD is not set
+-# CONFIG_USB_R8A66597_HCD is not set
 -# CONFIG_USB_MUSB_HDRC is not set
 -# CONFIG_USB_GADGET_MUSB_HDRC is not set
 -
 -#
+-# USB Device Class drivers
+-#
+-CONFIG_USB_ACM=y
+-CONFIG_USB_PRINTER=y
+-CONFIG_USB_WDM=y
+-
+-#
 -# NOTE: USB_STORAGE enables SCSI, and 'SCSI disk support'
 -#
+-
+-#
+-# may also be needed; see USB_STORAGE Help for more information
+-#
+-CONFIG_USB_STORAGE=m
+-# CONFIG_USB_STORAGE_DEBUG is not set
+-# CONFIG_USB_STORAGE_DATAFAB is not set
+-# CONFIG_USB_STORAGE_FREECOM is not set
+-# CONFIG_USB_STORAGE_ISD200 is not set
+-# CONFIG_USB_STORAGE_DPCM is not set
+-# CONFIG_USB_STORAGE_USBAT is not set
+-# CONFIG_USB_STORAGE_SDDR09 is not set
+-# CONFIG_USB_STORAGE_SDDR55 is not set
+-# CONFIG_USB_STORAGE_JUMPSHOT is not set
+-# CONFIG_USB_STORAGE_ALAUDA is not set
+-# CONFIG_USB_STORAGE_ONETOUCH is not set
+-# CONFIG_USB_STORAGE_KARMA is not set
+-# CONFIG_USB_STORAGE_CYPRESS_ATACB is not set
+-CONFIG_USB_LIBUSUAL=y
+-
+-#
+-# USB Imaging devices
+-#
+-# CONFIG_USB_MDC800 is not set
+-# CONFIG_USB_MICROTEK is not set
+-
+-#
+-# USB port drivers
+-#
+-# CONFIG_USB_USS720 is not set
+-CONFIG_USB_SERIAL=y
+-CONFIG_USB_SERIAL_CONSOLE=y
+-# CONFIG_USB_EZUSB is not set
+-CONFIG_USB_SERIAL_GENERIC=y
+-# CONFIG_USB_SERIAL_AIRCABLE is not set
+-# CONFIG_USB_SERIAL_ARK3116 is not set
+-# CONFIG_USB_SERIAL_BELKIN is not set
+-# CONFIG_USB_SERIAL_CH341 is not set
+-# CONFIG_USB_SERIAL_WHITEHEAT is not set
+-# CONFIG_USB_SERIAL_DIGI_ACCELEPORT is not set
+-# CONFIG_USB_SERIAL_CP2101 is not set
+-# CONFIG_USB_SERIAL_CYPRESS_M8 is not set
+-# CONFIG_USB_SERIAL_EMPEG is not set
+-# CONFIG_USB_SERIAL_FTDI_SIO is not set
+-# CONFIG_USB_SERIAL_FUNSOFT is not set
+-# CONFIG_USB_SERIAL_VISOR is not set
+-# CONFIG_USB_SERIAL_IPAQ is not set
+-# CONFIG_USB_SERIAL_IR is not set
+-# CONFIG_USB_SERIAL_EDGEPORT is not set
+-# CONFIG_USB_SERIAL_EDGEPORT_TI is not set
+-# CONFIG_USB_SERIAL_GARMIN is not set
+-# CONFIG_USB_SERIAL_IPW is not set
+-# CONFIG_USB_SERIAL_IUU is not set
+-# CONFIG_USB_SERIAL_KEYSPAN_PDA is not set
+-# CONFIG_USB_SERIAL_KEYSPAN is not set
+-# CONFIG_USB_SERIAL_KLSI is not set
+-# CONFIG_USB_SERIAL_KOBIL_SCT is not set
+-# CONFIG_USB_SERIAL_MCT_U232 is not set
+-# CONFIG_USB_SERIAL_MOS7720 is not set
+-# CONFIG_USB_SERIAL_MOS7840 is not set
+-# CONFIG_USB_SERIAL_MOTOROLA is not set
+-# CONFIG_USB_SERIAL_NAVMAN is not set
+-# CONFIG_USB_SERIAL_PL2303 is not set
+-# CONFIG_USB_SERIAL_OTI6858 is not set
+-# CONFIG_USB_SERIAL_SPCP8X5 is not set
+-# CONFIG_USB_SERIAL_HP4X is not set
+-# CONFIG_USB_SERIAL_SAFE is not set
+-# CONFIG_USB_SERIAL_SIERRAWIRELESS is not set
+-# CONFIG_USB_SERIAL_TI is not set
+-# CONFIG_USB_SERIAL_CYBERJACK is not set
+-# CONFIG_USB_SERIAL_XIRCOM is not set
+-# CONFIG_USB_SERIAL_OPTION is not set
+-# CONFIG_USB_SERIAL_OMNINET is not set
+-# CONFIG_USB_SERIAL_DEBUG is not set
+-
+-#
+-# USB Miscellaneous drivers
+-#
+-# CONFIG_USB_EMI62 is not set
+-# CONFIG_USB_EMI26 is not set
+-# CONFIG_USB_ADUTUX is not set
+-# CONFIG_USB_RIO500 is not set
+-# CONFIG_USB_LEGOTOWER is not set
+-CONFIG_USB_LCD=y
+-# CONFIG_USB_BERRY_CHARGE is not set
+-# CONFIG_USB_LED is not set
+-# CONFIG_USB_CYPRESS_CY7C63 is not set
+-# CONFIG_USB_CYTHERM is not set
+-# CONFIG_USB_PHIDGET is not set
+-# CONFIG_USB_IDMOUSE is not set
+-# CONFIG_USB_FTDI_ELAN is not set
+-# CONFIG_USB_APPLEDISPLAY is not set
+-CONFIG_USB_SISUSBVGA=y
+-CONFIG_USB_LD=y
+-# CONFIG_USB_TRANCEVIBRATOR is not set
+-# CONFIG_USB_IOWARRIOR is not set
+-# CONFIG_USB_TEST is not set
+-# CONFIG_USB_ISIGHTFW is not set
 -CONFIG_USB_GADGET=y
 -# CONFIG_USB_GADGET_DEBUG is not set
 -# CONFIG_USB_GADGET_DEBUG_FILES is not set
@@ -1997,7 +2109,7 @@ index 7fa05cc..0000000
 -#
 -# MMC/SD Host Controller Drivers
 -#
--CONFIG_MMC_SDHCI=y
+-# CONFIG_MMC_SDHCI is not set
 -CONFIG_MMC_ATMELMCI=y
 -# CONFIG_MMC_ATMELMCI_DMA is not set
 -CONFIG_MMC_SPI=m
@@ -2018,7 +2130,7 @@ index 7fa05cc..0000000
 -CONFIG_LEDS_TRIGGERS=y
 -CONFIG_LEDS_TRIGGER_TIMER=m
 -CONFIG_LEDS_TRIGGER_HEARTBEAT=m
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
+-# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
 -# CONFIG_ACCESSIBILITY is not set
 -CONFIG_RTC_LIB=y
 -CONFIG_RTC_CLASS=y
@@ -2082,7 +2194,7 @@ index 7fa05cc..0000000
 -# DMA Devices
 -#
 -CONFIG_ATMEL_PDCA=y
--CONFIG_DW_DMAC=y
+-# CONFIG_DW_DMAC is not set
 -CONFIG_DMA_ENGINE=y
 -
 -#
@@ -2090,6 +2202,7 @@ index 7fa05cc..0000000
 -#
 -# CONFIG_NET_DMA is not set
 -# CONFIG_DMATEST is not set
+-# CONFIG_AUXDISPLAY is not set
 -# CONFIG_UIO is not set
 -
 -#
@@ -2125,9 +2238,9 @@ index 7fa05cc..0000000
 -#
 -# DOS/FAT/NT Filesystems
 -#
--CONFIG_FAT_FS=m
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
+-CONFIG_FAT_FS=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
 -CONFIG_FAT_DEFAULT_CODEPAGE=437
 -CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
 -# CONFIG_NTFS_FS is not set
@@ -2195,11 +2308,27 @@ index 7fa05cc..0000000
 -#
 -# Partition Types
 -#
--# CONFIG_PARTITION_ADVANCED is not set
+-CONFIG_PARTITION_ADVANCED=y
+-# CONFIG_ACORN_PARTITION is not set
+-# CONFIG_OSF_PARTITION is not set
+-# CONFIG_AMIGA_PARTITION is not set
+-# CONFIG_ATARI_PARTITION is not set
+-# CONFIG_MAC_PARTITION is not set
 -CONFIG_MSDOS_PARTITION=y
--CONFIG_NLS=m
+-# CONFIG_BSD_DISKLABEL is not set
+-# CONFIG_MINIX_SUBPARTITION is not set
+-# CONFIG_SOLARIS_X86_PARTITION is not set
+-# CONFIG_UNIXWARE_DISKLABEL is not set
+-# CONFIG_LDM_PARTITION is not set
+-# CONFIG_SGI_PARTITION is not set
+-# CONFIG_ULTRIX_PARTITION is not set
+-# CONFIG_SUN_PARTITION is not set
+-# CONFIG_KARMA_PARTITION is not set
+-# CONFIG_EFI_PARTITION is not set
+-# CONFIG_SYSV68_PARTITION is not set
+-CONFIG_NLS=y
 -CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=m
+-CONFIG_NLS_CODEPAGE_437=y
 -# CONFIG_NLS_CODEPAGE_737 is not set
 -# CONFIG_NLS_CODEPAGE_775 is not set
 -# CONFIG_NLS_CODEPAGE_850 is not set
@@ -2233,7 +2362,7 @@ index 7fa05cc..0000000
 -# CONFIG_NLS_ISO8859_9 is not set
 -# CONFIG_NLS_ISO8859_13 is not set
 -# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
+-CONFIG_NLS_ISO8859_15=y
 -# CONFIG_NLS_KOI8_R is not set
 -# CONFIG_NLS_KOI8_U is not set
 -CONFIG_NLS_UTF8=m
@@ -2383,7 +2512,7 @@ index 7fa05cc..0000000
 -# CONFIG_GENERIC_FIND_FIRST_BIT is not set
 -# CONFIG_GENERIC_FIND_NEXT_BIT is not set
 -CONFIG_CRC_CCITT=m
--# CONFIG_CRC16 is not set
+-CONFIG_CRC16=m
 -# CONFIG_CRC_T10DIF is not set
 -CONFIG_CRC_ITU_T=m
 -CONFIG_CRC32=y
@@ -2396,16 +2525,16 @@ index 7fa05cc..0000000
 -CONFIG_HAS_IOMEM=y
 -CONFIG_HAS_IOPORT=y
 -CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config b/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
+diff --git a/target/device/Atmel/atstk1005/atstk1005-linux-2.6.28.2.config b/target/device/Atmel/atstk1005/atstk1005-linux-2.6.28.2.config
 deleted file mode 100644
-index 1a2306c..0000000
---- a/target/device/Atmel/atstk100x/atstk100x-linux-2.6.28.2.config
+index 10ed7e6..0000000
+--- a/target/device/Atmel/atstk1005/atstk1005-linux-2.6.28.2.config
 +++ /dev/null
-@@ -1,1332 +0,0 @@
+@@ -1,1602 +0,0 @@
 -#
 -# Automatically generated make config: don't edit
 -# Linux kernel version: 2.6.28.2
--# Thu Jan 29 21:32:22 2009
+-# Thu Jan 29 21:40:53 2009
 -#
 -CONFIG_AVR32=y
 -CONFIG_GENERIC_GPIO=y
@@ -2516,7 +2645,7 @@ index 1a2306c..0000000
 -# CONFIG_DEFAULT_NOOP is not set
 -CONFIG_DEFAULT_IOSCHED="cfq"
 -CONFIG_CLASSIC_RCU=y
--# CONFIG_FREEZER is not set
+-CONFIG_FREEZER=y
 -
 -#
 -# System Type and features
@@ -2527,23 +2656,24 @@ index 1a2306c..0000000
 -CONFIG_SUBARCH_AVR32B=y
 -CONFIG_MMU=y
 -CONFIG_PERFORMANCE_COUNTERS=y
--CONFIG_PORTMUX_PIO=y
+-CONFIG_PORTMUX_GPIO_V2=y
+-CONFIG_TIMER_AST=y
 -CONFIG_PLATFORM_AT32AP=y
--CONFIG_CPU_AT32AP700X=y
--CONFIG_CPU_AT32AP7000=y
+-CONFIG_CPU_AT32AP720X=y
+-CONFIG_CPU_AT32AP7200=y
 -CONFIG_BOARD_ATSTK1000=y
 -# CONFIG_BOARD_ATNGW100 is not set
 -# CONFIG_BOARD_FAVR_32 is not set
 -# CONFIG_BOARD_MIMC200 is not set
--CONFIG_BOARD_ATSTK1002=y
+-# CONFIG_BOARD_ATSTK1002 is not set
 -# CONFIG_BOARD_ATSTK1003 is not set
 -# CONFIG_BOARD_ATSTK1004 is not set
--# CONFIG_BOARD_ATSTK1005 is not set
+-CONFIG_BOARD_ATSTK1005=y
 -# CONFIG_BOARD_ATSTK1006 is not set
 -# CONFIG_BOARD_ATSTK100X_CUSTOM is not set
 -# CONFIG_BOARD_ATSTK100X_SPI1 is not set
--# CONFIG_BOARD_ATSTK1000_J2_LED is not set
--# CONFIG_BOARD_ATSTK1000_J2_LED8 is not set
+-CONFIG_BOARD_ATSTK1000_J2_LED=y
+-CONFIG_BOARD_ATSTK1000_J2_LED8=y
 -# CONFIG_BOARD_ATSTK1000_J2_RGB is not set
 -CONFIG_BOARD_ATSTK1000_EXTDAC=y
 -CONFIG_LOADER_U_BOOT=y
@@ -2551,9 +2681,6 @@ index 1a2306c..0000000
 -#
 -# Atmel AVR32 AP options
 -#
--# CONFIG_AP700X_32_BIT_SMC is not set
--CONFIG_AP700X_16_BIT_SMC=y
--# CONFIG_AP700X_8_BIT_SMC is not set
 -CONFIG_LOAD_ADDRESS=0x10000000
 -CONFIG_ENTRY_ADDRESS=0x90000000
 -CONFIG_PHYS_OFFSET=0x10000000
@@ -2594,7 +2721,11 @@ index 1a2306c..0000000
 -#
 -# Power management options
 -#
--# CONFIG_PM is not set
+-CONFIG_PM=y
+-# CONFIG_PM_DEBUG is not set
+-CONFIG_PM_SLEEP=y
+-CONFIG_SUSPEND=y
+-CONFIG_SUSPEND_FREEZER=y
 -CONFIG_ARCH_SUSPEND_POSSIBLE=y
 -
 -#
@@ -2806,7 +2937,7 @@ index 1a2306c..0000000
 -#
 -# Self-contained MTD device drivers
 -#
--CONFIG_MTD_DATAFLASH=m
+-CONFIG_MTD_DATAFLASH=y
 -# CONFIG_MTD_DATAFLASH_WRITE_VERIFY is not set
 -# CONFIG_MTD_DATAFLASH_OTP is not set
 -CONFIG_MTD_M25P80=m
@@ -2822,19 +2953,35 @@ index 1a2306c..0000000
 -# CONFIG_MTD_DOC2000 is not set
 -# CONFIG_MTD_DOC2001 is not set
 -# CONFIG_MTD_DOC2001PLUS is not set
--# CONFIG_MTD_NAND is not set
+-CONFIG_MTD_NAND=y
+-# CONFIG_MTD_NAND_VERIFY_WRITE is not set
+-# CONFIG_MTD_NAND_ECC_SMC is not set
+-# CONFIG_MTD_NAND_MUSEUM_IDS is not set
+-CONFIG_MTD_NAND_IDS=y
+-# CONFIG_MTD_NAND_DISKONCHIP is not set
+-CONFIG_MTD_NAND_ATMEL=y
+-CONFIG_MTD_NAND_ATMEL_ECC_HW=y
+-# CONFIG_MTD_NAND_ATMEL_ECC_SOFT is not set
+-# CONFIG_MTD_NAND_ATMEL_ECC_NONE is not set
+-# CONFIG_MTD_NAND_NANDSIM is not set
+-# CONFIG_MTD_NAND_PLATFORM is not set
+-# CONFIG_MTD_ALAUDA is not set
 -# CONFIG_MTD_ONENAND is not set
 -
 -#
 -# UBI - Unsorted block images
 -#
 -# CONFIG_MTD_UBI is not set
--# CONFIG_PARPORT is not set
+-CONFIG_PARPORT=y
+-# CONFIG_PARPORT_GSC is not set
+-# CONFIG_PARPORT_AX88796 is not set
+-# CONFIG_PARPORT_1284 is not set
 -CONFIG_BLK_DEV=y
 -# CONFIG_BLK_DEV_COW_COMMON is not set
 -CONFIG_BLK_DEV_LOOP=m
 -# CONFIG_BLK_DEV_CRYPTOLOOP is not set
 -CONFIG_BLK_DEV_NBD=m
+-CONFIG_BLK_DEV_UB=y
 -CONFIG_BLK_DEV_RAM=m
 -CONFIG_BLK_DEV_RAM_COUNT=16
 -CONFIG_BLK_DEV_RAM_SIZE=4096
@@ -2843,7 +2990,9 @@ index 1a2306c..0000000
 -# CONFIG_ATA_OVER_ETH is not set
 -CONFIG_MISC_DEVICES=y
 -# CONFIG_ATMEL_PWM is not set
--# CONFIG_ATMEL_TCLIB is not set
+-CONFIG_ATMEL_TCLIB=y
+-CONFIG_ATMEL_TCB_CLKSRC=y
+-CONFIG_ATMEL_TCB_CLKSRC_BLOCK=0
 -# CONFIG_EEPROM_93CX6 is not set
 -# CONFIG_ICS932S401 is not set
 -CONFIG_ATMEL_SSC=m
@@ -2892,8 +3041,11 @@ index 1a2306c..0000000
 -# CONFIG_SCSI_DH is not set
 -CONFIG_ATA=m
 -# CONFIG_ATA_NONSTANDARD is not set
--# CONFIG_SATA_PMP is not set
--# CONFIG_ATA_SFF is not set
+-CONFIG_SATA_PMP=y
+-CONFIG_ATA_SFF=y
+-# CONFIG_SATA_MV is not set
+-CONFIG_PATA_AT32=m
+-# CONFIG_PATA_PLATFORM is not set
 -# CONFIG_MD is not set
 -CONFIG_NETDEVICES=y
 -# CONFIG_DUMMY is not set
@@ -2920,7 +3072,7 @@ index 1a2306c..0000000
 -# CONFIG_FIXED_PHY is not set
 -# CONFIG_MDIO_BITBANG is not set
 -CONFIG_NET_ETHERNET=y
--# CONFIG_MII is not set
+-CONFIG_MII=y
 -CONFIG_MACB=y
 -# CONFIG_ENC28J60 is not set
 -# CONFIG_IBM_NEW_EMAC_ZMII is not set
@@ -2931,6 +3083,7 @@ index 1a2306c..0000000
 -# CONFIG_IBM_NEW_EMAC_MAL_CLR_ICINTSTAT is not set
 -# CONFIG_IBM_NEW_EMAC_MAL_COMMON_ERR is not set
 -# CONFIG_B44 is not set
+-# CONFIG_NET_POCKET is not set
 -# CONFIG_NETDEV_1000 is not set
 -# CONFIG_NETDEV_10000 is not set
 -
@@ -2940,7 +3093,34 @@ index 1a2306c..0000000
 -# CONFIG_WLAN_PRE80211 is not set
 -# CONFIG_WLAN_80211 is not set
 -# CONFIG_IWLWIFI_LEDS is not set
+-
+-#
+-# USB Network Adapters
+-#
+-# CONFIG_USB_CATC is not set
+-CONFIG_USB_KAWETH=y
+-# CONFIG_USB_PEGASUS is not set
+-# CONFIG_USB_RTL8150 is not set
+-CONFIG_USB_USBNET=y
+-CONFIG_USB_NET_AX8817X=y
+-CONFIG_USB_NET_CDCETHER=y
+-# CONFIG_USB_NET_DM9601 is not set
+-# CONFIG_USB_NET_SMSC95XX is not set
+-# CONFIG_USB_NET_GL620A is not set
+-CONFIG_USB_NET_NET1080=y
+-# CONFIG_USB_NET_PLUSB is not set
+-# CONFIG_USB_NET_MCS7830 is not set
+-# CONFIG_USB_NET_RNDIS_HOST is not set
+-CONFIG_USB_NET_CDC_SUBSET=y
+-# CONFIG_USB_ALI_M5632 is not set
+-# CONFIG_USB_AN2720 is not set
+-CONFIG_USB_BELKIN=y
+-CONFIG_USB_ARMLINUX=y
+-# CONFIG_USB_EPSON2888 is not set
+-# CONFIG_USB_KC2190 is not set
+-CONFIG_USB_NET_ZAURUS=y
 -# CONFIG_WAN is not set
+-# CONFIG_PLIP is not set
 -CONFIG_PPP=m
 -# CONFIG_PPP_MULTILINK is not set
 -# CONFIG_PPP_FILTER is not set
@@ -3029,6 +3209,8 @@ index 1a2306c..0000000
 -CONFIG_SERIAL_CORE_CONSOLE=y
 -CONFIG_UNIX98_PTYS=y
 -# CONFIG_LEGACY_PTYS is not set
+-# CONFIG_PRINTER is not set
+-# CONFIG_PPDEV is not set
 -# CONFIG_IPMI_HANDLER is not set
 -# CONFIG_HW_RANDOM is not set
 -# CONFIG_R3964 is not set
@@ -3054,8 +3236,10 @@ index 1a2306c..0000000
 -#
 -# External I2C/SMBus adapter drivers
 -#
+-# CONFIG_I2C_PARPORT is not set
 -# CONFIG_I2C_PARPORT_LIGHT is not set
 -# CONFIG_I2C_TAOS_EVM is not set
+-# CONFIG_I2C_TINY_USB is not set
 -
 -#
 -# Other I2C/SMBus bus drivers
@@ -3067,7 +3251,7 @@ index 1a2306c..0000000
 -# Miscellaneous I2C Chip support
 -#
 -# CONFIG_DS1682 is not set
--CONFIG_AT24=m
+-# CONFIG_AT24 is not set
 -# CONFIG_SENSORS_EEPROM is not set
 -# CONFIG_SENSORS_PCF8574 is not set
 -# CONFIG_PCF8575 is not set
@@ -3087,9 +3271,10 @@ index 1a2306c..0000000
 -#
 -# SPI Master Controller Drivers
 -#
--CONFIG_SPI_ATMEL_HAVE_PDC=y
 -CONFIG_SPI_ATMEL=y
 -# CONFIG_SPI_BITBANG is not set
+-# CONFIG_SPI_BUTTERFLY is not set
+-# CONFIG_SPI_LM70_LLP is not set
 -
 -#
 -# SPI Protocol Masters
@@ -3135,6 +3320,11 @@ index 1a2306c..0000000
 -#
 -# CONFIG_SOFT_WATCHDOG is not set
 -# CONFIG_AT32_WDT is not set
+-
+-#
+-# USB-based Watchdog Cards
+-#
+-# CONFIG_USBPCWATCHDOG is not set
 -CONFIG_SSB_POSSIBLE=y
 -
 -#
@@ -3198,7 +3388,7 @@ index 1a2306c..0000000
 -#
 -# CONFIG_FB_S1D13XXX is not set
 -CONFIG_FB_ATMEL=y
--# CONFIG_FB_ATMEL_MPOP is not set
+-CONFIG_FB_ATMEL_MPOP=y
 -# CONFIG_FB_VIRTUAL is not set
 -# CONFIG_FB_METRONOME is not set
 -# CONFIG_FB_MB862XX is not set
@@ -3215,12 +3405,17 @@ index 1a2306c..0000000
 -# Display device support
 -#
 -# CONFIG_DISPLAY_SUPPORT is not set
--# CONFIG_LOGO is not set
+-CONFIG_LOGO=y
+-CONFIG_LOGO_LINUX_MONO=y
+-CONFIG_LOGO_LINUX_VGA16=y
+-CONFIG_LOGO_LINUX_CLUT224=y
 -CONFIG_SOUND=m
 -CONFIG_SOUND_OSS_CORE=y
 -CONFIG_SND=m
 -CONFIG_SND_TIMER=m
 -CONFIG_SND_PCM=m
+-CONFIG_SND_HWDEP=m
+-CONFIG_SND_RAWMIDI=m
 -# CONFIG_SND_SEQUENCER is not set
 -CONFIG_SND_OSSEMUL=y
 -CONFIG_SND_MIXER_OSS=m
@@ -3234,27 +3429,214 @@ index 1a2306c..0000000
 -CONFIG_SND_DRIVERS=y
 -# CONFIG_SND_DUMMY is not set
 -# CONFIG_SND_MTPAV is not set
+-# CONFIG_SND_MTS64 is not set
 -# CONFIG_SND_SERIAL_U16550 is not set
 -# CONFIG_SND_MPU401 is not set
+-# CONFIG_SND_PORTMAN2X4 is not set
 -CONFIG_SND_SPI=y
 -CONFIG_SND_AT73C213=m
 -CONFIG_SND_AT73C213_TARGET_BITRATE=48000
--# CONFIG_SND_SOC is not set
+-CONFIG_SND_USB=y
+-CONFIG_SND_USB_AUDIO=m
+-# CONFIG_SND_USB_CAIAQ is not set
+-CONFIG_SND_SOC=m
+-CONFIG_SND_AT32_SOC=m
+-# CONFIG_SND_SOC_ALL_CODECS is not set
 -# CONFIG_SOUND_PRIME is not set
--# CONFIG_HID_SUPPORT is not set
+-CONFIG_HID_SUPPORT=y
+-CONFIG_HID=m
+-# CONFIG_HID_DEBUG is not set
+-# CONFIG_HIDRAW is not set
+-
+-#
+-# USB Input Devices
+-#
+-CONFIG_USB_HID=m
+-# CONFIG_HID_PID is not set
+-# CONFIG_USB_HIDDEV is not set
+-
+-#
+-# USB HID Boot Protocol drivers
+-#
+-# CONFIG_USB_KBD is not set
+-# CONFIG_USB_MOUSE is not set
+-
+-#
+-# Special HID drivers
+-#
+-CONFIG_HID_COMPAT=y
+-CONFIG_HID_A4TECH=m
+-CONFIG_HID_APPLE=m
+-CONFIG_HID_BELKIN=m
+-CONFIG_HID_BRIGHT=m
+-CONFIG_HID_CHERRY=m
+-CONFIG_HID_CHICONY=m
+-CONFIG_HID_CYPRESS=m
+-CONFIG_HID_DELL=m
+-CONFIG_HID_EZKEY=m
+-CONFIG_HID_GYRATION=m
+-CONFIG_HID_LOGITECH=m
+-# CONFIG_LOGITECH_FF is not set
+-# CONFIG_LOGIRUMBLEPAD2_FF is not set
+-CONFIG_HID_MICROSOFT=m
+-CONFIG_HID_MONTEREY=m
+-CONFIG_HID_PANTHERLORD=m
+-# CONFIG_PANTHERLORD_FF is not set
+-CONFIG_HID_PETALYNX=m
+-CONFIG_HID_SAMSUNG=m
+-CONFIG_HID_SONY=m
+-CONFIG_HID_SUNPLUS=m
+-# CONFIG_THRUSTMASTER_FF is not set
+-# CONFIG_ZEROPLUS_FF is not set
 -CONFIG_USB_SUPPORT=y
 -CONFIG_USB_ARCH_HAS_HCD=y
 -# CONFIG_USB_ARCH_HAS_OHCI is not set
 -CONFIG_USB_ARCH_HAS_EHCI=y
--# CONFIG_USB is not set
+-CONFIG_USB=y
+-# CONFIG_USB_DEBUG is not set
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-
+-#
+-# Miscellaneous USB options
+-#
+-CONFIG_USB_DEVICEFS=y
+-CONFIG_USB_DEVICE_CLASS=y
+-CONFIG_USB_DYNAMIC_MINORS=y
+-# CONFIG_USB_SUSPEND is not set
+-# CONFIG_USB_OTG is not set
 -# CONFIG_USB_OTG_WHITELIST is not set
--CONFIG_USB_OTG_BLACKLIST_HUB=y
+-# CONFIG_USB_OTG_BLACKLIST_HUB is not set
+-CONFIG_USB_MON=y
+-# CONFIG_USB_WUSB is not set
+-# CONFIG_USB_WUSB_CBAF is not set
+-
+-#
+-# USB Host Controller Drivers
+-#
+-# CONFIG_USB_C67X00_HCD is not set
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_ROOT_HUB_TT=y
+-# CONFIG_USB_EHCI_TT_NEWSCHED is not set
+-CONFIG_USB_EHCI_BIG_ENDIAN_MMIO=y
+-CONFIG_USB_EHCI_BIG_ENDIAN_DESC=y
+-# CONFIG_USB_ISP116X_HCD is not set
+-# CONFIG_USB_SL811_HCD is not set
+-# CONFIG_USB_R8A66597_HCD is not set
+-# CONFIG_USB_HWA_HCD is not set
 -# CONFIG_USB_MUSB_HDRC is not set
 -# CONFIG_USB_GADGET_MUSB_HDRC is not set
 -
 -#
+-# USB Device Class drivers
+-#
+-CONFIG_USB_ACM=y
+-CONFIG_USB_PRINTER=y
+-CONFIG_USB_WDM=y
+-# CONFIG_USB_TMC is not set
+-
+-#
 -# NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed;
 -#
+-
+-#
+-# see USB_STORAGE Help for more information
+-#
+-CONFIG_USB_STORAGE=m
+-# CONFIG_USB_STORAGE_DEBUG is not set
+-# CONFIG_USB_STORAGE_DATAFAB is not set
+-# CONFIG_USB_STORAGE_FREECOM is not set
+-# CONFIG_USB_STORAGE_ISD200 is not set
+-# CONFIG_USB_STORAGE_DPCM is not set
+-# CONFIG_USB_STORAGE_USBAT is not set
+-# CONFIG_USB_STORAGE_SDDR09 is not set
+-# CONFIG_USB_STORAGE_SDDR55 is not set
+-# CONFIG_USB_STORAGE_JUMPSHOT is not set
+-# CONFIG_USB_STORAGE_ALAUDA is not set
+-# CONFIG_USB_STORAGE_ONETOUCH is not set
+-# CONFIG_USB_STORAGE_KARMA is not set
+-# CONFIG_USB_STORAGE_CYPRESS_ATACB is not set
+-CONFIG_USB_LIBUSUAL=y
+-
+-#
+-# USB Imaging devices
+-#
+-# CONFIG_USB_MDC800 is not set
+-# CONFIG_USB_MICROTEK is not set
+-
+-#
+-# USB port drivers
+-#
+-# CONFIG_USB_USS720 is not set
+-CONFIG_USB_SERIAL=y
+-CONFIG_USB_SERIAL_CONSOLE=y
+-# CONFIG_USB_EZUSB is not set
+-CONFIG_USB_SERIAL_GENERIC=y
+-# CONFIG_USB_SERIAL_AIRCABLE is not set
+-# CONFIG_USB_SERIAL_ARK3116 is not set
+-# CONFIG_USB_SERIAL_BELKIN is not set
+-# CONFIG_USB_SERIAL_CH341 is not set
+-# CONFIG_USB_SERIAL_WHITEHEAT is not set
+-# CONFIG_USB_SERIAL_DIGI_ACCELEPORT is not set
+-# CONFIG_USB_SERIAL_CP2101 is not set
+-# CONFIG_USB_SERIAL_CYPRESS_M8 is not set
+-# CONFIG_USB_SERIAL_EMPEG is not set
+-# CONFIG_USB_SERIAL_FTDI_SIO is not set
+-# CONFIG_USB_SERIAL_FUNSOFT is not set
+-# CONFIG_USB_SERIAL_VISOR is not set
+-# CONFIG_USB_SERIAL_IPAQ is not set
+-# CONFIG_USB_SERIAL_IR is not set
+-# CONFIG_USB_SERIAL_EDGEPORT is not set
+-# CONFIG_USB_SERIAL_EDGEPORT_TI is not set
+-# CONFIG_USB_SERIAL_GARMIN is not set
+-# CONFIG_USB_SERIAL_IPW is not set
+-# CONFIG_USB_SERIAL_IUU is not set
+-# CONFIG_USB_SERIAL_KEYSPAN_PDA is not set
+-# CONFIG_USB_SERIAL_KEYSPAN is not set
+-# CONFIG_USB_SERIAL_KLSI is not set
+-# CONFIG_USB_SERIAL_KOBIL_SCT is not set
+-# CONFIG_USB_SERIAL_MCT_U232 is not set
+-# CONFIG_USB_SERIAL_MOS7720 is not set
+-# CONFIG_USB_SERIAL_MOS7840 is not set
+-# CONFIG_USB_SERIAL_MOTOROLA is not set
+-# CONFIG_USB_SERIAL_NAVMAN is not set
+-# CONFIG_USB_SERIAL_PL2303 is not set
+-# CONFIG_USB_SERIAL_OTI6858 is not set
+-# CONFIG_USB_SERIAL_SPCP8X5 is not set
+-# CONFIG_USB_SERIAL_HP4X is not set
+-# CONFIG_USB_SERIAL_SAFE is not set
+-# CONFIG_USB_SERIAL_SIERRAWIRELESS is not set
+-# CONFIG_USB_SERIAL_TI is not set
+-# CONFIG_USB_SERIAL_CYBERJACK is not set
+-# CONFIG_USB_SERIAL_XIRCOM is not set
+-# CONFIG_USB_SERIAL_OPTION is not set
+-# CONFIG_USB_SERIAL_OMNINET is not set
+-# CONFIG_USB_SERIAL_DEBUG is not set
+-
+-#
+-# USB Miscellaneous drivers
+-#
+-# CONFIG_USB_EMI62 is not set
+-# CONFIG_USB_EMI26 is not set
+-# CONFIG_USB_ADUTUX is not set
+-# CONFIG_USB_SEVSEG is not set
+-# CONFIG_USB_RIO500 is not set
+-# CONFIG_USB_LEGOTOWER is not set
+-CONFIG_USB_LCD=y
+-# CONFIG_USB_BERRY_CHARGE is not set
+-# CONFIG_USB_LED is not set
+-# CONFIG_USB_CYPRESS_CY7C63 is not set
+-# CONFIG_USB_CYTHERM is not set
+-# CONFIG_USB_PHIDGET is not set
+-# CONFIG_USB_IDMOUSE is not set
+-# CONFIG_USB_FTDI_ELAN is not set
+-# CONFIG_USB_APPLEDISPLAY is not set
+-CONFIG_USB_SISUSBVGA=y
+-CONFIG_USB_LD=y
+-# CONFIG_USB_TRANCEVIBRATOR is not set
+-# CONFIG_USB_IOWARRIOR is not set
+-# CONFIG_USB_TEST is not set
+-# CONFIG_USB_ISIGHTFW is not set
+-# CONFIG_USB_VST is not set
 -CONFIG_USB_GADGET=y
 -# CONFIG_USB_GADGET_DEBUG is not set
 -# CONFIG_USB_GADGET_DEBUG_FILES is not set
@@ -3302,7 +3684,7 @@ index 1a2306c..0000000
 -#
 -# MMC/SD/SDIO Host Controller Drivers
 -#
--CONFIG_MMC_SDHCI=y
+-# CONFIG_MMC_SDHCI is not set
 -CONFIG_MMC_ATMELMCI=y
 -# CONFIG_MMC_ATMELMCI_DMA is not set
 -CONFIG_MMC_SPI=m
@@ -3324,7 +3706,7 @@ index 1a2306c..0000000
 -CONFIG_LEDS_TRIGGER_TIMER=m
 -CONFIG_LEDS_TRIGGER_HEARTBEAT=m
 -# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
--CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
+-# CONFIG_LEDS_TRIGGER_DEFAULT_ON is not set
 -# CONFIG_ACCESSIBILITY is not set
 -CONFIG_RTC_LIB=y
 -CONFIG_RTC_CLASS=y
@@ -3394,7 +3776,7 @@ index 1a2306c..0000000
 -# DMA Devices
 -#
 -CONFIG_ATMEL_PDCA=y
--CONFIG_DW_DMAC=y
+-# CONFIG_DW_DMAC is not set
 -CONFIG_DMA_ENGINE=y
 -
 -#
@@ -3402,6 +3784,7 @@ index 1a2306c..0000000
 -#
 -# CONFIG_NET_DMA is not set
 -# CONFIG_DMATEST is not set
+-# CONFIG_AUXDISPLAY is not set
 -# CONFIG_UIO is not set
 -# CONFIG_STAGING is not set
 -
@@ -3439,9 +3822,9 @@ index 1a2306c..0000000
 -#
 -# DOS/FAT/NT Filesystems
 -#
--CONFIG_FAT_FS=m
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=m
+-CONFIG_FAT_FS=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
 -CONFIG_FAT_DEFAULT_CODEPAGE=437
 -CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
 -# CONFIG_NTFS_FS is not set
@@ -3511,11 +3894,27 @@ index 1a2306c..0000000
 -#
 -# Partition Types
 -#
--# CONFIG_PARTITION_ADVANCED is not set
+-CONFIG_PARTITION_ADVANCED=y
+-# CONFIG_ACORN_PARTITION is not set
+-# CONFIG_OSF_PARTITION is not set
+-# CONFIG_AMIGA_PARTITION is not set
+-# CONFIG_ATARI_PARTITION is not set
+-# CONFIG_MAC_PARTITION is not set
 -CONFIG_MSDOS_PARTITION=y
--CONFIG_NLS=m
+-# CONFIG_BSD_DISKLABEL is not set
+-# CONFIG_MINIX_SUBPARTITION is not set
+-# CONFIG_SOLARIS_X86_PARTITION is not set
+-# CONFIG_UNIXWARE_DISKLABEL is not set
+-# CONFIG_LDM_PARTITION is not set
+-# CONFIG_SGI_PARTITION is not set
+-# CONFIG_ULTRIX_PARTITION is not set
+-# CONFIG_SUN_PARTITION is not set
+-# CONFIG_KARMA_PARTITION is not set
+-# CONFIG_EFI_PARTITION is not set
+-# CONFIG_SYSV68_PARTITION is not set
+-CONFIG_NLS=y
 -CONFIG_NLS_DEFAULT="iso8859-1"
--CONFIG_NLS_CODEPAGE_437=m
+-CONFIG_NLS_CODEPAGE_437=y
 -# CONFIG_NLS_CODEPAGE_737 is not set
 -# CONFIG_NLS_CODEPAGE_775 is not set
 -# CONFIG_NLS_CODEPAGE_850 is not set
@@ -3549,7 +3948,7 @@ index 1a2306c..0000000
 -# CONFIG_NLS_ISO8859_9 is not set
 -# CONFIG_NLS_ISO8859_13 is not set
 -# CONFIG_NLS_ISO8859_14 is not set
--# CONFIG_NLS_ISO8859_15 is not set
+-CONFIG_NLS_ISO8859_15=y
 -# CONFIG_NLS_KOI8_R is not set
 -# CONFIG_NLS_KOI8_U is not set
 -CONFIG_NLS_UTF8=m
@@ -3721,7 +4120,7 @@ index 1a2306c..0000000
 -#
 -CONFIG_BITREVERSE=y
 -CONFIG_CRC_CCITT=m
--# CONFIG_CRC16 is not set
+-CONFIG_CRC16=m
 -# CONFIG_CRC_T10DIF is not set
 -CONFIG_CRC_ITU_T=m
 -CONFIG_CRC32=y
@@ -3734,10 +4133,10 @@ index 1a2306c..0000000
 -CONFIG_HAS_IOMEM=y
 -CONFIG_HAS_IOPORT=y
 -CONFIG_HAS_DMA=y
-diff --git a/target/device/Atmel/atstk100x/busybox-1.9.1.config b/target/device/Atmel/atstk100x/busybox-1.9.1.config
+diff --git a/target/device/Atmel/atstk1005/busybox-1.9.1.config b/target/device/Atmel/atstk1005/busybox-1.9.1.config
 deleted file mode 100644
 index 7dd45cd..0000000
---- a/target/device/Atmel/atstk100x/busybox-1.9.1.config
+--- a/target/device/Atmel/atstk1005/busybox-1.9.1.config
 +++ /dev/null
 @@ -1,767 +0,0 @@
 -#
@@ -4507,10 +4906,10 @@ index 7dd45cd..0000000
 -#
 -# CONFIG_TCPSVD is not set
 -# CONFIG_UDPSVD is not set
-diff --git a/target/device/Atmel/atstk100x/device_table.txt b/target/device/Atmel/atstk100x/device_table.txt
+diff --git a/target/device/Atmel/atstk1005/device_table.txt b/target/device/Atmel/atstk1005/device_table.txt
 deleted file mode 100644
 index 1b76a30..0000000
---- a/target/device/Atmel/atstk100x/device_table.txt
+--- a/target/device/Atmel/atstk1005/device_table.txt
 +++ /dev/null
 @@ -1,181 +0,0 @@
 -# When building a target filesystem, it is desirable to not have to become
@@ -4694,153 +5093,17 @@ index 1b76a30..0000000
 -#/dev/mcd	b	640	0	0	23	0	0	0	-
 -#/dev/optcd	b	640	0	0	17	0	0	0	-
 -
-diff --git a/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch b/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
-deleted file mode 100644
-index 365ee49..0000000
---- a/target/device/Atmel/atstk100x/kernel-patches/linux-2.6.23-200-gpio_mouse-setup-for-atstk1000-board.patch
-+++ /dev/null
-@@ -1,130 +0,0 @@
-->From 9c5fa914202d20756c56e0c4fd76035ed8f8ced8 Mon Sep 17 00:00:00 2001
--From: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
--Date: Mon, 6 Aug 2007 08:31:14 +0200
--Subject: [PATCH 1/1] Add gpio_mouse board setup to atstk1000 board
--
--This patch adds a gpio_mouse_platform_data to the atstk1000 board code and
--registers a gpio_mouse platform_device. This will enable a GPIO mouse on header
--J1 on GPIO of the ATSTK1000 development kit. The board code is enabled/disabled
--in menuconfig.
--
--By connecting J1 (GPIO) to J25 (SWITCH) you can use the following keys to
--simulate a mouse:
--
--SW0: right
--SW1: down
--SW2: up
--SW3: left
--SW5: right button
--SW6: middle button
--SW7: left button
--
--Signed-off-by: Hans-Christian Egtvedt <hcegtvedt@atmel.com>
-----
-- arch/avr32/boards/atstk1000/Kconfig     |   16 ++++++++++
-- arch/avr32/boards/atstk1000/atstk1002.c |   48 +++++++++++++++++++++++++++++++
-- 2 files changed, 64 insertions(+), 0 deletions(-)
--
--diff --git a/arch/avr32/boards/atstk1000/Kconfig b/arch/avr32/boards/atstk1000/Kconfig
--index 718578f..d99d4bd 100644
----- a/arch/avr32/boards/atstk1000/Kconfig
--+++ b/arch/avr32/boards/atstk1000/Kconfig
--@@ -52,6 +52,22 @@ config BOARD_ATSTK100X_SPI1
-- 	  GPIO lines and accessed through the J1 jumper block.  Say "y"
-- 	  here to configure that SPI controller.
-- 
--+config BOARD_ATSTK1002_GPIO_MOUSE
--+	bool "Configure gpio_mouse on GPIO J1 header"
--+	depends on !BOARD_ATSTK1002_SW4_CUSTOM
--+	help
--+	  Enable gpio_mouse board configuration on GPIO 0 to 7. Connecting a
--+	  10-pin flat cable from J1 (GPIO) to J25 (SWITCH) will let a user give
--+	  mouse inputs using the the switches SW0 to SW7.
--+
--+	  SW0: right
--+	  SW1: down
--+	  SW2: up
--+	  SW3: left
--+	  SW5: right button
--+	  SW6: middle button
--+	  SW7: left button
--+
-- config BOARD_ATSTK1000_J2_LED
-- 	bool
-- 	default BOARD_ATSTK1000_J2_LED8 || BOARD_ATSTK1000_J2_RGB
--diff --git a/arch/avr32/boards/atstk1000/atstk1002.c b/arch/avr32/boards/atstk1000/atstk1002.c
--index c958fd4..c7560e5 100644
----- a/arch/avr32/boards/atstk1000/atstk1002.c
--+++ b/arch/avr32/boards/atstk1000/atstk1002.c
--@@ -16,6 +16,7 @@
-- #include <linux/types.h>
-- #include <linux/spi/spi.h>
-- #include <linux/spi/at73c213.h>
--+#include <linux/gpio_mouse.h>
-- 
-- #include <video/atmel_lcdc.h>
-- 
--@@ -100,6 +101,49 @@ static struct mci_platform_data __initdata mci0_data = {
-- 	.cs		= 4,
-- };
-- 
--+#ifdef CONFIG_BOARD_ATSTK1002_GPIO_MOUSE
--+static struct gpio_mouse_platform_data gpio_mouse0_data = {
--+	.polarity	= GPIO_MOUSE_POLARITY_ACT_LOW,
--+	{
--+		{
--+			.up		= GPIO_PIN_PB(2),
--+			.down		= GPIO_PIN_PB(1),
--+			.left		= GPIO_PIN_PB(3),
--+			.right		= GPIO_PIN_PB(0),
--+			.bleft		= GPIO_PIN_PB(7),
--+			.bmiddle	= GPIO_PIN_PB(6),
--+			.bright		= GPIO_PIN_PB(5),
--+		},
--+	},
--+	.scan_ms	= 10,
--+};
--+
--+static struct platform_device gpio_mouse0_device = {
--+	.name		= "gpio_mouse",
--+	.id		= 0,
--+	.dev		= {
--+		.platform_data = &gpio_mouse0_data,
--+	},
--+};
--+
--+static void __init add_device_gpio_mouse0(void)
--+{
--+	struct platform_device *pdev = &gpio_mouse0_device;
--+	struct gpio_mouse_platform_data *data = pdev->dev.platform_data;
--+
--+	at32_select_gpio(data->up, 0);
--+	at32_select_gpio(data->down, 0);
--+	at32_select_gpio(data->left, 0);
--+	at32_select_gpio(data->right, 0);
--+
--+	at32_select_gpio(data->bleft, 0);
--+	at32_select_gpio(data->bmiddle, 0);
--+	at32_select_gpio(data->bright, 0);
--+
--+	platform_device_register(pdev);
--+}
--+#endif
--+
-- /*
--  * The next two functions should go away as the boot loader is
--  * supposed to initialize the macb address registers with a valid
--@@ -269,6 +313,10 @@ static int __init atstk1002_init(void)
-- 	atstk1000_setup_j2_leds();
-- 	atstk1002_setup_extdac();
-- 
--+#ifdef CONFIG_BOARD_ATSTK1002_GPIO_MOUSE
--+	add_device_gpio_mouse0();
--+#endif
--+
-- 	return 0;
-- }
-- postcore_initcall(atstk1002_init);
---- 
--1.5.2.3
--
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/TZ b/target/device/Atmel/atstk100x/target_skeleton/etc/TZ
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/TZ b/target/device/Atmel/atstk1005/target_skeleton/etc/TZ
 deleted file mode 100644
 index 36498c4..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/TZ
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/TZ
 +++ /dev/null
 @@ -1 +0,0 @@
 -CET1CDT
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state b/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/asound.state b/target/device/Atmel/atstk1005/target_skeleton/etc/asound.state
 deleted file mode 100644
 index 55fb3f0..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/asound.state
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/asound.state
 +++ /dev/null
 @@ -1,108 +0,0 @@
 -state.at73c213_0 {
@@ -4951,10 +5214,10 @@ index 55fb3f0..0000000
 -		value false
 -	}
 -}
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate b/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/default/ntpdate b/target/device/Atmel/atstk1005/target_skeleton/etc/default/ntpdate
 deleted file mode 100644
 index 80d8608..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/default/ntpdate
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/default/ntpdate
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -# servers to check.   (Separate multiple servers with spaces.)
@@ -4963,10 +5226,10 @@ index 80d8608..0000000
 -# additional options for ntpdate
 -#NTPOPTIONS="-v"
 -NTPOPTIONS="-u"
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/dnsmasq.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/dnsmasq.conf
 deleted file mode 100644
 index 09a3681..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/dnsmasq.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/dnsmasq.conf
 +++ /dev/null
 @@ -1,385 +0,0 @@
 -# Configuration file for dnsmasq.
@@ -5354,10 +5617,10 @@ index 09a3681..0000000
 -# Include a another lot of configuration options.
 -#conf-file=/etc/dnsmasq.more.conf
 -
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes b/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/fb.modes b/target/device/Atmel/atstk1005/target_skeleton/etc/fb.modes
 deleted file mode 100644
 index 5884cca..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/fb.modes
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/fb.modes
 +++ /dev/null
 @@ -1,5 +0,0 @@
 -mode "320x240-68"
@@ -5365,19 +5628,19 @@ index 5884cca..0000000
 -    geometry 320 240 320 240 24
 -    timings 145116 17 33 10 10 16 1
 -endmode
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/fstab b/target/device/Atmel/atstk100x/target_skeleton/etc/fstab
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/fstab b/target/device/Atmel/atstk1005/target_skeleton/etc/fstab
 deleted file mode 100644
 index fcf1a78..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/fstab
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/fstab
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# /etc/fstab: static file system information.
 -#
 -# <file system>	<mount pt>	<type>		<options>	<dump>	<pass>
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/group b/target/device/Atmel/atstk100x/target_skeleton/etc/group
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/group b/target/device/Atmel/atstk1005/target_skeleton/etc/group
 deleted file mode 100644
 index cec65da..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/group
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/group
 +++ /dev/null
 @@ -1,20 +0,0 @@
 -root::0:
@@ -5400,17 +5663,17 @@ index cec65da..0000000
 -users::500:
 -default::1000:
 -nogroup::65534:
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hostname b/target/device/Atmel/atstk100x/target_skeleton/etc/hostname
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/hostname b/target/device/Atmel/atstk1005/target_skeleton/etc/hostname
 deleted file mode 100644
 index 29a3f1c..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/hostname
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/hostname
 +++ /dev/null
 @@ -1 +0,0 @@
 -stk1000.example.net
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts b/target/device/Atmel/atstk100x/target_skeleton/etc/hosts
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/hosts b/target/device/Atmel/atstk1005/target_skeleton/etc/hosts
 deleted file mode 100644
 index ef38167..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/hosts
 +++ /dev/null
 @@ -1,12 +0,0 @@
 -127.0.0.1   localhost.localdomain localhost
@@ -5425,10 +5688,10 @@ index ef38167..0000000
 -ff02::1 ip6-allnodes
 -ff02::2 ip6-allrouters
 -ff02::3 ip6-allhosts
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq b/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/hosts.dnsmasq b/target/device/Atmel/atstk1005/target_skeleton/etc/hosts.dnsmasq
 deleted file mode 100644
 index b831444..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/hosts.dnsmasq
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/hosts.dnsmasq
 +++ /dev/null
 @@ -1,246 +0,0 @@
 -# Local server
@@ -5677,27 +5940,27 @@ index b831444..0000000
 -10.0.0.252 dhcp-252.example.net
 -10.0.0.253 dhcp-253.example.net
 -10.0.0.254 dhcp-254.example.net
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/httpd.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/httpd.conf
 deleted file mode 100644
 index 640f815..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/httpd.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/httpd.conf
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# Allow all trafic
 -A: *
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/inetd.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/inetd.conf
 deleted file mode 100644
 index 23eba79..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/inetd.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/inetd.conf
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -#netbios-ssn	stream	tcp nowait	root.root /usr/sbin/smbd smbd
 -#netbios-ns	dgram	udp wait	root.root /usr/sbin/nmbd nmbd
 -#swat		stream	tcp nowait.400	root.root /usr/sbin/swat swat
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K20alsa-utils b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K20alsa-utils
 deleted file mode 100644
 index 68f7462..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K20alsa-utils
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K20alsa-utils
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -#!/bin/sh
@@ -5714,24 +5977,24 @@ index 68f7462..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K70sendsig b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K70sendsig
 deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K70sendsig
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K70sendsig
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K80netfs b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K80netfs
 deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K80netfs
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K80netfs
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K85network b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K85network
 deleted file mode 100644
 index d4e8e61..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K85network
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K85network
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -5745,17 +6008,17 @@ index d4e8e61..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K90localfs b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K90localfs
 deleted file mode 100644
 index 1a24852..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/K90localfs
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/K90localfs
 +++ /dev/null
 @@ -1 +0,0 @@
 -#!/bin/sh
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S00mountvirtfs b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S00mountvirtfs
 deleted file mode 100644
 index d9e5c92..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S00mountvirtfs
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S00mountvirtfs
 +++ /dev/null
 @@ -1,74 +0,0 @@
 -#!/bin/sh
@@ -5832,10 +6095,10 @@ index d9e5c92..0000000
 -fi
 -
 -exit $retval
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S01hotplug b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S01hotplug
 deleted file mode 100644
 index 15e075b..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S01hotplug
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S01hotplug
 +++ /dev/null
 @@ -1,14 +0,0 @@
 -#!/bin/sh
@@ -5852,10 +6115,10 @@ index 15e075b..0000000
 -/sbin/mdev -s
 -trap - EXIT
 -echo "done"
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S02hostname b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S02hostname
 deleted file mode 100644
 index cf858ed..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S02hostname
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S02hostname
 +++ /dev/null
 @@ -1,47 +0,0 @@
 -#!/bin/sh
@@ -5905,10 +6168,10 @@ index cf858ed..0000000
 -esac
 -
 -exit $?
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S03bootsplash b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S03bootsplash
 deleted file mode 100644
 index 21a3a57..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S03bootsplash
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S03bootsplash
 +++ /dev/null
 @@ -1,25 +0,0 @@
 -#!/bin/sh
@@ -5936,10 +6199,10 @@ index 21a3a57..0000000
 -else
 -	echo "failed"
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S08syslog b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S08syslog
 deleted file mode 100644
 index 58b0592..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S08syslog
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S08syslog
 +++ /dev/null
 @@ -1,24 +0,0 @@
 -#!/bin/sh
@@ -5966,10 +6229,10 @@ index 58b0592..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S09klog b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S09klog
 deleted file mode 100644
 index 1b0028a..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S09klog
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S09klog
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -5988,10 +6251,10 @@ index 1b0028a..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S10modules-init b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S10modules-init
 deleted file mode 100644
 index e2cf4e3..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S10modules-init
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S10modules-init
 +++ /dev/null
 @@ -1,21 +0,0 @@
 -#!/bin/sh
@@ -6015,10 +6278,10 @@ index e2cf4e3..0000000
 -		echo "  $module failed"
 -	fi
 -done
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S15localfs b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S15localfs
 deleted file mode 100644
 index a0b5a89..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S15localfs
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S15localfs
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -6032,10 +6295,10 @@ index a0b5a89..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S20network b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S20network
 deleted file mode 100644
 index 06cf8cb..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S20network
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S20network
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#! /bin/sh
@@ -6049,10 +6312,10 @@ index 06cf8cb..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S40telnetd b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S40telnetd
 deleted file mode 100644
 index e0fd2f2..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S40telnetd
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S40telnetd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -6071,10 +6334,10 @@ index e0fd2f2..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S41inetd b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S41inetd
 deleted file mode 100644
 index e485dcc..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S41inetd
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S41inetd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -6093,10 +6356,10 @@ index e485dcc..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S42httpd b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S42httpd
 deleted file mode 100644
 index f8e7813..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S42httpd
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S42httpd
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -#!/bin/sh
@@ -6115,10 +6378,10 @@ index f8e7813..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S43ntp b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S43ntp
 deleted file mode 100644
 index 69fa4c8..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S43ntp
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S43ntp
 +++ /dev/null
 @@ -1,27 +0,0 @@
 -#!/bin/sh
@@ -6148,10 +6411,10 @@ index 69fa4c8..0000000
 -	echo "edit NTPSERVERS in /etc/default/ntpdate."
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S49netfs b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S49netfs
 deleted file mode 100644
 index e1e0fbf..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S49netfs
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S49netfs
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -6165,10 +6428,10 @@ index e1e0fbf..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S50alsa-utils b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S50alsa-utils
 deleted file mode 100644
 index e92e5d8..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S50alsa-utils
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S50alsa-utils
 +++ /dev/null
 @@ -1,19 +0,0 @@
 -#!/bin/sh
@@ -6190,10 +6453,10 @@ index e92e5d8..0000000
 -	echo "failed"
 -	exit 1
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
 deleted file mode 100644
 index 7c07f28..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99gpio
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99gpio
 +++ /dev/null
 @@ -1,142 +0,0 @@
 -#!/bin/sh
@@ -6338,10 +6601,10 @@ index 7c07f28..0000000
 -	echo "'${BOARD}'"
 -	echo "  WARNING: no GPIO for this board"
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99splash b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99splash
 deleted file mode 100644
 index 47001ad..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/S99splash
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/S99splash
 +++ /dev/null
 @@ -1,17 +0,0 @@
 -#!/bin/sh
@@ -6361,10 +6624,10 @@ index 47001ad..0000000
 -else
 -	echo "failed"
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcK b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcK
 deleted file mode 100644
 index 1db1400..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcK
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcK
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -#!/bin/sh
@@ -6373,10 +6636,10 @@ index 1db1400..0000000
 -for k in /etc/init.d/K*; do
 -	$k stop
 -done
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS b/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcS b/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcS
 deleted file mode 100644
 index a8ea85c..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/init.d/rcS
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/init.d/rcS
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
@@ -6390,10 +6653,10 @@ index a8ea85c..0000000
 -echo
 -echo "STK1000 ready"
 -echo
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/inittab b/target/device/Atmel/atstk100x/target_skeleton/etc/inittab
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/inittab b/target/device/Atmel/atstk1005/target_skeleton/etc/inittab
 deleted file mode 100644
 index 82672b1..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/inittab
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/inittab
 +++ /dev/null
 @@ -1,28 +0,0 @@
 -# Inittab for the ATSTK1000 development board
@@ -6424,10 +6687,10 @@ index 82672b1..0000000
 -
 -# Run a script on shutdown.
 -::shutdown:/etc/init.d/rcK
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/mdev.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/mdev.conf
 deleted file mode 100644
 index 046d0d4..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/mdev.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/mdev.conf
 +++ /dev/null
 @@ -1,49 +0,0 @@
 -# mdev.conf for ATSTK1000
@@ -6479,20 +6742,20 @@ index 046d0d4..0000000
 -tty6.*	0:5	0660
 -
 -ttyS.*	0:20	640
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/modules b/target/device/Atmel/atstk100x/target_skeleton/etc/modules
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/modules b/target/device/Atmel/atstk1005/target_skeleton/etc/modules
 deleted file mode 100644
 index 82da2e7..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/modules
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/modules
 +++ /dev/null
 @@ -1,4 +0,0 @@
 -snd-at73c213
 -snd-pcm-oss
 -gpio_mouse
 -mousedev
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/mplayer.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/mplayer.conf
 deleted file mode 100644
 index 45d7d7e..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/mplayer.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/mplayer.conf
 +++ /dev/null
 @@ -1,129 +0,0 @@
 -#
@@ -6624,18 +6887,18 @@ index 45d7d7e..0000000
 -
 -# You can also include other configuration files.
 -#include = /path/to/the/file/you/want/to/include
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab b/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/mtab b/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
 deleted file mode 120000
 index e1c2045..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/mtab
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/mtab
 +++ /dev/null
 @@ -1 +0,0 @@
 -../proc/mounts
 \ No newline at end of file
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces b/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/network/interfaces b/target/device/Atmel/atstk1005/target_skeleton/etc/network/interfaces
 deleted file mode 100644
 index a20055c..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/network/interfaces
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/network/interfaces
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -# Configure Loopback
@@ -6649,10 +6912,10 @@ index a20055c..0000000
 -# Configure Ethernet 1, not enabled by default
 -#auto eth1
 -iface eth1 inet dhcp
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/ntp.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/ntp.conf
 deleted file mode 100644
 index d1b0af9..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/ntp.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/ntp.conf
 +++ /dev/null
 @@ -1,49 +0,0 @@
 -# /etc/ntp.conf, configuration for ntpd
@@ -6704,10 +6967,10 @@ index d1b0af9..0000000
 -# on the network!
 -#disable auth
 -#broadcastclient
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/passwd b/target/device/Atmel/atstk100x/target_skeleton/etc/passwd
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/passwd b/target/device/Atmel/atstk1005/target_skeleton/etc/passwd
 deleted file mode 100644
 index 5e073f6..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/passwd
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/passwd
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -root:x:0:0:root:/:/bin/sh
@@ -6728,10 +6991,10 @@ index 5e073f6..0000000
 -nobody:x:65534:65534:nobody:/nonexistent:/bin/false
 -avr32:x:500:500:Linux User,,,:/home/avr32:/bin/sh
 -default:x:1000:1000:Default non-root user:/home/default:/bin/sh
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/proftpd.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/proftpd.conf
 deleted file mode 100644
 index 86b447d..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/proftpd.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/proftpd.conf
 +++ /dev/null
 @@ -1,31 +0,0 @@
 -ServerName			"ATSTK1002 FTP server"
@@ -6765,10 +7028,10 @@ index 86b447d..0000000
 -#<Limit SITE_CHMOD>
 -#  DenyAll
 -#</Limit>
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/protocols b/target/device/Atmel/atstk100x/target_skeleton/etc/protocols
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/protocols b/target/device/Atmel/atstk1005/target_skeleton/etc/protocols
 deleted file mode 100644
 index 1521f39..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/protocols
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/protocols
 +++ /dev/null
 @@ -1,149 +0,0 @@
 -# /etc/protocols:
@@ -6920,18 +7183,18 @@ index 1521f39..0000000
 -# rsvp-e2e-ignore	134	RSVP-E2E-IGNORE
 -#	134-254			# Unassigned
 -#	255			# Reserved
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/resolv.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/resolv.conf
 deleted file mode 100644
 index 71f6f96..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/resolv.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/resolv.conf
 +++ /dev/null
 @@ -1 +0,0 @@
 -../tmp/resolv.conf
 \ No newline at end of file
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf b/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smb.conf b/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smb.conf
 deleted file mode 100644
 index a295718..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smb.conf
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smb.conf
 +++ /dev/null
 @@ -1,287 +0,0 @@
 -# This is the main Samba configuration file. You should read the
@@ -7221,17 +7484,17 @@ index a295718..0000000
 -;   writable = yes
 -;   printable = no
 -;   create mask = 0765
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd b/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smbpasswd b/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smbpasswd
 deleted file mode 100644
 index a3fe520..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/samba/smbpasswd
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/samba/smbpasswd
 +++ /dev/null
 @@ -1 +0,0 @@
 -root:0:172DC9BBE870E1B6AAD3B435B51404EE:090A846DE05FDBC2D90864D49620FD7C:[U          ]:LCT-4561C217:
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/services b/target/device/Atmel/atstk100x/target_skeleton/etc/services
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/services b/target/device/Atmel/atstk1005/target_skeleton/etc/services
 deleted file mode 100644
 index e2ffd3d..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/services
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/services
 +++ /dev/null
 @@ -1,2117 +0,0 @@
 -#
@@ -9351,10 +9614,10 @@ index e2ffd3d..0000000
 -wnn6_DS		26208/tcp  #Wnn6 (Dserver)
 -dbbrowse	47557/tcp  #Databeam Corporation
 -dbbrowse	47557/udp  #Databeam Corporation
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/shadow b/target/device/Atmel/atstk100x/target_skeleton/etc/shadow
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/shadow b/target/device/Atmel/atstk1005/target_skeleton/etc/shadow
 deleted file mode 100644
 index d5dc397..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/shadow
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/shadow
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -root:$1$OJeedGT3$uG0eWkNhkeq0WO6Wldk1Y.:13200:0:99999:7:::
@@ -9375,10 +9638,10 @@ index d5dc397..0000000
 -nobody:!:13200:0:99999:7:::
 -avr32:$1$TVWxUVs7$/ze18sFeD6F26w0hgyB6M.:13200:0:99999:7:::
 -default:!:13200:0:99999:7:::
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/etc/shells b/target/device/Atmel/atstk100x/target_skeleton/etc/shells
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/etc/shells b/target/device/Atmel/atstk1005/target_skeleton/etc/shells
 deleted file mode 100644
 index 6ee110c..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/etc/shells
+--- a/target/device/Atmel/atstk1005/target_skeleton/etc/shells
 +++ /dev/null
 @@ -1,8 +0,0 @@
 -# /etc/shells: valid login shells
@@ -9389,10 +9652,10 @@ index 6ee110c..0000000
 -/usr/bin/zsh
 -/usr/bin/bash
 -/usr/bin/screen
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout b/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/root/.bash_logout b/target/device/Atmel/atstk1005/target_skeleton/root/.bash_logout
 deleted file mode 100644
 index 77ef1f9..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_logout
+--- a/target/device/Atmel/atstk1005/target_skeleton/root/.bash_logout
 +++ /dev/null
 @@ -1,7 +0,0 @@
 -# ~/.bash_logout: executed by bash(1) when login shell exits.
@@ -9402,10 +9665,10 @@ index 77ef1f9..0000000
 -case "`tty`" in
 -    /dev/tty[0-9]*) clear
 -esac
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile b/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/root/.bash_profile b/target/device/Atmel/atstk1005/target_skeleton/root/.bash_profile
 deleted file mode 100644
 index 27bf149..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/root/.bash_profile
+--- a/target/device/Atmel/atstk1005/target_skeleton/root/.bash_profile
 +++ /dev/null
 @@ -1,15 +0,0 @@
 -# .bash_profile
@@ -9423,10 +9686,10 @@ index 27bf149..0000000
 -if [ -f ~/.bashrc ]; then
 -    source ~/.bashrc
 -fi
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc b/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/root/.bashrc b/target/device/Atmel/atstk1005/target_skeleton/root/.bashrc
 deleted file mode 100644
 index d13c8f9..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/root/.bashrc
+--- a/target/device/Atmel/atstk1005/target_skeleton/root/.bashrc
 +++ /dev/null
 @@ -1,48 +0,0 @@
 -# ~/.bashrc: executed by bash(1) for non-login interactive shells.
@@ -9477,13 +9740,13 @@ index d13c8f9..0000000
 -    alias calc='calc -Cd '
 -    alias bc='calc -Cd '
 -fi;
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/sys/.empty b/target/device/Atmel/atstk100x/target_skeleton/sys/.empty
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/sys/.empty b/target/device/Atmel/atstk1005/target_skeleton/sys/.empty
 deleted file mode 100644
 index e69de29..0000000
-diff --git a/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script b/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
+diff --git a/target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script b/target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script
 deleted file mode 100644
 index 56cbaf6..0000000
---- a/target/device/Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
+--- a/target/device/Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script
 +++ /dev/null
 @@ -1,19 +0,0 @@
 -#!/bin/sh
