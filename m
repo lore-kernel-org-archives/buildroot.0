@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Dec 2010 23:40:14 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.02/fix-ccache-support
-In-Reply-To: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 3 Dec 2010 20:16:22 +0100")
+Date: Sun, 05 Dec 2010 23:47:25 +0100
+Subject: [Buildroot] [PATCH 1/1] ccache: rework ccache management
+In-Reply-To: <03b95520ec943581129be4cf92a6ea70e661cf6d.1291403746.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Fri, 3 Dec 2010 20:16:23 +0100")
 References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874oarx2r5.fsf@macbook.be.48ers.dk>
+	<cover.1291403746.git.thomas.petazzoni@free-electrons.com>
+	<03b95520ec943581129be4cf92a6ea70e661cf6d.1291403746.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zksjvnuq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +15,45 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> [ Sorry, previous pull request had some mistakes. ]
+Hi,
 
- Thomas> Here is a patch that reworks the ccache support to make it work and
- Thomas> make it useful. It is now a "Build options" rather than a "Toolchain
- Thomas> option". I have tested it with both internal toolchain and external
- Thomas> toolchain. The principle is simply to build ccache as early as
- Thomas> possible in the build process, and then use it to cache host and
- Thomas> target compiled files.
+ Thomas>  * ccache is now a normal package (both for the host and the target).
 
-Thanks, looks interesting.
+Besides the general comments, I have a few specific ones as well:
 
- Thomas> The ccache cache is kept in ~/.buildroot-ccache/, so that it can be
- Thomas> shared between different builds.
+ Thomas> +++ b/docs/buildroot.html
+ Thomas> @@ -681,6 +682,31 @@ endif
+ Thomas>      Build options -&gt; Toolchain and header file location</code> options.
+ Thomas>      This could be useful if the toolchain must be shared with other users.</p>
+ 
+ Thomas> +    <h2 id="ccache-support">Using <code>ccache</code> in Buildroot</h2>
+ Thomas> +
+ Thomas> +    <p><a href="http://ccache.samba.org">ccache</a> is a compiler
+ Thomas> +    cache. It stores the object files resulting from each compilation
+ Thomas> +    process, and is able to skip future compilation of the same source
+ Thomas> +    file (with same compiler and same arguments) by using the
+ Thomas> +    pre-existing object files. When doing almost identical builds from
+ Thomas> +    scratch a number of times, it can divide the build time by a
+ Thomas> +    factor of two.</p>
 
-Why here and not in the default ~/.ccache? Is the ~/.ccache directory
-content ccache-version dependent?
+The improvement depends quite a lot on the configuration / use case, so
+I think we should simpluy write something like 'it can significantly
+speed up the build process.' rather than specifically saying x2.
 
- Thomas> I'm not using the symlink technique that was used in the past, but
- Thomas> rather prefixing all invocation to host gcc and target gcc with
- Thomas> "$(HOST_DIR)/usr/bin/ccache".
+ Thomas> +++ b/package/ccache/Config.in
+ Thomas> @@ -0,0 +1,5 @@
+ Thomas> +config BR2_PACKAGE_CCACHE
+ Thomas> +	bool "ccache"
+ Thomas> +	help
+ Thomas> +	  Compiler Cache
+ Thomas> +	  http://samba.org/ftp/ccache
+ Thomas> \ No newline at end of file
 
-Is that working everywhere? I remember we had some problems back when we
-added --sysroot= to TARGET_CC. The qt package in particular is stripping
-the --sysroot argument because of this.
+You forgot the missing newline here and for the .mk. We normally have an
+empty line before the website. The official website is afaik also
+http://ccache.samba.org, rather than this download URL.
+
+Doesn't ccache need zlib?
 
 -- 
 Bye, Peter Korsgaard
