@@ -1,257 +1,180 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:52:34 +0100
-Subject: [Buildroot] [PATCH 03/55] Update defconfigs after Atmel mirror
-	related options removal
+Date: Sun,  5 Dec 2010 21:52:37 +0100
+Subject: [Buildroot] [PATCH 06/55] Move Config.in.mirrors out of
+	target/device
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8e993e75b828cbab097c727000fbe5a690b4b976.1291582350.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ca5678ee7e13b481396f8076f94d5beb769d128d.1291582351.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Having Config.in.mirrors (which also to select various download sites)
+inside target/device sounds strange. This commit moves the contents of
+Config.in.mirrors directly into the main Config.in file.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/arm_toolchain_defconfig      |    2 --
- configs/at91rm9200df_defconfig       |    2 --
- configs/at91sam9260dfc_defconfig     |    2 --
- configs/at91sam9260pf_defconfig      |    2 --
- configs/at91sam9261ek_defconfig      |    2 --
- configs/at91sam9263ek_defconfig      |    2 --
- configs/at91sam9g20dfc_defconfig     |    2 --
- configs/atngw100-base_defconfig      |    2 --
- configs/atngw100_defconfig           |    2 --
- configs/atstk1005_defconfig          |    2 --
- configs/atstk100x_defconfig          |    2 --
- configs/i386_defconfig               |    2 --
- configs/i686_defconfig               |    2 --
- configs/integrator926_defconfig      |    2 --
- configs/integrator926_huge_defconfig |    2 --
- configs/kb9202_defconfig             |    2 --
- configs/v100sc2_defconfig            |    2 --
- 17 files changed, 0 insertions(+), 34 deletions(-)
+ Config.in                       |   69 ++++++++++++++++++++++++++++++++++++++-
+ target/device/Config.in.mirrors |   68 --------------------------------------
+ 2 files changed, 68 insertions(+), 69 deletions(-)
+ delete mode 100644 target/device/Config.in.mirrors
 
-diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
-index d4642d9..a25ece5 100644
---- a/configs/arm_toolchain_defconfig
-+++ b/configs/arm_toolchain_defconfig
-@@ -151,8 +151,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index de061ac..01849b0 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -156,8 +156,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index 1740e13..ec8d44c 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -169,8 +169,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
-index a2a7fef..7b3f890 100644
---- a/configs/at91sam9260pf_defconfig
-+++ b/configs/at91sam9260pf_defconfig
-@@ -67,8 +67,6 @@ BR2_SOURCEFORGE_MIRROR="easynews"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- BR2_TOPDIR_PREFIX=""
- BR2_TOPDIR_SUFFIX="wchar"
-diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index f4c0755..5c2d15b 100644
---- a/configs/at91sam9261ek_defconfig
-+++ b/configs/at91sam9261ek_defconfig
-@@ -172,8 +172,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index cfa8742..a2e6181 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -170,8 +170,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index dc9b600..cb82c2d 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -170,8 +170,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-index 2b79015..72bd2cc 100644
---- a/configs/atngw100-base_defconfig
-+++ b/configs/atngw100-base_defconfig
-@@ -104,8 +104,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index ec87a09..d2bdb68 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -88,8 +88,6 @@ BR2_SOURCEFORGE_MIRROR="easynews"
- BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
- BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
- BR2_DEBIAN_MIRROR="http://ftp.debian.org"
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_JLEVEL=2
- # BR2_DEPRECATED is not set
- # BR2_ENABLE_DEBUG is not set
-diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
-index 6212e2b..4531fd2 100644
---- a/configs/atstk1005_defconfig
-+++ b/configs/atstk1005_defconfig
-@@ -102,8 +102,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index ce50944..e120de8 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -103,8 +103,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/i386_defconfig b/configs/i386_defconfig
-index 80100d6..6bd7934 100644
---- a/configs/i386_defconfig
-+++ b/configs/i386_defconfig
-@@ -105,8 +105,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/i686_defconfig b/configs/i686_defconfig
-index 4a128e8..167eee2 100644
---- a/configs/i686_defconfig
-+++ b/configs/i686_defconfig
-@@ -105,8 +105,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index fc2dccf..992e1f4 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -101,8 +101,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
-index c56b628..238dc26 100644
---- a/configs/integrator926_huge_defconfig
-+++ b/configs/integrator926_huge_defconfig
-@@ -101,8 +101,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index 727b3c2..fa5fa60 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -110,8 +110,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index a7d0f34..03d036f 100644
---- a/configs/v100sc2_defconfig
-+++ b/configs/v100sc2_defconfig
-@@ -81,8 +81,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+diff --git a/Config.in b/Config.in
+index a41cd3e..1a27fc0 100644
+--- a/Config.in
++++ b/Config.in
+@@ -86,7 +86,74 @@ config BR2_STAGING_DIR
+ 	  Most people will leave this set to the default value of
+ 	  "$(BASE_DIR)/staging".
+ 
+-source	"target/device/Config.in.mirrors"
++menu "Mirrors and Download locations"
++
++config BR2_PRIMARY_SITE
++	string "Primary download site"
++	default ""
++	help
++	  Primary site to download from. If this option is set then buildroot
++	  will try to download package source first from this site and try the
++	  default if the file is not found.
++	  NOTE: This only works for packages using the Makefile.autotools.in
++
++config BR2_BACKUP_SITE
++	string "Backup download site"
++	default "http://sources.buildroot.net/"
++	help
++	  Backup site to download from. If this option is set then buildroot
++	  will fall back to download package sources from here if the
++	  normal location fails.
++
++config BR2_SOURCEFORGE_MIRROR
++	string "Sourceforge mirror site"
++	default "easynews"
++	help
++	  Sourceforge has a system of mirror sites.  Some sites may be
++	  closer to your location, and sometimes mirror sites go down
++	  and are no longer available.  This option allows you to select
++	  your preferred Sourceforge mirror site.
++
++	  The list of mirrors is available here:
++	  http://prdownloads.sourceforge.net/index-sf.html?download
++
++config BR2_KERNEL_MIRROR
++	string "Kernel.org mirror"
++	default "http://www.kernel.org/pub/"
++	help
++	  kernel.org is mirrored on a number of servers around the world.
++	  The following allows you to select your preferred mirror.
++
++	  Have a look on the kernel.org site for a list of mirrors, then enter
++	  the URL to the base directory.  Examples:
++
++	     http://www.XX.kernel.org/pub (XX = country code)
++	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
++
++config BR2_GNU_MIRROR
++	string "GNU Software mirror"
++	default "http://ftp.gnu.org/pub/gnu"
++	help
++	  GNU has multiple software mirrors scattered around the world.
++	  The following allows you to select your preferred mirror.
++
++	  Have a look on the gnu.org site for a list of mirrors, then enter
++	  the URL to the base directory.  Examples:
++
++	     http://ftp.gnu.org/pub/gnu
++	     http://mirror.aarnet.edu.au/pub/gnu
++
++config BR2_DEBIAN_MIRROR
++	string "Debian Software mirror"
++	default "http://ftp.debian.org"
++	help
++	  Debian has multiple software mirrors scattered around the world.
++	  The following allows you to select your preferred mirror.
++
++	  Usually, just add your country code like XX here:
++	  http://ftp.XX.debian.org
++
++endmenu
+ 
+ config BR2_JLEVEL
+ 	int "Number of jobs to run simultaneously"
+diff --git a/target/device/Config.in.mirrors b/target/device/Config.in.mirrors
+deleted file mode 100644
+index 9e44e2a..0000000
+--- a/target/device/Config.in.mirrors
++++ /dev/null
+@@ -1,68 +0,0 @@
+-menu "Mirrors and Download locations"
+-
+-config BR2_PRIMARY_SITE
+-	string "Primary download site"
+-	default ""
+-	help
+-	  Primary site to download from. If this option is set then buildroot
+-	  will try to download package source first from this site and try the
+-	  default if the file is not found.
+-	  NOTE: This only works for packages using the Makefile.autotools.in
+-
+-config BR2_BACKUP_SITE
+-	string "Backup download site"
+-	default "http://sources.buildroot.net/"
+-	help
+-	  Backup site to download from. If this option is set then buildroot
+-	  will fall back to download package sources from here if the
+-	  normal location fails.
+-
+-config BR2_SOURCEFORGE_MIRROR
+-	string "Sourceforge mirror site"
+-	default "easynews"
+-	help
+-	  Sourceforge has a system of mirror sites.  Some sites may be
+-	  closer to your location, and sometimes mirror sites go down
+-	  and are no longer available.  This option allows you to select
+-	  your preferred Sourceforge mirror site.
+-
+-	  The list of mirrors is available here:
+-	  http://prdownloads.sourceforge.net/index-sf.html?download
+-
+-config BR2_KERNEL_MIRROR
+-	string "Kernel.org mirror"
+-	default "http://www.kernel.org/pub/"
+-	help
+-	  kernel.org is mirrored on a number of servers around the world.
+-	  The following allows you to select your preferred mirror.
+-
+-	  Have a look on the kernel.org site for a list of mirrors, then enter
+-	  the URL to the base directory.  Examples:
+-
+-	     http://www.XX.kernel.org/pub (XX = country code)
+-	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
+-
+-config BR2_GNU_MIRROR
+-	string "GNU Software mirror"
+-	default "http://ftp.gnu.org/pub/gnu"
+-	help
+-	  GNU has multiple software mirrors scattered around the world.
+-	  The following allows you to select your preferred mirror.
+-
+-	  Have a look on the gnu.org site for a list of mirrors, then enter
+-	  the URL to the base directory.  Examples:
+-
+-	     http://ftp.gnu.org/pub/gnu
+-	     http://mirror.aarnet.edu.au/pub/gnu
+-
+-config BR2_DEBIAN_MIRROR
+-	string "Debian Software mirror"
+-	default "http://ftp.debian.org"
+-	help
+-	  Debian has multiple software mirrors scattered around the world.
+-	  The following allows you to select your preferred mirror.
+-
+-	  Usually, just add your country code like XX here:
+-	  http://ftp.XX.debian.org
+-
+-endmenu
 -- 
 1.7.0.4
