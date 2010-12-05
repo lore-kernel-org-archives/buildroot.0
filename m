@@ -1,241 +1,141 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:22 +0100
-Subject: [Buildroot] [PATCH 51/55] board: Add Qemu SH4 r2d configuration
+Date: Sun,  5 Dec 2010 21:53:25 +0100
+Subject: [Buildroot] [PATCH 54/55] board: Add a Qemu mipsel Malta board
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e1524cecda686fe6098ed348ce1648302d1cc87d.1291582352.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e1d3afdf1076dd673deb06a9b803cf4e05133d0f.1291582352.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Philippe Reynes <tremyfr@yahoo.fr>
-
-[ Thomas:
-
-   * renamed sh4_defconfig to qemu_sh4_r2d_defconfig, for consistency
-     with other Qemu platforms supported
-   * renamed board/qemu/sh4 to board/qemu/sh4-r2d
-   * minor fixes in the readme.txt
-   * remove useless statements in the minimal defconfig
-   * switch to a fixed kernel version instead of "same as headers"
-]
-
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-missing-consts-to-sys_execve-declaration.patch |   17 +++
- .../linux-sh-fix-kconfig-warning.patch             |   13 +++
- board/qemu/sh4-r2d/linux-2.6.36.config             |  106 ++++++++++++++++++++
- board/qemu/sh4-r2d/readme.txt                      |   17 +++
- configs/qemu_sh4_r2d_defconfig                     |   17 +++
- 5 files changed, 170 insertions(+), 0 deletions(-)
- create mode 100644 board/qemu/sh4-r2d/kernel-patches/linux-06-17-SH-Add-missing-consts-to-sys_execve-declaration.patch
- create mode 100644 board/qemu/sh4-r2d/kernel-patches/linux-sh-fix-kconfig-warning.patch
- create mode 100644 board/qemu/sh4-r2d/linux-2.6.36.config
- create mode 100644 board/qemu/sh4-r2d/readme.txt
- create mode 100644 configs/qemu_sh4_r2d_defconfig
+ board/qemu/mipsel-malta/linux-2.6.36.config |   77 +++++++++++++++++++++++++++
+ board/qemu/mipsel-malta/readme.txt          |    7 +++
+ configs/qemu_mipsel_malta_defconfig         |   15 +++++
+ 3 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 board/qemu/mipsel-malta/linux-2.6.36.config
+ create mode 100644 board/qemu/mipsel-malta/readme.txt
+ create mode 100644 configs/qemu_mipsel_malta_defconfig
 
-diff --git a/board/qemu/sh4-r2d/kernel-patches/linux-06-17-SH-Add-missing-consts-to-sys_execve-declaration.patch b/board/qemu/sh4-r2d/kernel-patches/linux-06-17-SH-Add-missing-consts-to-sys_execve-declaration.patch
+diff --git a/board/qemu/mipsel-malta/linux-2.6.36.config b/board/qemu/mipsel-malta/linux-2.6.36.config
 new file mode 100644
-index 0000000..f702abe
+index 0000000..b51de4b
 --- /dev/null
-+++ b/board/qemu/sh4-r2d/kernel-patches/linux-06-17-SH-Add-missing-consts-to-sys_execve-declaration.patch
-@@ -0,0 +1,17 @@
-+diff --git a/arch/sh/include/asm/syscalls_32.h b/arch/sh/include/asm/syscalls_32.h
-+index be201fd..454538a 100644
-+--- a/arch/sh/include/asm/syscalls_32.h
-++++ b/arch/sh/include/asm/syscalls_32.h
-+@@ -19,8 +19,10 @@ asmlinkage int sys_clone(unsigned long clone_flags, unsigned long newsp,
-+ asmlinkage int sys_vfork(unsigned long r4, unsigned long r5,
-+ 			 unsigned long r6, unsigned long r7,
-+ 			 struct pt_regs __regs);
-+-asmlinkage int sys_execve(const char __user *ufilename, char __user * __user *uargv,
-+-			  char __user * __user *uenvp, unsigned long r7,
-++asmlinkage int sys_execve(const char __user *ufilename,
-++			  const char __user *const __user *uargv,
-++			  const char __user *const __user *uenvp,
-++			  unsigned long r7,
-+ 			  struct pt_regs __regs);
-+ asmlinkage int sys_sigsuspend(old_sigset_t mask, unsigned long r5,
-+ 			      unsigned long r6, unsigned long r7,
-diff --git a/board/qemu/sh4-r2d/kernel-patches/linux-sh-fix-kconfig-warning.patch b/board/qemu/sh4-r2d/kernel-patches/linux-sh-fix-kconfig-warning.patch
-new file mode 100644
-index 0000000..0ac07f2
---- /dev/null
-+++ b/board/qemu/sh4-r2d/kernel-patches/linux-sh-fix-kconfig-warning.patch
-@@ -0,0 +1,13 @@
-+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-+index 33990fa..06645b6 100644
-+--- a/arch/sh/Kconfig
-++++ b/arch/sh/Kconfig
-+@@ -45,7 +45,7 @@ config SUPERH32
-+ 	select HAVE_ARCH_KGDB
-+ 	select HAVE_HW_BREAKPOINT
-+ 	select HAVE_MIXED_BREAKPOINTS_REGS
-+-	select PERF_EVENTS if HAVE_HW_BREAKPOINT
-++	select PERF_EVENTS
-+ 	select ARCH_HIBERNATION_POSSIBLE if MMU
-+ 
-+ config SUPERH64
-diff --git a/board/qemu/sh4-r2d/linux-2.6.36.config b/board/qemu/sh4-r2d/linux-2.6.36.config
-new file mode 100644
-index 0000000..638e4e0
---- /dev/null
-+++ b/board/qemu/sh4-r2d/linux-2.6.36.config
-@@ -0,0 +1,106 @@
++++ b/board/qemu/mipsel-malta/linux-2.6.36.config
+@@ -0,0 +1,77 @@
++CONFIG_MIPS_MALTA=y
++CONFIG_CPU_LITTLE_ENDIAN=y
++CONFIG_CPU_MIPS32_R2=y
++CONFIG_MIPS_MT_SMP=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_HZ_100=y
 +CONFIG_EXPERIMENTAL=y
 +CONFIG_SYSVIPC=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
++CONFIG_LOG_BUF_SHIFT=15
 +CONFIG_SYSFS_DEPRECATED_V2=y
++CONFIG_RELAY=y
++CONFIG_NAMESPACES=y
++CONFIG_UTS_NS=y
++CONFIG_IPC_NS=y
++CONFIG_PID_NS=y
 +# CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
++CONFIG_EMBEDDED=y
 +# CONFIG_SYSCTL_SYSCALL is not set
++# CONFIG_COMPAT_BRK is not set
 +CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_OPROFILE=y
 +CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
 +# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_CPU_SUBTYPE_SH7751R=y
-+CONFIG_MEMORY_START=0x0c000000
-+CONFIG_FLATMEM_MANUAL=y
-+CONFIG_SH_RTS7751R2D=y
-+CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_HEARTBEAT=y
 +CONFIG_PCI=y
-+CONFIG_HOTPLUG_PCI=y
++CONFIG_PM=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
 +CONFIG_INET=y
 +CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
 +# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
 +# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
 +CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_FW_LOADER=m
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_PATA_PLATFORM=y
++# CONFIG_MISC_DEVICES is not set
++CONFIG_IDE=y
++CONFIG_BLK_DEV_IDECD=y
++CONFIG_IDE_GENERIC=y
++CONFIG_BLK_DEV_GENERIC=y
++CONFIG_BLK_DEV_PIIX=y
 +CONFIG_NETDEVICES=y
 +CONFIG_NET_ETHERNET=y
 +CONFIG_NET_PCI=y
-+CONFIG_8139CP=y
-+CONFIG_8139TOO=y
-+# CONFIG_8139TOO_PIO is not set
++CONFIG_PCNET32=y
++# CONFIG_NETDEV_1000 is not set
++# CONFIG_NETDEV_10000 is not set
 +# CONFIG_WLAN is not set
-+CONFIG_INPUT_FF_MEMLESS=m
-+# CONFIG_INPUT_MOUSEDEV is not set
 +# CONFIG_INPUT_KEYBOARD is not set
 +# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO is not set
++# CONFIG_SERIO_I8042 is not set
 +CONFIG_VT_HW_CONSOLE_BINDING=y
 +CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_SH_SCI=y
-+CONFIG_SERIAL_SH_SCI_NR_UARTS=1
-+CONFIG_SERIAL_SH_SCI_CONSOLE=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_SPI=y
-+CONFIG_SPI_SH_SCI=y
-+CONFIG_MFD_SM501=y
-+CONFIG_VIDEO_OUTPUT_CONTROL=m
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++# CONFIG_MFD_SUPPORT is not set
 +CONFIG_FB=y
-+CONFIG_FB_SH_MOBILE_LCDC=m
-+CONFIG_FB_SH_MOBILE_HDMI=m
-+CONFIG_FB_SM501=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+# CONFIG_LOGO_LINUX_MONO is not set
-+# CONFIG_LOGO_LINUX_VGA16 is not set
-+# CONFIG_LOGO_LINUX_CLUT224 is not set
-+# CONFIG_LOGO_SUPERH_MONO is not set
-+# CONFIG_LOGO_SUPERH_VGA16 is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=m
-+CONFIG_SND_YMFPCI=m
-+CONFIG_SOUND_PRIME=m
-+CONFIG_HID_A4TECH=y
-+CONFIG_HID_APPLE=y
-+CONFIG_HID_BELKIN=y
-+CONFIG_HID_CHERRY=y
-+CONFIG_HID_CHICONY=y
-+CONFIG_HID_CYPRESS=y
-+CONFIG_HID_EZKEY=y
-+CONFIG_HID_GYRATION=y
-+CONFIG_HID_LOGITECH=y
-+CONFIG_HID_MICROSOFT=y
-+CONFIG_HID_MONTEREY=y
-+CONFIG_HID_PANTHERLORD=y
-+CONFIG_HID_PETALYNX=y
-+CONFIG_HID_SAMSUNG=y
-+CONFIG_HID_SONY=y
-+CONFIG_HID_SUNPLUS=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_LIBUSUAL=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_R9701=y
++CONFIG_FB_CIRRUS=y
++# CONFIG_VGA_CONSOLE is not set
++# CONFIG_HID_SUPPORT is not set
++# CONFIG_USB_SUPPORT is not set
 +CONFIG_EXT2_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_QUOTA=y
 +CONFIG_PROC_KCORE=y
 +CONFIG_TMPFS=y
-+CONFIG_MINIX_FS=y
-+CONFIG_NLS_CODEPAGE_932=y
-+CONFIG_DEBUG_FS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3=y
++CONFIG_ROOT_NFS=y
 +# CONFIG_RCU_CPU_STALL_DETECTOR is not set
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+CONFIG_CRC_T10DIF=y
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
 new file mode 100644
-index 0000000..b237596
+index 0000000..b494976
 --- /dev/null
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -0,0 +1,17 @@
-+This little documentation explains how to build a kernel and a rootfs
-+for qemu with sh4 architecture.
++++ b/board/qemu/mipsel-malta/readme.txt
+@@ -0,0 +1,7 @@
++Run the emulation with:
 +
-+1) Select qemu sh4 configuration and compile it :
++ qemu-system-mipsel -M malta -kernel vmlinux -serial stdio -hda rootfs.ext2 -append "root=/dev/hda"
 +
-+make sh4_defconfig
-+make all
-+
-+2) Run qemu-system-sh4 with the kernel and rootfs previously generated
-+
-+It's recommended to use a git release for qemu (the current stable
-+version has framebuffer display issues). If you want to avoid building
-+all target, you can use this option on qemu configure :
-+--target-list=sh4-softmmu
-+
-+The command is :
-+qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append root=/dev/sda console=ttySC1,115200 noiotrap
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
++The login prompt will appear in the terminal that started Qemu. The
++graphical window is the framebuffer. No keyboard support has been
++enabled.
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
 new file mode 100644
-index 0000000..5e1f626
+index 0000000..b021c1f
 --- /dev/null
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -0,0 +1,17 @@
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -0,0 +1,15 @@
 +# Architecture
-+BR2_sh=y
-+BR2_sh4=y
++BR2_mipsel=y
++BR2_mips_32r2=y
 +
-+# The kernel wants to use the -m4-nofpu option to make sure that it
-+# doesn't use floating point operations.
-+BR2_GCC_VERSION_4_5_X=y
-+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
-+
-+# Linux kernel
++# Kernel
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_PATCH="board/qemu/sh4-r2d/kernel-patches/"
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.36.config"
++BR2_LINUX_KERNEL_VMLINUX=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 -- 
 1.7.0.4
