@@ -1,158 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  5 Dec 2010 21:53:14 +0100
-Subject: [Buildroot] [PATCH 43/55] Free text field for serial port
-	configuration
+Date: Sun,  5 Dec 2010 21:53:17 +0100
+Subject: [Buildroot] [PATCH 46/55] linux: Import minimal defconfigs as
+	defconfigs
 In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5b1d4ed81c2cdedfce4b9389697f9f4a7a0fc121.1291582352.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5362be689be3eaa9a4f79a03e2963080957c9496.1291582352.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Now that minimal kernel defconfigs are used in Buildroot, the problem
+is that copying those minimal configuration files to .config in the
+kernel source tree does not work, as kconfig will ask interactively
+what should be the value for all unspecified options.
 
-BR2_TARGET_GENERIC_GETTY_PORT has now a string type instead of choice.
-This makes port configuration flexible and compact.
+On suggestion on Sam Ravnborg, the easiest way to solve this is to
+import the minimal defconfig file as a defconfig inside the kernel
+tree (in arch/$(ARCH)/configs) and configure the kernel with it.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/generic/Config.in |  120 ++--------------------------------------------
- 1 files changed, 4 insertions(+), 116 deletions(-)
+ linux/linux.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 81ac011..c624ba8 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -17,123 +17,11 @@ menuconfig BR2_TARGET_GENERIC_GETTY
- 
- if BR2_TARGET_GENERIC_GETTY
- 
--choice
--	prompt "Serial port to run a getty on"
--	default BR2_TARGET_GENERIC_GETTY_TTYS0
--	help
--	  Select a port to run a getty (login prompt) on.
--
--config BR2_TARGET_GENERIC_GETTY_NONE
--	bool "none"
--config BR2_TARGET_GENERIC_GETTY_TTYS0
--	bool "ttyS0"
--config BR2_TARGET_GENERIC_GETTY_TTYS1
--	bool "ttyS1"
--config BR2_TARGET_GENERIC_GETTY_TTYS2
--	bool "ttyS2"
--config BR2_TARGET_GENERIC_GETTY_TTYS3
--	bool "ttyS3"
--config BR2_TARGET_GENERIC_GETTY_TTYAMA0
--	bool "ttyAMA0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA1
--	bool "ttyAMA1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA2
--	bool "ttyAMA2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYAMA3
--	bool "ttyAMA3"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC0
--	bool "ttySAC0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC1
--	bool "ttySAC1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC2
--	bool "ttySAC2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYSAC3
--	bool "ttySAC3"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC0
--	bool "ttymxc0"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC1
--	bool "ttymxc1"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYMXC2
--	bool "ttymxc2"
--	depends on BR2_arm
--config BR2_TARGET_GENERIC_GETTY_TTYUL0
--	bool "ttyUL0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL1
--	bool "ttyUL1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL2
--	bool "ttyUL2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYUL3
--	bool "ttyUL3"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC0
--	bool "ttyPSC0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC1
--	bool "ttyPSC1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC2
--	bool "ttyPSC2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYPSC3
--	bool "ttyPSC3"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM0
--	bool "ttyCPM0"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM1
--	bool "ttyCPM1"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM2
--	bool "ttyCPM2"
--	depends on BR2_powerpc
--config BR2_TARGET_GENERIC_GETTY_TTYCPM3
--	bool "ttyCPM3"
--	depends on BR2_powerpc
--endchoice
--
- config BR2_TARGET_GENERIC_GETTY_PORT
--	string
--	default "#ttyS0"	if BR2_TARGET_GENERIC_GETTY_NONE
--	default "ttyS0"		if BR2_TARGET_GENERIC_GETTY_TTYS0
--	default "ttyS1"		if BR2_TARGET_GENERIC_GETTY_TTYS1
--	default "ttyS2"		if BR2_TARGET_GENERIC_GETTY_TTYS2
--	default "ttyS3"		if BR2_TARGET_GENERIC_GETTY_TTYS3
--	default "ttyAMA0"	if BR2_TARGET_GENERIC_GETTY_TTYAMA0
--	default "ttyAMA1"	if BR2_TARGET_GENERIC_GETTY_TTYAMA1
--	default "ttyAMA2"	if BR2_TARGET_GENERIC_GETTY_TTYAMA2
--	default "ttyAMA3"	if BR2_TARGET_GENERIC_GETTY_TTYAMA3
--	default "ttySAC0"	if BR2_TARGET_GENERIC_GETTY_TTYSAC0
--	default "ttySAC1"	if BR2_TARGET_GENERIC_GETTY_TTYSAC1
--	default "ttySAC2"	if BR2_TARGET_GENERIC_GETTY_TTYSAC2
--	default "ttySAC3"	if BR2_TARGET_GENERIC_GETTY_TTYSAC3
--	default "ttymxc0"	if BR2_TARGET_GENERIC_GETTY_TTYMXC0
--	default "ttymxc1"	if BR2_TARGET_GENERIC_GETTY_TTYMXC1
--	default "ttymxc2"	if BR2_TARGET_GENERIC_GETTY_TTYMXC2
--	default "ttyUL0"	if BR2_TARGET_GENERIC_GETTY_TTYUL0
--	default "ttyUL1"	if BR2_TARGET_GENERIC_GETTY_TTYUL1
--	default "ttyUL2"	if BR2_TARGET_GENERIC_GETTY_TTYUL2
--	default "ttyUL3"	if BR2_TARGET_GENERIC_GETTY_TTYUL3
--	default "ttyPSC0"	if BR2_TARGET_GENERIC_GETTY_TTYPSC0
--	default "ttyPSC1"	if BR2_TARGET_GENERIC_GETTY_TTYPSC1
--	default "ttyPSC2"	if BR2_TARGET_GENERIC_GETTY_TTYPSC2
--	default "ttyPSC3"	if BR2_TARGET_GENERIC_GETTY_TTYPSC3
--	default "ttyCPM0"	if BR2_TARGET_GENERIC_GETTY_TTYCPM0
--	default "ttyCPM1"	if BR2_TARGET_GENERIC_GETTY_TTYCPM1
--	default "ttyCPM2"	if BR2_TARGET_GENERIC_GETTY_TTYCPM2
--	default "ttyCPM3"	if BR2_TARGET_GENERIC_GETTY_TTYCPM3
-+	string "Serial port to run a getty on"
-+	default "ttyS0"
-+	help
-+	  Specify a port to run a getty (login prompt) on.
- 
- choice
- 	prompt "Baudrate to use"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f7b0889..746eab0 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -87,7 +87,9 @@ $(LINUX26_DIR)/.stamp_configured: $(LINUX26_DIR)/.stamp_patched
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(@D)/.config
++	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(@D)/arch/$(KERNEL_ARCH)/configs/buildroot_defconfig
++	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) buildroot_defconfig
++	rm $(@D)/arch/$(KERNEL_ARCH)/configs/buildroot_defconfig
+ endif
+ ifeq ($(BR2_ARM_EABI),y)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config)
 -- 
 1.7.0.4
