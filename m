@@ -1,47 +1,25 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Mon, 06 Dec 2010 11:58:33 +0100
-Subject: [Buildroot] [PATCH] New package: sdparm
-Message-ID: <4CFCC1D9.8070209@visionsystems.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  6 Dec 2010 14:21:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 2419] Add a bundle of Lua modules
+In-Reply-To: <bug-2419-163@https.bugs.busybox.net/>
+References: <bug-2419-163@https.bugs.busybox.net/>
+Message-ID: <20101206142129.724768E1FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add utility to accesses SCSI device parameters.
+https://bugs.busybox.net/show_bug.cgi?id=2419
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+--- Comment #1 from Fran?ois Perrad <francois.perrad@gadz.org>  ---
+Created attachment 2773
+  --> https://bugs.busybox.net/attachment.cgi?id=2773
+I've updated the patches vs BR-2010.11
 
-Index: b/package/sdparm/Config.in
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/sdparm/Config.in	2010-12-06 11:14:41.000000000 +0100
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_SDPARM
-+	bool "sdparm"
-+	help
-+	  Utility to accesses SCSI device parameters.
-Index: b/package/sdparm/sdparm.mk
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/sdparm/sdparm.mk	2010-12-06 08:33:16.000000000 +0100
-@@ -0,0 +1,7 @@
-+SDPARM_VERSION = 1.06
-+SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
-+SDPARM_SITE = http://sg.danny.cz/sg/p/
-+SDPARM_INSTALL_STAGING = NO
-+SDPARM_INSTALL_TARGET = YES
-+
-+$(eval $(call AUTOTARGETS,package,sdparm))
-Index: b/package/Config.in
-===================================================================
---- a/package/Config.in	2010-11-08 12:09:05.000000000 +0100
-+++ b/package/Config.in	2010-12-03 17:37:41.000000000 +0100
-@@ -184,6 +184,7 @@
- source "package/ntfsprogs/Config.in"
- source "package/pciutils/Config.in"
- source "package/rng-tools/Config.in"
-+source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- # busybox has fdisk
+ping
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
