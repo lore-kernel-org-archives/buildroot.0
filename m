@@ -1,53 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Dec 2010 21:05:10 +0100
-Subject: [Buildroot] [PATCH] New package: sdparm
-In-Reply-To: <4CFCC1D9.8070209@visionsystems.de>
-References: <4CFCC1D9.8070209@visionsystems.de>
-Message-ID: <20101206210510.5ef8ca45@surf>
+Date: Mon, 6 Dec 2010 21:09:24 +0100
+Subject: [Buildroot] [PATCH] add insserv to use LSB compliant init
+ scripts and dynamically configure init order
+In-Reply-To: <96b265c099c9a9d7673ed6061aa562878ac45be0.1291587953.git.smiley73@users.sourceforge.net>
+References: <96b265c099c9a9d7673ed6061aa562878ac45be0.1291587953.git.smiley73@users.sourceforge.net>
+Message-ID: <20101206210924.75330f3d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+Hello,
 
-On Mon, 06 Dec 2010 11:58:33 +0100
-Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
+On Sun,  5 Dec 2010 16:26:19 -0600
+heiko at zuerker.org wrote:
 
-> Index: b/package/sdparm/Config.in
-> ===================================================================
-> --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-> +++ b/package/sdparm/Config.in	2010-12-06 11:14:41.000000000
-> +0100 @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_SDPARM
-> +	bool "sdparm"
+> +config BR2_PACKAGE_INSSERV
+> +	bool "insserv"
 > +	help
-> +	  Utility to accesses SCSI device parameters.
+> +	  This small package provides a tool for process controlling
+> +	  in System V boot scripts.
+> +	  It works for LSB compliant init scripts.
+> +	  http://wiki.debian.org/LSBInitScripts
 
-We generally put the URL of the project here in the help text.
+Just curious, how do you use this in the context of Buildroot ?
 
-> Index: b/package/sdparm/sdparm.mk
-> ===================================================================
-> --- /dev/null	1970-01-01 00:00:00.000000000 +0000
-> +++ b/package/sdparm/sdparm.mk	2010-12-06 08:33:16.000000000
-> +0100 @@ -0,0 +1,7 @@
-> +SDPARM_VERSION = 1.06
-> +SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
-> +SDPARM_SITE = http://sg.danny.cz/sg/p/
-> +SDPARM_INSTALL_STAGING = NO
-> +SDPARM_INSTALL_TARGET = YES
+By default, Buildroot uses Busybox init, which isn't SysV compliant (it
+doesn't support runlevels). And how would this interact with the
+Buildroot build process ?
 
-You can get rid of those last two lines, they are the default behaviour.
+> +#INSSERV_DEPENDENCIES=zlib
+> +#HOST_INSSERV_DEPENDENCIES=host-zlib
 
-Once you have fixed those two minors comment, you get my:
+Useful ? Comments ?
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +define INSSERV_CONFIGURE_CMDS
+> +	echo "#!/bin/sh" > $(@D)/tests/common
+> +	echo "exit 0" >> $(@D)/tests/common
+> +	chmod +x $(@D)/tests/common
+> +endef
+> +
+> +define HOST_INSSERV_CONFIGURE_CMDS
+> +	echo "#!/bin/sh" > $(@D)/tests/common
+> +	echo "exit 0" >> $(@D)/tests/common
+> +	chmod +x $(@D)/tests/common
+> +endef
 
-Peter: it builds fine here with a minimal Buildroot toolchain (no
-largefile, no IPv6, no locale, etc.).
+Those sound strange. Maybe a short comment above would clarify a bit.
 
-Regards,
+Thanks!
 
 Thomas
 -- 
