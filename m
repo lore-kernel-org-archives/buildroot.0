@@ -1,96 +1,85 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 6 Dec 2010 15:20:47 -0500
-Subject: [Buildroot] Pull request buildroot.git (vapier branch)
-In-Reply-To: <20101206203910.15e7fd5a@surf>
-References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
-	<201012060250.03103.vapier@gentoo.org>
-	<20101206203910.15e7fd5a@surf>
-Message-ID: <201012061520.47907.vapier@gentoo.org>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Mon, 06 Dec 2010 14:29:39 -0600
+Subject: [Buildroot] [PATCH] add insserv to use LSB compliant init
+ scripts and dynamically configure init order
+In-Reply-To: <20101206210924.75330f3d@surf>
+References: <96b265c099c9a9d7673ed6061aa562878ac45be0.1291587953.git.smiley73@users.sourceforge.net>
+	<20101206210924.75330f3d@surf>
+Message-ID: <20101206142939.363466ukki3ve10k@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, December 06, 2010 14:39:10 Thomas Petazzoni wrote:
-> On Mon, 6 Dec 2010 02:50:01 -0500 Mike Frysinger wrote:
-> > > Moreover, pax-utils requires LARGEFILE support, so you have to do
-> > 
-> > > the usual stuff in the Config.in file:
-> > why do you say this ?
-> 
-> Because when you build it with a toolchain that doesn't support
-> LARGEFILE you have undefined references to glob64_t. It can probably be
-> fixed in pax-utils itself, but when we don't want to fix it, we just
-> mark the package as depending on LARGEFILE.
+Quoting Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 
-considering i'm one of the authors, i'd rather fix pax-utils upstream.  i see 
-no reason for it to be using glob64 code considering we build with _GNU_SOURCE 
-which implies LFS which transparently rewrites glob to glob64 with glibc.
+> Hello,
+>
+> On Sun,  5 Dec 2010 16:26:19 -0600
+> heiko at zuerker.org wrote:
+>
+>> +config BR2_PACKAGE_INSSERV
+>> +	bool "insserv"
+>> +	help
+>> +	  This small package provides a tool for process controlling
+>> +	  in System V boot scripts.
+>> +	  It works for LSB compliant init scripts.
+>> +	  http://wiki.debian.org/LSBInitScripts
+>
+> Just curious, how do you use this in the context of Buildroot ?
 
-> > > >       portmap: add nommu support
-> > > 
-> > > Just curious: why was portmap compiled PIE ?
-> > 
-> > redhat takes the general position that network daemons be compiled as
-> > PIEs. since the portmap maintainer is a redhat employee, he put it
-> > into the portmap build system instead of keeping it in the redhat
-> > spec.  glibc does the same thing.
-> 
-> Ok, thanks. Do you what's the reasoning behind compiling all network
-> daemons as PIE ? Is it because of some address space randomization
-> feature ?
+I'm currently trying to get buildroot working as a build system for  
+Devil-Linux.
+Unfortunately I can't go the minimalistic route with most things,  
+since I need to stay aligned with the current stable release.
 
-i'm fairly certain that is why.  if it werent built as a PIE, then using ASLR 
-would cause unsharable mappings, and that can quickly suck up resources.
+> By default, Buildroot uses Busybox init, which isn't SysV compliant (it
+> doesn't support runlevels). And how would this interact with the
+> Buildroot build process ?
 
-> > > Have you pushed the patches upstream ?
-> > 
-> > of course, but the maintainer hasnt updated things in a while.
-> > probably because people are moving to rpcbind.
-> 
-> Should we as well ?
+I call it as part of BR2_ROOTFS_POST_BUILD_SCRIPT, in order to get the  
+init scripts ordered initially.
+Later we do use insserv during upgrades, to fix any new dependencies.
 
-the rpcbind stack isnt as friendly (yet) to uClibc.  so it might be an OK 
-future plan, but today it wont work out of the box.  and i dont have personal 
-interest to get it resolved today.
+Insserv works only with BR2_PACKAGE_SYSVINIT, maybe I should add this  
+as a dependency.
 
-> > > >       irda-utils: new package for IrDA devices
-> > > 
-> > > I know Peter wants a short description + author in each patch. Your
-> > > patches are fairly obvious, but that's the rule :)
-> > 
-> > i dont know what you mean by author.  git already tracks authorship.
-> 
-> Peter still wants the patch we have in Buildroot to carry a description
-> and an author. The author of the patch may not be the person who
-> imported it into Buildroot.
+>> +#INSSERV_DEPENDENCIES=zlib
+>> +#HOST_INSSERV_DEPENDENCIES=host-zlib
+>
+> Useful ? Comments ?
 
-when using `git am` or `git pull`, it does retain authorship.  i dont see how 
-the changeset would make it into the tree unless people were manually doing 
-`patch && git commit`.
+Nope, just me forgetting to clean up my stuff after I copy scripts.
 
-> > > I tested the Blackfin support (well only the build part of it,
-> > > since I don't have hardware to test), and I had a few issues with
-> > > the default Busybox configuration:
-> > 
-> > which are all fixed by another patch i have which adds defconfigs for
-> > Blackfin boards.  fixing the default defconfig makes no sense to me
-> > so i'm not going to spend time on it.
-> 
-> Ok. I think we generally want Buildroot to make a working build when
-> used out-of-the-box. I.e, without using any defconfig, if the user does
-> "make menuconfig", selects "blackfin" and then exits, the build should
-> be working. I think Peter quite likes this rule. But for the blackfin
-> case, we can probably discuss how to solve this later.
+>> +define INSSERV_CONFIGURE_CMDS
+>> +	echo "#!/bin/sh" > $(@D)/tests/common
+>> +	echo "exit 0" >> $(@D)/tests/common
+>> +	chmod +x $(@D)/tests/common
+>> +endef
+>> +
+>> +define HOST_INSSERV_CONFIGURE_CMDS
+>> +	echo "#!/bin/sh" > $(@D)/tests/common
+>> +	echo "exit 0" >> $(@D)/tests/common
+>> +	chmod +x $(@D)/tests/common
+>> +endef
+>
+> Those sound strange. Maybe a short comment above would clarify a bit.
 
-well, it wont be specific to Blackfin, and would probably require digging down 
-into mmu/nommu specific options in things like busybox.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101206/b479194e/attachment-0001.pgp>
+Okay I'll add that.
+It's basically just disabling some tests, which would fail otherwise.
+
+> Thanks!
+
+I'm still learning how buildroot works, so my apologies for any  
+patches I sent in which need fixing.
+
+-- 
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
