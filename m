@@ -1,47 +1,47 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 6 Dec 2010 10:44:40 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.02/fix-ccache-support
-In-Reply-To: <874oarx2r5.fsf@macbook.be.48ers.dk>
-References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-	<874oarx2r5.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTimzwXT4JMAv_oZxcCrRSEbGc8reZ+GfYhb8RHUZ@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 06 Dec 2010 11:58:33 +0100
+Subject: [Buildroot] [PATCH] New package: sdparm
+Message-ID: <4CFCC1D9.8070209@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Add utility to accesses SCSI device parameters.
 
-On 5 December 2010 23:40, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-[snip]
-
-> ?Thomas> I'm not using the symlink technique that was used in the past, but
-> ?Thomas> rather prefixing all invocation to host gcc and target gcc with
-> ?Thomas> "$(HOST_DIR)/usr/bin/ccache".
->
-> Is that working everywhere? I remember we had some problems back when we
-> added --sysroot= to TARGET_CC. The qt package in particular is stripping
-> the --sysroot argument because of this.
-
-The cdrkit package also strips off --sysroot because its build system
-CMake doesn't like it when --sysroot is part of the compiler path.
-
-Actually, I am currently working on a CMAKETARGETS macro (similar to
-AUTOTARGETS) and decided to write a patch that takes --sysroot out of
-TARGET_CC and move it to the {C,CXX}FLAGS variables, to make CMake
-happy. I've been meaning to post the patch series but I don't feel
-it's ready to be merged yet. How do the Buildroot developers feel
-about
-
-a) moving --sysroot from TARGET_CC to {C,CXX}FLAGS
-
-b) add CMAKETARGETS infrastructure
-
-If this sounds interesting I can post the patches for review.
-
-Best regards,
-Bj?rn Forsman
+Index: b/package/sdparm/Config.in
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/sdparm/Config.in	2010-12-06 11:14:41.000000000 +0100
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_SDPARM
++	bool "sdparm"
++	help
++	  Utility to accesses SCSI device parameters.
+Index: b/package/sdparm/sdparm.mk
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/sdparm/sdparm.mk	2010-12-06 08:33:16.000000000 +0100
+@@ -0,0 +1,7 @@
++SDPARM_VERSION = 1.06
++SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
++SDPARM_SITE = http://sg.danny.cz/sg/p/
++SDPARM_INSTALL_STAGING = NO
++SDPARM_INSTALL_TARGET = YES
++
++$(eval $(call AUTOTARGETS,package,sdparm))
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in	2010-11-08 12:09:05.000000000 +0100
++++ b/package/Config.in	2010-12-03 17:37:41.000000000 +0100
+@@ -184,6 +184,7 @@
+ source "package/ntfsprogs/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/rng-tools/Config.in"
++source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # busybox has fdisk
