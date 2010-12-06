@@ -1,85 +1,116 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Mon, 06 Dec 2010 14:29:39 -0600
-Subject: [Buildroot] [PATCH] add insserv to use LSB compliant init
- scripts and dynamically configure init order
-In-Reply-To: <20101206210924.75330f3d@surf>
-References: <96b265c099c9a9d7673ed6061aa562878ac45be0.1291587953.git.smiley73@users.sourceforge.net>
-	<20101206210924.75330f3d@surf>
-Message-ID: <20101206142939.363466ukki3ve10k@www.home.zuerker.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Dec 2010 21:44:05 +0100
+Subject: [Buildroot] Pull request buildroot.git (vapier branch)
+In-Reply-To: <201012061520.47907.vapier@gentoo.org>
+References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
+	<201012060250.03103.vapier@gentoo.org>
+	<20101206203910.15e7fd5a@surf>
+	<201012061520.47907.vapier@gentoo.org>
+Message-ID: <20101206214405.1fe43de1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+Hello,
 
-> Hello,
->
-> On Sun,  5 Dec 2010 16:26:19 -0600
-> heiko at zuerker.org wrote:
->
->> +config BR2_PACKAGE_INSSERV
->> +	bool "insserv"
->> +	help
->> +	  This small package provides a tool for process controlling
->> +	  in System V boot scripts.
->> +	  It works for LSB compliant init scripts.
->> +	  http://wiki.debian.org/LSBInitScripts
->
-> Just curious, how do you use this in the context of Buildroot ?
+On Mon, 6 Dec 2010 15:20:47 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-I'm currently trying to get buildroot working as a build system for  
-Devil-Linux.
-Unfortunately I can't go the minimalistic route with most things,  
-since I need to stay aligned with the current stable release.
+> considering i'm one of the authors, i'd rather fix pax-utils upstream.  i see 
+> no reason for it to be using glob64 code considering we build with _GNU_SOURCE 
+> which implies LFS which transparently rewrites glob to glob64 with glibc.
 
-> By default, Buildroot uses Busybox init, which isn't SysV compliant (it
-> doesn't support runlevels). And how would this interact with the
-> Buildroot build process ?
+Ok. Here is what I have with my !LARGEFILE toolchain:
 
-I call it as part of BR2_ROOTFS_POST_BUILD_SCRIPT, in order to get the  
-init scripts ordered initially.
-Later we do use insserv during upgrades, to fix any new dependencies.
+/home/test/toolchains/br-arm-basic/usr/bin/arm-linux-gcc --sysroot=/home/test/outputs/pax/staging -Os -mabi=aapcs-linux -msoft-float -D_GNU_SOURCE -o scanelf.o -c scanelf.c
+scanelf.c: In function 'load_ld_cache_config':
+scanelf.c:1597: error: 'glob64_t' undeclared (first use in this function)
+scanelf.c:1597: error: (Each undeclared identifier is reported only once
+scanelf.c:1597: error: for each function it appears in.)
+scanelf.c:1597: error: expected ';' before 'gl'
+scanelf.c:1598: warning: ISO C90 forbids mixed declarations and code
+scanelf.c:1608: warning: implicit declaration of function 'glob64'
+scanelf.c:1608: warning: nested extern declaration of 'glob64'
+scanelf.c:1608: error: 'gl' undeclared (first use in this function)
+scanelf.c:1615: warning: implicit declaration of function 'globfree64'
+scanelf.c:1615: warning: nested extern declaration of 'globfree64'
+make[1]: *** [scanelf.o] Error 1
 
-Insserv works only with BR2_PACKAGE_SYSVINIT, maybe I should add this  
-as a dependency.
+> > > redhat takes the general position that network daemons be compiled as
+> > > PIEs. since the portmap maintainer is a redhat employee, he put it
+> > > into the portmap build system instead of keeping it in the redhat
+> > > spec.  glibc does the same thing.
+> > 
+> > Ok, thanks. Do you what's the reasoning behind compiling all network
+> > daemons as PIE ? Is it because of some address space randomization
+> > feature ?
+> 
+> i'm fairly certain that is why.  if it werent built as a PIE, then using ASLR 
+> would cause unsharable mappings, and that can quickly suck up resources.
 
->> +#INSSERV_DEPENDENCIES=zlib
->> +#HOST_INSSERV_DEPENDENCIES=host-zlib
->
-> Useful ? Comments ?
+Ok, thanks.
 
-Nope, just me forgetting to clean up my stuff after I copy scripts.
+> > > > Have you pushed the patches upstream ?
+> > > 
+> > > of course, but the maintainer hasnt updated things in a while.
+> > > probably because people are moving to rpcbind.
+> > 
+> > Should we as well ?
+> 
+> the rpcbind stack isnt as friendly (yet) to uClibc.  so it might be an OK 
+> future plan, but today it wont work out of the box.  and i dont have personal 
+> interest to get it resolved today.
 
->> +define INSSERV_CONFIGURE_CMDS
->> +	echo "#!/bin/sh" > $(@D)/tests/common
->> +	echo "exit 0" >> $(@D)/tests/common
->> +	chmod +x $(@D)/tests/common
->> +endef
->> +
->> +define HOST_INSSERV_CONFIGURE_CMDS
->> +	echo "#!/bin/sh" > $(@D)/tests/common
->> +	echo "exit 0" >> $(@D)/tests/common
->> +	chmod +x $(@D)/tests/common
->> +endef
->
-> Those sound strange. Maybe a short comment above would clarify a bit.
+Ok. I am personally not that familiar with portmap/rpcbind.
 
-Okay I'll add that.
-It's basically just disabling some tests, which would fail otherwise.
+> > > > >       irda-utils: new package for IrDA devices
+> > > > 
+> > > > I know Peter wants a short description + author in each patch. Your
+> > > > patches are fairly obvious, but that's the rule :)
+> > > 
+> > > i dont know what you mean by author.  git already tracks authorship.
+> > 
+> > Peter still wants the patch we have in Buildroot to carry a description
+> > and an author. The author of the patch may not be the person who
+> > imported it into Buildroot.
+> 
+> when using `git am` or `git pull`, it does retain authorship.  i dont see how 
+> the changeset would make it into the tree unless people were manually doing 
+> `patch && git commit`.
 
-> Thanks!
+I'm not talking about the patches you are sending to Buildroot, but the
+patches that are added to packages (i.e patches inside the patches).
 
-I'm still learning how buildroot works, so my apologies for any  
-patches I sent in which need fixing.
+For Buildroot patches, obviously Git tracks everything. But not for
+the individual package/*/*.patch, which can come from various sources.
 
+> > Ok. I think we generally want Buildroot to make a working build when
+> > used out-of-the-box. I.e, without using any defconfig, if the user does
+> > "make menuconfig", selects "blackfin" and then exits, the build should
+> > be working. I think Peter quite likes this rule. But for the blackfin
+> > case, we can probably discuss how to solve this later.
+> 
+> well, it wont be specific to Blackfin, and would probably require digging down 
+> into mmu/nommu specific options in things like busybox.
+
+Yes, it is definitely not Blackfin specific, and is a problem all !MMU
+arches would have. But again, we could solve it at a later time, I
+don't see that as a problem to get the Blackfin arch support merged.
+
+Thanks!
+
+Thomas
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101206/24d28f36/attachment.pgp>
