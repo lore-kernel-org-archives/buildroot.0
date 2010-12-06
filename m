@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Dec 2010 00:07:59 +0100
-Subject: [Buildroot] [PATCH 0/5] toolchain rework, part 1
-In-Reply-To: <1291664411-27836-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1291664411-27836-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20101207000759.42974a61@surf>
+Date: Tue, 7 Dec 2010 00:14:57 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+ for-2011.02/fix-ccache-support
+In-Reply-To: <874oarx2r5.fsf@macbook.be.48ers.dk>
+References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
+	<874oarx2r5.fsf@macbook.be.48ers.dk>
+Message-ID: <20101207001457.56309418@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +14,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Dec 2010 16:40:06 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+On Sun, 05 Dec 2010 23:40:14 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> This is the first batch of patches for the internal toolchain rework.
+>  Thomas> The ccache cache is kept in ~/.buildroot-ccache/, so that it can be
+>  Thomas> shared between different builds.
 > 
-> In this first stage we convert gmp, mpfr and mpc to proper packages and
-> hook them up for use in the current toolchain.
-> 
-> We also fix a small bug in the package infra with regards to versioned patches
-> that'll be required to avoid duplication in the binutils/gcc migration.
+> Why here and not in the default ~/.ccache? Is the ~/.ccache directory
+> content ccache-version dependent?
 
-I have reviewed these patches, and tested that I could build
-successfully an ARM toolchain, and a native ARM toolchain for the
-target. The ARM cross-compiling toolchain was used to compile a
-complete DirectFB+Gtk stack. The native toolchain on the target was
-used to compile a simple hello world program, that I could execute.
+I don't know how ccache-version dependent are the contents of the cache
+directory. In the previous ccache integration, the cache was inside
+Buildroot build directory (which I thought was stupid since you then
+couldn't share the cache between different Buildroot builds), but I
+kept the idea of having a Buildroot-specific location for the cache.
 
-Therefore, since I have also reviewed those changes, they all get my:
+I don't have strong opinion/arguments on that, so if you say we should
+use the default cache location, I'll just do it.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Is that working everywhere?
+
+Everywhere I don't know, I obviously haven't compiled all our packages
+with ccache support enabled.
+
+> I remember we had some problems back when we added --sysroot= to TARGET_CC.
+> The qt package in particular is stripping the --sysroot argument because
+> of this.
+
+I just tried Qt, and it built fine. It does not use ccache for the
+parts compiled for the host (since we don't tell Qt about $(HOSTCXX)),
+but it definitely uses the cache for parts compiled for the target.
+
+Here are the results for a Busybox + Qt build, with a CodeSourcery glibc
+ARM external toolchain.
+
+Cold cache
+==========
+
+real    7m41.319s
+user    37m53.620s
+sys     1m31.660s
+
+Hot cache
+=========
+
+real    3m4.738s
+user    5m34.480s
+sys     0m36.160s
+
+And in the hot cache case, a quite significant time is spent rebuilding
+the host tools, as ccache is not used there. So we could probably speed
+this up a bit further.
+
+I am not strongly advocating the usage of the "ccache /path/to/gcc"
+solution compared to the symbolic link solutions, but if the first
+solution works, I find it better because: 1) it's nicer and 2) it's
+easier to implement with external toolchains.
 
 Regards,
 
