@@ -1,54 +1,48 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Mon, 06 Dec 2010 08:26:20 -0600
-Subject: [Buildroot] [PATCH] improved initramfs and iso target support
-In-Reply-To: <201012060156.04137.vapier@gentoo.org>
-References: <ea18b2e06d4eccbe63653f6186d7e6e15b7b9178.1291585241.git.smiley73@users.sourceforge.net>
-	<201012060156.04137.vapier@gentoo.org>
-Message-ID: <20101206082620.67683ns4t4j06j6s@www.home.zuerker.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 06 Dec 2010 16:08:17 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	for-2011.02/fix-ccache-support
+In-Reply-To: <AANLkTimzwXT4JMAv_oZxcCrRSEbGc8reZ+GfYhb8RHUZ@mail.gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Mon,
+	6 Dec 2010 10:44:40 +0100")
+References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
+	<874oarx2r5.fsf@macbook.be.48ers.dk>
+	<AANLkTimzwXT4JMAv_oZxcCrRSEbGc8reZ+GfYhb8RHUZ@mail.gmail.com>
+Message-ID: <87tyiruefy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
-Quoting Mike Frysinger <vapier@gentoo.org>:
-> On Sunday, December 05, 2010 16:40:51 heiko at zuerker.org wrote:
->> A small initramfs is now supported in order to initialize the system (like
->> initrd). New options to create a bootable CD with optional support for a
->> minimal initramfs, isolinux boot loader and zisofs have been added.
->>
->> The iso filesystem doesn't need the ext2 image anymore, but the old
->> functionality is still available.
->
-> please word wrap your changelog
+Hi,
 
-done
+ Bj?rn> Actually, I am currently working on a CMAKETARGETS macro (similar to
+ Bj?rn> AUTOTARGETS) and decided to write a patch that takes --sysroot out of
+ Bj?rn> TARGET_CC and move it to the {C,CXX}FLAGS variables, to make CMake
+ Bj?rn> happy. I've been meaning to post the patch series but I don't feel
+ Bj?rn> it's ready to be merged yet. How do the Buildroot developers feel
+ Bj?rn> about
 
->> +menu "initramfs options"
->> +depends on BR2_TARGET_DO_INITRAMFS
->> +
->> +choice
->> +	prompt "initramfs type"
->> +	default BR2_TARGET_ROOTFS_INITRAMFS
->> +	depends on BR2_TARGET_DO_INITRAMFS
->> +	help
->> +	  Select compressor for ext2 filesystem of the root filesystem
->
-> initramfs is not ext2 by definition, but ignoring that, this is not selecting
-> compression.
+ Bj?rn> a) moving --sysroot from TARGET_CC to {C,CXX}FLAGS
 
-That's what I get for copy'n'pasting.... ;-)
+It afaik got moved in the first place to fix issues with external
+toolchains (E.G. where sysroot is important) and various configure
+scripts not using CFLAGS, so I don't think this will work.
 
-I sent in a revised patch.
+Perhaps we should simply bite the bullet and add simple shell wrappers
+in HOST_DIR / STAGING_DIR for gcc/g++/ld which add --sysroot when we're
+using an external toolchain, and then get rid of --sysroot in TARGET_CC.
+
+ Bj?rn> b) add CMAKETARGETS infrastructure
+
+Sounds good!
+
+ Bj?rn> If this sounds interesting I can post the patches for review.
+
+Yes, please.
 
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+Bye, Peter Korsgaard
