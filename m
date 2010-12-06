@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 6 Dec 2010 23:24:15 +0100
-Subject: [Buildroot] [git commit master 1/1] m4: version bump to 1.4.15
-Message-ID: <20101206222758.BDFB58D9B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] xz: version bump to 5.0.0
+Message-ID: <20101206222758.E97DD8D9B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d8c87560180723e6a140a71e8871986caa244f3
+commit: http://git.buildroot.net/buildroot/commit/?id=7bb7de971269c863e7d5204417dd6adcc73e72c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-And include patch from OE for building on uClibc targets.
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                           |    2 +-
- package/m4/m4-1.4.15-uclibc-sched_param-def.patch |   19 +++++++++++++++++++
- package/m4/m4.mk                                  |    2 +-
- 3 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100644 package/m4/m4-1.4.15-uclibc-sched_param-def.patch
+ CHANGES          |    2 +-
+ package/xz/xz.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 77ceee0..e590289 100644
+index e590289..7ca867f 100644
 --- a/CHANGES
 +++ b/CHANGES
 @@ -1,6 +1,6 @@
  2011.02, Not yet released:
  
--	Updated/fixed packages: cloop
-+	Updated/fixed packages: cloop, m4
+-	Updated/fixed packages: cloop, m4
++	Updated/fixed packages: cloop, m4, xz
  
  2010.11, Released November 30th, 2010:
  
-diff --git a/package/m4/m4-1.4.15-uclibc-sched_param-def.patch b/package/m4/m4-1.4.15-uclibc-sched_param-def.patch
-new file mode 100644
-index 0000000..47bdd3d
---- /dev/null
-+++ b/package/m4/m4-1.4.15-uclibc-sched_param-def.patch
-@@ -0,0 +1,19 @@
-+uclibc defines __GLIBC__ but it does not expose struct shed_param as much as glibc
-+and is not needed too per standard. gnulib attempts to use it but we have to account
-+for it because in this case uclibc does not behave like glibc.
-+
-+-Khem
-+
-+Index: m4-1.4.14/lib/spawn.in.h
-+===================================================================
-+--- m4-1.4.14.orig/lib/spawn.in.h	2010-06-01 14:27:59.394242980 -0700
-++++ m4-1.4.14/lib/spawn.in.h	2010-06-01 14:28:28.202332200 -0700
-+@@ -31,7 +31,7 @@
-+ 
-+ /* Get definitions of 'struct sched_param' and 'sigset_t'.
-+    But avoid namespace pollution on glibc systems.  */
-+-#ifndef __GLIBC__
-++#if !defined __GLIBC__ || defined __UCLIBC__
-+ # include <sched.h>
-+ # include <signal.h>
-+ #endif
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 7f2e333..d713b6d 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 7490f77..a965d8a 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
 @@ -3,7 +3,7 @@
- # m4
+ # xz-utils
  #
  #############################################################
--M4_VERSION = 1.4.9
-+M4_VERSION = 1.4.15
- M4_SOURCE = m4-$(M4_VERSION).tar.bz2
- M4_SITE = $(BR2_GNU_MIRROR)/m4
- 
+-XZ_VERSION = 4.999.9beta
++XZ_VERSION = 5.0.0
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz/
+ XZ_INSTALL_STAGING = YES
 -- 
 1.7.2.2
