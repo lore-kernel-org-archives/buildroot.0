@@ -1,31 +1,39 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Tue,  7 Dec 2010 13:36:49 -0800
-Subject: [Buildroot] X-Loader support
-Message-ID: <1291757810-11503-1-git-send-email-maxime.petazzoni@bulix.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 Dec 2010 23:01:35 +0100
+Subject: [Buildroot] [git commit master 1/1] linux: drop LDFLAGS override
+Message-ID: <20101207220221.B9B878E11D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-The following patch adds support for the X-Loader bootloader. Using a tarball
-extracted from http://gitorious.org/x-load-omap3/mainline I was able to produce
-the X-Loader BIN and IFT images.
+commit: http://git.buildroot.net/buildroot/commit/?id=3bbf1c2ea6140d8b288b0af5b1a9c3a1aa92edad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As explained in the commit message, support for the custom patch dir isn't
-implemented yet. It should be very similar to what U-Boot does already using
-patch-kernel.sh, but I didn't have the time to implement and test it yet so I
-left it out of this first try.
+The current linux code overrides LDFLAGS that the kernel itself might be
+setting up. Looking at the history, there doesn't seem to be any reason
+for this override. It was added in ea8b1fa6a60705 without any logic.
 
-Also, since this is outside of the package infrastructure, we can't use
-non-wget download so only custom tarball is supported for now. I need to work
-on the DOWNLOAD macro a bit more to allow for its use outside of the package
-infrastructure (which is simply finding a way around the $(PKG) references).
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Anyway, having support for X-Loader is a first step towards supporting the
-BeagleBoard for example. Being able to source the Linux kernel from Git is
-probably one of the next steps, too (relying on the improved DOWNLOAD macro).
-
-- Maxime
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8dc7dd0..feda418 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -24,7 +24,6 @@ LINUX26_MAKE_FLAGS = \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE=$(TARGET_CROSS) \
+-	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	LZMA="$(LZMA)"
+ 
+ # Get the real Linux version, which tells us where kernel modules are
+-- 
+1.7.2.2
