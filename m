@@ -1,82 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 Dec 2010 22:56:56 +0100
-Subject: [Buildroot] [git commit master 1/1] lsuio: new UIO helper package
-Message-ID: <20101207215804.5C1278E11D@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Tue, 7 Dec 2010 16:30:31 -0500
+Subject: [Buildroot] [PATCH v2] rsh-redone: new package for rsh/rlogin
+	clients
+In-Reply-To: <87ei9ts2jk.fsf@macbook.be.48ers.dk>
+References: <1290122441-7320-1-git-send-email-vapier@gentoo.org>
+	<201012071554.58601.vapier@gentoo.org>
+	<87ei9ts2jk.fsf@macbook.be.48ers.dk>
+Message-ID: <201012071630.31741.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tuesday, December 07, 2010 16:20:31 Peter Korsgaard wrote:
+>  >> Does this do anything else than just copying the binaries? If not, it
+>  >> might be simpler to just do a
+>  >> 
+>  >> for i in $(rsh-redone-bin-y); do $(INSTALL) -m 755 -D $$i
+>  >> $(TARGET_DIR)/usr/bin/$$i; done for i in $(rsh-redone-sbin-y); do
+>  >> $(INSTALL) -m 755 -D $$i $(TARGET_DIR)/usr/sbin/$$i; done
+> 
+>  Mike> i prefer to let the package build system do these simple steps to
+>  Mike> avoid worrying about changes in between version bumps.  this
+>  Mike> proposal for examples misses set*id on the binaries, and i'm not
+>  Mike> entirely sure it is more simple.
+> 
+> setuid/setgid wouldn't work anyway, as we don't do make install as
+> root. For that kind of stuff you have to define it in device_table.txt
+> like it's done for busybox.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95f17bf78f94a69858ebe9a7a64a5b9cce76eedb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                 |    2 ++
- package/Config.in       |    1 +
- package/lsuio/Config.in |    6 ++++++
- package/lsuio/lsuio.mk  |   11 +++++++++++
- 4 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/lsuio/Config.in
- create mode 100644 package/lsuio/lsuio.mk
-
-diff --git a/CHANGES b/CHANGES
-index b3cf6ae..9333e3f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,6 +2,8 @@
- 
- 	Updated/fixed packages: cloop, m4, openssh, xz
- 
-+	New packages: lsuio
-+
- 2010.11, Released November 30th, 2010:
- 
- 	Fixes all over the tree.
-diff --git a/package/Config.in b/package/Config.in
-index 03e580a..08ffda6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -175,6 +175,7 @@ source "package/input-tools/Config.in"
- source "package/iostat/Config.in"
- source "package/kbd/Config.in"
- source "package/lm-sensors/Config.in"
-+source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
- source "package/makedevs/Config.in"
- source "package/mdadm/Config.in"
-diff --git a/package/lsuio/Config.in b/package/lsuio/Config.in
-new file mode 100644
-index 0000000..675a318
---- /dev/null
-+++ b/package/lsuio/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LSUIO
-+	bool "lsuio"
-+	help
-+	  list available userspace I/O (UIO) devices
-+
-+	  http://www.osadl.org/UIO.uio.0.html
-diff --git a/package/lsuio/lsuio.mk b/package/lsuio/lsuio.mk
-new file mode 100644
-index 0000000..2a867b7
---- /dev/null
-+++ b/package/lsuio/lsuio.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# lsuio
-+#
-+#############################################################
-+
-+LSUIO_VERSION = 0.2.0
-+LSUIO_SOURCE = lsuio-$(LSUIO_VERSION).tar.gz
-+LSUIO_SITE = http://www.osadl.org/projects/downloads/UIO/user
-+
-+$(eval $(call AUTOTARGETS,package,lsuio))
--- 
-1.7.2.2
+sounds like a limitation in the build system somewhere.  the file is certainly 
+installed into output/target/ with set*id.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101207/83f3f9b1/attachment-0001.pgp>
