@@ -1,48 +1,74 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 07 Dec 2010 10:05:32 +0100
-Subject: [Buildroot] [PATCH v2] New package: sdparm
-Message-ID: <4CFDF8DC.9040604@visionsystems.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Dec 2010 15:43:07 +0100
+Subject: [Buildroot] [PATCH v2] whetstone: new benchmark package
+In-Reply-To: <1290235409-31995-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Sat, 20 Nov 2010 01:43:29 -0500")
+References: <1290233458-23229-1-git-send-email-vapier@gentoo.org>
+	<1290235409-31995-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87ipz5skxw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add utility to accesses SCSI device parameters.
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+ Mike> ---
+ Mike> v2
+ Mike> 	- tweak flag passing when building
 
-Index: b/package/sdparm/Config.in
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/sdparm/Config.in	2010-12-07 09:36:58.000000000 +0100
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SDPARM
-+	bool "sdparm"
-+	help
-+	  Utility to accesses SCSI device parameters.
-+
-+	  http://sg.danny.cz/sg/sdparm.html
-Index: b/package/sdparm/sdparm.mk
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/sdparm/sdparm.mk	2010-12-07 09:37:26.000000000 +0100
-@@ -0,0 +1,5 @@
-+SDPARM_VERSION = 1.06
-+SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
-+SDPARM_SITE = http://sg.danny.cz/sg/p/
-+
-+$(eval $(call AUTOTARGETS,package,sdparm))
-Index: b/package/Config.in
-===================================================================
---- a/package/Config.in	2010-11-08 12:09:05.000000000 +0100
-+++ b/package/Config.in	2010-12-03 17:37:41.000000000 +0100
-@@ -184,6 +184,7 @@
- source "package/ntfsprogs/Config.in"
- source "package/pciutils/Config.in"
- source "package/rng-tools/Config.in"
-+source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- # busybox has fdisk
+ Mike> diff --git a/package/whetstone/Config.in b/package/whetstone/Config.in
+ Mike> new file mode 100644
+ Mike> index 0000000..7a68160
+ Mike> --- /dev/null
+ Mike> +++ b/package/whetstone/Config.in
+ Mike> @@ -0,0 +1,6 @@
+ Mike> +config BR2_PACKAGE_WHETSTONE
+ Mike> +	bool "whetstone"
+ Mike> +	help
+ Mike> +	  C Converted Whetstone Double Precision Benchmark
+ Mike> +
+ Mike> +	  http://www.netlib.org/benchmark/
+ Mike> diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
+ Mike> new file mode 100644
+ Mike> index 0000000..ab3c147
+ Mike> --- /dev/null
+ Mike> +++ b/package/whetstone/whetstone.mk
+ Mike> @@ -0,0 +1,37 @@
+ Mike> +#############################################################
+ Mike> +#
+ Mike> +# whetstone
+ Mike> +#
+ Mike> +#############################################################
+ Mike> +
+ Mike> +WHETSTONE_VERSION = 1.2
+ Mike> +WHETSTONE_SOURCE = whetstone.c
+ Mike> +WHETSTONE_SITE = http://www.netlib.org/benchmark/
+ Mike> +
+ Mike> +define WHETSTONE_BUILD_CMDS
+ Mike> +	CFLAGS="$(TARGET_CFLAGS) -Wall -DNO_PROTOTYPES=1" \
+ Mike> +	$(MAKE) \
+ Mike> +		CC="$(TARGET_CC)" \
+ Mike> +		LDLIBS="-lm" \
+ Mike> +		-C $(@D) whetstone
+
+Please don't add hardcoded cflags like -Wall. As it's a single file, I
+would prefer to call $(TARGET_CC) directly instead of using make.
+
+Also don't forget TARGET_LDFLAGS.
+
+ Mike> +endef
+ Mike> +
+ Mike> +define WHETSTONE_CLEAN_CMDS
+ Mike> +	rm -f $(@D)/whetstone
+ Mike> +endef
+ Mike> +
+ Mike> +define WHETSTONE_INSTALL_TARGET_CMDS
+ Mike> +	$(INSTALL) -D $(@D)/whetstone $(TARGET_DIR)/bin/whetstone
+
+I would have expected it to get installed into /usr/bin
+
+-- 
+Bye, Peter Korsgaard
