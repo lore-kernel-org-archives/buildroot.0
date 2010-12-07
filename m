@@ -1,27 +1,36 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 7 Dec 2010 16:31:46 -0500
-Subject: [Buildroot] Pull request buildroot.git (vapier branch)
-In-Reply-To: <8762v5u5r5.fsf@macbook.be.48ers.dk>
-References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
-	<20101206202754.57658344@surf> <8762v5u5r5.fsf@macbook.be.48ers.dk>
-Message-ID: <201012071631.47002.vapier@gentoo.org>
+Date: Tue, 7 Dec 2010 16:32:43 -0500
+Subject: [Buildroot] [PATCH v4] inetutils: new package for random
+	network tools
+In-Reply-To: <20101123203818.3efd3e9a@surf>
+References: <1290145160-21033-1-git-send-email-vapier@gentoo.org>
+	<1290225547-9728-1-git-send-email-vapier@gentoo.org>
+	<20101123203818.3efd3e9a@surf>
+Message-ID: <201012071632.43904.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, December 07, 2010 07:28:14 Peter Korsgaard wrote:
->  Thomas> Those two sets of packages are not identical, that's why I
->  Thomas> proposed two different options. A package that doesn't support
->  Thomas> static build should do:
->  Thomas> 	depends on !BR2_PREFER_STATIC_LIB
->  Thomas> and all packages that do not work on !MMU should do
->  Thomas> 	depends on BR2_USE_MMU
+On Tuesday, November 23, 2010 14:38:18 Thomas Petazzoni wrote:
+> On Fri, 19 Nov 2010 22:59:07 -0500 Mike Frysinger wrote:
+> > +	$(call USE_ENABLE,INET_IPV6,ipv6) \
 > 
-> And as this will be most packages
+> The following bit in package/Makefile.in already passes --disable-ipv6
+> when IPv6 is not available:
+> 
+> ifneq ($(BR2_INET_IPV6),y)
+> DISABLE_IPV6= --disable-ipv6
+> endif
+> 
+> However, it does not pass --enable-ipv6 when IPv6 is enabled.
+> 
+> I'm not sure what to do:
+> 
+>  *) Pass --{disable,enable}-ipv6 to every package
 
-what are you basing this on ?  this isnt my experience at all.
+i'd go with this as packages can go either way (default to off or on)
 -mike
 -------------- next part --------------
 A non-text attachment was scrubbed...
@@ -29,4 +38,4 @@ Name: not available
 Type: application/pgp-signature
 Size: 836 bytes
 Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101207/ec477bb9/attachment.pgp>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101207/a0482936/attachment.pgp>
