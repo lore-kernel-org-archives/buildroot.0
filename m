@@ -1,74 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Dec 2010 15:43:07 +0100
-Subject: [Buildroot] [PATCH v2] whetstone: new benchmark package
-In-Reply-To: <1290235409-31995-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Sat, 20 Nov 2010 01:43:29 -0500")
-References: <1290233458-23229-1-git-send-email-vapier@gentoo.org>
-	<1290235409-31995-1-git-send-email-vapier@gentoo.org>
-Message-ID: <87ipz5skxw.fsf@macbook.be.48ers.dk>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Tue,  7 Dec 2010 10:24:54 -0600
+Subject: [Buildroot] [PATCH] hwdata: ensure hwdata's usb.ids and pci.ids is
+	used
+Message-ID: <42c4bb22ac27f4b61978355733b0189d351a4aca.1291738310.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
- Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
- Mike> ---
- Mike> v2
- Mike> 	- tweak flag passing when building
+When pciutils and/or usbutils gets installed, they install their own version
+of the .ids files in /usr/share, which we don't want.
+Delete them and symlink to the more current hwdata versions.
 
- Mike> diff --git a/package/whetstone/Config.in b/package/whetstone/Config.in
- Mike> new file mode 100644
- Mike> index 0000000..7a68160
- Mike> --- /dev/null
- Mike> +++ b/package/whetstone/Config.in
- Mike> @@ -0,0 +1,6 @@
- Mike> +config BR2_PACKAGE_WHETSTONE
- Mike> +	bool "whetstone"
- Mike> +	help
- Mike> +	  C Converted Whetstone Double Precision Benchmark
- Mike> +
- Mike> +	  http://www.netlib.org/benchmark/
- Mike> diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
- Mike> new file mode 100644
- Mike> index 0000000..ab3c147
- Mike> --- /dev/null
- Mike> +++ b/package/whetstone/whetstone.mk
- Mike> @@ -0,0 +1,37 @@
- Mike> +#############################################################
- Mike> +#
- Mike> +# whetstone
- Mike> +#
- Mike> +#############################################################
- Mike> +
- Mike> +WHETSTONE_VERSION = 1.2
- Mike> +WHETSTONE_SOURCE = whetstone.c
- Mike> +WHETSTONE_SITE = http://www.netlib.org/benchmark/
- Mike> +
- Mike> +define WHETSTONE_BUILD_CMDS
- Mike> +	CFLAGS="$(TARGET_CFLAGS) -Wall -DNO_PROTOTYPES=1" \
- Mike> +	$(MAKE) \
- Mike> +		CC="$(TARGET_CC)" \
- Mike> +		LDLIBS="-lm" \
- Mike> +		-C $(@D) whetstone
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/hwdata/hwdata.mk |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-Please don't add hardcoded cflags like -Wall. As it's a single file, I
-would prefer to call $(TARGET_CC) directly instead of using make.
-
-Also don't forget TARGET_LDFLAGS.
-
- Mike> +endef
- Mike> +
- Mike> +define WHETSTONE_CLEAN_CMDS
- Mike> +	rm -f $(@D)/whetstone
- Mike> +endef
- Mike> +
- Mike> +define WHETSTONE_INSTALL_TARGET_CMDS
- Mike> +	$(INSTALL) -D $(@D)/whetstone $(TARGET_DIR)/bin/whetstone
-
-I would have expected it to get installed into /usr/bin
-
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 7a0cef8..94a86eb 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -8,9 +8,24 @@ HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+ HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+ HWDATA_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata/
+ 
++HWDATA_DEPENDENCIES=
++ifeq ($(BR2_PACKAGE_PCIUTILS),y)
++    HWDATA_DEPENDENCIES+=pciutils
++endif
++ifeq ($(BR2_PACKAGE_USBUTILS),y)
++    HWDATA_DEPENDENCIES+=usbutils
++endif
++
+ define HWDATA_INSTALL_TARGET_CMDS
+ 	install -D -m 644 $(@D)/pci.ids $(TARGET_DIR)/usr/share/hwdata/pci.ids
+ 	install -D -m 644 $(@D)/usb.ids $(TARGET_DIR)/usr/share/hwdata/usb.ids
++
++	# get rid of the pci.ids and usb.ids provided by usbutils and pciutils
++	# and link them to our more current version
++	test -e $(TARGET_DIR)/usr/share/pci.ids* && rm $(TARGET_DIR)/usr/share/pci.ids*
++	ln -sf hwdata/pci.ids $(TARGET_DIR)/usr/share/pci.ids
++	test -e $(TARGET_DIR)/usr/share/usb.ids* && rm $(TARGET_DIR)/usr/share/usb.ids*
++	ln -sf hwdata/usb.ids $(TARGET_DIR)/usr/share/usb.ids
+ endef
+ 
+ define HWDATA_UNINSTALL_TARGET_CMDS
 -- 
-Bye, Peter Korsgaard
+1.7.3.2
