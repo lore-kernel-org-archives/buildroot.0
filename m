@@ -1,112 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Dec 2010 21:18:18 +0100
-Subject: [Buildroot] [PATCH 09/55] Stop referencing the crazy
- target/device stuff
-In-Reply-To: <AANLkTikq-exQbC1vA965hRN0g-G2qiOoJ-BdAwmsiCZm@mail.gmail.com>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<47aba834b9147ad9a3ee0a32a08cd21763b0d4c8.1291582351.git.thomas.petazzoni@free-electrons.com>
-	<AANLkTik7fEm_DTts5a=o-ooC2DOvTJyvhJc9f4ZA5qq4@mail.gmail.com>
-	<20101206204339.44533180@surf>
-	<AANLkTikq-exQbC1vA965hRN0g-G2qiOoJ-BdAwmsiCZm@mail.gmail.com>
-Message-ID: <20101207211818.0e36c8ce@surf>
+Date: Tue, 7 Dec 2010 21:35:18 +0100
+Subject: [Buildroot] Pull request buildroot.git (vapier branch)
+In-Reply-To: <8762v5u5r5.fsf@macbook.be.48ers.dk>
+References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
+	<20101205115745.0e86c054@surf> <20101205131952.50400c59@surf>
+	<201012060156.53523.vapier@gentoo.org>
+	<20101206202754.57658344@surf> <8762v5u5r5.fsf@macbook.be.48ers.dk>
+Message-ID: <20101207213518.61b77079@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Tue, 07 Dec 2010 13:28:14 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-On Tue, 7 Dec 2010 08:26:31 +0100
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
+> And as this will be most packages, we should probably do something
+> like BR2_PACKAGE_BUSYBOX_SHOW_OTHERS - E.G. add this dependency in
+> package/Config.in instead of moving it down to each individual
+> package.
 
-> Hello Thomas, (this will become confusing for other readers :-p )
+I don't think we should do that. With three options to handle
+(BUSYBOX_SHOW_OTHERS, USE_MMU and PREFER_STATIC_LIB), the
+package/Config.in is going to become a nightmare to read, and the fact
+that the current if's in package/Config.in can be common to several
+packages will be very reduced because of the three conditions.
 
-Yes, but it's funny :-)
-
-> > At least in the existing target/device/*/Config.in files, there
-> > were no such options.
-> 
-> For example, in a manufacturer specific Config.in file, I added an
-> option for a new board. This board has two variants, each having a
-> different processor architecture. Other than that, the selection of
-> components for the root filesystem, the kernel etc. would all be the
-> same (except for the kernel configuration).
-> By adding 'depends on' and 'default' options to the config, I could
-> make the selection for the right board variant automatic based on the
-> global buildroot architecture selection.
-> 
-> e.g.
-> config MYBOARD
->     config MYBOARD_PPC
->         depends on MYBOARD && BR2_powerpc
->         default y if BR2_powerpc
-> 
->     config MYBOARD_X86
->         depends on MYBOARD && BR2_i386
->         default y if BR2_i386
-> 
-> Then, based on the above selection, I'd automatically determine the
-> board name:
-> 
-> config BR2_BOARD_NAME
->     default "myboard_ppc" if MYBOARD_PPC
->     default "myboard_x86" if MYBOARD_X86
-> 
-> config BR2_BOARD_PATH
->     default "target/device/<manufacturer>/$(BR2_BOARD_NAME)"
-
-Just provide two different defconfig files for your two boards.
-
-> Additionally, I liked the idea of 'status' targets in the board
-> Makefiles. These targets print out certain configuration variables,
-> e.g. the Linux kernel used, the name of the board selected, etc.
-> This may not need to be in a board-specific file, but in my opinion
-> this is worth implementing globally. Do you agree?
-
-With my changes, there isn't anymore the concept of a "board" inside
-Buildroot, because IMO it doesn't make sense. A "board" is just a
-initial configuration file that is known to work for a particular
-hardware platform, but a defconfig file should be sufficient. So from
-that perspective, there's no way Buildroot would know the "board" name.
-The user just starts by doing :
-
-	make foobar_defconfig
-
-and (s)he knows that the architecture, kernel, bootloader are correct,
-and so (s)he can go ahead with
-
-	make menuconfig
-
-and add whatever software is needed for the system (s)he is building.
-
-With regard to the version of the Linux kernel selected or things like
-that, we could obviously add a "make status" thing, but I don't really
-what this would buy us compared to running "make menuconfig". And what
-do we put in this "make status" ? The version of the kernel ? Why
-only ? There should be the version of all the components, no ?
-
-> > BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/friendlyarm/mini2440/linux-2.6.32.2.config"
-> 
-> The disadvantage of this is that the above configuration setting needs
-> to change if the board name changes.
-
-If the name of the board changes, you have to rename the defconfig file
-*and rename the directory. So changing two paths in the defconfig file
-shouldn't be a very big deal compared to all the renames already
-needed. And renaming a board is really a corner use case, for which
-changing two paths in a defconfig sounds reasonable.
-
-> If the board name is abstracted
-> in a variable like BR2_BOARD_NAME, the setting stays the same
-> (although of course the expanded string is different). This makes
-> configuration files more generic.
-
-Configuration files are specific to a particular board. Even their name
-is, so I don't see the point of making them whatsoever generic :-)
-
-I agree that my patch set is changing things, but that's why it has
-been written in the first place.
+On the opposite, I would have suggested to move these to the
+per-package Config.in. Yes, it's a bit more code, but it's not a big
+deal, and will make it easier to maintain.
 
 Regards,
 
