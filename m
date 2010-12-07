@@ -1,41 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Dec 2010 21:35:18 +0100
-Subject: [Buildroot] Pull request buildroot.git (vapier branch)
-In-Reply-To: <8762v5u5r5.fsf@macbook.be.48ers.dk>
-References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
-	<20101205115745.0e86c054@surf> <20101205131952.50400c59@surf>
-	<201012060156.53523.vapier@gentoo.org>
-	<20101206202754.57658344@surf> <8762v5u5r5.fsf@macbook.be.48ers.dk>
-Message-ID: <20101207213518.61b77079@surf>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Tue, 7 Dec 2010 15:54:57 -0500
+Subject: [Buildroot] [PATCH v2] rsh-redone: new package for rsh/rlogin
+	clients
+In-Reply-To: <87r5dtu9ht.fsf@macbook.be.48ers.dk>
+References: <1290122441-7320-1-git-send-email-vapier@gentoo.org>
+	<1290145224-21076-1-git-send-email-vapier@gentoo.org>
+	<87r5dtu9ht.fsf@macbook.be.48ers.dk>
+Message-ID: <201012071554.58601.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 07 Dec 2010 13:28:14 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Tuesday, December 07, 2010 06:07:26 Peter Korsgaard wrote:
+>  Mike> +# requires PAM
+>  Mike> +#config BR2_PACKAGE_RSH_REDONE_RSHD
+>  Mike> +#	bool "rshd"
+>  Mike> +#	depends on BR2_PACKAGE_RSH_REDONE
+> 
+> How useful is this without the server part?
 
-> And as this will be most packages, we should probably do something
-> like BR2_PACKAGE_BUSYBOX_SHOW_OTHERS - E.G. add this dependency in
-> package/Config.in instead of moving it down to each individual
-> package.
+i use rshd from inetutils.  ive never tested rshd from this since it requires 
+pam (as already documented).  someone else can if they care.
 
-I don't think we should do that. With three options to handle
-(BUSYBOX_SHOW_OTHERS, USE_MMU and PREFER_STATIC_LIB), the
-package/Config.in is going to become a nightmare to read, and the fact
-that the current if's in package/Config.in can be common to several
-packages will be very reduced because of the three conditions.
+>  Mike> +
+>  Mike> +define RSH_REDONE_INSTALL_TARGET_CMDS
+>  Mike> +	if [ -n "$(rsh-redone-bin-y)$(rsh-redone-sbin-y)" ] ; then \
+>  Mike> +		$(RSH_REDONE_BUILD_CMDS) DESTDIR=$(TARGET_DIR) \
+>  Mike> +			$(if $(rsh-redone-bin-y),install-bin) \
+>  Mike> +			$(if $(rsh-redone-sbin-y),install-sbin); \
+>  Mike> +	fi
+>  Mike> +endef
+> 
+> Does this do anything else than just copying the binaries? If not, it
+> might be simpler to just do a
+> 
+> for i in $(rsh-redone-bin-y); do $(INSTALL) -m 755 -D $$i
+> $(TARGET_DIR)/usr/bin/$$i; done for i in $(rsh-redone-sbin-y); do
+> $(INSTALL) -m 755 -D $$i $(TARGET_DIR)/usr/sbin/$$i; done
 
-On the opposite, I would have suggested to move these to the
-per-package Config.in. Yes, it's a bit more code, but it's not a big
-deal, and will make it easier to maintain.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+i prefer to let the package build system do these simple steps to avoid 
+worrying about changes in between version bumps.  this proposal for examples 
+misses set*id on the binaries, and i'm not entirely sure it is more simple.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101207/032f0e7e/attachment.pgp>
