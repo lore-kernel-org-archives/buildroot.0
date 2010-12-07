@@ -1,85 +1,102 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 7 Dec 2010 01:04:41 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.02/fix-ccache-support
-In-Reply-To: <20101206202232.6bdcaddb@surf>
-References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-	<874oarx2r5.fsf@macbook.be.48ers.dk>
-	<AANLkTimzwXT4JMAv_oZxcCrRSEbGc8reZ+GfYhb8RHUZ@mail.gmail.com>
-	<20101206202232.6bdcaddb@surf>
-Message-ID: <AANLkTi=6nM36bHfthxOTgw3noRR+P-pz6k10YcBGOws7@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 7 Dec 2010 08:26:31 +0100
+Subject: [Buildroot] [PATCH 09/55] Stop referencing the crazy
+ target/device stuff
+In-Reply-To: <20101206204339.44533180@surf>
+References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
+	<47aba834b9147ad9a3ee0a32a08cd21763b0d4c8.1291582351.git.thomas.petazzoni@free-electrons.com>
+	<AANLkTik7fEm_DTts5a=o-ooC2DOvTJyvhJc9f4ZA5qq4@mail.gmail.com>
+	<20101206204339.44533180@surf>
+Message-ID: <AANLkTikq-exQbC1vA965hRN0g-G2qiOoJ-BdAwmsiCZm@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Thomas, (this will become confusing for other readers :-p )
 
-2010/12/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Hello,
+On Mon, Dec 6, 2010 at 8:43 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Thomas,
 >
-> On Mon, 6 Dec 2010 10:44:40 +0100
-> Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
->> Actually, I am currently working on a CMAKETARGETS macro (similar to
->> AUTOTARGETS) and decided to write a patch that takes --sysroot out of
->> TARGET_CC and move it to the {C,CXX}FLAGS variables, to make CMake
->> happy. I've been meaning to post the patch series but I don't feel
->> it's ready to be merged yet. How do the Buildroot developers feel
->> about
->>
->> a) moving --sysroot from TARGET_CC to {C,CXX}FLAGS
+> On Mon, 6 Dec 2010 08:35:32 +0100
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
 >
-> No, please don't do that :-)
+>> How then would you add board-specific configuration options?
+>> Suppose that for a certain board you can enable or disable a certain
+>> feature. Previously, you'd add such an option in the board-specific
+>> Config.in file, which was included via the manufacturer-specific
+>> Config.in file, which was included from target/device/Config.in.
+>> Now that all these are being removed, what's the strategy?
 >
-> There are other packages that need this. See
-> efb1d8d3f40281645c178c150d992601c8042c1a.
+> Could you give examples of what these options would be ? I think it
+> would depend on which options we're talking about, I don't have a
+> generic answer to this question.
 >
-> commit efb1d8d3f40281645c178c150d992601c8042c1a
-> Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Date: ? Fri Jun 25 15:04:08 2010 +0200
->
-> ? ?Cleanup TARGET_CONFIGURE_OPTS
->
-> ? ?The definition of CC, LD, GCC, CPP, CXX and FC shouldn't contain the
-> ? ?CFLAGS/LDFLAGS/CXXFLAGS, those should be passed through the
-> ? ?appropriate variables.
->
-> ? ?However, the --sysroot option is a particular case here: it needs to
-> ? ?be part of the CC/LD/GCC/etc. definitions otherwise libtool strips it
-> ? ?from the CFLAGS/LDFLAGS.
->
-> ? ?Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> The current choice has been fairly hard to get to, we made a number of
-> different tries before finding a solution that seems to work relatively
-> fine for most packages. Therefore, I'd prefer to keep the
-> TARGET_CC/TARGET_CFLAGS as they are today, even if the CMAKETARGETS
-> infrastructure needs to do the same kind of mungling as cdrkit.mk is
-> doing.
->
-> If you really want to be convinced that having --sysroot in
-> TARGET_CFLAGS causes problems, I can probably trigger a particular
-> configuration to exhibit the issue.
+> At least in the existing target/device/*/Config.in files, there were no
+> such options.
 
-Are many packages affected? If many, I'll just take your word for it and
-leave TARGET_CC and xFLAGS variables be, but if there is only a few
-packages affected, maybe we can fix them instead?
+For example, in a manufacturer specific Config.in file, I added an
+option for a new board. This board has two variants, each having a
+different processor architecture. Other than that, the selection of
+components for the root filesystem, the kernel etc. would all be the
+same (except for the kernel configuration).
+By adding 'depends on' and 'default' options to the config, I could
+make the selection for the right board variant automatic based on the
+global buildroot architecture selection.
 
->> b) add CMAKETARGETS infrastructure
+e.g.
+config MYBOARD
+    config MYBOARD_PPC
+        depends on MYBOARD && BR2_powerpc
+        default y if BR2_powerpc
+
+    config MYBOARD_X86
+        depends on MYBOARD && BR2_i386
+        default y if BR2_i386
+
+Then, based on the above selection, I'd automatically determine the board name:
+
+config BR2_BOARD_NAME
+    default "myboard_ppc" if MYBOARD_PPC
+    default "myboard_x86" if MYBOARD_X86
+
+config BR2_BOARD_PATH
+    default "target/device/<manufacturer>/$(BR2_BOARD_NAME)"
+
+
+
+Additionally, I liked the idea of 'status' targets in the board
+Makefiles. These targets print out certain configuration variables,
+e.g. the Linux kernel used, the name of the board selected, etc.
+This may not need to be in a board-specific file, but in my opinion
+this is worth implementing globally. Do you agree?
+
 >
-> Yes, that would be great. We're likely to see more CMake-based packages
-> in the future.
+>> Related to this: previously some target/device/*/Config.in files added
+>> configuration options called BR2_BOARD_NAME and BR2_BOARD_PATH. These
+>> could be referenced from other configuration options, for example in
+>> target/linux/Config.in.advanced, as the default Linux configuration
+>> file. Is this mechanism still supported, or is there an alternative?
 >
-> Note that some people in the Armadeus project are working on a
-> different thing related to CMake and Buildroot: generate automatically
-> a CMake toolchain description file, to make it easy to build
-> CMake-based applications outside of Buildroot, using the toolchain and
-> staging directory of Buildroot.
+> target/linux/Config.in.advanced does not exist anymore.
+>
+> In the U-Boot or Linux configuration, if you need to reference
+> something in the board-specific directory, just use
+> "board/<vendor>/<boardname>/something". For example, in the mini2440
+> defconfig:
+>
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/friendlyarm/mini2440/linux-2.6.32.2.config"
 
-Yes, I'd like to get this CMake toolchain file feature into Buildroot as
-well. How about appending a toolchain file target to $(2)_DEPENDENCIES
-in Makefile.cmake.in? And place the toolchain file in output/?
+The disadvantage of this is that the above configuration setting needs
+to change if the board name changes. If the board name is abstracted
+in a variable like BR2_BOARD_NAME, the setting stays the same
+(although of course the expanded string is different). This makes
+configuration files more generic.
+Here again, having a board name setting may be something that can be
+moved to the global buildroot settings, available for every board.
+What do you think?
 
-Best regards,
-Bj?rn Forsman
+Thanks,
+Thomas
