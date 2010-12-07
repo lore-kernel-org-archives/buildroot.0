@@ -1,51 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 Dec 2010 12:25:46 +0100
-Subject: [Buildroot] [git commit master 1/1] package/openssh: Use HTTP
-	instead of FTP for source download
-Message-ID: <20101207112701.115368D35D@busybox.osuosl.org>
+From: Serj Kalichev <serj.kalichev@gmail.com>
+Date: Tue,  7 Dec 2010 18:48:14 +0300
+Subject: [Buildroot] [PATCH] The external toolchain can be used statically.
+Message-ID: <1291736894-3692-1-git-send-email-serj.kalichev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I tried to build minimal busybox-only project for using as initramfs. I use
+external buildroot toolchain. The buildroot copy the .so libraries from
+external toolchain to the target dir unconditionally. But I build busybox
+statically and don't need shared libraries (the size of resulted image is too
+big with unneeded libraries).
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56a2e82c40947bb4eab2a129bfe184df83fd2807
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The patch use BR2_PREFER_STATIC_LIB to find out if the project prefer
+static linking and if the static linking is preferred don't copy shared
+libraries to the target dir.
 
-HTTP should be more firewall friendly.
-
-Signed-off-by: Will Newton <will.newton@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
 ---
- CHANGES                    |    2 +-
- package/openssh/openssh.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/ext-tool.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7ca867f..b3cf6ae 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,6 +1,6 @@
- 2011.02, Not yet released:
- 
--	Updated/fixed packages: cloop, m4, xz
-+	Updated/fixed packages: cloop, m4, openssh, xz
- 
- 2010.11, Released November 30th, 2010:
- 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 236a3a8..82c64d6 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -5,7 +5,7 @@
- #############################################################
- 
- OPENSSH_VERSION = 5.6p1
--OPENSSH_SITE = ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
-+OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_CONF_ENV = LD="$(TARGET_CC)"
- OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
- 		--disable-utmpx --disable-wtmp --disable-wtmpx --disable-strip
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 7e4645d..895ef5f 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -99,6 +99,7 @@ else
+ 	$(Q)$(call check_glibc,$(SYSROOT_DIR))
+ endif
+ 	mkdir -p $(TARGET_DIR)/lib
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ 	@echo "Copy external toolchain libraries to target..."
+ 	$(Q)for libs in $(LIB_EXTERNAL_LIBS); do \
+ 		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
+@@ -106,6 +107,7 @@ endif
+ 	$(Q)for libs in $(USR_LIB_EXTERNAL_LIBS); do \
+ 		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,/usr/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
+ 	done
++endif
+ 	@echo "Copy external toolchain sysroot to staging..."
+ 	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
+ 	# Create lib64 symbolic links if needed
 -- 
-1.7.2.2
+1.7.3.3
