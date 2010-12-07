@@ -1,102 +1,80 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 7 Dec 2010 08:26:31 +0100
-Subject: [Buildroot] [PATCH 09/55] Stop referencing the crazy
- target/device stuff
-In-Reply-To: <20101206204339.44533180@surf>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<47aba834b9147ad9a3ee0a32a08cd21763b0d4c8.1291582351.git.thomas.petazzoni@free-electrons.com>
-	<AANLkTik7fEm_DTts5a=o-ooC2DOvTJyvhJc9f4ZA5qq4@mail.gmail.com>
-	<20101206204339.44533180@surf>
-Message-ID: <AANLkTikq-exQbC1vA965hRN0g-G2qiOoJ-BdAwmsiCZm@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Dec 2010 12:07:26 +0100
+Subject: [Buildroot] [PATCH v2] rsh-redone: new package for rsh/rlogin
+	clients
+In-Reply-To: <1290145224-21076-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Fri, 19 Nov 2010 00:40:24 -0500")
+References: <1290122441-7320-1-git-send-email-vapier@gentoo.org>
+	<1290145224-21076-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87r5dtu9ht.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, (this will become confusing for other readers :-p )
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-On Mon, Dec 6, 2010 at 8:43 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Thomas,
->
-> On Mon, 6 Dec 2010 08:35:32 +0100
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
->
->> How then would you add board-specific configuration options?
->> Suppose that for a certain board you can enable or disable a certain
->> feature. Previously, you'd add such an option in the board-specific
->> Config.in file, which was included via the manufacturer-specific
->> Config.in file, which was included from target/device/Config.in.
->> Now that all these are being removed, what's the strategy?
->
-> Could you give examples of what these options would be ? I think it
-> would depend on which options we're talking about, I don't have a
-> generic answer to this question.
->
-> At least in the existing target/device/*/Config.in files, there were no
-> such options.
+Hi,
 
-For example, in a manufacturer specific Config.in file, I added an
-option for a new board. This board has two variants, each having a
-different processor architecture. Other than that, the selection of
-components for the root filesystem, the kernel etc. would all be the
-same (except for the kernel configuration).
-By adding 'depends on' and 'default' options to the config, I could
-make the selection for the right board variant automatic based on the
-global buildroot architecture selection.
+ Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+ Mike> ---
+ Mike> v2
+ Mike> 	- the install target didn't work quite right in the empty case
 
-e.g.
-config MYBOARD
-    config MYBOARD_PPC
-        depends on MYBOARD && BR2_powerpc
-        default y if BR2_powerpc
+ Mike> +# this is incomplete in the source
+ Mike> +#config BR2_PACKAGE_RSH_REDONE_RCP
+ Mike> +#	bool "rcp"
+ Mike> +#	depends on BR2_PACKAGE_RSH_REDONE
+ Mike> +
+ Mike> +config BR2_PACKAGE_RSH_REDONE_RLOGIN
+ Mike> +	bool "rlogin"
+ Mike> +	depends on BR2_PACKAGE_RSH_REDONE
+ Mike> +
+ Mike> +# requires PAM
+ Mike> +#config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ Mike> +#	bool "rlogind"
+ Mike> +#	depends on BR2_PACKAGE_RSH_REDONE
+ Mike> +
+ Mike> +config BR2_PACKAGE_RSH_REDONE_RSH
+ Mike> +	bool "rsh"
+ Mike> +	depends on BR2_PACKAGE_RSH_REDONE
+ Mike> +
+ Mike> +# requires PAM
+ Mike> +#config BR2_PACKAGE_RSH_REDONE_RSHD
+ Mike> +#	bool "rshd"
+ Mike> +#	depends on BR2_PACKAGE_RSH_REDONE
 
-    config MYBOARD_X86
-        depends on MYBOARD && BR2_i386
-        default y if BR2_i386
+How useful is this without the server part?
 
-Then, based on the above selection, I'd automatically determine the board name:
+ Mike> +define RSH_REDONE_BUILD_CMDS
+ Mike> +	$(MAKE) CC="$(TARGET_CC)" -C $(@D) BIN="$(rsh-redone-bin-y)" SBIN="$(rsh-redone-sbin-y)"
+ Mike> +endef
 
-config BR2_BOARD_NAME
-    default "myboard_ppc" if MYBOARD_PPC
-    default "myboard_x86" if MYBOARD_X86
-
-config BR2_BOARD_PATH
-    default "target/device/<manufacturer>/$(BR2_BOARD_NAME)"
+You seem to be missing TARGET_CFLAGS / TARGET_LDFLAGS?
 
 
+ Mike> +
+ Mike> +define RSH_REDONE_INSTALL_TARGET_CMDS
+ Mike> +	if [ -n "$(rsh-redone-bin-y)$(rsh-redone-sbin-y)" ] ; then \
+ Mike> +		$(RSH_REDONE_BUILD_CMDS) DESTDIR=$(TARGET_DIR) \
+ Mike> +			$(if $(rsh-redone-bin-y),install-bin) \
+ Mike> +			$(if $(rsh-redone-sbin-y),install-sbin); \
+ Mike> +	fi
+ Mike> +endef
 
-Additionally, I liked the idea of 'status' targets in the board
-Makefiles. These targets print out certain configuration variables,
-e.g. the Linux kernel used, the name of the board selected, etc.
-This may not need to be in a board-specific file, but in my opinion
-this is worth implementing globally. Do you agree?
+Does this do anything else than just copying the binaries? If not, it
+might be simpler to just do a
 
->
->> Related to this: previously some target/device/*/Config.in files added
->> configuration options called BR2_BOARD_NAME and BR2_BOARD_PATH. These
->> could be referenced from other configuration options, for example in
->> target/linux/Config.in.advanced, as the default Linux configuration
->> file. Is this mechanism still supported, or is there an alternative?
->
-> target/linux/Config.in.advanced does not exist anymore.
->
-> In the U-Boot or Linux configuration, if you need to reference
-> something in the board-specific directory, just use
-> "board/<vendor>/<boardname>/something". For example, in the mini2440
-> defconfig:
->
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/friendlyarm/mini2440/linux-2.6.32.2.config"
+for i in $(rsh-redone-bin-y); do $(INSTALL) -m 755 -D $$i $(TARGET_DIR)/usr/bin/$$i; done
+for i in $(rsh-redone-sbin-y); do $(INSTALL) -m 755 -D $$i $(TARGET_DIR)/usr/sbin/$$i; done
 
-The disadvantage of this is that the above configuration setting needs
-to change if the board name changes. If the board name is abstracted
-in a variable like BR2_BOARD_NAME, the setting stays the same
-(although of course the expanded string is different). This makes
-configuration files more generic.
-Here again, having a board name setting may be something that can be
-moved to the global buildroot settings, available for every board.
-What do you think?
+ Mike> +
+ Mike> +define RSH_REDONE_UNINSTALL_TARGET_CMDS
+ Mike> +	rm -f $(patsubst %,$(TARGET_DIR)/usr/bin/%,$(rsh-redone-bin-y))
+ Mike> +	rm -f $(patsubst %,$(TARGET_DIR)/usr/sbin/%,$(rsh-redone-sbin-y))
 
-Thanks,
-Thomas
+We normally use addprefix rather than patsubst.
+
+-- 
+Bye, Peter Korsgaard
