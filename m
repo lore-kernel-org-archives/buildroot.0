@@ -1,42 +1,30 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 7 Dec 2010 17:02:39 -0500
-Subject: [Buildroot] Pull request buildroot.git (vapier branch)
-In-Reply-To: <87aakhs19p.fsf@macbook.be.48ers.dk>
-References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
-	<201012071631.47002.vapier@gentoo.org>
-	<87aakhs19p.fsf@macbook.be.48ers.dk>
-Message-ID: <201012071702.40547.vapier@gentoo.org>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Tue, 07 Dec 2010 16:21:24 -0600
+Subject: [Buildroot] iproute2 failing for x86_64 with ext. toolchain
+Message-ID: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, December 07, 2010 16:48:02 Peter Korsgaard wrote:
-> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
->  >> And as this will be most packages
-> 
->  Mike> what are you basing this on ?  this isnt my experience at all.
-> 
-> Nothing but gut feeling. I would expect lots of packages use fork() or
-> similar.
+Hey,
 
-fork() is common, but the vast majority of the time it's to do an exec which 
-makes them trivial to convert to vfork().  realistically, build problems with 
-uClibc vs glibc tend to be more common.
+the iproute2 compile fails with:
+-------------------
+/data/devil-linux/../x-tools/x86_64-unknown-linux-gnu/bin/x86_64-unknown-linux-gnu-gcc --sysroot=/data/devil-linux/output/staging -Wl,-export-dynamic  ip.o ipaddress.o ipaddrlabel.o iproute.o iprule.o rtm_map.o iptunnel.o ip6tunnel.o tunnel.o ipneigh.o ipntable.o iplink.o ipmaddr.o ipmonitor.o ipmroute.o ipprefix.o iptuntap.o ipxfrm.o xfrm_state.o xfrm_policy.o xfrm_monitor.o iplink_vlan.o link_veth.o link_gre.o iplink_can.o iplink_macvlan.o ../lib/libnetlink.a ../lib/libutil.a  -lresolv -L../lib -lnetlink -lutil -ldl -o  
+ip
+../lib/libnetlink.a: could not read symbols: Archive has no index; run  
+ranlib to add one
+collect2: ld returned 1 exit status
+------------------------
 
-> Out of interest, what packages are you using on nommu?
+-- 
 
-i've played doom on my hardware, made video/voip calls via linphone, browsed 
-the web with qt/webkit, and served web pages from sqlite/php (to name a few).  
-we treat it as a generic Linux platform like any other arch rather than 
-pigeonhole it as a "firewall" or something.  i dont really keep track as it'd 
-kind of be like asking what packages have i used on an mmu.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101207/df1edd4b/attachment.pgp>
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
