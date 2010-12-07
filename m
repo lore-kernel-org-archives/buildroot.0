@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Dec 2010 13:26:10 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.02/fix-ccache-support
-In-Reply-To: <20101207001457.56309418@surf> (Thomas Petazzoni's message of
-	"Tue, 7 Dec 2010 00:14:57 +0100")
-References: <cover.1291403746.git.thomas.petazzoni@free-electrons.com>
-	<874oarx2r5.fsf@macbook.be.48ers.dk> <20101207001457.56309418@surf>
-Message-ID: <87d3pdu5ul.fsf@macbook.be.48ers.dk>
+Date: Tue, 07 Dec 2010 13:28:14 +0100
+Subject: [Buildroot] Pull request buildroot.git (vapier branch)
+In-Reply-To: <20101206202754.57658344@surf> (Thomas Petazzoni's message of
+	"Mon, 6 Dec 2010 20:27:54 +0100")
+References: <1291503121-24114-1-git-send-email-vapier@gentoo.org>
+	<20101205115745.0e86c054@surf> <20101205131952.50400c59@surf>
+	<201012060156.53523.vapier@gentoo.org> <20101206202754.57658344@surf>
+Message-ID: <8762v5u5r5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,60 +17,19 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> Why here and not in the default ~/.ccache? Is the ~/.ccache
- >> directory content ccache-version dependent?
+ Thomas> Those two sets of packages are not identical, that's why I
+ Thomas> proposed two different options. A package that doesn't support
+ Thomas> static build should do:
 
- Thomas> I don't know how ccache-version dependent are the contents of
- Thomas> the cache directory. In the previous ccache integration, the
- Thomas> cache was inside Buildroot build directory (which I thought was
- Thomas> stupid since you then couldn't share the cache between
- Thomas> different Buildroot builds), but I kept the idea of having a
- Thomas> Buildroot-specific location for the cache.
+ Thomas> 	depends on !BR2_PREFER_STATIC_LIB
 
- Thomas> I don't have strong opinion/arguments on that, so if you say we
- Thomas> should use the default cache location, I'll just do it.
+ Thomas> and all packages that do not work on !MMU should do
 
-Ok, me neither - Just keep it where it is. It just wasn't clear to me
-from the commit message if there was any deeper reason behind it.
+ Thomas> 	depends on BR2_USE_MMU
 
- >> I remember we had some problems back when we added --sysroot= to TARGET_CC.
- >> The qt package in particular is stripping the --sysroot argument because
- >> of this.
-
- Thomas> I just tried Qt, and it built fine. It does not use ccache for the
- Thomas> parts compiled for the host (since we don't tell Qt about $(HOSTCXX)),
- Thomas> but it definitely uses the cache for parts compiled for the target.
-
-Ok, thanks.
-
- Thomas> Here are the results for a Busybox + Qt build, with a
- Thomas> CodeSourcery glibc ARM external toolchain.
-
- Thomas> Cold cache
- Thomas> ==========
-
- Thomas> real    7m41.319s
- Thomas> user    37m53.620s
- Thomas> sys     1m31.660s
-
- Thomas> Hot cache
- Thomas> =========
-
- Thomas> real    3m4.738s
- Thomas> user    5m34.480s
- Thomas> sys     0m36.160s
-
-Nice!
-
- Thomas> I am not strongly advocating the usage of the "ccache /path/to/gcc"
- Thomas> solution compared to the symbolic link solutions, but if the first
- Thomas> solution works, I find it better because: 1) it's nicer and 2) it's
- Thomas> easier to implement with external toolchains.
-
-Ok, fine by me if it works.
-
-Care to send a new pull request with the few issues I pointed out fixed,
-then I'll commit it?
+And as this will be most packages, we should probably do something like
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS - E.G. add this dependency in
+package/Config.in instead of moving it down to each individual package.
 
 -- 
 Bye, Peter Korsgaard
