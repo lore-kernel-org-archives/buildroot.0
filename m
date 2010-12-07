@@ -1,51 +1,77 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Dec 2010 22:20:31 +0100
-Subject: [Buildroot] [PATCH v2] rsh-redone: new package for rsh/rlogin
-	clients
-In-Reply-To: <201012071554.58601.vapier@gentoo.org> (Mike Frysinger's message
-	of "Tue, 7 Dec 2010 15:54:57 -0500")
-References: <1290122441-7320-1-git-send-email-vapier@gentoo.org>
-	<1290145224-21076-1-git-send-email-vapier@gentoo.org>
-	<87r5dtu9ht.fsf@macbook.be.48ers.dk>
-	<201012071554.58601.vapier@gentoo.org>
-Message-ID: <87ei9ts2jk.fsf@macbook.be.48ers.dk>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Tue,  7 Dec 2010 15:32:58 -0600
+Subject: [Buildroot] [PATCH] add shadow password support
+Message-ID: <f9326e5048382646daf4469a1a62b25b8fd925dd.1291757566.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
- Mike> On Tuesday, December 07, 2010 06:07:26 Peter Korsgaard wrote:
- Mike> +# requires PAM
- Mike> +#config BR2_PACKAGE_RSH_REDONE_RSHD
- Mike> +#	bool "rshd"
- Mike> +#	depends on BR2_PACKAGE_RSH_REDONE
- >> 
- >> How useful is this without the server part?
 
- Mike> i use rshd from inetutils.  ive never tested rshd from this since
- Mike> it requires pam (as already documented).  someone else can if
- Mike> they care.
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/Config.in        |    1 +
+ package/shadow/Config.in |   13 +++++++++++++
+ package/shadow/shadow.mk |   16 ++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/shadow/Config.in
+ create mode 100644 package/shadow/shadow.mk
 
-Ok.
-
- >> Does this do anything else than just copying the binaries? If not, it
- >> might be simpler to just do a
- >> 
- >> for i in $(rsh-redone-bin-y); do $(INSTALL) -m 755 -D $$i
- >> $(TARGET_DIR)/usr/bin/$$i; done for i in $(rsh-redone-sbin-y); do
- >> $(INSTALL) -m 755 -D $$i $(TARGET_DIR)/usr/sbin/$$i; done
-
- Mike> i prefer to let the package build system do these simple steps to
- Mike> avoid worrying about changes in between version bumps.  this
- Mike> proposal for examples misses set*id on the binaries, and i'm not
- Mike> entirely sure it is more simple.
-
-setuid/setgid wouldn't work anyway, as we don't do make install as
-root. For that kind of stuff you have to define it in device_table.txt
-like it's done for busybox.
-
+diff --git a/package/Config.in b/package/Config.in
+index 03e580a..c42c2dd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -471,6 +471,7 @@ source "package/bootutils/Config.in"
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++source "package/shadow/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+diff --git a/package/shadow/Config.in b/package/shadow/Config.in
+new file mode 100644
+index 0000000..b10fc1a
+--- /dev/null
++++ b/package/shadow/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SHADOW
++	bool "shadow"
++	help
++	  This package includes the programs necessary to convert traditional
++	  V7 UNIX password files to the SVR4 shadow password format and additional
++	  tools to work with shadow passwords.
++	  - 'pwconv' converts everything to the shadow password format.
++	  - 'pwunconv' converts back to non-shadow passwords.
++	  - 'pwck' checks the integrity of the password and shadow files.
++	  - 'lastlog' prints out the last login times of all users.
++	  - 'useradd', 'userdel', 'usermod' to manage user accounts.
++	  - 'groupadd', 'groupdel', 'groupmod' to manage groups.
++
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+new file mode 100644
+index 0000000..730b8c5
+--- /dev/null
++++ b/package/shadow/shadow.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# SHADOW
++#
++#############################################################
++SHADOW_VERSION:=4.1.4.2
++SHADOW_SOURCE:=shadow-$(SHADOW_VERSION).tar.bz2
++SHADOW_SITE:=ftp://pkg-shadow.alioth.debian.org/pub/pkg-shadow
++SHADOW_INSTALL_STAGING=YES
++
++SHADOW_CONF_OPT=--without-libpam --without-libcrack
++SHADOW_CONF_ENV=ac_cv_func_setpgrp_void=yes
++HOST_SHADOW_CONF_OPT=--without-libpam --without-libcrack
++
++$(eval $(call AUTOTARGETS,package,shadow))
++$(eval $(call AUTOTARGETS,package,shadow,host))
 -- 
-Bye, Peter Korsgaard
+1.7.3.2
