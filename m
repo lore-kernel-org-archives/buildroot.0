@@ -1,33 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Dec 2010 13:36:00 +0100
-Subject: [Buildroot] mailinglist settings
-In-Reply-To: <201012052041.47131.yann.morin.1998@anciens.enib.fr> (Yann
-	E. MORIN's message of "Sun, 5 Dec 2010 20:41:47 +0100")
-References: <001301cb948c$bbe83240$33b896c0$@zuerker.org>
-	<20101205202352.7cbc20f9@surf>
-	<201012052041.47131.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87wrnlsqtq.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 07 Dec 2010 10:05:32 +0100
+Subject: [Buildroot] [PATCH v2] New package: sdparm
+Message-ID: <4CFDF8DC.9040604@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Add utility to accesses SCSI device parameters.
 
-Hi,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Yann> On Sunday 05 December 2010 20:23:52 Thomas Petazzoni wrote:
- >> This is a normal setting for a mailing-list.
-
- Yann> Well, I would not call that 'normal setting'. I too got annoyed in the
- Yann> first place, that replying would send only to the OP, not the list.
- Yann> After all, one could assume that replying to a post in a ML would by
- Yann> default answer to the list.
-
-Well, it's the mailman default, and a pretty common configuration. It
-has served us well ever since the seperate buildroot list was created
-(in 2006), so I prefer to keep it this way.
-
--- 
-Bye, Peter Korsgaard
+Index: b/package/sdparm/Config.in
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/sdparm/Config.in	2010-12-07 09:36:58.000000000 +0100
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_SDPARM
++	bool "sdparm"
++	help
++	  Utility to accesses SCSI device parameters.
++
++	  http://sg.danny.cz/sg/sdparm.html
+Index: b/package/sdparm/sdparm.mk
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/sdparm/sdparm.mk	2010-12-07 09:37:26.000000000 +0100
+@@ -0,0 +1,5 @@
++SDPARM_VERSION = 1.06
++SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
++SDPARM_SITE = http://sg.danny.cz/sg/p/
++
++$(eval $(call AUTOTARGETS,package,sdparm))
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in	2010-11-08 12:09:05.000000000 +0100
++++ b/package/Config.in	2010-12-03 17:37:41.000000000 +0100
+@@ -184,6 +184,7 @@
+ source "package/ntfsprogs/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/rng-tools/Config.in"
++source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # busybox has fdisk
