@@ -1,51 +1,42 @@
-From: Pkun <serj.kalichev@gmail.com>
-Date: Wed, 8 Dec 2010 10:21:53 +0300
-Subject: [Buildroot] Fwd: [PATCH] The external toolchain can be used
-	statically.
-In-Reply-To: <AANLkTikFg6m92-ovN5cf6E29-owMVLY_K20twJ1eqy66@mail.gmail.com>
-References: <1291736894-3692-1-git-send-email-serj.kalichev@gmail.com>
-	<201012071908.32897.vapier@gentoo.org>
-	<AANLkTikFg6m92-ovN5cf6E29-owMVLY_K20twJ1eqy66@mail.gmail.com>
-Message-ID: <AANLkTikmgoy6nj=P3Fv6kqbSYvUNBDMoaEJQSmhVXVvy@mail.gmail.com>
+From: Phil Edworthy <Phil.Edworthy@renesas.com>
+Date: Wed, 8 Dec 2010 08:05:30 -0000
+Subject: [Buildroot] Steps to add a new board
+In-Reply-To: <20101207204426.08a6be76@surf>
+References: <AB12B32E73474741A2C5361C433A44DE01E38E6B@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
+	<20101207204426.08a6be76@surf>
+Message-ID: <AB12B32E73474741A2C5361C433A44DE026111AF@rte-ben-exch.RTE.ADWIN.RENESAS.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----------- Forwarded message ----------
-From: Pkun <serj.kalichev@gmail.com>
-Date: 2010/12/8
-Subject: Re: [Buildroot] [PATCH] The external toolchain can be used
-statically.
-To: Mike Frysinger <vapier@gentoo.org>
+Hi Thomas,
 
+...
+> Good idea, sorry for the huge delay for the answer :)
+No problem, I noticed you were working in this area so I kept quiet.
 
-Ok.
-May be the right way is to copy only
-"/usr/lib/libnss*.so*" and
-"/usr/lib/gconv"
-when the static is preferred?
+...
+> > I also use a post build script to fix securetty (the device needs
+> > ttySC0)
+> 
+> Maybe this could be added in a generic way, i.e in the main securetty
+> file.
+Yes, that makes sense.
 
-Or make the shared libraries copying optional in Config.in?
-Or make checkboxes especially for libnss and conv libraries to force
-copying?
+...
+> > and also add an mdev script to /etc/init.d along with mdef.conf.
+> 
+> The boards-cleanup branch I'm pushing also carries some work from Yegor
+> that better integrates mdev (there's just a Buildroot option to
+> enable). However, it does not come with a mdev configuration file.
+Ok, if I want BR to add this to my rootfs I will still need a post build
+script.
+ 
+...
+> All of those changes are still pending review and inclusion, though.
+Sure, I'll wait for these before sending any board patches.
 
-2010/12/8 Mike Frysinger <vapier@gentoo.org>
-
-On Tuesday, December 07, 2010 10:48:14 Serj Kalichev wrote:
-> > I tried to build minimal busybox-only project for using as initramfs. I
-> use
-> > external buildroot toolchain. The buildroot copy the .so libraries from
-> > external toolchain to the target dir unconditionally. But I build busybox
-> > statically and don't need shared libraries (the size of resulted image is
-> > too big with unneeded libraries).
->
-> this isnt entirely correct.  glibc will still load shared libs on the fly
-> such
-> as nss and iconv.
-> -mike
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101208/515f01fa/attachment.html>
+Thanks
+Phil
