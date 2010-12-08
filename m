@@ -1,25 +1,42 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Wed, 8 Dec 2010 13:27:18 +0200
-Subject: [Buildroot] mailinglist settings
-In-Reply-To: <87wrnlsqtq.fsf@macbook.be.48ers.dk>
-References: <001301cb948c$bbe83240$33b896c0$@zuerker.org>
-	<20101205202352.7cbc20f9@surf>
-	<201012052041.47131.yann.morin.1998@anciens.enib.fr>
-	<87wrnlsqtq.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikFqpY5ji6_1qizNbhbYk_RgN=jN4Tqt4ca2CWm@mail.gmail.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Wed, 8 Dec 2010 06:31:27 -0500
+Subject: [Buildroot] [PATCH] The external toolchain can be used
+	statically.
+In-Reply-To: <AANLkTikEM07Fz7fe7C9LRt0--ysT7Ck__BUiyYTjeoHj@mail.gmail.com>
+References: <1291736894-3692-1-git-send-email-serj.kalichev@gmail.com>
+	<201012080548.05897.vapier@gentoo.org>
+	<AANLkTikEM07Fz7fe7C9LRt0--ysT7Ck__BUiyYTjeoHj@mail.gmail.com>
+Message-ID: <201012080631.28379.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Dec 7, 2010 at 2:36 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Well, it's the mailman default, and a pretty common configuration. It
-> has served us well ever since the seperate buildroot list was created
-> (in 2006), so I prefer to keep it this way.
+On Wednesday, December 08, 2010 06:26:52 Pkun wrote:
 
-Besides, there are good reasons for it:
-http://felipec.wordpress.com/2010/08/03/avoid-reply-to-munging-mail-as-mail-was-meant-to-be/
+again, please do not top post
 
--- 
-Felipe Contreras
+> What about checkbox "Don't copy toolchain libraries to the target dir" that
+> depends on PREFERRED_STATIC. So users who use dynamic linking don't see
+> this checkbox at all. But users who use static linking can manually choose
+> to copy or don't copy shared libraries. It's usefull to create initramfs
+> images at least. It's unlikely that someone make initramfs with complex
+> soft.
+
+that's up to Peter, but anything you add will need to include warnings such as 
+ive already spewed
+
+> Usually it will be a static busybox.
+
+even a static busybox could try to load those libraries depending on the nss 
+configuration.  nss handles simple things like user/group look ups in 
+/etc/passwd and /etc/group to more complicated like host resolving.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101208/faca16d7/attachment-0001.pgp>
