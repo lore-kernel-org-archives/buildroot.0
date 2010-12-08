@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Dec 2010 22:16:59 +0100
-Subject: [Buildroot] [PATCH 08/17] busybox: move udhcp script from
- skeleton to package
-In-Reply-To: <1291841733.24014.159.camel@coalu.atr>
-References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-9-git-send-email-llandwerlin@gmail.com>
-	<20101208201219.52cbfc37@surf>
-	<1291841733.24014.159.camel@coalu.atr>
-Message-ID: <20101208221659.0ca316e4@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Dec 2010 22:55:04 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.02/fix-ccache-support
+In-Reply-To: <cover.1291752554.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Tue, 7 Dec 2010 21:09:55 +0100")
+References: <cover.1291752554.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ipz4q69z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 08 Dec 2010 21:55:33 +0100
-Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> default.script seems to be a config file related to busybox, why not
-> manage all the busybox stuff into the busybox package ?
+ Thomas> Changes since last post:
+ Thomas>  * Fixed the documentation to not advertise a x2 speed-up
 
-Then this explanation should be part of the commit log :-)
+ Thomas>  * Fixed the documentation to not mention that ccache is inside the
+ Thomas>    toolchain.
 
-Thomas
+ Thomas>  * Fixed package/ccache/Config.in with a proper description, correct
+ Thomas>    link
+
+ Thomas>  * Add final newlines
+
+ Thomas>  * Export HOSTCXX_NOCCACHE just like we export HOSTCC_NOCCACHE.
+
+Thanks, committed.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
