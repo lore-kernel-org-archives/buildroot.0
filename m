@@ -1,32 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Dec 2010 20:13:33 +0100
-Subject: [Buildroot] [PATCH 14/17] pango: ensure startup script is well
- installed
-In-Reply-To: <1291802049-18764-15-git-send-email-llandwerlin@gmail.com>
-References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-15-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20101208201333.7de8d5b8@surf>
+From: Arreche <arreche@gmail.com>
+Date: Wed, 8 Dec 2010 19:14:38 +0000
+Subject: [Buildroot] Tiny Alternative to NetworkManager
+Message-ID: <AANLkTimAuEVsqb5N5AXs+nyNT7Tb4c5u-YaLcR-RrKoC@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Dec 2010 10:54:06 +0100
-llandwerlin at gmail.com wrote:
+Hi list!,
 
->  define PANGO_INSTALL_INITSCRIPT
-> +	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
->  	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
->  endef
+Are there anything like NetworkManager for embedded devices?
 
-We could also do it in one line:
+Regards.
 
- $(INSTALL) -m 755 -D package/pango/S25pango $(TARGET_DIR)/etc/init.d/S25pango
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101208/1364079c/attachment.html>
