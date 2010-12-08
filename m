@@ -1,30 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Dec 2010 20:23:31 +0100
-Subject: [Buildroot] [PATCH] linux: restore DEPMOD usage
-In-Reply-To: <1291800426-28554-1-git-send-email-vapier@gentoo.org>
-References: <1291800426-28554-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101208202331.3bf47461@surf>
+Date: Wed, 8 Dec 2010 20:26:06 +0100
+Subject: [Buildroot] helper tool handling in build system
+ (sed/install/...)
+In-Reply-To: <201012080350.46424.vapier@gentoo.org>
+References: <201012080350.46424.vapier@gentoo.org>
+Message-ID: <20101208202606.59e45501@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Dec 2010 04:27:06 -0500
+On Wed, 8 Dec 2010 03:50:45 -0500
 Mike Frysinger <vapier@gentoo.org> wrote:
 
-> The linux.mk rewrite lost the DEPMOD setting while installing modules
-> which means depending on host-module-init-tools has been useless.
-> Instead, the build system has been executing /sbin/depmod.
-> 
-> While we're here, drop the INSTALL_MOD_PATH since LINUX26_MAKE_FLAGS
-> already contains it.
-> 
-> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+> i cant seem to figure out why we bother looking up the full path:
+> 	SED:=$(shell which sed || type -p sed) -i -e
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I don't know either.
 
-Thanks,
+> we dont build up host versions, nor do we have to worry about them being found 
+> in the cross-compiled PATH since we arent adding that to the host PATH.  the 
+> only things this which/type logic is doing is shortcutting the shell's 
+> implicit PATH lookup -- which is pretty much useless since it isnt saving us 
+> any forks.  if anything, it just adds shell overhead whenever someone does 
+> `make` because of the usage of ":=".
+> 
+> further, it isnt like we're trying to be portable.  the sed's -i usage is 
+> purely GNU and not POSIX compliant at all.  which makes me wonder why the -e 
+> is even there since the default behavior of `sed` is to treat the first 
+> argument as a script.  and then makes me wonder why we have $(SED) at all -- 
+> there are plenty of places in the dist where people just go through `sed`.
+> 
+> so am i missing something or is this all purely vestigial ?
+
+It was added in :
+
+commit afc61c6e8e3f9d0065c2328d4a01227cfa71ba5d
+Author: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date:   Thu Jun 28 10:47:05 2007 +0000
+
+    - adjust infrastructure for new kconfig
+
+For me, it's purely vestigial, so I wouldn't mind if we get rid of it.
+
+Regards,
 
 Thomas
 -- 
@@ -32,3 +52,10 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101208/c0c3fd0e/attachment.pgp>
