@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Dec 2010 20:12:19 +0100
-Subject: [Buildroot] [PATCH 08/17] busybox: move udhcp script from
- skeleton to package
-In-Reply-To: <1291802049-18764-9-git-send-email-llandwerlin@gmail.com>
+Date: Wed, 8 Dec 2010 20:13:33 +0100
+Subject: [Buildroot] [PATCH 14/17] pango: ensure startup script is well
+ installed
+In-Reply-To: <1291802049-18764-15-git-send-email-llandwerlin@gmail.com>
 References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-9-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20101208201219.52cbfc37@surf>
+	<1291802049-18764-15-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20101208201333.7de8d5b8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Dec 2010 10:54:00 +0100
+On Wed,  8 Dec 2010 10:54:06 +0100
 llandwerlin at gmail.com wrote:
 
-> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> 
-> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-> ---
->  fs/skeleton/usr/share/udhcpc/default.script |   39 ---------------------------
->  package/busybox/busybox.mk                  |    2 +-
->  package/busybox/udhcpc.script               |   39 +++++++++++++++++++++++++++
+>  define PANGO_INSTALL_INITSCRIPT
+> +	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
+>  	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
+>  endef
 
-Why is this needed ?
+We could also do it in one line:
+
+ $(INSTALL) -m 755 -D package/pango/S25pango $(TARGET_DIR)/etc/init.d/S25pango
 
 Thomas
 -- 
