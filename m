@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Dec 2010 20:08:52 +0100
-Subject: [Buildroot] [PATCH 01/17] gdk-pixbuf: fix dependency on libiconv
-In-Reply-To: <1291802049-18764-2-git-send-email-llandwerlin@gmail.com>
+Date: Wed, 8 Dec 2010 20:10:55 +0100
+Subject: [Buildroot] [PATCH 06/17] i2c-tools: ensure binaries are
+ installed in the right place
+In-Reply-To: <1291802049-18764-7-git-send-email-llandwerlin@gmail.com>
 References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-2-git-send-email-llandwerlin@gmail.com>
-Message-ID: <20101208200852.210480da@surf>
+	<1291802049-18764-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <20101208201055.3debc42f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Dec 2010 10:53:53 +0100
+On Wed,  8 Dec 2010 10:53:58 +0100
 llandwerlin at gmail.com wrote:
 
-> +GDK_PIXBUF_DEPENDENCIES += \
-> +	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
-> +	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
-> +	host-pkg-config libglib2
+>  define I2C_TOOLS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 755 -d $(TARGET_DIR)/usr/bin
 
-Then maybe, in package/gdk-pixbuf/Config.in:
-
-	select BR2_PACKAGE_ICONV if !BR2_ENABLE_LOCALE
-
- ?
+In some packages you're doing mkdir -p, in others $(INSTALL) -m 755 -d.
+Maybe we should standardize on one or the other ?
 
 Thomas
 -- 
