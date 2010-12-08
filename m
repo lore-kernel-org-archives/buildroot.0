@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Wed,  8 Dec 2010 10:54:05 +0100
-Subject: [Buildroot] [PATCH 13/17] gdk-pixbuf: ensure startup script is well
+Date: Wed,  8 Dec 2010 10:54:06 +0100
+Subject: [Buildroot] [PATCH 14/17] pango: ensure startup script is well
 	installed
 In-Reply-To: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
 References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291802049-18764-14-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291802049-18764-15-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +17,19 @@ In case /etc/init.d does not exist.
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk |    1 +
+ package/pango/pango.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index f129e46..beba138 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -44,6 +44,7 @@ GDK_PIXBUF_DEPENDENCIES += \
- 	host-pkg-config libglib2
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 373eb8b..a350f92 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -55,6 +55,7 @@ else
+ endif
  
- define GDK_PIXBUF_POST_INSTALL_TWEAKS
+ define PANGO_INSTALL_INITSCRIPT
 +	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 755 package/gdk-pixbuf/S26gdk-pixbuf $(TARGET_DIR)/etc/init.d/
+ 	$(INSTALL) -m 755 package/pango/S25pango $(TARGET_DIR)/etc/init.d/
  endef
  
 -- 
