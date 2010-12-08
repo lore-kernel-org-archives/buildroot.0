@@ -1,35 +1,37 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 8 Dec 2010 03:50:45 -0500
-Subject: [Buildroot] helper tool handling in build system (sed/install/...)
-Message-ID: <201012080350.46424.vapier@gentoo.org>
+Date: Wed,  8 Dec 2010 04:27:06 -0500
+Subject: [Buildroot] [PATCH] linux: restore DEPMOD usage
+Message-ID: <1291800426-28554-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i cant seem to figure out why we bother looking up the full path:
-	SED:=$(shell which sed || type -p sed) -i -e
+The linux.mk rewrite lost the DEPMOD setting while installing modules
+which means depending on host-module-init-tools has been useless.
+Instead, the build system has been executing /sbin/depmod.
 
-we dont build up host versions, nor do we have to worry about them being found 
-in the cross-compiled PATH since we arent adding that to the host PATH.  the 
-only things this which/type logic is doing is shortcutting the shell's 
-implicit PATH lookup -- which is pretty much useless since it isnt saving us 
-any forks.  if anything, it just adds shell overhead whenever someone does 
-`make` because of the usage of ":=".
+While we're here, drop the INSTALL_MOD_PATH since LINUX26_MAKE_FLAGS
+already contains it.
 
-further, it isnt like we're trying to be portable.  the sed's -i usage is 
-purely GNU and not POSIX compliant at all.  which makes me wonder why the -e 
-is even there since the default behavior of `sed` is to treat the first 
-argument as a script.  and then makes me wonder why we have $(SED) at all -- 
-there are plenty of places in the dist where people just go through `sed`.
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-so am i missing something or is this all purely vestigial ?
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101208/25fae0b3/attachment.pgp>
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5f89b7d..e9c37eb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -132,7 +132,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+ 	# directories, not relevant on the target
+ 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
+-			INSTALL_MOD_PATH=$(TARGET_DIR) modules_install ;		\
++			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
+ 	fi
+-- 
+1.7.3.3
