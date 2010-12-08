@@ -1,31 +1,30 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Wed, 08 Dec 2010 22:00:47 +0100
-Subject: [Buildroot] [PATCH 01/17] gdk-pixbuf: fix dependency on libiconv
-In-Reply-To: <20101208200852.210480da@surf>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Dec 2010 22:16:59 +0100
+Subject: [Buildroot] [PATCH 08/17] busybox: move udhcp script from
+ skeleton to package
+In-Reply-To: <1291841733.24014.159.camel@coalu.atr>
 References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-2-git-send-email-llandwerlin@gmail.com>
-	<20101208200852.210480da@surf>
-Message-ID: <1291842047.24014.164.camel@coalu.atr>
+	<1291802049-18764-9-git-send-email-llandwerlin@gmail.com>
+	<20101208201219.52cbfc37@surf>
+	<1291841733.24014.159.camel@coalu.atr>
+Message-ID: <20101208221659.0ca316e4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mercredi 08 d?cembre 2010 ? 20:08 +0100, Thomas Petazzoni a ?crit :
-> On Wed,  8 Dec 2010 10:53:53 +0100
-> llandwerlin at gmail.com wrote:
-> 
-> > +GDK_PIXBUF_DEPENDENCIES += \
-> > +	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
-> > +	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
-> > +	host-pkg-config libglib2
-> 
-> Then maybe, in package/gdk-pixbuf/Config.in:
-> 
-> 	select BR2_PACKAGE_ICONV if !BR2_ENABLE_LOCALE
-> 
->  ?
-> 
+On Wed, 08 Dec 2010 21:55:33 +0100
+Lionel Landwerlin <llandwerlin@gmail.com> wrote:
 
-Sure, thx !
+> default.script seems to be a config file related to busybox, why not
+> manage all the busybox stuff into the busybox package ?
+
+Then this explanation should be part of the commit log :-)
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
