@@ -1,43 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  8 Dec 2010 16:30:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 2905] New: Qt: Speed up compilation,
- if gui-module isn't selected
-Message-ID: <bug-2905-163@https.bugs.busybox.net/>
+From: Robert Szentmihalyi <robert.szentmihalyi@helvetica-it.com>
+Date: Wed, 8 Dec 2010 17:44:10 +0100
+Subject: [Buildroot] YAFFS2 support for buildroot
+Message-ID: <201012081744.10248.robert.szentmihalyi@helvetica-it.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2905
+Hi,
 
-           Summary: Qt: Speed up compilation, if gui-module isn't selected
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I am planning to add YAFFS2 support to buildroot.
+Is anybody else interested in that or working on it already?
 
+Would anybody care to give me a hint about what is the preferred way to add 
+support for a new root filesystem to buildroot, so that a patch could 
+eventually be accepted for inclusion?
 
-Created attachment 2779
-  --> https://bugs.busybox.net/attachment.cgi?id=2779
-patch to disable gui-module
+Thanks for your support,
+ Robert
 
-By default the gui-module is built.
-
-With the appended patch building is disabled, if gui-module isn't selected via
-configuration.
-
-Frederik Pasch
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Robert Szentmih?lyi
+Technischer Leiter
+
+Helvetica IT AG
+Bahnhofstrasse 15
+CH-8890 Flums SG
+
+Tel +41 81 733 15 67
+Fax +41 81 733 15 68
+Mobil +41 79 252 97 80
+
+Niederlassung Deutschland:
+Leopoldstrasse 244
+DE-80807 M?nchen
+
+Tel +49 89 20 80 39 508
+
+http://www.helvetica-it.com
