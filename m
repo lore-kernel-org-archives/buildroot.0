@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:03 +0100
-Subject: [Buildroot] [PATCH 05/16] i2c-tools: ensure binaries are installed
-	in the right place
+Date: Thu,  9 Dec 2010 10:55:04 +0100
+Subject: [Buildroot] [PATCH 06/16] udev: ensure startup script is well
+	installed
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-6-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-7-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,26 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
+In case /etc/init.d does not exists.
+
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/i2c-tools/i2c-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/udev/udev.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index d419524..2e60407 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -12,10 +12,10 @@ define I2C_TOOLS_BUILD_CMDS
- endef
- 
- define I2C_TOOLS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -d $(TARGET_DIR)/usr/bin
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
- 		$(INSTALL) -m 755 $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
--		$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/$$i; \
- 	done
- endef
- 
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index 90dbdce..8da2798 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -88,7 +88,9 @@ define UDEV_INSTALL_TARGET_CMDS
+ 		LDFLAGS="-warn-common" \
+ 		USE_LOG=false USE_SELINUX=false \
+ 		udevdir=$(UDEV_ROOT) EXTRAS="$(UDEV_BUILD_EXTRAS)" -C $(@D) install
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/init.d
+ 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/udev/rules.d
+ 	$(INSTALL) -m 0644 $(@D)/etc/udev/frugalware/* $(TARGET_DIR)/etc/udev/rules.d
+ 	( grep udev_root $(TARGET_DIR)/etc/udev/udev.conf > /dev/null 2>&1 || echo 'udev_root=/dev' >> $(TARGET_DIR)/etc/udev/udev.conf )
+ 	install -m 0755 -D $(@D)/udevstart $(TARGET_DIR)/sbin/udevstart
 -- 
 1.7.2.3
