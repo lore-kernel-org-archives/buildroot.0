@@ -1,33 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 09 Dec 2010 10:55:58 -0300
-Subject: [Buildroot] iproute2 failing for x86_64 with ext. toolchain
-In-Reply-To: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
-References: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
-Message-ID: <4D00DFEE.7090103@zacarias.com.ar>
+From: Jomas Nash <jomasnash@gmail.com>
+Date: Thu, 9 Dec 2010 15:17:59 +0100
+Subject: [Buildroot] problem with new package partimage
+In-Reply-To: <AANLkTimc0c=FW=2Zv4jT9WWV7bc903J2VkOoZ0L9a+Af@mail.gmail.com>
+References: <AANLkTimc0c=FW=2Zv4jT9WWV7bc903J2VkOoZ0L9a+Af@mail.gmail.com>
+Message-ID: <AANLkTinKgMJibA8dC_n3e_KU2yRf6uOZ-90NAimmMasp@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/07/10 19:21, Heiko Zuerker wrote:
+Hi,
 
-> Hey,
-> 
-> the iproute2 compile fails with:
-> -------------------
-> /data/devil-linux/../x-tools/x86_64-unknown-linux-gnu/bin/x86_64-unknown-linux-gnu-gcc
-> --sysroot=/data/devil-linux/output/staging -Wl,-export-dynamic  ip.o
-> ipaddress.o ipaddrlabel.o iproute.o iprule.o rtm_map.o iptunnel.o
-> ip6tunnel.o tunnel.o ipneigh.o ipntable.o iplink.o ipmaddr.o ipmonitor.o
-> ipmroute.o ipprefix.o iptuntap.o ipxfrm.o xfrm_state.o xfrm_policy.o
-> xfrm_monitor.o iplink_vlan.o link_veth.o link_gre.o iplink_can.o
-> iplink_macvlan.o ../lib/libnetlink.a ../lib/libutil.a  -lresolv -L../lib
-> -lnetlink -lutil -ldl -o ip
-> ../lib/libnetlink.a: could not read symbols: Archive has no index; run
-> ranlib to add one
-> collect2: ld returned 1 exit status
-> ------------------------
+Lionel Landwerlin advised me to run the program under gdb (thanks for the
+advice).
+So I tried this but i get an error in gdb.
 
-Can you upload a full build log of the relevant (iproute2) part somewhere?
-Thanks.
+1. I start gdb:    gdb partimage
+2. The debugger starts and I type:   run
+
+Then I see an error message in gdb:  /root/exec   /usr/bin/partimage : No
+such file or directory
+
+partimage is in /usr/bin  , So how can I debug my program?
+Please help.
+
+
+Kind regards,
+
+Jomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101209/9c494f59/attachment.html>
