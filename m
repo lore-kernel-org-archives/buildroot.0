@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:05 +0100
-Subject: [Buildroot] [PATCH 07/16] busybox: move udhcp script from skeleton
-	to package
+Date: Thu,  9 Dec 2010 10:55:07 +0100
+Subject: [Buildroot] [PATCH 09/16] sdl_gfx: avoid using non reevaluated
+	$(STAGING_DIR)
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-8-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-10-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,120 +13,28 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Since udhcpc is part of busybox, it seems logical to move the udhcpc
-script from skeleton to busybox.
-
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- fs/skeleton/usr/share/udhcpc/default.script |   39 ---------------------------
- package/busybox/busybox.mk                  |    2 +-
- package/busybox/udhcpc.script               |   39 +++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+), 40 deletions(-)
- delete mode 100755 fs/skeleton/usr/share/udhcpc/default.script
- create mode 100755 package/busybox/udhcpc.script
+ package/sdl_gfx/sdl_gfx.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/fs/skeleton/usr/share/udhcpc/default.script b/fs/skeleton/usr/share/udhcpc/default.script
-deleted file mode 100755
-index a52a7f8..0000000
---- a/fs/skeleton/usr/share/udhcpc/default.script
-+++ /dev/null
-@@ -1,39 +0,0 @@
--#!/bin/sh
--
--# udhcpc script edited by Tim Riker <Tim@Rikers.org>
--
--[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
--
--RESOLV_CONF="/etc/resolv.conf"
--[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
--[ -n "$subnet" ] && NETMASK="netmask $subnet"
--
--case "$1" in
--	deconfig)
--		/sbin/ifconfig $interface 0.0.0.0
--		;;
--
--	renew|bound)
--		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
--
--		if [ -n "$router" ] ; then
--			echo "deleting routers"
--			while route del default gw 0.0.0.0 dev $interface ; do
--				:
--			done
--
--			for i in $router ; do
--				route add default gw $i dev $interface
--			done
--		fi
--
--		echo -n > $RESOLV_CONF
--		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
--		for i in $dns ; do
--			echo adding dns $i
--			echo nameserver $i >> $RESOLV_CONF
--		done
--		;;
--esac
--
--exit 0
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index b7f4740..da391ba 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -141,7 +141,7 @@ endif
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index bd4e3f1..bbfd99f 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -12,9 +12,10 @@ SDL_GFX_INSTALL_TARGET:=YES
  
- define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_BINARY)
--	-chmod a+rx $(TARGET_DIR)/usr/share/udhcpc/default.script
-+	$(INSTALL) -m 0755 -D package/busybox/udhcpc.script $(TARGET_DIR)/usr/share/udhcpc/default.script
- endef
+ SDL_GFX_DEPENDENCIES:=sdl
  
- define BUSYBOX_UNINSTALL_TARGET_CMDS
-diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-new file mode 100755
-index 0000000..a52a7f8
---- /dev/null
-+++ b/package/busybox/udhcpc.script
-@@ -0,0 +1,39 @@
-+#!/bin/sh
-+
-+# udhcpc script edited by Tim Riker <Tim@Rikers.org>
-+
-+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
-+
-+RESOLV_CONF="/etc/resolv.conf"
-+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
-+[ -n "$subnet" ] && NETMASK="netmask $subnet"
-+
-+case "$1" in
-+	deconfig)
-+		/sbin/ifconfig $interface 0.0.0.0
-+		;;
-+
-+	renew|bound)
-+		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-+
-+		if [ -n "$router" ] ; then
-+			echo "deleting routers"
-+			while route del default gw 0.0.0.0 dev $interface ; do
-+				:
-+			done
-+
-+			for i in $router ; do
-+				route add default gw $i dev $interface
-+			done
-+		fi
-+
-+		echo -n > $RESOLV_CONF
-+		[ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
-+		for i in $dns ; do
-+			echo adding dns $i
-+			echo nameserver $i >> $RESOLV_CONF
-+		done
-+		;;
-+esac
-+
-+exit 0
+-SDL_GFX_CONF_OPT:=--with-sdl-prefix=$(STAGING_DIR)/usr \
+-		--disable-sdltest \
+-		--enable-static
++SDL_GFX_CONF_OPT = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--enable-static
+ 
+ # enable mmx for newer x86's
+ ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
 -- 
 1.7.2.3
