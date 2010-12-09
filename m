@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:09 +0100
-Subject: [Buildroot] [PATCH 11/16] rsync: avoid using non reevaluated
-	$(TARGET_DIR) in RSYNC_INSTALL_TARGET_OPT
+Date: Thu,  9 Dec 2010 10:55:10 +0100
+Subject: [Buildroot] [PATCH 12/16] gdk-pixbuf: ensure startup script is well
+	installed
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-12-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-13-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,24 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
+In case /etc/init.d does not exist.
+
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/rsync/rsync.mk |   18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index e1bb28e..5ffbfbb 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,19 +4,19 @@
- #
- #############################################################
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index f129e46..beba138 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -44,6 +44,7 @@ GDK_PIXBUF_DEPENDENCIES += \
+ 	host-pkg-config libglib2
  
--RSYNC_VERSION:=3.0.7
--RSYNC_SOURCE:=rsync-$(RSYNC_VERSION).tar.gz
--RSYNC_SITE:=http://rsync.samba.org/ftp/rsync/src
--RSYNC_INSTALL_STAGING:=NO
--RSYNC_INSTALL_TARGET:=YES
--RSYNC_CONF_OPT=$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
-+RSYNC_VERSION := 3.0.7
-+RSYNC_SOURCE := rsync-$(RSYNC_VERSION).tar.gz
-+RSYNC_SITE := http://rsync.samba.org/ftp/rsync/src
-+RSYNC_INSTALL_STAGING = NO
-+RSYNC_INSTALL_TARGET = YES
-+RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
- ifeq ($(BR2_ENABLE_DEBUG),y)
--RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
-+RSYNC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
- 			  install
- else
--RSYNC_INSTALL_TARGET_OPT:=DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
-+RSYNC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
- 			  STRIPPROG="$(TARGET_STRIP)" install-strip
- endif
--RSYNC_CONF_OPT:=--with-included-popt
-+RSYNC_CONF_OPT = --with-included-popt
+ define GDK_PIXBUF_POST_INSTALL_TWEAKS
++	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
+ 	$(INSTALL) -m 755 package/gdk-pixbuf/S26gdk-pixbuf $(TARGET_DIR)/etc/init.d/
+ endef
  
- $(eval $(call AUTOTARGETS,package,rsync))
 -- 
 1.7.2.3
