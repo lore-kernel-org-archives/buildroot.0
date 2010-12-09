@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:10 +0100
-Subject: [Buildroot] [PATCH 12/16] gdk-pixbuf: ensure startup script is well
+Date: Thu,  9 Dec 2010 10:55:12 +0100
+Subject: [Buildroot] [PATCH 14/16] at: ensure startup script is well
 	installed
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-13-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-15-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +17,19 @@ In case /etc/init.d does not exist.
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk |    1 +
+ package/at/at.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index f129e46..beba138 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -44,6 +44,7 @@ GDK_PIXBUF_DEPENDENCIES += \
- 	host-pkg-config libglib2
+diff --git a/package/at/at.mk b/package/at/at.mk
+index c38c424..531cb40 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -20,6 +20,7 @@ AT_CONF_OPT = \
+ 	SENDMAIL=/usr/sbin/sendmail
  
- define GDK_PIXBUF_POST_INSTALL_TWEAKS
-+	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 755 package/gdk-pixbuf/S26gdk-pixbuf $(TARGET_DIR)/etc/init.d/
+ define AT_INSTALL_INITSCRIPT
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/init.d
+ 	$(INSTALL) -m 0755 package/at/S99at $(TARGET_DIR)/etc/init.d/S99at
  endef
  
 -- 
