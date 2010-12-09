@@ -1,28 +1,39 @@
-From: Jomas Nash <jomasnash@gmail.com>
-Date: Thu, 9 Dec 2010 11:58:56 +0100
-Subject: [Buildroot] problem with new package partimage
-In-Reply-To: <AANLkTimc0c=FW=2Zv4jT9WWV7bc903J2VkOoZ0L9a+Af@mail.gmail.com>
-References: <AANLkTimc0c=FW=2Zv4jT9WWV7bc903J2VkOoZ0L9a+Af@mail.gmail.com>
-Message-ID: <AANLkTikQmrSYjpQdj-2xTJsTvUnkRsEF2oY-Nf1Pbs9T@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  9 Dec 2010 11:05:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 2917] New: Qt: Add declarative module
+Message-ID: <bug-2917-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=2917
 
-I updated the buildroot packages newt -> newt-0.52.12 and slang ->
-slang2-2.2.2 (these are the most recent ones) and then I compiled partimage
-again.
-It did not help. The program crashes at the same point.
+           Summary: Qt: Add declarative module
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: fpasch at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Anybody has a suggestion what to do?
 
+Created attachment 2791
+  --> https://bugs.busybox.net/attachment.cgi?id=2791
+qt-declarative
 
-Kind regards,
+There is a new module available with Qt 4.7: QtDeclarative
 
-Jomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101209/3eb9ac21/attachment.html>
+The attached patch makes it selectable in buildroot-config
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
