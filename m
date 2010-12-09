@@ -1,58 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Dec 2010 20:33:02 +0100
-Subject: [Buildroot] YAFFS2 support for buildroot
-In-Reply-To: <201012082347.55945.robert.szentmihalyi@helvetica-it.com>
-References: <201012081744.10248.robert.szentmihalyi@helvetica-it.com>
-	<20101208203429.5ae2cadc@surf>
-	<201012082347.55945.robert.szentmihalyi@helvetica-it.com>
-Message-ID: <20101209203302.60ee10ac@surf>
+Date: Thu, 9 Dec 2010 20:34:37 +0100
+Subject: [Buildroot] problem with new package partimage
+In-Reply-To: <AANLkTinScnan+v3ys81p40EohreZpLYY3CrWkzxPWHy8@mail.gmail.com>
+References: <AANLkTimc0c=FW=2Zv4jT9WWV7bc903J2VkOoZ0L9a+Af@mail.gmail.com>
+	<AANLkTinScnan+v3ys81p40EohreZpLYY3CrWkzxPWHy8@mail.gmail.com>
+Message-ID: <20101209203437.766b210e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Robert,
+Hello,
 
-On Wed, 8 Dec 2010 23:47:55 +0100
-Robert Szentmihalyi <robert.szentmihalyi@helvetica-it.com> wrote:
+On Thu, 9 Dec 2010 16:40:21 +0100
+Jomas Nash <jomasnash@gmail.com> wrote:
 
-> I have solved that with the attached script for now, which generates
-> a patch against a given kernel which contains the yaffs2 code taken
-> from the git repository plus a defconfig for our board. I place the
-> generated patch in the buildroot directory and set
-> BR2_LINUX_KERNEL_PATCH and BR2_LINUX_KERNEL_DEFCONFIG to make use of
-> it. This works at least until I have time to think up something
-> better :-)
+> I found another strange thing with partimage.
+> When I start partimage and run 'ps'  in an other terminal, I see that
+> 3 instances of partimage are running.
+> like:
+> 
+> 1117   partimage -S  etc...
+> 1118   partimage -S
+> 1119   partimage -S
+> 
+> All three lines have the same parameters
+> At my "normal" linux system (ubuntu) there is only one instance of
+> partimage when I start it
+> 
+> 
+> Has anybody an idea what can cause this?
 
-Ok. I haven't either thought on how to integrate well-known kernel
-patches. This is probably a topic on which we will work on later.
+Busybox ps probably show all the threads by default, while the normal
+ps shows only processes and hides all their threads.
 
-> Is there a way to pull the sources from the yaffs git repository, or
-> will I have to create a pseudo package and place it in the dl
-> directory? As I said, my goal is not just to make it work somehow,
-> but to create a patch which can be submitted later, so that others
-> can benefit from it.
+> It looks like partimge does not want to be compiled in buildroot.
 
-Yes, the GENTARGETS and AUTOTARGETS infrastructure can both pull
-sources from a git repository. Something like :
+This sentence simply doesn't make sense. It's not because there is a
+bug somewhere that "partimage does not want to be compiled in
+Buildroot".
 
-YAFFSTOOLS_SITE = git://foobar.org
-YAFFSTOOLS_VERSION = somegitcommitid
-
-See http://buildroot.org/downloads/buildroot.html#generic-reference for
-more details
-
-> I did that and I added 
-> source "fs/yaffs2/Config.in"
-> to
-> fs/Config.in,
-> but the option does not appear under "target filesystem options".
-
-Could you post what you have done exactly ? Because from this
-description, it should just work.
-
-Regards,
+Regards!
 
 Thomas
 -- 
