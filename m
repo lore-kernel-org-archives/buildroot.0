@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:02 +0100
-Subject: [Buildroot] [PATCH 04/16] cloop: ensure target directory exist
-	before copying into
+Date: Thu,  9 Dec 2010 10:55:06 +0100
+Subject: [Buildroot] [PATCH 08/16] sdl_sound: avoid using non reevaluated
+	$(STAGING_DIR)
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-9-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,27 +15,30 @@ From: Lionel Landwerlin <llandwerlin@gmail.com>
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/cloop/cloop.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ package/sdl_sound/sdl_sound.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index 0ed9ff0..4c16098 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -10,9 +10,10 @@ define HOST_CLOOP_BUILD_CMDS
- endef
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index bd94a62..6c45fcf 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -28,11 +28,12 @@ ifeq ($(BR2_PACKAGE_SPEEX),y)
+ SDL_SOUND_DEPENDENCIES += speex
+ endif
  
- define HOST_CLOOP_INSTALL_CMDS
-- install -m 755 $(@D)/create_compressed_fs $(HOST_DIR)/usr/bin
-- install -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
-+	$(INSTALL) -m 0755 -d $(HOST_DIR)/usr/bin
-+	$(INSTALL) -m 755 $(@D)/create_compressed_fs $(HOST_DIR)/usr/bin
-+	$(INSTALL) -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
- endef
+-SDL_SOUND_CONF_OPT:=--with-sdl-prefix=$(STAGING_DIR)/usr \
+-		--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+-		--disable-sdltest \
+-		--enable-static \
+-		--program-prefix=''
++SDL_SOUND_CONF_OPT = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--enable-static \
++	--program-prefix=''
  
- $(eval $(call GENTARGETS,package,cloop))
--$(eval $(call GENTARGETS,package,cloop,host))
-\ No newline at end of file
-+$(eval $(call GENTARGETS,package,cloop,host))
+ # enable mmx for newer x86's
+ ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
 -- 
 1.7.2.3
