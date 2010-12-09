@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  9 Dec 2010 10:27:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 2911] New: Qt: Disable qt3support-option,
+Date: Thu,  9 Dec 2010 10:28:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 2911] Qt: Disable qt3support-option,
  if gui-module isn't selected
-Message-ID: <bug-2911-163@https.bugs.busybox.net/>
+In-Reply-To: <bug-2911-163@https.bugs.busybox.net/>
+References: <bug-2911-163@https.bugs.busybox.net/>
+Message-ID: <20101209102840.E2A508E231@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +13,10 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=2911
 
-           Summary: Qt: Disable qt3support-option, if gui-module isn't
-                    selected
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-See appended patch...
-
-Frederik Pasch
+--- Comment #1 from Frederik Pasch <fpasch@googlemail.com>  ---
+Created attachment 2785
+  --> https://bugs.busybox.net/attachment.cgi?id=2785
+Disable qt3support-option if gui isn't selected
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
