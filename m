@@ -1,10 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Thu,  9 Dec 2010 10:55:04 +0100
-Subject: [Buildroot] [PATCH 06/16] udev: ensure startup script is well
-	installed
+Date: Thu,  9 Dec 2010 10:55:02 +0100
+Subject: [Buildroot] [PATCH 04/16] cloop: ensure target directory exist
+	before copying into
 In-Reply-To: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
 References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1291888514-31385-7-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1291888514-31385-5-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,29 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-In case /etc/init.d does not exists.
-
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/udev/udev.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/cloop/cloop.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 90dbdce..8da2798 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -88,7 +88,9 @@ define UDEV_INSTALL_TARGET_CMDS
- 		LDFLAGS="-warn-common" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="$(UDEV_BUILD_EXTRAS)" -C $(@D) install
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/udev/rules.d
- 	$(INSTALL) -m 0644 $(@D)/etc/udev/frugalware/* $(TARGET_DIR)/etc/udev/rules.d
- 	( grep udev_root $(TARGET_DIR)/etc/udev/udev.conf > /dev/null 2>&1 || echo 'udev_root=/dev' >> $(TARGET_DIR)/etc/udev/udev.conf )
- 	install -m 0755 -D $(@D)/udevstart $(TARGET_DIR)/sbin/udevstart
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index 0ed9ff0..4c16098 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -10,9 +10,10 @@ define HOST_CLOOP_BUILD_CMDS
+ endef
+ 
+ define HOST_CLOOP_INSTALL_CMDS
+- install -m 755 $(@D)/create_compressed_fs $(HOST_DIR)/usr/bin
+- install -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 0755 -d $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 755 $(@D)/create_compressed_fs $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
+ endef
+ 
+ $(eval $(call GENTARGETS,package,cloop))
+-$(eval $(call GENTARGETS,package,cloop,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS,package,cloop,host))
 -- 
 1.7.2.3
