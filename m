@@ -1,39 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  9 Dec 2010 11:05:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 2917] New: Qt: Add declarative module
-Message-ID: <bug-2917-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 09 Dec 2010 10:55:58 -0300
+Subject: [Buildroot] iproute2 failing for x86_64 with ext. toolchain
+In-Reply-To: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
+References: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
+Message-ID: <4D00DFEE.7090103@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2917
+On 12/07/10 19:21, Heiko Zuerker wrote:
 
-           Summary: Qt: Add declarative module
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Hey,
+> 
+> the iproute2 compile fails with:
+> -------------------
+> /data/devil-linux/../x-tools/x86_64-unknown-linux-gnu/bin/x86_64-unknown-linux-gnu-gcc
+> --sysroot=/data/devil-linux/output/staging -Wl,-export-dynamic  ip.o
+> ipaddress.o ipaddrlabel.o iproute.o iprule.o rtm_map.o iptunnel.o
+> ip6tunnel.o tunnel.o ipneigh.o ipntable.o iplink.o ipmaddr.o ipmonitor.o
+> ipmroute.o ipprefix.o iptuntap.o ipxfrm.o xfrm_state.o xfrm_policy.o
+> xfrm_monitor.o iplink_vlan.o link_veth.o link_gre.o iplink_can.o
+> iplink_macvlan.o ../lib/libnetlink.a ../lib/libutil.a  -lresolv -L../lib
+> -lnetlink -lutil -ldl -o ip
+> ../lib/libnetlink.a: could not read symbols: Archive has no index; run
+> ranlib to add one
+> collect2: ld returned 1 exit status
+> ------------------------
 
-
-Created attachment 2791
-  --> https://bugs.busybox.net/attachment.cgi?id=2791
-qt-declarative
-
-There is a new module available with Qt 4.7: QtDeclarative
-
-The attached patch makes it selectable in buildroot-config
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Can you upload a full build log of the relevant (iproute2) part somewhere?
+Thanks.
