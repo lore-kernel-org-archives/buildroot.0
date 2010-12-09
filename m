@@ -1,90 +1,46 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Thu, 09 Dec 2010 20:46:20 +0000
-Subject: [Buildroot] Tiny Alternative to NetworkManager
-In-Reply-To: <AANLkTimw8fmwe8vEsXo5=05AOP5zjPZ5x_GwkXWsuKeW@mail.gmail.com>
-References: <AANLkTimAuEVsqb5N5AXs+nyNT7Tb4c5u-YaLcR-RrKoC@mail.gmail.com>
-	<20101208214330.7cc8c7e8@surf>
-	<AANLkTimJKTHvG6oWy7HgFGU1MNAEjpMRVM6QtkhfSx8r@mail.gmail.com>
-	<AANLkTimw8fmwe8vEsXo5=05AOP5zjPZ5x_GwkXWsuKeW@mail.gmail.com>
-Message-ID: <1291927580.7128.1.camel@segulix>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Thu, 09 Dec 2010 14:58:36 -0600
+Subject: [Buildroot] iproute2 failing for x86_64 with ext. toolchain
+In-Reply-To: <201012091946.12899.yann.morin.1998@anciens.enib.fr>
+References: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
+	<4D0112E5.301@zacarias.com.ar>
+	<20101209122657.12946lktv4rsa84k@www.home.zuerker.org>
+	<201012091946.12899.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20101209145836.1349479ewfmysxkw@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also exist 
+Quoting "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>:
 
-http://wicd.sourceforge.net/ 
+> Heiko, All,
+>
+> On Thursday 09 December 2010 19:26:57 Heiko Zuerker wrote:
+>> It now blows up because it can't find xtables.h. Seems like the
+>> external toolchain (ct-ng 1.9.0) didn't include that from the kernel.
+>> I'll do some more testing on it.
+>
+> As an addendum to my previous mail: xtables.h does no exist. indeed, but
+> x_tables.h does, and is correctly is installed in my toolchains, here.
+>
+> It should be included as though:
+>   #include <linux/netfilter/x_tables.h>
 
-On Thu, 2010-12-09 at 21:33 +0100, Yoann Sculo wrote:
-> I'm using Connman with uclibc, it works great ...
-> Actually, I could say Connman is not 100% stable yet, it was a bet to
-> base a commercial project on it.
-> But it sounds promissing and at the end Connman is really useful !
-> 
-> 
-> And Thomas you're right, it would be nice to get Connman on
-> Buildroot !
-> It would make my work easier ;)
-> 
-> Yoann Sculo
-> Blog - www.yoannsculo.fr
-> Twitter - twitter.com/yoannsculo
-> 
-> 
-> 2010/12/9 Arreche <arreche@gmail.com>
->         Thanks but I limited to use uclibc
->         
->         On Wed, Dec 8, 2010 at 8:43 PM, Thomas Petazzoni
->         <thomas.petazzoni@free-electrons.com> wrote:
->                 On Wed, 8 Dec 2010 19:14:38 +0000
->                 Arreche <arreche@gmail.com> wrote:
->                 
->                 > Are there anything like NetworkManager for embedded
->                 devices?
->                 
->                 
->                 Connman is the option used by Meego. See
->                 <http://connman.net/>. Having
->                 a package for Connman in Buildroot would be great.
->                 
->                 Regards,
->                 
->                 Thomas
->                 --
->                 Thomas Petazzoni, Free Electrons
->                 Kernel, drivers, real-time and embedded Linux
->                 development, consulting, training and support.
->                 http://free-electrons.com
->                 _______________________________________________
->                 buildroot mailing list
->                 buildroot at busybox.net
->                 http://lists.busybox.net/mailman/listinfo/buildroot
->         
->         
->         
->         -- 
->         .
->         
->         
->         _______________________________________________
->         buildroot mailing list
->         buildroot at busybox.net
->         http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Mistery solved!
+xtables.h comes from iptables, so there's a dependency between  
+iproute2 and iptables. In addition to that, iptables needs the AR= fix  
+also.
+
+I'll send in a patch later today.
 
 -- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101209/e37ab27a/attachment.bin>
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
