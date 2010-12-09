@@ -1,9 +1,9 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 09 Dec 2010 23:24:15 +0100
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Thu, 09 Dec 2010 23:24:07 +0100
 Subject: [Buildroot] [PATCH] dejavu: add new package
 In-Reply-To: <1290464467-2320-1-git-send-email-luca@lucaceresoli.net>
 References: <1290464467-2320-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <4D01570F.3030600@lucaceresoli.net>
+Message-ID: <4D015707.3080308@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
