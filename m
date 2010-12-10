@@ -1,61 +1,39 @@
-From: Steve Calfee <nospamcalfee@yahoo.com>
-Date: Fri, 10 Dec 2010 08:34:57 -0800 (PST)
-Subject: [Buildroot] skeleton updates
-In-Reply-To: <002a01cb9875$c5f3b5b0$51db2110$@zuerker.org>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<da8a618d7ebd5da7e48fccbab506f3e7b7a5cdd8.1291582351.git.thomas.petazzoni@free-electrons.com>
-	<158894.53583.qm@web58205.mail.re3.yahoo.com>
-	<002a01cb9875$c5f3b5b0$51db2110$@zuerker.org>
-Message-ID: <695339.53017.qm@web58207.mail.re3.yahoo.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 10 Dec 2010 11:50:40 -0500
+Subject: [Buildroot] [PATCH 2/2] iproute2: Fix auto configuration to
+ work in cross environment.
+In-Reply-To: <1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
+References: <1291988711-8162-1-git-send-email-serj.kalichev@gmail.com>
+	<1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
+Message-ID: <AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message ----
+On Fri, Dec 10, 2010 at 8:45 AM, Serj Kalichev wrote:
+> The iproute2's configure script was fixed to work with cross
+> toolchain. Now it can use tools from cross toolchain but not
+> from the host. So it can automatically generate right Config
+> file. The checks for the IPv6 support and Berkeley DB
+> availability were added to the configure script. The
+> Berkeley DB support is needed to build (or not) arpd.
 
-> From: Heiko Zuerker <heiko@zuerker.org>
-> > From: buildroot-bounces at busybox.net [mailto:buildroot-
-> > Subject:  [Buildroot] skeleton updates
-> > 
-> > Hi Guys,
-> > 
-> > I am  trying to follow up with Marcus Osdoba's work on dockstar and get
-> >  something ready to submit to buildroot.
-> > 
-> > I am having a real  problem figuring out how stuff makes it into the the
-> final
-> > etc  directory. My patch script in the
-> >  target/device/sheevaplug/SeagateDockStar/patchrootfs.sh copies new files
-> >  (inittab and shadow into output/target/skeleton/etc/ and this happens on
-> >  re-invocation of make. However when I look at the rootfs.tar file the
-> >  updated inittab is not there. Can anyone describe how the various  /etc/
-> files
-> > in fs/skeleton and target/device/...skeleton and the  final patch file get
-> to the
-> > final output image files.
-> 
-> The best  place to add these customizations is BR2_ROOTFS_POST_BUILD_SCRIPT,
-> which you  can find under "Target filesystem options" in menuconfig.
-> This script is  called after everything is build, but before the target
-> filesystem is  generated.
-> 
-> Here's the example I  use:
-> BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/$(BOARD_PATH)/customize_target.sh"
-> 
+this is way more work than necessary.  the iproute2 configure script
+does all of two things:
+ - detect atm support
+ - detect iptables version
 
-Hi thanks for the comment. I am using that script and it gets invoked during the 
-build.
+instead of trying to clean up the bundled configure script which is a
+pile of crap, simply have the iproute2.mk file do:
+echo TC_CONFIG_ATM:=y > Config
+echo TC_CONFIG_XT:=$(BR2_IPTABLES) >> Config
 
-Investigating further, I was copying into the wrong output directory.
+after all, we already know that the version of iptables in BR is the
+latest and so dont need any of the hacky iptables detection.
 
-The way I implemented rootfs updates, is I just have a device directory with the 
-skeleton of things I want installed, and it gets copied over the default stuff 
-from the build. In the case of the default all I am changing is inittab and 
-shadow, but any file could be added there to replace or add to the default 
-fs/skeleton.
-
-
-
-      
+here is a simple patch i wrote for Gentoo that allows you to disable
+iptables support completely:
+http://sources.gentoo.org/sys-apps/iproute2/files/iproute2-2.6.35-no-iptables.patch
+-mike
