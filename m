@@ -1,32 +1,104 @@
-From: Steve Calfee <nospamcalfee@yahoo.com>
-Date: Thu, 9 Dec 2010 22:46:42 -0800 (PST)
-Subject: [Buildroot] skeleton updates
-In-Reply-To: <da8a618d7ebd5da7e48fccbab506f3e7b7a5cdd8.1291582351.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<da8a618d7ebd5da7e48fccbab506f3e7b7a5cdd8.1291582351.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <158894.53583.qm@web58205.mail.re3.yahoo.com>
+From: Arreche <arreche@gmail.com>
+Date: Fri, 10 Dec 2010 08:25:11 +0000
+Subject: [Buildroot] Tiny Alternative to NetworkManager
+In-Reply-To: <1291927580.7128.1.camel@segulix>
+References: <AANLkTimAuEVsqb5N5AXs+nyNT7Tb4c5u-YaLcR-RrKoC@mail.gmail.com>
+	<20101208214330.7cc8c7e8@surf>
+	<AANLkTimJKTHvG6oWy7HgFGU1MNAEjpMRVM6QtkhfSx8r@mail.gmail.com>
+	<AANLkTimw8fmwe8vEsXo5=05AOP5zjPZ5x_GwkXWsuKeW@mail.gmail.com>
+	<1291927580.7128.1.camel@segulix>
+Message-ID: <AANLkTi=vxU3HJCDn6WOLyZcx4XaNtf_V92NbtNQ55iuF@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guys,
+I can't use python and unfortunately I neither have enough memory to store
+stripped dbus binaries :(
 
-I am trying to follow up with Marcus Osdoba's work on dockstar and get something 
-ready to submit to buildroot.
+On Thu, Dec 9, 2010 at 8:46 PM, Sergio Monteiro Basto <
+sergio@sergiomb.no-ip.org> wrote:
 
-I am having a real problem figuring out how stuff makes it into the the final 
-etc directory. My patch script in the 
-target/device/sheevaplug/SeagateDockStar/patchrootfs.sh copies new files 
-(inittab and shadow into output/target/skeleton/etc/ and this happens on 
-re-invocation of make. However when I look at the rootfs.tar file the updated 
-inittab is not there. Can anyone describe how the various /etc/ files in 
-fs/skeleton and target/device/...skeleton and the final patch file get to the 
-final output image files.
+> Also exist
+>
+> http://wicd.sourceforge.net/
+>
+> On Thu, 2010-12-09 at 21:33 +0100, Yoann Sculo wrote:
+> > I'm using Connman with uclibc, it works great ...
+> > Actually, I could say Connman is not 100% stable yet, it was a bet to
+> > base a commercial project on it.
+> > But it sounds promissing and at the end Connman is really useful !
+> >
+> >
+> > And Thomas you're right, it would be nice to get Connman on
+> > Buildroot !
+> > It would make my work easier ;)
+> >
+> > Yoann Sculo
+> > Blog - www.yoannsculo.fr
+> > Twitter - twitter.com/yoannsculo
+> >
+> >
+> > 2010/12/9 Arreche <arreche@gmail.com>
+> >         Thanks but I limited to use uclibc
+> >
+> >         On Wed, Dec 8, 2010 at 8:43 PM, Thomas Petazzoni
+> >         <thomas.petazzoni@free-electrons.com> wrote:
+> >                 On Wed, 8 Dec 2010 19:14:38 +0000
+> >                 Arreche <arreche@gmail.com> wrote:
+> >
+> >                 > Are there anything like NetworkManager for embedded
+> >                 devices?
+> >
+> >
+> >                 Connman is the option used by Meego. See
+> >                 <http://connman.net/>. Having
+> >                 a package for Connman in Buildroot would be great.
+> >
+> >                 Regards,
+> >
+> >                 Thomas
+> >                 --
+> >                 Thomas Petazzoni, Free Electrons
+> >                 Kernel, drivers, real-time and embedded Linux
+> >                 development, consulting, training and support.
+> >                 http://free-electrons.com
+> >                 _______________________________________________
+> >                 buildroot mailing list
+> >                 buildroot at busybox.net
+> >                 http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> >
+> >         --
+> >         .
+> >
+> >
+> >         _______________________________________________
+> >         buildroot mailing list
+> >         buildroot at busybox.net
+> >         http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> S?rgio M. B.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-Thanks, Steve
 
 
-
-      
+-- 
+.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101210/d7695529/attachment.html>
