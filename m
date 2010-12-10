@@ -1,53 +1,43 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Fri, 10 Dec 2010 08:29:56 -0600
-Subject: [Buildroot] [PATCH] iproute2 depends on iptables and both
-	packages need AR set to TARGET_AR
-In-Reply-To: <AANLkTikqsS+VfM8aSWzQz1ZUHWQGw2pAR98BLc1U0bdW@mail.gmail.com>
-References: <84f07dad0d6d3c038b5e7a7e00fff09c4b010b60.1291939153.git.smiley73@users.sourceforge.net>	<AANLkTi=y1trbKTL-Kc6rS2urg=wf63WPnC=ovR5qGcuV@mail.gmail.com>
-	<AANLkTikqsS+VfM8aSWzQz1ZUHWQGw2pAR98BLc1U0bdW@mail.gmail.com>
-Message-ID: <002c01cb9876$b7667860$26336920$@zuerker.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 Dec 2010 16:04:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 2935] New: Ntpdate isn't installed
+Message-ID: <bug-2935-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[................]
+https://bugs.busybox.net/show_bug.cgi?id=2935
 
-> > Do you have a real problems with AR in iptables? I don't find $(AR) in
-> > the unpacked iptables source. And don't see any ar while iptables
-> > building process.
-> 
-> Indeed for autotools packages, AR is set to TARGET_AR at configure step.
-So
-> there is no need to set it again at build step.
+           Summary: Ntpdate isn't installed
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: fpasch at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-It definitely did not build without it. I tried multiple times.
-For some reason it kept using the host's ar, which didn't work so well.
 
-> > I think it's not good to set hard dependence on iptables to the
-> > iproute2 package. Because iproute2 can be built without iptables. So
-> > the iptables is optional for iproute2.
-> >
-> 
-> It's not good indeed, because if you run the configure script, it's going
-to
-> detect it.
-> All you have to do is to patch the configure script, so it doesn't use
-'gcc' but
-> '$(CC)' which is set by buildroot.
-> Otherwise you could probably fill the Config file produced by the
-configure
-> script yourself, so you know exactly what you enable or not.
+Created attachment 2797
+  --> https://bugs.busybox.net/attachment.cgi?id=2797
+ntp-install-ntpdate.patch
 
-Right now iproute2 chokes if it doesn't find the xtables stuff from
-iptables.
-I took a quick look at the makefile and we'd need to make sure TC_CONFIG_XT
-is not defined. 
-I'll take a look at this today and send in a revised patch. 
+You can select ntpdate via buildroot-config but it isn't installed on target.
+
+ntpd is installed without considering the config-value.
+
+The attached patch resolves this issue.
+
+Frederik Pasch
 
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
