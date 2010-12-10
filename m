@@ -1,63 +1,85 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 10 Dec 2010 13:30:53 -0500
-Subject: [Buildroot] [PATCH 2/2] iproute2: Fix auto configuration to
- work in cross environment.
-In-Reply-To: <AANLkTimGFdUmur3EkfSbpamCotp9L5iSUWQVNPqN4hx+@mail.gmail.com>
-References: <1291988711-8162-1-git-send-email-serj.kalichev@gmail.com>
-	<1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
-	<AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
-	<AANLkTinACyTB=SF_Ji4Fk8Z1X2n38T9B3HCDmJ1BRmBt@mail.gmail.com>
-	<AANLkTim+gc8LaxdmFBNcqBq5HC3LmquLcrVQLu_D1Ng3@mail.gmail.com>
-	<AANLkTimGFdUmur3EkfSbpamCotp9L5iSUWQVNPqN4hx+@mail.gmail.com>
-Message-ID: <AANLkTi=EB44yGcBcLYt7_D-Pfq4hR-=hERh+qBG5i9Sm@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 10 Dec 2010 20:48:41 +0100
+Subject: [Buildroot] Problem with libcgi : build links to glib2 instead of
+	uclibc ?
+Message-ID: <737777249D884273A2236C0B56BDE478@apexjs>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 10, 2010 at 1:29 PM, Pkun wrote:
-> 2010/12/10 Mike Frysinger:
->> On Fri, Dec 10, 2010 at 12:46 PM, Pkun wrote:
->>> 2010/12/10 Mike Frysinger
->>>> On Fri, Dec 10, 2010 at 8:45 AM, Serj Kalichev wrote:
->>>> > The iproute2's configure script was fixed to work with cross
->>>> > toolchain. Now it can use tools from cross toolchain but not
->>>> > from the host. So it can automatically generate right Config
->>>> > file. The checks for the IPv6 support and Berkeley DB
->>>> > availability were added to the configure script. The
->>>> > Berkeley DB support is needed to build (or not) arpd.
->>>>
->>>> this is way more work than necessary. ?the iproute2 configure script
->>>> does all of two things:
->>>> ?- detect atm support
->>>> ?- detect iptables version
->>>>
->>>> instead of trying to clean up the bundled configure script which is a
->>>> pile of crap, simply have the iproute2.mk file do:
->>>> echo TC_CONFIG_ATM:=y > Config
->>>> echo TC_CONFIG_XT:=$(BR2_IPTABLES) >> Config
->>>>
->>>> after all, we already know that the version of iptables in BR is the
->>>> latest and so dont need any of the hacky iptables detection.
->>>>
->>>> here is a simple patch i wrote for Gentoo that allows you to disable
->>>> iptables support completely:
->>>>
->>>> http://sources.gentoo.org/sys-apps/iproute2/files/iproute2-2.6.35-no-iptables.patch
->>>
->>> To write ad-hoc iproute2.mk is not general way. Especially the replacing -o2
->>> with the CFLAGS by the sed. You don't need iptables integration but I do. I
->>> don't need IPv6. I don't need ATM but it was switch on in my system by
->>> ./configure that use host dirs instead staging. You suggest to hardcode
->>> settings. It's not good.
->>
->> all of this is irrelevant to what i highlighted. ?my point is to not
->> run configure and i showed you how to do it cleanly instead. ?nothing
->> in my proposal limits dynamic selection of features.
->
-> I this case people must do it by hands with patching iproute2.mk
+Hi
+ 
+I am building for i686 target.
+ 
+When building libcgi i could not link my program with libcgi,
+It sems libcgi  is linked with glib instead of uclibc :
+ 
+snippet from running nm libcgi.so in the output/staging/usr/lib :
+ 
+................
+         U sprintf@@GLIBC_2.0
+         U srand@@GLIBC_2.0
+000061e0 t stat
+         U stdin@@GLIBC_2.0
+00003b1f T str_base64_decode
+000039cc T str_base64_encode
+0000526a T str_nreplace
+000053e1 T str_replace
+         U strcasecmp@@GLIBC_2.0
+000057c5 T strcat_ex
+         U strchr@@GLIBC_2.0
+         U strcmp@@GLIBC_2.0
+         U strcpy@@GLIBC_2.0
+000054f7 T strdel
+00004d73 T stripnslashes
+00004e1a T stripslashes
+         U strlen@@GLIBC_2.0
+         U strncat@@GLIBC_2.0
+         U strncpy@@GLIBC_2.0
+00005461 T strnpos
+000054be T strpos
+00004f6b T substr
+000073c0 d table.2974
+00004f3d T trim
+         U unlink@@GLIBC_2.0
+         U vprintf@@GLIBC_2.0
+         U vsprintf@@GLIBC_2.0
+.......
 
-no, it really doesnt.  i gave an *example*.  nowhere did i say "you
-must use the example exactly as i posted".
--mike
+After removing the related stamps (.built ,.installed, ....) and doing a make clean in the libcgi build dir
+I added a line $(CC) = i686-linux-gcc in the Makefile.
+
+After re-building, the cgilib is correctly linked to the uclibc.
+
+What could be wrong in the libcgi configure scripts ?
+
+Buildroot build output : i noticed cc ....this was giving me the clue why glib2 was used...
+
+make[1]: Entering directory `/mnt/hd2/buildrootx86/output/build/libcgi-1.0'
+cc -Wall -D_REENTRANT -fPIC -c src/error.c -o src/error.sh.o
+cc -Wall -D_REENTRANT -fPIC -c src/cgi.c -o src/cgi.sh.o
+src/cgi.c: In function ???cgi_escape_special_chars???:
+src/cgi.c:462: warning: pointer targets in return differ in signedness
+cc -Wall -D_REENTRANT -fPIC -c src/session.c -o src/session.sh.o
+cc -Wall -D_REENTRANT -fPIC -c src/base64.c -o src/base64.sh.o
+cc -Wall -D_REENTRANT -fPIC -c src/md5.c -o src/md5.sh.o
+src/md5.c: In function ???md5???:
+....
+
+
+
+This produced the right libcgi after adding the CC line in the makefile.
+make[1]: Entering directory `/mnt/hd2/buildrootx86/output/build/libcgi-1.0'
+i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/error.c -o src/error.sh.o
+i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/cgi.c -o src/cgi.sh.o
+src/cgi.c: In function 'cgi_escape_special_chars':
+src/cgi.c:462: warning: pointer targets in return differ in signedness
+i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/session.c -o src/session.sh.o
+i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/base64.c -o src/base64.sh.o
+i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/md5.c -o src/md5.sh.o
+
+
+
+Johan
