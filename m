@@ -1,87 +1,52 @@
-From: Serj Kalichev <serj.kalichev@gmail.com>
-Date: Fri, 10 Dec 2010 19:47:58 +0300
-Subject: [Buildroot] [PATCH] Add 'klish' package
-Message-ID: <1291999678-25429-1-git-send-email-serj.kalichev@gmail.com>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Fri, 10 Dec 2010 08:23:10 -0600
+Subject: [Buildroot] skeleton updates
+In-Reply-To: <158894.53583.qm@web58205.mail.re3.yahoo.com>
+References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>	<da8a618d7ebd5da7e48fccbab506f3e7b7a5cdd8.1291582351.git.thomas.petazzoni@free-electrons.com>
+	<158894.53583.qm@web58205.mail.re3.yahoo.com>
+Message-ID: <002a01cb9875$c5f3b5b0$51db2110$@zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The klish is a framework for implementing a CISCO-like CLI on a UNIX systems.
-It is configurable by XML files. The klish is the fork of clish project.
+Hey,
 
-http://klish.googlecode.com
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Steve Calfee
+> Sent: Friday, December 10, 2010 12:47 AM
+> To: Thomas Petazzoni; buildroot at uclibc.org
+> Subject: [Buildroot] skeleton updates
+> 
+> Hi Guys,
+> 
+> I am trying to follow up with Marcus Osdoba's work on dockstar and get
+> something ready to submit to buildroot.
+> 
+> I am having a real problem figuring out how stuff makes it into the the
+final
+> etc directory. My patch script in the
+> target/device/sheevaplug/SeagateDockStar/patchrootfs.sh copies new files
+> (inittab and shadow into output/target/skeleton/etc/ and this happens on
+> re-invocation of make. However when I look at the rootfs.tar file the
+> updated inittab is not there. Can anyone describe how the various /etc/
+files
+> in fs/skeleton and target/device/...skeleton and the final patch file get
+to the
+> final output image files.
 
-Signed-off-by: Serj Kalichev <serj.kalichev@gmail.com>
----
- package/Config.in       |    1 +
- package/klish/Config.in |   16 ++++++++++++++++
- package/klish/klish.mk  |   21 +++++++++++++++++++++
- 3 files changed, 38 insertions(+), 0 deletions(-)
- create mode 100644 package/klish/Config.in
- create mode 100644 package/klish/klish.mk
+The best place to add these customizations is BR2_ROOTFS_POST_BUILD_SCRIPT,
+which you can find under "Target filesystem options" in menuconfig.
+This script is called after everything is build, but before the target
+filesystem is generated.
 
-diff --git a/package/Config.in b/package/Config.in
-index 10d8918..2ffb5ca 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -467,6 +467,7 @@ source "package/logrotate/Config.in"
- source "package/screen/Config.in"
- source "package/sudo/Config.in"
- source "package/which/Config.in"
-+source "package/klish/Config.in"
- endmenu
- 
- menu "System tools"
-diff --git a/package/klish/Config.in b/package/klish/Config.in
-new file mode 100644
-index 0000000..c6201f2
---- /dev/null
-+++ b/package/klish/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_KLISH
-+	bool "klish"
-+	help
-+	  The klish is a framework for implementing a CISCO-like CLI on a UNIX systems.
-+	  It is configurable by XML files. The klish is the fork of clish project.
-+
-+	  http://klish.googlecode.com
-+
-+if BR2_PACKAGE_KLISH
-+
-+config BR2_PACKAGE_KLISH_SVN
-+	bool "Get klish sources from the SVN repository"
-+	help
-+	  Use source code from SVN repository instead klish stable version.
-+
-+endif
-diff --git a/package/klish/klish.mk b/package/klish/klish.mk
-new file mode 100644
-index 0000000..b7bedf9
---- /dev/null
-+++ b/package/klish/klish.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# klish
-+#
-+#############################################################
-+
-+ifeq ($(BR2_PACKAGE_KLISH_SVN),y)
-+KLISH_VERSION:=HEAD
-+KLISH_SITE:=http://klish.googlecode.com/svn/trunk
-+KLISH_SITE_METHOD:=svn
-+else
-+KLISH_VERSION = 1.3.1
-+KLISH_SOURCE = klish-$(KLISH_VERSION).tar.bz2
-+KLISH_SITE = http://klish.googlecode.com/files
-+endif
-+
-+KLISH_INSTALL_STAGING = YES
-+KLISH_INSTALL_TARGET = YES
-+KLISH_CONF_OPT = --disable-gpl --without-tcl
-+
-+$(eval $(call AUTOTARGETS,package,klish))
+Here's the example I use:
+BR2_ROOTFS_POST_BUILD_SCRIPT="$(TOPDIR)/$(BOARD_PATH)/customize_target.sh"
+
 -- 
-1.7.3.3
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
