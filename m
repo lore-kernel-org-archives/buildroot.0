@@ -1,29 +1,63 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Fri, 10 Dec 2010 13:29:18 -0500
-Subject: [Buildroot] host-ncurses: cannot find -lstdc++
-In-Reply-To: <1292003086.27164.12.camel@dubciaranr0.verifone.com>
-References: <1292003086.27164.12.camel@dubciaranr0.verifone.com>
-Message-ID: <AANLkTinbFX4PnSW5KsJ+Nog2y9jenymiUU7X-t7gQmcB@mail.gmail.com>
+Date: Fri, 10 Dec 2010 13:30:53 -0500
+Subject: [Buildroot] [PATCH 2/2] iproute2: Fix auto configuration to
+ work in cross environment.
+In-Reply-To: <AANLkTimGFdUmur3EkfSbpamCotp9L5iSUWQVNPqN4hx+@mail.gmail.com>
+References: <1291988711-8162-1-git-send-email-serj.kalichev@gmail.com>
+	<1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
+	<AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
+	<AANLkTinACyTB=SF_Ji4Fk8Z1X2n38T9B3HCDmJ1BRmBt@mail.gmail.com>
+	<AANLkTim+gc8LaxdmFBNcqBq5HC3LmquLcrVQLu_D1Ng3@mail.gmail.com>
+	<AANLkTimGFdUmur3EkfSbpamCotp9L5iSUWQVNPqN4hx+@mail.gmail.com>
+Message-ID: <AANLkTi=EB44yGcBcLYt7_D-Pfq4hR-=hERh+qBG5i9Sm@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 10, 2010 at 12:44 PM, Quotient Remainder wrote:
-> ? ? ? ?make[2]: Entering directory `/home/qvr/obair/community/buildroot/output/build/host-ncurses-5.7/c++'
-> ? ? ? ?/usr/lib64/ccache/g++ ?-o demo ../objects/demo.o -L../lib -lncurses++ -static -L../lib -lform -lmenu -lpanel -lncurses ?-dynamic ?-L/home/qvr/obair/community/buildroot/output/host/lib -L/home/qvr/obair/community/buildroot/output/host/usr/lib -Wl,-rpath,/home/qvr/obair/community/buildroot/output/host/usr/lib ?-I../c++ -I../include -I. -DHAVE_CONFIG_H -I. -I../include ?-D_GNU_SOURCE -DNDEBUG -I/home/qvr/obair/community/buildroot/output/host/usr/include/ncurses -I/home/qvr/obair/community/buildroot/output/host/include -I/home/qvr/obair/community/buildroot/output/host/usr/include
-> ? ? ? ?/usr/bin/ld: cannot find -lstdc++
-> ? ? ? ?collect2: ld returned 1 exit status
-> ? ? ? ?make[2]: *** [demo] Error 1
+On Fri, Dec 10, 2010 at 1:29 PM, Pkun wrote:
+> 2010/12/10 Mike Frysinger:
+>> On Fri, Dec 10, 2010 at 12:46 PM, Pkun wrote:
+>>> 2010/12/10 Mike Frysinger
+>>>> On Fri, Dec 10, 2010 at 8:45 AM, Serj Kalichev wrote:
+>>>> > The iproute2's configure script was fixed to work with cross
+>>>> > toolchain. Now it can use tools from cross toolchain but not
+>>>> > from the host. So it can automatically generate right Config
+>>>> > file. The checks for the IPv6 support and Berkeley DB
+>>>> > availability were added to the configure script. The
+>>>> > Berkeley DB support is needed to build (or not) arpd.
+>>>>
+>>>> this is way more work than necessary. ?the iproute2 configure script
+>>>> does all of two things:
+>>>> ?- detect atm support
+>>>> ?- detect iptables version
+>>>>
+>>>> instead of trying to clean up the bundled configure script which is a
+>>>> pile of crap, simply have the iproute2.mk file do:
+>>>> echo TC_CONFIG_ATM:=y > Config
+>>>> echo TC_CONFIG_XT:=$(BR2_IPTABLES) >> Config
+>>>>
+>>>> after all, we already know that the version of iptables in BR is the
+>>>> latest and so dont need any of the hacky iptables detection.
+>>>>
+>>>> here is a simple patch i wrote for Gentoo that allows you to disable
+>>>> iptables support completely:
+>>>>
+>>>> http://sources.gentoo.org/sys-apps/iproute2/files/iproute2-2.6.35-no-iptables.patch
+>>>
+>>> To write ad-hoc iproute2.mk is not general way. Especially the replacing -o2
+>>> with the CFLAGS by the sed. You don't need iptables integration but I do. I
+>>> don't need IPv6. I don't need ATM but it was switch on in my system by
+>>> ./configure that use host dirs instead staging. You suggest to hardcode
+>>> settings. It's not good.
+>>
+>> all of this is irrelevant to what i highlighted. ?my point is to not
+>> run configure and i showed you how to do it cleanly instead. ?nothing
+>> in my proposal limits dynamic selection of features.
+>
+> I this case people must do it by hands with patching iproute2.mk
 
-i see no value in building the demos for the host.  if you're after
-the helper binaries (like `tic`), then build only the few tools you
-actually need.
-
-along those lines, last time i looked, the ncurses build system does
-not automatically build up a local `tic` to generate terminfo files.
-which means BR' ncurses.mk should be doing this already.  otherwise
-you can hit random problems with using the host `tic` which can be a
-different version from the one you're cross-compiling.
+no, it really doesnt.  i gave an *example*.  nowhere did i say "you
+must use the example exactly as i posted".
 -mike
