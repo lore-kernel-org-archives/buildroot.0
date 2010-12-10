@@ -1,41 +1,54 @@
-From: Pkun <serj.kalichev@gmail.com>
-Date: Fri, 10 Dec 2010 21:16:52 +0300
-Subject: [Buildroot] [PATCH v3] fix iproute2 dependencies and define AR
- for iptables and iproute2
-In-Reply-To: <201012101908.38592.yann.morin.1998@anciens.enib.fr>
-References: <0e6c629d481e9024055833cf47d4543e0b1f2d76.1292000704.git.smiley73@users.sourceforge.net>
-	<AANLkTimVB8tTYopQxQrzAXbQxhBygGZd6xDj0tUFeNjv@mail.gmail.com>
-	<201012101900.44789.yann.morin.1998@anciens.enib.fr>
-	<201012101908.38592.yann.morin.1998@anciens.enib.fr>
-Message-ID: <AANLkTi=rQ0aaqQiEZ4QM+MiTv6rhNvosezrYi2q+viw7@mail.gmail.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Fri, 10 Dec 2010 13:26:26 -0500
+Subject: [Buildroot] [PATCH 2/2] iproute2: Fix auto configuration to
+ work in cross environment.
+In-Reply-To: <AANLkTinACyTB=SF_Ji4Fk8Z1X2n38T9B3HCDmJ1BRmBt@mail.gmail.com>
+References: <1291988711-8162-1-git-send-email-serj.kalichev@gmail.com>
+	<1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
+	<AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
+	<AANLkTinACyTB=SF_Ji4Fk8Z1X2n38T9B3HCDmJ1BRmBt@mail.gmail.com>
+Message-ID: <AANLkTim+gc8LaxdmFBNcqBq5HC3LmquLcrVQLu_D1Ng3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2010/12/10 Yann E. MORIN <yann.morin.1998@anciens.enib.fr>:
-> Serj, Heiko, All,
->
-> On Friday 10 December 2010 19:00:44 Yann E. MORIN wrote:
->> On Friday 10 December 2010 18:56:02 Pkun wrote:
->> > Unpack the iptables and search for the $(AR) within the project. There is no
->> > $(AR) at all.
+On Fri, Dec 10, 2010 at 12:46 PM, Pkun wrote:
+> 2010/12/10 Mike Frysinger
+>> On Fri, Dec 10, 2010 at 8:45 AM, Serj Kalichev wrote:
+>> > The iproute2's configure script was fixed to work with cross
+>> > toolchain. Now it can use tools from cross toolchain but not
+>> > from the host. So it can automatically generate right Config
+>> > file. The checks for the IPv6 support and Berkeley DB
+>> > availability were added to the configure script. The
+>> > Berkeley DB support is needed to build (or not) arpd.
 >>
->> Yes there is:
+>> this is way more work than necessary. ?the iproute2 configure script
+>> does all of two things:
+>> ?- detect atm support
+>> ?- detect iptables version
 >>
->> ? cd iptables-1.4.10
->> ? ./configure
->> ? grep -r -E '\<AR\>' .
->> ? ---8<---
->> ? ./Makefile:AR = ar
->> ? ---8<---
+>> instead of trying to clean up the bundled configure script which is a
+>> pile of crap, simply have the iproute2.mk file do:
+>> echo TC_CONFIG_ATM:=y > Config
+>> echo TC_CONFIG_XT:=$(BR2_IPTABLES) >> Config
+>>
+>> after all, we already know that the version of iptables in BR is the
+>> latest and so dont need any of the hacky iptables detection.
+>>
+>> here is a simple patch i wrote for Gentoo that allows you to disable
+>> iptables support completely:
+>>
+>> http://sources.gentoo.org/sys-apps/iproute2/files/iproute2-2.6.35-no-iptables.patch
 >
-> And:
-> ?grep -r -E '\$\<\(?AR\)?\>' .
->
-> Regards,
-> Yann E. MORIN.
->
+> To write ad-hoc iproute2.mk is not general way. Especially the replacing -o2
+> with the CFLAGS by the sed. You don't need iptables integration but I do. I
+> don't need IPv6. I don't need ATM but it was switch on in my system by
+> ./configure that use host dirs instead staging. You suggest to hardcode
+> settings. It's not good.
 
-Sorry. I'm wrong. I have searched without ./configure first.
+all of this is irrelevant to what i highlighted.  my point is to not
+run configure and i showed you how to do it cleanly instead.  nothing
+in my proposal limits dynamic selection of features.
+-mike
