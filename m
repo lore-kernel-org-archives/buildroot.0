@@ -1,59 +1,54 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Fri, 10 Dec 2010 17:44:46 +0000
-Subject: [Buildroot] host-ncurses: cannot find -lstdc++
-Message-ID: <1292003086.27164.12.camel@dubciaranr0.verifone.com>
+From: Pkun <serj.kalichev@gmail.com>
+Date: Fri, 10 Dec 2010 20:46:21 +0300
+Subject: [Buildroot] [PATCH 2/2] iproute2: Fix auto configuration to
+ work in cross environment.
+In-Reply-To: <AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
+References: <1291988711-8162-1-git-send-email-serj.kalichev@gmail.com>
+	<1291988711-8162-2-git-send-email-serj.kalichev@gmail.com>
+	<AANLkTikV2v-Vja9XeaYNDPYpQd6=XBS=fdGTPoc964hS@mail.gmail.com>
+Message-ID: <AANLkTinACyTB=SF_Ji4Fk8Z1X2n38T9B3HCDmJ1BRmBt@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK, possibly a little bit OT since this isn't actually in mainline but
-it's very close and may be useful.
-I "added" host-ncurses by applying this trivial patch.
+2010/12/10 Mike Frysinger <vapier@gentoo.org>
 
---8<--
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 0a49887..0aa66d7 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -121,3 +121,4 @@ define NCURSES_INSTALL_TARGET_CMDS
- endef # NCURSES_INSTALL_TARGET_CMDS
- 
- $(eval $(call AUTOTARGETS,package,ncurses))
-+$(eval $(call AUTOTARGETS,package,ncurses,host))
--->8--
+> On Fri, Dec 10, 2010 at 8:45 AM, Serj Kalichev wrote:
+> > The iproute2's configure script was fixed to work with cross
+> > toolchain. Now it can use tools from cross toolchain but not
+> > from the host. So it can automatically generate right Config
+> > file. The checks for the IPv6 support and Berkeley DB
+> > availability were added to the configure script. The
+> > Berkeley DB support is needed to build (or not) arpd.
+>
+> this is way more work than necessary.  the iproute2 configure script
+> does all of two things:
+>  - detect atm support
+>  - detect iptables version
+>
+> instead of trying to clean up the bundled configure script which is a
+> pile of crap, simply have the iproute2.mk file do:
+> echo TC_CONFIG_ATM:=y > Config
+> echo TC_CONFIG_XT:=$(BR2_IPTABLES) >> Config
+>
+> after all, we already know that the version of iptables in BR is the
+> latest and so dont need any of the hacky iptables detection.
+>
+> here is a simple patch i wrote for Gentoo that allows you to disable
+> iptables support completely:
+>
+> http://sources.gentoo.org/sys-apps/iproute2/files/iproute2-2.6.35-no-iptables.patch
+> -mike
+>
 
-Minimum test case is configure for ARM CodeSourcery 2010q1 and try "make
-dirs cross && make host-ncurses".
 
-        make[2]: Entering directory `/home/qvr/obair/community/buildroot/output/build/host-ncurses-5.7/c++'
-        /usr/lib64/ccache/g++  -o demo ../objects/demo.o -L../lib -lncurses++ -static -L../lib -lform -lmenu -lpanel -lncurses  -dynamic  -L/home/qvr/obair/community/buildroot/output/host/lib -L/home/qvr/obair/community/buildroot/output/host/usr/lib -Wl,-rpath,/home/qvr/obair/community/buildroot/output/host/usr/lib  -I../c++ -I../include -I. -DHAVE_CONFIG_H -I. -I../include  -D_GNU_SOURCE -DNDEBUG -I/home/qvr/obair/community/buildroot/output/host/usr/include/ncurses -I/home/qvr/obair/community/buildroot/output/host/include -I/home/qvr/obair/community/buildroot/output/host/usr/include 
-        /usr/bin/ld: cannot find -lstdc++
-        collect2: ld returned 1 exit status
-        make[2]: *** [demo] Error 1
-        make[2]: Leaving directory `/home/qvr/obair/community/buildroot/output/build/host-ncurses-5.7/c++'
-
-
-"locate libstdc++.so" gives:
-        /usr/lib/libstdc++.so.6
-        /usr/lib/libstdc++.so.6.0.14
-        /usr/lib/gcc/x86_64-redhat-linux/4.5.1/libstdc++.so
-        /usr/lib/gcc/x86_64-redhat-linux/4.5.1/32/libstdc++.so
-        /usr/lib64/libstdc++.so.5
-        /usr/lib64/libstdc++.so.5.0.7
-        /usr/lib64/libstdc++.so.6
-        /usr/lib64/libstdc++.so.6.0.14
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/armv4t/usr/lib/libstdc++.so
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/armv4t/usr/lib/libstdc++.so.6
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/armv4t/usr/lib/libstdc++.so.6.0.12
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/thumb2/usr/lib/libstdc++.so
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/thumb2/usr/lib/libstdc++.so.6
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/thumb2/usr/lib/libstdc++.so.6.0.12
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/usr/lib/libstdc++.so
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/usr/lib/libstdc++.so.6
-        /home/qvr/CodeSourcery/Sourcery_G++_Lite/arm-none-linux-gnueabi/libc/usr/lib/libstdc++.so.6.0.12
-
-I don't see anything specifically on libstdc++ on the list previously.
-Build machine x86_64 running Fedora 14 with make downgraded to v3.81.
-Any ideas?
+To write ad-hoc iproute2.mk is not general way. Especially the replacing -o2
+with the CFLAGS by the sed. You don't need iptables integration but I do. I
+don't need IPv6. I don't need ATM but it was switch on in my system by
+./configure that use host dirs instead staging. You suggest to hardcode
+settings. It's not good.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101210/9aaa0b46/attachment.html>
