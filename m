@@ -1,114 +1,120 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Fri, 10 Dec 2010 21:29:47 +0100
-Subject: [Buildroot] Problem with libcgi : build links to glib2 instead
- of uclibc ?
-In-Reply-To: <737777249D884273A2236C0B56BDE478@apexjs>
-References: <737777249D884273A2236C0B56BDE478@apexjs>
-Message-ID: <1292012987.24014.175.camel@coalu.atr>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Fri, 10 Dec 2010 15:20:28 -0600
+Subject: [Buildroot] [PATCH v2] add acl and attr support for extended
+	attributes and POSIX Access Control Lists
+Message-ID: <2911fdf24c8da0851176d0fd2168a04e876ec3aa.1292015991.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sagaert,
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-Le vendredi 10 d?cembre 2010 ? 20:48 +0100, Sagaert Johan a ?crit :
-> Hi
->  
-> I am building for i686 target.
->  
-> When building libcgi i could not link my program with libcgi,
-> It sems libcgi  is linked with glib instead of uclibc :
+In addition to providing the acl and extended attributes functionality,
+these new packages satisfy newer udev versions, so you can build all extras.
 
-glibc not glib
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/Config.in      |    2 ++
+ package/acl/Config.in  |   11 +++++++++++
+ package/acl/acl.mk     |   17 +++++++++++++++++
+ package/attr/Config.in |    7 +++++++
+ package/attr/attr.mk   |   17 +++++++++++++++++
+ 5 files changed, 54 insertions(+), 0 deletions(-)
+ create mode 100644 package/acl/Config.in
+ create mode 100644 package/acl/acl.mk
+ create mode 100644 package/attr/Config.in
+ create mode 100644 package/attr/attr.mk
 
->  
-> snippet from running nm libcgi.so in the output/staging/usr/lib :
->  
-> ................
->          U sprintf@@GLIBC_2.0
->          U srand@@GLIBC_2.0
-> 000061e0 t stat
->          U stdin@@GLIBC_2.0
-> 00003b1f T str_base64_decode
-> 000039cc T str_base64_encode
-> 0000526a T str_nreplace
-> 000053e1 T str_replace
->          U strcasecmp@@GLIBC_2.0
-> 000057c5 T strcat_ex
->          U strchr@@GLIBC_2.0
->          U strcmp@@GLIBC_2.0
->          U strcpy@@GLIBC_2.0
-> 000054f7 T strdel
-> 00004d73 T stripnslashes
-> 00004e1a T stripslashes
->          U strlen@@GLIBC_2.0
->          U strncat@@GLIBC_2.0
->          U strncpy@@GLIBC_2.0
-> 00005461 T strnpos
-> 000054be T strpos
-> 00004f6b T substr
-> 000073c0 d table.2974
-> 00004f3d T trim
->          U unlink@@GLIBC_2.0
->          U vprintf@@GLIBC_2.0
->          U vsprintf@@GLIBC_2.0
-> .......
-> 
-> After removing the related stamps (.built ,.installed, ....) and doing a make clean in the libcgi build dir
-> I added a line $(CC) = i686-linux-gcc in the Makefile.
-
-It sounds like the same issue than the one discussed very recently :
-
-http://lists.busybox.net/pipermail/buildroot/2010-December/039375.html
-
-> 
-> After re-building, the cgilib is correctly linked to the uclibc.
-> 
-> What could be wrong in the libcgi configure scripts ?
-> 
-> Buildroot build output : i noticed cc ....this was giving me the clue why glib2 was used...
-> 
-> make[1]: Entering directory `/mnt/hd2/buildrootx86/output/build/libcgi-1.0'
-> cc -Wall -D_REENTRANT -fPIC -c src/error.c -o src/error.sh.o
-> cc -Wall -D_REENTRANT -fPIC -c src/cgi.c -o src/cgi.sh.o
-> src/cgi.c: In function ???cgi_escape_special_chars???:
-> src/cgi.c:462: warning: pointer targets in return differ in signedness
-> cc -Wall -D_REENTRANT -fPIC -c src/session.c -o src/session.sh.o
-> cc -Wall -D_REENTRANT -fPIC -c src/base64.c -o src/base64.sh.o
-> cc -Wall -D_REENTRANT -fPIC -c src/md5.c -o src/md5.sh.o
-> src/md5.c: In function ???md5???:
-> ....
-> 
-> 
-> 
-> This produced the right libcgi after adding the CC line in the makefile.
-> make[1]: Entering directory `/mnt/hd2/buildrootx86/output/build/libcgi-1.0'
-> i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/error.c -o src/error.sh.o
-> i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/cgi.c -o src/cgi.sh.o
-> src/cgi.c: In function 'cgi_escape_special_chars':
-> src/cgi.c:462: warning: pointer targets in return differ in signedness
-> i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/session.c -o src/session.sh.o
-> i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/base64.c -o src/base64.sh.o
-> i686-linux-gcc -Wall -D_REENTRANT -fPIC -c src/md5.c -o src/md5.sh.o
-> 
-
-All this crap is due to the fact that libcgi isn't a fully autotooled
-package. It uses autoconf but not automake. Thus you have to set CC and
-AR variables manually in the package/libcgi/libcgi.mk file and
-triggering build.
-
-I suggest that you define LIBCGI_MAKE_ENV in package/libcgi/libcgi.mk
-just like this :
-
-LIBCGI_MAKE_ENV = CC="$(TARGET_CC)" AR="$(TARGET_AR)"
-
-And it should work right away.
-
-Thanks for reporting that, and feel free to submit a patch.
-
-Regards,
-
---
-Lionel Landwerlin
+diff --git a/package/Config.in b/package/Config.in
+index 10d8918..3a0b042 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -470,6 +470,8 @@ source "package/which/Config.in"
+ endmenu
+ 
+ menu "System tools"
++source "package/acl/Config.in"
++source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ source "package/module-init-tools/Config.in"
+diff --git a/package/acl/Config.in b/package/acl/Config.in
+new file mode 100644
+index 0000000..8ed1d20
+--- /dev/null
++++ b/package/acl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ACL
++	bool "acl"
++	select BR2_PACKAGE_ATTR
++	help
++	  POSIX Access Control Lists, which are used to define more 
++	  fine-grained discretionary access rights for files and
++	  directories.
++	  This package also provides libacl.
++
++comment "acl requires attr to be built"
++        depends on !BR2_PACKAGE_ATTR
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+new file mode 100644
+index 0000000..16410fe
+--- /dev/null
++++ b/package/acl/acl.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# attr
++#
++#############################################################
++
++ACL_VERSION = 2.2.49
++ACL_SOURCE := acl_$(ACL_VERSION).orig.tar.gz
++ACL_SITE = http://ftp.debian.org/debian/pool/main/a/acl
++ACL_INSTALL_STAGING = YES
++ACL_DEPENDENCIES = attr
++ACL_INSTALL_STAGING = YES
++
++ACL_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(TARGET_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
++ACL_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
++
++$(eval $(call AUTOTARGETS,package,acl))
+diff --git a/package/attr/Config.in b/package/attr/Config.in
+new file mode 100644
+index 0000000..34920ed
+--- /dev/null
++++ b/package/attr/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ATTR
++	bool "attr"
++	help
++	  Extended attributes are name:value pairs associated permanently with
++	  files and directories, similar to the environment strings associated
++	  with a process
++	  This package also provides libattr.
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+new file mode 100644
+index 0000000..2b584b1
+--- /dev/null
++++ b/package/attr/attr.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# attr
++#
++#############################################################
++
++ATTR_VERSION = 2.4.44
++ATTR_SOURCE := attr_$(ATTR_VERSION).orig.tar.gz
++ATTR_SITE = http://ftp.debian.org/debian/pool/main/a/attr
++
++ATTR_INSTALL_STAGING = YES
++
++ATTR_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(STAGING_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
++ATTR_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
++#install-lib
++
++$(eval $(call AUTOTARGETS,package,attr))
+-- 
+1.7.3.2
