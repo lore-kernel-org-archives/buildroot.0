@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 22:53:14 +0100
-Subject: [Buildroot] [PATCH] zlib: fix installing when static-only
-In-Reply-To: <1291759032-1336-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Tue, 7 Dec 2010 16:57:12 -0500")
-References: <1291759032-1336-1-git-send-email-vapier@gentoo.org>
-Message-ID: <871v5onfhx.fsf@macbook.be.48ers.dk>
+Date: Sat, 11 Dec 2010 22:57:34 +0100
+Subject: [Buildroot] [PATCH] linux: restore DEPMOD usage
+In-Reply-To: <1291800426-28554-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Wed, 8 Dec 2010 04:27:06 -0500")
+References: <1291800426-28554-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87wrngm0q9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Mike> The switch from manual targets to using zlib's targets to fix shared
- Mike> building/installing doesn't work quite right as zlib itself doesn't
- Mike> handle static-only installs fully.
+ Mike> The linux.mk rewrite lost the DEPMOD setting while installing modules
+ Mike> which means depending on host-module-init-tools has been useless.
+ Mike> Instead, the build system has been executing /sbin/depmod.
 
- Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+ Mike> While we're here, drop the INSTALL_MOD_PATH since LINUX26_MAKE_FLAGS
+ Mike> already contains it.
 
-Ehh, that seems very similar to the zlib-1.2.5-fix-static-install.patch
-we already have?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
