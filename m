@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Dec 2010 14:49:18 +0100
-Subject: [Buildroot] [PATCH 2/9] pptp-linux: convert to gentargets and
- bump to 1.7.2
-In-Reply-To: <1286527389-29983-2-git-send-email-Martin.Banky@gmail.com>
+Date: Sat, 11 Dec 2010 16:23:51 +0100
+Subject: [Buildroot] [PATCH 7/9] sysklogd: convert to gentargets and
+ bump to 1.5
+In-Reply-To: <1286527389-29983-7-git-send-email-Martin.Banky@gmail.com>
 References: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
-	<1286527389-29983-2-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20101211144918.23fac791@surf>
+	<1286527389-29983-7-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20101211162351.5982d012@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Oct 2010 01:43:01 -0700
+On Fri,  8 Oct 2010 01:43:06 -0700
 Martin Banky <martin.banky@gmail.com> wrote:
 
+> Also, changed the site to Debian, to get the latest patches
+> 
 > Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 
-A similar patch from Gustavo has been merged early November.
+Merged into my branch, with additional fixes.
 
 Thomas
 -- 
