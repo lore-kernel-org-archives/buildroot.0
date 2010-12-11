@@ -1,32 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Dec 2010 16:24:06 +0100
-Subject: [Buildroot] [PATCH 8/9] sysvint: convert to gentargets and bump
- to 2.88
-In-Reply-To: <1286527389-29983-8-git-send-email-Martin.Banky@gmail.com>
-References: <1286527389-29983-1-git-send-email-Martin.Banky@gmail.com>
-	<1286527389-29983-8-git-send-email-Martin.Banky@gmail.com>
-Message-ID: <20101211162406.22980190@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 11 Dec 2010 22:45:16 +0100
+Subject: [Buildroot] ifplugd
+In-Reply-To: <113211291269229@web79.yandex.ru> (=?utf-8?B?ItCh0YLQsNGA0YY=?=
+	=?utf-8?B?0LXQsiDQldCy0LPQtdC90LjQuSIncw==?= message of
+	"Thu, 02 Dec 2010 08:53:49 +0300")
+References: <113211291269229@web79.yandex.ru>
+Message-ID: <877hfgnfv7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 Oct 2010 01:43:07 -0700
-Martin Banky <martin.banky@gmail.com> wrote:
+>>>>> "???????" == ??????? ??????? <slayer-gurgen@yandex.ru> writes:
 
-> Also, changed the site to Debian, to get the latest patches
-> 
-> As for the BR2_PACKAGE_UTIL_LINUX_NG variable, its in preparation for
-> the, hopefully soon, conversion to util-linux-ng
-> 
-> Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
+ ???????> Hello!
+ ???????> When i try to build this package for target system, i get this error (at configuration time).
 
-Merged into my branch, with additional fixes.
+ ???????> ..
+ ???????> checking for strspn... yes
+ ???????> checking pkg-config is at least version 0.9.0... yes
+ ???????> checking for LIBDAEMON... yes
+ ???????> configure: error: missing --with-initdir=DIR
+ ???????> ..
 
-Thomas
+ ???????> I think that this is little mistake in related Makefile, but i don't know that means option --with-initdir in this case.
+
+Hmm, looking at the configure script I see this only happens if you
+don't have either:
+
+/etc/init.d or /etc/rc.d/init.d
+
+On your build host. What Linux distribution are you using on it?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
