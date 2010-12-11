@@ -1,21 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 02:02:02 +0100
-Subject: [Buildroot] [PATCH v2] linux: add shorter shortcuts
-In-Reply-To: <1290079906-3643-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Thu, 18 Nov 2010 06:31:46 -0500")
-References: <1290075883-30494-1-git-send-email-vapier@gentoo.org>
-	<1290079906-3643-1-git-send-email-vapier@gentoo.org>
-Message-ID: <874oalp1f9.fsf@macbook.be.48ers.dk>
+Date: Sat, 11 Dec 2010 02:21:35 +0100
+Subject: [Buildroot] [PATCH] busybox: add 1.18.0,
+	remove 1.13.x and 1.14.x, mark 1.15.x as deprecated
+In-Reply-To: <1291405910-28686-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Fri, 3 Dec 2010 16:51:49 -0300")
+References: <1291405910-28686-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y67xnly8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Mike> We only have one Linux kernel package, and "linux26-" is an anachronism
- Mike> in today's world.  So add useful "linux-%" shortcuts to the "linux26-%".
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
