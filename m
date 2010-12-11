@@ -1,55 +1,69 @@
-From: Pkun <serj.kalichev@gmail.com>
-Date: Sat, 11 Dec 2010 12:06:54 +0300
-Subject: [Buildroot] iproute2 failing for x86_64 with ext. toolchain
-In-Reply-To: <4D012474.8050902@zacarias.com.ar>
-References: <20101207162124.20071ez7m458t3lw@www.home.zuerker.org>
-	<4D00DFEE.7090103@zacarias.com.ar>
-	<20101209105559.10305jzi16ub75cs@www.home.zuerker.org>
-	<AANLkTi=T0idFP0k6fFXP3ex6dsupLxMGPgJwz+V4DCkM@mail.gmail.com>
-	<4D0112E5.301@zacarias.com.ar>
-	<AANLkTi=X+CZ9+=yRjcvzfxUecteEGzTgm_6eB+OCGMbG@mail.gmail.com>
-	<4D012474.8050902@zacarias.com.ar>
-Message-ID: <AANLkTik=Q-B9a-s-0Q0aVvm4POFEcXohBri0XQyJoSJo@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Dec 2010 11:05:39 +0100
+Subject: [Buildroot] [PATCH 14/55] documentation: Update to explain how
+ board support works
+In-Reply-To: <143229.86585.qm@web58201.mail.re3.yahoo.com>
+References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
+	<da8a618d7ebd5da7e48fccbab506f3e7b7a5cdd8.1291582351.git.thomas.petazzoni@free-electrons.com>
+	<143229.86585.qm@web58201.mail.re3.yahoo.com>
+Message-ID: <20101211110539.08ebc734@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2010/12/9 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> On 12/09/10 15:36, Pkun wrote:
->
->> There is a good variable TARGET_CONFIGURE_OPTS within buildroot. It
->> contain all possible AR="$(TARGET_AR) CC="$(TARGET_CC) etc. But it's
->> long and complex. Probably it will be right to use it for similar cases.
->>
->> Now I'm making a big patch for iproute2. It has terrible build system
->> that don't support cross build. And iproute2's configure script is
->> hand-made and use 'gcc' instead $(CC) for example. It can't be build
->> without IPv6. I wrote about TARGET_CONFIGURE_OPTS but it can't be used
->> for the current iproute2 because it will break the internal CFLAGS
->> definitions.
->>
->> The xtables.h belong to iptables package. But buildroot's iptables don't
->> install anything to the staging. The iproute2 uses libxtables.so also.
->
-> Keep in mind that doing huge patches that modify upstream source should
-> be submitted for upstream inclusion, otherwise when there is a new
-> version for inclusion it might break everything up again.
-> With regards to IPv6 support i think (and it's a completely personal
-> opinion) that it's no big deal with the iproute2 case, adding IPv6
-> support won't make things much bigger than say using real iproute2
-> versus small busybox iproute2-compatible utils.
-> Granted, you loose some functionality, but if you want the advanced
-> stuff you might as well throw IPv6 in.
-> Regards.
->
+Steve,
 
-The author of iproute2 did't accept my patch. Moreover the problem is
-not with a bad patch. The author don't want to make IPv6 support
-optional and don't want to make iproute2 configurable. From netdev
-mailing list: to my question about optional IPv6 he wrote: "Because I
-want iproute to be a complete tool, not a user configurable nightmare.
-Just look at busybox to see what over configuration is." It's strange
-for me. So the upstream problems with iproute2 build system will
-continue.
+On Fri, 10 Dec 2010 20:37:57 -0800 (PST)
+Steve Calfee <nospamcalfee@yahoo.com> wrote:
+
+> I am trying to prepare a board support package. I have run this step
+> and stuff disappeared from the .config, for instance:
+
+When you run "savedefconfig", it generates a defconfig file that
+contains the value only for the config options that are not of the
+default value, and that cannot be computed from other options.
+
+> BR2_ARM_TYPE="ARM926T"
+
+This is an hidden option, whose value is selected depending on
+BR2_arm926t. So if you have BR2_arm926t=y in your defconfig, having
+BR2_ARM_TYPE="ARM926T" is useless: it will be computed automatically.
+
+> BR2_ARM_EABI=y
+
+This is the default.
+
+> # BR2_ARM_OABI is not set
+
+This is the default.
+
+> BR2_ARCH="arm"
+> BR2_ENDIAN="LITTLE"
+> BR2_GCC_TARGET_TUNE="arm926ej-s"
+> BR2_GCC_TARGET_ARCH="armv5te"
+> BR2_GCC_TARGET_ABI="aapcs-linux"
+
+All those are hidden options, whose value is computed from the value of
+other options, so there's no need to store them in defconfig files.
+
+> Is this normal? It takes so long to completely rebuild, but they
+> don't seem to matter. If you say savedefconfig is enough, ok with me.
+
+savedefconfig is enough. For all options that you were wondering about,
+having:
+
+BR2_arm=y
+BR2_arm926t=y
+
+in your savedefconfig is sufficient.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
