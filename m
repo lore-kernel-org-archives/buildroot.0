@@ -1,67 +1,124 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 23:55:29 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.02/toolchain-improvements
-In-Reply-To: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 10:25:27 +0100")
-References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r5dnly1q.fsf@macbook.be.48ers.dk>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sat, 11 Dec 2010 17:20:32 -0600
+Subject: [Buildroot] [PATCH] add package inetutils
+Message-ID: <0260bedd1f27be6bf776f65145d3a40df111b2a6.1292109432.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
- Thomas> Hello,
- Thomas> Here is a set of patches that mainly improves the toolchain
- Thomas> configuration and support, with two majors directions :
 
- Thomas>  * Turn BR2_LARGEFILE, BR2_INET_RPC, BR2_INET_RPC and similar options
- Thomas>    into hidden options, and let the toolchain backends present them as
- Thomas>    they wish. For example for RPC, xthe Buildroot backend says "Do you
- Thomas>    want RPC ?" while the external toolchain backend doesn't show the
- Thomas>    option when glibc is used, or present an option "Does your
- Thomas>    toolchain has RPC ?" when uclibc is used.
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/Config.in                                  |    3 ++
+ package/inetutils/Config.in                        |   17 +++++++++
+ .../inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch |   14 ++++++++
+ package/inetutils/inetutils.mk                     |   35 ++++++++++++++++++++
+ 4 files changed, 69 insertions(+), 0 deletions(-)
+ create mode 100644 package/inetutils/Config.in
+ create mode 100644 package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
+ create mode 100644 package/inetutils/inetutils.mk
 
- Thomas>    So really those options should now be called
- Thomas>    BR2_TOOLCHAIN_HAS_LARGEFILE, BR2_TOOLCHAIN_HAS_INET_RPC, etc, but
- Thomas>    we kept the old names in this patch series because changing them
- Thomas>    impacts all packages. This will be done later.
-
- Thomas>    A first commit handles largefile, rpc, ipv6, locale and program
- Thomas>    invocation options, and some later commits handle the C++ option
- Thomas>    and thread options.
-
- Thomas>  * Extend external toolchain with "profiles", i.e well-known external
- Thomas>    toolchains. For those toolchains, Buildroot can automatically
- Thomas>    download and install them and will automatically select the
- Thomas>    appropriate configuration options (C library used, RPC, IPv6,
- Thomas>    locale, etc.). So an user can know tell Buildroot to use a
- Thomas>    CodeSourcery toolchain, and Buildroot will do all the job. Such
- Thomas>    toolchains are extracted in $(O)/external-toolchain, but my intent
- Thomas>    is to move it to $(O)/toolchain once Gustavoz's toolchain cleanup
- Thomas>    work is done.
-
- Thomas>    This work keeps the ability of doing some more manual things with
- Thomas>    external toolchains:
-
- Thomas>      - For an external toolchain profile, you can tell Buildroot *not*
- Thomas>        to download it, and in that case, you must provide Buildroot
- Thomas>        with the location of the external toolchain.
-
- Thomas>      - You keep the ability to specify a custom profile, where you
- Thomas>        will have to tell Buildroot everything: location of the
- Thomas>        toolchain, toolchain prefix, C library used, etc.
-
- Thomas> In my opinion, those two directions really make the external
- Thomas> toolchains easier and simpler to use. One topic left is the gdb
- Thomas> options, but I decided not to change it, in order to not conflict too
- Thomas> much with Gustavoz's work.
-
-Thanks, looks good. Care to fix the few issues I pointed out and send a
-new pull request? Then I'll pull it.
-
+diff --git a/package/Config.in b/package/Config.in
+index 10d8918..9acf765 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -376,6 +376,9 @@ source "package/dropbear/Config.in"
+ source "package/ethtool/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/ifplugd/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++source "package/inetutils/Config.in"
++endif
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
+new file mode 100644
+index 0000000..6afdbc9
+--- /dev/null
++++ b/package/inetutils/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_INETUTILS
++	bool "inetutils"
++	help
++	  GNU Inetutils
++
++	  This is a distribution of common networking utilities and servers.
++	  It provides apps like ftp, hostname, ping, ping6, rcp, rexec, 
++	  rlogin, rsh, talk, telnet, tftp, and traceroute
++
++config BR2_PACKAGE_INETUTILS_DISABLE_SERVERS
++	depends on BR2_PACKAGE_INETUTILS
++	bool "Don't compile servers"
++
++config BR2_PACKAGE_INETUTILS_DISABLE_CLIENTS
++	depends on BR2_PACKAGE_INETUTILS
++	bool "Don't compile clients"
++
+diff --git a/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch b/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
+new file mode 100644
+index 0000000..c46d1ee
+--- /dev/null
++++ b/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
+@@ -0,0 +1,14 @@
++diff -ru inetutils-1.8.orig/ifconfig/system/linux.c inetutils-1.8/ifconfig/system/linux.c
++--- inetutils-1.8.orig/ifconfig/system/linux.c	2010-05-15 06:48:38.000000000 -0500
+++++ inetutils-1.8/ifconfig/system/linux.c	2010-12-11 17:14:22.000000000 -0600
++@@ -49,6 +49,10 @@
++ #include "../ifconfig.h"
++ 
++ 
+++#ifndef PATH_PROCNET_DEV
+++  #define PATH_PROCNET_DEV "/proc/net/dev"
+++#endif
+++
++ /* ARPHRD stuff.  */
++ 
++ static void
+diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
+new file mode 100644
+index 0000000..8fcc186
+--- /dev/null
++++ b/package/inetutils/inetutils.mk
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# inetutils
++#
++#############################################################
++INETUTILS_VERSION = 1.8
++INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.gz
++INETUTILS_SITE = http://ftp.gnu.org/gnu/inetutils/
++
++INETUTILS_DEPENDENCIES =
++INETUTILS_CONF_OPT = --disable-syslogd --disable-logger
++
++ifeq ($(BR2_INET_IPV6),y)
++	INETUTILS_CONF_OPT += --enable-ipv6
++else
++	INETUTILS_CONF_OPT += --disable-ipv6
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++	INETUTILS_CONF_OPT += --enable-ncurses
++	INETUTILS_DEPENDENCIES += ncurses
++else
++	INETUTILS_CONF_OPT += --disable-ncurses
++endif
++
++ifeq ($(BR2_PACKAGE_INETUTILS_DISABLE_SERVERS),y)
++	INETUTILS_CONF_OPT += --disable-servers
++endif
++
++ifeq ($(BR2_PACKAGE_INETUTILS_DISABLE_CLIENTS),y)
++	INETUTILS_CONF_OPT += --disable-clients
++endif
++
++$(eval $(call AUTOTARGETS,package,inetutils))
++
 -- 
-Bye, Peter Korsgaard
+1.7.3.2
