@@ -1,124 +1,43 @@
-From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Sat, 11 Dec 2010 17:44:35 -0600
-Subject: [Buildroot] [PATCH v2] add package inetutils
-Message-ID: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 11 Dec 2010 22:57:07 +0100
+Subject: [Buildroot] [git commit master 1/1] linux: restore DEPMOD usage
+Message-ID: <20101211235057.B58EC7F903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
+commit: http://git.buildroot.net/buildroot/commit/?id=b7a2358f0babe29219f3e2956eae53603b4a7f2c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+The linux.mk rewrite lost the DEPMOD setting while installing modules
+which means depending on host-module-init-tools has been useless.
+Instead, the build system has been executing /sbin/depmod.
+
+While we're here, drop the INSTALL_MOD_PATH since LINUX26_MAKE_FLAGS
+already contains it.
+
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    3 ++
- package/inetutils/Config.in                        |   17 +++++++++
- .../inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch |   14 ++++++++
- package/inetutils/inetutils.mk                     |   35 ++++++++++++++++++++
- 4 files changed, 69 insertions(+), 0 deletions(-)
- create mode 100644 package/inetutils/Config.in
- create mode 100644 package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
- create mode 100644 package/inetutils/inetutils.mk
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 10d8918..9acf765 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -376,6 +376,9 @@ source "package/dropbear/Config.in"
- source "package/ethtool/Config.in"
- source "package/hostapd/Config.in"
- source "package/ifplugd/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+source "package/inetutils/Config.in"
-+endif
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
-new file mode 100644
-index 0000000..9b3827e
---- /dev/null
-+++ b/package/inetutils/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_INETUTILS
-+	bool "inetutils"
-+	help
-+	  GNU Inetutils
-+
-+	  This is a distribution of common networking utilities and servers.
-+	  It provides apps like ftp, hostname, ping, ping6, rcp, rexec, 
-+	  rlogin, rsh, talk, telnet, tftp, and traceroute
-+
-+config BR2_PACKAGE_INETUTILS_DISABLE_SERVERS
-+	depends on BR2_PACKAGE_INETUTILS
-+	bool "Don't compile servers"
-+
-+config BR2_PACKAGE_INETUTILS_DISABLE_CLIENTS
-+	depends on BR2_PACKAGE_INETUTILS
-+	bool "Don't compile clients"
-+
-diff --git a/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch b/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
-new file mode 100644
-index 0000000..c46d1ee
---- /dev/null
-+++ b/package/inetutils/inetutils-1.8-PATH_PROCNET_DEV.patch
-@@ -0,0 +1,14 @@
-+diff -ru inetutils-1.8.orig/ifconfig/system/linux.c inetutils-1.8/ifconfig/system/linux.c
-+--- inetutils-1.8.orig/ifconfig/system/linux.c	2010-05-15 06:48:38.000000000 -0500
-++++ inetutils-1.8/ifconfig/system/linux.c	2010-12-11 17:14:22.000000000 -0600
-+@@ -49,6 +49,10 @@
-+ #include "../ifconfig.h"
-+ 
-+ 
-++#ifndef PATH_PROCNET_DEV
-++  #define PATH_PROCNET_DEV "/proc/net/dev"
-++#endif
-++
-+ /* ARPHRD stuff.  */
-+ 
-+ static void
-diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
-new file mode 100644
-index 0000000..9b9687b
---- /dev/null
-+++ b/package/inetutils/inetutils.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# inetutils
-+#
-+#############################################################
-+INETUTILS_VERSION = 1.8
-+INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.gz
-+INETUTILS_SITE = http://ftp.gnu.org/gnu/inetutils/
-+
-+INETUTILS_DEPENDENCIES =
-+INETUTILS_CONF_OPT = --disable-syslogd --disable-logger --program-prefix= --program-suffix=
-+
-+ifeq ($(BR2_INET_IPV6),y)
-+	INETUTILS_CONF_OPT += --enable-ipv6
-+else
-+	INETUTILS_CONF_OPT += --disable-ipv6
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+	INETUTILS_CONF_OPT += --enable-ncurses
-+	INETUTILS_DEPENDENCIES += ncurses
-+else
-+	INETUTILS_CONF_OPT += --disable-ncurses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_DISABLE_SERVERS),y)
-+	INETUTILS_CONF_OPT += --disable-servers
-+endif
-+
-+ifeq ($(BR2_PACKAGE_INETUTILS_DISABLE_CLIENTS),y)
-+	INETUTILS_CONF_OPT += --disable-clients
-+endif
-+
-+$(eval $(call AUTOTARGETS,package,inetutils))
-+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5f89b7d..e9c37eb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -132,7 +132,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+ 	# directories, not relevant on the target
+ 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
+-			INSTALL_MOD_PATH=$(TARGET_DIR) modules_install ;		\
++			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
+ 	fi
 -- 
-1.7.3.2
+1.7.2.2
