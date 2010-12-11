@@ -1,37 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 02:41:19 +0100
-Subject: [Buildroot] [PATCH 1/1] bump libconfig to version 1.4.6
-In-Reply-To: <5D84D73AF97C43079AA3F8DBD15187CD@apexjs> (Sagaert Johan's
-	message of "Sat, 11 Dec 2010 00:44:30 +0100")
-References: <5D84D73AF97C43079AA3F8DBD15187CD@apexjs>
-Message-ID: <87lj3xnl1c.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 11 Dec 2010 02:40:53 +0100
+Subject: [Buildroot] [git commit master 1/1] libconfig: bump version
+Message-ID: <20101211014135.EBD738E25C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
- Sagaert> Hi
- Sagaert> diff -rupN package/libconfigorg/libconfig.mk package/libconfig/libconfig.mk
- Sagaert> --- package/libconfigorg/libconfig.mk 2010-11-30 16:52:43.000000000 +0100
- Sagaert> +++ package/libconfig/libconfig.mk 2010-12-11 00:41:00.000000000 +0100
- Sagaert> @@ -3,12 +3,13 @@
- Sagaert>  # libconfig
- Sagaert>  #
- Sagaert>  #############################################################
- Sagaert> -LIBCONFIG_VERSION:=1.3
- Sagaert> +LIBCONFIG_VERSION:=1.4.6
- Sagaert>  LIBCONFIG_SOURCE:=libconfig-$(LIBCONFIG_VERSION).tar.gz
- Sagaert>  LIBCONFIG_SITE:=http://www.hyperrealm.com/libconfig/
- Sagaert>  LIBCONFIG_AUTORECONF:=NO
- Sagaert>  LIBCONFIG_INSTALL_STAGING:=YES
- Sagaert>  LIBCONFIG_INSTALL_TARGET:=YES
- Sagaert> +LIBCONFIG_LIBTOOL_PATCH:=NO
+commit: http://git.buildroot.net/buildroot/commit/?id=6f955df42d27f9afe7a9a1a43d0a4095a95c1286
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Don't disable the libtool patch, otherwise it looks good - Committed,
-thanks.
+[Peter: Don't disable libtool patch]
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                        |    4 ++--
+ package/libconfig/libconfig.mk |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index c1c4a6f..399dba2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,8 +3,8 @@
+ 	Ccache support reworked. Now used for both host and target
+ 	compilation, and cache is stored in ~/.buildroot-ccache.
+ 
+-	Updated/fixed packages: busybox, cloop, m4, openssh, openssl,
+-	qt, usbutils, xz
++	Updated/fixed packages: busybox, cloop, libconfig, m4,
++	openssh, openssl, qt, usbutils, xz
+ 
+ 	New packages: dhrystone, lsuio, rsh-redone, whetstone
+ 
+diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
+index d260930..6e232a4 100644
+--- a/package/libconfig/libconfig.mk
++++ b/package/libconfig/libconfig.mk
+@@ -3,7 +3,7 @@
+ # libconfig
+ #
+ #############################################################
+-LIBCONFIG_VERSION:=1.3
++LIBCONFIG_VERSION:=1.4.6
+ LIBCONFIG_SOURCE:=libconfig-$(LIBCONFIG_VERSION).tar.gz
+ LIBCONFIG_SITE:=http://www.hyperrealm.com/libconfig/
+ LIBCONFIG_AUTORECONF:=NO
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
