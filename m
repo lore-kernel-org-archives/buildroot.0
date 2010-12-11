@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 01:45:13 +0100
-Subject: [Buildroot] [PATCH] linux: set a few more initramfs opts for
-	newer kernels
-In-Reply-To: <1290224285-21053-1-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Fri, 19 Nov 2010 22:38:05 -0500")
-References: <1290224285-21053-1-git-send-email-vapier@gentoo.org>
-Message-ID: <87hbelp27a.fsf@macbook.be.48ers.dk>
+Date: Sat, 11 Dec 2010 02:02:02 +0100
+Subject: [Buildroot] [PATCH v2] linux: add shorter shortcuts
+In-Reply-To: <1290079906-3643-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Thu, 18 Nov 2010 06:31:46 -0500")
+References: <1290075883-30494-1-git-send-email-vapier@gentoo.org>
+	<1290079906-3643-1-git-send-email-vapier@gentoo.org>
+Message-ID: <874oalp1f9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Mike> Building with linux-2.6.36 and initramfs support causes the build to
- Mike> pause while it prompts for newer options (uid/gid/compression).  So
- Mike> have the build system inject the newer options into the linux config
- Mike> automatically.  Older versions should just ignore these.
+ Mike> We only have one Linux kernel package, and "linux26-" is an anachronism
+ Mike> in today's world.  So add useful "linux-%" shortcuts to the "linux26-%".
 
 Committed, thanks.
 
