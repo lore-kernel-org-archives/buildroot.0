@@ -1,37 +1,28 @@
-From: Jomas Nash <jomasnash@gmail.com>
-Date: Sat, 11 Dec 2010 13:16:53 +0100
-Subject: [Buildroot] How to debug a program in target?
-Message-ID: <AANLkTikih3WteMMs9gW1dcW-JsfRGB=xTa2+uPbZi9=S@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Dec 2010 14:46:26 +0100
+Subject: [Buildroot] [PATCH 1/1] mrouted: convet to gentargets and bump
+ to version 3.9.2
+In-Reply-To: <1286318752-26740-2-git-send-email-Martin.Banky@gmail.com>
+References: <1286318752-26740-1-git-send-email-Martin.Banky@gmail.com>
+	<1286318752-26740-2-git-send-email-Martin.Banky@gmail.com>
+Message-ID: <20101211144626.62aa76e5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue,  5 Oct 2010 15:45:52 -0700
+Martin Banky <martin.banky@gmail.com> wrote:
 
-I'm trying to debug a program on the target. (i686)
-On the target I type:
-# gdb partimage
+> mrouted is once again being actively developed.
+> See http://github.com/troglobit/mrouted
 
-gdb starts and say (last line):
+Thanks, merged in one of my branch and bumped to 3.9.4 with some fixes.
 
-Reading symbols from /bin/partimage...done
-(gdb) _
-
-Then I type run and gdb say:
-(gdb) run
-Starting program /bin/partimage
-..
-.. Some copyright messages
-..
-/root/exec /bin/partimage : No such file or directory.
-
-Can someone tell me what is the problem and
-how can I debug my program.
-
-Kind regards,
-Jomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101211/e87af44f/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
