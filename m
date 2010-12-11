@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 11 Dec 2010 23:50:55 +0100
-Subject: [Buildroot] [PATCH 13/15] toolchain: expose thread options in
-	the Crosstool-NG backend
-In-Reply-To: <ebd285ae70fb69572d98ea560e2180aecf57ffd7.1291541115.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 10:25:40 +0100")
+Date: Sat, 11 Dec 2010 23:55:29 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.02/toolchain-improvements
+In-Reply-To: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 10:25:27 +0100")
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<ebd285ae70fb69572d98ea560e2180aecf57ffd7.1291541115.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87zksbly9c.fsf@macbook.be.48ers.dk>
+Message-ID: <87r5dnly1q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,40 +14,54 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  toolchain/toolchain-crosstool-ng/Config.in       |   32 ++++++++++++++++++++++
- Thomas>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   21 ++++++++++++++
- Thomas>  2 files changed, 53 insertions(+), 0 deletions(-)
+ Thomas> Hello,
+ Thomas> Here is a set of patches that mainly improves the toolchain
+ Thomas> configuration and support, with two majors directions :
 
- Thomas> diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
- Thomas> index b345297..9d8cb24 100644
- Thomas> --- a/toolchain/toolchain-crosstool-ng/Config.in
- Thomas> +++ b/toolchain/toolchain-crosstool-ng/Config.in
- Thomas> @@ -106,4 +106,36 @@ config BR2_TOOLCHAIN_CTNG_C_PLUS_PLUS
- Thomas>  	  C++ language and you want C++ libraries to be installed on
- Thomas>  	  your target system.
- 
- Thomas> +choice
- Thomas> +	prompt "Thread library implementation"
- Thomas> +	default BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD \
- Thomas> +		if BR2_TOOLCHAIN_CTNG_uClibc
- Thomas> +	default BR2_TOOLCHAIN_CTNG_THREADS_NPTL		\
- Thomas> +		if BR2_TOOLCHAIN_CTNG_eglibc ||		\
- Thomas> +		   BR2_TOOLCHAIN_CTNG_glibc
- Thomas> +	help
- Thomas> +	  Enable thread support and select thread implementation. Not
- Thomas> +	  all thread variants work with all versions of uClibc, the
- Thomas> +	  "linuxthreads (stable/old)" may be a working fallback if you
- Thomas> +	  need threading at all.
- Thomas> +
- Thomas> +	config BR2_TOOLCHAIN_CTNG_THREADS_NONE
- Thomas> +		bool "none"
+ Thomas>  * Turn BR2_LARGEFILE, BR2_INET_RPC, BR2_INET_RPC and similar options
+ Thomas>    into hidden options, and let the toolchain backends present them as
+ Thomas>    they wish. For example for RPC, xthe Buildroot backend says "Do you
+ Thomas>    want RPC ?" while the external toolchain backend doesn't show the
+ Thomas>    option when glibc is used, or present an option "Does your
+ Thomas>    toolchain has RPC ?" when uclibc is used.
 
-So you can build a glibc/eglibc ctng toolchain without threading
-support? Then we shouldn't unconditionally enable thread support for
-external glibc toolchains (in patch 8).
+ Thomas>    So really those options should now be called
+ Thomas>    BR2_TOOLCHAIN_HAS_LARGEFILE, BR2_TOOLCHAIN_HAS_INET_RPC, etc, but
+ Thomas>    we kept the old names in this patch series because changing them
+ Thomas>    impacts all packages. This will be done later.
 
+ Thomas>    A first commit handles largefile, rpc, ipv6, locale and program
+ Thomas>    invocation options, and some later commits handle the C++ option
+ Thomas>    and thread options.
+
+ Thomas>  * Extend external toolchain with "profiles", i.e well-known external
+ Thomas>    toolchains. For those toolchains, Buildroot can automatically
+ Thomas>    download and install them and will automatically select the
+ Thomas>    appropriate configuration options (C library used, RPC, IPv6,
+ Thomas>    locale, etc.). So an user can know tell Buildroot to use a
+ Thomas>    CodeSourcery toolchain, and Buildroot will do all the job. Such
+ Thomas>    toolchains are extracted in $(O)/external-toolchain, but my intent
+ Thomas>    is to move it to $(O)/toolchain once Gustavoz's toolchain cleanup
+ Thomas>    work is done.
+
+ Thomas>    This work keeps the ability of doing some more manual things with
+ Thomas>    external toolchains:
+
+ Thomas>      - For an external toolchain profile, you can tell Buildroot *not*
+ Thomas>        to download it, and in that case, you must provide Buildroot
+ Thomas>        with the location of the external toolchain.
+
+ Thomas>      - You keep the ability to specify a custom profile, where you
+ Thomas>        will have to tell Buildroot everything: location of the
+ Thomas>        toolchain, toolchain prefix, C library used, etc.
+
+ Thomas> In my opinion, those two directions really make the external
+ Thomas> toolchains easier and simpler to use. One topic left is the gdb
+ Thomas> options, but I decided not to change it, in order to not conflict too
+ Thomas> much with Gustavoz's work.
+
+Thanks, looks good. Care to fix the few issues I pointed out and send a
+new pull request? Then I'll pull it.
 
 -- 
 Bye, Peter Korsgaard
