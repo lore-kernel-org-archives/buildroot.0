@@ -1,83 +1,32 @@
-From: Justin Mark <oilehus@yahoo.com>
-Date: Sat, 11 Dec 2010 19:37:36 -0800 (PST)
-Subject: [Buildroot] Problem to add DConf in buildroot
-In-Reply-To: <1292057462.24014.176.camel@coalu.atr>
-Message-ID: <681873.12388.qm@web111105.mail.gq1.yahoo.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 11 Dec 2010 22:52:50 -0500
+Subject: [Buildroot] [PATCH] zlib: fix installing when static-only
+In-Reply-To: <871v5onfhx.fsf@macbook.be.48ers.dk>
+References: <1291759032-1336-1-git-send-email-vapier@gentoo.org>
+	<871v5onfhx.fsf@macbook.be.48ers.dk>
+Message-ID: <201012112252.52313.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Lionel,
-
-Thanks a lot for the reply. I checked the uclibc config file, UCLIBC_HAS_ADVANCED_REALTIME was already turned on.
-
-But I found a note in the file "uClibc_vs_SuSv3.txt":
-
-Unimplemented optional interfaces:
-----------------------------------
-...
-fcntl.h: posix_fallocate (depend on ADV)
-...
-
-so there's no implementation for posix_fallocate(). Since this function is only called once in Dconf, like this:
- if (posix_fallocate (fd, 0, 1) == 0)
-
-maybe I can patch the Dconf file, if anyone has an idea on how to replace the above code, please let me know.
-
-Many thanks,
---Justin  
-
---- On Sat, 12/11/10, Lionel Landwerlin <llandwerlin@gmail.com> wrote:
-
-> From: Lionel Landwerlin <llandwerlin@gmail.com>
-> Subject: Re: [Buildroot] Problem to add DConf in buildroot
-> To: buildroot at busybox.net
-> Date: Saturday, December 11, 2010, 12:51 AM
-> Le vendredi 10 d?cembre 2010 ?
-> 22:24 -0800, Justin Mark a ?crit :
-> > Hi
-> > 
-> > When I tried to add DConf into buildroot, I got the
-> following error:
-> > 
-> > ../client/libdconf.so.0: undefined reference to
-> `posix_fallocate'
-> > collect2: ld returned 1 exit status
-> > 
-> > but I can build DConf without any problems outside of
-> buildroot. 
-> > 
-> > In the Makefile.am, there's a line 
-> > 
-> > dconf_LDADD = $(gio_LIBS) ../client/libdconf.so.0
-> > 
-> > It seems to me that a dependency of
-> "../client/libdconf.so.0" is not in the path when I built
-> under buildroot, if so, anyone has an idea how to patch the
-> makefile, so I can build Dconf and link with libdconf.so.0
-> > 
-> > Many Thanks,
-> > Justin
-> > 
+On Saturday, December 11, 2010 16:53:14 Peter Korsgaard wrote:
+> >>>>> "Mike" == Mike Frysinger writes:
+>  Mike> The switch from manual targets to using zlib's targets to fix shared
+>  Mike> building/installing doesn't work quite right as zlib itself doesn't
+>  Mike> handle static-only installs fully.
 > 
-> Hello Justin,
-> 
-> I think you need uclibc compiled with
-> UCLIBC_HAS_ADVANCED_REALTIME
-> option.
-> 
-> Regards,
-> 
-> --
-> Lionel Landwerlin
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Ehh, that seems very similar to the zlib-1.2.5-fix-static-install.patch
+> we already have?
 
-
-      
+i dont know what you're referring to.  there are no patches currently:
+	http://git.buildroot.net/buildroot/tree/package/zlib
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101211/c71c2e0e/attachment.pgp>
