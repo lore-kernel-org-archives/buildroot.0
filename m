@@ -1,35 +1,38 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 12 Dec 2010 11:25:25 -0500
-Subject: [Buildroot] [PATCH] toolchain-external: improve sysroot lookup with
-	multilib
-Message-ID: <1292171125-32589-1-git-send-email-vapier@gentoo.org>
+Date: Sun, 12 Dec 2010 11:25:20 -0500
+Subject: [Buildroot] [PATCH] toolchain: speed up sysroot lib copying
+Message-ID: <1292171120-32512-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the external toolchain we're using starts in a path other than /usr/lib,
-the sysroot detection fails as it has /usr/lib hardcoded.  Improve the code
-to strip out any lib suffixes to handle the most common behavior.
+The copy_toolchain_lib_root helper searches the entire sysroot, but is
+only interested in files in certain subdirs.  So rather than waste time
+in walking the entire tree, walk the few subdirs at the depth level we
+are actually going to be poaching files from.
 
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- toolchain/toolchain-external/ext-tool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/helpers.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index a913162..646b8ea 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -65,7 +65,7 @@ endif # ! no threads
- TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
- SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
- ifeq ($(SYSROOT_DIR),)
--SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;')
-+SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib[^/]*/libc\.a::;')
- endif
- 
- # Now, find if the toolchain specifies a sub-directory for the
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 05d43e7..674e7b4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -24,7 +24,10 @@ copy_toolchain_lib_root = \
+ 	STRIP="$(strip $4)"; \
+  \
+ 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
+-		find -L . -path "./lib/$${LIB}.*"     -o \
++		find -L \
++			  ./lib/ ./usr/lib/ ./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/ \
++			  -maxdepth 1 \
++			  -path "./lib/$${LIB}.*"     -o \
+ 			  -path "./usr/lib/$${LIB}.*" -o \
+ 			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
+ 		)` ; \
 -- 
 1.7.3.3
