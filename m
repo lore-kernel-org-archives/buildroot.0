@@ -1,39 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Dec 2010 23:53:37 +0100
-Subject: [Buildroot] [PATCH 07/15] ltp-testsuite: bump version and use
-	autotargets
-In-Reply-To: <20101212234625.29f64f1a@surf> (Thomas Petazzoni's message of
-	"Sun, 12 Dec 2010 23:46:25 +0100")
-References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<c3f16255f702a6cdd4936c2c91d13ac61db35c82.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<87bp4slyo4.fsf@macbook.be.48ers.dk> <20101212123150.77a2569e@surf>
-	<87aakaljiz.fsf@macbook.be.48ers.dk> <20101212234625.29f64f1a@surf>
-Message-ID: <8762uyli1a.fsf@macbook.be.48ers.dk>
+Date: Sun, 12 Dec 2010 23:59:23 +0100
+Subject: [Buildroot] [PATCH 05/17] ifplugd: ensure target directories
+	exist before copying into
+In-Reply-To: <1291802049-18764-6-git-send-email-llandwerlin@gmail.com>
+	(llandwerlin@gmail.com's message of "Wed, 8 Dec 2010 10:53:57 +0100")
+References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
+	<1291802049-18764-6-git-send-email-llandwerlin@gmail.com>
+Message-ID: <87zksak378.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
 
-Hi,
+ llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
+ llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+ llandwerlin> ---
+ llandwerlin>  package/ifplugd/ifplugd.mk |    1 +
+ llandwerlin>  1 files changed, 1 insertions(+), 0 deletions(-)
 
- Thomas> So you mean that just like for mrouted, I should allow the
- Thomas> selection of ltp-testsuite with uClibc, even though it would
- Thomas> not build with our default uClibc configuration ?
+ llandwerlin> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+ llandwerlin> index 5e66cea..0be903c 100644
+ llandwerlin> --- a/package/ifplugd/ifplugd.mk
+ llandwerlin> +++ b/package/ifplugd/ifplugd.mk
+ llandwerlin> @@ -22,6 +22,7 @@ define IFPLUGD_INSTALL_FIXUP
+ llandwerlin>  		$(INSTALL) $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
+ llandwerlin>  		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ llandwerlin>  	fi
+ llandwerlin> +	mkdir -p $(TARGET_DIR)/etc/ifplugd
 
-Yes.
-
- >> We could ofcourse add toolchain knobs for all of these, but as you say
- >> they are probably not worth the effort / extra complexity. I think
- >> just leaving them like this is good enough.
-
- Thomas> Obviously, I don't think it's reasonable to add dozens of toolchain
- Thomas> configuration knobs.
-
-Me neither.
+Hmm, just a few lines above we have install -d $(TARGET_DIR)/etc/ifplugd
+- Isn't that working for you?
 
 -- 
 Bye, Peter Korsgaard
