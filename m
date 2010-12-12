@@ -1,148 +1,172 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 22:54:02 +0100
-Subject: [Buildroot] [PATCH 16/19] libaio: add patch to support AVR32
+Date: Sun, 12 Dec 2010 22:54:01 +0100
+Subject: [Buildroot] [PATCH 15/19] netplug: convert to gentargets and bump
+	to 1.2.9.2
 In-Reply-To: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <04123fddd011c6725e044370b50ba103a980458f.1292190675.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <26da3aef415e23cddb98ccbd3a1d985edf2f118e.1292190675.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Martin Banky <martin.banky@gmail.com>
+
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libaio/libaio-0.3.109-avr32-support.patch |  122 +++++++++++++++++++++
- 1 files changed, 122 insertions(+), 0 deletions(-)
- create mode 100644 package/libaio/libaio-0.3.109-avr32-support.patch
+ package/netplug/netplug-1.2.9-disable-werror.patch |   22 --------
+ .../netplug/netplug-1.2.9.2-makefile-flags.patch   |   21 ++++++++
+ package/netplug/netplug-socklen-type.patch         |   12 -----
+ package/netplug/netplug.mk                         |   53 +++++--------------
+ 4 files changed, 35 insertions(+), 73 deletions(-)
+ delete mode 100644 package/netplug/netplug-1.2.9-disable-werror.patch
+ create mode 100644 package/netplug/netplug-1.2.9.2-makefile-flags.patch
+ delete mode 100644 package/netplug/netplug-socklen-type.patch
 
-diff --git a/package/libaio/libaio-0.3.109-avr32-support.patch b/package/libaio/libaio-0.3.109-avr32-support.patch
+diff --git a/package/netplug/netplug-1.2.9-disable-werror.patch b/package/netplug/netplug-1.2.9-disable-werror.patch
+deleted file mode 100644
+index d8a3e15..0000000
+--- a/package/netplug/netplug-1.2.9-disable-werror.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-netplug uses nested functions, and gcc generates a warning that
+-is turned into an error:
+-
+-cc1: warnings being treated as errors
+-if_info.c: In function 'ifsm_scriptdone':
+-if_info.c:289: error: generating trampoline in object (requires executable stack)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: netplug-1.2.9/Makefile
+-===================================================================
+---- netplug-1.2.9.orig/Makefile	2010-05-09 21:07:40.000000000 +0200
+-+++ netplug-1.2.9/Makefile	2010-05-09 21:09:32.000000000 +0200
+-@@ -9,7 +9,7 @@
+- 
+- install_opts :=
+- 
+--CFLAGS += -Wall -Werror -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+-+CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+- 	-DNP_SCRIPT_DIR='"$(scriptdir)"' -ggdb3 -O3 -DNP_VERSION='"$(version)"'
+- 
+- netplugd: config.o netlink.o lib.o if_info.o main.o
+diff --git a/package/netplug/netplug-1.2.9.2-makefile-flags.patch b/package/netplug/netplug-1.2.9.2-makefile-flags.patch
 new file mode 100644
-index 0000000..57bb1f3
+index 0000000..b2468f8
 --- /dev/null
-+++ b/package/libaio/libaio-0.3.109-avr32-support.patch
-@@ -0,0 +1,122 @@
-+Add AVR32 support to libaio
++++ b/package/netplug/netplug-1.2.9.2-makefile-flags.patch
+@@ -0,0 +1,21 @@
++Preserve the cflags settings, because buildroot clobbers them.
 +
-+Taken from OpenWRT repository.
-+
-+--- a/src/libaio.h
-++++ b/src/libaio.h
-+@@ -107,6 +107,10 @@ typedef enum io_iocb_cmd {
-+ #  else
-+ #    error "neither mipseb nor mipsel?"
-+ #  endif
-++#elif defined(__avr32__) /* big endian, 32 bits */
-++#define PADDED(x, y)	unsigned y; x
-++#define PADDEDptr(x, y)	unsigned y; x
-++#define PADDEDul(x, y)	unsigned y; unsigned long x;
-+ #else
-+ #error	endian?
-+ #endif
-+--- /dev/null
-++++ b/src/syscall-avr32.h
-+@@ -0,0 +1,91 @@
-++/*
-++ * Copyright (C) 2007 Atmel Corporation
-++ *
-++ * This program is free software; you can redistribute it and/or modify
-++ * it under the terms of the GNU General Public License version 2 as
-++ * published by the Free Software Foundation.
-++ */
++--- a/Makefile	2010-10-05 00:06:38.000000000 -0700
+++++ b/Makefile	2010-10-05 00:15:27.000000000 -0700
++@@ -11,11 +11,14 @@ mandir ?= $(prefix)/usr/share/man
++ 
++ install_opts :=
++ 
++-CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
+++NETPLUG_CFLAGS += -Wall -std=gnu99 -DNP_ETC_DIR='"$(etcdir)"' \
++ 	-DNP_SCRIPT_DIR='"$(scriptdir)"' -ggdb3 -O3 -DNP_VERSION='"$(version)"'
++ 
+++%.o: %.c
+++	$(CC) $(NETPLUG_CFLAGS) $(CFLAGS) -c -o $@ $<
 ++
-++#define __NR_io_setup		197
-++#define __NR_io_destroy		198
-++#define __NR_io_getevents	199
-++#define __NR_io_submit		200
-++#define __NR_io_cancel		201
-++
-++#define io_syscall1(type,fname,sname,type1,arg1)			\
-++type fname(type1 arg1)							\
-++{									\
-++	register long __r12 __asm__("r12") = (long)arg1;		\
-++	register long __res_r12 __asm__("r12");				\
-++	register long __scno __asm__("r8") = __NR_##sname;		\
-++	__asm__ __volatile__("scall"					\
-++			     : "=r"(__res_r12)				\
-++			     : "0"(__r12), "r"(__scno)			\
-++			     : "memory");				\
-++	return (type) __res_r12;					\
-++}
-++
-++#define io_syscall2(type,fname,sname,type1,arg1,type2,arg2)		\
-++type fname(type1 arg1, type2 arg2)					\
-++{									\
-++	register long __r12 __asm__("r12") = (long)arg1;		\
-++	register long __r11 __asm__("r11") = (long)arg2;		\
-++	register long __res_r12 __asm__("r12");				\
-++	register long __scno __asm__("r8") = __NR_##sname;		\
-++	__asm__ __volatile__("scall"					\
-++			     : "=r"(__res_r12)				\
-++			     : "0"(__r12), "r"(__r11), "r"(__scno)	\
-++			     : "memory");				\
-++	return (type) __res_r12;					\
-++}
-++
-++#define io_syscall3(type,fname,sname,type1,arg1,type2,arg2,type3,arg3)	\
-++type fname(type1 arg1, type2 arg2, type3 arg3)				\
-++{									\
-++	register long __r12 __asm__("r12") = (long)arg1;		\
-++	register long __r11 __asm__("r11") = (long)arg2;		\
-++	register long __r10 __asm__("r10") = (long)arg3;		\
-++	register long __res_r12 __asm__("r12");				\
-++	register long __scno __asm__("r8") = __NR_##sname;		\
-++	__asm__ __volatile__("scall"					\
-++			     : "=r"(__res_r12)				\
-++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
-++			       "r"(__scno)				\
-++			     : "memory");				\
-++	return (type) __res_r12;					\
-++}
-++
-++#define io_syscall4(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4) \
-++type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4)		\
-++{									\
-++	register long __r12 __asm__("r12") = (long)arg1;		\
-++	register long __r11 __asm__("r11") = (long)arg2;		\
-++	register long __r10 __asm__("r10") = (long)arg3;		\
-++	register long __r9 __asm__("r9") = (long)arg4;			\
-++	register long __res_r12 __asm__("r12");				\
-++	register long __scno __asm__("r8") = __NR_##sname;		\
-++	__asm__ __volatile__("scall"					\
-++			     : "=r"(__res_r12)				\
-++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
-++			       "r"(__r9), "r"(__scno)			\
-++			     : "memory");				\
-++	return (type) __res_r12;					\
-++}
-++
-++#define io_syscall5(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4,type5,arg5) \
-++type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4, type5 arg5)	\
-++{									\
-++	register long __r12 __asm__("r12") = (long)arg1;		\
-++	register long __r11 __asm__("r11") = (long)arg2;		\
-++	register long __r10 __asm__("r10") = (long)arg3;		\
-++	register long __r9 __asm__("r9") = (long)arg4;			\
-++	register long __r5 __asm__("r5") = (long)arg5;			\
-++	register long __res_r12 __asm__("r12");				\
-++	register long __scno __asm__("r8") = __NR_##sname;		\
-++	__asm__ __volatile__("scall"					\
-++			     : "=r"(__res_r12)				\
-++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
-++			       "r"(__r9), "r"(__r5), "r"(__scno)	\
-++			     : "memory");				\
-++	return (type) __res_r12;					\
-++}
-+--- a/src/syscall.h
-++++ b/src/syscall.h
-+@@ -32,6 +32,8 @@
-+ #include "syscall-parisc.h"
-+ #elif defined(__mips__)
-+ #include "syscall-mips.h"
-++#elif defined(__avr32__)
-++#include "syscall-avr32.h"
-+ #else
-+ #error "add syscall-arch.h"
-+ #endif
++ netplugd: config.o netlink.o lib.o if_info.o main.o
++-	$(CC) $(LDFLAGS) -o $@ $^
+++	$(CC) $(LDFLAGS) -o $@ $(NETPLUG_CFLAGS) $^
++ 
++ install:
++ 	install -d $(install_opts) -m 755 \
+diff --git a/package/netplug/netplug-socklen-type.patch b/package/netplug/netplug-socklen-type.patch
+deleted file mode 100644
+index 1e36988..0000000
+--- a/package/netplug/netplug-socklen-type.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -ur netplug-1.2.9/netlink.c netplug-1.2.9-patched/netlink.c
+---- netplug-1.2.9/netlink.c	2005-01-07 23:57:09.000000000 -0600
+-+++ netplug-1.2.9-patched/netlink.c	2008-02-27 20:18:09.855767996 -0600
+-@@ -284,7 +284,7 @@
+-         exit(1);
+-     }
+- 
+--    int addr_len = sizeof(addr);
+-+    socklen_t addr_len = sizeof(addr);
+- 
+-     if (getsockname(fd, (struct sockaddr *) &addr, &addr_len) == -1) {
+-         do_log(LOG_ERR, "Could not get socket details: %m");
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index 74fa0c5..cbe9a8d 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -3,51 +3,26 @@
+ # netplug
+ #
+ #############################################################
+-NETPLUG_VERSION=1.2.9
++NETPLUG_VERSION=1.2.9.2
+ NETPLUG_SOURCE=netplug-$(NETPLUG_VERSION).tar.bz2
+ NETPLUG_SITE=http://www.red-bean.com/~bos/netplug
+-NETPLUG_DIR=$(BUILD_DIR)/netplug-$(NETPLUG_VERSION)
+-NETPLUG_CAT:=$(BZCAT)
+-NETPLUG_BINARY:=netplugd
+-NETPLUG_TARGET_BINARY:=sbin/netplugd
+ 
+-$(DL_DIR)/$(NETPLUG_SOURCE):
+-	$(call DOWNLOAD,$(NETPLUG_SITE),$(NETPLUG_SOURCE))
++define NETPLUG_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
+ 
+-netplug-source: $(DL_DIR)/$(NETPLUG_SOURCE)
++define NETPLUG_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
+ 
+-$(NETPLUG_DIR)/.unpacked: $(DL_DIR)/$(NETPLUG_SOURCE)
+-	$(NETPLUG_CAT) $(DL_DIR)/$(NETPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(NETPLUG_DIR) package/netplug/ netplug\*.patch
+-	touch $(NETPLUG_DIR)/.unpacked
+-
+-$(NETPLUG_DIR)/$(NETPLUG_BINARY): $(NETPLUG_DIR)/.unpacked
+-	$(MAKE) CC="$(TARGET_CC)" -C $(NETPLUG_DIR)
+-	$(STRIPCMD) $(NETPLUG_DIR)/$(NETPLUG_BINARY)
+-
+-$(TARGET_DIR)/$(NETPLUG_TARGET_BINARY): $(NETPLUG_DIR)/$(NETPLUG_BINARY)
+-	$(INSTALL) -m 644 -D $(NETPLUG_DIR)/etc/netplugd.conf $(TARGET_DIR)/etc/netplug/netplugd.conf
+-	$(INSTALL) -m 755 -D package/netplug/netplug-script $(TARGET_DIR)/etc/netplug.d/netplug
+-	$(INSTALL) -m 755 -D package/netplug/S29netplug $(TARGET_DIR)/etc/init.d
+-	$(INSTALL) -m 755 -D $(NETPLUG_DIR)/$(NETPLUG_BINARY) $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
+-	touch -c $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
+-
+-netplug: $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
+-
+-netplug-clean:
+-	rm -f $(TARGET_DIR)/$(NETPLUG_TARGET_BINARY)
++define NETPLUG_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/sbin/netplugd
+ 	rm -rf $(TARGET_DIR)/etc/netplug*
+ 	rm -f $(TARGET_DIR)/etc/init.d/S*netplug
+-	-$(MAKE) -C $(NETPLUG_DIR) clean
++endef
+ 
+-netplug-dirclean:
+-	rm -rf $(NETPLUG_DIR)
++define NETPLUG_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_NETPLUG),y)
+-TARGETS+=netplug
+-endif
++$(eval $(call GENTARGETS,package,netplug))
 -- 
 1.7.0.4
