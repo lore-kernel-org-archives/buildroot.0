@@ -1,42 +1,43 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 12 Dec 2010 11:58:07 -0500
-Subject: [Buildroot] [PATCH 2/2 v2] busybox: let buildroot handle stripping
-In-Reply-To: <1292173087-8806-1-git-send-email-vapier@gentoo.org>
-References: <1292173087-8806-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1292173087-8806-2-git-send-email-vapier@gentoo.org>
+Date: Sun, 12 Dec 2010 11:56:25 -0500
+Subject: [Buildroot] [PATCH] toolchain: glibc: improve library checking
+Message-ID: <1292172985-8647-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some ABI's (like FLAT), we cannot strip busybox as the file format
-does not support it and strip will abort with errors like 'File format
-not recognized'.  Since the toplevel already takes care of stripping
-things, simply disable the busybox step.
+If the source sysroot has symlinks to the ldso, the globs might match more
+than one file, and test fails due to too many arguments.  So move the glob
+into a for loop and test each result that way.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
-v2
-	- rebase on top of new unification code
+ toolchain/helpers.mk |   11 +++++++----
+ 1 files changed, 7 insertions(+), 4 deletions(-)
 
- package/busybox/busybox.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 67664f6..ca5b495 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -21,7 +21,8 @@ BUSYBOX_MAKE_OPTS = \
- 	PREFIX="$(TARGET_DIR)" \
- 	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	CONFIG_PREFIX="$(TARGET_DIR)"
-+	CONFIG_PREFIX="$(TARGET_DIR)" \
-+	SKIP_STRIP=y
- 
- ifndef BUSYBOX_CONFIG_FILE
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 674e7b4..166f290 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -150,10 +150,13 @@ check_glibc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
+-		echo "Incorrect selection of the C library"; \
+-		exit -1; \
+-	fi; \
++	for l in $${SYSROOT_DIR}/lib/ld-linux*.so.* $${SYSROOT_DIR}/lib/ld.so.* ""; do \
++		if test -z "$$l"; then \
++			echo "Incorrect selection of the C library"; \
++			exit 1; \
++		fi; \
++		test -f $$l && break; \
++	done; \
+ 	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
+ 	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
+ 	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
 -- 
 1.7.3.3
