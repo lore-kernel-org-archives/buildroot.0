@@ -1,57 +1,64 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 12 Dec 2010 13:24:58 -0500
-Subject: [Buildroot] [PATCH] ccache: do not setup vars with :=
-Message-ID: <1292178298-8574-1-git-send-email-vapier@gentoo.org>
+Date: Sun, 12 Dec 2010 13:27:18 -0500
+Subject: [Buildroot] [PATCH v2] u-boot: version bump to 2010.09
+In-Reply-To: <1289916977-29852-1-git-send-email-vapier@gentoo.org>
+References: <1289916977-29852-1-git-send-email-vapier@gentoo.org>
+Message-ID: <1292178438-9441-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ccache var setup does not need to assign values immediately, and by
-doing so, prevents later toolchain logic from tweaking the cross target
-easily.  So rework the code a bit to use deferred evaluation.
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/Makefile.in |   15 +++++++++------
- 1 files changed, 9 insertions(+), 6 deletions(-)
+v2
+	- also set update mkimage fallback to 2010.09
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2ba2b64..9004bd7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -103,9 +103,9 @@ TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
- # including the --sysroot option where necessary.
- TARGET_AR       = $(TARGET_CROSS)ar
- TARGET_AS       = $(TARGET_CROSS)as
--TARGET_CC       = $(TARGET_CROSS)gcc $(TARGET_SYSROOT_OPT)
-+_TARGET_CC      = $(TARGET_CROSS)gcc $(TARGET_SYSROOT_OPT)
- TARGET_CPP      = $(TARGET_CROSS)cpp $(TARGET_SYSROOT_OPT)
--TARGET_CXX      = $(TARGET_CROSS)g++ $(TARGET_SYSROOT_OPT)
-+_TARGET_CXX     = $(TARGET_CROSS)g++ $(TARGET_SYSROOT_OPT)
- TARGET_FC       = $(TARGET_CROSS)gfortran $(TARGET_SYSROOT_OPT)
- TARGET_LD       = $(TARGET_CROSS)ld $(TARGET_SYSROOT_OPT)
- TARGET_NM       = $(TARGET_CROSS)nm
-@@ -113,12 +113,15 @@ TARGET_RANLIB   = $(TARGET_CROSS)ranlib
- TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
- TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ boot/u-boot/Config.in |    6 +++++-
+ boot/u-boot/u-boot.mk |    2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index ce79a8a..86c656d 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
  
--TARGET_CC_NOCCACHE  := $(TARGET_CC)
--TARGET_CXX_NOCCACHE := $(TARGET_CXX)
-+TARGET_CC_NOCCACHE  = $(_TARGET_CC)
-+TARGET_CXX_NOCCACHE = $(_TARGET_CXX)
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2010_06
++	default BR2_TARGET_UBOOT_2010_09
+ 	help
+ 	  Select the specific U-Boot version you want to use
  
- ifeq ($(BR2_CCACHE),y)
--TARGET_CC  := $(CCACHE) $(TARGET_CC)
--TARGET_CXX := $(CCACHE) $(TARGET_CXX)
-+TARGET_CC  = $(CCACHE) $(_TARGET_CC)
-+TARGET_CXX = $(CCACHE) $(_TARGET_CXX)
-+else
-+TARGET_CC  = $(_TARGET_CC)
-+TARGET_CXX = $(_TARGET_CXX)
++config BR2_TARGET_UBOOT_2010_09
++	bool "2010.09"
++
+ config BR2_TARGET_UBOOT_2010_06
+ 	bool "2010.06"
+ 
+@@ -42,6 +45,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
+ 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+ 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index 9719207..99615c8 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -11,7 +11,7 @@ U_BOOT_BOARD_NAME:=$(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+ # pick some random stable U-Boot version that will be used just to
+ # build mkimage.
+ ifeq ($(U_BOOT_VERSION),)
+-U_BOOT_VERSION=2010.03
++U_BOOT_VERSION=2010.09
  endif
  
- ifeq ($(BR2_STRIP_strip),y)
+ ifeq ($(U_BOOT_VERSION),custom)
 -- 
 1.7.3.3
