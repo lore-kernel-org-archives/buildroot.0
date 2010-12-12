@@ -1,386 +1,288 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 15:17:03 +0100
-Subject: [Buildroot] [PATCH 07/14] ltp-testsuite: bump version and use
-	autotargets
+Date: Sun, 12 Dec 2010 15:17:01 +0100
+Subject: [Buildroot] [PATCH 05/14] toolchain: rework C++ options
 In-Reply-To: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f074c1bb3e111f2b2173cbffa2f287217767d205.1292163398.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fb633b08677502c0569cfacde6bab08650e9fc74.1292163398.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reworking ltp-testsuite is needed in order to get rid of some
-thread-specific options that will be cleaned-up in the next commit.
+Instead of having BR2_GCC_CROSS_CXX and BR2_INSTALL_LIBSTDCPP, with
+BR2_GCC_CROSS_CXX not being visible (and therefore being useless),
+let's just keep BR2_INSTALL_LIBSTDCPP to enable C++ in the toolchain
+and install C++ libraries on the target.
+
+We also take that opportunity to make BR2_INSTALL_LIBSTDCPP an hidden
+option, which is selected by an option in Buildroot toolchain support
+or an option in External toolchain support, just as we did for other
+toolchain features.
+
+Some work definitely remains to be done :
+
+ - The name BR2_INSTALL_LIBSTDCPP is ugly, but we keep it for the
+   moment in order to avoid changing all packages.
+
+ - We should clarify the other language-related options (Fortran,
+   Java, Objective-C, etc.).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltp-testsuite/Config.in                    |   15 ++-
- ...tp-testsuite-20101031-disable-controllers.patch |   25 ++++
- .../ltp-testsuite-disable-ipv6-tests.patch         |  123 --------------------
- .../ltp-testsuite-enable-openposix-for-nptl.patch  |   33 -----
- .../ltp-testsuite-generate-needs-bash.patch        |    8 --
- .../ltp-testsuite-sched-getaffinity.patch          |   11 --
- .../ltp-testsuite-uclibc-syscalls.patch            |   11 --
- package/ltp-testsuite/ltp-testsuite.mk             |   68 +----------
- 8 files changed, 42 insertions(+), 252 deletions(-)
- create mode 100644 package/ltp-testsuite/ltp-testsuite-20101031-disable-controllers.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-disable-ipv6-tests.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-enable-openposix-for-nptl.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-generate-needs-bash.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-sched-getaffinity.patch
- delete mode 100644 package/ltp-testsuite/ltp-testsuite-uclibc-syscalls.patch
+ package/Makefile.in                              |    2 +-
+ package/lzma/Config.in                           |    4 +-
+ package/rpm/Config.in                            |    4 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk                  |    2 +-
+ toolchain/helpers.mk                             |    2 +-
+ toolchain/toolchain-buildroot/Config.in.2        |   16 ++++++++++++++
+ toolchain/toolchain-common.in                    |   25 ++-------------------
+ toolchain/toolchain-crosstool-ng/Config.in       |    8 +++++++
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
+ toolchain/toolchain-external/Config.in           |   14 ++++++++++++
+ 10 files changed, 49 insertions(+), 30 deletions(-)
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index efe0db7..e059af3 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -1,7 +1,18 @@
--config BR2_PACKAGE_LTP-TESTSUITE
-+config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
--	depends on BROKEN
-+	depends on !BR2_PTHREADS_NONE
-+	# Several tests of LTP use legacy functions that are usually
-+	# not available in uClibc.
-+	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-+		   BR2_TOOLCHAIN_CTNG_glibc	|| \
-+		   BR2_TOOLCHAIN_CTNG_eglibc
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 36bd59f..71c8dbc 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -307,7 +307,7 @@ ifneq ($(BR2_INET_IPV6),y)
+ DISABLE_IPV6= --disable-ipv6
+ endif
+ 
+-ifneq ($(BR2_GCC_CROSS_CXX),y)
++ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TARGET_CONFIGURE_OPTS+=CXX=false
+ endif
+ 
+diff --git a/package/lzma/Config.in b/package/lzma/Config.in
+index 4904721..2b94dde 100644
+--- a/package/lzma/Config.in
++++ b/package/lzma/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LZMA
+ 	bool "lzma"
+-	depends on BR2_GCC_CROSS_CXX
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_DEPRECATED
  	help
- 	  The Linux Test Project provides a huge testsuite for Linux.
+ 	  Lempel Ziv compression method (LZMA) is a compression
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_LZMA
+ 	  http://tukaani.org/lzma/
  
- 	  http://ltp.sourceforge.net/
-+
-+comment "ltp-testsuite requires a glibc toolchain with thread support"
-+	depends on (!BR2_TOOLCHAIN_EXTERNAL_GLIBC && \
-+		    !BR2_TOOLCHAIN_CTNG_glibc	  && \
-+		    !BR2_TOOLCHAIN_CTNG_eglibc)   || \
-+                    BR2_PTHREADS_NONE
-diff --git a/package/ltp-testsuite/ltp-testsuite-20101031-disable-controllers.patch b/package/ltp-testsuite/ltp-testsuite-20101031-disable-controllers.patch
-new file mode 100644
-index 0000000..57d6038
---- /dev/null
-+++ b/package/ltp-testsuite/ltp-testsuite-20101031-disable-controllers.patch
-@@ -0,0 +1,25 @@
-+Disable controllers testcases
-+
-+The cpuset controllers testcases do not build due to bug
-+https://sourceforge.net/tracker/?func=detail&aid=3126942&group_id=3382&atid=103382. Disabling
-+just the cpuset controllers do not seem to be easily possible, and
-+those controller features are rarely used on embedded systems anyway.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ testcases/kernel/Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: ltp-testsuite-20101031/testcases/kernel/Makefile
-+===================================================================
-+--- ltp-testsuite-20101031.orig/testcases/kernel/Makefile
-++++ ltp-testsuite-20101031/testcases/kernel/Makefile
-+@@ -28,7 +28,7 @@
-+ #
-+ # KEEP THIS LIST ALPHABETIZED PLEASE!
-+ ifneq ($(UCLINUX),1)
-+-SUBDIRS		:= containers connectors controllers fs hotplug io ipc mem \
-++SUBDIRS		:= containers connectors fs hotplug io ipc mem \
-+ 		   numa performance_counters power_management pty sched \
-+ 		   security syscalls timers tracing
-+ else
-diff --git a/package/ltp-testsuite/ltp-testsuite-disable-ipv6-tests.patch b/package/ltp-testsuite/ltp-testsuite-disable-ipv6-tests.patch
-deleted file mode 100644
-index 6f1a927..0000000
---- a/package/ltp-testsuite/ltp-testsuite-disable-ipv6-tests.patch
-+++ /dev/null
-@@ -1,123 +0,0 @@
--diff -ur ltp-full-20070228/testcases/network/sctp/func_tests/Makefile ltp-full-20070228-patched/testcases/network/sctp/func_tests/Makefile
----- ltp-full-20070228/testcases/network/sctp/func_tests/Makefile	2007-02-28 22:40:32.000000000 -0600
--+++ ltp-full-20070228-patched/testcases/network/sctp/func_tests/Makefile	2007-07-05 22:40:08.524219814 -0500
--@@ -26,8 +26,6 @@
-- 
-- LOADLIBES += $(LIBS) -lltp -lsctputil -lsctp -lpthread
-- 
---V6FLAGS = -DTEST_V6=1 $(CFLAGS)
---
-- SRCS = $(wildcard *.c)
-- 
-- V4_TARGETS = test_1_to_1_accept_close test_1_to_1_addrs test_1_to_1_connect \
--@@ -42,11 +40,7 @@
--              test_sctp_sendrecvmsg test_sockopt test_tcp_style \
--              test_timetolive test_1_to_1_connectx test_connectx
-- 
---V6_TARGETS = test_basic_v6 test_fragments_v6 test_getname_v6 \
---             test_inaddr_any_v6 test_peeloff_v6 test_sctp_sendrecvmsg_v6 \
---             test_sockopt_v6 test_tcp_style_v6 test_timetolive_v6
---
---all: $(V4_TARGETS) $(V6_TARGETS)
--+all: $(V4_TARGETS)
-- 
-- test_1_to_1_accept_close: test_1_to_1_accept_close.c
-- test_1_to_1_addrs: test_1_to_1_addrs.c
--@@ -68,47 +62,19 @@
-- test_assoc_shutdown: test_assoc_shutdown.c
-- test_autoclose: test_autoclose.c
-- test_basic: test_basic.c
---test_basic_v6: test_basic_v6.o
-- test_connect: test_connect.c
-- test_fragments: test_fragments.c
---test_fragments_v6: test_fragments_v6.o
-- test_getname: test_getname.c
---test_getname_v6: test_getname_v6.o
-- test_inaddr_any: test_inaddr_any.c
---test_inaddr_any_v6: test_inaddr_any_v6.o
-- test_peeloff: test_peeloff.c
---test_peeloff_v6: test_peeloff_v6.o
-- test_recvmsg: test_recvmsg.c
-- test_sctp_sendrecvmsg: test_sctp_sendrecvmsg.c
---test_sctp_sendrecvmsg_v6: test_sctp_sendrecvmsg_v6.o
-- test_sockopt: test_sockopt.c
---test_sockopt_v6: test_sockopt_v6.o
-- test_tcp_style: test_tcp_style.c
---test_tcp_style_v6: test_tcp_style_v6.o
-- test_timetolive: test_timetolive.c
---test_timetolive_v6: test_timetolive_v6.o
-- test_1_to_1_connectx: test_1_to_1_connectx.c
-- test_connectx: test_connectx.c
-- 
---test_basic_v6.o: test_basic.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_fragments_v6.o: test_fragments.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_getname_v6.o: test_getname.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_inaddr_any_v6.o: test_inaddr_any.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_peeloff_v6.o: test_peeloff.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_sctp_sendrecvmsg_v6.o: test_sctp_sendrecvmsg.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_sockopt_v6.o: test_sockopt.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_tcp_style_v6.o: test_tcp_style.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---test_timetolive_v6.o: test_timetolive.c
---	$(CC) -c $(V6FLAGS) -o $@ $^
---
-- v4test: ${V4_TARGETS}
-- 	@for a in $^;                           \
-- 	do                                      \
--@@ -123,26 +89,9 @@
-- 		fi;                             \
-- 	done
-- 
---v6test: ${V6_TARGETS}
---	@for a in $^;                           \
---	do                                      \
---		echo "./$$a";                   \
---		if ./$$a;                       \
---		then                            \
---			echo "$$a passes";      \
---			echo "";                \
---		else                            \
---			echo "$$a fails";       \
---			exit 1;                 \
---		fi;                             \
---	done
---
-- install:
-- 	ln -f $(V4_TARGETS) ../../../bin
---	ln -f $(V6_TARGETS) ../../../bin
-- 
-- clean:
-- 	rm -f $(V4_TARGETS)
---	rm -f $(V6_TARGETS)
---	rm -f ../../../bin/$(V6_TARGETS)
-- 	rm -f *.o
--diff -ur ltp-full-20070228/testcases/network/stress/ns-tools/Makefile ltp-full-20070228-patched/testcases/network/stress/ns-tools/Makefile
----- ltp-full-20070228/testcases/network/stress/ns-tools/Makefile	2007-02-28 22:40:31.000000000 -0600
--+++ ltp-full-20070228-patched/testcases/network/stress/ns-tools/Makefile	2007-07-05 22:39:27.593059603 -0500
--@@ -10,9 +10,8 @@
-- 	ns-echoclient
-- 
-- BINS=ns-tcpserver ns-tcpclient ns-udpserver ns-udpclient \
---     ns-icmpv4_sender ns-icmpv6_sender \
--+     ns-icmpv4_sender \
--      ns-udpsender \
---     ns-icmp_redirector \
--      ns-mcast_receiver ns-igmp_querier \
--      ns-mcast_join 
-- 
--diff -ur ltp-full-20070228/tools/Makefile ltp-full-20070228-patched/tools/Makefile
----- ltp-full-20070228/tools/Makefile	2007-02-28 22:40:41.000000000 -0600
--+++ ltp-full-20070228-patched/tools/Makefile	2007-07-05 22:39:27.593059603 -0500
--@@ -1,4 +1,4 @@
---SUBDIRS = apicmds genload netpipe-2.4 netpipe-2.4-ipv6 #top-LTP
--+SUBDIRS = apicmds genload netpipe-2.4 #top-LTP
-- 
-- CFLAGS+= -Wall -I../include
-- LOADLIBES+= -L../lib -lltp
-diff --git a/package/ltp-testsuite/ltp-testsuite-enable-openposix-for-nptl.patch b/package/ltp-testsuite/ltp-testsuite-enable-openposix-for-nptl.patch
-deleted file mode 100644
-index ebb888c..0000000
---- a/package/ltp-testsuite/ltp-testsuite-enable-openposix-for-nptl.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--diff -ur ltp-full-20060615/testcases/Makefile ltp-full-20060615-patched/testcases/Makefile
----- ltp-full-20060615/testcases/Makefile	2006-01-31 08:48:38.000000000 -0600
--+++ ltp-full-20060615-patched/testcases/Makefile	2006-07-04 22:20:40.298850250 -0500
--@@ -1,4 +1,4 @@
---SUBDIRS = `ls */Makefile | sed "s/Makefile//g" | grep -v open | grep -v pounder | grep -v DOTS`
--+SUBDIRS = `ls */Makefile | sed "s/Makefile//g" | grep -v open_hpi | grep -v pounder | grep -v DOTS`
-- UCLINUX_SUBDIRS = kernel
-- 
-- all:
--diff -ur ltp-full-20060615/testcases/open_posix_testsuite/LDFLAGS ltp-full-20060615-patched/testcases/open_posix_testsuite/LDFLAGS
----- ltp-full-20060615/testcases/open_posix_testsuite/LDFLAGS	2005-06-03 11:29:49.000000000 -0500
--+++ ltp-full-20060615-patched/testcases/open_posix_testsuite/LDFLAGS	2006-07-04 22:21:34.322226500 -0500
--@@ -14,3 +14,5 @@
-- # allow for the NPTL-specific compilation (used in some test cases)
-- # Note: this sometimes require the package nptl-devel.*.rpm to be installed.
-- #-I /usr/include/nptl -L /usr/lib/nptl -D_XOPEN_SOURCE=600 -lpthread -lrt -lm
--+
--+-D_XOPEN_SOURCE=600 -lpthread -lrt -lm -D_GNU_SOURCE
--diff -ur ltp-full-20060615/testcases/open_posix_testsuite/Makefile ltp-full-20060615-patched/testcases/open_posix_testsuite/Makefile
----- ltp-full-20060615/testcases/open_posix_testsuite/Makefile	2006-05-21 18:38:52.000000000 -0500
--+++ ltp-full-20060615-patched/testcases/open_posix_testsuite/Makefile	2006-07-04 22:22:16.660872500 -0500
--@@ -45,7 +45,10 @@
-- TIMEOUT = $(top_builddir)/t0 $(TIMEOUT_VAL)
-- 
-- 
---all: build-tests run-tests 
--+all: build-tests $(top_builddir)/t0
--+
--+install:
--+	@echo " "
-- 
-- build-tests: $(BUILD_TESTS:.c=.test)
-- run-tests: $(RUN_TESTS:.test=.run-test)
-diff --git a/package/ltp-testsuite/ltp-testsuite-generate-needs-bash.patch b/package/ltp-testsuite/ltp-testsuite-generate-needs-bash.patch
-deleted file mode 100644
-index 1f28956..0000000
---- a/package/ltp-testsuite/ltp-testsuite-generate-needs-bash.patch
-+++ /dev/null
-@@ -1,8 +0,0 @@
----- ltp-full-20061121/testcases/network/generate.sh.orig	2006-12-07 22:21:56.000000000 -0700
--+++ ltp-full-20061121/testcases/network/generate.sh	2006-12-07 22:22:05.000000000 -0700
--@@ -1,4 +1,4 @@
---#!/bin/sh
--+#!/bin/bash
-- #
-- #   Copyright (c) International Business Machines  Corp., 2001
-- #
-diff --git a/package/ltp-testsuite/ltp-testsuite-sched-getaffinity.patch b/package/ltp-testsuite/ltp-testsuite-sched-getaffinity.patch
-deleted file mode 100644
-index 9e4a9d8..0000000
---- a/package/ltp-testsuite/ltp-testsuite-sched-getaffinity.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- ltp-full-20090630/testcases/kernel/syscalls/sched_getaffinity/Makefile	2009-06-15 19:38:04.000000000 +0100
--+++ ltp-full-20090630.mod/testcases/kernel/syscalls/sched_getaffinity/Makefile	2009-07-02 15:02:33.000000000 +0100
--@@ -16,7 +16,7 @@
-- #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-- #
-- 
---CFLAGS += -I../../../../include -Wall
--+CFLAGS += -I../../../../include -Wall -D_GNU_SOURCE
-- LDLIBS += -L../../../../lib -lltp
-- 
-- SRCS    = $(wildcard *.c)
-diff --git a/package/ltp-testsuite/ltp-testsuite-uclibc-syscalls.patch b/package/ltp-testsuite/ltp-testsuite-uclibc-syscalls.patch
-deleted file mode 100644
-index 866a56c..0000000
---- a/package/ltp-testsuite/ltp-testsuite-uclibc-syscalls.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- ltp-full-20090630/testcases/kernel/syscalls/Makefile	2009-02-26 11:37:28.000000000 +0000
--+++ ltp-full-20090630.mod/testcases/kernel/syscalls/Makefile	2009-07-02 14:57:30.000000000 +0100
--@@ -25,7 +25,7 @@
-- #
-- # Commented this out since there are directories here we don't want built by default
-- #
---SUBDIR = `ls */Makefile | sed "s/Makefile//g"` 
--+SUBDIR = `ls */Makefile | sed "s/Makefile//g" | grep -vE "^clock_nanosleep|quotactl|sched_getaffinity|sigreturn|unshare"` 
-- UCLINUX_SUBDIR = `ls */Makefile | sed "s/Makefile//g" | grep -vE "^fork|epoll|capget|capset|chmod|chown|llseek|nftw|clone|profil|getcontext|remap_file_pages"`
-- 
-- all:
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 7be12fd..8f2a986 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -3,68 +3,8 @@
- # ltp-testsuite
- #
- #############################################################
--LTP_TESTSUITE_VERSION:=20090630
--LTP_TESTSUITE_SOURCE:=ltp-full-$(LTP_TESTSUITE_VERSION).tgz
--LTP_TESTSUITE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ltp
--LTP_TESTSUITE_CAT:=$(ZCAT)
--LTP_TESTSUITE_ROOT:=$(TARGET_DIR)/root
--LTP_TESTSUITE_DIR:=$(LTP_TESTSUITE_ROOT)/ltp-full-$(LTP_TESTSUITE_VERSION)
-+LTP_TESTSUITE_VERSION = 20101031
-+LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
-+LTP_TESTSUITE_SITE    = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ltp
+ comment "lzma requires a toolchain with C++ support"
+-        depends on !BR2_GCC_CROSS_CXX && BR2_DEPRECATED
++        depends on !BR2_INSTALL_LIBSTDCPP && BR2_DEPRECATED
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index 448606c..8d4c6a3 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -25,11 +25,11 @@ config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
+ config BR2_PACKAGE_RPM_XZ_PAYLOADS
+ 	bool "support for xz payloads"
+ 	depends on BR2_PACKAGE_RPM
+-	depends on BR2_GCC_CROSS_CXX
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Support for xz payloads in RPM.
  
--#
--# Enable patches based upon different toolchain configuration options.
--#
--LTP_PATCHES:=ltp-testsuite-generate-needs-bash.patch \
--	     ltp-testsuite-sh-is-not-C-code.patch \
--	     ltp-testsuite-sched-getaffinity.patch \
--	     ltp-testsuite-uclibc-syscalls.patch
+ comment "xz payload support requires a toolchain with c++ support"
+-	depends on !BR2_GCC_CROSS_CXX
++	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+ 
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index af085f7..eec6523 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -67,7 +67,7 @@ GCC_STAGING_PREREQ+=$(STAGING_DIR)/usr/lib/libc.a
+ GCC_TARGET_LANGUAGES:=c
+ 
+ GCC_CROSS_LANGUAGES:=c
+-ifeq ($(BR2_GCC_CROSS_CXX),y)
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ GCC_CROSS_LANGUAGES:=$(GCC_CROSS_LANGUAGES),c++
+ endif
+ ifeq ($(BR2_GCC_CROSS_FORTRAN),y)
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 24f379d..33f0484 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -220,7 +220,7 @@ check_arm_abi = \
+ check_cplusplus = \
+ 	$(TARGET_CXX) -v > /dev/null 2>&1 ; \
+ 	if test $$? -ne 0 ; then \
+-		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
++		echo "C++ support is selected but is not available in external toolchain" ; \
+ 		exit 1 ; \
+ 	fi
+ 
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 2a8dcf5..cf426ee 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -51,6 +51,22 @@ config BR2_TOOLCHAIN_BUILDROOT_PROGRAM_INVOCATION
+ 	  (like tar and coreutils) utilize these for extra useful
+ 	  output, but in general are not required.
+ 
++config BR2_TOOLCHAIN_BUILDROOT_CXX
++	bool "Enable C++ support"
++	select BR2_INSTALL_LIBSTDCPP
++	depends on !(! BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE && \
++		       BR2_TOOLCHAIN_BUILDROOT_LOCALE    && \
++		       BR2_UCLIBC_VERSION_0_9_31)
++	help
++	  Enable this option if you want your toolchain to support the
++	  C++ language and you want C++ libraries to be installed on
++	  your target system.
++
++comment "C++ support broken in uClibc 0.9.31 with locale enabled with gcc 4.2"
++	depends on !BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE && \
++		    BR2_TOOLCHAIN_BUILDROOT_LOCALE    && \
++		    BR2_UCLIBC_VERSION_0_9_31
++
+ source "toolchain/elf2flt/Config.in"
+ source "toolchain/mklibs/Config.in"
+ source "toolchain/sstrip/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index ea47466..2c54acd 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -23,6 +23,9 @@ config BR2_ENABLE_LOCALE
+ config BR2_PROGRAM_INVOCATION
+ 	bool
+ 
++config BR2_INSTALL_LIBSTDCPP
++	bool
++
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
+@@ -108,28 +111,6 @@ choice
+ 		depends on BR2_UCLIBC_VERSION_SNAPSHOT
+ endchoice
+ 
+-config BR2_GCC_CROSS_CXX
+-	bool
+-	help
+-	  If you are building your own toolchain and want to build 
+-	  a C++ cross-compiler this needs to be enabled.
+-	  If you have an external binary toolchain that has a C++ compiler
+-	  and you want to use it then you need to enable this option.
 -
--ifeq ($(BR2_PTHREADS_NATIVE),y)
--LTP_PATCHES+=ltp-testsuite-enable-openposix-for-nptl.patch
--endif
--ifeq ($(BR2_EXT_PTHREADS_NATIVE),y)
--LTP_PATCHES+=ltp-testsuite-enable-openposix-for-nptl.patch
--endif
--ifneq ($(BR2_INET_IPV6),y)
--LTP_PATCHES+=ltp-testsuite-disable-ipv6-tests.patch
--endif
+-config BR2_INSTALL_LIBSTDCPP
+-	bool "Build/install c++ compiler and libstdc++?"
+-	select BR2_GCC_CROSS_CXX
+-	depends on !(! BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31)
+-	help
+-	  If you are building your own toolchain and want to build and install
+-	  the C++ compiler and library then you need to enable this option.
+-	  If you have an external toolchain that has been built with C++ 
+-	  support and you want to use the compiler / library then you need 
+-	  to select this option.
 -
--$(DL_DIR)/$(LTP_TESTSUITE_SOURCE):
--	 $(call DOWNLOAD,$(LTP_TESTSUITE_SITE),$(LTP_TESTSUITE_SOURCE))
+-comment "C++ support broken in uClibc 0.9.31 with locale enabled with gcc 4.2"
+-	depends on !BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE && BR2_ENABLE_LOCALE && BR2_UCLIBC_VERSION_0_9_31
 -
--ltp-testsuite-source: $(DL_DIR)/$(LTP_TESTSUITE_SOURCE)
--
--$(LTP_TESTSUITE_DIR)/Makefile: $(DL_DIR)/$(LTP_TESTSUITE_SOURCE)
--	mkdir -p $(LTP_TESTSUITE_ROOT)
--	$(LTP_TESTSUITE_CAT) $(DL_DIR)/$(LTP_TESTSUITE_SOURCE) | tar -C $(LTP_TESTSUITE_ROOT) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(LTP_TESTSUITE_DIR) package/ltp-testsuite/ $(LTP_PATCHES)
--	touch -c $@
--
--$(LTP_TESTSUITE_DIR)/.compiled: $(LTP_TESTSUITE_DIR)/Makefile
--	$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS_COMPILER=$(TARGET_CROSS) \
--		-C $(LTP_TESTSUITE_DIR) all
--	touch $@
--
--$(LTP_TESTSUITE_DIR)/.installed: $(LTP_TESTSUITE_DIR)/.compiled
--	# Use fakeroot to pretend to do 'make install' as root
--	echo '$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS_COMPILER=$(TARGET_CROSS) ' \
--			'-C $(LTP_TESTSUITE_DIR) install' \
--			> $(BUILD_DIR)/.fakeroot.ltp
--	touch $@
--
--ltp-testsuite: host-fakeroot $(LTP_TESTSUITE_DIR)/.installed
--
--ltp-testsuite-clean:
--	-$(MAKE) -C $(LTP_TESTSUITE_DIR) clean
--
--ltp-testsuite-dirclean:
--	rm -rf $(LTP_TESTSUITE_DIR)
--
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_LTP-TESTSUITE),y)
--TARGETS+=ltp-testsuite
--endif
-+$(eval $(call AUTOTARGETS,package,ltp-testsuite))
-\ No newline at end of file
+ config BR2_TARGET_OPTIMIZATION
+ 	string "Target Optimizations"
+ 	default "-pipe"
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index 4ee665d..82e223d 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -98,4 +98,12 @@ config BR2_TOOLCHAIN_CTNG_uClibc_PROGRAM_INVOCATION
+ 
+ endif # BR2_TOOLCHAIN_CTNG_uClibc
+ 
++config BR2_TOOLCHAIN_CTNG_CXX
++	bool "Enable C++ support"
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable this option if you want your toolchain to support the
++	  C++ language and you want C++ libraries to be installed on
++	  your target system.
++
+ endif # BR2_TOOLCHAIN_CTNG
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index 1c5e864..817a1f7 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -207,7 +207,7 @@ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_PKGVERSION)="(.*)":\1="crosstool-NG $(CTNG_
+ ifneq ($(call qstrip,$(BR2_PACKAGE_GDB_SERVER))$(call qstrip,$(BR2_PACKAGE_GDB_HOST)),)
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_DEBUG_gdb)=.*:\# \1 is not set:;
+ endif
+-ifneq ($(call qstrip,$(BR2_INSTALL_LIBSTDCPP)),)
++ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_CXX)),y)
+ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_CC_LANG_CXX) is not set:\1=y:;
+ else
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_LANG_CXX)=.*:\# \1 is not set:;
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 59fcb52..bd22e0c 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -7,6 +7,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	bool "CodeSourcery ARM 2010.09"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the ARM architecture, from CodeSourcery. It
+ 	  uses gcc 4.5.1, binutils 2.20, glibc 2.11 and gdb 7.2.50,
+@@ -20,6 +21,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+ 	bool "CodeSourcery ARM 2010q1"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the ARM architecture, from CodeSourcery. It
+ 	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, gdb 7.0.50 and
+@@ -33,6 +35,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
+ 	bool "CodeSourcery ARM 2009q1"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the ARM architecture, from CodeSourcery. It
+ 	  uses gcc 4.3.3, binutils 2.19, glibc 2.8 and gdb 6.8 and
+@@ -46,6 +49,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	bool "CodeSourcery MIPS 4.4"
+ 	depends on BR2_mips || BR2_mipsel
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the MIPS architecture, from CodeSourcery. It
+ 	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, uClibc 0.9.30 and
+@@ -68,6 +72,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	bool "CodeSoucery PowerPC 2010.09"
+ 	depends on BR2_powerpc
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the PowerPC architecture, from
+ 	  CodeSourcery. It uses gcc 4.5.1, binutils 2.20, glibc 2.11,
+@@ -85,6 +90,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	bool "CodeSoucery PowerPC 2010.09"
+ 	depends on BR2_sh
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Toolchain for the SuperH architecture, from CodeSourcery. It
+ 	  uses gcc 4.5.1, binutils 2.20, glibc 2.11, uClibc 0.9.30,
+@@ -216,6 +222,14 @@ config BR2_TOOLCHAIN_EXTERNAL_PROGRAM_INVOCATION
+ 
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CXX
++	bool "Toolchain has C++ support?"
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Select this option if your external toolchain has C++
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ endif # BR2_TOOLCHAIN_EXTERNAL
 -- 
 1.7.0.4
