@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 14:33:58 +0100
-Subject: [Buildroot] [PATCH 05/15] toolchain: rework C++ options
-In-Reply-To: <201012121125.24507.yann.morin.1998@anciens.enib.fr>
+Date: Sun, 12 Dec 2010 14:35:59 +0100
+Subject: [Buildroot] [PATCH 13/15] toolchain: expose thread options in
+ the Crosstool-NG backend
+In-Reply-To: <201012121137.22698.yann.morin.1998@anciens.enib.fr>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<e24f28446cde0a4d1dad1bfb5e55c070c9345770.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<201012121125.24507.yann.morin.1998@anciens.enib.fr>
-Message-ID: <20101212143358.596d8d45@surf>
+	<ebd285ae70fb69572d98ea560e2180aecf57ffd7.1291541115.git.thomas.petazzoni@free-electrons.com>
+	<201012121137.22698.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20101212143559.45cbf31b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Dec 2010 11:25:24 +0100
+On Sun, 12 Dec 2010 11:37:22 +0100
 "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
-> > +config BR2_TOOLCHAIN_CTNG_C_PLUS_PLUS
+> > s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_OLD).*:\# \2 is not settted:;
 > 
-> C_PLUS_PLUS --> CXX
+> 'settted' ?
+
+Leftover from a crappy debugging session. Thanks for spotting this, I
+fixed it.
+
+> > +CTNG_FIX_DOT_CONFIG_SED +=
+> > s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_NEW).*:\2=y:;
+> > +  endif
+> > + endif
+> > +else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NPTL)),)
+> > +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NPTL).*:\2=y:;
+> > +else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NONE)),)
+> > +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NONE).*:\2=y:;
+> > +endif
+> > +
+> >  #--------------
+> >  # And the specials for paths
+> >  CTNG_FIX_DOT_CONFIG_PATHS_SED +=
+> > s:^(CT_PREFIX_DIR)=.*:\1="$(TOOLCHAIN_DIR)":;
 > 
-> 'CXX' is a common, and well understood, variable name for 'C++'.
-> Besides, it is much shorter to write. :-)
+> I am not so sure what to say about this one...
+> 
+> There is already a place where we check the C library, on line 223
+> (upstream) and I would say that should go there.
 
-Done.
-
-> I think this option should be used in the .mk (yes, I know, I should
-> have run a real git send-email). Could you add this hunk:
-
-Done. As the change was small, I just squashed it into the existing
-5/15 patch.
+I am not sure how it would fit in the existing checks. Can we fix this
+as a separate patchset ?
 
 Thanks!
 
