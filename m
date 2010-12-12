@@ -1,51 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 12:34:47 +0100
-Subject: [Buildroot] [PATCH 08/15] toolchain: rework thread options
-In-Reply-To: <874oaklyih.fsf@macbook.be.48ers.dk>
+Date: Sun, 12 Dec 2010 14:33:58 +0100
+Subject: [Buildroot] [PATCH 05/15] toolchain: rework C++ options
+In-Reply-To: <201012121125.24507.yann.morin.1998@anciens.enib.fr>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<99d8d624018cee0c619bc147ed4ab8eaeaf50828.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<874oaklyih.fsf@macbook.be.48ers.dk>
-Message-ID: <20101212123447.2be7c84c@surf>
+	<e24f28446cde0a4d1dad1bfb5e55c070c9345770.1291541115.git.thomas.petazzoni@free-electrons.com>
+	<201012121125.24507.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20101212143358.596d8d45@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Dec 2010 23:45:26 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Sun, 12 Dec 2010 11:25:24 +0100
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
 
->  Thomas> +choice
->  Thomas> +	prompt "Thread library implementation"
->  Thomas> +	default BR2_PTHREADS_OLD
->  Thomas> +	help
->  Thomas> +	  If you are building your own toolchain then
->  Thomas> select the type
+> > +config BR2_TOOLCHAIN_CTNG_C_PLUS_PLUS
 > 
-> This is now only shown if we're building a toolchain, so this part of
-> the help text could go.
-
-Fixed.
-
->  Thomas> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
->  Thomas> +	bool "Toolchain has threads support ?"
+> C_PLUS_PLUS --> CXX
 > 
-> No space before '?'
+> 'CXX' is a common, and well understood, variable name for 'C++'.
+> Besides, it is much shorter to write. :-)
 
-Ditto.
+Done.
 
->  Thomas> +	select BR2_TOOLCHAIN_HAS_THREADS
->  Thomas> +	help
->  Thomas> +	  Enable this option if you want your external
->  Thomas> toolchain has
->  Thomas> +	  support for C++. If you don't know, leave the
->  Thomas> default value,
->  Thomas> +	  Buildroot will tell you if it's correct or not.
-> 
-> Cut'n'paste? ;) It shouldn't be about C++ and reworded.
+> I think this option should be used in the .mk (yes, I know, I should
+> have run a real git send-email). Could you add this hunk:
 
-Indeed, bad cut and paste. Fixed.
+Done. As the change was small, I just squashed it into the existing
+5/15 patch.
+
+Thanks!
 
 Thomas
 -- 
