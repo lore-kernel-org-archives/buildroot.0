@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 13 Dec 2010 00:42:03 +0100
-Subject: [Buildroot] [git commit master 1/1] udev: ensure startup script is
-	well installed
-Message-ID: <20101212234309.B60898E0D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] sdl_gfx: avoid using non
+	reevaluated $(STAGING_DIR)
+Message-ID: <20101212234310.46D018E0D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd182cae65c0075c16910dc6b990fc3f8abbd776
+commit: http://git.buildroot.net/buildroot/commit/?id=b8c860992a408e7d650af369b39cc1c5edef5980
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In case /etc/init.d does not exists.
-
-[Peter: use install -D]
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES              |    4 ++--
- package/udev/udev.mk |    3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ CHANGES                    |    2 +-
+ package/sdl_gfx/sdl_gfx.mk |    7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 11c2bec..d5c40c5 100644
+index a735b06..c958307 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -4,8 +4,8 @@
- 	compilation, and cache is stored in ~/.buildroot-ccache.
+@@ -5,7 +5,7 @@
  
  	Updated/fixed packages: busybox, dbus, cloop, gdk-pixbuf,
--	hostapd, i2c-tools, libconfig, m4, openssh, openssl, qt, usbutils, xz,
--	zlib
-+	hostapd, i2c-tools, libconfig, m4, openssh, openssl, qt,
-+	udev, usbutils, xz, zlib
+ 	hostapd, i2c-tools, libconfig, m4, openssh, openssl, qt,
+-	sdl_sound, udev, usbutils, xz, zlib
++	sdl_gfx, sdl_sound, udev, usbutils, xz, zlib
  
  	New packages: dhrystone, lsuio, rsh-redone, whetstone
  
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 90dbdce..4b61ce4 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -88,7 +88,8 @@ define UDEV_INSTALL_TARGET_CMDS
- 		LDFLAGS="-warn-common" \
- 		USE_LOG=false USE_SELINUX=false \
- 		udevdir=$(UDEV_ROOT) EXTRAS="$(UDEV_BUILD_EXTRAS)" -C $(@D) install
--	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d
-+	$(INSTALL) -m 0755 -D package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/etc/udev/rules.d
- 	$(INSTALL) -m 0644 $(@D)/etc/udev/frugalware/* $(TARGET_DIR)/etc/udev/rules.d
- 	( grep udev_root $(TARGET_DIR)/etc/udev/udev.conf > /dev/null 2>&1 || echo 'udev_root=/dev' >> $(TARGET_DIR)/etc/udev/udev.conf )
- 	install -m 0755 -D $(@D)/udevstart $(TARGET_DIR)/sbin/udevstart
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index bd4e3f1..bbfd99f 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -12,9 +12,10 @@ SDL_GFX_INSTALL_TARGET:=YES
+ 
+ SDL_GFX_DEPENDENCIES:=sdl
+ 
+-SDL_GFX_CONF_OPT:=--with-sdl-prefix=$(STAGING_DIR)/usr \
+-		--disable-sdltest \
+-		--enable-static
++SDL_GFX_CONF_OPT = \
++	--with-sdl-prefix=$(STAGING_DIR)/usr \
++	--disable-sdltest \
++	--enable-static
+ 
+ # enable mmx for newer x86's
+ ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
 -- 
 1.7.2.2
