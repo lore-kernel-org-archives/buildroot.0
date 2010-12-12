@@ -1,58 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 22:53:52 +0100
-Subject: [Buildroot] [PATCH 06/19] target: support generic getty with
-	sysvinit inittabs
+Date: Sun, 12 Dec 2010 22:53:55 +0100
+Subject: [Buildroot] [PATCH 09/19] memtester: convert to gentargets and bump
+	to 4.2.1
 In-Reply-To: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20f4577914da6a1fca0f640bc01ecb2ac58ea5c3.1292190675.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3746067dbbd9c37149a8dce29e48b4d45dafc95a.1292190675.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In sysvinit inittab the "id" field (first field) must be no longer
-than 4 bytes, and is not used by init to determine the output
-terminal. Therefore, we adjust the strategy used to modify the inittab
-file according to the getty configuration.
+From: Martin Banky <martin.banky@gmail.com>
 
+Also, memtester requires largefile support
+
+[ Thomas: add patch to fix memtester's Makefile at installation
+  stage. Bump to 4.2.1. ]
+
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/generic/Makefile.in |   14 ++++++++++++--
- 1 files changed, 12 insertions(+), 2 deletions(-)
+ package/memtester/Config.in                        |    4 ++
+ .../memtester/memtester-4.2.1-makefile-fix.patch   |   23 ++++++++
+ package/memtester/memtester.mk                     |   54 +++++++-------------
+ 3 files changed, 45 insertions(+), 36 deletions(-)
+ create mode 100644 package/memtester/memtester-4.2.1-makefile-fix.patch
 
-diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index 1ef2a9d..3a750c3 100644
---- a/target/generic/Makefile.in
-+++ b/target/generic/Makefile.in
-@@ -11,10 +11,16 @@ target-generic-issue:
- 	mkdir -p $(TARGET_DIR)/etc
- 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
+diff --git a/package/memtester/Config.in b/package/memtester/Config.in
+index 7a504dc..82769f5 100644
+--- a/package/memtester/Config.in
++++ b/package/memtester/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_MEMTESTER
+ 	bool "memtester"
++	depends on BR2_LARGEFILE
+ 	help
+ 	  A userspace utility for testing the memory subsystem for faults.
  
--target-generic-getty:
-+target-generic-getty-busybox:
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
- 		$(TARGET_DIR)/etc/inittab
- 
-+# In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
-+# skip the "tty" part and keep only the remaining.
-+target-generic-getty-sysvinit:
-+	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
-+		$(TARGET_DIR)/etc/inittab
+ 	  http://pyropus.ca/software/memtester/
 +
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- TARGETS += target-generic-hostname
- endif
-@@ -24,5 +30,9 @@ TARGETS += target-generic-issue
- endif
++comment "memtester requires a toolchain with LARGEFILE support"
++       depends on !BR2_LARGEFILE
+diff --git a/package/memtester/memtester-4.2.1-makefile-fix.patch b/package/memtester/memtester-4.2.1-makefile-fix.patch
+new file mode 100644
+index 0000000..6f1481b
+--- /dev/null
++++ b/package/memtester/memtester-4.2.1-makefile-fix.patch
+@@ -0,0 +1,23 @@
++The a/{b,c} construct doesn't work within make, so let's split the
++creation of the installation directories in two commands.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile |    3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++Index: memtester-4.2.1/Makefile
++===================================================================
++--- memtester-4.2.1.orig/Makefile
+++++ memtester-4.2.1/Makefile
++@@ -25,8 +25,9 @@
++ all: memtester
++ 
++ install: all
++-	mkdir -m 755 -p $(INSTALLPATH)/{bin,man/man8}
+++	mkdir -m 755 -p $(INSTALLPATH)/bin
++ 	install -m 755 memtester $(INSTALLPATH)/bin/
+++	mkdir -m 755 -p $(INSTALLPATH)/man/man8
++ 	gzip -c memtester.8 >memtester.8.gz ; install -m 644 memtester.8.gz $(INSTALLPATH)/man/man8/
++ 
++ auto-ccld.sh: \
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index ed8470b..a92c5d2 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -3,45 +3,27 @@
+ # memtester
+ #
+ #############################################################
+-MEMTESTER_VERSION:=4.0.6
+-MEMTESTER_SOURCE:=memtester-$(MEMTESTER_VERSION).tar.gz
+-MEMTESTER_SITE:=http://pyropus.ca/software/memtester/old-versions/
+-MEMTESTER_DIR:=$(BUILD_DIR)/memtester-$(MEMTESTER_VERSION)
+-MEMTESTER_BINARY:=memtester
+-MEMTESTER_TARGET_BINARY:=usr/bin/memtester
++MEMTESTER_VERSION = 4.2.1
++MEMTESTER_SOURCE = memtester-$(MEMTESTER_VERSION).tar.gz
++MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions/
  
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
--TARGETS += target-generic-getty
-+ifeq ($(BR2_PACKAGE_SYSVINIT),y)
-+TARGETS += target-generic-getty-sysvinit
-+else
-+TARGETS += target-generic-getty-busybox
-+endif
- endif
+-$(DL_DIR)/$(MEMTESTER_SOURCE):
+-	 $(call DOWNLOAD,$(MEMTESTER_SITE),$(MEMTESTER_SOURCE))
++MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+ 
+-memtester-source: $(DL_DIR)/$(MEMTESTER_SOURCE)
++define MEMTESTER_BUILD_CMDS
++	$(SED) "s,cc,$(TARGET_CC)," $(@D)/conf-*
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
+ 
+-$(MEMTESTER_DIR)/.unpacked: $(DL_DIR)/$(MEMTESTER_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(MEMTESTER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	#toolchain/patch-kernel.sh $(MEMTESTER_DIR) package/memtester/ memtester\*.patch
+-	$(SED) "s,cc,$(TARGET_CC)," $(MEMTESTER_DIR)/conf-*
+-	touch $(MEMTESTER_DIR)/.unpacked
++define MEMTESTER_INSTALL_TARGET_CMDS
++	$(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
++endef
+ 
+-$(MEMTESTER_DIR)/$(MEMTESTER_BINARY): $(MEMTESTER_DIR)/.unpacked
+-	$(MAKE) -C $(MEMTESTER_DIR)
+-	$(STRIPCMD) $(MEMTESTER_DIR)/$(MEMTESTER_BINARY)
++define MEMTESTER_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/memtester
++endef
+ 
+-$(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY): $(MEMTESTER_DIR)/$(MEMTESTER_BINARY)
+-	$(INSTALL) -m 0755 -D $(MEMTESTER_DIR)/$(MEMTESTER_BINARY) $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
++define MEMTESTER_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
+ 
+-memtester: $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
+-
+-memtester-clean:
+-	rm -f $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
+-	-$(MAKE) -C $(MEMTESTER_DIR) clean
+-
+-memtester-dirclean:
+-	rm -rf $(MEMTESTER_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_MEMTESTER),y)
+-TARGETS+=memtester
+-endif
++$(eval $(call GENTARGETS,package,memtester))
 -- 
 1.7.0.4
