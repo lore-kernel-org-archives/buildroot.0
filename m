@@ -1,38 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Dec 2010 23:59:23 +0100
-Subject: [Buildroot] [PATCH 05/17] ifplugd: ensure target directories
-	exist before copying into
-In-Reply-To: <1291802049-18764-6-git-send-email-llandwerlin@gmail.com>
-	(llandwerlin@gmail.com's message of "Wed, 8 Dec 2010 10:53:57 +0100")
+Date: Mon, 13 Dec 2010 00:00:20 +0100
+Subject: [Buildroot] [PATCH 06/17] i2c-tools: ensure binaries are
+	installed in the right place
+In-Reply-To: <20101208201055.3debc42f@surf> (Thomas Petazzoni's message of
+	"Wed, 8 Dec 2010 20:10:55 +0100")
 References: <1291802049-18764-1-git-send-email-llandwerlin@gmail.com>
-	<1291802049-18764-6-git-send-email-llandwerlin@gmail.com>
-Message-ID: <87zksak378.fsf@macbook.be.48ers.dk>
+	<1291802049-18764-7-git-send-email-llandwerlin@gmail.com>
+	<20101208201055.3debc42f@surf>
+Message-ID: <87vd2yk35n.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
- llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
- llandwerlin> ---
- llandwerlin>  package/ifplugd/ifplugd.mk |    1 +
- llandwerlin>  1 files changed, 1 insertions(+), 0 deletions(-)
+ Thomas> On Wed,  8 Dec 2010 10:53:58 +0100
+ Thomas> llandwerlin at gmail.com wrote:
 
- llandwerlin> diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
- llandwerlin> index 5e66cea..0be903c 100644
- llandwerlin> --- a/package/ifplugd/ifplugd.mk
- llandwerlin> +++ b/package/ifplugd/ifplugd.mk
- llandwerlin> @@ -22,6 +22,7 @@ define IFPLUGD_INSTALL_FIXUP
- llandwerlin>  		$(INSTALL) $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/; \
- llandwerlin>  		$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
- llandwerlin>  	fi
- llandwerlin> +	mkdir -p $(TARGET_DIR)/etc/ifplugd
+ >> define I2C_TOOLS_INSTALL_TARGET_CMDS
+ >> +	$(INSTALL) -m 755 -d $(TARGET_DIR)/usr/bin
 
-Hmm, just a few lines above we have install -d $(TARGET_DIR)/etc/ifplugd
-- Isn't that working for you?
+ Thomas> In some packages you're doing mkdir -p, in others $(INSTALL) -m 755 -d.
+ Thomas> Maybe we should standardize on one or the other ?
+
+Actually, the nicest would imho be to use install -D (E.G. create parent
+dirs if not available).
 
 -- 
 Bye, Peter Korsgaard
