@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 12:31:50 +0100
-Subject: [Buildroot] [PATCH 07/15] ltp-testsuite: bump version and use
-	autotargets
-In-Reply-To: <87bp4slyo4.fsf@macbook.be.48ers.dk>
+Date: Sun, 12 Dec 2010 12:34:47 +0100
+Subject: [Buildroot] [PATCH 08/15] toolchain: rework thread options
+In-Reply-To: <874oaklyih.fsf@macbook.be.48ers.dk>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
 	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<c3f16255f702a6cdd4936c2c91d13ac61db35c82.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<87bp4slyo4.fsf@macbook.be.48ers.dk>
-Message-ID: <20101212123150.77a2569e@surf>
+	<99d8d624018cee0c619bc147ed4ab8eaeaf50828.1291541115.git.thomas.petazzoni@free-electrons.com>
+	<874oaklyih.fsf@macbook.be.48ers.dk>
+Message-ID: <20101212123447.2be7c84c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Dec 2010 23:42:03 +0100
+On Sat, 11 Dec 2010 23:45:26 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> Does it really not work on uClibc? This is afaik the first package we
-> have that is glibc only.
+>  Thomas> +choice
+>  Thomas> +	prompt "Thread library implementation"
+>  Thomas> +	default BR2_PTHREADS_OLD
+>  Thomas> +	help
+>  Thomas> +	  If you are building your own toolchain then
+>  Thomas> select the type
+> 
+> This is now only shown if we're building a toolchain, so this part of
+> the help text could go.
 
-ltp-testsuite uses sigset(), which is obsolete. uClibc can implement
-it, but not with our default configuration. I thought ltp-testsuite was
-not of sufficiently general usage to decide to make the change of our
-default uClibc configuration. The option is
-UCLIBC_HAS_OBSOLETE_BSD_SIGNAL.
+Fixed.
 
-BTW, I have the same problem with the mrouted package, which needs
-UCLIBC_SUPPORT_AI_ADDRCONFIG enabled in uClibc to compile. For this
-package, I just added a comment in the Config.in help text mentionning
-this. Should I do the same with ltp-testsuite ?
+>  Thomas> +config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
+>  Thomas> +	bool "Toolchain has threads support ?"
+> 
+> No space before '?'
 
-I'm not sure how to handle those types of packages, that can work with
-uClibc, but not with our default uClibc configuration, and who are
-probably not of enough general use to require a change of our default
-uClibc configuration.
+Ditto.
 
-Thoughts ?
+>  Thomas> +	select BR2_TOOLCHAIN_HAS_THREADS
+>  Thomas> +	help
+>  Thomas> +	  Enable this option if you want your external
+>  Thomas> toolchain has
+>  Thomas> +	  support for C++. If you don't know, leave the
+>  Thomas> default value,
+>  Thomas> +	  Buildroot will tell you if it's correct or not.
+> 
+> Cut'n'paste? ;) It shouldn't be about C++ and reworded.
+
+Indeed, bad cut and paste. Fixed.
 
 Thomas
 -- 
