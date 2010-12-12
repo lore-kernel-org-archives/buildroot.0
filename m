@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 11:51:12 +0100
-Subject: [Buildroot] [PATCH 01/15] toolchain: Improve C library option
-	selection
-In-Reply-To: <87oc8slzxv.fsf@macbook.be.48ers.dk>
+Date: Sun, 12 Dec 2010 12:04:35 +0100
+Subject: [Buildroot] [PATCH 03/15] toolchain: add support for external
+ toolchain profiles and download
+In-Reply-To: <87k4jglzdt.fsf@macbook.be.48ers.dk>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
 	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<ca79dc87ecbeff3cfc20427c3ec3a54ca3a98c94.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<87oc8slzxv.fsf@macbook.be.48ers.dk>
-Message-ID: <20101212115112.2f9d0717@surf>
+	<3a0463ff0daf67faf5c2b278726c84d70084029b.1291541115.git.thomas.petazzoni@free-electrons.com>
+	<87k4jglzdt.fsf@macbook.be.48ers.dk>
+Message-ID: <20101212120435.17d4e07d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Dec 2010 23:14:36 +0100
+On Sat, 11 Dec 2010 23:26:38 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> This breaks the toolchain setup of people's existing .config's, but
-> OK - Perhaps add a note about it in the commit message though.
+>  Thomas>  config BR2_TOOLCHAIN_EXTERNAL_STRIP
+>  Thomas>  	bool
+>  Thomas>  	default y
+>  Thomas> +	depends on BR2_TOOLCHAIN_EXTERNAL
+> 
+> This is all in an if BR2_TOOLCHAIN_EXTERNAL conditional. Did you mean
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM instead?
 
-Done.
+This option is removed by the next patch anyway, but I fixed this
+patch (just removed this added line).
 
-> The other places we have 'Enable ... SUPPORT'
-
-Ok, done. For many other places as well.
-
-> We normally don't do spaces before question mark (several places in
-> this file).
-
-Ok, done.
+Regards,
 
 Thomas
 -- 
