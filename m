@@ -1,22 +1,73 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 11 Dec 2010 22:54:07 -0500
-Subject: [Buildroot] [PATCH v2] add package inetutils
-In-Reply-To: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
-References: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
-Message-ID: <201012112254.08035.vapier@gentoo.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 12 Dec 2010 08:51:58 +0100
+Subject: [Buildroot] [git commit master 1/1] zlib: really fix install for
+	static only builds
+Message-ID: <20101212081028.305EE8E25B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NAK: i already posted an inetutils patch that is much more complete (search 
-the list).  if my version is missing something, let me know.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101211/68586b28/attachment.pgp>
+
+commit: http://git.buildroot.net/buildroot/commit/?id=cc37a07f289f56a81195933810af705d77e95ee4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit ab2f5567c1 (cleanup, fix install for static only build) forgot
+to add the patch for static only builds, even though the commit message
+mentioned it.
+
+Thanks to Mike for noticing.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                                          |    2 +-
+ package/zlib/zlib-1.2.5-fix-static-install.patch |   24 ++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletions(-)
+ create mode 100644 package/zlib/zlib-1.2.5-fix-static-install.patch
+
+diff --git a/CHANGES b/CHANGES
+index 399dba2..7d79c27 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -4,7 +4,7 @@
+ 	compilation, and cache is stored in ~/.buildroot-ccache.
+ 
+ 	Updated/fixed packages: busybox, cloop, libconfig, m4,
+-	openssh, openssl, qt, usbutils, xz
++	openssh, openssl, qt, usbutils, xz, zlib
+ 
+ 	New packages: dhrystone, lsuio, rsh-redone, whetstone
+ 
+diff --git a/package/zlib/zlib-1.2.5-fix-static-install.patch b/package/zlib/zlib-1.2.5-fix-static-install.patch
+new file mode 100644
+index 0000000..0a885f7
+--- /dev/null
++++ b/package/zlib/zlib-1.2.5-fix-static-install.patch
+@@ -0,0 +1,24 @@
++[PATCH] fix make install for static builds
++
++Only try to install shared lib if we've built one.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ Makefile.in |    4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++Index: zlib-1.2.5/Makefile.in
++===================================================================
++--- zlib-1.2.5.orig/Makefile.in
+++++ zlib-1.2.5/Makefile.in
++@@ -168,7 +168,9 @@ install-libs: $(LIBS)
++ 	- at if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
++ 	- at if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
++ 	cp $(STATICLIB) $(DESTDIR)$(libdir)
++-	cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)
+++	if test "$(SHAREDLIBV)" -a -f $(SHAREDLIBV); then \
+++	  cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
+++	fi
++ 	cd $(DESTDIR)$(libdir); chmod u=rw,go=r $(STATICLIB)
++ 	-@(cd $(DESTDIR)$(libdir); $(RANLIB) libz.a || true) >/dev/null 2>&1
++ 	- at cd $(DESTDIR)$(sharedlibdir); if test "$(SHAREDLIBV)" -a -f $(SHAREDLIBV); then \
+-- 
+1.7.2.2
