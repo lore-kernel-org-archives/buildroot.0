@@ -1,143 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 22:53:55 +0100
-Subject: [Buildroot] [PATCH 09/19] memtester: convert to gentargets and bump
-	to 4.2.1
+Date: Sun, 12 Dec 2010 22:53:57 +0100
+Subject: [Buildroot] [PATCH 11/19] ng-spice-rework: remove package
 In-Reply-To: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292190675.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3746067dbbd9c37149a8dce29e48b4d45dafc95a.1292190675.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <96fa8ab52eab86737aaba89f1aad50bb739dd17e.1292190675.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Martin Banky <martin.banky@gmail.com>
+This package has been marked deprecated in October, and no-one
+complained. Moreover, it doesn't sound like a package that is widely
+used on embedded systems. So we get rid of it.
 
-Also, memtester requires largefile support
-
-[ Thomas: add patch to fix memtester's Makefile at installation
-  stage. Bump to 4.2.1. ]
-
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/memtester/Config.in                        |    4 ++
- .../memtester/memtester-4.2.1-makefile-fix.patch   |   23 ++++++++
- package/memtester/memtester.mk                     |   54 +++++++-------------
- 3 files changed, 45 insertions(+), 36 deletions(-)
- create mode 100644 package/memtester/memtester-4.2.1-makefile-fix.patch
+ package/Config.in                                  |    1 -
+ package/ng-spice-rework/Config.in                  |    9 ---------
+ .../ng-spice-rework-17-makeidx.patch               |   12 ------------
+ package/ng-spice-rework/ng-spice-rework.mk         |   18 ------------------
+ 4 files changed, 0 insertions(+), 40 deletions(-)
+ delete mode 100644 package/ng-spice-rework/Config.in
+ delete mode 100644 package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
+ delete mode 100644 package/ng-spice-rework/ng-spice-rework.mk
 
-diff --git a/package/memtester/Config.in b/package/memtester/Config.in
-index 7a504dc..82769f5 100644
---- a/package/memtester/Config.in
-+++ b/package/memtester/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_MEMTESTER
- 	bool "memtester"
-+	depends on BR2_LARGEFILE
- 	help
- 	  A userspace utility for testing the memory subsystem for faults.
+diff --git a/package/Config.in b/package/Config.in
+index 32145d0..70c807b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -352,7 +352,6 @@ endmenu
+ endmenu
  
- 	  http://pyropus.ca/software/memtester/
-+
-+comment "memtester requires a toolchain with LARGEFILE support"
-+       depends on !BR2_LARGEFILE
-diff --git a/package/memtester/memtester-4.2.1-makefile-fix.patch b/package/memtester/memtester-4.2.1-makefile-fix.patch
-new file mode 100644
-index 0000000..6f1481b
---- /dev/null
-+++ b/package/memtester/memtester-4.2.1-makefile-fix.patch
-@@ -0,0 +1,23 @@
-+The a/{b,c} construct doesn't work within make, so let's split the
-+creation of the installation directories in two commands.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile |    3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+Index: memtester-4.2.1/Makefile
-+===================================================================
-+--- memtester-4.2.1.orig/Makefile
-++++ memtester-4.2.1/Makefile
-+@@ -25,8 +25,9 @@
-+ all: memtester
-+ 
-+ install: all
-+-	mkdir -m 755 -p $(INSTALLPATH)/{bin,man/man8}
-++	mkdir -m 755 -p $(INSTALLPATH)/bin
-+ 	install -m 755 memtester $(INSTALLPATH)/bin/
-++	mkdir -m 755 -p $(INSTALLPATH)/man/man8
-+ 	gzip -c memtester.8 >memtester.8.gz ; install -m 644 memtester.8.gz $(INSTALLPATH)/man/man8/
-+ 
-+ auto-ccld.sh: \
-diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
-index ed8470b..a92c5d2 100644
---- a/package/memtester/memtester.mk
-+++ b/package/memtester/memtester.mk
-@@ -3,45 +3,27 @@
- # memtester
- #
- #############################################################
--MEMTESTER_VERSION:=4.0.6
--MEMTESTER_SOURCE:=memtester-$(MEMTESTER_VERSION).tar.gz
--MEMTESTER_SITE:=http://pyropus.ca/software/memtester/old-versions/
--MEMTESTER_DIR:=$(BUILD_DIR)/memtester-$(MEMTESTER_VERSION)
--MEMTESTER_BINARY:=memtester
--MEMTESTER_TARGET_BINARY:=usr/bin/memtester
-+MEMTESTER_VERSION = 4.2.1
-+MEMTESTER_SOURCE = memtester-$(MEMTESTER_VERSION).tar.gz
-+MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions/
+ menu "Miscellaneous"
+-source "package/ng-spice-rework/Config.in"
+ source "package/shared-mime-info/Config.in"
+ endmenu
  
--$(DL_DIR)/$(MEMTESTER_SOURCE):
--	 $(call DOWNLOAD,$(MEMTESTER_SITE),$(MEMTESTER_SOURCE))
-+MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
- 
--memtester-source: $(DL_DIR)/$(MEMTESTER_SOURCE)
-+define MEMTESTER_BUILD_CMDS
-+	$(SED) "s,cc,$(TARGET_CC)," $(@D)/conf-*
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
- 
--$(MEMTESTER_DIR)/.unpacked: $(DL_DIR)/$(MEMTESTER_SOURCE)
--	$(ZCAT) $(DL_DIR)/$(MEMTESTER_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	#toolchain/patch-kernel.sh $(MEMTESTER_DIR) package/memtester/ memtester\*.patch
--	$(SED) "s,cc,$(TARGET_CC)," $(MEMTESTER_DIR)/conf-*
--	touch $(MEMTESTER_DIR)/.unpacked
-+define MEMTESTER_INSTALL_TARGET_CMDS
-+	$(MAKE) $(MEMTESTER_TARGET_INSTALL_OPTS) -C $(@D) install
-+endef
- 
--$(MEMTESTER_DIR)/$(MEMTESTER_BINARY): $(MEMTESTER_DIR)/.unpacked
--	$(MAKE) -C $(MEMTESTER_DIR)
--	$(STRIPCMD) $(MEMTESTER_DIR)/$(MEMTESTER_BINARY)
-+define MEMTESTER_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/memtester
-+endef
- 
--$(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY): $(MEMTESTER_DIR)/$(MEMTESTER_BINARY)
--	$(INSTALL) -m 0755 -D $(MEMTESTER_DIR)/$(MEMTESTER_BINARY) $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
-+define MEMTESTER_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
- 
--memtester: $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
+diff --git a/package/ng-spice-rework/Config.in b/package/ng-spice-rework/Config.in
+deleted file mode 100644
+index de5d091..0000000
+--- a/package/ng-spice-rework/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_NG_SPICE_REWORK
+-	bool "ng-spice-rework"
+-	depends on BR2_DEPRECATED
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXAW
+-	help
+-	  Ngspice is a mixed-level/mixed-signal circuit simulator.
 -
--memtester-clean:
--	rm -f $(TARGET_DIR)/$(MEMTESTER_TARGET_BINARY)
--	-$(MAKE) -C $(MEMTESTER_DIR) clean
--
--memtester-dirclean:
--	rm -rf $(MEMTESTER_DIR)
--
+-	  http://superb-west.dl.sourceforge.net/sourceforge/ngspice
+diff --git a/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch b/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
+deleted file mode 100644
+index dcce6ce..0000000
+--- a/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- a/src/Makefile.in	2005-08-30 03:58:00.000000000 -0400
+-+++ b/src/Makefile.in	2008-02-13 14:38:04.000000000 -0500
+-@@ -882,7 +882,8 @@ spice.o: main.c
+- 		$(COMPILE) -DSIMULATOR -o spice.o  -c $(srcdir)/main.c
+- 
+- ngspice.idx: makeidx
+--	./makeidx $(srcdir)/ngspice.txt
+-+	gcc -I/usr/include -I.. -I./include $(makeidx_SOURCES) -o makeidx-host
+-+	./makeidx-host $(srcdir)/ngspice.txt
+- # Tell versions [3.59,3.63) of GNU make to not export all variables.
+- # Otherwise a system limit (for SysV at least) may be exceeded.
+- .NOEXPORT:
+diff --git a/package/ng-spice-rework/ng-spice-rework.mk b/package/ng-spice-rework/ng-spice-rework.mk
+deleted file mode 100644
+index 113b59d..0000000
+--- a/package/ng-spice-rework/ng-spice-rework.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
 -#############################################################
 -#
--# Toplevel Makefile options
+-# ng-spice-rework
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_MEMTESTER),y)
--TARGETS+=memtester
--endif
-+$(eval $(call GENTARGETS,package,memtester))
+-NG_SPICE_REWORK_VERSION = 17
+-NG_SPICE_REWORK_SOURCE = ng-spice-rework-$(NG_SPICE_REWORK_VERSION).tar.gz
+-NG_SPICE_REWORK_SITE = http://superb-west.dl.sourceforge.net/sourceforge/ngspice
+-NG_SPICE_REWORK_AUTORECONF = NO
+-NG_SPICE_REWORK_INSTALL_STAGING = NO
+-NG_SPICE_REWORK_INSTALL_TARGET = YES
+-
+-NG_SPICE_REWORK_CONF_OPT = CFLAGS="-I$(STAGING_DIR)/usr/include"
+-
+-NG_SPICE_REWORK_DEPENDENCIES = xserver_xorg-server xlib_libXaw
+-
+-$(eval $(call AUTOTARGETS,package,ng-spice-rework))
+-
 -- 
 1.7.0.4
