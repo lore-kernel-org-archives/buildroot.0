@@ -1,61 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 12:24:53 +0100
-Subject: [Buildroot] [PATCH 05/15] toolchain: rework C++ options
-In-Reply-To: <87fwu4lytt.fsf@macbook.be.48ers.dk>
+Date: Sun, 12 Dec 2010 12:31:50 +0100
+Subject: [Buildroot] [PATCH 07/15] ltp-testsuite: bump version and use
+	autotargets
+In-Reply-To: <87bp4slyo4.fsf@macbook.be.48ers.dk>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
 	<cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<e24f28446cde0a4d1dad1bfb5e55c070c9345770.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<87fwu4lytt.fsf@macbook.be.48ers.dk>
-Message-ID: <20101212122453.19ce3f39@surf>
+	<c3f16255f702a6cdd4936c2c91d13ac61db35c82.1291541115.git.thomas.petazzoni@free-electrons.com>
+	<87bp4slyo4.fsf@macbook.be.48ers.dk>
+Message-ID: <20101212123150.77a2569e@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Dec 2010 23:38:38 +0100
+On Sat, 11 Dec 2010 23:42:03 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
->  Thomas>  - We could have two independent options: one to tell
->  Thomas> whether the toolchain has C++ support (on which packages
->  Thomas> would depend on) and another to tell whether the C++ library
->  Thomas> should be installed (that packages would select). This would
->  Thomas> allow to have a C++-free target filesystem even if the
->  Thomas> toolchain used actually supports C++.
-> 
-> Is that really important? I would expect people who really care about
-> such stuff to build a custom toolchain for their project.
+> Does it really not work on uClibc? This is afaik the first package we
+> have that is glibc only.
 
-No strong opinion on this, so I just deleted this part from the commit
-log.
+ltp-testsuite uses sigset(), which is obsolete. uClibc can implement
+it, but not with our default configuration. I thought ltp-testsuite was
+not of sufficiently general usage to decide to make the change of our
+default uClibc configuration. The option is
+UCLIBC_HAS_OBSOLETE_BSD_SIGNAL.
 
-> If there's interest, perhaps it would make more sense to generalize
-> this library-cleanup step for all libs and do something like the
-> mklibs stuff.
+BTW, I have the same problem with the mrouted package, which needs
+UCLIBC_SUPPORT_AI_ADDRCONFIG enabled in uClibc to compile. For this
+package, I just added a comment in the Config.in help text mentionning
+this. Should I do the same with ltp-testsuite ?
 
-Yeah, would probably be a better idea.
+I'm not sure how to handle those types of packages, that can work with
+uClibc, but not with our default uClibc configuration, and who are
+probably not of enough general use to require a change of our default
+uClibc configuration.
 
-> Here we add an option to build a ctng toolchain (glibc/uclibc)
-> with/without C++ support.
-> 
-> .. But here we say that all external glibc toolchains have C++
-> support. That doesn't seem to be always true.
-
-Indeed. Generally, most glibc toolchains will probably have C++
-support, but that's not necessarly the case. So I move the option
-outside the CUSTOM_UCLIBC thing, so that it is visible for any CUSTOM
-external toolchain.
-
->  Thomas> +config BR2_TOOLCHAIN_EXTERNAL_C_PLUS_PLUS
->  Thomas> +	bool "Toolchain has C++ support ?"
-> 
-> No space before '?'
-
-Fixed.
-
-> 'Enable this option if your external toolchain has'
-
-Fixed.
+Thoughts ?
 
 Thomas
 -- 
