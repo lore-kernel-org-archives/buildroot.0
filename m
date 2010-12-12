@@ -1,43 +1,83 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 Dec 2010 22:57:07 +0100
-Subject: [Buildroot] [git commit master 1/1] linux: restore DEPMOD usage
-Message-ID: <20101211235057.B58EC7F903@busybox.osuosl.org>
+From: Justin Mark <oilehus@yahoo.com>
+Date: Sat, 11 Dec 2010 19:37:36 -0800 (PST)
+Subject: [Buildroot] Problem to add DConf in buildroot
+In-Reply-To: <1292057462.24014.176.camel@coalu.atr>
+Message-ID: <681873.12388.qm@web111105.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Lionel,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7a2358f0babe29219f3e2956eae53603b4a7f2c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks a lot for the reply. I checked the uclibc config file, UCLIBC_HAS_ADVANCED_REALTIME was already turned on.
 
-The linux.mk rewrite lost the DEPMOD setting while installing modules
-which means depending on host-module-init-tools has been useless.
-Instead, the build system has been executing /sbin/depmod.
+But I found a note in the file "uClibc_vs_SuSv3.txt":
 
-While we're here, drop the INSTALL_MOD_PATH since LINUX26_MAKE_FLAGS
-already contains it.
+Unimplemented optional interfaces:
+----------------------------------
+...
+fcntl.h: posix_fallocate (depend on ADV)
+...
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+so there's no implementation for posix_fallocate(). Since this function is only called once in Dconf, like this:
+ if (posix_fallocate (fd, 0, 1) == 0)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5f89b7d..e9c37eb 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -132,7 +132,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 	# directories, not relevant on the target
- 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
--			INSTALL_MOD_PATH=$(TARGET_DIR) modules_install ;		\
-+			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
- 	fi
--- 
-1.7.2.2
+maybe I can patch the Dconf file, if anyone has an idea on how to replace the above code, please let me know.
+
+Many thanks,
+--Justin  
+
+--- On Sat, 12/11/10, Lionel Landwerlin <llandwerlin@gmail.com> wrote:
+
+> From: Lionel Landwerlin <llandwerlin@gmail.com>
+> Subject: Re: [Buildroot] Problem to add DConf in buildroot
+> To: buildroot at busybox.net
+> Date: Saturday, December 11, 2010, 12:51 AM
+> Le vendredi 10 d?cembre 2010 ?
+> 22:24 -0800, Justin Mark a ?crit :
+> > Hi
+> > 
+> > When I tried to add DConf into buildroot, I got the
+> following error:
+> > 
+> > ../client/libdconf.so.0: undefined reference to
+> `posix_fallocate'
+> > collect2: ld returned 1 exit status
+> > 
+> > but I can build DConf without any problems outside of
+> buildroot. 
+> > 
+> > In the Makefile.am, there's a line 
+> > 
+> > dconf_LDADD = $(gio_LIBS) ../client/libdconf.so.0
+> > 
+> > It seems to me that a dependency of
+> "../client/libdconf.so.0" is not in the path when I built
+> under buildroot, if so, anyone has an idea how to patch the
+> makefile, so I can build Dconf and link with libdconf.so.0
+> > 
+> > Many Thanks,
+> > Justin
+> > 
+> 
+> Hello Justin,
+> 
+> I think you need uclibc compiled with
+> UCLIBC_HAS_ADVANCED_REALTIME
+> option.
+> 
+> Regards,
+> 
+> --
+> Lionel Landwerlin
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+      
