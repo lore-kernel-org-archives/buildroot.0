@@ -1,94 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 15:17:08 +0100
-Subject: [Buildroot] [PATCH 12/14] toolchain: expose thread options in the
-	Crosstool-NG backend
+Date: Sun, 12 Dec 2010 15:17:10 +0100
+Subject: [Buildroot] [PATCH 14/14] package: pass TARGET_MAKE_ENV at
+	install/clean/uninstall steps
 In-Reply-To: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5e3d734d306055d721640fa45478bd1d1b6f8370.1292163398.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b69bbe4fc261580528a1527a4c9675292da6c738.1292163398.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+TARGET_MAKE_ENV contains the PATH to the host tools built in
+$(HOST_DIR), and not having this directory in the PATH while
+installing packages may cause troubles.
+
+The specific example that trigerred the problem is the following
+one. libglib2 ./configure tries to find a awk version, either gawk or
+mawk. On my limited testing system, only mawk is available, so
+normally, libglib2 detects mawk and uses it, and it works perfectly.
+
+However, when host-gawk has been compiled before libglib2 (which
+happens for example if you have used the Crosstool-NG backend), gawk
+is well detected in $(HOST_DIR)/usr/bin at ./configure time
+($(HOST_DIR)/usr/bin is in the PATH at ./configure time, thanks to
+TARGET_MAKE_ENV). But at install time, when libglib2 uses gawk, it
+doesn't find it anymore because it is not in the PATH.
+
+This also makes things coherent with host installation, in which
+$(HOST_MAKE_ENV) was already used.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-crosstool-ng/Config.in       |   32 ++++++++++++++++++++++
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   21 ++++++++++++++
- 2 files changed, 53 insertions(+), 0 deletions(-)
+ package/Makefile.autotools.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 82e223d..f86abd3 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -106,4 +106,36 @@ config BR2_TOOLCHAIN_CTNG_CXX
- 	  C++ language and you want C++ libraries to be installed on
- 	  your target system.
- 
-+choice
-+	prompt "Thread library implementation"
-+	default BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD \
-+		if BR2_TOOLCHAIN_CTNG_uClibc
-+	default BR2_TOOLCHAIN_CTNG_THREADS_NPTL		\
-+		if BR2_TOOLCHAIN_CTNG_eglibc ||		\
-+		   BR2_TOOLCHAIN_CTNG_glibc
-+	help
-+	  Enable thread support and select thread implementation. Not
-+	  all thread variants work with all versions of uClibc, the
-+	  "linuxthreads (stable/old)" may be a working fallback if you
-+	  need threading at all.
-+
-+	config BR2_TOOLCHAIN_CTNG_THREADS_NONE
-+		bool "none"
-+
-+	config BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS
-+		bool "linuxthreads"
-+		select BR2_TOOLCHAIN_HAS_THREADS
-+
-+	config BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD
-+		bool "linuxthreads (stable/old)"
-+		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_TOOLCHAIN_CTNG_uClibc
-+
-+	config BR2_TOOLCHAIN_CTNG_THREADS_NPTL
-+		bool "Native POSIX Threading (NPTL)"
-+		select BR2_TOOLCHAIN_HAS_THREADS
-+		depends on BR2_TOOLCHAIN_CTNG_eglibc || \
-+			   BR2_TOOLCHAIN_CTNG_glibc
-+endchoice
-+
- endif # BR2_TOOLCHAIN_CTNG
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 817a1f7..a38dd12 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -213,6 +213,27 @@ else
- CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_LANG_CXX)=.*:\# \1 is not set:;
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 7d04e44..de0a355 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -210,7 +210,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+ 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
+ 		cp -f $$$$i $$$$i~; \
+ 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+@@ -224,7 +224,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
  endif
  
-+# Thread implementation selection
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NONE).*:\# \2 is not set:;
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_LINUXTHREADS).*:\# \2 is not set:;
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NPTL).*:\# \2 is not set:;
-+ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS))$(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_LINUXTHREADS).*:\2=y:;
-+ ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc)),)
-+  ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_NEW).*:\# \2 is not set:;
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_OLD).*:\2=y:;
-+  else
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_OLD).*:\# \2 is not set:;
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_NEW).*:\2=y:;
-+  endif
-+ endif
-+else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NPTL)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NPTL).*:\2=y:;
-+else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NONE)),)
-+CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NONE).*:\2=y:;
-+endif
-+
- #--------------
- # And the specials for paths
- CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_PREFIX_DIR)=.*:\1="$(TOOLCHAIN_DIR)":;
+@@ -234,7 +234,7 @@ endif
+ #
+ ifndef $(2)_CLEAN_CMDS
+ define $(2)_CLEAN_CMDS
+-	-$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
++	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
+@@ -244,7 +244,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_STAGING_CMDS
+ define $(2)_UNINSTALL_STAGING_CMDS
+-	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
+@@ -254,7 +254,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_TARGET_CMDS
+ define $(2)_UNINSTALL_TARGET_CMDS
+-	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
 -- 
 1.7.0.4
