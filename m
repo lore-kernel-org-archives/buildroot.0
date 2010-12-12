@@ -1,47 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Dec 2010 15:17:09 +0100
-Subject: [Buildroot] [PATCH 13/14] toolchain: more verbose in crosstool-ng
-	backend
-In-Reply-To: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1292163398.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6198cd04b43d9ad9123bca1c41965cfce605380d.1292163398.git.thomas.petazzoni@free-electrons.com>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Sun, 12 Dec 2010 08:35:38 -0600
+Subject: [Buildroot] [PATCH v2] add package inetutils
+In-Reply-To: <201012112254.08035.vapier@gentoo.org>
+References: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
+	<201012112254.08035.vapier@gentoo.org>
+Message-ID: <20101212083538.18716ylb7nmj1y0w@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, Crosstool-NG hides all the details of the toolchain build
-process. However, this is inconsistent with the typical Buildroot
-build, and the rotating progress thing makes log file resulting from
-redirecting the Buildroot output a bit unusable. Therefore, switch the
-Crosstool-NG configuration to a more verbose default.
+Quoting Mike Frysinger <vapier@gentoo.org>:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../toolchain-crosstool-ng/crosstool-ng.config     |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+> NAK: i already posted an inetutils patch that is much more complete (search
+> the list).  if my version is missing something, let me know.
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config b/toolchain/toolchain-crosstool-ng/crosstool-ng.config
-index d5ee244..506f78a 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config
-@@ -72,12 +72,12 @@ CT_CONFIG_SHELL_CUSTOM_PATH="/bin/sh"
- # CT_LOG_ERROR is not set
- # CT_LOG_WARN is not set
- # CT_LOG_INFO is not set
--CT_LOG_EXTRA=y
--# CT_LOG_ALL is not set
-+# CT_LOG_EXTRA is not set
-+CT_LOG_ALL=y
- # CT_LOG_DEBUG is not set
--CT_LOG_LEVEL_MAX="EXTRA"
-+CT_LOG_LEVEL_MAX="ALL"
- # CT_LOG_SEE_TOOLS_WARN is not set
--CT_LOG_PROGRESS_BAR=y
-+# CT_LOG_PROGRESS_BAR is not set
- CT_LOG_TO_FILE=y
- CT_LOG_FILE_COMPRESS=y
- 
+Found it. Yes your patch looks better.
+You sent it in before I started my activities with buildroot, that's  
+why I missed it.
+
+Now I just need to figure out how I can apply this from the  
+mailinglist archive...
+
 -- 
-1.7.0.4
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
