@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 12 Dec 2010 11:25:24 +0100
-Subject: [Buildroot] [PATCH 05/15] toolchain: rework C++ options
-In-Reply-To: <e24f28446cde0a4d1dad1bfb5e55c070c9345770.1291541115.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Dec 2010 11:37:22 +0100
+Subject: [Buildroot] [PATCH 13/15] toolchain: expose thread options in
+	the Crosstool-NG backend
+In-Reply-To: <ebd285ae70fb69572d98ea560e2180aecf57ffd7.1291541115.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1291541115.git.thomas.petazzoni@free-electrons.com>
-	<e24f28446cde0a4d1dad1bfb5e55c070c9345770.1291541115.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201012121125.24507.yann.morin.1998@anciens.enib.fr>
+	<ebd285ae70fb69572d98ea560e2180aecf57ffd7.1291541115.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201012121137.22698.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +14,50 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Sunday 05 December 2010 10:25:32 Thomas Petazzoni wrote:
-> Instead of having BR2_GCC_CROSS_CXX and BR2_INSTALL_LIBSTDCPP, with
-> BR2_GCC_CROSS_CXX not being visible (and therefore being useless),
-> let's just keep BR2_INSTALL_LIBSTDCPP to enable C++ in the toolchain
-> and install C++ libraries on the target.
+On Sunday 05 December 2010 10:25:40 Thomas Petazzoni wrote:
 [--SNIP--]
-> diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-> index 5ba1071..b345297 100644
-> --- a/toolchain/toolchain-crosstool-ng/Config.in
-> +++ b/toolchain/toolchain-crosstool-ng/Config.in
-> @@ -98,4 +98,12 @@ config BR2_TOOLCHAIN_CTNG_uClibc_PROGRAM_INVOCATION
+> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> index 1c5e864..b7f88ee 100644
+> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> @@ -213,6 +213,27 @@ else
+>  CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_LANG_CXX)=.*:\# \1 is not set:;
+>  endif
 >  
->  endif # BR2_TOOLCHAIN_CTNG_uClibc
->  
-> +config BR2_TOOLCHAIN_CTNG_C_PLUS_PLUS
+> +# Thread implementation selection
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NONE).*:\# \2 is not set:;
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_LINUXTHREADS).*:\# \2 is not set:;
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NPTL).*:\# \2 is not set:;
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS))$(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD)),)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_LINUXTHREADS).*:\2=y:;
+> + ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc)),)
+> +  ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD)),)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_NEW).*:\# \2 is not set:;
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_OLD).*:\2=y:;
+> +  else
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_OLD).*:\# \2 is not settted:;
 
-C_PLUS_PLUS --> CXX
+'settted' ?
 
-'CXX' is a common, and well understood, variable name for 'C++'.
-Besides, it is much shorter to write. :-)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_LNXTHRD_NEW).*:\2=y:;
+> +  endif
+> + endif
+> +else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NPTL)),)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NPTL).*:\2=y:;
+> +else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_THREADS_NONE)),)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_THREADS_NONE).*:\2=y:;
+> +endif
+> +
+>  #--------------
+>  # And the specials for paths
+>  CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_PREFIX_DIR)=.*:\1="$(TOOLCHAIN_DIR)":;
 
-> +	bool "Enable C++ support"
-> +	select BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  Enable this option if you want your toolchain to support the
-> +	  C++ language and you want C++ libraries to be installed on
-> +	  your target system.
+I am not so sure what to say about this one...
 
-I think this option should be used in the .mk (yes, I know, I should have
-run a real git send-email). Could you add this hunk:
+There is already a place where we check the C library, on line 223 (upstream)
+and I would say that should go there.
 
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -207,7 +207,7 @@ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_PKGVERSION)="(.*)":\1="crosstool-NG $(CTNG_
- ifneq ($(call qstrip,$(BR2_PACKAGE_GDB_SERVER))$(call qstrip,$(BR2_PACKAGE_GDB_HOST)),)
- CTNG_FIX_DOT_CONFIG_SED += s:^(CT_DEBUG_gdb)=.*:\# \1 is not set:;
- endif
--ifneq ($(call qstrip,$(BR2_INSTALL_LIBSTDCPP)),)
-+ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_C_PLUS_PLUS)),y)
- CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_CC_LANG_CXX) is not set:\1=y:;
- else
- CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_LANG_CXX)=.*:\# \1 is not set:;
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+I'll look at it tonight...
 
 Regards,
 Yann E. MORIN.
