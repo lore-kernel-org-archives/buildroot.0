@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 13 Dec 2010 22:26:52 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain: remove ending
-	semi-colon in helpers
-Message-ID: <20101213214843.A981E8E2C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain: move Stack
+	Protection Support option
+Message-ID: <20101213214844.5F42E8E2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +10,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac38fd3dc6f046022c13f12aad0e754ec4242ffc
+commit: http://git.buildroot.net/buildroot/commit/?id=ab64b95e4d1957992bcad7e66d3e331a84b1daed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some helpers had their final line ending with a semi-colon, some did
-not. For consistency, remove the final semi-colon from all helpers,
-it's the responsability of the caller to add the final semi-colon as
-needed.
+The BR2_USE_SSP option is only used inside the uClibc build, so only
+meaningful for Buildroot internal toolchains. Therefore, the option is
+moved to the right location so that it isn't visible when working with
+external toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/helpers.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ toolchain/toolchain-buildroot/Config.in.2 |    9 +++++++++
+ toolchain/toolchain-common.in             |    9 ---------
+ toolchain/uClibc/uclibc.mk                |    2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 05d43e7..43c6db3 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -201,7 +201,7 @@ check_uclibc = \
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support)
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index cf426ee..f1b0a7c 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -67,6 +67,15 @@ comment "C++ support broken in uClibc 0.9.31 with locale enabled with gcc 4.2"
+ 		    BR2_TOOLCHAIN_BUILDROOT_LOCALE    && \
+ 		    BR2_UCLIBC_VERSION_0_9_31
  
- #
- # Check that the Buildroot configuration of the ABI matches the
-@@ -221,7 +221,7 @@ check_arm_abi = \
- 	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
- 		echo "Incorrect ABI setting" ; \
- 		exit 1 ; \
--	fi ; \
-+	fi
++config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
++	bool "Enable stack protection support"
++	help
++	  Enable stack smashing protection support using GCCs
++	  -fstack-protector[-all] option.
++
++	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
++
+ source "toolchain/elf2flt/Config.in"
+ source "toolchain/mklibs/Config.in"
+ source "toolchain/sstrip/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2c54acd..5502ab4 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -76,15 +76,6 @@ config BR2_SOFT_FLOAT
+ 	  functions, then everything will need to be compiled with soft
+ 	  floating point support (-msoft-float).
  
- #
- # Check that the external toolchain supports C++
-@@ -231,7 +231,7 @@ check_cplusplus = \
- 	if test $$? -ne 0 ; then \
- 		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
- 		exit 1 ; \
--	fi ; \
-+	fi
- 
- #
- # Check that the cross-compiler given in the configuration exists
-@@ -241,4 +241,4 @@ check_cross_compiler_exists = \
- 	if test $$? -ne 0 ; then \
- 		echo "Cannot execute cross-compiler '$(TARGET_CC)'" ; \
- 		exit 1 ; \
--	fi ; \
-+	fi
+-config BR2_USE_SSP
+-	bool "Enable stack protection support"
+-	help
+-	  Enable stack smashing protection support using GCCs
+-	  -fstack-protector[-all] option.
+-
+-	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
+-
+ choice
+ 	prompt "Thread library implementation"
+ 	default BR2_PTHREADS_OLD
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 1ed40cc..e05e16c 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -271,7 +271,7 @@ else
+ 		-e 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' \
+ 		$(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_USE_SSP),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=n,g' $(UCLIBC_DIR)/.oldconfig
 -- 
 1.7.2.2
