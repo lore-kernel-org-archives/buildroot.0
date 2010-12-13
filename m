@@ -1,33 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 13 Dec 2010 20:51:09 +0100
-Subject: [Buildroot] [PATCH 13/14] toolchain: more verbose in
-	crosstool-ng backend
-In-Reply-To: <7b20c8407580bff3fa1809440eaa6b1ea25ad91e.1292257643.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-	<7b20c8407580bff3fa1809440eaa6b1ea25ad91e.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201012132051.09453.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Dec 2010 20:59:36 +0100
+Subject: [Buildroot] can't compile mplayer for ARM with actual buildroot
+ 5a6f6bfe885754955b615ca9353baa3496682c6f
+In-Reply-To: <AANLkTinqjw_EqtmNnj6+rTzHDFdoVov34aDTOo4VpkNQ@mail.gmail.com>
+References: <AANLkTimto_ZpVXosSAAv8YtVS6o+o94y12MU3mx5cOcj@mail.gmail.com>
+	<20101213174444.3b328c36@surf>
+	<AANLkTinqjw_EqtmNnj6+rTzHDFdoVov34aDTOo4VpkNQ@mail.gmail.com>
+Message-ID: <20101213205936.10a69e66@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 13 December 2010 17:27:49 Thomas Petazzoni wrote:
-> By default, Crosstool-NG hides all the details of the toolchain build
-> process. However, this is inconsistent with the typical Buildroot
-> build, and the rotating progress thing makes log file resulting from
-> redirecting the Buildroot output a bit unusable. Therefore, switch the
-> Crosstool-NG configuration to a more verbose default.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Mon, 13 Dec 2010 19:30:57 +0100
+Belisko Marek <marek.belisko@gmail.com> wrote:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+> Sorry for spamming. My mistake. I accidently select arm920 not arm926t.
+> It's correct now.
 
+Well, even with arm920 it should still build. But I'd prefer to look at
+those issues once the newer mplayer package is merged, since it has
+quite significantly improved how processor-specific optimizations are
+handled.
 
+Regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
