@@ -1,37 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Dec 2010 17:52:44 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: check sysroot *after*
- copying
-In-Reply-To: <1292171123-32551-1-git-send-email-vapier@gentoo.org>
-References: <1292171123-32551-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20101213175244.72901d85@surf>
+Date: Mon, 13 Dec 2010 17:56:08 +0100
+Subject: [Buildroot] [PATCH v2] add package inetutils
+In-Reply-To: <20101212083538.18716ylb7nmj1y0w@www.home.zuerker.org>
+References: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
+	<201012112254.08035.vapier@gentoo.org>
+	<20101212083538.18716ylb7nmj1y0w@www.home.zuerker.org>
+Message-ID: <20101213175608.62854560@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Dec 2010 11:25:23 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
+On Sun, 12 Dec 2010 08:35:38 -0600
+Heiko Zuerker <heiko@zuerker.org> wrote:
 
-> The current toolchain checking code will probe the files in the
-> sysroot to make sure things are sane, but it does this *before* it
-> actually copies the files in question over.  Thus from a clean build,
-> it's impossible to actually use the external toolchain option.
-> 
-> So re-order things so we initialize the local sysroot first and then
-> check the result.
+> Now I just need to figure out how I can apply this from the  
+> mailinglist archive...
 
-SYSROOT_DIR points to the original sysroot of the toolchain, not the
-one we copy locally for Buildroot. So the original sysroot of the
-toolchain is already available when starting a new build.
-
-See the definition of SYSROOT_DIR:
-
-TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
-SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
-
-Could you point the specific problem you're having ?
+Have a look at "git am".
 
 Thomas
 -- 
