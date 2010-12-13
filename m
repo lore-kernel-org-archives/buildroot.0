@@ -1,28 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Dec 2010 17:56:08 +0100
-Subject: [Buildroot] [PATCH v2] add package inetutils
-In-Reply-To: <20101212083538.18716ylb7nmj1y0w@www.home.zuerker.org>
-References: <32a2c79752de9bf3bcea4a53e7ef19ade80f41a8.1292110978.git.smiley73@users.sourceforge.net>
-	<201012112254.08035.vapier@gentoo.org>
-	<20101212083538.18716ylb7nmj1y0w@www.home.zuerker.org>
-Message-ID: <20101213175608.62854560@surf>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 13 Dec 2010 12:27:08 -0500
+Subject: [Buildroot] [PATCH] toolchain-external: check sysroot *after*
+	copying
+In-Reply-To: <20101213175244.72901d85@surf>
+References: <1292171123-32551-1-git-send-email-vapier@gentoo.org>
+	<20101213175244.72901d85@surf>
+Message-ID: <201012131227.08896.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Dec 2010 08:35:38 -0600
-Heiko Zuerker <heiko@zuerker.org> wrote:
+On Monday, December 13, 2010 11:52:44 Thomas Petazzoni wrote:
+> On Sun, 12 Dec 2010 11:25:23 -0500 Mike Frysinger wrote:
+> > The current toolchain checking code will probe the files in the
+> > sysroot to make sure things are sane, but it does this *before* it
+> > actually copies the files in question over.  Thus from a clean build,
+> > it's impossible to actually use the external toolchain option.
+> > 
+> > So re-order things so we initialize the local sysroot first and then
+> > check the result.
+> 
+> SYSROOT_DIR points to the original sysroot of the toolchain, not the
+> one we copy locally for Buildroot. So the original sysroot of the
+> toolchain is already available when starting a new build.
 
-> Now I just need to figure out how I can apply this from the  
-> mailinglist archive...
-
-Have a look at "git am".
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+ok, so i misinterpreted the errors fixed by the other toolchain patches ive 
+posted around the same time as this one.  for more details, consult those.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101213/0472f868/attachment.pgp>
