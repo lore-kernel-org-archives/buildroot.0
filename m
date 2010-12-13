@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 13 Dec 2010 22:26:52 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain: add support for
-	external toolchain profiles and download
-Message-ID: <20101213214843.D5E498E2C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain: rework thread options
+Message-ID: <20101213214844.D1E118E2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,563 +9,293 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c492d5e7be51e4f1031139883acd03f78881e49
+commit: http://git.buildroot.net/buildroot/commit/?id=9eaad202f1579630598c160952da4b29e56d5bdb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of letting the user define all the details of his external
-toolchain, we define a set of profiles for well-known external
-toolchains (CodeSourcery ones only at the moment, can easily be
-extended with other toolchains).
+The selection of linuxthreads, linuxthreads old or NPTL doesn't make a
+lot of sense for external toolchains. So, instead, we :
 
-Once a profile has been choosen, the user is offered the choice of
-either letting Buildroot download and install the external toolchain,
-or (as before) to tell Buildroot where the toolchain is installed on
-the system.
+ * Introduce an hidden BR2_TOOLCHAIN_HAS_THREADS option, which must be
+   selected by toolchain specific options when thread support is
+   available. Package needing to test thread support should use this
+   option.
 
-We of course provide a "custom profile", through which the user can
-configure Buildroot to use a custom external toolchain for which no
-profile is available.
+ * Move the none/linuxthreads/linuxthreads old/NPTL selection to
+   Buildroot internal toolchain configuration.
+
+ * Add an option in external toolchain to tell if thread support is
+   available or not in the external toolchain. We assume that glibc
+   without threads is not possible, as Ulrich Drepper said in
+   http://sourceware.org/ml/libc-alpha/2005-08/msg00091.html
+
+ffmpeg, dmalloc and openvpn are fixed to use the new
+BR2_TOOLCHAIN_HAS_THREADS option. For openvpn, --enable-threads=posix
+is no longer used, as the configure script doesn't even understand
+this option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                                 |    3 +-
- package/Makefile.in                      |   10 +-
- toolchain/Config.in                      |    5 +-
- toolchain/toolchain-external/Config.in   |  168 ++++++++++++++++++++++--
- toolchain/toolchain-external/Config.in.2 |   17 ---
- toolchain/toolchain-external/ext-tool.mk |  210 +++++++++++++++++++++---------
- 6 files changed, 315 insertions(+), 98 deletions(-)
- delete mode 100644 toolchain/toolchain-external/Config.in.2
+ CHANGES                                   |    9 +++++----
+ package/dmalloc/dmalloc.mk                |    6 +++---
+ package/ltp-testsuite/Config.in           |    4 ++--
+ package/multimedia/ffmpeg/ffmpeg.mk       |    6 +++---
+ package/openvpn/openvpn.mk                |    6 +++---
+ toolchain/Makefile.in                     |    6 ------
+ toolchain/gcc/gcc-uclibc-4.x.mk           |    6 ++++++
+ toolchain/toolchain-buildroot/Config.in.2 |   27 +++++++++++++++++++++++++++
+ toolchain/toolchain-common.in             |   29 +++--------------------------
+ toolchain/toolchain-external/Config.in    |    9 +++++++++
+ toolchain/toolchain-external/ext-tool.mk  |    2 +-
+ 11 files changed, 62 insertions(+), 48 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7d6e4af..f6ab07e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -279,6 +279,7 @@ STAMP_DIR:=$(BASE_DIR)/stamps
- BINARIES_DIR:=$(BASE_DIR)/images
- TARGET_DIR:=$(BASE_DIR)/target
- TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
-+TOOLCHAIN_EXTERNAL_DIR=$(BASE_DIR)/external-toolchain
- TARGET_SKELETON=$(TOPDIR)/fs/skeleton
+diff --git a/CHANGES b/CHANGES
+index ab6eabc..2d3bbb6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -3,10 +3,11 @@
+ 	Ccache support reworked. Now used for both host and target
+ 	compilation, and cache is stored in ~/.buildroot-ccache.
  
- BR2_DEPENDS_DIR=$(BUILD_DIR)/buildroot-config
-@@ -600,7 +601,7 @@ endif
+-	Updated/fixed packages: at, busybox, bzip2, direcfb-examples,
+-	dbus, cloop, cups, gdk-pixbuf, hostapd, i2c-tools, libconfig,
+-	ltp-testsuite, m4, openssh, openssl, pango, qt, rsync,
+-	sdl_gfx, sdl_sound, udev, usbutils, xz, zlib
++	Updated/fixed packages: at, busybox, bzip2, dbus,
++	direcfb-examples, dmalloc, cloop, cups, ffmpeg, gdk-pixbuf,
++	hostapd, i2c-tools, libconfig, ltp-testsuite, m4, openssh,
++	openssl, openvpn, pango, qt, rsync, sdl_gfx, sdl_sound, udev,
++	usbutils, xz, zlib
  
- clean:
- 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
--		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR)
-+		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(TOOLCHAIN_EXTERNAL_DIR)
+ 	New packages: dhrystone, fbgrab, lsuio, rsh-redone, whetstone
  
- distclean: clean
- ifeq ($(DL_DIR),$(TOPDIR)/dl)
-diff --git a/package/Makefile.in b/package/Makefile.in
-index d448a7e..36bd59f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -114,13 +114,13 @@ REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
--TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
--TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
--ifneq ($(TOOLCHAIN_EXTERNAL_PATH),)
--TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-+TOOLCHAIN_EXTERNAL_LOCATION=$(TOOLCHAIN_EXTERNAL_DIR)
- else
--TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 60ad763..dca0488 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -16,10 +16,10 @@ else
+ DMALLOC_CONF_OPT+=--disable-cxx
  endif
-+TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_LOCATION)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-
+ 
+-ifeq ($(BR2_PTHREADS_NONE),y)
+-DMALLOC_CONF_OPT+=--disable-threads
+-else
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ DMALLOC_CONF_OPT+=--enable-threads
++else
++DMALLOC_CONF_OPT+=--disable-threads
  endif
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index d476cbf..8baa0c1 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -13,6 +13,10 @@ config BR2_TOOLCHAIN_BUILDROOT
  
- config BR2_TOOLCHAIN_EXTERNAL
- 	bool "External toolchain"
-+	help
-+	  Select if you want to use an existing cross-compiling
-+	  toolchain. Buildroot can either download automatically a
-+	  toolchain, or use an already installed toolchain.
+ define DMALLOC_POST_PATCH
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 2ab4134..86aa4fb 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LTP_TESTSUITE
+ 	bool "ltp-testsuite"
+-	depends on !BR2_PTHREADS_NONE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  The Linux Test Project provides a huge testsuite for Linux.
  
- config BR2_TOOLCHAIN_CTNG
- 	bool "Crosstool-NG toolchain"
-@@ -29,6 +33,5 @@ source "toolchain/toolchain-external/Config.in"
- source "toolchain/toolchain-crosstool-ng/Config.in"
- source "toolchain/toolchain-common.in"
- source "toolchain/toolchain-buildroot/Config.in.2"
--source "toolchain/toolchain-external/Config.in.2"
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	  http://ltp.sourceforge.net/
  
- endmenu
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f0268a7..c2602d2 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1,15 +1,142 @@
--#
+ comment "ltp-testsuite requires a toolchain with thread support"
+-	depends on BR2_PTHREADS_NONE
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 959efa3..f0ec930 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -111,10 +111,10 @@ else
+ FFMPEG_CONF_OPT += --disable-outdevs
+ endif
+ 
+-ifeq ($(BR2_PTHREADS_NONE),y)
+-FFMPEG_CONF_OPT += --disable-pthreads
+-else
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ FFMPEG_CONF_OPT += --enable-pthreads
++else
++FFMPEG_CONF_OPT += --disable-pthreads
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 7d8fb0c..ba91690 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -8,10 +8,10 @@ OPENVPN_VERSION = 2.1.3
+ OPENVPN_SITE = http://openvpn.net/release
+ OPENVPN_CONF_OPT = --enable-small
+ 
+-ifeq ($(BR2_PTHREADS_NATIVE),y)
+-	OPENVPN_CONF_OPT += --enable-threads=posix
+-else
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	OPENVPN_CONF_OPT += --enable-pthread
++else
++	OPENVPN_CONF_OPT += --disable-pthread
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
+diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
+index 371509f..2cb6e95 100644
+--- a/toolchain/Makefile.in
++++ b/toolchain/Makefile.in
+@@ -1,9 +1,3 @@
+-ifeq ($(BR2_PTHREADS_NONE),y)
+-THREADS:=--disable-threads
+-else
+-THREADS:=--enable-threads
+-endif
 -
- if BR2_TOOLCHAIN_EXTERNAL
-+
- choice
--	prompt "External toolchain C library"
--	default BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	prompt "Toolchain"
+ BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/
+ BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
+ BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index eec6523..5f69906 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -138,6 +138,12 @@ else
+ GCC_TLS:=--disable-tls
+ endif
  
--config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	bool "uClibc"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
-+	bool "CodeSourcery ARM 2010.09"
-+	depends on BR2_arm
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++ifeq ($(BR2_PTHREADS_NONE),y)
++THREADS:=--disable-threads
++else
++THREADS:=--enable-threads
++endif
++
+ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+ GCC_DECIMAL_FLOAT:=--disable-decimal-float
+ endif
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index f1b0a7c..fe93e70 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -76,6 +76,33 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+ 	  for details.
+ 
++choice
++	prompt "Thread library implementation"
++	default BR2_PTHREADS_OLD
 +	help
-+	  Toolchain for the ARM architecture, from CodeSourcery. It
-+	  uses gcc 4.5.1, binutils 2.20, glibc 2.11 and gdb 7.2.50,
-+	  kernel headers 2.6.35.2. It has support for the following
-+	  variants:
-+            - ARMv5TE, little endian, soft-float, glibc
-+            - ARMv4T, little endian, soft-float, glibc
-+            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	  Use this option to select the thread library implementation
++	  that should be used in your toolchain. Not all thread
++	  variants work with all versions of uClibc, the "linuxthreads
++	  (stable/old)" may be a working fallback if you need
++	  threading at all.
 +
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
-+	bool "CodeSourcery ARM 2010q1"
-+	depends on BR2_arm
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Toolchain for the ARM architecture, from CodeSourcery. It
-+	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, gdb 7.0.50 and
-+	  kernel headers 2.6.32. It has support for the following
-+	  variants:
-+             - ARMv5T, little endian, soft-float, glibc
-+             - ARMv4T, little endian, soft-float, glibc
-+             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	config BR2_PTHREADS_NONE
++		bool "none"
 +
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
-+	bool "CodeSourcery ARM 2009q1"
-+	depends on BR2_arm
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Toolchain for the ARM architecture, from CodeSourcery. It
-+	  uses gcc 4.3.3, binutils 2.19, glibc 2.8 and gdb 6.8 and
-+	  kernel headers 2.6.30. It has support for the following
-+	  variants:
-+            - ARMv5T, little endian, soft-float, glibc
-+            - ARMv4T, little endian, soft-float, glibc
-+            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	config BR2_PTHREADS
++		bool "linuxthreads"
++	        select BR2_TOOLCHAIN_HAS_THREADS
 +
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
-+	bool "CodeSourcery MIPS 4.4"
-+	depends on BR2_mips || BR2_mipsel
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Toolchain for the MIPS architecture, from CodeSourcery. It
-+	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, uClibc 0.9.30 and
-+	  gdb 7.0, kernel headers 2.6.32. It has support for the
-+	  following variants:
-+            - MIPS32 O32 big endian glibc
-+            - MIPS32 O32 little endian glibc
-+            - MIPS32 big endian soft float glibc
-+            - MIPS32 little endian soft float glibc
-+            - MIPS32 big endian microMIPS glibc
-+            - MIPS32 little endian microMIPS glibc
-+            - MIPS32 big endian soft float microMIPS glibc
-+            - MIPS32 little endian soft float microMIPS glibc
-+            - MIPS32 big endian uclibc
-+            - MIPS32 little endian uclibc
-+            - MIPS32 big endian soft float uclibc
-+            - MIPS32 little endian soft float uclibc
++	config BR2_PTHREADS_OLD
++		bool "linuxthreads (stable/old)"
++	        select BR2_TOOLCHAIN_HAS_THREADS
 +
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	bool "CodeSoucery PowerPC 2010.09"
-+	depends on BR2_powerpc
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Toolchain for the PowerPC architecture, from
-+	  CodeSourcery. It uses gcc 4.5.1, binutils 2.20, glibc 2.11,
-+	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
-+	  the following variants:
-+            - 603 glibc, 32 bits
-+            - 603 soft float glibc, 32 bits
-+            - e600 altivec glibc, 32 bits
-+            - e500v1 glibc, 32 bits
-+            - e500v2 glibc, 32 bits
-+            - e500mc glibc, 32 bits
-+            - 970 glibc hard-float, 64 bits
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
-+	bool "CodeSoucery PowerPC 2010.09"
-+	depends on BR2_sh
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	help
-+	  Toolchain for the SuperH architecture, from CodeSourcery. It
-+	  uses gcc 4.5.1, binutils 2.20, glibc 2.11, uClibc 0.9.30,
-+	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
-+	  the following variants:
-+            - SH4A, glibc, little endian
-+            - SH4A, glibc, big endian
-+	    - SH4A, uClibc, little endian
-+            - SH4A, uClibc, big endian
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+       bool "Custom toolchain"
-+       help
-+         Use this option to use a custom toolchain pre-installed on
-+         your system.
-+
++	config BR2_PTHREADS_NATIVE
++		bool "Native POSIX Threading (NPTL)"
++	        select BR2_TOOLCHAIN_HAS_THREADS
++		depends on BR2_UCLIBC_VERSION_SNAPSHOT
 +endchoice
 +
-+config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	bool "Download toolchain automatically"
-+	default y
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	help
-+	  When enabled, Buildroot will automatically download and
-+	  install the selected external toolchain. When disabled,
-+	  Buildroot will use a pre-installed toolchain.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PATH
-+	string "Toolchain path"
-+	default "/path/to/toolchain/usr"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	help
-+	  Path to where the external toolchain is installed.
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
-+	string "Toolchain prefix"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	default "$(ARCH)-linux"
-+
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	string
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
-+	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	default "sh4-linux-gnu"          if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
-+	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
-+					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ source "toolchain/elf2flt/Config.in"
+ source "toolchain/mklibs/Config.in"
+ source "toolchain/sstrip/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 5502ab4..34d70a0 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -26,6 +26,9 @@ config BR2_PROGRAM_INVOCATION
+ config BR2_INSTALL_LIBSTDCPP
+ 	bool
  
- config BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	bool "glibc"
++config BR2_TOOLCHAIN_HAS_THREADS
 +	bool
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
- 	select BR2_INET_RPC
-@@ -17,9 +144,26 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
++
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
+@@ -76,32 +79,6 @@ config BR2_SOFT_FLOAT
+ 	  functions, then everything will need to be compiled with soft
+ 	  floating point support (-msoft-float).
+ 
+-choice
+-	prompt "Thread library implementation"
+-	default BR2_PTHREADS_OLD
+-	help
+-	  If you are building your own toolchain then select the type of 
+-	  libpthreads you want to use.
+-	  Not all thread variants work with all versions of uClibc,
+-	  the "linuxthreads (stable/old)" may be a working fallback
+-	  if you need threading at all.
+-	  If you have an external binary toolchain then select the type 
+-	  of libpthreads it was built with.
+-
+-	config BR2_PTHREADS_NONE
+-		bool "none"
+-
+-	config BR2_PTHREADS
+-		bool "linuxthreads"
+-
+-	config BR2_PTHREADS_OLD
+-		bool "linuxthreads (stable/old)"
+-
+-	config BR2_PTHREADS_NATIVE
+-		bool "Native POSIX Threading (NPTL)"
+-		depends on BR2_UCLIBC_VERSION_SNAPSHOT
+-endchoice
+-
+ config BR2_TARGET_OPTIMIZATION
+ 	string "Target Optimizations"
+ 	default "-pipe"
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index bd22e0c..2ed65bf 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -149,6 +149,7 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_USE_WCHAR
  	select BR2_ENABLE_LOCALE
  	select BR2_PROGRAM_INVOCATION
++	select BR2_TOOLCHAIN_HAS_THREADS
  
-+config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	bool
-+
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+
-+choice
-+	prompt "External toolchain C library"
-+	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+	bool "uClibc"
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+
-+config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
-+	bool "glibc"
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+
- endchoice
- 
--if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
- config BR2_TOOLCHAIN_EXTERNAL_LARGEFILE
- 	bool "Toolchain has large file support?"
-@@ -70,7 +214,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PROGRAM_INVOCATION
+ config BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	bool
+@@ -220,6 +221,14 @@ config BR2_TOOLCHAIN_EXTERNAL_PROGRAM_INVOCATION
  	  invocation support. If you don't know, leave the default
  	  value, Buildroot will tell you if it's correct or not.
  
--endif
-+endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
++config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
++	bool "Toolchain has threads support?"
++	select BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Select this option if your external toolchain has thread
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
 +
-+endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
  
- config BR2_TOOLCHAIN_EXTERNAL_STRIP
- 	bool
-@@ -78,4 +224,6 @@ config BR2_TOOLCHAIN_EXTERNAL_STRIP
- 	prompt "Strip shared libraries"
- 	help
- 	  Strip shared libraries copied from the external toolchain.
--endif
-+
-+endif # BR2_TOOLCHAIN_EXTERNAL
-+
-diff --git a/toolchain/toolchain-external/Config.in.2 b/toolchain/toolchain-external/Config.in.2
-deleted file mode 100644
-index 489558c..0000000
---- a/toolchain/toolchain-external/Config.in.2
-+++ /dev/null
-@@ -1,17 +0,0 @@
--#
--
--if BR2_TOOLCHAIN_EXTERNAL
--config BR2_TOOLCHAIN_EXTERNAL_PATH
--	string "External toolchain path"
--	default "/path/to/staging_dir/usr"
--	help
--	  Path to where the external toolchain is installed.
--
--config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	string "External toolchain prefix"
--	default "$(ARCH)-linux"
--	help
--	  This the the external toolchain prefix. For example:
--	    armeb-unknown-linux-gnu, mipsel-unknown-linux-gnu, etc.
--
--endif
+ config BR2_TOOLCHAIN_EXTERNAL_CXX
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 53ad636..7a17914 100644
+index 027fbbd..d6153f1 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -2,8 +2,9 @@
- #
- # This file implements the support for external toolchains, i.e
- # toolchains that have not been produced by Buildroot itself and that
--# are already available on the system on which Buildroot runs. So far,
--# we have tested this with:
-+# Buildroot can download from the Web or that are already available on
-+# the system on which Buildroot runs. So far, we have tested this
-+# with:
- #
- #  * Toolchains generated by Crosstool-NG
- #  * Toolchains generated by Buildroot
-@@ -13,17 +14,21 @@
- #
- # The basic principle is the following
- #
--#  1. Perform some checks on the conformity between the toolchain
--#  configuration described in the Buildroot menuconfig system, and the
--#  real configuration of the external toolchain. This is for example
--#  important to make sure that the Buildroot configuration system
--#  knows whether the toolchain supports RPC, IPv6, locales, large
--#  files, etc. Unfortunately, these things cannot be detected
--#  automatically, since the value of these options (such as
--#  BR2_INET_RPC) are needed at configuration time because these
--#  options are used as dependencies for other options. And at
--#  configuration time, we are not able to retrieve the external
--#  toolchain configuration.
-+#  1. a. For toolchains downloaded from the Web, Buildroot already
-+#  knows their configuration, so it just downloads them and extract
-+#  them in $(TOOLCHAIN_EXTERNAL_DIR).
-+#
-+#  1. b. For pre-installed toolchains, perform some checks on the
-+#  conformity between the toolchain configuration described in the
-+#  Buildroot menuconfig system, and the real configuration of the
-+#  external toolchain. This is for example important to make sure that
-+#  the Buildroot configuration system knows whether the toolchain
-+#  supports RPC, IPv6, locales, large files, etc. Unfortunately, these
-+#  things cannot be detected automatically, since the value of these
-+#  options (such as BR2_INET_RPC) are needed at configuration time
-+#  because these options are used as dependencies for other
-+#  options. And at configuration time, we are not able to retrieve the
-+#  external toolchain configuration.
- #
- #  2. Copy the libraries needed at runtime to the target directory,
- #  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
-@@ -55,61 +60,138 @@ LIB_EXTERNAL_LIBS+=libthread_db.so
- endif # gdbserver
- endif # ! no threads
- 
--# SYSROOT_DIR selection. We first try the -print-sysroot option,
--# available in gcc 4.4.x and in some Codesourcery toolchains. If this
--# option is not available, we fallback to the value of --with-sysroot
--# as visible in CROSS-gcc -v. We don't pass any option to gcc that
--# could select a multilib variant as we want the "main" sysroot, which
--# contains all variants of the C library in the case of multilib
--# toolchains.
-+# Details about sysroot directory selection.
-+#
-+# To find the sysroot directory:
-+#
-+#  * We first try the -print-sysroot option, available in gcc 4.4.x
-+#    and in some Codesourcery toolchains.
-+#
-+#  * If this option is not available, we fallback to the value of
-+#    --with-sysroot as visible in CROSS-gcc -v.
-+#
-+# When doing those tests, we don't pass any option to gcc that could
-+# select a multilib variant (such as -march) as we want the "main"
-+# sysroot, which contains all variants of the C library in the case of
-+# multilib toolchains. We use the TARGET_CC_NO_SYSROOT variable, which
-+# is the path of the cross-compiler, without the
-+# --sysroot=$(STAGING_DIR), since what we want to find is the location
-+# of the original toolchain sysroot. This "main" sysroot directory is
-+# stored in SYSROOT_DIR.
-+#
-+# Then, multilib toolchains are a little bit more complicated, since
-+# they in fact have multiple sysroots, one for each variant supported
-+# by the toolchain. So we need to find the particular sysroot we're
-+# interested in.
-+#
-+# To do so, we ask the compiler where its sysroot is by passing all
-+# flags (including -march and al.), except the --sysroot flag since we
-+# want to the compiler to tell us where its original sysroot
-+# is. ARCH_SUBDIR will contain the subdirectory, in the main
-+# SYSROOT_DIR, that corresponds to the selected architecture
-+# variant. ARCH_SYSROOT_DIR will contain the full path to this
-+# location.
-+#
-+# One might wonder why we don't just bother with ARCH_SYSROOT_DIR. The
-+# fact is that in multilib toolchains, the header files are often only
-+# present in the main sysroot, and only the libraries are available in
-+# each variant-specific sysroot directory.
-+
- TARGET_CC_NO_SYSROOT=$(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
--SYSROOT_DIR=$(shell $(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null)
--ifeq ($(SYSROOT_DIR),)
--SYSROOT_DIR=$(shell readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;')
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
-+else
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/arm/portal/package7851/public/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2010.09-50-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else
-+# A value must be set (even if unused), otherwise the
-+# $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
-+# $(DL_DIR) rule
-+TOOLCHAIN_EXTERNAL_SOURCE=none
+@@ -53,7 +53,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ USR_LIB_EXTERNAL_LIBS+=libstdc++.so
  endif
  
--# Now, find if the toolchain specifies a sub-directory for the
--# specific architecture variant we're interested in. This is the case
--# with multilib toolchain, when the selected architecture variant is
--# not the default one. To do so, we ask the compiler by passing all
--# flags, except the --sysroot flag since we want to the compiler to
--# tell us where its original sysroot is. ARCH_SUBDIR will contain the
--# subdirectory, in the main SYSROOT_DIR, that corresponds to the
--# selected architecture variant. ARCH_SYSROOT_DIR will contain the
--# full path to this location.
--ARCH_SUBDIR=$(shell $(TARGET_CC_NO_SYSROOT) $(TARGET_CFLAGS) -print-multi-directory)
--ARCH_SYSROOT_DIR=$(SYSROOT_DIR)/$(ARCH_SUBDIR)
-+# Download and extraction of a toolchain
-+$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
-+	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE),$(TOOLCHAIN_EXTERNAL_SOURCE))
-+
-+$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
-+	mkdir -p $(@D)
-+	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	touch $@
- 
--$(STAMP_DIR)/ext-toolchain-installed:
-+# Checks for an already installed toolchain: check the toolchain
-+# location, check that it supports sysroot, and then verify that it
-+# matches the configuration provided in Buildroot: ABI, C++ support,
-+# type of C library and all C library features.
-+$(STAMP_DIR)/ext-toolchain-checked:
- 	@echo "Checking external toolchain settings"
- 	$(Q)$(call check_cross_compiler_exists)
--ifeq ($(strip $(SYSROOT_DIR)),)
--	@echo "External toolchain doesn't support --sysroot. Cannot use."
--	exit 1
--endif
--ifeq ($(BR2_arm),y)
--	$(Q)$(call check_arm_abi)
--endif
--ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	$(Q)$(call check_cplusplus)
--endif
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--	$(Q)$(call check_uclibc,$(SYSROOT_DIR))
--else
--	$(Q)$(call check_glibc,$(SYSROOT_DIR))
--endif
--	mkdir -p $(TARGET_DIR)/lib
--	@echo "Copy external toolchain libraries to target..."
--	$(Q)for libs in $(LIB_EXTERNAL_LIBS); do \
--		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
--	done
--	$(Q)for libs in $(USR_LIB_EXTERNAL_LIBS); do \
--		$(call copy_toolchain_lib_root,$(ARCH_SYSROOT_DIR),$$libs,/usr/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
--	done
--	@echo "Copy external toolchain sysroot to staging..."
--	$(Q)$(call copy_toolchain_sysroot,$(SYSROOT_DIR),$(ARCH_SYSROOT_DIR),$(ARCH_SUBDIR))
--	# Create lib64 symbolic links if needed
--	$(Q)if [ -L $(ARCH_SYSROOT_DIR)/lib64 ] ; then \
--		$(call create_lib64_symlinks) ; \
-+	$(Q)SYSROOT_DIR=`$(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null` ; \
-+	if test -z "$${SYSROOT_DIR}" ; then \
-+		SYSROOT_DIR=`readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;'` ; \
-+	fi ; \
-+	if test -z "$${SYSROOT_DIR}" ; then \
-+		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-+		exit 1 ; \
-+	fi ; \
-+	if test x$(BR2_arm) == x"y" ; then \
-+		$(call check_arm_abi) ; \
-+	fi ; \
-+	if test x$(BR2_INSTALL_LIBSTDCPP) == x"y" ; then \
-+		$(call check_cplusplus) ; \
-+	fi ; \
-+	if test x$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC) == x"y" ; then \
-+		$(call check_uclibc,$${SYSROOT_DIR}) ; \
-+	else \
-+		$(call check_glibc,$${SYSROOT_DIR}) ; \
- 	fi
--	@touch $@
-+
-+# Integration of the toolchain into Buildroot: find the main sysroot
-+# and the variant-specific sysroot, then copy the needed libraries to
-+# the $(TARGET_DIR) and copy the whole sysroot (libraries and headers)
-+# to $(STAGING_DIR).
-+$(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
-+	$(Q)SYSROOT_DIR=`$(TARGET_CC_NO_SYSROOT) -print-sysroot 2>/dev/null` ; \
-+	if test -z "$${SYSROOT_DIR}" ; then \
-+		SYSROOT_DIR=`readlink -f $$(LANG=C $(TARGET_CC_NO_SYSROOT) -print-file-name=libc.a) |sed -r -e 's:usr/lib/libc\.a::;'` ; \
-+	fi ; \
-+	if test -z "$${SYSROOT_DIR}" ; then \
-+		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-+		exit 1 ; \
-+	fi ; \
-+	ARCH_SUBDIR=`$(TARGET_CC_NO_SYSROOT) $(TARGET_CFLAGS) -print-multi-directory` ; \
-+	ARCH_SYSROOT_DIR=$${SYSROOT_DIR}/$${ARCH_SUBDIR} ; \
-+	mkdir -p $(TARGET_DIR)/lib ; \
-+	echo "Copy external toolchain libraries to target..." ; \
-+	for libs in $(LIB_EXTERNAL_LIBS); do \
-+	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+	done ; \
-+	for libs in $(USR_LIB_EXTERNAL_LIBS); do \
-+	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/usr/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+	done ; \
-+	echo "Copy external toolchain sysroot to staging..." ; \
-+	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR}) ; \
-+	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
-+		$(call create_lib64_symlinks) ; \
-+	fi ; \
-+	touch $@
+-ifneq ($(BR2_PTHREADS_NONE),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIB_EXTERNAL_LIBS+=libpthread.so
+ ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+ LIB_EXTERNAL_LIBS+=libthread_db.so
 -- 
 1.7.2.2
