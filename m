@@ -1,88 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Dec 2010 17:27:50 +0100
-Subject: [Buildroot] [PATCH 14/14] package: pass TARGET_MAKE_ENV at
-	install/clean/uninstall steps
-In-Reply-To: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <44f934455cebed54b30310c7bc86857b09320de2.1292257643.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Dec 2010 17:44:44 +0100
+Subject: [Buildroot] can't compile mplayer for ARM with actual buildroot
+ 5a6f6bfe885754955b615ca9353baa3496682c6f
+In-Reply-To: <AANLkTimto_ZpVXosSAAv8YtVS6o+o94y12MU3mx5cOcj@mail.gmail.com>
+References: <AANLkTimto_ZpVXosSAAv8YtVS6o+o94y12MU3mx5cOcj@mail.gmail.com>
+Message-ID: <20101213174444.3b328c36@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TARGET_MAKE_ENV contains the PATH to the host tools built in
-$(HOST_DIR), and not having this directory in the PATH while
-installing packages may cause troubles.
+Hello,
 
-The specific example that trigerred the problem is the following
-one. libglib2 ./configure tries to find a awk version, either gawk or
-mawk. On my limited testing system, only mawk is available, so
-normally, libglib2 detects mawk and uses it, and it works perfectly.
+On Mon, 13 Dec 2010 11:48:03 +0100
+Belisko Marek <marek.belisko@gmail.com> wrote:
 
-However, when host-gawk has been compiled before libglib2 (which
-happens for example if you have used the Crosstool-NG backend), gawk
-is well detected in $(HOST_DIR)/usr/bin at ./configure time
-($(HOST_DIR)/usr/bin is in the PATH at ./configure time, thanks to
-TARGET_MAKE_ENV). But at install time, when libglib2 uses gawk, it
-doesn't find it anymore because it is not in the PATH.
+> Trying to compile mplayer for ARM produce following error:
+> 
+> buildroot/output/staging/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+> --sysroot=/home/open-nandra/projects/buildroot/output/staging
+> -I../libswscale -I../libavcodec  -DHAVE_AV_CONFIG_H -D_ISOC9X_SOURCE
+> -I.. -I.. -I../libavutil -Wdisabled-optimization -Wno-pointer-sign
+> -Wdeclaration-after-statement -I. -I.. -I../libavutil -pipe -Os
+> -mtune=arm920t -march=armv4t -mabi=aapcs-linux -msoft-float
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -I/home/open-nandra/projects/buildroot/output/staging/usr/include
+> -I/home/open-nandra/projects/buildroot/output/staging/include
+> -D_REENTRANT -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+> -D_LARGEFILE64_SOURCE -DHAVE_CONFIG_H
+> -I/home/open-nandra/projects/buildroot/output/staging/usr/include   -c
+> -o armv4l/dsputil_arm_s.o armv4l/dsputil_arm_s.S
+> armv4l/dsputil_arm_s.S: Assembler messages:
+> armv4l/dsputil_arm_s.S:79: Error: selected processor does not support
+> `pld [r1]' armv4l/dsputil_arm_s.S:90: Error: selected processor does
+> not support `pld [r1]' armv4l/dsputil_arm_s.S:100: Error: selected
+> processor does not support `pld [r1]'
+> armv4l/dsputil_arm_s.S:111: Error: selected processor does not support
+> `pld [r1]'
 
-This also makes things coherent with host installation, in which
-$(HOST_MAKE_ENV) was already used.
+mplayer is using optimized assembly code that isn't valid for the
+selected armv4t architecture.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.autotools.in |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+Could you post the full mplayer build log ?
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 7d04e44..de0a355 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -210,7 +210,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
- 		cp -f $$$$i $$$$i~; \
- 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-@@ -224,7 +224,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -234,7 +234,7 @@ endif
- #
- ifndef $(2)_CLEAN_CMDS
- define $(2)_CLEAN_CMDS
--	-$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
-+	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -244,7 +244,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_STAGING_CMDS
- define $(2)_UNINSTALL_STAGING_CMDS
--	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -254,7 +254,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_TARGET_CMDS
- define $(2)_UNINSTALL_TARGET_CMDS
--	$$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
+For information, I just sent yesterday a new version of the mplayer
+package, that uses a very recent mplayer compared to the 1.0-rc2
+currently packaged in Buildroot. You'll find the patch on the list if
+you want to try.
+
+Regards,
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
