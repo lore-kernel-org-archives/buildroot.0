@@ -1,21 +1,22 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 13 Dec 2010 20:44:56 +0100
-Subject: [Buildroot] [PATCH 01/14] toolchain: Improve C library option
-	selection
-In-Reply-To: <366de3d2f2b619b68d0fc0f48ac3698cb48ca4c4.1292257643.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Dec 2010 20:46:16 +0100
+Subject: [Buildroot] [PATCH 02/14] toolchain: remove ending semi-colon
+	in helpers
+In-Reply-To: <2dcdf99548257a5907c8f77eb7a1b65d7295f135.1292257643.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-	<366de3d2f2b619b68d0fc0f48ac3698cb48ca4c4.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201012132044.57098.yann.morin.1998@anciens.enib.fr>
+	<2dcdf99548257a5907c8f77eb7a1b65d7295f135.1292257643.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201012132046.16330.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 13 December 2010 17:27:37 Thomas Petazzoni wrote:
-> Turn BR2_LARGEFILE, BR2_INET_IPV6, BR2_INET_RPC, BR2_USE_WCHAR,
-> BR2_ENABLE_LOCALE and BR2_PROGRAM_INVOCATION into hidden options.
-[--SNIP--]
+On Monday 13 December 2010 17:27:38 Thomas Petazzoni wrote:
+> Some helpers had their final line ending with a semi-colon, some did
+> not. For consistency, remove the final semi-colon from all helpers,
+> it's the responsability of the caller to add the final semi-colon as
+> needed.
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
