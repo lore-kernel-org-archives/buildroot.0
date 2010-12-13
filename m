@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 13 Dec 2010 22:26:52 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain: remove
-	toolchain-specific stripping
-Message-ID: <20101213214844.08AD98E2C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] toolchain: remove ending
+	semi-colon in helpers
+Message-ID: <20101213214843.A981E8E2C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,121 +10,57 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01b434b27a24652cf1ad2d77aeba8f55bac61e1c
+commit: http://git.buildroot.net/buildroot/commit/?id=ac38fd3dc6f046022c13f12aad0e754ec4242ffc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We already handle the stripping of libraries in $(TARGET_DIR) at the
-global level, so there's no need to have toolchain-specific option and
-code for this.
+Some helpers had their final line ending with a semi-colon, some did
+not. For consistency, remove the final semi-colon from all helpers,
+it's the responsability of the caller to add the final semi-colon as
+needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/helpers.mk                             |    9 ---------
- toolchain/toolchain-crosstool-ng/Config.in       |    6 ------
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
- toolchain/toolchain-external/Config.in           |    7 -------
- toolchain/toolchain-external/ext-tool.mk         |    4 ++--
- 5 files changed, 4 insertions(+), 26 deletions(-)
+ toolchain/helpers.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 43c6db3..24f379d 100644
+index 05d43e7..43c6db3 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -15,13 +15,11 @@
- # $1: arch specific sysroot directory
- # $2: library name
- # $3: destination directory of the libary, relative to $(TARGET_DIR)
--# $4: strip (y|n), default is to strip
+@@ -201,7 +201,7 @@ check_uclibc = \
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_PROGRAM_INVOCATION_NAME__,BR2_PROGRAM_INVOCATION,$${UCLIBC_CONFIG_FILE},Program invocation support)
+ 
  #
- copy_toolchain_lib_root = \
- 	ARCH_SYSROOT_DIR="$(strip $1)"; \
- 	LIB="$(strip $2)"; \
- 	DESTDIR="$(strip $3)" ; \
--	STRIP="$(strip $4)"; \
-  \
- 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
- 		find -L . -path "./lib/$${LIB}.*"     -o \
-@@ -39,13 +37,6 @@ copy_toolchain_lib_root = \
- 				cp -d $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/; \
- 			elif test -f $${FULLPATH}; then \
- 				$(INSTALL) -D -m0755 $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
--				case "$${STRIP}" in \
--				(0 | n | no) \
--;; \
--				(*) \
--					$(TARGET_CROSS)strip "$(TARGET_DIR)/$${DESTDIR}/$${LIB}"; \
--;; \
--				esac; \
- 			else \
- 				exit -1; \
- 			fi; \
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 4f30588..4ee665d 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -98,10 +98,4 @@ config BR2_TOOLCHAIN_CTNG_uClibc_PROGRAM_INVOCATION
+ # Check that the Buildroot configuration of the ABI matches the
+@@ -221,7 +221,7 @@ check_arm_abi = \
+ 	if [ x$(BR2_ARM_EABI) = x"y" -a $${EXT_TOOLCHAIN_ABI} = "oabi" ] ; then \
+ 		echo "Incorrect ABI setting" ; \
+ 		exit 1 ; \
+-	fi ; \
++	fi
  
- endif # BR2_TOOLCHAIN_CTNG_uClibc
+ #
+ # Check that the external toolchain supports C++
+@@ -231,7 +231,7 @@ check_cplusplus = \
+ 	if test $$? -ne 0 ; then \
+ 		echo "BR2_INSTALL_LIBSTDCPP is selected but C++ support not available in external toolchain" ; \
+ 		exit 1 ; \
+-	fi ; \
++	fi
  
--config BR2_TOOLCHAIN_CTNG_STRIP_LIBS
--	bool "Strip libs copied to target"
--	default !BR2_STRIP_none
--	help
--	  Strip shared libraries copied from the toolchain.
--
- endif # BR2_TOOLCHAIN_CTNG
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 31797c4..1c5e864 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -65,10 +65,10 @@ $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- 	    echo "CTNG_SYSROOT='$${CTNG_SYSROOT}'";                         \
- 	    echo "Copy external toolchain libraries to target...";          \
- 	    for libs in $(CTNG_LIBS_LIB); do                                \
--	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/lib,$(BR2_TOOLCHAIN_CTNG_STRIP_LIBS)); \
-+	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/lib); \
- 	    done;                                                           \
- 	    for libs in $(CTNG_LIBS_USR_LIB); do                            \
--	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/usr/lib,$(BR2_TOOLCHAIN_CTNG_STRIP_LIBS)); \
-+	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/usr/lib); \
- 	    done;                                                           \
- 	    echo "Copy external toolchain sysroot to staging...";           \
- 	    $(call copy_toolchain_sysroot,$${CTNG_SYSROOT},$${CTNG_SYSROOT},)
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c2602d2..59fcb52 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -218,12 +218,5 @@ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
--config BR2_TOOLCHAIN_EXTERNAL_STRIP
--	bool
--	default y
--	prompt "Strip shared libraries"
--	help
--	  Strip shared libraries copied from the external toolchain.
--
- endif # BR2_TOOLCHAIN_EXTERNAL
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 7a17914..027fbbd 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -184,10 +184,10 @@ $(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 	mkdir -p $(TARGET_DIR)/lib ; \
- 	echo "Copy external toolchain libraries to target..." ; \
- 	for libs in $(LIB_EXTERNAL_LIBS); do \
--	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+		$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/lib); \
- 	done ; \
- 	for libs in $(USR_LIB_EXTERNAL_LIBS); do \
--	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/usr/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+		$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/usr/lib); \
- 	done ; \
- 	echo "Copy external toolchain sysroot to staging..." ; \
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR}) ; \
+ #
+ # Check that the cross-compiler given in the configuration exists
+@@ -241,4 +241,4 @@ check_cross_compiler_exists = \
+ 	if test $$? -ne 0 ; then \
+ 		echo "Cannot execute cross-compiler '$(TARGET_CC)'" ; \
+ 		exit 1 ; \
+-	fi ; \
++	fi
 -- 
 1.7.2.2
