@@ -1,42 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Dec 2010 21:03:22 +0100
-Subject: [Buildroot] [PATCH 07/16] busybox: move udhcp script from
- skeleton to package
-In-Reply-To: <87ei9mk1q2.fsf@macbook.be.48ers.dk>
-References: <1291888514-31385-1-git-send-email-llandwerlin@gmail.com>
-	<1291888514-31385-8-git-send-email-llandwerlin@gmail.com>
-	<87ei9mk1q2.fsf@macbook.be.48ers.dk>
-Message-ID: <20101213210322.4d218d38@surf>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 13 Dec 2010 21:22:58 +0100
+Subject: [Buildroot] yocto project
+In-Reply-To: <20101213191100.GF23258@bulix.org>
+References: <AANLkTikVA4Ge81Z=oy5utWp57RgV0-3-3Rx809AksYGD@mail.gmail.com>
+	<20101213191100.GF23258@bulix.org>
+Message-ID: <201012132122.58695.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Dec 2010 00:31:17 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Marek, Maxime, All,
 
-> We have a number of (somewhat) different default.script files in the
-> skeletons:
->  find -name default.script|xargs md5sum|sort 
-> 07e9a6d08f1cb076af6f54f1f69b76e2  ./Atmel/atngw100/target_skeleton/usr/share/udhcpc/default.script
-> 07e9a6d08f1cb076af6f54f1f69b76e2  ./Atmel/atstk1005/target_skeleton/usr/share/udhcpc/default.script
-> 07e9a6d08f1cb076af6f54f1f69b76e2  ./Atmel/atstk100x/target_skeleton/usr/share/udhcpc/default.script
-> 0869726c3fdd7a10f9ea5b368a9474a0  ./Atmel/root/target_skeleton/usr/share/udhcpc/default.script
-> 33cc63bd3d159030a849105e719d0592  ./KwikByte/kb9202/target_skeleton/usr/share/udhcpc/default.script
-> f5b6d601ced4aad0e6de650234200381  ./valka/target_skeleton/usr/share/udhcpc/default.script
-> 
-> So I prefer to only install if the skeleton hasn't defined a custom one
-> like we do elsewhere.
+On Monday 13 December 2010 20:11:01 Maxime Petazzoni wrote:
+> * Belisko Marek <marek.belisko@gmail.com> [2010-12-13 19:51:18]:
+> > I like it :
+> > http://www.linuxfoundation.org/news-media/announcements/2010/12/linux-foundation-appoints-new-fellow
+> > but why create new build system type? We have openembedded, buildroot,
+> > PTXdist...
+> I had the chance to attend the little Linux Foundation summit on Yocto
+> at the beginning of December,
 
-FWIW, my boards-cleanup branch gets rid of all those redundant
-skeletons.
+Of which (I believe) a summary is available at:
+  http://lwn.net/Articles/419642/
+
+Subscribers only for now, available to all 20101223.
 
 Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
