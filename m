@@ -1,22 +1,22 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 13 Dec 2010 20:46:16 +0100
-Subject: [Buildroot] [PATCH 02/14] toolchain: remove ending semi-colon
-	in helpers
-In-Reply-To: <2dcdf99548257a5907c8f77eb7a1b65d7295f135.1292257643.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Dec 2010 20:47:02 +0100
+Subject: [Buildroot] [PATCH 04/14] toolchain: remove toolchain-specific
+	stripping
+In-Reply-To: <1fd847785df3843e906c143c04528f4f1fef0a77.1292257643.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-	<2dcdf99548257a5907c8f77eb7a1b65d7295f135.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201012132046.16330.yann.morin.1998@anciens.enib.fr>
+	<1fd847785df3843e906c143c04528f4f1fef0a77.1292257643.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201012132047.02977.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 13 December 2010 17:27:38 Thomas Petazzoni wrote:
-> Some helpers had their final line ending with a semi-colon, some did
-> not. For consistency, remove the final semi-colon from all helpers,
-> it's the responsability of the caller to add the final semi-colon as
-> needed.
+On Monday 13 December 2010 17:27:40 Thomas Petazzoni wrote:
+> We already handle the stripping of libraries in $(TARGET_DIR) at the
+> global level, so there's no need to have toolchain-specific option and
+> code for this.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
