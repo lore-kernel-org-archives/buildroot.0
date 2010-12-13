@@ -1,126 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Dec 2010 17:27:40 +0100
-Subject: [Buildroot] [PATCH 04/14] toolchain: remove toolchain-specific
-	stripping
+Date: Mon, 13 Dec 2010 17:27:42 +0100
+Subject: [Buildroot] [PATCH 06/14] toolchain: move Stack Protection Support
+	option
 In-Reply-To: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1fd847785df3843e906c143c04528f4f1fef0a77.1292257643.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a39ab8a30f677d4a07d6d88a2cc036ccba0ff225.1292257643.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We already handle the stripping of libraries in $(TARGET_DIR) at the
-global level, so there's no need to have toolchain-specific option and
-code for this.
+The BR2_USE_SSP option is only used inside the uClibc build, so only
+meaningful for Buildroot internal toolchains. Therefore, the option is
+moved to the right location so that it isn't visible when working with
+external toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk                             |    9 ---------
- toolchain/toolchain-crosstool-ng/Config.in       |    6 ------
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
- toolchain/toolchain-external/Config.in           |    7 -------
- toolchain/toolchain-external/ext-tool.mk         |    4 ++--
- 5 files changed, 4 insertions(+), 26 deletions(-)
+ toolchain/toolchain-buildroot/Config.in.2 |    9 +++++++++
+ toolchain/toolchain-common.in             |    9 ---------
+ toolchain/uClibc/uclibc.mk                |    2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 43c6db3..24f379d 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -15,13 +15,11 @@
- # $1: arch specific sysroot directory
- # $2: library name
- # $3: destination directory of the libary, relative to $(TARGET_DIR)
--# $4: strip (y|n), default is to strip
- #
- copy_toolchain_lib_root = \
- 	ARCH_SYSROOT_DIR="$(strip $1)"; \
- 	LIB="$(strip $2)"; \
- 	DESTDIR="$(strip $3)" ; \
--	STRIP="$(strip $4)"; \
-  \
- 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
- 		find -L . -path "./lib/$${LIB}.*"     -o \
-@@ -39,13 +37,6 @@ copy_toolchain_lib_root = \
- 				cp -d $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/; \
- 			elif test -f $${FULLPATH}; then \
- 				$(INSTALL) -D -m0755 $${FULLPATH} $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
--				case "$${STRIP}" in \
--				(0 | n | no) \
--;; \
--				(*) \
--					$(TARGET_CROSS)strip "$(TARGET_DIR)/$${DESTDIR}/$${LIB}"; \
--;; \
--				esac; \
- 			else \
- 				exit -1; \
- 			fi; \
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 4f30588..4ee665d 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -98,10 +98,4 @@ config BR2_TOOLCHAIN_CTNG_uClibc_PROGRAM_INVOCATION
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index cf426ee..f1b0a7c 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -67,6 +67,15 @@ comment "C++ support broken in uClibc 0.9.31 with locale enabled with gcc 4.2"
+ 		    BR2_TOOLCHAIN_BUILDROOT_LOCALE    && \
+ 		    BR2_UCLIBC_VERSION_0_9_31
  
- endif # BR2_TOOLCHAIN_CTNG_uClibc
++config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
++	bool "Enable stack protection support"
++	help
++	  Enable stack smashing protection support using GCCs
++	  -fstack-protector[-all] option.
++
++	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
++	  for details.
++
+ source "toolchain/elf2flt/Config.in"
+ source "toolchain/mklibs/Config.in"
+ source "toolchain/sstrip/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2c54acd..5502ab4 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -76,15 +76,6 @@ config BR2_SOFT_FLOAT
+ 	  functions, then everything will need to be compiled with soft
+ 	  floating point support (-msoft-float).
  
--config BR2_TOOLCHAIN_CTNG_STRIP_LIBS
--	bool "Strip libs copied to target"
--	default !BR2_STRIP_none
+-config BR2_USE_SSP
+-	bool "Enable stack protection support"
 -	help
--	  Strip shared libraries copied from the toolchain.
+-	  Enable stack smashing protection support using GCCs
+-	  -fstack-protector[-all] option.
 -
- endif # BR2_TOOLCHAIN_CTNG
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 31797c4..1c5e864 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -65,10 +65,10 @@ $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- 	    echo "CTNG_SYSROOT='$${CTNG_SYSROOT}'";                         \
- 	    echo "Copy external toolchain libraries to target...";          \
- 	    for libs in $(CTNG_LIBS_LIB); do                                \
--	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/lib,$(BR2_TOOLCHAIN_CTNG_STRIP_LIBS)); \
-+	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/lib); \
- 	    done;                                                           \
- 	    for libs in $(CTNG_LIBS_USR_LIB); do                            \
--	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/usr/lib,$(BR2_TOOLCHAIN_CTNG_STRIP_LIBS)); \
-+	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/usr/lib); \
- 	    done;                                                           \
- 	    echo "Copy external toolchain sysroot to staging...";           \
- 	    $(call copy_toolchain_sysroot,$${CTNG_SYSROOT},$${CTNG_SYSROOT},)
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c2602d2..59fcb52 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -218,12 +218,5 @@ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
--config BR2_TOOLCHAIN_EXTERNAL_STRIP
--	bool
--	default y
--	prompt "Strip shared libraries"
--	help
--	  Strip shared libraries copied from the external toolchain.
+-	  See http://www.linuxfromscratch.org/hints/downloads/files/ssp.txt
+-	  for details.
 -
- endif # BR2_TOOLCHAIN_EXTERNAL
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 7a17914..71aa127 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -184,10 +184,10 @@ $(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 	mkdir -p $(TARGET_DIR)/lib ; \
- 	echo "Copy external toolchain libraries to target..." ; \
- 	for libs in $(LIB_EXTERNAL_LIBS); do \
--	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/lib); \
- 	done ; \
- 	for libs in $(USR_LIB_EXTERNAL_LIBS); do \
--	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/usr/lib,$(BR2_TOOLCHAIN_EXTERNAL_STRIP)); \
-+	 	$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$$libs,/usr/lib); \
- 	done ; \
- 	echo "Copy external toolchain sysroot to staging..." ; \
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR}) ; \
+ choice
+ 	prompt "Thread library implementation"
+ 	default BR2_PTHREADS_OLD
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 1ed40cc..e05e16c 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -271,7 +271,7 @@ else
+ 		-e 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' \
+ 		$(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_USE_SSP),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=n,g' $(UCLIBC_DIR)/.oldconfig
 -- 
 1.7.0.4
