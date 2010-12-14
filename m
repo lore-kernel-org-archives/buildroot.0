@@ -1,43 +1,42 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 14 Dec 2010 14:00:57 -0500
-Subject: [Buildroot] [PATCH] hostcc/hostcxx: fix noccache variant setting
-Message-ID: <1292353257-13594-1-git-send-email-vapier@gentoo.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Dec 2010 16:05:56 -0300
+Subject: [Buildroot] [PATCH 00/13] Toolchain rework, take 2
+Message-ID: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current code accidentally sets up HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE
-only when the respective HOSTCC or HOSTCXX values are not set.  So if you
-do something like:
-	make HOSTCC=gcc menuconfig
-The build fails because HOSTCC_NOCCACHE is not set anywhere.
+This is the second batch of patches for the internal toolchain rework.
+I've included the first batch since they're not in mainline yet.
+The idea is to get testers, feedback and get it in mainline soon.
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+gmp: converted to package, renamed from libgmp.
 
-diff --git a/Makefile b/Makefile
-index f6ab07e..34d28a3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -126,13 +126,13 @@ endif
- ifndef HOSTCC
- HOSTCC:=gcc
- HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
--HOSTCC_NOCCACHE:=$(HOSTCC)
- endif
-+HOSTCC_NOCCACHE:=$(HOSTCC)
- ifndef HOSTCXX
- HOSTCXX:=g++
- HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
--HOSTCXX_NOCCACHE:=$(HOSTCXX)
- endif
-+HOSTCXX_NOCCACHE:=$(HOSTCXX)
- ifndef HOSTFC
- HOSTFC:=gfortran
- endif
--- 
-1.7.3.3
+php: refer to gmp instead of libgmp.
+
+mpc: converted to package, renamed from libmpc.
+
+mpfr: converted to package, renamed from libmpfr.
+
+sstrip: converted to package.
+
+binutils: converted to package, added version 2.21.
+
+toolchain: move the sysroot to the host directory.
+It's now under $HOST_DIR/usr/tuple/sysroot
+
+gcc: minor cleanup, change target and hooks to host dir.
+
+gdb: converted to package, added version 7.2.
+
+uclibc: install tools to host dir,
+
+Also fix a small bug in the package infra to avoid patch duplication between
+host and target packages.
+
+TODO: convert gcc, uclibc, kernel-headers, elf2flt & mklibs.
+TODO: update documentation.
+
+STATE: working, tested with ARM and PPC targets.
