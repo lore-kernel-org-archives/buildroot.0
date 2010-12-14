@@ -1,41 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 14 Dec 2010 22:40:20 +0100
-Subject: [Buildroot] "output" directory for multiple targets
-In-Reply-To: <966150.47074.qm@web111115.mail.gq1.yahoo.com>
-References: <966150.47074.qm@web111115.mail.gq1.yahoo.com>
-Message-ID: <201012142240.20508.yann.morin.1998@anciens.enib.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Dec 2010 22:48:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 2965] New: Broken linkage to xkbcomp (blocking X
+ server startup)
+Message-ID: <bug-2965-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Justin, All,
+https://bugs.busybox.net/show_bug.cgi?id=2965
 
-On Tuesday 14 December 2010 22:34:14 Justin Mark wrote:
-> If I want to use buildroot for multiple targets (or devices), is there a way
-> to specify each target's own "output" directory (not only the destination
-> root filesystem folder)? so I can keep all the build results for different
-> targets?
+           Summary: Broken linkage to xkbcomp (blocking X server startup)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: adm at mpscompany.pl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-You can do out-of-tree builds, one for each of your devices:
-  mkdir device-1
-  cd device-1
-  make -C "/path/to/buildroot" O="$(pwd)" menuconfig
-  make
 
-The first time you run 'make -C....', as above, it creates wrapper Makefile
-in $(pwd) that allows you to simply call make the following times.
+Hello,
 
-And so on for each of your devices...
+Buildroot generates rootfs image with xkbcomp file is a sym link to host
+xkbcomp binary.
 
-Regards,
-Yann E. MORIN.
+[dynia at entropia images]$ tar tvf rootfs.tar | grep /usr/share/X11/xkb/xkbcomp
+lrwxrwxrwx root/root         0 2010-12-14 20:24 ./usr/share/X11/xkb/xkbcomp ->
+/mnt/b/Arm/buildroot-2010.11/output/host/usr/bin/xkbcomp
+
+So in my case I got ARM rootfs link to non-existing and wrong (since x86)
+binary.
+
+Additionally I guest the xkbcomp is placed in a wrong dir since X server is
+searching it in /usr/bin and the broken link is located in /usr/share/X11/xkb -
+but this is rather a minor issue.
+
+This have been tested on buildroot-2010.11 and daily snapshot at 15th Dec 2010.
+
+Regards
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
