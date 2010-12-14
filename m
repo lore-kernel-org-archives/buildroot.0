@@ -1,7 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 14 Dec 2010 01:35:41 +0100
-Subject: [Buildroot] [git commit master 1/1] hotplug: remove package
-Message-ID: <20101214003643.5BA8E82927@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] lsof: convert to gentargets and
+	bump to 4.84
+Message-ID: <20101214003642.6DF258E2DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,117 +10,248 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92919160b8a06260463ba3e3a241e433bbe1d947
+commit: http://git.buildroot.net/buildroot/commit/?id=8db52c6e78c040d035522ca747acc7752d474cf2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package has been marked deprecated, is no longer developed
-upstream, so let's get rid of it.
+lsof is packaged as a tarball inside a .tar.bz2 package, so we have a
+post-extract hook to extract the source code tarball, so that for the
+next steps, lsof looks like a normal package.
 
+Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                             |    2 +-
- package/Config.in                   |    1 -
- package/hotplug/Config.in           |    7 -----
- package/hotplug/diethotplug-0.5.tar |  Bin 40960 -> 0 bytes
- package/hotplug/hotplug.mk          |   45 -----------------------------------
- 5 files changed, 1 insertions(+), 54 deletions(-)
- delete mode 100644 package/hotplug/Config.in
- delete mode 100644 package/hotplug/diethotplug-0.5.tar
- delete mode 100644 package/hotplug/hotplug.mk
+ CHANGES                                            |    8 +-
+ ...sof-makefile.patch => lsof-4.84-makefile.patch} |    4 +-
+ ...f-noportmap.patch => lsof-4.84-noportmap.patch} |    4 +-
+ ...flags.patch => lsof-4.84-override-cflags.patch} |    4 +-
+ ...tch => lsof-4.84-remove-susvlegacy-funcs.patch} |    4 +-
+ package/lsof/lsof-uclibc.patch                     |   12 ---
+ package/lsof/lsof.mk                               |   96 ++++++++++----------
+ 7 files changed, 58 insertions(+), 74 deletions(-)
+ rename package/lsof/{lsof-makefile.patch => lsof-4.84-makefile.patch} (62%)
+ rename package/lsof/{lsof-noportmap.patch => lsof-4.84-noportmap.patch} (64%)
+ rename package/lsof/{lsof-override-cflags.patch => lsof-4.84-override-cflags.patch} (66%)
+ rename package/lsof/{lsof-remove-susvlegacy-funcs.patch => lsof-4.84-remove-susvlegacy-funcs.patch} (62%)
+ delete mode 100644 package/lsof/lsof-uclibc.patch
 
 diff --git a/CHANGES b/CHANGES
-index c4cf18c..51ab28b 100644
+index 5dbc27c..a021437 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -12,7 +12,7 @@
+@@ -5,10 +5,10 @@
+ 
+ 	Updated/fixed packages: at, busybox, bzip2, dbus,
+ 	direcfb-examples, dmalloc, cloop, cups, ffmpeg, gdk-pixbuf,
+-	hostapd, i2c-tools, input-tools, libconfig, ltp-testsuite, m4,
+-	mii-diag, mrouted, openssh, openssl, openvpn, pango, qt,
+-	rsync, sdl_gfx, sdl_sound, sysklogd, sysvinit, udev, usbutils,
+-	xz, zlib
++	hostapd, i2c-tools, input-tools, libconfig, lsof,
++	ltp-testsuite, m4, mii-diag, mrouted, openssh, openssl,
++	openvpn, pango, qt, rsync, sdl_gfx, sdl_sound, sysklogd,
++	sysvinit, udev, usbutils, xz, zlib
  
  	New packages: dhrystone, fbgrab, lsuio, rsh-redone, whetstone
  
--	Removed packages: libfloat, microcom, ng-spice-rework
-+	Removed packages: hotplug, libfloat, microcom, ng-spice-rework
+diff --git a/package/lsof/lsof-makefile.patch b/package/lsof/lsof-4.84-makefile.patch
+similarity index 62%
+rename from package/lsof/lsof-makefile.patch
+rename to package/lsof/lsof-4.84-makefile.patch
+index 2d4e9d4..65b1b2e 100644
+--- a/package/lsof/lsof-makefile.patch
++++ b/package/lsof/lsof-4.84-makefile.patch
+@@ -1,6 +1,6 @@
+ diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
+---- lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
+-+++ lsof_4.81/lsof_4.81_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
++--- a/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
+++++ b/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
+ @@ -21,8 +21,8 @@
+  all:	${LIB}
+  
+diff --git a/package/lsof/lsof-noportmap.patch b/package/lsof/lsof-4.84-noportmap.patch
+similarity index 64%
+rename from package/lsof/lsof-noportmap.patch
+rename to package/lsof/lsof-4.84-noportmap.patch
+index 4a37db4..984e0d8 100644
+--- a/package/lsof/lsof-noportmap.patch
++++ b/package/lsof/lsof-4.84-noportmap.patch
+@@ -1,5 +1,5 @@
+---- lsof_4.81/lsof_4.81_src/print.orig.c	2006-08-23 13:37:43.000000000 -0600
+-+++ lsof_4.81/lsof_4.81_src/print.c	2006-08-23 13:38:29.000000000 -0600
++--- a/print.c	2006-08-23 13:37:43.000000000 -0600
+++++ b/print.c	2006-08-23 13:38:29.000000000 -0600
+ @@ -148,6 +148,7 @@
+  static void
+  fill_portmap()
+diff --git a/package/lsof/lsof-override-cflags.patch b/package/lsof/lsof-4.84-override-cflags.patch
+similarity index 66%
+rename from package/lsof/lsof-override-cflags.patch
+rename to package/lsof/lsof-4.84-override-cflags.patch
+index fcb9292..135e599 100644
+--- a/package/lsof/lsof-override-cflags.patch
++++ b/package/lsof/lsof-4.84-override-cflags.patch
+@@ -1,5 +1,5 @@
+---- lsof_4.81/lsof_4.81_src/Configure	2008-10-21 18:21:45.000000000 +0200
+-+++ lsof_4.81/lsof_4.81_src/Configure	2010-11-03 14:00:00.000000000 +0100
++--- lsof_4.84/Configure	2008-10-21 18:21:45.000000000 +0200
+++++ lsof_4.84/Configure	2010-11-03 14:00:00.000000000 +0100
+ @@ -5206,6 +5206,10 @@
+    cp $LSOF_MKFC ${LSOF_LIB}/$LSOF_LIBMKF
+  fi	# }
+diff --git a/package/lsof/lsof-remove-susvlegacy-funcs.patch b/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
+similarity index 62%
+rename from package/lsof/lsof-remove-susvlegacy-funcs.patch
+rename to package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
+index d1d9371..fca66ae 100644
+--- a/package/lsof/lsof-remove-susvlegacy-funcs.patch
++++ b/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
+@@ -1,6 +1,6 @@
+ diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
+---- lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
+-+++ lsof_4.81/lsof_4.81_src/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
++--- a/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
+++++ b/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
+ @@ -616,6 +616,6 @@
+   * zeromem is a macro that uses bzero or memset.
+   */
+diff --git a/package/lsof/lsof-uclibc.patch b/package/lsof/lsof-uclibc.patch
+deleted file mode 100644
+index 797a0ce..0000000
+--- a/package/lsof/lsof-uclibc.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+-diff -ru lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h
+---- lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h	2006-03-28 00:57:14.000000000 +0200
+-+++ lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
+-@@ -49,7 +49,7 @@
+- #include <unistd.h>
+- #include <netinet/in.h>
+- 
+--# if	defined(GLIBCV)
+-+# if	defined(GLIBCV) || defined __UCLIBC__
+- #include <netinet/tcp.h>
+- # else	/* !defined(GLIBCV) */
+- #include <linux/tcp.h>
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 837a88c..05365da 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -3,68 +3,64 @@
+ # lsof
+ #
+ #############################################################
+-LSOF_VERSION:=4.81
+-LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
+-LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+-LSOF_CAT:=$(BZCAT)
+-LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
+-LSOF_BINARY:=lsof
+-LSOF_TARGET_BINARY:=bin/lsof
+-LSOF_INCLUDE:=$(STAGING_DIR)/usr/include
++LSOF_VERSION = 4.84
++LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
++LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
  
- 	Issues resolved (http://bugs.uclibc.org):
- 
-diff --git a/package/Config.in b/package/Config.in
-index 0f3eca4..b590867 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -170,7 +170,6 @@ source "package/gvfs/Config.in"
- source "package/hal/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/hdparm/Config.in"
--source "package/hotplug/Config.in"
+-BR2_LSOF_CFLAGS:=
++BR2_LSOF_CFLAGS =
+ ifeq ($(BR2_LARGEFILE),)
+-BR2_LSOF_CFLAGS+=-U_FILE_OFFSET_BITS
++BR2_LSOF_CFLAGS += -U_FILE_OFFSET_BITS
  endif
- source "package/hwdata/Config.in"
- source "package/i2c-tools/Config.in"
-diff --git a/package/hotplug/Config.in b/package/hotplug/Config.in
-deleted file mode 100644
-index 48f1d71..0000000
---- a/package/hotplug/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_HOTPLUG
--	bool "hotplug"
--	depends on BR2_DEPRECATED
--	help
--	  Plug in new devices and use them immediately.
+ ifeq ($(BR2_INET_IPV6),)
+-BR2_LSOF_CFLAGS+=-UHASIPv6
++BR2_LSOF_CFLAGS += -UHASIPv6
+ endif
+ 
+-$(DL_DIR)/$(LSOF_SOURCE):
+-	 $(call DOWNLOAD,$(LSOF_SITE),$(LSOF_SOURCE))
 -
--	  http://linux-hotplug.sourceforge.net/
-diff --git a/package/hotplug/diethotplug-0.5.tar b/package/hotplug/diethotplug-0.5.tar
-deleted file mode 100644
-index 8088670..0000000
-Binary files a/package/hotplug/diethotplug-0.5.tar and /dev/null differ
-diff --git a/package/hotplug/hotplug.mk b/package/hotplug/hotplug.mk
-deleted file mode 100644
-index 0b354a8..0000000
---- a/package/hotplug/hotplug.mk
-+++ /dev/null
-@@ -1,45 +0,0 @@
--#############################################################
--#
--# hotplug support
--#
--#############################################################
--HOTPLUG_VERSION:=0.5
--HOTPLUG_SOURCE=package/hotplug/diethotplug-$(HOTPLUG_VERSION).tar
--HOTPLUG_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
--HOTPLUG_DIR=$(BUILD_DIR)/diethotplug-$(HOTPLUG_VERSION)
--HOTPLUG_CAT=cat
+-lsof-source: $(DL_DIR)/$(LSOF_SOURCE)
 -
--$(HOTPLUG_DIR): $(HOTPLUG_SOURCE)
--	$(HOTPLUG_CAT) $(HOTPLUG_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(HOTPLUG_DIR) package/hotplug/ hotplug\*.patch
+-lsof-unpacked: $(LSOF_DIR)/.unpacked
 -
--$(HOTPLUG_DIR)/hotplug: $(HOTPLUG_DIR)
--	$(MAKE) CROSS=$(TARGET_CROSS) DEBUG=false KLIBC=false \
--	    KERNEL_INCLUDE_DIR=$(STAGING_DIR)/usr/include \
--	    TARGET_DIR=$(TARGET_DIR) -C $(HOTPLUG_DIR)
--	$(STRIPCMD) $(HOTPLUG_DIR)/hotplug
--	touch -c $(HOTPLUG_DIR)/hotplug
+-$(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
+-	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	(cd $(LSOF_DIR);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
+-	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
+-	touch $(LSOF_DIR)/.unpacked
 -
--$(TARGET_DIR)/sbin/hotplug: $(HOTPLUG_DIR)/hotplug
--	cp $(HOTPLUG_DIR)/hotplug $(TARGET_DIR)/sbin/hotplug
--	touch -c $(TARGET_DIR)/sbin/hotplug
+-$(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
+-	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" LSOF_CFLAGS_OVERRIDE=1 ./Configure linux)
+-	touch $(LSOF_DIR)/.configured
 -
--hotplug: $(TARGET_DIR)/sbin/hotplug
--
--hotplug-source: $(HOTPLUG_SOURCE)
--
--hotplug-clean:
--	rm -f $(TARGET_DIR)/sbin/hotplug
--	-$(MAKE) -C $(HOTPLUG_DIR) clean
--
--hotplug-dirclean:
--	rm -rf $(HOTPLUG_DIR)
--
+-$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
+ ifeq ($(BR2_USE_WCHAR),)
+-	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
+-	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
++define LSOF_CONFIGURE_WCHAR_FIXUPS
++	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' \
++		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
++	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' \
++		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
++endef
+ endif
++
+ ifeq ($(BR2_ENABLE_LOCALE),)
+-	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
++define LSOF_CONFIGURE_LOCALE_FIXUPS
++	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' \
++		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
++endef
+ endif
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
+ 
+-$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY)
+-	cp $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY) $@
+-	$(STRIPCMD) $@
++# The .tar.bz2 contains another .tar, which contains the source code.
++define LSOF_EXTRACT_TAR
++	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -xf $(@D)/lsof_$(LSOF_VERSION)_src.tar -C $(@D)
++	rm -f $(@D)/lsof_$(LSOF_VERSION)_src.tar
++endef
+ 
+-lsof: $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
++LSOF_POST_EXTRACT_HOOKS += LSOF_EXTRACT_TAR
+ 
+-lsof-clean:
+-	-rm -f $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
+-	-$(MAKE) -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src clean
++define LSOF_CONFIGURE_CMDS
++	(cd $(@D) ; \
++		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" \
++		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 ./Configure linux)
++	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
++	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
++endef
+ 
+-lsof-dirclean:
+-	rm -rf $(LSOF_DIR)
++define LSOF_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(@D)
++endef
+ 
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_HOTPLUG),y)
--TARGETS+=hotplug
+-ifeq ($(BR2_PACKAGE_LSOF),y)
+-TARGETS+=lsof
 -endif
++define LSOF_INSTALL_TARGET_CMDS
++	install -D -m 755 $(@D)/lsof $(TARGET_DIR)/bin/lsof
++endef
++
++define LSOF_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/bin/lsof
++endef
++
++define LSOF_CLEAN_CMDS
++	-$(MAKE) -C $(@D)/lsof_$(LSOF_VERSION)_src clean
++endef
++
++$(eval $(call GENTARGETS,package,lsof))
 -- 
 1.7.2.2
