@@ -1,39 +1,43 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 14 Dec 2010 16:59:59 +0100
-Subject: [Buildroot] [PATCH] New package: can-utils
-In-Reply-To: <20101214151749.4e529f54@surf>
-References: <4D0778E5.9010401@visionsystems.de> <20101214151749.4e529f54@surf>
-Message-ID: <4D07947F.8010403@visionsystems.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Dec 2010 17:00:15 +0100
+Subject: [Buildroot] cannot log to my build root
+In-Reply-To: <AANLkTik3m_kFJjxqo-Y3XS0J+AjbhPfXQ3CiSXvVOs6n@mail.gmail.com>
+References: <AANLkTine190SpsTRLjzsOvdTFjAXiEwDK4yd8Vmkhsj_@mail.gmail.com>
+	<20101214142544.7863d2d2@surf>
+	<AANLkTi=GjsSptGonZv0S+BqCgYZZYoTOC=K+mTYpLrSd@mail.gmail.com>
+	<20101214150520.253b9bae@surf>
+	<AANLkTi=YP74FxwLhGyYo7gn5WFpR6PK8Qqw4UTWTE08N@mail.gmail.com>
+	<20101214154228.51a969b6@surf>
+	<AANLkTikOXep3YnuzHai4fzM-QEGb8BqSZvPsdRvQ_Hkc@mail.gmail.com>
+	<20101214160558.325cddcb@surf>
+	<AANLkTinQYpMH5VVCiXwLpN4io7rh=VaML+AX3yAOD5_F@mail.gmail.com>
+	<20101214163754.6b1e664f@surf>
+	<AANLkTik3m_kFJjxqo-Y3XS0J+AjbhPfXQ3CiSXvVOs6n@mail.gmail.com>
+Message-ID: <20101214170015.23afdb41@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Tue, 14 Dec 2010 17:56:06 +0200
+Diego Iastrubni <diegoiast@gmail.com> wrote:
 
->> +	  SocketCAN is a set of open source CAN drivers and a networking stack. This package provides various
->> +	  tools for this stack.
-> Please wrap at ~80.
+> And now it works. The problem is that shadow was not readable from the
+> remote NFS.  Now I wait for the correct fix for this problem.
 
-Fixed. Can we have something like checkpatch.pl in linux kernel? Is it easy to adopt?
+Ah, that's because your NFS directory is incorrectly exported. You
+should use the no_root_squash option.
 
->> Index: b/package/can-utils/can-utils.mk
->> ===================================================================
->> --- /dev/null	1970-01-01 00:00:00.000000000 +0000
->> +++ b/package/can-utils/can-utils.mk	2010-12-14 14:40:07.000000000 +0100
->> @@ -0,0 +1,13 @@
->> +#############################################################
->> +#
->> +# can-utils
->> +#
->> +#############################################################
->> +
->> +CAN_UTILS_VERSION = HEAD
-> We need a fixed version, not a random HEAD one. Pick the latest
-> revision you tested.
+Otherwise, root accesses from the remote machine are made on the NFS
+server as the nobody user, which obviously, can't access the
+rootfs/etc/shadow file.
 
-Fixed. Thanks for reviewing.
+Regards,
 
-Best regards,
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
