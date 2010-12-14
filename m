@@ -1,57 +1,40 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 14 Dec 2010 15:02:13 +0100
-Subject: [Buildroot] [PATCH] New package: can-utils
-Message-ID: <4D0778E5.9010401@visionsystems.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Dec 2010 15:05:20 +0100
+Subject: [Buildroot] cannot log to my build root
+In-Reply-To: <AANLkTi=GjsSptGonZv0S+BqCgYZZYoTOC=K+mTYpLrSd@mail.gmail.com>
+References: <AANLkTine190SpsTRLjzsOvdTFjAXiEwDK4yd8Vmkhsj_@mail.gmail.com>
+	<20101214142544.7863d2d2@surf>
+	<AANLkTi=GjsSptGonZv0S+BqCgYZZYoTOC=K+mTYpLrSd@mail.gmail.com>
+Message-ID: <20101214150520.253b9bae@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add SocketCAN utilities.
+On Tue, 14 Dec 2010 15:39:45 +0200
+Diego Iastrubni <diegoiast@gmail.com> wrote:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Nope. In my original case /dev/tty was not a char device (a null file
+> instead). Creating these files fixed the problem:
 
-Index: b/package/Config.in
-===================================================================
---- a/package/Config.in	2010-12-14 12:26:51.000000000 +0100
-+++ b/package/Config.in	2010-12-14 12:41:56.000000000 +0100
-@@ -364,6 +364,7 @@
- source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
-+source "package/can-utils/Config.in"
- source "package/ctorrent/Config.in"
- source "package/cups/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-Index: b/package/can-utils/Config.in
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/can-utils/Config.in	2010-12-14 12:41:05.000000000 +0100
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CAN_UTILS
-+	bool "can-utils"
-+	help
-+	  SocketCAN is a set of open source CAN drivers and a networking stack. This package provides various
-+	  tools for this stack.
-+
-+	  http://developer.berlios.de/projects/socketcan/
-+
-Index: b/package/can-utils/can-utils.mk
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/can-utils/can-utils.mk	2010-12-14 14:40:07.000000000 +0100
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# can-utils
-+#
-+#############################################################
-+
-+CAN_UTILS_VERSION = HEAD
-+CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
-+
-+CAN_UTILS_AUTORECONF = YES
-+
-+$(eval $(call AUTOTARGETS,package,can-utils))
-+
+This is because you are using the output/target/ directory, but you
+should *not* do this. From the Buildroot documentation:
+
+?
+target/ which contains almost the complete root filesystem for the
+target: everything needed is present except the device files in /dev/
+(Buildroot can't create them because Buildroot doesn't run as root and
+doesn't want to run as root). Therefore, this directory should not be
+used on your target. Instead, you should use one of the images built in
+the images/ directory. If you need an extracted image of the root
+filesystem for booting over NFS, then use the tarball image generated
+in images/ and extract it as root.
+?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
