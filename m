@@ -1,18 +1,27 @@
-From: Arreche <arreche@gmail.com>
-Date: Tue, 14 Dec 2010 12:27:55 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Dec 2010 13:37:05 +0100
 Subject: [Buildroot] Profiler, Memory debugger for ARM uclibc
-Message-ID: <AANLkTinzMQHbgujJJFhbLcwY5j_7gTrGKniVuusX1+qE@mail.gmail.com>
+In-Reply-To: <AANLkTinzMQHbgujJJFhbLcwY5j_7gTrGKniVuusX1+qE@mail.gmail.com>
+References: <AANLkTinzMQHbgujJJFhbLcwY5j_7gTrGKniVuusX1+qE@mail.gmail.com>
+Message-ID: <20101214133705.495adc3c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I miss a lot Valgrind but It's not supported :(
+On Tue, 14 Dec 2010 12:27:55 +0000
+Arreche <arreche@gmail.com> wrote:
 
-Thanks in advance.
+> I miss a lot Valgrind but It's not supported :(
+
+Version 3.6.0 of Valgrind is said to support ARM.
+
+But what was your question ?
+
+Thomas
 -- 
-.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/08b83c71/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
