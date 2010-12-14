@@ -1,166 +1,3215 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Tue, 14 Dec 2010 11:33:08 -0800
-Subject: [Buildroot] [PATCH] buildroot:linux: Add options to checkout
- Linux kernel source from SVN or GIT repository.
-In-Reply-To: <AANLkTinnDf3BbYuU2HsvRMuoO2eezwoN-23e7z_cScSQ@mail.gmail.com>
-References: <1292304542-29813-1-git-send-email-sonic.adi@gmail.com>
-	<1292304542-29813-2-git-send-email-sonic.adi@gmail.com>
-	<AANLkTinnDf3BbYuU2HsvRMuoO2eezwoN-23e7z_cScSQ@mail.gmail.com>
-Message-ID: <20101214193307.GH23258@bulix.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Dec 2010 16:06:05 -0300
+Subject: [Buildroot] [PATCH 09/13] binutils: make it a proper package
+In-Reply-To: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1292353569-30172-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+* Convert binutils to a proper autotargets package
+* Add version 2.21
+* Drop version 2.17
 
-* Sonic Zhang <sonic.adi@gmail.com> [2010-12-14 17:12:01]:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ Makefile                                           |    4 +-
+ package/Config.in                                  |    1 +
+ package/binutils/Config.in                         |   10 +
+ package/binutils/Config.in.host                    |   56 ++++++
+ .../binutils-2.18/100-makeinfo-version.patch       |   32 ++++
+ .../binutils/binutils-2.18/110-arm-eabi-conf.patch |   24 +++
+ .../binutils-2.18/300-001_ld_makefile_patch.patch  |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ .../binutils-2.19.1/110-arm-eabi-conf.patch        |   24 +++
+ package/binutils/binutils-2.19.1/120-sh-conf.patch |   42 +++++
+ .../300-001_ld_makefile_patch.patch                |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ .../binutils/binutils-2.19/110-arm-eabi-conf.patch |   24 +++
+ package/binutils/binutils-2.19/120-sh-conf.patch   |   42 +++++
+ .../binutils-2.19/300-001_ld_makefile_patch.patch  |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ .../binutils-2.20.1/110-arm-eabi-conf.patch        |   24 +++
+ package/binutils/binutils-2.20.1/120-sh-conf.patch |   42 +++++
+ .../300-001_ld_makefile_patch.patch                |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ .../binutils-2.20.1/400-arm_link_speed.patch       |  183 ++++++++++++++++++++
+ .../binutils/binutils-2.20/110-arm-eabi-conf.patch |   24 +++
+ package/binutils/binutils-2.20/120-sh-conf.patch   |   42 +++++
+ .../binutils-2.20/300-001_ld_makefile_patch.patch  |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ .../binutils-2.20/400-arm_link_speed.patch         |  183 ++++++++++++++++++++
+ .../binutils/binutils-2.21/110-arm-eabi-conf.patch |   24 +++
+ package/binutils/binutils-2.21/120-sh-conf.patch   |   42 +++++
+ .../binutils-2.21/300-001_ld_makefile_patch.patch  |   24 +++
+ .../300-012_check_ldrunpath_length.patch           |   21 +++
+ package/binutils/binutils.mk                       |   42 +++++
+ toolchain/binutils/2.17/100-uclibc-conf.patch      |  139 ---------------
+ toolchain/binutils/2.17/110-arm-eabi-conf.patch    |   24 ---
+ .../binutils/2.17/300-001_ld_makefile_patch.patch  |   50 ------
+ .../binutils/2.17/300-006_better_file_error.patch  |   43 -----
+ .../2.17/300-012_check_ldrunpath_length.patch      |   47 -----
+ .../2.17/400-mips-ELF_MAXPAGESIZE-4K.patch         |   26 ---
+ .../binutils/2.17/500-fix-makeinfo-check.patch     |   17 --
+ toolchain/binutils/2.18/100-makeinfo-version.patch |   32 ----
+ toolchain/binutils/2.18/110-arm-eabi-conf.patch    |   24 ---
+ .../binutils/2.18/300-001_ld_makefile_patch.patch  |   24 ---
+ .../2.18/300-012_check_ldrunpath_length.patch      |   21 ---
+ toolchain/binutils/2.19.1/110-arm-eabi-conf.patch  |   24 ---
+ toolchain/binutils/2.19.1/120-sh-conf.patch        |   42 -----
+ .../2.19.1/300-001_ld_makefile_patch.patch         |   24 ---
+ .../2.19.1/300-012_check_ldrunpath_length.patch    |   21 ---
+ toolchain/binutils/2.19/110-arm-eabi-conf.patch    |   24 ---
+ toolchain/binutils/2.19/120-sh-conf.patch          |   42 -----
+ .../binutils/2.19/300-001_ld_makefile_patch.patch  |   24 ---
+ .../2.19/300-012_check_ldrunpath_length.patch      |   21 ---
+ toolchain/binutils/2.20.1/110-arm-eabi-conf.patch  |   24 ---
+ toolchain/binutils/2.20.1/120-sh-conf.patch        |   42 -----
+ .../2.20.1/300-001_ld_makefile_patch.patch         |   24 ---
+ .../2.20.1/300-012_check_ldrunpath_length.patch    |   21 ---
+ toolchain/binutils/2.20.1/400-arm_link_speed.patch |  183 --------------------
+ toolchain/binutils/2.20/110-arm-eabi-conf.patch    |   24 ---
+ toolchain/binutils/2.20/120-sh-conf.patch          |   42 -----
+ .../binutils/2.20/300-001_ld_makefile_patch.patch  |   24 ---
+ .../2.20/300-012_check_ldrunpath_length.patch      |   21 ---
+ toolchain/binutils/2.20/400-arm_link_speed.patch   |  183 --------------------
+ toolchain/binutils/Config.in                       |   59 -------
+ toolchain/binutils/binutils.mk                     |  179 -------------------
+ toolchain/toolchain-buildroot.mk                   |    1 -
+ toolchain/toolchain-buildroot/Config.in            |    2 +-
+ toolchain/toolchain-crosstool-ng.mk                |    1 -
+ toolchain/toolchain-external.mk                    |    1 -
+ 66 files changed, 1134 insertions(+), 1501 deletions(-)
+ create mode 100644 package/binutils/Config.in
+ create mode 100644 package/binutils/Config.in.host
+ create mode 100644 package/binutils/binutils-2.18/100-makeinfo-version.patch
+ create mode 100644 package/binutils/binutils-2.18/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.19.1/120-sh-conf.patch
+ create mode 100644 package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils-2.19/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.19/120-sh-conf.patch
+ create mode 100644 package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.20.1/120-sh-conf.patch
+ create mode 100644 package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils-2.20.1/400-arm_link_speed.patch
+ create mode 100644 package/binutils/binutils-2.20/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.20/120-sh-conf.patch
+ create mode 100644 package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils-2.20/400-arm_link_speed.patch
+ create mode 100644 package/binutils/binutils-2.21/110-arm-eabi-conf.patch
+ create mode 100644 package/binutils/binutils-2.21/120-sh-conf.patch
+ create mode 100644 package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch
+ create mode 100644 package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
+ create mode 100644 package/binutils/binutils.mk
+ delete mode 100644 toolchain/binutils/2.17/100-uclibc-conf.patch
+ delete mode 100644 toolchain/binutils/2.17/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.17/300-006_better_file_error.patch
+ delete mode 100644 toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
+ delete mode 100644 toolchain/binutils/2.17/500-fix-makeinfo-check.patch
+ delete mode 100644 toolchain/binutils/2.18/100-makeinfo-version.patch
+ delete mode 100644 toolchain/binutils/2.18/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.18/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.19.1/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.19.1/120-sh-conf.patch
+ delete mode 100644 toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.19/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.19/120-sh-conf.patch
+ delete mode 100644 toolchain/binutils/2.19/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.20.1/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.20.1/120-sh-conf.patch
+ delete mode 100644 toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.20.1/400-arm_link_speed.patch
+ delete mode 100644 toolchain/binutils/2.20/110-arm-eabi-conf.patch
+ delete mode 100644 toolchain/binutils/2.20/120-sh-conf.patch
+ delete mode 100644 toolchain/binutils/2.20/300-001_ld_makefile_patch.patch
+ delete mode 100644 toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch
+ delete mode 100644 toolchain/binutils/2.20/400-arm_link_speed.patch
+ delete mode 100644 toolchain/binutils/Config.in
+ delete mode 100644 toolchain/binutils/binutils.mk
 
-> Please ignore this patch. I will send out a new version.
-
-Ok, I'm looking forward to it (and to the other one). The download
-mechanism still has some shortcomings.
-
-For keeping the version control information, this folds in the "doing
-application development with Buildroot" process discussion, which we
-should really get going to discuss this and come up with a reasonable
-solution (Thomas? Peter? do you have any input on this?).
-
-As for the Linux kernel, I am running into the same problem as well (not
-only for the kernel, but for any non-package software like bootloaders),
-so we need to find a common way of downloading sources from the web,
-Svn, Git or whatever, being in the GENTARGETS infrastructure or not.
-Here again, any input is most welcome so we can design the appropriate
-solution (see my email on X-Loader support for a few more insights on
-this).
-
-- Maxime
-
-> 
-> 
-> Sonic Zhang
-> 
-> On Tue, Dec 14, 2010 at 1:29 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
-> > From: Sonic Zhang <sonic.zhang@analog.com>
-> >
-> > Current buildroot Config.in and linux.mk don't support kernel source in SVN
-> > or GIT repository. A pre-checkouted local SVN or GIT kernel tree set in
-> > KERNEL_CUSTOM_TREE is the only option. Because the local path can be anywhere,
-> > no buildroot default config file can be defined in sub folder
-> > target/device/company/boards to run quick building. It is inconvient to run
-> > regression testing. Since buildroot has already support SVN and GIT repository
-> > for application packages, it is reasonable to have it for linux kernel as well.
-> >
-> > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> > ---
-> > ?linux/Config.in | ? 19 ++++++++++++++++++-
-> > ?linux/linux.mk ?| ? 24 +++++++++++++++++++++++-
-> > ?2 files changed, 41 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/linux/Config.in b/linux/Config.in
-> > index 480adca..07b08e2 100644
-> > --- a/linux/Config.in
-> > +++ b/linux/Config.in
-> > @@ -52,6 +52,10 @@ config BR2_LINUX_KERNEL_CUSTOM_TREE
-> > ? ? ? ?help
-> > ? ? ? ? ?This option allows use of an already unpacked linux tree.
-> >
-> > +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
-> > + ? ? ? bool "Custom source repository"
-> > + ? ? ? help
-> > + ? ? ? ? This option allows to specify the svn or git repository.
-> > ?endchoice
-> >
-> > ?config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-> > @@ -67,12 +71,25 @@ config BR2_LINUX_KERNEL_CUSTOM_PATH
-> > ? ? ? ?string "PATH of custom kernel tree"
-> > ? ? ? ?depends on BR2_LINUX_KERNEL_CUSTOM_TREE
-> >
-> > +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_LOCATION
-> > + ? ? ? string "URL of custom kernel repository"
-> > + ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
-> > + ? ? ? help
-> > + ? ? ? ? This is either the clone URL of GIT or trunk/tag/branch URL of SVN.
-> > +
-> > +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION
-> > + ? ? ? string "revision(svn/git), tag(git) or branch(git) of custom kernel source"
-> > + ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
-> > + ? ? ? default "HEAD"
-> > + ? ? ? help
-> > + ? ? ? ? Tag or branch of GIT repository should be filled in here.
-> > +
-> > ?config BR2_LINUX_KERNEL_VERSION
-> > ? ? ? ?string
-> > ? ? ? ?default "2.6.36" if BR2_LINUX_KERNEL_2_6_36
-> > ? ? ? ?default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
-> > ? ? ? ?default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
-> > - ? ? ? default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL || BR2_LINUX_KERNEL_CUSTOM_TREE
-> > + ? ? ? default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL || BR2_LINUX_KERNEL_CUSTOM_TREE || BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
-> >
-> > ?#
-> > ?# Patch selection
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 4b680fd..55fddfa 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -7,11 +7,33 @@ LINUX26_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-> >
-> > ?# Compute LINUX26_SOURCE and LINUX26_SITE from the configuration
-> > ?ifeq ($(LINUX26_VERSION),custom)
-> > +
-> > +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY),y)
-> > +PKG:=LINUX26
-> > +LINUX26_SITE:=$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_LOCATION))
-> > +LINUX26_DL_VERSION:=$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION))
-> > +
-> > +ifeq ($(findstring svn://,$(LINUX26_SITE)),svn://)
-> > +LINUX26_SITE_METHOD:=svn
-> > +LINUX26_DL_DIR:=linux-$(notdir $(LINUX26_SITE))
-> > +else
-> > +LINUX26_SITE_METHOD:=git
-> > +LINUX26_DL_DIR:=linux-$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION))
-> > +LINUX26_BRANCH:=$(LINUX26_DL_VERSION)
-> > +endif
-> > +
-> > +LINUX26_BASE_NAME:=$(LINUX26_DL_DIR)
-> > +LINUX26_SOURCE:=$(LINUX26_DL_DIR).tar.gz
-> > +else
-> > +
-> > ?ifneq ($(BR2_LINUX_KERNEL_CUSTOM_TREE),y)
-> > ?LINUX26_TARBALL:=$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-> > ?LINUX26_SITE:=$(dir $(LINUX26_TARBALL))
-> > -LINUX26_SOURCE:=$(notdir $(LINUX26_TARBALL))
-> > +LINUX26_SOURCE:=linux-$(notdir $(LINUX26_TARBALL))
-> > ?endif
-> > +
-> > +endif
-> > +
-> > ?else
-> > ?LINUX26_SOURCE:=linux-$(LINUX26_VERSION).tar.bz2
-> > ?LINUX26_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-> > --
-> > 1.6.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/Makefile b/Makefile
+index d7d6f8d..b12ea6d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -239,7 +239,7 @@ BASE_TARGETS += host-ccache
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-BASE_TARGETS += uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
++BASE_TARGETS += uclibc-configured host-binutils cross_compiler uclibc-target-utils kernel-headers
+ else
+ BASE_TARGETS += uclibc
+ endif
+@@ -614,7 +614,7 @@ endif
+ 
+ configured: dirs kernel-headers uclibc-config busybox-config linux26-config
+ 
+-prepatch:	gcc-patched binutils-patched gdb-patched uclibc-patched
++prepatch:	gcc-patched gdb-patched uclibc-patched
+ 
+ cross: $(BASE_TARGETS)
+ 
+diff --git a/package/Config.in b/package/Config.in
+index eb44b0d..6d6e72a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ endmenu
+ menu "Development tools"
+ source "package/autoconf/Config.in"
+ source "package/automake/Config.in"
++source "package/binutils/Config.in"
+ source "package/bison/Config.in"
+ source "package/bsdiff/Config.in"
+ source "package/ccache/Config.in"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+new file mode 100644
+index 0000000..a4cf1fb
+--- /dev/null
++++ b/package/binutils/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_BINUTILS
++	bool "binutils"
++	depends on BR2_TOOLCHAIN_BUILDROOT
++	select BR2_PACKAGE_MPC if BR2_GCC_VERSION_4_5_X
++	select BR2_PACKAGE_MPFR
++	select BR2_PACKAGE_GMP
++	help
++	  The GNU Binutils are a collection of binary tools.
++
++	  http://www.gnu.org/software/binutils/
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+new file mode 100644
+index 0000000..4a5e8ef
+--- /dev/null
++++ b/package/binutils/Config.in.host
+@@ -0,0 +1,56 @@
++comment "Binutils Options"
++
++choice
++	prompt "Binutils Version"
++	default BR2_BINUTILS_VERSION_2_21
++	help
++	  Select the version of binutils you wish to use.
++
++	config BR2_BINUTILS_VERSION_2_18
++		depends on !BR2_avr32
++		depends on BR2_DEPRECATED
++		bool "binutils 2.18"
++
++	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
++	       depends on BR2_avr32
++	       bool "binutils 2.18-avr32-1.0.1"
++
++	config BR2_BINUTILS_VERSION_2_19
++		depends on !BR2_avr32
++		depends on BR2_DEPRECATED
++		bool "binutils 2.19"
++
++	config BR2_BINUTILS_VERSION_2_19_1
++		depends on !BR2_avr32
++		depends on BR2_DEPRECATED
++		bool "binutils 2.19.1"
++
++	config BR2_BINUTILS_VERSION_2_20
++		depends on !BR2_avr32
++		bool "binutils 2.20"
++
++	config BR2_BINUTILS_VERSION_2_20_1
++		depends on !BR2_avr32
++		bool "binutils 2.20.1"
++
++	config BR2_BINUTILS_VERSION_2_21
++		depends on !BR2_avr32
++		bool "binutils 2.21"
++
++endchoice
++
++config BR2_BINUTILS_VERSION
++	string
++	default "2.18"		if BR2_BINUTILS_VERSION_2_18
++	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
++	default "2.19"		if BR2_BINUTILS_VERSION_2_19
++	default "2.19.1"	if BR2_BINUTILS_VERSION_2_19_1
++	default "2.20"		if BR2_BINUTILS_VERSION_2_20
++	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
++	default "2.21"		if BR2_BINUTILS_VERSION_2_21
++
++config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
++	string "Additional binutils options"
++	default ""
++	help
++	  Any additional binutils options you may want to include.
+diff --git a/package/binutils/binutils-2.18/100-makeinfo-version.patch b/package/binutils/binutils-2.18/100-makeinfo-version.patch
+new file mode 100644
+index 0000000..d911d62
+--- /dev/null
++++ b/package/binutils/binutils-2.18/100-makeinfo-version.patch
+@@ -0,0 +1,32 @@
++diff -u binutils-2.18-orig/configure binutils-2.18/configure
++--- binutils-2.18-orig/configure	2007-08-06 16:29:40.000000000 -0400
+++++ binutils-2.18/configure	2007-09-27 22:41:51.000000000 -0400
++@@ -6125,10 +6125,10 @@
++   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
++   *)
++ 
++-    # For an installed makeinfo, we require it to be from texinfo 4.4 or
+++    # For an installed makeinfo, we require it to be from texinfo 4.6 or
++     # higher, else we use the "missing" dummy.
++     if ${MAKEINFO} --version \
++-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
+++       | egrep 'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
++       :
++     else
++       MAKEINFO="$MISSING makeinfo"
++diff -u binutils-2.18-orig/configure.ac binutils-2.18/configure.ac
++--- binutils-2.18-orig/configure.ac	2007-08-28 16:24:26.000000000 -0400
+++++ binutils-2.18/configure.ac	2007-09-27 22:41:00.000000000 -0400
++@@ -2400,10 +2400,10 @@
++   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
++   *)
++ changequote(,)
++-    # For an installed makeinfo, we require it to be from texinfo 4.4 or
+++    # For an installed makeinfo, we require it to be from texinfo 4.6 or
++     # higher, else we use the "missing" dummy.
++     if ${MAKEINFO} --version \
++-       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
+++       | egrep 'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
++       :
++     else
++       MAKEINFO="$MISSING makeinfo"
+diff --git a/package/binutils/binutils-2.18/110-arm-eabi-conf.patch b/package/binutils/binutils-2.18/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..04e19be
+--- /dev/null
++++ b/package/binutils/binutils-2.18/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/configure binutils-2.17.50.0.17/configure
++--- binutils-2.17.50.0.17.oorig/configure	2007-06-18 19:29:28.000000000 +0200
+++++ binutils-2.17.50.0.17/configure	2007-06-25 09:58:36.000000000 +0200
++@@ -2224,7 +2224,7 @@
++   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
++     ;;
++diff -u binutils-2.17.50.0.17.oorig/configure.ac binutils-2.17.50.0.17/configure.ac
++--- binutils-2.17.50.0.17.oorig/configure.ac	2007-06-18 19:29:28.000000000 +0200
+++++ binutils-2.17.50.0.17/configure.ac	2007-06-25 09:58:36.000000000 +0200
++@@ -513,7 +513,7 @@
++   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
++     ;;
+diff --git a/package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..6e80921
+--- /dev/null
++++ b/package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
+diff --git a/package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch b/package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..af26329
+--- /dev/null
++++ b/package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
+diff --git a/package/binutils/binutils-2.19.1/120-sh-conf.patch b/package/binutils/binutils-2.19.1/120-sh-conf.patch
+new file mode 100644
+index 0000000..071d15a
+--- /dev/null
++++ b/package/binutils/binutils-2.19.1/120-sh-conf.patch
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..6e80921
+--- /dev/null
++++ b/package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
+diff --git a/package/binutils/binutils-2.19/110-arm-eabi-conf.patch b/package/binutils/binutils-2.19/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..af26329
+--- /dev/null
++++ b/package/binutils/binutils-2.19/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
+diff --git a/package/binutils/binutils-2.19/120-sh-conf.patch b/package/binutils/binutils-2.19/120-sh-conf.patch
+new file mode 100644
+index 0000000..071d15a
+--- /dev/null
++++ b/package/binutils/binutils-2.19/120-sh-conf.patch
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..6e80921
+--- /dev/null
++++ b/package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
+diff --git a/package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch b/package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..af26329
+--- /dev/null
++++ b/package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
+diff --git a/package/binutils/binutils-2.20.1/120-sh-conf.patch b/package/binutils/binutils-2.20.1/120-sh-conf.patch
+new file mode 100644
+index 0000000..071d15a
+--- /dev/null
++++ b/package/binutils/binutils-2.20.1/120-sh-conf.patch
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..6e80921
+--- /dev/null
++++ b/package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
+diff --git a/package/binutils/binutils-2.20.1/400-arm_link_speed.patch b/package/binutils/binutils-2.20.1/400-arm_link_speed.patch
+new file mode 100644
+index 0000000..d03385a
+--- /dev/null
++++ b/package/binutils/binutils-2.20.1/400-arm_link_speed.patch
+@@ -0,0 +1,183 @@
++From Binutils CVS:
++
++http://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/elf32-arm.c?rev=1.230&content-type=text/x-cvsweb-markup&cvsroot=src
++
++Improves linking time from large projects on ARM.
++diff -dupr binutils-2.20.orig/bfd/elf32-arm.c binutils-2.20/bfd/elf32-arm.c
++--- binutils-2.20.orig/bfd/elf32-arm.c	2010-04-19 10:08:50.000000000 -0700
+++++ binutils-2.20/bfd/elf32-arm.c	2010-04-19 10:12:45.000000000 -0700
++@@ -12736,108 +12736,15 @@ elf32_arm_section_from_shdr (bfd *abfd,
++   return TRUE;
++ }
++
++-/* A structure used to record a list of sections, independently
++-   of the next and prev fields in the asection structure.  */
++-typedef struct section_list
++-{
++-  asection * sec;
++-  struct section_list * next;
++-  struct section_list * prev;
++-}
++-section_list;
++-
++-/* Unfortunately we need to keep a list of sections for which
++-   an _arm_elf_section_data structure has been allocated.  This
++-   is because it is possible for functions like elf32_arm_write_section
++-   to be called on a section which has had an elf_data_structure
++-   allocated for it (and so the used_by_bfd field is valid) but
++-   for which the ARM extended version of this structure - the
++-   _arm_elf_section_data structure - has not been allocated.  */
++-static section_list * sections_with_arm_elf_section_data = NULL;
++-
++-static void
++-record_section_with_arm_elf_section_data (asection * sec)
++-{
++-  struct section_list * entry;
++-
++-  entry = bfd_malloc (sizeof (* entry));
++-  if (entry == NULL)
++-    return;
++-  entry->sec = sec;
++-  entry->next = sections_with_arm_elf_section_data;
++-  entry->prev = NULL;
++-  if (entry->next != NULL)
++-    entry->next->prev = entry;
++-  sections_with_arm_elf_section_data = entry;
++-}
++-
++-static struct section_list *
++-find_arm_elf_section_entry (asection * sec)
++-{
++-  struct section_list * entry;
++-  static struct section_list * last_entry = NULL;
++-
++-  /* This is a short cut for the typical case where the sections are added
++-     to the sections_with_arm_elf_section_data list in forward order and
++-     then looked up here in backwards order.  This makes a real difference
++-     to the ld-srec/sec64k.exp linker test.  */
++-  entry = sections_with_arm_elf_section_data;
++-  if (last_entry != NULL)
++-    {
++-      if (last_entry->sec == sec)
++-	entry = last_entry;
++-      else if (last_entry->next != NULL
++-	       && last_entry->next->sec == sec)
++-	entry = last_entry->next;
++-    }
++-
++-  for (; entry; entry = entry->next)
++-    if (entry->sec == sec)
++-      break;
++-
++-  if (entry)
++-    /* Record the entry prior to this one - it is the entry we are most
++-       likely to want to locate next time.  Also this way if we have been
++-       called from unrecord_section_with_arm_elf_section_data() we will not
++-       be caching a pointer that is about to be freed.  */
++-    last_entry = entry->prev;
++-
++-  return entry;
++-}
++-
++ static _arm_elf_section_data *
++ get_arm_elf_section_data (asection * sec)
++ {
++-  struct section_list * entry;
++-
++-  entry = find_arm_elf_section_entry (sec);
++-
++-  if (entry)
++-    return elf32_arm_section_data (entry->sec);
+++  if (sec && sec->owner && is_arm_elf (sec->owner))
+++    return elf32_arm_section_data (sec);
++   else
++     return NULL;
++ }
++
++-static void
++-unrecord_section_with_arm_elf_section_data (asection * sec)
++-{
++-  struct section_list * entry;
++-
++-  entry = find_arm_elf_section_entry (sec);
++-
++-  if (entry)
++-    {
++-      if (entry->prev != NULL)
++-	entry->prev->next = entry->next;
++-      if (entry->next != NULL)
++-	entry->next->prev = entry->prev;
++-      if (entry == sections_with_arm_elf_section_data)
++-	sections_with_arm_elf_section_data = entry->next;
++-      free (entry);
++-    }
++-}
++-
++-
++ typedef struct
++ {
++   void *finfo;
++@@ -13230,8 +13137,6 @@ elf32_arm_new_section_hook (bfd *abfd, a
++       sec->used_by_bfd = sdata;
++     }
++
++-  record_section_with_arm_elf_section_data (sec);
++-
++   return _bfd_elf_new_section_hook (abfd, sec);
++ }
++
++@@ -13659,44 +13564,13 @@ elf32_arm_write_section (bfd *output_bfd
++     }
++
++   free (map);
++-  arm_data->mapcount = 0;
+++  arm_data->mapcount = -1;
++   arm_data->mapsize = 0;
++   arm_data->map = NULL;
++-  unrecord_section_with_arm_elf_section_data (sec);
++
++   return FALSE;
++ }
++
++-static void
++-unrecord_section_via_map_over_sections (bfd * abfd ATTRIBUTE_UNUSED,
++-					asection * sec,
++-					void * ignore ATTRIBUTE_UNUSED)
++-{
++-  unrecord_section_with_arm_elf_section_data (sec);
++-}
++-
++-static bfd_boolean
++-elf32_arm_close_and_cleanup (bfd * abfd)
++-{
++-  if (abfd->sections)
++-    bfd_map_over_sections (abfd,
++-			   unrecord_section_via_map_over_sections,
++-			   NULL);
++-
++-  return _bfd_elf_close_and_cleanup (abfd);
++-}
++-
++-static bfd_boolean
++-elf32_arm_bfd_free_cached_info (bfd * abfd)
++-{
++-  if (abfd->sections)
++-    bfd_map_over_sections (abfd,
++-			   unrecord_section_via_map_over_sections,
++-			   NULL);
++-
++-  return _bfd_free_cached_info (abfd);
++-}
++-
++ /* Display STT_ARM_TFUNC symbols as functions.  */
++
++ static void
++@@ -13882,8 +13756,6 @@ const struct elf_size_info elf32_arm_siz
++ #define bfd_elf32_find_inliner_info	        elf32_arm_find_inliner_info
++ #define bfd_elf32_new_section_hook		elf32_arm_new_section_hook
++ #define bfd_elf32_bfd_is_target_special_symbol	elf32_arm_is_target_special_symbol
++-#define bfd_elf32_close_and_cleanup             elf32_arm_close_and_cleanup
++-#define bfd_elf32_bfd_free_cached_info          elf32_arm_bfd_free_cached_info
++ #define bfd_elf32_bfd_final_link		elf32_arm_final_link
++
++ #define elf_backend_get_symbol_type             elf32_arm_get_symbol_type
+diff --git a/package/binutils/binutils-2.20/110-arm-eabi-conf.patch b/package/binutils/binutils-2.20/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..af26329
+--- /dev/null
++++ b/package/binutils/binutils-2.20/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
+diff --git a/package/binutils/binutils-2.20/120-sh-conf.patch b/package/binutils/binutils-2.20/120-sh-conf.patch
+new file mode 100644
+index 0000000..071d15a
+--- /dev/null
++++ b/package/binutils/binutils-2.20/120-sh-conf.patch
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..6e80921
+--- /dev/null
++++ b/package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
++--- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
++@@ -1007,6 +1007,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++		  lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1191,6 +1193,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++      rpath = NULL;
++   if (! (bfd_elf_size_dynamic_sections
++ 	 (output_bfd, command_line.soname, rpath,
++ 	  command_line.filter_shlib,
+diff --git a/package/binutils/binutils-2.20/400-arm_link_speed.patch b/package/binutils/binutils-2.20/400-arm_link_speed.patch
+new file mode 100644
+index 0000000..d03385a
+--- /dev/null
++++ b/package/binutils/binutils-2.20/400-arm_link_speed.patch
+@@ -0,0 +1,183 @@
++From Binutils CVS:
++
++http://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/elf32-arm.c?rev=1.230&content-type=text/x-cvsweb-markup&cvsroot=src
++
++Improves linking time from large projects on ARM.
++diff -dupr binutils-2.20.orig/bfd/elf32-arm.c binutils-2.20/bfd/elf32-arm.c
++--- binutils-2.20.orig/bfd/elf32-arm.c	2010-04-19 10:08:50.000000000 -0700
+++++ binutils-2.20/bfd/elf32-arm.c	2010-04-19 10:12:45.000000000 -0700
++@@ -12736,108 +12736,15 @@ elf32_arm_section_from_shdr (bfd *abfd,
++   return TRUE;
++ }
++
++-/* A structure used to record a list of sections, independently
++-   of the next and prev fields in the asection structure.  */
++-typedef struct section_list
++-{
++-  asection * sec;
++-  struct section_list * next;
++-  struct section_list * prev;
++-}
++-section_list;
++-
++-/* Unfortunately we need to keep a list of sections for which
++-   an _arm_elf_section_data structure has been allocated.  This
++-   is because it is possible for functions like elf32_arm_write_section
++-   to be called on a section which has had an elf_data_structure
++-   allocated for it (and so the used_by_bfd field is valid) but
++-   for which the ARM extended version of this structure - the
++-   _arm_elf_section_data structure - has not been allocated.  */
++-static section_list * sections_with_arm_elf_section_data = NULL;
++-
++-static void
++-record_section_with_arm_elf_section_data (asection * sec)
++-{
++-  struct section_list * entry;
++-
++-  entry = bfd_malloc (sizeof (* entry));
++-  if (entry == NULL)
++-    return;
++-  entry->sec = sec;
++-  entry->next = sections_with_arm_elf_section_data;
++-  entry->prev = NULL;
++-  if (entry->next != NULL)
++-    entry->next->prev = entry;
++-  sections_with_arm_elf_section_data = entry;
++-}
++-
++-static struct section_list *
++-find_arm_elf_section_entry (asection * sec)
++-{
++-  struct section_list * entry;
++-  static struct section_list * last_entry = NULL;
++-
++-  /* This is a short cut for the typical case where the sections are added
++-     to the sections_with_arm_elf_section_data list in forward order and
++-     then looked up here in backwards order.  This makes a real difference
++-     to the ld-srec/sec64k.exp linker test.  */
++-  entry = sections_with_arm_elf_section_data;
++-  if (last_entry != NULL)
++-    {
++-      if (last_entry->sec == sec)
++-	entry = last_entry;
++-      else if (last_entry->next != NULL
++-	       && last_entry->next->sec == sec)
++-	entry = last_entry->next;
++-    }
++-
++-  for (; entry; entry = entry->next)
++-    if (entry->sec == sec)
++-      break;
++-
++-  if (entry)
++-    /* Record the entry prior to this one - it is the entry we are most
++-       likely to want to locate next time.  Also this way if we have been
++-       called from unrecord_section_with_arm_elf_section_data() we will not
++-       be caching a pointer that is about to be freed.  */
++-    last_entry = entry->prev;
++-
++-  return entry;
++-}
++-
++ static _arm_elf_section_data *
++ get_arm_elf_section_data (asection * sec)
++ {
++-  struct section_list * entry;
++-
++-  entry = find_arm_elf_section_entry (sec);
++-
++-  if (entry)
++-    return elf32_arm_section_data (entry->sec);
+++  if (sec && sec->owner && is_arm_elf (sec->owner))
+++    return elf32_arm_section_data (sec);
++   else
++     return NULL;
++ }
++
++-static void
++-unrecord_section_with_arm_elf_section_data (asection * sec)
++-{
++-  struct section_list * entry;
++-
++-  entry = find_arm_elf_section_entry (sec);
++-
++-  if (entry)
++-    {
++-      if (entry->prev != NULL)
++-	entry->prev->next = entry->next;
++-      if (entry->next != NULL)
++-	entry->next->prev = entry->prev;
++-      if (entry == sections_with_arm_elf_section_data)
++-	sections_with_arm_elf_section_data = entry->next;
++-      free (entry);
++-    }
++-}
++-
++-
++ typedef struct
++ {
++   void *finfo;
++@@ -13230,8 +13137,6 @@ elf32_arm_new_section_hook (bfd *abfd, a
++       sec->used_by_bfd = sdata;
++     }
++
++-  record_section_with_arm_elf_section_data (sec);
++-
++   return _bfd_elf_new_section_hook (abfd, sec);
++ }
++
++@@ -13659,44 +13564,13 @@ elf32_arm_write_section (bfd *output_bfd
++     }
++
++   free (map);
++-  arm_data->mapcount = 0;
+++  arm_data->mapcount = -1;
++   arm_data->mapsize = 0;
++   arm_data->map = NULL;
++-  unrecord_section_with_arm_elf_section_data (sec);
++
++   return FALSE;
++ }
++
++-static void
++-unrecord_section_via_map_over_sections (bfd * abfd ATTRIBUTE_UNUSED,
++-					asection * sec,
++-					void * ignore ATTRIBUTE_UNUSED)
++-{
++-  unrecord_section_with_arm_elf_section_data (sec);
++-}
++-
++-static bfd_boolean
++-elf32_arm_close_and_cleanup (bfd * abfd)
++-{
++-  if (abfd->sections)
++-    bfd_map_over_sections (abfd,
++-			   unrecord_section_via_map_over_sections,
++-			   NULL);
++-
++-  return _bfd_elf_close_and_cleanup (abfd);
++-}
++-
++-static bfd_boolean
++-elf32_arm_bfd_free_cached_info (bfd * abfd)
++-{
++-  if (abfd->sections)
++-    bfd_map_over_sections (abfd,
++-			   unrecord_section_via_map_over_sections,
++-			   NULL);
++-
++-  return _bfd_free_cached_info (abfd);
++-}
++-
++ /* Display STT_ARM_TFUNC symbols as functions.  */
++
++ static void
++@@ -13882,8 +13756,6 @@ const struct elf_size_info elf32_arm_siz
++ #define bfd_elf32_find_inliner_info	        elf32_arm_find_inliner_info
++ #define bfd_elf32_new_section_hook		elf32_arm_new_section_hook
++ #define bfd_elf32_bfd_is_target_special_symbol	elf32_arm_is_target_special_symbol
++-#define bfd_elf32_close_and_cleanup             elf32_arm_close_and_cleanup
++-#define bfd_elf32_bfd_free_cached_info          elf32_arm_bfd_free_cached_info
++ #define bfd_elf32_bfd_final_link		elf32_arm_final_link
++
++ #define elf_backend_get_symbol_type             elf32_arm_get_symbol_type
+diff --git a/package/binutils/binutils-2.21/110-arm-eabi-conf.patch b/package/binutils/binutils-2.21/110-arm-eabi-conf.patch
+new file mode 100644
+index 0000000..af26329
+--- /dev/null
++++ b/package/binutils/binutils-2.21/110-arm-eabi-conf.patch
+@@ -0,0 +1,24 @@
++diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
++--- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
++@@ -2245,7 +2245,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
++diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
++--- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+++++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
++@@ -522,7 +522,7 @@ case "${target}" in
++     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
++     libgloss_dir=arm
++     ;;
++-  arm*-*-linux-gnueabi)
+++  arm*-*-linux-*gnueabi)
++     noconfigdirs="$noconfigdirs target-qthreads"
++     noconfigdirs="$noconfigdirs target-libobjc"
++     case ${with_newlib} in
+diff --git a/package/binutils/binutils-2.21/120-sh-conf.patch b/package/binutils/binutils-2.21/120-sh-conf.patch
+new file mode 100644
+index 0000000..071d15a
+--- /dev/null
++++ b/package/binutils/binutils-2.21/120-sh-conf.patch
+@@ -0,0 +1,42 @@
++diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
++--- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
++@@ -2281,7 +2281,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -2606,7 +2606,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[3456789]86-*-vsta) ;; # don't add gprof back in
++       i[3456789]86-*-go32*) ;; # don't add gprof back in
++diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
++--- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+++++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
++@@ -530,7 +530,7 @@ case "${target}" in
++   am33_2.0-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;
++-  sh-*-linux*)
+++  sh*-*-linux*)
++     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
++     ;;    
++   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
++@@ -855,7 +855,7 @@ case "${target}" in
++   romp-*-*)
++     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
++     ;;
++-  sh-*-* | sh64-*-*)
+++  sh*-*-* | sh64-*-*)
++     case "${host}" in
++       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
++       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch
+new file mode 100644
+index 0000000..5cb0f61
+--- /dev/null
++++ b/package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch
+@@ -0,0 +1,24 @@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
++@@ -18,7 +18,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ 
++ EMUL = @EMUL@
++ EMULATION_OFILES = @EMULATION_OFILES@
++diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
++--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
++@@ -287,7 +287,7 @@
++ # We put the scripts in the directory $(scriptdir)/ldscripts.
++ # We can't put the scripts in $(datadir) because the SEARCH_DIR
++ # directives need to be different for native and cross linkers.
++-scriptdir = $(tooldir)/lib
+++scriptdir = $(libdir)
++ BASEDIR = $(srcdir)/..
++ BFDDIR = $(BASEDIR)/bfd
++ INCDIR = $(BASEDIR)/include
+diff --git a/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
+new file mode 100644
+index 0000000..df78310
+--- /dev/null
++++ b/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
+@@ -0,0 +1,21 @@
++diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
++--- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
+++++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
++@@ -1270,6 +1270,8 @@
++ 	      && command_line.rpath == NULL)
++ 	    {
++ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+++	      if ((lib_path) && (strlen (lib_path) == 0))
+++	      	lib_path = NULL;
++ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
++ 						      force))
++ 		break;
++@@ -1497,6 +1499,8 @@
++   rpath = command_line.rpath;
++   if (rpath == NULL)
++     rpath = (const char *) getenv ("LD_RUN_PATH");
+++  if ((rpath) && (strlen (rpath) == 0))
+++  	rpath = NULL;
++ 
++   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
++     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+new file mode 100644
+index 0000000..5f51f44
+--- /dev/null
++++ b/package/binutils/binutils.mk
+@@ -0,0 +1,42 @@
++#############################################################
++#
++# binutils
++#
++#############################################################
++
++BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
++BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.bz2
++BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
++ifeq ($(ARCH),avr32)
++BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
++endif
++
++BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
++BINUTILS_DEPENDENCIES = gmp mpfr
++# We need to specify host & target to avoid breaking ARM EABI
++BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
++		--host=$(REAL_GNU_TARGET_NAME) \
++		--target=$(REAL_GNU_TARGET_NAME) \
++		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
++
++# Install binutils after busybox to prefer full-blown utilities
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++BINUTILS_DEPENDENCIES += busybox
++endif
++
++# "host" binutils should actually be "cross"
++# We just keep the convention of "host utility" for now
++HOST_BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
++HOST_BINUTILS_DEPENDENCIES = host-gmp host-mpfr
++HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
++			--target=$(REAL_GNU_TARGET_NAME) \
++			$(BR2_CONFIGURE_STAGING_SYSROOT) \
++			$(HOST_BINUTILS_EXTRA_CONFIG_OPTIONS)
++
++ifeq ($(BR2_GCC_VERSION_4_5_X),y)
++BINUTILS_DEPENDENCIES += mpc
++HOST_BINUTILS_DEPENDENCIES += host-mpc
++endif
++
++$(eval $(call AUTOTARGETS,package,binutils))
++$(eval $(call AUTOTARGETS,package,binutils,host))
+diff --git a/toolchain/binutils/2.17/100-uclibc-conf.patch b/toolchain/binutils/2.17/100-uclibc-conf.patch
+deleted file mode 100644
+index 25222e5..0000000
+--- a/toolchain/binutils/2.17/100-uclibc-conf.patch
++++ /dev/null
+@@ -1,139 +0,0 @@
+---- binutils-2.16.91.0.7/bfd/configure
+-+++ binutils-2.16.91.0.7/bfd/configure
+-@@ -3576,7 +3576,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/binutils/configure
+-+++ binutils-2.16.91.0.7/binutils/configure
+-@@ -3411,7 +3411,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/configure
+-+++ binutils-2.16.91.0.7/configure
+-@@ -1270,7 +1270,7 @@
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -1578,7 +1578,7 @@
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+---- binutils-2.16.91.0.7/configure.in
+-+++ binutils-2.16.91.0.7/configure.in
+-@@ -468,7 +468,7 @@
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -776,7 +776,7 @@
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+---- binutils-2.16.91.0.7/gas/configure
+-+++ binutils-2.16.91.0.7/gas/configure
+-@@ -3411,7 +3411,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/gprof/configure
+-+++ binutils-2.16.91.0.7/gprof/configure
+-@@ -3419,6 +3419,11 @@
+-   lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
+-   ;;
+- 
+-+linux-uclibc*)
+-+  lt_cv_deplibs_check_method=pass_all
+-+  lt_cv_file_magic_test_file=`echo /lib/libuClibc-*.so`
+-+  ;;
+-+
+- netbsd* | knetbsd*-gnu)
+-   if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
+-     lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$'
+---- binutils-2.16.91.0.7/ld/configure
+-+++ binutils-2.16.91.0.7/ld/configure
+-@@ -3413,7 +3413,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/libtool.m4
+-+++ binutils-2.16.91.0.7/libtool.m4
+-@@ -739,7 +739,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+---- binutils-2.16.91.0.7/ltconfig
+-+++ binutils-2.16.91.0.7/ltconfig
+-@@ -602,6 +602,7 @@
+- 
+- # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
+- case $host_os in
+-+linux-uclibc*) ;;
+- linux-gnu*) ;;
+- linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
+- esac
+-@@ -1247,7 +1248,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   version_type=linux
+-   need_lib_prefix=no
+-   need_version=no
+---- binutils-2.16.91.0.7/opcodes/configure
+-+++ binutils-2.16.91.0.7/opcodes/configure
+-@@ -3579,7 +3579,7 @@
+-   ;;
+- 
+- # This must be Linux ELF.
+--linux-gnu*)
+-+linux-gnu*|linux-uclibc*)
+-   lt_cv_deplibs_check_method=pass_all
+-   ;;
+- 
+diff --git a/toolchain/binutils/2.17/110-arm-eabi-conf.patch b/toolchain/binutils/2.17/110-arm-eabi-conf.patch
+deleted file mode 100644
+index be85ceb..0000000
+--- a/toolchain/binutils/2.17/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -urN binutils-2.16.91.0.7.orig/configure binutils-2.16.91.0.7/configure
+---- binutils-2.16.91.0.7.orig/configure	2006-05-31 14:54:24.000000000 +0300
+-+++ binutils-2.16.91.0.7/configure	2006-05-31 14:55:53.000000000 +0300
+-@@ -1299,7 +1299,7 @@
+-   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+-     ;;
+-diff -urN binutils-2.16.91.0.7.orig/configure.in binutils-2.16.91.0.7/configure.in
+---- binutils-2.16.91.0.7.orig/configure.in	2006-05-31 14:54:24.000000000 +0300
+-+++ binutils-2.16.91.0.7/configure.in	2006-05-31 14:55:53.000000000 +0300
+-@@ -497,7 +497,7 @@
+-   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+-     ;;
+diff --git a/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 04a7e61..0000000
+--- a/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-#!/bin/sh -e
+-## 001_ld_makefile_patch.dpatch
+-##
+-## All lines beginning with `## DP:' are a description of the patch.
+-## DP: Description: correct where ld scripts are installed
+-## DP: Author: Chris Chimelis <chris@debian.org>
+-## DP: Upstream status: N/A
+-## DP: Date: ??
+-
+-if [ $# -ne 1 ]; then
+-    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-    exit 1
+-fi
+-
+-[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+-patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+-
+-case "$1" in
+-       -patch) patch $patch_opts -p1 < $0;;
+-       -unpatch) patch $patch_opts -p1 -R < $0;;
+-        *)
+-                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-                exit 1;;
+-esac
+-
+-exit 0
+-
+- at DPATCH@
+---- binutils-2.16.91.0.1/ld/Makefile.am
+-+++ binutils-2.16.91.0.1/ld/Makefile.am
+-@@ -20,7 +20,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+---- binutils-2.16.91.0.1/ld/Makefile.in
+-+++ binutils-2.16.91.0.1/ld/Makefile.in
+-@@ -268,7 +268,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.17/300-006_better_file_error.patch b/toolchain/binutils/2.17/300-006_better_file_error.patch
+deleted file mode 100644
+index f337611..0000000
+--- a/toolchain/binutils/2.17/300-006_better_file_error.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-#!/bin/sh -e
+-## 006_better_file_error.dpatch by David Kimdon <dwhedon@gordian.com>
+-##
+-## All lines beginning with `## DP:' are a description of the patch.
+-## DP: Specify which filename is causing an error if the filename is a
+-## DP: directory. (#45832)
+-
+-if [ $# -ne 1 ]; then
+-    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-    exit 1
+-fi
+-
+-[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+-patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+-
+-case "$1" in
+-       -patch) patch $patch_opts -p1 < $0;;
+-       -unpatch) patch $patch_opts -p1 -R < $0;;
+-        *)
+-                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-                exit 1;;
+-esac
+-
+-exit 0
+-
+- at DPATCH@
+-diff -urNad /home/james/debian/packages/binutils/binutils-2.14.90.0.6/bfd/opncls.c binutils-2.14.90.0.6/bfd/opncls.c
+---- /home/james/debian/packages/binutils/binutils-2.14.90.0.6/bfd/opncls.c	2003-07-23 16:08:09.000000000 +0100
+-+++ binutils-2.14.90.0.6/bfd/opncls.c	2003-09-10 22:35:00.000000000 +0100
+-@@ -150,6 +150,13 @@
+- {
+-   bfd *nbfd;
+-   const bfd_target *target_vec;
+-+  struct stat s;
+-+
+-+  if (stat (filename, &s) == 0)
+-+    if (S_ISDIR(s.st_mode)) {
+-+      bfd_set_error (bfd_error_file_not_recognized);
+-+      return NULL;
+-+    }
+- 
+-   nbfd = _bfd_new_bfd ();
+-   if (nbfd == NULL)
+diff --git a/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 498651a..0000000
+--- a/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-#!/bin/sh -e
+-## 012_check_ldrunpath_length.dpatch by Chris Chimelis <chris@debian.org>
+-##
+-## All lines beginning with `## DP:' are a description of the patch.
+-## DP: Only generate an RPATH entry if LD_RUN_PATH is not empty, for
+-## DP: cases where -rpath isn't specified. (#151024)
+-
+-if [ $# -ne 1 ]; then
+-    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-    exit 1
+-fi
+-
+-[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
+-patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
+-
+-case "$1" in
+-       -patch) patch $patch_opts -p1 < $0;;
+-       -unpatch) patch $patch_opts -p1 -R < $0;;
+-        *)
+-                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
+-                exit 1;;
+-esac
+-
+-exit 0
+-
+- at DPATCH@
+-diff -urNad /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em binutils-2.15/ld/emultempl/elf32.em
+---- /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:58.000000000 +0100
+-+++ binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:59.000000000 +0100
+-@@ -692,6 +692,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -871,6 +873,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch b/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
+deleted file mode 100644
+index 5959c71..0000000
+--- a/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+---- binutils/bfd/elf32-mips.c~
+-+++ binutils/bfd/elf32-mips.c
+-@@ -1613,7 +1613,9 @@
+- 
+- /* The SVR4 MIPS ABI says that this should be 0x10000, and Linux uses
+-    page sizes of up to that limit, so we need to respect it.  */
+--#define ELF_MAXPAGESIZE			0x10000
+-+/*#define ELF_MAXPAGESIZE			0x10000*/
+-+/* Use 4K to shrink the elf header.  NOT for general use! */
+-+#define ELF_MAXPAGESIZE			0x1000
+- #define elf32_bed			elf32_tradbed
+- 
+- /* Include the target file again for this target.  */
+---- binutils/bfd/elfn32-mips.c~
+-+++ binutils/bfd/elfn32-mips.c
+-@@ -2399,7 +2399,9 @@
+- 
+- /* The SVR4 MIPS ABI says that this should be 0x10000, and Linux uses
+-    page sizes of up to that limit, so we need to respect it.  */
+--#define ELF_MAXPAGESIZE			0x10000
+-+/*#define ELF_MAXPAGESIZE			0x10000*/
+-+/* Use 4K to shrink the elf header.  NOT for general use! */
+-+#define ELF_MAXPAGESIZE			0x1000
+- #define elf32_bed			elf32_tradbed
+- 
+- /* Include the target file again for this target.  */
+diff --git a/toolchain/binutils/2.17/500-fix-makeinfo-check.patch b/toolchain/binutils/2.17/500-fix-makeinfo-check.patch
+deleted file mode 100644
+index c4c8888..0000000
+--- a/toolchain/binutils/2.17/500-fix-makeinfo-check.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+----
+- configure |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: binutils-2.17/configure
+-===================================================================
+---- binutils-2.17.orig/configure
+-+++ binutils-2.17/configure
+-@@ -3637,7 +3637,7 @@
+-     # For an installed makeinfo, we require it to be from texinfo 4.4 or
+-     # higher, else we use the "missing" dummy.
+-     if ${MAKEINFO} --version \
+--       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
+-+       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|4\.[1-9][0-9]|[5-9])' >/dev/null 2>&1; then
+-       :
+-     else
+-       MAKEINFO="$MISSING makeinfo"
+diff --git a/toolchain/binutils/2.18/100-makeinfo-version.patch b/toolchain/binutils/2.18/100-makeinfo-version.patch
+deleted file mode 100644
+index d911d62..0000000
+--- a/toolchain/binutils/2.18/100-makeinfo-version.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-diff -u binutils-2.18-orig/configure binutils-2.18/configure
+---- binutils-2.18-orig/configure	2007-08-06 16:29:40.000000000 -0400
+-+++ binutils-2.18/configure	2007-09-27 22:41:51.000000000 -0400
+-@@ -6125,10 +6125,10 @@
+-   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
+-   *)
+- 
+--    # For an installed makeinfo, we require it to be from texinfo 4.4 or
+-+    # For an installed makeinfo, we require it to be from texinfo 4.6 or
+-     # higher, else we use the "missing" dummy.
+-     if ${MAKEINFO} --version \
+--       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
+-+       | egrep 'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+-       :
+-     else
+-       MAKEINFO="$MISSING makeinfo"
+-diff -u binutils-2.18-orig/configure.ac binutils-2.18/configure.ac
+---- binutils-2.18-orig/configure.ac	2007-08-28 16:24:26.000000000 -0400
+-+++ binutils-2.18/configure.ac	2007-09-27 22:41:00.000000000 -0400
+-@@ -2400,10 +2400,10 @@
+-   *" texinfo "*) MAKEINFO='$$r/$(BUILD_SUBDIR)/texinfo/makeinfo/makeinfo' ;;
+-   *)
+- changequote(,)
+--    # For an installed makeinfo, we require it to be from texinfo 4.4 or
+-+    # For an installed makeinfo, we require it to be from texinfo 4.6 or
+-     # higher, else we use the "missing" dummy.
+-     if ${MAKEINFO} --version \
+--       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
+-+       | egrep 'texinfo[^0-9]*(4\.([6-9]|[1-9][0-9])|[5-9]|[1-9][0-9])' >/dev/null 2>&1; then
+-       :
+-     else
+-       MAKEINFO="$MISSING makeinfo"
+diff --git a/toolchain/binutils/2.18/110-arm-eabi-conf.patch b/toolchain/binutils/2.18/110-arm-eabi-conf.patch
+deleted file mode 100644
+index 04e19be..0000000
+--- a/toolchain/binutils/2.18/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/configure binutils-2.17.50.0.17/configure
+---- binutils-2.17.50.0.17.oorig/configure	2007-06-18 19:29:28.000000000 +0200
+-+++ binutils-2.17.50.0.17/configure	2007-06-25 09:58:36.000000000 +0200
+-@@ -2224,7 +2224,7 @@
+-   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+-     ;;
+-diff -u binutils-2.17.50.0.17.oorig/configure.ac binutils-2.17.50.0.17/configure.ac
+---- binutils-2.17.50.0.17.oorig/configure.ac	2007-06-18 19:29:28.000000000 +0200
+-+++ binutils-2.17.50.0.17/configure.ac	2007-06-25 09:58:36.000000000 +0200
+-@@ -513,7 +513,7 @@
+-   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
+-     ;;
+diff --git a/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 6e80921..0000000
+--- a/toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
+---- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
+-@@ -1007,6 +1007,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1191,6 +1193,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.19.1/110-arm-eabi-conf.patch b/toolchain/binutils/2.19.1/110-arm-eabi-conf.patch
+deleted file mode 100644
+index af26329..0000000
+--- a/toolchain/binutils/2.19.1/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
+---- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
+-@@ -2245,7 +2245,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+-diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
+---- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
+-@@ -522,7 +522,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+diff --git a/toolchain/binutils/2.19.1/120-sh-conf.patch b/toolchain/binutils/2.19.1/120-sh-conf.patch
+deleted file mode 100644
+index 071d15a..0000000
+--- a/toolchain/binutils/2.19.1/120-sh-conf.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
+---- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
+-@@ -2281,7 +2281,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -2606,7 +2606,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+-diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
+---- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
+-@@ -530,7 +530,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -855,7 +855,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 6e80921..0000000
+--- a/toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
+---- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
+-@@ -1007,6 +1007,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1191,6 +1193,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.19/110-arm-eabi-conf.patch b/toolchain/binutils/2.19/110-arm-eabi-conf.patch
+deleted file mode 100644
+index af26329..0000000
+--- a/toolchain/binutils/2.19/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
+---- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
+-@@ -2245,7 +2245,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+-diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
+---- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
+-@@ -522,7 +522,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+diff --git a/toolchain/binutils/2.19/120-sh-conf.patch b/toolchain/binutils/2.19/120-sh-conf.patch
+deleted file mode 100644
+index 071d15a..0000000
+--- a/toolchain/binutils/2.19/120-sh-conf.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
+---- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
+-@@ -2281,7 +2281,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -2606,7 +2606,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+-diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
+---- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
+-@@ -530,7 +530,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -855,7 +855,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/toolchain/binutils/2.19/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.19/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/toolchain/binutils/2.19/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 6e80921..0000000
+--- a/toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
+---- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
+-@@ -1007,6 +1007,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1191,6 +1193,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.20.1/110-arm-eabi-conf.patch b/toolchain/binutils/2.20.1/110-arm-eabi-conf.patch
+deleted file mode 100644
+index af26329..0000000
+--- a/toolchain/binutils/2.20.1/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
+---- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
+-@@ -2245,7 +2245,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+-diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
+---- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
+-@@ -522,7 +522,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+diff --git a/toolchain/binutils/2.20.1/120-sh-conf.patch b/toolchain/binutils/2.20.1/120-sh-conf.patch
+deleted file mode 100644
+index 071d15a..0000000
+--- a/toolchain/binutils/2.20.1/120-sh-conf.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
+---- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
+-@@ -2281,7 +2281,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -2606,7 +2606,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+-diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
+---- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
+-@@ -530,7 +530,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -855,7 +855,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 6e80921..0000000
+--- a/toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
+---- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
+-@@ -1007,6 +1007,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1191,6 +1193,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.20.1/400-arm_link_speed.patch b/toolchain/binutils/2.20.1/400-arm_link_speed.patch
+deleted file mode 100644
+index d03385a..0000000
+--- a/toolchain/binutils/2.20.1/400-arm_link_speed.patch
++++ /dev/null
+@@ -1,183 +0,0 @@
+-From Binutils CVS:
+-
+-http://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/elf32-arm.c?rev=1.230&content-type=text/x-cvsweb-markup&cvsroot=src
+-
+-Improves linking time from large projects on ARM.
+-diff -dupr binutils-2.20.orig/bfd/elf32-arm.c binutils-2.20/bfd/elf32-arm.c
+---- binutils-2.20.orig/bfd/elf32-arm.c	2010-04-19 10:08:50.000000000 -0700
+-+++ binutils-2.20/bfd/elf32-arm.c	2010-04-19 10:12:45.000000000 -0700
+-@@ -12736,108 +12736,15 @@ elf32_arm_section_from_shdr (bfd *abfd,
+-   return TRUE;
+- }
+-
+--/* A structure used to record a list of sections, independently
+--   of the next and prev fields in the asection structure.  */
+--typedef struct section_list
+--{
+--  asection * sec;
+--  struct section_list * next;
+--  struct section_list * prev;
+--}
+--section_list;
+--
+--/* Unfortunately we need to keep a list of sections for which
+--   an _arm_elf_section_data structure has been allocated.  This
+--   is because it is possible for functions like elf32_arm_write_section
+--   to be called on a section which has had an elf_data_structure
+--   allocated for it (and so the used_by_bfd field is valid) but
+--   for which the ARM extended version of this structure - the
+--   _arm_elf_section_data structure - has not been allocated.  */
+--static section_list * sections_with_arm_elf_section_data = NULL;
+--
+--static void
+--record_section_with_arm_elf_section_data (asection * sec)
+--{
+--  struct section_list * entry;
+--
+--  entry = bfd_malloc (sizeof (* entry));
+--  if (entry == NULL)
+--    return;
+--  entry->sec = sec;
+--  entry->next = sections_with_arm_elf_section_data;
+--  entry->prev = NULL;
+--  if (entry->next != NULL)
+--    entry->next->prev = entry;
+--  sections_with_arm_elf_section_data = entry;
+--}
+--
+--static struct section_list *
+--find_arm_elf_section_entry (asection * sec)
+--{
+--  struct section_list * entry;
+--  static struct section_list * last_entry = NULL;
+--
+--  /* This is a short cut for the typical case where the sections are added
+--     to the sections_with_arm_elf_section_data list in forward order and
+--     then looked up here in backwards order.  This makes a real difference
+--     to the ld-srec/sec64k.exp linker test.  */
+--  entry = sections_with_arm_elf_section_data;
+--  if (last_entry != NULL)
+--    {
+--      if (last_entry->sec == sec)
+--	entry = last_entry;
+--      else if (last_entry->next != NULL
+--	       && last_entry->next->sec == sec)
+--	entry = last_entry->next;
+--    }
+--
+--  for (; entry; entry = entry->next)
+--    if (entry->sec == sec)
+--      break;
+--
+--  if (entry)
+--    /* Record the entry prior to this one - it is the entry we are most
+--       likely to want to locate next time.  Also this way if we have been
+--       called from unrecord_section_with_arm_elf_section_data() we will not
+--       be caching a pointer that is about to be freed.  */
+--    last_entry = entry->prev;
+--
+--  return entry;
+--}
+--
+- static _arm_elf_section_data *
+- get_arm_elf_section_data (asection * sec)
+- {
+--  struct section_list * entry;
+--
+--  entry = find_arm_elf_section_entry (sec);
+--
+--  if (entry)
+--    return elf32_arm_section_data (entry->sec);
+-+  if (sec && sec->owner && is_arm_elf (sec->owner))
+-+    return elf32_arm_section_data (sec);
+-   else
+-     return NULL;
+- }
+-
+--static void
+--unrecord_section_with_arm_elf_section_data (asection * sec)
+--{
+--  struct section_list * entry;
+--
+--  entry = find_arm_elf_section_entry (sec);
+--
+--  if (entry)
+--    {
+--      if (entry->prev != NULL)
+--	entry->prev->next = entry->next;
+--      if (entry->next != NULL)
+--	entry->next->prev = entry->prev;
+--      if (entry == sections_with_arm_elf_section_data)
+--	sections_with_arm_elf_section_data = entry->next;
+--      free (entry);
+--    }
+--}
+--
+--
+- typedef struct
+- {
+-   void *finfo;
+-@@ -13230,8 +13137,6 @@ elf32_arm_new_section_hook (bfd *abfd, a
+-       sec->used_by_bfd = sdata;
+-     }
+-
+--  record_section_with_arm_elf_section_data (sec);
+--
+-   return _bfd_elf_new_section_hook (abfd, sec);
+- }
+-
+-@@ -13659,44 +13564,13 @@ elf32_arm_write_section (bfd *output_bfd
+-     }
+-
+-   free (map);
+--  arm_data->mapcount = 0;
+-+  arm_data->mapcount = -1;
+-   arm_data->mapsize = 0;
+-   arm_data->map = NULL;
+--  unrecord_section_with_arm_elf_section_data (sec);
+-
+-   return FALSE;
+- }
+-
+--static void
+--unrecord_section_via_map_over_sections (bfd * abfd ATTRIBUTE_UNUSED,
+--					asection * sec,
+--					void * ignore ATTRIBUTE_UNUSED)
+--{
+--  unrecord_section_with_arm_elf_section_data (sec);
+--}
+--
+--static bfd_boolean
+--elf32_arm_close_and_cleanup (bfd * abfd)
+--{
+--  if (abfd->sections)
+--    bfd_map_over_sections (abfd,
+--			   unrecord_section_via_map_over_sections,
+--			   NULL);
+--
+--  return _bfd_elf_close_and_cleanup (abfd);
+--}
+--
+--static bfd_boolean
+--elf32_arm_bfd_free_cached_info (bfd * abfd)
+--{
+--  if (abfd->sections)
+--    bfd_map_over_sections (abfd,
+--			   unrecord_section_via_map_over_sections,
+--			   NULL);
+--
+--  return _bfd_free_cached_info (abfd);
+--}
+--
+- /* Display STT_ARM_TFUNC symbols as functions.  */
+-
+- static void
+-@@ -13882,8 +13756,6 @@ const struct elf_size_info elf32_arm_siz
+- #define bfd_elf32_find_inliner_info	        elf32_arm_find_inliner_info
+- #define bfd_elf32_new_section_hook		elf32_arm_new_section_hook
+- #define bfd_elf32_bfd_is_target_special_symbol	elf32_arm_is_target_special_symbol
+--#define bfd_elf32_close_and_cleanup             elf32_arm_close_and_cleanup
+--#define bfd_elf32_bfd_free_cached_info          elf32_arm_bfd_free_cached_info
+- #define bfd_elf32_bfd_final_link		elf32_arm_final_link
+-
+- #define elf_backend_get_symbol_type             elf32_arm_get_symbol_type
+diff --git a/toolchain/binutils/2.20/110-arm-eabi-conf.patch b/toolchain/binutils/2.20/110-arm-eabi-conf.patch
+deleted file mode 100644
+index af26329..0000000
+--- a/toolchain/binutils/2.20/110-arm-eabi-conf.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -rdup binutils-2.18.50.0.3.orig/configure binutils-2.18.50.0.3/configure
+---- binutils-2.18.50.0.3.orig/configure	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure	2007-11-22 12:45:01.000000000 +0100
+-@@ -2245,7 +2245,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+-diff -rdup binutils-2.18.50.0.3.orig/configure.ac binutils-2.18.50.0.3/configure.ac
+---- binutils-2.18.50.0.3.orig/configure.ac	2007-11-22 12:41:26.000000000 +0100
+-+++ binutils-2.18.50.0.3/configure.ac	2007-11-22 12:44:54.000000000 +0100
+-@@ -522,7 +522,7 @@ case "${target}" in
+-     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
+-     libgloss_dir=arm
+-     ;;
+--  arm*-*-linux-gnueabi)
+-+  arm*-*-linux-*gnueabi)
+-     noconfigdirs="$noconfigdirs target-qthreads"
+-     noconfigdirs="$noconfigdirs target-libobjc"
+-     case ${with_newlib} in
+diff --git a/toolchain/binutils/2.20/120-sh-conf.patch b/toolchain/binutils/2.20/120-sh-conf.patch
+deleted file mode 100644
+index 071d15a..0000000
+--- a/toolchain/binutils/2.20/120-sh-conf.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-diff -rdup binutils-2.18.50.0.9.old/configure binutils-2.18.50.0.9/configure
+---- binutils-2.18.50.0.9.old/configure	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure	2008-10-14 14:25:22.000000000 +0200
+-@@ -2281,7 +2281,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -2606,7 +2606,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[3456789]86-*-vsta) ;; # don't add gprof back in
+-       i[3456789]86-*-go32*) ;; # don't add gprof back in
+-diff -rdup binutils-2.18.50.0.9.old/configure.ac binutils-2.18.50.0.9/configure.ac
+---- binutils-2.18.50.0.9.old/configure.ac	2008-08-23 17:36:13.000000000 +0200
+-+++ binutils-2.18.50.0.9/configure.ac	2008-10-14 14:25:11.000000000 +0200
+-@@ -530,7 +530,7 @@ case "${target}" in
+-   am33_2.0-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;
+--  sh-*-linux*)
+-+  sh*-*-linux*)
+-     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
+-     ;;    
+-   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
+-@@ -855,7 +855,7 @@ case "${target}" in
+-   romp-*-*)
+-     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
+-     ;;
+--  sh-*-* | sh64-*-*)
+-+  sh*-*-* | sh64-*-*)
+-     case "${host}" in
+-       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
+-       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
+diff --git a/toolchain/binutils/2.20/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.20/300-001_ld_makefile_patch.patch
+deleted file mode 100644
+index 5cb0f61..0000000
+--- a/toolchain/binutils/2.20/300-001_ld_makefile_patch.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
+-@@ -18,7 +18,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- 
+- EMUL = @EMUL@
+- EMULATION_OFILES = @EMULATION_OFILES@
+-diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
+---- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
+-@@ -287,7 +287,7 @@
+- # We put the scripts in the directory $(scriptdir)/ldscripts.
+- # We can't put the scripts in $(datadir) because the SEARCH_DIR
+- # directives need to be different for native and cross linkers.
+--scriptdir = $(tooldir)/lib
+-+scriptdir = $(libdir)
+- BASEDIR = $(srcdir)/..
+- BFDDIR = $(BASEDIR)/bfd
+- INCDIR = $(BASEDIR)/include
+diff --git a/toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch
+deleted file mode 100644
+index 6e80921..0000000
+--- a/toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-diff -u binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em binutils-2.17.50.0.17/ld/emultempl/elf32.em
+---- binutils-2.17.50.0.17.oorig/ld/emultempl/elf32.em	2007-06-18 19:31:40.000000000 +0200
+-+++ binutils-2.17.50.0.17/ld/emultempl/elf32.em	2007-06-25 10:01:25.000000000 +0200
+-@@ -1007,6 +1007,8 @@
+- 	      && command_line.rpath == NULL)
+- 	    {
+- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
+-+	      if ((lib_path) && (strlen (lib_path) == 0))
+-+		  lib_path = NULL;
+- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
+- 						      force))
+- 		break;
+-@@ -1191,6 +1193,8 @@
+-   rpath = command_line.rpath;
+-   if (rpath == NULL)
+-     rpath = (const char *) getenv ("LD_RUN_PATH");
+-+  if ((rpath) && (strlen (rpath) == 0))
+-+      rpath = NULL;
+-   if (! (bfd_elf_size_dynamic_sections
+- 	 (output_bfd, command_line.soname, rpath,
+- 	  command_line.filter_shlib,
+diff --git a/toolchain/binutils/2.20/400-arm_link_speed.patch b/toolchain/binutils/2.20/400-arm_link_speed.patch
+deleted file mode 100644
+index d03385a..0000000
+--- a/toolchain/binutils/2.20/400-arm_link_speed.patch
++++ /dev/null
+@@ -1,183 +0,0 @@
+-From Binutils CVS:
+-
+-http://sourceware.org/cgi-bin/cvsweb.cgi/src/bfd/elf32-arm.c?rev=1.230&content-type=text/x-cvsweb-markup&cvsroot=src
+-
+-Improves linking time from large projects on ARM.
+-diff -dupr binutils-2.20.orig/bfd/elf32-arm.c binutils-2.20/bfd/elf32-arm.c
+---- binutils-2.20.orig/bfd/elf32-arm.c	2010-04-19 10:08:50.000000000 -0700
+-+++ binutils-2.20/bfd/elf32-arm.c	2010-04-19 10:12:45.000000000 -0700
+-@@ -12736,108 +12736,15 @@ elf32_arm_section_from_shdr (bfd *abfd,
+-   return TRUE;
+- }
+-
+--/* A structure used to record a list of sections, independently
+--   of the next and prev fields in the asection structure.  */
+--typedef struct section_list
+--{
+--  asection * sec;
+--  struct section_list * next;
+--  struct section_list * prev;
+--}
+--section_list;
+--
+--/* Unfortunately we need to keep a list of sections for which
+--   an _arm_elf_section_data structure has been allocated.  This
+--   is because it is possible for functions like elf32_arm_write_section
+--   to be called on a section which has had an elf_data_structure
+--   allocated for it (and so the used_by_bfd field is valid) but
+--   for which the ARM extended version of this structure - the
+--   _arm_elf_section_data structure - has not been allocated.  */
+--static section_list * sections_with_arm_elf_section_data = NULL;
+--
+--static void
+--record_section_with_arm_elf_section_data (asection * sec)
+--{
+--  struct section_list * entry;
+--
+--  entry = bfd_malloc (sizeof (* entry));
+--  if (entry == NULL)
+--    return;
+--  entry->sec = sec;
+--  entry->next = sections_with_arm_elf_section_data;
+--  entry->prev = NULL;
+--  if (entry->next != NULL)
+--    entry->next->prev = entry;
+--  sections_with_arm_elf_section_data = entry;
+--}
+--
+--static struct section_list *
+--find_arm_elf_section_entry (asection * sec)
+--{
+--  struct section_list * entry;
+--  static struct section_list * last_entry = NULL;
+--
+--  /* This is a short cut for the typical case where the sections are added
+--     to the sections_with_arm_elf_section_data list in forward order and
+--     then looked up here in backwards order.  This makes a real difference
+--     to the ld-srec/sec64k.exp linker test.  */
+--  entry = sections_with_arm_elf_section_data;
+--  if (last_entry != NULL)
+--    {
+--      if (last_entry->sec == sec)
+--	entry = last_entry;
+--      else if (last_entry->next != NULL
+--	       && last_entry->next->sec == sec)
+--	entry = last_entry->next;
+--    }
+--
+--  for (; entry; entry = entry->next)
+--    if (entry->sec == sec)
+--      break;
+--
+--  if (entry)
+--    /* Record the entry prior to this one - it is the entry we are most
+--       likely to want to locate next time.  Also this way if we have been
+--       called from unrecord_section_with_arm_elf_section_data() we will not
+--       be caching a pointer that is about to be freed.  */
+--    last_entry = entry->prev;
+--
+--  return entry;
+--}
+--
+- static _arm_elf_section_data *
+- get_arm_elf_section_data (asection * sec)
+- {
+--  struct section_list * entry;
+--
+--  entry = find_arm_elf_section_entry (sec);
+--
+--  if (entry)
+--    return elf32_arm_section_data (entry->sec);
+-+  if (sec && sec->owner && is_arm_elf (sec->owner))
+-+    return elf32_arm_section_data (sec);
+-   else
+-     return NULL;
+- }
+-
+--static void
+--unrecord_section_with_arm_elf_section_data (asection * sec)
+--{
+--  struct section_list * entry;
+--
+--  entry = find_arm_elf_section_entry (sec);
+--
+--  if (entry)
+--    {
+--      if (entry->prev != NULL)
+--	entry->prev->next = entry->next;
+--      if (entry->next != NULL)
+--	entry->next->prev = entry->prev;
+--      if (entry == sections_with_arm_elf_section_data)
+--	sections_with_arm_elf_section_data = entry->next;
+--      free (entry);
+--    }
+--}
+--
+--
+- typedef struct
+- {
+-   void *finfo;
+-@@ -13230,8 +13137,6 @@ elf32_arm_new_section_hook (bfd *abfd, a
+-       sec->used_by_bfd = sdata;
+-     }
+-
+--  record_section_with_arm_elf_section_data (sec);
+--
+-   return _bfd_elf_new_section_hook (abfd, sec);
+- }
+-
+-@@ -13659,44 +13564,13 @@ elf32_arm_write_section (bfd *output_bfd
+-     }
+-
+-   free (map);
+--  arm_data->mapcount = 0;
+-+  arm_data->mapcount = -1;
+-   arm_data->mapsize = 0;
+-   arm_data->map = NULL;
+--  unrecord_section_with_arm_elf_section_data (sec);
+-
+-   return FALSE;
+- }
+-
+--static void
+--unrecord_section_via_map_over_sections (bfd * abfd ATTRIBUTE_UNUSED,
+--					asection * sec,
+--					void * ignore ATTRIBUTE_UNUSED)
+--{
+--  unrecord_section_with_arm_elf_section_data (sec);
+--}
+--
+--static bfd_boolean
+--elf32_arm_close_and_cleanup (bfd * abfd)
+--{
+--  if (abfd->sections)
+--    bfd_map_over_sections (abfd,
+--			   unrecord_section_via_map_over_sections,
+--			   NULL);
+--
+--  return _bfd_elf_close_and_cleanup (abfd);
+--}
+--
+--static bfd_boolean
+--elf32_arm_bfd_free_cached_info (bfd * abfd)
+--{
+--  if (abfd->sections)
+--    bfd_map_over_sections (abfd,
+--			   unrecord_section_via_map_over_sections,
+--			   NULL);
+--
+--  return _bfd_free_cached_info (abfd);
+--}
+--
+- /* Display STT_ARM_TFUNC symbols as functions.  */
+-
+- static void
+-@@ -13882,8 +13756,6 @@ const struct elf_size_info elf32_arm_siz
+- #define bfd_elf32_find_inliner_info	        elf32_arm_find_inliner_info
+- #define bfd_elf32_new_section_hook		elf32_arm_new_section_hook
+- #define bfd_elf32_bfd_is_target_special_symbol	elf32_arm_is_target_special_symbol
+--#define bfd_elf32_close_and_cleanup             elf32_arm_close_and_cleanup
+--#define bfd_elf32_bfd_free_cached_info          elf32_arm_bfd_free_cached_info
+- #define bfd_elf32_bfd_final_link		elf32_arm_final_link
+-
+- #define elf_backend_get_symbol_type             elf32_arm_get_symbol_type
+diff --git a/toolchain/binutils/Config.in b/toolchain/binutils/Config.in
+deleted file mode 100644
+index 165b43e..0000000
+--- a/toolchain/binutils/Config.in
++++ /dev/null
+@@ -1,59 +0,0 @@
+-# Choose binutils version.
+-
+-comment "Binutils Options"
+-
+-choice
+-	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_20_1
+-	help
+-	  Select the version of binutils you wish to use.
+-
+-	config BR2_BINUTILS_VERSION_2_17
+-		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED
+-		bool "binutils 2.17"
+-
+-	config BR2_BINUTILS_VERSION_2_18
+-		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED
+-		bool "binutils 2.18"
+-
+-	config BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+-	       depends on BR2_avr32
+-	       bool "binutils 2.18-avr32-1.0.1"
+-
+-	config BR2_BINUTILS_VERSION_2_19
+-		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED
+-		bool "binutils 2.19"
+-
+-	config BR2_BINUTILS_VERSION_2_19_1
+-		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED
+-		bool "binutils 2.19.1"
+-
+-	config BR2_BINUTILS_VERSION_2_20
+-		depends on !BR2_avr32
+-		bool "binutils 2.20"
+-
+-	config BR2_BINUTILS_VERSION_2_20_1
+-		depends on !BR2_avr32
+-		bool "binutils 2.20.1"
+-
+-endchoice
+-
+-config BR2_BINUTILS_VERSION
+-	string
+-	default "2.17"		if BR2_BINUTILS_VERSION_2_17
+-	default "2.18"		if BR2_BINUTILS_VERSION_2_18
+-	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+-	default "2.19"		if BR2_BINUTILS_VERSION_2_19
+-	default "2.19.1"	if BR2_BINUTILS_VERSION_2_19_1
+-	default "2.20"		if BR2_BINUTILS_VERSION_2_20
+-	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
+-
+-config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
+-	string "Additional binutils options"
+-	default ""
+-	help
+-	  Any additional binutils options you may want to include.
+diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
+deleted file mode 100644
+index 8ab383b..0000000
+--- a/toolchain/binutils/binutils.mk
++++ /dev/null
+@@ -1,179 +0,0 @@
+-#############################################################
+-#
+-# build binutils for use on the host system
+-#
+-#############################################################
+-BINUTILS_VERSION:=$(call qstrip,$(BR2_BINUTILS_VERSION))
+-
+-EXTRA_BINUTILS_CONFIG_OPTIONS=$(call qstrip,$(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS))
+-ifeq ($(findstring avr32,$(BINUTILS_VERSION)),avr32)
+-BINUTILS_SITE:=ftp://www.at91.com/pub/buildroot/
+-else
+-BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
+-endif
+-
+-# We do not rely on the host's gmp/mpfr but use a known working one
+-BINUTILS_HOST_PREREQ:=
+-BINUTILS_TARGET_PREREQ:=
+-
+-BINUTILS_HOST_PREREQ:=host-gmp host-mpfr
+-HOST_SOURCE += host-gmp-source host-mpfr-source
+-
+-BINUTILS_TARGET_PREREQ:=gmp mpfr
+-
+-EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-gmp=$(HOST_DIR)/usr
+-EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-mpfr=$(HOST_DIR)/usr
+-
+-BINUTILS_TARGET_CONFIG_OPTIONS=--with-gmp=$(STAGING_DIR)/usr
+-BINUTILS_TARGET_CONFIG_OPTIONS+=--with-mpfr=$(STAGING_DIR)/usr
+-
+-ifeq ($(BR2_PACKAGE_LIBMPC),y)
+-BINUTILS_ADD_MPC = y
+-endif
+-
+-ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-BINUTILS_ADD_MPC = y
+-endif
+-
+-ifeq ($(BINUTILS_ADD_MPC),y)
+-BINUTILS_HOST_PREREQ += host-mpc
+-HOST_SOURCE += host-mpc-source
+-BINUTILS_TARGET_PREREQ += mpc
+-EXTRA_BINUTILS_CONFIG_OPTIONS += --with-mpc=$(HOST_DIR)/usr
+-BINUTILS_TARGET_CONFIG_OPTIONS += --with-mpc=$(STAGING_DIR)/usr
+-endif
+-
+-BINUTILS_PATCH_DIR:=toolchain/binutils/$(BINUTILS_VERSION)
+-
+-ifneq ($(filter xtensa%,$(ARCH)),)
+-include target/xtensa/patch.in
+-BINUTILS_PATCH_EXTRA:=$(call XTENSA_PATCH,binutils,$(BINUTILS_PATCH_DIR),. ..)
+-endif
+-
+-BINUTILS_SOURCE:=binutils-$(BINUTILS_VERSION).tar.bz2
+-BINUTILS_DIR:=$(TOOLCHAIN_DIR)/binutils-$(BINUTILS_VERSION)
+-BINUTILS_CAT:=$(BZCAT)
+-
+-BINUTILS_DIR1:=$(TOOLCHAIN_DIR)/binutils-$(BINUTILS_VERSION)-build
+-
+-$(DL_DIR)/$(BINUTILS_SOURCE):
+-	mkdir -p $(DL_DIR)
+-	$(call DOWNLOAD,$(BINUTILS_SITE),$(BINUTILS_SOURCE))
+-
+-binutils-unpacked: $(BINUTILS_DIR)/.patched
+-$(BINUTILS_DIR)/.unpacked: $(DL_DIR)/$(BINUTILS_SOURCE)
+-	mkdir -p $(TOOLCHAIN_DIR)
+-	rm -rf $(BINUTILS_DIR)
+-	$(BINUTILS_CAT) $(DL_DIR)/$(BINUTILS_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(@D)
+-	touch $@
+-
+-binutils-patched: $(BINUTILS_DIR)/.patched
+-$(BINUTILS_DIR)/.patched: $(BINUTILS_DIR)/.unpacked
+-	# Apply appropriate binutils patches.
+-ifneq ($(wildcard $(BINUTILS_PATCH_DIR)),)
+-	toolchain/patch-kernel.sh $(BINUTILS_DIR) $(BINUTILS_PATCH_DIR) \*.patch $(BINUTILS_PATCH_EXTRA)
+-endif
+-	touch $@
+-
+-$(BINUTILS_DIR1)/.configured: $(BINUTILS_DIR)/.patched
+-	mkdir -p $(BINUTILS_DIR1)
+-	(cd $(BINUTILS_DIR1); rm -rf config.cache; \
+-		$(HOST_CONFIGURE_OPTS) \
+-		$(BINUTILS_DIR)/configure $(QUIET) \
+-		--prefix=$(STAGING_DIR)/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		$(BR2_CONFIGURE_DEVEL_SYSROOT) \
+-		$(BR2_CONFIGURE_STAGING_SYSROOT) \
+-		$(DISABLE_NLS) \
+-		--disable-multilib \
+-		--disable-werror \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(EXTRA_BINUTILS_CONFIG_OPTIONS) \
+-		$(QUIET) \
+-	)
+-	touch $@
+-
+-$(BINUTILS_DIR1)/binutils/objdump: $(BINUTILS_DIR1)/.configured
+-	$(MAKE) -C $(BINUTILS_DIR1) all
+-
+-# Make install will put gettext data in staging_dir/share/locale.
+-# Unfortunatey, it isn't configureable.
+-$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld: $(BINUTILS_DIR1)/binutils/objdump
+-	$(MAKE) -C $(BINUTILS_DIR1) install
+-	#	tooldir=/usr build_tooldir=/usr install
+-	#rm -f $(STAGING_DIR)/usr/bin/{ar,as,ld,nm,objdump,ranlib,strip}
+-
+-binutils: $(BINUTILS_HOST_PREREQ) $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld
+-
+-binutils-source: $(DL_DIR)/$(BINUTILS_SOURCE)
+-
+-binutils-clean:
+-	-$(MAKE) -C $(BINUTILS_DIR1) DESTDIR=$(STAGING_DIR) \
+-		tooldir=/usr build_tooldir=/usr uninstall
+-	-$(MAKE) -C $(BINUTILS_DIR1) clean
+-	rm -rf $(wildcard $(patsubst %,$(STAGING_DIR)/usr/bin/*%,ar as ld nm objdump ranlib strip c++filt)) \
+-		$(wildcard $(patsubst %,$(STAGING_DIR)/usr/lib/%*,libiberty ldscripts))
+-
+-binutils-dirclean:
+-	rm -rf $(BINUTILS_DIR1)
+-
+-binutils-src-dirclean:
+-	rm -rf $(BINUTILS_DIR)
+-
+-#############################################################
+-#
+-# build binutils for use on the target system
+-#
+-#############################################################
+-BINUTILS_DIR2:=$(BUILD_DIR)/binutils-$(BINUTILS_VERSION)-target
+-$(BINUTILS_DIR2)/.configured: $(BINUTILS_DIR)/.patched
+-	mkdir -p $(BINUTILS_DIR2)
+-	(cd $(BINUTILS_DIR2); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(BINUTILS_DIR)/configure $(QUIET) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-		$(DISABLE_NLS) \
+-		$(BINUTILS_TARGET_CONFIG_OPTIONS) \
+-		--disable-multilib \
+-		--disable-werror \
+-		$(SOFT_FLOAT_CONFIG_OPTION) \
+-	)
+-	touch $@
+-
+-$(BINUTILS_DIR2)/binutils/objdump: $(BINUTILS_DIR2)/.configured
+-	PATH=$(TARGET_PATH) $(MAKE) -C $(BINUTILS_DIR2) all
+-
+-$(TARGET_DIR)/usr/bin/ld: $(BINUTILS_DIR2)/binutils/objdump
+-	PATH=$(TARGET_PATH) \
+-	$(MAKE) DESTDIR=$(TARGET_DIR) \
+-		tooldir=/usr build_tooldir=/usr \
+-		-C $(BINUTILS_DIR2) install
+-	rm -rf $(TARGET_DIR)/share/locale
+-	-$(STRIPCMD) $(TARGET_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/* > /dev/null 2>&1
+-	-$(STRIPCMD) $(TARGET_DIR)/usr/bin/* > /dev/null 2>&1
+-
+-# If both binutils-target and busybox are selected, make certain binutils
+-# gets to run after busybox, so it can overwrite the busybox symlink for
+-# ar if enabled
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-BINUTILS_TARGET_PREREQ += busybox
+-endif
+-
+-binutils_target: $(BINUTILS_TARGET_PREREQ) $(TARGET_DIR)/usr/bin/ld
+-
+-binutils_target-clean:
+-	-$(MAKE) -C $(BINUTILS_DIR2) clean
+-	rm -f $(TARGET_DIR)/bin/$(REAL_GNU_TARGET_NAME)* \
+-		$(addprefix $(TARGET_DIR)/usr/bin/, addr2line ar as gprof ld nm objcopy objdump ranlib readelf size strings strip c++filt)
+-
+-binutils_target-dirclean:
+-	rm -rf $(BINUTILS_DIR2)
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+index f12a480..c611562 100644
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -1,7 +1,6 @@
+ # Include files required for the internal toolchain backend
+ 
+ include toolchain/dependencies/dependencies.mk
+-include toolchain/binutils/binutils.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index c458251..3894890 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -3,6 +3,6 @@
+ if BR2_TOOLCHAIN_BUILDROOT
+ source "toolchain/kernel-headers/Config.in"
+ source "toolchain/uClibc/Config.in"
+-source "toolchain/binutils/Config.in"
++source "package/binutils/Config.in.host"
+ source "toolchain/gcc/Config.in"
+ endif
+diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
+index 1befff2..e480da9 100644
+--- a/toolchain/toolchain-crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng.mk
+@@ -2,7 +2,6 @@
+ 
+ # Explicit ordering:
+ include toolchain/helpers.mk
+-include toolchain/binutils/binutils.mk
+ include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+index c43618b..d67405b 100644
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,7 +1,6 @@
+ # Required includes for the external toolchain backend
+ 
+ include toolchain/helpers.mk
+-include toolchain/binutils/binutils.mk
+ include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
 -- 
-Maxime Petazzoni <http://www.bulix.org>
- ``One by one, the penguins took away my sanity.''
-Writing software in California
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/cebdf594/attachment.pgp>
+1.7.2.2
