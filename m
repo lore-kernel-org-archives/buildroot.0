@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 14 Dec 2010 01:35:41 +0100
-Subject: [Buildroot] [git commit master 1/1] input-tools: fix jscal build,
-	ensure target dir exists
-Message-ID: <20101214003641.4A65A8E2DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] target: support generic getty
+	with sysvinit inittabs
+Message-ID: <20101214003642.3DDEE8E2DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +10,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbda6575f04d09cd79ff8111c94572b155b3fdb3
+commit: http://git.buildroot.net/buildroot/commit/?id=fb7226ca2f185577f656b422f9e6a73304de71e9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And at the same time only build enabled applets.
+In sysvinit inittab the "id" field (first field) must be no longer
+than 4 bytes, and is not used by init to determine the output
+terminal. Therefore, we adjust the strategy used to modify the inittab
+file according to the getty configuration.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/input-tools/input-tools.mk |   20 +++++++++++---------
- 1 files changed, 11 insertions(+), 9 deletions(-)
+ target/generic/Makefile.in |   14 ++++++++++++--
+ 1 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
-index bd85af3..daf0755 100644
---- a/package/input-tools/input-tools.mk
-+++ b/package/input-tools/input-tools.mk
-@@ -21,18 +21,20 @@ endef
+diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
+index 1ef2a9d..3a750c3 100644
+--- a/target/generic/Makefile.in
++++ b/target/generic/Makefile.in
+@@ -11,10 +11,16 @@ target-generic-issue:
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
  
- INPUT_TOOLS_POST_PATCH_HOOKS = INPUT_TOOLS_DEBIAN_PATCHES
+-target-generic-getty:
++target-generic-getty-busybox:
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+ 		$(TARGET_DIR)/etc/inittab
  
-+# jscal needs -lm
- define INPUT_TOOLS_BUILD_CMDS
--	(cd $(@D)/utils; \
--		$(TARGET_CC) $(TARGET_CFLAGS) -o evtest evtest.c; \
--		$(TARGET_CC) $(TARGET_CFLAGS) -o inputattach inputattach.c; \
--		$(TARGET_CC) $(TARGET_CFLAGS) -o jscal jscal.c; \
--		$(TARGET_CC) $(TARGET_CFLAGS) -o jstest jstest.c; \
--	)
-+	for i in $(filter-out jscal,$(INPUT_TOOLS_TARGETS_y)); do \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$$i $(@D)/utils/$$i.c; \
-+	done
-+	for i in $(filter jscal,$(INPUT_TOOLS_TARGETS_y)); do \
-+		$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/$$i $(@D)/utils/$$i.c -lm; \
-+	done
- endef
++# In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
++# skip the "tty" part and keep only the remaining.
++target-generic-getty-sysvinit:
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
++		$(TARGET_DIR)/etc/inittab
++
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+ TARGETS += target-generic-hostname
+ endif
+@@ -24,5 +30,9 @@ TARGETS += target-generic-issue
+ endif
  
- define INPUT_TOOLS_INSTALL_TARGET_CMDS
--	test -z "$(INPUT_TOOLS_TARGETS_y)" || \
--	install -m 755 $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y)) $(TARGET_DIR)/usr/bin/
-+	for i in $(INPUT_TOOLS_TARGETS_y); do \
-+		install -m 755 -D $(@D)/$$i $(TARGET_DIR)/usr/bin/$$i; \
-+	done
- endef
- 
- define INPUT_TOOLS_UNINSTALL_TARGET_CMDS
-@@ -40,7 +42,7 @@ define INPUT_TOOLS_UNINSTALL_TARGET_CMDS
- endef
- 
- define INPUT_TOOLS_CLEAN_CMDS
--	rm -f $(addprefix $(@D)/utils/,$(INPUT_TOOLS_TARGETS_y))
-+	rm -f $(addprefix $(@D)/,$(INPUT_TOOLS_TARGETS_y))
- endef
- 
- $(eval $(call GENTARGETS,package,input-tools))
+ ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-TARGETS += target-generic-getty
++ifeq ($(BR2_PACKAGE_SYSVINIT),y)
++TARGETS += target-generic-getty-sysvinit
++else
++TARGETS += target-generic-getty-busybox
++endif
+ endif
 -- 
 1.7.2.2
