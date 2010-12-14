@@ -1,60 +1,39 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 14 Dec 2010 21:19:20 +0100
-Subject: [Buildroot] [PATCH] package/Makefile.package.in: Added BZR
-	download support
-In-Reply-To: <1290681394-29453-1-git-send-email-daniel.nystrom@timeterminal.se>
-References: <1290681394-29453-1-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <AANLkTinh0YcHx4GDb5if0iu3YYyQ0K87EE3twLoiT_NV@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 14 Dec 2010 21:45:36 +0100
+Subject: [Buildroot] [PATCH 07/13] toolchain: move sysroot to host dir
+In-Reply-To: <201012142058.45571.yann.morin.1998@anciens.enib.fr>
+References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
+	<1292353569-30172-8-git-send-email-gustavo@zacarias.com.ar>
+	<201012142058.45571.yann.morin.1998@anciens.enib.fr>
+Message-ID: <201012142145.36146.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping this patch...
-Den 25 nov 2010 11.36 skrev "Daniel Nystr?m" <daniel.nystrom@timeterminal.se
->:
-> ---
-> package/Makefile.package.in | 15 +++++++++++++++
-> 1 files changed, 15 insertions(+), 0 deletions(-)
->
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index 816a013..f7e69e7 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -123,6 +123,20 @@ define SHOW_EXTERNAL_DEPS_GIT
-> endef
->
->
-> +define DOWNLOAD_BZR
-> + test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> + $(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r
-$($(PKG)_DL_VERSION)
-> +endef
-> +
-> +define SOURCE_CHECK_BZR
-> + $(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
-> +endef
-> +
-> +define SHOW_EXTERNAL_DEPS_BZR
-> + echo "$($(PKG)_SITE) [bzr: $($(PKG)_DL_VERSION)]"
-> +endef
-> +
-> +
-> define DOWNLOAD_SVN
-> test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> (pushd $(DL_DIR) > /dev/null && \
-> @@ -175,6 +189,7 @@ define DOWNLOAD
-> case "$($(PKG)_SITE_METHOD)" in \
-> git) $($(DL_MODE)_GIT) && exit ;; \
-> svn) $($(DL_MODE)_SVN) && exit ;; \
-> + bzr) $($(DL_MODE)_BZR) && exit ;; \
-> *) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
-> esac ; \
-> fi ; \
-> --
-> 1.7.1
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/c3ca7757/attachment.html>
+Gustavo, All,
+
+On Tuesday 14 December 2010 20:58:45 Yann E. MORIN wrote:
+> On Tuesday 14 December 2010 20:06:03 Gustavo Zacarias wrote:
+> > * Drop the BR2_STAGING_DIR option
+> > * Hardcode STAGING_DIR to $(HOST_DIR)/usr/TUPLE/sysroot
+> Why do you need that?
+> The fact that the user can set this location is to be able to use the
+> toolchain outside of buildroot, without need to relocate it.
+> Something to do with what we wanted to do for the SDK, IIRC.
+
+OK, forget my comment. Resolved on IRC:
+- have the _staging_ to be the sysroot
+- later, offer an option to move the _toolchain_
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
