@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 14 Dec 2010 01:35:41 +0100
-Subject: [Buildroot] [git commit master 1/1] microcom: remove package
-Message-ID: <20101214003642.D46428E2DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libaio: add patch to support
+	AVR32
+Message-ID: <20101214003644.00D6882927@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,267 +10,157 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af6fd2d931c5fec8d95cbe635265cff74c09a54a
+commit: http://git.buildroot.net/buildroot/commit/?id=1e17f73d279e71d6669649d2a16835b3d45fed48
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package has been marked deprecated some time ago, because it has
-been integrated into Busybox. Let's get rid of it now.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    2 +
- package/Config.in                                  |    3 -
- package/microcom/Config.in                         |    7 --
- .../microcom/microcom-102-001-speed-defines.patch  |   34 ---------
- .../microcom-102-002-rename-variable-log.patch     |   78 --------------------
- package/microcom/microcom.mk                       |   71 ------------------
- 6 files changed, 2 insertions(+), 193 deletions(-)
- delete mode 100644 package/microcom/Config.in
- delete mode 100644 package/microcom/microcom-102-001-speed-defines.patch
- delete mode 100644 package/microcom/microcom-102-002-rename-variable-log.patch
- delete mode 100644 package/microcom/microcom.mk
+ CHANGES                                           |    2 +-
+ package/libaio/libaio-0.3.109-avr32-support.patch |  122 +++++++++++++++++++++
+ 2 files changed, 123 insertions(+), 1 deletions(-)
+ create mode 100644 package/libaio/libaio-0.3.109-avr32-support.patch
 
 diff --git a/CHANGES b/CHANGES
-index d53192b..f3e990c 100644
+index 98af6f5..e99e491 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -12,6 +12,8 @@
+@@ -5,7 +5,7 @@
  
- 	New packages: dhrystone, fbgrab, lsuio, rsh-redone, whetstone
- 
-+	Removed packages: microcom
+ 	Updated/fixed packages: alsa-utils, at, busybox, bzip2, dbus,
+ 	direcfb-examples, dmalloc, cloop, cups, ffmpeg, gdk-pixbuf,
+-	hostapd, i2c-tools, input-tools, libconfig, lsof,
++	hostapd, i2c-tools, input-tools, libaio, libconfig, lsof,
+ 	ltp-testsuite, lvm2, m4, memtester, mii-diag, mrouted,
+ 	netplug, openssh, openssl, openvpn, pango, qt, rsync, sdl_gfx,
+ 	sdl_sound, sysklogd, sysvinit, udev, usbutils, xz, zlib
+diff --git a/package/libaio/libaio-0.3.109-avr32-support.patch b/package/libaio/libaio-0.3.109-avr32-support.patch
+new file mode 100644
+index 0000000..57bb1f3
+--- /dev/null
++++ b/package/libaio/libaio-0.3.109-avr32-support.patch
+@@ -0,0 +1,122 @@
++Add AVR32 support to libaio
 +
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#2905: Qt: Speed up compilation, if gui-module isn't selected
-diff --git a/package/Config.in b/package/Config.in
-index b312ce1..23f000b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -389,9 +389,6 @@ source "package/lighttpd/Config.in"
- endif
- source "package/links/Config.in"
- source "package/lrzsz/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/microcom/Config.in"
--endif
- source "package/mii-diag/Config.in"
- source "package/mrouted/Config.in"
- source "package/mutt/Config.in"
-diff --git a/package/microcom/Config.in b/package/microcom/Config.in
-deleted file mode 100644
-index bf9f5df..0000000
---- a/package/microcom/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_MICROCOM
--	depends on BR2_DEPRECATED
--	bool "microcom"
--	help
--	  A minicom-like serial terminal emulator with scripting support.
--
--	  http://microcom.port5.com/
-diff --git a/package/microcom/microcom-102-001-speed-defines.patch b/package/microcom/microcom-102-001-speed-defines.patch
-deleted file mode 100644
-index b9aece8..0000000
---- a/package/microcom/microcom-102-001-speed-defines.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--diff -rdup microcom-1.02.orig/help.c microcom-1.02/help.c
----- microcom-1.02.orig/help.c	2000-07-30 06:15:47.000000000 +0200
--+++ microcom-1.02/help.c	2007-01-19 19:44:19.000000000 +0100
--@@ -273,12 +273,29 @@ static void help_set_speed(int fd, char 
--     B19200,
--     B38400,
--     B57600,
--+#if defined B115200
--     B115200,
--+#endif
--+#if defined B230400
--     B230400,
--+#endif
--+#if defined B460800
--     B460800
--+#endif
--   };
--+#undef __STOPCHAR
--+#if defined B115200
--+#define __STOPCHAR 'h'
--+#endif
--+#if defined B230400
--+#define __STOPCHAR 'i'
--+#endif
--+#if defined B460800
--+#define __STOPCHAR 'j'
--+#endif
-- 
---  if (c < 'a' && c > 'j') {
--+
--+  if (c < 'a' && c > __STOPCHAR) {
--     if (c == '~') {
--       help_speed();
--       return;
-diff --git a/package/microcom/microcom-102-002-rename-variable-log.patch b/package/microcom/microcom-102-002-rename-variable-log.patch
-deleted file mode 100644
-index 8516b56..0000000
---- a/package/microcom/microcom-102-002-rename-variable-log.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--diff -rdup microcom-1.02.speed/help.c microcom-1.02/help.c
----- microcom-1.02.speed/help.c	2007-01-19 19:44:19.000000000 +0100
--+++ microcom-1.02/help.c	2007-01-19 19:48:20.000000000 +0100
--@@ -23,7 +23,7 @@ extern int crnl_mapping; //0 - no mappin
-- extern int script; /* script active flag */
-- extern char scr_name[MAX_SCRIPT_NAME]; /* default name of the script */
-- extern char device[MAX_DEVICE_NAME]; /* serial device name */
---extern int log; /* log active flag */
--+extern int log_active; /* log active flag */
-- extern FILE* flog;   /* log file */
-- 
-- static int help_state = 0;
--@@ -85,7 +85,7 @@ static void help_escape(void) {
-- 
--   write(STDOUT_FILENO, str1, strlen(str1));
-- 
---  if (log == 0)
--+  if (log_active == 0)
--     write(STDOUT_FILENO, "  l - log on             \n", 26);
--   else
--     write(STDOUT_FILENO, "  l - log off            \n", 26);
--@@ -156,11 +156,11 @@ static void help_send_escape(int fd, cha
--   case 'q': /* quit help */
--     break;
--   case 'l': /* log on/off */
---    log = (log == 0)? 1: 0;
---    if (log) { /* open log file */
--+    log_active = (log_active == 0)? 1: 0;
--+    if (log_active) { /* open log file */
--       if ((flog = fopen("microcom.log", "a")) == (FILE *)0) {
-- 	write(STDOUT_FILENO, "Cannot open microcom.log \n", 26);
---	log = 0;
--+	log_active = 0;
--       }
--     }
--     else { /* cloase log file */
--diff -rdup microcom-1.02.speed/microcom.c microcom-1.02/microcom.c
----- microcom-1.02.speed/microcom.c	2000-08-27 17:22:47.000000000 +0200
--+++ microcom-1.02/microcom.c	2007-01-19 19:48:37.000000000 +0100
--@@ -25,7 +25,7 @@ int crnl_mapping; //0 - no mapping, 1 ma
-- int script = 0; /* script active flag */
-- char scr_name[MAX_SCRIPT_NAME] = "script.scr"; /* default name of the script */
-- char device[MAX_DEVICE_NAME]; /* serial device name */
---int log = 0; /* log active flag */
--+int log_active = 0; /* log active flag */
-- FILE* flog;   /* log file */
-- int  pf = 0;  /* port file descriptor */
-- struct termios pots; /* old port termios settings to restore */
--@@ -106,7 +106,7 @@ void main_usage(int exitcode, char *str,
-- /* restore original terminal settings on exit */
-- void cleanup_termios(int signal) {
--   /* cloase the log file first */
---  if (log) {
--+  if (log_active) {
--     fflush(flog);
--     fclose(flog);
--   }
--diff -rdup microcom-1.02.speed/mux.c microcom-1.02/mux.c
----- microcom-1.02.speed/mux.c	2000-07-30 06:15:47.000000000 +0200
--+++ microcom-1.02/mux.c	2007-01-19 19:48:48.000000000 +0100
--@@ -24,7 +24,7 @@
-- 
-- extern int script;
-- extern char scr_name[];
---extern int log;
--+extern int log_active;
-- extern FILE* flog;
-- 
-- void mux_clear_sflag(void) {
--@@ -71,7 +71,7 @@ void mux_loop(int pf) {
--       i = read(pf, buf, BUFSIZE);
--       if (i > 0) {
-- 	write(STDOUT_FILENO, buf, i);
---	if (log)
--+	if (log_active)
-- 	  fwrite(buf, 1, i, flog);
-- 	if (script) {
-- 	  i = script_process(S_DCE, buf, i);
-diff --git a/package/microcom/microcom.mk b/package/microcom/microcom.mk
-deleted file mode 100644
-index f691723..0000000
---- a/package/microcom/microcom.mk
-+++ /dev/null
-@@ -1,71 +0,0 @@
--#############################################################
--#
--# microcom terminal emulator
--#
--# Maintainer: Tim Riker <Tim@Rikers.org>
--#
--#############################################################
--# Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
--# Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
--#
--# This program is free software; you can redistribute it and/or modify
--# it under the terms of the GNU Library General Public License as
--# published by the Free Software Foundation; either version 2 of the
--# License, or (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful, but
--# WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
--# Library General Public License for more details.
--#
--# You should have received a copy of the GNU Library General Public
--# License along with this program; if not, write to the Free Software
--# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
--# USA
--
--# TARGETS
--# http://microcom.port5.com/m102.tar.gz
--MICROCOM_VERSION:=1.02
--MICROCOM_SITE:=http://buildroot.net/downloads/sources/
--MICROCOM_SOURCE:=m102.tar.gz
--MICROCOM_DIR:=$(BUILD_DIR)/microcom-$(MICROCOM_VERSION)
--
--$(DL_DIR)/$(MICROCOM_SOURCE):
--	$(call DOWNLOAD,$(MICROCOM_SITE),$(MICROCOM_SOURCE))
--
--microcom-source: $(DL_DIR)/$(MICROCOM_SOURCE)
--
--$(MICROCOM_DIR)/.unpacked: $(DL_DIR)/$(MICROCOM_SOURCE)
--	mkdir -p $(MICROCOM_DIR)
--	$(ZCAT) $(DL_DIR)/$(MICROCOM_SOURCE) | tar -C $(MICROCOM_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(MICROCOM_DIR) package/microcom/ \*.patch
--	touch $@
--
--$(MICROCOM_DIR)/.configured: $(MICROCOM_DIR)/.unpacked
--	$(SED) 's~gcc~$$(CC)~' -e 's~-O~$$(CFLAGS)~' $(MICROCOM_DIR)/Makefile
--	touch $@
--
--$(MICROCOM_DIR)/microcom: $(MICROCOM_DIR)/.configured
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(MICROCOM_DIR)
--	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
--
--$(TARGET_DIR)/usr/bin/microcom: $(MICROCOM_DIR)/microcom
--	install -c $(MICROCOM_DIR)/microcom $(TARGET_DIR)/usr/bin/microcom
--
--microcom-clean:
--	rm -f $(MICROCOM_DIR)/*.o $(MICROCOM_DIR)/microcom \
--		$(TARGET_DIR)/usr/bin/microcom
--
--microcom-dirclean:
--	rm -rf $(MICROCOM_DIR)
--
--microcom: $(TARGET_DIR)/usr/bin/microcom
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_MICROCOM),y)
--TARGETS+=microcom
--endif
++Taken from OpenWRT repository.
++
++--- a/src/libaio.h
+++++ b/src/libaio.h
++@@ -107,6 +107,10 @@ typedef enum io_iocb_cmd {
++ #  else
++ #    error "neither mipseb nor mipsel?"
++ #  endif
+++#elif defined(__avr32__) /* big endian, 32 bits */
+++#define PADDED(x, y)	unsigned y; x
+++#define PADDEDptr(x, y)	unsigned y; x
+++#define PADDEDul(x, y)	unsigned y; unsigned long x;
++ #else
++ #error	endian?
++ #endif
++--- /dev/null
+++++ b/src/syscall-avr32.h
++@@ -0,0 +1,91 @@
+++/*
+++ * Copyright (C) 2007 Atmel Corporation
+++ *
+++ * This program is free software; you can redistribute it and/or modify
+++ * it under the terms of the GNU General Public License version 2 as
+++ * published by the Free Software Foundation.
+++ */
+++
+++#define __NR_io_setup		197
+++#define __NR_io_destroy		198
+++#define __NR_io_getevents	199
+++#define __NR_io_submit		200
+++#define __NR_io_cancel		201
+++
+++#define io_syscall1(type,fname,sname,type1,arg1)			\
+++type fname(type1 arg1)							\
+++{									\
+++	register long __r12 __asm__("r12") = (long)arg1;		\
+++	register long __res_r12 __asm__("r12");				\
+++	register long __scno __asm__("r8") = __NR_##sname;		\
+++	__asm__ __volatile__("scall"					\
+++			     : "=r"(__res_r12)				\
+++			     : "0"(__r12), "r"(__scno)			\
+++			     : "memory");				\
+++	return (type) __res_r12;					\
+++}
+++
+++#define io_syscall2(type,fname,sname,type1,arg1,type2,arg2)		\
+++type fname(type1 arg1, type2 arg2)					\
+++{									\
+++	register long __r12 __asm__("r12") = (long)arg1;		\
+++	register long __r11 __asm__("r11") = (long)arg2;		\
+++	register long __res_r12 __asm__("r12");				\
+++	register long __scno __asm__("r8") = __NR_##sname;		\
+++	__asm__ __volatile__("scall"					\
+++			     : "=r"(__res_r12)				\
+++			     : "0"(__r12), "r"(__r11), "r"(__scno)	\
+++			     : "memory");				\
+++	return (type) __res_r12;					\
+++}
+++
+++#define io_syscall3(type,fname,sname,type1,arg1,type2,arg2,type3,arg3)	\
+++type fname(type1 arg1, type2 arg2, type3 arg3)				\
+++{									\
+++	register long __r12 __asm__("r12") = (long)arg1;		\
+++	register long __r11 __asm__("r11") = (long)arg2;		\
+++	register long __r10 __asm__("r10") = (long)arg3;		\
+++	register long __res_r12 __asm__("r12");				\
+++	register long __scno __asm__("r8") = __NR_##sname;		\
+++	__asm__ __volatile__("scall"					\
+++			     : "=r"(__res_r12)				\
+++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
+++			       "r"(__scno)				\
+++			     : "memory");				\
+++	return (type) __res_r12;					\
+++}
+++
+++#define io_syscall4(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4) \
+++type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4)		\
+++{									\
+++	register long __r12 __asm__("r12") = (long)arg1;		\
+++	register long __r11 __asm__("r11") = (long)arg2;		\
+++	register long __r10 __asm__("r10") = (long)arg3;		\
+++	register long __r9 __asm__("r9") = (long)arg4;			\
+++	register long __res_r12 __asm__("r12");				\
+++	register long __scno __asm__("r8") = __NR_##sname;		\
+++	__asm__ __volatile__("scall"					\
+++			     : "=r"(__res_r12)				\
+++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
+++			       "r"(__r9), "r"(__scno)			\
+++			     : "memory");				\
+++	return (type) __res_r12;					\
+++}
+++
+++#define io_syscall5(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4,type5,arg5) \
+++type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4, type5 arg5)	\
+++{									\
+++	register long __r12 __asm__("r12") = (long)arg1;		\
+++	register long __r11 __asm__("r11") = (long)arg2;		\
+++	register long __r10 __asm__("r10") = (long)arg3;		\
+++	register long __r9 __asm__("r9") = (long)arg4;			\
+++	register long __r5 __asm__("r5") = (long)arg5;			\
+++	register long __res_r12 __asm__("r12");				\
+++	register long __scno __asm__("r8") = __NR_##sname;		\
+++	__asm__ __volatile__("scall"					\
+++			     : "=r"(__res_r12)				\
+++			     : "0"(__r12), "r"(__r11), "r"(__r10),	\
+++			       "r"(__r9), "r"(__r5), "r"(__scno)	\
+++			     : "memory");				\
+++	return (type) __res_r12;					\
+++}
++--- a/src/syscall.h
+++++ b/src/syscall.h
++@@ -32,6 +32,8 @@
++ #include "syscall-parisc.h"
++ #elif defined(__mips__)
++ #include "syscall-mips.h"
+++#elif defined(__avr32__)
+++#include "syscall-avr32.h"
++ #else
++ #error "add syscall-arch.h"
++ #endif
 -- 
 1.7.2.2
