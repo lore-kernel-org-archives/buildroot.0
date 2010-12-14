@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 14 Dec 2010 20:54:04 +0100
-Subject: [Buildroot] [PATCH 05/13] package infra: fix versioned patches
-	for host packages
-In-Reply-To: <1292353569-30172-6-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 14 Dec 2010 20:58:45 +0100
+Subject: [Buildroot] [PATCH 07/13] toolchain: move sysroot to host dir
+In-Reply-To: <1292353569-30172-8-git-send-email-gustavo@zacarias.com.ar>
 References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
-	<1292353569-30172-6-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201012142054.04574.yann.morin.1998@anciens.enib.fr>
+	<1292353569-30172-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <201012142058.45571.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +13,16 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On Tuesday 14 December 2010 20:06:01 Gustavo Zacarias wrote:
-> Without this patch we'd need separate versioned patch directories for
-> target and host packages, thus having unwanted duplication.
+On Tuesday 14 December 2010 20:06:03 Gustavo Zacarias wrote:
+> * Drop the BR2_STAGING_DIR option
+> * Hardcode STAGING_DIR to $(HOST_DIR)/usr/TUPLE/sysroot
 
-Maybe this should come first, before the gmp/mpfr/mpc patches?
+Why do you need that?
 
-I believe it is not related to making toolchain components proper packages.
-I mean, it can be seen as a bug in the existing infra, so has to come before
-the actual changes that do need it, or uncovered the issue, no?
+The fact that the user can set this location is to be able to use the
+toolchain outside of buildroot, without need to relocate it.
+
+Something to do with what we wanted to do for the SDK, IIRC.
 
 Regards,
 Yann E. MORIN.
