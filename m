@@ -1,81 +1,57 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Tue, 14 Dec 2010 15:39:45 +0200
-Subject: [Buildroot] cannot log to my build root
-In-Reply-To: <20101214142544.7863d2d2@surf>
-References: <AANLkTine190SpsTRLjzsOvdTFjAXiEwDK4yd8Vmkhsj_@mail.gmail.com>
-	<20101214142544.7863d2d2@surf>
-Message-ID: <AANLkTi=GjsSptGonZv0S+BqCgYZZYoTOC=K+mTYpLrSd@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 14 Dec 2010 15:02:13 +0100
+Subject: [Buildroot] [PATCH] New package: can-utils
+Message-ID: <4D0778E5.9010401@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nope. In my original case /dev/tty was not a char device (a null file
-instead). Creating these files fixed the problem:
+Add SocketCAN utilities.
 
-rm -fr $ROOT/dev/*
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-
-mknod $ROOT/dev/tty     c 5 0
-
-
-mknod $ROOT/dev/console c 5 1
-
-
-mknod $ROOT/dev/null    c 1 3
-
-
-mknod $ROOT/dev/tty0    c 4 0
-
-
-mknod $ROOT/dev/tty1    c 4 1
-
-
-mknod $ROOT/dev/tty2    c 4 2
-
-
-mknod $ROOT/dev/tty3    c 4 3
-
-
-mknod $ROOT/dev/ttyS0   c 4 64
-
-(I only need the very basic before udev starts).
-
-If I write "/bin/sh" at /etc/init.d/rc.S I *do* get a working shell, so my
-problem is with login.
-
-On Tue, Dec 14, 2010 at 3:25 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> On Tue, 14 Dec 2010 15:06:43 +0200
-> Diego Iastrubni <diegoiast@gmail.com> wrote:
->
-> > I am using buitdroot to create my development environment (the
-> > production is something bigger and slower made manually once...). I
-> > am using codesourcery for arm as the toolchain. the HW (which is not
-> > relevant  to the scenario) is an OMAP3 device boots with my old
-> > firmware).
-> >
-> > I forked (I use git and not released versions)  buildroot a few
-> > months and its worked after I manually mknod'ed some devices. Now I
-> > pulled from you guys, and now I cannot even login to my new clean
-> > environment (last time it was /dev/tty ,which was not correct). Does
-> > anyone have an idea?
->
-> What is your boot log ?
->
-> Quite likely, you should read
-> http://buildroot.org/downloads/buildroot.html#faq-boot-hangs, but there
-> may be other problems as well, of course.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/d5f9be56/attachment.html>
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in	2010-12-14 12:26:51.000000000 +0100
++++ b/package/Config.in	2010-12-14 12:41:56.000000000 +0100
+@@ -364,6 +364,7 @@
+ source "package/bind/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
++source "package/can-utils/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+Index: b/package/can-utils/Config.in
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/can-utils/Config.in	2010-12-14 12:41:05.000000000 +0100
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CAN_UTILS
++	bool "can-utils"
++	help
++	  SocketCAN is a set of open source CAN drivers and a networking stack. This package provides various
++	  tools for this stack.
++
++	  http://developer.berlios.de/projects/socketcan/
++
+Index: b/package/can-utils/can-utils.mk
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ b/package/can-utils/can-utils.mk	2010-12-14 14:40:07.000000000 +0100
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# can-utils
++#
++#############################################################
++
++CAN_UTILS_VERSION = HEAD
++CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
++
++CAN_UTILS_AUTORECONF = YES
++
++$(eval $(call AUTOTARGETS,package,can-utils))
++
