@@ -1,51 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Dec 2010 19:58:27 +0200
-Subject: [Buildroot] ssh-copy-id
-In-Reply-To: <SNT119-W22D09D75AD75F3A79A77D082130@phx.gbl>
-References: <SNT119-W63CFD1FA0F757DC16BC53C82120@phx.gbl>
-	<20101213174615.491fdba7@surf>
-	<SNT119-W22D09D75AD75F3A79A77D082130@phx.gbl>
-Message-ID: <20101214175826.GA11373@tarshish>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Tue, 14 Dec 2010 14:00:57 -0500
+Subject: [Buildroot] [PATCH] hostcc/hostcxx: fix noccache variant setting
+Message-ID: <1292353257-13594-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johnny,
+The current code accidentally sets up HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE
+only when the respective HOSTCC or HOSTCXX values are not set.  So if you
+do something like:
+	make HOSTCC=gcc menuconfig
+The build fails because HOSTCC_NOCCACHE is not set anywhere.
 
-On Tue, Dec 14, 2010 at 09:28:16AM +0000, Johnny Beardsmore wrote:
-> Many thanks for the response.  I've now built the system with sss-copy-id.  
-> After copying it to the target, and trying to use it, I get:
-> 
-> ERROR: No identities found
->
-> I know the target has a key pair, as I've just used ssh-keygen.  Any ideas 
-> what could be causing this?
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-This is not related to Buildroot. However, since ssh-copy-id is just a shell 
-script you can try doing 'sh -x /usr/bin/ssh-copy-id user at host' to get more 
-info on the script execution.
-
-baruch
-
-> > Date: Mon, 13 Dec 2010 17:46:15 +0100
-> > From: thomas.petazzoni at free-electrons.com
-> > To: jny0 at hotmail.com
-> > CC: buildroot at busybox.net
-> > Subject: Re: [Buildroot] ssh-copy-id
-> > 
-> > On Mon, 13 Dec 2010 10:07:44 +0000
-> > Johnny Beardsmore <jny0@hotmail.com> wrote:
-> > 
-> > > Is there a ssh-copy-id option in Buildroot?  If so, where is it?
-> > 
-> > It is part of OpenSSH, which is packaged in Networking applications ->
-> > openssh in Buildroot.
-> > 
-> > Thomas
-
+diff --git a/Makefile b/Makefile
+index f6ab07e..34d28a3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -126,13 +126,13 @@ endif
+ ifndef HOSTCC
+ HOSTCC:=gcc
+ HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+-HOSTCC_NOCCACHE:=$(HOSTCC)
+ endif
++HOSTCC_NOCCACHE:=$(HOSTCC)
+ ifndef HOSTCXX
+ HOSTCXX:=g++
+ HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+-HOSTCXX_NOCCACHE:=$(HOSTCXX)
+ endif
++HOSTCXX_NOCCACHE:=$(HOSTCXX)
+ ifndef HOSTFC
+ HOSTFC:=gfortran
+ endif
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.3.3
