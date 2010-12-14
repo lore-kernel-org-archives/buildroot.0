@@ -1,56 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Dec 2010 16:06:07 -0300
-Subject: [Buildroot] [PATCH 11/13] gcc: install copies of libgcc,
-	libstdc++ and libgcj to the sysroot too
+Date: Tue, 14 Dec 2010 16:06:08 -0300
+Subject: [Buildroot] [PATCH 12/13] uclibc: fix program invocation name
+	config option for the snapshot version
 In-Reply-To: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1292353569-30172-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1292353569-30172-13-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We want to keep a copy around for the future SDK functionality.
+We didn't have UCLIBC_HAS___PROGNAME in the sample config so when
+program invocation name was enabled we got a stalling point.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ toolchain/uClibc/uClibc-snapshot.config |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 543454b..215915d 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -421,6 +421,8 @@ ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These go in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
- 		$(TARGET_DIR)/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
- endif
-@@ -428,14 +430,20 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
-+		$(STAGING_DIR)/usr/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
- 		$(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(STAGING_DIR)/usr/lib/
- 	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(STAGING_DIR)/usr/lib/security
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
- 	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
-+		$(STAGING_DIR)/usr/lib/security/
-+	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
- 		$(TARGET_DIR)/usr/lib/security/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
- endif
+diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
+index e5d2bea..9d6acc4 100644
+--- a/toolchain/uClibc/uClibc-snapshot.config
++++ b/toolchain/uClibc/uClibc-snapshot.config
+@@ -111,6 +111,7 @@ UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_HAS_STUBS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
++# UCLIBC_HAS___PROGNAME is not set
+ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
 -- 
 1.7.2.2
