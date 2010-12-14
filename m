@@ -1,10 +1,11 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 14 Dec 2010 17:09:51 +0800
-Subject: [Buildroot] [PATCH] buildroot:download: Add option to download
- SVN or GIT repository with version control information.
-In-Reply-To: <1292304542-29813-1-git-send-email-sonic.adi@gmail.com>
+Date: Tue, 14 Dec 2010 17:12:01 +0800
+Subject: [Buildroot] [PATCH] buildroot:linux: Add options to checkout
+ Linux kernel source from SVN or GIT repository.
+In-Reply-To: <1292304542-29813-2-git-send-email-sonic.adi@gmail.com>
 References: <1292304542-29813-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <AANLkTimB_dcK9gfxNEkGTJhhax-RZ1s-TaJQuse9b4X3@mail.gmail.com>
+	<1292304542-29813-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <AANLkTinnDf3BbYuU2HsvRMuoO2eezwoN-23e7z_cScSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,87 +14,107 @@ To: buildroot@busybox.net
 
 Please ignore this patch. I will send out a new version.
 
+
 Sonic Zhang
 
 On Tue, Dec 14, 2010 at 1:29 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 > From: Sonic Zhang <sonic.zhang@analog.com>
 >
-> Current DOWNLOAD_SVN and DOWNLOAD_GIT scripts only retrieve source code of a
-> given version from the repository. It is more complicated to generate patches
-> against the source after fixing bugs and developing in buildroot directly.
-> This patch adds an option BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT to checkout the
-> source with version control information. This option is disabled by default.
+> Current buildroot Config.in and linux.mk don't support kernel source in SVN
+> or GIT repository. A pre-checkouted local SVN or GIT kernel tree set in
+> KERNEL_CUSTOM_TREE is the only option. Because the local path can be anywhere,
+> no buildroot default config file can be defined in sub folder
+> target/device/company/boards to run quick building. It is inconvient to run
+> regression testing. Since buildroot has already support SVN and GIT repository
+> for application packages, it is reasonable to have it for linux kernel as well.
 >
 > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > ---
-> ?Config.in ? ? ? ? ? ? ? ? ? | ? ?7 +++++++
-> ?package/Makefile.package.in | ? 20 ++++++++++++++++----
-> ?2 files changed, 23 insertions(+), 4 deletions(-)
+> ?linux/Config.in | ? 19 ++++++++++++++++++-
+> ?linux/linux.mk ?| ? 24 +++++++++++++++++++++++-
+> ?2 files changed, 41 insertions(+), 2 deletions(-)
 >
-> diff --git a/Config.in b/Config.in
-> index c90de77..7fa2aba 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -154,6 +154,13 @@ config BR2_DEBUG_MUDFLAP
-> ? ? ? ? ?Your GCC must be new enough to support this option.
-> ?endif
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 480adca..07b08e2 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -52,6 +52,10 @@ config BR2_LINUX_KERNEL_CUSTOM_TREE
+> ? ? ? ?help
+> ? ? ? ? ?This option allows use of an already unpacked linux tree.
 >
-> +config BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT
-> + ? ? ? bool "check out source with git or svn revision information"
-> + ? ? ? default n
+> +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
+> + ? ? ? bool "Custom source repository"
 > + ? ? ? help
-> + ? ? ? ? If y, check out the source from git or svn repository with
-> + ? ? ? ? revision information and store in the source tar ball.
+> + ? ? ? ? This option allows to specify the svn or git repository.
+> ?endchoice
+>
+> ?config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+> @@ -67,12 +71,25 @@ config BR2_LINUX_KERNEL_CUSTOM_PATH
+> ? ? ? ?string "PATH of custom kernel tree"
+> ? ? ? ?depends on BR2_LINUX_KERNEL_CUSTOM_TREE
+>
+> +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_LOCATION
+> + ? ? ? string "URL of custom kernel repository"
+> + ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
+> + ? ? ? help
+> + ? ? ? ? This is either the clone URL of GIT or trunk/tag/branch URL of SVN.
 > +
-> ?choice
-> ? ? ? ?prompt "strip"
-> ? ? ? ?default BR2_STRIP_strip
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index 9f876b9..d72e32d 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -100,15 +100,22 @@ endif
-> ?# source repositories, producing a list of all the "external dependencies" of
-> ?# a given build configuration.
-> ?################################################################################
-> -
-> ?define DOWNLOAD_GIT
-> + ? ? ? if [ $(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT) = "y" ] ; then \
-> + ? ? ? ? ? ? ? GITCMD="checkout -b $($(PKG)_BRANCH) $($(PKG)_DL_VERSION)" ; \
-> + ? ? ? ? ? ? ? GITTAR="$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ &&" ; \
-> + ? ? ? else \
-> + ? ? ? ? ? ? ? GITCMD="archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> + ? ? ? ? ? ? ? ? ? ? ? gzip -c > $(DL_DIR)/$($(PKG)_SOURCE)" ; \
-> + ? ? ? ? ? ? ? GITTAR= ; \
-> + ? ? ? fi ; \
-> ? ? ? ?test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> ? ? ? ?(pushd $(DL_DIR) > /dev/null && \
-> ? ? ? ?$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-> ? ? ? ?pushd $($(PKG)_BASE_NAME) > /dev/null && \
-> - ? ? ? $(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> - ? ? ? ? ? ? ? gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-> + ? ? ? $(GIT) $$GITCMD && \
-> ? ? ? ?popd > /dev/null && \
-> + ? ? ? $$GITTAR \
-> ? ? ? ?rm -rf $($(PKG)_DL_DIR) && \
-> ? ? ? ?popd > /dev/null)
-> ?endef
-> @@ -125,9 +132,14 @@ endef
+> +config BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION
+> + ? ? ? string "revision(svn/git), tag(git) or branch(git) of custom kernel source"
+> + ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
+> + ? ? ? default "HEAD"
+> + ? ? ? help
+> + ? ? ? ? Tag or branch of GIT repository should be filled in here.
+> +
+> ?config BR2_LINUX_KERNEL_VERSION
+> ? ? ? ?string
+> ? ? ? ?default "2.6.36" if BR2_LINUX_KERNEL_2_6_36
+> ? ? ? ?default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+> ? ? ? ?default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+> - ? ? ? default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL || BR2_LINUX_KERNEL_CUSTOM_TREE
+> + ? ? ? default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL || BR2_LINUX_KERNEL_CUSTOM_TREE || BR2_LINUX_KERNEL_CUSTOM_REPOSITORY
 >
+> ?#
+> ?# Patch selection
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 4b680fd..55fddfa 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -7,11 +7,33 @@ LINUX26_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
 >
-> ?define DOWNLOAD_SVN
-> + ? ? ? if [ $(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT) = "y" ] ; then \
-> + ? ? ? ? ? ? ? SVNCMD=checkout ; \
-> + ? ? ? else \
-> + ? ? ? ? ? ? ? SVNCMD=export ; \
-> + ? ? ? fi ; \
-> ? ? ? ?test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> ? ? ? ?(pushd $(DL_DIR) > /dev/null && \
-> - ? ? ? $(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-> + ? ? ? $(SVN) $$SVNCMD -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-> ? ? ? ?$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
-> ? ? ? ?rm -rf $($(PKG)_DL_DIR) && \
-> ? ? ? ?popd > /dev/null)
+> ?# Compute LINUX26_SOURCE and LINUX26_SITE from the configuration
+> ?ifeq ($(LINUX26_VERSION),custom)
+> +
+> +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY),y)
+> +PKG:=LINUX26
+> +LINUX26_SITE:=$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_LOCATION))
+> +LINUX26_DL_VERSION:=$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION))
+> +
+> +ifeq ($(findstring svn://,$(LINUX26_SITE)),svn://)
+> +LINUX26_SITE_METHOD:=svn
+> +LINUX26_DL_DIR:=linux-$(notdir $(LINUX26_SITE))
+> +else
+> +LINUX26_SITE_METHOD:=git
+> +LINUX26_DL_DIR:=linux-$(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_REPOSITORY_VERSION))
+> +LINUX26_BRANCH:=$(LINUX26_DL_VERSION)
+> +endif
+> +
+> +LINUX26_BASE_NAME:=$(LINUX26_DL_DIR)
+> +LINUX26_SOURCE:=$(LINUX26_DL_DIR).tar.gz
+> +else
+> +
+> ?ifneq ($(BR2_LINUX_KERNEL_CUSTOM_TREE),y)
+> ?LINUX26_TARBALL:=$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+> ?LINUX26_SITE:=$(dir $(LINUX26_TARBALL))
+> -LINUX26_SOURCE:=$(notdir $(LINUX26_TARBALL))
+> +LINUX26_SOURCE:=linux-$(notdir $(LINUX26_TARBALL))
+> ?endif
+> +
+> +endif
+> +
+> ?else
+> ?LINUX26_SOURCE:=linux-$(LINUX26_VERSION).tar.bz2
+> ?LINUX26_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
 > --
 > 1.6.0
 >
