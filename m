@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 14 Dec 2010 01:35:41 +0100
-Subject: [Buildroot] [git commit master 1/1] lsof: convert to gentargets and
-	bump to 4.84
-Message-ID: <20101214003642.6DF258E2DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] ng-spice-rework: remove package
+Message-ID: <20101214003643.06FFE8E2DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,248 +9,107 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8db52c6e78c040d035522ca747acc7752d474cf2
+commit: http://git.buildroot.net/buildroot/commit/?id=b07fed4bf1030a0e20c92843203cb896ff4d9575
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lsof is packaged as a tarball inside a .tar.bz2 package, so we have a
-post-extract hook to extract the source code tarball, so that for the
-next steps, lsof looks like a normal package.
+This package has been marked deprecated in October, and no-one
+complained. Moreover, it doesn't sound like a package that is widely
+used on embedded systems. So we get rid of it.
 
-Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES                                            |    8 +-
- ...sof-makefile.patch => lsof-4.84-makefile.patch} |    4 +-
- ...f-noportmap.patch => lsof-4.84-noportmap.patch} |    4 +-
- ...flags.patch => lsof-4.84-override-cflags.patch} |    4 +-
- ...tch => lsof-4.84-remove-susvlegacy-funcs.patch} |    4 +-
- package/lsof/lsof-uclibc.patch                     |   12 ---
- package/lsof/lsof.mk                               |   96 ++++++++++----------
- 7 files changed, 58 insertions(+), 74 deletions(-)
- rename package/lsof/{lsof-makefile.patch => lsof-4.84-makefile.patch} (62%)
- rename package/lsof/{lsof-noportmap.patch => lsof-4.84-noportmap.patch} (64%)
- rename package/lsof/{lsof-override-cflags.patch => lsof-4.84-override-cflags.patch} (66%)
- rename package/lsof/{lsof-remove-susvlegacy-funcs.patch => lsof-4.84-remove-susvlegacy-funcs.patch} (62%)
- delete mode 100644 package/lsof/lsof-uclibc.patch
+ CHANGES                                            |    2 +-
+ package/Config.in                                  |    1 -
+ package/ng-spice-rework/Config.in                  |    9 ---------
+ .../ng-spice-rework-17-makeidx.patch               |   12 ------------
+ package/ng-spice-rework/ng-spice-rework.mk         |   18 ------------------
+ 5 files changed, 1 insertions(+), 41 deletions(-)
+ delete mode 100644 package/ng-spice-rework/Config.in
+ delete mode 100644 package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
+ delete mode 100644 package/ng-spice-rework/ng-spice-rework.mk
 
 diff --git a/CHANGES b/CHANGES
-index 5dbc27c..a021437 100644
+index f3e990c..f3d8243 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -5,10 +5,10 @@
- 
- 	Updated/fixed packages: at, busybox, bzip2, dbus,
- 	direcfb-examples, dmalloc, cloop, cups, ffmpeg, gdk-pixbuf,
--	hostapd, i2c-tools, input-tools, libconfig, ltp-testsuite, m4,
--	mii-diag, mrouted, openssh, openssl, openvpn, pango, qt,
--	rsync, sdl_gfx, sdl_sound, sysklogd, sysvinit, udev, usbutils,
--	xz, zlib
-+	hostapd, i2c-tools, input-tools, libconfig, lsof,
-+	ltp-testsuite, m4, mii-diag, mrouted, openssh, openssl,
-+	openvpn, pango, qt, rsync, sdl_gfx, sdl_sound, sysklogd,
-+	sysvinit, udev, usbutils, xz, zlib
+@@ -12,7 +12,7 @@
  
  	New packages: dhrystone, fbgrab, lsuio, rsh-redone, whetstone
  
-diff --git a/package/lsof/lsof-makefile.patch b/package/lsof/lsof-4.84-makefile.patch
-similarity index 62%
-rename from package/lsof/lsof-makefile.patch
-rename to package/lsof/lsof-4.84-makefile.patch
-index 2d4e9d4..65b1b2e 100644
---- a/package/lsof/lsof-makefile.patch
-+++ b/package/lsof/lsof-4.84-makefile.patch
-@@ -1,6 +1,6 @@
- diff -ru lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel lsof_4.81/lsof_4.81_src/lib/Makefile.skel
----- lsof_4.81.orig/lsof_4.81_src/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
--+++ lsof_4.81/lsof_4.81_src/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
-+--- a/lib/Makefile.skel	2001-02-13 03:12:22.000000000 +0100
-++++ b/lib/Makefile.skel	2006-11-29 13:51:44.000000000 +0100
- @@ -21,8 +21,8 @@
-  all:	${LIB}
-  
-diff --git a/package/lsof/lsof-noportmap.patch b/package/lsof/lsof-4.84-noportmap.patch
-similarity index 64%
-rename from package/lsof/lsof-noportmap.patch
-rename to package/lsof/lsof-4.84-noportmap.patch
-index 4a37db4..984e0d8 100644
---- a/package/lsof/lsof-noportmap.patch
-+++ b/package/lsof/lsof-4.84-noportmap.patch
-@@ -1,5 +1,5 @@
----- lsof_4.81/lsof_4.81_src/print.orig.c	2006-08-23 13:37:43.000000000 -0600
--+++ lsof_4.81/lsof_4.81_src/print.c	2006-08-23 13:38:29.000000000 -0600
-+--- a/print.c	2006-08-23 13:37:43.000000000 -0600
-++++ b/print.c	2006-08-23 13:38:29.000000000 -0600
- @@ -148,6 +148,7 @@
-  static void
-  fill_portmap()
-diff --git a/package/lsof/lsof-override-cflags.patch b/package/lsof/lsof-4.84-override-cflags.patch
-similarity index 66%
-rename from package/lsof/lsof-override-cflags.patch
-rename to package/lsof/lsof-4.84-override-cflags.patch
-index fcb9292..135e599 100644
---- a/package/lsof/lsof-override-cflags.patch
-+++ b/package/lsof/lsof-4.84-override-cflags.patch
-@@ -1,5 +1,5 @@
----- lsof_4.81/lsof_4.81_src/Configure	2008-10-21 18:21:45.000000000 +0200
--+++ lsof_4.81/lsof_4.81_src/Configure	2010-11-03 14:00:00.000000000 +0100
-+--- lsof_4.84/Configure	2008-10-21 18:21:45.000000000 +0200
-++++ lsof_4.84/Configure	2010-11-03 14:00:00.000000000 +0100
- @@ -5206,6 +5206,10 @@
-    cp $LSOF_MKFC ${LSOF_LIB}/$LSOF_LIBMKF
-  fi	# }
-diff --git a/package/lsof/lsof-remove-susvlegacy-funcs.patch b/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
-similarity index 62%
-rename from package/lsof/lsof-remove-susvlegacy-funcs.patch
-rename to package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
-index d1d9371..fca66ae 100644
---- a/package/lsof/lsof-remove-susvlegacy-funcs.patch
-+++ b/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
-@@ -1,6 +1,6 @@
- diff -rdup lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h lsof_4.81/lsof_4.81_src/dialects/linux/machine.h
----- lsof_4.81.orig/lsof_4.81_src/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
--+++ lsof_4.81/lsof_4.81_src/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
-+--- a/dialects/linux/machine.h	2007-04-24 18:20:58.000000000 +0200
-++++ b/dialects/linux/machine.h	2007-05-15 12:17:03.000000000 +0200
- @@ -616,6 +616,6 @@
-   * zeromem is a macro that uses bzero or memset.
-   */
-diff --git a/package/lsof/lsof-uclibc.patch b/package/lsof/lsof-uclibc.patch
+-	Removed packages: microcom
++	Removed packages: microcom, ng-spice-rework
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 23f000b..eb4ea8e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -353,7 +353,6 @@ endmenu
+ endmenu
+ 
+ menu "Miscellaneous"
+-source "package/ng-spice-rework/Config.in"
+ source "package/shared-mime-info/Config.in"
+ endmenu
+ 
+diff --git a/package/ng-spice-rework/Config.in b/package/ng-spice-rework/Config.in
 deleted file mode 100644
-index 797a0ce..0000000
---- a/package/lsof/lsof-uclibc.patch
+index de5d091..0000000
+--- a/package/ng-spice-rework/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_NG_SPICE_REWORK
+-	bool "ng-spice-rework"
+-	depends on BR2_DEPRECATED
+-	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXAW
+-	help
+-	  Ngspice is a mixed-level/mixed-signal circuit simulator.
+-
+-	  http://superb-west.dl.sourceforge.net/sourceforge/ngspice
+diff --git a/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch b/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
+deleted file mode 100644
+index dcce6ce..0000000
+--- a/package/ng-spice-rework/ng-spice-rework-17-makeidx.patch
 +++ /dev/null
 @@ -1,12 +0,0 @@
--diff -ru lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h
----- lsof_4.81.orig/lsof_4.81_src/dialects/linux/dlsof.h	2006-03-28 00:57:14.000000000 +0200
--+++ lsof_4.81/lsof_4.81_src/dialects/linux/dlsof.h	2006-11-29 14:03:07.000000000 +0100
--@@ -49,7 +49,7 @@
-- #include <unistd.h>
-- #include <netinet/in.h>
+---- a/src/Makefile.in	2005-08-30 03:58:00.000000000 -0400
+-+++ b/src/Makefile.in	2008-02-13 14:38:04.000000000 -0500
+-@@ -882,7 +882,8 @@ spice.o: main.c
+- 		$(COMPILE) -DSIMULATOR -o spice.o  -c $(srcdir)/main.c
 - 
---# if	defined(GLIBCV)
--+# if	defined(GLIBCV) || defined __UCLIBC__
-- #include <netinet/tcp.h>
-- # else	/* !defined(GLIBCV) */
-- #include <linux/tcp.h>
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 837a88c..05365da 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -3,68 +3,64 @@
- # lsof
- #
- #############################################################
--LSOF_VERSION:=4.81
--LSOF_SOURCE:=lsof_$(LSOF_VERSION).tar.bz2
--LSOF_SITE:=ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
--LSOF_CAT:=$(BZCAT)
--LSOF_DIR:=$(BUILD_DIR)/lsof_$(LSOF_VERSION)
--LSOF_BINARY:=lsof
--LSOF_TARGET_BINARY:=bin/lsof
--LSOF_INCLUDE:=$(STAGING_DIR)/usr/include
-+LSOF_VERSION = 4.84
-+LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
-+LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
- 
--BR2_LSOF_CFLAGS:=
-+BR2_LSOF_CFLAGS =
- ifeq ($(BR2_LARGEFILE),)
--BR2_LSOF_CFLAGS+=-U_FILE_OFFSET_BITS
-+BR2_LSOF_CFLAGS += -U_FILE_OFFSET_BITS
- endif
- ifeq ($(BR2_INET_IPV6),)
--BR2_LSOF_CFLAGS+=-UHASIPv6
-+BR2_LSOF_CFLAGS += -UHASIPv6
- endif
- 
--$(DL_DIR)/$(LSOF_SOURCE):
--	 $(call DOWNLOAD,$(LSOF_SITE),$(LSOF_SOURCE))
--
--lsof-source: $(DL_DIR)/$(LSOF_SOURCE)
--
--lsof-unpacked: $(LSOF_DIR)/.unpacked
--
--$(LSOF_DIR)/.unpacked: $(DL_DIR)/$(LSOF_SOURCE)
--	$(LSOF_CAT) $(DL_DIR)/$(LSOF_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	(cd $(LSOF_DIR);tar xf lsof_$(LSOF_VERSION)_src.tar;rm -f lsof_$(LSOF_VERSION)_src.tar)
--	toolchain/patch-kernel.sh $(LSOF_DIR) package/lsof/ \*.patch
--	touch $(LSOF_DIR)/.unpacked
--
--$(LSOF_DIR)/.configured: $(LSOF_DIR)/.unpacked
--	(cd $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src; echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" LSOF_INCLUDE="$(LSOF_INCLUDE)" LSOF_CFLAGS_OVERRIDE=1 ./Configure linux)
--	touch $(LSOF_DIR)/.configured
--
--$(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY): $(LSOF_DIR)/.configured
- ifeq ($(BR2_USE_WCHAR),)
--	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
--	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
-+define LSOF_CONFIGURE_WCHAR_FIXUPS
-+	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' \
-+		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' \
-+		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+endef
- endif
-+
- ifeq ($(BR2_ENABLE_LOCALE),)
--	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/machine.h
-+define LSOF_CONFIGURE_LOCALE_FIXUPS
-+	$(SED) 's,^#define[[:space:]]*HASSETLOCALE.*,#undef HASSETLOCALE,' \
-+		$(@D)/lsof_$(LSOF_VERSION)_src/machine.h
-+endef
- endif
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src
- 
--$(TARGET_DIR)/$(LSOF_TARGET_BINARY): $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY)
--	cp $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src/$(LSOF_BINARY) $@
--	$(STRIPCMD) $@
-+# The .tar.bz2 contains another .tar, which contains the source code.
-+define LSOF_EXTRACT_TAR
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -xf $(@D)/lsof_$(LSOF_VERSION)_src.tar -C $(@D)
-+	rm -f $(@D)/lsof_$(LSOF_VERSION)_src.tar
-+endef
- 
--lsof: $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
-+LSOF_POST_EXTRACT_HOOKS += LSOF_EXTRACT_TAR
- 
--lsof-clean:
--	-rm -f $(TARGET_DIR)/$(LSOF_TARGET_BINARY)
--	-$(MAKE) -C $(LSOF_DIR)/lsof_$(LSOF_VERSION)_src clean
-+define LSOF_CONFIGURE_CMDS
-+	(cd $(@D) ; \
-+		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" \
-+		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 ./Configure linux)
-+	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
-+	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
-+endef
- 
--lsof-dirclean:
--	rm -rf $(LSOF_DIR)
-+define LSOF_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" -C $(@D)
-+endef
- 
+- ngspice.idx: makeidx
+--	./makeidx $(srcdir)/ngspice.txt
+-+	gcc -I/usr/include -I.. -I./include $(makeidx_SOURCES) -o makeidx-host
+-+	./makeidx-host $(srcdir)/ngspice.txt
+- # Tell versions [3.59,3.63) of GNU make to not export all variables.
+- # Otherwise a system limit (for SysV at least) may be exceeded.
+- .NOEXPORT:
+diff --git a/package/ng-spice-rework/ng-spice-rework.mk b/package/ng-spice-rework/ng-spice-rework.mk
+deleted file mode 100644
+index 113b59d..0000000
+--- a/package/ng-spice-rework/ng-spice-rework.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
 -#############################################################
 -#
--# Toplevel Makefile options
+-# ng-spice-rework
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_LSOF),y)
--TARGETS+=lsof
--endif
-+define LSOF_INSTALL_TARGET_CMDS
-+	install -D -m 755 $(@D)/lsof $(TARGET_DIR)/bin/lsof
-+endef
-+
-+define LSOF_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/bin/lsof
-+endef
-+
-+define LSOF_CLEAN_CMDS
-+	-$(MAKE) -C $(@D)/lsof_$(LSOF_VERSION)_src clean
-+endef
-+
-+$(eval $(call GENTARGETS,package,lsof))
+-NG_SPICE_REWORK_VERSION = 17
+-NG_SPICE_REWORK_SOURCE = ng-spice-rework-$(NG_SPICE_REWORK_VERSION).tar.gz
+-NG_SPICE_REWORK_SITE = http://superb-west.dl.sourceforge.net/sourceforge/ngspice
+-NG_SPICE_REWORK_AUTORECONF = NO
+-NG_SPICE_REWORK_INSTALL_STAGING = NO
+-NG_SPICE_REWORK_INSTALL_TARGET = YES
+-
+-NG_SPICE_REWORK_CONF_OPT = CFLAGS="-I$(STAGING_DIR)/usr/include"
+-
+-NG_SPICE_REWORK_DEPENDENCIES = xserver_xorg-server xlib_libXaw
+-
+-$(eval $(call AUTOTARGETS,package,ng-spice-rework))
+-
 -- 
 1.7.2.2
