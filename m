@@ -1,49 +1,44 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 14 Dec 2010 15:48:38 -0500
-Subject: [Buildroot] [PATCH 03/14] toolchain: add support for external
-	toolchain profiles and download
-In-Reply-To: <bf29c83b99bbc83aa389f2960819e87b900904ab.1292257643.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-	<bf29c83b99bbc83aa389f2960819e87b900904ab.1292257643.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201012141548.38928.vapier@gentoo.org>
+Date: Tue, 14 Dec 2010 15:59:38 -0500
+Subject: [Buildroot] [PATCH v2] toolchain: speed up sysroot lib copying
+In-Reply-To: <1292171120-32512-1-git-send-email-vapier@gentoo.org>
+References: <1292171120-32512-1-git-send-email-vapier@gentoo.org>
+Message-ID: <1292360378-9887-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, December 13, 2010 11:27:39 Thomas Petazzoni wrote:
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -114,13 +114,13 @@
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> -TOOLCHAIN_EXTERNAL_PREFIX:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-> -TOOLCHAIN_EXTERNAL_PATH:=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
-> -ifneq ($(TOOLCHAIN_EXTERNAL_PATH),)
-> -TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PATH)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-> +TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-> +TOOLCHAIN_EXTERNAL_LOCATION=$(TOOLCHAIN_EXTERNAL_DIR)
->  else
-> -TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PREFIX)-
-> +TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
->  endif
-> +TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_LOCATION)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
->  else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
->  TARGET_CROSS=$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-
->  endif
+The copy_toolchain_lib_root helper searches the entire sysroot, but is
+only interested in files in certain subdirs.  So rather than waste time
+in walking the entire tree, walk the few subdirs at the depth level we
+are actually going to be poaching files from.
 
-this makes it harder to use an external toolchain because you now force
-TARGET_CROSS to always start with /bin/.  before, people could easily set the
-full path to nothing and the prefix to the toolchain they want.  since the
-toolchain is in $PATH, there's no reason to force a useless full path to it.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/b03a3fcd/attachment.pgp>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+v2
+	- unify -path's too
+
+ toolchain/helpers.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index d4caf48..3ea9075 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -22,9 +22,9 @@ copy_toolchain_lib_root = \
+ 	DESTDIR="$(strip $3)" ; \
+  \
+ 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
+-		find -L . -path "./lib/$${LIB}.*"     -o \
+-			  -path "./usr/lib/$${LIB}.*" -o \
+-			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
++		find -L \
++			$(for d in lib* usr/lib* usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*; do test -e "$d" && echo $d) \
++			-maxdepth 1 -name "$${LIB}.*" \
+ 		)` ; \
+ 	for FILE in $${LIBS} ; do \
+ 		LIB=`basename $${FILE}`; \
+-- 
+1.7.3.3
