@@ -1,50 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 14 Dec 2010 16:06:04 -0300
-Subject: [Buildroot] [PATCH 08/13] uclibc: move tools to host dir
+Date: Tue, 14 Dec 2010 16:06:01 -0300
+Subject: [Buildroot] [PATCH 05/13] package infra: fix versioned patches for
+	host packages
 In-Reply-To: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1292353569-30172-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1292353569-30172-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move uclibc host tools (ldd/ldconfig) to host dir.
-They were previously installed in the staging dir.
+Without this patch we'd need separate versioned patch directories for
+target and host packages, thus having unwanted duplication.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/uClibc/uclibc.mk |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/Makefile.package.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index e05e16c..ec92824 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -450,17 +450,17 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
- 	fi
- 	# Build the host utils. Need to add an install target...
- 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
--		PREFIX=$(STAGING_DIR) \
-+		PREFIX=$(HOST_DIR) \
- 		HOSTCC="$(HOSTCC)" \
- 		hostutils
- 	if [ -f $(UCLIBC_DIR)/utils/ldd.host ]; then \
--		install -c $(UCLIBC_DIR)/utils/ldd.host $(STAGING_DIR)/usr/bin/ldd; \
--		ln -sf ldd $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldd; \
-+		install -D $(UCLIBC_DIR)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd; \
-+		ln -sf ldd $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldd; \
- 	fi
- 	if [ -f $(UCLIBC_DIR)/utils/ldconfig.host ]; then \
--		install -c $(UCLIBC_DIR)/utils/ldconfig.host $(STAGING_DIR)/usr/bin/ldconfig; \
--		ln -sf ldconfig $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldconfig; \
--		ln -sf ldconfig $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig; \
-+		install -D $(UCLIBC_DIR)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig; \
-+		ln -sf ldconfig $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldconfig; \
-+		ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig; \
- 	fi
- 	touch -c $@
- 
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 816a013..4cb0334 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -250,7 +250,7 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+ 	  else \
+ 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $($(NOHOSTPKG)_NAME)\*.patch $($(NOHOSTPKG)_NAME)\*.patch.$(ARCH) || exit 1; \
+-	    if test -d $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER); then \
++	    if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER); then \
+ 	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    fi; \
+ 	  fi; \
 -- 
 1.7.2.2
