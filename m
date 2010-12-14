@@ -1,48 +1,34 @@
-From: Arreche <arreche@gmail.com>
-Date: Tue, 14 Dec 2010 15:07:51 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Dec 2010 16:19:00 +0100
 Subject: [Buildroot] Profiler, Memory debugger for ARM uclibc
-In-Reply-To: <20101214133705.495adc3c@surf>
+In-Reply-To: <AANLkTi=xjujFnTPXbC6sftGikkLG-u_orC9jV3MptqMv@mail.gmail.com>
 References: <AANLkTinzMQHbgujJJFhbLcwY5j_7gTrGKniVuusX1+qE@mail.gmail.com>
 	<20101214133705.495adc3c@surf>
-Message-ID: <AANLkTi=xjujFnTPXbC6sftGikkLG-u_orC9jV3MptqMv@mail.gmail.com>
+	<AANLkTi=xjujFnTPXbC6sftGikkLG-u_orC9jV3MptqMv@mail.gmail.com>
+Message-ID: <20101214161900.74331c9a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-oh I'm sorry.
+On Tue, 14 Dec 2010 15:07:51 +0000
+Arreche <arreche@gmail.com> wrote:
 
-Anybody knows profilers and memory debuggers that works int ARM uclibc?
+> Anybody knows profilers and memory debuggers that works int ARM uclibc?
 
-On Tue, Dec 14, 2010 at 12:37 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+ * oprofile for system profiling
+   http://oprofile.sourceforge.net/
 
-> On Tue, 14 Dec 2010 12:27:55 +0000
-> Arreche <arreche@gmail.com> wrote:
->
-> > I miss a lot Valgrind but It's not supported :(
->
-> Version 3.6.0 of Valgrind is said to support ARM.
->
-> But what was your question ?
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+ * gprof for application profiling
+   http://sourceware.org/binutils/docs-2.21/gprof/index.html
 
+ * duma for "memory debugging"
+   http://duma.sourceforge.net/
 
-
+Thomas
 -- 
-.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/3ab22f8d/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
