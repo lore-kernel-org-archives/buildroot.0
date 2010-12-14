@@ -1,44 +1,37 @@
-From: Johnny Beardsmore <jny0@hotmail.com>
-Date: Tue, 14 Dec 2010 09:28:16 +0000
-Subject: [Buildroot] ssh-copy-id
-In-Reply-To: <20101213174615.491fdba7@surf>
-References: <SNT119-W63CFD1FA0F757DC16BC53C82120@phx.gbl>,
-	<20101213174615.491fdba7@surf>
-Message-ID: <SNT119-W22D09D75AD75F3A79A77D082130@phx.gbl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Dec 2010 09:38:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 2617] Pixman 0.19.2 & Cairo 1.10.0
+In-Reply-To: <bug-2617-163@https.bugs.busybox.net/>
+References: <bug-2617-163@https.bugs.busybox.net/>
+Message-ID: <20101214093822.4094B8E297@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2617
 
-Many thanks for the response.  I've now built the system with sss-copy-id.  After copying it to the target, and trying to use it, I get:
+--- Comment #4 from Paul Burton <Paul.Burton@imgtec.com>  ---
+(In reply to comment #3)
+> Paul,
+> 
+> Could you give a few more details on why the new patch
+> cairo-1.10.0-packttstructs.patch is necessary ? The description at the top of
+> the patch doesn't really explain the why.
+> 
+> Thanks!
 
-ERROR: No identities found
+Sure, essentially if you look at src/cairo-truetype-subset.c lines 98-111, you
+can see that the size of the structs must match the sum of the size of their
+fields, ie. have no padding, because these structs are being read from font
+files which obviously aren't padded to word boundaries on disk. At least with
+the compiler I'm using that was not the case by default, but the packed
+attribute ensures that padding isn't added and the checks pass.
 
-I know the target has a key pair, as I've just used ssh-keygen.  Any ideas what could be causing this?
+This should probably be reported upstream, I'll get to that later today.
 
-> Date: Mon, 13 Dec 2010 17:46:15 +0100
-> From: thomas.petazzoni at free-electrons.com
-> To: jny0 at hotmail.com
-> CC: buildroot at busybox.net
-> Subject: Re: [Buildroot] ssh-copy-id
-> 
-> On Mon, 13 Dec 2010 10:07:44 +0000
-> Johnny Beardsmore <jny0@hotmail.com> wrote:
-> 
-> > Is there a ssh-copy-id option in Buildroot?  If so, where is it?
-> 
-> It is part of OpenSSH, which is packaged in Networking applications ->
-> openssh in Buildroot.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101214/c2787225/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
