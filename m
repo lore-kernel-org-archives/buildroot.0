@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 14 Dec 2010 20:49:18 +0100
-Subject: [Buildroot] [PATCH 02/13] php: libgmp was renamed to gmp
-In-Reply-To: <1292353569-30172-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 14 Dec 2010 20:54:04 +0100
+Subject: [Buildroot] [PATCH 05/13] package infra: fix versioned patches
+	for host packages
+In-Reply-To: <1292353569-30172-6-git-send-email-gustavo@zacarias.com.ar>
 References: <1292353569-30172-1-git-send-email-gustavo@zacarias.com.ar>
-	<1292353569-30172-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201012142049.18999.yann.morin.1998@anciens.enib.fr>
+	<1292353569-30172-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <201012142054.04574.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,15 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On Tuesday 14 December 2010 20:05:58 Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/php/Config.ext |    2 +-
->  package/php/php.mk     |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Tuesday 14 December 2010 20:06:01 Gustavo Zacarias wrote:
+> Without this patch we'd need separate versioned patch directories for
+> target and host packages, thus having unwanted duplication.
 
-I think this should be folded into the previous patch.
+Maybe this should come first, before the gmp/mpfr/mpc patches?
 
-First, with only the first patch, the build is broken.
-Second, as a direct consequennce, it breaks bisecting.
+I believe it is not related to making toolchain components proper packages.
+I mean, it can be seen as a bug in the existing infra, so has to come before
+the actual changes that do need it, or uncovered the issue, no?
 
 Regards,
 Yann E. MORIN.
