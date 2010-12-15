@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Dec 2010 11:29:08 +0100
-Subject: [Buildroot] "output" directory for multiple targets
-In-Reply-To: <201012142240.20508.yann.morin.1998@anciens.enib.fr>
-References: <966150.47074.qm@web111115.mail.gq1.yahoo.com>
-	<201012142240.20508.yann.morin.1998@anciens.enib.fr>
-Message-ID: <20101215112908.009964e8@surf>
+Date: Wed, 15 Dec 2010 11:31:52 +0100
+Subject: [Buildroot] [PATCH 03/14] toolchain: add support for external
+ toolchain profiles and download
+In-Reply-To: <201012141548.38928.vapier@gentoo.org>
+References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
+	<bf29c83b99bbc83aa389f2960819e87b900904ab.1292257643.git.thomas.petazzoni@free-electrons.com>
+	<201012141548.38928.vapier@gentoo.org>
+Message-ID: <20101215113152.2cf64845@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Dec 2010 22:40:20 +0100
-"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> wrote:
+On Tue, 14 Dec 2010 15:48:38 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-> You can do out-of-tree builds, one for each of your devices:
->   mkdir device-1
->   cd device-1
->   make -C "/path/to/buildroot" O="$(pwd)" menuconfig
->   make
-> 
-> The first time you run 'make -C....', as above, it creates wrapper
-> Makefile in $(pwd) that allows you to simply call make the following
-> times.
+> this makes it harder to use an external toolchain because you now
+> force TARGET_CROSS to always start with /bin/.  before, people could
+> easily set the full path to nothing and the prefix to the toolchain
+> they want.  since the toolchain is in $PATH, there's no reason to
+> force a useless full path to it. -mike
 
-Or, using the exact same feature, but differently, what I do is :
+Right, this is a regression from an useful feature, I'll have a look
+into this and see what I can come up with.
 
-	cd buildroot/
-	mkdir ../outputs/device1
-	make O=../outputs/device1 menuconfig
-	make O=../outputs/device1
-	mkdir ../outputs/device2
-	make O=../outputs/device2 menuconfig
-	make O=../outputs/device2
-
-and so on.
-
-This O= feature is documented in our documentation,
-http://buildroot.org/downloads/buildroot.html#using.
+Regarding this toolchain profile thing, I intended to extend it to
+support the Blackfin toolchains, but I'd like to make sure you're not
+already working on this, in order to avoid duplication.
 
 Regards,
 
@@ -47,3 +37,10 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101215/e420d905/attachment.pgp>
