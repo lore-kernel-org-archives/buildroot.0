@@ -1,12 +1,25 @@
 From: Sergey Naumov <sknaumov@gmail.com>
-Date: Wed, 15 Dec 2010 18:39:31 +0300
-Subject: [Buildroot] g++-target compilation error
-Message-ID: <AANLkTintm7dU1s=1HiGeMQob30kHY6yj+x7=y8EMTDM2@mail.gmail.com>
+Date: Wed, 15 Dec 2010 18:42:55 +0300
+Subject: [Buildroot] Fwd: g++-target compilation error
+In-Reply-To: <AANLkTintm7dU1s=1HiGeMQob30kHY6yj+x7=y8EMTDM2@mail.gmail.com>
+References: <AANLkTintm7dU1s=1HiGeMQob30kHY6yj+x7=y8EMTDM2@mail.gmail.com>
+Message-ID: <AANLkTi=9JkE_5Aff1uQrBPBRy+652O_RUyqote0+QXhh@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Slight correction: remaking does not help. After 10 minutes of
+compilation it returns the same error.
+
+
+---------- Forwarded message ----------
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: 2010/12/15
+Subject: g++-target compilation error
+To: buildroot at busybox.net
+
 
 Hello.
 
