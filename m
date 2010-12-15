@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Dec 2010 22:38:34 +0100
-Subject: [Buildroot] [PATCH 03/14] toolchain: add support for external
- toolchain profiles and download
-In-Reply-To: <201012150614.44014.vapier@gentoo.org>
-References: <cover.1292257643.git.thomas.petazzoni@free-electrons.com>
-	<201012141548.38928.vapier@gentoo.org>
-	<20101215113152.2cf64845@surf>
-	<201012150614.44014.vapier@gentoo.org>
-Message-ID: <20101215223834.1623496a@surf>
+Date: Wed, 15 Dec 2010 22:39:53 +0100
+Subject: [Buildroot] [PATCH 1/2 v2] busybox: unify duplicated build steps
+In-Reply-To: <1292173087-8806-1-git-send-email-vapier@gentoo.org>
+References: <1292173087-8806-1-git-send-email-vapier@gentoo.org>
+Message-ID: <20101215223953.317bcb26@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 15 Dec 2010 06:14:43 -0500
+On Sun, 12 Dec 2010 11:58:06 -0500
 Mike Frysinger <vapier@gentoo.org> wrote:
 
-> it seems the profiles thing only supports downloading toolchain
-> binaries ?  in the Blackfin setup, the toolchain is usually installed
-> via the host package manager (we offer rpms/debs/etc...), so that
-> still wouldnt work for us ... -mike
+>  busybox-menuconfig:	$(BUSYBOX_DIR)/.stamp_extracted
+> -	$(BUSYBOX_MAKE_ENV) $(MAKE) ARCH=$(KERNEL_ARCH) \
+> -		CROSS_COMPILE="$(TARGET_CROSS)" -C $(BUSYBOX_DIR) menuconfig
+> +	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) menuconfig
+>  	rm -f $(BUSYBOX_DIR)/.stamp_built
+>  	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
 
-Below a very experimental/hackish way of integrating the Blackfin
-toolchain into the existing logic. I've tested, I can successfully
-build Busybox in both FLAT mode and FDPIC mode, with Buildroot that
-downloads/installs the toolchain automatically.
-
-The patch is not meant for inclusion yet, there are things I don't like
-in it. It's just to show how I think it could work.
+Here you should keep -C $(BUSYBOX_DIR). We are not inside a package
+_CMDS, so $(@D) is in fact the main Buildroot source directory, so
+running make busybox-menuconfig starts the Buildroot menuconfig.
 
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
