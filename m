@@ -1,65 +1,103 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 16 Dec 2010 15:32:41 +0100
-Subject: [Buildroot] udev 164 build fail  & uclibc patch
-In-Reply-To: <mailman.930.1292491630.16180.buildroot@busybox.net>
-Message-ID: <366CBDCF27F547E2B93DA02BBA2ACC9D@apexjs>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Thu, 16 Dec 2010 15:36:26 +0100
+Subject: [Buildroot] [PATCH] Add LBreakout2 game package
+Message-ID: <1292510186-14853-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi
-
-I did a rebuild of uclibc and still have problems 
-
-= in udev-watch.c:41  undefined  IN_CLOEXEC
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
 
-And then there seems a linking problem with ata_id.c  undefined reference to
-le16toh
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/Config.in                |    1 +
+ package/lbreakout2/Config.in     |   26 ++++++++++++++++++++++++++
+ package/lbreakout2/lbreakout2.mk |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 0 deletions(-)
+ create mode 100644 package/lbreakout2/Config.in
+ create mode 100644 package/lbreakout2/lbreakout2.mk
 
-So there seems to be more work to do to get udev 164 build.
-
-Johan
-
-
-
-
-Message: 5
-Date: Thu, 16 Dec 2010 08:55:59 +0100
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To: buildroot at busybox.net
-Subject: Re: [Buildroot] ERROR building udev 164
-Message-ID: <20101216085559.62d5cb53@surf>
-Content-Type: text/plain; charset=US-ASCII
-
-On Thu, 16 Dec 2010 01:21:53 +0100
-"Sagaert Johan" <sagaert.johan@skynet.be> wrote:
-
-> I  used the patch from the mailinglist ,
->  
-> When building it end with an error SOCK_CLOEXEC undeclared 
->  
-> It seems this is something not available in uclibc.
->  
-> Regards Johan
->  
-> http://lists.busybox.net/pipermail/buildroot/2010-December/039348.html
-
-This has been fixed in uClibc git, but is not yet available in any
-release. Can you try to put the patch
-http://git.buildroot.net/uClibc/commit/?id=83333e9c873e4eca6b2c945f7770b1f53
-73b0427
-in toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch, and retry ?
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index d3ae75e..1eab1ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -80,6 +80,7 @@ endmenu
+ menu "Games"
+ source "package/games/ace_of_penguins/Config.in"
+ source "package/games/gnuchess/Config.in"
++source "package/lbreakout2/Config.in"
+ source "package/games/magiccube4d/Config.in"
+ source "package/games/prboom/Config.in"
+ source "package/games/doom-wad/Config.in"
+diff --git a/package/lbreakout2/Config.in b/package/lbreakout2/Config.in
+new file mode 100644
+index 0000000..1869cc1
+--- /dev/null
++++ b/package/lbreakout2/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_LBREAKOUT2
++	bool "LBreakout2"
++	select BR2_PACKAGE_SDL
++	help
++	  LBreakout2 is the successor to LBreakout, a breakout-style arcade
++	  game in the manner of Arkanoid.
++
++	  http://lgames.sourceforge.net/index.php?project=LBreakout2
++
++if BR2_PACKAGE_LBREAKOUT2
++
++config BR2_PACKAGE_LBREAKOUT2_AUDIO
++	bool "audio support"
++	default y
++	select BR2_PACKAGE_SDL_MIXER
++	help
++	  Activates audio support. Will add SDL_mixer.
++
++config BR2_PACKAGE_LBREAKOUT2_NET
++	bool "network support"
++	default y
++	select BR2_PACKAGE_SDL_NET
++	help
++	  Activates network support. Will add SDL_net.
++
++endif
+diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
+new file mode 100644
+index 0000000..bf12c30
+--- /dev/null
++++ b/package/lbreakout2/lbreakout2.mk
+@@ -0,0 +1,29 @@
++#############################################################
++#
++# LBreakout2
++#
++#############################################################
++
++LBREAKOUT2_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lgames
++LBREAKOUT2_VERSION:=2.6.1
++LBREAKOUT2_SOURCE:=lbreakout2-$(LBREAKOUT2_VERSION).tar.gz
++LBREAKOUT2_CAT=$(ZCAT)
++
++LBREAKOUT2_DEPENDENCIES = sdl libpng
++
++ifeq ($(BR2_PACKAGE_LBREAKOUT2_AUDIO),y)
++LBREAKOUT2_DEPENDENCIES += sdl_mixer
++else
++LBREAKOUT2_CONF_OPT += --disable-audio
++endif
++
++ifeq ($(BR2_PACKAGE_LBREAKOUT2_NET),y)
++LBREAKOUT2_DEPENDENCIES += sdl_net
++else
++LBREAKOUT2_CONF_OPT += --disable-network
++endif
++
++LBREAKOUT2_CONF_ENV = \
++	SDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
++
++$(eval $(call AUTOTARGETS,package,lbreakout2))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
-
-
-------------------------------
+1.6.0.4
