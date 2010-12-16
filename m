@@ -1,118 +1,51 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Thu, 16 Dec 2010 22:22:40 +0100
-Subject: [Buildroot] [PATCH v2] buildroot:download: Add option to
- download SVN or GIT repository with version control information.
-In-Reply-To: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
-References: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <1292534560.15771.21.camel@coalu.atr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 16 Dec 2010 22:34:18 +0100
+Subject: [Buildroot] [PATCH 47/55] linux: support a space-separated list
+	of patches
+In-Reply-To: <1baf7aad49e6e48e95506af55611e18d70e4209d.1291582352.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 21:53:18 +0100")
+References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
+	<cover.1291582350.git.thomas.petazzoni@free-electrons.com>
+	<1baf7aad49e6e48e95506af55611e18d70e4209d.1291582352.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878vzph06d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sonic,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I'm very pleased to see this BR2_CHECKOUT_SOURCE_FOR_DEV option. But I
-have a slight point to make, why make a tarball of the checkout tree ?
-It seems quite slow to me, because it stores the source code twice (once
-in the .svn/.git directory, and once in the working tree).
+ Thomas> The kernel being a component that often needs a fairly important set
+ Thomas> of changes to be adapted to a particular hardware platform, having
+ Thomas> maximum flexibility on the patching process is a nice
+ Thomas> thing. Therefore, as per the discussions from the Buildroot Developer
+ Thomas> Day, we add a mechanism to apply a list of patches (that could come
+ Thomas> either from URLs, local files or local directories).
 
-I've the attached patch which only makes the checkout and do not
-generate a tarball (but it might be frustrating when you're offline
-after a <pkg>-dirclean...).
+ Thomas> +	for p in $(LINUX26_PATCH) ; do \
+ Thomas> +		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
+ Thomas> +			toolchain/patch-kernel.sh $(@D) $(DL_DIR) `basename $$p` ; \
+ Thomas> +		elif test -d $$p ; then \
+ Thomas> +			toolchain/patch-kernel.sh $(@D) $$p linux-\*.patch ; \
+ Thomas> +		else \
+ Thomas> +			toolchain/patch-kernel.sh $(@D) `dirname $$p` `basename $$p` ; \
+ Thomas> +		fi \
 
-Wouldn't it be possible to find a solution to just store .svn/.git
-directories and trigger a git-checkout -f $(BRANCH)/svn update --force
-after extraction?
+It would be a bit more efficient to do it in shell with a case
+statement, E.G.:
 
-Best regards,
+case "$$p" in
+     http://*|http://*)
+        toolchain/patch-kernel ..
+        ;;
 
---
-Lionel Landwerlin
+     *)
+        if [ -d $$p ]; then
+        ..
+esac
 
-Le jeudi 16 d?cembre 2010 ? 17:49 +0800, Sonic Zhang a ?crit :
-> Current DOWNLOAD_SVN and DOWNLOAD_GIT scripts only retrieve source code of a
-> given version from the repository. It is more complicated to generate patches
-> against the source after fixing bugs and developing in buildroot directly.
-> This patch adds an option BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT to checkout the
-> source with version control information. This option is disabled by default.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-> ---
->  Config.in                   |    7 +++++++
->  package/Makefile.package.in |   20 ++++++++++++++++----
->  2 files changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index c90de77..7fa2aba 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -154,6 +154,13 @@ config BR2_DEBUG_MUDFLAP
->  	  Your GCC must be new enough to support this option.
->  endif
->  
-> +config BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT
-> +	bool "check out source with git or svn revision information"
-> +	default n
-> +	help
-> +	  If y, check out the source from git or svn repository with
-> +	  revision information and store in the source tar ball.
-> +
->  choice
->  	prompt "strip"
->  	default BR2_STRIP_strip
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index 9f876b9..78b2cda 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -100,15 +100,22 @@ endif
->  # source repositories, producing a list of all the "external dependencies" of
->  # a given build configuration.
->  ################################################################################
-> -
->  define DOWNLOAD_GIT
-> +	if [ "$(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT)" = "y" ] ; then \
-> +		GITCMD="$(GIT) checkout -b $($(PKG)_BRANCH) $($(PKG)_DL_VERSION)" ; \
-> +		TARCMD="$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/" ; \
-> +	else \
-> +		GITCMD="$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> +			gzip -c > $(DL_DIR)/$($(PKG)_SOURCE)" ; \
-> +		TARCMD=test ; \
-> +	fi ; \
->  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->  	(pushd $(DL_DIR) > /dev/null && \
->  	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
->  	pushd $($(PKG)_BASE_NAME) > /dev/null && \
-> -	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> -		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-> +	eval $$GITCMD && \
->  	popd > /dev/null && \
-> +	eval $$TARCMD && \
->  	rm -rf $($(PKG)_DL_DIR) && \
->  	popd > /dev/null)
->  endef
-> @@ -125,9 +132,14 @@ endef
->  
-> 
->  define DOWNLOAD_SVN
-> +	if [ "$(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT)" = "y" ] ; then \
-> +		SVNCMD=checkout ; \
-> +	else \
-> +		SVNCMD=export ; \
-> +	fi ; \
->  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->  	(pushd $(DL_DIR) > /dev/null && \
-> -	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-> +	$(SVN) $$SVNCMD -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
->  	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
->  	rm -rf $($(PKG)_DL_DIR) && \
->  	popd > /dev/null)
+But not a big deal.
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: rework-download.patch
-Type: text/x-patch
-Size: 2644 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101216/e3ac198e/attachment.bin>
+-- 
+Bye, Peter Korsgaard
