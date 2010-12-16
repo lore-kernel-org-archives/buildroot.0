@@ -1,51 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Dec 2010 22:34:18 +0100
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 16 Dec 2010 17:21:59 -0500
 Subject: [Buildroot] [PATCH 47/55] linux: support a space-separated list
 	of patches
-In-Reply-To: <1baf7aad49e6e48e95506af55611e18d70e4209d.1291582352.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 21:53:18 +0100")
+In-Reply-To: <878vzph06d.fsf@macbook.be.48ers.dk>
 References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<cover.1291582350.git.thomas.petazzoni@free-electrons.com>
 	<1baf7aad49e6e48e95506af55611e18d70e4209d.1291582352.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <878vzph06d.fsf@macbook.be.48ers.dk>
+	<878vzph06d.fsf@macbook.be.48ers.dk>
+Message-ID: <201012161722.00016.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Thursday, December 16, 2010 16:34:18 Peter Korsgaard wrote:
+> case "$$p" in
+>      http://*|http://*)
 
- Thomas> The kernel being a component that often needs a fairly important set
- Thomas> of changes to be adapted to a particular hardware platform, having
- Thomas> maximum flexibility on the patching process is a nice
- Thomas> thing. Therefore, as per the discussions from the Buildroot Developer
- Thomas> Day, we add a mechanism to apply a list of patches (that could come
- Thomas> either from URLs, local files or local directories).
+guessing you meant ftp://|http://
 
- Thomas> +	for p in $(LINUX26_PATCH) ; do \
- Thomas> +		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
- Thomas> +			toolchain/patch-kernel.sh $(@D) $(DL_DIR) `basename $$p` ; \
- Thomas> +		elif test -d $$p ; then \
- Thomas> +			toolchain/patch-kernel.sh $(@D) $$p linux-\*.patch ; \
- Thomas> +		else \
- Thomas> +			toolchain/patch-kernel.sh $(@D) `dirname $$p` `basename $$p` ; \
- Thomas> +		fi \
-
-It would be a bit more efficient to do it in shell with a case
-statement, E.G.:
-
-case "$$p" in
-     http://*|http://*)
-        toolchain/patch-kernel ..
-        ;;
-
-     *)
-        if [ -d $$p ]; then
-        ..
-esac
-
-But not a big deal.
-
--- 
-Bye, Peter Korsgaard
+also, this patch reminds me of common problem in buildroot.  why do people use 
+`dirname` and `basename` ?  these really should be letting the shell do it 
+like ${f##*/} and ${f%/*}.  or use make's builtins.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101216/8b988f9c/attachment.pgp>
