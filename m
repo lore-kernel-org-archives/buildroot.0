@@ -1,74 +1,118 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 16 Dec 2010 22:01:15 +0100
-Subject: [Buildroot] Build failures...
-In-Reply-To: <72247.47890.qm@web121804.mail.ne1.yahoo.com> (Joe's message of
-	"Thu, 16 Dec 2010 11:58:36 -0800 (PST)")
-References: <72247.47890.qm@web121804.mail.ne1.yahoo.com>
-Message-ID: <87k4j9h1pg.fsf@macbook.be.48ers.dk>
+From: Lionel Landwerlin <llandwerlin@gmail.com>
+Date: Thu, 16 Dec 2010 22:22:40 +0100
+Subject: [Buildroot] [PATCH v2] buildroot:download: Add option to
+ download SVN or GIT repository with version control information.
+In-Reply-To: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
+References: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1292534560.15771.21.camel@coalu.atr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joe" == Joe  <lordvictory1@yahoo.com> writes:
+Hello Sonic,
 
-Hi,
+I'm very pleased to see this BR2_CHECKOUT_SOURCE_FOR_DEV option. But I
+have a slight point to make, why make a tarball of the checkout tree ?
+It seems quite slow to me, because it stores the source code twice (once
+in the .svn/.git directory, and once in the working tree).
 
- Joe> I'm new to buildroot, so I hope I don't cause any extra work on
- Joe> anyones behalf if I'm incorrect about these...I would just like to
- Joe> help participate to make this project better...so I thought I'd
- Joe> post what I've encountering so far.
+I've the attached patch which only makes the checkout and do not
+generate a tarball (but it might be frustrating when you're offline
+after a <pkg>-dirclean...).
 
- Joe> My host environment if a VMware Centos v5.5 system, and I've encountered a 
- Joe> couple issues during building of the most current buildroot release.
+Wouldn't it be possible to find a solution to just store .svn/.git
+directories and trigger a git-checkout -f $(BRANCH)/svn update --force
+after extraction?
 
- Joe>   1) When building ncurses it got hung up when running the
- Joe> terminfo compiler (tic).  I let it run for over an hour, but
- Joe> decided to cancel it when top indicated it had already consumed
- Joe> >43 minutes of CPU time and was still not finished.
+Best regards,
 
-That's because of a version incompatibility between the ncurses version
-you have on your host and what we have in buildroot. There recently was
-a patch posted to fix this by building a host version, but that hasn't
-been integrated yet.
+--
+Lionel Landwerlin
 
- Joe>   2) When building host-zlib-1.2.5 it failed during the make
- Joe> install phase it invokes install-libs, which attempted to copy (cp
- Joe> command) SHAREDLIBV (which was empty) and received a failure on
- Joe> the cp command due to only a single argument.  I simply commented
- Joe> the line out and then the make of that component completed.
+Le jeudi 16 d?cembre 2010 ? 17:49 +0800, Sonic Zhang a ?crit :
+> Current DOWNLOAD_SVN and DOWNLOAD_GIT scripts only retrieve source code of a
+> given version from the repository. It is more complicated to generate patches
+> against the source after fixing bugs and developing in buildroot directly.
+> This patch adds an option BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT to checkout the
+> source with version control information. This option is disabled by default.
+> 
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  Config.in                   |    7 +++++++
+>  package/Makefile.package.in |   20 ++++++++++++++++----
+>  2 files changed, 23 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index c90de77..7fa2aba 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -154,6 +154,13 @@ config BR2_DEBUG_MUDFLAP
+>  	  Your GCC must be new enough to support this option.
+>  endif
+>  
+> +config BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT
+> +	bool "check out source with git or svn revision information"
+> +	default n
+> +	help
+> +	  If y, check out the source from git or svn repository with
+> +	  revision information and store in the source tar ball.
+> +
+>  choice
+>  	prompt "strip"
+>  	default BR2_STRIP_strip
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> index 9f876b9..78b2cda 100644
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -100,15 +100,22 @@ endif
+>  # source repositories, producing a list of all the "external dependencies" of
+>  # a given build configuration.
+>  ################################################################################
+> -
+>  define DOWNLOAD_GIT
+> +	if [ "$(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT)" = "y" ] ; then \
+> +		GITCMD="$(GIT) checkout -b $($(PKG)_BRANCH) $($(PKG)_DL_VERSION)" ; \
+> +		TARCMD="$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/" ; \
+> +	else \
+> +		GITCMD="$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+> +			gzip -c > $(DL_DIR)/$($(PKG)_SOURCE)" ; \
+> +		TARCMD=test ; \
+> +	fi ; \
+>  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>  	(pushd $(DL_DIR) > /dev/null && \
+>  	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+>  	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+> -	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+> -		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+> +	eval $$GITCMD && \
+>  	popd > /dev/null && \
+> +	eval $$TARCMD && \
+>  	rm -rf $($(PKG)_DL_DIR) && \
+>  	popd > /dev/null)
+>  endef
+> @@ -125,9 +132,14 @@ endef
+>  
+> 
+>  define DOWNLOAD_SVN
+> +	if [ "$(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT)" = "y" ] ; then \
+> +		SVNCMD=checkout ; \
+> +	else \
+> +		SVNCMD=export ; \
+> +	fi ; \
+>  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>  	(pushd $(DL_DIR) > /dev/null && \
+> -	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
+> +	$(SVN) $$SVNCMD -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
+>  	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
+>  	rm -rf $($(PKG)_DL_DIR) && \
+>  	popd > /dev/null)
 
-You have enabled BR2_PREFER_STATIC_LIB and you are using 2010.11, right?
-If so you can fix it by the following patch:
-
-http://git.buildroot.net/buildroot/tree/package/zlib/zlib-1.2.5-fix-static-install.patch
-
-(download and put in package/zlib).
-  
- Joe>   3) When configuring buildroot I checked off the item (in
- Joe> menuconfig) to build the uClibc tests.  When it was building the
- Joe> tests it got a compile error (not sure now what file or error).  I
- Joe> simply went back into the configure and unselected to build the
- Joe> tests and then it went past this.
-
-Hmm, will check.
-
- Joe>   4) When invoking /usr/bin/msgfmt it got a parse failure in
- Joe> ./de.po on the keyword "msgctxt".  Not sure what it's building or
- Joe> how to get around this.
-
-That also sounds like a version incompatibility. Care to post your
-buildroot .config?
-
- Joe> I'm unable to complete the make process, so currently I dead in
- Joe> the water with this tool, and I'm not sure where to go from here
- Joe> with it.  Perhaps it's my build environment?  What Linux version
- Joe> has this been known to build without failures on?
-
-Well, centos 5.5 is SW from 2006/2007, so it's fairly outdated. Most
-developers use something more recent like uptodate versions of
-Debian/Ubuntu/Fedora.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: rework-download.patch
+Type: text/x-patch
+Size: 2644 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101216/e3ac198e/attachment.bin>
