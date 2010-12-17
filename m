@@ -1,24 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 17 Dec 2010 17:01:05 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.02/boards-cleanup
-In-Reply-To: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 5 Dec 2010 21:52:31 +0100")
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mxo4fkxq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 17 Dec 2010 17:00:18 +0100
+Subject: [Buildroot] [git commit master 1/1] CHANGES: #561/#1651/#1735 are
+	resolved
+Message-ID: <20101217160155.3B9668E9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here is the set of patches that reworks how Buildroot support
- Thomas> boards. Now, the principles are :
+commit: http://git.buildroot.net/buildroot/commit/?id=f362c51f7fb0e7e70136804467557e23550b2e96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks a lot! Committed everything except for patch 45, 48 and 49.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index cfaf386..45d2830 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -19,6 +19,9 @@
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
++	#561:  ltp-testsuite failed to install
++	#1651: Build fail caused by ccache in module-init-tools
++	#1735: [PATCH] mplayer: convert to autotools infrastructure
+ 	#2905: Qt: Speed up compilation, if gui-module isn't selected
+ 
+ 2010.11, Released November 30th, 2010:
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
