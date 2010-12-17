@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 17 Dec 2010 17:00:18 +0100
-Subject: [Buildroot] [git commit master 1/1] Update defconfigs after Atmel
-	mirror related options removal
-Message-ID: <20101217160156.0D2908E9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Use the new
+	BR2_ROOTFS_SKELETON_CUSTOM options
+Message-ID: <20101217160156.C3D848E9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,251 +10,167 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e96a820300fc53ff63099e9b8dde179407663930
+commit: http://git.buildroot.net/buildroot/commit/?id=ad5031cc229ab2a3e0dbc7c3ca2f7303bb7e2735
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/arm_toolchain_defconfig      |    2 --
- configs/at91rm9200df_defconfig       |    2 --
- configs/at91sam9260dfc_defconfig     |    2 --
- configs/at91sam9260pf_defconfig      |    2 --
- configs/at91sam9261ek_defconfig      |    2 --
- configs/at91sam9263ek_defconfig      |    2 --
- configs/at91sam9g20dfc_defconfig     |    2 --
- configs/atngw100-base_defconfig      |    2 --
- configs/atngw100_defconfig           |    2 --
- configs/atstk1005_defconfig          |    2 --
- configs/atstk100x_defconfig          |    2 --
- configs/i386_defconfig               |    2 --
- configs/i686_defconfig               |    2 --
- configs/integrator926_defconfig      |    2 --
- configs/integrator926_huge_defconfig |    2 --
- configs/kb9202_defconfig             |    2 --
- configs/v100sc2_defconfig            |    2 --
- 17 files changed, 0 insertions(+), 34 deletions(-)
+ configs/at91rm9200df_defconfig   |    2 ++
+ configs/at91sam9260dfc_defconfig |    2 ++
+ configs/at91sam9260pf_defconfig  |    2 ++
+ configs/at91sam9261ek_defconfig  |    2 ++
+ configs/at91sam9263ek_defconfig  |    2 ++
+ configs/at91sam9g20dfc_defconfig |    2 ++
+ configs/atngw100_defconfig       |    2 ++
+ configs/atstk1005_defconfig      |    2 ++
+ configs/atstk100x_defconfig      |    2 ++
+ configs/kb9202_defconfig         |    2 ++
+ configs/v100sc2_defconfig        |    2 ++
+ 11 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
-index d4642d9..a25ece5 100644
---- a/configs/arm_toolchain_defconfig
-+++ b/configs/arm_toolchain_defconfig
-@@ -151,8 +151,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
 diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index de061ac..01849b0 100644
+index 01849b0..d2d1500 100644
 --- a/configs/at91rm9200df_defconfig
 +++ b/configs/at91rm9200df_defconfig
-@@ -156,8 +156,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -826,6 +826,8 @@ BR2_PACKAGE_LIBXML2=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index 1740e13..ec8d44c 100644
+index ec8d44c..e1eac51 100644
 --- a/configs/at91sam9260dfc_defconfig
 +++ b/configs/at91sam9260dfc_defconfig
-@@ -169,8 +169,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -840,6 +840,8 @@ BR2_PACKAGE_LIBXML2=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/at91sam9260pf_defconfig b/configs/at91sam9260pf_defconfig
-index a2a7fef..7b3f890 100644
+index 7b3f890..db716a0 100644
 --- a/configs/at91sam9260pf_defconfig
 +++ b/configs/at91sam9260pf_defconfig
-@@ -67,8 +67,6 @@ BR2_SOURCEFORGE_MIRROR="easynews"
+@@ -540,6 +540,8 @@ BR2_SCRIPTING_SUPPORT=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- BR2_TOPDIR_PREFIX=""
- BR2_TOPDIR_SUFFIX="wchar"
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index f4c0755..5c2d15b 100644
+index 5c2d15b..2c0b8af 100644
 --- a/configs/at91sam9261ek_defconfig
 +++ b/configs/at91sam9261ek_defconfig
-@@ -172,8 +172,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -891,6 +891,8 @@ BR2_PACKAGE_LIBXSLT=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index cfa8742..a2e6181 100644
+index a2e6181..d75c6fd 100644
 --- a/configs/at91sam9263ek_defconfig
 +++ b/configs/at91sam9263ek_defconfig
-@@ -170,8 +170,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -888,6 +888,8 @@ BR2_PACKAGE_LIBXSLT=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index dc9b600..cb82c2d 100644
+index cb82c2d..f761e72 100644
 --- a/configs/at91sam9g20dfc_defconfig
 +++ b/configs/at91sam9g20dfc_defconfig
-@@ -170,8 +170,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -756,6 +756,8 @@ BR2_PACKAGE_EXPAT=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/atngw100-base_defconfig b/configs/atngw100-base_defconfig
-index 2b79015..72bd2cc 100644
---- a/configs/atngw100-base_defconfig
-+++ b/configs/atngw100-base_defconfig
-@@ -104,8 +104,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/root/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/root/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index ec87a09..d2bdb68 100644
+index d2bdb68..08d111e 100644
 --- a/configs/atngw100_defconfig
 +++ b/configs/atngw100_defconfig
-@@ -88,8 +88,6 @@ BR2_SOURCEFORGE_MIRROR="easynews"
- BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
- BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
- BR2_DEBIAN_MIRROR="http://ftp.debian.org"
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_JLEVEL=2
- # BR2_DEPRECATED is not set
- # BR2_ENABLE_DEBUG is not set
+@@ -689,6 +689,8 @@ BR2_PACKAGE_WIRELESS_TOOLS=y
+ #
+ BR2_ROOTFS_POST_BUILD_SCRIPT=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atngw100/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atngw100/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ # BR2_TARGET_ROOTFS_EXT2 is not set
 diff --git a/configs/atstk1005_defconfig b/configs/atstk1005_defconfig
-index 6212e2b..4531fd2 100644
+index 4531fd2..d87e103 100644
 --- a/configs/atstk1005_defconfig
 +++ b/configs/atstk1005_defconfig
-@@ -102,8 +102,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -718,6 +718,8 @@ BR2_PACKAGE_ZLIB=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atstk1005/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atstk1005/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ # BR2_TARGET_ROOTFS_EXT2 is not set
 diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index ce50944..e120de8 100644
+index e120de8..b4e7f06 100644
 --- a/configs/atstk100x_defconfig
 +++ b/configs/atstk100x_defconfig
-@@ -103,8 +103,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -821,6 +821,8 @@ BR2_ROOTFS_PREFIX="atstk1002-rootfs"
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/i386_defconfig b/configs/i386_defconfig
-index 80100d6..6bd7934 100644
---- a/configs/i386_defconfig
-+++ b/configs/i386_defconfig
-@@ -105,8 +105,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/i686_defconfig b/configs/i686_defconfig
-index 4a128e8..167eee2 100644
---- a/configs/i686_defconfig
-+++ b/configs/i686_defconfig
-@@ -105,8 +105,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index fc2dccf..992e1f4 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -101,8 +101,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
-diff --git a/configs/integrator926_huge_defconfig b/configs/integrator926_huge_defconfig
-index c56b628..238dc26 100644
---- a/configs/integrator926_huge_defconfig
-+++ b/configs/integrator926_huge_defconfig
-@@ -101,8 +101,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
- #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/Atmel/atstk100x/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/Atmel/atstk100x/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ BR2_TARGET_ROOTFS_EXT2=y
 diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index 727b3c2..fa5fa60 100644
+index fa5fa60..c13c30f 100644
 --- a/configs/kb9202_defconfig
 +++ b/configs/kb9202_defconfig
-@@ -110,8 +110,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -643,6 +643,8 @@ BR2_GAMES=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/KwikByte/kb9202/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/KwikByte/kb9202/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ # BR2_TARGET_ROOTFS_EXT2 is not set
 diff --git a/configs/v100sc2_defconfig b/configs/v100sc2_defconfig
-index a7d0f34..03d036f 100644
+index 03d036f..b32fa21 100644
 --- a/configs/v100sc2_defconfig
 +++ b/configs/v100sc2_defconfig
-@@ -81,8 +81,6 @@ BR2_DEBIAN_MIRROR="http://ftp.debian.org"
+@@ -675,6 +675,8 @@ BR2_PACKAGE_LIBXSLT=y
+ # filesystem for target device
  #
- # Atmel Mirrors
- #
--BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/"
--BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/"
- BR2_STAGING_DIR="$(BASE_DIR)/staging"
- # BR2_FPU_SUFFIX is not set
- BR2_TOPDIR_PREFIX=""
+ BR2_ROOTFS_DEVICE_TABLE="target/device/valka/device_table.txt"
++BR2_ROOTFS_SKELETON_CUSTOM=y
++BR2_ROOTFS_SKELETON_CUSTOM_PATH="target/device/target/device/valka/target_skeleton"
+ # BR2_TARGET_ROOTFS_CRAMFS is not set
+ # BR2_TARGET_ROOTFS_CLOOP is not set
+ # BR2_TARGET_ROOTFS_EXT2 is not set
 -- 
 1.7.2.2
