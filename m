@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 17 Dec 2010 17:00:18 +0100
-Subject: [Buildroot] [git commit master 1/1] Re-add target/generic/Config.in
-	options to menuconfig
-Message-ID: <20101217160158.125AA8E9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] u-boot: add U-Boot 2010.09
+Message-ID: <20101217160159.E3F728E9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +9,41 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=beb43c7d26eff220acb6de98300f4e0865352154
+commit: http://git.buildroot.net/buildroot/commit/?id=eb95b01fffcba0a5c06be046965022dcbed0774f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The options to customize the hostname, the banner and the serial port
-configuration are now inside a menu named 'System configuration'.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in                |    2 ++
- target/generic/Config.in |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ boot/u-boot/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 874c20a..ff77449 100644
---- a/Config.in
-+++ b/Config.in
-@@ -334,6 +334,8 @@ endmenu
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index ce79a8a..86c656d 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
  
- source "toolchain/Config.in"
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2010_06
++	default BR2_TARGET_UBOOT_2010_09
+ 	help
+ 	  Select the specific U-Boot version you want to use
  
-+source "target/generic/Config.in"
++config BR2_TARGET_UBOOT_2010_09
++	bool "2010.09"
 +
- source "package/Config.in"
+ config BR2_TARGET_UBOOT_2010_06
+ 	bool "2010.06"
  
- source "fs/Config.in"
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 54ff1d6..81ac011 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -1,4 +1,4 @@
--if !(BR2_TARGET_ATMEL||BR2_TARGET_KWIKBYTE||BR2_TARGET_VALKA)
-+menu "System configuration"
+@@ -42,6 +45,7 @@ endif
  
- config BR2_TARGET_GENERIC_HOSTNAME
-        string "System hostname"
-@@ -166,4 +166,4 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
- 
- endif # BR2_TARGET_GENERIC_GETTY
- 
--endif
-+endmenu
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
+ 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+ 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+ 	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
 -- 
 1.7.2.2
