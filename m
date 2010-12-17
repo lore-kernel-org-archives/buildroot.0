@@ -1,42 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 17 Dec 2010 14:04:34 -0300
-Subject: [Buildroot] [PATCH 13/13] ed: bump to version 1.5
-In-Reply-To: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1292605474-19443-13-git-send-email-gustavo@zacarias.com.ar>
+From: William Wagner <will_wagner@carallon.com>
+Date: Fri, 17 Dec 2010 17:31:28 +0000
+Subject: [Buildroot] ldd and external toolchain
+Message-ID: <4D0B9E70.3010909@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Bump to version 1.5
+Sorry if this is a stupid question but I can't seem to find any way of 
+getting ldd on my target when I use an external crosstools-ng toolchain.
 
-* Really configure right (or wrong depending on perspective) since we
-  weren't building ed for the target it was completely broken.
+Is there any support for this with an external toolchain and if so where 
+would I find it?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ed/ed.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+Thanks
+Will
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index 158667b..e7016bf 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -3,8 +3,10 @@
- # ed
- #
- #############################################################
--ED_VERSION:=1.1
--ED_SOURCE:=ed-$(ED_VERSION).tar.bz2
--ED_SITE:=$(BR2_GNU_MIRROR)/ed/
-+
-+ED_VERSION = 1.5
-+ED_SITE = $(BR2_GNU_MIRROR)/ed
-+ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)"
- 
- $(eval $(call AUTOTARGETS,package,ed))
 -- 
-1.7.2.2
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
