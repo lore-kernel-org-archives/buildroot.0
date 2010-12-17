@@ -1,71 +1,67 @@
-From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Thu, 16 Dec 2010 20:35:08 -0600
-Subject: [Buildroot] [PATCH] psmisc: bump to version 22.13
-Message-ID: <50fdf9b9da0ad5602517bd81006c0dd2c6475b6d.1292553281.git.smiley73@users.sourceforge.net>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Fri, 17 Dec 2010 10:44:58 +0800
+Subject: [Buildroot] [PATCH v2] buildroot:download: Add option to
+ download SVN or GIT repository with version control information.
+In-Reply-To: <1292509157.6496.27.camel@dubciaranr0.verifone.com>
+References: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
+	<1292509157.6496.27.camel@dubciaranr0.verifone.com>
+Message-ID: <AANLkTi=01SABHNM+ycGxtNEpX3xK8E9bN+vRqV_7_CUN@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Zuerker <smiley73@users.sourceforge.net>
+On Thu, Dec 16, 2010 at 10:19 PM, Quotient Remainder
+<quotientvremainder@gmail.com> wrote:
+> Hello Sonic,
+>
+> I've done a bit of work in this area, but it's now so outdated (in
+> before Maxime's changes, although vaguely based on the same approach)
+> that the patches will not apply to the current HEAD. ?I will certainly
+> share these if anyone's interested. ?They'd probably apply to 2010.08.
+>
+> I have a few observations and questions based on the problems I
+> encountered.
+>
+> Ar D?ar, 2010-12-16 ag 17:49 +0800, scr?obh Sonic Zhang:
+>> This patch adds an option BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT to checkout the
+>> source with version control information. This option is disabled by default.
+>>
+>
+> What if you only want to have working copies of some of the
+> repositories, not all?
+>
+
+This option only controls if the revision database is fetched. You can
+indicate working copy version or URL in the package's config file.
+Fetching revision database for all SVN/GIT packages is OK.
 
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
----
- package/psmisc/psmisc-no-__progname.patch |   26 +++++++++++---------------
- package/psmisc/psmisc.mk                  |    2 +-
- 2 files changed, 12 insertions(+), 16 deletions(-)
+>> + ? ? if [ "$(BR2_CHECKOUT_SOURCE_FOR_DEVELOPMENT)" = "y" ] ; then \
+>> + ? ? ? ? ? ? GITCMD="$(GIT) checkout -b $($(PKG)_BRANCH) $($(PKG)_DL_VERSION)" ; \
+>> + ? ? ? ? ? ? TARCMD="$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/" ; \
+>
+> Where does $($(PKG)_BRANCH) get its value?
+>
 
-diff --git a/package/psmisc/psmisc-no-__progname.patch b/package/psmisc/psmisc-no-__progname.patch
-index 82e6daf..6a73f54 100644
---- a/package/psmisc/psmisc-no-__progname.patch
-+++ b/package/psmisc/psmisc-no-__progname.patch
-@@ -4,21 +4,17 @@ uclibc (per default) doesn't implement __progname, and the pstree.x11
- stuff isn't that critical, so just disable it.
- 
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- src/pstree.c |    3 ---
-- 1 file changed, 3 deletions(-)
- 
--Index: psmisc-22.8/src/pstree.c
--===================================================================
----- psmisc-22.8.orig/src/pstree.c
--+++ psmisc-22.8/src/pstree.c
--@@ -893,9 +893,6 @@ main (int argc, char **argv)
--   bindtextdomain(PACKAGE, LOCALEDIR);
--   textdomain(PACKAGE);
-+diff -ru psmisc-22.13.orig/src/pstree.c psmisc-22.13/src/pstree.c
-+--- psmisc-22.13.orig/src/pstree.c	2010-07-12 06:10:03.000000000 -0500
-++++ psmisc-22.13/src/pstree.c	2010-12-16 20:30:14.000000000 -0600
-+@@ -854,9 +854,6 @@
-+     textdomain(PACKAGE);
-  #endif
---  
---  if (!strcmp(__progname, "pstree.x11"))
---    wait_end=1;
-  
--   /*
--    * Attempt to figure out a good default symbol set.  Will be overriden by
-+-    if (!strcmp(__progname, "pstree.x11"))
-+-        wait_end = 1;
-+-
-+     /*
-+      * Attempt to figure out a good default symbol set.  Will be overriden by
-+      * command-line options, if given.
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index e4301da..43d4d9b 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -3,7 +3,7 @@
- # psmisc
- #
- #############################################################
--PSMISC_VERSION:=22.8
-+PSMISC_VERSION:=22.13
- PSMISC_SOURCE:=psmisc-$(PSMISC_VERSION).tar.gz
- PSMISC_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/psmisc
- PSMISC_AUTORECONF:=NO
--- 
-1.7.3.2
+The package's Config.in should include this option if it points to a
+GIT repository.
+
+>
+> An finally, when you make a change in your repository working copy, how
+> does this change get into $(BUILD_DIR) so it's part of the build?
+>
+
+By now, you have to either run "svn update" and "git pull/checkout"
+manually under output/build/package_name/ or make clean and remove the
+tarball under download folder.
+
+Sonic
+
+>
+> As I say, I have found a way to do these but it's not elegant and will
+> probably not be suitable for inclusion in mainline without serious
+> restructuring.
+>
+>
