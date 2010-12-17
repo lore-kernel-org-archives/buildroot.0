@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 17 Dec 2010 17:00:18 +0100
-Subject: [Buildroot] [git commit master 1/1] at91bootstrap: no board name
-	check when 'make source' is used
-Message-ID: <20101217160159.87C848E9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Re-add target/generic/Config.in
+	options to menuconfig
+Message-ID: <20101217160158.125AA8E9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,47 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ff655c2e13c8075b5a52f12c3b89c8f996426a0
+commit: http://git.buildroot.net/buildroot/commit/?id=beb43c7d26eff220acb6de98300f4e0865352154
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The options to customize the hostname, the banner and the serial port
+configuration are now inside a menu named 'System configuration'.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ Config.in                |    2 ++
+ target/generic/Config.in |    4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index bfffe11..3d4308e 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -56,8 +56,11 @@ at91bootstrap-dirclean:
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
- TARGETS+=at91bootstrap
+diff --git a/Config.in b/Config.in
+index 874c20a..ff77449 100644
+--- a/Config.in
++++ b/Config.in
+@@ -334,6 +334,8 @@ endmenu
  
--# we NEED a board name
-+# we NEED a board name unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
- ifeq ($(AT91BOOTSTRAP_BOARD),)
- $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
- endif
- endif
+ source "toolchain/Config.in"
+ 
++source "target/generic/Config.in"
 +
-+endif
+ source "package/Config.in"
+ 
+ source "fs/Config.in"
+diff --git a/target/generic/Config.in b/target/generic/Config.in
+index 54ff1d6..81ac011 100644
+--- a/target/generic/Config.in
++++ b/target/generic/Config.in
+@@ -1,4 +1,4 @@
+-if !(BR2_TARGET_ATMEL||BR2_TARGET_KWIKBYTE||BR2_TARGET_VALKA)
++menu "System configuration"
+ 
+ config BR2_TARGET_GENERIC_HOSTNAME
+        string "System hostname"
+@@ -166,4 +166,4 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ 
+ endif # BR2_TARGET_GENERIC_GETTY
+ 
+-endif
++endmenu
 -- 
 1.7.2.2
