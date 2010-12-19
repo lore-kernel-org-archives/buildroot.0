@@ -1,30 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Dec 2010 17:55:10 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
- for-2011.02/boards-cleanup
-In-Reply-To: <87mxo4fkxq.fsf@macbook.be.48ers.dk>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<87mxo4fkxq.fsf@macbook.be.48ers.dk>
-Message-ID: <20101218175510.0a6f2e0e@surf>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Sun, 19 Dec 2010 16:42:35 +0100
+Subject: [Buildroot] qemu_ppc_g3beige_defconfig kernel image type (with
+	patch)
+Message-ID: <AANLkTinnVwRMDN91ZYL8bWcJdncpg+qzrpho=X=gNes0@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Dec 2010 17:01:05 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Hi all,
 
-> Thanks a lot! Committed everything except for patch 45, 48 and 49.
+I'm testing the new qemu_*_defconfig files (brilliant stuff!) but I think I have
+found a bug:
 
-Thanks, I'll rework 45, 48 and 49 as per your comments, and provide a
-new branch with only those commits. Thanks for picking all the other
-patches, it's much easier to handle a 3-patches patch set than a
-55-patches patch set :-)
+qemu_ppc_g3beige_defconfig defines BR2_LINUX_KERNEL_VMLINUX=y, but after
+configuration the .config file ends up with BR2_LINUX_KERNEL_UIMAGE=y.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+According to linux/Config.in it seems like BR2_LINUX_KERNEL_VMLINUX is only
+supported on MIPS. I've attached a patch that changes the kernel format
+from vmlinux to zImage, as uImage is no good with QEMU :-)
+
+Best regards,
+Bj?rn Forsman
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-qemu_ppc_g3beige_defconfig-fix-kernel-image-format.patch
+Type: text/x-diff
+Size: 1259 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101219/f6348440/attachment.bin>
