@@ -1,12 +1,19 @@
 From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 19 Dec 2010 19:37:28 +0100
-Subject: [Buildroot] [PATCH 1/2] linux: support 'make linux26-nconfig'
-Message-ID: <1292783849-8766-1-git-send-email-bjorn.forsman@gmail.com>
+Date: Sun, 19 Dec 2010 19:37:29 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: fix linux-% shortcut targets
+In-Reply-To: <1292783849-8766-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1292783849-8766-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <1292783849-8766-2-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+linux-% shortcut targets (short for linux26-%) ignores the ouput dir
+$(O) so that 'make O=output.arm linux-menuconfig' is actually run in the
+default $(O) directory output/ and not in output.arm/. Fix by passing on
+$(O).
 
 Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 ---
@@ -14,17 +21,14 @@ Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 23b89cf..6636a35 100644
+index 6636a35..68d2d6d 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -159,7 +159,7 @@ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+@@ -200,4 +200,4 @@ endif
+ endif
  
- linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
- 
--linux26-menuconfig linux26-xconfig linux26-gconfig: dirs $(LINUX26_DIR)/.stamp_configured
-+linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX26_DIR)/.stamp_configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) $(subst linux26-,,$@)
- 
- # Support for rebuilding the kernel after the initramfs file list has
+ linux-%:
+-	$(MAKE) $(subst linux-,linux26-,$@)
++	$(MAKE) O=$(O) $(subst linux-,linux26-,$@)
 -- 
 1.7.1
