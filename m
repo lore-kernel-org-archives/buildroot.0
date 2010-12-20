@@ -1,37 +1,30 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 19 Dec 2010 21:39:19 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: fix linux-% shortcut targets
-In-Reply-To: <87d3ox1pub.fsf@macbook.be.48ers.dk>
-References: <1292783849-8766-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292783849-8766-2-git-send-email-bjorn.forsman@gmail.com>
-	<87d3ox1pub.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTin2y_1s87StpK7tbEqy2pbjoUP3BPqmgF6Onj1F@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Dec 2010 08:58:38 +0100
+Subject: [Buildroot] qemu_ppc_g3beige_defconfig kernel image type (with
+ patch)
+In-Reply-To: <AANLkTikMMHpan0BZuLEV2yvc_Wm9twqYWg23heRgNizV@mail.gmail.com>
+References: <AANLkTinnVwRMDN91ZYL8bWcJdncpg+qzrpho=X=gNes0@mail.gmail.com>
+	<AANLkTikMMHpan0BZuLEV2yvc_Wm9twqYWg23heRgNizV@mail.gmail.com>
+Message-ID: <20101220085838.6f9787ee@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sun, 19 Dec 2010 17:04:05 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-2010/12/19 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
->
-> Hi,
->
-> ?Bj?rn> linux-% shortcut targets (short for linux26-%) ignores the ouput
-> ?Bj?rn> dir $(O) so that 'make O=output.arm linux-menuconfig' is
-> ?Bj?rn> actually run in the default $(O) directory output/ and not in
-> ?Bj?rn> output.arm/. Fix by passing on $(O).
->
-> This is still not correct. You should only pass O= if it was given on
-> the command line, otherwise BR will look in output/.config for the
-> configuration for non-out-of-tree-builds. I've added EXTRAMAKEARGS in
-> the toplevel makefile a while ago to handle it.
->
-> Committed with that change.
+> I just realized that QEMU handles uImage very well, but I think the
+> patch is still valid.
 
-Thanks for fixing and committing!
+Hum, zImage wasn't working for me on Qemu PowerPC. I'll re-test.
 
-Best regards,
-Bj?rn Forsman
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
