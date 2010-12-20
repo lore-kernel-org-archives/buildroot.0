@@ -1,37 +1,42 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Mon, 20 Dec 2010 12:37:27 +0100
-Subject: [Buildroot] [PATCH v2] buildroot:download: Add option to
- download SVN or GIT repository with version control information.
-In-Reply-To: <AANLkTimyNWZtc0+o0hGsJj65pzLA-ge3RK9FOEMvNZj3@mail.gmail.com>
-References: <1292492992-15797-1-git-send-email-sonic.adi@gmail.com>
-	<20101217113436.43ec2958@surf>
-	<AANLkTimyNWZtc0+o0hGsJj65pzLA-ge3RK9FOEMvNZj3@mail.gmail.com>
-Message-ID: <AANLkTikGADXeh2Z1VzQkAgvsqnuOGtVYdgXpe8WfbG+P@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 20 Dec 2010 15:00:52 +0100
+Subject: [Buildroot] Build failure on msgfmt
+In-Reply-To: <393933.14584.qm@web121804.mail.ne1.yahoo.com>
+References: <393933.14584.qm@web121804.mail.ne1.yahoo.com>
+Message-ID: <20101220150052.662a3707@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> ?Allow the user to write a "local.mk" file that gets included before
->> ?any package .mk file. In this "local.mk" file, the user can define
->> ?variables such as DIRECTFB_OVERRIDE_SOURCE_DIR=/home/foobar/directfb/.
->> ?The package infrastructure would of course be modified to take into
->> ?account this new variable, and use the given directory as the source
->> ?tree to compile the DirectFB package.
->>
->> Again, that's a rough scheme, but at least it should solve your use
->> case, but also the use case brought by Mike who wanted to specify a
->> custom source tree for the kernel.
->>
->> Does that make sense ? Would it solve your use case ?
->
-> Yes, this helps developers who has some separate local source trees.
-> But it is not as convenient as automatically storing svn/git tree in
-> download folder mentioned above, when you want to check out complete
-> sources trees in a distribution at once. If this is something
-> buildroot Makefile can help?
+Hello,
 
-Another great benefit of setting path to local source trees, is that
-you may want to do some trial and error without flooding your commit
-log.
+On Fri, 17 Dec 2010 12:52:19 -0800 (PST)
+Joe <lordvictory1@yahoo.com> wrote:
+
+> /usr/bin/msgfmt -o test.mo ./de.po; \
+>         /bin/mkdir -p de/LC_MESSAGES; \
+>         cp -f test.mo de/LC_MESSAGES
+> ./de.po:15: keyword "msgctxt" unknown
+> ./de.po:15:8: parse error
+> /usr/bin/msgfmt: found 2 fatal errors
+> cp: cannot stat `test.mo': No such file or directory
+> make[5]: *** [test.mo] Error 1
+
+This is because your gettext package from your distribution is too old,
+and msgfmt doesn't understand some newer keywords of the libglib2 .po
+files.
+
+Peter, maybe we should build gettext for the host instead of relying on
+the distribution msgfmt ? What do you think ? Or should be add a check
+to verify that msgfmt is sufficiently recent ?
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
