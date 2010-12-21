@@ -1,41 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Dec 2010 13:57:11 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain: fix multilib symlink
-	for external toolchains
-Message-ID: <20101221125742.DAE2E8E148@busybox.osuosl.org>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Tue, 21 Dec 2010 14:15:54 +0100
+Subject: [Buildroot] [PATCH] Add libmodbus to buildroot.
+Message-ID: <1292937354-20879-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Following patch add compilation of libmodbus use for communication
+over modbus protocol.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd11bf49704ef6413ae303c6c774b5c6a4a62f9a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-ARCH_SUBDIR is a shell variable, so it should be referenced with
-$${ARCH_SUBDIR}. Without this, no symbolic link is created, and the
-external toolchain fails to work if the non-default multilib variant
-is used.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- toolchain/helpers.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in              |    1 +
+ package/libmodbus/Config.in    |    9 +++++++++
+ package/libmodbus/libmodbus.mk |    8 ++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmodbus/Config.in
+ create mode 100644 package/libmodbus/libmodbus.mk
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 9b37f3f..eb9d742 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -96,7 +96,7 @@ copy_toolchain_sysroot = \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
- 		fi ; \
--		ln -s . $(STAGING_DIR)/$(ARCH_SUBDIR) ; \
-+		ln -s . $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
- 	fi ; \
- 	find $(STAGING_DIR) -type d | xargs chmod 755
+diff --git a/package/Config.in b/package/Config.in
+index 80aca2a..b29113c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -203,6 +203,7 @@ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
++source "package/libmodbus/Config.in"
+ endmenu
  
+ menu "Interpreter languages and scripting"
+diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
+new file mode 100644
+index 0000000..99e8952
+--- /dev/null
++++ b/package/libmodbus/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBMODBUS
++	bool "libmodbus"
++	help
++	  libmodbus is a free software library to send/receive data with
++	  a device which respects the Modbus protocol. This library can
++	  use a serial port or an Ethernet connection.
++
++	  http://http://libmodbus.org
++
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+new file mode 100644
+index 0000000..eb03c84
+--- /dev/null
++++ b/package/libmodbus/libmodbus.mk
+@@ -0,0 +1,8 @@
++############################################################
++# libmodbus
++#############################################################
++LIBMODBUS_VERSION:=2.0.3
++LIBMODBUS_SOURCE:=libmodbus-$(LIBMODBUS_VERSION).tar.gz
++LIBMODBUS_SITE:=http://github.com/downloads/stephane/libmodbus/$(LIBMODBUS_SOURCE)
++
++$(eval $(call AUTOTARGETS,package,libmodbus))
 -- 
-1.7.2.2
+1.7.1
