@@ -1,9 +1,10 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 21 Dec 2010 23:32:23 +0100
-Subject: [Buildroot] [PATCH 1/2] tslib: bump version to current git head
-In-Reply-To: <1292954816-19987-1-git-send-email-daniel.nystrom@timeterminal.se>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Tue, 21 Dec 2010 23:33:08 +0100
+Subject: [Buildroot] [PATCH 2/2] tslib: Enable raw module in ts.conf
+In-Reply-To: <1292954816-19987-2-git-send-email-daniel.nystrom@timeterminal.se>
 References: <1292954816-19987-1-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <4D112AF7.1010804@lucaceresoli.net>
+	<1292954816-19987-2-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <4D112B24.4030208@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,14 @@ To: buildroot@busybox.net
 
 Daniel Nystr?m ha scritto:
 
-> Due to missing official releases, fetch directly from GitHub
-> repository. Many bugfixes since 1.0 and all previous patches in
-> Buildroot are either applied or obsoleted.
+> By default there is no module activated in ts.conf. According to the
+> ts.conf previously attached in the tslib package dir (which was never
+> installed) the default module of choice was the raw module.
+>
+> This patch enables the raw module in the ts.conf file in the tslib
+> source tree, which will be installed in the target.
 >
 > Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 >   
-
 Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Thanks, the current management was really painful.
-Luca
+ 
