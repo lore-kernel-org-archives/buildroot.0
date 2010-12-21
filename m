@@ -1,15 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Dec 2010 14:14:53 +0100
-Subject: [Buildroot] [PATCH 1/1] xlib_libX11: compile makekeys for the host
-	correctly
-In-Reply-To: <cover.1292937286.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1292937286.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <90d05a2a9ac9123d0fab7f68c31d58feb627d16a.1292937286.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 21 Dec 2010 14:20:17 +0100
+Subject: [Buildroot] [git commit master 1/1] xlib_libX11: compile makekeys
+	for the host correctly
+Message-ID: <20101221132035.52CDD8E148@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+commit: http://git.buildroot.net/buildroot/commit/?id=eb56385b24b590b22951b4499bf3bad4a563433c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 As reported by Miroslav Ignjatovic in bug #2983, our hack in
 xlib_libX11 to build makekeys for the host does not work, for several
@@ -20,7 +22,7 @@ reasons:
    headers of packages for the target.
 
  * Instead, we should use the headers in $(HOST_DIR)/usr/include. They
-   were not used due to a type: $(HOST_CFLAGS) must be used instead of
+   were not used due to a typo: $(HOST_CFLAGS) must be used instead of
    $(HOSTCFLAGS).
 
  * Finally, in order for makekeys to find the required headers in
@@ -29,10 +31,35 @@ reasons:
 This fixes bug #2983.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
+ CHANGES                                  |    5 +++--
  package/x11r7/xlib_libX11/xlib_libX11.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/CHANGES b/CHANGES
+index 45d2830..846183d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -8,8 +8,8 @@
+ 	hostapd, i2c-tools, input-tools, libaio, libconfig, libtheora,
+ 	lsof, ltp-testsuite, lvm2, m4, memtester, mii-diag, mplayer,
+ 	mrouted, netplug, openssh, openssl, openvpn, pango, qt, rsync,
+-	sdl_gfx, sdl_sound, sysklogd, sysvinit, udev, usbutils, xz,
+-	zlib
++	sdl_gfx, sdl_sound, sysklogd, sysvinit, udev, usbutils,
++	xlib_libX11, xz, zlib
+ 
+ 	New packages: dhrystone, fbgrab, lsuio, rsh-redone, whetstone,
+ 	xl2tp
+@@ -23,6 +23,7 @@
+ 	#1651: Build fail caused by ccache in module-init-tools
+ 	#1735: [PATCH] mplayer: convert to autotools infrastructure
+ 	#2905: Qt: Speed up compilation, if gui-module isn't selected
++	#2983: xlib_libX11 build failed
+ 
+ 2010.11, Released November 30th, 2010:
+ 
 diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
 index c95d654..1acc35c 100644
 --- a/package/x11r7/xlib_libX11/xlib_libX11.mk
@@ -57,4 +84,4 @@ index c95d654..1acc35c 100644
  
  XLIB_LIBX11_POST_CONFIGURE_HOOKS += XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
 -- 
-1.7.0.4
+1.7.2.2
