@@ -1,28 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 21 Dec 2010 11:01:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 2983] xlib_libX11 build failed
-In-Reply-To: <bug-2983-163@https.bugs.busybox.net/>
-References: <bug-2983-163@https.bugs.busybox.net/>
-Message-ID: <20101221110145.D33328E215@busybox.osuosl.org>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Tue, 21 Dec 2010 15:27:42 +0300
+Subject: [Buildroot] gcc-target compilation error due to TARGET_CFLAGS bug
+Message-ID: <AANLkTinS3oGOx855_HJKiugih0Q3nbh1w+tEo5NkhBYC@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2983
+Hello.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I encountered problems with compiling gcc-target with enabled c++:
+file <fenv.h> (with _FENV_H) was not included and it caused
+compilation errors due to undeclared symbols.
+It seems that the problem was in package/Makefile.in:
+ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+    TARGET_CFLAGS+=-I... -I...
+endif
+If we look at compilation of gcc-final we can notice that these files
+was included there as -isystem and all was compiled well (because
+#include_next <fenv.h> in fenv.h with _GLIBCXX_FENV_H work there as it
+should).
+I changed -I to -isystem and error with <fenv.h> disappeared, but can
+the change affect other packages?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
-                   |.org                        |rons.com
+It seems that now I have problems with gettext's gnulib-lib, but do
+not know whether it is related to my changes.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-Bug reproduced, fix written, going to send to the list soon.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sergey Naumov.
