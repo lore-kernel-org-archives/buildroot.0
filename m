@@ -1,75 +1,108 @@
-From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
-Date: Tue, 21 Dec 2010 16:55:23 +0800
-Subject: [Buildroot]  [PATCH] New package: bwm-ng
-Message-ID: <1292921723-3372-1-git-send-email-keguang.zhang@gmail.com>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Tue, 21 Dec 2010 10:05:17 +0100
+Subject: [Buildroot] [PATCH] Add UBI image generation support.
+Message-ID: <1292922317-29202-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Kelvin Cheung <keguang.zhang@gmail.com>
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Add new package: bwm-ng
 
-Bandwidth Monitor NG is a small and console-based live network and
-disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
-
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Nicolas Colombain <nicolas.colombain@armadeus.com>
 ---
- package/Config.in        |    1 +
- package/bwm-ng/Config.in |    7 +++++++
- package/bwm-ng/bwm-ng.mk |   16 ++++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/bwm-ng/Config.in
- create mode 100644 package/bwm-ng/bwm-ng.mk
+ fs/ubi/Config.in   |   22 ++++++++++++++++++++++
+ fs/ubi/ubi.mk      |   24 ++++++++++++++++++++++++
+ fs/ubi/ubinize.cfg |    7 +++++++
+ fs/ubifs/Config.in |    2 ++
+ 4 files changed, 55 insertions(+), 0 deletions(-)
+ create mode 100644 fs/ubi/Config.in
+ create mode 100644 fs/ubi/ubi.mk
+ create mode 100644 fs/ubi/ubinize.cfg
 
-diff --git a/package/Config.in b/package/Config.in
-index d3ae75e..2648062 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -148,6 +148,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/acpid/Config.in"
-+source "package/bwm-ng/Config.in"
- source "package/cdrkit/Config.in"
- source "package/cramfs/Config.in"
- source "package/dbus/Config.in"
-diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
+diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
 new file mode 100644
-index 0000000..f2f8b12
+index 0000000..b4433f7
 --- /dev/null
-+++ b/package/bwm-ng/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BWM_NG
-+	bool "bwm-ng"
++++ b/fs/ubi/Config.in
+@@ -0,0 +1,22 @@
++config BR2_TARGET_ROOTFS_UBI
++	depends on BR2_TARGET_ROOTFS_UBIFS
++	bool "generate ubi image"
 +	help
-+	  Bandwidth Monitor NG is a small and console-based live network and
-+	  disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
++	  Build a UBI image of the UBIFS root filesystem.
 +
-+	  http://sourceforge.net/projects/bwmng/
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
++config BR2_TARGET_ROOTFS_UBI_PEBSIZE
++	hex "UBI physical erase block size"
++	depends on BR2_TARGET_ROOTFS_UBI
++	default 0x20000
++	help
++	  Tells ubinize that physical eraseblock size of the flash chip the UBI
++	  image is created for is 0x20000 (by default).
++
++config BR2_TARGET_ROOTFS_UBI_SUBSIZE
++	int "UBI sub-page size"
++	depends on BR2_TARGET_ROOTFS_UBI
++	default 512
++	help
++	  Tells ubinize that the flash supports sub-pages and sub-page size is
++	  512 bytes (by default).
++
+diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
 new file mode 100644
-index 0000000..7fd5b38
+index 0000000..71e41c3
 --- /dev/null
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -0,0 +1,16 @@
++++ b/fs/ubi/ubi.mk
+@@ -0,0 +1,24 @@
 +#############################################################
 +#
-+# bwm-ng
++# Build the UBI root filesystem image
 +#
 +#############################################################
-+BWM_NG_VERSION:=0.6
-+BWM_NG:=bwm-ng-$(BWM_NG_VERSION).tar.gz
-+BWM_NG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/bwmng/bwmng/0.6/
-+BWM_NG_CONF_OPT = --with-procnetdev --with-diskstats
 +
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+BWM_NG_CONF_OPT += --with-ncurses
-+BWM_NG_DEPENDENCIES += ncurses
++UBI_UBINIZE_OPTS := -m $(BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE)
++UBI_UBINIZE_OPTS += -p $(BR2_TARGET_ROOTFS_UBI_PEBSIZE)
++ifneq ($(BR2_TARGET_ROOTFS_UBI_SUBSIZE),0)
++UBI_UBINIZE_OPTS += -s $(BR2_TARGET_ROOTFS_UBI_SUBSIZE)
 +endif
 +
-+$(eval $(call AUTOTARGETS,package,bwm-ng))
++
++ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
++
++define ROOTFS_UBI_CMD
++	cp fs/ubi/ubinize.cfg . ;\
++	echo "image=$$@fs" \
++		>> ./ubinize.cfg ;\
++	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS) ubinize.cfg ;\
++	rm ubinize.cfg
++endef
++
++$(eval $(call ROOTFS_TARGET,ubi))
+diff --git a/fs/ubi/ubinize.cfg b/fs/ubi/ubinize.cfg
+new file mode 100644
+index 0000000..6515271
+--- /dev/null
++++ b/fs/ubi/ubinize.cfg
+@@ -0,0 +1,7 @@
++[ubifs]
++mode=ubi
++vol_id=0
++vol_type=dynamic
++vol_name=rootfs
++vol_alignment=1
++vol_flags=autoresize
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index bcf409c..e150f9b 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -77,3 +77,5 @@ config BR2_TARGET_ROOTFS_UBIFS_LZMA
+ 
+ endchoice
+ 
++source "fs/ubi/Config.in"
++
 -- 
-1.7.1
+1.6.0.4
