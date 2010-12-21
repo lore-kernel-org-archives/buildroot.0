@@ -1,36 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Dec 2010 14:20:30 +0100
-Subject: [Buildroot] [PATCH 1/1] xlib_libX11: compile makekeys for the
-	host correctly
-In-Reply-To: <90d05a2a9ac9123d0fab7f68c31d58feb627d16a.1292937286.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 21 Dec 2010 14:14:53 +0100")
-References: <cover.1292937286.git.thomas.petazzoni@free-electrons.com>
-	<cover.1292937286.git.thomas.petazzoni@free-electrons.com>
-	<90d05a2a9ac9123d0fab7f68c31d58feb627d16a.1292937286.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r5dbuush.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 21 Dec 2010 14:23:09 +0100
+Subject: [Buildroot] [git commit master 1/1] busybox: clarify
+	BR2_PACKAGE_BUSYBOX_FULLINSTALL description
+Message-ID: <20101221133224.854DF8E1EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> As reported by Miroslav Ignjatovic in bug #2983, our hack in
- Thomas> xlib_libX11 to build makekeys for the host does not work, for several
- Thomas> reasons:
+commit: http://git.buildroot.net/buildroot/commit/?id=a7472011ae7a921162ac9dea21c0da231f899b6f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas>  * As we are building a tool for the host, we shouldn't pass
- Thomas>    -I$(STAGING_DIR)/usr/include, since the $(STAGING_DIR) contains
- Thomas>    headers of packages for the target.
+Explicitly explain what the (default) install target does, so people who
+don't know busybox details understands what the option does.
 
- Thomas>  * Instead, we should use the headers in $(HOST_DIR)/usr/include. They
- Thomas>    were not used due to a type: $(HOST_CFLAGS) must be used instead of
- Thomas>    $(HOSTCFLAGS).
+Notice: Busybox can be configured to create hard links or shell wrappers
+instead, but by default symlinks are used.
 
-s/type/typo/
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 9988178..19c68cd 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -43,7 +43,7 @@ config BR2_BUSYBOX_VERSION
+ 	default "1.18.1"	if BR2_BUSYBOX_VERSION_1_18_X
+ 
+ config BR2_PACKAGE_BUSYBOX_FULLINSTALL
+-	bool "Run BusyBox's own full installation"
++	bool "Install symlinks to BusyBox applets"
+ 	default y
+ 	help
+ 	  If you want to run BusyBox's own full install for the
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
