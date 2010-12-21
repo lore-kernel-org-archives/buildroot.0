@@ -1,85 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Dec 2010 10:36:59 +0100
-Subject: [Buildroot] [PATCH] bare-bone support for Soekris net4501
-In-Reply-To: <AANLkTim9KWDfq9pkkUodr19FVTNBZsAiYYLt258Uux0d@mail.gmail.com>
-References: <AANLkTim9KWDfq9pkkUodr19FVTNBZsAiYYLt258Uux0d@mail.gmail.com>
-Message-ID: <20101221103659.08f633f4@surf>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Tue, 21 Dec 2010 18:07:59 +0800
+Subject: [Buildroot] [PATCH] New package: bwm-ng
+In-Reply-To: <1292921723-3372-1-git-send-email-keguang.zhang@gmail.com>
+References: <1292921723-3372-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <AANLkTinAe00qo8PuVJW4qCZbbRAz7GaDP0KuAf5TWuWb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 20 Dec 2010 20:26:38 -0500
-Chris Schaefer <chris@dtzq.com> wrote:
+Please review this patch.
+Thanks!
 
-> I had needed bare-bone configs (kernel, buildroot, busybox, uClibc) as
-> a starting point for projects running on a Soekris net4501 device. I'v
-> attached what I have been using in hopes it could benefit others. This
-> is my first experience w/ buildroot so please let me know any
-> feedback/suggestions.
+2010/12/21 <keguang.zhang@gmail.com>
 
-Thanks a lot! Support for such platforms is very welcome!
+> From: Kelvin Cheung <keguang.zhang@gmail.com>
+>
+> Add new package: bwm-ng
+>
+> Bandwidth Monitor NG is a small and console-based live network and
+> disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
+>
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> ---
+>  package/Config.in        |    1 +
+>  package/bwm-ng/Config.in |    7 +++++++
+>  package/bwm-ng/bwm-ng.mk |   16 ++++++++++++++++
+>  3 files changed, 24 insertions(+), 0 deletions(-)
+>  create mode 100644 package/bwm-ng/Config.in
+>  create mode 100644 package/bwm-ng/bwm-ng.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index d3ae75e..2648062 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -148,6 +148,7 @@ endmenu
+>
+>  menu "Hardware handling"
+>  source "package/acpid/Config.in"
+> +source "package/bwm-ng/Config.in"
+>  source "package/cdrkit/Config.in"
+>  source "package/cramfs/Config.in"
+>  source "package/dbus/Config.in"
+> diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
+> new file mode 100644
+> index 0000000..f2f8b12
+> --- /dev/null
+> +++ b/package/bwm-ng/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_BWM_NG
+> +       bool "bwm-ng"
+> +       help
+> +         Bandwidth Monitor NG is a small and console-based live network
+> and
+> +         disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and
+> others.
+> +
+> +         http://sourceforge.net/projects/bwmng/
+> diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+> new file mode 100644
+> index 0000000..7fd5b38
+> --- /dev/null
+> +++ b/package/bwm-ng/bwm-ng.mk
+> @@ -0,0 +1,16 @@
+> +#############################################################
+> +#
+> +# bwm-ng
+> +#
+> +#############################################################
+> +BWM_NG_VERSION:=0.6
+> +BWM_NG:=bwm-ng-$(BWM_NG_VERSION).tar.gz
+> +BWM_NG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).
+> dl.sourceforge.net/project/bwmng/bwmng/0.6/
+> +BWM_NG_CONF_OPT = --with-procnetdev --with-diskstats
+> +
+> +ifeq ($(BR2_PACKAGE_NCURSES),y)
+> +BWM_NG_CONF_OPT += --with-ncurses
+> +BWM_NG_DEPENDENCIES += ncurses
+> +endif
+> +
+> +$(eval $(call AUTOTARGETS,package,bwm-ng))
+> --
+> 1.7.1
+>
+>
 
-I have a couple of comments below, though.
 
-> diff --git a/configs/soekris-net4501_defconfig
-> b/configs/soekris-net4501_defconfig
-
-Your patch is wrapped, something is wrong in your e-mail configuration.
-
-Moreover, the Buildroot configuration file should be a minimal
-configuration. To do so :
-
-	make savedefconfig
-	cp defconfig configs/soekris-net4501_defconfig
-
-> diff --git a/target/device/soekris/net4501/busybox.config
-> b/target/device/soekris/net4501/busybox.config
-
-Why do you need a special Busybox configuration file ?
-
-> diff --git a/target/device/soekris/net4501/device_table.txt
-> b/target/device/soekris/net4501/device_table.txt
-
-Could you detail the differences with the default device table ?
-
-> diff --git a/target/device/soekris/net4501/linux26.config
-> b/target/device/soekris/net4501/linux26.config
-
-It should be stored in:
-
-	board/soekris/net4501
-
-And it should be a minimal kernel configuration. So in your kernel tree:
-
-	make savedefconfig
-
-and then
-
-	cp defconfig /path/to/buildroot/board/soekris/net4501/linux-x.y.z.config
-
-> diff --git a/target/device/soekris/net4501/target_skeleton/bin/.empty
-> b/target/device/soekris/net4501/target_skeleton/bin/.empty
-
-Could you highlight the differences between this target skeleton and
-the default one ? I'm trying to avoid the duplication of skeletons, so
-I need to understand what this one adds, and how we can solve it
-without duplicating the complete target skeleton.
-
-> diff --git a/target/device/soekris/net4501/uClibc.config
-> b/target/device/soekris/net4501/uClibc.config
-
-Could you detail why a specific uClibc configuration is needed compared
-to the default one we ship in toolchain/uClibc/ ?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best Regards!
+Kelvin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101221/aa1bbad1/attachment.html>
