@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 22 Dec 2010 23:47:28 +0100
-Subject: [Buildroot] [git commit master 1/1] libxml2: bump to version 2.7.8
-Message-ID: <20101222232250.161748E20B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libxslt: bump to version 1.1.26
+Message-ID: <20101222232250.492228E20B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e9213f11219e588f5759955c5731bfa0f1ed172
+commit: http://git.buildroot.net/buildroot/commit/?id=ff354debfa6391cf5762519652cb6cac27bc96f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump libxml2 to version 2.7.8.
-Re-enable libtool patch now that we handle libtool2 in package infra.
+Bump libxslt to version 1.1.26
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libxml2/libxml2.mk |    7 ++-----
- 1 files changed, 2 insertions(+), 5 deletions(-)
+ ....21-configure.patch => libxslt-configure.patch} |    0
+ package/libxslt/libxslt.mk                         |    5 ++---
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+ rename package/libxslt/{libxslt-1.1.21-configure.patch => libxslt-configure.patch} (100%)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 387dce3..d07f631 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -3,13 +3,10 @@
- # libxml2
+diff --git a/package/libxslt/libxslt-1.1.21-configure.patch b/package/libxslt/libxslt-configure.patch
+similarity index 100%
+rename from package/libxslt/libxslt-1.1.21-configure.patch
+rename to package/libxslt/libxslt-configure.patch
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 5437e29..5fa2f4c 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -3,11 +3,10 @@
+ # libxslt
  #
  #############################################################
--LIBXML2_VERSION = 2.7.7
--LIBXML2_SOURCE = libxml2-sources-$(LIBXML2_VERSION).tar.gz
+-LIBXSLT_VERSION = 1.1.24
+-LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.gz
 +
-+LIBXML2_VERSION = 2.7.8
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
--LIBXML2_INSTALL_TARGET = YES
--#this is needed for version 2.7.4 and higher
--LIBXML2_LIBTOOL_PATCH = NO
++LIBXSLT_VERSION = 1.1.26
+ LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
+ LIBXSLT_INSTALL_STAGING = YES
+-LIBXSLT_INSTALL_TARGET = YES
  
- ifneq ($(BR2_LARGEFILE),y)
- LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+ # If we have enabled libgcrypt then use it, else disable crypto support.
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
 -- 
 1.7.2.2
