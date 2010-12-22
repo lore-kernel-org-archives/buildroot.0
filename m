@@ -1,26 +1,26 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Tue, 21 Dec 2010 23:33:08 +0100
-Subject: [Buildroot] [PATCH 2/2] tslib: Enable raw module in ts.conf
-In-Reply-To: <1292954816-19987-2-git-send-email-daniel.nystrom@timeterminal.se>
-References: <1292954816-19987-1-git-send-email-daniel.nystrom@timeterminal.se>
-	<1292954816-19987-2-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <4D112B24.4030208@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 22 Dec 2010 09:10:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 2965] Broken linkage to xkbcomp (blocking X server
+	startup)
+In-Reply-To: <bug-2965-163@https.bugs.busybox.net/>
+References: <bug-2965-163@https.bugs.busybox.net/>
+Message-ID: <20101222091054.9C2227FC75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daniel Nystr?m ha scritto:
+https://bugs.busybox.net/show_bug.cgi?id=2965
 
-> By default there is no module activated in ts.conf. According to the
-> ts.conf previously attached in the tslib package dir (which was never
-> installed) the default module of choice was the raw module.
->
-> This patch enables the raw module in the ts.conf file in the tslib
-> source tree, which will be installed in the target.
->
-> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
->   
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
- 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
+                   |.org                        |rons.com
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
