@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Dec 2010 18:25:23 +0100
-Subject: [Buildroot] [PATCH 4/7] libdnet: remove dnet-config script from
+Date: Wed, 22 Dec 2010 18:25:21 +0100
+Subject: [Buildroot] [PATCH 2/7] imagemagick: remove *-config scripts from
 	TARGET_DIR
 In-Reply-To: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7122ce5c138c556304b772d83581316c3942f034.1293038710.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3f29fe94726ed9c3c04e46626f138dd026b7b9b7.1293038710.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdnet/libdnet.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index eb67b05..d3d58e5 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -31,4 +31,10 @@ endef
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index aecf7ae..035ab7a 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -80,4 +80,12 @@ else
+ IMAGEMAGICK_CONF_OPT += --without-tiff
+ endif
  
- LIBDNET_POST_EXTRACT_HOOKS += LIBDNET_FIXUP_ACINCLUDE_M4
- 
-+define LIBDNET_REMOVE_CONFIG_SCRIPT
-+	$(RM) -f $(TARGET_DIR)/usr/bin/dnet-config
++define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
++	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
++		   $(addsuffix -config,			\
++		     Magick MagickCore MagickWand Wand))
 +endef
 +
-+LIBDNET_POST_INSTALL_TARGET_HOOKS += LIBDNET_REMOVE_CONFIG_SCRIPT
++IMAGEMAGICK_POST_INSTALL_TARGET_HOOKS += IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
 +
- $(eval $(call AUTOTARGETS,package,libdnet))
+ $(eval $(call AUTOTARGETS,package,imagemagick))
 -- 
 1.7.0.4
