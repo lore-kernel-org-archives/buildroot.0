@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Dec 2010 18:25:22 +0100
-Subject: [Buildroot] [PATCH 3/7] neon: remove neon-config script from
+Date: Wed, 22 Dec 2010 18:25:26 +0100
+Subject: [Buildroot] [PATCH 7/7] libxslt: remove xslt-config script from
 	TARGET_DIR
 In-Reply-To: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <01842baab1e3559eef5172206cf3993e6ee8c9f0.1293038710.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dd348152e969dd05791d0800a0ffbcfb7811a71a.1293038710.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/neon/neon.mk |    6 ++++++
+ package/libxslt/libxslt.mk |    6 ++++++
  1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index c570fc1..41d8fa1 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -45,4 +45,10 @@ else
- NEON_CONF_OPT+=--without-ssl
- endif
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 5437e29..fd64b9a 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -40,5 +40,11 @@ endef
  
-+define NEON_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/usr/bin/neon-config
+ LIBXSLT_POST_INSTALL_STAGING_HOOKS += LIBXSLT_XSLT_CONFIG_FIXUP
+ 
++define LIBXSLT_REMOVE_CONFIG_SCRIPTS
++	$(RM) -f $(TARGET_DIR)/usr/bin/xslt-config
 +endef
 +
-+NEON_POST_INSTALL_TARGET_HOOKS += NEON_REMOVE_CONFIG_SCRIPTS
++LIBXSLT_POST_INSTALL_TARGET_HOOKS += LIBXSLT_REMOVE_CONFIG_SCRIPTS
 +
- $(eval $(call AUTOTARGETS,package,neon))
+ $(eval $(call AUTOTARGETS,package,libxslt))
+ $(eval $(call AUTOTARGETS,package,libxslt,host))
 -- 
 1.7.0.4
