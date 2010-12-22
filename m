@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Dec 2010 18:25:25 +0100
-Subject: [Buildroot] [PATCH 6/7] libxml2: remove xml2-config script from
+Date: Wed, 22 Dec 2010 18:25:24 +0100
+Subject: [Buildroot] [PATCH 5/7] libpng: remove libpng*-config scripts from
 	TARGET_DIR
 In-Reply-To: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b5cd2040e13def8b92682c0b3097e2bb45c5801f.1293038710.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6ccd12874e5df9dbf0258efc63bd3b9e9c3751aa.1293038710.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxml2/libxml2.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/libpng/libpng.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 387dce3..b9d036d 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -33,6 +33,12 @@ HOST_LIBXML2_CONF_OPT = \
- 		--enable-shared --without-debugging --without-python \
- 		--without-threads
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 82b88da..d655199 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -23,5 +23,12 @@ endef
  
-+define LIBXML2_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
+ LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+ 
++define LIBPNG_REMOVE_CONFIG_SCRIPTS
++	$(RM) -f $(TARGET_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config \
++		 $(TARGET_DIR)/usr/bin/libpng-config
 +endef
 +
-+LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_REMOVE_CONFIG_SCRIPTS
++LIBPNG_POST_INSTALL_TARGET_HOOKS += LIBPNG_REMOVE_CONFIG_SCRIPTS
 +
- $(eval $(call AUTOTARGETS,package,libxml2))
- $(eval $(call AUTOTARGETS,package,libxml2,host))
- 
+ $(eval $(call AUTOTARGETS,package,libpng))
+ $(eval $(call AUTOTARGETS,package,libpng,host))
 -- 
 1.7.0.4
