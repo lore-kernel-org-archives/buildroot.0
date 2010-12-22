@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 22 Dec 2010 23:47:28 +0100
-Subject: [Buildroot] [git commit master 1/1] php: security bump to version
-	5.2.16
-Message-ID: <20101222232247.B7D508E20B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] freetype: bump to version 2.4.4
+Message-ID: <20101222232248.1B9FC8E20B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,42 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ecf423dfb69492a3fadb3c11ae735a6c0d5e0c4
+commit: http://git.buildroot.net/buildroot/commit/?id=1fdd8100b6d7f5146c62116b44c3175db284265e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* Fixed extract() to do not overwrite $GLOBALS and $this when using
-  EXTR_OVERWRITE.
-
-* Fixed crash in zip extract method (possible CWE-170).
-
-* Fixed a possible double free in imap extension.
-
-* Fixed possible flaw in open_basedir (CVE-2010-3436).
-
-* Fixed NULL pointer dereference in ZipArchive::getArchiveComment.
-  (CVE-2010-3709).
-
-* Fixed bug #52929 (Segfault in filter_var with FILTER_VALIDATE_EMAIL
-  with large amount of data).
+See http://www.freetype.org/index2.html#release-freetype-2.4.4
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/php/php.mk |    2 +-
+ package/freetype/freetype.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index af4fa29..4db2b84 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index c7e5c32..ad4292f 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -3,7 +3,7 @@
+ # freetype
  #
  #############################################################
- 
--PHP_VERSION = 5.2.14
-+PHP_VERSION = 5.2.16
- PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
+-FREETYPE_VERSION = 2.3.12
++FREETYPE_VERSION = 2.4.4
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 1.7.2.2
