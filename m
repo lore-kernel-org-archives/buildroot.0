@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Dec 2010 22:15:03 +0100
-Subject: [Buildroot] [PATCH 1/7] imagemagick: add patch to fix libxml2
-	issue and remove useless patch
-In-Reply-To: <8f23282ed90aabed67682d1f85470571c5ea056d.1293038710.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 22 Dec 2010 18:25:20 +0100")
+Date: Wed, 22 Dec 2010 22:18:43 +0100
+Subject: [Buildroot] [PATCH 2/7] imagemagick: remove *-config scripts
+	from TARGET_DIR
+In-Reply-To: <3f29fe94726ed9c3c04e46626f138dd026b7b9b7.1293038710.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 22 Dec 2010 18:25:21 +0100")
 References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 	<cover.1293038710.git.thomas.petazzoni@free-electrons.com>
-	<8f23282ed90aabed67682d1f85470571c5ea056d.1293038710.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <871v59v7ag.fsf@macbook.be.48ers.dk>
+	<3f29fe94726ed9c3c04e46626f138dd026b7b9b7.1293038710.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87wrn1tsjw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +16,29 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The patch imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
- Thomas> was not applied anymore due to a difference in the version number, and
- Thomas> it didn't prevent imagemagick to be built. It was introduced several
- Thomas> years ago together with the ImageMagick package itself, so presumably
- Thomas> it is no longer needed.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/imagemagick/imagemagick.mk |    8 ++++++++
+ Thomas>  1 files changed, 8 insertions(+), 0 deletions(-)
 
-Committed, thanks - Please send the xml2-config patch upstream.
+ Thomas> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+ Thomas> index aecf7ae..035ab7a 100644
+ Thomas> --- a/package/imagemagick/imagemagick.mk
+ Thomas> +++ b/package/imagemagick/imagemagick.mk
+ Thomas> @@ -80,4 +80,12 @@ else
+ Thomas>  IMAGEMAGICK_CONF_OPT += --without-tiff
+ Thomas>  endif
+ 
+ Thomas> +define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
+ Thomas> +	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
+ Thomas> +		   $(addsuffix -config,			\
+ Thomas> +		     Magick MagickCore MagickWand Wand))
+ Thomas> +endef
+ Thomas> +
+ Thomas> +IMAGEMAGICK_POST_INSTALL_TARGET_HOOKS += IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
+
+This (and the rest of the series) should presumably only be done if
+!BR2_HAVE_DEVFILES?
 
 -- 
 Bye, Peter Korsgaard
