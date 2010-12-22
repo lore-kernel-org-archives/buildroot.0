@@ -1,30 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Dec 2010 14:54:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 2197] classpath should depends on IPv6
-In-Reply-To: <bug-2197-163@https.bugs.busybox.net/>
-References: <bug-2197-163@https.bugs.busybox.net/>
-Message-ID: <20101222145458.5ECDA8E25F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Dec 2010 18:25:19 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.02/remove-config-scripts
+Message-ID: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2197
+The following changes since commit 11ab05f53a16f635a27139b33170a9dadba9f3c5:
+  Peter Korsgaard (1):
+        qt: svg and multimedia modules depends on gui module as well
 
---- Comment #4 from Thomas Rudin <thomas@rudin.li>  ---
-Created attachment 2821
-  --> https://bugs.busybox.net/attachment.cgi?id=2821
-Patch for Classpath Package
+are available in the git repository at:
 
-After some modifications in the classpath package
-it worked for me (i386 uclibc)
-see attachment
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.02/remove-config-scripts
 
-can you tell me why the package was masked?
-i like to fix it, but i can't find any error-reports or comments about it...
+Thomas Petazzoni (7):
+      imagemagick: add patch to fix libxml2 issue and remove useless patch
+      imagemagick: remove *-config scripts from TARGET_DIR
+      neon: remove neon-config script from TARGET_DIR
+      libdnet: remove dnet-config script from TARGET_DIR
+      libpng: remove libpng*-config scripts from TARGET_DIR
+      libxml2: remove xml2-config script from TARGET_DIR
+      libxslt: remove xslt-config script from TARGET_DIR
 
+ .../imagemagick-6.6.4-8-use-xml2-config.patch      |   31 ++++++++++++++++++++
+ ....6.4-add-errno-h-if-argz-h-does-not-exist.patch |   11 -------
+ package/imagemagick/imagemagick.mk                 |   10 ++++++
+ package/libdnet/libdnet.mk                         |    6 ++++
+ package/libpng/libpng.mk                           |    7 ++++
+ package/libxml2/libxml2.mk                         |    6 ++++
+ package/libxslt/libxslt.mk                         |    6 ++++
+ package/neon/neon.mk                               |    6 ++++
+ 8 files changed, 72 insertions(+), 11 deletions(-)
+ create mode 100644 package/imagemagick/imagemagick-6.6.4-8-use-xml2-config.patch
+ delete mode 100644 package/imagemagick/imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
+
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
