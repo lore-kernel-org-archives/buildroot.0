@@ -1,34 +1,39 @@
-From: Sergey Naumov <sknaumov@gmail.com>
-Date: Wed, 22 Dec 2010 16:29:07 +0300
-Subject: [Buildroot] gettext compilation error
-Message-ID: <AANLkTi=Lq2fhx5KALj1_pcUWqC9H__70dLzDUUi4u21Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Dec 2010 14:49:01 +0100
+Subject: [Buildroot] Release tarballs location
+Message-ID: <20101222144901.5d2bb8c7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+Hello,
 
-I am trying to create development system with buildroot, but after
-fixing g++-target problems there was gettext:
+I am a contributor of Buildroot, a tool that allows to easily build
+embedded Linux systems. We create recipes to cross-compile software
+that are useful on embedded systems, and LVM2 is one of them.
 
-gettext seeks for sys/utime.h, but there is only utime.h, so may be it
-is worth to create a symlink after installation of uclibc headers? At
-least it works for me.
+Unfortunately, it looks like when a release is made, the tarball is
+placed at ftp://sources.redhat.com/pub/lvm2/, but as once as a newer
+release is made, the previous tarball is moved into
+ftp://sources.redhat.com/pub/lvm2/old/. Unfortunately, this doesn't
+work well with how embedded Linux build systems work, since they code
+an URL and a version for each software they build. This is usually not
+a problem, since most of the software tarballs are available from a
+fixed location.
 
-Also there was problems with glib2 with iconv.h and libintl.h: don't
-know whether they were installed, I think they were, but when make
-reports error and after fixing it you execute make again, uClibc
-makefile is called and it removes some headers including iconv.h and
-libintl.h. But gettext and libiconv packages was already built and
-stamps prevents them from reinstalling just deleted headers. So if
-buildroot supports make not from scratch, then I think this issue
-should be fixed. For now I am simply deleting gettext and libiconv
-from outbut/build to force their reinstallation. Also to ensure their
-installation I edited gettext.mk and libiconv.mk and copy this headers
-to $(STAGING_DIR)/usr/include (because I don't know whether they
-weren't installed or they were deleted - only what I know is that in
-make log at uClibc stage they are passed as parameters to rm).
+Would it be possible to change the release tarball location policy in
+order not to move them ? If you really want to have only the latest one
+in ftp://sources.redhat.com/pub/lvm2/, could you also put the latest
+available version in ftp://sources.redhat.com/pub/lvm2/old/ at the
+moment of the release ?
 
-Sergey Naumov.
+Thank you very much!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
