@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 22 Dec 2010 23:47:28 +0100
-Subject: [Buildroot] [git commit master 1/1] vim: convert to autotargets,
-	bump to version 7.2.446
-Message-ID: <20101222232248.745218E20B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] tar: bump to version 1.25
+Message-ID: <20101222232249.016DF8E20B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb23d22794b2e52bb23da71237bf078f25dacfb9
+commit: http://git.buildroot.net/buildroot/commit/?id=4860730019db598b8e4b6f2f03cef0677ab36fef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* Convert to autotargets package.
-* Bump to version 7.2.446.
-
-We fetch from svn to avoid having a ton of patch files.
-
-This won't do us any good if we want vim 7.3 since the repository was
-moved to mercurial. However 7.3 still has some cross-compile issues.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/tar/tar.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index f9ee74b..e1e16a2 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -3,8 +3,8 @@
+ # tar
+ #
+ #############################################################
+-TAR_VERSION:=1.21
+-TAR_SOURCE:=tar-$(TAR_VERSION).tar.bz2
+-TAR_SITE:=$(BR2_GNU_MIRROR)/tar/
++
++TAR_VERSION = 1.25
++TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ 
+ $(eval $(call AUTOTARGETS,package,tar))
+-- 
+1.7.2.2
