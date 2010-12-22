@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Dec 2010 18:25:21 +0100
-Subject: [Buildroot] [PATCH 2/7] imagemagick: remove *-config scripts from
+Date: Wed, 22 Dec 2010 18:25:25 +0100
+Subject: [Buildroot] [PATCH 6/7] libxml2: remove xml2-config script from
 	TARGET_DIR
 In-Reply-To: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3f29fe94726ed9c3c04e46626f138dd026b7b9b7.1293038710.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b5cd2040e13def8b92682c0b3097e2bb45c5801f.1293038710.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/libxml2/libxml2.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index aecf7ae..035ab7a 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -80,4 +80,12 @@ else
- IMAGEMAGICK_CONF_OPT += --without-tiff
- endif
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 387dce3..b9d036d 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -33,6 +33,12 @@ HOST_LIBXML2_CONF_OPT = \
+ 		--enable-shared --without-debugging --without-python \
+ 		--without-threads
  
-+define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
-+		   $(addsuffix -config,			\
-+		     Magick MagickCore MagickWand Wand))
++define LIBXML2_REMOVE_CONFIG_SCRIPTS
++	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
 +endef
 +
-+IMAGEMAGICK_POST_INSTALL_TARGET_HOOKS += IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_REMOVE_CONFIG_SCRIPTS
 +
- $(eval $(call AUTOTARGETS,package,imagemagick))
+ $(eval $(call AUTOTARGETS,package,libxml2))
+ $(eval $(call AUTOTARGETS,package,libxml2,host))
+ 
 -- 
 1.7.0.4
