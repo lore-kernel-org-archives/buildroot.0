@@ -1,38 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Dec 2010 09:34:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 2965] Broken linkage to xkbcomp (blocking X server
-	startup)
-In-Reply-To: <bug-2965-163@https.bugs.busybox.net/>
-References: <bug-2965-163@https.bugs.busybox.net/>
-Message-ID: <20101222093435.7B4838E0D0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Dec 2010 10:35:03 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.02/fix-bug-2965
+Message-ID: <cover.1293010496.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2965
+The following changes since commit 11ab05f53a16f635a27139b33170a9dadba9f3c5:
+  Peter Korsgaard (1):
+        qt: svg and multimedia modules depends on gui module as well
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-I'm sending in a minute a patch that fixes this to the Buildroot mailing-list.
+are available in the git repository at:
 
-The thing is that xkeyboard-config <= 1.8 created a symbolic link from
-/usr/share/X11/xkb/xkbcomp to the xkbcomp binary used@compile time, which in
-cross-compile mode in the host xkbcomp. In fact, this symbolic link seems to be
-useless, and has been removed from xkeyboard-config >= 1.9. So the fix was to
-just bump xkeyboard-config to the latest available version, 2.0.
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.02/fix-bug-2965
 
-Concerning the usr/bin/xkbcomp binary in the target directory, it is there,
-since the xkeyboard-config package selects xapp_xkbcomp for the target. Here is
-what I have here :
+Thomas Petazzoni (1):
+      xkeyboard-config: bump to 2.0 to fix bug 2965
 
-$ ls -l target/usr/share/X11/xkb/xkbcomp
-ls: cannot access target/usr/share/X11/xkb/xkbcomp: No such file or directory
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-$ ls -l target/usr/bin/xkbcomp 
--rwxr-xr-x 1 test test 156804 Dec 22 09:27 target/usr/bin/xkbcomp
-
+Thanks,
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni
