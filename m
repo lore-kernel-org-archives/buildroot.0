@@ -1,48 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Dec 2010 10:35:04 +0100
-Subject: [Buildroot] [PATCH 1/1] xkeyboard-config: bump to 2.0 to fix bug
-	2965
-In-Reply-To: <cover.1293010496.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1293010496.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7d1e217a300ed9ebcee0cea4bdd55d12370d3ef8.1293010496.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 22 Dec 2010 11:11:27 +0100
+Subject: [Buildroot] [Bug 2875] Kernel doesn't build Ext2 support
+	out-of-the-box
+In-Reply-To: <20101222091404.B58E688F68@busybox.osuosl.org>
+	(bugzilla@busybox.net's message of "Wed, 22 Dec 2010 09:14:04 +0000
+	(UTC)")
+References: <bug-2875-163@https.bugs.busybox.net/>
+	<20101222091404.B58E688F68@busybox.osuosl.org>
+Message-ID: <87mxnyung0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some odd reason, xkeyboard-config < 1.8 was creating a symbolic
-link from /usr/share/X11/xkb/xkbcomp to the xkbcomp binary. But in
-cross-compilation mode, this is absurd as the xkbcomp binary to which
-the link is pointing is the one in $(HOST_DIR).
+>>>>> "bugzilla" == bugzilla  <bugzilla@busybox.net> writes:
 
-This symbolic link thing has been removed completely starting from
-xkeyboard-config 1.9. See
-http://cgit.freedesktop.org/xkeyboard-config/commit/?id=f413dff57e77e7b01461508f74b4e92d1dc8defd.
+Hi,
 
-Therefore, we simply bump xkeyboard-config to the latest available
-version, 2.0.
+ bugzilla> https://bugs.busybox.net/show_bug.cgi?id=2875 --- Comment #1
+ bugzilla> from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ bugzilla> --- Well, in general we only try to minimally interact with
+ bugzilla> the kernel configuration. For example, regardless of whether
+ bugzilla> IPv6 is enabled or not at the toolchain level, we do not
+ bugzilla> enforce IPv6 configuration at the kernel level.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+I agree, but you're giving a bad example:
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index b9f1d62..f5ad44d 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -3,9 +3,9 @@
- # xkeyboard-config
- #
- #############################################################
--XKEYBOARD_CONFIG_VERSION = 1.8
-+XKEYBOARD_CONFIG_VERSION = 2.0
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
--XKEYBOARD_CONFIG_SITE = http://xlibs.freedesktop.org/xkbdesc
-+XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config/
- XKEYBOARD_CONFIG_AUTORECONF = NO
- XKEYBOARD_CONFIG_INSTALL_STAGING = NO
- XKEYBOARD_CONFIG_INSTALL_TARGET = YES
+linux/linux.mk:
+ifeq ($(BR2_INET_IPV6),y)
+        $(call KCONFIG_ENABLE_OPT,CONFIG_IPV6,$(@D)/.config)
+else
+        $(call KCONFIG_DISABLE_OPT,CONFIG_IPV6,$(@D)/.config)
+endif
+
+Which comes from:
+
+commit 100c09a53b8806b2281a93ad21744d26f68bcc6b
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Tue Jun 8 13:56:19 2010 +0200
+
+    linux: adjust kernel config according to the Buildroot configuration
+    
+    We only adjust the configuration or ARM EABI and IPv6. The (more
+    complicated) initramfs case is handled in a separate commit. The user
+    is expected to take care of all other configuration details (like
+    having Netfilter enabled to make iptables work, etc.)
+    
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+;)
+
+ bugzilla> I will not mark the bug as WONTFIX, waiting for other
+ bugzilla> Buildroot developers to comment.
+
+I vote for WONTFIX.
+
 -- 
-1.7.0.4
+Bye, Peter Korsgaard
