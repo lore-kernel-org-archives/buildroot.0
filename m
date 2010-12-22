@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 22 Dec 2010 23:47:28 +0100
-Subject: [Buildroot] [git commit master 1/1] freetype: bump to version 2.4.4
-Message-ID: <20101222232248.1B9FC8E20B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] patch: needs toolchain with
+	wchar
+Message-ID: <20101222232248.A24AF8E20B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +10,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fdd8100b6d7f5146c62116b44c3175db284265e
+commit: http://git.buildroot.net/buildroot/commit/?id=b236dcb618d8fd0422d79c4682837a5f9bd59d2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See http://www.freetype.org/index2.html#release-freetype-2.4.4
+* Patch needs a toolchain with WCHAR support
+* Use real upstream gnu mirror
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/freetype/freetype.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/patch/Config.in |    4 ++++
+ package/patch/patch.mk  |    6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index c7e5c32..ad4292f 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -3,7 +3,7 @@
- # freetype
+diff --git a/package/patch/Config.in b/package/patch/Config.in
+index 5a80ea5..dd6d51c 100644
+--- a/package/patch/Config.in
++++ b/package/patch/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PATCH
+ 	bool "patch"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Take patch files (containing difference listings) and apply them
+ 	  to original files, producing patched versions.
+ 
+ 	  http://www.gnu.org/software/patch/
++
++comment "patch needs a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index 80d9db1..5c46c77 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -3,8 +3,8 @@
+ # patch
  #
  #############################################################
--FREETYPE_VERSION = 2.3.12
-+FREETYPE_VERSION = 2.4.4
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
+-PATCH_VERSION:=2.6
+-PATCH_SOURCE:=patch_$(PATCH_VERSION).orig.tar.gz
+-PATCH_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/p/patch
++
++PATCH_VERSION = 2.6
++PATCH_SITE = $(BR2_GNU_MIRROR)/patch
+ 
+ $(eval $(call AUTOTARGETS,package,patch))
 -- 
 1.7.2.2
