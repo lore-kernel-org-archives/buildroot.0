@@ -1,30 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Dec 2010 13:09:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 2875] Kernel doesn't build Ext2 support
-	out-of-the-box
-In-Reply-To: <bug-2875-163@https.bugs.busybox.net/>
-References: <bug-2875-163@https.bugs.busybox.net/>
-Message-ID: <20101222130936.4964B8B820@busybox.osuosl.org>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Wed, 22 Dec 2010 16:29:07 +0300
+Subject: [Buildroot] gettext compilation error
+Message-ID: <AANLkTi=Lq2fhx5KALj1_pcUWqC9H__70dLzDUUi4u21Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2875
+Hello.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I am trying to create development system with buildroot, but after
+fixing g++-target problems there was gettext:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+gettext seeks for sys/utime.h, but there is only utime.h, so may be it
+is worth to create a symlink after installation of uclibc headers? At
+least it works for me.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-See http://lists.busybox.net/pipermail/buildroot/2010-December/040028.html for
-Peter Korsgaard opinion on this, which agrees with the WONTFIX proposal.
+Also there was problems with glib2 with iconv.h and libintl.h: don't
+know whether they were installed, I think they were, but when make
+reports error and after fixing it you execute make again, uClibc
+makefile is called and it removes some headers including iconv.h and
+libintl.h. But gettext and libiconv packages was already built and
+stamps prevents them from reinstalling just deleted headers. So if
+buildroot supports make not from scratch, then I think this issue
+should be fixed. For now I am simply deleting gettext and libiconv
+from outbut/build to force their reinstallation. Also to ensure their
+installation I edited gettext.mk and libiconv.mk and copy this headers
+to $(STAGING_DIR)/usr/include (because I don't know whether they
+weren't installed or they were deleted - only what I know is that in
+make log at uClibc stage they are passed as parameters to rm).
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sergey Naumov.
