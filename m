@@ -1,68 +1,34 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Thu, 23 Dec 2010 13:40:38 +0100
-Subject: [Buildroot] [PATCH v2] Add libmodbus to buildroot.
-In-Reply-To: <1293108038-24759-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1293108038-24759-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1293108038-24759-2-git-send-email-marek.belisko@open-nandra.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Dec 2010 13:45:33 +0100
+Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
+In-Reply-To: <4D133983.5040807@zacarias.com.ar>
+References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
+	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
+	<20101223083303.07f8a70f@surf> <87zkrwsy45.fsf@macbook.be.48ers.dk>
+	<20101223095057.6c7ff091@surf> <4D133983.5040807@zacarias.com.ar>
+Message-ID: <20101223134533.15ceb51a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following patch add compilation of libmodbus use for communication
-over modbus protocol.
+On Thu, 23 Dec 2010 08:58:59 -0300
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- package/Config.in              |    1 +
- package/libmodbus/Config.in    |    9 +++++++++
- package/libmodbus/libmodbus.mk |    9 +++++++++
- 3 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/libmodbus/Config.in
- create mode 100644 package/libmodbus/libmodbus.mk
+> I'm not quite fond of huge "configure" patches, i'd rather patch
+> configure.in and autoreconf since it's easier to port to a newer version
+> later on - though it adds up to a little more build time.
 
-diff --git a/package/Config.in b/package/Config.in
-index 80aca2a..19c3e49 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -307,6 +307,7 @@ source "package/libdnet/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libidn/Config.in"
- source "package/libmicrohttpd/Config.in"
-+source "package/libmodbus/Config.in"
- source "package/neon/Config.in"
- source "package/libnl/Config.in"
- source "package/libpcap/Config.in"
-diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
-new file mode 100644
-index 0000000..df90cee
---- /dev/null
-+++ b/package/libmodbus/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBMODBUS
-+	bool "libmodbus"
-+	help
-+	  libmodbus is a free software library to send/receive data with
-+	  a device which respects the Modbus protocol. This library can
-+	  use a serial port or an Ethernet connection.
-+
-+	  http://libmodbus.org
-+
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-new file mode 100644
-index 0000000..5ca88f0
---- /dev/null
-+++ b/package/libmodbus/libmodbus.mk
-@@ -0,0 +1,9 @@
-+############################################################
-+# libmodbus
-+#############################################################
-+LIBMODBUS_VERSION:=2.0.3
-+LIBMODBUS_SOURCE:=libmodbus-$(LIBMODBUS_VERSION).tar.gz
-+LIBMODBUS_SITE:=http://github.com/downloads/stephane/libmodbus/$(LIBMODBUS_SOURCE)
-+LIBMODBUS_INSTALL_STAGING=YES
-+
-+$(eval $(call AUTOTARGETS,package,libmodbus))
+Agreed.
+
+The idea is also to have those patches submitted upstream, so hopefully
+in one of the next releases, we can get rid of the patch and the
+autoreconfiguration step.
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
