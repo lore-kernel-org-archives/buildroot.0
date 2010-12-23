@@ -1,33 +1,32 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Thu, 23 Dec 2010 07:33:18 -0600
-Subject: [Buildroot] busybox, hardcoded config
-Message-ID: <20101223073318.154656bz82tuap44@www.home.zuerker.org>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 23 Dec 2010 16:36:19 +0100
+Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
+In-Reply-To: <20101223135427.3876f009@surf>
+References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
+	<20101223135427.3876f009@surf>
+Message-ID: <AANLkTi=rRZkFxAwtjbr1GGbQxvHWuufvWfSuy40kfsrd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+Hi,
 
-there was recently a discussion on the topic of automatically turning  
-on specific kernel features, which can cause some problems.
+On 23 December 2010 13:54, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 
-This is very heavily done in busybox, i.e. nfs support for mount keeps  
-being turned on by the makefile. At least in my case this is causing  
-me some grief.
+[...]
 
-I think we really should keep this automatically setting of  
-configurations to an absolute minimum. Can't we rely on the person  
-configuring buildroot, to set the correct options he or she needs for  
-example in busybox or the kernel?
+> ?* The other solution proposed below is to not add a new root
+> ? filesystem type, but rather add a post-processing step to the
+> ? rootfs.ubifs image when "Embed in UBI image" is selected. You end up
+> ? with rootfs.ubifs in $(O)/images, regardless of whether it is a
+> ? UBIFS filesystem image, or a complete UBI image.
 
--- 
+How about using .ubi filename extension for UBI images
+(and .ubifs for UBIFS) so it's easy to spot what's what?
 
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+Best regards,
+Bj?rn Forsman
