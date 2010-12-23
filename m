@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 23 Dec 2010 09:13:38 +0100
-Subject: [Buildroot] [PATCH 01/13] portmap: install initscript
-In-Reply-To: <20101223083051.6b22cf0f@surf> (Thomas Petazzoni's message of
-	"Thu, 23 Dec 2010 08:30:51 +0100")
+Date: Thu, 23 Dec 2010 09:16:10 +0100
+Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
+In-Reply-To: <20101223083303.07f8a70f@surf> (Thomas Petazzoni's message of
+	"Thu, 23 Dec 2010 08:33:03 +0100")
 References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-	<87bp4dtmun.fsf@macbook.be.48ers.dk> <20101223083051.6b22cf0f@surf>
-Message-ID: <874oa4ucst.fsf@macbook.be.48ers.dk>
+	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
+	<20101223083303.07f8a70f@surf>
+Message-ID: <87zkrwsy45.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +15,26 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >> Thanks, committed the entire series + the 6 extra patches you have
- >> added to the branch in the mean time.
+ Thomas> Hello,
+ Thomas> On Fri, 17 Dec 2010 14:04:33 -0300
+ Thomas> Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
- Thomas> I'd prefer if all patches were sent to the list, unless they are really
- Thomas> trivial. The "icu" package conversion for example, wasn't really
- Thomas> trivial.
+ >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ >> ---
+ >> .../screen/screen-4.0.2-cross_compile_fix.patch    |  524 --------------------
+ >> package/screen/screen-4.0.2_install-fix.patch      |   21 -
+ >> package/screen/screen-cross_compile_fix.patch      |  524 ++++++++++++++++++++
 
-True. I'll wait until Gustavoz posts them in the future.
+ Thomas> I am not terribly happy about this cross_compile_fix patch that
+ Thomas> directly hacks the ./configure script.
+
+Me neither. Notice that it was just renamed here, not introduced.
+
+ Thomas> In bce15df3bea6d1ab4a88db9d31fc2dd30418decc, Nikel Kukard said "The
+ Thomas> cross compile fix is unavoidable". But do we have an idea of what the
+ Thomas> problem is exactly ?
+
+Sorry, haven't looked at it in details.
 
 -- 
 Bye, Peter Korsgaard
