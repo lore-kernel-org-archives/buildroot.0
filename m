@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 08:46:44 +0100
-Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
- CMake packages
-In-Reply-To: <AANLkTi=frxyYAzAaApiwAfxairhSKe38qkBgvk633_eF@mail.gmail.com>
+Date: Thu, 23 Dec 2010 08:48:13 +0100
+Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
+ in $(O)
+In-Reply-To: <AANLkTikFyao3mPUg=cWm-D9YGM91DU6dBvJk84o7WjJ5@mail.gmail.com>
 References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTinkazQ2EzvCE46nSYmAkGiEJ3Ti+oM6=7g+u0Y5@mail.gmail.com>
-	<AANLkTi=tmgB5T23WvH112P1YgrO-w+xjwtiU9=D01J90@mail.gmail.com>
-	<AANLkTi=frxyYAzAaApiwAfxairhSKe38qkBgvk633_eF@mail.gmail.com>
-Message-ID: <20101223084644.018fa724@surf>
+	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
+	<AANLkTi=R7C0yXPepZWz=Pj=-Vc2B62-qBPZ6L-GkjBpQ@mail.gmail.com>
+	<AANLkTimy9OaB+LHAxLD4psmnewUntXfbr0rDUKywMZjG@mail.gmail.com>
+	<AANLkTikFyao3mPUg=cWm-D9YGM91DU6dBvJk84o7WjJ5@mail.gmail.com>
+Message-ID: <20101223084813.7decd2f5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 22 Dec 2010 22:34:17 +0100
+On Wed, 22 Dec 2010 22:32:30 +0100
 Samuel Martin <s.martin49@gmail.com> wrote:
 
-> srctree:
->   output/build/cdrkit-1.1.10
-> buildtree:
->   output/build/cdrkit-1.1.10/build
-> Like this, we keep only one directory per package and don't mess up the
-> source tree.
-> Whatever, both solutions are good. For me, it's not a big deal, but maybe BR
-> leaders will prefer one or the other solution to keep it consistent.
+> I haven't test external toolchain nor crosstool-NG, but afaik, crosstool-NG
+> toolchain is copied in the BR staging,
+> but not external ones.
 
-I agree.
+The sysroot of external toolchain is copied to $(STAGING_DIR) as well.
 
-> > but give CMake CFLAGS/CXXFLAGS on the commandline when building internal
-> > packages?
-> 
-> If we need, yes, but i am quite doubtful about the usefulness of these
-> flags.
+> Btw, the toolchain is currently located in the staging, but if this change
+> [1] (or if you're using a external tc), then, there needs to append both the
+> staging directory and the toolchain directory to CMAKE_FIND_ROOT_PATH.
 
-Huh ?
+I don't know what you call the "toolchain directory", but the changes
+made by Gustavo only *move* the location of the sysroot, but there will
+still be only one location for it, and $(STAGING_DIR) will continue to
+point to it.
+
+Regards,
 
 Thomas
 -- 
