@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 08:33:03 +0100
-Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
-In-Reply-To: <1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
-References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20101223083303.07f8a70f@surf>
+Date: Thu, 23 Dec 2010 08:33:44 +0100
+Subject: [Buildroot] [PATCH 1/7] imagemagick: add patch to fix libxml2
+ issue and remove useless patch
+In-Reply-To: <871v59v7ag.fsf@macbook.be.48ers.dk>
+References: <cover.1293038710.git.thomas.petazzoni@free-electrons.com>
+	<cover.1293038710.git.thomas.petazzoni@free-electrons.com>
+	<8f23282ed90aabed67682d1f85470571c5ea056d.1293038710.git.thomas.petazzoni@free-electrons.com>
+	<871v59v7ag.fsf@macbook.be.48ers.dk>
+Message-ID: <20101223083344.1d0573cd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, 22 Dec 2010 22:15:03 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-On Fri, 17 Dec 2010 14:04:33 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+>  Thomas> The patch imagemagick-6.6.4-add-errno-h-if-argz-h-does-not-exist.patch
+>  Thomas> was not applied anymore due to a difference in the version number, and
+>  Thomas> it didn't prevent imagemagick to be built. It was introduced several
+>  Thomas> years ago together with the ImageMagick package itself, so presumably
+>  Thomas> it is no longer needed.
+> 
+> Committed, thanks - Please send the xml2-config patch upstream.
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../screen/screen-4.0.2-cross_compile_fix.patch    |  524 --------------------
->  package/screen/screen-4.0.2_install-fix.patch      |   21 -
->  package/screen/screen-cross_compile_fix.patch      |  524 ++++++++++++++++++++
-
-I am not terribly happy about this cross_compile_fix patch that
-directly hacks the ./configure script.
-
-In bce15df3bea6d1ab4a88db9d31fc2dd30418decc, Nikel Kukard said "The
-cross compile fix is unavoidable". But do we have an idea of what the
-problem is exactly ?
-
-Regards,
+Tried yesterday, but their list is not-open to non-subscribers. Will
+have to subscribe.
 
 Thomas
 -- 
