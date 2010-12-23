@@ -1,30 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 13:45:33 +0100
-Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
-In-Reply-To: <4D133983.5040807@zacarias.com.ar>
-References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
-	<20101223083303.07f8a70f@surf> <87zkrwsy45.fsf@macbook.be.48ers.dk>
-	<20101223095057.6c7ff091@surf> <4D133983.5040807@zacarias.com.ar>
-Message-ID: <20101223134533.15ceb51a@surf>
+Date: Thu, 23 Dec 2010 13:47:48 +0100
+Subject: [Buildroot] [git commit master 1/1] ed: bump to version 1.5
+In-Reply-To: <4D133AB5.1010507@zacarias.com.ar>
+References: <20101222232249.DB1F38E20B@busybox.osuosl.org>
+	<20101223082919.0d574cf8@surf> <87vd2kswmm.fsf@macbook.be.48ers.dk>
+	<20101223095612.60df592b@surf> <87mxnwsvpz.fsf@macbook.be.48ers.dk>
+	<4D133AB5.1010507@zacarias.com.ar>
+Message-ID: <20101223134748.33ba89eb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Dec 2010 08:58:59 -0300
+On Thu, 23 Dec 2010 09:04:05 -0300
 Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-> I'm not quite fond of huge "configure" patches, i'd rather patch
-> configure.in and autoreconf since it's easier to port to a newer version
-> later on - though it adds up to a little more build time.
+> Should we go for gentargets even if they behave like auto thus making
+> the package file a tad bigger/redundant?
 
-Agreed.
+No strong opinion on this. The thing is that as time goes, the
+autotools infrastructure may make more and more assumptions on the fact
+that the build system is actually autotools-based. So maybe such
+packages might break in the future, so technically, GENTARGETS would be
+a better fit. But as you said, this will involve quite a bit of
+redundancy. Hard to say what the right (tm) solution is.
 
-The idea is also to have those patches submitted upstream, so hopefully
-in one of the next releases, we can get rid of the patch and the
-autoreconfiguration step.
+An intermediate solution is to add a comment above ED_CONF_OPT to
+explain why it's done, so that if ed build breaks in the future, we're
+warned that the AUTOTARGETS infrastructure has been abused by this
+package.
+
+Regards,
 
 Thomas
 -- 
