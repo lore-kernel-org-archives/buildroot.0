@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 09:50:57 +0100
-Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
-In-Reply-To: <87zkrwsy45.fsf@macbook.be.48ers.dk>
-References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
-	<20101223083303.07f8a70f@surf> <87zkrwsy45.fsf@macbook.be.48ers.dk>
-Message-ID: <20101223095057.6c7ff091@surf>
+Date: Thu, 23 Dec 2010 09:54:03 +0100
+Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
+ CMake packages
+In-Reply-To: <AANLkTinpJpLVjV7ogcT35GcX6RPfpG66k0hGQEkyfSko@mail.gmail.com>
+References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
+	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
+	<AANLkTinkazQ2EzvCE46nSYmAkGiEJ3Ti+oM6=7g+u0Y5@mail.gmail.com>
+	<AANLkTi=tmgB5T23WvH112P1YgrO-w+xjwtiU9=D01J90@mail.gmail.com>
+	<AANLkTi=frxyYAzAaApiwAfxairhSKe38qkBgvk633_eF@mail.gmail.com>
+	<20101223084644.018fa724@surf>
+	<AANLkTinpJpLVjV7ogcT35GcX6RPfpG66k0hGQEkyfSko@mail.gmail.com>
+Message-ID: <20101223095403.21c714dd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Dec 2010 09:16:10 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Thu, 23 Dec 2010 09:46:12 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
->  >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->  >> ---
->  >> .../screen/screen-4.0.2-cross_compile_fix.patch    |  524 --------------------
->  >> package/screen/screen-4.0.2_install-fix.patch      |   21 -
->  >> package/screen/screen-cross_compile_fix.patch      |  524 ++++++++++++++++++++
-> 
->  Thomas> I am not terribly happy about this cross_compile_fix patch that
->  Thomas> directly hacks the ./configure script.
-> 
-> Me neither. Notice that it was just renamed here, not introduced.
+> I actually chose to build in SRCDIR for the sake of consistency - autotools
+> packages build in SRCDIR :-)
 
-Yes, yes, it really wasn't a criticism of Gustavo's work here, not
-at all. Just wondering what this patch does.
+Oh, if CMake supports nicely the build-inside-source directory thing,
+then we can just use it as we do for autotools packages.
+
+I've been wondering whether we could build out-of-tree for autotools
+based packages, in order to share the source code between target and
+host package, and to ease the support of overriden packages, but I'm
+pretty sure we'll it a lot of problems with out-of-tree build in
+different packages, and it'll only work with autotools or cmake based
+packages. So the safest is probably to keep the build-inside-source
+mechanism we are currently doing.
+
+Regards,
 
 Thomas
 -- 
