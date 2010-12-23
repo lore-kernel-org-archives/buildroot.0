@@ -1,42 +1,33 @@
-From: Robert Schwebel <r.schwebel@pengutronix.de>
-Date: Thu, 23 Dec 2010 11:04:37 +0100
-Subject: [Buildroot] Release tarballs location
-In-Reply-To: <20101222144901.5d2bb8c7@surf>
-References: <20101222144901.5d2bb8c7@surf>
-Message-ID: <20101223100437.GS4233@pengutronix.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Dec 2010 11:42:49 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: fix again stamp file touch
+In-Reply-To: <cover.1293100963.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1293100963.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1b94958acacfda721682103452ced93d539f9a9c.1293100963.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In e6633fd2e37d25f32958f30e852baa216ce1384a I did crap, and added a
+quietization inside a shell command, which was already quietized. This
+was stupid, and is fixed by this patch.
 
-On Wed, Dec 22, 2010 at 02:49:01PM +0100, Thomas Petazzoni wrote:
-> I am a contributor of Buildroot, a tool that allows to easily build
-> embedded Linux systems. We create recipes to cross-compile software
-> that are useful on embedded systems, and LVM2 is one of them.
->
-> Unfortunately, it looks like when a release is made, the tarball is
-> placed at ftp://sources.redhat.com/pub/lvm2/, but as once as a newer
-> release is made, the previous tarball is moved into
-> ftp://sources.redhat.com/pub/lvm2/old/. Unfortunately, this doesn't
-> work well with how embedded Linux build systems work, since they code
-> an URL and a version for each software they build. This is usually not
-> a problem, since most of the software tarballs are available from a
-> fixed location.
->
-> Would it be possible to change the release tarball location policy in
-> order not to move them ? If you really want to have only the latest one
-> in ftp://sources.redhat.com/pub/lvm2/, could you also put the latest
-> available version in ftp://sources.redhat.com/pub/lvm2/old/ at the
-> moment of the release ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I second Thomas' position - we have the same problem in PTXdist as well.
-
-Robert
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index ab8bc94..f6249ef 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -195,4 +195,4 @@ $(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+ 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
+ 		$(call create_lib64_symlinks) ; \
+ 	fi ; \
+-	$(Q)touch $@
++	touch $@
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+1.7.0.4
