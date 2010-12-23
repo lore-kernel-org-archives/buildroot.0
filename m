@@ -1,72 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 10:26:39 +0100
-Subject: [Buildroot] [PATCH] Add libmodbus to buildroot.
-In-Reply-To: <1292937354-20879-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1292937354-20879-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20101223102639.23672613@surf>
+Date: Thu, 23 Dec 2010 10:31:08 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: add missing stamp file touch in
+	external toolchain
+In-Reply-To: <cover.1293096662.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1293096662.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7f7c793bd9f7ee4b0745b35c9106cf16be717172.1293096662.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marek,
+In the support of custom external toolchains, we forgot to touch the
+$(STAMP_DIR)/ext-toolchain-checked stamp file, which means that the
+toolchain was re-checked and re-installed at everyt build.
 
-Thanks for proposing this package! I have a few comments below.
+At the same time, quietize a bit other stamp files touch.
 
-On Tue, 21 Dec 2010 14:15:54 +0100
-Marek Belisko <marek.belisko@open-nandra.com> wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/ext-tool.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 80aca2a..b29113c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -203,6 +203,7 @@ source "package/usbmount/Config.in"
->  source "package/usbutils/Config.in"
->  source "package/wipe/Config.in"
->  source "package/xfsprogs/Config.in"
-> +source "package/libmodbus/Config.in"
->  endmenu
-
-libmodbus sounds like a networking library rather than a hardware
-handling utility. Therefore, could you move it to "Libraries ->
-Networking" ?
-
-Moreover, the entries in each category are alphabetically sorted, so
-please put libmodbus at the right location.
-
-> +LIBMODBUS_VERSION:=2.0.3
-> +LIBMODBUS_SOURCE:=libmodbus-$(LIBMODBUS_VERSION).tar.gz
-> +LIBMODBUS_SITE:=http://github.com/downloads/stephane/libmodbus/$(LIBMODBUS_SOURCE)
-
-Unfortunately, this redirects to a https site, with an invalid
-certificate:
-
-ERROR: certificate common name `*.github.com' doesn't match requested
-host name `github.com'.
-
-So I had to add --no-check-certificate to wget's command line options.
-Not sure what we should do about this :
-
- *) Always use --no-check-certificate for all downloads
-
- *) Add a new <pkg>_WGET_NO_CERTIFICATE=YES option to the package
-    infrastructure.
-
- *) Something else ?
-
-Moreover, this package being a library, you certainly want:
-
-LIBMODBUS_INSTALL_STAGING=YES
-
-in order to install headers, pkgconfig file and other stuff to the
-$(STAGING_DIR).
-
-Thanks,
-
-Thomas
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index d6153f1..ab8bc94 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -137,7 +137,7 @@ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
+ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
+ 	mkdir -p $(@D)
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	touch $@
++	$(Q)touch $@
+ 
+ # Checks for an already installed toolchain: check the toolchain
+ # location, check that it supports sysroot, and then verify that it
+@@ -165,6 +165,7 @@ $(STAMP_DIR)/ext-toolchain-checked:
+ 	else \
+ 		$(call check_glibc,$${SYSROOT_DIR}) ; \
+ 	fi
++	$(Q)touch $@
+ 
+ # Integration of the toolchain into Buildroot: find the main sysroot
+ # and the variant-specific sysroot, then copy the needed libraries to
+@@ -194,4 +195,4 @@ $(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+ 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
+ 		$(call create_lib64_symlinks) ; \
+ 	fi ; \
+-	touch $@
++	$(Q)touch $@
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
