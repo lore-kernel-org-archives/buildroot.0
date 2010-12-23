@@ -1,79 +1,63 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 23 Dec 2010 13:03:15 -0600
-Subject: [Buildroot] oprofile "requires" gmp???
-In-Reply-To: <20101223082740.3a8e44c4@surf>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com>
-	<20101223082740.3a8e44c4@surf>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Thu, 23 Dec 2010 16:15:07 -0600
+Subject: [Buildroot] [PATCH] busybox: add option to disable automatic
+	configuration changes depending on buildroot settings
+Message-ID: <8a37582ac05b4d5f7cf49873ac2f8155f3df7d08.1293142151.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay, I've done some tracking and have found the issue, but I don't know
-Mips asm that great (only 2 months into mips).
-
-The code that it pukes at for building gmp for the native toolchain is:
-
-#define umul_ppmm(w1, w0, u, v) \
-__asm__ ("multu %2,%3" : "=l" (w0), "=h" (w1) : "d" (u), "d" (v))
-
-(defined in longlong.h under the root of gmp-4.2.4)
-
-The error given is:
-dive_1.c:114:4: error: impossible constraint in 'asm'
-
-dive_1.c:114 is: umul_ppmm (h, dummy, l, divisor);
-
-Also, for my edification and learning, how does that asm line read?
-
-Thanks in advance for your help!
-Andy 
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
 
------Original Message-----
-From: buildroot-bounces@busybox.net
-[mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas Petazzoni
-Sent: Thursday, December 23, 2010 1:28 AM
-To: buildroot at busybox.net
-Subject: Re: [Buildroot] oprofile "requires" gmp???
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/busybox/Config.in  |    6 ++++++
+ package/busybox/busybox.mk |    6 ++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-Hello,
-
-On Wed, 22 Dec 2010 22:47:17 -0600
-ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
-
-> buildroot v2011.02-git Configuration:
-> 
-> MIPS-32r2 using native toolchain, uclibc-0.9.31.x, gcc-4.5.x, binutils
-> 2.20.1.
-> 
-> When I select oprofile from packages -> debug utils, gmp is selected,
-> though the .config file reports # BR2_PACKAGE_LIBGMP is not set,
-> though buildroot attempts to build it.
-> 
-> There are no dependencies for gmp listed in the oprofile help section.
-> 
-> What gives?
-
-oprofile needs binutils on target, which in turns requires gmp on
-target. So the fact that gmp gets compiled is normal.
-
-However, the fact that BR2_PACKAGE_LIBGMP is not set is indeed
-incorrect. But Gustavo has a patch series that rewrites how binutils,
-gmp, mpfr are handled, so presumably he could fix that particular
-problem as part of this patch set.
-
-Regards,
-
-Thomas
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 79a6341..99deeff 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -61,6 +61,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG
++	bool "Don't automatically adjust busybox configuration" if BR2_PACKAGE_BUSYBOX
++	help
++	  Don't automatically adjust the busybox configuration,
++	  according on how buildroot is configured.
++
+ endif
+ 
+ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index a94e4c0..7cf1b58 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -39,6 +39,9 @@ define BUSYBOX_SET_BB_PWD
+ endef
+ endif
+ 
++# automatically adjust the busybox configuration depending on the buildroot settings
++ifneq ($BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG),y)
++
+ ifeq ($(BR2_LARGEFILE),y)
+ define BUSYBOX_SET_LARGEFILE
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
+@@ -96,6 +99,9 @@ define BUSYBOX_NETKITTELNET
+ endef
+ endif
+ 
++# end of busybox config adjustments
++endif
++
+ define BUSYBOX_COPY_CONFIG
+ 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
+ endef
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+1.7.3.2
