@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 08:30:51 +0100
-Subject: [Buildroot] [PATCH 01/13] portmap: install initscript
-In-Reply-To: <87bp4dtmun.fsf@macbook.be.48ers.dk>
+Date: Thu, 23 Dec 2010 08:33:03 +0100
+Subject: [Buildroot] [PATCH 12/13] screen: bump to version 4.0.3
+In-Reply-To: <1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
 References: <1292605474-19443-1-git-send-email-gustavo@zacarias.com.ar>
-	<87bp4dtmun.fsf@macbook.be.48ers.dk>
-Message-ID: <20101223083051.6b22cf0f@surf>
+	<1292605474-19443-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20101223083303.07f8a70f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Dec 2010 00:21:52 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Hello,
 
->  Gustavo> Thanks to patrick.ziegler at fh-kl.de in the mailing list for
->  Gustavo> noticing. Signed-off-by: Gustavo Zacarias
->  Gustavo> <gustavo@zacarias.com.ar> ---
->  Gustavo>  package/portmap/portmap.mk |    2 ++
->  Gustavo>  1 files changed, 2 insertions(+), 0 deletions(-)
-> 
-> Thanks, committed the entire series + the 6 extra patches you have
-> added to the branch in the mean time.
+On Fri, 17 Dec 2010 14:04:33 -0300
+Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-I'd prefer if all patches were sent to the list, unless they are really
-trivial. The "icu" package conversion for example, wasn't really
-trivial.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  .../screen/screen-4.0.2-cross_compile_fix.patch    |  524 --------------------
+>  package/screen/screen-4.0.2_install-fix.patch      |   21 -
+>  package/screen/screen-cross_compile_fix.patch      |  524 ++++++++++++++++++++
 
-Thanks!
+I am not terribly happy about this cross_compile_fix patch that
+directly hacks the ./configure script.
+
+In bce15df3bea6d1ab4a88db9d31fc2dd30418decc, Nikel Kukard said "The
+cross compile fix is unavoidable". But do we have an idea of what the
+problem is exactly ?
+
+Regards,
 
 Thomas
 -- 
