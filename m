@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 13:54:27 +0100
-Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
-In-Reply-To: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20101223135427.3876f009@surf>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Thu, 23 Dec 2010 07:33:18 -0600
+Subject: [Buildroot] busybox, hardcoded config
+Message-ID: <20101223073318.154656bz82tuap44@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hey,
 
-Thanks Julien for this UBI support, it's definitely good to have in
-Buildroot. This version looks good to me, but there is an alternate
-solution (patch below, merged into Julien's patch).
+there was recently a discussion on the topic of automatically turning  
+on specific kernel features, which can cause some problems.
 
-Peter, we need you to make a decision here, between those two
-solutions, because I have no strong opinion on which one is the best. To
-summarize:
+This is very heavily done in busybox, i.e. nfs support for mount keeps  
+being turned on by the makefile. At least in my case this is causing  
+me some grief.
 
- * Julien's solution is to create a new root filesystem type, called
-   "ubi", which depends on the "ubifs" filesystem to be generated. So
-   at build time, the rootfs.ubifs image is first generated, and then
-   the rootfs.ubi image is generated from rootfs.ubifs using ubinize.
-   You end up with rootfs.ubifs and rootfs.ubi in $(O)/images.
+I think we really should keep this automatically setting of  
+configurations to an absolute minimum. Can't we rely on the person  
+configuring buildroot, to set the correct options he or she needs for  
+example in busybox or the kernel?
 
- * The other solution proposed below is to not add a new root
-   filesystem type, but rather add a post-processing step to the
-   rootfs.ubifs image when "Embed in UBI image" is selected. You end up
-   with rootfs.ubifs in $(O)/images, regardless of whether it is a
-   UBIFS filesystem image, or a complete UBI image.
+-- 
 
-I just implemented the second solution because it's how I would have
-implemented it if I had to do it, but I don't know if it's better or
-not than Julien's proposal.
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
 
-Regards,
 
-Thomas
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
