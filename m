@@ -1,50 +1,34 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 23 Dec 2010 09:46:12 +0100
-Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
-	CMake packages
-In-Reply-To: <20101223084644.018fa724@surf>
-References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTinkazQ2EzvCE46nSYmAkGiEJ3Ti+oM6=7g+u0Y5@mail.gmail.com>
-	<AANLkTi=tmgB5T23WvH112P1YgrO-w+xjwtiU9=D01J90@mail.gmail.com>
-	<AANLkTi=frxyYAzAaApiwAfxairhSKe38qkBgvk633_eF@mail.gmail.com>
-	<20101223084644.018fa724@surf>
-Message-ID: <AANLkTinpJpLVjV7ogcT35GcX6RPfpG66k0hGQEkyfSko@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 23 Dec 2010 09:48:17 +0100
+Subject: [Buildroot] [git commit master 1/1] ed: bump to version 1.5
+In-Reply-To: <20101223082919.0d574cf8@surf> (Thomas Petazzoni's message of
+	"Thu, 23 Dec 2010 08:29:19 +0100")
+References: <20101222232249.DB1F38E20B@busybox.osuosl.org>
+	<20101223082919.0d574cf8@surf>
+Message-ID: <87vd2kswmm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 23 December 2010 08:46, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 22 Dec 2010 22:34:17 +0100
-> Samuel Martin <s.martin49@gmail.com> wrote:
->
->> srctree:
->> ? output/build/cdrkit-1.1.10
->> buildtree:
->> ? output/build/cdrkit-1.1.10/build
->> Like this, we keep only one directory per package and don't mess up the
->> source tree.
->> Whatever, both solutions are good. For me, it's not a big deal, but maybe BR
->> leaders will prefer one or the other solution to keep it consistent.
->
-> I agree.
+ Thomas> On Wed, 22 Dec 2010 23:47:28 +0100
+ Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-I actually chose to build in SRCDIR for the sake of consistency - autotools
-packages build in SRCDIR :-)
+ >> +ED_VERSION = 1.5
+ >> +ED_SITE = $(BR2_GNU_MIRROR)/ed
+ >> +ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ >> +		LDFLAGS="$(TARGET_LDFLAGS)"
 
-What if a package already has a build/ dir inside of its source tree?
-Maybe a bit safer
-if we call the build dir _cmake_build/ or something? I'll introduce a
-$(2)_BUILDDIR
-variable in the next patch series and point it to a build dir inside
-the source tree.
+ Thomas> Sorry for this late review, but why is this ED_CONF_OPT needed ? We
+ Thomas> already pass those variables through TARGET_CONFIGURE_OPTS.
 
-Best regards,
-Bj?rn Forsman
+Yes, it's a bit tricky. TARGET_CONFIGURE_OPTS are provided in the
+environment, and the configure script overrides the variables
+(CC=''). It then checks for a CC=<blah> argument and uses that,
+otherwise it defaults to 'gcc'.
+
+-- 
+Bye, Peter Korsgaard
