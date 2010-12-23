@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Dec 2010 13:47:48 +0100
-Subject: [Buildroot] [git commit master 1/1] ed: bump to version 1.5
-In-Reply-To: <4D133AB5.1010507@zacarias.com.ar>
-References: <20101222232249.DB1F38E20B@busybox.osuosl.org>
-	<20101223082919.0d574cf8@surf> <87vd2kswmm.fsf@macbook.be.48ers.dk>
-	<20101223095612.60df592b@surf> <87mxnwsvpz.fsf@macbook.be.48ers.dk>
-	<4D133AB5.1010507@zacarias.com.ar>
-Message-ID: <20101223134748.33ba89eb@surf>
+Date: Thu, 23 Dec 2010 13:54:27 +0100
+Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
+In-Reply-To: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
+References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20101223135427.3876f009@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Dec 2010 09:04:05 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+Hello,
 
-> Should we go for gentargets even if they behave like auto thus making
-> the package file a tad bigger/redundant?
+Thanks Julien for this UBI support, it's definitely good to have in
+Buildroot. This version looks good to me, but there is an alternate
+solution (patch below, merged into Julien's patch).
 
-No strong opinion on this. The thing is that as time goes, the
-autotools infrastructure may make more and more assumptions on the fact
-that the build system is actually autotools-based. So maybe such
-packages might break in the future, so technically, GENTARGETS would be
-a better fit. But as you said, this will involve quite a bit of
-redundancy. Hard to say what the right (tm) solution is.
+Peter, we need you to make a decision here, between those two
+solutions, because I have no strong opinion on which one is the best. To
+summarize:
 
-An intermediate solution is to add a comment above ED_CONF_OPT to
-explain why it's done, so that if ed build breaks in the future, we're
-warned that the AUTOTARGETS infrastructure has been abused by this
-package.
+ * Julien's solution is to create a new root filesystem type, called
+   "ubi", which depends on the "ubifs" filesystem to be generated. So
+   at build time, the rootfs.ubifs image is first generated, and then
+   the rootfs.ubi image is generated from rootfs.ubifs using ubinize.
+   You end up with rootfs.ubifs and rootfs.ubi in $(O)/images.
+
+ * The other solution proposed below is to not add a new root
+   filesystem type, but rather add a post-processing step to the
+   rootfs.ubifs image when "Embed in UBI image" is selected. You end up
+   with rootfs.ubifs in $(O)/images, regardless of whether it is a
+   UBIFS filesystem image, or a complete UBI image.
+
+I just implemented the second solution because it's how I would have
+implemented it if I had to do it, but I don't know if it's better or
+not than Julien's proposal.
 
 Regards,
 
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
