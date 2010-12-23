@@ -1,46 +1,72 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 23 Dec 2010 10:14:54 +0100
-Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
-	CMake packages
-In-Reply-To: <20101223095403.21c714dd@surf>
-References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTinkazQ2EzvCE46nSYmAkGiEJ3Ti+oM6=7g+u0Y5@mail.gmail.com>
-	<AANLkTi=tmgB5T23WvH112P1YgrO-w+xjwtiU9=D01J90@mail.gmail.com>
-	<AANLkTi=frxyYAzAaApiwAfxairhSKe38qkBgvk633_eF@mail.gmail.com>
-	<20101223084644.018fa724@surf>
-	<AANLkTinpJpLVjV7ogcT35GcX6RPfpG66k0hGQEkyfSko@mail.gmail.com>
-	<20101223095403.21c714dd@surf>
-Message-ID: <AANLkTin1J8Z4o0QKjnLGxs2Ui2kN9W5kFY-ATdyyU09+@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Dec 2010 10:26:39 +0100
+Subject: [Buildroot] [PATCH] Add libmodbus to buildroot.
+In-Reply-To: <1292937354-20879-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1292937354-20879-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20101223102639.23672613@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Marek,
 
-2010/12/23 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> On Thu, 23 Dec 2010 09:46:12 +0100
-> Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
->
->> I actually chose to build in SRCDIR for the sake of consistency - autotools
->> packages build in SRCDIR :-)
->
-> Oh, if CMake supports nicely the build-inside-source directory thing,
-> then we can just use it as we do for autotools packages.
+Thanks for proposing this package! I have a few comments below.
 
-Yes. CMake has no problems with build-inside-source.
+On Tue, 21 Dec 2010 14:15:54 +0100
+Marek Belisko <marek.belisko@open-nandra.com> wrote:
 
-> I've been wondering whether we could build out-of-tree for autotools
-> based packages, in order to share the source code between target and
-> host package, and to ease the support of overriden packages, but I'm
-> pretty sure we'll it a lot of problems with out-of-tree build in
-> different packages, and it'll only work with autotools or cmake based
-> packages. So the safest is probably to keep the build-inside-source
-> mechanism we are currently doing.
+> diff --git a/package/Config.in b/package/Config.in
+> index 80aca2a..b29113c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -203,6 +203,7 @@ source "package/usbmount/Config.in"
+>  source "package/usbutils/Config.in"
+>  source "package/wipe/Config.in"
+>  source "package/xfsprogs/Config.in"
+> +source "package/libmodbus/Config.in"
+>  endmenu
 
-Agree.
+libmodbus sounds like a networking library rather than a hardware
+handling utility. Therefore, could you move it to "Libraries ->
+Networking" ?
 
-Best regards,
-Bj?rn Forsman
+Moreover, the entries in each category are alphabetically sorted, so
+please put libmodbus at the right location.
+
+> +LIBMODBUS_VERSION:=2.0.3
+> +LIBMODBUS_SOURCE:=libmodbus-$(LIBMODBUS_VERSION).tar.gz
+> +LIBMODBUS_SITE:=http://github.com/downloads/stephane/libmodbus/$(LIBMODBUS_SOURCE)
+
+Unfortunately, this redirects to a https site, with an invalid
+certificate:
+
+ERROR: certificate common name `*.github.com' doesn't match requested
+host name `github.com'.
+
+So I had to add --no-check-certificate to wget's command line options.
+Not sure what we should do about this :
+
+ *) Always use --no-check-certificate for all downloads
+
+ *) Add a new <pkg>_WGET_NO_CERTIFICATE=YES option to the package
+    infrastructure.
+
+ *) Something else ?
+
+Moreover, this package being a library, you certainly want:
+
+LIBMODBUS_INSTALL_STAGING=YES
+
+in order to install headers, pkgconfig file and other stuff to the
+$(STAGING_DIR).
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
