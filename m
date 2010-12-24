@@ -1,65 +1,84 @@
 From: Heiko Zuerker <heiko@zuerker.org>
-Date: Fri, 24 Dec 2010 07:29:47 -0600
-Subject: [Buildroot] busybox, hardcoded config
-In-Reply-To: <20101224085246.0a2d8640@surf>
-References: <20101223073318.154656bz82tuap44@www.home.zuerker.org>
-	<20101224085246.0a2d8640@surf>
-Message-ID: <20101224072947.17101by6ka661utc@www.home.zuerker.org>
+Date: Fri, 24 Dec 2010 07:33:23 -0600
+Subject: [Buildroot] [PATCH] add syslog-ng 3.0.9,
+ including required eventlog lib
+In-Reply-To: <20101224082110.419580d3@surf>
+References: <7c61f61e277949a18b471ee5297d03062ced6083.1293153003.git.smiley73@users.sourceforge.net>
+	<73a045889e438229d8d9dd10da05a8585acb46d6.1293153206.git.smiley73@users.sourceforge.net>
+	<20101224082110.419580d3@surf>
+Message-ID: <20101224073323.161130mqscpjbqck@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
-
 Quoting Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> On Thu, 23 Dec 2010 07:33:18 -0600
-> Heiko Zuerker <heiko@zuerker.org> wrote:
+
+> Hello,
 >
->> there was recently a discussion on the topic of automatically turning
->> on specific kernel features, which can cause some problems.
+> On Thu, 23 Dec 2010 19:26:22 -0600
+> heiko at zuerker.org wrote:
+>
+>> From: Heiko Zuerker <smiley73@users.sourceforge.net>
 >>
->> This is very heavily done in busybox, i.e. nfs support for mount keeps
->> being turned on by the makefile. At least in my case this is causing
->> me some grief.
+>>
+>> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+>> ---
+>>  package/Config.in              |    1 +
+>>  package/eventlog/eventlog.mk   |   13 +++++++++++++
 >
-> Could you detail why that specific behaviour on NFS is causing
-> problems ?
+> You'll need a Config.in file for eventlog as well.
 
-(A rather lengthy explanation)
+Will do
 
-My situation is a bit different than most people using buildroot.
-I'm trying to use buildroot for a full blown, security focused distribution.
-Since Devil-Linux is already well established, I have to reproduce the  
-current features.
-
-Busybox is only used as a static binary in the initramfs to initialize  
-the system, find the configuration and the distribution media.
-
-We're using the full blown glibc and busybox can't be statically  
-compiled if nfs support is on, since it needs it for dns resolution.
-
->> I think we really should keep this automatically setting of
->> configurations to an absolute minimum. Can't we rely on the person
->> configuring buildroot, to set the correct options he or she needs for
->> example in busybox or the kernel?
+>> --- /dev/null
+>> +++ b/package/syslog-ng/Config.in
+>> @@ -0,0 +1,19 @@
+>> +config BR2_PACKAGE_SYSLOG_NG
+>> +    bool "syslog-ng"
+>> +    depends on BR2_PACKAGE_LIBNET
 >
-> There's no one-size-fits-all answer to this question. On the one hand,
-> we can't make everything automatic and we have to rely on the user to
-> make sane choices. On the other hand, we also want configurations built
-> by default to make sense as much as possible.
->
-> I'm not terribly happy about the BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG
-> you proposed, but it's true I don't really have a better proposal.
-> Maybe we should automatically disable the automatic tuning if the
-> Busybox configuration file is not in package/busybox/ (i.e when it's a
-> non-Buildroot provided configuration file) ? But maybe this behaviour
-> is a bit tricky.
+> For library dependencies, we generally use "select".
 
-This may cause other people more issues. I'm sure not everybody can  
-used the provided config files and has to do some minor adjustments,  
-but still relies on some of the auto-config features.
+Okay
+
+>> +    help
+>> +      The syslog-ng application supports reliable and encrypted transport
+>> +      using TCP and TLS, and offers powerful message filtering, sorting,
+>> +      pre-processing and log normalization capabilities. Utilizing message
+>> +      parsing and classification, syslog-ng is able to correlate  
+>> log messages
+>> +      both real-time and offline, making it especially suited to  
+>> implement the
+>> +      artificial ignorance principle. This high-performance tool handles
+>> +      extreme loads easily, and is extensible with various plug-ins to best
+>> +      suit your requirements.
+>
+> And we generally add the main website of the package here, at the end
+> of the help text.
+
+Will do
+
+>> +config BR2_PACKAGE_SYSLOG_NG_LINK_DYN
+>> +    bool "dynamic linking"
+>> +    depends on BR2_PACKAGE_SYSLOG_NG
+>
+> I haven't checked what --enable-dynamic-linking does. But if it's
+> dynamic linking against libraries, then you don't need a separate
+> option for that, just use BR2_PREFER_STATIC_LIB.
+
+--enable-dynamic-linking        Link glib and eventlog dynamically  
+instead of statically.
+--enable-static-linking         Link everything statically.
+--enable-mixed-linking          Link 3rd party libraries statically,  
+system libraries dynamically
+
+> Is syslog-ng a complete replacement for sysklogd ?
+
+Yes it is. It has a lot more features.
+
+I'll be sending in a newer patch in a little bit.
 
 -- 
 
