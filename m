@@ -1,8 +1,9 @@
 From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Fri, 24 Dec 2010 08:43:20 -0600
-Subject: [Buildroot] [PATCH v2 1/3] add eventlog 0.2.12 (required by
-	syslog-ng)
-Message-ID: <68d89026bd8ffb144ab70206c02552c0b1084eec.1293201732.git.smiley73@users.sourceforge.net>
+Date: Fri, 24 Dec 2010 08:43:21 -0600
+Subject: [Buildroot] [PATCH v2 2/3] add libnet 1.1.5 (required by syslog-ng)
+In-Reply-To: <68d89026bd8ffb144ab70206c02552c0b1084eec.1293201732.git.smiley73@users.sourceforge.net>
+References: <68d89026bd8ffb144ab70206c02552c0b1084eec.1293201732.git.smiley73@users.sourceforge.net>
+Message-ID: <e462fee52ddc3103521628136d6a6321f93b18f9.1293201732.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +15,54 @@ From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
 Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
 ---
- package/Config.in            |    1 +
- package/eventlog/Config.in   |   10 ++++++++++
- package/eventlog/eventlog.mk |   13 +++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/eventlog/Config.in
- create mode 100644 package/eventlog/eventlog.mk
+ package/Config.in        |    1 +
+ package/libnet/Config.in |    6 ++++++
+ package/libnet/libnet.mk |   12 ++++++++++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnet/Config.in
+ create mode 100644 package/libnet/libnet.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d3ae75e..0b1b996 100644
+index 0b1b996..a127926 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -317,6 +317,7 @@ endmenu
- 
- menu "Other"
- source "package/argp-standalone/Config.in"
-+source "package/eventlog/Config.in"
- source "package/libatomic_ops/Config.in"
- source "package/libcap/Config.in"
- source "package/libdaemon/Config.in"
-diff --git a/package/eventlog/Config.in b/package/eventlog/Config.in
+@@ -307,6 +307,7 @@ source "package/libeXosip2/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
++source "package/libnet/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
 new file mode 100644
-index 0000000..287d8eb
+index 0000000..5fc8c62
 --- /dev/null
-+++ b/package/eventlog/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EVENTLOG
-+    bool "eventlog"
++++ b/package/libnet/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBNET
++    bool "libnet"
 +    help
-+      A new API to format and send structured log messages. It supports 
-+      multiple message representations (plain, XML attributes and XML tags) 
-+      and multiple output methods (local syslogd). 
-+      Syslog-NG requires this library.
-+      
-+      http://www.balabit.com/support/community/products
-+      
-\ No newline at end of file
-diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
++      libnet provides a portable framework for low-level network packet construction.
++
++      http://sourceforge.net/projects/libnet-dev
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
 new file mode 100644
-index 0000000..ef52400
+index 0000000..57c7c30
 --- /dev/null
-+++ b/package/eventlog/eventlog.mk
-@@ -0,0 +1,13 @@
++++ b/package/libnet/libnet.mk
+@@ -0,0 +1,12 @@
 +#############################################################
 +#
-+# EVENTLOG
++# LIBNET
 +#
 +#############################################################
-+EVENTLOG_MAIN_VERSION = 0.2
-+EVENTLOG_VERSION = $(EVENTLOG_MAIN_VERSION).12
-+EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
-+EVENTLOG_SITE = http://www.balabit.com/downloads/files/eventlog/$(EVENTLOG_MAIN_VERSION)
 +
-+EVENTLOG_INSTALL_STAGING = YES
++LIBNET_VERSION = 1.1.5
++LIBNET_SOURCE = libnet-$(LIBNET_VERSION).tar.gz
++LIBNET_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libnet-dev
++LIBNET_INSTALL_STAGING=YES
 +
-+$(eval $(call AUTOTARGETS,package,eventlog))
++$(eval $(call AUTOTARGETS,package,libnet))
 -- 
 1.7.3.2
