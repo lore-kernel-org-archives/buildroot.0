@@ -1,15 +1,15 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 24 Dec 2010 13:25:52 +0100
+Date: Fri, 24 Dec 2010 13:26:05 +0100
 Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
  in $(O)
-In-Reply-To: <20101223084813.7decd2f5@surf>
+In-Reply-To: <AANLkTi=7CxPqcF3Mr9SYNghbJ1ymmLUnniU70wCKKnts@mail.gmail.com>
 References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
 	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
 	<AANLkTi=R7C0yXPepZWz=Pj=-Vc2B62-qBPZ6L-GkjBpQ@mail.gmail.com>
 	<AANLkTimy9OaB+LHAxLD4psmnewUntXfbr0rDUKywMZjG@mail.gmail.com>
 	<AANLkTikFyao3mPUg=cWm-D9YGM91DU6dBvJk84o7WjJ5@mail.gmail.com>
-	<20101223084813.7decd2f5@surf>
-Message-ID: <AANLkTi=-+=o2u8VggQHwu_ziRzUTh0ThvAs-o+ypMuy-@mail.gmail.com>
+	<AANLkTi=7CxPqcF3Mr9SYNghbJ1ymmLUnniU70wCKKnts@mail.gmail.com>
+Message-ID: <AANLkTinqTj=20jTGNfxw8JA5EEL7rt=U56P3qHyHJEeW@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,66 +18,110 @@ To: buildroot@busybox.net
 
 Hi,
 
-> Btw, the toolchain is currently located in the staging, but if this change
+Yes. Also, the toolchain file can be copied out of buildroot and
 
-> [1] (or if you're using a external tc), then, there needs to append both
-> the
+modified (if desired).
 
-> staging directory and the toolchain directory to CMAKE_FIND_ROOT_PATH.
+Agree.
 
 
-> I don't know what you call the "toolchain directory", but the changes
+> > So, yes, for the target, i think it's safe to set it to "ONLY"
 
-made by Gustavo only *move* the location of the sysroot, but there will
 
-still be only one location for it, and $(STAGING_DIR) will continue to
+> But is it necessary? Wouldn't "NEVER" suffice? I don't mean to be
 
-point to it.
+difficult, but I'd like to see a real world example of when it is needed
 
-Ok, i didn't see that any toolchain is copied in the staging directory, so
-forget what i meant
+and not just add it because it "also works".
+
+Instead of being so strict with "ONLY" or "NEVER", maybe "FIRST" or "LAST"
+[1] can solve this issue.
+Months ago, I had some trouble with CMAKE_FIND_ROOT_PATH set to "NEVER"
+while cross-compiling OpenCV, and I fixed this setting it to "ONLY". I hope
+having some freetime during Xmas break to (re)run some tests about that.
+That's a tricky point that certainly needs some tests to get the right
+solution.
 
 Cheers,
 
+[1]
+http://www.cmake.org/cmake/help/cmake-2-8-docs.html#command:find_program
+
 Samuel
 
+2010/12/23 Bj?rn Forsman <bjorn.forsman@gmail.com>
 
-2010/12/23 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-> On Wed, 22 Dec 2010 22:32:30 +0100
-> Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi,
 >
-> > I haven't test external toolchain nor crosstool-NG, but afaik,
-> crosstool-NG
-> > toolchain is copied in the BR staging,
-> > but not external ones.
+> 2010/12/22 Samuel Martin <s.martin49@gmail.com>:
+> > Hi Bj?rn,
+> >
+> >>
+> >> > In my version (not submitted), i also set the following
+> >>
+> >> > variables: CMAKE_INCLUDE_PATH and CMAKE_LIBRARY_PATH
+> >>
+> >> I just read up on those variables (man cmake) and it seems to me that
+> they
+> >>
+> >> are used in addition to a default set of paths(?), which I presume are
+> >>
+> >> relative to CMAKE_FIND_ROOT_PATH. So are they really needed? What paths
+> >>
+> >> do you set them to?
+> >
+> > You're right.
+> > It might be an interesting point to add in the doc, but needs to be
+> tested
+> > and confirmed.
+> > use case:
+> >   You build a BR environment, then an external lib out of BR and develop
+> a
+> > project for the BR's target that use this external lib.
+> >   In this case, there are 2 solutions at least:
+> >     - add the external lib output directory path to
+> the CMAKE_FIND_ROOT_PATH
+> > variable (need to alter the toolchain file)
+> >     - or set CMAKE_INCLUDE_PATH and CMAKE_LIBRARY_PATH pointed on the
+> > corresponding sub-directories of the external lib output directory.
 >
-> The sysroot of external toolchain is copied to $(STAGING_DIR) as well.
+> Yes. Also, the toolchain file can be copied out of buildroot and
+> modified (if desired).
 >
-> > Btw, the toolchain is currently located in the staging, but if this
-> change
-> > [1] (or if you're using a external tc), then, there needs to append both
-> the
-> > staging directory and the toolchain directory to CMAKE_FIND_ROOT_PATH.
+> >> >> +       set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+> >>
+> >> >
+> >>
+> >> > Here is the main point of disagreement. Because in BR the
+> cross-compiler
+> >> > and
+> >>
+> >> > all tools around are located somewhere in a subdirectory of
+> >> > $(STAGING_DIR),
+> >>
+> >> > i do set CMAKE_FIND_ROOT_PATH_MODE_PROGRAM to "ONLY".
+> >>
+> >> Is it completely safe to set it to "ONLY"? Couldn't host binaries be
+> >> picked
+> >>
+> >> up during cross-compilation? Or am I missing something?
+> >
+> > When cross-compiling, you need to build the whole toolchain (ie. the
+> > cross-compiler, assembler, linker, and all useful cross-tools) and the
+> > sysroot for the target.
+> > You have to do this and only refer to these tools and sysroot when
+> building
+> > binaries for the target to avoid building broken binaries that could
+> > be linked with something from the host.
+> > So, yes, for the target, i think it's safe to set it to "ONLY"
 >
-> I don't know what you call the "toolchain directory", but the changes
-> made by Gustavo only *move* the location of the sysroot, but there will
-> still be only one location for it, and $(STAGING_DIR) will continue to
-> point to it.
+> But is it necessary? Wouldn't "NEVER" suffice? I don't mean to be
+> difficult, but I'd like to see a real world example of when it is needed
+> and not just add it because it "also works".
 >
-> Regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Best regards,
+> Bj?rn Forsman
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101224/d1545657/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101224/b4098878/attachment.html>
