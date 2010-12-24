@@ -1,8 +1,7 @@
 From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Thu, 23 Dec 2010 16:15:07 -0600
-Subject: [Buildroot] [PATCH] busybox: add option to disable automatic
-	configuration changes depending on buildroot settings
-Message-ID: <8a37582ac05b4d5f7cf49873ac2f8155f3df7d08.1293142151.git.smiley73@users.sourceforge.net>
+Date: Thu, 23 Dec 2010 19:26:21 -0600
+Subject: [Buildroot] [PATCH] add libnet 1.1.5
+Message-ID: <7c61f61e277949a18b471ee5297d03062ced6083.1293153003.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +13,52 @@ From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
 Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
 ---
- package/busybox/Config.in  |    6 ++++++
- package/busybox/busybox.mk |    6 ++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/libnet/Config.in |    4 ++++
+ package/libnet/libnet.mk |   12 ++++++++++++
+ 3 files changed, 17 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnet/Config.in
+ create mode 100644 package/libnet/libnet.mk
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 79a6341..99deeff 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -61,6 +61,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG
-+	bool "Don't automatically adjust busybox configuration" if BR2_PACKAGE_BUSYBOX
-+	help
-+	  Don't automatically adjust the busybox configuration,
-+	  according on how buildroot is configured.
+diff --git a/package/Config.in b/package/Config.in
+index d3ae75e..6e7970b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -308,6 +308,7 @@ source "package/libidn/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libnl/Config.in"
++source "package/libnet/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+ source "package/librsync/Config.in"
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
+new file mode 100644
+index 0000000..3e5bc27
+--- /dev/null
++++ b/package/libnet/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_LIBNET
++    bool "libnet"
++    help
++      libnet provides a portable framework for low-level network packet construction.
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+new file mode 100644
+index 0000000..57c7c30
+--- /dev/null
++++ b/package/libnet/libnet.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# LIBNET
++#
++#############################################################
 +
- endif
- 
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index a94e4c0..7cf1b58 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -39,6 +39,9 @@ define BUSYBOX_SET_BB_PWD
- endef
- endif
- 
-+# automatically adjust the busybox configuration depending on the buildroot settings
-+ifneq ($BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG),y)
++LIBNET_VERSION = 1.1.5
++LIBNET_SOURCE = libnet-$(LIBNET_VERSION).tar.gz
++LIBNET_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libnet-dev
++LIBNET_INSTALL_STAGING=YES
 +
- ifeq ($(BR2_LARGEFILE),y)
- define BUSYBOX_SET_LARGEFILE
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
-@@ -96,6 +99,9 @@ define BUSYBOX_NETKITTELNET
- endef
- endif
- 
-+# end of busybox config adjustments
-+endif
-+
- define BUSYBOX_COPY_CONFIG
- 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
++$(eval $(call AUTOTARGETS,package,libnet))
 -- 
 1.7.3.2
