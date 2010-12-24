@@ -1,89 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Dec 2010 18:07:42 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.package.in: Added BZR
-	download support
+Date: Fri, 24 Dec 2010 18:07:43 +0100
+Subject: [Buildroot] [PATCH 2/2] infrastructure: only require download tools
+	when needed
 In-Reply-To: <cover.1293210451.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1293210451.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ac294cf557f0d6053373d9af3471300a12f28d1c.1293210451.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <960d268b25f61c407056c2eba946612a38d7de9f.1293210451.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+Instead of having to require svn, git or bzr unconditionally, only
+require them when one package needs them to be downloaded.
 
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   39 ++++++++++++++++++++++++++++-----------
- 1 files changed, 28 insertions(+), 11 deletions(-)
+ package/Makefile.package.in            |   14 ++++++++++++--
+ toolchain/dependencies/dependencies.mk |    7 +++++++
+ toolchain/dependencies/dependencies.sh |    2 +-
+ 3 files changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 816a013..428dbcb 100644
+index 428dbcb..c4a1cf8 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -85,19 +85,21 @@ DL_DIR:=$(TOPDIR)/dl
+@@ -504,9 +504,19 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ # configuration
+ 
+ ifeq ($$(BR2_PACKAGE_$(2)),y)
++
+ TARGETS += $(1)
+-endif
+-endef
++
++ifeq ($$($(2)_SITE_METHOD),svn)
++DL_TOOLS_DEPENDENCIES += svn
++else ifeq ($$($(2)_SITE_METHOD),git)
++DL_TOOLS_DEPENDENCIES += git
++else ifeq ($$($(2)_SITE_METHOD),bzr)
++DL_TOOLS_DEPENDENCIES += bzr
++endif # SITE_METHOD
++
++endif # BR2_PACKAGE_$(2)
++endef # GENTARGETS_INNER
+ 
+ ################################################################################
+ # GENTARGETS -- the target generator macro for generic packages
+diff --git a/toolchain/dependencies/dependencies.mk b/toolchain/dependencies/dependencies.mk
+index 89ffd88..13604f0 100644
+--- a/toolchain/dependencies/dependencies.mk
++++ b/toolchain/dependencies/dependencies.mk
+@@ -10,9 +10,16 @@ ifeq ($(BR2_STRIP_sstrip),y)
+ DEPENDENCIES_HOST_PREREQ+=sstrip_host
  endif
  
- ################################################################################
--# The DOWNLOAD_{GIT,SVN} helpers are in charge of getting a working copy of
--# the source repository for their corresponding SCM, checking out the requested
--# version / commit / tag, and create an archive out of it. DOWNLOAD_WGET is the
--# normal wget-based download mechanism.
-+# The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
-+# working copy of the source repository for their corresponding SCM,
-+# checking out the requested version / commit / tag, and create an
-+# archive out of it. DOWNLOAD_WGET is the normal wget-based download
-+# mechanism.
- #
--# The SOURCE_CHECK_{GIT,SVN,WGET} helpers are in charge of simply checking that
--# the source is available for download. This can be used to make sure one will
--# be able to get all the sources needed for one's build configuration.
-+# The SOURCE_CHECK_{GIT,SVN,BZR,WGET} helpers are in charge of simply
-+# checking that the source is available for download. This can be used
-+# to make sure one will be able to get all the sources needed for
-+# one's build configuration.
- #
--# The SHOW_EXTERNAL_DEPS_{GIT,SVN,WGET} helpers simply output to the console
--# the names of the files that will be downloaded, or path and revision of the
--# source repositories, producing a list of all the "external dependencies" of
--# a given build configuration.
-+# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET} helpers simply output to
-+# the console the names of the files that will be downloaded, or path
-+# and revision of the source repositories, producing a list of all the
-+# "external dependencies" of a given build configuration.
- ################################################################################
++# Remove duplicate entries from $(DL_TOOLS_DEPENDENCIES)
++DL_TOOLS = \
++	$(findstring svn,$(DL_TOOLS_DEPENDENCIES)) \
++	$(findstring git,$(DL_TOOLS_DEPENDENCIES)) \
++	$(findstring bzr,$(DL_TOOLS_DEPENDENCIES))
++
+ dependencies: $(DEPENDENCIES_HOST_PREREQ)
+ 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+ 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
++		DL_TOOLS="$(DL_TOOLS)" \
+ 		$(TOPDIR)/toolchain/dependencies/dependencies.sh
  
- define DOWNLOAD_GIT
-@@ -123,6 +125,20 @@ define SHOW_EXTERNAL_DEPS_GIT
- endef
+ dependencies-source:
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index a152d4b..c5552ca 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -132,7 +132,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
- 
-+define DOWNLOAD_BZR
-+	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-+	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-+endef
-+
-+define SOURCE_CHECK_BZR
-+	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
-+endef
-+
-+define SHOW_EXTERNAL_DEPS_BZR
-+	echo "$($(PKG)_SITE) [bzr: $($(PKG)_DL_VERSION)]"
-+endef
-+
-+
- define DOWNLOAD_SVN
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
-@@ -175,6 +191,7 @@ define DOWNLOAD
- 		case "$($(PKG)_SITE_METHOD)" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
-+			bzr) $($(DL_MODE)_BZR) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python svn unzip ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python unzip ${DL_TOOLS} ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.7.0.4
