@@ -1,8 +1,8 @@
 From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Fri, 24 Dec 2010 08:17:50 -0600
-Subject: [Buildroot] [PATCH v2] busybox: add option to disable automatic
-	configuration changes depending on buildroot settings
-Message-ID: <d401ea0a282113d521f495b069f8c684736b0a4e.1293200255.git.smiley73@users.sourceforge.net>
+Date: Fri, 24 Dec 2010 08:43:20 -0600
+Subject: [Buildroot] [PATCH v2 1/3] add eventlog 0.2.12 (required by
+	syslog-ng)
+Message-ID: <68d89026bd8ffb144ab70206c02552c0b1084eec.1293201732.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,60 @@ From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
 Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
 ---
- package/busybox/busybox.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/Config.in            |    1 +
+ package/eventlog/Config.in   |   10 ++++++++++
+ package/eventlog/eventlog.mk |   13 +++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/eventlog/Config.in
+ create mode 100644 package/eventlog/eventlog.mk
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 8bff1a6..17303d7 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -39,6 +39,9 @@ define BUSYBOX_SET_BB_PWD
- endef
- endif
+diff --git a/package/Config.in b/package/Config.in
+index d3ae75e..0b1b996 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -317,6 +317,7 @@ endmenu
  
-+# automatically adjust the busybox configuration depending on the buildroot settings
-+ifneq ($(BR2_PACKAGE_BUSYBOX_DONT_CHANGE_CONFIG),y)
+ menu "Other"
+ source "package/argp-standalone/Config.in"
++source "package/eventlog/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libdaemon/Config.in"
+diff --git a/package/eventlog/Config.in b/package/eventlog/Config.in
+new file mode 100644
+index 0000000..287d8eb
+--- /dev/null
++++ b/package/eventlog/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_EVENTLOG
++    bool "eventlog"
++    help
++      A new API to format and send structured log messages. It supports 
++      multiple message representations (plain, XML attributes and XML tags) 
++      and multiple output methods (local syslogd). 
++      Syslog-NG requires this library.
++      
++      http://www.balabit.com/support/community/products
++      
+\ No newline at end of file
+diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
+new file mode 100644
+index 0000000..ef52400
+--- /dev/null
++++ b/package/eventlog/eventlog.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# EVENTLOG
++#
++#############################################################
++EVENTLOG_MAIN_VERSION = 0.2
++EVENTLOG_VERSION = $(EVENTLOG_MAIN_VERSION).12
++EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
++EVENTLOG_SITE = http://www.balabit.com/downloads/files/eventlog/$(EVENTLOG_MAIN_VERSION)
 +
- ifeq ($(BR2_LARGEFILE),y)
- define BUSYBOX_SET_LARGEFILE
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_LFS,$(BUSYBOX_BUILD_CONFIG))
-@@ -100,6 +103,9 @@ define BUSYBOX_NETKITTELNET
- endef
- endif
- 
-+# end of busybox config adjustments
-+endif
++EVENTLOG_INSTALL_STAGING = YES
 +
- define BUSYBOX_COPY_CONFIG
- 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
++$(eval $(call AUTOTARGETS,package,eventlog))
 -- 
 1.7.3.2
