@@ -1,33 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 25 Dec 2010 23:30:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.package.in: Added BZR
-	download support
-In-Reply-To: <ac294cf557f0d6053373d9af3471300a12f28d1c.1293210451.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Fri, 24 Dec 2010 18:07:42 +0100")
-References: <cover.1293210451.git.thomas.petazzoni@free-electrons.com>
-	<cover.1293210451.git.thomas.petazzoni@free-electrons.com>
-	<ac294cf557f0d6053373d9af3471300a12f28d1c.1293210451.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <878vzdpjt8.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 25 Dec 2010 23:21:43 +0100
+Subject: [Buildroot] [git commit master 1/1] u-boot: add support for version
+	2010.12
+Message-ID: <20101225223538.AC4668E261@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> From: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
- Thomas> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/Makefile.package.in |   39 ++++++++++++++++++++++++++++-----------
- Thomas>  1 files changed, 28 insertions(+), 11 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=969de4de7eb1ead64cafc1a85d4308164cf955b4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/u-boot/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 86c656d..60aeb1a 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
  
- Thomas> +define DOWNLOAD_BZR
- Thomas> +	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- Thomas> +	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-
-Shouldn't this make a tarball like the git/svn versions do?
-
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2010_09
++	default BR2_TARGET_UBOOT_2010_12
+ 	help
+ 	  Select the specific U-Boot version you want to use
+ 
++config BR2_TARGET_UBOOT_2010_12
++	bool "2010.12"
++
+ config BR2_TARGET_UBOOT_2010_09
+ 	bool "2010.09"
+ 
+@@ -45,6 +48,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
+ 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
+ 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+ 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
