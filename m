@@ -1,44 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Dec 2010 12:18:03 +0100
-Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
-In-Reply-To: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20101225121803.16bc81c6@surf>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sat, 25 Dec 2010 10:10:58 -0600
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.79 (.78 was pulled
+	by Redhat)
+Message-ID: <75941d8a73ea1ee57c01a6ae1259d7e7d31ec17e.1293293449.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-On Tue, 21 Dec 2010 18:38:07 +0100
-julien.boibessot at free.fr wrote:
 
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
-> 
-> UBI images are generated from UBIFS one (with ubinize tool) and are used by
-> bootloaders (eg U-Boot) to write UBIFS images directly on bare NAND FLASH
-> (see http://www.linux-mtd.infradead.org/faq/ubi.html).
-> 
-> Changes since v1:
-> * change some comments/helps
-> * as requested by Thomas, merged fs/ubi/ in fs/ubifs/, but kept ubifs.mk and
->   ubi.mk separated. (I don't know if it's really worth to merge them...)
-> 
-> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-> Signed-off-by: Nicolas Colombain <nicolas.colombain@armadeus.com>
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/lvm2/lvm2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-After thinking about this a bit, I think having two separate images is
-better, as it is more clear for the user what the image actually is.
-Therefore, I think this version from Julien should be applied, and it
-gets my:
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thomas
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 5c83d9d..9755392 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -3,7 +3,7 @@
+ # lvm2
+ #
+ #############################################################
+-LVM2_VERSION = 2.02.78
++LVM2_VERSION = 2.02.79
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
+ LVM2_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.2
