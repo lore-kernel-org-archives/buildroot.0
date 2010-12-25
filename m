@@ -1,33 +1,61 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Sun, 26 Dec 2010 00:25:45 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.package.in: Added BZR
-	download support
-In-Reply-To: <878vzdpjt8.fsf@macbook.be.48ers.dk>
-References: <cover.1293210451.git.thomas.petazzoni@free-electrons.com>
-	<ac294cf557f0d6053373d9af3471300a12f28d1c.1293210451.git.thomas.petazzoni@free-electrons.com>
-	<878vzdpjt8.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTimRPGKcst-pgrPt-135P2BaBy1V0+p2nEBoNCNK@mail.gmail.com>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Sun, 26 Dec 2010 00:29:42 +0100
+Subject: [Buildroot] [PATCH] Reset critical environment variables
+Message-ID: <1293319782-5813-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2010/12/25 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
-> ?Thomas> From: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-> ?Thomas> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-> ?Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ?Thomas> ---
-> ?Thomas> ?package/Makefile.package.in | ? 39 ++++++++++++++++++++++++++++-----------
-> ?Thomas> ?1 files changed, 28 insertions(+), 11 deletions(-)
->
-> ?Thomas> +define DOWNLOAD_BZR
-> ?Thomas> + ? ? ?test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> ?Thomas> + ? ? ?$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
->
-> Shouldn't this make a tarball like the git/svn versions do?
+Reset them early in top-level Makefile to ensure they're keept unset
+all the way through the build process.
 
-Bzr exports directly into a tarball:
-http://doc.bazaar.canonical.com/bzr.2.2/en/user-reference/export-help.html
+This also removes the requirement of these variables being unset
+globally prior the build.
+
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+---
+ Makefile                               |    6 ++++++
+ toolchain/dependencies/dependencies.sh |    9 ---------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f6ab07e..1974e1c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -186,6 +186,12 @@ cc-option=$(shell if $(TARGET_CC) $(TARGET_CFLAGS) $(1) -S -o /dev/null -xc /dev
+ #############################################################
+ unexport CROSS_COMPILE
+ unexport ARCH
++unexport CC
++unexport CXX
++unexport CPP
++unexport CFLAGS
++unexport CXXFLAGS
++unexport GREP_OPTIONS
+ 
+ GNU_HOST_NAME:=$(shell package/gnuconfig/config.guess)
+ 
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index a152d4b..766a478 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -4,15 +4,6 @@
+ 
+ export LC_ALL=C
+ 
+-# Verify that critical environment variables aren't set
+-for var in CC CXX CPP CFLAGS CXXFLAGS GREP_OPTIONS CROSS_COMPILE ARCH ; do
+-    if test -n "$(eval echo '$'$var)" ; then
+-	/bin/echo -e "\nYou must run 'unset $var' so buildroot can run with";
+-	/bin/echo -e "a clean environment on your build machine\n";
+-	exit 1;
+-    fi
+-done
+-
+ # Verify that grep works
+ echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+ if test $? != 0 ; then
+-- 
+1.7.1
