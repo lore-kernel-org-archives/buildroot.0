@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Dec 2010 18:21:37 +0100
-Subject: [Buildroot] [PATCH 1/1] u-boot: add support for version 2010.12
-In-Reply-To: <cover.1293211282.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1293211282.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4104ad3430da978e9b76ab73c6caa9b5df1b5912.1293211282.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Dec 2010 12:18:03 +0100
+Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
+In-Reply-To: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
+References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20101225121803.16bc81c6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/u-boot/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+Hello,
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 86c656d..60aeb1a 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2010_09
-+	default BR2_TARGET_UBOOT_2010_12
- 	help
- 	  Select the specific U-Boot version you want to use
- 
-+config BR2_TARGET_UBOOT_2010_12
-+	bool "2010.12"
-+
- config BR2_TARGET_UBOOT_2010_09
- 	bool "2010.09"
- 
-@@ -45,6 +48,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
-+	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
- 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
+On Tue, 21 Dec 2010 18:38:07 +0100
+julien.boibessot at free.fr wrote:
+
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> 
+> UBI images are generated from UBIFS one (with ubinize tool) and are used by
+> bootloaders (eg U-Boot) to write UBIFS images directly on bare NAND FLASH
+> (see http://www.linux-mtd.infradead.org/faq/ubi.html).
+> 
+> Changes since v1:
+> * change some comments/helps
+> * as requested by Thomas, merged fs/ubi/ in fs/ubifs/, but kept ubifs.mk and
+>   ubi.mk separated. (I don't know if it's really worth to merge them...)
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> Signed-off-by: Nicolas Colombain <nicolas.colombain@armadeus.com>
+
+After thinking about this a bit, I think having two separate images is
+better, as it is more clear for the user what the image actually is.
+Therefore, I think this version from Julien should be applied, and it
+gets my:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
