@@ -1,9 +1,10 @@
 From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 26 Dec 2010 16:59:18 +0100
-Subject: [Buildroot] [PATCH 1/2] vtun: fix startup script installation
+Date: Sun, 26 Dec 2010 16:59:19 +0100
+Subject: [Buildroot] [PATCH 2/2] package: avoid copying .m4 files from host
+	to staging
 In-Reply-To: <1293379159-19109-1-git-send-email-llandwerlin@gmail.com>
 References: <1293379159-19109-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1293379159-19109-2-git-send-email-llandwerlin@gmail.com>
+Message-ID: <1293379159-19109-3-git-send-email-llandwerlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,74 @@ To: buildroot@busybox.net
 
 From: Lionel Landwerlin <llandwerlin@gmail.com>
 
-In case etc/init.d does not exist.
+Instead include $(HOST_DIR)/usr/share/aclocal into autoreconf search
+directory.
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 ---
- package/vtun/vtun-3.0.2-001-Makefile.in.patch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/autoconf/autoconf.mk     |    2 +-
+ package/automake/automake.mk     |    1 +
+ package/libtool/libtool.mk       |    9 ---------
+ package/pkg-config/pkg-config.mk |    7 -------
+ 4 files changed, 2 insertions(+), 17 deletions(-)
 
-diff --git a/package/vtun/vtun-3.0.2-001-Makefile.in.patch b/package/vtun/vtun-3.0.2-001-Makefile.in.patch
-index 063d4b3..1f93969 100644
---- a/package/vtun/vtun-3.0.2-001-Makefile.in.patch
-+++ b/package/vtun/vtun-3.0.2-001-Makefile.in.patch
-@@ -26,7 +26,7 @@ diff -urN vtun/Makefile.in vtun-2.6/Makefile.in
-  	$(INSTALL) -d -m 755 $(INSTALL_OWNER) $(DESTDIR)$(LOCK_DIR)
-  	$(INSTALL) -d -m 755 $(INSTALL_OWNER) $(DESTDIR)$(SBIN_DIR)
-  	$(INSTALL) -m 755 $(INSTALL_OWNER) vtund $(DESTDIR)$(SBIN_DIR)
--+	$(INSTALL) -m 755 $(INSTALL_OWNER) scripts/vtund.rc.debian \
-++	$(INSTALL) -m 755 -D $(INSTALL_OWNER) scripts/vtund.rc.debian \
- +		$(DESTDIR)$(ETC_DIR)/init.d/S90vtun
-  
-  # DO NOT DELETE THIS LINE -- make depend depends on it.
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index a21192f..0ff0644 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -23,4 +23,4 @@ $(eval $(call AUTOTARGETS,package,autoconf,host))
+ # variables used by other packages
+ AUTOCONF:=$(HOST_DIR)/usr/bin/autoconf
+ AUTOHEADER:=$(HOST_DIR)/usr/bin/autoheader
+-AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
++AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index e2ff9b2..6ee3121 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -23,4 +23,5 @@ $(eval $(call AUTOTARGETS,package,automake,host))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
++ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 60fee9f..3306244 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -7,15 +7,6 @@ LIBTOOL_VERSION = 2.2.10
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+ 
+-define HOST_LIBTOOL_CUSTOM_INSTALL
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/libtool.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/libtool.m4
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/ltdl.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/ltdl.m4
+-endef
+-
+-HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_CUSTOM_INSTALL
+-
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
+ 
+ $(eval $(call AUTOTARGETS,package,libtool))
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+index 330b166..d0bc424 100644
+--- a/package/pkg-config/pkg-config.mk
++++ b/package/pkg-config/pkg-config.mk
+@@ -15,13 +15,6 @@ HOST_PKG_CONFIG_CONF_OPT = \
+ 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		--disable-static
+ 
+-define HOST_PKG_CONFIG_INSTALL_M4
+-install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/pkg.m4
+-endef
+-
+-HOST_PKG_CONFIG_POST_INSTALL_HOOKS += HOST_PKG_CONFIG_INSTALL_M4
+-
+ $(eval $(call AUTOTARGETS,package,pkg-config))
+ $(eval $(call AUTOTARGETS,package,pkg-config,host))
+ 
 -- 
 1.7.2.3
