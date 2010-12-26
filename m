@@ -1,60 +1,67 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sun, 26 Dec 2010 08:15:22 -0600
-Subject: [Buildroot] continued issues with AR
-In-Reply-To: <1293296176.4625.87.camel@coalu.atr>
-References: <20101225102011.66586l6anzqeak0s@www.home.zuerker.org>
-	<1293296176.4625.87.camel@coalu.atr>
-Message-ID: <20101226081522.9979373ky6jfze80@www.home.zuerker.org>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun, 26 Dec 2010 09:22:23 -0600
+Subject: [Buildroot] [PATCH v3 1/3] add libnet 1.1.5 (required by syslog-ng)
+Message-ID: <2b69360e32ed380ece014772502a6e5d3f1b6575.1293376253.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting Lionel Landwerlin <llandwerlin@gmail.com>:
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-> Le samedi 25 d?cembre 2010 ? 10:20 -0600, Heiko Zuerker a ?crit :
->> Hey,
->>
->> it seems like I keep running into issues where it tries to use my
->> local ar, instead of the one from the external toolchain.
->> I'm not familiar with the workings behind the scenes of buildroot, but
->> is it possible that something is missing somewhere?
->> Do we need to always set i.e. AR=$(TARGET_AR) ?
->> Could the same be happening for other files like ld,gcc and so on?
->>
->
-> Yup,
->
-> As some others packages, lvm2 does not use automake. So makefiles
-> remains mostly "hand written"...
->
-> With fully autotooled packages, we define CC/AR/LD/etc... variables at
-> configure time, so the configure script generates the makefiles with
-> proper CC/AR/LD/etc... variables definitions.
-> With semi autotooled packages as lvm2, we rely on what as been written
-> by the lvm2 developers.
->
-> One solution could be to define a kind of Makefile.half.autotool.in top
-> makefile to handle these specials cases (which do not seem that special
-> after all), in which we would define AR/CC/LD/etc... at build time (most
-> of them are defined in TARGET_CONFIGURE_OPTS already).
->
-> What do you think ?
 
-Wouldn't it make sense to always define the variables, using a subset  
-of TARGET_CONFIGURE_OPTS? Don't we always need them to point to the  
-cross compiler?
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/Config.in        |    1 +
+ package/libnet/Config.in |    6 ++++++
+ package/libnet/libnet.mk |   13 +++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnet/Config.in
+ create mode 100644 package/libnet/libnet.mk
 
-Or maybe some configuration variable you could specify in the  
-Makefile, which then takes care of all the magic.
-
+diff --git a/package/Config.in b/package/Config.in
+index 225d873..e8c2f70 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -306,6 +306,7 @@ source "package/libeXosip2/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
++source "package/libnet/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libnet/Config.in b/package/libnet/Config.in
+new file mode 100644
+index 0000000..5fc8c62
+--- /dev/null
++++ b/package/libnet/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBNET
++    bool "libnet"
++    help
++      libnet provides a portable framework for low-level network packet construction.
++
++      http://sourceforge.net/projects/libnet-dev
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+new file mode 100644
+index 0000000..aa623aa
+--- /dev/null
++++ b/package/libnet/libnet.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# LIBNET
++#
++#############################################################
++
++LIBNET_VERSION = 1.1.5
++LIBNET_SOURCE = libnet-$(LIBNET_VERSION).tar.gz
++LIBNET_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libnet-dev
++LIBNET_INSTALL_STAGING = YES
++LIBNET_CONF_OPT = --program-prefix=
++
++$(eval $(call AUTOTARGETS,package,libnet))
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+1.7.3.2
