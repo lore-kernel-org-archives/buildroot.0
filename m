@@ -1,35 +1,32 @@
-From: llandwerlin at gmail.com <llandwerlin@gmail.com>
-Date: Sun, 26 Dec 2010 17:16:36 +0100
-Subject: [Buildroot] [PATCH 3/3] automake: install gtk-doc.m4 in host
-	directory instead of staging
-In-Reply-To: <1293380196-22990-1-git-send-email-llandwerlin@gmail.com>
-References: <1293380196-22990-1-git-send-email-llandwerlin@gmail.com>
-Message-ID: <1293380196-22990-4-git-send-email-llandwerlin@gmail.com>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun, 26 Dec 2010 10:45:37 -0600
+Subject: [Buildroot] [PATCH] jpeg: don't add prefix to binaries
+Message-ID: <5898a721f72fb7143c3d747bc451dacc6eaad4f7.1293381926.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lionel Landwerlin <llandwerlin@gmail.com>
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
 ---
- package/automake/automake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/jpeg/jpeg.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 6ee3121..964f2fb 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -12,7 +12,7 @@ AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index 6dd4334..6baa64b 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -9,6 +9,7 @@ JPEG_SOURCE = jpegsrc.v$(JPEG_VERSION).tar.gz
+ JPEG_INSTALL_STAGING = YES
+ JPEG_INSTALL_TARGET = YES
+ JPEG_LIBTOOL_PATCH = NO
++JPEG_CONF_OPT = --program-prefix=
  
- define GTK_DOC_M4_INSTALL
-- $(INSTALL) -m 0644 package/automake/gtk-doc.m4 $(STAGING_DIR)/usr/share/aclocal/
-+ $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
- endef
- 
- HOST_AUTOMAKE_POST_INSTALL_HOOKS += GTK_DOC_M4_INSTALL
+ define JPEG_REMOVE_USELESS_TOOLS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtrans rdjpgcom wrjpgcom)
 -- 
-1.7.2.3
+1.7.3.2
