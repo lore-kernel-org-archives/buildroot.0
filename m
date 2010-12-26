@@ -1,61 +1,47 @@
-From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
-Date: Sun, 26 Dec 2010 00:29:42 +0100
-Subject: [Buildroot] [PATCH] Reset critical environment variables
-Message-ID: <1293319782-5813-1-git-send-email-daniel.nystrom@timeterminal.se>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Dec 2010 05:26:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 3013] New: make menuconfig fails with
+	buildroot-2010.11
+Message-ID: <bug-3013-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reset them early in top-level Makefile to ensure they're keept unset
-all the way through the build process.
+https://bugs.busybox.net/show_bug.cgi?id=3013
 
-This also removes the requirement of these variables being unset
-globally prior the build.
+           Summary: make menuconfig fails with buildroot-2010.11
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hrm-junk at att.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
----
- Makefile                               |    6 ++++++
- toolchain/dependencies/dependencies.sh |    9 ---------
- 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f6ab07e..1974e1c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -186,6 +186,12 @@ cc-option=$(shell if $(TARGET_CC) $(TARGET_CFLAGS) $(1) -S -o /dev/null -xc /dev
- #############################################################
- unexport CROSS_COMPILE
- unexport ARCH
-+unexport CC
-+unexport CXX
-+unexport CPP
-+unexport CFLAGS
-+unexport CXXFLAGS
-+unexport GREP_OPTIONS
- 
- GNU_HOST_NAME:=$(shell package/gnuconfig/config.guess)
- 
-diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
-index a152d4b..766a478 100755
---- a/toolchain/dependencies/dependencies.sh
-+++ b/toolchain/dependencies/dependencies.sh
-@@ -4,15 +4,6 @@
- 
- export LC_ALL=C
- 
--# Verify that critical environment variables aren't set
--for var in CC CXX CPP CFLAGS CXXFLAGS GREP_OPTIONS CROSS_COMPILE ARCH ; do
--    if test -n "$(eval echo '$'$var)" ; then
--	/bin/echo -e "\nYou must run 'unset $var' so buildroot can run with";
--	/bin/echo -e "a clean environment on your build machine\n";
--	exit 1;
--    fi
--done
--
- # Verify that grep works
- echo "WORKS" | grep "WORKS" >/dev/null 2>&1
- if test $? != 0 ; then
+Running "make menuconfig" fails with the following script:
+
+mkdir -p /data/Temp/buildroot-2010.11/output/build/buildroot-config/lxdialog
+make CC="/usr/bin/gcc"
+obj=/data/Temp/buildroot-2010.11/output/build/buildroot-config -C
+package/config -f Makefile.br mconf
+make[1]: Entering directory `/data/Temp/buildroot-2010.11/package/config'
+Makefile:299: *** invalid syntax in conditional.  Stop.
+make[1]: Leaving directory `/data/Temp/buildroot-2010.11/package/config'
+make: *** [/data/Temp/buildroot-2010.11/output/build/buildroot-config/mconf]
+Error 2
+
+
+The system is OpenSuSE 11.2, x86, 32 bit, and has gcc 4.4-4.2
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
