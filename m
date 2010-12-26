@@ -1,47 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Dec 2010 05:26:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 3013] New: make menuconfig fails with
-	buildroot-2010.11
-Message-ID: <bug-3013-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Dec 2010 10:21:55 +0100
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.package.in: Added BZR
+ download support
+In-Reply-To: <878vzdpjt8.fsf@macbook.be.48ers.dk>
+References: <cover.1293210451.git.thomas.petazzoni@free-electrons.com>
+	<cover.1293210451.git.thomas.petazzoni@free-electrons.com>
+	<ac294cf557f0d6053373d9af3471300a12f28d1c.1293210451.git.thomas.petazzoni@free-electrons.com>
+	<878vzdpjt8.fsf@macbook.be.48ers.dk>
+Message-ID: <20101226102155.04f7171f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3013
+On Sat, 25 Dec 2010 23:30:11 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-           Summary: make menuconfig fails with buildroot-2010.11
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: hrm-junk at att.net
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+>  Thomas> +define DOWNLOAD_BZR
+>  Thomas> +	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>  Thomas> +	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
+> 
+> Shouldn't this make a tarball like the git/svn versions do?
 
+I was also a little bit surprised, but bzr export creates a tarball
+automatically.
 
-Running "make menuconfig" fails with the following script:
+I have tested those two patches by creating a simple package that gets
+its source from BZR, and it worked properly (tarball created in
+$(DL_DIR), and re-used at the next build).
 
-mkdir -p /data/Temp/buildroot-2010.11/output/build/buildroot-config/lxdialog
-make CC="/usr/bin/gcc"
-obj=/data/Temp/buildroot-2010.11/output/build/buildroot-config -C
-package/config -f Makefile.br mconf
-make[1]: Entering directory `/data/Temp/buildroot-2010.11/package/config'
-Makefile:299: *** invalid syntax in conditional.  Stop.
-make[1]: Leaving directory `/data/Temp/buildroot-2010.11/package/config'
-make: *** [/data/Temp/buildroot-2010.11/output/build/buildroot-config/mconf]
-Error 2
+Regards,
 
-
-The system is OpenSuSE 11.2, x86, 32 bit, and has gcc 4.4-4.2
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
