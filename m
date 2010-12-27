@@ -1,40 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Dec 2010 22:50:18 +0100
-Subject: [Buildroot] [git commit master 1/1] package infra: fix versioned
-	patches for host packages
-Message-ID: <20101227222051.152BB8EB81@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 27 Dec 2010 23:25:58 +0100
+Subject: [Buildroot] [PATCH 0/5] toolchain rework, part 1
+In-Reply-To: <1291664411-27836-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Mon, 6 Dec 2010 16:40:06 -0300")
+References: <1291664411-27836-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bp46n98p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6908149bec720e6bb4c2d1e8d03331bcd4e3343b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> This is the first batch of patches for the internal toolchain
+ Gustavo> rework.  In this first stage we convert gmp, mpfr and mpc to
+ Gustavo> proper packages and hook them up for use in the current
+ Gustavo> toolchain.
 
-Without this patch we'd need separate versioned patch directories for
-target and host packages, thus having unwanted duplication.
+ Gustavo> We also fix a small bug in the package infra with regards to
+ Gustavo> versioned patches that'll be required to avoid duplication in
+ Gustavo> the binutils/gcc migration.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index c4a1cf8..92ce4e2 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -267,7 +267,7 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
- 	  else \
- 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $($(NOHOSTPKG)_NAME)\*.patch $($(NOHOSTPKG)_NAME)\*.patch.$(ARCH) || exit 1; \
--	    if test -d $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)/$(NAMEVER); then \
-+	    if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER); then \
- 	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
- 	    fi; \
- 	  fi; \
 -- 
-1.7.2.2
+Bye, Peter Korsgaard
