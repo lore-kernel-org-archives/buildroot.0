@@ -1,43 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Dec 2010 15:18:27 -0300
-Subject: [Buildroot] oprofile "requires" gmp???
-In-Reply-To: <4D18D7B3.3020900@zacarias.com.ar>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>	<20101224090517.0c935c19@surf>	<9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
-	<4D18D7B3.3020900@zacarias.com.ar>
-Message-ID: <4D18D873.9010502@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 27 Dec 2010 21:32:05 +0100
+Subject: [Buildroot] [git commit master 1/1] mesa3d: ensure it can only be
+	compiled with modular X server
+Message-ID: <20101227203241.AF9038EB73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/27/10 15:15, Gustavo Zacarias wrote:
 
-> On 12/27/10 15:15, ANDY KENNEDY wrote:
-> 
->> After doing a:
->> git clone git://repo.or.cz/buildroot-gz.git
->>
->> I get worse results.  There are no dependencies for gmp now in the
->> toolchain for the target (IIRC, the previous version does select gmp
->> when target tool chain is selected -- though, that was last Thursday and
->> minus christmas eve, I've slept since then).  The toolchain is still not
->> required for building oprofile, though it does attempt to build it.
->>
->> Did I perhaps use git incorrectly to not get the correct changes you
->> mentioned?  The gmp version was still 4.2.4 and I could find no place in
->> the config to change it to 5.0.1.
->>
->> Thanks,
->> Andy
-> 
-> git clone git://repo.or.cz/buildroot-gz.git toolchain-rework
-> is the correct syntax, otherwise you're just cloning my master repo
-> which is basically buildroot master, hence the same as cloning from
-> buildroot or getting a snapshot :)
-> Regards.
+commit: http://git.buildroot.net/buildroot/commit/?id=d741cf7c62a5197a138a4e0890bf99f026dd0354
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Oh my bad, summer temperatures are killer today and i'm still sleepy
-from a very festive weekend...
-git clone git://repo.or.cz/buildroot-gz.git -b toolchain-rework
-:)
+kdrive has no glx support, and mesa3d depends on libdrm which needs
+largefile support (just like the modular server), so ensure mesa3d
+can only be enabled in that configuration.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/mesa3d/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/x11r7/mesa3d/Config.in b/package/x11r7/mesa3d/Config.in
+index 52876e3..596eea3 100644
+--- a/package/x11r7/mesa3d/Config.in
++++ b/package/x11r7/mesa3d/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+ 	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
++	depends on BR2_PACKAGE_XSERVER_xorg
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Mesa 3D, an open-source implementation of the OpenGL specification.
+-- 
+1.7.2.2
