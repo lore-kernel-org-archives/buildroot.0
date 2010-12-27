@@ -1,40 +1,63 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Dec 2010 16:46:37 +0100
-Subject: [Buildroot] busybox, hardcoded config
-In-Reply-To: <20101227093446.1392541i0cof9es6@www.home.zuerker.org> (Heiko
-	Zuerker's message of "Mon, 27 Dec 2010 09:34:46 -0600")
-References: <20101223073318.154656bz82tuap44@www.home.zuerker.org>
-	<20101224085246.0a2d8640@surf>
-	<20101224072947.17101by6ka661utc@www.home.zuerker.org>
-	<87ipyhpl2b.fsf@macbook.be.48ers.dk>
-	<20101226080847.93616g8dqnq63ew4@www.home.zuerker.org>
-	<87tyhznskz.fsf@macbook.be.48ers.dk>
-	<20101227093446.1392541i0cof9es6@www.home.zuerker.org>
-Message-ID: <87pqsnnrqa.fsf@macbook.be.48ers.dk>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 27 Dec 2010 12:15:29 -0600
+Subject: [Buildroot] oprofile "requires" gmp???
+In-Reply-To: <20101224090517.0c935c19@surf>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>
+	<20101224090517.0c935c19@surf>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
+> Andy,
+> 
+> (Could you please avoid top-posting ? Thanks!)
 
-Hi,
+I could try, though, if the brain is in the wrong mode, probably not ;).
 
- >> Why not? As long as you are linking statically it doesn't matter
- >> what C library the rest of the system is using.
+> On Thu, 23 Dec 2010 13:03:15 -0600
+> ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+> 
+> > Okay, I've done some tracking and have found the issue, but I don't
+> know
+> > Mips asm that great (only 2 months into mips).
+> >
+> > The code that it pukes at for building gmp for the native toolchain
+> is:
+> >
+> > #define umul_ppmm(w1, w0, u, v) \
+> > __asm__ ("multu %2,%3" : "=l" (w0), "=h" (w1) : "d" (u), "d" (v))
+> >
+> > (defined in longlong.h under the root of gmp-4.2.4)
+> >
+> > The error given is:
+> > dive_1.c:114:4: error: impossible constraint in 'asm'
+> > dive_1.c:114 is: umul_ppmm (h, dummy, l, divisor);
+> 
+> Hum, maybe this has been fixed in more recent versions of gmp. Could
+> you try Gustavoz's toolchain-rework branch ? It bumps gmp to version
+> 5.0.1, it's really the first thing to test before trying to fix an old
+> gmp version.
+> 
+> Gustavo's repository is at git://repo.or.cz/buildroot-gz.git, the
+> branch is toolchain-rework. Or you can get the individual patches at
+>
+http://lists.busybox.net/pipermail/buildroot/2010-December/039804.html.
 
- Heiko> I didn't phrase my question right: does buildroot support it?
- Heiko> End-state I need to be able to just run "make" and everything is being
- Heiko> build without any interaction.
+After doing a:
+git clone git://repo.or.cz/buildroot-gz.git
 
-You are only using buildroot for the initramfs, right? If so, yes that
-works.
+I get worse results.  There are no dependencies for gmp now in the
+toolchain for the target (IIRC, the previous version does select gmp
+when target tool chain is selected -- though, that was last Thursday and
+minus christmas eve, I've slept since then).  The toolchain is still not
+required for building oprofile, though it does attempt to build it.
 
- Heiko> Obviously I didn't get a chance to look into it. My house decided it
- Heiko> wanted me to fix leaking water valves...
+Did I perhaps use git incorrectly to not get the correct changes you
+mentioned?  The gmp version was still 4.2.4 and I could find no place in
+the config to change it to 5.0.1.
 
-Priorities, priorities ;)
-
--- 
-Bye, Peter Korsgaard
+Thanks,
+Andy
