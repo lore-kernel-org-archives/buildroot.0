@@ -1,34 +1,86 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 27 Dec 2010 16:01:45 -0500
-Subject: [Buildroot] [PATCH] netperf: add Gentoo patch to fix buffer
-	overflow compiler warnings
-In-Reply-To: <87vd2flzaz.fsf@macbook.be.48ers.dk>
-References: <855e95b6e3f2b8aba90318035d9951ac9d1a5cb3.1293384653.git.smiley73@users.sourceforge.net>
-	<87vd2flzaz.fsf@macbook.be.48ers.dk>
-Message-ID: <201012271601.46107.vapier@gentoo.org>
+Date: Mon, 27 Dec 2010 16:40:14 -0500
+Subject: [Buildroot] [PATCH 1/2] busybox: unify duplicated build steps
+Message-ID: <1293486015-19100-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, December 27, 2010 15:45:56 Peter Korsgaard wrote:
-> >>>>> "heiko" == heiko  <heiko@zuerker.org> writes:
->  heiko> From: Heiko Zuerker <smiley73@users.sourceforge.net>
->  heiko> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
->  heiko> ---
->  heiko>  package/netperf/netperf-2.4.5-netserver.patch |   51
-> +++++++++++++++++++++++++
-> 
-> So this just fixes a build warning, and otherwise doesn't affect the
-> resulting binaries?
+This does set a few more vars in some steps that weren't set before, but
+they should be harmless in the contexts in question.  And the resulting
+save in duplication is nice.
 
-it fixes a possible buffer overflow and invalid memory indexing
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20101227/2c65b816/attachment.pgp>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ package/busybox/busybox.mk |   29 ++++++++++++-----------------
+ 1 files changed, 12 insertions(+), 17 deletions(-)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 8bff1a6..342819a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -15,6 +15,13 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
++BUSYBOX_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	ARCH=$(KERNEL_ARCH) \
++	PREFIX="$(TARGET_DIR)" \
++	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	CONFIG_PREFIX="$(TARGET_DIR)"
+ 
+ ifndef BUSYBOX_CONFIG_FILE
+ 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+@@ -121,16 +128,11 @@ define BUSYBOX_CONFIGURE_CMDS
+ endef
+ 
+ define BUSYBOX_BUILD_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define BUSYBOX_INSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) install
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
+ 	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+ 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+@@ -138,24 +140,17 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ endef
+ 
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) uninstall
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) uninstall
+ endef
+ 
+ define BUSYBOX_CLEAN_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) clean
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) clean
+ endef
+ 
+ $(eval $(call GENTARGETS,package,busybox))
+ 
+ busybox-menuconfig:	$(BUSYBOX_DIR)/.stamp_extracted
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) ARCH=$(KERNEL_ARCH) \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(BUSYBOX_DIR) menuconfig
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) menuconfig
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
+-- 
+1.7.3.4
