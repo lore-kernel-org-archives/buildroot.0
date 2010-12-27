@@ -1,23 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Dec 2010 23:53:13 +0100
-Subject: [Buildroot] [PATCH] netperf: add Gentoo patch to fix buffer
-	overflow compiler warnings
-In-Reply-To: <855e95b6e3f2b8aba90318035d9951ac9d1a5cb3.1293384653.git.smiley73@users.sourceforge.net>
-	(heiko@zuerker.org's message of "Sun, 26 Dec 2010 11:31:15 -0600")
-References: <855e95b6e3f2b8aba90318035d9951ac9d1a5cb3.1293384653.git.smiley73@users.sourceforge.net>
-Message-ID: <87tyhylteu.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 28 Dec 2010 00:07:53 +0100
+Subject: [Buildroot] [git commit master 1/1] qt: dbus module needs gui
+	support as well
+Message-ID: <20101227230818.C161E8EB87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "heiko" == heiko  <heiko@zuerker.org> writes:
 
- heiko> From: Heiko Zuerker <smiley73@users.sourceforge.net>
- heiko> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+commit: http://git.buildroot.net/buildroot/commit/?id=bff52482023a055aab28602ac630d229303c9013
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index faebfa0..e5fe325 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -284,7 +284,6 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	help
+ 	  Build the platform Phonon plugin.
+ 	  If unsure, say n.
+-endif
+ 
+ comment "Qt DBbus module not available (need dbus)"
+ 	depends on !BR2_PACKAGE_DBUS
+@@ -294,6 +293,7 @@ config BR2_PACKAGE_QT_DBUS
+ 	depends on BR2_PACKAGE_DBUS
+ 	help
+ 	  Build the Qt DBus module.
++endif
+ 
+ config BR2_PACKAGE_QT_XML
+ 	bool "XML Module"
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
