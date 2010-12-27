@@ -1,41 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Dec 2010 12:33:04 -0300
-Subject: [Buildroot] [PATCH] sqlite: use new upstream file versioning
-	convention
-Message-ID: <1293463984-20467-1-git-send-email-gustavo@zacarias.com.ar>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Mon, 27 Dec 2010 09:34:46 -0600
+Subject: [Buildroot] busybox, hardcoded config
+In-Reply-To: <87tyhznskz.fsf@macbook.be.48ers.dk>
+References: <20101223073318.154656bz82tuap44@www.home.zuerker.org>
+	<20101224085246.0a2d8640@surf>
+	<20101224072947.17101by6ka661utc@www.home.zuerker.org>
+	<87ipyhpl2b.fsf@macbook.be.48ers.dk>
+	<20101226080847.93616g8dqnq63ew4@www.home.zuerker.org>
+	<87tyhznskz.fsf@macbook.be.48ers.dk>
+Message-ID: <20101227093446.1392541i0cof9es6@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream decided to change the file naming convention.
+Quoting Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
+>
+> Hi,
+>
+>  Heiko> It wouldn't be possible too just compile busybox with uclibc and the
+>  Heiko> rest of the apps with glibc, correct?
+>
+> Why not? As long as you are linking statically it doesn't matter what C
+> library the rest of the system is using.
 
-sqlite-amalgamation is now sqlite-autoconf
+I didn't phrase my question right: does buildroot support it?
+End-state I need to be able to just run "make" and everything is being  
+build without any interaction.
+I assume it's probably a lot easier to just use shared libs.
 
-For a given version, say, 3.7.4 (W.X.Y) upstream now uses WXXYYZZ with Z
-reserved for minor fix versions, all zero padded.
-Thus 3.7.4 is 3070400, 3.7.4.1 would be 3070401.
+>  Heiko> I could rewrite the initramfs support to work with shared  
+> libs. All it
+>  Heiko> takes is a little routine to find all the required libraries and copy
+>  Heiko> them over. I'll take a look at this later today.
+>
+> Ok, great.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Obviously I didn't get a chance to look into it. My house decided it  
+wanted me to fix leaking water valves...
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 8b0e13e..7b3a983 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--SQLITE_VERSION = 3.7.4
--SQLITE_SOURCE = sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
-+SQLITE_VERSION = 3070400
-+SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
- SQLITE_INSTALL_STAGING = YES
- 
 -- 
-1.7.2.2
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
