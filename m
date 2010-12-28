@@ -1,46 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Dec 2010 16:10:34 -0300
-Subject: [Buildroot] [PATCH 09/10] binutils: needs libintl when locales are
-	enabled
+Date: Tue, 28 Dec 2010 16:10:33 -0300
+Subject: [Buildroot] [PATCH 08/10] oprofile: use new libbfd option
 In-Reply-To: <1293563435-10054-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1293563435-10054-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1293563435-10054-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1293563435-10054-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Convert the oprofile target to select the new libbfd staging/target
+option to avoid a huge target binutils for a simple task.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/binutils/Config.in   |    2 ++
- package/binutils/binutils.mk |    1 +
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ package/oprofile/Config.in   |    1 +
+ package/oprofile/oprofile.mk |    5 +----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 942562e..65b0f30 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_BINUTILS
- 	bool
- 	depends on BR2_TOOLCHAIN_BUILDROOT
- 	default y if BR2_PACKAGE_BINUTILS_TARGET || BR2_PACKAGE_BINUTILS_LIBBFD
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index c877dae..15e8186 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_OPROFILE
+ 	# choosen in the config. This will have to be fixed later.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL
+ 	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_BINUTILS_LIBBFD
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  OProfile is a system-wide profiler for Linux systems,
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 3be50f2..42bf0e2 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -5,9 +5,6 @@
+ #############################################################
+ OPROFILE_VERSION := 0.9.4
+ OPROFILE_CONF_OPT :=	--localstatedir=/var \
+-			--with-extra-includes="$(BUILD_DIR)/binutils-$(BR2_BINUTILS_VERSION)-target/bfd \
+-			-I$(TOOLCHAIN_DIR)/binutils-$(BR2_BINUTILS_VERSION)/include" \
+-			--with-extra-libs=$(BUILD_DIR)/binutils-$(BR2_BINUTILS_VERSION)-target/bfd \
+ 			--with-kernel-support
  
- config BR2_PACKAGE_BINUTILS_TARGET
- 	bool "binutils"
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 634c7ae..62b8b89 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -12,6 +12,7 @@ BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+ OPROFILE_BINARIES := utils/ophelp
+@@ -24,7 +21,7 @@ ifeq ($(OPROFILE_ARCH),)
+ OPROFILE_ARCH := $(BR2_ARCH)
  endif
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
-+BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
  
- # These aren't really needed, we just pull them until gcc is a proper package
- ifeq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+-OPROFILE_DEPENDENCIES := popt binutils_target
++OPROFILE_DEPENDENCIES := popt binutils
+ 
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
 -- 
 1.7.2.2
