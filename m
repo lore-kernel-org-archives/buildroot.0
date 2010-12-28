@@ -1,90 +1,122 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 Dec 2010 20:35:40 +0100
-Subject: [Buildroot] [git commit master 1/1] package: avoid copying .m4
-	files from host to staging
-Message-ID: <20101228193702.D73828EB88@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Dec 2010 16:38:09 -0300
+Subject: [Buildroot] [PATCH] uclibc: fix configs for 0.9.32 & snapshot
+Message-ID: <1293565090-6483-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* 0.9.32 config needs UCLIBC_HAS___PROGNAME defined or we stall when
+  program invocation name is enabled.
+* Mirror 0.9.32's config to snapshot for consistency.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a68640c31dbf216eb5862d76daefce4b7e754795
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since we are preparing a package generation mechanism, we would like
-to avoid packages that move/touch/modify files which are not part
-of their own package. That's why we try to not install host files into
-the staging directory (in this case .m4 files) and instead we include
-$(HOST_DIR)/usr/share/aclocal into autoreconf search directory.
-
-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/autoconf/autoconf.mk     |    2 +-
- package/automake/automake.mk     |    1 +
- package/libtool/libtool.mk       |    9 ---------
- package/pkg-config/pkg-config.mk |    7 -------
- 4 files changed, 2 insertions(+), 17 deletions(-)
+ toolchain/uClibc/uClibc-0.9.32.config   |    1 +
+ toolchain/uClibc/uClibc-snapshot.config |   34 ++++++++++++++++--------------
+ 2 files changed, 19 insertions(+), 16 deletions(-)
 
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index a21192f..0ff0644 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -23,4 +23,4 @@ $(eval $(call AUTOTARGETS,package,autoconf,host))
- # variables used by other packages
- AUTOCONF:=$(HOST_DIR)/usr/bin/autoconf
- AUTOHEADER:=$(HOST_DIR)/usr/bin/autoheader
--AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
-+AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index e2ff9b2..6ee3121 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -23,4 +23,5 @@ $(eval $(call AUTOTARGETS,package,automake,host))
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
-+ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 60fee9f..3306244 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -7,15 +7,6 @@ LIBTOOL_VERSION = 2.2.10
- LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
- LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+diff --git a/toolchain/uClibc/uClibc-0.9.32.config b/toolchain/uClibc/uClibc-0.9.32.config
+index e599198..9c83d68 100644
+--- a/toolchain/uClibc/uClibc-0.9.32.config
++++ b/toolchain/uClibc/uClibc-0.9.32.config
+@@ -112,6 +112,7 @@ UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_HAS_STUBS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
++# UCLIBC_HAS___PROGNAME is not set
+ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
+index e5d2bea..9c83d68 100644
+--- a/toolchain/uClibc/uClibc-snapshot.config
++++ b/toolchain/uClibc/uClibc-snapshot.config
+@@ -70,6 +70,7 @@ UCLIBC_HAS_FPU=y
+ DO_C99_MATH=y
+ # DO_XSI_MATH is not set
+ # UCLIBC_HAS_FENV is not set
++UCLIBC_HAS_LONG_DOUBLE_MATH=y
+ KERNEL_HEADERS="/usr/src/linux/include"
+ HAVE_DOT_CONFIG=y
  
--define HOST_LIBTOOL_CUSTOM_INSTALL
--	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/libtool.m4 \
--		$(STAGING_DIR)/usr/share/aclocal/libtool.m4
--	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/ltdl.m4 \
--		$(STAGING_DIR)/usr/share/aclocal/ltdl.m4
--endef
--
--HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_CUSTOM_INSTALL
--
- HOST_LIBTOOL_LIBTOOL_PATCH = NO
- 
- $(eval $(call AUTOTARGETS,package,libtool))
-diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
-index 330b166..d0bc424 100644
---- a/package/pkg-config/pkg-config.mk
-+++ b/package/pkg-config/pkg-config.mk
-@@ -15,13 +15,6 @@ HOST_PKG_CONFIG_CONF_OPT = \
- 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
- 		--disable-static
- 
--define HOST_PKG_CONFIG_INSTALL_M4
--install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
--		$(STAGING_DIR)/usr/share/aclocal/pkg.m4
--endef
--
--HOST_PKG_CONFIG_POST_INSTALL_HOOKS += HOST_PKG_CONFIG_INSTALL_M4
--
- $(eval $(call AUTOTARGETS,package,pkg-config))
- $(eval $(call AUTOTARGETS,package,pkg-config,host))
- 
+@@ -92,9 +93,9 @@ LDSO_SEARCH_INTERP_PATH=y
+ UCLIBC_CTOR_DTOR=y
+ # LDSO_GNU_HASH_SUPPORT is not set
+ # HAS_NO_THREADS is not set
+-# LINUXTHREADS_OLD is not set
++LINUXTHREADS_OLD=y
+ # LINUXTHREADS_NEW is not set
+-UCLIBC_HAS_THREADS_NATIVE=y
++# UCLIBC_HAS_THREADS_NATIVE is not set
+ UCLIBC_HAS_THREADS=y
+ # PTHREADS_DEBUG_SUPPORT is not set
+ UCLIBC_HAS_SYSLOG=y
+@@ -111,6 +112,7 @@ UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_HAS_STUBS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
++# UCLIBC_HAS___PROGNAME is not set
+ UCLIBC_HAS_PTY=y
+ ASSUME_DEVPTS=y
+ UNIX98PTY_ONLY=y
+@@ -151,10 +153,10 @@ UCLIBC_HAS_CRYPT=y
+ UCLIBC_HAS_NETWORK_SUPPORT=y
+ UCLIBC_HAS_SOCKET=y
+ UCLIBC_HAS_IPV4=y
+-UCLIBC_HAS_IPV6=y
+-UCLIBC_HAS_RPC=y
+-UCLIBC_HAS_FULL_RPC=y
+-UCLIBC_HAS_REENTRANT_RPC=y
++# UCLIBC_HAS_IPV6 is not set
++# UCLIBC_HAS_RPC is not set
++# UCLIBC_HAS_FULL_RPC is not set
++# UCLIBC_HAS_REENTRANT_RPC is not set
+ UCLIBC_USE_NETLINK=y
+ # UCLIBC_SUPPORT_AI_ADDRCONFIG is not set
+ # UCLIBC_HAS_BSD_RES_CLOSE is not set
+@@ -173,13 +175,8 @@ UCLIBC_HAS_CTYPE_SIGNED=y
+ # UCLIBC_HAS_CTYPE_UNSAFE is not set
+ # UCLIBC_HAS_CTYPE_CHECKED is not set
+ UCLIBC_HAS_CTYPE_ENFORCED=y
+-UCLIBC_HAS_WCHAR=y
+-UCLIBC_HAS_LOCALE=y
+-# UCLIBC_BUILD_ALL_LOCALE is not set
+-UCLIBC_BUILD_MINIMAL_LOCALE=y
+-# UCLIBC_PREGENERATED_LOCALE_DATA is not set
+-UCLIBC_BUILD_MINIMAL_LOCALES="en_US"
+-UCLIBC_HAS_XLOCALE=y
++# UCLIBC_HAS_WCHAR is not set
++# UCLIBC_HAS_LOCALE is not set
+ UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+ # UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
+ UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+@@ -219,8 +216,8 @@ UCLIBC_HAS_REGEX=y
+ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+ # UCLIBC_HAS_WORDEXP is not set
+-# UCLIBC_HAS_NFTW is not set
+-# UCLIBC_HAS_FTW is not set
++UCLIBC_HAS_NFTW=y
++UCLIBC_HAS_FTW=y
+ UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
+ # UCLIBC_HAS_UTMPX is not set
+@@ -239,7 +236,12 @@ HARDWIRED_ABSPATH=y
+ # UCLIBC_BUILD_PIE is not set
+ # UCLIBC_HAS_ARC4RANDOM is not set
+ # HAVE_NO_SSP is not set
+-# UCLIBC_HAS_SSP is not set
++UCLIBC_HAS_SSP=y
++# UCLIBC_HAS_SSP_COMPAT is not set
++# SSP_QUICK_CANARY is not set
++PROPOLICE_BLOCK_ABRT=y
++# PROPOLICE_BLOCK_SEGV is not set
++# UCLIBC_BUILD_SSP is not set
+ UCLIBC_BUILD_RELRO=y
+ UCLIBC_BUILD_NOW=y
+ UCLIBC_BUILD_NOEXECSTACK=y
 -- 
 1.7.2.2
