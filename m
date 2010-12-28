@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 28 Dec 2010 20:35:40 +0100
-Subject: [Buildroot] [git commit master 1/1] automake: install gtk-doc.m4 in
-	host directory instead of staging
-Message-ID: <20101228193703.164048EB88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] package: avoid copying .m4
+	files from host to staging
+Message-ID: <20101228193702.D73828EB88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,27 +10,81 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b0e9dd06f27d134340a4aedde6e6e2105820832
+commit: http://git.buildroot.net/buildroot/commit/?id=a68640c31dbf216eb5862d76daefce4b7e754795
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since we are preparing a package generation mechanism, we would like
+to avoid packages that move/touch/modify files which are not part
+of their own package. That's why we try to not install host files into
+the staging directory (in this case .m4 files) and instead we include
+$(HOST_DIR)/usr/share/aclocal into autoreconf search directory.
 
 Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/automake/automake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/autoconf/autoconf.mk     |    2 +-
+ package/automake/automake.mk     |    1 +
+ package/libtool/libtool.mk       |    9 ---------
+ package/pkg-config/pkg-config.mk |    7 -------
+ 4 files changed, 2 insertions(+), 17 deletions(-)
 
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index a21192f..0ff0644 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -23,4 +23,4 @@ $(eval $(call AUTOTARGETS,package,autoconf,host))
+ # variables used by other packages
+ AUTOCONF:=$(HOST_DIR)/usr/bin/autoconf
+ AUTOHEADER:=$(HOST_DIR)/usr/bin/autoheader
+-AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)"
++AUTORECONF=$(HOST_CONFIGURE_OPTS) ACLOCAL="$(ACLOCAL)" AUTOCONF="$(AUTOCONF)" AUTOHEADER="$(AUTOHEADER)" AUTOMAKE="$(AUTOMAKE)" $(HOST_DIR)/usr/bin/autoreconf -f -i -I "$(ACLOCAL_DIR)" -I "$(ACLOCAL_HOST_DIR)"
 diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 6ee3121..964f2fb 100644
+index e2ff9b2..6ee3121 100644
 --- a/package/automake/automake.mk
 +++ b/package/automake/automake.mk
-@@ -12,7 +12,7 @@ AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+@@ -23,4 +23,5 @@ $(eval $(call AUTOTARGETS,package,automake,host))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
++ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 60fee9f..3306244 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -7,15 +7,6 @@ LIBTOOL_VERSION = 2.2.10
+ LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.gz
+ LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
  
- define GTK_DOC_M4_INSTALL
-- $(INSTALL) -m 0644 package/automake/gtk-doc.m4 $(STAGING_DIR)/usr/share/aclocal/
-+ $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
- endef
+-define HOST_LIBTOOL_CUSTOM_INSTALL
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/libtool.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/libtool.m4
+-	install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/ltdl.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/ltdl.m4
+-endef
+-
+-HOST_LIBTOOL_POST_INSTALL_HOOKS += HOST_LIBTOOL_CUSTOM_INSTALL
+-
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
  
- HOST_AUTOMAKE_POST_INSTALL_HOOKS += GTK_DOC_M4_INSTALL
+ $(eval $(call AUTOTARGETS,package,libtool))
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+index 330b166..d0bc424 100644
+--- a/package/pkg-config/pkg-config.mk
++++ b/package/pkg-config/pkg-config.mk
+@@ -15,13 +15,6 @@ HOST_PKG_CONFIG_CONF_OPT = \
+ 		--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		--disable-static
+ 
+-define HOST_PKG_CONFIG_INSTALL_M4
+-install -D -m 0644 $(HOST_DIR)/usr/share/aclocal/pkg.m4 \
+-		$(STAGING_DIR)/usr/share/aclocal/pkg.m4
+-endef
+-
+-HOST_PKG_CONFIG_POST_INSTALL_HOOKS += HOST_PKG_CONFIG_INSTALL_M4
+-
+ $(eval $(call AUTOTARGETS,package,pkg-config))
+ $(eval $(call AUTOTARGETS,package,pkg-config,host))
+ 
 -- 
 1.7.2.2
