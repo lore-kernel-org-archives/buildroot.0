@@ -1,54 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Dec 2010 13:30:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package: correct usage of
-	PKG_CONFIG_LIBDIR and PKG_CONFIG_PATH
-In-Reply-To: <dfd500e8d6ee6be7e90583199314956adcce265f.1293535143.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 28 Dec 2010 12:19:09 +0100")
-References: <cover.1293535143.git.thomas.petazzoni@free-electrons.com>
-	<cover.1293535143.git.thomas.petazzoni@free-electrons.com>
-	<dfd500e8d6ee6be7e90583199314956adcce265f.1293535143.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87oc86krlb.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Dec 2010 10:04:57 -0300
+Subject: [Buildroot] oprofile "requires" gmp???
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB132@EXV1.corp.adtran.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>	<20101224090517.0c935c19@surf>	<9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
+	<4D18D7B3.3020900@zacarias.com.ar>
+	<4D18D873.9010502@zacarias.com.ar>
+	<9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB132@EXV1.corp.adtran.com>
+Message-ID: <4D19E079.9030704@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 12/27/10 20:12, ANDY KENNEDY wrote:
 
-Hi,
+> Gustavo,
+> 
+> Where did BR2_STAGING_DIR go?  I'm used to it being under Build Options,
+> but I cannot find it.
+> 
+> In fact, when I put this in and did a make oldconfig it deleted my entry
+> in the .config file.
 
- Thomas> In TARGET_CONFIGURE_OPTS (used to build packages for the target), we
- Thomas> were doing:
+Staging lives now in output/host/usr/tuple/sysroot, it's no longer an
+option. We can keep
 
- Thomas>  PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)"
+> Also, the gmp builds now -- they ifdef'ed out the asm code and replaced
+> it with a do while (0) C code -- which makes more sense, I think.
+> Though, I cannot get oprofile to build still.  The error message is:
+> 
+> /root/src/PRODUCTION/newbuildroo/buildroot-gz/output/host/usr/mips-unkno
+> wn-linux-uclibc/sysroot/usr/lib/libbfd.a(archures.o): relocation
+> R_MIPS_HI16 against `__gnu_local_gp' can not be used when making a
+> shared object; recompile with -fPIC
+> /root/src/PRODUCTION/newbuildroo/buildroot-gz/output/host/usr/mips-unkno
+> wn-linux-uclibc/sysroot/usr/lib/libbfd.a: could not read symbols: Bad
+> value
 
- Thomas> This is incorrect for two reasons:
+Oh, bad mips.
+Ok, we need a shared libbfd, i was hoping to get away with a static one
+but it seems not.
+Fixed in git, pull again and retry.
 
- Thomas>  * Adding $(PKG_CONFIG_PATH) to the PKG_CONFIG_PATH is useless, as
- Thomas>    PKG_CONFIG_PATH only *adds* new paths to the existing search paths.
+> . . . and before you say anything, yes I build as root ;).
 
- Thomas>  * PKG_CONFIG_PATH keeps default path (/usr/lib/pkgconfig) in the
- Thomas>    search path, which is incorrect for target packages: we should only
- Thomas>    look in $(STAGING_DIR)/usr/lib/pkgconfig. Lionel was hit by an
- Thomas>    issue caused by this: while compiling packages for the target, it
- Thomas>    was looking at .pc files in /usr/lib/pkgconfig on his host machine.
+Please don't, things should work and are far less risky without root.
 
-Hmm, but we compile a dedicated (host) pkg-config for this, where we
-have set --pc-path=staging, so none of this should be needed, right?
-(with the possible exception of ensuring PKG_CONFIG_PATH isn't set in
-the environment).
+> You want me to work these issues with you off-list until we (ur, you)
+> get it fixed, or shall I trim just reply to the list (removing the
+> /root/src etc and making it look like it is in a user's dir).
+> 
+> I don't mind either way.
+> 
+> I'm gone for the evening.  I'll catch up with you in the morning.  Enjoy
+> the long hours of sunlight and warm temperatures!!!
+> 
+> Andy 
 
- Thomas>    PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
-
- Thomas> But there's no real reason to use PKG_CONFIG_LIBDIR here: as we are
- Thomas> compiling for the host, we may well have some interesting libraries in
- Thomas> /usr/lib/pkgconfig. So searching through them after
- Thomas> $(HOST_DIR)/usr/lib/pkgconfig sounds like the right thing to do.
-
-That seems wrong as our pkg-config looks in staging by default, and
-random host libraries shouldn't get picked up if that then breaks the
-build for people without those libs.
-
--- 
-Bye, Peter Korsgaard
+Keep copying the list, maybe someone else is interested in this or can
+chime in with an idea.
