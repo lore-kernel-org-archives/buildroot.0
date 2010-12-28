@@ -1,86 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Dec 2010 16:55:35 -0300
-Subject: [Buildroot] [PATCHv2] libcap: fix target install
-Message-ID: <1293566135-8862-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 28 Dec 2010 18:21:26 -0300
+Subject: [Buildroot] oprofile "requires" gmp??? Slight fork:
+	BR2_STAGING_DIR
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB2EA@EXV1.corp.adtran.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>	<20101224090517.0c935c19@surf>	<9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
+	<4D18D7B3.3020900@zacarias.com.ar>
+	<4D18D873.9010502@zacarias.com.ar>
+	<9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB132@EXV1.corp.adtran.com>
+	<4D19E079.9030704@zacarias.com.ar>
+	<9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB2EA@EXV1.corp.adtran.com>
+Message-ID: <4D1A54D6.60805@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/usr/lib/libcap.so.* was installed via "install -D" but libcap.so.2 is
-a symlink so it was dereferenced.
+On 12/28/2010 01:19 PM, ANDY KENNEDY wrote:
 
-Also update the buildsystem patch so that the shared lib is +X.
+>>> Where did BR2_STAGING_DIR go?  I'm used to it being under Build
+>> Options,
+>>> but I cannot find it.
+>>>
+>>> In fact, when I put this in and did a make oldconfig it deleted my
+>> entry
+>>> in the .config file.
+>>
+>> Staging lives now in output/host/usr/tuple/sysroot, it's no longer an
+>> option. We can keep
+> 
+> 
+> You have a period there after "option" with "We can keep" as a partial
+> sentence.  So, what does that mean exactly?  Do you mean "it's no longer
+> an option we can keep." or do you mean "it's no longer an option.  We
+> can keep [this if enough people want that option]."
+> 
+> If it is the latter, please keep this as an option as I use this option
+> extensively with our code management system.  
+> 
+> Andy
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcap/libcap-2.19-build-system.patch |   35 +++++++++++++++---------
- package/libcap/libcap.mk                      |    3 +-
- 2 files changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/package/libcap/libcap-2.19-build-system.patch b/package/libcap/libcap-2.19-build-system.patch
-index 51b73af..f548726 100644
---- a/package/libcap/libcap-2.19-build-system.patch
-+++ b/package/libcap/libcap-2.19-build-system.patch
-@@ -1,18 +1,6 @@
--diff -Nura libcap-2.19.orig/libcap/Makefile libcap-2.19/libcap/Makefile
----- libcap-2.19.orig/libcap/Makefile	2008-12-04 05:03:12.000000000 -0200
--+++ libcap-2.19/libcap/Makefile	2010-05-28 14:32:06.290297694 -0300
--@@ -33,7 +33,7 @@
-- endif
-- 
-- _makenames: _makenames.c cap_names.list.h
---	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
--+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $< -o $@
-- 
-- cap_names.h: _makenames
-- 	./_makenames > cap_names.h
- diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
- --- libcap-2.19.orig/Make.Rules	2010-01-13 23:04:58.000000000 -0300
--+++ libcap-2.19/Make.Rules	2010-05-28 14:32:31.802296186 -0300
-++++ libcap-2.19/Make.Rules	2010-12-28 16:44:18.164052748 -0300
- @@ -45,25 +45,26 @@
-  KERNEL_HEADERS := $(topdir)/libcap/include
-  IPATH += -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
-@@ -48,3 +36,24 @@ diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
-  INDENT := $(shell if [ -n "$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
-  DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
-  LIBATTR := yes
-+diff -Nura libcap-2.19.orig/libcap/Makefile libcap-2.19/libcap/Makefile
-+--- libcap-2.19.orig/libcap/Makefile	2008-12-04 05:03:12.000000000 -0200
-++++ libcap-2.19/libcap/Makefile	2010-12-28 16:44:33.457052750 -0300
-+@@ -33,7 +33,7 @@
-+ endif
-+ 
-+ _makenames: _makenames.c cap_names.list.h
-+-	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
-++	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $< -o $@
-+ 
-+ cap_names.h: _makenames
-+ 	./_makenames > cap_names.h
-+@@ -65,7 +65,7 @@
-+ 	install -m 0644 include/sys/capability.h $(INCDIR)/sys
-+ 	mkdir -p -m 0755 $(LIBDIR)
-+ 	install -m 0644 $(STALIBNAME) $(LIBDIR)/$(STALIBNAME)
-+-	install -m 0644 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
-++	install -m 0755 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
-+ 	ln -sf $(MINLIBNAME) $(LIBDIR)/$(MAJLIBNAME)
-+ 	ln -sf $(MAJLIBNAME) $(LIBDIR)/$(LIBNAME)
-+ ifeq ($(FAKEROOT),)
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 301d1b1..f895b78 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -12,7 +12,8 @@ define LIBCAP_INSTALL_STAGING_CMDS
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
-- install -D $(STAGING_DIR)/usr/lib/libcap.so.* $(TARGET_DIR)/usr/lib
-+ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
-+ $(RM) -f $(addprefix $(TARGET_DIR)/usr/sbin/,capsh getpcaps)
- endef
- 
- define HOST_LIBCAP_BUILD_CMDS
--- 
-1.7.2.2
+My failure for hitting send before finishing.
+I was about to say that we can keep a symlink from staging->sysroot but
+i'd rather watch it die because i can't think of any useful purpose
+where people can't use the computed $(STAGING_DIR) directly.
