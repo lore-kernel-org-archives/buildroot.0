@@ -1,42 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 Dec 2010 00:07:53 +0100
-Subject: [Buildroot] [git commit master 1/1] qt: dbus module needs gui
-	support as well
-Message-ID: <20101227230818.C161E8EB87@busybox.osuosl.org>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Tue, 28 Dec 2010 11:10:00 +0300
+Subject: [Buildroot] gcc-4.4.5-target unworkable
+Message-ID: <AANLkTi=c_x+k8Oe+UBwVvQnAF6geYV2nevy8Ea7mLN_t@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bff52482023a055aab28602ac630d229303c9013
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I want to ask whether someone tested BR2_HAVE_DEVFILES option for
+buildroot-2010.11? I make gcc-4.4.5-target compile with correcting
+TARGET_CFLAGS to use -isystem instead of -I, but now it seems that
+compiler and linker do not look for headers/libraries in standard
+places like /usr/include, /usr/lib, /lib and so on: compiler can
+include <stdio.h> for helloworld only with -I/usr/include provided and
+linker complains that "this linker was not configured to use
+sysroots". Have anybody some clue about it?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks in advance,
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index faebfa0..e5fe325 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -284,7 +284,6 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
- 	help
- 	  Build the platform Phonon plugin.
- 	  If unsure, say n.
--endif
- 
- comment "Qt DBbus module not available (need dbus)"
- 	depends on !BR2_PACKAGE_DBUS
-@@ -294,6 +293,7 @@ config BR2_PACKAGE_QT_DBUS
- 	depends on BR2_PACKAGE_DBUS
- 	help
- 	  Build the Qt DBus module.
-+endif
- 
- config BR2_PACKAGE_QT_XML
- 	bool "XML Module"
--- 
-1.7.2.2
+Sergey Naumov.
