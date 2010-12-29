@@ -1,132 +1,90 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 29 Dec 2010 20:52:31 +0100
-Subject: [Buildroot] building mysqlclient fails when using gcc 4.51 :
-	do_abi_check needs perl ?
-Message-ID: <E1292EBFD5E7463BA24ECFD251C4CCE0@apexjs>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 29 Dec 2010 17:41:58 -0300
+Subject: [Buildroot] [PATCH 04/10] binutils: make it a proper package
+In-Reply-To: <874o9xldzj.fsf@macbook.be.48ers.dk>
+References: <1293563435-10054-1-git-send-email-gustavo@zacarias.com.ar>	<1293563435-10054-5-git-send-email-gustavo@zacarias.com.ar>
+	<874o9xldzj.fsf@macbook.be.48ers.dk>
+Message-ID: <4D1B9D16.1080902@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-This build seems to fail on do_abi_check when using GCC 451 (EABI or OABI
-selection in buildroot does not matter):
+On 12/28/10 19:38, Peter Korsgaard wrote:
 
-I have no idea if this is a GCC 4.5 issue or something with mysql client or
-some other reason.
+> Seeing this I thought the build would be broken because GCC isn't moved
+> yet, but I see you do move it later on in this patch, even if it isn't
+> mentioned in the commit message.
 
-Maybe do_abi_check needs perl (see the PATH below) but i do not have any
-perl stuff enabled in buildroot ? 
+Comment added.
 
-Regards ,
-Johan
+> I find this quite complicated. I would prefer something like:
+> 
+> config BR2_PACKAGE_BINUTILS
+>        bool "binutils"
+>        depends on BR2_TOOLCHAIN_BUILDROOT
+>        help
+>          ..
+> 
+> config BR2_PACKAGE_BINUTILS_FULLINSTALL
+>        bool "perform full installation"
+>        depends on BR2_PACKAGE_BINUTILS
+>        help
+>          Select this to install all binary utilies and not just libbfd.
+> 
+> And then move the MPC/MPFR/GMP selects under
+> BR2_PACKAGE_GCC_TARGET. Also add selects for BR2_PACKAGE_BINUTILS +
+> FULLINSTALL.
 
+Easier to define BR2_PACKAGE_BINUTILS that builds all
+of binutils and only installs libbfd + BR2_PACKAGE_BINUTILS_TARGET to
+install the full version.
 
-[7m>>> mysql_client 5.1.47 Building[27m
-PATH="/home/johan/buildroot/output/host/bin:/home/johan/buildroot/output/hos
-t/usr/bin:/home/johan/buildroot/output/host/usr/sbin/:/usr/local/sbin:/usr/l
-ocal/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/johan/buildroot/output/build/st
-aging_dir/usr/bin" PERLLIB="/home/johan/buildroot/output/host/usr/lib/perl"
-/usr/bin/make -j2  -C
-/home/johan/buildroot/output/build/mysql_client-5.1.47/
-make[1]: Entering directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-Making all in .
-make[2]: Entering directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-/usr/bin/make abi_headers="include/mysql/plugin.h include/mysql.h"
-do_abi_check
-make[3]: Entering directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-set -ex; \
-	for file in include/mysql/plugin.h include/mysql.h; do \
-	
-/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-unknown-linux-ucl
-ibc-gcc --sysroot=/home/johan/buildroot/output/build/staging_dir -E
--nostdinc -dI \
-	                  -I./include \
-	                  -I./include/mysql \
-	                  -I./sql \
-	                  -I./include \
-	                  -I./include/mysql \
-	                  -I./sql \
-	                                 $file 2>/dev/null | \
-	                  /bin/sed -e '/^# /d' \
-	                            -e '/^[ 	]*$/d' \
-	                            -e '/^#pragma GCC set_debug_pwd/d' \
-	                            -e '/^#ident/d' > \
-	                                       ./abi_check.out; \
-	                  /usr/bin/diff -w $file.pp ./abi_check.out; \
-	                  /bin/rm ./abi_check.out; \
-	done
-+ for file in include/mysql/plugin.h include/mysql.h
-+
-/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-unknown-linux-ucl
-ibc-gcc --sysroot=/home/johan/buildroot/output/build/staging_dir -E
--nostdinc -dI -I./include -I./include/mysql -I./sql -I./include
--I./include/mysql -I./sql include/mysql/plugin.h
-+ /bin/sed -e '/^# /d' -e '/^[ 	]*$/d' -e '/^#pragma GCC set_debug_pwd/d' -e
-'/^#ident/d'
-+ /usr/bin/diff -w include/mysql/plugin.h.pp ./abi_check.out
-+ /bin/rm ./abi_check.out
-+ for file in include/mysql/plugin.h include/mysql.h
-+
-/home/johan/buildroot/output/build/staging_dir/usr/bin/arm-unknown-linux-ucl
-ibc-gcc --sysroot=/home/johan/buildroot/output/build/staging_dir -E
--nostdinc -dI -I./include -I./include/mysql -I./sql -I./include
--I./include/mysql -I./sql include/mysql.h
-+ /bin/sed -e '/^# /d' -e '/^[ 	]*$/d' -e '/^#pragma GCC set_debug_pwd/d' -e
-'/^#ident/d'
-+ /usr/bin/diff -w include/mysql.h.pp ./abi_check.out
-2,674d1
-< typedef char my_bool;
-< typedef int my_socket;
-< #include "mysql_version.h"
-< #include "mysql_com.h"
-< enum enum_server_command
-< {
-<   COM_SLEEP, COM_QUIT, COM_INIT_DB, COM_QUERY, COM_FIELD_LIST,
-<   COM_CREATE_DB, COM_DROP_DB, COM_REFRESH, COM_SHUTDOWN, COM_STATISTICS,
-<   COM_PROCESS_INFO, COM_CONNECT, COM_PROCESS_KILL, COM_DEBUG, COM_PING,
-<   COM_TIME, COM_DELAYED_INSERT, COM_CHANGE_USER, COM_BINLOG_DUMP,
-<   COM_TABLE_DUMP, COM_CONNECT_OUT, COM_REGISTER_SLAVE,
-<   COM_STMT_PREPARE, COM_STMT_EXECUTE, COM_STMT_SEND_LONG_DATA,
-COM_STMT_CLOSE,
-<   COM_STMT_RESET, COM_SET_OPTION, COM_STMT_FETCH, COM_DAEMON,
-<   COM_END
-< };
-< struct st_vio;
-< typedef struct st_vio Vio;
-< typedef struct st_net {
-<   Vio *vio;
-<   unsigned char *buff,*buff_end,*write_pos,*read_pos;
-<   my_socket fd;
-<   unsigned long remain_in_buf,length, buf_length, where_b;
-<   unsigned long max_packet,max_packet_size;
-<   unsigned int pkt_nr,compress_pkt_nr;
-<   unsigned int write_timeout, read_timeout, retry_count;
-<   int fcntl;
-....
-snip 
-....
+> You have trailing spaces here and elsewhere.
 
-< my_bool mysql_autocommit(MYSQL * mysql, my_bool auto_mode);
-< my_bool mysql_more_results(MYSQL *mysql);
-< int mysql_next_result(MYSQL *mysql);
-< void mysql_close(MYSQL *sock);
-make[3]: *** [do_abi_check] Error 1
-make[3]: Leaving directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-make[2]: *** [abi_check] Error 2
-make[2]: Leaving directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/johan/buildroot11/output/build/mysql_client-5.1.47'
-make: ***
-[/home/johan/buildroot/output/build/mysql_client-5.1.47/.stamp_built] Error
-2
- 
- 
- 
- 
- 
+Hopefully fixed.
+
+>  Gustavo> -
+>  Gustavo> -# The --without-headers option stopped working with gcc 3.0 and has never been
+>  Gustavo> -# fixed, so we need to actually have working C library header files prior to
+>  Gustavo> -# the step or libgcc will not build...
+>  
+>  Gustavo>  $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
+>  Gustavo> -	# gcc >= 4.3.0 have to also build all-target-libgcc
+> 
+> Why are you removing those comments? We still support gcc 4.2.x
+
+Because these are in STAGE1 (DIR1) where it's completely irrelevant /
+doesn't apply and just amounts to misinformation.
+gcc-initial doesn't use nor install headers since the extra gcc build
+stage was added. Same scenario for libgcc.
+They're leftover comments. That's the reason i kept the ones in
+gcc-intermediate.
+
+>  Gustavo>  ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+>  Gustavo>  	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
+>  Gustavo>  else
+>  Gustavo> @@ -276,22 +262,16 @@ gcc_initial-dirclean:
+>  Gustavo>  #############################################################
+>  Gustavo>  GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
+>  
+>  Gustavo> -
+>  Gustavo>  # The --without-headers option stopped working with gcc 3.0 and has never been
+>  Gustavo>  # fixed, so we need to actually have working C library header files prior to
+>  Gustavo>  # the step or libgcc will not build...
+>  
+>  Gustavo>  $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+>  Gustavo>  	mkdir -p $(GCC_BUILD_DIR2)
+>  Gustavo> -	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+>  Gustavo> -	mkdir -p $(STAGING_DIR)/lib
+>  Gustavo> -	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
+>  Gustavo> -	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
+>  Gustavo> -	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
+> 
+> Why remove this ARCH_IS_64 stuff?
+
+This is from commit 3c77bab2eeace3ee675bd745ca335fa3dd1630bb which does
+a symlink trick to make libstdc++ available. It's simpler to just copy
+libstdc++ (and libgcj/libgcc while at it) to the sysroot which is fixed
+in patch #5 from my series.
