@@ -1,26 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 29 Dec 2010 23:37:05 +0100
-Subject: [Buildroot] [PATCH] Reset critical environment variables
-In-Reply-To: <1293319782-5813-1-git-send-email-daniel.nystrom@timeterminal.se>
-	("Daniel =?utf-8?Q?Nystr=C3=B6m=22's?= message of "Sun, 26 Dec 2010
-	00:29:42 +0100")
-References: <1293319782-5813-1-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <87sjxgi4tq.fsf@macbook.be.48ers.dk>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Wed, 29 Dec 2010 16:41:36 -0600
+Subject: [Buildroot] oprofile "requires" gmp???
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>	<20101224090517.0c935c19@surf>	<9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
+	<4D18D7B3.3020900@zacarias.com.ar>
+	<4D18D873.9010502@zacarias.com.ar>
+	<9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB132@EXV1.corp.adtran.com>
+	<4D19E079.9030704@zacarias.com.ar> 
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEBC14@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Nystr?m <daniel.nystrom@timeterminal.se> writes:
+> Okay, that fixed all the toolchain deps.  Everything looks  good in
+the
+> new toolchain when compiling with Linux Stable threads, however, it
+> will not build with Native Posix threads.  I'll work with that later
+to
+> give you more information as to what is broken and maybe a way to fix.
 
- Daniel> Reset them early in top-level Makefile to ensure they're keept unset
- Daniel> all the way through the build process.
+<snip>
+ 
+> Still poking around, will post more when I have it.
+> 
+> Andy
 
- Daniel> This also removes the requirement of these variables being unset
- Daniel> globally prior the build.
+Strange.  I built earlier today and I get an error on every file that
+includes limits.  I did a make clean, make menuconfig and select linux
+threads stable, change the build options to 50 simultaneous jobs and I
+don't get the errors on the limits not having the PATH_MAX and PIPE_BUF.
 
-Committed, thanks.
+Now, I must attempt this again with 2 jobs as I was doing earlier when I
+got this.  Is there something that oprofile depends on that is being
+built out-of-order with 2 jobs vs. 50?
 
--- 
-Bye, Peter Korsgaard
+Whether it breaks again, I'll let you know.
+
+Andy
