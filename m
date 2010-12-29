@@ -1,297 +1,64 @@
-From: Austin Foxley <austinf@cetoncorp.com>
-Date: Wed, 29 Dec 2010 18:09:35 -0800
-Subject: [Buildroot] [PATCH] add leon support to gcc 4.5.1
-In-Reply-To: <1293674861-30639-1-git-send-email-austinf@cetoncorp.com>
-References: <1293674861-30639-1-git-send-email-austinf@cetoncorp.com>
-Message-ID: <4D1BE9DF.9000202@cetoncorp.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 30 Dec 2010 00:01:01 +0100
+Subject: [Buildroot] [git commit master 1/1] New package: sdparm
+Message-ID: <20101230073531.77CA382826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, just realized this won't apply to master, as it has moved to 
-4.5.2. Will resend, sorry.
 
--Austin
+commit: http://git.buildroot.net/buildroot/commit/?id=fe008aaf38f3ac2d8083ec88f68616c721cd5c53
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 12/29/2010 06:07 PM, Austin Foxley wrote:
-> Signed-off-by: Austin Foxley<austinf@cetoncorp.com>
-> ---
->   target/Config.in.arch                    |    2 +-
->   toolchain/gcc/4.5.1/950-sparc-leon.patch |  239 ++++++++++++++++++++++++++++++
->   toolchain/gcc/Config.in                  |    2 +-
->   3 files changed, 241 insertions(+), 2 deletions(-)
->   create mode 100644 toolchain/gcc/4.5.1/950-sparc-leon.patch
->
-> diff --git a/target/Config.in.arch b/target/Config.in.arch
-> index 0774d55..2e348a2 100644
-> --- a/target/Config.in.arch
-> +++ b/target/Config.in.arch
-> @@ -306,7 +306,7 @@ config BR2_sparc_cypress
->   	bool "cypress"
->   config BR2_sparc_v8
->   	bool "v8"
-> -comment "LEON SPARC needs gcc = 4.4.x"
-> +comment "LEON SPARC needs gcc = 4.4.x or gcc = 4.5.x"
->   config BR2_sparc_sparchfleon
->   	bool "hfleon"
->   config BR2_sparc_sparchfleonv8
-> diff --git a/toolchain/gcc/4.5.1/950-sparc-leon.patch b/toolchain/gcc/4.5.1/950-sparc-leon.patch
-> new file mode 100644
-> index 0000000..34524da
-> --- /dev/null
-> +++ b/toolchain/gcc/4.5.1/950-sparc-leon.patch
-> @@ -0,0 +1,239 @@
-> +diff -Naurb gcc-4.4.2.ori/gcc/config/sparc/leon.md gcc-4.4.2/gcc/config/sparc/leon.md
-> +--- gcc-4.4.2.ori/gcc/config/sparc/leon.md	1970-01-01 01:00:00.000000000 +0100
-> ++++ gcc-4.4.2/gcc/config/sparc/leon.md	2010-10-19 11:56:58.000000000 +0200
-> +@@ -0,0 +1,56 @@
-> ++;; Scheduling description for Leon.
-> ++;;   Copyright (C) 2010 Free Software Foundation, Inc.
-> ++;;
-> ++;; This file is part of GCC.
-> ++;;
-> ++;; GCC is free software; you can redistribute it and/or modify
-> ++;; it under the terms of the GNU General Public License as published by
-> ++;; the Free Software Foundation; either version 3, or (at your option)
-> ++;; any later version.
-> ++;;
-> ++;; GCC is distributed in the hope that it will be useful,
-> ++;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-> ++;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> ++;; GNU General Public License for more details.
-> ++;;
-> ++;; You should have received a copy of the GNU General Public License
-> ++;; along with GCC; see the file COPYING3.  If not see
-> ++;;<http://www.gnu.org/licenses/>.
-> ++
-> ++
-> ++(define_automaton "leon")
-> ++
-> ++(define_cpu_unit "leon_memory, leon_fpalu" "leon")
-> ++(define_cpu_unit "leon_fpmds" "leon")
-> ++(define_cpu_unit "write_buf" "leon")
-> ++
-> ++(define_insn_reservation "leon_load" 1
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "load,sload,fpload"))
-> ++  "leon_memory")
-> ++
-> ++(define_insn_reservation "leon_store" 1
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "store,fpstore"))
-> ++  "leon_memory+write_buf")
-> ++
-> ++(define_insn_reservation "leon_fp_alu" 1
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "fp,fpmove"))
-> ++  "leon_fpalu, nothing")
-> ++
-> ++(define_insn_reservation "leon_fp_mult" 1
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "fpmul"))
-> ++  "leon_fpmds, nothing")
-> ++
-> ++(define_insn_reservation "leon_fp_div" 16
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "fpdivs,fpdivd"))
-> ++  "leon_fpmds, nothing*15")
-> ++
-> ++(define_insn_reservation "leon_fp_sqrt" 23
-> ++  (and (eq_attr "cpu" "leon")
-> ++    (eq_attr "type" "fpsqrts,fpsqrtd"))
-> ++  "leon_fpmds, nothing*21")
-> ++
-> +diff -Naurb gcc-4.4.2.ori/gcc/config/sparc/sparc.c gcc-4.4.2/gcc/config/sparc/sparc.c
-> +--- gcc-4.4.2.ori/gcc/config/sparc/sparc.c	2010-10-19 11:55:17.000000000 +0200
-> ++++ gcc-4.4.2/gcc/config/sparc/sparc.c	2010-10-19 11:56:58.000000000 +0200
-> +@@ -246,6 +246,30 @@
-> +   0, /* shift penalty */
-> + };
-> +
-> ++static const
-> ++struct processor_costs leon_costs = {
-> ++  COSTS_N_INSNS (1), /* int load */
-> ++  COSTS_N_INSNS (1), /* int signed load */
-> ++  COSTS_N_INSNS (1), /* int zeroed load */
-> ++  COSTS_N_INSNS (1), /* float load */
-> ++  COSTS_N_INSNS (1), /* fmov, fneg, fabs */
-> ++  COSTS_N_INSNS (1), /* fadd, fsub */
-> ++  COSTS_N_INSNS (1), /* fcmp */
-> ++  COSTS_N_INSNS (1), /* fmov, fmovr */
-> ++  COSTS_N_INSNS (1), /* fmul */
-> ++  COSTS_N_INSNS (15), /* fdivs */
-> ++  COSTS_N_INSNS (15), /* fdivd */
-> ++  COSTS_N_INSNS (23), /* fsqrts */
-> ++  COSTS_N_INSNS (23), /* fsqrtd */
-> ++  COSTS_N_INSNS (5), /* imul */
-> ++  COSTS_N_INSNS (5), /* imulX */
-> ++  0, /* imul bit factor */
-> ++  COSTS_N_INSNS (5), /* idiv */
-> ++  COSTS_N_INSNS (5), /* idivX */
-> ++  COSTS_N_INSNS (1), /* movcc/movr */
-> ++  0, /* shift penalty */
-> ++};
-> ++
-> + const struct processor_costs *sparc_costs =&cypress_costs;
-> +
-> + #ifdef HAVE_AS_RELAX_OPTION
-> +@@ -651,6 +675,10 @@
-> +     { TARGET_CPU_ultrasparc3, "ultrasparc3" },
-> +     { TARGET_CPU_niagara, "niagara" },
-> +     { TARGET_CPU_niagara2, "niagara2" },
-> ++    { TARGET_CPU_sparchfleon, "sparchfleon" },
-> ++    { TARGET_CPU_sparchfleonv8, "sparchfleonv8" },
-> ++    { TARGET_CPU_sparcsfleon, "sparcsfleon" },
-> ++    { TARGET_CPU_sparcsfleonv8, "sparcsfleonv8" },
-> +     { 0, 0 }
-> +   };
-> +   const struct cpu_default *def;
-> +@@ -689,6 +717,11 @@
-> +     /* UltraSPARC T1 */
-> +     { "niagara", PROCESSOR_NIAGARA, MASK_ISA, MASK_V9|MASK_DEPRECATED_V8_INSNS},
-> +     { "niagara2", PROCESSOR_NIAGARA, MASK_ISA, MASK_V9},
-> ++    /* SPARC-LEON */
-> ++    { "sparchfleon",   PROCESSOR_LEON, MASK_ISA, MASK_FPU },
-> ++    { "sparchfleonv8", PROCESSOR_LEON, MASK_ISA&  ~(MASK_V8), MASK_V8|MASK_FPU },
-> ++    { "sparcsfleon",   PROCESSOR_LEON, MASK_ISA | MASK_FPU, 0 },
-> ++    { "sparcsfleonv8", PROCESSOR_LEON, (MASK_ISA | MASK_FPU)&  ~(MASK_V8), MASK_V8 },
-> +     { 0, (enum processor_type) 0, 0, 0 }
-> +   };
-> +   const struct cpu_table *cpu;
-> +@@ -855,6 +888,9 @@
-> +     case PROCESSOR_NIAGARA2:
-> +       sparc_costs =&niagara2_costs;
-> +       break;
-> ++    case PROCESSOR_LEON:
-> ++      sparc_costs =&leon_costs;
-> ++      break;
-> +     };
-> +
-> + #ifdef TARGET_DEFAULT_LONG_DOUBLE_128
-> +diff -Naurb gcc-4.4.2.ori/gcc/config/sparc/sparc.h gcc-4.4.2/gcc/config/sparc/sparc.h
-> +--- gcc-4.4.2.ori/gcc/config/sparc/sparc.h	2010-10-19 11:55:17.000000000 +0200
-> ++++ gcc-4.4.2/gcc/config/sparc/sparc.h	2010-10-19 11:56:58.000000000 +0200
-> +@@ -243,6 +243,10 @@
-> + #define TARGET_CPU_ultrasparc3	9
-> + #define TARGET_CPU_niagara	10
-> + #define TARGET_CPU_niagara2	11
-> ++#define TARGET_CPU_sparchfleon  12
-> ++#define TARGET_CPU_sparchfleonv8 13
-> ++#define TARGET_CPU_sparcsfleon  14
-> ++#define TARGET_CPU_sparcsfleonv8 15
-> +
-> + #if TARGET_CPU_DEFAULT == TARGET_CPU_v9 \
-> +  || TARGET_CPU_DEFAULT == TARGET_CPU_ultrasparc \
-> +@@ -299,6 +303,26 @@
-> + #define ASM_CPU32_DEFAULT_SPEC "-Asparclite"
-> + #endif
-> +
-> ++#if TARGET_CPU_DEFAULT == TARGET_CPU_sparchfleon
-> ++#define CPP_CPU32_DEFAULT_SPEC "-Dsparcleon"
-> ++#define ASM_CPU32_DEFAULT_SPEC ""
-> ++#endif
-> ++
-> ++#if TARGET_CPU_DEFAULT == TARGET_CPU_sparcsfleon
-> ++#define CPP_CPU32_DEFAULT_SPEC "-Dsparcleon -D_SOFT_FLOAT"
-> ++#define ASM_CPU32_DEFAULT_SPEC ""
-> ++#endif
-> ++
-> ++#if TARGET_CPU_DEFAULT == TARGET_CPU_sparchfleonv8
-> ++#define CPP_CPU32_DEFAULT_SPEC "-Dsparcleon -D__sparc_v8__ "
-> ++#define ASM_CPU32_DEFAULT_SPEC ""
-> ++#endif
-> ++
-> ++#if TARGET_CPU_DEFAULT == TARGET_CPU_sparcsfleonv8
-> ++#define CPP_CPU32_DEFAULT_SPEC "-Dsparcleon -D__sparc_v8__ -D_SOFT_FLOAT"
-> ++#define ASM_CPU32_DEFAULT_SPEC ""
-> ++#endif
-> ++
-> + #if TARGET_CPU_DEFAULT == TARGET_CPU_supersparc
-> + #define CPP_CPU32_DEFAULT_SPEC "-D__supersparc__ -D__sparc_v8__"
-> + #define ASM_CPU32_DEFAULT_SPEC ""
-> +@@ -369,6 +393,10 @@
-> + %{mcpu=ultrasparc3:-D__sparc_v9__} \
-> + %{mcpu=niagara:-D__sparc_v9__} \
-> + %{mcpu=niagara2:-D__sparc_v9__} \
-> ++%{mcpu=sparchfleon:-Dsparcleon} \
-> ++%{mcpu=sparchfleonv8:-Dsparcleon -D__sparc_v8__} \
-> ++%{mcpu=sparcsfleon:-Dsparcleon -D_SOFT_FLOAT} \
-> ++%{mcpu=sparcsfleonv8:-Dsparcleon -D_SOFT_FLOAT -D__sparc_v8__} \
-> + %{!mcpu*:%{!mcypress:%{!msparclite:%{!mf930:%{!mf934:%{!mv8:%{!msupersparc:%(cpp_cpu_default)}}}}}}} \
-> + "
-> + #define CPP_ARCH32_SPEC ""
-> +@@ -533,6 +561,7 @@
-> +   PROCESSOR_V7,
-> +   PROCESSOR_CYPRESS,
-> +   PROCESSOR_V8,
-> ++  PROCESSOR_LEON,
-> +   PROCESSOR_SUPERSPARC,
-> +   PROCESSOR_SPARCLITE,
-> +   PROCESSOR_F930,
-> +diff -Naurb gcc-4.4.2.ori/gcc/config/sparc/sparc.md gcc-4.4.2/gcc/config/sparc/sparc.md
-> +--- gcc-4.4.2.ori/gcc/config/sparc/sparc.md	2010-10-19 11:55:17.000000000 +0200
-> ++++ gcc-4.4.2/gcc/config/sparc/sparc.md	2010-10-19 11:56:58.000000000 +0200
-> +@@ -89,6 +89,7 @@
-> +   "v7,
-> +    cypress,
-> +    v8,
-> ++   leon,
-> +    supersparc,
-> +    sparclite,f930,f934,
-> +    hypersparc,sparclite86x,
-> +@@ -320,6 +321,7 @@
-> + (include "ultra3.md")
-> + (include "niagara.md")
-> + (include "niagara2.md")
-> ++(include "leon.md")
-> +
-> +
-> + ;; Operand and operator predicates and constraints
-> +diff -Naurb gcc-4.4.2.ori/gcc/config/sparc/t-leon gcc-4.4.2/gcc/config/sparc/t-leon
-> +--- gcc-4.4.2.ori/gcc/config/sparc/t-leon	1970-01-01 01:00:00.000000000 +0100
-> ++++ gcc-4.4.2/gcc/config/sparc/t-leon	2010-10-19 11:56:58.000000000 +0200
-> +@@ -0,0 +1,16 @@
-> ++# configuration file for LEON cpu
-> ++
-> ++LIB1ASMSRC = sparc/lb1spc.asm
-> ++LIB1ASMFUNCS = _mulsi3 _divsi3 _modsi3
-> ++
-> ++# We want fine grained libraries, so use the new code to build the
-> ++# floating point emulation libraries.
-> ++FPBIT = fp-bit.c
-> ++DPBIT = dp-bit.c
-> ++
-> ++dp-bit.c: $(srcdir)/config/fp-bit.c
-> ++	cat $(srcdir)/config/fp-bit.c>  dp-bit.c
-> ++
-> ++fp-bit.c: $(srcdir)/config/fp-bit.c
-> ++	echo '#define FLOAT'>  fp-bit.c
-> ++	cat $(srcdir)/config/fp-bit.c>>  fp-bit.c
-> +diff -Naurb gcc-4.4.2.ori/gcc/config.gcc gcc-4.4.2/gcc/config.gcc
-> +--- gcc-4.4.2.ori/gcc/config.gcc	2010-10-19 11:55:17.000000000 +0200
-> ++++ gcc-4.4.2/gcc/config.gcc	2010-10-19 11:56:11.000000000 +0200
-> +@@ -2978,6 +2978,9 @@
-> + 			| v9 | ultrasparc | ultrasparc3 | niagara | niagara2)
-> + 				# OK
-> + 				;;
-> ++			sparchfleon | sparcsfleon | sparchfleonv8 | sparcsfleonv8 | leon)
-> ++				tmake_file="${tmake_file} sparc/t-leon"
-> ++				;;
-> + 			*)
-> + 				echo "Unknown cpu used in --with-$which=$val" 1>&2
-> + 				exit 1
-> diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-> index e7ac0e8..fea55a2 100644
-> --- a/toolchain/gcc/Config.in
-> +++ b/toolchain/gcc/Config.in
-> @@ -27,7 +27,7 @@ choice
->   		bool "gcc 4.4.x"
->
->   	config BR2_GCC_VERSION_4_5_X
-> -		depends on !BR2_avr32&&  !BR2_sparc_sparchfleon&&  !BR2_sparc_sparchfleonv8&&  !BR2_sparc_sparcsfleon&&  !BR2_sparc_sparcsfleonv8
-> +		depends on !BR2_avr32
->   		bool "gcc 4.5.x"
->
->   	config BR2_GCC_VERSION_SNAP
+Add utility to accesses SCSI device parameters.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in        |    1 +
+ package/sdparm/Config.in |    6 ++++++
+ package/sdparm/sdparm.mk |    5 +++++
+ 3 files changed, 12 insertions(+), 0 deletions(-)
+ create mode 100644 package/sdparm/Config.in
+ create mode 100644 package/sdparm/sdparm.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 27d8023..ec5d73e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -189,6 +189,7 @@ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/rng-tools/Config.in"
++source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ # busybox has fdisk
+diff --git a/package/sdparm/Config.in b/package/sdparm/Config.in
+new file mode 100644
+index 0000000..cec0f84
+--- /dev/null
++++ b/package/sdparm/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_SDPARM
++	bool "sdparm"
++	help
++	  Utility to accesses SCSI device parameters.
++
++	  http://sg.danny.cz/sg/sdparm.html
+diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
+new file mode 100644
+index 0000000..ecb30c5
+--- /dev/null
++++ b/package/sdparm/sdparm.mk
+@@ -0,0 +1,5 @@
++SDPARM_VERSION = 1.06
++SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
++SDPARM_SITE = http://sg.danny.cz/sg/p/
++
++$(eval $(call AUTOTARGETS,package,sdparm))
+-- 
+1.7.2.2
