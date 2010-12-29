@@ -1,40 +1,67 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Wed, 29 Dec 2010 16:41:36 -0600
-Subject: [Buildroot] oprofile "requires" gmp???
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EA26053@EXV1.corp.adtran.com><20101223082740.3a8e44c4@surf><9AC3F0E75060224C8BBC5BA2DDC8853A1EA263BF@EXV1.corp.adtran.com>	<20101224090517.0c935c19@surf>	<9AC3F0E75060224C8BBC5BA2DDC8853A1EA2689B@EXV1.corp.adtran.com>
-	<4D18D7B3.3020900@zacarias.com.ar>
-	<4D18D873.9010502@zacarias.com.ar>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1EAEB132@EXV1.corp.adtran.com>
-	<4D19E079.9030704@zacarias.com.ar> 
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEBC14@EXV1.corp.adtran.com>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 29 Dec 2010 23:35:52 +0100
+Subject: [Buildroot] [git commit master 1/1] Reset critical environment
+	variables
+Message-ID: <20101229224313.ED1E68EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Okay, that fixed all the toolchain deps.  Everything looks  good in
-the
-> new toolchain when compiling with Linux Stable threads, however, it
-> will not build with Native Posix threads.  I'll work with that later
-to
-> give you more information as to what is broken and maybe a way to fix.
 
-<snip>
+commit: http://git.buildroot.net/buildroot/commit/?id=2bf3c1660965d73a553d3c99d6f1a62f36e0069b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reset them early in top-level Makefile to ensure they're keept unset
+all the way through the build process.
+
+This also removes the requirement of these variables being unset
+globally prior the build.
+
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile                               |    6 ++++++
+ toolchain/dependencies/dependencies.sh |    9 ---------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9ba80a6..6d6e836 100644
+--- a/Makefile
++++ b/Makefile
+@@ -186,6 +186,12 @@ cc-option=$(shell if $(TARGET_CC) $(TARGET_CFLAGS) $(1) -S -o /dev/null -xc /dev
+ #############################################################
+ unexport CROSS_COMPILE
+ unexport ARCH
++unexport CC
++unexport CXX
++unexport CPP
++unexport CFLAGS
++unexport CXXFLAGS
++unexport GREP_OPTIONS
  
-> Still poking around, will post more when I have it.
-> 
-> Andy
-
-Strange.  I built earlier today and I get an error on every file that
-includes limits.  I did a make clean, make menuconfig and select linux
-threads stable, change the build options to 50 simultaneous jobs and I
-don't get the errors on the limits not having the PATH_MAX and PIPE_BUF.
-
-Now, I must attempt this again with 2 jobs as I was doing earlier when I
-got this.  Is there something that oprofile depends on that is being
-built out-of-order with 2 jobs vs. 50?
-
-Whether it breaks again, I'll let you know.
-
-Andy
+ GNU_HOST_NAME:=$(shell package/gnuconfig/config.guess)
+ 
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index c5552ca..74ab213 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -4,15 +4,6 @@
+ 
+ export LC_ALL=C
+ 
+-# Verify that critical environment variables aren't set
+-for var in CC CXX CPP CFLAGS CXXFLAGS GREP_OPTIONS CROSS_COMPILE ARCH ; do
+-    if test -n "$(eval echo '$'$var)" ; then
+-	/bin/echo -e "\nYou must run 'unset $var' so buildroot can run with";
+-	/bin/echo -e "a clean environment on your build machine\n";
+-	exit 1;
+-    fi
+-done
+-
+ # Verify that grep works
+ echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+ if test $? != 0 ; then
+-- 
+1.7.2.2
