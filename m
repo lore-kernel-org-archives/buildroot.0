@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Wed, 29 Dec 2010 09:14:15 +0100
-Subject: [Buildroot] [git commit master 1/1] automake: ensure staging
-	aclocal dir gets created
-Message-ID: <20101229081558.B70F28EB6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] uclibc: move tools to host dir
+Message-ID: <20101229081558.8BE058EE81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38826858c03db1ac09723ef5948eba438a349e09
+commit: http://git.buildroot.net/buildroot/commit/?id=514c019aa0f6847d0766a439da178ac4648db554
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise aclocal fails.
+Move uclibc host tools (ldd/ldconfig) to host dir.
+They were previously installed in the staging dir.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/automake/automake.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ toolchain/uClibc/uclibc.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 964f2fb..8857e98 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -15,7 +15,13 @@ define GTK_DOC_M4_INSTALL
-  $(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
- endef
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index e05e16c..ec92824 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -450,17 +450,17 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
+ 	fi
+ 	# Build the host utils. Need to add an install target...
+ 	$(MAKE1) -C $(UCLIBC_DIR)/utils \
+-		PREFIX=$(STAGING_DIR) \
++		PREFIX=$(HOST_DIR) \
+ 		HOSTCC="$(HOSTCC)" \
+ 		hostutils
+ 	if [ -f $(UCLIBC_DIR)/utils/ldd.host ]; then \
+-		install -c $(UCLIBC_DIR)/utils/ldd.host $(STAGING_DIR)/usr/bin/ldd; \
+-		ln -sf ldd $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldd; \
++		install -D $(UCLIBC_DIR)/utils/ldd.host $(HOST_DIR)/usr/bin/ldd; \
++		ln -sf ldd $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldd; \
+ 	fi
+ 	if [ -f $(UCLIBC_DIR)/utils/ldconfig.host ]; then \
+-		install -c $(UCLIBC_DIR)/utils/ldconfig.host $(STAGING_DIR)/usr/bin/ldconfig; \
+-		ln -sf ldconfig $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldconfig; \
+-		ln -sf ldconfig $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig; \
++		install -D $(UCLIBC_DIR)/utils/ldconfig.host $(HOST_DIR)/usr/bin/ldconfig; \
++		ln -sf ldconfig $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ldconfig; \
++		ln -sf ldconfig $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-ldconfig; \
+ 	fi
+ 	touch -c $@
  
-+# ensure staging aclocal dir exists
-+define HOST_AUTOMAKE_MAKE_ACLOCAL
-+	mkdir -p $(ACLOCAL_DIR)
-+endef
-+
- HOST_AUTOMAKE_POST_INSTALL_HOOKS += GTK_DOC_M4_INSTALL
-+HOST_AUTOMAKE_POST_INSTALL_HOOKS += HOST_AUTOMAKE_MAKE_ACLOCAL
- 
- $(eval $(call AUTOTARGETS,package,automake))
- $(eval $(call AUTOTARGETS,package,automake,host))
 -- 
 1.7.2.2
