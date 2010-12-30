@@ -1,62 +1,66 @@
-From: Sam Ravnborg <sam@ravnborg.org>
-Date: Thu, 30 Dec 2010 22:24:36 +0100
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Thu, 30 Dec 2010 15:38:02 -0600
 Subject: [Buildroot] commiting patches
-In-Reply-To: <AANLkTingc4f9wGxik=8Y+FuAzZaeH240ouExDr+sgVHb@mail.gmail.com>
+In-Reply-To: <8739pfhtgk.fsf@macbook.be.48ers.dk>
 References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
 	<8739pfhtgk.fsf@macbook.be.48ers.dk>
-	<AANLkTingc4f9wGxik=8Y+FuAzZaeH240ouExDr+sgVHb@mail.gmail.com>
-Message-ID: <20101230212436.GA13863@merkur.ravnborg.org>
+Message-ID: <20101230153802.68845wjtc9b63h0c@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 30, 2010 at 10:04:13PM +0100, Daniel Nystr?m wrote:
-> 2010/12/30 Peter Korsgaard <jacmet@uclibc.org>:
-> > It's a big help when other developers help with the review and send
-> > their ack/nacks (thanks for this!), so those patches are often handled
-> > earlier than others.
-> 
-> How do you prefer the ack/nack? Just a reply with "+1" in mail body? A
-> "Signed-off-by: name <mail>" mail body? or the whole patch resubmitted
-> with the SoB-line added?
+Quoting Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
+>
+>  Heiko> Hey,
+>
+>  Heiko> I was wondering for a while, what are the criterias for patches
+>  Heiko> to be applied to buildroot.
+>  Heiko> Some of them seem to get applied right away, others were sent in a
+>  Heiko> month or two ago and don't. I understand that some probably  
+> will never
+>  Heiko> get applied, but will there be a "sorry dude, but..." email?
+>
+> I'm not following any strict procedure, but I do try to sooner or later
+> get around to review all patches. Understand that I do this in my spare
+> time, so turnaround time can sometimes be slow.
 
-On linux-kernel the rules are mosre or less:
+No worries, we all do have the same issue. There are only so many  
+hours in a day (must be 48 according to my work load).
 
-You provide an ack by including the fomal ack line in a mail like this:
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> I mainly try to handle the patches in fifo mode, but I do also skim new
+> mails. This is both because sometimes updates are sent, and sometimes I
+> see trivial patches that can be handled when I have 5 min spare or
+> important bugfixes.
+>
+> It's a big help when other developers help with the review and send
+> their ack/nacks (thanks for this!), so those patches are often handled
+> earlier than others.
+>
+> But I can still forget about patches, so if you haven't had any feedback
+> for a week or two, please check if it still applies and send a followup
+> mail.
 
-This makes it easy for the submitter to copy the line and
-you have it using your preferred spelling / mail address.
-There are people that does not use their regular mail address
-the acked-by lines.
-Sometimes submittes interprets mails like "+1" as Acked-by: - sometimes not.
+I'll try and start nagging. ;-)
+I often forget myself about the patches I sent in the past, since I  
+keep using them as part of my git repository.
 
+> It might be politically incorrect, but the patch author also does
+> matter. If the patch is from a regular contributor who normally does
+> good work, then I know I don't need to review in as much details as if
+> it's from a complete stranger - So a good way of getting your own
+> patches applied faster is to help reviewing other patches ;)
 
-You use a sob line only if you are in the chain that _handle_ a patch.
-So you can follow the path of the patch by following the sob-lines.
+Ha! Now he's trying to make us work... :D
 
-Lets consider a simple example.
-I create a patch for which I add my:
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+-- 
 
-Then you pick it up - and potentially modifying it.
-To document that you are in the chain handling the
-patch you add your SOB line below mine.
-So it would now look like this:
-
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-
-And then Peter picks it up and when he applies it he add his SOB line as well.
-
-
-So the applied patch will look like this:
-
-Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-Signed-off-by: Peter Korsgaard <jacmet@uclibc.org>
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
 
 
-	Sam
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
