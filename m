@@ -1,24 +1,20 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 30 Dec 2010 16:20:17 -0600
-Subject: [Buildroot] Multiple build errors on the target toolchain for
-	mips:
-In-Reply-To: <4D1CFFD7.5090501@zacarias.com.ar>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEBFB0@EXV1.corp.adtran.com>
-	<AANLkTikWrX7W9D0kV7syrbVwpQ-bN12e3RiXf1Vbc2Av@mail.gmail.com>
-	<AANLkTiknUDt3eR-gphAP6kROX1cOWh-1YNC61EBjKiAp@mail.gmail.com>
-	<4D1CFFD7.5090501@zacarias.com.ar>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EB88D3B@EXV1.corp.adtran.com>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu, 30 Dec 2010 23:22:59 +0100
+Subject: [Buildroot] commiting patches
+In-Reply-To: <87ipyahq2q.fsf@macbook.be.48ers.dk>
+References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
+	<8739pfhtgk.fsf@macbook.be.48ers.dk>
+	<AANLkTingc4f9wGxik=8Y+FuAzZaeH240ouExDr+sgVHb@mail.gmail.com>
+	<87ipyahq2q.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTin7KMhsVtb+1-e9e97eJuWaSEyxvYSJGpx_mRj7@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> No, don't worry, it's harmless and works fine.
-> He probably pulled my branch when i was doing some rework :-)
+Den 30 december 2010 23:07 skrev Peter Korsgaard <jacmet@uclibc.org>:
+> I prefer an Acked-by: tag like it's done for the Linux kernel and a
+> bunch of other projects using git (and like Thomas already does).
 
-
-Let me know when it is safe to pull again and I'll retest.
-
-Andy
+Just a one-line mail with "Acked-by: Me <mymail>"?  (sorry for being picky)
