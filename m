@@ -1,24 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 30 Dec 2010 22:04:18 +0100
-Subject: [Buildroot] [PATCH] Add ttyO0 to ttyO3 in /etc/securetty in
-	skeleton
-In-Reply-To: <4D1CA946.5090009@free.fr> (Guillaume Gardet's message of "Thu,
-	30 Dec 2010 16:46:14 +0100")
-References: <4D1CA946.5090009@free.fr>
-Message-ID: <87tyhvgegd.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu, 30 Dec 2010 22:04:13 +0100
+Subject: [Buildroot] commiting patches
+In-Reply-To: <8739pfhtgk.fsf@macbook.be.48ers.dk>
+References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
+	<8739pfhtgk.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTingc4f9wGxik=8Y+FuAzZaeH240ouExDr+sgVHb@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Gardet <guillaume.gardet@free.fr> writes:
+2010/12/30 Peter Korsgaard <jacmet@uclibc.org>:
+> It's a big help when other developers help with the review and send
+> their ack/nacks (thanks for this!), so those patches are often handled
+> earlier than others.
 
- Guillaume> Hi,
- Guillaume> Recent kernels (2.6.37*) use a different name for OMAP serial ports. They are no longer called ttySx but ttyOx. This patch add ttyO0 to ttyO3 in /etc/securetty.
- Guillaume> Could you apply it in the trunk?
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+How do you prefer the ack/nack? Just a reply with "+1" in mail body? A
+"Signed-off-by: name <mail>" mail body? or the whole patch resubmitted
+with the SoB-line added?
