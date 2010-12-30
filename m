@@ -1,104 +1,114 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 30 Dec 2010 19:18:42 +0100
-Subject: [Buildroot] commiting patches
-In-Reply-To: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
-References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
-Message-ID: <201012301918.42811.yann.morin.1998@anciens.enib.fr>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Thu, 30 Dec 2010 13:43:52 -0600
+Subject: [Buildroot] Multiple build errors on the target toolchain for mips:
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEBFB0@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Gustavo,
 
-On Thursday 30 December 2010 13:30:05 Heiko Zuerker wrote:
-> I was wondering for a while, what are the criterias for patches to be  
-> applied to buildroot.
-> Some of them seem to get applied right away, others were sent in a  
-> month or two ago and don't. I understand that some probably will never  
-> get applied, but will there be a "sorry dude, but..." email?
-> Just curious how this is handled.
+I pulled the latest git from you this morning and attempted to build
+(worked for the git from two days ago).  The errors are to great to put
+in this message, but some of the first errors are below.
 
-Well, I won't speak for Peter, or any other participant, but here's what
-I believe is the proper way to act:
+I'm thinking that there is a $CC not being set somewhere -- as this is
+building with /usr/bin/gcc:
 
-0) prefer sending:
-   - new features asap after a release
-   - bug fixes: always
-   - in a patch series, bug fixes come first, features come last
-     - that way, even if your new feature has issues, or is not
-       interesting, at least your bug fixes can be applied
-   - in a patch series, trivial changes go first, and more complex
-     ones go to the end, as much as possible, so that you get a bit
-     more chance to get part of the series applied
-   - once a series as been partiually applied (cause of bug fixes
-     or new feature), you get a better chance that the remaining in
-     the next iteration gets more attention
-   - MOST IMPORTANT: do not expect people to be too much reactive
-     during holidays season, such as X-Mas, when people tend to be
-     with their families, and might not have that much time to
-     dedicate to FLOSS projects. ;-)
-   - look at who is usually changing the files you touch, and CC them
-     as that will make them notice. Do not CC too many people, or
-     everyone might think the series will be handled by someone esle
-     (max 2 CC is good fo BR, I believe)
+/usr/bin/gcc -c -DIN_GCC   -O2
+-I/root/src/PRODUCTION/newbuildroo/a/output/host/include
+-I/root/src/PRODUCTION/newbuildroo/a/output/host/usr/include
+-DGENERATOR_FILE -I. -Ibuild
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/buil
+d
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/../i
+nclude
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/../l
+ibcpp/include
+-I/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-
+uclibc/sysroot/usr/include
+-I/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-
+uclibc/sysroot/usr/include
+-I/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-
+uclibc/sysroot/usr/include
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/../l
+ibdecnumber
+-I/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/../l
+ibdecnumber/dpd -I../libdecnumber     \
+                -o build/genmodes.o
+/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/genmod
+es.c
+In file included from
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/stdio.h:36,
+                 from
+/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/system
+.h:42,
+                 from
+/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/genche
+cksum.c:22:
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:132:3: error: #error your machine
+is neither 32 bit or 64 bit ... it must be magical
+In file included from
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/stdio.h:36,
+                 from
+/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/system
+.h:42,
+                 from
+/root/src/PRODUCTION/newbuildroo/a/output/toolchain/gcc-4.5.2/gcc/genche
+cksum.c:22:
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:137: error: expected '=', ',',
+';', 'asm' or '__attribute__' before '__UQUAD_TYPE'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:138: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'unsigned'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:139: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'unsigned'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:140: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'unsigned'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:141: error: expected '=', ',',
+';', 'asm' or '__attribute__' before '__UQUAD_TYPE'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:142: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'unsigned'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:143: error: expected '=', ',',
+';', 'asm' or '__attribute__' before '__UWORD_TYPE'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:144: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'long'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:145: error: expected '=', ',',
+';', 'asm' or '__attribute__' before '__SQUAD_TYPE'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:146: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'int'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:147: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'struct'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:148: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'long'
+/root/src/PRODUCTION/newbuildroo/a/output/host/usr/mips-unknown-linux-uc
+libc/sysroot/usr/include/bits/types.h:149: error: expected '=', ',',
+';', 'asm' or '__attribute__' before 'unsigned'
 
-1) send your patch series:
-   - properly document each patch
-   - have an explicit commit message, with first line as descriptive
-     as you can (80-char wide)
-   - do not forget to SoB each patch
-   - for long and/or complex patch series (even single patch), write
-     an introductory message that is not gonna be part of the commit
-     message, where you can explain at large what the series does,
-     and explain the reasons for the changes (eg. design, bigger plan
-     long-term...)
-   - if it makes sense, split the patch series into shorter series,
-     as that gets easier to review; say the second series depends on
-     the first one. Even wait for the first to get applied before
-     sending the next one
 
-2) three cases
-   a) some patches in the series get applied: end of story for those! :-)
-   b) someone answers with comments
-      - adress the comments
-        - explain your position
-        - or accept to change/fix the affected patch(es)
-      - wait a litle bit, in case someone else chimes in to comment
-      - update the series, and go back to 1)
-   c) nobody answers
-      - wait a litle bit (about three/four days)
-      - answer the top-level mesage with something like:
-          Ping? Any comment on that series/patch?
-          Cheers! ;-)
 
-3) if after that noone answers
-   - wait a little longer, such as a good 10-15 days after your ping
-   - for features, even wait for after the next release if it gets too
-     close
-     - better not flood the maintainer just before a release, you may
-       get better chance to be noticed just after the release
-   - repost the whole series
-   - say that it is a repost, and why you think it is important
+This one compile error goes on for more that 4 screens @ 65 lines /
+screen.
 
-4) if after that, noone answers, then end of story.
+I'm looking for the culprit, but you probably know more along the lines
+of the oops than me.
 
-That applies to about all FLOSS projects, I believe! ;-)
-
-Patch series getting no comment might simply be because the maintainer
-missed it, or forget about it (hence the ping above). Of course, rejected
-series should get notified with the reasons for the rejection. :-/
-
-But usually, a ping is enough to get noticed. :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Cheers,
+Andy
