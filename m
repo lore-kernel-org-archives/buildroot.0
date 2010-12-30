@@ -1,51 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 30 Dec 2010 23:31:48 +0100
-Subject: [Buildroot] [git commit master 1/1] genext2fs.sh: improve
-	number of blocks calculation
-In-Reply-To: <20101230222011.4B7A08EE7F@busybox.osuosl.org>
-References: <20101230222011.4B7A08EE7F@busybox.osuosl.org>
-Message-ID: <201012302331.49472.yann.morin.1998@anciens.enib.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Dec 2010 22:35:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 2929] genext2fs: couldn't allocate a block (no
+	free space)
+In-Reply-To: <bug-2929-163@https.bugs.busybox.net/>
+References: <bug-2929-163@https.bugs.busybox.net/>
+Message-ID: <20101230223548.6471D8E2B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+https://bugs.busybox.net/show_bug.cgi?id=2929
 
-On Thursday 30 December 2010 23:10:21 Peter Korsgaard wrote:
-> +    BLOCKS=$(expr 500 + \( $BLOCKS + $INODES / 8 \) \* 11 / 10)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-POSIX specifies that you can do arithmetics in the shell:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-2.6.4 Arithmetic Expansion
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Hi,
 
-  Arithmetic expansion provides a mechanism for evaluating an arithmetic
-  expression and substituting its value. The format for arithmetic expansion
-  shall be as follows:
-
-  $((expression))
-
-You do even need to do variable expansion, it's implicit when doing
-arithmetics expansion:
-
-  If the shell variable x contains a value that forms a valid integer
-  constant, then the arithmetic expansions "$((x))" and "$(($x))" shall
-  return the same value.
-
-So I'd write that as:
-
-  BLOCKS=$(( 500 + (BLOCKS+INODES/8) * 11 / 10 ))
-
-Much more readable, IMHO.
-
-Regards,
-Yann E. MORIN.
+I've implemented better ext2 size estimation in git (eeea3ea6a88a8) - Could you
+give it a try?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
