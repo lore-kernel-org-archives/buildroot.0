@@ -1,29 +1,30 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Thu, 30 Dec 2010 06:30:05 -0600
-Subject: [Buildroot] commiting patches
-Message-ID: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
+From: Guillaume Gardet <guillaume.gardet@free.fr>
+Date: Thu, 30 Dec 2010 16:46:14 +0100
+Subject: [Buildroot] [PATCH] Add ttyO0 to ttyO3 in /etc/securetty in skeleton
+Message-ID: <4D1CA946.5090009@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+Hi,
 
-I was wondering for a while, what are the criterias for patches to be  
-applied to buildroot.
-Some of them seem to get applied right away, others were sent in a  
-month or two ago and don't. I understand that some probably will never  
-get applied, but will there be a "sorry dude, but..." email?
+Recent kernels (2.6.37*) use a different name for OMAP serial ports. They are no longer called ttySx but ttyOx. This patch add ttyO0 to ttyO3 in /etc/securetty.
+Could you apply it in the trunk?
 
-Just curious how this is handled.
-
--- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+Signed-off-by: Guillaume GARDET <guillaume.gardet@free.fr>
 
 
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
+diff --git a/fs/skeleton/etc/securetty b/fs/skeleton/etc/securetty
+index b25f4a5..e69fec7 100644
+--- a/fs/skeleton/etc/securetty
++++ b/fs/skeleton/etc/securetty
+@@ -33,3 +33,7 @@ ttyCPM3
+  ttymxc0
+  ttymxc1
+  ttymxc2
++ttyO0
++ttyO1
++ttyO2
++ttyO3
