@@ -1,25 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 30 Dec 2010 21:23:03 -0300
-Subject: [Buildroot] Multiple build errors on the target toolchain for
- mips:
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EB88D3B@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EAEBFB0@EXV1.corp.adtran.com>
-	<AANLkTikWrX7W9D0kV7syrbVwpQ-bN12e3RiXf1Vbc2Av@mail.gmail.com>
-	<AANLkTiknUDt3eR-gphAP6kROX1cOWh-1YNC61EBjKiAp@mail.gmail.com>
-	<4D1CFFD7.5090501@zacarias.com.ar>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1EB88D3B@EXV1.corp.adtran.com>
-Message-ID: <4D1D2267.6000708@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 31 Dec 2010 08:42:50 +0100
+Subject: [Buildroot] [PATCH 4/4] libglib2: bump to 2.26.1
+In-Reply-To: <1289811484-30702-5-git-send-email-llandwerlin@gmail.com>
+	(llandwerlin@gmail.com's message of "Mon, 15 Nov 2010 09:58:04 +0100")
+References: <1289811484-30702-1-git-send-email-llandwerlin@gmail.com>
+	<1289811484-30702-5-git-send-email-llandwerlin@gmail.com>
+Message-ID: <87aajmfkw5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/30/2010 07:20 PM, ANDY KENNEDY wrote:
+>>>>> "llandwerlin" == llandwerlin  <llandwerlin@gmail.com> writes:
 
-> Let me know when it is safe to pull again and I'll retest.
-> 
-> Andy
+ llandwerlin> From: Lionel Landwerlin <llandwerlin@gmail.com>
+ llandwerlin> Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 
-Should be usable now, i don't intend to do anything with it until next
-year :P
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
