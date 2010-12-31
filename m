@@ -1,8 +1,7 @@
-From: Phil Edworthy <phil.edworthy@renesas.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 31 Dec 2010 08:43:05 +0100
-Subject: [Buildroot] [git commit master 1/1] gst-plugins-good: Add option
-	for v4l2
-Message-ID: <20101231074507.5F76F8F30B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libglib2: bump to 2.26.1
+Message-ID: <20101231074507.92C228F30B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4696e075f6461d467340c78ecd7033301cac1dd7
+commit: http://git.buildroot.net/buildroot/commit/?id=56fe2bc6dce89eb9f4e1824533d4bdfffef57ef8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gst-plugins-good/Config.in      |    3 +++
- .../gst-plugins-good/gst-plugins-good.mk           |    7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletions(-)
+ package/libglib2/libglib2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 3b37b5e..dd293e9 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -159,6 +159,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_Y4M
- 	bool "y4m"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2
-+	bool "v4l2"
-+
- comment "plugins with external dependencies"
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index c44bdff..62d9d47 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -15,7 +15,6 @@ GST_PLUGINS_GOOD_CONF_OPT = \
- 		--disable-sunaudio \
- 		--disable-osx_audio \
- 		--disable-osx_video \
--		--disable-gst_v4l2 \
- 		--disable-x \
- 		--disable-xshm \
- 		--disable-xvideo \
-@@ -290,6 +289,12 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-y4m
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_V4L2),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-gst_v4l2
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-gst_v4l2
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-annodex
- GST_PLUGINS_GOOD_DEPENDENCIES += libxml2
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 0d44d71..3f24d6d 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ LIBGLIB2_VERSION_MAJOR = 2.26
+-LIBGLIB2_VERSION_MINOR = 0
++LIBGLIB2_VERSION_MINOR = 1
+ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
 -- 
 1.7.2.2
