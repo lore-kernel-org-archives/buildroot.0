@@ -1,532 +1,443 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 31 Dec 2010 08:39:01 -0300
-Subject: [Buildroot] [PATCH 1/6] binutils: make it a proper package
+Date: Fri, 31 Dec 2010 08:39:03 -0300
+Subject: [Buildroot] [PATCH 3/6] gdb: make it a proper package
 In-Reply-To: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1293795546-19674-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1293795546-19674-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Convert binutils to a proper autotargets package
+* Convert gdb to a proper autotargets package
+* Add version 7.2
+* Drop version 6.6
+* Mark version 6.7.1 (non-avr32) as deprecated
 
-* Add version 2.21 and drop version 2.17
+Kconfig can't handle duplicate choices and we can't make source depend
+on anything.
+To fix this we suffix the different version choices for each case (in
+the toolchain menu with internal toolchain, in the package menu for
+target gdb/gdbserver for internal and external toolchains.
 
-* Hook up packaged binutils for target gcc
-
-* Build tools are on HOST_DIR now so change it
-
-* Move cross/host gcc to HOST_DIR
-
-* Drop kludge from commit 3c77bab2eeace3ee675bd745ca335fa3dd1630bb
-  This is fixed in the next commit "gcc: install copies of libgcc,
-  libstdc++ and libgcj to the sysroot" - tested for arm & x86_64
-  targets.
-
-* TARGET_CROSS now pointed to HOST_DIR too
+TODO: copy gdbserver from external toolchains
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Makefile                                           |    4 +-
- package/Config.in                                  |    1 +
- package/Makefile.in                                |    2 +-
- package/binutils/Config.in                         |   22 +++
- .../Config.in => package/binutils/Config.in.host   |   17 +-
- .../binutils-2.18}/100-makeinfo-version.patch      |    0
- .../binutils-2.18}/110-arm-eabi-conf.patch         |    0
- .../binutils-2.18}/300-001_ld_makefile_patch.patch |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils-2.19.1}/110-arm-eabi-conf.patch       |    0
- .../binutils/binutils-2.19.1}/120-sh-conf.patch    |    0
- .../300-001_ld_makefile_patch.patch                |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils-2.19}/110-arm-eabi-conf.patch         |    0
- .../binutils/binutils-2.19}/120-sh-conf.patch      |    0
- .../binutils-2.19}/300-001_ld_makefile_patch.patch |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils-2.20.1}/110-arm-eabi-conf.patch       |    0
- .../binutils/binutils-2.20.1}/120-sh-conf.patch    |    0
- .../300-001_ld_makefile_patch.patch                |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils-2.20.1}/400-arm_link_speed.patch      |    0
- .../binutils-2.20}/110-arm-eabi-conf.patch         |    0
- .../binutils/binutils-2.20}/120-sh-conf.patch      |    0
- .../binutils-2.20}/300-001_ld_makefile_patch.patch |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils-2.20}/400-arm_link_speed.patch        |    0
- .../binutils-2.21}/110-arm-eabi-conf.patch         |    0
- .../binutils/binutils-2.21}/120-sh-conf.patch      |    0
- .../binutils-2.21}/300-001_ld_makefile_patch.patch |    0
- .../300-012_check_ldrunpath_length.patch           |   21 +++
- package/binutils/binutils.mk                       |   56 ++++++
- toolchain/Makefile.in                              |    2 +-
- toolchain/binutils/2.17/100-uclibc-conf.patch      |  139 ---------------
- toolchain/binutils/2.17/110-arm-eabi-conf.patch    |   24 ---
- .../binutils/2.17/300-001_ld_makefile_patch.patch  |   50 ------
- .../binutils/2.17/300-006_better_file_error.patch  |   43 -----
- .../2.17/300-012_check_ldrunpath_length.patch      |   47 -----
- .../2.17/400-mips-ELF_MAXPAGESIZE-4K.patch         |   26 ---
- .../binutils/2.17/500-fix-makeinfo-check.patch     |   17 --
- toolchain/binutils/binutils.mk                     |  179 --------------------
- toolchain/gcc/Config.in.2                          |    4 +
- toolchain/gcc/gcc-uclibc-4.x.mk                    |   81 ++++------
+ Makefile                                           |    2 +-
+ package/Config.in                                  |    6 +
+ package/gdb/Config.in.external                     |   66 ++++++
+ package/gdb/Config.in.host                         |   49 ++++
+ package/gdb/Config.in.internal                     |   70 ++++++
+ .../gdb-6.7.1}/600-fix-compile-flag-mismatch.patch |    0
+ .../gdb-6.8}/600-fix-compile-flag-mismatch.patch   |    0
+ package/gdb/gdb-7.2/100-fix-ipa.patch              |   25 ++
+ .../gdb/gdb-7.2/101-fix-gdbserver-uninstall.patch  |   23 ++
+ package/gdb/gdb.mk                                 |   62 +++++
+ toolchain/gdb/6.6/100-uclibc-conf.patch            |   82 -------
+ .../gdb/6.6/600-fix-compile-flag-mismatch.patch    |   69 ------
+ toolchain/gdb/Config.in                            |   69 ------
+ toolchain/gdb/gdb.mk                               |  237 --------------------
  toolchain/toolchain-buildroot.mk                   |    1 -
- toolchain/toolchain-buildroot/Config.in            |    2 +-
+ toolchain/toolchain-buildroot/Config.in            |    1 +
+ toolchain/toolchain-common.in                      |    5 -
  toolchain/toolchain-crosstool-ng.mk                |    1 -
  toolchain/toolchain-external.mk                    |    1 -
- 47 files changed, 148 insertions(+), 592 deletions(-)
- create mode 100644 package/binutils/Config.in
- rename toolchain/binutils/Config.in => package/binutils/Config.in.host (83%)
- rename {toolchain/binutils/2.18 => package/binutils/binutils-2.18}/100-makeinfo-version.patch (100%)
- rename {toolchain/binutils/2.18 => package/binutils/binutils-2.18}/110-arm-eabi-conf.patch (100%)
- copy {toolchain/binutils/2.18 => package/binutils/binutils-2.18}/300-001_ld_makefile_patch.patch (100%)
- rename {toolchain/binutils/2.18 => package/binutils/binutils-2.18}/300-012_check_ldrunpath_length.patch (100%)
- copy {toolchain/binutils/2.19.1 => package/binutils/binutils-2.19.1}/110-arm-eabi-conf.patch (100%)
- copy {toolchain/binutils/2.19.1 => package/binutils/binutils-2.19.1}/120-sh-conf.patch (100%)
- rename {toolchain/binutils/2.19.1 => package/binutils/binutils-2.19.1}/300-001_ld_makefile_patch.patch (100%)
- rename {toolchain/binutils/2.19.1 => package/binutils/binutils-2.19.1}/300-012_check_ldrunpath_length.patch (100%)
- rename {toolchain/binutils/2.19 => package/binutils/binutils-2.19}/110-arm-eabi-conf.patch (100%)
- rename {toolchain/binutils/2.19 => package/binutils/binutils-2.19}/120-sh-conf.patch (100%)
- rename {toolchain/binutils/2.19 => package/binutils/binutils-2.19}/300-001_ld_makefile_patch.patch (100%)
- rename {toolchain/binutils/2.19 => package/binutils/binutils-2.19}/300-012_check_ldrunpath_length.patch (100%)
- rename {toolchain/binutils/2.20.1 => package/binutils/binutils-2.20.1}/110-arm-eabi-conf.patch (100%)
- rename {toolchain/binutils/2.20.1 => package/binutils/binutils-2.20.1}/120-sh-conf.patch (100%)
- rename {toolchain/binutils/2.20.1 => package/binutils/binutils-2.20.1}/300-001_ld_makefile_patch.patch (100%)
- rename {toolchain/binutils/2.20.1 => package/binutils/binutils-2.20.1}/300-012_check_ldrunpath_length.patch (100%)
- rename {toolchain/binutils/2.20.1 => package/binutils/binutils-2.20.1}/400-arm_link_speed.patch (100%)
- rename {toolchain/binutils/2.20 => package/binutils/binutils-2.20}/110-arm-eabi-conf.patch (100%)
- rename {toolchain/binutils/2.20 => package/binutils/binutils-2.20}/120-sh-conf.patch (100%)
- rename {toolchain/binutils/2.20 => package/binutils/binutils-2.20}/300-001_ld_makefile_patch.patch (100%)
- rename {toolchain/binutils/2.20 => package/binutils/binutils-2.20}/300-012_check_ldrunpath_length.patch (100%)
- rename {toolchain/binutils/2.20 => package/binutils/binutils-2.20}/400-arm_link_speed.patch (100%)
- rename {toolchain/binutils/2.19.1 => package/binutils/binutils-2.21}/110-arm-eabi-conf.patch (100%)
- rename {toolchain/binutils/2.19.1 => package/binutils/binutils-2.21}/120-sh-conf.patch (100%)
- rename {toolchain/binutils/2.18 => package/binutils/binutils-2.21}/300-001_ld_makefile_patch.patch (100%)
- create mode 100644 package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
- create mode 100644 package/binutils/binutils.mk
- delete mode 100644 toolchain/binutils/2.17/100-uclibc-conf.patch
- delete mode 100644 toolchain/binutils/2.17/110-arm-eabi-conf.patch
- delete mode 100644 toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
- delete mode 100644 toolchain/binutils/2.17/300-006_better_file_error.patch
- delete mode 100644 toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
- delete mode 100644 toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
- delete mode 100644 toolchain/binutils/2.17/500-fix-makeinfo-check.patch
- delete mode 100644 toolchain/binutils/binutils.mk
+ 19 files changed, 303 insertions(+), 466 deletions(-)
+ create mode 100644 package/gdb/Config.in.external
+ create mode 100644 package/gdb/Config.in.host
+ create mode 100644 package/gdb/Config.in.internal
+ rename {toolchain/gdb/6.7.1 => package/gdb/gdb-6.7.1}/600-fix-compile-flag-mismatch.patch (100%)
+ rename {toolchain/gdb/6.8 => package/gdb/gdb-6.8}/600-fix-compile-flag-mismatch.patch (100%)
+ create mode 100644 package/gdb/gdb-7.2/100-fix-ipa.patch
+ create mode 100644 package/gdb/gdb-7.2/101-fix-gdbserver-uninstall.patch
+ create mode 100644 package/gdb/gdb.mk
+ delete mode 100644 toolchain/gdb/6.6/100-uclibc-conf.patch
+ delete mode 100644 toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch
+ delete mode 100644 toolchain/gdb/Config.in
+ delete mode 100644 toolchain/gdb/gdb.mk
 
 diff --git a/Makefile b/Makefile
-index 6d6e836..e634848 100644
+index e634848..f2f0dd0 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -245,7 +245,7 @@ BASE_TARGETS += host-ccache
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--BASE_TARGETS += uclibc-configured binutils cross_compiler uclibc-target-utils kernel-headers
-+BASE_TARGETS += uclibc-configured host-binutils cross_compiler uclibc-target-utils kernel-headers
- else
- BASE_TARGETS += uclibc
- endif
 @@ -618,7 +618,7 @@ endif
  
  configured: dirs kernel-headers uclibc-config busybox-config linux26-config
  
--prepatch:	gcc-patched binutils-patched gdb-patched uclibc-patched
-+prepatch:	gcc-patched gdb-patched uclibc-patched
+-prepatch:	gcc-patched gdb-patched uclibc-patched
++prepatch:	gcc-patched uclibc-patched
  
  cross: $(BASE_TARGETS)
  
 diff --git a/package/Config.in b/package/Config.in
-index ec5d73e..da5b62b 100644
+index da5b62b..e5ff8d9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -35,6 +35,7 @@ endmenu
- menu "Development tools"
- source "package/autoconf/Config.in"
- source "package/automake/Config.in"
-+source "package/binutils/Config.in"
- source "package/bison/Config.in"
- source "package/bsdiff/Config.in"
- source "package/ccache/Config.in"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7ff1700..a1e290f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -109,7 +109,7 @@ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
- TARGET_SYSROOT_OPT=--sysroot=$(STAGING_DIR)
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--TARGET_CROSS=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
-+TARGET_CROSS=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+@@ -55,6 +55,12 @@ source "package/flex/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gawk/Config.in"
+ endif
++if BR2_TOOLCHAIN_BUILDROOT
++source "package/gdb/Config.in.internal"
++endif
++if !BR2_TOOLCHAIN_BUILDROOT
++source "package/gdb/Config.in.external"
++endif
+ source "toolchain/gcc/Config.in.2"
+ source "package/gettext/Config.in"
+ source "package/gmp/Config.in"
+diff --git a/package/gdb/Config.in.external b/package/gdb/Config.in.external
 new file mode 100644
-index 0000000..83d3364
+index 0000000..9f7b0bf
 --- /dev/null
-+++ b/package/binutils/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_BINUTILS
-+	bool "binutils libbfd"
-+	depends on BR2_TOOLCHAIN_BUILDROOT
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	help
-+	  Install libbfd from binutils in the target.
-+	  
-+	  This is used by oprofile to avoid a full-blown target binutils.
++++ b/package/gdb/Config.in.external
+@@ -0,0 +1,66 @@
++config BR2_PACKAGE_GDB
++	bool
++	default y if BR2_PACKAGE_GDB_TARGET || BR2_PACKAGE_GDB_SERVER
 +
-+config BR2_PACKAGE_BINUTILS_TARGET
-+	bool "binutils full"
-+	depends on BR2_TOOLCHAIN_BUILDROOT
-+	select BR2_PACKAGE_BINUTILS
++config BR2_PACKAGE_GDB_TARGET
++	bool "gdb"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_GDB
++	depends on BR2_USE_WCHAR
 +	help
-+	  The GNU Binutils are a collection of binary tools:
++	    Build the full gdb debugger to run on the target.
 +
-+	  ld - the GNU linker.
-+	  as - the GNU assembler.
-+	  and others...
-+	  
-+	  http://www.gnu.org/software/binutils/
-diff --git a/toolchain/binutils/Config.in b/package/binutils/Config.in.host
-similarity index 83%
-rename from toolchain/binutils/Config.in
-rename to package/binutils/Config.in.host
-index 165b43e..4a5e8ef 100644
---- a/toolchain/binutils/Config.in
-+++ b/package/binutils/Config.in.host
-@@ -1,18 +1,11 @@
--# Choose binutils version.
--
- comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_20_1
-+	default BR2_BINUTILS_VERSION_2_21
- 	help
- 	  Select the version of binutils you wish to use.
- 
--	config BR2_BINUTILS_VERSION_2_17
--		depends on !BR2_avr32
--		depends on BR2_DEPRECATED
--		bool "binutils 2.17"
--
- 	config BR2_BINUTILS_VERSION_2_18
- 		depends on !BR2_avr32
- 		depends on BR2_DEPRECATED
-@@ -40,19 +33,23 @@ choice
- 		depends on !BR2_avr32
- 		bool "binutils 2.20.1"
- 
-+	config BR2_BINUTILS_VERSION_2_21
++comment "GDB debugger for the target needs WCHAR support in toolchain"
++	depends on !BR2_USE_WCHAR
++
++config BR2_PACKAGE_GDB_SERVER
++	bool "gdbserver"
++	select BR2_PACKAGE_GDB
++	help
++	    Build the gdbserver stub to run on the target.
++	    A full gdb is needed to debug the progam.
++
++choice
++	prompt "GDB debugger Version"
++	depends on BR2_PACKAGE_GDB
++	default BR2_GDB_VERSION_6_8_e if !BR2_avr32
++	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_e if BR2_avr32
++	help
++	  Select the version of gdb you wish to use.
++
++	config BR2_GDB_VERSION_6_7_1_e
 +		depends on !BR2_avr32
-+		bool "binutils 2.21"
++		bool "gdb 6.7.1"
++		depends on BR2_DEPRECATED
 +
- endchoice
- 
- config BR2_BINUTILS_VERSION
- 	string
--	default "2.17"		if BR2_BINUTILS_VERSION_2_17
- 	default "2.18"		if BR2_BINUTILS_VERSION_2_18
- 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
- 	default "2.19"		if BR2_BINUTILS_VERSION_2_19
- 	default "2.19.1"	if BR2_BINUTILS_VERSION_2_19_1
- 	default "2.20"		if BR2_BINUTILS_VERSION_2_20
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
-+	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 
--config BR2_EXTRA_BINUTILS_CONFIG_OPTIONS
-+config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
- 	string "Additional binutils options"
- 	default ""
- 	help
-diff --git a/toolchain/binutils/2.18/100-makeinfo-version.patch b/package/binutils/binutils-2.18/100-makeinfo-version.patch
-similarity index 100%
-rename from toolchain/binutils/2.18/100-makeinfo-version.patch
-rename to package/binutils/binutils-2.18/100-makeinfo-version.patch
-diff --git a/toolchain/binutils/2.18/110-arm-eabi-conf.patch b/package/binutils/binutils-2.18/110-arm-eabi-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.18/110-arm-eabi-conf.patch
-rename to package/binutils/binutils-2.18/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch
-similarity index 100%
-copy from toolchain/binutils/2.18/300-001_ld_makefile_patch.patch
-copy to package/binutils/binutils-2.18/300-001_ld_makefile_patch.patch
-diff --git a/toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from toolchain/binutils/2.18/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.18/300-012_check_ldrunpath_length.patch
-diff --git a/toolchain/binutils/2.19.1/110-arm-eabi-conf.patch b/package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch
-similarity index 100%
-copy from toolchain/binutils/2.19.1/110-arm-eabi-conf.patch
-copy to package/binutils/binutils-2.19.1/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.19.1/120-sh-conf.patch b/package/binutils/binutils-2.19.1/120-sh-conf.patch
-similarity index 100%
-copy from toolchain/binutils/2.19.1/120-sh-conf.patch
-copy to package/binutils/binutils-2.19.1/120-sh-conf.patch
-diff --git a/toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from toolchain/binutils/2.19.1/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.19.1/300-001_ld_makefile_patch.patch
-diff --git a/toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from toolchain/binutils/2.19.1/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.19.1/300-012_check_ldrunpath_length.patch
-diff --git a/toolchain/binutils/2.19/110-arm-eabi-conf.patch b/package/binutils/binutils-2.19/110-arm-eabi-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.19/110-arm-eabi-conf.patch
-rename to package/binutils/binutils-2.19/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.19/120-sh-conf.patch b/package/binutils/binutils-2.19/120-sh-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.19/120-sh-conf.patch
-rename to package/binutils/binutils-2.19/120-sh-conf.patch
-diff --git a/toolchain/binutils/2.19/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from toolchain/binutils/2.19/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.19/300-001_ld_makefile_patch.patch
-diff --git a/toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from toolchain/binutils/2.19/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.19/300-012_check_ldrunpath_length.patch
-diff --git a/toolchain/binutils/2.20.1/110-arm-eabi-conf.patch b/package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.20.1/110-arm-eabi-conf.patch
-rename to package/binutils/binutils-2.20.1/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.20.1/120-sh-conf.patch b/package/binutils/binutils-2.20.1/120-sh-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.20.1/120-sh-conf.patch
-rename to package/binutils/binutils-2.20.1/120-sh-conf.patch
-diff --git a/toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from toolchain/binutils/2.20.1/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.20.1/300-001_ld_makefile_patch.patch
-diff --git a/toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from toolchain/binutils/2.20.1/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.20.1/300-012_check_ldrunpath_length.patch
-diff --git a/toolchain/binutils/2.20.1/400-arm_link_speed.patch b/package/binutils/binutils-2.20.1/400-arm_link_speed.patch
-similarity index 100%
-rename from toolchain/binutils/2.20.1/400-arm_link_speed.patch
-rename to package/binutils/binutils-2.20.1/400-arm_link_speed.patch
-diff --git a/toolchain/binutils/2.20/110-arm-eabi-conf.patch b/package/binutils/binutils-2.20/110-arm-eabi-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.20/110-arm-eabi-conf.patch
-rename to package/binutils/binutils-2.20/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.20/120-sh-conf.patch b/package/binutils/binutils-2.20/120-sh-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.20/120-sh-conf.patch
-rename to package/binutils/binutils-2.20/120-sh-conf.patch
-diff --git a/toolchain/binutils/2.20/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from toolchain/binutils/2.20/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.20/300-001_ld_makefile_patch.patch
-diff --git a/toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from toolchain/binutils/2.20/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.20/300-012_check_ldrunpath_length.patch
-diff --git a/toolchain/binutils/2.20/400-arm_link_speed.patch b/package/binutils/binutils-2.20/400-arm_link_speed.patch
-similarity index 100%
-rename from toolchain/binutils/2.20/400-arm_link_speed.patch
-rename to package/binutils/binutils-2.20/400-arm_link_speed.patch
-diff --git a/toolchain/binutils/2.19.1/110-arm-eabi-conf.patch b/package/binutils/binutils-2.21/110-arm-eabi-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.19.1/110-arm-eabi-conf.patch
-rename to package/binutils/binutils-2.21/110-arm-eabi-conf.patch
-diff --git a/toolchain/binutils/2.19.1/120-sh-conf.patch b/package/binutils/binutils-2.21/120-sh-conf.patch
-similarity index 100%
-rename from toolchain/binutils/2.19.1/120-sh-conf.patch
-rename to package/binutils/binutils-2.21/120-sh-conf.patch
-diff --git a/toolchain/binutils/2.18/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from toolchain/binutils/2.18/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.21/300-001_ld_makefile_patch.patch
-diff --git a/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
++	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_e
++		depends on BR2_avr32
++		bool "gdb 6.7.1-avr32-2.1.5"
++
++	config BR2_GDB_VERSION_6_8_e
++		bool "gdb 6.8"
++		depends on !BR2_avr32
++
++	config BR2_GDB_VERSION_7_0_1_e
++		bool "gdb 7.0.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_1_e
++		bool "gdb 7.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_2_e
++		bool "gdb 7.2"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++endchoice
++
++config BR2_GDB_VERSION
++	depends on BR2_PACKAGE_GDB
++	string
++	default "6.7.1"			if BR2_GDB_VERSION_6_7_1_e
++	default "6.7.1-avr32-2.1.5"	if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_e
++	default "6.8"			if BR2_GDB_VERSION_6_8_e
++	default "7.0.1"			if BR2_GDB_VERSION_7_0_1_e
++	default "7.1"			if BR2_GDB_VERSION_7_1_e
++	default "7.2"			if BR2_GDB_VERSION_7_2_e
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
 new file mode 100644
-index 0000000..df78310
+index 0000000..78182ae
 --- /dev/null
-+++ b/package/binutils/binutils-2.21/300-012_check_ldrunpath_length.patch
-@@ -0,0 +1,21 @@
-+diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
-+--- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
-++++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
-+@@ -1270,6 +1270,8 @@
-+ 	      && command_line.rpath == NULL)
-+ 	    {
-+ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-++	      if ((lib_path) && (strlen (lib_path) == 0))
-++	      	lib_path = NULL;
-+ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-+ 						      force))
-+ 		break;
-+@@ -1497,6 +1499,8 @@
-+   rpath = command_line.rpath;
-+   if (rpath == NULL)
-+     rpath = (const char *) getenv ("LD_RUN_PATH");
-++  if ((rpath) && (strlen (rpath) == 0))
-++  	rpath = NULL;
++++ b/package/gdb/Config.in.host
+@@ -0,0 +1,49 @@
++config BR2_PACKAGE_HOST_GDB
++	bool "Build/install gdb for the host"
++	help
++	    Build gdb to run on the host to debug programs run on the target.
++
++choice
++	prompt "GDB debugger Version"
++	depends on BR2_PACKAGE_HOST_GDB
++	default BR2_GDB_VERSION_6_8 if !BR2_avr32
++	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
++	help
++	  Select the version of gdb you wish to use.
++
++	config BR2_GDB_VERSION_6_7_1
++		depends on !BR2_avr32
++		bool "gdb 6.7.1"
++		depends on BR2_DEPRECATED
++
++	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
++		depends on BR2_avr32
++		bool "gdb 6.7.1-avr32-2.1.5"
++
++	config BR2_GDB_VERSION_6_8
++		bool "gdb 6.8"
++		depends on !BR2_avr32
++
++	config BR2_GDB_VERSION_7_0_1
++		bool "gdb 7.0.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_1
++		bool "gdb 7.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_2
++		bool "gdb 7.2"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++endchoice
++
++config BR2_GDB_VERSION
++	depends on BR2_PACKAGE_HOST_GDB
++	string
++	default "6.7.1"			if BR2_GDB_VERSION_6_7_1
++	default "6.7.1-avr32-2.1.5"	if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
++	default "6.8"			if BR2_GDB_VERSION_6_8
++	default "7.0.1"			if BR2_GDB_VERSION_7_0_1
++	default "7.1"			if BR2_GDB_VERSION_7_1
++	default "7.2"			if BR2_GDB_VERSION_7_2
+diff --git a/package/gdb/Config.in.internal b/package/gdb/Config.in.internal
+new file mode 100644
+index 0000000..d3d8de5
+--- /dev/null
++++ b/package/gdb/Config.in.internal
+@@ -0,0 +1,70 @@
++config BR2_PACKAGE_GDB
++	bool
++	default y if BR2_PACKAGE_GDB_TARGET || BR2_PACKAGE_GDB_SERVER
++
++config BR2_PACKAGE_GDB_TARGET
++	bool "gdb"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_GDB
++	depends on BR2_USE_WCHAR
++	help
++	    Build the full gdb debugger to run on the target.
++
++comment "GDB debugger for the target needs WCHAR support in toolchain"
++	depends on !BR2_USE_WCHAR
++
++config BR2_PACKAGE_GDB_SERVER
++	bool "gdbserver"
++	depends on BR2_PACKAGE_HOST_GDB
++	select BR2_PACKAGE_GDB
++	help
++	    Build the gdbserver stub to run on the target.
++	    A full gdb is needed to debug the progam.
++
++comment "GDB server needs you to build a host GDB in toolchain"
++	depends on !BR2_PACKAGE_HOST_GDB
++
++choice
++	prompt "GDB debugger Version"
++	depends on !BR2_PACKAGE_HOST_GDB && BR2_PACKAGE_GDB
++	default BR2_GDB_VERSION_6_8_i if !BR2_avr32
++	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_i if BR2_avr32
++	help
++	  Select the version of gdb you wish to use.
++
++	config BR2_GDB_VERSION_6_7_1_i
++		depends on !BR2_avr32
++		bool "gdb 6.7.1"
++		depends on BR2_DEPRECATED
++
++	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_i
++		depends on BR2_avr32
++		bool "gdb 6.7.1-avr32-2.1.5"
++
++	config BR2_GDB_VERSION_6_8_i
++		bool "gdb 6.8"
++		depends on !BR2_avr32
++
++	config BR2_GDB_VERSION_7_0_1_i
++		bool "gdb 7.0.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_1_i
++		bool "gdb 7.1"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++	config BR2_GDB_VERSION_7_2_i
++		bool "gdb 7.2"
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
++endchoice
++
++config BR2_GDB_VERSION
++	depends on !BR2_PACKAGE_HOST_GDB && BR2_PACKAGE_GDB
++	string
++	default "6.7.1"			if BR2_GDB_VERSION_6_7_1_i
++	default "6.7.1-avr32-2.1.5"	if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5_i
++	default "6.8"			if BR2_GDB_VERSION_6_8_i
++	default "7.0.1"			if BR2_GDB_VERSION_7_0_1_i
++	default "7.1"			if BR2_GDB_VERSION_7_1_i
++	default "7.2"			if BR2_GDB_VERSION_7_2_i
+diff --git a/toolchain/gdb/6.7.1/600-fix-compile-flag-mismatch.patch b/package/gdb/gdb-6.7.1/600-fix-compile-flag-mismatch.patch
+similarity index 100%
+rename from toolchain/gdb/6.7.1/600-fix-compile-flag-mismatch.patch
+rename to package/gdb/gdb-6.7.1/600-fix-compile-flag-mismatch.patch
+diff --git a/toolchain/gdb/6.8/600-fix-compile-flag-mismatch.patch b/package/gdb/gdb-6.8/600-fix-compile-flag-mismatch.patch
+similarity index 100%
+rename from toolchain/gdb/6.8/600-fix-compile-flag-mismatch.patch
+rename to package/gdb/gdb-6.8/600-fix-compile-flag-mismatch.patch
+diff --git a/package/gdb/gdb-7.2/100-fix-ipa.patch b/package/gdb/gdb-7.2/100-fix-ipa.patch
+new file mode 100644
+index 0000000..96037a9
+--- /dev/null
++++ b/package/gdb/gdb-7.2/100-fix-ipa.patch
+@@ -0,0 +1,25 @@
++Fix gdbserver standalone
++
++See http://www.cygwin.com/ml/gdb-patches/2010-09/msg00148.html
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ gdb/gdbserver/Makefile.in |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/gdb/gdbserver/Makefile.in b/gdb/gdbserver/Makefile.in
++index 76577cf..c2fc245 100644
++--- a/gdb/gdbserver/Makefile.in
+++++ b/gdb/gdbserver/Makefile.in
++@@ -164,7 +164,7 @@ install: all install-only
++ install-only:
++ 	n=`echo gdbserver | sed '$(program_transform_name)'`; \
++ 	if [ x$$n = x ]; then n=gdbserver; else true; fi; \
++-	if [ x$IPA_DEPFILES != x ]; then \
+++	if [ x$$IPA_DEPFILES != x ]; then \
++ 		$(SHELL) $(srcdir)/../../mkinstalldirs $(DESTDIR)$(libdir); \
++ 		$(INSTALL_PROGRAM) $(IPA_LIB) $(DESTDIR)$(libdir)/$(IPA_LIB); \
++ 	fi; \
++-- 
++1.7.2.2
++
+diff --git a/package/gdb/gdb-7.2/101-fix-gdbserver-uninstall.patch b/package/gdb/gdb-7.2/101-fix-gdbserver-uninstall.patch
+new file mode 100644
+index 0000000..c42fddc
+--- /dev/null
++++ b/package/gdb/gdb-7.2/101-fix-gdbserver-uninstall.patch
+@@ -0,0 +1,23 @@
++Fix uninstall target of gdbserver... meaning honor DESTDIR.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ gdb/gdbserver/Makefile.in |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/gdb/gdbserver/Makefile.in b/gdb/gdbserver/Makefile.in
++index 76577cf..43024fe 100644
++--- a/gdb/gdbserver/Makefile.in
+++++ b/gdb/gdbserver/Makefile.in
++@@ -176,7 +176,7 @@ install-only:
++ uninstall: force
++ 	n=`echo gdbserver | sed '$(program_transform_name)'`; \
++ 	if [ x$$n = x ]; then n=gdbserver; else true; fi; \
++-	rm -f $(bindir)/$$n$(EXEEXT) $(DESTDIR)$(man1dir)/$$n.1
+++	rm -f $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(man1dir)/$$n.1
 + 
-+   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
-+     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
++ installcheck:
++ check:
++-- 
++1.7.2.2
++
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
 new file mode 100644
-index 0000000..7eee280
+index 0000000..92cc4af
 --- /dev/null
-+++ b/package/binutils/binutils.mk
-@@ -0,0 +1,56 @@
++++ b/package/gdb/gdb.mk
+@@ -0,0 +1,62 @@
 +#############################################################
 +#
-+# binutils
++# gdb
 +#
 +#############################################################
 +
-+BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
-+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.bz2
-+BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
++GDB_VERSION = $(call qstrip,$(BR2_GDB_VERSION))
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
++GDB_SITE = $(BR2_GNU_MIRROR)/gdb
 +ifeq ($(ARCH),avr32)
-+BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
++GDB_SITE = ftp://www.at91.com/pub/buildroot
 +endif
-+BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
-+BINUTILS_INSTALL_STAGING = YES
-+BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
++GDB_TARGET_BINS = gdb gdbserver gdbtui
 +
-+# We need to specify host & target to avoid breaking ARM EABI
-+BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
-+		--host=$(REAL_GNU_TARGET_NAME) \
-+		--target=$(REAL_GNU_TARGET_NAME) \
-+		--enable-shared \
-+		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
++HOST_GDB_CONF_ENV = gdb_cv_func_sigsetjmp=yes \
++			bash_cv_have_mbstate_t=yes
++HOST_GDB_CONF_OPT = --without-uiout --disable-werror \
++			--disable-gdbtk --without-x \
++			--without-included-gettext --enable-threads \
++			--target=$(REAL_GNU_TARGET_NAME)
 +
-+# Install binutils after busybox to prefer full-blown utilities
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+BINUTILS_DEPENDENCIES += busybox
-+endif
-+
-+# "host" binutils should actually be "cross"
-+# We just keep the convention of "host utility" for now
-+HOST_BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
-+HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
-+			--target=$(REAL_GNU_TARGET_NAME) \
-+			$(BR2_CONFIGURE_STAGING_SYSROOT) \
-+			$(HOST_BINUTILS_EXTRA_CONFIG_OPTIONS)
-+
-+# We just want libbfd, not the full-blown binutils in staging
-+define BINUTILS_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
++define HOST_GDB_SYMLINK_CREATE
++	cd $(HOST_DIR)/usr/bin ; \
++	ln -sf $(REAL_GNU_TARGET_NAME)-gdb gdb ; \
++	ln -sf $(REAL_GNU_TARGET_NAME)-gdbtui gdbtui
 +endef
 +
-+# only libbfd in the target...
-+BINUTILS_INSTALL_FROM = $(@D)/bfd
++HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_SYMLINK_CREATE
 +
-+# unless we want full...
-+ifeq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
-+BINUTILS_INSTALL_FROM = $(@D)
++# If it's not full gdb then it's just gdbserver (if built at all)
++ifeq ($(BR2_PACKAGE_GDB_TARGET),y)
++GDB_DEPENDENCIES = ncurses
++GDB_CONF_ENV = ac_cv_type_uintptr_t=yes \
++		gt_cv_func_gettext_libintl=yes \
++		ac_cv_func_dcgettext=yes \
++		gdb_cv_func_sigsetjmp=yes \
++		bash_cv_func_strcoll_broken=no \
++		bash_cv_must_reinstall_sighandlers=no \
++		bash_cv_func_sigsetjmp=present \
++		bash_cv_have_mbstate_t=yes
++GDB_CONF_OPT = --cache-file=/dev/null --without-uiout \
++		--disable-sim --enable-gdbserver \
++		--without-included-gettext --disable-werror \
++		--program-transform-name=''
++else
++GDB_CONF_ENV = gdb_cv_func_sigsetjmp=yes \
++		bash_cv_have_mbstate_t=yes
++GDB_CONF_OPT = --cache-file=/dev/null --without-uiout \
++		--disable-tui --disable-gdbtk \
++		--without-included-gettext \
++		--includedir=$(STAGING_DIR)/usr/include \
++		--program-transform-name=''
++GDB_SUBDIR = gdb/gdbserver
 +endif
 +
-+define BINUTILS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(BINUTILS_INSTALL_FROM) \
-+		DESTDIR=$(TARGET_DIR) install
++define GDB_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/usr/share/gdb
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GDB_TARGET_BINS))
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,binutils))
-+$(eval $(call AUTOTARGETS,package,binutils,host))
-diff --git a/toolchain/Makefile.in b/toolchain/Makefile.in
-index 2cb6e95..a7ca558 100644
---- a/toolchain/Makefile.in
-+++ b/toolchain/Makefile.in
-@@ -1,6 +1,6 @@
- BR2_CONFIGURE_DEVEL_SYSROOT=--with-sysroot=$(TOOLCHAIN_DIR)/uClibc_dev/
- BR2_CONFIGURE_STAGING_SYSROOT=--with-sysroot=$(STAGING_DIR)
--BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
-+BR2_CONFIGURE_BUILD_TOOLS=--with-build-time-tools=$(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin
- 
- # gcc has a bunch of needed stuff....
- include toolchain/gcc/Makefile.in
-diff --git a/toolchain/binutils/2.17/100-uclibc-conf.patch b/toolchain/binutils/2.17/100-uclibc-conf.patch
++$(eval $(call AUTOTARGETS,package,gdb))
++$(eval $(call AUTOTARGETS,package,gdb,host))
+diff --git a/toolchain/gdb/6.6/100-uclibc-conf.patch b/toolchain/gdb/6.6/100-uclibc-conf.patch
 deleted file mode 100644
-index 25222e5..0000000
---- a/toolchain/binutils/2.17/100-uclibc-conf.patch
+index a790b6f..0000000
+--- a/toolchain/gdb/6.6/100-uclibc-conf.patch
 +++ /dev/null
-@@ -1,139 +0,0 @@
----- binutils-2.16.91.0.7/bfd/configure
--+++ binutils-2.16.91.0.7/bfd/configure
--@@ -3576,7 +3576,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
+@@ -1,82 +0,0 @@
+-diff -rNdup gdb-6.6.orig/bfd/configure gdb-6.6/bfd/configure
+---- gdb-6.6.orig/bfd/configure	2006-10-25 08:49:20.000000000 +0200
+-+++ gdb-6.6/bfd/configure	2007-05-14 10:35:50.000000000 +0200
+-@@ -3579,6 +3579,11 @@ linux-gnu*)
 -   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
----- binutils-2.16.91.0.7/binutils/configure
--+++ binutils-2.16.91.0.7/binutils/configure
--@@ -3411,7 +3411,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
----- binutils-2.16.91.0.7/configure
--+++ binutils-2.16.91.0.7/configure
--@@ -1270,7 +1270,7 @@
--   am33_2.0-*-linux*)
--     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
--     ;;
---  sh-*-linux*)
--+  sh*-*-linux*)
--     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
--     ;;    
--   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
--@@ -1578,7 +1578,7 @@
--   romp-*-*)
--     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
--     ;;
---  sh-*-* | sh64-*-*)
--+  sh*-*-* | sh64-*-*)
--     case "${host}" in
--       i[3456789]86-*-vsta) ;; # don't add gprof back in
--       i[3456789]86-*-go32*) ;; # don't add gprof back in
----- binutils-2.16.91.0.7/configure.in
--+++ binutils-2.16.91.0.7/configure.in
--@@ -468,7 +468,7 @@
--   am33_2.0-*-linux*)
--     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
--     ;;
---  sh-*-linux*)
--+  sh*-*-linux*)
--     noconfigdirs="$noconfigdirs ${libgcj} target-newlib target-libgloss"
--     ;;    
--   sh*-*-pe|mips*-*-pe|*arm-wince-pe)
--@@ -776,7 +776,7 @@
--   romp-*-*)
--     noconfigdirs="$noconfigdirs bfd binutils ld gas opcodes target-libgloss ${libgcj}"
--     ;;
---  sh-*-* | sh64-*-*)
--+  sh*-*-* | sh64-*-*)
--     case "${host}" in
--       i[[3456789]]86-*-vsta) ;; # don't add gprof back in
--       i[[3456789]]86-*-go32*) ;; # don't add gprof back in
----- binutils-2.16.91.0.7/gas/configure
--+++ binutils-2.16.91.0.7/gas/configure
--@@ -3411,7 +3411,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
----- binutils-2.16.91.0.7/gprof/configure
--+++ binutils-2.16.91.0.7/gprof/configure
--@@ -3419,6 +3419,11 @@
--   lt_cv_file_magic_test_file=`echo /lib/libc.so* /lib/libc-*.so`
 -   ;;
 - 
 -+linux-uclibc*)
@@ -537,791 +448,526 @@ index 25222e5..0000000
 - netbsd* | knetbsd*-gnu)
 -   if echo __ELF__ | $CC -E - | grep __ELF__ > /dev/null; then
 -     lt_cv_deplibs_check_method='match_pattern /lib[^/\.]+\.so\.[0-9]+\.[0-9]+$'
----- binutils-2.16.91.0.7/ld/configure
--+++ binutils-2.16.91.0.7/ld/configure
--@@ -3413,7 +3413,7 @@
+-diff -rNdup gdb-6.6.orig/libtool.m4 gdb-6.6/libtool.m4
+---- gdb-6.6.orig/libtool.m4	2005-12-27 17:37:57.000000000 +0100
+-+++ gdb-6.6/libtool.m4	2007-05-14 10:35:50.000000000 +0200
+-@@ -751,6 +751,11 @@ netbsd* | knetbsd*-gnu)
+-   fi
 -   ;;
 - 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
----- binutils-2.16.91.0.7/libtool.m4
--+++ binutils-2.16.91.0.7/libtool.m4
--@@ -739,7 +739,7 @@
--   ;;
-- 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
----- binutils-2.16.91.0.7/ltconfig
--+++ binutils-2.16.91.0.7/ltconfig
--@@ -602,6 +602,7 @@
+-+linux-uclibc*)
+-+  lt_cv_deplibs_check_method=pass_all
+-+  lt_cv_file_magic_test_file=`echo /lib/libuClibc-*.so`
+-+  ;;
+-+
+- newsos6)
+-   [lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (executable|dynamic lib)']
+-   lt_cv_file_magic_cmd=/usr/bin/file
+-diff -rNdup gdb-6.6.orig/ltconfig gdb-6.6/ltconfig
+---- gdb-6.6.orig/ltconfig	2006-07-04 22:31:03.000000000 +0200
+-+++ gdb-6.6/ltconfig	2007-05-14 10:35:50.000000000 +0200
+-@@ -602,7 +602,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-
 - 
 - # Transform linux* to *-*-linux-gnu*, to support old configure scripts.
 - case $host_os in
--+linux-uclibc*) ;;
-- linux-gnu*) ;;
+--linux-gnu*) ;;
+-+linux-gnu*|linux-uclibc*) ;;
 - linux*) host=`echo $host | sed 's/^\(.*-.*-linux\)\(.*\)$/\1-gnu\2/'`
 - esac
--@@ -1247,7 +1248,7 @@
+- 
+-@@ -1270,6 +1270,24 @@ linux-gnu*)
+-   dynamic_linker='GNU/Linux ld.so'
 -   ;;
 - 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   version_type=linux
+-+linux-uclibc*)
+-+  version_type=linux
+-+  need_lib_prefix=no
+-+  need_version=no
+-+  library_names_spec='${libname}${release}.so$versuffix ${libname}${release}.so$major $libname.so'
+-+  soname_spec='${libname}${release}.so$major'
+-+  finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
+-+  shlibpath_var=LD_LIBRARY_PATH
+-+  shlibpath_overrides_runpath=no
+-+  # This implies no fast_install, which is unacceptable.
+-+  # Some rework will be needed to allow for fast_install
+-+  # before this can be enabled.
+-+  # Note: copied from linux-gnu, and may not be appropriate.
+-+  hardcode_into_libs=yes
+-+  # Assume using the uClibc dynamic linker.
+-+  dynamic_linker="uClibc ld.so"
+-+  ;;
+-+
+- netbsd*)
 -   need_lib_prefix=no
 -   need_version=no
----- binutils-2.16.91.0.7/opcodes/configure
--+++ binutils-2.16.91.0.7/opcodes/configure
--@@ -3579,7 +3579,7 @@
+-diff -rNdup gdb-6.6.orig/opcodes/configure gdb-6.6/opcodes/configure
+---- gdb-6.6.orig/opcodes/configure	2006-10-25 08:49:20.000000000 +0200
+-+++ gdb-6.6/opcodes/configure	2007-05-14 10:35:50.000000000 +0200
+-@@ -3590,6 +3590,11 @@ netbsd* | knetbsd*-gnu)
+-   fi
 -   ;;
 - 
-- # This must be Linux ELF.
---linux-gnu*)
--+linux-gnu*|linux-uclibc*)
--   lt_cv_deplibs_check_method=pass_all
--   ;;
-- 
-diff --git a/toolchain/binutils/2.17/110-arm-eabi-conf.patch b/toolchain/binutils/2.17/110-arm-eabi-conf.patch
-deleted file mode 100644
-index be85ceb..0000000
---- a/toolchain/binutils/2.17/110-arm-eabi-conf.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--diff -urN binutils-2.16.91.0.7.orig/configure binutils-2.16.91.0.7/configure
----- binutils-2.16.91.0.7.orig/configure	2006-05-31 14:54:24.000000000 +0300
--+++ binutils-2.16.91.0.7/configure	2006-05-31 14:55:53.000000000 +0300
--@@ -1299,7 +1299,7 @@
--   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
--     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
--     ;;
---  arm*-*-linux-gnueabi)
--+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
--     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
--     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
--     ;;
--diff -urN binutils-2.16.91.0.7.orig/configure.in binutils-2.16.91.0.7/configure.in
----- binutils-2.16.91.0.7.orig/configure.in	2006-05-31 14:54:24.000000000 +0300
--+++ binutils-2.16.91.0.7/configure.in	2006-05-31 14:55:53.000000000 +0300
--@@ -497,7 +497,7 @@
--   arm-*-elf* | strongarm-*-elf* | xscale-*-elf* | arm*-*-eabi* )
--     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
--     ;;
---  arm*-*-linux-gnueabi)
--+  arm*-*-linux-gnueabi | arm*-*-linux-uclibcgnueabi)
--     noconfigdirs="$noconfigdirs target-libffi target-qthreads"
--     noconfigdirs="$noconfigdirs target-libjava target-libobjc"
--     ;;
-diff --git a/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch b/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
-deleted file mode 100644
-index 04a7e61..0000000
---- a/toolchain/binutils/2.17/300-001_ld_makefile_patch.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--#!/bin/sh -e
--## 001_ld_makefile_patch.dpatch
--##
--## All lines beginning with `## DP:' are a description of the patch.
--## DP: Description: correct where ld scripts are installed
--## DP: Author: Chris Chimelis <chris@debian.org>
--## DP: Upstream status: N/A
--## DP: Date: ??
--
--if [ $# -ne 1 ]; then
--    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--    exit 1
--fi
--
--[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
--patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
--
--case "$1" in
--       -patch) patch $patch_opts -p1 < $0;;
--       -unpatch) patch $patch_opts -p1 -R < $0;;
--        *)
--                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--                exit 1;;
--esac
--
--exit 0
--
-- at DPATCH@
----- binutils-2.16.91.0.1/ld/Makefile.am
--+++ binutils-2.16.91.0.1/ld/Makefile.am
--@@ -20,7 +20,7 @@
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- 
-- EMUL = @EMUL@
-- EMULATION_OFILES = @EMULATION_OFILES@
----- binutils-2.16.91.0.1/ld/Makefile.in
--+++ binutils-2.16.91.0.1/ld/Makefile.in
--@@ -268,7 +268,7 @@
-- # We put the scripts in the directory $(scriptdir)/ldscripts.
-- # We can't put the scripts in $(datadir) because the SEARCH_DIR
-- # directives need to be different for native and cross linkers.
---scriptdir = $(tooldir)/lib
--+scriptdir = $(libdir)
-- BASEDIR = $(srcdir)/..
-- BFDDIR = $(BASEDIR)/bfd
-- INCDIR = $(BASEDIR)/include
-diff --git a/toolchain/binutils/2.17/300-006_better_file_error.patch b/toolchain/binutils/2.17/300-006_better_file_error.patch
-deleted file mode 100644
-index f337611..0000000
---- a/toolchain/binutils/2.17/300-006_better_file_error.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--#!/bin/sh -e
--## 006_better_file_error.dpatch by David Kimdon <dwhedon@gordian.com>
--##
--## All lines beginning with `## DP:' are a description of the patch.
--## DP: Specify which filename is causing an error if the filename is a
--## DP: directory. (#45832)
--
--if [ $# -ne 1 ]; then
--    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--    exit 1
--fi
--
--[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
--patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
--
--case "$1" in
--       -patch) patch $patch_opts -p1 < $0;;
--       -unpatch) patch $patch_opts -p1 -R < $0;;
--        *)
--                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--                exit 1;;
--esac
--
--exit 0
--
-- at DPATCH@
--diff -urNad /home/james/debian/packages/binutils/binutils-2.14.90.0.6/bfd/opncls.c binutils-2.14.90.0.6/bfd/opncls.c
----- /home/james/debian/packages/binutils/binutils-2.14.90.0.6/bfd/opncls.c	2003-07-23 16:08:09.000000000 +0100
--+++ binutils-2.14.90.0.6/bfd/opncls.c	2003-09-10 22:35:00.000000000 +0100
--@@ -150,6 +150,13 @@
-- {
--   bfd *nbfd;
--   const bfd_target *target_vec;
--+  struct stat s;
+-+linux-uclibc*)
+-+  lt_cv_deplibs_check_method=pass_all
+-+  lt_cv_file_magic_test_file=`echo /lib/libuClibc-*.so`
+-+  ;;
 -+
--+  if (stat (filename, &s) == 0)
--+    if (S_ISDIR(s.st_mode)) {
--+      bfd_set_error (bfd_error_file_not_recognized);
--+      return NULL;
--+    }
-- 
--   nbfd = _bfd_new_bfd ();
--   if (nbfd == NULL)
-diff --git a/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch b/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
+- newsos6)
+-   lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (executable|dynamic lib)'
+-   lt_cv_file_magic_cmd=/usr/bin/file
+diff --git a/toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch b/toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch
 deleted file mode 100644
-index 498651a..0000000
---- a/toolchain/binutils/2.17/300-012_check_ldrunpath_length.patch
+index 60f0ace..0000000
+--- a/toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch
 +++ /dev/null
-@@ -1,47 +0,0 @@
--#!/bin/sh -e
--## 012_check_ldrunpath_length.dpatch by Chris Chimelis <chris@debian.org>
--##
--## All lines beginning with `## DP:' are a description of the patch.
--## DP: Only generate an RPATH entry if LD_RUN_PATH is not empty, for
--## DP: cases where -rpath isn't specified. (#151024)
--
--if [ $# -ne 1 ]; then
--    echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--    exit 1
--fi
--
--[ -f debian/patches/00patch-opts ] && . debian/patches/00patch-opts
--patch_opts="${patch_opts:--f --no-backup-if-mismatch}"
--
--case "$1" in
--       -patch) patch $patch_opts -p1 < $0;;
--       -unpatch) patch $patch_opts -p1 -R < $0;;
--        *)
--                echo >&2 "`basename $0`: script expects -patch|-unpatch as argument"
--                exit 1;;
--esac
--
--exit 0
--
-- at DPATCH@
--diff -urNad /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em binutils-2.15/ld/emultempl/elf32.em
----- /home/james/debian/packages/binutils/new/binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:58.000000000 +0100
--+++ binutils-2.15/ld/emultempl/elf32.em	2004-05-21 23:12:59.000000000 +0100
--@@ -692,6 +692,8 @@
-- 	      && command_line.rpath == NULL)
-- 	    {
-- 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
--+	      if ((lib_path) && (strlen (lib_path) == 0))
--+		  lib_path = NULL;
-- 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-- 						      force))
-- 		break;
--@@ -871,6 +873,8 @@
--   rpath = command_line.rpath;
--   if (rpath == NULL)
--     rpath = (const char *) getenv ("LD_RUN_PATH");
--+  if ((rpath) && (strlen (rpath) == 0))
--+      rpath = NULL;
--   if (! (bfd_elf_size_dynamic_sections
-- 	 (output_bfd, command_line.soname, rpath,
-- 	  command_line.filter_shlib,
-diff --git a/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch b/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
+@@ -1,69 +0,0 @@
+-diff -rduNp gdb-6.6-100/Makefile.in gdb-6.6/Makefile.in
+---- gdb-6.6-100/Makefile.in	2006-12-18 08:21:19.000000000 +0100
+-+++ gdb-6.6/Makefile.in	2007-05-14 10:54:29.000000000 +0200
+-@@ -331,7 +331,7 @@ COMPILER_NM_FOR_TARGET=@COMPILER_NM_FOR_
+- # CFLAGS will be just -g.  We want to ensure that TARGET libraries
+- # (which we know are built with gcc) are built with optimizations so
+- # prepend -O2 when setting CFLAGS_FOR_TARGET.
+--CFLAGS_FOR_TARGET = -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+-+CFLAGS_FOR_TARGET = $(strip $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
+- SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
+- CXXFLAGS_FOR_TARGET = $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+- LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
+-diff -rduNp gdb-6.6-100/Makefile.tpl gdb-6.6/Makefile.tpl
+---- gdb-6.6-100/Makefile.tpl	2006-11-15 00:26:39.000000000 +0100
+-+++ gdb-6.6/Makefile.tpl	2007-05-14 10:54:29.000000000 +0200
+-@@ -334,7 +334,7 @@ COMPILER_NM_FOR_TARGET=@COMPILER_NM_FOR_
+- # CFLAGS will be just -g.  We want to ensure that TARGET libraries
+- # (which we know are built with gcc) are built with optimizations so
+- # prepend -O2 when setting CFLAGS_FOR_TARGET.
+--CFLAGS_FOR_TARGET = -O2 $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+-+CFLAGS_FOR_TARGET = $(strip $(CFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET))
+- SYSROOT_CFLAGS_FOR_TARGET = @SYSROOT_CFLAGS_FOR_TARGET@
+- CXXFLAGS_FOR_TARGET = $(CXXFLAGS) $(SYSROOT_CFLAGS_FOR_TARGET)
+- LIBCFLAGS_FOR_TARGET = $(CFLAGS_FOR_TARGET)
+-diff -rduNp gdb-6.6-100/gdb/configure gdb-6.6/gdb/configure
+---- gdb-6.6-100/gdb/configure	2006-12-17 16:38:59.000000000 +0100
+-+++ gdb-6.6/gdb/configure	2007-05-14 10:55:41.000000000 +0200
+-@@ -272,7 +272,7 @@ PACKAGE_STRING=
+- PACKAGE_BUGREPORT=
+- 
+- ac_unique_file="main.c"
+--ac_subdirs_all="$ac_subdirs_all doc testsuite"
+-+ac_subdirs_all="$ac_subdirs_all doc"
+- # Factoring default headers for most tests.
+- ac_includes_default="\
+- #include <stdio.h>
+-@@ -3055,7 +3055,7 @@ _ACEOF
+- 
+- 
+- 
+--subdirs="$subdirs doc testsuite"
+-+subdirs="$subdirs doc"
+- 
+- 
+- # Provide defaults for some variables set by the per-host and per-target
+-diff -rduNp gdb-6.6-100/gdb/gdbserver/configure gdb-6.6/gdb/gdbserver/configure
+---- gdb-6.6-100/gdb/gdbserver/configure	2006-11-22 01:10:19.000000000 +0100
+-+++ gdb-6.6/gdb/gdbserver/configure	2007-05-14 10:54:29.000000000 +0200
+-@@ -1239,7 +1239,7 @@ echo "$as_me: error: \`$ac_var' was not 
+-       ac_cache_corrupted=: ;;
+-     ,);;
+-     *)
+--      if test "x$ac_old_val" != "x$ac_new_val"; then
+-+      if test "`echo $ac_old_val`" != "`echo $ac_new_val`"; then
+- 	{ echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
+- echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
+- 	{ echo "$as_me:$LINENO:   former value:  $ac_old_val" >&5
+-diff -rduNp gdb-6.6-100/gdb/testsuite/configure gdb-6.6/gdb/testsuite/configure
+---- gdb-6.6-100/gdb/testsuite/configure	2006-06-21 15:57:21.000000000 +0200
+-+++ gdb-6.6/gdb/testsuite/configure	2007-05-14 10:54:29.000000000 +0200
+-@@ -1248,7 +1248,7 @@ echo "$as_me: error: \`$ac_var' was not 
+-       ac_cache_corrupted=: ;;
+-     ,);;
+-     *)
+--      if test "x$ac_old_val" != "x$ac_new_val"; then
+-+      if test "`echo $ac_old_val" != "`echo $ac_new_val"; then
+- 	{ echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
+- echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
+- 	{ echo "$as_me:$LINENO:   former value:  $ac_old_val" >&5
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
 deleted file mode 100644
-index 5959c71..0000000
---- a/toolchain/binutils/2.17/400-mips-ELF_MAXPAGESIZE-4K.patch
+index b45de9a..0000000
+--- a/toolchain/gdb/Config.in
 +++ /dev/null
-@@ -1,26 +0,0 @@
----- binutils/bfd/elf32-mips.c~
--+++ binutils/bfd/elf32-mips.c
--@@ -1613,7 +1613,9 @@
-- 
-- /* The SVR4 MIPS ABI says that this should be 0x10000, and Linux uses
--    page sizes of up to that limit, so we need to respect it.  */
---#define ELF_MAXPAGESIZE			0x10000
--+/*#define ELF_MAXPAGESIZE			0x10000*/
--+/* Use 4K to shrink the elf header.  NOT for general use! */
--+#define ELF_MAXPAGESIZE			0x1000
-- #define elf32_bed			elf32_tradbed
-- 
-- /* Include the target file again for this target.  */
----- binutils/bfd/elfn32-mips.c~
--+++ binutils/bfd/elfn32-mips.c
--@@ -2399,7 +2399,9 @@
-- 
-- /* The SVR4 MIPS ABI says that this should be 0x10000, and Linux uses
--    page sizes of up to that limit, so we need to respect it.  */
---#define ELF_MAXPAGESIZE			0x10000
--+/*#define ELF_MAXPAGESIZE			0x10000*/
--+/* Use 4K to shrink the elf header.  NOT for general use! */
--+#define ELF_MAXPAGESIZE			0x1000
-- #define elf32_bed			elf32_tradbed
-- 
-- /* Include the target file again for this target.  */
-diff --git a/toolchain/binutils/2.17/500-fix-makeinfo-check.patch b/toolchain/binutils/2.17/500-fix-makeinfo-check.patch
-deleted file mode 100644
-index c4c8888..0000000
---- a/toolchain/binutils/2.17/500-fix-makeinfo-check.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
-----
-- configure |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -1,69 +0,0 @@
+-comment "Gdb Options"
 -
--Index: binutils-2.17/configure
--===================================================================
----- binutils-2.17.orig/configure
--+++ binutils-2.17/configure
--@@ -3637,7 +3637,7 @@
--     # For an installed makeinfo, we require it to be from texinfo 4.4 or
--     # higher, else we use the "missing" dummy.
--     if ${MAKEINFO} --version \
---       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|[5-9])' >/dev/null 2>&1; then
--+       | egrep 'texinfo[^0-9]*([1-3][0-9]|4\.[4-9]|4\.[1-9][0-9]|[5-9])' >/dev/null 2>&1; then
--       :
--     else
--       MAKEINFO="$MISSING makeinfo"
-diff --git a/toolchain/binutils/binutils.mk b/toolchain/binutils/binutils.mk
+-config BR2_PACKAGE_GDB
+-	bool "Build gdb debugger for the Target"
+-	select BR2_PACKAGE_NCURSES
+-	depends on BR2_USE_WCHAR
+-	help
+-	    Build the full gdb debugger to run on the target.
+-
+-comment "Gdb debugger for the target needs WCHAR support in toolchain"
+-	depends on !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_GDB_SERVER
+-	bool "Build gdb server for the Target"
+-	help
+-	    Build the gdbserver stub to run on the target.
+-	    A full gdb is needed to debug the progam.
+-
+-config BR2_PACKAGE_GDB_HOST
+-	bool "Build gdb for the Host"
+-	# cross-gdb is supposed to be part of the external
+-	# toolchain. And the build currently fails.
+-	depends on !BR2_TOOLCHAIN_EXTERNAL
+-	help
+-	    Build gdb to run on the host to debug programs run on the target.
+-
+-choice
+-	prompt "GDB debugger Version"
+-	default BR2_GDB_VERSION_6_8 if !BR2_avr32
+-	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+-	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GDB_SERVER || BR2_PACKAGE_GDB_HOST
+-	help
+-	  Select the version of gdb you wish to use.
+-
+-	config BR2_GDB_VERSION_6_6
+-		bool "gdb 6.6"
+-		depends on !BR2_avr32
+-		depends on BR2_DEPRECATED
+-
+-	config BR2_GDB_VERSION_6_7_1
+-		depends on !BR2_avr32
+-		bool "gdb 6.7.1"
+-
+-	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+-		depends on BR2_avr32
+-		bool "gdb 6.7.1-avr32-2.1.5"
+-
+-	config BR2_GDB_VERSION_6_8
+-		bool "gdb 6.8"
+-		depends on !BR2_avr32
+-
+-	config BR2_GDB_VERSION_7_0_1
+-		bool "gdb 7.0.1"
+-		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+-
+-	config BR2_GDB_VERSION_7_1
+-		bool "gdb 7.1"
+-		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+-
+-endchoice
+-
+-config BR2_GDB_VERSION
+-	string
+-	default "6.6"      if BR2_GDB_VERSION_6_6
+-	default "6.7.1"    if BR2_GDB_VERSION_6_7_1
+-	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+-	default "6.8"      if BR2_GDB_VERSION_6_8
+-	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
+-	default "7.1"      if BR2_GDB_VERSION_7_1
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
 deleted file mode 100644
-index 8ab383b..0000000
---- a/toolchain/binutils/binutils.mk
+index af08d1e..0000000
+--- a/toolchain/gdb/gdb.mk
 +++ /dev/null
-@@ -1,179 +0,0 @@
--#############################################################
+@@ -1,237 +0,0 @@
+-######################################################################
 -#
--# build binutils for use on the host system
+-# gdb
 -#
--#############################################################
--BINUTILS_VERSION:=$(call qstrip,$(BR2_BINUTILS_VERSION))
+-######################################################################
+-GDB_VERSION:=$(call qstrip,$(BR2_GDB_VERSION))
 -
--EXTRA_BINUTILS_CONFIG_OPTIONS=$(call qstrip,$(BR2_EXTRA_BINUTILS_CONFIG_OPTIONS))
--ifeq ($(findstring avr32,$(BINUTILS_VERSION)),avr32)
--BINUTILS_SITE:=ftp://www.at91.com/pub/buildroot/
+-GDB_SOURCE:=gdb-$(GDB_VERSION).tar.bz2
+-GDB_CAT:=$(BZCAT)
+-
+-ifeq ($(findstring avr32,$(GDB_VERSION)),avr32)
+- GDB_SITE:=ftp://www.at91.com/pub/buildroot/
+- GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
 -else
--BINUTILS_SITE:=$(BR2_GNU_MIRROR)/binutils/
+- GDB_SITE:=$(BR2_GNU_MIRROR)/gdb
+- GDB_PATCH_DIR:=toolchain/gdb/$(GDB_VERSION)
 -endif
--
--# We do not rely on the host's gmp/mpfr but use a known working one
--BINUTILS_HOST_PREREQ:=
--BINUTILS_TARGET_PREREQ:=
--
--BINUTILS_HOST_PREREQ:=host-gmp host-mpfr
--HOST_SOURCE += host-gmp-source host-mpfr-source
--
--BINUTILS_TARGET_PREREQ:=gmp mpfr
--
--EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-gmp=$(HOST_DIR)/usr
--EXTRA_BINUTILS_CONFIG_OPTIONS+=--with-mpfr=$(HOST_DIR)/usr
--
--BINUTILS_TARGET_CONFIG_OPTIONS=--with-gmp=$(STAGING_DIR)/usr
--BINUTILS_TARGET_CONFIG_OPTIONS+=--with-mpfr=$(STAGING_DIR)/usr
--
--ifeq ($(BR2_PACKAGE_LIBMPC),y)
--BINUTILS_ADD_MPC = y
--endif
--
--ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
--BINUTILS_ADD_MPC = y
--endif
--
--ifeq ($(BINUTILS_ADD_MPC),y)
--BINUTILS_HOST_PREREQ += host-mpc
--HOST_SOURCE += host-mpc-source
--BINUTILS_TARGET_PREREQ += mpc
--EXTRA_BINUTILS_CONFIG_OPTIONS += --with-mpc=$(HOST_DIR)/usr
--BINUTILS_TARGET_CONFIG_OPTIONS += --with-mpc=$(STAGING_DIR)/usr
--endif
--
--BINUTILS_PATCH_DIR:=toolchain/binutils/$(BINUTILS_VERSION)
 -
 -ifneq ($(filter xtensa%,$(ARCH)),)
 -include target/xtensa/patch.in
--BINUTILS_PATCH_EXTRA:=$(call XTENSA_PATCH,binutils,$(BINUTILS_PATCH_DIR),. ..)
+-GDB_PATCH_EXTRA:=$(call XTENSA_PATCH,gdb,$(GDB_PATCH_DIR),. ..)
 -endif
 -
--BINUTILS_SOURCE:=binutils-$(BINUTILS_VERSION).tar.bz2
--BINUTILS_DIR:=$(TOOLCHAIN_DIR)/binutils-$(BINUTILS_VERSION)
--BINUTILS_CAT:=$(BZCAT)
+-GDB_DIR:=$(TOOLCHAIN_DIR)/gdb-$(GDB_VERSION)
 -
--BINUTILS_DIR1:=$(TOOLCHAIN_DIR)/binutils-$(BINUTILS_VERSION)-build
+-$(DL_DIR)/$(GDB_SOURCE):
+-	$(call DOWNLOAD,$(GDB_SITE),$(GDB_SOURCE))
 -
--$(DL_DIR)/$(BINUTILS_SOURCE):
--	mkdir -p $(DL_DIR)
--	$(call DOWNLOAD,$(BINUTILS_SITE),$(BINUTILS_SOURCE))
--
--binutils-unpacked: $(BINUTILS_DIR)/.patched
--$(BINUTILS_DIR)/.unpacked: $(DL_DIR)/$(BINUTILS_SOURCE)
+-gdb-unpacked: $(GDB_DIR)/.unpacked
+-$(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
 -	mkdir -p $(TOOLCHAIN_DIR)
--	rm -rf $(BINUTILS_DIR)
--	$(BINUTILS_CAT) $(DL_DIR)/$(BINUTILS_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-ifeq ($(GDB_VERSION),snapshot)
+-	GDB_REAL_DIR=$(shell \
+-		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
+-	ln -sf $(TOOLCHAIN_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
+-endif
+-ifneq ($(wildcard $(GDB_PATCH_DIR)),)
+-	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch $(GDB_PATCH_EXTRA)
+-endif
 -	$(CONFIG_UPDATE) $(@D)
 -	touch $@
 -
--binutils-patched: $(BINUTILS_DIR)/.patched
--$(BINUTILS_DIR)/.patched: $(BINUTILS_DIR)/.unpacked
--	# Apply appropriate binutils patches.
--ifneq ($(wildcard $(BINUTILS_PATCH_DIR)),)
--	toolchain/patch-kernel.sh $(BINUTILS_DIR) $(BINUTILS_PATCH_DIR) \*.patch $(BINUTILS_PATCH_EXTRA)
--endif
--	touch $@
+-gdb-patched: $(GDB_DIR)/.unpacked
 -
--$(BINUTILS_DIR1)/.configured: $(BINUTILS_DIR)/.patched
--	mkdir -p $(BINUTILS_DIR1)
--	(cd $(BINUTILS_DIR1); rm -rf config.cache; \
--		$(HOST_CONFIGURE_OPTS) \
--		$(BINUTILS_DIR)/configure $(QUIET) \
--		--prefix=$(STAGING_DIR)/usr \
--		--build=$(GNU_HOST_NAME) \
--		--host=$(GNU_HOST_NAME) \
--		--target=$(REAL_GNU_TARGET_NAME) \
--		$(BR2_CONFIGURE_DEVEL_SYSROOT) \
--		$(BR2_CONFIGURE_STAGING_SYSROOT) \
--		$(DISABLE_NLS) \
--		--disable-multilib \
--		--disable-werror \
--		$(SOFT_FLOAT_CONFIG_OPTION) \
--		$(EXTRA_BINUTILS_CONFIG_OPTIONS) \
--		$(QUIET) \
--	)
--	touch $@
+-gdb-source: $(DL_DIR)/$(GDB_SOURCE)
+-gdb-dirclean:
+-	rm -rf $(GDB_DIR)
 -
--$(BINUTILS_DIR1)/binutils/objdump: $(BINUTILS_DIR1)/.configured
--	$(MAKE) -C $(BINUTILS_DIR1) all
--
--# Make install will put gettext data in staging_dir/share/locale.
--# Unfortunatey, it isn't configureable.
--$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld: $(BINUTILS_DIR1)/binutils/objdump
--	$(MAKE) -C $(BINUTILS_DIR1) install
--	#	tooldir=/usr build_tooldir=/usr install
--	#rm -f $(STAGING_DIR)/usr/bin/{ar,as,ld,nm,objdump,ranlib,strip}
--
--binutils: $(BINUTILS_HOST_PREREQ) $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-ld
--
--binutils-source: $(DL_DIR)/$(BINUTILS_SOURCE)
--
--binutils-clean:
--	-$(MAKE) -C $(BINUTILS_DIR1) DESTDIR=$(STAGING_DIR) \
--		tooldir=/usr build_tooldir=/usr uninstall
--	-$(MAKE) -C $(BINUTILS_DIR1) clean
--	rm -rf $(wildcard $(patsubst %,$(STAGING_DIR)/usr/bin/*%,ar as ld nm objdump ranlib strip c++filt)) \
--		$(wildcard $(patsubst %,$(STAGING_DIR)/usr/lib/%*,libiberty ldscripts))
--
--binutils-dirclean:
--	rm -rf $(BINUTILS_DIR1)
--
--binutils-src-dirclean:
--	rm -rf $(BINUTILS_DIR)
--
--#############################################################
+-######################################################################
 -#
--# build binutils for use on the target system
+-# gdb target
 -#
--#############################################################
--BINUTILS_DIR2:=$(BUILD_DIR)/binutils-$(BINUTILS_VERSION)-target
--$(BINUTILS_DIR2)/.configured: $(BINUTILS_DIR)/.patched
--	mkdir -p $(BINUTILS_DIR2)
--	(cd $(BINUTILS_DIR2); rm -rf config.cache; \
+-######################################################################
+-
+-GDB_TARGET_DIR:=$(BUILD_DIR)/gdb-$(GDB_VERSION)-target
+-
+-GDB_TARGET_CONFIGURE_VARS:= \
+-	ac_cv_type_uintptr_t=yes \
+-	gt_cv_func_gettext_libintl=yes \
+-	ac_cv_func_dcgettext=yes \
+-	gdb_cv_func_sigsetjmp=yes \
+-	bash_cv_func_strcoll_broken=no \
+-	bash_cv_must_reinstall_sighandlers=no \
+-	bash_cv_func_sigsetjmp=present \
+-	bash_cv_have_mbstate_t=yes
+-
+-$(GDB_TARGET_DIR)/.configured: $(GDB_DIR)/.unpacked
+-	mkdir -p $(GDB_TARGET_DIR)
+-	(cd $(GDB_TARGET_DIR); \
+-		gdb_cv_func_sigsetjmp=yes \
 -		$(TARGET_CONFIGURE_OPTS) \
--		$(BINUTILS_DIR)/configure $(QUIET) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
+-		CFLAGS_FOR_TARGET="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
+-		CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -Wno-error" \
+-		$(GDB_TARGET_CONFIGURE_VARS) \
+-		$(GDB_DIR)/configure $(QUIET) \
+-		--cache-file=/dev/null \
 -		--build=$(GNU_HOST_NAME) \
 -		--host=$(REAL_GNU_TARGET_NAME) \
 -		--target=$(REAL_GNU_TARGET_NAME) \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
+-		--prefix=/usr \
 -		$(DISABLE_NLS) \
--		$(BINUTILS_TARGET_CONFIG_OPTIONS) \
--		--disable-multilib \
+-		--without-uiout $(DISABLE_GDBMI) \
+-		--disable-tui --disable-gdbtk --without-x \
+-		--disable-sim --enable-gdbserver \
+-		--without-included-gettext \
 -		--disable-werror \
--		$(SOFT_FLOAT_CONFIG_OPTION) \
+-		$(QUIET) \
+-	)
+-ifeq ($(BR2_ENABLE_LOCALE),y)
+-	-$(SED) "s,^INTL *=.*,INTL = -lintl,g;" $(GDB_DIR)/gdb/Makefile
+-endif
+-	touch $@
+-
+-$(GDB_TARGET_DIR)/gdb/gdb: $(GDB_TARGET_DIR)/.configured
+-	# force ELF support since it fails due to BFD linking problems
+-	gdb_cv_var_elf=yes \
+-	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+-		-C $(GDB_TARGET_DIR)
+-
+-$(TARGET_DIR)/usr/bin/gdb: $(GDB_TARGET_DIR)/gdb/gdb
+-	install -c -D $(GDB_TARGET_DIR)/gdb/gdb $(TARGET_DIR)/usr/bin/gdb
+-
+-gdb_target: ncurses $(TARGET_DIR)/usr/bin/gdb
+-
+-gdb_target-source: $(DL_DIR)/$(GDB_SOURCE)
+-
+-gdb_target-clean:
+-	-$(MAKE) -C $(GDB_DIR) clean
+-
+-gdb_target-dirclean:
+-	rm -rf $(GDB_DIR)
+-
+-######################################################################
+-#
+-# gdbserver
+-#
+-######################################################################
+-
+-GDB_SERVER_DIR:=$(BUILD_DIR)/gdbserver-$(GDB_VERSION)
+-
+-$(GDB_SERVER_DIR)/.configured: $(GDB_DIR)/.unpacked
+-	mkdir -p $(GDB_SERVER_DIR)
+-	(cd $(GDB_SERVER_DIR); \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		gdb_cv_func_sigsetjmp=yes \
+-		bash_cv_have_mbstate_t=yes \
+-		$(GDB_DIR)/gdb/gdbserver/configure $(QUIET) \
+-		--cache-file=/dev/null \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(REAL_GNU_TARGET_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--includedir=$(STAGING_DIR)/usr/include \
+-		$(DISABLE_NLS) \
+-		--without-uiout $(DISABLE_GDBMI) \
+-		--disable-tui --disable-gdbtk --without-x \
+-		--without-included-gettext \
 -	)
 -	touch $@
 -
--$(BINUTILS_DIR2)/binutils/objdump: $(BINUTILS_DIR2)/.configured
--	PATH=$(TARGET_PATH) $(MAKE) -C $(BINUTILS_DIR2) all
+-$(GDB_SERVER_DIR)/gdbserver: $(GDB_SERVER_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+-		-C $(GDB_SERVER_DIR)
 -
--$(TARGET_DIR)/usr/bin/ld: $(BINUTILS_DIR2)/binutils/objdump
--	PATH=$(TARGET_PATH) \
--	$(MAKE) DESTDIR=$(TARGET_DIR) \
--		tooldir=/usr build_tooldir=/usr \
--		-C $(BINUTILS_DIR2) install
--	rm -rf $(TARGET_DIR)/share/locale
--	-$(STRIPCMD) $(TARGET_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/* > /dev/null 2>&1
--	-$(STRIPCMD) $(TARGET_DIR)/usr/bin/* > /dev/null 2>&1
+-$(TARGET_DIR)/usr/bin/gdbserver: $(GDB_SERVER_DIR)/gdbserver
+-ifeq ($(BR2_CROSS_TOOLCHAIN_TARGET_UTILS),y)
+-	mkdir -p $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils
+-	install -c $(GDB_SERVER_DIR)/gdbserver \
+-		$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/target_utils/gdbserver
+-endif
+-	install -c -D $(GDB_SERVER_DIR)/gdbserver $(TARGET_DIR)/usr/bin/gdbserver
 -
--# If both binutils-target and busybox are selected, make certain binutils
--# gets to run after busybox, so it can overwrite the busybox symlink for
--# ar if enabled
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--BINUTILS_TARGET_PREREQ += busybox
+-gdbserver: $(TARGET_DIR)/usr/bin/gdbserver
+-
+-gdbserver-source: $(DL_DIR)/$(GDB_SOURCE)
+-
+-gdbserver-clean:
+-	-$(MAKE) -C $(GDB_SERVER_DIR) clean
+-
+-gdbserver-dirclean:
+-	rm -rf $(GDB_SERVER_DIR)
+-
+-######################################################################
+-#
+-# gdb on host
+-#
+-######################################################################
+-
+-GDB_HOST_DIR:=$(TOOLCHAIN_DIR)/gdbhost-$(GDB_VERSION)
+-
+-$(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
+-	mkdir -p $(GDB_HOST_DIR)
+-	(cd $(GDB_HOST_DIR); \
+-		gdb_cv_func_sigsetjmp=yes \
+-		bash_cv_have_mbstate_t=yes \
+-		$(GDB_DIR)/configure $(QUIET) \
+-		--cache-file=/dev/null \
+-		--prefix=$(STAGING_DIR) \
+-		--build=$(GNU_HOST_NAME) \
+-		--host=$(GNU_HOST_NAME) \
+-		--target=$(REAL_GNU_TARGET_NAME) \
+-		$(DISABLE_NLS) \
+-		--without-uiout $(DISABLE_GDBMI) \
+-		--disable-tui --disable-gdbtk --without-x \
+-		--without-included-gettext \
+-		--enable-threads \
+-		--disable-werror \
+-	)
+-	touch $@
+-
+-$(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
+-	$(MAKE) -C $(GDB_HOST_DIR)
+-	strip $(GDB_HOST_DIR)/gdb/gdb
+-
+-$(TARGET_CROSS)gdb: $(GDB_HOST_DIR)/gdb/gdb
+-	install -c $(GDB_HOST_DIR)/gdb/gdb $(TARGET_CROSS)gdb
+-	ln -snf ../../bin/$(REAL_GNU_TARGET_NAME)-gdb \
+-		$(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/gdb
+-	ln -snf $(REAL_GNU_TARGET_NAME)-gdb \
+-		$(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb
+-
+-gdbhost: $(TARGET_CROSS)gdb
+-
+-gdbhost-source: $(DL_DIR)/$(GDB_SOURCE)
+-
+-gdbhost-clean:
+-	-$(MAKE) -C $(GDB_HOST_DIR) clean
+-
+-gdbhost-dirclean:
+-	rm -rf $(GDB_HOST_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_GDB),y)
+-TARGETS+=gdb_target
 -endif
 -
--binutils_target: $(BINUTILS_TARGET_PREREQ) $(TARGET_DIR)/usr/bin/ld
--
--binutils_target-clean:
--	-$(MAKE) -C $(BINUTILS_DIR2) clean
--	rm -f $(TARGET_DIR)/bin/$(REAL_GNU_TARGET_NAME)* \
--		$(addprefix $(TARGET_DIR)/usr/bin/, addr2line ar as gprof ld nm objcopy objdump ranlib readelf size strings strip c++filt)
--
--binutils_target-dirclean:
--	rm -rf $(BINUTILS_DIR2)
-diff --git a/toolchain/gcc/Config.in.2 b/toolchain/gcc/Config.in.2
-index d9ebfcd..9676fdf 100644
---- a/toolchain/gcc/Config.in.2
-+++ b/toolchain/gcc/Config.in.2
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_GCC_TARGET
- 	bool "native toolchain in the target filesystem"
- 	depends on BR2_HAVE_DEVFILES
-+	select BR2_PACKAGE_BINUTILS_TARGET
-+	select BR2_PACKAGE_MPC if BR2_GCC_VERSION_4_5_X
-+	select BR2_PACKAGE_MPFR
-+	select BR2_PACKAGE_GMP
- 	help
- 	  If you want the target system to be able to run
- 	  binutils/gcc and compile native code, say Y here.
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 9e7127d..0d6f2ae 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -53,9 +53,6 @@ else
- GCC_OPTSPACE=--enable-target-optspace
- endif
- 
--GCC_TARGET_PREREQ=
--GCC_STAGING_PREREQ=
--
- #############################################################
- #
- # Setup some initial stuff
-@@ -106,25 +103,28 @@ ifeq ($(BR2_INSTALL_OBJC),y)
- GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),objc
- endif
- 
-+ifeq ($(BR2_INSTALL_FORTRAN),y)
-+GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),fortran
-+endif
-+
- GCC_WITH_HOST_GMP = --with-gmp=$(HOST_DIR)/usr
- GCC_WITH_HOST_MPFR = --with-mpfr=$(HOST_DIR)/usr
- HOST_SOURCE += host-gmp-source host-mpfr-source
-+GCC_HOST_PREREQ = host-gmp host-mpfr
- 
- ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
- GCC_WITH_HOST_MPC = --with-mpc=$(HOST_DIR)/usr
- HOST_SOURCE += host-mpc-source
-+GCC_HOST_PREREQ += host-mpc
- endif
- 
--ifeq ($(BR2_INSTALL_FORTRAN),y)
--GCC_TARGET_LANGUAGES:=$(GCC_TARGET_LANGUAGES),fortran
--#GCC_TARGET_PREREQ+=$(TARGET_DIR)/usr/lib/libmpfr.so $(TARGET_DIR)/usr/lib/libgmp.so
--#GCC_STAGING_PREREQ+=$(TOOLCHAIN_DIR)/mpfr/lib/libmpfr.so
-+GCC_TARGET_PREREQ += mpfr gmp
- GCC_WITH_TARGET_GMP = --with-gmp=$(STAGING_DIR)/usr
- GCC_WITH_TARGET_MPFR = --with-mpfr=$(STAGING_DIR)/usr
- ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
-+GCC_TARGET_PREREQ += mpc
- GCC_WITH_TARGET_MPC = --with-mpc=$(STAGING_DIR)/usr
- endif
+-ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+-TARGETS+=gdbserver
 -endif
- 
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- GCC_SHARED_LIBGCC:=--enable-shared
-@@ -203,17 +203,12 @@ endif
- #############################################################
- GCC_BUILD_DIR1:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-initial
- 
 -
--# The --without-headers option stopped working with gcc 3.0 and has never been
--# fixed, so we need to actually have working C library header files prior to
--# the step or libgcc will not build...
--
- $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- 	mkdir -p $(GCC_BUILD_DIR1)
- 	(cd $(GCC_BUILD_DIR1); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		$(GCC_DIR)/configure $(QUIET) \
--		--prefix=$(STAGING_DIR)/usr \
-+		--prefix=$(HOST_DIR)/usr \
- 		--build=$(GNU_HOST_NAME) \
- 		--host=$(GNU_HOST_NAME) \
- 		--target=$(REAL_GNU_TARGET_NAME) \
-@@ -243,7 +238,6 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- 	touch $@
- 
- $(GCC_BUILD_DIR1)/.compiled: $(GCC_BUILD_DIR1)/.configured
--	# gcc >= 4.3.0 have to also build all-target-libgcc
- ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
- 	$(GCC_CONF_ENV) $(MAKE) -C $(GCC_BUILD_DIR1) all-gcc
- else
-@@ -252,16 +246,11 @@ endif
- 	touch $@
- 
- gcc_initial=$(GCC_BUILD_DIR1)/.installed
--$(gcc_initial) $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
--	# gcc >= 4.3.0 have to also install install-target-libgcc
--ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
-+$(gcc_initial) $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc: $(GCC_BUILD_DIR1)/.compiled
- 	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
--else
--	PATH=$(TARGET_PATH) $(MAKE) -C $(GCC_BUILD_DIR1) install-gcc
+-ifeq ($(BR2_PACKAGE_GDB_HOST),y)
+-TARGETS+=gdbhost
 -endif
- 	touch $(gcc_initial)
- 
--gcc_initial: binutils $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
-+gcc_initial: $(GCC_HOST_PREREQ) host-binutils $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
- 
- gcc_initial-clean:
- 	rm -rf $(GCC_BUILD_DIR1)
-@@ -276,22 +265,16 @@ gcc_initial-dirclean:
- #############################################################
- GCC_BUILD_DIR2:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-intermediate
- 
--
- # The --without-headers option stopped working with gcc 3.0 and has never been
- # fixed, so we need to actually have working C library header files prior to
- # the step or libgcc will not build...
- 
- $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
- 	mkdir -p $(GCC_BUILD_DIR2)
--	-rmdir $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
--	mkdir -p $(STAGING_DIR)/lib
--	ln -snf ../../lib $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib
--	$(if $(BR2_ARCH_IS_64),mkdir -p $(STAGING_DIR)/lib64)
--	$(if $(BR2_ARCH_IS_64),ln -snf ../../lib64 $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib64)
- 	(cd $(GCC_BUILD_DIR2); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		$(GCC_DIR)/configure $(QUIET) \
--		--prefix=$(STAGING_DIR)/usr \
-+		--prefix=$(HOST_DIR)/usr \
- 		--build=$(GNU_HOST_NAME) \
- 		--host=$(GNU_HOST_NAME) \
- 		--target=$(REAL_GNU_TARGET_NAME) \
-@@ -338,7 +321,7 @@ else
- endif
- 	touch $(gcc_intermediate)
- 
--gcc_intermediate: uclibc-configured $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
-+gcc_intermediate: uclibc-configured $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
- 
- gcc_intermediate-clean:
- 	rm -rf $(GCC_BUILD_DIR2)
-@@ -363,11 +346,11 @@ GCC_BUILD_DIR3:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)-final
- $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 	mkdir -p $(GCC_BUILD_DIR3)
- 	# Important! Required for limits.h to be fixed.
--	ln -snf ../include/ $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
-+	ln -snf ../include/ $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sys-include
- 	(cd $(GCC_BUILD_DIR3); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		$(GCC_SRC_DIR)/configure $(QUIET) \
--		--prefix=$(STAGING_DIR)/usr \
-+		--prefix=$(HOST_DIR)/usr \
- 		--build=$(GNU_HOST_NAME) \
- 		--host=$(GNU_HOST_NAME) \
- 		--target=$(REAL_GNU_TARGET_NAME) \
-@@ -412,19 +395,19 @@ $(GCC_BUILD_DIR3)/.installed: $(GCC_BUILD_DIR3)/.compiled
- 	fi
- 	# Strip the host binaries
- ifeq ($(GCC_STRIP_HOST_BINARIES),true)
--	strip --strip-all -R .note -R .comment $(filter-out %-gccbug %-embedspu,$(wildcard $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
-+	strip --strip-all -R .note -R .comment $(filter-out %-gccbug %-embedspu,$(wildcard $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-*))
- endif
- 	# Make sure we have 'cc'.
--	if [ ! -e $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
-+	if [ ! -e $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc ]; then \
- 		ln -snf $(REAL_GNU_TARGET_NAME)-gcc \
--			$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
-+			$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
--		ln -snf gcc $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/cc; \
-+	if [ ! -e $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/cc ]; then \
-+		ln -snf gcc $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/bin/cc; \
- 	fi
- 	# Set up the symlinks to enable lying about target name.
- 	set -e; \
--	(cd $(STAGING_DIR)/usr; \
-+	(cd $(HOST_DIR)/usr; \
- 		ln -snf $(REAL_GNU_TARGET_NAME) $(GNU_TARGET_NAME); \
- 		cd bin; \
- 		for app in $(REAL_GNU_TARGET_NAME)-*; do \
-@@ -438,31 +421,31 @@ endif
- 
- $(STAMP_DIR)/gcc_libs_target_installed: $(GCC_BUILD_DIR3)/.installed
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
--	# These are in /lib, so...
-+	# These go in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
--	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
- 		$(TARGET_DIR)/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
- endif
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	mkdir -p $(TARGET_DIR)/usr/lib
--	-cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
- 		$(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
--	cp -dpf $(STAGING_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(TARGET_DIR)/usr/lib/
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(TARGET_DIR)/usr/lib/
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
--	cp -dpf $(STAGING_DIR)/usr/lib/security/classpath.security \
-+	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
- 		$(TARGET_DIR)/usr/lib/security/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
- endif
- 	mkdir -p $(@D)
- 	touch $@
- 
--cross_compiler:=$(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
-+cross_compiler:=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc
- cross_compiler gcc: gcc_intermediate \
- 	$(LIBFLOAT_TARGET) uclibc $(GCC_BUILD_DIR3)/.installed \
- 	$(STAMP_DIR)/gcc_libs_target_installed \
-@@ -473,8 +456,8 @@ gcc-source: $(DL_DIR)/$(GCC_SOURCE)
- gcc-clean:
- 	rm -rf $(GCC_BUILD_DIR3)
- 	for prog in cpp gcc gcc-[0-9]* protoize unprotoize gcov gccbug cc; do \
--		rm -f $(STAGING_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-$$prog; \
--		rm -f $(STAGING_DIR)/usr/bin/$(GNU_TARGET_NAME)-$$prog; \
-+		rm -f $(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-$$prog; \
-+		rm -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-$$prog; \
- 	done
- 
- gcc-dirclean: gcc_initial-dirclean
-@@ -487,7 +470,7 @@ gcc-dirclean: gcc_initial-dirclean
- #############################################################
- GCC_BUILD_DIR4:=$(BUILD_DIR)/gcc-$(GCC_VERSION)-target
- 
--$(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed $(GCC_TARGET_PREREQ)
-+$(GCC_BUILD_DIR4)/.prepared: $(STAMP_DIR)/gcc_libs_target_installed
- 	mkdir -p $(GCC_BUILD_DIR4)
- 	touch $@
- 
-@@ -556,7 +539,7 @@ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
- 	# Work around problem of missing syslimits.h
- 	if [ ! -f $(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h ]; then \
- 		echo "warning: working around missing syslimits.h"; \
--		cp -f $(STAGING_DIR)/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h \
-+		cp -f $(HOST_DIR)/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/syslimits.h \
- 			$(TARGET_DIR)/usr/$(GCC_LIB_SUBDIR)/$(GCC_INCLUDE_DIR)/; \
- 	fi
- 	# Make sure we have 'cc'.
-@@ -567,7 +550,7 @@ $(TARGET_DIR)/usr/bin/gcc: $(GCC_BUILD_DIR4)/.compiled
- 	#rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	touch -c $@
- 
--gcc_target: uclibc_target binutils_target $(TARGET_DIR)/usr/bin/gcc
-+gcc_target: uclibc_target $(GCC_TARGET_PREREQ) binutils $(TARGET_DIR)/usr/bin/gcc
- 
- gcc_target-clean:
- 	rm -rf $(GCC_BUILD_DIR4)
 diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
-index f12a480..c611562 100644
+index c611562..764a1da 100644
 --- a/toolchain/toolchain-buildroot.mk
 +++ b/toolchain/toolchain-buildroot.mk
-@@ -1,7 +1,6 @@
- # Include files required for the internal toolchain backend
- 
+@@ -3,7 +3,6 @@
  include toolchain/dependencies/dependencies.mk
--include toolchain/binutils/binutils.mk
  include toolchain/elf2flt/elf2flt.mk
  include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/gdb/gdb.mk
+-include toolchain/gdb/gdb.mk
+ include toolchain/kernel-headers/kernel-headers.mk
+ include toolchain/mklibs/mklibs.mk
+ include toolchain/uClibc/uclibc.mk
 diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index c458251..3894890 100644
+index 3894890..485ab7c 100644
 --- a/toolchain/toolchain-buildroot/Config.in
 +++ b/toolchain/toolchain-buildroot/Config.in
-@@ -3,6 +3,6 @@
- if BR2_TOOLCHAIN_BUILDROOT
- source "toolchain/kernel-headers/Config.in"
+@@ -5,4 +5,5 @@ source "toolchain/kernel-headers/Config.in"
  source "toolchain/uClibc/Config.in"
--source "toolchain/binutils/Config.in"
-+source "package/binutils/Config.in.host"
+ source "package/binutils/Config.in.host"
  source "toolchain/gcc/Config.in"
++source "package/gdb/Config.in.host"
  endif
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index bdc6e76..1276305 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -1,10 +1,5 @@
+ # Generic toolchain options
+ 
+-# we want gdb config in the middle of both source and external
+-# toolchains, but mconf won't let us source the same file twice,
+-# so put it here instead
+-source "toolchain/gdb/Config.in"
+-
+ config BR2_LARGEFILE
+ 	bool
+ 
 diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
-index 1befff2..e480da9 100644
+index e480da9..5b0cc4e 100644
 --- a/toolchain/toolchain-crosstool-ng.mk
 +++ b/toolchain/toolchain-crosstool-ng.mk
-@@ -2,7 +2,6 @@
- 
- # Explicit ordering:
- include toolchain/helpers.mk
--include toolchain/binutils/binutils.mk
+@@ -5,7 +5,6 @@ include toolchain/helpers.mk
  include toolchain/dependencies/dependencies.mk
  include toolchain/elf2flt/elf2flt.mk
  include toolchain/gcc/gcc-uclibc-4.x.mk
+-include toolchain/gdb/gdb.mk
+ include toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+ include toolchain/mklibs/mklibs.mk
+ include toolchain/uClibc/uclibc.mk
 diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
-index c43618b..d67405b 100644
+index d67405b..4ade92a 100644
 --- a/toolchain/toolchain-external.mk
 +++ b/toolchain/toolchain-external.mk
-@@ -1,7 +1,6 @@
- # Required includes for the external toolchain backend
- 
- include toolchain/helpers.mk
--include toolchain/binutils/binutils.mk
+@@ -4,7 +4,6 @@ include toolchain/helpers.mk
  include toolchain/dependencies/dependencies.mk
  include toolchain/elf2flt/elf2flt.mk
  include toolchain/gcc/gcc-uclibc-4.x.mk
+-include toolchain/gdb/gdb.mk
+ include toolchain/kernel-headers/kernel-headers.mk
+ include toolchain/mklibs/mklibs.mk
+ include toolchain/toolchain-external/ext-tool.mk
 -- 
 1.7.2.2
