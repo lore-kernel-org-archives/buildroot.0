@@ -1,58 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 31 Dec 2010 08:39:02 -0300
-Subject: [Buildroot] [PATCH 2/6] gcc: install copies of libgcc,
-	libstdc++ and libgcj to the sysroot
+Date: Fri, 31 Dec 2010 08:39:04 -0300
+Subject: [Buildroot] [PATCH 4/6] oprofile: use new libbfd option
 In-Reply-To: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1293795546-19674-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1293795546-19674-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We want to keep a copy around for the future SDK functionality.
-
-Also it's a better fix for bug #1051.
+Convert the oprofile target to select the new libbfd staging/target
+option to avoid a huge target binutils for a simple task.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/oprofile/Config.in   |    1 +
+ package/oprofile/oprofile.mk |    5 +----
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 0d6f2ae..633b8aa 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -424,6 +424,8 @@ ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These go in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
- 		$(TARGET_DIR)/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index c877dae..0e3652d 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_OPROFILE
+ 	# choosen in the config. This will have to be fixed later.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL
+ 	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_BINUTILS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  OProfile is a system-wide profiler for Linux systems,
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 3be50f2..42bf0e2 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -5,9 +5,6 @@
+ #############################################################
+ OPROFILE_VERSION := 0.9.4
+ OPROFILE_CONF_OPT :=	--localstatedir=/var \
+-			--with-extra-includes="$(BUILD_DIR)/binutils-$(BR2_BINUTILS_VERSION)-target/bfd \
+-			-I$(TOOLCHAIN_DIR)/binutils-$(BR2_BINUTILS_VERSION)/include" \
+-			--with-extra-libs=$(BUILD_DIR)/binutils-$(BR2_BINUTILS_VERSION)-target/bfd \
+ 			--with-kernel-support
+ 
+ OPROFILE_BINARIES := utils/ophelp
+@@ -24,7 +21,7 @@ ifeq ($(OPROFILE_ARCH),)
+ OPROFILE_ARCH := $(BR2_ARCH)
  endif
-@@ -431,14 +433,20 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
-+		$(STAGING_DIR)/usr/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
- 		$(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(STAGING_DIR)/usr/lib/
- 	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(STAGING_DIR)/usr/lib/security
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
- 	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
-+		$(STAGING_DIR)/usr/lib/security/
-+	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
- 		$(TARGET_DIR)/usr/lib/security/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
- endif
+ 
+-OPROFILE_DEPENDENCIES := popt binutils_target
++OPROFILE_DEPENDENCIES := popt binutils
+ 
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
 -- 
 1.7.2.2
