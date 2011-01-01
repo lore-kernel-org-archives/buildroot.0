@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 1 Jan 2011 11:49:01 +0100
-Subject: [Buildroot] [git commit master 1/1] ffmpeg: fix build with ccache
-Message-ID: <20110101113506.F21938F326@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] bison: remove unused yacc
+	wrapper
+Message-ID: <20110101113506.C0AA68F2F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +10,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e18087a6011b1c1d474630df97a82e9b50baedac
+commit: http://git.buildroot.net/buildroot/commit/?id=6bdaee1e0fd76c0201e8ec18b241b21cd9dc593a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With ccache, HOSTCC contains a space, so ensure it's properly quoted.
+No longer used since 98611b (bison: convert to the autotools infrastructure)
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/bison/yacc |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
+ delete mode 100755 package/bison/yacc
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index f0ec930..60654de 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -136,7 +136,7 @@ define FFMPEG_CONFIGURE_CMDS
- 		--enable-cross-compile	\
- 		--cross-prefix=$(TARGET_CROSS) \
- 		--sysroot=$(STAGING_DIR) \
--		--host-cc=$(HOSTCC) \
-+		--host-cc="$(HOSTCC)" \
- 		--arch=$(BR2_ARCH) \
- 		--extra-cflags=-fPIC \
- 		$(DISABLE_IPV6) \
+diff --git a/package/bison/yacc b/package/bison/yacc
+deleted file mode 100755
+index aed120e..0000000
+--- a/package/bison/yacc
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh
+-exec /usr/bin/bison -y "$@"
 -- 
 1.7.2.2
