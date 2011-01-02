@@ -1,28 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 02 Jan 2011 23:45:47 +0100
-Subject: [Buildroot] [PATCH 3/6] gdb: make it a proper package
-In-Reply-To: <87hbdrc6ar.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Sun, 02 Jan 2011 23:03:08 +0100")
-References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
-	<1293795546-19674-6-git-send-email-gustavo@zacarias.com.ar>
-	<87hbdrc6ar.fsf@macbook.be.48ers.dk>
-Message-ID: <87aajidiw4.fsf@macbook.be.48ers.dk>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sun, 2 Jan 2011 18:10:03 -0500
+Subject: [Buildroot] [PATCH] toolchain: add a USE_MMU build option
+In-Reply-To: <1293486115-19186-1-git-send-email-vapier@gentoo.org>
+References: <1293486115-19186-1-git-send-email-vapier@gentoo.org>
+Message-ID: <201101021810.03876.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+On Monday, December 27, 2010 16:41:55 Mike Frysinger wrote:
+> Some packages need to know whether the MMU is in play, so add a toolchain
+> option to expose the feature to them.
+> 
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
- Gustavo> TODO: copy gdbserver from external toolchains
-
- Peter> Hmm, I don't quite like this Config.in.{internal,external} stuff, I'll
- Peter> take a look and see if I can combine them.
-
-We can do something like this below, but I also now noticed that you can
-no longer build both gdbserver and full gdb, like we used to be able to
-do. The gdb build system seems a bit odd, so I don't see any nice way of
-building both in the same make step.
-
-Any ideas?
+ping ...
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110102/55b8e4ee/attachment.pgp>
