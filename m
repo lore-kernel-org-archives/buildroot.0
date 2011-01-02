@@ -1,40 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 1 Jan 2011 21:53:34 +0100
-Subject: [Buildroot] [git commit master 1/1] vim: ensure configure doesn't
-	fail if X11 packages are enabled
-Message-ID: <20110101205456.B1F158072D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Jan 2011 23:01:17 +0100
+Subject: [Buildroot] [PATCH 1/6] binutils: make it a proper package
+In-Reply-To: <1293795546-19674-4-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Fri, 31 Dec 2010 08:39:01 -0300")
+References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
+	<1293795546-19674-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8739pbdkya.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=358214a8ba3e36f465829a33de7ea5c5ad0cef38
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> * Convert binutils to a proper autotargets package
+ Gustavo> * Add version 2.21 and drop version 2.17
 
-When X11 is detected, vim's configure does a AC_TRY_RUN to detect wchar_t
-size, so preset it.
+ Gustavo> * Hook up packaged binutils for target gcc
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/vim/vim.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Gustavo> * Build tools are on HOST_DIR now so change it
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index e94bb1e..917d1d4 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -17,7 +17,9 @@ VIM_CONF_ENV = vim_cv_toupper_broken=no \
- 		vim_cv_getcwd_broken=no \
- 		vim_cv_stat_ignores_slash=yes \
- 		vim_cv_memmove_handles_overlap=yes \
--		ac_cv_sizeof_int=4
-+		ac_cv_sizeof_int=4 \
-+		ac_cv_small_wchar_t=no
-+
- VIM_CONF_OPT = --with-tlib=ncurses
- 
- define VIM_INSTALL_TARGET_CMDS
+ Gustavo> * Move cross/host gcc to HOST_DIR
+
+ Gustavo> * Drop kludge from commit 3c77bab2eeace3ee675bd745ca335fa3dd1630bb
+ Gustavo>   This is fixed in the next commit "gcc: install copies of libgcc,
+ Gustavo>   libstdc++ and libgcj to the sysroot" - tested for arm & x86_64
+ Gustavo>   targets.
+
+ Gustavo> * TARGET_CROSS now pointed to HOST_DIR too
+
+Committed with small changes to Config.in, thanks!
+
 -- 
-1.7.2.2
+Bye, Peter Korsgaard
