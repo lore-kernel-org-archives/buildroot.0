@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 2 Jan 2011 22:55:37 +0100
-Subject: [Buildroot] [git commit master 1/1] gcc: install copies of libgcc,
-	libstdc++ and libgcj to the sysroot
-Message-ID: <20110102220443.4A5938F346@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] target gcc: cleanup
+Message-ID: <20110102220443.EAB8C8F346@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5bd272eb6bdd85c2de7ee1405058dbb0131b8beb
+commit: http://git.buildroot.net/buildroot/commit/?id=81f1f99dc5e54f02fd09e8b5a152b7beba5dbec5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We want to keep a copy around for the future SDK functionality.
+WITH_TARGET_{GMP/MPC/MPFR} is unneeded since we are providing a sysroot.
 
-Also it's a better fix for bug #1051.
+It also breaks build-gcc under certain conditions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ toolchain/gcc/gcc-uclibc-4.x.mk |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
 
 diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 0d6f2ae..633b8aa 100644
+index 633b8aa..80bed5e 100644
 --- a/toolchain/gcc/gcc-uclibc-4.x.mk
 +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -424,6 +424,8 @@ ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	# These go in /lib, so...
- 	rm -rf $(TARGET_DIR)/usr/lib/libgcc_s*.so*
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
-+		$(STAGING_DIR)/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcc_s* \
- 		$(TARGET_DIR)/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/lib/libgcc_s*
+@@ -119,11 +119,8 @@ GCC_HOST_PREREQ += host-mpc
  endif
-@@ -431,14 +433,20 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ 
+ GCC_TARGET_PREREQ += mpfr gmp
+-GCC_WITH_TARGET_GMP = --with-gmp=$(STAGING_DIR)/usr
+-GCC_WITH_TARGET_MPFR = --with-mpfr=$(STAGING_DIR)/usr
+ ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+ GCC_TARGET_PREREQ += mpc
+-GCC_WITH_TARGET_MPC = --with-mpc=$(STAGING_DIR)/usr
+ endif
+ 
  ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
- 	mkdir -p $(TARGET_DIR)/usr/lib
- 	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
-+		$(STAGING_DIR)/usr/lib/
-+	-cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libstdc++.so* \
- 		$(TARGET_DIR)/usr/lib/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libstdc++.so*
- endif
- endif
- ifeq ($(BR2_INSTALL_LIBGCJ),y)
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(STAGING_DIR)/usr/lib/
- 	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgcj.so* $(TARGET_DIR)/usr/lib/
-+	mkdir -p $(STAGING_DIR)/usr/lib/security
- 	mkdir -p $(TARGET_DIR)/usr/lib/security
- 	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
-+		$(STAGING_DIR)/usr/lib/security/
-+	cp -dpf $(HOST_DIR)/usr/lib/security/classpath.security \
- 		$(TARGET_DIR)/usr/lib/security/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
- endif
+@@ -506,9 +503,6 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+ 		--disable-multilib \
+ 		$(GCC_TLS) \
+ 		$(GCC_SHARED_LIBGCC) \
+-		$(GCC_WITH_TARGET_GMP) \
+-		$(GCC_WITH_TARGET_MPFR) \
+-		$(GCC_WITH_TARGET_MPC) \
+ 		$(DISABLE_NLS) \
+ 		$(THREADS) \
+ 		$(GCC_DECIMAL_FLOAT) \
 -- 
 1.7.2.2
