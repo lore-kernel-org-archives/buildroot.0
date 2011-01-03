@@ -1,36 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 03 Jan 2011 07:13:03 -0300
-Subject: [Buildroot] [PATCH 04/10] binutils: make it a proper package
-In-Reply-To: <20110103101458.61270f4a@surf>
-References: <1293563435-10054-1-git-send-email-gustavo@zacarias.com.ar>	<1293563435-10054-5-git-send-email-gustavo@zacarias.com.ar>	<874o9xldzj.fsf@macbook.be.48ers.dk>	<4D1B9D16.1080902@zacarias.com.ar>
-	<20110103101458.61270f4a@surf>
-Message-ID: <4D21A12F.9010201@zacarias.com.ar>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Mon, 03 Jan 2011 07:47:21 -0600
+Subject: [Buildroot] commiting patches
+In-Reply-To: <8762u6crpp.fsf@macbook.be.48ers.dk>
+References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
+	<8739pfhtgk.fsf@macbook.be.48ers.dk> <20110103090853.5168f221@surf>
+	<8762u6crpp.fsf@macbook.be.48ers.dk>
+Message-ID: <20110103074721.17177ctf7vs1s0kc@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/03/2011 06:14 AM, Thomas Petazzoni wrote:
+Quoting Peter Korsgaard <jacmet@uclibc.org>:
 
->>> Why remove this ARCH_IS_64 stuff?
->>
->> This is from commit 3c77bab2eeace3ee675bd745ca335fa3dd1630bb which does
->> a symlink trick to make libstdc++ available. It's simpler to just copy
->> libstdc++ (and libgcj/libgcc while at it) to the sysroot which is fixed
->> in patch #5 from my series.
-> 
-> I am not sure about this justification, since I don't see what change
-> in the toolchain build procedure removes the need for this symbolic
-> link. Have you actually tested building WebKit on x86_64 for example ?
-> 
-> Thanks,
-> 
-> Thomas
+>>>>>> "Thomas" == Thomas Petazzoni  
+>>>>>> <thomas.petazzoni@free-electrons.com> writes:
+>
+>  Thomas> Hello,
+>  Thomas> As this is my first message to the list in 2011: happy new year
+>  Thomas> everybody. Best wishes for 2011, and let's have some good BR
+>  Thomas> development during this year :-)
+>
+> Yeah!
 
-Yes, tested on an x86_64 host building an x86_64 target (full midori).
-First test was removing all the symlink stuff which in fact broke
-webkit, then i added my lib* in staging patch. Everything was built from
-scratch.
-To throw in some extra testing i did the same with an arm target for
-both runs with the same result.
+Happy New Year to everyone too.
+
+>  >> I mainly try to handle the patches in fifo mode, but I do also skim
+>  >> new mails. This is both because sometimes updates are sent, and
+>  >> sometimes I see trivial patches that can be handled when I have 5
+>  >> min spare or important bugfixes.
+>
+>  Thomas> I think there is also one criteria that has an impact of the
+>  Thomas> time it takes for a patch to be applied: what the patch
+>  Thomas> does. If the patch is a relatively simple fix to a package, a
+>  Thomas> new package, or something that doesn't have any major impact of
+>  Thomas> Buildroot's infrastructure, or Buildroot usage, then this patch
+>  Thomas> is likely to be handled/merged sooner than something that has
+>  Thomas> broader impact.
+>
+> Indeed, that's what I meant when I wrote about trivial patches.
+
+Makes perfect sense.
+I also understand that I'm new to BR and still have a lot to figure out.
+
+-- 
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
