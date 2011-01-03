@@ -1,40 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Jan 2011 09:32:50 +0100
-Subject: [Buildroot] commiting patches
-In-Reply-To: <20110103090853.5168f221@surf> (Thomas Petazzoni's message of
-	"Mon, 3 Jan 2011 09:08:53 +0100")
-References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
-	<8739pfhtgk.fsf@macbook.be.48ers.dk> <20110103090853.5168f221@surf>
-Message-ID: <8762u6crpp.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Jan 2011 10:10:03 +0100
+Subject: [Buildroot] building mysqlclient fails when using gcc 4.51 :
+ do_abi_check needs perl ?
+In-Reply-To: <E1292EBFD5E7463BA24ECFD251C4CCE0@apexjs>
+References: <E1292EBFD5E7463BA24ECFD251C4CCE0@apexjs>
+Message-ID: <20110103101003.0c08d839@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- Thomas> Hello,
- Thomas> As this is my first message to the list in 2011: happy new year
- Thomas> everybody. Best wishes for 2011, and let's have some good BR
- Thomas> development during this year :-)
+On Wed, 29 Dec 2010 20:52:31 +0100
+"Sagaert Johan" <sagaert.johan@skynet.be> wrote:
 
-Yeah!
+> This build seems to fail on do_abi_check when using GCC 451 (EABI or
+> OABI selection in buildroot does not matter):
+> 
+> I have no idea if this is a GCC 4.5 issue or something with mysql
+> client or some other reason.
+> 
+> Maybe do_abi_check needs perl (see the PATH below) but i do not have
+> any perl stuff enabled in buildroot ? 
 
- >> I mainly try to handle the patches in fifo mode, but I do also skim
- >> new mails. This is both because sometimes updates are sent, and
- >> sometimes I see trivial patches that can be handled when I have 5
- >> min spare or important bugfixes.
+The ABI check issue has been fixed in later versions of MySQL, and the
+mysql_client package in Buildroot Git has been bumped to 5.1.53, which
+does not have this problem.
 
- Thomas> I think there is also one criteria that has an impact of the
- Thomas> time it takes for a patch to be applied: what the patch
- Thomas> does. If the patch is a relatively simple fix to a package, a
- Thomas> new package, or something that doesn't have any major impact of
- Thomas> Buildroot's infrastructure, or Buildroot usage, then this patch
- Thomas> is likely to be handled/merged sooner than something that has
- Thomas> broader impact.
+See 24b27158cf103b15b3dd518bbb1b6301a3b0449d
 
-Indeed, that's what I meant when I wrote about trivial patches.
+Regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
