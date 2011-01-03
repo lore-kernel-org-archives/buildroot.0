@@ -1,37 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 3 Jan 2011 00:25:38 +0100
-Subject: [Buildroot] [git commit master 1/1] toolchain/gcc: fix target-gcc
-	selects
-Message-ID: <20110102232606.773598E203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Jan 2011 09:08:53 +0100
+Subject: [Buildroot] commiting patches
+In-Reply-To: <8739pfhtgk.fsf@macbook.be.48ers.dk>
+References: <20101230063005.15755osot9w5qwco@www.home.zuerker.org>
+	<8739pfhtgk.fsf@macbook.be.48ers.dk>
+Message-ID: <20110103090853.5168f221@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ca4e7ce970447fc5c6312e5f414b91b306b9f0b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As this is my first message to the list in 2011: happy new year
+everybody. Best wishes for 2011, and let's have some good BR
+development during this year :-)
 
-We need to select BR2_PACKAGE_BINUTILS as well, now
-BINUTILS_TARGET depends on it.
+On Thu, 30 Dec 2010 21:54:51 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gcc/Config.in.2 |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> I'm not following any strict procedure, but I do try to sooner or
+> later get around to review all patches. Understand that I do this in
+> my spare time, so turnaround time can sometimes be slow.
+> 
+> I mainly try to handle the patches in fifo mode, but I do also skim
+> new mails. This is both because sometimes updates are sent, and
+> sometimes I see trivial patches that can be handled when I have 5 min
+> spare or important bugfixes.
 
-diff --git a/toolchain/gcc/Config.in.2 b/toolchain/gcc/Config.in.2
-index 9676fdf..705506b 100644
---- a/toolchain/gcc/Config.in.2
-+++ b/toolchain/gcc/Config.in.2
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GCC_TARGET
- 	bool "native toolchain in the target filesystem"
- 	depends on BR2_HAVE_DEVFILES
-+	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_BINUTILS_TARGET
- 	select BR2_PACKAGE_MPC if BR2_GCC_VERSION_4_5_X
- 	select BR2_PACKAGE_MPFR
+I think there is also one criteria that has an impact of the time it
+takes for a patch to be applied: what the patch does. If the patch is a
+relatively simple fix to a package, a new package, or something that
+doesn't have any major impact of Buildroot's infrastructure, or
+Buildroot usage, then this patch is likely to be handled/merged sooner
+than something that has broader impact.
+
+For example, Heiko, your patch "Improved initramfs and iso target
+support" will take quite a bit of time, because it changes quite a few
+things, adds new use cases, we have to think whether we want to handle
+those use cases, if they are handled the correct way, etc. Such patches
+usually take a bit more time to handle than others.
+
+Regards,
+
+Thomas
 -- 
-1.7.2.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
