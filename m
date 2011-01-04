@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Jan 2011 13:52:17 +0100
-Subject: [Buildroot] Patching python to 2.7 (Thomas Petazzoni)
-In-Reply-To: <000001cbac0a$1ebf6020$5c3e2060$@com>
-References: <mailman.5.1294142401.15574.buildroot@busybox.net>
-	<000001cbac0a$1ebf6020$5c3e2060$@com>
-Message-ID: <20110104135217.5092017b@surf>
+Date: Tue, 4 Jan 2011 16:02:59 +0100
+Subject: [Buildroot] [lvm-devel]  Release tarballs location
+In-Reply-To: <20110104144901.GE13802@agk-dp.fab.redhat.com>
+References: <20101222144901.5d2bb8c7@surf>
+	<20101223100437.GS4233@pengutronix.de>
+	<20110104144901.GE13802@agk-dp.fab.redhat.com>
+Message-ID: <20110104160259.7b7745eb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Barry,
+Hello Alasdair,
 
-On Tue, 4 Jan 2011 12:22:57 -0000
-"Barry Bridges" <barry@disignconsultants.com> wrote:
+On Tue, 4 Jan 2011 14:49:01 +0000
+Alasdair G Kergon <agk@redhat.com> wrote:
 
-> It must be me doing something wrong. I've seen Maxime Ripards patches but
-> for some reason can't get them to work.
-> 
-> What version of BR would you recommend for the patches
+> OK - I've renamed 'old' to 'releases', put everything in there,
+> symlinked 'old' to it, and from now on will put new releases
+> in there immediately.
 
-I think 2010.11 should work, and the latest Git as well.
-
-> and is it just a matter of adding the patches into the package/python directory?
-
-No. You have to apply Maxime's patches to Buildroot. Maxime's patches
-are not against Python itself, but against Buildroot.
+Awesome, thanks!
 
 Regards,
 
