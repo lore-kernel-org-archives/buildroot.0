@@ -1,58 +1,63 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Thu,  6 Jan 2011 17:53:14 +0200
-Subject: [Buildroot] [PATCH 0/6] GStreamer patches, and TI OMAP3 DSP stuff
-Message-ID: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
+Date: Thu,  6 Jan 2011 17:53:15 +0200
+Subject: [Buildroot] [PATCH 1/6] gstreamer: remove unnecessary feature
+In-Reply-To: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
+References: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1294329200-10418-2-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 0.10.11 the binary-registry was added, on 0.10.12 the libxml2
+dependency was dropped when binary-registry was used, on 0.10.18 the
+binary-registry was made default, and on 0.10.23 it was the only option.
 
-These patches first improve GStreamer support (makes it build on newer versions
-of make), remove unnecessary dependencies, and then add support for gst-dsp and
-all the dependencies.
+So, libxml2 is not needed any more for the registry.
 
-By applying these, it's possible to use TI OMAP3 hardware accelerated codecs
-right away, no patches needed on the kernel.
+Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/gstreamer/Config.in    |    6 ------
+ package/multimedia/gstreamer/gstreamer.mk |   10 ++--------
+ 2 files changed, 2 insertions(+), 14 deletions(-)
 
-I tried these with linux 2.6.37 on an N900.
-
-Felipe Contreras (6):
-  gstreamer: remove unnecessary feature
-  Fix gstreamer packages for make 3.82
-  Add tidsp-binaries package
-  Add gst-dsp package
-  Add dsp-tools package
-  Add gst-omapfb package
-
- package/Config.in                                  |    1 +
- package/dsp-tools/Config.in                        |    7 +++++++
- package/dsp-tools/dsp-tools.mk                     |   13 +++++++++++++
- package/multimedia/Config.in                       |    3 +++
- package/multimedia/gst-dsp/Config.in               |    8 ++++++++
- package/multimedia/gst-dsp/gst-dsp.mk              |   15 +++++++++++++++
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk        |    2 ++
- package/multimedia/gst-omapfb/Config.in            |    7 +++++++
- package/multimedia/gst-omapfb/gst-omapfb.mk        |   15 +++++++++++++++
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 ++
- .../gst-plugins-base/gst-plugins-base.mk           |    2 ++
- .../gst-plugins-good/gst-plugins-good.mk           |    2 ++
- .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 ++
- package/multimedia/gstreamer/Config.in             |    6 ------
- package/multimedia/gstreamer/gstreamer.mk          |   15 ++++++++-------
- package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
- .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
- 17 files changed, 102 insertions(+), 13 deletions(-)
- create mode 100644 package/dsp-tools/Config.in
- create mode 100644 package/dsp-tools/dsp-tools.mk
- create mode 100644 package/multimedia/gst-dsp/Config.in
- create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
- create mode 100644 package/multimedia/gst-omapfb/Config.in
- create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
- create mode 100644 package/multimedia/tidsp-binaries/Config.in
- create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
-
+diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+index a3ce859..7de904c 100644
+--- a/package/multimedia/gstreamer/Config.in
++++ b/package/multimedia/gstreamer/Config.in
+@@ -9,9 +9,3 @@ config BR2_PACKAGE_GSTREAMER
+ 
+ comment "gstreamer requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_GSTREAMER_LIBXML2
+-	bool "require libxml2 for registry and load/save"
+-	default y
+-	select BR2_PACKAGE_LIBXML2
+-	depends on BR2_PACKAGE_GSTREAMER
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 49ac0df..d689619 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -19,15 +19,9 @@ endif
+ GSTREAMER_CONF_OPT = \
+ 		--disable-examples \
+ 		--disable-tests \
+-		--disable-failing-tests
++		--disable-failing-tests \
++		--disable-loadsave
+ 
+ GSTREAMER_DEPENDENCIES = libglib2 host-pkg-config
+ 
+-ifeq ($(BR2_PACKAGE_GSTREAMER_LIBXML2),y)
+-GSTREAMER_DEPENDENCIES += libxml2
+-else
+-GSTREAMER_CONF_OPT += \
+-	--disable-loadsave
+-endif
+-
+ $(eval $(call AUTOTARGETS,package/multimedia,gstreamer))
 -- 
 1.7.4.rc1
