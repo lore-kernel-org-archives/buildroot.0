@@ -1,9 +1,9 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Thu,  6 Jan 2011 17:53:19 +0200
-Subject: [Buildroot] [PATCH 5/6] Add dsp-tools package
+Date: Thu,  6 Jan 2011 17:53:20 +0200
+Subject: [Buildroot] [PATCH 6/6] Add gst-omapfb package
 In-Reply-To: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
 References: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1294329200-10418-6-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1294329200-10418-7-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,58 @@ To: buildroot@busybox.net
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/dsp-tools/Config.in    |    7 +++++++
- package/dsp-tools/dsp-tools.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/dsp-tools/Config.in
- create mode 100644 package/dsp-tools/dsp-tools.mk
+ package/multimedia/Config.in                |    1 +
+ package/multimedia/gst-omapfb/Config.in     |    7 +++++++
+ package/multimedia/gst-omapfb/gst-omapfb.mk |   15 +++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-omapfb/Config.in
+ create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index da5b62b..f9e1568 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -478,6 +478,7 @@ source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
- source "package/util-linux/Config.in"
- endif
-+source "package/dsp-tools/Config.in"
- endmenu
- 
- menu "Text editors and viewers"
-diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 7590219..8c50c5c 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -7,6 +7,7 @@ source "package/multimedia/ffmpeg/Config.in"
+ source "package/multimedia/gstreamer/Config.in"
+ source "package/multimedia/gst-ffmpeg/Config.in"
+ source "package/multimedia/gst-dsp/Config.in"
++source "package/multimedia/gst-omapfb/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
 new file mode 100644
-index 0000000..c37d76c
+index 0000000..e4a62c0
 --- /dev/null
-+++ b/package/dsp-tools/Config.in
++++ b/package/multimedia/gst-omapfb/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DSP_TOOLS
-+	bool "dsp-tools"
-+	select BR2_PACKAGE_TIDSP_BINARIES
++config BR2_PACKAGE_GST_OMAPFB
++	bool "gst-omapfb"
++	depends on BR2_PACKAGE_GSTREAMER
 +	help
-+	  Utilities for TI OMAP3 DSP.
++	  GStreamer plug-in to use OMAP framebuffer.
 +
-+	  http://github.com/felipec/dsp-tools
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
++	  http://github.com/felipec/gst-omapfb
+diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
 new file mode 100644
-index 0000000..39d11d6
+index 0000000..e370c4e
 --- /dev/null
-+++ b/package/dsp-tools/dsp-tools.mk
-@@ -0,0 +1,13 @@
-+DSP_TOOLS_VERSION=2.0
-+DSP_TOOLS_SOURCE=dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
-+DSP_TOOLS_SITE=http://gst-dsp.googlecode.com/files/
++++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
+@@ -0,0 +1,15 @@
++GST_OMAPFB_VERSION=1.0
++GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
++GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define DSP_TOOLS_BUILD_CMDS
++define GST_OMAPFB_BUILD_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+define DSP_TOOLS_INSTALL_TARGET_CMDS
++define GST_OMAPFB_INSTALL_TARGET_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+$(eval $(call GENTARGETS,package,dsp-tools))
++GST_OMAPFB_DEPENDENCIES = gstreamer
++
++$(eval $(call GENTARGETS,package/multimedia,gst-omapfb))
 -- 
 1.7.4.rc1
