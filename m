@@ -1,56 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Jan 2011 14:19:47 +0100
-Subject: [Buildroot] Problem building avahi
-In-Reply-To: <20110106135549.7f6ef437@surf> (Thomas Petazzoni's message of
-	"Thu, 6 Jan 2011 13:55:49 +0100")
-References: <B3C53ADB207D471B8656E4BCBBDDD557@WSA.local>
-	<20110105171027.1e64ffe6@surf>
-	<D473AD103FC84CD18D1AF9AB6EAE9D2B@WSA.local>
-	<20110106123238.1c227155@surf> <87ei8qgqju.fsf@macbook.be.48ers.dk>
-	<20110106135549.7f6ef437@surf>
-Message-ID: <87aajegoek.fsf@macbook.be.48ers.dk>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Thu,  6 Jan 2011 17:53:14 +0200
+Subject: [Buildroot] [PATCH 0/6] GStreamer patches, and TI OMAP3 DSP stuff
+Message-ID: <1294329200-10418-1-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-
 Hi,
 
- Thomas> Ok, good. At least this has exhibited an interesting bug of
- Thomas> Buildroot that we'll have to fix.
- >> 
- >> Yeah.
+These patches first improve GStreamer support (makes it build on newer versions
+of make), remove unnecessary dependencies, and then add support for gst-dsp and
+all the dependencies.
 
- Thomas> Something like "grep -v" the lines that have already been changed to
- Thomas> start with $(STAGING_DIR)/usr ?
+By applying these, it's possible to use TI OMAP3 hardware accelerated codecs
+right away, no patches needed on the kernel.
 
-We could simply skip lines that already contain STAGING_DIR/usr - E.G.
+I tried these with linux 2.6.37 on an N900.
 
-$(SED) -e '/$(subst /,\/,$(STAGING_DIR)/usr)/b' -e "s:\(['= ]\)/usr:..
+Felipe Contreras (6):
+  gstreamer: remove unnecessary feature
+  Fix gstreamer packages for make 3.82
+  Add tidsp-binaries package
+  Add gst-dsp package
+  Add dsp-tools package
+  Add gst-omapfb package
 
- >> For such a special situation, I would prefer to we tell users to do it
- >> with BR2_ROOTFS_POST_BUILD_SCRIPT instead.
-
- Thomas> On x86, it's fairly usual to have the kernel inside the root
- Thomas> filesystem, and embedded x86 systems are quite common. So this
- Thomas> feature could be seen as sufficiently useful to be integrated
- Thomas> into BR.
-
-But u-boot on x86 isn't common, right?
-
- Thomas> Something like:
-
- Thomas> config BR2_LINUX_KERNEL_INSTALL_TO_ROOTFS
- Thomas> 	bool "Install kernel image in rootfs"
- Thomas> 	default y if BR2_i386 || BR2_x86_64
- Thomas> 	help
- Thomas> 	  Copy the generated kernel image to the /boot directory
- Thomas> 	  in the root filesystem
-
-Ahh, for non-uImage stuff - Yes, that's fine.
+ package/Config.in                                  |    1 +
+ package/dsp-tools/Config.in                        |    7 +++++++
+ package/dsp-tools/dsp-tools.mk                     |   13 +++++++++++++
+ package/multimedia/Config.in                       |    3 +++
+ package/multimedia/gst-dsp/Config.in               |    8 ++++++++
+ package/multimedia/gst-dsp/gst-dsp.mk              |   15 +++++++++++++++
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk        |    2 ++
+ package/multimedia/gst-omapfb/Config.in            |    7 +++++++
+ package/multimedia/gst-omapfb/gst-omapfb.mk        |   15 +++++++++++++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 ++
+ .../gst-plugins-base/gst-plugins-base.mk           |    2 ++
+ .../gst-plugins-good/gst-plugins-good.mk           |    2 ++
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 ++
+ package/multimedia/gstreamer/Config.in             |    6 ------
+ package/multimedia/gstreamer/gstreamer.mk          |   15 ++++++++-------
+ package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
+ 17 files changed, 102 insertions(+), 13 deletions(-)
+ create mode 100644 package/dsp-tools/Config.in
+ create mode 100644 package/dsp-tools/dsp-tools.mk
+ create mode 100644 package/multimedia/gst-dsp/Config.in
+ create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ create mode 100644 package/multimedia/gst-omapfb/Config.in
+ create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
+ create mode 100644 package/multimedia/tidsp-binaries/Config.in
+ create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
 
 -- 
-Bye, Peter Korsgaard
+1.7.4.rc1
