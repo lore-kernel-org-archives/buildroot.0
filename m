@@ -1,40 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Jan 2011 15:41:58 -0300
-Subject: [Buildroot] [PATCH 2/5] pciutils: SHARED make opt goes for install
-	too
-In-Reply-To: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1294339321-5659-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  6 Jan 2011 15:41:57 -0300
+Subject: [Buildroot] [PATCH 1/5] alsa-utils: select alsa-lib
+Message-ID: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If we don't pass SHARED when installing we miss the shared library
-symlinks (libpci.so & libpci.so.3) thus breaking stuff.
+Select alsa-libs instead of depending on them otherwise it's just
+"missing" from the menu.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pciutils/pciutils.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/multimedia/alsa-utils/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 6e16300..782d348 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -39,8 +39,10 @@ endef
- 
- # Ditch install-lib if SHARED is an option in the future
- define PCIUTILS_INSTALL_TARGET_CMDS
--	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
--	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr install-lib
-+	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
-+		SHARED=$(PCIUTILS_SHARED) install
-+	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
-+		SHARED=$(PCIUTILS_SHARED) install-lib
- endef
- 
- $(eval $(call GENTARGETS,package,pciutils))
+diff --git a/package/multimedia/alsa-utils/Config.in b/package/multimedia/alsa-utils/Config.in
+index 3f30c61..b85ff7e 100644
+--- a/package/multimedia/alsa-utils/Config.in
++++ b/package/multimedia/alsa-utils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_ALSA_UTILS
+ 	bool "alsa-utils"
+ 	depends on BR2_LARGEFILE
+-	depends on BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB
+ 	help
+ 	  This package contains the command line utilities for the ALSA
+ 	  project.
 -- 
 1.7.2.2
