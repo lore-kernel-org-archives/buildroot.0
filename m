@@ -1,70 +1,77 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Jan 2011 15:41:59 -0300
-Subject: [Buildroot] [PATCH 3/5] flac: fix powerpc build
+Date: Thu,  6 Jan 2011 15:42:01 -0300
+Subject: [Buildroot] [PATCH 5/5] vorbis-tools: new package
 In-Reply-To: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1294339321-5659-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1294339321-5659-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-flac incorrectly assumes every powerpc around has altivec.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/flac/flac-no-altivec.patch |   28 +++++++++++++++++++++++++
- package/multimedia/flac/flac.mk               |    2 -
- 2 files changed, 28 insertions(+), 2 deletions(-)
- create mode 100644 package/multimedia/flac/flac-no-altivec.patch
+ package/multimedia/Config.in                    |    1 +
+ package/multimedia/vorbis-tools/Config.in       |   12 ++++++++++++
+ package/multimedia/vorbis-tools/vorbis-tools.mk |   20 ++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/vorbis-tools/Config.in
+ create mode 100644 package/multimedia/vorbis-tools/vorbis-tools.mk
 
-diff --git a/package/multimedia/flac/flac-no-altivec.patch b/package/multimedia/flac/flac-no-altivec.patch
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 5c1111d..6d2cbc7 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -32,4 +32,5 @@ source "package/multimedia/festival/Config.in"
+ source "package/multimedia/taglib/Config.in"
+ source "package/multimedia/tremor/Config.in"
+ source "package/multimedia/vlc/Config.in"
++source "package/multimedia/vorbis-tools/Config.in"
+ endmenu
+diff --git a/package/multimedia/vorbis-tools/Config.in b/package/multimedia/vorbis-tools/Config.in
 new file mode 100644
-index 0000000..c6a535b
+index 0000000..6092e01
 --- /dev/null
-+++ b/package/multimedia/flac/flac-no-altivec.patch
-@@ -0,0 +1,28 @@
-+FLAC assumes every powerpc around has altivec ABI which is wrong.
++++ b/package/multimedia/vorbis-tools/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_VORBIS_TOOLS
++	bool "vorbis-tools"
++	select BR2_PACKAGE_LIBAO
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Standalone player, encoder and decoder for Ogg format files.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++	  Works also as a streaming player.
 +
-+diff -Nura flac-1.2.1/src/libFLAC/Makefile.am flac-1.2.1-noaltivec/src/libFLAC/Makefile.am
-+--- flac-1.2.1/src/libFLAC/Makefile.am	2007-09-14 18:06:17.000000000 -0300
-++++ flac-1.2.1-noaltivec/src/libFLAC/Makefile.am	2011-01-06 15:14:36.384242614 -0300
-+@@ -41,7 +41,7 @@
-+ else
-+ # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
-+ #@@@ PPC optimizations temporarily disabled
-+-CPUCFLAGS = -maltivec -mabi=altivec -DFLAC__NO_ASM
-++CPUCFLAGS = -DFLAC__NO_ASM
-+ endif
-+ endif
-+ 
-+diff -Nura flac-1.2.1/src/libFLAC/Makefile.in flac-1.2.1-noaltivec/src/libFLAC/Makefile.in
-+--- flac-1.2.1/src/libFLAC/Makefile.in	2007-09-16 17:05:12.000000000 -0300
-++++ flac-1.2.1-noaltivec/src/libFLAC/Makefile.in	2011-01-06 15:14:50.997545602 -0300
-+@@ -240,7 +240,7 @@
-+ @FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_TRUE at CPUCFLAGS = -faltivec -force_cpusubtype_ALL -DFLAC__NO_ASM
-+ # Linux-gcc for PPC does not have -force_cpusubtype_ALL, it is Darwin-specific
-+ #@@@ PPC optimizations temporarily disabled
-+- at FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_FALSE at CPUCFLAGS = -maltivec -mabi=altivec -DFLAC__NO_ASM
-++ at FLaC__CPU_PPC_TRUE@@FLaC__SYS_DARWIN_FALSE at CPUCFLAGS = -DFLAC__NO_ASM
-+ 
-+ AM_CFLAGS = $(DEBUGCFLAGS) $(CPUCFLAGS) @OGG_CFLAGS@
-+ @FLaC__CPU_PPC_TRUE@@FLaC__NO_ASM_FALSE at ARCH_SUBDIRS = ppc
-diff --git a/package/multimedia/flac/flac.mk b/package/multimedia/flac/flac.mk
-index a11924a..dbaf2e9 100644
---- a/package/multimedia/flac/flac.mk
-+++ b/package/multimedia/flac/flac.mk
-@@ -7,8 +7,6 @@
- FLAC_VERSION = 1.2.1
- FLAC_SOURCE = flac-$(FLAC_VERSION).tar.gz
- FLAC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/flac/
--FLAC_AUTORECONF = NO
--FLAC_INSTALL_TARGET = YES
- FLAC_INSTALL_STAGING = YES
- 
- FLAC_CONF_OPT = \
++	  http://www.vorbis.com/
+diff --git a/package/multimedia/vorbis-tools/vorbis-tools.mk b/package/multimedia/vorbis-tools/vorbis-tools.mk
+new file mode 100644
+index 0000000..6fd6c2a
+--- /dev/null
++++ b/package/multimedia/vorbis-tools/vorbis-tools.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# vorbis-tools
++#
++#############################################################
++
++VORBIS_TOOLS_VERSION = 1.4.0
++VORBIS_TOOLS_SITE = http://downloads.xiph.org/releases/vorbis
++VORBIS_TOOLS_DEPENDENCIES = libao libogg libvorbis libcurl
++VORBIS_TOOLS_CONF_OPT = --program-transform-name=''
++
++ifeq ($(BR2_PACKAGE_FLAC),y)
++VORBIS_TOOLS_DEPENDENCIES += flac
++endif
++
++ifeq ($(BR2_PACKAGE_SPEEX),y)
++VORBIS_TOOLS_DEPENDENCIES += speex
++endif
++
++$(eval $(call AUTOTARGETS,package/multimedia,vorbis-tools))
 -- 
 1.7.2.2
