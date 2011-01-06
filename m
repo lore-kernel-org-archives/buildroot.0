@@ -1,69 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Jan 2011 15:42:00 -0300
-Subject: [Buildroot] [PATCH 4/5] libao: new package
-In-Reply-To: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1294339321-5659-4-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 Jan 2011 18:48:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 3049] binutils prior to 2.21 have a sysroot bug in
+	ld
+In-Reply-To: <bug-3049-163@https.bugs.busybox.net/>
+References: <bug-3049-163@https.bugs.busybox.net/>
+Message-ID: <20110106184855.4820D8B2AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/Config.in       |    1 +
- package/multimedia/libao/Config.in |    7 +++++++
- package/multimedia/libao/libao.mk  |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/libao/Config.in
- create mode 100644 package/multimedia/libao/libao.mk
+https://bugs.busybox.net/show_bug.cgi?id=3049
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index da50dbb..5c1111d 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -10,6 +10,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/libao/Config.in"
- source "package/multimedia/libcdaudio/Config.in"
- source "package/multimedia/libdvdread/Config.in"
- source "package/multimedia/libdvdnav/Config.in"
-diff --git a/package/multimedia/libao/Config.in b/package/multimedia/libao/Config.in
-new file mode 100644
-index 0000000..3c99ab9
---- /dev/null
-+++ b/package/multimedia/libao/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBAO
-+	bool "libao"
-+	help
-+	  Libao is a cross-platform audio library that allows programs
-+	  to output audio using a simple API on a wide variety of platforms.
-+
-+	  http://www.xiph.org/ao/
-diff --git a/package/multimedia/libao/libao.mk b/package/multimedia/libao/libao.mk
-new file mode 100644
-index 0000000..edbada7
---- /dev/null
-+++ b/package/multimedia/libao/libao.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# libao
-+#
-+#############################################################
-+
-+LIBAO_VERSION = 1.0.0
-+LIBAO_SITE = http://downloads.xiph.org/releases/ao
-+LIBAO_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+LIBAO_DEPENDENCIES += alsa-lib
-+endif
-+
-+$(eval $(call AUTOTARGETS,package/multimedia,libao))
+--- Comment #3 from Mike Frysinger <vapier@gentoo.org>  ---
+perhaps you interpreted the "fixed in ubuntu binutils-xxx" as "fixed upstream"
+
 -- 
-1.7.2.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
