@@ -1,43 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Jan 2011 18:17:05 +0100
-Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
- CMake packages
-In-Reply-To: <1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
-References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20110107181705.20654fb0@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Jan 2011 17:36:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 2869] Do not erase source and build directories
+ from the linux kernel build.
+In-Reply-To: <bug-2869-163@https.bugs.busybox.net/>
+References: <bug-2869-163@https.bugs.busybox.net/>
+Message-ID: <20110107173657.2F0B68A301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bjorn,
+https://bugs.busybox.net/show_bug.cgi?id=2869
 
-On Sun, 12 Dec 2010 20:29:12 +0100
-Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+--- Comment #2 from Marcelo Roberto Jimenez <mroberto@cpti.cetuc.puc-rio.br>  ---
+I agree, although this is a method suggested in various places, those links are
+just a convenient way to find where are both the source and build directories
+given just the target directory. In buildroot we know those in advance, so
+there is really no need for the links.
 
-> +# CMake doesn't support having the --sysroot option directly in the
-> +# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
-> +CMAKE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
-> +CMAKE_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
-> +CMAKE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-> +CMAKE_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
+The kernel module is a piece of software made in my work, so there is no big
+deal changing it.
 
-Those definitions should be *outside* the CMAKETARGETS_INNER macro,
-because:
+With the help of the linux-fusion example, it was really easy to set up things.
+Maybe I didn't look at the right places, but I have missed this example
+completely.
 
- 1/ They might be useful even if no package makes use of the
-    CMAKETARGETS infrastructure
+Thanks for your reply, it did help a lot. Please disregard my patch, I consider
+the issue closed.
 
- 2/ They are not package specific, so they have no reason to be inside
-    the macro.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
