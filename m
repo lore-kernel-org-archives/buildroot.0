@@ -1,22 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Jan 2011 18:48:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 3049] binutils prior to 2.21 have a sysroot bug in
-	ld
-In-Reply-To: <bug-3049-163@https.bugs.busybox.net/>
-References: <bug-3049-163@https.bugs.busybox.net/>
-Message-ID: <20110106184855.4820D8B2AE@busybox.osuosl.org>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Thu, 6 Jan 2011 21:08:38 -0600
+Subject: [Buildroot] [PATCH] target/generic: add /dev/ttyAM* device nodes
+Message-ID: <0D753D10438DA54287A00B027084269764C40B3FB8@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3049
+Add ttyAM support for the ARM AMBA serial ports on the Cirrus EP93xx.
 
---- Comment #3 from Mike Frysinger <vapier@gentoo.org>  ---
-perhaps you interpreted the "fixed in ubuntu binutils-xxx" as "fixed upstream"
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+---
+
+diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
+index c054000..15132f9 100644
+--- a/target/generic/device_table.txt
++++ b/target/generic/device_table.txt
+@@ -72,6 +72,7 @@
+ #/dev/ttySA	c	666	0	0	204	5	0	1	3
+ /dev/psaux	c	666	0	0	10	1	0	0	-
+ #/dev/ppp	c	666	0	0	108	0	-	-	-
++/dev/ttyAM	c	666	0	0	204	16	0	1	3
+ /dev/ttyCPM	c	666	0	0	204	46	0	1	4
+ /dev/ttyAMA	c	666	0	0	204	64	0	1	4
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
