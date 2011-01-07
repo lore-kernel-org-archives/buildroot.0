@@ -1,68 +1,51 @@
 From: Henk <henk.vergonet@gmail.com>
-Date: Fri, 7 Jan 2011 13:17:44 +0100
-Subject: [Buildroot] [PATCH 1/2] Add the lm32 target
-In-Reply-To: <mailman.154.1294400356.14141.buildroot@busybox.net>
-References: <mailman.154.1294400356.14141.buildroot@busybox.net>
-Message-ID: <AANLkTimWWxzQ9-kQHeD5bZPNgMURMssN3qETQOCvkBmj@mail.gmail.com>
+Date: Fri, 7 Jan 2011 13:19:09 +0100
+Subject: [Buildroot] [PATCH 2/2] Added some gcc patches to get the lm32
+	toolchain compiled
+In-Reply-To: <AANLkTimivtZi6HyFkkQ9oUcxPwsLBgY_BrVGTRzkXtec@mail.gmail.com>
+References: <AANLkTimivtZi6HyFkkQ9oUcxPwsLBgY_BrVGTRzkXtec@mail.gmail.com>
+Message-ID: <AANLkTikGmUycCESyJrDvw+m5-avNdpbkFMyUt+uHFsjq@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the lm32 target
+Added some gcc patches to get the lm32 toolchain compiled.
 
 Signed-off-by: Henk Vergonet <Henk.Vergonet@gmail.com>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5e28b44..6c725ea 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -127,11 +127,11 @@ config BR2_LINUX_KERNEL_ZIMAGE
-
-?config BR2_LINUX_KERNEL_VMLINUX_BIN
-? ? ? ?bool "vmlinux.bin"
-- ? ? ? depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
-+ ? ? ? depends on BR2_lm32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
-
-?config BR2_LINUX_KERNEL_VMLINUX
-? ? ? ?bool "vmlinux"
-- ? ? ? depends on BR2_mips || BR2_mipsel
-+ ? ? ? depends on BR2_lm32 || BR2_mips || BR2_mipsel
-
-?endchoice
-
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 0774d55..e59bffb 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -16,6 +16,8 @@ config BR2_avr32
-? ? ? ?select BR2_SOFT_FLOAT
-?config BR2_i386
-? ? ? ?bool "i386"
-+config BR2_lm32
-+ ? ? ? bool "lm32"
-?config BR2_m68k
-? ? ? ?bool "m68k"
-? ? ? ?depends on BROKEN # ice in uclibc / inet_ntoa_r
-@@ -461,6 +463,7 @@ config BR2_ARCH
-? ? ? ?default "i686" ? ? ? ? ?if BR2_x86_pentiumpro
-? ? ? ?default "i686" ? ? ? ? ?if BR2_x86_nocona
-? ? ? ?default "i686" ? ? ? ? ?if BR2_x86_core2
-+ ? ? ? default "lm32" ? ? ? ? ?if BR2_lm32
-? ? ? ?default "m68k" ? ? ? ? ?if BR2_m68k
-? ? ? ?default "mips" ? ? ? ? ?if BR2_mips
-? ? ? ?default "mipsel" ? ? ? ?if BR2_mipsel
-@@ -487,9 +490,9 @@ config BR2_ENDIAN
-? ? ? ?string
-? ? ? ?default "LITTLE" if BR2_arm || BR2_i386 || BR2_mipsel || \
-? ? ? ? ? ? ? ? ? ? ? ? ? ?BR2_sh3 || BR2_sh4 || BR2_x86_64 || BR2_sh64
-- ? ? ? default "BIG" ? ?if BR2_armeb || BR2_avr32 || BR2_m68k || BR2_mips || \
-- ? ? ? ? ? ? ? ? ? ? ? ? ? BR2_powerpc || BR2_sh2a_nofpueb || BR2_sh2eb || \
-- ? ? ? ? ? ? ? ? ? ? ? ? ? BR2_sh3eb || BR2_sh4eb || BR2_sparc
-+ ? ? ? default "BIG" ? ?if BR2_armeb || BR2_avr32 || BR2_lm32 || BR2_m68k || \
-+ ? ? ? ? ? ? ? ? ? ? ? ? ? BR2_mips || BR2_powerpc || BR2_sh2a_nofpueb || \
-+ ? ? ? ? ? ? ? ? ? ? ? ? ? BR2_sh2eb || BR2_sh3eb || BR2_sh4eb || BR2_sparc
-
-?config BR2_GCC_TARGET_TUNE
-? ? ? ?string
+diff --git a/toolchain/gcc/4.5.2/105-lm32-fix-linux-uclibc-target.patch
+b/toolchain/gcc/4.5.2/105-lm32-fix-linux-uclibc-target.patch
+new file mode 100644
+index 0000000..ee6ec74
+--- /dev/null
++++ b/toolchain/gcc/4.5.2/105-lm32-fix-linux-uclibc-target.patch
+@@ -0,0 +1,11 @@
++--- gcc-4.5.2/gcc/config.gcc.orig ? ? ?2010-10-09 11:35:53.000000000 +0200
+++++ gcc-4.5.2/gcc/config.gcc ? 2011-01-07 00:12:51.000000000 +0100
++@@ -1527,7 +1527,7 @@
++ ? ? ? tmake_file="${tmake_file} lm32/t-lm32 lm32/t-fprules-softfp
+soft-fp/t-softfp"
++ ? ? ? tmake_file="${tmake_file} t-rtems"
++ ? ? ? ? ?;;
++-lm32-*-uclinux*)
+++lm32-*-uclinux*|lm32-*-linux-uclibc*)
++ ? ? ? ? tm_file="dbxelf.h elfos.h ${tm_file} linux.h lm32/uclinux-elf.h"
++ ? ? ? tmake_file="${tmake_file} lm32/t-lm32 lm32/t-fprules-softfp
+soft-fp/t-softfp"
++ ? ? ? ? ;;
+diff --git a/toolchain/gcc/4.5.2/110-lm32-fix-bug-46692.patch
+b/toolchain/gcc/4.5.2/110-lm32-fix-bug-46692.patch
+new file mode 100644
+index 0000000..a67f3e1
+--- /dev/null
++++ b/toolchain/gcc/4.5.2/110-lm32-fix-bug-46692.patch
+@@ -0,0 +1,5 @@
++--- gcc-4.5.2/gcc/config/lm32/t-lm32.orig ? ? ?2010-03-30
+12:26:24.000000000 +0200
+++++ gcc-4.5.2/gcc/config/lm32/t-lm32 ? 2010-11-28 12:42:30.047795004 +0100
++@@ -1,1 +1,1 @@
++-MULTILIB_OPTIONS = mmultiply-enabled mbarrel-shift-enabled
+++MULTILIB_OPTIONS = mbarrel-shift-enabled mmultiply-enabled
+mdivide-enabled msign-extend-enabled
