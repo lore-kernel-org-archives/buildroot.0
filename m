@@ -1,35 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Jan 2011 17:36:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 2869] Do not erase source and build directories
- from the linux kernel build.
-In-Reply-To: <bug-2869-163@https.bugs.busybox.net/>
-References: <bug-2869-163@https.bugs.busybox.net/>
-Message-ID: <20110107173657.2F0B68A301@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  7 Jan 2011 17:12:50 -0300
+Subject: [Buildroot] [PATCH 01/13] e2fsprogs: bump to 1.41.14 and fixup
+Message-ID: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2869
+Bump e2fsprogs to version 1.41.14
 
---- Comment #2 from Marcelo Roberto Jimenez <mroberto@cpti.cetuc.puc-rio.br>  ---
-I agree, although this is a method suggested in various places, those links are
-just a convenient way to find where are both the source and build directories
-given just the target directory. In buildroot we know those in advance, so
-there is really no need for the links.
+Also export libblkid properly for util-linux to use.
 
-The kernel module is a piece of software made in my work, so there is no big
-deal changing it.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/e2fsprogs/e2fsprogs.mk |   20 +++++++++++++-------
+ 1 files changed, 13 insertions(+), 7 deletions(-)
 
-With the help of the linux-fusion example, it was really easy to set up things.
-Maybe I didn't look at the right places, but I have missed this example
-completely.
-
-Thanks for your reply, it did help a lot. Please disregard my patch, I consider
-the issue closed.
-
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index f525804..13c94ba 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -3,15 +3,10 @@
+ # e2fsprogs
+ #
+ #############################################################
+-E2FSPROGS_VERSION:=1.41.12
+-E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
+-E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+-
+-E2FSPROGS_AUTORECONF = NO
+-E2FSPROGS_LIBTOOL_PATCH = NO
+ 
++E2FSPROGS_VERSION = 1.41.14
++E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+ E2FSPROGS_INSTALL_STAGING = YES
+-E2FSPROGS_INSTALL_TARGET = YES
+ 
+ E2FSPROGS_CONF_OPT = \
+ 	--disable-tls \
+@@ -118,5 +113,16 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBUUID),y)
+ E2FSPROGS_POST_INSTALL_STAGING_HOOKS += E2FSPROGS_STAGING_LIBUUID_INSTALL
+ endif
+ 
++define E2FSPROGS_STAGING_LIBBLKID_INSTALL
++	install -D $(@D)/lib/blkid/blkid.h \
++		$(STAGING_DIR)/usr/include/blkid/blkid.h
++	install -D $(@D)/lib/blkid/blkid_types.h \
++		$(STAGING_DIR)/usr/include/blkid/blkid_types.h
++endef
++
++ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBBLKID),y)
++E2FSPROGS_POST_INSTALL_STAGING_HOOKS += E2FSPROGS_STAGING_LIBBLKID_INSTALL
++endif
++
+ $(eval $(call AUTOTARGETS,package,e2fsprogs))
+ $(eval $(call AUTOTARGETS,package,e2fsprogs,host))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.2.2
