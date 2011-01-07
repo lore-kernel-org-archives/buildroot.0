@@ -1,22 +1,25 @@
-From: Henk <henk.vergonet@gmail.com>
-Date: Fri, 7 Jan 2011 13:20:03 +0100
-Subject: [Buildroot] lm32 target
-In-Reply-To: <AANLkTimcEVnV=-1Ow5opvfO6WTL2d1uap6BTJoEO3WNn@mail.gmail.com>
-References: <AANLkTimcEVnV=-1Ow5opvfO6WTL2d1uap6BTJoEO3WNn@mail.gmail.com>
-Message-ID: <AANLkTi=BuOWjj8kw1YFEDzWbNfAUe-aMdoKEaWn8-CE1@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Jan 2011 12:24:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 3049] binutils have a sysroot bug in ld
+In-Reply-To: <bug-3049-163@https.bugs.busybox.net/>
+References: <bug-3049-163@https.bugs.busybox.net/>
+Message-ID: <20110107122439.AD9938A301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=3049
 
-I am intending to get buildroot support in for the lm32 target. This
-is very preliminary of course and I am not an expert in uclibc or
-buildroot.
-Feedback is highly appreciated and needed will i be able to succeed in my quest.
+Rick <rick@sloservers.com> changed:
 
-Thank you all for supporting buildroot!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|binutils prior to 2.21 have |binutils have a sysroot bug
+                   |a sysroot bug in ld         |in ld
 
-Henk
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
