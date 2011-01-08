@@ -1,12 +1,12 @@
 From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 9 Jan 2011 00:42:42 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
- in $(O)
-In-Reply-To: <20110107181536.53713c9a@surf>
+Date: Sun, 9 Jan 2011 00:44:19 +0100
+Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
+	CMake packages
+In-Reply-To: <20110107181705.20654fb0@surf>
 References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
-	<20110107181536.53713c9a@surf>
-Message-ID: <AANLkTimTzc3zxYPX40UjRqcGJ5-L2D9Y7-arPMdW9L9r@mail.gmail.com>
+	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
+	<20110107181705.20654fb0@surf>
+Message-ID: <AANLkTikjXhXn8SXi1wwjWDXzqQKYZD2er_+JpTs2AYXZ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,49 +18,26 @@ Hi Thomas,
 2011/1/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Hello Bjorn,
 >
-> I finally had the time to try this, and got some issues, fixed by the
-> below patch.
->
-> On Sun, 12 Dec 2010 20:29:14 +0100
+> On Sun, 12 Dec 2010 20:29:12 +0100
 > Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 >
->> +$(O)/toolchainfile.cmake:
->> + ? ? @echo -en "\
->> + ? ? set(CMAKE_SYSTEM_NAME Linux)\n\
->> + ? ? set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
->> + ? ? set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
->> + ? ? set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
->> + ? ? set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
->> + ? ? set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
->> + ? ? set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
->> + ? ? " > $@
->>
->> ?.PHONY: all world dirs clean distclean source outputmakefile \
->> ? ? ? $(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+>> +# CMake doesn't support having the --sysroot option directly in the
+>> +# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
+>> +CMAKE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
+>> +CMAKE_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
+>> +CMAKE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+>> +CMAKE_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
 >
-> diff --git a/Makefile b/Makefile
-> index 831b424..994dd52 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -375,8 +375,11 @@ world: prepare dependencies dirs $(BASE_TARGETS)
-> $(TARGETS_ALL) $(O)/toolchainfile.cmake:
-> ? ? ? ?@echo -en "\
-> ? ? ? ?set(CMAKE_SYSTEM_NAME Linux)\n\
-> + ? ? ? set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
-> ? ? ? ?set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
-> ? ? ? ?set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
-> + ? ? ? set(CMAKE_C_FLAGS \"$(CMAKE_TARGET_CFLAGS)\")\n\
-> + ? ? ? set(CMAKE_CXX_FLAGS \"$(CMAKE_TARGET_CXXFLAGS)\")\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+> Those definitions should be *outside* the CMAKETARGETS_INNER macro,
+> because:
 >
-> With those, I can successfully use the CMake toolchain file to build a
-> Qt application against the Buildroot libraries.
+> ?1/ They might be useful even if no package makes use of the
+> ? ?CMAKETARGETS infrastructure
 >
-> If you agree, could you merge those modifications into your patch ?
+> ?2/ They are not package specific, so they have no reason to be inside
+> ? ?the macro.
 
-Yes, I will merge it. Thanks for testing and patching!
+You are right. I will fix it in the next version of the patch series.
 
 Best regards,
 Bj?rn Forsman
