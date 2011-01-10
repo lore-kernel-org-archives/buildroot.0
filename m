@@ -1,12 +1,12 @@
 From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 10 Jan 2011 19:30:16 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
- in $(O)
-In-Reply-To: <20110110185013.331f5af1@surf>
+Date: Mon, 10 Jan 2011 21:14:20 +0100
+Subject: [Buildroot] [PATCH 1/4] Add CMAKETARGETS infrastructure for
+	CMake packages
+In-Reply-To: <20110110185127.65bdb2e2@surf>
 References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
-	<20110107181536.53713c9a@surf> <20110110185013.331f5af1@surf>
-Message-ID: <AANLkTimq86Kw6oCyacEhwE+YpcQa4H8etr49hCAyNz4y@mail.gmail.com>
+	<1292182155-29576-2-git-send-email-bjorn.forsman@gmail.com>
+	<20110110185127.65bdb2e2@surf>
+Message-ID: <AANLkTi=tqJhKvj8qpn-fyzC+r-VcdY3_9C4uSpzsJpBN@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,59 +15,87 @@ To: buildroot@busybox.net
 
 Hi,
 
-On 10 January 2011 18:50, Thomas Petazzoni
+On 10 January 2011 18:51, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Hello Bjorn,
+> Hello,
 >
-> On Fri, 7 Jan 2011 18:15:36 +0100
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> On Sun, 12 Dec 2010 20:29:12 +0100
+> Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 >
->> diff --git a/Makefile b/Makefile
->> index 831b424..994dd52 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -375,8 +375,11 @@ world: prepare dependencies dirs $(BASE_TARGETS)
->> $(TARGETS_ALL) $(O)/toolchainfile.cmake:
->> ? ? ? ? @echo -en "\
->> ? ? ? ? set(CMAKE_SYSTEM_NAME Linux)\n\
->> + ? ? ? set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
->> ? ? ? ? set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
->> ? ? ? ? set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
->> + ? ? ? set(CMAKE_C_FLAGS \"$(CMAKE_TARGET_CFLAGS)\")\n\
->> + ? ? ? set(CMAKE_CXX_FLAGS \"$(CMAKE_TARGET_CXXFLAGS)\")\n\
->> ? ? ? ? set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
->> ? ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
->> ? ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
->>
->> With those, I can successfully use the CMake toolchain file to build a
->> Qt application against the Buildroot libraries.
->>
->> If you agree, could you merge those modifications into your patch ?
+>> + ? ? ? ? ? ? -DCMAKE_SYSTEM_NAME:STRING="Linux" \
+>> + ? ? ? ? ? ? -DCMAKE_C_COMPILER:FILEPATH="$$(CMAKE_TARGET_CC)" \
+>> + ? ? ? ? ? ? -DCMAKE_CXX_COMPILER:FILEPATH="$$(CMAKE_TARGET_CXX)" \
+>> + ? ? ? ? ? ? -DCMAKE_C_FLAGS:STRING="$$(CMAKE_TARGET_CFLAGS)" \
+>> + ? ? ? ? ? ? -DCMAKE_CXX_FLAGS:STRING="$$(CMAKE_TARGET_CXXFLAGS)" \
+>> + ? ? ? ? ? ? -DCMAKE_EXE_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+>> + ? ? ? ? ? ? -DCMAKE_MODULE_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+>> + ? ? ? ? ? ? -DCMAKE_SHARED_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+>> + ? ? ? ? ? ? -DCMAKE_FIND_ROOT_PATH:PATH="$$(STAGING_DIR)" \
+>> + ? ? ? ? ? ? -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM:STRING="NEVER" \
+>> + ? ? ? ? ? ? -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY:STRING="ONLY" \
+>> + ? ? ? ? ? ? -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE:STRING="ONLY" \
+>> + ? ? ? ? ? ? -DCMAKE_INSTALL_PREFIX:PATH="/usr" \
 >
-> It'd be great if you could also add
->
-> ? ? ? ?set(CMAKE_INSTALL_SO_NO_EXE 0)
->
-> This is related to the executable permission of the shared libraries
-> installed by CMake. As explained in Modules/Platform/Linux.cmake, the
-> behaviour of CMake depends on the host system: on Debian systems, it
-> installs shared libraries without executable permissions, and on Fedora
-> systems it installs shared libraries with executable permissions.
->
-> In Buildroot, all shared libraries are installed with executable
-> permissions, and this fact is used to support stripping of shared
-> libraries in the target-finalize target of the main Makefile.
->
-> Therefore, we should not rely on CMake default behaviour, and instead
-> tell CMake what to do: set the executable permission on the installed
-> shared libraries. Which is what is done by setting the above variable.
->
-> For reference, this issue has also been raised on OpenEmbedded:
-> http://www.mail-archive.com/openembedded-devel at lists.openembedded.org/msg04736.html.
+> We lack CMAKE_PROGRAM_PATH and CMAKE_INSTALL_SO_NO_EXE in this list. As
+> pointed out by others, it'd be great if the infrastructure could use
+> the generated CMake toolchain file.
 
-Yes, I'll add that, thanks! I guess it only matters for the target build and
-not native build (we don't strip HOST_DIR do we?), but I think I'll add
-it to native build anyway, for consistency.
+Yes, next version uses the toolchain-file internally. Regarding
+CMAKE_PROGRAM_PATH, I'm adding that for target configuration. But for host
+configuration I'm trying to use this instead:
+
+CMAKE_FIND_ROOT_PATH=$(HOST_DIR)
+CMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH
+CMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH
+CMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH
+
+Setting CMAKE_PROGRAM_PATH only affects FIND_PROGRAM but the above affects
+all of FIND_{PROGRAM,LIBRARY,PATH,FILE} which I think is the right thing
+here. What do you think?
+
+> Could you update your patch set and resend ?
+
+Yes, it's on my TODO list :-) But there are some issues I'm still working
+on.
+
+I've been experimenting with removing the following flags:
+
+-DCMAKE_EXE_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+-DCMAKE_MODULE_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+-DCMAKE_SHARED_LINKER_FLAGS:STRING="$$(TARGET_LDFLAGS)" \
+
+as I feel it is not the "CMake"-way of doing it. I mean that
+CMAKE_FIND_ROOT_PATH and friends should be enough and that there should be
+no need to "micro manage" CMake. However, the only package I've got for
+testing which has any sort of external dependency is the cdrkit package and
+it fails to build without explicitly adding -Lpath/to/lib to the command
+line (which the above does). cdrkit doesn't use FIND_LIBRARY, it just adds
+libs as dependencies without looking for them and assumes they will be
+found during linking. This must be wrong of cdrkit.
+
+Maybe the linker flags should go only in cdrkit.mk and not in CMAKETARGETS?
+A part of me feels that having these extra flags in the framework may hide
+bugs in a package CMakeLists.txt file...
+
+If it matters, OE doesn't have linker flags to its cmake.bbclass.
+
+Oh, and speaking of OE (thanks for reminding me of their cmake.bbclass),
+they have some interresting settings:
+
+  echo "set( CMAKE_FIND_ROOT_PATH ${STAGING_DIR_HOST}
+${STAGING_DIR_NATIVE}
+${STAGING_DIR_NATIVE}${prefix_native}/${BASE_PACKAGE_ARCH} )" >>
+${WORKDIR}/toolchain.cmake
+  echo "set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY )" >>
+${WORKDIR}/toolchain.cmake
+  echo "set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )" >>
+${WORKDIR}/toolchain.cmake
+  echo "set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )" >>
+${WORKDIR}/toolchain.cmake
+
+And they disable ccache. Maybe we should too, as there are issues with
+ccache in the current CMAKETARGETS implementation. Or we could symlink
+gcc->ccache which I think should fix the issue.
 
 Best regards,
 Bj?rn Forsman
