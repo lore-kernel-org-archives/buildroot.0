@@ -1,26 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Jan 2011 14:57:08 +0100
-Subject: [Buildroot] [PATCH] pciutils: SHARED make opt goes for install
-	too
-In-Reply-To: <1294667243-14845-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Mon, 10 Jan 2011 10:47:23 -0300")
-References: <1294667243-14845-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877hecg8uj.fsf@macbook.be.48ers.dk>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 10 Jan 2011 09:28:38 -0500
+Subject: [Buildroot] Pull request buildroot.git (vapier branch)
+Message-ID: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+The following changes since commit 54942318f93b12f8166f110905ec7df6e3279a74:
 
- Gustavo> If we don't pass SHARED when installing we miss the shared library
- Gustavo> symlinks (libpci.so & libpci.so.3)
- Gustavo> On internal and external toolchains that have a proper cross ldconfig
- Gustavo> this isn't a problem but it breaks on toolchains that lack a cross ldconfig to
- Gustavo> automagically make the symlinks.
+  pciutils: SHARED make opt goes for install too (2011-01-10 14:52:02 +0100)
 
-Committed, thanks.
+are available in the git repository at:
+  git://sources.blackfin.uclinux.org/git/users/vapier/buildroot.git vapier
 
--- 
-Bye, Peter Korsgaard
+Mike Frysinger (7):
+      busybox: unify duplicated build steps
+      busybox: let buildroot handle stripping
+      toolchain: add a USE_MMU build option
+      portmap: add nommu support
+      portmap: respect target CFLAGS
+      portmap: fix clean target to actually clean
+      tcpdump: add patch for nommu systems
+
+ package/busybox/busybox.mk                         |   30 ++---
+ ...0-0001-README-fix-typo-in-tcp-wrapper-doc.patch |   26 ++++
+ ...0002-NO_PIE-make-PIE-support-controllable.patch |   53 ++++++++
+ ...K-control-usage-of-fork-for-nommu-systems.patch |  110 +++++++++++++++++
+ ...ERROR-control-overriding-of-perror-symbol.patch |   46 +++++++
+ package/portmap/portmap.mk                         |   12 ++-
+ package/tcpdump/tcpdump-4.1.1-vfork.patch          |  128 ++++++++++++++++++++
+ toolchain/helpers.mk                               |    2 +
+ toolchain/toolchain-common.in                      |    7 +
+ 9 files changed, 396 insertions(+), 18 deletions(-)
+ create mode 100644 package/portmap/portmap-6.0-0001-README-fix-typo-in-tcp-wrapper-doc.patch
+ create mode 100644 package/portmap/portmap-6.0-0002-NO_PIE-make-PIE-support-controllable.patch
+ create mode 100644 package/portmap/portmap-6.0-0003-NO_FORK-control-usage-of-fork-for-nommu-systems.patch
+ create mode 100644 package/portmap/portmap-6.0-0004-NO_PERROR-control-overriding-of-perror-symbol.patch
+ create mode 100644 package/tcpdump/tcpdump-4.1.1-vfork.patch
