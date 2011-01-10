@@ -1,40 +1,33 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 10 Jan 2011 09:28:40 -0500
-Subject: [Buildroot] [PATCH 2/7] busybox: let buildroot handle stripping
+Date: Mon, 10 Jan 2011 09:28:43 -0500
+Subject: [Buildroot] [PATCH 5/7] portmap: respect target CFLAGS
 In-Reply-To: <1294669725-5379-1-git-send-email-vapier@gentoo.org>
 References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
 	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1294669725-5379-2-git-send-email-vapier@gentoo.org>
+Message-ID: <1294669725-5379-5-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some ABI's (like FLAT), we cannot strip busybox as the file format
-does not support it and strip will abort with errors like 'File format
-not recognized'.  Since the toplevel already takes care of stripping
-things, simply disable the busybox step.
-
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/busybox/busybox.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/portmap/portmap.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 342819a..38897f7 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -21,7 +21,8 @@ BUSYBOX_MAKE_OPTS = \
- 	PREFIX="$(TARGET_DIR)" \
- 	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	CONFIG_PREFIX="$(TARGET_DIR)"
-+	CONFIG_PREFIX="$(TARGET_DIR)" \
-+	SKIP_STRIP=y
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index 4a5fe62..bebafce 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -15,6 +15,7 @@ PORTMAP_FLAGS += NO_FORK=1
+ endif
  
- ifndef BUSYBOX_CONFIG_FILE
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+ define PORTMAP_BUILD_CMDS
++	CFLAGS="$(TARGET_CFLAGS)" \
+ 	$(MAKE) CC="$(TARGET_CC)" -C $(@D) $(PORTMAP_FLAGS)
+ endef
+ 
 -- 
 1.7.4.rc1
