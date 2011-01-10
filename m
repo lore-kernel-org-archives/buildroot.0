@@ -1,33 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Jan 2011 10:15:40 -0300
-Subject: [Buildroot] [PATCH 2/5] pciutils: SHARED make opt goes for
-	install too
-In-Reply-To: <87bp3ogaxw.fsf@macbook.be.48ers.dk>
-References: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>	<1294339321-5659-2-git-send-email-gustavo@zacarias.com.ar>
-	<87bp3ogaxw.fsf@macbook.be.48ers.dk>
-Message-ID: <4D2B067C.5090603@zacarias.com.ar>
+Date: Mon, 10 Jan 2011 10:47:23 -0300
+Subject: [Buildroot] [PATCH] pciutils: SHARED make opt goes for install too
+Message-ID: <1294667243-14845-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/10/11 10:11, Peter Korsgaard wrote:
+If we don't pass SHARED when installing we miss the shared library
+symlinks (libpci.so & libpci.so.3)
+On internal and external toolchains that have a proper cross ldconfig
+this isn't a problem but it breaks on toolchains that lack a cross ldconfig to
+automagically make the symlinks.
 
->  Gustavo> If we don't pass SHARED when installing we miss the shared library
->  Gustavo> symlinks (libpci.so & libpci.so.3) thus breaking stuff.
-> 
-> Really? It works here:
-> 
->>>> pciutils 3.1.7 Installing to target
-> ..
-> /usr/bin/make -j2 BUILDDIR=/home/peko/source/buildroot/output3/build/pciutils-3.1.7 -C /home/peko/source/buildroot/output3/build/pciutils-3.1.7 PREFIX=/home/peko/source/buildroot/output3/target/usr install-lib
-> /usr/bin/make -C lib all
-> make[3]: Nothing to be done for `all'.
-> install -d -m 755 /home/peko/source/buildroot/output3/target/usr/include/pci /home/peko/source/buildroot/output3/target/usr/lib /home/peko/source/buildroot/output3/target/usr/lib/pkgconfig
-> install -c -m 644 lib/config.h lib/header.h lib/pci.h lib/types.h /home/peko/source/buildroot/output3/target/usr/include/pci
-> install -c -m 644 lib/libpci.so.3.1.7 /home/peko/source/buildroot/output3/target/usr/lib
-> install -c -m 644 lib/libpci.pc /home/peko/source/buildroot/output3/target/usr/lib/pkgconfig
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/pciutils/pciutils.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Oh but you're missing libpci.so and libpci.so.3
-See the Makefile, lines 109-113 and 120-122...
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 6e16300..782d348 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -39,8 +39,10 @@ endef
+ 
+ # Ditch install-lib if SHARED is an option in the future
+ define PCIUTILS_INSTALL_TARGET_CMDS
+-	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
+-	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr install-lib
++	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
++		SHARED=$(PCIUTILS_SHARED) install
++	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
++		SHARED=$(PCIUTILS_SHARED) install-lib
+ endef
+ 
+ $(eval $(call GENTARGETS,package,pciutils))
+-- 
+1.7.3.4
