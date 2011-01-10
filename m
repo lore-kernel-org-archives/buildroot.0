@@ -1,156 +1,40 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 10 Jan 2011 09:28:45 -0500
-Subject: [Buildroot] [PATCH 7/7] tcpdump: add patch for nommu systems
+Date: Mon, 10 Jan 2011 09:28:40 -0500
+Subject: [Buildroot] [PATCH 2/7] busybox: let buildroot handle stripping
 In-Reply-To: <1294669725-5379-1-git-send-email-vapier@gentoo.org>
 References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
 	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1294669725-5379-7-git-send-email-vapier@gentoo.org>
+Message-ID: <1294669725-5379-2-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For some ABI's (like FLAT), we cannot strip busybox as the file format
+does not support it and strip will abort with errors like 'File format
+not recognized'.  Since the toplevel already takes care of stripping
+things, simply disable the busybox step.
+
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/tcpdump/tcpdump-4.1.1-vfork.patch |  128 +++++++++++++++++++++++++++++
- 1 files changed, 128 insertions(+), 0 deletions(-)
- create mode 100644 package/tcpdump/tcpdump-4.1.1-vfork.patch
+ package/busybox/busybox.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump-4.1.1-vfork.patch b/package/tcpdump/tcpdump-4.1.1-vfork.patch
-new file mode 100644
-index 0000000..a6725e6
---- /dev/null
-+++ b/package/tcpdump/tcpdump-4.1.1-vfork.patch
-@@ -0,0 +1,128 @@
-+https://sourceforge.net/tracker/?func=detail&aid=3120897&group_id=53066&atid=469575
-+
-+From 6f8927c609d1f986a45010b7acae0eb570668642 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Sat, 27 Nov 2010 17:18:05 -0500
-+Subject: [PATCH] add support for nommu systems
-+
-+Rather than hardcode the WIN32 define, add proper fork checks to the
-+configure script and check those.  This fixes building for nommu systems
-+which lack the fork function.
-+
-+While we're here though, add support for this functionality via vfork
-+so that it does work on nommu systems.  And fix an old bug where we
-+exit properly in the forked child when the exec failed instead of just
-+returning to the calling code (which isn't expecting it).
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+
-+--- tcpdump-4.0.0/config.h.in
-++++ tcpdump-4.0.0/config.h.in
-+@@ -151,6 +151,9 @@
-+ /* Define to 1 if you have the <fcntl.h> header file. */
-+ #undef HAVE_FCNTL_H
-+ 
-++/* Define to 1 if you have the `fork' function. */
-++#undef HAVE_FORK
-++
-+ /* Define to 1 if you have the `getnameinfo' function. */
-+ #undef HAVE_GETNAMEINFO
-+ 
-+@@ -274,6 +277,9 @@
-+ /* Define to 1 if you have the <unistd.h> header file. */
-+ #undef HAVE_UNISTD_H
-+ 
-++/* Define to 1 if you have the `vfork' function. */
-++#undef HAVE_VFORK
-++
-+ /* Define to 1 if you have the `vfprintf' function. */
-+ #undef HAVE_VFPRINTF
-+ 
-+--- tcpdump-4.0.0/configure
-++++ tcpdump-4.0.0/configure
-+@@ -7976,7 +7976,7 @@ done
-+ 
-+ 
-+ 
-+-for ac_func in strftime
-++for ac_func in fork vfork strftime
-+ do
-+ as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-+ { echo "$as_me:$LINENO: checking for $ac_func" >&5
-+diff --git a/tcpdump.c b/tcpdump.c
-+index c8da36b..abf3e69 100644
-+--- a/tcpdump.c
-++++ b/tcpdump.c
-+@@ -1250,8 +1250,10 @@ main(int argc, char **argv)
-+ 	(void)setsignal(SIGPIPE, cleanup);
-+ 	(void)setsignal(SIGTERM, cleanup);
-+ 	(void)setsignal(SIGINT, cleanup);
-+-	(void)setsignal(SIGCHLD, child_cleanup);
-+ #endif /* WIN32 */
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-++	(void)setsignal(SIGCHLD, child_cleanup);
-++#endif
-+ 	/* Cooperate with nohup(1) */
-+ #ifndef WIN32	
-+ 	if ((oldhandler = setsignal(SIGHUP, cleanup)) != SIG_DFL)
-+@@ -1464,13 +1466,13 @@ cleanup(int signo _U_)
-+   On windows, we do not use a fork, so we do not care less about
-+   waiting a child processes to die
-+  */
-+-#ifndef WIN32
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-+ static RETSIGTYPE
-+ child_cleanup(int signo _U_)
-+ {
-+   wait(NULL);
-+ }
-+-#endif /* WIN32 */
-++#endif /* HAVE_FORK && HAVE_VFORK */
-+ 
-+ static void
-+ info(register int verbose)
-+@@ -1514,11 +1516,15 @@ info(register int verbose)
-+ 	infoprint = 0;
-+ }
-+ 
-+-#ifndef WIN32
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-+ static void
-+ compress_savefile(const char *filename)
-+ {
-++# ifdef HAVE_FORK
-+ 	if (fork())
-++# else
-++	if (vfork())
-++# endif
-+ 		return;
-+ 	/*
-+ 	 * Set to lowest priority so that this doesn't disturb the capture
-+@@ -1534,15 +1540,20 @@ compress_savefile(const char *filename)
-+ 			zflag,
-+ 			filename,
-+ 			strerror(errno));
-++# ifdef HAVE_FORK
-++	exit(1);
-++# else
-++	_exit(1);
-++# endif
-+ }
-+-#else  /* WIN32 */
-++#else  /* HAVE_FORK && HAVE_VFORK */
-+ static void
-+ compress_savefile(const char *filename)
-+ {
-+ 	fprintf(stderr,
-+-		"compress_savefile failed. Functionality not implemented under windows\n");
-++		"compress_savefile failed. Functionality not implemented under your system\n");
-+ }
-+-#endif /* WIN32 */
-++#endif /* HAVE_FORK && HAVE_VFORK */
-+ 
-+ static void
-+ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
-+-- 
-+1.7.3.1
-+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 342819a..38897f7 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -21,7 +21,8 @@ BUSYBOX_MAKE_OPTS = \
+ 	PREFIX="$(TARGET_DIR)" \
+ 	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+-	CONFIG_PREFIX="$(TARGET_DIR)"
++	CONFIG_PREFIX="$(TARGET_DIR)" \
++	SKIP_STRIP=y
+ 
+ ifndef BUSYBOX_CONFIG_FILE
+ 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
 -- 
 1.7.4.rc1
