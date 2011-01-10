@@ -1,63 +1,88 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 10 Jan 2011 09:28:41 -0500
-Subject: [Buildroot] [PATCH 3/7] toolchain: add a USE_MMU build option
-In-Reply-To: <1294669725-5379-1-git-send-email-vapier@gentoo.org>
+Date: Mon, 10 Jan 2011 09:28:39 -0500
+Subject: [Buildroot] [PATCH 1/7] busybox: unify duplicated build steps
+In-Reply-To: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
 References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1294669725-5379-3-git-send-email-vapier@gentoo.org>
+Message-ID: <1294669725-5379-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages need to know whether the MMU is in play, so add a toolchain
-option to expose the feature to them.
+This does set a few more vars in some steps that weren't set before, but
+they should be harmless in the contexts in question.  And the resulting
+save in duplication is nice.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- toolchain/helpers.mk          |    2 ++
- toolchain/toolchain-common.in |    7 +++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |   29 ++++++++++++-----------------
+ 1 files changed, 12 insertions(+), 17 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index eb9d742..db7c7f1 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -146,6 +146,7 @@ check_glibc = \
- 	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
- 	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
- 	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
-+	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
- 	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
- 	$(call check_glibc_feature,BR2_PROGRAM_INVOCATION,Program invocation support)
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 8bff1a6..342819a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -15,6 +15,13 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
++BUSYBOX_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	ARCH=$(KERNEL_ARCH) \
++	PREFIX="$(TARGET_DIR)" \
++	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	CONFIG_PREFIX="$(TARGET_DIR)"
  
-@@ -187,6 +188,7 @@ check_uclibc = \
- 		exit -1; \
- 	fi; \
- 	UCLIBC_CONFIG_FILE=$${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; \
-+	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index bdc6e76..f53f630 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -66,6 +66,13 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- 	bool
- 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ ifndef BUSYBOX_CONFIG_FILE
+ 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+@@ -121,16 +128,11 @@ define BUSYBOX_CONFIGURE_CMDS
+ endef
  
-+config BR2_USE_MMU
-+	bool "Enable MMU support"
-+	default y
-+	help
-+	  If your target has a MMU, you should say Y here.  If you
-+	  are unsure, just say Y.
-+
- config BR2_PREFER_SOFT_FLOAT
- 	bool
- 	default y if BR2_arm || BR2_armeb || BR2_avr32 || BR2_mips || BR2_mipsel
+ define BUSYBOX_BUILD_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define BUSYBOX_INSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) install
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
+ 	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+ 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+@@ -138,24 +140,17 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ endef
+ 
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) uninstall
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) uninstall
+ endef
+ 
+ define BUSYBOX_CLEAN_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" ARCH=$(KERNEL_ARCH) \
+-		PREFIX="$(TARGET_DIR)" EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
+-		CROSS_COMPILE="$(TARGET_CROSS)" CONFIG_PREFIX="$(TARGET_DIR)" \
+-		-C $(@D) clean
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) clean
+ endef
+ 
+ $(eval $(call GENTARGETS,package,busybox))
+ 
+ busybox-menuconfig:	$(BUSYBOX_DIR)/.stamp_extracted
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) ARCH=$(KERNEL_ARCH) \
+-		CROSS_COMPILE="$(TARGET_CROSS)" -C $(BUSYBOX_DIR) menuconfig
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) menuconfig
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
 -- 
 1.7.4.rc1
