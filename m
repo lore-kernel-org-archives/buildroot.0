@@ -1,307 +1,249 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 10 Jan 2011 09:28:42 -0500
-Subject: [Buildroot] [PATCH 4/7] portmap: add nommu support
-In-Reply-To: <1294669725-5379-1-git-send-email-vapier@gentoo.org>
-References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-Message-ID: <1294669725-5379-4-git-send-email-vapier@gentoo.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Jan 2011 14:41:22 -0300
+Subject: [Buildroot] [PATCH 1/4] busybox: add/update 1.18.1 fixes for hush,
+	mkswap, modprobe, tftp and procps
+Message-ID: <1294681285-1205-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...0-0001-README-fix-typo-in-tcp-wrapper-doc.patch |   26 +++++
- ...0002-NO_PIE-make-PIE-support-controllable.patch |   53 ++++++++++
- ...K-control-usage-of-fork-for-nommu-systems.patch |  110 ++++++++++++++++++++
- ...ERROR-control-overriding-of-perror-symbol.patch |   46 ++++++++
- package/portmap/portmap.mk                         |    7 +-
- 5 files changed, 241 insertions(+), 1 deletions(-)
- create mode 100644 package/portmap/portmap-6.0-0001-README-fix-typo-in-tcp-wrapper-doc.patch
- create mode 100644 package/portmap/portmap-6.0-0002-NO_PIE-make-PIE-support-controllable.patch
- create mode 100644 package/portmap/portmap-6.0-0003-NO_FORK-control-usage-of-fork-for-nommu-systems.patch
- create mode 100644 package/portmap/portmap-6.0-0004-NO_PERROR-control-overriding-of-perror-symbol.patch
+ .../busybox-1.18.1/busybox-1.18.1-hush.patch       |   28 ++++++--
+ .../busybox-1.18.1/busybox-1.18.1-mkswap.patch     |   12 +++
+ .../busybox-1.18.1-modprobe-small.patch            |   21 ++++++
+ .../busybox-1.18.1/busybox-1.18.1-tftp.patch       |   72 ++++++++++++++++++++
+ .../busybox-1.18.1/busybox-1.18.1-warning.patch    |   28 ++++++++
+ 5 files changed, 156 insertions(+), 5 deletions(-)
+ create mode 100644 package/busybox/busybox-1.18.1/busybox-1.18.1-mkswap.patch
+ create mode 100644 package/busybox/busybox-1.18.1/busybox-1.18.1-modprobe-small.patch
+ create mode 100644 package/busybox/busybox-1.18.1/busybox-1.18.1-tftp.patch
+ create mode 100644 package/busybox/busybox-1.18.1/busybox-1.18.1-warning.patch
 
-diff --git a/package/portmap/portmap-6.0-0001-README-fix-typo-in-tcp-wrapper-doc.patch b/package/portmap/portmap-6.0-0001-README-fix-typo-in-tcp-wrapper-doc.patch
+diff --git a/package/busybox/busybox-1.18.1/busybox-1.18.1-hush.patch b/package/busybox/busybox-1.18.1/busybox-1.18.1-hush.patch
+index 3e189a9..5281a52 100644
+--- a/package/busybox/busybox-1.18.1/busybox-1.18.1-hush.patch
++++ b/package/busybox/busybox-1.18.1/busybox-1.18.1-hush.patch
+@@ -1,6 +1,6 @@
+ diff -urpN busybox-1.18.1/shell/hush.c busybox-1.18.1-hush/shell/hush.c
+ --- busybox-1.18.1/shell/hush.c	2010-12-21 05:31:04.000000000 +0100
+-+++ busybox-1.18.1-hush/shell/hush.c	2010-12-21 21:20:02.493651813 +0100
+++++ busybox-1.18.1-hush/shell/hush.c	2011-01-07 14:59:19.649956156 +0100
+ @@ -913,7 +913,7 @@ static const struct built_in_command blt
+   */
+  #if HUSH_DEBUG
+@@ -177,7 +177,25 @@ diff -urpN busybox-1.18.1/shell/hush.c busybox-1.18.1-hush/shell/hush.c
+  			prn++;
+  		}
+  		pi = pi->next;
+-@@ -7445,7 +7461,7 @@ int hush_main(int argc, char **argv)
++@@ -4106,7 +4122,16 @@ static struct pipe *parse_stream(char **
++ 				if (IS_NULL_CMD(ctx.command)
++ 				 && dest.length == 0 && !dest.has_quoted_part
++ 				) {
++-					continue;
+++					/* This newline can be ignored. But...
+++					 * without the below check, interactive shell
+++					 * will ignore even lines with bare <newline>,
+++					 * and show the continuation prompt:
+++					 * ps1_prompt$ <enter>
+++					 * ps2> _   <=== wrong prompt, should be ps1
+++					 */
+++					struct pipe *pi = ctx.list_head;
+++					if (pi->num_cmds != 0)
+++						continue;
++ 				}
++ 				/* Treat newline as a command separator. */
++ 				done_pipe(&ctx, PIPE_SEQ);
++@@ -7445,7 +7470,7 @@ int hush_main(int argc, char **argv)
+  	unsigned builtin_argc;
+  	char **e;
+  	struct variable *cur_var;
+@@ -186,7 +204,7 @@ diff -urpN busybox-1.18.1/shell/hush.c busybox-1.18.1-hush/shell/hush.c
+  
+  	INIT_G();
+  	if (EXIT_SUCCESS) /* if EXIT_SUCCESS == 0, it is already done */
+-@@ -7454,17 +7470,17 @@ int hush_main(int argc, char **argv)
++@@ -7454,17 +7479,17 @@ int hush_main(int argc, char **argv)
+  	G.argv0_for_re_execing = argv[0];
+  #endif
+  	/* Deal with HUSH_VERSION */
+@@ -209,7 +227,7 @@ diff -urpN busybox-1.18.1/shell/hush.c busybox-1.18.1-hush/shell/hush.c
+  	cur_var = G.top_var;
+  	e = environ;
+  	if (e) while (*e) {
+-@@ -7479,8 +7495,8 @@ int hush_main(int argc, char **argv)
++@@ -7479,8 +7504,8 @@ int hush_main(int argc, char **argv)
+  		e++;
+  	}
+  	/* (Re)insert HUSH_VERSION into env (AFTER we scanned the env!) */
+@@ -220,7 +238,7 @@ diff -urpN busybox-1.18.1/shell/hush.c busybox-1.18.1-hush/shell/hush.c
+  
+  	/* Export PWD */
+  	set_pwd_var(/*exp:*/ 1);
+-@@ -7840,18 +7856,6 @@ int hush_main(int argc, char **argv)
++@@ -7840,18 +7865,6 @@ int hush_main(int argc, char **argv)
+  	parse_and_run_file(stdin);
+  
+   final_return:
+diff --git a/package/busybox/busybox-1.18.1/busybox-1.18.1-mkswap.patch b/package/busybox/busybox-1.18.1/busybox-1.18.1-mkswap.patch
 new file mode 100644
-index 0000000..01aa7bf
+index 0000000..41dff57
 --- /dev/null
-+++ b/package/portmap/portmap-6.0-0001-README-fix-typo-in-tcp-wrapper-doc.patch
-@@ -0,0 +1,26 @@
-+From af4a27a17bbdbe941f2462e116c2e4c8ade110e3 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 19 Nov 2010 23:35:20 -0500
-+Subject: [PATCH 1/4] README: fix typo in tcp wrapper doc
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ README |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/README b/README
-+index 0da54cc..916de7e 100644
-+--- a/README
-++++ b/README
-+@@ -18,7 +18,7 @@ There is no "./configure", just use "make".
++++ b/package/busybox/busybox-1.18.1/busybox-1.18.1-mkswap.patch
+@@ -0,0 +1,12 @@
++diff -urpN busybox-1.18.1/util-linux/mkswap.c busybox-1.18.1-mkswap/util-linux/mkswap.c
++--- busybox-1.18.1/util-linux/mkswap.c	2010-12-20 01:41:27.000000000 +0100
+++++ busybox-1.18.1-mkswap/util-linux/mkswap.c	2011-01-05 11:41:24.455856773 +0100
++@@ -15,7 +15,7 @@ static void mkswap_selinux_setcontext(in
++ 	if (!is_selinux_enabled())
++ 		return;
 + 
-+ Some make variable can be used to control compilation.
-+ 
-+- NO_TCP_WRAPPER=  if non-empty, doen't use tcp_wrappers
-++ NO_TCP_WRAPPER=  if non-empty, don't use tcp_wrappers
-+  USE_DNS=	  if set, tcp_wrappers can check peers based on hostname
-+ 		  as well as IP address.  This should only be used if you
-+ 		  are certain that gethostbyname will never trigger a
-+-- 
-+1.7.3.1
-+
-diff --git a/package/portmap/portmap-6.0-0002-NO_PIE-make-PIE-support-controllable.patch b/package/portmap/portmap-6.0-0002-NO_PIE-make-PIE-support-controllable.patch
++-	xfstat(fd, &stbuf, argv[0]);
+++	xfstat(fd, &stbuf, path);
++ 	if (S_ISREG(stbuf.st_mode)) {
++ 		security_context_t newcon;
++ 		security_context_t oldcon = NULL;
+diff --git a/package/busybox/busybox-1.18.1/busybox-1.18.1-modprobe-small.patch b/package/busybox/busybox-1.18.1/busybox-1.18.1-modprobe-small.patch
 new file mode 100644
-index 0000000..6e544bf
+index 0000000..c1d5615
 --- /dev/null
-+++ b/package/portmap/portmap-6.0-0002-NO_PIE-make-PIE-support-controllable.patch
-@@ -0,0 +1,53 @@
-+From 087874b15367a04fd482541d1832696d7163d1ac Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 19 Nov 2010 23:35:47 -0500
-+Subject: [PATCH 2/4] NO_PIE: make PIE support controllable
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ Makefile |    8 ++++++--
-+ README   |    1 +
-+ 2 files changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 5343428..cfcfdbb 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -106,6 +106,10 @@ CPPFLAGS += -DIGNORE_SIGCHLD	# AIX 4.x, HP-UX 9.x
-+ #
-+ # LDLIBS	+= -m
-+ # CFLAGS	+= -arch m68k -arch i386 -arch hppa
-++ifeq ($(NO_PIE),)
-++CFLAGS_PIE  = -fpie
-++LDFLAGS_PIE = -pie
-++endif
++++ b/package/busybox/busybox-1.18.1/busybox-1.18.1-modprobe-small.patch
+@@ -0,0 +1,21 @@
++diff -urpN busybox-1.18.1/modutils/modprobe-small.c busybox-1.18.1-modprobe-small/modutils/modprobe-small.c
++--- busybox-1.18.1/modutils/modprobe-small.c	2010-12-20 01:41:27.000000000 +0100
+++++ busybox-1.18.1-modprobe-small/modutils/modprobe-small.c	2011-01-09 21:00:26.000000000 +0100
++@@ -844,13 +844,15 @@ int modprobe_main(int argc UNUSED_PARAM,
++ 		void *map;
 + 
-+ # Auxiliary libraries that you may have to specify
-+ #
-+@@ -125,9 +129,9 @@ CFLAGS   += -Wall -Wstrict-prototypes
-+ all:	portmap pmap_dump pmap_set portmap.man
++ 		len = MAXINT(ssize_t);
++-		map = xmalloc_xopen_read_close(*argv, &len);
+++		map = xmalloc_open_zipped_read_close(*argv, &len);
++ 		if (init_module(map, len,
++ 			IF_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE(options ? options : "")
++ 			IF_NOT_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE("")
++-				) != 0)
+++			) != 0
+++		) {
++ 			bb_error_msg_and_die("can't insert '%s': %s",
++ 					*argv, moderror(errno));
+++		}
++ 		return 0;
++ 	}
 + 
-+ CPPFLAGS += $(HOSTS_ACCESS)
-+-portmap: CFLAGS   += -fpie
-++portmap: CFLAGS   += $(CFLAGS_PIE)
-+ portmap: LDLIBS   += $(WRAP_LIB)
-+-portmap: LDFLAGS  += -pie
-++portmap: LDFLAGS  += $(LDFLAGS_PIE)
-+ portmap: portmap.o pmap_check.o from_local.o
-+ 
-+ from_local: CPPFLAGS += -DTEST
-+diff --git a/README b/README
-+index 916de7e..e0b561a 100644
-+--- a/README
-++++ b/README
-+@@ -18,6 +18,7 @@ There is no "./configure", just use "make".
-+ 
-+ Some make variable can be used to control compilation.
-+ 
-++ NO_PIE=	  if non-empty, don't build portmap as a PIE
-+  NO_TCP_WRAPPER=  if non-empty, don't use tcp_wrappers
-+  USE_DNS=	  if set, tcp_wrappers can check peers based on hostname
-+ 		  as well as IP address.  This should only be used if you
-+-- 
-+1.7.3.1
-+
-diff --git a/package/portmap/portmap-6.0-0003-NO_FORK-control-usage-of-fork-for-nommu-systems.patch b/package/portmap/portmap-6.0-0003-NO_FORK-control-usage-of-fork-for-nommu-systems.patch
+diff --git a/package/busybox/busybox-1.18.1/busybox-1.18.1-tftp.patch b/package/busybox/busybox-1.18.1/busybox-1.18.1-tftp.patch
 new file mode 100644
-index 0000000..6f16aa2
+index 0000000..b038ea8
 --- /dev/null
-+++ b/package/portmap/portmap-6.0-0003-NO_FORK-control-usage-of-fork-for-nommu-systems.patch
-@@ -0,0 +1,110 @@
-+From b3afea5757af1a7356ba30d2e0a7d5909ca18121 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 19 Nov 2010 23:48:20 -0500
-+Subject: [PATCH 3/4] NO_FORK: control usage of fork() for nommu systems
-+
-+nommu systems lack a fork() function, so add a NO_FORK flag to control
-+its usage.  We don't lose a ton of functionality in doing so, and on an
-+embedded system, this is OK.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ Makefile     |    5 +++++
-+ README       |    1 +
-+ pmap_check.c |    6 ++++--
-+ portmap.c    |    6 ++++++
-+ 4 files changed, 16 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index cfcfdbb..9df5574 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -27,6 +27,11 @@ MAN_SED += -e 's/USE_DNS/yes/'
-+ endif
-+ endif
++++ b/package/busybox/busybox-1.18.1/busybox-1.18.1-tftp.patch
+@@ -0,0 +1,72 @@
++diff -urpN busybox-1.18.1/networking/tftp.c busybox-1.18.1-tftp/networking/tftp.c
++--- busybox-1.18.1/networking/tftp.c	2010-12-20 01:41:27.000000000 +0100
+++++ busybox-1.18.1-tftp/networking/tftp.c	2011-01-10 12:50:02.687941194 +0100
++@@ -105,39 +105,22 @@ struct BUG_G_too_big {
++ #define error_pkt_str    (error_pkt + 4)
 + 
-++# For no-mmu systems, we have to disable the fork() functions.
-++ifneq ($(NO_FORK),)
-++CPPFLAGS += -DNO_FORK
-++endif
-++
-+ # Comment out if your RPC library does not allocate privileged ports for
-+ # requests from processes with root privilege, or the new portmap will
-+ # always reject requests to register/unregister services on privileged
-+diff --git a/README b/README
-+index e0b561a..bda1707 100644
-+--- a/README
-++++ b/README
-+@@ -18,6 +18,7 @@ There is no "./configure", just use "make".
-+ 
-+ Some make variable can be used to control compilation.
-+ 
-++ NO_FORK=	  if non-empty, don't use fork (good for nommu systems)
-+  NO_PIE=	  if non-empty, don't build portmap as a PIE
-+  NO_TCP_WRAPPER=  if non-empty, don't use tcp_wrappers
-+  USE_DNS=	  if set, tcp_wrappers can check peers based on hostname
-+diff --git a/pmap_check.c b/pmap_check.c
-+index 6b3e490..983414e 100644
-+--- a/pmap_check.c
-++++ b/pmap_check.c
-+@@ -302,8 +302,10 @@ static void logit(int severity, struct sockaddr_in *addr,
-+      * getrpcbynumber() or syslog() does its thing.
-+      */
-+ 
-+-    if (fork() == 0) {
-+-
-++#ifndef NO_FORK
-++    if (fork() == 0)
-++#endif
-++    {
-+ 	/* Try to map program number to name. */
-+ 
-+ 	if (prognum == 0) {
-+diff --git a/portmap.c b/portmap.c
-+index 2a98881..94abc64 100644
-+--- a/portmap.c
-++++ b/portmap.c
-+@@ -391,12 +391,14 @@ main(int argc, char **argv)
-+ 	abort();
-+ }
-+ 
-++#ifndef NO_PERROR
-+ /* need to override perror calls in rpc library */
-+ void perror(const char *what)
++ #if ENABLE_FEATURE_TFTP_PROGRESS_BAR
++-/* SIGALRM logic nicked from the wget applet */
++-static void progress_meter(int flag)
+++static void tftp_progress_update(void)
 + {
-+ 
-+ 	syslog(LOG_ERR, "%s: %m", what);
++-	/* We can be called from signal handler */
++-	int save_errno = errno;
++-
++-	if (flag == -1) { /* first call to progress_meter */
++-		bb_progress_init(&G.pmt);
++-	}
++-
++ 	bb_progress_update(&G.pmt, G.file, 0, G.pos, G.size);
++-
++-	if (flag == 0) {
++-		/* last call to progress_meter */
++-		alarm(0);
++-		bb_putchar_stderr('\n');
++-	} else {
++-		if (flag == -1) { /* first call to progress_meter */
++-			signal_SA_RESTART_empty_mask(SIGALRM, progress_meter);
++-		}
++-		alarm(1);
++-	}
++-
++-	errno = save_errno;
 + }
-++#endif
-+ 
-+ static struct pmaplist *
-+ find_service(u_long prog, u_long vers, u_long prot)
-+@@ -753,6 +755,7 @@ static void callit(struct svc_req *rqstp, SVCXPRT *xprt)
-+ 	if ((pml = find_service(a.rmt_prog, a.rmt_vers,
-+ 	    (u_long)IPPROTO_UDP)) == NULL)
-+ 		return;
-++#ifndef NO_FORK
-+ 	/*
-+ 	 * fork a child to do the work.  Parent immediately returns.
-+ 	 * Child exits upon completion.
-+@@ -763,6 +766,7 @@ static void callit(struct svc_req *rqstp, SVCXPRT *xprt)
-+ 			    a.rmt_prog);
-+ 		return;
-+ 	}
-++#endif
-+ 	port = pml->pml_map.pm_port;
-+ 	get_myaddress(&me);
-+ 	me.sin_port = htons(port);
-+@@ -783,7 +787,9 @@ static void callit(struct svc_req *rqstp, SVCXPRT *xprt)
-+ 		clnt_destroy(client);
-+ 	}
-+ 	(void)close(so);
-++#ifndef NO_FORK
-+ 	exit(0);
-++#endif
++ static void tftp_progress_init(void)
++ {
++-	progress_meter(-1);
+++	bb_progress_init(&G.pmt);
+++	tftp_progress_update();
 + }
++ static void tftp_progress_done(void)
++ {
++-	if (G.pmt.inited)
++-		progress_meter(0);
+++	if (G.pmt.inited) {
+++		tftp_progress_update();
+++		bb_putchar_stderr('\n');
+++		G.pmt.inited = 0;
+++	}
++ }
++ #else
++ # define tftp_progress_init() ((void)0)
++@@ -460,9 +443,10 @@ static int tftp_protocol(
++ 		xsendto(socket_fd, xbuf, send_len, &peer_lsa->u.sa, peer_lsa->len);
 + 
-+ #ifndef IGNORE_SIGCHLD			/* Lionel Cons <cons@dxcern.cern.ch> */
-+-- 
-+1.7.3.1
-+
-diff --git a/package/portmap/portmap-6.0-0004-NO_PERROR-control-overriding-of-perror-symbol.patch b/package/portmap/portmap-6.0-0004-NO_PERROR-control-overriding-of-perror-symbol.patch
++ #if ENABLE_FEATURE_TFTP_PROGRESS_BAR
++-		if (ENABLE_TFTP && remote_file) { /* tftp */
+++		if (ENABLE_TFTP && remote_file) /* tftp */
++ 			G.pos = (block_nr - 1) * (uoff_t)blksize;
++-		}
+++		if (G.pmt.inited)
+++			tftp_progress_update();
++ #endif
++ 		/* Was it final ACK? then exit */
++ 		if (finished && (opcode == TFTP_ACK))
++@@ -479,6 +463,7 @@ static int tftp_protocol(
++ 		case 0:
++ 			retries--;
++ 			if (retries == 0) {
+++				tftp_progress_done();
++ 				bb_error_msg("timeout");
++ 				goto ret; /* no err packet sent */
++ 			}
+diff --git a/package/busybox/busybox-1.18.1/busybox-1.18.1-warning.patch b/package/busybox/busybox-1.18.1/busybox-1.18.1-warning.patch
 new file mode 100644
-index 0000000..a5554ea
+index 0000000..cda94bd
 --- /dev/null
-+++ b/package/portmap/portmap-6.0-0004-NO_PERROR-control-overriding-of-perror-symbol.patch
-@@ -0,0 +1,46 @@
-+From 8cea0778f0fb838a7bd764be08f15e1494e5a0b2 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Fri, 19 Nov 2010 23:50:27 -0500
-+Subject: [PATCH 4/4] NO_PERROR: control overriding of perror() symbol
-+
-+Doing static builds of portmap might fail when the C library's perror()
-+function is pulled in and collides with portmap's definition.  So add a
-+flag to control the local override.
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+ Makefile |    5 +++++
-+ README   |    1 +
-+ 2 files changed, 6 insertions(+), 0 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 9df5574..1635107 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -32,6 +32,11 @@ ifneq ($(NO_FORK),)
-+ CPPFLAGS += -DNO_FORK
-+ endif
++++ b/package/busybox/busybox-1.18.1/busybox-1.18.1-warning.patch
+@@ -0,0 +1,28 @@
++diff -urpN busybox-1.18.1/libbb/procps.c busybox-1.18.1-warning/libbb/procps.c
++--- busybox-1.18.1/libbb/procps.c	2010-12-21 05:29:45.000000000 +0100
+++++ busybox-1.18.1-warning/libbb/procps.c	2011-01-07 13:41:22.000000000 +0100
++@@ -154,6 +154,7 @@ static unsigned long fast_strtoul_10(cha
++ 	return n;
++ }
 + 
-++# For static builds, we might hit perror() symbol clashes
-++ifneq ($(NO_PERROR),)
-++CPPFLAGS += -DNO_PERROR
-++endif
-++
-+ # Comment out if your RPC library does not allocate privileged ports for
-+ # requests from processes with root privilege, or the new portmap will
-+ # always reject requests to register/unregister services on privileged
-+diff --git a/README b/README
-+index bda1707..05861a8 100644
-+--- a/README
-++++ b/README
-+@@ -19,6 +19,7 @@ There is no "./configure", just use "make".
-+ Some make variable can be used to control compilation.
+++# if ENABLE_FEATURE_FAST_TOP
++ static long fast_strtol_10(char **endptr)
++ {
++ 	if (**endptr != '-')
++@@ -162,6 +163,7 @@ static long fast_strtol_10(char **endptr
++ 	(*endptr)++;
++ 	return - (long)fast_strtoul_10(endptr);
++ }
+++# endif
 + 
-+  NO_FORK=	  if non-empty, don't use fork (good for nommu systems)
-++ NO_PERROR=	  if non-empty, don't override the perror() func
-+  NO_PIE=	  if non-empty, don't build portmap as a PIE
-+  NO_TCP_WRAPPER=  if non-empty, don't use tcp_wrappers
-+  USE_DNS=	  if set, tcp_wrappers can check peers based on hostname
-+-- 
-+1.7.3.1
-+
-diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-index e83ff1d..4a5fe62 100644
---- a/package/portmap/portmap.mk
-+++ b/package/portmap/portmap.mk
-@@ -9,8 +9,13 @@ PORTMAP_SOURCE = portmap-$(PORTMAP_VERSION).tgz
- PORTMAP_SITE = http://neil.brown.name/portmap
- PORTMAP_SBINS = portmap pmap_dump pmap_set
- 
-+PORTMAP_FLAGS = NO_TCP_WRAPPER=1 NO_PIE=1 NO_PERROR=1
-+ifeq ($(BR2_USE_MMU),)
-+PORTMAP_FLAGS += NO_FORK=1
-+endif
-+
- define PORTMAP_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" -C $(@D) NO_TCP_WRAPPER=1
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D) $(PORTMAP_FLAGS)
- endef
- 
- define PORTMAP_INSTALL_TARGET_CMDS
++ static char *skip_fields(char *str, int count)
++ {
++@@ -448,7 +450,7 @@ procps_status_t* FAST_FUNC procps_scan(p
++ //FIXME: is it safe to assume this field exists?
++ 			sp->last_seen_on_cpu = fast_strtoul_10(&cp);
++ # endif
++-#endif /* end of !ENABLE_FEATURE_TOP_SMP_PROCESS */
+++#endif /* FEATURE_FAST_TOP */
++ 
++ #if ENABLE_FEATURE_PS_ADDITIONAL_COLUMNS
++ 			sp->niceness = tasknice;
 -- 
-1.7.4.rc1
+1.7.3.4
