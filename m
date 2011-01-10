@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Jan 2011 14:11:55 +0100
-Subject: [Buildroot] [PATCH 2/5] pciutils: SHARED make opt goes for
-	install too
-In-Reply-To: <1294339321-5659-2-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Thu, 6 Jan 2011 15:41:58 -0300")
-References: <1294339321-5659-1-git-send-email-gustavo@zacarias.com.ar>
-	<1294339321-5659-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bp3ogaxw.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Jan 2011 13:13:45 +0100
+Subject: [Buildroot] [git commit master 1/1] ccache: bump version
+Message-ID: <20110110131222.847A38A3BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> If we don't pass SHARED when installing we miss the shared library
- Gustavo> symlinks (libpci.so & libpci.so.3) thus breaking stuff.
+commit: http://git.buildroot.net/buildroot/commit/?id=0063c87c7e754b548a854655aff97ae5478e4c40
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Really? It works here:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ccache/ccache.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
->>> pciutils 3.1.7 Installing to target
-..
-/usr/bin/make -j2 BUILDDIR=/home/peko/source/buildroot/output3/build/pciutils-3.1.7 -C /home/peko/source/buildroot/output3/build/pciutils-3.1.7 PREFIX=/home/peko/source/buildroot/output3/target/usr install-lib
-/usr/bin/make -C lib all
-make[3]: Nothing to be done for `all'.
-install -d -m 755 /home/peko/source/buildroot/output3/target/usr/include/pci /home/peko/source/buildroot/output3/target/usr/lib /home/peko/source/buildroot/output3/target/usr/lib/pkgconfig
-install -c -m 644 lib/config.h lib/header.h lib/pci.h lib/types.h /home/peko/source/buildroot/output3/target/usr/include/pci
-install -c -m 644 lib/libpci.so.3.1.7 /home/peko/source/buildroot/output3/target/usr/lib
-install -c -m 644 lib/libpci.pc /home/peko/source/buildroot/output3/target/usr/lib/pkgconfig
-
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 1d0a560..dd25b76 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-CCACHE_VERSION = 3.1.3
++CCACHE_VERSION = 3.1.4
+ CCACHE_SITE    = http://samba.org/ftp/ccache
+ CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
