@@ -1,60 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Jan 2011 14:41:25 -0300
-Subject: [Buildroot] [PATCH 4/4] iproute2: bump to version 2.6.37 + fixes
-In-Reply-To: <1294681285-1205-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1294681285-1205-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1294681285-1205-4-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Jan 2011 18:50:13 +0100
+Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
+ in $(O)
+In-Reply-To: <20110107181536.53713c9a@surf>
+References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
+	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
+	<20110107181536.53713c9a@surf>
+Message-ID: <20110110185013.331f5af1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 2.6.37
-Add iptables support when it's available.
-ATM support requires linux-atm for which we don't have a package yet.
+Hello Bjorn,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iproute2/iproute2.mk |   16 +++++++++++++---
- 1 files changed, 13 insertions(+), 3 deletions(-)
+On Fri, 7 Jan 2011 18:15:36 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 0f99894..c3e9650 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,19 +4,29 @@
- #
- #############################################################
- 
--IPROUTE2_VERSION = 2.6.35
-+IPROUTE2_VERSION = 2.6.37
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.bz2
- IPROUTE2_SITE = http://devresources.linuxfoundation.org/dev/iproute2/download
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- 
-+# If we've got iptables enable xtables support for tc
-+ifeq ($(BR2_PACKAGE_IPTABLES),y)
-+IPROUTE2_DEPENDENCIES += iptables
-+define IPROUTE2_WITH_IPTABLES
-+	# Makefile is busted so it never passes IPT_LIB_DIR properly
-+	$(SED) "s/-DIPT/-DXT/" $(IPROUTE2_DIR)/tc/Makefile
-+	echo "TC_CONFIG_XT:=y" >>$(IPROUTE2_DIR)/Config
-+endef
-+endif
-+
- define IPROUTE2_CONFIGURE_CMDS
- 	# Use kernel headers
- 	rm -r $(IPROUTE2_DIR)/include/netinet
- 	# arpd needs berkeleydb
- 	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
- 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(IPROUTE2_DIR)/Makefile
--	( cd $(@D); ./configure )
--	echo "IPT_LIB_DIR=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
-+	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
-+	$(IPROUTE2_WITH_IPTABLES)
- endef
- 
- define IPROUTE2_BUILD_CMDS
+> diff --git a/Makefile b/Makefile
+> index 831b424..994dd52 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -375,8 +375,11 @@ world: prepare dependencies dirs $(BASE_TARGETS)
+> $(TARGETS_ALL) $(O)/toolchainfile.cmake:
+>         @echo -en "\
+>         set(CMAKE_SYSTEM_NAME Linux)\n\
+> +       set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
+>         set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
+>         set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
+> +       set(CMAKE_C_FLAGS \"$(CMAKE_TARGET_CFLAGS)\")\n\
+> +       set(CMAKE_CXX_FLAGS \"$(CMAKE_TARGET_CXXFLAGS)\")\n\
+>         set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
+>         set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+>         set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+> 
+> With those, I can successfully use the CMake toolchain file to build a
+> Qt application against the Buildroot libraries.
+> 
+> If you agree, could you merge those modifications into your patch ?
+
+It'd be great if you could also add
+
+	set(CMAKE_INSTALL_SO_NO_EXE 0)
+
+This is related to the executable permission of the shared libraries
+installed by CMake. As explained in Modules/Platform/Linux.cmake, the
+behaviour of CMake depends on the host system: on Debian systems, it
+installs shared libraries without executable permissions, and on Fedora
+systems it installs shared libraries with executable permissions.
+
+In Buildroot, all shared libraries are installed with executable
+permissions, and this fact is used to support stripping of shared
+libraries in the target-finalize target of the main Makefile.
+
+Therefore, we should not rely on CMake default behaviour, and instead
+tell CMake what to do: set the executable permission on the installed
+shared libraries. Which is what is done by setting the above variable.
+
+For reference, this issue has also been raised on OpenEmbedded:
+http://www.mail-archive.com/openembedded-devel at lists.openembedded.org/msg04736.html.
+
+Thanks!
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
