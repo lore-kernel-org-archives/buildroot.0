@@ -1,23 +1,38 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 10 Jan 2011 23:39:26 +0100
-Subject: [Buildroot] Conditional patch ??
-Message-ID: <523673715039461A87A2AA7AC0F9404B@apexjs>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Jan 2011 23:24:58 +0100
+Subject: [Buildroot] [git commit master 1/1] at: fix build issue with
+	parallel builds
+Message-ID: <20110110224623.1D1198A3DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-If i create an entry in the Config.in for a package to enable or disable a
-certain patch, how do i need to change the <package>.mk  so the patch is
-only applied when enabled in the config ?
- 
-Johan
- 
- 
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110110/823b2a1a/attachment.html>
+
+commit: http://git.buildroot.net/buildroot/commit/?id=716d75350b26e4a0dab8045a5d39e1153e61b561
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+With highly parallel builds, the input files for parsetime.l are not
+alway present when needed, breaking the build.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/at/at.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/at/at.mk b/package/at/at.mk
+index 9067fa5..e9873f8 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -6,6 +6,8 @@
+ AT_VERSION = 3.1.12
+ AT_SOURCE = at_$(AT_VERSION).orig.tar.gz
+ AT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/a/at
++# missing deps for parsetime.l
++AT_MAKE = $(MAKE1)
+ AT_AUTORECONF = YES
+ AT_INSTALL_STAGING = NO
+ AT_INSTALL_TARGET = YES
+-- 
+1.7.2.2
