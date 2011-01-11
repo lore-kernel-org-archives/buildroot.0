@@ -1,37 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Jan 2011 16:46:00 +0100
-Subject: [Buildroot] [git commit master 1/1] target skeleton: add audio group
-Message-ID: <20110111154614.EC49B8A3BF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Jan 2011 16:46:24 +0100
+Subject: [Buildroot] [PATCH] target skeleton: add audio group
+In-Reply-To: <1294753796-4848-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Tue, 11 Jan 2011 10:49:56 -0300")
+References: <1294753796-4848-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r5cj1m0f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8497c46a57e740cb9d236cae2c2a4cc4d9962a23
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Add audio group to the target skeleton.
+ Gustavo> Some multimedia applications based on alsa-lib need it.
 
-Add audio group to the target skeleton.
-Some multimedia applications based on alsa-lib need it.
+Committed, thanks.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/skeleton/etc/group |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/fs/skeleton/etc/group b/fs/skeleton/etc/group
-index c600be0..df12dba 100644
---- a/fs/skeleton/etc/group
-+++ b/fs/skeleton/etc/group
-@@ -6,6 +6,7 @@ adm:x:4:
- tty:x:5:
- disk:x:6:
- wheel:x:10:root
-+audio:x:29:
- utmp:x:43:
- staff:x:50:
- haldaemon:x:68:
 -- 
-1.7.2.2
+Bye, Peter Korsgaard
