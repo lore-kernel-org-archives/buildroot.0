@@ -1,24 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Jan 2011 09:13:40 +0100
-Subject: [Buildroot] [PATCH 4/4] iproute2: bump to version 2.6.37 + fixes
-In-Reply-To: <1294681285-1205-4-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Mon, 10 Jan 2011 14:41:25 -0300")
-References: <1294681285-1205-1-git-send-email-gustavo@zacarias.com.ar>
-	<1294681285-1205-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874o9f503v.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Jan 2011 07:56:22 +0100
+Subject: [Buildroot] [git commit master 1/1] iptables: install to staging
+Message-ID: <20110111081431.855798A4A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Bump to version 2.6.37
- Gustavo> Add iptables support when it's available.
- Gustavo> ATM support requires linux-atm for which we don't have a package yet.
+commit: http://git.buildroot.net/buildroot/commit/?id=bd5cbcb2b1702fff9983f101b9bc4c96bcedc389
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Install iptables to staging so we can build iproute2 with filtering.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/iptables/iptables.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 1ec2c85..b06ab71 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -3,9 +3,12 @@
+ # iptables
+ #
+ #############################################################
++
+ IPTABLES_VERSION = 1.4.10
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
++IPTABLES_INSTALL_STAGING = YES
++IPTABLES_AUTORECONF = YES
+ IPTABLES_DEPENDENCIES = host-pkg-config
+ 
+ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
+@@ -13,8 +16,6 @@ ifneq ($(BR2_INET_IPV6),y)
+ IPTABLES_CONF_OPT += --disable-ipv6
+ endif
+ 
+-IPTABLES_AUTORECONF = YES
+-
+ define IPTABLES_TARGET_SYMLINK_CREATE
+ 	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables
+ 	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-save
 -- 
-Bye, Peter Korsgaard
+1.7.2.2
