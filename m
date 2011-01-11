@@ -1,39 +1,43 @@
-From: Divick Kishore <divick.kishore@gmail.com>
-Date: Tue, 11 Jan 2011 17:55:15 +0530
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Jan 2011 14:45:03 +0100
 Subject: [Buildroot] Illegal instruction when running some of the cross
-	compiled binaries
-Message-ID: <AANLkTi=0q8wUTjBSdVUv2KTVyxYc9NTSumE_+MrN4faf@mail.gmail.com>
+ compiled binaries
+In-Reply-To: <AANLkTi=0q8wUTjBSdVUv2KTVyxYc9NTSumE_+MrN4faf@mail.gmail.com>
+References: <AANLkTi=0q8wUTjBSdVUv2KTVyxYc9NTSumE_+MrN4faf@mail.gmail.com>
+Message-ID: <20110111144503.3bdf7fa4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-    I have built a custom root filesystem using build root, but
-certain binaries (built with the packages selected during menuconfig)
-when run give "Illegal Instruction".
+Hello Divick,
 
-# sshd
-Illegal instruction
+On Tue, 11 Jan 2011 17:55:15 +0530
+Divick Kishore <divick.kishore@gmail.com> wrote:
 
-Having looked at the logs, the compiler flags used to build the binary
-seems fine (-mtune=arm920t -march=armv4t -mabi=aapcs-linux
--msoft-float ) i.e. right for my H/W (ATMEL AT91RM9200).
+>     I have built a custom root filesystem using build root, but
+> certain binaries (built with the packages selected during menuconfig)
+> when run give "Illegal Instruction".
+> 
+> # sshd
+> Illegal instruction
+> 
+> Having looked at the logs, the compiler flags used to build the binary
+> seems fine (-mtune=arm920t -march=armv4t -mabi=aapcs-linux
+> -msoft-float ) i.e. right for my H/W (ATMEL AT91RM9200).
 
-1. Toolchain used CodeSourcery G++ Lite 2010.09-50
-(arm-none-linux-gnueabi-gcc-4.5.1).
-2. Linux kernel using the above mentioned toolchain.
-3. Version of buildroot used is buildroot-2010.11.
+During compilation yes, but at the link stage of sshd, the
+-march=armv4t flag is missing. Therefore, some ARMv5-only code gets
+added to the binary. Maybe we need to add -march=armv4t to the
+TARGET_LDFLAGS, or some other trick. I haven't tested anything for the
+moment, so feel free to experiment.
 
-Could anyone please suggest what is going wrong? It seems people have
-similar kind of issue
-(http://www.embeddedrelated.com/groups/AT91SAM/show/3547.php)
-but the bug pointed for the issue doesn't seem to exist.
+Regards,
 
-Another related issue that I see is that the pthreads libraries are
-not copied in the rootfilesystem image from toolchain for some
-reasons. Is it a known issue?
-
-Thanks & Regards,
-DivKis
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
