@@ -1,54 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Jan 2011 21:30:19 +0100
-Subject: [Buildroot] [PATCH 4/7] portmap: add nommu support
-In-Reply-To: <201101111250.24179.vapier@gentoo.org> (Mike Frysinger's message
-	of "Tue, 11 Jan 2011 12:50:23 -0500")
-References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-4-git-send-email-vapier@gentoo.org>
-	<87lj2r3f8m.fsf@macbook.be.48ers.dk>
-	<201101111250.24179.vapier@gentoo.org>
-Message-ID: <87tyhfyyhw.fsf@macbook.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 11 Jan 2011 22:09:15 +0100
+Subject: [Buildroot] [PATCH 1/2] qt: optionally skip installation of bundled
+	TrueType fonts
+Message-ID: <1294780156-2301-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/qt/Config.in |   12 ++++++++++++
+ package/qt/qt.mk     |    2 ++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-Hi,
-
- Mike> On Tuesday, January 11, 2011 05:29:45 Peter Korsgaard wrote:
- >> What's the upstream status of these patches?
-
- Mike> they've been sent multiple times, but upstream portmap hasnt
- Mike> responded to anyone in a while
-
-Ok, thanks.
-
- >> What is this NO_PERROR thing? That belongs in the next patch rather than
- >> here, right?
-
- Mike> yes
-
-Ok.
-
- >> Why not simply rename it like the recent issue with getline -> get_line
- >> in kconfig?
-
- Mike> because perror is a standard, not a gnuism like getline
-
-Yes, but why is there a perror() implementation in portmapper in the
-first place? It seems like they want
-something-looking-like-perror-but-using-syslog, rather than the real
-perror?
-
- >> Out of interest, what functionaly in portmapper do you miss with
- >> NO_FORK?
-
- Mike> the forks are only used to speed up responses
-
-Ok.
-
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index e5fe325..ef37352 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -152,6 +152,18 @@ config BR2_PACKAGE_QT_SYSTEMFREETYPE
+ 	  See http://www.freetype.org/
+ endchoice
+ 
++if !BR2_PACKAGE_QT_NOFREETYPE
++
++config BR2_PACKAGE_QT_BUNDLED_TTF
++	bool "Install TTF fonts bundled with Qt"
++	default y
++	help
++	  Qt is distributed with a selection of opensource TrueType fonts.
++	  Say yes if you want to install those fonts, no if you want to install
++	  a different selection of TrueType fonts.
++
++endif # !BR2_PACKAGE_QT_NOFREETYPE
++
+ config BR2_PACKAGE_QT_GIF
+ 	bool "Enable GIF support"
+ 	help
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 6eb31bc..ddee4fa 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -545,8 +545,10 @@ ifneq ($(QT_FONTS),)
+ 	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+ endif
+ ifneq ($(BR2_PACKAGE_QT_NOFREETYPE),y)
++ifeq ($(BR2_PACKAGE_QT_BUNDLED_TTF),y)
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endif
++endif
+ 	# Install image plugins if they are built
+ 	$(call QT_INSTALL_PLUGINS,imageformats)
+ ifeq ($(BR2_PACKAGE_QT_SHARED),y)
 -- 
-Bye, Peter Korsgaard
+1.7.1
