@@ -1,74 +1,63 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Wed, 12 Jan 2011 15:15:30 -0600
-Subject: [Buildroot] [PATCH] htop: new package
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 13 Jan 2011 00:18:39 +0100
+Subject: [Buildroot] [git commit master 1/1] Update copyright info for 2011
+Message-ID: <20110113094938.E07188B4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following adds support for version 0.8.3 of htop.  0.9 is the
-latest, however, is dependant on backtrace.  The next version is to
-remove the hard dependencies of backtrace and make it a compile-time
-check.
 
-Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=877044a73823a078f91f09579d838719f26797d7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Happy newyear!
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
-diff -Naur a/package/htop/Config.in b/package/htop/Config.in
---- a/package/htop/Config.in    1969-12-31 18:00:00.000000000 -0600
-+++ b/package/htop/Config.in    2011-01-11 15:16:01.000000000 -0600
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HTOP
-+       bool "htop"
-+       select BR2_PACKAGE_NCURSES
-+       select UCLIBC_HAS_BACKTRACE if BR2_TOOLCHAIN_BUILDROOT
-+       help
-+         htop is an interactive text-mode process viewer for Linux.
-+         It aims to be a better top. 
-+
-+         http://sourceforge.net/projects/htop/
-diff -Naur a/package/htop/htop-cross-no-proc-check.patch
-b/package/htop/htop-cross-no-proc-check.patch
---- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31
-18:00:00.000000000 -0600
-+++ b/package/htop/htop-cross-no-proc-check.patch       2011-01-12
-14:51:53.000000000 -0600
-@@ -0,0 +1,18 @@
-+--- a/configure        2009-06-23 08:53:37.000000000 -0500
-++++ b/configure        2011-01-12 14:21:49.000000000 -0600
-+@@ -21809,6 +21809,7 @@
-+ 
-+ fi
-+ 
-++if test "$cross_compiling" = no ; then
-+ as_ac_File=`echo "ac_cv_file_$PROCDIR/stat" | $as_tr_sh`
-+ { echo "$as_me:$LINENO: checking for $PROCDIR/stat" >&5
-+ echo $ECHO_N "checking for $PROCDIR/stat... $ECHO_C" >&6; }
-+@@ -21862,6 +21863,7 @@
-+ echo "$as_me: error: Cannot find /proc/meminfo. Make sure you have a
-Linux-compatible /proc filesystem mounted. See the file README for
-help." >&2;}
-+    { (exit 1); exit 1; }; }
-+ fi
-++fi #cross_compiling = no (Andy Kennedy)
-+ 
-+ 
-+ 
-diff -Naur a/package/htop/htop.mk b/package/htop/htop.mk
---- a/package/htop/htop.mk      1969-12-31 18:00:00.000000000 -0600
-+++ b/package/htop/htop.mk      2011-01-12 13:36:36.000000000 -0600
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# htop
-+#
-+#############################################################
-+# Version 0.9 requires backtrace, which doesn't exsist in uClibC, yet.
-+HTOP_VERSION = 0.8.3
-+HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
-+HTOP_SITE =
-http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
-+HTOP_DEPENDENCIES = ncurses
-+
-+$(eval $(call AUTOTARGETS,package,htop))
+ Makefile           |    2 +-
+ docs/copyright.txt |    2 +-
+ docs/footer.html   |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7e08cf3..cf2a7dc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ # Makefile for buildroot2
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+-# Copyright (C) 2006-2010 by the Buildroot developers <buildroot@uclibc.org>
++# Copyright (C) 2006-2011 by the Buildroot developers <buildroot@uclibc.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/copyright.txt b/docs/copyright.txt
+index d4712a7..83382f4 100644
+--- a/docs/copyright.txt
++++ b/docs/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2010 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2011 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
+diff --git a/docs/footer.html b/docs/footer.html
+index 11bfec2..86e7ffa 100644
+--- a/docs/footer.html
++++ b/docs/footer.html
+@@ -10,7 +10,7 @@
+     <p>
+     <font face="arial, helvetica, sans-serif" size="-1">
+ 	<a HREF="/copyright.txt">Copyright &copy; 1999-2005 Erik Andersen,
+-	2006-2010 The Buildroot developers</a>
++	2006-2011 The Buildroot developers</a>
+ 	<br>
+ 	Mail all comments, insults, suggestions and bribes to
+ 	<br>
+-- 
+1.7.2.2
