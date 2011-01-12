@@ -1,36 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Jan 2011 22:41:32 +0100
-Subject: [Buildroot] [PATCH] v2 Add UBI image generation support.
-In-Reply-To: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-	(julien boibessot's message of "Tue, 21 Dec 2010 18:38:07 +0100")
-References: <1292953087-19486-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87lj2ryv77.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 12 Jan 2011 12:03:14 +0100
+Subject: [Buildroot] [PATCH 1/2] liberation: add support for custom target
+	directory
+Message-ID: <1294830195-11438-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+---
+ package/liberation/Config.in     |    9 +++++++++
+ package/liberation/liberation.mk |    2 +-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> UBI images are generated from UBIFS one (with ubinize tool) and are used by
- julien> bootloaders (eg U-Boot) to write UBIFS images directly on bare NAND FLASH
- julien> (see http://www.linux-mtd.infradead.org/faq/ubi.html).
-
-Committed, thanks!
-
- julien> Changes since v1:
- julien> * change some comments/helps
- julien> * as requested by Thomas, merged fs/ubi/ in fs/ubifs/, but kept ubifs.mk and
- julien>   ubi.mk separated. (I don't know if it's really worth to merge them...)
-
-These comments to reviewers (which shouldn't be part of the final commit
-message) normally goes after the '---' line, so 'git am' doesn't include
-them.
-
-Same for the subject - The 'v2' should be in the [PATCH] square
-brackets so it doesn't get included.
-
+diff --git a/package/liberation/Config.in b/package/liberation/Config.in
+index 48d4195..9295b4e 100644
+--- a/package/liberation/Config.in
++++ b/package/liberation/Config.in
+@@ -5,3 +5,12 @@ config BR2_PACKAGE_LIBERATION
+ 	  three most commonly used fonts on Microsoft systems:
+ 	  Times New Roman, Arial, and Courier New.
+ 
++if BR2_PACKAGE_LIBERATION
++
++config BR2_PACKAGE_LIBERATION_INSTALL_DIR
++	string "Install directory"
++	default "/usr/share/fonts/liberation"
++	help
++	  Target directory where the fonts should be installed
++
++endif
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 89987d6..53b817d 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -7,7 +7,7 @@ LIBERATION_VERSION = 1.06.0.20100721
+ LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ 
+-LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
++LIBERATION_TARGET_DIR = $(TARGET_DIR)/$(BR2_PACKAGE_LIBERATION_INSTALL_DIR)
+ 
+ define LIBERATION_INSTALL_TARGET_CMDS
+ 	mkdir -p $(LIBERATION_TARGET_DIR)
 -- 
-Bye, Peter Korsgaard
+1.7.1
