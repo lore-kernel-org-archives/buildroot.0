@@ -1,92 +1,72 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Jan 2011 15:57:51 -0300
-Subject: [Buildroot] [PATCH 1/3] uclibc: add BSD endian conversions
+Date: Wed, 12 Jan 2011 15:57:52 -0300
+Subject: [Buildroot] [PATCH 2/3] uclibc: add SOCK_CLOEXEC and SOCK_NONBLOCK
+	support
 In-Reply-To: <1294858673-25760-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1294858673-25760-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1294858673-25760-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1294858673-25760-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add BSD endian conversion routines.
+Add SOCK_CLOEXEC and SOCK_NONBLOCK support to uclibc.
 
 Required to use a modern udev.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../uClibc-0.9.31-add-bsd-endian-conversions.patch |   64 ++++++++++++++++++++
- 1 files changed, 64 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
+ .../uClibc/uClibc-0.9.31-add-sock-cloexec.patch    |   43 ++++++++++++++++++++
+ 1 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch b/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
+diff --git a/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch b/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
 new file mode 100644
-index 0000000..652d7c9
+index 0000000..a7089a9
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
-@@ -0,0 +1,64 @@
-+From c6d6237819037168a6923ac080e348e54615422c Mon Sep 17 00:00:00 2001
++++ b/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
+@@ -0,0 +1,43 @@
++From 83333e9c873e4eca6b2c945f7770b1f5373b0427 Mon Sep 17 00:00:00 2001
 +From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Date: Tue, 1 Jun 2010 23:22:57 +0400
-+Subject: [PATCH] endian.h: add BSD convertions between big/little-endian byte order
++Date: Tue, 1 Jun 2010 20:02:39 +0400
++Subject: [PATCH] bits/socket.h: add SOCK_CLOEXEC and SOCK_NONBLOCK support
 +
-+This patch adds support for convertion of values between host and
-+big-/little-endian byte order.
++This patch adds support for SOCK_CLOEXEC and SOCK_NONBLOCK socket
++descriptor flags, which are introduced since Linux 2.6.27
 +
 +Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +---
-+ include/endian.h |   38 ++++++++++++++++++++++++++++++++++++++
-+ 1 files changed, 38 insertions(+), 0 deletions(-)
++ libc/sysdeps/linux/common/bits/socket.h |   12 +++++++++++-
++ 1 files changed, 11 insertions(+), 1 deletions(-)
 +
-+diff --git a/include/endian.h b/include/endian.h
-+index 2f7bce1..0ba7384 100644
-+--- a/include/endian.h
-++++ b/include/endian.h
-+@@ -55,4 +55,42 @@
-+ # define __LONG_LONG_PAIR(HI, LO) HI, LO
-+ #endif
++diff --git a/libc/sysdeps/linux/common/bits/socket.h b/libc/sysdeps/linux/common/bits/socket.h
++index ac5a433..11f6e97 100644
++--- a/libc/sysdeps/linux/common/bits/socket.h
+++++ b/libc/sysdeps/linux/common/bits/socket.h
++@@ -53,10 +53,20 @@ enum __socket_type
++   SOCK_SEQPACKET = 5,		/* Sequenced, reliable, connection-based,
++ 				   datagrams of fixed maximum length.  */
++ #define SOCK_SEQPACKET SOCK_SEQPACKET
++-  SOCK_PACKET = 10		/* Linux specific way of getting packets
+++  SOCK_PACKET = 10,		/* Linux specific way of getting packets
++ 				   at the dev level.  For writing rarp and
++ 				   other similar things on the user level. */
++ #define SOCK_PACKET SOCK_PACKET
+++
+++  /* Flags to be ORed into the type parameter of socket and socketpair and
+++     used for the flags parameter of paccept.  */
+++
+++  SOCK_CLOEXEC = 02000000,	/* Atomically set close-on-exec flag for the
+++				   new descriptor(s).  */
+++#define SOCK_CLOEXEC SOCK_CLOEXEC
+++  SOCK_NONBLOCK = 04000		/* Atomically mark descriptor(s) as
+++				   non-blocking.  */
+++#define SOCK_NONBLOCK SOCK_NONBLOCK
++ };
 + 
-++
-++#ifdef __USE_BSD
-++/* Conversion interfaces.  */
-++# include <byteswap.h>
-++
-++# if __BYTE_ORDER == __LITTLE_ENDIAN
-++#  define htobe16(x) __bswap_16 (x)
-++#  define htole16(x) (x)
-++#  define be16toh(x) __bswap_16 (x)
-++#  define le16toh(x) (x)
-++
-++#  define htobe32(x) __bswap_32 (x)
-++#  define htole32(x) (x)
-++#  define be32toh(x) __bswap_32 (x)
-++#  define le32toh(x) (x)
-++
-++#  define htobe64(x) __bswap_64 (x)
-++#  define htole64(x) (x)
-++#  define be64toh(x) __bswap_64 (x)
-++#  define le64toh(x) (x)
-++# else
-++#  define htobe16(x) (x)
-++#  define htole16(x) __bswap_16 (x)
-++#  define be16toh(x) (x)
-++#  define le16toh(x) __bswap_16 (x)
-++
-++#  define htobe32(x) (x)
-++#  define htole32(x) __bswap_32 (x)
-++#  define be32toh(x) (x)
-++#  define le32toh(x) __bswap_32 (x)
-++
-++#  define htobe64(x) (x)
-++#  define htole64(x) __bswap_64 (x)
-++#  define be64toh(x) (x)
-++#  define le64toh(x) __bswap_64 (x)
-++# endif
-++#endif
-++
-+ #endif	/* endian.h */
++ /* Protocol families.  */
 +-- 
 +1.7.3.4
 +
