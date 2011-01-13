@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 14 Jan 2011 00:39:39 +0100
-Subject: [Buildroot] [git commit master 1/1] coreutils: bump to 8.5
-Message-ID: <20110114065832.A98848B4BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] coreutils: changed/removed some
+	of the configure environmental variables
+Message-ID: <20110114065832.3A2818B523@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,113 +10,123 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=480afee911dad1e6e003d58877ee9528fc475412
+commit: http://git.buildroot.net/buildroot/commit/?id=d895a699cc04cb63dc71fc657b7efa27538f5bdb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ac_cv_func_closedir_void=no - no longer used
+ac_cv_func_fnmatch_gnu=yes - no longer used
+ac_cv_func_getcwd_null=yes - duplicate of gl_cv_func_getcwd_null
+ac_cv_func_mkstemp=yes - changed to gl_cv_func_working_mkstemp
+ac_cv_func_stat_empty_string_bug=no - no longer used
+ac_cv_func_utime_null=yes - no longer used
+ac_cv_have_decl_euidaccess=no - no longer used
+ac_cv_have_decl_nanosleep=yes - no longer used
+ac_cv_struct_st_mtim_nsec=no - no longer used
+am_cv_func_working_getline=yes - duplicate
+am_getline_needs_run_time_check=no - changed to gl_getline_needs_run_time_check
+gl_cv_c_restrict=no - changed to ac_cv_c_restrict
+gl_cv_func_mkstemp_limitations=no - no longer used
+gl_cv_func_working_readdir=yes - no longer used
+jm_ac_cv_func_link_follows_symlink=no - changed to gl_ac_cv_func_link_follows_symlink
+jm_cv_func_gettimeofday_clobber=no - changed to gl_cv_func_gettimeofday_clobber
+jm_cv_func_nanosleep_works=yes - no longer used
+jm_cv_func_svid_putenv=yes - changed to gl_cv_func_svid_putenv
+jm_cv_func_working_re_compile_pattern=yes - changed to gl_cv_func_re_compile_pattern_working
+utils_cv_func_mkdir_trailing_slash_bug=no - duplicate of gl_cv_func_mkdir_trailing_slash_bug
+utils_cv_func_mkstemp_limitations=no - duplicate of gl_cv_func_mkstemp_limitations
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../coreutils/coreutils-7.4-rename-m4-fix.patch    |   44 --------------------
- ...-man.patch => coreutils-8.5-hostname-man.patch} |    2 +-
- package/coreutils/coreutils.mk                     |   10 +----
- 3 files changed, 2 insertions(+), 54 deletions(-)
- delete mode 100644 package/coreutils/coreutils-7.4-rename-m4-fix.patch
- rename package/coreutils/{coreutils-7.4-hostname-man.patch => coreutils-8.5-hostname-man.patch} (95%)
+ package/coreutils/coreutils.mk |   66 ++++++++++++++++------------------------
+ 1 files changed, 26 insertions(+), 40 deletions(-)
 
-diff --git a/package/coreutils/coreutils-7.4-rename-m4-fix.patch b/package/coreutils/coreutils-7.4-rename-m4-fix.patch
-deleted file mode 100644
-index 8177200..0000000
---- a/package/coreutils/coreutils-7.4-rename-m4-fix.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Commit 7fcb389fb4cd5ba26e330fef991ffdc05392f289 from gnulib, to fix
--the rename bugs detection macros.
-----
-- m4/rename.m4 |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--Index: coreutils-7.4/m4/rename.m4
--===================================================================
----- coreutils-7.4.orig/m4/rename.m4
--+++ coreutils-7.4/m4/rename.m4
--@@ -51,12 +51,12 @@
--     AC_LIBOBJ([rename])
--     AC_DEFINE([rename], [rpl_rename],
--       [Define to rpl_rename if the replacement function should be used.])
---    if test $gl_cv_func_rename_trailing_slash_bug; then
--+    if test $gl_cv_func_rename_trailing_slash_bug = yes; then
--       AC_DEFINE([RENAME_TRAILING_SLASH_BUG], [1],
-- 	[Define if rename does not work for source file names with a trailing
-- 	 slash, like the one from SunOS 4.1.1_U1.])
--     fi
---    if test $gl_cv_func_rename_dest_exists_bug; then
--+    if test $gl_cv_func_rename_dest_exists_bug = yes; then
--       AC_DEFINE([RENAME_DEST_EXISTS_BUG], [1],
-- 	[Define if rename does not work when the destination file exists,
-- 	 as on Windows.])
--Index: coreutils-7.4/configure
--===================================================================
----- coreutils-7.4.orig/configure
--+++ coreutils-7.4/configure
--@@ -28698,12 +28698,12 @@ $as_echo "$gl_cv_func_rename_dest_exists
-- 
-- $as_echo "#define rename rpl_rename" >>confdefs.h
-- 
---    if test $gl_cv_func_rename_trailing_slash_bug; then
--+    if test $gl_cv_func_rename_trailing_slash_bug = yes; then
-- 
-- $as_echo "#define RENAME_TRAILING_SLASH_BUG 1" >>confdefs.h
-- 
--     fi
---    if test $gl_cv_func_rename_dest_exists_bug; then
--+    if test $gl_cv_func_rename_dest_exists_bug = yes; then
-- 
-- $as_echo "#define RENAME_DEST_EXISTS_BUG 1" >>confdefs.h
-- 
-diff --git a/package/coreutils/coreutils-7.4-hostname-man.patch b/package/coreutils/coreutils-8.5-hostname-man.patch
-similarity index 95%
-rename from package/coreutils/coreutils-7.4-hostname-man.patch
-rename to package/coreutils/coreutils-8.5-hostname-man.patch
-index 843ecaa..6025f56 100644
---- a/package/coreutils/coreutils-7.4-hostname-man.patch
-+++ b/package/coreutils/coreutils-8.5-hostname-man.patch
-@@ -2,7 +2,7 @@
- +++ b/man/hostname.1	2010-09-23 12:08:06.000000000 -0700
- @@ -0,0 +1,48 @@
- +.\" DO NOT MODIFY THIS FILE!  It was generated by help2man 1.35.
--+.TH HOSTNAME "1" "September 2010" "GNU coreutils 7.4" "User Commands"
-++.TH HOSTNAME "1" "September 2010" "GNU coreutils 8.5" "User Commands"
- +.SH NAME
- +hostname \- set or print the name of the current host system
- +.SH SYNOPSIS
 diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 7e64d25..73dd662 100644
+index 078e28f..6d510cb 100644
 --- a/package/coreutils/coreutils.mk
 +++ b/package/coreutils/coreutils.mk
-@@ -3,7 +3,7 @@
- # coreutils
- #
- #############################################################
--COREUTILS_VERSION = 7.4
-+COREUTILS_VERSION = 8.5
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.gz
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+@@ -17,55 +17,41 @@ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostnam
+ 	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
+ 	uname join
  
-@@ -57,14 +57,6 @@ COREUTILS_CONF_OPT = --disable-rpath \
- 		--disable-dependency-tracking \
- 		--enable-install-program=hostname
+-COREUTILS_CONF_ENV = ac_cv_func_strtod=yes \
+-		ac_fsusage_space=yes \
+-		fu_cv_sys_stat_statfs2_bsize=yes \
+-		ac_cv_func_closedir_void=no \
+-		ac_cv_func_getloadavg=no \
+-		ac_cv_lib_util_getloadavg=no \
+-		ac_cv_lib_getloadavg_getloadavg=no \
+-		ac_cv_func_getgroups=yes \
+-		ac_cv_func_getgroups_works=yes \
++COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 		ac_cv_func_chown_works=yes \
+-		ac_cv_have_decl_euidaccess=no \
+ 		ac_cv_func_euidaccess=no \
+-		ac_cv_have_decl_strnlen=yes \
+-		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_getdelim=yes \
++		ac_cv_func_getgroups=yes \
++		ac_cv_func_getgroups_works=yes \
++		ac_cv_func_getloadavg=no \
+ 		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+ 		ac_cv_func_lstat_empty_string_bug=no \
+-		ac_cv_func_stat_empty_string_bug=no \
+-		gl_cv_func_rename_trailing_slash_bug=no \
+-		ac_cv_have_decl_nanosleep=yes \
+-		jm_cv_func_nanosleep_works=yes \
+-		gl_cv_func_working_utimes=yes \
+-		ac_cv_func_utime_null=yes \
+-		ac_cv_have_decl_strerror_r=yes \
+ 		ac_cv_func_strerror_r_char_p=no \
+-		jm_cv_func_svid_putenv=yes \
+-		ac_cv_func_getcwd_null=yes \
+-		ac_cv_func_getdelim=yes \
+-		ac_cv_func_mkstemp=yes \
+-		utils_cv_func_mkstemp_limitations=no \
+-		utils_cv_func_mkdir_trailing_slash_bug=no \
+-		gl_cv_func_rename_dest_exists_bug=no \
+-		jm_cv_func_gettimeofday_clobber=no \
++		ac_cv_func_strnlen_working=yes \
++		ac_cv_func_strtod=yes \
++		ac_cv_func_working_mktime=yes \
++		ac_cv_have_decl_strerror_r=yes \
++		ac_cv_have_decl_strnlen=yes \
++		ac_cv_lib_getloadavg_getloadavg=no \
++		ac_cv_lib_util_getloadavg=no \
++		ac_fsusage_space=yes \
++		ac_use_included_regex=no \
+ 		am_cv_func_working_getline=yes \
+-		gl_cv_func_working_readdir=yes \
+-		jm_ac_cv_func_link_follows_symlink=no \
+-		utils_cv_localtime_cache=no \
+-		ac_cv_struct_st_mtim_nsec=no \
+-		gl_cv_func_tzset_clobber=no \
++		fu_cv_sys_stat_statfs2_bsize=yes \
++		gl_ac_cv_func_link_follows_symlink=no \
+ 		gl_cv_func_getcwd_null=yes \
+ 		gl_cv_func_getcwd_path_max=yes \
+-		ac_cv_func_fnmatch_gnu=yes \
+-		am_getline_needs_run_time_check=no \
+-		am_cv_func_working_getline=yes \
++		gl_cv_func_gettimeofday_clobber=no \
+ 		gl_cv_func_mkdir_trailing_slash_bug=no \
+-		gl_cv_func_mkstemp_limitations=no \
+-		ac_cv_func_working_mktime=yes \
+-		jm_cv_func_working_re_compile_pattern=yes \
+-		ac_use_included_regex=no \
+-		gl_cv_c_restrict=no
++		gl_cv_func_re_compile_pattern_working=yes \
++		gl_cv_func_rename_dest_exists_bug=no \
++		gl_cv_func_rename_trailing_slash_bug=no \
++		gl_cv_func_svid_putenv=yes \
++		gl_cv_func_tzset_clobber=no \
++		gl_cv_func_working_mkstemp=yes \
++		gl_cv_func_working_utimes=yes \
++		gl_getline_needs_run_time_check=no \
++		utils_cv_localtime_cache=no
  
--define COREUTILS_TOUCH_RENAME_M4
--	# ensure rename.m4 file is older than configure / aclocal.m4 so
--	# auto* isn't rerun
--	touch -d '1979-01-01' $(@D)/m4/rename.m4
--endef
--
--COREUTILS_POST_PATCH_HOOKS += COREUTILS_TOUCH_RENAME_M4
--
- define COREUTILS_POST_INSTALL
- 	# some things go in root rather than usr
- 	for f in $(COREUTILS_BIN_PROGS); do \
+ COREUTILS_CONF_OPT = --disable-rpath \
+ 		--disable-dependency-tracking
 -- 
 1.7.2.2
