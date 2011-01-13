@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 14 Jan 2011 00:39:39 +0100
-Subject: [Buildroot] [git commit master 1/1] coreutils: convert to autotarget
-Message-ID: <20110114065832.1029F8B4BA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] coreutils: add uname patch
+Message-ID: <20110114065832.F197F8B4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,154 +9,217 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=386183f852ed94ec3a91b0bb8bbf15590027a042
+commit: http://git.buildroot.net/buildroot/commit/?id=05c8c8eb5ae4f001e594f7c756cf118ca54ad1c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+On linux platforms, grok /proc/cpuinfo for the CPU/vendor info.
 
 Signed-off-by: Martin Banky <Martin.Banky@gmail.com>
 Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/coreutils/coreutils.mk |  107 ++++++++++-----------------------------
- 1 files changed, 28 insertions(+), 79 deletions(-)
+ package/coreutils/coreutils-8.5-uname.patch |  173 +++++++++++++++++++++++++++
+ package/coreutils/coreutils.mk              |    8 ++
+ 2 files changed, 181 insertions(+), 0 deletions(-)
+ create mode 100644 package/coreutils/coreutils-8.5-uname.patch
 
+diff --git a/package/coreutils/coreutils-8.5-uname.patch b/package/coreutils/coreutils-8.5-uname.patch
+new file mode 100644
+index 0000000..b458abe
+--- /dev/null
++++ b/package/coreutils/coreutils-8.5-uname.patch
+@@ -0,0 +1,173 @@
++On linux platforms, grok /proc/cpuinfo for the CPU/vendor info.
++
++Prob not suitable for upstream seeing as how it's 100% linux-specific
++http://lists.gnu.org/archive/html/bug-coreutils/2005-09/msg00063.html
++
++Patch originally by Carlos E. Gorges <carlos@techlinux.com.br>, but 
++heavily reworked to suck less.
++
++To add support for additional platforms, check out the show_cpuinfo()
++func in the linux/arch/<ARCH>/ source tree of the kernel.
++
++--- coreutils/src/uname.c
+++++ coreutils/src/uname.c
++@@ -50,6 +50,11 @@
++ # include <mach-o/arch.h>
++ #endif
++ 
+++#if defined(__linux__)
+++# define USE_PROCINFO
+++# define UNAME_HARDWARE_PLATFORM
+++#endif
+++
++ #include "system.h"
++ #include "error.h"
++ #include "quote.h"
++@@ -138,6 +143,117 @@
++   exit (status);
++ }
++ 
+++#if defined(USE_PROCINFO)
+++
+++# if defined(__s390__) || defined(__s390x__)
+++#  define CPUINFO_FILE    "/proc/sysinfo"
+++#  define CPUINFO_FORMAT  "%64[^\t :]%*[ :]%256[^\n]%c"
+++# else
+++#  define CPUINFO_FILE    "/proc/cpuinfo"
+++#  define CPUINFO_FORMAT  "%64[^\t:]\t:%256[^\n]%c"
+++# endif
+++
+++# define PROCINFO_PROCESSOR      0
+++# define PROCINFO_HARDWARE_PLATFORM 1
+++
+++static void __eat_cpuinfo_space(char *buf)
+++{
+++	/* first eat trailing space */
+++	char *tmp = buf + strlen(buf) - 1;
+++	while (tmp > buf && isspace(*tmp))
+++		*tmp-- = '\0';
+++	/* then eat leading space */
+++	tmp = buf;
+++	while (*tmp && isspace(*tmp))
+++		tmp++;
+++	if (tmp != buf)
+++		memmove(buf, tmp, strlen(tmp)+1);
+++	/* finally collapse whitespace */
+++	tmp = buf;
+++	while (tmp[0] && tmp[1]) {
+++		if (isspace(tmp[0]) && isspace(tmp[1])) {
+++			memmove(tmp, tmp+1, strlen(tmp));
+++			continue;
+++		}
+++		++tmp;
+++	}
+++}
+++
+++static int __linux_procinfo(int x, char *fstr, size_t s)
+++{
+++	FILE *fp;
+++
+++	char *procinfo_keys[] = {
+++		/* --processor --hardware-platform */
+++		#if defined(__alpha__)
+++			"cpu model", "system type"
+++		#elif defined(__arm__)
+++			"Processor", "Hardware"
+++		#elif defined(__avr32__)
+++			"processor", "cpu family"
+++		#elif defined(__bfin__)
+++			"CPU", "BOARD Name"
+++		#elif defined(__cris__)
+++			"cpu", "cpu model"
+++		#elif defined(__frv__)
+++			"CPU-Core", "System"
+++		#elif defined(__i386__) || defined(__x86_64__)
+++			"model name", "vendor_id"
+++		#elif defined(__ia64__)
+++			"family", "vendor"
+++		#elif defined(__hppa__)
+++			"cpu", "model"
+++		#elif defined(__m68k__)
+++			"CPU", "MMU"
+++		#elif defined(__mips__)
+++			"cpu model", "system type"
+++		#elif defined(__powerpc__) || defined(__powerpc64__)
+++			"cpu", "machine"
+++		#elif defined(__s390__) || defined(__s390x__)
+++			"Type", "Manufacturer"
+++		#elif defined(__sh__)
+++			"cpu type", "machine"
+++		#elif defined(sparc) || defined(__sparc__)
+++			"type", "cpu"
+++		#elif defined(__vax__)
+++			"cpu type", "cpu"
+++		#else
+++			"unknown", "unknown"
+++		#endif
+++	};
+++
+++	if ((fp = fopen(CPUINFO_FILE, "r")) != NULL) {
+++		char key[65], value[257], eol, *ret = NULL;
+++
+++		while (fscanf(fp, CPUINFO_FORMAT, key, value, &eol) != EOF) {
+++			__eat_cpuinfo_space(key);
+++			if (!strcmp(key, procinfo_keys[x])) {
+++				__eat_cpuinfo_space(value);
+++				ret = value;
+++				break;
+++			}
+++			if (eol != '\n') {
+++				/* we need two fscanf's here in case the previous
+++				 * length limit caused us to read right up to the
+++				 * newline ... doing "%*[^\n]\n" wont eat the newline
+++				 */
+++				fscanf(fp, "%*[^\n]");
+++				fscanf(fp, "\n");
+++			}
+++		}
+++		fclose(fp);
+++
+++		if (ret) {
+++			strncpy(fstr, ret, s);
+++			return 0;
+++		}
+++	}
+++
+++	return -1;
+++}
+++
+++#endif
+++
++ /* Print ELEMENT, preceded by a space if something has already been
++    printed.  */
++ 
++@@ -250,10 +344,14 @@ main (int argc, char **argv)
++   if (toprint & PRINT_PROCESSOR)
++     {
++       char const *element = unknown;
++-#if HAVE_SYSINFO && defined SI_ARCHITECTURE
+++#if ( HAVE_SYSINFO && defined SI_ARCHITECTURE ) || defined(USE_PROCINFO)
++       {
++         static char processor[257];
+++#if defined(USE_PROCINFO)
+++        if (0 <= __linux_procinfo (PROCINFO_PROCESSOR, processor, sizeof processor))
+++#else
++         if (0 <= sysinfo (SI_ARCHITECTURE, processor, sizeof processor))
+++#endif
++           element = processor;
++       }
++ #endif
++@@ -306,9 +404,13 @@ main (int argc, char **argv)
++       if (element == unknown)
++         {
++           static char hardware_platform[257];
+++#if defined(USE_PROCINFO)
+++          if (0 <= __linux_procinfo (PROCINFO_HARDWARE_PLATFORM, hardware_platform, sizeof hardware_platform))
+++#else
++           size_t s = sizeof hardware_platform;
++           static int mib[] = { CTL_HW, UNAME_HARDWARE_PLATFORM };
++           if (sysctl (mib, 2, hardware_platform, &s, 0, 0) >= 0)
+++#endif
++             element = hardware_platform;
++         }
++ #endif
 diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index f9910c6..078e28f 100644
+index ae8863f..d934ae8 100644
 --- a/package/coreutils/coreutils.mk
 +++ b/package/coreutils/coreutils.mk
-@@ -3,37 +3,21 @@
- # coreutils
- #
- #############################################################
--COREUTILS_VERSION:=7.4
--COREUTILS_SOURCE:=coreutils-$(COREUTILS_VERSION).tar.gz
--#COREUTILS_SITE:=ftp://alpha.gnu.org/gnu/coreutils/
--COREUTILS_SITE:=$(BR2_GNU_MIRROR)/coreutils
--COREUTILS_CAT:=$(ZCAT)
--COREUTILS_DIR:=$(BUILD_DIR)/coreutils-$(COREUTILS_VERSION)
--COREUTILS_BINARY:=src/vdir
--COREUTILS_TARGET_BINARY:=bin/vdir
--BIN_PROGS:=cat chgrp chmod chown cp date dd df dir echo false hostname \
--	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
--	uname join
-+COREUTILS_VERSION = 7.4
-+COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.gz
-+COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+@@ -54,6 +54,14 @@ COREUTILS_CONF_OPT = --disable-rpath \
+ 		--disable-dependency-tracking \
+ 		--enable-install-program=hostname
  
--$(DL_DIR)/$(COREUTILS_SOURCE):
--	 $(call DOWNLOAD,$(COREUTILS_SITE),$(COREUTILS_SOURCE))
--
--coreutils-source: $(DL_DIR)/$(COREUTILS_SOURCE)
-+# If both coreutils and busybox are selected, make certain coreutils
-+# wins the fight over who gets to have their utils actually installed.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+COREUTILS_DEPENDENCIES = busybox
-+endif
- 
--$(COREUTILS_DIR)/.unpacked: $(DL_DIR)/$(COREUTILS_SOURCE)
--	$(COREUTILS_CAT) $(DL_DIR)/$(COREUTILS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(COREUTILS_DIR) package/coreutils/ coreutils\*.patch
--	$(CONFIG_UPDATE) $(COREUTILS_DIR)/build-aux
--	# ensure rename.m4 file is older than configure / aclocal.m4 so
--	# auto* isn't rerun
--	touch -d '1979-01-01' $(@D)/m4/rename.m4
--	touch $@
-+COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
-+	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
-+	uname join
- 
--$(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
--	(cd $(COREUTILS_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_func_strtod=yes \
-+COREUTILS_CONF_ENV = ac_cv_func_strtod=yes \
- 		ac_fsusage_space=yes \
- 		fu_cv_sys_stat_statfs2_bsize=yes \
- 		ac_cv_func_closedir_void=no \
-@@ -81,68 +65,33 @@ $(COREUTILS_DIR)/.configured: $(COREUTILS_DIR)/.unpacked
- 		ac_cv_func_working_mktime=yes \
- 		jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no \
--		gl_cv_c_restrict=no \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/usr/lib \
--		--sysconfdir=/etc \
--		--datadir=/usr/share \
--		--localstatedir=/var \
--		--mandir=/usr/share/man \
--		--infodir=/usr/share/info \
--		$(DISABLE_NLS) \
--		$(DISABLE_LARGEFILE) \
--		--disable-rpath \
--		--disable-dependency-tracking \
--	)
--	touch $@
-+		gl_cv_c_restrict=no
- 
--$(COREUTILS_DIR)/$(COREUTILS_BINARY): $(COREUTILS_DIR)/.configured
--	$(MAKE) -C $(COREUTILS_DIR)
--	rm -f $(TARGET_DIR)/$(COREUTILS_TARGET_BINARY)
-+COREUTILS_CONF_OPT = --disable-rpath \
-+		--disable-dependency-tracking
- 
--$(TARGET_DIR)/$(COREUTILS_TARGET_BINARY): $(COREUTILS_DIR)/$(COREUTILS_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(COREUTILS_DIR) install
-+define COREUTILS_TOUCH_RENAME_M4
-+	# ensure rename.m4 file is older than configure / aclocal.m4 so
-+	# auto* isn't rerun
-+	touch -d '1979-01-01' $(@D)/m4/rename.m4
++define COREUTILS_TOUCH_UNAME_C
++	# ensure uname.c file's timestamp does not change,
++	# so help2man does not run
++	touch -d '2010-01-01' $(@D)/src/uname.c
 +endef
 +
-+COREUTILS_POST_PATCH_HOOKS += COREUTILS_TOUCH_RENAME_M4
++COREUTILS_POST_PATCH_HOOKS += COREUTILS_TOUCH_UNAME_C
 +
-+define COREUTILS_POST_INSTALL
+ define COREUTILS_POST_INSTALL
  	# some things go in root rather than usr
--	for f in $(BIN_PROGS); do \
-+	for f in $(COREUTILS_BIN_PROGS); do \
- 		mv $(TARGET_DIR)/usr/bin/$$f $(TARGET_DIR)/bin/$$f; \
- 	done
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
- 	# gnu thinks chroot is in bin, debian thinks it's in sbin
- 	mv $(TARGET_DIR)/usr/bin/chroot $(TARGET_DIR)/usr/sbin/chroot
--	$(STRIPCMD) $(TARGET_DIR)/usr/sbin/chroot > /dev/null 2>&1
--	rm -rf $(TARGET_DIR)/share/locale
-+endef
- 
--# If both coreutils and busybox are selected, make certain coreutils
--# wins the fight over who gets to have their utils actually installed.
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--coreutils: busybox $(TARGET_DIR)/$(COREUTILS_TARGET_BINARY)
--else
--coreutils: $(TARGET_DIR)/$(COREUTILS_TARGET_BINARY)
--endif
-+COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_POST_INSTALL
- 
- # If both coreutils and busybox are selected, the corresponding applets
- # may need to be reinstated by the clean targets.
--coreutils-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(COREUTILS_DIR) uninstall
--	-$(MAKE) -C $(COREUTILS_DIR) clean
- 
--coreutils-dirclean:
--	rm -rf $(COREUTILS_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_COREUTILS),y)
--TARGETS+=coreutils
--endif
-+$(eval $(call AUTOTARGETS,package,coreutils))
+ 	for f in $(COREUTILS_BIN_PROGS); do \
 -- 
 1.7.2.2
