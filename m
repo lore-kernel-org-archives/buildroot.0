@@ -1,7 +1,7 @@
 From: Matt Johnson <mj1856@hotmail.com>
-Date: Thu, 13 Jan 2011 21:18:33 -0700
-Subject: [Buildroot] freetype: fix for multilib toolchain
-Message-ID: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
+Date: Thu, 13 Jan 2011 21:21:59 -0700
+Subject: [Buildroot] rubix: pass target cflags
+Message-ID: <BAY145-w120285E8572BD44A195EABC2F30@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,23 +9,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-FreeType's makefile needs to have the architecture (example, -march=armv4t) passed in the LDFLAGS in order to work properly with a multilib toolchain, like CodeSourcery.  This is the easiest way I could think of to do it.  Tested and works.
- 
 Signed-off-by: Matt Johnson <mj1856@hotmail.com>
 ---
- package/freetype/freetype.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index ad4292f..7e59b57 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -8,6 +8,7 @@ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_INSTALL_TARGET = YES
-+FREETYPE_CONF_ENV = LDFLAGS="-march=$(CC_TARGET_ARCH_) $(TARGET_LDFLAGS)"
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
+ package/games/rubix/rubix.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+diff --git a/package/games/rubix/rubix.mk b/package/games/rubix/rubix.mk
+index 3440c23..7e3b34f 100644
+--- a/package/games/rubix/rubix.mk
++++ b/package/games/rubix/rubix.mk
+@@ -10,7 +10,7 @@ RUBIX_INSTALL_STAGING = NO
+ RUBIX_INSTALL_TARGET = YES
+ RUBIX_INSTALL_TARGET_OPT = GAMESDIR=$(TARGET_DIR)/usr/games install
+ 
+-RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
++RUBIX_MAKE_OPT = CC="$(TARGET_CC) $(TARGET_CFLAGS)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+ 
+ RUBIX_DEPENDENCIES = xserver_xorg-server
  
 -- 
-1.7.1 		 	   		  
+1.7.1
+ 
+  		 	   		  
