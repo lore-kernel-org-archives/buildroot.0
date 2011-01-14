@@ -1,30 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 14 Jan 2011 21:51:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 2647] makedevs package lacks support for 16-bit
- major/minor numbers
-In-Reply-To: <bug-2647-163@https.bugs.busybox.net/>
-References: <bug-2647-163@https.bugs.busybox.net/>
-Message-ID: <20110114215119.983E789009@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Jan 2011 22:53:38 +0100
+Subject: [Buildroot] [PATCH 3/7] toolchain: add a USE_MMU build option
+In-Reply-To: <201101141627.50341.vapier@gentoo.org> (Mike Frysinger's message
+	of "Fri, 14 Jan 2011 16:27:49 -0500")
+References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
+	<1294669725-5379-3-git-send-email-vapier@gentoo.org>
+	<87y66nvfcd.fsf@macbook.be.48ers.dk>
+	<201101141627.50341.vapier@gentoo.org>
+Message-ID: <87zkr36tjx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2647
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ >> What archs currently have working nommu support in uClibc?
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed thanks. Linux actually supports 12bit majors / 20bit minors, so I
-slightly adjusted the patch.
+ Mike> any arch can be built as "nommu".  it simply means certain
+ Mike> functions are not enabled (like fork) while others are not as
+ Mike> complicated (like malloc).  so there is no technical limitation
+ Mike> that only certain arches support nommu.  -mike
+
+Naturally, but which one are used in the wild? E.G. what is supported by
+linux-2.6.37 and uClibc-0.9.32-rc1 ?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
