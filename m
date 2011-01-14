@@ -1,60 +1,128 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Jan 2011 11:20:38 +0100
-Subject: [Buildroot] [git commit master 1/1] fs/jffs2: remove
-	BR2_JFFS2_TARGET_SREC option
-Message-ID: <20110114102129.741618B4D1@busybox.osuosl.org>
+From: Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk>
+Date: Fri, 14 Jan 2011 11:39:59 +0000
+Subject: [Buildroot] FW: Festival on Buildroot
+Message-ID: <SNT105-DS201489E837B90D9C737910EBF30@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=921f75e2607e7f3d16b7ba8ee62ed68a3632eeb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This kind of custom image conversion is better handled outside BR.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/jffs2/Config.in |    5 -----
- fs/jffs2/jffs2.mk  |   10 +---------
- 2 files changed, 1 insertions(+), 14 deletions(-)
-
-diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
-index edb1f4d..5748fbb 100644
---- a/fs/jffs2/Config.in
-+++ b/fs/jffs2/Config.in
-@@ -80,11 +80,6 @@ config BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER
- 	  Do not use cleanmarkers if using NAND flash or Dataflash where
- 	  the pagesize is not a power of 2
  
--config BR2_JFFS2_TARGET_SREC
--	bool "RootFS in SREC file format"
--	help
--	  The binary data will be encoded in Motorola's S-record format
--
- config BR2_TARGET_ROOTFS_JFFS2_PAD
- 	bool "Pad output"
+
+Would there be any chance of adding in esd? / How can I go about adding it
+if it's not possible?
+
  
-diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
-index fd5da0c..2a69849 100644
---- a/fs/jffs2/jffs2.mk
-+++ b/fs/jffs2/jffs2.mk
-@@ -46,12 +46,4 @@ define ROOTFS_JFFS2_CMD
- endef
- endif
+
+Thanks,
+
  
--define JFFS2_GEN_SREC
--	$(TARGET_CROSS)objcopy -I binary -O srec --adjust-vma 0xa1000000 $$@ $$@.srec
--endef
--
--ifeq ($(BR2_JFFS2_TARGET_SREC),y)
--ROOTFS_JFFS2_POST_GEN_HOOKS += JFFS2_GEN_SREC
--endif
--
--$(eval $(call ROOTFS_TARGET,jffs2))
-\ No newline at end of file
-+$(eval $(call ROOTFS_TARGET,jffs2))
+
+Jon
+
+ 
+
+Hello,
+
+ 
+
+On Thu, 13 Jan 2011 18:55:08 +0000
+
+Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk> wrote:
+
+ 
+
+> I am trying to get festival compiled by Buildroot, but having no luck
+
+> what so ever. Has anyone got this running?
+
+> 
+
+> I keep on getting errors complaining about linking
+
+> to ../lib/libestools.so libestbase.so "cannot find -lesd"
+
+ 
+
+Well, obviously,  libesd wasn't compiled before festival. And it seems
+
+we don't even have a package for it in Buildroot. So it looks like a
+
+package needs to be created to build the ESD library.
+
+ 
+
+It's a bit odd though, since I remember building festival maybe about a
+
+year ago, and I think it was a least building. But from a quick look,
+
+it really seems to depend on esd.
+
+ 
+
+Regards,
+
+ 
+
+Thomas
+
 -- 
-1.7.2.2
+
+Thomas Petazzoni, Free Electrons
+
+Kernel, drivers, real-time and embedded Linux
+
+development, consulting, training and support.
+
+http://free-electrons.com
+
+ 
+
+ 
+
+From: Jon Ambrose [mailto:jonathan.ambrose at live.uwe.ac.uk] 
+Sent: 13 January 2011 18:55
+To: 'buildroot at busybox.net'
+Subject: Festival on Buildroot
+
+ 
+
+Hi,
+
+ 
+
+I am trying to get festival compiled by Buildroot, but having no luck what
+so ever. Has anyone got this running?
+
+ 
+
+I keep on getting errors complaining about linking to ../lib/libestools.so
+libestbase.so "cannot find -lesd"
+
+ 
+
+I would really appreciate some help on this one, I have been browsing the
+web continuously, and recompiling different options.
+
+ 
+
+Best regards,
+
+ 
+
+Jon 
+
+ 
+
+ 
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110114/60ce2430/attachment.html>
