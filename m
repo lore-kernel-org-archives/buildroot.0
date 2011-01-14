@@ -1,54 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 18:14:37 +0100
-Subject: [Buildroot] [PATCH] htop: new package
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
-	<20110114085941.6df4841d@surf>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
-Message-ID: <20110114181437.63bbb7a1@surf>
+Date: Fri, 14 Jan 2011 18:19:20 +0100
+Subject: [Buildroot] ssh-keygen seg fault
+In-Reply-To: <AANLkTi=kVHeatBJ1G2wZsX1ww-FOV0qb5Vtf5rxXNneL@mail.gmail.com>
+References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
+	<20110114090752.5f01ade5@surf>
+	<469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
+	<20110114104016.252e7f90@surf>
+	<AANLkTi=kVHeatBJ1G2wZsX1ww-FOV0qb5Vtf5rxXNneL@mail.gmail.com>
+Message-ID: <20110114181920.59ba8b8b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jan 2011 10:14:33 -0600
-ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+Hi Kyle,
 
-> > Your patch is word-wrapped. Could you check your e-mail
-> > client configuration ? You should probably try git send-email, as this
-> > will guarantee that your patches will make it properly to the list,
-> > without being word-wrapped or damaged in anyway by the mail client
-> > you're using.
+On Fri, 14 Jan 2011 09:00:16 -0800
+Kyle Hayes <kyle@greenmonitor.com> wrote:
+
+> > Ok, good to know. We don't know if Kyle is using dropbear of the
+> > full-fledged openssh. That might make a difference.
 > 
-> GGGGRRRRR!!!  I'm using Outlook and I'm behind an Exchange server.  To
-> that end, will git sendmail work?
+> Sorry, it is the full OpenSSH version.  I need to use OpenVPN too, so
+> I thought I would try to use the same tools I am currently using.
 
-No. Tell your network administrator that not having a real SMTP server
-prevents you from working efficiently. There's nothing useful you can
-do without a real SMTP server.
+Ok, good idea.
 
-Of course, if you can SSH out to another box that has a SMTP server
-available, that would work.
-
-> > None of those options are perfect, but we'd like to avoid adding
-> dozens
-> > and dozens of options at the Buildroot level to tweak every possible
-> > option of uClibc.
+> >> I think it does.
 > 
-> Nah, no reason to.  The HTOP guys say that their next release will auto
-> detect the presence of backtrace and use it if it is there, so we'll
-> skip right on past 0.9 when they get it fixed.
+> I am sure of it.  I can run Ubuntu 8.04 on the box with only a custom
+> kernel.  Everything else is completely stock from Ubuntu 8.04.  As far
+> as I know, Ubuntu is configured (or was) for either a 486 or a Pentium
+> when you run it as stock for x86.
 
-Great.
+Ok.
 
-> > Patch lacks a description of why it is needed and the Signed-off-by
-> > line.
+> > Ok, great.
 > 
-> Hmm, so naming the file htop-cross-no-proc-check is not sufficient for
-> the comment?  Will fix and resubmit.
+> See above.  I am not sure what Ubuntu 8.04 assumes, but I'm fairly
+> sure it is not using software FPU.
 
-In that case, I admit it's a bit silly, but that's the rule :-)
+Yes, definitely.
+
+> I am currently using a custom distro based on Ubuntu 8.04 with as many
+> packages trimmed as I can easily do.  This still makes the base CF
+> card image more than 400MB.  Buildroot is making a base image of about
+> 6MB.  I intend to use extlinux' ability to concatenate multiple
+> initramfs files to keep our software (which revs fairly often)
+> separate from OpenVPN config (which doesn't change too often) separate
+> from the core root filesystem.
+
+Sounds good. Didn't know that extlinux was able to do this kind of
+things. By the way, do you build extlinux with Buildroot or separatly ?
+If built with Buildroot, does it work ? Is there anything we should
+improve on that side ?
+
+> I will try dropbear and see if that works any better.  OpenSSH works
+> fine out-of-the box for the Ubuntu 8.04 version so I'm suspicious that
+> it is something about the way it is built or with the current version
+> of OpenSSH.
+
+Yes, it's definitely something wrong in the build process, and it'd be
+great to sort it out.
+
+Would you mind running ssh-keygen under gdbserver+cross-gdb as
+suggested in my first e-mail ? Or run "ulimit -c unlimited" on your
+board, get ssh-keygen to crash, and then transfer the core file to your
+development workstation, and get a backstrace with the cross-gdb. That
+would immediatly point us to the segfault location, which would really,
+really help in understanding what the issue is.
+
+Regards,
 
 Thomas
 -- 
