@@ -1,41 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Jan 2011 13:29:06 +0100
-Subject: [Buildroot] [PATCH 3/7] toolchain: add a USE_MMU build option
-In-Reply-To: <1294669725-5379-3-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Mon, 10 Jan 2011 09:28:41 -0500")
-References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-3-git-send-email-vapier@gentoo.org>
-Message-ID: <87y66nvfcd.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Fri, 14 Jan 2011 13:47:54 +0100
+Subject: [Buildroot] freetype: fix for multilib toolchain
+In-Reply-To: <20110114091129.13d810c8@surf>
+References: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
+	<20110114091129.13d810c8@surf>
+Message-ID: <AANLkTi=4rF27ON=McqUWPnM3g7JrjBtGto2q3rMrNKbG@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+Hi,
 
- Mike> Some packages need to know whether the MMU is in play, so add a toolchain
- Mike> option to expose the feature to them.
+On 14 January 2011 09:11, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello Matt,
+>
+> On Thu, 13 Jan 2011 21:18:33 -0700
+> Matt Johnson <mj1856@hotmail.com> wrote:
+>
+>> FreeType's makefile needs to have the architecture (example, -march=armv4t) passed in the LDFLAGS in order to work properly with a multilib toolchain, like CodeSourcery. ?This is the easiest way I could think of to do it. ?Tested and works.
+>
+> The description of your patch should be wrapped at ~80 columns.
+>
+>> Signed-off-by: Matt Johnson <mj1856@hotmail.com>
+>> ---
+>> ?package/freetype/freetype.mk | ? ?1 +
+>> ?1 files changed, 1 insertions(+), 0 deletions(-)
+>> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+>> index ad4292f..7e59b57 100644
+>> --- a/package/freetype/freetype.mk
+>> +++ b/package/freetype/freetype.mk
+>> @@ -8,6 +8,7 @@ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
+>> ?FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+>> ?FREETYPE_INSTALL_STAGING = YES
+>> ?FREETYPE_INSTALL_TARGET = YES
+>> +FREETYPE_CONF_ENV = LDFLAGS="-march=$(CC_TARGET_ARCH_) $(TARGET_LDFLAGS)"
+>
+> I am not sure I want to see this fixed this way. It looks like the
+> issue reported by Divick Kishore on sshd is similar: we need to pass
+> the -march argument in the LDFLAGS for all packages.
+>
+> So probably we should rather adjust TARGET_LDFLAGS globally (its
+> definition is in package/Makefile.in) so that it contains the
+> appropriate -march.
 
- Mike> +++ b/toolchain/toolchain-common.in
- Mike> @@ -66,6 +66,13 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- Mike>  	bool
- Mike>  	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
- 
- Mike> +config BR2_USE_MMU
- Mike> +	bool "Enable MMU support"
- Mike> +	default y
- Mike> +	help
- Mike> +	  If your target has a MMU, you should say Y here.  If you
- Mike> +	  are unsure, just say Y.
+AFAIK, ld does not have an "-march" option (just looked at the man page).
+So I'd say that it is the freetype (and sshd?) package that needs to be fixed
+(and not BR) because they are using LDFLAGS wrong.
 
-I think it makes sense to only show this option on archs where nommu
-makes sense to not confuse users. - E.G.:
-
-bool "Enable MMU support" if BR2_arm || BR2_armeb ...
-
-What archs currently have working nommu support in uClibc?
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Bj?rn Forsman
