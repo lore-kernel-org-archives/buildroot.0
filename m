@@ -1,32 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:42:45 +0100
-Subject: [Buildroot] Inappropriate ioctl - hwclock
-In-Reply-To: <SNT119-W1972A4A3A479929AD85F7882F00@phx.gbl>
-References: <SNT119-W1972A4A3A479929AD85F7882F00@phx.gbl>
-Message-ID: <20110114094245.78bf04ff@surf>
+Date: Fri, 14 Jan 2011 09:47:56 +0100
+Subject: [Buildroot] [PATCH 1/2] liberation: add support for custom
+ target directory
+In-Reply-To: <LEWX59$4533F784E6DAC4CB1531E0AED3C460A7@aruba.it>
+References: <LEWX59$4533F784E6DAC4CB1531E0AED3C460A7@aruba.it>
+Message-ID: <20110114094756.4f6d1747@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 13 Jan 2011 09:55:41 +0000
-Johnny Beardsmore <jny0@hotmail.com> wrote:
+Hello,
 
-> I've copied the hwclock and rtc files onto my architecture, but when I call hwclock, I get the following message:
->  
-> RTC_RD_TIME: Inappropriate ioctl for device
-> ioctl() to /dev/misc/rtc to read the time failed.
->  
-> Any ideas what I've done wrong?
+On Wed, 12 Jan 2011 14:51:09 +0100
+"Luca Ceresoli" <list@lucaceresoli.net> wrote:
 
-This is not really Buildroot related, but anyway.
+> I think Thomas is right: a unique setting should be used to override
+> the font install dir.
+> 
+> It might look like this in menuconfig:
+> 
+>       *** X libraries and helper libraries ***
+>   ()  Force all fonts to be installed here {*}
+>   [*] DejaVu (Free fonts)  --->
+>   [ ] Liberation (Free fonts) 
+>       *** X Window managers ***
+> 
+> {*} if this is empty, each font .mk will install in the default directory,
+> as liberation does in current head;
+> otherwise all fonts will be copied in the directory specified.
+> 
+> How about this?
 
-Are you sure that /dev/misc/rtc is a really a RTC device ? The
-RTC_RD_TIME ioctl() is implemented in the core RTC infrastructure of
-the kernel, so it looks like you're not talking to the right device, or
-using a really really old version of the kernel that didn't support
-this ioctl(). Or that your kernel lacks RTC support completely.
+That could be one solution. The other solution would be to hide this
+from the user, i.e an unvisible configuration option to select the
+installation location of the fonts (i.e ? fonts in subdirs ? or ? all
+fonts in /usr/share/fonts ?). ? fonts in subdirs ? would be the
+default, and ? all fonts in /usr/share/fonts/ ? would be selected by
+Nano-X/Microwindows. This way, the user wouldn't have to worry about
+the installation location of fonts.
+
+But for the moment, we don't have any microwin package. It got removed
+in september 2010, due to upstream inactivity. But it seems that the
+project is active again, and a new release has been made. So obviously,
+we could re-add such a package if someone submits it.
 
 Regards,
 
