@@ -1,240 +1,94 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Jan 2011 10:12:23 +0100
-Subject: [Buildroot] [git commit master 1/1] fs/ext2: don't enable by default
-Message-ID: <20110114092134.718C78B4CF@busybox.osuosl.org>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Fri, 14 Jan 2011 09:24:19 -0000
+Subject: [Buildroot] ssh-keygen seg fault
+In-Reply-To: <20110114090752.5f01ade5@surf>
+References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
+	<20110114090752.5f01ade5@surf>
+Message-ID: <469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net]
+> On Behalf Of Thomas Petazzoni
+> Sent: 14 January 2011 08:08
+> Hello Kyle,
+> 
+> On Thu, 13 Jan 2011 13:29:42 -0800
+> Kyle Hayes <kyle@greenmonitor.com> wrote:
+> 
+> > I am getting a seg fault when ssh-keygen tries to run and when sshd
+> > tries to start.  Here is my set up:
+> >
+> > Buildroot: GIT checkout from 1/11/11
+> > Kernel: 2.6.37
+> > Initrd type: CPIO/gzip
+> >
+> > machine: DMP eBox 3100 (PC-compatible x86 machine w/256MB of RAM)
+> >
+> > I've got extlinux installed, the kernel boots fine and I get a login
+> > prompt.  However, I see errors that ssh-keygen and sshd are seg
+> > faulting.
+> >
+> > I would appreciate any tips on how to debug/fix this.  Buildroot is
+> > exactly the system I was looking for.
+> 
+> Hard to say since we can't reproduce without having the hardware. I
+> suspect that on a "normal" x86 CPU, sshd and ssh-keygen are working
+> fine.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=319815a5d54567c1aafa17f3c8125ea74f3f3c55
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I am working on a *similar* platform (vortex86dx VDX6354 embedded PC104)
+with buildroot for some time.  I have dropbear working without problems.
 
-It's pretty uncommon to use ext2fs on embedded systems, so don't enable
-it by default.
+> 
+> So the best you could do is use gdbserver on the target and a
+> cross-gdb (both can be built by Buildroot) and start ssh-keygen without
+> gdbserver in order to find the location of the segfault in ssh-keygen.
+> That would really in understanding the issue.
+> 
+> Are you sure that the Vortex 86DX supports all instructions of i486 ?
 
-Adjust defconfigs to match.
+I think it does.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/arm_nptl_toolchain_defconfig |    1 -
- configs/arm_toolchain_defconfig      |    1 -
- configs/at91rm9200df_defconfig       |    1 -
- configs/at91sam9260dfc_defconfig     |    1 -
- configs/at91sam9261ek_defconfig      |    1 -
- configs/at91sam9263ek_defconfig      |    1 -
- configs/at91sam9g20dfc_defconfig     |    1 -
- configs/atngw100_defconfig           |    1 -
- configs/atstk100x_defconfig          |    1 -
- configs/integrator926_defconfig      |    1 -
- configs/kb9202_defconfig             |    1 -
- configs/qemu_arm_versatile_defconfig |    3 +++
- configs/qemu_mipsel_malta_defconfig  |    3 +++
- configs/qemu_ppc_g3beige_defconfig   |    3 +++
- configs/qemu_sh4_r2d_defconfig       |    3 +++
- configs/qemu_x86_defconfig           |    3 +++
- fs/ext2/Config.in                    |    1 -
- 17 files changed, 15 insertions(+), 12 deletions(-)
+> Are you sure that the FPU is compatible ?
 
-diff --git a/configs/arm_nptl_toolchain_defconfig b/configs/arm_nptl_toolchain_defconfig
-index 1bb1193..8100073 100644
---- a/configs/arm_nptl_toolchain_defconfig
-+++ b/configs/arm_nptl_toolchain_defconfig
-@@ -15,4 +15,3 @@ BR2_INSTALL_LIBSTDCPP=y
- # BR2_PACKAGE_BUSYBOX is not set
- 
- # No filesystem (toolchain only)
--# BR2_TARGET_ROOTFS_EXT2 is not set
-diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
-index e46c5c9..8bc97c9 100644
---- a/configs/arm_toolchain_defconfig
-+++ b/configs/arm_toolchain_defconfig
-@@ -13,4 +13,3 @@ BR2_INSTALL_LIBSTDCPP=y
- # BR2_PACKAGE_BUSYBOX is not set
- 
- # No filesystem (toolchain only)
--# BR2_TARGET_ROOTFS_EXT2 is not set
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index b23665f..4229155 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -2,7 +2,6 @@
- BR2_arm=y
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
- BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x420
-diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
-index d20d89e..13748d3 100644
---- a/configs/at91sam9260dfc_defconfig
-+++ b/configs/at91sam9260dfc_defconfig
-@@ -20,5 +20,4 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260ek"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
-index c1ab6be..cea28cb 100644
---- a/configs/at91sam9261ek_defconfig
-+++ b/configs/at91sam9261ek_defconfig
-@@ -21,5 +21,4 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="at91sam9261ek"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
-index acf86ad..1a79482 100644
---- a/configs/at91sam9263ek_defconfig
-+++ b/configs/at91sam9263ek_defconfig
-@@ -21,5 +21,4 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263ek"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
-\ No newline at end of file
-diff --git a/configs/at91sam9g20dfc_defconfig b/configs/at91sam9g20dfc_defconfig
-index 59cc27c..16fd023 100644
---- a/configs/at91sam9g20dfc_defconfig
-+++ b/configs/at91sam9g20dfc_defconfig
-@@ -21,5 +21,4 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g20ek"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
-index 85aa94e..5373b44 100644
---- a/configs/atngw100_defconfig
-+++ b/configs/atngw100_defconfig
-@@ -2,7 +2,6 @@
- BR2_avr32=y
- 
- # Filesystems
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_FLASH_128=y
- BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x1000
-diff --git a/configs/atstk100x_defconfig b/configs/atstk100x_defconfig
-index 35571a0..1af5001 100644
---- a/configs/atstk100x_defconfig
-+++ b/configs/atstk100x_defconfig
-@@ -14,7 +14,6 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="atstk1002"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
- 
- 
-diff --git a/configs/integrator926_defconfig b/configs/integrator926_defconfig
-index b9e790a..e596d33 100644
---- a/configs/integrator926_defconfig
-+++ b/configs/integrator926_defconfig
-@@ -14,5 +14,4 @@ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="integrator"
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/kb9202_defconfig b/configs/kb9202_defconfig
-index b71ceee..50b278c 100644
---- a/configs/kb9202_defconfig
-+++ b/configs/kb9202_defconfig
-@@ -3,7 +3,6 @@ BR2_arm=y
- BR2_arm920t=y
- 
- # Filesystem
--# BR2_TARGET_ROOTFS_EXT2 is not set
- BR2_TARGET_ROOTFS_TAR=y
- 
- # Kernel
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 6c349d3..f5e2464 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -2,6 +2,9 @@
- BR2_arm=y
- BR2_arm926t=y
- 
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index b021c1f..612698d 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -2,6 +2,9 @@
- BR2_mipsel=y
- BR2_mips_32r2=y
- 
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 8b9212d..c625743 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -2,6 +2,9 @@
- BR2_powerpc=y
- BR2_powerpc_440fp=y
- 
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 5e1f626..ba46ea0 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -2,6 +2,9 @@
- BR2_sh=y
- BR2_sh4=y
- 
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
- # The kernel wants to use the -m4-nofpu option to make sure that it
- # doesn't use floating point operations.
- BR2_GCC_VERSION_4_5_X=y
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index e670b30..171da63 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -2,6 +2,9 @@
- BR2_i386=y
- BR2_x86_pentiumpro=y
- 
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 5c041d9..535fa01 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -1,6 +1,5 @@
- config BR2_TARGET_ROOTFS_EXT2
- 	bool "ext2 root filesystem"
--	default y
- 	help
- 	  Build an ext2 root filesystem
- 
--- 
-1.7.2.2
+I think it is.
+
+Certainly I have had no problems associated with running a buildroot
+generated i486 toolchain.
+
+ The documentation of the
+> Vortex 86DX states that it has a FPU, but I don't know if it's the same
+> as the one in normal x86 CPUs. Maybe you could try to build Buildroot
+> with BR2_SOFT_FLOAT=y (config options: "Use software floating point by
+> default").
+
+I think your problem may be the kernel config.  Can I suggest that you
+download the X-Linux sources from http://www.dmp.com.tw/tech/os-xlinux/ then
+use the kernel configuration for the vortex86dx as your kernel
+configuration?  X-Linux is currently stuck at 2.6.29.6 and I have had
+problems moving to more recent kernels (gdbserver no longer stopped at
+breakpoints, kernel panics at boot).  YMMV.  As X-Linux is provided by DM&P
+who make the vortex86dx I have taken the "safe" approach and stuck with
+2.6.29.6 too and used their kernel configuration verbatim.  Please note: I
+am unclear what is in the eBOX 3100 and so what the differences between this
+and the VDX6354 are.  If the eBOX is actually a vortex86sx (no FPU) then I
+have also previously used the VSX6154 which contains the vortex86sx with
+buildroot using the X-Linux kernel configuration for vortex86sx.
+
+> 
+> Regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
