@@ -1,15 +1,15 @@
 From: Andy Kennedy <Andy.Kennedy@adtran.com>
-Date: Fri, 14 Jan 2011 15:53:03 -0600
+Date: Fri, 14 Jan 2011 15:45:39 -0600
 Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.2 + change URL
 	to match kernel.org
-Message-ID: <4D30C5BF.6050106@AdTran.com>
+Message-ID: <4D30C403.4010105@AdTran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay, this is like TAKE-6 or so. . . Hopefully, there will be no egg
+Okay, this is like TAKE-5 or so. . . Hopefully, there will be no egg
 in my face this time. ;)
 
 Changed the KEXEC_SITE to the new home of kexec.  This patch also
