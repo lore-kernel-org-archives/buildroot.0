@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:19:52 +0100
-Subject: [Buildroot] rubix: pass target cflags
-In-Reply-To: <BAY145-w120285E8572BD44A195EABC2F30@phx.gbl>
-References: <BAY145-w120285E8572BD44A195EABC2F30@phx.gbl>
-Message-ID: <20110114091952.154e11e6@surf>
+Date: Fri, 14 Jan 2011 09:28:50 +0100
+Subject: [Buildroot] fontconfig: bump to version 2.8.0
+In-Reply-To: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
+References: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
+Message-ID: <20110114092850.1fb27fc1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,34 @@ To: buildroot@busybox.net
 
 Matt,
 
-On Thu, 13 Jan 2011 21:21:59 -0700
+On Thu, 13 Jan 2011 21:12:09 -0700
 Matt Johnson <mj1856@hotmail.com> wrote:
 
-> -RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
-> +RUBIX_MAKE_OPT = CC="$(TARGET_CC) $(TARGET_CFLAGS)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+> Signed-off-by: Matt Johnson <mj1856@hotmail.com>
+> ---
+>  ...fontconfig-2.6.0-parallel-compilation-fix.patch |   26 -------
 
-I was wondering why passing all those flags was necessary with an
-autotools-based package.
+In the commit description, would be great to say that the
+parallel-compilation-fix patch is no longer necessary since it has been
+merged upstream at
 
-And in fact, rubix is not autotools based. The ./configure script
-contains:
+  http://cgit.freedesktop.org/fontconfig/commit/?id=0e21b5a4d5609a5dd0f332b412d878b6f1037d29
 
-=================================================================
-#!/bin/sh
+so that people reviewing your patch can easily understand why it's no
+longer necessary.
 
-echo "Dummy configure script for autotools in buildroot"
+>  .../fontconfig-2.6.0-use_for_build.patch           |   80 --------------------
+>  .../fontconfig-2.8.0-use_for_build.patch           |   80 ++++++++++++++++++++
 
-exit 0
-=================================================================
+A patch has been committed upstream that intends to fix some
+cross-compilation issues:
 
-So I would prefer to see this package converted to the GENTARGETS
-infrastructure. This should be relatively simple:
+ http://cgit.freedesktop.org/fontconfig/commit/?id=2a6b235ff6d2750171e8dff7cfdfe3bccb0f630e
 
- * Remove RUBIX_INSTALL_STAGING, RUBIX_INSTALL_TARGET,
-   RUBIX_INSTALL_TARGET_OPT, RUBIX_MAKE_OPT
-
- * Add the following lines
-
-define RUBIX_BUILD_CMDS
-	$(MAKE) 				\
-	CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	\
-	XINC="-I$(STAGING_DIR)/usr/include/X11"	\
-	XLIB="-L$(STAGING_DIR)/usr/lib -lX11"	\
-	-C $(@D)
-endef
-
-define RUBIX_INSTALL_TARGET_CMDS
-	$(MAKE) GAMESDIR=$(TARGET_DIR)/usr/games -C $(@D) install
-endef
-
- * Replace AUTOTARGETS by GENTARGETS
-
-And if you have time, it would be even better to switch to the upstream
-version instead of this version on avr32linux.org. There is a new
-version 1.0.6 available, that you can grab from
-http://sed.free.fr/rubix/index.html.
+but it is not part of fontconfig-2.8.0. Does it solve all problems
+fixed by the use_for_build patch ? If so, I'd prefer to see an already
+upstreamed patch used in Buildroot, with the proper comment mentionning
+that the next version of fontconfig will include this fix.
 
 Thanks!
 
