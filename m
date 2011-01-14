@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 15:44:30 +0100
-Subject: [Buildroot] freetype: fix for multilib toolchain
-In-Reply-To: <AANLkTi=4rF27ON=McqUWPnM3g7JrjBtGto2q3rMrNKbG@mail.gmail.com>
-References: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
-	<20110114091129.13d810c8@surf>
-	<AANLkTi=4rF27ON=McqUWPnM3g7JrjBtGto2q3rMrNKbG@mail.gmail.com>
-Message-ID: <20110114154430.4952dca7@surf>
+Date: Fri, 14 Jan 2011 15:46:23 +0100
+Subject: [Buildroot] FW: Festival on Buildroot
+In-Reply-To: <SNT105-DS201489E837B90D9C737910EBF30@phx.gbl>
+References: <SNT105-DS201489E837B90D9C737910EBF30@phx.gbl>
+Message-ID: <20110114154623.6ed335b1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jan 2011 13:47:54 +0100
-Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+Jon,
 
-> AFAIK, ld does not have an "-march" option (just looked at the man page).
-> So I'd say that it is the freetype (and sshd?) package that needs to be fixed
-> (and not BR) because they are using LDFLAGS wrong.
+(Could you fix your e-mail client in order to properly reply in the
+ existing thread ? Could you also not top-post ?)
 
-I clearly overlooked this, and I think you're correct.
+On Fri, 14 Jan 2011 11:39:59 +0000
+Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk> wrote:
 
-So, as I said in another e-mail, I think ld does allows to choose
-between different ld variants. So the link should always be done with
-gcc, which then drives ld, giving it the correct path to the
-appropriate libraries and runtime.
+> Would there be any chance of adding in esd? / How can I go about adding it
+> if it's not possible?
+
+I personaly won't have the time right now to work on packaging esd. If
+you're interested, we have documentation on how to add packages:
+http://buildroot.org/downloads/buildroot.html#add_packages.
+
+I'm sure if you start posting your first attempts at packaging esd, you
+will receive comments and reviews from people on the list.
 
 Regards,
 
