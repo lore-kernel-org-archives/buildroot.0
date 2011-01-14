@@ -1,39 +1,52 @@
-From: Matt Johnson <mj1856@hotmail.com>
-Date: Fri, 14 Jan 2011 09:19:10 -0700
-Subject: [Buildroot] fontconfig: bump to version 2.8.0
-In-Reply-To: <20110114092850.1fb27fc1@surf>
-References: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
-	<20110114092850.1fb27fc1@surf>
-Message-ID: <BAY145-ds14C51F7DDAD975EF4B45E1C2F30@phx.gbl>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Fri, 14 Jan 2011 17:48:45 +0100
+Subject: [Buildroot]
+	=?utf-8?q?=5BPATCH_1/2=5D_liberation=3A_add_support_f?=
+	=?utf-8?q?or_custom_target_directory?=
+In-Reply-To: <20110114094756.4f6d1747@surf>
+References: =?iso-8859-1?q?=3CLEWX59=244533F784E6DAC4CB1531E0AED3C460A7=40aruba?=
+	=?iso-8859-1?q?=2Eit=3E_=3C20110114094756=2E4f6d1747=40surf=3E?=
+Message-ID: <LF0UP9$6C050B5F0CF790CC5FFC45AB98AF886D@aruba.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> In the commit description, would be great to say that the
-parallel-compilation-fix patch is no longer necessary since it has been
-merged upstream
+Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 12 Jan 2011 14:51:09 +0100
+> "Luca Ceresoli" <list@lucaceresoli.net> wrote:
+> 
+> > I think Thomas is right: a unique setting should be used to override
+> > the font install dir.
+> > 
+> > It might look like this in menuconfig:
+> > 
+> >       *** X libraries and helper libraries ***
+> >   ()  Force all fonts to be installed here {*}
+> >   [*] DejaVu (Free fonts)  --->
+> >   [ ] Liberation (Free fonts) 
+> >       *** X Window managers ***
+> > 
+> > {*} if this is empty, each font .mk will install in the default directory,
+> > as liberation does in current head;
+> > otherwise all fonts will be copied in the directory specified.
+> > 
+> > How about this?
+> 
+> That could be one solution. The other solution would be to hide this
+> from the user, i.e an unvisible configuration option to select the
+> installation location of the fonts (i.e ? fonts in subdirs ? or ? all
+> fonts in /usr/share/fonts ?). ? fonts in subdirs ? would be the
+> default, and ? all fonts in /usr/share/fonts/ ? would be selected by
+> Nano-X/Microwindows. This way, the user wouldn't have to worry about
+> the installation location of fonts.
 
-Yes, the parallel compilation fix was no longer necessary.  Thanks for the
-link, I would have had no idea where to look, I just saw that the changes
-were already in the 2.8.0 sources.
+That would not be enough in my case.
+I don't use Nano-x/Microwin, my setup is based on qt + directfb + freetype.
+I am not sure which of these components needs fonts in a specific dir,
+but if fonts are in subdirs they won't be found.
 
-In regards to the use_for_build patch, I wasn't sure why it was in there to
-begin with.  However I didn't see any specific reason to remove it, since
-the files it touches have not changed.  I just updated the version number
-references.
-
-Also, one thing I didn't mention is that these lines:
-
--# This package does not like using the target cflags for some reason.
--FONTCONFIG_CONF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/freetype2"
-
-, were removed because of the same missing target cflags (for -march) issue
-that I described recently in the freetype and rubix packages.  I found the
-comment to be untrue, even under the old version 2.6.0. I had no problem
-compiling with the target cflags in place.  Perhaps someone can shed light
-on why that was added in the first place?  Maybe on a different platform
-than mine it fails.
-
--Matt
+Luca
