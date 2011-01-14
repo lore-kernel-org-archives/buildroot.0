@@ -1,47 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:28:50 +0100
-Subject: [Buildroot] fontconfig: bump to version 2.8.0
-In-Reply-To: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
-References: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
-Message-ID: <20110114092850.1fb27fc1@surf>
+Date: Fri, 14 Jan 2011 09:42:45 +0100
+Subject: [Buildroot] Inappropriate ioctl - hwclock
+In-Reply-To: <SNT119-W1972A4A3A479929AD85F7882F00@phx.gbl>
+References: <SNT119-W1972A4A3A479929AD85F7882F00@phx.gbl>
+Message-ID: <20110114094245.78bf04ff@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt,
+On Thu, 13 Jan 2011 09:55:41 +0000
+Johnny Beardsmore <jny0@hotmail.com> wrote:
 
-On Thu, 13 Jan 2011 21:12:09 -0700
-Matt Johnson <mj1856@hotmail.com> wrote:
+> I've copied the hwclock and rtc files onto my architecture, but when I call hwclock, I get the following message:
+>  
+> RTC_RD_TIME: Inappropriate ioctl for device
+> ioctl() to /dev/misc/rtc to read the time failed.
+>  
+> Any ideas what I've done wrong?
 
-> Signed-off-by: Matt Johnson <mj1856@hotmail.com>
-> ---
->  ...fontconfig-2.6.0-parallel-compilation-fix.patch |   26 -------
+This is not really Buildroot related, but anyway.
 
-In the commit description, would be great to say that the
-parallel-compilation-fix patch is no longer necessary since it has been
-merged upstream at
+Are you sure that /dev/misc/rtc is a really a RTC device ? The
+RTC_RD_TIME ioctl() is implemented in the core RTC infrastructure of
+the kernel, so it looks like you're not talking to the right device, or
+using a really really old version of the kernel that didn't support
+this ioctl(). Or that your kernel lacks RTC support completely.
 
-  http://cgit.freedesktop.org/fontconfig/commit/?id=0e21b5a4d5609a5dd0f332b412d878b6f1037d29
-
-so that people reviewing your patch can easily understand why it's no
-longer necessary.
-
->  .../fontconfig-2.6.0-use_for_build.patch           |   80 --------------------
->  .../fontconfig-2.8.0-use_for_build.patch           |   80 ++++++++++++++++++++
-
-A patch has been committed upstream that intends to fix some
-cross-compilation issues:
-
- http://cgit.freedesktop.org/fontconfig/commit/?id=2a6b235ff6d2750171e8dff7cfdfe3bccb0f630e
-
-but it is not part of fontconfig-2.8.0. Does it solve all problems
-fixed by the use_for_build patch ? If so, I'd prefer to see an already
-upstreamed patch used in Buildroot, with the proper comment mentionning
-that the next version of fontconfig will include this fix.
-
-Thanks!
+Regards,
 
 Thomas
 -- 
