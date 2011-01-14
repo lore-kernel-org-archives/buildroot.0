@@ -1,33 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Jan 2011 23:08:49 +0100
-Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.2 + change URL
-	to match kernel.org
-In-Reply-To: <4D30C5BF.6050106@AdTran.com> (Andy Kennedy's message of "Fri, 14
-	Jan 2011 15:53:03 -0600")
-References: <4D30C5BF.6050106@AdTran.com>
-Message-ID: <87vd1r6sum.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 14 Jan 2011 22:09:10 +0000 (UTC)
+Subject: [Buildroot] [Bug 3007] kexec doesn't build: Missing regdef.h file
+In-Reply-To: <bug-3007-163@https.bugs.busybox.net/>
+References: <bug-3007-163@https.bugs.busybox.net/>
+Message-ID: <20110114220910.25BC08B528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andy" == Andy Kennedy <Andy.Kennedy@adtran.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=3007
 
- Andy> Okay, this is like TAKE-6 or so. . . Hopefully, there will be no egg
- Andy> in my face this time. ;)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Wee, it worked! One minor nit: This kind of extra info that shouldn't be
-part of the commit message should go under the '---' line, so git-am
-doesn't include it in the commit.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Committed, thanks!
-
- Andy> Changed the KEXEC_SITE to the new home of kexec.  This patch also
- Andy> satisfies bug id=3007 created by me last month.  Thanks to Gustavo for
- Andy> pointing out that the easy fix was to bump kexec to 2.0.2.
-
- Andy> Signed-of-by: Andy Kennedy <Andy.Kennedy@AdTran.com>
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed by kexec version bump in git, thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
