@@ -1,93 +1,69 @@
-From: Kyle Hayes <kyle@greenmonitor.com>
-Date: Fri, 14 Jan 2011 11:29:29 -0800
-Subject: [Buildroot] ssh-keygen seg fault
-In-Reply-To: <20110114181920.59ba8b8b@surf>
-References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
-	<20110114090752.5f01ade5@surf>
-	<469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
-	<20110114104016.252e7f90@surf>
-	<AANLkTi=kVHeatBJ1G2wZsX1ww-FOV0qb5Vtf5rxXNneL@mail.gmail.com>
-	<20110114181920.59ba8b8b@surf>
-Message-ID: <AANLkTimU=1_RZohLaLaNZDsfYek3Xr8TbWPZUaCDk6ne@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 14 Jan 2011 22:02:47 +0100
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
+	changes
+Message-ID: <20110114210302.695718B52A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK, now back to this...
 
-On Fri, Jan 14, 2011 at 9:19 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hi Kyle,
->
-> On Fri, 14 Jan 2011 09:00:16 -0800
-> Kyle Hayes <kyle@greenmonitor.com> wrote:
->> I am currently using a custom distro based on Ubuntu 8.04 with as many
->> packages trimmed as I can easily do. ?This still makes the base CF
->> card image more than 400MB. ?Buildroot is making a base image of about
->> 6MB. ?I intend to use extlinux' ability to concatenate multiple
->> initramfs files to keep our software (which revs fairly often)
->> separate from OpenVPN config (which doesn't change too often) separate
->> from the core root filesystem.
->
-> Sounds good. Didn't know that extlinux was able to do this kind of
-> things. By the way, do you build extlinux with Buildroot or separatly ?
-> If built with Buildroot, does it work ? Is there anything we should
-> improve on that side ?
+commit: http://git.buildroot.net/buildroot/commit/?id=a7f40dfc1b676a34fe257dc0dd0a25dfe69416d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I am using extlinux from the syslinux distribution included with
-Ubuntu 10.04 (my build workstation). I have not tried to build it with
-Buildroot as it is not a tool for the target, but something that I
-used when setting up the CF card.  It isn't the easiest thing to
-figure out (the config file for extlinux has a different _mandatory_
-file extension than the config file for syslinux!), but once you get
-it working, it is pretty slick.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |   34 ++++++++++++++++++----------------
+ 1 files changed, 18 insertions(+), 16 deletions(-)
 
->> I will try dropbear and see if that works any better. ?OpenSSH works
->> fine out-of-the box for the Ubuntu 8.04 version so I'm suspicious that
->> it is something about the way it is built or with the current version
->> of OpenSSH.
->
-> Yes, it's definitely something wrong in the build process, and it'd be
-> great to sort it out.
-
-Dropbear appears to work.  It built RSA and DSA keys without barfing.
-However, there was something else I found, see at the bottom.
-
-> Would you mind running ssh-keygen under gdbserver+cross-gdb as
-> suggested in my first e-mail ? Or run "ulimit -c unlimited" on your
-> board, get ssh-keygen to crash, and then transfer the core file to your
-> development workstation, and get a backstrace with the cross-gdb. That
-> would immediatly point us to the segfault location, which would really,
-> really help in understanding what the issue is.
-
-I'll do this when I regress my build options back to where I had them.
- I have something working and I want to save this configuration so
-that I can come back to it if I need to.
-
-I was looking for clues in the fact that my previous custom kernel was
-built for a 586, not a 486.  I checked in my old .config files and the
-586 options, NOT Pentium was checked.  This support AMD K6-2
-processors etc.  I changed Buildroot's configuration to select the
-i386 processor family and Pentium processors as there was not an
-option that matched the kernel exactly.  I tried to build the system
-and then installed it.  The kernel failed to boot saying that it was
-the wrong processor version?!
-
-I checked the .config file for the kernel and found that Pentium-Pro
-was selected! Huh?  I ran make menuconfig in the kernel build
-directory and reset everything back the way I thought it should be and
-rebuilt.  That worked.  I'm still confused as to how the kernel came
-to be configured for the wrong processor.  I now have a fully working
-base system.  At least as far as I have tested it.  I have not tested
-logging into dropbear remotely.
-
-I will now start undoing my changes and test to find out where things
-go wrong.  I will first make the selected Buildroot CPU type = i486
-and see what that does to the kernel CPU type.  I will then set it
-back to Pentium to see if that is where the Pentium-Pro selection came
-from.
-
-Best,
-Kyle
+diff --git a/CHANGES b/CHANGES
+index 8f7fc5c..15ae301 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -8,24 +8,26 @@
+ 
+ 	Support for bzr downloads, next to the existing git/svn support.
+ 
+-	EXT2 file system size handling improved. U-Boot 2010.12 added.
++	EXT2 file system size handling improved, UBI image support, fs
++	configuration options cleanup, U-Boot/Barebox version bumps.
+ 
+ 	Updated/fixed packages: alsa-utils, at, autoconf, automake,
+-	binutils, bison, busybox, bzip2, cloop, cups, dbus,
+-	direcfb-examples, dmalloc, ed, ffmpeg, findutils, freetype,
+-	gdk-pixbuf, gmp, grep, gst-plugins-good, gvfs, hostapd,
+-	i2c-tools, icu, input-tools, jpeg, libaio, libcap, libconfig,
+-	libglib2, libogg, libtheora, libtool, libvorbis, libxml2,
+-	libxslt, linux-fusion, lsof, ltp-testsuite, lvm2, m4,
+-	memtester, mesa3d, mii-diag, mpc, mpfr, mplayer, mrouted,
+-	nano, netperf, netplug, openssh, openssl, openvpn, oprofile,
+-	pango, patch, php, portmap, qt, rsync, screen, sdl_gfx,
+-	sdl_sound, sqlite, squid, sstrip, sysklogd, sysvinit, tar,
+-	tslib, udev, usbutils, vim, vtun, webkit, xapp_xlogo,
+-	xkeyboard-config, xlib_libX11, xz, zlib
+-
+-	New packages: dhrystone, fbgrab, lsuio, rsh-redone, sdparm,
+-	whetstone, xl2tp
++	binutils, bison, busybox, bzip2, cloop, coreutils, cups, dbus,
++	direcfb-examples, dmalloc, ed, ffmpeg, findutils, flac,
++	freetype, gdk-pixbuf, gmp, grep, gst-plugins-good, gvfs,
++	hostapd, i2c-tools, icu, input-tools, iproute2, iptables,
++	jpeg, libaio, libcap, libconfig, libglib2, libogg, libtheora,
++	libtool, libvorbis, libxml2, libxslt, linux-fusion, lsof,
++	ltp-testsuite, ltrace, lvm2, m4, memtester, mesa3d, mii-diag,
++	mpc, mpfr, mplayer, mrouted, nano, netperf, netplug, openssh,
++	openssl, openvpn, oprofile, pango, patch, pciutils, php,
++	portmap, qt, rsync, screen, sdl_gfx, sdl_sound, sqlite, squid,
++	sstrip, sysklogd, sysvinit, tar, tslib, udev, usbutils, vim,
++	vtun, webkit, xapp_xlogo, xkeyboard-config, xlib_libX11, xz,
++	zlib
++
++	New packages: dhrystone, fbgrab, irda-utils, libao, lsuio,
++	rsh-redone, sdparm, vorbis-tools, whetstone, xl2tp
+ 
+ 	Removed packages: hotplug, l2tp, libfloat, microcom,
+ 	ng-spice-rework
+-- 
+1.7.2.2
