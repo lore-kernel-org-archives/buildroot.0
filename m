@@ -1,54 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:47:56 +0100
-Subject: [Buildroot] [PATCH 1/2] liberation: add support for custom
- target directory
-In-Reply-To: <LEWX59$4533F784E6DAC4CB1531E0AED3C460A7@aruba.it>
-References: <LEWX59$4533F784E6DAC4CB1531E0AED3C460A7@aruba.it>
-Message-ID: <20110114094756.4f6d1747@surf>
+Date: Fri, 14 Jan 2011 09:48:35 +0100
+Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.2 + change URL
+ to match kernel.org
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EDEEF0D@EXV1.corp.adtran.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EDEEF0D@EXV1.corp.adtran.com>
+Message-ID: <20110114094835.01eda2d3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Andy,
 
-On Wed, 12 Jan 2011 14:51:09 +0100
-"Luca Ceresoli" <list@lucaceresoli.net> wrote:
+This patch is also word-wrapped. Care to fix your mailer or use git
+send-email and resend ?
 
-> I think Thomas is right: a unique setting should be used to override
-> the font install dir.
-> 
-> It might look like this in menuconfig:
-> 
->       *** X libraries and helper libraries ***
->   ()  Force all fonts to be installed here {*}
->   [*] DejaVu (Free fonts)  --->
->   [ ] Liberation (Free fonts) 
->       *** X Window managers ***
-> 
-> {*} if this is empty, each font .mk will install in the default directory,
-> as liberation does in current head;
-> otherwise all fonts will be copied in the directory specified.
-> 
-> How about this?
-
-That could be one solution. The other solution would be to hide this
-from the user, i.e an unvisible configuration option to select the
-installation location of the fonts (i.e ? fonts in subdirs ? or ? all
-fonts in /usr/share/fonts ?). ? fonts in subdirs ? would be the
-default, and ? all fonts in /usr/share/fonts/ ? would be selected by
-Nano-X/Microwindows. This way, the user wouldn't have to worry about
-the installation location of fonts.
-
-But for the moment, we don't have any microwin package. It got removed
-in september 2010, due to upstream inactivity. But it seems that the
-project is active again, and a new release has been made. So obviously,
-we could re-add such a package if someone submits it.
-
-Regards,
+Thanks!
 
 Thomas
+
+On Tue, 11 Jan 2011 11:30:42 -0600
+ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+
+> Changed the KEEC_SITE to the new home of kexec.  This patch also
+> satisfies
+> bug id=3007 created by me last month.  Thanks to Gustavo for pointing
+> out
+> that the easy fix was to bump kexec to 2.0.2.
+> 
+> Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
+> ---
+> --- a/package/kexec/kexec.mk    2011-01-06 05:25:33.000000000 -0600
+> +++ b/package/kexec/kexec.mk    2011-01-03 13:09:10.000000000 -0600
+> @@ -3,9 +3,9 @@
+>  # kexec
+>  #
+>  #############################################################
+> -KEXEC_VERSION = 2.0.1
+> +KEXEC_VERSION = 2.0.2
+>  KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
+> -KEXEC_SITE =
+> $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
+> +KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+>  
+>  ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
+>  KEXEC_CONF_OPT += --with-zlib
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
