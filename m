@@ -1,36 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 18:12:54 +0100
-Subject: [Buildroot] [PATCH 1/2] liberation: add support for custom
- target directory
-In-Reply-To: <LF0UP9$6C050B5F0CF790CC5FFC45AB98AF886D@aruba.it>
-References: <20110114094756.4f6d1747@surf>
-	<LF0UP9$6C050B5F0CF790CC5FFC45AB98AF886D@aruba.it>
-Message-ID: <20110114181254.3e773a18@surf>
+Date: Fri, 14 Jan 2011 18:14:37 +0100
+Subject: [Buildroot] [PATCH] htop: new package
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
+	<20110114085941.6df4841d@surf>
+	<9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
+Message-ID: <20110114181437.63bbb7a1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jan 2011 17:48:45 +0100
-"Luca Ceresoli" <list@lucaceresoli.net> wrote:
+On Fri, 14 Jan 2011 10:14:33 -0600
+ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
 
-> > That could be one solution. The other solution would be to hide this
-> > from the user, i.e an unvisible configuration option to select the
-> > installation location of the fonts (i.e ? fonts in subdirs ? or ? all
-> > fonts in /usr/share/fonts ?). ? fonts in subdirs ? would be the
-> > default, and ? all fonts in /usr/share/fonts/ ? would be selected by
-> > Nano-X/Microwindows. This way, the user wouldn't have to worry about
-> > the installation location of fonts.
+> > Your patch is word-wrapped. Could you check your e-mail
+> > client configuration ? You should probably try git send-email, as this
+> > will guarantee that your patches will make it properly to the list,
+> > without being word-wrapped or damaged in anyway by the mail client
+> > you're using.
 > 
-> That would not be enough in my case.
-> I don't use Nano-x/Microwin, my setup is based on qt + directfb + freetype.
-> I am not sure which of these components needs fonts in a specific dir,
-> but if fonts are in subdirs they won't be found.
+> GGGGRRRRR!!!  I'm using Outlook and I'm behind an Exchange server.  To
+> that end, will git sendmail work?
 
-Sorry, but I do not understand why it wouldn't be enough. If you need
-all the fonts in a single directory, you would just select the ? all
-fonts in /usr/share/fonts ? case, and that would work, no ?
+No. Tell your network administrator that not having a real SMTP server
+prevents you from working efficiently. There's nothing useful you can
+do without a real SMTP server.
+
+Of course, if you can SSH out to another box that has a SMTP server
+available, that would work.
+
+> > None of those options are perfect, but we'd like to avoid adding
+> dozens
+> > and dozens of options at the Buildroot level to tweak every possible
+> > option of uClibc.
+> 
+> Nah, no reason to.  The HTOP guys say that their next release will auto
+> detect the presence of backtrace and use it if it is there, so we'll
+> skip right on past 0.9 when they get it fixed.
+
+Great.
+
+> > Patch lacks a description of why it is needed and the Signed-off-by
+> > line.
+> 
+> Hmm, so naming the file htop-cross-no-proc-check is not sufficient for
+> the comment?  Will fix and resubmit.
+
+In that case, I admit it's a bit silly, but that's the rule :-)
 
 Thomas
 -- 
