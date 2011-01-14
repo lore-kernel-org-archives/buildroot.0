@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 08:51:00 +0100
-Subject: [Buildroot] Festival on Buildroot
-In-Reply-To: <SNT105-DS199722A66CD236B883E6E7EBF00@phx.gbl>
-References: <SNT105-DS199722A66CD236B883E6E7EBF00@phx.gbl>
-Message-ID: <20110114085100.1a7fcd34@surf>
+Date: Fri, 14 Jan 2011 08:53:20 +0100
+Subject: [Buildroot] buildroot's support of ltp-testsuite
+In-Reply-To: <AANLkTin=kO3yG0t4MhDhBDP_Y4Y46Jt98Um7a7epVBy3@mail.gmail.com>
+References: <AANLkTin=kO3yG0t4MhDhBDP_Y4Y46Jt98Um7a7epVBy3@mail.gmail.com>
+Message-ID: <20110114085320.29dfe769@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, 13 Jan 2011 18:34:48 -0800
+David Fisher <dfisher769@gmail.com> wrote:
 
-On Thu, 13 Jan 2011 18:55:08 +0000
-Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk> wrote:
-
-> I am trying to get festival compiled by Buildroot, but having no luck
-> what so ever. Has anyone got this running?
+> The latest version of buildroot has a directory of
+> .../buildroot/package/ltp-testsuite, which includes Config.in,
+> ltp-testsuite.mk and five patch files.
+> The third line of Config.in is "depends on BROKEN".  As a result the
+> ltp-testsuite could not be compiled under buildroot.
 > 
-> I keep on getting errors complaining about linking
-> to ../lib/libestools.so libestbase.so "cannot find -lesd"
+> Any plan to fix this problem, so the ltp-testsuite could be built?
 
-Well, obviously,  libesd wasn't compiled before festival. And it seems
-we don't even have a package for it in Buildroot. So it looks like a
-package needs to be created to build the ESD library.
+This has been improved a bit in the current Git version, through the
+following commit:
 
-It's a bit odd though, since I remember building festival maybe about a
-year ago, and I think it was a least building. But from a quick look,
-it really seems to depend on esd.
+ a72a670489547a3ca645ff7c3a0d9c3fb66eab51
+
+However, beware that ltp-testsuite cannot be built with the default
+Buildroot configuration for uClibc, as ltp-testsuite uses some legacy
+functions that we don't enable in our default build of uClibc.
+
+ltp-testsuite however builds fine with an external toolchain that
+relies on glibc, and it even runs on ARM (some tests have issues, but
+most of the tests were working correctly).
 
 Regards,
 
