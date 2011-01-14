@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:11:29 +0100
-Subject: [Buildroot] freetype: fix for multilib toolchain
-In-Reply-To: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
-References: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
-Message-ID: <20110114091129.13d810c8@surf>
+Date: Fri, 14 Jan 2011 09:19:52 +0100
+Subject: [Buildroot] rubix: pass target cflags
+In-Reply-To: <BAY145-w120285E8572BD44A195EABC2F30@phx.gbl>
+References: <BAY145-w120285E8572BD44A195EABC2F30@phx.gbl>
+Message-ID: <20110114091952.154e11e6@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+Matt,
 
-On Thu, 13 Jan 2011 21:18:33 -0700
+On Thu, 13 Jan 2011 21:21:59 -0700
 Matt Johnson <mj1856@hotmail.com> wrote:
 
-> FreeType's makefile needs to have the architecture (example, -march=armv4t) passed in the LDFLAGS in order to work properly with a multilib toolchain, like CodeSourcery.  This is the easiest way I could think of to do it.  Tested and works.
+> -RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+> +RUBIX_MAKE_OPT = CC="$(TARGET_CC) $(TARGET_CFLAGS)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
 
-The description of your patch should be wrapped at ~80 columns.
+I was wondering why passing all those flags was necessary with an
+autotools-based package.
 
-> Signed-off-by: Matt Johnson <mj1856@hotmail.com>
-> ---
->  package/freetype/freetype.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> index ad4292f..7e59b57 100644
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -8,6 +8,7 @@ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
->  FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
->  FREETYPE_INSTALL_STAGING = YES
->  FREETYPE_INSTALL_TARGET = YES
-> +FREETYPE_CONF_ENV = LDFLAGS="-march=$(CC_TARGET_ARCH_) $(TARGET_LDFLAGS)"
+And in fact, rubix is not autotools based. The ./configure script
+contains:
 
-I am not sure I want to see this fixed this way. It looks like the
-issue reported by Divick Kishore on sshd is similar: we need to pass
-the -march argument in the LDFLAGS for all packages.
+=================================================================
+#!/bin/sh
 
-So probably we should rather adjust TARGET_LDFLAGS globally (its
-definition is in package/Makefile.in) so that it contains the
-appropriate -march.
+echo "Dummy configure script for autotools in buildroot"
 
-Regards,
+exit 0
+=================================================================
+
+So I would prefer to see this package converted to the GENTARGETS
+infrastructure. This should be relatively simple:
+
+ * Remove RUBIX_INSTALL_STAGING, RUBIX_INSTALL_TARGET,
+   RUBIX_INSTALL_TARGET_OPT, RUBIX_MAKE_OPT
+
+ * Add the following lines
+
+define RUBIX_BUILD_CMDS
+	$(MAKE) 				\
+	CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	\
+	XINC="-I$(STAGING_DIR)/usr/include/X11"	\
+	XLIB="-L$(STAGING_DIR)/usr/lib -lX11"	\
+	-C $(@D)
+endef
+
+define RUBIX_INSTALL_TARGET_CMDS
+	$(MAKE) GAMESDIR=$(TARGET_DIR)/usr/games -C $(@D) install
+endef
+
+ * Replace AUTOTARGETS by GENTARGETS
+
+And if you have time, it would be even better to switch to the upstream
+version instead of this version on avr32linux.org. There is a new
+version 1.0.6 available, that you can grab from
+http://sed.free.fr/rubix/index.html.
+
+Thanks!
 
 Thomas
 -- 
