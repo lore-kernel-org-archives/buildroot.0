@@ -1,81 +1,39 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 14 Jan 2011 10:14:33 -0600
-Subject: [Buildroot] [PATCH] htop: new package
-In-Reply-To: <20110114085941.6df4841d@surf>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
-	<20110114085941.6df4841d@surf>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
+From: Matt Johnson <mj1856@hotmail.com>
+Date: Fri, 14 Jan 2011 09:19:10 -0700
+Subject: [Buildroot] fontconfig: bump to version 2.8.0
+In-Reply-To: <20110114092850.1fb27fc1@surf>
+References: <BAY145-w55783B9ED56A589ABC3816C2F30@phx.gbl>
+	<20110114092850.1fb27fc1@surf>
+Message-ID: <BAY145-ds14C51F7DDAD975EF4B45E1C2F30@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Your patch is word-wrapped. Could you check your e-mail
-> client configuration ? You should probably try git send-email, as this
-> will guarantee that your patches will make it properly to the list,
-> without being word-wrapped or damaged in anyway by the mail client
-> you're using.
+> In the commit description, would be great to say that the
+parallel-compilation-fix patch is no longer necessary since it has been
+merged upstream
 
-GGGGRRRRR!!!  I'm using Outlook and I'm behind an Exchange server.  To
-that end, will git sendmail work?
+Yes, the parallel compilation fix was no longer necessary.  Thanks for the
+link, I would have had no idea where to look, I just saw that the changes
+were already in the 2.8.0 sources.
 
-> > +       select UCLIBC_HAS_BACKTRACE if BR2_TOOLCHAIN_BUILDROOT
-> 
-> We can't do that. UCLIBC_HAS_BACKTRACE does not exist in the current
-> version of Buildroot. Probably a left over from the packaging of htop
-> 0.9, which requires backtrace support.
+In regards to the use_for_build patch, I wasn't sure why it was in there to
+begin with.  However I didn't see any specific reason to remove it, since
+the files it touches have not changed.  I just updated the version number
+references.
 
-Leftover from 0.9 -- that's why I went backwards to 0.8.3
+Also, one thing I didn't mention is that these lines:
 
+-# This package does not like using the target cflags for some reason.
+-FONTCONFIG_CONF_ENV = CFLAGS="-I$(STAGING_DIR)/usr/include/freetype2"
 
-> 
-> However, even when you'll package htop 0.9, the current policy is not
-> to do something like selecting a given UCLIBC option. We either :
-> 
->  *) Enable the needed option in our default uClibc build, if the
->     footprint impact is reasonable and the option is sufficiently
-> useful
->     for different packages.
-> 
->  *) Or add a comment in the package help in Config.in stating that the
->     package would not build with the default uClibc configuration.
-> 
-> None of those options are perfect, but we'd like to avoid adding
-dozens
-> and dozens of options at the Buildroot level to tweak every possible
-> option of uClibc.
+, were removed because of the same missing target cflags (for -march) issue
+that I described recently in the freetype and rubix packages.  I found the
+comment to be untrue, even under the old version 2.6.0. I had no problem
+compiling with the target cflags in place.  Perhaps someone can shed light
+on why that was added in the first place?  Maybe on a different platform
+than mine it fails.
 
-
-Nah, no reason to.  The HTOP guys say that their next release will auto
-detect the presence of backtrace and use it if it is there, so we'll
-skip right on past 0.9 when they get it fixed.
-
-
-> 
-> > diff -Naur a/package/htop/htop-cross-no-proc-check.patch
-> > b/package/htop/htop-cross-no-proc-check.patch
-> > --- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31
-> > 18:00:00.000000000 -0600
-> > +++ b/package/htop/htop-cross-no-proc-check.patch       2011-01-12
-> > 14:51:53.000000000 -0600
-> 
-> Patch lacks a description of why it is needed and the Signed-off-by
-> line.
-
-Hmm, so naming the file htop-cross-no-proc-check is not sufficient for
-the comment?  Will fix and resubmit.
-
-> 
-> Regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-Matt
