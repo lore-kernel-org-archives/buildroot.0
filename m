@@ -1,50 +1,81 @@
-From: Matt Johnson <mj1856@hotmail.com>
-Date: Fri, 14 Jan 2011 09:04:43 -0700
-Subject: [Buildroot] freetype: fix for multilib toolchain
-In-Reply-To: <20110114154430.4952dca7@surf>
-References: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>	<20110114091129.13d810c8@surf>	<AANLkTi=4rF27ON=McqUWPnM3g7JrjBtGto2q3rMrNKbG@mail.gmail.com>
-	<20110114154430.4952dca7@surf>
-Message-ID: <BAY145-ds21C7E90736BB4F6C125201C2F30@phx.gbl>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 14 Jan 2011 10:14:33 -0600
+Subject: [Buildroot] [PATCH] htop: new package
+In-Reply-To: <20110114085941.6df4841d@surf>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
+	<20110114085941.6df4841d@surf>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EED6864@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> So, as I said in another e-mail, I think ld does allows to choose between
-different ld variants.
-> So the link should always be done with gcc, which then drives ld, giving
-it the correct path to the appropriate libraries and runtime.
->
+> Your patch is word-wrapped. Could you check your e-mail
+> client configuration ? You should probably try git send-email, as this
+> will guarantee that your patches will make it properly to the list,
+> without being word-wrapped or damaged in anyway by the mail client
+> you're using.
 
-Sorry, perhaps I confused the issue.  It's not that -march needs to be
-passed to LD, it's needed because of how the freetype makefile is designed
-to use libtool.
+GGGGRRRRR!!!  I'm using Outlook and I'm behind an Exchange server.  To
+that end, will git sendmail work?
 
-From freetype-2.4.4/builds/unix/unix-cc.in:
+> > +       select UCLIBC_HAS_BACKTRACE if BR2_TOOLCHAIN_BUILDROOT
+> 
+> We can't do that. UCLIBC_HAS_BACKTRACE does not exist in the current
+> version of Buildroot. Probably a left over from the packaging of htop
+> 0.9, which requires backtrace support.
 
-# Library linking
-#
-LINK_LIBRARY = $(LIBTOOL) --mode=link $(CCraw) -o $@ $(OBJECTS_LIST) \
-                          -rpath $(libdir) -version-info $(version_info) \
-                          $(LDFLAGS) -no-undefined \
-                          # -export-symbols $(EXPORTS_LIST)
+Leftover from 0.9 -- that's why I went backwards to 0.8.3
 
 
-Earlier in the file, they do this:
+> 
+> However, even when you'll package htop 0.9, the current policy is not
+> to do something like selecting a given UCLIBC option. We either :
+> 
+>  *) Enable the needed option in our default uClibc build, if the
+>     footprint impact is reasonable and the option is sufficiently
+> useful
+>     for different packages.
+> 
+>  *) Or add a comment in the package help in Config.in stating that the
+>     package would not build with the default uClibc configuration.
+> 
+> None of those options are perfect, but we'd like to avoid adding
+dozens
+> and dozens of options at the Buildroot level to tweak every possible
+> option of uClibc.
 
-CCraw := $(CC)
-CC    := $(LIBTOOL) --mode=compile $(CCraw)
 
-I opened a bug with the FreeType team here:
-https://savannah.nongnu.org/bugs/?32114
+Nah, no reason to.  The HTOP guys say that their next release will auto
+detect the presence of backtrace and use it if it is there, so we'll
+skip right on past 0.9 when they get it fixed.
 
-, suggesting that they pass the CFLAGS as part of CCraw, but one of their
-lead devs suggested that just -march should be passed in the LDFLAGS.  Any
-actual calls to LD would ignore the flag anyway.
 
-Since FreeType is not updated anywhere near as often as BuildRoot, it seems
-to make sense.
+> 
+> > diff -Naur a/package/htop/htop-cross-no-proc-check.patch
+> > b/package/htop/htop-cross-no-proc-check.patch
+> > --- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31
+> > 18:00:00.000000000 -0600
+> > +++ b/package/htop/htop-cross-no-proc-check.patch       2011-01-12
+> > 14:51:53.000000000 -0600
+> 
+> Patch lacks a description of why it is needed and the Signed-off-by
+> line.
 
--Matt
+Hmm, so naming the file htop-cross-no-proc-check is not sufficient for
+the comment?  Will fix and resubmit.
+
+> 
+> Regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
