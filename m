@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:07:52 +0100
-Subject: [Buildroot] ssh-keygen seg fault
-In-Reply-To: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
-References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
-Message-ID: <20110114090752.5f01ade5@surf>
+Date: Fri, 14 Jan 2011 09:11:29 +0100
+Subject: [Buildroot] freetype: fix for multilib toolchain
+In-Reply-To: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
+References: <BAY145-w16379D55CDD8378B320C74C2F30@phx.gbl>
+Message-ID: <20110114091129.13d810c8@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kyle,
+Hello Matt,
 
-On Thu, 13 Jan 2011 13:29:42 -0800
-Kyle Hayes <kyle@greenmonitor.com> wrote:
+On Thu, 13 Jan 2011 21:18:33 -0700
+Matt Johnson <mj1856@hotmail.com> wrote:
 
-> I am getting a seg fault when ssh-keygen tries to run and when sshd
-> tries to start.  Here is my set up:
-> 
-> Buildroot: GIT checkout from 1/11/11
-> Kernel: 2.6.37
-> Initrd type: CPIO/gzip
-> 
-> machine: DMP eBox 3100 (PC-compatible x86 machine w/256MB of RAM)
-> 
-> I've got extlinux installed, the kernel boots fine and I get a login
-> prompt.  However, I see errors that ssh-keygen and sshd are seg
-> faulting.
-> 
-> I would appreciate any tips on how to debug/fix this.  Buildroot is
-> exactly the system I was looking for.
+> FreeType's makefile needs to have the architecture (example, -march=armv4t) passed in the LDFLAGS in order to work properly with a multilib toolchain, like CodeSourcery.  This is the easiest way I could think of to do it.  Tested and works.
 
-Hard to say since we can't reproduce without having the hardware. I
-suspect that on a "normal" x86 CPU, sshd and ssh-keygen are working
-fine.
+The description of your patch should be wrapped at ~80 columns.
 
-So the best you could do is use gdbserver on the target and a
-cross-gdb (both can be built by Buildroot) and start ssh-keygen without
-gdbserver in order to find the location of the segfault in ssh-keygen.
-That would really in understanding the issue.
+> Signed-off-by: Matt Johnson <mj1856@hotmail.com>
+> ---
+>  package/freetype/freetype.mk |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
+> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+> index ad4292f..7e59b57 100644
+> --- a/package/freetype/freetype.mk
+> +++ b/package/freetype/freetype.mk
+> @@ -8,6 +8,7 @@ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
+>  FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+>  FREETYPE_INSTALL_STAGING = YES
+>  FREETYPE_INSTALL_TARGET = YES
+> +FREETYPE_CONF_ENV = LDFLAGS="-march=$(CC_TARGET_ARCH_) $(TARGET_LDFLAGS)"
 
-Are you sure that the Vortex 86DX supports all instructions of i486 ?
-Are you sure that the FPU is compatible ? The documentation of the
-Vortex 86DX states that it has a FPU, but I don't know if it's the same
-as the one in normal x86 CPUs. Maybe you could try to build Buildroot
-with BR2_SOFT_FLOAT=y (config options: "Use software floating point by
-default").
+I am not sure I want to see this fixed this way. It looks like the
+issue reported by Divick Kishore on sshd is similar: we need to pass
+the -march argument in the LDFLAGS for all packages.
+
+So probably we should rather adjust TARGET_LDFLAGS globally (its
+definition is in package/Makefile.in) so that it contains the
+appropriate -march.
 
 Regards,
 
