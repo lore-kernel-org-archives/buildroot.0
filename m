@@ -1,128 +1,26 @@
-From: Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk>
-Date: Fri, 14 Jan 2011 11:39:59 +0000
-Subject: [Buildroot] FW: Festival on Buildroot
-Message-ID: <SNT105-DS201489E837B90D9C737910EBF30@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Jan 2011 13:26:34 +0100
+Subject: [Buildroot] [PATCH v2] irda-utils: new package for IrDA devices
+In-Reply-To: <1291784836-20906-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Wed, 8 Dec 2010 00:07:16 -0500")
+References: <1290240308-9109-1-git-send-email-vapier@gentoo.org>
+	<1291784836-20906-1-git-send-email-vapier@gentoo.org>
+Message-ID: <8739ovwu11.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- 
+ Mike> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+ Mike> ---
+ Mike> v2
+ Mike> 	- add author info to patches
 
-Would there be any chance of adding in esd? / How can I go about adding it
-if it's not possible?
-
- 
-
-Thanks,
-
- 
-
-Jon
-
- 
-
-Hello,
-
- 
-
-On Thu, 13 Jan 2011 18:55:08 +0000
-
-Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk> wrote:
-
- 
-
-> I am trying to get festival compiled by Buildroot, but having no luck
-
-> what so ever. Has anyone got this running?
-
-> 
-
-> I keep on getting errors complaining about linking
-
-> to ../lib/libestools.so libestbase.so "cannot find -lesd"
-
- 
-
-Well, obviously,  libesd wasn't compiled before festival. And it seems
-
-we don't even have a package for it in Buildroot. So it looks like a
-
-package needs to be created to build the ESD library.
-
- 
-
-It's a bit odd though, since I remember building festival maybe about a
-
-year ago, and I think it was a least building. But from a quick look,
-
-it really seems to depend on esd.
-
- 
-
-Regards,
-
- 
-
-Thomas
+Committed, thanks.
 
 -- 
-
-Thomas Petazzoni, Free Electrons
-
-Kernel, drivers, real-time and embedded Linux
-
-development, consulting, training and support.
-
-http://free-electrons.com
-
- 
-
- 
-
-From: Jon Ambrose [mailto:jonathan.ambrose at live.uwe.ac.uk] 
-Sent: 13 January 2011 18:55
-To: 'buildroot at busybox.net'
-Subject: Festival on Buildroot
-
- 
-
-Hi,
-
- 
-
-I am trying to get festival compiled by Buildroot, but having no luck what
-so ever. Has anyone got this running?
-
- 
-
-I keep on getting errors complaining about linking to ../lib/libestools.so
-libestbase.so "cannot find -lesd"
-
- 
-
-I would really appreciate some help on this one, I have been browsing the
-web continuously, and recompiling different options.
-
- 
-
-Best regards,
-
- 
-
-Jon 
-
- 
-
- 
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110114/60ce2430/attachment.html>
+Bye, Peter Korsgaard
