@@ -1,69 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 08:59:41 +0100
-Subject: [Buildroot] [PATCH] htop: new package
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EE63C42@EXV1.corp.adtran.com>
-Message-ID: <20110114085941.6df4841d@surf>
+Date: Fri, 14 Jan 2011 09:07:52 +0100
+Subject: [Buildroot] ssh-keygen seg fault
+In-Reply-To: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
+References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
+Message-ID: <20110114090752.5f01ade5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andy,
+Hello Kyle,
 
-On Wed, 12 Jan 2011 15:15:30 -0600
-ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+On Thu, 13 Jan 2011 13:29:42 -0800
+Kyle Hayes <kyle@greenmonitor.com> wrote:
 
-> The following adds support for version 0.8.3 of htop.  0.9 is the
-> latest, however, is dependant on backtrace.  The next version is to
-> remove the hard dependencies of backtrace and make it a compile-time
-> check.
+> I am getting a seg fault when ssh-keygen tries to run and when sshd
+> tries to start.  Here is my set up:
+> 
+> Buildroot: GIT checkout from 1/11/11
+> Kernel: 2.6.37
+> Initrd type: CPIO/gzip
+> 
+> machine: DMP eBox 3100 (PC-compatible x86 machine w/256MB of RAM)
+> 
+> I've got extlinux installed, the kernel boots fine and I get a login
+> prompt.  However, I see errors that ssh-keygen and sshd are seg
+> faulting.
+> 
+> I would appreciate any tips on how to debug/fix this.  Buildroot is
+> exactly the system I was looking for.
 
-Your patch is word-wrapped. Could you check your e-mail
-client configuration ? You should probably try git send-email, as this
-will guarantee that your patches will make it properly to the list,
-without being word-wrapped or damaged in anyway by the mail client
-you're using.
+Hard to say since we can't reproduce without having the hardware. I
+suspect that on a "normal" x86 CPU, sshd and ssh-keygen are working
+fine.
 
-> Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
-> ---
-> diff -Naur a/package/htop/Config.in b/package/htop/Config.in
-> --- a/package/htop/Config.in    1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/htop/Config.in    2011-01-11 15:16:01.000000000 -0600
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HTOP
-> +       bool "htop"
-> +       select BR2_PACKAGE_NCURSES
-> +       select UCLIBC_HAS_BACKTRACE if BR2_TOOLCHAIN_BUILDROOT
+So the best you could do is use gdbserver on the target and a
+cross-gdb (both can be built by Buildroot) and start ssh-keygen without
+gdbserver in order to find the location of the segfault in ssh-keygen.
+That would really in understanding the issue.
 
-We can't do that. UCLIBC_HAS_BACKTRACE does not exist in the current
-version of Buildroot. Probably a left over from the packaging of htop
-0.9, which requires backtrace support.
-
-However, even when you'll package htop 0.9, the current policy is not
-to do something like selecting a given UCLIBC option. We either :
-
- *) Enable the needed option in our default uClibc build, if the
-    footprint impact is reasonable and the option is sufficiently useful
-    for different packages.
-
- *) Or add a comment in the package help in Config.in stating that the
-    package would not build with the default uClibc configuration.
-
-None of those options are perfect, but we'd like to avoid adding dozens
-and dozens of options at the Buildroot level to tweak every possible
-option of uClibc.
-
-> diff -Naur a/package/htop/htop-cross-no-proc-check.patch
-> b/package/htop/htop-cross-no-proc-check.patch
-> --- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31
-> 18:00:00.000000000 -0600
-> +++ b/package/htop/htop-cross-no-proc-check.patch       2011-01-12
-> 14:51:53.000000000 -0600
-
-Patch lacks a description of why it is needed and the Signed-off-by
-line.
+Are you sure that the Vortex 86DX supports all instructions of i486 ?
+Are you sure that the FPU is compatible ? The documentation of the
+Vortex 86DX states that it has a FPU, but I don't know if it's the same
+as the one in normal x86 CPUs. Maybe you could try to build Buildroot
+with BR2_SOFT_FLOAT=y (config options: "Use software floating point by
+default").
 
 Regards,
 
