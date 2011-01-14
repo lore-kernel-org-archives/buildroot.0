@@ -1,59 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Jan 2011 09:48:35 +0100
-Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.2 + change URL
- to match kernel.org
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EDEEF0D@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EDEEF0D@EXV1.corp.adtran.com>
-Message-ID: <20110114094835.01eda2d3@surf>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 14 Jan 2011 09:53:45 +0100
+Subject: [Buildroot] Inappropriate ioctl - hwclock
+In-Reply-To: <20110114094245.78bf04ff@surf>
+References: <SNT119-W1972A4A3A479929AD85F7882F00@phx.gbl>
+	<20110114094245.78bf04ff@surf>
+Message-ID: <4D300F19.70704@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andy,
-
-This patch is also word-wrapped. Care to fix your mailer or use git
-send-email and resend ?
-
-Thanks!
-
-Thomas
-
-On Tue, 11 Jan 2011 11:30:42 -0600
-ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
-
-> Changed the KEEC_SITE to the new home of kexec.  This patch also
-> satisfies
-> bug id=3007 created by me last month.  Thanks to Gustavo for pointing
-> out
-> that the easy fix was to bump kexec to 2.0.2.
+Am 14.01.2011 09:42, schrieb Thomas Petazzoni:
+> On Thu, 13 Jan 2011 09:55:41 +0000
+> Johnny Beardsmore <jny0@hotmail.com> wrote:
 > 
-> Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
-> ---
-> --- a/package/kexec/kexec.mk    2011-01-06 05:25:33.000000000 -0600
-> +++ b/package/kexec/kexec.mk    2011-01-03 13:09:10.000000000 -0600
-> @@ -3,9 +3,9 @@
->  # kexec
->  #
->  #############################################################
-> -KEXEC_VERSION = 2.0.1
-> +KEXEC_VERSION = 2.0.2
->  KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
-> -KEXEC_SITE =
-> $(BR2_KERNEL_MIRROR)/linux/kernel/people/horms/kexec-tools/
-> +KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
->  
->  ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
->  KEXEC_CONF_OPT += --with-zlib
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> I've copied the hwclock and rtc files onto my architecture, but when I call hwclock, I get the following message:
+>>  
+>> RTC_RD_TIME: Inappropriate ioctl for device
+>> ioctl() to /dev/misc/rtc to read the time failed.
+>>  
+>> Any ideas what I've done wrong?
+> 
+> This is not really Buildroot related, but anyway.
+> 
+> Are you sure that /dev/misc/rtc is a really a RTC device ? The
+> RTC_RD_TIME ioctl() is implemented in the core RTC infrastructure of
+> the kernel, so it looks like you're not talking to the right device, or
+> using a really really old version of the kernel that didn't support
+> this ioctl(). Or that your kernel lacks RTC support completely.
 
+I agree, /dev/misc/rtc is not a default rtc device. If you look at the kernel RTC configuration ("Device Drivers"->"Real Time Clock"), you'll see the following option:
 
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+/dev/rtcN (character devices)
+
+Yegor
