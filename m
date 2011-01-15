@@ -1,71 +1,52 @@
-From: Andy Kennedy <Andy.Kennedy@adtran.com>
-Date: Fri, 14 Jan 2011 17:38:23 -0600
-Subject: [Buildroot] [PATCH] htop: new package
-Message-ID: <4D30DE6F.6010801@AdTran.com>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Sat, 15 Jan 2011 13:23:01 +0100
+Subject: [Buildroot] [PATCH 1/2] liberation: add support for custom
+ target directory
+In-Reply-To: <20110114181254.3e773a18@surf>
+References: <20110114094756.4f6d1747@surf>	<LF0UP9$6C050B5F0CF790CC5FFC45AB98AF886D@aruba.it>
+	<20110114181254.3e773a18@surf>
+Message-ID: <4D3191A5.4070002@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following adds support for version 0.8.3 of htop.  0.9 is the
-latest, however, is dependant on backtrace.  The next version is to
-remove the hard dependencies of backtrace and make it a compile-time
-check.
+Thomas Petazzoni wrote:
+> On Fri, 14 Jan 2011 17:48:45 +0100
+> "Luca Ceresoli" <list@lucaceresoli.net> wrote:
+>
+>   
+>>> That could be one solution. The other solution would be to hide this
+>>> from the user, i.e an unvisible configuration option to select the
+>>> installation location of the fonts (i.e ? fonts in subdirs ? or ? all
+>>> fonts in /usr/share/fonts ?). ? fonts in subdirs ? would be the
+>>> default, and ? all fonts in /usr/share/fonts/ ? would be selected by
+>>> Nano-X/Microwindows. This way, the user wouldn't have to worry about
+>>> the installation location of fonts.
+>>>       
+>> That would not be enough in my case.
+>> I don't use Nano-x/Microwin, my setup is based on qt + directfb + freetype.
+>> I am not sure which of these components needs fonts in a specific dir,
+>> but if fonts are in subdirs they won't be found.
+>>     
+>
+> Sorry, but I do not understand why it wouldn't be enough. If you need
+> all the fonts in a single directory, you would just select the ? all
+> fonts in /usr/share/fonts ? case, and that would work, no ?
+>   
 
-Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
----
-diff -Naur a/package/htop/Config.in b/package/htop/Config.in
---- a/package/htop/Config.in    1969-12-31 18:00:00.000000000 -0600
-+++ b/package/htop/Config.in    2011-01-14 11:49:53.000000000 -0600
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HTOP
-+       bool "htop"
-+       select BR2_PACKAGE_NCURSES
-+       help
-+         htop is an interactive text-mode process viewer for Linux.
-+         It aims to be a better top.
-+
-+         http://sourceforge.net/projects/htop/
-diff -Naur a/package/htop/htop-cross-no-proc-check.patch b/package/htop/htop-cross-no-proc-check.patch
---- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31 18:00:00.000000000 -0600
-+++ b/package/htop/htop-cross-no-proc-check.patch       2011-01-14 11:47:29.000000000 -0600
-@@ -0,0 +1,22 @@
-+# This patch removes the checks for /proc when cross compiling.
-+# We hope you know what you are doing and you have /proc, doesn't everyone?
-+# Signed-of-by:  Andy Kennedy <Andy.Kennedy@adtran.com> <akennedy@wpid-am.com>
-+
-+--- a/configure        2009-06-23 08:53:37.000000000 -0500
-++++ b/configure        2011-01-12 14:21:49.000000000 -0600
-+@@ -21809,6 +21809,7 @@
-+
-+ fi
-+
-++if test "$cross_compiling" = no ; then
-+ as_ac_File=`echo "ac_cv_file_$PROCDIR/stat" | $as_tr_sh`
-+ { echo "$as_me:$LINENO: checking for $PROCDIR/stat" >&5
-+ echo $ECHO_N "checking for $PROCDIR/stat... $ECHO_C" >&6; }
-+@@ -21862,6 +21863,7 @@
-+ echo "$as_me: error: Cannot find /proc/meminfo. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&2;}
-+    { (exit 1); exit 1; }; }
-+ fi
-++fi #cross_compiling = no (Andy Kennedy)
-+
-+
-+
-diff -Naur a/package/htop/htop.mk b/package/htop/htop.mk
---- a/package/htop/htop.mk      1969-12-31 18:00:00.000000000 -0600
-+++ b/package/htop/htop.mk      2011-01-12 13:36:36.000000000 -0600
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# htop
-+#
-+#############################################################
-+# Version 0.9 requires backtrace, which doesn't exsist in uClibC, yet.
-+HTOP_VERSION = 0.8.3
-+HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
-+HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
-+HTOP_DEPENDENCIES = ncurses
-+
-+$(eval $(call AUTOTARGETS,package,htop))
+I was commenting on the *automatic* choice of the font location. You 
+proposed an algorithm that would install fonts in a unique directory if 
+microwin is installed. I only wanted ti point out that the condition 
+should include other packages, i.e. it should install in a unique dir if 
+microwin or qt or directfb or freetype are installed.
+
+I am not against automatic choice, but the buildroot user would be more 
+conscious of what's going on if there were an explicit item in 
+menuconfig. Of course the most reasonable default value for such an item 
+would be "microwin or qt or...", and a couple lines explaining that in 
+the help would be wise.
+
+
+Luca
