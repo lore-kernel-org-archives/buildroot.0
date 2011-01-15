@@ -1,94 +1,75 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 15 Jan 2011 14:50:18 +0100
-Subject: [Buildroot] [PATCH 3/4] Makefile: generate CMake toolchain file
- in $(O)
-In-Reply-To: <20110111112228.263c00cb@surf>
-References: <1292182155-29576-1-git-send-email-bjorn.forsman@gmail.com>
-	<1292182155-29576-4-git-send-email-bjorn.forsman@gmail.com>
-	<20110107181536.53713c9a@surf> <20110110185013.331f5af1@surf>
-	<AANLkTimq86Kw6oCyacEhwE+YpcQa4H8etr49hCAyNz4y@mail.gmail.com>
-	<20110111112228.263c00cb@surf>
-Message-ID: <AANLkTinF8S5BZw_+6kuP810=72jX=akd_KW3gpeJgnDc@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 15 Jan 2011 16:26:21 +0100
+Subject: [Buildroot] [PATCH] Add libsigc++ package
+In-Reply-To: <201011291822.20672.hartleys@visionengravers.com> (H. Hartley
+	Sweeten's message of "Mon, 29 Nov 2010 18:22:20 -0700")
+References: <201011291822.20672.hartleys@visionengravers.com>
+Message-ID: <8762tq6vdu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
 
-Sorry for the late reply.
+ H> Add support for the libsigc++ library.
+ H> Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-2011/1/11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Mon, 10 Jan 2011 19:30:16 +0100
-> Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
->
->> Yes, I'll add that, thanks! I guess it only matters for the target
->> build and not native build (we don't strip HOST_DIR do we?), but I
->> think I'll add it to native build anyway, for consistency.
->
-> I had another two problems with the CMake toolchain file. The first is
-> that the CMAKE_C_FLAGS and CMAKE_CXX_FLAGS variables were not taken
-> into account. It's more or less explained at
-> http://www.mail-archive.com/cmake at cmake.org/msg33248.html why this
-> happens. The second problem is that --sysroot was missing at link time,
-> so I had to add CMAKE_EXE_LINKER_FLAGS as well.
->
-> So I have the following changes:
->
-> diff --git a/Makefile b/Makefile
-> index 994dd52..b154007 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -378,8 +378,9 @@ $(O)/toolchainfile.cmake:
-> ? ? ? ?set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
-> ? ? ? ?set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
-> ? ? ? ?set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
-> - ? ? ? set(CMAKE_C_FLAGS \"$(CMAKE_TARGET_CFLAGS)\")\n\
-> - ? ? ? set(CMAKE_CXX_FLAGS \"$(CMAKE_TARGET_CXXFLAGS)\")\n\
-> + ? ? ? set(CMAKE_C_FLAGS \"$(CMAKE_TARGET_CFLAGS)\" CACHE STRING \"\" FORCE)\n\
-> + ? ? ? set(CMAKE_CXX_FLAGS \"$(CMAKE_TARGET_CXXFLAGS)\" CACHE STRING \"\" FORCE)\n\
-> + ? ? ? set(CMAKE_EXE_LINKER_FLAGS \"$(CMAKE_TARGET_LDFLAGS)\" CACHE STRING \"\" FORCE)\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-> diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-> index 08a0395..ce50b10 100644
-> --- a/package/Makefile.cmake.in
-> +++ b/package/Makefile.cmake.in
-> @@ -41,6 +41,7 @@ CMAKE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
-> ?CMAKE_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
-> ?CMAKE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-> ?CMAKE_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
-> +CMAKE_TARGET_LDFLAGS = $(filter --sysroot=%,$(TARGET_LD)) $(TARGET_LDFLAGS)
+Thanks, committed with a few tweaks (see below).
 
-The FORCE stuff seems like a good idea, thanks!
+ H> diff --git a/package/Config.in b/package/Config.in
+ H> index 03e580a..1f6f7c1 100644
+ H> --- a/package/Config.in
+ H> +++ b/package/Config.in
+ H> @@ -322,6 +322,7 @@ source "package/libevent/Config.in"
+ H>  source "package/libfloat/Config.in"
+ H>  source "package/libglib2/Config.in"
+ H>  source "package/liboil/Config.in"
+ H> +source "package/libsigc++/Config.in"
+ H>  source "package/startup-notification/Config.in"
+ H>  endmenu
+ 
+ H> diff --git a/package/libsigc++/Config.in b/package/libsigc++/Config.in
+ H> new file mode 100644
+ H> index 0000000..8ec674c
+ H> --- /dev/null
+ H> +++ b/package/libsigc++/Config.in
+ H> @@ -0,0 +1,9 @@
+ H> +config BR2_PACKAGE_LIBSIGC
+ H> +	bool "libsigc++"
 
-Hm... I've been thinking about --sysroot, -I and -L flags in the
-toolchain-file lately. AFAIK, any CMake package should be able to
-build perfectly without manually specifying these flags. Actually, I
-would go so far as saying that passing -I, -L (or --sysroot) may hide
-bugs in CMakeLists.txt files because a package should use FIND_XXX()
-macros and not depend on -I, -L or --sysroot.
+You need to depend on C++ support.
 
-However, my impression is that not all CMake packages are looking for
-headers and libs using FIND_XXX() and actually relies on -I, -L flags
-(or built-in compiler config) to build. Thus, it may be easier to add
-these flags to the CMake infrastructure than to fix the packages. But I
-think it is a bit of a hack/workaround...
+ H> +	help
+ H> +	  libsigc++ implements a typesafe callback system for standard C++.
+ H> +	  It allows you to define signals and to connect those signals to
+ H> +	  any callback function, either global or a member function,
+ H> +	  regardless of whether it is static or virtual.
+ H> +
+ H> +	  http://libsigc.sourceforge.net/
 
-CMAKE_C_FLAGS is a bit special because it includes not only (unneeded)
--I flags, but some important flags such as the -march flag. So we at
-least need some way to get -march into the compiler line and using the whole
-TARGET_CFLAGS is an easy way to do that. CMAKE_EXE_LINKER_FLAGS
-is just -L flags, so this is IMO just a workaround broken packages...
+ H> diff --git a/package/libsigc++/libsigc.mk b/package/libsigc++/libsigc.mk
+ H> new file mode 100644
+ H> index 0000000..640c803
+ H> --- /dev/null
+ H> +++ b/package/libsigc++/libsigc.mk
 
-There is also the possibility to pass CMAKE_EXE_LINKER_FLAGS as
-<PKG>_CONF_OPT in each broken package.
+AUTOTARGETS expects the package directory to be the same as the package
+name, otherwise it won't find patches.
 
-What do you think?
+ H> @@ -0,0 +1,12 @@
+ H> +#############################################################
+ H> +#
+ H> +# libsigc++
+ H> +#
+ H> +#############################################################
+ H> +LIBSIGC_VERSION = 2.2.8
+ H> +LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
+ H> +LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
+ H> +LIBSIGC_LIBTOOL_PATCH = NO
 
-Best regards,
-Bj?rn Forsman
+We now have libtool v2.2 patch support, so this line can go.
+
+-- 
+Bye, Peter Korsgaard
