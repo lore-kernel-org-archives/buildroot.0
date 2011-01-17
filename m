@@ -1,56 +1,98 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 17 Jan 2011 14:29:20 +0100
-Subject: [Buildroot] [PATCH 1/2] socat: bump 2.0.0-b4 version
-In-Reply-To: <y>
-References: <y>
-Message-ID: <1295270961-20268-1-git-send-email-yegorslists@googlemail.com>
+From: Serj Kalichev <serj.kalichev@gmail.com>
+Date: Mon, 17 Jan 2011 19:14:45 +0300
+Subject: [Buildroot] [PATCH 1/2] ncurses: Add wchar support
+Message-ID: <1295280886-20910-1-git-send-email-serj.kalichev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-security:
-	fixed a stack overflow vulnerability that occurred when command
-	line arguments (whole addresses, host names, file names) were longer
-	than 512 bytes.
-	Note that this could only be exploited when an attacker was able to
-	inject data into socat's command line.
-	Full credits to Felix Gr??bert, Google Security Team, for finding and
-	reporting this issue
-
-new features:
-	added inter addresses for execution of external programs or scripts:
-	EXEC2 and SYSTEM2 are bidirectional, EXEC1 and SYSTEM1 are
-	unidirectional
-
-	option commtype replaces the now obsolete "socketpair" and "pipes"
-	options and selects the communication mechanism on the left side of
-	EXEC and SYSTEM addresses
-
-	options leftfd, leftinfd, leftoutfd; and rightfd, rightinfd,
-	rightoutfd override the default file descriptor numbers provided to
-	exec'd programs
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+When the BR2_USE_WCHAR is "y" the ncurses will be configured with
+wide char support. It will build ncursesw.* instead ncurses.*.
 ---
- package/socat/socat.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ncurses/ncurses.mk |   28 +++++++++++++++++-----------
+ 1 files changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/package/socat/socat.mk b/package/socat/socat.mk
-index 2b53d88..1687f3c 100644
---- a/package/socat/socat.mk
-+++ b/package/socat/socat.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 0a49887..2e9c5d0 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -43,11 +43,17 @@ NCURSES_CONF_OPT = \
+ 	--enable-broken_linker \
+ 	--disable-static
  
- #SOCAT_MAJOR_VERSION=1.4
- #SOCAT_MINOR_VERSION=.0.3
--SOCAT_MAJOR_VERSION=2.0.0-b2
-+SOCAT_MAJOR_VERSION=2.0.0-b4
- SOCAT_MINOR_VERSION=
++ifeq ($(BR2_USE_WCHAR),y)
++NCURSES_CONF_OPT += \
++	--enable-widec \
++	--with-build-cppflags=-D_GNU_SOURCE
++NCURSES_W = w
++endif
++
+ ifneq ($(BR2_ENABLE_DEBUG),y)
+ NCURSES_CONF_OPT += --without-debug
+ endif
  
- # Don't alter below this line unless you (think) you know
+-
+ define NCURSES_BUILD_CMDS
+ 	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
+ endef
+@@ -67,38 +73,38 @@ define NCURSES_INSTALL_TARGET_DEVFILES
+ 	cp -dpf $(NCURSES_DIR)/include/term.h $(TARGET_DIR)/usr/include/
+ 	cp -dpf $(NCURSES_DIR)/include/unctrl.h $(TARGET_DIR)/usr/include/
+ 	cp -dpf $(NCURSES_DIR)/include/termcap.h $(TARGET_DIR)/usr/include/
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.a $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libncurses*.a $(TARGET_DIR)/usr/lib/
+ 	(cd $(TARGET_DIR)/usr/lib; \
+-	 ln -fs libncurses.a libcurses.a; \
+-	 ln -fs libncurses.a libtermcap.a; \
++	 ln -fs libncurses$(NCURSES_W).a libcurses.a; \
++	 ln -fs libncurses$(NCURSES_W).a libtermcap.a; \
+ 	)
+ 	(cd $(TARGET_DIR)/usr/include; ln -fs curses.h ncurses.h)
+-	rm -f $(TARGET_DIR)/usr/lib/libncurses.so
+-	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses.so.$(NCURSES_VERSION) libncurses.so)
++	rm -f $(TARGET_DIR)/usr/lib/libncurses*.so
++	(cd $(TARGET_DIR)/usr/lib; ln -fs libncurses$(NCURSES_W).so.$(NCURSES_VERSION) libncurses$(NCURSES_W).so)
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PANEL),y)
+ define NCURSES_INSTALL_TARGET_PANEL
+-	cp -dpf $(NCURSES_DIR)/lib/libpanel.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libpanel*.so* $(TARGET_DIR)/usr/lib/
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_FORM),y)
+ define NCURSES_INSTALL_TARGET_FORM
+-	cp -dpf $(NCURSES_DIR)/lib/libform.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libform*.so* $(TARGET_DIR)/usr/lib/
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES_TARGET_MENU),y)
+ define NCURSES_INSTALL_TARGET_MENU
+-	cp -dpf $(NCURSES_DIR)/lib/libmenu.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libmenu*.so* $(TARGET_DIR)/usr/lib/
+ endef
+ endif
+ 
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -dpf $(NCURSES_DIR)/lib/libncurses.so* $(TARGET_DIR)/usr/lib/
++	cp -dpf $(NCURSES_DIR)/lib/libncurses*.so* $(TARGET_DIR)/usr/lib/
+ 	$(NCURSES_INSTALL_TARGET_PANEL)
+ 	$(NCURSES_INSTALL_TARGET_FORM)
+ 	$(NCURSES_INSTALL_TARGET_MENU)
+@@ -116,7 +122,7 @@ define NCURSES_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses*.so*
+ 	$(NCURSES_INSTALL_TARGET_DEVFILES)
+ endef # NCURSES_INSTALL_TARGET_CMDS
+ 
 -- 
-1.7.1.1
+1.7.3.5
