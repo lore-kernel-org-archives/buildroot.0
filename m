@@ -1,32 +1,57 @@
-From: Raul Valadez Estrada <raul.valadez@hotmail.com>
-Date: Mon, 17 Jan 2011 12:57:31 -0600
-Subject: [Buildroot] buildroot with uclibc 0.9.26
-In-Reply-To: <COL122-W2323D19ABB9E89C489F7F38AF40@phx.gbl>
-References: <COL122-W2323D19ABB9E89C489F7F38AF40@phx.gbl>
-Message-ID: <COL122-W2659D0E68C30A9BF640C9B8AF40@phx.gbl>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Jan 2011 20:41:28 +0100
+Subject: [Buildroot] [PATCH 03/13] procps: convert to gentargets and
+	bump to 3.2.8
+In-Reply-To: <1294431182-27793-3-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Fri, 7 Jan 2011 17:12:52 -0300")
+References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
+	<1294431182-27793-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r5cbnwrb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+Hi,
 
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/procps/procps-make-3.82.patch |   15 ++++++++
+ Gustavo>  package/procps/procps.mk              |   61 ++++++++++-----------------------
+ Gustavo>  2 files changed, 33 insertions(+), 43 deletions(-)
+ Gustavo>  create mode 100644 package/procps/procps-make-3.82.patch
 
+ Gustavo> diff --git a/package/procps/procps-make-3.82.patch b/package/procps/procps-make-3.82.patch
+ Gustavo> new file mode 100644
+ Gustavo> index 0000000..b66945c
+ Gustavo> --- /dev/null
+ Gustavo> +++ b/package/procps/procps-make-3.82.patch
+ Gustavo> @@ -0,0 +1,15 @@
+ Gustavo> +ps/module.mk depends on vars set up in proc/module.mk, so make sure we always
+ Gustavo> +include the .mk files in the right order
 
+Please add authorship / signed-off-by to patches. According to the name,
+this patch is to fix an issue with make 3.82, but from reading the
+description and fix, it doesn't look version dependent?
 
-Hi, my name is Raul, I?ve been trying to create a buildroot for i386, kernel  2.4.25 and uclibc 0.9.26, but no success, I?m new on this I really need help! on the make menuconfig doesn?t show uclibc 0.9.26, I need to compile some tools, I?ll appreciate any help, is there in someplace some root_fs_i386.ext2 with the kernel I need and uclibc I told you before?, thanks, and I really hope you can help me or guide me on this adventure.
- 
-Regards.
+ Gustavo> +
+ Gustavo> +--- procps-3.2.8/Makefile
+ Gustavo> ++++ procps-3.2.8/Makefile
+ Gustavo> +@@ -174,7 +174,8 @@
+ Gustavo> + # want this rule first, use := on ALL, and ALL not filled in yet
+ Gustavo> + all: do_all
+ Gustavo> + 
+ Gustavo> +--include */module.mk
+ Gustavo> ++-include proc/module.mk
+ Gustavo> ++-include ps/module.mk
+ Gustavo> + 
+ Gustavo> + do_all:    $(ALL)
+ Gustavo> + 
 
-p.s. sorry about my english
+Otherwise looks good.
 
-
-May the Geforce be with you!
- 
-
-
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110117/33d8c0e7/attachment.html>
+-- 
+Bye, Peter Korsgaard
