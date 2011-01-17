@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 17 Jan 2011 21:23:00 +0100
-Subject: [Buildroot] [git commit master 1/1] mpg123: bump to version 1.13.1
-Message-ID: <20110117202413.2D81589008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] ntfs-3g: bump to version
+	2010.10.2
+Message-ID: <20110117202412.CEA3089008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,55 +10,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56b28d3ee1e50f7014d38f8535a67418f363ff23
+commit: http://git.buildroot.net/buildroot/commit/?id=f6cc067d961cfd7c326bccabedca8d46ea807d5d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpg123/mpg123.mk |   18 +++++++++++++++---
- 1 files changed, 15 insertions(+), 3 deletions(-)
+ package/ntfs-3g/ntfs-3g.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index ea35220..ddd891f 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -3,11 +3,16 @@
- # mpg123
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index a372d42..796e269 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -3,10 +3,11 @@
+ # ntfs-3g
  #
  #############################################################
--MPG123_VERSION = 0.66
+-NTFS_3G_VERSION:=2009.3.8
+-NTFS_3G_SOURCE:=ntfs-3g-$(NTFS_3G_VERSION).tgz
+-NTFS_3G_SITE:=http://www.ntfs-3g.org/
+-NTFS_3G_CONF_OPT:=--disable-ldconfig --program-prefix=""
+-NTFS_3G_INSTALL_STAGING:=yes
 +
-+MPG123_VERSION = 1.13.1
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
-+MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
-+MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
++NTFS_3G_VERSION = 2010.10.2
++NTFS_3G_SOURCE = ntfs-3g-$(NTFS_3G_VERSION).tgz
++NTFS_3G_SITE = http://tuxera.com/opensource
++NTFS_3G_CONF_OPT = --disable-ldconfig --program-prefix=""
++NTFS_3G_INSTALL_STAGING = YES
  
--MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic)
-+ifeq ($(BR2_arm),y)
-+MPG123_CPU = arm_nofpu
-+endif
- 
- ifeq ($(BR2_i386),y)
- MPG123_CPU = x86
-@@ -17,9 +22,16 @@ ifeq ($(BR2_powerpc),y)
- ifneq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),)
- MPG123_CPU = altivec
- endif
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+MPG123_CPU = ppc_nofpu
-+endif
-+endif
-+
-+ifeq ($(BR2_x86_64),y)
-+MPG123_CPU = x86-64
- endif
- 
--MPG123_CONF_OPT = --program-prefix='' --with-cpu=$(MPG123_CPU)
-+MPG123_CONF_OPT += --program-prefix='' --with-cpu=$(MPG123_CPU)
- 
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
+ $(eval $(call AUTOTARGETS,package,ntfs-3g))
 -- 
 1.7.3.4
