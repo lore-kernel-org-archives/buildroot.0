@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 17 Jan 2011 21:23:00 +0100
-Subject: [Buildroot] [git commit master 1/1] i2c-tools: bump to version 3.0.3
-Message-ID: <20110117202411.A666A8A6AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] hdparm: bump to version 9.36
+Message-ID: <20110117202412.026CC8B382@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b74f6d13d0d25b9328227734a5fc155b56b92bc8
+commit: http://git.buildroot.net/buildroot/commit/?id=15f088a115f58a38e35101bd6834718d30e77b62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/i2c-tools/i2c-tools.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ package/hdparm/hdparm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 58dde05..d96bad3 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -3,9 +3,10 @@
- # i2c-tools
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 02d76a9..4e3cfe5 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -3,7 +3,7 @@
+ # hdparm
  #
  #############################################################
--I2C_TOOLS_VERSION:=3.0.2
--I2C_TOOLS_SOURCE:=i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
--I2C_TOOLS_SITE:=http://dl.lm-sensors.org/i2c-tools/releases/
-+
-+I2C_TOOLS_VERSION = 3.0.3
-+I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
-+I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases/
+-HDPARM_VERSION = 9.32
++HDPARM_VERSION = 9.36
+ HDPARM_SOURCE = hdparm-$(HDPARM_VERSION).tar.gz
+ HDPARM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/hdparm
  
- define I2C_TOOLS_BUILD_CMDS
-  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 -- 
 1.7.3.4
