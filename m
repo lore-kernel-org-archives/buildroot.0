@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 17 Jan 2011 21:23:00 +0100
-Subject: [Buildroot] [git commit master 1/1] gperf: bump to version 3.0.4
-Message-ID: <20110117202414.3112189008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] bash: build after busybox
+Message-ID: <20110117202413.9C4538A6AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5118e1cf26641b6dd4dba0dd83be12b1ba56020d
+commit: http://git.buildroot.net/buildroot/commit/?id=0cce9228a1bcf1c228a75da366d110cf52c0d39d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Make sure bash builds after busybox when it's enabled to override
+busybox's /bin/sh symlink with bash.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gperf/gperf.mk |    7 ++-----
- 1 files changed, 2 insertions(+), 5 deletions(-)
+ package/bash/bash.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
-index f48ba9f..3593637 100644
---- a/package/gperf/gperf.mk
-+++ b/package/gperf/gperf.mk
-@@ -3,12 +3,9 @@
- # gperf
- #
- #############################################################
--GPERF_VERSION = 3.0.3
--GPERF_SOURCE = gperf-$(GPERF_VERSION).tar.gz
-+
-+GPERF_VERSION = 3.0.4
- GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
--GPERF_AUTORECONF = NO
--GPERF_INSTALL_STAGING = NO
--GPERF_INSTALL_TARGET = YES
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index d7bb699..2bcf0c4 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -8,6 +8,11 @@ BASH_VERSION = 4.1
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ BASH_DEPENDENCIES = ncurses
  
- $(eval $(call AUTOTARGETS,package,gperf))
- $(eval $(call AUTOTARGETS,package,gperf,host))
++# Make sure we build after busybox so that /bin/sh links to bash
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++BASH_DEPENDENCIES += busybox
++endif
++
+ # Save the old sh file/link if there is one and symlink bash->sh
+ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
 -- 
 1.7.3.4
