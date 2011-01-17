@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 17 Jan 2011 21:23:00 +0100
-Subject: [Buildroot] [git commit master 1/1] sshfs: select openssh instead
-	of depending
-Message-ID: <20110117202412.A4D0289008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] gperf: bump to version 3.0.4
+Message-ID: <20110117202414.3112189008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,52 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae2aa63dafca83259c4e113c9934bd5fef715881
+commit: http://git.buildroot.net/buildroot/commit/?id=5118e1cf26641b6dd4dba0dd83be12b1ba56020d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Select openssh in Config.in rather than depend on it.
-Otherwise the option is missing without an obvious reason.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sshfs/Config.in |    2 +-
- package/sshfs/sshfs.mk  |   10 +++-------
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ package/gperf/gperf.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index 61d9bf3..1d9f759 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_SSHFS
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	depends on BR2_PACKAGE_OPENSSH
-+	select BR2_PACKAGE_OPENSSH
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # glib2
- 	help
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 09f1e93..816f77a 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -4,13 +4,9 @@
+diff --git a/package/gperf/gperf.mk b/package/gperf/gperf.mk
+index f48ba9f..3593637 100644
+--- a/package/gperf/gperf.mk
++++ b/package/gperf/gperf.mk
+@@ -3,12 +3,9 @@
+ # gperf
  #
  #############################################################
+-GPERF_VERSION = 3.0.3
+-GPERF_SOURCE = gperf-$(GPERF_VERSION).tar.gz
++
++GPERF_VERSION = 3.0.4
+ GPERF_SITE = $(BR2_GNU_MIRROR)/gperf
+-GPERF_AUTORECONF = NO
+-GPERF_INSTALL_STAGING = NO
+-GPERF_INSTALL_TARGET = YES
  
--SSHFS_VERSION:=2.2
--SSHFS_SOURCE:=sshfs-fuse-$(SSHFS_VERSION).tar.gz
--SSHFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
--SSHFS_AUTORECONF:=NO
--SSHFS_INSTALL_STAGING:=NO
--SSHFS_INSTALL_TARGET:=YES
--
-+SSHFS_VERSION = 2.2
-+SSHFS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
-+SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
- SSHFS_DEPENDENCIES = libglib2 libfuse $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
- 
- $(eval $(call AUTOTARGETS,package,sshfs))
+ $(eval $(call AUTOTARGETS,package,gperf))
+ $(eval $(call AUTOTARGETS,package,gperf,host))
 -- 
 1.7.3.4
