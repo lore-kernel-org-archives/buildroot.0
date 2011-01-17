@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Jan 2011 20:48:21 +0100
-Subject: [Buildroot] [PATCH 10/13] sshfs: select openssh instead of
-	depending
-In-Reply-To: <1294431182-27793-10-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Fri, 7 Jan 2011 17:12:59 -0300")
+Date: Mon, 17 Jan 2011 20:49:36 +0100
+Subject: [Buildroot] [PATCH 11/13] ntfs-3g: bump to version 2010.10.2
+In-Reply-To: <1294431182-27793-11-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Fri, 7 Jan 2011 17:13:00 -0300")
 References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
-	<1294431182-27793-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wrm3mhve.fsf@macbook.be.48ers.dk>
+	<1294431182-27793-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sjwrmhtb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Select openssh in Config.in rather than depend on it.
- Gustavo> Otherwise the option is missing without an obvious reason.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/ntfs-3g/ntfs-3g.mk |   11 ++++++-----
+ Gustavo>  1 files changed, 6 insertions(+), 5 deletions(-)
 
 Committed, thanks.
 
