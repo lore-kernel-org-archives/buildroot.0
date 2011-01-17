@@ -1,46 +1,35 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 17 Jan 2011 13:06:14 +0100
-Subject: [Buildroot] qtwebkit illegal instruction problem with external
-	toolchain
-Message-ID: <AANLkTinGoE2b8t1YA7bu-ontgi++0RaGz9jNN8r_SU5t@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 17 Jan 2011 12:16:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 3103] make external-deps wants to download
+ gcc-.tar.bz2 when using an external toolchain
+In-Reply-To: <bug-3103-163@https.bugs.busybox.net/>
+References: <bug-3103-163@https.bugs.busybox.net/>
+Message-ID: <20110117121650.4A09C8B382@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My git head is ca2b65a6515800991dae49d1815b7bb933f4015c.
-Compile qt including webkit with external toolchain (codesourcery
-default from selection).
+https://bugs.busybox.net/show_bug.cgi?id=3103
 
-Use simple qt code to test webkit:
-int main(int argc, char *argv[])
-{
-        QApplication a(argc, argv);
-        QWebView *view = new QWebView();
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-        view->load(QUrl("http://mrdoob.com/projects/chromeexperiments/ball_pool/"));
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
 
-	view->showFullScreen();
-        return a.exec();
-}
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 2869
+  --> https://bugs.busybox.net/attachment.cgi?id=2869
+Disable gcc fetch when not internal toolchain
 
-After app. starting it failed with Illegal instruction (don't check deeply).
-
-Do same with buildroot builded toolchain (default selection just add
-WCHAR and C++ support to be able compile QT).
-Application work fine without problem.
-
-Marek
+This is an old bug that's been lingering for some time now.
+Try the attached patch, it should solve the issue.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
