@@ -1,24 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 17 Jan 2011 17:29:14 -0300
-Subject: [Buildroot] [PATCH 03/13] procps: convert to gentargets and
-	bump to 3.2.8
-In-Reply-To: <87tyh7l1fx.fsf@macbook.be.48ers.dk>
-References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>	<1294431182-27793-3-git-send-email-gustavo@zacarias.com.ar>	<87r5cbnwrb.fsf@macbook.be.48ers.dk>	<4D349C76.5000503@zacarias.com.ar>
-	<87tyh7l1fx.fsf@macbook.be.48ers.dk>
-Message-ID: <4D34A69A.3040002@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Jan 2011 21:32:21 +0100
+Subject: [Buildroot] buildroot with uclibc 0.9.26
+In-Reply-To: <COL122-W2659D0E68C30A9BF640C9B8AF40@phx.gbl> (Raul Valadez
+	Estrada's message of "Mon, 17 Jan 2011 12:57:31 -0600")
+References: <COL122-W2323D19ABB9E89C489F7F38AF40@phx.gbl>
+	<COL122-W2659D0E68C30A9BF640C9B8AF40@phx.gbl>
+Message-ID: <87pqrvl19m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/17/11 17:28, Peter Korsgaard wrote:
+>>>>> "Raul" == Raul Valadez Estrada <raul.valadez@hotmail.com> writes:
 
->  Gustavo> Author unknown, nixed from gentoo.
->  Gustavo> I think i shouldn't sign off on something i didn't write right?
-> 
-> No, put putting the Gentoo URL in it would be very good for
-> tracability. Is it a make 3.82 only thing, or does it also fail with
-> 3.81?
+Hi,
 
-Only for 3.82.
+ Raul> Hi, my name is Raul, I?ve been trying to create a buildroot for
+ Raul> i386, kernel 2.4.25 and uclibc 0.9.26, but no success, I?m new on
+ Raul> this I really need help!  on the make menuconfig doesn?t show
+ Raul> uclibc 0.9.26,
+
+0.9.26? In 2011 - Really? 0.9.26 is from 2004, and has never been
+supported by buildroot (oldest is 0.9.28). I'm afraid you're on your
+own here...
+
+-- 
+Bye, Peter Korsgaard
