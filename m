@@ -1,41 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 17 Jan 2011 21:23:00 +0100
-Subject: [Buildroot] [git commit master 1/1] bash: build after busybox
-Message-ID: <20110117202413.9C4538A6AD@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Jan 2011 21:28:34 +0100
+Subject: [Buildroot] [PATCH 03/13] procps: convert to gentargets and
+	bump to 3.2.8
+In-Reply-To: <4D349C76.5000503@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Mon, 17 Jan 2011 16:45:58 -0300")
+References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
+	<1294431182-27793-3-git-send-email-gustavo@zacarias.com.ar>
+	<87r5cbnwrb.fsf@macbook.be.48ers.dk>
+	<4D349C76.5000503@zacarias.com.ar>
+Message-ID: <87tyh7l1fx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cce9228a1bcf1c228a75da366d110cf52c0d39d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> On 01/17/11 16:41, Peter Korsgaard wrote:
+ >> Please add authorship / signed-off-by to patches. According to the name,
+ >> this patch is to fix an issue with make 3.82, but from reading the
+ >> description and fix, it doesn't look version dependent?
 
-Make sure bash builds after busybox when it's enabled to override
-busybox's /bin/sh symlink with bash.
+ Gustavo> Author unknown, nixed from gentoo.
+ Gustavo> I think i shouldn't sign off on something i didn't write right?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bash/bash.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index d7bb699..2bcf0c4 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -8,6 +8,11 @@ BASH_VERSION = 4.1
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- BASH_DEPENDENCIES = ncurses
+No, put putting the Gentoo URL in it would be very good for
+tracability. Is it a make 3.82 only thing, or does it also fail with
+3.81?
  
-+# Make sure we build after busybox so that /bin/sh links to bash
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+BASH_DEPENDENCIES += busybox
-+endif
-+
- # Save the old sh file/link if there is one and symlink bash->sh
- define BASH_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
