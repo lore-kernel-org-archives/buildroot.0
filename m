@@ -1,21 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Jan 2011 21:56:40 +0100
-Subject: [Buildroot] [PATCH 1/3] coreutils: bump to version 8.9
-In-Reply-To: <1295028711-28716-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Fri, 14 Jan 2011 15:11:49 -0300")
-References: <1295028711-28716-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87hbd7l053.fsf@macbook.be.48ers.dk>
+From: Kyle Hayes <kyle@greenmonitor.com>
+Date: Mon, 17 Jan 2011 13:01:09 -0800
+Subject: [Buildroot] bug when doing clean kernel build?
+Message-ID: <AANLkTikJiXF-w3baF2POeVr5Zh_sGUkdS+UQCQFmzb4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+I'm not sure if this is a code bug or a user bug :-)
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I'm trying to repeat my problems with openssh segfaulting and to do
+that I'm trying to build with make xconfig; make clean; make.
+However, when I do this, I see that the Linux kernel, 2.6.37, is made
+with Pentium Pro selected and I explicitly selected i486 in the
+Buildroot config.  I can go in after the make finishes and reconfigure
+the kernel again to get the right processor type.  Is this expected
+behavior?
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best,
+Kyle
