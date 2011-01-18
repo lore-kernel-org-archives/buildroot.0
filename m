@@ -1,42 +1,30 @@
-From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
-Date: Tue, 18 Jan 2011 10:20:07 -0800
-Subject: [Buildroot] beagleboard support
-In-Reply-To: <895970.43224.qm@web161805.mail.bf1.yahoo.com>
-References: <895970.43224.qm@web161805.mail.bf1.yahoo.com>
-Message-ID: <20110118182007.GD9083@bulix.org>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 18 Jan 2011 12:26:00 -0600
+Subject: [Buildroot] Strange behaviour of inittab
+In-Reply-To: <1295373920.16414.126.camel@worky>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
+	<1295373920.16414.126.camel@worky>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EF4@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Steve,
+inittab ordering causes mount to fail on remount,rw.  inittab
+changed to mount /proc first.
 
-* Steve Calfee <nospamcalfee@yahoo.com> [2011-01-17 17:06:51]:
-
-> I found a patch from last may proposing a beagleboard defconfig, but it is not 
-> in my 11/10 release of buildroot. Does anyone know the status of beagleboard 
-> support?
-
-AFAIK BeagleBoard support has not been merged in yet. The patch from
-last May is being progressively reworked. I recently submitted a patch
-for X-Loader support which is a pre-requesite to BeagleBoard support. We
-then need to implement building a kernel from Git instead of from a
-released tarball (kernel trees with BeagleBoard support are usually not
-tarballed), and finally we can add the board support.
-
-I haven't heard anything back on my X-Loader support patch though, but I
-guess everyone is pretty busy in the beginning of the new year.
-
-- Maxime
--- 
-Maxime Petazzoni <http://www.bulix.org>
- ``One by one, the penguins took away my sanity.''
-Writing software in California
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110118/62c702c6/attachment.asc>
+Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
+---
+--- a/fs/skeleton/etc/inittab   2011-01-06 05:25:33.000000000 -0600
++++ b/fs/skeleton/etc/inittab   2011-01-18 12:16:18.000000000 -0600
+@@ -14,8 +14,8 @@
+ # process   == program to run
+ 
+ # Startup the system
+-null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -t proc proc /proc
++null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
