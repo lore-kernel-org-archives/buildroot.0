@@ -1,376 +1,69 @@
-From: Yoann Sculo <yoann.sculo@gmail.com>
-Date: Tue, 18 Jan 2011 19:29:58 +0100
-Subject: [Buildroot] [PATCH 10/10] mpd: new package
-In-Reply-To: <1295369680-24816-11-git-send-email-gustavo@zacarias.com.ar>
-References: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
-	<1295369680-24816-11-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <AANLkTin_d12vtdFJGvhVA96AsAodUELF5BCOtafOS4Pt@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 18 Jan 2011 23:32:01 +0100
+Subject: [Buildroot] beagleboard support
+In-Reply-To: <20110118182007.GD9083@bulix.org>
+References: <895970.43224.qm@web161805.mail.bf1.yahoo.com>
+	<20110118182007.GD9083@bulix.org>
+Message-ID: <4D3614E1.4080904@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh thank you ;) !!
-I wanted to do this patch for so many months... But I hadn't so much time to
-do it.
-So, thank you for your time and for your patch ;) I can cross this off my
-huge todo list !
+Maxime Petazzoni ha scritto:
 
-Yoann Sculo
+> Hi Steve,
+>
+> * Steve Calfee <nospamcalfee@yahoo.com> [2011-01-17 17:06:51]:
+>
+>   
+>> I found a patch from last may proposing a beagleboard defconfig, but it is not 
+>> in my 11/10 release of buildroot. Does anyone know the status of beagleboard 
+>> support?
+>>     
+>
+> AFAIK BeagleBoard support has not been merged in yet. The patch from
+> last May is being progressively reworked. I recently submitted a patch
+> for X-Loader support which is a pre-requesite to BeagleBoard support. We
+> then need to implement building a kernel from Git instead of from a
+> released tarball (kernel trees with BeagleBoard support are usually not
+> tarballed), and finally we can add the board support.
+>
+> I haven't heard anything back on my X-Loader support patch though, but I
+> guess everyone is pretty busy in the beginning of the new year.
+>   
+Sorry for not having found the time to comment your patch timely. I'll do it now.
 
+Your contribution is naturally appreciated, but what I think is that X-loader
+should not be in buildroot at all. Although it has historical merits, I find
+X-loader totally useless nowadays. I develop the buildsystem for a custom OMAP3
+board, and I completely eliminated X-loader with great relief.
 
-2011/1/18 Gustavo Zacarias <gustavo@zacarias.com.ar>
+X-loader is made for two uses:
+1. a serial loader for being able to burn a "main" bootloader (e.g. U-boot) onto
+   an empty or corrupted flash (a "bricked" board);
+2. a 2nd stage bootloader for normal boot, being run by the boot ROM (1st stage
+   bootloader) and used to run the "main", or 3rd, bootloader (e.g. U-boot).
 
-> Add the Music Player Daemon package.
-> Enjoy, send me beers ;)
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/multimedia/Config.in     |    1 +
->  package/multimedia/mpd/Config.in |  138
-> ++++++++++++++++++++++++++++++++++++++
->  package/multimedia/mpd/S95mpd    |   30 ++++++++
->  package/multimedia/mpd/mpd.conf  |   32 +++++++++
->  package/multimedia/mpd/mpd.mk    |   85 +++++++++++++++++++++++
->  5 files changed, 286 insertions(+), 0 deletions(-)
->  create mode 100644 package/multimedia/mpd/Config.in
->  create mode 100755 package/multimedia/mpd/S95mpd
->  create mode 100644 package/multimedia/mpd/mpd.conf
->  create mode 100644 package/multimedia/mpd/mpd.mk
->
-> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-> index 14c4145..ae26ceb 100644
-> --- a/package/multimedia/Config.in
-> +++ b/package/multimedia/Config.in
-> @@ -28,6 +28,7 @@ source "package/multimedia/libsndfile/Config.in"
->  source "package/multimedia/libtheora/Config.in"
->  source "package/multimedia/libvorbis/Config.in"
->  source "package/multimedia/madplay/Config.in"
-> +source "package/multimedia/mpd/Config.in"
->  source "package/multimedia/mpg123/Config.in"
->  source "package/multimedia/mplayer/Config.in"
->  source "package/multimedia/musepack/Config.in"
-> diff --git a/package/multimedia/mpd/Config.in
-> b/package/multimedia/mpd/Config.in
-> new file mode 100644
-> index 0000000..b902b7b
-> --- /dev/null
-> +++ b/package/multimedia/mpd/Config.in
-> @@ -0,0 +1,138 @@
-> +menuconfig BR2_PACKAGE_MPD
-> +       bool "mpd"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_USE_WCHAR
-> +       select BR2_PACKAGE_LIBGLIB2
-> +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-> +       help
-> +         MPD is a flexible, powerful, server-side application
-> +         for playing music. Through plugins and libraries
-> +         it can play a variety of sound files while being
-> +         controlled by its network protocol.
-> +
-> +         http://www.musicpd.org
-> +
-> +if BR2_PACKAGE_MPD
-> +
-> +config BR2_PACKAGE_MPD_ALSA
-> +       bool "alsa"
-> +       select BR2_PACKAGE_ALSA_LIB
-> +       help
-> +         Enable alsa output support.
-> +
-> +config BR2_PACKAGE_MPD_AO
-> +       bool "ao"
-> +       select BR2_PACKAGE_LIBAO
-> +       help
-> +         Enable libao output support.
-> +
-> +config BR2_PACKAGE_MPD_BZIP2
-> +       bool "bzip2"
-> +       select BR2_PACKAGE_BZIP2
-> +       help
-> +         Enable bzip2 archive support.
-> +
-> +config BR2_PACKAGE_MPD_CURL
-> +       bool "curl"
-> +       select BR2_PACKAGE_LIBCURL
-> +       help
-> +         Enable curl streaming (http) support.
-> +
-> +config BR2_PACKAGE_MPD_FAAD2
-> +       bool "faad2"
-> +       select BR2_PACKAGE_FAAD2
-> +       help
-> +         Enable faad2 input support.
-> +         Select this if you want to play back MP4/AAC files.
-> +
-> +config BR2_PACKAGE_MPD_FLAC
-> +       bool "flac"
-> +       select BR2_PACKAGE_FLAC
-> +       help
-> +         Enable flac input/streaming support.
-> +         Select this if you want to play back FLAC files.
-> +
-> +config BR2_PACKAGE_MPD_LIBSAMPLERATE
-> +       bool "libsamplerate"
-> +       select BR2_PACKAGE_LIBSAMPLERATE
-> +       help
-> +         Enable libsamplerate input support.
-> +         Select this for software sample rate conversion.
-> +
-> +config BR2_PACKAGE_MPD_LIBSNDFILE
-> +       bool "libsndfile"
-> +       select BR2_PACKAGE_LIBSNDFILE
-> +       help
-> +         Enable libsndfile input/streaming support.
-> +         Select this if you want to play back WAV files.
-> +
-> +config BR2_PACKAGE_MPD_MAD
-> +       bool "mad"
-> +       select BR2_PACKAGE_LIBID3TAG
-> +       select BR2_PACKAGE_LIBMAD
-> +       help
-> +         Enable mad input support.
-> +         Select this if you want to play back MP3 files.
-> +         mpg123 has better quality support (24-bit) but doesn't seek.
-> +
-> +config BR2_PACKAGE_MPD_MPG123
-> +       bool "mpg123"
-> +       select BR2_PACKAGE_LIBID3TAG
-> +       select BR2_PACKAGE_MPG123
-> +       help
-> +         Enable mpg123 input support.
-> +         Select this if you want to play back MP3 files.
-> +         mpg123 has better quality support (24-bit) but doesn't seek.
-> +
-> +config BR2_PACKAGE_MPD_MUSEPACK
-> +       bool "musepack"
-> +       select BR2_PACKAGE_LIBCUE
-> +       select BR2_PACKAGE_LIBREPLAYGAIN
-> +       select BR2_PACKAGE_MUSEPACK
-> +       help
-> +         Enable musepack input support.
-> +         Select this if you want to play back MPC files.
-> +
-> +config BR2_PACKAGE_MPD_SQLITE
-> +       bool "sqlite"
-> +       select BR2_PACKAGE_SQLITE
-> +       help
-> +         Enable sqlite database support.
-> +         If you don't use sqlite it will use an ASCII database.
-> +
-> +config BR2_PACKAGE_MPD_TCP
-> +       bool "tcp sockets"
-> +       default y
-> +       help
-> +         Enable mpd to listen on tcp sockets.
-> +
-> +         You want this on if mpd and the client(s) work
-> +         on different machines (the usual scenario).
-> +
-> +config BR2_PACKAGE_MPD_TREMOR
-> +       bool "tremor"
-> +       select BR2_PACKAGE_LIBOGG
-> +       select BR2_PACKAGE_TREMOR
-> +       help
-> +         Enable vorbis input support.
-> +         Select this if you want to play back OGG files.
-> +
-> +config BR2_PACKAGE_MPD_VORBIS
-> +       bool "vorbis"
-> +       select BR2_PACKAGE_LIBOGG
-> +       select BR2_PACKAGE_LIBVORBIS
-> +       help
-> +         Enable vorbis input/streaming support.
-> +         Select this if you want to play back OGG files.
-> +
-> +config BR2_PACKAGE_MPD_WAVPACK
-> +       bool "wavpack"
-> +       select BR2_PACKAGE_WAVPACK
-> +       help
-> +         Enable wavpack input support.
-> +         Select this if you want to play back WV files.
-> +
-> +endif
-> +
-> +comment "mpd requires a toolchain with C++ and WCHAR support"
-> +       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-> diff --git a/package/multimedia/mpd/S95mpd b/package/multimedia/mpd/S95mpd
-> new file mode 100755
-> index 0000000..7c242f4
-> --- /dev/null
-> +++ b/package/multimedia/mpd/S95mpd
-> @@ -0,0 +1,30 @@
-> +#!/bin/sh
-> +
-> +start() {
-> +       echo -n "Starting mpd: "
-> +       start-stop-daemon --start --quiet --background --exec /usr/bin/mpd
-> +       echo "OK"
-> +}
-> +
-> +stop() {
-> +       echo -n "Stopping mpd: "
-> +       start-stop-daemon --stop --quiet --pidfile /var/run/mpd.pid
-> +       echo "OK"
-> +}
-> +
-> +case "$1" in
-> +       start)
-> +               start
-> +               ;;
-> +       stop)
-> +               stop
-> +               ;;
-> +       restart|reload)
-> +               stop
-> +               sleep 1
-> +               start
-> +               ;;
-> +       *)
-> +               echo $"Usage: $0 {start|stop|restart}"
-> +               exit 1
-> +esac
-> diff --git a/package/multimedia/mpd/mpd.conf
-> b/package/multimedia/mpd/mpd.conf
-> new file mode 100644
-> index 0000000..1a08ed0
-> --- /dev/null
-> +++ b/package/multimedia/mpd/mpd.conf
-> @@ -0,0 +1,32 @@
-> +#
-> +# Sample configuration file for mpd
-> +# This is a minimal configuration, see the manpage for more options
-> +#
-> +
-> +# Directory where the music is stored
-> +music_directory                "/var/lib/mpd/music"
-> +
-> +# Directory where user-made playlists are stored (RW)
-> +playlist_directory     "/mnt/mpd/playlists"
-> +
-> +# Database file (RW)
-> +db_file                        "/var/lib/mpd/database"
-> +
-> +# Log file (RW)
-> +log_file               "/var/log/mpd.log"
-> +
-> +# Process ID file (RW)
-> +pid_file               "/var/run/mpd.pid"
-> +
-> +# State file (RW)
-> +state_file             "/var/lib/mpd/state"
-> +
-> +# User id to run the daemon as
-> +#user                  "nobody"
-> +
-> +# TCP socket binding
-> +bind_to_address                "any"
-> +#bind_to_address       "localhost"
-> +
-> +# Unix socket to listen on
-> +bind_to_address                "/var/lib/mpd/socket"
-> diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-> new file mode 100644
-> index 0000000..15fb215
-> --- /dev/null
-> +++ b/package/multimedia/mpd/mpd.mk
-> @@ -0,0 +1,85 @@
-> +#############################################################
-> +#
-> +# mpd
-> +#
-> +#############################################################
-> +
-> +MPD_VERSION = 0.16.1
-> +MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).
-> dl.sourceforge.net/sourceforge/musicpd
-> +MPD_DEPENDENCIES = host-pkg-config libglib2
-> +
-> +# Config.in selects most options to make life easier and avoid guess work
-> +
-> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-> +MPD_DEPENDENCIES += alsa-lib
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBAO),y)
-> +MPD_DEPENDENCIES += libao
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MPD_BZIP2),y)
-> +MPD_DEPENDENCIES += bzip2
-> +MPD_CONF_OPT += --enable-bzip2
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_FAAD2),y)
-> +MPD_DEPENDENCIES += faad2
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_FLAC),y)
-> +MPD_DEPENDENCIES += flac
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> +MPD_DEPENDENCIES += libcurl
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-> +MPD_DEPENDENCIES += libsamplerate
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-> +MPD_DEPENDENCIES += libsndfile
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
-> +MPD_DEPENDENCIES += libvorbis
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MPG123),y)
-> +MPD_DEPENDENCIES += libid3tag mpg123
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MUSEPACK),y)
-> +MPD_DEPENDENCIES += musepack
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SQLITE),y)
-> +MPD_DEPENDENCIES += sqlite
-> +endif
-> +
-> +ifneq ($(BR2_PACKAGE_MPD_TCP),y)
-> +MPD_CONF_OPT += --disable-tcp
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TREMOR),y)
-> +MPD_DEPENDENCIES += tremor
-> +MPD_CONF_OPT += --with-tremor
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WAVPACK),y)
-> +MPD_DEPENDENCIES += wavpack
-> +endif
-> +
-> +define MPD_INSTALL_EXTRA_FILES
-> +       [ ! -f $(TARGET_DIR)/etc/mpd.conf ] && \
-> +               $(INSTALL) -D package/multimedia/mpd/mpd.conf \
-> +                       $(TARGET_DIR)/etc/mpd.conf
-> +       $(INSTALL) -m 0755 -D package/multimedia/mpd/S95mpd \
-> +               $(TARGET_DIR)/etc/init.d/S95mpd
-> +endef
-> +
-> +MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
-> +
-> +$(eval $(call AUTOTARGETS,package/multimedia,mpd))
-> --
-> 1.7.3.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110118/36247df4/attachment-0001.html>
+For the first usage, I found that barebox is a great alternative. In its
+omap3530_beagle_per_uart_defconfig it has the same functionality as X-loader,
+but it is well-written, supported and actively developed (while X-loader is a
+fork from a very ancient version of U-boot).
+
+About the second usage, a 2nd stage bootloader is just not needed. The OMAP3
+boot ROM can directly boot the "main" bootloader if the latter is prefixed by a
+suitable configuration header. You can read more about this at
+http://nishanthmenon.blogspot.com/2009/05/configuration-header-no-more-x-loader.html
+
+Finally, I don't know if X-loader can act as a "main" bootloader but I think it
+doesn't. Anyway, since barebox and U-boot are around, would you choose anything
+else?
+
+Instead of putting efforts on integrating X-loader, I would instead investigate
+how to integrate in buildroot the steps to generate a bootloader with a
+configuration header (as per Nishanth's blog entry). I hadn't time to do it so
+far, but I'd be glad to to so if time permits, as well as to review someone
+else's proposal.
+
+Luca
