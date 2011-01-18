@@ -1,28 +1,19 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 18 Jan 2011 08:25:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 3109] abnormal `make busybox-menuconfig`
-In-Reply-To: <bug-3109-163@https.bugs.busybox.net/>
-References: <bug-3109-163@https.bugs.busybox.net/>
-Message-ID: <20110118082539.D25458A5C2@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 18 Jan 2011 13:54:30 -0300
+Subject: [Buildroot] [PATCH 00/10] Add mpd to buildroot
+Message-ID: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3109
+This patchset adds the mpd package to buildroot.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+No attempt is made to avoid people hurting themselves, for instance
+you can build mpd with a full set of options even on a softfloat target
+though it probably won't do you any good if you lack the CPU power for
+some codecs like wavpack.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Hmm, I thought we had already fixed this once. Anyway, thanks, committed.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Run-tested on powerpc hardfloat.
+Build-tested for armv4t softfloat.
