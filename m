@@ -1,81 +1,69 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Jan 2011 13:54:33 -0300
-Subject: [Buildroot] [PATCH 03/10] libmad: install pkgconfig file
+Date: Tue, 18 Jan 2011 13:54:34 -0300
+Subject: [Buildroot] [PATCH 04/10] wavpack: new package
 In-Reply-To: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1295369680-24816-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1295369680-24816-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make libmad install mad.pc into staging and target.
-
-Needed for mpd.
+Add new wavpack package, another lossless codec like flac.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/libmad/libmad.mk |   21 ++++++++++++++++-----
- package/multimedia/libmad/mad.pc    |   11 +++++++++++
- 2 files changed, 27 insertions(+), 5 deletions(-)
- create mode 100644 package/multimedia/libmad/mad.pc
+ package/multimedia/Config.in          |    1 +
+ package/multimedia/wavpack/Config.in  |   10 ++++++++++
+ package/multimedia/wavpack/wavpack.mk |   12 ++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/wavpack/Config.in
+ create mode 100644 package/multimedia/wavpack/wavpack.mk
 
-diff --git a/package/multimedia/libmad/libmad.mk b/package/multimedia/libmad/libmad.mk
-index ae83725..d129aad 100644
---- a/package/multimedia/libmad/libmad.mk
-+++ b/package/multimedia/libmad/libmad.mk
-@@ -4,18 +4,29 @@
- #
- #############################################################
- 
--LIBMAD_VERSION=0.15.1b
--LIBMAD_SOURCE=libmad-$(LIBMAD_VERSION).tar.gz
--LIBMAD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad/
--LIBMAD_INSTALL_STAGING=YES
--LIBMAD_LIBTOOL_PATCH=NO
-+LIBMAD_VERSION = 0.15.1b
-+LIBMAD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mad/
-+LIBMAD_INSTALL_STAGING = YES
-+LIBMAD_LIBTOOL_PATCH = NO
- 
- define LIBMAD_PREVENT_AUTOMAKE
- 	# Prevent automake from running.
- 	(cd $(@D); touch -c config* aclocal.m4 Makefile*);
- endef
- 
-+define LIBMAD_INSTALL_STAGING_PC
-+	$(INSTALL) -D package/multimedia/libmad/mad.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/mad.pc
-+endef
-+
-+define LIBMAD_INSTALL_TARGET_PC
-+	$(INSTALL) -D package/multimedia/libmad/mad.pc \
-+		$(TARGET_DIR)/usr/lib/pkgconfig/mad.pc
-+endef
-+
- LIBMAD_POST_PATCH_HOOKS += LIBMAD_PREVENT_AUTOMAKE
-+LIBMAD_POST_INSTALL_STAGING_HOOKS += LIBMAD_INSTALL_STAGING_PC
-+LIBMAD_POST_INSTALL_TARGET_HOOKS += LIBMAD_INSTALL_TARGET_PC
- 
- LIBMAD_CONF_OPT = \
- 		--disable-debugging \
-diff --git a/package/multimedia/libmad/mad.pc b/package/multimedia/libmad/mad.pc
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 6d2cbc7..ba6c927 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -33,4 +33,5 @@ source "package/multimedia/taglib/Config.in"
+ source "package/multimedia/tremor/Config.in"
+ source "package/multimedia/vlc/Config.in"
+ source "package/multimedia/vorbis-tools/Config.in"
++source "package/multimedia/wavpack/Config.in"
+ endmenu
+diff --git a/package/multimedia/wavpack/Config.in b/package/multimedia/wavpack/Config.in
 new file mode 100644
-index 0000000..d1b4801
+index 0000000..e18e6e7
 --- /dev/null
-+++ b/package/multimedia/libmad/mad.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/package/multimedia/wavpack/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WAVPACK
++	bool "wavpack"
++	help
++	  WavPack is a completely open audio compression format providing
++	  lossless, high-quality lossy, and a unique hybrid compression mode.
 +
-+Name: mad
-+Description: MPEG Audio Decoder
-+Requires:
-+Version: 0.15.1b
-+Libs: -L${libdir} -lmad -lm
-+Cflags: -I${includedir}
++	  Works on softfloat but it's not recommended since it uses
++	  a big deal of CPU power.
++
++	  http://www.wavpack.com/
+diff --git a/package/multimedia/wavpack/wavpack.mk b/package/multimedia/wavpack/wavpack.mk
+new file mode 100644
+index 0000000..28e2c31
+--- /dev/null
++++ b/package/multimedia/wavpack/wavpack.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# wavpack
++#
++################################################################################
++
++WAVPACK_VERSION = 4.60.1
++WAVPACK_SITE = http://www.wavpack.com
++WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.bz2
++WAVPACK_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS,package/multimedia,wavpack))
 -- 
 1.7.3.4
