@@ -1,54 +1,42 @@
-From: Lionel Landwerlin <llandwerlin@gmail.com>
-Date: Tue, 18 Jan 2011 18:05:20 +0000
-Subject: [Buildroot] Strange behaviour of inittab
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
-Message-ID: <1295373920.16414.126.camel@worky>
+From: Maxime Petazzoni <maxime.petazzoni@bulix.org>
+Date: Tue, 18 Jan 2011 10:20:07 -0800
+Subject: [Buildroot] beagleboard support
+In-Reply-To: <895970.43224.qm@web161805.mail.bf1.yahoo.com>
+References: <895970.43224.qm@web161805.mail.bf1.yahoo.com>
+Message-ID: <20110118182007.GD9083@bulix.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2011-01-18 at 11:55 -0600, ANDY KENNEDY wrote:
-> I'm on drugs, sorry if this post is illegible.
-> 
-> The original inittab included by BuildRoot looked like this:
-> 
-> # Startup the system
-> ::sysinit:/bin/mount -o remount,rw /
-> ::sysinit:/bin/mount -t proc proc /proc
-> ::sysinit:/bin/mkdir -p /dev/pts
-> ::sysinit:/bin/mount -a
-> 
-> Anyone else have a problem with this?  On my mips, I have an NFS mounted
-> RFS.  With the above configuration, I cannot get the system to remount
-> because proc is not mounted (apparently this version of BusyBox mount
-> requires proc????).
+Hi Steve,
 
-All the busybox versions I've used required /proc to be mounted. In
-particular /proc/filesystem which is parsed by busybox to guess the
-available filesystems supported by the kernel when mounting with "-t
-auto".
+* Steve Calfee <nospamcalfee@yahoo.com> [2011-01-17 17:06:51]:
 
-> 
-> The fix I have done is to reverse the mounting/remounting of proc and
-> the RFS as follows:
-> 
-> # Startup the system
-> ::sysinit:/bin/mount -t proc proc /proc
-> ::sysinit:/bin/mount -o remount,rw /
-> ::sysinit:/bin/mkdir -p /dev/pts
-> ::sysinit:/bin/mount -a
-> 
-> 
-> The question I have is should we change the inittab from within
-> BuildRoot or is there really only a problem with something in my
-> configuration?
-> 
-> 
-> Andy
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> I found a patch from last may proposing a beagleboard defconfig, but it is not 
+> in my 11/10 release of buildroot. Does anyone know the status of beagleboard 
+> support?
+
+AFAIK BeagleBoard support has not been merged in yet. The patch from
+last May is being progressively reworked. I recently submitted a patch
+for X-Loader support which is a pre-requesite to BeagleBoard support. We
+then need to implement building a kernel from Git instead of from a
+released tarball (kernel trees with BeagleBoard support are usually not
+tarballed), and finally we can add the board support.
+
+I haven't heard anything back on my X-Loader support patch though, but I
+guess everyone is pretty busy in the beginning of the new year.
+
+- Maxime
+-- 
+Maxime Petazzoni <http://www.bulix.org>
+ ``One by one, the penguins took away my sanity.''
+Writing software in California
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110118/62c702c6/attachment.asc>
