@@ -1,38 +1,23 @@
 From: Kyle Hayes <kyle@greenmonitor.com>
-Date: Mon, 17 Jan 2011 14:23:21 -0800
+Date: Mon, 17 Jan 2011 16:12:36 -0800
 Subject: [Buildroot] ssh-keygen seg fault
-In-Reply-To: <20110114181920.59ba8b8b@surf>
+In-Reply-To: <AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
 References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
 	<20110114090752.5f01ade5@surf>
 	<469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
 	<20110114104016.252e7f90@surf>
 	<AANLkTi=kVHeatBJ1G2wZsX1ww-FOV0qb5Vtf5rxXNneL@mail.gmail.com>
 	<20110114181920.59ba8b8b@surf>
-Message-ID: <AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
+	<AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
+Message-ID: <AANLkTi=1mMpNWnQweX8xM9BGDtoRy-degDtgzT-C-8x+@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-See below...
-
-On Fri, Jan 14, 2011 at 9:19 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Yes, it's definitely something wrong in the build process, and it'd be
-> great to sort it out.
->
-> Would you mind running ssh-keygen under gdbserver+cross-gdb as
-> suggested in my first e-mail ? Or run "ulimit -c unlimited" on your
-> board, get ssh-keygen to crash, and then transfer the core file to your
-> development workstation, and get a backstrace with the cross-gdb. That
-> would immediatly point us to the segfault location, which would really,
-> really help in understanding what the issue is.
-
-I got a core file.  I have a target GDB for use with host programs.  I
-turned off stripping.  But...
+Sigh.  Same sort of problems.  I'm clearly missing something.  At
+least this time I got a file name and a line number.
 
 sudo /home/kyle/buildroot/buildroot/output/toolchain/gdbhost-7.1/gdb/gdb
 /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen
@@ -48,59 +33,159 @@ This GDB was configured as "--host=i686-pc-linux-gnu
 For bug reporting instructions, please see:
 <http://www.gnu.org/software/gdb/bugs/>...
 Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen...(no
-debugging symbols found)...done.
-[New Thread 549]
+/home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen...done.
+[New Thread 550]
+Error while mapping shared library sections:
+/usr/lib/libcrypto.so.1.0.0: No such file or directory.
+Error while mapping shared library sections:
+/lib/libdl.so.0: No such file or directory.
+Error while mapping shared library sections:
+/lib/libutil.so.0: No such file or directory.
+Error while mapping shared library sections:
+/usr/lib/libz.so.1: No such file or directory.
+Error while mapping shared library sections:
+/lib/libcrypt.so.0: No such file or directory.
 
 warning: .dynamic section for "/lib/libgcc_s.so.1" is not at the
 expected address (wrong library or version mismatch?)
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/usr/lib/libcrypto.so.1.0.0...done.
-Loaded symbols for
-/home/kyle/buildroot/buildroot/output/target/usr/lib/libcrypto.so.1.0.0
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/lib/libdl.so.0...(no
-debugging symbols found)...done.
-Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libdl.so.0
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/lib/libutil.so.0...(no
-debugging symbols found)...done.
-Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libutil.so.0
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/usr/lib/libz.so.1...done.
-Loaded symbols for
-/home/kyle/buildroot/buildroot/output/target/usr/lib/libz.so.1
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/lib/libcrypt.so.0...(no
-debugging symbols found)...done.
-Loaded symbols for
-/home/kyle/buildroot/buildroot/output/target/lib/libcrypt.so.0
+Error while mapping shared library sections:
+/lib/libc.so.0: No such file or directory.
+Error while mapping shared library sections:
+/lib/ld-uClibc.so.0: No such file or directory.
+Symbol file not found for /usr/lib/libcrypto.so.1.0.0
+Symbol file not found for /lib/libdl.so.0
+Symbol file not found for /lib/libutil.so.0
+Symbol file not found for /usr/lib/libz.so.1
+Symbol file not found for /lib/libcrypt.so.0
 Reading symbols from /lib/libgcc_s.so.1...(no debugging symbols found)...done.
 Loaded symbols for /lib/libgcc_s.so.1
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/lib/libc.so.0...(no
-debugging symbols found)...done.
-Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libc.so.0
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/lib/ld-uClibc.so.0...(no
-debugging symbols found)...done.
-Loaded symbols for
-/home/kyle/buildroot/buildroot/output/target/lib/ld-uClibc.so.0
+Symbol file not found for /lib/libc.so.0
+Symbol file not found for /lib/ld-uClibc.so.0
+
+warning: Unable to find dynamic linker breakpoint function.
+GDB will be unable to debug shared library initializers
+and track explicitly loaded dynamic code.
 Core was generated by `ssh-keygen -t rsa'.
 Program terminated with signal 11, Segmentation fault.
-#0  0x0804da1a in main ()
-(gdb) backtrace
-#0  0x0804da1a in main ()
-(gdb) up
-Initial frame selected; you cannot go up.
+#0  main (argc=-1079009626, argv=0xbfaf9eb1) at ssh-keygen.c:1762
+1762	{
+(gdb)
 
-Uh, so somewhere I managed to build everything without any debugging
-symbols.  I'll try again.  Sigh.  The compile/edit/retry cycle on this
-is quite long.  How "smart" is Builtroot when I change configuration?
-Will it just rebuild the things I need to rebuild?  I've been doing a
-"make clean" before every attempt.
 
-I'm trying!
+This is useless information because 1762 is the first line of main() :-(
+
+I'm now rebuilding with a version of gdb for the target...
+
+Huh, did that and got the same thing.
+
+How do I do this?  I've never tried to debug anything like this.  I'm
+clearly doing something wrong with the debugging.  It only gives me
+the initial stack frame, so I think that I'm missing something
+important somewhere.
+
+I've built everything with debugging symbols on.  I've build with
+strip turned off.  I've built gdb for both host and target.  The above
+is about all I can get.
+
+Can someone explain what to do in short sentences using very small
+words? I need to be able to get more of a stack trace than this.  I
+tried running ssh-keygen inside gdb on the target system and this is
+all I get.  So, it is as if the debugging info is still not there.
+I'm doing yet another make clean and remake and I hope that will work.
 
 Best,
 Kyle
+
+
+
+On Mon, Jan 17, 2011 at 2:23 PM, Kyle Hayes <kyle@greenmonitor.com> wrote:
+> Hi Thomas,
+>
+> See below...
+>
+> On Fri, Jan 14, 2011 at 9:19 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Yes, it's definitely something wrong in the build process, and it'd be
+>> great to sort it out.
+>>
+>> Would you mind running ssh-keygen under gdbserver+cross-gdb as
+>> suggested in my first e-mail ? Or run "ulimit -c unlimited" on your
+>> board, get ssh-keygen to crash, and then transfer the core file to your
+>> development workstation, and get a backstrace with the cross-gdb. That
+>> would immediatly point us to the segfault location, which would really,
+>> really help in understanding what the issue is.
+>
+> I got a core file. ?I have a target GDB for use with host programs. ?I
+> turned off stripping. ?But...
+>
+> sudo /home/kyle/buildroot/buildroot/output/toolchain/gdbhost-7.1/gdb/gdb
+> /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen
+> /media/HC/core
+> GNU gdb (GDB) 7.1
+> Copyright (C) 2010 Free Software Foundation, Inc.
+> License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+> This is free software: you are free to change and redistribute it.
+> There is NO WARRANTY, to the extent permitted by law. ?Type "show copying"
+> and "show warranty" for details.
+> This GDB was configured as "--host=i686-pc-linux-gnu
+> --target=i486-unknown-linux-uclibc".
+> For bug reporting instructions, please see:
+> <http://www.gnu.org/software/gdb/bugs/>...
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen...(no
+> debugging symbols found)...done.
+> [New Thread 549]
+>
+> warning: .dynamic section for "/lib/libgcc_s.so.1" is not at the
+> expected address (wrong library or version mismatch?)
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/usr/lib/libcrypto.so.1.0.0...done.
+> Loaded symbols for
+> /home/kyle/buildroot/buildroot/output/target/usr/lib/libcrypto.so.1.0.0
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/lib/libdl.so.0...(no
+> debugging symbols found)...done.
+> Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libdl.so.0
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/lib/libutil.so.0...(no
+> debugging symbols found)...done.
+> Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libutil.so.0
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/usr/lib/libz.so.1...done.
+> Loaded symbols for
+> /home/kyle/buildroot/buildroot/output/target/usr/lib/libz.so.1
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/lib/libcrypt.so.0...(no
+> debugging symbols found)...done.
+> Loaded symbols for
+> /home/kyle/buildroot/buildroot/output/target/lib/libcrypt.so.0
+> Reading symbols from /lib/libgcc_s.so.1...(no debugging symbols found)...done.
+> Loaded symbols for /lib/libgcc_s.so.1
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/lib/libc.so.0...(no
+> debugging symbols found)...done.
+> Loaded symbols for /home/kyle/buildroot/buildroot/output/target/lib/libc.so.0
+> Reading symbols from
+> /home/kyle/buildroot/buildroot/output/target/lib/ld-uClibc.so.0...(no
+> debugging symbols found)...done.
+> Loaded symbols for
+> /home/kyle/buildroot/buildroot/output/target/lib/ld-uClibc.so.0
+> Core was generated by `ssh-keygen -t rsa'.
+> Program terminated with signal 11, Segmentation fault.
+> #0 ?0x0804da1a in main ()
+> (gdb) backtrace
+> #0 ?0x0804da1a in main ()
+> (gdb) up
+> Initial frame selected; you cannot go up.
+>
+> Uh, so somewhere I managed to build everything without any debugging
+> symbols. ?I'll try again. ?Sigh. ?The compile/edit/retry cycle on this
+> is quite long. ?How "smart" is Builtroot when I change configuration?
+> Will it just rebuild the things I need to rebuild? ?I've been doing a
+> "make clean" before every attempt.
+>
+> I'm trying!
+>
+> Best,
+> Kyle
+>
