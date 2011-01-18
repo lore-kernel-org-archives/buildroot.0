@@ -1,28 +1,41 @@
-From: Jon Ambrose <jonathan.ambrose@live.uwe.ac.uk>
-Date: Tue, 18 Jan 2011 17:03:39 +0000
-Subject: [Buildroot] FW: Festival on Buildroot
-In-Reply-To: <20110114154623.6ed335b1@surf>
-References: <SNT105-DS201489E837B90D9C737910EBF30@phx.gbl>
-	<20110114154623.6ed335b1@surf>
-Message-ID: <SNT105-DS25218D6E652399BB33EF43EBF70@phx.gbl>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 18 Jan 2011 11:55:38 -0600
+Subject: [Buildroot] Strange behaviour of inittab
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm on drugs, sorry if this post is illegible.
 
-Thomas Petazzoni wrote:
+The original inittab included by BuildRoot looked like this:
 
-> Jon,
+# Startup the system
+::sysinit:/bin/mount -o remount,rw /
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mkdir -p /dev/pts
+::sysinit:/bin/mount -a
 
->(Could you fix your e-mail client in order to properly reply in the
-> existing thread ? Could you also not top-post ?)
+Anyone else have a problem with this?  On my mips, I have an NFS mounted
+RFS.  With the above configuration, I cannot get the system to remount
+because proc is not mounted (apparently this version of BusyBox mount
+requires proc????).
 
-Is this better now?
+The fix I have done is to reverse the mounting/remounting of proc and
+the RFS as follows:
 
-I have been looking into this issue a bit more, and libestools and
-libestbase libraries come from compiled speech-tools, which is included in
-Buildroot, however it does not generate these files. 
+# Startup the system
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mount -o remount,rw /
+::sysinit:/bin/mkdir -p /dev/pts
+::sysinit:/bin/mount -a
 
-Jon
+
+The question I have is should we change the inittab from within
+BuildRoot or is there really only a problem with something in my
+configuration?
+
+
+Andy
