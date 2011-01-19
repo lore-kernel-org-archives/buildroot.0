@@ -1,62 +1,50 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Wed, 19 Jan 2011 10:07:46 -0000
-Subject: [Buildroot] bug when doing clean kernel build?
-In-Reply-To: <AANLkTikJiXF-w3baF2POeVr5Zh_sGUkdS+UQCQFmzb4g@mail.gmail.com>
-References: <AANLkTikJiXF-w3baF2POeVr5Zh_sGUkdS+UQCQFmzb4g@mail.gmail.com>
-Message-ID: <F25ADE2AF76246FD958773C4133D8E24@beraninstruments.com.local>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Jan 2011 11:29:54 +0100
+Subject: [Buildroot] ssh-keygen seg fault
+In-Reply-To: <AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
+	(Kyle Hayes's message of "Mon, 17 Jan 2011 14:23:21 -0800")
+References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
+	<20110114090752.5f01ade5@surf>
+	<469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
+	<20110114104016.252e7f90@surf>
+	<AANLkTi=kVHeatBJ1G2wZsX1ww-FOV0qb5Vtf5rxXNneL@mail.gmail.com>
+	<20110114181920.59ba8b8b@surf>
+	<AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
+Message-ID: <87sjwpfaot.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kyle,
+>>>>> "Kyle" == Kyle Hayes <kyle@greenmonitor.com> writes:
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net]
-> On Behalf Of Kyle Hayes
-> Sent: 17 January 2011 21:01
-> 
-> I'm not sure if this is a code bug or a user bug :-)
-> 
-> I'm trying to repeat my problems with openssh segfaulting and to do
-> that I'm trying to build with make xconfig; make clean; make.
-> However, when I do this, I see that the Linux kernel, 2.6.37, is made
-> with Pentium Pro selected and I explicitly selected i486 in the
-> Buildroot config.  I can go in after the make finishes and reconfigure
-> the kernel again to get the right processor type.  Is this expected
-> behavior?
+Hi,
 
-FWIW I believe configuring buildroot with i486 processor builds you a
-toolchain for an i486.  A i486 toolchain seems to work well for me on a
-vortex86dx.
+ Kyle> I got a core file.  I have a target GDB for use with host programs.  I
+ Kyle> turned off stripping.  But...
 
-I tend to configure buildroot to pick up a kernel config:
+ Kyle> sudo /home/kyle/buildroot/buildroot/output/toolchain/gdbhost-7.1/gdb/gdb
+ Kyle> /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen
+ Kyle> /media/HC/core
 
- make menuconfig
+You don't need sudo.
 
-Select "Kernel" then "Linux Kernel".
-Select "Kernel configuration (Using a defconfig)" and select "Using a custom
-config file".
-Select "() Configuration file path" and enter the path to your desired
-kernel config.
+You can do this even with stripping, if you point gdb at the unstripped
+version in output/build/...
 
-Others with a better understanding can tell you if what you are experiencing
-might be considered a bug...
+To get gdb to find the correct shared libs, you'll need to do
+set solib-absolute-prefix path/to/output/staging
 
-X-Linux provided kernel configs changed (quite considerably) between v5.6
-and v5.7 as to quite what processor / processor features they declare the
-vortex86dx to have, the same may be true for the vortex86mx.  Perhaps you
-can gain some understanding from a diff of these?
+ Kyle> Uh, so somewhere I managed to build everything without any debugging
+ Kyle> symbols.  I'll try again.  Sigh.  The compile/edit/retry cycle on this
+ Kyle> is quite long.  How "smart" is Builtroot when I change configuration?
+ Kyle> Will it just rebuild the things I need to rebuild?  I've been doing a
+ Kyle> "make clean" before every attempt.
 
-Regards,
+Buildroot handles small changes like adding a package quite well, but
+for global changes like toolchain options or strip/no-strip you'll need
+to make clean; make
 
-Will
-
-> 
-> Best,
-> Kyle
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
