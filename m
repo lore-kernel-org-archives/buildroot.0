@@ -1,79 +1,159 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 19 Jan 2011 06:21:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 3115] New: How about board specific makefiles?
-Message-ID: <bug-3115-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 19 Jan 2011 09:08:45 +0100
+Subject: [Buildroot] [git commit master 1/1] busybox: add 1.18.2 fixes
+Message-ID: <20110119081003.EB30088F20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3115
 
-           Summary: How about board specific makefiles?
-           Product: buildroot
-           Version: 2010.11
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: twinkle.j4k at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=dea0b13403e2696046d1469f691945a74545127e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../busybox-1.18.2/busybox-1.18.2-buildsys.patch   |   62 ++++++++++++++++++++
+ .../busybox-1.18.2/busybox-1.18.2-hush.patch       |   34 +++++++++++
+ .../busybox-1.18.2-modprobe-small.patch            |   19 ++++++
+ 3 files changed, 115 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-buildsys.patch
+ create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-hush.patch
+ create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe-small.patch
 
-I want to rename my kernel image from `bzImage` to anything else.
-But it is so tiresome to do that every time I do `make`.
-I think it is possible if `post-world-hook` or `post-all-hook` is provided by
-board specific makefiles.
-
-My suggestion is like below:
-- In this case, I use `board/sample/linux-2.6.37.config` as kernel config.
-  (BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=board/sample/linux-2.6.37.config)
-
-diff --git a/Makefile b/Makefile
-index cf2a7dc..e409ca3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -307,6 +307,9 @@ include package/Makefile.in
-
- all: world
-
-+# board specific makefiles
-+include board/*/*.mk
-+
- # We also need the various per-package makefiles, which also add
- # each selected package to TARGETS if that package was selected
- # in the .config file.
-
-diff --git a/board/sample/sample.mk b/board/sample/sample.mk
+diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-buildsys.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-buildsys.patch
 new file mode 100644
-index 0000000..be1a9a1
+index 0000000..d904806
 --- /dev/null
-+++ b/board/sample/sample.mk
-@@ -0,0 +1,17 @@
-+ifneq ($(findstring sample,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)),)
-+
-+SAMPLE_OS_VERSION:=1.0
-+SAMPLE_OS_NAME:=sample-os-$(SAMPLE_OS_VERSION).bin
-+SAMPLE_OS_PATH:="$(BINARIES_DIR)/$(SAMPLE_OS_NAME)"
-+
-+all: sample-post-all-hook
-+
-+sample-post-all-hook:
-+       @cp $(BINARIES_DIR)/$(LINUX26_IMAGE_NAME) $(SAMPLE_OS_PATH)
-+       @$(call MESSAGE,"Finished to build OS image")
-+       @echo "Original Image | $(BINARIES_DIR)/$(LINUX26_IMAGE_NAME)"
-+       @echo "Renamed Image  | $(SAMPLE_OS_PATH)"
-+       @echo -n "Image size     | "
-+       @echo -n `ls -l $(SAMPLE_OS_PATH) | awk '{print $$5}'`
-+       @echo " (`ls -lh $(SAMPLE_OS_PATH) | awk '{print $$5}'`)"
-+endif
-
++++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-buildsys.patch
+@@ -0,0 +1,62 @@
++--- busybox-1.18.2/loginutils/Config.src
+++++ busybox-1.18.2-buildsys/loginutils/Config.src
++@@ -186,7 +186,6 @@ config GETTY
++ config LOGIN
++ 	bool "login"
++ 	default y
++-	select FEATURE_SUID
++ 	select FEATURE_SYSLOG
++ 	help
++ 	  login is used when signing onto a system.
++@@ -229,7 +228,6 @@ config FEATURE_SECURETTY
++ config PASSWD
++ 	bool "passwd"
++ 	default y
++-	select FEATURE_SUID
++ 	select FEATURE_SYSLOG
++ 	help
++ 	  passwd changes passwords for user and group accounts. A normal user
++@@ -265,7 +263,6 @@ config CHPASSWD
++ config SU
++ 	bool "su"
++ 	default y
++-	select FEATURE_SUID
++ 	select FEATURE_SYSLOG
++ 	help
++ 	  su is used to become another user during a login session.
++@@ -295,7 +292,6 @@ config SULOGIN
++ config VLOCK
++ 	bool "vlock"
++ 	default y
++-	select FEATURE_SUID
++ 	help
++ 	  Build the "vlock" applet which allows you to lock (virtual) terminals.
++ 
++--- busybox-1.18.2/miscutils/Config.src
+++++ busybox-1.18.2-buildsys/miscutils/Config.src
++@@ -170,7 +170,6 @@ config FEATURE_CROND_DIR
++ config CRONTAB
++ 	bool "crontab"
++ 	default y
++-	select FEATURE_SUID
++ 	help
++ 	  Crontab manipulates the crontab for a particular user. Only
++ 	  the superuser may specify a different user and/or crontab directory.
++--- busybox-1.18.2/util-linux/Config.src
+++++ busybox-1.18.2-buildsys/util-linux/Config.src
++@@ -354,7 +354,6 @@ config FEATURE_HWCLOCK_ADJTIME_FHS
++ config IPCRM
++ 	bool "ipcrm"
++ 	default y
++-	select FEATURE_SUID
++ 	help
++ 	  The ipcrm utility allows the removal of System V interprocess
++ 	  communication (IPC) objects and the associated data structures
++@@ -364,7 +363,6 @@ config IPCS
++ 	bool "ipcs"
++ 	default y
++ 	depends on PLATFORM_LINUX
++-	select FEATURE_SUID
++ 	help
++ 	  The ipcs utility is used to provide information on the currently
++ 	  allocated System V interprocess (IPC) objects in the system.
+diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-hush.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-hush.patch
+new file mode 100644
+index 0000000..d08e519
+--- /dev/null
++++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-hush.patch
+@@ -0,0 +1,34 @@
++--- busybox-1.18.2/shell/hush.c
+++++ busybox-1.18.2-hush/shell/hush.c
++@@ -4123,15 +4123,26 @@ static struct pipe *parse_stream(char **
++ 				 && dest.length == 0 && !dest.has_quoted_part
++ 				) {
++ 					/* This newline can be ignored. But...
++-					 * without the below check, interactive shell
++-					 * will ignore even lines with bare <newline>,
++-					 * and show the continuation prompt:
+++					 * Without check #1, interactive shell
+++					 * ignores even bare <newline>,
+++					 * and shows the continuation prompt:
++ 					 * ps1_prompt$ <enter>
++-					 * ps2> _   <=== wrong prompt, should be ps1
+++					 * ps2> _   <=== wrong, should be ps1
+++					 * Without check #2, "cmd & <newline>"
+++					 * is similarly mistreated.
+++					 * (BTW, this makes "cmd & cmd"
+++					 * and "cmd && cmd" non-orthogonal.
+++					 * Really, ask yourself, why
+++					 * "cmd && <newline>" doesn't start
+++					 * cmd but waits for more input?
+++					 * No reason...)
++ 					 */
++ 					struct pipe *pi = ctx.list_head;
++-					if (pi->num_cmds != 0)
+++					if (pi->num_cmds != 0       /* check #1 */
+++					 && pi->followup != PIPE_BG /* check #2 */
+++					) {
++ 						continue;
+++					}
++ 				}
++ 				/* Treat newline as a command separator. */
++ 				done_pipe(&ctx, PIPE_SEQ);
+diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe-small.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe-small.patch
+new file mode 100644
+index 0000000..b0623f2
+--- /dev/null
++++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe-small.patch
+@@ -0,0 +1,19 @@
++--- busybox-1.18.2/modutils/modprobe-small.c
+++++ busybox-1.18.2-modprobe-small/modutils/modprobe-small.c
++@@ -205,6 +205,7 @@ static void parse_module(module_info *in
++ 	/* Read (possibly compressed) module */
++ 	len = 64 * 1024 * 1024; /* 64 Mb at most */
++ 	module_image = xmalloc_open_zipped_read_close(pathname, &len);
+++	/* module_image == NULL is ok here, find_keyword handles it */
++ //TODO: optimize redundant module body reads
++ 
++ 	/* "alias1 symbol:sym1 alias2 symbol:sym2" */
++@@ -845,6 +846,8 @@ int modprobe_main(int argc UNUSED_PARAM,
++ 
++ 		len = MAXINT(ssize_t);
++ 		map = xmalloc_open_zipped_read_close(*argv, &len);
+++		if (!map)
+++			bb_perror_msg_and_die("can't read '%s'", *argv);
++ 		if (init_module(map, len,
++ 			IF_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE(options ? options : "")
++ 			IF_NOT_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE("")
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
