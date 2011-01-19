@@ -1,34 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Jan 2011 22:52:14 +0100
-Subject: [Buildroot] [PATCH 7/7] tcpdump: add patch for nommu systems
-In-Reply-To: <1294669725-5379-7-git-send-email-vapier@gentoo.org> (Mike
-	Frysinger's message of "Mon, 10 Jan 2011 09:28:45 -0500")
-References: <1294669718-5339-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-1-git-send-email-vapier@gentoo.org>
-	<1294669725-5379-7-git-send-email-vapier@gentoo.org>
-Message-ID: <87pqrsef3l.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 19 Jan 2011 22:52:30 +0100
+Subject: [Buildroot] [git commit master 1/1] portmap: fix clean target to
+	actually clean
+Message-ID: <20110119215340.ACCD98B4DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Mike> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
- Mike> ---
- Mike>  package/tcpdump/tcpdump-4.1.1-vfork.patch |  128 +++++++++++++++++++++++++++++
- Mike> ++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
- Mike> +-#else  /* WIN32 */
- Mike> ++#else  /* HAVE_FORK && HAVE_VFORK */
+commit: http://git.buildroot.net/buildroot/commit/?id=58b34e6a60ce101f2651772793b8c4d8bed24879
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This should be HAVE_FORK || HAVE_VFORK
- Mike> ++#endif /* HAVE_FORK && HAVE_VFORK */
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/portmap/portmap.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Same here.
-
-Other than that it looks good, committed - Thanks.
-
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index bebafce..e996824 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -19,6 +19,10 @@ define PORTMAP_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC)" -C $(@D) $(PORTMAP_FLAGS)
+ endef
+ 
++define PORTMAP_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
+ define PORTMAP_INSTALL_TARGET_CMDS
+ 	for sbin in $(PORTMAP_SBINS); do \
+ 		$(INSTALL) -D $(@D)/$$sbin $(TARGET_DIR)/sbin/$$sbin; \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
