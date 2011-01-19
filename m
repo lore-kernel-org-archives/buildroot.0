@@ -1,7 +1,8 @@
-From: Kyle Hayes <kyle@greenmonitor.com>
-Date: Wed, 19 Jan 2011 09:50:11 -0800
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Jan 2011 20:14:36 +0100
 Subject: [Buildroot] ssh-keygen seg fault
-In-Reply-To: <87sjwpfaot.fsf@macbook.be.48ers.dk>
+In-Reply-To: <AANLkTinJ1e9Q9V0YscnQ=s9ALVyvbJn_bZYPLeLeee+A@mail.gmail.com>
+	(Kyle Hayes's message of "Wed, 19 Jan 2011 09:50:11 -0800")
 References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
 	<20110114090752.5f01ade5@surf>
 	<469243A17FE74439A7BBB6F327046F20@beraninstruments.com.local>
@@ -10,116 +11,69 @@ References: <AANLkTi=OafFhejBCDjz-rffd3_gFR99kzxcGP3o+EmEM@mail.gmail.com>
 	<20110114181920.59ba8b8b@surf>
 	<AANLkTik4ZfnUpWeg91eWqMXGSxEX-H3c5L6+LDM_BqdU@mail.gmail.com>
 	<87sjwpfaot.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTinJ1e9Q9V0YscnQ=s9ALVyvbJn_bZYPLeLeee+A@mail.gmail.com>
+	<AANLkTinJ1e9Q9V0YscnQ=s9ALVyvbJn_bZYPLeLeee+A@mail.gmail.com>
+Message-ID: <87d3nsg0yr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the tips.  See below:
+>>>>> "Kyle" == Kyle Hayes <kyle@greenmonitor.com> writes:
 
-On Wed, Jan 19, 2011 at 2:29 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Kyle" == Kyle Hayes <kyle@greenmonitor.com> writes:
->
-> Hi,
->
-> ?Kyle> I got a core file. ?I have a target GDB for use with host programs. ?I
-> ?Kyle> turned off stripping. ?But...
->
-> ?Kyle> sudo /home/kyle/buildroot/buildroot/output/toolchain/gdbhost-7.1/gdb/gdb
-> ?Kyle> /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen
-> ?Kyle> /media/HC/core
->
-> You don't need sudo.
+Hi,
 
-I needed sudo because the core file was not readable by a normal user.
+ >> Buildroot handles small changes like adding a package quite well, but
+ >> for global changes like toolchain options or strip/no-strip you'll need
+ >> to make clean; make
 
-> You can do this even with stripping, if you point gdb at the unstripped
-> version in output/build/...
->
-> To get gdb to find the correct shared libs, you'll need to do
-> set solib-absolute-prefix path/to/output/staging
+ Kyle> I think something I'm doing is still incorrect:
 
-Ah, OK.
+ Kyle> kyle at hp-workstation:~/buildroot/buildroot$
+ Kyle> ./output/toolchain/gdbhost-7.1/gdb/gdb
 
-> ?Kyle> Uh, so somewhere I managed to build everything without any debugging
-> ?Kyle> symbols. ?I'll try again. ?Sigh. ?The compile/edit/retry cycle on this
-> ?Kyle> is quite long. ?How "smart" is Builtroot when I change configuration?
-> ?Kyle> Will it just rebuild the things I need to rebuild? ?I've been doing a
-> ?Kyle> "make clean" before every attempt.
->
-> Buildroot handles small changes like adding a package quite well, but
-> for global changes like toolchain options or strip/no-strip you'll need
-> to make clean; make
+Normally you would use output/staging/usr/bin/$PREFIX-gdb, but OK.
 
-I think something I'm doing is still incorrect:
+ Kyle> GNU gdb (GDB) 7.1
+ Kyle> Copyright (C) 2010 Free Software Foundation, Inc.
+ Kyle> License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ Kyle> This is free software: you are free to change and redistribute it.
+ Kyle> There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+ Kyle> and "show warranty" for details.
+ Kyle> This GDB was configured as "--host=i686-pc-linux-gnu
+ Kyle> --target=i486-unknown-linux-uclibc".
+ Kyle> For bug reporting instructions, please see:
+ Kyle> <http://www.gnu.org/software/gdb/bugs/>.
+ Kyle> (gdb) set solib-absolute-prefix
+ Kyle> /home/kyle/buildroot/buildroot/output/staging/lib/
 
-kyle at hp-workstation:~/buildroot/buildroot$
-./output/toolchain/gdbhost-7.1/gdb/gdb
-GNU gdb (GDB) 7.1
-Copyright (C) 2010 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "--host=i686-pc-linux-gnu
---target=i486-unknown-linux-uclibc".
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-(gdb) set solib-absolute-prefix
-/home/kyle/buildroot/buildroot/output/staging/lib/
-(gdb) file output/target/usr/bin/ssh-keygen
-Reading symbols from
-/home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen...done.
-(gdb) target remote 10.206.1.102:4567
-Remote debugging using 10.206.1.102:4567
-warning: Unable to find dynamic linker breakpoint function.
-GDB will be unable to debug shared library initializers
-and track explicitly loaded dynamic code.
-0xb787d870 in ?? ()
-(gdb) continue
-Continuing.
-Error while mapping shared library sections:
-/usr/lib/libcrypto.so.1.0.0: No such file or directory.
-Error while mapping shared library sections:
-/lib/libdl.so.0: No such file or directory.
-Error while mapping shared library sections:
-/lib/libutil.so.0: No such file or directory.
-Error while mapping shared library sections:
-/usr/lib/libz.so.1: No such file or directory.
-Error while mapping shared library sections:
-/lib/libcrypt.so.0: No such file or directory.
-Error while mapping shared library sections:
-/lib/libgcc_s.so.1: No such file or directory.
-Error while mapping shared library sections:
-/lib/libc.so.0: No such file or directory.
-Error while mapping shared library sections:
-/lib/ld-uClibc.so.0: No such file or directory.
+Don't add lib at the end. solib-absolute-prefix is a PREFIX, not the
+location of the library files.
 
-Program received signal SIGSEGV, Segmentation fault.
-main (argc=-1078251855, argv=0x0) at ssh-keygen.c:1762
-1762	{
-(gdb)
+ Kyle> (gdb) file output/target/usr/bin/ssh-keygen
+ Kyle> Reading symbols from
+ Kyle> /home/kyle/buildroot/buildroot/output/target/usr/bin/ssh-keygen...done.
 
+Again, please point gdb at the unstripped version in
+output/build/openssh*/ssh-keygen instead of the (potentially) stripped
+version in target.
 
-If I run ssh-keygen on the command line on the target machine, I get a
-seg fault and I get "ssh-keygen used greatest stack depth: 6460 bytes
-left"  I have stack smashing protection turned on.  Is this an
-infinite recursion problem or just a normal output from the system
-about this? Other commands from busybox do not print out this error
-about the stack.
+ Kyle> If I run ssh-keygen on the command line on the target machine, I get a
+ Kyle> seg fault and I get "ssh-keygen used greatest stack depth: 6460 bytes
+ Kyle> left"  I have stack smashing protection turned on.  Is this an
+ Kyle> infinite recursion problem or just a normal output from the system
+ Kyle> about this? Other commands from busybox do not print out this error
+ Kyle> about the stack.
 
-I tried adding 'no-asm' to the list of options for openssl and
-rebuilding that (just a make at the top level does not rebuild
-openssl, is that correct behavior?).  I get the same behavior.
-However, I am not sure that I'm getting the right version of openssl.
- If I just change the Makefile for openssl to add the option, then a
-remake with just "make" at the top level does NOT rebuild openssl.
-How do I force this?  If I do a make clean, all the output/target
-stuff is gone and I have nothing to change.
+Sorry. don't know. I've never uses the SSP stuff.
 
-I tried with dropbear and it works.  I will probably go with that for now.
+ Kyle> I tried adding 'no-asm' to the list of options for openssl and
+ Kyle> rebuilding that (just a make at the top level does not rebuild
+ Kyle> openssl, is that correct behavior?).  I get the same behavior.
 
-Best,
-Kyle
+Rebuild is controlled by the .stamp_* files inside build/openssl*/, so
+it only gets rebuilt if you remove those (or remove the entire openssl
+dir). Notice that dependent packages don't get rebuilt automatically.
+
+-- 
+Bye, Peter Korsgaard
