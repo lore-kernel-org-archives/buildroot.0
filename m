@@ -1,159 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Jan 2011 22:52:30 +0100
-Subject: [Buildroot] [git commit master 1/1] tcpdump: add patch for nommu
-	systems
-Message-ID: <20110119215340.DBE6E8B4DF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Jan 2011 23:52:32 +0100
+Subject: [Buildroot] [PATCH 01/10] mpg123: install to staging
+In-Reply-To: <1295369680-24816-2-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Tue, 18 Jan 2011 13:54:31 -0300")
+References: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
+	<1295369680-24816-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lj2gecb3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2abc61d028b9e9cc602108ce1ad03942092bed2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> I want this for mpd which is coming since it's better than mad IMHO.
 
-[Peter: slightly tweak patch]
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/tcpdump/tcpdump-4.1.1-vfork.patch |  127 +++++++++++++++++++++++++++++
- 1 files changed, 127 insertions(+), 0 deletions(-)
- create mode 100644 package/tcpdump/tcpdump-4.1.1-vfork.patch
+Committed with slightly reworded commit message, thanks.
 
-diff --git a/package/tcpdump/tcpdump-4.1.1-vfork.patch b/package/tcpdump/tcpdump-4.1.1-vfork.patch
-new file mode 100644
-index 0000000..8213f35
---- /dev/null
-+++ b/package/tcpdump/tcpdump-4.1.1-vfork.patch
-@@ -0,0 +1,127 @@
-+https://sourceforge.net/tracker/?func=detail&aid=3120897&group_id=53066&atid=469575
-+
-+From 6f8927c609d1f986a45010b7acae0eb570668642 Mon Sep 17 00:00:00 2001
-+From: Mike Frysinger <vapier@gentoo.org>
-+Date: Sat, 27 Nov 2010 17:18:05 -0500
-+Subject: [PATCH] add support for nommu systems
-+
-+Rather than hardcode the WIN32 define, add proper fork checks to the
-+configure script and check those.  This fixes building for nommu systems
-+which lack the fork function.
-+
-+While we're here though, add support for this functionality via vfork
-+so that it does work on nommu systems.  And fix an old bug where we
-+exit properly in the forked child when the exec failed instead of just
-+returning to the calling code (which isn't expecting it).
-+
-+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-+---
-+
-+--- tcpdump-4.0.0/config.h.in
-++++ tcpdump-4.0.0/config.h.in
-+@@ -151,6 +151,9 @@
-+ /* Define to 1 if you have the <fcntl.h> header file. */
-+ #undef HAVE_FCNTL_H
-+ 
-++/* Define to 1 if you have the `fork' function. */
-++#undef HAVE_FORK
-++
-+ /* Define to 1 if you have the `getnameinfo' function. */
-+ #undef HAVE_GETNAMEINFO
-+ 
-+@@ -274,6 +277,9 @@
-+ /* Define to 1 if you have the <unistd.h> header file. */
-+ #undef HAVE_UNISTD_H
-+ 
-++/* Define to 1 if you have the `vfork' function. */
-++#undef HAVE_VFORK
-++
-+ /* Define to 1 if you have the `vfprintf' function. */
-+ #undef HAVE_VFPRINTF
-+ 
-+--- tcpdump-4.0.0/configure
-++++ tcpdump-4.0.0/configure
-+@@ -7976,7 +7976,7 @@ done
-+ 
-+ 
-+ 
-+-for ac_func in strftime
-++for ac_func in fork vfork strftime
-+ do
-+ as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-+ { echo "$as_me:$LINENO: checking for $ac_func" >&5
-+diff --git a/tcpdump.c b/tcpdump.c
-+index c8da36b..abf3e69 100644
-+--- a/tcpdump.c
-++++ b/tcpdump.c
-+@@ -1250,8 +1250,10 @@ main(int argc, char **argv)
-+ 	(void)setsignal(SIGPIPE, cleanup);
-+ 	(void)setsignal(SIGTERM, cleanup);
-+ 	(void)setsignal(SIGINT, cleanup);
-+-	(void)setsignal(SIGCHLD, child_cleanup);
-+ #endif /* WIN32 */
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-++	(void)setsignal(SIGCHLD, child_cleanup);
-++#endif
-+ 	/* Cooperate with nohup(1) */
-+ #ifndef WIN32	
-+ 	if ((oldhandler = setsignal(SIGHUP, cleanup)) != SIG_DFL)
-+@@ -1464,13 +1466,13 @@ cleanup(int signo _U_)
-+   On windows, we do not use a fork, so we do not care less about
-+   waiting a child processes to die
-+  */
-+-#ifndef WIN32
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-+ static RETSIGTYPE
-+ child_cleanup(int signo _U_)
-+ {
-+   wait(NULL);
-+ }
-+-#endif /* WIN32 */
-++#endif /* HAVE_FORK || HAVE_VFORK */
-+ 
-+ static void
-+ info(register int verbose)
-+@@ -1514,11 +1516,15 @@ info(register int verbose)
-+ 	infoprint = 0;
-+ }
-+ 
-+-#ifndef WIN32
-++#if defined(HAVE_FORK) || defined(HAVE_VFORK)
-+ static void
-+ compress_savefile(const char *filename)
-+ {
-++# ifdef HAVE_FORK
-+ 	if (fork())
-++# else
-++	if (vfork())
-++# endif
-+ 		return;
-+ 	/*
-+ 	 * Set to lowest priority so that this doesn't disturb the capture
-+@@ -1534,15 +1540,20 @@ compress_savefile(const char *filename)
-+ 			zflag,
-+ 			filename,
-+ 			strerror(errno));
-++# ifdef HAVE_FORK
-++	exit(1);
-++# else
-++	_exit(1);
-++# endif
-+ }
-+-#else  /* WIN32 */
-++#else  /* HAVE_FORK || HAVE_VFORK */
-+ static void
-+ compress_savefile(const char *filename)
-+ {
-+ 	fprintf(stderr,
-+-		"compress_savefile failed. Functionality not implemented under windows\n");
-++		"compress_savefile failed. Functionality not implemented under your system\n");
-+ }
-+-#endif /* WIN32 */
-++#endif /* HAVE_FORK || HAVE_VFORK */
-+ 
-+ static void
-+ dump_packet_and_trunc(u_char *user, const struct pcap_pkthdr *h, const u_char *sp)
-+-- 
-+1.7.3.1
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
