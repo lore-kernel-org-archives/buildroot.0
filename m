@@ -1,67 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 20 Jan 2011 15:26:28 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
-	changes
-Message-ID: <20110120142701.4E94F8A5D8@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Jan 2011 13:25:09 -0300
+Subject: [Buildroot] [PATCH v3] udev: bump version to 164,
+ add optional support for all extras, depend on host-gperf
+In-Reply-To: <4D33D762.4010502@ethertek.ca>
+References: <25c844f9547462b4cc5b7a27a80562c4df29ddc5.1293377040.git.smiley73@users.sourceforge.net>
+	<4D2DFA62.4070000@zacarias.com.ar> <4D33D762.4010502@ethertek.ca>
+Message-ID: <4D3861E5.6080400@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 01/17/11 02:45, Dan Pattison wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c51d90a663889f8586bf23fa95c392fa2c85d64
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Hello,
+> 
+> I would like your udev support patches for uclibc-0.9.30.1 please, so I
+> could use a newer udev.
+> 
+> Thank you,
+> 
+> Dan Pattison
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   33 ++++++++++++++++++---------------
- 1 files changed, 18 insertions(+), 15 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index a825511..27e9bf7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -12,22 +12,25 @@
- 	configuration options cleanup, U-Boot/Barebox version bumps.
- 
- 	Updated/fixed packages: alsa-utils, at, autoconf, automake,
--	binutils, bison, busybox, bzip2, cloop, coreutils, cups, dbus,
--	direcfb-examples, dmalloc, ed, ffmpeg, findutils, flac,
--	freetype, gdk-pixbuf, gmp, grep, gst-plugins-good, gvfs,
--	hostapd, i2c-tools, icu, input-tools, iproute2, iptables,
--	jpeg, kexec, libaio, libcap, libconfig, libglib2, libogg,
-+	bash, binutils, bison, busybox, bzip2, cloop, coreutils, cups,
-+	dbus, direcfb-examples, dmalloc, dosfstools, ed, ffmpeg,
-+	findutils, flac, freetype, gdk-pixbuf, gmp, grep, gperf,
-+	gst-plugins-good, gvfs, hdparm, hostapd, i2c-tools, icu,
-+	input-tools, iproute2, iptables, jpeg, kexec, libaio, libcap,
-+	libconfig, libfuse, libglib2, libmad, libogg, libsndfile,
- 	libtheora, libtool, libvorbis, libxml2, libxslt, linux-fusion,
--	lsof, ltp-testsuite, ltrace, lvm2, m4, makedevs, memtester,
--	mesa3d, mii-diag, mpc, mpfr, mplayer, mrouted, nano, netperf,
--	netplug, openssh, openssl, openvpn, oprofile, pango, patch,
--	pciutils, php, portmap, qt, rsync, screen, sdl_gfx, sdl_sound,
--	sqlite, squid, sstrip, sysklogd, sysvinit, tar, tslib, udev,
--	usbutils, vim, vtun, webkit, xapp_xlogo, xkeyboard-config,
--	xlib_libX11, xz, zlib
--
--	New packages: dhrystone, fbgrab, irda-utils, libao, lsuio,
--	rsh-redone, sdparm, vorbis-tools, whetstone, xl2tp
-+	lm-sensors, lsof, ltp-testsuite, ltrace, lvm2, m4, makedevs,
-+	memtester, mesa3d, mii-diag, mpc, mpfr, mpg123, mplayer,
-+	mrouted, nano, netperf, netplug, ntfs-3g, openssh, openssl,
-+	openvpn, oprofile, pango, patch, pciutils, php, portmap,
-+	psmisc, qt, rsync, screen, sdl_gfx, sdl_sound, smartmontools,
-+	sqlite, squid, sshfs, sstrip, sysklogd, sysstat, sysvinit,
-+	tar, tcpdump, tslib, udev, usbutils, vim, vtun, webkit, wipe,
-+	xapp_xlogo, xkeyboard-config, xlib_libX11, xz, zlib
-+
-+	New packages: dhrystone, faad2, fbgrab, irda-utils, libao,
-+	libreplaygain, libsamplerate, libsigc++, lsuio, rsh-redone,
-+	sdparm, vorbis-tools, wavpack, whetstone, xl2tp
- 
- 	Removed packages: hotplug, l2tp, libfloat, microcom,
- 	ng-spice-rework
--- 
-1.7.3.4
+Try to keep replies on the list.
+From a quick test the same patches apply to 0.9.30.3, so they should
+probably apply to 0.9.30.1 too.
+If it works and other things aren't missing from the 0.9.30 series is
+completely unknown to me, i have no need to stick with old versions.
+Buildroot-wise 0.9.32 will probably be out soon (-rc2 out today) so
+there really isn't much interest in backporting things for 0.9.30.
+Regards.
