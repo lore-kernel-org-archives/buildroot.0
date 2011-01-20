@@ -1,76 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 20 Jan 2011 13:52:23 +0100
-Subject: [Buildroot] [git commit master 1/1] libsamplerate: new package
-Message-ID: <20110120130801.8A48A8B533@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 20 Jan 2011 10:15:33 -0300
+Subject: [Buildroot] [PATCH 04/10] wavpack: new package
+In-Reply-To: <87y66fbwe9.fsf@macbook.be.48ers.dk>
+References: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>	<1295369680-24816-5-git-send-email-gustavo@zacarias.com.ar>
+	<87y66fbwe9.fsf@macbook.be.48ers.dk>
+Message-ID: <4D383575.7010203@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 01/20/11 09:19, Peter Korsgaard wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ba84234e831cf8c1c78d5073be5cda474c5f299
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> CPUs without HW FPU are not necessarily low performance for integer
+> calculations. I don't know anything about wavpack, but from the
+> wikipedia page it seems like it doesn't use much FPU:
+> 
+> No floating-point arithmetic is used in WavPack's data path because,
+> according to the author, integer operations are less susceptible to
+> subtle chip-to-chip variations that could corrupt the lossless nature of
+> the compression (the Pentium floating point bug being an example). It is
+> possible that a lossless compressor that used floating-point math could
+> generate different output when running on that faulty Pentium. Even
+> disregarding actual bugs, floating-point math is complicated enough that
+> there could be subtle differences between "correct" implementations that
+> could cause trouble for this type of application.
+> 
+> So I would just drop this sentence.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/Config.in                      |    1 +
- package/multimedia/libsamplerate/Config.in        |    9 +++++++++
- package/multimedia/libsamplerate/libsamplerate.mk |   17 +++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/libsamplerate/Config.in
- create mode 100644 package/multimedia/libsamplerate/libsamplerate.mk
-
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 6d2cbc7..22c2d03 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -20,6 +20,7 @@ source "package/multimedia/libmms/Config.in"
- source "package/multimedia/libmpd/Config.in"
- source "package/multimedia/libmpeg2/Config.in"
- source "package/multimedia/libogg/Config.in"
-+source "package/multimedia/libsamplerate/Config.in"
- source "package/multimedia/libsndfile/Config.in"
- source "package/multimedia/libtheora/Config.in"
- source "package/multimedia/libvorbis/Config.in"
-diff --git a/package/multimedia/libsamplerate/Config.in b/package/multimedia/libsamplerate/Config.in
-new file mode 100644
-index 0000000..b394fdb
---- /dev/null
-+++ b/package/multimedia/libsamplerate/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBSAMPLERATE
-+	bool "libsamplerate"
-+	help
-+	  Secret Rabbit Code (aka libsamplerate) is a Sample Rate
-+	  Converter for audio. One example of where such a thing would
-+	  be useful is converting audio from the CD sample rate of
-+	  44.1kHz to the 48kHz sample rate used by DAT players.
-+
-+	  http://www.mega-nerd.com/SRC/
-diff --git a/package/multimedia/libsamplerate/libsamplerate.mk b/package/multimedia/libsamplerate/libsamplerate.mk
-new file mode 100644
-index 0000000..94b07a4
---- /dev/null
-+++ b/package/multimedia/libsamplerate/libsamplerate.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libsamplerate
-+#
-+################################################################################
-+
-+LIBSAMPLERATE_VERSION = 0.1.7
-+LIBSAMPLERATE_SITE = http://www.mega-nerd.com/SRC
-+LIBSAMPLERATE_INSTALL_STAGING = YES
-+LIBSAMPLERATE_DEPENDENCIES = host-pkg-config
-+LIBSAMPLERATE_CONF_OPT = --disable-fftw --program-transform-name=''
-+
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+LIBSAMPLERATE_DEPENDENCIES += libsndfile
-+endif
-+
-+$(eval $(call AUTOTARGETS,package/multimedia,libsamplerate))
--- 
-1.7.3.4
+Fair enough, armv4t @ 200 mhz seems to handle it OK at ~50% CPU load.
