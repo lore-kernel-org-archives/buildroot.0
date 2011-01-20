@@ -1,37 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 20 Jan 2011 09:56:41 +0100
-Subject: [Buildroot] [PATCH 03/10] libmad: install pkgconfig file
-In-Reply-To: <874o94dkhb.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
-	of "Thu, 20 Jan 2011 09:53:36 +0100")
-References: <1295369680-24816-1-git-send-email-gustavo@zacarias.com.ar>
-	<1295369680-24816-4-git-send-email-gustavo@zacarias.com.ar>
-	<874o94dkhb.fsf@macbook.be.48ers.dk>
-Message-ID: <87zkqwc5rq.fsf@macbook.be.48ers.dk>
+Date: Thu, 20 Jan 2011 09:57:56 +0100
+Subject: [Buildroot] [git commit master 1/1] mpg123: install to staging
+Message-ID: <20110120085838.D136E8B531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=5aac28441439c8f4e3a0414b71d12dc53b4a4f6d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> +Description: MPEG Audio Decoder
- Gustavo> +Requires:
- Gustavo> +Version: 0.15.1b
- Gustavo> +Libs: -L${libdir} -lmad -lm
+mpg123 also provides a shared library (libmpg123.so), so install into
+staging so other programs can find it.
 
- Peter> Do we really need -lm? It's not in mad.pc on my Debian machine, and I
- Peter> don't see any use of math.h in libmad.
+[Peter: reworded commit message]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mpg123/mpg123.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-From the Debian package changelog:
-
-   * Don't set -lm in the mad.pc file.  libmad doesn't use any math function.
-
-http://packages.debian.org/changelogs/pool/main/libm/libmad/libmad_0.15.1b-5/changelog
-
-Committed without -lm, thanks.
-
+diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
+index ddd891f..f6eaddb 100644
+--- a/package/multimedia/mpg123/mpg123.mk
++++ b/package/multimedia/mpg123/mpg123.mk
+@@ -8,6 +8,7 @@ MPG123_VERSION = 1.13.1
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
+ MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
++MPG123_INSTALL_STAGING = YES
+ MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
+ 
+ ifeq ($(BR2_arm),y)
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
