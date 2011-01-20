@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 20 Jan 2011 21:29:47 +0100
-Subject: [Buildroot] [git commit master 1/1] libcuefile: new package
-Message-ID: <20110120203249.1800488E28@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] musepack: new package
+Message-ID: <20110120203249.4F6EA88E28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,91 +9,67 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9af7b7677fa9672b39939e7e7160cfbd0ba23c5f
+commit: http://git.buildroot.net/buildroot/commit/?id=64129c0546dfeaef6fa1eb8ad78901e9fd12f20a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix build with ccache]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/Config.in                |    1 +
- package/multimedia/libcuefile/Config.in     |    6 ++++
- package/multimedia/libcuefile/libcuefile.mk |   42 +++++++++++++++++++++++++++
- 3 files changed, 49 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/libcuefile/Config.in
- create mode 100644 package/multimedia/libcuefile/libcuefile.mk
+ package/multimedia/Config.in            |    1 +
+ package/multimedia/musepack/Config.in   |   11 +++++++++++
+ package/multimedia/musepack/musepack.mk |   14 ++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/musepack/Config.in
+ create mode 100644 package/multimedia/musepack/musepack.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 14057e9..16d7471 100644
+index 16d7471..14c4145 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -13,6 +13,7 @@ source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/libao/Config.in"
- source "package/multimedia/libcdaudio/Config.in"
-+source "package/multimedia/libcuefile/Config.in"
- source "package/multimedia/libdvdread/Config.in"
- source "package/multimedia/libdvdnav/Config.in"
- source "package/multimedia/libid3tag/Config.in"
-diff --git a/package/multimedia/libcuefile/Config.in b/package/multimedia/libcuefile/Config.in
+@@ -30,6 +30,7 @@ source "package/multimedia/libvorbis/Config.in"
+ source "package/multimedia/madplay/Config.in"
+ source "package/multimedia/mpg123/Config.in"
+ source "package/multimedia/mplayer/Config.in"
++source "package/multimedia/musepack/Config.in"
+ source "package/multimedia/speex/Config.in"
+ source "package/multimedia/swfdec/Config.in"
+ source "package/multimedia/festival/Config.in"
+diff --git a/package/multimedia/musepack/Config.in b/package/multimedia/musepack/Config.in
 new file mode 100644
-index 0000000..416b3e1
+index 0000000..2a966a4
 --- /dev/null
-+++ b/package/multimedia/libcuefile/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBCUEFILE
-+	bool "libcuefile"
++++ b/package/multimedia/musepack/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MUSEPACK
++	bool "musepack"
++	select BR2_PACKAGE_LIBCUEFILE
++	select BR2_PACKAGE_LIBREPLAYGAIN
 +	help
-+	  Cue File library from Musepack
++	  Musepack is an audio compression format with a strong emphasis
++	  on high quality. It's not lossless, but it is designed
++	  for transparency, so that you won't be able to hear differences
++	  between the original wave file and the much smaller MPC file.
 +
 +	  http://www.musepack.net/
-diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+diff --git a/package/multimedia/musepack/musepack.mk b/package/multimedia/musepack/musepack.mk
 new file mode 100644
-index 0000000..934113b
+index 0000000..34581b6
 --- /dev/null
-+++ b/package/multimedia/libcuefile/libcuefile.mk
-@@ -0,0 +1,42 @@
++++ b/package/multimedia/musepack/musepack.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libcuefile
++# musepack
 +#
 +################################################################################
 +
-+LIBCUEFILE_VERSION = r453
-+LIBCUEFILE_SITE = http://files.musepack.net/source
-+LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
-+LIBCUEFILE_DEPENDENCIES = host-cmake
-+LIBCUEFILE_INSTALL_STAGING = YES
++MUSEPACK_VERSION =  r435
++MUSEPACK_SITE = http://files.musepack.net/source
++MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
++MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
++MUSEPACK_AUTORECONF = YES
++MUSEPACK_INSTALL_STAGING = YES
 +
-+# CMake doesn't support having the --sysroot option directly in the
-+# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
-+# It also gets confused by ccache, so don't use ccache here.
-+LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
-+LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
-+
-+define LIBCUEFILE_CONFIGURE_CMDS
-+	(cd $(@D) ; \
-+		$(HOST_DIR)/usr/bin/cmake . \
-+		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
-+		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
-+		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
-+	)
-+endef
-+
-+define LIBCUEFILE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define LIBCUEFILE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
-+	cp -r $(@D)/include $(STAGING_DIR)/usr
-+endef
-+
-+define LIBCUEFILE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+	cp -r $(@D)/include $(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(call GENTARGETS,package/multimedia,libcuefile))
++$(eval $(call AUTOTARGETS,package/multimedia,musepack))
 -- 
 1.7.3.4
