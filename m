@@ -1,30 +1,22 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 20 Jan 2011 21:41:22 -0600
-Subject: [Buildroot] [PATCH] Strange behaviour of inittab
-In-Reply-To: <1295373920.16414.126.camel@worky>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
-	<1295373920.16414.126.camel@worky>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F01731C@EXV1.corp.adtran.com>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Fri, 21 Jan 2011 10:46:48 +0300
+Subject: [Buildroot] uclibc config changes and cross-compiler
+Message-ID: <AANLkTi=e=ncL_G+F0iH5Dia+N2iBHi=x8EA9bsw6=uhO@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-inittab ordering causes mount to fail on remount,rw.  inittab
-changed to mount /proc first.
+Hello.
 
-Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
----
---- a/fs/skeleton/etc/inittab   2011-01-06 05:25:33.000000000 -0600
-+++ b/fs/skeleton/etc/inittab   2011-01-18 12:16:18.000000000 -0600
-@@ -14,8 +14,8 @@
- # process   == program to run
- 
- # Startup the system
--null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mount -t proc proc /proc
-+null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mkdir -p /dev/pts
- null::sysinit:/bin/mount -a
- null::sysinit:/bin/hostname -F /etc/hostname
+Does anybody know whether changes in uclibc.conf when cross-compiler
+is already built can lead to unrunnable programs?
+For example, we made a toolchain with certain uclibc features. Then we
+decided to add/remove some programs from our build so we need
+additional/no longer need some uclibc features. Is it safe to rebuild
+only uclibc in this case, or we also have to rebuild compiler?
+
+Thanks in advance,
+
+Sergey Naumov.
