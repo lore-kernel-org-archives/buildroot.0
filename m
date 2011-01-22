@@ -1,9 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 22 Jan 2011 17:59:13 +0100
-Subject: [Buildroot] [PATCH 1/4] Move fonts into a dedicated submenu
+Date: Sat, 22 Jan 2011 17:59:14 +0100
+Subject: [Buildroot] [PATCH 2/4] Configurable font install layout and
+	directory
 In-Reply-To: <1295715556-7239-1-git-send-email-luca@lucaceresoli.net>
 References: <1295715556-7239-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1295715556-7239-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1295715556-7239-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +13,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/Config.in                            |    3 ++-
- package/fonts/Config.in                      |    5 +++++
- package/fonts/fonts.mk                       |    1 +
- package/{ => fonts}/liberation/Config.in     |    0
- package/{ => fonts}/liberation/liberation.mk |    0
- 5 files changed, 8 insertions(+), 1 deletions(-)
- create mode 100644 package/fonts/Config.in
- create mode 100644 package/fonts/fonts.mk
- rename package/{ => fonts}/liberation/Config.in (100%)
- rename package/{ => fonts}/liberation/liberation.mk (100%)
+ package/fonts/Config.in                |   33 ++++++++++++++++++++++++++++++++
+ package/fonts/liberation/liberation.mk |    9 ++++++-
+ 2 files changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 48f245c..3ec9109 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -120,8 +120,9 @@ comment "other GUIs"
- source "package/qt/Config.in"
- source "package/x11r7/Config.in"
- 
-+source package/fonts/Config.in
-+
- comment "X libraries and helper libraries"
--source "package/liberation/Config.in"
- source "package/libsexy/Config.in"
- 
- comment "X Window managers"
 diff --git a/package/fonts/Config.in b/package/fonts/Config.in
-new file mode 100644
-index 0000000..61072ad
---- /dev/null
+index 61072ad..11497a5 100644
+--- a/package/fonts/Config.in
 +++ b/package/fonts/Config.in
-@@ -0,0 +1,5 @@
-+menu "Fonts"
+@@ -1,5 +1,38 @@
+ menu "Fonts"
+ 
++choice
++	prompt "Font install layout"
++	default BR2_FONT_LAYOUT_FLAT if (BR2_PACKAGE_QT || BR2_PACKAGE_FREETYPE)
++	default BR2_FONT_LAYOUT_SUBDIRS
++	help
++	  Select where do you want buildroot to install fonts.
 +
-+source "package/fonts/liberation/Config.in"
++	  Installing fonts in subdirectories is the standard layout, but
++	  some applications and libraries are unable to find fonts that are
++	  installed this way.
++	  If you need such applications or libraries, choose the flat install
++	  layout.
 +
-+endmenu
-diff --git a/package/fonts/fonts.mk b/package/fonts/fonts.mk
-new file mode 100644
-index 0000000..f0447af
---- /dev/null
-+++ b/package/fonts/fonts.mk
-@@ -0,0 +1 @@
-+include package/fonts/*/*.mk
-diff --git a/package/liberation/Config.in b/package/fonts/liberation/Config.in
-similarity index 100%
-rename from package/liberation/Config.in
-rename to package/fonts/liberation/Config.in
-diff --git a/package/liberation/liberation.mk b/package/fonts/liberation/liberation.mk
-similarity index 100%
-rename from package/liberation/liberation.mk
-rename to package/fonts/liberation/liberation.mk
++config BR2_FONT_LAYOUT_SUBDIRS
++	bool "In subdirectories"
++	help
++	  Install each font family in a separate subdirectory.
++
++config BR2_FONT_LAYOUT_FLAT
++	bool "Flat"
++	help
++	  Install all fonts in the same directory.
++endchoice
++
++config BR2_FONT_LAYOUT_BASEDIR
++	string "Font install directory"
++	default "/usr/share/fonts"
++	help
++	  Directory where fonts must be installed.
++
++	  Depending on the font install layout chosen, fonts will be installed
++	  here or in a subdirectory for each family.
++
+ source "package/fonts/liberation/Config.in"
+ 
+ endmenu
+diff --git a/package/fonts/liberation/liberation.mk b/package/fonts/liberation/liberation.mk
+index 89987d6..6efa54b 100644
+--- a/package/fonts/liberation/liberation.mk
++++ b/package/fonts/liberation/liberation.mk
+@@ -7,7 +7,11 @@ LIBERATION_VERSION = 1.06.0.20100721
+ LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ 
+-LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
++LIBERATION_TARGET_DIR = $(TARGET_DIR)/$(call qstrip,$(BR2_FONT_LAYOUT_BASEDIR))
++
++ifeq ($(BR2_FONT_LAYOUT_SUBDIRS),y)
++LIBERATION_TARGET_DIR = $(LIBERATION_TARGET_DIR)/liberation
++endif
+ 
+ define LIBERATION_INSTALL_TARGET_CMDS
+ 	mkdir -p $(LIBERATION_TARGET_DIR)
+@@ -15,7 +19,8 @@ define LIBERATION_INSTALL_TARGET_CMDS
+ endef
+ 
+ define LIBERATION_CLEAN_CMDS
+-	rm -rf $(LIBERATION_TARGET_DIR)
++	rm -rf $(LIBERATION_TARGET_DIR)/Liberation*.ttf
++	rmdir $(LIBERATION_TARGET_DIR) || true # remove dir if empty
+ endef
+ 
+ $(eval $(call GENTARGETS,package,liberation))
 -- 
 1.7.1
