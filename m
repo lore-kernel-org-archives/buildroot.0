@@ -1,115 +1,135 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 23 Jan 2011 15:42:08 +0100
-Subject: [Buildroot] [PATCH v2 4/4] cdrkit: convert to CMAKETARGETS
-	infrastructure
-In-Reply-To: <AANLkTi=XYYi_M7W1_NAdnV+WW9iFftEZ5+uYL3CCtoym@mail.gmail.com>
-References: <1295124808-5649-1-git-send-email-bjorn.forsman@gmail.com>
-	<1295124808-5649-5-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTi=XYYi_M7W1_NAdnV+WW9iFftEZ5+uYL3CCtoym@mail.gmail.com>
-Message-ID: <AANLkTimn-g5Djk2c+1BHfCUMkYth9VOf+zj+UaF-8Y9u@mail.gmail.com>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Sun, 23 Jan 2011 19:02:54 +0000
+Subject: [Buildroot] Python 2.7 and ARM targets
+Message-ID: <AANLkTimb4i816rBar-v4o7-xwgG2-fu3sndYqX=rUAsy@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/1/23 Samuel Martin <s.martin49@gmail.com>:
-> Hi,
->
->
-> 2011/1/15 Bj?rn Forsman <bjorn.forsman@gmail.com>
->>
->> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
->> ---
->> ?package/cdrkit/cdrkit.mk | ? 65
->> ++++++---------------------------------------
->> ?1 files changed, 9 insertions(+), 56 deletions(-)
->>
->> diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
->> index a0ce9cb..0e97cc1 100644
->> --- a/package/cdrkit/cdrkit.mk
->> +++ b/package/cdrkit/cdrkit.mk
->> @@ -11,61 +11,14 @@ else
->> ?CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
->> ?endif
->>
->> -# CMake doesn't support having the --sysroot option directly in the
->> -# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
->> -CDRKIT_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC))
->> -CDRKIT_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX))
->> -CDRKIT_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC))
->> $(TARGET_CFLAGS)
->> -CDRKIT_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX))
->> $(TARGET_CXXFLAGS)
->> +CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
->>
->> -define CDRKIT_CONFIGURE_CMDS
->> - -mkdir $(@D)/build
->> - (cd $(@D)/build ; \
->> - ? ? ? $(HOST_DIR)/usr/bin/cmake .. \
->> - ? ? ? ? ? ? ? -Wno-dev \
->> - ? ? ? ? ? ? ? -DCMAKE_SYSTEM_NAME:STRING="Linux" \
->> - ? ? ? ? ? ? ? -DCMAKE_C_COMPILER:FILEPATH="$(CDRKIT_TARGET_CC)" \
->> - ? ? ? ? ? ? ? -DCMAKE_CXX_COMPILER:FILEPATH="$(CDRKIT_TARGET_CXX)" \
->> - ? ? ? ? ? ? ? -DCMAKE_C_FLAGS:STRING="$(CDRKIT_TARGET_CFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_CXX_FLAGS:STRING="$(CDRKIT_TARGET_CXXFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_FIND_ROOT_PATH:PATH="$(STAGING_DIR)" \
->> - ? ? ? ? ? ? ? -DCMAKE_INSTALL_PREFIX:PATH="$(TARGET_DIR)/usr" \
->> - ? ? ? ? ? ? ? $(CMAKE_ENDIAN_OPT) \
->> - )
->> -endef
->> -
->> -define CDRKIT_BUILD_CMDS
->> - $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build
->> -endef
->> -
->> -define CDRKIT_INSTALL_TARGET_CMDS
->> - $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build install
->> -endef
->> -
->> -define HOST_CDRKIT_CONFIGURE_CMDS
->> - -mkdir $(@D)/build
->> - (cd $(@D)/build ; \
->> - ? ? ? $(HOST_DIR)/usr/bin/cmake .. \
->> - ? ? ? ? ? ? ? -Wno-dev \
->> - ? ? ? ? ? ? ? -DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_EXE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_MODULE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
->> - ? ? ? ? ? ? ? -DCMAKE_INSTALL_PREFIX:STRING="$(HOST_DIR)/usr" \
->> - )
->> -endef
->> -
->> -define HOST_CDRKIT_BUILD_CMDS
->> - $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build
->> -endef
->> -
->> -define HOST_CDRKIT_INSTALL_CMDS
->> - $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build ?install
->> -endef
->> -
->> -$(eval $(call GENTARGETS,package,cdrkit))
->> -$(eval $(call GENTARGETS,package,cdrkit,host))
->> +## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
->> +## some extra flags so it finds needed libs and headers.
->> +CDRKIT_CONF_OPT += -DCMAKE_REQUIRED_INCLUDES="$(STAGING_DIR)/usr/include"
->> +CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
->> +HOST_CDRKIT_CONF_OPT +=
->> -DCMAKE_REQUIRED_INCLUDES="$(HOST_DIR)/usr/include"
->> +HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
->
-> any specific reasons to remove defined variables' type?
+Hi
 
-AFAIK, the variable type is only used by CMake GUI so it can use the
-most appropriate widget (when manipulating the variables). I didn't
-see any use for this in Buildroot so I took it out.
+I Recently started using buildroot for a project involving Telit's
+GE863-PRO.
 
-The reason it was included in v1 was that cdrkit.mk had it (which I
-based this on) and I did an early release :-) Maybe Thomas (original
-cdrkit.mk author) has any comments?
+OS: Fedora 14
+Buidlroot: 2010.11  and  "daily snapshot"
 
-Best regards,
-Bj?rn Forsman
+First a newbie question:
+1. Why do I always end up with the word "unknown" in the resulting
+"arm-unknown-linux-uclibcgnueabi"?
+
+I have the following settings in my ".config":
+BR2_arm=y
+BR2_arm926t=y
+BR2_ARM_TYPE="ARM926T"
+BR2_ARM_EABI=y
+BR2_ARCH="arm"
+BR2_GCC_TARGET_TUNE="arm926ej-s"
+BR2_GCC_TARGET_ARCH="armv5te"
+
+Is it possible to have the results reflect my target, for example:
+"arm-ge863pro-linux-uclibcgnueabi".......or "arm-arm926-linux-uclibcgnueabi"
+?
+
+
+
+Using the daily snapshot, I get the following Python issue:
+
+1. Fedora 14 uses python 2.7 and not python 2.4, this appears to cause the
+following error:
+
+Making all in python
+make[2]: Entering directory
+`/home/bruce/arm-buildroot/buildroot/output/build/libdnet-1.11/python'
+CC="/home/bruce/arm/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+--sysroot=/home/bruce/arm/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot"
+LDSHARED="/home/bruce/arm/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+--sysroot=/home/bruce/arm/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot
+-shared" python2.4 setup.py build_ext
+-I/home/bruce/arm/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/python2.4
+/bin/sh: python2.4: command not found
+make[2]: *** [python-build] Error 127
+make[2]: Leaving directory
+`/home/bruce/arm-buildroot/buildroot/output/build/libdnet-1.11/python'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory
+`/home/bruce/arm-buildroot/buildroot/output/build/libdnet-1.11'
+make: *** [/home/bruce/arm/buildroot/output/build/libdnet-1.11/.stamp_built]
+Error 2
+[bruce at varm buildroot]$
+
+
+So to get around this, I changed my "buildroot/package/python/python.mk" to
+install "python 2.7"  .... however that produces a follow on issue:
+
+/usr/bin/make -j2
+CC="/home/bruce/arm-buildroot/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+--sysroot=/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot"
+-C /home/bruce/arm-buildroot/buildroot/output/build/Python-2.7
+DESTDIR=/home/bruce/arm-buildroot/buildroot/output/target \
+
+ PYTHON_MODULES_INCLUDE=/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+\
+
+ PYTHON_MODULES_LIB="/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/lib
+/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib"
+\
+        PYTHON_DISABLE_MODULES="dbm zipfile gdbm nis" \
+        HOSTPYTHON=./hostpython HOSTPGEN=./Parser/hostpgen
+make[1]: Entering directory
+`/home/bruce/arm-buildroot/buildroot/output/build/Python-2.7'
+/home/bruce/arm-buildroot/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+--sysroot=/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot
+-c -fno-strict-aliasing -pipe -Os  -mtune=arm926ej-s -march=armv5te
+-mabi=aapcs-linux -msoft-float
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/include
+-DNDEBUG -pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux
+-msoft-float
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/include
+ -I. -IInclude -I./Include  -fPIC -DPy_BUILD_CORE -o Modules/python.o
+./Modules/python.c
+/home/bruce/arm-buildroot/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+--sysroot=/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot
+-c -fno-strict-aliasing -pipe -Os  -mtune=arm926ej-s -march=armv5te
+-mabi=aapcs-linux -msoft-float
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/include
+-DNDEBUG -pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux
+-msoft-float
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+-I/home/bruce/arm-buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/include
+ -I. -IInclude -I./Include  -fPIC -DPy_BUILD_CORE -o Parser/acceler.o
+Parser/acceler.c
+In file included from Include/Python.h:58,
+                 from ./Modules/python.c:3In file included from
+Include/Python.h:58:
+Include/pyport.h:243:13:,
+                 from Include/pgenheaders.h:10 ,
+                 from Parser/acceler.c:13error: :
+#error "This platform's pyconfig.h needs to define
+PY_FORMAT_LONG_LONG"Include/pyport.h:243:13:
+ error: #error "This platform's pyconfig.h needs to define
+PY_FORMAT_LONG_LONG"
+make[1]: *** [Modules/python.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make[1]: *** [Parser/acceler.o] Error 1
+make[1]: Leaving directory
+`/home/bruce/arm-buildroot/buildroot/output/build/Python-2.7'
+make: ***
+[/home/bruce/arm-buildroot/buildroot/output/build/Python-2.7/python] Error 2
+[bruce at varm buildroot]$
+
+
+Searching google I get the impression there are patches for "buildroot" to
+enable python 2.7 ........  any pointers in locating and applying these
+patches would be a great help!!!!
+
+Thanks
+Bruce
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110123/970a7f8c/attachment.html>
