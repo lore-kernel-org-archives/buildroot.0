@@ -1,9 +1,9 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 24 Jan 2011 00:41:33 +0200
-Subject: [Buildroot] [PATCH 3rd RESEND 4/6] Add gst-dsp package
+Date: Mon, 24 Jan 2011 00:41:34 +0200
+Subject: [Buildroot] [PATCH 3rd RESEND 5/6] Add dsp-tools package
 In-Reply-To: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1295822495-16972-5-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1295822495-16972-6-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,56 @@ To: buildroot@busybox.net
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/Config.in          |    1 +
- package/multimedia/gst-dsp/Config.in  |    8 ++++++++
- package/multimedia/gst-dsp/gst-dsp.mk |   15 +++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-dsp/Config.in
- create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ package/Config.in              |    1 +
+ package/dsp-tools/Config.in    |    7 +++++++
+ package/dsp-tools/dsp-tools.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/dsp-tools/Config.in
+ create mode 100644 package/dsp-tools/dsp-tools.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 8a251fb..7590219 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -6,6 +6,7 @@ source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-ffmpeg/Config.in"
-+source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
-diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index da5b62b..f9e1568 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -478,6 +478,7 @@ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+ endif
++source "package/dsp-tools/Config.in"
+ endmenu
+ 
+ menu "Text editors and viewers"
+diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
 new file mode 100644
-index 0000000..c4d1033
+index 0000000..c37d76c
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GST_DSP
-+	bool "gst-dsp"
-+	depends on BR2_PACKAGE_GSTREAMER
++++ b/package/dsp-tools/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DSP_TOOLS
++	bool "dsp-tools"
 +	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
++	  Utilities for TI OMAP3 DSP.
 +
-+	  http://code.google.com/p/gst-dsp/
-diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
++	  http://github.com/felipec/dsp-tools
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
 new file mode 100644
-index 0000000..12ca5d8
+index 0000000..39d11d6
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/gst-dsp.mk
-@@ -0,0 +1,15 @@
-+GST_DSP_VERSION=0.8.0
-+GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
-+GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -0,0 +1,13 @@
++DSP_TOOLS_VERSION=2.0
++DSP_TOOLS_SOURCE=dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
++DSP_TOOLS_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define GST_DSP_BUILD_CMDS
++define DSP_TOOLS_BUILD_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+define GST_DSP_INSTALL_TARGET_CMDS
++define DSP_TOOLS_INSTALL_TARGET_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+GST_DSP_DEPENDENCIES = gstreamer
-+
-+$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
++$(eval $(call GENTARGETS,package,dsp-tools))
 -- 
 1.7.4.rc2
