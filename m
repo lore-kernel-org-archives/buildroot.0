@@ -1,9 +1,9 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Mon, 24 Jan 2011 00:41:32 +0200
-Subject: [Buildroot] [PATCH 3rd RESEND 3/6] Add tidsp-binaries package
+Date: Mon, 24 Jan 2011 00:41:33 +0200
+Subject: [Buildroot] [PATCH 3rd RESEND 4/6] Add gst-dsp package
 In-Reply-To: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <1295822495-16972-4-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <1295822495-16972-5-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,59 @@ To: buildroot@busybox.net
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/Config.in                       |    1 +
- package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
- .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
- 3 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/tidsp-binaries/Config.in
- create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
+ package/multimedia/Config.in          |    1 +
+ package/multimedia/gst-dsp/Config.in  |    8 ++++++++
+ package/multimedia/gst-dsp/gst-dsp.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-dsp/Config.in
+ create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index da50dbb..8a251fb 100644
+index 8a251fb..7590219 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -27,6 +27,7 @@ source "package/multimedia/mpg123/Config.in"
- source "package/multimedia/mplayer/Config.in"
- source "package/multimedia/speex/Config.in"
- source "package/multimedia/swfdec/Config.in"
-+source "package/multimedia/tidsp-binaries/Config.in"
- source "package/multimedia/festival/Config.in"
- source "package/multimedia/taglib/Config.in"
- source "package/multimedia/tremor/Config.in"
-diff --git a/package/multimedia/tidsp-binaries/Config.in b/package/multimedia/tidsp-binaries/Config.in
+@@ -6,6 +6,7 @@ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+ source "package/multimedia/gstreamer/Config.in"
+ source "package/multimedia/gst-ffmpeg/Config.in"
++source "package/multimedia/gst-dsp/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
 new file mode 100644
-index 0000000..2d50b62
+index 0000000..c4d1033
 --- /dev/null
-+++ b/package/multimedia/tidsp-binaries/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_TIDSP_BINARIES
-+	bool "tidsp-binaries"
++++ b/package/multimedia/gst-dsp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GST_DSP
++	bool "gst-dsp"
++	depends on BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  TI OMAP3 DSP algorithms.
++	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
 +
-+	  https://gforge.ti.com/gf/project/openmax/
-diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
++	  http://code.google.com/p/gst-dsp/
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
 new file mode 100644
-index 0000000..5dc9205
+index 0000000..12ca5d8
 --- /dev/null
-+++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
-@@ -0,0 +1,9 @@
-+TIDSP_BINARIES_VERSION=23.i3.8
-+TIDSP_BINARIES_SOURCE=tidsp-binaries-$(TIDSP_BINARIES_VERSION).tar.gz
-+TIDSP_BINARIES_SITE:=http://gst-dsp.googlecode.com/files/
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -0,0 +1,15 @@
++GST_DSP_VERSION=0.8.0
++GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
++GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define TIDSP_BINARIES_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
++define GST_DSP_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+$(eval $(call GENTARGETS,package/multimedia,tidsp-binaries))
++define GST_DSP_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
++endef
++
++GST_DSP_DEPENDENCIES = gstreamer
++
++$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
 -- 
 1.7.4.rc2
