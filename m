@@ -1,38 +1,62 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 23 Jan 2011 16:07:30 -0500
-Subject: [Buildroot] [PATCH 1/4] libpcap: update static handling
-In-Reply-To: <877hdvapq0.fsf@macbook.be.48ers.dk>
-References: <1295493022-4659-1-git-send-email-vapier@gentoo.org>
-	<1295493032-4705-1-git-send-email-vapier@gentoo.org>
-	<877hdvapq0.fsf@macbook.be.48ers.dk>
-Message-ID: <201101231607.30938.vapier@gentoo.org>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Mon, 24 Jan 2011 00:41:29 +0200
+Subject: [Buildroot] [PATCH 3rd RESEND 0/6] GStreamer patches,
+	and TI OMAP3 DSP stuff
+Message-ID: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday, January 23, 2011 05:17:43 Peter Korsgaard wrote:
-> >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
->  Mike> The new version of libpcap changed how its install targets work. 
-> The Mike> main "install" target now always depends on "install-shared", so
-> we Mike> need to force the DYEXT variable to "none" in order to bypass
-> shared.
-> 
-> Does that then still install the shared lib for normal
-> (!PREFER_STATIC_LIB) builds, or should this only be passed for the
-> static case?
+Hi,
 
-hmm, well Thomas' suggestion before doesnt work ... the current autotools 
-Makefile only adds $(PKG)_MAKE_OPT to the build step instead of all the steps.  
-so ignore this patch until that can be fixed.
+I haven't received any comments on the previous 2 tries (except the ack from
+Thomas Petazzoni), so I'm resending yet again.
 
-the other 3 patches in this set dont require this one
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110123/70542dc5/attachment.asc>
+These patches first improve GStreamer support (makes it build on newer versions
+of make), remove unnecessary dependencies, and then add support for gst-dsp and
+all the dependencies.
+
+By applying these, it's possible to use TI OMAP3 hardware accelerated codecs
+right away, no patches needed on the kernel.
+
+I tried these with linux 2.6.37 on an N900.
+
+Felipe Contreras (6):
+  gstreamer: remove unnecessary feature
+  Fix gstreamer packages for make 3.82
+  Add tidsp-binaries package
+  Add gst-dsp package
+  Add dsp-tools package
+  Add gst-omapfb package
+
+ package/Config.in                                  |    1 +
+ package/dsp-tools/Config.in                        |    7 +++++++
+ package/dsp-tools/dsp-tools.mk                     |   13 +++++++++++++
+ package/multimedia/Config.in                       |    3 +++
+ package/multimedia/gst-dsp/Config.in               |    8 ++++++++
+ package/multimedia/gst-dsp/gst-dsp.mk              |   15 +++++++++++++++
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk        |    2 ++
+ package/multimedia/gst-omapfb/Config.in            |    7 +++++++
+ package/multimedia/gst-omapfb/gst-omapfb.mk        |   15 +++++++++++++++
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 ++
+ .../gst-plugins-base/gst-plugins-base.mk           |    2 ++
+ .../gst-plugins-good/gst-plugins-good.mk           |    2 ++
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 ++
+ package/multimedia/gstreamer/Config.in             |    6 ------
+ package/multimedia/gstreamer/gstreamer.mk          |   15 ++++++++-------
+ package/multimedia/tidsp-binaries/Config.in        |    6 ++++++
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    9 +++++++++
+ 17 files changed, 102 insertions(+), 13 deletions(-)
+ create mode 100644 package/dsp-tools/Config.in
+ create mode 100644 package/dsp-tools/dsp-tools.mk
+ create mode 100644 package/multimedia/gst-dsp/Config.in
+ create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ create mode 100644 package/multimedia/gst-omapfb/Config.in
+ create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
+ create mode 100644 package/multimedia/tidsp-binaries/Config.in
+ create mode 100644 package/multimedia/tidsp-binaries/tidsp-binaries.mk
+
+-- 
+1.7.4.rc2
