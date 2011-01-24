@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 22:20:45 +0100
-Subject: [Buildroot] [PATCH 08/10] Remove .py or .pyc depending on
-	Python configuration
-In-Reply-To: <ae3e42bc699cefc69cc523fb3969c94c32ca3a9d.1295866866.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 24 Jan 2011 12:01:36 +0100")
+Date: Mon, 24 Jan 2011 22:22:31 +0100
+Subject: [Buildroot] [PATCH 09/10] python-serial: new package
+In-Reply-To: <89d3302cc6fa8367faa06a948d33039b6888c9d2.1295866866.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 24 Jan 2011 12:01:37 +0100")
 References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
 	<cover.1295866866.git.thomas.petazzoni@free-electrons.com>
-	<ae3e42bc699cefc69cc523fb3969c94c32ca3a9d.1295866866.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87aaiqq9qq.fsf@macbook.be.48ers.dk>
+	<89d3302cc6fa8367faa06a948d33039b6888c9d2.1295866866.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8762teq9ns.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +15,45 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> We do this at a global level since several packages can install
- Thomas> Python modules.
+ Thomas> python-serial is a Python library to access serial ports.
+ Thomas> This package has originally been introduced to test that third-party
+ Thomas> pure Python modules (that do not use C extensions) build properly
+ Thomas> against the Buildroot Python infrastructure.
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  Thomas> ---
- Thomas>  Makefile |    8 ++++++++
- Thomas>  1 files changed, 8 insertions(+), 0 deletions(-)
+ Thomas>  package/Config.in                      |    1 +
+ Thomas>  package/python-serial/Config.in        |    5 +++++
+ Thomas>  package/python-serial/python-serial.mk |   21 +++++++++++++++++++++
+ Thomas>  3 files changed, 27 insertions(+), 0 deletions(-)
+ Thomas>  create mode 100644 package/python-serial/Config.in
+ Thomas>  create mode 100644 package/python-serial/python-serial.mk
 
- Thomas> diff --git a/Makefile b/Makefile
- Thomas> index 7e08cf3..1f37a1f 100644
- Thomas> --- a/Makefile
- Thomas> +++ b/Makefile
- Thomas> @@ -438,6 +438,14 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- Thomas>  	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- Thomas>  	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
- Thomas>  endif
- Thomas> +ifeq ($(BR2_PACKAGE_PYTHON),y)
- Thomas> +ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
- Thomas> +	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -print0 | xargs -0 rm -f
- Thomas> +endif
- Thomas> +ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- Thomas> +	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- Thomas> +endif
- Thomas> +endif
+ Thomas> diff --git a/package/Config.in b/package/Config.in
+ Thomas> index 438e1b4..d437dc4 100644
+ Thomas> --- a/package/Config.in
+ Thomas> +++ b/package/Config.in
+ Thomas> @@ -293,6 +293,7 @@ source "package/libraw1394/Config.in"
+ Thomas>  source "package/tslib/Config.in"
+ Thomas>  source "package/libusb/Config.in"
+ Thomas>  source "package/libusb-compat/Config.in"
+ Thomas> +source "package/python-serial/Config.in"
+ Thomas>  endmenu
+ 
+ Thomas>  if BROKEN
+ Thomas> diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
+ Thomas> new file mode 100644
+ Thomas> index 0000000..06866db
+ Thomas> --- /dev/null
+ Thomas> +++ b/package/python-serial/Config.in
+ Thomas> @@ -0,0 +1,5 @@
+ Thomas> +config BR2_PACKAGE_PYTHON_SERIAL
+ Thomas> +	bool "python-serial"
+ Thomas> +	depends on BR2_PACKAGE_PYTHON
+ Thomas> +	help
+ Thomas> +	  python-serial is a Python library to access serial ports.
 
-The outermost conditional is not really needed.
+Please add a link to http://pyserial.sf.net here.
 
 -- 
 Bye, Peter Korsgaard
