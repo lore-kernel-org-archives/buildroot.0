@@ -1,55 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 18:04:28 +0100
+Date: Mon, 24 Jan 2011 18:08:54 +0100
 Subject: [Buildroot] ARM cores
-In-Reply-To: <87y66athl7.fsf@macbook.be.48ers.dk>
+In-Reply-To: <4D3DA411.8080906@free.fr>
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
 	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
 	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
-	<87y66athl7.fsf@macbook.be.48ers.dk>
-Message-ID: <20110124180428.3bcbe29f@surf>
+	<4D3DA411.8080906@free.fr>
+Message-ID: <20110124180854.5ee86742@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 24 Jan 2011 17:03:00 +0100
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Mon, 24 Jan 2011 17:08:49 +0100
+Eric BENARD <ebenard@free.fr> wrote:
 
-> Not available? Doesn't almost all A8 implementations have NEON?
+> NEON (and VFP) is a feature of cortex A8 :
+> http://www.arm.com/products/processors/cortex-a/cortex-a8.php
+> 
+> It's optional on A5 & A9 but not on A8.
 
-According to http://wiki.debian.org/ArmHardFloatPort, CPUs such as
-Marvell Dove and Nvidia Tegra 2 are ARMv7 CPUs, but they don't have
-NEON support. NEON is an extension, so it isn't necessarly part of ARM
-cores.
-
-> Do we have any packages that cannot work on !NEON arms? (E.G. where it isn't
-> just an optimization)
-
-In mplayer, we have:
-
-ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
-MPLAYER_CONF_OPTS += --enable-neon
-endif
-
-(This is code that I added, it's an approximation, since as said above,
-not all ARMv7 CPUs have NEON support).
-
-Once mplayer is compiled with --enable-neon, it will presumably not
-work on !NEON arms.
-
-Instead of having the list of gazillions ARM SoC, we could also extend
-a bit our architecture-specific options:
-
- * Has NEON support ?
-   shown only if > ARMv7 is selected
-
- * Floating point type (with a choice of soft-float, VFPv2, VFPv3)
-
- * Floating point ABI (soft, softfp, hard)
-
-But it means that the user needs more knowledge on the details of the
-ARM SoC he is using. But it's probably the only realistic solution.
+Yes, sorry. I've given the example of Marvell Dove and Nvidia Tegra 2,
+which presumably are Cortex-A9. But it doesn't change my initial
+comment: if the user says "I'm using Cortex A9", it's not enough to
+decide whether you can use NEON or not.
 
 Regards,
 
