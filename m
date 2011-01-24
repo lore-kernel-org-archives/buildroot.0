@@ -1,40 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 17:14:00 +0100
-Subject: [Buildroot] [git commit master 1/1] cdrkit: fix build with
-	ccache
-In-Reply-To: <20110124170817.628499e6@surf> (Thomas Petazzoni's message of
-	"Mon, 24 Jan 2011 17:08:17 +0100")
-References: <20110120202551.3757C8B537@busybox.osuosl.org>
-	<20110124170817.628499e6@surf>
-Message-ID: <87tygyth2v.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Jan 2011 17:16:42 +0100
+Subject: [Buildroot] [PATCH 1/4] libpcap: update static handling
+In-Reply-To: <201101231607.30938.vapier@gentoo.org>
+References: <1295493022-4659-1-git-send-email-vapier@gentoo.org>
+	<1295493032-4705-1-git-send-email-vapier@gentoo.org>
+	<877hdvapq0.fsf@macbook.be.48ers.dk>
+	<201101231607.30938.vapier@gentoo.org>
+Message-ID: <20110124171642.6cff75a4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Sun, 23 Jan 2011 16:07:30 -0500
+Mike Frysinger <vapier@gentoo.org> wrote:
 
- Thomas> Hello,
- Thomas> On Thu, 20 Jan 2011 21:23:23 +0100
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> hmm, well Thomas' suggestion before doesnt work ... the current autotools 
+> Makefile only adds $(PKG)_MAKE_OPT to the build step instead of all the steps.  
+> so ignore this patch until that can be fixed.
 
- >> Cmake gets confused about ccache, so don't use ccache for cmake builds.
+For the moment:
 
- Thomas> Which problems did you had exactly ?
+ $(PKG)_MAKE_OPT is passed at build time for target and host packages
+ (maybe we should rename it $(PKG)_BUILD_MAKE_OPT, or pass it during all
+ steps)
 
-See the quoted error message in the libcuefile thread:
+ $(PKG)_INSTALL_STAGING_OPT is passed at staging installation time for
+ target packages
 
-http://lists.busybox.net/pipermail/buildroot/2011-January/040755.html
+ $(PKG)_INSTALL_TARGET_OPT is passed at target installation time for
+ target packages
 
-(and followups)
+So in your case you probably need to do something like:
 
- Thomas> While this is obviously the right short-term fix, it's a bit of
- Thomas> a shame of CMake doesn't play well with ccache, so maybe it's
- Thomas> something I could raise on the CMake mailing-list.
+LIBPCAP_INSTALL_STAGING_OPT = DYEXT=none DESTDIR="$(STAGING_DIR)" install
+LIBPCAP_INSTALL_TARGET_OPT  = DYEXT=none DESTDIR="$(TARGET_DIR)" install
 
-Indeed. We left it here for you to have fun with once you're back from
-holidays :P
+Regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110124/4e46cae6/attachment.asc>
