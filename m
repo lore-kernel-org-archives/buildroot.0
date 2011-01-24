@@ -1,36 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 17:11:32 +0100
-Subject: [Buildroot] [PATCH 1/4] libpcap: update static handling
-In-Reply-To: <1295493032-4705-1-git-send-email-vapier@gentoo.org>
-References: <1295493022-4659-1-git-send-email-vapier@gentoo.org>
-	<1295493032-4705-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20110124171132.6baad50c@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 24 Jan 2011 17:14:00 +0100
+Subject: [Buildroot] [git commit master 1/1] cdrkit: fix build with
+	ccache
+In-Reply-To: <20110124170817.628499e6@surf> (Thomas Petazzoni's message of
+	"Mon, 24 Jan 2011 17:08:17 +0100")
+References: <20110120202551.3757C8B537@busybox.osuosl.org>
+	<20110124170817.628499e6@surf>
+Message-ID: <87tygyth2v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Completely unrelated to Mike's change, but still spotted while looking
-at the patch context:
+ Thomas> Hello,
+ Thomas> On Thu, 20 Jan 2011 21:23:23 +0100
+ Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-On Wed, 19 Jan 2011 22:10:29 -0500
-Mike Frysinger <vapier@gentoo.org> wrote:
+ >> Cmake gets confused about ccache, so don't use ccache for cmake builds.
 
->  LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))))) \
+ Thomas> Which problems did you had exactly ?
 
-Both libpcap and tcpdump use this and I never noticed, but this is
-completely broken with external toolchains and the Crosstool-NG backend,
-since BR2_DEFAULT_KERNEL_HEADERS is only set with internal toolchains.
+See the quoted error message in the libcuefile thread:
 
-I haven't thought of what the right fix would be, but it's definitely
-not that one.
+http://lists.busybox.net/pipermail/buildroot/2011-January/040755.html
 
-Thomas
+(and followups)
+
+ Thomas> While this is obviously the right short-term fix, it's a bit of
+ Thomas> a shame of CMake doesn't play well with ccache, so maybe it's
+ Thomas> something I could raise on the CMake mailing-list.
+
+Indeed. We left it here for you to have fun with once you're back from
+holidays :P
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
