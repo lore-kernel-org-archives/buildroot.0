@@ -1,34 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 17:08:17 +0100
-Subject: [Buildroot] [git commit master 1/1] cdrkit: fix build with
- ccache
-In-Reply-To: <20110120202551.3757C8B537@busybox.osuosl.org>
-References: <20110120202551.3757C8B537@busybox.osuosl.org>
-Message-ID: <20110124170817.628499e6@surf>
+From: Eric BENARD <ebenard@free.fr>
+Date: Mon, 24 Jan 2011 17:08:49 +0100
+Subject: [Buildroot] ARM cores
+In-Reply-To: <20110124165711.381989cf@surf>
+References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>	<87lj2ahe4y.fsf@macbook.be.48ers.dk>
+	<20110124165711.381989cf@surf>
+Message-ID: <4D3DA411.8080906@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Thu, 20 Jan 2011 21:23:23 +0100
-Peter Korsgaard <jacmet@sunsite.dk> wrote:
+On 24/01/2011 16:57, Thomas Petazzoni wrote:
+> For example, some video decoders have specific code to use NEON
+> instructions, but those instructions are not available on Cortex-A8
+> cores for example.
+>
+NEON (and VFP) is a feature of cortex A8 :
+http://www.arm.com/products/processors/cortex-a/cortex-a8.php
 
-> Cmake gets confused about ccache, so don't use ccache for cmake builds.
+It's optional on A5 & A9 but not on A8.
 
-Which problems did you had exactly ?
-
-While this is obviously the right short-term fix, it's a bit of a shame
-of CMake doesn't play well with ccache, so maybe it's something I could
-raise on the CMake mailing-list.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Eric
