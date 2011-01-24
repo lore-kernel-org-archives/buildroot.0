@@ -1,37 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 21:07:48 +0100
-Subject: [Buildroot] [git commit master 1/1] openssl: add ocf support
-In-Reply-To: <20110124173553.61328a62@surf> (Thomas Petazzoni's message of
-	"Mon, 24 Jan 2011 17:35:53 +0100")
-References: <20110117214924.564878A3BF@busybox.osuosl.org>
-	<20110124173553.61328a62@surf>
-Message-ID: <87tygyrror.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Jan 2011 21:09:28 +0100
+Subject: [Buildroot] qtwebkit illegal instruction problem with external
+ toolchain
+In-Reply-To: <AANLkTik5NVe-dwR_rv9x8WSTf_H1wyt48_rR_UsqAGx8@mail.gmail.com>
+References: <AANLkTinGoE2b8t1YA7bu-ontgi++0RaGz9jNN8r_SU5t@mail.gmail.com>
+	<BAY145-ds17A7EE20590429F8F04A44C2F40@phx.gbl>
+	<20110124182247.1b120be8@surf>
+	<AANLkTik5NVe-dwR_rv9x8WSTf_H1wyt48_rR_UsqAGx8@mail.gmail.com>
+Message-ID: <20110124210928.1e89f1cb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Mon, 24 Jan 2011 21:00:58 +0100
+Belisko Marek <marek.belisko@gmail.com> wrote:
 
-Hi,
+> ARCH=arm920t
 
- >> +define OPENSSL_INSTALL_CRYPTODEV_H
- >> +$(INSTALL) -D package/openssl/ocf-cryptodev-20101223.h \
- >> +	$(STAGING_DIR)/usr/include/crypto/cryptodev.h
- >> +endef
- >> +
- >> +OPENSSL_POST_EXTRACT_HOOKS += OPENSSL_INSTALL_CRYPTODEV_H
- >> +endif
+What does that mean ? Does that mean that your processor is an ARM920T
+*and* that you selected this CPU type in Buildroot ?
 
- Thomas> This is not a problem today, but it will break horribly when we'll try
- Thomas> to merge the packaging work from Lionel, because here we are installing
- Thomas> a file to the $(STAGING_DIR) outside of a package staging installation
- Thomas> step.
-
-Ok, so we would either need to move this to a seperate package or play
-around with -I options to get openssl to find it somewhere else during
-compilation.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
