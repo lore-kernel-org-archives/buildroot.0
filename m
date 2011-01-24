@@ -1,34 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 21:12:36 +0100
-Subject: [Buildroot] [git commit master 1/1] sshfs: select openssh
-	instead of depending
-In-Reply-To: <20110124172820.13b2e781@surf> (Thomas Petazzoni's message of
-	"Mon, 24 Jan 2011 17:28:20 +0100")
-References: <20110117202412.A4D0289008@busybox.osuosl.org>
-	<20110124172820.13b2e781@surf>
-Message-ID: <87pqrmrrgr.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 24 Jan 2011 21:11:36 +0100
+Subject: [Buildroot] [git commit master 1/1] sshfs: adjust make dependencies
+	to match Kconfig
+Message-ID: <20110124210028.CE91C8D210@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=eef3d90998441d060785366d27f0080bbfc9e9c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Then presumably we should:
+Spotted by Thomas, thanks.
 
- >> SSHFS_DEPENDENCIES = libglib2 libfuse $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sshfs/sshfs.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
- Thomas> SSHFS_DEPENDENCIES = \
- Thomas> 	libglib2 libfuse openssh \
- Thomas> 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
- Thomas> 	$(if $(BR2_ENABLE_LOCALE),,libiconv)
-
- Thomas> (i.e add openssh and libiconv in the dependencies)
-
-Ahh yes, will fix - Thanks.
-
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index 816f77a..ae837bb 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
+@@ -7,6 +7,9 @@
+ SSHFS_VERSION = 2.2
+ SSHFS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
+ SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
+-SSHFS_DEPENDENCIES = libglib2 libfuse $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
++SSHFS_DEPENDENCIES = \
++	libglib2 libfuse openssh \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
++	$(if $(BR2_ENABLE_LOCALE),,libiconv)
+ 
+ $(eval $(call AUTOTARGETS,package,sshfs))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
