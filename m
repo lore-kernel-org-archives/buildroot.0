@@ -1,63 +1,37 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 24 Jan 2011 21:00:58 +0100
-Subject: [Buildroot] qtwebkit illegal instruction problem with external
-	toolchain
-In-Reply-To: <20110124182247.1b120be8@surf>
-References: <AANLkTinGoE2b8t1YA7bu-ontgi++0RaGz9jNN8r_SU5t@mail.gmail.com>
-	<BAY145-ds17A7EE20590429F8F04A44C2F40@phx.gbl>
-	<20110124182247.1b120be8@surf>
-Message-ID: <AANLkTik5NVe-dwR_rv9x8WSTf_H1wyt48_rR_UsqAGx8@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 24 Jan 2011 21:06:07 +0100
+Subject: [Buildroot] ARM cores
+In-Reply-To: <20110124180428.3bcbe29f@surf> (Thomas Petazzoni's message of
+	"Mon, 24 Jan 2011 18:04:28 +0100")
+References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
+	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
+	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
+	<87y66athl7.fsf@macbook.be.48ers.dk> <20110124180428.3bcbe29f@surf>
+Message-ID: <87y66arrrk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+
 Hi,
 
-On Mon, Jan 24, 2011 at 6:22 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 17 Jan 2011 11:45:44 -0700
-> Matt Johnson <mj1856@hotmail.com> wrote:
->
->> Haven't tested webkit, but this is probably the same issue I've been finding
->> in lots of other packages. ?CodeSourcery is a multilib toolchain, and it
->> picks its library based on the machine architecture flag (-march). ?It
->> assumes armv5te by default, so it is critical when you are targeting one of
->> the other libraries like armv4t or armv7-a (thumb) to provide -march to the
->> package. ?This is part of the $(TARGET_CFLAGS) variable, but some packages
->> don't pass it properly.
->
-> Yes, quite likely.
->
-> Marek, could you give us some details about your hardware configuration
-> (which CPU type) and Buildroot configuration ?
-ARCH=arm920t and just select qt including webkit + select external toolchain.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
+ Thomas> Instead of having the list of gazillions ARM SoC, we could also
+ Thomas> extend a bit our architecture-specific options:
 
-thanks,
+ Thomas>  * Has NEON support ?
+ Thomas>    shown only if > ARMv7 is selected
 
-marek
+ Thomas>  * Floating point type (with a choice of soft-float, VFPv2, VFPv3)
+
+ Thomas>  * Floating point ABI (soft, softfp, hard)
+
+ Thomas> But it means that the user needs more knowledge on the details of the
+ Thomas> ARM SoC he is using. But it's probably the only realistic solution.
+
+Yes, agreed.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+Bye, Peter Korsgaard
