@@ -1,65 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 22:23:53 +0100
-Subject: [Buildroot] [PATCH 10/10] python-mad: new package
-In-Reply-To: <4202ec9552c58af1c5ba12aac109b6c563ac6ef0.1295866866.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 24 Jan 2011 12:01:38 +0100")
-References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
-	<cover.1295866866.git.thomas.petazzoni@free-electrons.com>
-	<4202ec9552c58af1c5ba12aac109b6c563ac6ef0.1295866866.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <871v42q9li.fsf@macbook.be.48ers.dk>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 24 Jan 2011 16:46:23 -0500
+Subject: [Buildroot] [PATCH 1/4] libpcap: update static handling
+In-Reply-To: <87pqrmtgju.fsf@macbook.be.48ers.dk>
+References: <1295493022-4659-1-git-send-email-vapier@gentoo.org>
+	<20110124171132.6baad50c@surf> <87pqrmtgju.fsf@macbook.be.48ers.dk>
+Message-ID: <201101241646.23935.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Monday, January 24, 2011 11:25:25 Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 
+writes:
+>  Thomas> Hello,
+>  Thomas> Completely unrelated to Mike's change, but still spotted while
+> looking Thomas> at the patch context:
+> 
+>  Thomas> On Wed, 19 Jan 2011 22:10:29 -0500
+> 
+>  Thomas> Mike Frysinger <vapier@gentoo.org> wrote:
+>  >> LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst
+>  >> .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS)))))
+>  >> \
+> 
+>  Thomas> Both libpcap and tcpdump use this and I never noticed, but this
+>  Thomas> is completely broken with external toolchains and the
+>  Thomas> Crosstool-NG backend, since BR2_DEFAULT_KERNEL_HEADERS is only
+>  Thomas> set with internal toolchains.
+> 
+>  Thomas> I haven't thought of what the right fix would be, but it's
+> definitely Thomas> not that one.
+> 
+> True. The question is why they need this info? Perhaps we can just lie
+> and simply say 2.6.x?
 
- Thomas> python-mad is a Python binding for the MAD library, a high-quality
- Thomas> integer-only MPEG decoder.
-
- Thomas> This package has been introduced as a test to make sure that
- Thomas> third-party Python modules that rely on a C extension can properly be
- Thomas> built against the Python infrastructure of Buildroot.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/multimedia/Config.in                |    1 +
- Thomas>  package/multimedia/python-mad/Config.in     |    7 ++++
- Thomas>  package/multimedia/python-mad/python-mad.mk |   41 +++++++++++++++++++++++++++
- Thomas>  3 files changed, 49 insertions(+), 0 deletions(-)
- Thomas>  create mode 100644 package/multimedia/python-mad/Config.in
- Thomas>  create mode 100644 package/multimedia/python-mad/python-mad.mk
-
- Thomas> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
- Thomas> index da50dbb..ae685cf 100644
- Thomas> --- a/package/multimedia/Config.in
- Thomas> +++ b/package/multimedia/Config.in
- Thomas> @@ -25,6 +25,7 @@ source "package/multimedia/libvorbis/Config.in"
- Thomas>  source "package/multimedia/madplay/Config.in"
- Thomas>  source "package/multimedia/mpg123/Config.in"
- Thomas>  source "package/multimedia/mplayer/Config.in"
- Thomas> +source "package/multimedia/python-mad/Config.in"
- Thomas>  source "package/multimedia/speex/Config.in"
- Thomas>  source "package/multimedia/swfdec/Config.in"
- Thomas>  source "package/multimedia/festival/Config.in"
- Thomas> diff --git a/package/multimedia/python-mad/Config.in b/package/multimedia/python-mad/Config.in
- Thomas> new file mode 100644
- Thomas> index 0000000..d25f2b8
- Thomas> --- /dev/null
- Thomas> +++ b/package/multimedia/python-mad/Config.in
- Thomas> @@ -0,0 +1,7 @@
- Thomas> +config BR2_PACKAGE_PYTHON_MAD
- Thomas> +	bool "python-mad"
- Thomas> +	depends on BR2_PACKAGE_PYTHON
- Thomas> +	select BR2_PACKAGE_LIBMAD
- Thomas> +	help
- Thomas> +	  python-mad is a Python binding for the MAD library, a
- Thomas> +	  high-quality integer-only MPEG decoder.
- Thomas> \ No newline at end of file
-
-Please add the newline (here and elsewhere) and add a link to
-http://spacepants.org/src/pymad/
-
--- 
-Bye, Peter Korsgaard
+ive noticed this in all my builds, but ive just ignored it.  it isnt a matter 
+of picking "linux 2.6" over "linux 2.4".  you simply need to pick linux-2.x 
+over linux-1.x or linux-0.x.  we've long used this in Gentoo/uclinux-dist:
+	export ac_cv_linux_vers=2
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110124/1881ed86/attachment.asc>
