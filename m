@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 09:39:29 +0100
-Subject: [Buildroot] [PATCH 3rd RESEND 2/6] Fix gstreamer packages for
-	make 3.82
-In-Reply-To: <1295822495-16972-3-git-send-email-felipe.contreras@gmail.com>
-	(Felipe Contreras's message of "Mon, 24 Jan 2011 00:41:31 +0200")
+Date: Mon, 24 Jan 2011 09:42:11 +0100
+Subject: [Buildroot] [PATCH 3rd RESEND 1/6] gstreamer: remove
+	unnecessary feature
+In-Reply-To: <1295822495-16972-2-git-send-email-felipe.contreras@gmail.com>
+	(Felipe Contreras's message of "Mon, 24 Jan 2011 00:41:30 +0200")
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-3-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <877hduitku.fsf@macbook.be.48ers.dk>
+	<1295822495-16972-2-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <8739oiitgc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
 
- Felipe> These packages would get fixed on the next releases, but each one gets
- Felipe> released at different periods. For now this is needed to build on 3.82.
+ Felipe> On 0.10.11 the binary-registry was added, on 0.10.12 the
+ Felipe> libxml2 dependency was dropped when binary-registry was used,
+ Felipe> on 0.10.18 the binary-registry was made default, and on 0.10.23
+ Felipe> it was the only option.
 
- Felipe> I only tested gstreamer, gst-plugins-base, and
- Felipe> gst-plugins-good, but all the ones using the 'common' submodule
- Felipe> should have this issue.
+ Felipe> So, libxml2 is not needed any more for the registry.
 
-There recently were a number of new gst-* releases. I took a quick look
-at gst-plugins-base-0.10.32, an no longer see that gtkdoc line.
-Wouldn't it make more sense to update now instead of adding this hack?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
