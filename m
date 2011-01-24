@@ -1,41 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 09:58:21 +0100
-Subject: [Buildroot] [PATCH 3rd RESEND 6/6] Add gst-omapfb package
-In-Reply-To: <1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-	(Felipe Contreras's message of "Mon, 24 Jan 2011 00:41:35 +0200")
-References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <87lj2ahe4y.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 24 Jan 2011 09:39:56 +0100
+Subject: [Buildroot] [git commit master 1/1] gstreamer: remove unnecessary
+	feature
+Message-ID: <20110124092105.D00DD8335C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
 
- Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
- Felipe> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=0642953bddc8dc8fd36b008860be6bc8d9778c93
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And here.
+On 0.10.11 the binary-registry was added, on 0.10.12 the libxml2
+dependency was dropped when binary-registry was used, on 0.10.18 the
+binary-registry was made default, and on 0.10.23 it was the only option.
 
-Thinking a bit more about it - For the omap3 stuff, they are all with A8
-cores, so we could even do 'depends on BR2_cortex_a8', right?
+So, libxml2 is not needed any more for the registry.
 
- Felipe> diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
- Felipe> new file mode 100644
- Felipe> index 0000000..e4a62c0
- Felipe> --- /dev/null
- Felipe> +++ b/package/multimedia/gst-omapfb/Config.in
- Felipe> @@ -0,0 +1,7 @@
- Felipe> +config BR2_PACKAGE_GST_OMAPFB
- Felipe> +	bool "gst-omapfb"
- Felipe> +	depends on BR2_PACKAGE_GSTREAMER
- Felipe> +	help
- Felipe> +	  GStreamer plug-in to use OMAP framebuffer.
+Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gstreamer/Config.in    |    6 ------
+ package/multimedia/gstreamer/gstreamer.mk |   10 ++--------
+ 2 files changed, 2 insertions(+), 14 deletions(-)
 
-Is this omap3 specific like the rest, or would it also work on E.G. the
-pandaboard?
-
+diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+index a3ce859..7de904c 100644
+--- a/package/multimedia/gstreamer/Config.in
++++ b/package/multimedia/gstreamer/Config.in
+@@ -9,9 +9,3 @@ config BR2_PACKAGE_GSTREAMER
+ 
+ comment "gstreamer requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_GSTREAMER_LIBXML2
+-	bool "require libxml2 for registry and load/save"
+-	default y
+-	select BR2_PACKAGE_LIBXML2
+-	depends on BR2_PACKAGE_GSTREAMER
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index 49ac0df..d689619 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -19,15 +19,9 @@ endif
+ GSTREAMER_CONF_OPT = \
+ 		--disable-examples \
+ 		--disable-tests \
+-		--disable-failing-tests
++		--disable-failing-tests \
++		--disable-loadsave
+ 
+ GSTREAMER_DEPENDENCIES = libglib2 host-pkg-config
+ 
+-ifeq ($(BR2_PACKAGE_GSTREAMER_LIBXML2),y)
+-GSTREAMER_DEPENDENCIES += libxml2
+-else
+-GSTREAMER_CONF_OPT += \
+-	--disable-loadsave
+-endif
+-
+ $(eval $(call AUTOTARGETS,package/multimedia,gstreamer))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
