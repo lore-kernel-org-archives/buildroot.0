@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 17:55:10 +0100
-Subject: [Buildroot] [git commit master 1/1] cdrkit: fix build with
-	ccache
-In-Reply-To: <87tygyth2v.fsf@macbook.be.48ers.dk>
-References: <20110120202551.3757C8B537@busybox.osuosl.org>
-	<20110124170817.628499e6@surf> <87tygyth2v.fsf@macbook.be.48ers.dk>
-Message-ID: <20110124175510.086c9719@surf>
+Date: Mon, 24 Jan 2011 18:04:28 +0100
+Subject: [Buildroot] ARM cores
+In-Reply-To: <87y66athl7.fsf@macbook.be.48ers.dk>
+References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
+	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
+	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
+	<87y66athl7.fsf@macbook.be.48ers.dk>
+Message-ID: <20110124180428.3bcbe29f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 24 Jan 2011 17:14:00 +0100
+On Mon, 24 Jan 2011 17:03:00 +0100
 Peter Korsgaard <jacmet@uclibc.org> wrote:
 
->  >> Cmake gets confused about ccache, so don't use ccache for cmake builds.
-> 
->  Thomas> Which problems did you had exactly ?
-> 
-> See the quoted error message in the libcuefile thread:
-> 
-> http://lists.busybox.net/pipermail/buildroot/2011-January/040755.html
-> 
-> (and followups)
+> Not available? Doesn't almost all A8 implementations have NEON?
 
-Thanks. In fact, I found this e-mail while going through the rest of my
-Buildroot backlog (which I'm going through in a reverse chronological
-order).
+According to http://wiki.debian.org/ArmHardFloatPort, CPUs such as
+Marvell Dove and Nvidia Tegra 2 are ARMv7 CPUs, but they don't have
+NEON support. NEON is an extension, so it isn't necessarly part of ARM
+cores.
 
->  Thomas> While this is obviously the right short-term fix, it's a bit of
->  Thomas> a shame of CMake doesn't play well with ccache, so maybe it's
->  Thomas> something I could raise on the CMake mailing-list.
-> 
-> Indeed. We left it here for you to have fun with once you're back from
-> holidays :P
+> Do we have any packages that cannot work on !NEON arms? (E.G. where it isn't
+> just an optimization)
 
-Thanks so much :-)
+In mplayer, we have:
+
+ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
+MPLAYER_CONF_OPTS += --enable-neon
+endif
+
+(This is code that I added, it's an approximation, since as said above,
+not all ARMv7 CPUs have NEON support).
+
+Once mplayer is compiled with --enable-neon, it will presumably not
+work on !NEON arms.
+
+Instead of having the list of gazillions ARM SoC, we could also extend
+a bit our architecture-specific options:
+
+ * Has NEON support ?
+   shown only if > ARMv7 is selected
+
+ * Floating point type (with a choice of soft-float, VFPv2, VFPv3)
+
+ * Floating point ABI (soft, softfp, hard)
+
+But it means that the user needs more knowledge on the details of the
+ARM SoC he is using. But it's probably the only realistic solution.
+
+Regards,
 
 Thomas
 -- 
