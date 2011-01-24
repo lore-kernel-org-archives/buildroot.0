@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 17:35:53 +0100
-Subject: [Buildroot] [git commit master 1/1] openssl: add ocf support
-In-Reply-To: <20110117214924.564878A3BF@busybox.osuosl.org>
-References: <20110117214924.564878A3BF@busybox.osuosl.org>
-Message-ID: <20110124173553.61328a62@surf>
+Date: Mon, 24 Jan 2011 17:55:10 +0100
+Subject: [Buildroot] [git commit master 1/1] cdrkit: fix build with
+	ccache
+In-Reply-To: <87tygyth2v.fsf@macbook.be.48ers.dk>
+References: <20110120202551.3757C8B537@busybox.osuosl.org>
+	<20110124170817.628499e6@surf> <87tygyth2v.fsf@macbook.be.48ers.dk>
+Message-ID: <20110124175510.086c9719@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 17 Jan 2011 22:27:41 +0100
-Peter Korsgaard <jacmet@sunsite.dk> wrote:
+On Mon, 24 Jan 2011 17:14:00 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> +define OPENSSL_INSTALL_CRYPTODEV_H
-> +$(INSTALL) -D package/openssl/ocf-cryptodev-20101223.h \
-> +	$(STAGING_DIR)/usr/include/crypto/cryptodev.h
-> +endef
-> +
-> +OPENSSL_POST_EXTRACT_HOOKS += OPENSSL_INSTALL_CRYPTODEV_H
-> +endif
+>  >> Cmake gets confused about ccache, so don't use ccache for cmake builds.
+> 
+>  Thomas> Which problems did you had exactly ?
+> 
+> See the quoted error message in the libcuefile thread:
+> 
+> http://lists.busybox.net/pipermail/buildroot/2011-January/040755.html
+> 
+> (and followups)
 
-This is not a problem today, but it will break horribly when we'll try
-to merge the packaging work from Lionel, because here we are installing
-a file to the $(STAGING_DIR) outside of a package staging installation
-step.
+Thanks. In fact, I found this e-mail while going through the rest of my
+Buildroot backlog (which I'm going through in a reverse chronological
+order).
 
-Regards,
+>  Thomas> While this is obviously the right short-term fix, it's a bit of
+>  Thomas> a shame of CMake doesn't play well with ccache, so maybe it's
+>  Thomas> something I could raise on the CMake mailing-list.
+> 
+> Indeed. We left it here for you to have fun with once you're back from
+> holidays :P
+
+Thanks so much :-)
 
 Thomas
 -- 
