@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 21:06:07 +0100
-Subject: [Buildroot] ARM cores
-In-Reply-To: <20110124180428.3bcbe29f@surf> (Thomas Petazzoni's message of
-	"Mon, 24 Jan 2011 18:04:28 +0100")
-References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
-	<87y66athl7.fsf@macbook.be.48ers.dk> <20110124180428.3bcbe29f@surf>
-Message-ID: <87y66arrrk.fsf@macbook.be.48ers.dk>
+Date: Mon, 24 Jan 2011 21:07:48 +0100
+Subject: [Buildroot] [git commit master 1/1] openssl: add ocf support
+In-Reply-To: <20110124173553.61328a62@surf> (Thomas Petazzoni's message of
+	"Mon, 24 Jan 2011 17:35:53 +0100")
+References: <20110117214924.564878A3BF@busybox.osuosl.org>
+	<20110124173553.61328a62@surf>
+Message-ID: <87tygyrror.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,20 +16,22 @@ To: buildroot@busybox.net
 
 Hi,
 
- Thomas> Instead of having the list of gazillions ARM SoC, we could also
- Thomas> extend a bit our architecture-specific options:
+ >> +define OPENSSL_INSTALL_CRYPTODEV_H
+ >> +$(INSTALL) -D package/openssl/ocf-cryptodev-20101223.h \
+ >> +	$(STAGING_DIR)/usr/include/crypto/cryptodev.h
+ >> +endef
+ >> +
+ >> +OPENSSL_POST_EXTRACT_HOOKS += OPENSSL_INSTALL_CRYPTODEV_H
+ >> +endif
 
- Thomas>  * Has NEON support ?
- Thomas>    shown only if > ARMv7 is selected
+ Thomas> This is not a problem today, but it will break horribly when we'll try
+ Thomas> to merge the packaging work from Lionel, because here we are installing
+ Thomas> a file to the $(STAGING_DIR) outside of a package staging installation
+ Thomas> step.
 
- Thomas>  * Floating point type (with a choice of soft-float, VFPv2, VFPv3)
-
- Thomas>  * Floating point ABI (soft, softfp, hard)
-
- Thomas> But it means that the user needs more knowledge on the details of the
- Thomas> ARM SoC he is using. But it's probably the only realistic solution.
-
-Yes, agreed.
+Ok, so we would either need to move this to a seperate package or play
+around with -I options to get openssl to find it somewhere else during
+compilation.
 
 -- 
 Bye, Peter Korsgaard
