@@ -1,46 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 17:03:00 +0100
-Subject: [Buildroot] ARM cores
-In-Reply-To: <20110124165711.381989cf@surf> (Thomas Petazzoni's message of
-	"Mon, 24 Jan 2011 16:57:11 +0100")
-References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
-Message-ID: <87y66athl7.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Jan 2011 17:02:56 +0100
+Subject: [Buildroot] uclibc config changes and cross-compiler
+In-Reply-To: <AANLkTi=e=ncL_G+F0iH5Dia+N2iBHi=x8EA9bsw6=uhO@mail.gmail.com>
+References: <AANLkTi=e=ncL_G+F0iH5Dia+N2iBHi=x8EA9bsw6=uhO@mail.gmail.com>
+Message-ID: <20110124170256.4cbf2e10@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Fri, 21 Jan 2011 10:46:48 +0300
+Sergey Naumov <sknaumov@gmail.com> wrote:
 
-Hi,
+> Does anybody know whether changes in uclibc.conf when cross-compiler
+> is already built can lead to unrunnable programs?
 
- >> Thinking a bit more about it - For the omap3 stuff, they are all with
- >> A8 cores, so we could even do 'depends on BR2_cortex_a8', right?
+I don't think there is an uclibc.conf file, but I assume you're talking
+about uClibc .config file.
 
- Thomas> Besides those OMAP-specific packages, there are also other packages
- Thomas> that could depend on CPU-specific features.
+> For example, we made a toolchain with certain uclibc features. Then we
+> decided to add/remove some programs from our build so we need
+> additional/no longer need some uclibc features. Is it safe to rebuild
+> only uclibc in this case, or we also have to rebuild compiler?
 
- Thomas> For example, some video decoders have specific code to use NEON
- Thomas> instructions, but those instructions are not available on Cortex-A8
- Thomas> cores for example.
+I am not an uClibc expert, but my understanding is that uClibc does not
+provide ABI compatibility between versions and configurations.
+Therefore, you cannot assume that programs compiled against version
+A/configuration A of uClibc will work properly with version
+B/configuration B of uClibc.
 
-Not available? Doesn't almost all A8 implementations have NEON? Do we
-have any packages that cannot work on !NEON arms? (E.G. where it isn't
-just an optimization)
+Regards,
 
- Thomas> Should we go all the way down to specifying the particular CPU
- Thomas> the user is going to use (OMAP3, OMAP4, etc.) and then select
- Thomas> the appropriate mtune/march according to this, show/hide
- Thomas> packages according to this, and tune specifically some packages
- Thomas> according to this ?
-
-That would imho be a lot of work to keep uptodate with the maze of ARM
-SoCs available.
-
-I think a few defconfigs for commonly used boards would be good enough.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
