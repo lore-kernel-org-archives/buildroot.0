@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 22:22:31 +0100
-Subject: [Buildroot] [PATCH 09/10] python-serial: new package
-In-Reply-To: <89d3302cc6fa8367faa06a948d33039b6888c9d2.1295866866.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 24 Jan 2011 12:01:37 +0100")
+Date: Mon, 24 Jan 2011 22:23:53 +0100
+Subject: [Buildroot] [PATCH 10/10] python-mad: new package
+In-Reply-To: <4202ec9552c58af1c5ba12aac109b6c563ac6ef0.1295866866.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Mon, 24 Jan 2011 12:01:38 +0100")
 References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
 	<cover.1295866866.git.thomas.petazzoni@free-electrons.com>
-	<89d3302cc6fa8367faa06a948d33039b6888c9d2.1295866866.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8762teq9ns.fsf@macbook.be.48ers.dk>
+	<4202ec9552c58af1c5ba12aac109b6c563ac6ef0.1295866866.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871v42q9li.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,51 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> python-serial is a Python library to access serial ports.
- Thomas> This package has originally been introduced to test that third-party
- Thomas> pure Python modules (that do not use C extensions) build properly
- Thomas> against the Buildroot Python infrastructure.
+ Thomas> python-mad is a Python binding for the MAD library, a high-quality
+ Thomas> integer-only MPEG decoder.
+
+ Thomas> This package has been introduced as a test to make sure that
+ Thomas> third-party Python modules that rely on a C extension can properly be
+ Thomas> built against the Python infrastructure of Buildroot.
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  Thomas> ---
- Thomas>  package/Config.in                      |    1 +
- Thomas>  package/python-serial/Config.in        |    5 +++++
- Thomas>  package/python-serial/python-serial.mk |   21 +++++++++++++++++++++
- Thomas>  3 files changed, 27 insertions(+), 0 deletions(-)
- Thomas>  create mode 100644 package/python-serial/Config.in
- Thomas>  create mode 100644 package/python-serial/python-serial.mk
+ Thomas>  package/multimedia/Config.in                |    1 +
+ Thomas>  package/multimedia/python-mad/Config.in     |    7 ++++
+ Thomas>  package/multimedia/python-mad/python-mad.mk |   41 +++++++++++++++++++++++++++
+ Thomas>  3 files changed, 49 insertions(+), 0 deletions(-)
+ Thomas>  create mode 100644 package/multimedia/python-mad/Config.in
+ Thomas>  create mode 100644 package/multimedia/python-mad/python-mad.mk
 
- Thomas> diff --git a/package/Config.in b/package/Config.in
- Thomas> index 438e1b4..d437dc4 100644
- Thomas> --- a/package/Config.in
- Thomas> +++ b/package/Config.in
- Thomas> @@ -293,6 +293,7 @@ source "package/libraw1394/Config.in"
- Thomas>  source "package/tslib/Config.in"
- Thomas>  source "package/libusb/Config.in"
- Thomas>  source "package/libusb-compat/Config.in"
- Thomas> +source "package/python-serial/Config.in"
- Thomas>  endmenu
- 
- Thomas>  if BROKEN
- Thomas> diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
+ Thomas> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+ Thomas> index da50dbb..ae685cf 100644
+ Thomas> --- a/package/multimedia/Config.in
+ Thomas> +++ b/package/multimedia/Config.in
+ Thomas> @@ -25,6 +25,7 @@ source "package/multimedia/libvorbis/Config.in"
+ Thomas>  source "package/multimedia/madplay/Config.in"
+ Thomas>  source "package/multimedia/mpg123/Config.in"
+ Thomas>  source "package/multimedia/mplayer/Config.in"
+ Thomas> +source "package/multimedia/python-mad/Config.in"
+ Thomas>  source "package/multimedia/speex/Config.in"
+ Thomas>  source "package/multimedia/swfdec/Config.in"
+ Thomas>  source "package/multimedia/festival/Config.in"
+ Thomas> diff --git a/package/multimedia/python-mad/Config.in b/package/multimedia/python-mad/Config.in
  Thomas> new file mode 100644
- Thomas> index 0000000..06866db
+ Thomas> index 0000000..d25f2b8
  Thomas> --- /dev/null
- Thomas> +++ b/package/python-serial/Config.in
- Thomas> @@ -0,0 +1,5 @@
- Thomas> +config BR2_PACKAGE_PYTHON_SERIAL
- Thomas> +	bool "python-serial"
+ Thomas> +++ b/package/multimedia/python-mad/Config.in
+ Thomas> @@ -0,0 +1,7 @@
+ Thomas> +config BR2_PACKAGE_PYTHON_MAD
+ Thomas> +	bool "python-mad"
  Thomas> +	depends on BR2_PACKAGE_PYTHON
+ Thomas> +	select BR2_PACKAGE_LIBMAD
  Thomas> +	help
- Thomas> +	  python-serial is a Python library to access serial ports.
+ Thomas> +	  python-mad is a Python binding for the MAD library, a
+ Thomas> +	  high-quality integer-only MPEG decoder.
+ Thomas> \ No newline at end of file
 
-Please add a link to http://pyserial.sf.net here.
+Please add the newline (here and elsewhere) and add a link to
+http://spacepants.org/src/pymad/
 
 -- 
 Bye, Peter Korsgaard
