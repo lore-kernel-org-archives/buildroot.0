@@ -1,85 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Jan 2011 17:00:44 +0100
-Subject: [Buildroot] [PATCH 2/2] new package libhid
-In-Reply-To: <A17BA6C9FDFD463A81926C4778154B14@apexjs>
-References: <A17BA6C9FDFD463A81926C4778154B14@apexjs>
-Message-ID: <20110124170044.732194de@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 24 Jan 2011 17:03:00 +0100
+Subject: [Buildroot] ARM cores
+In-Reply-To: <20110124165711.381989cf@surf> (Thomas Petazzoni's message of
+	"Mon, 24 Jan 2011 16:57:11 +0100")
+References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
+	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
+	<87lj2ahe4y.fsf@macbook.be.48ers.dk> <20110124165711.381989cf@surf>
+Message-ID: <87y66athl7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sagaert,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat, 22 Jan 2011 20:17:34 +0100
-"Sagaert Johan" <sagaert.johan@skynet.be> wrote:
+Hi,
 
-> The included patch prevents from linking to libusb on the host.
+ >> Thinking a bit more about it - For the omap3 stuff, they are all with
+ >> A8 cores, so we could even do 'depends on BR2_cortex_a8', right?
 
-The patch below does not seem to match this description.
+ Thomas> Besides those OMAP-specific packages, there are also other packages
+ Thomas> that could depend on CPU-specific features.
 
-Moreover, your patch has been word-wrapped by your e-mail client.
-Could you use git send-email instead ?
+ Thomas> For example, some video decoders have specific code to use NEON
+ Thomas> instructions, but those instructions are not available on Cortex-A8
+ Thomas> cores for example.
 
-Your patch 1/2 (which adds the source package/libhid/Config.in line)
-should be part of this patch (i.e a single patch for adding the
-package).
+Not available? Doesn't almost all A8 implementations have NEON? Do we
+have any packages that cannot work on !NEON arms? (E.G. where it isn't
+just an optimization)
 
->  diff -rupN buildroot-master/package/libhid/Config.in
-> buildroot/package/libhid/Config.in
-> --- buildroot-master/package/libhid/Config.in	1970-01-01
-> 01:00:00.000000000 +0100
-> +++ buildroot/package/libhid/Config.in	2011-01-29 19:30:49.000000000 +0100
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBHID
-> +	bool "libhid"
-> +	depends on BR2_PACKAGE_LIBUSB
+ Thomas> Should we go all the way down to specifying the particular CPU
+ Thomas> the user is going to use (OMAP3, OMAP4, etc.) and then select
+ Thomas> the appropriate mtune/march according to this, show/hide
+ Thomas> packages according to this, and tune specifically some packages
+ Thomas> according to this ?
 
-This should be a "select" statement, as we do for all
-library dependencies.
+That would imho be a lot of work to keep uptodate with the maze of ARM
+SoCs available.
 
-> diff -rupN buildroot-master/package/libhid/Config.in~
-> buildroot/package/libhid/Config.in~
-> --- buildroot-master/package/libhid/Config.in~	1970-01-01
-> 01:00:00.000000000 +0100
-> +++ buildroot/package/libhid/Config.in~	2011-01-29 19:27:59.000000000 +0100
+I think a few defconfigs for commonly used boards would be good enough.
 
-Could you use Git to generate your patches in order to not have those
-backup files in the patch ?
-
-> diff -rupN buildroot-master/package/libhid/libhid.mk
-> buildroot/package/libhid/libhid.mk
-> --- buildroot-master/package/libhid/libhid.mk	1970-01-01
-> 01:00:00.000000000 +0100
-> +++ buildroot/package/libhid/libhid.mk	2011-01-30 00:10:11.000000000 +0100
-> @@ -0,0 +1,15 @@
-> +#############################################################
-> +#
-> +# libhid
-> +#
-> +#############################################################
-> +LIBHID_VERSION = 0.2.16
-> +LIBHID_SOURCE = libhid-$(LIBHID_VERSION).tar.gz
-> +LIBHID_SITE = http://alioth.debian.org/frs/download.php/1958
-> +LIBHID_DEPENDENCIES = libusb-compat libusb
-> +LIBHID_INSTALL_STAGING = YES
-> +LIBHID_INSTALL_TARGET = YES
-> +LIBHID_CONF_OPT = --disable-swig  --without-doxygen
-> --disable-package-config
-> +
-> +
-> +$(eval $(call AUTOTARGETS,package,libhid))
-
-This .mk file looks good, but I haven't tested it yet.
-
-Could you fix those comments and resend ?
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
