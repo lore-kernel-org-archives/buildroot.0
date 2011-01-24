@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 09:54:26 +0100
-Subject: [Buildroot] [PATCH 3rd RESEND 4/6] Add gst-dsp package
-In-Reply-To: <1295822495-16972-5-git-send-email-felipe.contreras@gmail.com>
-	(Felipe Contreras's message of "Mon, 24 Jan 2011 00:41:33 +0200")
+Date: Mon, 24 Jan 2011 09:54:55 +0100
+Subject: [Buildroot] [PATCH 3rd RESEND 5/6] Add dsp-tools package
+In-Reply-To: <1295822495-16972-6-git-send-email-felipe.contreras@gmail.com>
+	(Felipe Contreras's message of "Mon, 24 Jan 2011 00:41:34 +0200")
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-5-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <87tygyhebh.fsf@macbook.be.48ers.dk>
+	<1295822495-16972-6-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <87pqrmheao.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,7 @@ To: buildroot@busybox.net
  Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
  Felipe> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Same comments as for tidsp-bridge.
+And here as well.
 
 -- 
 Bye, Peter Korsgaard
