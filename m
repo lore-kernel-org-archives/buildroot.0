@@ -1,39 +1,52 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Tue, 25 Jan 2011 04:51:00 +0200
-Subject: [Buildroot] [PATCH 3rd RESEND 2/6] Fix gstreamer packages for
-	make 3.82
-In-Reply-To: <877hduitku.fsf@macbook.be.48ers.dk>
+Date: Tue, 25 Jan 2011 04:55:47 +0200
+Subject: [Buildroot] [PATCH 3rd RESEND 6/6] Add gst-omapfb package
+In-Reply-To: <87lj2ahe4y.fsf@macbook.be.48ers.dk>
 References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-3-git-send-email-felipe.contreras@gmail.com>
-	<877hduitku.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTimbpB9pdWg2wBPz3Je-CjGPPiduGE-6U9vHCb-4@mail.gmail.com>
+	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
+	<87lj2ahe4y.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTimFBvGJdW975fEObvwh9L5cK9vS5o7EbWr=qV83@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Mon, Jan 24, 2011 at 10:39 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Mon, Jan 24, 2011 at 10:58 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 >>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
 >
-> ?Felipe> These packages would get fixed on the next releases, but each one gets
-> ?Felipe> released at different periods. For now this is needed to build on 3.82.
+> ?Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+> ?Felipe> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
-> ?Felipe> I only tested gstreamer, gst-plugins-base, and
-> ?Felipe> gst-plugins-good, but all the ones using the 'common' submodule
-> ?Felipe> should have this issue.
->
-> There recently were a number of new gst-* releases. I took a quick look
-> at gst-plugins-base-0.10.32, an no longer see that gtkdoc line.
-> Wouldn't it make more sense to update now instead of adding this hack?
+> And here.
 
-Well, _some_ packages have been released: gstreamer core, plugins
-base, good, bad and ugly, in short, I think everything except
-gst-ffmpeg. And yeah, this is the "next release" I was talking about,
-so it might make sense to jump to this release (if it compiles), but
-I'm not sure if the hack would still be needed for some packages.
+Well, there's no 'uninstall' in upstream. Should I add a patch to the
+Makefile, or shall I manually remove the files (in gst-dsp and
+gst-omapfb it's just one file, and in the other packages there are
+very few).
+
+> Thinking a bit more about it - For the omap3 stuff, they are all with A8
+> cores, so we could even do 'depends on BR2_cortex_a8', right?
+
+I guess so.
+
+> ?Felipe> diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
+> ?Felipe> new file mode 100644
+> ?Felipe> index 0000000..e4a62c0
+> ?Felipe> --- /dev/null
+> ?Felipe> +++ b/package/multimedia/gst-omapfb/Config.in
+> ?Felipe> @@ -0,0 +1,7 @@
+> ?Felipe> +config BR2_PACKAGE_GST_OMAPFB
+> ?Felipe> + ? ? ?bool "gst-omapfb"
+> ?Felipe> + ? ? ?depends on BR2_PACKAGE_GSTREAMER
+> ?Felipe> + ? ? ?help
+> ?Felipe> + ? ? ? ?GStreamer plug-in to use OMAP framebuffer.
+>
+> Is this omap3 specific like the rest, or would it also work on E.G. the
+> pandaboard?
+
+That's a good question. I don't think the OMAP4 display sub-system
+works right now, so it's hard to tell, but in theory it should work.
 
 Cheers.
 
