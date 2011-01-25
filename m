@@ -1,50 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Jan 2011 10:02:07 +0100
-Subject: [Buildroot] [PATCH 3rd RESEND 6/6] Add gst-omapfb package
-In-Reply-To: <AANLkTimFBvGJdW975fEObvwh9L5cK9vS5o7EbWr=qV83@mail.gmail.com>
-	(Felipe Contreras's message of "Tue, 25 Jan 2011 04:55:47 +0200")
-References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-	<87lj2ahe4y.fsf@macbook.be.48ers.dk>
-	<AANLkTimFBvGJdW975fEObvwh9L5cK9vS5o7EbWr=qV83@mail.gmail.com>
-Message-ID: <87hbcxpd9s.fsf@macbook.be.48ers.dk>
+Date: Tue, 25 Jan 2011 10:02:32 +0100
+Subject: [Buildroot] [PATCH 06/10] autotools: allow host package to use
+	<pkg>_MAKE_ENV and <pkg>_MAKE
+In-Reply-To: <20110125085533.35bd27e1@surf> (Thomas Petazzoni's message of
+	"Tue, 25 Jan 2011 08:55:33 +0100")
+References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<cover.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<178a42636fdb3c6119ca718a24b14a22c9c9df28.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<87ei82qaho.fsf@macbook.be.48ers.dk> <20110125085533.35bd27e1@surf>
+Message-ID: <87d3nlpd93.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Felipe> On Mon, Jan 24, 2011 at 10:58 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
- >>>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
+ Thomas> On Mon, 24 Jan 2011 22:04:35 +0100
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+ >> Hmm, I don't really like this. Packages might be adding target specific
+ >> stuff to their $PKG_MAKE_ENV - E.G.:
  >> 
- >> ?Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
- >> ?Felipe> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> lvm2/lvm2.mk:LVM2_MAKE_ENV = CC="$(TARGET_CC)"
  >> 
- >> And here.
+ >> Wouldn't it make more sense to add a HOST_$PKG_MAKE_ENV and use it just
+ >> like we do for $PKG_MAKE_ENV (E.G. at build and install time)?
 
- Felipe> Well, there's no 'uninstall' in upstream. Should I add a patch to the
- Felipe> Makefile, or shall I manually remove the files (in gst-dsp and
- Felipe> gst-omapfb it's just one file, and in the other packages there are
- Felipe> very few).
+ Thomas> $$(PKG) is already HOST_FOOBAR. So, when I do:
 
-Just remove the files.
-
- >> Thinking a bit more about it - For the omap3 stuff, they are all with A8
- >> cores, so we could even do 'depends on BR2_cortex_a8', right?
-
- Felipe> I guess so.
-
-Ok, good.
-
- >> Is this omap3 specific like the rest, or would it also work on E.G. the
- >> pandaboard?
-
- Felipe> That's a good question. I don't think the OMAP4 display sub-system
- Felipe> works right now, so it's hard to tell, but in theory it should work.
-
-Ok, thanks.
+Ahh yes, true - Thanks.
 
 -- 
 Bye, Peter Korsgaard
