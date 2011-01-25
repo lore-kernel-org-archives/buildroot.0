@@ -1,58 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jan 2011 00:21:13 +0100
-Subject: [Buildroot] [PATCH v2 1/4] Makefile: generate CMake
- toolchain-file in $(O)
-In-Reply-To: <1295124808-5649-2-git-send-email-bjorn.forsman@gmail.com>
-References: <1295124808-5649-1-git-send-email-bjorn.forsman@gmail.com>
-	<1295124808-5649-2-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20110126002113.51aeb0f0@surf>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 26 Jan 2011 00:25:13 +0100
+Subject: [Buildroot] [git commit master 1/1] Use sys-root rather than
+	sysroot for the sysroot/staging_dir
+In-Reply-To: <20110125225053.49f7660b@surf>
+References: <20110125150944.2C7438D244@busybox.osuosl.org>
+	<201101252239.36666.yann.morin.1998@anciens.enib.fr>
+	<20110125225053.49f7660b@surf>
+Message-ID: <201101260025.13116.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bjorn,
+Thomas, All,
 
-On Sat, 15 Jan 2011 21:53:25 +0100
-Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+On Tuesday 25 January 2011 22:50:53 Thomas Petazzoni wrote:
+> Just for the record, my preference for "sysroot" instead of "sys-root"
+> is because all sysroot-related options in gcc use the "sysroot"
+> spelling and not "sys-root" :
 
-> +	set(CMAKE_SYSTEM_NAME Linux)\n\
-> +	set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
-> +	set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
-> +	set(CMAKE_C_FLAGS \"${CMAKE_C_FLAGS} $(CMAKE_TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-> +	set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} $(CMAKE_TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-> +	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
-> +	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
-> +	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-> +	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-> +	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-> +	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
-> +	" > $@
+Yes, agreed. That's the reason I also changed the default in crosstool-NG
+to 'sysroot', to match the literature.
 
-Could you also add:
+The 'sys-root' name comes from the original crosstool:
+  http://code.google.com/p/crosstool/source/browse/trunk/src/crosstool.sh#320
 
-+       set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))\n\
+I saw no reason to change it at the time, although I hae no strong opinion
+about it (so I renamed).
 
-This is needed to get CMake pkg-config module to work properly.
+Regards,
+Yann E. MORIN.
 
-I am not entirely happy with the name/location of the CMake toolchain
-file, but that's something we can sort out later.
-
-I have tested your patchset with my qserialport library (that uses
-CMake as its build system and relies on Qt) and my custom application
-(that uses CMake, Qt and qserialport), and it worked fine with  the
-PKG_CONFIG_SYSROOT_DIR change mentionned above.
-
-So, once this change is done, your patch gets my:
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
