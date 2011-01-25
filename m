@@ -1,32 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Jan 2011 22:17:36 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.02/python-bump
-In-Reply-To: <20110125090339.2d427f43@surf> (Thomas Petazzoni's message of
-	"Tue, 25 Jan 2011 09:03:39 +0100")
-References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
-	<20110125090339.2d427f43@surf>
-Message-ID: <871v401y4v.fsf@macbook.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 25 Jan 2011 22:28:23 +0100
+Subject: [Buildroot] [git commit master 1/1] crosstool-ng: don't remove
+	installation directory before installing
+In-Reply-To: <20110125211621.EA9998D245@busybox.osuosl.org>
+References: <20110125211621.EA9998D245@busybox.osuosl.org>
+Message-ID: <201101252228.23801.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Peter, All,
 
- Thomas> Hello,
- Thomas> On Mon, 24 Jan 2011 12:01:28 +0100
- Thomas> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Tuesday 25 January 2011 22:07:14 Peter Korsgaard wrote:
+> crosstool-ng would normally delete its installation directory before
+> installing the toolchain to ensure it wouldn't get confused by an earlier
+> build. Now that we're installing directly into HOST_DIR/usr, this doesn't
+> work very well - So get rid of the rm's.
 
- >> Here is a set of patches that improve Python support in Buildroot:
- >> Python is bumped to 2.7.1, the package is converted to the autotargets
- >> infrastructure, some third-party Python modules are introduced as
- >> examples, many minor issues were fixed.
+Too late, but:
+Acked-by: me
 
- Thomas> I have pushed a new version, with the following changes :
+But anyway, I would like to carry as few patches against crosstool-NG as
+possible in buildroot, and push as much as possible into upstream.
 
-Thanks, commmitted.
+If you would rework that to be configurable, I would apply it, so it gets
+in the next release.
+
+As I plan to update the crosstool-NG backend during the next BDD in
+Brussels, it means we could then get rid of that patch in buildroot.
+
+And if you have patches against crosstool-NG, and they are not BR-related,
+could you Cc: me (and the crossgcc ML) so I can apply them upstream? Thx.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
