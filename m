@@ -1,41 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 26 Jan 2011 00:25:13 +0100
-Subject: [Buildroot] [git commit master 1/1] Use sys-root rather than
-	sysroot for the sysroot/staging_dir
-In-Reply-To: <20110125225053.49f7660b@surf>
-References: <20110125150944.2C7438D244@busybox.osuosl.org>
-	<201101252239.36666.yann.morin.1998@anciens.enib.fr>
-	<20110125225053.49f7660b@surf>
-Message-ID: <201101260025.13116.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jan 2011 00:25:16 +0100
+Subject: [Buildroot] [PATCH v2 2/4] Add CMAKETARGETS infrastructure for
+ CMake packages
+In-Reply-To: <1295124808-5649-3-git-send-email-bjorn.forsman@gmail.com>
+References: <1295124808-5649-1-git-send-email-bjorn.forsman@gmail.com>
+	<1295124808-5649-3-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20110126002516.662ad0c5@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sat, 15 Jan 2011 21:53:26 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-On Tuesday 25 January 2011 22:50:53 Thomas Petazzoni wrote:
-> Just for the record, my preference for "sysroot" instead of "sys-root"
-> is because all sysroot-related options in gcc use the "sysroot"
-> spelling and not "sys-root" :
+> +$(2)_INSTALL_HOST_OPT		?= DESTDIR=$$(HOST_DIR) install
 
-Yes, agreed. That's the reason I also changed the default in crosstool-NG
-to 'sysroot', to match the literature.
+$(2)_INSTALL_HOST_OPT		?= install
 
-The 'sys-root' name comes from the original crosstool:
-  http://code.google.com/p/crosstool/source/browse/trunk/src/crosstool.sh#320
+should be sufficient if:
 
-I saw no reason to change it at the time, although I hae no strong opinion
-about it (so I renamed).
+> +		-DCMAKE_INSTALL_PREFIX="/usr" \
 
-Regards,
-Yann E. MORIN.
+is replaced by:
 
+> +		-DCMAKE_INSTALL_PREFIX="$(HOST_DIR)/usr" \
+
+for host packages. I think, like for autotools packages, it is more
+technically correct to set the installation prefix to $(HOST_DIR)/usr
+rather than /usr.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
