@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jan 2011 00:25:16 +0100
-Subject: [Buildroot] [PATCH v2 2/4] Add CMAKETARGETS infrastructure for
- CMake packages
-In-Reply-To: <1295124808-5649-3-git-send-email-bjorn.forsman@gmail.com>
+Date: Wed, 26 Jan 2011 00:26:40 +0100
+Subject: [Buildroot] [PATCH v2 4/4] cdrkit: convert to CMAKETARGETS
+ infrastructure
+In-Reply-To: <AANLkTimn-g5Djk2c+1BHfCUMkYth9VOf+zj+UaF-8Y9u@mail.gmail.com>
 References: <1295124808-5649-1-git-send-email-bjorn.forsman@gmail.com>
-	<1295124808-5649-3-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20110126002516.662ad0c5@surf>
+	<1295124808-5649-5-git-send-email-bjorn.forsman@gmail.com>
+	<AANLkTi=XYYi_M7W1_NAdnV+WW9iFftEZ5+uYL3CCtoym@mail.gmail.com>
+	<AANLkTimn-g5Djk2c+1BHfCUMkYth9VOf+zj+UaF-8Y9u@mail.gmail.com>
+Message-ID: <20110126002640.5cd5de9f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 15 Jan 2011 21:53:26 +0100
+On Sun, 23 Jan 2011 15:42:08 +0100
 Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-> +$(2)_INSTALL_HOST_OPT		?= DESTDIR=$$(HOST_DIR) install
+> The reason it was included in v1 was that cdrkit.mk had it (which I
+> based this on) and I did an early release :-) Maybe Thomas (original
+> cdrkit.mk author) has any comments?
 
-$(2)_INSTALL_HOST_OPT		?= install
+No, no specific comment: I'm a CMake newbie, so I didn't know exactly
+what the variable type was used for. If it's only for some
+CMake-specific GUI, then yes, they are probably useless in Buildroot.
 
-should be sufficient if:
-
-> +		-DCMAKE_INSTALL_PREFIX="/usr" \
-
-is replaced by:
-
-> +		-DCMAKE_INSTALL_PREFIX="$(HOST_DIR)/usr" \
-
-for host packages. I think, like for autotools packages, it is more
-technically correct to set the installation prefix to $(HOST_DIR)/usr
-rather than /usr.
+Regards,
 
 Thomas
 -- 
