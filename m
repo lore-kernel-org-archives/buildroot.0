@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Jan 2011 16:08:50 +0100
-Subject: [Buildroot] [git commit master 1/1] crosstool-ng: install toolchain
-	into HOST_DIR like the internal toolchain
-Message-ID: <20110125150944.C5F238D244@busybox.osuosl.org>
+Date: Tue, 25 Jan 2011 16:23:22 +0100
+Subject: [Buildroot] [git commit master 1/1] tcpdump,
+	libpcap: simplify and fix ac_cv_linux_vers
+Message-ID: <20110125152339.D5A578CA3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,72 +10,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58d107ec3fb77b05bc16911a04ca7d42c46eb4d5
+commit: http://git.buildroot.net/buildroot/commit/?id=4c6a451ac9fab16abcda5834ed4a9b728091ab9e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Simplifies code and helps us when we add SDK support in the future.
-With this we no longer need to copy headers/libraries to STAGING_DIR either.
+For some reason, tcpdump and libpcap need to have some information
+about the kernel version being used. This information is passed using
+the ac_cv_linux_vers autoconf variable.
 
+However, the current value is determined using
+BR2_DEFAULT_KERNEL_HEADERS which is only defined when an internal
+Buildroot toolchain is used. So it would break with an external
+toolchain or the Crosstool-NG backend.
+
+According to Mike Frysinger at
+http://lists.busybox.net/pipermail/buildroot/2011-January/040861.html,
+this value is only used to determine if the kernel version is 0.x, 1.x
+or 2.x, so passing ac_cv_linux_vers=2 is sufficient since Buildroot
+only supports the 2.6 kernel anyway.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in                              |    4 +---
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    8 +++-----
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ package/libpcap/libpcap.mk |    2 +-
+ package/tcpdump/tcpdump.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 468d30c..d3f51ad 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -106,7 +106,7 @@ TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- TARGET_CXXFLAGS=$(TARGET_CFLAGS)
- TARGET_SYSROOT_OPT=--sysroot=$(STAGING_DIR)
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index eebfc03..a2d0376 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -14,7 +14,7 @@ LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
+ LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
+ 	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
+ LIBPCAP_DEPENDENCIES:=zlib
+-LIBPCAP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))))) \
++LIBPCAP_CONF_ENV:=ac_cv_linux_vers=2 \
+ 		  ac_cv_header_linux_wireless_h=yes # configure misdetects this
+ LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
  
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
- TARGET_CROSS=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
- TOOLCHAIN_EXTERNAL_PREFIX=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-@@ -116,8 +116,6 @@ else
- TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
- endif
- TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_LOCATION)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
--else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
--TARGET_CROSS=$(TOOLCHAIN_DIR)/bin/$(REAL_GNU_TARGET_NAME)-
- endif
- 
- # Quotes are needed for spaces et al in path components.
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 0da7629..ee267df 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -60,7 +60,7 @@ endif
- $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- 	$(Q)mkdir -p $(TARGET_DIR)/lib
- 	$(Q)CTNG_TUPLE="$$( $(call ctng,show-tuple) )";                     \
--	    CTNG_SYSROOT="$(TOOLCHAIN_DIR)/$${CTNG_TUPLE}/sys-root";        \
-+	    CTNG_SYSROOT="$(HOST_DIR)/usr/$${CTNG_TUPLE}/sys-root";        \
- 	    echo "CTNG_TUPLE='$${CTNG_TUPLE}'";                             \
- 	    echo "CTNG_SYSROOT='$${CTNG_SYSROOT}'";                         \
- 	    echo "Copy external toolchain libraries to target...";          \
-@@ -69,9 +69,7 @@ $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- 	    done;                                                           \
- 	    for libs in $(CTNG_LIBS_USR_LIB); do                            \
- 	        $(call copy_toolchain_lib_root,$${CTNG_SYSROOT},$$libs,/usr/lib); \
--	    done;                                                           \
--	    echo "Copy external toolchain sysroot to staging...";           \
--	    $(call copy_toolchain_sysroot,$${CTNG_SYSROOT},$${CTNG_SYSROOT},)
-+	    done;
- 	$(Q)touch $@
- 
- #-----------------------------------------------------------------------------
-@@ -236,7 +234,7 @@ endif
- 
- #--------------
- # And the specials for paths
--CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_PREFIX_DIR)=.*:\1="$(TOOLCHAIN_DIR)":;
-+CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_PREFIX_DIR)=.*:\1="$(HOST_DIR)/usr":;
- CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_LOCAL_TARBALLS_DIR)=.*:\1="$(DL_DIR)":;
- CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
- 
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 8122816..720a29a 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -9,7 +9,7 @@
+ TCPDUMP_VERSION:=4.1.1
+ TCPDUMP_SITE:=http://www.tcpdump.org/release
+ TCPDUMP_SOURCE:=tcpdump-$(TCPDUMP_VERSION).tar.gz
+-TCPDUMP_CONF_ENV:=ac_cv_linux_vers=$(firstword $(subst .,$(space),$(firstword $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS)))))
++TCPDUMP_CONF_ENV:=ac_cv_linux_vers=2
+ TCPDUMP_CONF_OPT:=--without-crypto \
+ 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES:=zlib libpcap
 -- 
 1.7.3.4
