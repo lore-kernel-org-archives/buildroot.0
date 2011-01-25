@@ -1,54 +1,52 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Tue, 25 Jan 2011 04:55:47 +0200
-Subject: [Buildroot] [PATCH 3rd RESEND 6/6] Add gst-omapfb package
-In-Reply-To: <87lj2ahe4y.fsf@macbook.be.48ers.dk>
-References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
-	<1295822495-16972-7-git-send-email-felipe.contreras@gmail.com>
-	<87lj2ahe4y.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTimFBvGJdW975fEObvwh9L5cK9vS5o7EbWr=qV83@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Jan 2011 08:55:33 +0100
+Subject: [Buildroot] [PATCH 06/10] autotools: allow host package to use
+ <pkg>_MAKE_ENV and <pkg>_MAKE
+In-Reply-To: <87ei82qaho.fsf@macbook.be.48ers.dk>
+References: <cover.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<cover.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<178a42636fdb3c6119ca718a24b14a22c9c9df28.1295866866.git.thomas.petazzoni@free-electrons.com>
+	<87ei82qaho.fsf@macbook.be.48ers.dk>
+Message-ID: <20110125085533.35bd27e1@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 24, 2011 at 10:58 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
->
-> ?Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
-> ?Felipe> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> And here.
+On Mon, 24 Jan 2011 22:04:35 +0100
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Well, there's no 'uninstall' in upstream. Should I add a patch to the
-Makefile, or shall I manually remove the files (in gst-dsp and
-gst-omapfb it's just one file, and in the other packages there are
-very few).
+> Hmm, I don't really like this. Packages might be adding target specific
+> stuff to their $PKG_MAKE_ENV - E.G.:
+> 
+> lvm2/lvm2.mk:LVM2_MAKE_ENV = CC="$(TARGET_CC)"
+> 
+> Wouldn't it make more sense to add a HOST_$PKG_MAKE_ENV and use it just
+> like we do for $PKG_MAKE_ENV (E.G. at build and install time)?
 
-> Thinking a bit more about it - For the omap3 stuff, they are all with A8
-> cores, so we could even do 'depends on BR2_cortex_a8', right?
+$$(PKG) is already HOST_FOOBAR. So, when I do:
 
-I guess so.
+$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
 
-> ?Felipe> diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
-> ?Felipe> new file mode 100644
-> ?Felipe> index 0000000..e4a62c0
-> ?Felipe> --- /dev/null
-> ?Felipe> +++ b/package/multimedia/gst-omapfb/Config.in
-> ?Felipe> @@ -0,0 +1,7 @@
-> ?Felipe> +config BR2_PACKAGE_GST_OMAPFB
-> ?Felipe> + ? ? ?bool "gst-omapfb"
-> ?Felipe> + ? ? ?depends on BR2_PACKAGE_GSTREAMER
-> ?Felipe> + ? ? ?help
-> ?Felipe> + ? ? ? ?GStreamer plug-in to use OMAP framebuffer.
->
-> Is this omap3 specific like the rest, or would it also work on E.G. the
-> pandaboard?
+it gets expanded to
 
-That's a good question. I don't think the OMAP4 display sub-system
-works right now, so it's hard to tell, but in theory it should work.
+$(HOST_MAKE_ENV) $(HOST_<pkg>_MAKE_ENV) $(HOST_<pkg>_MAKE) -C $(HOST_<pkg>_SRCDIR) install
 
-Cheers.
+See how $(PKG) is defined:
 
+$$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+
+And $(2) is :
+
+#  argument 2 is the uppercase package name, including an HOST_ prefix
+#             for host packages
+
+Regards,
+
+Thomas
 -- 
-Felipe Contreras
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
