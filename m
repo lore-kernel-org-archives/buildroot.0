@@ -1,37 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Jan 2011 16:23:44 +0100
-Subject: [Buildroot] [PATCH 1/1] tcpdump,
-	libpcap: simplify and fix ac_cv_linux_vers
-In-Reply-To: <397ba8b1856a2465105b4a12e7500e50cc11768c.1295945207.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 25 Jan 2011 09:46:58 +0100")
-References: <cover.1295945207.git.thomas.petazzoni@free-electrons.com>
-	<cover.1295945207.git.thomas.petazzoni@free-electrons.com>
-	<397ba8b1856a2465105b4a12e7500e50cc11768c.1295945207.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8739ohovlr.fsf@macbook.be.48ers.dk>
+From: Maxime Ripard <ripard@archos.com>
+Date: Tue, 25 Jan 2011 22:07:14 +0100
+Subject: [Buildroot] [git commit master 1/1] python: Move to version 2.7
+Message-ID: <20110125211619.B19808D245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> For some reason, tcpdump and libpcap need to have some information
- Thomas> about the kernel version being used. This information is passed using
- Thomas> the ac_cv_linux_vers autoconf variable.
+commit: http://git.buildroot.net/buildroot/commit/?id=afe54f1008dee29af6338d8766381aad9e2871bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> However, the current value is determined using
- Thomas> BR2_DEFAULT_KERNEL_HEADERS which is only defined when an internal
- Thomas> Buildroot toolchain is used. So it would break with an external
- Thomas> toolchain or the Crosstool-NG backend.
+Signed-off-by: Maxime Ripard <ripard@archos.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/python.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Thomas> According to Mike Frysinger at
- Thomas> http://lists.busybox.net/pipermail/buildroot/2011-January/040861.html,
- Thomas> this value is only used to determine if the kernel version is 0.x, 1.x
- Thomas> or 2.x, so passing ac_cv_linux_vers=2 is sufficient since Buildroot
- Thomas> only supports the 2.6 kernel anyway.
-
-Committed, thanks.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8721d40..5c85c59 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -3,8 +3,8 @@
+ # python
+ #
+ #############################################################
+-PYTHON_VERSION=2.4.5
+-PYTHON_VERSION_MAJOR=2.4
++PYTHON_VERSION=2.7
++PYTHON_VERSION_MAJOR=2.7
+ PYTHON_SOURCE:=Python-$(PYTHON_VERSION).tar.bz2
+ PYTHON_SITE:=http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_DIR:=$(BUILD_DIR)/Python-$(PYTHON_VERSION)
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
