@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 25 Jan 2011 22:07:14 +0100
-Subject: [Buildroot] [git commit master 1/1] python-serial: new package
-Message-ID: <20110125211621.4E6CE8D254@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] python: convert to autotargets,
+	bump to 2.7.1, many improvements
+Message-ID: <20110125211621.007368D245@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,76 +10,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0eafafbe3dcff1362ee7f0617af6b75e22cd5014
+commit: http://git.buildroot.net/buildroot/commit/?id=e3418f69cf2f17d54dfb521adedbe8abf6e35927
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python-serial is a Python library to access serial ports.
+This commit does a number of changes and improvements to the Python
+interpreter package :
 
-This package has originally been introduced to test that third-party
-pure Python modules (that do not use C extensions) build properly
-against the Buildroot Python infrastructure.
+ * It converts the .mk file to the AUTOTARGETS infrastructure. Even
+   though Python uses only autoconf and not automake, the AUTOTARGETS
+   is a fairly good fit for the Python interpreter, so we make use of
+   it.
+
+ * It bumps the version to 2.7.1. As this is a minor release compared
+   to 2.7, there are no particular changes needed because of this
+   bump. All changes done to the package are cleanups and improvements
+   unrelated to the version bump.
+
+ * It uses the system libffi. Until now, Python was building its own
+   libffi (a library used by interprets to build code that makes
+   function call at runtime). Using the Python internal libffi was not
+   working as Python was not passing the appropriate arguments down to
+   libffi ./configure script. And it sounded better to use a
+   system-wide libffi, that could potentially be used by other
+   packages as well. This libffi is needed for the ctypes Python
+   module.
+
+ * Remove all "depends on BR2_PACKAGE_PYTHON" by moving all
+   Python-related options under a "if BR2_PACKAGE_PYTHON ... endif"
+   condition.
+
+ * Make the installation of pre-compiled Python modules (.pyc) the
+   default, since they are smaller and do not need to be compiled on
+   the target. It is still possible to install uncompiled modules, or
+   both the uncompiled and pre-compiled versions.
+
+ * The options to select the set of Python modules to compile has been
+   moved to a submenu.
+
+ * The codecscjk (Japanese, Korean and Chinese codecs) module is no
+   longer enabled by default.
+
+ * The commented options for gdbm and nis in Python have been
+   removed. Those were not supported, so let's get rid of unused code.
+
+ * The option for the tkinker module in Python has been removed, since
+   we don't have a package for Tk in Buildroot.
+
+ * Options for the bzip2, sqlite and zlib modules have been added,
+   since those modules have external dependencies.
+
+ * The set of patches has been completely reworked and extended, with
+   more fine-grained patches and newer functionalities. The patches
+   are split in two categories:
+
+    - Patches that make various modifications to the Python build
+      system to support cross-compilation or make some minor
+      modifications. Those patches are numbered from 0 to 100.
+
+    - Patches that add configuration options to the Python build
+      system in order to enable/disable the compilation of Python
+      extensions or modules (test modules, pydoc, lib2to3, sqlite, tk,
+      curses, expat, codecs-cjk, nis, unicodedata, database modules,
+      ssl, bzip2, zlib). These patches are numbered from 100 to 200.
+
+   All features of the previous four patches are preserved, but they
+   are organized differently and the patches have been renamed. This
+   makes it difficult to see the differences from the existing
+   patches.
+
+ * The host Python interpreter is now installed in $(HOST_DIR), since
+   it is used to build third party Python modules.
+
+ * The BR2_PACKAGE_PYTHON_DEV option is removed since
+   BR2_HAVE_DEVFILES already does the necessary work.
+
+ * The "make -i install" workaround introduced by Maxime Ripard is no
+   longer needed. It was caused by the compilation of the tests that
+   required the unicodedata module (which wasn't built in the host
+   Python interpreter). Since we no longer compile the Python tests,
+   the problem doesn't exist anymore and we can avoid this "-i"
+   option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                      |    1 +
- package/python-serial/Config.in        |    8 ++++++++
- package/python-serial/python-serial.mk |   21 +++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/python-serial/Config.in
- create mode 100644 package/python-serial/python-serial.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 4f1621b..8154907 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -294,6 +294,7 @@ source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
-+source "package/python-serial/Config.in"
- endmenu
- 
- if BROKEN
-diff --git a/package/python-serial/Config.in b/package/python-serial/Config.in
-new file mode 100644
-index 0000000..ea090bd
---- /dev/null
-+++ b/package/python-serial/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SERIAL
-+	bool "python-serial"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  python-serial is a Python library to access serial ports.
-+
-+	  http://pyserial.sf.net
-+
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-new file mode 100644
-index 0000000..048930b
---- /dev/null
-+++ b/package/python-serial/python-serial.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# python-serial
-+#
-+#############################################################
-+
-+PYTHON_SERIAL_VERSION = 2.5
-+PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
-+PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
-+
-+PYTHON_SERIAL_DEPENDENCIES = python
-+
-+define PYTHON_SERIAL_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_SERIAL_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(call GENTARGETS,package,python-serial))
--- 
-1.7.3.4
+Patch is too large, so refusing to show it
