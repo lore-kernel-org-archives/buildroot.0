@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 24 Jan 2011 22:59:30 +0100
-Subject: [Buildroot] [PATCH 1/4] libpcap: update static handling
-In-Reply-To: <201101241648.15991.vapier@gentoo.org> (Mike Frysinger's message
-	of "Mon, 24 Jan 2011 16:48:15 -0500")
-References: <1295493022-4659-1-git-send-email-vapier@gentoo.org>
-	<201101231607.30938.vapier@gentoo.org> <20110124171642.6cff75a4@surf>
-	<201101241648.15991.vapier@gentoo.org>
-Message-ID: <87tygyotdp.fsf@macbook.be.48ers.dk>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Tue, 25 Jan 2011 04:51:00 +0200
+Subject: [Buildroot] [PATCH 3rd RESEND 2/6] Fix gstreamer packages for
+	make 3.82
+In-Reply-To: <877hduitku.fsf@macbook.be.48ers.dk>
+References: <1295822495-16972-1-git-send-email-felipe.contreras@gmail.com>
+	<1295822495-16972-3-git-send-email-felipe.contreras@gmail.com>
+	<877hduitku.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTimbpB9pdWg2wBPz3Je-CjGPPiduGE-6U9vHCb-4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+Hi,
 
- >> LIBPCAP_INSTALL_STAGING_OPT = DYEXT=none DESTDIR="$(STAGING_DIR)" install
- >> LIBPCAP_INSTALL_TARGET_OPT  = DYEXT=none DESTDIR="$(TARGET_DIR)" install
+On Mon, Jan 24, 2011 at 10:39 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
+>
+> ?Felipe> These packages would get fixed on the next releases, but each one gets
+> ?Felipe> released at different periods. For now this is needed to build on 3.82.
+>
+> ?Felipe> I only tested gstreamer, gst-plugins-base, and
+> ?Felipe> gst-plugins-good, but all the ones using the 'common' submodule
+> ?Felipe> should have this issue.
+>
+> There recently were a number of new gst-* releases. I took a quick look
+> at gst-plugins-base-0.10.32, an no longer see that gtkdoc line.
+> Wouldn't it make more sense to update now instead of adding this hack?
 
- Mike> yes, that would make it work, but that just makes me want to cry.
- Mike> it makes a lot more sense imo to have $(PKG)_MAKE_OPT be passed
- Mike> for all steps (and grepping the tree doesnt show any cases where
- Mike> this would be a problem).  if people still want a hook specific
- Mike> to the build step, then it'd make sense to add $(PKG)_BUILD_OPT
- Mike> or something similiar.
+Well, _some_ packages have been released: gstreamer core, plugins
+base, good, bad and ugly, in short, I think everything except
+gst-ffmpeg. And yeah, this is the "next release" I was talking about,
+so it might make sense to jump to this release (if it compiles), but
+I'm not sure if the hack would still be needed for some packages.
 
-Yeah, similar to the recent patch to pass $PKG_MAKE_ENV for host
-packages Thomas sent earlier today.
+Cheers.
 
 -- 
-Bye, Peter Korsgaard
+Felipe Contreras
