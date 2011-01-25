@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 25 Jan 2011 16:08:50 +0100
-Subject: [Buildroot] [git commit master 1/1] package/Makefile.in: Fix LIBC
-	calculation for internal ct-ng toolchains
-Message-ID: <20110125150944.5AF498D24D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] crosstool-ng: Use same naming
+	convention as internal toolchains
+Message-ID: <20110125150944.A04618D244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f82604657871e11af7fd833b97bec2dc7d27841e
+commit: http://git.buildroot.net/buildroot/commit/?id=8442ae7946a8b09fb42d30537c79ddef14121d69
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use uclibc for internal ct-ng toolchains configured with uClibc as well.
+Use unknown for the vendor part of the tuple, and add $arch-linux- symlinks,
+similar to how it's done for the internal toolchain, rather than using
+buildroot_ctng and unknown symlinks.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index fae0e0e..468d30c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -12,9 +12,7 @@ MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
- # Compute GNU_TARGET_NAME and REAL_GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-linux
- 
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--LIBC=uclibc
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- LIBC=uclibc
- else
- LIBC=gnu
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index a38dd12..0da7629 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -201,8 +201,8 @@ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_$(CTNG_ENDIAN)) is not set:\1=y:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_ARCH_(32|64)).*:\# \2 is not set:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_$(CTNG_BIT)) is not set:\1=y:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_USE_MMU) is not set:\1=y:;
+-CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_VENDOR)=.*:\1="buildroot_ctng":;
+-CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_ALIAS)=.*:\1="$(REAL_GNU_TARGET_NAME)":;
++CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_VENDOR)=.*:\1="unknown":;
++CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_ALIAS)=.*:\1="$(GNU_TARGET_NAME)":;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_PKGVERSION)="(.*)":\1="crosstool-NG $(CTNG_VERSION) - buildroot $(BR2_VERSION_FULL)":;
+ ifneq ($(call qstrip,$(BR2_PACKAGE_GDB_SERVER))$(call qstrip,$(BR2_PACKAGE_GDB_HOST)),)
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_DEBUG_gdb)=.*:\# \1 is not set:;
 -- 
 1.7.3.4
