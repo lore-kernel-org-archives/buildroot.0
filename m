@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 25 Jan 2011 22:28:23 +0100
-Subject: [Buildroot] [git commit master 1/1] crosstool-ng: don't remove
-	installation directory before installing
-In-Reply-To: <20110125211621.EA9998D245@busybox.osuosl.org>
-References: <20110125211621.EA9998D245@busybox.osuosl.org>
-Message-ID: <201101252228.23801.yann.morin.1998@anciens.enib.fr>
+Date: Tue, 25 Jan 2011 22:39:36 +0100
+Subject: [Buildroot] [git commit master 1/1] Use sys-root rather than
+	sysroot for the sysroot/staging_dir
+In-Reply-To: <20110125150944.2C7438D244@busybox.osuosl.org>
+References: <20110125150944.2C7438D244@busybox.osuosl.org>
+Message-ID: <201101252239.36666.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,23 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On Tuesday 25 January 2011 22:07:14 Peter Korsgaard wrote:
-> crosstool-ng would normally delete its installation directory before
-> installing the toolchain to ensure it wouldn't get confused by an earlier
-> build. Now that we're installing directly into HOST_DIR/usr, this doesn't
-> work very well - So get rid of the rm's.
+On Tuesday 25 January 2011 16:08:50 Peter Korsgaard wrote:
+> The name of the sysroot directory is arbitrary, but as ct-ng uses sys-root,
+> let's use that as well for consistency.
 
-Too late, but:
-Acked-by: me
+As Thomas said on IRC, I would suggest to revert this. Is there anything
+in BR that depends on the sysroot being named 'sysroot' or 'sys-root' at all,
+or was that just an eye-candy change? (genuine question)
 
-But anyway, I would like to carry as few patches against crosstool-NG as
-possible in buildroot, and push as much as possible into upstream.
+I will push the change in crosstool-NG that makes this configurable, and
+the default is now 'sysroot', instead of the old hard-coded 'sys-root'.
 
-If you would rework that to be configurable, I would apply it, so it gets
-in the next release.
+Then, it will be a matter of taste what to set it to, with BR forcing it
+to whatever suits (I believe just 'sysroot').
 
-As I plan to update the crosstool-NG backend during the next BDD in
-Brussels, it means we could then get rid of that patch in buildroot.
-
-And if you have patches against crosstool-NG, and they are not BR-related,
-could you Cc: me (and the crossgcc ML) so I can apply them upstream? Thx.
+Also, note that not all toolchains set this to any of 'sysroot' or 'sys-root'.
+For example, the CodeSourcery toolchains set this to 'libc' for the main
+sysroot, and to libc/${variant} for each supported variant's sysroot.
 
 Regards,
 Yann E. MORIN.
