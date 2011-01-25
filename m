@@ -1,54 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Jan 2011 22:51:22 +0100
-Subject: [Buildroot] [git commit master 1/1] Use sys-root rather than
-	sysroot for the sysroot/staging_dir
-In-Reply-To: <201101252239.36666.yann.morin.1998@anciens.enib.fr> (Yann
-	E. MORIN's message of "Tue, 25 Jan 2011 22:39:36 +0100")
-References: <20110125150944.2C7438D244@busybox.osuosl.org>
-	<201101252239.36666.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87wrlszm79.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jan 2011 00:21:13 +0100
+Subject: [Buildroot] [PATCH v2 1/4] Makefile: generate CMake
+ toolchain-file in $(O)
+In-Reply-To: <1295124808-5649-2-git-send-email-bjorn.forsman@gmail.com>
+References: <1295124808-5649-1-git-send-email-bjorn.forsman@gmail.com>
+	<1295124808-5649-2-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20110126002113.51aeb0f0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Hello Bjorn,
 
- Yann> Peter, All,
- Yann> On Tuesday 25 January 2011 16:08:50 Peter Korsgaard wrote:
- >> The name of the sysroot directory is arbitrary, but as ct-ng uses sys-root,
- >> let's use that as well for consistency.
+On Sat, 15 Jan 2011 21:53:25 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
- Yann> As Thomas said on IRC, I would suggest to revert this. Is there
- Yann> anything in BR that depends on the sysroot being named 'sysroot'
- Yann> or 'sys-root' at all, or was that just an eye-candy change?
- Yann> (genuine question)
+> +	set(CMAKE_SYSTEM_NAME Linux)\n\
+> +	set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
+> +	set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
+> +	set(CMAKE_C_FLAGS \"${CMAKE_C_FLAGS} $(CMAKE_TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+> +	set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} $(CMAKE_TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+> +	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+> +	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+> +	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
+> +	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+> +	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+> +	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+> +	" > $@
 
-No, as mentioned - The name is arbitrary, but as the ct-ng version we're
-currently using hardcodes it as sys-root, then we either need to use
-sys-root or add symlinks if we want ct-ng to install directly into
-HOST_DIR/usr to get BR's and ct-ng's idea of $tuple/sys-root to match.
+Could you also add:
 
- Yann> I will push the change in crosstool-NG that makes this
- Yann> configurable, and the default is now 'sysroot', instead of the
- Yann> old hard-coded 'sys-root'.
++       set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))\n\
 
-Ok, good.
+This is needed to get CMake pkg-config module to work properly.
 
- Yann> Then, it will be a matter of taste what to set it to, with BR forcing it
- Yann> to whatever suits (I believe just 'sysroot').
+I am not entirely happy with the name/location of the CMake toolchain
+file, but that's something we can sort out later.
 
-Yeah. Until very recently noone really cared as STAGING_DIR used to be
-directly in output/.
+I have tested your patchset with my qserialport library (that uses
+CMake as its build system and relies on Qt) and my custom application
+(that uses CMake, Qt and qserialport), and it worked fine with  the
+PKG_CONFIG_SYSROOT_DIR change mentionned above.
 
- Yann> Also, note that not all toolchains set this to any of 'sysroot'
- Yann> or 'sys-root'.  For example, the CodeSourcery toolchains set this
- Yann> to 'libc' for the main sysroot, and to libc/${variant} for each
- Yann> supported variant's sysroot.
+So, once this change is done, your patch gets my:
 
-Yes, but that's OK. This change was just to get the ct-ng toolchain to
-behave more similar to the internal one.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
