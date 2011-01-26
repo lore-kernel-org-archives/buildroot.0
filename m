@@ -1,8 +1,8 @@
 From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
 Date: Wed, 26 Jan 2011 23:22:32 +0100
-Subject: [Buildroot] [git commit master 1/1] Add CMAKETARGETS infrastructure
-	for CMake packages
-Message-ID: <20110126222431.48C548D23E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] cdrkit: convert to CMAKETARGETS
+	infrastructure
+Message-ID: <20110126222431.A8A008D23E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,235 +10,91 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc1acec14317b0cea2ecec3a6b8dbc6692b720c2
+commit: http://git.buildroot.net/buildroot/commit/?id=12d2ea9ae79f0a13989a37ee5af5ee9062c8efe7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The CMAKETARGETS infrastructure makes adding CMake-based packages to
-Buildroot easy. It uses the same set of variables as the autotools
-infrastructure, except for autoreconf and libtool stuff which is not
-needed. Usage: just call CMAKETARGETS instead of AUTOTARGETS.
 
 Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.cmake.in |  197 +++++++++++++++++++++++++++++++++++++++++++++
- package/Makefile.in       |    1 +
- 2 files changed, 198 insertions(+), 0 deletions(-)
- create mode 100644 package/Makefile.cmake.in
+ package/cdrkit/cdrkit.mk |   66 ++++++---------------------------------------
+ 1 files changed, 9 insertions(+), 57 deletions(-)
 
-diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-new file mode 100644
-index 0000000..1263eb9
---- /dev/null
-+++ b/package/Makefile.cmake.in
-@@ -0,0 +1,197 @@
-+################################################################################
-+# CMake package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for CMake packages. It should be used for all
-+# packages that use CMake as their build system.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+# In terms of implementation, this CMake infrastructure requires
-+# the .mk file to only specify metadata informations about the
-+# package: name, version, download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different
-+# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
-+# already defined, it is used as the list of commands to perform to
-+# build the package, instead of the default CMake behaviour. The
-+# package can also define some post operation hooks.
-+#
-+################################################################################
-+
-+################################################################################
-+# CMAKETARGETS_INNER -- defines how the configuration, compilation and
-+# installation of a CMake package should be done, implements a few hooks to
-+# tune the build process and calls the generic package infrastructure to
-+# generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the package directory prefix
-+#  argument 5 is the type (target or host)
-+################################################################################
-+
-+define CMAKETARGETS_INNER
-+
-+# define package-specific variables to default values
-+ifndef $(2)_SUBDIR
-+ ifdef $(3)_SUBDIR
-+  $(2)_SUBDIR = $($(3)_SUBDIR)
-+ else
-+  $(2)_SUBDIR ?=
-+ endif
-+endif
-+
-+$(2)_CONF_ENV			?=
-+$(2)_CONF_OPT			?=
-+$(2)_MAKE			?= $(MAKE)
-+$(2)_MAKE_ENV			?=
-+$(2)_MAKE_OPT			?=
-+$(2)_INSTALL_HOST_OPT		?= install
-+$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
-+$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR) install
-+$(2)_CLEAN_OPT			?= clean
-+
-+$(2)_SRCDIR			= $$($(2)_DIR)/$($(2)_SUBDIR)
-+$(2)_BUILDDIR			= $$($(2)_SRCDIR)
-+
-+#
-+# Configure step. Only define it if not already defined by the package
-+# .mk file. And take care of the differences between host and target
-+# packages.
-+#
-+ifndef $(2)_CONFIGURE_CMDS
-+ifeq ($(5),target)
-+
-+# Configure package for target
-+define $(2)_CONFIGURE_CMDS
-+	(cd $$($$(PKG)_BUILDDIR) && \
-+	rm -f CMakeCache.txt && \
-+	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-+		-DCMAKE_TOOLCHAIN_FILE="$$(BASE_DIR)/toolchainfile.cmake" \
-+		-DCMAKE_INSTALL_PREFIX="/usr" \
-+		$$($$(PKG)_CONF_OPT) \
-+	)
-+endef
-+else
-+
-+# Configure package for host
-+define $(2)_CONFIGURE_CMDS
-+	(cd $$($$(PKG)_BUILDDIR) && \
-+	rm -f CMakeCache.txt && \
-+	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-+		-DCMAKE_INSTALL_SO_NO_EXE=0 \
-+		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
-+		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
-+		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
-+		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
-+		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-+		$$($$(PKG)_CONF_OPT) \
-+	)
-+endef
-+endif
-+endif
-+
-+$(2)_DEPENDENCIES += host-cmake
-+
-+#
-+# Build step. Only define it if not already defined by the package .mk
-+# file.
-+#
-+ifndef $(2)_BUILD_CMDS
-+ifeq ($(5),target)
-+define $(2)_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+else
-+define $(2)_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+endif
-+endif
-+
-+#
-+# Host installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_HOST_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+endif
-+
-+#
-+# Staging installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_STAGING_CMDS
-+define $(2)_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+endif
-+
-+#
-+# Target installation step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+endif
-+
-+#
-+# Clean step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_CLEAN_CMDS
-+define $(2)_CLEAN_CMDS
-+	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_BUILDDIR)
-+endef
-+endif
-+
-+#
-+# Uninstall from staging step. Only define it if not already defined by
-+# the package .mk file.
-+#
-+ifndef $(2)_UNINSTALL_STAGING_CMDS
-+define $(2)_UNINSTALL_STAGING_CMDS
-+	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(STAGING_DIR)\1:" install_manifest.txt | xargs rm -f)
-+endef
-+endif
-+
-+#
-+# Uninstall from target step. Only define it if not already defined
-+# by the package .mk file.
-+#
-+ifndef $(2)_UNINSTALL_TARGET_CMDS
-+define $(2)_UNINSTALL_TARGET_CMDS
-+	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(TARGET_DIR)\1:" install_manifest.txt | xargs rm -f)
-+endef
-+endif
-+
-+# Call the generic package infrastructure to generate the necessary
-+# make targets
-+$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5))
-+
-+endef
-+
-+################################################################################
-+# CMAKETARGETS -- the target generator macro for CMake packages
-+#
-+# Argument 1 is the package directory prefix [mandatory]
-+# Argument 2 is the lowercase package name   [mandatory]
-+# Argument 3 is "target" or "host"           [optional, default: "target"]
-+################################################################################
-+
-+define CMAKETARGETS
-+ifeq ($(3),host)
-+$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
-+else
-+$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
-+endif
-+endef
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 599f684..4e795f9 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -319,4 +319,5 @@ ENABLE_DEBUG:=
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index 7d6899a..ea7f65e 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -11,62 +11,14 @@ else
+ CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=0
  endif
  
- include package/Makefile.autotools.in
-+include package/Makefile.cmake.in
- include package/Makefile.package.in
+-# CMake doesn't support having the --sysroot option directly in the
+-# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
+-# It also gets confused by ccache, so don't use ccache here.
+-CDRKIT_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
+-CDRKIT_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX_NOCCACHE))
+-CDRKIT_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+-CDRKIT_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX)) $(TARGET_CXXFLAGS)
++CDRKIT_CONF_OPT += $(CMAKE_ENDIAN_OPT)
+ 
+-define CDRKIT_CONFIGURE_CMDS
+- -mkdir $(@D)/build
+- (cd $(@D)/build ; \
+-	$(HOST_DIR)/usr/bin/cmake .. \
+-		-Wno-dev \
+-		-DCMAKE_SYSTEM_NAME:STRING="Linux" \
+-		-DCMAKE_C_COMPILER:FILEPATH="$(CDRKIT_TARGET_CC)" \
+-		-DCMAKE_CXX_COMPILER:FILEPATH="$(CDRKIT_TARGET_CXX)" \
+-		-DCMAKE_C_FLAGS:STRING="$(CDRKIT_TARGET_CFLAGS)" \
+-		-DCMAKE_CXX_FLAGS:STRING="$(CDRKIT_TARGET_CXXFLAGS)" \
+-		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+-		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+-		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(TARGET_LDFLAGS)" \
+-		-DCMAKE_FIND_ROOT_PATH:PATH="$(STAGING_DIR)" \
+-		-DCMAKE_INSTALL_PREFIX:PATH="$(TARGET_DIR)/usr" \
+-		$(CMAKE_ENDIAN_OPT) \
+- )
+-endef
+-
+-define CDRKIT_BUILD_CMDS
+- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build
+-endef
+-
+-define CDRKIT_INSTALL_TARGET_CMDS
+- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/build install
+-endef
+-
+-define HOST_CDRKIT_CONFIGURE_CMDS
+- -mkdir $(@D)/build
+- (cd $(@D)/build ; \
+-	$(HOST_DIR)/usr/bin/cmake .. \
+-		-Wno-dev \
+-		-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
+-		-DCMAKE_EXE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
+-		-DCMAKE_MODULE_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
+-		-DCMAKE_SHARED_LINKER_FLAGS:STRING="$(HOST_LDFLAGS)" \
+-		-DCMAKE_INSTALL_PREFIX:STRING="$(HOST_DIR)/usr" \
+- )
+-endef
+-
+-define HOST_CDRKIT_BUILD_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build
+-endef
+-
+-define HOST_CDRKIT_INSTALL_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build  install
+-endef
+-
+-$(eval $(call GENTARGETS,package,cdrkit))
+-$(eval $(call GENTARGETS,package,cdrkit,host))
++## cdrkit isn't completely re-rooted by CMAKE_FIND_ROOT_PATH, so add
++## some extra flags so it finds needed libs and headers.
++CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(STAGING_DIR)/usr/include"
++CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
++HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
++HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
+ 
++$(eval $(call CMAKETARGETS,package,cdrkit))
++$(eval $(call CMAKETARGETS,package,cdrkit,host))
 -- 
 1.7.3.4
