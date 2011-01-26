@@ -1,27 +1,61 @@
-From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Wed, 26 Jan 2011 14:03:07 -0700
-Subject: [Buildroot] Migrate .05 to .08/.11 fails with glibc based
- external toolchain
-In-Reply-To: <20110126203547.09906893@surf>
-References: <1296063608.3969.20.camel@feynman.coloradoengineeringinc.com>
-	<20110126203547.09906893@surf>
-Message-ID: <1296075787.3969.22.camel@feynman.coloradoengineeringinc.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jan 2011 22:08:33 +0100
+Subject: [Buildroot] Can Buildroot be configured to use the ELDK
+ toolchain as an External Toolchain?
+In-Reply-To: <20110126084547.0a47a506@surf>
+References: <2B25428B-FDE1-4E48-A13D-45B6B7E9706B@gmail.com>
+	<20110126084547.0a47a506@surf>
+Message-ID: <20110126220833.24a1c7ea@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2011-01-26 at 20:35 +0100, Thomas Petazzoni wrote:
-> > make[1]: *** No rule to make target `uclibc_target', needed by
-> > `gcc_target'. Stop.
-> > make[1]: Leaving directory
-> > `/home/mjhammel/src/cei/system_build/bld/buildroot-2010.11'
-> > 
-> You have enabled "native toolchain in the target filesystem" in
-> Packages -> Development tools. This is not supported currently with
-> external toolchains.
+On Wed, 26 Jan 2011 08:45:47 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Ah.  Excellent.  That fixes it.  Many thanks!
+> Unfortunately, last time I checked, the ELDK toolchains did not support
+> the --sysroot option, which is mandatory to use a given toolchain as an
+> external toolchain in Buildroot. We have tried to support non
+> sysroot-capable toolchains, but it was the source of various issues,
+> and since sysroot is now quite ancient and available in most
+> toolchains, it sounded like a reasonable tradeoff.
+
+Ok, I had a look at ELDK, and unfortunately, it cannot work. I will
+updated the documentation accordingly, but here is the diff of what I
+will push into the documentation:
+
++    <p>We do not support toolchains from
++    the <a href="http://www.denx.de/wiki/DULG/ELDK">ELDK of Denx</a>,
++    for two reasons:</p>
++
++    <ul>
++
++      <li>The ELDK does not contain a pure toolchain (i.e just the
++      compiler, binutils, the C and C++ libraries), but a toolchain
++      that comes with a very large set of pre-compiled libraries and
++      programs. Therefore, Buildroot cannot import the <i>sysroot</i>
++      of the toolchain, as it would contain hundreds of megabytes of
++      pre-compiled libraries that are normally built by
++      Buildroot.</li>
++
++      <li>The ELDK toolchains have a completely non-standard custom
++      mechanism to handle multiple library variants. Instead of using
++      the standard GCC <i>multilib</i> mechanism, the ARM ELDK uses
++      different symbolic links to the compiler to differentiate
++      between library variants (for ARM soft-float and ARM VFP), and
++      the PowerPC ELDK compiler uses a <code>CROSS_COMPILE</code>
++      environment variable. This non-standard behaviour makes it
++      difficult to support ELDK in Buildroot.</li>
++
++    </ul>
+
+Regards,
+
+Thomas
 -- 
-Michael J. Hammel <buildroot@graphics-muse.org>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
