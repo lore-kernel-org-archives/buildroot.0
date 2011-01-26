@@ -1,61 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jan 2011 22:08:33 +0100
-Subject: [Buildroot] Can Buildroot be configured to use the ELDK
- toolchain as an External Toolchain?
-In-Reply-To: <20110126084547.0a47a506@surf>
-References: <2B25428B-FDE1-4E48-A13D-45B6B7E9706B@gmail.com>
-	<20110126084547.0a47a506@surf>
-Message-ID: <20110126220833.24a1c7ea@surf>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Wed, 26 Jan 2011 22:18:42 +0100
+Subject: [Buildroot] [PATCH v3 1/4] Makefile: generate CMake toolchain-file
+	in $(O)
+In-Reply-To: <1296076725-25194-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1296076725-25194-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <1296076725-25194-2-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 26 Jan 2011 08:45:47 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+A CMake toolchain-file makes it easy to develop CMake-based packages
+outside of Buildroot. Just give the toolchain-file to CMake via the
+-DCMAKE_TOOLCHAIN_FILE=... option.
 
-> Unfortunately, last time I checked, the ELDK toolchains did not support
-> the --sysroot option, which is mandatory to use a given toolchain as an
-> external toolchain in Buildroot. We have tried to support non
-> sysroot-capable toolchains, but it was the source of various issues,
-> and since sysroot is now quite ancient and available in most
-> toolchains, it sounded like a reasonable tradeoff.
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile            |   17 ++++++++++++++++-
+ package/Makefile.in |    8 ++++++++
+ 2 files changed, 24 insertions(+), 1 deletions(-)
 
-Ok, I had a look at ELDK, and unfortunately, it cannot work. I will
-updated the documentation accordingly, but here is the diff of what I
-will push into the documentation:
-
-+    <p>We do not support toolchains from
-+    the <a href="http://www.denx.de/wiki/DULG/ELDK">ELDK of Denx</a>,
-+    for two reasons:</p>
+diff --git a/Makefile b/Makefile
+index a5a37a1..04783f2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -363,7 +363,7 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
+ dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 
+-$(BASE_TARGETS): dirs
++$(BASE_TARGETS): dirs $(O)/toolchainfile.cmake
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+ 	$(MAKE) $(EXTRAMAKEARGS) silentoldconfig
+@@ -372,6 +372,21 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: prepare dependencies dirs $(BASE_TARGETS) $(TARGETS_ALL)
+ 
++$(O)/toolchainfile.cmake:
++	@echo -en "\
++	set(CMAKE_SYSTEM_NAME Linux)\n\
++	set(CMAKE_C_COMPILER $(CMAKE_TARGET_CC))\n\
++	set(CMAKE_CXX_COMPILER $(CMAKE_TARGET_CXX))\n\
++	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(CMAKE_TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
++	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(CMAKE_TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
++	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
++	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
++	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
++	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
++	" > $@
+ 
+ .PHONY: all world dirs clean distclean source outputmakefile \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 644eb1f..599f684 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -143,6 +143,14 @@ TARGET_CC  := $(CCACHE) $(TARGET_CC)
+ TARGET_CXX := $(CCACHE) $(TARGET_CXX)
+ endif
+ 
++# * CMake doesn't support having the --sysroot option directly in the
++#   compiler path, so move this option to CFLAGS/CXXFLAGS variables.
++# * Don't use ccache because then CMake will fail to detect compiler.
++CMAKE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
++CMAKE_TARGET_CXX = $(filter-out --sysroot=%,$(TARGET_CXX_NOCCACHE))
++CMAKE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC_NOCCACHE)) $(TARGET_CFLAGS)
++CMAKE_TARGET_CXXFLAGS = $(filter --sysroot=%,$(TARGET_CXX_NOCCACHE)) $(TARGET_CXXFLAGS)
 +
-+    <ul>
-+
-+      <li>The ELDK does not contain a pure toolchain (i.e just the
-+      compiler, binutils, the C and C++ libraries), but a toolchain
-+      that comes with a very large set of pre-compiled libraries and
-+      programs. Therefore, Buildroot cannot import the <i>sysroot</i>
-+      of the toolchain, as it would contain hundreds of megabytes of
-+      pre-compiled libraries that are normally built by
-+      Buildroot.</li>
-+
-+      <li>The ELDK toolchains have a completely non-standard custom
-+      mechanism to handle multiple library variants. Instead of using
-+      the standard GCC <i>multilib</i> mechanism, the ARM ELDK uses
-+      different symbolic links to the compiler to differentiate
-+      between library variants (for ARM soft-float and ARM VFP), and
-+      the PowerPC ELDK compiler uses a <code>CROSS_COMPILE</code>
-+      environment variable. This non-standard behaviour makes it
-+      difficult to support ELDK in Buildroot.</li>
-+
-+    </ul>
-
-Regards,
-
-Thomas
+ ifeq ($(BR2_STRIP_strip),y)
+ STRIP_DISCARD_ALL:=--discard-all
+ STRIP_STRIP_UNNEEDED:=--strip-unneeded
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
