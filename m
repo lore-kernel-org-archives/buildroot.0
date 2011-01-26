@@ -1,67 +1,41 @@
-From: Steve Calfee <nospamcalfee@yahoo.com>
-Date: Wed, 26 Jan 2011 10:20:22 -0800 (PST)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Jan 2011 19:41:23 +0100
 Subject: [Buildroot] Enabling NFS
-Message-ID: <89359.48464.qm@web161810.mail.bf1.yahoo.com>
+In-Reply-To: <89359.48464.qm@web161810.mail.bf1.yahoo.com> (Steve Calfee's
+	message of "Wed, 26 Jan 2011 10:20:22 -0800 (PST)")
+References: <89359.48464.qm@web161810.mail.bf1.yahoo.com>
+Message-ID: <87y667tsmk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Steve" == Steve Calfee <nospamcalfee@yahoo.com> writes:
 
-I have just spent some time trying to enable NFS on a beagle board. It seems 
-that RPC is required for nfs. 
+ Steve> Hi,
 
+ Steve> I have just spent some time trying to enable NFS on a beagle
+ Steve> board. It seems that RPC is required for nfs.
 
-To enable nfs requires some NFS specific changes to:
-find target/device/beagleboard/ | xargs grep  "_NFS"
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_NFS_FS=y
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_NFS_V3=y
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:# CONFIG_NFS_V3_ACL 
-is not set
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:# CONFIG_NFS_V4 is 
-not set
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_ROOT_NFS=y
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_NFSD=m
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_NFSD_V3=y
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:# CONFIG_NFSD_V3_ACL 
-is not set
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_NFS_COMMON=y
-target/device/beagleboard/beagleboard-busybox-1.17.x.config:CONFIG_FEATURE_MOUNT_NFS=y
+You have to make the distinction between boot-from-nfs and being able to
+mount nfs shares at runtime. For both you need kernel support for NFS,
+but:
 
-target/device/beagleboard/beagleboard_defconfig:# BR2_PACKAGE_NFS_UTILS is not 
-set
+1: boot-from-nfs needs CONFIG_ROOT_NFS and CONFIG_IP_PNP (and
+   IP_PNP_DHCP for most setups) enabled in the kernel and no changes in
+   userland.
 
-To enable RPC requires:
-find target/device/beagleboard/ | xargs grep  "_RPC"
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:# CONFIG_ARCH_RPC is 
-not set
-target/device/beagleboard/beagleboard-linux-2.6.36.1.config:CONFIG_RPCSEC_GSS_KRB5=y
+2: runtime nfs support needs RPC support in C library and NFS support in
+   busybox mount command (automatically enabled if you used the standard
+   busybox config).
 
-target/device/beagleboard/beagleboard-busybox-1.17.x.config:CONFIG_FEATURE_HAVE_RPC=y
+The bootloader doesn't need any changes for either of these (with the
+possible exception of a modification of the kernel cmdline).
 
-target/device/beagleboard/beagleboard-busybox-1.17.x.config:# 
-CONFIG_FEATURE_INETD_RPC is not set
-target/device/beagleboard/beagleboard-uClibc-0.9.31.config:UCLIBC_HAS_RPC=y
-target/device/beagleboard/beagleboard-uClibc-0.9.31.config:# UCLIBC_HAS_FULL_RPC 
-is not set
-target/device/beagleboard/beagleboard-uClibc-0.9.31.config:UCLIBC_HAS_REENTRANT_RPC=y
+This is not really related to buildroot though (except for the automatic
+enabling of NFS support in busybox mount if the C library has RPC
+support).
 
-target/device/beagleboard/beagleboard_defconfig:BR2_INET_RPC=y
-
-And here the big issue is the uclibc requires the option to be set, so that 
-means a big build!
-
-It seems having to configure buildroot, the kernel, busybox, and uclibc all to 
-get this option on is quite an unexpected effort, and I have not even tried with 
-uboot yet.
-
-This is what I have found, and I got it working, but I wonder if there was extra 
-stuff I did that I did not need to do?
-
-Thanks, Steve
-
-
-
-      
+-- 
+Bye, Peter Korsgaard
