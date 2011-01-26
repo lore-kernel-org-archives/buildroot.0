@@ -1,41 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Jan 2011 19:41:23 +0100
-Subject: [Buildroot] Enabling NFS
-In-Reply-To: <89359.48464.qm@web161810.mail.bf1.yahoo.com> (Steve Calfee's
-	message of "Wed, 26 Jan 2011 10:20:22 -0800 (PST)")
-References: <89359.48464.qm@web161810.mail.bf1.yahoo.com>
-Message-ID: <87y667tsmk.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Jan 2011 20:35:47 +0100
+Subject: [Buildroot] Migrate .05 to .08/.11 fails with glibc based
+ external toolchain
+In-Reply-To: <1296063608.3969.20.camel@feynman.coloradoengineeringinc.com>
+References: <1296063608.3969.20.camel@feynman.coloradoengineeringinc.com>
+Message-ID: <20110126203547.09906893@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Calfee <nospamcalfee@yahoo.com> writes:
+On Wed, 26 Jan 2011 10:40:08 -0700
+"Michael J. Hammel" <buildroot@graphics-muse.org> wrote:
 
- Steve> Hi,
+> I've got a build that has been working with 2010.05 that I tried to
+> migrate to a newer release.  It dies early in the newer releases,
+> apparently related to a dependency on uclibc.  The problem is my
+> external toolchain (Crosstool-NG) is glibc based and the buildroot
+> configs appear to reflect this.  So I'm not sure where this dependency
+> is coming from.  Here is where the build fails with 2010.11 (2010.08 is
+> the same):
+> 
+> Checking external toolchain settings
+> mkdir
+> -p /home/mjhammel/src/cei/system_build/bld/buildroot-2010.11/output/target/lib
+> Copy external toolchain libraries to target...
+> Copy external toolchain sysroot to staging...
+> # Create lib64 symbolic links if needed
+> make[1]: *** No rule to make target `uclibc_target', needed by
+> `gcc_target'. Stop.
+> make[1]: Leaving directory
+> `/home/mjhammel/src/cei/system_build/bld/buildroot-2010.11'
+> 
+> I found nothing in bugzilla about this.  Something tells me I'm missing
+> something basic here.
 
- Steve> I have just spent some time trying to enable NFS on a beagle
- Steve> board. It seems that RPC is required for nfs.
+You have enabled "native toolchain in the target filesystem" in
+Packages -> Development tools. This is not supported currently with
+external toolchains.
 
-You have to make the distinction between boot-from-nfs and being able to
-mount nfs shares at runtime. For both you need kernel support for NFS,
-but:
+Regards,
 
-1: boot-from-nfs needs CONFIG_ROOT_NFS and CONFIG_IP_PNP (and
-   IP_PNP_DHCP for most setups) enabled in the kernel and no changes in
-   userland.
-
-2: runtime nfs support needs RPC support in C library and NFS support in
-   busybox mount command (automatically enabled if you used the standard
-   busybox config).
-
-The bootloader doesn't need any changes for either of these (with the
-possible exception of a modification of the kernel cmdline).
-
-This is not really related to buildroot though (except for the automatic
-enabling of NFS support in busybox mount if the C library has RPC
-support).
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
