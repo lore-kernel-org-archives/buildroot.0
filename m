@@ -1,36 +1,241 @@
 From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Wed, 26 Jan 2011 22:18:41 +0100
-Subject: [Buildroot] [PATCH v3 0/4] Introducing CMAKETARGETS infrastructure
-Message-ID: <1296076725-25194-1-git-send-email-bjorn.forsman@gmail.com>
+Date: Wed, 26 Jan 2011 22:18:43 +0100
+Subject: [Buildroot] [PATCH v3 2/4] Add CMAKETARGETS infrastructure for
+	CMake packages
+In-Reply-To: <1296076725-25194-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1296076725-25194-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <1296076725-25194-3-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series adds a new infrastructure for CMake packages called
-CMAKETARGETS. It is based on the AUTOTARGETS infrastructure.
+The CMAKETARGETS infrastructure makes adding CMake-based packages to
+Buildroot easy. It uses the same set of variables as the autotools
+infrastructure, except for autoreconf and libtool stuff which is not
+needed. Usage: just call CMAKETARGETS instead of AUTOTARGETS.
 
-Changes in v3:
-
-* Fix host-cdrkit build failure (thanks Thomas)
-* Set PKG_CONFIG_SYSROOT_DIR in toolchain file
-* CMAKE_INSTALL_PREFIX + DESTDIR modification for host packages
-* Properly escape CMAKE_C/CXX_FLAGS when writing the toolchain file (so that
-  the variables are not expanded immediately). Without this, flags set in
-  package.mk would be ignored.
-* Disable ccache as it seems to break CMake compiler detection.
-
-Bj?rn Forsman (4):
-  Makefile: generate CMake toolchain-file in $(O)
-  Add CMAKETARGETS infrastructure for CMake packages
-  doc: add CMAKETARGETS documentation
-  cdrkit: convert to CMAKETARGETS infrastructure
-
- Makefile                  |   17 ++++-
- docs/buildroot.html       |  151 +++++++++++++++++++++++++++++++++-
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/Makefile.cmake.in |  197 +++++++++++++++++++++++++++++++++++++++++++++
- package/Makefile.in       |    9 ++
- package/cdrkit/cdrkit.mk  |   66 ++-------------
- 5 files changed, 378 insertions(+), 62 deletions(-)
+ package/Makefile.in       |    1 +
+ 2 files changed, 198 insertions(+), 0 deletions(-)
  create mode 100644 package/Makefile.cmake.in
+
+diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
+new file mode 100644
+index 0000000..1263eb9
+--- /dev/null
++++ b/package/Makefile.cmake.in
+@@ -0,0 +1,197 @@
++################################################################################
++# CMake package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for CMake packages. It should be used for all
++# packages that use CMake as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this CMake infrastructure requires
++# the .mk file to only specify metadata informations about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default CMake behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++################################################################################
++# CMAKETARGETS_INNER -- defines how the configuration, compilation and
++# installation of a CMake package should be done, implements a few hooks to
++# tune the build process and calls the generic package infrastructure to
++# generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including an HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the package directory prefix
++#  argument 5 is the type (target or host)
++################################################################################
++
++define CMAKETARGETS_INNER
++
++# define package-specific variables to default values
++ifndef $(2)_SUBDIR
++ ifdef $(3)_SUBDIR
++  $(2)_SUBDIR = $($(3)_SUBDIR)
++ else
++  $(2)_SUBDIR ?=
++ endif
++endif
++
++$(2)_CONF_ENV			?=
++$(2)_CONF_OPT			?=
++$(2)_MAKE			?= $(MAKE)
++$(2)_MAKE_ENV			?=
++$(2)_MAKE_OPT			?=
++$(2)_INSTALL_HOST_OPT		?= install
++$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
++$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR) install
++$(2)_CLEAN_OPT			?= clean
++
++$(2)_SRCDIR			= $$($(2)_DIR)/$($(2)_SUBDIR)
++$(2)_BUILDDIR			= $$($(2)_SRCDIR)
++
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_CONFIGURE_CMDS
++ifeq ($(5),target)
++
++# Configure package for target
++define $(2)_CONFIGURE_CMDS
++	(cd $$($$(PKG)_BUILDDIR) && \
++	rm -f CMakeCache.txt && \
++	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++		-DCMAKE_TOOLCHAIN_FILE="$$(BASE_DIR)/toolchainfile.cmake" \
++		-DCMAKE_INSTALL_PREFIX="/usr" \
++		$$($$(PKG)_CONF_OPT) \
++	)
++endef
++else
++
++# Configure package for host
++define $(2)_CONFIGURE_CMDS
++	(cd $$($$(PKG)_BUILDDIR) && \
++	rm -f CMakeCache.txt && \
++	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++		-DCMAKE_INSTALL_SO_NO_EXE=0 \
++		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
++		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
++		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
++		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
++		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
++		$$($$(PKG)_CONF_OPT) \
++	)
++endef
++endif
++endif
++
++$(2)_DEPENDENCIES += host-cmake
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(5),target)
++define $(2)_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++else
++define $(2)_BUILD_CMDS
++	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++endif
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_HOST_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++#
++# Staging installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_STAGING_CMDS
++define $(2)_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++#
++# Clean step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_CLEAN_CMDS
++define $(2)_CLEAN_CMDS
++	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_BUILDDIR)
++endef
++endif
++
++#
++# Uninstall from staging step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_UNINSTALL_STAGING_CMDS
++define $(2)_UNINSTALL_STAGING_CMDS
++	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(STAGING_DIR)\1:" install_manifest.txt | xargs rm -f)
++endef
++endif
++
++#
++# Uninstall from target step. Only define it if not already defined
++# by the package .mk file.
++#
++ifndef $(2)_UNINSTALL_TARGET_CMDS
++define $(2)_UNINSTALL_TARGET_CMDS
++	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(TARGET_DIR)\1:" install_manifest.txt | xargs rm -f)
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5))
++
++endef
++
++################################################################################
++# CMAKETARGETS -- the target generator macro for CMake packages
++#
++# Argument 1 is the package directory prefix [mandatory]
++# Argument 2 is the lowercase package name   [mandatory]
++# Argument 3 is "target" or "host"           [optional, default: "target"]
++################################################################################
++
++define CMAKETARGETS
++ifeq ($(3),host)
++$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
++else
++$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
++endif
++endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 599f684..4e795f9 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -319,4 +319,5 @@ ENABLE_DEBUG:=
+ endif
+ 
+ include package/Makefile.autotools.in
++include package/Makefile.cmake.in
+ include package/Makefile.package.in
+-- 
+1.7.1
