@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Jan 2011 08:39:05 +0100
-Subject: [Buildroot] Problem compiling busybox with libpam
-In-Reply-To: <AANLkTin4zfThtsb=2TobEPZWupSJAPmw1Xde2=OMiPER@mail.gmail.com>
-References: <AANLkTi=SoMmj4_=FMZnJ3cYTyJcTj2ymizEOM9PGSO3r@mail.gmail.com>
-	<AANLkTin4zfThtsb=2TobEPZWupSJAPmw1Xde2=OMiPER@mail.gmail.com>
-Message-ID: <20110126083905.0b0dab48@surf>
+Date: Wed, 26 Jan 2011 08:45:47 +0100
+Subject: [Buildroot] Can Buildroot be configured to use the ELDK
+ toolchain as an External Toolchain?
+In-Reply-To: <2B25428B-FDE1-4E48-A13D-45B6B7E9706B@gmail.com>
+References: <2B25428B-FDE1-4E48-A13D-45B6B7E9706B@gmail.com>
+Message-ID: <20110126084547.0a47a506@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Spider,
+Hello Davis,
 
-On Wed, 26 Jan 2011 00:09:13 -0200
-Spider <spiderwebmail@gmail.com> wrote:
+On Tue, 25 Jan 2011 18:44:58 -0500
+Davis Mcpherson <davis.mcpherson@gmail.com> wrote:
+ 
+> I'm working on a project that is using the ELDK toolchain and would
+> like to use these tools to build Buildroot, I followed the
+> instructions to configure an external toolchain via 'make menuconfig'
+> but when I do 'make' i get an error that the the c library has been
+> specified, i'm using glibc
 
-> I was using buildroot to compile busybox and got the following error
-> when I add libpam using "make busybox-menuconfig". ?(The output is
-> below).
-> How can I get libpam to compile without this errors? If I "make clean"
-> and remake everything from scratch will it work? (I wil try this
-> tomorrow because of the time to compile and fear of configuration files changes)
+Unfortunately, last time I checked, the ELDK toolchains did not support
+the --sysroot option, which is mandatory to use a given toolchain as an
+external toolchain in Buildroot. We have tried to support non
+sysroot-capable toolchains, but it was the source of various issues,
+and since sysroot is now quite ancient and available in most
+toolchains, it sounded like a reasonable tradeoff.
+
+> but I think the problem is rooted in the SYSROOT value being used to
+> verify glibc...
 > 
-> I searched for a similar problem but didnt find anything on
-> documentation. Do I need to manually supply security/pam_appl.h and
-> security/pam_misc.h? Where to find them?
+> has anyone configured Buildroot to use ELDK as the external toolchain
+> to use for builds? 
 
-It looks like Busybox PAM support depends on the PAM library, for which
-we don't have a package yet.
+I wanted to, but I never understood how to get just the ELDK toolchain
+and not a complete distribution. I'll try to see if I can test this
+toolchain, but if you have some simple setup instructions to get just
+the toolchain, that would be great.
 
-So you would need to :
-
- * Create a Buildroot package for
-   ftp://ftp.kernel.org/pub/linux/libs/pam/library/Linux-PAM-1.1.3.tar.bz2
-
- * Create a sub-option in the Busybox Buildroot package to
-   enable/disable PAM support. This option should select the PAM
-   library package created at the previous step.
-
- * In package/busybox/busybox.mk, if PAM support is enabled, then tweak
-   the Busybox configuration file, and add the dependencies on the PAM
-   library.
-
-Regards,
+Thanks,
 
 Thomas
 -- 
