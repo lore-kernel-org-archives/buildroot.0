@@ -1,30 +1,52 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 27 Jan 2011 12:10:46 -0600
-Subject: [Buildroot] [BuildRoot][PATCH] Resubmit Strange behavior of inittab
-In-Reply-To: <1295373920.16414.126.camel@worky>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
-	<1295373920.16414.126.camel@worky>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F199844@EXV1.corp.adtran.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 27 Jan 2011 23:38:48 +0100
+Subject: [Buildroot] [git commit master 1/1] libxcb: use host-python and fix
+	dependencies
+Message-ID: <20110127224051.E879B8D348@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-inittab ordering causes mount to fail on remount,rw.  inittab
-changed to mount /proc first.
 
-Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=5f19df9224d6ef826f9d4ce9a06673ada705d743
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Now that we have a proper host-python package, use that one instead of
+whatever might be available on the build host. Also don't overwrite
+the host-python package version variable and fix dependency list
+(xcb-proto is needed for the host).
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
---- a/fs/skeleton/etc/inittab   2011-01-06 05:25:33.000000000 -0600
-+++ b/fs/skeleton/etc/inittab   2011-01-18 12:16:18.000000000 -0600
-@@ -14,8 +14,8 @@
- # process   == program to run
+ package/x11r7/libxcb/libxcb.mk |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index bfeceab..c9835ed 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -11,12 +11,16 @@ LIBXCB_INSTALL_STAGING = YES
  
- # Startup the system
--null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mount -t proc proc /proc
-+null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mkdir -p /dev/pts
- null::sysinit:/bin/mount -a
- null::sysinit:/bin/hostname -F /etc/hostname
+ LIBXCB_AUTORECONF = NO
+ LIBXCB_LIBTOOL_PATCH = NO
+-LIBXCB_DEPENDENCIES = host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau
++LIBXCB_DEPENDENCIES = \
++	host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
++	host-xcb-proto host-python
+ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+-HOST_PYTHON_VERSION=$(shell python --version 2>&1 | sed 's/Python \([0-9]\.[^\.]\).*/\1/')
+-LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb XCBPROTO_XCBPYTHONDIR=$(STAGING_DIR)/usr/lib/python$(HOST_PYTHON_VERSION)/site-packages
++LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
++	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(HOST_PYTHON_VERSION)/site-packages
+ 
+-HOST_LIBXCB_DEPENDENCIES = host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp host-xlib_libXau
++HOST_LIBXCB_DEPENDENCIES = \
++	host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp \
++	host-xlib_libXau host-python
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,libxcb))
+ $(eval $(call AUTOTARGETS,package/x11r7,libxcb,host))
+-- 
+1.7.3.4
