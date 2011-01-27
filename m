@@ -1,94 +1,121 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jan 2011 11:21:30 -0300
-Subject: [Buildroot] [PATCH 5/9] uclibc: add inotify_init1 syscall support
+Date: Thu, 27 Jan 2011 11:21:31 -0300
+Subject: [Buildroot] [PATCH 6/9] procps: convert to gentargets and bump to
+	version 3.2.8
 In-Reply-To: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1296138094-502-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1296138094-502-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add inotify_init1 system call support to uclibc.
-
-Required to use a modern udev.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../uClibc/uClibc-0.9.31-add-inotify-init1.patch   |   64 ++++++++++++++++++++
- 1 files changed, 64 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
+ package/procps/procps-make-3.82.patch |   19 ++++++++++
+ package/procps/procps.mk              |   61 ++++++++++-----------------------
+ 2 files changed, 37 insertions(+), 43 deletions(-)
+ create mode 100644 package/procps/procps-make-3.82.patch
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch b/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
+diff --git a/package/procps/procps-make-3.82.patch b/package/procps/procps-make-3.82.patch
 new file mode 100644
-index 0000000..cbec426
+index 0000000..a4d49eb
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
-@@ -0,0 +1,64 @@
-+From a2e5630af426f85fdd8721b2820786d9bd2aa695 Mon Sep 17 00:00:00 2001
-+From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Date: Tue, 1 Jun 2010 20:02:54 +0400
-+Subject: [PATCH] inotify: add inotify_init1 system call support
++++ b/package/procps/procps-make-3.82.patch
+@@ -0,0 +1,19 @@
++ps/module.mk depends on vars set up in proc/module.mk, so make sure we always
++include the .mk files in the right order
 +
-+This patch introduces support for inotify_init1 system call, found
-+since Linux 2.6.27.
++Patch from gentoo's portage tree, http://bugs.gentoo.org/show_bug.cgi?id=333299
 +
-+Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+---
-+ libc/sysdeps/linux/common/inotify.c     |    4 ++++
-+ libc/sysdeps/linux/common/sys/inotify.h |   13 +++++++++++++
-+ 2 files changed, 17 insertions(+), 0 deletions(-)
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff --git a/libc/sysdeps/linux/common/inotify.c b/libc/sysdeps/linux/common/inotify.c
-+index e5a6120..e35f043 100644
-+--- a/libc/sysdeps/linux/common/inotify.c
-++++ b/libc/sysdeps/linux/common/inotify.c
-+@@ -15,6 +15,10 @@
-+ _syscall0(int, inotify_init)
-+ #endif
++--- procps-3.2.8/Makefile
+++++ procps-3.2.8/Makefile
++@@ -174,7 +174,8 @@
++ # want this rule first, use := on ALL, and ALL not filled in yet
++ all: do_all
 + 
-++#ifdef __NR_inotify_init1
-++_syscall1(int, inotify_init1, int, flags)
-++#endif
-++
-+ #ifdef __NR_inotify_add_watch
-+ _syscall3(int, inotify_add_watch, int, fd, const char *, path, uint32_t, mask)
-+ #endif
-+diff --git a/libc/sysdeps/linux/common/sys/inotify.h b/libc/sysdeps/linux/common/sys/inotify.h
-+index 0131db9..dc4e19d 100644
-+--- a/libc/sysdeps/linux/common/sys/inotify.h
-++++ b/libc/sysdeps/linux/common/sys/inotify.h
-+@@ -22,6 +22,16 @@
-+ #include <stdint.h>
++--include */module.mk
+++-include proc/module.mk
+++-include ps/module.mk
 + 
++ do_all:    $(ALL)
 + 
-++/* Flags for the parameter of inotify_init1.  */
-++enum
-++  {
-++    IN_CLOEXEC = 02000000,
-++#define IN_CLOEXEC IN_CLOEXEC
-++    IN_NONBLOCK = 04000
-++#define IN_NONBLOCK IN_NONBLOCK
-++  };
-++
-++
-+ /* Structure describing an inotify event.  */
-+ struct inotify_event
-+ {
-+@@ -79,6 +89,9 @@ __BEGIN_DECLS
-+ /* Create and initialize inotify instance.  */
-+ extern int inotify_init (void) __THROW;
-+ 
-++/* Create and initialize inotify instance.  */
-++extern int inotify_init1 (int __flags) __THROW;
-++
-+ /* Add watch of object NAME to inotify instance FD.  Notify about
-+    events specified by MASK.  */
-+ extern int inotify_add_watch (int __fd, const char *__name, uint32_t __mask)
-+-- 
-+1.7.3.4
-+
+diff --git a/package/procps/procps.mk b/package/procps/procps.mk
+index 3add243..2cee119 100644
+--- a/package/procps/procps.mk
++++ b/package/procps/procps.mk
+@@ -3,51 +3,26 @@
+ # procps
+ #
+ #############################################################
+-PROCPS_VERSION:=3.2.7
+-PROCPS_SOURCE:=procps-$(PROCPS_VERSION).tar.gz
+-PROCPS_SITE:=http://procps.sourceforge.net/
+-PROCPS_DIR:=$(BUILD_DIR)/procps-$(PROCPS_VERSION)
+-PROCPS_BINARY:=ps/ps
+-PROCPS_TARGET_BINARY:=usr/bin/vmstat
+ 
+-$(DL_DIR)/$(PROCPS_SOURCE):
+-	$(call DOWNLOAD,$(PROCPS_SITE),$(PROCPS_SOURCE))
++PROCPS_VERSION = 3.2.8
++PROCPS_SITE = http://procps.sourceforge.net/
++PROCPS_DEPENDENCIES = ncurses
+ 
+-$(PROCPS_DIR)/.source: $(DL_DIR)/$(PROCPS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(PROCPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(PROCPS_DIR) package/procps/ procps\*.patch
+-	touch $(PROCPS_DIR)/.source
+-
+-$(PROCPS_DIR)/$(PROCPS_BINARY): $(PROCPS_DIR)/.source
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(PROCPS_DIR)
+-
+-$(TARGET_DIR)/$(PROCPS_TARGET_BINARY): $(PROCPS_DIR)/$(PROCPS_BINARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
+-		install='install -D' -C $(PROCPS_DIR) lib64=/lib \
+-		ldconfig='/bin/true' install
+-	rm -Rf $(TARGET_DIR)/usr/share/man
+-
+-procps: ncurses $(TARGET_DIR)/$(PROCPS_TARGET_BINARY)
+-
+-procps-source: $(DL_DIR)/$(PROCPS_SOURCE)
++# build after busybox, we prefer fat versions while we're at it
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++PROCPS_DEPENDENCIES += busybox
++endif
+ 
+-procps-clean:
+-	for bin in uptime tload free w \
+-		   top vmstat watch skill \
+-		   snice kill sysctl pmap \
+-		   pgrep pkill slabtop; do \
+-		rm -f $(TARGET_DIR)/usr/bin/$${bin}; \
+-	done
+-	rm -f $(TARGET_DIR)/lib/libproc*
++define PROCPS_BUILD_CMDS
++	$(SED) "s/ --owner 0 --group 0//" $(@D)/Makefile
++	$(SED) "s/ ldconfig/echo/" $(@D)/Makefile
++	$(SED) "s/[$$][(]lib64[)]/lib/" $(@D)/Makefile
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LDFLAGS="$(TARGET_LDFLAGS)" \
++		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
++endef
+ 
+-procps-dirclean:
+-	rm -rf $(PROCPS_DIR)
++define PROCPS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_PROCPS),y)
+-TARGETS+=procps
+-endif
++$(eval $(call GENTARGETS,package,procps))
 -- 
 1.7.3.4
