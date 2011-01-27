@@ -1,65 +1,23 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jan 2011 12:02:40 -0300
-Subject: [Buildroot] [PATCHv2] libcuefile: convert to cmaketargets
+Date: Thu, 27 Jan 2011 12:03:33 -0300
+Subject: [Buildroot] [PATCH 8/9] libcuefile: convert to cmaketargets
 	infrastructure
-Message-ID: <1296140560-13426-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <20110127154244.198d4077@surf>
+References: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>	<1296138094-502-8-git-send-email-gustavo@zacarias.com.ar>
+	<20110127154244.198d4077@surf>
+Message-ID: <4D418945.5020108@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/libcuefile/libcuefile.mk |   31 +++++---------------------
- 1 files changed, 6 insertions(+), 25 deletions(-)
+On 01/27/11 11:42, Thomas Petazzoni wrote:
 
-diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
-index 934113b..86ec070 100644
---- a/package/multimedia/libcuefile/libcuefile.mk
-+++ b/package/multimedia/libcuefile/libcuefile.mk
-@@ -7,36 +7,17 @@
- LIBCUEFILE_VERSION = r453
- LIBCUEFILE_SITE = http://files.musepack.net/source
- LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
--LIBCUEFILE_DEPENDENCIES = host-cmake
- LIBCUEFILE_INSTALL_STAGING = YES
- 
--# CMake doesn't support having the --sysroot option directly in the
--# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
--# It also gets confused by ccache, so don't use ccache here.
--LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
--LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
--
--define LIBCUEFILE_CONFIGURE_CMDS
--	(cd $(@D) ; \
--		$(HOST_DIR)/usr/bin/cmake . \
--		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
--		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
--		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
--	)
--endef
--
--define LIBCUEFILE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define LIBCUEFILE_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
-+define LIBCUEFILE_INSTALL_STAGING_INCLUDES
- 	cp -r $(@D)/include $(STAGING_DIR)/usr
- endef
- 
--define LIBCUEFILE_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+define LIBCUEFILE_INSTALL_TARGET_INCLUDES
- 	cp -r $(@D)/include $(TARGET_DIR)/usr
- endef
- 
--$(eval $(call GENTARGETS,package/multimedia,libcuefile))
-+LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
-+LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
-+
-+$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
--- 
-1.7.3.4
+> I would prefer to let the infrastructure do the target/staging
+> installation, and use the post-staging-install and post-target-install
+> hooks to do the headers copy trick.
+> 
+> Thomas
+
+Fair enough, sent PATCHv2.
