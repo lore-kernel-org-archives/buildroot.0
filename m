@@ -1,9 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jan 2011 11:21:32 -0300
-Subject: [Buildroot] [PATCH 7/9] libpng: bump to version 1.4.5
+Date: Thu, 27 Jan 2011 11:21:33 -0300
+Subject: [Buildroot] [PATCH 8/9] libcuefile: convert to cmaketargets
+	infrastructure
 In-Reply-To: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1296138094-502-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1296138094-502-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libpng/libpng.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/multimedia/libcuefile/libcuefile.mk |   22 +---------------------
+ 1 files changed, 1 insertions(+), 21 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 82b88da..699561b 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -3,11 +3,10 @@
- # libpng (Portable Network Graphic library)
- #
- #############################################################
--LIBPNG_VERSION = 1.4.4
-+LIBPNG_VERSION = 1.4.5
- LIBPNG_SERIES = 14
- LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
--LIBPNG_LIBTOOL_PATCH = NO
- LIBPNG_INSTALL_STAGING = YES
- LIBPNG_DEPENDENCIES = host-pkg-config zlib
+diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+index 934113b..b801185 100644
+--- a/package/multimedia/libcuefile/libcuefile.mk
++++ b/package/multimedia/libcuefile/libcuefile.mk
+@@ -7,28 +7,8 @@
+ LIBCUEFILE_VERSION = r453
+ LIBCUEFILE_SITE = http://files.musepack.net/source
+ LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
+-LIBCUEFILE_DEPENDENCIES = host-cmake
+ LIBCUEFILE_INSTALL_STAGING = YES
  
+-# CMake doesn't support having the --sysroot option directly in the
+-# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
+-# It also gets confused by ccache, so don't use ccache here.
+-LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
+-LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+-
+-define LIBCUEFILE_CONFIGURE_CMDS
+-	(cd $(@D) ; \
+-		$(HOST_DIR)/usr/bin/cmake . \
+-		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
+-		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
+-		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
+-	)
+-endef
+-
+-define LIBCUEFILE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+ define LIBCUEFILE_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
+ 	cp -r $(@D)/include $(STAGING_DIR)/usr
+@@ -39,4 +19,4 @@ define LIBCUEFILE_INSTALL_TARGET_CMDS
+ 	cp -r $(@D)/include $(TARGET_DIR)/usr
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,libcuefile))
++$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
 -- 
 1.7.3.4
