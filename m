@@ -1,26 +1,65 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Jan 2011 11:52:09 -0300
-Subject: [Buildroot] [PATCH 2/9] util-linux: convert to autotargets and
- bump to 2.18
-In-Reply-To: <20110127154344.2d25d0ca@surf>
-References: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>	<1296138094-502-2-git-send-email-gustavo@zacarias.com.ar>
-	<20110127154344.2d25d0ca@surf>
-Message-ID: <4D418699.2040402@zacarias.com.ar>
+Date: Thu, 27 Jan 2011 12:02:40 -0300
+Subject: [Buildroot] [PATCHv2] libcuefile: convert to cmaketargets
+	infrastructure
+Message-ID: <1296140560-13426-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/27/11 11:43, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/multimedia/libcuefile/libcuefile.mk |   31 +++++---------------------
+ 1 files changed, 6 insertions(+), 25 deletions(-)
 
-> We had some patches on the list switching to util-linux-ng. Wouldn't
-> this be a better choice ? Or maybe I misunderstood the status of
-> util-linux vs. util-linux-ng ?
-> 
-> Regards,
-> 
-> Thomas
-
-It's util-linux-ng, i just keep the old package name :)
-Regards.
+diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+index 934113b..86ec070 100644
+--- a/package/multimedia/libcuefile/libcuefile.mk
++++ b/package/multimedia/libcuefile/libcuefile.mk
+@@ -7,36 +7,17 @@
+ LIBCUEFILE_VERSION = r453
+ LIBCUEFILE_SITE = http://files.musepack.net/source
+ LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
+-LIBCUEFILE_DEPENDENCIES = host-cmake
+ LIBCUEFILE_INSTALL_STAGING = YES
+ 
+-# CMake doesn't support having the --sysroot option directly in the
+-# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
+-# It also gets confused by ccache, so don't use ccache here.
+-LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
+-LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+-
+-define LIBCUEFILE_CONFIGURE_CMDS
+-	(cd $(@D) ; \
+-		$(HOST_DIR)/usr/bin/cmake . \
+-		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
+-		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
+-		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
+-	)
+-endef
+-
+-define LIBCUEFILE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define LIBCUEFILE_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++define LIBCUEFILE_INSTALL_STAGING_INCLUDES
+ 	cp -r $(@D)/include $(STAGING_DIR)/usr
+ endef
+ 
+-define LIBCUEFILE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++define LIBCUEFILE_INSTALL_TARGET_INCLUDES
+ 	cp -r $(@D)/include $(TARGET_DIR)/usr
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,libcuefile))
++LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
++LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
++
++$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
+-- 
+1.7.3.4
