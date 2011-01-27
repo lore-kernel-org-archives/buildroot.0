@@ -1,23 +1,30 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Thu, 27 Jan 2011 17:38:24 +0100
-Subject: [Buildroot] [PATCH] ntp: bump to version 4.2.6p3 and fix glibc
- build failure
-In-Reply-To: <1296145451-19548-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1296145451-19548-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <AANLkTimeh1judED-R7+jvujfiq0OutQ+yFUvJuLfqEut@mail.gmail.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Thu, 27 Jan 2011 12:10:46 -0600
+Subject: [Buildroot] [BuildRoot][PATCH] Resubmit Strange behavior of inittab
+In-Reply-To: <1295373920.16414.126.camel@worky>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1EF91EB1@EXV1.corp.adtran.com>
+	<1295373920.16414.126.camel@worky>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F199844@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/1/27 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> Bump to version 4.2.6p3 and fix a build failure with external toolchains
-> that use certain glibc versions as point out by speakman on IRC.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
-> <snip>
->
+inittab ordering causes mount to fail on remount,rw.  inittab
+changed to mount /proc first.
 
-Acked-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
+---
+--- a/fs/skeleton/etc/inittab   2011-01-06 05:25:33.000000000 -0600
++++ b/fs/skeleton/etc/inittab   2011-01-18 12:16:18.000000000 -0600
+@@ -14,8 +14,8 @@
+ # process   == program to run
+ 
+ # Startup the system
+-null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mount -t proc proc /proc
++null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
