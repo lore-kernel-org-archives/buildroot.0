@@ -1,26 +1,60 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 27 Jan 2011 12:36:28 +0100
-Subject: [Buildroot] [PATCH v2] New package: can-utils
-In-Reply-To: <8762tasjjs.fsf@macbook.be.48ers.dk>
-References: <4D07935A.1070505@visionsystems.de>
-	<4D2DCB65.6080502@visionsystems.de>
-	<8762tasjjs.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTinhGDC1RgSETa1Wt=3NnUV=iE3W64M-BKEes3Sh@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 27 Jan 2011 11:21:26 -0300
+Subject: [Buildroot] [PATCH 1/9] e2fsprogs: bump to 1.41.14 and fixup
+Message-ID: <1296138094-502-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ?Yegor> Please, don't apply this patch. SocketCAN devs are about to
-> ?Yegor> create official distribution and the package name will be
-> ?Yegor> changed. I'll post a proper patch as soon as the distro is
-> ?Yegor> finished.
->
-> Ok, great. The utilities are quite small, but perhaps it would be nice
-> to add config options to choose what tools to build/install
-> (E.G. similar to how we do it for input-tools).
+Bump e2fsprogs to version 1.41.14
 
-O.K. I'll make so.
+Also export libblkid properly for util-linux to use.
 
-Yegor
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/e2fsprogs/e2fsprogs.mk |   20 +++++++++++++-------
+ 1 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index f525804..13c94ba 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -3,15 +3,10 @@
+ # e2fsprogs
+ #
+ #############################################################
+-E2FSPROGS_VERSION:=1.41.12
+-E2FSPROGS_SOURCE=e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
+-E2FSPROGS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+-
+-E2FSPROGS_AUTORECONF = NO
+-E2FSPROGS_LIBTOOL_PATCH = NO
+ 
++E2FSPROGS_VERSION = 1.41.14
++E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+ E2FSPROGS_INSTALL_STAGING = YES
+-E2FSPROGS_INSTALL_TARGET = YES
+ 
+ E2FSPROGS_CONF_OPT = \
+ 	--disable-tls \
+@@ -118,5 +113,16 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBUUID),y)
+ E2FSPROGS_POST_INSTALL_STAGING_HOOKS += E2FSPROGS_STAGING_LIBUUID_INSTALL
+ endif
+ 
++define E2FSPROGS_STAGING_LIBBLKID_INSTALL
++	install -D $(@D)/lib/blkid/blkid.h \
++		$(STAGING_DIR)/usr/include/blkid/blkid.h
++	install -D $(@D)/lib/blkid/blkid_types.h \
++		$(STAGING_DIR)/usr/include/blkid/blkid_types.h
++endef
++
++ifeq ($(BR2_PACKAGE_E2FSPROGS_LIBBLKID),y)
++E2FSPROGS_POST_INSTALL_STAGING_HOOKS += E2FSPROGS_STAGING_LIBBLKID_INSTALL
++endif
++
+ $(eval $(call AUTOTARGETS,package,e2fsprogs))
+ $(eval $(call AUTOTARGETS,package,e2fsprogs,host))
+-- 
+1.7.3.4
