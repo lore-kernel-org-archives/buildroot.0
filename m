@@ -1,39 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jan 2011 15:46:50 +0100
-Subject: [Buildroot] [git commit master 1/1] iproute2: ensure it gets built
-	after busybox if both enabled
-Message-ID: <20110128144734.66F378DCBD@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 28 Jan 2011 20:36:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 3169] New: python patch has typo,
+	aborts build in scenario
+Message-ID: <bug-3169-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=3169
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f199bce78c5298e1316bff8c78299dc1ee73101
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+           Summary: python patch has typo, aborts build in scenario
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: markw at digi.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iproute2/iproute2.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index c3e9650..dfb8410 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -9,6 +9,12 @@ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.bz2
- IPROUTE2_SITE = http://devresources.linuxfoundation.org/dev/iproute2/download
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- 
-+# If both iproute2 and busybox are selected, make certain we win
-+# the fight over who gets to have their utils actually installed.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+IPROUTE2_DEPENDENCIES += busybox
-+endif
-+
- # If we've got iptables enable xtables support for tc
- ifeq ($(BR2_PACKAGE_IPTABLES),y)
- IPROUTE2_DEPENDENCIES += iptables
+Created attachment 2899
+  --> https://bugs.busybox.net/attachment.cgi?id=2899
+Proposed patch to python patch 005
+
+Pulled from git repository, CHANGES says: 2011-02, not yet released.
+
+python package patch file python-2.7-005-staging-headers-libs.patch has typo in
+modules_lib_dirs section, causing build abort if PYTHON_MODULES_LIB is not
+specified during build.
+
++        try:
++            modules_lib_dirs = os.environ["PYTHON_MODULES_LIB"].split()
++        except KeyError:
++            modules_include_dirs = ['/usr/lib']
+
+modules_include_dirs should be modules_lib_dirs:
+
++            modules_lib_dirs = ['/usr/lib']
+
+Proposed patch to patch is attached, or you could replace existing patch.  No
+attribution is necessary.
+
+Thanks.
+
+Mark Wickham
+Digi International
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
