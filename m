@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Jan 2011 09:17:52 +0100
-Subject: [Buildroot] [git commit master 1/1] dbus-python: fix build after
-	python upgrade
-Message-ID: <20110128081845.95FBE8D475@busybox.osuosl.org>
+Date: Fri, 28 Jan 2011 10:43:13 +0100
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
+	changes
+Message-ID: <20110128094347.4CCEE8DCAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,99 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51c5af67a6c87660eba8454bb924cf5f2ee08a33
+commit: http://git.buildroot.net/buildroot/commit/?id=2645004bb5e2f067532e8356694bbe66c4296d9b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Point it at host-python, and ensure it gets built in advance.
+Thanks to Thomas for input.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus-python/dbus-python.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES |   58 +++++++++++++++++++++++++++++++++++++++++++---------------
+ 1 files changed, 43 insertions(+), 15 deletions(-)
 
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index 5c12456..b2e9f56 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -10,7 +10,7 @@ DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_INSTALL_TARGET = YES
+diff --git a/CHANGES b/CHANGES
+index 27e9bf7..79197de 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,36 +1,64 @@
+ 2011.02, Not yet released:
  
- DBUS_PYTHON_CONF_ENV = am_cv_pathless_PYTHON=python \
--		ac_cv_path_PYTHON=$(PYTHON_DIR)/hostpython \
-+		ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python \
- 		am_cv_python_version=$(PYTHON_VERSION) \
- 		am_cv_python_platform=linux2 \
- 		am_cv_python_pythondir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-@@ -19,6 +19,6 @@ DBUS_PYTHON_CONF_ENV = am_cv_pathless_PYTHON=python \
++	External toolchain improvements: clarification of the options,
++	and introduction of the toolchain profile concept, for
++	well-known toolchains. Buildroot is now capable of
++	automatically downloading and extracting well-known toolchains
++	(for the moment, CodeSourcery ARM, PowerPC, MIPS and SuperH
++	toolchains are supported).
++
++	Complete rework of how hardware boards are supported.
++	Each board now only has a single defconfig file, and all
++	board-specific options have been removed. See
++	docs/buildroot.html#board_support for details.
++
++	Added support for the following boards: Mini2440, Qemu ARM
++	Versatile, Qemu MIPSel Malta, Qemu PowerPC G3beige, Qemu SH4
++	r2d and Qemu x86. The Qemu boards support allows to easily
++	build systems that are known to work under Qemu.
++
++	Staging directory moved into $(O)/host/usr/<tuple>/sysroot, in
++	preparation for support of SDK. For the same reason, the
++	toolchain binaries (cross-compiler and other related tools)
++	are now installed in $(O)/host/usr/bin/.
++
+ 	Ccache support reworked. Now used for both host and target
+ 	compilation, and cache is stored in ~/.buildroot-ccache.
  
- DBUS_PYTHON_CONF_OPT = --disable-html-docs --disable-api-docs
+-	Toolchain: uClibc 0.9.32-rc1, several components moved to
++	Toolchain: uClibc 0.9.32-rc2, several components moved to
+ 	normal AUTOTARGET packages.
  
--DBUS_PYTHON_DEPENDENCIES = dbus-glib python
-+DBUS_PYTHON_DEPENDENCIES = dbus-glib python host-python
++	Generic cmake infrastructure, similar to the existing
++	GENTARGETS/AUTOTARGETS.
++
+ 	Support for bzr downloads, next to the existing git/svn support.
  
- $(eval $(call AUTOTARGETS,package,dbus-python))
+ 	EXT2 file system size handling improved, UBI image support, fs
+ 	configuration options cleanup, U-Boot/Barebox version bumps.
+ 
+ 	Updated/fixed packages: alsa-utils, at, autoconf, automake,
+-	bash, binutils, bison, busybox, bzip2, cloop, coreutils, cups,
+-	dbus, direcfb-examples, dmalloc, dosfstools, ed, ffmpeg,
+-	findutils, flac, freetype, gdk-pixbuf, gmp, grep, gperf,
+-	gst-plugins-good, gvfs, hdparm, hostapd, i2c-tools, icu,
+-	input-tools, iproute2, iptables, jpeg, kexec, libaio, libcap,
+-	libconfig, libfuse, libglib2, libmad, libogg, libsndfile,
+-	libtheora, libtool, libvorbis, libxml2, libxslt, linux-fusion,
+-	lm-sensors, lsof, ltp-testsuite, ltrace, lvm2, m4, makedevs,
++	bash, binutils, bison, busybox, bzip2, cdrkit, cloop,
++	coreutils, cups, dbus, dbus-python, direcfb-examples, dmalloc,
++	dosfstools, ed, ffmpeg, findutils, flac, freetype, gdk-pixbuf,
++	gmp, grep, gperf, gst-plugins-good, gstreamer, gvfs, hdparm,
++	hostapd, i2c-tools, icu, input-tools, iproute2, iptables,
++	jpeg, kexec, libaio, libcap, libconfig, libfuse, libglib2,
++	libmad, libogg, libpcap, libsndfile, libtheora, libtool,
++	libvorbis, libxcb, libxml2, libxslt, linux-fusion, lm-sensors,
++	lsof, ltp-testsuite, ltrace, lvm2, lzo, m4, makedevs,
+ 	memtester, mesa3d, mii-diag, mpc, mpfr, mpg123, mplayer,
+ 	mrouted, nano, netperf, netplug, ntfs-3g, openssh, openssl,
+ 	openvpn, oprofile, pango, patch, pciutils, php, portmap,
+-	psmisc, qt, rsync, screen, sdl_gfx, sdl_sound, smartmontools,
+-	sqlite, squid, sshfs, sstrip, sysklogd, sysstat, sysvinit,
+-	tar, tcpdump, tslib, udev, usbutils, vim, vtun, webkit, wipe,
+-	xapp_xlogo, xkeyboard-config, xlib_libX11, xz, zlib
++	psmisc, python, qt, rsync, screen, sdl_gfx, sdl_sound,
++	smartmontools, sqlite, squid, sshfs, sstrip, sysklogd,
++	sysstat, sysvinit, tar, tcpdump, tslib, udev, usbutils, vim,
++	vtun, webkit, wipe, xapp_xlogo, xcb-proto, xkeyboard-config,
++	xlib_libX11, xz, zlib
+ 
+ 	New packages: dhrystone, faad2, fbgrab, irda-utils, libao,
+-	libreplaygain, libsamplerate, libsigc++, lsuio, rsh-redone,
+-	sdparm, vorbis-tools, wavpack, whetstone, xl2tp
++	libcuefile, libffi, libreplaygain, libsamplerate, libsigc++,
++	lsuio, mpd, musepack, python-mad, python-serial, rsh-redone, sdparm,
++	vorbis-tools, wavpack, whetstone, xl2tp
+ 
+ 	Removed packages: hotplug, l2tp, libfloat, microcom,
+ 	ng-spice-rework
 -- 
 1.7.3.4
