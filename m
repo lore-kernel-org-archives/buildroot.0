@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 30 Jan 2011 00:40:13 +0100
-Subject: [Buildroot] [git commit master 1/1] libcuefile: convert to
-	cmaketargets infrastructure
-Message-ID: <20110129234038.CD3958E076@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] pkg-config: bump version
+Message-ID: <20110129234038.402CB8E076@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +9,68 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=950a63a75383ec42795ec4a0c1559bbc832912be
+commit: http://git.buildroot.net/buildroot/commit/?id=d5da84fda9bf9478935e7a080491519ebc4197d3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/libcuefile/libcuefile.mk |   31 +++++---------------------
- 1 files changed, 6 insertions(+), 25 deletions(-)
+ .../pkg-config/pkg-config-0.23-fix-sysroot.patch   |   34 --------------------
+ package/pkg-config/pkg-config.mk                   |    2 +-
+ 2 files changed, 1 insertions(+), 35 deletions(-)
+ delete mode 100644 package/pkg-config/pkg-config-0.23-fix-sysroot.patch
 
-diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
-index 934113b..86ec070 100644
---- a/package/multimedia/libcuefile/libcuefile.mk
-+++ b/package/multimedia/libcuefile/libcuefile.mk
-@@ -7,36 +7,17 @@
- LIBCUEFILE_VERSION = r453
- LIBCUEFILE_SITE = http://files.musepack.net/source
- LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
--LIBCUEFILE_DEPENDENCIES = host-cmake
- LIBCUEFILE_INSTALL_STAGING = YES
- 
--# CMake doesn't support having the --sysroot option directly in the
--# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
--# It also gets confused by ccache, so don't use ccache here.
--LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
--LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+diff --git a/package/pkg-config/pkg-config-0.23-fix-sysroot.patch b/package/pkg-config/pkg-config-0.23-fix-sysroot.patch
+deleted file mode 100644
+index 3653811..0000000
+--- a/package/pkg-config/pkg-config-0.23-fix-sysroot.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-[PATCH] fix PKG_CONFIG_SYSROOT_DIR handling
 -
--define LIBCUEFILE_CONFIGURE_CMDS
--	(cd $(@D) ; \
--		$(HOST_DIR)/usr/bin/cmake . \
--		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
--		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
--		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
--	)
--endef
+-With PKG_CONFIG_SYSROOT_DIR enabled, everything else than -L and -I words
+-gets stripped away.
 -
--define LIBCUEFILE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- pkg.c |    8 ++------
+- 1 file changed, 2 insertions(+), 6 deletions(-)
 -
--define LIBCUEFILE_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
-+define LIBCUEFILE_INSTALL_STAGING_INCLUDES
- 	cp -r $(@D)/include $(STAGING_DIR)/usr
- endef
+-Index: pkg-config-0.23/pkg.c
+-===================================================================
+---- pkg-config-0.23.orig/pkg.c
+-+++ pkg-config-0.23/pkg.c
+-@@ -472,17 +472,13 @@
+-   while (tmp != NULL)
+-     {
+-       char *tmpstr = (char*) tmp->data;
+--      if (pcsysrootdir != NULL)
+-+      if (pcsysrootdir != NULL && tmpstr[0] == '-' &&
+-+          (tmpstr[1] == 'I' || tmpstr[1] == 'L'))
+- 	{
+--	  if (tmpstr[0] == '-' &&
+--	      (tmpstr[1] == 'I' ||
+--	       tmpstr[1] == 'L'))
+--	    {
+- 	      g_string_append_c (str, '-');
+- 	      g_string_append_c (str, tmpstr[1]);
+- 	      g_string_append (str, pcsysrootdir);
+- 	      g_string_append (str, tmpstr+2);
+--	    }
+- 	}
+-       else 
+- 	{
+diff --git a/package/pkg-config/pkg-config.mk b/package/pkg-config/pkg-config.mk
+index d0bc424..413853d 100644
+--- a/package/pkg-config/pkg-config.mk
++++ b/package/pkg-config/pkg-config.mk
+@@ -3,7 +3,7 @@
+ # pkgconfig
+ #
+ #############################################################
+-PKG_CONFIG_VERSION = 0.23
++PKG_CONFIG_VERSION = 0.25
+ PKG_CONFIG_SOURCE = pkg-config-$(PKG_CONFIG_VERSION).tar.gz
+ PKG_CONFIG_SITE = http://pkgconfig.freedesktop.org/releases/
  
--define LIBCUEFILE_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+define LIBCUEFILE_INSTALL_TARGET_INCLUDES
- 	cp -r $(@D)/include $(TARGET_DIR)/usr
- endef
- 
--$(eval $(call GENTARGETS,package/multimedia,libcuefile))
-+LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
-+LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
-+
-+$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
 -- 
 1.7.3.4
