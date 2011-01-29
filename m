@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 30 Jan 2011 00:40:13 +0100
-Subject: [Buildroot] [git commit master 1/1] pkg-config: prefix sysroot to
-	path variables
-Message-ID: <20110129234038.7376F8E076@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libcuefile: convert to
+	cmaketargets infrastructure
+Message-ID: <20110129234038.CD3958E076@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4df2ea27fc28734978ff8a52811dc23d5d1c221
+commit: http://git.buildroot.net/buildroot/commit/?id=950a63a75383ec42795ec4a0c1559bbc832912be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes gst-plugins-bad build, if gstreamer is installed on host with xml
-support, as it uses pkg-config --variable=includedir to find gstconfig.h,
-and hence ends up looking at the host version.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../pkg-config/pkg-config-0.25-fix-variable.patch  |   27 ++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/pkg-config/pkg-config-0.25-fix-variable.patch
+ package/multimedia/libcuefile/libcuefile.mk |   31 +++++---------------------
+ 1 files changed, 6 insertions(+), 25 deletions(-)
 
-diff --git a/package/pkg-config/pkg-config-0.25-fix-variable.patch b/package/pkg-config/pkg-config-0.25-fix-variable.patch
-new file mode 100644
-index 0000000..46b262b
---- /dev/null
-+++ b/package/pkg-config/pkg-config-0.25-fix-variable.patch
-@@ -0,0 +1,27 @@
-+[PATCH] prefix sysroot to path variables
+diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+index 934113b..86ec070 100644
+--- a/package/multimedia/libcuefile/libcuefile.mk
++++ b/package/multimedia/libcuefile/libcuefile.mk
+@@ -7,36 +7,17 @@
+ LIBCUEFILE_VERSION = r453
+ LIBCUEFILE_SITE = http://files.musepack.net/source
+ LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
+-LIBCUEFILE_DEPENDENCIES = host-cmake
+ LIBCUEFILE_INSTALL_STAGING = YES
+ 
+-# CMake doesn't support having the --sysroot option directly in the
+-# compiler path, so move this option to the CFLAGS/CXXFLAGS variables.
+-# It also gets confused by ccache, so don't use ccache here.
+-LIBCUEFILE_TARGET_CC = $(filter-out --sysroot=%,$(TARGET_CC_NOCCACHE))
+-LIBCUEFILE_TARGET_CFLAGS = $(filter --sysroot=%,$(TARGET_CC)) $(TARGET_CFLAGS)
+-
+-define LIBCUEFILE_CONFIGURE_CMDS
+-	(cd $(@D) ; \
+-		$(HOST_DIR)/usr/bin/cmake . \
+-		-DCMAKE_C_COMPILER:FILEPATH="$(LIBCUEFILE_TARGET_CC)" \
+-		-DCMAKE_C_FLAGS:STRING="$(LIBCUEFILE_TARGET_CFLAGS)" \
+-		-DCMAKE_INSTALL_PREFIX:PATH="/usr" \
+-	)
+-endef
+-
+-define LIBCUEFILE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define LIBCUEFILE_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++define LIBCUEFILE_INSTALL_STAGING_INCLUDES
+ 	cp -r $(@D)/include $(STAGING_DIR)/usr
+ endef
+ 
+-define LIBCUEFILE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++define LIBCUEFILE_INSTALL_TARGET_INCLUDES
+ 	cp -r $(@D)/include $(TARGET_DIR)/usr
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,libcuefile))
++LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
++LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
 +
-+Prefix path values with sysroot if a variable is requested
-+(--varable=<name>), similar to how it's done for -I / -L flags.
-+
-+This is sometimes used to find header files (E.G. in gst-plugins configure),
-+so ensure the sysroot'ed files are used.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ main.c |    3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+Index: pkg-config-0.25/main.c
-+===================================================================
-+--- pkg-config-0.25.orig/main.c
-++++ pkg-config-0.25/main.c
-+@@ -695,6 +695,9 @@ main (int argc, char **argv)
-+   if (variable_name)
-+     {
-+       char *str = packages_get_var (packages, variable_name);
-++      /* path variable? */
-++      if (pcsysrootdir && str[0] == '/')
-++          printf ("%s/", pcsysrootdir);
-+       printf ("%s", str);
-+       g_free (str);
-+       need_newline = TRUE;
++$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
 -- 
 1.7.3.4
