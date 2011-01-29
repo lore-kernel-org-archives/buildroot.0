@@ -1,25 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Jan 2011 00:39:27 +0100
-Subject: [Buildroot] [PATCHv2] libcuefile: convert to cmaketargets
-	infrastructure
-In-Reply-To: <1296140560-13426-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Thu, 27 Jan 2011 12:02:40 -0300")
-References: <1296140560-13426-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k4hnxosw.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 Jan 2011 00:40:13 +0100
+Subject: [Buildroot] [git commit master 1/1] mtd: bump version
+Message-ID: <20110129234038.13C818E076@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/multimedia/libcuefile/libcuefile.mk |   31 +++++---------------------
- Gustavo>  1 files changed, 6 insertions(+), 25 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=50c93ed9b3d906b0e10c370431ca9e333053bdef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index ec8c663..8a819fa 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=1.4.1
++MTD_VERSION:=1.4.2
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
