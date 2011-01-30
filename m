@@ -1,35 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jan 2011 15:37:48 +0100
-Subject: [Buildroot] [PATCH 4/6] Use <code> instead of <pre> to improve
-	formatting
+Date: Sun, 30 Jan 2011 15:37:49 +0100
+Subject: [Buildroot] [PATCH 5/6] Do not mention
+	toolchain/uClibc/uClibc.config-locale
 In-Reply-To: <cover.1296398261.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1296398261.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a1579985e5305ea4d7f4c66ebd1b34a606c71041.1296398261.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e24f48609cc9c204ff7df26fe82f7fa1eb1322c0.1296398261.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The uClibc configuration file toolchain/uClibc/uClibc.config-locale
+does not exist anymore.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/buildroot.html |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/buildroot.html |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 1b8da2a..e815ee9 100644
+index e815ee9..04cbe67 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -187,8 +187,8 @@
-     <p>You <b>should never</b> use <code>make -jN</code> with
-     Buildroot: it does not support <i>top-level parallel
-     make</i>. Instead, use the <code>BR2_JLEVEL</code> option to tell
--    Buildroot to run each package compilation with <pre>make
--    -jN</pre>.</p>
-+    Buildroot to run each package compilation with <code>make
-+    -jN</code>.</p>
+@@ -409,9 +409,8 @@
+       your configuration changes as appropriate.</li>
  
-     <p>This command will generally perform the following steps:</p>
-     <ul>
+       <li>Copy the <code>.config</code> file to
+-      <code>toolchain/uClibc/uClibc.config</code> or
+-      <code>toolchain/uClibc/uClibc.config-locale</code>. The former
+-      is used if you haven't selected locale support in Buildroot
++      <code>toolchain/uClibc/uClibc.config</code>. The former is used
++      if you haven't selected locale support in Buildroot
+       configuration, and the latter is used if you have selected
+       locale support.</li>
+ 
+@@ -419,9 +418,8 @@
+     </ol>
+ 
+     <p>Otherwise, you can simply change
+-    <code>toolchain/uClibc/uClibc.config</code> or
+-    <code>toolchain/uClibc/uClibc.config-locale</code>, without running
+-    the configuration assistant.</p>
++    <code>toolchain/uClibc/uClibc.config</code>, without running the
++    configuration assistant.</p>
+ 
+     <p>If you want to use an existing config file for uclibc, then see
+     section <a href="#environment_variables">environment variables</a>.</p>
 -- 
 1.7.0.4
