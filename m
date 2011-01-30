@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 30 Jan 2011 20:13:44 +0100
-Subject: [Buildroot] [git commit master 1/1] Use <code> instead of <pre> to
-	improve formatting
-Message-ID: <20110130191406.4FA818E21F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Update documentation about
+	external toolchain
+Message-ID: <20110130191405.F40488E21F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,93 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07cb06962c5a9326bf30713ee0a6ee2fd6a67323
+commit: http://git.buildroot.net/buildroot/commit/?id=7af45b8ae07cce97c6f72245c13fbeb355eeaea5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reword the documentation on external toolchain to take into account
+the new features added since 2010.11 concerning external toolchain
+profiles.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/buildroot.html |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/buildroot.html |   61 ++++++++++++++++++++++++++++++++------------------
+ 1 files changed, 39 insertions(+), 22 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 1ec707d..f1721ea 100644
+index 3a7684d..6226c11 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -187,8 +187,8 @@
-     <p>You <b>should never</b> use <code>make -jN</code> with
-     Buildroot: it does not support <i>top-level parallel
-     make</i>. Instead, use the <code>BR2_JLEVEL</code> option to tell
--    Buildroot to run each package compilation with <pre>make
--    -jN</pre>.</p>
-+    Buildroot to run each package compilation with <code>make
-+    -jN</code>.</p>
+@@ -706,31 +706,48 @@ $(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
+     </ul>
  
-     <p>This command will generally perform the following steps:</p>
+     <p>Buildroot supports using existing toolchains through a
+-    mechanism called <i>external toolchain</i>.</p>
++    mechanism called <i>external toolchain</i>. The external toolchain
++    mechanism is enabled in the <code>Toolchain</code> menu, by
++    selecting <code>External toolchain</code> in <code>Toolchain
++    type</code>.</p>
+ 
+-    <p>To enable the use of an external toolchain, go to the
+-    <code>Toolchain</code> menu, and :</p>
++    <p>Then, you have three solutions to use an external
++    toolchain:</p>
+ 
      <ul>
+-      <li>Select the <code>External binary toolchain</code> toolchain
+-      type</li>
+-      <li>Select the appropriate <code>External toolchain C
+-      library</code></li>
+-      <li>Select the appropriate values for <code>Enable large
+-      file</code>, <code>Enable IPv6</code>, <code>Enable
+-      RPC</code>, <code>Enable toolchain
+-      locale/i18n</code>, <code>Enable WCHAR</code>, <code>Enable
+-      program invocation</code>, <code>Build/install c++ compiler and
+-      libstdc++</code>, according to the configuration of your
+-      external toolchain. Buildroot will check those values at the
+-      beginning of the compilation process and will tell you if you
+-      used incorrect values.</li>
+-      <li>Adjust the <code>External toolchain path</code>
+-      appropriately. It should be set to a path where a bin/ directory
+-      contains your cross-compiling tools</li>
+-      <li>Adjust the <code>External toolchain prefix</code> so that the
+-      prefix, suffixed with <code>-gcc</code> or <code>-ld</code> will
+-      correspond to your cross-compiling tools</li>
++
++      <li>Use a predefined external toolchain profile, and let
++      Buildroot download, extract and install the toolchain. Buildroot
++      already knows about a few CodeSourcery toolchains for ARM,
++      PowerPC, MIPS and SuperH. Just select the toolchain profile
++      in <code>Toolchain</code> through the available ones. This is
++      definitely the easiest solution.</li>
++
++      <li>Use a predefined external toolchain profile, but instead of
++      having Buildroot download and extract the toolchain, you can
++      tell Buildroot where your toolchain is already installed on your
++      system. Just select the toolchain profile
++      in <code>Toolchain</code> through the available ones,
++      unselect <code>Download toolchain automatically</code>, and fill
++      the <code>Toolchain path</code> text entry with the path to your
++      cross-compiling toolchain.</li>
++
++      <li>Use a completely custom external toolchain. This is
++      particularly useful for toolchains generated using
++      Crosstool-NG. To do this, select the <code>Custom
++      toolchain</code> solution in the <code>Toolchain</code>
++      list. You need to fill the <code>Toolchain
++      path</code>, <code>Toolchain prefix</code> and <code>External
++      toolchain C library</code> options. Then, you have to tell
++      Buildroot what your external toolchain supports. If your
++      external toolchain uses the <i>glibc</i> library, you only have
++      to tell whether your toolchain supports C++ or not. If your
++      external toolchain uses the <i>uclibc</i> library, then you have
++      to tell Buildroot if it supports largefile, IPv6, RPC,
++      wide-char, locale, program invocation, threads and C++. At the
++      beginning of the execution, Buildroot will tell you if the
++      selected options do not match the toolchain configuration.</li>
++
+     </ul>
+ 
+     <p>Our external toolchain support has been tested with toolchains
 -- 
 1.7.3.4
