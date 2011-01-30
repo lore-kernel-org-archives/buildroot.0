@@ -1,98 +1,68 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Jan 2011 11:05:50 +0100
-Subject: [Buildroot] [git commit master 1/1] pkg-config: rework
-	--with-sysroot patch so it doesn't break target build
-Message-ID: <20110130100955.79B298D1F3@busybox.osuosl.org>
+From: Marcus Osdoba <marcus.osdoba@googlemail.com>
+Date: Sun, 30 Jan 2011 11:30:54 +0100
+Subject: [Buildroot] rootfs.ubifs not able to mount by kernel
+In-Reply-To: <20110130014541.ed0f21fc085cea67a12906c6b8e6fb44.9d3b1440ba.wbe@email10.secureserver.net>
+References: <20110130014541.ed0f21fc085cea67a12906c6b8e6fb44.9d3b1440ba.wbe@email10.secureserver.net>
+Message-ID: <4D453DDE.7000007@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am 30.01.2011 09:45, schrieb nataraj at vaaraahi.com:
+> Hi Jacmet, Kos_tom & friends
+>
+> I am trying to boot from a ubifs file system from u-boot. I am able to
+> write my "rootfs.ubifs" onto nand flash, and then, mount and list
+> using 'ubimount' and 'ubifsls' commands, in u-boot. But getting kernel
+> panic when kernel tries to mount the rootfs.I am using arm-linux
+> kernel on at91sam9263 Soc gadget having 256M Nand flash.
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02d605cd556107d9e1a4f0c9ae9ee3403fd1a170
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Writing a ubiFS on NAND (with RAW u-boot command) and mounting 
+afterwards is not possible. The produced ubiFS must be ubinized to a UBI 
+image.
+I must admit, that I did not exactly understand the diffrence between 
+ubifs and ubi, but as explained on the mtd-utils page, the ubifs is the 
+FS layer to the kernel in a traditional sense (like ext2FS) and ubi is a 
+technical layer between RAW NAND and FS.
+http://www.linux-mtd.infradead.org/doc/ubi.html
+http://www.linux-mtd.infradead.org/doc/ubifs.html
 
-We don't currently autoreconf pkg-config for the target as we don't need
---with-sysroot support, which means PKG_CONFIG_SYSROOT=NULL wasn't
-passed, breaking the build.
+I already used ubifs and ubiimages on my target device and can confirm, 
+that you have to create the ubifs image AND afterwards you have to 
+UBINIZE it BEFORE writing it on NAND.
 
-Fix it by reworking the patch to only pass this if --with-sysroot is given,
-and handle the not set case in main.c.
+Excerpt from 
+http://gitorious.org/dockstar/emdebian-multistrap/blobs/master/mkubi-img.sh
+..
+echo "Generating UBIFS out of target dir: $ROOTFS"
+mkfs.ubifs -r $ROOTFS $UBIFS_OPTS -o $UBIFS_IMAGEFILE
+echo "Generating UBI image out of file $UBIFS_IMAGEFILE"
+ubinize $UBINIZE_OPTS ubinize.cfg -o $UBI_IMAGEFILE
+..
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../pkg-config-0.25-add-with-sysroot.patch         |   32 ++++++++++++-------
- 1 files changed, 20 insertions(+), 12 deletions(-)
+I wrote the ubinized image on the NAND flash and the linux kernel could 
+be read via u-boot ubifsload from that nand partition without problems. 
+Furthermore the kernel accepted the ubifs on the ubi parition as rootfs.
 
-diff --git a/package/pkg-config/pkg-config-0.25-add-with-sysroot.patch b/package/pkg-config/pkg-config-0.25-add-with-sysroot.patch
-index 0fdcd25..e8431ed 100644
---- a/package/pkg-config/pkg-config-0.25-add-with-sysroot.patch
-+++ b/package/pkg-config/pkg-config-0.25-add-with-sysroot.patch
-@@ -6,28 +6,29 @@ The environment variable overrides this default setting if set.
- 
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
- ---
-- Makefile.am  |    6 ++++++
-+ Makefile.am  |    6 +++++-
-  configure.in |    6 ++++++
-- main.c       |    5 +++--
-- 3 files changed, 15 insertions(+), 2 deletions(-)
-+ main.c       |    9 +++++++--
-+ 3 files changed, 18 insertions(+), 3 deletions(-)
- 
- Index: pkg-config-0.25/Makefile.am
- ===================================================================
- --- pkg-config-0.25.orig/Makefile.am
- +++ pkg-config-0.25/Makefile.am
--@@ -31,6 +31,12 @@ AM_CFLAGS=@WARN_CFLAGS@
-- INCLUDES=-DPKG_CONFIG_PC_PATH="\"$(pc_path)\"" $(included_glib_includes) \
-- 	$(popt_includes)
-+@@ -28,8 +28,12 @@ EXTRA_DIST = $(m4_DATA) $(man_MANS) READ
-+ bin_PROGRAMS = pkg-config
-+ AM_CFLAGS=@WARN_CFLAGS@
-  
- +if USE_SYSROOT
--+INCLUDES += -DPKG_CONFIG_SYSROOT="\"$(sysroot)\""
--+else
--+INCLUDES += -DPKG_CONFIG_SYSROOT=NULL
-++sysroot_includes = -DPKG_CONFIG_SYSROOT="\"$(sysroot)\""
- +endif
- +
-+ INCLUDES=-DPKG_CONFIG_PC_PATH="\"$(pc_path)\"" $(included_glib_includes) \
-+-	$(popt_includes)
-++	$(popt_includes) $(sysroot_includes)
-+ 
-  pkg_config_SOURCES= \
-  	pkg.h \
-- 	pkg.c \
- Index: pkg-config-0.25/configure.in
- ===================================================================
- --- pkg-config-0.25.orig/configure.in
-@@ -49,7 +50,14 @@ Index: pkg-config-0.25/main.c
- ===================================================================
- --- pkg-config-0.25.orig/main.c
- +++ pkg-config-0.25/main.c
--@@ -39,7 +39,7 @@
-+@@ -36,10 +36,14 @@
-+ #undef STRICT
-+ #endif
-+ 
-++#ifndef PKG_CONFIG_SYSROOT
-++#define PKG_CONFIG_SYSROOT NULL
-++#endif
-++
-  static int want_debug_spew = 0;
-  static int want_verbose_errors = 0;
-  static int want_stdout_errors = 0;
-@@ -58,7 +66,7 @@ Index: pkg-config-0.25/main.c
-  
-  void
-  debug_spew (const char *format, ...)
--@@ -311,7 +311,8 @@ main (int argc, char **argv)
-+@@ -311,7 +315,8 @@ main (int argc, char **argv)
-        add_search_dirs(PKG_CONFIG_PC_PATH, G_SEARCHPATH_SEPARATOR_S);
-      }
-  
--- 
-1.7.3.4
+>
+> Specific errors being:-
+> UBIFS error (pid 1): ubifs_get_sb: cannot open "ubi0:rootfs", error -19
+> VFS: Cannot open root device "ubi0:rootfs" or unknown-block(0,0)
+I guess, the ubifs on the UBI(without fs) parition could not be loaded 
+(because you didn't create one ;-) ).
+
+I think it is possible to write a ubifs image onto a formerly created 
+ubi parition with mtd-utils (this would preserve the write counters of 
+the ubi layer). But I never tried that (because I didn't bookmark the 
+site where I found that information...).
+
+May be it is possible to "format" or better prepare the ubi parition 
+with some u-boot command and write the ubiFS image on it... But I was 
+happy with my ubi image and since it worked, I didn't have a deeper look 
+into u-boot commands...
+
+Regards,
+Marcus
