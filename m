@@ -1,49 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Jan 2011 10:36:39 +0100
-Subject: [Buildroot] Buildroot with 2.4.27 kernel: Network problems
-In-Reply-To: <20110130084425.5cc28ae3@x41> (Simon Kagstrom's message of "Sun, 
-	30 Jan 2011 08:44:25 +0100")
-References: <20110130084425.5cc28ae3@x41>
-Message-ID: <87bp2yybq0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 Jan 2011 10:40:17 +0100
+Subject: [Buildroot] [git commit master 1/1] dnsmasq: remove dbus cflags
+	mangling
+Message-ID: <20110130094614.6518B80738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Kagstrom <simon.kagstrom@gmail.com> writes:
 
- Simon> Hi Buildrooters!
- Simon> I have a bit of an odd problem. I have a ARM-based Linux stereo, which
- Simon> I've rooted and want to add despotify support to and other things (see
- Simon> here:
+commit: http://git.buildroot.net/buildroot/commit/?id=be89b851762244c8d3f1c14f1fae6afa1b695b5c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Simon>   http://simonkagstrom.livejournal.com/51909.html
+Get rid of cflags workaround now that we always use sysroot, and
+pkg-config --cflags dbus-1 thus returns the correct value.
 
- Simon> if you are interested). I'm using buildroot to make my one rootfs for
- Simon> it. The problem is that it uses a very old kernel, 2.4.27-vrs1, and
- Simon> while the built buildroot filesystem works, I get problems with network
- Simon> operations:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dnsmasq/dnsmasq.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- Simon>   g2 trunk 6869 Island:# ping 192.168.1.104
- Simon>   PING 192.168.1.104 (192.168.1.104): 56 data bytes
- Simon>   ping: can't create raw socket: Function not implemented
-
- Simon>   g2 trunk 6869 Island:# ./busybox telnet localhost  
- Simon>   telnet: socket: Function not implemented
-
-Is this with a complete rootfs built by buildroot, or just with the
-busybox binary copied over to an existing system? If the last, don't
-forget that uClibc doesn't have a stable ABI, so you need to link
-busybox statically if you want to run it in a rootfs with another uClibc
-version.
-
- Simon> I'm trying to trick buildroot into accepting my 2.4.27 kernel
- Simon> sources by renaming it linux-2.6.tar.bz2 and hacking a bit, but
- Simon> is so far unsuccessful. Have anyone else used buildroot with a
- Simon> 2.4 kernel recently?
-
-No, not as far as I know. 2.4.x is ancient.
-
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index ea47e96..976e1d6 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -42,8 +42,6 @@ define DNSMASQ_ENABLE_DBUS
+ 		$(DNSMASQ_DIR)/src/config.h
+ 	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+ 		$(DNSMASQ_DIR)/Makefile
+-	$(SED) 's^--cflags dbus-1^--cflags dbus-1 \| sed s\\\#-I/\\\#-I$(STAGING_DIR)/\\\#g^' \
+-		$(DNSMASQ_DIR)/Makefile
+ endef
+ else
+ define DNSMASQ_ENABLE_DBUS
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
