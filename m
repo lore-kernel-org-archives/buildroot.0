@@ -1,29 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Jan 2011 20:14:18 +0100
-Subject: [Buildroot] [pull request] Pull request for branch doc-updates
-In-Reply-To: <cover.1296398261.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 30 Jan 2011 15:37:44 +0100")
-References: <cover.1296398261.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87tygqw6et.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 30 Jan 2011 21:08:10 +0100
+Subject: [Buildroot] [git commit master 1/1] xfont_font-util: remove
+	mapfiles workaround
+Message-ID: <20110130200835.2034D8E280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit 0fa46e59db087478b4844b2358a496eacdef7569:
- Thomas>   Peter Korsgaard (1):
- Thomas>         lzo: build shared library for host and target
+commit: http://git.buildroot.net/buildroot/commit/?id=a52509a4ddabba26b1c927551cea209c4432b693
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
+Not needed (in fact breaks the build) now pkg-config --variable= does the
+right thing.
 
- Thomas>   git://git.busybox.net/~tpetazzoni/git/buildroot doc-updates
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/xfont_font-util/xfont_font-util.mk |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-Thanks, committed everything except for this one:
-
- Thomas>       Do not mention toolchain/uClibc/uClibc.config-locale
-
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
+index 3ca51ac..82b66a5 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.mk
++++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+@@ -13,13 +13,5 @@ XFONT_FONT_UTIL_INSTALL_TARGET = NO
+ 
+ HOST_XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
+ 
+-define XFONT_FONT_UTIL_POST_INSTALL_FIXES
+-	sed "s,^mapdir=.*,mapdir=$(STAGING_DIR)/usr/share/fonts/X11/util,g" \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc > $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc.new
+-	mv $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc.new $(STAGING_DIR)/usr/lib/pkgconfig/fontutil.pc
+-endef
+-
+-XFONT_FONT_UTIL_POST_INSTALL_STAGING_HOOKS += XFONT_FONT_UTIL_POST_INSTALL_FIXES
+-
+ $(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util))
+ $(eval $(call AUTOTARGETS,package/x11r7,xfont_font-util,host))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
