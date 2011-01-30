@@ -1,44 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Jan 2011 15:20:21 +0100
-Subject: [Buildroot] rootfs.ubifs not able to mount by kernel
-In-Reply-To: <4D453DDE.7000007@googlemail.com>
-References: <20110130014541.ed0f21fc085cea67a12906c6b8e6fb44.9d3b1440ba.wbe@email10.secureserver.net>
-	<4D453DDE.7000007@googlemail.com>
-Message-ID: <20110130152021.4073fd79@surf>
+Date: Sun, 30 Jan 2011 15:23:58 +0100
+Subject: [Buildroot] [git commit master 1/1] pkg-config: add
+ --with-sysroot option for compiled in default sysroot setting
+In-Reply-To: <20110129234038.9CB708E076@busybox.osuosl.org>
+References: <20110129234038.9CB708E076@busybox.osuosl.org>
+Message-ID: <20110130152358.436fc691@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcus,
+Hello,
 
-On Sun, 30 Jan 2011 11:30:54 +0100
-Marcus Osdoba <marcus.osdoba@googlemail.com> wrote:
+On Sun, 30 Jan 2011 00:40:13 +0100
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-> Writing a ubiFS on NAND (with RAW u-boot command) and mounting 
-> afterwards is not possible. The produced ubiFS must be ubinized to a UBI 
-> image.
+> Similar to the --with-pc-path option. It works just like the existing
+> PKG_CONFIG_SYSROOT_DIR environment variable, but compiled in.
+> The environment variable overrides this default setting if set.
+> 
+> This way we don't need to pass PKG_CONFIG_SYSROOT_DIR in the environment
+> when building for the target, and it is easier to reuse pkg-config outside
+> BR (E.G. for the SDK) without having to setup special environment
+> variables.
 
-Correct. But Nataraj did create the UBI volume with U-Boot, and has
-written the UBIFS image inside this UBI volume.
+I am not a big fan of this: we compile a single pkg-config to handle
+both target and host packages. So I don't see why this pkg-config
+should be specifically configured to handle packages and not for host
+packages. I know it was already configured specifically for target
+packages with --with-pc-path, but I wasn't a fan of this.
 
-> I must admit, that I did not exactly understand the diffrence between 
-> ubifs and ubi, but as explained on the mtd-utils page, the ubifs is the 
-> FS layer to the kernel in a traditional sense (like ext2FS) and ubi is a 
-> technical layer between RAW NAND and FS.
-> http://www.linux-mtd.infradead.org/doc/ubi.html
-> http://www.linux-mtd.infradead.org/doc/ubifs.html
-
-UBI is a bit like a LVM (Logical Volume Manager) for MTD devices. On
-top of physical erase blocks, it creates volumes composed of virtual
-erase blocks. This level of indirection allows UBI to handle bad block
-replacement, wear leveling and other low-level flash issues.
-
-Note that since recently, Buildroot is capable of generating a
-ubinize'd UBI filesystem image, thanks to the work done by Julien
-Boibessot from Armadeus. This is available in Buildroot git, and will
-be part of the next Buildroot release.
+I think I'd prefer if we didn't pass any --with-sysroot nor
+--with-pc-path, and instead use the proper environment variables all
+the time. Or either build two pkg-config, one for host packages, one
+for target packages.
 
 Regards,
 
