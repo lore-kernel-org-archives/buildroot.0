@@ -1,46 +1,39 @@
-From: Marcus Osdoba <marcus.osdoba@googlemail.com>
-Date: Mon, 31 Jan 2011 22:18:33 +0100
-Subject: [Buildroot] rootfs.ubifs not able to mount by kernel
-In-Reply-To: <20110130152021.4073fd79@surf>
-References: <20110130014541.ed0f21fc085cea67a12906c6b8e6fb44.9d3b1440ba.wbe@email10.secureserver.net>	<4D453DDE.7000007@googlemail.com>
-	<20110130152021.4073fd79@surf>
-Message-ID: <4D472729.7000501@googlemail.com>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Mon, 31 Jan 2011 22:52:47 +0100
+Subject: [Buildroot] [PATCH] Makefile.package.in: accept upper case
+	$(PKG)_SITE_METHOD as well
+Message-ID: <1296510767-15670-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 30.01.2011 15:20, schrieb Thomas Petazzoni:
-> Hello Marcus,
->
-> On Sun, 30 Jan 2011 11:30:54 +0100
-> Marcus Osdoba<marcus.osdoba@googlemail.com>  wrote:
->
->> Writing a ubiFS on NAND (with RAW u-boot command) and mounting
->> afterwards is not possible. The produced ubiFS must be ubinized to a UBI
->> image.
->
-> Correct. But Nataraj did create the UBI volume with U-Boot, and has
-> written the UBIFS image inside this UBI volume.
-True. I should have read the entire output ;-)
-But what I miss is the name of the volume inside the ubiparition. 
-Nataraj gave root=ubi0:rootfs on the command line. In my example project 
-I set this parameter in ubinize.cfg. But the manual way with u-boot like 
-Nataraj did, doesn't show a setting like:
-"An ubi-volume named rootfs resides on an mtdpart named data."
-I ubinized the image outside u-boot and my kernel accepts the 
-root=ubi0:rootfs. As noticed, I hardly see a volume_name definition 
-"rootfs" in Nataraj's u-boot log....
+The Buildroot documentation says it's OK to use upper case names for
+$(PKG)_SITE_METHOD, but the implementation does not support it. This
+patch adds support for both upper and lower case names.
 
-May be that's the problem? A mixup of the label "data" for mtdpart name 
-and ubi volume name?
-"U-Boot> ubi create data" should be
-"U-Boot> ubi create rootfs" or "root=ubi0:data"
-Without warranty ... but @Nataraj, could you try on of the above?
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+---
+ package/Makefile.package.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-> Note that since recently, Buildroot is capable of generating a
-> ubinize'd UBI filesystem image, thanks to the work done by Julien
-> Boibessot from Armadeus. This is available in Buildroot git, and will
-> be part of the next Buildroot release.
-Good news.
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 92ce4e2..9a327c6 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -189,9 +189,9 @@ define DOWNLOAD
+ 	fi ; \
+ 	if test -n "$(1)" ; then \
+ 		case "$($(PKG)_SITE_METHOD)" in \
+-			git) $($(DL_MODE)_GIT) && exit ;; \
+-			svn) $($(DL_MODE)_SVN) && exit ;; \
+-			bzr) $($(DL_MODE)_BZR) && exit ;; \
++			git|GIT) $($(DL_MODE)_GIT) && exit ;; \
++			svn|SVN) $($(DL_MODE)_SVN) && exit ;; \
++			bzr|BZR) $($(DL_MODE)_BZR) && exit ;; \
+ 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
+ 		esac ; \
+ 	fi ; \
+-- 
+1.7.1
