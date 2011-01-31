@@ -1,18 +1,18 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Mon, 31 Jan 2011 00:18:38 +0100
-Subject: [Buildroot] Qt package wrongly installs host binaries in target
-	sysroot
-Message-ID: <AANLkTikPnE=oeDHX87wf5zvCLK77Gqthq3RQryuisASK@mail.gmail.com>
+From: Justin Mark <oilehus@yahoo.com>
+Date: Sun, 30 Jan 2011 18:51:29 -0800 (PST)
+Subject: [Buildroot] Webkit issue
+Message-ID: <543120.16780.qm@web111116.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-Didn't you have a fix for the Qt package so it installs qmake/moc etc.
-in host dir and not target sysroot? Could you post it?
+I built webkit 1.2.6 + directfb by using buildroot, there's no problem to build, but when I ran the test program "Gtklauncher http://www.google.com", the screen is blank, no web page is showing. Any ideas? Did anyone try Webkit before? 
 
-Best regards,
-Bj?rn Forsman
+Thanks,   
+
+
+      
