@@ -1,31 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 31 Jan 2011 15:09:43 +0100
-Subject: [Buildroot] FW: x11vnc compile error
-In-Reply-To: <35FC1A56EEC91A42A0EB92079193ED8D02E6E24C@ASISML10.asia-idc.local>
-	(Feng Yang's message of "Mon, 31 Jan 2011 16:25:59 +0800")
-References: <35FC1A56EEC91A42A0EB92079193ED8D02E6E24C@ASISML10.asia-idc.local>
-Message-ID: <87pqrdw4ew.fsf@macbook.be.48ers.dk>
+From: Bryce Schober <bryce.schober@gmail.com>
+Date: Mon, 31 Jan 2011 10:50:54 -0800
+Subject: [Buildroot] buildroot and NPTL
+Message-ID: <AANLkTi=2w7uNjDayUdi32CuFyXpGmfWEu_bVo_=nju+E@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Feng" == Feng Yang <feng.yang.xb@renesas.com> writes:
+What combination of magic is required to enable NPTL support in buildroot?
+I'm currently trying to set up 2010.02 for NPTL support with my externally
+compiled crosstool-ng i686 glibc toolchain...
 
- Feng> Hi,
- Feng> My name is Feng and come from Taiwan, as title, I build x11vnc package in
- Feng> buildroot-2010.08.
-
- Feng> My CPU core is SuperH 4A.
-
- Feng> Would you mind give me some suggestion to fix error?
-
- Feng> following is the error message.
-
-Seems like it ends up including host header files, which causes the
-break. Could you try adding xlib_libXt to your build? With that added,
-it builds here on powerpc with latest git.
-
--- 
-Bye, Peter Korsgaard
+<><  <><  <><
+Bryce Schober
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110131/273b993f/attachment.html>
