@@ -1,8 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 31 Jan 2011 21:30:05 +0100
-Subject: [Buildroot] [git commit master 1/1] uclibc: add BSD endian
-	conversions routines for 0.9.31
-Message-ID: <20110131203037.14B418E2CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] CHANGES: #1681,
+	#2839 and #2893 are resolved
+Message-ID: <20110131203037.423D58E2CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,89 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95aacf0cf02d537fcccd1d187b4c69abbb08e1b8
+commit: http://git.buildroot.net/buildroot/commit/?id=6d17192f27f1d035edcc8b90db05be10a0fe86fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add BSD endian conversion routines (backport from 0.9.32 / git).
-
-Required to use a modern udev.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../uClibc-0.9.31-add-bsd-endian-conversions.patch |   64 ++++++++++++++++++++
- 1 files changed, 64 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
+ CHANGES |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch b/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
-new file mode 100644
-index 0000000..652d7c9
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-add-bsd-endian-conversions.patch
-@@ -0,0 +1,64 @@
-+From c6d6237819037168a6923ac080e348e54615422c Mon Sep 17 00:00:00 2001
-+From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Date: Tue, 1 Jun 2010 23:22:57 +0400
-+Subject: [PATCH] endian.h: add BSD convertions between big/little-endian byte order
-+
-+This patch adds support for convertion of values between host and
-+big-/little-endian byte order.
-+
-+Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-+---
-+ include/endian.h |   38 ++++++++++++++++++++++++++++++++++++++
-+ 1 files changed, 38 insertions(+), 0 deletions(-)
-+
-+diff --git a/include/endian.h b/include/endian.h
-+index 2f7bce1..0ba7384 100644
-+--- a/include/endian.h
-++++ b/include/endian.h
-+@@ -55,4 +55,42 @@
-+ # define __LONG_LONG_PAIR(HI, LO) HI, LO
-+ #endif
-+ 
-++
-++#ifdef __USE_BSD
-++/* Conversion interfaces.  */
-++# include <byteswap.h>
-++
-++# if __BYTE_ORDER == __LITTLE_ENDIAN
-++#  define htobe16(x) __bswap_16 (x)
-++#  define htole16(x) (x)
-++#  define be16toh(x) __bswap_16 (x)
-++#  define le16toh(x) (x)
-++
-++#  define htobe32(x) __bswap_32 (x)
-++#  define htole32(x) (x)
-++#  define be32toh(x) __bswap_32 (x)
-++#  define le32toh(x) (x)
-++
-++#  define htobe64(x) __bswap_64 (x)
-++#  define htole64(x) (x)
-++#  define be64toh(x) __bswap_64 (x)
-++#  define le64toh(x) (x)
-++# else
-++#  define htobe16(x) (x)
-++#  define htole16(x) __bswap_16 (x)
-++#  define be16toh(x) (x)
-++#  define le16toh(x) __bswap_16 (x)
-++
-++#  define htobe32(x) (x)
-++#  define htole32(x) __bswap_32 (x)
-++#  define be32toh(x) (x)
-++#  define le32toh(x) __bswap_32 (x)
-++
-++#  define htobe64(x) (x)
-++#  define htole64(x) __bswap_64 (x)
-++#  define be64toh(x) (x)
-++#  define le64toh(x) __bswap_64 (x)
-++# endif
-++#endif
-++
-+ #endif	/* endian.h */
-+-- 
-+1.7.3.4
-+
+diff --git a/CHANGES b/CHANGES
+index 79197de..25c3163 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -67,9 +67,12 @@
+ 
+ 	#561:  ltp-testsuite failed to install
+ 	#1651: Build fail caused by ccache in module-init-tools
++	#1681: Cross-compiled binaries shouldn't be installed into staging
+ 	#1735: [PATCH] mplayer: convert to autotools infrastructure
+ 	#2647: makedevs package lacks support for 16-bit major/minor numbers
+ 	#2371: QT MYSQL Module does not build when MySQL installed on the host
++	#2839: compile fails in various packages with a odd message "error:...
++	#2893: Broken "make source" with external toolchain
+ 	#2905: Qt: Speed up compilation, if gui-module isn't selected
+ 	#2929: genext2fs: couldn't allocate a block (no free space)
+ 	#2965: Broken linkage to xkbcomp (blocking X server startup)
 -- 
 1.7.3.4
