@@ -1,15 +1,20 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 31 Jan 2011 16:40:25 -0300
-Subject: [Buildroot] [PATCH] fbset: ensure it builds after busybox if both
-	are enabled
-Message-ID: <1296502825-30254-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 31 Jan 2011 20:45:14 +0100
+Subject: [Buildroot] [git commit master 1/1] fbset: ensure it builds after
+	busybox if both are enabled
+Message-ID: <20110131194528.05F0D8E5EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
+commit: http://git.buildroot.net/buildroot/commit/?id=2e77770e615819b8ec969e4e39160d4185f89d0c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/fbset/fbset.mk |    6 ++++++
  1 files changed, 6 insertions(+), 0 deletions(-)
