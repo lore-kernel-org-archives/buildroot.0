@@ -1,41 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 31 Jan 2011 20:23:42 +0100
-Subject: [Buildroot] [git commit master 1/1] libusb-compat: fixup
-	libusb-config script similarly to other *-config scripts
-Message-ID: <20110131192513.5497E8E2D5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 31 Jan 2011 20:25:33 +0100
+Subject: [Buildroot] RESEND [PATCH 2/2] new package libhid
+In-Reply-To: <370CEDEBA78A4F7D970C185C09C5992B@apexjs> (Sagaert Johan's
+	message of "Sat, 22 Jan 2011 20:46:54 +0100")
+References: <370CEDEBA78A4F7D970C185C09C5992B@apexjs>
+Message-ID: <87lj20x4cy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e7a8dc85e92171e93e14eb0323bc518ecada3cc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sagaert> Previous 2/2 patch was wrong so ignore
+ Sagaert> Here is the corrected one:
 
-So programs using this don't end up looking for host includes / libraries.
+Thanks, I've committed a somewhat modified version of this.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libusb-compat/libusb-compat.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
-
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index 98271c7..6590e89 100644
---- a/package/libusb-compat/libusb-compat.mk
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -11,4 +11,12 @@ LIBUSB_COMPAT_DEPENDENCIES = host-pkg-config libusb
- LIBUSB_COMPAT_INSTALL_STAGING = YES
- LIBUSB_COMPAT_INSTALL_TARGET = YES
- 
-+define LIBUSB_COMPAT_FIXUP_CONFIG
-+	$(SED) 's%prefix=/usr%prefix=$(STAGING_DIR)/usr%' \
-+	    -e 's%exec_prefix=/usr%exec_prefix=$(STAGING_DIR)/usr%' \
-+		$(STAGING_DIR)/usr/bin/libusb-config
-+endef
-+
-+LIBUSB_COMPAT_POST_INSTALL_STAGING_HOOKS+=LIBUSB_COMPAT_FIXUP_CONFIG
-+
- $(eval $(call AUTOTARGETS,package,libusb-compat))
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
