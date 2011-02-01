@@ -1,45 +1,37 @@
-From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Tue, 1 Feb 2011 12:43:23 +0800
+From: Mike Frysinger <vapier.adi@gmail.com>
+Date: Tue, 1 Feb 2011 01:59:47 -0500
 Subject: [Buildroot] [uclinux-dist-devel] [PATCH] buildroot:package:
  Remove configure target parameter in Makefile.autotools.in
-In-Reply-To: <AANLkTi=F8BRtskBBKE_Wno=Vy=EHvLjE3bkYagiAuegH@mail.gmail.com>
+In-Reply-To: <AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
 References: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
 	<AANLkTi=F8BRtskBBKE_Wno=Vy=EHvLjE3bkYagiAuegH@mail.gmail.com>
-Message-ID: <AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
+	<AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
+Message-ID: <AANLkTik6Pq6j33vqKyZ-fkuGat8KwwEDAxuW08y0cDit@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some autotools based software packages generate prefix name to the
-binary after running install if you set --target parameter.
+On Mon, Jan 31, 2011 at 23:43, Sonic Zhang wrote:
 
-For example:
+please dont top post
 
---target=arm
-
-rcp is rename to "linux-arm-rcp" after running install
-
-
-Sonic
-
-
-On Tue, Feb 1, 2011 at 12:02 PM, Mike Frysinger <vapier.adi@gmail.com> wrote:
-> On Mon, Jan 31, 2011 at 22:52, Sonic Zhang wrote:
->> configure parameter --target has different meaning from buildroot environment
->> parameter GNU_TARGET_NAME. GNU_TARGET_NAME is actually equal to --host.
->>
->> ?--build=BUILD ? ? configure for building on BUILD [guessed]
->> ?--host=HOST ? ? ? cross-compile to build programs to run on HOST [BUILD]
->> ?--target=TARGET ? configure for building compilers for TARGET [HOST]
->>
->> --target is rarely used by most packages and is redundant in configure line.
->> If some packages do need --target, they can append it to buildroot environment
->> parameter INETUTILS_CONF_OPT in packages' makefile.
+> Some autotools based software packages generate prefix name to the
+> binary after running install if you set --target parameter.
 >
-> not really ... the usage is harmless. ?it might be a little redundant
-> since target tends to default to host, but that's about it. ?what are
-> you actually trying to address here ?
-> -mike
+> For example:
 >
+> --target=arm
+>
+> rcp is rename to "linux-arm-rcp" after running install
+
+this is due to program_transform_name which is easily disabled:
+    program_transform_name=
+
+alternatively, inetutils should be fixed to not have a --target in the
+first place.  a "target" makes no sense for applications that dont
+generate anything, and since inetutils falls into that category, it
+should have AC_CANONICAL_SYSTEM changed to AC_CANONICAL_HOST in its
+configure.ac.
+-mike
