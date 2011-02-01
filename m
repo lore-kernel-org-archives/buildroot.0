@@ -1,40 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Feb 2011 22:04:16 +0100
-Subject: [Buildroot] [PATCH] Add cryptsetup package
-In-Reply-To: <1296580718-4746-1-git-send-email-mort@bork.org>
-References: <1296580718-4746-1-git-send-email-mort@bork.org>
-Message-ID: <20110201220416.5319c07a@surf>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 1 Feb 2011 22:19:19 +0100
+Subject: [Buildroot] [PATCH] Makefile.package.in: fix upper case
+	$(PKG)_SITE_METHOD
+In-Reply-To: <20110201220016.5a34b56d@surf>
+References: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
+	<20110201213433.1d527342@surf>
+	<AANLkTikUX0mZAwBhX=xVYYtmHR8gp1K3cBde=w7wpwhH@mail.gmail.com>
+	<20110201220016.5a34b56d@surf>
+Message-ID: <AANLkTi=KQKTUX5zSnqzCUMpT8x6JzNbhtNHKzocPiNcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 1 February 2011 22:00, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 1 Feb 2011 21:51:38 +0100
+> Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
+>
+>> Maybe, after all, this is a special case where both upper and lower
+>> case should work?
+>
+> Hum, why would it be necessary to accept upper case spelling ?
 
-On Tue,  1 Feb 2011 12:18:38 -0500
-Martin Hicks <mort@bork.org> wrote:
-
-> +CRYPTSETUP_INSTALL_STAGING = NO
-> +CRYPTSETUP_INSTALL_TARGET = YES
-
-Those are not needed, this is the default.
-
-> +#CRYPTSETUP_CONF_OPT = --BLAH
-
-Not needed (but removed by your followup patch that should be merged
-here).
-
-> +CRYPTSETUP_DEPENDENCIES = lvm2 libgcrypt popt e2fsprogs
-
-As done by your followup patch, if you have an e2fsprogs dependency
-here, you should also have the dependency in the Config.in file.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+The BR documentation uses upper case spelling. So currently
+implementation != documentation.
