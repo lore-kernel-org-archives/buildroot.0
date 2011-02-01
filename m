@@ -1,37 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Feb 2011 20:14:00 +0100
-Subject: [Buildroot] [git commit master 1/1] ruby: don't build documentation
-	when building for host either
-Message-ID: <20110201191437.5ADA98EE80@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Feb 2011 21:34:33 +0100
+Subject: [Buildroot] [PATCH] Makefile.package.in: fix upper case
+ $(PKG)_SITE_METHOD
+In-Reply-To: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
+References: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20110201213433.1d527342@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue,  1 Feb 2011 12:18:49 +0100
+Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b823c04d080016b28c955240ec634764718041bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  		case "$($(PKG)_SITE_METHOD)" in \
+> -			git) $($(DL_MODE)_GIT) && exit ;; \
+> -			svn) $($(DL_MODE)_SVN) && exit ;; \
+> -			bzr) $($(DL_MODE)_BZR) && exit ;; \
+> +			GIT) $($(DL_MODE)_GIT) && exit ;; \
+> +			SVN) $($(DL_MODE)_SVN) && exit ;; \
+> +			BZR) $($(DL_MODE)_BZR) && exit ;; \
+>  			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
+>  		esac ; \
+>  	fi ; \
 
-We don't use it, so it only slows down the build.
+No. This is going to break:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/ruby.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+        # Try automatic detection using the scheme part of the URI
+        $(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(2)_SITE))))
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index adb1862..966a6a1 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -12,6 +12,8 @@ RUBY_DEPENDENCIES = host-ruby
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPT = --disable-install-doc
- 
-+HOST_RUBY_CONF_OPT = --disable-install-doc
-+
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- 	RUBY_DEPENDENCIES += berkeleydb
+is used to detect the site method from the URI, like :
+
+	git://....
+
+or
+
+	svn://....
+
+so if only upper case site methods are accepted, it's not going to work.
+
+And more generally, I'd prefer to keep the existing lower-case writing
+of the site method, since it is coherent with how it's written in the
+URI.
+
+Regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
