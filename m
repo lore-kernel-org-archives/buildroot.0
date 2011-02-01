@@ -1,32 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Feb 2011 08:45:01 +0100
+From: Mike Frysinger <vapier.adi@gmail.com>
+Date: Tue, 1 Feb 2011 02:50:46 -0500
 Subject: [Buildroot] [uclinux-dist-devel] [PATCH] buildroot:package:
-	Remove configure target parameter in Makefile.autotools.in
-In-Reply-To: <AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
-	(Sonic Zhang's message of "Tue, 1 Feb 2011 12:43:23 +0800")
+ Remove configure target parameter in Makefile.autotools.in
+In-Reply-To: <DB904C5425BA6F4E8424B3B51A1414D165B430B838@NWD2CMBX1.ad.analog.com>
 References: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
 	<AANLkTi=F8BRtskBBKE_Wno=Vy=EHvLjE3bkYagiAuegH@mail.gmail.com>
 	<AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
-Message-ID: <87vd14urk2.fsf@macbook.be.48ers.dk>
+	<AANLkTik6Pq6j33vqKyZ-fkuGat8KwwEDAxuW08y0cDit@mail.gmail.com>
+	<DB904C5425BA6F4E8424B3B51A1414D165B430B838@NWD2CMBX1.ad.analog.com>
+Message-ID: <AANLkTi=5O7TL7KrCD8Ja1XKvYBWUboxjU6biOw=-MXwd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sonic" == Sonic Zhang <sonic.adi@gmail.com> writes:
+On Tue, Feb 1, 2011 at 02:48, Zhang, Sonic wrote:
+>Mike Frysinger:
+>>On Mon, Jan 31, 2011 at 23:43, Sonic Zhang wrote:
+>>> Some autotools based software packages generate prefix name to the
+>>> binary after running install if you set --target parameter.
+>>>
+>>> For example:
+>>> --target=arm
+>>> rcp is rename to "linux-arm-rcp" after running install
+>>
+>>this is due to program_transform_name which is easily disabled:
+>> ? ?program_transform_name=
+>
+> Not only inetutils, but many other packages need "program_transform_name=" in this case. Because rare packages require --target to be set, why not do something to ease many?
 
- Sonic> Some autotools based software packages generate prefix name to the
- Sonic> binary after running install if you set --target parameter.
-
- Sonic> For example:
-
- Sonic> --target=arm
-
- Sonic> rcp is rename to "linux-arm-rcp" after running install
-
-These packages typically accept the configure options
---program-transform-name to make them not do that.
-
--- 
-Bye, Peter Korsgaard
+personally, i prefer the route of fixing the underlying problem --
+these packages should not have a --target unless they actually need
+it.
+-mike
