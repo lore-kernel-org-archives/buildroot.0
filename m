@@ -1,34 +1,69 @@
 From: Martin Hicks <mort@bork.org>
-Date: Tue,  1 Feb 2011 12:13:01 -0500
-Subject: [Buildroot] [PATCH] Enable ccache for u-boot compile
-In-Reply-To: <1296580381-4658-1-git-send-email-mort@bork.org>
-References: <1296580381-4658-1-git-send-email-mort@bork.org>
-Message-ID: <1296580381-4658-2-git-send-email-mort@bork.org>
+Date: Tue,  1 Feb 2011 12:18:38 -0500
+Subject: [Buildroot] [PATCH] Add cryptsetup package
+Message-ID: <1296580718-4746-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just needed to pass in ccache as a prefix to the CROSS_TARGET variable.
+This adds the cryptsetup package to buildroot
 
 Signed-off-by: Martin Hicks <mort@bork.org>
 ---
- boot/u-boot/u-boot.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in                |    1 +
+ package/cryptsetup/Config.in     |   10 ++++++++++
+ package/cryptsetup/cryptsetup.mk |   12 ++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/cryptsetup/Config.in
+ create mode 100644 package/cryptsetup/cryptsetup.mk
 
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index d520bb8..2f890fa 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -130,7 +130,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		$(U_BOOT_CONFIGURE_OPTS) \
--		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
-+		$(MAKE) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
- 		$(U_BOOT_MAKE_OPT) -C $(U_BOOT_DIR)
+diff --git a/package/Config.in b/package/Config.in
+index 16a9e8f..631bb80 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+ endif
++source "package/cryptsetup/Config.in"
+ endmenu
  
- # Copy the result to the images/ directory
+ menu "Text editors and viewers"
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+new file mode 100644
+index 0000000..23c4afa
+--- /dev/null
++++ b/package/cryptsetup/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_CRYPTSETUP
++	bool "cryptsetup"
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_LVM2
++	help
++	  This tool helps manipulate dm-crypt and luks partitions for on-disk
++          encryption.
++
++	  http://www.saout.de/misc/dm-crypt/
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+new file mode 100644
+index 0000000..5b0310f
+--- /dev/null
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -0,0 +1,12 @@
++#
++# cryptsetup
++#
++CRYPTSETUP_VERSION = 1.2.0
++CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
++CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
++CRYPTSETUP_INSTALL_STAGING = NO
++CRYPTSETUP_INSTALL_TARGET = YES
++#CRYPTSETUP_CONF_OPT = --BLAH
++CRYPTSETUP_DEPENDENCIES = lvm2 libgcrypt popt e2fsprogs
++
++$(eval $(call AUTOTARGETS,package,cryptsetup))
 -- 
 1.5.6.5
