@@ -1,25 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Feb 2011 22:00:16 +0100
-Subject: [Buildroot] [PATCH] Makefile.package.in: fix upper case
- $(PKG)_SITE_METHOD
-In-Reply-To: <AANLkTikUX0mZAwBhX=xVYYtmHR8gp1K3cBde=w7wpwhH@mail.gmail.com>
-References: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
-	<20110201213433.1d527342@surf>
-	<AANLkTikUX0mZAwBhX=xVYYtmHR8gp1K3cBde=w7wpwhH@mail.gmail.com>
-Message-ID: <20110201220016.5a34b56d@surf>
+Date: Tue, 1 Feb 2011 22:02:38 +0100
+Subject: [Buildroot] [PATCH] Add package bonnie++
+In-Reply-To: <1296580740-4790-1-git-send-email-mort@bork.org>
+References: <1296580740-4790-1-git-send-email-mort@bork.org>
+Message-ID: <20110201220238.2c218fcd@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 1 Feb 2011 21:51:38 +0100
-Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
+Hello,
 
-> Maybe, after all, this is a special case where both upper and lower
-> case should work?
+On Tue,  1 Feb 2011 12:19:00 -0500
+Martin Hicks <mort@bork.org> wrote:
 
-Hum, why would it be necessary to accept upper case spelling ?
+> A good filesystem performance benchmark program
+> 
+> Signed-off-by: Martin Hicks <mort@bork.org>
+
+Thanks for this package. Some comments below.
+
+> +config BR2_PACKAGE_BONNIE
+> +	bool "bonnie++"
+> +	help
+> +          Filesystem tester
+
+Here the indent should be one tab + two spaces.
+
+> +BONNIE_VERSION = 1.03e
+> +BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
+> +BONNIE_SITE = http://www.coker.com.au/bonnie++/
+> +BONNIE_INSTALL_TARGET_OPT = INSTALL="install -m 0755" install-bin
+
+This is not needed if you override the installation as done below by
+BONNE_INSTALL_TARGET_CMDS.
+
+> +define BONNIE_INSTALL_TARGET_CMDS
+> +	install -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin
+
+should be
+
+install -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin/bonnie++
+
+> +	install -D -m 755 $(@D)/zcav $(TARGET_DIR)/usr/sbin
+
+should be
+
+install -D -m 755 $(@D)/zcav $(TARGET_DIR)/usr/sbin/zcav
+
+Regards,
 
 Thomas
 -- 
