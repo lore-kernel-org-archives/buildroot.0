@@ -1,45 +1,37 @@
-From: Martin Hicks <mort@bork.org>
-Date: Tue,  1 Feb 2011 13:44:17 -0500
-Subject: [Buildroot] [PATCH] cryptsetup: select e2fsprogs for libuuid
-	dependency
-In-Reply-To: <=> run ramboot>
-References: <=> run ramboot>
-Message-ID: <1296585857-5491-1-git-send-email-mort@bork.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 Feb 2011 20:14:00 +0100
+Subject: [Buildroot] [git commit master 1/1] ruby: don't build documentation
+	when building for host either
+Message-ID: <20110201191437.5ADA98EE80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Hicks <mort@bork.org>
----
- package/cryptsetup/Config.in     |    1 +
- package/cryptsetup/cryptsetup.mk |    1 -
- 2 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 23c4afa..8b543cd 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_E2FSPROGS
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for on-disk
-           encryption.
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 5b0310f..33869c7 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -6,7 +6,6 @@ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
- CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
- CRYPTSETUP_INSTALL_STAGING = NO
- CRYPTSETUP_INSTALL_TARGET = YES
--#CRYPTSETUP_CONF_OPT = --BLAH
- CRYPTSETUP_DEPENDENCIES = lvm2 libgcrypt popt e2fsprogs
+commit: http://git.buildroot.net/buildroot/commit/?id=b823c04d080016b28c955240ec634764718041bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We don't use it, so it only slows down the build.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ruby/ruby.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index adb1862..966a6a1 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -12,6 +12,8 @@ RUBY_DEPENDENCIES = host-ruby
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPT = --disable-install-doc
  
- $(eval $(call AUTOTARGETS,package,cryptsetup))
++HOST_RUBY_CONF_OPT = --disable-install-doc
++
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ 	RUBY_DEPENDENCIES += berkeleydb
 -- 
-1.5.6.5
+1.7.3.4
