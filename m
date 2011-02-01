@@ -1,40 +1,47 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue,  1 Feb 2011 12:18:49 +0100
-Subject: [Buildroot] [PATCH] Makefile.package.in: fix upper case
-	$(PKG)_SITE_METHOD
-Message-ID: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Feb 2011 12:20:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 3181] New: dhcp.mk copies S80dhcp-server to
+ output/target/etc/init.d, not init.d
+Message-ID: <bug-3181-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Buildroot documentation says $(PKG)_SITE_METHOD can be set to upper
-case names like SVN or GIT, but the actual implementation (currently)
-accepts lower case. This patch changes lower case to upper case in the
-implementation to stay in sync with the documentation.
+https://bugs.busybox.net/show_bug.cgi?id=3181
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- package/Makefile.package.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+           Summary: dhcp.mk copies S80dhcp-server to
+                    output/target/etc/init.d, not init.d
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: dmitry at radiofid.ru
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 92ce4e2..c3e7dd1 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -189,9 +189,9 @@ define DOWNLOAD
- 	fi ; \
- 	if test -n "$(1)" ; then \
- 		case "$($(PKG)_SITE_METHOD)" in \
--			git) $($(DL_MODE)_GIT) && exit ;; \
--			svn) $($(DL_MODE)_SVN) && exit ;; \
--			bzr) $($(DL_MODE)_BZR) && exit ;; \
-+			GIT) $($(DL_MODE)_GIT) && exit ;; \
-+			SVN) $($(DL_MODE)_SVN) && exit ;; \
-+			BZR) $($(DL_MODE)_BZR) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
+
+buildroot v2011.02-git-00303-ga9eed3f-dirty
+
+dhcp.mk:
+24     $(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server
+$(TARGET_DIR)/etc/init.d
+35     $(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay
+$(TARGET_DIR)/etc/init.d
+
+These lines copy file to init.d file, not directory, which breaks other package
+instalation since it is impossible to copy init scripts to none existent init.d
+directory.
+
+My solution is to add a slash to the end of lines.
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
