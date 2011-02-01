@@ -1,69 +1,71 @@
 From: Martin Hicks <mort@bork.org>
-Date: Tue,  1 Feb 2011 12:18:38 -0500
-Subject: [Buildroot] [PATCH] Add cryptsetup package
-Message-ID: <1296580718-4746-1-git-send-email-mort@bork.org>
+Date: Tue,  1 Feb 2011 12:19:00 -0500
+Subject: [Buildroot] [PATCH] Add package bonnie++
+Message-ID: <1296580740-4790-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds the cryptsetup package to buildroot
+A good filesystem performance benchmark program
 
 Signed-off-by: Martin Hicks <mort@bork.org>
 ---
- package/Config.in                |    1 +
- package/cryptsetup/Config.in     |   10 ++++++++++
- package/cryptsetup/cryptsetup.mk |   12 ++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/cryptsetup/Config.in
- create mode 100644 package/cryptsetup/cryptsetup.mk
+ package/Config.in        |    1 +
+ package/bonnie/Config.in |    6 ++++++
+ package/bonnie/bonnie.mk |   18 ++++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/bonnie/Config.in
+ create mode 100644 package/bonnie/bonnie.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 16a9e8f..631bb80 100644
+index 631bb80..49859b1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -483,6 +483,7 @@ source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
- source "package/util-linux/Config.in"
- endif
-+source "package/cryptsetup/Config.in"
+@@ -17,6 +17,7 @@ source "package/xz/Config.in"
  endmenu
  
- menu "Text editors and viewers"
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+ menu "Debugging, profiling and benchmark"
++source "package/bonnie/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dmalloc/Config.in"
+ source "package/kexec/Config.in"
+diff --git a/package/bonnie/Config.in b/package/bonnie/Config.in
 new file mode 100644
-index 0000000..23c4afa
+index 0000000..6bef13b
 --- /dev/null
-+++ b/package/cryptsetup/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CRYPTSETUP
-+	bool "cryptsetup"
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_LVM2
++++ b/package/bonnie/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_BONNIE
++	bool "bonnie++"
 +	help
-+	  This tool helps manipulate dm-crypt and luks partitions for on-disk
-+          encryption.
++          Filesystem tester
 +
-+	  http://www.saout.de/misc/dm-crypt/
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
++	  http://www.coker.com.au/bonnie++/
+diff --git a/package/bonnie/bonnie.mk b/package/bonnie/bonnie.mk
 new file mode 100644
-index 0000000..5b0310f
+index 0000000..03fce50
 --- /dev/null
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -0,0 +1,12 @@
++++ b/package/bonnie/bonnie.mk
+@@ -0,0 +1,18 @@
 +#
-+# cryptsetup
++# bonnie++
 +#
-+CRYPTSETUP_VERSION = 1.2.0
-+CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
-+CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
-+CRYPTSETUP_INSTALL_STAGING = NO
-+CRYPTSETUP_INSTALL_TARGET = YES
-+#CRYPTSETUP_CONF_OPT = --BLAH
-+CRYPTSETUP_DEPENDENCIES = lvm2 libgcrypt popt e2fsprogs
++BONNIE_VERSION = 1.03e
++BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
++BONNIE_SITE = http://www.coker.com.au/bonnie++/
++BONNIE_INSTALL_TARGET_OPT = INSTALL="install -m 0755" install-bin
 +
-+$(eval $(call AUTOTARGETS,package,cryptsetup))
++define BONNIE_INSTALL_TARGET_CMDS
++	install -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin
++	install -D -m 755 $(@D)/zcav $(TARGET_DIR)/usr/sbin
++endef
++
++define BONNIE_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/sbin/bonnie++ $(TARGET_DIR)/usr/sbin/zcav
++endef
++
++$(eval $(call AUTOTARGETS,package,bonnie))
 -- 
 1.5.6.5
