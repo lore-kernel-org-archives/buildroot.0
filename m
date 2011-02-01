@@ -1,37 +1,22 @@
-From: Martin Hicks <mort@bork.org>
-Date: Tue, 1 Feb 2011 20:53:05 +0100
-Subject: [Buildroot] [git commit master 1/1] Enable ccache for u-boot compile
-Message-ID: <20110201203534.A71C68EE4A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Feb 2011 21:42:53 +0100
+Subject: [Buildroot] [PATCH] Enable ccache for kernel compile
+In-Reply-To: <1296580381-4658-1-git-send-email-mort@bork.org> (Martin Hicks's
+	message of "Tue, 1 Feb 2011 12:13:00 -0500")
+References: <1296580381-4658-1-git-send-email-mort@bork.org>
+Message-ID: <87fws7v642.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3fb2ce122055fd34df7e1712700e5d72bdb40e4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Martin> Just needed to pass in ccache as a prefix to the CROSS_TARGET variable.
+ Martin> Signed-off-by: Martin Hicks <mort@bork.org>
 
-Just needed to pass in ccache as a prefix to the CROSS_TARGET variable.
+Committed, thanks.
 
-Signed-off-by: Martin Hicks <mort@bork.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/u-boot/u-boot.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index d520bb8..2f890fa 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -130,7 +130,7 @@ $(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		$(U_BOOT_CONFIGURE_OPTS) \
--		$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
-+		$(MAKE) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
- 		$(U_BOOT_MAKE_OPT) -C $(U_BOOT_DIR)
- 
- # Copy the result to the images/ directory
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
