@@ -1,39 +1,40 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 1 Feb 2011 12:12:37 +0100
-Subject: [Buildroot] [PATCH] Makefile.package.in: accept upper case
- $(PKG)_SITE_METHOD as well
-In-Reply-To: <AANLkTinZUOGKU6XcCex4jHOUz0B0LB2uzBUUZzgNROV2@mail.gmail.com>
-References: <1296510767-15670-1-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTikMeVCgHZs8z-tx+X5uTT=RSdunZfmSSYTj4uc7@mail.gmail.com>
-	<AANLkTike_vYiEai14pf_Ww5SKj+e3bQUzq9MdE905D7O@mail.gmail.com>
-	<AANLkTinZUOGKU6XcCex4jHOUz0B0LB2uzBUUZzgNROV2@mail.gmail.com>
-Message-ID: <AANLkTin9=UwcnSSJ81vMyaAcwYF+_Kxh7tesTw54F_Li@mail.gmail.com>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue,  1 Feb 2011 12:18:49 +0100
+Subject: [Buildroot] [PATCH] Makefile.package.in: fix upper case
+	$(PKG)_SITE_METHOD
+Message-ID: <1296559129-5595-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 1 February 2011 08:59, Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
-> 2011/1/31 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> On 31 January 2011 23:30, Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
->>> 2011/1/31 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->>>> The Buildroot documentation says it's OK to use upper case names for
->>>> $(PKG)_SITE_METHOD, but the implementation does not support it. This
->>>> patch adds support for both upper and lower case names.
->>>
->>> In my opinion changing the documentation is a better way to go since
->>> it would make the mk files uniformed.
->>
->> I'm not sure I understand what you mean by "uniformed". Can you give an example?
->>
->> My idea of uniform .mk files would actually be to use upper case, as
->> there is already lots of upper case in BR. Am I wrong?
->
-> You're absolutely right, upper case seems to be most common. But it
-> also seems like no other options (for example PKG_INSTALL_STAGING)
-> handles both upper and lower case which I consider a good thing since
-> it's what makes the mk files uniformed. :)
-> See: http://git.buildroot.net/buildroot/tree/package/Makefile.package.in#n454
+The Buildroot documentation says $(PKG)_SITE_METHOD can be set to upper
+case names like SVN or GIT, but the actual implementation (currently)
+accepts lower case. This patch changes lower case to upper case in the
+implementation to stay in sync with the documentation.
 
-All right, I'll resend. Ignore this patch then.
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+---
+ package/Makefile.package.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 92ce4e2..c3e7dd1 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -189,9 +189,9 @@ define DOWNLOAD
+ 	fi ; \
+ 	if test -n "$(1)" ; then \
+ 		case "$($(PKG)_SITE_METHOD)" in \
+-			git) $($(DL_MODE)_GIT) && exit ;; \
+-			svn) $($(DL_MODE)_SVN) && exit ;; \
+-			bzr) $($(DL_MODE)_BZR) && exit ;; \
++			GIT) $($(DL_MODE)_GIT) && exit ;; \
++			SVN) $($(DL_MODE)_SVN) && exit ;; \
++			BZR) $($(DL_MODE)_BZR) && exit ;; \
+ 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
+ 		esac ; \
+ 	fi ; \
+-- 
+1.7.1
