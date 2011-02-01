@@ -1,7 +1,7 @@
-From: Martin Hicks <mort@bork.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 1 Feb 2011 20:53:05 +0100
-Subject: [Buildroot] [git commit master 1/1] Enable ccache for kernel compile
-Message-ID: <20110201203534.882F28EE4A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] barebox: use ccache if enabled
+Message-ID: <20110201203534.CDF058EE4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d10e46fb7623673b590faac2a90dccea475a7e3e
+commit: http://git.buildroot.net/buildroot/commit/?id=a7306b8aa5b51f7c6e9f5327e0bd80c11cfadda6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just needed to pass in ccache as a prefix to the CROSS_TARGET variable.
-
-Signed-off-by: Martin Hicks <mort@bork.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/linux.mk |    2 +-
+ boot/barebox/barebox.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d3c06db..2bc2efe 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -23,7 +23,7 @@ LINUX26_MAKE_FLAGS = \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
--	CROSS_COMPILE=$(TARGET_CROSS) \
-+	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
- 	LZMA="$(LZMA)"
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 3df424c..07266d9 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -19,7 +19,7 @@ else
+ BAREBOX_ARCH=$(KERNEL_ARCH)
+ endif
  
- # Get the real Linux version, which tells us where kernel modules are
+-BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE=$(TARGET_CROSS)
++BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
+ 
+ $(DL_DIR)/$(BAREBOX_SOURCE):
+ 	 $(call DOWNLOAD,$(BAREBOX_SITE),$(BAREBOX_SOURCE))
 -- 
 1.7.3.4
