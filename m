@@ -1,37 +1,44 @@
-From: Mike Frysinger <vapier.adi@gmail.com>
-Date: Tue, 1 Feb 2011 01:59:47 -0500
-Subject: [Buildroot] [uclinux-dist-devel] [PATCH] buildroot:package:
- Remove configure target parameter in Makefile.autotools.in
-In-Reply-To: <AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
-References: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
-	<AANLkTi=F8BRtskBBKE_Wno=Vy=EHvLjE3bkYagiAuegH@mail.gmail.com>
-	<AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
-Message-ID: <AANLkTik6Pq6j33vqKyZ-fkuGat8KwwEDAxuW08y0cDit@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 Feb 2011 08:41:01 +0100
+Subject: [Buildroot] [git commit master 1/1] make help: document ncurses,
+	make V=1 and make O=<dir>
+Message-ID: <20110201074141.30A238E5F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 31, 2011 at 23:43, Sonic Zhang wrote:
 
-please dont top post
+commit: http://git.buildroot.net/buildroot/commit/?id=15f5bef0532aebe2f955cc9b377bd81f8dc06c4d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Some autotools based software packages generate prefix name to the
-> binary after running install if you set --target parameter.
->
-> For example:
->
-> --target=arm
->
-> rcp is rename to "linux-arm-rcp" after running install
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-this is due to program_transform_name which is easily disabled:
-    program_transform_name=
-
-alternatively, inetutils should be fixed to not have a --target in the
-first place.  a "target" makes no sense for applications that dont
-generate anything, and since inetutils falls into that category, it
-should have AC_CANONICAL_SYSTEM changed to AC_CANONICAL_HOST in its
-configure.ac.
--mike
+diff --git a/Makefile b/Makefile
+index 04783f2..3ecc597 100644
+--- a/Makefile
++++ b/Makefile
+@@ -655,6 +655,7 @@ help:
+ 	@echo
+ 	@echo 'Configuration:'
+ 	@echo '  menuconfig             - interactive curses-based configurator'
++	@echo '  nconfig                - interactive ncurses-based configurator'
+ 	@echo '  xconfig                - interactive Qt-based configurator'
+ 	@echo '  gconfig                - interactive GTK-based configurator'
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
+@@ -673,6 +674,9 @@ help:
+ 	@echo '  source-check           - check all packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo
++	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
++	@echo '  make O=dir             - Locate all output files in "dir", including .config'
++	@echo
+ 	@$(foreach b, $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig)), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ 	@echo
+-- 
+1.7.3.4
