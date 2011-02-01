@@ -1,49 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 31 Dec 2010 08:39:06 -0300
-Subject: [Buildroot] [PATCH 6/6] target gcc: cleanup
-In-Reply-To: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1293795546-19674-9-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Frysinger <vapier.adi@gmail.com>
+Date: Mon, 31 Jan 2011 23:06:14 -0500
+Subject: [Buildroot] [uclinux-dist-devel] [PATCH] buildroot:package:
+ Remove configure target parameter in Makefile.autotools.in
+In-Reply-To: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
+References: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <AANLkTik2iJ5iDsEEgp7bFqscbTLHuy95QL4tndhQe7MM@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WITH_TARGET_{GMP/MPC/MPFR} is unneeded since we are providing a sysroot.
+On Mon, Jan 31, 2011 at 22:52, Sonic Zhang wrote:
+> configure parameter --target has different meaning from buildroot environment
+> parameter GNU_TARGET_NAME. GNU_TARGET_NAME is actually equal to --host.
+>
+> ?--build=BUILD ? ? configure for building on BUILD [guessed]
+> ?--host=HOST ? ? ? cross-compile to build programs to run on HOST [BUILD]
+> ?--target=TARGET ? configure for building compilers for TARGET [HOST]
+>
+> --target is rarely used by most packages and is redundant in configure line.
+> If some packages do need --target, they can append it to buildroot environment
+> parameter INETUTILS_CONF_OPT in packages' makefile.
 
-It also breaks build-gcc under certain conditions.
+not really ... the usage is harmless.  it might be a little redundant
+since target tends to default to host, but that's about it.  what are
+you actually trying to address here ?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/gcc/gcc-uclibc-4.x.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
-
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 633b8aa..80bed5e 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -119,11 +119,8 @@ GCC_HOST_PREREQ += host-mpc
- endif
- 
- GCC_TARGET_PREREQ += mpfr gmp
--GCC_WITH_TARGET_GMP = --with-gmp=$(STAGING_DIR)/usr
--GCC_WITH_TARGET_MPFR = --with-mpfr=$(STAGING_DIR)/usr
- ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
- GCC_TARGET_PREREQ += mpc
--GCC_WITH_TARGET_MPC = --with-mpc=$(STAGING_DIR)/usr
- endif
- 
- ifeq ($(BR2_GCC_SHARED_LIBGCC),y)
-@@ -506,9 +503,6 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
- 		--disable-multilib \
- 		$(GCC_TLS) \
- 		$(GCC_SHARED_LIBGCC) \
--		$(GCC_WITH_TARGET_GMP) \
--		$(GCC_WITH_TARGET_MPFR) \
--		$(GCC_WITH_TARGET_MPC) \
- 		$(DISABLE_NLS) \
- 		$(THREADS) \
- 		$(GCC_DECIMAL_FLOAT) \
--- 
-1.7.2.2
+[resending with buildroot subscription]
+-mike
