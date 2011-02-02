@@ -1,30 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Feb 2011 20:02:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 267] The make target: cross fails because
- toolchain_build_<arch>/bin/sed not found
-In-Reply-To: <bug-267-163@https.bugs.busybox.net/>
-References: <bug-267-163@https.bugs.busybox.net/>
-Message-ID: <20110202200234.5C3708F308@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Feb 2011 22:23:38 +0100
+Subject: [Buildroot] [PATCH 1/5] directfb: bump to version 1.4.11
+In-Reply-To: <1296649344-12456-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Wed, 2 Feb 2011 09:22:20 -0300")
+References: <1296649344-12456-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mxmet9k5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=267
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
-
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
-We don't build our own sed or symlink the host sed anymore, so this bug no
-longer exists.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
