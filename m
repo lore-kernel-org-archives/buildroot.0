@@ -1,29 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Feb 2011 20:12:19 +0100
-Subject: [Buildroot] [PATCH 2/2] documentation: update buildroot
- internal toolchain usage
-In-Reply-To: <1296651957-1633-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1296651957-1633-1-git-send-email-gustavo@zacarias.com.ar>
-	<1296651957-1633-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20110202201219.7a41b6db@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Feb 2011 19:58:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 3115] How about board specific makefiles?
+In-Reply-To: <bug-3115-163@https.bugs.busybox.net/>
+References: <bug-3115-163@https.bugs.busybox.net/>
+Message-ID: <20110202195851.380A68F320@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Feb 2011 10:05:57 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=3115
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-Thanks,
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  ---
+Or you can also do :
 
-Thomas
+$ cd buildroot/
+$ make && mv output/images/bzImage output/images/mykernelname
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
