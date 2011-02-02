@@ -1,43 +1,49 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue,  1 Feb 2011 23:22:40 +0100
-Subject: [Buildroot] [PATCH 2/2] docs: add missing info about Bazaar (bzr)
-	download method
-In-Reply-To: <1296598960-356-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1296598960-356-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <1296598960-356-2-git-send-email-bjorn.forsman@gmail.com>
+From: Ravi Chemudugunta <chemuduguntar@gmail.com>
+Date: Wed, 2 Feb 2011 13:22:16 +1300
+Subject: [Buildroot] RTAI Working
+Message-ID: <AANLkTim11VrToTB7Zdjc=W0nFPzfu5tuX2oTKt0BoYwu@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- docs/buildroot.html |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+Hello,
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index de6b1d7..67c82a7 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -1061,12 +1061,12 @@ $(eval $(call GENTARGETS,package,libfoo,host))
-       <li><code>LIBFOO_SITE_METHOD</code> may contain the method to
-       fetch the package source code. It can either
-       be <code>wget</code> (for normal FTP/HTTP downloads of
--      tarballs), <code>svn</code> or <code>git</code>. When not
--      specified, it is guessed from the URL given
--      in <code>LIBFOO_SITE</code>: <code>git://</code>
--      and <code>svn://</code> URLs will use the <code>git</code>
--      and <code>svn</code> methods respectively. All other URL-types
--      will use the <code>wget</code> method. So for example, in the
-+      tarballs), <code>svn</code>, <code>git</code> or <code>bzr</code>.
-+      When not specified, it is guessed from the URL given
-+      in <code>LIBFOO_SITE</code>: <code>svn://</code>, <code>git://</code>
-+      and <code>bzr://</code> URLs will use the <code>svn</code>,
-+      <code>git</code> and <code>bzr</code> methods respectively. All other
-+      URL-types will use the <code>wget</code> method. So for example, in the
-       case of a package whose source code is available through
-       Subversion repository on HTTP, one <i>must</i>
-       specifiy <code>LIBFOO_SITE_METHOD=svn</code>. For <code>svn</code>
+RTAI, working with some workarounds.
+
+RTAI requires that the kernel be patched, and that the sources for the
+kernel are available.
+This creates a circular dependency (unless it is possible for RTAI to
+depend on the extract
+stage of the kernel).
+
+I have gotten around the requirement to patch, by using kernel patch
+feature in build root and pointing
+it to a pre-extracted patch.
+
+I am also doing the same to address the requirement that the kernel
+sources be made known to
+RTAI. Is it possible to use some kind of an auto-global $KERNEL_SOURCE_DIR?
+I am thinking of using the set k-options function (as used in busybox
+- RTAI uses a .config file, similar
+ to that of the linux kernel and busybox) to set this path?
+
+cheers,
+
 -- 
-1.7.1
+C-x C-s, C-x C-c
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in
+Type: application/octet-stream
+Size: 232 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110202/5d56122f/attachment.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: rtai.mk
+Type: application/octet-stream
+Size: 482 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110202/5d56122f/attachment-0001.obj>
