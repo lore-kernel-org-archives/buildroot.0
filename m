@@ -1,41 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Feb 2011 23:00:35 +0100
-Subject: [Buildroot] [git commit master 1/1] cdrkit: drop host-cmake
-	dependencies
-Message-ID: <20110202221651.390DA8F33C@busybox.osuosl.org>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu,  3 Feb 2011 00:06:44 +0100
+Subject: [Buildroot] [PATCH] qt: add option to hide mouse cursor
+Message-ID: <1296688004-27884-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Allow the user to build Qt with the QT_NO_QWS_CURSOR macro set.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe34e2e06dc57c75a5b29e4acf4df59bbc99709a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now that it's been converted to cmaketargets it doesn't need the
-host-cmake dependencies since this are fulfilled in the infrastructure.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 ---
- package/cdrkit/cdrkit.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt/Config.mouse.in |    7 +++++++
+ package/qt/qt.mk           |    3 +++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index ea7f65e..a57a8fd 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -2,8 +2,8 @@ CDRKIT_VERSION=1.1.10
- CDRKIT_SOURCE=cdrkit-$(CDRKIT_VERSION).tar.gz
- CDRKIT_SITE=http://www.cdrkit.org/releases/
+diff --git a/package/qt/Config.mouse.in b/package/qt/Config.mouse.in
+index 87973d2..16c41c1 100644
+--- a/package/qt/Config.mouse.in
++++ b/package/qt/Config.mouse.in
+@@ -15,4 +15,11 @@ config BR2_PACKAGE_QT_MOUSE_TSLIB
+ config BR2_PACKAGE_QT_MOUSE_QVFB
+ 	bool "qvfb"
  
--CDRKIT_DEPENDENCIES=libcap bzip2 host-cmake zlib
--HOST_CDRKIT_DEPENDENCIES=host-libcap host-cmake host-bzip2 host-zlib
-+CDRKIT_DEPENDENCIES=libcap bzip2 zlib
-+HOST_CDRKIT_DEPENDENCIES=host-libcap host-bzip2 host-zlib
++comment "Mouse Options"
++
++config BR2_PACKAGE_QT_MOUSE_NO_QWS_CURSOR
++	bool "Hide the mouse cursor"
++	help
++	  Do not show the mouse cursor in QWS.
++
+ endmenu
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 6eb31bc..7a57357 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -154,6 +154,9 @@ QT_CONFIGURE += -qt-mouse-qvfb
+ else
+ QT_CONFIGURE += -no-mouse-qvfb
+ endif
++ifeq ($(BR2_PACKAGE_QT_MOUSE_NO_QWS_CURSOR),y)
++QT_CONFIGURE+= -D QT_NO_QWS_CURSOR
++endif
  
- ifeq ($(BR2_ENDIAN),"BIG")
- CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
+ ### Keyboard drivers
+ ifeq ($(BR2_PACKAGE_QT_KEYBOARD_TTY),y)
 -- 
-1.7.3.4
+1.7.1
