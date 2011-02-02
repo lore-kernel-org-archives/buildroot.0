@@ -1,43 +1,99 @@
-From: Mike Frysinger <vapier.adi@gmail.com>
-Date: Wed, 2 Feb 2011 01:40:12 -0500
-Subject: [Buildroot] [uclinux-dist-devel] [PATCH] buildroot:package:
- Remove configure target parameter in Makefile.autotools.in
-In-Reply-To: <AANLkTinx51twX6nF5Yxn7iZbNbaocvsrpGp1YUoSTrOT@mail.gmail.com>
-References: <1296532330-24961-1-git-send-email-sonic.adi@gmail.com>
-	<AANLkTi=F8BRtskBBKE_Wno=Vy=EHvLjE3bkYagiAuegH@mail.gmail.com>
-	<AANLkTikMtTC3zOWCOQDLGWpv3h=-rUiQwVa4fAN07rBM@mail.gmail.com>
-	<87vd14urk2.fsf@macbook.be.48ers.dk>
-	<AANLkTinx51twX6nF5Yxn7iZbNbaocvsrpGp1YUoSTrOT@mail.gmail.com>
-Message-ID: <AANLkTi=ZuWp-6kbBRt+8Yz7OwQz4ODGWeSk9kSjs=VbZ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Feb 2011 09:22:20 -0300
+Subject: [Buildroot] [PATCH 1/5] directfb: bump to version 1.4.11
+Message-ID: <1296649344-12456-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 1, 2011 at 23:49, Sonic Zhang wrote:
-> On Tue, Feb 1, 2011 at 3:45 PM, Peter Korsgaard wrote:
->>>>>>> "Sonic" == Sonic Zhang writes:
->>
->> ?Sonic> Some autotools based software packages generate prefix name to the
->> ?Sonic> binary after running install if you set --target parameter.
->>
->> ?Sonic> For example:
->>
->> ?Sonic> --target=arm
->>
->> ?Sonic> rcp is rename to "linux-arm-rcp" after running install
->>
->> These packages typically accept the configure options
->> --program-transform-name to make them not do that.
->
-> Yes, but for some packages, --host and --target are not the same as
-> defined in buildroot.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...directfb-1.4.10-add-missing-lm-flag-patch.patch |   49 --------------------
+ package/directfb/directfb.mk                       |   12 ++---
+ 2 files changed, 5 insertions(+), 56 deletions(-)
+ delete mode 100644 package/directfb/directfb-1.4.10-add-missing-lm-flag-patch.patch
 
-yes they are
-
-> For example, to build on x86, run on arm and generate binary for mips.
-
-but that is what we're doing.  we build on x86, run on arm, and
-generate for arm.
--mike
+diff --git a/package/directfb/directfb-1.4.10-add-missing-lm-flag-patch.patch b/package/directfb/directfb-1.4.10-add-missing-lm-flag-patch.patch
+deleted file mode 100644
+index b07f0c5..0000000
+--- a/package/directfb/directfb-1.4.10-add-missing-lm-flag-patch.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From dbf8fd1d097420d02f0603155ca81fcc7e232a0a Mon Sep 17 00:00:00 2001
+-From: Lionel Landwerlin <llandwerlin@gmail.com>
+-Date: Sun, 7 Nov 2010 21:45:19 +0100
+-Subject: [PATCH] Add -lm flag when nedded
+-
+-Signed-off-by: Lionel Landwerlin <llandwerlin@gmail.com>
+----
+- configure.in          |   14 ++++++++++++++
+- src/media/Makefile.am |    2 +-
+- 2 files changed, 15 insertions(+), 1 deletions(-)
+-
+-diff --git a/configure.in b/configure.in
+-index 78c842d..aa608d4 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -533,6 +533,20 @@ AM_CONDITIONAL(DIRECTFB_BUILD_PURE_VOODOO, test "$DIRECTFB_BUILD_PURE_VOODOO" =
+- 
+- AC_SUBST(DEP_VOODOO)
+- 
+-+dnl If we're not building a pure voodoo lib, we need the sqrt symbol
+-+dnl for src/media/idirectfbfont.c
+-+MEDIALIB=""
+-+if test "$enable_pure_voodoo" = "no"; then
+-+  AC_CHECK_LIB(m, sqrt,
+-+    MEDIALIB="-lm",
+-+    AC_MSG_ERROR([
+-+*** DirectFB requires libm.]))
+-+  if test "$enable_shared" = "yes"; then
+-+    DYNLIB+=" $MEDIALIB"
+-+    AC_SUBST(DYNLIB)
+-+  fi
+-+fi
+-+AC_SUBST(MEDIALIB)
+- 
+- AM_CONDITIONAL(ENABLE_MULTI, test "$enable_multi" = "yes")
+- 
+-diff --git a/src/media/Makefile.am b/src/media/Makefile.am
+-index 1a39a25..a4bdb10 100644
+---- a/src/media/Makefile.am
+-+++ b/src/media/Makefile.am
+-@@ -35,4 +35,4 @@ libdirectfb_media_la_SOURCES = \
+- 	idirectfbdatabuffer_file.c	\
+- 	idirectfbdatabuffer_memory.c	\
+- 	idirectfbdatabuffer_streamed.c
+--
+-+libdirectfb_media_la_LDFLAGS = $(MEDIALIB)
+--- 
+-1.7.2.3
+-
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 309659a..0635551 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -3,15 +3,13 @@
+ # directfb
+ #
+ #############################################################
+-DIRECTFB_VERSION_MAJOR:=1.4
+-DIRECTFB_VERSION:=$(DIRECTFB_VERSION_MAJOR).10
+-DIRECTFB_SITE:=http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+-DIRECTFB_SOURCE:=DirectFB-$(DIRECTFB_VERSION).tar.gz
++DIRECTFB_VERSION_MAJOR = 1.4
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).11
++DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
++DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = YES
+-DIRECTFB_LIBTOOL_PATCH = NO
++#DIRECTFB_LIBTOOL_PATCH = NO
+ DIRECTFB_INSTALL_STAGING = YES
+-DIRECTFB_INSTALL_TARGET = YES
+-
+ DIRECTFB_CONF_OPT = \
+ 	--localstatedir=/var \
+ 	--enable-static \
+-- 
+1.7.3.4
