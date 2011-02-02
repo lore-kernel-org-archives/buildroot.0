@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 2 Feb 2011 12:07:45 +0100
 Subject: [Buildroot] [git commit master 1/1] package/config: rebase against
-	652cf9821d2a
-Message-ID: <20110202144319.38B2D8F33A@busybox.osuosl.org>
+	ffb5957bc48f64
+Message-ID: <20110202144319.141B48F338@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,512 +10,534 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9c5296f4c5138ff02cb7f9912df3a117352398c
+commit: http://git.buildroot.net/buildroot/commit/?id=d19a8be27b24ae59ab94815ed52d956c652753bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/config/conf.c                              |   11 +-
- package/config/gconf.c                             |    3 +-
- package/config/mconf.c                             |   35 +++---
+ package/config/conf.c                              |    2 +-
+ package/config/confdata.c                          |   24 +++--
+ package/config/lkc.h                               |    3 +
+ package/config/mconf.c                             |   10 +-
  package/config/menu.c                              |    2 +-
- package/config/nconf.c                             |   43 +++----
- .../patches/01-kconfig-kernel-to-buildroot.patch   |  145 +-------------------
- .../config/patches/12-fix-glade-file-path.patch    |    2 +-
- package/config/qconf.cc                            |    2 +-
- 8 files changed, 49 insertions(+), 194 deletions(-)
+ package/config/nconf.c                             |   12 +-
+ .../patches/01-kconfig-kernel-to-buildroot.patch   |    6 +-
+ .../patches/03-change-config-option-prefix.patch   |  100 ++++++++++++--------
+ .../patches/09-implement-kconfig-probability.patch |    4 +-
+ .../patches/14-support-out-of-tree-config.patch    |   14 ++--
+ .../patches/15-use-PATH_MAX-for-path-buffer.patch  |    4 +-
+ 11 files changed, 107 insertions(+), 74 deletions(-)
 
 diff --git a/package/config/conf.c b/package/config/conf.c
-index bd5dcb0..2192aeb 100644
+index ab349ba..bd5dcb0 100644
 --- a/package/config/conf.c
 +++ b/package/config/conf.c
-@@ -507,8 +507,7 @@ int main(int ac, char **av)
- 		name = conf_get_configname();
- 		if (stat(name, &tmpstat)) {
- 			fprintf(stderr, _("***\n"
--				"*** You have not yet configured your Buildroot!\n"
--				"*** (missing .config file \"%s\")\n"
-+				"*** Configuration file \"%s\" not found!\n"
- 				"***\n"
- 				"*** Please run some configurator (e.g. \"make oldconfig\" or\n"
- 				"*** \"make menuconfig\" or \"make xconfig\").\n"
-@@ -570,7 +569,7 @@ int main(int ac, char **av)
- 			name = getenv("KCONFIG_NOSILENTUPDATE");
- 			if (name && *name) {
- 				fprintf(stderr,
--					_("\n*** Buildroot configuration requires explicit update.\n\n"));
-+					_("\n*** The configuration requires explicit update.\n\n"));
- 				return 1;
+@@ -425,7 +425,7 @@ static void check_conf(struct menu *menu)
+ 		    (sym_is_choice(sym) && sym_get_tristate_value(sym) == yes)) {
+ 			if (input_mode == listnewconfig) {
+ 				if (sym->name && !sym_is_choice_value(sym)) {
+-					printf("CONFIG_%s\n", sym->name);
++					printf("%s%s\n", CONFIG_, sym->name);
+ 				}
+ 			} else if (input_mode != oldnoconfig) {
+ 				if (!conf_cnt++)
+diff --git a/package/config/confdata.c b/package/config/confdata.c
+index 8e2d870..9a6d9d0 100644
+--- a/package/config/confdata.c
++++ b/package/config/confdata.c
+@@ -221,7 +221,7 @@ load:
+ 		conf_lineno++;
+ 		sym = NULL;
+ 		if (line[0] == '#') {
+-			if (line[1] != ' ')
++			if (memcmp(line + 2, CONFIG_, strlen(CONFIG_)))
+ 				continue;
+ 			p = strchr(line + 2, ' ');
+ 			if (!p)
+@@ -424,7 +424,8 @@ static void conf_write_symbol(struct symbol *sym, enum symbol_type type,
+ 		switch (sym_get_tristate_value(sym)) {
+ 		case no:
+ 			if (write_no)
+-				fprintf(out, "# %s is not set\n", sym->name);
++				fprintf(out, "# %s is not set\n",
++				    sym->name);
+ 			break;
+ 		case mod:
+ 			fprintf(out, "%s=m\n", sym->name);
+@@ -861,14 +862,17 @@ int conf_write_autoconf(void)
+ 			case no:
+ 				break;
+ 			case mod:
+-				fprintf(tristate, "%s=M\n", sym->name);
+-				fprintf(out_h, "#define %s_MODULE 1\n", sym->name);
++				fprintf(tristate, "%s=M\n",
++				    sym->name);
++				fprintf(out_h, "#define %s_MODULE 1\n",
++				    sym->name);
+ 				break;
+ 			case yes:
+ 				if (sym->type == S_TRISTATE)
+-					fprintf(tristate, "%s=Y\n",
+-							sym->name);
+-				fprintf(out_h, "#define %s 1\n", sym->name);
++					fprintf(tristate,"%s=Y\n",
++					    sym->name);
++				fprintf(out_h, "#define %s 1\n",
++				    sym->name);
+ 				break;
  			}
- 		}
-@@ -622,11 +621,11 @@ int main(int ac, char **av)
- 		 * All other commands are only used to generate a config.
- 		 */
- 		if (conf_get_changed() && conf_write(NULL)) {
--			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
-+			fprintf(stderr, _("\n*** Error during writing of the configuration.\n\n"));
- 			exit(1);
- 		}
- 		if (conf_write_autoconf()) {
--			fprintf(stderr, _("\n*** Error during update of the Buildroot configuration.\n\n"));
-+			fprintf(stderr, _("\n*** Error during update of the configuration.\n\n"));
- 			return 1;
- 		}
- 	} else if (input_mode == savedefconfig) {
-@@ -637,7 +636,7 @@ int main(int ac, char **av)
- 		}
- 	} else if (input_mode != listnewconfig) {
- 		if (conf_write(NULL)) {
--			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
-+			fprintf(stderr, _("\n*** Error during writing of the configuration.\n\n"));
- 			exit(1);
- 		}
- 	}
-diff --git a/package/config/gconf.c b/package/config/gconf.c
-index f626061..d5f3ec7 100644
---- a/package/config/gconf.c
-+++ b/package/config/gconf.c
-@@ -671,8 +671,7 @@ void on_introduction1_activate(GtkMenuItem * menuitem, gpointer user_data)
- {
- 	GtkWidget *dialog;
- 	const gchar *intro_text = _(
--	    "Welcome to gkc, the GTK+ graphical kernel configuration tool\n"
--	    "for Linux.\n"
-+	    "Welcome to gkc, the GTK+ graphical configuration tool\n"
- 	    "For each option, a blank box indicates the feature is disabled, a\n"
- 	    "check indicates it is enabled, and a dot indicates that it is to\n"
- 	    "be compiled as a module.  Clicking on the box will cycle through the three states.\n"
+ 			break;
+@@ -878,12 +882,14 @@ int conf_write_autoconf(void)
+ 		case S_HEX:
+ 			str = sym_get_string_value(sym);
+ 			if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
+-				fprintf(out_h, "#define %s 0x%s\n", sym->name, str);
++				fprintf(out_h, "#define %s 0x%s\n",
++				    sym->name, str);
+ 				break;
+ 			}
+ 		case S_INT:
+ 			str = sym_get_string_value(sym);
+-			fprintf(out_h, "#define %s %s\n", sym->name, str);
++			fprintf(out_h, "#define %s %s\n",
++			    sym->name, str);
+ 			break;
+ 		default:
+ 			break;
+diff --git a/package/config/lkc.h b/package/config/lkc.h
+index bdf71bd..e9a4e51 100644
+--- a/package/config/lkc.h
++++ b/package/config/lkc.h
+@@ -37,6 +37,9 @@ extern "C" {
+ #define _(text) gettext(text)
+ #define N_(text) (text)
+ 
++#ifndef CONFIG_
++#define CONFIG_ "BR_"
++#endif
+ 
+ #define TF_COMMAND	0x0001
+ #define TF_PARAM	0x0002
 diff --git a/package/config/mconf.c b/package/config/mconf.c
-index dfc0acb..cb5e3cd 100644
+index 41a7b28..dfc0acb 100644
 --- a/package/config/mconf.c
 +++ b/package/config/mconf.c
-@@ -25,10 +25,9 @@
- static const char mconf_readme[] = N_(
- "Overview\n"
- "--------\n"
--"Some features may be built directly into Buildroot. Some features\n"
--"may be completely removed altogether.  There are also certain\n"
--"parameters which are not really features, but must be\n"
--"entered in as decimal or hexadecimal numbers or possibly text.\n"
-+"This interface let you select features and parameters for the build.\n"
-+"Features can either be built-in, modularized, or ignored. Parameters\n"
-+"must be entered in as decimal or hexadecimal numbers or text.\n"
- "\n"
- "Menu items beginning with following braces represent features that\n"
- "  [ ] can be built in or removed\n"
-@@ -149,9 +148,9 @@ static const char mconf_readme[] = N_(
- "\n"
- "Optional personality available\n"
- "------------------------------\n"
--"If you prefer to have all of the options listed in a single\n"
--"menu, rather than the default multimenu hierarchy, run the menuconfig\n"
--"with MENUCONFIG_MODE environment variable set to single_menu. Example:\n"
-+"If you prefer to have all of the options listed in a single menu, rather\n"
-+"than the default multimenu hierarchy, run the menuconfig with\n"
-+"MENUCONFIG_MODE environment variable set to single_menu. Example:\n"
- "\n"
- "make MENUCONFIG_MODE=single_menu menuconfig\n"
- "\n"
-@@ -206,12 +205,12 @@ load_config_text[] = N_(
- 	"last retrieved.  Leave blank to abort."),
- load_config_help[] = N_(
- 	"\n"
--	"For various reasons, one may wish to keep several different Buildroot\n"
-+	"For various reasons, one may wish to keep several different\n"
- 	"configurations available on a single machine.\n"
- 	"\n"
- 	"If you have saved a previous configuration in a file other than the\n"
--	"Buildroot's default, entering the name of the file here will allow you\n"
--	"to modify that configuration.\n"
-+	"default one, entering its name here will allow you to modify that\n"
-+	"configuration.\n"
- 	"\n"
- 	"If you are uncertain, then you have probably never used alternate\n"
- 	"configuration files. You should therefore leave this blank to abort.\n"),
-@@ -220,8 +219,8 @@ save_config_text[] = N_(
- 	"as an alternate.  Leave blank to abort."),
- save_config_help[] = N_(
- 	"\n"
--	"For various reasons, one may wish to keep different Buildroot\n"
--	"configurations available on a single machine.\n"
-+	"For various reasons, one may wish to keep different configurations\n"
-+	"available on a single machine.\n"
- 	"\n"
- 	"Entering a file name here will allow you to later retrieve, modify\n"
- 	"and use the current configuration as an alternate to whatever\n"
-@@ -833,7 +832,7 @@ int main(int ac, char **av)
- 		if (conf_get_changed())
- 			res = dialog_yesno(NULL,
- 					   _("Do you wish to save your "
--					     "new Buildroot configuration?\n"
-+					     "new configuration?\n"
- 					     "<ESC><ESC> to continue."),
- 					   6, 60);
- 		else
-@@ -845,20 +844,20 @@ int main(int ac, char **av)
+@@ -315,8 +315,8 @@ static void search_conf(void)
+ again:
+ 	dialog_clear();
+ 	dres = dialog_inputbox(_("Search Configuration Parameter"),
+-			      _("Enter CONFIG_ (sub)string to search for "
+-				"(with or without \"CONFIG\")"),
++			      _("Enter " CONFIG_ " (sub)string to search for "
++				"(with or without \"" CONFIG_ "\")"),
+ 			      10, 75, "");
+ 	switch (dres) {
  	case 0:
- 		if (conf_write(filename)) {
- 			fprintf(stderr, _("\n\n"
--				"Error during writing of the Buildroot configuration.\n"
--				"Your Buildroot configuration changes were NOT saved."
-+				"Error while writing of the configuration.\n"
-+				"Your configuration changes were NOT saved."
- 				"\n\n"));
- 			return 1;
- 		}
- 	case -1:
- 		printf(_("\n\n"
--			"*** End of Buildroot configuration.\n"
--			"*** Execute 'make' to build Buildroot or try 'make help'."
-+			"*** End of the configuration.\n"
-+			"*** Execute 'make' to start the build or try 'make help'."
- 			"\n\n"));
- 		break;
- 	default:
- 		fprintf(stderr, _("\n\n"
--			"Your Buildroot configuration changes were NOT saved."
-+			"Your configuration changes were NOT saved."
- 			"\n\n"));
+@@ -328,10 +328,10 @@ again:
+ 		return;
  	}
  
+-	/* strip CONFIG_ if necessary */
++	/* strip the prefix if necessary */
+ 	dialog_input = dialog_input_result;
+-	if (strncasecmp(dialog_input_result, "CONFIG_", 7) == 0)
+-		dialog_input += 7;
++	if (strncasecmp(dialog_input_result, CONFIG_, strlen(CONFIG_)) == 0)
++		dialog_input += strlen(CONFIG_);
+ 
+ 	sym_arr = sym_re_search(dialog_input);
+ 	res = get_relations_str(sym_arr);
 diff --git a/package/config/menu.c b/package/config/menu.c
-index 64da30c..682045a 100644
+index 4fb5902..64da30c 100644
 --- a/package/config/menu.c
 +++ b/package/config/menu.c
-@@ -10,7 +10,7 @@
- #include "lkc.h"
+@@ -566,7 +566,7 @@ void menu_get_ext_help(struct menu *menu, struct gstr *help)
  
- static const char nohelp_text[] = N_(
--	"There is no help available for this kernel option.\n");
-+	"There is no help available for this option.\n");
- 
- struct menu rootmenu;
- static struct menu **last_entry_ptr;
+ 	if (menu_has_help(menu)) {
+ 		if (sym->name) {
+-			str_printf(help, "CONFIG_%s:\n\n", sym->name);
++			str_printf(help, "%s%s:\n\n", CONFIG_, sym->name);
+ 			str_append(help, _(menu_get_help(menu)));
+ 			str_append(help, "\n");
+ 		}
 diff --git a/package/config/nconf.c b/package/config/nconf.c
-index da5e45d..801cc04 100644
+index b8a9f37..da5e45d 100644
 --- a/package/config/nconf.c
 +++ b/package/config/nconf.c
-@@ -15,11 +15,9 @@
- static const char nconf_readme[] = N_(
- "Overview\n"
- "--------\n"
--"Some kernel features may be built directly into the kernel.\n"
--"Some may be made into loadable runtime modules.  Some features\n"
--"may be completely removed altogether.  There are also certain\n"
--"kernel parameters which are not really features, but must be\n"
--"entered in as decimal or hexadecimal numbers or possibly text.\n"
-+"This interface let you select features and parameters for the build.\n"
-+"Features can either be built-in, modularized, or ignored. Parameters\n"
-+"must be entered in as decimal or hexadecimal numbers or text.\n"
- "\n"
- "Menu items beginning with following braces represent features that\n"
- "  [ ] can be built in or removed\n"
-@@ -95,7 +93,7 @@ static const char nconf_readme[] = N_(
- "-----------------------------\n"
- "nconfig supports the use of alternate configuration files for\n"
- "those who, for various reasons, find it necessary to switch\n"
--"between different kernel configurations.\n"
-+"between different configurations.\n"
- "\n"
- "At the end of the main menu you will find two options.  One is\n"
- "for saving the current configuration to a file of your choosing.\n"
-@@ -128,9 +126,9 @@ static const char nconf_readme[] = N_(
- "\n"
- "Optional personality available\n"
- "------------------------------\n"
--"If you prefer to have all of the kernel options listed in a single\n"
--"menu, rather than the default multimenu hierarchy, run the nconfig\n"
--"with NCONFIG_MODE environment variable set to single_menu. Example:\n"
-+"If you prefer to have all of the options listed in a single menu, rather\n"
-+"than the default multimenu hierarchy, run the nconfig with NCONFIG_MODE\n"
-+"environment variable set to single_menu. Example:\n"
- "\n"
- "make NCONFIG_MODE=single_menu nconfig\n"
- "\n"
-@@ -185,19 +183,19 @@ setmod_text[] = N_(
- "has been configured as a module.\n"
- "As a result, this feature will be built as a module."),
- nohelp_text[] = N_(
--"There is no help available for this kernel option.\n"),
-+"There is no help available for this option.\n"),
- load_config_text[] = N_(
- "Enter the name of the configuration file you wish to load.\n"
- "Accept the name shown to restore the configuration you\n"
- "last retrieved.  Leave blank to abort."),
- load_config_help[] = N_(
- "\n"
--"For various reasons, one may wish to keep several different kernel\n"
-+"For various reasons, one may wish to keep several different\n"
- "configurations available on a single machine.\n"
- "\n"
- "If you have saved a previous configuration in a file other than the\n"
--"kernel's default, entering the name of the file here will allow you\n"
--"to modify that configuration.\n"
-+"default one, entering its name here will allow you to modify that\n"
-+"configuration.\n"
- "\n"
- "If you are uncertain, then you have probably never used alternate\n"
- "configuration files.  You should therefor leave this blank to abort.\n"),
-@@ -206,8 +204,8 @@ save_config_text[] = N_(
- "as an alternate.  Leave blank to abort."),
- save_config_help[] = N_(
- "\n"
--"For various reasons, one may wish to keep different kernel\n"
--"configurations available on a single machine.\n"
-+"For various reasons, one may wish to keep different configurations\n"
-+"available on a single machine.\n"
- "\n"
- "Entering a file name here will allow you to later retrieve, modify\n"
- "and use the current configuration as an alternate to whatever\n"
-@@ -681,8 +679,7 @@ static int do_exit(void)
- 		return 0;
+@@ -744,8 +744,8 @@ static void search_conf(void)
+ again:
+ 	dres = dialog_inputbox(main_window,
+ 			_("Search Configuration Parameter"),
+-			_("Enter CONFIG_ (sub)string to search for "
+-				"(with or without \"CONFIG\")"),
++			_("Enter " CONFIG_ " (sub)string to search for "
++				"(with or without \"" CONFIG_ "\")"),
+ 			"", dialog_input_result, 99);
+ 	switch (dres) {
+ 	case 0:
+@@ -758,10 +758,10 @@ again:
+ 		return;
  	}
- 	res = btn_dialog(main_window,
--			_("Do you wish to save your "
--				"new kernel configuration?\n"
-+			_("Do you wish to save your new configuration?\n"
- 				"<ESC> to cancel and resume nconfig."),
- 			2,
- 			"   <save>   ",
-@@ -701,18 +698,16 @@ static int do_exit(void)
- 		if (res)
- 			btn_dialog(
- 				main_window,
--				_("Error during writing of the kernel "
--				  "configuration.\n"
--				  "Your kernel configuration "
--				  "changes were NOT saved."),
-+				_("Error during writing of configuration.\n"
-+				  "Your configuration changes were NOT saved."),
- 				  1,
- 				  "<OK>");
- 		else {
- 			char buf[1024];
- 			snprintf(buf, 1024,
- 				_("Configuration written to %s\n"
--				  "End of Linux kernel configuration.\n"
--				  "Execute 'make' to build the kernel or try"
-+				  "End of the configuration.\n"
-+				  "Execute 'make' to start the build or try"
- 				  " 'make help'."), filename);
- 			btn_dialog(
- 				main_window,
-@@ -724,7 +719,7 @@ static int do_exit(void)
- 	default:
- 		btn_dialog(
- 			main_window,
--			_("Your kernel configuration changes were NOT saved."),
-+			_("Your configuration changes were NOT saved."),
- 			1,
- 			"<OK>");
- 		break;
+ 
+-	/* strip CONFIG_ if necessary */
++	/* strip the prefix if necessary */
+ 	dialog_input = dialog_input_result;
+-	if (strncasecmp(dialog_input_result, "CONFIG_", 7) == 0)
+-		dialog_input += 7;
++	if (strncasecmp(dialog_input_result, CONFIG_, strlen(CONFIG_)) == 0)
++		dialog_input += strlen(CONFIG_);
+ 
+ 	sym_arr = sym_re_search(dialog_input);
+ 	res = get_relations_str(sym_arr);
+@@ -1261,7 +1261,7 @@ static void show_help(struct menu *menu)
+ 
+ 	if (menu && menu->sym && menu_has_help(menu)) {
+ 		if (menu->sym->name) {
+-			str_printf(&help, "CONFIG_%s:\n\n", menu->sym->name);
++			str_printf(&help, "%s%s:\n\n", CONFIG_, menu->sym->name);
+ 			str_append(&help, _(menu_get_help(menu)));
+ 			str_append(&help, "\n");
+ 			get_symbol_str(&help, menu->sym);
 diff --git a/package/config/patches/01-kconfig-kernel-to-buildroot.patch b/package/config/patches/01-kconfig-kernel-to-buildroot.patch
-index 0ef8ed6..c511459 100644
+index feff55b..0ef8ed6 100644
 --- a/package/config/patches/01-kconfig-kernel-to-buildroot.patch
 +++ b/package/config/patches/01-kconfig-kernel-to-buildroot.patch
-@@ -1,61 +1,13 @@
- ---
-- conf.c              |   12 ++++++------
-  confdata.c          |   14 +++++++-------
-  gconf.c             |    4 ++--
-  gconf.glade         |    2 +-
-- mconf.c             |   35 +++++++++++++++++------------------
-+ mconf.c             |    8 ++++----
-  qconf.cc            |    4 ++--
-  zconf.tab.c_shipped |    2 +-
-  zconf.y             |    2 +-
-- 8 files changed, 37 insertions(+), 38 deletions(-)
-+ 7 files changed, 18 insertions(+), 18 deletions(-)
- 
--Index: config/conf.c
--===================================================================
----- config.orig/conf.c
--+++ config/conf.c
--@@ -508,8 +508,8 @@
-- 		name = conf_get_configname();
-- 		if (stat(name, &tmpstat)) {
-- 			fprintf(stderr, _("***\n"
---				"*** You have not yet configured your kernel!\n"
---				"*** (missing kernel config file \"%s\")\n"
--+				"*** You have not yet configured your Buildroot!\n"
--+				"*** (missing .config file \"%s\")\n"
-- 				"***\n"
-- 				"*** Please run some configurator (e.g. \"make oldconfig\" or\n"
-- 				"*** \"make menuconfig\" or \"make xconfig\").\n"
--@@ -571,7 +571,7 @@
-- 			name = getenv("KCONFIG_NOSILENTUPDATE");
-- 			if (name && *name) {
-- 				fprintf(stderr,
---					_("\n*** Kernel configuration requires explicit update.\n\n"));
--+					_("\n*** Buildroot configuration requires explicit update.\n\n"));
-- 				return 1;
-- 			}
-- 		}
--@@ -623,11 +623,11 @@
-- 		 * All other commands are only used to generate a config.
-- 		 */
-- 		if (conf_get_changed() && conf_write(NULL)) {
---			fprintf(stderr, _("\n*** Error during writing of the kernel configuration.\n\n"));
--+			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
-- 			exit(1);
-- 		}
-- 		if (conf_write_autoconf()) {
---			fprintf(stderr, _("\n*** Error during update of the kernel configuration.\n\n"));
--+			fprintf(stderr, _("\n*** Error during update of the Buildroot configuration.\n\n"));
-- 			return 1;
-- 		}
-- 	} else if (input_mode == savedefconfig) {
--@@ -638,7 +638,7 @@
-- 		}
-- 	} else if (input_mode != listnewconfig) {
-- 		if (conf_write(NULL)) {
---			fprintf(stderr, _("\n*** Error during writing of the kernel configuration.\n\n"));
--+			fprintf(stderr, _("\n*** Error during writing of the Buildroot configuration.\n\n"));
-- 			exit(1);
-- 		}
-- 	}
- Index: config/confdata.c
+@@ -60,7 +60,7 @@ Index: config/confdata.c
  ===================================================================
  --- config.orig/confdata.c
-@@ -141,38 +93,7 @@ Index: config/mconf.c
- ===================================================================
- --- config.orig/mconf.c
- +++ config/mconf.c
--@@ -25,10 +25,9 @@
-- static const char mconf_readme[] = N_(
-- "Overview\n"
-- "--------\n"
---"Some kernel features may be built directly into the kernel.\n"
---"Some may be made into loadable runtime modules.  Some features\n"
--+"Some features may be built directly into Buildroot. Some features\n"
-- "may be completely removed altogether.  There are also certain\n"
---"kernel parameters which are not really features, but must be\n"
--+"parameters which are not really features, but must be\n"
-- "entered in as decimal or hexadecimal numbers or possibly text.\n"
-- "\n"
-- "Menu items beginning with following braces represent features that\n"
--@@ -117,7 +116,7 @@
-- "-----------------------------\n"
-- "Menuconfig supports the use of alternate configuration files for\n"
-- "those who, for various reasons, find it necessary to switch\n"
---"between different kernel configurations.\n"
--+"between different configurations.\n"
-- "\n"
-- "At the end of the main menu you will find two options.  One is\n"
-- "for saving the current configuration to a file of your choosing.\n"
--@@ -150,7 +149,7 @@
-- "\n"
-- "Optional personality available\n"
-- "------------------------------\n"
---"If you prefer to have all of the kernel options listed in a single\n"
--+"If you prefer to have all of the options listed in a single\n"
-- "menu, rather than the default multimenu hierarchy, run the menuconfig\n"
-- "with MENUCONFIG_MODE environment variable set to single_menu. Example:\n"
-- "\n"
--@@ -180,9 +179,9 @@
-+@@ -178,9 +178,9 @@
-  	"Arrow keys navigate the menu.  "
-  	"<Enter> selects submenus --->.  "
-  	"Highlighted letters are hotkeys.  "
-@@ -184,30 +105,7 @@ Index: config/mconf.c
-  radiolist_instructions[] = N_(
-  	"Use the arrow keys to navigate this window or "
-  	"press the hotkey of the item you wish to select "
--@@ -207,11 +206,11 @@
-- 	"last retrieved.  Leave blank to abort."),
-- load_config_help[] = N_(
-- 	"\n"
---	"For various reasons, one may wish to keep several different kernel\n"
--+	"For various reasons, one may wish to keep several different Buildroot\n"
-- 	"configurations available on a single machine.\n"
-- 	"\n"
-- 	"If you have saved a previous configuration in a file other than the\n"
---	"kernel's default, entering the name of the file here will allow you\n"
--+	"Buildroot's default, entering the name of the file here will allow you\n"
-- 	"to modify that configuration.\n"
-- 	"\n"
-- 	"If you are uncertain, then you have probably never used alternate\n"
--@@ -221,7 +220,7 @@
-- 	"as an alternate.  Leave blank to abort."),
-- save_config_help[] = N_(
-- 	"\n"
---	"For various reasons, one may wish to keep different kernel\n"
--+	"For various reasons, one may wish to keep different Buildroot\n"
-- 	"configurations available on a single machine.\n"
-- 	"\n"
-- 	"Entering a file name here will allow you to later retrieve, modify\n"
--@@ -292,10 +291,10 @@
-+@@ -290,10 +290,10 @@
-  	int size;
-  	struct symbol *sym;
+ +++ config/confdata.c
+-@@ -573,7 +573,7 @@
++@@ -574,7 +574,7 @@
+  	if (!out)
+  		return 1;
   
-@@ -220,41 +118,6 @@ Index: config/mconf.c
-  		        config_filename, sym_get_string_value(sym));
-  	if (size >= sizeof(menu_backtitle))
-  		menu_backtitle[sizeof(menu_backtitle)-1] = '\0';
--@@ -834,7 +833,7 @@
-- 		if (conf_get_changed())
-- 			res = dialog_yesno(NULL,
-- 					   _("Do you wish to save your "
---					     "new kernel configuration?\n"
--+					     "new Buildroot configuration?\n"
-- 					     "<ESC><ESC> to continue."),
-- 					   6, 60);
-- 		else
--@@ -846,20 +845,20 @@
-- 	case 0:
-- 		if (conf_write(filename)) {
-- 			fprintf(stderr, _("\n\n"
---				"Error during writing of the kernel configuration.\n"
---				"Your kernel configuration changes were NOT saved."
--+				"Error during writing of the Buildroot configuration.\n"
--+				"Your Buildroot configuration changes were NOT saved."
-- 				"\n\n"));
-- 			return 1;
-- 		}
-- 	case -1:
-- 		printf(_("\n\n"
---			"*** End of Linux kernel configuration.\n"
---			"*** Execute 'make' to build the kernel or try 'make help'."
--+			"*** End of Buildroot configuration.\n"
--+			"*** Execute 'make' to build Buildroot or try 'make help'."
-- 			"\n\n"));
-- 		break;
-- 	default:
-- 		fprintf(stderr, _("\n\n"
---			"Your kernel configuration changes were NOT saved."
--+			"Your Buildroot configuration changes were NOT saved."
-- 			"\n\n"));
-- 	}
-- 
- Index: config/qconf.cc
- ===================================================================
- --- config.orig/qconf.cc
-diff --git a/package/config/patches/12-fix-glade-file-path.patch b/package/config/patches/12-fix-glade-file-path.patch
-index 140201c..0824c32 100644
---- a/package/config/patches/12-fix-glade-file-path.patch
-+++ b/package/config/patches/12-fix-glade-file-path.patch
-@@ -6,7 +6,7 @@ Index: config/gconf.c
- ===================================================================
- --- config.orig/gconf.c
- +++ config/gconf.c
--@@ -1525,7 +1525,7 @@
-+@@ -1524,7 +1524,7 @@
-  	/* Determine GUI path */
-  	env = getenv(SRCTREE);
-  	if (env)
-diff --git a/package/config/qconf.cc b/package/config/qconf.cc
-index 5d65647..77a298c 100644
---- a/package/config/qconf.cc
-+++ b/package/config/qconf.cc
-@@ -1655,7 +1655,7 @@ void ConfigMainWindow::closeEvent(QCloseEvent* e)
+@@ -69,7 +69,7 @@ Index: config/confdata.c
+  	sym_calc_value(sym);
+  	time(&now);
+  	env = getenv("KCONFIG_NOTIMESTAMP");
+-@@ -582,7 +582,7 @@
++@@ -583,7 +583,7 @@
+  
+  	fprintf(out, _("#\n"
+  		       "# Automatically generated make config: don't edit\n"
+@@ -78,7 +78,7 @@ Index: config/confdata.c
+  		       "%s%s"
+  		       "#\n"),
+  		     sym_get_string_value(sym),
+-@@ -796,25 +796,25 @@
++@@ -797,25 +797,25 @@
+  		return 1;
+  	}
+  
+diff --git a/package/config/patches/03-change-config-option-prefix.patch b/package/config/patches/03-change-config-option-prefix.patch
+index 59f1beb..6ceafcd 100644
+--- a/package/config/patches/03-change-config-option-prefix.patch
++++ b/package/config/patches/03-change-config-option-prefix.patch
+@@ -1,6 +1,7 @@
+ ---
+- confdata.c |   45 +++++++++++++++++++++++----------------------
+- 1 file changed, 23 insertions(+), 22 deletions(-)
++ confdata.c |   57 +++++++++++++++++++++++++++++----------------------------
++ lkc.h      |    2 +-
++ 2 files changed, 30 insertions(+), 29 deletions(-)
  
- void ConfigMainWindow::showIntro(void)
- {
--	static const QString str = _("Welcome to the qconf graphical kernel configuration tool for Linux.\n\n"
-+	static const QString str = _("Welcome to the qconf graphical configuration tool.\n\n"
- 		"For each option, a blank box indicates the feature is disabled, a check\n"
- 		"indicates it is enabled, and a dot indicates that it is to be compiled\n"
- 		"as a module.  Clicking on the box will cycle through the three states.\n\n"
+ Index: config/confdata.c
+ ===================================================================
+@@ -32,14 +33,11 @@ Index: config/confdata.c
+  
+  	return name ? name : ".config";
+  }
+-@@ -222,22 +223,22 @@
+- 		conf_lineno++;
+- 		sym = NULL;
++@@ -224,20 +225,20 @@
+  		if (line[0] == '#') {
+--			if (memcmp(line + 2, "CONFIG_", 7))
+-+			if (line[1] != ' ')
++ 			if (memcmp(line + 2, CONFIG_, strlen(CONFIG_)))
+  				continue;
+--			p = strchr(line + 9, ' ');
++-			p = strchr(line + 2 + strlen(CONFIG_), ' ');
+ +			p = strchr(line + 2, ' ');
+  			if (!p)
+  				continue;
+@@ -47,14 +45,14 @@ Index: config/confdata.c
+  			if (strncmp(p, "is not set", 10))
+  				continue;
+  			if (def == S_DEF_USER) {
+--				sym = sym_find(line + 9);
++-				sym = sym_find(line + 2 + strlen(CONFIG_));
+ +				sym = sym_find(line + 2);
+  				if (!sym) {
+  					sym_add_change_count(1);
+  					break;
+  				}
+  			} else {
+--				sym = sym_lookup(line + 9, 0);
++-				sym = sym_lookup(line + 2 + strlen(CONFIG_), 0);
+ +				sym = sym_lookup(line + 2, 0);
+  				if (sym->type == S_UNKNOWN)
+  					sym->type = S_BOOLEAN;
+@@ -63,8 +61,8 @@ Index: config/confdata.c
+  			default:
+  				;
+  			}
+--		} else if (memcmp(line, "CONFIG_", 7) == 0) {
+--			p = strchr(line + 7, '=');
++-		} else if (memcmp(line, CONFIG_, strlen(CONFIG_)) == 0) {
++-			p = strchr(line + strlen(CONFIG_), '=');
+ +		} else if (isupper(line[0])) {
+ +			p = strchr(line, '=');
+  			if (!p)
+@@ -74,14 +72,14 @@ Index: config/confdata.c
+  					*p2 = 0;
+  			}
+  			if (def == S_DEF_USER) {
+--				sym = sym_find(line + 7);
++-				sym = sym_find(line + strlen(CONFIG_));
+ +				sym = sym_find(line);
+  				if (!sym) {
+  					sym_add_change_count(1);
+  					break;
+  				}
+  			} else {
+--				sym = sym_lookup(line + 7, 0);
++-				sym = sym_lookup(line + strlen(CONFIG_), 0);
+ +				sym = sym_lookup(line, 0);
+  				if (sym->type == S_UNKNOWN)
+  					sym->type = S_OTHER;
+@@ -90,71 +88,97 @@ Index: config/confdata.c
+  {
+  	int l;
+  	if (headerfile)
+--		fprintf(out, "#define CONFIG_%s \"", name);
++-		fprintf(out, "#define %s%s \"", CONFIG_, name);
+ +		fprintf(out, "#define %s \"", name);
+  	else
+--		fprintf(out, "CONFIG_%s=\"", name);
++-		fprintf(out, "%s%s=\"", CONFIG_, name);
+ +		fprintf(out, "%s=\"", name);
+  
+  	while (1) {
+  		l = strcspn(str, "\"\\");
+-@@ -425,13 +426,13 @@
++@@ -425,14 +426,14 @@
+  		switch (sym_get_tristate_value(sym)) {
+  		case no:
+  			if (write_no)
+--				fprintf(out, "# CONFIG_%s is not set\n", sym->name);
+-+				fprintf(out, "# %s is not set\n", sym->name);
++-				fprintf(out, "# %s%s is not set\n",
++-				    CONFIG_, sym->name);
+++				fprintf(out, "# %s is not set\n",
+++				    sym->name);
+  			break;
+  		case mod:
+--			fprintf(out, "CONFIG_%s=m\n", sym->name);
++-			fprintf(out, "%s%s=m\n", CONFIG_, sym->name);
+ +			fprintf(out, "%s=m\n", sym->name);
+  			break;
+  		case yes:
+--			fprintf(out, "CONFIG_%s=y\n", sym->name);
++-			fprintf(out, "%s%s=y\n", CONFIG_, sym->name);
+ +			fprintf(out, "%s=y\n", sym->name);
+  			break;
+  		}
+  		break;
+-@@ -441,7 +442,7 @@
++@@ -442,7 +443,7 @@
+  	case S_HEX:
+  	case S_INT:
+  		str = sym_get_string_value(sym);
+--		fprintf(out, "CONFIG_%s=%s\n", sym->name, str);
++-		fprintf(out, "%s%s=%s\n", CONFIG_, sym->name, str);
+ +		fprintf(out, "%s=%s\n", sym->name, str);
+  		break;
+  	case S_OTHER:
+  	case S_UNKNOWN:
+-@@ -832,14 +833,14 @@
++@@ -833,17 +834,17 @@
+  			case no:
+  				break;
+  			case mod:
+--				fprintf(tristate, "CONFIG_%s=M\n", sym->name);
+--				fprintf(out_h, "#define CONFIG_%s_MODULE 1\n", sym->name);
+-+				fprintf(tristate, "%s=M\n", sym->name);
+-+				fprintf(out_h, "#define %s_MODULE 1\n", sym->name);
++-				fprintf(tristate, "%s%s=M\n",
++-				    CONFIG_, sym->name);
++-				fprintf(out_h, "#define %s%s_MODULE 1\n",
++-				    CONFIG_, sym->name);
+++				fprintf(tristate, "%s=M\n",
+++				    sym->name);
+++				fprintf(out_h, "#define %s_MODULE 1\n",
+++				    sym->name);
+  				break;
+  			case yes:
+  				if (sym->type == S_TRISTATE)
+--					fprintf(tristate, "CONFIG_%s=Y\n",
+-+					fprintf(tristate, "%s=Y\n",
+- 							sym->name);
+--				fprintf(out_h, "#define CONFIG_%s 1\n", sym->name);
+-+				fprintf(out_h, "#define %s 1\n", sym->name);
++-					fprintf(tristate,"%s%s=Y\n",
++-					    CONFIG_, sym->name);
++-				fprintf(out_h, "#define %s%s 1\n",
++-				    CONFIG_, sym->name);
+++					fprintf(tristate,"%s=Y\n",
+++					    sym->name);
+++				fprintf(out_h, "#define %s 1\n",
+++				    sym->name);
+  				break;
+  			}
+  			break;
+-@@ -849,12 +850,12 @@
++@@ -853,14 +854,14 @@
+  		case S_HEX:
+  			str = sym_get_string_value(sym);
+  			if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
+--				fprintf(out_h, "#define CONFIG_%s 0x%s\n", sym->name, str);
+-+				fprintf(out_h, "#define %s 0x%s\n", sym->name, str);
++-				fprintf(out_h, "#define %s%s 0x%s\n",
++-				    CONFIG_, sym->name, str);
+++				fprintf(out_h, "#define %s 0x%s\n",
+++				    sym->name, str);
+  				break;
+  			}
+  		case S_INT:
+  			str = sym_get_string_value(sym);
+--			fprintf(out_h, "#define CONFIG_%s %s\n", sym->name, str);
+-+			fprintf(out_h, "#define %s %s\n", sym->name, str);
++-			fprintf(out_h, "#define %s%s %s\n",
++-			    CONFIG_, sym->name, str);
+++			fprintf(out_h, "#define %s %s\n",
+++			    sym->name, str);
+  			break;
+  		default:
+  			break;
++Index: config/lkc.h
++===================================================================
++--- config.orig/lkc.h
+++++ config/lkc.h
++@@ -38,7 +38,7 @@
++ #define N_(text) (text)
++ 
++ #ifndef CONFIG_
++-#define CONFIG_ "CONFIG_"
+++#define CONFIG_ "BR_"
++ #endif
++ 
++ #define TF_COMMAND	0x0001
+diff --git a/package/config/patches/09-implement-kconfig-probability.patch b/package/config/patches/09-implement-kconfig-probability.patch
+index e16bca2..7d188e5 100644
+--- a/package/config/patches/09-implement-kconfig-probability.patch
++++ b/package/config/patches/09-implement-kconfig-probability.patch
+@@ -6,7 +6,7 @@ Index: config/confdata.c
+ ===================================================================
+ --- config.orig/confdata.c
+ +++ config/confdata.c
+-@@ -979,7 +979,16 @@
++@@ -985,7 +985,16 @@
+  void conf_set_all_new_symbols(enum conf_def_mode mode)
+  {
+  	struct symbol *sym, *csym;
+@@ -24,7 +24,7 @@ Index: config/confdata.c
+  
+  	for_all_symbols(i, sym) {
+  		if (sym_has_value(sym))
+-@@ -998,8 +1007,15 @@
++@@ -1004,8 +1013,15 @@
+  				sym->def[S_DEF_USER].tri = no;
+  				break;
+  			case def_random:
+diff --git a/package/config/patches/14-support-out-of-tree-config.patch b/package/config/patches/14-support-out-of-tree-config.patch
+index 1f18711..8cce7dc 100644
+--- a/package/config/patches/14-support-out-of-tree-config.patch
++++ b/package/config/patches/14-support-out-of-tree-config.patch
+@@ -31,7 +31,7 @@ Index: config/confdata.c
+  }
+  
+  static char *conf_expand_value(const char *in)
+-@@ -540,6 +538,9 @@
++@@ -541,6 +539,9 @@
+  	int use_timestamp = 1;
+  	char *env;
+  
+@@ -41,7 +41,7 @@ Index: config/confdata.c
+  	dirname[0] = 0;
+  	if (name && name[0]) {
+  		struct stat st;
+-@@ -656,6 +657,7 @@
++@@ -657,6 +658,7 @@
+  {
+  	const char *name;
+  	char path[128];
+@@ -49,7 +49,7 @@ Index: config/confdata.c
+  	char *s, *d, c;
+  	struct symbol *sym;
+  	struct stat sb;
+-@@ -664,8 +666,20 @@
++@@ -665,8 +667,20 @@
+  	name = conf_get_autoconfig_name();
+  	conf_read_simple(name, S_DEF_AUTO);
+  
+@@ -72,7 +72,7 @@ Index: config/confdata.c
+  
+  	res = 0;
+  	for_all_symbols(i, sym) {
+-@@ -758,9 +772,11 @@
++@@ -759,9 +773,11 @@
+  		close(fd);
+  	}
+  out:
+@@ -87,7 +87,7 @@ Index: config/confdata.c
+  	return res;
+  }
+  
+-@@ -772,25 +788,38 @@
++@@ -773,25 +789,38 @@
+  	FILE *out, *tristate, *out_h;
+  	time_t now;
+  	int i;
+@@ -130,7 +130,7 @@ Index: config/confdata.c
+  	if (!out_h) {
+  		fclose(out);
+  		fclose(tristate);
+-@@ -813,8 +842,7 @@
++@@ -814,8 +843,7 @@
+  	fprintf(out_h, "/*\n"
+  		       " * Automatically generated C config: don't edit\n"
+  		       " * %s"
+@@ -140,7 +140,7 @@ Index: config/confdata.c
+  		       ctime(&now));
+  
+  	for_all_symbols(i, sym) {
+-@@ -868,19 +896,22 @@
++@@ -874,19 +902,22 @@
+  	name = getenv("KCONFIG_AUTOHEADER");
+  	if (!name)
+  		name = "include/generated/autoconf.h";
+diff --git a/package/config/patches/15-use-PATH_MAX-for-path-buffer.patch b/package/config/patches/15-use-PATH_MAX-for-path-buffer.patch
+index 1a2a802..fafc0ff 100644
+--- a/package/config/patches/15-use-PATH_MAX-for-path-buffer.patch
++++ b/package/config/patches/15-use-PATH_MAX-for-path-buffer.patch
+@@ -18,7 +18,7 @@ Index: config/confdata.c
+ ===================================================================
+ --- config.orig/confdata.c
+ +++ config/confdata.c
+-@@ -532,7 +532,7 @@
++@@ -533,7 +533,7 @@
+  	struct menu *menu;
+  	const char *basename;
+  	const char *str;
+@@ -27,7 +27,7 @@ Index: config/confdata.c
+  	enum symbol_type type;
+  	time_t now;
+  	int use_timestamp = 1;
+-@@ -656,7 +656,7 @@
++@@ -657,7 +657,7 @@
+  static int conf_split_config(void)
+  {
+  	const char *name;
 -- 
 1.7.3.4
