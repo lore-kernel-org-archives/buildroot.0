@@ -1,16 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Feb 2011 15:21:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 2887] tar "buffer overflow detected" error
-In-Reply-To: <bug-2887-163@https.bugs.busybox.net/>
-References: <bug-2887-163@https.bugs.busybox.net/>
-Message-ID: <20110202152135.F39698F2FD@busybox.osuosl.org>
+Date: Wed,  2 Feb 2011 15:49:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 2623] buildroot-snapshot-20100922 fails when
+ compiling development packages to target
+In-Reply-To: <bug-2623-163@https.bugs.busybox.net/>
+References: <bug-2623-163@https.bugs.busybox.net/>
+Message-ID: <20110202154921.0578A8F30C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2887
+https://bugs.busybox.net/show_bug.cgi?id=2623
 
 Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
@@ -20,7 +21,7 @@ Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
          Resolution|                            |FIXED
 
 --- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-tar already bumped to version 1.25, thanks!
+It's fixed in git with the toolchain rework.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
