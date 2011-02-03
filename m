@@ -1,22 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  3 Feb 2011 14:30:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 3205] Failing chmod when running "make" in
- buildroot (openssl). /usr/lib should have been /usr/lib64
-In-Reply-To: <bug-3205-163@https.bugs.busybox.net/>
-References: <bug-3205-163@https.bugs.busybox.net/>
-Message-ID: <20110203143005.97CC38F39A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 03 Feb 2011 12:08:35 -0300
+Subject: [Buildroot] [PATCH] qt: add option to hide mouse cursor
+In-Reply-To: <1296688004-27884-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1296688004-27884-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <4D4AC4F3.9030700@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3205
+On 02/02/11 20:06, Daniel Nystr?m wrote:
 
---- Comment #5 from daniel at visp.name  ---
-Testing it now. Takes a while to build...
+> Allow the user to build Qt with the QT_NO_QWS_CURSOR macro set.
+> 
+> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> ---
+>  package/qt/Config.mouse.in |    7 +++++++
+>  package/qt/qt.mk           |    3 +++
+>  2 files changed, 10 insertions(+), 0 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
