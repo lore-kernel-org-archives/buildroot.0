@@ -1,40 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 Feb 2011 20:44:45 +0100
-Subject: [Buildroot] [git commit master 1/1] bzip2: don't hide on
-	!BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-Message-ID: <20110203195508.1628E8F39F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Feb 2011 17:45:55 -0300
+Subject: [Buildroot] [PATCH 1/3] openssl: fix libdir issue bug #3205
+Message-ID: <1296765957-5137-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+OpenSSL's build system tries to be too wise for it's own good when
+guessing what libdir should be.
+This causes problems like the one reported in bug #3205 so just specify
+libdir to point to /lib (since it's prefixed it would finally be
+/usr/lib) since it should be present on 32 and 64 bit targets.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cc0e5f85a23c884efebb357d35295a08a3c8c97
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Quite a lot of packages select bzip2 (for its libbz2 library), so don't
-hide it even though busybox DOES have a bzip2 applet - Otherwise
-kconfig complains.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/openssl/openssl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 16a9e8f..de51c46 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -7,8 +7,8 @@ source "package/customize/Config.in"
- source "package/multimedia/Config.in"
- 
- menu "Compressors and decompressors"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bzip2/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
- endif
- source "package/lzop/Config.in"
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index e35eaa3..95459ec 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -41,6 +41,7 @@ define OPENSSL_CONFIGURE_CMDS
+ 			linux-$(OPENSSL_TARGET_ARCH) \
+ 			--prefix=/usr \
+ 			--openssldir=/etc/ssl \
++			--libdir=/lib \
+ 			threads \
+ 			shared \
+ 			no-idea \
 -- 
 1.7.3.4
