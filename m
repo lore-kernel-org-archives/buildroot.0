@@ -1,20 +1,33 @@
-From: Davis Mcpherson <davis.mcpherson@gmail.com>
-Date: Thu, 3 Feb 2011 07:38:58 -0500
-Subject: [Buildroot] Buildroot compatiable with Linux kernel 2.6.14
-Message-ID: <C00253FF-C6FC-425D-B030-FE312668B071@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  3 Feb 2011 13:00:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 3205] Failing chmod when running "make" in
+ buildroot (openssl). /usr/lib should have been /usr/lib64
+In-Reply-To: <bug-3205-163@https.bugs.busybox.net/>
+References: <bug-3205-163@https.bugs.busybox.net/>
+Message-ID: <20110203130021.C7C5E8F39B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm working on a project that currently requires me to use Linux kernel version 2.6.14 for the embedded target I'm building for, 
+https://bugs.busybox.net/show_bug.cgi?id=3205
 
- Should I use a specfic version of Buildroot to ensure compatibility with with this kernel or should the latest stable version work? 
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
 
- Do I need to set any Buildroot configuration options to reference the kernel source tree I'm using?  I see a config option under Toolchain to specify the kernel version for 'Kernel Headers' but i'm not sure what this affects?  Is it just the toolchain tools and should thus match the kernel on the build machine or should this be set to the version of the kernel running on the target?
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Can you try the patch at
+http://repo.or.cz/w/buildroot-gz.git/commitdiff/dddfea987f329a7dea507f987bde59f52b14ddd5
+?
+Fixes the issue for me.
 
-thanks for your time and suggestions
-
--davis mcpherson
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
