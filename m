@@ -1,31 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  3 Feb 2011 13:00:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 3205] Failing chmod when running "make" in
- buildroot (openssl). /usr/lib should have been /usr/lib64
-In-Reply-To: <bug-3205-163@https.bugs.busybox.net/>
-References: <bug-3205-163@https.bugs.busybox.net/>
-Message-ID: <20110203130021.C7C5E8F39B@busybox.osuosl.org>
+Date: Thu,  3 Feb 2011 13:24:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 2971] rootfs lacks /lib64 directory for 64 bits
+	arch
+In-Reply-To: <bug-2971-163@https.bugs.busybox.net/>
+References: <bug-2971-163@https.bugs.busybox.net/>
+Message-ID: <20110203132429.2F84B8F398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3205
+https://bugs.busybox.net/show_bug.cgi?id=2971
 
 Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
-                   |.org                        |
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
---- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
-Can you try the patch at
-http://repo.or.cz/w/buildroot-gz.git/commitdiff/dddfea987f329a7dea507f987bde59f52b14ddd5
-?
-Fixes the issue for me.
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+This has been fixed in modern versions of buildroot.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
