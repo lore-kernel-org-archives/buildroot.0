@@ -1,66 +1,106 @@
-From: Mike <kenziem@sympatico.ca>
-Date: Fri, 4 Feb 2011 14:57:43 -0500
-Subject: [Buildroot] ISO image question
-Message-ID: <BLU0-SMTP3809CE19EBC125B18D8251CAE60@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Feb 2011 21:26:59 +0100
+Subject: [Buildroot] [PATCH 2/2] Add orc package
+In-Reply-To: <1296843913-22321-3-git-send-email-felipe.contreras@gmail.com>
+References: <1296843913-22321-1-git-send-email-felipe.contreras@gmail.com>
+	<1296843913-22321-3-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <20110204212659.4c5d6469@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've recently built an ISO image for i386 (git clone 2011-02-02). 
+Hello,
 
-I ended up using  make qemu_x86_defconfig  to get it to build successfully.
+There was already a orc package in the bug tracker, which I started to
+test this week, but didn't had the time to finish.
 
-When I mount the image it is almost empty 
+Thomas
 
-drwxr-xr-x 3 root root    2048 2011-02-02 11:14 boot
--r--r--r-- 1 root root    2048 2011-02-02 11:14 boot.catalog
--rw-r--r-- 1 root root 2338816 2011-02-02 11:14 initrd
--rw-r--r-- 1 root root 1351488 2011-02-02 11:14 kernel
+On Fri,  4 Feb 2011 20:25:13 +0200
+Felipe Contreras <felipe.contreras@gmail.com> wrote:
 
-When I look at the rootfs.ext2 that was created it seems to be complete
-
-drwxr-xr-x 2 root root   2048 2011-02-02 11:14 bin
-drwxr-xr-x 3 root root   1024 2011-02-01 22:21 boot
-drwxr-xr-x 6 root root   3072 2011-02-01 22:07 dev
-drwxr-xr-x 5 root root   1024 2011-02-01 22:07 etc
-drwxr-xr-x 3 root root   1024 2011-02-01 22:07 home
-drwxr-xr-x 2 root root   1024 2011-02-02 11:14 lib
-lrwxrwxrwx 1 root root     11 2011-02-01 22:07 linuxrc -> bin/busybox
-drwx------ 2 root root 116736 2011-02-02 11:14 lost+found
-drwxr-xr-x 2 root root   1024 2011-02-01 21:51 mnt
-drwxr-xr-x 2 root root   1024 2011-02-01 21:51 opt
-drwxr-xr-x 2 root root   1024 2011-02-01 21:51 proc
-drwxr-xr-x 2 root root   1024 2011-02-01 21:51 root
-drwxr-xr-x 2 root root   1024 2011-02-02 11:14 sbin
-drwxr-xr-x 2 root root   1024 2011-02-01 21:51 sys
-drwxrwxrwt 3 root root   1024 2011-02-01 22:07 tmp
-drwxr-xr-x 6 root root   1024 2011-02-01 22:07 usr
-drwxr-xr-x 3 root root   1024 2011-01-31 15:21 var
-
-Did I miss an option that would have copied the rootfs to the ISO image? 
-
-I'm trying to run it under Virtualbox and it fails to mount root 
-looking at menu.lst shows that the root (hd1,1) is not 
-
-> cat menu.lst
-default         0
-timeout         10
-color cyan/blue white/blue
-
-title           Hard Drive (first partition)
-rootnoverify    (hd0)
-chainloader     +1
-
-title           BuildRoot ISO9660 image
-kernel          /kernel
-initrd          /initrd
-
+> And add GStreamer dependencies (although they are not strong).
+> 
+> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+> ---
+>  package/Config.in                                  |    1 +
+>  .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 +-
+>  .../gst-plugins-base/gst-plugins-base.mk           |    2 +-
+>  package/orc/Config.in                              |    6 ++++++
+>  package/orc/orc.mk                                 |    7 +++++++
+>  5 files changed, 16 insertions(+), 2 deletions(-)
+>  create mode 100644 package/orc/Config.in
+>  create mode 100644 package/orc/orc.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 16a9e8f..0004e6d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -333,6 +333,7 @@ source "package/libffi/Config.in"
+>  source "package/libglib2/Config.in"
+>  source "package/liboil/Config.in"
+>  source "package/libsigc/Config.in"
+> +source "package/orc/Config.in"
+>  source "package/startup-notification/Config.in"
+>  endmenu
+>  
+> diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+> b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk index
+> c300256..00f78a8 100644 ---
+> a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk +++
+> b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk @@ -11,7
+> +11,7 @@ GST_PLUGINS_BAD_LIBTOOL_PATCH = NO GST_PLUGINS_BAD_CONF_OPT
+> = \ --disable-examples
+>  
+> -GST_PLUGINS_BAD_DEPENDENCIES = gst-plugins-base gstreamer
+> +GST_PLUGINS_BAD_DEPENDENCIES = gst-plugins-base gstreamer orc
+>  
+>  ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AACPARSE),y)
+>  GST_PLUGINS_BAD_CONF_OPT += --enable-aacparse
+> diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+> b/package/multimedia/gst-plugins-base/gst-plugins-base.mk index
+> 828d156..2df1818 100644 ---
+> a/package/multimedia/gst-plugins-base/gst-plugins-base.mk +++
+> b/package/multimedia/gst-plugins-base/gst-plugins-base.mk @@ -25,7
+> +25,7 @@ GST_PLUGINS_BASE_CONF_OPT = \ --disable-vorbistest \
+>  		--disable-freetypetest
+>  
+> -GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
+> +GST_PLUGINS_BASE_DEPENDENCIES = gstreamer orc
+>  
+>  # alsa support needs pcm+mixer support, but configure fails to check
+> for it ifeq
+> ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+> diff --git a/package/orc/Config.in b/package/orc/Config.in new file
+> mode 100644 index 0000000..d94856c
+> --- /dev/null
+> +++ b/package/orc/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_ORC
+> +	bool "orc"
+> +	help
+> +	  Library of simple functions that are optimized for various
+> CPUs. +
+> +	  http://code.entropywave.com/download/orc/
+> diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+> new file mode 100644
+> index 0000000..ef57023
+> --- /dev/null
+> +++ b/package/orc/orc.mk
+> @@ -0,0 +1,7 @@
+> +ORC_VERSION = 0.4.11
+> +ORC_SOURCE = orc-$(ORC_VERSION).tar.gz
+> +ORC_SITE = http://code.entropywave.com/download/orc/
+> +ORC_INSTALL_STAGING = YES
+> +ORC_INSTALL_TARGET = YES
+> +
+> +$(eval $(call AUTOTARGETS,package,orc))
 
 
 -- 
-Collector of vintage computers http://www.ncf.ca/~ba600
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110204/018ea7f2/attachment-0001.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
