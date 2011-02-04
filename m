@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 4 Feb 2011 19:49:50 +0100
-Subject: [Buildroot] [git commit master 1/1] busybox: add 1.18.2 modprobe fix
-Message-ID: <20110204185010.DED7E8F3BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] busybox: add 1.18.2 libbb fix
+Message-ID: <20110204185011.1BF468F3BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9384f00cce18077bb32494489f5b9e37ff5564e3
+commit: http://git.buildroot.net/buildroot/commit/?id=3fa18d27d3f4254f467333a903dcb5f7fcd53b24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox-1.18.2/busybox-1.18.2-modprobe.patch   |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe.patch
+ .../busybox-1.18.2/busybox-1.18.2-libbb.patch      |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
 
-diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe.patch
+diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
 new file mode 100644
-index 0000000..cad887e
+index 0000000..aa7e75d
 --- /dev/null
-+++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe.patch
-@@ -0,0 +1,20 @@
-+--- busybox-1.18.2/modutils/modutils.c
-++++ busybox-1.18.2-modprobe/modutils/modutils.c
-+@@ -71,12 +71,11 @@ char* FAST_FUNC parse_cmdline_module_opt
-+ 	optlen = 0;
-+ 	while (*++argv) {
-+ 		options = xrealloc(options, optlen + 2 + strlen(*argv) + 2);
-+-		/* Older versions were enclosing space-containing *argv in "",
-+-		 * but both modprobe and insmod from module-init-tools 3.11.1
-+-		 * don't do this anymore. (As to extra trailing space,
-+-		 * insmod adds it but modprobe does not. We do in both cases)
-+-		 */
-+-		optlen += sprintf(options + optlen, "%s ", *argv);
-++		/* Spaces handled by "" pairs, but no way of escaping quotes */
-++//TODO: module-init-tools version 3.11.1 quotes only value:
-++//it generates var="val with spaces", not "var=val with spaces"
-++//(and it won't quote var *name* even if it has spaces)
-++		optlen += sprintf(options + optlen, (strchr(*argv, ' ') ? "\"%s\" " : "%s "), *argv);
++++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
+@@ -0,0 +1,10 @@
++--- busybox-1.18.2/libbb/vfork_daemon_rexec.c
+++++ busybox-1.18.2-libbb/libbb/vfork_daemon_rexec.c
++@@ -52,6 +52,7 @@ pid_t FAST_FUNC spawn(char **argv)
++ 	 * Interested party can wait on pid and learn exit code.
++ 	 * If 111 - then it (most probably) failed to exec */
++ 	if (failed) {
+++		safe_waitpid(pid, NULL, 0); /* prevent zombie */
++ 		errno = failed;
++ 		return -1;
 + 	}
-+ 	return options;
-+ }
 -- 
 1.7.3.4
