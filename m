@@ -1,23 +1,20 @@
-From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Fri, 04 Feb 2011 10:16:31 +0100
-Subject: [Buildroot] [PATCH] lua: enables lua to be built for host
-Message-ID: <4D4BC3EF.5090408@free.fr>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 4 Feb 2011 10:38:17 -0600
+Subject: [Buildroot] New Toolchain issues
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F320BCE@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables lua to be built for host.
+Gustavo/all,
 
-Signed-off-by: Guillaume GARDET <guillaume.gardet@free.fr>
----
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 598eea1..a3b16d9 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -122,3 +122,4 @@ define LUA_CLEAN_CMDS
-  endef
+Perhaps I missed this in an e-mail (if so, my apologies).  Each time I\
+run make on BuildRoot, the new toolchain builds -- which is quite
+aggravating when all I'm doing is attempting to add a package to the
+overall system.
 
-  $(eval $(call GENTARGETS,package,lua))
-+$(eval $(call GENTARGETS,package,lua,host))
+Is this by design, or am I experiencing a problem?
+
+Andy
