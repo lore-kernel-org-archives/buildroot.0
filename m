@@ -1,70 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 4 Feb 2011 20:00:35 +0100
-Subject: [Buildroot] [git commit master 1/1] ntp: only install init script
-	if ntpd is enabled
-Message-ID: <20110204190242.306018F33F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Feb 2011 20:02:48 +0100
+Subject: [Buildroot] [PATCH 3/3] ntp: add ntpdate option
+In-Reply-To: <1296765957-5137-3-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Thu, 3 Feb 2011 17:45:57 -0300")
+References: <1296765957-5137-1-git-send-email-gustavo@zacarias.com.ar>
+	<1296765957-5137-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878vxvr5bb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d0352edeea629349a0ce497e53cb6ce34feacac0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Add ntpdate option bug #2935.
+ Gustavo> Based on incomplete patch by Frederik Pasch <fpasch@googlemail.com>
 
-Further more:
-- Rename to S49ntp to match other packages
-- Fix start target to run ntpd, and only try ntpdate if available
+ Gustavo> Also enable crypto when openssl is enabled.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ntp/{ntp.sysvinit => S49ntp} |   11 +++++------
- package/ntp/ntp.mk                   |    2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
- rename package/ntp/{ntp.sysvinit => S49ntp} (86%)
+Committed, thanks.
 
-diff --git a/package/ntp/ntp.sysvinit b/package/ntp/S49ntp
-similarity index 86%
-rename from package/ntp/ntp.sysvinit
-rename to package/ntp/S49ntp
-index 38e60b0..7b929e9 100755
---- a/package/ntp/ntp.sysvinit
-+++ b/package/ntp/S49ntp
-@@ -20,16 +20,15 @@ fi
- 
- case "$1" in
-   start)
--	if test x$NTPDATE = xyes ; then
-+	if [ -x $NTPDATE_BIN ] ; then
- 		echo -n "Getting initial time via ntp"
- 		$NTPDATE_BIN $NTPDATE_OPTS $NTPSERVERS > /dev/null 2>&1
- 		echo "."
- 	fi
--	if test x$NTPD = xyes ; then
--		echo -n "Starting $DESC: $NAME"
--		start-stop-daemon -S -q -x $DAEMON
--		echo "."
--	fi
-+
-+	echo -n "Starting $DESC: $NAME"
-+	start-stop-daemon -S -q -x $DAEMON
-+	echo "."
- 	;;
-   stop) echo -n "Stopping $DESC: $NAME"
- 	start-stop-daemon -K -q -n $NAME
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index bca5d6e..72e462e 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -42,7 +42,7 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
- define NTP_INSTALL_TARGET_CMDS
- 	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 $(@D)/ntpd/ntpd $(TARGET_DIR)/usr/sbin/ntpd)
- 	test -z "$(NTP_INSTALL_FILES_y)" || install -m 755 $(addprefix $(@D)/,$(NTP_INSTALL_FILES_y)) $(TARGET_DIR)/usr/bin/
--	install -m 755 package/ntp/ntp.sysvinit $(TARGET_DIR)/etc/init.d/S49ntp
-+	$(if $(BR2_PACKAGE_NTP_NTPD), install -m 755 package/ntp/S49ntp $(TARGET_DIR)/etc/init.d/S49ntp)
- 	@if [ ! -f $(TARGET_DIR)/etc/default/ntpd ]; then \
- 		install -m 755 -d $(TARGET_DIR)/etc/default ; \
- 		install -m 644 package/ntp/ntpd.etc.default $(TARGET_DIR)/etc/default/ntpd ; \
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
