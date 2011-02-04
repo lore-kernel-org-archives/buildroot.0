@@ -1,38 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 4 Feb 2011 19:49:50 +0100
-Subject: [Buildroot] [git commit master 1/1] busybox: add 1.18.2 libbb fix
-Message-ID: <20110204185011.1BF468F3BD@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Feb 2011 19:50:20 +0100
+Subject: [Buildroot] [PATCH 2/3] busybox: add modprobe fix
+In-Reply-To: <1296765957-5137-2-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Thu, 3 Feb 2011 17:45:56 -0300")
+References: <1296765957-5137-1-git-send-email-gustavo@zacarias.com.ar>
+	<1296765957-5137-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d3n7r5w3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fa18d27d3f4254f467333a903dcb5f7fcd53b24
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  .../busybox-1.18.2/busybox-1.18.2-modprobe.patch   |   20 ++++++++++++++++++++
+ Gustavo>  1 files changed, 20 insertions(+), 0 deletions(-)
+ Gustavo>  create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-modprobe.patch
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../busybox-1.18.2/busybox-1.18.2-libbb.patch      |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
+Committed, thanks.
 
-diff --git a/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch b/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
-new file mode 100644
-index 0000000..aa7e75d
---- /dev/null
-+++ b/package/busybox/busybox-1.18.2/busybox-1.18.2-libbb.patch
-@@ -0,0 +1,10 @@
-+--- busybox-1.18.2/libbb/vfork_daemon_rexec.c
-++++ busybox-1.18.2-libbb/libbb/vfork_daemon_rexec.c
-+@@ -52,6 +52,7 @@ pid_t FAST_FUNC spawn(char **argv)
-+ 	 * Interested party can wait on pid and learn exit code.
-+ 	 * If 111 - then it (most probably) failed to exec */
-+ 	if (failed) {
-++		safe_waitpid(pid, NULL, 0); /* prevent zombie */
-+ 		errno = failed;
-+ 		return -1;
-+ 	}
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
