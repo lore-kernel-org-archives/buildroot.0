@@ -1,25 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Feb 2011 20:02:48 +0100
-Subject: [Buildroot] [PATCH 3/3] ntp: add ntpdate option
-In-Reply-To: <1296765957-5137-3-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Thu, 3 Feb 2011 17:45:57 -0300")
-References: <1296765957-5137-1-git-send-email-gustavo@zacarias.com.ar>
-	<1296765957-5137-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878vxvr5bb.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  4 Feb 2011 19:03:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 2935] Ntpdate isn't installed
+In-Reply-To: <bug-2935-163@https.bugs.busybox.net/>
+References: <bug-2935-163@https.bugs.busybox.net/>
+Message-ID: <20110204190330.6EC3A8F380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=2935
 
- Gustavo> Add ntpdate option bug #2935.
- Gustavo> Based on incomplete patch by Frederik Pasch <fpasch@googlemail.com>
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Gustavo> Also enable crypto when openssl is enabled.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Committed, thanks.
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed in git (14a971ab6c4)
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
