@@ -1,33 +1,57 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Sat, 5 Feb 2011 00:56:22 +0200
-Subject: [Buildroot] [PATCH 1/2] Update to the latest GStreamer packages
-In-Reply-To: <8739o3qxmg.fsf@macbook.be.48ers.dk>
-References: <1296843913-22321-1-git-send-email-felipe.contreras@gmail.com>
-	<1296843913-22321-2-git-send-email-felipe.contreras@gmail.com>
-	<8739o3qxmg.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikNbw8Y9MG8KGgRR6Ztj+9Li1+x4GtNujEjW+Bt@mail.gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Fri, 4 Feb 2011 17:06:40 -0600
+Subject: [Buildroot] Question: mdev and snd/* device nodes
+Message-ID: <0D753D10438DA54287A00B027084269764CF157CB5@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 4, 2011 at 11:48 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
->
-> ?Felipe> liboil is not needed not used any more. orc _can_ be used instead, but
-> ?Felipe> it's not needed.
->
-> Committed, thanks. You forgot to remove the select BR2_PACKAGE_LIBOIL,
-> but I did that.
+Hello all,
 
-It's supposed to be useful outside GStreamer, but I guess nobody
-really uses that.
+Does mdev have a problem creating device nodes in subdirectories?
 
-> Just to be sure - With these version bumps the fixes for make 3.82 are
-> no longer needed, right?
+I am trying to get audio working on an ep93xx based board and found the
+audio device nodes were being created in /dev and not /dev/snd.
 
-That's right, they are not needed any more.
+I have these devices:
 
--- 
-Felipe Contreras
+# ls /sys/class/sound
+card0      controlC0  pcmC0D0c   pcmC0D0p   timer
+
+Which has these uevents, which I assume is what mdev uses to create the
+nodes:
+
+# cat controlC0/uevent
+MAJOR=116
+MINOR=0
+DEVNAME=snd/controlC0
+# cat pcmC0D0c/uevent
+MAJOR=116
+MINOR=24
+DEVNAME=snd/pcmC0D0c
+# cat pcmC0D0p/uevent
+MAJOR=116
+MINOR=16
+DEVNAME=snd/pcmC0D0p
+# cat timer/uevent
+MAJOR=116
+MINOR=33
+DEVNAME=snd/timer
+
+After 'mdev -s' runs in my startup I end up with these nodes:
+
+# ls /dev -la | grep 116
+crw-rw----    1 root     root      116,   0 Jan  1 01:05 controlC0
+crw-rw----    1 root     root      116,  24 Jan  1 01:05 pcmC0D0c
+crw-rw----    1 root     root      116,  16 Jan  1 01:05 pcmC0D0p
+crw-rw----    1 root     root      116,  33 Jan  1 01:05 timer
+
+At this point audio does not work.  If I manually create /dev/snd and
+move these nodes it then works.
+
+Is this a known issue?  Is there a way to work around it?
+
+Thanks,
+Hartley
