@@ -1,57 +1,25 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Fri, 4 Feb 2011 17:06:40 -0600
-Subject: [Buildroot] Question: mdev and snd/* device nodes
-Message-ID: <0D753D10438DA54287A00B027084269764CF157CB5@AUSP01VMBX24.collaborationhost.net>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Sat, 5 Feb 2011 07:11:47 +0000
+Subject: [Buildroot] easynews sourceforge mirror is down
+Message-ID: <AANLkTi=WoaejX3iJWteTEprkeY=sWDFLY2dSC1PgiKHL@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi
 
-Does mdev have a problem creating device nodes in subdirectories?
+Not sure if the site is down for maintenance but the "easynews" sourceforge
+mirror is no longer responding.
 
-I am trying to get audio working on an ep93xx based board and found the
-audio device nodes were being created in /dev and not /dev/snd.
+To get around this with existing config I simply added a local hosts file
+entry using the IP address for "switch.dl.sourceforge.net"
 
-I have these devices:
+echo "130.59.138.21 easynews.sourceforge.net" >> /etc/hosts
 
-# ls /sys/class/sound
-card0      controlC0  pcmC0D0c   pcmC0D0p   timer
 
-Which has these uevents, which I assume is what mdev uses to create the
-nodes:
-
-# cat controlC0/uevent
-MAJOR=116
-MINOR=0
-DEVNAME=snd/controlC0
-# cat pcmC0D0c/uevent
-MAJOR=116
-MINOR=24
-DEVNAME=snd/pcmC0D0c
-# cat pcmC0D0p/uevent
-MAJOR=116
-MINOR=16
-DEVNAME=snd/pcmC0D0p
-# cat timer/uevent
-MAJOR=116
-MINOR=33
-DEVNAME=snd/timer
-
-After 'mdev -s' runs in my startup I end up with these nodes:
-
-# ls /dev -la | grep 116
-crw-rw----    1 root     root      116,   0 Jan  1 01:05 controlC0
-crw-rw----    1 root     root      116,  24 Jan  1 01:05 pcmC0D0c
-crw-rw----    1 root     root      116,  16 Jan  1 01:05 pcmC0D0p
-crw-rw----    1 root     root      116,  33 Jan  1 01:05 timer
-
-At this point audio does not work.  If I manually create /dev/snd and
-move these nodes it then works.
-
-Is this a known issue?  Is there a way to work around it?
-
-Thanks,
-Hartley
+Bruce
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110205/c0e46751/attachment.html>
