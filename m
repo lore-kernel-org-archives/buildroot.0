@@ -1,39 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Feb 2011 08:29:30 +0100
-Subject: [Buildroot] [PATCH 1/2] Update to the latest GStreamer packages
-In-Reply-To: <AANLkTikNbw8Y9MG8KGgRR6Ztj+9Li1+x4GtNujEjW+Bt@mail.gmail.com>
-	(Felipe Contreras's message of "Sat, 5 Feb 2011 00:56:22 +0200")
-References: <1296843913-22321-1-git-send-email-felipe.contreras@gmail.com>
-	<1296843913-22321-2-git-send-email-felipe.contreras@gmail.com>
-	<8739o3qxmg.fsf@macbook.be.48ers.dk>
-	<AANLkTikNbw8Y9MG8KGgRR6Ztj+9Li1+x4GtNujEjW+Bt@mail.gmail.com>
-Message-ID: <87tygjos6d.fsf@macbook.be.48ers.dk>
+Date: Sat, 05 Feb 2011 08:31:24 +0100
+Subject: [Buildroot] easynews sourceforge mirror is down
+In-Reply-To: <AANLkTi=WoaejX3iJWteTEprkeY=sWDFLY2dSC1PgiKHL@mail.gmail.com>
+	(bruce bushby's message of "Sat, 5 Feb 2011 07:11:47 +0000")
+References: <AANLkTi=WoaejX3iJWteTEprkeY=sWDFLY2dSC1PgiKHL@mail.gmail.com>
+Message-ID: <87pqr7os37.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
+>>>>> "bruce" == bruce bushby <bruce.bushby@gmail.com> writes:
 
-Hi,
+ bruce> Hi
 
- >> Committed, thanks. You forgot to remove the select
- >> BR2_PACKAGE_LIBOIL, but I did that.
+ bruce> Not sure if the site is down for maintenance but the "easynews"
+ bruce> sourceforge mirror is no longer responding.
 
- Felipe> It's supposed to be useful outside GStreamer, but I guess nobody
- Felipe> really uses that.
+Yeah, I noticed as well. It's probably related to the recent sf.net
+breakin attempts.
 
-I didn't meant that you should remove the liboil package, just that the
-select|depends on statements of the gstreamer packages should be in sync
-with the _DEPENDENCIES lines of their makefiles.
+ bruce> To get around this with existing config I simply added a local hosts file entry
+ bruce> using the IP address for "switch.dl.sourceforge.net"
 
- >> Just to be sure - With these version bumps the fixes for make 3.82 are
- >> no longer needed, right?
+ bruce> echo "130.59.138.21 easynews.sourceforge.net" >> /etc/hosts
 
- Felipe> That's right, they are not needed any more.
-
-Great, thanks.
+Or you can simply select another sf.net mirror in Build options ->
+Mirrors and download locations -> Sourceforge mirror site ;)
 
 -- 
 Bye, Peter Korsgaard
