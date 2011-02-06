@@ -1,32 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Feb 2011 21:04:51 +0100
-Subject: [Buildroot] make source cannot find /gcc-/gcc-.tar.bz2
-In-Reply-To: <AANLkTinNDuEZiQfV8pEyKg8SsdNSNKj7Q4k-mFJtN8B1@mail.gmail.com>
-	(Friedrich Schick's message of "Sat, 5 Feb 2011 18:39:24 +0100")
-References: <AANLkTinNDuEZiQfV8pEyKg8SsdNSNKj7Q4k-mFJtN8B1@mail.gmail.com>
-Message-ID: <87lj1up7rw.fsf@macbook.be.48ers.dk>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Sun, 06 Feb 2011 04:18:41 +0000
+Subject: [Buildroot] compiling mplayer on mipsel
+Message-ID: <1296965921.20053.24.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Friedrich" == Friedrich Schick <Friedrich.Schick@web.de> writes:
+Hi,
+I'm using git version and tests are going well..., but I stuck again on
+mplayer, well I'm far to play mplayer in my HDD media player but I'd
+like try test it.  
+I send full log from : 
+rm -rf output/build/mplayer-32710/ ; make mplayer >& mplayer.log
+to see if you can help out.
 
- Friedrich> Hello,
+Should I file a bug ? 
 
- Friedrich> I like to build buildroot for a PPC 405 without FPU using a
- Friedrich> external toolchain with glibc support.
+The compile error is : 
+file.c:23:5: warning: "HAVE_MMAP" is not defined                                                                                           
+file.c:25:7: warning: "HAVE_MAPVIEWOFFILE" is not defined                                                                                  
+file.c: In function 'av_file_map':                                                                                                         
+file.c:50: error: 'HAVE_MMAP' undeclared (first use in this function)                                                                      
+file.c:50: error: (Each undeclared identifier is reported only once                                                                        
+file.c:50: error: for each function it appears in.)                                                                                        
+file.c:77:5: warning: "HAVE_MMAP" is not defined                                                                                           
+file.c:87:7: warning: "HAVE_MAPVIEWOFFILE" is not defined                                                                                  
+file.c:124:5: warning: "HAVE_MMAP" is not defined                                                                                          
+file.c:126:7: warning: "HAVE_MAPVIEWOFFILE" is not defined 
 
- Friedrich> When I do "make source" it seems, that the Makefile is
- Friedrich> looking for "not configured" GCC version. Where do I setup
- Friedrich> this version?
-
-That's a known issue in 2010.11. It's fixed in git:
-
-http://bugs.buildroot.net/2893
-
-As a workaround you can do make -k source
-
+Thanks, 
 -- 
-Bye, Peter Korsgaard
+S?rgio M. B.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mplayer.log
+Type: text/x-log
+Size: 1037857 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110206/cb791c1e/attachment-0002.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110206/cb791c1e/attachment-0003.bin>
