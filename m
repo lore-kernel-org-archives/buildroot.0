@@ -1,25 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Feb 2011 18:16:10 +0100
-Subject: [Buildroot] [PATCH] V2: Add package bonnie++
-In-Reply-To: <1297096132-5433-1-git-send-email-mort@bork.org> (Martin Hicks's
-	message of "Mon, 7 Feb 2011 11:28:52 -0500")
-References: <20110201220238.2c218fcd@surf>
-	<1297096132-5433-1-git-send-email-mort@bork.org>
-Message-ID: <87sjvzvk85.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  7 Feb 2011 18:17:59 +0100
+Subject: [Buildroot] [pull request] Pull request for branch qt-host-tools
+Message-ID: <cover.1297099060.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
+The following changes since commit c761eafb021c2beaf52b2d1a383433deac5fc2b4:
+  Thomas Petazzoni (1):
+        openssl: pass LDFLAGS to fix incorrect link
 
- Martin> A good filesystem performance benchmark program.
- Martin> Fixed up a few things requested by reviewers.
+are available in the git repository at:
 
-Bonnie++ is implemented in C++, right? If so, you need to depend on
-LIBSTDCPP (and add a comment statement if it isn't available) - See
-E.G. package/iperf/Config.in for an example.
+  git://git.busybox.net/~tpetazzoni/git/buildroot qt-host-tools
 
+Thomas Petazzoni (1):
+      qt: move host programs and specs in HOST_DIR
+
+ package/qt/qt.mk |   18 +++++++++++++++++-
+ 1 files changed, 17 insertions(+), 1 deletions(-)
+
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
