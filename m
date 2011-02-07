@@ -1,26 +1,39 @@
 From: Martin Hicks <mort@bork.org>
-Date: Mon,  7 Feb 2011 09:09:42 -0500
-Subject: [Buildroot] [PATCH] V2: Add cryptsetup package
-In-Reply-To: <20110201220306.5f8ea962@surf>
-References: <20110201220306.5f8ea962@surf>
-Message-ID: <1297087782-25029-1-git-send-email-mort@bork.org>
+Date: Mon,  7 Feb 2011 09:16:49 -0500
+Subject: [Buildroot] [PATCH] V3: Add cryptsetup package
+In-Reply-To: <1297087782-25029-1-git-send-email-mort@bork.org>
+References: <1297087782-25029-1-git-send-email-mort@bork.org>
+Message-ID: <1297088209-25208-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds the cryptsetup package to buildroot.  Includes e2fsprogs
+This adds the cryptsetup package to buildroot. Includes e2fsprogs
 dependency in Config.in
 
 Signed-off-by: Martin Hicks <mort@bork.org>
 ---
+ package/Config.in                |    1 +
  package/cryptsetup/Config.in     |   11 +++++++++++
  package/cryptsetup/cryptsetup.mk |    9 +++++++++
- 2 files changed, 20 insertions(+), 0 deletions(-)
+ 3 files changed, 21 insertions(+), 0 deletions(-)
  create mode 100644 package/cryptsetup/Config.in
  create mode 100644 package/cryptsetup/cryptsetup.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 16a9e8f..631bb80 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+ endif
++source "package/cryptsetup/Config.in"
+ endmenu
+ 
+ menu "Text editors and viewers"
 diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
 new file mode 100644
 index 0000000..9cd9ba4
