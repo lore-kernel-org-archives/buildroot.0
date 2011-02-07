@@ -1,69 +1,73 @@
 From: Martin Hicks <mort@bork.org>
-Date: Mon, 7 Feb 2011 09:17:15 -0500
-Subject: [Buildroot] [PATCH] V2: Add cryptsetup package
-In-Reply-To: <1297087782-25029-1-git-send-email-mort@bork.org>
-References: <20110201220306.5f8ea962@surf>
-	<1297087782-25029-1-git-send-email-mort@bork.org>
-Message-ID: <AANLkTin379wp0-sJxRwpM_-i1ce6YHVUN2yGVewXY2Jh@mail.gmail.com>
+Date: Mon,  7 Feb 2011 11:28:52 -0500
+Subject: [Buildroot] [PATCH] V2: Add package bonnie++
+In-Reply-To: <20110201220238.2c218fcd@surf>
+References: <20110201220238.2c218fcd@surf>
+Message-ID: <1297096132-5433-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ignore this.  I forgot the change for package/Config.in
+A good filesystem performance benchmark program.
+Fixed up a few things requested by reviewers.
 
-On Mon, Feb 7, 2011 at 9:09 AM, Martin Hicks <mort@bork.org> wrote:
-> This adds the cryptsetup package to buildroot. ?Includes e2fsprogs
-> dependency in Config.in
->
-> Signed-off-by: Martin Hicks <mort@bork.org>
-> ---
-> ?package/cryptsetup/Config.in ? ? | ? 11 +++++++++++
-> ?package/cryptsetup/cryptsetup.mk | ? ?9 +++++++++
-> ?2 files changed, 20 insertions(+), 0 deletions(-)
-> ?create mode 100644 package/cryptsetup/Config.in
-> ?create mode 100644 package/cryptsetup/cryptsetup.mk
->
-> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-> new file mode 100644
-> index 0000000..9cd9ba4
-> --- /dev/null
-> +++ b/package/cryptsetup/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_CRYPTSETUP
-> + ? ? ? bool "cryptsetup"
-> + ? ? ? select BR2_PACKAGE_LIBGCRYPT
-> + ? ? ? select BR2_PACKAGE_POPT
-> + ? ? ? select BR2_PACKAGE_LVM2
-> + ? ? ? select BR2_PACKAGE_E2FSPROGS
-> + ? ? ? help
-> + ? ? ? ? This tool helps manipulate dm-crypt and luks partitions for on-disk
-> + ? ? ? ? encryption.
-> +
-> + ? ? ? ? http://www.saout.de/misc/dm-crypt/
-> diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-> new file mode 100644
-> index 0000000..8390710
-> --- /dev/null
-> +++ b/package/cryptsetup/cryptsetup.mk
-> @@ -0,0 +1,9 @@
-> +#
-> +# cryptsetup
-> +#
-> +CRYPTSETUP_VERSION = 1.2.0
-> +CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.bz2
-> +CRYPTSETUP_SITE = http://cryptsetup.googlecode.com/files
-> +CRYPTSETUP_DEPENDENCIES = lvm2 libgcrypt popt e2fsprogs
-> +
-> +$(eval $(call AUTOTARGETS,package,cryptsetup))
-> --
-> 1.5.6.5
->
->
+Signed-off-by: Martin Hicks <mort@bork.org>
+---
+ package/Config.in        |    1 +
+ package/bonnie/Config.in |    6 ++++++
+ package/bonnie/bonnie.mk |   17 +++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/bonnie/Config.in
+ create mode 100644 package/bonnie/bonnie.mk
 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 631bb80..49859b1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -17,6 +17,7 @@ source "package/xz/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
++source "package/bonnie/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dmalloc/Config.in"
+ source "package/kexec/Config.in"
+diff --git a/package/bonnie/Config.in b/package/bonnie/Config.in
+new file mode 100644
+index 0000000..ff4988b
+--- /dev/null
++++ b/package/bonnie/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_BONNIE
++	bool "bonnie++"
++	help
++	  Filesystem tester
++
++	  http://www.coker.com.au/bonnie++/
+diff --git a/package/bonnie/bonnie.mk b/package/bonnie/bonnie.mk
+new file mode 100644
+index 0000000..87f5fbc
+--- /dev/null
++++ b/package/bonnie/bonnie.mk
+@@ -0,0 +1,17 @@
++#
++# bonnie++
++#
++BONNIE_VERSION = 1.03e
++BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
++BONNIE_SITE = http://www.coker.com.au/bonnie++/
++
++define BONNIE_INSTALL_TARGET_CMDS
++	install -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin/bonnie++
++	install -D -m 755 $(@D)/zcav $(TARGET_DIR)/usr/sbin/zcav
++endef
++
++define BONNIE_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/sbin/bonnie++ $(TARGET_DIR)/usr/sbin/zcav
++endef
++
++$(eval $(call AUTOTARGETS,package,bonnie))
 -- 
-Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
-Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
+1.5.6.5
