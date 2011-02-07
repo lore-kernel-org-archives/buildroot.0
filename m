@@ -1,14 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  7 Feb 2011 18:18:00 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: move host programs and specs in HOST_DIR
-In-Reply-To: <cover.1297099060.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1297099060.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fc21c0b4bcdd6d940a323c5d394d1e285aa3ec4e.1297099060.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 7 Feb 2011 18:22:25 +0100
+Subject: [Buildroot] [git commit master 1/1] qt: move host programs and
+	specs in HOST_DIR
+Message-ID: <20110207172244.CAF9F8F419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+commit: http://git.buildroot.net/buildroot/commit/?id=ca290e7e280da8bdaa2818d6666fee1875f359ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The Qt build system installs all host programs (uic, rcc, moc, qmake,
 etc.) in the same base directory as the headers and libraries, but
@@ -22,6 +25,7 @@ Tested with Qmake and Cmake as build system for a simple Qt
 application.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/qt/qt.mk |   18 +++++++++++++++++-
  1 files changed, 17 insertions(+), 1 deletions(-)
@@ -57,4 +61,4 @@ index 6eb31bc..3857087 100644
  qt-gui: $(STAGING_DIR)/usr/lib/libQtCore.la
  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
 -- 
-1.7.0.4
+1.7.3.4
