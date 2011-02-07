@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 7 Feb 2011 17:24:47 +0100
-Subject: [Buildroot] [git commit master 1/1] Add gst-dsp package
-Message-ID: <20110207164337.E929E8F414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add dsp-tools package
+Message-ID: <20110207164338.344F88F414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,71 +9,70 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6854cb49f8f673cb5700d52e8a133dcdde78c702
+commit: http://git.buildroot.net/buildroot/commit/?id=c7bffc1d32e985a0663bce9ca9e13ee191962cf9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: add tidsp-binaries to _DEPENDENCIES]
+[Peter: add tidsp-binaries dependency, cleanup]
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/Config.in          |    1 +
- package/multimedia/gst-dsp/Config.in  |    8 ++++++++
- package/multimedia/gst-dsp/gst-dsp.mk |   19 +++++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-dsp/Config.in
- create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ package/Config.in              |    1 +
+ package/dsp-tools/Config.in    |    8 ++++++++
+ package/dsp-tools/dsp-tools.mk |   18 ++++++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100644 package/dsp-tools/Config.in
+ create mode 100644 package/dsp-tools/dsp-tools.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 415e6ad..cfc4190 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -7,6 +7,7 @@ source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-ffmpeg/Config.in"
-+source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
-diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index de51c46..0899578 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+ endif
++source "package/dsp-tools/Config.in"
+ endmenu
+ 
+ menu "Text editors and viewers"
+diff --git a/package/dsp-tools/Config.in b/package/dsp-tools/Config.in
 new file mode 100644
-index 0000000..590931a
+index 0000000..0267454
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/Config.in
++++ b/package/dsp-tools/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GST_DSP
-+	bool "gst-dsp"
-+	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
++config BR2_PACKAGE_DSP_TOOLS
++	bool "dsp-tools"
++	depends on BR2_cortex_a8
 +	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
++	  Utilities for TI OMAP3 DSP.
 +
-+	  http://code.google.com/p/gst-dsp/
-diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
++	  http://github.com/felipec/dsp-tools
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
 new file mode 100644
-index 0000000..f55f510
+index 0000000..ab31afb
 --- /dev/null
-+++ b/package/multimedia/gst-dsp/gst-dsp.mk
-@@ -0,0 +1,19 @@
-+GST_DSP_VERSION=0.8.0
-+GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
-+GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -0,0 +1,18 @@
++DSP_TOOLS_VERSION = 2.0
++DSP_TOOLS_SOURCE = dsp-tools-$(DSP_TOOLS_VERSION).tar.gz
++DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files/
++DSP_TOOLS_DEPENDENCIES = tidsp-binaries
 +
-+define GST_DSP_BUILD_CMDS
++define DSP_TOOLS_BUILD_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+define GST_DSP_INSTALL_TARGET_CMDS
++define DSP_TOOLS_INSTALL_TARGET_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+define GST_DSP_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstdsp.so
++define DSP_TOOLS_UNINSTALL_TARGET_CMDS
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/dsp-, load probe test exec)
 +endef
 +
-+GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries
-+
-+$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
++$(eval $(call GENTARGETS,package,dsp-tools))
 -- 
 1.7.3.4
