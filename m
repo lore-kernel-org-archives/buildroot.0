@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 7 Feb 2011 17:24:47 +0100
-Subject: [Buildroot] [git commit master 1/1] Add gst-omapfb package
-Message-ID: <20110207164338.519018F414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] Add gst-dsp package
+Message-ID: <20110207164337.E929E8F414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,69 +9,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c19765ba4289f0a1d53b7060095b65c42b9cda6
+commit: http://git.buildroot.net/buildroot/commit/?id=6854cb49f8f673cb5700d52e8a133dcdde78c702
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: add tidsp-binaries to _DEPENDENCIES]
 Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/Config.in                |    1 +
- package/multimedia/gst-omapfb/Config.in     |    7 +++++++
- package/multimedia/gst-omapfb/gst-omapfb.mk |   19 +++++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-omapfb/Config.in
- create mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
+ package/multimedia/Config.in          |    1 +
+ package/multimedia/gst-dsp/Config.in  |    8 ++++++++
+ package/multimedia/gst-dsp/gst-dsp.mk |   19 +++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/gst-dsp/Config.in
+ create mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
 
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index cfc4190..69ad113 100644
+index 415e6ad..cfc4190 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -8,6 +8,7 @@ source "package/multimedia/ffmpeg/Config.in"
+@@ -7,6 +7,7 @@ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
  source "package/multimedia/gstreamer/Config.in"
  source "package/multimedia/gst-ffmpeg/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
-+source "package/multimedia/gst-omapfb/Config.in"
++source "package/multimedia/gst-dsp/Config.in"
  source "package/multimedia/gst-plugins-base/Config.in"
  source "package/multimedia/gst-plugins-good/Config.in"
  source "package/multimedia/gst-plugins-bad/Config.in"
-diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
+diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
 new file mode 100644
-index 0000000..e603cb1
+index 0000000..590931a
 --- /dev/null
-+++ b/package/multimedia/gst-omapfb/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_GST_OMAPFB
-+	bool "gst-omapfb"
++++ b/package/multimedia/gst-dsp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GST_DSP
++	bool "gst-dsp"
 +	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
++	select BR2_PACKAGE_TIDSP_BINARIES
 +	help
-+	  GStreamer plug-in to use OMAP framebuffer.
++	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
 +
-+	  http://github.com/felipec/gst-omapfb
-diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
++	  http://code.google.com/p/gst-dsp/
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
 new file mode 100644
-index 0000000..726ef83
+index 0000000..f55f510
 --- /dev/null
-+++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
 @@ -0,0 +1,19 @@
-+GST_OMAPFB_VERSION=1.0
-+GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
-+GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
++GST_DSP_VERSION=0.8.0
++GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
++GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
 +
-+define GST_OMAPFB_BUILD_CMDS
++define GST_DSP_BUILD_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 +endef
 +
-+define GST_OMAPFB_INSTALL_TARGET_CMDS
++define GST_DSP_INSTALL_TARGET_CMDS
 +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
 +endef
 +
-+define GST_OMAPFB_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstomapfb.so
++define GST_DSP_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstdsp.so
 +endef
 +
-+GST_OMAPFB_DEPENDENCIES = gstreamer
++GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries
 +
-+$(eval $(call GENTARGETS,package/multimedia,gst-omapfb))
++$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
 -- 
 1.7.3.4
