@@ -1,28 +1,32 @@
-From: Nate Ford <nford@westpond.com>
-Date: Tue, 8 Feb 2011 11:18:53 -0500
-Subject: [Buildroot] [PATCH] Add package xmlstarlet
-Message-ID: <AANLkTinQpDAy5HL+Eky5TAVe623bT7BrZaENutSR0FE9@mail.gmail.com>
+From: Martin Hicks <mort@bork.org>
+Date: Tue,  8 Feb 2011 16:12:14 -0500
+Subject: [Buildroot] [PATCH] microperl compile fix with ccache enabled
+Message-ID: <1297199534-30597-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds xmlstarlet, a command line XML processing tool.
-http://xmlstar.sourceforge.net/
+Just a simple quote problem with $(HOSTCC)
 
-This is my first patch contribution to an open source project, so be gentle
-:P
+Signed-off-by: Martin Hicks <mort@bork.org>
+---
+ package/microperl/microperl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Nathan Ford
-West Pond Technologies
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110208/12a7de28/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: xmlstarlet.patch
-Type: application/octet-stream
-Size: 1781 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110208/12a7de28/attachment.obj>
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index bf76fa7..b68e825 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -32,7 +32,7 @@ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 
+ $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
+ 	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); ./Configure -Dcc=$(HOSTCC) -de  )
++	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de  )
+ 	touch $@
+ 
+ 
+-- 
+1.5.6.5
