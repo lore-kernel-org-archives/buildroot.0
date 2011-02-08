@@ -1,22 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Feb 2011 22:24:21 +0100
-Subject: [Buildroot] [PATCH] microperl compile fix with ccache enabled
-In-Reply-To: <1297199534-30597-1-git-send-email-mort@bork.org> (Martin Hicks's
-	message of "Tue, 8 Feb 2011 16:12:14 -0500")
-References: <1297199534-30597-1-git-send-email-mort@bork.org>
-Message-ID: <87k4hajk3e.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 8 Feb 2011 22:23:58 +0100
+Subject: [Buildroot] [git commit master 1/1] microperl compile fix with
+	ccache enabled
+Message-ID: <20110208213552.DCAED8F434@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
 
- Martin> Just a simple quote problem with $(HOSTCC)
- Martin> Signed-off-by: Martin Hicks <mort@bork.org>
+commit: http://git.buildroot.net/buildroot/commit/?id=43987641d3325a24f6db2785c17c3485c06a0719
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Just a simple quote problem with $(HOSTCC)
 
+Signed-off-by: Martin Hicks <mort@bork.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/microperl/microperl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index bf76fa7..b68e825 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -32,7 +32,7 @@ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 
+ $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
+ 	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); ./Configure -Dcc=$(HOSTCC) -de  )
++	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de  )
+ 	touch $@
+ 
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
