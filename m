@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Feb 2011 15:44:01 +0100
-Subject: [Buildroot] [PATCH 1/1] Do not mention
-	toolchain/uClibc/uClibc.config-locale
-In-Reply-To: <6d62ddb2c67276b41031b90b8877c231cd9bca7c.1297151135.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Tue, 8 Feb 2011 08:45:42 +0100")
-References: <cover.1297151135.git.thomas.petazzoni@free-electrons.com>
-	<cover.1297151135.git.thomas.petazzoni@free-electrons.com>
-	<6d62ddb2c67276b41031b90b8877c231cd9bca7c.1297151135.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874o8elh72.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 8 Feb 2011 15:44:22 +0100
+Subject: [Buildroot] [git commit master 1/1] cmake: bump to 2.8.3
+Message-ID: <20110208144444.7AA8D8F3B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The uClibc configuration file toolchain/uClibc/uClibc.config-locale
- Thomas> does not exist anymore.
+commit: http://git.buildroot.net/buildroot/commit/?id=33eac4b511cd5f24b6bb393d32260aaec1651e1d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cmake/cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index b388874..efff5a5 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -1,4 +1,4 @@
+-CMAKE_VERSION=2.8.0
++CMAKE_VERSION=2.8.3
+ CMAKE_SOURCE=cmake-$(CMAKE_VERSION).tar.gz
+ CMAKE_SITE=http://www.cmake.org/files/v2.8/
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
