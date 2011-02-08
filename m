@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 8 Feb 2011 15:44:22 +0100
-Subject: [Buildroot] [git commit master 1/1] Add support for DirectFB EP9x
-	driver
-Message-ID: <20110208144445.07D718F3B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] kernel-headers: bump 2.6.35.x
+	longterm version
+Message-ID: <20110208144444.535CE8F3B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c1e029a3dcf23a6ad66eb4b3a3c54f8468600b3
+commit: http://git.buildroot.net/buildroot/commit/?id=9df325814b22bff50b2aa7f6f1005ac14dcce2fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/directfb/Config.in   |    4 ++++
- package/directfb/directfb.mk |    3 ++-
- 2 files changed, 6 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.35.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 1dedb8f..47f9fea 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -49,6 +49,10 @@ config BR2_PACKAGE_DIRECTFB_PXA3XX
- 	bool "compile pxa3xx graphics driver"
- 	depends on BR2_arm
- 
-+config BR2_PACKAGE_DIRECTFB_EP9X
-+	bool "compile ep9x graphics driver"
-+	depends on BR2_arm
-+
- config BR2_PACKAGE_DIRECTFB_UNICHROME
- 	bool "compile unichrome graphics driver"
- 	default y
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index ca0f8e4..36b1c0a 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -60,7 +60,8 @@ DIRECTFB_GFX := \
- 	$(if $(BR2_PACKAGE_DIRECTFB_MATROX),matrox) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
--	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)
-+	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
-+	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
- 
- ifeq ($(strip $(DIRECTFB_GFX)),)
- DIRECTFB_GFX:=none
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 6710098..47892ea 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -45,7 +45,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "2.6.34.8"	if BR2_KERNEL_HEADERS_2_6_34
+-	default "2.6.35.10"	if BR2_KERNEL_HEADERS_2_6_35
++	default "2.6.35.11"	if BR2_KERNEL_HEADERS_2_6_35
+ 	default "2.6.36.3"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6.37"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/toolchain/kernel-headers/linux-2.6.35.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.35.10-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
 1.7.3.4
