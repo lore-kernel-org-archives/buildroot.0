@@ -1,35 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Feb 2011 10:25:51 -0300
-Subject: [Buildroot] [PATCH 3/5] squid: bump to version 3.1.11
+Date: Wed,  9 Feb 2011 10:25:52 -0300
+Subject: [Buildroot] [PATCH 4/5] mpd: fix libao support
 In-Reply-To: <1297257953-8381-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1297257953-8381-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1297257953-8381-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1297257953-8381-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many small fixes, see
-http://www.squid-cache.org/Versions/v3/3.1/changesets/SQUID_3_1_11.html
+libao output must be explicitly enabled, so fix it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/multimedia/mpd/mpd.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 3afa07d..e410bd1 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
+index c60ccc6..971ad67 100644
+--- a/package/multimedia/mpd/mpd.mk
++++ b/package/multimedia/mpd/mpd.mk
+@@ -18,8 +18,7 @@ endif
  
--SQUID_VERSION = 3.1.10
-+SQUID_VERSION = 3.1.11
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
- SQUID_DEPENDENCIES = libcap host-libcap
- SQUID_AUTORECONF = YES
+ ifeq ($(BR2_PACKAGE_MPD_AO),y)
+ MPD_DEPENDENCIES += libao
+-else
+-MPD_CONF_OPT += --disable-ao
++MPD_CONF_OPT += --enable-ao
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_BZIP2),y)
 -- 
 1.7.3.4
