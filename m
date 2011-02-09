@@ -1,50 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Feb 2011 23:09:48 +0100
-Subject: [Buildroot] [git commit master 1/1] Config.in: use
-	kent.dl.sourceforge.net by default
-Message-ID: <20110209221130.BBBC08F480@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Feb 2011 23:12:33 +0100
+Subject: [Buildroot] [PATCH 02/13] util-linux: convert to autotargets
+	and bump to 2.18
+In-Reply-To: <4D530C19.3050407@zacarias.com.ar> (Gustavo Zacarias's message of
+	"Wed, 09 Feb 2011 18:50:17 -0300")
+References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
+	<1294431182-27793-2-git-send-email-gustavo@zacarias.com.ar>
+	<87bp2kkhhl.fsf@macbook.be.48ers.dk>
+	<4D530C19.3050407@zacarias.com.ar>
+Message-ID: <874o8cj1ri.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d0d3502e2ee103914414b4a82ea0ce786b54c4a5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Easynews has been down for a number of days, and it is no longer in the
-mirror list, so use the mirror from the University of Kent instead by
-default.
+ >> Could you take a look at it?
 
-At the same time fix the link to the sf mirror list.
+ Gustavo> Did you apply the previous e2fsprogs patch? It's required for it to
+ Gustavo> export libbklid :)
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Yes I did. I even fixed it to also install the pkg-config files.
 
-diff --git a/Config.in b/Config.in
-index c992c5b..a67c08d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -103,7 +103,7 @@ config BR2_BACKUP_SITE
- 
- config BR2_SOURCEFORGE_MIRROR
- 	string "Sourceforge mirror site"
--	default "easynews"
-+	default "kent"
- 	help
- 	  Sourceforge has a system of mirror sites.  Some sites may be
- 	  closer to your location, and sometimes mirror sites go down
-@@ -111,7 +111,7 @@ config BR2_SOURCEFORGE_MIRROR
- 	  your preferred Sourceforge mirror site.
- 
- 	  The list of mirrors is available here:
--	  http://prdownloads.sourceforge.net/index-sf.html?download
-+	  http://sourceforge.net/apps/trac/sourceforge/wiki/Mirrors
- 
- config BR2_KERNEL_MIRROR
- 	string "Kernel.org mirror"
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
