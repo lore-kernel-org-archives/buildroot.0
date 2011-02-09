@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 9 Feb 2011 23:01:44 +0100
-Subject: [Buildroot] [git commit master 1/1] squid: bump to version 3.1.11
-Message-ID: <20110209220224.A6D398F47E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] mpd: fix libao support
+Message-ID: <20110209220224.D22818F47E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,30 +9,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d7064b20756ea8fd4c0c60f1ecada3afd5f6c19
+commit: http://git.buildroot.net/buildroot/commit/?id=0b69f7438a8bd142be822630f60b18a6d739a6c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Many small fixes, see
-http://www.squid-cache.org/Versions/v3/3.1/changesets/SQUID_3_1_11.html
+libao output must be explicitly enabled, so fix it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/multimedia/mpd/mpd.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 3afa07d..e410bd1 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
+index c60ccc6..971ad67 100644
+--- a/package/multimedia/mpd/mpd.mk
++++ b/package/multimedia/mpd/mpd.mk
+@@ -18,8 +18,7 @@ endif
  
--SQUID_VERSION = 3.1.10
-+SQUID_VERSION = 3.1.11
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
- SQUID_DEPENDENCIES = libcap host-libcap
- SQUID_AUTORECONF = YES
+ ifeq ($(BR2_PACKAGE_MPD_AO),y)
+ MPD_DEPENDENCIES += libao
+-else
+-MPD_CONF_OPT += --disable-ao
++MPD_CONF_OPT += --enable-ao
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_BZIP2),y)
 -- 
 1.7.3.4
