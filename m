@@ -1,36 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Feb 2011 10:25:49 -0300
-Subject: [Buildroot] [PATCH 1/5] iw: bump to version 0.9.22
-Message-ID: <1297257953-8381-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  9 Feb 2011 10:25:50 -0300
+Subject: [Buildroot] [PATCH 2/5] sqlite: bump to version 3.7.5
+In-Reply-To: <1297257953-8381-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1297257953-8381-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1297257953-8381-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New antenna configuration and wds peer commands.
-New mesh functionality.
-Misc fixes.
-
-See http://www.spinics.net/lists/linux-wireless/msg64061.html
+See http://www.sqlite.org/releaselog/3_7_5.html
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iw/iw.mk |    2 +-
+ package/sqlite/sqlite.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 2c93516..0f5dd0e 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 7b3a983..30e75a2 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--IW_VERSION = 0.9.21
-+IW_VERSION = 0.9.22
- IW_SOURCE = iw-$(IW_VERSION).tar.bz2
- IW_SITE = http://wireless.kernel.org/download/iw
- IW_DEPENDENCIES = host-pkg-config libnl
+-SQLITE_VERSION = 3070400
++SQLITE_VERSION = 3070500
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
 -- 
 1.7.3.4
