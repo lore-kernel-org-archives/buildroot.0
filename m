@@ -1,30 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Feb 2011 23:12:33 +0100
-Subject: [Buildroot] [PATCH 02/13] util-linux: convert to autotargets
-	and bump to 2.18
-In-Reply-To: <4D530C19.3050407@zacarias.com.ar> (Gustavo Zacarias's message of
-	"Wed, 09 Feb 2011 18:50:17 -0300")
-References: <1294431182-27793-1-git-send-email-gustavo@zacarias.com.ar>
-	<1294431182-27793-2-git-send-email-gustavo@zacarias.com.ar>
-	<87bp2kkhhl.fsf@macbook.be.48ers.dk>
-	<4D530C19.3050407@zacarias.com.ar>
-Message-ID: <874o8cj1ri.fsf@macbook.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed,  9 Feb 2011 23:57:20 +0100
+Subject: [Buildroot] [PATCH 2/4] toolchain/ct-ng: use MMU option from the BR
+	config
+In-Reply-To: <1297292242-5300-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1297292242-5300-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1297292242-5300-3-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-Hi,
-
- >> Could you take a look at it?
-
- Gustavo> Did you apply the previous e2fsprogs patch? It's required for it to
- Gustavo> export libbklid :)
-
-Yes I did. I even fixed it to also install the pkg-config files.
-
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index c838f51..b14c08e 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -198,10 +198,14 @@ CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_ARCH_[BL]E).*:\# \2 is not set:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_$(CTNG_ENDIAN)) is not set:\1=y:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_ARCH_(32|64)).*:\# \2 is not set:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_$(CTNG_BIT)) is not set:\1=y:;
+-CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_USE_MMU) is not set:\1=y:;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_VENDOR)=.*:\1="unknown":;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_TARGET_ALIAS)=.*:\1="$(GNU_TARGET_NAME)":;
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_CC_PKGVERSION)="(.*)":\1="crosstool-NG $(CTNG_VERSION) - buildroot $(BR2_VERSION_FULL)":;
++ifneq ($(call qstrip,$(BR2_USE_MMU)),)
++CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_ARCH_USE_MMU) is not set:\1=y:;
++else
++CTNG_FIX_DOT_CONFIG_SED += s:^(CT_ARCH_USE_MMU)=y:\# \1 is not set:;
++endif
+ ifneq ($(call qstrip,$(BR2_PACKAGE_GDB_SERVER))$(call qstrip,$(BR2_PACKAGE_GDB_HOST)),)
+ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_DEBUG_gdb)=.*:\# \1 is not set:;
+ endif
 -- 
-Bye, Peter Korsgaard
+1.7.1
