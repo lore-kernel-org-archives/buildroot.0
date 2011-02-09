@@ -1,35 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Feb 2011 11:33:03 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to 1.0.0d
-Message-ID: <1297261983-4152-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  9 Feb 2011 15:22:39 -0300
+Subject: [Buildroot] [PATCH 1/2] directfb: fixup directfb-config for
+	correctness
+Message-ID: <1297275760-29399-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2011-0014
-http://www.openssl.org/news/secadv_20110208.txt
-
-OCSP stapling vulnerability in OpenSSL
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/directfb/directfb.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 95459ec..6300e88 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 36b1c0a..98590cc 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -137,6 +137,14 @@ HOST_DIRECTFB_BUILD_CMDS = \
+ HOST_DIRECTFB_INSTALL_CMDS = \
+ 	$(INSTALL) -m 0755 $(@D)/tools/directfb-csource $(HOST_DIR)/usr/bin
  
--OPENSSL_VERSION = 1.0.0c
-+OPENSSL_VERSION = 1.0.0d
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
++define DIRECTFB_STAGING_CONFIG_FIXUP
++	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
++		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
++		$(STAGING_DIR)/usr/bin/directfb-config
++endef
++
++DIRECTFB_POST_INSTALL_STAGING_HOOKS += DIRECTFB_STAGING_CONFIG_FIXUP
++
+ $(eval $(call AUTOTARGETS,package,directfb))
+ $(eval $(call AUTOTARGETS,package,directfb,host))
+ 
 -- 
 1.7.3.4
