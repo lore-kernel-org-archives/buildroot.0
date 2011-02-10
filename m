@@ -1,118 +1,79 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Feb 2011 14:58:13 -0300
-Subject: [Buildroot] [PATCH 2/3] lame: new package
+Date: Thu, 10 Feb 2011 14:58:14 -0300
+Subject: [Buildroot] [PATCH 3/3] mpd: new features
 In-Reply-To: <1297360694-24145-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1297360694-24145-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1297360694-24145-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1297360694-24145-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Add libcue support (.cue file parsing)
+* Add lame support (mp3 encoding)
+* Fix slight typo in Config.in wrt LIBCUEFILE
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/Config.in                 |    1 +
- package/multimedia/lame/Config.in            |    6 +++++
- package/multimedia/lame/lame-no-static.patch |   28 +++++++++++++++++++++++++
- package/multimedia/lame/lame.mk              |   29 ++++++++++++++++++++++++++
- 4 files changed, 64 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/lame/Config.in
- create mode 100644 package/multimedia/lame/lame-no-static.patch
- create mode 100644 package/multimedia/lame/lame.mk
+ package/multimedia/mpd/Config.in |   14 +++++++++++++-
+ package/multimedia/mpd/mpd.mk    |   12 ++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index b60849e..12d6e30 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -13,6 +13,7 @@ source "package/multimedia/gst-plugins-base/Config.in"
- source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
-+source "package/multimedia/lame/Config.in"
- source "package/multimedia/libao/Config.in"
- source "package/multimedia/libcdaudio/Config.in"
- source "package/multimedia/libcue/Config.in"
-diff --git a/package/multimedia/lame/Config.in b/package/multimedia/lame/Config.in
-new file mode 100644
-index 0000000..2b144a0
---- /dev/null
-+++ b/package/multimedia/lame/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LAME
+diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
+index 3906a5f..e418d32 100644
+--- a/package/multimedia/mpd/Config.in
++++ b/package/multimedia/mpd/Config.in
+@@ -53,6 +53,18 @@ config BR2_PACKAGE_MPD_FLAC
+ 	  Enable flac input/streaming support.
+ 	  Select this if you want to play back FLAC files.
+ 
++config BR2_PACKAGE_MPD_LAME
 +	bool "lame"
++	select BR2_PACKAGE_LAME
 +	help
-+	  LAME is a high quality MPEG Audio Layer III (MP3) encoder.
++	  Enable lame (mp3) encoding support.
 +
-+	  http://lame.sourceforge.net/
-diff --git a/package/multimedia/lame/lame-no-static.patch b/package/multimedia/lame/lame-no-static.patch
-new file mode 100644
-index 0000000..f507f7f
---- /dev/null
-+++ b/package/multimedia/lame/lame-no-static.patch
-@@ -0,0 +1,28 @@
-+We don't want statically compiled binaries by force so nuke that.
++config BR2_PACKAGE_MPD_LIBCUE
++	bool "libcue"
++	select BR2_PACKAGE_LIBCUE
++	help
++	  Enable cue file support.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lame-3.98.4/frontend/Makefile.am lame-3.98.4.nostatic/frontend/Makefile.am
-+--- lame-3.98.4/frontend/Makefile.am	2006-09-30 06:17:05.000000000 -0300
-++++ lame-3.98.4.nostatic/frontend/Makefile.am	2011-02-10 13:46:05.512559590 -0300
-+@@ -52,7 +52,7 @@
-+ endif
-+ 
-+ CFLAGS = @CFLAGS@ @GTK_CFLAGS@ @FRONTEND_CFLAGS@ @SNDFILE_CFLAGS@
-+-LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
-++LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
-+ 
-+ INCLUDES = -I$(top_srcdir)/libmp3lame -I$(top_srcdir)/include -I$(top_builddir)
-+ 
-+diff -Nura lame-3.98.4/frontend/Makefile.in lame-3.98.4.nostatic/frontend/Makefile.in
-+--- lame-3.98.4/frontend/Makefile.in	2008-06-25 09:17:51.000000000 -0300
-++++ lame-3.98.4.nostatic/frontend/Makefile.in	2011-02-10 13:45:54.752559590 -0300
-+@@ -152,7 +152,7 @@
-+ 	$(top_builddir)/libmp3lame/libmp3lame.la \
-+ 	@FRONTEND_LDADD@
-+ 
-+-LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
-++LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
-+ LIBOBJS = @LIBOBJS@
-+ LIBS = @LIBS@
-+ LIBTOOL = @LIBTOOL@
-diff --git a/package/multimedia/lame/lame.mk b/package/multimedia/lame/lame.mk
-new file mode 100644
-index 0000000..841cbff
---- /dev/null
-+++ b/package/multimedia/lame/lame.mk
-@@ -0,0 +1,29 @@
-+#############################################################
-+#
-+# lame
-+#
-+#############################################################
-+
-+LAME_VERSION = 3.98.4
-+LAME_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lame
-+LAME_DEPENDENCIES = host-pkg-config
-+LAME_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+LAME_DEPENDENCIES += libsndfile
-+LAME_CONF_OPT += --with-fileio=sndfile
+ config BR2_PACKAGE_MPD_LIBSAMPLERATE
+ 	bool "libsamplerate"
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+@@ -86,7 +98,7 @@ config BR2_PACKAGE_MPD_MPG123
+ 
+ config BR2_PACKAGE_MPD_MUSEPACK
+ 	bool "musepack"
+-	select BR2_PACKAGE_LIBCUE
++	select BR2_PACKAGE_LIBCUEFILE
+ 	select BR2_PACKAGE_LIBREPLAYGAIN
+ 	select BR2_PACKAGE_MUSEPACK
+ 	help
+diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
+index 61b107b..728feaa 100644
+--- a/package/multimedia/mpd/mpd.mk
++++ b/package/multimedia/mpd/mpd.mk
+@@ -44,6 +44,18 @@ else
+ MPD_CONF_OPT += --disable-curl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_LAME),y)
++MPD_DEPENDENCIES += lame
++else
++MPD_CONF_OPT += --disable-lame-encoder
 +endif
 +
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+LAME_DEPENDENCIES += ncurses
++ifeq ($(BR2_PACKAGE_MPD_LIBCUE),y)
++MPD_DEPENDENCIES += libcue
++else
++MPD_CONF_OPT += --disable-cue
 +endif
 +
-+ifeq ($(BR2_ENDIAN),"BIG")
-+define LAME_BIGENDIAN_ARCH
-+	echo "#define WORDS_BIGENDIAN 1" >>$(@D)/config.h
-+endef
-+endif
-+
-+LAME_POST_CONFIGURE_HOOKS += LAME_BIGENDIAN_ARCH
-+
-+$(eval $(call AUTOTARGETS,package/multimedia,lame))
+ ifeq ($(BR2_PACKAGE_MPD_LIBSAMPLERATE),y)
+ MPD_DEPENDENCIES += libsamplerate
+ else
 -- 
 1.7.3.4
