@@ -1,36 +1,44 @@
-From: Martin Hicks <mort@bork.org>
-Date: Thu, 10 Feb 2011 11:41:39 -0500
-Subject: [Buildroot] [PATCH] Allow file globs in microperl module list
-Message-ID: <1297356099-15765-1-git-send-email-mort@bork.org>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 10 Feb 2011 17:47:15 +0100
+Subject: [Buildroot] [PATCH] mplayer: bump version to fix build error
+Message-ID: <1297356435-11303-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This lets the user place file globs into the microperl module
-list.  e.g.,
+Bump mplayer to the first version that fixes this issue:
 
-CGI/*.pm warnings.pm strict.pm
+file.c:23:5: warning: "HAVE_MMAP" is not defined
+file.c:25:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+file.c:77:5: warning: "HAVE_MMAP" is not defined
+file.c:87:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+file.c:124:5: warning: "HAVE_MMAP" is not defined
+file.c:126:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+file.c: In function 'av_file_map':
+file.c:50: error: 'HAVE_MMAP' undeclared (first use in this function)
+file.c:50: error: (Each undeclared identifier is reported only once
+file.c:50: error: for each function it appears in.)
+make[2]: *** [file.o] Error 1
 
-Signed-off-by: Martin Hicks <mort@bork.org>
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 ---
- package/microperl/microperl.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/multimedia/mplayer/mplayer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index b68e825..71a4e4a 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -82,7 +82,8 @@ ifneq ($(MICROPERL_MODS),)
- 	 for i in $(patsubst %,$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/%,$(dir $(MICROPERL_MODS))); do \
- 		[ -d $$i ] || mkdir -p $$i; \
- 	 done; \
--	 for i in $(MICROPERL_MODS); do \
-+	 FILES="$(shell cd $(MICROPERL_DIR)/lib && ls $(MICROPERL_MODS))"; \
-+	 for i in $$FILES; do \
- 	 cp -dpf $(MICROPERL_DIR)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
- 	 done; \
- 	)
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index bd5c079..7d45960 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -3,7 +3,7 @@
+ # mplayer
+ #
+ #############################################################
+-MPLAYER_VERSION = 32710
++MPLAYER_VERSION = 32726
+ # MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
+ # MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+ MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
 -- 
-1.5.6.5
+1.7.1
