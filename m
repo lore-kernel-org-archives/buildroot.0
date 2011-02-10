@@ -1,44 +1,66 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 10 Feb 2011 17:47:15 +0100
-Subject: [Buildroot] [PATCH] mplayer: bump version to fix build error
-Message-ID: <1297356435-11303-1-git-send-email-bjorn.forsman@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Feb 2011 14:58:12 -0300
+Subject: [Buildroot] [PATCH 1/3] libcue: new package
+Message-ID: <1297360694-24145-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump mplayer to the first version that fixes this issue:
-
-file.c:23:5: warning: "HAVE_MMAP" is not defined
-file.c:25:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
-file.c:77:5: warning: "HAVE_MMAP" is not defined
-file.c:87:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
-file.c:124:5: warning: "HAVE_MMAP" is not defined
-file.c:126:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
-file.c: In function 'av_file_map':
-file.c:50: error: 'HAVE_MMAP' undeclared (first use in this function)
-file.c:50: error: (Each undeclared identifier is reported only once
-file.c:50: error: for each function it appears in.)
-make[2]: *** [file.o] Error 1
-
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/mplayer/mplayer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/multimedia/Config.in        |    1 +
+ package/multimedia/libcue/Config.in |    8 ++++++++
+ package/multimedia/libcue/libcue.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/libcue/Config.in
+ create mode 100644 package/multimedia/libcue/libcue.mk
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index bd5c079..7d45960 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -3,7 +3,7 @@
- # mplayer
- #
- #############################################################
--MPLAYER_VERSION = 32710
-+MPLAYER_VERSION = 32726
- # MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
- # MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
- MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 69ad113..b60849e 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -15,6 +15,7 @@ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+ source "package/multimedia/libao/Config.in"
+ source "package/multimedia/libcdaudio/Config.in"
++source "package/multimedia/libcue/Config.in"
+ source "package/multimedia/libcuefile/Config.in"
+ source "package/multimedia/libdvdread/Config.in"
+ source "package/multimedia/libdvdnav/Config.in"
+diff --git a/package/multimedia/libcue/Config.in b/package/multimedia/libcue/Config.in
+new file mode 100644
+index 0000000..e5e2e16
+--- /dev/null
++++ b/package/multimedia/libcue/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBCUE
++	bool "libcue"
++	select BR2_PACKAGE_FLEX
++	select BR2_PACKAGE_FLEX_LIBFL
++	help
++	  CUE Sheet Parser Library
++
++	  http://libcue.sourceforge.net/
+diff --git a/package/multimedia/libcue/libcue.mk b/package/multimedia/libcue/libcue.mk
+new file mode 100644
+index 0000000..2de0423
+--- /dev/null
++++ b/package/multimedia/libcue/libcue.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libcue
++#
++################################################################################
++
++LIBCUE_VERSION = 1.4.0
++LIBCUE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcue
++LIBCUE_SOURCE = libcue-$(LIBCUE_VERSION).tar.bz2
++LIBCUE_DEPENDENCIES = flex
++LIBCUE_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS,package/multimedia,libcue))
 -- 
-1.7.1
+1.7.3.4
