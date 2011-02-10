@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 10 Feb 2011 22:47:19 +0100
-Subject: [Buildroot] [git commit master 1/1] mpd: new features
-Message-ID: <20110210214825.204658F483@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libcue: new package
+Message-ID: <20110210214824.B1DBC8F483@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,74 +9,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a74b4044b00b19055474c3d3dc2c069fc26a38c0
+commit: http://git.buildroot.net/buildroot/commit/?id=1b9f3db859387f66f4c9b500d50e17279f042e32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* Add libcue support (.cue file parsing)
-* Add lame support (mp3 encoding)
-* Fix slight typo in Config.in wrt LIBCUEFILE
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpd/Config.in |   14 +++++++++++++-
- package/multimedia/mpd/mpd.mk    |   12 ++++++++++++
- 2 files changed, 25 insertions(+), 1 deletions(-)
+ package/multimedia/Config.in        |    1 +
+ package/multimedia/libcue/Config.in |    8 ++++++++
+ package/multimedia/libcue/libcue.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/libcue/Config.in
+ create mode 100644 package/multimedia/libcue/libcue.mk
 
-diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
-index 3906a5f..e418d32 100644
---- a/package/multimedia/mpd/Config.in
-+++ b/package/multimedia/mpd/Config.in
-@@ -53,6 +53,18 @@ config BR2_PACKAGE_MPD_FLAC
- 	  Enable flac input/streaming support.
- 	  Select this if you want to play back FLAC files.
- 
-+config BR2_PACKAGE_MPD_LAME
-+	bool "lame"
-+	select BR2_PACKAGE_LAME
-+	help
-+	  Enable lame (mp3) encoding support.
-+
-+config BR2_PACKAGE_MPD_LIBCUE
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 69ad113..b60849e 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -15,6 +15,7 @@ source "package/multimedia/gst-plugins-bad/Config.in"
+ source "package/multimedia/gst-plugins-ugly/Config.in"
+ source "package/multimedia/libao/Config.in"
+ source "package/multimedia/libcdaudio/Config.in"
++source "package/multimedia/libcue/Config.in"
+ source "package/multimedia/libcuefile/Config.in"
+ source "package/multimedia/libdvdread/Config.in"
+ source "package/multimedia/libdvdnav/Config.in"
+diff --git a/package/multimedia/libcue/Config.in b/package/multimedia/libcue/Config.in
+new file mode 100644
+index 0000000..e5e2e16
+--- /dev/null
++++ b/package/multimedia/libcue/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBCUE
 +	bool "libcue"
-+	select BR2_PACKAGE_LIBCUE
++	select BR2_PACKAGE_FLEX
++	select BR2_PACKAGE_FLEX_LIBFL
 +	help
-+	  Enable cue file support.
++	  CUE Sheet Parser Library
 +
- config BR2_PACKAGE_MPD_LIBSAMPLERATE
- 	bool "libsamplerate"
- 	select BR2_PACKAGE_LIBSAMPLERATE
-@@ -86,7 +98,7 @@ config BR2_PACKAGE_MPD_MPG123
- 
- config BR2_PACKAGE_MPD_MUSEPACK
- 	bool "musepack"
--	select BR2_PACKAGE_LIBCUE
-+	select BR2_PACKAGE_LIBCUEFILE
- 	select BR2_PACKAGE_LIBREPLAYGAIN
- 	select BR2_PACKAGE_MUSEPACK
- 	help
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 61b107b..728feaa 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -44,6 +44,18 @@ else
- MPD_CONF_OPT += --disable-curl
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_LAME),y)
-+MPD_DEPENDENCIES += lame
-+else
-+MPD_CONF_OPT += --disable-lame-encoder
-+endif
++	  http://libcue.sourceforge.net/
+diff --git a/package/multimedia/libcue/libcue.mk b/package/multimedia/libcue/libcue.mk
+new file mode 100644
+index 0000000..2de0423
+--- /dev/null
++++ b/package/multimedia/libcue/libcue.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libcue
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_MPD_LIBCUE),y)
-+MPD_DEPENDENCIES += libcue
-+else
-+MPD_CONF_OPT += --disable-cue
-+endif
++LIBCUE_VERSION = 1.4.0
++LIBCUE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcue
++LIBCUE_SOURCE = libcue-$(LIBCUE_VERSION).tar.bz2
++LIBCUE_DEPENDENCIES = flex
++LIBCUE_INSTALL_STAGING = YES
 +
- ifeq ($(BR2_PACKAGE_MPD_LIBSAMPLERATE),y)
- MPD_DEPENDENCIES += libsamplerate
- else
++$(eval $(call AUTOTARGETS,package/multimedia,libcue))
 -- 
 1.7.3.4
