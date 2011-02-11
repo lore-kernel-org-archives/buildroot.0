@@ -1,81 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Feb 2011 10:26:24 +0100
-Subject: [Buildroot] [git commit master 1/1] package: add xmlstarlet package
-Message-ID: <20110211093539.E989E88E7A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Feb 2011 10:27:18 -0300
+Subject: [Buildroot] [PATCH] openssh: security bump to version 5.8p1
+Message-ID: <1297430838-28868-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+http://www.openssh.com/txt/legacy-cert.adv
+CVE-2011-0539
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0efb0d334dc3d882e286027e6c583d18ff9396c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Peter: don't link statically, only depend on iconv if !BR_ENABLE_LOCALE]
-Signed-off-by: Nate Ford <nford@westpond.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                |    1 +
- package/xmlstarlet/Config.in     |    9 +++++++++
- package/xmlstarlet/xmlstarlet.mk |   21 +++++++++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
- create mode 100644 package/xmlstarlet/Config.in
- create mode 100644 package/xmlstarlet/xmlstarlet.mk
+ package/openssh/S50sshd    |    8 ++++++++
+ package/openssh/openssh.mk |    2 +-
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0899578..0f0ec47 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -471,6 +471,7 @@ source "package/logrotate/Config.in"
- source "package/screen/Config.in"
- source "package/sudo/Config.in"
- source "package/which/Config.in"
-+source "package/xmlstarlet/Config.in"
- endmenu
+diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+index 3821449..f0d2aef 100644
+--- a/package/openssh/S50sshd
++++ b/package/openssh/S50sshd
+@@ -25,6 +25,14 @@ if [ ! -f /etc/ssh_host_dsa_key ] ; then
+ 	echo
+         /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
+ fi
++
++# Check for the SSH2 ECDSA key
++if [ ! -f /etc/ssh_host_ecdsa_key ]; then
++	echo Generating ECDSA Key...
++	echo THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
++	echo
++	/usr/bin/ssh-keygen -t ecdsa -f /etc/ssh_host_ecdsa_key -C '' -N ''
++fi
+                 
+ umask 077
  
- menu "System tools"
-diff --git a/package/xmlstarlet/Config.in b/package/xmlstarlet/Config.in
-new file mode 100644
-index 0000000..99762b8
---- /dev/null
-+++ b/package/xmlstarlet/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_XMLSTARLET
-+	bool "xmlstarlet"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Command Line XML Toolkit
-+
-+	  http://xmlstar.sourceforge.net/
-diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
-new file mode 100644
-index 0000000..d7613f8
---- /dev/null
-+++ b/package/xmlstarlet/xmlstarlet.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# XMLstarlet
-+#
-+#############################################################
-+
-+XMLSTARLET_VERSION:=1.0.4
-+XMLSTARLET_SOURCE:=xmlstarlet-$(XMLSTARLET_VERSION).tar.gz
-+XMLSTARLET_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
-+XMLSTARLET_INSTALL_STAGING:=NO
-+XMLSTARLET_INSTALL_TARGET:=YES
-+
-+XMLSTARLET_DEPENDENCIES += libxml2 libxslt \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+
-+XMLSTARLET_CONF_OPT += --disable-static-libs \
-+	--with-libxml-prefix=${STAGING_DIR}/usr \
-+	--with-libxslt-prefix=${STAGING_DIR}/usr \
-+	--with-libiconv-prefix=${STAGING_DIR}/usr
-+
-+$(eval $(call AUTOTARGETS,package,xmlstarlet))
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 3db7156..104977e 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-OPENSSH_VERSION = 5.6p1
++OPENSSH_VERSION = 5.8p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
 -- 
 1.7.3.4
