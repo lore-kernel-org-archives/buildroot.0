@@ -1,44 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Feb 2011 23:14:50 +0100
-Subject: [Buildroot] [PATCH] Allow file globs in microperl module list
-In-Reply-To: <1297356099-15765-1-git-send-email-mort@bork.org> (Martin Hicks's
-	message of "Thu, 10 Feb 2011 11:41:39 -0500")
-References: <1297356099-15765-1-git-send-email-mort@bork.org>
-Message-ID: <87ipwrfsf9.fsf@macbook.be.48ers.dk>
+Date: Fri, 11 Feb 2011 10:35:19 +0100
+Subject: [Buildroot] [PATCH] Add package xmlstarlet
+In-Reply-To: <AANLkTinQpDAy5HL+Eky5TAVe623bT7BrZaENutSR0FE9@mail.gmail.com>
+	(Nate Ford's message of "Tue, 8 Feb 2011 11:18:53 -0500")
+References: <AANLkTinQpDAy5HL+Eky5TAVe623bT7BrZaENutSR0FE9@mail.gmail.com>
+Message-ID: <87zkq2ewx4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
+>>>>> "Nate" == Nate Ford <nford@westpond.com> writes:
 
- Martin> This lets the user place file globs into the microperl module
- Martin> list.  e.g.,
+ Nate> This adds xmlstarlet, a command line XML processing tool. http://
+ Nate> xmlstar.sourceforge.net/
 
- Martin> CGI/*.pm warnings.pm strict.pm
+ Nate> This is my first patch contribution to an open source project, so be gentle :P
 
- Martin> Signed-off-by: Martin Hicks <mort@bork.org>
- Martin> ---
- Martin>  package/microperl/microperl.mk |    3 ++-
- Martin>  1 files changed, 2 insertions(+), 1 deletions(-)
+Thanks, committed.
 
- Martin> diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
- Martin> index b68e825..71a4e4a 100644
- Martin> --- a/package/microperl/microperl.mk
- Martin> +++ b/package/microperl/microperl.mk
- Martin> @@ -82,7 +82,8 @@ ifneq ($(MICROPERL_MODS),)
- Martin>  	 for i in $(patsubst %,$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/%,$(dir $(MICROPERL_MODS))); do \
- Martin>  		[ -d $$i ] || mkdir -p $$i; \
- Martin>  	 done; \
- Martin> -	 for i in $(MICROPERL_MODS); do \
- Martin> +	 FILES="$(shell cd $(MICROPERL_DIR)/lib && ls $(MICROPERL_MODS))"; \
- Martin> +	 for i in $$FILES; do \
- Martin>  	 cp -dpf $(MICROPERL_DIR)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+There were a few minor issues (it doesn't make sense to link statically
+to the XML libs when we install the shared libs in target and iconv is
+only needed if the toolchain doesn't have locale support), but I've
+fixed that.
 
-Why not just do:
-
-for i in $(addprefix $(MICROPERL_DIR)/lib/,$(MICROPERL_MODS)); do ..
 
 -- 
 Bye, Peter Korsgaard
