@@ -1,30 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Feb 2011 10:35:19 +0100
-Subject: [Buildroot] [PATCH] Add package xmlstarlet
-In-Reply-To: <AANLkTinQpDAy5HL+Eky5TAVe623bT7BrZaENutSR0FE9@mail.gmail.com>
-	(Nate Ford's message of "Tue, 8 Feb 2011 11:18:53 -0500")
-References: <AANLkTinQpDAy5HL+Eky5TAVe623bT7BrZaENutSR0FE9@mail.gmail.com>
-Message-ID: <87zkq2ewx4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 11 Feb 2011 10:26:24 +0100
+Subject: [Buildroot] [git commit master 1/1] imagemagick: bump version
+Message-ID: <20110211093539.873128F4A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nate" == Nate Ford <nford@westpond.com> writes:
 
- Nate> This adds xmlstarlet, a command line XML processing tool. http://
- Nate> xmlstar.sourceforge.net/
+commit: http://git.buildroot.net/buildroot/commit/?id=e9a7bf38b3526d385e65074b5d9527f0a1427db2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Nate> This is my first patch contribution to an open source project, so be gentle :P
+The 6.6.7-4 version is no longer available upstream.
 
-Thanks, committed.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-There were a few minor issues (it doesn't make sense to link statically
-to the XML libs when we install the shared libs in target and iconv is
-only needed if the toolchain doesn't have locale support), but I've
-fixed that.
-
-
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 2166c34..97c0041 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ IMAGEMAGICK_MAJOR = 6.6.7
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-4
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-6
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
+ IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
+ IMAGEMAGICK_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
