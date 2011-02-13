@@ -1,93 +1,103 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Sun, 13 Feb 2011 21:09:05 +0100
-Subject: [Buildroot] [PATCH] Makefile: improve $(TARGET_DIR) (re)creation
-Message-ID: <1297627745-17087-1-git-send-email-bjorn.forsman@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 13 Feb 2011 22:58:39 +0100
+Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
+	changes
+Message-ID: <20110213215849.CAC3E8F4D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes the following use case:
 
- 1. Build, hack, ...
- 2. Oh no, $(TARGET_DIR) is no longer in sync with $(TARGET_SKELETON)
-    and/or the packages selected in menuconfig. If only there was a way
-    to *easily* rebuild $(TARGET_DIR) so it is in sync...
+commit: http://git.buildroot.net/buildroot/commit/?id=4120e051f6c1721dbe9419e5942df833ba53159e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this patch, just remove $(TARGET_DIR) and Buildroot will recreate
-it.
-
-Main changes:
- * Always copy $(TARGET_SKELETON). This is the easiest way to ensure
-   $(TARGET_DIR) has the latest skeleton.
- * If $(TARGET_DIR) needs to be created (i.e. if the directory is
-   missing), remove $(BUILD_DIR)/*/.stamp_target_installed files so
-   all currently selected packages will be reinstalled.
-
-Also:
- * remove code touching .fakeroot.00000 file (not needed)
- * remove code trying to remove CVS and .svn stuff from target skeleton
-   (not needed)
-
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
-Applies on top of "[PATCH] Makefile: remove dead code (TARGET_SKELETON_PATCH)"
-which I sent 12 Feb.
+ CHANGES |   55 +++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 31 insertions(+), 24 deletions(-)
 
- Makefile |   25 ++++++++++---------------
- 1 files changed, 10 insertions(+), 15 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 111fbd6..157e29f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -364,7 +364,7 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+diff --git a/CHANGES b/CHANGES
+index ac5d45b..2db2158 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -5,7 +5,8 @@
+ 	well-known toolchains. Buildroot is now capable of
+ 	automatically downloading and extracting well-known toolchains
+ 	(for the moment, CodeSourcery ARM, PowerPC, MIPS and SuperH
+-	toolchains are supported).
++	toolchains are supported). Crosstool-NG backend updated and
++	improved.
  
--$(BASE_TARGETS): dirs $(O)/toolchainfile.cmake
-+$(BASE_TARGETS): dirs $(O)/toolchainfile.cmake copy-target-skeleton
+ 	Complete rework of how hardware boards are supported.
+ 	Each board now only has a single defconfig file, and all
+@@ -17,6 +18,8 @@
+ 	r2d and Qemu x86. The Qemu boards support allows to easily
+ 	build systems that are known to work under Qemu.
  
- $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
- 	$(MAKE) $(EXTRAMAKEARGS) silentoldconfig
-@@ -390,9 +390,10 @@ $(O)/toolchainfile.cmake:
- 	" > $@
++	Initial support for Blackfin processors.
++
+ 	Staging directory moved into $(O)/host/usr/<tuple>/sysroot, in
+ 	preparation for support of SDK. For the same reason, the
+ 	toolchain binaries (cross-compiler and other related tools)
+@@ -43,30 +46,34 @@
+ 	configuration options cleanup, U-Boot/Barebox version bumps.
  
- .PHONY: all world dirs clean distclean source outputmakefile \
-+	copy-target-skeleton \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
--	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-+	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) \
- 	$(HOST_DIR) $(BR2_DEPENDS_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 	Updated/fixed packages: alsa-utils, at, autoconf, automake,
+-	bash, binutils, bison, busybox, bzip2, cdrkit, cloop,
++	bash, binutils, bison, busybox, bzip2, cdrkit, cloop, cmake,
+ 	coreutils, cups, dbus, dbus-python, dhcp, directfb,
+-	direcfb-examples, dmalloc, dnsmasq, dosfstools, ed, fbset,
+-	ffmpeg, findutils, flac, freetype, gdk-pixbuf, gmp, grep,
+-	gperf, gst-plugins-good, gstreamer, gvfs, hdparm, hostapd,
+-	i2c-tools, icu, imagemagick, input-tools, iproute2, iptables,
+-	jpeg, kexec, libaio, libart, libcap, libconfig, libfuse,
+-	libglib2, libidn, libmad, libogg, libpcap, libsndfile,
+-	libtheora, libtool, libusb-compat, libvorbis, libxcb, libxml2,
+-	libxslt, linux-fusion, lm-sensors, lsof, ltp-testsuite,
+-	ltrace, lvm2, lzo, m4, makedevs, memtester, mesa3d, mii-diag,
+-	mpc, mpfr, mpg123, mplayer, mrouted, mtd-utils, nano, netperf,
+-	netplug, ntfs-3g, ntp, openssh, openssl, openvpn, oprofile,
+-	pango, patch, pciutils, php, pkgconfig, portmap, psmisc,
+-	python, qt, rsync, ruby, screen, sdl_gfx, sdl_sound,
+-	smartmontools, sqlite, squid, sshfs, sstrip, sysklogd,
+-	sysstat, sysvinit, tar, tcpdump, tslib, udev, usbutils, vim,
+-	vtun, webkit, wipe, x11vnc, xapp_xlogo, xcb-proto,
+-	xfont_font-util, xkeyboard-config, xlib_libX11, xz, zlib
+-
+-	New packages: dhrystone, faad2, fbgrab, irda-utils, libao,
+-	libcuefile, libffi, libhid, libreplaygain, libsamplerate,
+-	libsigc++, lsuio, mpd, musepack, python-mad, python-serial,
+-	rsh-redone, sdparm, vorbis-tools, wavpack, whetstone, xl2tp
++	direcfb-examples, dmalloc, dnsmasq, dosfstools, e2fsprogs, ed,
++	fbset, ffmpeg, findutils, flac, freetype, gdk-pixbuf, gmp,
++	grep, gperf, gst-ffmpeg, gst-plugins-bad, gst-plugins-base,
++	gst-plugins-good, gst-plugins-ugly, gstreamer, gvfs, hdparm,
++	hostapd, i2c-tools, icu, imagemagick, input-tools, iproute2,
++	iptables, iw, jpeg, kexec, libaio, libart, libcap, libconfig,
++	libfuse, libglib2, libidn, libmad, libogg, libpcap, libpng,
++	libsndfile, libtheora, libtool, libusb-compat, libvorbis,
++	libxcb, libxml2, libxslt, links, linux-fusion, lm-sensors,
++	lsof, ltp-testsuite, ltrace, lvm2, lzo, m4, makedevs,
++	memtester, mesa3d, mii-diag, mpc, mpfr, mpg123, mplayer,
++	mrouted, mtd-utils, nano, netperf, netplug, ntfs-3g, ntp,
++	openssh, openssl, openvpn, oprofile, pango, patch, pciutils,
++	php, pkgconfig, portmap, psmisc, python, qt, rsync, ruby,
++	sawman, screen, sdl_gfx, sdl_sound, smartmontools, socat,
++	sqlite, squid, sshfs, sstrip, sysklogd, sysstat, sysvinit,
++	tar, tcpdump, tslib, udev, usbutils, vim, vtun, webkit, wipe,
++	x11vnc, xapp_xlogo, xcb-proto, xfont_font-util,
++	xkeyboard-config, xlib_libX11, xz, zlib
++
++	New packages: dhrystone, dsp-tools, faad2, fbgrab, gst-dsp,
++	gst-omapfb, irda-utils, lame, libao, libcue, libcuefile,
++	libffi, libhid, libreplaygain, libsamplerate, libsigc++,
++	lsuio, mpd, musepack, python-mad, python-serial, rsh-redone,
++	sdparm, tidsp-binaries, vorbis-tools, wavpack, whetstone,
++	xl2tp, xmlstarlet
  
- #############################################################
-@@ -416,19 +417,13 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
- TARGET_SKELETON=$(BR2_ROOTFS_SKELETON_CUSTOM_PATH)
- endif
- 
--$(BUILD_DIR)/.root:
--	mkdir -p $(TARGET_DIR)
--	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
--		if [ -d "$(TARGET_SKELETON)" ]; then \
--			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
--		fi; \
--		touch $(STAGING_DIR)/.fakeroot.00000; \
--	fi
--	-find $(TARGET_DIR) -type d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
--	-find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
--	touch $@
-+copy-target-skeleton: $(TARGET_DIR)
-+	cp -ua $(TARGET_SKELETON)/* $(TARGET_DIR)/ && \
-+	find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
- 
--$(TARGET_DIR): $(BUILD_DIR)/.root
-+$(TARGET_DIR):
-+	mkdir $(TARGET_DIR) && \
-+	rm -f $(BUILD_DIR)/*/.stamp_target_installed
- 
- erase-fakeroots:
- 	rm -f $(BUILD_DIR)/.fakeroot*
+ 	Removed packages: hotplug, l2tp, libfloat, microcom,
+ 	ng-spice-rework
 -- 
-1.7.1
+1.7.3.4
