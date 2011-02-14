@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Feb 2011 22:26:58 +0100
-Subject: [Buildroot] [PATCH] openssh: security bump to version 5.8p1
-In-Reply-To: <1297430838-28868-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Fri, 11 Feb 2011 10:27:18 -0300")
-References: <1297430838-28868-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wrl2b93x.fsf@macbook.be.48ers.dk>
+Date: Mon, 14 Feb 2011 22:27:42 +0100
+Subject: [Buildroot] [PATCH] Makefile: remove dead code
+	(TARGET_SKELETON_PATCH)
+In-Reply-To: <1297466733-32105-1-git-send-email-bjorn.forsman@gmail.com>
+	(=?utf-8?Q?=22Bj=C3=B8rn?= Forsman"'s message of "Sat,
+	12 Feb 2011 00:25:33 +0100")
+References: <1297466733-32105-1-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <87sjvqb92p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
 
- Gustavo> http://www.openssh.com/txt/legacy-cert.adv
- Gustavo> CVE-2011-0539
-
+ Bj?rn> TARGET_SKELETON_PATCH is no longer in use, so remove it.
+ Bj?rn> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 Committed, thanks.
 
 -- 
