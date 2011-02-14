@@ -1,103 +1,89 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Feb 2011 22:58:39 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
-	changes
-Message-ID: <20110213215849.CAC3E8F4D1@busybox.osuosl.org>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Mon, 14 Feb 2011 14:04:02 +0000
+Subject: [Buildroot] How I upgrade busybox from 1.1.3 to busybox 1.17
+ without change init scripts ? Was: [PATCH] mplayer: bump version to fix
+ build error
+In-Reply-To: <201102120903.17257.minimod@morethan.org>
+References: <1297356435-11303-1-git-send-email-bjorn.forsman@gmail.com>
+	<201102120607.50136.minimod@morethan.org>
+	<1297517462.5409.5.camel@segulix>
+	<201102120903.17257.minimod@morethan.org>
+Message-ID: <1297692242.29881.27.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, 2011-02-12 at 09:03 -0600, Michael S. Zick wrote: 
+> On Sat February 12 2011, Sergio Monteiro Basto wrote:
+> > On Sat, 2011-02-12 at 06:07 -0600, Michael S. Zick wrote: 
+> > > On Fri February 11 2011, Sergio Monteiro Basto wrote:
+> > > > 
+> > > > On Thu, 2011-02-10 at 21:28 +0100, Peter Korsgaard wrote: 
+> > > > > >>>>> "Bj?rn" == Bj?rn Forsman <bjorn.forsman@gmail.com> writes:
+> > > > > 
+> > > > >  Bj?rn> Bump mplayer to the first version that fixes this issue:
+> > > > >  Bj?rn> file.c:23:5: warning: "HAVE_MMAP" is not defined
+> > > > >  Bj?rn> file.c:25:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+> > > > >  Bj?rn> file.c:77:5: warning: "HAVE_MMAP" is not defined
+> > > > >  Bj?rn> file.c:87:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+> > > > >  Bj?rn> file.c:124:5: warning: "HAVE_MMAP" is not defined
+> > > > >  Bj?rn> file.c:126:7: warning: "HAVE_MAPVIEWOFFILE" is not defined
+> > > > >  Bj?rn> file.c: In function 'av_file_map':
+> > > > >  Bj?rn> file.c:50: error: 'HAVE_MMAP' undeclared (first use in this function)
+> > > > >  Bj?rn> file.c:50: error: (Each undeclared identifier is reported only once
+> > > > >  Bj?rn> file.c:50: error: for each function it appears in.)
+> > > > >  Bj?rn> make[2]: *** [file.o] Error 1
+> > > > > 
+> > > > > Committed, thanks.
+> > > > 
+> > > > Hi, 
+> > > > mplayer, now, has been compiled successfully on mipsel , without any
+> > > > changes. 
+> > > >
+> > > 
+> > > That is good news and I see you have tweaked your howto page.
+> > > Haven't had any available "hobby time" myself yet this year.
+> > 
+> > don't worry :)
+> > btw , http://minimodding.com/tiki-index.php?page=UserPagesergiomb is the
+> > page.
+> > Well one off-topic question , now is my next idea.
+> > How or can I upgrade busybox from 1.1.3 to busybox 1.17 without change
+> > init scripts ? 
+> >
+> 
+> You might need to apply the Realtek sigabrt patch -
+> http://minimodding.com/tiki-download_file.php?fileId=44
+> Which cgales did for 1.15 but I suspect it will apply to 1.17 also.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4120e051f6c1721dbe9419e5942df833ba53159e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+OK CC to buildroot , off-topic but why not ?, someone could help.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   55 +++++++++++++++++++++++++++++++------------------------
- 1 files changed, 31 insertions(+), 24 deletions(-)
+but where is described what cgales made for 1.15 ? is what is write on 
+http://minimodding.com/CustomFirmware ? 
 
-diff --git a/CHANGES b/CHANGES
-index ac5d45b..2db2158 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,7 +5,8 @@
- 	well-known toolchains. Buildroot is now capable of
- 	automatically downloading and extracting well-known toolchains
- 	(for the moment, CodeSourcery ARM, PowerPC, MIPS and SuperH
--	toolchains are supported).
-+	toolchains are supported). Crosstool-NG backend updated and
-+	improved.
- 
- 	Complete rework of how hardware boards are supported.
- 	Each board now only has a single defconfig file, and all
-@@ -17,6 +18,8 @@
- 	r2d and Qemu x86. The Qemu boards support allows to easily
- 	build systems that are known to work under Qemu.
- 
-+	Initial support for Blackfin processors.
-+
- 	Staging directory moved into $(O)/host/usr/<tuple>/sysroot, in
- 	preparation for support of SDK. For the same reason, the
- 	toolchain binaries (cross-compiler and other related tools)
-@@ -43,30 +46,34 @@
- 	configuration options cleanup, U-Boot/Barebox version bumps.
- 
- 	Updated/fixed packages: alsa-utils, at, autoconf, automake,
--	bash, binutils, bison, busybox, bzip2, cdrkit, cloop,
-+	bash, binutils, bison, busybox, bzip2, cdrkit, cloop, cmake,
- 	coreutils, cups, dbus, dbus-python, dhcp, directfb,
--	direcfb-examples, dmalloc, dnsmasq, dosfstools, ed, fbset,
--	ffmpeg, findutils, flac, freetype, gdk-pixbuf, gmp, grep,
--	gperf, gst-plugins-good, gstreamer, gvfs, hdparm, hostapd,
--	i2c-tools, icu, imagemagick, input-tools, iproute2, iptables,
--	jpeg, kexec, libaio, libart, libcap, libconfig, libfuse,
--	libglib2, libidn, libmad, libogg, libpcap, libsndfile,
--	libtheora, libtool, libusb-compat, libvorbis, libxcb, libxml2,
--	libxslt, linux-fusion, lm-sensors, lsof, ltp-testsuite,
--	ltrace, lvm2, lzo, m4, makedevs, memtester, mesa3d, mii-diag,
--	mpc, mpfr, mpg123, mplayer, mrouted, mtd-utils, nano, netperf,
--	netplug, ntfs-3g, ntp, openssh, openssl, openvpn, oprofile,
--	pango, patch, pciutils, php, pkgconfig, portmap, psmisc,
--	python, qt, rsync, ruby, screen, sdl_gfx, sdl_sound,
--	smartmontools, sqlite, squid, sshfs, sstrip, sysklogd,
--	sysstat, sysvinit, tar, tcpdump, tslib, udev, usbutils, vim,
--	vtun, webkit, wipe, x11vnc, xapp_xlogo, xcb-proto,
--	xfont_font-util, xkeyboard-config, xlib_libX11, xz, zlib
--
--	New packages: dhrystone, faad2, fbgrab, irda-utils, libao,
--	libcuefile, libffi, libhid, libreplaygain, libsamplerate,
--	libsigc++, lsuio, mpd, musepack, python-mad, python-serial,
--	rsh-redone, sdparm, vorbis-tools, wavpack, whetstone, xl2tp
-+	direcfb-examples, dmalloc, dnsmasq, dosfstools, e2fsprogs, ed,
-+	fbset, ffmpeg, findutils, flac, freetype, gdk-pixbuf, gmp,
-+	grep, gperf, gst-ffmpeg, gst-plugins-bad, gst-plugins-base,
-+	gst-plugins-good, gst-plugins-ugly, gstreamer, gvfs, hdparm,
-+	hostapd, i2c-tools, icu, imagemagick, input-tools, iproute2,
-+	iptables, iw, jpeg, kexec, libaio, libart, libcap, libconfig,
-+	libfuse, libglib2, libidn, libmad, libogg, libpcap, libpng,
-+	libsndfile, libtheora, libtool, libusb-compat, libvorbis,
-+	libxcb, libxml2, libxslt, links, linux-fusion, lm-sensors,
-+	lsof, ltp-testsuite, ltrace, lvm2, lzo, m4, makedevs,
-+	memtester, mesa3d, mii-diag, mpc, mpfr, mpg123, mplayer,
-+	mrouted, mtd-utils, nano, netperf, netplug, ntfs-3g, ntp,
-+	openssh, openssl, openvpn, oprofile, pango, patch, pciutils,
-+	php, pkgconfig, portmap, psmisc, python, qt, rsync, ruby,
-+	sawman, screen, sdl_gfx, sdl_sound, smartmontools, socat,
-+	sqlite, squid, sshfs, sstrip, sysklogd, sysstat, sysvinit,
-+	tar, tcpdump, tslib, udev, usbutils, vim, vtun, webkit, wipe,
-+	x11vnc, xapp_xlogo, xcb-proto, xfont_font-util,
-+	xkeyboard-config, xlib_libX11, xz, zlib
-+
-+	New packages: dhrystone, dsp-tools, faad2, fbgrab, gst-dsp,
-+	gst-omapfb, irda-utils, lame, libao, libcue, libcuefile,
-+	libffi, libhid, libreplaygain, libsamplerate, libsigc++,
-+	lsuio, mpd, musepack, python-mad, python-serial, rsh-redone,
-+	sdparm, tidsp-binaries, vorbis-tools, wavpack, whetstone,
-+	xl2tp, xmlstarlet
- 
- 	Removed packages: hotplug, l2tp, libfloat, microcom,
- 	ng-spice-rework
+But anyway leaves to same question, I have a mountpoint with busybox
+1.1.3 and want upgrade busybox to 1.17 without change init scripts and
+keep box working, after reboot.
+
+Just overwrite busybox1.17 files and just keep what is in /etc ? 
+in CustomFirmware page mention a yaffs2_2 stuff example which is should
+be saved ? 
+dvdplayer  group  hdd  hdd.old  ld.so.conf  magic  passwd  profile  rcS
+
+
+yeah , if I need to tweak BusyBox with that patch, that is easy (I think). 
+
+Best regards,
+
 -- 
-1.7.3.4
+S?rgio M. B.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110214/9c58bea0/attachment.bin>
