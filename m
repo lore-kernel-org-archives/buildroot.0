@@ -1,5 +1,5 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Wed, 16 Feb 2011 16:15:39 +0100
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Wed, 16 Feb 2011 17:55:38 +0100
 Subject: [Buildroot] [PATCH] Makefile: improve $(TARGET_DIR) (re)creation
 In-Reply-To: <AANLkTim9oR5GthXJcfJsi70qNfZEX3gXDNVOAx+ptq-F@mail.gmail.com>
 References: <1297627745-17087-1-git-send-email-bjorn.forsman@gmail.com>
@@ -7,14 +7,15 @@ References: <1297627745-17087-1-git-send-email-bjorn.forsman@gmail.com>
 	<AANLkTikvPodMe8ZGmo452Zn_hBU5c2S=2RpMNYKOoMAP@mail.gmail.com>
 	<AANLkTi=jtfZmP=BqvhxoQxLLRyFpj0p3=Z_b0WguBu_y@mail.gmail.com>
 	<AANLkTim9oR5GthXJcfJsi70qNfZEX3gXDNVOAx+ptq-F@mail.gmail.com>
-Message-ID: <AANLkTinnMpcWpDiHVyPyQTP8AdhEEy9f+aegCsoUhCWH@mail.gmail.com>
+Message-ID: <AANLkTinrGKji5vpczhHyHO1ezzbFHx6C=nRsF3iMOSL4@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/2/16 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
+On 16 February 2011 16:03, Daniel Nystr?m
+<daniel.nystrom@timeterminal.se> wrote:
 > 2011/2/16 Bj?rn Forsman <bjorn.forsman@gmail.com>
 >>
 >> On 15 February 2011 13:10, Daniel Nystr?m
@@ -40,10 +41,18 @@ To: buildroot@busybox.net
 > let every package get rebuilt (if necessary!) and reinstalled. In that case,
 > testing minor changes to single packages would be a quick job. Not an
 > half-hour job as of today.
->
+
+rm output/build/*/.stamp*
+
+(works for packages using the auto/generic/cmake infrastructure)
+
+or `make package-uninstall package` to rebuild a single package.
+
 > I think there is work going on to add a step when installing packages, where
 > it would first be turned into a tarball and later on extracted upon the
 > target root fs. But I havn't heard anything about it for months.
->
 
-(sorry if last message got send as html)
+Yeah, an update on that would be nice.
+
+Best regards,
+Bj?rn Forsman
