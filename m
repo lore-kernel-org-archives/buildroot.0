@@ -1,58 +1,58 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Wed, 16 Feb 2011 17:55:38 +0100
-Subject: [Buildroot] [PATCH] Makefile: improve $(TARGET_DIR) (re)creation
-In-Reply-To: <AANLkTim9oR5GthXJcfJsi70qNfZEX3gXDNVOAx+ptq-F@mail.gmail.com>
-References: <1297627745-17087-1-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTi==jLjhNbswUC1wsgUySjB_kM_7VD1Ns9mQoMsE@mail.gmail.com>
-	<AANLkTikvPodMe8ZGmo452Zn_hBU5c2S=2RpMNYKOoMAP@mail.gmail.com>
-	<AANLkTi=jtfZmP=BqvhxoQxLLRyFpj0p3=Z_b0WguBu_y@mail.gmail.com>
-	<AANLkTim9oR5GthXJcfJsi70qNfZEX3gXDNVOAx+ptq-F@mail.gmail.com>
-Message-ID: <AANLkTinrGKji5vpczhHyHO1ezzbFHx6C=nRsF3iMOSL4@mail.gmail.com>
+From: Steve Morris <morris@buinea.com>
+Date: Wed, 16 Feb 2011 10:38:35 -0800
+Subject: [Buildroot] problems linking when using -lSDL
+Message-ID: <20110216183835.GA16325@buinea.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 February 2011 16:03, Daniel Nystr?m
-<daniel.nystrom@timeterminal.se> wrote:
-> 2011/2/16 Bj?rn Forsman <bjorn.forsman@gmail.com>
->>
->> On 15 February 2011 13:10, Daniel Nystr?m
->> <daniel.nystrom@timeterminal.se> wrote:
->> > 2011/2/15 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> >> 2011/2/13 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> >>> With this patch, just remove $(TARGET_DIR) and Buildroot will recreate
->> >>> it.
->
-> [snip]
->>
->> >
->> > I'm afraid I can't say anything about this particular approach (I
->> > don't even have time to test it right now) but I do would love a way
->> > to regenerate the target dir.
->>
->> It's good to know I'm not the only one wanting this :-)
->
-> Actually, there has been a few request of such feature just recently on the
-> Freenode IRC channel.
->
-> One great step would be to remove all "compiled" and "installed" stamps and
-> let every package get rebuilt (if necessary!) and reinstalled. In that case,
-> testing minor changes to single packages would be a quick job. Not an
-> half-hour job as of today.
+Hi All,
 
-rm output/build/*/.stamp*
+I've recently tried to use SDL with buildroot-2010.11 and crosstools-ng
+1.82. I've also tried the latest buildroot snapshot wit a fresh
+crosstools. I've managed to have everything working prior to trying to
+use SDL.`
 
-(works for packages using the auto/generic/cmake infrastructure)
+'ve been circling around this for days with no luck. Perhaps someone
+can point me in the right direction.
 
-or `make package-uninstall package` to rebuild a single package.
+ct.c is a simple hello world which doesn't call in anything
 
-> I think there is work going on to add a step when installing packages, where
-> it would first be turned into a tarball and later on extracted upon the
-> target root fs. But I havn't heard anything about it for months.
+#include <stdlib.h>
+#include <stdio.h>
+int main () {
+	printf
+		("hello world\n");
+	exit(0);
+}
 
-Yeah, an update on that would be nice.
+my makefile, though perhaps adding too many directories to searc in
+compiles the program properly.
 
-Best regards,
-Bj?rn Forsman
+
+CC = /lfs/x-tools/i586-unknown-linux-gnu/bin/i586-unknown-linux-gnu-gcc
+CFLAGS = -Wl,--verbose
+LDFLAGS =
+LDFLAGS += -L/lfs/x-tools/i586-unknown-linux-gnu/i586-unknown-linux-gnu/sys-root/lib
+LDFLAGS += -L/lfs/x-tools/i586-unknown-linux-gnu/i586-unknown-linux-gnu/sys-root/usr/lib
+LDFLAGS += -L/lfs/x-tools/i586-unknown-linux-gnu/i586-unknown-linux-gnu/sysroot/lib
+LDFLAGS += -L/lfs/x-tools/i586-unknown-linux-gnu/i586-unknown-linux-gnu/sysroot/usr/lib
+LDFLAGS += -L/lfs/buildroot/output/host/usr/i586-unknown-linux-gnu/sysroot/lib
+LDFLAGS += -L/lfs/buildroot/output/host/usr/i586-unknown-linux-gnu/sysroot/usr/lib
+LDFLAGS += -lpthread 
+
+ct:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o ct ct.c
+
+
+When I add -lSDL to the mix I get a bunch of errors such as:
+
+tools/i586-unknown-linux-gnu/lib/gcc/i586-unknown-linux-gnu/4.4.3/../../../../i586-unknown-linux-gnu/bin/ld: warning: libdirectfb-1.4.so.5, needed by /lfs/buildroot/output/host/usr/i586-unknown-linux-gnu/sysroot/usr/lib/libSDL.so, not found (try using -rpath or -rpath-link)
+/lfs/x-tools/i586-unknown-linux-gnu/lib/gcc/i586-unknown-linux-gnu/4.4.3/../../../../i586-unknown-linux-gnu/bin/ld: warning: libfusion-1.4.so.5, needed by /lfs/buildroot/output/host/usr/i586-unknown-linux-gnu/sysroot/usr/lib/libSDL.so, not found (try using -rpath or -rpath-link)
+/lfs/x-tools/i586-unknown-linux-gnu/lib/gcc/i586-unknown-linux-gnu/4.4.3/../../../../i586-unknown-linux-gnu/bin/ld: warning: libdirect-1.4.so.5, needed by /lfs/buildroot/output/host/usr/i586-unknown-linux-gnu/sysroot/usr/lib/libSDL.so, not found (try using -rpath or -rpath-link)
+
+Any pointers would be appreciated,
+
+Steve
