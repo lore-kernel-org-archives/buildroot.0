@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 17 Feb 2011 14:05:47 +0100
-Subject: [Buildroot] [git commit master 1/1] package/x11r7: apply libtool
-	patch where possible
-Message-ID: <20110217130821.EB1148F5C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] package: apply libtool patch
+	where possible
+Message-ID: <20110217130822.2E5E78F5C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,470 +10,577 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68f166074bba01ea4abb9575a5578d662103904f
+commit: http://git.buildroot.net/buildroot/commit/?id=0be744e49590c32a1fb9141f4a0ef617b62b27c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Now that we have libtool-2.2.x patch support, we can get rid of a bunch
 of _LIBTOOL_PATH = NO, fixing (potential) cross link issues.
 
+Notice: php not changed, as it uses a very old 1.5 version for the
+embedded sqlite, where our buildroot-libtool-v1.5.patch doesn't apply.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/libxcb/libxcb.mk                     |    1 -
- package/x11r7/pthread-stubs/pthread-stubs.mk       |    1 -
- package/x11r7/xcb-util/xcb-util.mk                 |    1 -
- .../xdriver_xf86-input-acecad.mk                   |    1 -
- .../xdriver_xf86-input-aiptek.mk                   |    1 -
- .../xdriver_xf86-input-evdev.mk                    |    1 -
- .../xdriver_xf86-input-joystick.mk                 |    1 -
- .../xdriver_xf86-input-keyboard.mk                 |    1 -
- .../xdriver_xf86-input-mouse.mk                    |    1 -
- .../xdriver_xf86-input-synaptics.mk                |    1 -
- .../xdriver_xf86-input-void.mk                     |    1 -
- .../xdriver_xf86-video-chips.mk                    |    1 -
- .../xdriver_xf86-video-dummy.mk                    |    1 -
- .../xdriver_xf86-video-geode.mk                    |    1 -
- .../xdriver_xf86-video-glide.mk                    |    1 -
- .../xdriver_xf86-video-intel.mk                    |    1 -
- .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    1 -
- .../xdriver_xf86-video-wsfb.mk                     |    1 -
- package/x11r7/xlib_libICE/xlib_libICE.mk           |    1 -
- package/x11r7/xlib_libSM/xlib_libSM.mk             |    1 -
- .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    1 -
- package/x11r7/xlib_libXau/xlib_libXau.mk           |    1 -
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    1 -
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    1 -
- package/x11r7/xlib_libXi/xlib_libXi.mk             |    1 -
- package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |    1 -
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |    1 -
- package/x11r7/xlib_libXt/xlib_libXt.mk             |    1 -
- package/x11r7/xlib_libXtst/xlib_libXtst.mk         |    1 -
- package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    1 -
- package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    1 -
- package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    1 -
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    1 -
- .../x11r7/xlib_libpciaccess/xlib_libpciaccess.mk   |    1 -
- .../xserver_xorg-server/xserver_xorg-server.mk     |    1 -
- 35 files changed, 0 insertions(+), 35 deletions(-)
+ package/atk/atk.mk                                 |    1 -
+ package/avahi/avahi.mk                             |    1 -
+ package/cairo/cairo.mk                             |    1 -
+ package/dbus/dbus.mk                               |    1 -
+ package/enchant/enchant.mk                         |    1 -
+ package/fakeroot/fakeroot.mk                       |    1 -
+ package/gmpc/gmpc.mk                               |    1 -
+ package/gpsd/gpsd.mk                               |    1 -
+ package/gvfs/gvfs.mk                               |    1 -
+ package/iperf/iperf.mk                             |    1 -
+ package/jpeg/jpeg.mk                               |    1 -
+ package/libarchive/libarchive.mk                   |    1 -
+ package/libcgicc/libcgicc.mk                       |    1 -
+ package/libdaemon/libdaemon.mk                     |    1 -
+ package/libdrm/libdrm.mk                           |    1 -
+ package/libevent/libevent.mk                       |    1 -
+ package/libgail/libgail.mk                         |    1 -
+ package/libglib2/libglib2.mk                       |    1 -
+ package/libgpg-error/libgpg-error.mk               |    1 -
+ package/libmicrohttpd/libmicrohttpd.mk             |    1 -
+ package/librsvg/librsvg.mk                         |    1 -
+ package/libsoup/libsoup.mk                         |    1 -
+ package/libusb-compat/libusb-compat.mk             |    1 -
+ package/libusb/libusb.mk                           |    1 -
+ package/lighttpd/lighttpd.mk                       |    1 -
+ .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    1 -
+ .../matchbox-startup-monitor.mk                    |    1 -
+ package/mdadm/mdadm.mk                             |    1 -
+ package/nasm/nasm.mk                               |    1 -
+ package/popt/popt.mk                               |    1 -
+ package/quagga/quagga.mk                           |    1 -
+ package/rpm/rpm.mk                                 |    1 -
+ package/samba/samba.mk                             |    1 -
+ package/sdl/sdl.mk                                 |    1 -
+ package/sdl_gfx/sdl_gfx.mk                         |    1 -
+ package/sdl_image/sdl_image.mk                     |    1 -
+ package/sdl_mixer/sdl_mixer.mk                     |    1 -
+ package/sdl_sound/sdl_sound.mk                     |    1 -
+ package/sdl_ttf/sdl_ttf.mk                         |    1 -
+ package/tcpreplay/tcpreplay.mk                     |    1 -
+ package/tiff/tiff.mk                               |    1 -
+ package/wpa_supplicant/wpa_supplicant.mk           |    1 -
+ package/xz/xz.mk                                   |    1 -
+ 43 files changed, 0 insertions(+), 43 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 5b6a7ca..a3c87d1 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -10,7 +10,6 @@ LIBXCB_SITE = http://xcb.freedesktop.org/dist/
- LIBXCB_INSTALL_STAGING = YES
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 71937a9..0ac9b77 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -9,7 +9,6 @@ ATK_SOURCE = atk-$(ATK_VERSION).tar.bz2
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)/
+ ATK_INSTALL_STAGING = YES
+ ATK_INSTALL_TARGET = YES
+-ATK_LIBTOOL_PATCH = NO
+ ATK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
  
- LIBXCB_AUTORECONF = NO
--LIBXCB_LIBTOOL_PATCH = NO
- LIBXCB_DEPENDENCIES = \
- 	host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
- 	host-xcb-proto host-python
-diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
-index 3ee7ec1..75980c8 100644
---- a/package/x11r7/pthread-stubs/pthread-stubs.mk
-+++ b/package/x11r7/pthread-stubs/pthread-stubs.mk
-@@ -7,7 +7,6 @@ PTHREAD_STUBS_VERSION = 0.3
- PTHREAD_STUBS_SOURCE = libpthread-stubs-$(PTHREAD_STUBS_VERSION).tar.bz2
- PTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
+ ATK_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes \
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 205554a..8c0d920 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -13,7 +13,6 @@
+ AVAHI_VERSION = 0.6.27
+ AVAHI_SOURCE = avahi-$(AVAHI_VERSION).tar.gz
+ AVAHI_SITE = http://www.avahi.org/download/
+-AVAHI_LIBTOOL_PATCH = NO
+ AVAHI_INSTALL_STAGING = YES
+ AVAHI_INSTALL_TARGET = YES
  
--PTHREAD_STUBS_LIBTOOL_PATCH = NO
- PTHREAD_STUBS_INSTALL_STAGING = YES
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 4f01493..7955e08 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -9,7 +9,6 @@ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_AUTORECONF = NO
+ CAIRO_INSTALL_STAGING = YES
+ CAIRO_INSTALL_TARGET = YES
+-CAIRO_LIBTOOL_PATCH = NO
  
- $(eval $(call AUTOTARGETS,package/x11r7,pthread-stubs))
-diff --git a/package/x11r7/xcb-util/xcb-util.mk b/package/x11r7/xcb-util/xcb-util.mk
-index b0dabd8..2983280 100644
---- a/package/x11r7/xcb-util/xcb-util.mk
-+++ b/package/x11r7/xcb-util/xcb-util.mk
+ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ 		glib_cv_uscore=no ac_cv_func_strtod=yes \
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index f485ceb..153e72b 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
 @@ -6,7 +6,6 @@
- XCB_UTIL_VERSION = 0.3.6
- XCB_UTIL_SOURCE = xcb-util-$(XCB_UTIL_VERSION).tar.bz2
- XCB_UTIL_SITE = http://xcb.freedesktop.org/dist/
--XCB_UTIL_LIBTOOL_PATCH = NO
- XCB_UTIL_DEPENDENCIES = host-gperf
+ DBUS_VERSION = 1.2.24
+ DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
+-DBUS_LIBTOOL_PATCH = NO
+ DBUS_INSTALL_STAGING = YES
+ DBUS_INSTALL_TARGET = YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xcb-util))
-diff --git a/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk b/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk
-index 0d615ca..d6f958c 100644
---- a/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk
-+++ b/package/x11r7/xdriver_xf86-input-acecad/xdriver_xf86-input-acecad.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_ACECAD_VERSION = 1.4.0
- XDRIVER_XF86_INPUT_ACECAD_SOURCE = xf86-input-acecad-$(XDRIVER_XF86_INPUT_ACECAD_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_ACECAD_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_ACECAD_AUTORECONF = NO
--XDRIVER_XF86_INPUT_ACECAD_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_ACECAD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
+index 9c12231..9be3f1a 100644
+--- a/package/enchant/enchant.mk
++++ b/package/enchant/enchant.mk
+@@ -9,7 +9,6 @@ ENCHANT_SITE = http://www.abisource.com/downloads/enchant/$(ENCHANT_VERSION)
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-acecad))
-diff --git a/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk b/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk
-index 0f03bb0..aa93fdc 100644
---- a/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk
-+++ b/package/x11r7/xdriver_xf86-input-aiptek/xdriver_xf86-input-aiptek.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_AIPTEK_VERSION = 1.3.0
- XDRIVER_XF86_INPUT_AIPTEK_SOURCE = xf86-input-aiptek-$(XDRIVER_XF86_INPUT_AIPTEK_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_AIPTEK_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_AIPTEK_AUTORECONF = NO
--XDRIVER_XF86_INPUT_AIPTEK_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_AIPTEK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ ENCHANT_INSTALL_STAGING = YES
+ ENCHANT_INSTALL_TARGET = YES
+-ENCHANT_LIBTOOL_PATCH = NO
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-aiptek))
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 49c5db2..bb5a1d7 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.3.0
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_AUTORECONF = NO
--XDRIVER_XF86_INPUT_EVDEV_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto
+ ENCHANT_DEPENDENCIES = libglib2 host-pkg-config
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-evdev))
-diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-index 9c0e230..f6d5619 100644
---- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-+++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_JOYSTICK_VERSION = 1.4.99.2
- XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JOYSTICK_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_JOYSTICK_AUTORECONF = NO
--XDRIVER_XF86_INPUT_JOYSTICK_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index fd60dbe..347a641 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -6,7 +6,6 @@
+ FAKEROOT_VERSION:=1.9.5
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/f/fakeroot/
+-FAKEROOT_LIBTOOL_PATCH=NO
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-joystick))
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-index 2e68e5c..15b0715 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_KEYBOARD_VERSION = 1.4.0
- XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KEYBOARD_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_KEYBOARD_AUTORECONF = NO
--XDRIVER_XF86_INPUT_KEYBOARD_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_kbproto xproto_randrproto xproto_xproto
+ define FAKEROOT_PATCH_FAKEROOT_IN
+ 	# If using busybox getopt, make it be quiet.
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+index 940f264..62c6427 100644
+--- a/package/gmpc/gmpc.mk
++++ b/package/gmpc/gmpc.mk
+@@ -6,7 +6,6 @@
+ GMPC_VERSION = 0.17.0
+ GMPC_SOURCE = gmpc-$(GMPC_VERSION).tar.gz
+ GMPC_SITE = http://download.sarine.nl/download/Programs/gmpc/$(GMPC_VERSION)/
+-GMPC_LIBTOOL_PATCH = NO
+ GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
+ 		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
+ GMPC_CONF_OPT = --disable-mmkeys
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 35e2c7d..60f884b 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -8,7 +8,6 @@ GPSD_VERSION = 2.95
+ GPSD_SITE = http://download.berlios.de/gpsd
+ GPSD_INSTALL_STAGING = YES
+ GPSD_CONF_OPT = --disable-static
+-GPSD_LIBTOOL_PATCH = NO
+ GPSD_TARGET_BINS = cgps gpsctl gpsdecode gpsmon gpspipe gpxlogger lcdgps
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-keyboard))
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index 4302db4..6be28c7 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.5.0
- XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_AUTORECONF = NO
--XDRIVER_XF86_INPUT_MOUSE_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ # Build libgpsmm if we've got C++
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 42c27fc..adfa966 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -12,7 +12,6 @@ GVFS_INSTALL_STAGING = NO
+ GVFS_INSTALL_TARGET = YES
+ GVFS_AUTORECONF = NO
+ GVFS_DEPENDENCIES = host-pkg-config host-libglib2 libglib2 dbus-glib shared-mime-info
+-GVFS_LIBTOOL_PATCH = NO
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-mouse))
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index 9948d73..4cb16ea 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.2.0
- XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = NO
--XDRIVER_XF86_INPUT_SYNAPTICS_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ GVFS_CONF_OPT = \
+ 	--disable-gconf			\
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index 843b53b..769923f 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -8,7 +8,6 @@ IPERF_SOURCE = iperf-$(IPERF_VERSION).tar.gz
+ IPERF_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/iperf
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-synaptics))
-diff --git a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-index 17f2a80..fb16bb7 100644
---- a/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-+++ b/package/x11r7/xdriver_xf86-input-void/xdriver_xf86-input-void.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_INPUT_VOID_VERSION = 1.3.0
- XDRIVER_XF86_INPUT_VOID_SOURCE = xf86-input-void-$(XDRIVER_XF86_INPUT_VOID_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_VOID_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VOID_AUTORECONF = NO
--XDRIVER_XF86_INPUT_VOID_LIBTOOL_PATCH = NO
- XDRIVER_XF86_INPUT_VOID_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ IPERF_AUTORECONF = NO
+-FETCHMAIL_LIBTOOL_PATCH = NO
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-void))
-diff --git a/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk b/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk
-index a79b2dd..0dc5dd1 100644
---- a/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk
-+++ b/package/x11r7/xdriver_xf86-video-chips/xdriver_xf86-video-chips.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_CHIPS_VERSION = 1.2.2
- XDRIVER_XF86_VIDEO_CHIPS_SOURCE = xf86-video-chips-$(XDRIVER_XF86_VIDEO_CHIPS_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_CHIPS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_CHIPS_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_CHIPS_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_CHIPS_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
+ IPERF_INSTALL_STAGING = NO
+ IPERF_INSTALL_TARGET = YES
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index 6baa64b..8919a3a 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -8,7 +8,6 @@ JPEG_SITE = http://www.ijg.org/files/
+ JPEG_SOURCE = jpegsrc.v$(JPEG_VERSION).tar.gz
+ JPEG_INSTALL_STAGING = YES
+ JPEG_INSTALL_TARGET = YES
+-JPEG_LIBTOOL_PATCH = NO
+ JPEG_CONF_OPT = --program-prefix=
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-chips))
-diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-index 8d3d8bf..2121748 100644
---- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-+++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_DUMMY_VERSION = 0.3.2
- XDRIVER_XF86_VIDEO_DUMMY_SOURCE = xf86-video-dummy-$(XDRIVER_XF86_VIDEO_DUMMY_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_DUMMY_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_DUMMY_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_DUMMY_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_DUMMY_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xf86dgaproto xproto_xproto
+ define JPEG_REMOVE_USELESS_TOOLS
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index efd1656..0038cd3 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -6,7 +6,6 @@
+ LIBARCHIVE_VERSION = 2.7.1
+ LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
+-LIBARCHIVE_LIBTOOL_PATCH = NO
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_INSTALL_TARGET = YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-dummy))
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-index 03fd6d4..cd94246 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.6
- XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GEODE_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_GEODE_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index b281eed..dbc9073 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -7,7 +7,6 @@ LIBCGICC_VERSION=3.2.9
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
+ LIBCGICC_INSTALL_STAGING=YES
+-LIBCGICC_LIBTOOL_PATCH=NO
+ LIBCGICC_AUTORECONF=YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-geode))
-diff --git a/package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk b/package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk
-index d626572..0115cec 100644
---- a/package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk
-+++ b/package/x11r7/xdriver_xf86-video-glide/xdriver_xf86-video-glide.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_GLIDE_VERSION = 1.0.3
- XDRIVER_XF86_VIDEO_GLIDE_SOURCE = xf86-video-glide-$(XDRIVER_XF86_VIDEO_GLIDE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_GLIDE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GLIDE_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_GLIDE_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_GLIDE_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
+ LIBCGICC_CONF_OPT = \
+diff --git a/package/libdaemon/libdaemon.mk b/package/libdaemon/libdaemon.mk
+index 9a78bff..6972a71 100644
+--- a/package/libdaemon/libdaemon.mk
++++ b/package/libdaemon/libdaemon.mk
+@@ -8,7 +8,6 @@ LIBDAEMON_VERSION = 0.14
+ LIBDAEMON_SOURCE = libdaemon-$(LIBDAEMON_VERSION).tar.gz
+ LIBDAEMON_SITE = http://0pointer.de/lennart/projects/libdaemon/
+ LIBDAEMON_AUTORECONF = NO
+-LIBDAEMON_LIBTOOL_PATCH = NO
+ LIBDAEMON_INSTALL_STAGING = YES
+ LIBDAEMON_CONF_ENV = ac_cv_func_setpgrp_void=no
+ LIBDAEMON_CONF_OPT = --disable-lynx
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 38cb636..fe7a46f 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -6,7 +6,6 @@
+ LIBDRM_VERSION = 2.4.19
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+-LIBDRM_LIBTOOL_PATCH = NO
+ LIBDRM_INSTALL_STAGING = YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-glide))
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 0fe2553..83d0a44 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.10.0
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_INTEL_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = --enable-dri
- XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
+ LIBDRM_DEPENDENCIES = xproto_glproto xproto_xf86vidmodeproto xlib_libXxf86vm xlib_libXmu xproto_dri2proto pthread-stubs
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 4df6270..ba9769f 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -8,7 +8,6 @@ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+ LIBEVENT_SITE = http://monkey.org/~provos/
  
-diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-index 39c53fa..9f969e5 100644
---- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-+++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_NV_VERSION = 2.1.15
- XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NV_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_NV_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_NV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
+ LIBEVENT_AUTORECONF = NO
+-LIBEVENT_LIBTOOL_PATCH = NO
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_INSTALL_TARGET = YES
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-nv))
-diff --git a/package/x11r7/xdriver_xf86-video-wsfb/xdriver_xf86-video-wsfb.mk b/package/x11r7/xdriver_xf86-video-wsfb/xdriver_xf86-video-wsfb.mk
-index 389f9b6..e71715a 100644
---- a/package/x11r7/xdriver_xf86-video-wsfb/xdriver_xf86-video-wsfb.mk
-+++ b/package/x11r7/xdriver_xf86-video-wsfb/xdriver_xf86-video-wsfb.mk
-@@ -8,7 +8,6 @@ XDRIVER_XF86_VIDEO_WSFB_VERSION = 0.3.0
- XDRIVER_XF86_VIDEO_WSFB_SOURCE = xf86-video-wsfb-$(XDRIVER_XF86_VIDEO_WSFB_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_WSFB_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_WSFB_AUTORECONF = NO
--XDRIVER_XF86_VIDEO_WSFB_LIBTOOL_PATCH = NO
- XDRIVER_XF86_VIDEO_WSFB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
+diff --git a/package/libgail/libgail.mk b/package/libgail/libgail.mk
+index ef08b66..7e498f1 100644
+--- a/package/libgail/libgail.mk
++++ b/package/libgail/libgail.mk
+@@ -10,7 +10,6 @@ LIBGAIL_SOURCE = gail-$(LIBGAIL_VERSION).tar.bz2
+ LIBGAIL_SITE = http://ftp.gnome.org/pub/gnome/sources/gail/$(LIBGAIL_VERSION_MAJOR)
  
- $(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-video-wsfb))
-diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
-index 0d2a480..99cb11b 100644
---- a/package/x11r7/xlib_libICE/xlib_libICE.mk
-+++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
-@@ -8,7 +8,6 @@ XLIB_LIBICE_VERSION = 1.0.6
- XLIB_LIBICE_SOURCE = libICE-$(XLIB_LIBICE_VERSION).tar.bz2
- XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBICE_AUTORECONF = NO
--XLIB_LIBICE_LIBTOOL_PATCH = NO
- XLIB_LIBICE_INSTALL_STAGING = YES
- XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto
- XLIB_LIBICE_CONF_OPT = --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
-index 9c11c88..5aeb42d 100644
---- a/package/x11r7/xlib_libSM/xlib_libSM.mk
-+++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
-@@ -8,7 +8,6 @@ XLIB_LIBSM_VERSION = 1.1.1
- XLIB_LIBSM_SOURCE = libSM-$(XLIB_LIBSM_VERSION).tar.bz2
- XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBSM_AUTORECONF = NO
--XLIB_LIBSM_LIBTOOL_PATCH = NO
- XLIB_LIBSM_INSTALL_STAGING = YES
- XLIB_LIBSM_DEPENDENCIES = xlib_libICE xlib_xtrans xproto_xproto
- XLIB_LIBSM_CONF_OPT = --enable-shared --disable-static --without-libuuid
-diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
-index 9a88b03..ee45948 100644
---- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
-+++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXSCRNSAVER_VERSION = 1.2.0
- XLIB_LIBXSCRNSAVER_SOURCE = libXScrnSaver-$(XLIB_LIBXSCRNSAVER_VERSION).tar.bz2
- XLIB_LIBXSCRNSAVER_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXSCRNSAVER_AUTORECONF = NO
--XLIB_LIBXSCRNSAVER_LIBTOOL_PATCH = NO
- XLIB_LIBXSCRNSAVER_INSTALL_STAGING = YES
- XLIB_LIBXSCRNSAVER_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_scrnsaverproto
- XLIB_LIBXSCRNSAVER_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index ad6a0e5..af4dde8 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXAU_VERSION = 1.0.5
- XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.bz2
- XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAU_AUTORECONF = NO
--XLIB_LIBXAU_LIBTOOL_PATCH = NO
- XLIB_LIBXAU_INSTALL_STAGING = YES
- XLIB_LIBXAU_DEPENDENCIES = xutil_util-macros xproto_xproto
- XLIB_LIBXAU_CONF_OPT = --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index f8da364..abe823b 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXCURSOR_VERSION = 1.1.10
- XLIB_LIBXCURSOR_SOURCE = libXcursor-$(XLIB_LIBXCURSOR_VERSION).tar.bz2
- XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXCURSOR_AUTORECONF = NO
--XLIB_LIBXCURSOR_LIBTOOL_PATCH = NO
- XLIB_LIBXCURSOR_INSTALL_STAGING = YES
- XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xproto_xproto
- XLIB_LIBXCURSOR_CONF_OPT = --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index eef3a5e..1a11ea6 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXDMCP_VERSION = 1.0.3
- XLIB_LIBXDMCP_SOURCE = libXdmcp-$(XLIB_LIBXDMCP_VERSION).tar.bz2
- XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXDMCP_AUTORECONF = NO
--XLIB_LIBXDMCP_LIBTOOL_PATCH = NO
- XLIB_LIBXDMCP_INSTALL_STAGING = YES
- XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
- XLIB_LIBXDMCP_CONF_OPT = --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
-index a711247..c1da9c6 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.mk
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXI_VERSION = 1.3
- XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
- XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXI_AUTORECONF = NO
--XLIB_LIBXI_LIBTOOL_PATCH = NO
- XLIB_LIBXI_INSTALL_STAGING = YES
- XLIB_LIBXI_DEPENDENCIES = xproto_inputproto xlib_libX11 xlib_libXext xproto_xproto
- XLIB_LIBXI_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-index 37553a7..4c43e79 100644
---- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-+++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXINERAMA_VERSION = 1.1
- XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.bz2
- XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXINERAMA_AUTORECONF = NO
--XLIB_LIBXINERAMA_LIBTOOL_PATCH = NO
- XLIB_LIBXINERAMA_INSTALL_STAGING = YES
- XLIB_LIBXINERAMA_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xineramaproto
- XLIB_LIBXINERAMA_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-index 4556c81..08fbaa4 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXRANDR_VERSION = 1.3.0
- XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
- XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRANDR_AUTORECONF = NO
--XLIB_LIBXRANDR_LIBTOOL_PATCH = NO
- XLIB_LIBXRANDR_INSTALL_STAGING = YES
- XLIB_LIBXRANDR_DEPENDENCIES = xproto_randrproto xlib_libX11 xlib_libXext xlib_libXrender xproto_renderproto xproto_xproto
- XLIB_LIBXRANDR_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
-index 38ebe1c..c1cdb15 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.mk
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXT_VERSION = 1.0.7
- XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
- XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXT_AUTORECONF = YES
--XLIB_LIBXT_LIBTOOL_PATCH = NO
- XLIB_LIBXT_INSTALL_STAGING = YES
- XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xproto_kbproto xproto_xproto xcb-proto libxcb host-xproto_xproto
- XLIB_LIBXT_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static --disable-install-makestrs
-diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-index e89cf11..935d034 100644
---- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
-+++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+ LIBGAIL_AUTORECONF = YES
+-LIBGAIL_LIBTOOL_PATCH = NO
+ LIBGAIL_INSTALL_STAGING = YES
+ LIBGAIL_INSTALL_TARGET = YES
+ 
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 3f24d6d..57facfc 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -9,7 +9,6 @@ LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ 
+-LIBGLIB2_LIBTOOL_PATCH = NO
+ LIBGLIB2_INSTALL_STAGING = YES
+ LIBGLIB2_INSTALL_TARGET = YES
+ LIBGLIB2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 89ff24c..ab62d73 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -7,7 +7,6 @@ LIBGPG_ERROR_VERSION:=1.8
+ LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
+ 
+-LIBGPG_ERROR_LIBTOOL_PATCH = NO
+ LIBGPG_ERROR_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS,package,libgpg-error))
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index b62f117..8273d90 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -6,7 +6,6 @@
+ LIBMICROHTTPD_VERSION:=0.4.2
+ LIBMICROHTTPD_SOURCE:=libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
+ LIBMICROHTTPD_SITE:=$(BR2_GNU_MIRROR)/libmicrohttpd
+-LIBMICROHTTPD_LIBTOOL_PATCH = NO
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ 
+ LIBMICROHTTPD_DEPENDENCIES = libgcrypt
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 98bb25c..daa34ab 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -11,7 +11,6 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
+ LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_INSTALL_TARGET = YES
+-LIBRSVG_LIBTOOL_PATCH = NO
+ LIBRSVG_CONF_OPT = --disable-tools
+ LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
+ 
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 2c9a486..132ea34 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -9,7 +9,6 @@ LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
+ LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
+ LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
+ LIBSOUP_INSTALL_STAGING = YES
+-LIBSOUP_LIBTOOL_PATCH = NO
+ 
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+ 
+diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
+index 6590e89..1668614 100644
+--- a/package/libusb-compat/libusb-compat.mk
++++ b/package/libusb-compat/libusb-compat.mk
+@@ -6,7 +6,6 @@
+ LIBUSB_COMPAT_VERSION = 0.1.3
+ LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
+ LIBUSB_COMPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-$(LIBUSB_COMPAT_VERSION)
+-LIBUSB_COMPAT_LIBTOOL_PATCH = NO
+ LIBUSB_COMPAT_DEPENDENCIES = host-pkg-config libusb
+ LIBUSB_COMPAT_INSTALL_STAGING = YES
+ LIBUSB_COMPAT_INSTALL_TARGET = YES
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 141633b..050e2ba 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -6,7 +6,6 @@
+ LIBUSB_VERSION = 1.0.8
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
+-LIBUSB_LIBTOOL_PATCH = NO
+ LIBUSB_DEPENDENCIES = host-pkg-config
+ LIBUSB_INSTALL_STAGING = YES
+ LIBUSB_INSTALL_TARGET = YES
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 7d8708a..67cd272 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -6,7 +6,6 @@
+ 
+ LIGHTTPD_VERSION = 1.4.28
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-1.4.x
+-LIGHTTPD_LIBTOOL_PATCH = NO
+ 
+ LIGHTTPD_CONF_OPT = \
+ 	--libdir=/usr/lib/lighttpd \
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
+index bcb6cc0..dc448b8 100644
+--- a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
++++ b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
 @@ -7,7 +7,6 @@
- XLIB_LIBXTST_VERSION = 1.1.0
- XLIB_LIBXTST_SOURCE = libXtst-$(XLIB_LIBXTST_VERSION).tar.bz2
- XLIB_LIBXTST_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBXTST_LIBTOOL_PATCH = NO
- XLIB_LIBXTST_INSTALL_STAGING = YES
- 
- XLIB_LIBXTST_DEPENDENCIES = \
-diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
-index 72fb034..e2e3d15 100644
---- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
-+++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXXF86DGA_VERSION = 1.1.1
- XLIB_LIBXXF86DGA_SOURCE = libXxf86dga-$(XLIB_LIBXXF86DGA_VERSION).tar.bz2
- XLIB_LIBXXF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXXF86DGA_AUTORECONF = NO
--XLIB_LIBXXF86DGA_LIBTOOL_PATCH = NO
- XLIB_LIBXXF86DGA_INSTALL_STAGING = YES
- XLIB_LIBXXF86DGA_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xf86dgaproto xproto_xproto
- XLIB_LIBXXF86DGA_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-index 90b88e1..b35c492 100644
---- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-+++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
-@@ -8,7 +8,6 @@ XLIB_LIBXXF86VM_VERSION = 1.1.0
- XLIB_LIBXXF86VM_SOURCE = libXxf86vm-$(XLIB_LIBXXF86VM_VERSION).tar.bz2
- XLIB_LIBXXF86VM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXXF86VM_AUTORECONF = NO
--XLIB_LIBXXF86VM_LIBTOOL_PATCH = NO
- XLIB_LIBXXF86VM_INSTALL_STAGING = YES
- XLIB_LIBXXF86VM_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xf86vidmodeproto xproto_xproto
- XLIB_LIBXXF86VM_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index 93da5b0..e7c7837 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-@@ -8,7 +8,6 @@ XLIB_LIBDMX_VERSION = 1.1.0
- XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_AUTORECONF = NO
--XLIB_LIBDMX_LIBTOOL_PATCH = NO
- XLIB_LIBDMX_INSTALL_STAGING = YES
- XLIB_LIBDMX_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_dmxproto
- XLIB_LIBDMX_CONF_OPT = --disable-malloc0returnsnull --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-index cc5cdf4..a2ba2d7 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-@@ -8,7 +8,6 @@ XLIB_LIBFONTENC_VERSION = 1.0.5
- XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
- XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFONTENC_AUTORECONF = NO
--XLIB_LIBFONTENC_LIBTOOL_PATCH = NO
- XLIB_LIBFONTENC_INSTALL_STAGING = YES
- XLIB_LIBFONTENC_DEPENDENCIES = zlib xproto_xproto
- XLIB_LIBFONTENC_CONF_OPT = --enable-shared --disable-static
-diff --git a/package/x11r7/xlib_libpciaccess/xlib_libpciaccess.mk b/package/x11r7/xlib_libpciaccess/xlib_libpciaccess.mk
-index 9bb1576..c42f35d 100644
---- a/package/x11r7/xlib_libpciaccess/xlib_libpciaccess.mk
-+++ b/package/x11r7/xlib_libpciaccess/xlib_libpciaccess.mk
+ MATCHBOX_FAKEKEY_VERSION = 0.1
+ MATCHBOX_FAKEKEY_SOURCE = libfakekey-$(MATCHBOX_FAKEKEY_VERSION).tar.bz2
+ MATCHBOX_FAKEKEY_SITE = http://matchbox-project.org/sources/libfakekey/$(MATCHBOX_FAKEKEY_VERSION)
+-MATCHBOX_FAKEKEY_LIBTOOL_PATCH = NO
+ MATCHBOX_FAKEKEY_INSTALL_STAGING = YES
+ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
+ MATCHBOX_FAKEKEY_CONF_OPT = --enable-expat
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
+index 8f3d7ca..954709a 100644
+--- a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
++++ b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
 @@ -7,7 +7,6 @@
- XLIB_LIBPCIACCESS_VERSION = 0.11.0
- XLIB_LIBPCIACCESS_SOURCE = libpciaccess-$(XLIB_LIBPCIACCESS_VERSION).tar.bz2
- XLIB_LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
--XLIB_LIBPCIACCESS_LIBTOOL_PATCH = NO
- XLIB_LIBPCIACCESS_INSTALL_STAGING = YES
- XLIB_LIBPCIACCESS_CONF_OPT = --enable-shared --disable-static
+ MATCHBOX_STARTUP_MONITOR_VERSION = 0.1
+ MATCHBOX_STARTUP_MONITOR_SOURCE = mb-applet-startup-monitor-$(MATCHBOX_STARTUP_MONITOR_VERSION).tar.bz2
+ MATCHBOX_STARTUP_MONITOR_SITE = http://matchbox-project.org/sources/mb-applet-startup-monitor/$(MATCHBOX_STARTUP_MONITOR_VERSION)
+-MATCHBOX_STARTUP_MONITOR_LIBTOOL_PATCH = NO
+ MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
+ MATCHBOX_STARTUP_MONITOR_CONF_OPT =
  
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 2cf5fb3..6dc1705 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -9,7 +9,6 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
- XSERVER_XORG_SERVER_AUTORECONF = NO
--XSERVER_XORG_SERVER_LIBTOOL_PATCH = NO
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 3b71724..fbd5f16 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -8,7 +8,6 @@ MDADM_SOURCE:=mdadm-$(MDADM_VERSION).tar.bz2
+ MDADM_SITE:=http://www.kernel.org/pub/linux/utils/raid/mdadm
  
+ MDADM_AUTORECONF = NO
+-MDADM_LIBTOOL_PATCH = NO
+ 
+ MDADM_INSTALL_STAGING = NO
+ MDADM_INSTALL_TARGET = YES
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 08983e1..03e8394 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -13,7 +13,6 @@
+ NASM_VERSION=2.08.01
+ NASM_SOURCE=nasm-$(NASM_VERSION).tar.bz2
+ NASM_SITE=http://www.nasm.us/pub/nasm/releasebuilds/2.08.01/
+-NASM_LIBTOOL_PATCH=NO
+ 
+ $(eval $(call AUTOTARGETS,package,nasm))
+ $(eval $(call AUTOTARGETS,package,nasm,host))
+diff --git a/package/popt/popt.mk b/package/popt/popt.mk
+index ed8cddd..0f9d313 100644
+--- a/package/popt/popt.mk
++++ b/package/popt/popt.mk
+@@ -8,7 +8,6 @@ POPT_SITE:=http://rpm5.org/files/popt
+ POPT_INSTALL_STAGING = YES
+ POPT_INSTALL_TARGET = YES
+ 
+-POPT_LIBTOOL_PATCH = NO
+ 
+ POPT_CONF_ENV = ac_cv_va_copy=yes
+ 
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index c1eeee8..d2b1444 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -8,7 +8,6 @@ QUAGGA_SOURCE:=quagga-$(QUAGGA_VERSION).tar.gz
+ QUAGGA_SITE:=http://www.quagga.net/download/
+ 
+ QUAGGA_DEPENDENCIES = host-gawk
+-QUAGGA_LIBTOOL_PATCH = NO
+ QUAGGA_CONF_OPT = --program-transform-name='' --enable-netlink
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_ZEBRA),y)
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 778982a..1a4c10b 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -6,7 +6,6 @@
+ RPM_VERSION = 5.2.0
+ RPM_SITE = http://rpm5.org/files/rpm/rpm-5.2/
+ RPM_AUTORECONF = NO
+-RPM_LIBTOOL_PATCH = NO
+ 
+ RPM_DEPENDENCIES = zlib beecrypt neon popt
+ 
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index f6d2d53..f61444d 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -9,7 +9,6 @@ SAMBA_SITE:=http://samba.org/samba/ftp/stable/
+ 
+ SAMBA_SUBDIR = source
+ SAMBA_AUTORECONF = NO
+-SAMBA_LIBTOOL_PATCH = NO
+ 
+ SAMBA_INSTALL_STAGING = YES
+ SAMBA_INSTALL_TARGET = YES
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 4fd3ad4..8d9d8ae 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -7,7 +7,6 @@ SDL_VERSION:=1.2.14
+ SDL_SOURCE:=SDL-$(SDL_VERSION).tar.gz
+ SDL_SITE:=http://www.libsdl.org/release
+ 
+-SDL_LIBTOOL_PATCH = NO
+ SDL_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index bbfd99f..c5a6d7e 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -6,7 +6,6 @@
+ SDL_GFX_VERSION:=2.0.19
+ SDL_GFX_SOURCE:=SDL_gfx-$(SDL_GFX_VERSION).tar.gz
+ SDL_GFX_SITE:=http://www.ferzkopp.net/Software/SDL_gfx-2.0/
+-SDL_GFX_LIBTOOL_PATCH:=NO
+ SDL_GFX_INSTALL_STAGING:=YES
+ SDL_GFX_INSTALL_TARGET:=YES
+ 
+diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
+index 772bb86..ab838b1 100644
+--- a/package/sdl_image/sdl_image.mk
++++ b/package/sdl_image/sdl_image.mk
+@@ -6,7 +6,6 @@
+ SDL_IMAGE_VERSION:=1.2.6
+ SDL_IMAGE_SOURCE:=SDL_image-$(SDL_IMAGE_VERSION).tar.gz
+ SDL_IMAGE_SITE:=http://www.libsdl.org/projects/SDL_image/release
+-SDL_IMAGE_LIBTOOL_PATCH:=NO
+ SDL_IMAGE_INSTALL_STAGING:=YES
+ SDL_IMAGE_INSTALL_TARGET:=YES
+ 
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index c7135ba..01129fa 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -7,7 +7,6 @@ SDL_MIXER_VERSION:=1.2.11
+ SDL_MIXER_SOURCE:=SDL_mixer-$(SDL_MIXER_VERSION).tar.gz
+ SDL_MIXER_SITE:=http://www.libsdl.org/projects/SDL_mixer/release/
+ 
+-SDL_MIXER_LIBTOOL_PATCH = NO
+ SDL_MIXER_INSTALL_STAGING = YES
+ SDL_MIXER_DEPENDENCIES = sdl
+ SDL_MIXER_CONF_OPT = \
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 6c45fcf..8f51e05 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -6,7 +6,6 @@
+ SDL_SOUND_VERSION:=1.0.3
+ SDL_SOUND_SOURCE:=SDL_sound-$(SDL_SOUND_VERSION).tar.gz
+ SDL_SOUND_SITE:=http://icculus.org/SDL_sound/downloads/
+-SDL_SOUND_LIBTOOL_PATCH:=NO
+ SDL_SOUND_INSTALL_STAGING:=YES
+ SDL_SOUND_INSTALL_TARGET:=YES
+ SDL_SOUND_DEPENDENCIES = sdl
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 7ff5cb8..0a8a9e9 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -7,7 +7,6 @@ SDL_TTF_VERSION:=2.0.9
+ SDL_TTF_SOURCE:=SDL_ttf-$(SDL_TTF_VERSION).tar.gz
+ SDL_TTF_SITE:=http://www.libsdl.org/projects/SDL_ttf/release/
+ 
+-SDL_TTF_LIBTOOL_PATCH = NO
+ SDL_TTF_INSTALL_STAGING = YES
+ SDL_TTF_DEPENDENCIES = sdl freetype
+ SDL_TTF_CONF_OPT = --without-x \
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 52b0b35..f82867c 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -6,7 +6,6 @@
+ 
+ TCPREPLAY_VERSION = 3.4.3
+ TCPREPLAY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/tcpreplay
+-TCPREPLAY_LIBTOOL_PATCH = NO
+ TCPREPLAY_CONF_ENV = tr_cv_libpcap_version=">= 0.7.0"
+ TCPREPLAY_CONF_OPT = --program-prefix="" --with-libpcap=$(STAGING_DIR)/usr
+ 
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 748e58f..55acf24 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -6,7 +6,6 @@
+ TIFF_VERSION:=3.9.4
+ TIFF_SITE:=ftp://ftp.remotesensing.org/pub/libtiff
+ TIFF_SOURCE:=tiff-$(TIFF_VERSION).tar.gz
+-TIFF_LIBTOOL_PATCH = NO
+ TIFF_INSTALL_STAGING = YES
+ TIFF_INSTALL_TARGET = YES
+ TIFF_CONF_OPT = \
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index bfd20ab..698e365 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -6,7 +6,6 @@
+ 
+ WPA_SUPPLICANT_VERSION = 0.7.3
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+-WPA_SUPPLICANT_LIBTOOL_PATCH = NO
+ WPA_SUPPLICANT_DEPENDENCIES =
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+ WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index a965d8a..2da8fcb 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -7,7 +7,6 @@ XZ_VERSION = 5.0.0
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz/
+ XZ_INSTALL_STAGING = YES
+-XZ_LIBTOOL_PATCH = NO
+ 
+ $(eval $(call AUTOTARGETS,package,xz))
+ $(eval $(call AUTOTARGETS,package,xz,host))
 -- 
 1.7.3.4
