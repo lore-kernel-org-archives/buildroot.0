@@ -1,49 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 17 Feb 2011 10:08:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 3259] New: Unable to build webkit (on arm).
-Message-ID: <bug-3259-163@https.bugs.busybox.net/>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Thu, 17 Feb 2011 11:50:19 +0000
+Subject: [Buildroot] First day with buildroot
+In-Reply-To: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
+References: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
+Message-ID: <1297943420.4856.2.camel@dublxciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3259
+Ar C?ad, 2011-02-16 at 20:12 -0800, Charles Krinke wrote:
 
-           Summary: Unable to build webkit (on arm).
-           Product: buildroot
-           Version: unspecified
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: noel.vellemans at visionbms.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Below are the last half dozen lines of my first compile with
+> buildroot. I set it up for a powerpc architecture and selected almost
+> all the defaults, changing only things like ext2 to jffs2 file system.
+> I did select the "general" for sub-architecture (as opposed to say,
+> e300c2). 
+> /usr/bin/ld: cannot find -lc
+> -- 
 
+"sudo yum install glibc-static"
+You need the static C library to build host-module-init-tools
 
-Created attachment 2971
-  --> https://bugs.busybox.net/attachment.cgi?id=2971
-Webkit - Error snippet.
-
-version Git-buildroot (17/02/2011)
-
-Webkit fails to build (for arm). 
-
-undefined reference(s) to :
-
-`u_charType_44' `u_strToUpper_44' `ucol_close_44' `ucol_getLocaleByType_44'
-`ucol_getAttribute_44' `ucol_open_44' `ucol_open_44'
-`ucol_setAttribute_44'... etc...
-
-I guess has something to do with icu.
-
-Regards Noel
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110217/d05c5df9/attachment-0001.html>
