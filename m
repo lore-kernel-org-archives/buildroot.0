@@ -1,22 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Feb 2011 14:05:59 +0100
-Subject: [Buildroot] [PATCH] toolchain/ct-ng: use
-	program_invocation_name option from BR config
-In-Reply-To: <1297813302-8293-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Wed, 16 Feb 2011 00:41:42 +0100")
-References: <1297813302-8293-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87ipwi95fs.fsf@macbook.be.48ers.dk>
+Date: Thu, 17 Feb 2011 14:07:38 +0100
+Subject: [Buildroot] First day with buildroot
+In-Reply-To: <1297943420.4856.2.camel@dublxciaranr1.verifone.com> (Quotient
+	Remainder's message of "Thu, 17 Feb 2011 11:50:19 +0000")
+References: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
+	<1297943420.4856.2.camel@dublxciaranr1.verifone.com>
+Message-ID: <87bp2a95d1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+>>>>> "Quotient" == Quotient Remainder <quotientvremainder@gmail.com> writes:
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+ Quotient> Ar C?ad, 2011-02-16 at 20:12 -0800, Charles Krinke wrote:
+ Quotient>     Below are the last half dozen lines of my first compile with buildroot. I
+ Quotient>     set it up for a powerpc architecture and selected almost all the defaults,
+ Quotient>     changing only things like ext2 to jffs2 file system. I did select the
+ Quotient>     "general" for sub-architecture (as opposed to say, e300c2).
+ Quotient>     /usr/bin/ld: cannot find -lc
+ Quotient>     --
 
-Committed, thanks.
+ Quotient> "sudo yum install glibc-static"
+ Quotient> You need the static C library to build host-module-init-tools
+
+Indeed. Notice that this is a FAQ:
+
+http://buildroot.net/buildroot.html#faq
 
 -- 
 Bye, Peter Korsgaard
