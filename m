@@ -1,28 +1,22 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Thu, 17 Feb 2011 11:50:19 +0000
-Subject: [Buildroot] First day with buildroot
-In-Reply-To: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
-References: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
-Message-ID: <1297943420.4856.2.camel@dublxciaranr1.verifone.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 17 Feb 2011 14:05:59 +0100
+Subject: [Buildroot] [PATCH] toolchain/ct-ng: use
+	program_invocation_name option from BR config
+In-Reply-To: <1297813302-8293-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Wed, 16 Feb 2011 00:41:42 +0100")
+References: <1297813302-8293-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87ipwi95fs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar C?ad, 2011-02-16 at 20:12 -0800, Charles Krinke wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-> Below are the last half dozen lines of my first compile with
-> buildroot. I set it up for a powerpc architecture and selected almost
-> all the defaults, changing only things like ext2 to jffs2 file system.
-> I did select the "general" for sub-architecture (as opposed to say,
-> e300c2). 
-> /usr/bin/ld: cannot find -lc
-> -- 
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-"sudo yum install glibc-static"
-You need the static C library to build host-module-init-tools
+Committed, thanks.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110217/d05c5df9/attachment-0001.html>
+-- 
+Bye, Peter Korsgaard
