@@ -1,45 +1,39 @@
-From: Martin Hicks <mort@bork.org>
-Date: Thu, 17 Feb 2011 15:49:39 -0500
-Subject: [Buildroot] Strange hang while executing commands
-In-Reply-To: <87sjvm75ik.fsf@macbook.be.48ers.dk>
-References: <AANLkTikvXk7qzFov-25Xu_MmUXdkYMdwkKkGtsRzhUwA@mail.gmail.com>
-	<87sjvm75ik.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTim0HL1qMmkS7tNaYmoEeyg4pZXLr3FztfAVPoXq@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Feb 2011 21:00:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 3265] After enabling IPv6 support in the master
+ configuration, uClibc has IPv6 disabled
+In-Reply-To: <bug-3265-163@https.bugs.busybox.net/>
+References: <bug-3265-163@https.bugs.busybox.net/>
+Message-ID: <20110217210009.CBA318F5D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 17, 2011 at 3:47 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
->
-> ?Martin> Hi,
-> ?Martin> Does anyone have any clues where I might start looking for the reason
-> ?Martin> behind commands within the procps package just hanging?
->
-> Hanging or crashing?
+https://bugs.busybox.net/show_bug.cgi?id=3265
 
-Hang.
+--- Comment #2 from faber at faberman.de  ---
+I used uClibc 0.9.31.x, any more recent version fails to build with 
 
->
-> ?Martin> mprotect(0xffa9000, 16384, PROT_READ) ? = 0 <0.000104>
-> ?Martin> mprotect(0x4802e000, 4096, PROT_READ) ? = 0 <0.000077>
-> ?Martin> munmap(0x4801f000, 64) ? ? ? ? ? ? ? ? ?= 0 <0.000098>
-> ?Martin> uname({sys="Linux", node="targa4v2", ...}) = 0 <0.000115>
-> ?Martin> --- SIGINT (Interrupt) @ 0 (0) ---
-> ?Martin> +++ killed by SIGINT +++
->
-> This looks like a crash (a null pointer access). On what arch / with
-> what configuration is this?
+In file included from libc/stdlib/__cxa_finalize.c:8:
+libc/stdlib/_atexit.c: In function '__cxa_finalize':
+libc/stdlib/_atexit.c:203: error: '__result' undeclared (first use in this
+function)
+libc/stdlib/_atexit.c:203: error: (Each undeclared identifier is reported only
+once
+libc/stdlib/_atexit.c:203: error: for each function it appears in.)
+libc/stdlib/_atexit.c:203: error: invalid lvalue in asm output 0
+make[1]: *** [libc/stdlib/__cxa_finalize.os] Error 1
 
-The last two lines are me hitting ^C.  It hangs after the uname() forever.
+(even when disabling atexit)
 
-This is a custom board based on MPC8379ERDB.  Compiled using the code
-sourcery toolchain.
-(glibc, linux-2.7.37)
-mh
+But this is another issue, not related to this bug..
+
+
+If it works on current snapshot version, then we can close this one.
 
 -- 
-Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
-Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
