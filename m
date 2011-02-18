@@ -1,62 +1,62 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Fri, 18 Feb 2011 00:44:54 +0100
-Subject: [Buildroot] [PATCH v2 2/2] linux.mk: depend on actual kernel image
-	instead of stamp file
-In-Reply-To: <1297986294-23446-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1297986294-23446-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <1297986294-23446-2-git-send-email-bjorn.forsman@gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 17 Feb 2011 18:10:07 -0800
+Subject: [Buildroot] First day with buildroot
+In-Reply-To: <87bp2a95d1.fsf@macbook.be.48ers.dk>
+References: <AANLkTimbBptSub=x_KvcnAt+And2=-NpAPH+m8RR5vmH@mail.gmail.com>
+	<1297943420.4856.2.camel@dublxciaranr1.verifone.com>
+	<87bp2a95d1.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTikkr-9xXZNasdBtxRFtE-k0JLjkUAbPj=_11VDX@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the real output file (kernel image) as target instead of a stamp
-file. This way Buildroot cannot be tricked into thinking that the kernel
-image is installed when it's not.
+Thank you gentlemen, that completed the build and a new uImage and
+rootfs.jffs2 appeared.
 
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- linux/linux.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+A second question if I may.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 0ad8c0f..5855658 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -144,7 +144,7 @@ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/
- 	$(Q)touch $@
- 
- # Installation
--$(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
-+$(BINARIES_DIR)/$(LINUX26_IMAGE_NAME): $(LINUX26_DIR)/.stamp_compiled
- 	@$(call MESSAGE,"Installing kernel")
- 	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
- 	$(Q)touch $@
-@@ -153,13 +153,13 @@ $(TARGET_DIR)/lib/modules:
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
--		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
-+		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR)	\
- 			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
- 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
- 	fi
- 
--linux linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed $(TARGET_DIR)/lib/modules
-+linux linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(BINARIES_DIR)/$(LINUX26_IMAGE_NAME) $(TARGET_DIR)/lib/modules
- 
- linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX26_DIR)/.stamp_configured
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
-@@ -167,7 +167,7 @@ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig li
- 
- # Support for rebuilding the kernel after the initramfs file list has
- # been generated in $(BINARIES_DIR)/rootfs.initramfs.
--$(LINUX26_DIR)/.stamp_initramfs_rebuilt: $(LINUX26_DIR)/.stamp_installed $(BINARIES_DIR)/rootfs.initramfs
-+$(LINUX26_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/$(LINUX26_IMAGE_NAME) $(BINARIES_DIR)/rootfs.initramfs
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Remove the previously generated initramfs which was empty,
- 	# to make sure the kernel will actually regenerate it.
+I selected the general option instead of the e300c2 as my host compiler is
+older then required.
+
+Am I correct in assuming that the general option for a MPC8323 (which is an
+e300 core) should produce binaries that will run on an MPC8323E-RDB
+(Freescale 8323 Reference Design Board) ?
+
+Charles
+
+On Thu, Feb 17, 2011 at 5:07 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "Quotient" == Quotient Remainder <quotientvremainder@gmail.com>
+> writes:
+>
+>  Quotient> Ar C?ad, 2011-02-16 at 20:12 -0800, Charles Krinke wrote:
+>  Quotient>     Below are the last half dozen lines of my first compile with
+> buildroot. I
+>  Quotient>     set it up for a powerpc architecture and selected almost all
+> the defaults,
+>  Quotient>     changing only things like ext2 to jffs2 file system. I did
+> select the
+>  Quotient>     "general" for sub-architecture (as opposed to say, e300c2).
+>  Quotient>     /usr/bin/ld: cannot find -lc
+>  Quotient>     --
+>
+>  Quotient> "sudo yum install glibc-static"
+>  Quotient> You need the static C library to build host-module-init-tools
+>
+> Indeed. Notice that this is a FAQ:
+>
+> http://buildroot.net/buildroot.html#faq
+>
+> --
+> Bye, Peter Korsgaard
+>
+
+
+
 -- 
-1.7.1
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110217/53f774c0/attachment.html>
