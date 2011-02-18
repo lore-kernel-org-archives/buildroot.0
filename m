@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Feb 2011 07:33:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 3289] New: speech-tools fails to build
-Message-ID: <bug-3289-163@https.bugs.busybox.net/>
+Date: Fri, 18 Feb 2011 07:35:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 3295] New: slang fails to build on mipsel
+Message-ID: <bug-3295-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3289
+https://bugs.busybox.net/show_bug.cgi?id=3295
 
-           Summary: speech-tools fails to build
+           Summary: slang fails to build on mipsel
            Product: buildroot
            Version: 2010.11
           Platform: PC
@@ -25,54 +25,19 @@ https://bugs.busybox.net/show_bug.cgi?id=3289
    Estimated Hours: 0.0
 
 
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--shared -o libestbase.so.1.2.96 \
-                shared_space/*.o -L. -leststring $libs -L. -lesd
-/home/test/outputs/test-378/external-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.5.1/../../../../arm-none-linux-gnueabi/bin/ld:
-cannot find -lesd
+/home/test/toolchains/br-mipsel-full/usr/bin/mipsel-linux-gcc
+--sysroot=/home/test/outputs/test-379/host/usr/mipsel-unknown-linux-uclibc/sysroot
+-o libslang.so -shared -Wl,-soname,libslang.so.1 sldisply.o slerr.o slgetkey.o
+slmisc.o slsignal.o slsmg.o sltermin.o slutty.o slcurses.o slkeypad.o
+slkeymap.o slstring.o slmemcmp.o
+/home/test/toolchains/br-mipsel-full/usr/bin/../lib/gcc/mipsel-unknown-linux-uclibc/4.4.4/../../../../mipsel-unknown-linux-uclibc/bin/ld:
+sldisply.o: relocation R_MIPS_HI16 against `a local symbol' can not be used
+when making a shared object; recompile with -fPIC
+sldisply.o: could not read symbols: Bad value
 collect2: ld returned 1 exit status
-make[2]: *** [libestbase.so] Error 1
-make[1]: *** [lib] Error 2
-make[1]: *** Waiting for unfinished jobs....
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include ngrammar_aux.cc
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include ngrammar_utils.cc
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include EST_lattice.cc
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include EST_lattice_io.cc
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include freqsmooth.cc
-/home/test/outputs/test-378/external-toolchain/bin/arm-none-linux-gnueabi-g++
---sysroot=/home/test/outputs/test-378/host/usr/arm-unknown-linux-gnueabi/sysroot
--c -O3 -fPIC -Wall -I../../include EST_PST.cc
-look at library estools lattice_t.o EST_Ngrammar.o ngrammar_io.o ngrammar_aux.o
-ngrammar_utils.o EST_lattice.o EST_lattice_io.o freqsmooth.o EST_PST.o
-look at library estbase
-Update library estools lattice_t.o EST_Ngrammar.o ngrammar_io.o ngrammar_aux.o
-ngrammar_utils.o EST_lattice.o EST_lattice_io.o freqsmooth.o EST_PST.o
-look at library eststring
-a - lattice_t.o
-a - EST_Ngrammar.o
-a - ngrammar_io.o
-a - ngrammar_aux.o
-a - ngrammar_utils.o
-a - EST_lattice.o
-a - EST_lattice_io.o
-a - freqsmooth.o
-a - EST_PST.o
-make[1]: Leaving directory
-`/home/test/outputs/test-378/build/speech-tools-1.2.96~beta'
-make: ***
-[/home/test/outputs/test-378/build/speech-tools-1.2.96~beta/.stamp_built] Error
-2
+make[1]: *** [libslang.so] Error 1
+make[1]: Leaving directory `/home/test/outputs/test-379/build/slang-1.4.5'
+make: *** [/home/test/outputs/test-379/build/slang-1.4.5/.stamp_built] Error 2
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
