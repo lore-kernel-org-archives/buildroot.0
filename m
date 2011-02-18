@@ -1,54 +1,41 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 18 Feb 2011 12:55:55 +0000
-Subject: [Buildroot] [PATCH] toolchain/gcc/4.2.4: Add missing hunk to gcc
-	4.2.4 libgcc patch.
-Message-ID: <AANLkTik-ufaZx1XV=rrrzjnaukSsZT6w_0DUXnUjiPxB@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 Feb 2011 14:17:34 +0100
+Subject: [Buildroot] [git commit master 1/1] olsr: fix build
+Message-ID: <20110218132038.06A318F5DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is required to build gcc 4.2.4 libgcc with dwarf2
-unwinding support enabled.
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=a1c787ea6a7428fdfe88fd6c2333f35da5cec44d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Pass TARGET_CONFIGURE_OPTS in the environment rather than as make arguments,
+so the olsr build system can append to CFLAGS / LDFLAGS - Otherwise build
+fails when the wrong linker flags are used to create the plugin .so's.
+
+Also pass ARCH, so the olsr build system choses the right libdir / PIC
+settings for the target, rather than for the host.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch    |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+ package/olsr/olsr.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
-b/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
-index 9a7c909..6b7c4ee 100644
---- a/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
-+++ b/toolchain/gcc/4.2.4/1001-gcc-4.2.x-inhibit-libc.patch
-@@ -47,3 +47,20 @@
-  alias (_Unwind_Find_FDE);
-  #endif
- +#endif
-+--- gcc-4.2.4/gcc/unwind-dw2-fde.c	2005-06-25 03:02:01.000000000 +0100
-++++ gcc-4.2.4/gcc/unwind-dw2-fde.c	2010-08-12 10:43:24.221690613 +0100
-+@@ -29,6 +29,8 @@
-+ Software Foundation, 51 Franklin Street, Fifth Floor, Boston, MA
-+ 02110-1301, USA.  */
-+
-++#ifndef inhibit_libc
-++
-+ #ifndef _Unwind_Find_FDE
-+ #include "tconfig.h"
-+ #include "tsystem.h"
-+@@ -1028,3 +1030,5 @@
-+
-+   return f;
-+ }
-++
-++#endif
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 75d5d66..03a8a02 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -16,7 +16,7 @@ OLSR_PLUGINS=dot_draw dyn_gw secure
+ OLSR_TARGET_PLUGIN=usr/lib/
+ 
+ define OLSR_BUILD_CMDS
+- $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) olsrd $(OLSR_PLUGINS)
++ $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd $(OLSR_PLUGINS)
+ endef
+ 
+ define OLSR_INSTALL_TARGET_CMDS
 -- 
 1.7.3.4
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-toolchain-gcc-4.2.4-Add-missing-hunk-to-gcc-4.2.4-li.patch
-Type: text/x-patch
-Size: 1270 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110218/7a962c79/attachment.bin>
