@@ -1,55 +1,69 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 18 Feb 2011 10:59:50 -0600
-Subject: [Buildroot] device_table question
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F559B74@EXV1.corp.adtran.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Feb 2011 17:36:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 3313] New: mesa3d fails to build
+Message-ID: <bug-3313-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the comment:
+https://bugs.busybox.net/show_bug.cgi?id=3313
 
-#<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
+           Summary: mesa3d fails to build
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rotwang at crux.org.pl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-implies to me that if I want the device nodes:
 
-crwxrwxrwx 1 root root 254,  0 2010-12-22 23:27 mydev1
-crwxrwxrwx 1 root root 254,  1 2010-12-22 23:27 mydev2
-crwxrwxrwx 1 root root 254,  2 2010-12-22 23:27 mydev3
+In snapshot from 16th of february, mesa3d fails to build:
 
+/home/bartek/crax/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc
+--sysroot=/home/bartek/crax/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot
+-c -I../../include -I../../src/mesa -I../../src/gallium/include
+-I../../src/gallium/auxiliary -pipe -fomit-frame-pointer -Os  -mtune=i686
+-march=i686 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-I/home/bartek/crax/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include
+-I/home/bartek/crax/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/include
+-Wall -Wmissing-prototypes -std=c99 -ffast-math -fno-strict-aliasing  -fPIC  
+-D_GNU_SOURCE -DPTHREADS -DHAVE_POSIX_MEMALIGN -DUSE_EXTERNAL_DXTN_LIB=1
+-DIN_DRI_DRIVER -DGLX_DIRECT_RENDERING -DGLX_INDIRECT_RENDERING -DHAVE_ALIAS
+main/imports.c -o main/imports.o
+main/imports.c: In function '_mesa_strtod':
+main/imports.c:919:20: error: expected '=', ',', ';', 'asm' or '__attribute__'
+before 'loc'
+main/imports.c:919:20: error: 'loc' undeclared (first use in this function)
+main/imports.c:919:20: note: each undeclared identifier is reported only once
+for each function it appears in
+main/imports.c:921:7: warning: implicit declaration of function 'newlocale'
+main/imports.c:921:23: error: 'LC_CTYPE_MASK' undeclared (first use in this
+function)
+main/imports.c:923:4: warning: implicit declaration of function 'strtod_l'
+main/imports.c:927:1: warning: control reaches end of non-void function
+make[3]: *** [main/imports.o] Error 1
+make[3]: Leaving directory
+`/home/bartek/crax/buildroot/output/build/mesa3d-7.6.1/src/mesa'
+make[2]: *** [subdirs] Error 1
+make[2]: Leaving directory
+`/home/bartek/crax/buildroot/output/build/mesa3d-7.6.1/src'
+make[1]: *** [default] Error 1
+make[1]: Leaving directory
+`/home/bartek/crax/buildroot/output/build/mesa3d-7.6.1'
+make: *** [/home/bartek/crax/buildroot/output/build/mesa3d-7.6.1/.stamp_built]
+Error 2
 
-I should be able to create an entry in the file along the lines of:
+I've found it sufficent to apply attached patch to fix the issue
 
-mydev    c      666    0           254     0        1      1     24
-
-My assumption is:
-
-Name = base name of the device
-Type = type of file (char special)
-mode = permissions
-uid  = owner of the file
-gid  = group associated with the file
-major= Device major number
-minor= Start of the minor numbers (in this case minor 0 = mydev1)
-start= Start of the named numbers (in this case mydev1)
-inc  = iteration of both minor numbers and named numbers
-count= how many device to make.
-
-FYI I have tried it this way as well as
-
-mydev    c      666    0           254     1        0      1     24
-
-What I end up with is
-
-crwxrwxrwx 1 root root 254,  0 2010-12-22 23:27 mydev0
-crwxrwxrwx 1 root root 254,  1 2010-12-22 23:27 mydev1
-crwxrwxrwx 1 root root 254,  2 2010-12-22 23:27 mydev2
-
-Which is undesirable for me.
-
-Question:  Are my expectations wrong are is fakeroot/make_devs 
-wrong?
-
-Thanks,
-Andy
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
