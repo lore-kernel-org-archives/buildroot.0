@@ -1,36 +1,34 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Fri, 18 Feb 2011 21:21:35 +0100
-Subject: [Buildroot] Problem with gmp library
-In-Reply-To: <AANLkTikFLQ8AdekPMkaZzEUFJPxb22W2FmZaoBkfSYcS@mail.gmail.com>
-References: <AANLkTimDr-hb4wUZBG+tqavQyDhiRZJ791n==JgbmU+w@mail.gmail.com>
-	<AANLkTikFLQ8AdekPMkaZzEUFJPxb22W2FmZaoBkfSYcS@mail.gmail.com>
-Message-ID: <AANLkTikgbWnPj3CJ7-PcV78YyeVxBHQrd9sugp1vKNgg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Feb 2011 20:58:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 3319] "make xconfig" takes fatal error
+In-Reply-To: <bug-3319-163@https.bugs.busybox.net/>
+References: <bug-3319-163@https.bugs.busybox.net/>
+Message-ID: <20110218205801.931A08F5C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=3319
 
-2011/2/18 Zden?k Materna <zdenek.materna@gmail.com>:
-> Here is Buildroot's .config, and config.log of mpfr and gmp. I'm sorry for
-> another mail - forgot to attach link in previous one.
->
-> http://sestka.zlutaponorka.com/zd/logs.zip
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-I tried your .config in git master and cannot reproduce the error
-(Ubuntu 10.10 64-bit host).
-(There were som other build errors, but not related to this.)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-1. Have you tried fully cleaning your Buildroot directory and building
-it again? Still errors?
-2. If it still fails, try updating your tree to git master (and do a
-full clean before building).
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+We've recently synched the kconfig stuff with the kernel, and from the error
+message it sounds like you have a mix of qt3 and qt4 installed. Please check
+your path /environment.
 
-BTW, you could use 'make qemu_arm_versatile_defconfig' in git master
-as base for the Olimex SAM9-L9260 board, just change the kernel
-settings.
+Also see
+http://www.linuxquestions.org/questions/linux-software-2/error-when-compiling-app-against-qt4-775969/
 
-Best regards,
-Bj?rn Forsman
+As another test you could also try make xconfig with a Linux kernel >= 2.6.37.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
