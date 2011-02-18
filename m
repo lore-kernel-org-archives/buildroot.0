@@ -1,41 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 Feb 2011 14:17:34 +0100
-Subject: [Buildroot] [git commit master 1/1] olsr: fix build
-Message-ID: <20110218132038.06A318F5DF@busybox.osuosl.org>
+From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
+Date: Fri, 18 Feb 2011 14:30:28 +0100
+Subject: [Buildroot] Problem with gmp library
+Message-ID: <AANLkTimDr-hb4wUZBG+tqavQyDhiRZJ791n==JgbmU+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello everyone,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1c787ea6a7428fdfe88fd6c2333f35da5cec44d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+how are you? I'm new to this list.
 
-Pass TARGET_CONFIGURE_OPTS in the environment rather than as make arguments,
-so the olsr build system can append to CFLAGS / LDFLAGS - Otherwise build
-fails when the wrong linker flags are used to create the plugin .so's.
+What's my problem? I would like to build toolchain, rootfs and kernel for
+Olimex kit SAM9-L9260 with Buildroot 2010.11, but I get this error:
 
-Also pass ARCH, so the olsr build system choses the right libdir / PIC
-settings for the target, rather than for the host.
+checking for __gmpz_init in -lgmp... no
+configure: error: libgmp not found or uses a different ABI.
+Please read the INSTALL file -- see "In case of problem".
+make: *** [/home/zdenal/Dokumenty/fekt/
+diplomka/buildroot/buildroot-2010.11/output/build/mpfr-2.4.1/.configured]
+Error 1
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/olsr/olsr.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I tryed different configurations (gmp/mpfr enabled and disabled, more
+versions of uclibc/gcc) and it's always the same. It is strange because not
+so far I was able to build it and I don't know what's different now in
+config. I also try depclean and bright new configuration. With same result.
+Googling didn't help.
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 75d5d66..03a8a02 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -16,7 +16,7 @@ OLSR_PLUGINS=dot_draw dyn_gw secure
- OLSR_TARGET_PLUGIN=usr/lib/
- 
- define OLSR_BUILD_CMDS
-- $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) olsrd $(OLSR_PLUGINS)
-+ $(TARGET_CONFIGURE_OPTS) $(MAKE) ARCH=$(KERNEL_ARCH) -C $(@D) olsrd $(OLSR_PLUGINS)
- endef
- 
- define OLSR_INSTALL_TARGET_CMDS
--- 
-1.7.3.4
+Thanks a lot for any advice!
+
+Zdenek Materna
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110218/d698a0b0/attachment.html>
