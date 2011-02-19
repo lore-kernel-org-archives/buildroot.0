@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 19 Feb 2011 23:52:40 +0100
-Subject: [Buildroot] [git commit master 1/1] libmicrohttpd: bump version
-Message-ID: <20110219225351.70FDA8F5F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libmicrohttpd: make https
+	support optional
+Message-ID: <20110219225351.52A1C8F5A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +10,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65600edcaa72a796b131d06fb2cc96cbed98a106
+commit: http://git.buildroot.net/buildroot/commit/?id=7ee387f43b8daa8e749472a9b1153941a44e688e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The old 0.4.2 version doesn't seem to be available on the GNU mirrors
-anymore, so change to the slightly-less-ancient 0.4.6 version.
-
-We're not moving to the new 0.9.x series yet, as that one needs an
-external libgnutls for https support, which we don't have a BR
-package for yet.
+Libmicrohttpd works nicely without https support, so make it optional.
+Also ensure the cross-libgcrypt-config is found, rather than whatever
+is installed on the host.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmicrohttpd/libmicrohttpd.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmicrohttpd/Config.in        |    8 +++++++-
+ package/libmicrohttpd/libmicrohttpd.mk |    8 +++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index de656ad..cfedc8f 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -1,8 +1,14 @@
+ config BR2_PACKAGE_LIBMICROHTTPD
+ 	bool "libmicrohttpd"
+-	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  GNU libmicrohttpd is a small C library that makes it easy to
+ 	  run an HTTP server as part of another application.
+ 
+ 	  http://www.gnu.org/software/libmicrohttpd/
++
++config BR2_PACKAGE_LIBMICROHTTPD_SSL
++       bool "https support"
++       depends on BR2_PACKAGE_LIBMICROHTTPD
++       select BR2_PACKAGE_LIBGCRYPT
++       help
++         Enable HTTPS (SSL) support.
 diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 626c046..7a1925e 100644
+index 8273d90..626c046 100644
 --- a/package/libmicrohttpd/libmicrohttpd.mk
 +++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -3,9 +3,9 @@
- # libmicrohttpd
- #
- #############################################################
--LIBMICROHTTPD_VERSION:=0.4.2
--LIBMICROHTTPD_SOURCE:=libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
--LIBMICROHTTPD_SITE:=$(BR2_GNU_MIRROR)/libmicrohttpd
-+LIBMICROHTTPD_VERSION = 0.4.6
-+LIBMICROHTTPD_SOURCE = libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
-+LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+@@ -8,6 +8,12 @@ LIBMICROHTTPD_SOURCE:=libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
+ LIBMICROHTTPD_SITE:=$(BR2_GNU_MIRROR)/libmicrohttpd
  LIBMICROHTTPD_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+-LIBMICROHTTPD_DEPENDENCIES = libgcrypt
++ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
++LIBMICROHTTPD_DEPENDENCIES += libgcrypt
++LIBMICROHTTPD_CONF_OPT += --enable-https \
++			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++else
++LIBMICROHTTPD_CONF_OPT += --disable-https
++endif
+ 
+ $(eval $(call AUTOTARGETS,package,libmicrohttpd))
 -- 
 1.7.3.4
