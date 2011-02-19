@@ -1,30 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 19 Feb 2011 03:49:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 3295] slang fails to build on mipsel
-In-Reply-To: <bug-3295-163@https.bugs.busybox.net/>
-References: <bug-3295-163@https.bugs.busybox.net/>
-Message-ID: <20110219034909.28A868F5E4@busybox.osuosl.org>
+From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
+Date: Sat, 19 Feb 2011 14:56:40 +0100
+Subject: [Buildroot] Problem with gmp library
+In-Reply-To: <AANLkTikgbWnPj3CJ7-PcV78YyeVxBHQrd9sugp1vKNgg@mail.gmail.com>
+References: <AANLkTimDr-hb4wUZBG+tqavQyDhiRZJ791n==JgbmU+w@mail.gmail.com>
+	<AANLkTikFLQ8AdekPMkaZzEUFJPxb22W2FmZaoBkfSYcS@mail.gmail.com>
+	<AANLkTikgbWnPj3CJ7-PcV78YyeVxBHQrd9sugp1vKNgg@mail.gmail.com>
+Message-ID: <AANLkTi=6aOJEZWZmJaXTqB7wHzDOnQiUYCkekGE_PtQX@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3295
+Hello,
 
---- Comment #3 from S?rgio <sergio@sergiomb.no-ip.org>  ---
-(In reply to comment #0)
-> /home/test/toolchains/br-mipsel-full/usr/bin/../lib/gcc/mipsel-unknown-linux-uclibc/4.4.4/../../../../mipsel-unknown-linux-uclibc/bin/ld:
-> sldisply.o: relocation R_MIPS_HI16 against `a local symbol' can not be used
-> when making a shared object; recompile with -fPIC
-> sldisply.o: could not read symbols: Bad value
-> collect2: ld returned 1 exit status
-> make[1]: *** [libslang.so] Error 1
+I tryed to do "make clean" and then "make" and it was same. Builroot from
+git with  qemu_arm_versatile_defconfig was compiled fine. Thanks a lot for
+advice. I thought that stable versions are more tested so they should
+compile without problems (or at least with less problems). But it seems that
+my assumption wasn't right :-)
 
-I also see (on mipsel) this "compile error", also have other "compile error"
-with metacity if you want checkout ?
+Regards,
+Zdenek Materna
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2011/2/18 Bj?rn Forsman <bjorn.forsman@gmail.com>
+
+> Hi,
+>
+> 2011/2/18 Zden?k Materna <zdenek.materna@gmail.com>:
+> > Here is Buildroot's .config, and config.log of mpfr and gmp. I'm sorry
+> for
+> > another mail - forgot to attach link in previous one.
+> >
+> > http://sestka.zlutaponorka.com/zd/logs.zip
+>
+> I tried your .config in git master and cannot reproduce the error
+> (Ubuntu 10.10 64-bit host).
+> (There were som other build errors, but not related to this.)
+>
+> 1. Have you tried fully cleaning your Buildroot directory and building
+> it again? Still errors?
+> 2. If it still fails, try updating your tree to git master (and do a
+> full clean before building).
+>
+> BTW, you could use 'make qemu_arm_versatile_defconfig' in git master
+> as base for the Olimex SAM9-L9260 board, just change the kernel
+> settings.
+>
+> Best regards,
+> Bj?rn Forsman
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110219/83f95b19/attachment.html>
