@@ -1,26 +1,28 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Feb 2011 20:59:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 3313] mesa3d fails to build
-In-Reply-To: <bug-3313-163@https.bugs.busybox.net/>
-References: <bug-3313-163@https.bugs.busybox.net/>
-Message-ID: <20110218205939.63A328F5DC@busybox.osuosl.org>
+Date: Sat, 19 Feb 2011 03:49:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 3295] slang fails to build on mipsel
+In-Reply-To: <bug-3295-163@https.bugs.busybox.net/>
+References: <bug-3295-163@https.bugs.busybox.net/>
+Message-ID: <20110219034909.28A868F5E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3313
+https://bugs.busybox.net/show_bug.cgi?id=3295
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-(In reply to comment #2)
-> Buildroot currently packages version 7.6.1 of mesa3d, but the latest upstream
-> version seems to be 7.9.1, in
-> ftp://ftp.freedesktop.org/pub/mesa/7.9.1/MesaLib-7.9.1.tar.bz2. Maybe we should
-> bump the version in BR first ?
+--- Comment #3 from S?rgio <sergio@sergiomb.no-ip.org>  ---
+(In reply to comment #0)
+> /home/test/toolchains/br-mipsel-full/usr/bin/../lib/gcc/mipsel-unknown-linux-uclibc/4.4.4/../../../../mipsel-unknown-linux-uclibc/bin/ld:
+> sldisply.o: relocation R_MIPS_HI16 against `a local symbol' can not be used
+> when making a shared object; recompile with -fPIC
+> sldisply.o: could not read symbols: Bad value
+> collect2: ld returned 1 exit status
+> make[1]: *** [libslang.so] Error 1
 
-Possibly, but we have to be careful about the dependencies. I'm not interested
-in moving the entire X stack forward this close to the release.
+I also see (on mipsel) this "compile error", also have other "compile error"
+with metacity if you want checkout ?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
