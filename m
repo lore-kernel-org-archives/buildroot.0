@@ -1,65 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 Feb 2011 23:52:40 +0100
-Subject: [Buildroot] [git commit master 1/1] libmicrohttpd: make https
-	support optional
-Message-ID: <20110219225351.52A1C8F5A9@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sat, 19 Feb 2011 15:21:47 -0800
+Subject: [Buildroot] Moving from 2.6.36.1 to 2.6.35.11 (or perhaps 2.6.35.9)
+Message-ID: <AANLkTikMqQa2b8VALCFzCvhzhLGokgjjeu5jwWgbspv1@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+My group desires to use the 2.6.35.11 kernel as it is listed as a longterm
+stable kernel instead of the 2.6.36.1 buildroot currently supports <sigh>.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ee387f43b8daa8e749472a9b1153941a44e688e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In looking at at buildroot, it appears that changine
+buildroot-2010.11/.config BR2_DEFAULT_KERNEL_HEADERS *and* linux/Config.in
+(3 places) would do it to change to an arbitrary kernel version.
 
-Libmicrohttpd works nicely without https support, so make it optional.
-Also ensure the cross-libgcrypt-config is found, rather than whatever
-is installed on the host.
+Is this the correct procedure to change these two files? I can make it work
+with 2.6.35.9, but it seems that kernel.org/pub/linux/kernel/v2.6/ contains
+up to 2.6.35.9 but not 2.6.35.10 or 2.6.35.11 so 2.6.35.9 works but
+2.6.35.11 fails.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libmicrohttpd/Config.in        |    8 +++++++-
- package/libmicrohttpd/libmicrohttpd.mk |    8 +++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+Perhaps a FAQ entry regarding the changes necessary to move to various
+kernels might be appropriate? I would offer to do it but I am (perhaps) two
+days into using buildroot and I dont want to fubar the web site
+instructions.
 
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index de656ad..cfedc8f 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,8 +1,14 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
--	select BR2_PACKAGE_LIBGCRYPT
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
- 
- 	  http://www.gnu.org/software/libmicrohttpd/
-+
-+config BR2_PACKAGE_LIBMICROHTTPD_SSL
-+       bool "https support"
-+       depends on BR2_PACKAGE_LIBMICROHTTPD
-+       select BR2_PACKAGE_LIBGCRYPT
-+       help
-+         Enable HTTPS (SSL) support.
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 8273d90..626c046 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -8,6 +8,12 @@ LIBMICROHTTPD_SOURCE:=libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
- LIBMICROHTTPD_SITE:=$(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_INSTALL_STAGING = YES
- 
--LIBMICROHTTPD_DEPENDENCIES = libgcrypt
-+ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
-+LIBMICROHTTPD_DEPENDENCIES += libgcrypt
-+LIBMICROHTTPD_CONF_OPT += --enable-https \
-+			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+else
-+LIBMICROHTTPD_CONF_OPT += --disable-https
-+endif
- 
- $(eval $(call AUTOTARGETS,package,libmicrohttpd))
 -- 
-1.7.3.4
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110219/dbc18e7c/attachment.html>
