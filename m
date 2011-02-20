@@ -1,57 +1,40 @@
-From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
-Date: Sun, 20 Feb 2011 14:03:15 +0100
-Subject: [Buildroot] nfs-utils build failed
-Message-ID: <AANLkTi=HTAaDcQJJW1e+A_RPHEdgQX=4sA7Lw3nh7bcn@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 Feb 2011 14:36:52 +0100
+Subject: [Buildroot] [git commit master 1/1] bind: disable parallel build
+Message-ID: <20110220133715.1C57C8F407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I'm back with another problem which I can't solve. I'm using buildroot from
-git, uclibc 0.9.31 and there is some problem with building nfs-utils (build
-log at bottom). If I understand it right rpcgen is used to generate mount.h.
-But rpcgen is compiled for target and can't be run on host. Then it's little
-bit strange that mount.h missing error is produced before "rpcgen: cannot
-execute binary file" error.
+commit: http://git.buildroot.net/buildroot/commit/?id=b1a3545a3f9dc3f18154dcfbe467c62a5088ed3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Can anybody explain it for me? I'm quite confused with it. And any tips what
-to do to compile nfs-utils?
+The build system of bind seems to have issues with (highly) parallel
+builds, breaking the build with errors like:
 
-Thanks a lot!
+libtool: link: `nothreads/condition.lo' is not a valid libtool object
 
-Regards,
-Zdenek Materna
+So disable parallel builds.
 
-....
-In file included from auth.c:20:0:
-mountd.h:16:19: fatal error: mount.h: No such file or directory
-compilation terminated.
-make[3]: *** [mountd-auth.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from mount_dispatch.c:15:0:
-mountd.h:16:19: fatal error: mount.h: No such file or directory
-compilation terminated.
-make[3]: *** [mountd-mount_dispatch.o] Error 1
-In file included from mountd.c:27:0:
-mountd.h:16:19: fatal error: mount.h: No such file or directory
-compilation terminated.
-make[3]: *** [mountd-mountd.o] Error 1
-......
-showmount.c:35:19: fatal error: mount.h: No such file or directory
-compilation terminated.
-make[3]: *** [showmount-showmount.o] Error 1
-.......
-/bin/bash: ../../tools/rpcgen/rpcgen: cannot execute binary file
-make[3]: *** [sm_inter_xdr.c] Error 126
-make[3]: *** Waiting for unfinished jobs....
-/bin/bash: ../../tools/rpcgen/rpcgen: cannot execute binary file
-/bin/bash: ../../tools/rpcgen/rpcgen: cannot execute binary file
-make[3]: *** [sm_inter_clnt.c] Error 126
-make[3]: *** [sm_inter_svc.c] Error 126
-.......
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110220/96228256/attachment.html>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bind/bind.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index f402ad1..ff0ec04 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -11,6 +11,7 @@ BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
+ BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
+ BIND_TARGET_BINS = dig host nslookup nsupdate
+ BIND_TARGET_LIBS = libbind9.* libdns.* libisccc.* libisccfg.* libisc.* liblwres.*
++BIND_MAKE = $(MAKE1)
+ BIND_CONF_ENV =	BUILD_CC="$(TARGET_CC)" \
+ 		BUILD_CFLAGS="$(TARGET_CFLAGS)"
+ BIND_CONF_OPT =	\
+-- 
+1.7.3.4
