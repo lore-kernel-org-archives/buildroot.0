@@ -1,48 +1,85 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 Feb 2011 08:21:19 +0100
-Subject: [Buildroot] Moving from 2.6.36.1 to 2.6.35.11 (or perhaps
-	2.6.35.9)
-In-Reply-To: <AANLkTikMqQa2b8VALCFzCvhzhLGokgjjeu5jwWgbspv1@mail.gmail.com>
-	(Charles Krinke's message of "Sat, 19 Feb 2011 15:21:47 -0800")
-References: <AANLkTikMqQa2b8VALCFzCvhzhLGokgjjeu5jwWgbspv1@mail.gmail.com>
-Message-ID: <87pqqndvdc.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 20 Feb 2011 13:59:31 +0100
+Subject: [Buildroot] device_table question
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1F559B74@EXV1.corp.adtran.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1F559B74@EXV1.corp.adtran.com>
+Message-ID: <AANLkTimh-oHKjexs3L7Ag1-x=R_E+Ha11kkHw4xJLh5-@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
-
 Hi,
 
- Charles> My group desires to use the 2.6.35.11 kernel as it is listed
- Charles> as a longterm stable kernel instead of the 2.6.36.1 buildroot
- Charles> currently supports <sigh>.
+On Fri, Feb 18, 2011 at 5:59 PM, ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+> the comment:
+>
+> #<name> <type> <mode> <uid> <gid> <major> <minor> <start> <inc> <count>
+>
+> implies to me that if I want the device nodes:
+>
+> crwxrwxrwx 1 root root 254, ?0 2010-12-22 23:27 mydev1
+> crwxrwxrwx 1 root root 254, ?1 2010-12-22 23:27 mydev2
+> crwxrwxrwx 1 root root 254, ?2 2010-12-22 23:27 mydev3
+>
+>
+> I should be able to create an entry in the file along the lines of:
+>
+> mydev ? ?c ? ? ?666 ? ?0 ? ? ? ? ? 254 ? ? 0 ? ? ? ?1 ? ? ?1 ? ? 24
+>
+> My assumption is:
+>
+> Name = base name of the device
+> Type = type of file (char special)
+> mode = permissions
+> uid ?= owner of the file
+> gid ?= group associated with the file
+> major= Device major number
+> minor= Start of the minor numbers (in this case minor 0 = mydev1)
+> start= Start of the named numbers (in this case mydev1)
+> inc ?= iteration of both minor numbers and named numbers
+> count= how many device to make.
+>
+> FYI I have tried it this way as well as
+>
+> mydev ? ?c ? ? ?666 ? ?0 ? ? ? ? ? 254 ? ? 1 ? ? ? ?0 ? ? ?1 ? ? 24
+>
+> What I end up with is
+>
+> crwxrwxrwx 1 root root 254, ?0 2010-12-22 23:27 mydev0
+> crwxrwxrwx 1 root root 254, ?1 2010-12-22 23:27 mydev1
+> crwxrwxrwx 1 root root 254, ?2 2010-12-22 23:27 mydev2
+>
+> Which is undesirable for me.
+>
+> Question: ?Are my expectations wrong are is fakeroot/make_devs
+> wrong?
 
-Ok.
+I tried your scenario with the following device table line:
 
- Charles> In looking at at buildroot, it appears that changine
- Charles> buildroot-2010.11/.config BR2_DEFAULT_KERNEL_HEADERS *and*
- Charles> linux/Config.in (3 places) would do it to change to an
- Charles> arbitrary kernel version.
+/dev/mybetterdev         c       640     0       0       230     0
+  1       1       10
 
- Charles> Is this the correct procedure to change these two files? I can
- Charles> make it work with 2.6.35.9, but it seems that
- Charles> kernel.org/pub/linux/kernel/v2.6/ contains up to 2.6.35.9 but
- Charles> not 2.6.35.10 or 2.6.35.11 so 2.6.35.9 works but 2.6.35.11
- Charles> fails.
+which resulted in:
 
-The problem is that the long term kernels is a concept that didn't exist
-back when 2010.11 was released. Since 2011.02-rc1 we now automatically
-handle the long term support kernels for 2.6.35 for the kernel headers.
+crw-r----- 1 root root 230, 0 2011-02-20 10:42 /mnt/dev/mybetterdev1
+crw-r----- 1 root root 230, 1 2011-02-20 10:42 /mnt/dev/mybetterdev2
+crw-r----- 1 root root 230, 2 2011-02-20 10:42 /mnt/dev/mybetterdev3
+crw-r----- 1 root root 230, 3 2011-02-20 10:42 /mnt/dev/mybetterdev4
+crw-r----- 1 root root 230, 4 2011-02-20 10:42 /mnt/dev/mybetterdev5
+crw-r----- 1 root root 230, 5 2011-02-20 10:42 /mnt/dev/mybetterdev6
+crw-r----- 1 root root 230, 6 2011-02-20 10:42 /mnt/dev/mybetterdev7
+crw-r----- 1 root root 230, 7 2011-02-20 10:42 /mnt/dev/mybetterdev8
+crw-r----- 1 root root 230, 8 2011-02-20 10:42 /mnt/dev/mybetterdev9
 
-Notice that it isn't strictly required to use the exact same kernel
-headers version as the kernel, so you could keep your kernel headers at
-2.6.35.9 without any likely issue.
+This is what you wanted, right?
 
-For the kernel you can simply choose 'custom tarball' and provide the
-long term URL.
+Note that you seem to have forgotten one field in your device table
+lines: I count only 9 fields, while you should have 10 (or is this a
+typeover mistake?)
 
--- 
-Bye, Peter Korsgaard
+The above was tested with Buildroot 2010.05.
+
+Best regards,
+Thomas
