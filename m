@@ -1,40 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 Feb 2011 14:36:52 +0100
-Subject: [Buildroot] [git commit master 1/1] bind: disable parallel build
-Message-ID: <20110220133715.1C57C8F407@busybox.osuosl.org>
+From: Martin Hicks <mort@bork.org>
+Date: Sun, 20 Feb 2011 09:20:01 -0500
+Subject: [Buildroot] nfs-utils build failed
+In-Reply-To: <AANLkTi=HTAaDcQJJW1e+A_RPHEdgQX=4sA7Lw3nh7bcn@mail.gmail.com>
+References: <AANLkTi=HTAaDcQJJW1e+A_RPHEdgQX=4sA7Lw3nh7bcn@mail.gmail.com>
+Message-ID: <AANLkTi=M1GVWE=+DD5X=T2eeysYDhETsyrisG5W9PPZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2011/2/20 Zden?k Materna <zdenek.materna@gmail.com>:
+> Hello,
+>
+> I'm back with another problem which I can't solve. I'm using buildroot from
+> git, uclibc 0.9.31 and there is some problem with building nfs-utils (build
+> log at bottom). If I understand it right rpcgen is used to generate mount.h.
+> But rpcgen is compiled for target and can't be run on host. Then it's little
+> bit strange that mount.h missing error is produced before "rpcgen: cannot
+> execute binary file" error.
+>
+> Can anybody explain it for me? I'm quite confused with it. And any tips what
+> to do to compile nfs-utils?
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b1a3545a3f9dc3f18154dcfbe467c62a5088ed3d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I fought with this in a non buildroot environment this week.  The
+reason is that rpcgen is compiled with your cross compiler and not
+your build host's CC.  I couldn't figure out how to make automake use
+my host's compiler, but did eventually figure out that if you install
+the rpcgen program from your build server's package manager into
+/usr/bin  you can specify RPCGEN=/usr/bin/rpcgen and nfs-utils will
+stop trying to compile this tool and just use the one you've
+specified.
 
-The build system of bind seems to have issues with (highly) parallel
-builds, breaking the build with errors like:
+mh
 
-libtool: link: `nothreads/condition.lo' is not a valid libtool object
-
-So disable parallel builds.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bind/bind.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index f402ad1..ff0ec04 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -11,6 +11,7 @@ BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
- BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
- BIND_TARGET_BINS = dig host nslookup nsupdate
- BIND_TARGET_LIBS = libbind9.* libdns.* libisccc.* libisccfg.* libisc.* liblwres.*
-+BIND_MAKE = $(MAKE1)
- BIND_CONF_ENV =	BUILD_CC="$(TARGET_CC)" \
- 		BUILD_CFLAGS="$(TARGET_CFLAGS)"
- BIND_CONF_OPT =	\
 -- 
-1.7.3.4
+Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
