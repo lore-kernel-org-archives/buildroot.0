@@ -1,64 +1,38 @@
-From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
-Date: Mon, 21 Feb 2011 21:21:52 +0100
-Subject: [Buildroot] nfs-utils build failed
-In-Reply-To: <87aahqe63r.fsf@macbook.be.48ers.dk>
-References: <AANLkTi=HTAaDcQJJW1e+A_RPHEdgQX=4sA7Lw3nh7bcn@mail.gmail.com>
-	<AANLkTi=M1GVWE=+DD5X=T2eeysYDhETsyrisG5W9PPZQ@mail.gmail.com>
-	<87aahqe63r.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTikpSLFns5fzrd3Un5Jy5cVfXz==4Wpf1_pUUdGz@mail.gmail.com>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Mon, 21 Feb 2011 21:28:32 +0100
+Subject: [Buildroot] Saving custom configs to buildroot, linux, uclibc,
+	...
+In-Reply-To: <AANLkTimThq-otAmyU+UYWs6EHg6zfjXqv669OzrpE=Xd@mail.gmail.com>
+References: <AANLkTimThq-otAmyU+UYWs6EHg6zfjXqv669OzrpE=Xd@mail.gmail.com>
+Message-ID: <AANLkTinK3Y2T8_Bd9_ikamAMCN1iUVx241RObVV_0uZ5@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2011/2/21 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
+> For a certain project, I have custom configuration files for buildroot
+> itself (defconfig), for the Linux kernel, and for uClibc. In buildroot
+> 2010.05, these files would reside in the
+> target/device/<manufacturer>/<board> directory. These files would be
+> under version control in my repository.
 
-thanks for fix, it's ok now!
+[snip]
 
-Zdenek
+> However, the feature is actually generic, and could be implemented in
+> a common location.
+> Is there already an implementation? I have seen there is a
+> 'savedefconfig' target, but this only targets the buildroot
+> configuration, not the kernel nor uclibc.
+> What do you think about such a build target?
 
-2011/2/20 Peter Korsgaard <jacmet@uclibc.org>
+Not sure I fully understood your circumstances, but any progress
+making Buildroot a bit more product-centric would get my thumbs-up.
 
-> >>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
->
->  Martin> 2011/2/20 Zden?k Materna <zdenek.materna@gmail.com>:
->  >> Hello,
->  >>
->  >> I'm back with another problem which I can't solve. I'm using buildroot
-> from
->  >> git, uclibc 0.9.31 and there is some problem with building nfs-utils
-> (build
->  >> log at bottom). If I understand it right rpcgen is used to generate
-> mount.h.
->  >> But rpcgen is compiled for target and can't be run on host. Then it's
-> little
->  >> bit strange that mount.h missing error is produced before "rpcgen:
-> cannot
->  >> execute binary file" error.
->  >>
->  >> Can anybody explain it for me? I'm quite confused with it. And any tips
-> what
->  >> to do to compile nfs-utils?
->
->  Martin> I fought with this in a non buildroot environment this week.  The
->  Martin> reason is that rpcgen is compiled with your cross compiler and not
->  Martin> your build host's CC.  I couldn't figure out how to make automake
-> use
->  Martin> my host's compiler, but did eventually figure out that if you
-> install
->  Martin> the rpcgen program from your build server's package manager into
->  Martin> /usr/bin  you can specify RPCGEN=/usr/bin/rpcgen and nfs-utils
-> will
->  Martin> stop trying to compile this tool and just use the one you've
->  Martin> specified.
->
-> FYI: I've fixed the nfs-utils package in git to build rpcgen itself, so
-> you no longer need this.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/4086a313/attachment.html>
+In my use-case I will be building the complete firmware for a couple
+of products using Buildroot, and my dream scenario would be "make
+myproductname" to use any custom configs (br, bb, uclibc, kernel) for
+that product.
+
+Not sure how to get there myself yet, but I would support any work on it.
