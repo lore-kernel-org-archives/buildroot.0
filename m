@@ -1,45 +1,37 @@
-From: Marco <chopin1998@gmail.com>
-Date: Mon, 21 Feb 2011 16:33:31 +0800
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 21 Feb 2011 09:41:23 +0100
 Subject: [Buildroot] build python failed
-Message-ID: <AANLkTinfpWsELrvHSZYq1+w-W_zF6fgoSVgPEMVYxvjg@mail.gmail.com>
+In-Reply-To: <AANLkTinfpWsELrvHSZYq1+w-W_zF6fgoSVgPEMVYxvjg@mail.gmail.com>
+	(Marco's message of "Mon, 21 Feb 2011 16:33:31 +0800")
+References: <AANLkTinfpWsELrvHSZYq1+w-W_zF6fgoSVgPEMVYxvjg@mail.gmail.com>
+Message-ID: <871v31eq4s.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, All
+>>>>> "Marco" == Marco  <chopin1998@gmail.com> writes:
 
-    my buildroot has git pulled, and my target is at91sam9260. I choose
-python package via make menuconfig, but make failed:
+ Marco> Hi, All
 
-In file included from Include/Python.h:86,
->                  from ./Modules/python.c:4:
-> Include/unicodeobject.h:575: warning: type defaults to 'int' in declaration
-> of 'wchar_t'
-> Include/unicodeobject.h:575: error: expected ';', ',' or ')' before '*'
-> token
-> In file included from Include/Python.h:86,
->                  from ./Modules/python.c:4:
-> Include/unicodeobject.h:593: warning: type defaults to 'int' in declaration
-> of 'wchar_t'
-> Include/unicodeobject.h:593: error: expected ';', ',' or ')' before '*'
-> token
-> make[1]: *** [Modules/python.o] Error 1
-> make[1]: Leaving directory
-> `/home/marco/est_works/proj/concentrator/buildroot/output/build/python-2.7.1'
-> make: ***
-> [/home/marco/est_works/proj/concentrator/buildroot/output/build/python-2.7.1/.stamp_built]
-> Error 2
->
->
- How can I fix the error and using python in ARM? Thank you!!!
+ Marco> ??? my buildroot has git pulled, and my target is at91sam9260. I
+ Marco> choose python package via make menuconfig, but make failed:
+
+
+ Marco>     In file included from Include/Python.h:86,
+ Marco>     ???????????????? from ./Modules/python.c:4:
+ Marco>     Include/unicodeobject.h:575: warning: type defaults to 'int' in declaration
+ Marco>     of 'wchar_t'
+
+It doesn't find the wchar_t type.
+
+Python does depend on wchar support in the toolchain, so you probably
+have done a build without wchar, and then gone and added wchar support
+and python without doing a clean rebuild.
+
+For this kind of toolchain changes you need to do make clean; make.
 
 
 -- 
-LinuX
-Violin
-Canon EOS
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/b19d6613/attachment.html>
+Bye, Peter Korsgaard
