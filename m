@@ -1,53 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 21 Feb 2011 09:48:17 +0100
-Subject: [Buildroot] Saving custom configs to buildroot, linux, uclibc, ...
-Message-ID: <AANLkTimThq-otAmyU+UYWs6EHg6zfjXqv669OzrpE=Xd@mail.gmail.com>
+From: Marco <chopin1998@gmail.com>
+Date: Mon, 21 Feb 2011 18:24:55 +0800
+Subject: [Buildroot] build python failed
+In-Reply-To: <871v31eq4s.fsf@macbook.be.48ers.dk>
+References: <AANLkTinfpWsELrvHSZYq1+w-W_zF6fgoSVgPEMVYxvjg@mail.gmail.com>
+	<871v31eq4s.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTi=u98Dp4Ts2jYN_3oi3Ni8dHEOUy7PC6gjp4-r9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+WOW, that' cool!  Python running!
 
-For a certain project, I have custom configuration files for buildroot
-itself (defconfig), for the Linux kernel, and for uClibc. In buildroot
-2010.05, these files would reside in the
-target/device/<manufacturer>/<board> directory. These files would be
-under version control in my repository.
-When you build buildroot, each of these configuration files are being
-copied to another location, as .config. These copies are not under
-version control.
+Thank thee very much!
 
-During development, if you make a change to the buildroot, kernel or
-uclibc configuration, only the respective .config is being changed. If
-you want to commit the change, you should not forget to copy over the
-.config to the target/device directory.
+On Mon, Feb 21, 2011 at 4:41 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-I'd like to have a more simpler way than manually checking for changes
-and copying them over, for example with a specific build target,
-something like:
-board-saveconfig:
-        cp .config configs/board_defconfig
-        cp output/build/linux/.config $(BOARD_PATH)/linux.config
-        cp output/build/uclibc/.config $(BOARD_PATH)/uclibc.config
+> >>>>> "Marco" == Marco  <chopin1998@gmail.com> writes:
+>
+>  Marco> Hi, All
+>
+>  Marco>     my buildroot has git pulled, and my target is at91sam9260. I
+>  Marco> choose python package via make menuconfig, but make failed:
+>
+>
+>  Marco>     In file included from Include/Python.h:86,
+>  Marco>                      from ./Modules/python.c:4:
+>  Marco>     Include/unicodeobject.h:575: warning: type defaults to 'int' in
+> declaration
+>  Marco>     of 'wchar_t'
+>
+> It doesn't find the wchar_t type.
+>
+> Python does depend on wchar support in the toolchain, so you probably
+> have done a build without wchar, and then gone and added wchar support
+> and python without doing a clean rebuild.
+>
+> For this kind of toolchain changes you need to do make clean; make.
+>
+>
+> --
+> Bye, Peter Korsgaard
+>
 
-In buildroot 2010.05, you'd add this change to the board-specific Makefile.
 
-In later buildroot versions however, there have been some changes to
-the way board support is handled (see
-http://lists.busybox.net/pipermail/buildroot/2010-December/039228.html
-) and it is no longer possible to create board-specific targets.
 
-However, the feature is actually generic, and could be implemented in
-a common location.
-Is there already an implementation? I have seen there is a
-'savedefconfig' target, but this only targets the buildroot
-configuration, not the kernel nor uclibc.
-What do you think about such a build target?
-
-I found a similar question here, but it seemed to have died out:
-http://lists.busybox.net/pipermail/buildroot/2010-July/035817.html
-
-Best regards,
-Thomas
+-- 
+LinuX
+Violin
+Canon EOS
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/9d683055/attachment.html>
