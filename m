@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Feb 2011 23:09:54 +0100
-Subject: [Buildroot] booting JFFS2 or UBIFS created with buildroot
-In-Reply-To: <AANLkTimY2pEGmkM+ZvyXSKUuaWHae=B-cQA3iC3xi_2A@mail.gmail.com>
-References: <AANLkTimrjTXp24EtKa1zPrf1j6-s-p1twWYA832PAGun@mail.gmail.com>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1F5E11D6@EXV1.corp.adtran.com>
-	<AANLkTimY2pEGmkM+ZvyXSKUuaWHae=B-cQA3iC3xi_2A@mail.gmail.com>
-Message-ID: <20110221230954.4b39da54@surf>
+Date: Mon, 21 Feb 2011 23:21:19 +0100
+Subject: [Buildroot] No response after "Freeing init memory"
+In-Reply-To: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
+References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
+Message-ID: <20110221232119.07dc234d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +12,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 Feb 2011 13:30:01 -0800
-Charles Krinke <charles.krinke@gmail.com> wrote:
+On Mon, 21 Feb 2011 21:53:51 +0100
+Zden?k Materna <zdenek.materna@gmail.com> wrote:
 
-> bootcmd=bootm 0xfe120000 - 0xfe080000
-> bootargs=root=/dev/mtdblock2 rootfstype=jffs2
-> mtdparts=nor:1152k(U-Boot),2176k(kernel),-(JFFS2) rw console=ttyS0,115200
+> I have problem with init. Kernel boots ok, but after message "Freeing init
+> memory: 120K" there is no response (*), but system seems to be up (it
+> responds to ping). I tried to change init=/linuxrc to init=/hello which is
+> statically compiled hello world and after that I got kernel panic (**). I
+> double checked all configuration, but I couldn't find nothing weird. I have
+> Generic serial port configured and console is also configured in inittab.
+> All is compiled with same toolchain with EABI. Where might be problem?
+> Thanks for any advice.
 > 
-> As I recall, this was working the last time I did it 5 years ago, but again,
-> I probably have forgotten a few details or there are some config options not
-> yet turned on. I am working with buildroot defaults so far.
+> My kernel command line: mem=64M console=ttyS0,115200 root=/dev/nfs rw
+> nfsroot=192.168.1.37:/home/zdenal/nfsroot/,proto=tcp ip=dhcp init=/linuxrc.
+> 
+> Buildroot from git, kernel 2.6.33.7, uClibc 0.9.31, Busybox 1.18.
 
-Your kernel configuration looks ok. Please give some details:
+Could you post your Buildroot .config and kernel .config files, and the
+full kernel boot log ?
 
- *) How do you flash your JFFS2 filesystem (exact commands)
-
- *) The full kernel boot log
-
-Regards,
+Thanks,
 
 Thomas
 -- 
