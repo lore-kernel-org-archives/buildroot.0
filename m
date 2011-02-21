@@ -1,98 +1,64 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 21 Feb 2011 20:54:57 +0100
-Subject: [Buildroot] device_table question
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1F55A176@EXV1.corp.adtran.com>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1F559B74@EXV1.corp.adtran.com>
-	<AANLkTimh-oHKjexs3L7Ag1-x=R_E+Ha11kkHw4xJLh5-@mail.gmail.com>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1F55A176@EXV1.corp.adtran.com>
-Message-ID: <AANLkTinJMr11Jw87u+3wcytvM6mLpJomF9FobVyT+6Wd@mail.gmail.com>
+From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
+Date: Mon, 21 Feb 2011 21:21:52 +0100
+Subject: [Buildroot] nfs-utils build failed
+In-Reply-To: <87aahqe63r.fsf@macbook.be.48ers.dk>
+References: <AANLkTi=HTAaDcQJJW1e+A_RPHEdgQX=4sA7Lw3nh7bcn@mail.gmail.com>
+	<AANLkTi=M1GVWE=+DD5X=T2eeysYDhETsyrisG5W9PPZQ@mail.gmail.com>
+	<87aahqe63r.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTikpSLFns5fzrd3Un5Jy5cVfXz==4Wpf1_pUUdGz@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andy,
+Hello,
 
-On Mon, Feb 21, 2011 at 5:34 PM, ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
->>
->> I tried your scenario with the following device table line:
->>
->> /dev/mybetterdev ? ? ? ? c ? ? ? 640 ? ? 0 ? ? ? 0 ? ? ? 230 ? ? 0
->> ? 1 ? ? ? 1 ? ? ? 10
->>
->> which resulted in:
->>
->> crw-r----- 1 root root 230, 0 2011-02-20 10:42 /mnt/dev/mybetterdev1
->> crw-r----- 1 root root 230, 1 2011-02-20 10:42 /mnt/dev/mybetterdev2
->> crw-r----- 1 root root 230, 2 2011-02-20 10:42 /mnt/dev/mybetterdev3
->> crw-r----- 1 root root 230, 3 2011-02-20 10:42 /mnt/dev/mybetterdev4
->> crw-r----- 1 root root 230, 4 2011-02-20 10:42 /mnt/dev/mybetterdev5
->> crw-r----- 1 root root 230, 5 2011-02-20 10:42 /mnt/dev/mybetterdev6
->> crw-r----- 1 root root 230, 6 2011-02-20 10:42 /mnt/dev/mybetterdev7
->> crw-r----- 1 root root 230, 7 2011-02-20 10:42 /mnt/dev/mybetterdev8
->> crw-r----- 1 root root 230, 8 2011-02-20 10:42 /mnt/dev/mybetterdev9
->>
->> This is what you wanted, right?
->
-> Crap, I feel into the same trap:
->
-> /dev/mydev ? c ?666 ? 0 ? 0 ? 254 ? ?1 ? 1 ? 1 ? 24
->
-> gives the following (and I didn't see that until just now):
->
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 1 Feb 18 ?2011 /dev/mydev1
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?10 Feb 18 ?2011 /dev/mydev10
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?11 Feb 18 ?2011 /dev/mydev11
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?12 Feb 18 ?2011 /dev/mydev12
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?13 Feb 18 ?2011 /dev/mydev13
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?14 Feb 18 ?2011 /dev/mydev14
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?15 Feb 18 ?2011 /dev/mydev15
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?16 Feb 18 ?2011 /dev/mydev16
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?17 Feb 18 ?2011 /dev/mydev17
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?18 Feb 18 ?2011 /dev/mydev18
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?19 Feb 18 ?2011 /dev/mydev19
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 2 Feb 18 ?2011 /dev/mydev2
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?20 Feb 18 ?2011 /dev/mydev20
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?21 Feb 18 ?2011 /dev/mydev21
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?22 Feb 18 ?2011 /dev/mydev22
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ?23 Feb 18 ?2011 /dev/mydev23
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 3 Feb 18 ?2011 /dev/mydev3
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 4 Feb 18 ?2011 /dev/mydev4
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 5 Feb 18 ?2011 /dev/mydev5
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 6 Feb 18 ?2011 /dev/mydev6
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 7 Feb 18 ?2011 /dev/mydev7
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 8 Feb 18 ?2011 /dev/mydev8
-> crw-rw-rw- ? ?1 root ? ? root ? ? ?254, ? 9 Feb 18 ?2011 /dev/mydev9
->
-> and my device minor numbers were wrong. ?This was the fix:
->
-> /dev/mydev ? c ?666 ?0 0 254 0 1 1 25
->
-> Though, I would love for someone to answer the question of "why do
-> I have to request 25 device nodes to get 24?"
+thanks for fix, it's ok now!
 
-A quick look at the code reveals why:
-http://git.buildroot.net/buildroot/tree/target/makedevs/makedevs.c?h=2010.11&id=eb0ee4509d3112d80cbb210b44fb682ba7033385#n459
+Zdenek
 
-for (i = start; i < count; i++) {
-	sprintf(full_name_inc, "%s%d", full_name, i);
-	rdev = (major << 8) + minor + (i * increment - start);
-	if (mknod(full_name_inc, mode, rdev) == -1) {
-		...
-	}
-	...
-}
+2011/2/20 Peter Korsgaard <jacmet@uclibc.org>
 
-where start, increment and count are the three last numbers in the
-device table file.
-So, 'count' is not coded as a count, but rather as a maximum value - 1.
-
-I'm not sure what the best solution would be: either to keep the code
-and fix the documentation, or to fix the code based on the
-documentation.
-
-Changing 'i < count' to 'i < start + count' should fix the code.
-
-Best regards,
-Thomas
+> >>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
+>
+>  Martin> 2011/2/20 Zden?k Materna <zdenek.materna@gmail.com>:
+>  >> Hello,
+>  >>
+>  >> I'm back with another problem which I can't solve. I'm using buildroot
+> from
+>  >> git, uclibc 0.9.31 and there is some problem with building nfs-utils
+> (build
+>  >> log at bottom). If I understand it right rpcgen is used to generate
+> mount.h.
+>  >> But rpcgen is compiled for target and can't be run on host. Then it's
+> little
+>  >> bit strange that mount.h missing error is produced before "rpcgen:
+> cannot
+>  >> execute binary file" error.
+>  >>
+>  >> Can anybody explain it for me? I'm quite confused with it. And any tips
+> what
+>  >> to do to compile nfs-utils?
+>
+>  Martin> I fought with this in a non buildroot environment this week.  The
+>  Martin> reason is that rpcgen is compiled with your cross compiler and not
+>  Martin> your build host's CC.  I couldn't figure out how to make automake
+> use
+>  Martin> my host's compiler, but did eventually figure out that if you
+> install
+>  Martin> the rpcgen program from your build server's package manager into
+>  Martin> /usr/bin  you can specify RPCGEN=/usr/bin/rpcgen and nfs-utils
+> will
+>  Martin> stop trying to compile this tool and just use the one you've
+>  Martin> specified.
+>
+> FYI: I've fixed the nfs-utils package in git to build rpcgen itself, so
+> you no longer need this.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/4086a313/attachment.html>
