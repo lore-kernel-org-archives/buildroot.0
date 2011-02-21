@@ -1,33 +1,96 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 21 Feb 2011 15:19:02 -0600
-Subject: [Buildroot] booting JFFS2 or UBIFS created with buildroot
-In-Reply-To: <AANLkTimrjTXp24EtKa1zPrf1j6-s-p1twWYA832PAGun@mail.gmail.com>
-References: <AANLkTimrjTXp24EtKa1zPrf1j6-s-p1twWYA832PAGun@mail.gmail.com>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F5E11D6@EXV1.corp.adtran.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Mon, 21 Feb 2011 13:23:37 -0800
+Subject: [Buildroot] No response after "Freeing init memory"
+In-Reply-To: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
+References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
+Message-ID: <AANLkTi=MvzvzNPOMm+3xq8Y_H72PmYC5KV7Gb2gQ5=t-@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Zdenek:
+
+Usually when the terminal is quiet (no characters) after printing "Freeing
+init memory", it means the init process and its associated /etc/inittab is
+not quite setup completely.
+
+So, in looking at this, I would look at your definitions of ttyS0, the
+"getty" in /etc/inittab and maybe enable generic console support in
+buildroot on ttyS0.
+
+Charles
+
+2011/2/21 Zden?k Materna <zdenek.materna@gmail.com>
+
+> Hello,
+>
+> I have problem with init. Kernel boots ok, but after message "Freeing init
+> memory: 120K" there is no response (*), but system seems to be up (it
+> responds to ping). I tried to change init=/linuxrc to init=/hello which is
+> statically compiled hello world and after that I got kernel panic (**). I
+> double checked all configuration, but I couldn't find nothing weird. I have
+> Generic serial port configured and console is also configured in inittab.
+> All is compiled with same toolchain with EABI. Where might be problem?
+> Thanks for any advice.
+>
+> My kernel command line: mem=64M console=ttyS0,115200 root=/dev/nfs rw
+> nfsroot=192.168.1.37:/home/zdenal/nfsroot/,proto=tcp ip=dhcp
+> init=/linuxrc.
+>
+> Buildroot from git, kernel 2.6.33.7, uClibc 0.9.31, Busybox 1.18.
+>
+> * with init=/linuxrc
+>
+> VFS: Mounted root (nfs filesystem) on device 0:13.
+>
+> Freeing init memory: 120K
+>
+> eth0: link up (100/Full)
+>
+>
+>
+> ** With init=/hello
+>
+> VFS: Mounted root (nfs filesystem) on device 0:13.
+>
+> Freeing init memory: 120K
+>
+> Kernel panic - not syncing: Attempted to kill init!
+>
+> [<c002c934>] (unwi
+>
+> nd_backtrace+0x0/0xd0) from [<c0244c04>] (panic+0x44/0x120)
+>
+> [<c0244c04>] (panic+0x44/0x120) from [<c003e840>] (do_exit+0x68/0x5c8)
+>
+> [<c003e840>] (do_exit+0x68/0x5c8) from [<c003f080>]
+> (do_group_exit+0x90/0xc4)
+>
+> [<c003f080>] (do_group_exit+0x90/0xc4) from [<c0048c54>]
+> (get_signal_to_deliver+0x30c/0x344)
+>
+> [<c0048c54>] (get_signal_to_deliver+0x30c/0x344) from [<c00296ac>]
+> (do_signal+0x78/0x5f0)
+>
+> [<c00296ac>] (do_signal+0x78/0x5f0) from [<c002a110>]
+> (do_notify_resume+0x18/0x4c)
+>
+> [<c002a110>] (do_notify_resume+0x18/0x4c) from [<c0026f68>]
+> (work_pending+0x1c/0x20)
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
 
-From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Charles Krinke
-Sent: Monday, February 21, 2011 2:54 PM
-To: buildroot at busybox.net
-Subject: [Buildroot] booting JFFS2 or UBIFS created with buildroot
 
-Thanks guys for bearing with my first two questions. I believe I can compile u-boot, linux and various file systems such as cpio, jffs2, ubifs so now I get to a new puzzle.
-
-When I create a jffs2 image, I am used to giving u-boot a bootargs line that looks somewhat like:
-
-root=/dev/mtdblock2 rootfstype=jffs2 rw mtdparts=nor:1162k(U-boot),1536k(kernel),-(JFFS2)
-
-Which I believe essentially means that I have created mtdparts partitions on the fly and that the root filesystem should boot at the offset of JFFS2 and that the dynamic creation on the fly of the number of partitions doesnt matter as long as the jffs2 lines up with the last incantation.
-
-But, ... this doesnt work anymore.
-
-
-
-
-Define "doesn't work anymore".  The problem I'm seeing in linux-2.6.36.1 is that the kernel panics when attempting to create the devices on the fly (I think I have seen the panic around the function call add_device IIRC).  If this is a similar issue you are having, give me another week and I'll have it fixed as the MTD guys have ignored/not known the answer to my question from about a month ago.
+-- 
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/917cd3ca/attachment.html>
