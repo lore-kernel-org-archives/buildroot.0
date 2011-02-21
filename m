@@ -1,55 +1,57 @@
-From: Marco <chopin1998@gmail.com>
-Date: Mon, 21 Feb 2011 18:24:55 +0800
-Subject: [Buildroot] build python failed
-In-Reply-To: <871v31eq4s.fsf@macbook.be.48ers.dk>
-References: <AANLkTinfpWsELrvHSZYq1+w-W_zF6fgoSVgPEMVYxvjg@mail.gmail.com>
-	<871v31eq4s.fsf@macbook.be.48ers.dk>
-Message-ID: <AANLkTi=u98Dp4Ts2jYN_3oi3Ni8dHEOUy7PC6gjp4-r9@mail.gmail.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 21 Feb 2011 10:02:19 -0600
+Subject: [Buildroot] device_table question
+In-Reply-To: <AANLkTimh-oHKjexs3L7Ag1-x=R_E+Ha11kkHw4xJLh5-@mail.gmail.com>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1F559B74@EXV1.corp.adtran.com>
+	<AANLkTimh-oHKjexs3L7Ag1-x=R_E+Ha11kkHw4xJLh5-@mail.gmail.com>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F55A121@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WOW, that' cool!  Python running!
+> 
+> I tried your scenario with the following device table line:
+> 
+> /dev/mybetterdev         c       640     0       0       230     0
+>   1       1       10
+> 
+> which resulted in:
+> 
+> crw-r----- 1 root root 230, 0 2011-02-20 10:42 /mnt/dev/mybetterdev1
+> crw-r----- 1 root root 230, 1 2011-02-20 10:42 /mnt/dev/mybetterdev2
+> crw-r----- 1 root root 230, 2 2011-02-20 10:42 /mnt/dev/mybetterdev3
+> crw-r----- 1 root root 230, 3 2011-02-20 10:42 /mnt/dev/mybetterdev4
+> crw-r----- 1 root root 230, 4 2011-02-20 10:42 /mnt/dev/mybetterdev5
+> crw-r----- 1 root root 230, 5 2011-02-20 10:42 /mnt/dev/mybetterdev6
+> crw-r----- 1 root root 230, 6 2011-02-20 10:42 /mnt/dev/mybetterdev7
+> crw-r----- 1 root root 230, 7 2011-02-20 10:42 /mnt/dev/mybetterdev8
+> crw-r----- 1 root root 230, 8 2011-02-20 10:42 /mnt/dev/mybetterdev9
 
-Thank thee very much!
+Nope, if the above is a direct paste, nope, that's wrong.  You have
+nine devices up there, you asked for 10.
+ 
+> This is what you wanted, right?
+> 
+> Note that you seem to have forgotten one field in your device table
+> lines: I count only 9 fields, while you should have 10 (or is this a
+> typeover mistake?)
 
-On Mon, Feb 21, 2011 at 4:41 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+I must have backspaced through one of the numbers
 
-> >>>>> "Marco" == Marco  <chopin1998@gmail.com> writes:
->
->  Marco> Hi, All
->
->  Marco>     my buildroot has git pulled, and my target is at91sam9260. I
->  Marco> choose python package via make menuconfig, but make failed:
->
->
->  Marco>     In file included from Include/Python.h:86,
->  Marco>                      from ./Modules/python.c:4:
->  Marco>     Include/unicodeobject.h:575: warning: type defaults to 'int' in
-> declaration
->  Marco>     of 'wchar_t'
->
-> It doesn't find the wchar_t type.
->
-> Python does depend on wchar support in the toolchain, so you probably
-> have done a build without wchar, and then gone and added wchar support
-> and python without doing a clean rebuild.
->
-> For this kind of toolchain changes you need to do make clean; make.
->
->
-> --
-> Bye, Peter Korsgaard
->
+> 
+> The above was tested with Buildroot 2010.05.
+> 
+> Best regards,
+> Thomas
 
+What I did (which works) is:
 
+/dev/mydev   c  666   0   0   254    1   1   1   24
 
--- 
-LinuX
-Violin
-Canon EOS
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110221/9d683055/attachment.html>
+which actually gives 24 devices from 0 - 23 with names mydev[1-24].
+
+As long as it is 100% reproducible, I'm okay with this solution.
+
+Andy
