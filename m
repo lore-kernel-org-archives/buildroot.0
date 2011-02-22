@@ -1,42 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Feb 2011 23:31:01 +0100
-Subject: [Buildroot] [PATCH] makedevs: fix cases where (start != 0)
-In-Reply-To: <4D63E496.8020704@gmail.com> (Thomas De Schampheleire's message
-	of "Tue, 22 Feb 2011 17:30:14 +0100")
-References: <4D63E496.8020704@gmail.com>
-Message-ID: <87tyfvn1lm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 Feb 2011 00:40:11 +0100
+Subject: [Buildroot] [git commit master 1/1] package/multimedia: mark
+	festival packages as broken
+Message-ID: <20110222234940.283838F5A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- Thomas> The makedevs script did not always generate the requested set of device names / minor number series.
- Thomas> * If start != 0, then requesting (count) devices would generate only (count - start)
- Thomas> * If start != 0 && increment != 1, then requesting minors starting with (minor) would generate minors starting with (minor + (start * (increment - 1)))
+commit: http://git.buildroot.net/buildroot/commit/?id=a6ada2c94667fd6e1030cfeffd088703b263ddf8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> This patch fixes the code and updates the usage text with extra examples.
+After spending a couple of hours on it today, I'm still unable to get
+speech-tools to build and install properly with a uClibc toolchain.
 
-Good catch, thanks!
+So I'm giving up. Mark the entire thing broken as the text-to-speech
+stuff is unlikely to be used very much on the kind of small systems
+we're targetting.
 
- Thomas>  				full_name_inc = xmalloc(strlen(full_name) + 8);
- Thomas> -				for (i = start; i < count; i++) {
- Thomas> +				for (i = start; i < start + count; i++) {
- Thomas>  					sprintf(full_name_inc, "%s%d", full_name, i);
- Thomas> -					rdev = makedev(major, minor + (i * increment - start));
- Thomas> +					rdev = makedev(major, minor + ((i - start) * increment));
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/festival/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-It looks like the logic would be simplified some by using:
-
-   for (i=0; i < count; i++) {
-
-Care to rework the patch to do that instead?
-
-You could argue if it makes more sense to use start or minor in the
-makedevs call - They should be the same, but perhaps it would be cleaner
-to use the same everywhere instead of this mix.
-
+diff --git a/package/multimedia/festival/Config.in b/package/multimedia/festival/Config.in
+index 2be32f9..e05fde9 100644
+--- a/package/multimedia/festival/Config.in
++++ b/package/multimedia/festival/Config.in
+@@ -1,6 +1,7 @@
+ menuconfig BR2_PACKAGE_FESTIVAL
+ 	bool "festival text-to-speech system"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BROKEN # doesn't build
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_SPEECH_TOOLS
+ 	help
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
