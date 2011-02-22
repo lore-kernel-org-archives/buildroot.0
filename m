@@ -1,46 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Feb 2011 19:55:33 +0100
-Subject: [Buildroot] Problem when running a Qt program on AT91SAM9M10
-In-Reply-To: <1759946353.864.1298362207553.JavaMail.root@Tesla.Syntronic.com>
-References: <1411107015.845.1298361874825.JavaMail.root@Tesla.Syntronic.com>
-	<1759946353.864.1298362207553.JavaMail.root@Tesla.Syntronic.com>
-Message-ID: <20110222195533.1b8c6294@surf>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 22 Feb 2011 13:04:57 -0600
+Subject: [Buildroot] No response after "Freeing init memory"
+In-Reply-To: <20110222192538.6720529a@surf>
+References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com><AANLkTikh9tw-PuERGodGqC+aVS0dfkiyR11RGghcx=E2@mail.gmail.com><AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
+	<20110222192538.6720529a@surf>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F5E169D@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 22 Feb 2011 09:10:07 +0100 (CET)
-Anders Gabert <anga@syntronic.com> wrote:
 
-> I have a problem when running a Qt example program on AT91SAM9M10. 
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas
+> Petazzoni
+> Sent: Tuesday, February 22, 2011 12:26 PM
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] No response after "Freeing init memory"
 > 
-> I?m using Buildroot 2010.11 and have selected and compiled Qt. 
-> I get a bunch of Qt libs under usr/lib. 
+> On Tue, 22 Feb 2011 09:06:34 +0100
+> Zden?k Materna <zdenek.materna@gmail.com> wrote:
 > 
-> To test Qt I have compiled the calculator under the example widgets
-> when running it on the unit a get the error below. As you can see
-> there are characters missing in the error text. When looking in the
-> Qt code, I think the last line should be ?Cannot create Qt for
-> Embedded Linux data directory: %s?. Has anyone had the same problem
-> or a solution to it. 
+> > -------------- inittab ---------------------------------------------------
+> >
+> > # /etc/inittab
+> > #
+> > # This inittab is a basic inittab sample for sysvinit, which mimics
+> > # Buildroot's default inittab for Busybox.
 > 
-> # ./calculator -qws 
+> Aah, you have enabled sysvinit. Could you disable it, make clean &&
+> make, and retry ?
+> 
+> Busybox already contains a default init, and it's the one most of us
+> test and use on a daily basis.
+> 
+> I've written this sysvinit inittab not long ago, it was working for me,
+> but it definitely does not receive as much testing as the sysvinit one
+> gets.
+> 
 
-I have just tested the calculator example on a simple ARM system built
-by Buildroot, and it works fine here in Qemu.
+Isn't the main difference just S0 vs ttyS0 from the two init files?
 
-Could you give some details: your Buildroot .config, and the procedure
-you use to build the calculator application.
+So, (if I'm remembering correctly) a simple test would be to change
+ttyS0 to S0, right?
 
-Regards,
+Andy
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
