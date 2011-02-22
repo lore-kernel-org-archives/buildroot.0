@@ -1,38 +1,28 @@
-From: Anders Gabert <anga@syntronic.com>
-Date: Tue, 22 Feb 2011 09:10:07 +0100 (CET)
-Subject: [Buildroot] Problem when running a Qt program on AT91SAM9M10
-In-Reply-To: <1411107015.845.1298361874825.JavaMail.root@Tesla.Syntronic.com>
-Message-ID: <1759946353.864.1298362207553.JavaMail.root@Tesla.Syntronic.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 22 Feb 2011 10:05:58 +0100
+Subject: [Buildroot] rebuilding u-boot
+In-Reply-To: <AANLkTim69LmQk8O7Evg9Tb4f9yOS6KRb7L_5VXCQTZbo@mail.gmail.com>
+	(Charles Krinke's message of "Mon, 21 Feb 2011 17:31:43 -0800")
+References: <AANLkTim69LmQk8O7Evg9Tb4f9yOS6KRb7L_5VXCQTZbo@mail.gmail.com>
+Message-ID: <87y658qw09.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi 
+>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-I have a problem when running a Qt example program on AT91SAM9M10. 
+ Charles> I figured out how to rebuild uImage after reviewing the instructions. To help
+ Charles> others, it involves removing the file ".stamp_compiled" from the top of the
+ Charles> linux kernel tree in output/build/linux-xxx/
 
-I?m using Buildroot 2010.11 and have selected and compiled Qt. 
-I get a bunch of Qt libs under usr/lib. 
+ Charles> But, ... there is no corresponding ".stamp_compiled" in output/build/
+ Charles> u-boot-2010.06/
 
-To test Qt I have compiled the calculator under the example widgets when running it on 
-the unit a get the error below. As you can see there are characters missing in the error text. 
-When looking in the Qt code, I think the last line should be 
-?Cannot create Qt for Embedded Linux data directory: %s?. 
-Has anyone had the same problem or a solution to it. 
+ Charles> So, .... how does one go about rebuilding u-boot?
 
-# ./calculator -qws 
-QString::arg: Argument missing: "/proc/%1/exe" , 384 
-Qtig:r:Agmn isn:"po/1ee 8 ? 
-Qtig:r:Agmn isn:"po/1ee 8 ? 
-Qtig:r:Agmn isn:%ted,/ 
-Qtig:r:Agmn isn:"1qebde-2 ????? 
-Cno raeQ o meddLnxdt ietr:%ted 
-Aborted 
-# 
+rm output/build/u-boot-*/u-boot.bin
 
-//Anders 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110222/ee0f23ae/attachment.html>
+-- 
+Bye, Peter Korsgaard
