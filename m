@@ -1,61 +1,74 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Tue, 22 Feb 2011 13:04:57 -0600
-Subject: [Buildroot] No response after "Freeing init memory"
-In-Reply-To: <20110222192538.6720529a@surf>
-References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com><AANLkTikh9tw-PuERGodGqC+aVS0dfkiyR11RGghcx=E2@mail.gmail.com><AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
-	<20110222192538.6720529a@surf>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F5E169D@EXV1.corp.adtran.com>
+From: Steve Johnson <sjohnson228@gmail.com>
+Date: Tue, 22 Feb 2011 12:10:32 -0800
+Subject: [Buildroot] Errors using buildroot-2010.11 on Fedora 14 x86_64
+Message-ID: <AANLkTikMr6bW=CpEH5RTq+jAm+Kd8K7YCLdDtY5E23yE@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I get the following error when I try to use buildroot (this is the end of
+the output):
 
+rm -rf /home//projects/embeddedlinux/
+test1/build-tools/buildroot-2010.11/output/target/usr/share/gtk-doc
+rmdir
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/usr/share
+2>/dev/null
+* make: [target-finalize] Error 1 (ignored)*
+find
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target
+-type f -perm +111 '!' -name 'libthread_db*.so*' | \
+               xargs
+/home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-strip
+--remove-section=.comment --remove-section=.note 2>/dev/null || true
+find
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/lib/modules
+-type f -name '*.ko' | \
+               xargs -r
+/home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-strip
+--remove-section=.comment --remove-section=.note --strip-unneeded ||
+true
+find:
+`/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/lib/modules':
+No such file or directory
+mkdir -p
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/etc
+# Mandatory configuration file and auxilliary cache directory
+# for recent versions of ldconfig
+touch
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/etc/ld.so.conf
+mkdir -p
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/var/cache/ldconfig
+if [ -x
+"/home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-ldconfig"
+]; \
+       then \
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Thomas
-> Petazzoni
-> Sent: Tuesday, February 22, 2011 12:26 PM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] No response after "Freeing init memory"
-> 
-> On Tue, 22 Feb 2011 09:06:34 +0100
-> Zden?k Materna <zdenek.materna@gmail.com> wrote:
-> 
-> > -------------- inittab ---------------------------------------------------
-> >
-> > # /etc/inittab
-> > #
-> > # This inittab is a basic inittab sample for sysvinit, which mimics
-> > # Buildroot's default inittab for Busybox.
-> 
-> Aah, you have enabled sysvinit. Could you disable it, make clean &&
-> make, and retry ?
-> 
-> Busybox already contains a default init, and it's the one most of us
-> test and use on a daily basis.
-> 
-> I've written this sysvinit inittab not long ago, it was working for me,
-> but it definitely does not receive as much testing as the sysvinit one
-> gets.
-> 
+ /home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-ldconfig
+-r
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target;
+\
+       else \
+               /sbin/ldconfig -r
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target;
+\
+       fi
+/home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-ldconfig:
+*can't resolve /usr/X11R6/lib in chroot .: No such file or directory
+*
+/home//projects/embeddedlinux/test1/tools1/usr/bin/arm-unknown-linux-uclibcgnueabi-ldconfig:
+*skipping /usr/X11R6/lib: No such file or directory
+*echo 2010.11 >
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/target/etc/br-version
+rm -f
+/home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/build/.fakeroot*
+$
 
-Isn't the main difference just S0 vs ttyS0 from the two init files?
+Thanks,
 
-So, (if I'm remembering correctly) a simple test would be to change
-ttyS0 to S0, right?
-
-Andy
-
-
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Steve
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110222/b95d11fd/attachment.html>
