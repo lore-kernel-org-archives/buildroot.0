@@ -1,31 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Feb 2011 23:20:56 +0100
-Subject: [Buildroot] Errors using buildroot-2010.11 on Fedora 14 x86_64
-In-Reply-To: <AANLkTikMr6bW=CpEH5RTq+jAm+Kd8K7YCLdDtY5E23yE@mail.gmail.com>
-	(Steve Johnson's message of "Tue, 22 Feb 2011 12:10:32 -0800")
-References: <AANLkTikMr6bW=CpEH5RTq+jAm+Kd8K7YCLdDtY5E23yE@mail.gmail.com>
-Message-ID: <87y657n22f.fsf@macbook.be.48ers.dk>
+Date: Tue, 22 Feb 2011 23:31:01 +0100
+Subject: [Buildroot] [PATCH] makedevs: fix cases where (start != 0)
+In-Reply-To: <4D63E496.8020704@gmail.com> (Thomas De Schampheleire's message
+	of "Tue, 22 Feb 2011 17:30:14 +0100")
+References: <4D63E496.8020704@gmail.com>
+Message-ID: <87tyfvn1lm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Johnson <sjohnson228@gmail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- Steve> I get the following error when I try to use buildroot (this is
- Steve> the end of the output):
+ Thomas> The makedevs script did not always generate the requested set of device names / minor number series.
+ Thomas> * If start != 0, then requesting (count) devices would generate only (count - start)
+ Thomas> * If start != 0 && increment != 1, then requesting minors starting with (minor) would generate minors starting with (minor + (start * (increment - 1)))
 
- Steve> echo 2010.11 > /home//projects/embeddedlinux/test1/build-tools/
- Steve> buildroot-2010.11/output/target/etc/br-version
- Steve> rm -f /home//projects/embeddedlinux/test1/build-tools/buildroot-2010.11/output/
- Steve> build/.fakeroot*
+ Thomas> This patch fixes the code and updates the usage text with extra examples.
 
-I don't see any errors. From this output it just looks as if you didn't
-enable any output images (make menuconfig -> Target filesystem options).
+Good catch, thanks!
 
-The warnings / ignored errors above are expected (depending on what
-packages are enabled).
+ Thomas>  				full_name_inc = xmalloc(strlen(full_name) + 8);
+ Thomas> -				for (i = start; i < count; i++) {
+ Thomas> +				for (i = start; i < start + count; i++) {
+ Thomas>  					sprintf(full_name_inc, "%s%d", full_name, i);
+ Thomas> -					rdev = makedev(major, minor + (i * increment - start));
+ Thomas> +					rdev = makedev(major, minor + ((i - start) * increment));
+
+It looks like the logic would be simplified some by using:
+
+   for (i=0; i < count; i++) {
+
+Care to rework the patch to do that instead?
+
+You could argue if it makes more sense to use start or minor in the
+makedevs call - They should be the same, but perhaps it would be cleaner
+to use the same everywhere instead of this mix.
 
 -- 
 Bye, Peter Korsgaard
