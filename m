@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Feb 2011 19:25:38 +0100
-Subject: [Buildroot] No response after "Freeing init memory"
-In-Reply-To: <AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
-References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
-	<AANLkTikh9tw-PuERGodGqC+aVS0dfkiyR11RGghcx=E2@mail.gmail.com>
-	<AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
-Message-ID: <20110222192538.6720529a@surf>
+Date: Tue, 22 Feb 2011 19:55:33 +0100
+Subject: [Buildroot] Problem when running a Qt program on AT91SAM9M10
+In-Reply-To: <1759946353.864.1298362207553.JavaMail.root@Tesla.Syntronic.com>
+References: <1411107015.845.1298361874825.JavaMail.root@Tesla.Syntronic.com>
+	<1759946353.864.1298362207553.JavaMail.root@Tesla.Syntronic.com>
+Message-ID: <20110222195533.1b8c6294@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Feb 2011 09:06:34 +0100
-Zden?k Materna <zdenek.materna@gmail.com> wrote:
+Hello,
 
-> -------------- inittab ---------------------------------------------------
+On Tue, 22 Feb 2011 09:10:07 +0100 (CET)
+Anders Gabert <anga@syntronic.com> wrote:
+
+> I have a problem when running a Qt example program on AT91SAM9M10. 
 > 
-> # /etc/inittab
-> #
-> # This inittab is a basic inittab sample for sysvinit, which mimics
-> # Buildroot's default inittab for Busybox.
+> I?m using Buildroot 2010.11 and have selected and compiled Qt. 
+> I get a bunch of Qt libs under usr/lib. 
+> 
+> To test Qt I have compiled the calculator under the example widgets
+> when running it on the unit a get the error below. As you can see
+> there are characters missing in the error text. When looking in the
+> Qt code, I think the last line should be ?Cannot create Qt for
+> Embedded Linux data directory: %s?. Has anyone had the same problem
+> or a solution to it. 
+> 
+> # ./calculator -qws 
 
-Aah, you have enabled sysvinit. Could you disable it, make clean &&
-make, and retry ?
+I have just tested the calculator example on a simple ARM system built
+by Buildroot, and it works fine here in Qemu.
 
-Busybox already contains a default init, and it's the one most of us
-test and use on a daily basis.
+Could you give some details: your Buildroot .config, and the procedure
+you use to build the calculator application.
 
-I've written this sysvinit inittab not long ago, it was working for me,
-but it definitely does not receive as much testing as the sysvinit one
-gets.
+Regards,
 
 Thomas
 -- 
