@@ -1,25 +1,958 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 Feb 2011 07:31:03 +0100
-Subject: [Buildroot] Buildroot AT91 support
-In-Reply-To: <AANLkTinWjJjMqL_x5gRVKBKQuyo4GkHwMYXkstH9xyUm@mail.gmail.com>
-	(bruce bushby's message of "Wed, 23 Feb 2011 01:50:44 +0000")
-References: <AANLkTinWjJjMqL_x5gRVKBKQuyo4GkHwMYXkstH9xyUm@mail.gmail.com>
-Message-ID: <87oc63mfdk.fsf@macbook.be.48ers.dk>
+From: Anders Gabert <anga@syntronic.com>
+Date: Wed, 23 Feb 2011 08:29:04 +0100 (CET)
+Subject: [Buildroot] Problem when running a Qt program on AT91SAM9M10
+In-Reply-To: <20110222195533.1b8c6294@surf>
+Message-ID: <484982291.450.1298446144179.JavaMail.root@Tesla.Syntronic.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "bruce" == bruce bushby <bruce.bushby@gmail.com> writes:
+Hi, Tanks for the replay 
 
-Hi,
+This is how I built the calculator example. 
 
- bruce> Is it safe to consider those instructions as deprecated given
- bruce> the current buildroot appears to have broad support for AT91
- bruce> boards?
+cd ~/qt_proj/buildroot-2010.11/output/build/qt-everywhere-opensource-src-4.7.1/examples/widgets 
+~/qt_proj/buildroot-2010.11/output/staging/usr/bin/qmake widgets.pro 
+make 
 
-Yes. I use the official buildroot tree with at91 variants daily.
+This builds all the widgets examples without errors. Then I copy the calculator to the target filesystem and 
+move to the root of Buildroot execute make to get a new filesystem tar. 
 
+cp calculator/calculator ../../../../target/root/ 
+cd ~/qt_proj/buildroot-2010.11 
+make 
+
+Below you can see my .config file, sorry if I did it wrong by pasting 
+it in to the mail instead of an attachment. 
+
+.config start >> 
+# 
+# Automatically generated make config: don't edit 
+# Buildroot version: 2010.11 
+# Mon Feb 21 13:51:50 2011 
+# 
+BR2_HAVE_DOT_CONFIG=y 
+BR2_arm=y 
+# BR2_armeb is not set 
+# BR2_avr32 is not set 
+# BR2_i386 is not set 
+# BR2_mips is not set 
+# BR2_mipsel is not set 
+# BR2_powerpc is not set 
+# BR2_sh is not set 
+# BR2_sh64 is not set 
+# BR2_sparc is not set 
+# BR2_x86_64 is not set 
+# BR2_xtensa is not set 
+# BR2_generic_arm is not set 
+# BR2_arm7tdmi is not set 
+# BR2_arm610 is not set 
+# BR2_arm710 is not set 
+# BR2_arm720t is not set 
+# BR2_arm920t is not set 
+# BR2_arm922t is not set 
+BR2_arm926t=y 
+# BR2_arm10t is not set 
+# BR2_arm1136jf_s is not set 
+# BR2_arm1176jz_s is not set 
+# BR2_arm1176jzf_s is not set 
+
+# 
+# cortex-A8/A9 needs gcc >= 4.4.x 
+# 
+# BR2_cortex_a8 is not set 
+# BR2_cortex_a9 is not set 
+# BR2_sa110 is not set 
+# BR2_sa1100 is not set 
+# BR2_xscale is not set 
+# BR2_iwmmxt is not set 
+BR2_ARM_TYPE="ARM926T" 
+# BR2_ARM_EABI is not set 
+BR2_ARM_OABI=y 
+BR2_ARCH="arm" 
+BR2_ENDIAN="LITTLE" 
+BR2_GCC_TARGET_TUNE="arm926ej-s" 
+BR2_GCC_TARGET_ARCH="armv5te" 
+BR2_GCC_TARGET_ABI="apcs-gnu" 
+
+# 
+# Target options 
+# 
+
+# 
+# Preset Devices 
+# 
+# BR2_TARGET_ARMLTD is not set 
+BR2_BOARD_NAME="at91sam9g45ekes" 
+BR2_BOARD_PATH="target/device/Atmel/$(BR2_BOARD_NAME)" 
+BR2_TARGET_ATMEL=y 
+
+# 
+# Atmel AT91 Specific Device Support 
+# 
+BR2_TARGET_AT91=y 
+
+# 
+# Selection criteria 
+# 
+BR2_TARGET_ATMEL_ALL=y 
+
+# 
+# Device Selection 
+# 
+# BR2_TARGET_AT91RM9200 is not set 
+# BR2_TARGET_AT91SAM9260 is not set 
+# BR2_TARGET_AT91SAM9G20 is not set 
+# BR2_TARGET_AT91SAM9261 is not set 
+# BR2_TARGET_AT91SAM9263 is not set 
+BR2_TARGET_AT91SAM9G45=y 
+
+# 
+# Development Board Selection 
+# 
+BR2_TARGET_AT91SAM9G45EKES=y 
+BR2_TARGET_AT91_ADVANCED_INFO=y 
+
+# 
+# Package support 
+# 
+
+# 
+# Secondary locations 
+# 
+BR2_AT91_LINUXPATCH_SITE="http://maxim.org.za/AT91RM9200/2.6" 
+# BR2_TARGET_KWIKBYTE is not set 
+
+# 
+# Build options 
+# 
+
+# 
+# Commands 
+# 
+BR2_WGET="wget --passive-ftp -nd -t 3" 
+BR2_SVN="svn" 
+BR2_BZR="bzr" 
+BR2_GIT="git" 
+BR2_ZCAT="gzip -d -c" 
+BR2_BZCAT="bzcat" 
+BR2_TAR_OPTIONS="" 
+BR2_DL_DIR="$(TOPDIR)/dl" 
+BR2_STAGING_DIR="$(BASE_DIR)/staging" 
+
+# 
+# Mirrors and Download locations 
+# 
+BR2_PRIMARY_SITE="" 
+BR2_BACKUP_SITE="http://sources.buildroot.net/" 
+BR2_SOURCEFORGE_MIRROR="easynews" 
+BR2_KERNEL_MIRROR="http://www.kernel.org/pub/" 
+BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu" 
+BR2_DEBIAN_MIRROR="http://ftp.debian.org" 
+BR2_ATMEL_MIRROR="ftp://www.at91.com/pub/buildroot/" 
+BR2_AT91_PATCH_MIRROR="http://maxim.org.za/AT91RM9200/2.6/" 
+BR2_JLEVEL=2 
+# BR2_DEPRECATED is not set 
+# BR2_ENABLE_DEBUG is not set 
+BR2_STRIP_strip=y 
+# BR2_STRIP_sstrip is not set 
+# BR2_STRIP_none is not set 
+# BR2_OPTIMIZE_0 is not set 
+# BR2_OPTIMIZE_1 is not set 
+# BR2_OPTIMIZE_2 is not set 
+# BR2_OPTIMIZE_3 is not set 
+BR2_OPTIMIZE_S=y 
+# BR2_PREFER_STATIC_LIB is not set 
+# BR2_HAVE_DOCUMENTATION is not set 
+# BR2_HAVE_DEVFILES is not set 
+
+# 
+# Toolchain 
+# 
+BR2_TOOLCHAIN_BUILDROOT=y 
+# BR2_TOOLCHAIN_EXTERNAL is not set 
+# BR2_TOOLCHAIN_CTNG is not set 
+
+# 
+# Kernel Header Options 
+# 
+# BR2_KERNEL_HEADERS_2_6_34 is not set 
+# BR2_KERNEL_HEADERS_2_6_35 is not set 
+BR2_KERNEL_HEADERS_2_6_36=y 
+# BR2_KERNEL_HEADERS_VERSION is not set 
+# BR2_KERNEL_HEADERS_SNAP is not set 
+BR2_DEFAULT_KERNEL_HEADERS="2.6.36.1" 
+
+# 
+# uClibc Options 
+# 
+# BR2_UCLIBC_VERSION_0_9_30 is not set 
+BR2_UCLIBC_VERSION_0_9_31=y 
+# BR2_UCLIBC_VERSION_SNAPSHOT is not set 
+BR2_UCLIBC_VERSION_STRING="0.9.31" 
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config" 
+# BR2_PTHREAD_DEBUG is not set 
+# BR2_UCLIBC_INSTALL_TEST_SUITE is not set 
+
+# 
+# Binutils Options 
+# 
+# BR2_BINUTILS_VERSION_2_20 is not set 
+BR2_BINUTILS_VERSION_2_20_1=y 
+BR2_BINUTILS_VERSION="2.20.1" 
+BR2_EXTRA_BINUTILS_CONFIG_OPTIONS="" 
+
+# 
+# GCC Options 
+# 
+# BR2_GCC_VERSION_4_2_4 is not set 
+BR2_GCC_VERSION_4_3_X=y 
+# BR2_GCC_VERSION_4_4_X is not set 
+# BR2_GCC_VERSION_4_5_X is not set 
+# BR2_GCC_VERSION_SNAP is not set 
+BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y 
+BR2_GCC_VERSION="4.3.5" 
+BR2_EXTRA_GCC_CONFIG_OPTIONS="" 
+# BR2_GCC_CROSS_OBJC is not set 
+# BR2_GCC_CROSS_FORTRAN is not set 
+# BR2_INSTALL_OBJC is not set 
+# BR2_INSTALL_FORTRAN is not set 
+BR2_GCC_SHARED_LIBGCC=y 
+
+# 
+# Ccache Options 
+# 
+# BR2_CCACHE is not set 
+
+# 
+# Gdb Options 
+# 
+# BR2_PACKAGE_GDB is not set 
+# BR2_PACKAGE_GDB_SERVER is not set 
+# BR2_PACKAGE_GDB_HOST is not set 
+
+# 
+# Common Toolchain Options 
+# 
+# BR2_LARGEFILE is not set 
+# BR2_INET_IPV6 is not set 
+# BR2_INET_RPC is not set 
+# BR2_ENABLE_LOCALE is not set 
+# BR2_ENABLE_LOCALE_PURGE is not set 
+BR2_NEEDS_GETTEXT=y 
+BR2_USE_WCHAR=y 
+BR2_PREFER_SOFT_FLOAT=y 
+# BR2_SOFT_FLOAT is not set 
+# BR2_USE_SSP is not set 
+# BR2_PTHREADS_NONE is not set 
+# BR2_PTHREADS is not set 
+BR2_PTHREADS_OLD=y 
+# BR2_PROGRAM_INVOCATION is not set 
+BR2_GCC_CROSS_CXX=y 
+BR2_INSTALL_LIBSTDCPP=y 
+BR2_TARGET_OPTIMIZATION="-pipe" 
+# BR2_ELF2FLT is not set 
+# BR2_MKLIBS is not set 
+# BR2_PACKAGE_SSTRIP_TARGET is not set 
+# BR2_PACKAGE_SSTRIP_HOST is not set 
+# BR2_VFP_FLOAT is not set 
+BR2_CROSS_TOOLCHAIN_TARGET_UTILS=y 
+
+# 
+# Package Selection for the target 
+# 
+BR2_PACKAGE_BUSYBOX=y 
+# BR2_BUSYBOX_VERSION_1_15_X is not set 
+# BR2_BUSYBOX_VERSION_1_16_X is not set 
+BR2_BUSYBOX_VERSION_1_17_X=y 
+# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set 
+BR2_BUSYBOX_VERSION="1.17.4" 
+BR2_PACKAGE_BUSYBOX_FULLINSTALL=y 
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.17.x.config" 
+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set 
+# BR2_PACKAGE_CUSTOMIZE is not set 
+
+# 
+# Audio and video libraries and applications 
+# 
+# BR2_PACKAGE_ALSA_LIB is not set 
+
+# 
+# alsa-utils requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_AUMIX is not set 
+# BR2_PACKAGE_FLAC is not set 
+
+# 
+# ffmpeg requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_GSTREAMER is not set 
+
+# 
+# gst-ffmpeg requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_LIBCDAUDIO is not set 
+
+# 
+# libdvdread requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# libdvdnav requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_LIBID3TAG is not set 
+# BR2_PACKAGE_LIBMAD is not set 
+# BR2_PACKAGE_LIBMMS is not set 
+# BR2_PACKAGE_LIBMPD is not set 
+# BR2_PACKAGE_LIBMPEG2 is not set 
+# BR2_PACKAGE_LIBOGG is not set 
+# BR2_PACKAGE_LIBSNDFILE is not set 
+# BR2_PACKAGE_LIBTHEORA is not set 
+# BR2_PACKAGE_LIBVORBIS is not set 
+# BR2_PACKAGE_MADPLAY is not set 
+# BR2_PACKAGE_MPG123 is not set 
+# BR2_PACKAGE_MPLAYER is not set 
+# BR2_PACKAGE_SPEEX is not set 
+# BR2_PACKAGE_SWFDEC is not set 
+# BR2_PACKAGE_FESTIVAL is not set 
+# BR2_PACKAGE_TAGLIB is not set 
+# BR2_PACKAGE_TREMOR is not set 
+
+# 
+# Compressors and decompressors 
+# 
+# BR2_PACKAGE_LZOP is not set 
+# BR2_PACKAGE_XZ is not set 
+
+# 
+# Debugging, profiling and benchmark 
+# 
+# BR2_PACKAGE_DMALLOC is not set 
+# BR2_PACKAGE_KEXEC is not set 
+
+# 
+# lmbench requires a toolchain with RPC support 
+# 
+
+# 
+# lsof requires a toolchain with RPC support 
+# 
+# BR2_PACKAGE_LTRACE is not set 
+# BR2_PACKAGE_MEMSTAT is not set 
+# BR2_PACKAGE_NETPERF is not set 
+# BR2_PACKAGE_OPROFILE is not set 
+# BR2_PACKAGE_STRACE is not set 
+
+# 
+# Development tools 
+# 
+# BR2_PACKAGE_AUTOCONF is not set 
+# BR2_PACKAGE_AUTOMAKE is not set 
+# BR2_PACKAGE_BISON is not set 
+# BR2_PACKAGE_BSDIFF is not set 
+# BR2_PACKAGE_CVS is not set 
+# BR2_PACKAGE_DISTCC is not set 
+# BR2_PACKAGE_FAKEROOT is not set 
+# BR2_PACKAGE_FLEX is not set 
+
+# 
+# native toolchain needs development files in target filesystem 
+# 
+# BR2_PACKAGE_GETTEXT is not set 
+# BR2_PACKAGE_LIBINTL is not set 
+# BR2_PACKAGE_LIBGMP is not set 
+# BR2_PACKAGE_GPERF is not set 
+# BR2_PACKAGE_MAKE is not set 
+# BR2_PACKAGE_LIBMPC is not set 
+# BR2_PACKAGE_LIBMPFR is not set 
+# BR2_PACKAGE_LIBTOOL is not set 
+# BR2_PACKAGE_M4 is not set 
+# BR2_PACKAGE_PKG_CONFIG is not set 
+
+# 
+# Games 
+# 
+# BR2_PACKAGE_GNUCHESS is not set 
+# BR2_PACKAGE_PRBOOM is not set 
+
+# 
+# Graphic libraries and applications (graphic/text) 
+# 
+
+# 
+# Graphic applications 
+# 
+# BR2_PACKAGE_RRDTOOL is not set 
+
+# 
+# graphic libraries 
+# 
+# BR2_PACKAGE_DIRECTFB is not set 
+# BR2_PACKAGE_FBDUMP is not set 
+# BR2_PACKAGE_FBV is not set 
+# BR2_PACKAGE_IMAGEMAGICK is not set 
+# BR2_PACKAGE_SDL is not set 
+
+# 
+# other GUIs 
+# 
+BR2_PACKAGE_QT=y 
+# BR2_PACKAGE_QT_DEBUG is not set 
+# BR2_PACKAGE_QT_DEMOS is not set 
+BR2_PACKAGE_QT_SHARED=y 
+# BR2_PACKAGE_QT_STATIC is not set 
+BR2_PACKAGE_QT_LICENSE_APPROVED=y 
+# BR2_PACKAGE_QT_QT3SUPPORT is not set 
+BR2_PACKAGE_QT_GUI_MODULE=y 
+
+# 
+# Pixel depths 
+# 
+
+# 
+# Deselecting each option leads to Qt's default (8,16,32) 
+# 
+# BR2_PACKAGE_QT_PIXEL_DEPTH_1 is not set 
+# BR2_PACKAGE_QT_PIXEL_DEPTH_4 is not set 
+BR2_PACKAGE_QT_PIXEL_DEPTH_8=y 
+# BR2_PACKAGE_QT_PIXEL_DEPTH_12 is not set 
+# BR2_PACKAGE_QT_PIXEL_DEPTH_15 is not set 
+BR2_PACKAGE_QT_PIXEL_DEPTH_16=y 
+# BR2_PACKAGE_QT_PIXEL_DEPTH_18 is not set 
+BR2_PACKAGE_QT_PIXEL_DEPTH_24=y 
+BR2_PACKAGE_QT_PIXEL_DEPTH_32=y 
+
+# 
+# Fonts 
+# 
+BR2_PACKAGE_QT_FONT_MICRO=y 
+BR2_PACKAGE_QT_FONT_FIXED=y 
+BR2_PACKAGE_QT_FONT_HELVETICA=y 
+# BR2_PACKAGE_QT_FONT_JAPANESE is not set 
+# BR2_PACKAGE_QT_FONT_UNIFONT is not set 
+# BR2_PACKAGE_QT_NOFREETYPE is not set 
+BR2_PACKAGE_QT_QTFREETYPE=y 
+# BR2_PACKAGE_QT_SYSTEMFREETYPE is not set 
+# BR2_PACKAGE_QT_GIF is not set 
+# BR2_PACKAGE_QT_LIBMNG is not set 
+# BR2_PACKAGE_QT_NOJPEG is not set 
+BR2_PACKAGE_QT_SYSTEMJPEG=y 
+# BR2_PACKAGE_QT_QTJPEG is not set 
+BR2_PACKAGE_QT_NOPNG=y 
+# BR2_PACKAGE_QT_SYSTEMPNG is not set 
+# BR2_PACKAGE_QT_QTPNG is not set 
+BR2_PACKAGE_QT_NOTIFF=y 
+# BR2_PACKAGE_QT_SYSTEMTIFF is not set 
+# BR2_PACKAGE_QT_QTTIFF is not set 
+BR2_PACKAGE_QT_QTZLIB=y 
+# BR2_PACKAGE_QT_SYSTEMZLIB is not set 
+BR2_PACKAGE_QT_EMB_PLATFORM="arm" 
+# BR2_PACKAGE_QT_SQL_MODULE is not set 
+
+# 
+# Graphics drivers 
+# 
+BR2_PACKAGE_QT_GFX_LINUXFB=y 
+# BR2_PACKAGE_QT_GFX_TRANSFORMED is not set 
+# BR2_PACKAGE_QT_GFX_QVFB is not set 
+# BR2_PACKAGE_QT_GFX_VNC is not set 
+# BR2_PACKAGE_QT_GFX_MULTISCREEN is not set 
+
+# 
+# directfb Qt driver not available (need directfb) 
+# 
+
+# 
+# Mouse drivers 
+# 
+# BR2_PACKAGE_QT_MOUSE_PC is not set 
+# BR2_PACKAGE_QT_MOUSE_LINUXTP is not set 
+# BR2_PACKAGE_QT_MOUSE_LINUXINPUT is not set 
+BR2_PACKAGE_QT_MOUSE_TSLIB=y 
+# BR2_PACKAGE_QT_MOUSE_QVFB is not set 
+
+# 
+# Keyboard drivers 
+# 
+# BR2_PACKAGE_QT_KEYBOARD_TTY is not set 
+# BR2_PACKAGE_QT_KEYBOARD_LINUXINPUT is not set 
+# BR2_PACKAGE_QT_KEYBOARD_QVFB is not set 
+
+# 
+# Phonon module needs gstreamer 
+# 
+
+# 
+# Qt DBbus module not available (need dbus) 
+# 
+BR2_PACKAGE_QT_XML=y 
+# BR2_PACKAGE_QT_XMLPATTERNS is not set 
+# BR2_PACKAGE_QT_MULTIMEDIA is not set 
+# BR2_PACKAGE_QT_SVG is not set 
+BR2_PACKAGE_QT_NETWORK=y 
+# BR2_PACKAGE_QT_WEBKIT is not set 
+# BR2_PACKAGE_QT_JAVASCRIPTCORE is not set 
+# BR2_PACKAGE_QT_STL is not set 
+# BR2_PACKAGE_QT_OPENSSL is not set 
+BR2_PACKAGE_QT_SCRIPT=y 
+# BR2_PACKAGE_QT_SCRIPTTOOLS is not set 
+# BR2_PACKAGE_XORG7 is not set 
+
+# 
+# X libraries and helper libraries 
+# 
+# BR2_PACKAGE_LIBERATION is not set 
+
+# 
+# X Window managers 
+# 
+
+# 
+# X applications 
+# 
+# BR2_PACKAGE_GOB2 is not set 
+
+# 
+# midori requires C++, WCHAR in toolchain and libgtk2 
+# 
+
+# 
+# Hardware handling 
+# 
+
+# 
+# cdrkit requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_CRAMFS is not set 
+
+# 
+# dbus not available (need expat or libxml2) 
+# 
+
+# 
+# dmraid requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# dosfstools requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# e2fsprogs requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_EEPROG is not set 
+# BR2_PACKAGE_FCONFIG is not set 
+# BR2_PACKAGE_FIS is not set 
+# BR2_PACKAGE_GADGETFS_TEST is not set 
+# BR2_PACKAGE_GENEXT2FS is not set 
+# BR2_PACKAGE_GENROMFS is not set 
+# BR2_PACKAGE_GPSD is not set 
+
+# 
+# gvfs requires a toolchain with LARGEFILE and WCHAR support 
+# 
+# BR2_PACKAGE_HAL is not set 
+# BR2_PACKAGE_HWDATA is not set 
+# BR2_PACKAGE_I2C_TOOLS is not set 
+# BR2_PACKAGE_INPUT_TOOLS is not set 
+# BR2_PACKAGE_IOSTAT is not set 
+# BR2_PACKAGE_KBD is not set 
+# BR2_PACKAGE_LM_SENSORS is not set 
+
+# 
+# lvm2 requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_MAKEDEVS is not set 
+# BR2_PACKAGE_MDADM is not set 
+# BR2_PACKAGE_MEMTESTER is not set 
+# BR2_PACKAGE_MTD is not set 
+
+# 
+# ntfs-3g requires a toolchain with LARGEFILE and WCHAR support 
+# 
+
+# 
+# ntfsprogs requires a toolchain with WCHAR and LARGEFILE support 
+# 
+# BR2_PACKAGE_PCIUTILS is not set 
+# BR2_PACKAGE_RNG_TOOLS is not set 
+# BR2_PACKAGE_SETSERIAL is not set 
+# BR2_PACKAGE_SMARTMONTOOLS is not set 
+
+# 
+# squashfs requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# sshfs requires a toolchain with LARGEFILE and WCHAR support 
+# 
+# BR2_PACKAGE_SYSSTAT is not set 
+# BR2_PACKAGE_UDEV is not set 
+# BR2_PACKAGE_USB_MODESWITCH is not set 
+# BR2_PACKAGE_USBMOUNT is not set 
+# BR2_PACKAGE_USBUTILS is not set 
+# BR2_PACKAGE_WIPE is not set 
+
+# 
+# xfsprogs requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# Interpreter languages and scripting 
+# 
+# BR2_PACKAGE_HASERL is not set 
+# BR2_PACKAGE_LUA is not set 
+# BR2_PACKAGE_MICROPERL is not set 
+# BR2_PACKAGE_PHP is not set 
+# BR2_PACKAGE_PYTHON is not set 
+# BR2_PACKAGE_RUBY is not set 
+# BR2_PACKAGE_TCL is not set 
+
+# 
+# Libraries 
+# 
+
+# 
+# Compression and decompression 
+# 
+# BR2_PACKAGE_LIBARCHIVE is not set 
+# BR2_PACKAGE_LZO is not set 
+# BR2_PACKAGE_ZLIB is not set 
+
+# 
+# Crypto 
+# 
+# BR2_PACKAGE_BEECRYPT is not set 
+# BR2_PACKAGE_LIBGCRYPT is not set 
+# BR2_PACKAGE_LIBGPG_ERROR is not set 
+# BR2_PACKAGE_OPENSSL is not set 
+
+# 
+# Database 
+# 
+# BR2_PACKAGE_BERKELEYDB is not set 
+# BR2_PACKAGE_MYSQL_CLIENT is not set 
+# BR2_PACKAGE_SQLITE is not set 
+
+# 
+# Filesystem 
+# 
+# BR2_PACKAGE_GAMIN is not set 
+# BR2_PACKAGE_LIBCONFIG is not set 
+# BR2_PACKAGE_LIBCONFUSE is not set 
+
+# 
+# libfuse requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_LIBLOCKFILE is not set 
+# BR2_PACKAGE_LIBSYSFS is not set 
+
+# 
+# Graphics 
+# 
+# BR2_PACKAGE_ATK is not set 
+# BR2_PACKAGE_CAIRO is not set 
+# BR2_PACKAGE_FONTCONFIG is not set 
+# BR2_PACKAGE_FREETYPE is not set 
+BR2_PACKAGE_JPEG=y 
+# BR2_PACKAGE_LIBART is not set 
+# BR2_PACKAGE_GDK_PIXBUF is not set 
+# BR2_PACKAGE_LIBPNG is not set 
+# BR2_PACKAGE_LIBSVGTINY is not set 
+# BR2_PACKAGE_LIBUNGIF is not set 
+# BR2_PACKAGE_PANGO is not set 
+# BR2_PACKAGE_PIXMAN is not set 
+# BR2_PACKAGE_TIFF is not set 
+
+# 
+# webkit requires C++, WCHAR in toolchain and libgtk2 
+# 
+
+# 
+# Hardware handling 
+# 
+# BR2_PACKAGE_LIBAIO is not set 
+# BR2_PACKAGE_LIBRAW1394 is not set 
+BR2_PACKAGE_TSLIB=y 
+# BR2_PACKAGE_LIBUSB is not set 
+
+# 
+# Networking 
+# 
+# BR2_PACKAGE_LIBCGI is not set 
+# BR2_PACKAGE_LIBCGICC is not set 
+# BR2_PACKAGE_LIBCURL is not set 
+# BR2_PACKAGE_LIBDNET is not set 
+# BR2_PACKAGE_LIBEXOSIP2 is not set 
+# BR2_PACKAGE_LIBIDN is not set 
+# BR2_PACKAGE_LIBMICROHTTPD is not set 
+# BR2_PACKAGE_NEON is not set 
+# BR2_PACKAGE_LIBNL is not set 
+# BR2_PACKAGE_LIBPCAP is not set 
+# BR2_PACKAGE_LIBOSIP2 is not set 
+# BR2_PACKAGE_LIBRSYNC is not set 
+# BR2_PACKAGE_LIBSOUP is not set 
+
+# 
+# libupnp requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# Other 
+# 
+# BR2_PACKAGE_ARGP_STANDALONE is not set 
+# BR2_PACKAGE_LIBATOMIC_OPS is not set 
+# BR2_PACKAGE_LIBCAP is not set 
+# BR2_PACKAGE_LIBDAEMON is not set 
+# BR2_PACKAGE_LIBELF is not set 
+# BR2_PACKAGE_LIBEVENT is not set 
+# BR2_PACKAGE_LIBGLIB2 is not set 
+# BR2_PACKAGE_LIBOIL is not set 
+
+# 
+# Text and terminal handling 
+# 
+# BR2_PACKAGE_ENCHANT is not set 
+# BR2_PACKAGE_ICU is not set 
+# BR2_PACKAGE_LIBICONV is not set 
+# BR2_PACKAGE_NCURSES is not set 
+# BR2_PACKAGE_NEWT is not set 
+# BR2_PACKAGE_PCRE is not set 
+# BR2_PACKAGE_POPT is not set 
+# BR2_PACKAGE_READLINE is not set 
+# BR2_PACKAGE_SLANG is not set 
+
+# 
+# XML 
+# 
+# BR2_PACKAGE_EXPAT is not set 
+# BR2_PACKAGE_EZXML is not set 
+# BR2_PACKAGE_LIBXML2 is not set 
+# BR2_PACKAGE_LIBXSLT is not set 
+# BR2_PACKAGE_XERCES is not set 
+
+# 
+# Miscellaneous 
+# 
+# BR2_PACKAGE_SHARED_MIME_INFO is not set 
+
+# 
+# Networking applications 
+# 
+# BR2_PACKAGE_ARGUS is not set 
+# BR2_PACKAGE_AVAHI is not set 
+# BR2_PACKAGE_AXEL is not set 
+
+# 
+# bind requires a toolchain with LARGEFILE support 
+# 
+
+# 
+# bmon requires a toolchain with IPv6 support 
+# 
+# BR2_PACKAGE_BRIDGE is not set 
+# BR2_PACKAGE_CTORRENT is not set 
+# BR2_PACKAGE_CUPS is not set 
+# BR2_PACKAGE_DNSMASQ is not set 
+# BR2_PACKAGE_DROPBEAR is not set 
+# BR2_PACKAGE_ETHTOOL is not set 
+# BR2_PACKAGE_HOSTAPD is not set 
+# BR2_PACKAGE_IFPLUGD is not set 
+# BR2_PACKAGE_IPERF is not set 
+
+# 
+# iproute2 requires a toolchain with IPv6 support 
+# 
+# BR2_PACKAGE_IPSEC_TOOLS is not set 
+
+# 
+# iptables requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_IW is not set 
+# BR2_PACKAGE_KISMET is not set 
+# BR2_PACKAGE_L2TP is not set 
+# BR2_PACKAGE_LINKS is not set 
+# BR2_PACKAGE_LRZSZ is not set 
+# BR2_PACKAGE_MIIDIAG is not set 
+# BR2_PACKAGE_MROUTED is not set 
+# BR2_PACKAGE_MUTT is not set 
+# BR2_PACKAGE_NBD is not set 
+
+# 
+# ncftp requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_NETPLUG is not set 
+# BR2_PACKAGE_NETSNMP is not set 
+# BR2_PACKAGE_NETSTAT_NAT is not set 
+
+# 
+# nfs-utils requires a toolchain with 'Enable RPC' selected 
+# 
+# BR2_PACKAGE_NTP is not set 
+# BR2_PACKAGE_NUTTCP is not set 
+
+# 
+# olsr requires a toolchain with IPv6 support 
+# 
+# BR2_PACKAGE_OPENNTPD is not set 
+# BR2_PACKAGE_OPENSSH is not set 
+# BR2_PACKAGE_OPENVPN is not set 
+
+# 
+# portmap requires a toolchain with 'Enable RPC' selected 
+# 
+# BR2_PACKAGE_PPPD is not set 
+# BR2_PACKAGE_PPTP_LINUX is not set 
+# BR2_PACKAGE_PROFTPD is not set 
+# BR2_PACKAGE_QUAGGA is not set 
+# BR2_PACKAGE_RSYNC is not set 
+# BR2_PACKAGE_SAMBA is not set 
+# BR2_PACKAGE_SER2NET is not set 
+# BR2_PACKAGE_SOCAT is not set 
+# BR2_PACKAGE_SPAWN_FCGI is not set 
+
+# 
+# Squid requires a toolchain with C++ and IPv6 support enabled 
+# 
+# BR2_PACKAGE_TCPDUMP is not set 
+# BR2_PACKAGE_DHCPDUMP is not set 
+# BR2_PACKAGE_TCPREPLAY is not set 
+# BR2_PACKAGE_TN5250 is not set 
+# BR2_PACKAGE_TTCP is not set 
+
+# 
+# udpcast requires a toolchain with LARGEFILE support 
+# 
+# BR2_PACKAGE_VPNC is not set 
+# BR2_PACKAGE_VSFTPD is not set 
+# BR2_PACKAGE_VTUN is not set 
+# BR2_PACKAGE_WEBIF is not set 
+# BR2_PACKAGE_WIRELESS_TOOLS is not set 
+# BR2_PACKAGE_WPA_SUPPLICANT is not set 
+
+# 
+# Package managers 
+# 
+# BR2_PACKAGE_IPKG is not set 
+
+# 
+# Shell and utilities 
+# 
+# BR2_PACKAGE_AT is not set 
+# BR2_PACKAGE_DIALOG is not set 
+# BR2_PACKAGE_FILE is not set 
+# BR2_PACKAGE_LOCKFILE_PROGS is not set 
+# BR2_PACKAGE_LOGROTATE is not set 
+# BR2_PACKAGE_SCREEN is not set 
+# BR2_PACKAGE_SUDO is not set 
+# BR2_PACKAGE_WHICH is not set 
+
+# 
+# System tools 
+# 
+
+# 
+# Text editors and viewers 
+# 
+# BR2_PACKAGE_ED is not set 
+# BR2_PACKAGE_NANO is not set 
+# BR2_PACKAGE_UEMACS is not set 
+
+# 
+# Target filesystem options 
+# 
+BR2_ROOTFS_POST_BUILD_SCRIPT="" 
+BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt" 
+BR2_ROOTFS_SKELETON_DEFAULT=y 
+# BR2_ROOTFS_SKELETON_CUSTOM is not set 
+# BR2_TARGET_ROOTFS_CRAMFS is not set 
+# BR2_TARGET_ROOTFS_CLOOP is not set 
+BR2_TARGET_ROOTFS_EXT2=y 
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=0 
+BR2_TARGET_ROOTFS_EXT2_INODES=0 
+BR2_TARGET_ROOTFS_EXT2_RESBLKS=0 
+BR2_TARGET_ROOTFS_EXT2_SQUASH=y 
+BR2_TARGET_ROOTFS_EXT2_NONE=y 
+# BR2_TARGET_ROOTFS_EXT2_GZIP is not set 
+# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set 
+# BR2_TARGET_ROOTFS_EXT2_LZMA is not set 
+# BR2_TARGET_ROOTFS_JFFS2 is not set 
+# BR2_TARGET_ROOTFS_UBIFS is not set 
+# BR2_TARGET_ROOTFS_SQUASHFS is not set 
+BR2_TARGET_ROOTFS_TAR=y 
+# BR2_TARGET_ROOTFS_TAR_NONE is not set 
+BR2_TARGET_ROOTFS_TAR_GZIP=y 
+# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set 
+# BR2_TARGET_ROOTFS_TAR_LZMA is not set 
+BR2_TARGET_ROOTFS_TAR_OPTIONS="" 
+# BR2_TARGET_ROOTFS_CPIO is not set 
+
+# 
+# initramfs requires a Linux kernel to be built 
+# 
+# BR2_TARGET_ROOTFS_ROMFS is not set 
+
+# 
+# Bootloaders 
+# 
+# BR2_TARGET_BAREBOX is not set 
+# BR2_TARGET_UBOOT is not set 
+# BR2_TARGET_AT91BOOTSTRAP is not set 
+# BR2_TARGET_DATAFLASHBOOT is not set 
+
+# 
+# Kernel 
+# 
+# BR2_LINUX_KERNEL is not set 
+
+<<.config end 
+
+
+----- Ursprungligt meddelande -----
+Fr?n: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com> 
+Till: buildroot at busybox.net 
+Skickat: tisdag, 22 feb 2011 19:55:33 
+?mne: Re: [Buildroot] Problem when running a Qt program on AT91SAM9M10 
+
+Hello, 
+
+On Tue, 22 Feb 2011 09:10:07 +0100 (CET) 
+Anders Gabert <anga@syntronic.com> wrote: 
+
+> I have a problem when running a Qt example program on AT91SAM9M10. 
+> 
+> I?m using Buildroot 2010.11 and have selected and compiled Qt. 
+> I get a bunch of Qt libs under usr/lib. 
+> 
+> To test Qt I have compiled the calculator under the example widgets 
+> when running it on the unit a get the error below. As you can see 
+> there are characters missing in the error text. When looking in the 
+> Qt code, I think the last line should be ?Cannot create Qt for 
+> Embedded Linux data directory: %s?. Has anyone had the same problem 
+> or a solution to it. 
+> 
+> # ./calculator -qws 
+
+I have just tested the calculator example on a simple ARM system built 
+by Buildroot, and it works fine here in Qemu. 
+
+Could you give some details: your Buildroot .config, and the procedure 
+you use to build the calculator application. 
+
+Regards, 
+
+Thomas 
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons 
+Kernel, drivers, real-time and embedded Linux 
+development, consulting, training and support. 
+http://free-electrons.com 
+_______________________________________________ 
+buildroot mailing list 
+buildroot at busybox.net 
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110223/59dac538/attachment-0001.html>
