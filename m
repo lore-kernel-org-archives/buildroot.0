@@ -1,41 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Feb 2011 00:40:11 +0100
-Subject: [Buildroot] [git commit master 1/1] package/multimedia: mark
-	festival packages as broken
-Message-ID: <20110222234940.283838F5A9@busybox.osuosl.org>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Wed, 23 Feb 2011 01:50:44 +0000
+Subject: [Buildroot] Buildroot AT91 support
+Message-ID: <AANLkTinWjJjMqL_x5gRVKBKQuyo4GkHwMYXkstH9xyUm@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a6ada2c94667fd6e1030cfeffd088703b263ddf8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I've been reading most of the pages hosted at:
+www.at91.com/linux4sam/bin/view/Linux4SAM/
 
-After spending a couple of hours on it today, I'm still unable to get
-speech-tools to build and install properly with a uClibc toolchain.
+When I came across:
+http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_buildroot_for_AT91
+<http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRootBuild#How_to_build_buildroot_for_AT91>
 
-So I'm giving up. Mark the entire thing broken as the text-to-speech
-stuff is unlikely to be used very much on the kind of small systems
-we're targetting.
+In summary...the instructions say:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/festival/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+svn co -r 23434 svn://uclibc.org/trunk/buildroot
+patch -p1 < ../buildroot-v23434.patch
+make BOARD=AT91 getconfig
+make 2>&1 | tee at91sam9.log
 
-diff --git a/package/multimedia/festival/Config.in b/package/multimedia/festival/Config.in
-index 2be32f9..e05fde9 100644
---- a/package/multimedia/festival/Config.in
-+++ b/package/multimedia/festival/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_FESTIVAL
- 	bool "festival text-to-speech system"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BROKEN # doesn't build
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_SPEECH_TOOLS
- 	help
--- 
-1.7.3.4
+
+Is it safe to consider those instructions as deprecated given the current
+buildroot appears to have broad support for AT91 boards?
+
+
+Thanks
+Bruce
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110223/5c9d8912/attachment.html>
