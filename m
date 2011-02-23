@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 23 Feb 2011 23:37:36 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
-	changes
-Message-ID: <20110223224019.E21198F626@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] metacity: fix build,
+	bump version
+Message-ID: <20110223224019.9CF748F626@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,129 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b41d7f4939b98cba5fbddda6fb7e7bba4ca8fd1
+commit: http://git.buildroot.net/buildroot/commit/?id=c25d7e49a94b997144f808c44495d38de507b1e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Metacity no longer built after libgtk2 was updated, so fix it by bumping
+the version. We unfortunately cannot move to the latest version, as
+these have extra dependencies we don't have in BR yet
+(libcanberra-gtk + gnome-doc-utils).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   29 +++++++++++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
+ package/metacity/metacity-gconf.patch |   44 +++++++++++++++++++++------------
+ package/metacity/metacity-nopo.patch  |   30 ----------------------
+ package/metacity/metacity.mk          |    9 +++---
+ 3 files changed, 33 insertions(+), 50 deletions(-)
+ delete mode 100644 package/metacity/metacity-nopo.patch
 
-diff --git a/CHANGES b/CHANGES
-index 5c866e8..925ef5d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,32 @@
-+2011.02, Not yet released:
+diff --git a/package/metacity/metacity-gconf.patch b/package/metacity/metacity-gconf.patch
+index b513b06..939ef7e 100644
+--- a/package/metacity/metacity-gconf.patch
++++ b/package/metacity/metacity-gconf.patch
+@@ -1,18 +1,30 @@
+---- metacity-2.17.3/src/prefs.c.orig	2007-01-12 21:42:53.000000000 -0700
+-+++ metacity-2.17.3/src/prefs.c	2007-01-12 21:45:21.000000000 -0700
+-@@ -2277,6 +2277,7 @@
+-       key = g_strconcat (KEY_SCREEN_BINDINGS_PREFIX, "/",
+-                          binding->name, NULL);
+-       
+-+#ifdef HAVE_GCONF
+-       gconf_client_set_string (gconf_client_get_default (),
+-                                key, old_setting, &err);
++[PATCH] fix build with --disable-gconf
 +
-+	Fixes all over the tree.
++src/core/prefs.c still contain a call to gconf_client_set_bool() when
++built with --disable-gconf, breaking the build.
 +
-+	Festival packages marked as broken. Unless someone steps up
-+	to support them, they will be removed during the 2011.05
-+	development cycle.
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ src/core/prefs.c |    2 ++
++ 1 file changed, 2 insertions(+)
 +
-+	Updated/fixed packages: atk, avahi, bind, cairo, dbus,
-+	enchant, fakeroot, gmpc, gpsd, gvfs, iperf, jpeg, libarchive,
-+	libcgicc, libdaemon, libdrm, libevent, libgail, libglib2,
-+	libgpg-error, libmicrohttpd, librsvg, libsoup, libxcp,
-+	matchbox-fakekey, matchbox-startup-monitor, mdadm, metacity,
-+	mpd, nasm, nfs-utils, olsr, popt, pthread-stubs, quagga, rpm,
-+	samba, sdl, sdl_gfx, sdl_image, sdl_mixer, sdl_sound, sdl_ttf,
-+	squashfs, taglib, tcpreplay, tiff, wpa_supplicant, xcb-util,
-+	xdriver_xf86-input-{acepad,aiptek,evdev,joystick,keyboard},
-+	xdriver_xf86-input-{mouse,synaptics,void},
-+	xdriver_xf86-video-{chips,dummy,geode,glide,intel,nv,wsfb},
-+	xlib_lib{ICE,SM,XScrnSaver,Xau,Xcursor,Xdmcp,Xi,Xinerama},
-+	xlib_lib{Xrandr,Xt,Xtst,Xxf86dga,Xxf86vm,dmx,fontenc,pciaccess},
-+	xserver_xorg-server, xz
-+
-+	Removed packages: ace_of_penguins, vlc
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#3283: See why nfs-utils needs fakeroot, and convert to autotools
-+
- 2011.02-rc1, Released February 14th, 2011:
++Index: metacity-2.25.1/src/core/prefs.c
++===================================================================
++--- metacity-2.25.1.orig/src/core/prefs.c
+++++ metacity-2.25.1/src/core/prefs.c
++@@ -2949,6 +2949,7 @@
++ void
++ meta_prefs_set_compositing_manager (gboolean whether)
++ {
+++#if HAVE_GCONF
++   GError *err = NULL;
+  
+-@@ -2287,6 +2288,7 @@
+-           g_error_free (err);
+-           err = NULL;
+-         }
++   gconf_client_set_bool (default_client,
++@@ -2962,6 +2963,7 @@
++                     err->message);
++       g_error_free (err);
++     }
+ +#endif
+-       
+-       g_free (old_setting);
+-       g_free (key);
++ }
++ 
++ #ifndef HAVE_GCONF
+diff --git a/package/metacity/metacity-nopo.patch b/package/metacity/metacity-nopo.patch
+deleted file mode 100644
+index 563a17b..0000000
+--- a/package/metacity/metacity-nopo.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-metacity: don't descent into po / docs subdirs
+----
+- Makefile.am |    2 +-
+- Makefile.in |    2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: metacity-2.16.8/Makefile.am
+-===================================================================
+---- metacity-2.16.8.orig/Makefile.am
+-+++ metacity-2.16.8/Makefile.am
+-@@ -1,5 +1,5 @@
+- 
+--SUBDIRS=src po doc
+-+SUBDIRS=src
+- 
+- EXTRA_DIST=HACKING rationales.txt \
+- 	intltool-extract.in intltool-merge.in intltool-update.in
+-Index: metacity-2.16.8/Makefile.in
+-===================================================================
+---- metacity-2.16.8.orig/Makefile.in
+-+++ metacity-2.16.8/Makefile.in
+-@@ -244,7 +244,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = src po doc
+-+SUBDIRS = src
+- EXTRA_DIST = HACKING rationales.txt \
+- 	intltool-extract.in intltool-merge.in intltool-update.in
+- 
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 9d91efe..04cfa10 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -4,11 +4,12 @@
+ #
+ #############################################################
  
- 	Fixes all over the tree and new features.
+-METACITY_VERSION = 2.16.8
++# newer versions need libcanberra-gtk and gnome-doc-utils
++METACITY_VERSION_MAJOR = 2.25
++METACITY_VERSION_MINOR = 1
++METACITY_VERSION = $(METACITY_VERSION_MAJOR).$(METACITY_VERSION_MINOR)
+ METACITY_SOURCE = metacity-$(METACITY_VERSION).tar.bz2
+-METACITY_SITE = http://ftp.gnome.org/pub/gnome/sources/metacity/2.16
+-METACITY_INSTALL_STAGING =NO
+-METACITY_INSTALL_TARGET =YES
++METACITY_SITE = http://ftp.gnome.org/pub/gnome/sources/metacity/$(METACITY_VERSION_MAJOR)
+ 
+ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib \
 -- 
 1.7.3.4
