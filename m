@@ -1,35 +1,43 @@
-From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
-Date: Wed, 23 Feb 2011 18:05:35 +0100
-Subject: [Buildroot] No response after "Freeing init memory"
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1F5E1B54@EXV1.corp.adtran.com>
-References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
-	<AANLkTikh9tw-PuERGodGqC+aVS0dfkiyR11RGghcx=E2@mail.gmail.com>
-	<AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
-	<20110222192538.6720529a@surf>
-	<AANLkTimGr8JsO82tn==M8n9zAtfpxMoRPOvh_vY9sKb_@mail.gmail.com>
-	<AANLkTimf6Yvj1CSSwPT4Qg399_72ZOQhaR9tvPx_w+sM@mail.gmail.com>
-	<87oc62yduh.fsf@macbook.be.48ers.dk>
-	<AANLkTin5SgZE2nBsnYaKu5vsSVgb4oLD9xMr3=CC=vUx@mail.gmail.com>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1F5E1B54@EXV1.corp.adtran.com>
-Message-ID: <AANLkTikS431dDAtPFwgucnDrK3jAa1eYJMt4ZdkLgZX5@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Feb 2011 19:10:24 +0200
+Subject: [Buildroot] Changing from NFS root filesystem to embedded
+ within kernel
+In-Reply-To: <201102231803.41162.dargaud@lpsc.in2p3.fr>
+References: <201102231803.41162.dargaud@lpsc.in2p3.fr>
+Message-ID: <20110223171024.GC339@jasper.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dne 23. ?nora 2011 17:38 ANDY KENNEDY <ANDY.KENNEDY@adtran.com> napsal(a):
->
-> > I promise that I will read FAQs more carefully :-) Thanks for patience!
-> > Now I'm able to login and work.
->
-> You mean like: ?"Don't top post." and "Send e-mails to this list in
-> plain text format"? ?=))
->
->
-> Andy
+Hi Guillaume,
 
+On Wed, Feb 23, 2011 at 06:03:40PM +0100, Guillaume Dargaud wrote:
+> It's probably a simple question, but I'm a bit confused by what I found 
+> searching this question.
+> I have a buildroot system which currently boots remotely via DHCP+NFS.
+> The following is both in the dts file and as the kernel parameter line:
+> console=ttyUL0,115200 rw root=/dev/nfs ip=bootp
+> 
+> Now I would like to package the kernel with the filesystem embedded in it. 
+> That's what initramfs is for, right ?
+> 
+> In buildroot, I generated a CPIO filesystem, and in the kernel compile options 
+> I told it to use that file as an initramfs.
+> 
+> Now all I need is to change the kernel parameter line, right ? What's the 
+> syntax ?
 
-I will do my best! :-D
+No. If you include initramfs in your kernel, the /init script runs 
+automatically, regardless of the kernel command line. In this script you can 
+examine the kernel command line (available in /proc/cmdline), and mount the 
+right filesystem. See the Documentation/filesystems/ramfs-rootfs-initramfs.txt 
+file under "What is initramfs?".
 
-Zdenek
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
