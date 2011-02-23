@@ -1,71 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Feb 2011 16:46:07 +0100
-Subject: [Buildroot] [git commit master 1/1] u-boot: drop old 2009.xx
-	versions
-Message-ID: <20110223154954.4A3238F623@busybox.osuosl.org>
+From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
+Date: Wed, 23 Feb 2011 16:54:33 +0100
+Subject: [Buildroot] No response after "Freeing init memory"
+In-Reply-To: <87oc62yduh.fsf@macbook.be.48ers.dk>
+References: <AANLkTimNjQwt1HtqQLCcnsVWtSp7=3Mb2M_00EMsdOzS@mail.gmail.com>
+	<AANLkTikh9tw-PuERGodGqC+aVS0dfkiyR11RGghcx=E2@mail.gmail.com>
+	<AANLkTi=pxm_KCKqhFr0c7kMs_DU6m1wE49V5K6ShE=WQ@mail.gmail.com>
+	<20110222192538.6720529a@surf>
+	<AANLkTimGr8JsO82tn==M8n9zAtfpxMoRPOvh_vY9sKb_@mail.gmail.com>
+	<AANLkTimf6Yvj1CSSwPT4Qg399_72ZOQhaR9tvPx_w+sM@mail.gmail.com>
+	<87oc62yduh.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTin5SgZE2nBsnYaKu5vsSVgb4oLD9xMr3=CC=vUx@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I promise that I will read FAQs more carefully :-) Thanks for patience! Now
+I'm able to login and work.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a157909eefe1215d9173aa2b76b4bfd7ba1612f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Best regards,
+Zdenek Materna
 
-We use 'make tools' to build a mkimage for the host if needed by the
-kernel (uImage) without having u-boot configured, but that only works
-since the 2010.03 release:
+2011/2/23 Peter Korsgaard <jacmet@uclibc.org>
 
-http://git.denx.de/?p=u-boot.git;a=commit;h=c7c0d542a1990
-
-So drop the old 2009.xx versions rather than having the build break
-for people.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/u-boot/Config.in |    8 --------
- boot/u-boot/u-boot.mk |    2 +-
- 2 files changed, 1 insertions(+), 9 deletions(-)
-
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 78c03ff..3ba1ef3 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -28,12 +28,6 @@ config BR2_TARGET_UBOOT_2010_06
- config BR2_TARGET_UBOOT_2010_03
- 	bool "2010.03"
- 
--config BR2_TARGET_UBOOT_2009_11
--	bool "2009.11"
--
--config BR2_TARGET_UBOOT_2009_08
--	bool "2009.08"
--
- config BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-@@ -52,8 +46,6 @@ config BR2_TARGET_UBOOT_VERSION
- 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
--	default "2009.11"	if BR2_TARGET_UBOOT_2009_11
--	default "2009.08"	if BR2_TARGET_UBOOT_2009_08
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 
- config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index bd26f52..a86819b 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -43,7 +43,7 @@ U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN) $(MKIMAGE)
- U_BOOT_ARCH=$(KERNEL_ARCH)
- 
- # u-boot in the past used arch=ppc for powerpc
--ifneq ($(findstring x200,x$(U_BOOT_VERSION))$(findstring x2010.03,x$(U_BOOT_VERSION)),)
-+ifneq ($(findstring x2010.03,x$(U_BOOT_VERSION)),)
- U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
- endif
- 
--- 
-1.7.3.4
+> >>>>> "Zden?k" == Zden?k Materna <zdenek.materna@gmail.com> writes:
+>
+>  Zden?k> Ouch, my mistake! All files in /dev are plain text... I have to
+>  Zden?k> mount ext2 rootfs or untar rootfs from output/images on my
+>  Zden?k> laptop, than share this over nfs like rootfs for my
+>  Zden?k> board... I'm correct?
+>
+> Yes - Like it says in the documentation:
+>
+> http://buildroot.net/buildroot.html#using
+>
+> * target/ which contains almost the complete root filesystem for the
+>  target: everything needed is present except the device files in /dev/
+>  (Buildroot can't create them because Buildroot doesn't run as root and
+>  doesn't want to run as root). Therefore, this directory should not be
+>  used on your target. Instead, you should use one of the images built in
+>  the images/ directory. If you need an extracted image of the root
+>  filesystem for booting over NFS, then use the tarball image generated in
+>  images/ and extract it as root.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110223/e107071f/attachment.html>
