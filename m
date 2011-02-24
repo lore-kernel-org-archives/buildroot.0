@@ -1,43 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Feb 2011 12:59:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 3331] New: xdata_xcursor-themes depends on
-	xcursorgen
-Message-ID: <bug-3331-163@https.bugs.busybox.net/>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Thu, 24 Feb 2011 13:59:42 +0100
+Subject: [Buildroot] Unable to login to buildroot
+In-Reply-To: <AANLkTimvTBzuBY5gpdGmcWDVdMAntznMRPTB6stdK=6F@mail.gmail.com>
+References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
+	<AANLkTimvTBzuBY5gpdGmcWDVdMAntznMRPTB6stdK=6F@mail.gmail.com>
+Message-ID: <201102241359.42509.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3331
+On Thursday 24 February 2011 12:30:51 Daniel Nystr?m wrote:
+> 2011/2/24 Guillaume Dargaud <dargaud@lpsc.in2p3.fr>:
+> > # Put a getty on the serial port
+> > ttyUL0::respawn:/sbin/getty -L ttyUL0 115200 vt100 # GENERIC_SERIAL
+> 
+> Try replace this line with:
+> ::respawn:-/bin/sh
+> 
+> And see if that works?
 
-           Summary: xdata_xcursor-themes depends on xcursorgen
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rotwang at crux.org.pl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Boot stops after:
+Freeing unused kernel memory: 108k init
 
-
-checking for xcursorgen... no
-configure: error: xcursorgen is required to build these cursors.
-make: ***
-[/mnt/usb/repos/buildroot/output/build/xdata_xcursor-themes-1.0.2/.stamp_configured]
-Error 1
-
-target: i586
-host: i686
-toolchain: buildroot
-buildroot: latest from git
+I have a feeling the mounts at the begining of inittab don't work... As seen 
+from the NFS server, there's nothing in /proc, /tmp. /dev/pts, /sys...
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Guillaume Dargaud
+http://www.gdargaud.net/
