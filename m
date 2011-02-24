@@ -1,32 +1,34 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 24 Feb 2011 15:56:08 +0100
-Subject: [Buildroot] Unable to login to buildroot
-In-Reply-To: <87pqqhr6mt.fsf@macbook.be.48ers.dk>
-References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
-	<87pqqhr6mt.fsf@macbook.be.48ers.dk>
-Message-ID: <201102241556.09029.dargaud@lpsc.in2p3.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 24 Feb 2011 12:53:43 +0100
+Subject: [Buildroot] [git commit master 1/1] docs: fix /know/known/ typo
+Message-ID: <20110224150357.7D3328F755@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> The default skeleton doesn't have a password set for root, and dropbear
-> doesn't allow root login without a password.
 
-I set it up in /etc/shadow. I get an error message if I try with the wrong 
-pwd. And also tried without one in /etc/shadow.
+commit: http://git.buildroot.net/buildroot/commit/?id=37126f56c47f7085d78e4b3e8bf78c37ab933144
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Not as far as I can see. You are creating your nfsroot from rootfs.tar
-> and extracting as root, right?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/about.html |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Yes, with tar xvf. Any option I forgot ?
-
-> On a system without a hardware FPU you CAN run hard float binaries if
-> you have configured the kernel to emulate those instructions, but it
-> will be very slow. Soft float is preferred.
-
-Thanks. I was confused by the float options in both the kernel and uclibc.
+diff --git a/docs/about.html b/docs/about.html
+index 06d7cb3..bf78db3 100644
+--- a/docs/about.html
++++ b/docs/about.html
+@@ -50,7 +50,7 @@ cross-compilation process.</p>
+   toolchain</li>
+ 
+   <li>Has a <b>simple structure</b> that makes it easy to understand
+-  and extend. It relies only on the well-know Makefile language.</li>
++  and extend. It relies only on the well-known Makefile language.</li>
+ 
+ </ul>
+ 
 -- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+1.7.3.4
