@@ -1,32 +1,21 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 24 Feb 2011 11:55:41 +0100
-Subject: [Buildroot] Unable to login to buildroot
-In-Reply-To: <20110224095445.GB5481@jasper.tkos.co.il>
-References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
-	<20110224095445.GB5481@jasper.tkos.co.il>
-Message-ID: <201102241155.41180.dargaud@lpsc.in2p3.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Feb 2011 10:58:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 3259] Unable to build webkit (on arm).
+In-Reply-To: <bug-3259-163@https.bugs.busybox.net/>
+References: <bug-3259-163@https.bugs.busybox.net/>
+Message-ID: <20110224105802.B8BD98F6D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Do you have /etc/securetty? What is its content? It should contain a
-> 'ttyUL0' line to allow login.
+https://bugs.busybox.net/show_bug.cgi?id=3259
 
-Yes, it's there.
+--- Comment #2 from Bart?omiej Palmowski <rotwang@crux.org.pl>  ---
+Quick workaround is passing --with-unicode-backend=glib to webkits configure.
 
-I just noticed that I'd forgotten to compile RPC in buildroot, which would 
-explain why there's nothing in /tmp on my NFS filesystem, but I did a make 
-clean; make, reinstall the filesystem and there's no difference, I still can't 
-login.
-
-I put an 'echo' in rcS and it's not being executed.
-But if i put some 
-ttyUL0::sysinit:/bin/echo AAAAAAAAAAAAAAAAAA
-in inittab, I see them.
-
-Any other idea ?
 -- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
