@@ -1,32 +1,40 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 24 Feb 2011 13:59:42 +0100
-Subject: [Buildroot] Unable to login to buildroot
-In-Reply-To: <AANLkTimvTBzuBY5gpdGmcWDVdMAntznMRPTB6stdK=6F@mail.gmail.com>
-References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
-	<AANLkTimvTBzuBY5gpdGmcWDVdMAntznMRPTB6stdK=6F@mail.gmail.com>
-Message-ID: <201102241359.42509.dargaud@lpsc.in2p3.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Feb 2011 13:09:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 3259] Unable to build webkit (on arm).
+In-Reply-To: <bug-3259-163@https.bugs.busybox.net/>
+References: <bug-3259-163@https.bugs.busybox.net/>
+Message-ID: <20110224130927.134EC8F715@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 24 February 2011 12:30:51 Daniel Nystr?m wrote:
-> 2011/2/24 Guillaume Dargaud <dargaud@lpsc.in2p3.fr>:
-> > # Put a getty on the serial port
-> > ttyUL0::respawn:/sbin/getty -L ttyUL0 115200 vt100 # GENERIC_SERIAL
-> 
-> Try replace this line with:
-> ::respawn:-/bin/sh
-> 
-> And see if that works?
+https://bugs.busybox.net/show_bug.cgi?id=3259
 
-Boot stops after:
-Freeing unused kernel memory: 108k init
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-I have a feeling the mounts at the begining of inittab don't work... As seen 
-from the NFS server, there's nothing in /proc, /tmp. /dev/pts, /sys...
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |gustavo at zacarias.com.ar
+                   |.org                        |
+
+--- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Created attachment 3019
+  --> https://bugs.busybox.net/attachment.cgi?id=3019
+Fixup icu-config
+
+After trying a build on a system that completely lacks icu i've found the
+issue.
+icu-config checks for the library presence in exec_prefix, thus if the real
+system lacks it (checks at /usr/lib, default) it fails.
+So we need to tweak exec_prefix too in icu-config to point to the staging dir.
+
+Give this patch a try, works on my ubuntu netbook (which took it's sweet time
+to build).
 
 -- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
