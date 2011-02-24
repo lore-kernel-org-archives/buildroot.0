@@ -1,90 +1,116 @@
-From: Gary Altenberg <gary@ioengineering.com>
-Date: Thu, 24 Feb 2011 08:57:03 -0600
-Subject: [Buildroot] final link failed: Nonrepresentable section on output
- during build ARM7TDMI uClibc toolchain with Buildroot
-Message-ID: <4D6671BF.40802@ioengineering.com>
+From: Williams, Michael (mwilli60) <mwilli60@harris.com>
+Date: Thu, 24 Feb 2011 10:15:29 -0500
+Subject: [Buildroot] Unable to login to buildroot
+In-Reply-To: <201102241516.22825.dargaud@lpsc.in2p3.fr>
+References: <201102241048.48537.dargaud@lpsc.in2p3.fr><201102241359.42509.dargaud@lpsc.in2p3.fr><4D665ADD.10608@daccii.it>
+	<201102241516.22825.dargaud@lpsc.in2p3.fr>
+Message-ID: <818976D2341E8345BAE1673D4C4C4D88017C0D5E@mlbe2k10.cs.myharris.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I have been attempting to build a toolchain for an ARM7 based board.
 
-I chose the following settings in buildroot:
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of Guillaume Dargaud
+> Sent: Thursday, February 24, 2011 9:16 AM
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Unable to login to buildroot
+> 
+> > There isn't any reason that these folders for containing something
+> > because proc, sysfs, devpts and tmpfs (generally used on /tmp) are
+> > virtual filesystems handled by the kernel ... there isn't anything
+> > written on the disk.
+> 
+> OK, I suspected as much...
+> 
+> > If you didn't see anything it means that init get executed but the
+> > console isn't started on the serial port.
+> > Do a simply test: set as init, on boot options, /bin/ls (for
+> example),
+> > just to see if something is showed on the serial console after the
+> boot.
+> 
+> I'm not sure I understand.
+> sbin/init is already a symbolic link to bin/busybox. Should I make
+that
+> a
+> symbolic link to ls ?
+> 
+> If I add the following to inittab:
+> ::wait:/bin/ls -alF / /tmp
+> 
+> I get:
+> ...
+> [   33.070279] Freeing unused kernel memory: 108k init
+> /:
+> total 52
+> drwxr-xr-x   16 root     root          4096 Feb 24  2011 ./
+> drwxr-xr-x   16 root     root          4096 Feb 24  2011 ../
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 bin/
+> drwxr-xr-x    6 root     root          4096 Feb 24  2011 dev/
+> drwxr-xr-x    7 root     root          4096 Feb 24  2011 etc/
+> drwxr-xr-x    3 root     root          4096 Feb 24  2011 home/
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 lib/
+> lrwxrwxrwx    1 root     root            11 Feb 24  2011 linuxrc ->
+> bin/busybox*
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 mnt/
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 opt/
+> dr-xr-xr-x   26 root     root             0 Jan  1 00:00 proc/
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 root/
+> drwxr-xr-x    2 root     root          4096 Feb 24  2011 sbin/
+> drwxr-xr-x   11 root     root             0 Jan  1 00:00 sys/
+> drwxrwxrwt    2 root     root            80 Jan  1 00:00 tmp/
+> drwxr-xr-x    6 root     root          4096 Feb 24  2011 usr/
+> drwxr-xr-x    3 root     root          4096 Feb 14  2011 var/
+> 
+> /tmp:
+> total 4
+> drwxrwxrwt    2 root     root            80 Jan  1 00:00 ./
+> drwxr-xr-x   16 root     root          4096 Feb 24  2011 ../
+> -rw-r--r--    1 root     root             0 Jan  1 00:00 messages
+> -rw-r--r--    1 root     root             0 Jan  1 00:00 utmp
+> 
+> Welcome to the Gandalf acquisition
+> gandalf login: root
+> Password:
+> Jan  1 00:00:57 login[255]: root login on 'ttyUL0'
+> 
+> Welcome to the Gandalf acquisition
+> gandalf login:
+> 
+> And still can't login.
+> And if it's only a tty problem, why is rcS not launched ?
 
-arm
-arm7tdmi
-EABI
-Kernel headers for 2.6.21
-uClibC 0.9.31.x
-binutils 2.21
-gcc 4.3.x
+Just a heads up, I fought with a similar problem with bizarre,
+inconsistent results running programs from init, with the same symptoms
+from sysv init as busybox's. Have you tried tracing using
+::respawn:-strace /bin/sh in inittab? In my case, everything worked
+perfectly on 2.6.38-rc5, but failed on kernel 2.6.24.
 
-I want to use the toolchain to build uClinux for this board. I can build 
-uClinux with some much older tools and older uClibc and it runs on the 
-board but it's very buggy. Lots of memory problems. I thought if I could 
-upgrade my tools, busybox and uClibc. I can't even build the latest 
-busybox for this board with the old tools.
+In the end, it turned out to be a floating-point support configuration
+mismatch between buildroot and my old kernel (2.6.24). After changing
+everything to a soft FPU on the old kernel and the buildroot toolchain,
+it all worked.
 
-I am building buildroot on an Ubuntu 9.10 machine
 
-I have attempted this with buildroot-2010.11 then with buildroot-2011.02-rc1
-
-I extract buildroot then run menuconfig and just set the options for a 
-toolchain with the parameters from above.
-
-Each time I have run into the getline problem where 
-linux-2.6.21/unifdef.c has a getline function that needs to be renamed. 
-Renaming the function gets me past that.
-
-Then I keep running into a problem with "final link failed: 
-Nonrepresentable section on output" I have looked and looked but cannot 
-find any solution to this.
-
-Below is the end of the build of buildroot when it quits.
-
-Should I use a different combination of tools, a newer set of kernel 
-stuff, a newer build of Ubuntu? Any help would be appreciated.
-
-/work/sd/buildroot-2011.02-rc1/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os): 
-In function `__uClibc_fini':
-__uClibc_main.c:(.text+0x6c): undefined reference to `__fini_array_start'
-__uClibc_main.c:(.text+0x74): undefined reference to `__fini_array_end'
-/work/sd/buildroot-2011.02-rc1/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os): 
-In function `__uClibc_main':
-__uClibc_main.c:(.text+0x240): undefined reference to 
-`__preinit_array_start'
-__uClibc_main.c:(.text+0x244): undefined reference to `__preinit_array_end'
-__uClibc_main.c:(.text+0x24c): undefined reference to `__init_array_start'
-__uClibc_main.c:(.text+0x250): undefined reference to `__init_array_end'
-/work/sd/buildroot-2011.02-rc1/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.5/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: 
-.libs/libbfd-2.21.so: hidden symbol `__fini_array_end' isn't defined
-/work/sd/buildroot-2011.02-rc1/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.5/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: 
-final link failed: Nonrepresentable section on output
-collect2: ld returned 1 exit status
-make[5]: *** [libbfd.la] Error 1
-make[5]: Leaving directory 
-`/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21/bfd'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory 
-`/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21/bfd'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory 
-`/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21/bfd'
-make[2]: *** [all-bfd] Error 2
-make[2]: Leaving directory 
-`/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory 
-`/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21'
-make: *** 
-[/work/sd/buildroot-2011.02-rc1/output/build/binutils-2.21/.stamp_built] 
-Error 2
-
--- 
-Regards,
-Gary
-   
+> 
+> > If something get showed, it means that, with high probability, the
+> only
+> > problem is that getty isn't started on the right console. Have you
+> tried
+> > to start getty on ttyUL1? Can be that ttyUL0 is used for something
+> else
+> > on the board (but really, i don't know).
+> 
+> That doesn't display anything after "Freeing unused kernel memory"
+> --
+> Guillaume Dargaud
+> http://www.gdargaud.net/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
