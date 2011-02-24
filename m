@@ -1,39 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 24 Feb 2011 20:56:15 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: #3259 is resolved
-Message-ID: <20110224195646.11A728F6D8@busybox.osuosl.org>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Thu, 24 Feb 2011 21:37:48 +0100
+Subject: [Buildroot] [PATCH] gdb: depend on host-expat to fix remote
+	debugging
+Message-ID: <1298579868-22046-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch fixes the following error when using GDB with gdbserver:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f19259a47828d498432b38d91e08901343de361
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  warning: Can not parse XML target description; XML support was disabled at compile time
+  Remote 'g' packet reply is too long: <very long line of hex chars>
+  [remote debugging does not work]
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Use $(HOST_CONFIGURE_OPTS) so expat is found.
+
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 ---
- CHANGES |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ toolchain/gdb/gdb.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index c2fc5fd..39c9f3b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,13 @@
-+2011.02, Not yet released:
-+
-+	Fixes all over the tree.
-+
-+	Updated/fixed packages: icu
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#3259: Unable to build webkit (on arm)
-+
- 2011.02-rc2, Released February 24th, 2011:
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 739ebbe..caf3e36 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -183,6 +183,7 @@ $(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
+ 	(cd $(GDB_HOST_DIR); \
+ 		gdb_cv_func_sigsetjmp=yes \
+ 		bash_cv_have_mbstate_t=yes \
++		$(HOST_CONFIGURE_OPTS) \
+ 		$(GDB_DIR)/configure $(QUIET) \
+ 		--cache-file=/dev/null \
+ 		--prefix=$(STAGING_DIR) \
+@@ -207,7 +208,7 @@ $(TARGET_CROSS)gdb: $(GDB_HOST_DIR)/gdb/gdb
+ 	ln -snf $(REAL_GNU_TARGET_NAME)-gdb \
+ 		$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb
  
- 	Fixes all over the tree.
+-gdbhost: $(TARGET_CROSS)gdb
++gdbhost: host-expat $(TARGET_CROSS)gdb
+ 
+ gdbhost-source: $(DL_DIR)/$(GDB_SOURCE)
+ 
 -- 
-1.7.3.4
+1.7.1
