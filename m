@@ -1,22 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 24 Feb 2011 10:59:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 3259] Unable to build webkit (on arm).
-In-Reply-To: <bug-3259-163@https.bugs.busybox.net/>
-References: <bug-3259-163@https.bugs.busybox.net/>
-Message-ID: <20110224105922.D09D18F6D7@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Thu, 24 Feb 2011 12:30:51 +0100
+Subject: [Buildroot] Unable to login to buildroot
+In-Reply-To: <201102241048.48537.dargaud@lpsc.in2p3.fr>
+References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
+Message-ID: <AANLkTimvTBzuBY5gpdGmcWDVdMAntznMRPTB6stdK=6F@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3259
+2011/2/24 Guillaume Dargaud <dargaud@lpsc.in2p3.fr>:
+> # Put a getty on the serial port
+> ttyUL0::respawn:/sbin/getty -L ttyUL0 115200 vt100 # GENERIC_SERIAL
 
---- Comment #3 from Bart?omiej Palmowski <rotwang@crux.org.pl>  ---
-and here is some more info on that option:
-https://bugs.webkit.org/show_bug.cgi?id=34247
+Try replace this line with:
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+::respawn:-/bin/sh
+
+And see if that works?
