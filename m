@@ -1,84 +1,32 @@
 From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Thu, 24 Feb 2011 15:16:22 +0100
+Date: Thu, 24 Feb 2011 15:56:08 +0100
 Subject: [Buildroot] Unable to login to buildroot
-In-Reply-To: <4D665ADD.10608@daccii.it>
+In-Reply-To: <87pqqhr6mt.fsf@macbook.be.48ers.dk>
 References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
-	<201102241359.42509.dargaud@lpsc.in2p3.fr>
-	<4D665ADD.10608@daccii.it>
-Message-ID: <201102241516.22825.dargaud@lpsc.in2p3.fr>
+	<87pqqhr6mt.fsf@macbook.be.48ers.dk>
+Message-ID: <201102241556.09029.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> There isn't any reason that these folders for containing something 
-> because proc, sysfs, devpts and tmpfs (generally used on /tmp) are 
-> virtual filesystems handled by the kernel ... there isn't anything 
-> written on the disk.
+> The default skeleton doesn't have a password set for root, and dropbear
+> doesn't allow root login without a password.
 
-OK, I suspected as much...
+I set it up in /etc/shadow. I get an error message if I try with the wrong 
+pwd. And also tried without one in /etc/shadow.
 
-> If you didn't see anything it means that init get executed but the 
-> console isn't started on the serial port.
-> Do a simply test: set as init, on boot options, /bin/ls (for example), 
-> just to see if something is showed on the serial console after the boot.
+> Not as far as I can see. You are creating your nfsroot from rootfs.tar
+> and extracting as root, right?
 
-I'm not sure I understand.
-sbin/init is already a symbolic link to bin/busybox. Should I make that a 
-symbolic link to ls ?
+Yes, with tar xvf. Any option I forgot ?
 
-If I add the following to inittab:
-::wait:/bin/ls -alF / /tmp
+> On a system without a hardware FPU you CAN run hard float binaries if
+> you have configured the kernel to emulate those instructions, but it
+> will be very slow. Soft float is preferred.
 
-I get:
-...
-[   33.070279] Freeing unused kernel memory: 108k init
-/:
-total 52
-drwxr-xr-x   16 root     root          4096 Feb 24  2011 ./
-drwxr-xr-x   16 root     root          4096 Feb 24  2011 ../
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 bin/
-drwxr-xr-x    6 root     root          4096 Feb 24  2011 dev/
-drwxr-xr-x    7 root     root          4096 Feb 24  2011 etc/
-drwxr-xr-x    3 root     root          4096 Feb 24  2011 home/
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 lib/
-lrwxrwxrwx    1 root     root            11 Feb 24  2011 linuxrc -> 
-bin/busybox*
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 mnt/
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 opt/
-dr-xr-xr-x   26 root     root             0 Jan  1 00:00 proc/
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 root/
-drwxr-xr-x    2 root     root          4096 Feb 24  2011 sbin/
-drwxr-xr-x   11 root     root             0 Jan  1 00:00 sys/
-drwxrwxrwt    2 root     root            80 Jan  1 00:00 tmp/
-drwxr-xr-x    6 root     root          4096 Feb 24  2011 usr/
-drwxr-xr-x    3 root     root          4096 Feb 14  2011 var/
-
-/tmp:
-total 4
-drwxrwxrwt    2 root     root            80 Jan  1 00:00 ./
-drwxr-xr-x   16 root     root          4096 Feb 24  2011 ../
--rw-r--r--    1 root     root             0 Jan  1 00:00 messages
--rw-r--r--    1 root     root             0 Jan  1 00:00 utmp
-
-Welcome to the Gandalf acquisition
-gandalf login: root
-Password:
-Jan  1 00:00:57 login[255]: root login on 'ttyUL0'
-
-Welcome to the Gandalf acquisition
-gandalf login:
-
-And still can't login.
-And if it's only a tty problem, why is rcS not launched ?
-
-> If something get showed, it means that, with high probability, the only 
-> problem is that getty isn't started on the right console. Have you tried 
-> to start getty on ttyUL1? Can be that ttyUL0 is used for something else 
-> on the board (but really, i don't know).
-
-That doesn't display anything after "Freeing unused kernel memory"
+Thanks. I was confused by the float options in both the kernel and uclibc.
 -- 
 Guillaume Dargaud
 http://www.gdargaud.net/
