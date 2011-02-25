@@ -1,44 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 25 Feb 2011 12:00:37 +0100
-Subject: [Buildroot] [git commit master 1/1] linux: bump 2.6.37.x stable
-	version
-Message-ID: <20110225110122.E5C7F8F75A@busybox.osuosl.org>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 25 Feb 2011 12:50:52 +0100
+Subject: [Buildroot] Unable to login to buildroot [SOLVED]
+In-Reply-To: <818976D2341E8345BAE1673D4C4C4D88017C0D5E@mlbe2k10.cs.myharris.net>
+References: <201102241048.48537.dargaud@lpsc.in2p3.fr>
+	<201102241516.22825.dargaud@lpsc.in2p3.fr>
+	<818976D2341E8345BAE1673D4C4C4D88017C0D5E@mlbe2k10.cs.myharris.net>
+Message-ID: <201102251250.52341.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thursday 24 February 2011 16:15:29 Williams, Michael (mwilli60) wrote:
+> In the end, it turned out to be a floating-point support configuration
+> mismatch between buildroot and my old kernel (2.6.24). After changing
+> everything to a soft FPU on the old kernel and the buildroot toolchain,
+> it all worked.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed9737388fab1f20ca9ba0cc743bd9616c0946a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index bdb1abe..9d514c5 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_2_6_37
- 
- config BR2_LINUX_KERNEL_2_6_37
--	bool "2.6.37"
-+	bool "2.6.37.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -52,7 +52,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "2.6.37"
-+	default "2.6.37.2"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
+Yup, that was it. It works now and I'm gonna start using oprofile to fight my 
+original issue (slow network).
 -- 
-1.7.3.4
+Guillaume Dargaud
+http://www.gdargaud.net/
