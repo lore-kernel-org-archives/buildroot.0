@@ -1,40 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 25 Feb 2011 15:31:33 +0100
-Subject: [Buildroot] [git commit master 1/1] CHANGES: update with recent
-	changes
-Message-ID: <20110225143207.ACE558F760@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Fri, 25 Feb 2011 07:43:57 -0800
+Subject: [Buildroot] Question about buildroot generated toolchain
+	binaries
+In-Reply-To: <AANLkTikLie3Zj9hqYV=BvGEN+efJm0_eVKWbc-66L3wt@mail.gmail.com>
+References: <AANLkTikLie3Zj9hqYV=BvGEN+efJm0_eVKWbc-66L3wt@mail.gmail.com>
+Message-ID: <AANLkTi=4GCSBMgvC6M8Dh0LrpOdpOOX2J+jk6+3X5tOo@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Steve:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c82d04c415ef9af9608faa049fb36918e42688d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I suspect you will find that only one set exists and the others are all
+soft-links to the *real* set.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+This has to do with name expectations of various software using those
+binaries, but I believe there is only one set.
 
-diff --git a/CHANGES b/CHANGES
-index 39c9f3b..8149d8f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,11 +2,12 @@
- 
- 	Fixes all over the tree.
- 
--	Updated/fixed packages: icu
-+	Updated/fixed packages: icu, nuttcp, slang, sylpheed
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#3259: Unable to build webkit (on arm)
-+	#3295: slang fails to build on mipsel
- 
- 2011.02-rc2, Released February 24th, 2011:
- 
+Charles
+
+On Thu, Feb 24, 2011 at 5:54 PM, Steve Johnson <sjohnson228@gmail.com>wrote:
+
+> Hi,
+>
+> In my toolchain output directory I seem to have
+> multiple copies of the same binaries..
+> In directory /usr/bin I have the gcc compiler (and other binaries) and in
+> directory /usr/arm-linux/bin I also have gcc? Why is that?
+>
+> Thanks,
+>
+> Steve
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
 -- 
-1.7.3.4
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110225/eafe6e1b/attachment.html>
