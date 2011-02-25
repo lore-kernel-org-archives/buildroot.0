@@ -1,8 +1,8 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Fri, 25 Feb 2011 17:46:20 +0000
-Subject: [Buildroot] [PATCH 1/8] gnuconfig: Remove old checkout of GNU
-	config.
-Message-ID: <AANLkTikOhY3TdvpQvckMo05ksyiSvznrh_i7gF8gX0A-@mail.gmail.com>
+Date: Fri, 25 Feb 2011 17:46:34 +0000
+Subject: [Buildroot] [PATCH 5/8] gnuconfig: Update config.{sub,
+	guess} to 2011-02-02 version.
+Message-ID: <AANLkTi=3H1Ru2Am6wTe-va=0a6dFuFEAu2oUi5Nx7XA8@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,2433 +11,1503 @@ To: buildroot@busybox.net
 
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- package/gnuconfig/CVS/Entries                 |   14 -
- package/gnuconfig/CVS/Repository              |    1 -
- package/gnuconfig/CVS/Root                    |    1 -
- package/gnuconfig/ChangeLog                   | 1996 -------------------------
- package/gnuconfig/Makefile                    |   15 -
- package/gnuconfig/testsuite/.cvsignore        |    1 -
- package/gnuconfig/testsuite/CVS/Entries       |    7 -
- package/gnuconfig/testsuite/CVS/Repository    |    1 -
- package/gnuconfig/testsuite/CVS/Root          |    1 -
- package/gnuconfig/testsuite/config-guess.data |   34 -
- package/gnuconfig/testsuite/config-guess.sh   |   47 -
- package/gnuconfig/testsuite/config-sub.data   |  117 --
- package/gnuconfig/testsuite/config-sub.sh     |   35 -
- package/gnuconfig/testsuite/uname.in          |    9 -
- package/gnuconfig/uname                       |   11 -
- 15 files changed, 0 insertions(+), 2290 deletions(-)
- delete mode 100644 package/gnuconfig/CVS/Entries
- delete mode 100644 package/gnuconfig/CVS/Repository
- delete mode 100644 package/gnuconfig/CVS/Root
- delete mode 100644 package/gnuconfig/ChangeLog
- delete mode 100644 package/gnuconfig/Makefile
- delete mode 100644 package/gnuconfig/testsuite/.cvsignore
- delete mode 100644 package/gnuconfig/testsuite/CVS/Entries
- delete mode 100644 package/gnuconfig/testsuite/CVS/Repository
- delete mode 100644 package/gnuconfig/testsuite/CVS/Root
- delete mode 100644 package/gnuconfig/testsuite/config-guess.data
- delete mode 100644 package/gnuconfig/testsuite/config-guess.sh
- delete mode 100644 package/gnuconfig/testsuite/config-sub.data
- delete mode 100644 package/gnuconfig/testsuite/config-sub.sh
- delete mode 100755 package/gnuconfig/testsuite/uname.in
- delete mode 100755 package/gnuconfig/uname
+ package/gnuconfig/config.guess |  510 +++++++++++++++++++---------------------
+ package/gnuconfig/config.sub   |  239 +++++++++++++------
+ 2 files changed, 407 insertions(+), 342 deletions(-)
 
-diff --git a/package/gnuconfig/CVS/Entries b/package/gnuconfig/CVS/Entries
-deleted file mode 100644
-index 07ca106..0000000
---- a/package/gnuconfig/CVS/Entries
-+++ /dev/null
-@@ -1,14 +0,0 @@
--D/doc////
--D/lib////
--D/m4////
--D/patches////
--D/po////
--D/scripts////
--D/src////
--D/tests////
--D/testsuite////
--/Makefile/1.6/Mon Sep 26 07:33:33 2005//
--/ChangeLog/1.387/Thu Sep 20 16:47:12 2007//
--/config.guess/1.368/Thu Sep 20 16:47:12 2007//
--/config.sub/1.356/Thu Sep 20 16:47:05 2007//
--/uname/1.5/Tue Aug 21 18:37:34 2007//
-diff --git a/package/gnuconfig/CVS/Repository b/package/gnuconfig/CVS/Repository
-deleted file mode 100644
-index 04204c7..0000000
---- a/package/gnuconfig/CVS/Repository
-+++ /dev/null
-@@ -1 +0,0 @@
--config
-diff --git a/package/gnuconfig/CVS/Root b/package/gnuconfig/CVS/Root
-deleted file mode 100644
-index 192e02e..0000000
---- a/package/gnuconfig/CVS/Root
-+++ /dev/null
-@@ -1 +0,0 @@
--:pserver:anonymous at cvs.savannah.gnu.org:/cvsroot/config
-diff --git a/package/gnuconfig/ChangeLog b/package/gnuconfig/ChangeLog
-deleted file mode 100644
-index 2bba73e..0000000
---- a/package/gnuconfig/ChangeLog
-+++ /dev/null
-@@ -1,1996 +0,0 @@
--2007-07-25  Mike Frysinger  <vapier@gentoo.org>
--
--	* testsuite/config-guess.sh (run_config_guess): Do not prefix with
--	"function" as this is not permitted by POSIX.
--	* testsuite/config-sub.sh (run_config_sub): Likewise.
--
--2007-07-24  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Remove trailing whitespace.
--
--2007-07-22  Ben Elliston  <bje@gnu.org>
--
--	Reported by Luke Mewburn <luke@mewburn.net>:
--	* config.guess: Fix typo ix86xen -> i86xen.
--
--2007-06-28  Ben Elliston  <bje@gnu.org>
--
--	From M R Swami Reddy <MR.Swami.Reddy@nsc.com>:
--	* config.sub: Rename cr16c to cr16.
--
--2007-05-17  Ben Elliston  <bje@gnu.org>
--
--	From Luke Mewburn <luke@mewburn.net>:
--	* config.guess (i86xen:SunOS:5.*:*): New.
--	* testsuite/config-guess.data: Add test case.
--
--2007-04-29  Ben Elliston  <bje@gnu.org>
--
--	From Pedro Alves <pedro_alves@portugalmail.pt>:
--	* config.sub (mingw32ce): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2007-03-06  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (*:Interix*:[3456]*): Consolidate all machine
--	possibilities into a single entry with a case statement that
--	examines ${UNAME_MACHINE}. Suggested by <jerker.back@telia.com>.
--
--2007-01-18  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-sub.data: Add MeP test cases.
--
--	From Dave Brolley  <brolley@redhat.com>
--	2001-03-19  Ben Elliston  <bje@redhat.com>
--
--	* config.sub (mep, mep-*): Add.
--
--2007-01-15  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (SX-8R:SUPER-UX:*:*): New.
--	* testsuite/config-guess.data: Add a test case.
--
--2007-01-04  Ben Elliston  <bje@gnu.org>
--
--	From Alexander Boettcher <alex@kaffe.org> via Dalibor Topic:
--	* config.sub: Recognise -drops*.
--	* testsuite/config-sub.data: Add a test.
--
--2006-12-22  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (i*:MINGW:*:*): Rename from this ..
--	(*:MINGW:*:*): .. to this.
--	* testsuite/config-guess.data: Add test cases.
--
--2006-12-08  Bob Wilson  <bob.wilson@acm.org>
--
--	* config.guess (xtensa:Linux:*:*): New.
--	* testsuite/config-guess.data: Add test case.
--	* testsuite/config-sub.data: Add xtensa-elf and xtensa-linux.
--
--2006-12-08  Kazu Hirata  <kazu@codesourcery.com>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.sub: Recognize fido and fido-*.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-11-30  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (SX-7:SUPER-UX:*:*): New.
--	* testsuite/config-guess.data: Add test case.
--
--2006-11-15  Ben Elliston  <bje@gnu.org>
--
--	From Josselin Mouette <joss@debian.org>:
--	* config.guess (SX-8:SUPER-UX:*:*): New.
--	* testsuite/config-guess.data: Add test case.
--
--2006-11-08  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (authenticamd:Interix*:[3456]*): Another AMD64.
--	* testsuite/config-guess.data: Add test case.
--
--2006-11-07  Steve Woodford  <scw@NetBSD.org>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.guess (*:NetBSD:*:*): Handle sh5el arch.
--	* config.sub (sh5el): New basic_machine.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-09-20  Ben Elliston  <bje@gnu.org>
--
--	* config.sub (score, score-*): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-08-14  Thiemo Seufer  <ths@mips.com>
--	    Nigel Stephens  <nigel@mips.com>
--	    David Ung  <davidu@mips.com>
--
--	* config.sub (sde): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-08-14  Vijay K. Munjal <vijaykumarm1@KPITCummins.com>
--
--	* config.sub (xc16x, xc16x-*): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-07-02  Masaki MURANAKA  <monaka@monami-software.com>
--
--	* config.sub (toppers-*): New.
--	* testsuite/config-sub.data: Add test case.
--
--2006-07-02  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (macppc:MirBSD:*:*): Fix typo.
--	* testsuite/config-guess.data: Add test case.
--
--2006-07-02  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Handle Interix 6.
--	* testsuite/config-guess.data: Add test case.
--
--2006-06-06  Ben Elliston  <bje@gnu.org>
--
--	From H??vard Skinnemoen <hskinnemoen@atmel.com>:
--	* config.guess (avr32*:Linux:*:*): New.
--	* config.sub (avr32, avr32-*): Likewise.
--	* testsuite/config-guess.data: Add test case.
--	* testsuite/config-sub.data: Likewise.
--
--2006-05-13  Ben Elliston  <bje@gnu.org>
--
--	* config.sub: Specify -elf as the default OS for spu.
--	(c4x-* | tic4x-*): Tidy formatting.
--	* testsuite/config-sub.data: Update tests.
--
--2006-05-13  Bruno Haible  <bruno@clisp.org>
--
--	* config.guess: Change support for Sun C/C++ 5.9 on Linux/x86 to
--	use compiler-specific predefines other than __sun.
--
--2006-05-12  Ben Elliston  <bje@gnu.org>
--
--	* config.sub (spu): New.
--	* testsuite/config-sub.data: Add test case.
--
--2006-05-12  Ben Elliston  <bje@gnu.org>
--
--	* config.sub (m32c, m32c-*): Fold into the standard case.
--
--2006-04-26  Bruno Haible  <bruno@clisp.org>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.guess (amd64:FreeBSD:*:*) Detect as x86_64.
--	* testsuite/config-guess.data: Add test case.
--
--2006-03-13  Ben Elliston  <bje@gnu.org>
--
--	Revert these patches at Earnie Boyd's request:
--
--	* testsuite/config-guess.data: Tweak MSYS_NT-5.1 test.
--
--	* config.guess: Handle i*:MSYS_NT-*:*:* for MSYS/Mingw.
--	* testsuite/config-guess.data: Add test case.
--
--2006-03-07  Mike Frysinger  <vapier@gentoo.org>
--
--        * config.sub (sheb, sheb-*): Handle these in addition to shbe.
--        * testsuite/config-sub.data: Add test case.
--
--2006-03-06  Ben Elliston  <bje@gnu.org>
--
--	* uname: Exit with exit code 0.
--
--2006-02-27  David S. Miller  <davem@sunset.davemloft.net>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.sub (sparcv9v, sparc64v): Recognise SUN4V-based SPARCs.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-02-27  Ben Elliston  <bje@gnu.org>
--
--	* config.guess, config.sub: Add 2006 to copyright years.
--
--2006-02-23  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (EM64T:Interix:*:*): New case.
--	* testsuite/config-guess.data: Add test case.
--
--2006-02-23  Mike Frysinger  <vapier@gentoo.org>
--
--	* config.sub (nios, nios2): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2006-02-23  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (x86:Interix*:[345]*): Retain full Interix version.
--	* testsuite/config-guess.data: Update Interix test(s).
--
--2006-02-23  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-guess.data: Tweak MSYS_NT-5.1 test.
--
--2006-02-23  Dan Nicolaescu  <dann@ics.uci.edu>
--
--	* config.guess (i*86:Linux:*:*): Recognise the Sun Studio compiler
--	by handling #if defined(__sun).
--
--2006-02-23  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Handle i*:MSYS_NT-*:*:* for MSYS/Mingw.
--	* testsuite/config-guess.data: Add test case.
--
--2006-01-30  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
--
--	* config.guess: Don't use semicolons to separate sed commands, as
--	POSIX says it's not portable.
--	Noted by Paul Eggert <eggert@cs.ucla.edu>.
--
--2006-01-30  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
--
--	* config.guess (set_cc_for_build): Do not pass `-q' to mktemp.
--	Reported by Bruce Korb <bkorb@gnu.org>.
--
--2006-01-19  Robert Millan  <robertmh@gnu.org>
--
--	* testsuite/config-guess.data: Add test case for GNU/kFreeBSD.
--	* testsuite/config-sub.data: Add test case for amd64-kfreebsd5.4-gnu.
--
--2006-01-02  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (*:SolidBSD:*:*): New.
--	* config.sub (-solidbsd*): New.
--	* testsuite/config-guess.data: Add test case.
--	* testsuite/config-sub.data: Ditto.
--
--2005-12-23  Ben Elliston  <bje@gnu.org>
--
--	From Takahashi Yoshihiro <nyan@jp.FreeBSD.org>:
--	* config.guess (pc98:FreeBSD:*:*) Add special case.
--	* config.sub (pc98, pc98-*): New.
--	* testsuite/config-guess.data: Add test case.
--	* testsuite/config-sub.data: Ditto.
--
--2005-12-22  Ben Elliston  <bje@gnu.org>
--
--	From John Williams <jwilliams@itee.uq.edu.au>:
--	* config.sub (mb, microblaze): New basic_machine.
--	* testsuite/config-sub.data: New tests.
--
--2005-12-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
--
--	* config.guess (mips:Linux:*:*, mips64:Linux:*:*, i*86:Linux:*:*):
--	Fix quoting of eval command line, allow for preprocessor to insert
--	white space between C tokens.
--	(i*86:Linux:*:*): Handle Portland Group pgcc like Intel icc; it
--	doesn't define __ELF__ either.
--
--2005-12-11  Ben Elliston  <bje@gnu.org>
--
--	From Shaun Jackman <sjackman@gmail.com>:
--	* config.sub: Add the KERNEL-OS combination linux-newlib*.
--	* testsuite/config-sub.data: Add a test for i386-linux-newlib.
--
--2005-12-11  Ben Elliston  <bje@gnu.org>
--
--	Reported by Leif Ekblad <leif@rdos.net>:
--	* config.guess (i*86:rdos:*:*): New.
--	* config.sub: Handle rdos.
--	* testsuite/config-guess.data: Add test case for RDOS.
--	* testsuite/config-sub.data: Likewise.
--
--2005-12-09  Ben Elliston  <bje@gnu.org>
--
--	Reported by Jan-Benedict Glaw <jbglaw@lug-owl.de>:
--	* config.guess (vax:Linux:*:): Detect as vax-dec-linux-gnu.
--	* testsuite/config-guess.data: Add test.
--
--2005-12-09  Nathan Sidwell  <nathan@codesourcery.com>
--
--	* config.sub (mt): Rename from ms1.
--	(ms1): Alias it to mt for backward compatibility.
--	* testsuite/config-sub.data: Update testsuite.
--
--2005-11-13  Kean Johnston  <jkj@sco.com>
--
--	* config.sub: Allow -sco6 and -sco5v6 to be aliases for SCO
--	OpenServer 6.
--	* testsuite/config-sub.data: New tests.
--
--2005-11-11  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-guess.data: Add test case for Linux PPC64.
--
--2005-11-11  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (x86:Interix*:[345]*): Handle Interix version 5.
--	* testsuite/config-guess.data: Add test case.
--
--2005-09-19  Gerben Wierda <Gerben.Wierda@rna.nl>
--
--	* config.guess (*:Darwin:*:*): Don't treat *86 specifically.
--
--2005-08-03  Ben Elliston  <bje@gnu.org>
--
--	Reported by Kulkin Alexey <kulkin@yandex.ru>:
--	* config.guess (x86_64:CYGWIN*:*:*): New case.
--	* testsuite/config-guess.data: Add test case.
--
--2005-07-14  Robert Millan  <robertmh@gnu.org>
--
--	* config.guess (or32:Linux:*:*): Detect.
--	* testsuite/config-guess.data: Add test case.
--
--2005-07-08  Michael Haubenwallner  <michael.haubenwallner@salomon.at>
--
--	* config.guess: Let set_cc_for_build evaluate only once to avoid
--	creation of more than one tmpdir without removing the old one.
--
--2005-07-08  Ben Elliston  <bje@gnu.org>
--
--	* config.sub: Add support for Haiku.
--	* testsuite/config-sub.data: Add test cases for i386, SPARC and
--	PowerPC Haiku.
--
--2005-07-08  Ben Elliston  <bje@gnu.org>
--
--	* Makefile (SHELL): Remove override.
--
--2005-07-04  Ben Elliston  <bje@gnu.org>
--	    Paul Mundt  <lethal@linux-sh.org>
--
--	* config.sub: Handle sh2a/sh4a.
--	* testsuite/config-sub.data: Add test cases.
--
--2005-07-01  Robert Millan  <robertmh@gnu.org>
--
--	* config.sub: Deprecate "openrisc" in favour of "or32".
--	Do not default the OS field to "coff".
--	* testsuite/config-sub.data: Add a test case.
--
--2005-06-30  Ben Elliston  <bje@gnu.org>
--
--	* config.sub (sh64): Remove duplicate entry.
--	* testsuite/config-sub.data: Add test case for sh64.
--
--2005-06-30  Mike Frysinger <vapier@gentoo.org>
--
--	* config.sub (mips64vr5900, mips64vr5900el): New machines.
--	* testsuite/config-sub.data: Add test cases.
--
--2005-06-30  Brad Smith  <brad@comstyle.com>
--
--	* config.guess: Simplify OpenBSD support.
--
--2005-06-02  Aldy Hernandez  <aldyh@redhat.com>
--
--	* config.sub (ms1, ms1-*): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2005-06-02  Jim Blandy  <jimb@redhat.com>
--
--	* config.sub (m32c, m32c-*): New.
--	* testsuite/config-sub.data: Add test cases.
--
--2005-05-27  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (i*:windows32*:*): uname -m includes "-pc", so no
--	need to emit it additionally.
--	* testsuite/config-guess.data: Update test case.
--
--2005-05-15  Ben Elliston  <bje@gnu.org>
--
--	Reported by Sam Steingold <sds@gnu.org>:
--	* config.guess (i*:windows32*:*): New.
--	* testsuite/config-guess.data: Add a corresponding test case.
--
--2005-05-15  Paul Eggert  <eggert@cs.ucla.edu>
--
--	* config.guess: Fix remaining problematic uses of "exit 0" (and
--	one problematic use of "&& exit").
--
--2005-05-12  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Update Free Software Foundation address.
--	* config.sub: Likewise.
--
--2005-05-12  Ben Elliston  <bje@gnu.org>
--
--	* uname: Similar to the last change, remove all exit commands and
--	let the script exit with the exit code of the last command.
--
--2005-05-12  Paul Eggert  <eggert@CS.UCLA.EDU>
--
--	Explanation for this subtle change:
--
--	From: Paul Eggert <eggert@CS.UCLA.EDU>
--	To: config-patches at gnu.org
--	Subject: config.guess, config.sub misdiagnose write errors
--	
--	config.guess and config.sub sometimes mishandle write errors to
--	stdout: they either ignore the errors, or output invalid
--	diagnostics when they occur.  For a simple (albeit unrealistic)
--	example, on my Solaris 8 (sparc) host, the command "config.guess
--	>&-" exits with status 0; it should exit with status 1, due to the
--	write failure.
--	
--	* config.guess: Don't exit with an explicit exit code of 0.
--	* config.sub: Likewise.
--
--2005-05-12  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (i*86:skyos:*:*): New.
--	* config.sub (case $os): Handle "-skyos*" as a valid OS.
--	* testsuite/config-guess.data: Add a test case.
--	* testsuite/config-sub.data: Likewise.
--
--2005-05-12  Tim Rice  <tim@multitalents.net>
--
--	* config.guess: Add support for SCO OpenServer 6.
--
--2005-05-12  Noah Misch  <noah@cs.caltech.edu>
--
--	* config.guess (9000/[34678]??:HP-UX:*:*): Discard stderr of `cc
--	-E -'; HP `cc' emits an error for it but still preprocesses
--	standard input as expected.  Add comment.
--
--2005-05-12  Nick Burrett  <nick@sqrt.co.uk>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.guess (arm:riscos:*:*): New configuration.
--	* testsuite/config-sub.data: New tests.
--	* testsuite/config-guess.data: Likewise.
--
--2005-05-12  Nick Burrett  <nick@sqrt.co.uk>
--
--	* config.guess: Add a missing newline to arm-acorn-riscix string.
--
--2005-04-22  Paul Green  <Paul.Green@stratus.com>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Add Stratus VOS IA32 systems.
--	* testsuite/config-guess.data: Add a testcase.
--
--2005-04-22  Ben Elliston  <bje@gnu.org>
--	    Bernd Schmidt  <bernds_cb1@t-online.de>
--
--	* config.sub (bfin): New target.
--	* testsuite/config-sub.data: Test bfin-elf.
--
--2005-04-22  Ben Elliston  <bje@gnu.org>
--	    Dave Miller  <davem@davemloft.net>
--
--	* config.sub (sparc64b): Handle.
--	* testsuite/config-sub.data: Test sparc64-linux, sparc64b-linux.
--
--2005-03-24  Paul Eggert  <eggert@cs.ucla.edu>
--
--	* config.guess: Update URL for script location.
--	Problem reported by Bruno Haible.
--
--2005-02-10  Ben Elliston  <bje@gnu.org>
--	    J Shepherd  <jashepherd@usa.net>
--
--	* config.guess (NSE-?:NONSTOP_KERNEL:*:*): New.
--	* testsuite/config-guess.data: Test for nse-tandem-nsk.
--
--2005-02-10  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-guess.data: Add craynv-cray-unicosmp2.5.X case.
--
--2005-02-10  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-sub.sh (run_config_sub): New function. Compute
--	$rc within the function and return it.
--	* testsuite/config-guess.sh (run_config_guess): Likewise.
--
--2005-02-10  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (amd64:CYGWIN*:*:*): New.
--	* testsuite/config-sub.data: Add amd64-cygwin, x86_64-cygwin.
--	* testsuite/config-guess.data: Add x86_64-unknown-cygwin test.
--
--2005-02-10  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Update copyright years.
--	* config.sub: Likewise.
--
--2005-01-11  Inderpreet Singh  <inderpreetb@noida.hcltech.com>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.sub: Handle maxq target.
--	* testsuite/config-sub.data: Add maxq and maxq-elf tests.
--
--2004-11-30  Melissa Mears  <asterisk@graces.dricas.com>
--
--	* config.sub: Handle xbox alias.
--	* testsuite/config-sub.data: Add xbox case.
--
--2004-11-17  Ian Lance Taylor  <ian@wasabisystems.com>
--	    Ben Elliston  <bje@gnu.org>
--
--	* config.sub: Recognize xscalee[bl].
--	* testsuite/config-sub.data: Add xscale, xscalee[bl] cases.
--
--2004-11-12  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (*:z/VM:*:*): Add new case.
--	* config.sub (os): Add case for -zvmoe.
--	* testsuite/config-guess.data: Add a test case.
--	* testsuite/config-sub.data: Likewise.
--
--2004-11-12  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-guess.sh: Use , and not / as the sed delimiter.
--
--2004-11-12  Andris Pavenis <pavenis@latnet.lv>
--
--	* config.sub (djgpp): Alias to i586-pc-msdosdjgpp.
--	* testsuite/config-sub.data: Add a test case.
--	
--2004-10-25  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-guess.sh: Reduce recurring tabs into a single
--	tab, to allow the test data to be better aligned in columns.
--
--2004-10-25  Ben Elliston  <bje@gnu.org>
--
--	Reported by Monty Solomon <monty@roscom.com>:
--	* config.guess (*:XENIX:*:SysV): New.
--	* testsuite/config-guess.data: Add a test case.
--
--2004-10-25  Ben Elliston  <bje@gnu.org>
--
--	Reported by Martin Hammer <martin.hammer@siemens.com>:
--	* config.guess (DRS?6000:isis:4.2*:7*): New pattern.
--
--2004-09-07  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (frv:Linux:*:*): New.
--	* testsuite/config-sub.data: Add cris-linux, frv-linux.
--	* testsuite/config-guess.data: Add frv-linux-unknown-gnu case.
--
--2004-08-27  Hans-Peter Nilsson  <hp@axis.com>
--
--	* config.sub: Handle crisv32, alias etraxfs.
--	* config.guess (crisv32:Linux:*:*): Handle.
--	* testsuite/config-sub.data: Add test case.
--	* testsuite/config-guess.data: Likewise.
--
--2004-08-22  Ben Elliston  <bje@gnu.org>
--
--	* Makefile (check): Run config-guess.sh tests as well.
--	* testsuite/config-guess.sh: New test.
--	* testsuite/config-guess.data: New file.
--	* testsuite/uname.in: Likewise.
--	* testsuite/config-sub.data (amd64-unknown-freebsd5.2): New case.
--
--2004-08-13  Brad Smith  <brad@comstyle.com>
--
--	* config.guess (*:OpenBSD:*:*): Remove defunct MIPS machines.
--	(sgi:OpenBSD:*:*): Emit mips64, not mipseb.
--
--2004-08-11  Paul Eggert  <eggert@cs.ucla.edu>
--
--	* config.guess (*:Darwin:*:*): If uname -p reports "unknown",
--	assume the processor is a powerpc.  This is because coreutils
--	uname (at least versions 4.5.7 through 5.2.1) outputs "unknown"
--	in this case, due to a MacOS X bug that causes
--	sysctl ((int[]) {CTL_HW, HW_MACHINE_ARCH}, 2, buffer, &bufsize, 0, 0)
--	to return a negative number.
--	Problem reported by Petter Reinholdtsen in:
--	http://lists.gnu.org/archive/html/bug-gnu-utils/2003-02/msg00201.html
--
--2004-07-19  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (S7501:*:4.0:3.0): Handle NCR System V UNIX machine.
--
--2004-07-02  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-sub.data: Add i386-elf to i786-elf.
--
--2004-06-30  Ben Elliston  <bje@gnu.org>
--
--	* testsuite/config-sub.data: Add more new tests.
--
--2004-06-25  Ben Elliston  <bje@gnu.org>
--
--	* Makefile (check): New target.
--	* testsuite/config-sub.sh: New test.
--	* testsuite/config-sub.data: New file.
--
--2004-06-24  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Update copyright years.
--	* config.sub: Likewise.
--
--2004-06-22  Robert Millan  <robertmh@gnu.org>
--
--	* config.guess (*:FreeBSD:*:*): Remove check for glibc (unneeded
--	since GNU/kFreeBSD systems match *:GNU/*:*:* instead).
--
--2004-06-22  Stanley F. Quayle <stan@stanq.com>
--
--	* config.guess (*:*VMS:*:*): New entry. Replaces
--	Alpha:OpenVMS:*. Recognize and advertise all VMS flavors as dec
--	manufacturer.
--
--2004-06-22  Ben Elliston  <bje@gnu.org>
--
--	* config.guess: Cray fixes from Wendy Palm <wendyp@cray.com>.
--	* config.sub: Likewise.
--
--2004-06-22  Ben Elliston  <bje@gnu.org>
--
--	Reported by Hans-Peter Nilsson <hp@bitrange.com>:
--	* config.sub: Correctly handle mmix-knuth and mmix-knuth-mmixware.
--
--2004-06-21  Ben Elliston  <bje@gnu.org>
--
--	* Makefile: New file.
--
--2004-06-11  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (pegasos:OpenBSD:*:*): Remove.
--
--2004-06-11  Ben Elliston  <bje@gnu.org>
--
--	From Wouter Verhelst <wouter@grep.be>:
--	* config.guess (M68*:*:R3V[5678]:*): Detect R3V8.
--
--2004-06-11  Ben Elliston  <bje@gnu.org>
--
--	* config.guess (luna88k:OpenBSD:*:*): New.
--
--2004-03-12  Kazuhiro Inaoka  <inaoka.kazuhiro@renesas.com>
--
--	* config.guess (m32r*:Linux:*:*): New case.
--	* config.sub: Handle m32rle.
--
--2004-03-12  Ben Elliston  <bje@wasabisystems.com>
--
--	From Jens Petersen  <petersen@redhat.com>:
--	* config.sub: Handle sparcv8.
--
--2004-03-03  Ben Elliston  <bje@wasabisystems.com>
--
--	From Tom Smith <smith@cag.lkg.hp.com>:
--	* config.guess: Version suffixes are equally significant on Tru64
--	V4.* and V5.*, so do not ignore them on V5.*.  Handle a version
--	prefix of "P" (patched kernel).
--
--2004-02-23  Tal Agmon  <Tal.Agmon@nsc.com>
--
--	* config.sub: Add support for National Semiconductor CRX target.
--
--2004-02-16  Thorsten Glaser  <x86@ePost.de>
--
--	* config.guess (*:MirBSD:*:*, macppc:MirBSD:*:*): Handle.
--	* config.sub: Handle -mirbsd*.
--
--2004-02-16  Brad Smith  <brad@comstyle.com>
--
--	* config.guess: Recognize OpenBSD on AMD64 and CATS hardware.
--
--2004-02-11  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.sub (abacus): Add.
--
--2004-02-11  Galit Heller  <Galit.Heller@nsc.com>
--
--	* config.sub: Add support for National Semiconductor CR16C target.
--
--2004-02-02  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (*:ekkoBSD:*:*): Handle.
--	* config.guess: Handle -ekkobsd*.
--
--2004-01-30  Ben Elliston  <bje@wasabisystems.com>
--
--	* NEWS: Remove.
--
--2004-01-24  Ben Elliston  <bje@wasabisystems.com>
--
--	From Brett E. Wynkoop <wynkoop@wynn.com>:
--	* config.guess (m68k:machten:*:*): Handle.
--
--2004-01-20  Jeroen Ruigrok van der Werven  <asmodai@dragonflybsd.org>
--
--	* config.guess: Fix DragonFly entry to really work.
--
--2004-01-05  Ben Elliston  <bje@wasabisystems.com>
--	    Joachim Schmitz  <schmitz@hp.com>
--
--	* config.guess: Handle NSR-? to accept any CPU type.
--
--2004-01-05  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.sub: Handle amd64-*.
--
--2003-11-20  Kristian Van Der Vliet  <vanders@liqwyd.com>
--
--	* config.guess (i*86:syllable:*:*): New.
--	* config.sub (-syllable*): Likewise.
--
--2003-11-18  Jeroen Ruigrok van der Werven  <asmodai@dragonflybsd.org>
--
--	* config.guess (*:DRAGONFLY:*:*): New.
--	* config.sub (-dragonfly*): Likewise.
--
--2003-11-03  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess: Detect OpenBSD on Pegasos I hardware.
--
--2003-11-03  Jim Tison  <jtison@us.ibm.com>
--	    Ulrich Weigand  <uweigand@de.ibm.com>
--
--	* config.sub (tpf, -tpf*): Recognize.
--
--2003-10-16  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (5000:UNIX_System_V:4.*:*): Detect the Fujitsu
--	VPP5000.  Reported by Naoki Yoshida <naoki@th.nao.ac.jp>.
--
--2003-10-16  Bernardo Innocenti  <bernie@develer.com>
--
--	* config.sub (linux-uclibc, uclinux-uclibc): Handle.
--
--2003-10-16  Ben Elliston  <bje@wasabisystems.com>
--
--	Reported by Todd Humphrey <thump@isl.net>:
--	* config.guess (*:OS400:*:*): Detect OS/400 on AS/400 machines.
--	* config.sub (os400, -os400*): Recognise.
--
--2003-10-07  Robert Millan  <robertmh@gnu.org>
--	    Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (*:GNU/*:*:*): New. Generic check for systems with
--	GNU libc and userland (matches GNU/KFreeBSD and GNU/KNetBSD).
--	(*:GNU/FreeBSD:*:*): Remove, superceeded by GNU/*.
--	* config.sub: Handle -knetbsd*.
--
--2003-10-07  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (3[345]??:*:4.0:3.0): Expand pattern to match 3526.
--
--2003-10-03  Chris Demetriou  <cgd@broadcom.com>
--
--	* config.sub (mipsisa64r2*): Add.
--
--2003-10-03  Ben Elliston  <bje@wasabisystems.com>
--	    Joachim Schmitz  <schmitz@hp.com>
--
--	* config.guess (NSR-*:NONSTOP_KERNEL:*:*): Recognise NSR-Y.
--
--2003-08-18  Andreas Krennmair <krennmair@lizenzfrei.at>
--
--	* config.guess: Add detection for diet libc.
--	* config.sub: Handle linux-dietlibc.
--
--2003-07-29  Ben Elliston  <bje@wasabisystems.com>
--
--	* NEWS: New draft file.
--
--2003-07-17  Ben Elliston  <bje@wasabisystems.com>
--
--	Reported as missing by Doug Evans:
--	* config.sub: Handle iq2000 and iq2000-*.
--
--2003-07-15  Alexandre Oliva  <aoliva@redhat.com>
--
--	* config.sub: Add am33_2.0 machine.
--
--2003-07-04  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.sub: Handle -kfreebsd*. From Robert Millan.
--
--2003-07-02  Robert Millan  <rmh@debian.org>
--
--	* config.guess (*:GNU/FreeBSD:*:*): Prefix GNU/FreeBSD triplet
--	with a "k" to indicate the system is based on FreeBSD's kernel and
--	not the whole OS.
--
--2003-06-17  Ben Elliston  <bje@wasabisystems.com>
--
--	From by Stephen Thomas <stephen.thomas@superh.com>:
--	* config.guess (sh64*:*:*:Linux): New case.
--	* config.sub (sh64): Map to sh64-unknown.
--
--2003-06-17  Ben Elliston  <bje@wasabisystems.com>
--
--	Reported by Dennis Grevenstein <dennis@pcde.inka.de>:
--	* config.guess (sei:*:*:seiux): Detect SEIUX running on MIPS-based
--	workstations manufactured by Sumitomo Electric Industries.
--	* config.sub (sei, -sei*): Handle.
--
--2003-06-13  Svein E. Seldal  <Svein.Seldal@solidas.com>
--
--	* config.sub (c4x, tic4x): Re-arrange and fix.
--
--2003-06-12  Bernard Giroud  <bernard.giroud@creditlyonnais.ch>
--
--	* config.guess (Alpha*:OpenVMS:*:*): New entry.
--
--2003-06-06  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.sub: Recognise pentium3 and pentium4.  From Kelley Cook
--	<kcook34@ford.com>.
--
--2003-06-06  Douglas B Rupp  <rupp@gnat.com>
--
--	* config.guess: Recognize Interix 4.
--
--2003-06-04  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (set_cc_for_build): Allow insecure temporary
--	filenames to be generated on systems without mktemp(1) or $RANDOM,
--	but issue a warning to standard error.  Suggested by Hans-Peter
--	Nilsson.
--
--2003-05-24  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.sub: Handle $os values of -nx6 and -nx7.
--
--2003-05-22  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess: Detect ICL NX version 6 running on ICL/Fujitsu DRS
--	6000 machines. Reported by <alpha1@alpha1teclabs.com>.
--
--2003-05-19  Hans-Peter Nilsson  <hp@axis.com>
--
--	* config.guess (cris:Linux:*:*): New case.
--
--2003-05-09  Ben Elliston  <bje@wasabisystems.com>
--
--	* config.guess (SHG2:*:4.0:3.0): Handle NCR System V UNIX machine.
--	Reported by Raj Mannar <rajman@ureach.com>.
--
--2003-05-09  Andreas Jaeger  <aj@suse.de>
--
--	* config.sub (maybe_os): Add alias amd64 for x86_64.
--
--2003-05-09  Ben Elliston  <bje@wasabisystems.com>
--
--	From Robert Millan <zeratul2@wanadoo.es>
--	* config.guess (*:GNU/FreeBSD:*:*): Handle.
--
--2003-02-22  Ben Elliston  <bje@redhat.com>
--
--	Revert the following due to the demise of MicroBSD:
--
--        2003-01-03  Scott Kamp  <dingo@microbsd.net>
--	* config.guess: Detect MicroBSD operating system on i386 CPUs.
--	* config.sub: Handle aliases for such.
--
--2003-02-03  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle -kaos*.
--
--2003-02-03  Charles Lepple  <clepple@ghz.cc>
--
--	* config.sub: Handle TI tic55x-* and tic6x-* targets.
--
--2003-01-30  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (alpha:OSF1:*:*): Use /usr/sbin/psrinfo -v to
--	detect the Alpha CPU type, not an assembled program requiring
--	$CC_FOR_BUILD.
--
--2003-01-28  Nick Clifton  <nickc@redhat.com>
--
--	* config.sub: Add sh2e support.
--
--2003-01-22  Fabio Alemagna  <falemagn@aros.org>
--
--	* config.sub: Handle -aros*.
--
--2003-01-10  Stuart Hastings  <stuart@apple.com>
--
--	* config.guess: Make i686 the default for Darwin/x86.
--
--2003-01-03  Scott Kamp  <dingo@microbsd.net>
--
--	* config.guess: Detect MicroBSD operating system on i386 CPUs.
--	* config.sub: Handle aliases for such.
--
--2003-01-02  Ben Elliston  <bje@redhat.com>
--
--	From Wendy Palm <wendyp@cray.com>:
--	* config.guess (CRAY*T3D:*:*:*): Remove.
--	(*:UNICOS/mp:*:*): New system.
--	* config.sub (t3d): Remove.
--	(nv1): Add.
--
--2003-01-02  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Fix mipstx39-* and mipstx39el-* handling (typo).
--
--2003-01-02  Ben Elliston  <bje@redhat.com>
--
--	From Dmitry Diky <diwil@mail.ru>:
--	* config.sub (basic_machine): Add msp430 and msp430-*.
--
--2003-01-02  Chris Demetriou  <cgd@broadcom.com>
--
--	* config.sub (mipsisa32r2*): Add.
--
--2002-12-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (set_cc_for_build): Rework to do more secure tmp
--	directory creation.  Remove temporary files and tmp directory on
--	exit; remove redundant rm(1) and rmdir(1) commands throughout.
--
--2002-12-17  John David Anglin  <dave@hiauly1.hia.nrc.ca>
--
--	* config.guess (hppa*): Remove tmpdir when CC_FOR_BUILD is set.
--
--2002-12-11  Ben Elliston  <bje@redhat.com>
--	    Dave Anglin  <dave.anglin@nrc.ca>
--	    Ross Alexander  <ross.alexander@uk.neceur.com>
--
--	* config.guess (*:HP-UX:*:*): Detect 64-bit compiler.
--
--2002-11-30  J.T. Conklin  <jtc@acorntoolworks.com>
--
--	* config.sub (-nto-qnx*): New $os pattern.
--	(-nto*): Preserve OS version when converting to -nto-qnx*.
--
--2002-11-30  Ben Elliston  <bje@redhat.com>
--
--	From Stefan Neis <neis@kobil.de>:
--	* config.guess: Reorder entries so that hosts with a different
--	operating system won't be misdetected as System V simply because
--	their version number happens to be 3.2, 4.* or 5.  This is needed
--	for OS/2, at least, which is currently at version 4.52.
--
--2002-11-30  Ben Elliston  <bje@redhat.com>
--
--	From Joel Baker <lucifer@lightbearer.com>:
--	* config.guess: Append "-gnu" to triplet on Debian/NetBSD systems.
--	* config.sub: Recognise netbsd*-gnu*.
--
--2002-11-30  Maciej W. Rozycki  <macro@ds2.pg.gda.pl>
--
--	* config.guess (mips64:Linux:*:*): Recognize.
--	(mips:Linux:*:*): Recognize as mips-unknown-linux-gnu instead of
--	mips-pc-linux-gnu.
--
--2002-11-30  Douglas B Rupp  <rupp@gnat.com>
--
--	* config.guess: Make default Interix arch "i586".
--
--2002-11-30  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Add "SDS2" to machines that run NCR System V UNIX.
--	Reported by <agustinsanchez@prodigy.net.mx>.
--
--2002-11-13  Ben Elliston  <bje@redhat.com>
--
--	* config.sub (windows32): Remove bad idea.
--
--2002-11-13  Werner Lemberg  <wl@gnu.org>
--
--	* config.sub: Add -mks*.
--
--2002-11-13  Jeff Conrad  <jeff_conrad@msn.com>
--
--	* config.guess: Detect MKS running on Windows {95,98,NT}.
--
--2002-11-13  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect PowerMAX OS on Concurrent Synergy machines.
--	Reported by Sam Williams <sam.williams@hs.utc.com>.
--
--2002-11-08  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect m68k-diab-dnix.
--	* config.sub: Handle -dnix*.
--
--2002-10-21  Paul Eggert  <eggert@twinsun.com>
--
--	* config.guess (CC_FOR_BUILD): Put "-o outputfile" before any
--	operands.  POSIX 1003.1-2001 says that "c99 file.c -o file" is not
--	supported; you must put all options before all operands, e.g. "c99
--	-o file file.c".
--
--2002-09-05  Svein E. Seldal  <Svein.Seldal@solidas.com>
--
--	* config.sub: Add tic4x target.
--
--2002-09-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect NSR-D machines for nsr-tandem-nsk.
--	Reported by <Duncan_Stodart@insession.com>.
--
--2002-08-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Concurrent PowerMaxion.
--	Reported by Lloyd Goldston <lloyd.goldston@sed.redstone.army.mil>.
--
--	* config.guess: Detect Convergent 3B1 machines (running AT&T UNIX).
--	Reported by Bruce Lilly <blilly@erols.com>.
--
--2002-08-22  Urs Jan?en <urs@akk.org>
--
--	* config.sub: Cosmetic whitespace fixes.
--
--2002-08-20  Phil Edwards  <pme@gcc.gnu.org>
--
--	* config.sub: Accept athlon_* patterns as synonyms for i686-pc.
--
--2002-08-20  Ben Elliston  <bje@redhat.com>
--
--	From Chris Demetriou <cgd@broadcom.com>:
--	* config.sub (sb1, sb1el): Treat these machines as
--	mipsisa64sb1-unknown and mipsisa64sb1el-unknown, respectively.
--
--2002-08-19  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Super-UX on NEC SX-6.
--	Reported by Joachim Worringen <joachim@ccrl-nece.de>.
--
--2002-08-16  Eric Christopher  <echristo@redhat.com>
--
--	* config.sub (mipsisa64sr71k*, mips64vr*): Add.
--
--2002-07-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect alphaev7.  Reported by urs at akk.org.
--
--2002-07-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Use umask to create temporary directly safely.
--	Using mkdir and chmod introduces a race.
--
--2002-07-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect ICL NX version 7 running on ICL/Fujitsu DRS
--	6000 machines. Reported by Henrik N. Spuur Hansen <hnsh@mera.dk>.
--
--2002-07-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Execute $dummy, not ./$dummy, throughout.
--
--	* config.guess (set_cc_for_build): Create a chmod 700 directory in
--	/tmp (or $TMPDIR, if set) to store temporary files generated for
--	use by the C compiler. This should resist the /tmp symbolic link
--	race vulnerability reported by Lawrence Teo.
--
--2002-07-03  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle freebsd*. From Bruno Haible.
--
--2002-07-01  Bruno Haible  <bruno@clisp.org>
--
--	* config.guess: For FreeBSD systems using glibc, add suffix "-gnu".
--	* config.sub: Accept freebsd-gnu system name.
--
--2002-06-21  J"orn Rennecke <joern.rennecke@superh.com>
--
--	* config.sub: Add support for sh[12], sh3e, sh[1234]le, sh3ele,
--	shle, sh[1234]le, sh3ele.
--
--2002-06-21  Dave Brolley  <brolley@redhat.com>
--
--	* config.sub: Add support for frv.
--
--2002-06-20  Chris Demetriou  <cgd@broadcom.com>
--
--	* config.sub: Add Broadcom SiByte SB-1 processor support
--	(mipsisa64sb1, mipsisa64sb1el).  Add little-endian variants of
--	mipsisa32 and mipsisa64 (mipsisa32el and mipsisa64el,
--	respectively).  Sort MIPS entries and split their lines a bit more
--	logically.  Make sure that all of the MIPS entries in the "without
--	company name" target list are echoed in the "with company name"
--	list.
--
--2002-06-19  Denis Chertykov  <denisc@overta.ru>
--
--	*  (config.sub): Add ip2k support.
--
--2002-06-19  J"orn Rennecke <joern.rennecke@superh.com>
--
--	* config.sub: Accept sh64le and sh64le-*.
--
--2002-05-29  Paul Eggert  <eggert@twinsun.com>
--
--	* config.guess: Don't use egrep, as POSIX 1003.1-2001 no longer
--	requires egrep.  Use grep instead.
--
--2002-05-28  Kuang Hwa Lin <kuang@sbcglobal.net>
--
--	* config.sub: Add DLX support.
--
--2002-05-22  Jason Thorpe  <thorpej@wasabisystems.com>
--
--	* config.guess: Add case for "armeb" in NetBSD section.
--	* config.sub: Allow "armeb" as a valid CPU type.
--
--2002-05-16  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect PowerMAX OS on Concurrent Night Hawk.
--	* config.sub: Handle -powermax*.
--
--2002-05-02  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Add "4400" to machines that run NCR System V UNIX.
--
--2002-04-25  Mark Mitchell <mark@codesourcery.com>
--
--	* config.sub (*-wrs-windiss): New targets.
--
--2002-03-20  Keith Thompson  <kst@sdsc.edu>
--
--	* config.guess (ia64:Linux:*:*): Output "ia64-unknown-linux-gnu".
--
--2002-03-20  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (set_cc_for_build): Add c99 to list of candidates.
--
--2002-03-12  J.T. Conklin  <jtc@acorntoolworks.com>
--
--	* config.guess: Add OS release to QNX config strings.
--
--2002-03-06  Chris Demetriou  <cgd@broadcom.com>
--
--	* config.sub: Add support for mipsisa64.
--
--2002-03-04  Ben Elliston  <bje@redhat.com>
--
--	From Kevin Ryde <user42@zip.com.au>:
--	* config.sub (sparclet-*-*): Accept any vendor.
--	(sparc86x): Expand to sparc86x-unknown-none.
--
--2002-03-04  Adrian Bunk  <bunk@fs.tum.de>
--
--	* config.guess (*:NetBSD:*:*): Use "sysctl -n hw.machine_arch"
--	instead of "uname -p" to get UNAME_MACHINE_ARCH.
--
--2002-02-22  Ben Elliston  <bje@redhat.com>
--	    Thiemo Seufer <seufer@csv.ica.uni-stuttgart.de>
--
--	* config.sub (case $basic_machine): Add mips and clean up other
--	Linux specific cases. Now `config.sub mips` yields mips-unknown-elf.
--
--2002-02-22  Ben Elliston  <bje@redhat.com>
--
--	From Kevin Ryde <user42@zip.com.au>:
--	* config.sub (sv1-*, ymp-*, c90-*): Preserve CPU type in output.
--	(t3d-*, t3e-*): Canonicalize to alpha and alphaev5.
--
--2002-02-18  Jim Meyering  <meyering@lucent.com>
--
--	* config.guess: Don't use `head -1'; it's no longer portable.
--	Use `sed 1q' instead.
--
--2002-02-15  Ben Elliston  <bje@redhat.com>
--
--	* config.sub (rtmk*, rtmk-nova*): Recognise.
--	From Johan Rydberg <jrydberg@rtmk.org>.
--
--2002-02-15  Wendy Palm  <wendyp@cray.com>
--
--	* config.guess (CRAY*X-MP:*:*:*, CRAY-2:*:*:*): Remove, as we know
--	they no longer exist in the field.
--	* config.sub (cray2, xmp): Likewise.
--	(cray, ymp, [cj]90-cray): basic_machine is now j90-cray.
--	(sv1-cray, cray-t3e, cray-t3d, cray-t90): New basic machine patterns.
--
--2002-02-15  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Accept m68060.
--
--2002-02-12  Ben Elliston  <bje@redhat.com>
--
--	* config.sub (sx?-*, superux*): New basic_machine and os.
--	From Len Makin <Len.Makin@csiro.au>.
--
--2002-02-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Set LC_ALL, not LANG, when running ld --help.
--	From Nicola Pero <nicola@brainstorm.co.uk>.
--
--2002-02-01  Ben Elliston  <bje@redhat.com>
--
--	* config.sub (sh64, sh64-*): Add new machine.
--
--2002-01-31  Ivan Guzvinec  <ivang@opencores.org>
--
--	* config.sub: Add support for or32.
--
--2002-01-26  Andy Olson  <andrew.olson@lmco.com>
--
--	* config.guess (*:QNX:*:*): Report i386-* rather than x86pc-*.
--	Discussed with and approved by <peterv@qnx.com>.
--
--2002-01-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (i*86:Linux:*:*): Specifically handle the Intel icc
--	compiler, which doesn't define __ELF__.  Submitted by Erik Lindahl
--	<lindahl@stanford.edu>.
--
--2002-01-22  Nicola Pero  <nicola@brainstorm.co.uk>
--
--	* config.guess (i*86:Linux:*:*): Fixed: export LANG=C before
--	running ld so that linker output can be assumed to be in English,
--	and it works with non-default locales.
--
--2002-01-10  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Update Per Bothner's mail address.
--
--2002-01-02  Douglas B. Rupp  <rupp@gnat.com>
--
--	* config.sub (alpha64*): New basic_machine.
--
--2002-01-02  Ben Elliston  <bje@redhat.com>
--
--	From Sigbjorn Skjaeret <cisc@c2i.net>.
--	* config.guess: Add detection for MorphOS.
--	* config.sub: Handle morphos*.
--
--2002-01-02  H.J. Lu  <hjl@gnu.org>
--
--	* config.guess (mips:Linux:*:*): Undef CPU, mips and mipsel first.
--
--2001-12-13  Douglas B. Rupp  <rupp@gnat.com>
--
--	* config.guess: Recognize x86 Interix version 3.
--
--2001-12-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (i*86:Linux:*:*): Minor simplification: have the
--	preprocessor emit shell assignments and just eval the output.
--
--2001-12-12  H.J. Lu  <hjl@gnu.org>
--
--	* config.guess (mips:Linux:*:*): Re-work.
--
--2001-12-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (i*86:Linux:*:*): Speed up detection of x86 Linux
--	systems by using just the C preprocessor rather than assembling
--	and linking a final executable.
--
--2001-12-12  Jason Thorpe  <thorpej@wasabisystems.com>
--
--	* config.guess: Simplify assignment of machine for NetBSD targets,
--	and make it match the convention that NetBSD uses.  List all
--	NetBSD architectures that require "elf" at the end of the OS name.
--
--2001-12-10  Lars Brinkhoff  <lars@nocrew.org>
--
--	* config.sub: Recognize a few PDP-10 aliases.
--
--2001-12-03  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise the Nucleus family of operating systems.
--	From <Takahiko_Kawasaki@cii.csk.co.jp>.
--
--2001-12-03  Bob Wilson  <bwilson@tensilica.com>
--
--	* config.sub: Add support for Xtensa targets.
--
--2001-11-30  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise NEC v850e. From Miles Bader
--	<miles@lsi.nec.co.jp>.
--
--2001-11-26  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (nsr-tandem-nsk): Detect all known NSR processor
--	types. Contributed by Kjetil Barvik <kjetil.barvik@bbs.no>.
--
--2001-11-16  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Accept "-atheos*" as a valid OS.
--	From Taco Witte <T.C.Witte@phys.uu.nl>.
--
--2001-11-08  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle 3487/3488 machines for NCR SysV UNIX.
--	Contributed by Melvin M. Bagaforo <mbagaforo@makro.com.ph>.
--
--2001-11-07  Adrian von Bidder  <avbidder@acter.ch>
--
--	* config.sub: Accept "-uclinux*" as a valid OS.
--
--2001-11-07  D.J. Barrow  <djbarrow@de.ibm.com>
--
--        * config.sub: Added S/390 31 and 64 bit target.
--
--2001-11-06  John Marshall  <jmarshall@acm.org>
--
--	* config.sub: Accept "-palmos*" as a valid OS.
--
--2001-11-07  Geoffrey Keating  <geoffk@redhat.com>
--
--	* config.sub: Change 'stormy16' to 'xstormy16' in the two places
--	it appears.
--
--2001-10-05  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Add "SKA40" as a machine type for NCR SysV UNIX.
--	From Rudi Heitbaum <rheitbaum@tattersalls.com.au>.
--
--2001-10-05  Rodney Brown  <rbrown64@csc.com.au>
--
--	* config.guess (9000/[34678]??:HP-UX:*:*): Unconditionally try
--	/usr/bin/getconf which is available on HP-UX 10.20. Reindent.
--
--2001-10-04  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle viac3 as an i586-class CPU.
--
--	* config.sub: Handle simso-wrs (Wind River's VxWorks Solaris
--	simulator target). From dpovey at dstc.qut.edu.au.
--
--2001-09-14  H.J. Lu  <hjl@gnu.org>
--
--	* config.sub: Support avr-vendor-*.
--
--2001-09-13  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (*-*-openbsd): Reorganise and clean up.
--	Contributed by brad at openbsd.org.
--
--2001-09-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (sparc*-*-netbsd): Properly match 32-bit NetBSD/sparc64
--	as sparc-unknown-netbsd. From Matthew Green <mrg@eterna.com.au>.
--
--2001-09-07  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Add mipseb-* alias (whoops).
--
--2001-09-04  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Add mipseb alias.
--
--2001-09-04  Eric Christopher  <echristo@redhat.com>
--	    Jason Eckhardt  <jle@redhat.com>
--
--	* config.sub: Add support for mipsisa32.
--
--2001-09-04  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Move eval $set_cc_for_build in most cases, to
--	prevent this script fragment from cloberring a previously
--	constructed C program in $dummy.c.
--
--2001-08-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect AtheOS on x86 systems.
--	Based on info provided by Taco Witte <tcwitte@wish.net>.
--
--2001-08-23  Geoffrey Keating  <geoffk@redhat.com>
--
--	* config.sub: Add stormy16-elf.
--
--2001-08-21  matthew green  <mrg@eterna.com.au>
--
--	* config.guess (sparc*:NetBSD:*): Use $MACHINE_ARCH, not $MACHINE.
--
--2001-08-13  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle complete system name for elxsi.
--	From Zack Weinberg <zackw@panix.com>.
--
--2001-08-09  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Alpha ev68 on OSF/1 and Linux.
--	From Ken Whaley <ken@believe.com>.
--
--2001-08-04  Darrell Hamilton  <Darrell_Hamilton@labcorp.com>
--
--	* config.guess: Unisys places the host id in ${UNAME_SYSTEM}
--	which is too unique to flag this system.  Detect it with *
--	instead.
--
--2001-08-02  Alan Modra  <amodra@bigpond.net.au>
--
--	* config.sub: Sort basic cpu patterns.  Combine hppa patterns.
--
--2001-08-01  Alan Modra  <amodra@bigpond.net.au>
--
--	* config.sub: Recognise powerpc64, powerpc64le, ppc64 variations.
--
--2001-07-31  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Stratus VOS operating system.
--	* config.sub: Handle aliases for such.
--
--2001-07-30  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect STOP operating system on x86 CPUs.
--	From Hans Edwards <Hans.Edwards@getronicsgov.com>.
--
--2001-07-27  Niibe Yutaka  <gniibe@m17n.org>
--
--        * config.sub: Recognize sh3eb and sh4eb (big endian) aliases.
--
--2001-07-19  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Linux on the PPC64 architecture.
--
--2001-07-12  Keith Thompson  <kst@sdsc.edu>
--
--	* config.guess: Strip trailing sub-version number from
--	$UNAME_RELEASE on Cray YMP or Cray [A-Z]90 models.
--
--2001-07-09  Mark Klein  <mklein@dis.com>
--
--	* config.guess: Update MPE/iX to handle A and N class HPe3000.
--
--2001-07-02  Graham Stott  <grahams@redhat.com>
--
--	* config.sub (basic_machine): Fix typo for mips64vr5000el.
--
--2001-06-29  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Remove stale libc1 tests on PowerPC Linux.
--
--2001-06-29  John Wolfe  <jlw@sco.com>
--
--	* config.guess: Correct UnixWare 7 and Open UNIX 8.0 change;
--	test for i586 must be a string that ends with "Pentium".
--
--2001-06-28  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: On Alpha Linux, use /proc/cpuinfo to determine
--	the CPU model, rather than assembling a small test program.
--
--2001-06-27  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Do not unconditionally run the script fragment
--	to set $CC_FOR_BUILD. Put the script in the shell variable
--	$set_cc_for_build and only evaluate it before $CC_FOR_BUILD is
--	referenced. (Poor man's function inlining!)
--
--	In future, the goal will be to reduce the dependence on a C
--	compiler to detect system types by utilising other means.
--
--2001-06-26  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: On MIPS Linux, use /proc/cpuinfo to determine
--	the endian mode of the CPU, rather than compiling and running
--	a small C program.
--
--2001-06-12  John Wolfe  <jlw@sco.com>
--
--	* config.guess: Standardize triplet for UnixWare 7 and Open
--	UNIX 8.0, improve processor detection and maintain "sysv5"
--	prefix on third segment.
--
--2001-06-08  Christopher Faylor  <cgf@redhat.com>
--
--	* config.sub: Add support for Sun Chorus.
--
--2001-06-05  Tomislav Greguric  <greguric@stud.uni-frankfurt.de>
--
--	* config.guess: Add 2001 to copyright notice issued for -v.
--
--2001-06-01  Ben Elliston  <bje@redhat.com>
--
--	* config.guess (i*86:Linux:*:*): Examine the list of supported
--	targets, not the list of supported emulations when capturing
--	the output of "ld --help".  This causes problems on systems
--	where GNU ld is built with support for all targets. Adjust
--	cases in the switch accordingly.
--
--	* config.guess: Other small Linux cleanups. Remove unnecessary
--	logic for setting $VENDOR, since UNAME_MACHINE will always be
--	i*86 in this case.
--
--2001-05-30  Mo DeJong  <mdejong@redhat.com>
--
--	* config.sub: Handle windows32 and runtimes.
--
--2001-05-24  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Remove duplicate z8k entry.
--
--2001-05-11  Yaegashi Takeshi  <t@keshi.org>
--
--	* config.sub: Handle sh[34]-* and sh[34]eb-*.
--
--2001-05-09  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle z8k-coff.
--	From Christian Groessler <cpg@aladdin.de>.
--
--2001-04-20  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle sparcv9b.
--	From Dave Miller <davem@redhat.com>.
--
--	* config.guess: Detect PowerMAX OS on PowerPC.
--
--2001-04-20  Tyson Dowd  <trd@cs.mu.oz.au>
--	    Fergus Henderson  <fjh@cs.mu.oz.au>
--
--	* config.guess: Replace i?86 with i*86 to match newer Pentiums.
--	* config.sub: Likewise.
--
--2001-03-30  Peter Buckingham  <pbuckingham@lnxw.com>
--
--	* config.guess: Update LynxOS version numbers.
--
--2001-03-30  Alexandre Oliva  <aoliva@redhat.com>
--
--	* config.sub: Make sure to match an already-canonicalized
--	machine name (eg. mn10300-unknown-elf).
--
--2001-03-19  Philip Blundell  <philb@gnu.org>
--
--	* config.sub: Allow tic80 as machine type.  Allow company name for
--	h8500 and pj targets; add `unknown' component when canonicalising
--	h8500-*, pj-* and pjl-*.
--
--2001-03-16  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Linux on SPARC64.
--
--2001-03-14  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect ELF-based m68k Linux systems. Reported by
--	Michael Fedrowitz <michael.fedrowitz@informatik.uni-ulm.de>.
--
--2001-03-09  H.J. Lu  <hjl@gnu.org>
--
--	* config.sub: Recognize s390/s390x as valid $basic_machine.
--
--2001-03-05  Pavel Roskin  <proski@gnu.org>
--
--	* config.guess: Never use `rm' without `-f' since it may be
--	interactive.
--
--2001-02-24  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Match Linux x86 systems explicitly.  Allow unknown
--	architectures to fall through to the default case.
--
--2001-02-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: More Linux cleanup. Match more in the top-level
--	case statement and less by groking the output of ld.
--
--2001-02-16  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise [cjt]90-*. From Kevin Ryde.
--
--2001-02-13  David Edelsohn  <edelsohn@gnu.org>
--
--	* config.guess (ia64:AIX): New case.
--	(*:AIX): Expand AIX V4 case to include V5.  Remove unnecessary `H'
--	option from lsattr.  Check for string "POWER" with prepended space
--	to distinguish from PowerPC_POWER3.  Use ${UNAME_VERSION} instead
--	of assuming "4" to match the expanded case.
--
--2001-02-13  Kevin Ryde  <user42@zip.com.au>
--
--	* config.sub: Recognise t90, c90, j90 without -cray. Preserve t90
--	and j90--don't transform to c90.
--
--2001-02-13  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: More Linux cleanup.
--
--2001-02-13  Martin Schwidefsky  <schwidefsky@de.ibm.com>
--
--	* config.guess: Add Linux target for S/390x.
--	* config.sub: Likewise.
--
--2001-02-13  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Rework detection of many Linux platforms, where
--	detection is straightforward.
--
--2001-01-31  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle hppa64-linux systems. From Alan Modra
--	<alan@linuxcare.com.au>.
--
--2001-01-29  Michael Sokolov  <msokolov@ivan.Harhan.ORG>
--
--	* config.guess: Specifically identify 4.3BSD and 4.3BSD-Reno in
--	the original VAX UNIX detection logic based on the BSD define in
--	<sys/param.h>.
--
--2001-01-17  Pavel Roskin  <proski@gnu.org>
--
--	* config.sub: Removed cases that cannot match. Vendor changed
--	from "unknown" to "pc" for "mingw", "msdos" and "go32".
--
--2001-01-17  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect HI-UX on Hitachi SR8000 machines. It has
--	been difficult to discover what type of CPU is in this machine,
--	so we'll punt on hppa1.1 for now.
--
--2001-01-14  Pavel Roskin  <proski@gnu.org>
--
--	* config.guess: Don't use $version in the error message. Use
--	$timestamp instead. Minor changes in the error text.
--
--2001-01-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Delete $dummy.rel after compiling test programs on
--	PDP-10 systems whose compilers produce this output file. From Lars
--	Brinkhoff <lars@nocrew.org>.
--
--	* config.sub: Handle EMX on OS/2. From Pavel Roskin.
--
--2001-01-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect common kernels running on various PDP-10
--	architectures. Contributed by Lars Brinkhoff <lars@nocrew.org>.
--	* config.sub: Handle PDP-10.
--
--2001-01-10  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect LynxOS 3.x on PowerPC architectures.
--
--2001-01-07  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise openrisc-*-*.
--
--2000-12-21  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect HP-UX on IA-64 hosts.  From Jonathan
--	Thackray <jon@thackray.org>.
--
--2000-12-20  Pavel Roskin  <proski@gnu.org>
--
--	* config.sub: Handle mint with version number as recognized OS.
--	Contributed by Tomas Berndtsson <tomas@nocrew.org>.
--
--2000-12-20  Pavel Roskin  <proski@gnu.org>
--
--	* config.guess: Detect Fujitsu f700 machines.
--	* config.sub: Handle f700 and f700-fujitsu.
--
--2000-12-15  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect AIX version 5. Contributed by
--	Dan McNichol <mcnichol@austin.ibm.com>.
--
--	* config.sub: Accept f301 for Fujitsu machines.
--	Reported by Pavel Roskin <proski@gnu.org>.
--
--2000-12-07  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Add more detail to version information.
--	* config.guess: Likewise.
--
--2000-12-06  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Add --version option.
--	* config.guess: Likewise.
--
--2000-12-02  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Only append "elf" to "netbsd" for platforms that
--	have switched to the ELF object file format in recent history.
--	From Matthew Green <mrg@eterna.com.au>.
--
--2000-11-24  Nick Clifton  <nickc@redhat.com>
--
--	* config.sub: Add xscale as a recognised CPU name.
--
--2000-11-23  Ben Elliston  <bje@redhat.com>
--
--	Patches from Akim Demaille <akim@epita.fr>.
--	* config.sub (version): Rename from this ..
--	(timestamp): .. to this.
--	(usage): Replace --version with --time-stamp. Add additional help
--	and copyleft notice.
--	(time-stamp-start): Replace with "timestamp=".
--	* config.guess (version): Rename from this ..
--	(timestamp): .. to this.
--	(usage): Replace --version with --time-stamp. Add additional help
--	and copyleft notice.
--	(CC_FOR_BUILD): Rework this logic.
--	(time-stamp-start): Replace with "timestamp=".
--
--2000-11-21  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect EMX on OS/2. Reported by Ilya Zakharevich
--	<ilya@math.ohio-state.edu>.
--
--2000-11-16  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Use getconf(1) on HP-UX 11.x systems (when
--	available) to eliminate the need for compiling a small test
--	program. From Neil Schellenberger <nschelle@crosskeys.com>.
--
--2000-11-15  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Expand `power' to `power-ibm-aix' for consistency.
--	From Kevin Ryde.
--
--	* config.guess: Differentiate Cray T3D and T3E. From Kevin Ryde
--	<user42@zip.com.au>.
--
--2000-11-10  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Map pentiumpro and pentiumii aliases onto i686-pc.
--	From Kevin Ryde <user42@zip.com.au>.
--
--	* config.guess: Search for a working C compiler if CC_FOR_BUILD is
--	not specified. From Kevin Ryde.
--
--	* config.guess: Set CPU architecture to "hppa" by default, in case
--	tests fail to produce a result. From Kevin Ryde.
--
--2000-11-08  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect sparc-unknown-linux-gnu. Reported by Peter
--	Storkey <pstorkey@primex.com>.
--
--2000-11-02  Per Lundberg  <plundis@chaosdev.org>
--
--	* config.sub: Add support for the *-storm-chaos OS.
--
--2000-10-25  Ed Satterthwaite  <ehs@sibyte.com>
--
--	* config.sub: NexGen, not nexen, is the x86 CPU clone
--	manufacturer.
--
--2000-10-23  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect NonStop-UX on Compaq MIPS machines.
--	* config.sub: Handle aliases for mips-compaq-nonstopux.
--	From Tom Bates <tom.bates@compaq.com>.
--
--2000-10-12  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect GNU/Linux on HP PA-RISC systems.
--	From David Huggins-Daines <dhd@linuxcare.com>.
--
--2000-10-09  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Typo fix for sh{3,4} case.
--
--2000-10-08  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle 8-way NCR 4300s -- uname(1) returns 3446A.
--	From Ken Cormack <kcormack@acs.roadway.com>.
--
--2000-10-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Do not hold ld's output in a shell variable; feed
--	the output directly into the command pipline to avoid a limitation
--	in variable lengths in ash(1). From Pavel Roskin <proski@gnu.org>.
--
--2000-09-11  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle nsk*.
--
--2000-09-11  Philip Blundell  <philb@gnu.org>
--
--	* config.sub: Fix mistake in change of 2000-08-06.
--
--2000-09-05  Andreas Jaeger  <aj@suse.de>
--
--	* config.sub (maybe_os): Recognise AMD x86-64 as x86_64.
--	* config.guess: Detect x86_64-unknown-linux-gnu.
--
--2000-09-05  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle Tandem NSR-K machines.
--	Reported by Andres Junge <ajunge@adexus.cl>.
--
--2000-09-05  Paul Sokolovsky  <Paul.Sokolovsky@technologist.com>
--
--	* config.guess: Detect the PW32 POSIX-on-Win32 environment.
--	* config.sub: Handle pw32 aliases.
--
--2000-08-31  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Correctly detect Sony NEWS-OS 6.x.
--	From Kimio Ishii <ishii@sm.sony.co.jp>.
--
--2000-08-06  Philip Blundell  <philb@gnu.org>
--
--	* config.sub: Accept `-conix*' as a valid OS.  Accept `armv*' as a
--	valid CPU without a company name.
--
--2000-07-31  Mark Kettenis  <kettenis@gnu.org>
--
--	* config.guess: Restore detection of libc version for x86
--	Linux/GNU ELF systems, but fall back on tentative name based on ld
--	emulation.  Use i?86-pc-linux-gnu as tentative name since that's
--	the canonical name.
--
--2000-07-27  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Use "unknown" for the manufacturer field of Amiga
--	systems, not "cbm". Contributed by Ruediger Kuhlmann
--	<ruediger.kuhlmann@stud.uni-karlsruhe.de>.
--	* config.sub: Likewise.
--
--2000-07-24  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Plan 9.
--
--2000-07-06  Andrew Cagney  <cagney@b1.cygnus.com>
--
--	* config.sub: Recognise d30v as a valid basic_machine.
--
--2000-06-28  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise Motorola 68HC11/12 targets. From Stephane
--	Carrez <Stephane.Carrez@worldnet.fr>.
--
--2000-06-20  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise tic54x (Texas Instruments TMS320C54x) and
--	c54x (IBM C54XDSP). From Tim Wall <twall@cygnus.com>.
--
--2000-06-13  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Minix on x86 machines.
--	* config.sub: Recognise i286. From <michael@moria.de>.
--
--	* config.sub: Recognise sh3 and sh4 aliases. From Kazumoto Kojima
--	<kkojima@rr.iij4u.or.jp>.
--
--	* config.sub: Per Bothner is not the author.
--
--2000-06-10  Hans-Peter Nilsson  <hp@axis.com>
--
--	* config.sub (os): Recognize axis as manufacturer.
--	(basic_machine): Recognize cris and etrax* as cris-axis.
--
--2000-05-31  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Accept athlon as an i686 variant. From Philipp
--	Thomas <pthomas@suse.de>.
--
--2000-05-30  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Re-word some output.
--	* config.sub: Fix a syntax error introduced by yesterday's
--	changes. Correct a spelling mistake. From Steven G. Johnson
--	<stevenj@alum.mit.edu>.
--
--2000-05-02  Akim Demaille  <akim@epita.fr>
--
--	* config.guess: Add --help and --version options. Add Emacs hooks.
--	* config.sub: Likewise.
--
--2000-05-27  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle GNU/Linux on Hitachi SuperH. From Niibe
--	Yutaka <gniibe@chroot.org>.
--
--2000-05-19  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise hppa64 as a valid cpu type. From Jeff Law.
--
--2000-05-10  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Recognise bs2000-siemens as a basic_machine type.
--	From Jean-Frederic Clere <jfrederic.clere@fujitsu.siemens.se>.
--
--2000-05-07  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Mac OS X will never return "Mac OS" as a uname
--	value, so remove these cases and punt to the "Darwin" case.
--	From Wilfredo Sanchez <wsanchez@apple.com>.
--
--2000-04-30  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle Fujitsu UXP/DS. From Fu-Chuan Tsai
--	<fchtsai@ms23.hinet.net>.
--
--2000-04-26  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle an ld emulation of elf_i?86. From Bruce
--	Korb <bkorb@sco.com>.
--
--2000-04-22  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Do not differentiate FreeBSD systems that use the
--	ELF object file format. From David O'Brien <obrien@freebsd.org>.
--
--2000-04-22  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Siemens BS2000 machines. From Jean-Frederic
--	Clere <jfrederic.clere@fujitsu.siemens.se>.
--
--2000-04-22  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Fix a syntax error in the DG/UX test.
--
--2000-04-06  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Define _HPUX_SOURCE for the HP-UX test program.
--	From Bruno Haible <haible@ilog.fr>.
--
--2000-04-06  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Apple's Darwin operating system.
--	* config.sub: Handle an appropriate alias. From Assar Westerlund.
--
--2000-03-27  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect Ascend Embedded/OS, which is really BSDI.
--	From Assar Westerlund <assar@sics.se>.
--
--2000-03-20  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Detect the NonStop Kernel on Tandem
--	machines. Suggested by Kelly F. Hickel <kfh@mqsoftware.com>.
--	* config.sub: Handle nsr-tandem and -nsk aliases.
--
--2000-02-29  Peter van der Veen  <peterv@qnx.com>
--
--	* config.guess: Add support for QNX Neutrino.
--	* config.sub: Improve support for QNX Neutrino.
--
--2000-02-29  Ossama Othman  <ossama@ece.uci.edu>
--
--	* config.sub: Add support for QNX Neutrino.
--
--2000-02-24  Nick Clifton  <nickc@cygnus.com>
--
--	* config.sub: Support an OS of "wince".
--
--2000-02-15  Andrew Cagney  <cagney@cygnus.com>
--
--	* config.guess: Rewrite NetBSD code.  Return *-*-netbsdelf* for
--	ELF systems and *-*-netbsd* for all others.  Provide a guideline
--	for how to match a NetBSD tuple.
--
--2000-02-15  Richard Henderson  <rth@cygnus.com>
--
--	* config.guess (alpha-osf, alpha-linux): Detect ev67.
--	* config.sub: Accept alphaev6[78], alphaev8.
--
--2000-02-15  Philip Blundell  <philb@gnu.org>
--
--	* config.guess: Distinguish arm-*-linux-gnuoldld from
--	arm*-linux-gnu.
--
--2000-02-15  Ben Elliston  <bje@redhat.com>
--
--	* config.sub: Handle avr. From Denis Chertykov <denisc@overta.ru>.
--
--	* config.guess: Detect GNU/Linux on IBM S/390 machines.
--	* config.sub: Handle s390-*. From Adam J. Thornton
--	<adam@phoenix.princeton.edu>.
--
--	* config.guess: Detect MacOS X on PowerPC and other machines.
--	From Stephen G. Johnson <stephenj@gil-galad.mit.edu>.
--
--2000-02-08  John W. Eaton  <jwe@bevo.che.wisc.edu>
--
--	* config.sub: Recognize sv1-cray as a basic_machine type.
--
--2000-02-07  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Replace sub-minor system version number with an
--	`X' on certain Cray platforms. From Keith Thompson <kst@sdsc.edu>.
--
--	* config.sub: Add support for mmix and mmixware. From Hans-Peter
--	Nilsson <hp@bitrange.com>.
--
--2000-02-06  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Include <stdio.h> when compiling test programs
--	with a C++ compiler.  Function prototypes are mandatory in C++.
--	From Ossama Othman <othman@cs.wustl.edu>.
--
--	* config.guess: Fix a regression in PowerPC Linux detection.
--	From Franz Sirl.
--
--2000-02-03  Ben Elliston  <bje@redhat.com>
--
--	* config.guess: Handle versions of DJGPP's uname(1) command which
--	return the exact machine type and not just `pc'. From Laurynas
--	Biveinis <lauras@softhome.net>.
--
--	* config.guess: Import from autoconf source tree.
--	* config.sub: Likewise.
-diff --git a/package/gnuconfig/Makefile b/package/gnuconfig/Makefile
-deleted file mode 100644
-index ca366a9..0000000
---- a/package/gnuconfig/Makefile
-+++ /dev/null
-@@ -1,15 +0,0 @@
--UPLOAD=ftp://ftp-upload.gnu.org/incoming/ftp/
--
--all:
--	@echo "Type 'make upload' to upload to the GNU FTP server."
--
--upload:
--	gpg --detach-sign config.guess
--	gpg --detach-sign config.sub
--	echo "directory: config" | gpg --clearsign > config.guess.directive.asc
--	cp config.guess.directive.asc config.sub.directive.asc
--	ftp -a -u $(UPLOAD) config.{guess,sub}{,.sig,.directive.asc}
--	rm config.{guess,sub}{.sig,.directive.asc}
--
--check:
--	cd testsuite && (sh config-sub.sh; sh config-guess.sh) && rm uname
-diff --git a/package/gnuconfig/testsuite/.cvsignore
-b/package/gnuconfig/testsuite/.cvsignore
-deleted file mode 100644
-index e4dcdcf..0000000
---- a/package/gnuconfig/testsuite/.cvsignore
-+++ /dev/null
-@@ -1 +0,0 @@
--uname
-diff --git a/package/gnuconfig/testsuite/CVS/Entries
-b/package/gnuconfig/testsuite/CVS/Entries
-deleted file mode 100644
-index 31b1476..0000000
---- a/package/gnuconfig/testsuite/CVS/Entries
-+++ /dev/null
-@@ -1,7 +0,0 @@
--/.cvsignore/1.1/Mon Sep 26 07:33:33 2005//
--/uname.in/1.1/Mon Sep 26 07:33:33 2005//
--/config-guess.data/1.38/Thu Sep 20 16:47:13 2007//
--/config-guess.sh/1.5/Thu Sep 20 16:47:13 2007//
--/config-sub.data/1.47/Tue Aug 21 18:37:33 2007//
--/config-sub.sh/1.3/Thu Sep 20 16:47:13 2007//
--D
-diff --git a/package/gnuconfig/testsuite/CVS/Repository
-b/package/gnuconfig/testsuite/CVS/Repository
-deleted file mode 100644
-index 5337292..0000000
---- a/package/gnuconfig/testsuite/CVS/Repository
-+++ /dev/null
-@@ -1 +0,0 @@
--config/testsuite
-diff --git a/package/gnuconfig/testsuite/CVS/Root
-b/package/gnuconfig/testsuite/CVS/Root
-deleted file mode 100644
-index 192e02e..0000000
---- a/package/gnuconfig/testsuite/CVS/Root
-+++ /dev/null
-@@ -1 +0,0 @@
--:pserver:anonymous at cvs.savannah.gnu.org:/cvsroot/config
-diff --git a/package/gnuconfig/testsuite/config-guess.data
-b/package/gnuconfig/testsuite/config-guess.data
-deleted file mode 100644
-index 0d8210d..0000000
---- a/package/gnuconfig/testsuite/config-guess.data
-+++ /dev/null
-@@ -1,34 +0,0 @@
--crisv32	2.6.6			Linux		ignored	crisv32-axis-linux-gnu
--frv	2.4.24			Linux		ignored	frv-unknown-linux-gnu
--3	2.3.3			XENIX		SysV	i386-pc-xenix
--2064	ignored			z/VM		ignored	s390-ibm-zvmoe
--amd64	1.5.12(0.116/4/2)	CYGWIN_NT-5.2	ignored	x86_64-unknown-cygwin
--crayx1	2.5.20			UNICOS/mp	ignored	craynv-cray-unicosmp2.5.X
--NSE-N	1.0			NONSTOP_KERNEL	ignored	nse-tandem-nsk1.0
--i386	ignored			VOS		ignored	i386-stratus-vos
--arm	ignored			RISCOS		ignored	arm-unknown-riscos
--arm	ignored			riscos		ignored	arm-unknown-riscos
--i586	5.0.0			skyos		ignored	i586-pc-skyos5.0.0
--i786-pc	ignored			windows32	ignored	i786-pc-mingw32
--or32	ignored			Linux		ignored	or32-unknown-linux-gnu
--x86_64	1.5.18(0.132/4/2)	CYGWIN_NT-5.2	ignored	x86_64-unknown-cygwin
--x86	5.2			Interix		ignored	i586-pc-interix5.2
--ppc64	2.6.9-22		Linux		ignored	powerpc64-unknown-linux-gnu
--vax	2.6.15			Linux		ignored	vax-dec-linux-gnu
--i586	ignored			rdos		ignored	i586-pc-rdos
--pc98	7.0			FreeBSD		ignored	i386-unknown-freebsd7.0
--i586	1.0			SolidBSD	ignored	i586-unknown-solidbsd1.0
--i686	5.4-1-686		GNU/kFreeBSD	ignored	i686-unknown-kfreebsd5.4-gnu
--EM64T	5.2			Interix		ignored	x86_64-unknown-interix5.2
--amd64	5.2			FreeBSD		ignored	x86_64-unknown-freebsd5.2
--avr32	2.6.15			Linux		ignored	avr32-unknown-linux-gnu
--x86	6.0			Interix		ignored	i586-pc-interix6.0
--macppc	1.0			MirBSD		ignored	powerpc-unknown-mirbsd1.0
--authenticamd	6.0		Interix		ignored	x86_64-unknown-interix6.0
--SX-8	1.0			SUPER-UX	ignored	sx8-nec-superux1.0
--SX-7	1.0			SUPER-UX	ignored	sx7-nec-superux1.0
--xtensa	2.6.15			Linux		ignored	xtensa-unknown-linux-gnu
--x86_64	1.0			MINGW		ignored	x86_64-pc-mingw32
--i386	1.0			MINGW		ignored	i386-pc-mingw32
--SX-8R	1.0			SUPER-UX	ignored	sx8r-nec-superux1.0
--i86xen	5.6			SunOS		ignored	i386-pc-solaris2.6
-diff --git a/package/gnuconfig/testsuite/config-guess.sh
-b/package/gnuconfig/testsuite/config-guess.sh
-deleted file mode 100644
-index 324f275..0000000
---- a/package/gnuconfig/testsuite/config-guess.sh
-+++ /dev/null
-@@ -1,47 +0,0 @@
--#!/bin/sh
--#
--# Copyright 2004, 2005 Free Software Foundation, Inc.
--# Contributed by Ben Elliston <bje@gnu.org>.
--#
--# This test reads 5-tuples from config-guess.data: the components of
--# the simulated uname(1) output and the expected GNU system triplet.
--
--verbose=false
--export PATH=`pwd`:$PATH
--IFS="	" # tab
--
--run_config_guess ()
--{
--    rc=0
--    while read machine release system version triplet ; do
--	sed \
--	    -e "s, at MACHINE@,$machine," \
--	    -e "s, at RELEASE@,$release," \
--	    -e "s, at SYSTEM@,$system," \
--	    -e "s, at VERSION@,$version," < uname.in > uname
--	chmod +x uname
--	output=`sh ../config.guess 2>/dev/null`
--	if test $? != 0 ; then
--	    echo "FAIL: unable to guess $machine:$release:$system:$version"
--	    rc=1
--	    continue
--	fi
--	if test $output != $triplet ; then
--	    echo "FAIL: $output (expected $triplet)"
--	    rc=1
--	    continue
--	fi
--	$verbose && echo "PASS: $triplet"
--    done
--    return $rc
--}
--
--sed 's/		*/	/g' < config-guess.data | run_config_guess
--rc=$?
--if test $rc -eq 0 ; then
--  $verbose || echo "PASS: config.guess checks"
--else
--  test $rc -eq 1 && echo "Unexpected failures."
+diff --git a/package/gnuconfig/config.guess b/package/gnuconfig/config.guess
+index ced32b6..187cd54 100755
+--- a/package/gnuconfig/config.guess
++++ b/package/gnuconfig/config.guess
+@@ -1,10 +1,10 @@
+ #! /bin/sh
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation,
+-#   Inc.
++#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
++#   2011 Free Software Foundation, Inc.
+
+-timestamp='2009-07-24'
++timestamp='2011-02-02'
+
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -27,16 +27,16 @@ timestamp='2009-07-24'
+ # the same distribution terms that you use for the rest of that program.
+
+
+-# Originally written by Per Bothner <per@bothner.com>.
+-# Please send patches to <config-patches@gnu.org>.  Submit a context
+-# diff and a properly formatted ChangeLog entry.
++# Originally written by Per Bothner.  Please send patches (context
++# diff format) to <config-patches@gnu.org> and include a ChangeLog
++# entry.
+ #
+ # This script attempts to guess a canonical system name similar to
+ # config.sub.  If it succeeds, it prints the system name on stdout, and
+ # exits with 0.  Otherwise, it exits with 1.
+ #
+-# The plan is that this can be called by configure scripts if you
+-# don't specify an explicit build system type.
++# You can get the latest version of this script from:
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
+
+ me=`echo "$0" | sed -e 's,.*/,,'`
+
+@@ -56,8 +56,9 @@ version="\
+ GNU config.guess ($timestamp)
+
+ Originally written by Per Bothner.
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+2001, 2002, 2003, 2004, 2005
+-Free Software Foundation, Inc.
++Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
++2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free
++Software Foundation, Inc.
+
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -139,23 +140,6 @@ UNAME_RELEASE=`(uname -r) 2>/dev/null` ||
+UNAME_RELEASE=unknown
+ UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+
+-if [ "${UNAME_SYSTEM}" = "Linux" ] ; then
+-	eval $set_cc_for_build
+-	cat << EOF > $dummy.c
+-	#include <features.h>
+-	#ifdef __UCLIBC__
+-	# ifdef __UCLIBC_CONFIG_VERSION__
+-	LIBC=uclibc __UCLIBC_CONFIG_VERSION__
+-	# else
+-	LIBC=uclibc
+-	# endif
+-	#else
+-	LIBC=gnu
+-	#endif
+-EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep LIBC= | sed -e 's: ::g'`
 -fi
 -
--exit $rc
-diff --git a/package/gnuconfig/testsuite/config-sub.data
-b/package/gnuconfig/testsuite/config-sub.data
-deleted file mode 100644
-index 2a5e1f1..0000000
---- a/package/gnuconfig/testsuite/config-sub.data
-+++ /dev/null
-@@ -1,117 +0,0 @@
--arm-coff			arm-unknown-coff
--arm-elf				arm-unknown-elf
--sun3				m68k-sun-sunos4.1.1
--sun4 				sparc-sun-sunos4.1.1
--ibm				i370-ibm-aix
--i386-os2			i386-pc-os2
--os400				powerpc-ibm-os400
--mmix				mmix-knuth-mmixware
--mmix-elf			mmix-knuth-elf
--i386-linux			i386-pc-linux-gnu
--i386-netbsd			i386-pc-netbsd
--i386-openbsd			i386-pc-openbsd
--i386-freebsd			i386-pc-freebsd
--pc98-freebsd			i386-pc-freebsd
--i386-elf			i386-pc-elf
--i486-elf			i486-pc-elf
--i586-elf			i586-pc-elf
--i686-elf			i686-pc-elf
--i786-elf			i786-pc-elf
--amd64-unknown-freebsd5.2	x86_64-unknown-freebsd5.2
--cris-linux			cris-axis-linux-gnu
--crisv32-linux			crisv32-axis-linux-gnu
--frv-linux			frv-unknown-linux-gnu
--djgpp				i586-pc-msdosdjgpp
--s390-ibm-zvmoe			s390-ibm-zvmoe
--xscale				xscale-unknown-none
--xscaleeb			xscaleeb-unknown-none
--xscaleel			xscaleel-unknown-none
--xbox				i686-pc-mingw32
--maxq				maxq-unknown-none
--maxq-elf			maxq-unknown-elf
--amd64-cygwin			x86_64-pc-cygwin
--x86_64-cygwin			x86_64-pc-cygwin
--sparc64-linux			sparc64-unknown-linux-gnu
--sparc64b-linux			sparc64b-unknown-linux-gnu
--bfin-elf			bfin-unknown-elf
--bfin				bfin-unknown-none
--arm-riscos			arm-unknown-riscos
--arm-unknown-riscos		arm-unknown-riscos
--i586-skyos			i586-pc-skyos
--m32c				m32c-unknown-none
--m32c-elf			m32c-unknown-elf
--ms1				mt-unknown-none
--ms1-elf				mt-unknown-elf
--mips64vr5900-elf		mips64vr5900-unknown-elf
--mips64vr5900el-elf		mips64vr5900el-unknown-elf
--mips64vr5900			mips64vr5900-unknown-elf
--mips64vr5900el			mips64vr5900el-unknown-elf
--sh64				sh64-unknown-none
--sh64-elf			sh64-unknown-elf
--openrisc-linux			or32-unknown-linux-gnu
--or32-linux			or32-unknown-linux-gnu
--sh-elf				sh-unknown-elf
--sh1-elf				sh1-unknown-elf
--sh2-elf				sh2-unknown-elf
--sh3-elf				sh3-unknown-elf
--sh4-elf				sh4-unknown-elf
--sh2a-elf			sh2a-unknown-elf
--sh4a-elf			sh4a-unknown-elf
--sh2e-elf			sh2e-unknown-elf
--sh3e-elf			sh3e-unknown-elf
--sh3eb-elf			sh3eb-unknown-elf
--sh4eb-elf			sh4eb-unknown-elf
--sheb-elf			sheb-unknown-elf
--shbe-elf			shbe-unknown-elf
--shle-elf			shle-unknown-elf
--sh1le-elf			sh1le-unknown-elf
--sh2le-elf			sh2le-unknown-elf
--sh3le-elf			sh3le-unknown-elf
--sh4le-elf			sh4le-unknown-elf
--sh3ele-elf			sh3ele-unknown-elf
--i386-haiku			i386-pc-haiku
--sparc-haiku			sparc-unknown-haiku
--powerpc-haiku			powerpc-unknown-haiku
--i386-pc-sco6			i386-pc-sco5v6
--i386-pc-sco5v6			i386-pc-sco5v6
--mt				mt-unknown-none
--mt-elf				mt-unknown-elf
--rdos				i386-pc-rdos
--i586-rdos			i586-pc-rdos
--i386-linux-newlib		i386-pc-linux-newlib
--mb-elf				mb-unknown-elf
--microblaze-elf			microblaze-unknown-elf
--i386-solidbsd			i386-pc-solidbsd
--amd64-kfreebsd5.4-gnu		x86_64-pc-kfreebsd5.4-gnu
--nios				nios-unknown-none
--nios2				nios2-unknown-none
--nios-elf			nios-unknown-elf
--nios2-elf			nios2-unknown-elf
--sparcv9v-elf			sparcv9v-unknown-elf
--sparc64v-elf			sparc64v-unknown-elf
--sparcv9v-solaris2.9		sparcv9v-unknown-solaris2.9
--sparc64v-solaris2.9		sparc64v-unknown-solaris2.9
--sh-toppers			sh-unknown-toppers
--spu				spu-unknown-elf
--spu-elf				spu-unknown-elf
--spu-linux			spu-unknown-linux-gnu
--avr32				avr32-unknown-none
--avr32-linux			avr32-unknown-linux-gnu
--xc16x				xc16x-unknown-none
--xc16x-elf			xc16x-unknown-elf
--sde-elf				mipsisa32-sde-elf
--mips-sde-elf			mips-sde-elf
--score				score-unknown-elf
--score-elf			score-unknown-elf
--sh5el-elf			sh5le-unknown-elf
--sh5el-netbsd			sh5le-unknown-netbsd
--fido-elf			fido-unknown-elf
--fido				fido-unknown-none
--xtensa-elf			xtensa-unknown-elf
--xtensa-linux			xtensa-unknown-linux-gnu
--xtensa_dc232b-linux		xtensa_dc232b-unknown-linux-gnu
--i386-drops1.0			i386-pc-drops1.0
--mep				mep-unknown-elf
--mep-elf				mep-unknown-elf
--mingw32ce			arm-unknown-mingw32ce	
--arm-mingw32ce			arm-unknown-mingw32ce
-diff --git a/package/gnuconfig/testsuite/config-sub.sh
-b/package/gnuconfig/testsuite/config-sub.sh
-deleted file mode 100644
-index ab5d7ff..0000000
---- a/package/gnuconfig/testsuite/config-sub.sh
-+++ /dev/null
-@@ -1,35 +0,0 @@
--#!/bin/sh
--#
--# Copyright 2004, 2005 Free Software Foundation, Inc.
--# Contributed by Ben Elliston <bje@gnu.org>.
--#
--# This test reads pairs from config-sub.data: an alias and its
--# canonical triplet.  The config.sub scripts is invoked and the test
--# checks that the alias expands to the expected canonical triplet.
--
--verbose=false
--
--run_config_sub ()
--{
--    rc=0
--    while read alias canonical ; do
--	output=`sh ../config.sub $alias`
--	if test $output != $canonical ; then
--	    echo "FAIL: $alias -> $output, but expected $canonical"
--	    rc=1
--	else
--	    $verbose && echo "PASS: $alias"
--	fi
--    done < config-sub.data
--    return $rc
--}
--
--run_config_sub
--rc=$?
--if test $rc -eq 0 ; then
--    $verbose || echo "PASS: config.sub checks"
--else
--    test $rc -eq 1 && echo "Unexpected failures."
--fi
--
--exit $rc
-diff --git a/package/gnuconfig/testsuite/uname.in
-b/package/gnuconfig/testsuite/uname.in
-deleted file mode 100755
-index d44d15f..0000000
---- a/package/gnuconfig/testsuite/uname.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--#!/bin/sh
--# uname(1) simulator, inspired by Pavel Roskin.
--
--[ $# -ne 1 ] && exec sh $0 -s
--[ $1 = -m ] && echo "@MACHINE@" && exit 0
--[ $1 = -r ] && echo "@RELEASE@" && exit 0
--[ $1 = -s ] && echo "@SYSTEM@" && exit 0
--[ $1 = -v ] && echo "@VERSION@" && exit 0
--[ $1 = -p ] && echo "Pentium III(TM)-ISA/PCI"
-diff --git a/package/gnuconfig/uname b/package/gnuconfig/uname
-deleted file mode 100755
-index 0627f82..0000000
---- a/package/gnuconfig/uname
-+++ /dev/null
-@@ -1,11 +0,0 @@
--#!/bin/sh
--# uname(1) simulator, inspired by Pavel Roskin.
--
--[ $# -ne 1 ] && exec sh $0 -s
--[ $1 = -m ] && echo 4400
--[ $1 = -r ] && echo 4.0
--[ $1 = -s ] && echo iainfo2
--[ $1 = -v ] && echo 3.0
--[ $1 = -p ] && echo "Pentium III(TM)-ISA/PCI"
--
--exit 0
+ # Note: order is significant - the case branches are not exclusive.
+
+ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+@@ -187,7 +171,7 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+ 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+-			| grep __ELF__ >/dev/null
++			| grep -q __ELF__
+ 		then
+ 		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
+ 		    # Return netbsd for either.  FIX?
+@@ -197,7 +181,7 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 		fi
+ 		;;
+ 	    *)
+-	        os=netbsd
++		os=netbsd
+ 		;;
+ 	esac
+ 	# The OS release
+@@ -240,7 +224,7 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $3}'`
+ 		;;
+ 	*5.*)
+-	        UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $4}'`
++		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $4}'`
+ 		;;
+ 	esac
+ 	# According to Compaq, /usr/sbin/psrinfo has been available on
+@@ -286,7 +270,10 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 	# A Xn.n version is an unreleased experimental baselevel.
+ 	# 1.2 uses "1.2" for uname -r.
+ 	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e
+'s/^[PVTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz'`
+-	exit ;;
++	# Reset EXIT trap before exiting to avoid spurious non-zero exit code.
++	exitcode=$?
++	trap '' 0
++	exit $exitcode ;;
+     Alpha\ *:Windows_NT*:*)
+ 	# How do we know it's Interix rather than the generic POSIX subsystem?
+ 	# Should we change UNAME_MACHINE based on the output of uname instead
+@@ -312,7 +299,7 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 	echo s390-ibm-zvmoe
+ 	exit ;;
+     *:OS400:*:*)
+-        echo powerpc-ibm-os400
++	echo powerpc-ibm-os400
+ 	exit ;;
+     arm:RISC*:1.[012]*:*|arm:riscix:1.[012]*:*)
+ 	echo arm-acorn-riscix${UNAME_RELEASE}
+@@ -341,14 +328,33 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+ 	case `/usr/bin/uname -p` in
+ 	    sparc) echo sparc-icl-nx7; exit ;;
+ 	esac ;;
++    s390x:SunOS:*:*)
++	echo ${UNAME_MACHINE}-ibm-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
++	exit ;;
+     sun4H:SunOS:5.*:*)
+ 	echo sparc-hal-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit ;;
+     sun4*:SunOS:5.*:* | tadpole*:SunOS:5.*:*)
+ 	echo sparc-sun-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit ;;
++    i86pc:AuroraUX:5.*:* | i86xen:AuroraUX:5.*:*)
++	echo i386-pc-auroraux${UNAME_RELEASE}
++	exit ;;
+     i86pc:SunOS:5.*:* | i86xen:SunOS:5.*:*)
+-	echo i386-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
++	eval $set_cc_for_build
++	SUN_ARCH="i386"
++	# If there is a compiler, see if it is configured for 64-bit objects.
++	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
++	# This test works for both compilers.
++	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
++		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		grep IS_64BIT_ARCH >/dev/null
++	    then
++		SUN_ARCH="x86_64"
++	    fi
++	fi
++	echo ${SUN_ARCH}-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+ 	exit ;;
+     sun4*:SunOS:6*:*)
+ 	# According to config.sub, this is the proper way to canonicalize
+@@ -392,23 +398,23 @@ case
+"${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}"
+in
+     # MiNT.  But MiNT is downward compatible to TOS, so this should
+     # be no problem.
+     atarist[e]:*MiNT:*:* | atarist[e]:*mint:*:* | atarist[e]:*TOS:*:*)
+-        echo m68k-atari-mint${UNAME_RELEASE}
++	echo m68k-atari-mint${UNAME_RELEASE}
+ 	exit ;;
+     atari*:*MiNT:*:* | atari*:*mint:*:* | atarist[e]:*TOS:*:*)
+ 	echo m68k-atari-mint${UNAME_RELEASE}
+-        exit ;;
++	exit ;;
+     *falcon*:*MiNT:*:* | *falcon*:*mint:*:* | *falcon*:*TOS:*:*)
+-        echo m68k-atari-mint${UNAME_RELEASE}
++	echo m68k-atari-mint${UNAME_RELEASE}
+ 	exit ;;
+     milan*:*MiNT:*:* | milan*:*mint:*:* | *milan*:*TOS:*:*)
+-        echo m68k-milan-mint${UNAME_RELEASE}
+-        exit ;;
++	echo m68k-milan-mint${UNAME_RELEASE}
++	exit ;;
+     hades*:*MiNT:*:* | hades*:*mint:*:* | *hades*:*TOS:*:*)
+-        echo m68k-hades-mint${UNAME_RELEASE}
+-        exit ;;
++	echo m68k-hades-mint${UNAME_RELEASE}
++	exit ;;
+     *:*MiNT:*:* | *:*mint:*:* | *:*TOS:*:*)
+-        echo m68k-unknown-mint${UNAME_RELEASE}
+-        exit ;;
++	echo m68k-unknown-mint${UNAME_RELEASE}
++	exit ;;
+     m68k:machten:*:*)
+ 	echo m68k-apple-machten${UNAME_RELEASE}
+ 	exit ;;
+@@ -478,8 +484,8 @@ EOF
+ 	echo m88k-motorola-sysv3
+ 	exit ;;
+     AViiON:dgux:*:*)
+-        # DG/UX returns AViiON for all architectures
+-        UNAME_PROCESSOR=`/usr/bin/uname -p`
++	# DG/UX returns AViiON for all architectures
++	UNAME_PROCESSOR=`/usr/bin/uname -p`
+ 	if [ $UNAME_PROCESSOR = mc88100 ] || [ $UNAME_PROCESSOR = mc88110 ]
+ 	then
+ 	    if [ ${TARGET_BINARY_INTERFACE}x = m88kdguxelfx ] || \
+@@ -492,7 +498,7 @@ EOF
+ 	else
+ 	    echo i586-dg-dgux${UNAME_RELEASE}
+ 	fi
+- 	exit ;;
++	exit ;;
+     M88*:DolphinOS:*:*)	# DolphinOS (SVR3)
+ 	echo m88k-dolphin-sysv3
+ 	exit ;;
+@@ -549,7 +555,7 @@ EOF
+ 		echo rs6000-ibm-aix3.2
+ 	fi
+ 	exit ;;
+-    *:AIX:*:[45])
++    *:AIX:*:[4567])
+ 	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q |
+awk '{ print $1 }'`
+ 	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
+ 		IBM_ARCH=rs6000
+@@ -592,52 +598,52 @@ EOF
+ 	    9000/[678][0-9][0-9])
+ 		if [ -x /usr/bin/getconf ]; then
+ 		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
+-                    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS
+2>/dev/null`
+-                    case "${sc_cpu_version}" in
+-                      523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
+-                      528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
+-                      532)                      # CPU_PA_RISC2_0
+-                        case "${sc_kernel_bits}" in
+-                          32) HP_ARCH="hppa2.0n" ;;
+-                          64) HP_ARCH="hppa2.0w" ;;
++		    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
++		    case "${sc_cpu_version}" in
++		      523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
++		      528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
++		      532)                      # CPU_PA_RISC2_0
++			case "${sc_kernel_bits}" in
++			  32) HP_ARCH="hppa2.0n" ;;
++			  64) HP_ARCH="hppa2.0w" ;;
+ 			  '') HP_ARCH="hppa2.0" ;;   # HP-UX 10.20
+-                        esac ;;
+-                    esac
++			esac ;;
++		    esac
+ 		fi
+ 		if [ "${HP_ARCH}" = "" ]; then
+ 		    eval $set_cc_for_build
+-		    sed 's/^              //' << EOF >$dummy.c
++		    sed 's/^		//' << EOF >$dummy.c
+
+-              #define _HPUX_SOURCE
+-              #include <stdlib.h>
+-              #include <unistd.h>
++		#define _HPUX_SOURCE
++		#include <stdlib.h>
++		#include <unistd.h>
+
+-              int main ()
+-              {
+-              #if defined(_SC_KERNEL_BITS)
+-                  long bits = sysconf(_SC_KERNEL_BITS);
+-              #endif
+-                  long cpu  = sysconf (_SC_CPU_VERSION);
++		int main ()
++		{
++		#if defined(_SC_KERNEL_BITS)
++		    long bits = sysconf(_SC_KERNEL_BITS);
++		#endif
++		    long cpu  = sysconf (_SC_CPU_VERSION);
+
+-                  switch (cpu)
+-              	{
+-              	case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
+-              	case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
+-              	case CPU_PA_RISC2_0:
+-              #if defined(_SC_KERNEL_BITS)
+-              	    switch (bits)
+-              		{
+-              		case 64: puts ("hppa2.0w"); break;
+-              		case 32: puts ("hppa2.0n"); break;
+-              		default: puts ("hppa2.0"); break;
+-              		} break;
+-              #else  /* !defined(_SC_KERNEL_BITS) */
+-              	    puts ("hppa2.0"); break;
+-              #endif
+-              	default: puts ("hppa1.0"); break;
+-              	}
+-                  exit (0);
+-              }
++		    switch (cpu)
++			{
++			case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
++			case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
++			case CPU_PA_RISC2_0:
++		#if defined(_SC_KERNEL_BITS)
++			    switch (bits)
++				{
++				case 64: puts ("hppa2.0w"); break;
++				case 32: puts ("hppa2.0n"); break;
++				default: puts ("hppa2.0"); break;
++				} break;
++		#else  /* !defined(_SC_KERNEL_BITS) */
++			    puts ("hppa2.0"); break;
++		#endif
++			default: puts ("hppa1.0"); break;
++			}
++		    exit (0);
++		}
+ EOF
+ 		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) &&
+HP_ARCH=`$dummy`
+ 		    test -z "$HP_ARCH" && HP_ARCH=hppa
+@@ -657,7 +663,7 @@ EOF
+ 	    # => hppa64-hp-hpux11.23
+
+ 	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
+-		grep __LP64__ >/dev/null
++		grep -q __LP64__
+ 	    then
+ 		HP_ARCH="hppa2.0w"
+ 	    else
+@@ -728,22 +734,22 @@ EOF
+ 	exit ;;
+     C1*:ConvexOS:*:* | convex:ConvexOS:C1*:*)
+ 	echo c1-convex-bsd
+-        exit ;;
++	exit ;;
+     C2*:ConvexOS:*:* | convex:ConvexOS:C2*:*)
+ 	if getsysinfo -f scalar_acc
+ 	then echo c32-convex-bsd
+ 	else echo c2-convex-bsd
+ 	fi
+-        exit ;;
++	exit ;;
+     C34*:ConvexOS:*:* | convex:ConvexOS:C34*:*)
+ 	echo c34-convex-bsd
+-        exit ;;
++	exit ;;
+     C38*:ConvexOS:*:* | convex:ConvexOS:C38*:*)
+ 	echo c38-convex-bsd
+-        exit ;;
++	exit ;;
+     C4*:ConvexOS:*:* | convex:ConvexOS:C4*:*)
+ 	echo c4-convex-bsd
+-        exit ;;
++	exit ;;
+     CRAY*Y-MP:*:*:*)
+ 	echo ymp-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+ 	exit ;;
+@@ -767,14 +773,14 @@ EOF
+ 	exit ;;
+     F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
+ 	FUJITSU_PROC=`uname -m | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz'`
+-        FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
+-        FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
+-        echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
+-        exit ;;
++	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
++	FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
++	echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
++	exit ;;
+     5000:UNIX_System_V:4.*:*)
+-        FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
+-        FUJITSU_REL=`echo ${UNAME_RELEASE} | tr
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/
+/_/'`
+-        echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
++	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
++	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+'abcdefghijklmnopqrstuvwxyz' | sed -e 's/ /_/'`
++	echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
+ 	exit ;;
+     i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
+ 	echo ${UNAME_MACHINE}-pc-bsdi${UNAME_RELEASE}
+@@ -802,24 +808,30 @@ EOF
+ 	echo ${UNAME_MACHINE}-pc-mingw32
+ 	exit ;;
+     i*:windows32*:*)
+-    	# uname -m includes "-pc" on this system.
+-    	echo ${UNAME_MACHINE}-mingw32
++	# uname -m includes "-pc" on this system.
++	echo ${UNAME_MACHINE}-mingw32
+ 	exit ;;
+     i*:PW*:*)
+ 	echo ${UNAME_MACHINE}-pc-pw32
+ 	exit ;;
+-    *:Interix*:[3456]*)
+-    	case ${UNAME_MACHINE} in
++    *:Interix*:*)
++	case ${UNAME_MACHINE} in
+ 	    x86)
+ 		echo i586-pc-interix${UNAME_RELEASE}
+ 		exit ;;
+-	    EM64T | authenticamd)
++	    authenticamd | genuineintel | EM64T)
+ 		echo x86_64-unknown-interix${UNAME_RELEASE}
+ 		exit ;;
++	    IA64)
++		echo ia64-unknown-interix${UNAME_RELEASE}
++		exit ;;
+ 	esac ;;
+     [345]86:Windows_95:* | [345]86:Windows_98:* | [345]86:Windows_NT:*)
+ 	echo i${UNAME_MACHINE}-pc-mks
+ 	exit ;;
++    8664:Windows_NT:*)
++	echo x86_64-pc-mks
++	exit ;;
+     i*:Windows_NT*:* | Pentium*:Windows_NT*:*)
+ 	# How do we know it's Interix rather than the generic POSIX subsystem?
+ 	# It also conflicts with pre-2.0 versions of AT&T UWIN. Should we
+@@ -849,196 +861,128 @@ EOF
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+ 	exit ;;
++    alpha:Linux:*:*)
++	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
++	  EV5)   UNAME_MACHINE=alphaev5 ;;
++	  EV56)  UNAME_MACHINE=alphaev56 ;;
++	  PCA56) UNAME_MACHINE=alphapca56 ;;
++	  PCA57) UNAME_MACHINE=alphapca56 ;;
++	  EV6)   UNAME_MACHINE=alphaev6 ;;
++	  EV67)  UNAME_MACHINE=alphaev67 ;;
++	  EV68*) UNAME_MACHINE=alphaev68 ;;
++	esac
++	objdump --private-headers /bin/sh | grep -q ld.so.1
++	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
++	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
++	exit ;;
+     arm*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	eval $set_cc_for_build
++	if echo __ARM_EABI__ | $CC_FOR_BUILD -E - 2>/dev/null \
++	    | grep -q __ARM_EABI__
++	then
++	    echo ${UNAME_MACHINE}-unknown-linux-gnu
++	else
++	    echo ${UNAME_MACHINE}-unknown-linux-gnueabi
++	fi
+ 	exit ;;
+     avr32*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+     cris:Linux:*:*)
+-	echo cris-axis-linux-${LIBC}
++	echo cris-axis-linux-gnu
+ 	exit ;;
+     crisv32:Linux:*:*)
+-	echo crisv32-axis-linux-${LIBC}
++	echo crisv32-axis-linux-gnu
+ 	exit ;;
+     frv:Linux:*:*)
+-    	echo frv-unknown-linux-${LIBC}
++	echo frv-unknown-linux-gnu
++	exit ;;
++    i*86:Linux:*:*)
++	LIBC=gnu
++	eval $set_cc_for_build
++	sed 's/^	//' << EOF >$dummy.c
++	#ifdef __dietlibc__
++	LIBC=dietlibc
++	#endif
++EOF
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
++	echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
+ 	exit ;;
+     ia64:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+     m32r*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+     m68*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+-    mips:Linux:*:*)
+-	eval $set_cc_for_build
+-	sed 's/^	//' << EOF >$dummy.c
+-	#undef CPU
+-	#undef mips
+-	#undef mipsel
+-	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) ||
+defined(MIPSEL)
+-	CPU=mipsel
+-	#else
+-	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) ||
+defined(MIPSEB)
+-	CPU=mips
+-	#else
+-	CPU=
+-	#endif
+-	#endif
+-EOF
+-	eval "`$CC_FOR_BUILD -E $dummy.c 2>/dev/null | sed -n '
+-	    /^CPU/{
+-		s: ::g
+-		p
+-	    }'`"
+-	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
+-	;;
+-    mips64:Linux:*:*)
++    mips:Linux:*:* | mips64:Linux:*:*)
+ 	eval $set_cc_for_build
+ 	sed 's/^	//' << EOF >$dummy.c
+ 	#undef CPU
+-	#undef mips64
+-	#undef mips64el
++	#undef ${UNAME_MACHINE}
++	#undef ${UNAME_MACHINE}el
+ 	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) ||
+defined(MIPSEL)
+-	CPU=mips64el
++	CPU=${UNAME_MACHINE}el
+ 	#else
+ 	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) ||
+defined(MIPSEB)
+-	CPU=mips64
++	CPU=${UNAME_MACHINE}
+ 	#else
+ 	CPU=
+ 	#endif
+ 	#endif
+ EOF
+-	eval "`$CC_FOR_BUILD -E $dummy.c 2>/dev/null | sed -n '
+-	    /^CPU/{
+-		s: ::g
+-		p
+-	    }'`"
+-	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
++	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-gnu"; exit; }
+ 	;;
+     or32:Linux:*:*)
+-	echo or32-unknown-linux-${LIBC}
++	echo or32-unknown-linux-gnu
+ 	exit ;;
+-    ppc:Linux:*:*)
+-	echo powerpc-unknown-linux-${LIBC}
++    padre:Linux:*:*)
++	echo sparc-unknown-linux-gnu
+ 	exit ;;
+-    ppc64:Linux:*:*)
+-	echo powerpc64-unknown-linux-${LIBC}
+-	exit ;;
+-    alpha:Linux:*:*)
+-	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+-	  EV5)   UNAME_MACHINE=alphaev5 ;;
+-	  EV56)  UNAME_MACHINE=alphaev56 ;;
+-	  PCA56) UNAME_MACHINE=alphapca56 ;;
+-	  PCA57) UNAME_MACHINE=alphapca56 ;;
+-	  EV6)   UNAME_MACHINE=alphaev6 ;;
+-	  EV67)  UNAME_MACHINE=alphaev67 ;;
+-	  EV68*) UNAME_MACHINE=alphaev68 ;;
+-        esac
+-	objdump --private-headers /bin/sh | grep ld.so.1 >/dev/null
+-	if test "$?" = 0 ; then LIBC="gnulibc1" ; fi
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++    parisc64:Linux:*:* | hppa64:Linux:*:*)
++	echo hppa64-unknown-linux-gnu
+ 	exit ;;
+     parisc:Linux:*:* | hppa:Linux:*:*)
+ 	# Look for CPU level
+ 	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
+-	  PA7*) echo hppa1.1-unknown-linux-${LIBC} ;;
+-	  PA8*) echo hppa2.0-unknown-linux-${LIBC} ;;
+-	  *)    echo hppa-unknown-linux-${LIBC} ;;
++	  PA7*) echo hppa1.1-unknown-linux-gnu ;;
++	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
++	  *)    echo hppa-unknown-linux-gnu ;;
+ 	esac
+ 	exit ;;
+-    parisc64:Linux:*:* | hppa64:Linux:*:*)
+-	echo hppa64-unknown-linux-${LIBC}
++    ppc64:Linux:*:*)
++	echo powerpc64-unknown-linux-gnu
++	exit ;;
++    ppc:Linux:*:*)
++	echo powerpc-unknown-linux-gnu
+ 	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux
+ 	exit ;;
+     sh64*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+     sh*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+     sparc:Linux:*:* | sparc64:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
++    tile*:Linux:*:*)
++	echo ${UNAME_MACHINE}-tilera-linux-gnu
+ 	exit ;;
+     vax:Linux:*:*)
+-	echo ${UNAME_MACHINE}-dec-linux-${LIBC}
++	echo ${UNAME_MACHINE}-dec-linux-gnu
+ 	exit ;;
+     x86_64:Linux:*:*)
+-	echo x86_64-unknown-linux-${LIBC}
++	echo x86_64-unknown-linux-gnu
+ 	exit ;;
+     xtensa*:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
+ 	exit ;;
+-    i*86:Linux:*:*)
+-	# The BFD linker knows what the default object file format is, so
+-	# first see if it will tell us. cd to the root directory to prevent
+-	# problems with other programs or directories called `ld' in the path.
+-	# Set LC_ALL=C to ensure ld outputs messages in English.
+-	ld_supported_targets=`cd /; LC_ALL=C ld --help 2>&1 \
+-			 | sed -ne '/supported targets:/!d
+-				    s/[ 	][ 	]*/ /g
+-				    s/.*supported targets: *//
+-				    s/ .*//
+-				    p'`
+-        case "$ld_supported_targets" in
+-	  elf32-i386)
+-		TENTATIVE="${UNAME_MACHINE}-pc-linux-${LIBC}"
+-		;;
+-	  a.out-i386-linux)
+-		echo "${UNAME_MACHINE}-pc-linux-${LIBC}aout"
+-		exit ;;
+-	  coff-i386)
+-		echo "${UNAME_MACHINE}-pc-linux-${LIBC}coff"
+-		exit ;;
+-	  "")
+-		# Either a pre-BFD a.out linker (linux-gnuoldld) or
+-		# one that does not give us useful --help.
+-		echo "${UNAME_MACHINE}-pc-linux-${LIBC}oldld"
+-		exit ;;
+-	esac
+-	# This should get integrated into the C code below, but now we hack
+-	if [ "$LIBC" != "gnu" ] ; then echo "$TENTATIVE" && exit 0 ; fi
+-	# Determine whether the default compiler is a.out or elf
+-	eval $set_cc_for_build
+-	sed 's/^	//' << EOF >$dummy.c
+-	#include <features.h>
+-	#ifdef __ELF__
+-	# ifdef __GLIBC__
+-	#  if __GLIBC__ >= 2
+-	LIBC=gnu
+-	#  else
+-	LIBC=gnulibc1
+-	#  endif
+-	# else
+-	LIBC=gnulibc1
+-	# endif
+-	#else
+-	#if defined(__INTEL_COMPILER) || defined(__PGI) ||
+defined(__SUNPRO_C) || defined(__SUNPRO_CC)
+-	LIBC=gnu
+-	#else
+-	LIBC=gnuaout
+-	#endif
+-	#endif
+-	#ifdef __dietlibc__
+-	LIBC=dietlibc
+-	#endif
+-EOF
+-	eval "`$CC_FOR_BUILD -E $dummy.c 2>/dev/null | sed -n '
+-	    /^LIBC/{
+-		s: ::g
+-		p
+-	    }'`"
+-	test x"${LIBC}" != x && {
+-		echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
+-		exit
+-	}
+-	test x"${TENTATIVE}" != x && { echo "${TENTATIVE}"; exit; }
+-	;;
+     i*86:DYNIX/ptx:4*:*)
+ 	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
+ 	# earlier versions are messed up and put the nodename in both
+@@ -1046,11 +990,11 @@ EOF
+ 	echo i386-sequent-sysv4
+ 	exit ;;
+     i*86:UNIX_SV:4.2MP:2.*)
+-        # Unixware is an offshoot of SVR4, but it has its own version
+-        # number series starting with 2...
+-        # I am not positive that other SVR4 systems won't match this,
++	# Unixware is an offshoot of SVR4, but it has its own version
++	# number series starting with 2...
++	# I am not positive that other SVR4 systems won't match this,
+ 	# I just have to hope.  -- rms.
+-        # Use sysv4.2uw... so that sysv4* matches it.
++	# Use sysv4.2uw... so that sysv4* matches it.
+ 	echo ${UNAME_MACHINE}-pc-sysv4.2uw${UNAME_VERSION}
+ 	exit ;;
+     i*86:OS/2:*:*)
+@@ -1067,7 +1011,7 @@ EOF
+     i*86:syllable:*:*)
+ 	echo ${UNAME_MACHINE}-pc-syllable
+ 	exit ;;
+-    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.0*:*)
++    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.[02]*:*)
+ 	echo i386-unknown-lynxos${UNAME_RELEASE}
+ 	exit ;;
+     i*86:*DOS:*:*)
+@@ -1082,7 +1026,7 @@ EOF
+ 	fi
+ 	exit ;;
+     i*86:*:5:[678]*)
+-    	# UnixWare 7.x, OpenUNIX and OpenServer 6.
++	# UnixWare 7.x, OpenUNIX and OpenServer 6.
+ 	case `/bin/uname -X | grep "^Machine"` in
+ 	    *486*)	     UNAME_MACHINE=i486 ;;
+ 	    *Pentium)	     UNAME_MACHINE=i586 ;;
+@@ -1110,10 +1054,13 @@ EOF
+ 	exit ;;
+     pc:*:*:*)
+ 	# Left here for compatibility:
+-        # uname -m prints for DJGPP always 'pc', but it prints nothing about
+-        # the processor, so we play safe by assuming i386.
+-	echo i386-pc-msdosdjgpp
+-        exit ;;
++	# uname -m prints for DJGPP always 'pc', but it prints nothing about
++	# the processor, so we play safe by assuming i586.
++	# Note: whatever this is, it MUST be the same as what config.sub
++	# prints for the "djgpp" host, or else GDB configury will decide that
++	# this is a cross-build.
++	echo i586-pc-msdosdjgpp
++	exit ;;
+     Intel:Mach:3*:*)
+ 	echo i386-pc-mach3
+ 	exit ;;
+@@ -1148,8 +1095,18 @@ EOF
+ 	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
+ 	  && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+-        /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
+-          && { echo i486-ncr-sysv4; exit; } ;;
++	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	  && { echo i486-ncr-sysv4; exit; } ;;
++    NCR*:*:4.2:* | MPRAS*:*:4.2:*)
++	OS_REL='.3'
++	test -r /etc/.relid \
++	    && OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
++	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	    && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep pteron >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
+     m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+ 	exit ;;
+@@ -1162,7 +1119,7 @@ EOF
+     rs6000:LynxOS:2.*:*)
+ 	echo rs6000-unknown-lynxos${UNAME_RELEASE}
+ 	exit ;;
+-    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.0*:*)
++    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.[02]*:*)
+ 	echo powerpc-unknown-lynxos${UNAME_RELEASE}
+ 	exit ;;
+     SM[BE]S:UNIX_SV:*:*)
+@@ -1182,10 +1139,10 @@ EOF
+ 		echo ns32k-sni-sysv
+ 	fi
+ 	exit ;;
+-    PENTIUM:*:4.0*:*) # Unisys `ClearPath HMP IX 4000' SVR4/MP effort
+-                      # says <Richard.M.Bartel@ccMail.Census.GOV>
+-        echo i586-unisys-sysv4
+-        exit ;;
++    PENTIUM:*:4.0*:*)	# Unisys `ClearPath HMP IX 4000' SVR4/MP effort
++			# says <Richard.M.Bartel@ccMail.Census.GOV>
++	echo i586-unisys-sysv4
++	exit ;;
+     *:UNIX_System_V:4*:FTX*)
+ 	# From Gerald Hewes <hewes@openmarket.com>.
+ 	# How about differentiating between stratus architectures? -djm
+@@ -1211,11 +1168,11 @@ EOF
+ 	exit ;;
+     R[34]000:*System_V*:*:* | R4000:UNIX_SYSV:*:* | R*000:UNIX_SV:*:*)
+ 	if [ -d /usr/nec ]; then
+-	        echo mips-nec-sysv${UNAME_RELEASE}
++		echo mips-nec-sysv${UNAME_RELEASE}
+ 	else
+-	        echo mips-unknown-sysv${UNAME_RELEASE}
++		echo mips-unknown-sysv${UNAME_RELEASE}
+ 	fi
+-        exit ;;
++	exit ;;
+     BeBox:BeOS:*:*)	# BeOS running on hardware made by Be, PPC only.
+ 	echo powerpc-be-beos
+ 	exit ;;
+@@ -1225,6 +1182,9 @@ EOF
+     BePC:BeOS:*:*)	# BeOS running on Intel PC compatible.
+ 	echo i586-pc-beos
+ 	exit ;;
++    BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
++	echo i586-pc-haiku
++	exit ;;
+     SX-4:SUPER-UX:*:*)
+ 	echo sx4-nec-superux${UNAME_RELEASE}
+ 	exit ;;
+@@ -1252,6 +1212,16 @@ EOF
+     *:Darwin:*:*)
+ 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
+ 	case $UNAME_PROCESSOR in
++	    i386)
++		eval $set_cc_for_build
++		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		      grep IS_64BIT_ARCH >/dev/null
++		  then
++		      UNAME_PROCESSOR="x86_64"
++		  fi
++		fi ;;
+ 	    unknown) UNAME_PROCESSOR=powerpc ;;
+ 	esac
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+@@ -1267,6 +1237,9 @@ EOF
+     *:QNX:*:4*)
+ 	echo i386-pc-qnx
+ 	exit ;;
++    NEO-?:NONSTOP_KERNEL:*:*)
++	echo neo-tandem-nsk${UNAME_RELEASE}
++	exit ;;
+     NSE-?:NONSTOP_KERNEL:*:*)
+ 	echo nse-tandem-nsk${UNAME_RELEASE}
+ 	exit ;;
+@@ -1312,13 +1285,13 @@ EOF
+ 	echo pdp10-unknown-its
+ 	exit ;;
+     SEI:*:*:SEIUX)
+-        echo mips-sei-seiux${UNAME_RELEASE}
++	echo mips-sei-seiux${UNAME_RELEASE}
+ 	exit ;;
+     *:DragonFly:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-dragonfly`echo ${UNAME_RELEASE}|sed -e
+'s/[-(].*//'`
+ 	exit ;;
+     *:*VMS:*:*)
+-    	UNAME_MACHINE=`(uname -p) 2>/dev/null`
++	UNAME_MACHINE=`(uname -p) 2>/dev/null`
+ 	case "${UNAME_MACHINE}" in
+ 	    A*) echo alpha-dec-vms ; exit ;;
+ 	    I*) echo ia64-dec-vms ; exit ;;
+@@ -1333,6 +1306,9 @@ EOF
+     i*86:rdos:*:*)
+ 	echo ${UNAME_MACHINE}-pc-rdos
+ 	exit ;;
++    i*86:AROS:*:*)
++	echo ${UNAME_MACHINE}-pc-aros
++	exit ;;
+ esac
+
+ #echo '(No uname command or uname output not recognized.)' 1>&2
+@@ -1355,11 +1331,11 @@ main ()
+ #include <sys/param.h>
+   printf ("m68k-sony-newsos%s\n",
+ #ifdef NEWSOS4
+-          "4"
++	"4"
+ #else
+-	  ""
++	""
+ #endif
+-         ); exit (0);
++	); exit (0);
+ #endif
+ #endif
+
+@@ -1493,9 +1469,9 @@ This script, last modified $timestamp, has
+failed to recognize
+ the operating system you are using. It is advised that you
+ download the most up to date version of the config scripts from
+
+-  http://savannah.gnu.org/cgi-bin/viewcvs/*checkout*/config/config/config.guess
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
+ and
+-  http://savannah.gnu.org/cgi-bin/viewcvs/*checkout*/config/config/config.sub
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
+
+ If the version you run ($0) is already up to date, please
+ send the following data and any information you think might be
+diff --git a/package/gnuconfig/config.sub b/package/gnuconfig/config.sub
+index efbb230..0ef29b0 100755
+--- a/package/gnuconfig/config.sub
++++ b/package/gnuconfig/config.sub
+@@ -1,10 +1,10 @@
+ #! /bin/sh
+ # Configuration validation subroutine script.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation,
+-#   Inc.
++#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
++#   2011 Free Software Foundation, Inc.
+
+-timestamp='2007-06-28'
++timestamp='2011-02-24'
+
+ # This file is (in principle) common to ALL GNU software.
+ # The presence of a machine in this file suggests that SOME GNU software
+@@ -32,13 +32,16 @@ timestamp='2007-06-28'
+
+
+ # Please send patches to <config-patches@gnu.org>.  Submit a context
+-# diff and a properly formatted ChangeLog entry.
++# diff and a properly formatted GNU ChangeLog entry.
+ #
+ # Configuration subroutine to validate and canonicalize a configuration type.
+ # Supply the specified configuration type as an argument.
+ # If it is invalid, we print an error message on stderr and exit with code 1.
+ # Otherwise, we print the canonical config type on stdout and succeed.
+
++# You can get the latest version of this script from:
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
++
+ # This file is supposed to be the same for all GNU packages
+ # and recognize all the CPU types, system types and aliases
+ # that are meaningful with *any* GNU software.
+@@ -72,8 +75,9 @@ Report bugs and patches to <config-patches@gnu.org>."
+ version="\
+ GNU config.sub ($timestamp)
+
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
+2001, 2002, 2003, 2004, 2005
+-Free Software Foundation, Inc.
++Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
++2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free
++Software Foundation, Inc.
+
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -120,9 +124,10 @@ esac
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+-  gnu*-uclibc* | \
+-  uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* |
+netbsd*-gnu* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | \
++  linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | \
++  knetbsd*-gnu* | netbsd*-gnu* | \
++  kopensolaris*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
+@@ -149,10 +154,13 @@ case $os in
+ 	-convergent* | -ncr* | -news | -32* | -3600* | -3100* | -hitachi* |\
+ 	-c[123]* | -convex* | -sun | -crds | -omron* | -dg | -ultra | -tti* | \
+ 	-harris | -dolphin | -highlevel | -gould | -cbm | -ns | -masscomp | \
+-	-apple | -axis | -knuth | -cray)
++	-apple | -axis | -knuth | -cray | -microblaze)
+ 		os=
+ 		basic_machine=$1
+ 		;;
++	-bluegene*)
++		os=-cnk
++		;;
+ 	-sim | -cisco | -oki | -wec | -winbond)
+ 		os=
+ 		basic_machine=$1
+@@ -167,10 +175,10 @@ case $os in
+ 		os=-chorusos
+ 		basic_machine=$1
+ 		;;
+- 	-chorusrdb)
+- 		os=-chorusrdb
++	-chorusrdb)
++		os=-chorusrdb
+ 		basic_machine=$1
+- 		;;
++		;;
+ 	-hiux*)
+ 		os=-hiuxwe2
+ 		;;
+@@ -245,18 +253,21 @@ case $basic_machine in
+ 	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
+ 	| bfin \
+ 	| c4x | clipper \
+-	| d10v | d30v | dlx | dsp16xx | dvp \
++	| d10v | d30v | dlx | dsp16xx \
+ 	| fido | fr30 | frv \
+ 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+ 	| i370 | i860 | i960 | ia64 \
+ 	| ip2k | iq2000 \
++	| lm32 \
+ 	| m32c | m32r | m32rle | m68000 | m68k | m88k \
+-	| maxq | mb | microblaze | mcore | mep \
++	| maxq | mb | microblaze | mcore | mep | metag \
+ 	| mips | mipsbe | mipseb | mipsel | mipsle \
+ 	| mips16 \
+ 	| mips64 | mips64el \
+-	| mips64vr | mips64vrel \
++	| mips64octeon | mips64octeonel \
+ 	| mips64orion | mips64orionel \
++	| mips64r5900 | mips64r5900el \
++	| mips64vr | mips64vrel \
+ 	| mips64vr4100 | mips64vr4100el \
+ 	| mips64vr4300 | mips64vr4300el \
+ 	| mips64vr5000 | mips64vr5000el \
+@@ -269,28 +280,41 @@ case $basic_machine in
+ 	| mipsisa64sr71k | mipsisa64sr71kel \
+ 	| mipstx39 | mipstx39el \
+ 	| mn10200 | mn10300 \
++	| moxie \
+ 	| mt \
+ 	| msp430 \
++	| nds32 | nds32le | nds32be \
+ 	| nios | nios2 \
+ 	| ns16k | ns32k \
+ 	| or32 \
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle | ppcbe \
+ 	| pyramid \
++	| rx \
+ 	| score \
+-	| sh | sh[1234] | sh[24]a | sh[24]a*eb | sh[23]e | sh[34]eb | sheb |
+shbe | shle | sh[1234]le | sh3ele \
++	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb |
+shbe | shle | sh[1234]le | sh3ele \
+ 	| sh64 | sh64le \
+ 	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
+ 	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
+ 	| spu | strongarm \
+-	| tahoe | thumb | tic4x | tic80 | tron \
++	| tahoe | thumb | tic4x | tic54x | tic55x | tic6x | tic80 | tron \
++	| ubicom32 \
+ 	| v850 | v850e \
+ 	| we32k \
+ 	| x86 | xc16x | xscale | xscalee[bl] | xstormy16 | xtensa \
+-	| z8k)
++	| z8k | z80)
+ 		basic_machine=$basic_machine-unknown
+ 		;;
+-	m6811 | m68hc11 | m6812 | m68hc12)
++	c54x)
++		basic_machine=tic54x-unknown
++		;;
++	c55x)
++		basic_machine=tic55x-unknown
++		;;
++	c6x)
++		basic_machine=tic6x-unknown
++		;;
++	m6811 | m68hc11 | m6812 | m68hc12 | picochip)
+ 		# Motorola 68HC11/12.
+ 		basic_machine=$basic_machine-unknown
+ 		os=-none
+@@ -321,7 +345,7 @@ case $basic_machine in
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
+ 	| bfin-* | bs2000-* \
+-	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* | c55x-* | c6x-* \
++	| c[123]* | c30-* | [cjt]90-* | c4x-* \
+ 	| clipper-* | craynv-* | cydra-* \
+ 	| d10v-* | d30v-* | dlx-* \
+ 	| elxsi-* \
+@@ -330,14 +354,17 @@ case $basic_machine in
+ 	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
+ 	| i*86-* | i860-* | i960-* | ia64-* \
+ 	| ip2k-* | iq2000-* \
++	| lm32-* \
+ 	| m32c-* | m32r-* | m32rle-* \
+ 	| m68000-* | m680[012346]0-* | m68360-* | m683?2-* | m68k-* \
+-	| m88110-* | m88k-* | maxq-* | mcore-* \
++	| m88110-* | m88k-* | maxq-* | mcore-* | metag-* | microblaze-* \
+ 	| mips-* | mipsbe-* | mipseb-* | mipsel-* | mipsle-* \
+ 	| mips16-* \
+ 	| mips64-* | mips64el-* \
+-	| mips64vr-* | mips64vrel-* \
++	| mips64octeon-* | mips64octeonel-* \
+ 	| mips64orion-* | mips64orionel-* \
++	| mips64r5900-* | mips64r5900el-* \
++	| mips64vr-* | mips64vrel-* \
+ 	| mips64vr4100-* | mips64vr4100el-* \
+ 	| mips64vr4300-* | mips64vr4300el-* \
+ 	| mips64vr5000-* | mips64vr5000el-* \
+@@ -352,27 +379,30 @@ case $basic_machine in
+ 	| mmix-* \
+ 	| mt-* \
+ 	| msp430-* \
++	| nds32-* | nds32le-* | nds32be-* \
+ 	| nios-* | nios2-* \
+ 	| none-* | np1-* | ns16k-* | ns32k-* \
+ 	| orion-* \
+ 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
+ 	| pyramid-* \
+-	| romp-* | rs6000-* \
+-	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]a*eb-* | sh[23]e-* |
+sh[34]eb-* | sheb-* | shbe-* \
++	| romp-* | rs6000-* | rx-* \
++	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* |
+sh[34]eb-* | sheb-* | shbe-* \
+ 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
+ 	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
+ 	| sparclite-* \
+ 	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | strongarm-* |
+sv1-* | sx?-* \
+ 	| tahoe-* | thumb-* \
+ 	| tic30-* | tic4x-* | tic54x-* | tic55x-* | tic6x-* | tic80-* \
++	| tile-* | tilegx-* \
+ 	| tron-* \
++	| ubicom32-* \
+ 	| v850-* | v850e-* | vax-* \
+ 	| we32k-* \
+ 	| x86-* | x86_64-* | xc16x-* | xps100-* | xscale-* | xscalee[bl]-* \
+ 	| xstormy16-* | xtensa*-* \
+ 	| ymp-* \
+-	| z8k-*)
++	| z8k-* | z80-*)
+ 		;;
+ 	# Recognize the basic CPU types without company name, with glob match.
+ 	xtensa*)
+@@ -394,7 +424,7 @@ case $basic_machine in
+ 		basic_machine=a29k-amd
+ 		os=-udi
+ 		;;
+-    	abacus)
++	abacus)
+ 		basic_machine=abacus-unknown
+ 		;;
+ 	adobe68k)
+@@ -440,6 +470,10 @@ case $basic_machine in
+ 		basic_machine=m68k-apollo
+ 		os=-bsd
+ 		;;
++	aros)
++		basic_machine=i386-pc
++		os=-aros
++		;;
+ 	aux)
+ 		basic_machine=m68k-apple
+ 		os=-aux
+@@ -448,10 +482,35 @@ case $basic_machine in
+ 		basic_machine=ns32k-sequent
+ 		os=-dynix
+ 		;;
++	blackfin)
++		basic_machine=bfin-unknown
++		os=-linux
++		;;
++	blackfin-*)
++		basic_machine=bfin-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
++	bluegene*)
++		basic_machine=powerpc-ibm
++		os=-cnk
++		;;
++	c54x-*)
++		basic_machine=tic54x-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
++	c55x-*)
++		basic_machine=tic55x-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
++	c6x-*)
++		basic_machine=tic6x-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	c90)
+ 		basic_machine=c90-cray
+ 		os=-unicos
+ 		;;
++	cegcc)
++		basic_machine=arm-unknown
++		os=-cegcc
++		;;
+ 	convex-c1)
+ 		basic_machine=c1-convex
+ 		os=-bsd
+@@ -480,7 +539,7 @@ case $basic_machine in
+ 		basic_machine=craynv-cray
+ 		os=-unicosmp
+ 		;;
+-	cr16)
++	cr16 | cr16-*)
+ 		basic_machine=cr16-unknown
+ 		os=-elf
+ 		;;
+@@ -519,6 +578,10 @@ case $basic_machine in
+ 		basic_machine=m88k-motorola
+ 		os=-sysv3
+ 		;;
++	dicos)
++		basic_machine=i686-pc
++		os=-dicos
++		;;
+ 	djgpp)
+ 		basic_machine=i586-pc
+ 		os=-msdosdjgpp
+@@ -673,6 +736,14 @@ case $basic_machine in
+ 		basic_machine=m68k-isi
+ 		os=-sysv
+ 		;;
++	m68knommu)
++		basic_machine=m68k-unknown
++		os=-linux
++		;;
++	m68knommu-*)
++		basic_machine=m68k-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	m88k-omron*)
+ 		basic_machine=m88k-omron
+ 		;;
+@@ -684,6 +755,9 @@ case $basic_machine in
+ 		basic_machine=ns32k-utek
+ 		os=-sysv
+ 		;;
++	microblaze)
++		basic_machine=microblaze-xilinx
++		;;
+ 	mingw32)
+ 		basic_machine=i386-pc
+ 		os=-mingw32
+@@ -699,24 +773,6 @@ case $basic_machine in
+ 		basic_machine=m68k-atari
+ 		os=-mint
+ 		;;
+-	mipsEE* | ee | ps2)
+-		basic_machine=mips64r5900el-scei
+-		case $os in
+-		    -linux*)
+-			;;
+-		    *)
+-			os=-elf
+-			;;
+-		esac
+-		;;
+-	iop)
+-		basic_machine=mipsel-scei
+-		os=-irx
+-		;;
+-	dvp)
+-		basic_machine=dvp-scei
+-		os=-elf
+-		;;
+ 	mips3*-*)
+ 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
+ 		;;
+@@ -806,6 +862,12 @@ case $basic_machine in
+ 	np1)
+ 		basic_machine=np1-gould
+ 		;;
++	neo-tandem)
++		basic_machine=neo-tandem
++		;;
++	nse-tandem)
++		basic_machine=nse-tandem
++		;;
+ 	nsr-tandem)
+ 		basic_machine=nsr-tandem
+ 		;;
+@@ -836,6 +898,14 @@ case $basic_machine in
+ 		basic_machine=i860-intel
+ 		os=-osf
+ 		;;
++	parisc)
++		basic_machine=hppa-unknown
++		os=-linux
++		;;
++	parisc-*)
++		basic_machine=hppa-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	pbd)
+ 		basic_machine=sparc-tti
+ 		;;
+@@ -1032,17 +1102,14 @@ case $basic_machine in
+ 		basic_machine=t90-cray
+ 		os=-unicos
+ 		;;
+-	tic54x | c54x*)
+-		basic_machine=tic54x-unknown
+-		os=-coff
+-		;;
+-	tic55x | c55x*)
+-		basic_machine=tic55x-unknown
+-		os=-coff
++	# This must be matched before tile*.
++	tilegx*)
++		basic_machine=tilegx-unknown
++		os=-linux-gnu
+ 		;;
+-	tic6x | c6x*)
+-		basic_machine=tic6x-unknown
+-		os=-coff
++	tile*)
++		basic_machine=tile-unknown
++		os=-linux-gnu
+ 		;;
+ 	tx39)
+ 		basic_machine=mipstx39-unknown
+@@ -1119,6 +1186,10 @@ case $basic_machine in
+ 		basic_machine=z8k-unknown
+ 		os=-sim
+ 		;;
++	z80-*-coff)
++		basic_machine=z80-unknown
++		os=-sim
++		;;
+ 	none)
+ 		basic_machine=none-none
+ 		os=-none
+@@ -1157,7 +1228,7 @@ case $basic_machine in
+ 	we32k)
+ 		basic_machine=we32k-att
+ 		;;
+-	sh[1234] | sh[24]a | sh[34]eb | sh[1234]le | sh[23]ele)
++	sh[1234] | sh[24]a | sh[24]aeb | sh[34]eb | sh[1234]le | sh[23]ele)
+ 		basic_machine=sh-unknown
+ 		;;
+ 	sparc | sparcv8 | sparcv9 | sparcv9b | sparcv9v)
+@@ -1204,9 +1275,12 @@ esac
+ if [ x"$os" != x"" ]
+ then
+ case $os in
+-        # First match some system type aliases
+-        # that might get confused with valid system types.
++	# First match some system type aliases
++	# that might get confused with valid system types.
+ 	# -solaris* is a basic system type, with this one exception.
++	-auroraux)
++		os=-auroraux
++		;;
+ 	-solaris1 | -solaris1.*)
+ 		os=`echo $os | sed -e 's|solaris1|sunos4|'`
+ 		;;
+@@ -1227,10 +1301,11 @@ case $os in
+ 	# Each alternative MUST END IN A *, to match a version number.
+ 	# -sysv* is not here because it comes later, after sysvr4.
+ 	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
+-	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -sunos | -sunos[34]*\
+-	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -solaris* | -sym* \
++	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos |
+-sunos[34]*\
++	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
++	      | -sym* | -kopensolaris* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+-	      | -aos* \
++	      | -aos* | -aros* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+ 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
+ 	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
+@@ -1239,10 +1314,10 @@ case $os in
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+-	      | -chorusos* | -chorusrdb* \
++	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+-	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+-	      | -gnu*-uclibc* \
++	      | -mingw32* | -linux-gnu* | -linux-android* \
++	      | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+@@ -1250,7 +1325,7 @@ case $os in
+ 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
+ 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
+ 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
+-	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -irx*)
++	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	-qnx*)
+@@ -1289,7 +1364,7 @@ case $os in
+ 	-opened*)
+ 		os=-openedition
+ 		;;
+-        -os400*)
++	-os400*)
+ 		os=-os400
+ 		;;
+ 	-wince*)
+@@ -1338,7 +1413,7 @@ case $os in
+ 	-sinix*)
+ 		os=-sysv4
+ 		;;
+-        -tpf*)
++	-tpf*)
+ 		os=-tpf
+ 		;;
+ 	-triton*)
+@@ -1380,6 +1455,11 @@ case $os in
+ 	-zvmoe)
+ 		os=-zvmoe
+ 		;;
++	-dicos*)
++		os=-dicos
++		;;
++	-nacl*)
++		;;
+ 	-none)
+ 		;;
+ 	*)
+@@ -1402,10 +1482,10 @@ else
+ # system, and we'll never get to this point.
+
+ case $basic_machine in
+-        score-*)
++	score-*)
+ 		os=-elf
+ 		;;
+-        spu-*)
++	spu-*)
+ 		os=-elf
+ 		;;
+ 	*-acorn)
+@@ -1417,8 +1497,17 @@ case $basic_machine in
+ 	arm*-semi)
+ 		os=-aout
+ 		;;
+-        c4x-* | tic4x-*)
+-        	os=-coff
++	c4x-* | tic4x-*)
++		os=-coff
++		;;
++	tic54x-*)
++		os=-coff
++		;;
++	tic55x-*)
++		os=-coff
++		;;
++	tic6x-*)
++		os=-coff
+ 		;;
+ 	# This must come before the *-dec entry.
+ 	pdp10-*)
+@@ -1445,7 +1534,7 @@ case $basic_machine in
+ 	m68*-cisco)
+ 		os=-aout
+ 		;;
+-        mep-*)
++	mep-*)
+ 		os=-elf
+ 		;;
+ 	mips*-cisco)
+@@ -1472,7 +1561,7 @@ case $basic_machine in
+ 	*-ibm)
+ 		os=-aix
+ 		;;
+-    	*-knuth)
++	*-knuth)
+ 		os=-mmixware
+ 		;;
+ 	*-wec)
+@@ -1577,7 +1666,7 @@ case $basic_machine in
+ 			-sunos*)
+ 				vendor=sun
+ 				;;
+-			-aix*)
++			-cnk*|-aix*)
+ 				vendor=ibm
+ 				;;
+ 			-beos*)
 -- 
 1.7.3.4
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: 0001-gnuconfig-Remove-old-checkout-of-GNU-config.patch
+Name: 0005-gnuconfig-Update-config.-sub-guess-to-2011-02-02-ver.patch
 Type: text/x-patch
-Size: 76001 bytes
+Size: 45637 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110225/452f24bf/attachment-0001.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110225/e4b61930/attachment-0001.bin>
