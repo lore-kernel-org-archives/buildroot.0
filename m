@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 26 Feb 2011 11:22:04 +0100
-Subject: [Buildroot] add liblcms1.19 to buildroot
-In-Reply-To: <AANLkTinp++75KxqQa-1oQyPuZhfP5voL+PCbXEx2ZSAY@mail.gmail.com>
-	(bao bui's message of "Sat, 26 Feb 2011 01:57:11 -0800")
-References: <AANLkTinp++75KxqQa-1oQyPuZhfP5voL+PCbXEx2ZSAY@mail.gmail.com>
-Message-ID: <87pqqfp037.fsf@macbook.be.48ers.dk>
+Date: Sat, 26 Feb 2011 12:44:05 +0100
+Subject: [Buildroot] Strange:  MIPS, librt, malloc
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1F657546@EXV1.corp.adtran.com>
+	(ANDY KENNEDY's message of "Fri, 25 Feb 2011 14:47:48 -0600")
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1F657546@EXV1.corp.adtran.com>
+Message-ID: <87lj13owai.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "bao" == bao bui <buiqbao@gmail.com> writes:
+>>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
 
- bao> How can I add liblcms1.19 to buildroot? I alway have the error:
- >>>> liblcms 1.19 Extracting
- >>>> liblcms 1.19 Patching package/liblcms
- bao> Aborting.? Reject files found.
+Hi,
 
-Probably the upstream tarball contains .rej files:
+ ANDY> malloc never returns and I sit in the _pthread_cleanup_push_defer()
+ ANDY> while (1) loop.
 
-find lcms-1.19 -name \*.rej
-lcms-1.19/src/cmscam97.c.rej
+ ANDY> If I remove the malloc(), I get Hello World but never return.
 
-You can add a _POST_EXTRACT_HOOK to remove it (see busybox package for
-an example). Notice that 1.19 isn't the latest upstream version. Once
-you have it working, please consider sending us a patch to add it to BR.
+ ANDY> Where do I start tracking this problem down?  Anyone else have this
+ ANDY> issue?
+
+No, I haven't seen this before. It presumably is a uClibc issue - Could
+you try the various uClibc versions we support and report it on the
+uClibc list if it still happens with 0.9.32-rc2?
 
 -- 
 Bye, Peter Korsgaard
