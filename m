@@ -1,41 +1,72 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 27 Feb 2011 15:37:23 +0100
-Subject: [Buildroot] [PATCH 1 of 2] linux: add linux-update target to save
-	configuration
+Date: Sun, 27 Feb 2011 15:37:24 +0100
+Subject: [Buildroot] [PATCH 2 of 2] Add config-update target to save
+ buildroot configuration, e.g. to defconfig
 In-Reply-To: <patchbomb.1298817442@localhost6.localdomain6>
 References: <patchbomb.1298817442@localhost6.localdomain6>
-Message-ID: <06eeb477324b418b8fdb.1298817443@localhost6.localdomain6>
+Message-ID: <2e0e0d1708ae7d8034e9.1298817444@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In analogy to build targets uclibc-update and busybox-update, add linux-update
-that copies the current configuration to the custom configuration file set in
-buildroot.
+Add build target config-update that allows saving a buildroot configuration
+to a backup location, e.g. the appropriate defconfig. The location to backup
+to is specified with a new buildroot configuration option.
 This facilitates the work of developers adding support for a specific board
 to buildroot.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- linux/linux.mk |  7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ Config.in |  11 +++++++++++
+ Makefile  |   9 +++++++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -163,6 +163,13 @@
- 	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -10,6 +10,17 @@
+ 	string
+ 	option env="BR2_VERSION_FULL"
  
-+ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-+linux-update linux26-update: $(LINUX26_DIR)/.config
-+	cp -f $(LINUX26_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
++config BR2_BACKUP_CONFIG
++	string "Backup configuration file"
++	default ""
++	help
++	  If you set a configuration file here and run 'make config-update',
++	  the buildroot configuration will be copied to that file.
++	  This can be useful if you want to put the buildroot configuration
++	  under version control.
++	  If you are working on a specific board, it may be a good idea to
++	  specify the board_defconfig file here.
++
+ source "target/Config.in.arch"
+ 
+ menu "Build options"
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -598,6 +598,7 @@
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
++	@sed -i 's,BR2_BACKUP_CONFIG.*,BR2_BACKUP_CONFIG="$(TOPDIR)/configs/$@",' $(CONFIG_DIR)/.config
+ 
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+@@ -609,6 +610,14 @@
+ 
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
++ifneq ($(BR2_BACKUP_CONFIG),"")
++config-update: $(CONFIG_DIR)/.config
++	cp -f $(CONFIG_DIR)/.config $(BR2_BACKUP_CONFIG)
 +else
-+linux-update linux26-update: ;
++config-update: ;
 +endif
 +
- # Support for rebuilding the kernel after the initramfs file list has
- # been generated in $(BINARIES_DIR)/rootfs.initramfs.
- $(LINUX26_DIR)/.stamp_initramfs_rebuilt: $(LINUX26_DIR)/.stamp_installed $(BINARIES_DIR)/rootfs.initramfs
++
+ #############################################################
+ #
+ # Cleanup and misc junk
