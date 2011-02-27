@@ -1,8 +1,10 @@
 From: Malte Starostik <m-starostik@versanet.de>
-Date: Sun, 27 Feb 2011 18:24:24 +0100
+Date: Sun, 27 Feb 2011 18:36:20 +0100
 Subject: [Buildroot] [PATCH] Cope with unusual (?) toolchain library
 	locations
-Message-ID: <1298827464-19093-1-git-send-email-m-starostik@versanet.de>
+In-Reply-To: <1298827464-19093-1-git-send-email-m-starostik@versanet.de>
+References: <1298827464-19093-1-git-send-email-m-starostik@versanet.de>
+Message-ID: <1298828180-24239-1-git-send-email-m-starostik@versanet.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,14 +33,14 @@ be some .so files in $(SYSROOT)/usr/lib dir that are actually ld scripts.
 
 Signed-off-by: Malte Starostik <m-starostik@versanet.de>
 ---
- toolchain/helpers.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ toolchain/helpers.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index db7c7f1..1f19aba 100644
+index db7c7f1..4d7d177 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -26,11 +26,16 @@ copy_toolchain_lib_root = \
+@@ -26,11 +26,15 @@ copy_toolchain_lib_root = \
  			  -path "./usr/lib/$${LIB}.*" -o \
  			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
  		)` ; \
@@ -52,7 +54,6 @@ index db7c7f1..1f19aba 100644
 +			    /*) FULLPATH="$${LIBDIR}/$${LIB}";; \
 +			    *) FULLPATH="$${ARCH_SYSROOT_DIR}/$${LIBDIR}/$${LIB}" ; \
 +			esac; \
-+			echo "$${FULLPATH}"; \
  			rm -fr $(TARGET_DIR)/$${DESTDIR}/$${LIB}; \
  			mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
  			if test -h $${FULLPATH} ; then \
