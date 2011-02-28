@@ -1,29 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 28 Feb 2011 12:44:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 3325] ffmpeg fails to build
-In-Reply-To: <bug-3325-163@https.bugs.busybox.net/>
-References: <bug-3325-163@https.bugs.busybox.net/>
-Message-ID: <20110228124409.9F8968F7AB@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Mon, 28 Feb 2011 15:20:59 +0100
+Subject: [Buildroot] [PATCH 0 of 2] Facilitate saving of configuration
+ files for board developers
+In-Reply-To: <patchbomb.1298817442@localhost6.localdomain6>
+References: <patchbomb.1298817442@localhost6.localdomain6>
+Message-ID: <AANLkTi=HTQ-3PGY+ohnKfM5nS66=tV-Y-PENE75CofOV@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3325
+2011/2/27 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
+> This patch series intends to make the development life of board developers
+> working with buildroot easier, by providing two extra -update build targets
+> that copy over configuration files to their version-controlled counterparts.
+> The new targets, linux-update and config-update have the same behavior as
+> the already existing uclibc-update and busybox-update.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
---- Comment #2 from Bart?omiej Palmowski <rotwang@crux.org.pl>  ---
-I did as you suggested but it still doesn't work
-
-libavcodec/x86/h264dsp_mmx.c: In function 'h264_h_loop_filter_luma_mmx2':
-libavcodec/x86/dsputil_mmx.c:681: error: can't find a register in class
-'GENERAL_REGS' while reloading 'asm'
-libavcodec/x86/dsputil_mmx.c:681: error: can't find a register in class
-'GENERAL_REGS' while reloading 'asm'
-libavcodec/x86/dsputil_mmx.c:681: error: 'asm' operand has impossible
-constraints
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Great contribution! My thumbs-up for this patchset. :)
