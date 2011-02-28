@@ -1,73 +1,70 @@
 From: Bob Liu <lliubbo@gmail.com>
-Date: Mon, 28 Feb 2011 16:29:20 +0800
-Subject: [Buildroot] [PATCH] add inetutils to package
-Message-ID: <1298881761-1294-1-git-send-email-lliubbo@gmail.com>
+Date: Mon, 28 Feb 2011 16:29:21 +0800
+Subject: [Buildroot] [PATCH] add bluetooth utils to package
+In-Reply-To: <1298881761-1294-1-git-send-email-lliubbo@gmail.com>
+References: <1298881761-1294-1-git-send-email-lliubbo@gmail.com>
+Message-ID: <1298881761-1294-2-git-send-email-lliubbo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bluetooth utils often used in embeded system, add it to package.
+
 Signed-off-by: Bob Liu <lliubbo@gmail.com>
 ---
- package/Config.in              |    2 +-
- package/inetutils/Config.in    |    6 ++++++
- package/inetutils/inetutils.mk |   14 ++++++++++++++
- 3 files changed, 21 insertions(+), 1 deletions(-)
- create mode 100644 package/inetutils/Config.in
- create mode 100644 package/inetutils/inetutils.mk
+ package/Config.in                  |    1 +
+ package/bluez_utils/Config.in      |    7 +++++++
+ package/bluez_utils/bluez_utils.mk |   14 ++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/bluez_utils/Config.in
+ create mode 100644 package/bluez_utils/bluez_utils.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7f1d9ff..5123aec 100644
+index f459c1b..7f1d9ff 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -366,7 +366,6 @@ menu "Networking applications"
+@@ -366,6 +366,7 @@ menu "Networking applications"
  source "package/argus/Config.in"
  source "package/avahi/Config.in"
  source "package/axel/Config.in"
--source "package/bluez_utils/Config.in"
++source "package/bluez_utils/Config.in"
  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  source "package/boa/Config.in"
  endif
-@@ -383,6 +382,7 @@ source "package/dropbear/Config.in"
- source "package/ethtool/Config.in"
- source "package/hostapd/Config.in"
- source "package/ifplugd/Config.in"
-+source "package/inetutils/Config.in"
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/inetutils/Config.in b/package/inetutils/Config.in
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
 new file mode 100644
-index 0000000..ce7933b
+index 0000000..eb6e22d
 --- /dev/null
-+++ b/package/inetutils/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_INETUTILS
-+	bool "inetutils"
++++ b/package/bluez_utils/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BLUEZ_UTILS
++	bool "bluez_utils"
++	depends on BR2_PACKAGE_DBUS
 +	help
-+	  inetutils
++	  bluez utils
 +
-+	  http://www.gnu.org/software/inetutils/
-diff --git a/package/inetutils/inetutils.mk b/package/inetutils/inetutils.mk
++	  http://www.kernel.org/pub/linux/bluetooth
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
 new file mode 100644
-index 0000000..3d2d95d
+index 0000000..7b104b0
 --- /dev/null
-+++ b/package/inetutils/inetutils.mk
++++ b/package/bluez_utils/bluez_utils.mk
 @@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# inet_utils
++# bluez_utils
 +#
 +#############################################################
-+INETUTILS_VERSION = 1.8
-+INETUTILS_SOURCE = inetutils-$(INETUTILS_VERSION).tar.gz
-+INETUTILS_SITE = http://ftp.gnu.org/gnu/inetutils/
-+INETUTILS_INSTALL_STAGING = YES
-+INETUTILS_INSTALL_TARGET_OPT = SUIDMODE="-m 4775" DESTDIR=$(TARGET_DIR) install
-+INETUTILS_CONF_OPT = \
-+	--disable-ifconfig
++BLUEZ_UTILS_VERSION = 4.87
++BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.gz
++BLUEZ_UTILS_SITE = http://www.kernel.org/pub/linux/bluetooth/
++BLUEZ_UTILS_INSTALL_STAGING = YES
++BLUEZ_UTILS_INSTALL_TARGET = YES
++BLUEZ_UTILS_DEPENDENCIES += dbus libglib2
++BLUEZ_UTILS_CONF_OPT = --enable-hidd --enable-test --enable-alsa
 +
-+$(eval $(call AUTOTARGETS,package,inetutils))
++$(eval $(call AUTOTARGETS,package,bluez_utils))
 -- 
 1.6.3.3
