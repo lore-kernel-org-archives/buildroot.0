@@ -1,56 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 27 Feb 2011 23:58:40 +0100
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sun, 27 Feb 2011 16:13:04 -0800
 Subject: [Buildroot] Question about buildroot generated toolchain
 	binaries
 In-Reply-To: <AANLkTin5E0ig9oa0m-=L-xd-eg-QoeA9xOREO2mwBYEP@mail.gmail.com>
 References: <AANLkTikLie3Zj9hqYV=BvGEN+efJm0_eVKWbc-66L3wt@mail.gmail.com>
 	<AANLkTi=4GCSBMgvC6M8Dh0LrpOdpOOX2J+jk6+3X5tOo@mail.gmail.com>
 	<AANLkTin5E0ig9oa0m-=L-xd-eg-QoeA9xOREO2mwBYEP@mail.gmail.com>
-Message-ID: <201102272358.41140.yann.morin.1998@anciens.enib.fr>
+Message-ID: <AANLkTik50wEG+D=pUFuAihFdD7XnjPwHUOQ80dY0RP7a@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steve, Charles, All,
+Hmmm. Well perhaps a "ls -l" might shed more light as the printout below
+shows two entries with the same size which are probably the same file.
 
-On Sunday 27 February 2011 23:40:37 Steve Johnson wrote:
+I would suspect that one is a softlink to the other.
+
+Charles
+
+On Sun, Feb 27, 2011 at 2:40 PM, Steve Johnson <sjohnson228@gmail.com>wrote:
+
+> Dear Charles,
+>
 > Actually, there are two copies of gcc:
-> 
+>
 > one in /usr/arm-linux/bin:
+>
 > -rwxr-xr-x. 1 na na  252289 Feb 21 20:10 gcc
-> 
+>
 > and one in /usr/bin:
-> -rwxr-xr-x.  2 na na  252289 Feb 21 20:10 arm-unknown-linux-uclibcgnueabi-gcc
+>
+> -rwxr-xr-x.  2 na na  252289 Feb 21 20:10
+> arm-unknown-linux-uclibcgnueabi-gcc
+>
+> Thanks
+>
+> On Fri, Feb 25, 2011 at 7:43 AM, Charles Krinke
+> <charles.krinke@gmail.com> wrote:
+> > Dear Steve:
+> >
+> > I suspect you will find that only one set exists and the others are all
+> > soft-links to the *real* set.
+> >
+> > This has to do with name expectations of various software using those
+> > binaries, but I believe there is only one set.
+> >
+> > Charles
+> >
+> > On Thu, Feb 24, 2011 at 5:54 PM, Steve Johnson <sjohnson228@gmail.com>
+> > wrote:
+> >>
+> >> Hi,
+> >>
+> >> In my toolchain output directory I seem to have
+> >> multiple copies of the same binaries..
+> >> In directory /usr/bin I have the gcc compiler (and other binaries) and
+> in
+> >> directory /usr/arm-linux/bin I also have gcc? Why is that?
+> >>
+> >>
+> >> Thanks,
+> >>
+> >> Steve
+> >>
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> >
+> > --
+> > Charles Krinke
+> >
+> >
+> >
+>
 
-Actually, they are the same file. If you lok at the inode number for those
-two files, you'll see that the two inodes are the same. So the files are
-in fact hard links. As such, they do not use more space (only a directory
-entry, which is really not much).
 
-I am not too sure why there is one in /usr/tuple/bin, but as suggested before
-by Michael, it has to do with the 'machine' stuff that gcc used to use.
-
-Before gcc-4.6 (yet to be released!), you could use a single gcc frontend to
-drive different backends for different machines and/or versions of gcc. You
-would do that with the -b and -V options to gcc, and then gcc would call the
-/usr/tuple/bin/gcc instead.
-
-This was seldom used, was partly broken, and is now removed from gcc-4.6.
-See:
-  http://gcc.gnu.org/gcc-4.6/changes.html
-
-Also, as suggested by Michael, it was used on hosts where the standard C
-compiler was not gcc. But that is now of historical interest, no? ;-)
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110227/76a4b8d5/attachment.html>
