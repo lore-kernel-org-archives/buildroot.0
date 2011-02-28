@@ -1,36 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Feb 2011 22:37:41 +0100
-Subject: [Buildroot] [git commit master 1/1] news.html: add 2011.02
-	announcement link
-Message-ID: <20110228213803.435728CA67@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Feb 2011 23:24:28 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/pkg-stats-improvements
+Message-ID: <cover.1298931858.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The following changes since commit 910a54002b9734b00a04111841cc1f628fec0a04:
+  Peter Korsgaard (1):
+        xerces: disable parallel builds
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b466e1564f13f9e80a3f286286adcf86ca621b75
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+are available in the git repository at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.05/pkg-stats-improvements
 
-diff --git a/docs/news.html b/docs/news.html
-index f642024..45e28f5 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>The stable 2011.02 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.02">CHANGES</a>
--    file for more details,
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2011-February/041662.html">announcement</a>
-     and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2011.02.tar.bz2">2011.02 release</a>.</p>
- 
+Thomas Petazzoni (2):
+      pkg-stats: support CMAKETARGETS and update list of .mk to ignore
+      pkg-stats: add statistics about number of patches per package
+
+ scripts/pkg-stats |   58 +++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 files changed, 54 insertions(+), 4 deletions(-)
+
+Thanks,
 -- 
-1.7.3.4
+Thomas Petazzoni
