@@ -1,30 +1,40 @@
-From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
-Date: Mon, 28 Feb 2011 20:06:19 +0100
-Subject: [Buildroot] Nanosleep hangs
-Message-ID: <AANLkTik0PKyS+8tQfbA-yp2iqhzY6ScAiNQxXgh3ZeR8@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 28 Feb 2011 20:43:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 3343] New: Add file:// download SITE_METHOD
+Message-ID: <bug-3343-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=3343
 
-I would like to ask - is there any issue with nanosleep function?
-Clock_nanosleep is
-unimplemented in uClibc (right?) so I planed to use nanosleep instead
-of it. But it doesn't work for me - program hangs on it forever.
-Usleep works, but it's not good alternative, isn't it? I'm also going
-to utilize timers - are there any issues about them? However google
-didn't give me much useful answers. I tried it with uClibc 0.9.31 and
-0.9.32-rc2 (snapshot version didn't compile).
+           Summary: Add file:// download SITE_METHOD
+           Product: buildroot
+           Version: 2010.11
+          Platform: All
+        OS/Version: All
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rgbmj at tricolour.net
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I'm sorry for cross posting - originally posted to uclibc mailing list
-but without any
-response. Thanks for any advice and sorry for poor English.
 
-My environment: uClibc 0.9.32-rc2, ARM (AT91SAM9260), kernel 2.6.33.7
-(with RT path and hi-res timers enabled).
+Created attachment 3043
+  --> https://bugs.busybox.net/attachment.cgi?id=3043
+patch to add support for SITE_METHODS scp, file(cp), rsync
 
-Best regards,
-Zdenek Materna
+Add SITE_METHODs for flexibility and development ease.  Since http, ftp and
+git, svn and bzr are already supported, I added the "file://", scp and rsync
+SITE_METHODs for ease of development before migrating to git.  Since this is a
+proof of concept, feedback is sought about how appropriate these are.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
