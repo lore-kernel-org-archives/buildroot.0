@@ -1,87 +1,89 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Tue, 1 Mar 2011 13:27:40 +0100
-Subject: [Buildroot] 2011_02 qt compilation error
-In-Reply-To: <AANLkTik6dtAiO_JOdxr5Fk4yWq99MoE2bGnvGKy5eGKA@mail.gmail.com>
-References: <AANLkTimU+hUM71bBWk7VGpsJ8wGsLNKNGqMy19oD1Am5@mail.gmail.com>
-	<20110301124402.25226ea9@surf>
-	<AANLkTik6dtAiO_JOdxr5Fk4yWq99MoE2bGnvGKy5eGKA@mail.gmail.com>
-Message-ID: <AANLkTimibFRPt-VmyEL6nEUNvrH-YqsZTmbY9QQES6mQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Mar 2011 13:59:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 3349] New: host-module-init-tools-3.12 fails on
+ Fedora 13 with buildroot-2011.02-rc2
+Message-ID: <bug-3349-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for previous post. Ommit that Cortex-A8 needs gcc>4.4
+https://bugs.busybox.net/show_bug.cgi?id=3349
 
-On Tue, Mar 1, 2011 at 1:19 PM, Belisko Marek <marek.belisko@gmail.com> wrote:
-> Hi,
->
-> On Tue, Mar 1, 2011 at 12:44 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Tue, 1 Mar 2011 11:45:41 +0100
->> Belisko Marek <marek.belisko@gmail.com> wrote:
->>
->>> ../../include/QtCore/../../src/corelib/arch/qatomic_arm.h:361:35:
->>> error: output number 1 not directly addressable
->>
->> Reproduced. It's apparently a bug in gcc 4.5, see
->> https://bugs.launchpad.net/gcc-linaro/+bug/675347. I haven't checked if
->> there is a workaround at Qt level, but in the mean time, the easiest
->> solution is to revert to a gcc 4.4 based toolchain.
-> Well try with buildroot internat toolchain and result isn't better:
->
-> For ?real value is
-> For cortex-a8 real value is cortexa8
-> Unknown arch used in --with-arch=armv7-a
-> make[1]: *** [configure-gcc] Error 1
-> make[1]: *** Waiting for unfinished jobs....
->
-> (trying to build for beagleboard).
->>
->> Regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
-> thanks,
->
-> marek
->
-> --
-> as simple and primitive as possible
-> -------------------------------------------------
-> Marek Belisko - OPEN-NANDRA
-> Freelance Developer
->
-> Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-> Tel: +421 915 052 184
-> skype: marekwhite
-> icq: 290551086
-> web: http://open-nandra.com
->
+           Summary: host-module-init-tools-3.12 fails on Fedora 13 with
+                    buildroot-2011.02-rc2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jerkejacobs at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-marek
+
+Buildroot fails on the last steps while linking the host-module-init-tools on
+Fedora 13.
+
+I tried to compile with the mini2440_defconfig with rc1 and rc2, also with some
+menuconfig changes but that doesn't change anything. Maybe a developer can test
+on a Fedora 13 or 14 (virtual)machine. Or find out what the real problem is.
+
+
+mkdir -p /home/jerry/Downloads/buildroot-2011.02-rc2/output/target/etc
+echo "buildroot" >
+/home/jerry/Downloads/buildroot-2011.02-rc2/output/target/etc/hostname
+mkdir -p /home/jerry/Downloads/buildroot-2011.02-rc2/output/target/etc
+echo "Welcome to Buildroot" >
+/home/jerry/Downloads/buildroot-2011.02-rc2/output/target/etc/issue
+>>> host-module-init-tools 3.12 Building
+PATH=/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/bin:/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/bin:/usr/lib/qt-3.3/bin:/usr/kerberos/sbin:/usr/kerberos/bin:/usr/lib/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/jerry/Android/SDK/tools:/home/jerry/bin:/home/jerry/Android/SDK/tools
+LD_LIBRARY_PATH="/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib:"
+PKG_CONFIG=""
+PKG_CONFIG_LIBDIR="/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib/pkgconfig"
+PERLLIB="/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib/perl" 
+/usr/bin/make -j2  -C
+/home/jerry/Downloads/buildroot-2011.02-rc2/output/build/host-module-init-tools-3.12/
+make[1]: Entering directory
+`/home/jerry/Downloads/buildroot-2011.02-rc2/output/build/host-module-init-tools-3.12'
+MAKE i686-pc-linux-gnu : 0 * all-all
+make[2]: Entering directory
+`/home/jerry/Downloads/buildroot-2011.02-rc2/output/build/host-module-init-tools-3.12/build'
+/usr/lib/ccache/gcc  -O2
+-I/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/include
+-I/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/include -Wunused
+-Wall  -L/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/lib
+-L/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib
+-Wl,-rpath,/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib -o
+depmod depmod.o zlibsupport.o tables.o  libmodtools.a 
+/usr/lib/ccache/gcc  -O2
+-I/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/include
+-I/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/include -Wunused
+-Wall -static -L/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/lib
+-L/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib
+-Wl,-rpath,/home/jerry/Downloads/buildroot-2011.02-rc2/output/host/usr/lib -o
+insmod.static insmod.o libmodtools.a 
+/usr/bin/ld: cannot find -lc
+collect2: ld returned 1 exit status
+make[2]: *** [insmod.static] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory
+`/home/jerry/Downloads/buildroot-2011.02-rc2/output/build/host-module-init-tools-3.12/build'
+make[1]: *** [all-all] Error 2
+make[1]: Leaving directory
+`/home/jerry/Downloads/buildroot-2011.02-rc2/output/build/host-module-init-tools-3.12'
+
+If you need more info or my config file, please contact me.
+
+Kind regards,
+Jerry Jacobs
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
