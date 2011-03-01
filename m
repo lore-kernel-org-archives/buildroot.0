@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 1 Mar 2011 14:13:56 +0100
-Subject: [Buildroot] [git commit master 1/1] kickoff 2011.05 development
-	cycle
-Message-ID: <20110301154332.C7E9E8C99E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] avahi: bump version,
+	remove dbus workaround
+Message-ID: <20110301154333.024038D3E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,48 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da5e5a5aa23a727ffc7cd3a2eb8cd268ef2f8d06
+commit: http://git.buildroot.net/buildroot/commit/?id=75adc4ab5c5833c9afda04d9a0eaf947130c539f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This is now fixed upstream.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES  |    2 ++
- Makefile |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/avahi/avahi.mk |   13 +------------
+ 1 files changed, 1 insertions(+), 12 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 9ee4cd6..e9d9a2e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,5 @@
-+2011.05, Not released yet:
-+
- 2011.02, Released February 28th, 2011:
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 6321557..13ae85f 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -10,7 +10,7 @@
+ # either version 2.1 of the License, or (at your option) any
+ # later version.
  
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 8046763..7ae3787 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
+-AVAHI_VERSION = 0.6.27
++AVAHI_VERSION = 0.6.28
+ AVAHI_SOURCE = avahi-$(AVAHI_VERSION).tar.gz
+ AVAHI_SITE = http://www.avahi.org/download/
+ AVAHI_INSTALL_STAGING = YES
+@@ -160,19 +160,8 @@ define AVAHI_INSTALL_DAEMON_INITSCRIPT
+ 	$(INSTALL) -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/
+ endef
  
- # Set and export the version string
--export BR2_VERSION:=2011.02
-+export BR2_VERSION:=2011.05-git
+-# avahi build sys erroneously only installs dbus service if systemd is enabled
+-define AVAHI_INSTALL_DAEMON_DBUS_SERVICE
+-	$(INSTALL) -m 0644 -D $(@D)/avahi-daemon/org.freedesktop.Avahi.service \
+-		$(TARGET_DIR)/usr/share/dbus-1/system-services/org.freedesktop.Avahi.service
+-endef
+-
+ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
+ AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_DAEMON_INITSCRIPT
+-
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_DAEMON_DBUS_SERVICE
+-endif
+-
+ endif
  
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
+ $(eval $(call AUTOTARGETS,package,avahi))
 -- 
 1.7.3.4
