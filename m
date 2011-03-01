@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Mar 2011 17:20:39 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Makefile: improve $(TARGET_DIR)
- (re)creation
-In-Reply-To: <AANLkTimmDuHy5+u63ayUan1q1-LXKDM335qd22gngxbv@mail.gmail.com>
+Date: Tue, 1 Mar 2011 17:23:55 +0100
+Subject: [Buildroot] [PATCH v2 2/2] linux.mk: depend on actual kernel
+ image instead of stamp file
+In-Reply-To: <1297986294-23446-2-git-send-email-bjorn.forsman@gmail.com>
 References: <1297986294-23446-1-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTinSvBJ79mKnsGND7BL+FVfPQN-cp1jRuEmCZpy1@mail.gmail.com>
-	<AANLkTimmDuHy5+u63ayUan1q1-LXKDM335qd22gngxbv@mail.gmail.com>
-Message-ID: <20110301172039.1d30ff29@surf>
+	<1297986294-23446-2-git-send-email-bjorn.forsman@gmail.com>
+Message-ID: <20110301172355.2c535403@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 1 Mar 2011 17:03:22 +0100
+Hello,
+
+On Fri, 18 Feb 2011 00:44:54 +0100
 Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
 
-> Ping ping :-)
-> 
-> Now that the new cycle has opened, any comments on this?
-> 
-> I'd really like to get this functionality in mainline :-)
+> Use the real output file (kernel image) as target instead of a stamp
+> file. This way Buildroot cannot be tricked into thinking that the kernel
+> image is installed when it's not.
 
-I think the functionality is great, but I'd prefer to see it integrated
-on top of the packaging work started by Lionel rather than coded as
-proposed in the current patch. I am also not sure that rebuilding the
-$(TARGET_DIR) without rebuilding the $(STAGING_DIR) is a good thing.
+Well, we switched *all* packages from dependencies on installed files
+to dependencies on stamp files when migrating them from hand-coded
+makefiles to the package infrastructures, so I don't think we should do
+the opposite for the Linux kernel package.
 
-However, it's true that the packaging work started by Lionel is not
-ready for inclusion yet, so maybe we should merge this as is, and then
-update it once we have the proper packaging mechanism working.
+But maybe we need to provide for each package (kernel included) a clean
+and nice mechanism to delete their stamp files so that they get
+reinstalled at the next make invocation.
 
-Regards,
+Regardless of the solution chosen, I think any change in this direction
+should come with a clear update in the documentation. I don't want to
+see dozens of different hacks^Wmechanisms to do partial rebuilds being
+added all over the place without any coherency nor documentation.
+
+Regards!
 
 Thomas
 -- 
