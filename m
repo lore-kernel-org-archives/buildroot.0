@@ -1,30 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Mar 2011 15:57:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 3349] host-module-init-tools-3.12 fails on Fedora
- 13 with buildroot-2011.02-rc2
-In-Reply-To: <bug-3349-163@https.bugs.busybox.net/>
-References: <bug-3349-163@https.bugs.busybox.net/>
-Message-ID: <20110301155725.DEDA58D3E2@busybox.osuosl.org>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 1 Mar 2011 17:03:22 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Makefile: improve $(TARGET_DIR)
+	(re)creation
+In-Reply-To: <AANLkTinSvBJ79mKnsGND7BL+FVfPQN-cp1jRuEmCZpy1@mail.gmail.com>
+References: <1297986294-23446-1-git-send-email-bjorn.forsman@gmail.com>
+	<AANLkTinSvBJ79mKnsGND7BL+FVfPQN-cp1jRuEmCZpy1@mail.gmail.com>
+Message-ID: <AANLkTimmDuHy5+u63ayUan1q1-LXKDM335qd22gngxbv@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3349
+2011/2/21 Bj?rn Forsman <bjorn.forsman@gmail.com>:
+> 2011/2/18 Bj?rn Forsman <bjorn.forsman@gmail.com>:
+>> This patch fixes the following use case:
+>>
+>> ?1. Build, hack, ...
+>> ?2. Oh no, $(TARGET_DIR) is no longer in sync with $(TARGET_SKELETON)
+>> ? ?and/or the packages selected in menuconfig. If only there was a way
+>> ? ?to *easily* rebuild $(TARGET_DIR) so it is in sync...
+>>
+>> With this patch, just remove $(TARGET_DIR) and Buildroot will recreate
+>> it.
+>>
+>> Main changes:
+>> ?* Always copy $(TARGET_SKELETON) to $(TARGET_DIR).
+>> ?* If $(TARGET_DIR) needs to be created (i.e. if the directory is
+>> ? missing), remove stamp files so all currently selected packages will
+>> ? be reinstalled.
+>> ?* If $(TARGET_DIR)/lib/modules/ is missing, try to install kernel
+>> ? modules.
+>>
+>> Also:
+>> ?* remove code touching .fakeroot.00000 file (not needed)
+>> ?* remove code trying to remove CVS and .svn stuff from target skeleton
+>> ? (not needed)
+>>
+>> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
+>> ---
+>> Changes in v2:
+>> ?* remove gcc stamp file so libgcc_s.so.1 will be copied to TARGET_DIR
+>> ?* make sure kernel modules get reinstalled
+>>
+>> ?Makefile ? ? ? | ? 26 +++++++++++---------------
+>> ?linux/linux.mk | ? ?6 ++++--
+>> ?2 files changed, 15 insertions(+), 17 deletions(-)
+>
+> Ping?
 
---- Comment #2 from Jerry Jacobs <jerkejacobs@gmail.com>  ---
-(In reply to comment #1)
-> This is a FAQ. See http://buildroot.org/downloads/buildroot.html#faq. You have
-> to install glibc-static.
+Ping ping :-)
 
-Thank you for your answer, I already looked at the documentation but not the
-FAQ. And think I missed it. It proceeds now.
+Now that the new cycle has opened, any comments on this?
 
-Kind regards,
-Jerry
+I'd really like to get this functionality in mainline :-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Bj?rn Forsman
