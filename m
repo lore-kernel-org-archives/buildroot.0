@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Mar 2011 13:20:01 -0300
-Subject: [Buildroot] [PATCH 4/4] gst-ffmpeg: bump to version 0.10.11
+Date: Tue,  1 Mar 2011 13:20:00 -0300
+Subject: [Buildroot] [PATCH 3/4] ffmpeg: bump to version 0.6.1
 In-Reply-To: <1298996401-798-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1298996401-798-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1298996401-798-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1298996401-798-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,134 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/gst-ffmpeg/Config.in     |    6 +++---
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |    7 ++++---
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/multimedia/ffmpeg/Config.in                |    5 ++-
+ .../ffmpeg-0.5.2-fix-sdl-config-search.patch       |   17 -------------
+ package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch   |   17 +++++++++++++
+ package/multimedia/ffmpeg/ffmpeg.mk                |   26 +++++++++++++++----
+ 4 files changed, 40 insertions(+), 25 deletions(-)
+ delete mode 100644 package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
+ create mode 100644 package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
 
-diff --git a/package/multimedia/gst-ffmpeg/Config.in b/package/multimedia/gst-ffmpeg/Config.in
-index 17873f0..537101e 100644
---- a/package/multimedia/gst-ffmpeg/Config.in
-+++ b/package/multimedia/gst-ffmpeg/Config.in
-@@ -2,16 +2,16 @@ config BR2_PACKAGE_GST_FFMPEG
- 	bool "gst-ffmpeg"
- 	depends on BR2_PACKAGE_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
--	select BR2_PACKAGE_LIBOIL
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_GPL
- 	select BR2_PACKAGE_FFMPEG_POSTPROC
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
+diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
+index 2f94991..7a9513c 100644
+--- a/package/multimedia/ffmpeg/Config.in
++++ b/package/multimedia/ffmpeg/Config.in
+@@ -1,9 +1,10 @@
+-comment "ffmpeg requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "ffmpeg requires a toolchain with LARGEFILE and IPV6 support"
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+ 
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
  	depends on BR2_LARGEFILE
 +	depends on BR2_INET_IPV6
  	help
- 	  GStreamer plugin using FFmpeg.
- 
- 	  http://gstreamer.freedesktop.org/
- 
--comment "gst-ffmpeg requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "gst-ffmpeg requires a toolchain with LARGEFILE and IPV6 support"
-+	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-index 6e91ad5..021ad00 100644
---- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-@@ -3,11 +3,12 @@
- # gst-ffmpeg
+          FFmpeg is a complete, cross-platform solution to record, convert
+          and stream audio and video.
+diff --git a/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch b/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
+deleted file mode 100644
+index 58d08aa..0000000
+--- a/package/multimedia/ffmpeg/ffmpeg-0.5.2-fix-sdl-config-search.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Allow FFmpeg's ./configure script to use a custom sdl-config command.
+-
+-Inspired from:
+-http://www.mail-archive.com/uclinux-dist-commits at blackfin.uclinux.org/msg01099.html
+-
+-diff -u ffmpeg-0.5.2-orig/configure ffmpeg-0.5.2/configure
+---- a/configure
+-+++ b/configure
+-@@ -2066,7 +2066,7 @@
+- 
+- disable sdl_too_old
+- disable sdl
+--SDL_CONFIG="${cross_prefix}sdl-config"
+-+SDL_CONFIG="${SDL_CONFIG-${cross_prefix}sdl-config}"
+- if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
+-     sdl_cflags=`"${SDL_CONFIG}" --cflags`
+-     temp_cflags $sdl_cflags
+diff --git a/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch b/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
+new file mode 100644
+index 0000000..de2c004
+--- /dev/null
++++ b/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
+@@ -0,0 +1,17 @@
++We need to pass the location sdl-config so that ffmpeg picks it up.
++So just pass the whole string to make things simpler.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura ffmpeg-0.6.1/configure ffmpeg-0.6.1.sdl/configure
++--- ffmpeg-0.6.1/configure	2010-06-15 16:44:30.000000000 -0300
+++++ ffmpeg-0.6.1.sdl/configure	2011-02-25 17:13:12.979168176 -0300
++@@ -2640,7 +2640,7 @@
++     die "ERROR: No version of libdc1394 found "
++ fi
++ 
++-SDL_CONFIG="${cross_prefix}sdl-config"
+++SDL_CONFIG="${SDL_CONFIG}"
++ if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
++     sdl_cflags=$("${SDL_CONFIG}" --cflags)
++     sdl_libs=$("${SDL_CONFIG}" --libs)
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index b37ac90..1e8f09a 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -3,17 +3,16 @@
+ # ffmpeg
  #
  #############################################################
--GST_FFMPEG_VERSION = 0.10.9
--GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+-FFMPEG_VERSION := 0.5.2
+-FFMPEG_SOURCE := ffmpeg-$(FFMPEG_VERSION).tar.bz2
+-FFMPEG_SITE := http://ffmpeg.org/releases
 +
-+GST_FFMPEG_VERSION = 0.10.11
-+#GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
- GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
- GST_FFMPEG_INSTALL_STAGING = YES
--GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg liboil
-+GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
- GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
++FFMPEG_VERSION = 0.6.1
++FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
++FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+-FFMPEG_INSTALL_TARGET = YES
  
- ifeq ($(BR2_PACKAGE_BZIP2),y)
+ FFMPEG_CONF_OPT = \
+ 	--prefix=/usr		\
+ 	--enable-shared 	\
+ 	--disable-avfilter	\
+-	--disable-vhook		\
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
+ FFMPEG_CONF_OPT += --enable-gpl
+@@ -129,6 +128,21 @@ ifeq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pent
+ FFMPEG_CONF_OPT += --disable-mmx
+ endif
+ 
++# ARM defaults to v5: clear if less, add extra if more
++ifeq ($(BR2_generic_arm)$(BR2_arm7tdmi)$(BR2_arm610)$(BR2_arm710)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t),y)
++FFMPEG_CONF_OPT += --disable-armv5te
++endif
++ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
++FFMPEG_CONF_OPT += --enable-armv6
++endif
++ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a8)$(BR2_cortex_a9),y)
++FFMPEG_CONF_OPT += --enable-armvfp
++endif
++# NEON is optional for A9
++ifeq ($(BR2_cortex_a8),y)
++FFMPEG_CONF_OPT += --enable-neon
++endif
++
+ FFMPEG_CONF_OPT += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+@@ -143,8 +157,8 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--sysroot=$(STAGING_DIR) \
+ 		--host-cc="$(HOSTCC)" \
+ 		--arch=$(BR2_ARCH) \
++		--target-os=linux \
+ 		--extra-cflags=-fPIC \
+-		$(DISABLE_IPV6) \
+ 		$(FFMPEG_CONF_OPT) \
+ 	)
+ endef
 -- 
 1.7.3.4
