@@ -1,34 +1,46 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 1 Mar 2011 17:06:00 +0100
-Subject: [Buildroot] [PATCH v2 2/2] linux.mk: depend on actual kernel
- image instead of stamp file
-In-Reply-To: <AANLkTinKTFAOsP-0EUrVcFgAxntLpkhzN1EVZMapdJjW@mail.gmail.com>
-References: <1297986294-23446-1-git-send-email-bjorn.forsman@gmail.com>
-	<1297986294-23446-2-git-send-email-bjorn.forsman@gmail.com>
-	<AANLkTinKTFAOsP-0EUrVcFgAxntLpkhzN1EVZMapdJjW@mail.gmail.com>
-Message-ID: <AANLkTi=WBOcoMjXxYFRLBpsBUyKkkNYavhi-ZSwxCDpu@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 Mar 2011 17:08:42 +0100
+Subject: [Buildroot] [git commit master 1/1] qt: bump version
+Message-ID: <20110301160925.AF48F8CA64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/2/21 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> 2011/2/18 Bj?rn Forsman <bjorn.forsman@gmail.com>:
->> Use the real output file (kernel image) as target instead of a stamp
->> file. This way Buildroot cannot be tricked into thinking that the kernel
->> image is installed when it's not.
->>
->> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
->> ---
->> ?linux/linux.mk | ? ?8 ++++----
->> ?1 files changed, 4 insertions(+), 4 deletions(-)
->
-> Ping?
 
-Ping ping :-)
+commit: http://git.buildroot.net/buildroot/commit/?id=6b46297675cd01cb18b499880f1bb5423278733c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Any comments?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ..._np.patch => qt-4.7.2-pthread_getattr_np.patch} |    0
+ ...ch => qt-4.7.2-pthread_getattr_np_webkit.patch} |    0
+ package/qt/qt.mk                                   |    2 +-
+ 3 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/qt/{qt-4.7.1-pthread_getattr_np.patch => qt-4.7.2-pthread_getattr_np.patch} (100%)
+ rename package/qt/{qt-4.7.1-pthread_getattr_np_webkit.patch => qt-4.7.2-pthread_getattr_np_webkit.patch} (100%)
 
-Best regards,
-Bj?rn Forsman
+diff --git a/package/qt/qt-4.7.1-pthread_getattr_np.patch b/package/qt/qt-4.7.2-pthread_getattr_np.patch
+similarity index 100%
+rename from package/qt/qt-4.7.1-pthread_getattr_np.patch
+rename to package/qt/qt-4.7.2-pthread_getattr_np.patch
+diff --git a/package/qt/qt-4.7.1-pthread_getattr_np_webkit.patch b/package/qt/qt-4.7.2-pthread_getattr_np_webkit.patch
+similarity index 100%
+rename from package/qt/qt-4.7.1-pthread_getattr_np_webkit.patch
+rename to package/qt/qt-4.7.2-pthread_getattr_np_webkit.patch
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index cc90190..e8fff73 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -12,7 +12,7 @@
+ #
+ ######################################################################
+ 
+-QT_VERSION:=4.7.1
++QT_VERSION:=4.7.2
+ QT_SOURCE:=qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
+ QT_SITE:=http://get.qt.nokia.com/qt/source
+ QT_CAT:=$(ZCAT)
+-- 
+1.7.3.4
