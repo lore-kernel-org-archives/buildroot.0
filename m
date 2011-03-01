@@ -1,74 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Feb 2011 23:24:30 +0100
-Subject: [Buildroot] [PATCH 2/2] pkg-stats: add statistics about number of
-	patches per package
-In-Reply-To: <cover.1298931858.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1298931858.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b927b5f3020918b574474b5fd80969fad023a837.1298931858.git.thomas.petazzoni@free-electrons.com>
+From: =?UTF-8?Q?Zden=C4=9Bk_Materna?= <zdenek.materna@gmail.com>
+Date: Tue, 1 Mar 2011 09:03:28 +0100
+Subject: [Buildroot] Nanosleep hangs
+In-Reply-To: <AANLkTik0PKyS+8tQfbA-yp2iqhzY6ScAiNQxXgh3ZeR8@mail.gmail.com>
+References: <AANLkTik0PKyS+8tQfbA-yp2iqhzY6ScAiNQxXgh3ZeR8@mail.gmail.com>
+Message-ID: <AANLkTik_5Fsg8CnyH1mFwRBbY0uxWdDONrxo5Wa5nN=L@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- scripts/pkg-stats |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+Dne 28. ?nora 2011 20:06 Zden?k Materna <zdenek.materna@gmail.com> napsal(a):
+> Hello,
+>
+> I would like to ask - is there any issue with nanosleep function?
+> Clock_nanosleep is
+> unimplemented in uClibc (right?) so I planed to use nanosleep instead
+> of it. But it doesn't work for me - program hangs on it forever.
+> Usleep works, but it's not good alternative, isn't it? I'm also going
+> to utilize timers - are there any issues about them? However google
+> didn't give me much useful answers. I tried it with uClibc 0.9.31 and
+> 0.9.32-rc2 (snapshot version didn't compile).
+>
+> I'm sorry for cross posting - originally posted to uclibc mailing list
+> but without any
+> response. Thanks for any advice and sorry for poor English.
+>
+> My environment: uClibc 0.9.32-rc2, ARM (AT91SAM9260), kernel 2.6.33.7
+> (with RT path and hi-res timers enabled).
+>
+> Best regards,
+> Zdenek Materna
+>
 
-diff --git a/scripts/pkg-stats b/scripts/pkg-stats
-index 9607da2..7bb2928 100755
---- a/scripts/pkg-stats
-+++ b/scripts/pkg-stats
-@@ -51,6 +51,7 @@ tr.correct td {
- <tr>
- <td rowspan=\"2\">Id</td>
- <td rowspan=\"2\">Package</td>
-+<td>Patch count</td>
- <td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
- <td colspan=\"2\" class=\"centered\">GENTARGETS</td>
- <td colspan=\"2\" class=\"centered\">CMAKETARGETS</td>
-@@ -71,6 +72,7 @@ tr.correct td {
- convert_to_generic_target=0
- convert_to_generic_host=0
- convert_to_autotools=0
-+total_patch_count=0
- cnt=1
- for i in $(find package/ -name '*.mk') ; do
- 
-@@ -163,6 +165,22 @@ for i in $(find package/ -name '*.mk') ; do
-     echo "<td>$cnt</td>"
-     echo "<td>$i</td>"
- 
-+    package_dir=$(dirname $i)
-+    patch_count=$(find ${package_dir} -name '*.patch' | wc -l)
-+    total_patch_count=$(($total_patch_count+$patch_count))
-+
-+    if test $patch_count -lt 1 ; then
-+	patch_count_color="#00ff00"
-+    elif test $patch_count -lt 5 ; then
-+	patch_count_color="#ffc600"
-+    else
-+	patch_count_color="#ff0000"
-+    fi
-+
-+    echo "<td class=\"centered\" style=\"color: $patch_count_color; font-weight: bold;\">"
-+    echo $patch_count
-+    echo "</td>"
-+
-     echo "<td class=\"centered\">"
-     if [ $is_auto_host -eq 1 ] ; then
- 	echo "<b>YES</b>"
-@@ -256,6 +274,10 @@ echo "<td>Packages to convert to host autotools</td>"
- echo "<td>$convert_to_host_autotools</td>"
- echo "</tr>"
- echo "<tr>"
-+echo "<td>Number of patches in all packages</td>"
-+echo "<td>$total_patch_count</td>"
-+echo "</tr>"
-+echo "<tr>"
- echo "<td>TOTAL</td>"
- echo "<td>$cnt</td>"
- echo "</tr>"
--- 
-1.7.0.4
+Hello,
+
+problem with nanosleep solved - it was between chair and keyboard. As usually...
+
+Best regards
+Zdenek Materna
