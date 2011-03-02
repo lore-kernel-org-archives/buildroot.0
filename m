@@ -1,24 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Mar 2011 14:35:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 3343] Add file:// download SITE_METHOD
-In-Reply-To: <bug-3343-163@https.bugs.busybox.net/>
-References: <bug-3343-163@https.bugs.busybox.net/>
-Message-ID: <20110302143541.8206A8E0CF@busybox.osuosl.org>
+From: Ashutosh Naik <ashutosh.naik@gmail.com>
+Date: Thu, 3 Mar 2011 00:09:10 +0530
+Subject: [Buildroot] How to change the keyboard layout to German (qwertz) ?
+Message-ID: <AANLkTim9Gs6oPMnXsbr+xnPy1vCt=cP_HNoTY+X-=zym@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3343
+Hi,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I am trying to build a distribution using buildroot 2011.02 and I am
+able to boot into the kernel and everything is working fine. :)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Severity|minor                       |enhancement
+I am wondering how I can change my keyboard layout to "qwertz" from
+"qwerty" ? I am using a German keyboard.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Appreciate your comments
+
+Thanks
+Ashtosh
