@@ -1,48 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Mar 2011 11:56:03 +0100
-Subject: [Buildroot] [git commit master 1/1] website: add google analytics
-	for statistics
-Message-ID: <20110302105645.31BA48B635@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Mar 2011 13:51:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 2995] -fstack-protector-all causes ssh to SIGSEGV
+In-Reply-To: <bug-2995-163@https.bugs.busybox.net/>
+References: <bug-2995-163@https.bugs.busybox.net/>
+Message-ID: <20110302135126.5727A8D3E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=2995
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26ca282bc94d84fe705f48f3231035484ac9c6f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--- Comment #5 from Andrew Beard <abeard@wabtec.com>  ---
+I seem to be having the same problem on a proprietary Geode LX board I'm
+working with.  I just updated to the 2011.02 and with uclibc 0.9.31 if I enable
+stack protection all ssh related executables immediately cause a segfault. 
+Disabling stack protection seems to alleviate the problem.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/header.html |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+One thing I have found is that this problem does not seem to occur with uclibc
+09.32-rc2, though.  With the new release candidate I can enable or disable
+stack protection without causing a problem.  At this point we're still trying
+to decide if we'd rather continue with a pre-release c library or without stack
+protection.
 
-diff --git a/docs/header.html b/docs/header.html
-index beb85e9..c8cb135 100644
---- a/docs/header.html
-+++ b/docs/header.html
-@@ -15,6 +15,21 @@
-      td.c2 {font-family: arial, helvetica, sans-serif; font-size: 80%}
-      td.c1 {font-family: lucida, helvetica; font-size: 248%}
-     </style>
-+<script type="text/javascript">
-+
-+  var _gaq = _gaq || [];
-+  _gaq.push(['_setAccount', 'UA-21761074-1']);
-+  _gaq.push(['_setDomainName', 'none']);
-+  _gaq.push(['_setAllowLinker', true]);
-+  _gaq.push(['_trackPageview']);
-+
-+  (function() {
-+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-+  })();
-+
-+</script>
-   </head>
- 
-   <body>
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
