@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 2 Mar 2011 11:56:03 +0100
-Subject: [Buildroot] [git commit master 1/1] xerces: add optional libcurl
-	support
-Message-ID: <20110302105645.932078B635@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] website: add google analytics
+	for statistics
+Message-ID: <20110302105645.31BA48B635@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=764d844fbc20721b7be0c3b9328cbe130079a0ef
+commit: http://git.buildroot.net/buildroot/commit/?id=26ca282bc94d84fe705f48f3231035484ac9c6f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xerces/xerces.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ docs/header.html |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 9a22499..ffd874b 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -10,7 +10,6 @@ XERCES_MAKE = $(MAKE1)
- XERCES_INSTALL_STAGING = YES
- XERCES_CONF_OPT = --enable-shared \
- 		  --disable-threads \
--		  --disable-network \
- 		  --with-gnu-ld
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
-@@ -18,4 +17,11 @@ XERCES_CONF_ENV += LIBS=-liconv
- XERCES_DEPENDENCIES += libiconv
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+XERCES_CONF_OPT += --enable-netaccessor-curl
-+XERCES_DEPENDENCIES += libcurl
-+else
-+XERCES_CONF_OPT += --disable-network
-+endif
+diff --git a/docs/header.html b/docs/header.html
+index beb85e9..c8cb135 100644
+--- a/docs/header.html
++++ b/docs/header.html
+@@ -15,6 +15,21 @@
+      td.c2 {font-family: arial, helvetica, sans-serif; font-size: 80%}
+      td.c1 {font-family: lucida, helvetica; font-size: 248%}
+     </style>
++<script type="text/javascript">
 +
- $(eval $(call AUTOTARGETS,package,xerces))
++  var _gaq = _gaq || [];
++  _gaq.push(['_setAccount', 'UA-21761074-1']);
++  _gaq.push(['_setDomainName', 'none']);
++  _gaq.push(['_setAllowLinker', true]);
++  _gaq.push(['_trackPageview']);
++
++  (function() {
++    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
++    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
++    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
++  })();
++
++</script>
+   </head>
+ 
+   <body>
 -- 
 1.7.3.4
