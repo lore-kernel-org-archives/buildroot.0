@@ -1,35 +1,23 @@
-From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Wed, 02 Mar 2011 09:18:15 +0100
-Subject: [Buildroot] [PATCH] lua: enables lua to be built for host
-In-Reply-To: <4D4BC3EF.5090408@free.fr>
-References: <4D4BC3EF.5090408@free.fr>
-Message-ID: <4D6DFD47.50909@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Mar 2011 08:15:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 3355] mplayer fails to build
+In-Reply-To: <bug-3355-163@https.bugs.busybox.net/>
+References: <bug-3355-163@https.bugs.busybox.net/>
+Message-ID: <20110302081550.DFA8C8C984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping.
+https://bugs.busybox.net/show_bug.cgi?id=3355
 
+--- Comment #1 from Bart?omiej Palmowski <rotwang@crux.org.pl>  ---
+Created attachment 3055
+  --> https://bugs.busybox.net/attachment.cgi?id=3055
+error log
 
-Le 04/02/2011 10:16, Guillaume Gardet a ?crit :
-> This patch enables lua to be built for host.
->
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@free.fr>
-> ---
-> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-> index 598eea1..a3b16d9 100644
-> --- a/package/lua/lua.mk
-> +++ b/package/lua/lua.mk
-> @@ -122,3 +122,4 @@ define LUA_CLEAN_CMDS
->  endef
->
->  $(eval $(call GENTARGETS,package,lua))
-> +$(eval $(call GENTARGETS,package,lua,host))
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
