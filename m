@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2011 09:46:47 +0100
+Date: Wed, 2 Mar 2011 09:57:11 +0100
 Subject: [Buildroot] [PATCH] lua: enables lua to be built for host
-In-Reply-To: <4D4BC3EF.5090408@free.fr>
-References: <4D4BC3EF.5090408@free.fr>
-Message-ID: <20110302094647.1db11ae2@surf>
+In-Reply-To: <4D6E0687.2080800@free.fr>
+References: <4D4BC3EF.5090408@free.fr> <20110302094647.1db11ae2@surf>
+	<4D6E0687.2080800@free.fr>
+Message-ID: <20110302095711.706e2b1c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,20 @@ To: buildroot@busybox.net
 
 Hello Guillaume,
 
-On Fri, 04 Feb 2011 10:16:31 +0100
+(Please keep the Buildroot list in the loop. Thanks!)
+
+On Wed, 02 Mar 2011 09:57:43 +0100
 Guillaume Gardet <guillaume.gardet@free.fr> wrote:
 
-> This patch enables lua to be built for host.
+> For a package not yet submitted because it is not yet validated.
+> Maybe I need to submit this patch again with the package which need
+> it?
 
-Maybe I forgot, but for which package is lua on the host needed ?
+Yes, I think it's better. Just curious (and also to potentially
+prevent someone else from working on the same package), which package
+will need it ?
 
-Regards,
+Thanks!
 
 Thomas
 -- 
