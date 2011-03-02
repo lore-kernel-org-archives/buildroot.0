@@ -1,23 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Mar 2011 08:15:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 3355] mplayer fails to build
-In-Reply-To: <bug-3355-163@https.bugs.busybox.net/>
-References: <bug-3355-163@https.bugs.busybox.net/>
-Message-ID: <20110302081550.DFA8C8C984@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Mar 2011 09:46:47 +0100
+Subject: [Buildroot] [PATCH] lua: enables lua to be built for host
+In-Reply-To: <4D4BC3EF.5090408@free.fr>
+References: <4D4BC3EF.5090408@free.fr>
+Message-ID: <20110302094647.1db11ae2@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3355
+Hello Guillaume,
 
---- Comment #1 from Bart?omiej Palmowski <rotwang@crux.org.pl>  ---
-Created attachment 3055
-  --> https://bugs.busybox.net/attachment.cgi?id=3055
-error log
+On Fri, 04 Feb 2011 10:16:31 +0100
+Guillaume Gardet <guillaume.gardet@free.fr> wrote:
 
+> This patch enables lua to be built for host.
+
+Maybe I forgot, but for which package is lua on the host needed ?
+
+Regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
