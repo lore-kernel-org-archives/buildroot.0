@@ -1,23 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  2 Mar 2011 23:02:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 2419] Add a bundle of Lua modules
-In-Reply-To: <bug-2419-163@https.bugs.busybox.net/>
-References: <bug-2419-163@https.bugs.busybox.net/>
-Message-ID: <20110302230206.578198E1BE@busybox.osuosl.org>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Thu, 3 Mar 2011 10:19:44 +0100
+Subject: [Buildroot] __USE_GNU ?
+Message-ID: <201103031019.44511.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2419
+Hello all,
+I'm trying to compile some code that uses splice/vmplice and I get:
+TestSockets.c:85: error: 'SPLICE_F_GIFT' undeclared (first use in this function)
+TestSockets.c:86: error: 'SPLICE_F_MOVE' undeclared (first use in this function)
 
---- Comment #2 from Fran?ois Perrad <francois.perrad@gadz.org>  ---
-Created attachment 3061
-  --> https://bugs.busybox.net/attachment.cgi?id=3061
-I've updated the patches vs BR 2011.02 and bump some versions
+I use #include <fcntl.h> in my code which includes output/host/usr/powerpc-unknown-linux-
+uclibc/sysroot/usr/include/bits/fcntl.h
+where I see the two corresponding defines for SPLICE_F_*, but the conditional macro __USE_GNU is not defined.
 
+A quick googling tell me it's an internal macro to uclibc, so why is it not on ?
+How do I get those two macros ?
+
+Sure, I can define them by hand, but something's fishy.
+
+Thanks for the clarification.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Guillaume Dargaud
+http://www.gdargaud.net/
