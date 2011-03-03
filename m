@@ -1,39 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 Mar 2011 11:28:56 +0200
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 3 Mar 2011 04:40:43 -0500
 Subject: [Buildroot] __USE_GNU ?
 In-Reply-To: <201103031019.44511.dargaud@lpsc.in2p3.fr>
 References: <201103031019.44511.dargaud@lpsc.in2p3.fr>
-Message-ID: <20110303092856.GC20423@jasper.tkos.co.il>
+Message-ID: <201103030440.44857.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume,
+On Thursday, March 03, 2011 04:19:44 Guillaume Dargaud wrote:
+> A quick googling tell me it's an internal macro to uclibc, so why is it not
+> on ? How do I get those two macros ?
 
-On Thu, Mar 03, 2011 at 10:19:44AM +0100, Guillaume Dargaud wrote:
-> Hello all,
-> I'm trying to compile some code that uses splice/vmplice and I get:
-> TestSockets.c:85: error: 'SPLICE_F_GIFT' undeclared (first use in this function)
-> TestSockets.c:86: error: 'SPLICE_F_MOVE' undeclared (first use in this function)
-> 
-> I use #include <fcntl.h> in my code which includes output/host/usr/powerpc-unknown-linux-
-> uclibc/sysroot/usr/include/bits/fcntl.h
-> where I see the two corresponding defines for SPLICE_F_*, but the conditional macro __USE_GNU is not defined.
-> 
-> A quick googling tell me it's an internal macro to uclibc, so why is it not on ?
-> How do I get those two macros ?
-> 
-> Sure, I can define them by hand, but something's fishy.
-> 
-> Thanks for the clarification.
+you need to define _GNU_SOURCE before including any C library header files.  
+this is by design, and is not specific to uClibc.  please read the  
+feature_test_macros(7) man page.
 
-Make sure to define _GNU_SOURCE before including any header.
-
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+also, this has nothing to do with buildroot.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110303/eb48a8e6/attachment.asc>
