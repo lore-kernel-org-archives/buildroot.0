@@ -1,41 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 3 Mar 2011 13:47:19 +0100
-Subject: [Buildroot] buildroot version from year 2007
-In-Reply-To: <20110303115028.117780@gmx.net>
-References: <20110303115028.117780@gmx.net>
-Message-ID: <201103031347.20015.yann.morin.1998@anciens.enib.fr>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Thu,  3 Mar 2011 14:53:30 +0100
+Subject: [Buildroot] [PATCH] buildroot: Add webdav support to lighttpd.
+Message-ID: <1299160410-14587-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zergman, All,
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+---
+ package/lighttpd/Config.in   |    8 ++++++++
+ package/lighttpd/lighttpd.mk |    7 +++++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
 
-On Thursday 03 March 2011 125028 zergman at gmx.de wrote:
-> is there a way to get an old version of the buildroot tool?
-
----8<---
-# git clone git://git.buildroot.net/buildroot.git br-2007
-# cd br-2007
-# git checkout -b OLD-2007 dc6a57bc6909fbc175c86c044898f1c7694965fd
-# git log HEAD^..
-commit dc6a57bc6909fbc175c86c044898f1c7694965fd
-Author: Thomas Lundquist <lists@zelow.no>
-Date:   Thu Dec 27 12:00:12 2007 +0000
-
-    Added BR2_DEBIAN_MIRROR
----8<---
-
-Et voila!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index b56d66b..49877e4 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -42,5 +42,13 @@ config BR2_PACKAGE_LIGHTTPD_PCRE
+ 	help
+ 	  Enable PCRE support. Needed to support mod_rewrite
+ 
++config BR2_PACKAGE_LIGHTTPD_WEBDAV
++	bool "webdav"
++	depends on BR2_PACKAGE_LIGHTTPD
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_SQLITE
++	help
++	  Enable webdav support. Needed to support mod_webdav
++
+ endmenu
+ endif
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 67cd272..0b35df8 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -43,6 +43,13 @@ else
+ LIGHTTPD_CONF_OPT += --without-pcre
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
++LIGHTTPD_DEPENDENCIES += libxml2 sqlite
++LIGHTTPD_CONF_OPT += --with-webdav-props --with-webdav-locks
++else
++LIGHTTPD_CONF_OPT += ---without-webdav-props --without-webdav-locks
++endif
++
+ define LIGHTTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+1.7.1
