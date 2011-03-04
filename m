@@ -1,58 +1,43 @@
-From: Kyle Hayes <kyle@greenmonitor.com>
-Date: Fri, 4 Mar 2011 09:27:02 -0800
-Subject: [Buildroot] OT: ideas for embedded computers?
-In-Reply-To: <201103040643.04039.minimod@morethan.org>
-References: <AANLkTi=oM=aixkU_SjF6qXRr70rW0voNS3xRd3yekHAj@mail.gmail.com>
-	<201103040643.04039.minimod@morethan.org>
-Message-ID: <AANLkTim1zDzWhFEAz9Yub+58vDHvJOgi8h2z7_VaG0mX@mail.gmail.com>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Fri, 4 Mar 2011 21:15:30 +0000
+Subject: [Buildroot] Applying custom kernel patches
+Message-ID: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to keep the OT traffic low, here is a synopsis of the systems
-that were recommended by posters on the list and from other sources:
+Hi
 
-Torbj?rn:
-VIA ARTiGO -based systems that his company sells, they look nice!
+I'm having some trouble applying kernel patches.
 
-Charles/Micheal:
-BeagleBoard (newer, not older)
+I manually copied the kernel tar ball
+into: /opt/buildroot/dl/linux-2.6.38-rc5.tar.bz2 and using "make menuconfig"
+I specified the kernel version
 
-Bruce:
-Pandaboard (http://pandaboard.org/)
 
-Mike:
-http://www.aaeon.com.tw/ENS_Newsletter_eNews_260_20218_TW.html
+.....however I'm having some problems applying my patches. Everything
+compiles 100% if I patch "/opt/buildroot/output/toolchain/linux-2.6.38-rc5",
+however I would
+like it to apply my patches after extracting the tar ball from
+"/opt/buildroot/dl/linux-2.6.38-rc5.tar.bz2" when I run "make"
 
-From other sources I got:
+I've tried placing my patches in:
+/opt/buildroot/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
 
-Medallion/Techsol (http://medallionsystem.com/computers/index.html)
+I also tried putting them in
+/opt/buildroot/package/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
 
-Technologic Systems (http://www.embeddedarm.com/products/arm-sbc.php)
+Using "make menuconfig" under specified custom patches I added:
+linux/kernel-patches/0001-linux-2.6.38-rc5.patch
 
-The last one came with solid recommendations about pricing,
-flexibility and their policy of never sunsetting products unless it is
-not avoidable.
+...but it won't apply the patch.
 
-All these systems look pretty good.  Now the problem is figuring out
-which ones to sample and playing with them for while!
+Any ideas?
 
-I am fairly surprised that there are no reasonably priced Intel Atom
-or AMD Brazos systems.  It seems like those chips would do well in
-lower power environments.  I found some Mini-ITX boards, but they were
-not competitive with the ARM boards for power and form factor.  There
-were a few MIPS systems, mostly Loongson-based MIPS clones out of
-various Chinese companies.  Support and reliability information for
-those is either non-existent or extremely hard to find.  Since ARM is
-so dominant in cell phones and tablets, I think it will push MIPS out.
- However, the Chinese have the political will to force their MIPS
-clones on their own companies and Loongson is a pretty nice chip.  It
-does not look like they have achieved the same level of integration
-that the ARM systems have though.
 
-Thanks for all your help!
-
-Best,
-Kyle
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110304/e872e8c9/attachment.html>
