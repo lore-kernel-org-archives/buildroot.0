@@ -1,59 +1,85 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Fri, 4 Mar 2011 12:11:39 +0100
-Subject: [Buildroot]  xterm fails to compile
-Message-ID: <20110304121139.54ce01d0@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Mar 2011 13:35:33 +0100
+Subject: [Buildroot] xterm fails to compile
+In-Reply-To: <20110304121139.54ce01d0@gmail.com>
+References: <20110304121139.54ce01d0@gmail.com>
+Message-ID: <20110304133533.1e06310f@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody,
+Hello Frederic,
 
-I'm currently trying to compile xterm (Buildroot 2011.02) but it fails :
+On Fri, 4 Mar 2011 12:11:39 +0100
+Frederic Bassaler <frederic.bassaler@gmail.com> wrote:
 
-make[1]: quittant le r?pertoire ? /home/fred/buildroot ?
->>> xterm 262 Building
-PATH="/home/fred/buildroot/output/host/bin:/home/fred/buildroot/output/host/usr/bin:/home/fred/buildroot/output/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
-PERLLIB="/home/fred/buildroot/output/host/usr/lib/perl"  /usr/bin/make
--j2  -C /home/fred/buildroot/output/build/xterm-262/ make[1]: entrant
-dans le r?pertoire ? /home/fred/buildroot/output/build/xterm-262
-? /home/fred/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc
---sysroot=/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot
--I. -I. -DHAVE_CONFIG_H  -D_GNU_SOURCE  -DNARROWPROTO=1 -DFUNCPROTO=15
--DOSMAJORVERSION=2 -DOSMINORVERSION=6
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/freetype2
--pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/include
--c ./input.c /home/fred/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc
---sysroot=/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot
--I. -I. -DHAVE_CONFIG_H  -D_GNU_SOURCE  -DNARROWPROTO=1 -DFUNCPROTO=15
--DOSMAJORVERSION=2 -DOSMINORVERSION=6
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/freetype2
--pipe -Os  -mtune=i686 -march=i686 -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include
--I/home/fred/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/include
--c ./main.c In file included from ./input.c:86: ./xtermcap.h:62:20:
-error: curses.h: No such file or directory In file included
-from ./main.c:121: ./xtermcap.h:62:20: error: curses.h: No such file or
-directory make[1]: *** [input.o] Erreur 1 make[1]: *** Attente des
-t?ches non termin?es.... make[1]: *** [main.o] Erreur 1 make[1]:
-quittant le r?pertoire ? /home/fred/buildroot/output/build/xterm-262 ?
-make: *** [/home/fred/buildroot/output/build/xterm-262/.stamp_built]
-Erreur 2
+> -c ./main.c In file included from ./input.c:86: ./xtermcap.h:62:20:
+> error: curses.h: No such file or directory In file included
 
+Yes, xterm needs ncurses. I have the following patch in one of my
+branch since July 2010, but never had the time to finalize it. I think
+it should fix your problem:
 
+=======================================================================
+commit 2bb119327287ff859d5bc292881fc7e8f6c83bc6
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Thu Jul 22 15:45:19 2010 +0200
 
-On another note :
+    xterm: add missing dependency on ncurses
+    
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I was able to generate a working embedded i386 X.org + Blackbox wm
-system, but it seems that it must be done in several steps :
-- first build a bare Xorg
-- then add the Xorg Drivers and needed utilities
+diff --git a/package/xterm/Config.in b/package/xterm/Config.in
+index da3e9fe..447c912 100644
+--- a/package/xterm/Config.in
++++ b/package/xterm/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XTERM
+        bool "xterm"
+        depends on BR2_PACKAGE_XORG7
++       select BR2_PACKAGE_NCURSES
+        help
+          xterm terminal emulator
+ 
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index b07eda4..2304dd7 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -7,7 +7,8 @@
+ XTERM_VERSION:=259
+ XTERM_SOURCE:=xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE:=ftp://invisible-island.net/xterm
+-XTERM_DEPENDENCIES = xserver_xorg-server
++XTERM_DEPENDENCIES = xserver_xorg-server ncurses
+ XTERM_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++XTERM_CONF_OPT = --disable-imake
+ 
+ $(eval $(call AUTOTARGETS,package,xterm))
+=======================================================================
 
-otherwise, some packages may fail to compile because of dependencies
-not working (eg. xf86-input-driver would require xorg-server, but
-xorg-server wasn't compiled before)
+> I was able to generate a working embedded i386 X.org + Blackbox wm
+> system, but it seems that it must be done in several steps :
+> - first build a bare Xorg
+> - then add the Xorg Drivers and needed utilities
+> 
+> otherwise, some packages may fail to compile because of dependencies
+> not working (eg. xf86-input-driver would require xorg-server, but
+> xorg-server wasn't compiled before)
+
+Hum, which driver failed exactly ? Because for example
+xdriver_xf86-input-evdev already has the dependency on
+xserver_xorg-server. And from a quick look, it seems that all other
+input drivers also have xserver_xorg-server in their dependencies.
+Could you bit a more specific about the failure (i.e give us
+the .config + build log) ?
+
+Thanks !
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
