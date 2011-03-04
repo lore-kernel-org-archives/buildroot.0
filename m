@@ -1,43 +1,21 @@
-From: bruce bushby <bruce.bushby@gmail.com>
-Date: Fri, 4 Mar 2011 21:15:30 +0000
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Fri, 4 Mar 2011 15:52:14 -0600
 Subject: [Buildroot] Applying custom kernel patches
-Message-ID: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+In-Reply-To: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+References: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F734F29@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+> if I patch "/opt/buildroot/output/toolchain/linux-2.6.38-rc5"
 
-I'm having some trouble applying kernel patches.
+that is the Linux-headers directory.  The _kernel_ gets compiled
+under buildroot/output/build/linux-$(LINUX_VERSION).
 
-I manually copied the kernel tar ball
-into: /opt/buildroot/dl/linux-2.6.38-rc5.tar.bz2 and using "make menuconfig"
-I specified the kernel version
+So, are you having problems building the kernel-headers or the
+kernel?
 
-
-.....however I'm having some problems applying my patches. Everything
-compiles 100% if I patch "/opt/buildroot/output/toolchain/linux-2.6.38-rc5",
-however I would
-like it to apply my patches after extracting the tar ball from
-"/opt/buildroot/dl/linux-2.6.38-rc5.tar.bz2" when I run "make"
-
-I've tried placing my patches in:
-/opt/buildroot/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
-
-I also tried putting them in
-/opt/buildroot/package/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
-
-Using "make menuconfig" under specified custom patches I added:
-linux/kernel-patches/0001-linux-2.6.38-rc5.patch
-
-...but it won't apply the patch.
-
-Any ideas?
-
-
-Thanks
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110304/e872e8c9/attachment.html>
+Andy
