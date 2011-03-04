@@ -1,36 +1,37 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 4 Mar 2011 16:13:42 -0600
+From: Steve Calfee <nospamcalfee@yahoo.com>
+Date: Fri, 4 Mar 2011 14:21:52 -0800 (PST)
 Subject: [Buildroot] Applying custom kernel patches
-In-Reply-To: <AANLkTikLN+Pr2+Stg_mb2fDvEZrRtHO9A_W14Xjd_=o3@mail.gmail.com>
-References: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com><9AC3F0E75060224C8BBC5BA2DDC8853A1F734F29@EXV1.corp.adtran.com>
-	<AANLkTikLN+Pr2+Stg_mb2fDvEZrRtHO9A_W14Xjd_=o3@mail.gmail.com>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F734F5E@EXV1.corp.adtran.com>
+In-Reply-To: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+References: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+Message-ID: <518665.81144.qm@web161818.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi Andy
-> 
-> I'm attempting to do a full build (uImage and rootfs)?
-> 
-> I've got 6 kernel patches which I need to apply before running the
-> "full build", they add "board support" for my module and various other
-> "nand" related bits. One of the patches adds
-> "arch/arm/configs/telit_ge863_defconfig"?
-> 
+>From: bruce bushby <bruce.bushby@gmail.com>
 
-<list rules>  Plain Text (wrap at 72 chars), bottom post.  </list rules>
+>I've tried placing my patches in:
+>/opt/buildroot/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
+>
+>
+>I also tried putting them in
+>/opt/buildroot/package/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
+>
+Hi,
 
-You should create a directory OUTSIDE the scope of the BuildRoot dirs
-for your patches.  It didn't occur to me until I went looking for 
-something else just now that buildroot/linux is a known directory.
-Your patches could exist in buildroot/mylinux if you wanted, but you
-shouldn't put stuff into dirs that BuildRoot knows.
+You may have a path problem for your patches. The path should be given in your 
+*_defconfig. 
 
-So, you'll put your patches in mylinux then config the kernel patches
-to the unqualified path starting in buildroot (or you could do something
-along the lines of $(TOPDIR)/mylinux to be more BuildRoot friendly ;).
 
-Andy
+And buildroot will automatically apply patches at the appropriate time if they 
+are named in the form linux*patch. See the makefile.
+
+so 0001-linux-2.6.38-rc5.patch should be linux-001-2.6.38-rc5.patch
+
+Regards, Steve
+
+
+
+      
