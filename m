@@ -1,23 +1,18 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Mar 2011 15:37:43 +0100
-Subject: [Buildroot] [PATCH 2/2] dropbear: bump to version 0.53.1
-In-Reply-To: <1299248546-7165-2-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Fri, 4 Mar 2011 11:22:26 -0300")
-References: <1299248546-7165-1-git-send-email-gustavo@zacarias.com.ar>
-	<1299248546-7165-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mxl9my4o.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Mar 2011 15:37:16 +0100
+Subject: [Buildroot] [git commit master 1/1] pkg-stats: support CMAKETARGETS
+	and update list of .mk to ignore
+Message-ID: <20110305143807.3D2678E327@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Bump dropbear to version 0.53.1
- Gustavo> Changelog @ http://matt.ucc.asn.au/dropbear/CHANGES
+commit: http://git.buildroot.net/buildroot/commit/?id=1ff216b789067d58c96775d8d1db2c11a7fda31e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
