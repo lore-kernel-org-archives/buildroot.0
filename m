@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Mar 2011 15:37:16 +0100
-Subject: [Buildroot] [git commit master 1/1] qt: add option for system sqlite
-Message-ID: <20110305143808.078B78E327@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] dropbear: bump to version 0.53.1
+Message-ID: <20110305143808.78B7B8E327@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,82 +9,77 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7bdbdd3c38a4ad2c8273039bb17d0cd2ec664f82
+commit: http://git.buildroot.net/buildroot/commit/?id=baa8b69303a3f05b75fa183d62847bc97160cd2e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to use the system sqlite library.
-Also drop sqlite2 stub since it's pointless.
+Changelog @ http://matt.ucc.asn.au/dropbear/CHANGES
+
+Since some build-time defaults have changed that make dropbear somewhat
+bigger we introduce a new option to optimize dropbear for size.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/Config.sql.in |   30 +++++++++++++++++++++---------
- package/qt/qt.mk         |    7 ++++++-
- 2 files changed, 27 insertions(+), 10 deletions(-)
+ package/dropbear/Config.in   |   10 ++++++++++
+ package/dropbear/dropbear.mk |   17 ++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-index b982fdb..eceb15d 100644
---- a/package/qt/Config.sql.in
-+++ b/package/qt/Config.sql.in
-@@ -34,16 +34,28 @@ config BR2_PACKAGE_QT_PSQL
- 	  Build PostgreSQL driver
- 	  If unsure, say n.
- 
--config BR2_PACKAGE_QT_SQLITE
--	bool "SQLite 3 Driver"
-+choice
-+	prompt "SQLite 3 support"
-+	default BR2_PACKAGE_QT_SQLITE_NONE
- 	help
--	  Build SQLite driver
--	  If unsure, say n.
-+	  Select SQLite support.
- 
--config BR2_PACKAGE_QT_SQLITE2
--	bool "SQLite 2 Driver"
--	depends on BROKEN # sqlite2 not in BR
-+config BR2_PACKAGE_QT_SQLITE_NONE
-+	bool "No sqlite support"
- 	help
--	  Build SQLite 2 driver
--	  If unsure, say n.
-+	  Do not compile any kind of SQLite support.
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index e47ba45..4bc0e3e 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -13,3 +13,13 @@ config BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS
+ 	  Disable reverse DNS lookups on connection. This can be handy
+ 	  on systems without working DNS, as connections otherwise
+ 	  stall until DNS times out.
 +
-+config BR2_PACKAGE_QT_SQLITE_QT
-+	bool "Qt SQLite"
++config BR2_PACKAGE_DROPBEAR_SMALL
++	bool "optimize for size"
++	default y
++	depends on BR2_PACKAGE_DROPBEAR
 +	help
-+	  Use Qt bundled SQLite support.
++	  Compile dropbear for the smallest possible binary size.
 +
-+config BR2_PACKAGE_QT_SQLITE_SYSTEM
-+	bool "System SQLite"
-+	select BR2_PACKAGE_SQLITE
-+	help
-+	  Use system SQLite.
++	  Tradeoffs are slower hashes and ciphers, and disabling of the
++	  blowfish cipher.
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index b07cb63..fab7c96 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-DROPBEAR_VERSION = 0.52
++DROPBEAR_VERSION = 0.53.1
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.gz
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_DEPENDENCIES = zlib
+@@ -27,10 +27,25 @@ define DROPBEAR_DISABLE_REVERSE_DNS
+ 	$(SED) 's,^#define DO_HOST_LOOKUP.*,/* #define DO_HOST_LOOKUP */,' $(@D)/options.h
+ endef
+ 
++define DROPBEAR_BUILD_SMALL
++	echo "#define DROPBEAR_SMALL_CODE" >>$(@D)/options.h
++	echo "#define NO_FAST_EXPTMOD" >>$(@D)/options.h
++endef
 +
-+endchoice
++define DROPBEAR_BUILD_FEATURED
++	echo "#define DROPBEAR_BLOWFISH" >>$(@D)/options.h
++endef
 +
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),y)
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_REVERSE_DNS
  endif
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e8fff73..6974b2f 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -295,11 +295,16 @@ endif
- ifeq ($(BR2_PACKAGE_QT_PSQL),y)
- QT_CONFIGURE+= -qt-sql-psql
- endif
--ifeq ($(BR2_PACKAGE_QT_SQLITE),y)
-+ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
- QT_CONFIGURE+= -qt-sql-sqlite
- else
-+ifeq ($(BR2_PACKAGE_QT_SQLITE_SYSTEM),y)
-+QT_CONFIGURE+= -system-sqlite
-+QT_DEP_LIBS+= sqlite
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_SMALL
 +else
- QT_CONFIGURE+= -no-sql-sqlite
- endif
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
 +endif
- ifeq ($(BR2_PACKAGE_QT_SQLITE2),y)
- QT_CONFIGURE+= -qt-sql-sqlite2
- endif
++
+ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
 -- 
 1.7.3.4
