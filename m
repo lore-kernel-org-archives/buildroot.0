@@ -1,8 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 5 Mar 2011 15:37:16 +0100
-Subject: [Buildroot] [git commit master 1/1] pkg-stats: add statistics about
-	number of patches per package
-Message-ID: <20110305143807.743BC8E327@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] qt: add option for system sqlite
+Message-ID: <20110305143808.078B78E327@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,67 +9,82 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b927b5f3020918b574474b5fd80969fad023a837
+commit: http://git.buildroot.net/buildroot/commit/?id=7bdbdd3c38a4ad2c8273039bb17d0cd2ec664f82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- scripts/pkg-stats |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+Add an option to use the system sqlite library.
+Also drop sqlite2 stub since it's pointless.
 
-diff --git a/scripts/pkg-stats b/scripts/pkg-stats
-index 9607da2..7bb2928 100755
---- a/scripts/pkg-stats
-+++ b/scripts/pkg-stats
-@@ -51,6 +51,7 @@ tr.correct td {
- <tr>
- <td rowspan=\"2\">Id</td>
- <td rowspan=\"2\">Package</td>
-+<td>Patch count</td>
- <td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
- <td colspan=\"2\" class=\"centered\">GENTARGETS</td>
- <td colspan=\"2\" class=\"centered\">CMAKETARGETS</td>
-@@ -71,6 +72,7 @@ tr.correct td {
- convert_to_generic_target=0
- convert_to_generic_host=0
- convert_to_autotools=0
-+total_patch_count=0
- cnt=1
- for i in $(find package/ -name '*.mk') ; do
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/Config.sql.in |   30 +++++++++++++++++++++---------
+ package/qt/qt.mk         |    7 ++++++-
+ 2 files changed, 27 insertions(+), 10 deletions(-)
+
+diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
+index b982fdb..eceb15d 100644
+--- a/package/qt/Config.sql.in
++++ b/package/qt/Config.sql.in
+@@ -34,16 +34,28 @@ config BR2_PACKAGE_QT_PSQL
+ 	  Build PostgreSQL driver
+ 	  If unsure, say n.
  
-@@ -163,6 +165,22 @@ for i in $(find package/ -name '*.mk') ; do
-     echo "<td>$cnt</td>"
-     echo "<td>$i</td>"
+-config BR2_PACKAGE_QT_SQLITE
+-	bool "SQLite 3 Driver"
++choice
++	prompt "SQLite 3 support"
++	default BR2_PACKAGE_QT_SQLITE_NONE
+ 	help
+-	  Build SQLite driver
+-	  If unsure, say n.
++	  Select SQLite support.
  
-+    package_dir=$(dirname $i)
-+    patch_count=$(find ${package_dir} -name '*.patch' | wc -l)
-+    total_patch_count=$(($total_patch_count+$patch_count))
+-config BR2_PACKAGE_QT_SQLITE2
+-	bool "SQLite 2 Driver"
+-	depends on BROKEN # sqlite2 not in BR
++config BR2_PACKAGE_QT_SQLITE_NONE
++	bool "No sqlite support"
+ 	help
+-	  Build SQLite 2 driver
+-	  If unsure, say n.
++	  Do not compile any kind of SQLite support.
 +
-+    if test $patch_count -lt 1 ; then
-+	patch_count_color="#00ff00"
-+    elif test $patch_count -lt 5 ; then
-+	patch_count_color="#ffc600"
-+    else
-+	patch_count_color="#ff0000"
-+    fi
++config BR2_PACKAGE_QT_SQLITE_QT
++	bool "Qt SQLite"
++	help
++	  Use Qt bundled SQLite support.
 +
-+    echo "<td class=\"centered\" style=\"color: $patch_count_color; font-weight: bold;\">"
-+    echo $patch_count
-+    echo "</td>"
++config BR2_PACKAGE_QT_SQLITE_SYSTEM
++	bool "System SQLite"
++	select BR2_PACKAGE_SQLITE
++	help
++	  Use system SQLite.
 +
-     echo "<td class=\"centered\">"
-     if [ $is_auto_host -eq 1 ] ; then
- 	echo "<b>YES</b>"
-@@ -256,6 +274,10 @@ echo "<td>Packages to convert to host autotools</td>"
- echo "<td>$convert_to_host_autotools</td>"
- echo "</tr>"
- echo "<tr>"
-+echo "<td>Number of patches in all packages</td>"
-+echo "<td>$total_patch_count</td>"
-+echo "</tr>"
-+echo "<tr>"
- echo "<td>TOTAL</td>"
- echo "<td>$cnt</td>"
- echo "</tr>"
++endchoice
++
+ endif
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index e8fff73..6974b2f 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -295,11 +295,16 @@ endif
+ ifeq ($(BR2_PACKAGE_QT_PSQL),y)
+ QT_CONFIGURE+= -qt-sql-psql
+ endif
+-ifeq ($(BR2_PACKAGE_QT_SQLITE),y)
++ifeq ($(BR2_PACKAGE_QT_SQLITE_QT),y)
+ QT_CONFIGURE+= -qt-sql-sqlite
+ else
++ifeq ($(BR2_PACKAGE_QT_SQLITE_SYSTEM),y)
++QT_CONFIGURE+= -system-sqlite
++QT_DEP_LIBS+= sqlite
++else
+ QT_CONFIGURE+= -no-sql-sqlite
+ endif
++endif
+ ifeq ($(BR2_PACKAGE_QT_SQLITE2),y)
+ QT_CONFIGURE+= -qt-sql-sqlite2
+ endif
 -- 
 1.7.3.4
