@@ -1,33 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2011 20:32:05 +0100
-Subject: [Buildroot] [PATCH 49/55] Improve handling of mdev/udev
-In-Reply-To: <4D752973.3090004@carallon.com>
-References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
-	<f92465f9de8bcd24cf2c974b158a600a84e96422.1291582352.git.thomas.petazzoni@free-electrons.com>
-	<4D752973.3090004@carallon.com>
-Message-ID: <20110307203205.69bc844a@surf>
+From: Daniele Salvatore Albano - Lavoro <info@daccii.it>
+Date: Mon, 07 Mar 2011 20:42:28 +0100
+Subject: [Buildroot] Conditional patches (php package)
+Message-ID: <4D753524.5050306@daccii.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 07 Mar 2011 18:52:35 +0000
-William Wagner <will_wagner@carallon.com> wrote:
+Hi to all,
 
-> What is the status of this patch? Will it or something similar get 
-> merged this development cycle. I'm looking to update to a newer 
-> buildroot version internally and I'll either need this patch or 
-> something I've written myself and would rather stay in sync with upstream.
+i'm trying to add support for php 5.3(.5), mantaining the ability to 
+compile php 5.2(.17) for compatibility reasons.
 
-I have updated this patch set last week to take into account comments
-from Peter, so I hope to be able to send it rather soon.
+The main problem is a patch that is in php 5.3.5 sources but not in 
+5.2.17 sources so it needed to be applied conditionally.
 
-Regards!
+The, only one, patch is 
+php-5.2.16-fix-build-when-__GMP_BITS_PER_MP_LIMB-is-not-defined.patch 
+and it seems related to an extension (gmp in the name).
 
-Thomas
+Can someone give me an hint?
+
+
+Thank you,
+
+Best Regards,
+Daniele
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+____________________________________________________________
+                                         |
+Daniele Salvatore Albano                | web site:
+  IT Consultant                          | http://www.daccii.it
+  Website Design and Development         |
+  Software Engineer and Developer        | e-mail:
+  Linux Servers SetUp And Administration | info at daccii.it
+  Embedded Network Solutions             | d.albano at gmail.com
+
+Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
+questo messaggio sono riservate ed a uso esclusivo del destinatario. 
+Qualora il messaggio in parola Le fosse pervenuto per errore, La 
+invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
+dandocene gentilmente comunicazione. Grazie.
+Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
+that this message contains confidential information intended only for 
+the use of the addressee. If you are not the addressee, and have 
+received this message by mistake, please delete it and immediately 
+notify us. You may not copy or disseminate this message to anyone. Thank 
+you.
