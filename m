@@ -1,38 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2011 19:41:06 +0100
-Subject: [Buildroot] toolchain into the root disk
-In-Reply-To: <AANLkTinAL=LOhtUzChPu1xjnebf9PaXyJjmMknpthOrL@mail.gmail.com>
-References: <AANLkTi=tEiD9=biree-6EzC5qN_6ZL0r=tyhC0WPtpm1@mail.gmail.com>
-	<20110307143332.3afe2773@surf>
-	<AANLkTim0Up1xxGFx8AAg-_BWSNXgiJDjRV-3w1eaV9+m@mail.gmail.com>
-	<20110307182124.555f16ab@surf>
-	<AANLkTinAL=LOhtUzChPu1xjnebf9PaXyJjmMknpthOrL@mail.gmail.com>
-Message-ID: <20110307194106.3e980b0c@surf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 Mar 2011 18:55:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 3391] Add support for specifying an external
+	kernel tree
+In-Reply-To: <bug-3391-163@https.bugs.busybox.net/>
+References: <bug-3391-163@https.bugs.busybox.net/>
+Message-ID: <20110307185506.2F7988E217@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 7 Mar 2011 17:46:28 +0000
-Max <themaxmail@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=3391
 
-> >Do you really need a native toolchain on the target ? What do you want
-> >to build on the target ?
-> 
-> I prefer to have the toolchain also on the target for quick recompilation
-> during debugging phase =P
+--- Comment #1 from Will Wagner <will_wagner@carallon.com>  ---
+Martin,
 
-I don't see why having the toolchain on the target makes it any
-quicker. Just cross-compile your application, make your root filesystem
-mounted over NFS, and use cross-debugging. There are zero extra steps
-when compared to native building your application.
+I have used this a bit and it seems fine. One addition I have hacked in is an
+option to allow the output files to reside in the buildroot output folder using
+the O= option to kernel make.
 
-Regards,
+This allows me to have a directory containing the kernel source which does not
+get modified by a build and then the build files go into
+$(O)/build/linux-custom. If you are interested I could probably clean up my
+patch and submit.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
