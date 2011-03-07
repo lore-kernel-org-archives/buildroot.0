@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Mar 2011 16:07:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 3403] New: libgpg-error: bump to version 1.10
-Message-ID: <bug-3403-163@https.bugs.busybox.net/>
+Date: Mon,  7 Mar 2011 16:08:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 3409] New: libgpg-error: download from gnupg.org
+Message-ID: <bug-3409-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3403
+https://bugs.busybox.net/show_bug.cgi?id=3409
 
-           Summary: libgpg-error: bump to version 1.10
+           Summary: libgpg-error: download from gnupg.org
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -25,11 +25,10 @@ https://bugs.busybox.net/show_bug.cgi?id=3403
    Estimated Hours: 0.0
 
 
-Created attachment 3091
-  --> https://bugs.busybox.net/attachment.cgi?id=3091
-patch
+Change download site from ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error to
+ftp://ftp.gnupg.org/gcrypt/libgpg-error .
 
-Bump libgpg-error to version 1.10
+The first one doesn't work.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
