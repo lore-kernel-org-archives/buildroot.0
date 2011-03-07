@@ -1,32 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Mar 2011 19:18:27 +0000 (UTC)
-Subject: [Buildroot] [Bug 3391] Add support for specifying an external
-	kernel tree
-In-Reply-To: <bug-3391-163@https.bugs.busybox.net/>
-References: <bug-3391-163@https.bugs.busybox.net/>
-Message-ID: <20110307191827.E30C38F3CA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Mar 2011 20:32:05 +0100
+Subject: [Buildroot] [PATCH 49/55] Improve handling of mdev/udev
+In-Reply-To: <4D752973.3090004@carallon.com>
+References: <cover.1291582350.git.thomas.petazzoni@free-electrons.com>
+	<f92465f9de8bcd24cf2c974b158a600a84e96422.1291582352.git.thomas.petazzoni@free-electrons.com>
+	<4D752973.3090004@carallon.com>
+Message-ID: <20110307203205.69bc844a@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3391
+On Mon, 07 Mar 2011 18:52:35 +0000
+William Wagner <will_wagner@carallon.com> wrote:
 
---- Comment #2 from Martin Hicks <mort@bork.org>  ---
+> What is the status of this patch? Will it or something similar get 
+> merged this development cycle. I'm looking to update to a newer 
+> buildroot version internally and I'll either need this patch or 
+> something I've written myself and would rather stay in sync with upstream.
 
-> 
-> I have used this a bit and it seems fine. One addition I have hacked in is an
-> option to allow the output files to reside in the buildroot output folder using
-> the O= option to kernel make.
+I have updated this patch set last week to take into account comments
+from Peter, so I hope to be able to send it rather soon.
 
-Yeah, good idea.  If you send me a patch I'll wrap it up as one patch for Peter
-and repost to bugzilla.
+Regards!
 
-Thanks,
-mh
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
