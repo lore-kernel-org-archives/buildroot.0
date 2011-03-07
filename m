@@ -1,29 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2011 14:51:48 +0100
-Subject: [Buildroot] Qtopia 4.4.3 qmake build problem
- BR2_VERSION=0.10.0-svn
-In-Reply-To: <4D74D7AA.4030500@kelvatek.com>
-References: <4D74D7AA.4030500@kelvatek.com>
-Message-ID: <20110307145148.4126f404@surf>
+Date: Mon, 7 Mar 2011 14:54:43 +0100
+Subject: [Buildroot] How to make iptables binary for android devices
+In-Reply-To: <AANLkTiknB2CoHWVH-buJuVRH5ZC3bmWu9-YVp8X+n1hW@mail.gmail.com>
+References: <AANLkTiknB2CoHWVH-buJuVRH5ZC3bmWu9-YVp8X+n1hW@mail.gmail.com>
+Message-ID: <20110307145443.5f5a60c0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Krzysztof,
+Hello,
 
-On Mon, 07 Mar 2011 14:03:38 +0100
-Krzysztof Kanas <k.kanas@kelvatek.com> wrote:
+On Fri, 4 Mar 2011 11:52:38 -0500
+Preetam Bhosle <preetb123@gmail.com> wrote:
 
-> I am new here so I don't know if this problem occurred to anyone before.
-> I did some searching but haven't found anything similar to my case.
-> 
-> My version of buildroot is  BR2_VERSION=0.10.0-svn
+> i am trying to cross-compile iptables to work on android devices(ARM
+> processor). I tried, but i couldn't do it. please explain in detail(as
+> i am a beginner to this) how can i make iptables binary that will be
+> installed and used on android devices.
 
-This is an horribly old Buildroot version, for which the community is
-unlikely to provide support. Are you able to reproduce on a recent
-stable version ?
+This is out-of-topic for this list. Buildroot is an embedded Linux
+build system, which produces a traditional Linux userspace, with a
+traditional C library, Busybox, etc. Android has a completely custom
+userspace, with a specific C library (Bionic), a specific
+reimplementation of Busybox (Toolbox). This list is not the appropriate
+place to ask about how to compile iptables for an ARM Android device.
+
+> please help. i need this urgently.
+
+Hint when working with the open-source community: never say you need
+something urgently. It will just make people go away and never answer
+your question.
 
 Regards,
 
