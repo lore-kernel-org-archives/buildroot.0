@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2011 21:02:40 +0100
-Subject: [Buildroot] Conditional patches (php package)
-In-Reply-To: <4D753524.5050306@daccii.it>
-References: <4D753524.5050306@daccii.it>
-Message-ID: <20110307210240.66796e0b@surf>
+Date: Mon,  7 Mar 2011 22:21:22 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/dev-handling
+Message-ID: <cover.1299532878.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 07 Mar 2011 20:42:28 +0100
-Daniele Salvatore Albano - Lavoro <info@daccii.it> wrote:
+The following changes since commit 0a064b48c9d1044b05aee65272f5af7f28879473:
+  Gustavo Zacarias (1):
+        gst-ffmpeg: bump to version 0.10.11
 
-> i'm trying to add support for php 5.3(.5), mantaining the ability to 
-> compile php 5.2(.17) for compatibility reasons.
-> 
-> The main problem is a patch that is in php 5.3.5 sources but not in 
-> 5.2.17 sources so it needed to be applied conditionally.
-> 
-> The, only one, patch is 
-> php-5.2.16-fix-build-when-__GMP_BITS_PER_MP_LIMB-is-not-defined.patch 
-> and it seems related to an extension (gmp in the name).
-> 
-> Can someone give me an hint?
+are available in the git repository at:
 
-The package infrastructure has the following behaviour :
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.05/dev-handling
 
- *) If there are patches named <pkg>-<pkgversion>*.patch, then they are
-    applied, and only those are applied.
+Thomas Petazzoni (2):
+      Simplify udev startup script
+      Allow several device tables and split in two parts our device table
 
- *) Otherwise, patches named <pkg>*.patch are applied, as well as
-    <pkg>-<pkgversion>/*.patch if the <pkg>-<pkgversion> directory
-    exists.
+Yegor Yefremov (1):
+      Create menu entry to select device creation method
 
-See the $(BUILD_DIR)/%/.stamp_patched: target in
-package/Makefile.package.in for more details.
+ fs/Config.in                        |   41 +++++++-
+ fs/common.mk                        |   14 ++-
+ linux/linux.mk                      |    7 ++
+ package/busybox/S10mdev             |   22 ++++
+ package/busybox/busybox.mk          |   15 +++
+ package/makedevs/README             |   35 +++++++
+ package/udev/S10udev                |   34 -------
+ target/generic/device_table.txt     |  186 ++--------------------------------
+ target/generic/device_table_dev.txt |  142 ++++++++++++++++++++++++++
+ 9 files changed, 276 insertions(+), 220 deletions(-)
+ create mode 100644 package/busybox/S10mdev
+ create mode 100644 package/makedevs/README
+ create mode 100644 target/generic/device_table_dev.txt
 
-Regards,
-
-Thomas
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
