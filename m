@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Mar 2011 15:06:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 3379] New: New Package:  bonnie++
-Message-ID: <bug-3379-163@https.bugs.busybox.net/>
+Date: Mon,  7 Mar 2011 15:18:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 3385] New: New Package: cryptsetup
+Message-ID: <bug-3385-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3379
+https://bugs.busybox.net/show_bug.cgi?id=3385
 
-           Summary: New Package:  bonnie++
+           Summary: New Package: cryptsetup
            Product: buildroot
-           Version: 2011.02
+           Version: unspecified
           Platform: All
         OS/Version: All
             Status: NEW
@@ -25,16 +25,17 @@ https://bugs.busybox.net/show_bug.cgi?id=3379
    Estimated Hours: 0.0
 
 
-Created attachment 3067
-  --> https://bugs.busybox.net/attachment.cgi?id=3067
-patch file
+Created attachment 3073
+  --> https://bugs.busybox.net/attachment.cgi?id=3073
+cryptsetup patch
 
-Bonnie++ is a useful benchmark program for testing filesystem performance.
+This package provides the userland tools to create and manage encrypted block
+devices using dm-crypt and LUKS.
 
-This patch adds the bonnie package.  It was posted to the mailing list in late
-January 2011 and I have enhanced the patch to address feedback from Thomas
-Petazzoni (spacing issues, unnecessary bits in the .mk file) and Thomas
-Petazzoni (C++ dependency)
+I posted three iterations of the patch, responding to feedback and learning how
+dependencies in buildroot function.  The last patch posted by me on Feb 7, 2011
+to the list was regarding having to specify a config option to the STAGING_DIR
+when I switched to using an external toolchain.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
