@@ -1,56 +1,40 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Mar 2011 16:04:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 3391] New: Add support for specifying an external
-	kernel tree
-Message-ID: <bug-3391-163@https.bugs.busybox.net/>
+Date: Mon,  7 Mar 2011 16:06:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 3397] New: New Package: cryptsetup
+Message-ID: <bug-3397-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3391
+https://bugs.busybox.net/show_bug.cgi?id=3397
 
-           Summary: Add support for specifying an external kernel tree
+           Summary: New Package: cryptsetup
            Product: buildroot
            Version: unspecified
-          Platform: All
-        OS/Version: All
+          Platform: PC
+        OS/Version: Linux
             Status: NEW
-          Severity: enhancement
+          Severity: minor
           Priority: P5
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mort at bork.org
+        ReportedBy: info at daccii.it
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-Created attachment 3079
-  --> https://bugs.busybox.net/attachment.cgi?id=3079
-external kernel tree patch
+Created attachment 3085
+  --> https://bugs.busybox.net/attachment.cgi?id=3085
+Patch to add cryptsetup support
 
-I didn't get any comments from the list, so I'm posting this here so I doesn't
-get lost.  One thing that I changed from my original post is to conditionally
-create
-the .stamp_{downloaded,extracted,patched} files.  Doing do unconditionally
-causes unnecessary invocation of make in the kernel directory during each
-rebuild.
+This package adds cryptsetup support to buildroot.
 
-From my RFC e-mail to the buildroot list:
-
-I wanted to compile a kernel from an external git tree, so adding
-support for using this tree as the kernel source for buildroot
-seemed logical.
-
-The thing I'm seeking comments on is my short-circuiting of
-the .stamp_{downloaded,extraced,patched} bits.  Can someone
-suggest a more elegant way of doing this?
-
-..I removed patching support, since you should probably be using
-some other tool to manage patches in the external tree anyways.
-
-Comments appreciated
+NOTE:
+i've seen that there is an opened bug (#3385) that add a cryptsetup package but
+mine handle more stuff (disable selinux, copy only needed stuff, check for udev
+and has libgpg-error in deps) so i've opened a new bug
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
