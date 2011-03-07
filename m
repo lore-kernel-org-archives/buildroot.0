@@ -1,142 +1,89 @@
-From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
-Date: Mon, 07 Mar 2011 18:27:37 +0100
-Subject: [Buildroot] [PATCH] libv4l: Add new package libv4l
-In-Reply-To: <20110307144212.337d7778@surf>
-References: <1299253620-10707-1-git-send-email-schwarzkopf@sensortherm.de>
-	<20110307144212.337d7778@surf>
-Message-ID: <4D751589.2050408@sensortherm.de>
+From: Max <themaxmail@gmail.com>
+Date: Mon, 7 Mar 2011 17:46:28 +0000
+Subject: [Buildroot] toolchain into the root disk
+In-Reply-To: <20110307182124.555f16ab@surf>
+References: <AANLkTi=tEiD9=biree-6EzC5qN_6ZL0r=tyhC0WPtpm1@mail.gmail.com>
+	<20110307143332.3afe2773@surf>
+	<AANLkTim0Up1xxGFx8AAg-_BWSNXgiJDjRV-3w1eaV9+m@mail.gmail.com>
+	<20110307182124.555f16ab@surf>
+Message-ID: <AANLkTinAL=LOhtUzChPu1xjnebf9PaXyJjmMknpthOrL@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>Just curious, which toolchain have you used ?
 
-i have made a new patch with the changes.
+I built a x86-powerpc64 cross compiler based on gcc-4.5.2 and glibc-2.12.2
 
-Thanks for your response!
+>In the mean time, you can force the GCC version by modifying the code,
+>but you'll very likely have issues when building gcc for the target.
 
-The libv4l utilities are in my next patch.
+I will take the risk =)
 
-Regards,
+>Do you really need a native toolchain on the target ? What do you want
+>to build on the target ?
 
-Klaus
+I prefer to have the toolchain also on the target for quick recompilation
+during
+debugging phase =P
 
+__
+Massimiliano
 
+On Mon, Mar 7, 2011 at 5:21 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Am 07.03.2011 14:42, schrieb Thomas Petazzoni:
-> Hello Klaus,
+> Hello,
 >
-> Thanks for this new package. A couple of comments below.
+> On Mon, 7 Mar 2011 16:54:23 +0000
+> Max <themaxmail@gmail.com> wrote:
 >
-> On Fri,  4 Mar 2011 16:47:00 +0100
-> Klaus Schwarzkopf<schwarzkopf@sensortherm.de>  wrote:
+> > the BR2_PACKAGE_GCC_TARGET seams to me to work only with the internal
+> > toolchain.
 >
->> --- /dev/null
->> +++ b/package/libv4l/Config.in
->> @@ -0,0 +1,10 @@
->> +config BR2_PACKAGE_LIBV4L
->> +	bool "libv4l"
->> +	depends on BR2_LARGEFILE
->> +	help
->> +	  	libv4l is an accompanying collection of libraries that adds a thin abstraction layer on top of video4linux2 (V4L2) devices.
->> +
->> +		http://freshmeat.net/projects/libv4l
+> Yes. Nobody has done the effort on getting BR2_PACKAGE_GCC_TARGET to
+> work with external toolchain as of today. As said previously, Buildroot
+> is a cross-compiling environment, so the need of a toolchain on the
+> target is not very common.
 >
-> The help text indentation should be one tab + 2 spaces, and should be
-> wrapped at a reasonable length (~80 columns).
+> > I'm creating a root disk for a powerpc64 architecture. As build root does
+> > not support powerpc64, I'm
+> > using and external toolchain. With few workarounds evething works fine.
 >
->> +#############################################################
->> +#
->> +# libv4l
->> +#
->> +#############################################################
->> +LIBV4L_VERSION = 0.8.1
+> Just curious, which toolchain have you used ?
 >
-> Version 0.8.3 is the latest release. Any reason not to use it ?
+> > When I use BR2_PACKAGE_GCC_TARGET=y the tool tries to download gcc but
+> the
+> > version is not
+> > define so it tries to get the file gcc-.tar.bz2.
 >
->> +LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
->> +LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
->> +LIBV4L_INSTALL_STAGING = YES
->> +LIBV4L_INSTALL_TARGET = YES
+> Yes, correct.
 >
->> +LIBV4L_CONF_OPT = --enable-shared \
->> +		  --enable-static \
+> > Can you please tell me where in the tool the gcc version is set? I was
+> not
+> > able to spot the location.
 >
-> Since you're using the GENTARGETS infrastructure, this line is useless.
+> It isn't set in the external toolchain case, that's the problem. I now
+> Gustavo Zacarias has planned to rework the gcc handling, and it should
+> probably fix this problem.
 >
->> +
->> +define LIBV4L_BUILD_CMDS
->> + 	#$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
+> In the mean time, you can force the GCC version by modifying the code,
+> but you'll very likely have issues when building gcc for the target.
 >
-> Comment, remove.
+> Do you really need a native toolchain on the target ? What do you want
+> to build on the target ?
 >
->> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib PREFIX=/usr LINKTYPE=static
->> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib PREFIX=/usr
->
-> static linking is only needed when BR2_PREFER_STATIC_LIB is used. So
-> something like :
->
-> LIBV4L_MAKE_OPTS = PREFIX=/usr
-> ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> LIBV4L_MAKE_OPTS += LINKTYPE=static
-> endif
->
-> define LIBV4L_BUILD_CMDS
-> 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib $(LIBV4AL_MAKE_OPTS)
-> endif
->
-> Moreover, why do you build only the library ? There are some utilities
-> in utils/ that may be interesting to build (not all of them, since at
-> least one of them depends on Qt, and we don't want libv4l to depend on
-> Qt). You could add a sub-option "Install libv4l utils" to be able to
-> selectively install or not the libv4l utilities.
->
->> +#CFLAGS=-DO_LARGEFILE=0400000
->
-> Comment, remove.
->
->> +endef
->> +
->> +define LIBV4L_INSTALL_STAGING_CMDS
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l1/libv4l1.a $(STAGING_DIR)/usr/lib/libv4l1.a
->> + 	$(INSTALL) -D -m 0644 $(@D)/lib/include/libv4l1.h $(STAGING_DIR)/usr/include/libv4l1.h
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l1/libv4l1.so* $(STAGING_DIR)/usr/lib
->> +
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l2/libv4l2.a $(STAGING_DIR)/usr/lib/libv4l2.a
->> + 	$(INSTALL) -D -m 0644 $(@D)/lib/include/libv4l2.h $(STAGING_DIR)/usr/include/libv4l2.h
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l2/libv4l2.so* $(STAGING_DIR)/usr/lib
->> +
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4lconvert/libv4lconvert.a $(STAGING_DIR)/usr/lib/libv4l2.a
->> + 	$(INSTALL) -D -m 0644 $(@D)/lib/include/libv4lconvert.h $(STAGING_DIR)/usr/include/libv4lconvert.h
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4lconvert/libv4lconvert.so* $(STAGING_DIR)/usr/lib
->> +endef
->> +
->> +define LIBV4L_INSTALL_TARGET_CMDS
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l1/libv4l1.so* $(TARGET_DIR)/usr/lib
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4l2/libv4l2.so* $(TARGET_DIR)/usr/lib
->> + 	$(INSTALL) -D -m 0755 $(@D)/lib/libv4lconvert/libv4lconvert.so* $(TARGET_DIR)/usr/lib
->> +endef
->
-> Why don't you use the "make install" target here ? The libv4l Makefile
-> supports the $(DESTDIR) variable, so something like:
->
-> define LIBV4L_INSTALL_STAGING_CMDS
-> 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
-> endif
->
-> define LIBV4L_INSTALL_TARGET_CMDS
-> 	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-> endif
->
-> should work.
->
->> +$(eval $(call GENTARGETS,package,libv4l))
->> +#$(eval $(call AUTOTARGETS,package,libv4l))
->
-> Comment, remove.
->
-> Regards!
+> Regards,
 >
 > Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110307/fd0b1fa9/attachment.html>
