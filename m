@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Mar 2011 16:06:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 3397] New: New Package: cryptsetup
-Message-ID: <bug-3397-163@https.bugs.busybox.net/>
+Date: Mon,  7 Mar 2011 16:07:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 3403] New: libgpg-error: bump to version 1.10
+Message-ID: <bug-3403-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3397
+https://bugs.busybox.net/show_bug.cgi?id=3403
 
-           Summary: New Package: cryptsetup
+           Summary: libgpg-error: bump to version 1.10
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -25,16 +25,11 @@ https://bugs.busybox.net/show_bug.cgi?id=3397
    Estimated Hours: 0.0
 
 
-Created attachment 3085
-  --> https://bugs.busybox.net/attachment.cgi?id=3085
-Patch to add cryptsetup support
+Created attachment 3091
+  --> https://bugs.busybox.net/attachment.cgi?id=3091
+patch
 
-This package adds cryptsetup support to buildroot.
-
-NOTE:
-i've seen that there is an opened bug (#3385) that add a cryptsetup package but
-mine handle more stuff (disable selinux, copy only needed stuff, check for udev
-and has libgpg-error in deps) so i've opened a new bug
+Bump libgpg-error to version 1.10
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
