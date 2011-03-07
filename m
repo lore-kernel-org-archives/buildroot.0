@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  7 Mar 2011 22:22:45 +0100
-Subject: [Buildroot] [PATCH 1/6] imagemagick: remove *-config scripts from
-	TARGET_DIR
-In-Reply-To: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50e73c6f783d38c17d7bafc4bcfd9a6e826b0d73.1299532965.git.thomas.petazzoni@free-electrons.com>
+Date: Mon,  7 Mar 2011 22:22:44 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/remove-config-scripts
+Message-ID: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/imagemagick/imagemagick.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+The following changes since commit 0a064b48c9d1044b05aee65272f5af7f28879473:
+  Gustavo Zacarias (1):
+        gst-ffmpeg: bump to version 0.10.11
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 97c0041..7955db7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -80,4 +80,14 @@ else
- IMAGEMAGICK_CONF_OPT += --without-tiff
- endif
- 
-+define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
-+		   $(addsuffix -config,			\
-+		     Magick MagickCore MagickWand Wand Magick++))
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+IMAGEMAGICK_POST_INSTALL_TARGET_HOOKS += IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
-+endif
-+
- $(eval $(call AUTOTARGETS,package,imagemagick))
+are available in the git repository at:
+
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.05/remove-config-scripts
+
+Thomas Petazzoni (6):
+      imagemagick: remove *-config scripts from TARGET_DIR
+      neon: remove neon-config script from TARGET_DIR
+      libdnet: remove dnet-config script from TARGET_DIR
+      libpng: remove libpng*-config scripts from TARGET_DIR
+      libxml2: remove xml2-config script from TARGET_DIR
+      libxslt: remove xslt-config script from TARGET_DIR
+
+ package/imagemagick/imagemagick.mk |   10 ++++++++++
+ package/libdnet/libdnet.mk         |    8 ++++++++
+ package/libpng/libpng.mk           |    9 +++++++++
+ package/libxml2/libxml2.mk         |    8 ++++++++
+ package/libxslt/libxslt.mk         |    8 ++++++++
+ package/neon/neon.mk               |    8 ++++++++
+ 6 files changed, 51 insertions(+), 0 deletions(-)
+
+Thanks,
 -- 
-1.7.0.4
+Thomas Petazzoni
