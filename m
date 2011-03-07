@@ -1,40 +1,96 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 7 Mar 2011 16:42:54 -0500
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.05/remove-config-scripts
-In-Reply-To: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201103071642.55380.vapier@gentoo.org>
+From: Steve Calfee <nospamcalfee@yahoo.com>
+Date: Mon, 7 Mar 2011 13:46:35 -0800 (PST)
+Subject: [Buildroot] [OT?] Re:  Applying custom kernel patches
+In-Reply-To: <20110307145014.6fb32bec@surf>
+References: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+	<518665.81144.qm@web161818.mail.bf1.yahoo.com>
+	<4D716A17.1040008@wp.pl>
+	<100123.65141.qm@web161814.mail.bf1.yahoo.com>
+	<20110307145014.6fb32bec@surf>
+Message-ID: <483121.70776.qm@web161801.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, March 07, 2011 16:22:44 Thomas Petazzoni wrote:
-> The following changes since commit
-> 0a064b48c9d1044b05aee65272f5af7f28879473: Gustavo Zacarias (1):
->         gst-ffmpeg: bump to version 0.10.11
-> 
-> are available in the git repository at:
-> 
->   git://git.busybox.net/~tpetazzoni/git/buildroot
-> for-2011.05/remove-config-scripts
-> 
-> Thomas Petazzoni (6):
->       imagemagick: remove *-config scripts from TARGET_DIR
->       neon: remove neon-config script from TARGET_DIR
->       libdnet: remove dnet-config script from TARGET_DIR
->       libpng: remove libpng*-config scripts from TARGET_DIR
->       libxml2: remove xml2-config script from TARGET_DIR
->       libxslt: remove xslt-config script from TARGET_DIR
+----- Original Message ----
 
-told you we should have adopted my one line change to the top level install :p
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110307/d46db732/attachment.asc>
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: buildroot at busybox.net
+> Sent: Mon, March 7, 2011 5:50:14 AM
+> Subject: Re: [Buildroot] [OT?] Re:  Applying custom kernel patches
+> 
+> Hello Steeve,
+> 
+> On Fri, 4 Mar 2011 14:56:28 -0800 (PST)
+> Steve Calfee  <nospamcalfee@yahoo.com>  wrote:
+> 
+> > Yes, Docs are always nice. For now though from my boards  defconfig:
+> > 
+> > #
+> > # Kernel
+> > #
+> >  BR2_LINUX_KERNEL=y
+> > BR2_LINUX_KERNEL_2_6_36=y
+> > #  BR2_LINUX_KERNEL_CUSTOM_VERSION is not set
+> > #  BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
+> >  BR2_LINUX_KERNEL_VERSION="2.6.36.1"
+> >  
+BR2_LINUX_KERNEL_PATCH="$(TOPDIR)/target/device/beagleboard/kernel-patches/"
+> >  # BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
+> >  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> >  
+>BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(TOPDIR)/target/device/beagleboard/beagleboard-linux-2.6.36.1.config"
+>
+> > 
+> > BR2_LINUX_KERNEL_UIMAGE=y
+> > # BR2_LINUX_KERNEL_ZIMAGE is not  set
+> > 
+> > and the files I have put in target/device:
+> > 
+> > 
+> > ~/buildroot/bbkernel/target/device$ tree beagleboard/
+> >  beagleboard/
+> > |-- Config.in
+> > |-- Makefile.in
+> > |-- README
+> > |--  beagleboard-busybox-1.17.x.config
+> > |--  beagleboard-linux-2.6.36.1.config
+> > |-- beagleboard_defconfig
+> > |--  beagleboard_external_toolchain_defconfig
+> > |-- dropbear
+> > |    |-- dropbear_dss_host_key
+> > |   `-- dropbear_rsa_host_key
+> > |--  kernel-patches
+> > |   `--  linux-kernel-2.6.36-bb-xm-usb-pwr.patch
+> > |-- patchrootfs.sh
+> > |-- shadow
+> > `--  skeleton
+> >     `-- etc
+> >         |--  dropbear
+> >         |   |--  dropbear_dss_host_key
+> >         |   `--  dropbear_rsa_host_key
+> >         |--  network
+> >         |   `--  interfaces
+> >         `-- shadow
+> > 
+> > 6  directories, 16 files
+> 
+> This is a good organisation, even though in a  recent Buildroot
+> (2011.02), the board-specific stuff would rather go  into
+> board/<manufacturer>/<product>, and there would be  no
+> board-specific Config.in and Makefile.in. The rest would look  essential
+> the same.
+> 
+
+Hi Thomas,
+
+Looking at those two files, I guess Makefile.in could be replace with more 
+BR2_defines, but how do you replace a custom config system? I like to understand 
+"the plan" and I will try to comply with the design.
+
+Regards, Steve
+
+
+      
