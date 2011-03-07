@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  7 Mar 2011 22:22:48 +0100
-Subject: [Buildroot] [PATCH 4/6] libpng: remove libpng*-config scripts from
-	TARGET_DIR
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 7 Mar 2011 16:42:54 -0500
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/remove-config-scripts
 In-Reply-To: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1299532965.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ac7dbcf925e084a4c2e1d22d53d5d7bdb829d4d6.1299532965.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201103071642.55380.vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libpng/libpng.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+On Monday, March 07, 2011 16:22:44 Thomas Petazzoni wrote:
+> The following changes since commit
+> 0a064b48c9d1044b05aee65272f5af7f28879473: Gustavo Zacarias (1):
+>         gst-ffmpeg: bump to version 0.10.11
+> 
+> are available in the git repository at:
+> 
+>   git://git.busybox.net/~tpetazzoni/git/buildroot
+> for-2011.05/remove-config-scripts
+> 
+> Thomas Petazzoni (6):
+>       imagemagick: remove *-config scripts from TARGET_DIR
+>       neon: remove neon-config script from TARGET_DIR
+>       libdnet: remove dnet-config script from TARGET_DIR
+>       libpng: remove libpng*-config scripts from TARGET_DIR
+>       libxml2: remove xml2-config script from TARGET_DIR
+>       libxslt: remove xslt-config script from TARGET_DIR
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 699561b..e64989d 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -22,5 +22,14 @@ endef
- 
- LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
- 
-+define LIBPNG_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config \
-+		 $(TARGET_DIR)/usr/bin/libpng-config
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+LIBPNG_POST_INSTALL_TARGET_HOOKS += LIBPNG_REMOVE_CONFIG_SCRIPTS
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libpng))
- $(eval $(call AUTOTARGETS,package,libpng,host))
--- 
-1.7.0.4
+told you we should have adopted my one line change to the top level install :p
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 836 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110307/d46db732/attachment.asc>
