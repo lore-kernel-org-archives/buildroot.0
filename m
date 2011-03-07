@@ -1,67 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2011 14:48:17 +0100
-Subject: [Buildroot] Applying custom kernel patches
-In-Reply-To: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
+Date: Mon, 7 Mar 2011 14:50:14 +0100
+Subject: [Buildroot] [OT?] Re:  Applying custom kernel patches
+In-Reply-To: <100123.65141.qm@web161814.mail.bf1.yahoo.com>
 References: <AANLkTi=_dHFneTLXe3+P1-cOM2dsLsQW6f_fgbK7hSQy@mail.gmail.com>
-Message-ID: <20110307144817.216eeec3@surf>
+	<518665.81144.qm@web161818.mail.bf1.yahoo.com>
+	<4D716A17.1040008@wp.pl>
+	<100123.65141.qm@web161814.mail.bf1.yahoo.com>
+Message-ID: <20110307145014.6fb32bec@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bruce,
+Hello Steeve,
 
-On Fri, 4 Mar 2011 21:15:30 +0000
-bruce bushby <bruce.bushby@gmail.com> wrote:
+On Fri, 4 Mar 2011 14:56:28 -0800 (PST)
+Steve Calfee <nospamcalfee@yahoo.com> wrote:
 
-> .....however I'm having some problems applying my patches. Everything
-> compiles 100% if I patch "/opt/buildroot/output/toolchain/linux-2.6.38-rc5",
-> however I would
-> like it to apply my patches after extracting the tar ball from
-> "/opt/buildroot/dl/linux-2.6.38-rc5.tar.bz2" when I run "make"
+> Yes, Docs are always nice. For now though from my boards defconfig:
 > 
-> I've tried placing my patches in:
-> /opt/buildroot/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
+> #
+> # Kernel
+> #
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_2_6_36=y
+> # BR2_LINUX_KERNEL_CUSTOM_VERSION is not set
+> # BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
+> BR2_LINUX_KERNEL_VERSION="2.6.36.1"
+> BR2_LINUX_KERNEL_PATCH="$(TOPDIR)/target/device/beagleboard/kernel-patches/"
+> # BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(TOPDIR)/target/device/beagleboard/beagleboard-linux-2.6.36.1.config"
 > 
-> I also tried putting them in
-> /opt/buildroot/package/linux/kernel-patches/0001-linux-2.6.38-rc5.patch
+> BR2_LINUX_KERNEL_UIMAGE=y
+> # BR2_LINUX_KERNEL_ZIMAGE is not set
 > 
-> Using "make menuconfig" under specified custom patches I added:
-> linux/kernel-patches/0001-linux-2.6.38-rc5.patch
+> and the files I have put in target/device:
 > 
-> ...but it won't apply the patch.
 > 
-> Any ideas?
+> ~/buildroot/bbkernel/target/device$ tree beagleboard/
+> beagleboard/
+> |-- Config.in
+> |-- Makefile.in
+> |-- README
+> |-- beagleboard-busybox-1.17.x.config
+> |-- beagleboard-linux-2.6.36.1.config
+> |-- beagleboard_defconfig
+> |-- beagleboard_external_toolchain_defconfig
+> |-- dropbear
+> |   |-- dropbear_dss_host_key
+> |   `-- dropbear_rsa_host_key
+> |-- kernel-patches
+> |   `-- linux-kernel-2.6.36-bb-xm-usb-pwr.patch
+> |-- patchrootfs.sh
+> |-- shadow
+> `-- skeleton
+>     `-- etc
+>         |-- dropbear
+>         |   |-- dropbear_dss_host_key
+>         |   `-- dropbear_rsa_host_key
+>         |-- network
+>         |   `-- interfaces
+>         `-- shadow
+> 
+> 6 directories, 16 files
 
-Do the following :
-
-	mkdir board/bruce_company/bruce_product/linux
-	cp ALL_YOUR_PATCHES board/bruce_company/bruce_product/linux
-
-All patches must have filenames that start with "linux-".
-
-Then, run make menuconfig, and use the following options :
-
-	Kernel
-		-> Linux Kernel
-			-> Kernel version (Custom version)
-			-> (2.6.XX) Kernel version
-			-> (board/bruce_company/bruce_product/linux) Custom kernel patches
-
-Of course, make sure your patches match the selected kernel version.
-
-Then, in order to save your configuration and make it a default :
-
-	make savedefconfig
-	mv defconfig configs/bruce_product_defconfig
-
-Now, you can build Buildroot with:
-
-	make bruce_product_defconfig
-	make
-
-Regards,
+This is a good organisation, even though in a recent Buildroot
+(2011.02), the board-specific stuff would rather go into
+board/<manufacturer>/<product>, and there would be no
+board-specific Config.in and Makefile.in. The rest would look essential
+the same.
 
 Thomas
 -- 
