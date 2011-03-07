@@ -1,30 +1,38 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Mon, 7 Mar 2011 17:51:58 +0000
-Subject: [Buildroot] gcc 4.2.4 libstdc++ locale support
-Message-ID: <AANLkTi=2d0MJicfXHAHnHCM7WUCpsb9ip87AmGtrghUq@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Mar 2011 19:41:06 +0100
+Subject: [Buildroot] toolchain into the root disk
+In-Reply-To: <AANLkTinAL=LOhtUzChPu1xjnebf9PaXyJjmMknpthOrL@mail.gmail.com>
+References: <AANLkTi=tEiD9=biree-6EzC5qN_6ZL0r=tyhC0WPtpm1@mail.gmail.com>
+	<20110307143332.3afe2773@surf>
+	<AANLkTim0Up1xxGFx8AAg-_BWSNXgiJDjRV-3w1eaV9+m@mail.gmail.com>
+	<20110307182124.555f16ab@surf>
+	<AANLkTinAL=LOhtUzChPu1xjnebf9PaXyJjmMknpthOrL@mail.gmail.com>
+Message-ID: <20110307194106.3e980b0c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 7 Mar 2011 17:46:28 +0000
+Max <themaxmail@gmail.com> wrote:
 
-I recently tried to build a toolchain with a combination of gcc 4.2.4,
-C++ support and locale support but it failed to build.
+> >Do you really need a native toolchain on the target ? What do you want
+> >to build on the target ?
+> 
+> I prefer to have the toolchain also on the target for quick recompilation
+> during debugging phase =P
 
-The problem seems to be caused by some patches that are applied to
-libstdc++ which are no longer compatible with the headers that current
-uClibc is installing. I removed the patches and the build proceeds,
-although I have no idea if any of the functionality is broken. The
-patches are:
+I don't see why having the toolchain on the target makes it any
+quicker. Just cross-compile your application, make your root filesystem
+mounted over NFS, and use cross-debugging. There are zero extra steps
+when compared to native building your application.
 
-toolchain/gcc/4.2.4/200-uclibc-locale.patch
-toolchain/gcc/4.2.4/203-uclibc-locale-no__x.patch
-toolchain/gcc/4.2.4/204-uclibc-locale-wchar_fix.patch
-toolchain/gcc/4.2.4/205-uclibc-locale-update.patch
-toolchain/gcc/4.2.4/306-libstdc++-namespace.patch
+Regards,
 
-Does anybody recall what they do or why they are needed?
-
-Thanks,
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
