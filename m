@@ -1,25 +1,31 @@
-From: bao bui <buiqbao@gmail.com>
-Date: Mon, 7 Mar 2011 22:33:41 -0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Mar 2011 09:08:17 +0100
 Subject: [Buildroot] cross compile python 2.6.5
-Message-ID: <AANLkTik0RWJA=Yqf2mMetqNQQbCse66Q8wzcO5Uhmr8-@mail.gmail.com>
+In-Reply-To: <AANLkTik0RWJA=Yqf2mMetqNQQbCse66Q8wzcO5Uhmr8-@mail.gmail.com>
+References: <AANLkTik0RWJA=Yqf2mMetqNQQbCse66Q8wzcO5Uhmr8-@mail.gmail.com>
+Message-ID: <20110308090817.6dea632b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-How can I add Python 2.6.5 to buildroot? I got the error message when
-configuring:
+On Mon, 7 Mar 2011 22:33:41 -0800
+bao bui <buiqbao@gmail.com> wrote:
 
-checking for %zd printf() format support... configure: error: cannot run
-test program while cross compiling
+> How can I add Python 2.6.5 to buildroot? I got the error message when
+> configuring:
 
-In the config.log file:
+We have Python 2.7.1 in Buildroot 2011.02. Why would you want to
+add an older Python version ?
 
-configure:25017: checking for %zd printf() format support
-configure:25021: error: cannot run test program while cross compiling
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110307/46045d7d/attachment.html>
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
