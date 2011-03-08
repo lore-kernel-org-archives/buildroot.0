@@ -1,38 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Mar 2011 07:29:11 +0100
-Subject: [Buildroot] [PATCH 0/8] Update GNU config support.
-In-Reply-To: <AANLkTi=AvAnwz+z0JEQB10_UzejTWYa4+E7W9c9dzWMF@mail.gmail.com>
-	(Will Newton's message of "Fri, 4 Mar 2011 16:13:00 +0000")
-References: <AANLkTikOo9+wsqSNNLRPLJncArhW22BhXa6eV5Vu=QhU@mail.gmail.com>
-	<87zkpjq20w.fsf@macbook.be.48ers.dk>
-	<AANLkTi=AvAnwz+z0JEQB10_UzejTWYa4+E7W9c9dzWMF@mail.gmail.com>
-Message-ID: <87sjuyktvs.fsf@macbook.be.48ers.dk>
+From: bao bui <buiqbao@gmail.com>
+Date: Mon, 7 Mar 2011 22:33:41 -0800
+Subject: [Buildroot] cross compile python 2.6.5
+Message-ID: <AANLkTik0RWJA=Yqf2mMetqNQQbCse66Q8wzcO5Uhmr8-@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+Hi,
 
- Will> On Fri, Feb 25, 2011 at 8:42 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
- >>>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
- >> 
- >> ?Will> We currently use a version of config.sub that is nearly 4 years old
- >> ?Will> and a version of config.guess that is nearly 2 years old.
- >> 
- >> ?Will> Since this package was last updated GNU config has merged a
- >> ?Will> couple of patches and moved to git. This means we cannot use cvs
- >> ?Will> up to update it any more, so we can get rid of all the files that
- >> ?Will> were kept around for that purpose.
+How can I add Python 2.6.5 to buildroot? I got the error message when
+configuring:
 
+checking for %zd printf() format support... configure: error: cannot run
+test program while cross compiling
 
- Will> Hi Peter,
+In the config.log file:
 
- Will> Did you get time to take another look at this?
-
-yes, looks good - Committed, thanks!
-
-
--- 
-Bye, Peter Korsgaard
+configure:25017: checking for %zd printf() format support
+configure:25021: error: cannot run test program while cross compiling
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110307/46045d7d/attachment.html>
