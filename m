@@ -1,15 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2011 11:19:36 +0100
+From: Desroches, Ludovic <Ludovic.Desroches@atmel.com>
+Date: Tue, 8 Mar 2011 12:40:19 +0100
 Subject: [Buildroot] alsa-utils and nctp troubles with 2011.02
-In-Reply-To: <F41B82AC38A41A41868925971DCBED9E06EEB9E9@rfomb01.corp.atmel.com>
 References: <F41B82AC38A41A41868925971DCBED9E06EEB9E9@rfomb01.corp.atmel.com>
-Message-ID: <20110308111936.0802c04e@surf>
+	<20110308111936.0802c04e@surf>
+Message-ID: <F41B82AC38A41A41868925971DCBED9E06EEB9EE@rfomb01.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+-----Original Message-----
+From: buildroot-bounces@busybox.net on behalf of Thomas Petazzoni
+Sent: Tue 3/8/2011 11:19 AM
+To: buildroot at busybox.net
+Subject: Re: [Buildroot] alsa-utils and nctp troubles with 2011.02
+ 
 Hello Ludovic,
 
 On Tue, 8 Mar 2011 10:23:47 +0100
@@ -108,8 +114,17 @@ host distribution ?
 Regards,
 
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+
+Sorry for the probably bad reply format, I have troubles with my usual mail client.
+
+Thank you for these answers, the problem was coming from too old cp (5.97)and tar (1.16) commands. My host distribution is a Debian 4.0. I have replaced them with more recent version and everything works fine.
+
+
+Regards,
+
+Ludovic Desroches
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110308/9a4fa073/attachment-0001.html>
