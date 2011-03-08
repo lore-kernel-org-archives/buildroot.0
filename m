@@ -1,37 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2011 13:55:28 +0100
-Subject: [Buildroot] alsa-utils and nctp troubles with 2011.02
-In-Reply-To: <F41B82AC38A41A41868925971DCBED9E06EEB9EE@rfomb01.corp.atmel.com>
-References: <F41B82AC38A41A41868925971DCBED9E06EEB9E9@rfomb01.corp.atmel.com>
-	<20110308111936.0802c04e@surf>
-	<F41B82AC38A41A41868925971DCBED9E06EEB9EE@rfomb01.corp.atmel.com>
-Message-ID: <20110308135528.494c0a89@surf>
+Date: Tue, 8 Mar 2011 13:58:43 +0100
+Subject: [Buildroot] cross compile python 2.6.5
+In-Reply-To: <AANLkTimMH6XCuPH7vyMr8RBy=M+XT=ZQeNn90h7t=D6X@mail.gmail.com>
+References: <AANLkTik0RWJA=Yqf2mMetqNQQbCse66Q8wzcO5Uhmr8-@mail.gmail.com>
+	<20110308090817.6dea632b@surf>
+	<AANLkTimMH6XCuPH7vyMr8RBy=M+XT=ZQeNn90h7t=D6X@mail.gmail.com>
+Message-ID: <20110308135843.62a06e55@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ludovic,
+Hello,
 
-On Tue, 8 Mar 2011 12:40:19 +0100
-"Desroches, Ludovic" <Ludovic.Desroches@atmel.com> wrote:
+Please do not reply to me directly, but to the list.
 
-> Sorry for the probably bad reply format, I have troubles with my
-> usual mail client.
+On Tue, 8 Mar 2011 04:03:03 -0800
+bao bui <buiqbao@gmail.com> wrote:
 
-Ouch, yes, bad reply format :-)
+> Thanks for reply.
+> 
+> I downloaded my buildroot version in October last year. It has the
+> Python 2.4.5 version.
 
-> Thank you for these answers, the problem was coming from too old cp
-> (5.97)and tar (1.16) commands. My host distribution is a Debian 4.0.
-> I have replaced them with more recent version and everything works
-> fine.
+Yes, we have updated the Python version in 2011.02.
 
-Ok, good to know. Debian 4.0 is no longer supported by the Debian
-project itself since February 2010, so I don't think it's really worth
-the effort to support Debian 4.0 as the host distribution in Buildroot.
+> How can I the Python version in my current buildroot?
 
-Peter, your opinion ?
+The easiest way is quite certainly to upgrade your Buildroot version to
+2011.02. Going this way would allow you to have the support from the
+community.
+
+The other way is to backport the patches that bump Python, ie at least:
+
+afe54f1008dee29af6338d8766381aad9e2871bd
+d82df10e90ee9457ea0baba2d6a766149d4b7c38
+10e1927e1a1bc21785b9482fc4ba70d3b4773854
+05ac95e04d0b9867194492f75f4713498e2ab7df
+e3418f69cf2f17d54dfb521adedbe8abf6e35927
+
+There many be dependencies on other patches as well, it's hard to say.
+Going this way, you probably won't have much support from the community.
 
 Regards,
 
