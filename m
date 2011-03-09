@@ -1,23 +1,22 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  9 Mar 2011 12:10:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 3451] New: fakeroot package: wrong FAKEROOT_SITE
-	variable
-Message-ID: <bug-3451-163@https.bugs.busybox.net/>
+Date: Wed,  9 Mar 2011 16:42:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 3457] New: alsamixergui: broken URL
+Message-ID: <bug-3457-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3451
+https://bugs.busybox.net/show_bug.cgi?id=3457
 
-           Summary: fakeroot package: wrong FAKEROOT_SITE variable
+           Summary: alsamixergui: broken URL
            Product: buildroot
            Version: 2010.11
           Platform: PC
         OS/Version: Linux
             Status: NEW
-          Severity: normal
+          Severity: major
           Priority: P5
          Component: Outdated package
         AssignedTo: unassigned at buildroot.uclibc.org
@@ -28,26 +27,29 @@ https://bugs.busybox.net/show_bug.cgi?id=3451
 
 Hello,
 
-  FAKEROOT_SITE points to the wrong URL within buildroot fakeroot package.
-  The following patch fixes this issue:
+  alsamixergui provides a broken URL, a fixed one:
 
-diff -Naur buildroot-2010.11/package/fakeroot//fakeroot.mk
-buildroot-2010.11.fix/package/fakeroot//fakeroot.mk
---- buildroot-2010.11/package/fakeroot//fakeroot.mk     2010-11-30
+
+diff -Naur buildroot-2010.11/package/alsamixergui//alsamixergui.mk
+buildroot-2010.11.fix/package/alsamixergui//alsamixergui.mk
+--- buildroot-2010.11/package/alsamixergui//alsamixergui.mk     2010-11-30
 15:52:43.000000000 +0000
-+++ buildroot-2010.11.fix/package/fakeroot//fakeroot.mk 2011-03-09
-12:01:14.636006340 +0000
++++ buildroot-2010.11.fix/package/alsamixergui//alsamixergui.mk 2011-03-09
+16:38:53.856006502 +0000
 @@ -5,7 +5,7 @@
  #############################################################
- FAKEROOT_VERSION:=1.9.5
- FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
--FAKEROOT_SITE:=http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/f/fakeroot/
-+FAKEROOT_SITE:=http://snapshot.debian.org/archive/debian/20080427T000000Z/pool/main/f/fakeroot/
- FAKEROOT_LIBTOOL_PATCH=NO
+ ALSAMIXERGUI_VERSION = 0.9.0rc2-1
+ ALSAMIXERGUI_SOURCE = alsamixergui_$(ALSAMIXERGUI_VERSION).orig.tar.gz
+-ALSAMIXERGUI_SITE =
+http://snapshot.debian.net/archive/2008/03/19/debian/pool/main/a/alsamixergui
++ALSAMIXERGUI_SITE =
+http://snapshot.debian.org/archive/debian/20080319T000000Z/pool/main/a/alsamixergui/
+ ALSAMIXERGUI_AUTORECONF = YES
+ ALSAMIXERGUI_INSTALL_STAGING = NO
+ ALSAMIXERGUI_INSTALL_TARGET = YES
 
- define FAKEROOT_PATCH_FAKEROOT_IN
 
-Cheers,
+  Best regards,
   -- Hector Oron
 
 -- 
