@@ -1,64 +1,56 @@
-From: Joe Woodward <jw@terrafix.co.uk>
-Date: Wed, 09 Mar 2011 12:08:59 +0000
-Subject: [Buildroot] 2011.02 pkg-config problems?
-In-Reply-To: <WC20110307121409.5600B6@terrafix.co.uk>
-References: <WC20110307121409.5600B6@terrafix.co.uk>
-Message-ID: <WC20110309120859.51018D@terrafix.co.uk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  9 Mar 2011 12:10:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 3451] New: fakeroot package: wrong FAKEROOT_SITE
+	variable
+Message-ID: <bug-3451-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some more information:
+https://bugs.busybox.net/show_bug.cgi?id=3451
 
-My build machine is running Ubuntu 10.04 (Lucid).
+           Summary: fakeroot package: wrong FAKEROOT_SITE variable
+           Product: buildroot
+           Version: 2010.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hector.oron at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Also, attached is a config that shows the problem when built using a
-stock 2011.02 Buildroot.
+
+Hello,
+
+  FAKEROOT_SITE points to the wrong URL within buildroot fakeroot package.
+  The following patch fixes this issue:
+
+diff -Naur buildroot-2010.11/package/fakeroot//fakeroot.mk
+buildroot-2010.11.fix/package/fakeroot//fakeroot.mk
+--- buildroot-2010.11/package/fakeroot//fakeroot.mk     2010-11-30
+15:52:43.000000000 +0000
++++ buildroot-2010.11.fix/package/fakeroot//fakeroot.mk 2011-03-09
+12:01:14.636006340 +0000
+@@ -5,7 +5,7 @@
+ #############################################################
+ FAKEROOT_VERSION:=1.9.5
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+-FAKEROOT_SITE:=http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/f/fakeroot/
++FAKEROOT_SITE:=http://snapshot.debian.org/archive/debian/20080427T000000Z/pool/main/f/fakeroot/
+ FAKEROOT_LIBTOOL_PATCH=NO
+
+ define FAKEROOT_PATCH_FAKEROOT_IN
 
 Cheers,
-Joe
+  -- Hector Oron
 
------Original Message-----
-From: "Joe Woodward" <jw@terrafix.co.uk>
-To: buildroot at busybox.net
-Date: Mon, 07 Mar 2011 12:14:09 +0000
-Subject: [Buildroot] 2011.02 pkg-config problems?
-
-> Since moving from the 2010.11 release to the 2011.02 release I've had
-> problems with some files destined for the target ending up in rather
-> strange places.
-> 
-> For example, when doing a Xorg or TinyX build (with GTK/Pango/Cairo)
-> the X fonts used to be place in:
-> 
-> {TARGET}/usr/share/fonts/X11/100dpi
-> {TARGET}/usr/share/fonts/X11/75dpi
-> {TARGET}/usr/share/fonts/X11/misc   ...and so on
-> 
-> But now they end up in:
-> 
-> {TARGET}/home/MYBUILDUSERNAME/PATH/TO/BUILD/FOLDER/ON/HOST/MARCHINE/\
->   ./output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/\
->   ./share/fonts/X11/100dpi ...and so on
-> 
-> Has any else experienced this?
-> 
-> I'm fairly certain its due to the bumping of pkg-config and
-> tweaks to it's --sysroot patches.
-> 
-> Any ideas about what to do?
-> 
-> Cheers,
-> Joe
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: testconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110309/0c44821d/attachment-0001.ksh>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
