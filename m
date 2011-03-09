@@ -1,36 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  9 Mar 2011 10:27:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 3445] New: Not working openssl-10.0.0d on 386sx
-Message-ID: <bug-3445-163@https.bugs.busybox.net/>
+From: Phil Edworthy <PHIL.EDWORTHY@renesas.com>
+Date: Wed, 09 Mar 2011 11:40:03 +0000
+Subject: [Buildroot] [PATCH] sh: Fix displayed name of CodeSourcery toolchain
+Message-ID: <1299670804-26606-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3445
 
-           Summary: Not working openssl-10.0.0d on 386sx
-           Product: buildroot
-           Version: 2011.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: milospokorny at seznam.cz
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ toolchain/toolchain-external/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-
-In buildroot configuration, selecting 'Target architecture variant' i386 and
-then running on 80386sx processor makes libcrypto generate SIGILL (running ssh,
-openvpn etc ). For this configuration, parametter "386" should be passed to
-configure script of openssl.
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 2ed65bf..d9a0034 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -87,7 +87,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+             - 970 glibc hard-float, 64 bits
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+-	bool "CodeSoucery PowerPC 2010.09"
++	bool "CodeSoucery SH 2010.09"
+ 	depends on BR2_sh
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -98,7 +98,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	  the following variants:
+             - SH4A, glibc, little endian
+             - SH4A, glibc, big endian
+-	    - SH4A, uClibc, little endian
++            - SH4A, uClibc, little endian
+             - SH4A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1
