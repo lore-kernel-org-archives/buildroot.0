@@ -1,36 +1,36 @@
-From: Alexander Yohananov <yohananov@gmail.com>
-Date: Wed, 9 Mar 2011 11:28:59 +0200
-Subject: [Buildroot] [PATCH] lockfile-progs: add dependency on liblockfile
-Message-ID: <AANLkTinX1TBoNM3j6NkHB0E36o4dnemnFRjjjk4ThDCJ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  9 Mar 2011 10:27:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 3445] New: Not working openssl-10.0.0d on 386sx
+Message-ID: <bug-3445-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexander Yohananov <yohananov@gmail.com>
----
-Hope it's made properly (using git format-patch -s --stat origin)
+https://bugs.busybox.net/show_bug.cgi?id=3445
 
- package/lockfile-progs/lockfile-progs.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+           Summary: Not working openssl-10.0.0d on 386sx
+           Product: buildroot
+           Version: 2011.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: milospokorny at seznam.cz
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/lockfile-progs/lockfile-progs.mkb/package/lockfile-progs/
-lockfile-progs.mk
-index f8d8cee..031712e 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -6,6 +6,7 @@
- LOCKFILE_PROGS_VERSION = 0.1.15
- LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
- LOCKFILE_PROGS_SITE =
-$(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
-+LOCKFILE_PROGS_DEPENDENCIES = liblockfile
 
- LOCKFILE_BINS = \
-  $(addprefix lockfile-,check create remove touch) \
+In buildroot configuration, selecting 'Target architecture variant' i386 and
+then running on 80386sx processor makes libcrypto generate SIGILL (running ssh,
+openvpn etc ). For this configuration, parametter "386" should be passed to
+configure script of openssl.
+
 -- 
-1.7.4
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110309/8520fcce/attachment.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
