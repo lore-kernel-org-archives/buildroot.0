@@ -1,58 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  9 Mar 2011 16:42:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 3457] New: alsamixergui: broken URL
-Message-ID: <bug-3457-163@https.bugs.busybox.net/>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 9 Mar 2011 18:09:51 +0000 (UTC)
+Subject: [Buildroot] Is PHP download link in php.mk broken?
+Message-ID: <il8fpe$k15$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3457
+I enabled the php package today, and it appears that the download link
+used by buildroot is invalid.  It's using
 
-           Summary: alsamixergui: broken URL
-           Product: buildroot
-           Version: 2010.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: hector.oron at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+/home/nextgen/buildroot/downloads/php-$(PHP_VERSION).tar.bz2
 
+That link doesn't work for any of the version numbers I treid.  What
+you get is a blob of HTML that says this:
 
-Hello,
+ Sorry, but the function distributions/php-5.2.12.tar.bz2 is not in
+ the online manual. Perhaps you misspelled it, or it is a relatively
+ new function that hasn't made it into the online documentation yet.
+ The following are the 20 functions which seem to be closest in
+ spelling to distributions/php-5.2.12.tar.bz2 (really good matches are
+ in bold). Perhaps you were looking for one of these: [...]
 
-  alsamixergui provides a broken URL, a fixed one:
-
-
-diff -Naur buildroot-2010.11/package/alsamixergui//alsamixergui.mk
-buildroot-2010.11.fix/package/alsamixergui//alsamixergui.mk
---- buildroot-2010.11/package/alsamixergui//alsamixergui.mk     2010-11-30
-15:52:43.000000000 +0000
-+++ buildroot-2010.11.fix/package/alsamixergui//alsamixergui.mk 2011-03-09
-16:38:53.856006502 +0000
-@@ -5,7 +5,7 @@
- #############################################################
- ALSAMIXERGUI_VERSION = 0.9.0rc2-1
- ALSAMIXERGUI_SOURCE = alsamixergui_$(ALSAMIXERGUI_VERSION).orig.tar.gz
--ALSAMIXERGUI_SITE =
-http://snapshot.debian.net/archive/2008/03/19/debian/pool/main/a/alsamixergui
-+ALSAMIXERGUI_SITE =
-http://snapshot.debian.org/archive/debian/20080319T000000Z/pool/main/a/alsamixergui/
- ALSAMIXERGUI_AUTORECONF = YES
- ALSAMIXERGUI_INSTALL_STAGING = NO
- ALSAMIXERGUI_INSTALL_TARGET = YES
-
-
-  Best regards,
-  -- Hector Oron
-
+Does php.mk download the right thing for anybody else?
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Grant Edwards               grant.b.edwards        Yow! My EARS are GONE!!
+                                  at               
+                              gmail.com            
