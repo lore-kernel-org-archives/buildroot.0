@@ -1,34 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2011 12:28:16 +0100
-Subject: [Buildroot] [PATCH] buildroot:2011.02: Find compiler in
- environement path other than absolute path.
-In-Reply-To: <1299755561-11490-1-git-send-email-sonic.adi@gmail.com>
-References: <1299755561-11490-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20110310122816.3629b434@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Mar 2011 12:37:37 +0100
+Subject: [Buildroot] 2011.02 pkg-config problems?
+In-Reply-To: <20110310122659.7d9abef7@surf> (Thomas Petazzoni's message of
+	"Thu, 10 Mar 2011 12:26:59 +0100")
+References: <WC20110307121409.5600B6@terrafix.co.uk>
+	<8762rr8bs8.fsf@macbook.be.48ers.dk> <20110310122659.7d9abef7@surf>
+Message-ID: <871v2f8av2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Mar 2011 19:12:41 +0800
-Sonic Zhang <sonic.adi@gmail.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> From: Sonic Zhang <sonic.zhang@analog.com>
-> 
-> In release 2011.02, external compiler is always prefixed by he
-> customer path. When customer toolchain path is left empty, this patch
-> avoids prefix absolute path.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+ Thomas> On Thu, 10 Mar 2011 12:17:43 +0100
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> Thanks for reporting this. The problem is that pkg-config doesn't have
+ >> any explicit support for cross compilation, so we have to guess if a
+ >> given variable refers to a target path or a host path. For this
+ >> specific problem you could work around it by passing an explicit
+ >> --with-fontrootdir=/usr/share/fonts/X11 to the configure step of the
+ >> xfonts packages, but I have fixed pkg-config in git to only prepend
+ >> the sysroot location when the includedir + libdir variables are
+ >> requested, and not all variables like we did for 2011.02:
+ >> 
+ >> http://git.buildroot.net/buildroot/commit/?id=117a8ea0eaabe
 
-Thanks,
+ Thomas> Maybe we need to release 2011.02.1 with this fix ?
 
-Thomas
+Possibly. Lets give it a few days and see if anything else shows
+up.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
