@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 10 Mar 2011 11:36:18 +0100
-Subject: [Buildroot] [git commit master 1/1] libpng: remove libpng*-config
-	scripts from TARGET_DIR
-Message-ID: <20110310111400.DB8FE8FE31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit master 1/1] libxml2: remove xml2-config
+	script from TARGET_DIR
+Message-ID: <20110310111401.160068FE31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac7dbcf925e084a4c2e1d22d53d5d7bdb829d4d6
+commit: http://git.buildroot.net/buildroot/commit/?id=c08e016efad74b087b71df09b028f615eb5453db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpng/libpng.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/libxml2/libxml2.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 699561b..e64989d 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -22,5 +22,14 @@ endef
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index d07f631..2a267b2 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -30,6 +30,14 @@ HOST_LIBXML2_CONF_OPT = \
+ 		--enable-shared --without-debugging --without-python \
+ 		--without-threads
  
- LIBPNG_POST_INSTALL_STAGING_HOOKS += LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
- 
-+define LIBPNG_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/usr/bin/libpng$(LIBPNG_SERIES)-config \
-+		 $(TARGET_DIR)/usr/bin/libpng-config
++define LIBXML2_REMOVE_CONFIG_SCRIPTS
++	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
 +endef
 +
 +ifneq ($(BR2_HAVE_DEVFILES),y)
-+LIBPNG_POST_INSTALL_TARGET_HOOKS += LIBPNG_REMOVE_CONFIG_SCRIPTS
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_REMOVE_CONFIG_SCRIPTS
 +endif
 +
- $(eval $(call AUTOTARGETS,package,libpng))
- $(eval $(call AUTOTARGETS,package,libpng,host))
+ $(eval $(call AUTOTARGETS,package,libxml2))
+ $(eval $(call AUTOTARGETS,package,libxml2,host))
+ 
 -- 
 1.7.3.4
