@@ -1,36 +1,39 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 10 Mar 2011 10:27:49 +0000
-Subject: [Buildroot] [PATCH] toolchain/gcc/4.2.4: Remove libstdc++ uClibc
-	locale patches.
-Message-ID: <AANLkTin7isvvLN28dLa9_ca_cCW0odc8FerFkDEwYeJA@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Thu, 10 Mar 2011 19:12:41 +0800
+Subject: [Buildroot] [PATCH] buildroot:2011.02: Find compiler in
+	environement path other than absolute path.
+Message-ID: <1299755561-11490-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These patches do not build with more recent versions of uClibc
-going back as far as at least 2008. More recent compiler versions
-seem to do fine without these patches, so lets remove them so
-libstdc++ locale support will actually build for gcc 4.2.4.
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
+In release 2011.02, external compiler is always prefixed by he customer path.
+When customer toolchain path is left empty, this patch avoids prefix absolute path.
+
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- toolchain/gcc/4.2.4/200-uclibc-locale.patch        | 2790 --------------------
- toolchain/gcc/4.2.4/203-uclibc-locale-no__x.patch  |  213 --
- .../gcc/4.2.4/204-uclibc-locale-wchar_fix.patch    |   48 -
- toolchain/gcc/4.2.4/205-uclibc-locale-update.patch |  347 ---
- toolchain/gcc/4.2.4/306-libstdc++-namespace.patch  |   36 -
- 5 files changed, 0 insertions(+), 3434 deletions(-)
- delete mode 100644 toolchain/gcc/4.2.4/200-uclibc-locale.patch
- delete mode 100644 toolchain/gcc/4.2.4/203-uclibc-locale-no__x.patch
- delete mode 100644 toolchain/gcc/4.2.4/204-uclibc-locale-wchar_fix.patch
- delete mode 100644 toolchain/gcc/4.2.4/205-uclibc-locale-update.patch
- delete mode 100644 toolchain/gcc/4.2.4/306-libstdc++-namespace.patch
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-toolchain-gcc-4.2.4-Remove-libstdc-uClibc-locale-pat.patch.gz
-Type: application/x-gzip
-Size: 18625 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110310/80bfd867/attachment.bin>
+ package/Makefile.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index ef2c591..745bb23 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -115,7 +115,11 @@ TOOLCHAIN_EXTERNAL_LOCATION=$(TOOLCHAIN_EXTERNAL_DIR)
+ else
+ TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+ endif
++ifneq ($(TOOLCHAIN_EXTERNAL_LOCATION),)
+ TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_LOCATION)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
++else
++TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PREFIX)-
++endif
+ endif
+ 
+ # Quotes are needed for spaces et al in path components.
+-- 
+1.7.0.4
