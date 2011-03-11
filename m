@@ -1,36 +1,25 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 11 Mar 2011 11:38:06 -0800
-Subject: [Buildroot] SingleStep Linux Kernel with BDI200
-In-Reply-To: <AANLkTin6p-SaOJ12g2jw+9HdBSpTSF0VPMmSAEKuoOWg@mail.gmail.com>
-References: <AANLkTin67wa+HwN6CGKR9LP6YOuArDn8FW=gwgUMGD+K@mail.gmail.com>
-	<AANLkTin6p-SaOJ12g2jw+9HdBSpTSF0VPMmSAEKuoOWg@mail.gmail.com>
-Message-ID: <AANLkTikpLCxb00T8RZT3kv6KQud6CDLTVcmEe+A1_h65@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Mar 2011 22:31:52 +0100
+Subject: [Buildroot] [PATCH] toolchain/gcc/4.2.4: Remove libstdc++
+	uClibc locale patches.
+In-Reply-To: <AANLkTin7isvvLN28dLa9_ca_cCW0odc8FerFkDEwYeJA@mail.gmail.com>
+	(Will Newton's message of "Thu, 10 Mar 2011 10:27:49 +0000")
+References: <AANLkTin7isvvLN28dLa9_ca_cCW0odc8FerFkDEwYeJA@mail.gmail.com>
+Message-ID: <87mxl1pcmv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you, Thomas. That was the sort of clue I was "phishing" for.
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-Charles
+ Will> These patches do not build with more recent versions of uClibc
+ Will> going back as far as at least 2008. More recent compiler versions
+ Will> seem to do fine without these patches, so lets remove them so
+ Will> libstdc++ locale support will actually build for gcc 4.2.4.
 
-On Fri, Mar 11, 2011 at 10:48 AM, Thomas De Schampheleire <
-patrickdepinguin+buildroot@gmail.com> wrote:
-
-> >
-> > Can someone help me figure out how to create a cross gdb so I can get to
-> the
-> > next step, please?
->
-> Did you enable building gdb in the buildroot configuration?
-> (BR2_PACKAGE_GDB_HOST)
->
-
-
+Committed, thanks.
 
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110311/e6b6691e/attachment.html>
+Bye, Peter Korsgaard
