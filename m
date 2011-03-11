@@ -1,9 +1,9 @@
 From: Chih-Min Chao <cmchao@gmail.com>
-Date: Fri, 11 Mar 2011 16:13:28 +0800
-Subject: [Buildroot] [PATCH 2/9] alsa-utils : bump to 1.0.24.2
+Date: Fri, 11 Mar 2011 16:13:29 +0800
+Subject: [Buildroot] [PATCH 3/9] pixman : bump to 0.20.2
 In-Reply-To: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
 References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
-Message-ID: <1299831215-26466-2-git-send-email-cmchao@gmail.com>
+Message-ID: <1299831215-26466-3-git-send-email-cmchao@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
 ---
- package/multimedia/alsa-utils/alsa-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pixman/pixman-0.10.0-no-tests.patch |   11 -----------
+ package/pixman/pixman.mk                    |    3 ++-
+ 2 files changed, 2 insertions(+), 12 deletions(-)
+ delete mode 100644 package/pixman/pixman-0.10.0-no-tests.patch
 
-diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
-index 4ab49d3..26c270b 100644
---- a/package/multimedia/alsa-utils/alsa-utils.mk
-+++ b/package/multimedia/alsa-utils/alsa-utils.mk
-@@ -3,7 +3,7 @@
- # alsa-utils
+diff --git a/package/pixman/pixman-0.10.0-no-tests.patch b/package/pixman/pixman-0.10.0-no-tests.patch
+deleted file mode 100644
+index fbd0d26..0000000
+--- a/package/pixman/pixman-0.10.0-no-tests.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/Makefile.in.orig	2008-05-23 14:04:37.000000000 +0000
+-+++ b/Makefile.in	2008-05-23 14:04:50.000000000 +0000
+-@@ -198,7 +198,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = pixman test
+-+SUBDIRS = pixman
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = pixman-1.pc
+- USERNAME = $$USER
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 8c7a233..261b85a 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -3,7 +3,8 @@
+ # pixman
  #
- #############################################################
--ALSA_UTILS_VERSION = 1.0.23
-+ALSA_UTILS_VERSION = 1.0.24.2
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_INSTALL_STAGING = YES
+ ################################################################################
+-PIXMAN_VERSION = 0.17.6
++# "even, 0,2,4,6,8" major is stable version
++PIXMAN_VERSION = 0.20.2
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
+ PIXMAN_SITE = http://cairographics.org/releases/
+ PIXMAN_AUTORECONF = NO
 -- 
 1.7.0.4
