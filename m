@@ -1,25 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Mar 2011 22:31:52 +0100
-Subject: [Buildroot] [PATCH] toolchain/gcc/4.2.4: Remove libstdc++
-	uClibc locale patches.
-In-Reply-To: <AANLkTin7isvvLN28dLa9_ca_cCW0odc8FerFkDEwYeJA@mail.gmail.com>
-	(Will Newton's message of "Thu, 10 Mar 2011 10:27:49 +0000")
-References: <AANLkTin7isvvLN28dLa9_ca_cCW0odc8FerFkDEwYeJA@mail.gmail.com>
-Message-ID: <87mxl1pcmv.fsf@macbook.be.48ers.dk>
+Date: Fri, 11 Mar 2011 22:43:13 +0100
+Subject: [Buildroot] Is PHP download link in php.mk broken?
+In-Reply-To: <il8g6t$nke$1@dough.gmane.org> (Grant Edwards's message of "Wed, 
+	9 Mar 2011 18:17:01 +0000 (UTC)")
+References: <il8fpe$k15$1@dough.gmane.org> <il8g6t$nke$1@dough.gmane.org>
+Message-ID: <87fwqtpc3y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
- Will> These patches do not build with more recent versions of uClibc
- Will> going back as far as at least 2008. More recent compiler versions
- Will> seem to do fine without these patches, so lets remove them so
- Will> libstdc++ locale support will actually build for gcc 4.2.4.
+ Grant> On 2011-03-09, Grant Edwards <grant.b.edwards@gmail.com> wrote:
+ >> I enabled the php package today, and it appears that the download
+ >> link used by buildroot is invalid.  It's using
+ >> 
+ >> /home/nextgen/buildroot/downloads/php-$(PHP_VERSION).tar.bz2
 
-Committed, thanks.
+ Grant> Pasted the wrong thing.  That's
+
+ Grant> http://www.php.net/distributions/php-$(PHP_VERSION).tar.bz2
+
+Yeah, The php developers afaik use some magic download script to for
+load balancing / stats. The problem is that this script is broken, so
+instead of returning an error when the file isn't there it instead
+"helpfully" sends you a HTML file informing about it.
+
+Now, buildroot thinks the download went fine, so it doesn't fallback to
+the sources.buildroot.net mirror and the build then later breaks when it
+tries to extract the tarball (which instead is a HTML file).
+
+There's not much we can do about it besides complain to the PHP devs,
+but you can download the tarball from our mirror and stick in your dl
+dir so the build works.
+
+http://sources.buildroot.net/php-5.2.12.tar.bz2
 
 -- 
 Bye, Peter Korsgaard
