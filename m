@@ -1,25 +1,43 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 11 Mar 2011 09:55:38 +0000
-Subject: [Buildroot] [PATCH 3/9] pixman : bump to 0.20.2
-In-Reply-To: <1299831215-26466-3-git-send-email-cmchao@gmail.com>
-References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
-	<1299831215-26466-3-git-send-email-cmchao@gmail.com>
-Message-ID: <AANLkTi=nx7bfJ-+8Y463xjWDJkUAEfDXzMwHZMPJ4jeF@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Mar 2011 16:20:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 3475] New: Calling sync on large filesystems when
+ not always necessary
+Message-ID: <bug-3475-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 11, 2011 at 8:13 AM, Chih-Min Chao <cmchao@gmail.com> wrote:
->
-> Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
-> ---
-> ?package/pixman/pixman-0.10.0-no-tests.patch | ? 11 -----------
-> ?package/pixman/pixman.mk ? ? ? ? ? ? ? ? ? ?| ? ?3 ++-
-> ?2 files changed, 2 insertions(+), 12 deletions(-)
-> ?delete mode 100644 package/pixman/pixman-0.10.0-no-tests.patch
+https://bugs.busybox.net/show_bug.cgi?id=3475
 
-Has the "no tests" patch been applied upstream or is it fixed in some other way?
+           Summary: Calling sync on large filesystems when not always
+                    necessary
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: orionrobots at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-It would be good to note how this issue was resolved in the commit message.
+
+When using build root to cross compile for other devices, especially when doing
+many builds (multiple targets), on a CI system with 10s of gigs of ram and many
+intermediate targets, then sync is not really desirable here.
+
+The makedevs step makes a call to /bin/sync.
+
+I am suggesting a "--nosync" be introduced so buildroot will not sync the
+drives then? While of course preserving existing behaviour for the majority
+that don't find any problems.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
