@@ -1,30 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Mar 2011 22:45:27 +0100
-Subject: [Buildroot] Is PHP download link in php.mk broken?
-In-Reply-To: <il8gcq$pqn$1@dough.gmane.org> (Grant Edwards's message of "Wed, 
-	9 Mar 2011 18:20:11 +0000 (UTC)")
-References: <il8fpe$k15$1@dough.gmane.org> <il8g6t$nke$1@dough.gmane.org>
-	<il8gcq$pqn$1@dough.gmane.org>
-Message-ID: <87bp1hpc08.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 11 Mar 2011 22:31:44 +0100
+Subject: [Buildroot] [git commit master 1/1] toolchain/gcc/4.2.4: Remove
+	libstdc++ uClibc locale patches
+Message-ID: <20110311214931.1CB668C99C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
- Grant> I found older releases at:
+commit: http://git.buildroot.net/buildroot/commit/?id=a1c305c8a7011305b326aca1ad350c3be5a6db11
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Grant> http://museum.php.net/php5/php-$(PHP_VERSION).tar.bz2
+These patches do not build with more recent versions of uClibc
+going back as far as at least 2008. More recent compiler versions
+seem to do fine without these patches, so lets remove them so
+libstdc++ locale support will actually build for gcc 4.2.4.
 
- Grant> But, that link _won't_ work for the current version.  Is there a way
- Grant> to provide multiple download links in a .mk file?
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-Not for a specific .mk, but we support primary mirrors
-(BR2_PRIMARY_SITE) and fallback mirrors (BR2_BACKUP_SITE). The last one
-is normally enough (and set by default), but as php.net claims the
-download succeeded we never fall back to the backup site.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
