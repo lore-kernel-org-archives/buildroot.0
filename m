@@ -1,35 +1,31 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Sat, 12 Mar 2011 10:50:25 +0000
-Subject: [Buildroot] compile espgs 8.15.4 with buildroot
-In-Reply-To: <AANLkTin96tM_skmaWcEBDDfBB6Aoi+6s7ZrecspigB9x@mail.gmail.com>
-References: <AANLkTin96tM_skmaWcEBDDfBB6Aoi+6s7ZrecspigB9x@mail.gmail.com>
-Message-ID: <AANLkTinFrzeD7nnLNVR6yW+2PmE6S5vGR_p2Q5NmLiZH@mail.gmail.com>
+From: Chih-Min Chao <cmchao@gmail.com>
+Date: Sat, 12 Mar 2011 23:23:18 +0800
+Subject: [Buildroot] [PATCH 3/9] pixman : bump to 0.20.2
+In-Reply-To: <AANLkTi=nx7bfJ-+8Y463xjWDJkUAEfDXzMwHZMPJ4jeF@mail.gmail.com>
+References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
+	<1299831215-26466-3-git-send-email-cmchao@gmail.com>
+	<AANLkTi=nx7bfJ-+8Y463xjWDJkUAEfDXzMwHZMPJ4jeF@mail.gmail.com>
+Message-ID: <AANLkTi=5VoyhW44fNPP2gQFBawBeoJubAUf+-z84ju9=@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 12, 2011 at 7:53 AM, bao bui <buiqbao@gmail.com> wrote:
-> I am trying to add esp ghost script 8.15.4 to buildroot.
-> I got the error:
->>>> espgs 8.15.4 Patching package/espgs
-> for file in config.guess config.sub; do for i in $(find
-> /home/bao/work/buildroot/output/build/espgs-8.15.4 -name $file); do cp
-> package/gnuconfig/$file $i; done; done
-> cp: not writing through dangling symlink
-> `/home/bao/work/buildroot/output/build/espgs-8.15.4/ijs/config.guess'
-> cp: not writing through dangling symlink
-> `/home/bao/work/buildroot/output/build/espgs-8.15.4/ijs/config.sub'
-> make: ***
-> [/home/bao/work/buildroot/output/build/espgs-8.15.4/.stamp_patched] Error 1
+On Fri, Mar 11, 2011 at 5:55 PM, Will Newton <will.newton@gmail.com> wrote:
+> On Fri, Mar 11, 2011 at 8:13 AM, Chih-Min Chao <cmchao@gmail.com> wrote:
+>>
+>> Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
+>> ---
+>> ?package/pixman/pixman-0.10.0-no-tests.patch | ? 11 -----------
+>> ?package/pixman/pixman.mk ? ? ? ? ? ? ? ? ? ?| ? ?3 ++-
+>> ?2 files changed, 2 insertions(+), 12 deletions(-)
+>> ?delete mode 100644 package/pixman/pixman-0.10.0-no-tests.patch
 >
+> Has the "no tests" patch been applied upstream or is it fixed in some other way?
 >
-> How to fix it?
+> It would be good to note how this issue was resolved in the commit message.
+>
 
-Buildroot is trying to update config.sub and config.guess in the espgs
-source tree to the most recent version. However, it appears in the
-source tree ijs/config.sub and ijs/config.guess are dangling symlinks
-(i.e. symlinks to a non-existent file). That's a little strange and
-you should investigate the espgs build procedure to find out why that
-is the case.
+Thanks for your review
+I will check this and resend the patch
