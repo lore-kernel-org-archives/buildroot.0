@@ -1,46 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Mar 2011 00:27:17 +0100
-Subject: [Buildroot] [PATCH 2/9] alsa-utils : bump to 1.0.24.2
-In-Reply-To: <1299831215-26466-2-git-send-email-cmchao@gmail.com> (Chih-Min
-	Chao's message of "Fri, 11 Mar 2011 16:13:28 +0800")
-References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
-	<1299831215-26466-2-git-send-email-cmchao@gmail.com>
-Message-ID: <87lj0i8uui.fsf@macbook.be.48ers.dk>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sun, 13 Mar 2011 16:59:21 -0700
+Subject: [Buildroot] Looking for BDI2000 advice with buildroot kernel
+Message-ID: <AANLkTinw1xHiBRfeUhjJyk-aLE=fRWzkRNdRt9C4DupO@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chih-Min" == Chih-Min Chao <cmchao@gmail.com> writes:
+I have a kernel built with "-g", both zImage and vmlinux for MPC8323E-RDB
+using buildroot-2010.11. I can run the target until a u-boot prompt, halt
+the target with the BDI2000, load either vmlinux or zImage into the target,
+but after I do a "target remote bdi2000:2001", although I can "stepi"
+through the first few dozen assembly instructions in vmlinux, I cannot seem
+to get anywhere with zImage.
 
- Chih-Min> Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
- Chih-Min> ---
- Chih-Min>  package/multimedia/alsa-utils/alsa-utils.mk |    2 +-
- Chih-Min>  1 files changed, 1 insertions(+), 1 deletions(-)
+I think I am bolloxed up in mmu/virtual/physical addresses.
 
- Chih-Min> diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
- Chih-Min> index 4ab49d3..26c270b 100644
- Chih-Min> --- a/package/multimedia/alsa-utils/alsa-utils.mk
- Chih-Min> +++ b/package/multimedia/alsa-utils/alsa-utils.mk
- Chih-Min> @@ -3,7 +3,7 @@
- Chih-Min>  # alsa-utils
- Chih-Min>  #
- Chih-Min>  #############################################################
- Chih-Min> -ALSA_UTILS_VERSION = 1.0.23
- Chih-Min> +ALSA_UTILS_VERSION = 1.0.24.2
+Here is my recipe so far:
 
-This breaks on uClibc where we don't have the exp10 glibc extension:
+BDI> load zImage 0x00400000
+BDI> bi 0xc000xxxx <start_kernel from System.map>
 
-volume_mapping.o: In function `get_normalized_volume':
-volume_mapping.c:(.text+0x160): undefined reference to `exp10'
-volume_mapping.c:(.text+0x19c): undefined reference to `exp10'
-volume_mapping.o: In function `set_normalized_volume':
-volume_mapping.c:(.text+0x298): undefined reference to `exp10'
-collect2: ld returned 1 exit status
-make[3]: *** [alsamixer] Error 1
+Host$ ddd --debugger powerpc....gdb vmlinux
+  (gdb) target remote bdi2000:2001
+  (gdb) symbol-file vmlinux
 
-I guess we'll need to come up with an emulation for it.
+At this point a "BDI> go" or a "(gdb) cont" ends up just resetting the
+board.
+
+What am I stupidly doing wrong?
 
 -- 
-Bye, Peter Korsgaard
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110313/6bc47f51/attachment.html>
