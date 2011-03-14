@@ -1,42 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Mar 2011 10:17:10 +0100
-Subject: [Buildroot] BR: unable to patch u-boot
-In-Reply-To: <20110312004418.ed0f21fc085cea67a12906c6b8e6fb44.de35470e4e.wbe@email10.secureserver.net>
-References: <20110312004418.ed0f21fc085cea67a12906c6b8e6fb44.de35470e4e.wbe@email10.secureserver.net>
-Message-ID: <20110314101710.103d9566@surf>
+From: Martin Hicks <mort@bork.org>
+Date: Mon, 14 Mar 2011 10:14:26 -0400
+Subject: [Buildroot] Samba build problem
+In-Reply-To: <877hc5pat3.fsf@macbook.be.48ers.dk>
+References: <AANLkTinF_No7g1_N7cVDbwiyc7D+uRtkgW5HkG3crnsT@mail.gmail.com>
+	<877hc5pat3.fsf@macbook.be.48ers.dk>
+Message-ID: <AANLkTi=j+_OcDVOdc2ssYcKqG0KgY4onTS_qZc5Q4o32@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Mar 2011 00:44:18 -0700
-<nataraj@vaaraahi.com> wrote:
+On Fri, Mar 11, 2011 at 5:11 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
+>
+> ?Martin> Hi,
+>
+> ?Martin> When I recently merged the 2011-02 changes into my tree samba
+> ?Martin> started to fail to compile. ?Has anyone else seen this? ?I did
+> ?Martin> look into the git logs and it seems like the LIBTOOL patch and
+> ?Martin> a recent CVE are the only things that have touched
+> ?Martin> package/samba lately.
+>
+> I guess you mean post-2011.02 changes, as the CVE 2011 fix was only
+> added on the 4th - But yes, that's the reason why the build is breaking.
+>
+> The problem is the patch logic in AUTOTARGET doesn't apply the other
+> patches when it sees a samba-$VERSION-*.patch file, so the fix is simply
+> to remove the version number from the patch file name like I have done
+> in git.
 
-> |diff --git board/atmel/at91sam9263ek/at91sam9263ek.c board/atmel/at91sam9263ek/at91sam9263ek.c
-> |index 5cd7aa7..94b80b4 100644
-> |--- board/atmel/at91sam9263ek/at91sam9263ek.c
-> |+++ board/atmel/at91sam9263ek/at91sam9263ek.c
-> --------------------------
+Great.  Latest git is fixed.
 
-Patches should be generated to be apply with "patch -p1", i.e the paths
-in the patch must have an useless training component path. Instead of :
+Thanks,
+mh
 
- board/atmel/at91sam9263ek/at91sam9263ek.c
-
-you should have
-
- a/board/atmel/at91sam9263ek/at91sam9263ek.c
-
-or
-
- whateveryouwant/board/atmel/at91sam9263ek/at91sam9263ek.c
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
