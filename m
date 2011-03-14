@@ -1,30 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Mar 2011 09:50:47 +0100
-Subject: [Buildroot] [PATCH 2/9] alsa-utils : bump to 1.0.24.2
-In-Reply-To: <AANLkTimeoXMFvkq2FnsnfEFQXwWzH-R2fUAzmdYrUXUB@mail.gmail.com>
-	(Chih-Min Chao's message of "Mon, 14 Mar 2011 12:02:33 +0800")
-References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
-	<1299831215-26466-2-git-send-email-cmchao@gmail.com>
-	<87lj0i8uui.fsf@macbook.be.48ers.dk>
-	<AANLkTimeoXMFvkq2FnsnfEFQXwWzH-R2fUAzmdYrUXUB@mail.gmail.com>
-Message-ID: <87aagyhyqg.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Mar 2011 10:17:10 +0100
+Subject: [Buildroot] BR: unable to patch u-boot
+In-Reply-To: <20110312004418.ed0f21fc085cea67a12906c6b8e6fb44.de35470e4e.wbe@email10.secureserver.net>
+References: <20110312004418.ed0f21fc085cea67a12906c6b8e6fb44.de35470e4e.wbe@email10.secureserver.net>
+Message-ID: <20110314101710.103d9566@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chih-Min" == Chih-Min Chao <cmchao@gmail.com> writes:
+On Sat, 12 Mar 2011 00:44:18 -0700
+<nataraj@vaaraahi.com> wrote:
 
-Hi,
+> |diff --git board/atmel/at91sam9263ek/at91sam9263ek.c board/atmel/at91sam9263ek/at91sam9263ek.c
+> |index 5cd7aa7..94b80b4 100644
+> |--- board/atmel/at91sam9263ek/at91sam9263ek.c
+> |+++ board/atmel/at91sam9263ek/at91sam9263ek.c
+> --------------------------
 
- >> I guess we'll need to come up with an emulation for it.
+Patches should be generated to be apply with "patch -p1", i.e the paths
+in the patch must have an useless training component path. Instead of :
 
- Chih-Min> replace exp10(x) with   exp(x * ln 10)
+ board/atmel/at91sam9263ek/at91sam9263ek.c
 
- Chih-Min> 10^x = 10 ^(ln e^x) = (e^x)^ln10 = e ^ (x * ln 10)
+you should have
 
-Ahh yes, thanks. Committed and patch sent upstream.
+ a/board/atmel/at91sam9263ek/at91sam9263ek.c
 
+or
+
+ whateveryouwant/board/atmel/at91sam9263ek/at91sam9263ek.c
+
+Regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
