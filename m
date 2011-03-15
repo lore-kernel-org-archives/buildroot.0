@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Mar 2011 23:46:46 +0100
-Subject: [Buildroot] Facing errors when building swfdec (using external
- toolchain)
-In-Reply-To: <910338.67295.qm@web29006.mail.ird.yahoo.com>
-References: <910338.67295.qm@web29006.mail.ird.yahoo.com>
-Message-ID: <20110315234646.5f11ca74@surf>
+Date: Tue, 15 Mar 2011 23:48:14 +0100
+Subject: [Buildroot] Adding stunnel
+In-Reply-To: <AANLkTik+ge-q7jLcw3-caf6FOy8PjJ8zzesGj5GXgm-n@mail.gmail.com>
+References: <AANLkTiknO=A98cXWgg2DHa73uFbYwBtXmUF_7N8fbtx9@mail.gmail.com>
+	<351790.51583.qm@web29602.mail.ird.yahoo.com>
+	<AANLkTik+ge-q7jLcw3-caf6FOy8PjJ8zzesGj5GXgm-n@mail.gmail.com>
+Message-ID: <20110315234814.04bd9770@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+Hello,
 
-On Tue, 15 Mar 2011 10:44:11 +0000 (GMT)
-Daniel Kuhne <daniel.kuhne@yahoo.de> wrote:
+On Tue, 15 Mar 2011 10:38:00 +0000
+bruce bushby <bruce.bushby@gmail.com> wrote:
 
-> Building
-> swfdec using external toolchain results in erros. I did not modify the
-> swfdec.mk file.
+> For now I think I got it compiled and installed by adding additional
+> paths to my configure options:
+> STUNNEL_CONF_OPT = \
+>         --with-shared \
+>         --with-ssl=$(STAGING_DIR)/usr \
+>         --with-libssl-prefix=$(STAGING_DIR)/usr \
+>         --without-debug
+> 
+> Although I'm sure it's not the "buildroot way"...I'll have to read a
+> bit more on adding packages....I've been lazy in this area.
 
-I'm not able to reproduce. swfdec builds just fine with a CodeSourcery
-ARM toolchain used as an external toolchain.
+I haven't looked at stunnel precisely, but the paths you're passing are
+correct.
 
-So, we'll need more details :
- * Buildroot configuration
- * External toolchain used
- * Full build log
-
-Does this problem occurs during a fresh build from scratch ?
+The best would be to post a proper patch that adds stunnel so that we
+can review/comment the whole thing, and integrate it into Buildroot.
 
 Regards,
 
