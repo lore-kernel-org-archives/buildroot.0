@@ -1,60 +1,44 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Tue, 15 Mar 2011 10:28:54 -0700
-Subject: [Buildroot] inittab for Busybox
-In-Reply-To: <20110315180743.5e34890b@surf>
-References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>
-	<20110315180743.5e34890b@surf>
-Message-ID: <AANLkTinc6Aeu7A7_ZZEi8oxvSs3pzAJH9YtZAL=FkAvH@mail.gmail.com>
+From: Torsten Mohr <tmohr@s.netic.de>
+Date: Tue, 15 Mar 2011 18:29:12 +0100
+Subject: [Buildroot] u-boot, setup SD card, BeagleBoard-xM
+In-Reply-To: <20110315112216.5f3a91e2@surf>
+References: <201103132130.24022.tmohr@s.netic.de>
+	<201103142205.36239.tmohr@s.netic.de>
+	<20110315112216.5f3a91e2@surf>
+Message-ID: <201103151829.12640.tmohr@s.netic.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I want to second what Thomas said. I have been through both the sysvinit
-inittab and the busybox inittab and the busybox one works fine. As I recall,
-it also has a tiny variation in the location of the RC directory, so you
-might look at those differences which I think also depens on the skeleton
-base files.
-On Mar 15, 2011 10:07 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 15 Mar 2011 12:37:01 -0400
-> "Heyendal, Carl" <CHeyendal@stanleyworks.com> wrote:
->
->> I have not enabled support for sysvinit in my project. Could someone
->> tell me why Buildroot adds an inittab file that's incompatible with
->> BusyBox? I looked at the mail archives but no one seems to have asked
->> that question before.
->
-> How do you see that the inittab is incompatible with Busybox ? Many of
-> us use it every day without problem.
->
-> When sysvinit is not selected, fs/skeleton/etc/inittab is the inittab
-> that is used, and it is compatible with Busybox init.
->
-> When sysvinit is selected, package/sysvinit/inittab is used instead.
->
->> Also in the mail archives, some reference is made to documentation
->> about creating your own inittab file. Does that documentation still
->> exist somewhere? I've looked but can't find it.
->
-> You should refer to the Busybox documentation, as this is not something
-> related to Buildroot directly. See examples/inittab in Busybox sources.
->
+Hello,
+
+i found that hint when i googled, but directly after it the note that the 
+patch is deprecated as it is included in u-boot since version x.y.z.
+
+I have to say that i did not verify what version comes with buildroot (it 
+actually is 2010.06), but the patched version was quite old.
+
+I configured "omap3_beagle", which becomes omap3_beagle_config for u-boot.
+
+In the mailing list for beagleboard it seems somebody else also has weird 
+output from u-boot.bin that comes with buildroot.
+
+
+Best regards,
+Torsten.
+
+
+Am Dienstag, 15. M?rz 2011, 11:22:16 schrieb Thomas Petazzoni:
+> On Mon, 14 Mar 2011 22:05:36 +0100
+> 
+> Torsten Mohr <tmohr@s.netic.de> wrote:
+> > It looks that buildroot-2010.11 / u-boot does not work properly?
+> 
+> Does U-Boot mainline completely support the BeagleBoard XM ? Did you
+> select the appropriate U-Boot configuration ?
+> 
 > Regards,
->
+> 
 > Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110315/ff3c1830/attachment.html>
