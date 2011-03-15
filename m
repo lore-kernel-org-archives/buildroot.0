@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Mar 2011 23:53:33 +0100
-Subject: [Buildroot] buildroot directive for acyion after configuring
-In-Reply-To: <AANLkTinUEkDjVg4VnRJPCqvrF-CuGKmPppZCkmSz9gTE@mail.gmail.com>
-References: <AANLkTi=iLXet_5auTP_mp1KzsY9wr=FOQVRNVZk+Q0dg@mail.gmail.com>
-	<20110315111315.5d5a48f5@surf>
-	<AANLkTinUEkDjVg4VnRJPCqvrF-CuGKmPppZCkmSz9gTE@mail.gmail.com>
-Message-ID: <20110315235333.0131034e@surf>
+Date: Tue, 15 Mar 2011 23:54:28 +0100
+Subject: [Buildroot] [PATCH 0 of 3] Add support for local package
+ downloads (file://)
+In-Reply-To: <patchbomb.1300174025@localhost6.localdomain6>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+Message-ID: <20110315235428.1f50e78d@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 15 Mar 2011 08:27:05 +0100
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
 
-On Tue, 15 Mar 2011 04:06:34 -0700
-bao bui <buiqbao@gmail.com> wrote:
-
-> After configuring, the Makefile has the EXTRALIBS variable as
-> following
+> This patch series add support for file:// URLs for both the package
+> infrastructure, as for the BR2_PRIMARY_SITE and BR2_BACKUP_SITE
+> options. URLs starting with file:// will be handled by a plain 'cp'
+> instead of wget. A new SITE_METHOD 'file' is added. Documentation is
+> updated as well.
 > 
-> EXTRALIBS= -lcupsimage -lcups -ltiff -ljpeg -lpng
-> -Wl,-Bsymbolic-functions -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err
-> -lssl -lcrypto -lz -lpthread -lm -lcrypt -ldl -lm  -lstdc++
-> -lfontconfig
+> Note that this is mainly useful in situations where developers
+> working on a project are sharing the same filesystem (e.g. disk,
+> NFS, ...), as typically is the case in corporate environments. In
+> that case, one may add one or more local project-specific packages,
+> and even use a central storage location as 'proxy' for package
+> downloads (using BR2_PRIMARY_SITE with a file:// URL).
 > 
-> I don't have libgssapi_krb5 libkrb5 libk5crypto libcom_err in
-> buildroot library. I don't know where these option come from, maybe
-> the configure script probes the host system.
+> Signed-off-by: Thomas De Schampheleire
+> <thomas.de.schampheleire@gmail.com>
 
-Then it should be fixed by passing the appropriate values
-to ./configure.
+I agree with the principle, I need to do a bit of testing before acking
+the patches.
 
-> I got nothing. So I don't know how to fix it axcept modify the
-> Makefile after configuring.
-> Do you have any idea about this?
-
-Please post the full build log, and all files named "config.log" inside
-output/build/espgs-8.15.4/ and its subdirectories.
-
-Regards,
+Thanks for this work!
 
 Thomas
 -- 
