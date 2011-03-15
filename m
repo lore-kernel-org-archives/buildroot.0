@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Mar 2011 23:33:47 +0100
-Subject: [Buildroot] [PATCH] fetch/git: clone the as bare
-In-Reply-To: <1300193398-15217-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1300193398-15217-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <20110315233347.5dc5dd09@surf>
+Date: Tue, 15 Mar 2011 23:46:46 +0100
+Subject: [Buildroot] Facing errors when building swfdec (using external
+ toolchain)
+In-Reply-To: <910338.67295.qm@web29006.mail.ird.yahoo.com>
+References: <910338.67295.qm@web29006.mail.ird.yahoo.com>
+Message-ID: <20110315234646.5f11ca74@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Mar 2011 13:49:58 +0100
-Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> wrote:
+Hello Daniel,
 
-> this will reduce the space used and speed up the clone
-> as we will generate an archive later which does need the tree checkouted
-> 
-> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+On Tue, 15 Mar 2011 10:44:11 +0000 (GMT)
+Daniel Kuhne <daniel.kuhne@yahoo.de> wrote:
 
-Sounds good to me.
+> Building
+> swfdec using external toolchain results in erros. I did not modify the
+> swfdec.mk file.
 
-Could you resend a new version with a correct title, such as
-"fetch/git: clone the repository as bare" or something like that ?
+I'm not able to reproduce. swfdec builds just fine with a CodeSourcery
+ARM toolchain used as an external toolchain.
 
-It would then get my:
+So, we'll need more details :
+ * Buildroot configuration
+ * External toolchain used
+ * Full build log
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Does this problem occurs during a fresh build from scratch ?
 
-Thanks!
+Regards,
 
 Thomas
 -- 
