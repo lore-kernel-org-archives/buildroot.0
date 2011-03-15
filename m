@@ -1,26 +1,38 @@
-From: Torsten Mohr <tmohr@s.netic.de>
-Date: Tue, 15 Mar 2011 21:20:13 +0100
-Subject: [Buildroot] u-boot, setup SD card, BeagleBoard-xM
-In-Reply-To: <201103151829.12640.tmohr@s.netic.de>
-References: <201103132130.24022.tmohr@s.netic.de>
-	<20110315112216.5f3a91e2@surf>
-	<201103151829.12640.tmohr@s.netic.de>
-Message-ID: <201103152120.13294.tmohr@s.netic.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Mar 2011 23:33:47 +0100
+Subject: [Buildroot] [PATCH] fetch/git: clone the as bare
+In-Reply-To: <1300193398-15217-1-git-send-email-plagnioj@jcrosoft.com>
+References: <1300193398-15217-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <20110315233347.5dc5dd09@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 15 Mar 2011 13:49:58 +0100
+Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> wrote:
 
-when using buildroot-2011.02 it works !!  Hooray.
+> this will reduce the space used and speed up the clone
+> as we will generate an archive later which does need the tree checkouted
+> 
+> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 
-Though for the linux 2.6.37 the config failed as there is no omap3_defconfig 
-in there.  Copying it over from 2.6.36.x made it compile.
+Sounds good to me.
 
-u-boot.bin does not show any weird output any more.
+Could you resend a new version with a correct title, such as
+"fetch/git: clone the repository as bare" or something like that ?
 
+It would then get my:
 
-Best regards,
-Torsten.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
