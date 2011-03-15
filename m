@@ -1,44 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 Mar 2011 00:02:55 +0100
-Subject: [Buildroot] [git commit master 1/1] linux: bump 2.6.37.x stable
-	version
-Message-ID: <20110314230312.C1DDE8FFE2@busybox.osuosl.org>
+From: bao bui <buiqbao@gmail.com>
+Date: Tue, 15 Mar 2011 13:41:34 +0700
+Subject: [Buildroot] [gs-devel] ghost script warning with fonts
+In-Reply-To: <5.1.0.14.2.20110314130522.03adfe98@pop.gmail.com>
+References: <5.1.0.14.2.20110314130522.03adfe98@pop.gmail.com>
+Message-ID: <AANLkTimsQL4-8Ebxr3xMCeD29moSSdZCF_p8hi4dSPDc@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks Ken,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfde89c0972ceed774bac9658a0138f55a2d61f6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Is there another solution such as add more fonts for ghost script. This is
+an embedded device, and I can not remake the PDF file. It just print out
+every file I put in
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+BAO
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9d514c5..bdfdf9a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_2_6_37
- 
- config BR2_LINUX_KERNEL_2_6_37
--	bool "2.6.37.2"
-+	bool "2.6.37.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "2.6.37" if BR2_LINUX_KERNEL_2_6_37
-+	default "2.6.37.4" if BR2_LINUX_KERNEL_2_6_37
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.7.3.4
+On Mon, Mar 14, 2011 at 8:05 PM, Ken Sharp <ken.sharp@artifex.com> wrote:
+
+> At 05:21 14/03/2011 -0700, bao bui wrote:
+>
+>
+>  When printing using ghost script, I got this warning in the
+>> /var/log/cups/error_log:
+>>
+>> **** Warning: Fonts with Subtype = /TrueType should be embedded.
+>> D [04/Sep/2005:17:30:10 -0600] [Job 5] But RockwellCondensed,BoldItalic is
+>> not embedded.
+>>
+>
+> [snip]
+>
+>
+>  How can I get rid of those warning?
+>>
+>
+> Remake the PDF file with the required fonts embedded.
+>
+>            Ken
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110315/7dda3b2f/attachment.html>
