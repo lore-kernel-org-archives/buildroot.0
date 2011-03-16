@@ -1,118 +1,165 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Wed, 16 Mar 2011 17:10:28 +0100
-Subject: [Buildroot] [PATCH 2/2] Barebox add version selection support
-In-Reply-To: <1300291828-7952-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1300291828-7952-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <1300291828-7952-2-git-send-email-plagnioj@jcrosoft.com>
+From: Heyendal, Carl <CHeyendal@stanleyworks.com>
+Date: Wed, 16 Mar 2011 16:08:41 -0400
+Subject: [Buildroot] Buildroot in use
+References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>
+	<20110315180743.5e34890b@surf>
+	<1D6034426110564DA0DEA9EE9793B3835815AE19D2@NBE-MBX01.americas.swk.pri>
+	<20110315192211.3c59f861@surf>
+	<1D6034426110564DA0DEA9EE9793B3835815AE1A1F@NBE-MBX01.americas.swk.pri>
+	<20110315210538.1973f87f@surf>
+	<779935.72384.qm@web161802.mail.bf1.yahoo.com> 
+Message-ID: <1D6034426110564DA0DEA9EE9793B3835815B5144E@NBE-MBX01.americas.swk.pri>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
----
- boot/barebox/Config.in  |   26 +++++++++++++++++++++++++-
- boot/barebox/barebox.mk |   27 +++++++++++++++++++++++++++
- 2 files changed, 52 insertions(+), 1 deletions(-)
+...at least for the kernel anyways. Maybe not for busybox.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index eb7c2f9..679b1a2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -13,6 +13,20 @@ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
- 	  the _defconfig suffix.
- 
- choice
-+	prompt "Barebox Download"
-+	default BR2_TARGET_BAREBOX_TARBALL
-+	help
-+	  Select the download method you want to use
-+
-+config BR2_TARGET_BAREBOX_TARBALL
-+	bool "tar"
-+
-+config BR2_TARGET_BAREBOX_GIT
-+	bool "git"
-+
-+endchoice
-+
-+choice
- 	prompt "Barebox Version"
- 	default BR2_TARGET_BAREBOX_2011.01
- 	help
-@@ -35,7 +49,12 @@ endchoice
- if BR2_TARGET_BAREBOX_CUSTOM
- 
- config BR2_TARGET_BAREBOX_CUSTOM_LOCATION
--	string "URL of custom Barbox tarball"
-+	string "URL of custom Barbox tarball or git"
-+
-+if BR2_TARGET_BAREBOX_GIT
-+config BR2_TARGET_BAREBOX_CUSTOM_COMMIT
-+	string "URL of custom Barbox commit"
-+endif
- 
- endif
- 
-@@ -46,6 +65,11 @@ config BR2_TARGET_BAREBOX_VERSION
- 	default "2011.03.0"	if BR2_TARGET_BAREBOX_2011_03
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM
- 
-+config BR2_TARGET_BAREBOX_DOWNLOAD
-+	string
-+	default "tar"	if BR2_TARGET_BAREBOX_TARBALL
-+	default "git"	if BR2_TARGET_BAREBOX_GIT
-+
- config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
- 	help
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 116cc72..5994142 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -5,7 +5,33 @@
- #############################################################
- 
- BAREBOX_VERSION:=$(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
--
-+BAREBOX_DOWNLOAD:=$(call qstrip,$(BR2_TARGET_BAREBOX_DOWNLOAD))
-+# force Package as BAREBOX
-+# needed by DOWNLOAD_GIT
-+PKG=BAREBOX
-+
-+ifeq ($(BAREBOX_DOWNLOAD),git)
-+BAREBOX_SITE_METHOD:=git
-+DL_TOOLS_DEPENDENCIES += git
-+ifeq ($(BAREBOX_VERSION),custom)
-+BAREBOX_SITE:=$(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_LOCATION))
-+BAREBOX_VERSION=$(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_COMMIT))
-+# Handle custom Barebox git as specified by the configuration
-+else
-+BAREBOX_SITE:=http://git.pengutronix.de/git/barebox.git
-+BAREBOX_VERSION:=v$(BAREBOX_VERSION)
-+endif
-+ifneq ($(BAREBOX_VERSION),)
-+BAREBOX_BASE_NAME:=barebox-git-$(BAREBOX_VERSION)
-+BAREBOX_DL_VERSION:=$(BAREBOX_VERSION)
-+else
-+BAREBOX_BASE_NAME:=barebox-git
-+BAREBOX_DL_VERSION:=HEAD
-+endif
-+BAREBOX_SOURCE:=$(BAREBOX_BASE_NAME).tar.gz
-+BAREBOX_CAT:=$(ZCAT)
-+BAREBOX_DL_DIR=$(DL_DIR)/$(BAREBOX_BASE_NAME)
-+else
- ifeq ($(BAREBOX_VERSION),custom)
- # Handle custom Barebox tarballs as specified by the configuration
- BAREBOX_TARBALL=$(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_LOCATION))
-@@ -17,6 +43,7 @@ BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE:=http://www.barebox.org/download/
- endif
- BAREBOX_CAT:=$(BZCAT)
-+endif
- 
- ifneq ($(BAREBOX_VERSION),)
- BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
--- 
-1.7.4.1
+> -----Original Message-----
+> From: Heyendal, Carl
+> Sent: March 16, 2011 3:22 PM
+> To: 'Steve Calfee'
+> Subject: RE: [Buildroot] Buildroot in use
+> 
+> Good advice Steve. Thanks for the tip.
+> 
+> Another thing I've noticed when I do 'make clean' from Buildroot home
+> directory is that the configuration changes back to its defaults for
+> both the kernel and busybox. Any changes I made are gone after a make
+> clean. Should I need to copy my .config's before a rebuild?
+> 
+> /carl h.
+> 
+> 
+> 
+> > -----Original Message-----
+> > From: buildroot-bounces at busybox.net [mailto:buildroot-
+> > bounces at busybox.net] On Behalf Of Steve Calfee
+> > Sent: March 16, 2011 12:44 PM
+> > To: Thomas Petazzoni; buildroot at busybox.net
+> > Subject: [Buildroot] Buildroot in use
+> >
+> > ----- Original Message ----
+> >
+> > > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > >
+> > > Hello,
+> > >
+> > > On Tue, 15 Mar 2011 14:32:07 -0400
+> > > "Heyendal, Carl" <CHeyendal@stanleyworks.com>  wrote:
+> > >
+> > > > Really!! 'make clean' from Buildroot directory? That's a
+> complete
+> > > > rebuild!!
+> > >
+> > > Yes, it is. For now, Buildroot is "nothing"  more but a tool that
+> > > automates the process of building an embedded Linux  system. It is
+> > not
+> > > very smart, so it cannot remove packages that have been  installed,
+> > or
+> > > revert changes that have been made to the target  filesystem.
+> > >
+> > > My view on this: Buildroot has been more or less abandonned  until
+> > late
+> > > 2008/early 2009, when Peter took over the maintainership of  the
+> > > project. Since that time, our main goal was to clean up the
+> existing
+> > > code base, keeping the existing feature set (in fact, we added a
+> > bunch
+> > > of features as well, but we didn't fundamentaly changed how
+> > Buildroot
+> > > works). Now that this cleanup process is mostly over, I'd say  that
+> > > solving the issue you're facing here is now on the top priorities
+> of
+> > > the project. At least it's where it is on my own Buildroot TODO
+> > list.
+> > > But there a fairly huge and complex amount of work to do here, so
+> it
+> > > isn't going to happen overnight.
+> > >
+> >
+> > I think a general discussion of how we use buildroot and what we
+> would
+> > like to
+> > see is in order. It seems the framework is stabilizing and useful
+> > (thanks guys).
+> >
+> > It seems in my use that I am either working on the kernel or
+> > configuring a
+> > system with packages (rootfs). make clean is unbearable where it
+> > removes the
+> > toolchain etc.
+> >
+> >
+> > So what I do is I git pull one tree just for my toolchain and
+> compiler.
+> > I
+> > configure and build it without bootstraps, busybox, kernel etc. If I
+> > need to
+> > change a toolchain option I go back to this tree and fix it. This
+> build
+> > becomes
+> > my "external toolchain".
+> >
+> > I then git pull another tree which uses that external toolchain. Make
+> > clean is
+> > now much less painful.
+> >
+> > During development it is common to want to change stuff in the
+> > "skeleton"
+> > filesystem - add scripts, configure things etc. This is kind of
+> painful
+> > from
+> > within the buildroot framework, with no clear way to force an update
+> to
+> > the
+> > rootfs image etc. So what I do is I create a skeleton directory for
+> my
+> > board. In
+> > the post build script I copy my skeleton on top of the existing
+> > buildroot
+> > constructed skeleton. In this way I only have the files I care about
+> in
+> > my board
+> > skeleton, they are updated every build etc.
+> >
+> > I have not moved my bsp to the new board/company/bsp file system yet,
+> > but here
+> > is my post install script:
+> > #!/bin/bash
+> > #
+> > # script which runs before creating rootfs
+> > #
+> > #
+> > MAINDIR=${1}/../../
+> > SRCDIR=${MAINDIR}"target/device/beagleboard/skeleton/*"
+> > DESTDIR=${1}
+> > echo "***************patching some stuff in " ${DESTDIR} from
+> ${SRCDIR}
+> > #echo "DESTDIR " ${DESTDIR}
+> > #echo "SRCDIR " ${SRCDIR}
+> > #ls -l ${SRCDIR} ${SRCDIR}"/etc"
+> > cp -rv ${SRCDIR} ${DESTDIR}
+> > echo "end of userdefined script before packing rootfs"
+> >
+> >
+> > I am curious how people do development with cutting edge kernels like
+> > linux-next? Do you do it completely removed from buildroot and just
+> use
+> > the
+> > external tools? Do you use some kind of sym-link to point to the
+> other
+> > kernel
+> > git tree?
+> >
+> > Regards, Steve
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
