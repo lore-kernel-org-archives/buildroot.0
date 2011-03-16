@@ -1,46 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Mar 2011 23:57:11 +0100
-Subject: [Buildroot] [PATCH] libnss: Add new package.
-In-Reply-To: <AANLkTinFsyQbjv2PvuzV3TDmzMDZkCfAR95_sycwBo1x@mail.gmail.com>
-References: <AANLkTinFsyQbjv2PvuzV3TDmzMDZkCfAR95_sycwBo1x@mail.gmail.com>
-Message-ID: <20110315235711.05d56f8d@surf>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 16 Mar 2011 09:20:49 +0100
+Subject: [Buildroot] [PATCH 0 of 3] Add support for local package
+ downloads (file://)
+In-Reply-To: <20110315142624.GW7248@embryo.tricolour.net>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+	<20110315142624.GW7248@embryo.tricolour.net>
+Message-ID: <AANLkTi=iuQkoU5u=ZzW1n=x3zCsAgWD1D-34aan7OYSn@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Mar 2011 17:24:56 +0000
-Will Newton <will.newton@gmail.com> wrote:
+Hi Richard,
 
-> NSS is the Network Security Services library developed as part of
-> the Mozilla project. It provides similar functions to OpenSSL but
-> allows MPL, GPL and LGPL licensing.
+On Tue, Mar 15, 2011 at 3:26 PM, Richard Guy Briggs <rgb@tricolour.net> wrote:
+[...]
+> This looks like a more thorough implementation of what I started and
+> attached to bug 3343.
 
-Just curious, besides Mozilla software, are there other software
-components that rely on libnss ?
+I wasn't aware of this bug before, but I'm glad that I'm not the only
+one with this feature request.
 
-> +config BR2_PACKAGE_LIBNSS
-> +	bool "libnss"
-> +	depends on BR2_PACKAGE_LIBNSPR
-> +	depends on BR2_PACKAGE_SQLITE
-> +	depends on BR2_PACKAGE_ZLIB
+>
+> I'd recommend taking Thomas' patches over mine!
+>
+> Mine also had starting points for scp and rsync as well.
 
-The tradition is to use "select" dependencies for
-non-obvious dependencies on libraries.
+Thanks. I like the fact that you envisioned support for extra
+protocols like scp and rsync. Preferably we'd merge these changes with
+mine, don't you think? (but we should fix your laziness ;-) )
 
-> diff --git a/package/libnss/libnss-cross.patch
-> b/package/libnss/libnss-cross.patch
-
-Your patch seems wrapped.
-
-The patch lacks a description.
-
-Regards!
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
