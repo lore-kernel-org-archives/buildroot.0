@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 Mar 2011 22:47:40 +0100
-Subject: [Buildroot] [PATCHv2] fetch/git: clone the repository as bare
-In-Reply-To: <1300291628-7478-1-git-send-email-plagnioj@jcrosoft.com>
-	(Jean-Christophe PLAGNIOL-VILLARD's message of "Wed, 16 Mar 2011
-	17:07:08 +0100")
-References: <1300193398-15217-1-git-send-email-plagnioj@jcrosoft.com>
-	<1300291628-7478-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <8762rin3er.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 16 Mar 2011 22:46:52 +0100
+Subject: [Buildroot] [git commit master 1/1] fetch/git: clone the repository
+	as bare
+Message-ID: <20110316214804.C6DDE909B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
- Jean-Christophe> this will reduce the space used and speed up the clone
- Jean-Christophe> as we will generate an archive later which does need
- the tree checkouted
+commit: http://git.buildroot.net/buildroot/commit/?id=f7abec2d1d1e52f49f7d95c48165cde8cf41edb6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed with slightly tweaked commit message, thanks.
+This will reduce the space used and speed up the clone as it is only
+used to generate an archive, which doesn't need the git working tree.
 
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 84687d5..bf4e1b4 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -105,7 +105,7 @@ endif
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+-	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
++	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+ 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+ 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+ 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
