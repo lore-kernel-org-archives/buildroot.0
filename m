@@ -1,78 +1,29 @@
-From: Barry Kauler <bkauler@gmail.com>
-Date: Fri, 18 Mar 2011 00:32:38 +0800
-Subject: [Buildroot] Cannot compile gcc in target
-Message-ID: <AANLkTi=0qnn024KC8WWhg33-wCWi2Loy1RrBVuL0HdOT@mail.gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Thu, 17 Mar 2011 10:17:16 -0700
+Subject: [Buildroot] Buildroot in use
+In-Reply-To: <1D6034426110564DA0DEA9EE9793B3835815B51A9B@NBE-MBX01.americas.swk.pri>
+References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>	<20110315180743.5e34890b@surf>	<1D6034426110564DA0DEA9EE9793B3835815AE19D2@NBE-MBX01.americas.swk.pri>	<20110315192211.3c59f861@surf>	<1D6034426110564DA0DEA9EE9793B3835815AE1A1F@NBE-MBX01.americas.swk.pri>	<20110315210538.1973f87f@surf>	<779935.72384.qm@web161802.mail.bf1.yahoo.com>	<4D81FB3E.7060307@carallon.com>
+	<1D6034426110564DA0DEA9EE9793B3835815B51A9B@NBE-MBX01.americas.swk.pri>
+Message-ID: <4D82421C.9020704@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I am new to Buildroot, and it would be great if someone
-experienced with Buildroot could help me out.
+On 03/17/11 06:53, Heyendal, Carl wrote:
+> If starting from scratch, downloading and building 2 Buildroots (one for the toolchain, and the other for the rest of the stuff) sounds reasonable. But refining the notion a bit more, if you have already built the entire Buildroot tree like I have done already, is it possible to break off the toolchain leg of the tree and move it somewhere else. Then of course configure the external toolchain option after that.
+>
+> /carl
+>
 
-First time through, I just ran "make menuconfig" and apart from
-choosing i586 architecture, just accepted the defaults, and got a
-target root filesystem.
+I believe that the gcc that you have built has a few built-in paths, so 
+you cannot just move the compiler stuff to another file tree.
 
-Fine, but it only has runtime files and what I want is a basic cli
-compiling environment for compiling some applications statically. So I
-ran 'make clean' then 'make menuconfig' again, and made what seem like
-the minimum changes to create a compiling environment in the target
-rootfs.
+What you can do is the second part of my suggestion, just create another 
+buildroot tree and point its external toolchain to the one you now have 
+built. It will leave some garbage in the original tree, but disk space 
+is pretty cheap. In the new tree you will have faster make clean; 
+make.... cycles since the external toolchain will not be deleted.
 
-It all goes well until compiling gcc for the target, and stops with this:
-
-TARGET_CPU_DEFAULT="" \
-	HEADERS="options.h config/i386/i386.h config/i386/unix.h
-config/i386/att.h config/dbxelf.h config/elfos.h config/svr4.h
-config/linux.h config/i386/linux.h defaults.h"
-DEFINES="UCLIBC_DEFAULT=1" \
-	/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/mkconfig.sh
-tm.h
-gawk -f /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/opt-gather.awk
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/ada/lang.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/fortran/lang.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/java/lang.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/treelang/lang.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/c.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/common.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/config/i386/i386.opt
-/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/config/linux.opt
-> tmp-optionlist
-TARGET_CPU_DEFAULT="" \
-	HEADERS="auto-build.h ansidecl.h" DEFINES="" \
-	/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/mkconfig.sh
-bconfig.h
-make[3]: *** No rule to make target `auto-build.h', needed by
-`build/genmodes.o'.  Stop.
-make[3]: *** Waiting for unfinished jobs....
-/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/../move-if-change
-tmp-optionlist optionlist
-echo timestamp > s-options
-make[3]: Leaving directory
-`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target/gcc'
-make[2]: *** [all-gcc] Error 2
-make[2]: Leaving directory
-`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target'
-make: *** [/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target/.compiled]
-Error 2
-#
-
-I also tried the latest snapshot of Builroot, same problem. Does
-anyone know what is going wrong here?
-
-The .config file is attached.
-
-Regards,
-Barry Kauler
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: DOTconfig.gz
-Type: application/x-gzip
-Size: 3971 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/39e220ce/attachment.bin>
+Regards, Steve
