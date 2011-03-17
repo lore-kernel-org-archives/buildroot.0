@@ -1,19 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Mar 2011 13:24:43 +0100
-Subject: [Buildroot] [PATCH] imagemagick: disable openmp support
-In-Reply-To: <1300364502-7353-1-git-send-email-schwarzkopf@sensortherm.de>
-	(Klaus Schwarzkopf's message of "Thu, 17 Mar 2011 13:21:42 +0100")
-References: <1300364502-7353-1-git-send-email-schwarzkopf@sensortherm.de>
-Message-ID: <87oc5akk8k.fsf@macbook.be.48ers.dk>
+From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+Date: Thu, 17 Mar 2011 13:31:46 +0100
+Subject: [Buildroot] [PATCH v2] imagemagick: disable openmp support
+Message-ID: <1300365106-18760-1-git-send-email-schwarzkopf@sensortherm.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Klaus" == Klaus Schwarzkopf <schwarzkopf@sensortherm.de> writes:
+* fixed problem: can't load library 'libgomp.so.1'
 
-Why? A bit more detailed commit message would be good.
+Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+---
+ package/imagemagick/imagemagick.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 7955db7..ab59323 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -28,7 +28,8 @@ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+ 		--without-dps \
+ 		--without-gslib \
+ 		--without-fpx \
+-		--without-x
++		--without-x \
++		--disable-openmp
+ 
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ IMAGEMAGICK_CONF_OPT += --with-fontconfig
 -- 
-Bye, Peter Korsgaard
+1.7.0.4
