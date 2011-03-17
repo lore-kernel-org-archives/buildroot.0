@@ -1,36 +1,36 @@
-From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
-Date: Thu, 17 Mar 2011 12:05:05 +0100
-Subject: [Buildroot] can't load library 'libgomp.so.1'
-Message-ID: <4D81EAE1.7090903@sensortherm.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 17 Mar 2011 12:10:08 +0100
+Subject: [Buildroot] [git commit master 1/1] ethtool: bump version,
+	use new upstream location
+Message-ID: <20110317111324.D8C1F90A37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-if have installed imagemagick.
+commit: http://git.buildroot.net/buildroot/commit/?id=851c9b56e81eee992293c98a1843e7bcda3e3a9c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On my target, i have this error:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ethtool/ethtool.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-# convert --version
-convert: can't load library 'libgomp.so.1'
-
-
-I copied the lib and it works:
-
-cp 
-/opt/buildroot-git/output/host/usr/arm-unknown-linux-uclibcgnueabi/lib/libgomp.so.1.0.0 
-${TARGET}/usr/lib/libgomp.so.1
-
-# convert --version
-Version: ImageMagick 6.6.7-6 2011-03-17 Q16 http://www.imagemagick.org
-Copyright: Copyright (C) 1999-2011 ImageMagick Studio LLC
-Features: OpenMP
-
-Can you fix it?
-
-Regards,
-
-Klaus
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 1fc2315..53bbb67 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ETHTOOL_VERSION = 2.6.35
+-ETHTOOL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gkernel/
++ETHTOOL_VERSION = 2.6.38
++ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool/
+ 
+ $(eval $(call AUTOTARGETS,package,ethtool))
+-- 
+1.7.3.4
