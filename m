@@ -1,29 +1,40 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Thu, 17 Mar 2011 10:17:16 -0700
-Subject: [Buildroot] Buildroot in use
-In-Reply-To: <1D6034426110564DA0DEA9EE9793B3835815B51A9B@NBE-MBX01.americas.swk.pri>
-References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>	<20110315180743.5e34890b@surf>	<1D6034426110564DA0DEA9EE9793B3835815AE19D2@NBE-MBX01.americas.swk.pri>	<20110315192211.3c59f861@surf>	<1D6034426110564DA0DEA9EE9793B3835815AE1A1F@NBE-MBX01.americas.swk.pri>	<20110315210538.1973f87f@surf>	<779935.72384.qm@web161802.mail.bf1.yahoo.com>	<4D81FB3E.7060307@carallon.com>
-	<1D6034426110564DA0DEA9EE9793B3835815B51A9B@NBE-MBX01.americas.swk.pri>
-Message-ID: <4D82421C.9020704@gmail.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Thu, 17 Mar 2011 20:33:37 +0200
+Subject: [Buildroot] glibc vs uclibc
+In-Reply-To: <AANLkTinGzTxniNjkHfkpGLngJ_Y7ie+B4PiFUcrLDc-u@mail.gmail.com>
+References: <AANLkTinGzTxniNjkHfkpGLngJ_Y7ie+B4PiFUcrLDc-u@mail.gmail.com>
+Message-ID: <AANLkTimCeg_s5o7th-20cd77045CVrRAFowKwt8COXLa@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/17/11 06:53, Heyendal, Carl wrote:
-> If starting from scratch, downloading and building 2 Buildroots (one for the toolchain, and the other for the rest of the stuff) sounds reasonable. But refining the notion a bit more, if you have already built the entire Buildroot tree like I have done already, is it possible to break off the toolchain leg of the tree and move it somewhere else. Then of course configure the external toolchain option after that.
+You need now different configurations. Since rebuild of the whole target is
+pretty heavy - I suggest using tow different checkouts.
+
+On Thu, Mar 17, 2011 at 4:37 PM, Charles Krinke <charles.krinke@gmail.com>wrote:
+
+> Gentlemen:
 >
-> /carl
+> I have a request to provide our MPC8323E build with both uclibc and glibc
+> support  in seperate builds so this leads to a question or at least an
+> education of my naivety.
 >
-
-I believe that the gcc that you have built has a few built-in paths, so 
-you cannot just move the compiler stuff to another file tree.
-
-What you can do is the second part of my suggestion, just create another 
-buildroot tree and point its external toolchain to the one you now have 
-built. It will leave some garbage in the original tree, but disk space 
-is pretty cheap. In the new tree you will have faster make clean; 
-make.... cycles since the external toolchain will not be deleted.
-
-Regards, Steve
+> Can we build glibc as well as uclibc with buildroot? If so, how is it done?
+> I *did* go looking for this switch and did not find it, so this is the
+> opportunity for someone to say "its right there in file x, Charles"
+>
+> --
+> Charles Krinke
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110317/c2d0b6ce/attachment-0001.html>
