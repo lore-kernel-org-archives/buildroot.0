@@ -1,31 +1,53 @@
 From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
-Date: Thu, 17 Mar 2011 13:21:42 +0100
-Subject: [Buildroot] [PATCH] imagemagick: disable openmp support
-Message-ID: <1300364502-7353-1-git-send-email-schwarzkopf@sensortherm.de>
+Date: Thu, 17 Mar 2011 13:23:43 +0100
+Subject: [Buildroot] can't load library 'libgomp.so.1'
+In-Reply-To: <4D81EAE1.7090903@sensortherm.de>
+References: <4D81EAE1.7090903@sensortherm.de>
+Message-ID: <4D81FD4F.3020404@sensortherm.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
----
- package/imagemagick/imagemagick.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 7955db7..ab59323 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -28,7 +28,8 @@ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
- 		--without-dps \
- 		--without-gslib \
- 		--without-fpx \
--		--without-x
-+		--without-x \
-+		--disable-openmp
- 
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- IMAGEMAGICK_CONF_OPT += --with-fontconfig
--- 
-1.7.0.4
+disable openmp support works too.
+
+See my Patch.
+
+Regards,
+
+Klaus
+
+Am 17.03.2011 12:05, schrieb Klaus Schwarzkopf:
+> Hi,
+>
+> if have installed imagemagick.
+>
+> On my target, i have this error:
+>
+> # convert --version
+> convert: can't load library 'libgomp.so.1'
+>
+>
+> I copied the lib and it works:
+>
+> cp
+> /opt/buildroot-git/output/host/usr/arm-unknown-linux-uclibcgnueabi/lib/libgomp.so.1.0.0
+> ${TARGET}/usr/lib/libgomp.so.1
+>
+> # convert --version
+> Version: ImageMagick 6.6.7-6 2011-03-17 Q16 http://www.imagemagick.org
+> Copyright: Copyright (C) 1999-2011 ImageMagick Studio LLC
+> Features: OpenMP
+>
+> Can you fix it?
+>
+> Regards,
+>
+> Klaus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
