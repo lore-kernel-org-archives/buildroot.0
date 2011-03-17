@@ -1,25 +1,78 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Thu, 17 Mar 2011 07:37:20 -0700
-Subject: [Buildroot] glibc vs uclibc
-Message-ID: <AANLkTinGzTxniNjkHfkpGLngJ_Y7ie+B4PiFUcrLDc-u@mail.gmail.com>
+From: Barry Kauler <bkauler@gmail.com>
+Date: Fri, 18 Mar 2011 00:32:38 +0800
+Subject: [Buildroot] Cannot compile gcc in target
+Message-ID: <AANLkTi=0qnn024KC8WWhg33-wCWi2Loy1RrBVuL0HdOT@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gentlemen:
+Hi, I am new to Buildroot, and it would be great if someone
+experienced with Buildroot could help me out.
 
-I have a request to provide our MPC8323E build with both uclibc and glibc
-support  in seperate builds so this leads to a question or at least an
-education of my naivety.
+First time through, I just ran "make menuconfig" and apart from
+choosing i586 architecture, just accepted the defaults, and got a
+target root filesystem.
 
-Can we build glibc as well as uclibc with buildroot? If so, how is it done?
-I *did* go looking for this switch and did not find it, so this is the
-opportunity for someone to say "its right there in file x, Charles"
+Fine, but it only has runtime files and what I want is a basic cli
+compiling environment for compiling some applications statically. So I
+ran 'make clean' then 'make menuconfig' again, and made what seem like
+the minimum changes to create a compiling environment in the target
+rootfs.
 
--- 
-Charles Krinke
+It all goes well until compiling gcc for the target, and stops with this:
+
+TARGET_CPU_DEFAULT="" \
+	HEADERS="options.h config/i386/i386.h config/i386/unix.h
+config/i386/att.h config/dbxelf.h config/elfos.h config/svr4.h
+config/linux.h config/i386/linux.h defaults.h"
+DEFINES="UCLIBC_DEFAULT=1" \
+	/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/mkconfig.sh
+tm.h
+gawk -f /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/opt-gather.awk
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/ada/lang.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/fortran/lang.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/java/lang.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/treelang/lang.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/c.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/common.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/config/i386/i386.opt
+/mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/config/linux.opt
+> tmp-optionlist
+TARGET_CPU_DEFAULT="" \
+	HEADERS="auto-build.h ansidecl.h" DEFINES="" \
+	/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/mkconfig.sh
+bconfig.h
+make[3]: *** No rule to make target `auto-build.h', needed by
+`build/genmodes.o'.  Stop.
+make[3]: *** Waiting for unfinished jobs....
+/bin/sh /mnt/sdb3/buildroot/buildroot-2011.02/output/toolchain/gcc-4.3.5/gcc/../move-if-change
+tmp-optionlist optionlist
+echo timestamp > s-options
+make[3]: Leaving directory
+`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target/gcc'
+make[2]: *** [all-gcc] Error 2
+make[2]: Leaving directory
+`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target'
+make: *** [/mnt/sdb3/buildroot/buildroot-2011.02/output/build/gcc-4.3.5-target/.compiled]
+Error 2
+#
+
+I also tried the latest snapshot of Builroot, same problem. Does
+anyone know what is going wrong here?
+
+The .config file is attached.
+
+Regards,
+Barry Kauler
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110317/1b5a57ad/attachment.html>
+A non-text attachment was scrubbed...
+Name: DOTconfig.gz
+Type: application/x-gzip
+Size: 3971 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/39e220ce/attachment.bin>
