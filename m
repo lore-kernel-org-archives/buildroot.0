@@ -1,54 +1,69 @@
 From: bruce bushby <bruce.bushby@gmail.com>
-Date: Fri, 18 Mar 2011 11:16:39 +0000
-Subject: [Buildroot] procps fails to compile on Fedora 14 due to newer
-	version of GNU make
-Message-ID: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
+Date: Fri, 18 Mar 2011 11:38:09 +0000
+Subject: [Buildroot] [buildroot] libdrm tries to compile before cairo
+In-Reply-To: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
+References: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
+Message-ID: <AANLkTi=jMePwkivpVNHvqvP6SYS5GCtL0YMkNGnPb84m@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Barry
 
-I recently switched to Fedora 14 as my build platform and picked up a
-problem compiling procps. This is apparently caused by newer versions of
-make.
+I'm also new...so can't really offer anything beyond my recent experience.
+Could you past your "LIBDRM_DEPENDENCIES" line?
 
-Previously I was building on ubuntu "natty" which has "make-3.81-8" ...
-however Fedora 14 is using "make-3.82-2". There is a very nice explanation
-here:
-http://old.nabble.com/make-3.81.91---procps-3.2.8-td29281048.html
+I had some troubles adding "zeromq" until I added:
+ZEROMQ_DEPENDENCIES = e2fsprogs host-pkg-config host-e2fsprogs
 
-Where Paul Smith explains:
-In previous versions of GNU make, wildcards were returned in sorted
-order; however that was never guaranteed and the new version of make
-(for efficiency) returns matches in "directory order", which is
-essentially random.
+I suspect I don't need the "host-e2fsprogs" ..... it was only when I added
+"e2fsprogs" that everything worked.
 
-Following the recommendations in that thread I made very simple patch:
+If you "de-select" libdrm and allow the build to finish and then run "make
+libdrm" ... does it then compile?
 
-[root at plxarm01 tmp]# cat procps-sort-order.patch
---- procps-3.2.7.orig/Makefile  2006-06-24 10:02:25.000000000 +0100
-+++ procps-3.2.7/Makefile       2011-03-18 10:55:46.055307083 +0000
-@@ -174,7 +174,7 @@
- # want this rule first, use := on ALL, and ALL not filled in yet
- all: do_all
-
---include */module.mk
-+-include proc/module.mk ps/module.mk
-
- do_all:    $(ALL)
+My problem with zeromq complained that it couldn't find "uuid-dev" ....even
+though I had selected "uuid"....turned out "e2fsprogs" provides
+"uuid-dev"...just
+wondering if something similar applies to "cairo.h"
 
 
-[root at plxarm01 tmp]#
 
 
-I'm guessing forth coming versions of debian/ubuntu will also include
-"make-3.82+" and probably experience the same issue.
 
 
-Bruce
+
+
+
+
+
+
+
+On Fri, Mar 18, 2011 at 10:40 AM, Barry Kauler <bkauler@gmail.com> wrote:
+
+> Hi, I am a first-time user of Buildroot. It has been chugging along
+> nicely, but libdrm has failed to compile.
+>
+> It reports that 'cairo.h' is missing. Which it is, cairo has not yet
+> been compiled in the target.
+>
+> So, using my own reasoning, I added "cairo" onto LIBDRM_DEPENDENCIES
+> variable in file 'libdrm.mk'. I also deleted
+> output/build/libdrm-2.4.19.
+>
+> However, running 'make' again, it tries to compile libdrm again, and fails.
+>
+> How do I make it compile cairo (and its deps) before libdrm?
+>
+> Regards,
+> Barry Kauler
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/26d1d745/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/931a133b/attachment.html>
