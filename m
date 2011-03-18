@@ -1,69 +1,36 @@
-From: bruce bushby <bruce.bushby@gmail.com>
-Date: Fri, 18 Mar 2011 11:38:09 +0000
-Subject: [Buildroot] [buildroot] libdrm tries to compile before cairo
-In-Reply-To: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
-References: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
-Message-ID: <AANLkTi=jMePwkivpVNHvqvP6SYS5GCtL0YMkNGnPb84m@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 Mar 2011 13:26:48 +0100
+Subject: [Buildroot] [git commit master 1/1] mtd: bump version
+Message-ID: <20110318122732.21A14909C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Barry
 
-I'm also new...so can't really offer anything beyond my recent experience.
-Could you past your "LIBDRM_DEPENDENCIES" line?
+commit: http://git.buildroot.net/buildroot/commit/?id=91c4ff298cf91cd6782f5ba5c3f9e51d902d1b7a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I had some troubles adding "zeromq" until I added:
-ZEROMQ_DEPENDENCIES = e2fsprogs host-pkg-config host-e2fsprogs
+Fixes flash_erase argument handling (start should be in bytes, not blocks).
 
-I suspect I don't need the "host-e2fsprogs" ..... it was only when I added
-"e2fsprogs" that everything worked.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-If you "de-select" libdrm and allow the build to finish and then run "make
-libdrm" ... does it then compile?
-
-My problem with zeromq complained that it couldn't find "uuid-dev" ....even
-though I had selected "uuid"....turned out "e2fsprogs" provides
-"uuid-dev"...just
-wondering if something similar applies to "cairo.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-On Fri, Mar 18, 2011 at 10:40 AM, Barry Kauler <bkauler@gmail.com> wrote:
-
-> Hi, I am a first-time user of Buildroot. It has been chugging along
-> nicely, but libdrm has failed to compile.
->
-> It reports that 'cairo.h' is missing. Which it is, cairo has not yet
-> been compiled in the target.
->
-> So, using my own reasoning, I added "cairo" onto LIBDRM_DEPENDENCIES
-> variable in file 'libdrm.mk'. I also deleted
-> output/build/libdrm-2.4.19.
->
-> However, running 'make' again, it tries to compile libdrm again, and fails.
->
-> How do I make it compile cairo (and its deps) before libdrm?
->
-> Regards,
-> Barry Kauler
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/931a133b/attachment.html>
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 8a819fa..6b8f2c7 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=1.4.2
++MTD_VERSION:=1.4.3
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+-- 
+1.7.3.4
