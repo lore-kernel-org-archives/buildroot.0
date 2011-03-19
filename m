@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2011 08:26:16 +0100
-Subject: [Buildroot] procps fails to compile on Fedora 14 due to newer
- version of GNU make
-In-Reply-To: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
-References: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
-Message-ID: <20110319082616.6dfb9018@surf>
+Date: Sat, 19 Mar 2011 08:29:09 +0100
+Subject: [Buildroot] [Solved] Re:  ntpdate takes a long time
+In-Reply-To: <AANLkTin6eLoEyqOri=01+55AeDzQhw3MNg=0WZyCo28g@mail.gmail.com>
+References: <AANLkTi=PdnH5wLpD+F1pmWwf0jNc_baRBGbr70RAtVXT@mail.gmail.com>
+	<201103180953.21819.minimod@morethan.org>
+	<AANLkTin6eLoEyqOri=01+55AeDzQhw3MNg=0WZyCo28g@mail.gmail.com>
+Message-ID: <20110319082909.023d3e35@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bruce,
+Hello,
 
-On Fri, 18 Mar 2011 11:16:39 +0000
+On Fri, 18 Mar 2011 15:34:36 +0000
 bruce bushby <bruce.bushby@gmail.com> wrote:
 
-> [root at plxarm01 tmp]# cat procps-sort-order.patch
-> --- procps-3.2.7.orig/Makefile  2006-06-24 10:02:25.000000000 +0100
-> +++ procps-3.2.7/Makefile       2011-03-18 10:55:46.055307083 +0000
-> @@ -174,7 +174,7 @@
->  # want this rule first, use := on ALL, and ALL not filled in yet
->  all: do_all
+> Apologies Michael....I think it got mixed up and pasted the results
+> while still running over "ppp0"
 > 
-> --include */module.mk
-> +-include proc/module.mk ps/module.mk
+> It appears the issue is caused by "ntp", I reverted my ntp package
+> version to "4.2.6p1" and now it works fine.
 > 
->  do_all:    $(ALL)
+> The results below show the same commands from:
+> Linux Desktop
+> Embedded running ntp-4.2.6p3 (broken)
+> Embedded running ntp-4.2.6p1 (working)
 
-Could you send a patch that adds this modification as a patch against
-the procps package in Buildroot ? This way we could integrate it.
+Sorry, but we can't consider this problem as solved: it seems that the
+version currently packaged in Buildroot has an issue. Every other user
+of the version packaged in Buildroot might face the same problem.
 
-Thanks,
+Could you post a bug at http://bugs.ntp.org/ detailing your problem, so
+that maybe the NTP developers can find out what's going wrong ?
 
 Thomas
 -- 
