@@ -1,151 +1,60 @@
-From: bao bui <buiqbao@gmail.com>
-Date: Fri, 18 Mar 2011 23:24:22 -0700
-Subject: [Buildroot] qt 4.7.2 compile error
-Message-ID: <AANLkTinVf+6U=UNykD0nfrTMRZx+F4-oX_5EA2hqKcQD@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Mar 2011 08:22:40 +0100
+Subject: [Buildroot] [buildroot] libdrm tries to compile before cairo
+In-Reply-To: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
+References: <AANLkTinJmH7Jsb25KJY6WN5YZaHHKqRJO0ctNA3NmKog@mail.gmail.com>
+Message-ID: <20110319082240.7757e09c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Barry,
 
-I am trying to compile Qt 4.7.2 in buildroot. I got the error:
+On Fri, 18 Mar 2011 18:40:17 +0800
+Barry Kauler <bkauler@gmail.com> wrote:
 
-compiling util/qdeclarativestateoperations.cpp
-rm -f libQtDeclarative.so.4.7.2 libQtDeclarative.so libQtDeclarative.so.4
-libQtDeclarative.so.4.7
-linking ../../lib/libQtDeclarative.so.4.7.2
-.obj/release-shared-emb-arm/qdeclarativeview.o: In function
-`QDeclarativeView::setRootObject(QObject*)':
-qdeclarativeview.cpp:(.text+0x22e4): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativepackage.o: In function
-`QList<QDeclarativePackagePrivate::DataGuard>::detach_helper()':
-qdeclarativepackage.cpp:(.text._ZN5QListIN26QDeclarativePackagePrivate9DataGuardEE13detach_helperEv[QList<QDeclarativePackagePrivate::DataGuard>::detach_helper()]+0x2a0):
-undefined reference to `QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativepackage.o: In function
-`QList<QDeclarativePackagePrivate::DataGuard>::append(QDeclarativePackagePrivate::DataGuard
-const&)':
-qdeclarativepackage.cpp:(.text._ZN5QListIN26QDeclarativePackagePrivate9DataGuardEE6appendERKS1_[QList<QDeclarativePackagePrivate::DataGuard>::append(QDeclarativePackagePrivate::DataGuard
-const&)]+0x7d0): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativepackage.o: In function
-`QDeclarativePackagePrivate::data_append(QDeclarativeListProperty<QObject>*,
-QObject*)':
-qdeclarativepackage.cpp:(.text._ZN26QDeclarativePackagePrivate11data_appendEP24QDeclarativeListPropertyI7QObjectEPS1_[QDeclarativePackagePrivate::data_append(QDeclarativeListProperty<QObject>*,
-QObject*)]+0x19c): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativeanimation.o: In function
-`QDeclarativeAbstractAnimation::setRunning(bool)':
-qdeclarativeanimation.cpp:(.text+0x6bc8): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativeanimation.o:qdeclarativeanimation.cpp:(.text._ZN16QDeclarativeData3getEPK7QObjectb[QDeclarativeData::get(QObject
-const*, bool)]+0x118): more undefined references to
-`QAbstractDeclarativeData::objectNameChanged' follow
-.obj/release-shared-emb-arm/qdeclarativetextinput.o: In function
-`QDeclarativeTextInput::cursorPosChanged()':
-qdeclarativetextinput.cpp:(.text+0x1d70): undefined reference to
-`QLineControl::resetCursorBlinkTimer()'
-.obj/release-shared-emb-arm/qdeclarativevisualitemmodel.o: In function
-`QDeclarativeVisualDataModelData::QDeclarativeVisualDataModelData(int,
-QDeclarativeVisualDataModel*)':
-qdeclarativevisualitemmodel.cpp:(.text+0x2d2c): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevisualitemmodel.o: In function
-`QDeclarativeVisualDataModelPrivate::QDeclarativeVisualDataModelPrivate(QDeclarativeContext*)':
-qdeclarativevisualitemmodel.cpp:(.text+0x3614): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevisualitemmodel.o: In function
-`QDeclarativeVisualDataModelPrivate::QDeclarativeVisualDataModelPrivate(QDeclarativeContext*)':
-qdeclarativevisualitemmodel.cpp:(.text+0x3ccc): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevisualitemmodel.o: In function
-`QDeclarativeVisualDataModelData::QDeclarativeVisualDataModelData(int,
-QDeclarativeVisualDataModel*)':
-qdeclarativevisualitemmodel.cpp:(.text+0x43f4): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevisualitemmodel.o: In function
-`QDeclarativeGuard<QDeclarativeVisualDataModel>::operator=(QDeclarativeVisualDataModel*)':
-qdeclarativevisualitemmodel.cpp:(.text._ZN17QDeclarativeGuardI27QDeclarativeVisualDataModelEaSEPS0_[QDeclarativeGuard<QDeclarativeVisualDataModel>::operator=(QDeclarativeVisualDataModel*)]+0x174):
-undefined reference to `QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativelistview.o:qdeclarativelistview.cpp:(.text+0x930):
-more undefined references to `QAbstractDeclarativeData::objectNameChanged'
-follow
-.obj/release-shared-emb-arm/qdeclarativetextlayout.o: In function
-`(anonymous namespace)::DrawTextItemRecorder::drawTextItem(QPointF const&,
-QTextItem const&)':
-qdeclarativetextlayout.cpp:(.text+0x17d8): undefined reference to
-`QStaticTextItem::setFontEngine(QFontEngine*)'
-qdeclarativetextlayout.cpp:(.text+0x1854): undefined reference to
-`QStaticTextItem::~QStaticTextItem()'
-.obj/release-shared-emb-arm/qdeclarativetextlayout.o: In function
-`QVector<QStaticTextItem>::free(QVectorTypedData<QStaticTextItem>*)':
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE4freeEP16QVectorTypedDataIS0_E[QVector<QStaticTextItem>::free(QVectorTypedData<QStaticTextItem>*)]+0x30):
-undefined reference to `QStaticTextItem::~QStaticTextItem()'
-.obj/release-shared-emb-arm/qdeclarativetextlayout.o: In function
-`QVector<QStaticTextItem>::realloc(int, int)':
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE7reallocEii[QVector<QStaticTextItem>::realloc(int,
-int)]+0x1c8): undefined reference to
-`QStaticTextItem::setFontEngine(QFontEngine*)'
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE7reallocEii[QVector<QStaticTextItem>::realloc(int,
-int)]+0x2f0): undefined reference to `QStaticTextItem::~QStaticTextItem()'
-.obj/release-shared-emb-arm/qdeclarativetextlayout.o: In function
-`QVector<QStaticTextItem>::append(QStaticTextItem const&)':
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE6appendERKS0_[QVector<QStaticTextItem>::append(QStaticTextItem
-const&)]+0xf0): undefined reference to
-`QStaticTextItem::setFontEngine(QFontEngine*)'
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE6appendERKS0_[QVector<QStaticTextItem>::append(QStaticTextItem
-const&)]+0x224): undefined reference to
-`QStaticTextItem::setFontEngine(QFontEngine*)'
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE6appendERKS0_[QVector<QStaticTextItem>::append(QStaticTextItem
-const&)]+0x22c): undefined reference to
-`QStaticTextItem::~QStaticTextItem()'
-qdeclarativetextlayout.cpp:(.text._ZN7QVectorI15QStaticTextItemE6appendERKS0_[QVector<QStaticTextItem>::append(QStaticTextItem
-const&)]+0x350): undefined reference to
-`QStaticTextItem::setFontEngine(QFontEngine*)'
-.obj/release-shared-emb-arm/qdeclarativevmemetaobject.o: In function
-`QDeclarativeVMEMetaObject::QDeclarativeVMEMetaObject(QObject*, QMetaObject
-const*, QDeclarativeVMEMetaData const*, QDeclarativeCompiledData*)':
-qdeclarativevmemetaobject.cpp:(.text+0x1a0c): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevmemetaobject.o: In function
-`QDeclarativeVMEMetaObject::QDeclarativeVMEMetaObject(QObject*, QMetaObject
-const*, QDeclarativeVMEMetaData const*, QDeclarativeCompiledData*)':
-qdeclarativevmemetaobject.cpp:(.text+0x20a8): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevmemetaobject.o: In function
-`QDeclarativeVMEMetaObject::writeVarProperty(int, QVariant const&)':
-qdeclarativevmemetaobject.cpp:(.text+0x2774): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativevmemetaobject.o: In function
-`QDeclarativeVMEVariant::setValue(QObject*)':
-qdeclarativevmemetaobject.cpp:(.text._ZN22QDeclarativeVMEVariant8setValueEP7QObject[QDeclarativeVMEVariant::setValue(QObject*)]+0x308):
-undefined reference to `QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativeengine.o: In function
-`QDeclarativeEnginePrivate::init()':
-qdeclarativeengine.cpp:(.text+0xf50): undefined reference to
-`QAbstractDeclarativeData::objectNameChanged'
-.obj/release-shared-emb-arm/qdeclarativeengine.o:qdeclarativeengine.cpp:(.text+0x19e0):
-more undefined references to `QAbstractDeclarativeData::objectNameChanged'
-follow
-collect2: ld returned 1 exit status
-make[2]: *** [../../lib/libQtDeclarative.so.4.7.2] Error 1
-make[2]: Leaving directory
-`/home/bao/work/buildroot/output/build/qt-everywhere-opensource-src-4.7.2/src/declarative'
-make[1]: *** [sub-declarative-make_default-ordered] Error 2
-make[1]: Leaving directory
-`/home/bao/work/buildroot/output/build/qt-everywhere-opensource-src-4.7.2'
-make: ***
-[/home/bao/work/buildroot/output/build/qt-everywhere-opensource-src-4.7.2/.compiled]
-Error 2
+> Hi, I am a first-time user of Buildroot. It has been chugging along
+> nicely, but libdrm has failed to compile.
+> 
+> It reports that 'cairo.h' is missing. Which it is, cairo has not yet
+> been compiled in the target.
+> 
+> So, using my own reasoning, I added "cairo" onto LIBDRM_DEPENDENCIES
+> variable in file 'libdrm.mk'. I also deleted
+> output/build/libdrm-2.4.19.
+> 
+> However, running 'make' again, it tries to compile libdrm again, and
+> fails.
+> 
+> How do I make it compile cairo (and its deps) before libdrm?
 
+Adding "cairo" to LIBDRM_DEPENDENCIES is enough to get it compiled
+before libdrm. Something else is wrong in your setup, because that's
+really enough.
 
-How can I fix that?
+However, Cairo is not required by libdrm. It seems that the problem is
+that since you have Cairo installed on your host, libdrm ./configure
+script thinks that Cairo is available. Such "information leakage" from
+the host environment to the target environment is common and is one of
+the major challenge an embedded Linux build system such as Buildroot
+faces.
 
-Thanks
+However, as libdrm uses pkg-config to detect the presence or absence of
+cairo, it sounds strange to me that it detects the host version. Could
+you please pastebin somewhere the output of the
+output/build/libdrm-2.4.9/config.log case in the case of a failing
+compilation ?
 
-BAO
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110318/4441ee15/attachment.html>
+(I couldn't reproduce here in my test environment, since I don't have
+Cairo development files installed on the host)
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
