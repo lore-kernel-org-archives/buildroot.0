@@ -1,21 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2011 10:59:03 +0100
-Subject: [Buildroot] qt 4.7.2 compile error
-In-Reply-To: <AANLkTinVf+6U=UNykD0nfrTMRZx+F4-oX_5EA2hqKcQD@mail.gmail.com>
-References: <AANLkTinVf+6U=UNykD0nfrTMRZx+F4-oX_5EA2hqKcQD@mail.gmail.com>
-Message-ID: <20110319105903.10c99739@surf>
+Date: Sat, 19 Mar 2011 11:00:30 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+ for-2011.05/rename-toolchain-config-opts
+In-Reply-To: <cover.1299536722.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1299536722.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20110319110030.35d7295c@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 18 Mar 2011 23:24:22 -0700
-bao bui <buiqbao@gmail.com> wrote:
+Hello,
 
-> I am trying to compile Qt 4.7.2 in buildroot. I got the error:
+On Mon,  7 Mar 2011 23:28:33 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-What is your Buildroot .config ?
+> During the post-FOSDEM Buildroot Developer Day, we decided to clean up
+> and clarify the name of the toolchain options concerning large file,
+> IPv6, RPC, locale, program invocation, C++, etc. The goal is to have
+> something more coherent and more meaningful, so all options are now
+> named BR2_TOOLCHAIN_HAS_xxx.
+> 
+> The last commit is just a cleanup patch that fixes tab or space issues
+> in various Config.in files.
+
+Ping ?
 
 Thomas
 -- 
