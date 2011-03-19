@@ -1,25 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2011 08:24:22 +0100
-Subject: [Buildroot] BR: patching  diff f7abec2d1d1e5... direct
-In-Reply-To: <4D833C5B.4090604@vaaraahi.com>
-References: <4D833C5B.4090604@vaaraahi.com>
-Message-ID: <20110319082422.0d63019a@surf>
+Date: Sat, 19 Mar 2011 08:26:16 +0100
+Subject: [Buildroot] procps fails to compile on Fedora 14 due to newer
+ version of GNU make
+In-Reply-To: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
+References: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
+Message-ID: <20110319082616.6dfb9018@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 18 Mar 2011 11:04:59 +0000
-Nataraj S Narayan <nataraj@vaaraahi.com> wrote:
+Hello Bruce,
 
-> I was trying to patch the diff of commit
-> f7abec2d1d1e52f49f7d95c48165cde8cf41edb6 (patch) by
-> Jean-Christophe PLAGNIOL-VILLARD, in the 'package' dir of buildroot.
+On Fri, 18 Mar 2011 11:16:39 +0000
+bruce bushby <bruce.bushby@gmail.com> wrote:
 
-All patches must be applied from the top directory of the source tree,
-i.e not inside the package dir of Buildroot. This is nothing specific
-to Buildroot: it works like this for all open-source projects.
+> [root at plxarm01 tmp]# cat procps-sort-order.patch
+> --- procps-3.2.7.orig/Makefile  2006-06-24 10:02:25.000000000 +0100
+> +++ procps-3.2.7/Makefile       2011-03-18 10:55:46.055307083 +0000
+> @@ -174,7 +174,7 @@
+>  # want this rule first, use := on ALL, and ALL not filled in yet
+>  all: do_all
+> 
+> --include */module.mk
+> +-include proc/module.mk ps/module.mk
+> 
+>  do_all:    $(ALL)
+
+Could you send a patch that adds this modification as a patch against
+the procps package in Buildroot ? This way we could integrate it.
+
+Thanks,
 
 Thomas
 -- 
