@@ -1,41 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2011 11:00:44 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
- for-2011.05/dev-handling
-In-Reply-To: <cover.1299532878.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1299532878.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20110319110044.1138c2ec@surf>
+From: bao bui <buiqbao@gmail.com>
+Date: Sat, 19 Mar 2011 04:22:22 -0700
+Subject: [Buildroot] qt 4.7.2 compile error
+In-Reply-To: <20110319105903.10c99739@surf>
+References: <AANLkTinVf+6U=UNykD0nfrTMRZx+F4-oX_5EA2hqKcQD@mail.gmail.com>
+	<20110319105903.10c99739@surf>
+Message-ID: <AANLkTi=AP5KxfQ04anFcdvQkOXd95rkMgE66vBVp+FWY@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Mar 2011 22:21:22 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Hi,
 
-> The following changes since commit
-> 0a064b48c9d1044b05aee65272f5af7f28879473: Gustavo Zacarias (1):
->         gst-ffmpeg: bump to version 0.10.11
-> 
-> are available in the git repository at:
-> 
->   git://git.busybox.net/~tpetazzoni/git/buildroot
-> for-2011.05/dev-handling
-> 
-> Thomas Petazzoni (2):
->       Simplify udev startup script
->       Allow several device tables and split in two parts our device
-> table
-> 
-> Yegor Yefremov (1):
->       Create menu entry to select device creation method
+Thanks for your reply.
+Attached with this email is my .config file
 
-Ping ?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+BAO
+On Sat, Mar 19, 2011 at 2:59 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> On Fri, 18 Mar 2011 23:24:22 -0700
+> bao bui <buiqbao@gmail.com> wrote:
+>
+> > I am trying to compile Qt 4.7.2 in buildroot. I got the error:
+>
+> What is your Buildroot .config ?
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110319/1de33d45/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 22172 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110319/1de33d45/attachment-0001.obj>
