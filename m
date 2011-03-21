@@ -1,58 +1,30 @@
-From: Bob Liu <lliubbo@gmail.com>
-Date: Mon, 21 Mar 2011 15:51:45 +0800
-Subject: [Buildroot] 2011.02, BeagleBoard-xM, linux-2.6.37 does not boot
-In-Reply-To: <201103202325.39993.tmohr@s.netic.de>
-References: <201103202325.39993.tmohr@s.netic.de>
-Message-ID: <AANLkTi=t3L2WbrJXY0QRejbZTVKfNPbeSLjBazO3+E8T@mail.gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Mon, 21 Mar 2011 15:46:22 +0100
+Subject: [Buildroot] Booting with ramdisk
+Message-ID: <201103211546.22271.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 21, 2011 at 6:25 AM, Torsten Mohr <tmohr@s.netic.de> wrote:
-> Hi,
->
-> i configured and compiled buildroot-2011.02, which comes with 2.6.37 as the
-> default kernel setting. ?I chose this one and "omap2plus" as the defconfig
-> name.
->
-> u-boot.bin boots fine, but the kernel does not show any output. ?All i see is:
->
-> reading uImage
->
-> 2929528 bytes read
-> Booting from mmc ...
-> ## Booting kernel from Legacy Image at 82000000 ...
-> ? Image Name: ? Linux-2.6.37
-> ? Image Type: ? ARM Linux Kernel Image (uncompressed)
-> ? Data Size: ? ?2929464 Bytes = 2.8 MiB
-> ? Load Address: 80008000
-> ? Entry Point: ?80008000
-> ? Verifying Checksum ... OK
-> ? Loading Kernel Image ... OK
-> OK
->
-> Starting kernel ...
->
-> Uncompressing Linux... done, booting the kernel.
->
-> There's nothing more after this. ?I also tried "omap3" as defconfig (and
-> copied that 0map3_defconfig from a previous kernel, same result).
->
-> Not sure if i missed something, some questions came up:
->
-> - does buildroot use the correct kernel for BeagleBoard-xM?
-> - do i need to apply patches?
-> - what configuration file do i need to chose?
-> - does u-boot need special options to boot that kernel?
->
-> It would be great if anybody had some hints for me.
->
->
+Hello all,
+I'm trying to do something very classic, but it doesn't seem to work and the more I read about it the more I'm confused 
+by the amount of antiquated info and nearly-but-not-quite-so relevant info (like doing a temporary ramdisk before the 
+real OS loads).
 
-Maybe you need setenv console=/dev/ttyO2
+So I have a kernel and a buildroot-generated OS, currently on an NFS server. I boot with the following kernel parameters 
+and everything goes fine:
+console=ttyUL0,115200 rw root=/dev/nfs ip=bootp
 
+Now I want to embed that OS in the kernel (no need for a network anymore as the kernel is on a flash mem). So I did the 
+following:
+- add ROOTFS CPIO to the buildroot options and make a new version
+- point CONFIG_INITRAMFS_SOURCE to the resulting rootfs.cpio file
+- change the kernel parameters to "console=ttyUL0,115200 root=/dev/ram" (that's in a dts file)
+
+The kernel stops instantly without even a blip on the console. A debugger reveals that it stops at 0x401718... I have no 
+idea what's going on at this stage.
 -- 
-Regards,
---Bob
+Guillaume Dargaud
+http://www.gdargaud.net/
