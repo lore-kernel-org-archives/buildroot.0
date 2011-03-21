@@ -1,63 +1,81 @@
 From: bruce bushby <bruce.bushby@gmail.com>
-Date: Mon, 21 Mar 2011 16:19:07 +0000
-Subject: [Buildroot] [Solved] Re: ntpdate takes a long time
-In-Reply-To: <20110319082909.023d3e35@surf>
-References: <AANLkTi=PdnH5wLpD+F1pmWwf0jNc_baRBGbr70RAtVXT@mail.gmail.com>
-	<201103180953.21819.minimod@morethan.org>
-	<AANLkTin6eLoEyqOri=01+55AeDzQhw3MNg=0WZyCo28g@mail.gmail.com>
-	<20110319082909.023d3e35@surf>
-Message-ID: <AANLkTinc1j8=UV1Vjk24AM2whagiWMEzQaAEEgV1ZSG8@mail.gmail.com>
+Date: Mon, 21 Mar 2011 16:32:02 +0000
+Subject: [Buildroot] Python: can't resolve symbol
+In-Reply-To: <AANLkTim9AZ2Q8PZ9SOsBDPEL3Yqn7euZ4hmkKzQ1Dxai@mail.gmail.com>
+References: <AANLkTim9AZ2Q8PZ9SOsBDPEL3Yqn7euZ4hmkKzQ1Dxai@mail.gmail.com>
+Message-ID: <AANLkTi=yxFpMFoXnRErXd8iz1yhQw6gqbvv7Ns8-T6D3@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes good point Thomas!
+Hi
 
-http://bugs.ntp.org/show_bug.cgi?id=1853
-I'll follow the bug and update if/when fixed.
+I've been having a problem compiling python "readline" module. If I include
+the readline python module in my config, I get symbol errors when I start a
+python interactive shell.
+
+As a test, I stripped all python and readline from my build "host"
+machine....but buildroot complains that it's can't find python. I'm guessing
+this is due to the "host-python" directive?
+
+Since my build machine is 32bit Intel and my embedded board/target is
+ARM.....why would I need a local install of python to download and compile
+python for ARM?
+
+I'm suspecting that python is compiling against my "host's" readline library
+and not the readline that should have been compiled for my ARM
+target...which I think is what is causing the symbol errors.
+
+So far I've tried the "latest stable" release and the "daily snapshot" on:
+Fedora 12 (64bit)
+Fedora 14 (32bit)  <-- my current build host
+Ubuntu Natty
+
+
+Bruce
 
 
 
 
-On Sat, Mar 19, 2011 at 7:29 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
 
-> Hello,
+
+
+On Tue, Mar 8, 2011 at 8:20 AM, bruce bushby <bruce.bushby@gmail.com> wrote:
+
+> Hi
 >
-> On Fri, 18 Mar 2011 15:34:36 +0000
-> bruce bushby <bruce.bushby@gmail.com> wrote:
+> I'm not sure if this is the right list to post this issue to?
 >
-> > Apologies Michael....I think it got mixed up and pasted the results
-> > while still running over "ppp0"
-> >
-> > It appears the issue is caused by "ntp", I reverted my ntp package
-> > version to "4.2.6p1" and now it works fine.
-> >
-> > The results below show the same commands from:
-> > Linux Desktop
-> > Embedded running ntp-4.2.6p3 (broken)
-> > Embedded running ntp-4.2.6p1 (working)
+> From what I can tell, these "can't resolve" messages are caused when
+> selecting "readline"
 >
-> Sorry, but we can't consider this problem as solved: it seems that the
-> version currently packaged in Buildroot has an issue. Every other user
-> of the version packaged in Buildroot might face the same problem.
 >
-> Could you post a bug at http://bugs.ntp.org/ detailing your problem, so
-> that maybe the NTP developers can find out what's going wrong ?
+> # python
+> Python 2.7.1 (r271:86832, Mar  7 2011, 22:37:34)
+> [GCC 4.5.2] on linux2
+> Type "help", "copyright", "credits" or "license" for more information.
 >
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> python: symbol 'BC': can't resolve symbol
+>
+> python: symbol 'PC': can't resolve symbol
+>
+> python: symbol 'UP': can't resolve symbol
+>
+> python: symbol 'tgetnum': can't resolve symbol
+>
+> python: symbol 'tgoto': can't resolve symbol
+>
+> python: symbol 'tgetflag': can't resolve symbol
+>
+> python: symbol 'tputs': can't resolve symbol
+>
+> python: symbol 'tgetent': can't resolve symbol
+>
+> python: symbol 'tgetstr': can't resolve symbol
+> >>>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110321/23c92198/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110321/6389907a/attachment.html>
