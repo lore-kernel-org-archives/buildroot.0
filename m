@@ -1,81 +1,74 @@
-From: bruce bushby <bruce.bushby@gmail.com>
-Date: Mon, 21 Mar 2011 16:32:02 +0000
-Subject: [Buildroot] Python: can't resolve symbol
-In-Reply-To: <AANLkTim9AZ2Q8PZ9SOsBDPEL3Yqn7euZ4hmkKzQ1Dxai@mail.gmail.com>
-References: <AANLkTim9AZ2Q8PZ9SOsBDPEL3Yqn7euZ4hmkKzQ1Dxai@mail.gmail.com>
-Message-ID: <AANLkTi=yxFpMFoXnRErXd8iz1yhQw6gqbvv7Ns8-T6D3@mail.gmail.com>
+From: Martin Hicks <mort@bork.org>
+Date: Mon, 21 Mar 2011 13:39:43 -0400
+Subject: [Buildroot] [PATCH] Add support to specify special Kernel Image
+	make target
+Message-ID: <1300729183-29401-1-git-send-email-mort@bork.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+This is useful for ARCHes like PowerPC that have a whole lot of
+special targets for each different board.  The kernel image target
+tells make which OpenFirmware machine description file is combined into
+the kernel binary.
 
-I've been having a problem compiling python "readline" module. If I include
-the readline python module in my config, I get symbol errors when I start a
-python interactive shell.
+Signed-Off-By:  Martin Hicks <mort@bork.org>
+---
+ linux/Config.in |   15 +++++++++++++++
+ linux/linux.mk  |    4 ++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-As a test, I stripped all python and readline from my build "host"
-machine....but buildroot complains that it's can't find python. I'm guessing
-this is due to the "host-python" directive?
-
-Since my build machine is 32bit Intel and my embedded board/target is
-ARM.....why would I need a local install of python to download and compile
-python for ARM?
-
-I'm suspecting that python is compiling against my "host's" readline library
-and not the readline that should have been compiled for my ARM
-target...which I think is what is causing the symbol errors.
-
-So far I've tried the "latest stable" release and the "daily snapshot" on:
-Fedora 12 (64bit)
-Fedora 14 (32bit)  <-- my current build host
-Ubuntu Natty
-
-
-Bruce
-
-
-
-
-
-
-
-On Tue, Mar 8, 2011 at 8:20 AM, bruce bushby <bruce.bushby@gmail.com> wrote:
-
-> Hi
->
-> I'm not sure if this is the right list to post this issue to?
->
-> From what I can tell, these "can't resolve" messages are caused when
-> selecting "readline"
->
->
-> # python
-> Python 2.7.1 (r271:86832, Mar  7 2011, 22:37:34)
-> [GCC 4.5.2] on linux2
-> Type "help", "copyright", "credits" or "license" for more information.
->
-> python: symbol 'BC': can't resolve symbol
->
-> python: symbol 'PC': can't resolve symbol
->
-> python: symbol 'UP': can't resolve symbol
->
-> python: symbol 'tgetnum': can't resolve symbol
->
-> python: symbol 'tgoto': can't resolve symbol
->
-> python: symbol 'tgetflag': can't resolve symbol
->
-> python: symbol 'tputs': can't resolve symbol
->
-> python: symbol 'tgetent': can't resolve symbol
->
-> python: symbol 'tgetstr': can't resolve symbol
-> >>>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110321/6389907a/attachment.html>
+diff --git a/linux/Config.in b/linux/Config.in
+index 815d445..43d1047 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -146,8 +146,23 @@ config BR2_LINUX_KERNEL_VMLINUX
+ 	bool "vmlinux"
+ 	depends on BR2_mips || BR2_mipsel
+ 
++config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
++	bool "custom target"
++	help
++	  For certain cases a board-specific target image must be used.  For example,
++	  on powerPC where the OpenFirmware description is attached in a board-specific
++	  kernel image target like 'cuImage.mpc8379_rdb'.
++
++	  Select this option and specify the make target in "Kernel image target name".
++
+ endchoice
+ 
++config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
++	string "Kernel image target name"
++	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
++	help
++	  Specify the kernel make target to build the kernel that you need.
++
+ endif # BR2_LINUX_KERNEL
+ 
+ endmenu
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d94a97a..1f21b71 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -38,6 +38,9 @@ LINUX26_MAKE_FLAGS = \
+ # going to be installed in the target filesystem.
+ LINUX26_VERSION_PROBED = $(shell $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) --no-print-directory -s kernelrelease)
+ 
++ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
++LINUX26_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+ ifeq ($(KERNEL_ARCH),blackfin)
+ # a uImage, but with a different file name
+@@ -55,6 +58,7 @@ LINUX26_IMAGE_NAME=vmlinux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX26_IMAGE_NAME=vmlinux
+ endif
++endif
+ 
+ # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+ # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
+-- 
+1.5.6.5
