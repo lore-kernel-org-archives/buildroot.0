@@ -1,64 +1,78 @@
-From: chris at basementcode.com <chris@basementcode.com>
-Date: Tue, 22 Mar 2011 14:06:18 -0500
-Subject: [Buildroot] problems compiling crosstools-ng
-In-Reply-To: <1300814816.3848.93.camel@sadov-t.linux-ink.vo>
-References: <cd12ab38cf1fa34fa4c10dfaf6eec135@basementcode.com>
-	<201103221710.32592.yann.morin.1998@anciens.enib.fr>
-	<1300814816.3848.93.camel@sadov-t.linux-ink.vo>
-Message-ID: <e76b8d6c5f12b51b804484cba5fd787d@basementcode.com>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 22 Mar 2011 20:33:15 +0100
+Subject: [Buildroot] Compiling Apache
+In-Reply-To: <4D88C6B3.5010103@free.fr>
+References: <4D89170F.7080305@michaelburghart.de> <4D88B94A.1060609@free.fr>
+	<4D88BD19.7070901@michaelburghart.de> <4D88C6B3.5010103@free.fr>
+Message-ID: <4D88F97B.4060605@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- On Tue, 22 Mar 2011 20:26:56 +0300, Oleg Sadov <sadov@linux-ink.ru> 
- wrote:
-> 22/03/2011 17:10 +0100, Yann E. MORIN wrote:
->> On Tuesday 22 March 2011 15:24:39 chris at basementcode.com wrote:
->> >  buildroot-2011.02:
->> >  during the configure stage of binutils the configure script 
->> spawns the
->> >  following process over and over until swap is filled and the 
->> system
->> >  crashes:
->> >  makeinfo --force --force --force --force --force --force --force
->> >  --force --force --force --force  ......
->>
->> Yes, I know about this issue. You're not the first one to report it, 
->> but I
->> was not able to reproduce it, not to understand how it can happen 
->> (although
->> I have a small idea, but I'm not sure)
->>
->> I'm doing some changes right now, that should fix the issue if all 
->> goes well.
->
-> I've got the same problem on my RHEL-based system. Seems like the 
-> root
-> of problem in search path for commands setted up by Croostool-NG
-> environment -- local script 'makeinfo' placed in path before the real
-> 'makeinfo'. This script trying to execute 'makeinfo --force' command
-> and, voil? -- we got the infinite recursion!
->
-> Quck & dirty solution -- place the real path of makeinfo utility
-> (usually /usr/bin/makeinfo) in crosstool-NG.sh. Just put attached to
-> this mail patch in directory:
->
-> toolchain/toolchain-crosstool-ng
->
-> and rerun make -- hopefully your problem will be solved.
- It was solved. Thank you very much for the patch.
->
->> Regards,
->> Yann E. MORIN.
->
-> SY
-> --Oleg
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
- Yann, you had asked me some question earlier about this problem I was 
- having. I will get back to you with answers to them as soon as I have a 
- moment to investigate.
+Hi,
 
- thanks again,
- -Chris
+Am 22.03.2011 16:56, schrieb Eric BENARD:
+
+>> thanks for your info. Seems pretty weird and more complex than I
+>> thought. But how do you integrate those rules into buildroot? I only saw
+>> the "standard" autoconf and cmake Makefiles.in the documentation..
+>>
+> well for that part you will need to ask on the mailing list.
+> 
+
+what I do not understand: I get the following error:
+
+make[4]: Entering directory
+`/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre'
+./dftables
+/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c
+make[4]: ./dftables: Kommando nicht gefunden
+
+
+So I tried it manually and did a cd into the directory:
+cd /LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/
+
+then I invoked the dftables command manually:
+./dftables
+/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c
+
+got "File not found":
+- -bash: ./dftables: Datei oder Verzeichnis nicht gefunden
+
+Did a ls on that file and it exists! So why did it produce an "File not
+foound" error
+mb at einstein:/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre> ls
+- -l ./dftables
+- -rwxr-xr-x 1 mb users 8015 22. M?r 15:18 ./dftables
+
+
+How can that be? I am really puzzled now...
+
+
+> Regard,
+> Eric
+> 
+
+
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNiPl7AAoJEEMkp/gkis19EbcIAKi6tbjQAzNbf5OLqNh3Js2d
+9DSDhnCiGG1DfYkxTKDPEkdiPDXjxQMX4DtKivlnKs8n0MqW84jkbFV1yauFS8x4
+zkQ/zWTCRSrToMmCzhnMOpxPibB318hWseAEGECR7XrjdoRKSZiZQKGKzkVJECEM
+c2hzJOt0RyxTOqs1ZdmUmxZ/ui6O5w5bjb7tqPFh44GNH5JDigG7ghkJrtIuojEE
+tpL3MI7ZEi2LRQ8CGRvRejuxqiGL+U1gYJqpQ/dO1CmwbUMX7bQNzanN0OB+gqII
+YO1qbdG0kaONxScDn96qe2WVH98C7dfK4UOw+K2ordjmR98aunrlv7pmCvGAx4A=
+=kA5n
+-----END PGP SIGNATURE-----
