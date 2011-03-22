@@ -1,82 +1,174 @@
-From: Eric BENARD <ebenard@free.fr>
-Date: Tue, 22 Mar 2011 15:59:22 +0100
-Subject: [Buildroot] Compiling Apache
-In-Reply-To: <4D89170F.7080305@michaelburghart.de>
-References: <4D89170F.7080305@michaelburghart.de>
-Message-ID: <4D88B94A.1060609@free.fr>
+From: Andy Kennedy <Andy.Kennedy@adtran.com>
+Date: Tue, 22 Mar 2011 10:18:32 -0500
+Subject: [Buildroot] Add Package:  htop
+Message-ID: <4D88BDC8.6080002@AdTran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Adds package htop.  This is a resubmit, with corrections.
 
-On 22/03/2011 22:39, Michael Burghart wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
->
-> Hi,
->
-> I am new to this list. Nevertheless I am really happy about the
-> buildroot tool. Great Work!!
->
-> Unfortunately I ran into trouble which I don't understand. I produced a
-> working toolchain and managed to post-install things. Now I need to add
-> a "httpd-2.3.8" package. But it fails to  build with the following error:
->
-> make[4]: Entering directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre'
-> ./dftables
-> /LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c
-> make[4]: ./dftables: Kommando nicht gefunden
-> make[4]: ***
-> [/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c]
-> Fehler 127
-> make[4]: Leaving directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre'
-> make[3]: *** [all-recursive] Fehler 1
-> make[3]: Leaving directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre'
-> make[2]: *** [all-recursive] Fehler 1
-> make[2]: Leaving directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib'
-> make[1]: *** [all-recursive] Fehler 1
-> make[1]: Leaving directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17'
-> make: ***
-> [/LFS/buildroot-2011.02/output/build/httpd-2.2.17/.stamp_built] Fehler 2
->
-> ("Fehler" =>>  "Error" :)))
->
-> This is my mk file for httpd
->
-> HTTPD_VERSION=2.3.8
-> HTTPD_SOURCE=httpd-${HTTPD_VERSION}.tar.gz
-> HTTPD_SITE=http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/httpd/
-> HTTPD_INSTALL_TARGET=YES
-> HTTPD_AUTORECONF=YES
-> HTTPD_LIBTOOL_PATCH=YES
-> HTTPD_AUTORECONF=YES
-> HTTPD_CONF_OPT=  --enable-ldap=no  --enable-ssl --with-pcre=/usr
-> - --with-ssl=/usr ap_cv_void_ptr_lt_long=no
-> HTTPD_DEPENDENCIES=pcre
->
-> Does anybody know about this problem? What am I doing wrong?
->
-dftables is a tool which should be compiled for your host as it's used to 
-generate pcre_chartables.c . In the present case, it seems dftables can't be 
-executed so either it's compiled for your target (but in that cas you would 
-get a log saying it has a wrong binary format) or it's not present at all.
-
-Moreover you have HTTPD_VERSION=2.3.8 in your .mk and the log says 
-httpd-2.2.17 so there may be something wrong here.
-
-apache is not easy to cross compile, you can check the recipes in OpenEmbedded 
-to see what we do there :
-http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apache2/apache2_2.2.17.bb
-http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/libpcre/libpcre_8.10.bb
-http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr_1.4.2.bb
-http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr-util_1.3.10.bb
-
-Eric
+Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
+---
+diff -Naur a/package/Config.in b/package/Config.in
+--- a/package/Config.in 2011-03-14 10:39:51.000000000 -0500
++++ b/package/Config.in 2011-03-21 17:29:22.000000000 -0500
+@@ -476,6 +476,9 @@
+ menu "System tools"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
++endif
++source "package/htop/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
+diff -Naur a/package/htop/Config.in b/package/htop/Config.in
+--- a/package/htop/Config.in    1969-12-31 18:00:00.000000000 -0600
++++ b/package/htop/Config.in    2011-03-21 17:29:22.000000000 -0500
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HTOP
++       bool "htop"
++       select BR2_PACKAGE_NCURSES
++       help
++         htop is an interactive text-mode process viewer for Linux.
++         It aims to be a better top.
++
++         http://sourceforge.net/projects/htop/
+diff -Naur a/package/htop/htop-alloc-not-void.patch b/package/htop/htop-alloc-not-void.patch
+--- a/package/htop/htop-alloc-not-void.patch    1969-12-31 18:00:00.000000000 -0600
++++ b/package/htop/htop-alloc-not-void.patch    2011-03-21 18:09:45.000000000 -0500
+@@ -0,0 +1,21 @@
++diff -Naur a/configure b/configure
++--- a/configure        2010-11-23 10:33:53.000000000 -0600
+++++ b/configure        2011-03-21 18:05:46.000000000 -0500
++@@ -12363,7 +12363,7 @@
++ #if defined STDC_HEADERS || defined HAVE_STDLIB_H
++ # include <stdlib.h>
++ #else
++-char *malloc ();
+++void *malloc ();
++ #endif
++
++ int
++@@ -12598,7 +12598,7 @@
++ #if defined STDC_HEADERS || defined HAVE_STDLIB_H
++ # include <stdlib.h>
++ #else
++-char *realloc ();
+++void *realloc ();
++ #endif
++
++ int
+diff -Naur a/package/htop/htop-cross-no-proc-check.patch b/package/htop/htop-cross-no-proc-check.patch
+--- a/package/htop/htop-cross-no-proc-check.patch       1969-12-31 18:00:00.000000000 -0600
++++ b/package/htop/htop-cross-no-proc-check.patch       2011-03-22 09:57:22.000000000 -0500
+@@ -0,0 +1,22 @@
++# This patch removes the checks for /proc when cross compiling.
++# We hope you know what you are doing and you have /proc, doesn't everyone?
++# Signed-of-by:  Andy Kennedy <Andy.Kennedy@adtran.com>
++diff -Naur a/configure b/configure
++--- a/configure 2010-11-23 10:33:53.000000000 -0600
+++++ b/configure 2011-03-22 09:52:46.000000000 -0500
++@@ -13605,6 +13605,7 @@
++
++
++
+++if test "$cross_compiling" = no ; then
++ as_ac_File=`echo "ac_cv_file_$PROCDIR/stat" | $as_tr_sh`
++ { echo "$as_me:$LINENO: checking for $PROCDIR/stat" >&5
++ echo $ECHO_N "checking for $PROCDIR/stat... $ECHO_C" >&6; }
++@@ -13658,6 +13659,7 @@
++ echo "$as_me: error: Cannot find /proc/meminfo. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
+++fi #cross_compiling = no (Andy Kennedy)
++
++
++ # Check whether --enable-plpa was given.
+diff -Naur a/package/htop/htop-make-execinfo-detectable.patch b/package/htop/htop-make-execinfo-detectable.patch
+--- a/package/htop/htop-make-execinfo-detectable.patch  1969-12-31 18:00:00.000000000 -0600
++++ b/package/htop/htop-make-execinfo-detectable.patch  2011-03-21 17:29:22.000000000 -0500
+@@ -0,0 +1,59 @@
++# This patch removes the checks for /proc when cross compiling.
++# We hope you know what you are doing and you have /proc, doesn't everyone?
++# Patch given to me by Hisham <hisham.hm@gmail.com>
++# Signed-of-by:  Andy Kennedy <Andy.Kennedy@adtran.com>
++diff -Naur a/CRT.c b/CRT.c
++--- a/CRT.c    2010-11-23 09:56:32.000000000 -0600
+++++ b/CRT.c    2011-03-21 17:08:21.000000000 -0500
++@@ -11,7 +11,9 @@
++ #include <signal.h>
++ #include <stdlib.h>
++ #include <stdbool.h>
+++#ifdef HAVE_EXECINFO_H
++ #include <execinfo.h>
+++#endif
++
++ #include "String.h"
++
++@@ -125,12 +127,14 @@
++    CRT_done();
++    #if __linux
++    fprintf(stderr, "\n\nhtop " VERSION " aborting. Please report bug at http://htop.sf.net\n");
++-   #else
++-   fprintf(stderr, "\n\nhtop " VERSION " aborting. Unsupported platform.\n");
++-   #endif
+++   #ifdef HAVE_EXECINFO_H
++    size_t size = backtrace(backtraceArray, sizeof(backtraceArray));
++    fprintf(stderr, "Backtrace: \n");
++    backtrace_symbols_fd(backtraceArray, size, 2);
+++   #endif
+++   #else
+++   fprintf(stderr, "\n\nhtop " VERSION " aborting. Unsupported platform.\n");
+++   #endif
++    abort();
++ }
++
++diff -Naur a/CRT.h b/CRT.h
++--- a/CRT.h    2010-11-23 09:56:32.000000000 -0600
+++++ b/CRT.h    2011-03-21 17:06:16.000000000 -0500
++@@ -14,7 +14,9 @@
++ #include <signal.h>
++ #include <stdlib.h>
++ #include <stdbool.h>
+++#ifdef HAVE_EXECINFO_H
++ #include <execinfo.h>
+++#endif
++
++ #include "String.h"
++
++diff -Naur a/configure.ac b/configure.ac
++--- a/configure.ac     2010-11-23 09:56:32.000000000 -0600
+++++ b/configure.ac     2011-03-21 17:05:42.000000000 -0500
++@@ -25,6 +25,7 @@
++ AC_CHECK_HEADERS([stdlib.h string.h strings.h sys/param.h sys/time.h unistd.h curses.h],[:],[
++   missing_headers="$missing_headers $ac_header"
++ ])
+++AC_CHECK_HEADERS([execinfog.h],[:],[:])
++
++ # Checks for typedefs, structures, and compiler characteristics.
++ AC_HEADER_STDBOOL
+diff -Naur a/package/htop/htop.mk b/package/htop/htop.mk
+--- a/package/htop/htop.mk      1969-12-31 18:00:00.000000000 -0600
++++ b/package/htop/htop.mk      2011-03-22 09:31:54.000000000 -0500
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# htop
++#
++#############################################################
++HTOP_VERSION = 0.9
++HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
++HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
++HTOP_DEPENDENCIES = ncurses
++
++HTOP_POST_CONFIGURE_HOOKS = HTOP_RETOUCH_CONFIGURE_AC
++
++define HTOP_RETOUCH_CONFIGURE_AC
++       touch -r $(@D)/missing $(@D)/configure.ac
++endef
++
++$(eval $(call AUTOTARGETS,package,htop))
