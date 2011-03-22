@@ -1,63 +1,56 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Tue, 22 Mar 2011 17:07:19 +0100
-Subject: [Buildroot] Compiling Apache
-In-Reply-To: <4D88C6B3.5010103@free.fr>
-References: <4D89170F.7080305@michaelburghart.de> <4D88B94A.1060609@free.fr>
-	<4D88BD19.7070901@michaelburghart.de> <4D88C6B3.5010103@free.fr>
-Message-ID: <4D88C937.2010902@michaelburghart.de>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 22 Mar 2011 17:10:32 +0100
+Subject: [Buildroot] problems compiling crosstools-ng
+In-Reply-To: <cd12ab38cf1fa34fa4c10dfaf6eec135@basementcode.com>
+References: <cd12ab38cf1fa34fa4c10dfaf6eec135@basementcode.com>
+Message-ID: <201103221710.32592.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Cris, All,
 
-Hi,
+On Tuesday 22 March 2011 15:24:39 chris at basementcode.com wrote:
+>  I'm not sure if this belongs in the crosstools mailing list, or the 
+>  buildroot mailing list, so sorry if this in the wrong place.
 
-Am 22.03.2011 16:56, schrieb Eric BENARD:
-> Hi,
-> 
-> please keep list in copy when answering,
+Basically, I'd say:
+- if crosstool-NG works OK standalone, but fails in buildroot with the
+  same options, then the issue is to be reported here, on the BR ML,
+- but if crosstool-NG does not work standalone with the same config
+  options, then please report to the crossgcc ML.
 
-sorry. Yes, I will.
-> 
->> Am 22.03.2011 15:59, schrieb Eric BENARD:
->>
->>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apache2/apache2_2.2.17.bb
->>>
->>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/libpcre/libpcre_8.10.bb
->>>
->>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr_1.4.2.bb
->>>
->>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr-util_1.3.10.bb
->>>
->>
->> thanks for your info. Seems pretty weird and more complex than I
->> thought. But how do you integrate those rules into buildroot? I only saw
->> the "standard" autoconf and cmake Makefiles.in the documentation..
->>
-> well for that part you will need to ask on the mailing list.
+>  buildroot-2010.11:
+>  m4 gives and error and says "--gnu" is not a valid option.
+>  I have m4-1.4.15 installed, and the man page says that --gnu is valid.
+>  Does buildroot have another copy of m4?
 
-does any on this list know how to implement Eric's knowledge on Apache
-into an .mk file? Or does anybody already have a .mk file to share? Or
-am I the only guy who wants to cross compile an Apache? :)
+Do you mean the m4 built by buildroot as a package, or the m4 built by
+crosstool-NG as part of the companion tools (which you should not use,
+except under very exceptional conditions) ?
 
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+>  buildroot-2011.02:
+>  during the configure stage of binutils the configure script spawns the 
+>  following process over and over until swap is filled and the system 
+>  crashes:
+>  makeinfo --force --force --force --force --force --force --force 
+>  --force --force --force --force  ......
 
-iQEcBAEBAgAGBQJNiMk2AAoJEEMkp/gkis19u+EH/3MuAQCNXG2Dz6+5OnBja5+M
-BDx/OuQjfkSKyNN019PDf+ua/2oWe4OZJ7MiI/VaR/i5UFNCxoKAT+aRMpFR2PZf
-Pp3BmMBfpHpJLZRHoOjWsgr2pkU4mugD17aV/nRHdPXVt1XavLbue4pUwvXb/9t8
-EA9tryKHJ2L/u0ax1hLJZB5jAku2u1LaO7sY6kOGrKOVGi678QnMpQ7t610RCsiX
-R/vHnSzl3Uy+aqWWbpWK508snYyd/w9tnoEU8A6LJZNGoDFswbxPzS/XciRdwltG
-HteI9ut+R5UmiAJmdmJ4iV+D+0EQa6839celXJ4YPahyNSMtjaxo653huwgDCE8=
-=vwSS
------END PGP SIGNATURE-----
+Yes, I know about this issue. You're not the first one to report it, but I
+was not able to reproduce it, not to understand how it can happen (although
+I have a small idea, but I'm not sure)
+
+I'm doing some changes right now, that should fix the issue if all goes well.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
