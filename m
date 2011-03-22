@@ -1,59 +1,54 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 22 Mar 2011 12:09:13 -0400
-Subject: [Buildroot] Add Package: htop
-In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1F914D36@EXV1.corp.adtran.com>
-References: <4D88BDC8.6080002@AdTran.com>
-	<AANLkTin3jGmmJfRXAa7VHS0ZdcE76V8DVmuEvEZn4XeQ@mail.gmail.com>
-	<9AC3F0E75060224C8BBC5BA2DDC8853A1F914D36@EXV1.corp.adtran.com>
-Message-ID: <AANLkTimJca48ZwkJ0Z3_+GoPimvK0Sekk27zWtFvf1MW@mail.gmail.com>
+From: Oleg Sadov <sadov@linux-ink.ru>
+Date: Tue, 22 Mar 2011 20:26:56 +0300
+Subject: [Buildroot] problems compiling crosstools-ng
+In-Reply-To: <201103221710.32592.yann.morin.1998@anciens.enib.fr>
+References: <cd12ab38cf1fa34fa4c10dfaf6eec135@basementcode.com>
+	<201103221710.32592.yann.morin.1998@anciens.enib.fr>
+Message-ID: <1300814816.3848.93.camel@sadov-t.linux-ink.vo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 22, 2011 at 12:01 PM, ANDY KENNEDY wrote:
-> From: vapierfilter at gmail.com [mailto:vapierfilter at gmail.com] On Behalf Of Mike Frysinger
->> On Tue, Mar 22, 2011 at 11:18 AM, Andy Kennedy wrote:
->> > +--- a/configure
->> > ++++ b/configure
->>
->> so you patch configure ...
->>
->> > +--- a/configure.ac
->> > ++++ b/configure.ac
->>
->> then you patch configure.ac ...
->>
->> > +HTOP_POST_CONFIGURE_HOOKS = HTOP_RETOUCH_CONFIGURE_AC
->> > +
->> > +define HTOP_RETOUCH_CONFIGURE_AC
->> > + ? ? ? touch -r $(@D)/missing $(@D)/configure.ac
->> > +endef
->>
->> and then you manually touch configure.ac, but dont invoke autotools
->> anywhere. ?what is going on here ?
->
-> if you touch the configure.ac file using the timestamp off of missing,
-> you don't _need_ to rerun the automake if the configure.ac is near the
-> same time as missing and configure. ?This would be a hack. ?Perhaps I
-> should mention that in the patch file?
+22/03/2011 17:10 +0100, Yann E. MORIN wrote:
+> On Tuesday 22 March 2011 15:24:39 chris at basementcode.com wrote:
+> >  buildroot-2011.02:
+> >  during the configure stage of binutils the configure script spawns the 
+> >  following process over and over until swap is filled and the system 
+> >  crashes:
+> >  makeinfo --force --force --force --force --force --force --force 
+> >  --force --force --force --force  ......
+> 
+> Yes, I know about this issue. You're not the first one to report it, but I
+> was not able to reproduce it, not to understand how it can happen (although
+> I have a small idea, but I'm not sure)
+> 
+> I'm doing some changes right now, that should fix the issue if all goes well.
 
-sorry, i missed the -r.  this begs the question of why are you
-patching configure.ac at all then if you try and prevent autotools
-from running.  any changes made to configure.ac wont be reflected in
-configure and other files if autoconf/etc... arent run.
+I've got the same problem on my RHEL-based system. Seems like the root
+of problem in search path for commands setted up by Croostool-NG
+environment -- local script 'makeinfo' placed in path before the real
+'makeinfo'. This script trying to execute 'makeinfo --force' command
+and, voil? -- we got the infinite recursion!
 
->> you should only be patching generated files, or only the source
->> autotool files. ?and if you do the latter, you should be re-running
->> autotools via HTOP_AUTORECONF=yes, not manually mucking with
->> timestamps and letting the build system figure things out.
->
-> I'm confused about this (forgive my ignorance about the overall build
-> system). ?So, if I let configure run, then let make run it fails.
-> However, I can go back and rm .stamp_configured and re-run make then
-> all is well. ?So, if I do HTOP_AUTORECONF, will this do this for me?
+Quck & dirty solution -- place the real path of makeinfo utility
+(usually /usr/bin/makeinfo) in crosstool-NG.sh. Just put attached to
+this mail patch in directory:
 
-the vague description sounds like autotool problems and you should be
-using autoreconf.
--mike
+toolchain/toolchain-crosstool-ng
+
+and rerun make -- hopefully your problem will be solved.
+
+> Regards,
+> Yann E. MORIN.
+
+SY
+--Oleg
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 002-crosstool-NG.sh.patch
+Type: text/x-patch
+Size: 935 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110322/ca6a9c70/attachment.bin>
