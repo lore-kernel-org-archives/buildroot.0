@@ -1,90 +1,63 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Tue, 22 Mar 2011 11:01:11 -0500
-Subject: [Buildroot] Add Package: htop
-In-Reply-To: <AANLkTin3jGmmJfRXAa7VHS0ZdcE76V8DVmuEvEZn4XeQ@mail.gmail.com>
-References: <4D88BDC8.6080002@AdTran.com>
-	<AANLkTin3jGmmJfRXAa7VHS0ZdcE76V8DVmuEvEZn4XeQ@mail.gmail.com>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F914D36@EXV1.corp.adtran.com>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 22 Mar 2011 17:07:19 +0100
+Subject: [Buildroot] Compiling Apache
+In-Reply-To: <4D88C6B3.5010103@free.fr>
+References: <4D89170F.7080305@michaelburghart.de> <4D88B94A.1060609@free.fr>
+	<4D88BD19.7070901@michaelburghart.de> <4D88C6B3.5010103@free.fr>
+Message-ID: <4D88C937.2010902@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: vapierfilter at gmail.com [mailto:vapierfilter at gmail.com] On Behalf Of Mike Frysinger
-> Sent: Tuesday, March 22, 2011 10:39 AM
-> To: ANDY KENNEDY
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] Add Package: htop
-> 
-> On Tue, Mar 22, 2011 at 11:18 AM, Andy Kennedy wrote:
-> > --- a/package/htop/htop-alloc-not-void.patch ? ?1969-12-31 18:00:00.000000000 -0600
-> > +++ b/package/htop/htop-alloc-not-void.patch ? ?2011-03-21 18:09:45.000000000 -0500
-> > @@ -0,0 +1,21 @@
-> > +diff -Naur a/configure b/configure
-> > +--- a/configure ? ? ? ?2010-11-23 10:33:53.000000000 -0600
-> > ++++ b/configure ? ? ? ?2011-03-21 18:05:46.000000000 -0500
-> > +@@ -12363,7 +12363,7 @@
-> > + #if defined STDC_HEADERS || defined HAVE_STDLIB_H
-> > + # include <stdlib.h>
-> > + #else
-> > +-char *malloc ();
-> > ++void *malloc ();
-> > + #endif
-> > +
-> > + int
-> > +@@ -12598,7 +12598,7 @@
-> > + #if defined STDC_HEADERS || defined HAVE_STDLIB_H
-> > + # include <stdlib.h>
-> > + #else
-> > +-char *realloc ();
-> > ++void *realloc ();
-> > + #endif
-> 
-> why do you need to patch this ?  HAVE_STDLIB_H should be defined, or
-> something else is broken.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Ah crap!  I didn't mean that to be in there.  That was leftovers from
-when I was attempting to fix the issue of automake not being the correct
-version (they have it hard-coded to 1.10, mine is 1.11).  Though. . . 
+Hi,
 
+Am 22.03.2011 16:56, schrieb Eric BENARD:
+> Hi,
 > 
-> > +--- a/configure
-> > ++++ b/configure
-> 
-> so you patch configure ...
-> 
-> > +--- a/configure.ac
-> > ++++ b/configure.ac
-> 
-> then you patch configure.ac ...
-> 
-> > +HTOP_POST_CONFIGURE_HOOKS = HTOP_RETOUCH_CONFIGURE_AC
-> > +
-> > +define HTOP_RETOUCH_CONFIGURE_AC
-> > + ? ? ? touch -r $(@D)/missing $(@D)/configure.ac
-> > +endef
-> 
-> and then you manually touch configure.ac, but dont invoke autotools
-> anywhere.  what is going on here ?
+> please keep list in copy when answering,
 
-if you touch the configure.ac file using the timestamp off of missing,
-you don't _need_ to rerun the automake if the configure.ac is near the
-same time as missing and configure.  This would be a hack.  Perhaps I
-should mention that in the patch file?
-
+sorry. Yes, I will.
 > 
-> you should only be patching generated files, or only the source
-> autotool files.  and if you do the latter, you should be re-running
-> autotools via HTOP_AUTORECONF=yes, not manually mucking with
-> timestamps and letting the build system figure things out.
+>> Am 22.03.2011 15:59, schrieb Eric BENARD:
+>>
+>>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apache2/apache2_2.2.17.bb
+>>>
+>>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/libpcre/libpcre_8.10.bb
+>>>
+>>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr_1.4.2.bb
+>>>
+>>> http://cgit.openembedded.net/cgit.cgi/openembedded/tree/recipes/apr/apr-util_1.3.10.bb
+>>>
+>>
+>> thanks for your info. Seems pretty weird and more complex than I
+>> thought. But how do you integrate those rules into buildroot? I only saw
+>> the "standard" autoconf and cmake Makefiles.in the documentation..
+>>
+> well for that part you will need to ask on the mailing list.
 
-I'm confused about this (forgive my ignorance about the overall build
-system).  So, if I let configure run, then let make run it fails.
-However, I can go back and rm .stamp_configured and re-run make then
-all is well.  So, if I do HTOP_AUTORECONF, will this do this for me?
+does any on this list know how to implement Eric's knowledge on Apache
+into an .mk file? Or does anybody already have a .mk file to share? Or
+am I the only guy who wants to cross compile an Apache? :)
 
-> -mike
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-Andy
+iQEcBAEBAgAGBQJNiMk2AAoJEEMkp/gkis19u+EH/3MuAQCNXG2Dz6+5OnBja5+M
+BDx/OuQjfkSKyNN019PDf+ua/2oWe4OZJ7MiI/VaR/i5UFNCxoKAT+aRMpFR2PZf
+Pp3BmMBfpHpJLZRHoOjWsgr2pkU4mugD17aV/nRHdPXVt1XavLbue4pUwvXb/9t8
+EA9tryKHJ2L/u0ax1hLJZB5jAku2u1LaO7sY6kOGrKOVGi678QnMpQ7t610RCsiX
+R/vHnSzl3Uy+aqWWbpWK508snYyd/w9tnoEU8A6LJZNGoDFswbxPzS/XciRdwltG
+HteI9ut+R5UmiAJmdmJ4iV+D+0EQa6839celXJ4YPahyNSMtjaxo653huwgDCE8=
+=vwSS
+-----END PGP SIGNATURE-----
