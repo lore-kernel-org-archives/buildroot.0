@@ -1,59 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 Mar 2011 21:55:02 +0200
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 22 Mar 2011 21:00:06 +0100
 Subject: [Buildroot] Compiling Apache
-In-Reply-To: <4D88F97B.4060605@michaelburghart.de>
+In-Reply-To: <20110322195502.GA8662@tarshish>
 References: <4D89170F.7080305@michaelburghart.de> <4D88B94A.1060609@free.fr>
 	<4D88BD19.7070901@michaelburghart.de> <4D88C6B3.5010103@free.fr>
 	<4D88F97B.4060605@michaelburghart.de>
-Message-ID: <20110322195502.GA8662@tarshish>
+	<20110322195502.GA8662@tarshish>
+Message-ID: <4D88FFC6.1010404@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-On Tue, Mar 22, 2011 at 08:33:15PM +0100, Michael Burghart wrote:
-> what I do not understand: I get the following error:
-> 
-> make[4]: Entering directory
-> `/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre'
-> ./dftables
-> /LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c
-> make[4]: ./dftables: Kommando nicht gefunden
-> 
-> 
-> So I tried it manually and did a cd into the directory:
-> cd /LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/
-> 
-> then I invoked the dftables command manually:
-> ./dftables
-> /LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre/chartables.c
-> 
-> got "File not found":
-> - -bash: ./dftables: Datei oder Verzeichnis nicht gefunden
-> 
-> Did a ls on that file and it exists! So why did it produce an "File not
-> foound" error
-> mb at einstein:/LFS/buildroot-2011.02/output/build/httpd-2.2.17/srclib/pcre> ls
-> - -l ./dftables
-> - -rwxr-xr-x 1 mb users 8015 22. M?r 15:18 ./dftables
-> 
-> 
-> How can that be? I am really puzzled now...
+Hi Baruch,
 
-Quoting the execve(2) man page:
+Am 22.03.2011 20:55, schrieb Baruch Siach:
+> Quoting the execve(2) man page:
+> 
+>        ENOENT The  file  filename  or  a script or ELF interpreter does not exist, or a
+>               shared library needed for file or interpreter cannot be found.
+> 
+> This means that the format of the executable is wrong. What is the output of 
+> 'file dftables'?
 
-       ENOENT The  file  filename  or  a script or ELF interpreter does not exist, or a
-              shared library needed for file or interpreter cannot be found.
+./dftables: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),
+dynamically linked (uses shared libs), not stripped
 
-This means that the format of the executable is wrong. What is the output of 
-'file dftables'?
+But what is wrong?!
 
-baruch
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+iQEcBAEBAgAGBQJNiP/GAAoJEEMkp/gkis19b1kH/R0dw7EVzJzeohj+5sv2MA09
+B1ustR+KqY3+gnrPjCZdfWyv3sl9I6RJVcNLB4Eb5g0XUnNMiZ9bgvY/eVbQLvrW
+yYqFgIXS41z+GUmuSsalClol/mXKWtNG1EekBBUdakLbEzjNX9xGD+0endcGiWgI
+AvzrWps1guUpRo+OMol1P6R8OOEBeAvrS2kfC+pnfOaXfLybNnnqQOHIqSmDEvVT
+fB+06226wTQXlv94c9jfiwZ4GWR182WvtBqOu/5+5Lep5yzIitKZdlxYbcDJxu7z
+5aiW8ec/spo4WdhyIRXf6U7nz7/Sd4tvHWLDrQFV5mcJJk0tYc0A0ddeh/vX2Lo=
+=9Tzl
+-----END PGP SIGNATURE-----
