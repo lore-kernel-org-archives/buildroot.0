@@ -1,72 +1,79 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 23 Mar 2011 23:54:12 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: disable isascii calls when undefined
-Message-ID: <1300920852-21189-1-git-send-email-s.martin49@gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 23 Mar 2011 16:31:31 -0700
+Subject: [Buildroot] BeagleBoard-xM, booting 2.6.37, root=/dev/mmcblk0p2,
+ kernel hangs
+In-Reply-To: <AANLkTikPixoYQfWYnnKKBb6TuXOMXt165gkfVAzL-OPR@mail.gmail.com>
+References: <201103232200.55266.tmohr@s.netic.de>	<AANLkTikXt+=tDUAtbP39EZQ8ExEZzEU0kMYFP0NQ_Pm5@mail.gmail.com>	<201103232310.39054.tmohr@s.netic.de>
+	<AANLkTikPixoYQfWYnnKKBb6TuXOMXt165gkfVAzL-OPR@mail.gmail.com>
+Message-ID: <4D8A82D3.9020704@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 03/23/11 15:53, bruce bushby wrote:
+> I've only just started using buildroot but I found the NFS setup simplifies
+> things and it also makes testing new builds very easy.
+>
+> I can help with the NFS setup if you need.....it's about the only part of
+> things I'm any good at :)
+>
+> my uboot settings:
+>
+> U-Boot>  printenv
+> bootdelay=3
+> baudrate=115200
+> AutoRamSizeCfg=ON
+> AutoLinuxEnvCfg=ON
+> ethact=macb0
+> autostart=
+> autoload=no
+> ipaddr=192.100.1.102
+> ethaddr=192.100.1.102
+> bootcmd=ethinit $ipaddr ; tftp 0x20200000 uImage ; bootm 0x20200000
+> serverip=192.100.1.108
+> bootargs=console=ttyS0,115200 mem=64M ver=4384k icofat=257k root=/dev/nfs
+> nfsroot=192.100.1.108:/nfsroot ip=192.100.1.102
+> mtdparts=atmel_nand:7936k(ARMboot)ro,- at 7936k(root)
+> stdin=serial
+> stdout=serial
+> stderr=serial
+>
+> Environment size: 431/32764 bytes
+> U-Boot>
+>
+>
+> 1. setup tftpboot (I use /tftpboot)
+> 2. Create an nfs share (I use /nfsroot)
+> 2. Copy uImage to /tftpboot/uImage (give /tftpboot 777 file perms)
+> 4. Copy rootfs.tar to /nfsroot ; tar -xf rootfs.tar
+>
+> uboot:
+> setenv ipaddr 192.100.1.102
+> setenv bootcmd "...your bootcmd"
+> setenv bootargs "..your bootargs"
+> saveenv
+>
+> I set my bootcmd to include "ethinit $ipaddr;" .... otherwise you have to
+> manually "ethinit $ipaddr"
+>
+>
+>
+Hi Bruce,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- ...ale-disable-isascii-call-when-not-defined.patch |   47 ++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/qt/qt-4.7.2-qlocale-disable-isascii-call-when-not-defined.patch
+What u-boot are you using and what is it's config. I see here you got 
+both usb ethernet to work and also saveenv to mmc. I would like to see 
+your u-boot config.
 
-diff --git a/package/qt/qt-4.7.2-qlocale-disable-isascii-call-when-not-defined.patch b/package/qt/qt-4.7.2-qlocale-disable-isascii-call-when-not-defined.patch
-new file mode 100644
-index 0000000..f3cc3df
---- /dev/null
-+++ b/package/qt/qt-4.7.2-qlocale-disable-isascii-call-when-not-defined.patch
-@@ -0,0 +1,47 @@
-+From d2b483fea53a673a0dc9719717271615260e6ee7 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Wed, 23 Mar 2011 23:12:36 +0100
-+Subject: qlocale: disable isascii call when not defined
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ src/corelib/tools/qlocale.cpp |    5 +++++
-+ 1 files changed, 5 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/corelib/tools/qlocale.cpp b/src/corelib/tools/qlocale.cpp
-+index cfc8b33..9f03235 100644
-+--- a/src/corelib/tools/qlocale.cpp
-++++ b/src/corelib/tools/qlocale.cpp
-+@@ -123,6 +123,7 @@ static qlonglong qstrtoll(const char *nptr, const char **endptr, register int ba
-+ static qulonglong qstrtoull(const char *nptr, const char **endptr, register int base, bool *ok);
-+ 
-+ #if defined(Q_CC_MWERKS) && defined(Q_OS_WIN32)
-++#   define __HAS_ISASCII
-+ inline bool isascii(int c)
-+ {
-+         return (c >= 0 && c <=127);
-+@@ -4704,8 +4705,10 @@ static qulonglong qstrtoull(const char *nptr, const char **endptr, register int
-+     cutoff = qulonglong(ULLONG_MAX) / qbase;
-+     cutlim = qulonglong(ULLONG_MAX) % qbase;
-+     for (acc = 0, any = 0;; c = *s++) {
-++#if defined(__HAS_ISASCII)
-+         if (!isascii(c))
-+             break;
-++#endif
-+         if (isdigit(c))
-+             c -= '0';
-+         else if (isalpha(c))
-+@@ -4802,8 +4805,10 @@ static qlonglong qstrtoll(const char *nptr, const char **endptr, register int ba
-+     cutlim = cutoff % qbase;
-+     cutoff /= qbase;
-+     for (acc = 0, any = 0;; c = *s++) {
-++#if defined(__HAS_ISASCII)
-+         if (!isascii(c))
-+             break;
-++#endif
-+         if (isdigit(c))
-+             c -= '0';
-+         else if (isalpha(c))
-+-- 
-+1.7.0.4
-+
--- 
-1.7.0.4
+I gave up on u-boot, but do mount nfs from the bb-xm. then if needed I 
+copy over a new uImage and reboot. Obviously either tftp or nfs booting 
+would be even nicer.
+
+I tried to get kexec to work on the bb, but it doesn't. Lots of people 
+are saying kexec is not working in 2.6.38, but I haven't seen fixes yet. 
+The nice thing about kexec is it uses a less bloated u-boot, gives 
+better scripting capability (and for me without the ability to saveenv), 
+easier customizing. But alas....
+
+Regards, Steve
