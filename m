@@ -1,43 +1,53 @@
-From: =?ISO-8859-1?Q?P=E4r_Degerman?= <par@degerman.org>
-Date: Tue, 22 Mar 2011 21:31:02 +0100
-Subject: [Buildroot] Adding owfs to buildroot fails with "cannot find
-	/lib//libc.so.0"
-In-Reply-To: <AANLkTinhuHrKgnufO1mpJ6rbqqLiOv8T3gPsVuJZEarF@mail.gmail.com>
-References: <AANLkTikv8x-OmUoOvhJF-3Ly-fV6oLRzSKYY1ZP8s3R5@mail.gmail.com>
-	<AANLkTinhuHrKgnufO1mpJ6rbqqLiOv8T3gPsVuJZEarF@mail.gmail.com>
-Message-ID: <AANLkTik2NRrzq81T=M4fadTW2YuPVSBgS20iYYHNWi7B@mail.gmail.com>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Thu, 24 Mar 2011 21:57:16 +0100
+Subject: [Buildroot] [PATCH 1/1] qt: convert to the GENTARGETS
+	infrastructure
+In-Reply-To: <39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1300630739.git.thomas.petazzoni@free-electrons.com>
+	<39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4D8BB02C.4070108@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anders,
-Nice to hear from you again. It's been a while!
-
-> To me it looks like the host ld and /lib. Is it building a native-version?
-
-No, I'm trying to cross compile for my target (i486) on my build host (i686).
-
-> Do the configure step run OK?
-
-Yes, the config.log is attached.
-
->> OWFS_CONF_ENV = LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib"
+Thomas Petazzoni wrote:
+> In addition to converting the qt package to the GENTARGETS
+> infrastructure, this commit also does the following (related) things
+> in the Qt package:
 >
-> To me, it looks like this line is giving you you're problems.
+>   * Create a BR2_PACKAGE_QT_CONFIG_FILE option, which can be used to
+>     pass a custom Qt configuration file, such as the ones found in
+>     src/corelib/global/qconfig-*.h. This used to be possible, but
+>     required changing qt.mk directly, which isn't really how we
+>     configure things in Buildroot.
 >
-> What linking problems are you trying to avoid by that line?
+>   * Remove the BR2_PACKAGE_QT_EMB_PLATFORM option, the embedded
+>     platform name is now computed directly in qt.mk.
+>
+>   * The QT_CONFIGURE variable, which hosted all ./configure options,
+>     has been renamed to QT_CONFIGURE_OPTS, for consistency with what we
+>     do in the AUTOTARGETS infrastructure.
+>
+>   * The QT_DEP_LIBS variable has been renamed to QT_DEPENDENCIES, so
+>     that dependencies are properly handled by the GENTARGETS
+>     infrastructures.
+>
+>   * The QT_QMAKE_SET macro (used to adjust the path/flags of the
+>     compiler/linker) has been extended with an additional argument,
+>     which allows to pass the source directory of Qt.
+>
+>   * All the installation procedure has been rewritten to fit within the
+>     GENTARGETS mechanism.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   package/qt/Config.in |   35 ++--
+>   package/qt/qt.mk     |  623 +++++++++++++++++++++++---------------------------
+>   2 files changed, 302 insertions(+), 356 deletions(-)
+>
 
-Those where left overs from me trying to work around the problem I am
-having. I have the same result without this line though.
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Regards
-P?r
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.log
-Type: text/x-log
-Size: 192366 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110322/824f2ed7/attachment-0001.bin>
+Luca
