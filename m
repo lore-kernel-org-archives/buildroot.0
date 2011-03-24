@@ -1,53 +1,65 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Thu, 24 Mar 2011 21:57:16 +0100
-Subject: [Buildroot] [PATCH 1/1] qt: convert to the GENTARGETS
-	infrastructure
-In-Reply-To: <39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1300630739.git.thomas.petazzoni@free-electrons.com>
-	<39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4D8BB02C.4070108@lucaceresoli.net>
+From: Torsten Mohr <tmohr@s.netic.de>
+Date: Thu, 24 Mar 2011 22:19:55 +0100
+Subject: [Buildroot] [beagleboard] BeagleBoard-xM, booting 2.6.37,
+	root=/dev/mmcblk0p2, kernel hangs
+In-Reply-To: <201103232200.55266.tmohr@s.netic.de>
+References: <201103232200.55266.tmohr@s.netic.de>
+Message-ID: <201103242219.55879.tmohr@s.netic.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> In addition to converting the qt package to the GENTARGETS
-> infrastructure, this commit also does the following (related) things
-> in the Qt package:
->
->   * Create a BR2_PACKAGE_QT_CONFIG_FILE option, which can be used to
->     pass a custom Qt configuration file, such as the ones found in
->     src/corelib/global/qconfig-*.h. This used to be possible, but
->     required changing qt.mk directly, which isn't really how we
->     configure things in Buildroot.
->
->   * Remove the BR2_PACKAGE_QT_EMB_PLATFORM option, the embedded
->     platform name is now computed directly in qt.mk.
->
->   * The QT_CONFIGURE variable, which hosted all ./configure options,
->     has been renamed to QT_CONFIGURE_OPTS, for consistency with what we
->     do in the AUTOTARGETS infrastructure.
->
->   * The QT_DEP_LIBS variable has been renamed to QT_DEPENDENCIES, so
->     that dependencies are properly handled by the GENTARGETS
->     infrastructures.
->
->   * The QT_QMAKE_SET macro (used to adjust the path/flags of the
->     compiler/linker) has been extended with an additional argument,
->     which allows to pass the source directory of Qt.
->
->   * All the installation procedure has been rewritten to fit within the
->     GENTARGETS mechanism.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   package/qt/Config.in |   35 ++--
->   package/qt/qt.mk     |  623 +++++++++++++++++++++++---------------------------
->   2 files changed, 302 insertions(+), 356 deletions(-)
->
+Hello,
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+the problem was the kernel configuration, i configured MMC cards but i did not 
+enable the "Block Layer".  It seems in the OMAP specific kernel you can't rely 
+that every dependency is correctly set (enabling MMC is possible without block 
+layer).
 
-Luca
+After adapting /etc/inittab i can start /bin/sh
+
+
+Best regards,
+Torsten.
+
+
+Am Mittwoch, 23. M?rz 2011, 22:00:55 schrieb Torsten Mohr:
+> Hello,
+> 
+> i've set up a micro SD card with VFAT on partition 1, EXT2 on partition 2.
+> 
+> Partition 2 is buildroot's output/images/rootfs.ext2, copied with "dd" to
+> the micro SD card.
+> 
+> On partition 1 i have u-boot and i start the kernel like this:
+> mmc init
+> mmc rescan 0
+> run loaduimage
+> bootm 0x82000000
+> 
+> Then i see the kernel boot log and i see it hanging:
+> 
+> [    1.215850] twl_rtc twl_rtc: setting system clock to 2000-01-01 00:05:25
+> UTC (946685125)
+> [    1.226806] Waiting for root device /dev/mmcblk0p2...
+> [    1.369873] mmc0: host does not support reading read-only switch.
+> assuming write-enable.
+> [    1.389953] mmc0: new SDHC card at address e624
+> ---> no more output
+> 
+> 
+> I use buildroot-2011.02, the kernel is 2.6.37.
+> 
+> In the kernel configuration i have set:
+> 
+> TI OMAP Multimedia Card Interface support (MMC_OMAP)
+> TI OMAP High Speed Multimedia Card Interface support (MMC_OMAP_HS)
+> 
+> 
+> Can anybody give me a hint why the kernel does not continue to boot?
+> 
+> 
+> Best regards,
+> Torsten.
