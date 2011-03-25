@@ -1,44 +1,85 @@
-From: Gerhard Heift <ml-buildroot-20110324-cba5@gheift.de>
-Date: Fri, 25 Mar 2011 09:54:08 +0100
-Subject: [Buildroot] removed first argument from *TARGETS
-Message-ID: <20110325085407.GA5760@gheift>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 25 Mar 2011 12:06:02 +0000
+Subject: [Buildroot] [PATCH] libnspr: New package.
+Message-ID: <AANLkTik=qx-+2LYTHPkp=XO0J78j0JZDmtw4tc0J4Jo9@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add a package for the Netscape Portable Runtime library.
 
-I invested a little bit of time to understand the Makesystem of
-buildroot. After this I rewrote it a little bit to purge the first
-argument from the GENTARGETS, AUTOTARGETS and CMAKETARGETS macros.
-I also added a variable $(PKG_DIR) which points to the package
-directory, which is in some packages used to copy extra files to the
-target.
-([1], [2], [3], doc: [4])
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+---
+ package/Config.in          |    1 +
+ package/libnspr/Config.in  |   13 +++++++++++++
+ package/libnspr/libnspr.mk |   17 +++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnspr/Config.in
+ create mode 100644 package/libnspr/libnspr.mk
 
-After this I reordered all packages into categories, to cleanup the
-package directory. [5]
-
-Beside there is a little patch, which fixes a link in the documentation:
-[6]
-
-I hope, you can use some of the work I have done.
-
-Regards,
-  Gerhard
-
-[1] https://github.com/gheift/buildroot/commit/a423ae05caa41b28a03cbc3d0f104c7154e0c608
-[2] https://github.com/gheift/buildroot/commit/092381ecb395bf609e2f1e58d61b6ce6d4fcd953
-[3] https://github.com/gheift/buildroot/commit/1c4c3233c8d202d06a6a293a854f9264526e8bd1
-[4] https://github.coo/gheift/buildroot/commit/ce4726143199cc3bef1d3ac3ab1b34b468d7a0c5
-[5] https://github.com/gheift/buildroot/tree/mail-2011-03-25-1
-[6] https://github.com/gheift/buildroot/commit/bf4c02f6dace48cb7b98a41c8fc322f041fe1beb
+diff --git a/package/Config.in b/package/Config.in
+index 0f0ec47..19c38fa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -331,6 +331,7 @@ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
++source "package/libnspr/Config.in"
+ source "package/liboil/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/startup-notification/Config.in"
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+new file mode 100644
+index 0000000..53086f0
+--- /dev/null
++++ b/package/libnspr/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBNSPR
++	bool "libnspr"
++	depends on BR2_LARGEFILE
++	help
++	  NSPR is the Netscape Portable Runtime library which provides
++	  a platform-neutral API for system level and libc like
++	  functions. The library is used by the Mozilla project as well
++	  as others.
++
++	  http://www.mozilla.org/projects/nspr/
++
++comment "libnspr requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+new file mode 100644
+index 0000000..9ba7431
+--- /dev/null
++++ b/package/libnspr/libnspr.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# libnspr
++#
++#############################################################
++LIBNSPR_VERSION = 4.8.7
++LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
++LIBNSPR_SITE =
+https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
++LIBNSPR_SUBDIR = mozilla/nsprpub
++LIBNSPR_INSTALL_STAGING = YES
++# Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
++LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
++		   HOST_LDFLAGS="-lc"
++# NSPR mixes up --build and --host
++LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
++
++$(eval $(call AUTOTARGETS,package,libnspr))
+-- 
+1.7.3.4
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110325/fc427531/attachment.asc>
+Name: 0001-libnspr-New-package.patch
+Type: text/x-patch
+Size: 2459 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110325/5f3bc7db/attachment.bin>
