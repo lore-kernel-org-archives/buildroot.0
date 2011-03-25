@@ -1,49 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 25 Mar 2011 22:13:54 +0100
-Subject: [Buildroot] [git commit master 1/1] qt: dbus module doesn't depend
-	on gui support
-Message-ID: <20110325211424.DD25981951@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Fri, 25 Mar 2011 19:21:32 -0300
+Subject: [Buildroot] Missing $(PYTHON_SITE_PACKAGE_DIR) in python.mk rewrite
+Message-ID: <AANLkTi=h8RcWD5ZYQbx438P1m7QuRtpFjEDREGau4sQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=808f98e3ebc0bce5f96052fa0557ff68d33659d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+    I had some packages that depended on the above variable being available
+in buildroot. For example pyserial (pyserial.sf.net). Could you guys add it
+back? Otherwise, how should I build generate that value in my .mk files?
 
-Seems I somehow got this wrong back in December (bff5248202).
+    Below is my makefile for pyserial.
 
-At the same time fix a typo in the comment.
+Kind Regards,
+    Thiago A. Correa
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+#############################################################
+#
+# PySerial - Serial port classes for Python
+#
+#############################################################
+#
+PYSERIAL_VERSION:=2.5
+PYSERIAL_SOURCE:=pyserial-$(PYSERIAL_VERSION).tar.gz
+PYSERIAL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).
+dl.sourceforge.net/sourceforge/pyserial/
+PYSERIAL_DIR=$(BUILD_DIR)/pyserial-$(PYSERIAL_VERSION)
+PYSERIAL_CAT=$(ZCAT)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 3cc04f4..2eb05e4 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -285,8 +285,9 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
- 	help
- 	  Build the platform Phonon plugin.
- 	  If unsure, say n.
-+endif
- 
--comment "Qt DBbus module not available (need dbus)"
-+comment "Qt Dbus module not available (needs dbus)"
- 	depends on !BR2_PACKAGE_DBUS
- 
- config BR2_PACKAGE_QT_DBUS
-@@ -294,7 +295,6 @@ config BR2_PACKAGE_QT_DBUS
- 	depends on BR2_PACKAGE_DBUS
- 	help
- 	  Build the Qt DBus module.
--endif
- 
- config BR2_PACKAGE_QT_XML
- 	bool "XML Module"
--- 
-1.7.3.4
+$(DL_DIR)/$(PYSERIAL_SOURCE):
+    $(call DOWNLOAD,$(PYSERIAL_SITE),$(PYSERIAL_SOURCE))
+
+$(PYSERIAL_DIR)/.unpacked: $(DL_DIR)/$(PYSERIAL_SOURCE)
+    $(PYSERIAL_CAT) $(DL_DIR)/$(PYSERIAL_SOURCE) | tar -C $(BUILD_DIR)
+$(TAR_OPTIONS) -
+    touch $@
+
+$(PYSERIAL_DIR)/.installed: $(PYSERIAL_DIR)/.unpacked
+    cp -a $(PYSERIAL_DIR)/serial $(PYTHON_SITE_PACKAGE_DIR)
+    touch $@
+
+pyserial: $(PYSERIAL_DIR)/.installed
+
+pyserial-clean:
+    -rm -rf $(PYTHON_SITE_PACKAGE_DIR)/serial
+
+ifeq ($(strip $(BR2_PACKAGE_PYSERIAL)),y)
+TARGETS+=pyserial
+endif
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110325/c01f4671/attachment.html>
