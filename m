@@ -1,193 +1,89 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Fri, 25 Mar 2011 12:07:04 +0000
-Subject: [Buildroot] [PATCH] libnss: Add new package.
-Message-ID: <AANLkTin9OWzFmdHWykazECzNn5BPez4SjvJ6tE0gBW6E@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Fri, 25 Mar 2011 16:37:29 +0000
+Subject: [Buildroot] [PATCH 1/1] qt: convert to the GENTARGETS
+	infrastructure
+In-Reply-To: <39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1300630739.git.thomas.petazzoni@free-electrons.com>
+	<39ac37ec67acf7886777166a098039bbab39b691.1300630739.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4D8CC4C9.2080104@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NSS is the Network Security Services library developed as part of
-the Mozilla project. It provides similar functions to OpenSSL but
-allows MPL, GPL and LGPL licensing.
+On 20/03/2011 14:19, Thomas Petazzoni wrote:
+> In addition to converting the qt package to the GENTARGETS
+> infrastructure, this commit also does the following (related) things
+> in the Qt package:
+>
+>   * Create a BR2_PACKAGE_QT_CONFIG_FILE option, which can be used to
+>     pass a custom Qt configuration file, such as the ones found in
+>     src/corelib/global/qconfig-*.h. This used to be possible, but
+>     required changing qt.mk directly, which isn't really how we
+>     configure things in Buildroot.
+>
+>   * Remove the BR2_PACKAGE_QT_EMB_PLATFORM option, the embedded
+>     platform name is now computed directly in qt.mk.
+>
+>   * The QT_CONFIGURE variable, which hosted all ./configure options,
+>     has been renamed to QT_CONFIGURE_OPTS, for consistency with what we
+>     do in the AUTOTARGETS infrastructure.
+>
+>   * The QT_DEP_LIBS variable has been renamed to QT_DEPENDENCIES, so
+>     that dependencies are properly handled by the GENTARGETS
+>     infrastructures.
+>
+>   * The QT_QMAKE_SET macro (used to adjust the path/flags of the
+>     compiler/linker) has been extended with an additional argument,
+>     which allows to pass the source directory of Qt.
+>
+>   * All the installation procedure has been rewritten to fit within the
+>     GENTARGETS mechanism.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   package/qt/Config.in |   35 ++--
+>   package/qt/qt.mk     |  623 +++++++++++++++++++++++---------------------------
+>   2 files changed, 302 insertions(+), 356 deletions(-)
+>
+I have found three issues with this patch:
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
----
- package/Config.in                  |    1 +
- package/libnss/Config.in           |   13 +++++++
- package/libnss/libnss-cross.patch  |   24 ++++++++++++++
- package/libnss/libnss-uclibc.patch |   14 ++++++++
- package/libnss/libnss.mk           |   62 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 114 insertions(+), 0 deletions(-)
- create mode 100644 package/libnss/Config.in
- create mode 100644 package/libnss/libnss-cross.patch
- create mode 100644 package/libnss/libnss-uclibc.patch
- create mode 100644 package/libnss/libnss.mk
+Should be:
++else ifeq ($(BR2_i386),y)
+Not
++else ifeq ($(BR2_x86),y)
 
-diff --git a/package/Config.in b/package/Config.in
-index 19c38fa..6bb3a42 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -245,6 +245,7 @@ menu "Crypto"
- source "package/beecrypt/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
-+source "package/libnss/Config.in"
- source "package/openssl/Config.in"
- endmenu
+Should be:
+ifneq ($(findstring x86,$(QT_EMB_PLATFORM)),)
+Not
+ifneq ($(findstring x86,$(BR2_PACKAGE_QT_EMB_PLATFORM)),)
 
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-new file mode 100644
-index 0000000..12502c8
---- /dev/null
-+++ b/package/libnss/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBNSS
-+	bool "libnss"
-+	select BR2_PACKAGE_LIBNSPR
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Network Security Services (NSS) is a set of libraries designed
-+	  to support development of security-enabled client and server
-+	  applications. Applications built with NSS can support SSL v2
-+	  and v3, TLS, PKCS #5, PKCS #7, PKCS #11, PKCS #12, S/MIME,
-+	  and X.509 v3 certificates.
-+
-+	  http://www.mozilla.org/projects/security/pki/nss/
-diff --git a/package/libnss/libnss-cross.patch
-b/package/libnss/libnss-cross.patch
-new file mode 100644
-index 0000000..8d01d7c
---- /dev/null
-+++ b/package/libnss/libnss-cross.patch
-@@ -0,0 +1,24 @@
-+
-+This patch allows us to set a value for the cross compiler via
-TARGETCC without setting
-+CC on the command line. CC is used for host tools as well as cross
-compiled code so we
-+cannot define it on the command line without breaking the host tools build.
-+
-+--- libnss-3.12.9.old/mozilla/security/coreconf/Linux.mk	2011-03-01
-10:31:21.517847183 +0000
-++++ libnss-3.12.9/mozilla/security/coreconf/Linux.mk	2011-03-01
-10:33:42.688648237 +0000
-+@@ -46,9 +46,13 @@
-+ 	IMPL_STRATEGY = _PTH
-+ endif
-+
-+-CC			= gcc
-+-CCC			= g++
-+-RANLIB			= ranlib
-++TARGETCC		= gcc
-++TARGETCCC		= g++
-++TARGETRANLIB		= ranlib
-++
-++CC			= $(TARGETCC)
-++CCC			= $(TARGETCCC)
-++RANLIB			= $(TARGETRANLIB)
-+
-+ DEFAULT_COMPILER = gcc
-+
-diff --git a/package/libnss/libnss-uclibc.patch
-b/package/libnss/libnss-uclibc.patch
-new file mode 100644
-index 0000000..46b71b4
---- /dev/null
-+++ b/package/libnss/libnss-uclibc.patch
-@@ -0,0 +1,14 @@
-+
-+uCLibc does not support RTLD_NOLOAD.
-+
-+--- libnss-3.12.9.old/mozilla/security/nss/lib/freebl/stubs.c	2011-03-01
-10:41:35.226450100 +0000
-++++ libnss-3.12.9/mozilla/security/nss/lib/freebl/stubs.c	2011-03-01
-10:42:14.628507934 +0000
-+@@ -539,7 +539,7 @@
-+  * fetch the library if it's loaded. For NSS it should already be loaded
-+  */
-+ #define freebl_getLibrary(libName)  \
-+-    dlopen (libName, RTLD_LAZY|RTLD_NOLOAD)
-++    dlopen (libName, RTLD_LAZY)
-+
-+ #define freebl_releaseLibrary(lib) \
-+     if (lib) dlclose(lib)
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-new file mode 100644
-index 0000000..b530cc3
---- /dev/null
-+++ b/package/libnss/libnss.mk
-@@ -0,0 +1,62 @@
-+#############################################################
-+#
-+# libnss
-+#
-+#############################################################
-+LIBNSS_VERSION = 3.12.9
-+LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
-+LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
-+LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src/
-+LIBNSS_SUBDIR = mozilla/security
-+LIBNSS_DISTDIR = mozilla/dist
-+LIBNSS_INSTALL_STAGING = YES
-+LIBNSS_DEPENDENCIES = libnspr sqlite zlib
-+
-+LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
-+		NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
-+		NSPR_LIB_DIR=$(STAGING_DIR)/usr/lib \
-+		BUILD_OPT=1 \
-+		NS_USE_GCC=1 \
-+		OPTIMIZER="$(TARGET_CFLAGS)" \
-+		NSS_USE_SYSTEM_SQLITE=1 \
-+		NSS_ENABLE_ECC=1 \
-+		NATIVE_CC="$(HOSTCC)" \
-+		TARGETCC="$(TARGET_CC)" \
-+		TARGETCCC="$(TARGET_CXX)" \
-+		TARGETRANLIB="$(TARGET_RANLIB)" \
-+		OS_ARCH="Linux" \
-+		OS_RELEASE="2.6" \
-+		OS_TEST="$(ARCH)"
-+
-+
-+define LIBNSS_BUILD_CMDS
-+	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
-+			SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
-+			DIST=$(@D)/$(LIBNSS_DISTDIR) \
-+			CHECKLOC= \
-+			$(LIBNSS_BUILD_VARS)
-+endef
-+
-+define LIBNSS_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
-+		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/nss
-+	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/include/nss \
-+		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
-+	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
-+		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
-+endef
-+
-+define LIBNSS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/lib/ \
-+		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
-+endef
-+
-+define LIBNSS_CLEAN_CMDS
-+	-$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR) clobber \
-+					clobber_dbm \
-+					clobber_coreconf \
-+					BUILD_OPT=1
-+endef
-+
-+$(eval $(call GENTARGETS,package,libnss))
--- 
-1.7.3.4
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-libnss-Add-new-package.patch
-Type: text/x-patch
-Size: 5667 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110325/3db22bc8/attachment.bin>
+Finally whitespace formatting is slightly inconsistent for the 
+QT_DEPENDENCIES libglib2, directfb and tslib
+
+Assuming you fixup those three minor things
+Acked-by: Will Wagner <willw@carallon.com>
+
+As a slight aside I have a number of Qt patches in my tree that I'd love 
+to get merged if there was any interest.
+
+First is to allow compiling Qt for X11 rather than embedded. This is 
+involves a slight hack as Qt doesn't officially support cross compiling 
+the X11 version, however I have it working well and have been in touch 
+with Nokia support who say that although not officially supported it 
+should work
+
+Second is re-adding commercial support. i know we had this before and it 
+was removed, however I'm stuck with some projects that have to use the 
+commercial license. I have done it slightly differently to how it was 
+before, it no longer needs login details to download the tarball, 
+instead it just fails with an explanation if it isn't in your buildroot 
+dl folder.
+
+Other patches include Qt Declarative config option, more font config 
+options.
+
+If people are interested I'll submit patches.
+
+Will
