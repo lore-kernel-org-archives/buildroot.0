@@ -1,50 +1,66 @@
-From: Gerhard Heift <ml-buildroot-20110324-cba5@gheift.de>
-Date: Sat, 26 Mar 2011 15:23:09 +0100
-Subject: [Buildroot] Add Package:  htop
-In-Reply-To: <4D8D1B88.8040906@AdTran.com>
-References: <4D8D1B88.8040906@AdTran.com>
-Message-ID: <20110326142309.GB23871@wastebin.kawo1.rwth-aachen.de>
+From: Allan Nielsen <a@awn.dk>
+Date: Sat, 26 Mar 2011 19:42:46 +0100
+Subject: [Buildroot] Problems with pkg-config
+Message-ID: <AANLkTinY9SZZs0uBFzCah0oJD5JjTvRR0K7z+B1u=AHd@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 25, 2011 at 05:47:36PM -0500, Andy Kennedy wrote:
-> Adds package htop.  Changes made based upon e-mails with Mike Frysinger.
-> 
-> Signed-off-by:  Andy Kennedy <Andy.Kennedy@AdTran.com>
-> ---
-> diff -Naur a/package/Config.in b/package/Config.in
+Hey
 
-[snip]
+I'am trying to upgrade the xserver in buildroot to version 1.9.4 and
+i'am having some small problems. I have not been hacking on buildroot
+before, and i'am therefor simply seeking some advices on the right way
+to do things.
 
-> diff -Naur a/package/htop/htop.mk b/package/htop/htop.mk
-> --- a/package/htop/htop.mk      1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/htop/htop.mk      2011-03-22 09:31:54.000000000 -0500
-> @@ -0,0 +1,12 @@
-> +#############################################################
-> +#
-> +# htop
-> +#
-> +#############################################################
-> +HTOP_VERSION = 0.9
-> +HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
-> +HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
-> +HTOP_DEPENDENCIES = ncurses
-> +HTOP_AUTORECONF=yes
+I have incremented the versions on libX11 and xtrans (among others),
+xtrans compiles and installs without a problem, but there seems to
+exists some problems with the xtrans.pc file. When I tries to compile
+libX11 which depends on xtrans it complains:
 
-The value of *_AUTORECONF has to be an uppercase YES.
 
-> +
-> +$(eval $(call AUTOTARGETS,package,htop))
+configure: error: Package requirements (xproto >= 7.0.13 xextproto
+xtrans xcb >= 1.1.92 kbproto inputproto) were not met:
 
-Regards,
-  Gerhard
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110326/86f2aa47/attachment.asc>
+No package 'xtrans' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+
+Because of this message I started look after where the xtrans file is installed:
+awn at awn-pc ~/git/buildroot $ find -name xtrans.pc
+./output/target/usr/share/pkgconfig/xtrans.pc
+./output/build/xlib_xtrans-1.2.6/xtrans.pc
+./output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/share/pkgconfig/xtrans.pc
+awn at awn-pc ~/git/buildroot $
+
+
+The path in sysroot seems to be outside the pkg-config search path:
+
+awn at awn-pc ~/git/buildroot $
+/home/awn/git/buildroot/output/host/usr/bin/pkg-config --cflags xtrans
+Package xtrans was not found in the pkg-config search path.
+Perhaps you should add the directory containing `xtrans.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'xtrans' found
+
+awn at awn-pc ~/git/buildroot $
+PKG_CONFIG_PATH=./output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/share/pkgconfig
+/home/awn/git/buildroot/output/host/usr/bin/pkg-config --cflags xtrans
+-D_BSD_SOURCE -DHAS_FCHOWN -DHAS_STICKY_DIR_BIT
+
+awn at awn-pc ~/git/buildroot $
+
+
+So, now to my question: how should I correct this problem? Should
+patch/configure xtrans to install the xtrans.pc in
+..../sysroot/usr/lib/pkgconfig/ (this is where the other *.pc files
+are located). Should I include sysroot/usr/share/pkgconfig in
+pkg-configs search path, or something else???
+
+
+Best regards
+Allan W. Nielsen
