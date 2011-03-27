@@ -1,44 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 27 Mar 2011 22:58:41 +0200
-Subject: [Buildroot] [git commit master 1/1] dnsmasq: bump to version 2.57
-Message-ID: <20110327205948.216AD819C4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 Mar 2011 23:12:51 +0200
+Subject: [Buildroot] Booting with ramdisk
+In-Reply-To: <201103211546.22271.dargaud@lpsc.in2p3.fr> (Guillaume Dargaud's
+	message of "Mon, 21 Mar 2011 15:46:22 +0100")
+References: <201103211546.22271.dargaud@lpsc.in2p3.fr>
+Message-ID: <8739m8mfn0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c5ca3d27d510146f2e7c4a7c36c1c1d632909e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dnsmasq/dnsmasq.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Guillaume> Now I want to embed that OS in the kernel (no need for a
+ Guillaume> network anymore as the kernel is on a flash mem). So I did
+ Guillaume> the following: - add ROOTFS CPIO to the buildroot options
+ Guillaume> and make a new version - point CONFIG_INITRAMFS_SOURCE to
+ Guillaume> the resulting rootfs.cpio file
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 976e1d6..d8f4d77 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--DNSMASQ_VERSION = 2.55
-+DNSMASQ_VERSION = 2.57
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)"
- DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
-@@ -25,7 +25,7 @@ endif
- ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
- 	DNSMASQ_MAKE_OPT += all-i18n
- 	DNSMASQ_DEPENDENCIES += libidn libintl
--	DNSMASQ_MAKE_ENV += LDFLAGS+="-lintl"
-+	DNSMASQ_MAKE_ENV += LDFLAGS+="-lintl -lidn"
- endif
- 
- ifneq ($(BR2_LARGEFILE),y)
+That sounds correct. If you build your kernel in buildroot we even have
+initramfs option that handles it all, but the above should afaik work
+as well.
+
+ Guillaume> - change the kernel parameters to "console=ttyUL0,115200 root=/dev/ram" (that's in a dts file)
+
+That shouldn't be needed.
+
+ Guillaume> The kernel stops instantly without even a blip on the
+ Guillaume> console. A debugger reveals that it stops at 0x401718... I
+ Guillaume> have no idea what's going on at this stage.
+
+Strange. What architecture/system is this? How much did the (compressed)
+kernel grow? Perhaps it's too big / you'll need to load it higher. For
+most archs, the kernel want to decompress into address 0, so if you load
+it too low, you might end up overwriting the compressed kernel as you're
+decompressing it.
+
+Perhaps you could add some debugging prints to the bootloader handover /
+kernel decompression?
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
