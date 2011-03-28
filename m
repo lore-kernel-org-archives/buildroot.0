@@ -1,93 +1,64 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Mar 2011 21:45:06 +0200
-Subject: [Buildroot] [git commit master 1/1] Makefile.autotools.in: add
-	libtool v2.4 support
-Message-ID: <20110328194623.C0431819DC@busybox.osuosl.org>
+From: Martin Hicks <mort@bork.org>
+Date: Mon, 28 Mar 2011 16:08:13 -0400
+Subject: [Buildroot] Strange hang while executing commands
+In-Reply-To: <AANLkTim0HL1qMmkS7tNaYmoEeyg4pZXLr3FztfAVPoXq@mail.gmail.com>
+References: <AANLkTikvXk7qzFov-25Xu_MmUXdkYMdwkKkGtsRzhUwA@mail.gmail.com>
+	<87sjvm75ik.fsf@macbook.be.48ers.dk>
+	<AANLkTim0HL1qMmkS7tNaYmoEeyg4pZXLr3FztfAVPoXq@mail.gmail.com>
+Message-ID: <AANLkTimU_B32K7xWQCNGpMgiaFHiPp-G7ehNmctPz_e-@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Feb 17, 2011 at 3:49 PM, Martin Hicks <mort@bork.org> wrote:
+> On Thu, Feb 17, 2011 at 3:47 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
+>>
+>> ?Martin> Hi,
+>> ?Martin> Does anyone have any clues where I might start looking for the reason
+>> ?Martin> behind commands within the procps package just hanging?
+>>
+>> Hanging or crashing?
+>
+> Hang.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f055b266f11f8b72c60cf3b46bf081aaf97f5f6d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I finally got around to investigating this further.  If I enable the
+"build packages with debugging symbols' the problem goes away :(
 
-Packages (like avahi) are now using libtool 2.4, so extend the libtool
-handling to support those as well.
+If I interrupt the processes with gdb and step, I see that it's
+looping through the same function over and over, for some reason.  I
+did try procps-3.2.8, to no avail.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.autotools.in        |    2 +
- package/buildroot-libtool-v2.4.patch |   47 ++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 0 deletions(-)
- create mode 100644 package/buildroot-libtool-v2.4.patch
+Any ideas?
+Thanks,
+mh
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index d445348..88a06ea 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -145,6 +145,8 @@ define LIBTOOL_PATCH_HOOK
- 				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v1.5.patch; \
- 			elif test $$$${ltmain_version} = "2.2"; then\
- 				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v2.2.patch; \
-+			elif test $$$${ltmain_version} = "2.4"; then\
-+				toolchain/patch-kernel.sh $$$${i%/*} package buildroot-libtool-v2.4.patch; \
- 			fi \
- 		done \
- 	fi
-diff --git a/package/buildroot-libtool-v2.4.patch b/package/buildroot-libtool-v2.4.patch
-new file mode 100644
-index 0000000..d82d610
---- /dev/null
-+++ b/package/buildroot-libtool-v2.4.patch
-@@ -0,0 +1,47 @@
-+--- a/ltmain.sh
-++++ b/ltmain.sh
-+@@ -1416,8 +1416,8 @@
-+ 	# was found and let the user know that the "--tag" command
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+-	  func_echo "unable to infer tagged configuration"
-+-	  func_fatal_error "specify a tag with \`--tag'"
-++	  func_echo "defaulting to \`CC'"
-++	  func_echo "if this is not correct, specify a tag with \`--tag'"
-+ #	else
-+ #	  func_verbose "using $tagname tagged configuration"
-+ 	fi
-+@@ -2962,8 +2962,11 @@
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  test "$inst_prefix_dir" = "$destdir" && \
-+-	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  #
-++	  # test "$inst_prefix_dir" = "$destdir" && \
-++	  #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
-+ 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+@@ -6683,7 +6686,7 @@
-+ 	  *)
-+ 	    if test "$installed" = no; then
-+ 	      func_append notinst_deplibs " $lib"
-+-	      need_relink=yes
-++	      need_relink=no
-+ 	    fi
-+ 	    ;;
-+ 	  esac
-+@@ -9257,6 +9260,10 @@
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++              # Replacing uninstalled with installed can easily break crosscompilation,
-++              # since the installed path is generally the wrong architecture.  -CL
-++              newdependency_libs="$newdependency_libs $deplib"
-++              continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		func_basename "$deplib"
+(gdb) step
+Single stepping until exit from function init_Linux_version,
+which has no line number information.
+0x0ffc9104 in _restgpr_30_x () from /lib/libproc-3.2.8.so
+(gdb)
+Single stepping until exit from function _restgpr_30_x,
+which has no line number information.
+0x0fe5f540 in vsscanf () from /lib/libc.so.6
+(gdb)
+Single stepping until exit from function vsscanf,
+which has no line number information.
+0x0fe4d4b0 in sscanf () from /lib/libc.so.6
+(gdb)
+Single stepping until exit from function sscanf,
+which has no line number information.
+0x0ffc8ba8 in init_Linux_version () from /lib/libproc-3.2.8.so
+(gdb)
+Single stepping until exit from function init_Linux_version,
+which has no line number information.
+0x0ffc9104 in _restgpr_30_x () from /lib/libproc-3.2.8.so
+(gdb)
+
+
+
 -- 
-1.7.3.4
+Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
