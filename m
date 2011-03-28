@@ -1,32 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Mar 2011 09:22:26 +0200
-Subject: [Buildroot] Problems with pkg-config
-In-Reply-To: <87zkogmjbv.fsf@macbook.be.48ers.dk>
-References: <AANLkTinY9SZZs0uBFzCah0oJD5JjTvRR0K7z+B1u=AHd@mail.gmail.com>
-	<87zkogmjbv.fsf@macbook.be.48ers.dk>
-Message-ID: <20110328092226.4c657301@surf>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 28 Mar 2011 03:36:46 -0400
+Subject: [Buildroot] [PATCH] readline: link directly against ncurses
+In-Reply-To: <20110324194745.268213ba@surf>
+References: <1300923775-13739-1-git-send-email-vapier@gentoo.org>
+	<20110324194745.268213ba@surf>
+Message-ID: <AANLkTinDM3AY4iA5gipkrUHEc7EoMO6-VMLOb_NpsVkG@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Mar 2011 21:53:08 +0200
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On Thu, Mar 24, 2011 at 2:47 PM, Thomas Petazzoni wrote:
+> On Wed, 23 Mar 2011 19:42:55 -0400 Mike Frysinger wrote:
+>> note: not really tested since external toolchain support is totally
+>> broken
+>
+> Could you elaborate ?
 
-> The right fix is imho to make pkg-config search usr/share/pkgconfig as
-> well, as that's what upstream pkg-config does by default. I've fixed
-> it in git (6a86dd9c8e) and dropped the patch we had for xtrans to
-> make it use usr/lib/pkgconfig instead.
+i'm pretty sure i pointed this out around the time it broke.  if you
+dont specify the full path, the stupid makefiles prepend garbage.
 
-Agreed. I had a similar problem with some packages looking for udev.pc,
-which is looking in usr/share/pkgconfig.
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_PATH=""
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="bfin-uclinux"
+BR2_TOOLCHAIN_EXTERNAL_PREFIX="bfin-uclinux"
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+$ make ncurses
+....
+checking for bfin-linux-gcc... /bin/bfin-uclinux-gcc
+--sysroot=/usr/local/src/buildroot/output/host/usr/bfin-unknown-linux-uclibc/sysroot
+-mike
