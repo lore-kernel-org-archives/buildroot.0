@@ -1,35 +1,52 @@
 From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 28 Mar 2011 05:10:21 -0400
-Subject: [Buildroot] [PATCH] readline: link directly against ncurses
-In-Reply-To: <20110328105037.3655873a@surf>
-References: <1300923775-13739-1-git-send-email-vapier@gentoo.org>
-	<20110324194745.268213ba@surf>
-	<AANLkTinDM3AY4iA5gipkrUHEc7EoMO6-VMLOb_NpsVkG@mail.gmail.com>
-	<20110328105037.3655873a@surf>
-Message-ID: <AANLkTim7X6WFpt0qa3kFGyE5_gMyjwyzW+Mov7jXvupv@mail.gmail.com>
+Date: Mon, 28 Mar 2011 04:35:06 -0400
+Subject: [Buildroot] [PATCH] autotools: add with/without and enable/disable
+	helpers
+Message-ID: <1301301306-18134-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 28, 2011 at 4:50 AM, Thomas Petazzoni wrote:
-> On Mon, 28 Mar 2011 03:36:46 -0400 Mike Frysinger wrote:
->> On Thu, Mar 24, 2011 at 2:47 PM, Thomas Petazzoni wrote:
->> > On Wed, 23 Mar 2011 19:42:55 -0400 Mike Frysinger wrote:
->> >> note: not really tested since external toolchain support is totally
->> >> broken
->> >
->> > Could you elaborate ?
->>
->> i'm pretty sure i pointed this out around the time it broke. ?if you
->> dont specify the full path, the stupid makefiles prepend garbage.
->
-> Come on Mike, just for this reason you call the external toolchain
-> support "totally broken" ? It's ?fixed by a two-liner patch that I
-> acked some time ago:
-> http://lists.busybox.net/pipermail/buildroot/2011-March/041901.html.
+Rather than have to write ugly logic in every package .mk file to check
+a config var and then expand into a --{en,dis}able-foo flag, add helpers
+so code can cleanly expand things.
 
-the size of the patch doesnt make it any less broken.  and since it
-wasnt merged until just now, i couldnt test anything in mainline.
--mike
+A simple example:
+- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+- SDL_MIXER_CONF_OPT += --enable-music-ogg
+- else
+- SDL_MIXER_CONF_OPT += --disable-music-ogg
+- endif
++ SDL_MIXER_CONF_OPT += $(call USE_ENABLE,LIBVORBIS,music-ogg)
+
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+---
+ package/Makefile.autotools.in |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index d445348..e8d1eb0 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -279,3 +279,17 @@ else
+ $(call AUTOTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
+ endif
+ endef
++
++################################################################################
++# AUTOTOOLS HELPERS
++################################################################################
++
++# $(call _USE_CONF,enable,disable,LIB_FFMPEG,video,blah) -> --enable-video=blah if LIB_FFMPEG
++# $(call _USE_CONF,with,without,LIB_FFMPEG,video)        -> --with-video if LIB_FFMPEG
++_USE_CONF = $(if $(BR2_PACKAGE_$(3)), --$(1)-$(4)$(if $(5),=$(5)), --$(2)-$(4))
++
++# $(call USE_ENABLE,LIB_FFMPEG,video) => --enable-video if LIB_FFMPEG is set
++USE_ENABLE = $(call _USE_CONF,enable,disable,$(1),$(2),$(3))
++
++# $(call USE_WITH,LIB_FFMPEG,video) => --with-video if LIB_FFMPEG is set
++USE_WITH = $(call _USE_CONF,with,without,$(1),$(2),$(3))
+-- 
+1.7.4.1
