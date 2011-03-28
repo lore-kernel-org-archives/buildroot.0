@@ -1,32 +1,45 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Mon, 28 Mar 2011 12:18:22 -0400
-Subject: [Buildroot] Add Package: htop
-In-Reply-To: <4D90B11D.4070607@AdTran.com>
-References: <4D90B11D.4070607@AdTran.com>
-Message-ID: <AANLkTikJvMyKTpn4yZp3JrsvXREU=hM0GxgCuE7heB4i@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 28 Mar 2011 19:16:34 +0200
+Subject: [Buildroot] [PATCH 1 of 2] GENTARGETS: Allow disabling host package
+	installation
+In-Reply-To: <patchbomb.1301332593@localhost6.localdomain6>
+References: <patchbomb.1301332593@localhost6.localdomain6>
+Message-ID: <26b9d5d50f306815558c.1301332594@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 28, 2011 at 12:02 PM, Andy Kennedy wrote:
-> Adds package htop. ?Changes made based upon e-mails with Mike Frysinger
-> and Gerhard Heift. ?The autoreconf change is important for anyone using
-> uClibc as there is no widely available backtrace (yet).
+For target builds, it's already possible to enable/disable installation in the
+target and staging directories. Host builds, however, are installed
+unconditionally.
+In some cases, installation is not appropriate; building the package is
+enough. This patch checks whether the new variable HOST_PKGFOO_INSTALL_HOST
+equals NO, in which case the installation is not done.
+This principle is inspired by the PKGFOO_INSTALL_STAGING and
+PKGFOO_INSTALL_TARGET variables, but with negative logic to suit the common
+case.
 
-this ver looks mostly sane ...
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> ++AC_CHECK_HEADERS([execinfo.h],[:],[:])
+---
+ package/Makefile.package.in |  6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-no need for munging the other branches
-  AC_CHECK_HEADERS([execinfo.h])
-
-> ++if test "$cross_compiling" = "no"; then
-> + AC_CHECK_FILE($PROCDIR/stat,,AC_MSG_ERROR(Cannot find /proc/stat. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help.))
-> + AC_CHECK_FILE($PROCDIR/meminfo,,AC_MSG_ERROR(Cannot find /proc/meminfo. Make sure you have a Linux-compatible /proc filesystem mounted. See the file README for help.))
-> ++fi
-
-AC_CHECK_FILE has fallback cases for cross-compiling i thought, so you
-shouldnt need to check cross_compiling yourself
--mike
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -458,7 +458,11 @@
+ $(1)-install-staging:
+ endif
+ 
+-$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
++ifneq ($$($(2)_INSTALL_HOST),NO)
++$(1)-install-host:	$(1)-build $$($(2)_TARGET_INSTALL_HOST)
++else
++$(1)-install-host:	$(1)-build
++endif
+ 
+ $(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD)
