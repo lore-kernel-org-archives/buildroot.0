@@ -1,30 +1,30 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 28 Mar 2011 16:49:56 -0500
-Subject: [Buildroot] prefer static libraries question
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F99AC7E@EXV1.corp.adtran.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Mar 2011 00:03:23 +0200
+Subject: [Buildroot] [git commit master 1/1] Makefile.autotools.in: add
+ libtool v2.4 support
+In-Reply-To: <20110328194623.C0431819DC@busybox.osuosl.org>
+References: <20110328194623.C0431819DC@busybox.osuosl.org>
+Message-ID: <20110329000323.77c0d0d0@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Understanding that "prefer static libraries" is "highly experimental at
-the moment", should this export some default LDFLAGS=-static?  I
-attempted this with a very minimal set of tools (kexec, ssh, and
-busybox) and I found that busybox _does_ build statically, however, ssh
-and kexec don't.  Furthermore, openssl gets installed to the target
-(which is expected since ssh is built dynamically).  Preferring static
-libs would indicate (to me) that the _whole_ system will not have any
-libraries and each util would be linked statically.
+On Mon, 28 Mar 2011 21:45:06 +0200
+Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-Based upon the "at the moment" clause in the help:  is this an effort
-that is currently underway?  If yes, who is doing it and would you like
-help?  If no, since I have to do it anyway, should I start with the
-tools that I'm using and should I key off of the BR2_PREFER_STATIC_LIB
-for kexec, ssh, and anything else I run across to set *_CONF_ENV =
-LDFLAGS="-static" in the *.mk files?
+> Packages (like avahi) are now using libtool 2.4, so extend the libtool
+> handling to support those as well.
 
-Comments?
+I thought libtool v2.4 was supposed to support --sysroot and therefore
+to not need any of our dirty cross-compilation tricks. Am I wrong ?
 
-Thanks,
-Andy
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
