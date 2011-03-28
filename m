@@ -1,32 +1,46 @@
-From: Martin Hicks <mort@bork.org>
-Date: Mon, 28 Mar 2011 09:22:51 -0400
-Subject: [Buildroot] OF FDT compilation support
-In-Reply-To: <AANLkTimGE_8JQooPSJrkvDkM74mhf9Swj6m-cQwHzNeq@mail.gmail.com>
-References: <AANLkTikeJ-mbrieukd24z7zZi=hCRMNPhMZWP+Okm2oX@mail.gmail.com>
-	<20101123224505.1a26aeca@surf>
-	<AANLkTimGE_8JQooPSJrkvDkM74mhf9Swj6m-cQwHzNeq@mail.gmail.com>
-Message-ID: <AANLkTikxc5Wp0KYoYrGuYykPx8D5ZG88tmNMmpR5JjPt@mail.gmail.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Mauduit?= <benoit.mauduit@gmail.com>
+Date: Mon, 28 Mar 2011 16:33:25 +0200
+Subject: [Buildroot] [Bug 3511] New: make busybox-menuconfig does not
+ download busybox package
+In-Reply-To: <bug-3511-163@https.bugs.busybox.net/>
+References: <bug-3511-163@https.bugs.busybox.net/>
+Message-ID: <AANLkTim7uk2BJeqB8Y3kjHX5pAOGfuKKog80arp1=8Zn@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 26, 2011 at 4:28 AM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Stanislav,
+On Mon, Mar 28, 2011 at 2:16 PM,  <bugzilla@busybox.net> wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=3511
 >
-> I haven't seen a follow-up on this. Have you ever considered sending
-> an updated patch, based on Thomas' comments?
+> ? ? ? ? ? Summary: make busybox-menuconfig does not download busybox
+> ? ? ? ? ? ? ? ? ? ?package
+> ? ? ? ? ? Product: buildroot
+> ? ? ? ? ? Version: unspecified
+> ? ? ? ? ?Platform: PC
+> ? ? ? ?OS/Version: Linux
+> ? ? ? ? ? ?Status: NEW
+> ? ? ? ? ?Severity: minor
+> ? ? ? ? ?Priority: P5
+> ? ? ? ? Component: Other
+> ? ? ? ?AssignedTo: unassigned at buildroot.uclibc.org
+> ? ? ? ?ReportedBy: dmitry at radiofid.ru
+> ? ? ? ? ? ? ? ?CC: buildroot at uclibc.org
+> ? Estimated Hours: 0.0
+>
+>
+> 'make busybox-menuconfig' does not download busybox package, while 'make
+> linux26-menuconfig' and 'make uclibc-menuconfig' do. Workaround is to call
+> 'make busybox' (which fails since no crosscompiler is available yet) and repeat
+> 'make busybox-menuconfig'.
+> ...
 
-I also posted a patch last week to allow specifying an alternate
-kernel make target, rather than the default 'bzImage', 'uImage', etc.
-I'd much rather just leave FDT compilation to the kernel.  The
-alternate make target, at least for powerpc boards, is how you tell
-the kernel which FDT is used for your board.
+It's because busybox use GENTARGET mechanism, and stamp.extracted
+rules doesn't depend on stamp.downloaded. (Which it's the case for
+linux.mk)
 
-mh
+However, you can run : 'make busybox-source'.
 
 -- 
-Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
-Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
+Beno?t Mauduit
