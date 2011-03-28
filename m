@@ -1,68 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 28 Mar 2011 19:16:35 +0200
-Subject: [Buildroot] [PATCH 2 of 2] ncurses: fix hanging installation due to
- old version of tic
-In-Reply-To: <patchbomb.1301332593@localhost6.localdomain6>
-References: <patchbomb.1301332593@localhost6.localdomain6>
-Message-ID: <716e9d2242b5da1161e8.1301332595@localhost6.localdomain6>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 28 Mar 2011 12:21:57 -0500
+Subject: [Buildroot] Add Package: htop
+In-Reply-To: <AANLkTikJvMyKTpn4yZp3JrsvXREU=hM0GxgCuE7heB4i@mail.gmail.com>
+References: <4D90B11D.4070607@AdTran.com>
+	<AANLkTikJvMyKTpn4yZp3JrsvXREU=hM0GxgCuE7heB4i@mail.gmail.com>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1F99AAED@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During installation of ncurses, the 'tic' program from the host is used. In
-some cases, this version of tic is too old for the data to be processed, and
-the installation hangs indefinitely (already reported in July 2010, see [1])
+> On Mon, Mar 28, 2011 at 12:02 PM, Andy Kennedy wrote:
+> > Adds package htop. ?Changes made based upon e-mails with Mike
+> Frysinger
+> > and Gerhard Heift. ?The autoreconf change is important for anyone
+> using
+> > uClibc as there is no widely available backtrace (yet).
+> 
+> this ver looks mostly sane ...
+> 
+> > ++AC_CHECK_HEADERS([execinfo.h],[:],[:])
+> 
+> no need for munging the other branches
+>   AC_CHECK_HEADERS([execinfo.h])
+> 
+> > ++if test "$cross_compiling" = "no"; then
+> > + AC_CHECK_FILE($PROCDIR/stat,,AC_MSG_ERROR(Cannot find
+> /proc/stat. Make sure you have a Linux-compatible /proc filesystem
+> mounted. See the file README for help.))
+> > + AC_CHECK_FILE($PROCDIR/meminfo,,AC_MSG_ERROR(Cannot find
+> /proc/meminfo. Make sure you have a Linux-compatible /proc
+> filesystem mounted. See the file README for help.))
+> > ++fi
+> 
+> AC_CHECK_FILE has fallback cases for cross-compiling i thought, so
+> you
+> shouldnt need to check cross_compiling yourself
 
-With this patch, a static version of tic is built and used during the
-installation step of target ncurses. This method is based on a similar fix
-in Gentoo Linux (see [2] for the report and [3] for the solution).
+The error was really strange.  I submitted this patch to htop and
+they tested, modified and included it as a fix.  The problem was that
+when one is cross compiling, the test for /proc fails since the build
+is a cross build -- there were enough smarts to not test when cross
+building, however, the return value was a failure for the /proc
+tests.  This _should_ not occur so we skip the whole test.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2010-July/036100.html
-[2] http://bugs.gentoo.org/show_bug.cgi?id=249363#c25
-[3] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-libs/ncurses/ncurses-5.7-r2.ebuild
+This patch was derived by getting the current branch via svn and
+running a diff against configure.ac.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> -mike
 
----
- package/ncurses/ncurses.mk |  21 ++++++++++++++++++++-
- 1 files changed, 20 insertions(+), 1 deletions(-)
-
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -27,6 +27,7 @@
- NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
- NCURSES_SOURCE = ncurses-$(NCURSES_VERSION).tar.gz
- NCURSES_INSTALL_STAGING = YES
-+NCURSES_DEPENDENCIES = host-ncurses
- 
- NCURSES_CONF_OPT = \
- 	--with-shared \
-@@ -118,6 +119,24 @@
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
- 	$(NCURSES_INSTALL_TARGET_DEVFILES)
--endef # NCURSES_INSTALL_TARGET_CMDS
-+endef
-+
-+#
-+# On systems with an older version of tic, the installation of ncurses hangs
-+# forever. To resolve the problem, build a static version of tic on host
-+# ourselves, and use that during installation.
-+#
-+define HOST_NCURSES_BUILD_CMDS
-+	$(MAKE1) -C $(@D) sources
-+	$(MAKE) -C $(@D)/progs tic
-+endef
-+
-+HOST_NCURSES_CONF_OPT = \
-+	--without-shared
-+
-+HOST_NCURSES_INSTALL_HOST = NO
-+
-+NCURSES_MAKE_ENV += PATH=$(HOST_NCURSES_DIR)/progs:$(PATH)
- 
- $(eval $(call AUTOTARGETS,package,ncurses))
-+$(eval $(call AUTOTARGETS,package,ncurses,host))
+Andy
