@@ -1,44 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Mar 2011 10:00:37 +0200
-Subject: [Buildroot] [git commit master 1/1] external toolchain: Only prefix
-	path if specified
-Message-ID: <20110328081531.A815A80100@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 28 Mar 2011 03:18:47 -0400
+Subject: [Buildroot] [PATCH] hostcc/hostcxx: fix noccache variant setting
+Message-ID: <1301296727-28077-1-git-send-email-vapier@gentoo.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The current code accidentally sets up HOSTCC_NOCCACHE and HOSTCXX_NOCCACHE
+only when the respective HOSTCC or HOSTCXX values are not set.  So if you
+do something like:
+	make HOSTCC=gcc menuconfig
+The build fails because HOSTCC_NOCCACHE is not set anywhere.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d6ff452add2d4e902409ed35accfa59adba37f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Only prefix the external toolchain calls with its absolute path if
-BR2_TOOLCHAIN_EXTERNAL_PATH is set, otherwise just assume it will
-be available in the path.
-
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 ---
- package/Makefile.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index e1ffe15..f98b3e7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -115,7 +115,11 @@ TOOLCHAIN_EXTERNAL_LOCATION=$(TOOLCHAIN_EXTERNAL_DIR)
- else
- TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+diff --git a/Makefile b/Makefile
+index 7ae3787..9aa7399 100644
+--- a/Makefile
++++ b/Makefile
+@@ -126,13 +126,13 @@ endif
+ ifndef HOSTCC
+ HOSTCC:=gcc
+ HOSTCC:=$(shell which $(HOSTCC) || type -p $(HOSTCC) || echo gcc)
+-HOSTCC_NOCCACHE:=$(HOSTCC)
  endif
-+ifneq ($(TOOLCHAIN_EXTERNAL_LOCATION),)
- TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_LOCATION)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+else
-+TARGET_CROSS=$(TOOLCHAIN_EXTERNAL_PREFIX)-
-+endif
++HOSTCC_NOCCACHE:=$(HOSTCC)
+ ifndef HOSTCXX
+ HOSTCXX:=g++
+ HOSTCXX:=$(shell which $(HOSTCXX) || type -p $(HOSTCXX) || echo g++)
+-HOSTCXX_NOCCACHE:=$(HOSTCXX)
  endif
- 
- # Quotes are needed for spaces et al in path components.
++HOSTCXX_NOCCACHE:=$(HOSTCXX)
+ ifndef HOSTFC
+ HOSTFC:=gfortran
+ endif
 -- 
-1.7.3.4
+1.7.4.1
