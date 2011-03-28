@@ -1,50 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 Mar 2011 21:33:26 +0200
-Subject: [Buildroot] [git commit master 1/1] busybox: ensure source gets
-	downloaded/extracted/patched before -menuconfig
-Message-ID: <20110328193407.1B6FA819DC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 28 Mar 2011 19:34:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 3511] make busybox-menuconfig does not download
+	busybox package
+In-Reply-To: <bug-3511-163@https.bugs.busybox.net/>
+References: <bug-3511-163@https.bugs.busybox.net/>
+Message-ID: <20110328193409.D05C7817B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=3511
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c97608387f586f361e81a242d8838b9481369f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Closes #3511
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                    |    1 +
- package/busybox/busybox.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed it in git by depending on busybox-patch, thanks.
 
-diff --git a/CHANGES b/CHANGES
-index e4da26c..0908804 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -13,6 +13,7 @@
- 	#3451: fakeroot package: wrong FAKEROOT_SITE variable
- 	#3457: alsamixergui: broken URL
- 	#3475: Calling sync on large filesystems when not always necessary
-+	#3511: make busybox-menuconfig does not download busybox package
- 
- 2011.02, Released February 28th, 2011:
- 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 5583bc6..ffd6667 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -150,7 +150,7 @@ endef
- 
- $(eval $(call GENTARGETS,package,busybox))
- 
--busybox-menuconfig:	$(BUSYBOX_DIR)/.stamp_extracted
-+busybox-menuconfig: busybox-patch
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) menuconfig
- 	rm -f $(BUSYBOX_DIR)/.stamp_built
- 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
