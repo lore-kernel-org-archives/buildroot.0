@@ -1,48 +1,38 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Tue, 29 Mar 2011 03:41:28 +0200
-Subject: [Buildroot] SCM management
-In-Reply-To: <20110316163052.GA8006@game.jcrosoft.org>
-References: <20110316163052.GA8006@game.jcrosoft.org>
-Message-ID: <20110329014128.GO6466@game.jcrosoft.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 29 Mar 2011 13:34:25 +0200
+Subject: [Buildroot] [git commit master 1/1] qt: fix qt3 support target
+	install
+Message-ID: <20110329113545.9C930819E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-	ping
+commit: http://git.buildroot.net/buildroot/commit/?id=187ca32ae4a1c5661f0ae5a0b25403535748069a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best Regards,
-J.
-On 17:30 Wed 16 Mar     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> Hi,
-> 
-> 	During my work on barebox and the kernel
-> 	I modify Buildroot to get the source from my git or the mainline
-> 	and found out that we remove the tree everytime and re-clone it
-> 
-> 	This is time consuming specialy in develeopment when you add new
-> 	commit for other user which need to re-checkout your tree.
-> 
-> 	So I'd like to propose a new way to manage the trees
-> 	we could do something like on gentoo
-> 
-> 	as example with git
-> 	we clone a bare tre and store it in dl and do not remove it so if you
-> 	need a new version of the tree you just need to fetch it and do not
-> 	clone it again
-> 
-> 	For this purpose I would propose to manage the tree like this in dl
-> 	for git as example
-> 	builddir/fetch/git-src/${package}
-> 
-> 	for bzr
-> 	builddir/fetch/bzr-src/${package}
-> 
-> 	and to simplify the scm I would like to propose the manage it not via
-> 	makefile rules but via scripts
-> 
-> Best Regards,
-> J.
+"lib" shouldn't be prefixed, otherwise the make file tries to install
+liblibQt3Support.so.*.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/qt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 8569f7d..bdc32d9 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -539,7 +539,7 @@ ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
+ QT_INSTALL_LIBS    += QtScriptTools
+ endif
+ ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
+-QT_INSTALL_LIBS    += libQt3Support
++QT_INSTALL_LIBS    += Qt3Support
+ endif
+ 
+ QT_CONF_FILE=$(HOST_DIR)/usr/bin/qt.conf
+-- 
+1.7.3.4
