@@ -1,32 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 29 Mar 2011 00:23:57 +0200
-Subject: [Buildroot] [git commit master 1/1] Makefile.autotools.in: add
-	libtool v2.4 support
-In-Reply-To: <20110329000323.77c0d0d0@surf> (Thomas Petazzoni's message of
-	"Tue, 29 Mar 2011 00:03:23 +0200")
-References: <20110328194623.C0431819DC@busybox.osuosl.org>
-	<20110329000323.77c0d0d0@surf>
-Message-ID: <87zkoe28aq.fsf@macbook.be.48ers.dk>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Tue, 29 Mar 2011 03:41:28 +0200
+Subject: [Buildroot] SCM management
+In-Reply-To: <20110316163052.GA8006@game.jcrosoft.org>
+References: <20110316163052.GA8006@game.jcrosoft.org>
+Message-ID: <20110329014128.GO6466@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi,
 
- Thomas> On Mon, 28 Mar 2011 21:45:06 +0200
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> wrote:
+	ping
 
- >> Packages (like avahi) are now using libtool 2.4, so extend the libtool
- >> handling to support those as well.
-
- Thomas> I thought libtool v2.4 was supposed to support --sysroot and therefore
- Thomas> to not need any of our dirty cross-compilation tricks. Am I wrong ?
-
-Well, avahi failed for me atleast with dependent libs (it tried to
-relink during installation against native libs) - With the patch it
-works here, but I must admit I didn't look into the details.
-
--- 
-Bye, Peter Korsgaard
+Best Regards,
+J.
+On 17:30 Wed 16 Mar     , Jean-Christophe PLAGNIOL-VILLARD wrote:
+> Hi,
+> 
+> 	During my work on barebox and the kernel
+> 	I modify Buildroot to get the source from my git or the mainline
+> 	and found out that we remove the tree everytime and re-clone it
+> 
+> 	This is time consuming specialy in develeopment when you add new
+> 	commit for other user which need to re-checkout your tree.
+> 
+> 	So I'd like to propose a new way to manage the trees
+> 	we could do something like on gentoo
+> 
+> 	as example with git
+> 	we clone a bare tre and store it in dl and do not remove it so if you
+> 	need a new version of the tree you just need to fetch it and do not
+> 	clone it again
+> 
+> 	For this purpose I would propose to manage the tree like this in dl
+> 	for git as example
+> 	builddir/fetch/git-src/${package}
+> 
+> 	for bzr
+> 	builddir/fetch/bzr-src/${package}
+> 
+> 	and to simplify the scm I would like to propose the manage it not via
+> 	makefile rules but via scripts
+> 
+> Best Regards,
+> J.
