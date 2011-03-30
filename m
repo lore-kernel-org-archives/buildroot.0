@@ -1,36 +1,76 @@
-From: bbj17 at gmx.de <bbj17@gmx.de>
-Date: Wed, 30 Mar 2011 18:08:53 +0200
-Subject: [Buildroot] fix for package/config/util.c
-Message-ID: <20110330160853.179520@gmx.net>
+From: Martin Hicks <mort@bork.org>
+Date: Wed, 30 Mar 2011 12:54:30 -0400
+Subject: [Buildroot] SCM management
+In-Reply-To: <AANLkTik7W8-NnFEgU+ibjeTjVO1HHqwd4RwGvngR7kBT@mail.gmail.com>
+References: <20110316163052.GA8006@game.jcrosoft.org>
+	<AANLkTik7W8-NnFEgU+ibjeTjVO1HHqwd4RwGvngR7kBT@mail.gmail.com>
+Message-ID: <AANLkTinDPz4AZfasK_kWLoshWVTF8CUkh1sv9qxZxa4N@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-here is the correct diff:
+oops.  Forgot to CC the list.
 
+mh
 
- diff -Naur  package/config/util.c.old package/config/util.c
---- package/config/util.c.old   2011-03-30 17:37:08.016057639 +0200
-+++ package/config/util.c       2011-03-30 17:42:26.911184273 +0200
-@@ -35,12 +35,12 @@
-        char *ret;
-        if (len < 1)
-                return NULL;
--       ret = malloc(len);
-+       ret = malloc(len+1);
-        if (!ret) {
-                printf("Out of memory!");
-                exit(1);
-        }
--       memset(ret, 0, len);
-+       memset(ret, 0, len+1);
-        i = j = 0;
-        if (strncmp("BR2_", in, 4) == 0)
-                i += 4;
+On Wed, Mar 30, 2011 at 12:53 PM, Martin Hicks <mort@bork.org> wrote:
+> I added support, via a patch that I posted recently, to support an
+> external kernel tree. ?No dl/ file is used and the tree is referenced
+> directly by the makefiles rather than doing the download->extract
+> step.
+>
+> This is a hack. ?If you were to propose doing this in a more general
+> way, I'd be interested in seeing patches.
+> mh
+>
+> On Wed, Mar 16, 2011 at 12:30 PM, Jean-Christophe PLAGNIOL-VILLARD
+> <plagnioj@jcrosoft.com> wrote:
+>> Hi,
+>>
+>> ? ? ? ?During my work on barebox and the kernel
+>> ? ? ? ?I modify Buildroot to get the source from my git or the mainline
+>> ? ? ? ?and found out that we remove the tree everytime and re-clone it
+>>
+>> ? ? ? ?This is time consuming specialy in develeopment when you add new
+>> ? ? ? ?commit for other user which need to re-checkout your tree.
+>>
+>> ? ? ? ?So I'd like to propose a new way to manage the trees
+>> ? ? ? ?we could do something like on gentoo
+>>
+>> ? ? ? ?as example with git
+>> ? ? ? ?we clone a bare tre and store it in dl and do not remove it so if you
+>> ? ? ? ?need a new version of the tree you just need to fetch it and do not
+>> ? ? ? ?clone it again
+>>
+>> ? ? ? ?For this purpose I would propose to manage the tree like this in dl
+>> ? ? ? ?for git as example
+>> ? ? ? ?builddir/fetch/git-src/${package}
+>>
+>> ? ? ? ?for bzr
+>> ? ? ? ?builddir/fetch/bzr-src/${package}
+>>
+>> ? ? ? ?and to simplify the scm I would like to propose the manage it not via
+>> ? ? ? ?makefile rules but via scripts
+>>
+>> Best Regards,
+>> J.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+>
+> --
+> Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+> Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
+>
+
 
 
 -- 
-NEU: FreePhone - kostenlos mobil telefonieren und surfen!			
-Jetzt informieren: http://www.gmx.net/de/go/freephone
+Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
