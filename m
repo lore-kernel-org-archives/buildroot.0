@@ -1,77 +1,47 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Wed, 30 Mar 2011 02:46:06 +0100
-Subject: [Buildroot] Missing $(PYTHON_SITE_PACKAGE_DIR) in python.mk
- rewrite
-In-Reply-To: <AANLkTi=h8RcWD5ZYQbx438P1m7QuRtpFjEDREGau4sQQ@mail.gmail.com>
-References: <AANLkTi=h8RcWD5ZYQbx438P1m7QuRtpFjEDREGau4sQQ@mail.gmail.com>
-Message-ID: <1301449567.21198.1.camel@segulix>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Mar 2011 04:43:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 3529] New: alsa-lib 1.0.24.1 build fails with
+ daily snapshot (2011-03-29)
+Message-ID: <bug-3529-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-serial is in buildroot-2011.02
-take a look on
-package/python-serial/python-serial.mk
+https://bugs.busybox.net/show_bug.cgi?id=3529
 
-On Fri, 2011-03-25 at 19:21 -0300, Thiago A. Corr?a wrote:
-> Hi,
-> 
->     I had some packages that depended on the above variable being
-> available in buildroot. For example pyserial (pyserial.sf.net). Could
-> you guys add it back? Otherwise, how should I build generate that
-> value in my .mk files?
-> 
->     Below is my makefile for pyserial.
-> 
-> Kind Regards,
->     Thiago A. Correa
-> 
-> #############################################################
-> #
-> # PySerial - Serial port classes for Python
-> #
-> #############################################################
-> #
-> PYSERIAL_VERSION:=2.5
-> PYSERIAL_SOURCE:=pyserial-$(PYSERIAL_VERSION).tar.gz
-> PYSERIAL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pyserial/
-> PYSERIAL_DIR=$(BUILD_DIR)/pyserial-$(PYSERIAL_VERSION)
-> PYSERIAL_CAT=$(ZCAT)
-> 
-> $(DL_DIR)/$(PYSERIAL_SOURCE):
->     $(call DOWNLOAD,$(PYSERIAL_SITE),$(PYSERIAL_SOURCE))
-> 
-> $(PYSERIAL_DIR)/.unpacked: $(DL_DIR)/$(PYSERIAL_SOURCE)
->     $(PYSERIAL_CAT) $(DL_DIR)/$(PYSERIAL_SOURCE) | tar -C $(BUILD_DIR)
-> $(TAR_OPTIONS) -
->     touch $@
-> 
-> $(PYSERIAL_DIR)/.installed: $(PYSERIAL_DIR)/.unpacked
->     cp -a $(PYSERIAL_DIR)/serial $(PYTHON_SITE_PACKAGE_DIR)
->     touch $@
-> 
-> pyserial: $(PYSERIAL_DIR)/.installed
-> 
-> pyserial-clean:
->     -rm -rf $(PYTHON_SITE_PACKAGE_DIR)/serial
-> 
-> ifeq ($(strip $(BR2_PACKAGE_PYSERIAL)),y)
-> TARGETS+=pyserial
-> endif
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+           Summary: alsa-lib 1.0.24.1 build fails with daily snapshot
+                    (2011-03-29)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mjhammel at graphics-muse.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+make[4]: Entering directory
+`/home/mjhammel/src/ximba/bb/bld/buildroot-snapshot/output/build/alsa-lib-1.0.24.1/src/ucm'
+  CC     utils.lo
+  CC     parser.lo
+  CC     main.lo
+parser.c: In function 'uc_mgr_scan_master_configs':
+parser.c:1138: error: 'versionsort' undeclared (first use in this function)
+parser.c:1138: error: (Each undeclared identifier is reported only once
+parser.c:1138: error: for each function it appears in.)
+
+I'm on Fedora 13, using an external Crosstool-NG 1.10.0 toolchain.
+
+Tomorrow I'll try back-patching to 1.0.23 and see if that works.
 
 -- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110330/2a76c5cd/attachment.bin>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
