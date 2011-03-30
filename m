@@ -1,38 +1,77 @@
-From: Patryk Benderz <Patryk.Benderz@esp.pl>
-Date: Tue, 29 Mar 2011 20:14:34 +0200
-Subject: [Buildroot] [xdriver_xf86-video-openchrome-0.2.904] via_video.c:
- error: 'struct _Pixmap' has no member named 'screen_x'
-Message-ID: <1301422474.6206.37.camel@esp-patben-lin.espdx1.local>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Wed, 30 Mar 2011 02:46:06 +0100
+Subject: [Buildroot] Missing $(PYTHON_SITE_PACKAGE_DIR) in python.mk
+ rewrite
+In-Reply-To: <AANLkTi=h8RcWD5ZYQbx438P1m7QuRtpFjEDREGau4sQQ@mail.gmail.com>
+References: <AANLkTi=h8RcWD5ZYQbx438P1m7QuRtpFjEDREGau4sQQ@mail.gmail.com>
+Message-ID: <1301449567.21198.1.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Devs,
-I have searched biuldroot's mail archive but failed to find any solution
-to this. I am using buildroot-2011.02.tar.gz
-During compilation of openchrome, it complains about missing sarea.h and
-dri.h which I have workaround by:
-cd /home/patben/Dev/buildroot/output/build/xdriver_xf86-video-openchrome-0.2.904/src
-ln -s ../../xserver_xorg-server-1.7.5/hw/xfree86/dri/sarea.h sarea.h
-ln -s ../../xserver_xorg-server-1.7.5/hw/xfree86/dri/dri.h dri.h
+python-serial is in buildroot-2011.02
+take a look on
+package/python-serial/python-serial.mk
 
-Now make complains about:
-via_video.c: In function 'viaPaintColorkey':
-via_video.c:738:44: error: 'struct _Pixmap' has no member named 'screen_x'
-via_video.c:738:62: error: 'struct _Pixmap' has no member named 'screen_y'
-make[4]: *** [via_video.lo] Error 1
-
-As a side note I can tell, AFAIR it may have working fine with one of
-the following versions:
-	buildroot-2010.11.tar.gz
-	buildroot-2011.02-rc2.tar.gz
-
-Any hints how to make openchrome to compile again?
+On Fri, 2011-03-25 at 19:21 -0300, Thiago A. Corr?a wrote:
+> Hi,
+> 
+>     I had some packages that depended on the above variable being
+> available in buildroot. For example pyserial (pyserial.sf.net). Could
+> you guys add it back? Otherwise, how should I build generate that
+> value in my .mk files?
+> 
+>     Below is my makefile for pyserial.
+> 
+> Kind Regards,
+>     Thiago A. Correa
+> 
+> #############################################################
+> #
+> # PySerial - Serial port classes for Python
+> #
+> #############################################################
+> #
+> PYSERIAL_VERSION:=2.5
+> PYSERIAL_SOURCE:=pyserial-$(PYSERIAL_VERSION).tar.gz
+> PYSERIAL_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pyserial/
+> PYSERIAL_DIR=$(BUILD_DIR)/pyserial-$(PYSERIAL_VERSION)
+> PYSERIAL_CAT=$(ZCAT)
+> 
+> $(DL_DIR)/$(PYSERIAL_SOURCE):
+>     $(call DOWNLOAD,$(PYSERIAL_SITE),$(PYSERIAL_SOURCE))
+> 
+> $(PYSERIAL_DIR)/.unpacked: $(DL_DIR)/$(PYSERIAL_SOURCE)
+>     $(PYSERIAL_CAT) $(DL_DIR)/$(PYSERIAL_SOURCE) | tar -C $(BUILD_DIR)
+> $(TAR_OPTIONS) -
+>     touch $@
+> 
+> $(PYSERIAL_DIR)/.installed: $(PYSERIAL_DIR)/.unpacked
+>     cp -a $(PYSERIAL_DIR)/serial $(PYTHON_SITE_PACKAGE_DIR)
+>     touch $@
+> 
+> pyserial: $(PYSERIAL_DIR)/.installed
+> 
+> pyserial-clean:
+>     -rm -rf $(PYTHON_SITE_PACKAGE_DIR)/serial
+> 
+> ifeq ($(strip $(BR2_PACKAGE_PYSERIAL)),y)
+> TARGETS+=pyserial
+> endif
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Patryk "LeadMan" Benderz
-Linux Registered User #377521
-()  ascii ribbon campaign - against html e-mail 
-/\  www.asciiribbon.org   - against proprietary attachments
+S?rgio M. B.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110330/2a76c5cd/attachment.bin>
