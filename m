@@ -1,61 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 31 Mar 2011 20:24:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 3535] New: mplayer build fails against ARM on
-	2011.02
-Message-ID: <bug-3535-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 31 Mar 2011 22:46:06 +0200
+Subject: [Buildroot] [git commit master 1/1] rsync: bump version
+Message-ID: <20110331204622.7E2B081D42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3535
 
-           Summary: mplayer build fails against ARM on 2011.02
-           Product: buildroot
-           Version: 2011.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mjhammel at graphics-muse.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+commit: http://git.buildroot.net/buildroot/commit/?id=06002a58b53e27da33b2e32697e07058b5f3b9b8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes CVE-2011-1097 and various other issues, see NEWS for details:
 
-Building Buildroot 2011.02 with Crosstool-NG 1.10.0, using gcc 4.5.2 and uClibc
-0.9.31, I get this error:
+http://rsync.samba.org/ftp/rsync/src/rsync-3.0.8-NEWS
 
-AS arm/simple_idct_neon.o
-arm/mpegvideo_arm.c:33:1: error: size of array 'x_H263_AIC' is negative
-make[3]: *** [arm/mpegvideo_arm.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-CC matroska.o
-CC matroskadec.o
-CC md5proto.o
-make[3]: Leaving directory
-`/home/mjhammel/src/ximba/bb/bld/buildroot-2011.02/output/build/mplayer-32726/ffmpeg/libavcodec'
+At the same time get rid of unneeded install / install-strip handling.
 
-Doing some googling it appears that there is a problem with a defined value:
-http://comments.gmane.org/gmane.comp.video.mplayer.user/64844
-http://permalink.gmane.org/gmane.comp.video.mplayer.user/64851 - this is the
-most telling post
-http://code.google.com/p/chromium/issues/detail?id=59123
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/rsync/rsync.mk |   10 +---------
+ 1 files changed, 1 insertions(+), 9 deletions(-)
 
-Chromium has patches that might apply and appear to be generic (not ARM
-specific):
-http://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/source/patched-ffmpeg-mt/libavcodec/arm/asm-offsets.h?r1=62568&r2=62567&pathrev=62568&diff_format=s
-http://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/README.chromium?r1=62568&r2=62567&pathrev=62568&diff_format=c
-http://src.chromium.org/viewvc/chrome/trunk/deps/third_party/ffmpeg/source/patched-ffmpeg-mt/libavcodec/arm/asm-offsets.h?r1=62568&r2=62567&pathrev=62568&diff_format=c
-
-I have not tried these because it turns out I don't need mplayer after all
-since this patch only makes mplayer use NEON with the processor but does not
-utilize the DSP on the BeagleBoard.  So I just disabled mplayer from the build.
-
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 5ffbfbb..5030fae 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -4,19 +4,11 @@
+ #
+ #############################################################
+ 
+-RSYNC_VERSION := 3.0.7
++RSYNC_VERSION := 3.0.8
+ RSYNC_SOURCE := rsync-$(RSYNC_VERSION).tar.gz
+ RSYNC_SITE := http://rsync.samba.org/ftp/rsync/src
+ RSYNC_INSTALL_STAGING = NO
+-RSYNC_INSTALL_TARGET = YES
+ RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+-ifeq ($(BR2_ENABLE_DEBUG),y)
+-RSYNC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
+-			  install
+-else
+-RSYNC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) INSTALLCMD='./install-sh -c' \
+-			  STRIPPROG="$(TARGET_STRIP)" install-strip
+-endif
+ RSYNC_CONF_OPT = --with-included-popt
+ 
+ $(eval $(call AUTOTARGETS,package,rsync))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
