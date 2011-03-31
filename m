@@ -1,27 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Mar 2011 22:39:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 3529] alsa-lib 1.0.24.1 build fails with daily
- snapshot (2011-03-29)
-In-Reply-To: <bug-3529-163@https.bugs.busybox.net/>
-References: <bug-3529-163@https.bugs.busybox.net/>
-Message-ID: <20110330223936.06DCE81A15@busybox.osuosl.org>
+From: Martin Hicks <mort@bork.org>
+Date: Thu, 31 Mar 2011 08:48:59 -0400
+Subject: [Buildroot] SCM management
+In-Reply-To: <20110331100008.GF7420@game.jcrosoft.org>
+References: <20110316163052.GA8006@game.jcrosoft.org>
+	<AANLkTik7W8-NnFEgU+ibjeTjVO1HHqwd4RwGvngR7kBT@mail.gmail.com>
+	<20110331100008.GF7420@game.jcrosoft.org>
+Message-ID: <AANLkTin9X5e77wG2ZLE7pKSiaoY9Zr4q9NWbe5-iU7xJ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3529
+On Thu, Mar 31, 2011 at 6:00 AM, Jean-Christophe PLAGNIOL-VILLARD
+<plagnioj@jcrosoft.com> wrote:
+> On 12:53 Wed 30 Mar ? ? , Martin Hicks wrote:
+>> I added support, via a patch that I posted recently, to support an
+>> external kernel tree. ?No dl/ file is used and the tree is referenced
+>> directly by the makefiles rather than doing the download->extract
+>> step.
+> can you point which one?
 
---- Comment #5 from Michael J. Hammel <mjhammel@graphics-muse.org>  ---
-I think that may have been the latest available in Crosstool-NG 1.8.2 which was
-what I was using before testing the latest release (1.10.0).  Looks like 1.10.0
-only has uClibc 0.9.30.[1-3].  0.9.31 is marked EXPERIMENTAL.  There is also a
-"latest snapshot" option I can try.
+Go to http://buildroot.uclibc.org/lists.html and search for "external kernel"
 
-I'll give those a try and see if things fare any better.
+mh
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
+Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
