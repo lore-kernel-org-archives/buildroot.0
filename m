@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 31 Mar 2011 15:23:01 +0200
-Subject: [Buildroot] [PATCH 5/5] midori: bump to version 0.3.2
-In-Reply-To: <1299764675-23308-5-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Thu, 10 Mar 2011 10:44:35 -0300")
-References: <1299764675-23308-1-git-send-email-gustavo@zacarias.com.ar>
-	<1299764675-23308-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y63v2zm2.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 31 Mar 2011 15:23:13 +0200
+Subject: [Buildroot] [git commit master 1/1] webkit: bump to version 1.2.7
+Message-ID: <20110331132414.7E71981D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+commit: http://git.buildroot.net/buildroot/commit/?id=0a70aa0cc5d0980e72677869d9d87e0e4e35e483
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/webkit/webkit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 8483c0d..3a06f43 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-WEBKIT_VERSION = 1.2.6
++WEBKIT_VERSION = 1.2.7
+ WEBKIT_SITE = http://www.webkitgtk.org
+ WEBKIT_INSTALL_STAGING = YES
+ WEBKIT_DEPENDENCIES = host-flex host-gperf icu libcurl libxml2 libxslt \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
