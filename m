@@ -1,25 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 01 Apr 2011 14:57:07 +0200
-Subject: [Buildroot] [PATCH] Add support to specify special Kernel Image
-	make target
-In-Reply-To: <1300729183-29401-1-git-send-email-mort@bork.org> (Martin Hicks's
-	message of "Mon, 21 Mar 2011 13:39:43 -0400")
-References: <1300729183-29401-1-git-send-email-mort@bork.org>
-Message-ID: <874o6i2kpo.fsf@macbook.be.48ers.dk>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Fri, 01 Apr 2011 15:20:43 +0200
+Subject: [Buildroot] [xdriver_xf86-video-openchrome-0.2.904]
+ via_video.c: error: 'struct _Pixmap' has no member named 'screen_x'
+In-Reply-To: <1301422474.6206.37.camel@esp-patben-lin.espdx1.local>
+References: <1301422474.6206.37.camel@esp-patben-lin.espdx1.local>
+Message-ID: <1301664043.18237.38.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Hicks <mort@bork.org> writes:
-
- Martin> This is useful for ARCHes like PowerPC that have a whole lot of
- Martin> special targets for each different board.  The kernel image target
- Martin> tells make which OpenFirmware machine description file is combined into
- Martin> the kernel binary.
-
-Committed with a bit of tweaks to the long help text lines, thanks.
+[cut]
+> Now make complains about:
+> via_video.c: In function 'viaPaintColorkey':
+> via_video.c:738:44: error: 'struct _Pixmap' has no member named 'screen_x'
+> via_video.c:738:62: error: 'struct _Pixmap' has no member named 'screen_y'
+> make[4]: *** [via_video.lo] Error 1
+seems that snapshot from 2011-03-30 compiles openchrome correctly :)
 
 -- 
-Bye, Peter Korsgaard
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
