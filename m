@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 01 Apr 2011 21:25:43 +0200
-Subject: [Buildroot] [PATCH 1/2] mpd: bump to version 0.16.2 and bugfix
-In-Reply-To: <1301683889-30169-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Fri, 1 Apr 2011 15:51:28 -0300")
+Date: Fri, 01 Apr 2011 21:28:50 +0200
+Subject: [Buildroot] [PATCH 2/2] quagga: security bump to version 0.99.18
+In-Reply-To: <1301683889-30169-2-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Fri, 1 Apr 2011 15:51:29 -0300")
 References: <1301683889-30169-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zko922q0.fsf@macbook.be.48ers.dk>
+	<1301683889-30169-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vcyx22kt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Bump mpd server to version 0.6.12
- Gustavo> Also make ffmpeg support conditional on IPv6 since the new ffmpeg
- Gustavo> version requires it.
+ Gustavo> Fixes for vulnerabilities CVE-2010-1674 and CVE-2010-1675.
+ Gustavo> Additional patches for build-time breakage of the new version.
 
 Committed, thanks.
 
