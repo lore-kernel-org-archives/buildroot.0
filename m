@@ -1,40 +1,84 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 1 Apr 2011 09:54:05 +0200
-Subject: [Buildroot] [PATCH 0 of 2] Facilitate saving of configuration
- files for board developers
-In-Reply-To: <AANLkTinwOK-+fMFPh4cCsZreRnvVVSu-CYM9uuW1X=9F@mail.gmail.com>
-References: <patchbomb.1298817442@localhost6.localdomain6>
-	<AANLkTi=HTQ-3PGY+ohnKfM5nS66=tV-Y-PENE75CofOV@mail.gmail.com>
-	<AANLkTinwOK-+fMFPh4cCsZreRnvVVSu-CYM9uuW1X=9F@mail.gmail.com>
-Message-ID: <AANLkTikrVR16_Q-H29HopzUU8g=f3nK9doFQuG6Bu-kN@mail.gmail.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 1 Apr 2011 11:00:36 +0100
+Subject: [Buildroot] [PATCH] libnspr: New package.
+In-Reply-To: <AANLkTik=qx-+2LYTHPkp=XO0J78j0JZDmtw4tc0J4Jo9@mail.gmail.com>
+References: <AANLkTik=qx-+2LYTHPkp=XO0J78j0JZDmtw4tc0J4Jo9@mail.gmail.com>
+Message-ID: <AANLkTimrx5=xUcbFyhWBjdYTmtip91VRq2nfEsxABBRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/3/6 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
-> 2011/2/28 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
->> 2011/2/27 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
->>> This patch series intends to make the development life of board developers
->>> working with buildroot easier, by providing two extra -update build targets
->>> that copy over configuration files to their version-controlled counterparts.
->>> The new targets, linux-update and config-update have the same behavior as
->>> the already existing uclibc-update and busybox-update.
->>>
->>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> Great contribution! My thumbs-up for this patchset. :)
->>
+Ping?
+
+On Fri, Mar 25, 2011 at 12:06 PM, Will Newton <will.newton@gmail.com> wrote:
+> Add a package for the Netscape Portable Runtime library.
 >
-> Thanks Daniel!
+> Signed-off-by: Will Newton <will.newton@imgtec.com>
+> ---
+> ?package/Config.in ? ? ? ? ?| ? ?1 +
+> ?package/libnspr/Config.in ?| ? 13 +++++++++++++
+> ?package/libnspr/libnspr.mk | ? 17 +++++++++++++++++
+> ?3 files changed, 31 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/libnspr/Config.in
+> ?create mode 100644 package/libnspr/libnspr.mk
 >
-> Do others have any comments regarding this patch series? Could it be
-> included in buildroot?
-
-Thomas, Peter,
-
-Any objections against these patches?
-
-Thanks,
-Thomas
+> diff --git a/package/Config.in b/package/Config.in
+> index 0f0ec47..19c38fa 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -331,6 +331,7 @@ source "package/libelf/Config.in"
+> ?source "package/libevent/Config.in"
+> ?source "package/libffi/Config.in"
+> ?source "package/libglib2/Config.in"
+> +source "package/libnspr/Config.in"
+> ?source "package/liboil/Config.in"
+> ?source "package/libsigc/Config.in"
+> ?source "package/startup-notification/Config.in"
+> diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+> new file mode 100644
+> index 0000000..53086f0
+> --- /dev/null
+> +++ b/package/libnspr/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_LIBNSPR
+> + ? ? ? bool "libnspr"
+> + ? ? ? depends on BR2_LARGEFILE
+> + ? ? ? help
+> + ? ? ? ? NSPR is the Netscape Portable Runtime library which provides
+> + ? ? ? ? a platform-neutral API for system level and libc like
+> + ? ? ? ? functions. The library is used by the Mozilla project as well
+> + ? ? ? ? as others.
+> +
+> + ? ? ? ? http://www.mozilla.org/projects/nspr/
+> +
+> +comment "libnspr requires a toolchain with LARGEFILE support"
+> + ? ? ? depends on !BR2_LARGEFILE
+> diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+> new file mode 100644
+> index 0000000..9ba7431
+> --- /dev/null
+> +++ b/package/libnspr/libnspr.mk
+> @@ -0,0 +1,17 @@
+> +#############################################################
+> +#
+> +# libnspr
+> +#
+> +#############################################################
+> +LIBNSPR_VERSION = 4.8.7
+> +LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+> +LIBNSPR_SITE =
+> https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
+> +LIBNSPR_SUBDIR = mozilla/nsprpub
+> +LIBNSPR_INSTALL_STAGING = YES
+> +# Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+> +LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
+> + ? ? ? ? ? ? ? ? ?HOST_LDFLAGS="-lc"
+> +# NSPR mixes up --build and --host
+> +LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
+> +
+> +$(eval $(call AUTOTARGETS,package,libnspr))
+> --
+> 1.7.3.4
+>
