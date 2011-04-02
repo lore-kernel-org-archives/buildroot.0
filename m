@@ -1,37 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 2 Apr 2011 10:24:59 +0200
-Subject: [Buildroot] [git commit master 1/1] lighttpd: fix build without
-	webdav support
-Message-ID: <20110402082553.421CC81DED@busybox.osuosl.org>
+From: bao bui <buiqbao@gmail.com>
+Date: Sat, 2 Apr 2011 22:16:05 +0700
+Subject: [Buildroot] libdl in buildroot
+Message-ID: <BANLkTim6UsDHCRf5tQthWsrykgzmszn3Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bc1041db6ce805a8d96f653e50ce06eb6849d4b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+How can i compile the libdl in buildroot? In the stagging/usr/lib folder, i
+only have the libdl.a and libdl.so, which is the sym link to libdl.so.0.
+When I compile qt 4.7.1, I got the error: undefined reference to `dlopen'. I
+think the reason of this error is the missing of file libdl.so.0
 
-Fix a typo in the --without-webdav-* handling.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lighttpd/lighttpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 5901801..332afe7 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -47,7 +47,7 @@ ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
- LIGHTTPD_DEPENDENCIES += libxml2 sqlite
- LIGHTTPD_CONF_OPT += --with-webdav-props --with-webdav-locks
- else
--LIGHTTPD_CONF_OPT += ---without-webdav-props --without-webdav-locks
-+LIGHTTPD_CONF_OPT += --without-webdav-props --without-webdav-locks
- endif
- 
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
--- 
-1.7.3.4
+Thank in advance
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110402/53e2339c/attachment.html>
