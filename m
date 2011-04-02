@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2011 18:37:35 +0200
-Subject: [Buildroot] libdl in buildroot
-In-Reply-To: <BANLkTim6UsDHCRf5tQthWsrykgzmszn3Ew@mail.gmail.com>
-References: <BANLkTim6UsDHCRf5tQthWsrykgzmszn3Ew@mail.gmail.com>
-Message-ID: <20110402183735.674f48d6@surf>
+Date: Sat,  2 Apr 2011 18:44:36 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix ccache handling
+In-Reply-To: <cover.1301762667.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1301762667.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b72ef46ee804b8b98950e0559dadd4cb7590666b.1301762667.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When ccache support is enabled and 'make silentoldconfig' is being
+started from the following rule:
 
-On Sat, 2 Apr 2011 22:16:05 +0700
-bao bui <buiqbao@gmail.com> wrote:
+$(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
 
-> How can i compile the libdl in buildroot? In the stagging/usr/lib
-> folder, i only have the libdl.a and libdl.so, which is the sym link
-> to libdl.so.0. When I compile qt 4.7.1, I got the error: undefined
-> reference to `dlopen'. I think the reason of this error is the
-> missing of file libdl.so.0
+then, the Makefile in package/config inherits from HOSTCC/HOSTCXX
+values with the ccache prefix. However, if we start from a cleaned
+build (after make clean), ccache is not compiled yet, so things break.
 
-libdl is part of the C library.
+To solve this, we pass a noccache variant of HOSTCC/HOSTCXX down to
+the package/config Makefile.
 
-You don't provide enough details: which toolchain are you using, which
-Buildroot version are you using, which Buildroot configuration are you
-using, which exact error messages do you get.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 9aa7399..2e698cc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -367,7 +367,7 @@ dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ $(BASE_TARGETS): dirs $(O)/toolchainfile.cmake
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+-	$(MAKE) $(EXTRAMAKEARGS) silentoldconfig
++	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
