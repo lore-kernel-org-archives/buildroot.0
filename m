@@ -1,494 +1,226 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Apr 2011 18:53:34 +0200
-Subject: [Buildroot] [PATCH 3/3] Allow several device tables and split in
-	two parts our device table
-In-Reply-To: <cover.1301763205.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1301763205.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <22eab5b5139c1666b306d0afdbea056a8af65075.1301763205.git.thomas.petazzoni@free-electrons.com>
+Date: Sat,  2 Apr 2011 18:58:31 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/rename-toolchain-config-opts
+Message-ID: <cover.1301763514.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows to have a device table for all directories/files and
-another device table for the device files themselves. Both are needed
-for static /dev, but only the first one is needed when
-devtmpfs/mdev/udev are used.
+The following changes since commit 0a70aa0cc5d0980e72677869d9d87e0e4e35e483:
 
-We take this opportunity to move the documentation of the device table
-format in a common location, package/makedevs/README.
+  webkit: bump to version 1.2.7 (2011-03-31 15:23:13 +0200)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/Config.in                        |   20 +++-
- fs/common.mk                        |   14 ++-
- package/makedevs/README             |   35 +++++++
- target/generic/device_table.txt     |  186 ++--------------------------------
- target/generic/device_table_dev.txt |  142 ++++++++++++++++++++++++++
- 5 files changed, 211 insertions(+), 186 deletions(-)
- create mode 100644 package/makedevs/README
- create mode 100644 target/generic/device_table_dev.txt
+are available in the git repository at:
+  git://git.busybox.net/~tpetazzoni/git/buildroot for-2011.05/rename-toolchain-config-opts
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 9ac3acc..636e316 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -36,13 +36,21 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- endchoice
- 
- config BR2_ROOTFS_DEVICE_TABLE
--	string "Path to the device table"
--	depends on BR2_ROOTFS_DEVICE_CREATION_STATIC
--	default "target/generic/device_table.txt"
-+	string "Path to the device tables"
-+	default "target/generic/device_table.txt target/generic/device_table_dev.txt" \
-+		if BR2_ROOTFS_DEVICE_CREATION_STATIC
-+	default "target/generic/device_table.txt" \
-+		if (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV || \
-+		    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
-+		    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS)
- 	help
--	  Specify the location of a device table, that will be passed
--	  to the makedevs utility to create all the special device
--	  files in the target filesystem.
-+	  Specify a space-separated list of device table locations,
-+	  that will be passed to the makedevs utility to create all
-+	  the special device files and assign correct owners and
-+	  permissions on various files in the target filesystem.
-+
-+          See package/makedevs/README for details on the usage and
-+          syntax of these files.
- 
- choice
- 	prompt "Root FS skeleton"
-diff --git a/fs/common.mk b/fs/common.mk
-index 92be00c..f105af2 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -32,7 +32,8 @@
- # macro will automatically generate a compressed filesystem image.
- 
- FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
--ROOTFS_DEVICE_TABLE = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
-+FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
-+ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE))
- 
- define ROOTFS_TARGET_INTERNAL
- 
-@@ -42,17 +43,20 @@ $(eval ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs $(if $(BR2_TARGET
- $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
- 	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
--	rm -f $(FAKEROOT_SCRIPT)
-+	rm -f $(FAKEROOT_SCRIPT) $(FULL_DEVICE_TABLE)
- 	touch $(BUILD_DIR)/.fakeroot.00000
- 	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
- 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
--ifneq ($(ROOTFS_DEVICE_TABLE),)
--	echo "$(HOST_DIR)/usr/bin/makedevs -d $(ROOTFS_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-+ifneq ($(ROOTFS_DEVICE_TABLES),)
-+	for devtable in $(ROOTFS_DEVICE_TABLES) ; do \
-+		cat $$$${devtable} >> $(FULL_DEVICE_TABLE) ; \
-+	done
-+	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
- endif
- 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
--	- at rm -f $(FAKEROOT_SCRIPT)
-+	- at rm -f $(FAKEROOT_SCRIPT) $(FULL_DEVICE_TABLE)
- 	$(foreach hook,$(ROOTFS_$(2)_POST_GEN_HOOKS),$(call $(hook))$(sep))
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- 	gzip -9 -c $$@ > $$@.gz
-diff --git a/package/makedevs/README b/package/makedevs/README
-new file mode 100644
-index 0000000..6c54052
---- /dev/null
-+++ b/package/makedevs/README
-@@ -0,0 +1,35 @@
-+When building a target filesystem, it is desirable to not have to
-+become root and then run 'mknod' a thousand times.  Using a device
-+table you can create device nodes and directories "on the fly".
-+
-+You can do all sorts of interesting things with a device table file.
-+For example, if you want to adjust the permissions on a particular
-+file you can just add an entry like:
-+
-+  /sbin/foobar        f       2755    0       0       -       -       -       -       -
-+
-+and (assuming the file /sbin/foobar exists) it will be made setuid
-+root (regardless of what its permissions are on the host filesystem.
-+
-+Furthermore, you can use a single table entry to create a many device
-+minors.  For example, if I wanted to create /dev/hda and
-+/dev/hda[0-15] I could just use the following two table entries:
-+
-+  /dev/hda    b       640     0       0       3       0       0       0       -
-+  /dev/hda    b       640     0       0       3       1       1       1       15
-+
-+Device table entries take the form of:
-+
-+<name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
-+
-+where name is the file name,  type can be one of:
-+
-+      f       A regular file
-+      d       Directory
-+      c       Character special device file
-+      b       Block special device file
-+      p       Fifo (named pipe)
-+
-+uid is the user id for the target file, gid is the group id for the
-+target file.  The rest of the entries (major, minor, etc) apply only
-+to device special files.
-diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
-index 15132f9..12f35b2 100644
---- a/target/generic/device_table.txt
-+++ b/target/generic/device_table.txt
-@@ -1,44 +1,15 @@
--# When building a target filesystem, it is desirable to not have to
--# become root and then run 'mknod' a thousand times.  Using a device 
--# table you can create device nodes and directories "on the fly".
-+# See package/makedevs/README for details
- #
--# This is a sample device table file for use with genext2fs.  You can
--# do all sorts of interesting things with a device table file.  For
--# example, if you want to adjust the permissions on a particular file
--# you can just add an entry like:
--#   /sbin/foobar        f       2755    0       0       -       -       -       -       -
--# and (assuming the file /sbin/foobar exists) it will be made setuid
--# root (regardless of what its permissions are on the host filesystem.
--# Furthermore, you can use a single table entry to create a many device
--# minors.  For example, if I wanted to create /dev/hda and /dev/hda[0-15]
--# I could just use the following two table entries:
--#   /dev/hda    b       640     0       0       3       0       0       0       -
--#   /dev/hda    b       640     0       0       3       1       1       1       15
--# 
--# Device table entries take the form of:
--# <name>    <type>      <mode>  <uid>   <gid>   <major> <minor> <start> <inc>   <count>
--# where name is the file name,  type can be one of: 
--#       f       A regular file
--#       d       Directory
--#       c       Character special device file
--#       b       Block special device file
--#       p       Fifo (named pipe)
--# uid is the user id for the target file, gid is the group id for the
--# target file.  The rest of the entries (major, minor, etc) apply only 
--# to device special files.
--
--# Have fun
--# -Erik Andersen <andersen@codepoet.org>
-+# This device table is used to assign proper ownership and permissions
-+# on various files. It doesn't create any device file, as it is used
-+# in both static device configurations (where /dev/ is static) and in
-+# dynamic configurations (where devtmpfs, mdev or udev are used).
- #
--
--#<name>		<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
--/dev		d	755	0	0	-	-	-	-	-
--/dev/pts	d	755	0	0	-	-	-	-	-
--/dev/shm	d	755	0	0	-	-	-	-	-
--/tmp		d	1777	0	0	-	-	-	-	-
--/etc		d	755	0	0	-	-	-	-	-
--/home/default	d	2755	1000	1000	-	-	-	-	-
--#<name>					<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
-+# <name>				<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
-+/dev					d	755	0	0	-	-	-	-	-
-+/tmp					d	1777	0	0	-	-	-	-	-
-+/etc					d	755	0	0	-	-	-	-	-
-+/home/default				d	2755	1000	1000	-	-	-	-	-
- /bin/busybox				f	4755	0	0	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
-@@ -48,139 +19,4 @@
- /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
- /usr/share/udhcpc/default.script	f	755	0	0	-	-	-	-	-
- # uncomment this to allow starting x as non-root
--#/usr/X11R6/bin/Xfbdev		f	4755	0	0	-	-	-	-	-
--# Normal system devices
--/dev/mem	c	640	0	0	1	1	0	0	-
--/dev/kmem	c	640	0	0	1	2	0	0	-
--/dev/null	c	666	0	0	1	3	0	0	-
--/dev/zero	c	666	0	0	1	5	0	0	-
--/dev/random	c	666	0	0	1	8	0	0	-
--/dev/urandom	c	666	0	0	1	9	0	0	-
--/dev/ram	b	640	0	0	1	1	0	0	-
--/dev/ram	b	640	0	0	1	0	0	1	4
--/dev/loop	b	640	0	0	7	0	0	1	2
--/dev/rtc	c	640	0	0	10	135	-	-	-
--/dev/console	c	666	0	0	5	1	-	-	-
--/dev/tty	c	666	0	0	5	0	-	-	-
--/dev/tty	c	666	0	0	4	0	0	1	8
--/dev/ttyp	c	666	0	0	3	0	0	1	10
--/dev/ptyp	c       666     0       0       2       0       0       1       10
--/dev/ptmx	c	666	0	0	5	2	-	-	-
--/dev/ttyP	c	666	0	0	57	0	0	1	4
--/dev/ttyS	c	666	0	0	4	64	0	1	4
--/dev/fb		c	640	0	5	29	0	0	1	4
--#/dev/ttySA	c	666	0	0	204	5	0	1	3
--/dev/psaux	c	666	0	0	10	1	0	0	-
--#/dev/ppp	c	666	0	0	108	0	-	-	-
--/dev/ttyAM	c	666	0	0	204	16	0	1	3
--/dev/ttyCPM	c	666	0	0	204	46	0	1	4
--/dev/ttyAMA	c	666	0	0	204	64	0	1	4
--/dev/ttySAC	c	666	0	0	204	64	0	1	4
--/dev/ttyPSC	c	666	0	0	204	148	0	1	4
--/dev/ttyUL	c	666	0	0	204	187	0	1	4
--/dev/ttymxc	c	666	0	0	207	16	0	1	3
--
--# Input stuff
--/dev/input		d	755	0	0	-	-	-	-	-
--/dev/input/mice		c	640	0	0	13	63	0	0	-
--/dev/input/mouse	c	660	0	0	13	32	0	1	4
--/dev/input/event	c	660	0	0	13	64	0	1	4
--#/dev/input/js		c	660	0	0	13	0	0	1	4
--
--
--# MTD stuff
--/dev/mtd	c	640	0	0	90	0	0	2	4
--/dev/mtdblock	b	640	0	0	31	0	0	1	4
--
--#Tun/tap driver
--/dev/net	d	755	0	0	-	-	-	-	-
--/dev/net/tun	c	660	0	0	10	200	-	-	-
--
--# Audio stuff
--#/dev/audio	c	666	0	29	14	4	-	-	-
--#/dev/audio1	c	666	0	29	14	20	-	-	-
--#/dev/dsp	c	666	0	29	14	3	-	-	-
--#/dev/dsp1	c	666	0	29	14	19	-	-	-
--#/dev/sndstat	c	666	0	29	14	6	-	-	-
--
--# User-mode Linux stuff
--#/dev/ubda	b	640	0	0	98	0	0	0	-
--#/dev/ubda	b	640	0	0	98	1	1	1	15
--
--# IDE Devices
--/dev/hda	b	640	0	0	3	0	0	0	-
--/dev/hda	b	640	0	0	3	1	1	1	15
--/dev/hdb	b	640	0	0	3	64	0	0	-
--/dev/hdb	b	640	0	0	3	65	1	1	15
--#/dev/hdc	b	640	0	0	22	0	0	0	-
--#/dev/hdc	b	640	0	0	22	1	1	1	15
--#/dev/hdd	b	640	0	0	22	64	0	0	-
--#/dev/hdd	b	640	0	0	22	65	1	1	15
--#/dev/hde	b	640	0	0	33	0	0	0	-
--#/dev/hde	b	640	0	0	33	1	1	1	15
--#/dev/hdf	b	640	0	0	33	64	0	0	-
--#/dev/hdf	b	640	0	0	33	65	1	1	15
--#/dev/hdg	b	640	0	0	34	0	0	0	-
--#/dev/hdg	b	640	0	0	34	1	1	1	15
--#/dev/hdh	b	640	0	0	34	64	0	0	-
--#/dev/hdh	b	640	0	0	34	65	1	1	15
--
--# SCSI Devices
--/dev/sda	b	640	0	0	8	0	0	0	-
--/dev/sda	b	640	0	0	8	1	1	1	15
--/dev/sdb	b	640	0	0	8	16	0	0	-
--/dev/sdb	b	640	0	0	8	17	1	1	15
--#/dev/sdc	b	640	0	0	8	32	0	0	-
--#/dev/sdc	b	640	0	0	8	33	1	1	15
--#/dev/sdd	b	640	0	0	8	48	0	0	-
--#/dev/sdd	b	640	0	0	8	49	1	1	15
--#/dev/sde	b	640	0	0	8	64	0	0	-
--#/dev/sde	b	640	0	0	8	65	1	1	15
--#/dev/sdf	b	640	0	0	8	80	0	0	-
--#/dev/sdf	b	640	0	0	8	81	1	1	15
--#/dev/sdg	b	640	0	0	8	96	0	0	-
--#/dev/sdg	b	640	0	0	8	97	1	1	15
--#/dev/sdh	b	640	0	0	8	112	0	0	-
--#/dev/sdh	b	640	0	0	8	113	1	1	15
--#/dev/sg	c	640	0	0	21	0	0	1	15
--#/dev/scd	b	640	0	0	11	0	0	1	15
--#/dev/st	c	640	0	0	9	0	0	1	8
--#/dev/nst	c	640	0	0	9	128	0	1	8
--#/dev/st	c	640	0	0	9	32	1	1	4
--#/dev/st	c	640	0	0	9	64	1	1	4
--#/dev/st	c	640	0	0	9	96	1	1	4
--
--# USB block devices (ub driver)
--/dev/uba	b	640	0	0	180	0	0	0	-
--/dev/uba	b	640	0	0	180	1	1	1	6
--/dev/ubb	b	640	0	0	180	8	0	0	-
--/dev/ubb	b	640	0	0	180	65	1	1	6
--
--# Floppy disk devices
--#/dev/fd	b	640	0	0	2	0	0	1	2
--#/dev/fd0d360	b	640	0	0	2	4	0	0	-
--#/dev/fd1d360	b	640	0	0	2	5	0	0	-
--#/dev/fd0h1200	b	640	0	0	2	8	0	0	-
--#/dev/fd1h1200	b	640	0	0	2	9	0	0	-
--#/dev/fd0u1440	b	640	0	0	2	28	0	0	-
--#/dev/fd1u1440	b	640	0	0	2	29	0	0	-
--#/dev/fd0u2880	b	640	0	0	2	32	0	0	-
--#/dev/fd1u2880	b	640	0	0	2	33	0	0	-
--
--# All the proprietary cdrom devices in the world
--#/dev/aztcd	b	640	0	0	29	0	0	0	-
--#/dev/bpcd	b	640	0	0	41	0	0	0	-
--#/dev/capi20	c	640	0	0	68	0	0	1	2
--#/dev/cdu31a	b	640	0	0	15	0	0	0	-
--#/dev/cdu535	b	640	0	0	24	0	0	0	-
--#/dev/cm206cd	b	640	0	0	32	0	0	0	-
--#/dev/sjcd	b	640	0	0	18	0	0	0	-
--#/dev/sonycd	b	640	0	0	15	0	0	0	-
--#/dev/gscd	b	640	0	0	16	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	0	-
--#/dev/sbpcd	b	640	0	0	25	0	0	1	4
--#/dev/mcd	b	640	0	0	23	0	0	0	-
--#/dev/optcd	b	640	0	0	17	0	0	0	-
--
--# I2C device nodes
--/dev/i2c-	c	666	0	0	89	0	0	1	4
-+#/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
-diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
-new file mode 100644
-index 0000000..0890a47
---- /dev/null
-+++ b/target/generic/device_table_dev.txt
-@@ -0,0 +1,142 @@
-+# See package/makedevs/README for details
-+#
-+# This device table is used only to create device files when a static
-+# device configuration is used (entries in /dev are static).
-+#
-+# <name>	<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
-+
-+# Normal system devices
-+/dev/mem	c	640	0	0	1	1	0	0	-
-+/dev/kmem	c	640	0	0	1	2	0	0	-
-+/dev/null	c	666	0	0	1	3	0	0	-
-+/dev/zero	c	666	0	0	1	5	0	0	-
-+/dev/random	c	666	0	0	1	8	0	0	-
-+/dev/urandom	c	666	0	0	1	9	0	0	-
-+/dev/ram	b	640	0	0	1	1	0	0	-
-+/dev/ram	b	640	0	0	1	0	0	1	4
-+/dev/loop	b	640	0	0	7	0	0	1	2
-+/dev/rtc	c	640	0	0	10	135	-	-	-
-+/dev/console	c	666	0	0	5	1	-	-	-
-+/dev/tty	c	666	0	0	5	0	-	-	-
-+/dev/tty	c	666	0	0	4	0	0	1	8
-+/dev/ttyp	c	666	0	0	3	0	0	1	10
-+/dev/ptyp	c       666     0       0       2       0       0       1       10
-+/dev/ptmx	c	666	0	0	5	2	-	-	-
-+/dev/ttyP	c	666	0	0	57	0	0	1	4
-+/dev/ttyS	c	666	0	0	4	64	0	1	4
-+/dev/fb		c	640	0	5	29	0	0	1	4
-+#/dev/ttySA	c	666	0	0	204	5	0	1	3
-+/dev/psaux	c	666	0	0	10	1	0	0	-
-+#/dev/ppp	c	666	0	0	108	0	-	-	-
-+/dev/ttyAM	c	666	0	0	204	16	0	1	3
-+/dev/ttyCPM	c	666	0	0	204	46	0	1	4
-+/dev/ttyAMA	c	666	0	0	204	64	0	1	4
-+/dev/ttySAC	c	666	0	0	204	64	0	1	4
-+/dev/ttyPSC	c	666	0	0	204	148	0	1	4
-+/dev/ttyUL	c	666	0	0	204	187	0	1	4
-+/dev/ttymxc	c	666	0	0	207	16	0	1	3
-+
-+# Input stuff
-+/dev/input		d	755	0	0	-	-	-	-	-
-+/dev/input/mice		c	640	0	0	13	63	0	0	-
-+/dev/input/mouse	c	660	0	0	13	32	0	1	4
-+/dev/input/event	c	660	0	0	13	64	0	1	4
-+#/dev/input/js		c	660	0	0	13	0	0	1	4
-+
-+
-+# MTD stuff
-+/dev/mtd	c	640	0	0	90	0	0	2	4
-+/dev/mtdblock	b	640	0	0	31	0	0	1	4
-+
-+#Tun/tap driver
-+/dev/net	d	755	0	0	-	-	-	-	-
-+/dev/net/tun	c	660	0	0	10	200	-	-	-
-+
-+# Audio stuff
-+#/dev/audio	c	666	0	29	14	4	-	-	-
-+#/dev/audio1	c	666	0	29	14	20	-	-	-
-+#/dev/dsp	c	666	0	29	14	3	-	-	-
-+#/dev/dsp1	c	666	0	29	14	19	-	-	-
-+#/dev/sndstat	c	666	0	29	14	6	-	-	-
-+
-+# User-mode Linux stuff
-+#/dev/ubda	b	640	0	0	98	0	0	0	-
-+#/dev/ubda	b	640	0	0	98	1	1	1	15
-+
-+# IDE Devices
-+/dev/hda	b	640	0	0	3	0	0	0	-
-+/dev/hda	b	640	0	0	3	1	1	1	15
-+/dev/hdb	b	640	0	0	3	64	0	0	-
-+/dev/hdb	b	640	0	0	3	65	1	1	15
-+#/dev/hdc	b	640	0	0	22	0	0	0	-
-+#/dev/hdc	b	640	0	0	22	1	1	1	15
-+#/dev/hdd	b	640	0	0	22	64	0	0	-
-+#/dev/hdd	b	640	0	0	22	65	1	1	15
-+#/dev/hde	b	640	0	0	33	0	0	0	-
-+#/dev/hde	b	640	0	0	33	1	1	1	15
-+#/dev/hdf	b	640	0	0	33	64	0	0	-
-+#/dev/hdf	b	640	0	0	33	65	1	1	15
-+#/dev/hdg	b	640	0	0	34	0	0	0	-
-+#/dev/hdg	b	640	0	0	34	1	1	1	15
-+#/dev/hdh	b	640	0	0	34	64	0	0	-
-+#/dev/hdh	b	640	0	0	34	65	1	1	15
-+
-+# SCSI Devices
-+/dev/sda	b	640	0	0	8	0	0	0	-
-+/dev/sda	b	640	0	0	8	1	1	1	15
-+/dev/sdb	b	640	0	0	8	16	0	0	-
-+/dev/sdb	b	640	0	0	8	17	1	1	15
-+#/dev/sdc	b	640	0	0	8	32	0	0	-
-+#/dev/sdc	b	640	0	0	8	33	1	1	15
-+#/dev/sdd	b	640	0	0	8	48	0	0	-
-+#/dev/sdd	b	640	0	0	8	49	1	1	15
-+#/dev/sde	b	640	0	0	8	64	0	0	-
-+#/dev/sde	b	640	0	0	8	65	1	1	15
-+#/dev/sdf	b	640	0	0	8	80	0	0	-
-+#/dev/sdf	b	640	0	0	8	81	1	1	15
-+#/dev/sdg	b	640	0	0	8	96	0	0	-
-+#/dev/sdg	b	640	0	0	8	97	1	1	15
-+#/dev/sdh	b	640	0	0	8	112	0	0	-
-+#/dev/sdh	b	640	0	0	8	113	1	1	15
-+#/dev/sg	c	640	0	0	21	0	0	1	15
-+#/dev/scd	b	640	0	0	11	0	0	1	15
-+#/dev/st	c	640	0	0	9	0	0	1	8
-+#/dev/nst	c	640	0	0	9	128	0	1	8
-+#/dev/st	c	640	0	0	9	32	1	1	4
-+#/dev/st	c	640	0	0	9	64	1	1	4
-+#/dev/st	c	640	0	0	9	96	1	1	4
-+
-+# USB block devices (ub driver)
-+/dev/uba	b	640	0	0	180	0	0	0	-
-+/dev/uba	b	640	0	0	180	1	1	1	6
-+/dev/ubb	b	640	0	0	180	8	0	0	-
-+/dev/ubb	b	640	0	0	180	65	1	1	6
-+
-+# Floppy disk devices
-+#/dev/fd	b	640	0	0	2	0	0	1	2
-+#/dev/fd0d360	b	640	0	0	2	4	0	0	-
-+#/dev/fd1d360	b	640	0	0	2	5	0	0	-
-+#/dev/fd0h1200	b	640	0	0	2	8	0	0	-
-+#/dev/fd1h1200	b	640	0	0	2	9	0	0	-
-+#/dev/fd0u1440	b	640	0	0	2	28	0	0	-
-+#/dev/fd1u1440	b	640	0	0	2	29	0	0	-
-+#/dev/fd0u2880	b	640	0	0	2	32	0	0	-
-+#/dev/fd1u2880	b	640	0	0	2	33	0	0	-
-+
-+# All the proprietary cdrom devices in the world
-+#/dev/aztcd	b	640	0	0	29	0	0	0	-
-+#/dev/bpcd	b	640	0	0	41	0	0	0	-
-+#/dev/capi20	c	640	0	0	68	0	0	1	2
-+#/dev/cdu31a	b	640	0	0	15	0	0	0	-
-+#/dev/cdu535	b	640	0	0	24	0	0	0	-
-+#/dev/cm206cd	b	640	0	0	32	0	0	0	-
-+#/dev/sjcd	b	640	0	0	18	0	0	0	-
-+#/dev/sonycd	b	640	0	0	15	0	0	0	-
-+#/dev/gscd	b	640	0	0	16	0	0	0	-
-+#/dev/sbpcd	b	640	0	0	25	0	0	0	-
-+#/dev/sbpcd	b	640	0	0	25	0	0	1	4
-+#/dev/mcd	b	640	0	0	23	0	0	0	-
-+#/dev/optcd	b	640	0	0	17	0	0	0	-
-+
-+# I2C device nodes
-+/dev/i2c-	c	666	0	0	89	0	0	1	4
+Thomas Petazzoni (9):
+      Rename BR2_LARGEFILE to BR2_TOOLCHAIN_HAS_LARGEFILE
+      Rename BR2_INET_IPV6 to BR2_TOOLCHAIN_HAS_IPV6
+      Rename BR2_INET_RPC to BR2_TOOLCHAIN_HAS_RPC
+      Rename BR2_USE_WCHAR to BR2_TOOLCHAIN_HAS_WCHAR
+      Rename BR2_ENABLE_LOCALE_{PURGE,WHITELIST} to BR2_LOCALE_{PURGE,WHITELIST}
+      Rename BR2_ENABLE_LOCALE to BR2_TOOLCHAIN_HAS_LOCALE
+      Rename BR2_PROGRAM_INVOCATION to BR2_TOOLCHAIN_HAS_PROGRAM_INVOCATION
+      Rename BR2_INSTALL_LIBSTDCPP to BR2_TOOLCHAIN_HAS_CPP
+      Fix minor spacing/tabs issues in package/*/Config.in
+
+ Makefile                                           |    6 ++--
+ boot/grub/grub.mk                                  |    2 +-
+ boot/grub2/grub2.mk                                |    2 +-
+ configs/arm_nptl_toolchain_defconfig               |   12 +++---
+ configs/arm_toolchain_defconfig                    |   12 +++---
+ package/Makefile.in                                |   10 +++---
+ package/alsamixergui/Config.in                     |    4 +-
+ package/atk/Config.in                              |    4 +-
+ package/axel/axel.mk                               |    2 +-
+ package/bind/Config.in                             |    4 +-
+ package/bison/Config.in                            |    4 +-
+ package/blackbox/Config.in                         |    6 ++--
+ package/blackbox/blackbox.mk                       |    2 +-
+ package/bmon/Config.in                             |    4 +-
+ package/bootutils/Config.in                        |    4 +-
+ package/busybox/busybox.mk                         |    6 ++--
+ package/bzip2/bzip2.mk                             |    2 +-
+ package/cdrkit/Config.in                           |    4 +-
+ package/coreutils/Config.in                        |    4 +-
+ package/cramfs/Config.in                           |   10 +++---
+ package/ctorrent/Config.in                         |    4 +-
+ package/cups/Config.in                             |    4 +-
+ package/cvs/Config.in                              |    2 +-
+ package/dbus-glib/Config.in                        |    4 +-
+ package/dbus-python/Config.in                      |    4 +-
+ package/dialog/Config.in                           |    2 +-
+ package/dialog/dialog.mk                           |    2 +-
+ package/diffutils/Config.in                        |    2 +-
+ package/dmalloc/dmalloc.mk                         |    2 +-
+ package/dmraid/Config.in                           |    4 +-
+ package/dnsmasq/Config.in                          |    2 +-
+ package/dnsmasq/dnsmasq.mk                         |    4 +-
+ package/docker/Config.in                           |    4 +-
+ package/dosfstools/Config.in                       |    4 +-
+ package/e2fsprogs/Config.in                        |    4 +-
+ package/enchant/Config.in                          |    6 ++--
+ package/expat/Config.in                            |    2 +-
+ package/findutils/Config.in                        |    4 +-
+ package/fltk/Config.in                             |    4 +-
+ package/fuse/Config.in                             |    4 +-
+ package/gamin/Config.in                            |    4 +-
+ package/gamin/gamin.mk                             |    2 +-
+ package/gawk/Config.in                             |    2 +-
+ package/gdk-pixbuf/Config.in                       |    4 +-
+ package/gdk-pixbuf/gdk-pixbuf.mk                   |    4 +-
+ package/genext2fs/Config.in                        |   14 ++++----
+ package/genromfs/Config.in                         |    8 ++--
+ package/gettext/Config.in                          |    6 ++--
+ package/gmpc/Config.in                             |    6 ++--
+ package/gob2/Config.in                             |    4 +-
+ package/gperf/Config.in                            |    4 +-
+ package/gpsd/gpsd.mk                               |    2 +-
+ package/grep/Config.in                             |    4 +-
+ package/gvfs/Config.in                             |    6 ++--
+ package/hal/Config.in                              |    6 ++--
+ package/hdparm/Config.in                           |    4 +-
+ package/hostapd/hostapd.mk                         |    2 +-
+ package/i2c-tools/Config.in                        |   14 ++++----
+ package/icu/Config.in                              |    6 ++--
+ package/imagemagick/imagemagick.mk                 |    2 +-
+ package/iperf/Config.in                            |    4 +-
+ package/ipsec-tools/ipsec-tools.mk                 |    2 +-
+ package/iptables/Config.in                         |    4 +-
+ package/iptables/iptables.mk                       |    2 +-
+ package/kismet/Config.in                           |    4 +-
+ package/libarchive/Config.in                       |    4 +-
+ package/libcgicc/Config.in                         |    4 +-
+ package/libconfig/libconfig.mk                     |    2 +-
+ package/libdrm/Config.in                           |    4 +-
+ package/libelf/libelf.mk                           |    2 +-
+ package/libglade/Config.in                         |    4 +-
+ package/libglib2/Config.in                         |    6 ++--
+ package/libglib2/libglib2.mk                       |    4 +-
+ package/libgtk2/Config.in                          |    6 ++--
+ package/libiconv/Config.in                         |    2 +-
+ package/libiconv/libiconv.mk                       |    2 +-
+ package/librsvg/Config.in                          |    2 +-
+ package/libsigc/Config.in                          |    4 +-
+ package/libsoup/Config.in                          |    4 +-
+ package/libsoup/libsoup.mk                         |    2 +-
+ package/libupnp/Config.in                          |    4 +-
+ package/libxml2/libxml2.mk                         |    2 +-
+ package/lighttpd/lighttpd.mk                       |    2 +-
+ package/lmbench/Config.in                          |    4 +-
+ package/logrotate/Config.in                        |    4 +-
+ package/lsof/Config.in                             |    4 +-
+ package/lsof/lsof.mk                               |    8 ++--
+ package/luafilesystem/luafilesystem.mk             |    2 +-
+ package/lvm2/Config.in                             |    4 +-
+ package/lzma/Config.in                             |    4 +-
+ package/m4/Config.in                               |    4 +-
+ package/m4/m4.mk                                   |    2 +-
+ package/makedevs/Config.in                         |    8 ++--
+ package/memtester/Config.in                        |    4 +-
+ package/midori/Config.in                           |    6 ++--
+ package/mtd/Config.in                              |    4 +-
+ package/multimedia/alsa-utils/Config.in            |    8 ++--
+ package/multimedia/festival/Config.in              |    4 +-
+ package/multimedia/festival/speech-tools/Config.in |    4 +-
+ package/multimedia/ffmpeg/Config.in                |    7 ++--
+ package/multimedia/gst-ffmpeg/Config.in            |    7 ++--
+ package/multimedia/gst-plugins-bad/Config.in       |    4 +-
+ package/multimedia/gst-plugins-base/Config.in      |    4 +-
+ package/multimedia/gst-plugins-good/Config.in      |    4 +-
+ package/multimedia/gstreamer/Config.in             |    4 +-
+ package/multimedia/libdvdnav/Config.in             |    4 +-
+ package/multimedia/libdvdread/Config.in            |    4 +-
+ package/multimedia/libmms/Config.in                |    4 +-
+ package/multimedia/libmpd/Config.in                |    6 ++--
+ package/multimedia/mpd/Config.in                   |   12 +++---
+ package/multimedia/mplayer/mplayer.mk              |    4 +-
+ package/multimedia/swfdec/Config.in                |    6 ++--
+ package/multimedia/taglib/Config.in                |    4 +-
+ package/multimedia/wavpack/Config.in               |    2 +-
+ package/multimedia/wavpack/wavpack.mk              |    2 +-
+ package/mutt/Config.in                             |    4 +-
+ package/mysql_client/Config.in                     |    4 +-
+ package/nbd/Config.in                              |    4 +-
+ package/nbd/nbd.mk                                 |    2 +-
+ package/ncftp/Config.in                            |    4 +-
+ package/netkitbase/Config.in                       |    4 +-
+ package/netkittelnet/Config.in                     |    4 +-
+ package/netsnmp/netsnmp.mk                         |    2 +-
+ package/nfs-utils/Config.in                        |    6 ++--
+ package/ntfs-3g/Config.in                          |    6 ++--
+ package/ntfsprogs/Config.in                        |    6 ++--
+ package/ntp/ntp.mk                                 |    2 +-
+ package/olsr/Config.in                             |    4 +-
+ package/oprofile/Config.in                         |    4 +-
+ package/pango/Config.in                            |    6 ++--
+ package/patch/Config.in                            |    4 +-
+ package/pcmanfm/Config.in                          |    4 +-
+ package/pcre/pcre.mk                               |    2 +-
+ package/php/Config.ext                             |    8 ++--
+ package/php/php.mk                                 |    4 +-
+ package/pkg-config/Config.in                       |    4 +-
+ package/portmap/Config.in                          |    4 +-
+ package/pppd/pppd.mk                               |    2 +-
+ package/python/Config.in                           |    4 +-
+ package/qt/Config.in                               |    4 +-
+ package/qt/qt.mk                                   |    4 +-
+ package/quagga/Config.in                           |    4 +-
+ package/radvd/Config.in                            |    2 +-
+ package/rpm/Config.in                              |    4 +-
+ package/rrdtool/Config.in                          |    4 +-
+ package/ruby/Config.in                             |    4 +-
+ package/samba/Config.in                            |    2 +-
+ package/samba/samba.mk                             |    4 +-
+ package/sdl_sound/Config.in                        |    2 +-
+ package/sdl_sound/sdl_sound.mk                     |    2 +-
+ package/sed/Config.in                              |    2 +-
+ package/sfdisk/sfdisk.mk                           |    2 +-
+ package/shared-mime-info/Config.in                 |    4 +-
+ package/smartmontools/Config.in                    |    4 +-
+ package/spawn-fcgi/spawn-fcgi.mk                   |    2 +-
+ package/sqlite/sqlite.mk                           |    2 +-
+ package/squashfs/Config.in                         |    4 +-
+ package/squashfs3/Config.in                        |    4 +-
+ package/squid/Config.in                            |    6 ++--
+ package/sshfs/Config.in                            |    8 ++--
+ package/sshfs/sshfs.mk                             |    2 +-
+ package/strace/strace.mk                           |    2 +-
+ package/synergy/Config.in                          |    6 ++--
+ package/sysklogd/Config.in                         |    4 +-
+ package/tar/Config.in                              |    4 +-
+ package/udev/udev.mk                               |    2 +-
+ package/udpcast/Config.in                          |    4 +-
+ package/usbutils/Config.in                         |    4 +-
+ package/util-linux/Config.in                       |    4 +-
+ package/webkit/Config.in                           |    6 ++--
+ package/wget/Config.in                             |    4 +-
+ package/wipe/wipe.mk                               |    2 +-
+ package/x11r7/Config.in                            |    8 ++--
+ package/x11r7/mesa3d/Config.in                     |    2 +-
+ package/x11r7/xlib_libpciaccess/Config.in          |    4 +-
+ package/xerces/Config.in                           |    5 ++-
+ package/xfsprogs/Config.in                         |    4 +-
+ package/xmlstarlet/Config.in                       |    2 +-
+ target/xtensa/defconfig                            |    6 ++--
+ toolchain/dependencies/dependencies.sh             |    2 +-
+ toolchain/gcc/Config.in                            |    4 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    6 ++--
+ toolchain/gdb/Config.in                            |    4 +-
+ toolchain/gdb/gdb.mk                               |    2 +-
+ toolchain/helpers.mk                               |   24 ++++++------
+ toolchain/toolchain-buildroot/Config.in.2          |   14 ++++----
+ toolchain/toolchain-common.in                      |   22 ++++++------
+ toolchain/toolchain-crosstool-ng/Config.in         |   38 ++++++++++----------
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   14 ++++----
+ toolchain/toolchain-external/Config.in             |   38 ++++++++++----------
+ toolchain/toolchain-external/ext-tool.mk           |    6 ++--
+ toolchain/uClibc/uclibc.mk                         |   12 +++---
+ 192 files changed, 470 insertions(+), 467 deletions(-)
+
+Thanks,
 -- 
-1.7.1
+Thomas Petazzoni
