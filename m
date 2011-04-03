@@ -1,44 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 3 Apr 2011 20:22:56 +0200
-Subject: [Buildroot] [PATCH 3/3] Allow several device tables and split
- in two parts our device table
-In-Reply-To: <22eab5b5139c1666b306d0afdbea056a8af65075.1301763205.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1301763205.git.thomas.petazzoni@free-electrons.com>
-	<22eab5b5139c1666b306d0afdbea056a8af65075.1301763205.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <AANLkTimoHTKq7pBCjbppCiUAvE1GfqJapnpJF6c4Y-t=@mail.gmail.com>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sun, 3 Apr 2011 20:12:28 +0200
+Subject: [Buildroot] [git commit /heads/master] readline: link directly
+	against ncurses
+Message-ID: <20110403185530.D6CC781E9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 2, 2011 at 6:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This allows to have a device table for all directories/files and
-> another device table for the device files themselves. Both are needed
-> for static /dev, but only the first one is needed when
-> devtmpfs/mdev/udev are used.
->
-> We take this opportunity to move the documentation of the device table
-> format in a common location, package/makedevs/README.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?fs/Config.in ? ? ? ? ? ? ? ? ? ? ? ?| ? 20 +++-
-> ?fs/common.mk ? ? ? ? ? ? ? ? ? ? ? ?| ? 14 ++-
-> ?package/makedevs/README ? ? ? ? ? ? | ? 35 +++++++
 
-The source file makedevs.c also contains some documentation, with more
-examples. I think it would be best to keep just one: either the README
-file (expanded with the documentation in the sources), or the source
-documentation.
+commit: http://git.buildroot.net/buildroot/commit/?id=b864790383b1cb8d51e5202bb750c0a6601b21ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best regards,
-Thomas
+Fixes link issues on uClibc for applications using libreadline.
 
-> ?target/generic/device_table.txt ? ? | ?186 ++--------------------------------
-> ?target/generic/device_table_dev.txt | ?142 ++++++++++++++++++++++++++
-> ?5 files changed, 211 insertions(+), 186 deletions(-)
-> ?create mode 100644 package/makedevs/README
-> ?create mode 100644 target/generic/device_table_dev.txt
->
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/readline/readline-6.1-curses-link.patch |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
+ create mode 100644 package/readline/readline-6.1-curses-link.patch
+
+diff --git a/package/readline/readline-6.1-curses-link.patch b/package/readline/readline-6.1-curses-link.patch
+new file mode 100644
+index 0000000..56b4770
+--- /dev/null
++++ b/package/readline/readline-6.1-curses-link.patch
+@@ -0,0 +1,16 @@
++link readline directly to ncurses since it needs symbols from it
++
++upstream readline does this on purpose (no direct linking), but
++it doesn't make much sense in a Linux world
++
++--- a/support/shobj-conf
+++++ b/support/shobj-conf
++@@ -42,7 +42,7 @@
++ SHOBJ_LIBS=
++ 
++ SHLIB_XLDFLAGS=
++-SHLIB_LIBS=
+++SHLIB_LIBS=-lncurses
++ 
++ SHLIB_DOT='.'
++ SHLIB_LIBPREF='lib'
+-- 
+1.7.3.4
