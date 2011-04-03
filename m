@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Apr 2011 17:19:01 +0200
-Subject: [Buildroot] [PATCH 2/2] qt: speed up qmake build
-In-Reply-To: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f7951e2ee46e13c5d7a388b02c0b68995cce209f.1301843856.git.thomas.petazzoni@free-electrons.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sun, 3 Apr 2011 09:34:36 -0700
+Subject: [Buildroot] working with u-boot
+Message-ID: <BANLkTi=5sFsogvPiXWNvZaCO=JcyiZ0Wqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qmake is built during the execution of Qt ./configure script, so it is
-built just with a normal make, not taking advantage of parallel
-compilation. Passing MAKEFLAGS=-j$(BR2_JLEVEL) allows to speed up the
-qmake compilation process quite a bit.
+I am editing and recompiling u-boot a bit from within buildroot and
+currently am doing this to get a "clean"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt/qt.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+$buildroot   cd output/build/u-boot
+$u-boot   rm -rf .o
+$u-boot   cd ../../../
+$buildroot rm output/build/u-boot/.configured
+$ make
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 32dc574..8d7238e 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -468,7 +468,7 @@ define QT_CONFIGURE_CMDS
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
--		./configure \
-+		MAKEFLAGS="$(MAKEFLAGS) -j$(BR2_JLEVEL)" ./configure \
- 		$(if $(VERBOSE),-verbose,-silent) \
- 		-force-pkg-config \
- 		$(QT_CONFIGURE_OPTS) \
+And this gets me a fresh compile of u-boot.
+
+Is there a better way to do this?
+
 -- 
-1.7.1
+Charles Krinke
+
+p.s. make help shows
+
+make {uclibc/busybox/linux26}-config
+
+and I suspect it should show
+
+make {uclibc/busybox/linux26}-*menu*config
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110403/4a6dae9d/attachment.html>
