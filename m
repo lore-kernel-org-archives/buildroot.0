@@ -1,32 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 03 Apr 2011 20:55:30 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.05/more-qt-fixes
-In-Reply-To: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 3 Apr 2011 17:18:59 +0200")
-References: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87hbafyxjx.fsf@macbook.be.48ers.dk>
+Date: Sun, 03 Apr 2011 21:03:18 +0200
+Subject: [Buildroot] [PATCH] readline: link directly against ncurses
+In-Reply-To: <1300923775-13739-1-git-send-email-vapier@gentoo.org> (Mike
+	Frysinger's message of "Wed, 23 Mar 2011 19:42:55 -0400")
+References: <1300923775-13739-1-git-send-email-vapier@gentoo.org>
+Message-ID: <87bp0nyx6x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
- Thomas> Hello,
- Thomas> Changes since the previous version:
+ Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
- Thomas>  * Pass MAKEFLAGS down to Qt ./configure script, in addition to the
- Thomas>    -j$(BR2_JLEVEL) flag.
-
- Thomas>  * Test if the usr/lib/qt/plugins exists in STAGING_DIR before copying
- Thomas>    its contents to the TARGET_DIR. It is a bit pedantic as the current
- Thomas>    version of Qt, with just QtCore and no other libraries or plugins
- Thomas>    installs one plugin, but it may not be the case in future versions
- Thomas>    of Qt.
-
-Committed, thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
