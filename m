@@ -1,36 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 03 Apr 2011 20:17:03 +0200
-Subject: [Buildroot] [xdriver_xf86-video-openchrome-0.2.904]
-	via_video.c: error: 'struct _Pixmap' has no member named 'screen_x'
-In-Reply-To: <1301854310.32594.13.camel@esp-patben-lin.espdx1.local> (Patryk
-	Benderz's message of "Sun, 03 Apr 2011 20:11:50 +0200")
-References: <1301422474.6206.37.camel@esp-patben-lin.espdx1.local>
-	<1301664043.18237.38.camel@esp-patben-lin.espdx1.local>
-	<87lizt20nd.fsf@macbook.be.48ers.dk>
-	<1301854310.32594.13.camel@esp-patben-lin.espdx1.local>
-Message-ID: <87lizryzc0.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 3 Apr 2011 20:22:56 +0200
+Subject: [Buildroot] [PATCH 3/3] Allow several device tables and split
+ in two parts our device table
+In-Reply-To: <22eab5b5139c1666b306d0afdbea056a8af65075.1301763205.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1301763205.git.thomas.petazzoni@free-electrons.com>
+	<22eab5b5139c1666b306d0afdbea056a8af65075.1301763205.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <AANLkTimoHTKq7pBCjbppCiUAvE1GfqJapnpJF6c4Y-t=@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patryk" == Patryk Benderz <Patryk.Benderz@esp.pl> writes:
+On Sat, Apr 2, 2011 at 6:53 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This allows to have a device table for all directories/files and
+> another device table for the device files themselves. Both are needed
+> for static /dev, but only the first one is needed when
+> devtmpfs/mdev/udev are used.
+>
+> We take this opportunity to move the documentation of the device table
+> format in a common location, package/makedevs/README.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> ?fs/Config.in ? ? ? ? ? ? ? ? ? ? ? ?| ? 20 +++-
+> ?fs/common.mk ? ? ? ? ? ? ? ? ? ? ? ?| ? 14 ++-
+> ?package/makedevs/README ? ? ? ? ? ? | ? 35 +++++++
 
- Patryk> [cut]
- >> That's surprising as there has been very little changes to the X11
- >> packages since 2011.02-rc2, but OK - Good to know.
+The source file makedevs.c also contains some documentation, with more
+examples. I think it would be best to keep just one: either the README
+file (expanded with the documentation in the sources), or the source
+documentation.
 
- Patryk> I might as well made something wrong during compilation... If
- Patryk> you wish I may check if this is still reproducible and make bug
- Patryk> report of this?
+Best regards,
+Thomas
 
-That would be good if you don't mind.
-
- Patryk> P.S. Was this message intended to be PRIV only, or did you forget to
- Patryk> respond to Mailing List?
-
-No, it wasn't - But as far as I can see I did CC the list on my mail.
-
--- 
-Bye, Peter Korsgaard
+> ?target/generic/device_table.txt ? ? | ?186 ++--------------------------------
+> ?target/generic/device_table_dev.txt | ?142 ++++++++++++++++++++++++++
+> ?5 files changed, 211 insertions(+), 186 deletions(-)
+> ?create mode 100644 package/makedevs/README
+> ?create mode 100644 target/generic/device_table_dev.txt
+>
