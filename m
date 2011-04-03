@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 3 Apr 2011 22:51:54 +0200
-Subject: [Buildroot] [git commit /heads/master] mpd: fix build with tremor
-	support
-Message-ID: <20110403205311.C72BC81F00@busybox.osuosl.org>
+Date: Sun, 3 Apr 2011 23:32:43 +0200
+Subject: [Buildroot] [git commit /heads/master] CHANGES: update with recent
+	changes
+Message-ID: <20110403213309.879F481F05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,56 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d1118e2d83bcb3d5777f86e560086eaf60b0322
+commit: http://git.buildroot.net/buildroot/commit/?id=d1cba6e3268890d0592e0f2bc33efec05dd07b6c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Tremor needs the common ogg support (in _ogg_common.c) to get built,
-similar to how it is done when libvorbis is used.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../mpd/mpd-0.16.2-tremor-needs-ogg_common.patch   |   20 ++++++++++++++++++++
- package/multimedia/mpd/mpd.mk                      |    1 +
- 2 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/mpd/mpd-0.16.2-tremor-needs-ogg_common.patch
+ CHANGES |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/multimedia/mpd/mpd-0.16.2-tremor-needs-ogg_common.patch b/package/multimedia/mpd/mpd-0.16.2-tremor-needs-ogg_common.patch
-new file mode 100644
-index 0000000..d315f14
---- /dev/null
-+++ b/package/multimedia/mpd/mpd-0.16.2-tremor-needs-ogg_common.patch
-@@ -0,0 +1,20 @@
-+[PATCH] configure: tremor needs common ogg support just like libvorbis does
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ configure.ac |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: mpd-0.16.2/configure.ac
-+===================================================================
-+--- mpd-0.16.2.orig/configure.ac
-++++ mpd-0.16.2/configure.ac
-+@@ -1081,7 +1081,7 @@
-+ fi
-+ 
-+ AM_CONDITIONAL(HAVE_OGG_COMMON,
-+-	  test x$enable_vorbis = xyes || test x$enable_oggflac = xyes || test x$enable_flac = xyes)
-++	  test x$enable_vorbis = xyes || test x$enable_tremor = xyes || test x$enable_oggflac = xyes || test x$enable_flac = xyes)
-+ 
-+ AM_CONDITIONAL(HAVE_FLAC_COMMON,
-+ 	  test x$enable_flac = xyes || test x$enable_oggflac = xyes)
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 3f5057c..d418f61 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -6,6 +6,7 @@
+diff --git a/CHANGES b/CHANGES
+index c22d0b6..aa48a56 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,12 +1,13 @@
+ 2011.05, Not released yet:
  
- MPD_VERSION = 0.16.2
- MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/musicpd
-+MPD_AUTORECONF = YES
- MPD_DEPENDENCIES = host-pkg-config libglib2
+ 	Updated/fixed packages: alsa-lib, alsa-utils, alsamixergui,
+-	avahi, busybox, dnsmasq, dropbear, ethtool, fakeroot, ffmpeg,
+-	file, gnuconfig, gst-ffmpeg, gst-plugins-good, icu,
+-	imagemagick, libdnet, libpng, libxml2, libxslt, makedevs,
+-	mpg123, mtd-utils, ncurses, netsnmp, openssl, pkg-config, qt,
+-	samba, socat, squashfs, webkit, xerces, xlib_xtrans,
+-	xorg-server, xterm, xz
++	avahi, busybox, copas, dnsmasq, dropbear, ethtool, fakeroot,
++	ffmpeg, file, gnuconfig, gst-ffmpeg, gst-plugins-good, icu,
++	imagemagick, libdnet, libpng, libxml2, libxslt, lighttpd,
++	makedevs, midori, mpg123, mpd, mtd-utils, ncurses, netsnmp,
++	openssl, pkg-config, qt, quagga, readline, rsync, samba,
++	socat, squashfs, webkit, xerces, xlib_xtrans, xorg-server,
++	xterm, xz
  
- # Some options need an explicit --disable or --enable
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
 -- 
 1.7.3.4
