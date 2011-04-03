@@ -1,145 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Apr 2011 17:19:00 +0200
+Date: Sun, 3 Apr 2011 17:20:53 +0200
 Subject: [Buildroot] [PATCH 1/2] qt: fix plugin installation and change
-	plugin path
-In-Reply-To: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1301843856.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b7e8880ccdbd251315e3df5b9f028d2e400cdc7e.1301843856.git.thomas.petazzoni@free-electrons.com>
+ plugin path
+In-Reply-To: <87vcywz8eq.fsf@macbook.be.48ers.dk>
+References: <cover.1301763163.git.thomas.petazzoni@free-electrons.com>
+	<cover.1301763163.git.thomas.petazzoni@free-electrons.com>
+	<5dc3f963b1e5b12f9a5bb7bf4972619bce18371e.1301763163.git.thomas.petazzoni@free-electrons.com>
+	<87vcywz8eq.fsf@macbook.be.48ers.dk>
+Message-ID: <20110403172053.63bbf024@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the conversion of Qt to GENTARGETS in
-421cda1fd078f5fa7902f05bd1d2021fd101d9ea, plugin installation could
-break in some situations, for example if SQL support was enabled, but
-without any SQL driver: the sql plugin directory doesn't exist, but
-our qt.mk wanted to copy it.
+On Sat, 02 Apr 2011 22:48:45 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-This patches simplifies the plugin handling a bit, and basically
-copies all Qt plugins installed in the $(STAGING_DIR) to the
-$(TARGET_DIR), assuming Qt has only built and installed the needed
-plugins.
+>  Thomas> Signed-off-by: Thomas Petazzoni
+>  Thomas> <thomas.petazzoni@free-electrons.com> ---
+>  Thomas>  package/qt/qt-4.7.2-configure.patch |   48
+>  Thomas> +++++++++++++++++++++++++++++++++++
+>  Thomas> package/qt/qt.mk                    |   13 +++------ 2 files
+>  Thomas> changed, 52 insertions(+), 9 deletions(-) create mode 100644
+>  Thomas> package/qt/qt-4.7.2-configure.patch
+> 
+>  Thomas> diff --git a/package/qt/qt-4.7.2-configure.patch
+>  Thomas> b/package/qt/qt-4.7.2-configure.patch new file mode 100644
+>  Thomas> index 0000000..cef53e3
+>  Thomas> --- /dev/null
+>  Thomas> +++ b/package/qt/qt-4.7.2-configure.patch
+>  Thomas> @@ -0,0 +1,48 @@
+>  Thomas> +Fix -hostprefix behaviour
+> 
+> Have you sent this patch upstream?
 
-Moreover, instead of installing plugins to usr/plugins, which is a odd
-location, we install them in usr/lib/qt/plugins. This requires a small
-patch to Qt ./configure script so that even when -hostprefix is used,
-the -plugindir option is taken into account.
+No, I haven't. I could push this to their bugtracker.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt/qt-4.7.2-configure.patch |   48 +++++++++++++++++++++++++++++++++++
- package/qt/qt.mk                    |   15 ++++------
- 2 files changed, 54 insertions(+), 9 deletions(-)
- create mode 100644 package/qt/qt-4.7.2-configure.patch
+> Doesn't this break if there aren't any plugins? E.G. perhaps with a
+> static qt build?
 
-diff --git a/package/qt/qt-4.7.2-configure.patch b/package/qt/qt-4.7.2-configure.patch
-new file mode 100644
-index 0000000..cef53e3
---- /dev/null
-+++ b/package/qt/qt-4.7.2-configure.patch
-@@ -0,0 +1,48 @@
-+Fix -hostprefix behaviour
-+
-+When -hostprefix ./configure option is used, Qt installs all its
-+headers, libraries and binaries inside the given host prefix, instead
-+of the prefix. This is used by Buildroot to make sure that all Qt
-+libraries and headers are installed in $(STAGING_DIR).
-+
-+Qt ./configure script also allows to tune the installation location of
-+various elements, for examples the plugins through the -plugindir
-+option. Unfortunately, this option only impact the installation path
-+on the target, but not on the host when -hostprefix is used.
-+
-+This patch modifies Qt ./configure script so that HOST_*PATH_STR
-+variables are composed of the host prefix concatenated with the path
-+of installation on the target. This way, the plugin installation local
-+in the $(STAGING_DIR) and on the target remains the same.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: qt-4.7.2/configure
-+===================================================================
-+--- qt-4.7.2.orig/configure	2011-03-31 22:28:16.530647168 +0200
-++++ qt-4.7.2/configure	2011-03-31 22:29:38.908081695 +0200
-+@@ -4456,15 +4456,15 @@
-+
-+
-+ if [ ! -z "$QT_HOST_PREFIX" ]; then
-+-    HOSTPREFIX_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_prfxpath=$QT_HOST_PREFIX"`
-+-    HOSTDOCUMENTATION_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_docspath=$QT_HOST_PREFIX/doc"`
-+-    HOSTHEADERS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_hdrspath=$QT_HOST_PREFIX/include"`
-+-    HOSTLIBRARIES_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_libspath=$QT_HOST_PREFIX/lib"`
-+-    HOSTBINARIES_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_binspath=$QT_HOST_PREFIX/bin"`
-+-    HOSTPLUGINS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_plugpath=$QT_HOST_PREFIX/plugins"`
-+-    HOSTIMPORTS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_impspath=$QT_HOST_PREFIX/IMPORTS"`
-+-    HOSTDATA_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_datapath=$QT_HOST_PREFIX"`
-+-    HOSTTRANSLATIONS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_trnspath=$QT_HOST_PREFIX/translations"`
-++    HOSTPREFIX_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_prfxpath=$QT_HOST_PREFIX/$QT_INSTALL_PREFIX"`
-++    HOSTDOCUMENTATION_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_docspath=$QT_HOST_PREFIX/$QT_INSTALL_DOCS"`
-++    HOSTHEADERS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_hdrspath=$QT_HOST_PREFIX/$QT_INSTALL_HEADERS"`
-++    HOSTLIBRARIES_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_libspath=$QT_HOST_PREFIX/$QT_INSTALL_LIBS"`
-++    HOSTBINARIES_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_binspath=$QT_HOST_PREFIX/$QT_INSTALL_BINS"`
-++    HOSTPLUGINS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_plugpath=$QT_HOST_PREFIX/$QT_INSTALL_PLUGINS"`
-++    HOSTIMPORTS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_impspath=$QT_HOST_PREFIX/$QT_INSTALL_IMPORTS"`
-++    HOSTDATA_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_datapath=$QT_HOST_PREFIX/$QT_INSTALL_DATA"`
-++    HOSTTRANSLATIONS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_trnspath=$QT_HOST_PREFIX/$QT_INSTALL_TRANSLATIONS"`
-+     HOSTSETTINGS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_stngpath=$QT_INSTALL_SETTINGS"`
-+     HOSTEXAMPLES_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_xmplpath=$QT_INSTALL_EXAMPLES"`
-+     HOSTDEMOS_PATH_STR=`"$relpath/config.tests/unix/padstring" 268 "qt_demopath=$QT_INSTALL_DEMOS"`
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index bdc32d9..32dc574 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -481,7 +481,8 @@ define QT_CONFIGURE_CMDS
- 		-no-accessibility \
- 		-no-separate-debug-info \
- 		-prefix /usr \
--		-hostprefix $(STAGING_DIR)/usr \
-+		-plugindir /usr/lib/qt/plugins \
-+		-hostprefix $(STAGING_DIR) \
- 		-fast \
- 		-no-rpath \
- 	)
-@@ -499,23 +500,19 @@ QT_HOST_PROGRAMS   += moc rcc qmake lrelease
- 
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- QT_INSTALL_LIBS    += QtGui
--QT_INSTALL_PLUGINS += imageformats
- QT_HOST_PROGRAMS   += uic
- endif
- ifeq ($(BR2_PACKAGE_QT_SQL_MODULE),y)
- QT_INSTALL_LIBS    += QtSql
--QT_INSTALL_PLUGINS += sqldrivers
- endif
- ifeq ($(BR2_PACKAGE_QT_MULTIMEDIA),y)
- QT_INSTALL_LIBS    += QtMultimedia
- endif
- ifeq ($(BR2_PACKAGE_QT_PHONON),y)
- QT_INSTALL_LIBS    += phonon
--QT_INSTALL_PLUGINS += phonon_backend
- endif
- ifeq ($(BR2_PACKAGE_QT_SVG),y)
- QT_INSTALL_LIBS    += QtSvg
--QT_INSTALL_PLUGINS += iconengines
- endif
- ifeq ($(BR2_PACKAGE_QT_NETWORK),y)
- QT_INSTALL_LIBS    += QtNetwork
-@@ -582,10 +579,10 @@ endif
- 
- # Plugin installation
- define QT_INSTALL_TARGET_PLUGINS
--	for plugin in $(QT_INSTALL_PLUGINS); do \
--		mkdir -p $(TARGET_DIR)/usr/plugins ; \
--		cp -dpfr $(STAGING_DIR)/usr/plugins/$$plugin $(TARGET_DIR)/usr/plugins/; \
--	done
-+	if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/ ] ; then \
-+		mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins ; \
-+		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins ; \
-+	fi
- endef
- 
- # Fonts installation
+Fixed in the updated version I've just sent.
+
+Regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
