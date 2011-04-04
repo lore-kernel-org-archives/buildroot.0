@@ -1,32 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  4 Apr 2011 13:47:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 3541] Quotes in the top Makefile:217 break
- buildroot/kernel config build under cygwin
-In-Reply-To: <bug-3541-163@https.bugs.busybox.net/>
-References: <bug-3541-163@https.bugs.busybox.net/>
-Message-ID: <20110404134714.AB7BA81ED4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Apr 2011 15:44:35 +0200
+Subject: [Buildroot] [git commit] Makefile: remove extra quotes around host
+	linker flags for cygwin
+Message-ID: <20110404134731.C776481ED4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3541
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=f894e85e8537ec8b54abe40db21bd8281cedd245
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Closes #3541
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES  |    1 +
+ Makefile |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-Out of interest, is Buildroot really working for you on Cygwin? I don't recall
-ever hearing for any other Cygwin users.
-
+diff --git a/CHANGES b/CHANGES
+index aa48a56..d0a61eb 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -16,6 +16,7 @@
+ 	#3457: alsamixergui: broken URL
+ 	#3475: Calling sync on large filesystems when not always necessary
+ 	#3511: make busybox-menuconfig does not download busybox package
++	#3541: Quotes in the top Makefile:217 break buildroot/kernel config...
+ 
+ 2011.02, Released February 28th, 2011:
+ 
+diff --git a/Makefile b/Makefile
+index 2e698cc..02a5c36 100644
+--- a/Makefile
++++ b/Makefile
+@@ -214,7 +214,7 @@ ifneq ($(findstring cygwin,$(GNU_HOST_NAME)),)
+ HOST_EXEEXT:=.exe
+ HOST_LIBEXT:=.lib
+ HOST_SHREXT:=.dll
+-HOST_LOADLIBES="-lcurses -lintl"
++HOST_LOADLIBES=-lcurses -lintl
+ export HOST_LOADLIBES
+ endif
+ ifneq ($(findstring mingw,$(GNU_HOST_NAME)),)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
