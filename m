@@ -1,37 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  4 Apr 2011 14:06:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 3541] Quotes in the top Makefile:217 break
- buildroot/kernel config build under cygwin
-In-Reply-To: <bug-3541-163@https.bugs.busybox.net/>
-References: <bug-3541-163@https.bugs.busybox.net/>
-Message-ID: <20110404140629.767D581A0C@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Mon, 4 Apr 2011 11:51:25 -0400
+Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
+In-Reply-To: <871v1iz4rw.fsf@macbook.be.48ers.dk>
+References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
+	<871v1iz4rw.fsf@macbook.be.48ers.dk>
+Message-ID: <BANLkTin76g-S7ukNdq62ie3fJaMTc_7fag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3541
+On Mon, Apr 4, 2011 at 6:31 AM, Peter Korsgaard wrote:
+>>>>>> "Mike" == Mike Frysinger writes:
+> ?Mike> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+> ?Mike> ---
+> ?Mike> note: not really tested since external toolchain support is totally broken
+>
+> Have you had a chance to test it now?
 
---- Comment #2 from Oleg Semyonov <os-bugs-qztrsta-uclibc@os-propo.info>  ---
-(In reply to comment #1)
-> Out of interest, is Buildroot really working for you on Cygwin? I don't recall
-> ever hearing for any other Cygwin users.
+ive tested external toolchain support and it works fine for me now
+after merging Sonic's patch
 
-I am using it on Linux, but parts of software we're deleloping on Windows using
-MS Visual Studio for emulation win32 project and then cross-compiling the
-source for the arm target.
-
-So I used buildroot under cygwin to build arm uClibc and C++ cross-toolchain
-(it works for me few years already). Trying to do this yesterday, it stopped
-building on busybox. But I just didn't have enough time to see the problem. It
-doesn't find some headers which are definitely exist (shadow.h).
-
-Will be interesting if I could build whole file system and kernel under cygwin
-in the end :-)  Don't say it is very important for us, but it is at least
-interesting to try.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+as for ncurses-5.8 itself, i deployed it in Gentoo about a month ago
+and no one has filed a bug about it ...
+-mike
