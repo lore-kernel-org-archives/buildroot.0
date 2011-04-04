@@ -1,39 +1,37 @@
-From: Martin Hicks <mort@bork.org>
-Date: Mon, 4 Apr 2011 10:02:44 -0400
-Subject: [Buildroot] working with u-boot
-In-Reply-To: <BANLkTi=5sFsogvPiXWNvZaCO=JcyiZ0Wqg@mail.gmail.com>
-References: <BANLkTi=5sFsogvPiXWNvZaCO=JcyiZ0Wqg@mail.gmail.com>
-Message-ID: <BANLkTimbaWZKMSmubqQ+Q-uFU4JXK6UFsA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  4 Apr 2011 14:06:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 3541] Quotes in the top Makefile:217 break
+ buildroot/kernel config build under cygwin
+In-Reply-To: <bug-3541-163@https.bugs.busybox.net/>
+References: <bug-3541-163@https.bugs.busybox.net/>
+Message-ID: <20110404140629.767D581A0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 3, 2011 at 12:34 PM, Charles Krinke
-<charles.krinke@gmail.com> wrote:
-> I am editing and recompiling u-boot a bit from within buildroot and
-> currently am doing this to get a "clean"
->
-> $buildroot?? cd output/build/u-boot
-> $u-boot?? rm -rf .o
-> $u-boot?? cd ../../../
-> $buildroot rm output/build/u-boot/.configured
-> $ make
->
-> And this gets me a fresh compile of u-boot.
->
-> Is there a better way to do this?
+https://bugs.busybox.net/show_bug.cgi?id=3541
 
-I do:
+--- Comment #2 from Oleg Semyonov <os-bugs-qztrsta-uclibc@os-propo.info>  ---
+(In reply to comment #1)
+> Out of interest, is Buildroot really working for you on Cygwin? I don't recall
+> ever hearing for any other Cygwin users.
 
-rm -f output/build/u-boot*/u-boot*
+I am using it on Linux, but parts of software we're deleloping on Windows using
+MS Visual Studio for emulation win32 project and then cross-compiling the
+source for the arm target.
 
-Which deletes all the binaries.  If you investigate the dependencies
-in boot/u-boot/u-boot.mk you'll see that it depends on those.
+So I used buildroot under cygwin to build arm uClibc and C++ cross-toolchain
+(it works for me few years already). Trying to do this yesterday, it stopped
+building on busybox. But I just didn't have enough time to see the problem. It
+doesn't find some headers which are definitely exist (shadow.h).
 
-mh
+Will be interesting if I could build whole file system and kernel under cygwin
+in the end :-)  Don't say it is very important for us, but it is at least
+interesting to try.
 
 -- 
-Martin Hicks P.Eng. ?? ? | ? ? ? ? mort at bork.org
-Bork Consulting Inc. ? ? | ? +1 (613) 266-2296
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
