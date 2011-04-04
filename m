@@ -1,44 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Apr 2011 22:21:47 +0200
-Subject: [Buildroot] [git commit] docs: add favicon / robots.txt
-Message-ID: <20110404202245.27FC58190F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Apr 2011 22:40:00 +0200
+Subject: [Buildroot] [PATCH 1/3] tslib: add lowpass filter
+In-Reply-To: <1298996361-760-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Tue, 1 Mar 2011 13:19:19 -0300")
+References: <1298996361-760-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k4f9ycm7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b90b9cc70a88c52ed618ed2fb15853a779b3bbd6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Add the lowpass filter plugin from OpenMoko.
+ Gustavo> See http://docs.openmoko.org/trac/ticket/1194
 
-In the past, these files of the buildroot website weren't under git
-version control, but rather were static files added to the git checkout
-used by the webserver.
+Couldn't these patches simply be added upstream now tslib has an active
+maintainer?
 
-This is no longer the case, so add them to git - And at the same time
-use the Buildroot logo for the favicon, rather than reusing the busybox
-one.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/favicon.ico |  Bin 0 -> 2238 bytes
- docs/robots.txt  |    2 ++
- 2 files changed, 2 insertions(+), 0 deletions(-)
- create mode 100644 docs/favicon.ico
- create mode 100644 docs/robots.txt
-
-diff --git a/docs/favicon.ico b/docs/favicon.ico
-new file mode 100644
-index 0000000..fa9d240
-Binary files /dev/null and b/docs/favicon.ico differ
-diff --git a/docs/robots.txt b/docs/robots.txt
-new file mode 100644
-index 0000000..1b425ee
---- /dev/null
-+++ b/docs/robots.txt
-@@ -0,0 +1,2 @@
-+User-agent: *
-+Disallow: /cgi-bin/
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
