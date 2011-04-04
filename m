@@ -1,7 +1,7 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 4 Apr 2011 22:21:47 +0200
-Subject: [Buildroot] [git commit] mtd: bump version
-Message-ID: <20110404202244.EB50B8190F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs: add favicon / robots.txt
+Message-ID: <20110404202245.27FC58190F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7bb008d43fca26b76f98fa3e5c03293603886524
+commit: http://git.buildroot.net/buildroot/commit/?id=b90b9cc70a88c52ed618ed2fb15853a779b3bbd6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump mtd-utils version to 1.4.4 which contains the
-flash_eraseall -j bug-fix.
+In the past, these files of the buildroot website weren't under git
+version control, but rather were static files added to the git checkout
+used by the webserver.
 
-http://lists.infradead.org/pipermail/linux-mtd/2011-March/034505.html
+This is no longer the case, so add them to git - And at the same time
+use the Buildroot logo for the favicon, rather than reusing the busybox
+one.
 
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mtd/mtd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ docs/favicon.ico |  Bin 0 -> 2238 bytes
+ docs/robots.txt  |    2 ++
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+ create mode 100644 docs/favicon.ico
+ create mode 100644 docs/robots.txt
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 6b8f2c7..a957441 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION:=1.4.3
-+MTD_VERSION:=1.4.4
- MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
- ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+diff --git a/docs/favicon.ico b/docs/favicon.ico
+new file mode 100644
+index 0000000..fa9d240
+Binary files /dev/null and b/docs/favicon.ico differ
+diff --git a/docs/robots.txt b/docs/robots.txt
+new file mode 100644
+index 0000000..1b425ee
+--- /dev/null
++++ b/docs/robots.txt
+@@ -0,0 +1,2 @@
++User-agent: *
++Disallow: /cgi-bin/
 -- 
 1.7.3.4
