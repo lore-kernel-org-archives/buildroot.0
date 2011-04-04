@@ -1,41 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Apr 2011 21:28:38 +0200
-Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
-In-Reply-To: <BANLkTimaGrpddCjV6r7MkmiK9P1-GeiLDQ@mail.gmail.com> (Mike
-	Frysinger's message of "Mon, 4 Apr 2011 15:17:24 -0400")
-References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
-	<871v1iz4rw.fsf@macbook.be.48ers.dk>
-	<BANLkTin76g-S7ukNdq62ie3fJaMTc_7fag@mail.gmail.com>
-	<87wrj9ygui.fsf@macbook.be.48ers.dk>
-	<BANLkTimaGrpddCjV6r7MkmiK9P1-GeiLDQ@mail.gmail.com>
-Message-ID: <87oc4lyfx5.fsf@macbook.be.48ers.dk>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 4 Apr 2011 22:21:47 +0200
+Subject: [Buildroot] [git commit] mtd: bump version
+Message-ID: <20110404202244.EB50B8190F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=7bb008d43fca26b76f98fa3e5c03293603886524
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Ok, odd. I do see several gentoo bugs related to ncurses 5.8 though
- >> (rtorrent, vifm).
+Bump mtd-utils version to 1.4.4 which contains the
+flash_eraseall -j bug-fix.
 
- Mike> seems like all the logged gentoo bugs are issues in the packages
- Mike> and not ncurses
+http://lists.infradead.org/pipermail/linux-mtd/2011-March/034505.html
 
-Somewhat true. Looking at the Debian bugs I see ncurses 5.8 fails on
-newwin(0, 0, 0, 0) which it shouldn't - That's fixed post 5.8 though.
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Mike> did you have a particular app you were running from BR that
- Mike> exhibited the issue ?
-
-Well, everything I tried:
-
-- python with it's readline module
-- less
-- dialog
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 6b8f2c7..a957441 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=1.4.3
++MTD_VERSION:=1.4.4
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
