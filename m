@@ -1,30 +1,57 @@
-From: Heyendal, Carl <CHeyendal@stanleyworks.com>
-Date: Tue, 5 Apr 2011 12:13:43 -0400
-Subject: [Buildroot] debugging threads
-Message-ID: <1D6034426110564DA0DEA9EE9793B38358192AAA2C@NBE-MBX01.americas.swk.pri>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Apr 2011 21:54:47 +0200
+Subject: [Buildroot] Buildroot "install" wrapper to preserve file
+ permissions
+In-Reply-To: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
+References: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
+Message-ID: <20110405215447.135159ef@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, 5 Apr 2011 09:48:22 +0200
+Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
 
-Please indulge me asking this question here. I know my question is out of the scope for this group but I know of no other group that could probably help me more as this one, as everyone here likely uses remote debugging. I'm frustrated because I'm getting nowhere with other groups in regard to my problem(s).
+> An idea born out of the lately device_table.txt and install issues
+> discuessed lately.
+> 
+> In other tools similar to Buildroot (e.g. Axis SDK) I've seen an
+> "install" wrapper which sort of populate an device_table.txt while
+> installing each component.
+> 
+> In that way, it will preserve any setup, owner and permission on every
+> file without any global device_table.txt modifications.
+> 
+> (The Axis SDK actually uses meta files in the target dir, but that
+> would require a whole lot of tool patching while a dynamically written
+> device_table.txt would work as well)
+> 
+> How would you like this sort of approach in Buildroot?
 
-My question regards remote debugging of threads using Eclipse. I have a little app that prints "Hello World' from main() and again from a thread. That's it.
+Yesterday, I've implemented something that allows each package to add
+contents to the device table, so that packages can create additional
+device files, or adjust the permissions of the files they install. I
+needed this to fix the dbus package, which requires a particular
+program to have strict permission and ownership properties.
 
-As a local app on my workstation, I can place a breakpoint in the thread and GDB will stop at the break point, refresh the Debug window with all the new thread information, and show the breakpoint in the source window...all automatically. 
+Basically, each package can do:
 
-But when I do this with the same app running remotely on my target I have to watch the debug window and when the I notice that the original thread is suspended I have to click the refresh button to get the debug window to update the new thread information, open the new thread that is marked as 'hit breakpoint', and click the last function in the stack indicating the breakpoint before I can see it in the source.
+define <pkg>_PERMISSION_TABLE
+some content exactly similar to a device table fragment
+endef
 
-The remote app works perfectly when run from GDB stand-alone so it must be an Eclipse issue. I'm using GDB (DSF) Remote System Process Launcher in my debug configuration.
+and it will automatically be appended to the device table if the
+package is enabled.
 
-Shouldn't this be as automatic as debugging a local app? Do other people bother debugging from Eclipse because of quirks like this?
+Would that match your needs ?
 
-Correspond off-line if you wish.
+Regards,
 
-Appreciate any help.
-
-thanx
-/carl
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
