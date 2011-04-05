@@ -1,51 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Apr 2011 21:54:47 +0200
-Subject: [Buildroot] Buildroot "install" wrapper to preserve file
- permissions
-In-Reply-To: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
-References: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
-Message-ID: <20110405215447.135159ef@surf>
+Date: Tue, 5 Apr 2011 21:56:06 +0200
+Subject: [Buildroot] Installing native toolchain to target with
+ Crosstool-NG
+In-Reply-To: <4D9ACA75.8040203@linux-ink.ru>
+References: <4D9ACA75.8040203@linux-ink.ru>
+Message-ID: <20110405215606.2dbb6c88@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 5 Apr 2011 09:48:22 +0200
-Daniel Nystr?m <daniel.nystrom@timeterminal.se> wrote:
+Hello,
 
-> An idea born out of the lately device_table.txt and install issues
-> discuessed lately.
-> 
-> In other tools similar to Buildroot (e.g. Axis SDK) I've seen an
-> "install" wrapper which sort of populate an device_table.txt while
-> installing each component.
-> 
-> In that way, it will preserve any setup, owner and permission on every
-> file without any global device_table.txt modifications.
-> 
-> (The Axis SDK actually uses meta files in the target dir, but that
-> would require a whole lot of tool patching while a dynamically written
-> device_table.txt would work as well)
-> 
-> How would you like this sort of approach in Buildroot?
+On Tue, 05 Apr 2011 11:53:25 +0400
+"a.dobrov" <a.dobrov@linux-ink.ru> wrote:
 
-Yesterday, I've implemented something that allows each package to add
-contents to the device table, so that packages can create additional
-device files, or adjust the permissions of the files they install. I
-needed this to fix the dbus package, which requires a particular
-program to have strict permission and ownership properties.
+> I need to have the development environment (cross-native toolchain?)
+> on the target with glibc. How to do it in Buildroot with Crosstool-NG 
+> toolchain?
 
-Basically, each package can do:
+As of today, as far as I know, nobody as ever worked on native
+toolchain support when the CT-NG backend or the external toolchain
+backend are used.
 
-define <pkg>_PERMISSION_TABLE
-some content exactly similar to a device table fragment
-endef
+Generally speaking, our support for the native toolchain (i.E toolchain
+inside the target) is not really good, as Buildroot is meant to be a
+cross-compiling environment, so compiling on the target shouldn't be
+needed.
 
-and it will automatically be appended to the device table if the
-package is enabled.
-
-Would that match your needs ?
+Of course, improvements in this area are welcome.
 
 Regards,
 
