@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Apr 2011 12:10:38 +0200
-Subject: [Buildroot] [PATCH] libv4l: Add new package libv4l
-In-Reply-To: <1299518478-4151-1-git-send-email-schwarzkopf@sensortherm.de>
-	(Klaus Schwarzkopf's message of "Mon, 7 Mar 2011 18:21:18 +0100")
-References: <1299518478-4151-1-git-send-email-schwarzkopf@sensortherm.de>
-Message-ID: <877hb9xb35.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Apr 2011 12:31:22 +0200
+Subject: [Buildroot] [git commit] ncurses: don't build tests
+Message-ID: <20110405103333.BBD8782140@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Klaus" == Klaus Schwarzkopf <schwarzkopf@sensortherm.de> writes:
 
- Klaus> Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+commit: http://git.buildroot.net/buildroot/commit/?id=4d651b4d12eaddb6cc49645d1db001f1e1269364
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Slows down build.
 
-I moved it to the hardware section though, as that imho makes more
-sense.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ncurses/ncurses.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 362f3ed..91ab97a 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -34,6 +34,7 @@ NCURSES_CONF_OPT = \
+ 	--without-cxx-binding \
+ 	--without-ada \
+ 	--without-progs \
++	--without-tests \
+ 	--disable-big-core \
+ 	--without-profile \
+ 	--disable-rpath \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
