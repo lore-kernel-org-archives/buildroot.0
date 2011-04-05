@@ -1,41 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Apr 2011 21:57:03 +0200
-Subject: [Buildroot] [HALd] Slow startup (>4min.)
-In-Reply-To: <1301995387.4891.40.camel@esp-patben-lin.espdx1.local>
-References: <1301995387.4891.40.camel@esp-patben-lin.espdx1.local>
-Message-ID: <20110405215703.19ccce2e@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Apr 2011 21:58:46 +0200
+Subject: [Buildroot] Buildroot "install" wrapper to preserve file
+	permissions
+In-Reply-To: <20110405215447.135159ef@surf> (Thomas Petazzoni's message of
+	"Tue, 5 Apr 2011 21:54:47 +0200")
+References: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
+	<20110405215447.135159ef@surf>
+Message-ID: <87ipuswjux.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 05 Apr 2011 11:23:07 +0200
-Patryk Benderz <Patryk.Benderz@esp.pl> wrote:
+Hi,
 
-> I am using for this compilation BR snapshoot from 2011-03-30.
-> 	I was struggling with hald slow startup for few past days and
-> wasn't able to find out any answer in my favourite search engine ;).
-> HAL startup takes exactly 4 minutes and 10 seconds on x86 target. HAL
-> doesn't write out any info during startup
-> 	Maybe someone here already have ready answer - what am I
-> missing to start HAL quickly?
+ >> How would you like this sort of approach in Buildroot?
 
-Could you run it through strace to see what's going on ?
+ Thomas> Yesterday, I've implemented something that allows each package to add
+ Thomas> contents to the device table, so that packages can create additional
+ Thomas> device files, or adjust the permissions of the files they install. I
+ Thomas> needed this to fix the dbus package, which requires a particular
+ Thomas> program to have strict permission and ownership properties.
 
-However, notice that HAL is deprecated these days. For what usage do
-you need HAL ?
+ Thomas> Basically, each package can do:
 
-I'm currently packaging udisks and all related dependencies, so that
-signalisation of block device events can be propagated on D-Bus.
+ Thomas> define <pkg>_PERMISSION_TABLE
+ Thomas> some content exactly similar to a device table fragment
+ Thomas> endef
 
-Regards,
+ Thomas> and it will automatically be appended to the device table if the
+ Thomas> package is enabled.
 
-Thomas
+ Thomas> Would that match your needs ?
+
+I think Daniel's proposal is to use a custom install program (wrapper),
+which would then automatically create those device_table.txt snippets.
+
+I like the idea.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
