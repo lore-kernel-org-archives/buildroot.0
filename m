@@ -1,7 +1,7 @@
-From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 5 Apr 2011 12:05:08 +0200
-Subject: [Buildroot] [git commit] libv4l: Add new package libv4l
-Message-ID: <20110405100726.AF76B82144@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libv4l: add options to install utilites
+Message-ID: <20110405100726.E0DAE81F6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,83 +9,118 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3110e81773aeba9bb78e1fb54a0e8547ce882159
+commit: http://git.buildroot.net/buildroot/commit/?id=54f33b3865a88002c06abf8da1c4529d43cd07c8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: move to hw section]
-Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+These have extra deps though (C++ for some, argp.h for others which is not
+available on uClibc).
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/libv4l/Config.in |   11 +++++++++++
- package/libv4l/libv4l.mk |   29 +++++++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/libv4l/Config.in
- create mode 100644 package/libv4l/libv4l.mk
+ package/libv4l/Config.in |   50 ++++++++++++++++++++++++++++++++++++++++++++++
+ package/libv4l/libv4l.mk |   19 ++++++++++++++--
+ 2 files changed, 66 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f459c1b..ea39570 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -179,6 +179,7 @@ source "package/input-tools/Config.in"
- source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
-+source "package/libv4l/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
 diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-new file mode 100644
-index 0000000..1620b93
---- /dev/null
+index 1620b93..1e5eec6 100644
+--- a/package/libv4l/Config.in
 +++ b/package/libv4l/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBV4L
-+	bool "libv4l"
-+	depends on BR2_LARGEFILE
+@@ -7,5 +7,55 @@ config BR2_PACKAGE_LIBV4L
+ 
+ 	  http://freshmeat.net/projects/libv4l
+ 
++if BR2_PACKAGE_LIBV4L
++
++config BR2_PACKAGE_LIBV4L_DECODE_TM6000
++	bool "decode_tm6000"
++	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_glibc || BR2_TOOLCHAIN_CTNG_eglibc
 +	help
-+	  libv4l is an accompanying collection of libraries that adds a thin
-+	  abstraction layer on top of video4linux2 (V4L2) devices.
++	  Tool to decode tm6000 proprietary format streams
 +
-+	  http://freshmeat.net/projects/libv4l
++comment "decode_tm6000 requires a GLIBC based toolchain"
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_glibc || BR2_TOOLCHAIN_CTNG_eglibc)
 +
-+comment "libv4l requires a toolchain with LARGEFILE support"
-+        depends on !BR2_LARGEFILE
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-new file mode 100644
-index 0000000..a72320e
---- /dev/null
-+++ b/package/libv4l/libv4l.mk
-@@ -0,0 +1,29 @@
-+#############################################################
-+#
-+# libv4l
-+#
-+#############################################################
-+LIBV4L_VERSION = 0.8.3
-+LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
-+LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
-+LIBV4L_INSTALL_STAGING = YES
-+LIBV4L_MAKE_OPTS = PREFIX=/usr
++config BR2_PACKAGE_LIBV4L_IR_KEYTABLE
++	bool "ir-keytable"
++	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_glibc || BR2_TOOLCHAIN_CTNG_eglibc
++	help
++	  Tool to alter keymaps of Remote Controller devices
 +
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	LIBV4L_MAKE_OPTS += LINKTYPE=static
++comment "ir-keytable requires a GLIBC based toolchain"
++	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_glibc || BR2_TOOLCHAIN_CTNG_eglibc)
++
++config BR2_PACKAGE_LIBV4L_V4L2_COMPLIANCE
++	bool "v4l2-compliance"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Tool to test v4l2 API compliance of drivers
++
++comment "v4l2-compliance requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_LIBV4L_V4L2_CTL
++	bool "v4l2-ctl"
++	depends on BR2_INSTALL_LIBSTDCPP
++	default y
++	help
++	  Tool to configure v4l2 controls from the cmdline
++
++comment "v4l2-ctl requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_LIBV4L_V4L2_DBG
++	bool "v4l2-dbg"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Tool to directly get and set registers of v4l2 devices
++
++comment "v4l2-dbg requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
 +endif
 +
-+define LIBV4L_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib $(LIBV4L_MAKE_OPTS)
-+endef
+ comment "libv4l requires a toolchain with LARGEFILE support"
+         depends on !BR2_LARGEFILE
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index a72320e..1ea859a 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -9,20 +9,33 @@ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_MAKE_OPTS = PREFIX=/usr
+ 
++LIBV4L_DIRS_y += lib
++LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_DECODE_TM6000)	+= utils/decode_tm6000
++LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_IR_KEYTABLE)	+= utils/keytable
++LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_V4L2_COMPLIANCE) += utils/v4l2-compliance
++LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_V4L2_CTL)	+= utils/v4l2-ctl
++LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_V4L2_DBG)	+= utils/v4l2-dbg
 +
-+define LIBV4L_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install
-+endef
-+
-+define LIBV4L_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install
-+endef
-+
-+$(eval $(call GENTARGETS,package,libv4l))
-+
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ 	LIBV4L_MAKE_OPTS += LINKTYPE=static
+ endif
+ 
+ define LIBV4L_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/lib $(LIBV4L_MAKE_OPTS)
++	for i in $(LIBV4L_DIRS_y); do \
++		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++			$(LIBV4L_MAKE_OPTS); done
+ endef
+ 
+ define LIBV4L_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D)/lib DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install
++	for i in $(LIBV4L_DIRS_y); do \
++		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++			DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
+ define LIBV4L_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/lib DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install
++	for i in $(LIBV4L_DIRS_y); do \
++		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
+ $(eval $(call GENTARGETS,package,libv4l))
 -- 
 1.7.3.4
