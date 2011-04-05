@@ -1,18 +1,24 @@
-From: a.dobrov <a.dobrov@linux-ink.ru>
-Date: Tue, 05 Apr 2011 11:53:25 +0400
-Subject: [Buildroot] Installing native toolchain to target with Crosstool-NG
-Message-ID: <4D9ACA75.8040203@linux-ink.ru>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Tue, 05 Apr 2011 11:23:07 +0200
+Subject: [Buildroot] [HALd] Slow startup (>4min.)
+Message-ID: <1301995387.4891.40.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear colleagues!
+Hi all,
+I am using for this compilation BR snapshoot from 2011-03-30.
+	I was struggling with hald slow startup for few past days and wasn't
+able to find out any answer in my favourite search engine ;). HAL
+startup takes exactly 4 minutes and 10 seconds on x86 target. HAL
+doesn't write out any info during startup
+	Maybe someone here already have ready answer - what am I missing to
+start HAL quickly?
 
-I need to have the development environment (cross-native toolchain?) on 
-the target with glibc. How to do it in Buildroot with Crosstool-NG 
-toolchain?
-
-Sincerely,
-Alex Dobrov
+-- 
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
