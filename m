@@ -1,36 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Apr 2011 13:28:57 +0200
-Subject: [Buildroot] Upstream patches
-In-Reply-To: <BANLkTin5r172RvtraDpKMDaHom7ZZkcNHQ@mail.gmail.com> (Allan
-	Nielsen's message of "Tue, 5 Apr 2011 13:24:52 +0200")
-References: <BANLkTin5r172RvtraDpKMDaHom7ZZkcNHQ@mail.gmail.com>
-Message-ID: <87y63pvsw6.fsf@macbook.be.48ers.dk>
+From: Heyendal, Carl <CHeyendal@stanleyworks.com>
+Date: Tue, 5 Apr 2011 12:13:43 -0400
+Subject: [Buildroot] debugging threads
+Message-ID: <1D6034426110564DA0DEA9EE9793B38358192AAA2C@NBE-MBX01.americas.swk.pri>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Allan" == Allan Nielsen <a@awn.dk> writes:
+Hi,
 
-Hi Allan,
+Please indulge me asking this question here. I know my question is out of the scope for this group but I know of no other group that could probably help me more as this one, as everyone here likely uses remote debugging. I'm frustrated because I'm getting nowhere with other groups in regard to my problem(s).
 
- Allan> My company is planing on using build for a project which
- Allan> requires the X server version 1.9.4 (and its dependencies) and
- Allan> ogre 1.7.2. For this reason I have upgraded the X libraries in X
- Allan> to newest version, and will very soon work in adding packages
- Allan> for ogre.
+My question regards remote debugging of threads using Eclipse. I have a little app that prints "Hello World' from main() and again from a thread. That's it.
 
- Allan> I would be more than happy to provide all the patches upstream,
- Allan> if you would be interested?
+As a local app on my workstation, I can place a breakpoint in the thread and GDB will stop at the break point, refresh the Debug window with all the new thread information, and show the breakpoint in the source window...all automatically. 
 
-Sure!
+But when I do this with the same app running remotely on my target I have to watch the debug window and when the I notice that the original thread is suspended I have to click the refresh button to get the debug window to update the new thread information, open the new thread that is marked as 'hit breakpoint', and click the last function in the stack indicating the breakpoint before I can see it in the source.
 
- Allan> If so, I will properly need some one to take a look at the first
- Allan> set of patches, and provide some comments.
+The remote app works perfectly when run from GDB stand-alone so it must be an Eclipse issue. I'm using GDB (DSF) Remote System Process Launcher in my debug configuration.
 
-Just post them on the mailing list (preferably in git format-patch -s
-format), and I'll review them.
+Shouldn't this be as automatic as debugging a local app? Do other people bother debugging from Eclipse because of quirks like this?
 
--- 
-Bye, Peter Korsgaard
+Correspond off-line if you wish.
+
+Appreciate any help.
+
+thanx
+/carl
