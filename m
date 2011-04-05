@@ -1,33 +1,25 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Mon, 04 Apr 2011 22:22:44 +0100
-Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
-In-Reply-To: <871v1iz4rw.fsf@macbook.be.48ers.dk>
-References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
-	<871v1iz4rw.fsf@macbook.be.48ers.dk>
-Message-ID: <1301952165.27248.2.camel@segulix>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Tue, 5 Apr 2011 09:48:22 +0200
+Subject: [Buildroot] Buildroot "install" wrapper to preserve file permissions
+Message-ID: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2011-04-04 at 12:31 +0200, Peter Korsgaard wrote:
-> The problem is a null pointer access in tgetent. It seems to load the
-> terminfo file ok, but something goes wrong.
+An idea born out of the lately device_table.txt and install issues
+discuessed lately.
 
-https://bugs.busybox.net/show_bug.cgi?id=2845
+In other tools similar to Buildroot (e.g. Axis SDK) I've seen an
+"install" wrapper which sort of populate an device_table.txt while
+installing each component.
 
-we shoun't build curses with --with-termlib=tinfo 
+In that way, it will preserve any setup, owner and permission on every
+file without any global device_table.txt modifications.
 
-I have made a draft of a patch 
-https://bugs.busybox.net/show_bug.cgi?id=2845#c8
+(The Axis SDK actually uses meta files in the target dir, but that
+would require a whole lot of tool patching while a dynamically written
+device_table.txt would work as well)
 
--- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110404/2cf4f18c/attachment.bin>
+How would you like this sort of approach in Buildroot?
