@@ -1,25 +1,18 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 5 Apr 2011 09:48:22 +0200
-Subject: [Buildroot] Buildroot "install" wrapper to preserve file permissions
-Message-ID: <BANLkTi=gd8UtSZLpam0=Luyq8dZzcdfO_g@mail.gmail.com>
+From: a.dobrov <a.dobrov@linux-ink.ru>
+Date: Tue, 05 Apr 2011 11:53:25 +0400
+Subject: [Buildroot] Installing native toolchain to target with Crosstool-NG
+Message-ID: <4D9ACA75.8040203@linux-ink.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An idea born out of the lately device_table.txt and install issues
-discuessed lately.
+Dear colleagues!
 
-In other tools similar to Buildroot (e.g. Axis SDK) I've seen an
-"install" wrapper which sort of populate an device_table.txt while
-installing each component.
+I need to have the development environment (cross-native toolchain?) on 
+the target with glibc. How to do it in Buildroot with Crosstool-NG 
+toolchain?
 
-In that way, it will preserve any setup, owner and permission on every
-file without any global device_table.txt modifications.
-
-(The Axis SDK actually uses meta files in the target dir, but that
-would require a whole lot of tool patching while a dynamically written
-device_table.txt would work as well)
-
-How would you like this sort of approach in Buildroot?
+Sincerely,
+Alex Dobrov
