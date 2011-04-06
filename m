@@ -1,59 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Apr 2011 22:20:48 +0200
-Subject: [Buildroot] [git commit] procps: fix build with make 3.82
-Message-ID: <20110406202239.9B25E8223C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Apr 2011 22:23:30 +0200
+Subject: [Buildroot] procps fails to compile on Fedora 14 due to newer
+	version of GNU make
+In-Reply-To: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
+	(bruce bushby's message of "Fri, 18 Mar 2011 11:16:39 +0000")
+References: <AANLkTinvmWA5EWv+98t=YqasMOmxg4pusJgD4SQ7ayUV@mail.gmail.com>
+Message-ID: <877hb7w2m5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "bruce" == bruce bushby <bruce.bushby@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64b351f6252f27dc5c21b9b4b6c62fd2676837f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ bruce> Hi
 
-Based on patch by Bruce Bushby.
+ bruce> I recently switched to Fedora 14 as my build platform and picked
+ bruce> up a problem compiling procps. This is apparently caused by
+ bruce> newer versions of make.
 
-Issue with make include order. For more details, see:
-http://old.nabble.com/make-3.81.91---procps-3.2.8-td29281048.html
+ bruce> Previously I was building on ubuntu "natty" which has
+ bruce> "make-3.81-8" ... however Fedora 14 is using
+ bruce> "make-3.82-2". There is a very nice explanation here:
+ bruce> http://old.nabble.com/make-3.81.91---procps-3.2.8-td29281048.html
 
-Equivalent to upstream fix:
-http://procps.cvs.sourceforge.net/viewvc/procps/procps/Makefile?r1=1.70&r2=1.71
+ bruce> Where Paul Smith explains:
+ bruce> In previous versions of GNU make, wildcards were returned in sorted?
+ bruce> order; however that was never guaranteed and the new version of make?
+ bruce> (for efficiency) returns matches in "directory order", which is?
+ bruce> essentially random.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/procps/procps-make-3.82.patch |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/procps/procps-make-3.82.patch
+Fixed in git (together with the bump to 3.2.8) - Thanks.
 
-diff --git a/package/procps/procps-make-3.82.patch b/package/procps/procps-make-3.82.patch
-new file mode 100644
-index 0000000..2a56356
---- /dev/null
-+++ b/package/procps/procps-make-3.82.patch
-@@ -0,0 +1,23 @@
-+[PATCH] procps: fix build with make 3.82
-+
-+Equivalent to upstream fix:
-+http://procps.cvs.sourceforge.net/viewvc/procps/procps/Makefile?r1=1.70&r2=1.71
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: procps-3.2.8/Makefile
-+===================================================================
-+--- procps-3.2.8.orig/Makefile
-++++ procps-3.2.8/Makefile
-+@@ -174,7 +174,7 @@
-+ # want this rule first, use := on ALL, and ALL not filled in yet
-+ all: do_all
-+ 
-+--include */module.mk
-++-include proc/module.mk ps/module.mk
-+ 
-+ do_all:    $(ALL)
-+ 
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
