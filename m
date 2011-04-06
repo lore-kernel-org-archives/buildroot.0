@@ -1,44 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Apr 2011 15:35:02 +0200
+Date: Wed, 6 Apr 2011 16:42:59 +0200
 Subject: [Buildroot] Binary ATI driver package in buildroot
-In-Reply-To: <1302088845-15193-1-git-send-email-a@awn.dk>
+In-Reply-To: <BANLkTinVhQdOqVJdkO9gK8Q==1j1uf_=BA@mail.gmail.com>
 References: <1302088845-15193-1-git-send-email-a@awn.dk>
-Message-ID: <20110406153502.13c6affd@surf>
+	<20110406153502.13c6affd@surf>
+	<BANLkTinVhQdOqVJdkO9gK8Q==1j1uf_=BA@mail.gmail.com>
+Message-ID: <20110406164259.561b2511@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Apr 2011 13:20:44 +0200
-"Allan W. Nielsen" <a@awn.dk> wrote:
+Hello Allan,
 
-> I would like to use ATI's binary device drivers in my buildroot
-> project. I have therefore created the package fglrx. Right now it
-> will only work for 64bit, and it does not detect of the target system
-> is x86 or not. These things should of cause be fixed if the package
-> are to be included in buildroot.
+(It would be better to keep the Buildroot list CC'ed)
 
-If the driver is architecture-dependent, then you can just make the
-package depends on BR2_x86_64 for example.
+On Wed, 6 Apr 2011 16:34:42 +0200
+Allan Nielsen <a@awn.dk> wrote:
 
-> My question is whether such a package should exist in buildroots
-> repository or not.
+> > However, your package does not use the GENTARGETS infrastructure,
+> > which it should do. We don't include packages that don't rely on
+> > one of the GENTARGETS, AUTOTARGETS or CMAKETARGETS infrastructure.
+> 
+> I'am converting it to GENTARGETS right now, but I'am having some
+> problem with the extracting step, here is what I tried:
+> 
+> define FGLRX_EXTRACT_CMDS
+>         mkdir -p $(@D)
+>         sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
+> endef
+> 
+> But for some reason this does not seems to have any effect, hare are a
+> snippet from the output:
+> 
+> echo ">>> fglrx 11-2 "Extracting""
+> mkdir -p /home/awn/git/buildroot/output/build/fglrx-11-2
+> /home/awn/src/ati-driver-installer-11-2-x86.x86_64.run | tar
+> --strip-components=1 -C
+> /home/awn/git/buildroot/output/build/fglrx-11-2  -xf -
+> chmod -R ug+rw /home/awn/git/buildroot/output/build/fglrx-11-2
+> touch /home/awn/git/buildroot/output/build/fglrx-11-2/.stamp_extracted
+> 
+> Is this not the correct way to use GENTARGETS?
 
-If it is useful, then I think it should be part of Buildroot.
+Unfortunately for the moment, it is not possible to override the
+extraction step of a package by defining the <pkg>_EXTRACT_CMDS
+variable. Buildroot asumes that each package is a tarball that can be
+extracted as usual.
 
-> Also, I would like comments if this is the right way to build and
-> include external binary device drivers. (Sorry, I'am still new to
-> hacking buildroot)
+There are however several packages (usually non-open source stuff) with
+strange extraction needs, so it would be great to be able to override
+this step.
 
-We don't have that many binary device drivers, so there isn't yet any
-good practice in Buildroot on how to package them.
+As a hack, you can do something like:
 
-However, your package does not use the GENTARGETS infrastructure, which
-it should do. We don't include packages that don't rely on one of the
-GENTARGETS, AUTOTARGETS or CMAKETARGETS infrastructure.
+$(BUILD_DIR)/dhrystone-$(DHRYSTONE_VERSION)/.stamp_extracted:
+        @$(call MESSAGE,"Extracting")
+        $(Q)mkdir -p $(@D)
+        $(Q)cd $(@D) && $(SHELL) $(DL_DIR)/$($(PKG)_SOURCE)
+        $(Q)cp $($(PKG)_DIR_PREFIX)/dhrystone/Makefile $(@D)/
+        $(Q)touch $@
 
-Regards!
+(see package/dhrystone/dhryistone.mk)
+
+Or if you want to do it the clean way, add the possibility of
+overriding the extraction step in the package infrastructure.
+
+Best regards,
 
 Thomas
 -- 
