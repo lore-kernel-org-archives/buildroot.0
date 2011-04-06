@@ -1,33 +1,39 @@
-From: Allan W. Nielsen <a@awn.dk>
-Date: Wed,  6 Apr 2011 12:04:09 +0200
-Subject: [Buildroot] [PATCH 55/63] xproto_bigreqsproto: version bump to 1.1.1
-In-Reply-To: <1302084257-30775-1-git-send-email-a@awn.dk>
-References: <1302084257-30775-1-git-send-email-a@awn.dk>
-Message-ID: <1302084257-30775-56-git-send-email-a@awn.dk>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Wed, 06 Apr 2011 12:22:52 +0200
+Subject: [Buildroot] [HALd] Slow startup (>4min.)
+In-Reply-To: <20110405215703.19ccce2e@surf>
+References: <1301995387.4891.40.camel@esp-patben-lin.espdx1.local>
+	<20110405215703.19ccce2e@surf>
+Message-ID: <1302085372.4891.80.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[cut]
+> Could you run it through strace to see what's going on ?
+Hi Thomas,
+Thanks for help. I could if this is necessary. If this Helps, when I
+start HAL as:
+# hald --verbose=yes
+I get all info on console instantly with last line saying: "becoming a
+demon". Then for 4 minutes nothing happens and after that Console prompt
+returns.
 
-Signed-off-by: Allan W. Nielsen <a@awn.dk>
----
- .../xproto_bigreqsproto/xproto_bigreqsproto.mk     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> However, notice that HAL is deprecated these days. For what usage do
+> you need HAL ?
+Auto mounting USB storage (usbmount does not seem to work, and there is
+no info in any log files about it)
 
-diff --git a/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk b/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
-index 7ae7795..9d0a132 100644
---- a/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
-+++ b/package/x11r7/xproto_bigreqsproto/xproto_bigreqsproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XPROTO_BIGREQSPROTO_VERSION = 1.1.0
-+XPROTO_BIGREQSPROTO_VERSION = 1.1.1
- XPROTO_BIGREQSPROTO_SOURCE = bigreqsproto-$(XPROTO_BIGREQSPROTO_VERSION).tar.bz2
- XPROTO_BIGREQSPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_BIGREQSPROTO_AUTORECONF = NO
+> I'm currently packaging udisks and all related dependencies, so that
+> signalisation of block device events can be propagated on D-Bus.
+Will it automount USB pendrives with FAT32 fs?
+What time horizon do you see before udisks are usable in one of BR
+releases? I mean... should I wait, or it will take long?
+
 -- 
-1.7.3.4
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
