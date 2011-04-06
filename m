@@ -1,9 +1,9 @@
 From: Allan W. Nielsen <a@awn.dk>
-Date: Wed,  6 Apr 2011 12:03:58 +0200
-Subject: [Buildroot] [PATCH 44/63] xproto_renderproto: version bump to 0.11.1
+Date: Wed,  6 Apr 2011 12:03:41 +0200
+Subject: [Buildroot] [PATCH 27/63] xlib_libXau: version bump to 1.0.6
 In-Reply-To: <1302084257-30775-1-git-send-email-a@awn.dk>
 References: <1302084257-30775-1-git-send-email-a@awn.dk>
-Message-ID: <1302084257-30775-45-git-send-email-a@awn.dk>
+Message-ID: <1302084257-30775-28-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Allan W. Nielsen <a@awn.dk>
 ---
- .../x11r7/xproto_renderproto/xproto_renderproto.mk |    2 +-
+ package/x11r7/xlib_libXau/xlib_libXau.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xproto_renderproto/xproto_renderproto.mk b/package/x11r7/xproto_renderproto/xproto_renderproto.mk
-index 1763efd..f58cf3a 100644
---- a/package/x11r7/xproto_renderproto/xproto_renderproto.mk
-+++ b/package/x11r7/xproto_renderproto/xproto_renderproto.mk
+diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
+index af4dde8..59952e1 100644
+--- a/package/x11r7/xlib_libXau/xlib_libXau.mk
++++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XPROTO_RENDERPROTO_VERSION = 0.11
-+XPROTO_RENDERPROTO_VERSION = 0.11.1
- XPROTO_RENDERPROTO_SOURCE = renderproto-$(XPROTO_RENDERPROTO_VERSION).tar.bz2
- XPROTO_RENDERPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_RENDERPROTO_AUTORECONF = NO
+-XLIB_LIBXAU_VERSION = 1.0.5
++XLIB_LIBXAU_VERSION = 1.0.6
+ XLIB_LIBXAU_SOURCE = libXau-$(XLIB_LIBXAU_VERSION).tar.bz2
+ XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAU_AUTORECONF = NO
 -- 
 1.7.3.4
