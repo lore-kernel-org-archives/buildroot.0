@@ -1,9 +1,9 @@
 From: Allan W. Nielsen <a@awn.dk>
-Date: Wed,  6 Apr 2011 12:03:46 +0200
-Subject: [Buildroot] [PATCH 32/63] xlib_libFS: version bump to 1.0.3
+Date: Wed,  6 Apr 2011 12:03:22 +0200
+Subject: [Buildroot] [PATCH 08/63] xlib_libXScrnSaver: version bump
 In-Reply-To: <1302084257-30775-1-git-send-email-a@awn.dk>
 References: <1302084257-30775-1-git-send-email-a@awn.dk>
-Message-ID: <1302084257-30775-33-git-send-email-a@awn.dk>
+Message-ID: <1302084257-30775-9-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Allan W. Nielsen <a@awn.dk>
 ---
- package/x11r7/xlib_libFS/xlib_libFS.mk |    2 +-
+ .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index e7a92e6..d5b27f4 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+index ee45948..7f9fefd 100644
+--- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
++++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBFS_VERSION = 1.0.2
-+XLIB_LIBFS_VERSION = 1.0.3
- XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
- XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFS_AUTORECONF = NO
+-XLIB_LIBXSCRNSAVER_VERSION = 1.2.0
++XLIB_LIBXSCRNSAVER_VERSION = 1.2.1
+ XLIB_LIBXSCRNSAVER_SOURCE = libXScrnSaver-$(XLIB_LIBXSCRNSAVER_VERSION).tar.bz2
+ XLIB_LIBXSCRNSAVER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSCRNSAVER_AUTORECONF = NO
 -- 
 1.7.3.4
