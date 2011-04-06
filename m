@@ -1,77 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Apr 2011 16:42:59 +0200
-Subject: [Buildroot] Binary ATI driver package in buildroot
-In-Reply-To: <BANLkTinVhQdOqVJdkO9gK8Q==1j1uf_=BA@mail.gmail.com>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>
-	<20110406153502.13c6affd@surf>
-	<BANLkTinVhQdOqVJdkO9gK8Q==1j1uf_=BA@mail.gmail.com>
-Message-ID: <20110406164259.561b2511@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 6 Apr 2011 22:20:48 +0200
+Subject: [Buildroot] [git commit] procps: bump version, convert to GENTARGETS
+Message-ID: <20110406202239.6E390821E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Allan,
 
-(It would be better to keep the Buildroot list CC'ed)
+commit: http://git.buildroot.net/buildroot/commit/?id=ce6d09bdac0a343c380370bf95761f9640abfeac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 6 Apr 2011 16:34:42 +0200
-Allan Nielsen <a@awn.dk> wrote:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/procps/procps.mk |   56 ++++++++++-----------------------------------
+ 1 files changed, 13 insertions(+), 43 deletions(-)
 
-> > However, your package does not use the GENTARGETS infrastructure,
-> > which it should do. We don't include packages that don't rely on
-> > one of the GENTARGETS, AUTOTARGETS or CMAKETARGETS infrastructure.
-> 
-> I'am converting it to GENTARGETS right now, but I'am having some
-> problem with the extracting step, here is what I tried:
-> 
-> define FGLRX_EXTRACT_CMDS
->         mkdir -p $(@D)
->         sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
-> endef
-> 
-> But for some reason this does not seems to have any effect, hare are a
-> snippet from the output:
-> 
-> echo ">>> fglrx 11-2 "Extracting""
-> mkdir -p /home/awn/git/buildroot/output/build/fglrx-11-2
-> /home/awn/src/ati-driver-installer-11-2-x86.x86_64.run | tar
-> --strip-components=1 -C
-> /home/awn/git/buildroot/output/build/fglrx-11-2  -xf -
-> chmod -R ug+rw /home/awn/git/buildroot/output/build/fglrx-11-2
-> touch /home/awn/git/buildroot/output/build/fglrx-11-2/.stamp_extracted
-> 
-> Is this not the correct way to use GENTARGETS?
-
-Unfortunately for the moment, it is not possible to override the
-extraction step of a package by defining the <pkg>_EXTRACT_CMDS
-variable. Buildroot asumes that each package is a tarball that can be
-extracted as usual.
-
-There are however several packages (usually non-open source stuff) with
-strange extraction needs, so it would be great to be able to override
-this step.
-
-As a hack, you can do something like:
-
-$(BUILD_DIR)/dhrystone-$(DHRYSTONE_VERSION)/.stamp_extracted:
-        @$(call MESSAGE,"Extracting")
-        $(Q)mkdir -p $(@D)
-        $(Q)cd $(@D) && $(SHELL) $(DL_DIR)/$($(PKG)_SOURCE)
-        $(Q)cp $($(PKG)_DIR_PREFIX)/dhrystone/Makefile $(@D)/
-        $(Q)touch $@
-
-(see package/dhrystone/dhryistone.mk)
-
-Or if you want to do it the clean way, add the possibility of
-overriding the extraction step in the package infrastructure.
-
-Best regards,
-
-Thomas
+diff --git a/package/procps/procps.mk b/package/procps/procps.mk
+index 3add243..a279987 100644
+--- a/package/procps/procps.mk
++++ b/package/procps/procps.mk
+@@ -3,51 +3,21 @@
+ # procps
+ #
+ #############################################################
+-PROCPS_VERSION:=3.2.7
+-PROCPS_SOURCE:=procps-$(PROCPS_VERSION).tar.gz
+-PROCPS_SITE:=http://procps.sourceforge.net/
+-PROCPS_DIR:=$(BUILD_DIR)/procps-$(PROCPS_VERSION)
+-PROCPS_BINARY:=ps/ps
+-PROCPS_TARGET_BINARY:=usr/bin/vmstat
+ 
+-$(DL_DIR)/$(PROCPS_SOURCE):
+-	$(call DOWNLOAD,$(PROCPS_SITE),$(PROCPS_SOURCE))
++PROCPS_VERSION = 3.2.8
++PROCPS_SITE = http://procps.sourceforge.net/
+ 
+-$(PROCPS_DIR)/.source: $(DL_DIR)/$(PROCPS_SOURCE)
+-	$(ZCAT) $(DL_DIR)/$(PROCPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(PROCPS_DIR) package/procps/ procps\*.patch
+-	touch $(PROCPS_DIR)/.source
++PROCPS_DEPENDENCIES = ncurses
+ 
+-$(PROCPS_DIR)/$(PROCPS_BINARY): $(PROCPS_DIR)/.source
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(PROCPS_DIR)
++define PROCPS_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
+ 
+-$(TARGET_DIR)/$(PROCPS_TARGET_BINARY): $(PROCPS_DIR)/$(PROCPS_BINARY)
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
+-		install='install -D' -C $(PROCPS_DIR) lib64=/lib \
+-		ldconfig='/bin/true' install
+-	rm -Rf $(TARGET_DIR)/usr/share/man
++define PROCPS_INSTALL_TARGET_CMDS
++	mkdir -p $(addprefix $(TARGET_DIR)/,usr/bin bin sbin) \
++		 $(addprefix $(TARGET_DIR)/usr/share/man/,man1 man5 man8)
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) lib64=lib install=install \
++		ldconfig=true install
++endef
+ 
+-procps: ncurses $(TARGET_DIR)/$(PROCPS_TARGET_BINARY)
+-
+-procps-source: $(DL_DIR)/$(PROCPS_SOURCE)
+-
+-procps-clean:
+-	for bin in uptime tload free w \
+-		   top vmstat watch skill \
+-		   snice kill sysctl pmap \
+-		   pgrep pkill slabtop; do \
+-		rm -f $(TARGET_DIR)/usr/bin/$${bin}; \
+-	done
+-	rm -f $(TARGET_DIR)/lib/libproc*
+-
+-procps-dirclean:
+-	rm -rf $(PROCPS_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_PROCPS),y)
+-TARGETS+=procps
+-endif
++$(eval $(call GENTARGETS,package,procps))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
