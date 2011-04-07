@@ -1,10 +1,10 @@
 From: Allan W. Nielsen <a@awn.dk>
-Date: Thu,  7 Apr 2011 14:52:16 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile.package.in: Makes it possible to
-	override the default extract commands
+Date: Thu,  7 Apr 2011 14:52:17 +0200
+Subject: [Buildroot] [PATCH 2/2] fglrx: Binary ATI kernel module added
+	(version 11-2)
 In-Reply-To: <1302180737-18612-1-git-send-email-a@awn.dk>
 References: <1302180737-18612-1-git-send-email-a@awn.dk>
-Message-ID: <1302180737-18612-2-git-send-email-a@awn.dk>
+Message-ID: <1302180737-18612-3-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +14,125 @@ To: buildroot@busybox.net
 
 Signed-off-by: Allan W. Nielsen <a@awn.dk>
 ---
- package/Makefile.package.in |   22 +++++++++++++++++++---
- 1 files changed, 19 insertions(+), 3 deletions(-)
+ package/Config.in                                  |    5 ++
+ package/fglrx/Config.in                            |    7 +++
+ .../fglrx/fglrx-11-2-fix-gcc-version-detect.patch  |   30 ++++++++++++++
+ package/fglrx/fglrx.mk                             |   42 ++++++++++++++++++++
+ 4 files changed, 84 insertions(+), 0 deletions(-)
+ create mode 100644 package/fglrx/Config.in
+ create mode 100644 package/fglrx/fglrx-11-2-fix-gcc-version-detect.patch
+ create mode 100644 package/fglrx/fglrx.mk
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..2597f85 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -79,6 +79,8 @@ GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
- # external-deps target.
- DL_MODE=DOWNLOAD
- 
-+EX_MODE=DEFAULT
-+
- DL_DIR=$(call qstrip,$(BR2_DL_DIR))
- ifeq ($(DL_DIR),)
- DL_DIR:=$(TOPDIR)/dl
-@@ -239,9 +241,17 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)touch $@
+diff --git a/package/Config.in b/package/Config.in
+index ea39570..7d8b35d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -499,4 +499,9 @@ source "package/vim/Config.in"
  endif
+ endmenu
  
--# Unpack the archive
-+# Unpack the archive using custom commands
-+$(BUILD_DIR)/%/.stamp_custom_extracted:
-+	@$(call MESSAGE,"Extracting - custom")
-+	$(Q)mkdir -p $(@D)
-+	$($(PKG)_EXTRACT_CMDS)
-+	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
++menu "Linux kernel modules"
++depends on BR2_LINUX_KERNEL
++source "package/fglrx/Config.in"
++endmenu
 +
-+# Unpack the archive using default commands
- $(BUILD_DIR)/%/.stamp_extracted:
--	@$(call MESSAGE,"Extracting")
-+	@$(call MESSAGE,"Extracting - default")
- 	$(Q)mkdir -p $(@D)
- 	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
-@@ -261,7 +271,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $($(NOHOSTPKG)_NAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)")
- 	$(if $($(PKG)_PATCH),toolchain/patch-kernel.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
--	$(Q)( \
-+	( \
- 	if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME); then \
- 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER)*.patch*)"; then \
- 	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
-@@ -419,7 +429,13 @@ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
- $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+ endmenu
+diff --git a/package/fglrx/Config.in b/package/fglrx/Config.in
+new file mode 100644
+index 0000000..3395862
+--- /dev/null
++++ b/package/fglrx/Config.in
+@@ -0,0 +1,7 @@
 +
-+ifdef $(2)_EXTRACT_CMDS
-+$(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_custom_extracted
-+else
- $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
-+endif
++config BR2_PACKAGE_FGLRX
++	bool "fglrx"
++	depends on BR2_LINUX_KERNEL && (BR2_x86_64 || BR2_i386)
++	help 
++	  Build the ATI binary kernel module
 +
- $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
- $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+diff --git a/package/fglrx/fglrx-11-2-fix-gcc-version-detect.patch b/package/fglrx/fglrx-11-2-fix-gcc-version-detect.patch
+new file mode 100644
+index 0000000..259daaa
+--- /dev/null
++++ b/package/fglrx/fglrx-11-2-fix-gcc-version-detect.patch
+@@ -0,0 +1,30 @@
++--- A/common/lib/modules/fglrx/build_mod/2.6.x/Makefile	2011-02-02 19:39:49.000000000 +0100
+++++ B/common/lib/modules/fglrx/build_mod/2.6.x/Makefile	2011-03-28 15:05:41.656418668 +0200
++@@ -24,7 +24,7 @@
++ # NEGLIGENCE OR OTHERWISE) ARISING  IN  ANY  WAY  OUT  OF  THE  USE  OF  THIS
++ # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ 
++-GCC_VER_MAJ      = $(shell $(CC) --version | head -n 1 | sed -e 's/[^0-9. ]//g;s/^ *//;s/^\(.\)\..*$$/\1/')
+++GCC_VER_MAJ      = $(shell $(CC) --version | head -n 1 | perl -pe "s/^.+?(\d+)[^ ]+$$/\1/g" )
++ 
++ LIBIP_PREFIX   ?= ..
++ 
++@@ -75,7 +75,7 @@
++ 	KVER        = $(shell uname -r)
++ endif
++ 
++-KDIR            = /lib/modules/$(KVER)/build
+++KDIR           ?= /lib/modules/$(KVER)/build
++ PWD             = $(shell pwd)
++ 
++ fglrx-cfiles    = ${fglrx-c-objs:.o=.c}
++@@ -85,6 +85,9 @@
++ kmod_build:: $(fglrx-libs) $(fglrx-cfiles) $(fglrx-hdrs) $(drm-hdrs)
++ 	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
++ 
+++modules_install: kmod_build
+++	$(MAKE) INSTALL_MOD_PATH=$(INSTALL_MOD_PATH) INSTALL_MOD_DIR=kernel -C $(KDIR) M=$(PWD) modules_install
+++
++ %.c:
++        @ln -s ../$@
++  
+diff --git a/package/fglrx/fglrx.mk b/package/fglrx/fglrx.mk
+new file mode 100644
+index 0000000..ddc873b
+--- /dev/null
++++ b/package/fglrx/fglrx.mk
+@@ -0,0 +1,42 @@
++FGLRX_VERSION=11-2
++FGLRX_SOURCE:=ati-driver-installer-$(FGLRX_VERSION)-x86.x86_64.run
++FGLRX_SITE:=http://www2.ati.com/drivers/linux/
++
++FGLRX_DIR:=$(BUILD_DIR)/fglrx-$(FGLRX_VERSION)
++
++FGLRX_DEPENDENCIES=linux
++
++FGLRX_MAKE_FLAGS = LIBIP_PREFIX=../../../../../../arch/x86_64/lib/modules/fglrx/build_mod \
++	MODFLAGS="-DMODULE -DATI -DFGL -DPAGE_ATTR_FIX=0 -DCOMPAT_ALLOC_USER_SPACE=arch_compat_alloc_user_space -D__SMP__" \
++	CFLAGS_MODULE="-DMODULE -DATI -DFGL -DPAGE_ATTR_FIX=0 -DCOMPAT_ALLOC_USER_SPACE=arch_compat_alloc_user_space -D__SMP__" \
++	KVER=$(LINUX26_VERSION_PROBED) \
++	KDIR=$(LINUX26_DIR) \
++	PAGE_ATTR_FIX=0 \
++	$(LINUX26_MAKE_FLAGS)
++
++define FGLRX_EXTRACT_CMDS
++	sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
++endef
++
++define FGLRX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/common/lib/modules/fglrx/build_mod/2.6.x $(FGLRX_MAKE_FLAGS)
++endef
++
++define FGLRX_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/common/lib/modules/fglrx/build_mod/2.6.x $(FGLRX_MAKE_FLAGS) modules_install
++	cp -r $(@D)/common/etc/ati $(TARGET_DIR)/etc/.
++	cp -r $(@D)/common/usr/X11R6/bin/* $(TARGET_DIR)/usr/bin/.
++	cp -r $(@D)/common/usr/sbin/* $(TARGET_DIR)/usr/sbin/.
++	cp    $(@D)/arch/x86_64/usr/X11R6/lib64/lib* $(TARGET_DIR)/usr/lib/.
++	mkdir -p $(TARGET_DIR)/usr/lib/dri
++	cp -f $(@D)/arch/x86_64/usr/X11R6/lib64/modules/dri/* $(TARGET_DIR)/usr/lib/dri.
++	cp -r $(@D)/arch/x86_64/usr/X11R6/bin/* $(TARGET_DIR)/usr/bin/.
++	cp -r $(@D)/arch/x86_64/usr/lib64/* $(TARGET_DIR)/usr/lib/.
++	cp -r $(@D)/arch/x86_64/usr/share/ati $(TARGET_DIR)/usr/share/.
++	cp -r $(@D)/arch/x86_64/usr/sbin/* $(TARGET_DIR)/usr/sbin/.
++	(cd $(@D)/xpic_64a/usr/X11R6/lib64; find . -type f | cpio -pu --make-directories --verbose $(TARGET_DIR)/usr/lib/xorg )
++endef
++
++
++$(eval $(call GENTARGETS,package,fglrx))
++
 -- 
 1.7.3.4
