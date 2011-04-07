@@ -1,44 +1,24 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu,  7 Apr 2011 21:27:54 +0200
-Subject: [Buildroot] [PATCH] u-boot: add 2011.03 release
-Message-ID: <1302204474-21172-1-git-send-email-luca@lucaceresoli.net>
+From: Marc Leclerc <marc-leclerc@signaturealpha.com>
+Date: Thu, 7 Apr 2011 13:23:32 -0400
+Subject: [Buildroot] Device creation
+Message-ID: <91E60E2EFEE04B0399DD86344DDEF380@VOSTROSYS>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- boot/u-boot/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+Hi, I am trying to get linuxpps working on my board using ntp. there are 
+steps described at 
+http://wiki.enneenne.com/index.php/LinuxPPS_installation which says to 
+use ldattach to assign the pps signal but so it seem I do not have 
+ldattach on my buildroot system and tryin to compile util-linux led to 
+compilation errors. Just wondering if anyone here has the know how to 
+get my /dev/pps0 created and assigned to my /dev/ttyS1. the steps also
+mentions using udev to get the /dev/pps0 created, i have tried installing and
+using it and it just messed up my other links
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 3ba1ef3..00a4a5f 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2010_12
-+	default BR2_TARGET_UBOOT_2011_03
- 	help
- 	  Select the specific U-Boot version you want to use
- 
-+config BR2_TARGET_UBOOT_2011_03
-+	bool "2011.03"
-+
- config BR2_TARGET_UBOOT_2010_12
- 	bool "2010.12"
- 
-@@ -42,6 +45,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
-+	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
- 	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
- 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
--- 
-1.7.1
+Best regards
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110407/cdbc538e/attachment.html>
