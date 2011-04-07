@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Apr 2011 08:35:33 +0200
-Subject: [Buildroot] Upgrade of the Xorg-server to newest version
-In-Reply-To: <1302156644.4891.90.camel@esp-patben-lin.espdx1.local> (Patryk
-	Benderz's message of "Thu, 07 Apr 2011 08:10:44 +0200")
-References: <1302084257-30775-1-git-send-email-a@awn.dk>
-	<1302156644.4891.90.camel@esp-patben-lin.espdx1.local>
-Message-ID: <87pqoyvaa2.fsf@macbook.be.48ers.dk>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Thu, 07 Apr 2011 08:37:17 +0200
+Subject: [Buildroot] Apache CrossCompile recipe
+In-Reply-To: <20110406153502.13c6affd@surf>
+References: <1302088845-15193-1-git-send-email-a@awn.dk>
+	<20110406153502.13c6affd@surf>
+Message-ID: <4D9D5B9D.8090508@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patryk" == Patryk Benderz <Patryk.Benderz@esp.pl> writes:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
- Patryk> Dnia 2011-04-06, ?ro o godzinie 12:03 +0200, Allan W. Nielsen pisze:
- >> This patch series upgrades the XorgServer and all the xlibs + xprotos to newest
- >> version.
- Patryk> Hi Allan,
- Patryk> Thanks for your contribution. I would like to test newest Xorg. Are
- Patryk> these patches already incorporated in buildroot-20110407.tar.bz2
- Patryk> snapshot?
+Hi,
 
-No, they haven't been reviewed / committed yet.
+does anybody here have a rule set for compiling an Apache2?
+Thanks in advance...
 
-I'm away next week, so don't expect to see it integrated until some time
-after that.
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-To speed it up, it would be very good if you could test the patches.
-
--- 
-Bye, Peter Korsgaard
+iQEcBAEBAgAGBQJNnVudAAoJEEMkp/gkis19AvYH/3IN76+nbBIaNgjedR02UAVp
+TuhYt8GFS/a/UU5ikFmphS+p6/W1lMWicsjBBmBX8YSszRdMBKa+EOnDJsDMEuvt
+lxZDLBsvxGfe2x0+0xfqoFAZx1k3iwQMXA5tKhInvFcqPJTIWD2zW5oYdALtLIQp
+iv7ezVr6AHgZEVloVlY0fzB2FftxUgdkeQZpjjxiF/5BKx+fUK91jOLUrk3yMMs9
+Xd2hrC2qupa6dfO+xolP7bjHR5IfvFd0M8p7G5r79uSIHICxmyWYofKw/MX2zAy1
+MuZmsCIiITN5y9vTyWnHDsgyoq/9Kv0CGBUoJCXyysMF17ib0qpRjUeXfWcnBfI=
+=Aitg
+-----END PGP SIGNATURE-----
