@@ -1,47 +1,53 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Thu, 07 Apr 2011 10:20:17 +0200
-Subject: [Buildroot] Apache CrossCompile recipe
-In-Reply-To: <4D9D7131.3090705@itechcon.it>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>
-	<4D9D5B9D.8090508@michaelburghart.de> <4D9D6EDE.7050004@daccii.it>
-	<4D9D6F6B.6000801@michaelburghart.de>
-	<4D9D7131.3090705@itechcon.it>
-Message-ID: <4D9D73C1.1070408@michaelburghart.de>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 07 Apr 2011 11:32:27 +0200
+Subject: [Buildroot] Patching method
+Message-ID: <4D9D84AB.3080101@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hello,
 
-Hi Daniele,
+I was building a new file system and I have noticed something about 
+patching that seems a little dangerous :
 
-Am 07.04.2011 10:09, schrieb Daniele Salvatore Albano:
-> Hi,
-> 
-> last thing, if you need i've a patch (not yet published) to add support
-> for php 5.3.5 and nginx/php configuration/scripts for fastcgi :)
+ >>> liblockfile 1.08 Patching package/liblockfile
+toolchain/patch-kernel.sh 
+/home/ldesroches/buildroot/output/build/liblockfile-1.08 
+/home/ldesroches/buildroot/dl liblockfile_1.08-4.debian.tar.bz2
 
-thanks for your help. I won't need PHP but will need to run Perl scripts
-on it.
-Where do I find the .mk files for nginx?
+...
 
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
++ echo 'Applying liblockfile_1.08-4.debian.tar.bz2 using bzip2: '
+Applying liblockfile_1.08-4.debian.tar.bz2 using bzip2:
++ echo liblockfile_1.08-4.debian.tar.bz2
++ cat
++ bunzip2 -dc 
+/home/ldesroches/buildroot/dl/liblockfile_1.08-4.debian.tar.bz2
++ patch -p1 -E -d /home/ldesroches/buildroot/output/build/liblockfile-1.08
+patching file dotlockfile.c
+patching file lockfile.c
+missing header for unified diff at line 320 of patch
+patching file COPYRIGHT
+patching file dotlockfile.1
+patching file Makefile.in
+patch unexpectedly ends in middle of line
 
-iQEcBAEBAgAGBQJNnXPBAAoJEEMkp/gkis19aZwIAJ2TgZsU7g8KQ52ZPc1lePz1
-j2klu8oHVYSNVSN9Gdj9DAqhZp7gKsp4YSXSYtTX6chXq6hi7ti4pcQYZ2TlqxId
-UcL6IJ+VjCQEQXeKtjuHg1HXPvn42QFIkBSNsL14aye4gjTpuMM6s6l+Z4gPKW4N
-oTl34iyM6rzKFwNX3ZjTwohATCV1+1cq8BzPkKzfyvMR2SG2Z4+KqeGDhnfsJRdg
-Jo+gl/iv2y0kG0s4DoXAxY4hgKJYVUINEIp6N+anCUIc+a1cJ9299cGHrC4ZzB2K
-ZH7dp7NHabJtWhBTz30E65PeA6M6eqXgT5O7yopL5qah7fSfYbQBzTy8MzGMyVo=
-=0BBi
------END PGP SIGNATURE-----
+...
+
+As you can see, we have an archive and we don't extract it, we simply 
+unzip the compressed file and send the tar file to the patch command. 
+The content of this archive is a tree with files and directories (one of 
+them is the patch directory) that's why I think this method is a little 
+dangerous. The patches are not applied in the same order as defined into 
+the series file because the patch order is not kept into the archive.
+
+Am I wrong ? Do you think it can be a problem ?
+
+
+Regards
+
+
+Ludovic Desroches
