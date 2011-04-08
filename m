@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Apr 2011 10:39:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 3559] New: libnspr: Add new package
-Message-ID: <bug-3559-163@https.bugs.busybox.net/>
+Date: Fri,  8 Apr 2011 10:40:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 3565] New: libnss: Add new package
+Message-ID: <bug-3565-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3559
+https://bugs.busybox.net/show_bug.cgi?id=3565
 
-           Summary: libnspr: Add new package
+           Summary: libnss: Add new package
            Product: buildroot
-           Version: 2011.02
+           Version: 2010.02
           Platform: PC
         OS/Version: Linux
             Status: NEW
@@ -25,11 +25,13 @@ https://bugs.busybox.net/show_bug.cgi?id=3559
    Estimated Hours: 0.0
 
 
-Created attachment 3169
-  --> https://bugs.busybox.net/attachment.cgi?id=3169
-Patch to add libnspr
+Created attachment 3175
+  --> https://bugs.busybox.net/attachment.cgi?id=3175
+Patch to add libnss
 
-Add a package for the Netscape Portable Runtime library.
+NSS is the Network Security Services library developed as part of
+the Mozilla project. It provides similar functions to OpenSSL but
+allows MPL, GPL and LGPL licensing.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
