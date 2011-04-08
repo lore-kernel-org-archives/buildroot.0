@@ -1,98 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  8 Apr 2011 15:22:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 3571] New: u-boot: fw_printenv does not build
-Message-ID: <bug-3571-163@https.bugs.busybox.net/>
+From: Marc Leclerc <marc-leclerc@signaturealpha.com>
+Date: Fri, 8 Apr 2011 16:33:55 -0400
+Subject: [Buildroot] Device creation
+In-Reply-To: <20110407163451.6c00433c@snot.conwin.com>
+References: <91E60E2EFEE04B0399DD86344DDEF380@VOSTROSYS>
+	<20110407163451.6c00433c@snot.conwin.com>
+Message-ID: <62530A4FC0D74901A1AC9D2E6D3ADF17@VOSTROSYS>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3571
+Hi,
 
-           Summary: u-boot: fw_printenv does not build
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: luca.ceresoli at tiscali.it
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thanks for this info, it will prove usefull. I seem to have a problem with 
+the kernel hooking up to my pps on ttyS1.
+
+on startup i do see PPS line dicipline registered but the folder 
+/sys/stat/pps is empty. we have validated that the pps signal is pulsing at 
+9V
+
+Any clue why?
+
+Thanks again
+
+-----Original Message----- 
+From: Bill Borton
+Sent: Thursday, April 07, 2011 5:34 PM
+To: buildroot at busybox.net
+Subject: Re: [Buildroot] Device creation
+
+On Thu, 7 Apr 2011 13:23:32 -0400
+"Marc Leclerc" <marc-leclerc@signaturealpha.com> wrote:
+> Hi, I am trying to get linuxpps working on my board using ntp. there are
+> steps described at
+> http://wiki.enneenne.com/index.php/LinuxPPS_installation which says to
+> use ldattach to assign the pps signal but so it seem I do not have
+> ldattach on my buildroot system and tryin to compile util-linux led to
+> compilation errors. Just wondering if anyone here has the know how to
+> get my /dev/pps0 created and assigned to my /dev/ttyS1. the steps also
+> mentions using udev to get the /dev/pps0 created, i have tried installing 
+> and
+> using it and it just messed up my other links
+>
+> Best regards
+
+/dev/pps0 is it's own device.  Look in /sysfs/class/pps/pps0/dev (you did 
+build
+support into your kernel, correct?) for the details and use mknod to create 
+it:
+
+mknod -m 0664 /dev/pps0 c 252 0
 
 
-Created attachment 3181
-  --> https://bugs.busybox.net/attachment.cgi?id=3181
-Buildroot configuration to reproduce the problem
+If you are trying to bring up ntpd with the generic NMEA driver you will
+need to make a couple links to your ttyS1 and pps0:
 
-fw_printenv does not build in current versions of buildroot.
+ln -s /dev/ttyS1 /dev/gps0
+ln -s /dev/pps0 /dev/gpspps0
 
-The problem is well known ussue in upstream U-Boot.
-The good news is that there is a workaround.
-The bad news is that the issue is known by the U-Boot developers
-since last october, but there does not seem to be activity to
-really fix it.
+/dev/gps0 (ttyS1) has your nmea stream.
+/dev/gpspps0 (pps0) has your pps.
 
-For the long story see the links in
-http://lists.denx.de/pipermail/u-boot/2011-April/089987.html .
-
-Reproduced with current buildroot (2011.02-116-g64b351f) and the
-attached (minimized) config.
-
-The result is:
-
-  CONF  config/config.in
-  CONF  config/config.in
-mkdir -p /home/murray/temp/buildroot-clean/output/target/usr/sbin
-/home/murray/temp/buildroot-clean/output/host/usr/bin/arm-unknown-linux-gnueabi-gcc
---sysroot=/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot
--I/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/include
--I/include \
-        -DUSE_HOSTCC -o
-/home/murray/temp/buildroot-clean/output/target/usr/sbin/fw_printenv \
-       
-/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/tools/env/*.c
-/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/lib*/crc32.c
-/home/murray/temp/buildroot-clean/output/host/usr/lib/gcc/arm-unknown-linux-gnueabi/4.4.3/../../../../arm-unknown-linux-gnueabi/bin/ld:
-errno: TLS definition in
-/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libc.so.6
-section .tbss mismatches non-TLS reference in /tmp/cccHIRXB.o
-/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libc.so.6:
-could not read symbols: Bad value
-collect2: ld returned 1 exit status
-make: ***
-[/home/murray/temp/buildroot-clean/output/target/usr/sbin/fw_printenv] Error 1
-
-I solved this problem applying the known workaround this way:
-
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index d859cf5..4de4d1f 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -166,9 +166,8 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
- # Build manually fw_printenv for the target
- $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
-     mkdir -p $(@D)
--    $(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
--        -DUSE_HOSTCC -o $@ \
--        $(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib*/crc32.c
-+    $(MAKE) HOSTCC="$(TARGET_CC)" -C $(U_BOOT_DIR) env
-+    cp $(U_BOOT_DIR)/tools/env/fw_printenv $@
-     $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
-     ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
-
-This works for me, but I don't know if will for other people, nor
-if it is general enough to be proposed for mainline buildroot inclusion.
-
-Any observations?
-
-Luca
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+-Bill
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
