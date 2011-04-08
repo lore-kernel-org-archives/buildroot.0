@@ -1,31 +1,55 @@
-From: Patryk Benderz <Patryk.Benderz@esp.pl>
-Date: Fri, 08 Apr 2011 15:13:19 +0200
-Subject: [Buildroot] [gdk-pixbuf] error: libintl.h: No such file or directory
-Message-ID: <1302268399.4891.160.camel@esp-patben-lin.espdx1.local>
+From: Daniele Salvatore Albano <info@daccii.it>
+Date: Fri, 08 Apr 2011 15:15:24 +0200
+Subject: [Buildroot] Apache CrossCompile recipe
+In-Reply-To: <4D9F0483.7000001@michaelburghart.de>
+References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>	<4D9D5B9D.8090508@michaelburghart.de>
+	<4D9D6EDE.7050004@daccii.it>	<4D9D6F6B.6000801@michaelburghart.de>	<4D9D7131.3090705@itechcon.it>	<4D9D73C1.1070408@michaelburghart.de>	<4D9D75DB.2010005@itechcon.it>	<4D9D775A.5010506@michaelburghart.de>	<4D9D7EE5.6060200@itechcon.it>	<4D9DE9B2.1000100@michaelburghart.de>	<4D9DFE83.3080602@itechcon.it>	<4D9E5FAD.8020408@michaelburghart.de>
+	<4D9EFFBE.70308@itechcon.it> <4D9F0483.7000001@michaelburghart.de>
+Message-ID: <4D9F0A6C.2050104@daccii.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-just to let you know (maybe someone skilled will fix this) while
-compiling:
->>> gdk-pixbuf 2.23
-[...]
-libtool: compile:  /home/patben/Dev/buildroot/output/host/usr/bin/ccache /home/patben/Dev/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc --sysroot=/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot -std=gnu99 -DHAVE_CONFIG_H -I. -I.. -DG_LOG_DOMAIN=\"GdkPixbuf\" -DGDK_PIXBUF_COMPILATION -I.. -I.. -I../gdk-pixbuf -I../gdk-pixbuf -DGDK_PIXBUF_LOCALEDIR=\"/usr/share/locale\" -DGDK_PIXBUF_LIBDIR=\"/usr/lib\" -DGDK_PIXBUF_BINARY_VERSION=\"2.10.0\" -DGDK_PIXBUF_PREFIX=\"/usr\" -pthread -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/glib-2.0 -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/lib/glib-2.0/include -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/libpng14 -DGDK_PIXBUF_ENABLE_BACKEND -DPIXBUF_LIBDIR=\"/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders\" -DBUILT_MODULES_DIR=\"./.libs\" -DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_DEPRECATED -pipe -Os -mtune=c3-2 -march=c3-2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/include -Wall -MT gdk-pixbuf-util.lo -MD -MP -MF .deps/gdk-pixbuf-util.Tpo -c gdk-pixbuf-util.c  -fPIC -DPIC -o .libs/gdk-pixbuf-util.o
-gdk-pixbuf-util.c:26:21: fatal error: libintl.h: No such file or directory
-compilation terminated.
+Il 08/04/2011 14:50, Michael Burghart ha scritto:
+> the build host is a x64 system
+>
+> Linux einstein 2.6.37.1-1.2-desktop #1 SMP PREEMPT 2011-02-21 10:34:10
+> +0100 x86_64 x86_64 x86_64 GNU/Linux
+>
+> I am about to compile it for GeodeLX Arch.
 
-Copying missing libintl.h from:
-buildroot/output/build/gettext-0.16.1/gettext-tools/intl/libintl.h to
-buildroot/output/build/gdk-pixbuf-2.22.0/gdk-pixbuf/libintl.h
-solves compilation problem.
+I use nginx with php on that board (2D13) without any problem, but my 
+build host isn't 64 bit.
 
-This error occurs for past few snapshots.
+I can't test it directly, however in this weekend i'll try to give a 
+look to this problem.
+
+In any case, you can try to edit auto/types/sizeof and add there 
+u_int64_t size (well, it should be 8)
+
+Best Regards,
+Daniele
 
 -- 
-Patryk "LeadMan" Benderz
-Linux Registered User #377521
-()  ascii ribbon campaign - against html e-mail 
-/\  www.asciiribbon.org   - against proprietary attachments
+____________________________________________________________
+                                         |
+Daniele Salvatore Albano                | web site:
+  IT Consultant                          | http://www.itechcon.it
+  Website Design and Development         |
+  Software Engineer and Developer        | e-mail:
+  Linux Servers SetUp And Administration | info at itechcon.it
+  Embedded Network Solutions             | d.albano at itechcon.it
+
+Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
+questo messaggio sono riservate ed a uso esclusivo del destinatario. 
+Qualora il messaggio in parola Le fosse pervenuto per errore, La 
+invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
+dandocene gentilmente comunicazione. Grazie.
+Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
+that this message contains confidential information intended only for 
+the use of the addressee. If you are not the addressee, and have 
+received this message by mistake, please delete it and immediately 
+notify us. You may not copy or disseminate this message to anyone. Thank 
+you.
