@@ -1,52 +1,31 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Fri, 08 Apr 2011 07:58:36 +0200
-Subject: [Buildroot] Making kernel?
-In-Reply-To: <4D9DFE83.3080602@itechcon.it>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>
-	<4D9D5B9D.8090508@michaelburghart.de> <4D9D6EDE.7050004@daccii.it>
-	<4D9D6F6B.6000801@michaelburghart.de>
-	<4D9D7131.3090705@itechcon.it>
-	<4D9D73C1.1070408@michaelburghart.de>
-	<4D9D75DB.2010005@itechcon.it>
-	<4D9D775A.5010506@michaelburghart.de>
-	<4D9D7EE5.6060200@itechcon.it>
-	<4D9DE9B2.1000100@michaelburghart.de>
-	<4D9DFE83.3080602@itechcon.it>
-Message-ID: <4D9EA40C.2020208@michaelburghart.de>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Fri, 08 Apr 2011 09:06:46 +0200
+Subject: [Buildroot] [Xorg-Server] [GL] No package 'gl' found
+Message-ID: <1302246406.4891.131.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hi List,
+During configuration of xorg-server I got:
 
-Good morning Daniele, good morning list,
+>>> xserver_xorg-server 1.7.5 Configuring
+[...]
+checking for GL... configure: error: Package requirements (glproto >= 1.4.9 gl >= 7.1.0) were not met:
+No package 'gl' found
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+Alternatively, you may set the environment variables GL_CFLAGS
+and GL_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
-I wanted to generate my own kernel but I get a bit confused.
-What does
+I have checked, and glproto is selected in BR as version 1.4.10. Any
+hints which BR config option is responsible for GL?
 
-linux/linux.mk:197: *** No kernel configuration file specified, check
-your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting.
-
-mean? There is an .config file. I even refuses a "make linux-menuconfig"
-It doesn't give me the chance of building my own kernel. What do I do wrong?
-
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJNnqQMAAoJEEMkp/gkis1992sH/RWNr6hvNnffeZNHNL+6xXD5
-iPuqzsj9k1CkPUaX/AHYiSN1EBKvGTxJlHVnUW4Zo3XyFQuz1tCpXx33wvmNW5NO
-qXAsuKJ0lKjZu0G8SzIoCiLATDGpSsWoFjOWrDRsXjL3CeXQSO0icp150xekQGyN
-DF7mvqYymDJYQVxjwZ/P2qSJ30H7TWaPglFIhlsGB7VDvNnLC63T+hzAi27aitae
-qR/mWKESifCTEr3G60/UMZBSvTTE8NqRYWkh/sOXqytsMY8pFSwlH5AccEx/WQS2
-bn9IfQIrz4zooAOYUR4VW/x8SEHzKuk4bNDRzqRwWQosoCzuGlAacKnE+fY6p3I=
-=QyjC
------END PGP SIGNATURE-----
+-- 
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
