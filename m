@@ -1,66 +1,31 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Fri, 08 Apr 2011 14:50:11 +0200
-Subject: [Buildroot] Apache CrossCompile recipe
-In-Reply-To: <4D9EFFBE.70308@itechcon.it>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>
-	<4D9D5B9D.8090508@michaelburghart.de> <4D9D6EDE.7050004@daccii.it>
-	<4D9D6F6B.6000801@michaelburghart.de>
-	<4D9D7131.3090705@itechcon.it>
-	<4D9D73C1.1070408@michaelburghart.de>
-	<4D9D75DB.2010005@itechcon.it>
-	<4D9D775A.5010506@michaelburghart.de>
-	<4D9D7EE5.6060200@itechcon.it>
-	<4D9DE9B2.1000100@michaelburghart.de>
-	<4D9DFE83.3080602@itechcon.it>
-	<4D9E5FAD.8020408@michaelburghart.de> <4D9EFFBE.70308@itechcon.it>
-Message-ID: <4D9F0483.7000001@michaelburghart.de>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Fri, 08 Apr 2011 15:13:19 +0200
+Subject: [Buildroot] [gdk-pixbuf] error: libintl.h: No such file or directory
+Message-ID: <1302268399.4891.160.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hi all,
+just to let you know (maybe someone skilled will fix this) while
+compiling:
+>>> gdk-pixbuf 2.23
+[...]
+libtool: compile:  /home/patben/Dev/buildroot/output/host/usr/bin/ccache /home/patben/Dev/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc --sysroot=/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot -std=gnu99 -DHAVE_CONFIG_H -I. -I.. -DG_LOG_DOMAIN=\"GdkPixbuf\" -DGDK_PIXBUF_COMPILATION -I.. -I.. -I../gdk-pixbuf -I../gdk-pixbuf -DGDK_PIXBUF_LOCALEDIR=\"/usr/share/locale\" -DGDK_PIXBUF_LIBDIR=\"/usr/lib\" -DGDK_PIXBUF_BINARY_VERSION=\"2.10.0\" -DGDK_PIXBUF_PREFIX=\"/usr\" -pthread -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/glib-2.0 -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/lib/glib-2.0/include -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include/libpng14 -DGDK_PIXBUF_ENABLE_BACKEND -DPIXBUF_LIBDIR=\"/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders\" -DBUILT_MODULES_DIR=\"./.libs\" -DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_DEPRECATED -pipe -Os -mtune=c3-2 -march=c3-2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/usr/include -I/home/patben/Dev/buildroot/output/host/usr/i686-unknown-linux-uclibc/sysroot/include -Wall -MT gdk-pixbuf-util.lo -MD -MP -MF .deps/gdk-pixbuf-util.Tpo -c gdk-pixbuf-util.c  -fPIC -DPIC -o .libs/gdk-pixbuf-util.o
+gdk-pixbuf-util.c:26:21: fatal error: libintl.h: No such file or directory
+compilation terminated.
 
-Hi Daniele,
+Copying missing libintl.h from:
+buildroot/output/build/gettext-0.16.1/gettext-tools/intl/libintl.h to
+buildroot/output/build/gdk-pixbuf-2.22.0/gdk-pixbuf/libintl.h
+solves compilation problem.
 
-Am 08.04.2011 14:29, schrieb Daniele Salvatore Albano:
-> 
-> are you using a x86/x32 or a x64 system? I've tested nginx compilation
-> only on x86 bit toolchains (compiled for i586 specifically).
+This error occurs for past few snapshots.
 
-the build host is a x64 system
-
-Linux einstein 2.6.37.1-1.2-desktop #1 SMP PREEMPT 2011-02-21 10:34:10
-+0100 x86_64 x86_64 x86_64 GNU/Linux
-
-I am about to compile it for GeodeLX Arch.
-> 
-> Relatively to AIO, i think that uclibc support isn't complete or doesn't
-> fully support the standard because i got some errors trying to use
-> uclibc ... but, for my needs, i used eglibc as libc and all works
-> perfectly ... in any case you don't really need aio for control panels
-> or similar stuff
-
-jupp  I could just skip it... lets give it a try.
-As soon as I figured out how to put all the images on my CF card..
-Doesn't work yet.
-
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJNnwSDAAoJEEMkp/gkis19AD8H/j5URNYZy1uip+TxQqVPfPx6
-ao75LRzOORF1eBHKYNBwYj/5UfmVbUTQAKxJAj3W+Cln1BfluTW5DLV3gcpjTqcp
-NprgW5s8sgkN+Nyx0u/JOwFHW8HKeBeA5oaeQxS2T0j0L1qtgLvnza8S87i0n3GS
-09t6RWdq9vMC4A81g+jdHGeBwXSW3YQG+6bqLceN/+0PphlpV7vaHIz3F0PVGb/+
-rCiejs4N98xw5ozvQYw56zxwHWwV/yx5m+XmUTomr9n7VftCrfS0a6OySTuVY/Qx
-zjkn4DK0tw7mBZ+IoFJ8pF8M5GvFtijOhUn8+WBJ6OZuyHN+ucDqeiX1SBo/BGg=
-=c16R
------END PGP SIGNATURE-----
+-- 
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
