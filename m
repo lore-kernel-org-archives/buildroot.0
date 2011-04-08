@@ -1,29 +1,24 @@
 From: Patryk Benderz <Patryk.Benderz@esp.pl>
-Date: Fri, 08 Apr 2011 09:06:46 +0200
-Subject: [Buildroot] [Xorg-Server] [GL] No package 'gl' found
-Message-ID: <1302246406.4891.131.camel@esp-patben-lin.espdx1.local>
+Date: Fri, 08 Apr 2011 09:09:55 +0200
+Subject: [Buildroot] [HALd] Slow startup (>4min.)
+In-Reply-To: <4D9C47EE.5050105@daccii.it>
+References: <1301995387.4891.40.camel@esp-patben-lin.espdx1.local>
+	<20110405215703.19ccce2e@surf>
+	<1302085372.4891.80.camel@esp-patben-lin.espdx1.local>
+	<4D9C47EE.5050105@daccii.it>
+Message-ID: <1302246595.4891.134.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi List,
-During configuration of xorg-server I got:
-
->>> xserver_xorg-server 1.7.5 Configuring
-[...]
-checking for GL... configure: error: Package requirements (glproto >= 1.4.9 gl >= 7.1.0) were not met:
-No package 'gl' found
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-Alternatively, you may set the environment variables GL_CFLAGS
-and GL_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-I have checked, and glproto is selected in BR as version 1.4.10. Any
-hints which BR config option is responsible for GL?
-
+[cut]
+> http://www.debianhelp.org/node/9937#comment-46659
+I have already read this link, but not the comments. Last comment seems
+very useful.
+	Thanks Daniele - this will probably save my day - as soon as i will be
+able to compile ;)
 -- 
 Patryk "LeadMan" Benderz
 Linux Registered User #377521
