@@ -1,103 +1,57 @@
-From: bruce bushby <bruce.bushby@gmail.com>
-Date: Fri, 8 Apr 2011 08:50:14 +0100
-Subject: [Buildroot] Making kernel?
-In-Reply-To: <4D9EB9FB.2060909@michaelburghart.de>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>
-	<20110406153502.13c6affd@surf>
-	<4D9D5B9D.8090508@michaelburghart.de> <4D9D6EDE.7050004@daccii.it>
-	<4D9D6F6B.6000801@michaelburghart.de>
-	<4D9D7131.3090705@itechcon.it>
-	<4D9D73C1.1070408@michaelburghart.de>
-	<4D9D75DB.2010005@itechcon.it>
-	<4D9D775A.5010506@michaelburghart.de>
-	<4D9D7EE5.6060200@itechcon.it>
-	<4D9DE9B2.1000100@michaelburghart.de>
-	<4D9DFE83.3080602@itechcon.it>
-	<4D9EA40C.2020208@michaelburghart.de>
-	<4D9EB897.4050507@michaelburghart.de>
-	<4D9EB9FB.2060909@michaelburghart.de>
-Message-ID: <BANLkTi=B66V0kxNEWwGs1Pgus=Y4JycR4A@mail.gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Fri, 8 Apr 2011 10:00:51 +0200
+Subject: [Buildroot] Booting with ramdisk
+In-Reply-To: <8739m8mfn0.fsf@macbook.be.48ers.dk>
+References: <201103211546.22271.dargaud@lpsc.in2p3.fr>
+	<8739m8mfn0.fsf@macbook.be.48ers.dk>
+Message-ID: <201104081000.52071.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I run my buildroot from "/opt/buildroot" , for my platform "arm" the configs
-are sitting in:
-/opt/buildroot/output/build/linux-2.6.38-rc5/arch/arm/configs/
+On Sunday 27 March 2011 23:12:51 Peter Korsgaard wrote:
+> >>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
+> Hi,
+> 
+>  Guillaume> Now I want to embed that OS in the kernel (no need for a
+>  Guillaume> network anymore as the kernel is on a flash mem). So I did
+>  Guillaume> the following: - add ROOTFS CPIO to the buildroot options
+>  Guillaume> and make a new version - point CONFIG_INITRAMFS_SOURCE to
+>  Guillaume> the resulting rootfs.cpio file
+> 
+> That sounds correct. If you build your kernel in buildroot we even have
+> initramfs option that handles it all, but the above should afaik work
+> as well.
+> 
+>  Guillaume> - change the kernel parameters to "console=ttyUL0,115200
+> root=/dev/ram" (that's in a dts file)
+> 
+> That shouldn't be needed.
 
-Have you tried "make menuconfig" then select your kernel header and kernel
-versions and then specify a kernel "defconfig" for example
-"sam9_l9260_defconfig"
+OK, I've tried with the same kernel params, only adding
+CONFIG_INITRAMFS_SOURCE="/home/dargaud/Devel/buildroot-2010.11/output/images/rootfs.cpio"
+And it won't run just the same.
 
+>  Guillaume> The kernel stops instantly without even a blip on the
+>  Guillaume> console. A debugger reveals that it stops at 0x401718... I
+>  Guillaume> have no idea what's going on at this stage.
+> 
+> Strange. What architecture/system is this? How much did the (compressed)
+> kernel grow? Perhaps it's too big / you'll need to load it higher. For
+> most archs, the kernel want to decompress into address 0, so if you load
+> it too low, you might end up overwriting the compressed kernel as you're
+> decompressing it.
+> 
+> Perhaps you could add some debugging prints to the bootloader handover /
+> kernel decompression?
 
-
-
-
-On Fri, Apr 8, 2011 at 8:32 AM, Michael Burghart <mb@michaelburghart.de>wrote:
-
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
->
-> Apparently it doesn't find an own kernel defconfig file. The default
-> ones are found... Strange...
->
->
->
-> Am 08.04.2011 09:26, schrieb Michael Burghart:
-> > Hi again,
-> >
-> > where the hell is it looking for its defconfig files???? I manually
-> > copied it across the whole filesystem but the script doesn't find it.
-> > What can I do??
-> >
-> >
-> > Am 08.04.2011 07:58, schrieb Michael Burghart:
-> >> Good morning Daniele, good morning list,
-> >
-> >> I wanted to generate my own kernel but I get a bit confused.
-> >> What does
-> >
-> >> linux/linux.mk:197: *** No kernel configuration file specified, check
-> >> your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting.
-> >
-> >> mean? There is an .config file. I even refuses a "make linux-menuconfig"
-> >> It doesn't give me the chance of building my own kernel. What do I do
-> wrong?
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> - --
-> - --
-> cheers
-> - -micha-
-> - --
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v2.0.16 (GNU/Linux)
-> Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
->
-> iQEcBAEBAgAGBQJNnrn7AAoJEEMkp/gkis19w1sH/R5Bs4Tx64KUv0pUZqu0t3D2
-> bWK5WIj17V44Qf5jJgBuQEstTMDlHgpz/JJfmLk4mGdjOjaTiK80ylXROyYzJmlT
-> ExJZzXIHoK/tAzODrgkkehvs07H0A9FgFSIZ+WARfhIXCVsXbHyrkxbia5k7QgUk
-> QfYI8Rx+Z1fu0wtb6TPy9WMXeV0Dym059k+99Uuf0Cn2NrIen2pOXdyvRgW4mDhE
-> eFJ9NTzjpPDLWDEYrjmpVrTMxHwZn/4CJP0EGEA6/0oGW1Jrs/ED/bvWFVmregn4
-> oBgeHZj6Gnm69nyjKhGhd14kVLhcfycWYbDXV7mcAaUJxoI2ZaKe284vei0FGxI=
-> =LloO
-> -----END PGP SIGNATURE-----
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110408/ebc1f9e2/attachment-0001.html>
+The original kernel elf file is 1.4 Mb and it grows to 2.5 Mb with the ramdisk, which seems about right considering the 
+compression.
+It's a PowerPC architecture and the kernel gets loaded at 0x400000
+I don't know how to change the loading address or how to look at the uncompressed size in memory, how can I see if this 
+is the right track ?
+-- 
+Guillaume Dargaud
+http://www.gdargaud.net/
