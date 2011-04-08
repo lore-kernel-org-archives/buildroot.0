@@ -1,57 +1,62 @@
-From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
-Date: Fri, 8 Apr 2011 10:00:51 +0200
-Subject: [Buildroot] Booting with ramdisk
-In-Reply-To: <8739m8mfn0.fsf@macbook.be.48ers.dk>
-References: <201103211546.22271.dargaud@lpsc.in2p3.fr>
-	<8739m8mfn0.fsf@macbook.be.48ers.dk>
-Message-ID: <201104081000.52071.dargaud@lpsc.in2p3.fr>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Fri, 08 Apr 2011 11:20:57 +0200
+Subject: [Buildroot] Making kernel?
+In-Reply-To: <BANLkTi=B66V0kxNEWwGs1Pgus=Y4JycR4A@mail.gmail.com>
+References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>	<4D9D5B9D.8090508@michaelburghart.de>	<4D9D6EDE.7050004@daccii.it>	<4D9D6F6B.6000801@michaelburghart.de>	<4D9D7131.3090705@itechcon.it>	<4D9D73C1.1070408@michaelburghart.de>	<4D9D75DB.2010005@itechcon.it>	<4D9D775A.5010506@michaelburghart.de>	<4D9D7EE5.6060200@itechcon.it>	<4D9DE9B2.1000100@michaelburghart.de>	<4D9DFE83.3080602@itechcon.it>	<4D9EA40C.2020208@michaelburghart.de>	<4D9EB897.4050507@michaelburghart.de>	<4D9EB9FB.2060909@michaelburghart.de>
+	<BANLkTi=B66V0kxNEWwGs1Pgus=Y4JycR4A@mail.gmail.com>
+Message-ID: <4D9ED379.5090903@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 27 March 2011 23:12:51 Peter Korsgaard wrote:
-> >>>>> "Guillaume" == Guillaume Dargaud <dargaud@lpsc.in2p3.fr> writes:
-> Hi,
-> 
->  Guillaume> Now I want to embed that OS in the kernel (no need for a
->  Guillaume> network anymore as the kernel is on a flash mem). So I did
->  Guillaume> the following: - add ROOTFS CPIO to the buildroot options
->  Guillaume> and make a new version - point CONFIG_INITRAMFS_SOURCE to
->  Guillaume> the resulting rootfs.cpio file
-> 
-> That sounds correct. If you build your kernel in buildroot we even have
-> initramfs option that handles it all, but the above should afaik work
-> as well.
-> 
->  Guillaume> - change the kernel parameters to "console=ttyUL0,115200
-> root=/dev/ram" (that's in a dts file)
-> 
-> That shouldn't be needed.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-OK, I've tried with the same kernel params, only adding
-CONFIG_INITRAMFS_SOURCE="/home/dargaud/Devel/buildroot-2010.11/output/images/rootfs.cpio"
-And it won't run just the same.
+Hi,
 
->  Guillaume> The kernel stops instantly without even a blip on the
->  Guillaume> console. A debugger reveals that it stops at 0x401718... I
->  Guillaume> have no idea what's going on at this stage.
+Am 08.04.2011 09:50, schrieb bruce bushby:
+> I run my buildroot from "/opt/buildroot" , for my platform "arm" the configs
+> are sitting in:
+> /opt/buildroot/output/build/linux-2.6.38-rc5/arch/arm/configs/
 > 
-> Strange. What architecture/system is this? How much did the (compressed)
-> kernel grow? Perhaps it's too big / you'll need to load it higher. For
-> most archs, the kernel want to decompress into address 0, so if you load
-> it too low, you might end up overwriting the compressed kernel as you're
-> decompressing it.
-> 
-> Perhaps you could add some debugging prints to the bootloader handover /
-> kernel decompression?
+> Have you tried "make menuconfig" then select your kernel header and kernel
+> versions and then specify a kernel "defconfig" for example
+> "sam9_l9260_defconfig"
 
-The original kernel elf file is 1.4 Mb and it grows to 2.5 Mb with the ramdisk, which seems about right considering the 
-compression.
-It's a PowerPC architecture and the kernel gets loaded at 0x400000
-I don't know how to change the loading address or how to look at the uncompressed size in memory, how can I see if this 
-is the right track ?
--- 
-Guillaume Dargaud
-http://www.gdargaud.net/
+the problem was that it complaine about a missing file which I was just
+about to create. Anyway, I took the standard defconfig file and it worked:
+
+Now I got:
+
+- -rw-r--r-- 1 root root  4180960  8. Apr 10:57 bzImage
+- -rw-r--r-- 1 root root 11706368  8. Apr 10:30 rootfs.cpio
+- -rw-r--r-- 1 root root 14252032  8. Apr 10:56 rootfs.ext2
+- -rw-r--r-- 1 root root    40776  8. Apr 10:57 rootfs.initramfs
+- -rw-r--r-- 1 root root 18929664  8. Apr 10:56 rootfs.iso9660
+- -rw-r--r-- 1 root root 12052480  8. Apr 10:30 rootfs.tar
+
+;-)
+
+Just need to find out how to put that all together to get a bootable
+system..
+
+Thanks to all for your help so far!!!!
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNntN5AAoJEEMkp/gkis19ifcIAJB+uhhqmlzmr6ZM17yEM3Bh
+wYhh3RSLqWo/O70qa5KEOryxa8Si0Q219JQTD4VzDDinMLProyocJ79cM0oWNU/y
+du2X1uo5oVBYUwcoRa2mQQiaghEpf5TrrTPC+ht5lRTdlhnsJDtKBLV4ANI0kMhR
+FqIaHc5ZIQot7d88MgkR7vQWm2jIVG4P7TmjEfc7EqayB49QjKwDnlHSzMtib66j
+vUJl1aebDu038iPPuDW1kli3ksuGKz2FF7704L533JK+MDfouyFGrSCoZ77XjTBo
+eD4h7jYnKjZBHTjZbQmYQl9efbBanU6BwxjgbCSVhSVhzqSu5mNVIrfRq1Ul3tE=
+=Nkg5
+-----END PGP SIGNATURE-----
