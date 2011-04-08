@@ -1,55 +1,63 @@
-From: Daniele Salvatore Albano <info@daccii.it>
-Date: Fri, 08 Apr 2011 15:15:24 +0200
-Subject: [Buildroot] Apache CrossCompile recipe
-In-Reply-To: <4D9F0483.7000001@michaelburghart.de>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>	<4D9D5B9D.8090508@michaelburghart.de>
-	<4D9D6EDE.7050004@daccii.it>	<4D9D6F6B.6000801@michaelburghart.de>	<4D9D7131.3090705@itechcon.it>	<4D9D73C1.1070408@michaelburghart.de>	<4D9D75DB.2010005@itechcon.it>	<4D9D775A.5010506@michaelburghart.de>	<4D9D7EE5.6060200@itechcon.it>	<4D9DE9B2.1000100@michaelburghart.de>	<4D9DFE83.3080602@itechcon.it>	<4D9E5FAD.8020408@michaelburghart.de>
-	<4D9EFFBE.70308@itechcon.it> <4D9F0483.7000001@michaelburghart.de>
-Message-ID: <4D9F0A6C.2050104@daccii.it>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri,  8 Apr 2011 16:46:23 +0200
+Subject: [Buildroot] [PATCH v2] u-boot: add 2011.03 release
+In-Reply-To: <1302204474-21172-1-git-send-email-luca@lucaceresoli.net>
+References: <1302204474-21172-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1302273983-15137-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 08/04/2011 14:50, Michael Burghart ha scritto:
-> the build host is a x64 system
->
-> Linux einstein 2.6.37.1-1.2-desktop #1 SMP PREEMPT 2011-02-21 10:34:10
-> +0100 x86_64 x86_64 x86_64 GNU/Linux
->
-> I am about to compile it for GeodeLX Arch.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+Changed in v2:
+ - updated boot/u-boot/u-boot.mk too
 
-I use nginx with php on that board (2D13) without any problem, but my 
-build host isn't 64 bit.
+ boot/u-boot/Config.in |    6 +++++-
+ boot/u-boot/u-boot.mk |    2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-I can't test it directly, however in this weekend i'll try to give a 
-look to this problem.
-
-In any case, you can try to edit auto/types/sizeof and add there 
-u_int64_t size (well, it should be 8)
-
-Best Regards,
-Daniele
-
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 3ba1ef3..00a4a5f 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2010_12
++	default BR2_TARGET_UBOOT_2011_03
+ 	help
+ 	  Select the specific U-Boot version you want to use
+ 
++config BR2_TARGET_UBOOT_2011_03
++	bool "2011.03"
++
+ config BR2_TARGET_UBOOT_2010_12
+ 	bool "2010.12"
+ 
+@@ -42,6 +45,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
+ 	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
+ 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
+ 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index a86819b..d859cf5 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -11,7 +11,7 @@ U_BOOT_BOARD_NAME:=$(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+ # pick some random stable U-Boot version that will be used just to
+ # build mkimage.
+ ifeq ($(U_BOOT_VERSION),)
+-U_BOOT_VERSION=2010.12
++U_BOOT_VERSION=2011.03
+ endif
+ 
+ ifeq ($(U_BOOT_VERSION),custom)
 -- 
-____________________________________________________________
-                                         |
-Daniele Salvatore Albano                | web site:
-  IT Consultant                          | http://www.itechcon.it
-  Website Design and Development         |
-  Software Engineer and Developer        | e-mail:
-  Linux Servers SetUp And Administration | info at itechcon.it
-  Embedded Network Solutions             | d.albano at itechcon.it
-
-Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
-questo messaggio sono riservate ed a uso esclusivo del destinatario. 
-Qualora il messaggio in parola Le fosse pervenuto per errore, La 
-invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
-dandocene gentilmente comunicazione. Grazie.
-Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
-that this message contains confidential information intended only for 
-the use of the addressee. If you are not the addressee, and have 
-received this message by mistake, please delete it and immediately 
-notify us. You may not copy or disseminate this message to anyone. Thank 
-you.
+1.7.1
