@@ -1,63 +1,98 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  8 Apr 2011 16:46:23 +0200
-Subject: [Buildroot] [PATCH v2] u-boot: add 2011.03 release
-In-Reply-To: <1302204474-21172-1-git-send-email-luca@lucaceresoli.net>
-References: <1302204474-21172-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1302273983-15137-1-git-send-email-luca@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  8 Apr 2011 15:22:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 3571] New: u-boot: fw_printenv does not build
+Message-ID: <bug-3571-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
-Changed in v2:
- - updated boot/u-boot/u-boot.mk too
+https://bugs.busybox.net/show_bug.cgi?id=3571
 
- boot/u-boot/Config.in |    6 +++++-
- boot/u-boot/u-boot.mk |    2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+           Summary: u-boot: fw_printenv does not build
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: luca.ceresoli at tiscali.it
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 3ba1ef3..00a4a5f 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2010_12
-+	default BR2_TARGET_UBOOT_2011_03
- 	help
- 	  Select the specific U-Boot version you want to use
- 
-+config BR2_TARGET_UBOOT_2011_03
-+	bool "2011.03"
-+
- config BR2_TARGET_UBOOT_2010_12
- 	bool "2010.12"
- 
-@@ -42,6 +45,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
-+	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
- 	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
- 	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+
+Created attachment 3181
+  --> https://bugs.busybox.net/attachment.cgi?id=3181
+Buildroot configuration to reproduce the problem
+
+fw_printenv does not build in current versions of buildroot.
+
+The problem is well known ussue in upstream U-Boot.
+The good news is that there is a workaround.
+The bad news is that the issue is known by the U-Boot developers
+since last october, but there does not seem to be activity to
+really fix it.
+
+For the long story see the links in
+http://lists.denx.de/pipermail/u-boot/2011-April/089987.html .
+
+Reproduced with current buildroot (2011.02-116-g64b351f) and the
+attached (minimized) config.
+
+The result is:
+
+  CONF  config/config.in
+  CONF  config/config.in
+mkdir -p /home/murray/temp/buildroot-clean/output/target/usr/sbin
+/home/murray/temp/buildroot-clean/output/host/usr/bin/arm-unknown-linux-gnueabi-gcc
+--sysroot=/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot
+-I/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/include
+-I/include \
+        -DUSE_HOSTCC -o
+/home/murray/temp/buildroot-clean/output/target/usr/sbin/fw_printenv \
+       
+/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/tools/env/*.c
+/home/murray/temp/buildroot-clean/output/build/u-boot-2010.12/lib*/crc32.c
+/home/murray/temp/buildroot-clean/output/host/usr/lib/gcc/arm-unknown-linux-gnueabi/4.4.3/../../../../arm-unknown-linux-gnueabi/bin/ld:
+errno: TLS definition in
+/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libc.so.6
+section .tbss mismatches non-TLS reference in /tmp/cccHIRXB.o
+/home/murray/temp/buildroot-clean/output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libc.so.6:
+could not read symbols: Bad value
+collect2: ld returned 1 exit status
+make: ***
+[/home/murray/temp/buildroot-clean/output/target/usr/sbin/fw_printenv] Error 1
+
+I solved this problem applying the known workaround this way:
+
 diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index a86819b..d859cf5 100644
+index d859cf5..4de4d1f 100644
 --- a/boot/u-boot/u-boot.mk
 +++ b/boot/u-boot/u-boot.mk
-@@ -11,7 +11,7 @@ U_BOOT_BOARD_NAME:=$(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
- # pick some random stable U-Boot version that will be used just to
- # build mkimage.
- ifeq ($(U_BOOT_VERSION),)
--U_BOOT_VERSION=2010.12
-+U_BOOT_VERSION=2011.03
- endif
- 
- ifeq ($(U_BOOT_VERSION),custom)
+@@ -166,9 +166,8 @@ $(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
+ # Build manually fw_printenv for the target
+ $(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
+     mkdir -p $(@D)
+-    $(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(LINUX_HEADERS_DIR)/include \
+-        -DUSE_HOSTCC -o $@ \
+-        $(U_BOOT_DIR)/tools/env/*.c $(U_BOOT_DIR)/lib*/crc32.c
++    $(MAKE) HOSTCC="$(TARGET_CC)" -C $(U_BOOT_DIR) env
++    cp $(U_BOOT_DIR)/tools/env/fw_printenv $@
+     $(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
+     ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
+
+This works for me, but I don't know if will for other people, nor
+if it is general enough to be proposed for mainline buildroot inclusion.
+
+Any observations?
+
+Luca
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
