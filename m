@@ -1,7 +1,7 @@
 From: Michael Burghart <mb@michaelburghart.de>
-Date: Sat, 09 Apr 2011 18:30:25 +0200
-Subject: [Buildroot] duplicate IP?
-Message-ID: <4DA089A1.6060001@michaelburghart.de>
+Date: Sat, 09 Apr 2011 18:34:24 +0200
+Subject: [Buildroot] init not PID 1
+Message-ID: <4DA08A90.2020708@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,12 @@ Hash: SHA1
 
 Hi,
 
-I found something quite weird. Having set up my network the network
-startup scripts always complains about duplicte "local". There is only
-one local installed.
+once again. I just found out that I cannot shutdown with init. It complains:
 
-Anybody experienced this "feature" as well? :)
+init: must be run as PID 1
 
-ip: either "local" is duplicate,[38252.652832] eth0: link up, 100Mbps,
-full-duplex1
- or "/24" is garbage
-
+(which is correct).
+But why is it not 1?
 
 - -- 
 - --
@@ -33,11 +29,11 @@ cheers
 Version: GnuPG v2.0.16 (GNU/Linux)
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iQEcBAEBAgAGBQJNoImhAAoJEEMkp/gkis19Z98H/ArKPzmE7P+v+zn3oEjW305Z
-iK1NtSWce69LgxdDwVXhO2+zp+rrFlHlEfcGfHrBOh7MLmPVsIJJRqTvuwNkq1FF
-Aqol0zGBZUwph3uD3nSIW9gsJTypo7EvORGPo7B9kQx+Ss0K6pvUNNZ22vmqAEzb
-f0gfGB3JOrzkV44CGxxCrI+Uv0FeITj6i4FsOnoxFdrZbJ1AhlMJYSyig9rqnnl8
-LC2aqU/R/I25z58U7tSLEp9bremPezQQFYrncJAiseI3/9OVhFD6IVLLrWUXxJTh
-GcLTk2IrgJM4yB3TpftRgNtSge6X5712/0+O9NFvl0jWtRbDAjqh6E3GMtdaBrI=
-=1TAO
+iQEcBAEBAgAGBQJNoIqQAAoJEEMkp/gkis19YmcIAKYCwJENHCCiqBeg9vtKLnAY
+GerMajKzrx6+LjsW8++YZKbNJUfxDUE+8gdGOUaWIB7e+tk1P1zLVSoXFeLe4lIa
+sP1A972DRDqSPBiy0ksuRTD4N5a5prmQtbmT3HV34xHTDHxR3bjy6dql9wvZ6wTj
+JmlupMbJ4f9VFMqrqyRn1abMw8EGyJFTe4vukU2FXpkUj6HZ3JpxIKY2QLG0i0rI
+6fx+s/3399uGvL0ch7MZFGQGCpZZvFr/w0PJ79/28pip127RguO1/IBiVwsdW86v
+MMD2n6Y2wGmDVGBeY3zxj5e8G7waoqCdJ/0sItOO2RKifx6DmoYz2rT8kpNwv9E=
+=TbaH
 -----END PGP SIGNATURE-----
