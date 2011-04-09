@@ -1,44 +1,46 @@
-From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Sat, 09 Apr 2011 15:43:34 -0600
-Subject: [Buildroot] xfonts error in 2011.02
-Message-ID: <1302385414.7244.23.camel@galileo.graphics-muse.org>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Sun, 10 Apr 2011 00:48:19 +0200
+Subject: [Buildroot] init not PID 1
+In-Reply-To: <4DA0AB5E.7090005@arcor.de>
+References: <4DA08A90.2020708@michaelburghart.de> <4DA0AB5E.7090005@arcor.de>
+Message-ID: <4DA0E233.5000109@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm getting the following while building 2011.02's
-xfonts_font-adobe-100dpi package:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-/home/mjhammel/src/ximba/bb/src/../bld/buildroot-2011.02.bld/staging//usr/bin/ucs2any: Can't read mapping file '/usr/share/fonts/X11/util/map-ISO8859-1': No such file or directory!
+Am 09.04.2011 20:54, schrieb Jason Curl:
+> 
+> (which is correct).
+> But why is it not 1?
+>> Did you not start it from the kernel, but perhaps from a shell script?
 
-This seems related to this patch:
-http://git.buildroot.net/buildroot/commit/?id=117a8ea0eaabec72d7637f80f7a55fbba9ce67bf
+I have a look. Normally I start my kernel and thought the kernel keeps
+track of the init process.
 
-I've applied the patch but it doesn't appear to fix the problem.  Also,
-is this patch correct?  It seems the following:
 
-++ if (pcsysrootdir &&
-++ (!strcmp(variable_name, "includedir") ||
-++ !strcmp(variable_name, "libdir")))
+>> The first process the kernel starts is PID 1.
 
-should actually be this:
+sure, but that normally is init. Don't know why it's not here.
 
-++ if (pcsysrootdir &&
-++ (!strcmp(variable_name, "includedir") &&
-++ !strcmp(variable_name, "libdir")))
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-Unfortunately, that doesn't fix my problem either.  "map-ISO8859-1" is
-installed under the sysroot tree without my change and under the staging
-tree with it.  I need to double check that with clean builds (in
-progress) to be certain, but I'm pretty sure that's the scenario.
-
-Is the correct location for the map files ucs2any is looking for
-STAGING/usr/share/fonts/X11/util?  Should the output of this message
-specify that it was trying to look in the staging directory?  At the
-moment, it looks like it's looking in the host file system.  So I can't
-tell if the problem is that ucs2any is looking in the wrong place or the
-map file is installed (by xfonts_font-util) in the wrong place.
--- 
-Michael J. Hammel <buildroot@graphics-muse.org>
+iQEcBAEBAgAGBQJNoOIzAAoJEEMkp/gkis19OGMH/1wbC6T+EZTwIJI+Zp8lkyP+
+yiOhlYyXz1DEDDDSMcYWW11DvWAtRW/ATCXgXB1pP2aBLzlJEFM6nCma06unWpCH
+pNQSNuYtPHg77jMx7JhX89ovtq1XH9VZv9a/nzqomfyqAswXaGWIKhPl02R7yapj
+k/R3H9iIpr4Y2vpO9trBPApYyHBJy3Ww8v3rS3vchDbSAq9bY26/F/m7ueXFJ2oY
++7Z3+ZGcU7pSExSSf/H7bAi937QYgpwc10HMng/Nwh8l1PJRhzbrXsXqRjtjPf05
+veL1UqE+ka+DPfd1KMkpa8Utf0rZ6U1Z/5x5X6ybyo4FJVpL5WYS39pD1ebgLpI=
+=iZ0t
+-----END PGP SIGNATURE-----
