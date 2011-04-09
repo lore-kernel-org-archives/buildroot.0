@@ -1,91 +1,57 @@
-From: Bill Borton <security@conwin.com>
-Date: Fri, 8 Apr 2011 16:56:34 -0500
-Subject: [Buildroot] Device creation
-In-Reply-To: <62530A4FC0D74901A1AC9D2E6D3ADF17@VOSTROSYS>
-References: <91E60E2EFEE04B0399DD86344DDEF380@VOSTROSYS>
-	<20110407163451.6c00433c@snot.conwin.com>
-	<62530A4FC0D74901A1AC9D2E6D3ADF17@VOSTROSYS>
-Message-ID: <20110408165634.68ca542b@snot.conwin.com>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Sat, 09 Apr 2011 08:12:31 +0200
+Subject: [Buildroot] Apache CrossCompile recipe
+In-Reply-To: <4D9EFFBE.70308@itechcon.it>
+References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>
+	<4D9D5B9D.8090508@michaelburghart.de> <4D9D6EDE.7050004@daccii.it>
+	<4D9D6F6B.6000801@michaelburghart.de>
+	<4D9D7131.3090705@itechcon.it>
+	<4D9D73C1.1070408@michaelburghart.de>
+	<4D9D75DB.2010005@itechcon.it>
+	<4D9D775A.5010506@michaelburghart.de>
+	<4D9D7EE5.6060200@itechcon.it>
+	<4D9DE9B2.1000100@michaelburghart.de>
+	<4D9DFE83.3080602@itechcon.it>
+	<4D9E5FAD.8020408@michaelburghart.de> <4D9EFFBE.70308@itechcon.it>
+Message-ID: <4D9FF8CF.6020005@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You mean /sys/class/pps is empty?   I would check to make sure
-you have everything you need in your kernel.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-sysfs support?
-pps support?
-pps line discipline? (pps is connected to carrier detect. Correct?)
-
-Again, you will not have pps on ttyS1.  It is physically connected to
-DCD of your port but it will be it's own device.
-
--Bill
-
-p.s.  This is a kernel/linux-pps issue.  There are better forums to
-discuss this and a lot of info on-line...  Pretty much everything you
-need is in the link you provided in your first post.  Read through it
-again and play around a bit.
+Good morning Daniele,
 
 
+its getting better :)
+Now it complains about missing zlib. Unfortunately  I cannot enable zlib
+in menuconfig. There is no hook to activate.
+Does this depend on another point somewhere which I don't know?!
 
-On Fri, 8 Apr 2011 16:33:55 -0400
-"Marc Leclerc" <marc-leclerc@signaturealpha.com> wrote:
-> Hi,
-> 
-> Thanks for this info, it will prove usefull. I seem to have a problem with 
-> the kernel hooking up to my pps on ttyS1.
-> 
-> on startup i do see PPS line dicipline registered but the folder 
-> /sys/stat/pps is empty. we have validated that the pps signal is pulsing at 
-> 9V
-> 
-> Any clue why?
-> 
-> Thanks again
-> 
-> -----Original Message----- 
-> From: Bill Borton
-> Sent: Thursday, April 07, 2011 5:34 PM
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] Device creation
-> 
-> On Thu, 7 Apr 2011 13:23:32 -0400
-> "Marc Leclerc" <marc-leclerc@signaturealpha.com> wrote:
-> > Hi, I am trying to get linuxpps working on my board using ntp. there are
-> > steps described at
-> > http://wiki.enneenne.com/index.php/LinuxPPS_installation which says to
-> > use ldattach to assign the pps signal but so it seem I do not have
-> > ldattach on my buildroot system and tryin to compile util-linux led to
-> > compilation errors. Just wondering if anyone here has the know how to
-> > get my /dev/pps0 created and assigned to my /dev/ttyS1. the steps also
-> > mentions using udev to get the /dev/pps0 created, i have tried installing 
-> > and
-> > using it and it just messed up my other links
-> >
-> > Best regards
-> 
-> /dev/pps0 is it's own device.  Look in /sysfs/class/pps/pps0/dev (you did 
-> build
-> support into your kernel, correct?) for the details and use mknod to create 
-> it:
-> 
-> mknod -m 0664 /dev/pps0 c 252 0
-> 
-> 
-> If you are trying to bring up ntpd with the generic NMEA driver you will
-> need to make a couple links to your ttyS1 and pps0:
-> 
-> ln -s /dev/ttyS1 /dev/gps0
-> ln -s /dev/pps0 /dev/gpspps0
-> 
-> /dev/gps0 (ttyS1) has your nmea stream.
-> /dev/gpspps0 (pps0) has your pps.
-> 
-> -Bill
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Output:
+./configure: error: the HTTP gzip module requires the zlib library.
+You can either disable the module by using --without-http_gzip_module
+option, or install the zlib library into the system, or build the zlib
+library
+statically from the source with nginx by using --with-zlib=<path> option.
+
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNn/jPAAoJEEMkp/gkis192XgIAIefdHBU74wc7+xee9VLGfQE
+4W/zYxbmsRsCBmMSQ5T81yIKhVsmDDFoM6OfMxWTKqYNDBsp6lttvLlwwnSXr8yT
+a/RTvyLRh+an19BNaJJUEWYbf9NVtw32aahI3hOfNsygMOkxStUyr/tQjdHkr3jz
+zvnZqTa0ZUrYOlTFgM4AJlhzKFHMj9qrguciYvFvcxP4sVnoqqmE3OUoO+AlS8dv
+t7THNL4Lx7ugnEtOz0ifB/o5Zl9xImoRkD/NV03G/jqJVXQ6m3cwbZZz5eBJh4Hs
+awFfXwavVXdIS0teVYVc6Kn/Dg+xP48/KVrKdKvLo+YJPJlv6rOdr3oajxmZfdo=
+=70Lk
+-----END PGP SIGNATURE-----
