@@ -1,43 +1,45 @@
-From: Gerhard Heift <ml-buildroot-20110324-cba5@gheift.de>
-Date: Sun, 10 Apr 2011 11:54:04 +0200
-Subject: [Buildroot] init not PID 1
-In-Reply-To: <4DA08A90.2020708@michaelburghart.de>
-References: <4DA08A90.2020708@michaelburghart.de>
-Message-ID: <20110410095403.GF14333@wastebin.kawo1.rwth-aachen.de>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Sun, 10 Apr 2011 17:07:46 +0200
+Subject: [Buildroot] [SOLVED] [Xorg-Server] [GL] No package 'gl' found
+ (kinda solved)
+In-Reply-To: <1302246406.4891.131.camel@esp-patben-lin.espdx1.local>
+References: <1302246406.4891.131.camel@esp-patben-lin.espdx1.local>
+Message-ID: <1302448066.4891.179.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 09, 2011 at 06:34:24PM +0200, Michael Burghart wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
+Dnia 2011-04-08, pi? o godzinie 09:06 +0200, Patryk Benderz pisze:
+> Hi List,
+> During configuration of xorg-server I got:
 > 
-> Hi,
+> >>> xserver_xorg-server 1.7.5 Configuring
+> [...]
+> checking for GL... configure: error: Package requirements (glproto >= 1.4.9 gl >= 7.1.0) were not met:
+> No package 'gl' found
+> Consider adjusting the PKG_CONFIG_PATH environment variable if you
+> installed software in a non-standard prefix.
+> Alternatively, you may set the environment variables GL_CFLAGS
+> and GL_LIBS to avoid the need to call pkg-config.
+> See the pkg-config man page for more details.
 > 
-> once again. I just found out that I cannot shutdown with init. It complains:
-> 
-> init: must be run as PID 1
+> I have checked, and glproto is selected in BR as version 1.4.10. Any
+> hints which BR config option is responsible for GL?
 
-You have to use "halt" or "poweroff". Busybox does not support runlevels so you
-cannot run "init 0" to shutdown your system.
-
-> (which is correct).
-> But why is it not 1?
-
-This message comes from the new spawned init process, which gets a "usual" pid
-like any other process. There should already be an init process with the pid 1.
-
-> cheers
-> - -micha-
-
-Regards,
-  Gerhard
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110410/88b3d11c/attachment.asc>
+After searching the web a lot I found some information [1] that this gl
+is a library contained as an example in Mesa. I have deleted mesa build
+directory to make clean compilation. It occur that mesa has difficulties
+to compile. I was desperate to compile this ASAP, thus I tried different
+versions of Mesa. Some newer versions complained about missing 'talloc'
+package which  I couldn't find, and some had some syntax errors. Finally
+I have downgraded Mesa to 7.6. This version worked fine with 2011-03-31
+BR snapshot and let me compile whole system.
+	I hope that one day, this will save someone some time of searching for
+solution...
+-- 
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
