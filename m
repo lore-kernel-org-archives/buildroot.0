@@ -1,34 +1,60 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sun, 10 Apr 2011 12:10:30 -0700
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 10 Apr 2011 23:24:26 +0200
 Subject: [Buildroot] external-toolchain with CodeSourcery works well
-Message-ID: <BANLkTi=hgwAAjD8QhBWoDcOnVy8vwFLCyg@mail.gmail.com>
+In-Reply-To: <BANLkTi=hgwAAjD8QhBWoDcOnVy8vwFLCyg@mail.gmail.com>
+References: <BANLkTi=hgwAAjD8QhBWoDcOnVy8vwFLCyg@mail.gmail.com>
+Message-ID: <201104102324.27407.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was able to take buildroot-2011.02 and select the CodeSourcery
-external-toolchain. The CodeSourcery 2010.09.tar.bz2 downloaded and
-installed in buildroot-2011.02/output/external-toolchain and created jffs2,
-ubifs, cpio and tar root filesystems along with an external application with
-a path to the same toolchain. Great job getting this part working in
-buildroot.
+Charles, All,
 
-I do see a powerpc-linux-gnu-gdb and gdbserver, both of which run. The
-gdbserver runs on the PowerPC target and does make a connect.
+On Sunday 10 April 2011 21:10:30 Charles Krinke wrote:
+> Now, I am going to attempt to understand a bit about crosstools-ng. Here, I
+> am guessing a bit on configuration settings, that is, things like prefixes
+> and paths. Any suggestions would be gratefully appreciated.
 
-Toolchain is gcc-4.5.1 and it looks like the notion of "target remote
-targetIp:port" has now become "target extended-remote targetIp:port". When
-the remote debugger disconnects, the target now goes back to waiting for a
-connection which is a bit better then previous versions.
+It all depends on what you are trying to do. Regarding toolchains, here is
+what buildroot can do:
+ 1- build its own toolchain using the internal backend
+ 2- use a pre-built toolchain already installed on your machine
+ 3- use a pre-built CodeSourcery toolchain that it downloads for you
+   (what you did)
+ 4- build its own toolchain using the crosstool-NG backend
 
-Now, I am going to attempt to understand a bit about crosstools-ng. Here, I
-am guessing a bit on configuration settings, that is, things like prefixes
-and paths. Any suggestions would be gratefully appreciated.
+If you want to build your own toolchain, that you later feed to buildroot
+using 2, then you'd get better chance to post your questions on the
+crosstool-NG mailing list, as it has nothing to do with buildroot.
+
+If you want to use 4, then buildroot handles all the paths and prefixes
+stuff for you, and they are even hidden in the crosstool-NG config
+menu:
+  cd buildroot
+  make menuconfig
+    Toolchain  --->
+      Toolchain type (Crosstool-NG toolchain)
+      [other options at your discretion]
+      [then exit]
+  make ctng-menuconfig
+  [wait till it handles dependencies]
+  [configure crosstool-NG as you need]
+
+Then if you have issues while configuring/building crosstool-NG, please
+direct your questions to the crosstool-NG mailing list. You may keep the
+buildroot mailing list copied, but only on the initial question, and
+then on the final answer, keeping the crosstool-NG discussions on the
+crosstool-NG mailing list.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110410/2f7f001f/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
