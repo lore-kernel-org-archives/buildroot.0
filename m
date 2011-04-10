@@ -1,60 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 10 Apr 2011 15:58:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 3583] New: xfonts_font-adobe-100dpi fails due to
- missing map file.
-Message-ID: <bug-3583-163@https.bugs.busybox.net/>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sun, 10 Apr 2011 12:10:30 -0700
+Subject: [Buildroot] external-toolchain with CodeSourcery works well
+Message-ID: <BANLkTi=hgwAAjD8QhBWoDcOnVy8vwFLCyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3583
+I was able to take buildroot-2011.02 and select the CodeSourcery
+external-toolchain. The CodeSourcery 2010.09.tar.bz2 downloaded and
+installed in buildroot-2011.02/output/external-toolchain and created jffs2,
+ubifs, cpio and tar root filesystems along with an external application with
+a path to the same toolchain. Great job getting this part working in
+buildroot.
 
-           Summary: xfonts_font-adobe-100dpi fails due to missing map
-                    file.
-           Product: buildroot
-           Version: 2011.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mjhammel at graphics-muse.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I do see a powerpc-linux-gnu-gdb and gdbserver, both of which run. The
+gdbserver runs on the PowerPC target and does make a connect.
 
+Toolchain is gcc-4.5.1 and it looks like the notion of "target remote
+targetIp:port" has now become "target extended-remote targetIp:port". When
+the remote debugger disconnects, the target now goes back to waiting for a
+connection which is a bit better then previous versions.
 
-Created attachment 3187
-  --> https://bugs.busybox.net/attachment.cgi?id=3187
-Updated patch to address pkg-config variables that need sysroot path prepended.
-
-The problem presents itself with the following error:
-/home/mjhammel/src/ximba/bb/src/../bld/buildroot-2011.02.bld/staging//usr/bin/ucs2any:
-Can't read mapping file '/usr/share/fonts/X11/util/map-ISO8859-1': No such file
-or directory!
-
-After looking through the recent commits I found this patch:
-http://git.buildroot.net/buildroot/commit/?id=117a8ea0eaabec72d7637f80f7a55fbba9ce67bf
-
-This didn't fix the problem, but it pointed me in the right direction.  The map
-file was in two places under the staging tree after a build with this patch:
-$ find . -name map-ISO8859-1
-./staging/usr/share/fonts/X11/util/map-ISO8859-1
-./staging/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/share/fonts/X11/util/map-ISO8859-1
-
-Looking through xfonts_font-adobe-100dpi I discovered that the variable
-"mapdir" is checked for the location of this file  So I changed the patch to
-include mapdir and the build now completes and the fonts are in the correct
-location.
-
-The question is: is this the correct fix?  
-
-Updated patch is attached.
+Now, I am going to attempt to understand a bit about crosstools-ng. Here, I
+am guessing a bit on configuration settings, that is, things like prefixes
+and paths. Any suggestions would be gratefully appreciated.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110410/2f7f001f/attachment.html>
