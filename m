@@ -1,32 +1,60 @@
-From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Sun, 10 Apr 2011 09:38:28 -0600
-Subject: [Buildroot] xfonts error in 2011.02
-In-Reply-To: <1302385414.7244.23.camel@galileo.graphics-muse.org>
-References: <1302385414.7244.23.camel@galileo.graphics-muse.org>
-Message-ID: <1302449908.6468.3.camel@kepler.graphics-muse.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 10 Apr 2011 15:58:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 3583] New: xfonts_font-adobe-100dpi fails due to
+ missing map file.
+Message-ID: <bug-3583-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2011-04-09 at 15:43 -0600, Michael J. Hammel wrote:
-> This seems related to this patch:
-> http://git.buildroot.net/buildroot/commit/?id=117a8ea0eaabec72d7637f80f7a55fbba9ce67bf
-> 
-> I've applied the patch but it doesn't appear to fix the problem.  Also,
-> is this patch correct?  It seems the following:
-> 
-> ++ if (pcsysrootdir &&
-> ++ (!strcmp(variable_name, "includedir") ||
-> ++ !strcmp(variable_name, "libdir")))
+https://bugs.busybox.net/show_bug.cgi?id=3583
 
-After more testing it appears this is probably correct, but is missing
-one additional variable: mapdir.  When I added mapdir to the patch the
-build appears to complete successfully and the fonts are in the correct
+           Summary: xfonts_font-adobe-100dpi fails due to missing map
+                    file.
+           Product: buildroot
+           Version: 2011.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mjhammel at graphics-muse.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created attachment 3187
+  --> https://bugs.busybox.net/attachment.cgi?id=3187
+Updated patch to address pkg-config variables that need sysroot path prepended.
+
+The problem presents itself with the following error:
+/home/mjhammel/src/ximba/bb/src/../bld/buildroot-2011.02.bld/staging//usr/bin/ucs2any:
+Can't read mapping file '/usr/share/fonts/X11/util/map-ISO8859-1': No such file
+or directory!
+
+After looking through the recent commits I found this patch:
+http://git.buildroot.net/buildroot/commit/?id=117a8ea0eaabec72d7637f80f7a55fbba9ce67bf
+
+This didn't fix the problem, but it pointed me in the right direction.  The map
+file was in two places under the staging tree after a build with this patch:
+$ find . -name map-ISO8859-1
+./staging/usr/share/fonts/X11/util/map-ISO8859-1
+./staging/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/share/fonts/X11/util/map-ISO8859-1
+
+Looking through xfonts_font-adobe-100dpi I discovered that the variable
+"mapdir" is checked for the location of this file  So I changed the patch to
+include mapdir and the build now completes and the fonts are in the correct
 location.
 
-I don't know if this is the correct solution, but it works.  So I'll
-post a bug report for it in a little while.
+The question is: is this the correct fix?  
+
+Updated patch is attached.
+
 -- 
-Michael J. Hammel <buildroot@graphics-muse.org>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
