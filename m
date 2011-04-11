@@ -1,7 +1,7 @@
 From: Michael Burghart <mb@michaelburghart.de>
-Date: Mon, 11 Apr 2011 10:01:17 +0200
+Date: Mon, 11 Apr 2011 10:08:58 +0200
 Subject: [Buildroot] Strange behaviour with cramfs
-Message-ID: <4DA2B54D.8030102@michaelburghart.de>
+Message-ID: <4DA2B71A.3090407@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,6 +30,7 @@ can't open /dev/proc: No such file or directory
 and so on on end.. what did I forget to include?! Anybody experienced
 this before?
 
+
 - -- 
 - --
 cheers
@@ -39,11 +40,11 @@ cheers
 Version: GnuPG v2.0.16 (GNU/Linux)
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iQEcBAEBAgAGBQJNorVNAAoJEEMkp/gkis19PykIAJHR4AWuJG2qmn8F9pp0kZMV
-nkjQtO2LUo/txuCKgFk6q0gxkOOqqajko5Br8Wu0zw6IEDNgvhn/s1CP+w1Ra6oN
-1uZITMhZdxkk1yV6jeh34jG3nbhBnHpM370KxFAn7MYb9kh4TlP6/hLzvycSr4Hs
-wBntxX+/JoMlVvwQADgyytUmdD4PxVgfWMQFS/KpYSCTpyeEa90T74AnYK0krCG5
-/l0QHOu4/Ru/Iug2rNv+2XdGcw24ZsHpm9yhT6UGFiW9SO3AqAzDuxTF/Q0ahnwL
-bvufzguE+lJfGfKRnbvIj5GIv858V7Hhav2ZSHaD72P/lnCJngjc6cKXUwkOPfs=
-=1b1Q
+iQEcBAEBAgAGBQJNorcaAAoJEEMkp/gkis19PHwIAJ3eVahawrAji4laXgcdOdWI
+jdgd0fNfnbQeiQcVqwbDWZFeYvT0w2NmwfWpYJWUUwSkYjAP9q/B4/q53ONW47XB
+bGLzMbcnEfmou6BizSct/P7WsJVNTajCe+P+gebyNj6/az5lZgDrIiGOaiuR5iZi
+6frScszt8lyoVXLkWvec5XDBabGwtPTcHc8qzZZJxNzGIIrDmfNt1JaJJbQCnO3c
+cZYi8rq58KNSk3zq/1dYjfn8p+fMlP6eGt0jrlNNNR3cByHUCRGp6XqC/HmpPxIW
+/NRLIzL7T7mT1xx2BXO9NrcVcq6ZDOaviO81Ci57FFxVfGaUoD35gYQUUL5JkQ4=
+=Xs2k
 -----END PGP SIGNATURE-----
