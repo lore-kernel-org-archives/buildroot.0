@@ -1,12 +1,18 @@
-From: nataraj at vaaraahi.com <nataraj@vaaraahi.com>
-Date: Mon, 11 Apr 2011 04:03:30 -0700
-Subject: [Buildroot] BR:seg fault with legacy libusb-0.1.2
-Message-ID: <20110411040330.ed0f21fc085cea67a12906c6b8e6fb44.5eb2e67746.wbe@email10.secureserver.net>
+From: Allan W. Nielsen <a@awn.dk>
+Date: Mon, 11 Apr 2011 13:08:23 +0200
+Subject: [Buildroot] New version of patch to provide custom extract
+	procedures
+Message-ID: <1302520104-18682-1-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110411/5389ae2f/attachment-0001.html>
+As I wrote earier, here is a new more clean patch to
+Makefile.package.in which makes it possible to define custom extract
+procedures. After suggestion from Daniel Nystr?m I have included a
+simple example in the commit message
+
+--
+Allan W. Nielsen
