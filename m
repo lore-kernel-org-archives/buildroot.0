@@ -1,55 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 11 Apr 2011 09:58:13 +0200
-Subject: [Buildroot] Starting programs in the background at init time: stdin
-	EOF problem
-Message-ID: <BANLkTi=Vx9c7OJ0arjwmrr6=WcTYFUfpyA@mail.gmail.com>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Mon, 11 Apr 2011 10:01:17 +0200
+Subject: [Buildroot] Strange behaviour with cramfs
+Message-ID: <4DA2B54D.8030102@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
 Hi,
 
-I need to start a set of programs when the board boots. I'm using
-scripts in /etc/init.d/ to accomplish this.
-Since I shouldn't block the other inits, I put these programs in the
-background. But, this seems to give problems for programs that read
-from stdin: read immediately returns with EOF (return value 0).
+as I need to be able to replace the rootfs regularly I decided to build
+it as a cramfs (if there is a better option, please let me know).
 
-For example, the following script:
-/etc/init.d/S50shell
-#!/bin/sh
-/path/to/shell &
+Unfortunately it does not work. The cramfs gets loaded and the kernel
+tells me:
 
-with the following 'shell' program:
-#include <stdio.h>
-#include <unistd.h>
-int main (void)
-{
-    int len;
-    char in[1];
-    while (1) {
-        printf("\n--> ");
-        len = read(0, in, 1);
-        write(1, in, len);
-    }
-}
+[    2.883952] VFS: Mounted root (cramfs filesystem) readonly on device
+1:0.
 
-results in a continuous stream of "-->" to be printed at init time.
-The read is supposed to be blocking, but returns prematurely because
-end-of-file is detected on stdin.
+which is ok.
+But then:
 
-If I do not put /path/to/shell in the background, the program works as expected.
+can't open /dev/proc: No such file or directory
 
-What is the recommended way to start programs in such an embedded
-environment? Besides this background problem, I also noticed problems
-with using Ctrl-C depending on whether you start the program with a
-init.d script (on /dev/console) or explicitly put it on a serial tty
-in inittab.
-Eventually, I would like to start a bunch of programs in the
-background, and then present a login prompt to the user on the serial
-tty.
+and so on on end.. what did I forget to include?! Anybody experienced
+this before?
 
-Thanks,
-Thomas
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNorVNAAoJEEMkp/gkis19PykIAJHR4AWuJG2qmn8F9pp0kZMV
+nkjQtO2LUo/txuCKgFk6q0gxkOOqqajko5Br8Wu0zw6IEDNgvhn/s1CP+w1Ra6oN
+1uZITMhZdxkk1yV6jeh34jG3nbhBnHpM370KxFAn7MYb9kh4TlP6/hLzvycSr4Hs
+wBntxX+/JoMlVvwQADgyytUmdD4PxVgfWMQFS/KpYSCTpyeEa90T74AnYK0krCG5
+/l0QHOu4/Ru/Iug2rNv+2XdGcw24ZsHpm9yhT6UGFiW9SO3AqAzDuxTF/Q0ahnwL
+bvufzguE+lJfGfKRnbvIj5GIv858V7Hhav2ZSHaD72P/lnCJngjc6cKXUwkOPfs=
+=1b1Q
+-----END PGP SIGNATURE-----
