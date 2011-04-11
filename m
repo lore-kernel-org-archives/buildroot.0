@@ -1,7 +1,7 @@
 From: Michael Burghart <mb@michaelburghart.de>
-Date: Mon, 11 Apr 2011 17:37:16 +0200
-Subject: [Buildroot] Double cramfs mount
-Message-ID: <4DA3202C.9030507@michaelburghart.de>
+Date: Mon, 11 Apr 2011 22:10:46 +0200
+Subject: [Buildroot] which templates are used?
+Message-ID: <4DA36046.2040606@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,12 @@ Hash: SHA1
 
 Hi,
 
-how come that / is mounted once rw and ro at the same time!?
-Anybod seen that before?
+I want to design my own templates for directories and files (fstab etc).
+Where do I set this? I thought it's in ./fs/skeleton. But obviously not
+for every file..
 
-Or did I just miss something?
+Why this?
 
- # mount
-
-rootfs on / type rootfs (rw)
-
-/dev/root.old on / type cramfs (ro,relatime)
-
-
-proc on /proc type proc (rw,relatime)
-
-devpts on /dev/pts type devpts (rw,relatime,mode=600)
-
-tmpfs on /tmp type tmpfs (rw,relatime)
-
-sysfs on /sys type sysfs (rw,relatime)
-
-udev on /dev type ramfs (rw,relatime)
 - -- 
 - --
 cheers
@@ -43,11 +28,11 @@ cheers
 Version: GnuPG v2.0.16 (GNU/Linux)
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iQEcBAEBAgAGBQJNoyAsAAoJEEMkp/gkis199ecH/AnpKvBhNlMFrJSvIQ6wARb4
-jbgtfEOKWety125KX8bxxJU/vgMlZpNeb1ee1xcP79j31FUpGxLnhTDKf9Hymbq+
-PONfJ1YdeEXCXPqlp27LIT+5DXB6+IymEGcy22WIIqBbwQnRZyYNkszXSoDWJXeZ
-oM9qAXr4v4Wmqsz5CQ/mJcWEJJ3I9SqxW3Nq3YuNBPueppNMc5Lcdt7KmLlaNj78
-6eVMcdsUTwtwDsYzuQm8NDHx6TwCD89ozXs4vmrpUct4MGqgSByl6gt/wIGTk6PE
-QwaLzYGoueRtM+TFfUudKV2ryxeyWx0y+17LQZNZGJ2hnNwasGTXNaWrCYACMP8=
-=YUyR
+iQEcBAEBAgAGBQJNo2BGAAoJEEMkp/gkis19YJQIAMzTFOuekd83F+4HFtaGGQSU
+ufTyysVRTlOlptkMqC/u4K40N2bWKmz9Z4Fx3GnQ36g6FzVu1OUoFyWdxQ3pEUm5
+Jzn/Hy+iRuYaILiqS+iUbawb0mRrwwFUD7u7oa5KFyLQiRzeDwl8Yx63DJRuaKkI
+vlHFsSX1w283ZBtW0WPZ6X2zhwPV+CaSww5Qqem1JzmftjN9gMY8KF0lCrCK3Mft
+ASp1zHdvAzYlPtuon2w36yWAWVaFd+wscIvmdbEqZba5TJbPJpgEFHlvZ/CT32ee
+6yNXjOoeMnypz1AIdZgnh27Zo0hgqLD66JdvFzqa22mtU1voEzoPbwRZGGOLUpc=
+=pZ7R
 -----END PGP SIGNATURE-----
