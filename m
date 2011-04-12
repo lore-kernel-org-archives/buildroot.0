@@ -1,42 +1,59 @@
-From: Patryk Benderz <Patryk.Benderz@esp.pl>
-Date: Tue, 12 Apr 2011 19:41:40 +0200
-Subject: [Buildroot] Xorg via (unichrome) binary driver
-Message-ID: <1302630100.3538.45.camel@esp-patben-lin.espdx1.local>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 12 Apr 2011 19:53:41 +0200
+Subject: [Buildroot] mySQL Server for buildroot
+In-Reply-To: <4DA467C1.7080107@daccii.it>
+References: <4DA45B59.10309@michaelburghart.de> <4DA467C1.7080107@daccii.it>
+Message-ID: <4DA491A5.1020500@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
-I need to run dual head VIA VT8623 [Apollo CLE266] GPU. According to
-[1] (bottom of page), currently dual head is unsupported by openchrome
-driver. So I tried to manually copy VIA's binary driver
-(5.74.33.86a-u904-50937) files to appropriate  locations in target
-directory, the same way as VIA's install script does on running host.
-Lets assume I have copied all files correctly.
-	There are two commands in install script, which i do not know how to
-emulate:
-1. After "#install the 3D driver" step, installer does:
-# ldconfig -X
-2. After "#install the DRM module" step, installer does:
-# depmod -a
-	So my questions are:
-1. Should I run this commands on target directory before build? How to
-do it?
-2. When I try to run X I get:
-(EE) Failed to load /usr/lib/xorg/modules/drivers/via_drv.so ,
-(EE) Failed to load module "via" (loader failed, 7)
-however ls gives:
-# la /usr/lib/xorg/modules/drivers/
-[...]
--rwxr-xr-x 1 root root 709657 [...] openchrome_drv.so
--rwxr-xr-x 1 root root 709657 [...] via_drv.so
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-[1] http://www.openchrome.org/trac/wiki/Configuration
+Hi,
 
--- 
-Patryk "LeadMan" Benderz
-Linux Registered User #377521
-()  ascii ribbon campaign - against html e-mail 
-/\  www.asciiribbon.org   - against proprietary attachments
+Am 12.04.2011 16:54, schrieb Daniele Salvatore Albano:
+> Take a look at this package (quite simple, but uses conf end and conf
+> optio for configure) to create mysql package
+> http://git.buildroot.net/buildroot/tree/package/iperf/iperf.mk
+> 
+> Put your package in
+> package/mysql
+
+I already tried creating an Apache module; which did basically compile.
+So I think I can do the same with mysql.
+
+> and change package/Config.in to add your Config.in package to the list
+
+And if it works I can check it in; perhaps somebody else needs it.
+> 
+> PS: are you using an hdd on alix? i'm asking because an entire db like
+> mysql does a lot of I/O and a compact flash could be killed really
+> fastly by this work load
+
+I know but thanks for the hint.
+The customer already has a box which does all this but the Linux system
+is quite big and he wanted it to become smaller (and more up to date).
+They use cramfs and mysql and apache and perl. All really "small" and
+"tinxy" packages :))
+
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNpJGlAAoJEEMkp/gkis19/2YIAMU0FLdHs8F0gZQVXyo8g4/6
+/ldXKjtxjnIN7gnmRWhfa080xz7hcBc08DG4ZYSfjGONNw5hvT/JX8HVQJZyZXfo
+z6Ll/6/3KK6dFzlkVxdo3soBSlviD0iALWscjAtyN7RugwbFvFQQyBEdhwRxjGBJ
+oBH/dOr2Gn8UyhL3Y4LFvVv4LmTTah+nG8zRZt6Lo1+IfSzAKwyD0RJVcQRET8Bl
++O7N3CcGzp3Z5v+YuT8XiEaestarHyYOiiPBt+crCpj3l1z9vq641iM11d0RKeE5
+fajq2Zfvhb4chVIQLFfCJNbvtUPLbQY569MlqIsuXgLUm7srymbEkXRe0exsFsU=
+=cwIN
+-----END PGP SIGNATURE-----
