@@ -1,101 +1,44 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 12 Apr 2011 08:01:05 -0500
-Subject: [Buildroot] which templates are used?
-In-Reply-To: <4DA3976B.40807@gmail.com>
-References: <4DA36046.2040606@michaelburghart.de> <4DA3709E.7070005@daccii.it>
-	<4DA3976B.40807@gmail.com>
-Message-ID: <201104120801.08028.minimod@morethan.org>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 12 Apr 2011 15:03:09 +0200
+Subject: [Buildroot] nginx
+In-Reply-To: <4DA44715.1020006@daccii.it>
+References: <4DA41D20.6000001@michaelburghart.de> <4DA44715.1020006@daccii.it>
+Message-ID: <4DA44D8D.8030205@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon April 11 2011, Steve Calfee wrote:
-> On 04/11/11 14:20, Daniele Salvatore Albano wrote:
-> > Il 11/04/2011 22:52, Michael Burghart ha scritto:
-> >> I set this in .config:
-> >>
-> >> BR2_ROOTFS_SKELETON_CUSTOM=y
-> >> BR2_ROOTFS_SKELETON_CUSTOM_PATH="/Save/buildroot-2011.02/fs/skeleton"
-> >>
-> >>
-> >> but it's not used! I made special directories and files in the
-> >> fs/skeleton but they are nowhere to be seen. What do I have to do to
-> >> make them visible??
-> > 
-> > You need to do a full rebuild or just copy changed/updated files to the 
-> > target directory (target) and rebuild/regenerate filesystems
-> > 
-> Or you can use the
->  BR2_ROOTFS_POST_BUILD_SCRIPT:
->   ? Specify a script to be run after the build has finished and before
->     ?
->   ? the BR2 starts packing the files into selected packages.
->     ?
->     ? This gives users the oportunity to do board-specific cleanups,
->       ?
->   ? add-ons and the like, so the generated files can be used directly
->     ?
->   ? without further processing.
->     ?
->     ? The script is called with the target directory name as first and
->       ?
->   ? only argument. Make sure the exit code of that script is 0,
->     ?
->   ? otherwise make will stop after calling it.
->     ?
-> 
->   ? Symbol: BR2_ROOTFS_POST_BUILD_SCRIPT
-> [=$(TOPDIR)/target/device/beaglebo ?
->   ? Type  : string
->     ?
->   ? Prompt: Custom script to run before packing files
->     ?
->   ?   Defined at fs/Config.in:3
->     ?
->   ?   Location:
->     ?
->   ?     -> Target filesystem options
->     ?
-> 
-> Sorry about the mess in the cut and paste from buildroot's menuconfig.
-> 
-> 
-> Mine patchrootfs is:
-> #!/bin/bash
-> #
-> # skript which runs before creating rootfs
-> #
-> #
-> MAINDIR=${1}/../../
-> SRCDIR=${MAINDIR}"target/device/beagleboard/skeleton/*"
-> DESTDIR=${1}
-> echo "***************patching some stuff in " ${DESTDIR} from ${SRCDIR}
-> #echo "DESTDIR " ${DESTDIR}
-> #echo "SRCDIR " ${SRCDIR}
-> #ls -l ${SRCDIR} ${SRCDIR}"/etc"
-> cp -rvp ${SRCDIR} ${DESTDIR}
-> echo "end of userdefined script before packing rootfs"
-> 
-> So this copies the fs skeleton, recursively from the local directory
-> after every build. The trick is it just overlays the fs in the target,
-> so you only have to add files that are specific or changed in your
-> build. So if you tweak an existing file say in /etc, it will replace
-> that file. If you add a new file (maybe a script) say in /usr/bin it
-> will add that from your local tree into the build. The local skeleton
-> should stay very sparse.
-> 
-> There is no way to remove files that are not needed etc, just remove
-> them locally in your skeleton and when buildroot is remade with a clean
-> it will get all sorted out.
-> 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Would using rsync with appropriate options instead of cp do that trick?
+Hi Daniele,
 
-Mike
-> Regards, Steve
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+thanks a lot for your information and help. Will look through asap.
+Very helpful and I think I will use it in future projects :)
+
+Unfortunately our customer insists on using Apache.
+Now  I am in real trouble as cross compiling Apache is awful.
+
+Anybody here can help? Perhaps it would be easier to compile Apache
+under a chroot of output/target ?! But how do I integrate gcc in my
+target filesystem? Haven't found out yet where  I can configure it.
+
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNpE2NAAoJEEMkp/gkis19XZgH/j1S/RrML+biuKeRYZjgt3Fy
+nwJ5ru9U32f39VzdmREqUR3/sdMOt18pnHf0HgNZWrXY18kLXdUoUtGJWAOUIVkk
+VyepLyNuIECEWZuyZZu/PEJeAfa+QMSB0HezG2qXch9K6gYNKRWNp6WJTyr21GA6
+r6RElIUgUD82Xcje7nZO0y6FGo3uaXadXcBBH0Md3F01O7WG+dUU+sQUByHQOhAU
+xR+eyLEbhgj6TweqsbyczxOiyyB5UJTlpvuHg04Ok5/4qTeFv0WrrdVISE2yg/4F
+2xIUq7pjULd3j5CgeHBFAqy5xBVQjuC5t6jSsu/3UiSB4FWxcLFwUNlRwhH8Zck=
+=kvlb
+-----END PGP SIGNATURE-----
