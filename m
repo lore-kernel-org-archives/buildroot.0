@@ -1,34 +1,56 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Tue, 12 Apr 2011 16:02:01 +0200
+From: Daniele Salvatore Albano <info@daccii.it>
+Date: Tue, 12 Apr 2011 16:54:57 +0200
 Subject: [Buildroot] mySQL Server for buildroot
-Message-ID: <4DA45B59.10309@michaelburghart.de>
+In-Reply-To: <4DA45B59.10309@michaelburghart.de>
+References: <4DA45B59.10309@michaelburghart.de>
+Message-ID: <4DA467C1.7080107@daccii.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Il 12/04/2011 16:02, Michael Burghart ha scritto:
+ > Hi,
+ >
+ > Is there a mysql server for buildroot available?
 
-Hi,
+No, but try to create a package with default values for mysql.
 
-Is there a mysql server for buildroot available?
+Take a look at this package (quite simple, but uses conf end and conf 
+optio for configure) to create mysql package
+http://git.buildroot.net/buildroot/tree/package/iperf/iperf.mk
 
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+Put your package in
+package/mysql
 
-iQEcBAEBAgAGBQJNpFtZAAoJEEMkp/gkis19vAEH/1F0w9wRz1VzNr6sVOl6g3W1
-fmJ85CH4O9d2yBeeLcVZhaEJGTsCHazIB1LuFsPxAzXaLZ5MvDgp0vRT+J6PwnXs
-ypJuqFX0/tJeV54nsLZOWWDf3cqVN1H3b96XPVuLX7FB1B8gXArB9dV7drKQyyqY
-9X7JCNbCFjYmnhGudK5v7U3C81hTdvIlgRD4arlDmk+XMrpP/bTzWfJgkvJ1clC3
-tr+2uUapSC2ysyymQX8+p5sSOnF/vi2iWXHGz4+dlc6XoQSkL+b6E4otgztYuztD
-zTNtRb6+gw5t9VlRB9UXFJ7ziXwSA78tgqirerIF1drSmV7hd8EkEpB92p8fltE=
-=Kequ
------END PGP SIGNATURE-----
+Add a Config.in (look at 
+http://git.buildroot.net/buildroot/tree/package/iperf/Config.in as example)
+
+and change package/Config.in to add your Config.in package to the list
+
+PS: are you using an hdd on alix? i'm asking because an entire db like 
+mysql does a lot of I/O and a compact flash could be killed really 
+fastly by this work load
+
+-- 
+____________________________________________________________
+                                         |
+Daniele Salvatore Albano                | web site:
+  IT Consultant                          | http://www.itechcon.it
+  Website Design and Development         |
+  Software Engineer and Developer        | e-mail:
+  Linux Servers SetUp And Administration | info at itechcon.it
+  Embedded Network Solutions             | d.albano at itechcon.it
+
+Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
+questo messaggio sono riservate ed a uso esclusivo del destinatario. 
+Qualora il messaggio in parola Le fosse pervenuto per errore, La 
+invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
+dandocene gentilmente comunicazione. Grazie.
+Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
+that this message contains confidential information intended only for 
+the use of the addressee. If you are not the addressee, and have 
+received this message by mistake, please delete it and immediately 
+notify us. You may not copy or disseminate this message to anyone. Thank 
+you.
