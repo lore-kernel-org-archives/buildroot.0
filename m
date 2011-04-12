@@ -1,79 +1,101 @@
-From: Daniele Salvatore Albano <info@daccii.it>
-Date: Tue, 12 Apr 2011 14:35:33 +0200
-Subject: [Buildroot] nginx
-In-Reply-To: <4DA41D20.6000001@michaelburghart.de>
-References: <4DA41D20.6000001@michaelburghart.de>
-Message-ID: <4DA44715.1020006@daccii.it>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 12 Apr 2011 08:01:05 -0500
+Subject: [Buildroot] which templates are used?
+In-Reply-To: <4DA3976B.40807@gmail.com>
+References: <4DA36046.2040606@michaelburghart.de> <4DA3709E.7070005@daccii.it>
+	<4DA3976B.40807@gmail.com>
+Message-ID: <201104120801.08028.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 12/04/2011 11:36, Michael Burghart ha scritto:
- > What I urgently need for using nginx as replacement for Apache is:
- > auth_mysql and mod_perl which shoud be possible. Have you tried that 
-so far?
- >
- > http://code.svn.wordpress.org/nginx_auth_mysql/
- > http://wiki.nginx.org/NginxEmbeddedPerlModule
+On Mon April 11 2011, Steve Calfee wrote:
+> On 04/11/11 14:20, Daniele Salvatore Albano wrote:
+> > Il 11/04/2011 22:52, Michael Burghart ha scritto:
+> >> I set this in .config:
+> >>
+> >> BR2_ROOTFS_SKELETON_CUSTOM=y
+> >> BR2_ROOTFS_SKELETON_CUSTOM_PATH="/Save/buildroot-2011.02/fs/skeleton"
+> >>
+> >>
+> >> but it's not used! I made special directories and files in the
+> >> fs/skeleton but they are nowhere to be seen. What do I have to do to
+> >> make them visible??
+> > 
+> > You need to do a full rebuild or just copy changed/updated files to the 
+> > target directory (target) and rebuild/regenerate filesystems
+> > 
+> Or you can use the
+>  BR2_ROOTFS_POST_BUILD_SCRIPT:
+>   ? Specify a script to be run after the build has finished and before
+>     ?
+>   ? the BR2 starts packing the files into selected packages.
+>     ?
+>     ? This gives users the oportunity to do board-specific cleanups,
+>       ?
+>   ? add-ons and the like, so the generated files can be used directly
+>     ?
+>   ? without further processing.
+>     ?
+>     ? The script is called with the target directory name as first and
+>       ?
+>   ? only argument. Make sure the exit code of that script is 0,
+>     ?
+>   ? otherwise make will stop after calling it.
+>     ?
+> 
+>   ? Symbol: BR2_ROOTFS_POST_BUILD_SCRIPT
+> [=$(TOPDIR)/target/device/beaglebo ?
+>   ? Type  : string
+>     ?
+>   ? Prompt: Custom script to run before packing files
+>     ?
+>   ?   Defined at fs/Config.in:3
+>     ?
+>   ?   Location:
+>     ?
+>   ?     -> Target filesystem options
+>     ?
+> 
+> Sorry about the mess in the cut and paste from buildroot's menuconfig.
+> 
+> 
+> Mine patchrootfs is:
+> #!/bin/bash
+> #
+> # skript which runs before creating rootfs
+> #
+> #
+> MAINDIR=${1}/../../
+> SRCDIR=${MAINDIR}"target/device/beagleboard/skeleton/*"
+> DESTDIR=${1}
+> echo "***************patching some stuff in " ${DESTDIR} from ${SRCDIR}
+> #echo "DESTDIR " ${DESTDIR}
+> #echo "SRCDIR " ${SRCDIR}
+> #ls -l ${SRCDIR} ${SRCDIR}"/etc"
+> cp -rvp ${SRCDIR} ${DESTDIR}
+> echo "end of userdefined script before packing rootfs"
+> 
+> So this copies the fs skeleton, recursively from the local directory
+> after every build. The trick is it just overlays the fs in the target,
+> so you only have to add files that are specific or changed in your
+> build. So if you tweak an existing file say in /etc, it will replace
+> that file. If you add a new file (maybe a script) say in /usr/bin it
+> will add that from your local tree into the build. The local skeleton
+> should stay very sparse.
+> 
+> There is no way to remove files that are not needed etc, just remove
+> them locally in your skeleton and when buildroot is remade with a clean
+> it will get all sorted out.
+> 
 
-Well, while you can replace auth_mysql i think that a "mod_perl" for 
-nginx doesn't exists: nginx embedded perl module is used to as an 
-internal language to handle special conditions (i mean to write nginx 
-config file parts in perl so it can do what you need programmatically).
+Would using rsync with appropriate options instead of cp do that trick?
 
-If nginx_auth_mysql doesn't work, you can give a look to drizzle 
-extension, that works with mysql too, to handle authentication.
-
-Here there are links
-http://github.com/chaoslawful/drizzle-nginx-module
-
-If you can use pam, here there is a module that ask to pam for 
-authentication
-http://web.iti.upv.es/~sto/nginx/
-
-(you need pam-mysql in order to use mysql as authentication backend)
-
-In the end there is auth request that authorize an user using a 
-subrequest, in this way you could do a little perl script called via web 
-(nginx will use a sub-request) that will authorize the client to connect
-http://mdounin.ru/hg/ngx_http_auth_request_module
-
-Here some info on how to use it
-http://mdounin.ru/hg/ngx_http_auth_request_module/file/a29d74804ff1/README
-
-If mysql will run on the alix i suggest you to use a simple file based 
-authentication because will reduce a lot the load of the system.
-
-Regards perl, you need fast-cgi no other way, here some links
-http://library.linode.com/web-servers/nginx/perl-fastcgi/debian-5-lenny
-http://blog.oddeven.info/nginx-perl-fastcgi-how-to/
-http://staff.adams.edu/~cdmiller/posts/nginx-perl-fastcgi/
-http://stackoverflow.com/questions/369850/how-can-i-run-perl-scripts-using-fastcgi-on-nginx
-
-Hope this helps,
-
-Best Regards,
-Daniele
--- 
-____________________________________________________________
-                                         |
-Daniele Salvatore Albano                | web site:
-  IT Consultant                          | http://www.itechcon.it
-  Website Design and Development         |
-  Software Engineer and Developer        | e-mail:
-  Linux Servers SetUp And Administration | info at itechcon.it
-  Embedded Network Solutions             | d.albano at itechcon.it
-
-Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
-questo messaggio sono riservate ed a uso esclusivo del destinatario. 
-Qualora il messaggio in parola Le fosse pervenuto per errore, La 
-invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
-dandocene gentilmente comunicazione. Grazie.
-Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
-that this message contains confidential information intended only for 
-the use of the addressee. If you are not the addressee, and have 
-received this message by mistake, please delete it and immediately 
-notify us. You may not copy or disseminate this message to anyone. Thank 
-you.
+Mike
+> Regards, Steve
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
