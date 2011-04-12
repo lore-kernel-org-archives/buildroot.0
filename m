@@ -1,56 +1,72 @@
-From: Daniele Salvatore Albano <info@daccii.it>
-Date: Tue, 12 Apr 2011 16:54:57 +0200
-Subject: [Buildroot] mySQL Server for buildroot
-In-Reply-To: <4DA45B59.10309@michaelburghart.de>
-References: <4DA45B59.10309@michaelburghart.de>
-Message-ID: <4DA467C1.7080107@daccii.it>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 12 Apr 2011 10:20:38 -0500
+Subject: [Buildroot] prefer static libraries question
+In-Reply-To: <201104120248.26575.vapier@gentoo.org>
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1F99AC7E@EXV1.corp.adtran.com>
+	<201104120248.26575.vapier@gentoo.org>
+Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1FA8E4DC@EXV1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 12/04/2011 16:02, Michael Burghart ha scritto:
- > Hi,
- >
- > Is there a mysql server for buildroot available?
+> -----Original Message-----
+> From: Mike Frysinger [mailto:vapier at gentoo.org]
+> Sent: Tuesday, April 12, 2011 1:48 AM
+> To: buildroot at busybox.net
+> Cc: ANDY KENNEDY
+> Subject: Re: [Buildroot] prefer static libraries question
+> 
+> On Monday, March 28, 2011 17:49:56 ANDY KENNEDY wrote:
+> > Understanding that "prefer static libraries" is "highly
+> experimental at
+> > the moment", should this export some default LDFLAGS=-static?  I
+> > attempted this with a very minimal set of tools (kexec, ssh, and
+> > busybox) and I found that busybox _does_ build statically,
+> however, ssh
+> > and kexec don't.  Furthermore, openssl gets installed to the
+> target
+> > (which is expected since ssh is built dynamically).  Preferring
+> static
+> > libs would indicate (to me) that the _whole_ system will not have
+> any
+> > libraries and each util would be linked statically.
+> >
+> > Based upon the "at the moment" clause in the help:  is this an
+> effort
+> > that is currently underway?  If yes, who is doing it and would
+> you like
+> > help?  If no, since I have to do it anyway, should I start with
+> the
+> > tools that I'm using and should I key off of the
+> BR2_PREFER_STATIC_LIB
+> > for kexec, ssh, and anything else I run across to set *_CONF_ENV
+> =
+> > LDFLAGS="-static" in the *.mk files?
+> 
+> the config option is "prefer" not "use only".  so the behavior
+> tends to lean
+> towards static, but not always use it.  thus things like -static
+> are not
+> enforced, and shared libs still get installed.
+> 
+> then again, it seems that sometimes people interpret this to mean
+> "only do
+> static", so there might be some inconsistencies in the tree.  but
+> this is just
+> a vague recollection ... i dont have any examples off the top of my
+> head.
 
-No, but try to create a package with default values for mysql.
+Yeah, well at the moment it isn't on my plate as I'm writing kernel
+code attempting to get a PHY up and running, so I'll get back to
+this later.  I will probably go forth with the mentality of "only
+do static" and attempt to make things work in a sensible manner.
 
-Take a look at this package (quite simple, but uses conf end and conf 
-optio for configure) to create mysql package
-http://git.buildroot.net/buildroot/tree/package/iperf/iperf.mk
+Question:  Where should I put the libs?  I'm guessing that I should
+have all libs install to STAGING_DIR, but I want to make sure I'm
+doing the right thing.
 
-Put your package in
-package/mysql
+> -mike
 
-Add a Config.in (look at 
-http://git.buildroot.net/buildroot/tree/package/iperf/Config.in as example)
-
-and change package/Config.in to add your Config.in package to the list
-
-PS: are you using an hdd on alix? i'm asking because an entire db like 
-mysql does a lot of I/O and a compact flash could be killed really 
-fastly by this work load
-
--- 
-____________________________________________________________
-                                         |
-Daniele Salvatore Albano                | web site:
-  IT Consultant                          | http://www.itechcon.it
-  Website Design and Development         |
-  Software Engineer and Developer        | e-mail:
-  Linux Servers SetUp And Administration | info at itechcon.it
-  Embedded Network Solutions             | d.albano at itechcon.it
-
-Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
-questo messaggio sono riservate ed a uso esclusivo del destinatario. 
-Qualora il messaggio in parola Le fosse pervenuto per errore, La 
-invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
-dandocene gentilmente comunicazione. Grazie.
-Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
-that this message contains confidential information intended only for 
-the use of the addressee. If you are not the addressee, and have 
-received this message by mistake, please delete it and immediately 
-notify us. You may not copy or disseminate this message to anyone. Thank 
-you.
+Andy
