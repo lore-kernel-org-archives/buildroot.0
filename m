@@ -1,71 +1,92 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 13 Apr 2011 13:29:26 -0300
-Subject: [Buildroot] [PATCH 5/8] toolchain: add SOCK_CLOEXEC and
-	SOCK_NONBLOCK support to uclibc 0.9.31
+Date: Wed, 13 Apr 2011 13:29:27 -0300
+Subject: [Buildroot] [PATCH 6/8] toolchain: add inotify_init1 syscall
+	support to uclibc 0.9.31
 In-Reply-To: <1302712169-28385-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1302712169-28385-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1302712169-28385-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1302712169-28385-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add SOCK_CLOEXEC and SOCK_NONBLOCK support to uclibc 0.9.31.
+Add inotify_init1 system call support to uclibc 0.9.31.
 Required for modern versions of udev.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../uClibc/uClibc-0.9.31-add-sock-cloexec.patch    |   43 ++++++++++++++++++++
- 1 files changed, 43 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
+ .../uClibc/uClibc-0.9.31-add-inotify-init1.patch   |   64 ++++++++++++++++++++
+ 1 files changed, 64 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch b/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
+diff --git a/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch b/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
 new file mode 100644
-index 0000000..a7089a9
+index 0000000..cbec426
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31-add-sock-cloexec.patch
-@@ -0,0 +1,43 @@
-+From 83333e9c873e4eca6b2c945f7770b1f5373b0427 Mon Sep 17 00:00:00 2001
++++ b/toolchain/uClibc/uClibc-0.9.31-add-inotify-init1.patch
+@@ -0,0 +1,64 @@
++From a2e5630af426f85fdd8721b2820786d9bd2aa695 Mon Sep 17 00:00:00 2001
 +From: Vladimir Zapolskiy <vzapolskiy@gmail.com>
-+Date: Tue, 1 Jun 2010 20:02:39 +0400
-+Subject: [PATCH] bits/socket.h: add SOCK_CLOEXEC and SOCK_NONBLOCK support
++Date: Tue, 1 Jun 2010 20:02:54 +0400
++Subject: [PATCH] inotify: add inotify_init1 system call support
 +
-+This patch adds support for SOCK_CLOEXEC and SOCK_NONBLOCK socket
-+descriptor flags, which are introduced since Linux 2.6.27
++This patch introduces support for inotify_init1 system call, found
++since Linux 2.6.27.
 +
 +Signed-off-by: Vladimir Zapolskiy <vzapolskiy@gmail.com>
 +Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +---
-+ libc/sysdeps/linux/common/bits/socket.h |   12 +++++++++++-
-+ 1 files changed, 11 insertions(+), 1 deletions(-)
++ libc/sysdeps/linux/common/inotify.c     |    4 ++++
++ libc/sysdeps/linux/common/sys/inotify.h |   13 +++++++++++++
++ 2 files changed, 17 insertions(+), 0 deletions(-)
 +
-+diff --git a/libc/sysdeps/linux/common/bits/socket.h b/libc/sysdeps/linux/common/bits/socket.h
-+index ac5a433..11f6e97 100644
-+--- a/libc/sysdeps/linux/common/bits/socket.h
-++++ b/libc/sysdeps/linux/common/bits/socket.h
-+@@ -53,10 +53,20 @@ enum __socket_type
-+   SOCK_SEQPACKET = 5,		/* Sequenced, reliable, connection-based,
-+ 				   datagrams of fixed maximum length.  */
-+ #define SOCK_SEQPACKET SOCK_SEQPACKET
-+-  SOCK_PACKET = 10		/* Linux specific way of getting packets
-++  SOCK_PACKET = 10,		/* Linux specific way of getting packets
-+ 				   at the dev level.  For writing rarp and
-+ 				   other similar things on the user level. */
-+ #define SOCK_PACKET SOCK_PACKET
-++
-++  /* Flags to be ORed into the type parameter of socket and socketpair and
-++     used for the flags parameter of paccept.  */
-++
-++  SOCK_CLOEXEC = 02000000,	/* Atomically set close-on-exec flag for the
-++				   new descriptor(s).  */
-++#define SOCK_CLOEXEC SOCK_CLOEXEC
-++  SOCK_NONBLOCK = 04000		/* Atomically mark descriptor(s) as
-++				   non-blocking.  */
-++#define SOCK_NONBLOCK SOCK_NONBLOCK
-+ };
++diff --git a/libc/sysdeps/linux/common/inotify.c b/libc/sysdeps/linux/common/inotify.c
++index e5a6120..e35f043 100644
++--- a/libc/sysdeps/linux/common/inotify.c
+++++ b/libc/sysdeps/linux/common/inotify.c
++@@ -15,6 +15,10 @@
++ _syscall0(int, inotify_init)
++ #endif
 + 
-+ /* Protocol families.  */
+++#ifdef __NR_inotify_init1
+++_syscall1(int, inotify_init1, int, flags)
+++#endif
+++
++ #ifdef __NR_inotify_add_watch
++ _syscall3(int, inotify_add_watch, int, fd, const char *, path, uint32_t, mask)
++ #endif
++diff --git a/libc/sysdeps/linux/common/sys/inotify.h b/libc/sysdeps/linux/common/sys/inotify.h
++index 0131db9..dc4e19d 100644
++--- a/libc/sysdeps/linux/common/sys/inotify.h
+++++ b/libc/sysdeps/linux/common/sys/inotify.h
++@@ -22,6 +22,16 @@
++ #include <stdint.h>
++ 
++ 
+++/* Flags for the parameter of inotify_init1.  */
+++enum
+++  {
+++    IN_CLOEXEC = 02000000,
+++#define IN_CLOEXEC IN_CLOEXEC
+++    IN_NONBLOCK = 04000
+++#define IN_NONBLOCK IN_NONBLOCK
+++  };
+++
+++
++ /* Structure describing an inotify event.  */
++ struct inotify_event
++ {
++@@ -79,6 +89,9 @@ __BEGIN_DECLS
++ /* Create and initialize inotify instance.  */
++ extern int inotify_init (void) __THROW;
++ 
+++/* Create and initialize inotify instance.  */
+++extern int inotify_init1 (int __flags) __THROW;
+++
++ /* Add watch of object NAME to inotify instance FD.  Notify about
++    events specified by MASK.  */
++ extern int inotify_add_watch (int __fd, const char *__name, uint32_t __mask)
 +-- 
 +1.7.3.4
 +
