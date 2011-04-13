@@ -1,9 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 13 Apr 2011 13:29:24 -0300
-Subject: [Buildroot] [PATCH 3/8] toolchain: bump mpc to version 0.9
+Date: Wed, 13 Apr 2011 13:29:25 -0300
+Subject: [Buildroot] [PATCH 4/8] toolchain: update uClibc snapshot config to
+	avoid build stalls
 In-Reply-To: <1302712169-28385-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1302712169-28385-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1302712169-28385-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1302712169-28385-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,103 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpc/mpc-0.9-configure.patch |   69 +++++++++++++++++++++++++++++++++++
- package/mpc/mpc.mk                  |    4 ++-
- 2 files changed, 72 insertions(+), 1 deletions(-)
- create mode 100644 package/mpc/mpc-0.9-configure.patch
+ toolchain/uClibc/uClibc-snapshot.config |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mpc/mpc-0.9-configure.patch b/package/mpc/mpc-0.9-configure.patch
-new file mode 100644
-index 0000000..21dd242
---- /dev/null
-+++ b/package/mpc/mpc-0.9-configure.patch
-@@ -0,0 +1,69 @@
-+
-+Issue http://lists.gforge.inria.fr/pipermail/mpc-discuss/2011-February/000805.html
-+Upstream patch https://gforge.inria.fr/scm/viewvc.php/trunk/configure.ac?root=mpc&r1=932&r2=936
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- trunk/configure.ac	2011/02/21 12:18:31	932
-++++ trunk/configure.ac	2011/02/21 16:41:09	936
-+@@ -33,7 +33,7 @@
-+ AC_CANONICAL_HOST
-+ AC_CONFIG_MACRO_DIR([m4])
-+ 
-+-dnl Extra arguments to configure
-++# Extra arguments to configure
-+ AC_ARG_WITH([mpfr_include],
-+             [AC_HELP_STRING([--with-mpfr-include=DIR],
-+                             [MPFR include directory])],
-+@@ -85,18 +85,19 @@
-+              )
-+ 
-+ 
-+-dnl Setup CC and CFLAGS
-++# Setup CC and CFLAGS
-++AC_PROG_CC
-++AC_LANG(C)
-+ 
-+-dnl Check for user specification of CC or CFLAGS
-++# Set up LibTool
-++AC_PROG_LIBTOOL
-++
-++# Check for user specification of CC or CFLAGS
-+ if test -n "$CFLAGS" || test -n "$CC" ; then
-+    user_redefine_cc=yes
-+ fi
-+ 
-+-# Check for programs
-+-AC_PROG_CC
-+-AC_LANG(C)
-+-
-+-dnl Check GMP Header
-++# Check GMP Header
-+ AC_MSG_CHECKING(for gmp.h)
-+ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-+ #include "gmp.h"
-+@@ -105,22 +106,19 @@
-+  AC_MSG_ERROR([gmp.h can't be found, or is unusable.])
-+ ])
-+ 
-+-dnl Check for GMP CFLAGS in gmp.h
-++# Check for GMP CFLAGS in gmp.h
-+ if test -z "$user_redefine_cc" ; then
-+    MPC_GMP_CC_CFLAGS
-+ fi
-+ 
-+ 
-+-dnl Configs for Windows DLLs
-++# Configs for Windows DLLs
-+ case $host in
-+   *-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-os2*)
-+      MPC_WINDOWS
-+ esac
-+ 
-+ 
-+-dnl Finally set up LibTool
-+-AC_PROG_LIBTOOL
-+-
-+ # Checks for header files.
-+ AC_HEADER_STDC
-+ AC_CHECK_HEADERS([complex.h locale.h inttypes.h stdint.h limits.h unistd.h sys/time.h])
-diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
-index 8c6d486..b344f28 100644
---- a/package/mpc/mpc.mk
-+++ b/package/mpc/mpc.mk
-@@ -4,10 +4,12 @@
- #
- #############################################################
+diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
+index 9c83d68..aa00680 100644
+--- a/toolchain/uClibc/uClibc-snapshot.config
++++ b/toolchain/uClibc/uClibc-snapshot.config
+@@ -28,6 +28,7 @@
+ # TARGET_vax is not set
+ # TARGET_x86_64 is not set
+ # TARGET_xtensa is not set
++# TARGET_c6x is not set
  
--MPC_VERSION = 0.8.2
-+MPC_VERSION = 0.9
- MPC_SITE = http://www.multiprecision.org/mpc/download
- MPC_INSTALL_STAGING = YES
- MPC_DEPENDENCIES = gmp mpfr
-+MPC_AUTORECONF = YES
-+HOST_MPC_AUTORECONF = YES
- HOST_MPC_DEPENDENCIES = host-gmp host-mpfr
- 
- $(eval $(call AUTOTARGETS,package,mpc))
+ # CONFIG_GENERIC_ARM is not set
+ # CONFIG_ARM610 is not set
+@@ -109,6 +110,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
+ UCLIBC_SUSV3_LEGACY=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
++# UCLIBC_STRICT_HEADERS is not set
+ # UCLIBC_HAS_STUBS is not set
+ UCLIBC_HAS_SHADOW=y
+ # UCLIBC_HAS_PROGRAM_INVOCATION_NAME is not set
 -- 
 1.7.3.4
