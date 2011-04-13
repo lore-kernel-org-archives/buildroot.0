@@ -1,34 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Apr 2011 16:59:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 3415] dnsmasq: add dbus support to config menu
-In-Reply-To: <bug-3415-163@https.bugs.busybox.net/>
-References: <bug-3415-163@https.bugs.busybox.net/>
-Message-ID: <20110413165948.3706A825DD@busybox.osuosl.org>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Wed, 13 Apr 2011 19:22:23 +0200
+Subject: [Buildroot] mysql Server
+Message-ID: <4DA5DBCF.4020408@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3415
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+just wanted to start building a mysql_server package. Thought creating a
+packages/mysql_server directory with two files :Config.in and
+mysql_server.mk should be sufficient so that the appear in menuconfig.
 
---- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Obviously I was wrong.. Anything else I need to take into consideration?!
 
-Many optional support options are automatic in buildroot, like SSL (via
-OpenSSL) for example.
-We want to avoid the "option overload" scenario so i'd say "WONTFIX".
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-Peter and/or other devels are free to reopen but this has been standard issue
-for quite some time now.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+iQEcBAEBAgAGBQJNpdvPAAoJEEMkp/gkis192NcIAIvg8KNeTQa1EJfdNFTcxDYZ
+je0aGl0Lb15qweb4nBWg3rCK7mr5XGDUob1mRwsJ5qcAYY8qgnh6V8qCfPw9K6dj
+C15JXRkHal9fS8g87ISBtEQxsgNqEK7ZunGXQtAZ3ge4dkGhWXWVGb/6372nlefy
+MzzaGNwuUEgMclHVIp/vOf+ILzHDH7ykzk8ul0y83osu6UtcIvFfWjiN9J0pwiCK
+Ddqv7Slub1lKzNjLdK8hcK9MbquVRMoO1KZcpgB0Ilrag5Qoq0L673oGPxCU7+dz
+fT4xwphVE7UsOhGgjbEgqSqWfhskIroH/SMuIVhzWbJ7oTLJm4xCZoUn66dAyrg=
+=wonU
+-----END PGP SIGNATURE-----
