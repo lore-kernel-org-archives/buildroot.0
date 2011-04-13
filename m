@@ -1,44 +1,34 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Wed, 13 Apr 2011 18:52:53 +0200
-Subject: [Buildroot] mounting a cramfs
-Message-ID: <4DA5D4E5.7020603@michaelburghart.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 13 Apr 2011 16:59:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 3415] dnsmasq: add dbus support to config menu
+In-Reply-To: <bug-3415-163@https.bugs.busybox.net/>
+References: <bug-3415-163@https.bugs.busybox.net/>
+Message-ID: <20110413165948.3706A825DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+https://bugs.busybox.net/show_bug.cgi?id=3415
 
-Hi again,
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-hope this is not too silly a question:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-already mounted the rootfs via grub and it works.
-Now I need to mount other cramfs to a tmpfs directory (/var/language)
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
 
-Tried:
-mount /etc/language /var/language or explicitly with:
-mount -t cramfs -o loop /etc/language /var/language
+Many optional support options are automatic in buildroot, like SSL (via
+OpenSSL) for example.
+We want to avoid the "option overload" scenario so i'd say "WONTFIX".
 
-Neither of them worked.. don't know why. The system does not return back
-to the prompt... Any idea?
+Peter and/or other devels are free to reopen but this has been standard issue
+for quite some time now.
 
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJNpdTlAAoJEEMkp/gkis199aEIAMfPmyplfI2j0ghm3vl/rgLu
-6vv181oKQApG4vVnTUV8W3rTrz9JMRhOJnGU5gWszYFz7oS0qAaqJc3qdVjnZb+t
-IPTS/g70CUMFriAiufJ7yEBs68l3hYb62uFtBaqqbok5ML3prJVf4YizONIGne+V
-EQDRnzuw2IwD3M6bo9eLX3sqiUzRi4HCPUp0RffxUHDaucLE1rapArVvBwZ0cFYW
-QhHoFjJe1JXs1P1zxnwdZFL3PNdfi1xHqTmMtj2TwCHb7FYicu+csYup6RAWYGae
-o/fJ488wdTLQUCL0NdeEoNrUfQdlvmoXiQneMwfNt9XI/f9fGmsbO+D98PCo1LI=
-=WqM0
------END PGP SIGNATURE-----
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
