@@ -1,7 +1,10 @@
 From: Michael Burghart <mb@michaelburghart.de>
-Date: Wed, 13 Apr 2011 19:58:54 +0200
-Subject: [Buildroot] Fwd: Re:  mysql Server
-Message-ID: <4DA5E45E.5060500@michaelburghart.de>
+Date: Wed, 13 Apr 2011 20:00:02 +0200
+Subject: [Buildroot] Unix mail command?
+In-Reply-To: <BANLkTim9Qzo6EqBU9j+7aiJoFMAZM7qPsg@mail.gmail.com>
+References: <4DA5B60E.2060701@michaelburghart.de>
+	<BANLkTim9Qzo6EqBU9j+7aiJoFMAZM7qPsg@mail.gmail.com>
+Message-ID: <4DA5E4A2.8000509@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +14,29 @@ To: buildroot@busybox.net
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-sorry, went only to Andy...redirected it to list.
+Am 13.04.2011 19:58, schrieb Daniel Nystr?m:
+> 2011/4/13 Michael Burghart <mb@michaelburghart.de>:
+>> sorry for the silly question but where is the standard UNIX mail command
+>> located?! Need it and cannot find it :)
+> 
+> Unless you're talking about a buildroot fs;
 
-- -------- Original-Nachricht --------
-Betreff: Re: [Buildroot] mysql Server
-Datum: Wed, 13 Apr 2011 19:55:27 +0200
-Von: Michael Burghart <mb@michaelburghart.de>
-An: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+yes I am looking in the buildroot packages. On my desktop its installed :)
 
-Am 13.04.2011 19:52, schrieb ANDY KENNEDY:
-
-> You created a Config.in under package/mysql.  You then have to add that
-> file reference to package/Config.in.
-
-aaah... thanks a lot!!
-
+- -- 
+- --
+cheers
+- -micha-
+- --
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2.0.16 (GNU/Linux)
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iQEcBAEBAgAGBQJNpeReAAoJEEMkp/gkis19GcAH/jqfNr8H1XAvgwqKoi9LyZ3V
-GtzWGaIguL8a+g7cjavCHbHV4+IISZoJvODDNqav+buO7gPzVQz69W/jOo30fqPZ
-5ov0hQi0gvxP+sr5uu0kz5mfUJ0YvUmq5znzrm4b8Ya0vPRIZ7wPXy7Zw9mdbu3/
-YdjYF8XVw3cBUcPJwsMi+nzibh8aZxriFWahzpMVcIa7FM4YuughUHW2nOG6JX6G
-zOIo+7QCkQJfgiaCDNftY+UIgPKLsdO5vWP5wnRCh+vTSA4mLTHrxTPnP2xJ8V0E
-GzhzLvpA7wGjrDfbDSJSWIXKIF9RZpkqKnpMrk8PbOnihd7/TrSbCAkt1DC4hSg=
-=1Gp2
+iQEcBAEBAgAGBQJNpeSiAAoJEEMkp/gkis19/XgH/03vwLPONPIwispb7x/gg+Zh
+7dGmS+FFVrBhE4iZNkGW312Z9tHFTwLTzT1WYmcm1QOxP/eybuoe0s9Jxw8Z1qBQ
+2BpKYImQ2Hzi2qi8MX0xK24aZgAHF4tWxBGgqI6o5epdlfP9eJ+w9GDSIfazgL26
+SCPWtPIFeposAKqUw0Lb9KvwoDnmUmARJrJPUCLF1fIDsgcT2DpiatNbA57KQfen
+4wHTY+mo0l8+BHkK6H5qwwz1FEwfmmrrpXLXJ+KyewXTcLVyVQsThwxuG8WKK2Qe
+DfVDTcIqrAeTBKlYvVvY8Jm7YBE59s4bGCJYra+8zB9AqZCwKvT536+9Ybt5ivw=
+=nX4z
 -----END PGP SIGNATURE-----
