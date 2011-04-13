@@ -1,45 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Apr 2011 14:19:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 3601] New: DHCPD S80dhcp-server startup script
-	issues
-Message-ID: <bug-3601-163@https.bugs.busybox.net/>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Wed, 13 Apr 2011 16:41:18 +0200
+Subject: [Buildroot] Unix mail command?
+Message-ID: <4DA5B60E.2060701@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3601
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-           Summary: DHCPD S80dhcp-server startup script issues
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: dmitry at radiofid.ru
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+sorry for the silly question but where is the standard UNIX mail command
+located?! Need it and cannot find it :)
 
-1. DHCPD is currently unusable by default due to line 15 in S80dhcp-server
-script which is unconditional 'exit 1'.
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-2. DHCPD is always started. There are no means to disable dhcpd startup on
-boot.
-I suggest to rename S80dhcp-server to dhcp-server and use S* symlink when
-needed.
-
-3. Improper check in line 19:
-test -f /usr/sbin/dhcpd || exit 0
-I suggest to use execute permission check:
-test -x /usr/sbin/dhcpd || exit 0
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+iQEcBAEBAgAGBQJNpbYOAAoJEEMkp/gkis19yggIAIWzKwKVy/F/WHWVOWJdpxgw
+3hcc/d4B+fGAnbyBgsdwCtO7msHbJTz/mLzrVLHQZjMlqlicqAnBJgWwwvYgbKMF
+aeTreeuhqWJDytPE/QPmpH7iSrWbbUIAfSDMIuuaEUw2caCZdfLZSRER1Cw+KhZu
+hNQdf9xC00NJahx9SWrZIS7UY6+aWbiFbX2GE838Vr22i4YjQqewZatUM42dkCih
+bVz17WuyF6m9sjOebQF+3jucNtJGyToyXku159TkmyTqB10kxo499vtwaXuQNBRD
+PtG2uyWs7pW4x9WH/MWiOmQ+o/DAacRWt/Ga0Sq84cuHuJ7X/wctYRy/ot+cDYQ=
+=z+MK
+-----END PGP SIGNATURE-----
