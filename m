@@ -1,42 +1,86 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Wed, 13 Apr 2011 16:53:45 +0200
-Subject: [Buildroot] Apache CrossCompile recipe
-In-Reply-To: <4D9F0A6C.2050104@daccii.it>
-References: <1302088845-15193-1-git-send-email-a@awn.dk>	<20110406153502.13c6affd@surf>	<4D9D5B9D.8090508@michaelburghart.de>	<4D9D6EDE.7050004@daccii.it>	<4D9D6F6B.6000801@michaelburghart.de>	<4D9D7131.3090705@itechcon.it>	<4D9D73C1.1070408@michaelburghart.de>	<4D9D75DB.2010005@itechcon.it>	<4D9D775A.5010506@michaelburghart.de>	<4D9D7EE5.6060200@itechcon.it>	<4D9DE9B2.1000100@michaelburghart.de>	<4D9DFE83.3080602@itechcon.it>	<4D9E5FAD.8020408@michaelburghart.de>	<4D9EFFBE.70308@itechcon.it>
-	<4D9F0483.7000001@michaelburghart.de> <4D9F0A6C.2050104@daccii.it>
-Message-ID: <4DA5B8F9.7010903@michaelburghart.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 13 Apr 2011 13:29:22 -0300
+Subject: [Buildroot] [PATCH 1/8] toolchain: reorganize target gcc options
+Message-ID: <1302712169-28385-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+* Move target gcc language selections to the package menu.
+* Disable objc & fortran options unless target gcc is selected.
+* Rename the "native toolchain" option to gcc.
+* Disable target gcc unless we're using a buildroot toolchain.
 
-Hi Daniele,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/gcc/Config.in   |   12 ------------
+ toolchain/gcc/Config.in.2 |   20 ++++++++++++++++----
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-Am 08.04.2011 15:15, schrieb Daniele Salvatore Albano:
-> In any case, you can try to edit auto/types/sizeof and add there
-> u_int64_t size (well, it should be 8)
-
-in an normal environment I would just edit the .c file. But how do I do
-this with buildroot?
-
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJNpbj4AAoJEEMkp/gkis19EH4H/RXhP23HH24PG8c5XHWB5rRU
-5riB01xUOO8XIjqdhOxMT2SHbxFfaImjdfQrJKLxj62aCM9h2dWNoFGKEmGxdeD1
-gawM8ES3f0lAEsvD8DCILoazlj+FRu62vU0m6VtdxiQX0HVE8n3+fR8HYS7uDlbO
-VqJ+gdvdl+QpwvlbyoPxC5XUp4A/5LhQl13yNMGPpaUvOKLAecCoZ4ibwg+beG0y
-9F9zTOkSIn3hbBjr2BPOcvqyL3kDauo1iWZHAKKC2I4YFkGHRbG5eYSwFfJw48nU
-AKO3rhW+u50Ek8Q+Gb4Z83xDZzFCAFNHDT0D8os7L7kTcHxTiDGOczyKA7xH07M=
-=Q6D7
------END PGP SIGNATURE-----
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 7a1905f..c975bb5 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -62,18 +62,6 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	help
+ 	  Any additional gcc configure options you may want to include....
+ 
+-config BR2_GCC_CROSS_OBJC
+-	bool "Objective-C cross-compiler support"
+-	depends on !BR2_avr32
+-	help
+-	  Build an Objective-C cross-compiler
+-
+-config BR2_GCC_CROSS_FORTRAN
+-	bool "Fortran cross-compiler support"
+-	depends on !BR2_avr32
+-	help
+-	  Build a Fortran cross-compiler
+-
+ config BR2_GCC_CROSS_JAVA
+        bool
+ 
+diff --git a/toolchain/gcc/Config.in.2 b/toolchain/gcc/Config.in.2
+index 705506b..886e99b 100644
+--- a/toolchain/gcc/Config.in.2
++++ b/toolchain/gcc/Config.in.2
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_GCC_TARGET
+-	bool "native toolchain in the target filesystem"
+-	depends on BR2_HAVE_DEVFILES
++	bool "gcc"
++	depends on BR2_HAVE_DEVFILES && BR2_TOOLCHAIN_BUILDROOT
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_BINUTILS_TARGET
+ 	select BR2_PACKAGE_MPC if BR2_GCC_VERSION_4_5_X
+@@ -10,6 +10,18 @@ config BR2_PACKAGE_GCC_TARGET
+ 	  If you want the target system to be able to run
+ 	  binutils/gcc and compile native code, say Y here.
+ 
++config BR2_GCC_CROSS_FORTRAN
++	bool "fortran support"
++	depends on !BR2_avr32 && BR2_PACKAGE_GCC_TARGET
++	help
++	  Build a Fortran compiler
++
++config BR2_GCC_CROSS_OBJC
++	bool "objective-c support"
++	depends on !BR2_avr32 && BR2_PACKAGE_GCC_TARGET
++	help
++	  Build an Objective-C compiler
++
+ config BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS
+ 	string "Additional target gcc options"
+ 	default ""
+@@ -19,5 +31,5 @@ config BR2_EXTRA_TARGET_GCC_CONFIG_OPTIONS
+ 	  Including, but not limited to --disable-checking etc.
+ 	  Refer to */configure in your gcc sources.
+ 
+-comment "native toolchain needs development files in target filesystem"
+-	depends on !BR2_HAVE_DEVFILES
++comment "gcc needs development files in target filesystem"
++	depends on !BR2_HAVE_DEVFILES && BR2_TOOLCHAIN_BUILDROOT
+-- 
+1.7.3.4
