@@ -1,28 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 14 Apr 2011 09:50:17 +0200
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Apr 2011 12:02:53 +0300
 Subject: [Buildroot] Switching to /dev/ttyX
-Message-ID: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+In-Reply-To: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+References: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+Message-ID: <20110414090253.GC2867@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-In /etc/inittab, you have e.g.
+On Thu, Apr 14, 2011 at 09:50:17AM +0200, Thomas De Schampheleire wrote:
+> My question is: how can I access the other /dev/tty's?
+> I tried the chvt command, but that does nothing: the command just
+> completes but nothing changes on the shell.
+> 
+> 'tty' always shows /dev/ttyS0.
 
-tty1::respawn:/sbin/getty 38400 tty1
-tty2::respawn:/sbin/getty 38400 tty2
-tty3::respawn:/usr/bin/tail -f /var/log/messages
+You may try conspy, http://www.stuart.id.au/russell/files/conspy/.
 
-By default I'm connected to the board on a serial line, e.g. /dev/ttyS0
+baruch
 
-My question is: how can I access the other /dev/tty's?
-I tried the chvt command, but that does nothing: the command just
-completes but nothing changes on the shell.
-
-'tty' always shows /dev/ttyS0.
-
-Thanks,
-Thomas
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
