@@ -1,60 +1,70 @@
-From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Thu, 14 Apr 2011 09:12:53 +0200
-Subject: [Buildroot] mounting a cramfs
-In-Reply-To: <4DA5D4E5.7020603@michaelburghart.de>
-References: <4DA5D4E5.7020603@michaelburghart.de>
-Message-ID: <4DA69E75.1020506@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 14 Apr 2011 09:29:54 +0200
+Subject: [Buildroot] Starting programs in the background at init time:
+ stdin EOF problem
+In-Reply-To: <BANLkTi=PW70fZG+qqbztdY8GwYYF+F8pjA@mail.gmail.com>
+References: <BANLkTi=Vx9c7OJ0arjwmrr6=WcTYFUfpyA@mail.gmail.com>
+	<BANLkTi=qUjcrhX92_WCRXyaCSNxwscDtPA@mail.gmail.com>
+	<BANLkTimN8OJvrnFvW=BeLrCsuTB6-7ZxDw@mail.gmail.com>
+	<BANLkTi=PW70fZG+qqbztdY8GwYYF+F8pjA@mail.gmail.com>
+Message-ID: <BANLkTin1rwwGgFcESPRteNVbK+h5K1K+UQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+2011/4/11 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
+> Den 11 april 2011 11:53 skrev Thomas De Schampheleire
+> <patrickdepinguin+buildroot@gmail.com>:
+>> Hej Daniel!
+>>
+>> 2011/4/11 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
+>>> Hi Thomas!
+>>>
+>>> 2011/4/11 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
+>>>> What is the recommended way to start programs in such an embedded
+>>>> environment?
+>>>
+>>> I'm using start-stop-daemon to perform similar tasks. Have you given
+>>> it a try? It can "daemonize" even non-daemons which is pretty nice for
+>>> e.g. GUI softwares.
+>>
+>> Thanks for the hint.
+>> I just gave it a try as follows:
+>> # start-stop-daemon ?-S -x ./shell ?--background
+>>
+>> Unfortunately, it seems to have the same problem. By daemonizing, the
+>> file descriptor stdin seems to be closed, so my test program loops
+>> forever (which I was able to visualize with strace).
+>
+> When your program is daemonized, it per se looses it's stdin/stdout.
+> It sounds like a faulty design relying on those.
+>
+>> I may need to adapt my program to not use stdio, but rather other
+>> filedescriptors. I suppose that they will not be impacted be
+>> foreground/background issues?
+>
+> Fixing this design issue will probably help for future headaches as well.
 
-have you a loop device : /dev/loop0 ?
+I agree.
 
---
-Guillaume
+>
+>> Where do you start start-stop-daemon from? Directly from inittab or
+>> from scripts in /etc/init.d?
+>> How do you start other programs automatically?
+>
+> I'm starting them from /etc/init.d/. This is an example where it also
+> handles the PID file writing as well:
+>
+> /sbin/start-stop-daemon --start --background --make-pidfile \
+> ? ? ? ? ? ?--pidfile /var/run/myprogram.pid --exec /usr/bin/myprogram
+>
+> And this will kill it the fair way:
+>
+> /sbin/start-stop-daemon --stop --oknodo --pidfile /var/run/myprogram.pid
+>
 
+Thanks, I will keep this in mind.
 
-Le 13/04/2011 18:52, Michael Burghart a ?crit :
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
->
-> Hi again,
->
-> hope this is not too silly a question:
->
-> already mounted the rootfs via grub and it works.
-> Now I need to mount other cramfs to a tmpfs directory (/var/language)
->
-> Tried:
-> mount /etc/language /var/language or explicitly with:
-> mount -t cramfs -o loop /etc/language /var/language
->
-> Neither of them worked.. don't know why. The system does not return back
-> to the prompt... Any idea?
->
-> - -- 
-> - --
-> cheers
-> - -micha-
-> - --
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v2.0.16 (GNU/Linux)
-> Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
->
-> iQEcBAEBAgAGBQJNpdTlAAoJEEMkp/gkis199aEIAMfPmyplfI2j0ghm3vl/rgLu
-> 6vv181oKQApG4vVnTUV8W3rTrz9JMRhOJnGU5gWszYFz7oS0qAaqJc3qdVjnZb+t
-> IPTS/g70CUMFriAiufJ7yEBs68l3hYb62uFtBaqqbok5ML3prJVf4YizONIGne+V
-> EQDRnzuw2IwD3M6bo9eLX3sqiUzRi4HCPUp0RffxUHDaucLE1rapArVvBwZ0cFYW
-> QhHoFjJe1JXs1P1zxnwdZFL3PNdfi1xHqTmMtj2TwCHb7FYicu+csYup6RAWYGae
-> o/fJ488wdTLQUCL0NdeEoNrUfQdlvmoXiQneMwfNt9XI/f9fGmsbO+D98PCo1LI=
-> =WqM0
-> -----END PGP SIGNATURE-----
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Thomas
