@@ -1,29 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 Apr 2011 12:02:53 +0300
-Subject: [Buildroot] Switching to /dev/ttyX
-In-Reply-To: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
-References: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
-Message-ID: <20110414090253.GC2867@tarshish>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Thu, 14 Apr 2011 11:04:47 +0200
+Subject: [Buildroot] Booting with ramdisk
+In-Reply-To: <8739m8mfn0.fsf@macbook.be.48ers.dk>
+References: <201103211546.22271.dargaud@lpsc.in2p3.fr>
+	<8739m8mfn0.fsf@macbook.be.48ers.dk>
+Message-ID: <201104141104.47593.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Sunday 27 March 2011 23:12:51 Peter Korsgaard wrote:
 
-On Thu, Apr 14, 2011 at 09:50:17AM +0200, Thomas De Schampheleire wrote:
-> My question is: how can I access the other /dev/tty's?
-> I tried the chvt command, but that does nothing: the command just
-> completes but nothing changes on the shell.
+>  Guillaume> The kernel stops instantly without even a blip on the
+>  Guillaume> console. A debugger reveals that it stops at 0x401718... I
+>  Guillaume> have no idea what's going on at this stage.
 > 
-> 'tty' always shows /dev/ttyS0.
+> Strange. What architecture/system is this? How much did the (compressed)
+> kernel grow? Perhaps it's too big / you'll need to load it higher. For
+> most archs, the kernel want to decompress into address 0, so if you load
+> it too low, you might end up overwriting the compressed kernel as you're
+> decompressing it.
 
-You may try conspy, http://www.stuart.id.au/russell/files/conspy/.
-
-baruch
-
+Absolutely correct. I used:
+powerpc-linux-objcopy --change-addresses 0x400000 simpleImage.virtex405-ml405.elf reloc800000.elf
+And it booted fine afterwards at the new 0x800000 load address.
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Guillaume Dargaud
+http://www.gdargaud.net/Climbing/
