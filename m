@@ -1,137 +1,56 @@
-From: Bill Borton <security@conwin.com>
-Date: Thu, 14 Apr 2011 09:55:58 -0500
-Subject: [Buildroot] Device creation
-In-Reply-To: <4DA61245.40505@signaturealpha.com>
-References: <91E60E2EFEE04B0399DD86344DDEF380@VOSTROSYS>
-	<20110407163451.6c00433c@snot.conwin.com>
-	<62530A4FC0D74901A1AC9D2E6D3ADF17@VOSTROSYS>
-	<20110408165634.68ca542b@snot.conwin.com>
-	<4DA61245.40505@signaturealpha.com>
-Message-ID: <20110414095558.78546661@snot.conwin.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 14 Apr 2011 15:40:09 -0700
+Subject: [Buildroot] Switching to /dev/ttyX
+In-Reply-To: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+References: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+Message-ID: <BANLkTinoehuK5-xrtQSKyAVu3BdChV7HmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+What I am currently doing is commenting out the three tty's, tty1, tth2 &
+tty3 and then uncommenting ttyS0 in /etc/inittab on the mounted root
+filesystem.
 
-Read your ENTIRE directions.  After showing you how to use ldattach and
-udev to create the devices it says:
-
-"Alternatively, you can create the proper device nodes with the mknod
-utility. Please refer to the appropriate manual pages in either case."
-
-
-Now, re-hashing my first two replies:
-
-If you have your kernel configured correctly and your PPS hooked to DCD you
-should have a /sys/class/pps/pps0 entry.  If you do not, you need to figure
-out why before continuing.
-
-If you have a /sys/class/pps/pps0 entry you can use mknod to create
-/dev/pps0: "mknod -m 0664 /dev/pps0 c 252 0"  The arguments for mknod
-can be found in /sys/class/pps/pps0/dev.
-
-You do not need ldattach or udev.
-
--Bill
+I would appreciate some discussion from someone who is familiar with the
+location of /etc/inittab in buildroot's build so we could modify it before
+the rootfs is created.
 
 
-On Wed, 13 Apr 2011 17:14:45 -0400
-Marc Leclerc <marc-leclerc@signaturealpha.com> wrote:
-> Seems I am kind of stuck on the setup instructions where i should try 
-> ldattach.
-> buildroot only supports util-linux 2.13pre7 where as ldattach is only 
-> supplied starting
-> at 2.14. any chance to have support for the latest in buildroot?
-> 
-> Thanks
-> 
-> On 2011-04-08 17:56, Bill Borton wrote:
-> > You mean /sys/class/pps is empty?   I would check to make sure
-> > you have everything you need in your kernel.
-> >
-> > sysfs support?
-> > pps support?
-> > pps line discipline? (pps is connected to carrier detect. Correct?)
-> >
-> > Again, you will not have pps on ttyS1.  It is physically connected to
-> > DCD of your port but it will be it's own device.
-> >
-> > -Bill
-> >
-> > p.s.  This is a kernel/linux-pps issue.  There are better forums to
-> > discuss this and a lot of info on-line...  Pretty much everything you
-> > need is in the link you provided in your first post.  Read through it
-> > again and play around a bit.
-> >
-> >
-> >
-> > On Fri, 8 Apr 2011 16:33:55 -0400
-> > "Marc Leclerc"<marc-leclerc@signaturealpha.com>  wrote:
-> >> Hi,
-> >>
-> >> Thanks for this info, it will prove usefull. I seem to have a problem with
-> >> the kernel hooking up to my pps on ttyS1.
-> >>
-> >> on startup i do see PPS line dicipline registered but the folder
-> >> /sys/stat/pps is empty. we have validated that the pps signal is pulsing at
-> >> 9V
-> >>
-> >> Any clue why?
-> >>
-> >> Thanks again
-> >>
-> >> -----Original Message-----
-> >> From: Bill Borton
-> >> Sent: Thursday, April 07, 2011 5:34 PM
-> >> To: buildroot at busybox.net
-> >> Subject: Re: [Buildroot] Device creation
-> >>
-> >> On Thu, 7 Apr 2011 13:23:32 -0400
-> >> "Marc Leclerc"<marc-leclerc@signaturealpha.com>  wrote:
-> >>> Hi, I am trying to get linuxpps working on my board using ntp. there are
-> >>> steps described at
-> >>> http://wiki.enneenne.com/index.php/LinuxPPS_installation which says to
-> >>> use ldattach to assign the pps signal but so it seem I do not have
-> >>> ldattach on my buildroot system and tryin to compile util-linux led to
-> >>> compilation errors. Just wondering if anyone here has the know how to
-> >>> get my /dev/pps0 created and assigned to my /dev/ttyS1. the steps also
-> >>> mentions using udev to get the /dev/pps0 created, i have tried installing
-> >>> and
-> >>> using it and it just messed up my other links
-> >>>
-> >>> Best regards
-> >> /dev/pps0 is it's own device.  Look in /sysfs/class/pps/pps0/dev (you did
-> >> build
-> >> support into your kernel, correct?) for the details and use mknod to create
-> >> it:
-> >>
-> >> mknod -m 0664 /dev/pps0 c 252 0
-> >>
-> >>
-> >> If you are trying to bring up ntpd with the generic NMEA driver you will
-> >> need to make a couple links to your ttyS1 and pps0:
-> >>
-> >> ln -s /dev/ttyS1 /dev/gps0
-> >> ln -s /dev/pps0 /dev/gpspps0
-> >>
-> >> /dev/gps0 (ttyS1) has your nmea stream.
-> >> /dev/gpspps0 (pps0) has your pps.
-> >>
-> >> -Bill
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
+
+On Thu, Apr 14, 2011 at 12:50 AM, Thomas De Schampheleire <
+patrickdepinguin+buildroot@gmail.com> wrote:
+
+> Hi,
+>
+> In /etc/inittab, you have e.g.
+>
+> tty1::respawn:/sbin/getty 38400 tty1
+> tty2::respawn:/sbin/getty 38400 tty2
+> tty3::respawn:/usr/bin/tail -f /var/log/messages
+>
+> By default I'm connected to the board on a serial line, e.g. /dev/ttyS0
+>
+> My question is: how can I access the other /dev/tty's?
+> I tried the chvt command, but that does nothing: the command just
+> completes but nothing changes on the shell.
+>
+> 'tty' always shows /dev/ttyS0.
+>
+> Thanks,
+> Thomas
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
+-- 
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110414/7f2f70d1/attachment.html>
