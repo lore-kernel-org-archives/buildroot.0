@@ -1,61 +1,97 @@
-From: Michael Burghart <mb@michaelburghart.de>
-Date: Mon, 18 Apr 2011 17:17:11 +0200
-Subject: [Buildroot] kernel and|or initrd
-In-Reply-To: <LJUS2K$28351E41DE62C4240393CF6875FF3D6E@aruba.it>
-References: <LJUS2K$28351E41DE62C4240393CF6875FF3D6E@aruba.it>
-Message-ID: <4DAC55F7.30603@michaelburghart.de>
+From: kevin.joly at armadeus.com <kevin.joly@armadeus.com>
+Date: Mon, 18 Apr 2011 18:52:40 +0200
+Subject: [Buildroot] [PATCH] package: add socketcan package
+Message-ID: <1303145560-11520-1-git-send-email-kevin.joly@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+From: Kevin JOLY <joly.kevin25@gmail.com>
 
-Hi,
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Kevin Joly <joly.kevin25@gmail.com>
+Signed-off-by: Kevin JOLY <joly.kevin25@gmail.com>
+---
+ package/Config.in              |    1 +
+ package/socketcan/Config.in    |   15 +++++++++++++++
+ package/socketcan/socketcan.mk |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 0 deletions(-)
+ create mode 100644 package/socketcan/Config.in
+ create mode 100644 package/socketcan/socketcan.mk
 
-I've got a simple question. I compiled my kernel without use of modules.
-Is it necessary ot use an initrd?
-
-This is my grub/menu.lst:
-
-# Begin /boot/grub/menu.lst
-
-default 0
-timeout 30
-geometry (hd0) 1974 16 63
-
-color cyan/blue white/blue
-
-# The first entry is for TaLux.
-title Talux 1.0
-        root (hd0,0)
-        geometry (hd0) 1974 16 63
-        kernel /boot/talux-2.6.24.7 root=/dev/sda1 rw console=tty0
-console=ttyS0,38400n8
-
-
-root and setup of grub work fine. While booting grub announces
-"GRUB loading, please wait..." and thats it.
-
-What's the best way to boot?
-
-
-- -- 
-- --
-cheers
-- -micha-
-- --
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.16 (GNU/Linux)
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iQEcBAEBAgAGBQJNrFX3AAoJEEMkp/gkis19HVYH/15ORDqNJhpfm0Qq85fUHgAN
-rlP9loW0ARKv2EZIwM1OfH/MqNFpshYwmuK/c8vWRRQ6q4opSuW2l+UMXKOSUHuc
-lj0vUt44Jrtbw316zGwx6i3rz/2As4i5kFymKPvsf4fSTOe+oAzSfEM2iLNw8YeT
-U7mOH3XvrZELqUTTVprW0Tx2kPO/FSbvql0CIBLTqIs26NtAin1BiIWuVmSGL7Nt
-tJdcwGeHKh7OgwFGYxFXA/axtAI/baLCwk770hkV7K8OQZvsZvR4jIuG6oCik6mg
-HHgac1JVOYC0/rDZ8Uh3w71YbOUUJ70R/F6lh1UWvla5MOpWOxke21pibwtDNAk=
-=FYr2
------END PGP SIGNATURE-----
+diff --git a/package/Config.in b/package/Config.in
+index 014c2c0..f41d915 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -427,6 +427,7 @@ source "package/rsync/Config.in"
+ source "package/samba/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
++source "package/socketcan/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/squid/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/socketcan/Config.in b/package/socketcan/Config.in
+new file mode 100644
+index 0000000..e8d7a39
+--- /dev/null
++++ b/package/socketcan/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_SOCKETCAN
++	bool "Socket CAN"
++	help
++	  The socketcan package is an implementation of CAN protocols
++	  (Controller Area Network) for Linux. CAN is a networking technology
++	  which has wide-spread use in automation, embedded devices, and
++	  automotive fields.
++
++	  While there have been other CAN implementations for Linux based on
++	  character devices, Socket CAN uses the Berkeley socket API,
++	  the Linux network stack and implements the CAN device drivers as
++	  network interfaces.  The CAN socket API has been designed as similar
++	  as possible to the TCP/IP protocols to allow programmers, familiar
++	  with network programming, to easily learn how to use CAN sockets.
++
+diff --git a/package/socketcan/socketcan.mk b/package/socketcan/socketcan.mk
+new file mode 100644
+index 0000000..ee8efc0
+--- /dev/null
++++ b/package/socketcan/socketcan.mk
+@@ -0,0 +1,33 @@
++#############################################################
++#
++# Socket CAN
++#
++#############################################################
++PROGRAMS_ISOTP = isotpdump,isotprecv,isotpsend,isotpsniffer,isotptun,isotpserver
++PROGRAMS_CANGW = cangw
++PROGRAMS_SLCAN = slcan_attach,slcand
++PROGRAMS_CAN_UTILS = can-calc-bit-timing,candump,cansniffer,cansend,canplayer,cangen,canbusload,log2long,log2asc,asc2log,canlogserver,bcmserver,slcanpty,canfdtest
++PROGRAMS = {$(PROGRAMS_ISOTP),$(PROGRAMS_CANGW),$(PROGRAMS_SLCAN),$(PROGRAMS_CAN_UTILS)}
++SOCKETCAN_VERSION = 1235
++SOCKETCAN_SOURCE = socketcan-svn-rev$(SOCKETCAN_VERSION).tar.gz
++SOCKETCAN_SITE = http://svn.berlios.de/svnroot/repos/socketcan/trunk/
++SOCKETCAN_SITE_METHOD = svn
++
++define SOCKETCAN_BUILD_CMDS
++	$(MAKE) -C $(SOCKETCAN_DIR)/can-utils CC="$(TARGET_CC)"
++endef
++
++define SOCKETCAN_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(SOCKETCAN_DIR)/can-utils install
++	$(TARGET_STRIP) $(TARGET_DIR)/usr/local/bin/$(PROGRAMS)
++endef
++
++define SOCKETCAN_CLEAN_CMDS
++	$(MAKE) -C $(SOCKETCAN_DIR)/can-utils clean
++endef
++
++define SOCKETCAN_UNINSTALL_TARGET_CMDS
++	rm -rf $(SOCKETCAN_DIR)
++endef
++
++$(eval $(call GENTARGETS,package,socketcan))
+-- 
+1.7.1
