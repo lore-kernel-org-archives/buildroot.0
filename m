@@ -1,90 +1,55 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sun, 17 Apr 2011 19:24:53 -0700
-Subject: [Buildroot] Understanding how jffs2 boots linux
-In-Reply-To: <BANLkTim01WZ1Tjc742Ej11yVMU1=NvZqqA@mail.gmail.com>
-References: <BANLkTi=Oqk0sio+rO9-=L8OEd2Sf7Akb3w@mail.gmail.com>
-	<BANLkTim01WZ1Tjc742Ej11yVMU1=NvZqqA@mail.gmail.com>
-Message-ID: <BANLkTi==nuXSFQ=c6ONyd2wa4afGcPfDww@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 18 Apr 2011 10:34:06 +0200
+Subject: [Buildroot] Switching to /dev/ttyX
+In-Reply-To: <1302825872.7244.39.camel@galileo.graphics-muse.org>
+References: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
+	<1302825872.7244.39.camel@galileo.graphics-muse.org>
+Message-ID: <BANLkTi=0769ryV063eD80j6MdVNCiaNYdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, shoot, if they were in the device tree, then I would be done. But,
-since they are not, I need to dig into how the kernel actually works when
-trying to mount a NOR flash.
-
-Or perhaps find the right google term. Googling things like "mtdparts",
-"rootfstype=jffs2" doesnt glean enough or the right knowledge.
-
-It *almost* mounts. There appears to be a change in syntax in more recent
-linux kernels. The previous "root-/dev/mtdblockx" doesnt work anymore. It
-appears to need to be something like "root=mtd:<something>" now. I think
-this may be a side effect of all the NAND checkins to u-boot and the kernel
-over the last year or so.
-
-
-On Sun, Apr 17, 2011 at 4:49 PM, Martin Hicks <mort@bork.org> wrote:
-
-> The flash partitions are probably in the Flattened Device tree
-> (arch/powerpc/boot/dts) and linked into your kernel binary.
+On Fri, Apr 15, 2011 at 2:04 AM, Michael J. Hammel
+<buildroot@graphics-muse.org> wrote:
+> On Thu, 2011-04-14 at 09:50 +0200, Thomas De Schampheleire wrote:
+>> In /etc/inittab, you have e.g.
+>> tty1::respawn:/sbin/getty 38400 tty1
+>> tty2::respawn:/sbin/getty 38400 tty2
+>> tty3::respawn:/usr/bin/tail -f /var/log/messages
+>> By default I'm connected to the board on a serial line, e.g. /dev/ttyS0
+>> My question is: how can I access the other /dev/tty's?
 >
-> mh
->
->
-> On Sun, Apr 17, 2011 at 4:18 PM, Charles Krinke
-> <charles.krinke@gmail.com> wrote:
-> > I have a not-quite-buildroot question which I think has a simple answer.
-> I
-> > just cannot remember the answer.
-> >
-> > I have an MPC8323ERDB project with NOR flash that needs to boot a
-> buildroot
-> > generated rootfs.jffs2 and *somewhere* in the linux kernel, linux parses
-> the
-> > command line with the "mtdparts=" stuff.
-> >
-> > I am trying to understand where in the kernel linux parses the mtdparts=
-> and
-> > then how the JFFS2 is setup to boot.
-> >
-> > Grepping for CONFIG_MTD_PARTS, JFFS2, mtdparts doesnt get me there. It
-> sends
-> > me all over the kernel in nand stuff and various drivers. I have single
-> > stepped through "setup_command_line" expecting it to be there.
-> >
-> > Can someone give me a clue or two that might let me converge my
-> > understanding?
-> >
-> > --
-> > Charles Krinke
-> >
-> > p.s. I did get the BDI-2000 single stepping through the linux kernel
-> using
-> > Eclipse and if anyone is interested in the recipe, I am happy to share
-> some
-> > pointers. Its not that difficult.
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
->
->
-> --
-> Martin Hicks P.Eng.      |         mort at bork.org
-> Bork Consulting Inc.     |   +1 (613) 266-2296
->
+> tty's are controlling terminals for processes. ?They need to be attached
+> to a vc (virtual console) to use chvt. ?vc's require a display device,
+> like an LCD monitor. ?Not positive 'bout that last part, but its
+> something like that. ?You can read more about tty's and related devices
+> here: http://tldp.org/HOWTO/Text-Terminal-HOWTO-7.html
 
+Then why are different tty's used? If you specify no tty, the default
+/dev/console is used. Isn't that enough? Or maybe that's because these
+processes should run in parallel?
 
+Still, there must be some standard way to access tty1 or tty2,
+otherwise it seems useless to start a getty there!
+Conspy is interesting, but not included in buildroot, so I sense there
+should be an easier way...
 
--- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110417/c18ac7fc/attachment.html>
+>
+> If you're just looking for multiple terminal sessions to work with you
+> can try running "screen" on your serial port connection. ?That will give
+> you any number of extra terminal sessions. ?I'm not a screen expert so
+> can't say if logins (getty's) are possible on those other screen
+> sessions. ?But use of screen on serial port connections is very common
+> with embedded development. ?I also use it on my desktop so that
+> cross-compiled builds I start at home can be viewed from work by
+> attaching the the running screen session. ?Very handy. ?And easy to use.
+>
+>> 'tty' always shows /dev/ttyS0.
+>
+> That command only shows the terminal connected to the standard input,
+> which would be the one you typed the command on.
+
+Thanks,
+Thomas
