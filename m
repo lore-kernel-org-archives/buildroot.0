@@ -1,42 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 18 Apr 2011 11:09:22 -0300
-Subject: [Buildroot] [PATCH 3/5] toolchain: bump kernel headers 2.6.35.12
-	and 2.6.38.3
-In-Reply-To: <1303135764-20972-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1303135764-20972-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1303135764-20972-3-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Mon, 18 Apr 2011 16:54:20 +0200
+Subject: [Buildroot] initramfs, busybox init, switch_root and ARM
+Message-ID: <LJUS2K$28351E41DE62C4240393CF6875FF3D6E@aruba.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...types-for-headers-exported-to-user-space.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+Thomas Koster wrote:
+> ...
+> Question one: If the requisite drivers are included in the kernel
+> (e.g. ext2, or nfs + kernel network auto-configuration if I want an
+> NFS root), is an initramfs even necessary?
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 1da6d53..68151d0 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -43,9 +43,9 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "2.6.35.11"	if BR2_KERNEL_HEADERS_2_6_35
-+	default "2.6.35.12"	if BR2_KERNEL_HEADERS_2_6_35
- 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
--	default "2.6.38.2"	if BR2_KERNEL_HEADERS_2_6_38
-+	default "2.6.38.3"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
--- 
-1.7.3.4
+No.
+
+> Can I get away with the
+> 'real' root filesystem being mounted from the start?
+
+Yes!
+If your kernel has all the drivers needed to mount the root filesystem
+compiled in statically (=not as modules), there is usually no need to
+have an initramfs.
+This is frequent on embedded systems that have no or little variations
+of hardware configuration.
+
+Luca
