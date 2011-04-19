@@ -1,17 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Apr 2011 14:11:35 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: bump 4.4.x version
-Message-ID: <20110419121220.CC146800D0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Apr 2011 22:24:32 +0200
+Subject: [Buildroot] Fwd: Re:  mysql Server
+In-Reply-To: <4DA5E45E.5060500@michaelburghart.de>
+References: <4DA5E45E.5060500@michaelburghart.de>
+Message-ID: <20110419222432.33d12817@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, 13 Apr 2011 19:58:54 +0200
+Michael Burghart <mb@michaelburghart.de> wrote:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2af9541e2cdc4eaafb9a0766b9dd5b1012ef91f4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > You created a Config.in under package/mysql.  You then have to add
+> > that file reference to package/Config.in.
+> 
+> aaah... thanks a lot!!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Note that this is well documented in the Buildroot documentation:
+http://buildroot.org/downloads/buildroot.html#config-in-file
 
-Patch is too large, so refusing to show it
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
