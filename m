@@ -1,37 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 19 Apr 2011 23:02:22 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain/crosstool-NG: bump version to
-	1.10.1
-In-Reply-To: <1303246942-26415-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1303246942-26415-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1303246942-26415-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Michael Burghart <mb@michaelburghart.de>
+Date: Tue, 19 Apr 2011 23:04:00 +0200
+Subject: [Buildroot] mounting a cramfs
+In-Reply-To: <20110419222604.5b58e547@surf>
+References: <4DA5D4E5.7020603@michaelburghart.de>
+	<20110419222604.5b58e547@surf>
+Message-ID: <4DADF8C0.6090405@michaelburghart.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the same time, also use the new upstream location.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+hi Thomas,
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index c57876e..e52bdee 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -14,8 +14,8 @@ uclibc: dependencies $(STAMP_DIR)/ct-ng-toolchain-installed
- # Internal variables
- 
- # Crostool-NG hard-coded configuration options
--CTNG_VERSION:=1.10.0
--CTNG_SITE:=http://ymorin.is-a-geek.org/download/crosstool-ng/
-+CTNG_VERSION:=1.10.1
-+CTNG_SITE:=http://crosstool-ng.org/download/crosstool-ng/
- CTNG_SOURCE:=crosstool-ng-$(CTNG_VERSION).tar.bz2
- CTNG_DIR:=$(BUILD_DIR)/crosstool-ng-$(CTNG_VERSION)
- CTNG_CAT:=bzcat
--- 
-1.7.2.3
+Am 19.04.2011 22:26, schrieb Thomas Petazzoni:
+
+> I'm not sure this is really Buildroot-related, but anyway.
+
+jupp not really. Sorry.
+> 
+> On Wed, 13 Apr 2011 18:52:53 +0200
+> Michael Burghart <mb@michaelburghart.de> wrote:
+> 
+> Are you sure that /etc/language is really a cramfs image ? It sounds
+> like a very strange location and name for a cramfs image.
+
+yes I am. As it has been built by our client. I can mount it manually.
+Will try with bind.
+
+
+- -- 
+- --
+cheers
+- -micha-
+- --
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.16 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iQEcBAEBAgAGBQJNrfjAAAoJEEMkp/gkis191CUH/jH60hXd+J/16XVw+MLWAQST
+QJXtbS74jzuEskgZ9CcjMirHRqsyjO+b22+37U4jnNiVcEKOwd/kktC1bTJ1gAfS
+aISXPdKc3ZRy3XOBiylHf8EUNk3PEsFhq6u8Gx0TdpB0zE+juIUFfbVw5Em184js
+c4PpmmUv70Gq/A0Xf+ZOi3k8iTzgW5n/73fFMm2onSjCebI3y3VqwTA/e4Hph+IN
+YT2gzHDVb4589fNrm/uPJUi7X/A2hJqe/m4RtAm1PNPaQ1pPRbajsokxa8FtzdFq
+16VWs0juVarzKsaeA5FCLEmSoBlZFEpyA/EyD2L37LQUHx9Yxje0TzyP9+gIC2c=
+=n7Jv
+-----END PGP SIGNATURE-----
