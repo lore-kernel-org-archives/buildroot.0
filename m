@@ -1,46 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2011 10:15:56 +0200
-Subject: [Buildroot] [PATCH] package: add socketcan package
-In-Reply-To: <4DAE88BF.6070301@armadeus.com>
-References: <1303145560-11520-1-git-send-email-kevin.joly@armadeus.com>
-	<20110419223612.77112a72@surf> <4DAE88BF.6070301@armadeus.com>
-Message-ID: <20110420101556.63320c1b@surf>
+From: Fabien Marteau <fabien.marteau@armadeus.com>
+Date: Wed, 20 Apr 2011 10:49:32 +0200
+Subject: [Buildroot] [PATCH] package: Adding Next Generation IRC deamon
+ ngircd
+In-Reply-To: <BANLkTimGpTegpEY8Nx5KpGE0MjV0Dw8kQQ@mail.gmail.com>
+References: <1303284114-15370-1-git-send-email-fabien.marteau@armadeus.com>
+	<BANLkTimGpTegpEY8Nx5KpGE0MjV0Dw8kQQ@mail.gmail.com>
+Message-ID: <4DAE9E1C.5020305@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 20/04/2011 10:12, Daniel Nystr?m wrote:
+> Oops, one last thing:
+> 
+>> +NGIRCD_VERSION = 17.1
+>> +NGIRCD_SOURCE = ngircd-17.1.tar.gz
+> 
+> This should be:
+> 
+> +NGIRCD_VERSION = 17.1
+> +NGIRCD_SOURCE = ngircd-$(NGIRCD_VERSION).tar.gz
+> 
+> Or, as the tarball follows standard naming convention, you could just
+> strip the _SOURCE line as seen here:
+> http://git.buildroot.net/buildroot/tree/package/file/file.mk
+> 
 
-Please keep the list in Cc.
+Thanks for your remarks, i will commit a new version of the patch
 
-On Wed, 20 Apr 2011 09:18:23 +0200
-JOLY <kevin.joly@armadeus.com> wrote:
-
-> Thanks for your reply. I will correct that but I can't change the 
-> install location (/usr/local/bin) because there is no options in the 
-> makefile of socketcan-utils, we can choose the target root but not
-> the directory to install the binaries.
-
-You can make a one-line patch to can-utils/Makefile to change
-
-PREFIX = /usr/local
-
-to
-
-PREFIX ?= /usr/local
-
-and then pass "PREFIX=/usr" at make install.
-
-This patch could be submitted to the upstream SocketCAN project, but in
-the mean time, you can add it to the package directory in Buildroot.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Fabien
