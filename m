@@ -1,39 +1,66 @@
-From: Anders Darander <anders.darander@gmail.com>
-Date: Wed, 20 Apr 2011 07:48:03 +0200
-Subject: [Buildroot] initramfs, busybox init, switch_root and ARM
-In-Reply-To: <20110420000445.32c24327@surf>
-References: <BANLkTi=8bAcdFNgo8MXaiVHnSr8CTqrt-w@mail.gmail.com>
-	<20110420000445.32c24327@surf>
-Message-ID: <BANLkTin5GRDOQHiWi9ZTTOC5uzjT5FtUtQ@mail.gmail.com>
+From: fabien.marteau at armadeus.com <fabien.marteau@armadeus.com>
+Date: Wed, 20 Apr 2011 09:21:54 +0200
+Subject: [Buildroot] [PATCH] package: Adding Next Generation IRC deamon
+	ngircd
+Message-ID: <1303284114-15370-1-git-send-email-fabien.marteau@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 20, 2011 at 00:04, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Mon, 18 Apr 2011 19:31:52 +1000
-> Thomas Koster <tkoster@gmail.com> wrote:
->> In either case, I expect to be using busybox and uClibc throughout
->> (that is, I won't be using GNU libc or a debian root unless I hit a
->> major roadblock with uClibc). One day I might try compiling a java or
->> mono runtime for it but that is over the horizon.
->
-> Ouch, Java and Mono runtime are probably not the easiest things to get
-> running on non-x86 platforms. Definitely possible, but probably not
-> easy.
+From: Fabien Marteau <fabien.marteau@armadeus.com>
 
-Well, it can be a little bit tricky, but it's manageable.
 
-1 - 1 1/2 year ago, I got a few JavaVM's up and running (at least one
-of them were in buildroot at that time). Unfortunately, our Java-guy
-insisted that GNU's Classpath was unsuitable for our project; thus, we
-had to change the JavaVM. Ultimately, we used the PhoneME JavaVM (with
-the advanced profile, not the feature profile) up and running. At that
-time, it required a few patches to the build and configuration
-scripts.
+Signed-off-by: Fabien Marteau <fabien.marteau@armadeus.com>
+---
+ package/Config.in        |    1 +
+ package/ngircd/Config.in |    6 ++++++
+ package/ngircd/ngircd.mk |   11 +++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/ngircd/Config.in
+ create mode 100644 package/ngircd/ngircd.mk
 
-This was all done for an ARM9-platform (at91sam9260).
-
-/Anders
+diff --git a/package/Config.in b/package/Config.in
+index 014c2c0..cd49bc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -409,6 +409,7 @@ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/nfs-utils/Config.in"
++source "package/ngircd/Config.in"
+ source "package/ntp/Config.in"
+ source "package/nuttcp/Config.in"
+ source "package/olsr/Config.in"
+diff --git a/package/ngircd/Config.in b/package/ngircd/Config.in
+new file mode 100644
+index 0000000..db13c41
+--- /dev/null
++++ b/package/ngircd/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_NGIRCD
++	bool "ngircd"
++	help
++		Next Generation IRC server deamon.
++		http://ngircd.barton.de
++
+diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
+new file mode 100644
+index 0000000..0b70455
+--- /dev/null
++++ b/package/ngircd/ngircd.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# ngIRCd: Next Generation IRC Daemon
++#
++#############################################################
++NGIRCD_VERSION = 17.1
++NGIRCD_SOURCE = ngircd-17.1.tar.gz
++NGIRCD_SITE = ftp://ftp.berlios.de/pub/ngircd/
++NGIRCD_CONF_OPT =
++
++$(eval $(call AUTOTARGETS,package,ngircd))
+-- 
+1.7.0.4
