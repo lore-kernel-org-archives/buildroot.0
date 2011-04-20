@@ -1,49 +1,39 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Tue, 19 Apr 2011 18:48:05 -0700
-Subject: [Buildroot] Switching to /dev/ttyX
-In-Reply-To: <20110419222524.554c543d@surf>
-References: <BANLkTi=_zF-UOK2PQPxewXb7bPO00mzuAQ@mail.gmail.com>
-	<20110419222524.554c543d@surf>
-Message-ID: <BANLkTimipjfx55qSnsv1U7Z=NUBB9UEgOg@mail.gmail.com>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Wed, 20 Apr 2011 07:48:03 +0200
+Subject: [Buildroot] initramfs, busybox init, switch_root and ARM
+In-Reply-To: <20110420000445.32c24327@surf>
+References: <BANLkTi=8bAcdFNgo8MXaiVHnSr8CTqrt-w@mail.gmail.com>
+	<20110420000445.32c24327@surf>
+Message-ID: <BANLkTin5GRDOQHiWi9ZTTOC5uzjT5FtUtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That would seem reasonable to me. Currently I am commenting out tty1..3 and
-uncommenting ttyS0 on both my glibc and uclibc roots to get things boting.
-On Apr 19, 2011 1:25 PM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
-> Hi,
+On Wed, Apr 20, 2011 at 00:04, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Mon, 18 Apr 2011 19:31:52 +1000
+> Thomas Koster <tkoster@gmail.com> wrote:
+>> In either case, I expect to be using busybox and uClibc throughout
+>> (that is, I won't be using GNU libc or a debian root unless I hit a
+>> major roadblock with uClibc). One day I might try compiling a java or
+>> mono runtime for it but that is over the horizon.
 >
-> On Thu, 14 Apr 2011 09:50:17 +0200
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
->
->> tty1::respawn:/sbin/getty 38400 tty1
->> tty2::respawn:/sbin/getty 38400 tty2
->> tty3::respawn:/usr/bin/tail -f /var/log/messages
->>
->> By default I'm connected to the board on a serial line, e.g. /dev/ttyS0
->>
->> My question is: how can I access the other /dev/tty's?
->
-> I don't think you easily can. I'm not really a fan of those default
-> settings. Maybe we should just get rid of them, and keep a single getty
-> on the terminal port configured through menuconfig ?
->
-> Regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110419/f7c5e3d8/attachment.html>
+> Ouch, Java and Mono runtime are probably not the easiest things to get
+> running on non-x86 platforms. Definitely possible, but probably not
+> easy.
+
+Well, it can be a little bit tricky, but it's manageable.
+
+1 - 1 1/2 year ago, I got a few JavaVM's up and running (at least one
+of them were in buildroot at that time). Unfortunately, our Java-guy
+insisted that GNU's Classpath was unsuitable for our project; thus, we
+had to change the JavaVM. Ultimately, we used the PhoneME JavaVM (with
+the advanced profile, not the feature profile) up and running. At that
+time, it required a few patches to the build and configuration
+scripts.
+
+This was all done for an ARM9-platform (at91sam9260).
+
+/Anders
