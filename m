@@ -1,28 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Apr 2011 15:13:21 +0200
-Subject: [Buildroot] [PATCH 0/2] toolchain/crosstool-NG: misc fixes
-In-Reply-To: <1303246942-26415-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Tue, 19 Apr 2011 23:02:20 +0200")
-References: <1303246942-26415-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87vcy9hxqm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 20 Apr 2011 15:13:13 +0200
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: bump version to
+	1.10.1
+Message-ID: <20110420131407.CF779828A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> Hello!
- Yann> This ensures coherency between the sysroot naming in the crosstool-NG
- Yann> configuration, and the place we search for libraries.
+commit: http://git.buildroot.net/buildroot/commit/?id=f98c8d65bd2d7cfb9d3372f083baeb966377ef36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> Also, bump the version, and use the new download location.
+At the same time, also use the new upstream location.
 
- Yann>  [PATCH 1/2] toolchain/crosstool-NG: fix sysroot name
- Yann>  [PATCH 2/2] toolchain/crosstool-NG: bump version to 1.10.1
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index c57876e..e52bdee 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -14,8 +14,8 @@ uclibc: dependencies $(STAMP_DIR)/ct-ng-toolchain-installed
+ # Internal variables
+ 
+ # Crostool-NG hard-coded configuration options
+-CTNG_VERSION:=1.10.0
+-CTNG_SITE:=http://ymorin.is-a-geek.org/download/crosstool-ng/
++CTNG_VERSION:=1.10.1
++CTNG_SITE:=http://crosstool-ng.org/download/crosstool-ng/
+ CTNG_SOURCE:=crosstool-ng-$(CTNG_VERSION).tar.bz2
+ CTNG_DIR:=$(BUILD_DIR)/crosstool-ng-$(CTNG_VERSION)
+ CTNG_CAT:=bzcat
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
