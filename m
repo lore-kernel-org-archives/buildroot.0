@@ -1,33 +1,75 @@
-From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Wed, 20 Apr 2011 14:14:43 -0600
-Subject: [Buildroot] libav package
-Message-ID: <1303330483.13254.27.camel@feynman.coloradoengineeringinc.com>
+From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
+Date: Thu, 21 Apr 2011 10:29:27 +0800
+Subject: [Buildroot]  [PATCH 1/2] New package: bwm-ng
+Message-ID: <1303352967-6077-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've created a libav package for 2011.02 based on the ffmpeg package. It
-builds okay but I haven't tested it with any apps yet (working toward an
-omapfbplay package). There is one question before submitting a patch for
-it.  To get it to build I had to add the following config option:
+From: Kelvin Cheung <keguang.zhang@gmail.com>
 
---target-os=linux
+Add new package: bwm-ng
 
-I tried setting this to 
+Bandwidth Monitor NG is a small and console-based live network and
+disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
 
---target-os=$(GNU_TARGET_NAME)
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ package/Config.in        |    1 +
+ package/bwm-ng/Config.in |    7 +++++++
+ package/bwm-ng/bwm-ng.mk |   16 ++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/bwm-ng/Config.in
+ create mode 100644 package/bwm-ng/bwm-ng.mk
 
-but that generates linux-os which libav doesn't like.  Is it okay to
-leave it hardcoded like this or is there a Buildroot variable I should
-be using here?
-
-One other question:  what's the correct command for creating the patch
-for this?  I'd want to pick up both the multimedia/Config.in change and
-the new directory therein.  I've created patches before but not for
-adding a new directory like this.
-
-Thanks.
+diff --git a/package/Config.in b/package/Config.in
+index 014c2c0..0db0cd6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -150,6 +150,7 @@ endmenu
+ 
+ menu "Hardware handling"
+ source "package/acpid/Config.in"
++source "package/bwm-ng/Config.in"
+ source "package/cdrkit/Config.in"
+ source "package/cramfs/Config.in"
+ source "package/dbus/Config.in"
+diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
+new file mode 100644
+index 0000000..f2f8b12
+--- /dev/null
++++ b/package/bwm-ng/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BWM_NG
++	bool "bwm-ng"
++	help
++	  Bandwidth Monitor NG is a small and console-based live network and
++	  disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
++
++	  http://sourceforge.net/projects/bwmng/
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+new file mode 100644
+index 0000000..7fd5b38
+--- /dev/null
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# bwm-ng
++#
++#############################################################
++BWM_NG_VERSION:=0.6
++BWM_NG:=bwm-ng-$(BWM_NG_VERSION).tar.gz
++BWM_NG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/bwmng/bwmng/0.6/
++BWM_NG_CONF_OPT = --with-procnetdev --with-diskstats
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++BWM_NG_CONF_OPT += --with-ncurses
++BWM_NG_DEPENDENCIES += ncurses
++endif
++
++$(eval $(call AUTOTARGETS,package,bwm-ng))
 -- 
-Michael J. Hammel <buildroot@graphics-muse.org>
+1.7.1
