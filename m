@@ -1,20 +1,30 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 21 Apr 2011 16:48:10 +0200
-Subject: [Buildroot] devmem2
-In-Reply-To: <BANLkTinkR-QTr_HVKmJatrrQnF_xgMcTQg@mail.gmail.com>
-References: <BANLkTinkR-QTr_HVKmJatrrQnF_xgMcTQg@mail.gmail.com>
-Message-ID: <BANLkTikyrOJBpu71rzf32FV_5qy6q+3TWw@mail.gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 21 Apr 2011 11:58:42 -0700
+Subject: [Buildroot] creating a uclibc set of target binaries with Code
+	Sourcery
+Message-ID: <BANLkTin3JgVX91jeKX+YxQBap-BHMM8j1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21 April 2011 16:17, Xianghua Xiao <xiaoxianghua@gmail.com> wrote:
-> Please keep this package, as it's very useful for embedded product
-> debugging, and it does not take much space at all.
+I have had good luck with Code Sourcery 2010.09 so far and have used both
+config options in buildroot. The one which puts it in
+output/external-toolchain and pre-installing CodeSourcery for the powerpc
+and referencing it as an external tool.
 
-Busybox provides a similar tool called 'devmem'. Have you tried it?
+Getting to the next step of understanding how to create a target uclibc
+environment with a CodeSourcery pre-compiled binary would be of benefit. I
+am tending towards Code Sourcery as that makes the compiler a constant
+rather then a variable.
 
-Best regards,
-Bj?rn Forsman
+So, with that said, can I get a few hints on how one might accomplish the
+mission of using an external toolchain such as CodeSourcery to compile a
+uclibc root filesystem?? Can this even be done?
+
+-- 
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110421/5bdd3ea4/attachment.html>
