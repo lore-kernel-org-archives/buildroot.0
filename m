@@ -1,7 +1,7 @@
 From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
-Date: Thu, 21 Apr 2011 10:29:27 +0800
-Subject: [Buildroot]  [PATCH 1/2] New package: bwm-ng
-Message-ID: <1303352967-6077-1-git-send-email-keguang.zhang@gmail.com>
+Date: Thu, 21 Apr 2011 10:30:09 +0800
+Subject: [Buildroot]  [PATCH 2/2] New package: input-event-daemon
+Message-ID: <1303353009-6130-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,66 +10,139 @@ To: buildroot@busybox.net
 
 From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-Add new package: bwm-ng
+Add new package: input-event-daemon
 
-Bandwidth Monitor NG is a small and console-based live network and
-disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
+input-event-daemon -  input event handling daemon for linux.
 
 Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 ---
- package/Config.in        |    1 +
- package/bwm-ng/Config.in |    7 +++++++
- package/bwm-ng/bwm-ng.mk |   16 ++++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/bwm-ng/Config.in
- create mode 100644 package/bwm-ng/bwm-ng.mk
+ package/Config.in                                |    1 +
+ package/input-event-daemon/Config.in             |    8 ++++
+ package/input-event-daemon/S99input-event-daemon |   40 +++++++++++++++++++++
+ package/input-event-daemon/input-event-daemon.mk |   41 ++++++++++++++++++++++
+ 4 files changed, 90 insertions(+), 0 deletions(-)
+ create mode 100644 package/input-event-daemon/Config.in
+ create mode 100755 package/input-event-daemon/S99input-event-daemon
+ create mode 100644 package/input-event-daemon/input-event-daemon.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 014c2c0..0db0cd6 100644
+index 0db0cd6..4bd2864 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -150,6 +150,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/acpid/Config.in"
-+source "package/bwm-ng/Config.in"
- source "package/cdrkit/Config.in"
- source "package/cramfs/Config.in"
- source "package/dbus/Config.in"
-diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
+@@ -176,6 +176,7 @@ source "package/hdparm/Config.in"
+ endif
+ source "package/hwdata/Config.in"
+ source "package/i2c-tools/Config.in"
++source "package/input-event-daemon/Config.in"
+ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+diff --git a/package/input-event-daemon/Config.in b/package/input-event-daemon/Config.in
 new file mode 100644
-index 0000000..f2f8b12
+index 0000000..edf2886
 --- /dev/null
-+++ b/package/bwm-ng/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BWM_NG
-+	bool "bwm-ng"
++++ b/package/input-event-daemon/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_INPUT_EVENT_DAEMON
++	bool "input-event-daemon"
 +	help
-+	  Bandwidth Monitor NG is a small and console-based live network and
-+	  disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
++	  input-event-daemon is a daemon which executes
++	  a user-defined command on input events, such as
++	  keys, mouse buttons and switches.
 +
-+	  http://sourceforge.net/projects/bwmng/
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
-new file mode 100644
-index 0000000..7fd5b38
++	  http://github.com/gandro/input-event-daemon
+diff --git a/package/input-event-daemon/S99input-event-daemon b/package/input-event-daemon/S99input-event-daemon
+new file mode 100755
+index 0000000..ed374f4
 --- /dev/null
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -0,0 +1,16 @@
++++ b/package/input-event-daemon/S99input-event-daemon
+@@ -0,0 +1,40 @@
++#! /bin/sh
++
++[ -f /usr/bin/input-event-daemon ] || exit 0
++
++start() {
++	echo -n "Starting input-event-daemon: "
++	input-event-daemon
++	echo "done"
++}
++
++
++stop() {
++        echo -n "Stopping input-event-daemon: "
++	echo
++        killall input-event-daemon
++	echo "done"
++}
++
++restart() {
++	stop
++	start
++}
++
++# See how we were called.
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|reload|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+new file mode 100644
+index 0000000..5cd6e72
+--- /dev/null
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -0,0 +1,41 @@
 +#############################################################
 +#
-+# bwm-ng
++# input-event-daemon
 +#
 +#############################################################
-+BWM_NG_VERSION:=0.6
-+BWM_NG:=bwm-ng-$(BWM_NG_VERSION).tar.gz
-+BWM_NG_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/bwmng/bwmng/0.6/
-+BWM_NG_CONF_OPT = --with-procnetdev --with-diskstats
++INPUT_EVENT_DAEMON_VERSION:=13f4d61
++INPUT_EVENT_DAEMON_SITE:=git://github.com/gandro/input-event-daemon.git
 +
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+BWM_NG_CONF_OPT += --with-ncurses
-+BWM_NG_DEPENDENCIES += ncurses
-+endif
++define INPUT_EVENT_DAEMON_BUILD_CMDS
++	touch  $(@D)/input-event-table.h
++	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(@D)
++endef
 +
-+$(eval $(call AUTOTARGETS,package,bwm-ng))
++define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/input-event-daemon $(TARGET_DIR)/usr/bin
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/input-event-daemon
++	cp -n $(@D)/docs/sample.conf $(TARGET_DIR)/etc/input-event-daemon.conf
++endef
++
++define INPUT_EVENT_DAEMON_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/input-event-daemon
++	rm -f $(TARGET_DIR)/etc/input-event-daemon.conf
++endef
++
++define INPUT_EVENT_DAEMON_COSTUM_INSTALL
++	# install start/stop script
++	$(call MESSAGE,"Installing S99input-event-daemon init script")
++	if [ ! -f $(TARGET_DIR)/etc/init.d/S99input-event-daemon ]; then \
++		$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
++		$(TARGET_DIR)/etc/init.d/S99input-event-daemon; \
++	fi
++	$(Q)touch $@
++endef
++
++INPUT_EVENT_DAEMON_POST_INSTALL_TARGET_HOOKS += INPUT_EVENT_DAEMON_COSTUM_INSTALL
++
++$(eval $(call GENTARGETS,package,input-event-daemon))
 -- 
 1.7.1
