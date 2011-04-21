@@ -1,44 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 21 Apr 2011 23:52:45 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110421215407.6F6C38294B@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 21 Apr 2011 18:29:31 -0400
+Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
+In-Reply-To: <877hanz56u.fsf@macbook.be.48ers.dk>
+References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
+	<871v1iz4rw.fsf@macbook.be.48ers.dk> <1301952165.27248.2.camel@segulix>
+	<87pqogj49u.fsf@macbook.be.48ers.dk> <1303322103.8512.4.camel@segulix>
+	<878vv423zn.fsf@macbook.be.48ers.dk> <1303413743.6641.12.camel@segulix>
+	<877hanz56u.fsf@macbook.be.48ers.dk>
+Message-ID: <BANLkTikW4aebOtn_TBzRHQd+7+iYjEWtQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Apr 21, 2011 at 5:04 PM, Peter Korsgaard wrote:
+>> Sergio Monteiro Basto writes:
+>>> I haven't tried, but doesn't that just shuffle part of the ncurses
+>>> functions into libtinfo? I don't right away see why that would fix
+>>> anything, but I'll start a build now.
+>>
+>> so, it fix anything ?
+>
+> No, as expected the behaviour is exactly the same.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3510193460d7eb9eca2b944212ee84cabe4996a6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   12 +++++++-----
- 1 files changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index d0a61eb..5d29693 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -3,11 +3,13 @@
- 	Updated/fixed packages: alsa-lib, alsa-utils, alsamixergui,
- 	avahi, busybox, copas, dnsmasq, dropbear, ethtool, fakeroot,
- 	ffmpeg, file, gnuconfig, gst-ffmpeg, gst-plugins-good, icu,
--	imagemagick, libdnet, libpng, libxml2, libxslt, lighttpd,
--	makedevs, midori, mpg123, mpd, mtd-utils, ncurses, netsnmp,
--	openssl, pkg-config, qt, quagga, readline, rsync, samba,
--	socat, squashfs, webkit, xerces, xlib_xtrans, xorg-server,
--	xterm, xz
-+	imagemagick, iproute2, less, libdnet, libpng, libxml2,
-+	libxslt, lighttpd, makedevs, midori, mpg123, mpd, mtd-utils,
-+	ncurses, netsnmp, openssl, pkg-config, procps, qt, quagga,
-+	readline, rsync, samba, squid, socat, squashfs, tslib, webkit,
-+	xerces, xlib_xtrans, xorg-server, xterm, xz
-+
-+	New packages: can-utils, htop, libv4l
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
--- 
-1.7.3.4
+ncurses 5.9 is out and seems to be mostly a bugfix release over 5.8
+... probably worth testing
+-mike
