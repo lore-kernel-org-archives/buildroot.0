@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Apr 2011 23:04:57 +0200
-Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
-In-Reply-To: <1303413743.6641.12.camel@segulix> (Sergio Monteiro Basto's
-	message of "Thu, 21 Apr 2011 20:22:23 +0100")
-References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
-	<871v1iz4rw.fsf@macbook.be.48ers.dk>
-	<1301952165.27248.2.camel@segulix>
-	<87pqogj49u.fsf@macbook.be.48ers.dk> <1303322103.8512.4.camel@segulix>
-	<878vv423zn.fsf@macbook.be.48ers.dk>
-	<1303413743.6641.12.camel@segulix>
-Message-ID: <877hanz56u.fsf@macbook.be.48ers.dk>
+Date: Thu, 21 Apr 2011 23:19:59 +0200
+Subject: [Buildroot] [PATCH 4/7] libcap: bump to version 2.20
+In-Reply-To: <1303321319-16553-4-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Wed, 20 Apr 2011 14:41:56 -0300")
+References: <1303321319-16553-1-git-send-email-gustavo@zacarias.com.ar>
+	<1303321319-16553-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8739lbz4hs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergio" == Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ Gustavo> Bump libcap to version 2.20 and adjust style to match buildroot's
+ Gustavo> defacto standard.
 
- >> I haven't tried, but doesn't that just shuffle part of the ncurses
- >> functions into libtinfo? I don't right away see why that would fix
- >> anything, but I'll start a build now.
+Breaks here (I don't have libcap development headers on my build host):
 
- Sergio> so, it fix anything ? 
+/usr/bin/make -C libcap all
+make[2]: Entering directory `/home/peko/source/buildroot/output/build/libcap-2.20/libcap'
+/usr/bin/gcc -O2 -I/home/peko/source/buildroot/output/host/include -I/home/peko/source/buildroot/output/host/usr/include _makenames.c -o _makenames
+_makenames.c:10:28: error: sys/capability.h: No such file or directory
+_makenames.c:25: error: invalid application of ?sizeof? to incomplete type ?struct __user_cap_data_struct? 
+make[2]: *** [_makenames] Error 1
+make[2]: Leaving directory `/home/peko/source/buildroot/output/build/libcap-2.20/libcap'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/peko/source/buildroot/output/build/libcap-2.20'
+make: *** [/home/peko/source/buildroot/output/build/libcap-2.20/.stamp_built] Error 2
 
-No, as expected the behaviour is exactly the same.
+
+It seems like we'll need to first build libcap for the host.
 
 -- 
 Bye, Peter Korsgaard
