@@ -1,68 +1,106 @@
-From: Ettore Campion <ecampion@gmail.com>
-Date: Thu, 21 Apr 2011 09:42:50 +0200
-Subject: [Buildroot] Problems using buildroot with crosstoll-ng
-In-Reply-To: <201104171740.17634.yann.morin.1998@anciens.enib.fr>
-References: <BANLkTik6g3rhC1_WfRLkBodNVsOUhjKaJA@mail.gmail.com>
-	<201104171740.17634.yann.morin.1998@anciens.enib.fr>
-Message-ID: <BANLkTikpiEJaYWGHf+_3LF4D=m-ne10Gww@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 21 Apr 2011 10:28:11 +0200
+Subject: [Buildroot] [PATCH] [BUILDROOT] Update package socketcan and
+	rename socketcan to socketcan_utils
+In-Reply-To: <1303301727-893-1-git-send-email-kevin.joly@armadeus.com> (kevin
+	joly's message of "Wed, 20 Apr 2011 14:15:27 +0200")
+References: <1303301727-893-1-git-send-email-kevin.joly@armadeus.com>
+Message-ID: <87tydsypno.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "kevin" == kevin joly <kevin.joly@armadeus.com> writes:
 
-I just cloned the buildroot git repository (with your fixed applied)
-and tried again.
-With my configuration (glibc 2.9) is always missing ld.so.1 in target/lib.
-This seems to me because in
-toolchain/toolchain-crosstool-ng/crosstool-ng.mk we're looking for
-ld-linux.so and nor for ld.so.
+ kevin> From: Kevin JOLY <joly.kevin25@gmail.com>
+ kevin> Signed-off-by: Kevin JOLY <joly.kevin25@gmail.com>
+ kevin> ---
+ kevin>  patches/buildroot/2010.11/042-socketcan.patch |   48 +++++++++++++++++++++++-
+ kevin>  1 files changed, 46 insertions(+), 2 deletions(-)
 
-Regards,
-Ettore
+ kevin> diff --git a/patches/buildroot/2010.11/042-socketcan.patch b/patches/buildroot/2010.11/042-socketcan.patch
+ kevin> index 8c77741..7bb885c 100644
+ kevin> --- a/patches/buildroot/2010.11/042-socketcan.patch
+ kevin> +++ b/patches/buildroot/2010.11/042-socketcan.patch
+ kevin> @@ -5,8 +5,8 @@ Signed-off-by: Kevin Joly <joly.kevin25@gmail.com>
+ 
+ kevin>  Index: buildroot/package/Config.in
+ kevin>  ===================================================================
+ kevin> ---- buildroot.orig/package/Config.in	2011-04-20 13:56:09.454599001 +0200
+ kevin> -+++ buildroot/package/Config.in	2011-04-20 13:57:38.958599001 +0200
+ kevin> +--- buildroot.orig/package/Config.in	2011-04-20 14:11:30.206599000 +0200
+ kevin> ++++ buildroot/package/Config.in	2011-04-20 14:12:11.566599000 +0200
+ kevin>  @@ -428,6 +428,7 @@
+ kevin>   source "package/samba/Config.in"
+ kevin>   source "package/ser2net/Config.in"
+ kevin> @@ -15,3 +15,47 @@ Index: buildroot/package/Config.in
+ kevin>   source "package/spawn-fcgi/Config.in"
+ kevin>   source "package/squid/Config.in"
+ kevin>   source "package/tcpdump/Config.in"
+ kevin> +Index: buildroot/package/socketcan_utils/Config.in
+ kevin> +===================================================================
+ kevin> +--- /dev/null	1970-01-01 00:00:00.000000000 +0000
+ kevin> ++++ buildroot/package/socketcan_utils/Config.in	2011-04-20 09:45:25.000000000 +0200
+ kevin> +@@ -0,0 +1,7 @@
+ kevin> ++config BR2_PACKAGE_SOCKETCAN_UTILS
+ kevin> ++	bool "socketcan_utils"
+ kevin> ++	help
+ kevin> ++	  The socketcan_utils package contains several tools for Linux to test
+ kevin> ++	  a Controller Area Network.
+ kevin> ++
+ kevin> ++	  http://developer.berlios.de/projects/socketcan/
 
-On Sun, Apr 17, 2011 at 5:40 PM, Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> wrote:
-> Ettore, All,
->
-> On Friday 15 April 2011 22:14:06 Ettore Campion wrote:
->> I'm trying to use buildroot with crosstool-ng to create a glibc based
->> cross-toolchain and root filesystem image for a mipsel target.
->> I'm using the default settings everywhere besides the kernel-headers:
->> I'm using here a custom linux tarball based on linux 2.6.22.
->> The toolchain seems to be correctly generated but there are some
->> problems in the copy of the generated libraries files to the target
->> directory.
->>
->> The fist problem I faced was the following:
->> CTNG_TUPLE='mipsel-unknown-linux-gnu'
->> CTNG_SYSROOT='/home/tora/Projects/buildroot-2011.02/output/host/
->> usr/mipsel-unknown-linux-gnu/sys-root'
-> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ^^^^^^^^
-> Bummer... There's an issue here.
-> It should be 'sysroot', not 'sys-root'. I'm testing a fix here.
->
->> In crosstool-ng menuconfig I specified the sysroot dir like default as
->> "sysroot", not "sys-root".
->
-> Which should be hidden in this case. I'm testing a fix here.
->
->> Taking again a look to crosstool-ng.mk and target/lib I noticed that
->> was missing ld.so.1, manually adding the lib to target/lib I got rid
->> of the missing init message
->
-> OK, I'll see if it has anything to do with the above issue.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> | ?Yann E. MORIN ?| Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software ?Designer | \ / CAMPAIGN ? ? | ?___ ? ? ? ? ? ? ? |
-> | +33 223 225 172 `------------.-------: ?X ?AGAINST ? ? ?| ?\e/ ?There is no ?|
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL ? ?| ? v ? conspiracy. ?|
-> '------------------------------^-------^------------------^--------------------'
->
+The svn directory is called can-utils, so I prefer to use that instead.
+
+ kevin> +Index: buildroot/package/socketcan_utils/socketcan_utils.mk
+ kevin> +===================================================================
+ kevin> +--- /dev/null	1970-01-01 00:00:00.000000000 +0000
+ kevin> ++++ buildroot/package/socketcan_utils/socketcan_utils.mk	2011-04-20 11:52:55.000000000 +0200
+ kevin> +@@ -0,0 +1,27 @@
+ kevin> ++#############################################################
+ kevin> ++#
+ kevin> ++# socketcan_utils
+ kevin> ++#
+ kevin> ++#############################################################
+ kevin> ++SOCKETCAN_UTILS_VERSION = 1235
+ kevin> ++SOCKETCAN_UTILS_SOURCE = socketcan-svn-rev$(SOCKETCAN_VERSION).tar.gz
+ kevin> ++SOCKETCAN_UTILS_SITE = http://svn.berlios.de/svnroot/repos/socketcan/trunk/
+ kevin> ++SOCKETCAN_UTILS_SITE_METHOD = svn
+ kevin> ++TARGET_CFLAGS+= -I$(@D)/kernel/2.6/include \
+ kevin> ++	    -DSO_RXQ_OVFL=40 \
+ kevin> ++	    -DPF_CAN=29 \
+ kevin> ++	    -DAF_CAN=PF_CAN
+ kevin> ++
+
+You're changing TARGET_CFLAGS globally here, and can-utils' configure
+already checks for PF_CAN / AF_CAN and defines those if not provided by
+C library.
+
+ kevin> ++define SOCKETCAN_UTILS_BUILD_CMDS
+ kevin> ++	$(MAKE) -C $(@D)/can-utils CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
+ kevin> ++endef
+ kevin> ++
+ kevin> ++define SOCKETCAN_UTILS_INSTALL_TARGET_CMDS
+ kevin> ++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D)/can-utils install PREFIX="/usr"
+ kevin> ++endef
+ kevin> ++
+ kevin> ++define SOCKETCAN_UTILS_CLEAN_CMDS
+ kevin> ++	$(MAKE) -C $(@D)/can-utils clean
+ kevin> ++endef
+
+ kevin> ++
+ kevin> ++$(eval $(call GENTARGETS,package,socketcan_utils))
+
+can-utils uses autotools, so it makes more sense to use AUTOTARGETS
+here.
+
+I've made a can-utils package a few months ago as well, but kept back
+from committing it as can-utils was supposed to get a release shortly - 
+but that hasn't happened, so I'll commit it now.
+
+Thanks for your contribution.
+
+-- 
+Bye, Peter Korsgaard
