@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 21 Apr 2011 10:27:17 +0200
-Subject: [Buildroot] [git commit] iproute2: bump to version 2.6.38
-Message-ID: <20110421082832.DEE46828F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: add can-utils
+Message-ID: <20110421082833.134AB81E11@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,33 +9,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23f3b883ee6c4e1309557c1310af98855f171869
+commit: http://git.buildroot.net/buildroot/commit/?id=7d75acdbee2d3dc3f611c67ac0d3a05c544b8ca2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Add SocketCAN utilities.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...nal-ipv6.patch => iproute2-optional-ipv6.patch} |    0
- package/iproute2/iproute2.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename package/iproute2/{iproute2-2.6.37-optional-ipv6.patch => iproute2-optional-ipv6.patch} (100%)
+ package/Config.in              |    1 +
+ package/can-utils/Config.in    |    8 ++++++++
+ package/can-utils/can-utils.mk |   11 +++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/can-utils/Config.in
+ create mode 100644 package/can-utils/can-utils.mk
 
-diff --git a/package/iproute2/iproute2-2.6.37-optional-ipv6.patch b/package/iproute2/iproute2-optional-ipv6.patch
-similarity index 100%
-rename from package/iproute2/iproute2-2.6.37-optional-ipv6.patch
-rename to package/iproute2/iproute2-optional-ipv6.patch
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index dfb8410..630fab4 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPROUTE2_VERSION = 2.6.37
-+IPROUTE2_VERSION = 2.6.38
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.bz2
- IPROUTE2_SITE = http://devresources.linuxfoundation.org/dev/iproute2/download
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
+diff --git a/package/Config.in b/package/Config.in
+index 014c2c0..ce39edd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -373,6 +373,7 @@ endif
+ source "package/bind/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
++source "package/can-utils/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
+new file mode 100644
+index 0000000..79c1459
+--- /dev/null
++++ b/package/can-utils/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CAN_UTILS
++	bool "can-utils"
++	help
++	  SocketCAN is a set of open source CAN drivers and a
++	  networking stack.
++	  This package provides various tools for this stack.
++
++	  http://developer.berlios.de/projects/socketcan/
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+new file mode 100644
+index 0000000..f602490
+--- /dev/null
++++ b/package/can-utils/can-utils.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# can-utils
++#
++#############################################################
++
++CAN_UTILS_VERSION = 1235
++CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
++CAN_UTILS_AUTORECONF = YES
++
++$(eval $(call AUTOTARGETS,package,can-utils))
 -- 
 1.7.3.4
