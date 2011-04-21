@@ -1,8 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 21 Apr 2011 11:52:33 +0200
-Subject: [Buildroot] [git commit] toolchain: bump 2.6.35 kernel headers to
-	2.6.35.12
-Message-ID: <20110421095712.2871682908@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] New package: bwm-ng
+Message-ID: <20110421095712.5224082908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +9,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36449d1f2aaf67cf377d0b7eb49840b10cbec903
+commit: http://git.buildroot.net/buildroot/commit/?id=c5aee2a346d27ab8197ab3f7fb37e1b18a9868d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Add new package: bwm-ng
+
+Bandwidth Monitor NG is a small and console-based live network and
+disk-io bandwidth monitor for Linux, BSD, Solaris, Mac OS X and others.
+
+[Peter: move to net, fix Config.in line length, remove unused make var]
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    2 +-
- ...types-for-headers-exported-to-user-space.patch} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename toolchain/kernel-headers/{linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
+ package/Config.in        |    1 +
+ package/bwm-ng/Config.in |    8 ++++++++
+ package/bwm-ng/bwm-ng.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/bwm-ng/Config.in
+ create mode 100644 package/bwm-ng/bwm-ng.mk
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 92798d8..68151d0 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -43,7 +43,7 @@ config BR2_DEFAULT_KERNEL_VERSION
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "2.6.35.11"	if BR2_KERNEL_HEADERS_2_6_35
-+	default "2.6.35.12"	if BR2_KERNEL_HEADERS_2_6_35
- 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.3"	if BR2_KERNEL_HEADERS_2_6_38
-diff --git a/toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-2.6.35.11-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
-rename to toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+diff --git a/package/Config.in b/package/Config.in
+index ce39edd..76b2076 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -373,6 +373,7 @@ endif
+ source "package/bind/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
++source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/cups/Config.in"
+diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
+new file mode 100644
+index 0000000..25e7cbe
+--- /dev/null
++++ b/package/bwm-ng/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_BWM_NG
++	bool "bwm-ng"
++	help
++	  Bandwidth Monitor NG is a small and console-based live
++	  network and disk-io bandwidth monitor for Linux, BSD,
++	  Solaris, Mac OS X and others.
++
++	  http://sourceforge.net/projects/bwmng/
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+new file mode 100644
+index 0000000..a33f4f2
+--- /dev/null
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# bwm-ng
++#
++#############################################################
++
++BWM_NG_VERSION = 0.6
++BWM_NG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/bwmng/bwmng/$(BWM_NG_VERSION)/
++BWM_NG_CONF_OPT = --with-procnetdev --with-diskstats
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++BWM_NG_CONF_OPT += --with-ncurses
++BWM_NG_DEPENDENCIES += ncurses
++endif
++
++$(eval $(call AUTOTARGETS,package,bwm-ng))
 -- 
 1.7.3.4
