@@ -1,67 +1,43 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 22 Apr 2011 10:58:42 -0500
-Subject: [Buildroot] proftpd Startup issue
-In-Reply-To: <87sjtaa07g.fsf@macbook.be.48ers.dk>
-References: <9AC3F0E75060224C8BBC5BA2DDC8853A1FB11131@EXV1.corp.adtran.com>
-	<87sjtaa07g.fsf@macbook.be.48ers.dk>
-Message-ID: <9AC3F0E75060224C8BBC5BA2DDC8853A1FB1185B@EXV1.corp.adtran.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Apr 2011 21:36:34 +0200
+Subject: [Buildroot] Python segmentation fault
+In-Reply-To: <BANLkTikxb2A7_Q13NczB11RPiPpEvdduag@mail.gmail.com> (Ryan
+	Whelan's message of "Thu, 21 Apr 2011 22:17:56 -0400")
+References: <BANLkTikxb2A7_Q13NczB11RPiPpEvdduag@mail.gmail.com>
+Message-ID: <87liz29iyl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
-> 
->  ANDY> The error:
->  ANDY> 192.168.1.10 - error: getrlimit(RLIMIT_CORE): Operation not
-> permitted
-> 
->  >> From /var/log/messages:
-> 
->  ANDY> Apr 15 18:52:57 newrfs daemon.notice proftpd[83]:
-> 192.168.1.10 - ProFTPD
->  ANDY> 1.3.3b (maint) (built Fri Mar 25 2011 17:49:38 CDT)
-> standalone mode
->  ANDY> STARTUP
-> 
->  ANDY> BuildRoot version:  (size:)33650639 2011-02-22 16:24
-> buildroot.tar.bz2
->  ANDY> I believe this to be the correct snapshot date.
->  ANDY> Sys type: MIPS32r2
-> 
->  ANDY> I know that this _was_ working before this pull.  I got this
-> snapshot
->  ANDY> due to about 5 things being updated, of which (IIRC) one was
-> proftpd.
-> 
-> Hmm, odd - Proftpd hasn't been updated since Oct 2010, so that's
-> probably not it. What user are you running proftpd as?
+>>>>> "Ryan" == Ryan Whelan <rcwhelan@gmail.com> writes:
 
-Guess what pull I was working off of ;).  I just updated the other
-a couple of months ago, but didn't test proftpd -- it always had
-errors on startup because I kept forgetting to customize the conf
-file after build, so I expected errors.  It wasn't until someone
-started attempting to use it with eclipse that I realized that
-something was wrong.
+ Ryan> Im having an issue with the python interactive prompt in the latest
+ Ryan> git revision when i try to run it, it tries to start and seg faults.
+ Ryan> If I create a file, and run it, it seems to work- its only the
+ Ryan> interactive prompt.
 
-> 
-> I've just checked proftpd here (arm9), and it seems to work fine.
-> I've
-> committed a few minor tweaks to the default config/skeleton, but
-> you are
-> presumably using a custom config?
+ Ryan> / # python
+ Ryan> Python 2.7.1 (r271:86832, Apr 21 2011, 21:52:43)
+ Ryan> [GCC 4.3.5] on linux2
+ Ryan> Type "help", "copyright", "credits" or "license" for more information.
+ Ryan> Segmentation fault
+ Ryan> / #
 
-Great, so I'm on my own ;).  There was one other thing about the
-build and that is that is uses eglibc, however, I don't think that
-would be the problem.  I'm still redirected on a network driver
-(which I've never done before) so, I'm not able to get back over
-there to that (yet).
+ Ryan> I've tried with 32bit and 64bit builds, with different versions of GCC
+ Ryan> and uClibc with the stack smash protection on and off.  I'm not sure
+ Ryan> what info is going to be useful but here
+ Ryan> (http://pastebin.com/usP2962n) is a strace and here
+ Ryan> (http://pastebin.com/ApfWnTgq) is my .config.  I've enabled most of
+ Ryan> the python related options as this is a platform for python app
+ Ryan> hosting.  Sorry to include so little info, like i said, im not sure
+ Ryan> what is needed- let me know if you need something else and i will
+ Ryan> provide whatever i can.
 
-> 
-> --
-> Bye, Peter Korsgaard
+From the looks of the strace log, this looks to be the ncurses problem
+we've been trying to solve lately. Could you try changing the ncurses
+version back to 5.7 and do a clean rebuild?
 
-Thanks for the info.  Will keep the list posted.
-
-Andy
+-- 
+Bye, Peter Korsgaard
