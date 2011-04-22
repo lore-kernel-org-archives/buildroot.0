@@ -1,47 +1,33 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Fri, 22 Apr 2011 03:11:15 +0100
-Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
-In-Reply-To: <BANLkTikW4aebOtn_TBzRHQd+7+iYjEWtQQ@mail.gmail.com>
-References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
-	<871v1iz4rw.fsf@macbook.be.48ers.dk> <1301952165.27248.2.camel@segulix>
-	<87pqogj49u.fsf@macbook.be.48ers.dk> <1303322103.8512.4.camel@segulix>
-	<878vv423zn.fsf@macbook.be.48ers.dk> <1303413743.6641.12.camel@segulix>
-	<877hanz56u.fsf@macbook.be.48ers.dk>
-	<BANLkTikW4aebOtn_TBzRHQd+7+iYjEWtQQ@mail.gmail.com>
-Message-ID: <1303438275.9530.1.camel@segulix>
+From: Ryan Whelan <rcwhelan@gmail.com>
+Date: Thu, 21 Apr 2011 22:17:56 -0400
+Subject: [Buildroot] Python segmentation fault
+Message-ID: <BANLkTikxb2A7_Q13NczB11RPiPpEvdduag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2011-04-21 at 18:29 -0400, Mike Frysinger wrote: 
-> On Thu, Apr 21, 2011 at 5:04 PM, Peter Korsgaard wrote:
-> >> Sergio Monteiro Basto writes:
-> >>> I haven't tried, but doesn't that just shuffle part of the ncurses
-> >>> functions into libtinfo? I don't right away see why that would fix
-> >>> anything, but I'll start a build now.
-> >>
-> >> so, it fix anything ?
-> >
-> > No, as expected the behaviour is exactly the same.
-> 
-> ncurses 5.9 is out and seems to be mostly a bugfix release over 5.8
-> ... probably worth testing
+Im having an issue with the python interactive prompt in the latest
+git revision when i try to run it, it tries to start and seg faults.
+If I create a file, and run it, it seems to work- its only the
+interactive prompt.
 
-In this thread Peter was wrote:  
+/ # python
+Python 2.7.1 (r271:86832, Apr 21 2011, 21:52:43)
+[GCC 4.3.5] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+Segmentation fault
+/ #
 
-"I've also tested ncurses 5.9 with the same results. with 2011.05
-getting
-quite near, perhaps the best approach is to revert to ncurses 5.7? "
+I've tried with 32bit and 64bit builds, with different versions of GCC
+and uClibc with the stack smash protection on and off.  I'm not sure
+what info is going to be useful but here
+(http://pastebin.com/usP2962n) is a strace and here
+(http://pastebin.com/ApfWnTgq) is my .config.  I've enabled most of
+the python related options as this is a platform for python app
+hosting.  Sorry to include so little info, like i said, im not sure
+what is needed- let me know if you need something else and i will
+provide whatever i can.
 
-Best regards,
--- 
-S?rgio M. B.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110422/d91bb433/attachment.bin>
+thanks!
