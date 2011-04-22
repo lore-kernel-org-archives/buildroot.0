@@ -1,67 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 22 Apr 2011 15:12:19 +0200
-Subject: [Buildroot] [git commit] qemu/arm-versatile: use 2.6.38.3 kernel
-Message-ID: <20110422132110.142EC82973@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Apr 2011 15:24:03 +0200
+Subject: [Buildroot] proftpd Startup issue
+In-Reply-To: <9AC3F0E75060224C8BBC5BA2DDC8853A1FB11131@EXV1.corp.adtran.com>
+	(ANDY KENNEDY's message of "Fri, 15 Apr 2011 14:10:17 -0500")
+References: <9AC3F0E75060224C8BBC5BA2DDC8853A1FB11131@EXV1.corp.adtran.com>
+Message-ID: <87sjtaa07g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f550c1bdbb22df15d297303599e85c2a7511a8ff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ ANDY> The error:
+ ANDY> 192.168.1.10 - error: getrlimit(RLIMIT_CORE): Operation not permitted
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../{linux-2.6.36.config => linux-2.6.38.config}   |    4 ++--
- configs/qemu_arm_versatile_defconfig               |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
- rename board/qemu/arm-versatile/{linux-2.6.36.config => linux-2.6.38.config} (97%)
+ >> From /var/log/messages:
 
-diff --git a/board/qemu/arm-versatile/linux-2.6.36.config b/board/qemu/arm-versatile/linux-2.6.38.config
-similarity index 97%
-rename from board/qemu/arm-versatile/linux-2.6.36.config
-rename to board/qemu/arm-versatile/linux-2.6.38.config
-index 597fd23..5f58b97 100644
---- a/board/qemu/arm-versatile/linux-2.6.36.config
-+++ b/board/qemu/arm-versatile/linux-2.6.38.config
-@@ -8,12 +8,13 @@ CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MACH_VERSATILE_AB=y
- CONFIG_PCI=y
-+CONFIG_AEABI=y
-+# CONFIG_OABI_COMPAT is not set
- CONFIG_LEDS=y
- CONFIG_LEDS_CPU=y
- CONFIG_ZBOOT_ROM_TEXT=0x0
- CONFIG_ZBOOT_ROM_BSS=0x0
- CONFIG_CMDLINE="root=1f03 mem=32M"
--CONFIG_FPE_NWFPE=y
- CONFIG_VFP=y
- CONFIG_PM=y
- CONFIG_NET=y
-@@ -35,7 +36,6 @@ CONFIG_MTD_CFI_ADV_OPTIONS=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_ARM_INTEGRATOR=y
- CONFIG_BLK_DEV_RAM=y
--CONFIG_EEPROM_LEGACY=m
- CONFIG_SCSI=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_SCSI_SYM53C8XX_2=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 9c990fb..6b3d954 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ ANDY> Apr 15 18:52:57 newrfs daemon.notice proftpd[83]: 192.168.1.10 - ProFTPD
+ ANDY> 1.3.3b (maint) (built Fri Mar 25 2011 17:49:38 CDT) standalone mode
+ ANDY> STARTUP
+
+ ANDY> BuildRoot version:  (size:)33650639 2011-02-22 16:24 buildroot.tar.bz2
+ ANDY> I believe this to be the correct snapshot date.
+ ANDY> Sys type: MIPS32r2
+
+ ANDY> I know that this _was_ working before this pull.  I got this snapshot
+ ANDY> due to about 5 things being updated, of which (IIRC) one was proftpd.
+
+Hmm, odd - Proftpd hasn't been updated since Oct 2010, so that's
+probably not it. What user are you running proftpd as?
+
+I've just checked proftpd here (arm9), and it seems to work fine. I've
+committed a few minor tweaks to the default config/skeleton, but you are
+presumably using a custom config?
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
