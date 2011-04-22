@@ -1,43 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Apr 2011 21:36:34 +0200
-Subject: [Buildroot] Python segmentation fault
-In-Reply-To: <BANLkTikxb2A7_Q13NczB11RPiPpEvdduag@mail.gmail.com> (Ryan
-	Whelan's message of "Thu, 21 Apr 2011 22:17:56 -0400")
-References: <BANLkTikxb2A7_Q13NczB11RPiPpEvdduag@mail.gmail.com>
-Message-ID: <87liz29iyl.fsf@macbook.be.48ers.dk>
+Date: Fri, 22 Apr 2011 21:39:41 +0200
+Subject: [Buildroot] [PATCH] ncurses: version bump to 5.8
+In-Reply-To: <20110422102559.57825yx5w1jirnk0@www.home.zuerker.org> (Heiko
+	Zuerker's message of "Fri, 22 Apr 2011 10:25:59 -0500")
+References: <1300923770-13698-1-git-send-email-vapier@gentoo.org>
+	<871v1iz4rw.fsf@macbook.be.48ers.dk>
+	<1301952165.27248.2.camel@segulix>
+	<87pqogj49u.fsf@macbook.be.48ers.dk> <1303322103.8512.4.camel@segulix>
+	<878vv423zn.fsf@macbook.be.48ers.dk>
+	<1303413743.6641.12.camel@segulix>
+	<877hanz56u.fsf@macbook.be.48ers.dk>
+	<BANLkTikW4aebOtn_TBzRHQd+7+iYjEWtQQ@mail.gmail.com>
+	<87d3keyhy2.fsf@macbook.be.48ers.dk>
+	<20110422102559.57825yx5w1jirnk0@www.home.zuerker.org>
+Message-ID: <87hb9q9ite.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Whelan <rcwhelan@gmail.com> writes:
+>>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
 
- Ryan> Im having an issue with the python interactive prompt in the latest
- Ryan> git revision when i try to run it, it tries to start and seg faults.
- Ryan> If I create a file, and run it, it seems to work- its only the
- Ryan> interactive prompt.
+ >> As I mentioned in my previous mail, I already tried 5.9 and got same
+ >> crash as on 5.8 (arm926, both on glibc and uclibc).
 
- Ryan> / # python
- Ryan> Python 2.7.1 (r271:86832, Apr 21 2011, 21:52:43)
- Ryan> [GCC 4.3.5] on linux2
- Ryan> Type "help", "copyright", "credits" or "license" for more information.
- Ryan> Segmentation fault
- Ryan> / #
+ Heiko> The problem has something to do with readline.
+ Heiko> I tested it against bash and as soon as readline support is off, the
+ Heiko> seg fault disappears.
 
- Ryan> I've tried with 32bit and 64bit builds, with different versions of GCC
- Ryan> and uClibc with the stack smash protection on and off.  I'm not sure
- Ryan> what info is going to be useful but here
- Ryan> (http://pastebin.com/usP2962n) is a strace and here
- Ryan> (http://pastebin.com/ApfWnTgq) is my .config.  I've enabled most of
- Ryan> the python related options as this is a platform for python app
- Ryan> hosting.  Sorry to include so little info, like i said, im not sure
- Ryan> what is needed- let me know if you need something else and i will
- Ryan> provide whatever i can.
-
-From the looks of the strace log, this looks to be the ncurses problem
-we've been trying to solve lately. Could you try changing the ncurses
-version back to 5.7 and do a clean rebuild?
+But if you build without readline support, then bash isn't linked
+against ncurses at all, is it?
 
 -- 
 Bye, Peter Korsgaard
