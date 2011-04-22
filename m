@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 22 Apr 2011 15:12:19 +0200
-Subject: [Buildroot] [git commit] proftpd: remove UseIPv6 option from sample
-	config if built without IPv6
-Message-ID: <20110422132109.4A9B682973@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fs/skeleton: add ftp user/group
+Message-ID: <20110422132109.91F8E82973@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +9,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af6b3ecf401935edfe613c2d90423f34bc38460e
+commit: http://git.buildroot.net/buildroot/commit/?id=cffe3b1895f3b0b1e0cb36e1f209794a9ac9557b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-proftpd refuses to start if it finds a UseIPv6 option in the configuration
-file (even if set to off) when built without IPv6 support, so comment out
-line.
+Needed by E.G. proftpd for the default (anonymous ftp) config.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/proftpd/proftpd.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ fs/skeleton/etc/group             |    1 +
+ fs/skeleton/etc/passwd            |    1 +
+ fs/skeleton/etc/shadow            |    1 +
+ fs/skeleton/home/{ => ftp}/.empty |    0
+ 4 files changed, 3 insertions(+), 0 deletions(-)
+ rename fs/skeleton/home/{ => ftp}/.empty (100%)
 
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 191f611..75ab930 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -31,6 +31,7 @@ define PROFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
- 	@if [ ! -f $(TARGET_DIR)/etc/proftpd.conf ]; then \
- 		$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf; \
-+		$(if $(BR2_INET_IPV6),,$(SED) 's/^UseIPv6/# UseIPv6/' $(TARGET_DIR)/etc/proftpd.conf;) \
- 	fi
- 	$(INSTALL) -m 0755 package/proftpd/S50proftpd $(TARGET_DIR)/etc/init.d
- endef
+diff --git a/fs/skeleton/etc/group b/fs/skeleton/etc/group
+index df12dba..311a455 100644
+--- a/fs/skeleton/etc/group
++++ b/fs/skeleton/etc/group
+@@ -12,6 +12,7 @@ staff:x:50:
+ haldaemon:x:68:
+ dbus:x:81:
+ netdev:x:82:
++ftp:x:83
+ nobody:x:99:
+ nogroup:x:99:
+ users:x:100:
+diff --git a/fs/skeleton/etc/passwd b/fs/skeleton/etc/passwd
+index 377d4df..ed7006a 100644
+--- a/fs/skeleton/etc/passwd
++++ b/fs/skeleton/etc/passwd
+@@ -10,6 +10,7 @@ backup:x:34:34:backup:/var/backups:/bin/sh
+ operator:x:37:37:Operator:/var:/bin/sh
+ haldaemon:x:68:68:hald:/:/bin/sh
+ dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
++ftp:x:83:83:ftp:/home/ftp:/bin/sh
+ nobody:x:99:99:nobody:/home:/bin/sh
+ sshd:x:103:99:Operator:/var:/bin/sh
+ default:x:1000:1000:Default non-root user:/home/default:/bin/sh
+diff --git a/fs/skeleton/etc/shadow b/fs/skeleton/etc/shadow
+index 4941a1a..67b67c1 100644
+--- a/fs/skeleton/etc/shadow
++++ b/fs/skeleton/etc/shadow
+@@ -8,5 +8,6 @@ shutdown:*:10933:0:99999:7:::
+ halt:*:10933:0:99999:7:::
+ uucp:*:10933:0:99999:7:::
+ operator:*:10933:0:99999:7:::
++ftp:*:10933:0:99999:7:::
+ nobody:*:10933:0:99999:7:::
+ default::10933:0:99999:7:::
+diff --git a/fs/skeleton/home/.empty b/fs/skeleton/home/ftp/.empty
+similarity index 100%
+rename from fs/skeleton/home/.empty
+rename to fs/skeleton/home/ftp/.empty
 -- 
 1.7.3.4
