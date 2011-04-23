@@ -1,40 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 23 Apr 2011 15:26:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 3643] New: popt source url is not responding
-Message-ID: <bug-3643-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sat, 23 Apr 2011 18:18:33 +0200
+Subject: [Buildroot] [PATCH 0/1] toolchain/crosstool-NG: fix copying the
+	dynamic linker
+Message-ID: <1303575514-22656-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3643
+Hello All!
 
-           Summary: popt source url is not responding
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Outdated package
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mjhammel at graphics-muse.org
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Depending on some configurations (arch? bitness? others? combination of
+many settings?...), the dynamic linker can get different names.
 
+This patch implements a crude /heuristic/ to copy ld.so (see patch
+commit message). It is copied from the standard external toolchain
+code, so should behave the same wrt ld.so ( and we know that external
+toolchain does work, don't we? ;-) ).
 
-rpm5.org appears to have gone away.  Launchpad has 1.15:
-https://launchpad.net/popt/+milestone/1.15
+  [PATCH] toolchain/crosstool-NG: correctly copy the dynamic linker
 
-and BLFS has 1.16:
-http://www.linuxfromscratch.org/blfs/view/cvs/general/popt.html
+Thanks to Ettore Campion for being stubborn, and providing some dumps
+of its output files. Cheers! ;-)
 
-The broken rpm5 URL affects the build from master if you use any package that
-depends on it: oprofile, logrotate, rpm, librsync
+Regards,
+Yann E. MORIN.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+PS. Ettore, sorry for the dups, I'm having issues with my mails. PEBCAK...
