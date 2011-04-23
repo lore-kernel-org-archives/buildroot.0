@@ -1,54 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 23 Apr 2011 18:18:34 +0200
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: correctly copy the
-	dynamic linker
-In-Reply-To: <1303575514-22656-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1303575514-22656-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1303575514-22656-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sat, 23 Apr 2011 11:51:00 -0700
+Subject: [Buildroot] building uclibc with CodeSourcery toolchain
+Message-ID: <BANLkTikBDnrcDzAXcynePoojkjaQbLbgSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Depending on some setting (which? Arch? Others?), the dynamic linker
-can get different names. Some times, it is named ld-linux.something.so,
-other times, it is ld.so.1, and maybe other variants as well...
+Is there a way to build the uclibc files using the CodeSourcery toolchain?
 
-The fix is to always copy ls*.so, even if it is a symlink: we create
-the destination file by its SONAME, and if ld*.so matches more than
-one file, that's no issue, as they would all get the same SONAME (being
-symlinks ones to the others).
+I am in the midst of reading how the Makefile fit together a little bit,
+although I am not a makefile guru by any means, but it seems to me that it
+should be possible to use say the CodeSourcery toolchain to trigger a build
+of the uclibc .so binaries.
 
-Split long lines at the same time.
+Admiteddly the CodeSourcery toolchain is glibc, but, ... it seems to me that
+in a similar way that we build uclibc or glibc root file systems when
+buildroot builds its own toolchain, that we should be able to use the
+CodeSourcery toolchain to accomplish a similar task.
 
-Reported-by: Ettore Campion <ecampion@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index e52bdee..015cd13 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -36,13 +36,14 @@ endef
- 
- #--------------
- # The generic system libraries (in /lib)
--CTNG_LIBS_LIB := libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libpthread.so libresolv.so librt.so libutil.so
-+CTNG_LIBS_LIB := ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so    \
-+                 libnsl.so libpthread.so libresolv.so librt.so libutil.so
- 
- #--------------
- # The libc-specific system libraries (in /lib)
- # Note: it may be needed to tweak the NSS libs in the glibc and eglibc cases...
--CTNG_LIBS_uClibc := ld-uClibc.so
--CTNG_LIBS_glibc  := ld-linux.so libnss_files.so libnss_dns.so
-+CTNG_LIBS_uClibc :=
-+CTNG_LIBS_glibc  := libnss_files.so libnss_dns.so
- CTNG_LIBS_eglibc := $(CTNG_LIBS_glibc)
- 
- #--------------
 -- 
-1.7.2.3
+Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110423/084e856b/attachment.html>
