@@ -1,18 +1,40 @@
-From: Hu, Yanli <Yanli.Hu@philips.com>
-Date: Sat, 23 Apr 2011 00:56:41 +0200
-Subject: [Buildroot] use Buildroot (with uclibc and busybox) to build
- PREEMPT_RT kernel for AT91RM9200?
-Message-ID: <8BADEE91F16E11498AEB9FD8D502C1E66C9DADFF04@NLCLUEXM06.connect1.local>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 23 Apr 2011 15:26:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 3643] New: popt source url is not responding
+Message-ID: <bug-3643-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I wonder if I can use Buildroot (with uclibc and busybox) to build PREEMPT_RT kernel for AT91RM9200? It looks like uclibc lacks some support. Is it possible with the new developments? Thanks!
+https://bugs.busybox.net/show_bug.cgi?id=3643
 
-________________________________
-The information contained in this message may be confidential and legally protected under applicable law. The message is intended solely for the addressee(s). If you are not the intended recipient, you are hereby notified that any use, forwarding, dissemination, or reproduction of this message is strictly prohibited and may be unlawful. If you are not the intended recipient, please contact the sender by return e-mail and destroy all copies of the original message.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110423/526028f2/attachment-0001.html>
+           Summary: popt source url is not responding
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mjhammel at graphics-muse.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+rpm5.org appears to have gone away.  Launchpad has 1.15:
+https://launchpad.net/popt/+milestone/1.15
+
+and BLFS has 1.16:
+http://www.linuxfromscratch.org/blfs/view/cvs/general/popt.html
+
+The broken rpm5 URL affects the build from master if you use any package that
+depends on it: oprofile, logrotate, rpm, librsync
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
