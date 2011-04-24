@@ -1,35 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Apr 2011 23:54:28 +0200
-Subject: [Buildroot] [git commit] lockfile-progs: fix make dependency
-Message-ID: <20110424215455.16D5B82A2E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Apr 2011 23:55:05 +0200
+Subject: [Buildroot] [patch] add trival depencies on lockfile-progs,
+	should I  open a bug report ?
+In-Reply-To: <1303669801.6869.13.camel@segulix> (Sergio Monteiro Basto's
+	message of "Sun, 24 Apr 2011 19:30:01 +0100")
+References: <1303669801.6869.13.camel@segulix>
+Message-ID: <87bozv8gcm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sergio" == Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7edfd3c1b4fed7d7211024ae5f5a428a5187ea4d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sergio> Hi, 
+ Sergio> I saw this problem a some months ago, is not a new problem.
+ Sergio> lockfile-progs must have liblockfile compiled first. 
+ Sergio> This patch prevents a compile error when I am building buildroot. And as
+ Sergio> work around I have to done:
+ Sergio> make liblockfile; make 
+ Sergio> to continue the build.
 
-Based on patch by Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lockfile-progs/lockfile-progs.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
-index f8d8cee..031712e 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -6,6 +6,7 @@
- LOCKFILE_PROGS_VERSION = 0.1.15
- LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
- LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
-+LOCKFILE_PROGS_DEPENDENCIES = liblockfile
- 
- LOCKFILE_BINS = \
- 	$(addprefix lockfile-,check create remove touch) \
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
