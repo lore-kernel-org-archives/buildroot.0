@@ -1,37 +1,42 @@
-From: heiko at zuerker.org <heiko@zuerker.org>
-Date: Sun, 24 Apr 2011 09:38:30 -0500
-Subject: [Buildroot] [PATCH] Install module-init-tools into /sbin
-Message-ID: <8181b3e96a35f372c8b36ec2dfb1eb2a00ee18ea.1303655867.git.smiley73@users.sourceforge.net>
+From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
+Date: Sun, 24 Apr 2011 19:30:01 +0100
+Subject: [Buildroot] [patch] add trival depencies on lockfile-progs,
+ should I  open a bug report ?
+Message-ID: <1303669801.6869.13.camel@segulix>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Zuerker <smiley73@users.sourceforge.net>
+Hi, 
+I saw this problem a some months ago, is not a new problem.
+lockfile-progs must have liblockfile compiled first. 
+This patch prevents a compile error when I am building buildroot. And as
+work around I have to done:
+make liblockfile; make 
+to continue the build.
 
-Install module-init-tools binaries into /sbin, since they're system critical
-and need to be available before e.g. mounting of /usr
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk                                           
+index f8d8cee..031712e 100644                                                                                                              
+--- a/package/lockfile-progs/lockfile-progs.mk                                                                                             
++++ b/package/lockfile-progs/lockfile-progs.mk                                                                                             
+@@ -6,6 +6,7 @@                                                                                                                            
+ LOCKFILE_PROGS_VERSION = 0.1.15                                                                                                           
+ LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz                                                                   
+ LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/                                                             
++LOCKFILE_PROGS_DEPENDENCIES = liblockfile                                                                                                 
+                                                                                                                                           
+ LOCKFILE_BINS = \                                                                                                                         
+    $(addprefix lockfile-,check create remove touch) \       
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
----
- package/module-init-tools/module-init-tools.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
-index 27d0159..eb81ece 100644
---- a/package/module-init-tools/module-init-tools.mk
-+++ b/package/module-init-tools/module-init-tools.mk
-@@ -10,7 +10,9 @@ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
- MODULE_INIT_TOOLS_CONF_OPT = \
- 	--disable-static-utils \
- 	--disable-builddir \
--	--program-transform-name=''
-+	--program-transform-name='' \
-+	--prefix=/usr \
-+	--exec-prefix=
- 
- # module-init-tools-3.11-add-manpages-config-option.patch is modifying
- # configure.ac and Makefile.am
+Best regards,               
 -- 
-1.7.3.2
+S?rgio M. B.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3309 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110424/efa3ef13/attachment.bin>
