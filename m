@@ -1,28 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Apr 2011 23:55:05 +0200
-Subject: [Buildroot] [patch] add trival depencies on lockfile-progs,
-	should I  open a bug report ?
-In-Reply-To: <1303669801.6869.13.camel@segulix> (Sergio Monteiro Basto's
-	message of "Sun, 24 Apr 2011 19:30:01 +0100")
-References: <1303669801.6869.13.camel@segulix>
-Message-ID: <87bozv8gcm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Apr 2011 00:10:45 +0200
+Subject: [Buildroot] [git commit] Makefile: remove outdated make targets
+Message-ID: <20110424221238.7E10F82972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergio" == Sergio Monteiro Basto <sergio@sergiomb.no-ip.org> writes:
 
- Sergio> Hi, 
- Sergio> I saw this problem a some months ago, is not a new problem.
- Sergio> lockfile-progs must have liblockfile compiled first. 
- Sergio> This patch prevents a compile error when I am building buildroot. And as
- Sergio> work around I have to done:
- Sergio> make liblockfile; make 
- Sergio> to continue the build.
+commit: http://git.buildroot.net/buildroot/commit/?id=b052862f02f94eaca39fcd576971a84a13b865be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+busybox and linux26 no longer have a -config target, and prepatch only makes
+sense for a very specific configuration (BR toolchain with GDB enabled).
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 02a5c36..98cc09f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -637,10 +637,6 @@ ifeq ($(O),output)
+ endif
+ 	rm -rf $(CONFIG_DIR)/.config $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/.auto.deps
+ 
+-configured: dirs kernel-headers uclibc-config busybox-config linux26-config
+-
+-prepatch:	gcc-patched gdb-patched uclibc-patched
+-
+ cross: $(BASE_TARGETS)
+ 
+ help:
+@@ -665,7 +661,6 @@ help:
+ 	@echo '  randpackageconfig      - New config with random answer to package options'
+ 	@echo '  allyespackageconfig    - New config where pkg options are accepted with yes'
+ 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+-	@echo '  configured             - make {uclibc/busybox/linux26}-config'
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
