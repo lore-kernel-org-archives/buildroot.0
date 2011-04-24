@@ -1,21 +1,37 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 24 Apr 2011 03:11:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 3643] popt source url is not responding
-In-Reply-To: <bug-3643-163@https.bugs.busybox.net/>
-References: <bug-3643-163@https.bugs.busybox.net/>
-Message-ID: <20110424031107.8599582A39@busybox.osuosl.org>
+Date: Sun, 24 Apr 2011 03:13:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 3655] New: Add libav package
+Message-ID: <bug-3655-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3643
+https://bugs.busybox.net/show_bug.cgi?id=3655
 
---- Comment #2 from Michael J. Hammel <mjhammel@graphics-muse.org>  ---
-Created attachment 3241
-  --> https://bugs.busybox.net/attachment.cgi?id=3241
-Switch download URL to launchpad for popt
+           Summary: Add libav package
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mjhammel at graphics-muse.org
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created attachment 3247
+  --> https://bugs.busybox.net/attachment.cgi?id=3247
+Add libav package
+
+libav is a fork of ffmpeg which appears to be actively in development.  It is
+also required for omapfbplay, which I need for my project and is thus the
+reason to submit it as a new package.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
