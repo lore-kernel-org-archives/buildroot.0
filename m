@@ -1,32 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Apr 2011 23:51:25 +0200
-Subject: [Buildroot] JFFS2 Question
-In-Reply-To: <BANLkTi=WFMS9Uv-x6H8iHO-vDFwRvdS2hA@mail.gmail.com> (Charles
-	Krinke's message of "Sun, 24 Apr 2011 12:25:24 -0700")
-References: <BANLkTi=WFMS9Uv-x6H8iHO-vDFwRvdS2hA@mail.gmail.com>
-Message-ID: <87fwp78giq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Apr 2011 23:54:28 +0200
+Subject: [Buildroot] [git commit] lockfile-progs: fix make dependency
+Message-ID: <20110424215455.16D5B82A2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=7edfd3c1b4fed7d7211024ae5f5a428a5187ea4d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Charles> I seem to have gotten myself into a pickle (again) now that I
- Charles> have worked out the details of mounting a buildroot generated
- Charles> rootfs.jffs2.
+Based on patch by Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>.
 
- Charles> It boots on my MPC8323 target. I can "ls", "cd", "cat". But,
- Charles> .... when it boots, it complains a bit
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lockfile-progs/lockfile-progs.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Charles> Write of 68 bytes at 0x002fc498 failed. returned -30, retlen 67087004
- Charles> Erase at 0x008a0000 failed immediately: -EROFS. Is the sector locked?
-
-Did you configure jffs2 for the correct flash size? Are your flash
-sectors locked (protected?) You can normally check in u-boot.
-
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index f8d8cee..031712e 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -6,6 +6,7 @@
+ LOCKFILE_PROGS_VERSION = 0.1.15
+ LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
+ LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
++LOCKFILE_PROGS_DEPENDENCIES = liblockfile
+ 
+ LOCKFILE_BINS = \
+ 	$(addprefix lockfile-,check create remove touch) \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
