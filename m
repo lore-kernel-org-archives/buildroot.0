@@ -1,44 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 24 Apr 2011 06:22:03 +0000 (UTC)
-Subject: [Buildroot] [Bug 3643] popt source url is not responding
-In-Reply-To: <bug-3643-163@https.bugs.busybox.net/>
-References: <bug-3643-163@https.bugs.busybox.net/>
-Message-ID: <20110424062203.F325882A28@busybox.osuosl.org>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun, 24 Apr 2011 09:38:30 -0500
+Subject: [Buildroot] [PATCH] Install module-init-tools into /sbin
+Message-ID: <8181b3e96a35f372c8b36ec2dfb1eb2a00ee18ea.1303655867.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3643
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Install module-init-tools binaries into /sbin, since they're system critical
+and need to be available before e.g. mounting of /usr
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/module-init-tools/module-init-tools.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-normally a missing / down upstream doesn't matter much, as buildroot then falls
-back to sources.buildroot.net, which DOES have popt-1.15.tar.gz. Isn't that
-working for you?
-
-E.G.:
-
->>> popt 1.15 Downloading
---2011-04-24 08:19:48--  http://rpm5.org/files/popt/popt-1.15.tar.gz
-Resolving rpm5.org... failed: Name or service not known.
-wget: unable to resolve host address ?rpm5.org?
---2011-04-24 08:19:49--  http://sources.buildroot.net//popt-1.15.tar.gz
-Resolving sources.buildroot.net... 88.198.64.109
-Connecting to sources.buildroot.net|88.198.64.109|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 666242 (651K) [application/x-gzip]
-Saving to: ?/var/lib/downloads/popt-1.15.tar.gz?
-
-100%[======================================>] 666,242     1.36M/s   in 0.5s
-
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index 27d0159..eb81ece 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -10,7 +10,9 @@ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ MODULE_INIT_TOOLS_CONF_OPT = \
+ 	--disable-static-utils \
+ 	--disable-builddir \
+-	--program-transform-name=''
++	--program-transform-name='' \
++	--prefix=/usr \
++	--exec-prefix=
+ 
+ # module-init-tools-3.11-add-manpages-config-option.patch is modifying
+ # configure.ac and Makefile.am
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.2
