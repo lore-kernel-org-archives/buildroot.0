@@ -1,42 +1,38 @@
-From: Sergio Monteiro Basto <sergio@sergiomb.no-ip.org>
-Date: Sun, 24 Apr 2011 19:30:01 +0100
-Subject: [Buildroot] [patch] add trival depencies on lockfile-progs,
- should I  open a bug report ?
-Message-ID: <1303669801.6869.13.camel@segulix>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sun, 24 Apr 2011 12:25:24 -0700
+Subject: [Buildroot] JFFS2 Question
+Message-ID: <BANLkTi=WFMS9Uv-x6H8iHO-vDFwRvdS2hA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
-I saw this problem a some months ago, is not a new problem.
-lockfile-progs must have liblockfile compiled first. 
-This patch prevents a compile error when I am building buildroot. And as
-work around I have to done:
-make liblockfile; make 
-to continue the build.
+I seem to have gotten myself into a pickle (again) now that I have worked
+out the details of mounting a buildroot generated rootfs.jffs2.
 
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk                                           
-index f8d8cee..031712e 100644                                                                                                              
---- a/package/lockfile-progs/lockfile-progs.mk                                                                                             
-+++ b/package/lockfile-progs/lockfile-progs.mk                                                                                             
-@@ -6,6 +6,7 @@                                                                                                                            
- LOCKFILE_PROGS_VERSION = 0.1.15                                                                                                           
- LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz                                                                   
- LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/                                                             
-+LOCKFILE_PROGS_DEPENDENCIES = liblockfile                                                                                                 
-                                                                                                                                           
- LOCKFILE_BINS = \                                                                                                                         
-    $(addprefix lockfile-,check create remove touch) \       
+It boots on my MPC8323 target. I can "ls", "cd", "cat". But, .... when it
+boots, it complains a bit
 
-Best regards,               
+*Write of 68 bytes at 0x002fc498 failed. returned -30, retlen 67087004
+Erase at 0x008a0000 failed immediately: -EROFS. Is the sector locked?*
+
+A "df" shows it is 100% full and 13MByte in size (the entire balance of the
+NOR flash) and I know that is not true.
+
+And, after it boots, a "rm" of a file, gives me something like
+
+# rm boa.conf
+*Write error in obliterating obsoleted node at 0x000741b4: -30*
+
+I am hoping for a spot of advice to help me research and figure out why I
+seem to have a read only file system even though I did mount it with "rw" on
+the kernel command line. Is this a mkfs.jffs2 issue? A kernel command line
+issue? A kernel .config issue? Do I need to rotate my monitor 37 degrees
+counter-clockwise to get it to work?
+
 -- 
-S?rgio M. B.
+Charles Krinke
 -------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3309 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110424/efa3ef13/attachment.bin>
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110424/fa3d8e53/attachment.html>
