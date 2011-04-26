@@ -1,50 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Apr 2011 11:46:25 +0200
-Subject: [Buildroot] Buildroot 2011.02 images won't load on Qemu with
-	qemu_arm_versatile_defconfig
-In-Reply-To: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com> (Dwi
-	Sasongko Supriyadi's message of "Tue, 26 Apr 2011 16:40:22 +0700")
-References: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com>
-Message-ID: <87ipu15or2.fsf@macbook.be.48ers.dk>
+Date: Tue, 26 Apr 2011 15:02:39 +0200
+Subject: [Buildroot] [PATCH 8/9] libraw : new package
+In-Reply-To: <1299831215-26466-8-git-send-email-cmchao@gmail.com> (Chih-Min
+	Chao's message of "Fri, 11 Mar 2011 16:13:34 +0800")
+References: <1299831215-26466-1-git-send-email-cmchao@gmail.com>
+	<1299831215-26466-8-git-send-email-cmchao@gmail.com>
+Message-ID: <87ei4p5fo0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dwi" == Dwi Sasongko Supriyadi <ruckuus@gmail.com> writes:
+>>>>> "Chih-Min" == Chih-Min Chao <cmchao@gmail.com> writes:
 
- Dwi> Hello All,
- Dwi> I found issue when trying to load buildroot images on Qemu. Following is my
- Dwi> configuration:
+ Chih-Min> Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
 
- Dwi> 1. Buildroot configured with make qemu_arm_versatile_defconfig
- Dwi> 2. Using uClibc toolchain
- Dwi> 3. rootfs.cpio, initramfs of linux kernel
+Sorry for slow response - Committed with minor tweaks, thanks!
 
- Dwi> Basically, I just did: make qemu_arm_versatile_defconfig; make then use the
- Dwi> resulting images available under output/images
+ Chih-Min> +++ b/package/libraw/libraw.mk
+ Chih-Min> @@ -0,0 +1,15 @@
+ Chih-Min> +#############################################################
+ Chih-Min> +#
+ Chih-Min> +# libraw
+ Chih-Min> +#
+ Chih-Min> +#############################################################
+ Chih-Min> +LIBRAW_VERSION:=0.13.1
+ Chih-Min> +LIBRAW_SOURCE:=LibRaw-$(LIBRAW_VERSION).tar.gz
+ Chih-Min> +LIBRAW_SITE:=http://www.libraw.org/data/
 
- Dwi> I run qemu with following command:
-
- Dwi> qemu-system-arm -M versatilepb -m 128M -kernel output/images/zImage -initrd
- Dwi> output/images/rootfs.cpio.gz -append "root=/dev/ram rdinit=/bin/sh"
-
- Dwi> Qemu launched but there is nothing shown.
-
-Odd, I've using the versatile config pretty often here. I do configure
-it slightly differently, as I normally don't care about graphics output
-- So I use the serial output:
-
-qemu-system-arm -M versatilepb -kernel output/images/zImage -append
-   'console=ttyAMA0,115200 root=/dev/sda' -nographic -net nic -net user
-   -hda output/images/rootfs.ext2
-
-I've tweaked the versatile config a bit in git since the 2011.02
-release though (enabled getty on serial port).
-
-Perhaps you could give the default versatile config in git a try before
-changing to initramfs?
+We normally use ' = ' here rather than ':='
 
 -- 
 Bye, Peter Korsgaard
