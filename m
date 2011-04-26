@@ -1,27 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 26 Apr 2011 07:36:09 +0200
-Subject: [Buildroot] devmem2
-In-Reply-To: <263588.92519.qm@web161413.mail.bf1.yahoo.com> (David Anders's
-	message of "Mon, 25 Apr 2011 19:28:40 -0700 (PDT)")
-References: <263588.92519.qm@web161413.mail.bf1.yahoo.com>
-Message-ID: <871v0p7ewm.fsf@macbook.be.48ers.dk>
+From: Fabien Marteau <fabien.marteau@armadeus.com>
+Date: Tue, 26 Apr 2011 09:14:47 +0200
+Subject: [Buildroot] [PATCH] package: Adding Next Generation IRC deamon
+ ngircd
+In-Reply-To: <BANLkTi=hiNo9aQVVob5sWijeZPtT+7_UFw@mail.gmail.com>
+References: <1303291139-3117-1-git-send-email-fabien.marteau@armadeus.com>
+	<BANLkTi=hiNo9aQVVob5sWijeZPtT+7_UFw@mail.gmail.com>
+Message-ID: <4DB670E7.3020807@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "David" == David Anders <dave123_aml@yahoo.com> writes:
+Hi
+On 20/04/2011 12:15, Daniel Nystr?m wrote:
+> 2011/4/20  <fabien.marteau@armadeus.com>:
+>> From: Fabien Marteau <fabien.marteau@armadeus.com>
+>>
+>>
+>> Signed-off-by: Fabien Marteau <fabien.marteau@armadeus.com>
+> 
+> Acked-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+That mean you will integrate it ? Or I have to resend the patch with this Acked-by ?
 
- David> devmem in busybox is worthless.
-
- David> it has been "modified" so many times to adhere to the busybox
- David> standard that it is not longer a useful item.
-
-What do you mean about that? Devmem2 is a very simple program, and the
-devmem applet seems to work exactly the same the times I've used it
-(except for the access-to-highest-page-issue that got fixed back in
-1.16.x).
-
--- 
-Bye, Peter Korsgaard
+Fabien M
