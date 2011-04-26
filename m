@@ -1,148 +1,76 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 26 Apr 2011 11:56:48 -0300
-Subject: [Buildroot] [PATCH 1/4] libcap: bump to version 2.20
-Message-ID: <1303829811-13344-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 26 Apr 2011 11:56:49 -0300
+Subject: [Buildroot] [PATCH 2/4] readline: bump to version 6.2pl1
+In-Reply-To: <1303829811-13344-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1303829811-13344-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1303829811-13344-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump libcap to version 2.20 and adjust style to match buildroot's
-defacto standard.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...system.patch => libcap-2.20-build-system.patch} |   41 +++++++++-----------
- package/libcap/libcap.mk                           |   30 ++++++++++-----
- 2 files changed, 38 insertions(+), 33 deletions(-)
- rename package/libcap/{libcap-2.19-build-system.patch => libcap-2.20-build-system.patch} (57%)
+ ...s-link.patch => readline-6.2-curses-link.patch} |    0
+ package/readline/readline-6.2-pl1.patch            |   29 ++++++++++++++++++++
+ package/readline/readline.mk                       |    3 +-
+ 3 files changed, 31 insertions(+), 1 deletions(-)
+ rename package/readline/{readline-6.1-curses-link.patch => readline-6.2-curses-link.patch} (100%)
+ create mode 100644 package/readline/readline-6.2-pl1.patch
 
-diff --git a/package/libcap/libcap-2.19-build-system.patch b/package/libcap/libcap-2.20-build-system.patch
-similarity index 57%
-rename from package/libcap/libcap-2.19-build-system.patch
-rename to package/libcap/libcap-2.20-build-system.patch
-index f548726..397aff2 100644
---- a/package/libcap/libcap-2.19-build-system.patch
-+++ b/package/libcap/libcap-2.20-build-system.patch
-@@ -1,9 +1,14 @@
--diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
----- libcap-2.19.orig/Make.Rules	2010-01-13 23:04:58.000000000 -0300
--+++ libcap-2.19/Make.Rules	2010-12-28 16:44:18.164052748 -0300
--@@ -45,25 +45,26 @@
-+Avoid the libcap buildsys forcing CC/CFLAGS/LDFLAGS/AR/RANLIB
-+Also install the shared lib +x
+diff --git a/package/readline/readline-6.1-curses-link.patch b/package/readline/readline-6.2-curses-link.patch
+similarity index 100%
+rename from package/readline/readline-6.1-curses-link.patch
+rename to package/readline/readline-6.2-curses-link.patch
+diff --git a/package/readline/readline-6.2-pl1.patch b/package/readline/readline-6.2-pl1.patch
+new file mode 100644
+index 0000000..9ef0e48
+--- /dev/null
++++ b/package/readline/readline-6.2-pl1.patch
+@@ -0,0 +1,29 @@
++Bug-Reported-by:	Clark J. Wang <dearvoid@gmail.com>
++Bug-Reference-ID:	<AANLkTimGbW7aC4E5infXP6ku5WPci4t=xVc+L1SyHqrD@mail.gmail.com>
++Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2011-02/msg00157.html
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++diff -Nura readline-6.2/callback.c readline-6.2-pl1/callback.c
++--- readline-6.2/callback.c	2010-06-06 13:18:58.000000000 -0300
+++++ readline-6.2-pl1/callback.c	2011-04-19 14:20:00.269829168 -0300
++@@ -148,6 +148,9 @@
++ 	  eof = _rl_vi_domove_callback (_rl_vimvcxt);
++ 	  /* Should handle everything, including cleanup, numeric arguments,
++ 	     and turning off RL_STATE_VIMOTION */
+++	  if (RL_ISSTATE (RL_STATE_NUMERICARG) == 0)
+++	   _rl_internal_char_cleanup ();
+++
++ 	  return;
++ 	}
++ #endif
++diff -Nura readline-6.2/vi_mode.c readline-6.2-pl1/vi_mode.c
++--- readline-6.2/vi_mode.c	2010-11-20 21:51:39.000000000 -0300
+++++ readline-6.2-pl1/vi_mode.c	2011-04-19 14:19:24.510586785 -0300
++@@ -1114,7 +1114,7 @@
++       rl_beg_of_line (1, c);
++       _rl_vi_last_motion = c;
++       RL_UNSETSTATE (RL_STATE_VIMOTION);
++-      return (0);
+++      return (vidomove_dispatch (m));
++     }
++ #if defined (READLINE_CALLBACKS)
++   /* XXX - these need to handle rl_universal_argument bindings */
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index 9e25e04..e34c650 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -3,7 +3,8 @@
+ # build GNU readline
+ #
+ #############################################################
+-READLINE_VERSION = 6.1
 +
-+diff -Nura libcap-2.20/Make.Rules libcap-2.20-build/Make.Rules
-+--- libcap-2.20/Make.Rules	2011-01-19 02:06:44.000000000 -0300
-++++ libcap-2.20-build/Make.Rules	2011-04-19 14:07:53.544903094 -0300
-+@@ -47,25 +47,25 @@
-  KERNEL_HEADERS := $(topdir)/libcap/include
-- IPATH += -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
-+ IPATH += -fPIC -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
-  
- -CC := gcc
- -CFLAGS := -O2
-@@ -13,12 +18,12 @@ diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
- -RANLIB := ranlib
- +CC ?= gcc
- +CFLAGS ?= -O2
--+CC_FOR_BUILD ?= $(CC)
--+CFLAGS_FOR_BUILD ?= $(CFLAGS)
-++BUILD_CC ?= $(CC)
-++BUILD_CFLAGS ?= $(CFLAGS) $(IPATH)
- +AR ?= ar
- +RANLIB ?= ranlib
-  DEBUG = -g #-DDEBUG
-- WARNINGS=-fPIC -Wall -Wwrite-strings \
-+ WARNINGS=-Wall -Wwrite-strings \
-          -Wpointer-arith -Wcast-qual -Wcast-align \
-          -Wstrict-prototypes -Wmissing-prototypes \
-          -Wnested-externs -Winline -Wshadow
-@@ -29,25 +34,15 @@ diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
-  SYSTEM_HEADERS = /usr/include
-  INCS=$(topdir)/libcap/include/sys/capability.h
-  LDFLAGS += -L$(topdir)/libcap
-- CFLAGS += -Dlinux $(WARNINGS) $(DEBUG) $(IPATH)
-+ CFLAGS += -Dlinux $(WARNINGS) $(DEBUG)
- -PAM_CAP := $(shell if [ -f /usr/include/security/pam_modules.h ]; then echo yes ; else echo no ; fi)
--+CFLAGS_FOR_BUILD += $(IPATH)
--+PAM_CAP := no
-++PAM_CAP = no
-  INDENT := $(shell if [ -n "$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
-  DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
-  LIBATTR := yes
--diff -Nura libcap-2.19.orig/libcap/Makefile libcap-2.19/libcap/Makefile
----- libcap-2.19.orig/libcap/Makefile	2008-12-04 05:03:12.000000000 -0200
--+++ libcap-2.19/libcap/Makefile	2010-12-28 16:44:33.457052750 -0300
--@@ -33,7 +33,7 @@
-- endif
-- 
-- _makenames: _makenames.c cap_names.list.h
---	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
--+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $< -o $@
-- 
-- cap_names.h: _makenames
-- 	./_makenames > cap_names.h
-+diff -Nura libcap-2.20/libcap/Makefile libcap-2.20-build/libcap/Makefile
-+--- libcap-2.20/libcap/Makefile	2010-08-08 19:26:04.000000000 -0300
-++++ libcap-2.20-build/libcap/Makefile	2011-04-19 14:08:29.377146094 -0300
- @@ -65,7 +65,7 @@
-  	install -m 0644 include/sys/capability.h $(INCDIR)/sys
-  	mkdir -p -m 0755 $(LIBDIR)
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index d4f8f17..458f8e8 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -1,27 +1,37 @@
--LIBCAP_VERSION=2.19
--LIBCAP_SOURCE=libcap-$(LIBCAP_VERSION).tar.bz2
--LIBCAP_SITE=http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
--LIBCAP_INSTALL_STAGING=YES
-+#############################################################
-+#
-+# libcap
-+#
-+#############################################################
-+
-+LIBCAP_VERSION = 2.20
-+LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
-+LIBCAP_DEPENDENCIES = host-libcap
-+LIBCAP_INSTALL_STAGING = YES
- 
- define LIBCAP_BUILD_CMDS
-- $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		LIBATTR=no BUILD_CC="$(HOSTCC)" BUILD_CFLAGS="$(HOST_CFLAGS)"
- endef
- 
- define LIBCAP_INSTALL_STAGING_CMDS
-- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) \
-+		prefix=/usr lib=lib install
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
-- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
-- rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,capsh getpcaps)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) \
-+		prefix=/usr lib=lib install
-+	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,capsh getpcaps)
- endef
- 
- define HOST_LIBCAP_BUILD_CMDS
-- $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
-- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) prefix=/usr lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
-+		prefix=/usr lib=lib install
- endef
- 
- $(eval $(call GENTARGETS,package,libcap))
++READLINE_VERSION = 6.2
+ READLINE_SOURCE = readline-$(READLINE_VERSION).tar.gz
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
 -- 
 1.7.3.4
