@@ -1,40 +1,27 @@
-From: David Anders <dave123_aml@yahoo.com>
-Date: Mon, 25 Apr 2011 19:28:40 -0700 (PDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 26 Apr 2011 07:36:09 +0200
 Subject: [Buildroot] devmem2
-In-Reply-To: <BANLkTikyrOJBpu71rzf32FV_5qy6q+3TWw@mail.gmail.com>
-Message-ID: <263588.92519.qm@web161413.mail.bf1.yahoo.com>
+In-Reply-To: <263588.92519.qm@web161413.mail.bf1.yahoo.com> (David Anders's
+	message of "Mon, 25 Apr 2011 19:28:40 -0700 (PDT)")
+References: <263588.92519.qm@web161413.mail.bf1.yahoo.com>
+Message-ID: <871v0p7ewm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-devmem in busybox is worthless.
+>>>>> "David" == David Anders <dave123_aml@yahoo.com> writes:
 
-it has been "modified" so many times to adhere to the busybox standard that it is not longer a useful item.
+ David> devmem in busybox is worthless.
 
-Dave
+ David> it has been "modified" so many times to adhere to the busybox
+ David> standard that it is not longer a useful item.
 
---- On Thu, 4/21/11, Bj?rn Forsman <bjorn.forsman@gmail.com> wrote:
+What do you mean about that? Devmem2 is a very simple program, and the
+devmem applet seems to work exactly the same the times I've used it
+(except for the access-to-highest-page-issue that got fixed back in
+1.16.x).
 
-> From: Bj?rn Forsman <bjorn.forsman@gmail.com>
-> Subject: Re: [Buildroot] devmem2
-> To: "Xianghua Xiao" <xiaoxianghua@gmail.com>
-> Cc: buildroot at busybox.net
-> Date: Thursday, April 21, 2011, 9:48 AM
-> On 21 April 2011 16:17, Xianghua Xiao
-> <xiaoxianghua@gmail.com>
-> wrote:
-> > Please keep this package, as it's very useful for
-> embedded product
-> > debugging, and it does not take much space at all.
-> 
-> Busybox provides a similar tool called 'devmem'. Have you
-> tried it?
-> 
-> Best regards,
-> Bj?rn Forsman
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
