@@ -1,50 +1,28 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Tue, 26 Apr 2011 16:40:22 +0700
-Subject: [Buildroot] Buildroot 2011.02 images won't load on Qemu with
-	qemu_arm_versatile_defconfig
-Message-ID: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 Apr 2011 09:40:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 3379] New Package:  bonnie++
+In-Reply-To: <bug-3379-163@https.bugs.busybox.net/>
+References: <bug-3379-163@https.bugs.busybox.net/>
+Message-ID: <20110426094045.EC14182A59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+https://bugs.busybox.net/show_bug.cgi?id=3379
 
-I found issue when trying to load buildroot images on Qemu. Following is my
-configuration:
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-1. Buildroot configured with make qemu_arm_versatile_defconfig
-2. Using uClibc toolchain
-3. rootfs.cpio, initramfs of linux kernel
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Basically, I just did: make qemu_arm_versatile_defconfig; make then use the
-resulting images available under output/images
-
-I run qemu with following command:
-
-qemu-system-arm -M versatilepb -m 128M -kernel output/images/zImage -initrd
-output/images/rootfs.cpio.gz -append "root=/dev/ram rdinit=/bin/sh"
-
-Qemu launched but there is nothing shown.
-
-Then I tried another trick by building linux kernel inside
-output/build/linux-2.6.36 with CROSS_COMPILE parameter pointed to Code
-Sourcery toolchain and I found the very same result. Qemu did not show
-anything.
-
-I changed linux kernel version from buildroot menuconfig with 2.6.27.58,
-then configured buildroot with qemu_arm_versatile_defconfig following with
-make, then Qemu can load the kernel.
-
-Has anyone experienced this kind of issue?
-
-Thanks in advance,
-DWI
-
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Committed, thanks
 
 -- 
-Good software can't be measured by `wc -l software.c`
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110426/0fc98092/attachment.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
