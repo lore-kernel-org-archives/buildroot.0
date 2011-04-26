@@ -1,115 +1,148 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Tue, 26 Apr 2011 21:55:07 +0700
-Subject: [Buildroot] Buildroot 2011.02 images won't load on Qemu with
-	qemu_arm_versatile_defconfig
-In-Reply-To: <87ipu15or2.fsf@macbook.be.48ers.dk>
-References: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com>
-	<87ipu15or2.fsf@macbook.be.48ers.dk>
-Message-ID: <BANLkTinw6H=Z01BRih6rDR3-LbOcSk37uw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 26 Apr 2011 11:56:48 -0300
+Subject: [Buildroot] [PATCH 1/4] libcap: bump to version 2.20
+Message-ID: <1303829811-13344-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 26, 2011 at 4:46 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Bump libcap to version 2.20 and adjust style to match buildroot's
+defacto standard.
 
-> >>>>> "Dwi" == Dwi Sasongko Supriyadi <ruckuus@gmail.com> writes:
->
->  Dwi> Hello All,
->  Dwi> I found issue when trying to load buildroot images on Qemu. Following
-> is my
->  Dwi> configuration:
->
->  Dwi> 1. Buildroot configured with make qemu_arm_versatile_defconfig
->  Dwi> 2. Using uClibc toolchain
->  Dwi> 3. rootfs.cpio, initramfs of linux kernel
->
->  Dwi> Basically, I just did: make qemu_arm_versatile_defconfig; make then
-> use the
->  Dwi> resulting images available under output/images
->
->  Dwi> I run qemu with following command:
->
->  Dwi> qemu-system-arm -M versatilepb -m 128M -kernel output/images/zImage
-> -initrd
->  Dwi> output/images/rootfs.cpio.gz -append "root=/dev/ram rdinit=/bin/sh"
->
->  Dwi> Qemu launched but there is nothing shown.
->
-> Odd, I've using the versatile config pretty often here.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...system.patch => libcap-2.20-build-system.patch} |   41 +++++++++-----------
+ package/libcap/libcap.mk                           |   30 ++++++++++-----
+ 2 files changed, 38 insertions(+), 33 deletions(-)
+ rename package/libcap/{libcap-2.19-build-system.patch => libcap-2.20-build-system.patch} (57%)
 
-
-I also use versatile_defconfig for kernel then using the zImage with Qemu,
-and never try zImage result from buildroot. I also worked with older
-version, i.e. 2.6.27
-
-
-> I do configure
-> it slightly differently, as I normally don't care about graphics output
-> - So I use the serial output:
->
-> qemu-system-arm -M versatilepb -kernel output/images/zImage -append
->   'console=ttyAMA0,115200 root=/dev/sda' -nographic -net nic -net user
->   -hda output/images/rootfs.ext2
->
-> I've tweaked the versatile config a bit in git since the 2011.02
-> release though (enabled getty on serial port).
->
-
-Perhaps you could give the default versatile config in git a try before
-> changing to initramfs?
->
->
-I tried to use versatile config from git, but there is still the same
-result. Qemu stopped after compressing Linux.
-
-Please correct me if I am wrong, is following the versatile
-config difference between 2011.02 and buildroot from git correct?
-
-diff -Nru configs/qemu_arm_versatile_defconfig
-../buildroot/configs/qemu_arm_versatile_defconfig
---- configs/qemu_arm_versatile_defconfig 2011-04-26 19:16:59.215058879 +0700
-+++ ../buildroot/configs/qemu_arm_versatile_defconfig 2011-04-26
-19:34:21.614809336 +0700
-@@ -2,6 +2,10 @@
- BR2_arm=y
- BR2_arm926t=y
-
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/package/libcap/libcap-2.19-build-system.patch b/package/libcap/libcap-2.20-build-system.patch
+similarity index 57%
+rename from package/libcap/libcap-2.19-build-system.patch
+rename to package/libcap/libcap-2.20-build-system.patch
+index f548726..397aff2 100644
+--- a/package/libcap/libcap-2.19-build-system.patch
++++ b/package/libcap/libcap-2.20-build-system.patch
+@@ -1,9 +1,14 @@
+-diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
+---- libcap-2.19.orig/Make.Rules	2010-01-13 23:04:58.000000000 -0300
+-+++ libcap-2.19/Make.Rules	2010-12-28 16:44:18.164052748 -0300
+-@@ -45,25 +45,26 @@
++Avoid the libcap buildsys forcing CC/CFLAGS/LDFLAGS/AR/RANLIB
++Also install the shared lib +x
 +
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
-@@ -9,7 +13,7 @@
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-
-I also saw there are minor difference between both boards config and I did
-try 2.6.38.config in 2.6.36 kernel but I found the same result.
-
-I am a little bit puzzled but also surprised knowing that only older kernel
-version can be used ... should this be known as Qemu issue?
-
-Using 2.6.27.58 with CS toolchain or BR toolchain the image result can be
-used flawlessly, but not with 2.6.36/37/38. I am worried also with the fact
-that my qemu gets segfault when missing -m parameter. I am running Ubuntu
-Lucid with Qemu version 0.12.3. Could you please confirm your Qemu version?
-
-Thanks in advance,
-DWI
-
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura libcap-2.20/Make.Rules libcap-2.20-build/Make.Rules
++--- libcap-2.20/Make.Rules	2011-01-19 02:06:44.000000000 -0300
+++++ libcap-2.20-build/Make.Rules	2011-04-19 14:07:53.544903094 -0300
++@@ -47,25 +47,25 @@
+  KERNEL_HEADERS := $(topdir)/libcap/include
+- IPATH += -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
++ IPATH += -fPIC -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
+  
+ -CC := gcc
+ -CFLAGS := -O2
+@@ -13,12 +18,12 @@ diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
+ -RANLIB := ranlib
+ +CC ?= gcc
+ +CFLAGS ?= -O2
+-+CC_FOR_BUILD ?= $(CC)
+-+CFLAGS_FOR_BUILD ?= $(CFLAGS)
+++BUILD_CC ?= $(CC)
+++BUILD_CFLAGS ?= $(CFLAGS) $(IPATH)
+ +AR ?= ar
+ +RANLIB ?= ranlib
+  DEBUG = -g #-DDEBUG
+- WARNINGS=-fPIC -Wall -Wwrite-strings \
++ WARNINGS=-Wall -Wwrite-strings \
+          -Wpointer-arith -Wcast-qual -Wcast-align \
+          -Wstrict-prototypes -Wmissing-prototypes \
+          -Wnested-externs -Winline -Wshadow
+@@ -29,25 +34,15 @@ diff -Nura libcap-2.19.orig/Make.Rules libcap-2.19/Make.Rules
+  SYSTEM_HEADERS = /usr/include
+  INCS=$(topdir)/libcap/include/sys/capability.h
+  LDFLAGS += -L$(topdir)/libcap
+- CFLAGS += -Dlinux $(WARNINGS) $(DEBUG) $(IPATH)
++ CFLAGS += -Dlinux $(WARNINGS) $(DEBUG)
+ -PAM_CAP := $(shell if [ -f /usr/include/security/pam_modules.h ]; then echo yes ; else echo no ; fi)
+-+CFLAGS_FOR_BUILD += $(IPATH)
+-+PAM_CAP := no
+++PAM_CAP = no
+  INDENT := $(shell if [ -n "$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
+  DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
+  LIBATTR := yes
+-diff -Nura libcap-2.19.orig/libcap/Makefile libcap-2.19/libcap/Makefile
+---- libcap-2.19.orig/libcap/Makefile	2008-12-04 05:03:12.000000000 -0200
+-+++ libcap-2.19/libcap/Makefile	2010-12-28 16:44:33.457052750 -0300
+-@@ -33,7 +33,7 @@
+- endif
+- 
+- _makenames: _makenames.c cap_names.list.h
+--	$(BUILD_CC) $(BUILD_CFLAGS) $< -o $@
+-+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) $< -o $@
+- 
+- cap_names.h: _makenames
+- 	./_makenames > cap_names.h
++diff -Nura libcap-2.20/libcap/Makefile libcap-2.20-build/libcap/Makefile
++--- libcap-2.20/libcap/Makefile	2010-08-08 19:26:04.000000000 -0300
+++++ libcap-2.20-build/libcap/Makefile	2011-04-19 14:08:29.377146094 -0300
+ @@ -65,7 +65,7 @@
+  	install -m 0644 include/sys/capability.h $(INCDIR)/sys
+  	mkdir -p -m 0755 $(LIBDIR)
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index d4f8f17..458f8e8 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -1,27 +1,37 @@
+-LIBCAP_VERSION=2.19
+-LIBCAP_SOURCE=libcap-$(LIBCAP_VERSION).tar.bz2
+-LIBCAP_SITE=http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/
+-LIBCAP_INSTALL_STAGING=YES
++#############################################################
++#
++# libcap
++#
++#############################################################
++
++LIBCAP_VERSION = 2.20
++LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
++LIBCAP_DEPENDENCIES = host-libcap
++LIBCAP_INSTALL_STAGING = YES
+ 
+ define LIBCAP_BUILD_CMDS
+- $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		LIBATTR=no BUILD_CC="$(HOSTCC)" BUILD_CFLAGS="$(HOST_CFLAGS)"
+ endef
+ 
+ define LIBCAP_INSTALL_STAGING_CMDS
+- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(STAGING_DIR) \
++		prefix=/usr lib=lib install
+ endef
+ 
+ define LIBCAP_INSTALL_TARGET_CMDS
+- $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
+- rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,capsh getpcaps)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(TARGET_DIR) \
++		prefix=/usr lib=lib install
++	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,capsh getpcaps)
+ endef
+ 
+ define HOST_LIBCAP_BUILD_CMDS
+- $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) prefix=/usr lib=lib install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
++		prefix=/usr lib=lib install
+ endef
+ 
+ $(eval $(call GENTARGETS,package,libcap))
 -- 
-Good software can't be measured by `wc -l software.c`
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110426/25cc0b88/attachment-0001.html>
+1.7.3.4
