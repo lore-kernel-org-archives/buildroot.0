@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 26 Apr 2011 20:58:30 +0200
-Subject: [Buildroot] [git commit] readline: bump to version 6.2pl1
-Message-ID: <20110426190218.508EC82A63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] usbutils: bump to version 002
+Message-ID: <20110426190218.89CC782A63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,71 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20c32937a7524f025d885e75c561daedbef7a01b
+commit: http://git.buildroot.net/buildroot/commit/?id=49b6be29b07a1ffce55dc1070c196dab1886bb25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump to version 002, no longer needs libusb-compat
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...s-link.patch => readline-6.2-curses-link.patch} |    0
- package/readline/readline-6.2-pl1.patch            |   29 ++++++++++++++++++++
- package/readline/readline.mk                       |    3 +-
- 3 files changed, 31 insertions(+), 1 deletions(-)
- rename package/readline/{readline-6.1-curses-link.patch => readline-6.2-curses-link.patch} (100%)
- create mode 100644 package/readline/readline-6.2-pl1.patch
+ package/usbutils/Config.in   |    1 -
+ package/usbutils/usbutils.mk |    4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/readline/readline-6.1-curses-link.patch b/package/readline/readline-6.2-curses-link.patch
-similarity index 100%
-rename from package/readline/readline-6.1-curses-link.patch
-rename to package/readline/readline-6.2-curses-link.patch
-diff --git a/package/readline/readline-6.2-pl1.patch b/package/readline/readline-6.2-pl1.patch
-new file mode 100644
-index 0000000..9ef0e48
---- /dev/null
-+++ b/package/readline/readline-6.2-pl1.patch
-@@ -0,0 +1,29 @@
-+Bug-Reported-by:	Clark J. Wang <dearvoid@gmail.com>
-+Bug-Reference-ID:	<AANLkTimGbW7aC4E5infXP6ku5WPci4t=xVc+L1SyHqrD@mail.gmail.com>
-+Bug-Reference-URL:	http://lists.gnu.org/archive/html/bug-bash/2011-02/msg00157.html
-+
-+diff -Nura readline-6.2/callback.c readline-6.2-pl1/callback.c
-+--- readline-6.2/callback.c	2010-06-06 13:18:58.000000000 -0300
-++++ readline-6.2-pl1/callback.c	2011-04-19 14:20:00.269829168 -0300
-+@@ -148,6 +148,9 @@
-+ 	  eof = _rl_vi_domove_callback (_rl_vimvcxt);
-+ 	  /* Should handle everything, including cleanup, numeric arguments,
-+ 	     and turning off RL_STATE_VIMOTION */
-++	  if (RL_ISSTATE (RL_STATE_NUMERICARG) == 0)
-++	   _rl_internal_char_cleanup ();
-++
-+ 	  return;
-+ 	}
-+ #endif
-+diff -Nura readline-6.2/vi_mode.c readline-6.2-pl1/vi_mode.c
-+--- readline-6.2/vi_mode.c	2010-11-20 21:51:39.000000000 -0300
-++++ readline-6.2-pl1/vi_mode.c	2011-04-19 14:19:24.510586785 -0300
-+@@ -1114,7 +1114,7 @@
-+       rl_beg_of_line (1, c);
-+       _rl_vi_last_motion = c;
-+       RL_UNSETSTATE (RL_STATE_VIMOTION);
-+-      return (0);
-++      return (vidomove_dispatch (m));
-+     }
-+ #if defined (READLINE_CALLBACKS)
-+   /* XXX - these need to handle rl_universal_argument bindings */
-diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-index 9e25e04..e34c650 100644
---- a/package/readline/readline.mk
-+++ b/package/readline/readline.mk
-@@ -3,7 +3,8 @@
- # build GNU readline
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index 0aabc4a..fbd712b 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_USBUTILS
+ 	bool "usbutils"
+ 	depends on BR2_PROGRAM_INVOCATION
+ 	select BR2_PACKAGE_LIBUSB
+-	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  USB enumeration utilities
+ 
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index 46c889e..bd50a5f 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,9 +4,9 @@
  #
  #############################################################
--READLINE_VERSION = 6.1
-+
-+READLINE_VERSION = 6.2
- READLINE_SOURCE = readline-$(READLINE_VERSION).tar.gz
- READLINE_SITE = $(BR2_GNU_MIRROR)/readline
- READLINE_INSTALL_STAGING = YES
+ 
+-USBUTILS_VERSION = 0.91
++USBUTILS_VERSION = 002
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+-USBUTILS_DEPENDENCIES = host-pkg-config libusb-compat
++USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ 
+ ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+ 	USBUTILS_DEPENDENCIES += zlib
 -- 
 1.7.3.4
