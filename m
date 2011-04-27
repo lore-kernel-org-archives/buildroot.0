@@ -1,7 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Wed, 27 Apr 2011 22:13:48 +0200
-Subject: [Buildroot] [git commit] linux: bump 2.6.38 kernel to 2.6.38.4
-Message-ID: <20110427201947.421EA8294E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: update uClibc snapshot config
+	again to avoid build stalls
+Message-ID: <20110427201947.B4F558294E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,45 +10,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63690434d9ba897ff213c255c9f97585df586482
+commit: http://git.buildroot.net/buildroot/commit/?id=eac3475c4723e9e37aaaacb42003794dfbcd4184
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update uClibc snapshot version config to avoid build stalls.
+
+This time we take care of the new UCLIBC_HAS_FTS and
+UCLIBC_HAS_BACKTRACE options.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/uClibc/uClibc-snapshot.config |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d6bb790..3b0fa62 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_2_6_38
- 
- config BR2_LINUX_KERNEL_2_6_38
--	bool "2.6.38.3"
-+	bool "2.6.38.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -52,7 +52,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "2.6.38.3"
-+	default "2.6.38.4"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "2.6.38.3" if BR2_LINUX_KERNEL_2_6_38
-+	default "2.6.38.4" if BR2_LINUX_KERNEL_2_6_38
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
+index aa00680..34ec0ff 100644
+--- a/toolchain/uClibc/uClibc-snapshot.config
++++ b/toolchain/uClibc/uClibc-snapshot.config
+@@ -220,6 +220,7 @@ UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_WORDEXP is not set
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
++# UCLIBC_HAS_FTS is not set
+ UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
+ # UCLIBC_HAS_UTMPX is not set
+@@ -260,6 +261,7 @@ DOSTRIP=y
+ # SUPPORT_LD_DEBUG is not set
+ # SUPPORT_LD_DEBUG_EARLY is not set
+ # UCLIBC_MALLOC_DEBUGGING is not set
++# UCLIBC_HAS_BACKTRACE is not set
+ WARNINGS="-Wall"
+ # EXTRA_WARNINGS is not set
+ # DOMULTI is not set
 -- 
 1.7.3.4
