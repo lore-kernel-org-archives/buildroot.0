@@ -1,26 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Apr 2011 07:28:21 +0200
-Subject: [Buildroot] devmem2
-In-Reply-To: <BANLkTinUVfnoMGL2jySY4h7XOpN=Gkc2dA@mail.gmail.com> (Xianghua
-	Xiao's message of "Tue, 26 Apr 2011 22:55:16 -0500")
-References: <1303869098.2489.67.camel@kenm-i7>
-	<129278.98526.qm@web161414.mail.bf1.yahoo.com>
-	<BANLkTinUVfnoMGL2jySY4h7XOpN=Gkc2dA@mail.gmail.com>
-Message-ID: <87tydkz2iy.fsf@macbook.be.48ers.dk>
+Date: Wed, 27 Apr 2011 07:29:12 +0200
+Subject: [Buildroot] Buildroot 2011.02 images won't load on Qemu with
+	qemu_arm_versatile_defconfig
+In-Reply-To: <BANLkTi=0dPugw0sdqGeoeHn7BYFs9a_Umg@mail.gmail.com> (Dwi
+	Sasongko Supriyadi's message of "Wed, 27 Apr 2011 11:28:07 +0700")
+References: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com>
+	<87ipu15or2.fsf@macbook.be.48ers.dk>
+	<BANLkTinw6H=Z01BRih6rDR3-LbOcSk37uw@mail.gmail.com>
+	<87d3k8512b.fsf@macbook.be.48ers.dk>
+	<BANLkTi=0dPugw0sdqGeoeHn7BYFs9a_Umg@mail.gmail.com>
+Message-ID: <87pqo8z2hj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Xianghua" == Xianghua Xiao <xiaoxianghua@gmail.com> writes:
+>>>>> "Dwi" == Dwi Sasongko Supriyadi <ruckuus@gmail.com> writes:
 
- Xianghua> why not keep devmem2 as an option but disable it by default,
- Xianghua> it's tiny anyway and essential for embedded devel.
+Hi,
 
-That's how it is today - Busybox devmem applet is enabled in the default
-busybox config, and we have a devmem2 package that is only visible when
-you enable BR2_DEPRECATED.
+ Dwi> Yes I don't get any output at all using Qemu from Lucid Lynx
+
+ Dwi> qemu --version
+ Dwi> QEMU PC emulator version 0.12.3 (qemu-kvm-0.12.3), Copyright (c) 2003-2008
+ Dwi> Fabrice Bellard
+
+ Dwi> BUT,
+
+ Dwi> Using Qemu 0.14.0 compiled from source, everything works fine. So,
+ Dwi> it seems Ubuntu qemu-kvm-0.12.3 issue.
+
+Ok, good to hear that you've got it working.
 
 -- 
 Bye, Peter Korsgaard
