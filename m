@@ -1,54 +1,71 @@
-From: Xianghua Xiao <xiaoxianghua@gmail.com>
-Date: Tue, 26 Apr 2011 22:55:16 -0500
-Subject: [Buildroot] devmem2
-In-Reply-To: <129278.98526.qm@web161414.mail.bf1.yahoo.com>
-References: <1303869098.2489.67.camel@kenm-i7>
-	<129278.98526.qm@web161414.mail.bf1.yahoo.com>
-Message-ID: <BANLkTinUVfnoMGL2jySY4h7XOpN=Gkc2dA@mail.gmail.com>
+From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
+Date: Wed, 27 Apr 2011 11:28:07 +0700
+Subject: [Buildroot] Buildroot 2011.02 images won't load on Qemu with
+	qemu_arm_versatile_defconfig
+In-Reply-To: <87d3k8512b.fsf@macbook.be.48ers.dk>
+References: <BANLkTi=r-0A6Fy8FNMq+Y398sjOd6_cbPA@mail.gmail.com>
+	<87ipu15or2.fsf@macbook.be.48ers.dk>
+	<BANLkTinw6H=Z01BRih6rDR3-LbOcSk37uw@mail.gmail.com>
+	<87d3k8512b.fsf@macbook.be.48ers.dk>
+Message-ID: <BANLkTi=0dPugw0sdqGeoeHn7BYFs9a_Umg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-why not keep devmem2 as an option but disable it by default, it's tiny
-anyway and essential for embedded devel.
+On Wed, Apr 27, 2011 at 1:18 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-or maybe one day buildroot can 'opkg install devmem2' at devel/bringup
-time and remove it when things are done.
+> >>>>> "Dwi" == Dwi Sasongko Supriyadi <ruckuus@gmail.com> writes:
+>
+> Hi,
+>
+>  Dwi> I tried to use versatile config from git, but there is still the
+>  Dwi> same result.  Qemu stopped after compressing Linux.
+>
+>  Dwi> Please correct me if I am wrong, is following the versatile
+>  Dwi> config difference between 2011.02 and buildroot from git correct?
+>
+> Yes, that's it. Getty on the first serial port and use 2.6.38.3 rather
+> than 2.6.36.
+>
+>  Dwi> I am a little bit puzzled but also surprised knowing that only
+>  Dwi> older kernel version can be used ... should this be known as Qemu
+>  Dwi> issue?
+>
+>  Dwi> Using 2.6.27.58 with CS toolchain or BR toolchain the image result
+>  Dwi> can be used flawlessly, but not with 2.6.36/37/38. I am worried
+>  Dwi> also with the fact that my qemu gets segfault when missing -m
+>  Dwi> parameter. I am running Ubuntu Lucid with Qemu version
+>  Dwi> 0.12.3. Could you please confirm your Qemu version?
+>
+> This all sounds very odd. I use:
+>
+> $ qemu-system-arm -version
+> QEMU PC emulator version 0.12.5 (Debian 0.12.5+dfsg-3), Copyright (c)
+> 2003-2008 Fabrice Bellard
+>
+> So with the qemu_arm_versatile_defconfig without any changes and the
+> qemu-system-arm arguments exactly as I said you don't get any output at
+> all?
+>
+>
+Yes I don't get any output at all using Qemu from Lucid Lynx
 
-Xianghua
+qemu --version
+QEMU PC emulator version 0.12.3 (qemu-kvm-0.12.3), Copyright (c) 2003-2008
+Fabrice Bellard
 
-On Tue, Apr 26, 2011 at 9:15 PM, David Anders <dave123_aml@yahoo.com> wrote:
-> Peter,
->
-> --- On Tue, 4/26/11, Ken McGuire <kenm@desertweyr.com> wrote:
->
->> From: Ken McGuire <kenm@desertweyr.com>
->> Subject: Re: [Buildroot] devmem2
->> To: buildroot at busybox.net
->> Date: Tuesday, April 26, 2011, 8:51 PM
->> I use devmem/devmem2 on a daily
->> basis.
->>
->
->> That's my opinion, maybe the right thing to do is just
->> remove devmem
->> from busybox, even devmem2 from the Buildroot "distro". I
->> can live with
->> building it myself.
->>
->>
->
-> i agree, just remove the devmem applet from busybox and the devmem2 from buildroot.
->
-> problem solved.
->
-> Dave
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+BUT,
+
+Using Qemu 0.14.0 compiled from source, everything works fine. So, it seems
+Ubuntu qemu-kvm-0.12.3 issue.
+
+Thanks and regards,
+DWI
+
+-- 
+Good software can't be measured by `wc -l software.c`
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110427/9afb0838/attachment.html>
