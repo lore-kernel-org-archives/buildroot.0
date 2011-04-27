@@ -1,35 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Apr 2011 22:13:48 +0200
-Subject: [Buildroot] [git commit] kismet: bump to version 2011-03-R2
-Message-ID: <20110427201947.E55648294E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Apr 2011 23:13:56 +0200
+Subject: [Buildroot] Strange behaviour with cramfs
+In-Reply-To: <4DA2B71A.3090407@michaelburghart.de> (Michael Burghart's message
+	of "Mon, 11 Apr 2011 10:08:58 +0200")
+References: <4DA2B71A.3090407@michaelburghart.de>
+Message-ID: <87zknbwg6j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Michael" == Michael Burghart <mb@michaelburghart.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c200d5b369378876f85afc222ba7f14b120bbc6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Michael> Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/kismet/kismet.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Michael> as I need to be able to replace the rootfs regularly I decided
+ Michael> to build it as a cramfs (if there is a better option, please
+ Michael> let me know).
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 482c7db..b143ef3 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--KISMET_VERSION = 2010-07-R1
-+KISMET_VERSION = 2011-03-R2
- KISMET_SITE = http://www.kismetwireless.net/code
- KISMET_DEPENDENCIES = libpcap ncurses
- 
+I would strongly suggest you had a look at squashfs instead. It is
+conceptually the same as cramfs, but with better compression and without
+some of the limitations of cramfs.
+
+It's more than 5 years ago since I last used cramfs, but it should work
+as well though.
+
+ Michael> Unfortunately it does not work. The cramfs gets loaded and the kernel
+ Michael> tells me:
+
+ Michael> [    2.883952] VFS: Mounted root (cramfs filesystem) readonly on device
+ Michael> 1:0.
+
+ Michael> which is ok.
+ Michael> But then:
+
+ Michael> can't open /dev/proc: No such file or directory
+
+/dev/proc? that sounds odd.
+
+ Michael> and so on on end.. what did I forget to include?! Anybody experienced
+ Michael> this before?
+
+Could you post your buildroot .config (or even better defconfig which
+you get by running make savedefconfig). Do you have the possibility for
+boot over nfs? If so, you could try the same build (use the tarball
+output format) though nfs.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
