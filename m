@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Apr 2011 21:05:39 +0200
-Subject: [Buildroot] [PATCH 1/4] toolchain: bump 2.6.38 kernel headers
-	to 2.6.38.4
-In-Reply-To: <1303924616-4951-1-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Wed, 27 Apr 2011 14:16:53 -0300")
+Date: Wed, 27 Apr 2011 21:06:30 +0200
+Subject: [Buildroot] [PATCH 2/4] linux: bump 2.6.38 kernel to 2.6.38.4
+In-Reply-To: <1303924616-4951-2-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Wed, 27 Apr 2011 14:16:54 -0300")
 References: <1303924616-4951-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pqo7y0os.fsf@macbook.be.48ers.dk>
+	<1303924616-4951-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87liyvy0nd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
