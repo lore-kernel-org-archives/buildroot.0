@@ -1,8 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Wed, 27 Apr 2011 22:13:48 +0200
-Subject: [Buildroot] [git commit] toolchain: update uClibc snapshot config
-	again to avoid build stalls
-Message-ID: <20110427201947.B4F558294E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openvpn: bump to version 2.2.0
+Message-ID: <20110427201948.272A18294E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +9,89 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eac3475c4723e9e37aaaacb42003794dfbcd4184
+commit: http://git.buildroot.net/buildroot/commit/?id=f1d88a96ca865f828d1efadd8de0898819453373
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update uClibc snapshot version config to avoid build stalls.
-
-This time we take care of the new UCLIBC_HAS_FTS and
-UCLIBC_HAS_BACKTRACE options.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/uClibc/uClibc-snapshot.config |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ ...=> openvpn-fix-build-with-disable-crypto.patch} |    0
+ package/openvpn/openvpn-fix-tmpdir.patch           |   39 ++++++++++++++++++++
+ package/openvpn/openvpn.mk                         |   10 +----
+ 3 files changed, 41 insertions(+), 8 deletions(-)
+ rename package/openvpn/{openvpn-2.1.3-fix-build-with-disable-crypto.patch => openvpn-fix-build-with-disable-crypto.patch} (100%)
+ create mode 100644 package/openvpn/openvpn-fix-tmpdir.patch
 
-diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
-index aa00680..34ec0ff 100644
---- a/toolchain/uClibc/uClibc-snapshot.config
-+++ b/toolchain/uClibc/uClibc-snapshot.config
-@@ -220,6 +220,7 @@ UCLIBC_HAS_FNMATCH=y
- # UCLIBC_HAS_WORDEXP is not set
- UCLIBC_HAS_NFTW=y
- UCLIBC_HAS_FTW=y
-+# UCLIBC_HAS_FTS is not set
- UCLIBC_HAS_GLOB=y
- UCLIBC_HAS_GNU_GLOB=y
- # UCLIBC_HAS_UTMPX is not set
-@@ -260,6 +261,7 @@ DOSTRIP=y
- # SUPPORT_LD_DEBUG is not set
- # SUPPORT_LD_DEBUG_EARLY is not set
- # UCLIBC_MALLOC_DEBUGGING is not set
-+# UCLIBC_HAS_BACKTRACE is not set
- WARNINGS="-Wall"
- # EXTRA_WARNINGS is not set
- # DOMULTI is not set
+diff --git a/package/openvpn/openvpn-2.1.3-fix-build-with-disable-crypto.patch b/package/openvpn/openvpn-fix-build-with-disable-crypto.patch
+similarity index 100%
+rename from package/openvpn/openvpn-2.1.3-fix-build-with-disable-crypto.patch
+rename to package/openvpn/openvpn-fix-build-with-disable-crypto.patch
+diff --git a/package/openvpn/openvpn-fix-tmpdir.patch b/package/openvpn/openvpn-fix-tmpdir.patch
+new file mode 100644
+index 0000000..919d49b
+--- /dev/null
++++ b/package/openvpn/openvpn-fix-tmpdir.patch
+@@ -0,0 +1,39 @@
++From b70d99fb617350b252c8bde2f1f2d81d3f5b7955 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 27 Apr 2011 18:43:50 +0200
++Subject: [PATCH] Fix compile issues when using --enable-small and --disable-ssl/--disable-crypto
++
++The tmp_dir string is required in the options struct regardless of options
++so spin it out of #if conditionals.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Acked-by: David Sommerseth <dazo@users.sourceforge.net>
++Signed-off-by: David Sommerseth <dazo@users.sourceforge.net>
++---
++ options.h |    3 ++-
++ 1 files changed, 2 insertions(+), 1 deletions(-)
++
++diff --git a/options.h b/options.h
++index a9c6a94..8a51502 100644
++--- a/options.h
+++++ b/options.h
++@@ -369,6 +369,8 @@ struct options
++   struct plugin_option_list *plugin_list;
++ #endif
++ 
+++  const char *tmp_dir;
+++
++ #if P2MP
++ 
++ #if P2MP_SERVER
++@@ -409,7 +411,6 @@ struct options
++   const char *client_connect_script;
++   const char *client_disconnect_script;
++   const char *learn_address_script;
++-  const char *tmp_dir;
++   const char *client_config_dir;
++   bool ccd_exclusive;
++   bool disable;
++-- 
++1.7.0.1
++
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 89118b1..27a9a55 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,15 +4,9 @@
+ #
+ #############################################################
+ 
+-OPENVPN_VERSION = 2.1.4
++OPENVPN_VERSION = 2.2.0
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+-OPENVPN_CONF_OPT = --enable-small
+-
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-	OPENVPN_CONF_OPT += --enable-pthread
+-else
+-	OPENVPN_CONF_OPT += --disable-pthread
+-endif
++OPENVPN_CONF_OPT = --enable-small --disable-plugins
+ 
+ ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
+ 	OPENVPN_DEPENDENCIES += lzo
 -- 
 1.7.3.4
