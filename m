@@ -1,40 +1,32 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 27 Apr 2011 14:55:11 +0200
-Subject: [Buildroot] [PATCH v2] libnl: bump to version 2.0
-In-Reply-To: <20110427125034.GA12092@jasper.tkos.co.il>
-References: <4DB81033.1040503@visionsystems.de>
-	<20110427125034.GA12092@jasper.tkos.co.il>
-Message-ID: <4DB8122F.9070200@visionsystems.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Apr 2011 14:56:07 +0200
+Subject: [Buildroot] [PATCH] libnl: bump to version 2.0
+In-Reply-To: <4DB8116B.901@visionsystems.de> (Yegor Yefremov's message of
+	"Wed, 27 Apr 2011 14:51:55 +0200")
+References: <4DB7D29E.5000101@visionsystems.de>
+	<87liywylxb.fsf@macbook.be.48ers.dk> <4DB8116B.901@visionsystems.de>
+Message-ID: <87zknbyhso.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-> On Wed, Apr 27, 2011 at 02:46:43PM +0200, Yegor Yefremov wrote:
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->>
->>
->> Index: b/package/libnl/libnl.mk
->> ===================================================================
->> --- a/package/libnl/libnl.mk	2011-04-26 02:04:14.206276675 -0700
->> +++ b/package/libnl/libnl.mk	2011-04-27 05:43:47.382292483 -0700
->> @@ -4,9 +4,9 @@
->>  #
->>  #############################################################
->>  
->> -LIBNL_VERSION = 1.1
->> +LIBNL_VERSION = 3.0
-> You should probably change ${SUBJECT}.
+ >> Out of interest, how did you create this patch? It doesn't have the nice
+ >> diffstat overview like git format-patch normally creates.
 
-You're right.
+ Yegor> Just quilt :-) I'm working with various version control systems, so quilt is a versatile tool for me. But the patch could be applied without any problems?
 
-> By the way, since there are API changes between those libnl versions, does 
-> this change affect other packages using libnl?
+Sure, diffstat is just nice to get a quick overview of what the patch
+does.
 
-I've also provided patches for wpa_supplicant and hostapd. Both packages had already support for libnl, but I had to be set up in the configuration file.
+I use:
 
-Best regards,
-Yegor
+QUILT_REFRESH_ARGS="--diffstat --no-timestamps"
+
+in my ~/.quiltrc
+
+-- 
+Bye, Peter Korsgaard
