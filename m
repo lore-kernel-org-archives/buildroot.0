@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Wed, 27 Apr 2011 22:13:48 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: FINEGRAINEDMTUNE: remove
-	checks for unused/outdated versions
-Message-ID: <20110427201948.514E48294E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kismet: bump to version 2011-03-R2
+Message-ID: <20110427201947.E55648294E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc8b7766355ed3776f454cd8fbb180150bd627f0
+commit: http://git.buildroot.net/buildroot/commit/?id=2c200d5b369378876f85afc222ba7f14b120bbc6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/Config.in |    2 +-
+ package/kismet/kismet.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 31f7150..17b21b8 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -41,7 +41,7 @@ endchoice
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 482c7db..b143ef3 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
- 	bool
--	default y if !BR2_GCC_VERSION_4_2_1 && !BR2_GCC_VERSION_4_2_2 && !BR2_GCC_VERSION_4_2_3 && !BR2_GCC_VERSION_4_2_4 && !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
-+	default y if !BR2_GCC_VERSION_4_2_4 && !BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+-KISMET_VERSION = 2010-07-R1
++KISMET_VERSION = 2011-03-R2
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = libpcap ncurses
  
- config BR2_GCC_SNAP_DATE
- 	string "GCC snapshot date"
 -- 
 1.7.3.4
