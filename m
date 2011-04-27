@@ -1,77 +1,43 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 27 Apr 2011 10:32:48 +0200
-Subject: [Buildroot] [PATCH] New package: ti-utils
-Message-ID: <4DB7D4B0.9020905@visionsystems.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Apr 2011 13:26:56 +0200
+Subject: [Buildroot] [PATCH] libnl: bump to version 2.0
+In-Reply-To: <4DB7D29E.5000101@visionsystems.de> (Yegor Yefremov's message of
+	"Wed, 27 Apr 2011 10:23:58 +0200")
+References: <4DB7D29E.5000101@visionsystems.de>
+Message-ID: <87liywylxb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the calibrator and other useful utilities for TI wireless solution,
-based on wl12xx driver. 
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-See http://linuxwireless.org/en/users/Drivers/wl12xx/calibrator for
-further details.
+Out of interest, how did you create this patch? It doesn't have the nice
+diffstat overview like git format-patch normally creates.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Yegor> Index: b/package/libnl/libnl.mk
+ Yegor> ===================================================================
+ Yegor> --- a/package/libnl/libnl.mk	2011-04-26 02:04:14.206276675 -0700
+ Yegor> +++ b/package/libnl/libnl.mk	2011-04-26 03:29:21.934275959 -0700
+ Yegor> @@ -4,10 +4,11 @@
+ Yegor>  #
+ Yegor>  #############################################################
+ 
+ Yegor> -LIBNL_VERSION = 1.1
+ Yegor> +LIBNL_VERSION = 2.0
 
-Index: b/package/Config.in
-===================================================================
---- a/package/Config.in	2011-04-26 02:04:14.130276675 -0700
-+++ b/package/Config.in	2011-04-26 03:52:58.106277378 -0700
-@@ -203,6 +203,7 @@
- source "package/squashfs3/Config.in"
- source "package/sshfs/Config.in"
- source "package/sysstat/Config.in"
-+source "package/ti-utils/Config.in"
- source "package/udev/Config.in"
- source "package/usb_modeswitch/Config.in"
- source "package/usbmount/Config.in"
-Index: b/package/ti-utils/Config.in
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/ti-utils/Config.in	2011-04-27 00:58:58.674284049 -0700
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_TI_UTILS
-+	bool "ti-utils"
-+	help
-+	  The calibrator and other useful utilities for TI wireless solution,
-+	  based on wl12xx driver.
-+
-+	  http://linuxwireless.org/en/users/Drivers/wl12xx/calibrator
-+
-Index: b/package/ti-utils/ti-utils.mk
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ b/package/ti-utils/ti-utils.mk	2011-04-27 00:57:53.546282739 -0700
-@@ -0,0 +1,29 @@
-+#############################################################
-+#
-+# ti-utils
-+#
-+#############################################################
-+
-+TI_UTILS_VERSION = fbceab8f228cff80fd29b830bb85a188c69def08
-+TI_UTILS_SITE = git://github.com/gxk/ti-utils.git
-+TI_UTILS_DEPENDENCIES = libnl
-+
-+define TI_UTILS_BUILD_CMDS
-+	$(MAKE1) NFSROOT="$(STAGING_DIR)" CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+		-C $(@D) all
-+endef
-+
-+define TI_UTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/calibrator \
-+		$(TARGET_DIR)/usr/bin/calibrator
-+	$(INSTALL) -m 0755 $(@D)/scripts/go.sh \
-+		$(TARGET_DIR)/usr/bin/go.sh
-+endef
-+
-+define TI_UTILS_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/calibrator
-+	rm -f $(TARGET_DIR)/usr/bin/go.sh
-+endef
-+
-+$(eval $(call GENTARGETS,package,ti-utils))
-+
+I see there's already a libnl-3.0, is there any reason why you stick
+with 2.0?
+
+ Yegor>  LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
+ Yegor> -LIBNL_SITE = http://distfiles.gentoo.org/distfiles
+ Yegor> +LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
+ Yegor>  LIBNL_INSTALL_STAGING = YES
+ Yegor> +LIBNL_AUTORECONF = YES
+
+Why? You don't seem to be patching any auto* stuff?
+
+-- 
+Bye, Peter Korsgaard
