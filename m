@@ -1,59 +1,44 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 28 Apr 2011 16:26:00 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 28 Apr 2011 17:33:08 +0200
 Subject: [Buildroot] busybox network configuration
-In-Reply-To: <BANLkTinUrGGn0r6GR54j52Xv3eriRwyXVw@mail.gmail.com>
+In-Reply-To: <BANLkTinUrGGn0r6GR54j52Xv3eriRwyXVw@mail.gmail.com> (Charles
+	Krinke's message of "Thu, 28 Apr 2011 08:15:41 -0700")
 References: <BANLkTinUrGGn0r6GR54j52Xv3eriRwyXVw@mail.gmail.com>
-Message-ID: <E2055310C50F48C1B48974D7235DE3C4@beraninstruments.com.local>
+Message-ID: <87mxjawfuz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
+>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Charles Krinke
-> Sent: 28 April 2011 16:16
-> To: buildroot
-> Subject: [Buildroot] busybox network configuration
-> 
-> I have apparently forgotten the recipe to configure a network in busybox.
-> 
-> I have tried:
-> # ifconfig eth0 10.1.2.3 netmask 255.255.255.0 up
-> # route add default gw 10.1.1.1 etho
-> 
-> But, ping doesnt seem to get out of the target board.
-> 
-> I also suspect there are one or more script files with things like this that
-> need to be set, but the busybox implementation doesnt have an
-> /etc/sysconfig/network-scripts, so they need to be in a different place, but
-> what is the location and name of the file?
-> 
-> DEVICE=eth0
-> BOOTPROTO=static
-> BROADCAST=XXX.XXX.XXX.255
-> IPADDR=XXX.XXX.XXX.XXX
-> NETMASK=255.255.255.0
-> NETWORK=XXX.XXX.XXX.0
-> ONBOOT=yes
-> 
-> Can someone please help my naivety a little bit with busybox, please?
+ Charles> I have apparently forgotten the recipe to configure a network in busybox.
+ Charles> I have tried:
+ Charles> # ifconfig eth0 10.1.2.3 netmask 255.255.255.0 up
+ Charles> # route add default gw 10.1.1.1 etho
 
-Just alter /etc/network/interfaces to e.g:
+ Charles> But, ping doesnt seem to get out of the target board.
 
-auto eth0
-iface eth0 inet static
-   address 10.1.2.3
-   netmask 255.255.255.0
-   gateway 10.1.1.1
+ Charles> I also suspect there are one or more script files with things like this that
+ Charles> need to be set, but the busybox implementation doesnt have an /etc/sysconfig/
+ Charles> network-scripts, so they need to be in a different place, but what is the
+ Charles> location and name of the file?
 
-no?
+ Charles> DEVICE=eth0
+ Charles> BOOTPROTO=static
+ Charles> BROADCAST=XXX.XXX.XXX.255
+ Charles> IPADDR=XXX.XXX.XXX.XXX
+ Charles> NETMASK=255.255.255.0
+ Charles> NETWORK=XXX.XXX.XXX.0
+ Charles> ONBOOT=yes
 
-> 
-> --
-> Charles Krinke
-> 
-> 
+ Charles> Can someone please help my naivety a little bit with busybox, please?
+
+Busybox (and our default filesystem skeleton) uses Debian-style ifup /
+ifdown, so have a look in /etc/network/interfaces.
+
+See http://wiki.debian.org/NetworkConfiguration for more details.
+
+-- 
+Bye, Peter Korsgaard
