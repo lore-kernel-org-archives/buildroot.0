@@ -1,51 +1,68 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Apr 2011 23:13:56 +0200
-Subject: [Buildroot] Strange behaviour with cramfs
-In-Reply-To: <4DA2B71A.3090407@michaelburghart.de> (Michael Burghart's message
-	of "Mon, 11 Apr 2011 10:08:58 +0200")
-References: <4DA2B71A.3090407@michaelburghart.de>
-Message-ID: <87zknbwg6j.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 28 Apr 2011 09:23:51 +0200
+Subject: [Buildroot] [PATCH] iw: add support for libnl-3.0
+Message-ID: <4DB91607.9000708@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Burghart <mb@michaelburghart.de> writes:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- Michael> Hi,
+---
+ package/iw/iw-libnl-30-support.patch |   47 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
- Michael> as I need to be able to replace the rootfs regularly I decided
- Michael> to build it as a cramfs (if there is a better option, please
- Michael> let me know).
-
-I would strongly suggest you had a look at squashfs instead. It is
-conceptually the same as cramfs, but with better compression and without
-some of the limitations of cramfs.
-
-It's more than 5 years ago since I last used cramfs, but it should work
-as well though.
-
- Michael> Unfortunately it does not work. The cramfs gets loaded and the kernel
- Michael> tells me:
-
- Michael> [    2.883952] VFS: Mounted root (cramfs filesystem) readonly on device
- Michael> 1:0.
-
- Michael> which is ok.
- Michael> But then:
-
- Michael> can't open /dev/proc: No such file or directory
-
-/dev/proc? that sounds odd.
-
- Michael> and so on on end.. what did I forget to include?! Anybody experienced
- Michael> this before?
-
-Could you post your buildroot .config (or even better defconfig which
-you get by running make savedefconfig). Do you have the possibility for
-boot over nfs? If so, you could try the same build (use the tarball
-output format) though nfs.
-
--- 
-Bye, Peter Korsgaard
+Index: b/package/iw/iw-libnl-30-support.patch
+===================================================================
+--- /dev/null
++++ b/package/iw/iw-libnl-30-support.patch
+@@ -0,0 +1,47 @@
++---
++ Makefile |   10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -24,6 +24,7 @@
++
++ NL1FOUND := $(shell $(PKG_CONFIG) --atleast-version=1 libnl-1 && echo Y)
++ NL2FOUND := $(shell $(PKG_CONFIG) --atleast-version=2 libnl-2.0 && echo Y)
+++NL3FOUND := $(shell $(PKG_CONFIG) --atleast-version=3 libnl-3.0 && echo Y)
++
++ ifeq ($(NL1FOUND),Y)
++ NLLIBNAME = libnl-1
++@@ -35,6 +36,12 @@
++ NLLIBNAME = libnl-2.0
++ endif
++
+++ifeq ($(NL3FOUND),Y)
+++CFLAGS += -DCONFIG_LIBNL20
+++LIBS += -lnl-genl
+++NLLIBNAME = libnl-3.0
+++endif
+++
++ ifeq ($(NLLIBNAME),)
++ $(error Cannot find development files for any supported version of libnl)
++ endif
++@@ -53,6 +60,8 @@
++ all: version_check $(ALL)
++
++ version_check:
+++ifeq ($(NL3FOUND),Y)
+++else
++ ifeq ($(NL2FOUND),Y)
++ else
++ ifeq ($(NL1FOUND),Y)
++@@ -60,6 +69,7 @@
++ 	$(error No libnl found)
++ endif
++ endif
+++endif
++
++
++ VERSION_OBJS := $(filter-out version.o, $(OBJS))
++
