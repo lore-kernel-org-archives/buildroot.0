@@ -1,37 +1,100 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Fri, 29 Apr 2011 22:29:09 +0700
-Subject: [Buildroot] [PATCH] Setting system banner with plaintext file.
-Message-ID: <BANLkTinF-wH2TZBMjQfLWquyGmfh4Oqr=Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Apr 2011 17:21:09 -0300
+Subject: [Buildroot] [PATCH] uClibc: add linuxthreads/errno fix for snapshot
+	version
+Message-ID: <1304108469-11700-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See uclibc #2089 for details.
 
-This gives choice to set system banner with specified
-text file, so it is possible to set multiline message
-as well as ASCII art to be displayed at login.
+This is still not included upstream, but lets include it anyway as
+several people have been running into the issue.
 
-This is trivial patch, but I think it is better to set login message during
-menuconfig instead of editing /etc/issue from image output. This is my first
-attempt to send patch, so please let me know should I miss anything. Thanks
-in advance.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../uClibc.snapshot.linuxthreads-errno-fix.patch   |   70 ++++++++++++++++++++
+ 1 files changed, 70 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
 
-
-Best regards,
-DWI
-
+diff --git a/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch b/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
+new file mode 100644
+index 0000000..7335173
+--- /dev/null
++++ b/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
+@@ -0,0 +1,70 @@
++From af8b2d71ce37b9d4d24ddbc755cdea68de02949a Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Mon, 5 Jul 2010 14:08:17 +0200
++Subject: [PATCH] don't make __errno_location / __h_errno_location hidden
++
++Closes #2089 (https://bugs.busybox.net/show_bug.cgi?id=2089)
++
++__errno_location / __h_errno_location access has to go through the PLT
++like malloc/free, so the linuxthread variants gets used instead when
++compiling with -pthread.
++
++Based on http://github.com/mat-c/uClibc/commit/328d392c54aa5dc2b8e7f398a419087de497de2b
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ include/netdb.h                               |    1 -
++ libc/misc/internals/__errno_location.c        |    3 ---
++ libc/misc/internals/__h_errno_location.c      |    1 -
++ libc/sysdeps/linux/common/bits/errno.h        |    1 -
++ 6 files changed, 0 insertions(+), 11 deletions(-)
++
++diff --git a/include/netdb.h b/include/netdb.h
++index 9d3807d..ac411ab 100644
++--- a/include/netdb.h
+++++ b/include/netdb.h
++@@ -59,7 +59,6 @@ __BEGIN_DECLS
++ 
++ /* Function to get address of global `h_errno' variable.  */
++ extern int *__h_errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__h_errno_location)
++ 
++ /* Macros for accessing h_errno from inside libc.  */
++ #ifdef _LIBC
++diff --git a/libc/misc/internals/__errno_location.c b/libc/misc/internals/__errno_location.c
++index 487a9c2..0620860 100644
++--- a/libc/misc/internals/__errno_location.c
+++++ b/libc/misc/internals/__errno_location.c
++@@ -15,6 +15,3 @@ int * weak_const_function __errno_location (void)
++ {
++     return &errno;
++ }
++-#ifdef IS_IN_libc /* not really need, only to keep in sync w/ libc_hidden_proto */
++-libc_hidden_weak(__errno_location)
++-#endif
++diff --git a/libc/misc/internals/__h_errno_location.c b/libc/misc/internals/__h_errno_location.c
++index 213d398..235df4e 100644
++--- a/libc/misc/internals/__h_errno_location.c
+++++ b/libc/misc/internals/__h_errno_location.c
++@@ -10,4 +10,3 @@ int * weak_const_function __h_errno_location (void)
++ {
++     return &h_errno;
++ }
++-libc_hidden_weak(__h_errno_location)
++diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
++index 6e520fa..f4a9ebb 100644
++--- a/libc/sysdeps/linux/common/bits/errno.h
+++++ b/libc/sysdeps/linux/common/bits/errno.h
++@@ -43,7 +43,6 @@
++ # ifndef __ASSEMBLER__
++ /* Function to get address of global `errno' variable.  */
++ extern int *__errno_location (void) __THROW __attribute__ ((__const__));
++-libc_hidden_proto(__errno_location)
++ 
++ #  ifdef __UCLIBC_HAS_THREADS__
++ /* When using threads, errno is a per-thread value.  */
++diff --git a/libc/sysdeps/linux/common/bits/uClibc_errno.h b/libc/sysdeps/linux/common/bits/uClibc_errno.h
++index 9c15618..79eb7e6 100644
++-- 
++1.7.1
++
 -- 
-Good software can't be measured by `wc -l software.c`
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110429/9452aa47/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Setting-system-banner-with-plaintext-file.patch
-Type: text/x-patch
-Size: 2520 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110429/9452aa47/attachment.bin>
+1.7.3.4
