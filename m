@@ -1,23 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Apr 2011 21:41:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 2419] Add a bundle of Lua modules
-In-Reply-To: <bug-2419-163@https.bugs.busybox.net/>
-References: <bug-2419-163@https.bugs.busybox.net/>
-Message-ID: <20110428214150.C65AE82B34@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 29 Apr 2011 11:15:44 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.35.x longterm
+	version
+Message-ID: <20110429093012.E8C6A82B3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2419
 
---- Comment #4 from Fran?ois Perrad <francois.perrad@gadz.org>  ---
-after few experiments, a rebase seems useless.
+commit: http://git.buildroot.net/buildroot/commit/?id=2405fa26a8a081bc79548b3444cb1b3bffde5296
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-patches vs BR 2011.02 are fine.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index e3f6b46..d35f026 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -43,7 +43,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "2.6.35.12"	if BR2_KERNEL_HEADERS_2_6_35
++	default "2.6.35.13"	if BR2_KERNEL_HEADERS_2_6_35
+ 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.4"	if BR2_KERNEL_HEADERS_2_6_38
+diff --git a/toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.35.12-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
