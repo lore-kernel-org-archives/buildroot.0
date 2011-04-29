@@ -1,23 +1,25 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Fri, 29 Apr 2011 13:38:17 +0200
-Subject: [Buildroot] Making --localstatedir=/var global?
-Message-ID: <BANLkTi==ps=OpY80aRQBrEL7KcyowjPgOw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 29 Apr 2011 12:13:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 2419] Add a bundle of Lua modules
+In-Reply-To: <bug-2419-163@https.bugs.busybox.net/>
+References: <bug-2419-163@https.bugs.busybox.net/>
+Message-ID: <20110429121300.08B6082B2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I see many packages defines localstatedir to point at /var - what do
-you think about making it a global default by putting it in
-Makefile.autotools.in?
+https://bugs.busybox.net/show_bug.cgi?id=2419
 
-There are a few exceptions though:
-dhcp/dhcp.mk: defines localstatedir to /var/lib/dhcp
-links/links.mk: defines localstatedir to /tmp
-proftpd/proftpd.mk: defines localstatedir to /var/run
+--- Comment #5 from Gustavo Zacarias <gustavo@zacarias.com.ar>  ---
+Yes, the patches work against 2011.02 but not against LATEST 2011.05-git,
+specifically 0001-modules-lua-move-Lua-libraries-modules.patch
+Also please add a signoff message to them (git format-patch -s ...) so we can
+include them directly.
+Thanks.
 
-All of these are (AFAIK) errornous use of the localstatedir variable,
-and could be corrected using patches instead.
-
-Thoughts?
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
