@@ -1,35 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 29 Apr 2011 15:40:58 +0200
-Subject: [Buildroot] [git commit] toolchain-external: remove extra space in
-	RPC option string
-Message-ID: <20110429134747.D0ED082B3A@busybox.osuosl.org>
+From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
+Date: Fri, 29 Apr 2011 22:29:09 +0700
+Subject: [Buildroot] [PATCH] Setting system banner with plaintext file.
+Message-ID: <BANLkTinF-wH2TZBMjQfLWquyGmfh4Oqr=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b370e63806fa2ab064cd2b30d627914cc5c0a43
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This gives choice to set system banner with specified
+text file, so it is possible to set multiline message
+as well as ASCII art to be displayed at login.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-external/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This is trivial patch, but I think it is better to set login message during
+menuconfig instead of editing /etc/issue from image output. This is my first
+attempt to send patch, so please let me know should I miss anything. Thanks
+in advance.
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d9a0034..1cbf554 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -189,7 +189,7 @@ config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
- 	  will tell you if it's correct or not.
- 
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
--	bool "Toolchain has RPC support ?"
-+	bool "Toolchain has RPC support?"
- 	select BR2_INET_RPC
- 	help
- 	  Select this option if your external toolchain supports
+
+Best regards,
+DWI
+
 -- 
-1.7.3.4
+Good software can't be measured by `wc -l software.c`
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110429/9452aa47/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Setting-system-banner-with-plaintext-file.patch
+Type: text/x-patch
+Size: 2520 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110429/9452aa47/attachment.bin>
