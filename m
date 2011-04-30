@@ -1,145 +1,58 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Sat, 30 Apr 2011 15:42:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add jimtcl support
-Message-ID: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sat, 30 Apr 2011 22:43:25 +0200
+Subject: [Buildroot] e500v2 SPE toolchain tuple confuses BR
+In-Reply-To: <824040.8961.qm@web180204.mail.gq1.yahoo.com>
+References: <824040.8961.qm@web180204.mail.gq1.yahoo.com>
+Message-ID: <201104302243.26033.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-you will download it via git
-and can specify which repos and/or which commit
+Dwayne, All,
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Cc: Nicolas Ferre <nicolas.ferre@atmel.com>
-Cc: Patrice Vilchez <patrice.vilchez@atmel.com>
----
- package/Config.in        |    1 +
- package/jimtcl/Config.in |   65 ++++++++++++++++++++++++++++++++++++++++++++++
- package/jimtcl/jimtcl.mk |   30 +++++++++++++++++++++
- 3 files changed, 96 insertions(+), 0 deletions(-)
- create mode 100644 package/jimtcl/Config.in
- create mode 100644 package/jimtcl/jimtcl.mk
+On Saturday 30 April 2011 00:16:52 Dwayne Fontenot <dwayne.fontenot@att.net> wrote:
+> I'm having an issue with buildroot (git HEAD as of 20110428) and a powerpc
+> e500v2 toolchain built using the BR crosstool-ng integration.
+> 
+> The built toolchain has a prefix of powerpc-unknown-linux-gnuspe- yet BR
+> assumes it is powerpc-unknown-linux-gnu-
 
-diff --git a/package/Config.in b/package/Config.in
-index 76b2076..cd89892 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -231,6 +231,7 @@ source "package/php/Config.in"
- source "package/python/Config.in"
- source "package/ruby/Config.in"
- source "package/tcl/Config.in"
-+source "package/jimtcl/Config.in"
- endmenu
- 
- menu "Libraries"
-diff --git a/package/jimtcl/Config.in b/package/jimtcl/Config.in
-new file mode 100644
-index 0000000..7847d19
---- /dev/null
-+++ b/package/jimtcl/Config.in
-@@ -0,0 +1,65 @@
-+menuconfig BR2_PACKAGE_JIMTCL
-+	bool "jimtcl"
-+	help
-+	  Small footprint implementation of Tcl programming language
-+
-+	  http://jim.berlios.de/
-+
-+if BR2_PACKAGE_JIMTCL
-+
-+choice
-+	prompt "JIMTCL Version"
-+	default BR2_TARGET_JIMTCL_GIT
-+	help
-+	  Select the specific jimtcl version you want to use
-+
-+config BR2_TARGET_JIMTCL_GIT
-+	bool "Official git"
-+
-+config BR2_TARGET_JIMTCL_GIT_CUSTOM
-+	bool "Custom"
-+
-+endchoice
-+
-+if BR2_TARGET_JIMTCL_GIT_CUSTOM
-+
-+config BR2_TARGET_JIMTCL_CUSTOM_GIT_LOCATION
-+	string "URL of custom jimtcl git"
-+
-+endif
-+
-+choice
-+	prompt "jimtcl Version"
-+	default BR2_TARGET_JIMTCL_2011.01
-+	help
-+	  Select the specific jimtcl version you want to use
-+
-+config BR2_TARGET_JIMTCL_0_70
-+	bool "0.70"
-+
-+config BR2_TARGET_JIMTCL_0_63
-+	bool "0.63"
-+
-+config BR2_TARGET_JIMTCL_0_51
-+	bool "0.51"
-+
-+config BR2_TARGET_JIMTCL_CUSTOM
-+	bool "Custom"
-+
-+endchoice
-+
-+config BR2_TARGET_JIMTCL_VERSION
-+	string
-+	default "0.70"		if BR2_TARGET_JIMTCL_0_70
-+	default "0.63"		if BR2_TARGET_JIMTCL_0_63
-+	default "0.51"		if BR2_TARGET_JIMTCL_0_51
-+	default "custom"	if BR2_TARGET_JIMTCL_VERSION_CUSTOM
-+
-+if BR2_TARGET_JIMTCL_VERSION_CUSTOM
-+
-+config BR2_TARGET_JIMTCL_CUSTOM_COMMIT
-+	string "URL of custom jimtcl commit"
-+
-+endif
-+
-+endif
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-new file mode 100644
-index 0000000..d4f4c52
---- /dev/null
-+++ b/package/jimtcl/jimtcl.mk
-@@ -0,0 +1,30 @@
-+#############################################################
-+#
-+# jimtcl
-+#
-+#############################################################
-+JIMTCL_VERSION:=$(call qstrip,$(BR2_TARGET_JIMTCL_VERSION))
-+JIMTCL_SITE_METHOD:=git
-+DL_TOOLS_DEPENDENCIES += git
-+
-+ifneq ($(BR2_TARGET_JIMTCL_CUSTOM_GIT_LOCATION),)
-+JIMTCL_SITE:=$(call qstrip,$(BR2_TARGET_JIMTCL_CUSTOM_GIT_LOCATION))
-+else
-+JIMTCL_SITE:=http://repo.or.cz/r/jimtcl.git
-+endif
-+
-+ifeq ($(JIMTCL_VERSION),custom)
-+JIMTCL_VERSION=$(call qstrip,$(BR2_TARGET_JIMTCL_CUSTOM_COMMIT))
-+endif
-+
-+# Force it as the version can be a name such as HEAD
-+JIMTCL_DL_VERSION=$(OPENOCD_VERSION)
-+
-+JIMTCL_INSTALL_STAGING = YES
-+JIMTCL_INSTALL_TARGET = NO
-+
-+OPENOCD_AUTORECONF = YES
-+
-+JIMTCL_INSTALL_STAGING_OPT= DESTDIR=$(STAGING_DIR)/usr install
-+
-+$(eval $(call AUTOTARGETS,package,jimtcl))
+I've add an idea about this. It all boils down to buildroot computing
+its own tuple, when it should delegate that to the backend responsible
+for building the toolchain.
+
+Indeed, even with a purely external toolchain (ge it from CodeSourcey,
+built with crosstool-NG, or any other kind), the tuple can have specifics
+that buildroot has no idea about.
+
+In this case, buildroot has no knowledge of the ABI in use by the toolchain
+(here the SPE ABI). For ARM, buildroot handles the EABI stuff, but that's
+a side effect of buildroot having an internal backend that handles ARM EABI.
+
+So, what I would suggest is that computing the tuple be the responsibility
+of the toolchain backend.
+
+For the internal backend, I would be a matter of moving the code along,
+out from the package infrastructure. Probably nothing very complex...
+
+For the crosstool-NG backend, that should be fairly trivial; there is
+provision for this on crostool-NG, just call ct-ng show-tuple, et voila!
+
+For the external backend, it should not much more complex. gcc is able
+to dump the tuple for which it has been built, just call gcc -dumpmachine
+
+Of course, a quick hack to add PPC SPE would be fairly trivial as well,
+but it would not scale, doing work that should not ever be done at all. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.4.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
