@@ -1,55 +1,99 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 May 2011 19:49:33 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add jimtcl support
-In-Reply-To: <20110501164314.GE1212@game.jcrosoft.org> (Jean-Christophe
-	PLAGNIOL-VILLARD's message of "Sun, 1 May 2011 18:43:14 +0200")
-References: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
-	<87vcxuv2c6.fsf@macbook.be.48ers.dk>
-	<20110501164314.GE1212@game.jcrosoft.org>
-Message-ID: <87ei4iux8y.fsf@macbook.be.48ers.dk>
+From: trem <tremyfr@yahoo.fr>
+Date: Mon, 02 May 2011 00:14:37 +0200
+Subject: [Buildroot] [PATCH] Add pandaboard support
+In-Reply-To: <8762q15f5t.fsf@macbook.be.48ers.dk>
+References: <1303250132-14596-1-git-send-email-tremyfr@yahoo.fr>
+	<8762q15f5t.fsf@macbook.be.48ers.dk>
+Message-ID: <4DBDDB4D.6060401@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
-
 Hi,
 
- >> Is there really a need to support anything else than 0.70? We prefer to
- >> only have 1 version as that simplified implementation and testing.
+All this work is based on this tutorial : http://www.elinux.org/Panda_How_to_kernel_new
 
- Jean-Christophe> I do use the the HEAD personally
 
- Jean-Christophe> but the 0.70 is the last release I see project still
- Jean-Christophe> using the previous one
+On 26/04/11 15:13, Peter Korsgaard wrote:
+>>>>>> "Philippe" == Philippe Reynes<tremyfr@yahoo.fr>  writes:
+> Hi,
+>
+> Thanks, see below for a few comments.
+>
+>   Philippe>  Signed-off-by: Philippe Reynes<tremyfr@yahoo.fr>
+>   Philippe>  ---
+>   Philippe>   .../u-boot-2010.12-fix-tty-on-pandaboard.patch     |   13 +++++++++++++
+>   Philippe>   configs/omap4_panda_config                         |   14 ++++++++++++++
+>   Philippe>   2 files changed, 27 insertions(+), 0 deletions(-)
+>   Philippe>   create mode 100644 board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+>   Philippe>   create mode 100644 configs/omap4_panda_config
+>
+>   Philippe>  diff --git a/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+>   Philippe>  new file mode 100644
+>   Philippe>  index 0000000..0233460
+>   Philippe>  --- /dev/null
+>   Philippe>  +++ b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+>   Philippe>  @@ -0,0 +1,13 @@
+>   Philippe>  +Index: u-boot-2010.12/include/configs/omap4_panda.h
+>   Philippe>  +===================================================================
+>   Philippe>  +--- u-boot-2010.12.orig/include/configs/omap4_panda.h	2010-12-22 20:22:14.000000000 +0100
+>   Philippe>  ++++ u-boot-2010.12/include/configs/omap4_panda.h	2011-04-16 15:51:07.000000000 +0200
+>   Philippe>  +@@ -148,7 +148,7 @@
+>   Philippe>  +
+>   Philippe>  + #define CONFIG_EXTRA_ENV_SETTINGS \
+>   Philippe>  + 	"loadaddr=0x82000000\0" \
+>   Philippe>  +-	"console=ttyS2,115200n8\0" \
+>   Philippe>  ++	"console=ttyO2,115200n8\0" \
+>
+> Please document and sign-off-by on patches (using git style). Why is
+> this needed, is it going upstream?
+>
+As it's based on a well known tutorial, I've supposed that it's already known by upstream project.
+And I've done a quickly patch and I wait that upstream u-boot report this change.
 
-What does openocd need? I would prefer to only have 0.70.
+I've done a new release of this patch in git format.
 
- Jean-Christophe> I do not known yet how to implement it but, I get in
- Jean-Christophe> my mind the idea to add for the scm the same idea as
- Jean-Christophe> for http download, the mirror mecanism When you work
- Jean-Christophe> offline or on slow internet network it's really good
+>   Philippe>  +++ b/configs/omap4_panda_config
+>   Philippe>  @@ -0,0 +1,14 @@
+>   Philippe>  +BR2_arm=y
+>   Philippe>  +BR2_SOURCEFORGE_MIRROR="easynews"
+>
+> The custom sf.net mirror shouldn't be part of this defconfig.
+>
+>
+yes, I remove it in the new defconfig.
 
-That should work today - E.G. the git support creates a tarball which
-will be reused next time you build or can be put on a mirror server.
+>   Philippe>  +BR2_TOOLCHAIN_EXTERNAL=y
+>
+> Why an external toolchain?
+>
+>
+simply because it's was faster to compile.
 
- Jean-Christophe> +JIMTCL_INSTALL_STAGING = YES
- Jean-Christophe> +JIMTCL_INSTALL_TARGET = NO
- >> 
- >> Why no installation on target?
- Jean-Christophe> no need of it for openocd we just link link to it staticly
+>   Philippe>  +BR2_TARGET_GENERIC_GETTY=y
+>   Philippe>  +BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
+>   Philippe>  +BR2_PACKAGE_UDEV=y
+>
+> Why udev?
+>
+It's requested by the pandaboard (see the link at the beginning of the answer).
+>   Philippe>  +BR2_TARGET_UBOOT=y
+>   Philippe>  +BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
+>   Philippe>  +BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/arm/pandaboard/u-boot-patches/"
+>   Philippe>  +# BR2_TARGET_UBOOT_NETWORK is not set
+>   Philippe>  +BR2_TARGET_XLOADER=y
+>   Philippe>  +BR2_TARGET_XLOADER_BOARDNAME="omap4430panda"
+>
+> We don't have an xloader package in BR yet. I haven't followed
+> pandaboard development recently - Has xloader development stabilized,
+> and is there a single well-defined upstream?
+>
+I've sent a patch to add x-loader, thomas has replied.
+This patch (pandaboard support) depends on the former one (x-loader support).
 
-Ok, but we want a generic package. What does it install? Just a
-shared/static library or also some tools?
+I send a new release of the patch for the pandaboard support.
 
- >> Does it really use autotools and have broken DESTDIR support?
-
- Jean-Christophe> yeah the --prefix is ignore, even if you pass
- Jean-Christopha> --prefix=/usr it will install in /include
-
-That sound like something to fix upstream then.
-
--- 
-Bye, Peter Korsgaard
+Regards,
+Philippe
