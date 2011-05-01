@@ -1,99 +1,67 @@
-From: trem <tremyfr@yahoo.fr>
-Date: Mon, 02 May 2011 00:14:37 +0200
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Mon,  2 May 2011 00:16:44 +0200
 Subject: [Buildroot] [PATCH] Add pandaboard support
-In-Reply-To: <8762q15f5t.fsf@macbook.be.48ers.dk>
-References: <1303250132-14596-1-git-send-email-tremyfr@yahoo.fr>
-	<8762q15f5t.fsf@macbook.be.48ers.dk>
-Message-ID: <4DBDDB4D.6060401@yahoo.fr>
+Message-ID: <1304288204-30189-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
+---
+ .../u-boot-2010.12-fix-tty-on-pandaboard.patch     |   21 ++++++++++++++++++++
+ configs/omap4_panda_defconfig                      |   14 +++++++++++++
+ 2 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+ create mode 100644 configs/omap4_panda_defconfig
 
-All this work is based on this tutorial : http://www.elinux.org/Panda_How_to_kernel_new
-
-
-On 26/04/11 15:13, Peter Korsgaard wrote:
->>>>>> "Philippe" == Philippe Reynes<tremyfr@yahoo.fr>  writes:
-> Hi,
->
-> Thanks, see below for a few comments.
->
->   Philippe>  Signed-off-by: Philippe Reynes<tremyfr@yahoo.fr>
->   Philippe>  ---
->   Philippe>   .../u-boot-2010.12-fix-tty-on-pandaboard.patch     |   13 +++++++++++++
->   Philippe>   configs/omap4_panda_config                         |   14 ++++++++++++++
->   Philippe>   2 files changed, 27 insertions(+), 0 deletions(-)
->   Philippe>   create mode 100644 board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
->   Philippe>   create mode 100644 configs/omap4_panda_config
->
->   Philippe>  diff --git a/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
->   Philippe>  new file mode 100644
->   Philippe>  index 0000000..0233460
->   Philippe>  --- /dev/null
->   Philippe>  +++ b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
->   Philippe>  @@ -0,0 +1,13 @@
->   Philippe>  +Index: u-boot-2010.12/include/configs/omap4_panda.h
->   Philippe>  +===================================================================
->   Philippe>  +--- u-boot-2010.12.orig/include/configs/omap4_panda.h	2010-12-22 20:22:14.000000000 +0100
->   Philippe>  ++++ u-boot-2010.12/include/configs/omap4_panda.h	2011-04-16 15:51:07.000000000 +0200
->   Philippe>  +@@ -148,7 +148,7 @@
->   Philippe>  +
->   Philippe>  + #define CONFIG_EXTRA_ENV_SETTINGS \
->   Philippe>  + 	"loadaddr=0x82000000\0" \
->   Philippe>  +-	"console=ttyS2,115200n8\0" \
->   Philippe>  ++	"console=ttyO2,115200n8\0" \
->
-> Please document and sign-off-by on patches (using git style). Why is
-> this needed, is it going upstream?
->
-As it's based on a well known tutorial, I've supposed that it's already known by upstream project.
-And I've done a quickly patch and I wait that upstream u-boot report this change.
-
-I've done a new release of this patch in git format.
-
->   Philippe>  +++ b/configs/omap4_panda_config
->   Philippe>  @@ -0,0 +1,14 @@
->   Philippe>  +BR2_arm=y
->   Philippe>  +BR2_SOURCEFORGE_MIRROR="easynews"
->
-> The custom sf.net mirror shouldn't be part of this defconfig.
->
->
-yes, I remove it in the new defconfig.
-
->   Philippe>  +BR2_TOOLCHAIN_EXTERNAL=y
->
-> Why an external toolchain?
->
->
-simply because it's was faster to compile.
-
->   Philippe>  +BR2_TARGET_GENERIC_GETTY=y
->   Philippe>  +BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
->   Philippe>  +BR2_PACKAGE_UDEV=y
->
-> Why udev?
->
-It's requested by the pandaboard (see the link at the beginning of the answer).
->   Philippe>  +BR2_TARGET_UBOOT=y
->   Philippe>  +BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
->   Philippe>  +BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/arm/pandaboard/u-boot-patches/"
->   Philippe>  +# BR2_TARGET_UBOOT_NETWORK is not set
->   Philippe>  +BR2_TARGET_XLOADER=y
->   Philippe>  +BR2_TARGET_XLOADER_BOARDNAME="omap4430panda"
->
-> We don't have an xloader package in BR yet. I haven't followed
-> pandaboard development recently - Has xloader development stabilized,
-> and is there a single well-defined upstream?
->
-I've sent a patch to add x-loader, thomas has replied.
-This patch (pandaboard support) depends on the former one (x-loader support).
-
-I send a new release of the patch for the pandaboard support.
-
-Regards,
-Philippe
+diff --git a/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+new file mode 100644
+index 0000000..c80a9d3
+--- /dev/null
++++ b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+@@ -0,0 +1,21 @@
++commit bb4517fa4485c98be7474ceb87c031b17c82b3e8
++Author: Philippe Reynes <tremyfr@yahoo.fr>
++Date:   Sun May 1 16:04:46 2011 +0200
++
++    Fix tty on pandaboard
++    
++    Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
++
++diff --git a/include/configs/omap4_panda.h b/include/configs/omap4_panda.h
++index 2b03b0f..8715ed7 100644
++--- a/include/configs/omap4_panda.h
+++++ b/include/configs/omap4_panda.h
++@@ -148,7 +148,7 @@
++ 
++ #define CONFIG_EXTRA_ENV_SETTINGS \
++ 	"loadaddr=0x82000000\0" \
++-	"console=ttyS2,115200n8\0" \
+++	"console=ttyO2,115200n8\0" \
++ 	"usbtty=cdc_acm\0" \
++ 	"vram=16M\0" \
++ 	"mmcdev=0\0" \
+diff --git a/configs/omap4_panda_defconfig b/configs/omap4_panda_defconfig
+new file mode 100644
+index 0000000..f820eab
+--- /dev/null
++++ b/configs/omap4_panda_defconfig
+@@ -0,0 +1,14 @@
++BR2_arm=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
++BR2_PACKAGE_UDEV=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
++BR2_TARGET_UBOOT_2010_12=y
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/arm/pandaboard/u-boot-patches/"
++# BR2_TARGET_UBOOT_NETWORK is not set
++BR2_TARGET_XLOADER=y
++BR2_TARGET_XLOADER_BOARDNAME="omap4430panda"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+-- 
+1.7.1
