@@ -1,33 +1,33 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 1 May 2011 07:57:43 -0500
-Subject: [Buildroot] mysql server and stack direction
-In-Reply-To: <20110501074808.87796h8v1x8gb3k8@www.home.zuerker.org>
-References: <20110501074808.87796h8v1x8gb3k8@www.home.zuerker.org>
-Message-ID: <201105010757.45510.minimod@morethan.org>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun,  1 May 2011 08:00:14 -0500
+Subject: [Buildroot] [PATCH] usbutils: install into staging directory
+	(needed by udev)
+Message-ID: <a1ee6c8c1a0d28005dfa4b6e8fff9bbe0637bf07.1304254799.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun May 1 2011, Heiko Zuerker wrote:
-> Hi,
-> 
-> I'm working on the MySQL server package (v5.1 done, v5.5 will be  
-> next), but one of the issues is that it needs the "stack direction"  
-> set before the compile.
-> 
-> Does anybody have an idea how this can be configured dynamically? I'd  
-> really hate to have to make this a config option.
-> 
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-hardcode it to down.
-or
-if hp-parisc then up.
-But B.R. doesn't do hp-parisc, so just hardcoding it should do the job.
 
-Note:
-There might be other machines that have a stack direction of up,
-but I can't think of what they might be.
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/usbutils/usbutils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Mike
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index bd50a5f..a034ddc 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -7,6 +7,7 @@
+ USBUTILS_VERSION = 002
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb
++USBUTILS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+ 	USBUTILS_DEPENDENCIES += zlib
+-- 
+1.7.3.2
