@@ -1,24 +1,50 @@
 From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Sun, 1 May 2011 14:35:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add jimtcl support
-In-Reply-To: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <20110501123509.GD1212@game.jcrosoft.org>
+Date: Sun,  1 May 2011 14:37:42 +0200
+Subject: [Buildroot] [PATCH] dropbear: fix static link for version 0.53.1
+Message-ID: <1304253462-29820-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15:42 Sat 30 Apr     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> you will download it via git
-> and can specify which repos and/or which commit
-> 
-> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> Cc: Nicolas Ferre <nicolas.ferre@atmel.com>
-> Cc: Patrice Vilchez <patrice.vilchez@atmel.com>
-Please ignore these two patch I'll send soon a new version with FTDI Chip
-support and a defconfig to build based on at91 board a ethernet JTAG
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+---
+ .../dropbear-0.53.1-static_build_fix.patch         |   26 ++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/dropbear/dropbear-0.53.1-static_build_fix.patch
 
-Best Regards,
-J.
+diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
+new file mode 100644
+index 0000000..0e0a91a
+--- /dev/null
++++ b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
+@@ -0,0 +1,26 @@
++dropbear: fix static build
++
++the -lcrypt is missing during the link
++
++svr-authpasswd.o: In function `svr_auth_password':
++svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
++collect2: ld returned 1 exit status
++
++Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++---
++ Makefile.in |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: b/Makefile.in
++===================================================================
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -77,7 +77,7 @@ STRIP=@STRIP@
++ INSTALL=@INSTALL@
++ CPPFLAGS=@CPPFLAGS@
++ CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
++-LIBS+=@LIBS@
+++LIBS+=@CRYPTLIB@ @LIBS@
++ LDFLAGS=@LDFLAGS@
++ 
++ EXEEXT=@EXEEXT@
+-- 
+1.7.4.1
