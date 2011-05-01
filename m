@@ -1,50 +1,28 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Sun,  1 May 2011 14:37:42 +0200
-Subject: [Buildroot] [PATCH] dropbear: fix static link for version 0.53.1
-Message-ID: <1304253462-29820-1-git-send-email-plagnioj@jcrosoft.com>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Sun, 01 May 2011 07:48:08 -0500
+Subject: [Buildroot] mysql server and stack direction
+Message-ID: <20110501074808.87796h8v1x8gb3k8@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
----
- .../dropbear-0.53.1-static_build_fix.patch         |   26 ++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/dropbear/dropbear-0.53.1-static_build_fix.patch
+Hi,
 
-diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-new file mode 100644
-index 0000000..0e0a91a
---- /dev/null
-+++ b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-@@ -0,0 +1,26 @@
-+dropbear: fix static build
-+
-+the -lcrypt is missing during the link
-+
-+svr-authpasswd.o: In function `svr_auth_password':
-+svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
-+collect2: ld returned 1 exit status
-+
-+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-+---
-+ Makefile.in |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: b/Makefile.in
-+===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -77,7 +77,7 @@ STRIP=@STRIP@
-+ INSTALL=@INSTALL@
-+ CPPFLAGS=@CPPFLAGS@
-+ CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
-+-LIBS+=@LIBS@
-++LIBS+=@CRYPTLIB@ @LIBS@
-+ LDFLAGS=@LDFLAGS@
-+ 
-+ EXEEXT=@EXEEXT@
+I'm working on the MySQL server package (v5.1 done, v5.5 will be  
+next), but one of the issues is that it needs the "stack direction"  
+set before the compile.
+
+Does anybody have an idea how this can be configured dynamically? I'd  
+really hate to have to make this a config option.
+
 -- 
-1.7.4.1
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
+
+
+----------------------------------------------------------------
+This message was sent using IMP, the Internet Messaging Program.
