@@ -1,105 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 May 2011 17:44:30 +0200
-Subject: [Buildroot] [git commit] uClibc: add linuxthreads/errno fix for
-	snapshot version
-Message-ID: <20110502154550.AEFC382AFA@busybox.osuosl.org>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Mon, 2 May 2011 17:47:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package: add jimtcl support
+In-Reply-To: <20110502084427.3990412d@surf>
+References: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
+	<87vcxuv2c6.fsf@macbook.be.48ers.dk>
+	<20110501164314.GE1212@game.jcrosoft.org>
+	<87ei4iux8y.fsf@macbook.be.48ers.dk>
+	<20110502054115.GH1212@game.jcrosoft.org>
+	<20110502084427.3990412d@surf>
+Message-ID: <20110502154734.GK1212@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 08:44 Mon 02 May     , Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 2 May 2011 07:41:15 +0200
+> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> wrote:
+> 
+> > > That should work today - E.G. the git support creates a tarball
+> > > which will be reused next time you build or can be put on a mirror
+> > > server.
+> > The idea is to use the tree directly and not everytime create a
+> > tarball
+> 
+> That's something I plan to add globally at the package infrastructure
+> level. We need it for many other packages as well, for example the
+> bootloaders or the kernel. So there's infrastructure work to be done to
+> implement this, but I'd prefer to wait this work to be done rather than
+> cluttering each independent package with this kind of specific handling.
+> 
+> My idea is that users could write a "local.mk" file, in which they
+> could do:
+> 
+> JIMTCL_OVERRIDE_SRCDIR = /my/own/location
+> 
+> and Buildroot will use /my/own/location as the sources for JIMTCL.
+For now I'll post a patch to allow scm mirrors
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2b325c1f02f4579cbc7488a3321d313d7bd2239
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Personnaly I use this alot I've a gitosis with mirror of all my componet I
+work on so I can easly update them and reclone them quickly
+I do the same on Mercurial
+or svn via git tree
 
-See uclibc #2089 for details.
-
-This is still not included upstream, but lets include it anyway as
-several people have been running into the issue.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../uClibc.snapshot.linuxthreads-errno-fix.patch   |   70 ++++++++++++++++++++
- 1 files changed, 70 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
-
-diff --git a/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch b/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
-new file mode 100644
-index 0000000..7335173
---- /dev/null
-+++ b/toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
-@@ -0,0 +1,70 @@
-+From af8b2d71ce37b9d4d24ddbc755cdea68de02949a Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <jacmet@sunsite.dk>
-+Date: Mon, 5 Jul 2010 14:08:17 +0200
-+Subject: [PATCH] don't make __errno_location / __h_errno_location hidden
-+
-+Closes #2089 (https://bugs.busybox.net/show_bug.cgi?id=2089)
-+
-+__errno_location / __h_errno_location access has to go through the PLT
-+like malloc/free, so the linuxthread variants gets used instead when
-+compiling with -pthread.
-+
-+Based on http://github.com/mat-c/uClibc/commit/328d392c54aa5dc2b8e7f398a419087de497de2b
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ include/netdb.h                               |    1 -
-+ libc/misc/internals/__errno_location.c        |    3 ---
-+ libc/misc/internals/__h_errno_location.c      |    1 -
-+ libc/sysdeps/linux/common/bits/errno.h        |    1 -
-+ 6 files changed, 0 insertions(+), 11 deletions(-)
-+
-+diff --git a/include/netdb.h b/include/netdb.h
-+index 9d3807d..ac411ab 100644
-+--- a/include/netdb.h
-++++ b/include/netdb.h
-+@@ -59,7 +59,6 @@ __BEGIN_DECLS
-+ 
-+ /* Function to get address of global `h_errno' variable.  */
-+ extern int *__h_errno_location (void) __THROW __attribute__ ((__const__));
-+-libc_hidden_proto(__h_errno_location)
-+ 
-+ /* Macros for accessing h_errno from inside libc.  */
-+ #ifdef _LIBC
-+diff --git a/libc/misc/internals/__errno_location.c b/libc/misc/internals/__errno_location.c
-+index 487a9c2..0620860 100644
-+--- a/libc/misc/internals/__errno_location.c
-++++ b/libc/misc/internals/__errno_location.c
-+@@ -15,6 +15,3 @@ int * weak_const_function __errno_location (void)
-+ {
-+     return &errno;
-+ }
-+-#ifdef IS_IN_libc /* not really need, only to keep in sync w/ libc_hidden_proto */
-+-libc_hidden_weak(__errno_location)
-+-#endif
-+diff --git a/libc/misc/internals/__h_errno_location.c b/libc/misc/internals/__h_errno_location.c
-+index 213d398..235df4e 100644
-+--- a/libc/misc/internals/__h_errno_location.c
-++++ b/libc/misc/internals/__h_errno_location.c
-+@@ -10,4 +10,3 @@ int * weak_const_function __h_errno_location (void)
-+ {
-+     return &h_errno;
-+ }
-+-libc_hidden_weak(__h_errno_location)
-+diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
-+index 6e520fa..f4a9ebb 100644
-+--- a/libc/sysdeps/linux/common/bits/errno.h
-++++ b/libc/sysdeps/linux/common/bits/errno.h
-+@@ -43,7 +43,6 @@
-+ # ifndef __ASSEMBLER__
-+ /* Function to get address of global `errno' variable.  */
-+ extern int *__errno_location (void) __THROW __attribute__ ((__const__));
-+-libc_hidden_proto(__errno_location)
-+ 
-+ #  ifdef __UCLIBC_HAS_THREADS__
-+ /* When using threads, errno is a per-thread value.  */
-+diff --git a/libc/sysdeps/linux/common/bits/uClibc_errno.h b/libc/sysdeps/linux/common/bits/uClibc_errno.h
-+index 9c15618..79eb7e6 100644
-+-- 
-+1.7.1
-+
--- 
-1.7.3.4
+Best Regards,
+J.
