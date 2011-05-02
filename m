@@ -1,39 +1,48 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sun, 01 May 2011 20:11:41 -0500
-Subject: [Buildroot] mysql server and stack direction
-In-Reply-To: <20110501122303.70645rnjm01sb0kk@www.home.zuerker.org>
-References: <20110501074808.87796h8v1x8gb3k8@www.home.zuerker.org>
-	<87mxj6uz7p.fsf@macbook.be.48ers.dk>
-	<20110501122303.70645rnjm01sb0kk@www.home.zuerker.org>
-Message-ID: <20110501201141.75345921e89v74g8@www.home.zuerker.org>
+From: Carlos Alberto Diaz Gonzalez O. <cadgo.root@gmail.com>
+Date: Sun, 1 May 2011 21:12:03 -0500
+Subject: [Buildroot] Strange behavior in mount with tmpfs
+Message-ID: <BANLkTi=YPFQWBKV9L1EZR-PwxfubcNARPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting Heiko Zuerker <heiko@zuerker.org>:
-> Hey,
->
-> Quoting Peter Korsgaard <jacmet@uclibc.org>:
->>>>>>> "Heiko" == Heiko Zuerker <heiko@zuerker.org> writes:
->>
->> Heiko> Hi,
->> Heiko> I'm working on the MySQL server package (v5.1 done, v5.5 will be
->> Heiko> next), but one of the issues is that it needs the "stack direction"
->> Heiko> set before the compile.
+Hi Everybody,
+I?m testing buildroot for a personal project and is a really good tool
+thanks to all people that is doing it possible.
+At this moment I?m testing in a virtual machine a filesystem built
+with buildroot , but I?m observing an odd behavior when I try to mount
+some tmpfs all of these are being mounted in the /tmp, although my
+fstab is configured to mount in other way this filesystems
+Maybe someone in this list can help me to find an answer to fix it or
+a way to correct it. The version used to build my environment was the
+buildroot-2011.02.
 
-I submitted the current version of the patch, since I'm not sure when  
-I'll be able to continue the work.
-MySQL 5.1.x works fine for me (client + server), but 5.5 probably  
-needs some more experienced folks in the area of cross-compiling.
+# cat /etc/fstab
+# /etc/fstab: static file system information.
+# <file system> <mount pt>     <type>	<options>         <dump> <pass>
+/dev/sda5       /              ext3	rw,noauto         0      1
+/dev/sda6	/etc	       ext3     rw,auto,nodev,noexec,remount 0	0
+proc		/proc	       proc     defaults	  0	 0
+devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
+sysfs		/sys	       sysfs    defaults	  0	 0
+tmpfs	/var/run	tmpfs	rw,size=128k,nodev,nosuid  0   0
+tmpfs	/var/tmp	tmpfs	defaults 	0   0
+tmpfs	/var/log	tmpfs	rw,size=20m,nodev,nosuid  0   0
+tmpfs	/var/lock	tmpfs	rw,nodev,nosuid	 0   0
 
--- 
-
+# mount
+rootfs on / type rootfs (rw)
+none on /sys type sysfs (rw,nosuid,nodev,noexec)
+none on /proc type proc (rw,nosuid,nodev,noexec)
+udev on /dev type tmpfs (rw)
+none on /dev/pts type devpts (rw,nosuid,noexec,gid=5,mode=620)
+fusectl on /sys/fs/fuse/connections type fusectl (rw)
+/dev/sda5 on / type ext3 (rw,errors=continue,data=ordered)
+/dev/sda6 on /etc type ext3 (rw,errors=continue,data=ordered)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev)
+tmpfs on /tmp type tmpfs (rw)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev)
 Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
-----------------------------------------------------------------
-This message was sent using IMP, the Internet Messaging Program.
