@@ -1,41 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 May 2011 12:36:05 -0300
-Subject: [Buildroot] [PATCH] net-snmp: fixup paths in net-snmp-config
-Message-ID: <1304350565-1948-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 May 2011 17:41:44 +0200
+Subject: [Buildroot] [PATCH] usbutils: install into staging directory
+	(needed by udev)
+In-Reply-To: <a1ee6c8c1a0d28005dfa4b6e8fff9bbe0637bf07.1304254799.git.smiley73@users.sourceforge.net>
+	(heiko@zuerker.org's message of "Sun, 1 May 2011 08:00:14 -0500")
+References: <a1ee6c8c1a0d28005dfa4b6e8fff9bbe0637bf07.1304254799.git.smiley73@users.sourceforge.net>
+Message-ID: <8762ptun2f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Exposed by commit 7e3e8ec040b06d6e2fb69e55c004f1ebc02c76d0
-net-snmp-config goes for -L/usr/lib thus things break since this wins
-over the sysroot if we have a host net-snmp library around when we build
-packages that link against net-snmp.
+>>>>> "heiko" == heiko  <heiko@zuerker.org> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/netsnmp/netsnmp.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ heiko> From: Heiko Zuerker <smiley73@users.sourceforge.net>
+ heiko> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+ heiko> ---
+ heiko>  package/usbutils/usbutils.mk |    1 +
+ heiko>  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index edb1704..5704327 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -68,4 +68,14 @@ define NETSNMP_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/lib/libnetsnmp*
- endef
- 
-+define NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-+		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
-+		-e "s,^includedir=.*,includedir=\'$(STAGING_DIR)/usr/include\',g" \
-+		-e "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" \
-+		$(STAGING_DIR)/usr/bin/net-snmp-config
-+endef
-+
-+NETSNMP_POST_INSTALL_STAGING_HOOKS += NETSNMP_STAGING_NETSNMP_CONFIG_FIXUP
-+
- $(eval $(call AUTOTARGETS,package,netsnmp))
+ heiko> diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+ heiko> index bd50a5f..a034ddc 100644
+ heiko> --- a/package/usbutils/usbutils.mk
+ heiko> +++ b/package/usbutils/usbutils.mk
+ heiko> @@ -7,6 +7,7 @@
+ heiko>  USBUTILS_VERSION = 002
+ heiko>  USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ heiko>  USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ heiko> +USBUTILS_INSTALL_STAGING = YES
+
+Out of interest, what is this for exactly? the .pc file or usb.ids?
+
+Anyway, committed - Thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
