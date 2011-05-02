@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 2 May 2011 21:41:47 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: add openmp support option
-Message-ID: <20110502195833.53AE882BD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libxml2: fixup configure options
+Message-ID: <20110502195833.B71B282BD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,104 +9,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0073143087989caf4e4406a9ee3c80097684c9f3
+commit: http://git.buildroot.net/buildroot/commit/?id=874b6e4e87cf5835b2121750372046cbae9624b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add OpenMP support in gcc as an option instead of dynamically enabling
-it when threads are present.
-Also fix it up since we never installed libgomp to the target or staging
-thus it was never really functional.
+Some configure options changed so adjust.
+Forcibly disabling threads isn't good and also it's detected by
+configure when there are no threads.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/Config.in         |    6 ++++++
- toolchain/gcc/gcc-uclibc-4.x.mk |   17 ++++++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ package/libxml2/libxml2.mk |    9 ++-------
+ 1 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index fcdcc19..437b86b 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -109,3 +109,9 @@ config BR2_GCC_ENABLE_TLS
- 	help
- 	  Enable the compiler to generate code for accessing
- 	  thread local storage variables
-+
-+config BR2_GCC_ENABLE_OPENMP
-+	bool "Enable compiler OpenMP support"
-+	depends on !BR2_PTHREADS_NONE && !BR2_avr32
-+	help
-+	  Enable OpenMP support for the compiler
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 568aa1a..9b8bf68 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -147,6 +147,12 @@ else
- GCC_SHARED_LIBGCC:=--disable-shared
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 2a267b2..8f2878d 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -12,10 +12,7 @@ ifneq ($(BR2_LARGEFILE),y)
+ LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
  endif
  
-+ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
-+GCC_ENABLE_OPENMP:=--enable-libgomp
-+else
-+GCC_ENABLE_OPENMP:=--disable-libgomp
-+endif
-+
- ifeq ($(BR2_GCC_ENABLE_TLS),y)
- GCC_TLS:=--enable-tls
- else
-@@ -154,7 +160,7 @@ GCC_TLS:=--disable-tls
- endif
+-LIBXML2_CONF_OPT = --with-gnu-ld --enable-shared \
+-		--enable-static \
+-		--without-debugging --without-python \
+-		--without-threads
++LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug
  
- ifeq ($(BR2_PTHREADS_NONE),y)
--THREADS:=--disable-threads --disable-libgomp
-+THREADS:=--disable-threads
- else
- THREADS:=--enable-threads
- endif
-@@ -234,6 +240,7 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- 		--disable-__cxa_atexit \
- 		$(GCC_OPTSPACE) \
- 		$(GCC_QUADMATH) \
-+		$(GCC_ENABLE_OPENMP) \
- 		--with-gnu-ld \
- 		--disable-shared \
- 		--disable-libssp \
-@@ -301,6 +308,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
- 		--disable-__cxa_atexit \
- 		$(GCC_OPTSPACE) \
- 		$(GCC_QUADMATH) \
-+		$(GCC_ENABLE_OPENMP) \
- 		--with-gnu-ld \
- 		--enable-shared \
- 		--disable-libssp \
-@@ -379,6 +387,7 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 		--disable-__cxa_atexit \
- 		$(GCC_OPTSPACE) \
- 		$(GCC_QUADMATH) \
-+		$(GCC_ENABLE_OPENMP) \
- 		--with-gnu-ld \
- 		--disable-libssp \
- 		--disable-multilib \
-@@ -470,6 +479,11 @@ ifeq ($(BR2_INSTALL_LIBGCJ),y)
- 		$(TARGET_DIR)/usr/lib/security/
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
- endif
-+ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgomp.so* $(STAGING_DIR)/usr/lib/
-+	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgomp.so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgomp.so*
-+endif
- 	mkdir -p $(@D)
- 	touch $@
+ define LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/xml2-config
+@@ -26,9 +23,7 @@ LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
  
-@@ -523,6 +537,7 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
- 		--disable-__cxa_atexit \
- 		$(GCC_OPTSPACE) \
- 		$(GCC_QUADMATH) \
-+		$(GCC_ENABLE_OPENMP) \
- 		--with-gnu-ld \
- 		--disable-libssp \
- 		--disable-multilib \
+ HOST_LIBXML2_DEPENDENCIES = host-pkg-config
+ 
+-HOST_LIBXML2_CONF_OPT = \
+-		--enable-shared --without-debugging --without-python \
+-		--without-threads
++HOST_LIBXML2_CONF_OPT = --without-debug --without-python
+ 
+ define LIBXML2_REMOVE_CONFIG_SCRIPTS
+ 	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
 -- 
 1.7.3.4
