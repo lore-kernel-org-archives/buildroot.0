@@ -1,258 +1,171 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Mon,  2 May 2011 17:48:58 +0200
-Subject: [Buildroot] [PATCH] scm: add mirror support
-Message-ID: <1304351338-23388-1-git-send-email-plagnioj@jcrosoft.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2011 15:13:01 -0300
+Subject: [Buildroot] [PATCH 1/2] toolchain: bump gcc 4.5 series to verion
+	4.5.3
+Message-ID: <1304359982-15984-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this will allow you to use scm mirror for git, bazaar or svn and then download
-from their the source code. This is usefull specially when your are offline or
-slow network and still want to use scm tree for package instead of tar.gz.
-As example for HEAD/trunk build.
-
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Config.in                             |   26 ++++++++++++++++++++++
- package/Makefile.package.in           |   39 ++++++++++++++++++++++----------
- package/can-utils/can-utils.mk        |    3 +-
- package/libsvgtiny/libsvgtiny.mk      |    3 +-
- package/multimedia/mplayer/mplayer.mk |    3 +-
- package/multimedia/tremor/tremor.mk   |    3 +-
- package/sstrip/sstrip.mk              |    3 +-
- package/tslib/tslib.mk                |    3 +-
- package/vim/vim.mk                    |    3 +-
- 9 files changed, 67 insertions(+), 19 deletions(-)
+ toolchain/gcc/4.5.2/850-arm-pr44392.patch          |   70 --------------------
+ .../gcc/{4.5.2 => 4.5.3}/100-uclibc-conf.patch     |    0
+ .../{4.5.2 => 4.5.3}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.5.2 => 4.5.3}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.5.2 => 4.5.3}/820-arm-unbreak-armv4t.patch  |    0
+ .../gcc/{4.5.2 => 4.5.3}/830-arm-pr43440.patch     |    0
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ toolchain/gcc/Config.in                            |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    2 +-
+ 11 files changed, 2 insertions(+), 72 deletions(-)
+ delete mode 100644 toolchain/gcc/4.5.2/850-arm-pr44392.patch
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/100-uclibc-conf.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/301-missing-execinfo_h.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/302-c99-snprintf.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/305-libmudflap-susv3-legacy.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/810-arm-softfloat-libgcc.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/820-arm-unbreak-armv4t.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/830-arm-pr43440.patch (100%)
+ rename toolchain/gcc/{4.5.2 => 4.5.3}/powerpc-link-with-math-lib.patch.conditional (100%)
 
-diff --git a/Config.in b/Config.in
-index a67c08d..9dc1952 100644
---- a/Config.in
-+++ b/Config.in
-@@ -149,6 +149,32 @@ config BR2_DEBIAN_MIRROR
- 	  Usually, just add your country code like XX here:
- 	  http://ftp.XX.debian.org
+diff --git a/toolchain/gcc/4.5.2/850-arm-pr44392.patch b/toolchain/gcc/4.5.2/850-arm-pr44392.patch
+deleted file mode 100644
+index 4ad6c44..0000000
+--- a/toolchain/gcc/4.5.2/850-arm-pr44392.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+->From d0557763b0713a4c006bd2405eede3924569cafd Mon Sep 17 00:00:00 2001
+-From: Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
+-Date: Mon, 5 Jul 2010 11:28:49 +0100
+-Subject: [PATCH 2/2] Fix PR44392
+-
+----
+- gcc/config/arm/arm.md |   43 +++++++++++++++++++------------------------
+- 1 files changed, 19 insertions(+), 24 deletions(-)
+-
+-diff --git a/gcc/config/arm/arm.md b/gcc/config/arm/arm.md
+-index 2096ec6..f0348f3 100644
+---- a/gcc/config/arm/arm.md
+-+++ b/gcc/config/arm/arm.md
+-@@ -11318,34 +11318,29 @@
+- (define_expand "bswapsi2"
+-   [(set (match_operand:SI 0 "s_register_operand" "=r")
+-   	(bswap:SI (match_operand:SI 1 "s_register_operand" "r")))]
+--"TARGET_EITHER"
+-+"TARGET_EITHER && (arm_arch6 || !optimize_size)"
+- "
+--  if (!arm_arch6)
+--    {
+--      if (!optimize_size)
+--	{
+--	  rtx op2 = gen_reg_rtx (SImode);
+--	  rtx op3 = gen_reg_rtx (SImode);
+-+    if (!arm_arch6)
+-+      {
+-+	rtx op2 = gen_reg_rtx (SImode);
+-+	rtx op3 = gen_reg_rtx (SImode);
+- 
+--	  if (TARGET_THUMB)
+--	    {
+--	      rtx op4 = gen_reg_rtx (SImode);
+--	      rtx op5 = gen_reg_rtx (SImode);
+-+	if (TARGET_THUMB)
+-+	  {
+-+	    rtx op4 = gen_reg_rtx (SImode);
+-+	    rtx op5 = gen_reg_rtx (SImode);
+- 
+--	      emit_insn (gen_thumb_legacy_rev (operands[0], operands[1],
+--					       op2, op3, op4, op5));
+--	    }
+--	  else
+--	    {
+--	      emit_insn (gen_arm_legacy_rev (operands[0], operands[1],
+--					     op2, op3));
+--	    }
+-+	    emit_insn (gen_thumb_legacy_rev (operands[0], operands[1],
+-+					     op2, op3, op4, op5));
+-+	  }
+-+	else
+-+	  {
+-+	    emit_insn (gen_arm_legacy_rev (operands[0], operands[1],
+-+					   op2, op3));
+-+	  }
+- 
+--	  DONE;
+--	}
+--      else
+--	FAIL;
+--    }
+-+	DONE;
+-+      }
+-   "
+- )
+- 
+--- 
+-1.6.2
+-
+diff --git a/toolchain/gcc/4.5.2/100-uclibc-conf.patch b/toolchain/gcc/4.5.3/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/100-uclibc-conf.patch
+rename to toolchain/gcc/4.5.3/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.5.2/301-missing-execinfo_h.patch b/toolchain/gcc/4.5.3/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/301-missing-execinfo_h.patch
+rename to toolchain/gcc/4.5.3/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.5.2/302-c99-snprintf.patch b/toolchain/gcc/4.5.3/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/302-c99-snprintf.patch
+rename to toolchain/gcc/4.5.3/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.5.2/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.5.3/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/305-libmudflap-susv3-legacy.patch
+rename to toolchain/gcc/4.5.3/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.5.2/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.5.3/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/810-arm-softfloat-libgcc.patch
+rename to toolchain/gcc/4.5.3/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.5.2/820-arm-unbreak-armv4t.patch b/toolchain/gcc/4.5.3/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/820-arm-unbreak-armv4t.patch
+rename to toolchain/gcc/4.5.3/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.5.2/830-arm-pr43440.patch b/toolchain/gcc/4.5.3/830-arm-pr43440.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.2/830-arm-pr43440.patch
+rename to toolchain/gcc/4.5.3/830-arm-pr43440.patch
+diff --git a/toolchain/gcc/4.5.2/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.5.3/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.5.2/powerpc-link-with-math-lib.patch.conditional
+rename to toolchain/gcc/4.5.3/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 17b21b8..fcdcc19 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -57,7 +57,7 @@ config BR2_GCC_VERSION
+ 	default "4.2.4"     if BR2_GCC_VERSION_4_2_4
+ 	default "4.3.5"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.6"     if BR2_GCC_VERSION_4_4_X
+-	default "4.5.2"     if BR2_GCC_VERSION_4_5_X
++	default "4.5.3"     if BR2_GCC_VERSION_4_5_X
+ 	default "4.6.0"     if BR2_GCC_VERSION_4_6_X
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
  
-+comment "SCM Mirrors"
-+
-+config BR2_PRIMARY_BZR_MIRROR
-+	string "Bazaar mirror"
-+	default ""
-+	help
-+	  Primary bazaar site to download from. If this option is set then buildroot
-+	  will try to fetch package source first from this site and try the
-+	  default if not found.
-+
-+config BR2_PRIMARY_GIT_MIRROR
-+	string "GIT mirror"
-+	default ""
-+	help
-+	  Primary git site to download from. If this option is set then buildroot
-+	  will try to fetch package source first from this site and try the
-+	  default if not found.
-+
-+config BR2_PRIMARY_SVN_MIRROR
-+	string "SVN mirror"
-+	default ""
-+	help
-+	  Primary svn site to download from. If this option is set then buildroot
-+	  will try to fetch package source first from this site and try the
-+	  default if not found.
-+
- endmenu
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index ebcca53..568aa1a 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -44,7 +44,7 @@ EXTRA_GCC_CONFIG_OPTIONS+=--with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+ endif
  
- config BR2_JLEVEL
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..f8d2cb7 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -105,7 +105,7 @@ endif
- define DOWNLOAD_GIT
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-+	$(GIT) clone --bare $(1)/$($(PKG)_TREE) $($(PKG)_BASE_NAME) && \
- 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
- 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
- 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-@@ -117,43 +117,43 @@ endef
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
- # repository
- define SOURCE_CHECK_GIT
--  $(GIT) ls-remote --heads $($(PKG)_SITE) > /dev/null
-+  $(GIT) ls-remote --heads $(1)/$($(PKG)_TREE) > /dev/null
- endef
- 
- define SHOW_EXTERNAL_DEPS_GIT
--  echo "$($(PKG)_SITE) [git: $($(PKG)_DL_VERSION)]"
-+  echo "$(1)/$($(PKG)_TREE) [git: $($(PKG)_DL_VERSION)]"
- endef
- 
- 
- define DOWNLOAD_BZR
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-+	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $(1)/$($(PKG)_TREE) -r $($(PKG)_DL_VERSION)
- endef
- 
- define SOURCE_CHECK_BZR
--	$(BZR) ls --quiet $($(PKG)_SITE) > /dev/null
-+	$(BZR) ls --quiet $(1)/$($(PKG)_TREE) > /dev/null
- endef
- 
- define SHOW_EXTERNAL_DEPS_BZR
--	echo "$($(PKG)_SITE) [bzr: $($(PKG)_DL_VERSION)]"
-+	echo "$(1)/$($(PKG)_TREE) [bzr: $($(PKG)_DL_VERSION)]"
- endef
- 
- 
- define DOWNLOAD_SVN
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-+	$(SVN) export -r $($(PKG)_DL_VERSION) $(1)/$($(PKG)_TREE) $($(PKG)_DL_DIR) && \
- 	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
- 	rm -rf $($(PKG)_DL_DIR) && \
- 	popd > /dev/null)
- endef
- 
- define SOURCE_CHECK_SVN
--  $(SVN) ls $($(PKG)_SITE) > /dev/null
-+  $(SVN) ls $(1)/$($(PKG)_TREE) > /dev/null
- endef
- 
- define SHOW_EXTERNAL_DEPS_SVN
--  echo "$($(PKG)_SITE) [svn: $($(PKG)_DL_VERSION)]"
-+  echo "$(1)/$($(PKG)_TREE) [svn: $($(PKG)_DL_VERSION)]"
- endef
- 
- 
-@@ -189,9 +189,24 @@ define DOWNLOAD
- 	fi ; \
- 	if test -n "$(1)" ; then \
- 		case "$($(PKG)_SITE_METHOD)" in \
--			git) $($(DL_MODE)_GIT) && exit ;; \
--			svn) $($(DL_MODE)_SVN) && exit ;; \
--			bzr) $($(DL_MODE)_BZR) && exit ;; \
-+			git) \
-+				if test -n "$(call qstrip,$(BR2_PRIMARY_GIT_MIRROR))" ; then \
-+					$(call $(DL_MODE)_GIT,$(BR2_PRIMARY_GIT_MIRROR)) && exit ; \
-+				else \
-+					$(call $(DL_MODE)_GIT,$($(PKG)_SITE)) && exit ; \
-+				fi ;;\
-+			svn) \
-+				if test -n "$(call qstrip,$(BR2_PRIMARY_SVN_MIRROR))" ; then \
-+					$(call $(DL_MODE)_SVN,$(BR2_PRIMARY_SVN_MIRROR)) && exit ; \
-+				else \
-+					$(call $(DL_MODE)_SVN,$($(PKG)_SITE)) && exit ; \
-+				fi ;;\
-+			bzr) \
-+				if test -n "$(call qstrip,$(BR2_PRIMARY_BZR_MIRROR))" ; then \
-+					$(call $(DL_MODE)_BZR,$(BR2_PRIMARY_BZR_MIRROR)) && exit ; \
-+				else \
-+					$(call $(DL_MODE)_BZR,$($(PKG)_SITE)) && exit ; \
-+				fi ;;\
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index f602490..3fc5c12 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -5,7 +5,8 @@
- #############################################################
- 
- CAN_UTILS_VERSION = 1235
--CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
-+CAN_UTILS_TREE = can-utils
-+CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk
- CAN_UTILS_AUTORECONF = YES
- 
- $(eval $(call AUTOTARGETS,package,can-utils))
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index d9ac41b..b95d60b 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -4,7 +4,8 @@
- #
- ############################################################
- 
--LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk/libsvgtiny
-+LIBSVGTINY_TREE = libsvgtiny
-+LIBSVGTINY_SITE = svn://svn.netsurf-browser.org/trunk
- LIBSVGTINY_VERSION = 9800
- 
- LIBSVGTINY_INSTALL_STAGING = YES
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 7d45960..14db68d 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -6,7 +6,8 @@
- MPLAYER_VERSION = 32726
- # MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
- # MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
--MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
-+MPLAYER_TREE = mplayer/trunk
-+MPLAYER_SITE = svn://svn.mplayerhq.hu
- 
- # mplayer needs pcm+mixer support, but configure fails to check for it
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
-diff --git a/package/multimedia/tremor/tremor.mk b/package/multimedia/tremor/tremor.mk
-index 654a403..21fc4ab 100644
---- a/package/multimedia/tremor/tremor.mk
-+++ b/package/multimedia/tremor/tremor.mk
-@@ -4,7 +4,8 @@
- #
- ############################################################
- 
--TREMOR_SITE:=http://svn.xiph.org/trunk/Tremor/
-+TREMOR_TREE = Tremor
-+TREMOR_SITE:=http://svn.xiph.org/trunk
- TREMOR_SITE_METHOD:=svn
- TREMOR_VERSION:=16259
- 
-diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
-index 2dc383d..318ea4e 100644
---- a/package/sstrip/sstrip.mk
-+++ b/package/sstrip/sstrip.mk
-@@ -4,7 +4,8 @@
- #
- ############################################################
- 
--SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
-+SSTRIP_TREE = tools/sstrip
-+SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk
- SSTRIP_VERSION = 20154
- HOST_SSTRIP_BINARY = $(REAL_GNU_TARGET_NAME)-sstrip
- 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index ef77dac..9dbd1ef 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,8 @@
- #
- #############################################################
- TSLIB_VERSION:=412d99d8b92c
--TSLIB_SITE:=git://github.com/kergoth/tslib.git
-+TSLIB_TREE = tslib.git
-+TSLIB_SITE = git://github.com/kergoth/
- TSLIB_AUTORECONF = YES
- TSLIB_INSTALL_STAGING = YES
- TSLIB_INSTALL_TARGET = YES
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 917d1d4..ee37fbb 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -5,7 +5,8 @@
- #############################################################
- 
- # svn r1889 == 7.2 release + patchlevel 446
--VIM_SITE = https://vim.svn.sourceforge.net/svnroot/vim/branches/vim7.2
-+VIM_TREE = vim7.2
-+VIM_SITE = https://vim.svn.sourceforge.net/svnroot/vim/branches
- VIM_SITE_METHOD = svn
- VIM_VERSION = 1889
- VIM_DEPENDENCIES = ncurses
+ # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+-# Workaround until it's fixed in 4.5.2 or later
++# Workaround until it's fixed in 4.5.4 or later
+ ifeq ($(ARCH),powerpc)
+ ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+ GCC_OPTSPACE=--disable-target-optspace
 -- 
-1.7.4.1
+1.7.3.4
