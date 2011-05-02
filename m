@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 May 2011 21:40:23 +0200
-Subject: [Buildroot] [PATCH 2/3] libxml2: fixup configure options
-In-Reply-To: <1304363303-14984-2-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Mon, 2 May 2011 16:08:22 -0300")
+Date: Mon, 02 May 2011 21:41:24 +0200
+Subject: [Buildroot] [PATCH 3/3] libxslt: fixup configure options
+In-Reply-To: <1304363303-14984-3-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Mon, 2 May 2011 16:08:23 -0300")
 References: <1304363303-14984-1-git-send-email-gustavo@zacarias.com.ar>
-	<1304363303-14984-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87tydcsxg8.fsf@macbook.be.48ers.dk>
+	<1304363303-14984-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pqo0sxej.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
