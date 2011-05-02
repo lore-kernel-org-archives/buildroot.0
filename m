@@ -1,67 +1,804 @@
-From: Philippe Reynes <tremyfr@yahoo.fr>
-Date: Mon,  2 May 2011 00:16:44 +0200
-Subject: [Buildroot] [PATCH] Add pandaboard support
-Message-ID: <1304288204-30189-1-git-send-email-tremyfr@yahoo.fr>
+From: heiko at zuerker.org <heiko@zuerker.org>
+Date: Sun,  1 May 2011 20:06:43 -0500
+Subject: [Buildroot] [PATCH] mysql: support for client and server
+Message-ID: <b6adb6dc7a2a8b755029e58be8a6a10a80b5f7d3.1304298388.git.smiley73@users.sourceforge.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
----
- .../u-boot-2010.12-fix-tty-on-pandaboard.patch     |   21 ++++++++++++++++++++
- configs/omap4_panda_defconfig                      |   14 +++++++++++++
- 2 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
- create mode 100644 configs/omap4_panda_defconfig
+From: Heiko Zuerker <smiley73@users.sourceforge.net>
 
-diff --git a/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
+MySQL 5.1.56 is fully supported, 5.5.x does not yet compile.
+
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+---
+ package/Config.in                                  |    2 +-
+ package/mysql/Config.in                            |   51 +++++++
+ .../mysql_client-5.1.53-ac_cache_check.patch       |  156 ++++++++++++++++++++
+ ...ql_client-5.1.53-configure-ps-cache-check.patch |   39 +++++
+ ...ysql_client-5.1.53-use-new-readline-iface.patch |   21 +++
+ package/mysql/mysql.mk                             |  144 ++++++++++++++++++
+ package/mysql_client/Config.in                     |   10 --
+ .../mysql_client-5.1.53-ac_cache_check.patch       |  156 --------------------
+ ...ql_client-5.1.53-configure-ps-cache-check.patch |   39 -----
+ ...ysql_client-5.1.53-use-new-readline-iface.patch |   21 ---
+ package/mysql_client/mysql_client.mk               |   46 ------
+ 11 files changed, 412 insertions(+), 273 deletions(-)
+ create mode 100644 package/mysql/Config.in
+ create mode 100644 package/mysql/mysql-5.1.56/mysql_client-5.1.53-ac_cache_check.patch
+ create mode 100644 package/mysql/mysql-5.1.56/mysql_client-5.1.53-configure-ps-cache-check.patch
+ create mode 100644 package/mysql/mysql-5.1.56/mysql_client-5.1.53-use-new-readline-iface.patch
+ create mode 100644 package/mysql/mysql.mk
+ delete mode 100644 package/mysql_client/Config.in
+ delete mode 100644 package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch
+ delete mode 100644 package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch
+ delete mode 100644 package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch
+ delete mode 100644 package/mysql_client/mysql_client.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 7c55ba3..5798309 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -253,7 +253,6 @@ endmenu
+ 
+ menu "Database"
+ source "package/berkeleydb/Config.in"
+-source "package/mysql_client/Config.in"
+ source "package/sqlite/Config.in"
+ endmenu
+ 
+@@ -367,6 +366,7 @@ endmenu
+ endmenu
+ 
+ menu "Miscellaneous"
++source "package/mysql/Config.in"
+ source "package/shared-mime-info/Config.in"
+ endmenu
+ 
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
 new file mode 100644
-index 0000000..c80a9d3
+index 0000000..ce8e838
 --- /dev/null
-+++ b/board/arm/pandaboard/u-boot-patches/u-boot-2010.12-fix-tty-on-pandaboard.patch
-@@ -0,0 +1,21 @@
-+commit bb4517fa4485c98be7474ceb87c031b17c82b3e8
-+Author: Philippe Reynes <tremyfr@yahoo.fr>
-+Date:   Sun May 1 16:04:46 2011 +0200
++++ b/package/mysql/Config.in
+@@ -0,0 +1,51 @@
++config BR2_PACKAGE_MYSQL
++	bool "MySQL"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	help
++	  MySQL client and optional server
 +
-+    Fix tty on pandaboard
-+    
-+    Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
++menu "MySQL options"
++depends on BR2_PACKAGE_MYSQL
 +
-+diff --git a/include/configs/omap4_panda.h b/include/configs/omap4_panda.h
-+index 2b03b0f..8715ed7 100644
-+--- a/include/configs/omap4_panda.h
-++++ b/include/configs/omap4_panda.h
-+@@ -148,7 +148,7 @@
++choice
++	prompt "MySQL Version"
++	default BR2_PACKAGE_MYSQL_51
++	help
++	  The version of MySQL
++
++config BR2_PACKAGE_MYSQL_51
++	bool "5.1.x"
++	select BR2_TARGET_SYSLINUX
++
++config BR2_PACKAGE_MYSQL_55
++	bool "5.5.x (Experimental)"
++
++endchoice
++
++config BR2_PACKAGE_MYSQL_SERVER
++	bool "Build the MySQL Server"
++	depends on BR2_INSTALL_LIBSTDCPP && BR2_PACKAGE_MYSQL
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	help
++	  MySQL server
++
++config BR2_PACKAGE_MYSQL_LOWMEM
++	bool "Compile for low memory consumption"
++
++config BR2_PACKAGE_MYSQL_EMBEDDED
++	bool "Build the embedded server (libmysqld)"
++
++config BR2_PACKAGE_MYSQL_NO_NDBBINLOG
++	bool "Disable ndb binlog"
++	
++config BR2_PACKAGE_MYSQL_REMOVE_TEST_PROGS
++	bool "Remove test programs"
++	
++endmenu
++	
++
++comment "Mysql requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/mysql/mysql-5.1.56/mysql_client-5.1.53-ac_cache_check.patch b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-ac_cache_check.patch
+new file mode 100644
+index 0000000..c3b55ba
+--- /dev/null
++++ b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-ac_cache_check.patch
+@@ -0,0 +1,156 @@
++Patch borrowed from
++http://code.google.com/p/minimyth/source/browse/trunk/gar-minimyth/script/db/mysql/files/mysql-5.1.47-ac_cache_check.patch?r=6493.
++
++It allows to override through ac_cv_* variables various checks that
++cannot be performed when cross-compiling.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++---
++ storage/innodb_plugin/plug.in |   59 ++++++++++++++++++++++++++++--------------
++ 1 file changed, 40 insertions(+), 19 deletions(-)
++
++Index: mysql-5.1.53/storage/innodb_plugin/plug.in
++===================================================================
++--- mysql-5.1.53.orig/storage/innodb_plugin/plug.in
+++++ mysql-5.1.53/storage/innodb_plugin/plug.in
++@@ -53,9 +53,10 @@
++   esac
++   AC_SUBST(INNODB_DYNAMIC_CFLAGS)
 + 
-+ #define CONFIG_EXTRA_ENV_SETTINGS \
-+ 	"loadaddr=0x82000000\0" \
-+-	"console=ttyS2,115200n8\0" \
-++	"console=ttyO2,115200n8\0" \
-+ 	"usbtty=cdc_acm\0" \
-+ 	"vram=16M\0" \
-+ 	"mmcdev=0\0" \
-diff --git a/configs/omap4_panda_defconfig b/configs/omap4_panda_defconfig
++-  AC_MSG_CHECKING(whether GCC atomic builtins are available)
+++  AC_CACHE_CHECK([whether GCC atomic builtins are available],
+++                 [ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS],
++   # either define HAVE_IB_GCC_ATOMIC_BUILTINS or not
++-  AC_TRY_RUN(
+++  [AC_TRY_RUN(
++     [
++       int main()
++       {
++@@ -95,18 +96,23 @@
++       }
++     ],
++     [
++-      AC_DEFINE([HAVE_IB_GCC_ATOMIC_BUILTINS], [1],
++-                [GCC atomic builtins are available])
++       AC_MSG_RESULT(yes)
+++      ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=yes
++     ],
++     [
++       AC_MSG_RESULT(no)
+++      ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=no
++     ]
++-  )
+++  )])
+++  if test "x$ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS"= "xyes" ; then
+++    AC_DEFINE([HAVE_IB_GCC_ATOMIC_BUILTINS], [1],
+++              [GCC atomic builtins are available])
+++  fi
++ 
++-  AC_MSG_CHECKING(whether pthread_t can be used by GCC atomic builtins)
+++  AC_CACHE_CHECK([whether pthread_t can be used by GCC atomic builtins],
+++                 [ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC],
++   # either define HAVE_IB_ATOMIC_PTHREAD_T_GCC or not
++-  AC_TRY_RUN(
+++  [AC_TRY_RUN(
++     [
++       #include <pthread.h>
++       #include <string.h>
++@@ -126,14 +132,18 @@
++       }
++     ],
++     [
++-      AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_GCC], [1],
++-                [pthread_t can be used by GCC atomic builtins])
++       AC_MSG_RESULT(yes)
+++      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=yes
++     ],
++     [
++       AC_MSG_RESULT(no)
+++      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=no
++     ]
++-  )
+++  )])
+++  if test "x$ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC"= "xyes" ; then
+++    AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_GCC], [1],
+++              [pthread_t can be used by GCC atomic builtins])
+++  fi
++ 
++   AC_MSG_CHECKING(whether Solaris libc atomic functions are available)
++   # either define HAVE_IB_SOLARIS_ATOMICS or not
++@@ -148,9 +158,10 @@
++ 			    are available])
++   )
++ 
++-  AC_MSG_CHECKING(whether pthread_t can be used by Solaris libc atomic functions)
+++  AC_CACHE_CHECK([whether pthread_t can be used by Solaris libc atomic functions],
+++                 [ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS],
++   # either define HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS or not
++-  AC_TRY_RUN(
+++  [AC_TRY_RUN(
++     [
++       #include <pthread.h>
++       #include <string.h>
++@@ -181,28 +192,33 @@
++       }
++     ],
++     [
++-      AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS], [1],
++-                [pthread_t can be used by solaris atomics])
++       AC_MSG_RESULT(yes)
+++      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=yes
++     ],
++     [
++       AC_MSG_RESULT(no)
+++      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=no
++     ]
++-  )
+++  )])
+++  if test "x$ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS"= "xyes" ; then
+++    AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS], [1],
+++              [pthread_t can be used by solaris atomics])
+++  fi
++ 
++   # this is needed to know which one of atomic_cas_32() or atomic_cas_64()
++   # to use in the source
++   AC_CHECK_SIZEOF([pthread_t], [], [#include <pthread.h>])
++ 
++   # Check for x86 PAUSE instruction
++-  AC_MSG_CHECKING(for x86 PAUSE instruction)
+++  AC_CACHE_CHECK([for x86 PAUSE instruction],
+++                 [ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION],
++   # We have to actually try running the test program, because of a bug
++   # in Solaris on x86_64, where it wrongly reports that PAUSE is not
++   # supported when trying to run an application. See
++   # http://bugs.opensolaris.org/bugdatabase/printableBug.do?bug_id=6478684
++   # We use ib_ prefix to avoid collisoins if this code is added to
++   # mysql's configure.in.
++-  AC_TRY_RUN(
+++  [AC_TRY_RUN(
++     [
++       int main() {
++         __asm__ __volatile__ ("pause");
++@@ -210,16 +226,21 @@
++       }
++     ],
++     [
++-      AC_DEFINE([HAVE_IB_PAUSE_INSTRUCTION], [1], [Does x86 PAUSE instruction exist])
++       AC_MSG_RESULT(yes)
+++      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=yes
++     ],
++     [
++       AC_MSG_RESULT(no)
+++      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=no
++     ],
++     [
++       AC_MSG_RESULT(no)
+++      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=no
++     ]
++-  )
+++  )])
+++  if test "x$ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION"= "xyes" ; then
+++    AC_DEFINE([HAVE_IB_PAUSE_INSTRUCTION], [1], [Does x86 PAUSE instruction exist])
+++  fi
++   ])
++ 
++ # vim: set ft=config:
+diff --git a/package/mysql/mysql-5.1.56/mysql_client-5.1.53-configure-ps-cache-check.patch b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-configure-ps-cache-check.patch
 new file mode 100644
-index 0000000..f820eab
+index 0000000..336e80e
 --- /dev/null
-+++ b/configs/omap4_panda_defconfig
-@@ -0,0 +1,14 @@
-+BR2_arm=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
-+BR2_PACKAGE_UDEV=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
-+BR2_TARGET_UBOOT_2010_12=y
-+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/arm/pandaboard/u-boot-patches/"
-+# BR2_TARGET_UBOOT_NETWORK is not set
-+BR2_TARGET_XLOADER=y
-+BR2_TARGET_XLOADER_BOARDNAME="omap4430panda"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
++++ b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-configure-ps-cache-check.patch
+@@ -0,0 +1,39 @@
++Patch borrowed from
++http://cgit.openembedded.org/cgit.cgi/openembedded/tree/recipes/mysql/files/configure-ps-cache-check.patch
++
++It allows to specify through ac_cv_FIND_PROC how ps should be used on
++the target to find the PID of a program.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++---
++ configure.in |    9 +++++----
++ 1 file changed, 5 insertions(+), 4 deletions(-)
++
++Index: mysql-5.1.53/configure.in
++===================================================================
++--- mysql-5.1.53.orig/configure.in
+++++ mysql-5.1.53/configure.in
++@@ -462,8 +462,8 @@
++ # then Make, then shell.  The autoconf substitution uses single quotes, so 
++ # no unprotected single quotes should appear in the expression.
++ AC_PATH_PROG(PS, ps, ps)
++-AC_MSG_CHECKING("how to check if pid exists")
++-PS=$ac_cv_path_PS
+++AC_CACHE_CHECK([how to check if pid exists], [ac_cv_FIND_PROC],
+++[
++ # Linux style
++ if $PS wwwp $$ 2> /dev/null | grep -- "$0" > /dev/null
++ then
++@@ -502,8 +502,9 @@
++       AC_MSG_ERROR([Could not find the right ps and/or grep switches. Which OS is this?  See the Installation chapter in the Reference Manual.])
++   esac
++ fi
++-AC_SUBST(FIND_PROC)
++-AC_MSG_RESULT("$FIND_PROC")
+++ac_cv_FIND_PROC="$FIND_PROC"
+++])
+++AC_SUBST([FIND_PROC], [$ac_cv_FIND_PROC])
++ 
++ # Check if a pid is valid
++ AC_PATH_PROG(KILL, kill, kill)
+diff --git a/package/mysql/mysql-5.1.56/mysql_client-5.1.53-use-new-readline-iface.patch b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-use-new-readline-iface.patch
+new file mode 100644
+index 0000000..c590656
+--- /dev/null
++++ b/package/mysql/mysql-5.1.56/mysql_client-5.1.53-use-new-readline-iface.patch
+@@ -0,0 +1,21 @@
++Tell MySQL to use the new readline interface even when an external
++readline is being used.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++---
++ configure.in |    1 +
++ 1 file changed, 1 insertion(+)
++
++Index: mysql-5.1.53/configure.in
++===================================================================
++--- mysql-5.1.53.orig/configure.in
+++++ mysql-5.1.53/configure.in
++@@ -2689,6 +2689,7 @@
++ 	    # this way we avoid linking commercial source with GPL readline
++ 	    readline_link="-lreadline"
++ 	    want_to_use_readline="yes"
+++	    AC_DEFINE_UNQUOTED(USE_NEW_READLINE_INTERFACE, 1)
++ 	elif [test "$mysql_cv_libedit_interface" = "yes"]
++ 	then
++ 	    # Use libedit
+diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+new file mode 100644
+index 0000000..c1e2a46
+--- /dev/null
++++ b/package/mysql/mysql.mk
+@@ -0,0 +1,144 @@
++#############################################################
++#
++# MySQL Server & Client
++#
++#############################################################
++
++ifeq ($(BR2_PACKAGE_MYSQL_51),y)
++	MYSQL_MAIN_VERSION = 5.1
++	MYSQL_VERSION = $(MYSQL_MAIN_VERSION).56
++endif
++
++ifeq ($(BR2_PACKAGE_MYSQL_55),y)
++	MYSQL_MAIN_VERSION = 5.5
++	MYSQL_VERSION = $(MYSQL_MAIN_VERSION).11
++endif
++
++MYSQL_SOURCE = mysql-$(MYSQL_VERSION).tar.gz
++MYSQL_SITE = http://mirror.services.wisc.edu/mysql/Downloads/MySQL-$(MYSQL_MAIN_VERSION)
++MYSQL_INSTALL_TARGET = YES
++MYSQL_INSTALL_STAGING = YES
++MYSQL_DEPENDENCIES = readline ncurses host-mysql
++MYSQL_AUTORECONF=YES
++HOST_MYSQL_AUTORECONF=YES
++
++# MySQL 5.1
++ifeq ($(BR2_PACKAGE_MYSQL_51),y)
++	HOST_MYSQL_CONF_OPT = \
++		--program-prefix="" \
++		--without-libedit \
++		--without-readline \
++		--without-docs \
++		--without-man \
++		--without-ndb-binlog
++
++	MYSQL_CONF_ENV = \
++		ac_cv_sys_restartable_syscalls=yes \
++		ac_cv_path_PS=/bin/ps \
++		ac_cv_FIND_PROC="/bin/ps p \$\$PID | grep -v grep | grep mysqld > /dev/null" \
++		ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=yes \
++		ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=no \
++		ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=yes \
++		mysql_cv_new_rl_interface=yes \
++		ac_cv_c_stack_direction=-1
++
++	MYSQL_CONF_OPT = \
++		--program-prefix="" \
++		--without-libedit \
++		--without-readline \
++		--enable-thread-safe-client \
++		$(if $(BR2_HAVE_DOCUMENTATION),,--without-docs --without-man) \
++		$(if $(BR2_PACKAGE_MYSQL_SERVER),,--without-server) \
++		$(if $(BR2_PACKAGE_MYSQL_LOWMEM),--with-low-memory) \
++		$(if $(BR2_PACKAGE_MYSQL_NO_NDBBINLOG),--without-ndb-binlog) \
++		$(if $(BR2_PACKAGE_MYSQL_EMBEDDED),--with-embedded-server) \
++		--localstatedir=/var/mysql
++
++	ifeq ($(BR2_PACKAGE_OPENSSL),y)
++		MYSQL_CONF_OPT += --with-ssl
++		MYSQL_DEPENDENCIES += openssl
++	endif
++
++$(eval $(call AUTOTARGETS,package,mysql))
++$(eval $(call AUTOTARGETS,package,mysql,host))
++
++endif
++
++# MySQL 5.5
++ifeq ($(BR2_PACKAGE_MYSQL_55),y)
++	HOST_MYSQL_CONF_OPT = \
++		-DWITHOUT_SERVER=ON \
++		-DMYSQL_DATADIR=/var/mysql \
++		-DSTACK_DIRECTION=1 \
++		-DWITH_LIBEDIT=OFF \
++		-DWITH_READLINE=OFF
++
++	MYSQL_CONF_OPT = \
++		-DSYSCONFDIR=/etc \
++		-DMYSQL_DATADIR=/var/mysql \
++		-DSTACK_DIRECTION=1 \
++		-DWITH_LIBEDIT=OFF \
++		-DWITH_READLINE=OFF\
++		$(if $(BR2_PACKAGE_MYSQL_SERVER),,-DWITHOUT_SERVER=ON) \
++		$(if $(BR2_PACKAGE_MYSQL_EMBEDDED),-DWITH_EMBEDDED_SERVER=ON) \
++		#$(if $(BR2_HAVE_DOCUMENTATION),,--without-docs --without-man) \
++		#$(if $(BR2_PACKAGE_MYSQL_LOWMEM),--with-low-memory) \
++		#$(if $(BR2_PACKAGE_MYSQL_NO_NDBBINLOG),--without-ndb-binlog) \
++
++	ifeq ($(BR2_PACKAGE_OPENSSL),y)
++		MYSQL_CONF_OPT += -DWITH_SSL=ON
++		MYSQL_DEPENDENCIES += openssl
++	endif
++	
++	# MYSQL_DATADIR SYSCONFDIR WITHOUT_SERVER WITH_ARCHIVE_STORAGE_ENGINE WITH_BLACKHOLE_STORAGE_ENGINE WITH_EMBEDDED_SERVER
++	# WITH_FAST_MUTEXES WITH_FEDERATED_STORAGE_ENGINE WITH_INNOBASE_STORAGE_ENGINE WITH_PARTITION_STORAGE_ENGINE WITH_PERFSCHEMA_STORAGE_ENGINE
++	# WITH_PIC 
++
++$(eval $(call CMAKETARGETS,package,mysql))
++$(eval $(call CMAKETARGETS,package,mysql,host))
++
++endif
++
++# Generic section
++define MYSQL_REMOVE_TEST_PROGS
++	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
++endef
++
++define MYSQL_ADD_MYSQL_LIB_PATH
++	echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
++endef
++
++ifeq ($(BR2_PACKAGE_MYSQL_REMOVE_TEST_PROGS),y)
++	MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_REMOVE_TEST_PROGS
++endif
++
++MYSQL_POST_INSTALL_TARGET_HOOKS += MYSQL_ADD_MYSQL_LIB_PATH
++
++MYSQL_POST_PATCH_HOOKS += MYSQL_COPY_HOST_BINARIES
++
++define MYSQL_COPY_HOST_BINARIES
++	cp $(@D)/../host-mysql-$(MYSQL_VERSION)/sql/gen_lex_hash $(@D)/sql/
++	cp $(@D)/../host-mysql-$(MYSQL_VERSION)/extra/comp_err $(@D)/sql/
++	# set the file dates far into the future to prevent recompilation
++	touch -t "203012120101" $(@D)/sql/gen_lex_hash
++	touch -t "203012120101" $(@D)/sql/comp_err
++endef
++
++define HOST_MYSQL_BUILD_CMDS
++	# we need to build some components once for the host, 
++	# so we can copy the binaries into our target build tree
++	# unfortunately mysql is pretty bad when it comes to cross-compiling
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/include
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/vio
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/mysys
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/strings
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/dbug
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/regex
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/sql gen_lex_hash
++	$(HOST_MYSQL_CONF_ENV) make -C $(@D)/extra comp_err
++endef
++
++define HOST_MYSQL_INSTALL_CMDS
++	# no need to really install this
++	exit 0
++endef
+diff --git a/package/mysql_client/Config.in b/package/mysql_client/Config.in
+deleted file mode 100644
+index f07fdb4..0000000
+--- a/package/mysql_client/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_MYSQL_CLIENT
+-	bool "MySQL client"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_READLINE
+-	help
+-	  MySQL client
+-
+-comment "Mysql client requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch b/package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch
+deleted file mode 100644
+index c3b55ba..0000000
+--- a/package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch
++++ /dev/null
+@@ -1,156 +0,0 @@
+-Patch borrowed from
+-http://code.google.com/p/minimyth/source/browse/trunk/gar-minimyth/script/db/mysql/files/mysql-5.1.47-ac_cache_check.patch?r=6493.
+-
+-It allows to override through ac_cv_* variables various checks that
+-cannot be performed when cross-compiling.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+----
+- storage/innodb_plugin/plug.in |   59 ++++++++++++++++++++++++++++--------------
+- 1 file changed, 40 insertions(+), 19 deletions(-)
+-
+-Index: mysql-5.1.53/storage/innodb_plugin/plug.in
+-===================================================================
+---- mysql-5.1.53.orig/storage/innodb_plugin/plug.in
+-+++ mysql-5.1.53/storage/innodb_plugin/plug.in
+-@@ -53,9 +53,10 @@
+-   esac
+-   AC_SUBST(INNODB_DYNAMIC_CFLAGS)
+- 
+--  AC_MSG_CHECKING(whether GCC atomic builtins are available)
+-+  AC_CACHE_CHECK([whether GCC atomic builtins are available],
+-+                 [ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS],
+-   # either define HAVE_IB_GCC_ATOMIC_BUILTINS or not
+--  AC_TRY_RUN(
+-+  [AC_TRY_RUN(
+-     [
+-       int main()
+-       {
+-@@ -95,18 +96,23 @@
+-       }
+-     ],
+-     [
+--      AC_DEFINE([HAVE_IB_GCC_ATOMIC_BUILTINS], [1],
+--                [GCC atomic builtins are available])
+-       AC_MSG_RESULT(yes)
+-+      ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=yes
+-     ],
+-     [
+-       AC_MSG_RESULT(no)
+-+      ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=no
+-     ]
+--  )
+-+  )])
+-+  if test "x$ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS"= "xyes" ; then
+-+    AC_DEFINE([HAVE_IB_GCC_ATOMIC_BUILTINS], [1],
+-+              [GCC atomic builtins are available])
+-+  fi
+- 
+--  AC_MSG_CHECKING(whether pthread_t can be used by GCC atomic builtins)
+-+  AC_CACHE_CHECK([whether pthread_t can be used by GCC atomic builtins],
+-+                 [ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC],
+-   # either define HAVE_IB_ATOMIC_PTHREAD_T_GCC or not
+--  AC_TRY_RUN(
+-+  [AC_TRY_RUN(
+-     [
+-       #include <pthread.h>
+-       #include <string.h>
+-@@ -126,14 +132,18 @@
+-       }
+-     ],
+-     [
+--      AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_GCC], [1],
+--                [pthread_t can be used by GCC atomic builtins])
+-       AC_MSG_RESULT(yes)
+-+      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=yes
+-     ],
+-     [
+-       AC_MSG_RESULT(no)
+-+      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=no
+-     ]
+--  )
+-+  )])
+-+  if test "x$ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC"= "xyes" ; then
+-+    AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_GCC], [1],
+-+              [pthread_t can be used by GCC atomic builtins])
+-+  fi
+- 
+-   AC_MSG_CHECKING(whether Solaris libc atomic functions are available)
+-   # either define HAVE_IB_SOLARIS_ATOMICS or not
+-@@ -148,9 +158,10 @@
+- 			    are available])
+-   )
+- 
+--  AC_MSG_CHECKING(whether pthread_t can be used by Solaris libc atomic functions)
+-+  AC_CACHE_CHECK([whether pthread_t can be used by Solaris libc atomic functions],
+-+                 [ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS],
+-   # either define HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS or not
+--  AC_TRY_RUN(
+-+  [AC_TRY_RUN(
+-     [
+-       #include <pthread.h>
+-       #include <string.h>
+-@@ -181,28 +192,33 @@
+-       }
+-     ],
+-     [
+--      AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS], [1],
+--                [pthread_t can be used by solaris atomics])
+-       AC_MSG_RESULT(yes)
+-+      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=yes
+-     ],
+-     [
+-       AC_MSG_RESULT(no)
+-+      ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=no
+-     ]
+--  )
+-+  )])
+-+  if test "x$ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS"= "xyes" ; then
+-+    AC_DEFINE([HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS], [1],
+-+              [pthread_t can be used by solaris atomics])
+-+  fi
+- 
+-   # this is needed to know which one of atomic_cas_32() or atomic_cas_64()
+-   # to use in the source
+-   AC_CHECK_SIZEOF([pthread_t], [], [#include <pthread.h>])
+- 
+-   # Check for x86 PAUSE instruction
+--  AC_MSG_CHECKING(for x86 PAUSE instruction)
+-+  AC_CACHE_CHECK([for x86 PAUSE instruction],
+-+                 [ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION],
+-   # We have to actually try running the test program, because of a bug
+-   # in Solaris on x86_64, where it wrongly reports that PAUSE is not
+-   # supported when trying to run an application. See
+-   # http://bugs.opensolaris.org/bugdatabase/printableBug.do?bug_id=6478684
+-   # We use ib_ prefix to avoid collisoins if this code is added to
+-   # mysql's configure.in.
+--  AC_TRY_RUN(
+-+  [AC_TRY_RUN(
+-     [
+-       int main() {
+-         __asm__ __volatile__ ("pause");
+-@@ -210,16 +226,21 @@
+-       }
+-     ],
+-     [
+--      AC_DEFINE([HAVE_IB_PAUSE_INSTRUCTION], [1], [Does x86 PAUSE instruction exist])
+-       AC_MSG_RESULT(yes)
+-+      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=yes
+-     ],
+-     [
+-       AC_MSG_RESULT(no)
+-+      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=no
+-     ],
+-     [
+-       AC_MSG_RESULT(no)
+-+      ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION=no
+-     ]
+--  )
+-+  )])
+-+  if test "x$ac_cv_have_decl_HAVE_IB_PAUSE_INSTRUCTION"= "xyes" ; then
+-+    AC_DEFINE([HAVE_IB_PAUSE_INSTRUCTION], [1], [Does x86 PAUSE instruction exist])
+-+  fi
+-   ])
+- 
+- # vim: set ft=config:
+diff --git a/package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch b/package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch
+deleted file mode 100644
+index 336e80e..0000000
+--- a/package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-Patch borrowed from
+-http://cgit.openembedded.org/cgit.cgi/openembedded/tree/recipes/mysql/files/configure-ps-cache-check.patch
+-
+-It allows to specify through ac_cv_FIND_PROC how ps should be used on
+-the target to find the PID of a program.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+----
+- configure.in |    9 +++++----
+- 1 file changed, 5 insertions(+), 4 deletions(-)
+-
+-Index: mysql-5.1.53/configure.in
+-===================================================================
+---- mysql-5.1.53.orig/configure.in
+-+++ mysql-5.1.53/configure.in
+-@@ -462,8 +462,8 @@
+- # then Make, then shell.  The autoconf substitution uses single quotes, so 
+- # no unprotected single quotes should appear in the expression.
+- AC_PATH_PROG(PS, ps, ps)
+--AC_MSG_CHECKING("how to check if pid exists")
+--PS=$ac_cv_path_PS
+-+AC_CACHE_CHECK([how to check if pid exists], [ac_cv_FIND_PROC],
+-+[
+- # Linux style
+- if $PS wwwp $$ 2> /dev/null | grep -- "$0" > /dev/null
+- then
+-@@ -502,8 +502,9 @@
+-       AC_MSG_ERROR([Could not find the right ps and/or grep switches. Which OS is this?  See the Installation chapter in the Reference Manual.])
+-   esac
+- fi
+--AC_SUBST(FIND_PROC)
+--AC_MSG_RESULT("$FIND_PROC")
+-+ac_cv_FIND_PROC="$FIND_PROC"
+-+])
+-+AC_SUBST([FIND_PROC], [$ac_cv_FIND_PROC])
+- 
+- # Check if a pid is valid
+- AC_PATH_PROG(KILL, kill, kill)
+diff --git a/package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch b/package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch
+deleted file mode 100644
+index c590656..0000000
+--- a/package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Tell MySQL to use the new readline interface even when an external
+-readline is being used.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+----
+- configure.in |    1 +
+- 1 file changed, 1 insertion(+)
+-
+-Index: mysql-5.1.53/configure.in
+-===================================================================
+---- mysql-5.1.53.orig/configure.in
+-+++ mysql-5.1.53/configure.in
+-@@ -2689,6 +2689,7 @@
+- 	    # this way we avoid linking commercial source with GPL readline
+- 	    readline_link="-lreadline"
+- 	    want_to_use_readline="yes"
+-+	    AC_DEFINE_UNQUOTED(USE_NEW_READLINE_INTERFACE, 1)
+- 	elif [test "$mysql_cv_libedit_interface" = "yes"]
+- 	then
+- 	    # Use libedit
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+deleted file mode 100644
+index 9cd088c..0000000
+--- a/package/mysql_client/mysql_client.mk
++++ /dev/null
+@@ -1,46 +0,0 @@
+-#############################################################
+-#
+-# MySQL 5.1 Client
+-#
+-#############################################################
+-MYSQL_CLIENT_VERSION = 5.1.53
+-MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+-MYSQL_CLIENT_SITE = http://downloads.mysql.com/archives/mysql-5.1/
+-MYSQL_CLIENT_INSTALL_TARGET = YES
+-MYSQL_CLIENT_INSTALL_STAGING = YES
+-MYSQL_CLIENT_DEPENDENCIES = readline ncurses
+-MYSQL_CLIENT_AUTORECONF=YES
+-
+-MYSQL_CLIENT_CONF_ENV = \
+-	ac_cv_sys_restartable_syscalls=yes \
+-	ac_cv_path_PS=/bin/ps \
+-	ac_cv_FIND_PROC="/bin/ps p \$\$PID | grep -v grep | grep mysqld > /dev/null" \
+-	ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_GCC=yes \
+-	ac_cv_have_decl_HAVE_IB_ATOMIC_PTHREAD_T_SOLARIS=no \
+-	ac_cv_have_decl_HAVE_IB_GCC_ATOMIC_BUILTINS=yes \
+-	mysql_cv_new_rl_interface=yes
+-
+-MYSQL_CLIENT_CONF_OPT = \
+-	--program-prefix="" \
+-	--without-ndb-binlog \
+-	--without-server \
+-	--without-docs \
+-	--without-man \
+-	--without-libedit \
+-	--without-readline \
+-	--with-low-memory \
+-	--enable-thread-safe-client \
+-	$(ENABLE_DEBUG)
+-
+-define MYSQL_CLIENT_REMOVE_TEST_PROGS
+-	rm -rf $(TARGET_DIR)/usr/mysql-test $(TARGET_DIR)/usr/sql-bench
+-endef
+-
+-define MYSQL_CLIENT_ADD_MYSQL_LIB_PATH
+-	echo "/usr/lib/mysql" >> $(TARGET_DIR)/etc/ld.so.conf
+-endef
+-
+-MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_REMOVE_TEST_PROGS
+-MYSQL_CLIENT_POST_INSTALL_TARGET_HOOKS += MYSQL_CLIENT_ADD_MYSQL_LIB_PATH
+-
+-$(eval $(call AUTOTARGETS,package,mysql_client))
 -- 
-1.7.1
+1.7.3.2
