@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 May 2011 15:13:02 -0300
-Subject: [Buildroot] [PATCH 2/2] toolchain/gcc: add openmp support option
-In-Reply-To: <1304359982-15984-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1304359982-15984-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1304359982-15984-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2011 15:16:41 -0300
+Subject: [Buildroot] [PATCHv2] toolchain/gcc: add openmp support option
+Message-ID: <1304360201-16074-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +20,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  2 files changed, 22 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index fcdcc19..ae9d95d 100644
+index fcdcc19..437b86b 100644
 --- a/toolchain/gcc/Config.in
 +++ b/toolchain/gcc/Config.in
 @@ -109,3 +109,9 @@ config BR2_GCC_ENABLE_TLS
@@ -32,7 +30,7 @@ index fcdcc19..ae9d95d 100644
 +
 +config BR2_GCC_ENABLE_OPENMP
 +	bool "Enable compiler OpenMP support"
-+	depends on !BR2_PTHREADS_NONE && !BR2_avr2
++	depends on !BR2_PTHREADS_NONE && !BR2_avr32
 +	help
 +	  Enable OpenMP support for the compiler
 diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
