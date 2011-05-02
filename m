@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 2 May 2011 21:41:47 +0200
-Subject: [Buildroot] [git commit] toolchain: mark mklibs as broken
-Message-ID: <20110502195833.841BB82BD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/gcc: add openmp support option
+Message-ID: <20110502195833.53AE882BD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,104 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48a00cc2ce165e70acc5c327b3c6415dde5c794b
+commit: http://git.buildroot.net/buildroot/commit/?id=0073143087989caf4e4406a9ee3c80097684c9f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mklibs is a broken option, so mark it as so pending a proper fixup or
-punting it.
+Add OpenMP support in gcc as an option instead of dynamically enabling
+it when threads are present.
+Also fix it up since we never installed libgomp to the target or staging
+thus it was never really functional.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/mklibs/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ toolchain/gcc/Config.in         |    6 ++++++
+ toolchain/gcc/gcc-uclibc-4.x.mk |   17 ++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/mklibs/Config.in b/toolchain/mklibs/Config.in
-index 2298a3e..c065866 100644
---- a/toolchain/mklibs/Config.in
-+++ b/toolchain/mklibs/Config.in
-@@ -1,5 +1,6 @@
- config BR2_MKLIBS
- 	bool "Run mklibs on the built root filesystem"
-+	depends on BROKEN
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index fcdcc19..437b86b 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -109,3 +109,9 @@ config BR2_GCC_ENABLE_TLS
  	help
- 	  Recompiles all the shared libraries to only include the
- 	  symbols actually needed to run the binaries on the target
+ 	  Enable the compiler to generate code for accessing
+ 	  thread local storage variables
++
++config BR2_GCC_ENABLE_OPENMP
++	bool "Enable compiler OpenMP support"
++	depends on !BR2_PTHREADS_NONE && !BR2_avr32
++	help
++	  Enable OpenMP support for the compiler
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 568aa1a..9b8bf68 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -147,6 +147,12 @@ else
+ GCC_SHARED_LIBGCC:=--disable-shared
+ endif
+ 
++ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
++GCC_ENABLE_OPENMP:=--enable-libgomp
++else
++GCC_ENABLE_OPENMP:=--disable-libgomp
++endif
++
+ ifeq ($(BR2_GCC_ENABLE_TLS),y)
+ GCC_TLS:=--enable-tls
+ else
+@@ -154,7 +160,7 @@ GCC_TLS:=--disable-tls
+ endif
+ 
+ ifeq ($(BR2_PTHREADS_NONE),y)
+-THREADS:=--disable-threads --disable-libgomp
++THREADS:=--disable-threads
+ else
+ THREADS:=--enable-threads
+ endif
+@@ -234,6 +240,7 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+ 		--disable-__cxa_atexit \
+ 		$(GCC_OPTSPACE) \
+ 		$(GCC_QUADMATH) \
++		$(GCC_ENABLE_OPENMP) \
+ 		--with-gnu-ld \
+ 		--disable-shared \
+ 		--disable-libssp \
+@@ -301,6 +308,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
+ 		--disable-__cxa_atexit \
+ 		$(GCC_OPTSPACE) \
+ 		$(GCC_QUADMATH) \
++		$(GCC_ENABLE_OPENMP) \
+ 		--with-gnu-ld \
+ 		--enable-shared \
+ 		--disable-libssp \
+@@ -379,6 +387,7 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
+ 		--disable-__cxa_atexit \
+ 		$(GCC_OPTSPACE) \
+ 		$(GCC_QUADMATH) \
++		$(GCC_ENABLE_OPENMP) \
+ 		--with-gnu-ld \
+ 		--disable-libssp \
+ 		--disable-multilib \
+@@ -470,6 +479,11 @@ ifeq ($(BR2_INSTALL_LIBGCJ),y)
+ 		$(TARGET_DIR)/usr/lib/security/
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgcj.so*
+ endif
++ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
++	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgomp.so* $(STAGING_DIR)/usr/lib/
++	cp -dpf $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/lib*/libgomp.so* $(TARGET_DIR)/usr/lib/
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgomp.so*
++endif
+ 	mkdir -p $(@D)
+ 	touch $@
+ 
+@@ -523,6 +537,7 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
+ 		--disable-__cxa_atexit \
+ 		$(GCC_OPTSPACE) \
+ 		$(GCC_QUADMATH) \
++		$(GCC_ENABLE_OPENMP) \
+ 		--with-gnu-ld \
+ 		--disable-libssp \
+ 		--disable-multilib \
 -- 
 1.7.3.4
