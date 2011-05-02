@@ -1,13 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 May 2011 08:44:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add jimtcl support
-In-Reply-To: <20110502054115.GH1212@game.jcrosoft.org>
-References: <1304170969-30138-1-git-send-email-plagnioj@jcrosoft.com>
-	<87vcxuv2c6.fsf@macbook.be.48ers.dk>
-	<20110501164314.GE1212@game.jcrosoft.org>
-	<87ei4iux8y.fsf@macbook.be.48ers.dk>
-	<20110502054115.GH1212@game.jcrosoft.org>
-Message-ID: <20110502084427.3990412d@surf>
+From: Hu, Yanli <Yanli.Hu@philips.com>
+Date: Mon, 2 May 2011 17:25:22 +0200
+Subject: [Buildroot] PREEMPT_RT patched kernel halts at the end of booting
+	up process
+Message-ID: <8BADEE91F16E11498AEB9FD8D502C1E66CA265DED7@NLCLUEXM06.connect1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,33 +11,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 2 May 2011 07:41:15 +0200
-Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> wrote:
+I've been using buildroot kernel on a AT91RM9200 board and it has been working well. Recently I applied kernel PREEMPT_RT patch to get better interrupt latency and rebuilt the kernel. The kernel halted at the very end of the booting up process:
 
-> > That should work today - E.G. the git support creates a tarball
-> > which will be reused next time you build or can be put on a mirror
-> > server.
-> The idea is to use the tree directly and not everytime create a
-> tarball
+.......
+Looking up port of RPC 100003/2 on 192.168.0.80
+Looking up port of RPC 100005/1 on 192.168.0.80
+VFS: Mounted root (nfs filesystem) on device 0:11.
+Freeing init memory: 92K
 
-That's something I plan to add globally at the package infrastructure
-level. We need it for many other packages as well, for example the
-bootloaders or the kernel. So there's infrastructure work to be done to
-implement this, but I'd prefer to wait this work to be done rather than
-cluttering each independent package with this kind of specific handling.
+I used statically linked "hello world" application to replace /sbin/init and it was not called. Everything else was kept the same as the previous kernel. Even if I disabled the PREEMPT_RT feature in the patched the kernel, the kernel still halted at the same place. I couldn't figure out why.  Any help is greatly appreciated.
 
-My idea is that users could write a "local.mk" file, in which they
-could do:
+--yhu
 
-JIMTCL_OVERRIDE_SRCDIR = /my/own/location
-
-and Buildroot will use /my/own/location as the sources for JIMTCL.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+________________________________
+The information contained in this message may be confidential and legally protected under applicable law. The message is intended solely for the addressee(s). If you are not the intended recipient, you are hereby notified that any use, forwarding, dissemination, or reproduction of this message is strictly prohibited and may be unlawful. If you are not the intended recipient, please contact the sender by return e-mail and destroy all copies of the original message.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110502/08db0d9b/attachment.html>
