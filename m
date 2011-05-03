@@ -1,32 +1,34 @@
-From: Morten Leikvoll <nerd@cyviz.com>
-Date: Tue, 3 May 2011 14:15:38 +0200
-Subject: [Buildroot] sensors-detect and perl
-Message-ID: <37F0A12844A44CC987DE6597E8FFDF21@LEIKVOLLPC>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 3 May 2011 14:07:16 +0200
+Subject: [Buildroot] [git commit] libglade: bump version
+Message-ID: <20110503124040.7DBFF82BDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is my first post here! Bear with me :)
 
-Im trying to get sensors-detect running but it needs perl to work. Ive tried 
-to add microperl and the modules needed, but I ony get the error:
+commit: http://git.buildroot.net/buildroot/commit/?id=743208349966f76748a8017ffc394ad531825e20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-# sensors-detect
-Can't load module Fcntl, dynamic loading not available in this perl.
-  (You may need to build a new perl executable which either supports
-  dynamic loading or has the Fcntl module statically linked into it.)
- at /usr/sbin/sensors-detect line 26
-Compilation failed in require at /usr/sbin/sensors-detect line 26.
-BEGIN failed--compilation aborted at /usr/sbin/sensors-detect line 26.
-#
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libglade/libglade.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-(using buildroot 2011-02)
-
-I guess I have to add a full perl to make dynamic loading work.. Can anyone 
-give me directions? I was hoping that since you put sensors-detect in the 
-menuconfig, there would be some other options to make it run?
-
-PS:I would like to have reproducable code, so I prefer doing it in the 
-config files.
+diff --git a/package/libglade/libglade.mk b/package/libglade/libglade.mk
+index 67e621b..df62039 100644
+--- a/package/libglade/libglade.mk
++++ b/package/libglade/libglade.mk
+@@ -3,7 +3,7 @@
+ # libglade
+ #
+ #############################################################
+-LIBGLADE_VERSION = 2.6.3
++LIBGLADE_VERSION = 2.6.4
+ LIBGLADE_SOURCE = libglade-$(LIBGLADE_VERSION).tar.bz2
+ LIBGLADE_SITE = http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/
+ LIBGLADE_INSTALL_STAGING = YES
+-- 
+1.7.3.4
