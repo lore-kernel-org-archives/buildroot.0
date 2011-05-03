@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 3 May 2011 22:43:55 +0200
-Subject: [Buildroot] [git commit] bind: security bump to version 9.6-ESV-R4
-Message-ID: <20110503204511.9769A82BDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] New package: input-event-daemon
+Message-ID: <20110503204512.3C5D082BDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,72 +9,138 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6780d0ba04ecf4cf4bf2ec1dc9f13c78868cf95c
+commit: http://git.buildroot.net/buildroot/commit/?id=c17f4134384666e1ae6116a08b2ce92da633abef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump bind to version 9.6-ESV-R4 since the 9.5 series is no longer
-supported.
-While at it switch to the ESV (Extended Support Version) branch instead
-of going for the latest.
+Add new package: input-event-daemon
 
-Also adjust the package to build against OpenSSL when available for
-proper DNSSEC support and libxml2 too.
+input-event-daemon -  input event handling daemon for linux.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: minor tweaks, use v0.1.3 tag, pass LDFLAGS, combine install step]
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bind/bind.mk |   32 +++++++++++++++++++-------------
- 1 files changed, 19 insertions(+), 13 deletions(-)
+ package/Config.in                                |    1 +
+ package/input-event-daemon/Config.in             |    8 ++++
+ package/input-event-daemon/S99input-event-daemon |   39 ++++++++++++++++++++++
+ package/input-event-daemon/input-event-daemon.mk |   36 ++++++++++++++++++++
+ 4 files changed, 84 insertions(+), 0 deletions(-)
+ create mode 100644 package/input-event-daemon/Config.in
+ create mode 100755 package/input-event-daemon/S99input-event-daemon
+ create mode 100644 package/input-event-daemon/input-event-daemon.mk
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ff0ec04..e3341bd 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,26 +4,32 @@
- #
- #############################################################
- 
--BIND_VERSION = 9.5.2-P4
-+BIND_VERSION = 9.6-ESV-R4
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
--BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
--BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
-+BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen dnssec-dsfromkey
-+BIND_TARGET_SBINS += dnssec-keyfromlabel dnssec-keygen dnssec-signzone
- BIND_TARGET_BINS = dig host nslookup nsupdate
--BIND_TARGET_LIBS = libbind9.* libdns.* libisccc.* libisccfg.* libisc.* liblwres.*
--BIND_MAKE = $(MAKE1)
-+BIND_TARGET_LIBS = libbind9.* libdns.* libisc.* libisccc.* libisccfg.* liblwres.*
- BIND_CONF_ENV =	BUILD_CC="$(TARGET_CC)" \
- 		BUILD_CFLAGS="$(TARGET_CFLAGS)"
--BIND_CONF_OPT =	\
--		--sysconfdir=/etc \
-+BIND_CONF_OPT =	--sysconfdir=/etc \
- 		--localstatedir=/var \
- 		--with-randomdev=/dev/urandom \
--		--with-openssl=no \
--		--with-libxml2=no \
--		--with-pic \
--		--with-libtool \
--		--disable-epoll \
--		--disable-threads
-+		--enable-epoll --with-libtool
+diff --git a/package/Config.in b/package/Config.in
+index 8e78f0f..6f3384c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -177,6 +177,7 @@ source "package/hdparm/Config.in"
+ endif
+ source "package/hwdata/Config.in"
+ source "package/i2c-tools/Config.in"
++source "package/input-event-daemon/Config.in"
+ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+diff --git a/package/input-event-daemon/Config.in b/package/input-event-daemon/Config.in
+new file mode 100644
+index 0000000..edf2886
+--- /dev/null
++++ b/package/input-event-daemon/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_INPUT_EVENT_DAEMON
++	bool "input-event-daemon"
++	help
++	  input-event-daemon is a daemon which executes
++	  a user-defined command on input events, such as
++	  keys, mouse buttons and switches.
 +
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+	BIND_CONF_OPT += --with-libxml2=$(STAGING_DIR)/usr
-+	BIND_DEPENDENCIES += libxml2
-+else
-+	BIND_CONF_OPT += --with-libxml2=no
-+endif
++	  http://github.com/gandro/input-event-daemon
+diff --git a/package/input-event-daemon/S99input-event-daemon b/package/input-event-daemon/S99input-event-daemon
+new file mode 100755
+index 0000000..3a82b06
+--- /dev/null
++++ b/package/input-event-daemon/S99input-event-daemon
+@@ -0,0 +1,39 @@
++#! /bin/sh
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	BIND_DEPENDENCIES += openssl
-+else
-+	BIND_CONF_OPT += --with-openssl=no
-+endif
- 
- define BIND_TARGET_INSTALL_FIXES
- 	rm -f $(TARGET_DIR)/usr/bin/isc-config.sh
++[ -f /usr/bin/input-event-daemon ] || exit 0
++
++start() {
++	echo -n "Starting input-event-daemon: "
++	input-event-daemon
++	echo "done"
++}
++
++
++stop() {
++	echo -n "Stopping input-event-daemon: "
++	killall input-event-daemon
++	echo "done"
++}
++
++restart() {
++	stop
++	start
++}
++
++# See how we were called.
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|reload|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+new file mode 100644
+index 0000000..c335be3
+--- /dev/null
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -0,0 +1,36 @@
++#############################################################
++#
++# input-event-daemon
++#
++#############################################################
++
++INPUT_EVENT_DAEMON_VERSION = v0.1.3
++INPUT_EVENT_DAEMON_SITE = git://github.com/gandro/input-event-daemon.git
++
++define INPUT_EVENT_DAEMON_BUILD_CMDS
++	touch  $(@D)/input-event-table.h
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
++endef
++
++define INPUT_EVENT_DAEMON_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/input-event-daemon \
++		$(TARGET_DIR)/usr/bin/input-event-daemon
++	[ -f $(TARGET_DIR)/etc/input-event-daemon.conf ] || \
++		$(INSTALL) -m 644 -D $(@D)/docs/sample.conf \
++			$(TARGET_DIR)/etc/input-event-daemon.conf
++	[ -f $(TARGET_DIR)/etc/init.d/S99input-event-daemon ] || \
++		$(INSTALL) -m 0755 -D package/input-event-daemon/S99input-event-daemon \
++			$(TARGET_DIR)/etc/init.d/S99input-event-daemon
++endef
++
++define INPUT_EVENT_DAEMON_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/input-event-daemon
++	rm -f $(TARGET_DIR)/etc/input-event-daemon.conf
++endef
++
++$(eval $(call GENTARGETS,package,input-event-daemon))
 -- 
 1.7.3.4
