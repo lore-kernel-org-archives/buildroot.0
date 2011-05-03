@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  3 May 2011 07:17:42 +0000 (UTC)
+Date: Tue,  3 May 2011 07:18:56 +0000 (UTC)
 Subject: [Buildroot] [Bug 3685] ncurses installation hangs due to old
 	version of tic
 In-Reply-To: <bug-3685-163@https.bugs.busybox.net/>
 References: <bug-3685-163@https.bugs.busybox.net/>
-Message-ID: <20110503071742.BCAC382B34@busybox.osuosl.org>
+Message-ID: <20110503071856.F233382B34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,10 +17,7 @@ Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Attachment #3271|0                           |1
-           is patch|                            |
-   Attachment #3271|application/octet-stream    |text/plain
-          mime type|                            |
+           Platform|PC                          |Other
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
