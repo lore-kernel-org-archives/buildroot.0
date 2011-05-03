@@ -1,41 +1,75 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 May 2011 13:22:25 -0300
-Subject: [Buildroot] [PATCH 2/2] qemu/mipsel-malta: switch to kernel 2.6.38.5
-In-Reply-To: <1304439745-4308-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1304439745-4308-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1304439745-4308-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  3 May 2011 15:33:42 -0300
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R4
+Message-ID: <1304447622-6874-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump bind to version 9.6-ESV-R4 since the 9.5 series is no longer
+supported.
+While at it switch to the ESV (Extended Support Version) branch instead
+of going for the latest.
+
+Also adjust the package to build against OpenSSL when available for
+proper DNSSEC support and libxml2 too.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../{linux-2.6.36.config => linux-2.6.38.config}   |    0
- configs/qemu_mipsel_malta_defconfig                |    4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename board/qemu/mipsel-malta/{linux-2.6.36.config => linux-2.6.38.config} (100%)
+ package/bind/bind.mk |   32 +++++++++++++++++++-------------
+ 1 files changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/board/qemu/mipsel-malta/linux-2.6.36.config b/board/qemu/mipsel-malta/linux-2.6.38.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-2.6.36.config
-rename to board/qemu/mipsel-malta/linux-2.6.38.config
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index ea3ba88..0523a14 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.38.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index ff0ec04..e3341bd 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,26 +4,32 @@
+ #
+ #############################################################
  
- # Serial port config
+-BIND_VERSION = 9.5.2-P4
++BIND_VERSION = 9.6-ESV-R4
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+-BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen
+-BIND_TARGET_SBINS += dnssec-keygen dnssec-signzone
++BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen dnssec-dsfromkey
++BIND_TARGET_SBINS += dnssec-keyfromlabel dnssec-keygen dnssec-signzone
+ BIND_TARGET_BINS = dig host nslookup nsupdate
+-BIND_TARGET_LIBS = libbind9.* libdns.* libisccc.* libisccfg.* libisc.* liblwres.*
+-BIND_MAKE = $(MAKE1)
++BIND_TARGET_LIBS = libbind9.* libdns.* libisc.* libisccc.* libisccfg.* liblwres.*
+ BIND_CONF_ENV =	BUILD_CC="$(TARGET_CC)" \
+ 		BUILD_CFLAGS="$(TARGET_CFLAGS)"
+-BIND_CONF_OPT =	\
+-		--sysconfdir=/etc \
++BIND_CONF_OPT =	--sysconfdir=/etc \
+ 		--localstatedir=/var \
+ 		--with-randomdev=/dev/urandom \
+-		--with-openssl=no \
+-		--with-libxml2=no \
+-		--with-pic \
+-		--with-libtool \
+-		--disable-epoll \
+-		--disable-threads
++		--enable-epoll --with-libtool
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++	BIND_CONF_OPT += --with-libxml2=$(STAGING_DIR)/usr
++	BIND_DEPENDENCIES += libxml2
++else
++	BIND_CONF_OPT += --with-libxml2=no
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	BIND_DEPENDENCIES += openssl
++else
++	BIND_CONF_OPT += --with-openssl=no
++endif
+ 
+ define BIND_TARGET_INSTALL_FIXES
+ 	rm -f $(TARGET_DIR)/usr/bin/isc-config.sh
 -- 
 1.7.3.4
