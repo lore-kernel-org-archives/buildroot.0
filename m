@@ -1,33 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 May 2011 10:01:30 -0300
-Subject: [Buildroot] [PATCH 3/3] qemu/arm-versatile: use 2.6.38.5 kernel to
-	match headers
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 May 2011 15:06:56 +0200
+Subject: [Buildroot] [PATCH 1/3] linux: bump to version 2.6.38.5
 In-Reply-To: <1304427690-16291-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Tue, 3 May 2011 10:01:28 -0300")
 References: <1304427690-16291-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1304427690-16291-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zkn4lyq7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_arm_versatile_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index ba32327..1a1a0ff 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed all 3, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
