@@ -1,45 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 May 2011 20:45:23 +0200
-Subject: [Buildroot] [git commit] qemu/mipsel-malta: switch to kernel
-	2.6.38.5
-Message-ID: <20110503184704.D89E082BCB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 May 2011 21:15:32 +0200
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R4
+In-Reply-To: <1304447622-6874-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Tue, 3 May 2011 15:33:42 -0300")
+References: <1304447622-6874-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87liynmw8b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd0dfd0ec136c6c7300407d7e8a9713967be0efb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Bump bind to version 9.6-ESV-R4 since the 9.5 series is no longer
+ Gustavo> supported.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../{linux-2.6.36.config => linux-2.6.38.config}   |    0
- configs/qemu_mipsel_malta_defconfig                |    4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename board/qemu/mipsel-malta/{linux-2.6.36.config => linux-2.6.38.config} (100%)
+ Gustavo> While at it switch to the ESV (Extended Support Version)
+ Gustavo> branch instead of going for the latest.
 
-diff --git a/board/qemu/mipsel-malta/linux-2.6.36.config b/board/qemu/mipsel-malta/linux-2.6.38.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-2.6.36.config
-rename to board/qemu/mipsel-malta/linux-2.6.38.config
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index ea3ba88..0523a14 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.38.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+ Gustavo> Also adjust the package to build against OpenSSL when available for
+ Gustavo> proper DNSSEC support and libxml2 too.
+
+Committed, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
