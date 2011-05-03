@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 3 May 2011 15:23:40 +0200
-Subject: [Buildroot] [git commit] package/Makefile.in: ensure libtool
-	doesn't search host dirs for libraries
-Message-ID: <20110503140538.3427382DAA@busybox.osuosl.org>
+From: rpbainjr at yahoo.com <rpbainjr@yahoo.com>
+Date: Tue, 3 May 2011 07:33:46 -0700 (PDT)
+Subject: [Buildroot] libtool: Version mismatch error
+Message-ID: <113697.63851.qm@web120515.mail.ne1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +9,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6246704008ef219257f30a824903855d0e00cffb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Any,
 
-Commit 7e3e8ec040b (CFLAGS/LDFLAGS: don't add -I / -L args for STAGING_DIR)
-exposed a lingering libtool problem.
+I am trying to migrate from buildroot-2009.08 to buildroot-2011.02 for arm.
 
-Unless instructed otherwise (using -L) libtool will search its built in
-system path for libraries, and use those instead if found. The default
-search path is '/usr/lib, /lib, /usr/local/lib', which is no good for
-cross compilation.
+In a few packages such as tslib and pkg-config (glib) I am getting build errors with message 
 
-Fix it by setting the system search path to the empty string, effectively
-disabling this feature.
+../libtool: line 476: CDPATH: command not found
+../libtool: line 476: CDPATH: command not found
+../libtool: line 1300: func_opt_split: command not found
+libtool: Version mismatch error.  This is libtool 2.2.10, but the
+libtool: definition of this LT_INIT comes from an older release.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+libtool: and run autoconf again.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+I am running Ubuntu 10.10 and tried 11.04 also.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7811d51..391777e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -284,6 +284,7 @@ TARGET_CONFIGURE_ARGS= \
- 	ac_cv_func_malloc_0_nonnull=yes \
- 	ac_cv_func_calloc_0_nonnull=yes \
- 	ac_cv_func_realloc_0_nonnull=yes \
-+	lt_cv_sys_lib_search_path_spec="" \
- 	$(BR2_AC_CV_C_BIGENDIAN)
- 
- #######################################################################
--- 
-1.7.3.4
+Any suggestions?
+
+Thanks
