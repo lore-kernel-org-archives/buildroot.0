@@ -1,58 +1,52 @@
-From: Ryan Whelan <rcwhelan@gmail.com>
-Date: Wed, 4 May 2011 09:57:34 -0400
-Subject: [Buildroot] Python 2.7 & uClibc?
-Message-ID: <BANLkTi=CUm0qSidqqYk4AN4GSEPjcv0dsg@mail.gmail.com>
+From: Oleg Sadov <sadov@linux-ink.ru>
+Date: Wed, 04 May 2011 19:23:39 +0400
+Subject: [Buildroot] [Bug 3691] New: New EFL packages
+In-Reply-To: <20110504041151.GK11267@game.jcrosoft.org>
+References: <bug-3691-163@https.bugs.busybox.net/>
+	<20110504041151.GK11267@game.jcrosoft.org>
+Message-ID: <1304522619.32111.169.camel@sadov-t>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm having a strange issue with Python built with buildroot.  I've been
-trying to write a Python based init for linux but I'm having an issue with
-the buildroot version of python.  When a child process dies (and sends the
-parent - PID 1) a SIGCHLD, init spawns another process which appers to
-intercept the signal.  If fact, its not just SIGCHLD, its also SIGHUP.  I
-haven't tested all the signals, but i wouldn't assume its limited to these
-2.  This is a strange issue to try to articulate, but there is a description
-of the issue here (
-http://stackoverflow.com/questions/5844364/linux-blocking-signals-to-python-init)
+? ???, 04/05/2011 ? 06:11 +0200, Jean-Christophe PLAGNIOL-VILLARD ?????:
+> On 11:09 Tue 03 May     , bugzilla at busybox.net wrote:
+> > https://bugs.busybox.net/show_bug.cgi?id=3691
+> > 
+> >            Summary: New EFL packages
+> >            Product: buildroot
+> >            Version: 2011.02
+> >           Platform: PC
+> >         OS/Version: Linux
+> >             Status: NEW
+> >           Severity: enhancement
+> >           Priority: P5
+> >          Component: Other
+> >         AssignedTo: unassigned at buildroot.uclibc.org
+> >         ReportedBy: sadov at linux-ink.ru
+> >                 CC: buildroot at uclibc.org
+> >    Estimated Hours: 0.0
+> > 
+> > 
+> > Created attachment 3283
+> >   --> https://bugs.busybox.net/attachment.cgi?id=3283
+> > Patch for EFL packages adding
+> > 
+> > Enlightenment Foundation Libraries (EFL) is a compact, flexible and fast
+> > graphical library set from Enlightenment(E17) project.
+> how about put e17?
 
-In more detail,  If I run this script ( http://pastebin.com/bvMcrLjr ) on a
-linux machine with Python compiled against glibc it spawns 2 children
-processes and a `ps fax` looks like this:
+Why not, especially when other E17 components will be slightly
+stabilized ;)...
 
-\_ /usr/bin/python ./init
-    \_ sleep 10
-    \_ sleep 10
+Apropos, for eeze udev-related library must be solved problem early
+discussed in this mailing list -- missing udev.pc from udev package.
+Does someone have any solutions/workarounds about it?
 
-As the children processes die, they are respawned and you can see their PIDs
-change.  However, when run with a Python compiled via buildroot, when the
-first child dies, we see this:
+> Best Regards,
+> J.
 
-\_ /usr/bin/python ./init
-    \_ /usr/bin/python ./init
-        \_ sleep 10
-    \_ sleep 20
-
-and after the second child dies:
-
-\_ /usr/bin/python ./init
-    \_ /usr/bin/python ./init
-        \_ sleep 10
-        \_ sleep 20
-
-After successive child deaths, there are no more init's spawned, just that
-'extra' one (noted in the post on SO link)
-
-This doesn't happen with the python on any other (glibc) system I've tested
-on.  The issue is when this init script is running as actual PID 1, the
-children never get reaped, and become zombies.
-
-I'm not sure if I've made the issue clear, and I'm not sure if this is the
-place to mention it, but I thought i would start here.
-
-thanks!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110504/f5a8f366/attachment.html>
+Best Wishes,
+--Oleg
