@@ -1,31 +1,28 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Wed, 4 May 2011 10:38:31 -0700
-Subject: [Buildroot] modules.conf <hunnh?>
-Message-ID: <BANLkTimw6QVRy=JP5k=XNG=jnOeRZmSwmQ@mail.gmail.com>
+From: Matias Garcia <mgarcia@rossvideo.com>
+Date: Wed, 04 May 2011 16:52:08 -0400
+Subject: [Buildroot] Codesourcery multi-lib selection in buildroot
+Message-ID: <4DC1BC78.4050103@rossvideo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm a little confused this morning in trying to work out how to load modules
-at startup with a buildroot created busybox rootfs.
+I'm building an OS for a PowerPC e500v2 core. Originally, I used a stock 
+buildroot toolchain (uclibc), but was not able to optimize a 
+time-critical section of our application. With the CodeSourcery 
+compiler, I am. Unfortunately, even setting -te500v2 in the buildroot 
+optimizations (and hacking it into the TARGET_LDFLAGS) doesn't fix all 
+cases. Certain packages within buildroot seem to link against the wrong 
+library (linker complains that one library is compiled with hard-float 
+and another with soft-float, etc). Is there a way to tell buildroot (or 
+Make in general) to always link against a certain library set?
 
-I *thought* all that was required to load modules was to create a
-"/etc/modules.conf" file and list the kernel modules to load in it.
-
-But, now I *think* that there needs to be an "rc" reference somewhere to
-trigger the loading of modules.
-
-A google sends me around "rc.modules" and "rc.local", neither of which exist
-in busybox, I I *buess* that we have a somewhat simplified model for loading
-modules on startup.
-
-So, I *believe* I can explicitly put each "modprobe" in rcS, but I wonder if
-there is a more-proper way to do it in busybox?
-
+Cheers,
+Matias
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110504/f7347265/attachment.html>
+	*Matias Garcia*
+/Embedded Software Developer/
+Ross Video | Live Production Technology
+www.rossvideo.com <http://www.rossvideo.com>
++1 (613) 228 1198 x4264
