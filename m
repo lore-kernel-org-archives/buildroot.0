@@ -1,48 +1,58 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 04 May 2011 09:29:17 +0200
-Subject: [Buildroot] [PATCH v3] libnl: bump to version 3.0
-In-Reply-To: <87r58mwg0v.fsf@macbook.be.48ers.dk>
-References: <4DB8134E.1030503@visionsystems.de>	<4DB91798.6050601@visionsystems.de>
-	<20110428140919.77d3027f@surf>	<4DB97757.3090305@visionsystems.de>
-	<87r58mwg0v.fsf@macbook.be.48ers.dk>
-Message-ID: <4DC1004D.8000306@visionsystems.de>
+From: Ryan Whelan <rcwhelan@gmail.com>
+Date: Wed, 4 May 2011 09:57:34 -0400
+Subject: [Buildroot] Python 2.7 & uClibc?
+Message-ID: <BANLkTi=CUm0qSidqqYk4AN4GSEPjcv0dsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm having a strange issue with Python built with buildroot.  I've been
+trying to write a Python based init for linux but I'm having an issue with
+the buildroot version of python.  When a child process dies (and sends the
+parent - PID 1) a SIGCHLD, init spawns another process which appers to
+intercept the signal.  If fact, its not just SIGCHLD, its also SIGHUP.  I
+haven't tested all the signals, but i wouldn't assume its limited to these
+2.  This is a strange issue to try to articulate, but there is a description
+of the issue here (
+http://stackoverflow.com/questions/5844364/linux-blocking-signals-to-python-init)
 
->  Yegor> You're right. I tried it once again and it seems to fail only if I clean the whole buildroot and then start again. Build crashes with something like that:
->
->  Yegor>   CC     addr.lo
->  Yegor>   CC     attr.lo
->  Yegor>   CC     cache.lo
->  Yegor>   CC     cache_mngr.lo
->  Yegor>   CC     cache_mngt.lo
->  Yegor>   CC     data.lo
->  Yegor>   CC     error.lo
->  Yegor>   CC     handlers.lo
->  Yegor>   CC     msg.lo
->  Yegor>   CC     nl.lo
->  Yegor>   CC     object.lo
->  Yegor>   CC     socket.lo
->  Yegor>   CC     utils.lo
->  Yegor>   GEN    route/cls/ematch_syntax.c
->  Yegor>   CC     route/cls/ematch.lo
->  Yegor>   GEN    route/cls/ematch_grammar.c
->  Yegor>   GEN    route/pktloc_syntax.c
->  Yegor>   GEN    route/pktloc_grammar.c
->  Yegor>   CC     route/pktloc.lo
->  Yegor> route/pktloc.c:39:27: fatal error: pktloc_syntax.h: No such file or directory
->  Yegor> compilation terminated.
->  Yegor> cd .. && /bin/sh ./config.status lib/defs.h
->  Yegor>   CC     genl/ctrl.lo
->
->  Yegor> but if I run make again everything gets built like a charm. Perhaps this is caused by -j16. So no need for big hammer :-)
->
-> Yes, sounds like a race condition
+In more detail,  If I run this script ( http://pastebin.com/bvMcrLjr ) on a
+linux machine with Python compiled against glibc it spawns 2 children
+processes and a `ps fax` looks like this:
 
-Peter, are the patches O.K. for you or is there something that must be fixed ASAP?
+\_ /usr/bin/python ./init
+    \_ sleep 10
+    \_ sleep 10
 
-Yegor
+As the children processes die, they are respawned and you can see their PIDs
+change.  However, when run with a Python compiled via buildroot, when the
+first child dies, we see this:
+
+\_ /usr/bin/python ./init
+    \_ /usr/bin/python ./init
+        \_ sleep 10
+    \_ sleep 20
+
+and after the second child dies:
+
+\_ /usr/bin/python ./init
+    \_ /usr/bin/python ./init
+        \_ sleep 10
+        \_ sleep 20
+
+After successive child deaths, there are no more init's spawned, just that
+'extra' one (noted in the post on SO link)
+
+This doesn't happen with the python on any other (glibc) system I've tested
+on.  The issue is when this init script is running as actual PID 1, the
+children never get reaped, and become zombies.
+
+I'm not sure if I've made the issue clear, and I'm not sure if this is the
+place to mention it, but I thought i would start here.
+
+thanks!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110504/f5a8f366/attachment.html>
