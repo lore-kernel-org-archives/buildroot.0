@@ -1,28 +1,31 @@
-From: Matias Garcia <mgarcia@rossvideo.com>
-Date: Wed, 04 May 2011 16:52:08 -0400
-Subject: [Buildroot] Codesourcery multi-lib selection in buildroot
-Message-ID: <4DC1BC78.4050103@rossvideo.com>
+From: Phil Edworthy <PHIL.EDWORTHY@renesas.com>
+Date: Thu, 05 May 2011 13:17:23 +0100
+Subject: [Buildroot] [PATCH] sh: Fix CodeSourcery toolchain prefix
+Message-ID: <1304597843-11011-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm building an OS for a PowerPC e500v2 core. Originally, I used a stock 
-buildroot toolchain (uclibc), but was not able to optimize a 
-time-critical section of our application. With the CodeSourcery 
-compiler, I am. Unfortunately, even setting -te500v2 in the buildroot 
-optimizations (and hacking it into the TARGET_LDFLAGS) doesn't fix all 
-cases. Certain packages within buildroot seem to link against the wrong 
-library (linker complains that one library is compiled with hard-float 
-and another with soft-float, etc). Is there a way to tell buildroot (or 
-Make in general) to always link against a certain library set?
 
-Cheers,
-Matias
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ toolchain/toolchain-external/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 1cbf554..ca9892b 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -137,7 +137,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+-	default "sh4-linux-gnu"          if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
++	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
 -- 
-	*Matias Garcia*
-/Embedded Software Developer/
-Ross Video | Live Production Technology
-www.rossvideo.com <http://www.rossvideo.com>
-+1 (613) 228 1198 x4264
+1.7.1
