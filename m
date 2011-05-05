@@ -1,41 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2011 21:10:23 +0200
-Subject: [Buildroot] Codesourcery multi-lib selection in buildroot
-In-Reply-To: <4DC1BC78.4050103@rossvideo.com>
-References: <4DC1BC78.4050103@rossvideo.com>
-Message-ID: <20110505211023.142dec32@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 5 May 2011 23:44:04 +0200
+Subject: [Buildroot] RFC: toolchain wrapper for external toolchains
+In-Reply-To: <1304433655-1629-1-git-send-email-jacmet@sunsite.dk>
+References: <1304433655-1629-1-git-send-email-jacmet@sunsite.dk>
+Message-ID: <BANLkTi=w7UaAyk4T2SHjv5h9Pm+gRQW+4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 04 May 2011 16:52:08 -0400
-Matias Garcia <mgarcia@rossvideo.com> wrote:
+On Tue, May 3, 2011 at 4:40 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> This patch series adds a toolchain wrapper for external toolchains as
+> discussed during the Buildroot dev day after FOSDEM.
 
-> I'm building an OS for a PowerPC e500v2 core. Originally, I used a
-> stock buildroot toolchain (uclibc), but was not able to optimize a 
-> time-critical section of our application. With the CodeSourcery 
-> compiler, I am. Unfortunately, even setting -te500v2 in the buildroot 
-> optimizations (and hacking it into the TARGET_LDFLAGS) doesn't fix
-> all cases. Certain packages within buildroot seem to link against the
-> wrong library (linker complains that one library is compiled with
-> hard-float and another with soft-float, etc). Is there a way to tell
-> buildroot (or Make in general) to always link against a certain
-> library set?
+I didn't hear any negative comments either on the list or on IRC, so
+I've committed this.
 
-We have to make sure that this -te500v2 flag is passed to all packages
-during their build process. Which packages are causing problems
-exactly ?
-
-Another solution is to try the recent proposal of Peter Korsgaard to
-use a wrapper for external toolchain components, that would enforce the
-use of selected compiler flags so that the selected sysroot would
-always be correct.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
