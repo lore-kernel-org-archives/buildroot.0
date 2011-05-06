@@ -1,61 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  6 May 2011 11:04:45 -0300
-Subject: [Buildroot] [PATCH] bridge-utils: bump to version 1.5
-Message-ID: <1304690685-19754-1-git-send-email-gustavo@zacarias.com.ar>
+From: Phil Edworthy <PHIL.EDWORTHY@renesas.com>
+Date: Fri, 06 May 2011 15:23:04 +0100
+Subject: [Buildroot] [PATCH] sh: Add SH2A CodeSourcery external toolchain
+Message-ID: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/bridge-utils/Config.in |    2 +-
- package/bridge-utils/bridge.mk |   18 ++++++++----------
- 2 files changed, 9 insertions(+), 11 deletions(-)
+Added the CodeSourcery uCLinux/uClibc toolchain for the SH2A big
+endian devices.
 
-diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
-index 9feb230..c2e8ca0 100644
---- a/package/bridge-utils/Config.in
-+++ b/package/bridge-utils/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_BRIDGE
- 	  Manage ethernet bridging; a way to connect networks together to
- 	  form a larger network.
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ toolchain/toolchain-external/Config.in   |   13 +++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index c95945f..cb489bd 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -101,6 +101,18 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+             - SH4A, uClibc, little endian
+             - SH4A, uClibc, big endian
  
--	  http://bridge.sourceforge.net/
-+	  http://linux-net.osdl.org/index.php/Bridge
-diff --git a/package/bridge-utils/bridge.mk b/package/bridge-utils/bridge.mk
-index f8736b1..8f3f741 100644
---- a/package/bridge-utils/bridge.mk
-+++ b/package/bridge-utils/bridge.mk
-@@ -1,20 +1,18 @@
- #############################################################
- #
--# bridge-utils - User Space Program For Controlling Bridging
-+# bridge-utils
- #
- #############################################################
--#
--BRIDGE_VERSION:=1.4
--BRIDGE_SOURCE:=bridge-utils-$(BRIDGE_VERSION).tar.gz
--BRIDGE_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge/
--BRIDGE_AUTORECONF:=YES
--BRIDGE_INSTALL_STAGING:=NO
--BRIDGE_INSTALL_TARGET:=YES
--BRIDGE_CONF_OPT:=--with-linux-headers=$(LINUX_HEADERS_DIR)
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
++	bool "CodeSoucery SH 2010.09"
++	depends on BR2_sh2a_nofpueb || BR2_sh2eb
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Toolchain for the SuperH architecture, from CodeSourcery. It
++	  uses gcc 4.5.1, binutils 2.20, uClibc 0.9.30, gdb 7.2.50 and
++	  kernel headers 2.6.35.2. It has support for
++	  the following variants:
++            - SH2A, uClibc, big endian
 +
-+BRIDGE_VERSION = 1.5
-+BRIDGE_SOURCE = bridge-utils-$(BRIDGE_VERSION).tar.gz
-+BRIDGE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge
-+BRIDGE_AUTORECONF = YES
-+BRIDGE_CONF_OPT = --with-linux-headers=$(LINUX_HEADERS_DIR)
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+        bool "Custom toolchain"
+        help
+@@ -138,6 +150,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
++	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
- define BRIDGE_UNINSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
--		include/libbridge.h man/man8/brctl.8 sbin/brctl)
-+		include/libbridge.h share/man/man8/brctl.8 sbin/brctl)
- endef
- 
- $(eval $(call AUTOTARGETS,package,bridge))
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 328f908..e23af99 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -179,6 +179,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-g
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
++TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
++TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
+ else
+ # A value must be set (even if unused), otherwise the
+ # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
 -- 
-1.7.3.4
+1.7.1
