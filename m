@@ -1,19 +1,18 @@
-From: Cam Hutchison <cam@camh.ch>
-Date: Sat, 07 May 2011 06:54:20 -0000
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 7 May 2011 14:45:59 -0400
 Subject: [Buildroot] Fetching linux kernel source with git
-Message-ID: <778f.4dc4ec9c.697dc@getafix.xdna.net>
+In-Reply-To: <778f.4dc4ec9c.697dc@getafix.xdna.net>
+References: <778f.4dc4ec9c.697dc@getafix.xdna.net>
+Message-ID: <BANLkTinSrexGT=N3np1-M_1x9+khNxqLKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is it possible to tell buildroot to get the linux kernel source from a
-git repository?
+On Sat, May 7, 2011 at 02:54, Cam Hutchison wrote:
+> Is it possible to tell buildroot to get the linux kernel source from a
+> git repository?
 
-I had a look in linux/linux.mk and it does not look like it uses the
-package infrastructure for specifying the source and download methods,
-but I thought I'd check here in case I missed something.
-
-I have a local kernel git repository and I'd rather buildroot pull from
-that than download specific version tarballs.
+search the list archive ... people have posted patches to support this
+-mike
