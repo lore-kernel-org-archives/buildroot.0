@@ -1,35 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 May 2011 19:04:00 +0200
-Subject: [Buildroot] [PATCH] external toolchain: add arbitrary arguments
- to sysroot discovery and toolchain wrapper
-In-Reply-To: <4DC46EC4.2060000@rossvideo.com>
-References: <4DC46EC4.2060000@rossvideo.com>
-Message-ID: <20110508190400.43407143@surf>
+Date: Sun, 8 May 2011 20:28:47 +0200
+Subject: [Buildroot] [PATCH] sh: Add SH2A CodeSourcery external toolchain
+In-Reply-To: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
+References: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
+Message-ID: <20110508202847.0996a987@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mathias,
+Hello,
 
-On Fri, 06 May 2011 17:57:24 -0400
-Matias Garcia <mgarcia@rossvideo.com> wrote:
+On Fri, 06 May 2011 15:23:04 +0100
+Phil Edworthy <PHIL.EDWORTHY@renesas.com> wrote:
 
-> CodeSourcery uses non-standard arguments to determine which sysroot
-> to use and to set other optimizations (e.g. which floating point ABI
-> to use). This patch allows one to pass an arbitrary argument to the
-> sysroot discovery in ext-tool.mk and adds the same option to the
-> argument list in ext-toolchain-wrapper.c. I have not tested it with
-> an empty option. Use at your own risk as this is my first open-source
-> patch ever... (Am I supposed to write 'signed-off by...'?)
+> Added the CodeSourcery uCLinux/uClibc toolchain for the SH2A big
+> endian devices.
 
-While the goal is correct, I don't like this implementation. The
-toolchain wrapper should just make use of the flags in
-BR2_TARGET_OPTIMIZATION configuration option, and not only -march,
--mtune, -mabi, etc. options which are currently being used.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Regards,
+However, I have a question regarding the sh2a_nofpueb and sh2eb target
+architecture variants to which this toolchain applies. In Buildroot, we
+use the target architecture variant to build the host tuple, which is
+then used as the --host=XXX-YYY argument to build autotools-based
+packages.
+
+So for example, when sh2eb is selected, we pass "--host=sh2eb-linux" to
+the ./configure script of all autotools-based packages.
+
+Unfortunately, neither sh2a_nofpueb nor sh2eb are recognized as correct
+machine types by config.sub. From packages/gnuconfig/config.sub:
+
+        | sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+        | sh64 | sh64le \
+
+So, a package such as dropbear fails to build with:
+
+checking host system type... Invalid configuration `sh2eb-linux': machine `sh2eb' not recognized
+
+I don't know anything about the various CPU types in the SuperH world,
+so I can't fix it myself, but obviously the target variants do need
+some cleanup/improvements. Could you help us to improve this ?
+
+Thanks!
 
 Thomas
 -- 
