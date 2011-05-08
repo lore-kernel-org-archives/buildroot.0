@@ -1,36 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 08 May 2011 21:59:49 +0200
-Subject: [Buildroot] [PATCH 1/1] external-toolchain: fix support
-In-Reply-To: <c066155381297965b19106d4cd05524af58c771c.1304873537.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 8 May 2011 18:52:27 +0200")
-References: <cover.1304873537.git.thomas.petazzoni@free-electrons.com>
-	<cover.1304873537.git.thomas.petazzoni@free-electrons.com>
-	<c066155381297965b19106d4cd05524af58c771c.1304873537.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vcxlj74a.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 8 May 2011 21:56:10 +0200
+Subject: [Buildroot] [git commit] CHANGES: #2131 is resolved
+Message-ID: <20110508200027.8D5E5833DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The recent commit adding the external toolchain wrapper has broken the
- Thomas> support for external toolchain. The check_arm_eabi, check_cplusplus
- Thomas> and check_cross_compiler_exists functions were using TARGET_CC, which
- Thomas> points to the toolchain wrapper, but at the moment those functions are
- Thomas> called, the wrapper hasn't been generated yet.
+commit: http://git.buildroot.net/buildroot/commit/?id=8451c2329e000baf64c986889e8d5b3ac1c8d698
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> We fix this by passing to these functions the path to the C or C++
- Thomas> compiler they should use for their tests.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thanks, committed. I don't quite know how I could have forgotten about
-them in the commit. I do remember looking them over when I fixed the
-ones in ext-tool.mk.
-
-The commit would have been a bit smaller if we simply replaced TARGET_CC
-with TOOLCHAIN_EXTERNAL_CC (and same for C++) as we only use these
-macros from ex-tool.mk anyway, but ok.
-
+diff --git a/CHANGES b/CHANGES
+index 0b11898..3678d23 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -13,6 +13,7 @@
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
++	#2131: Add OpenMP support to the toolchain
+ 	#3379: New Package: bonnie++
+ 	#3445: Not working openssl-10.0.0d on 386sx
+ 	#3451: fakeroot package: wrong FAKEROOT_SITE variable
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
