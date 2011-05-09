@@ -1,42 +1,57 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sun, 08 May 2011 16:07:42 -0500
-Subject: [Buildroot] PATH
-In-Reply-To: <87mxixj6bb.fsf@macbook.be.48ers.dk>
-References: <20110508081440.78203647owixiiio@www.home.zuerker.org>
-	<201105081523.44670.yann.morin.1998@anciens.enib.fr>
-	<87mxixj6bb.fsf@macbook.be.48ers.dk>
-Message-ID: <20110508160742.Horde.pzUbY2ms4ABNxwYeJsYE0SA@www.home.zuerker.org>
+From: PHIL.EDWORTHY at renesas.com <PHIL.EDWORTHY@renesas.com>
+Date: Mon, 09 May 2011 07:54:57 +0100
+Subject: [Buildroot] [PATCH] sh: Add SH2A CodeSourcery external toolchain
+In-Reply-To: <20110508202847.0996a987@surf>
+References: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
+	<20110508202847.0996a987@surf>
+Message-ID: <OFC7293BD2.6D240F58-ONC125788B.00232F40-8025788B.0025ECD0@eu.necel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-Quoting Peter Korsgaard <jacmet@uclibc.org>:
-
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+> On Fri, 06 May 2011 15:23:04 +0100
+> Phil Edworthy <PHIL.EDWORTHY@renesas.com> wrote:
 >
->  Yann> Heiko, All,
->  Yann> On Sunday 08 May 2011 15:14:40 Heiko Zuerker wrote:
->  >> I'm almost done with the MySQL 5.5 script, but it requires ./ in  
-> the path.
->  >> It may not be a bad idea to add this to Makefile.in (TARGET_PATH,
->  >> HOST_PATH), in case other packages have a similar behavior.
->  >> Thoughts?
->  >> (Worst case I'll just keep it in the mysql.mk)
+> > Added the CodeSourcery uCLinux/uClibc toolchain for the SH2A big
+> > endian devices.
 >
->  Yann> In my opinion, . in the path is a Really Bad Idea (TM), and should not
->  Yann> only be avoided, but entirely banned.
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
-> I agree. I'm surprised to hear that mysql needs it.
+> However, I have a question regarding the sh2a_nofpueb and sh2eb target
+> architecture variants to which this toolchain applies. In Buildroot, we
+> use the target architecture variant to build the host tuple, which is
+> then used as the --host=XXX-YYY argument to build autotools-based
+> packages.
+>
+> So for example, when sh2eb is selected, we pass "--host=sh2eb-linux" to
+> the ./configure script of all autotools-based packages.
+>
+> Unfortunately, neither sh2a_nofpueb nor sh2eb are recognized as correct
+> machine types by config.sub. From packages/gnuconfig/config.sub:
+>
+>         | sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+>         | sh64 | sh64le \
+>
+> So, a package such as dropbear fails to build with:
+>
+> checking host system type... Invalid configuration `sh2eb-linux': machine `sh2eb' not recognized
 
-5.1 is fine, it's 5.5 which needs it.
-I'll look into writing a patch, but it could be a little while until I  
-get to it.
+Ah, I see. I just checked busybox built for sh2a.
 
--- 
 
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+> I don't know anything about the various CPU types in the SuperH world,
+> so I can't fix it myself, but obviously the target variants do need
+> some cleanup/improvements. Could you help us to improve this ?
+
+Hmm, SuperH has a lengthy mix of cpu types & pretty much everything I have done is with sh4a devices. I'll ask around to find out a bit more about sh2
+devices and attempt to clean this up.
+
+Thanks for pointing this out!
+Phil
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110509/946da4b6/attachment.html>
