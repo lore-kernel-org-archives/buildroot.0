@@ -1,57 +1,38 @@
-From: PHIL.EDWORTHY at renesas.com <PHIL.EDWORTHY@renesas.com>
-Date: Mon, 09 May 2011 07:54:57 +0100
-Subject: [Buildroot] [PATCH] sh: Add SH2A CodeSourcery external toolchain
-In-Reply-To: <20110508202847.0996a987@surf>
-References: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
-	<20110508202847.0996a987@surf>
-Message-ID: <OFC7293BD2.6D240F58-ONC125788B.00232F40-8025788B.0025ECD0@eu.necel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 May 2011 08:58:54 +0200
+Subject: [Buildroot] [PATCH 1/1] external-toolchain: fix support
+In-Reply-To: <87vcxlj74a.fsf@macbook.be.48ers.dk>
+References: <cover.1304873537.git.thomas.petazzoni@free-electrons.com>
+	<cover.1304873537.git.thomas.petazzoni@free-electrons.com>
+	<c066155381297965b19106d4cd05524af58c771c.1304873537.git.thomas.petazzoni@free-electrons.com>
+	<87vcxlj74a.fsf@macbook.be.48ers.dk>
+Message-ID: <20110509085854.0862d1fb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-> On Fri, 06 May 2011 15:23:04 +0100
-> Phil Edworthy <PHIL.EDWORTHY@renesas.com> wrote:
->
-> > Added the CodeSourcery uCLinux/uClibc toolchain for the SH2A big
-> > endian devices.
->
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> However, I have a question regarding the sh2a_nofpueb and sh2eb target
-> architecture variants to which this toolchain applies. In Buildroot, we
-> use the target architecture variant to build the host tuple, which is
-> then used as the --host=XXX-YYY argument to build autotools-based
-> packages.
->
-> So for example, when sh2eb is selected, we pass "--host=sh2eb-linux" to
-> the ./configure script of all autotools-based packages.
->
-> Unfortunately, neither sh2a_nofpueb nor sh2eb are recognized as correct
-> machine types by config.sub. From packages/gnuconfig/config.sub:
->
->         | sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
->         | sh64 | sh64le \
->
-> So, a package such as dropbear fails to build with:
->
-> checking host system type... Invalid configuration `sh2eb-linux': machine `sh2eb' not recognized
+On Sun, 08 May 2011 21:59:49 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Ah, I see. I just checked busybox built for sh2a.
+> The commit would have been a bit smaller if we simply replaced
+> TARGET_CC with TOOLCHAIN_EXTERNAL_CC (and same for C++) as we only
+> use these macros from ex-tool.mk anyway, but ok.
 
+Yes, but while TARGET_CC can be considered as a global variable, I
+don't consider TOOLCHAIN_EXTERNAL_CC to be a global one, but a local
+variable to ext-tool.mk (I know 'make' doesn't provide any sort of
+variable scoping mechanism, but still). For that reason, I thought that
+passing the compiler path was a clearer solution.
 
-> I don't know anything about the various CPU types in the SuperH world,
-> so I can't fix it myself, but obviously the target variants do need
-> some cleanup/improvements. Could you help us to improve this ?
+Regards,
 
-Hmm, SuperH has a lengthy mix of cpu types & pretty much everything I have done is with sh4a devices. I'll ask around to find out a bit more about sh2
-devices and attempt to clean this up.
-
-Thanks for pointing this out!
-Phil
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110509/946da4b6/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
