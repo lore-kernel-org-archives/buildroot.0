@@ -1,65 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2011 09:16:59 +0200
-Subject: [Buildroot] [PATCH 1/3] Makefile.package.in: Makes it possible
- to override the default extract commands
-In-Reply-To: <1305008226-8906-2-git-send-email-a@awn.dk>
+Date: Tue, 10 May 2011 09:36:09 +0200
+Subject: [Buildroot] [PATCH 3/3] Makefile.package.in: Fixing git
+ download method
+In-Reply-To: <BANLkTinQcHkTmHoq9ci_QYgaj8vAqZ07yQ@mail.gmail.com>
 References: <1305008226-8906-1-git-send-email-a@awn.dk>
-	<1305008226-8906-2-git-send-email-a@awn.dk>
-Message-ID: <20110510091659.5274152c@surf>
+	<1305008226-8906-4-git-send-email-a@awn.dk>
+	<20110510085335.5c9be308@surf>
+	<BANLkTinQcHkTmHoq9ci_QYgaj8vAqZ07yQ@mail.gmail.com>
+Message-ID: <20110510093609.203d64f9@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Allan,
+On Tue, 10 May 2011 09:22:22 +0200
+Allan Nielsen <a@awn.dk> wrote:
 
-On Tue, 10 May 2011 08:17:04 +0200
-"Allan W. Nielsen" <a@awn.dk> wrote:
+> When I run buildroot $(DL_DIR) is a relative path which says ./src and
+> the current directory (at this point) is $(DL_DIR)/my-git-package/,
+> and it will try to place the tar file in
+> $(DL_DIR)/my-git-package/src/my-git-package.tar.gz which is the wrong
+> place.
+> 
+> The suggested change should work both when $(DL_DIR) is relative and absolute.
 
-> When using GENTARGETS (or macroes depending on it), there is no way of
-> specifying a custom extraction procedure. When using the patch one can
-> simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
-> default. If non is defined it will fall back to the default extract
-> procedure.
+Ah, yes, got it.
 
-I like the feature added by this patch (it is needed for strange
-packages), but I'm not sure about the implementation.
+> Alternative I could of cause just change my $(DL_DIR) variable to an
+> absolute path.
 
-> -# Unpack the archive
-> +# Unpack the archive using custom commands
-> +$(BUILD_DIR)/%/.stamp_custom_extracted:
-> +	@$(call MESSAGE,"Extracting - custom")
-> +	$(Q)mkdir -p $(@D)
-> +	$($(PKG)_EXTRACT_CMDS)
-> +	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-> +	$(Q)touch $@
-> +
-> +# Unpack the archive using default commands
->  $(BUILD_DIR)/%/.stamp_extracted:
-> -	@$(call MESSAGE,"Extracting")
-> +	@$(call MESSAGE,"Extracting - default")
->  	$(Q)mkdir -p $(@D)
->  	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
->  	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
+Or, better, make sure that DL_DIR is an absolute path even if it was
+defined as a relative path in the configuration. Something like
+(untested):
 
-Instead of having two different stamp files, isn't possible to define
-the extract step as follows :
+  DL_DIR=$(call qstrip,$(BR2_DL_DIR))
+  ifeq ($(DL_DIR),)
+  DL_DIR:=$(TOPDIR)/dl
+  endif
++ DL_DIR=$(shell readlink -f $(DL_DIR))
 
-> +$(BUILD_DIR)/%/.stamp_extracted:
-> +	@$(call MESSAGE,"Extracting")
-> +	$(Q)mkdir -p $(@D)
-> +	$($(PKG)_EXTRACT_CMDS)
-> +	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-> +	$(Q)touch $@
+in package/Makefile.package.in
 
-And then have the $(PKG)_EXTRACT_CMDS variable be define to the default
-value, unless it has already been defined ?
-
-Note that I haven't looked closely whether it was possible or not. But
-if it is, then I would prefer such an implementation.
-
-Thanks for doing this work!
+Regards,
 
 Thomas
 -- 
