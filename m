@@ -1,78 +1,65 @@
 From: Allan W. Nielsen <a@awn.dk>
-Date: Tue, 10 May 2011 08:17:04 +0200
-Subject: [Buildroot] [PATCH 1/3] Makefile.package.in: Makes it possible to
-	override the default extract commands
+Date: Tue, 10 May 2011 08:17:05 +0200
+Subject: [Buildroot] [PATCH 2/3] Makefile.package.in: Added LZMA as
+	compression type
 In-Reply-To: <1305008226-8906-1-git-send-email-a@awn.dk>
 References: <1305008226-8906-1-git-send-email-a@awn.dk>
-Message-ID: <1305008226-8906-2-git-send-email-a@awn.dk>
+Message-ID: <1305008226-8906-3-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using GENTARGETS (or macroes depending on it), there is no way of
-specifying a custom extraction procedure. When using the patch one can
-simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
-default. If non is defined it will fall back to the default extract
-procedure.
-
-An example could look like this:
-
---- PACKAGE BEGIN ---
-FGLRX_VERSION=11-3
-FGLRX_SOURCE:=ati-driver-installer-$(FGLRX_VERSION)-x86.x86_64.run
-FGLRX_SITE:=http://www2.ati.com/drivers/linux/
-
-define FGLRX_EXTRACT_CMDS
-	sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
-endef
-
-$(eval $(call GENTARGETS,package,fglrx))
---- PACKAGE END ---
 
 Signed-off-by: Allan W. Nielsen <a@awn.dk>
 ---
- package/Makefile.package.in |   18 ++++++++++++++++--
- 1 files changed, 16 insertions(+), 2 deletions(-)
+ Config.in                   |    7 +++++++
+ Makefile                    |    1 +
+ package/Makefile.package.in |    1 +
+ 3 files changed, 9 insertions(+), 0 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index a67c08d..2fce9d7 100644
+--- a/Config.in
++++ b/Config.in
+@@ -52,6 +52,13 @@ config BR2_BZCAT
+ 	  Default is "bzcat"
+ 	  Other possible values include "bunzip2 -c" or "bzip2 -d -c".
+ 
++config BR2_XZCAT
++	string "xzcat command"
++	default "xzcat"
++	help
++	  Command to be used to extract a xz'ed file to stdout.
++	  Default is "xzcat"
++
+ config BR2_TAR_OPTIONS
+ 	string "Tar options"
+ 	default ""
+diff --git a/Makefile b/Makefile
+index 5f61b93..0ac9f12 100644
+--- a/Makefile
++++ b/Makefile
+@@ -271,6 +271,7 @@ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 
+ ZCAT:=$(call qstrip,$(BR2_ZCAT))
+ BZCAT:=$(call qstrip,$(BR2_BZCAT))
++XZCAT:=$(call qstrip,$(BR2_XZCAT))
+ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ GNU_TARGET_SUFFIX:=-$(call qstrip,$(BR2_GNU_TARGET_SUFFIX))
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..e5dafd1 100644
+index e5dafd1..1e87256 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -239,9 +239,17 @@ ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)touch $@
- endif
+@@ -61,6 +61,7 @@ INFLATE.gz   = $(ZCAT)
+ INFLATE.tbz  = $(BZCAT)
+ INFLATE.tbz2 = $(BZCAT)
+ INFLATE.tgz  = $(ZCAT)
++INFLATE.xz   = $(XZCAT)
+ INFLATE.tar  = cat
  
--# Unpack the archive
-+# Unpack the archive using custom commands
-+$(BUILD_DIR)/%/.stamp_custom_extracted:
-+	@$(call MESSAGE,"Extracting - custom")
-+	$(Q)mkdir -p $(@D)
-+	$($(PKG)_EXTRACT_CMDS)
-+	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
-+# Unpack the archive using default commands
- $(BUILD_DIR)/%/.stamp_extracted:
--	@$(call MESSAGE,"Extracting")
-+	@$(call MESSAGE,"Extracting - default")
- 	$(Q)mkdir -p $(@D)
- 	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
-@@ -419,7 +427,13 @@ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
- $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
-+
-+ifdef $(2)_EXTRACT_CMDS
-+$(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_custom_extracted
-+else
- $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
-+endif
-+
- $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
- $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+ # MESSAGE Macro -- display a message in bold type
 -- 
 1.7.3.4
