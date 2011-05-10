@@ -1,69 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2011 08:47:04 +0200
-Subject: [Buildroot] [PATCH] sh: Fix Buildroot sh targets to match
- gnuconfig targets
-In-Reply-To: <1304946773-5734-1-git-send-email-phil.edworthy@renesas.com>
-References: <1304946773-5734-1-git-send-email-phil.edworthy@renesas.com>
-Message-ID: <20110510084704.7cd44147@surf>
+Date: Tue, 10 May 2011 08:51:47 +0200
+Subject: [Buildroot] [PATCH] Added Live555 RTSP Server package.
+In-Reply-To: <1304972048-21092-2-git-send-email-mike@mikebwilliams.com>
+References: <1304972048-21092-1-git-send-email-mike@mikebwilliams.com>
+	<1304972048-21092-2-git-send-email-mike@mikebwilliams.com>
+Message-ID: <20110510085147.07330bef@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Mike,
 
-On Mon, 09 May 2011 14:12:53 +0100
-Phil Edworthy <PHIL.EDWORTHY@renesas.com> wrote:
+Great patch for a first post to the list!
 
-> sh2eb and sh2a_nofpueb gnuconfig targets are no longer supported
-> in Buildroot. This patch replaces these Buildroot targets with sh2
-> and sh2a respectively, and adds sh4a targets as these are widely
-> used.
-> 
-> To build for devices without an fpu, the relevant toolchain flags
-> will have to be specified.
+On Mon,  9 May 2011 16:14:08 -0400
+Mike Williams <mike@mikebwilliams.com> wrote:
 
-Thanks a lot for coming back so quickly with an updated patch and
-clarification about SuperH support. That's really nice!
+> +config BR2_PACKAGE_LIVE555
+> +	bool "Live555"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  LIVE555 Streaming Media forms a set of C++ libraries for multimedia
+> +	  streaming, using open standard protocols (RTP/RTCP, RTSP, SIP).
+> +
+> +	  http://www.live555.com/liveMedia/
+> +
+> +config BR2_PACKAGE_LIVE555_OPENRTSP
+> +	bool "OpenRRTSP"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		Live555 RTSP Client.
+> +		
+> +config BR2_PACKAGE_LIVE555_MEDIASERVER
+> +	bool "live555MediaServer"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		RTSP Server. Supports numerous media formats such as H.264 and MPEG2.
+> +
+> +config BR2_PACKAGE_LIVE555_MPEG2_INDEXER
+> +	bool "MPEG2TransportStreamIndexer"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		MPEG2 Transport Stream Indexer. Provides indexes allowing 'trick play'
+> +		operation in the Live555MediaServer.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Here, you should include something like:
 
-A few questions/comments below, though.
+comment "live555 needs C++ compiler"
+	depends on !BR2_INSTALL_LIBSTDCPP
 
-> diff --git a/fs/jffs2/Config.in b/fs/jffs2/Config.in
-> index 5748fbb..9a96d7d 100644
-> --- a/fs/jffs2/Config.in
-> +++ b/fs/jffs2/Config.in
-> @@ -94,8 +94,8 @@ choice
->  	prompt "Endianess"
->  	default BR2_TARGET_ROOTFS_JFFS2_BE if BR2_armeb || \
->  			BR2_avr32 || BR2_m68k || BR2_mips || \
-> -			BR2_powerpc || BR2_sh2a_nofpueb || BR2_sh2eb || \
-> -			BR2_sh3eb || BR2_sh4eb || BR2_sparc
-> +			BR2_powerpc || BR2_sh2 || BR2_sh2a || \
-> +			BR2_sh3eb || BR2_sh4eb || BR2_sh4aeb || BR2_sparc
+This allows the user to know that live555 is available, but not
+selectable due to the lack of C++ support. We typically do that when a
+package has a dependency on a toolchain option.
 
-Not your fault, but we should probably try to use BR2_ENDIAN here, in
-order to have the big/little endian list of architectures in a common
-location and not duplicated here in JFFS2. But that's a separate
-matter, and should be fixed in a separate patch.
+> +ifeq (${BR2_PACKAGE_LIVE555_OPENRTSP},y)
 
-> diff --git a/toolchain/elf2flt/elf2flt/config.sub b/toolchain/elf2flt/elf2flt/config.sub
-> index 4279c84..2072457 100755
-> --- a/toolchain/elf2flt/elf2flt/config.sub
-> +++ b/toolchain/elf2flt/elf2flt/config.sub
+Our convention is to use $(BR2_PACKAGE_LIVE555_OPENRTSP), i.e
+normal braces instead of curly braces.
 
-Just curious, as I have never used Buildroot to build a toolchain for
-non-MMU platforms (only used pre-built Blackfin toolchains so far). How
-does this elf2flt thing fits into the toolchain build process ?
+> +define LIVE555_INSTALL_OPENRTSP
+> +	$(INSTALL) -D -m 0755 $(@D)/testProgs/openRTSP $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +ifeq (${BR2_PACKAGE_LIVE555_MEDIASERVER},y)
+> +define LIVE555_INSTALL_MEDIASERVER
+> +	$(INSTALL) -D -m 0755 $(@D)/mediaServer/live555MediaServer $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +ifeq (${BR2_PACKAGE_LIVE555_MPEG2_INDEXER},y)
+> +define LIVE555_INSTALL_MPEG2_INDEXER
+> +	$(INSTALL) -D -m 0755 $(@D)/testProgs/MPEG2TransportStreamIndexer $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +define LIVE555_INSTALL_TARGET_CMDS
+> +	$(LIVE555_INSTALL_OPENRTSP)
+> +	$(LIVE555_INSTALL_MEDIASERVER)
+> +	$(LIVE555_INSTALL_MPEG2_INDEXER)
+> +endef
 
-Instead of patching this config.sub file, wouldn't it be possible to
-use the one we have in package/gnuconfig/ ? Or, put it differently, is
-there an upstream location for elf2flt we could use instead of having
-its source code directly into the Buildroot tree ?
+You could do it a little bit differently:
 
-Regards,
+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
+
+And then your LIVE555_INSTALL_TARGET_CMDS would iterate over the
+LIVE555_FILES_TO_INSTALL-y list, and install the corresponding
+binaries. Need to be careful about the case where
+LIVE555_FILES_TO_INSTALL-y is empty because no binary has been selected
+for installation.
 
 Thomas
 -- 
