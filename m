@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2011 20:43:32 +0200
-Subject: [Buildroot] [PATCH] Makefile.package.in: Makes it possible to
- override the default extract commands
-In-Reply-To: <1305027254-21565-2-git-send-email-a@awn.dk>
-References: <1305027254-21565-1-git-send-email-a@awn.dk>
-	<1305027254-21565-2-git-send-email-a@awn.dk>
-Message-ID: <20110510204332.62afd066@surf>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Wed, 11 May 2011 01:11:32 +0400
+Subject: [Buildroot] stunnel package
+Message-ID: <BANLkTineh8ZO9o1tqX36W=2QJz=1tYMhAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Allan,
+Hello.
 
-On Tue, 10 May 2011 13:34:14 +0200
-"Allan W. Nielsen" <a@awn.dk> wrote:
+In former versions of buildroot there was stunnel package (version
+1.16 as I remember). Are there any issues with it? I am trying to
+import stunnel 1.22 and 1.29 (from Debian) but without any success.
+First problem is connect() call for client tunnel: it returns error
+but errno=0. Does uclibc support errno for socket calls?
+If I check additionally for errno != 0 to prevent falling into error
+handling branch, then I have second problem: SSL_connect() failure in
+init_ssl() with "SSL_connect: Peer suddenly disconnected" error.
+Tcpdump shows a pair or three packets from client to server and vice
+versa.
+On the Debian 5.0.0. the similar configuration works fine.
+My embedded system is busybox-1.17.1, linux-2.6.35.3, uclibc-0.9.31
+(as far as I remember it is buildroot-08.2010).
 
-> --- PACKAGE BEGIN ---
+Have anybody encountered the similar problems?
 
-Please don't use --- at the beginning of a line in your commit message.
-Git believes that the rest of the message shouldn't be included in the
-commit message when applying your patch.
-
-> +# default extract command
-> +$(2)_EXTRACT_CMDS ?= $(if $($(2)_SOURCE),$(INFLATE$(suffix $($(2)_SOURCE))) $(DL_DIR)/$($(2)_SOURCE) | \
-> +	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-
-Hm, this is not some nice. I'm currently testing your patch, I'll see
-if I find a better way of writing this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks in advance,
+Sergey Naumov.
