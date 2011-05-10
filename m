@@ -1,7 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 10 May 2011 23:43:00 +0200
-Subject: [Buildroot] [git commit] Simplify udev startup script
-Message-ID: <20110510215121.AC2FF826FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] haserl: bump 0.9.x version
+Message-ID: <20110510215122.19E7083463@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,77 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca520507fc15a8213334a76339a3e6d567e91ea0
+commit: http://git.buildroot.net/buildroot/commit/?id=6e850246252e4978d93469a8998bf8343bab0340
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The S10udev startup script did useless things such as mounting sysfs,
-mounting a tmpfs filesystem in /dev/, etc. Those things are already
-done during in the default inittab.
+Fixes off-by-1 buffer overflow.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/udev/S10udev |   34 ----------------------------------
- 1 files changed, 0 insertions(+), 34 deletions(-)
+ package/haserl/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 6418f63..0d2a23a 100755
---- a/package/udev/S10udev
-+++ b/package/udev/S10udev
-@@ -16,12 +16,6 @@
- #	/dev/zero, /dev/null -- that's needed to boot and run this script.
- #
- 
--# old kernels don't use udev
--case $(uname -r) in
--    2.6*|2.7*)	;;
--    *)		exit 0;;
--esac
--
- # Check for missing binaries
- UDEV_BIN=/sbin/udevd
- test -x $UDEV_BIN || exit 5
-@@ -33,41 +27,13 @@ UDEV_CONFIG=/etc/udev/udev.conf
- test -r $UDEV_CONFIG || exit 6
- . $UDEV_CONFIG
- 
--# Directory where sysfs is mounted
--SYSFS_DIR=/sys
--
- case "$1" in
-     start)
--        # mount sysfs if it's not yet mounted
--        if [ ! -d $SYSFS_DIR ]; then
--	    echo "${0}: SYSFS_DIR \"$SYSFS_DIR\" not found"
--	    exit 1
--        fi
--        grep -q "^sysfs $SYSFS_DIR" /proc/mounts ||
--	mount -t sysfs /sys /sys ||
--	exit 1
--
--        # mount $udev_root as ramfs if it's not yet mounted
--        # we know 2.6 kernels always support ramfs
--        if [ ! -d $udev_root ]; then
--	    echo "${0}: udev_root \"$udev_root\" not found"
--	    exit 1
--        fi
--        grep -q "^udev $udev_root" /proc/mounts ||
--	mount -t ramfs udev $udev_root ||
--	exit 1
--
--        mkdir $udev_root/pts $udev_root/shm
-         mknod -m 0666 /dev/null c 1 3
--        mknod -m 0666 /dev/zero c 1 5
--        mknod -m 0600 /dev/console c 5 1
--
--        # populate /dev (normally)
-         echo -n "Populating $udev_root using udev: "
-         echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || (echo "FAIL" && exit 1)
- 	$UDEVSTART_BIN || (echo "FAIL" && exit 1)
--	mount -t devpts /dev/pts /dev/pts || (echo "FAIL" && exit 1)
-         echo "done"
-         ;;
-     stop)
+diff --git a/package/haserl/Config.in b/package/haserl/Config.in
+index ad9a8e9..7710fa1 100644
+--- a/package/haserl/Config.in
++++ b/package/haserl/Config.in
+@@ -38,4 +38,4 @@ endchoice
+ config BR2_PACKAGE_HASERL_VERSION
+ 	string
+ 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_X
+-	default "0.9.28"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
++	default "0.9.29"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
 -- 
 1.7.3.4
