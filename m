@@ -1,123 +1,71 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Wed, 11 May 2011 16:19:56 -0400
-Subject: [Buildroot] [PATCH] live555: Added Live555 RTSP Server package.
-Message-ID: <1305145196-20815-1-git-send-email-mike@mikebwilliams.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 May 2011 20:32:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 3703] Consider using /usr/bin/env bash in scripts
+In-Reply-To: <bug-3703-163@https.bugs.busybox.net/>
+References: <bug-3703-163@https.bugs.busybox.net/>
+Message-ID: <20110511203200.AC3E68349F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mike Williams <mwilli60@harris.com>
+https://bugs.busybox.net/show_bug.cgi?id=3703
 
----
- package/multimedia/Config.in          |    1 +
- package/multimedia/live555/Config.in  |   34 ++++++++++++++++++++++++++
- package/multimedia/live555/live555.mk |   43 +++++++++++++++++++++++++++++++++
- 3 files changed, 78 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/live555/Config.in
- create mode 100644 package/multimedia/live555/live555.mk
+--- Comment #2 from holger+br at freyther.de  ---
+I am hacking my way... so here is my incomplete list
+I do have symlinks to help me.. with GNU coreutils
+  mktemp -> gmktemp
+  sed -> gsed
+  install -> ginstall
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index b8a0f21..3ae9d5b 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -31,6 +31,7 @@ source "package/multimedia/libsamplerate/Config.in"
- source "package/multimedia/libsndfile/Config.in"
- source "package/multimedia/libtheora/Config.in"
- source "package/multimedia/libvorbis/Config.in"
-+source "package/multimedia/live555/Config.in"
- source "package/multimedia/madplay/Config.in"
- source "package/multimedia/mpd/Config.in"
- source "package/multimedia/mpg123/Config.in"
-diff --git a/package/multimedia/live555/Config.in b/package/multimedia/live555/Config.in
-new file mode 100644
-index 0000000..a6aebd3
---- /dev/null
-+++ b/package/multimedia/live555/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_LIVE555
-+	bool "Live555"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  LIVE555 Streaming Media forms a set of C++ libraries for multimedia
-+	  streaming, using open standard protocols (RTP/RTCP, RTSP, SIP).
-+
-+	  http://www.live555.com/liveMedia/
-+
-+config BR2_PACKAGE_LIVE555_OPENRTSP
-+	bool "OpenRRTSP"
-+	depends on BR2_PACKAGE_LIVE555
-+	default y
-+	help
-+		Live555 RTSP Client.
-+		
-+config BR2_PACKAGE_LIVE555_MEDIASERVER
-+	bool "live555MediaServer"
-+	depends on BR2_PACKAGE_LIVE555
-+	default y
-+	help
-+		RTSP Server. Supports numerous media formats such as H.264 and MPEG2.
-+
-+config BR2_PACKAGE_LIVE555_MPEG2_INDEXER
-+	bool "MPEG2TransportStreamIndexer"
-+	depends on BR2_PACKAGE_LIVE555
-+	default y
-+	help
-+		MPEG2 Transport Stream Indexer. Provides indexes allowing 'trick play'
-+		operation in the Live555MediaServer.
-+
-+comment "Live555 needs C++ compiler"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-diff --git a/package/multimedia/live555/live555.mk b/package/multimedia/live555/live555.mk
-new file mode 100644
-index 0000000..dff0e3c
---- /dev/null
-+++ b/package/multimedia/live555/live555.mk
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# live555 streaming media
-+#
-+#############################################################
-+
-+LIVE555_VERSION = latest
-+LIVE555_SOURCE = live555-$(LIVE555_VERSION).tar.gz
-+LIVE555_SITE = http://www.live555.com/liveMedia/public/
-+LIVE555_INSTALL_TARGET = YES
-+
-+define LIVE555_CONFIGURE_CMDS
-+	(cd $(@D); ./genMakefiles linux)
-+endef
-+
-+define LIVE555_BUILD_CMDS
-+	$(MAKE) C_COMPILER="$(TARGET_CC)" CPLUSPLUS_COMPILER="$(TARGET_CXX)" LINK="$(TARGET_CXX) -o" -C $(@D) all
-+endef
-+
-+define LIVE555_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+LIVE555_FILES_TO_INSTALL- =
-+LIVE555_FILES_TO_INSTALL-y = 
-+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
-+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live555MediaServer
-+LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
-+LIVE555_FILES_TO_INSTALL- += $(LIVE555_FILES_TO_INSTALL-y)
-+
-+define LIVE555_INSTALL_TARGET_CMDS
-+	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
-+		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i`; \
-+	done
-+endef
-+
-+define LIVE555_UNINSTALL_TARGET_CMDS
-+	for i in $(LIVE555_FILES_TO_INSTALL-); do \
-+		rm -f $(addprefix $(TARGET_DIR)/usr/bin/, `basename $$i`); \
-+	done
-+endef
-+
-+$(eval $(call GENTARGETS,package/multimedia,live555))
+uclibc fails to build a host utility... but on the second gmake just
+continues...
+  HOSTCC utils/ldconfig.host
+In file included from ../utils/ldconfig.c:170:
+../utils/readsoname2.c: In function 'readsoname32':
+../utils/readsoname2.c:3: warning: implicit declaration of function 'ElfW'
+(and more pointers to Elf names)
+
+
+busybox fails with a include of shadow.h (not present on FreeBSD)
+
+so I do have a basic gcc/uclibc toolchain for mips right now with the below
+hacky changes
+
+
+diff --git a/Makefile b/Makefile
+index 5f61b93..599e7f5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -108,9 +108,10 @@ else
+ endif
+
+ # we want bash as shell
+-SHELL:=$(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+-       else if [ -x /bin/bash ]; then echo /bin/bash; \
+-       else echo sh; fi; fi)
++SHELL:=/usr/local/bin/bash
++#$(shell if [ -x "$$BASH" ]; then echo $$BASH; \
++       #else if [ -x /bin/bash ]; then echo /bin/bash; \
++       #else echo sh; fi; fi)
+
+ # kconfig uses CONFIG_SHELL
+ CONFIG_SHELL:=$(SHELL)
+
+ # Check if we can link to ncurses
+diff --git a/toolchain/patch-kernel.sh b/toolchain/patch-kernel.sh
+index 76cb9f7..1e64d8d 100755
+--- a/toolchain/patch-kernel.sh
++++ b/toolchain/patch-kernel.sh
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#! /usr/bin/env bash
+ # A little script I whipped up to make it easy to
+ # patch source trees and have sane error handling
+ # -Erik
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
