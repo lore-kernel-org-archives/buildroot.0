@@ -1,48 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 May 2011 09:40:26 -0300
-Subject: [Buildroot] [PATCHv2 1/3] linux: bump 2.6.38 kernel to 2.6.38.6
-Message-ID: <1305117626-1506-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 May 2011 15:01:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 3703] New: Consider using /usr/bin/env bash in
+	scripts
+Message-ID: <bug-3703-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=3703
 
-diff --git a/linux/Config.in b/linux/Config.in
-index cfef5bb..ea04c7d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_2_6_38
- 
- config BR2_LINUX_KERNEL_2_6_38
--	bool "2.6.38.5"
-+	bool "2.6.38.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -52,7 +52,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "2.6.38.5"
-+	default "2.6.38.6"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "2.6.38.5" if BR2_LINUX_KERNEL_2_6_38
-+	default "2.6.38.6" if BR2_LINUX_KERNEL_2_6_38
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+           Summary: Consider using /usr/bin/env bash in scripts
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: holger+br at freyther.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+On FreeBSD bash will not be inside /bin/bash but will be in
+/usr/local/bin/bash, by using /usr/bin/env bash one can have a script that
+works well with a Linux system and FreeBSD.
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
