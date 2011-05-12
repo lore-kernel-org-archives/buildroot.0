@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 12 May 2011 17:21:06 +0200
-Subject: [Buildroot] [git commit] target/generic: only show getty port
-	option if default skeleton is used
-Message-ID: <20110512153807.1D5B4834DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt: hide shared library option if
+	BR2_PREFER_STATIC_LIB
+Message-ID: <20110512153806.E6EB0834D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +10,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d9d09db673abbedc1cc865c213b742e0450268d
+commit: http://git.buildroot.net/buildroot/commit/?id=5db57b7ac9fc8c5bd0bec6e06166443f04870a3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The special marker in etc/inittab might not be present with a custom
-skeleton. At the same time make the option always active, remove the
-hardcoded tty1/tty2 gettys and reword the option description slightly.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- fs/skeleton/etc/inittab    |    4 ----
- target/generic/Config.in   |    9 +++------
- target/generic/Makefile.in |    2 +-
- 3 files changed, 4 insertions(+), 11 deletions(-)
+ package/qt/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-index 873db29..b1e5c16 100644
---- a/fs/skeleton/etc/inittab
-+++ b/fs/skeleton/etc/inittab
-@@ -22,10 +22,6 @@ null::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
- ::sysinit:/etc/init.d/rcS
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index b223772..eafc855 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -23,12 +23,12 @@ config BR2_PACKAGE_QT_DEMOS
  
--# Set up a couple of getty's
--tty1::respawn:/sbin/getty 38400 tty1
--tty2::respawn:/sbin/getty 38400 tty2
--
- # Put a getty on the serial port
- #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
- 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index c624ba8..2d2ad44 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -12,13 +12,10 @@ config BR2_TARGET_GENERIC_ISSUE
-        help
-          Select system banner (/etc/issue) to be displayed at login.
- 
--menuconfig BR2_TARGET_GENERIC_GETTY
--	bool "Generic serial port config"
--
--if BR2_TARGET_GENERIC_GETTY
-+if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_TARGET_GENERIC_GETTY_PORT
--	string "Serial port to run a getty on"
-+	string "Port to run a getty (login prompt) on"
- 	default "ttyS0"
+ choice
+ 	prompt "Library type"
+-	default BR2_PACKAGE_QT_SHARED
  	help
- 	  Specify a port to run a getty (login prompt) on.
-@@ -52,6 +49,6 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
- 	default "57600"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600
- 	default "115200"	if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+ 	  Selects the library type: Shared or Static
  
--endif # BR2_TARGET_GENERIC_GETTY
-+endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
- endmenu
-diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index ba6e4b0..ce07ecf 100644
---- a/target/generic/Makefile.in
-+++ b/target/generic/Makefile.in
-@@ -31,7 +31,7 @@ ifneq ($(TARGET_GENERIC_ISSUE),)
- TARGETS += target-generic-issue
- endif
- 
--ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-+ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- ifeq ($(BR2_PACKAGE_SYSVINIT),y)
- TARGETS += target-generic-getty-sysvinit
- else
+ config BR2_PACKAGE_QT_SHARED
+ 	bool "Shared library"
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Create and use shared Qt libraries.
+ 	  If you have multiple programs that depend on Qt or intend to use
 -- 
 1.7.3.4
