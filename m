@@ -1,40 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 12 May 2011 17:21:06 +0200
-Subject: [Buildroot] [git commit] qt: hide shared library option if
-	BR2_PREFER_STATIC_LIB
-Message-ID: <20110512153806.E6EB0834D7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 May 2011 17:44:37 +0200
+Subject: [Buildroot] [PATCHv2 1/3] linux: bump 2.6.38 kernel to 2.6.38.6
+In-Reply-To: <1305117626-1506-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Wed, 11 May 2011 09:40:26 -0300")
+References: <1305117626-1506-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r583ly8q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5db57b7ac9fc8c5bd0bec6e06166443f04870a3a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index b223772..eafc855 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -23,12 +23,12 @@ config BR2_PACKAGE_QT_DEMOS
- 
- choice
- 	prompt "Library type"
--	default BR2_PACKAGE_QT_SHARED
- 	help
- 	  Selects the library type: Shared or Static
- 
- config BR2_PACKAGE_QT_SHARED
- 	bool "Shared library"
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Create and use shared Qt libraries.
- 	  If you have multiple programs that depend on Qt or intend to use
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
