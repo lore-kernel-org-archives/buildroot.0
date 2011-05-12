@@ -1,16 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 12 May 2011 12:49:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 3709] New: oprofile doesn't build for mipsel
-Message-ID: <bug-3709-163@https.bugs.busybox.net/>
+Date: Thu, 12 May 2011 12:50:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 3715] New: bunzip2 is forcefully selected by some
+ packages no matter if busybox already provides it
+Message-ID: <bug-3715-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3709
+https://bugs.busybox.net/show_bug.cgi?id=3715
 
-           Summary: oprofile doesn't build for mipsel
+           Summary: bunzip2 is forcefully selected by some packages no
+                    matter if busybox already provides it
            Product: buildroot
            Version: 2011.02
           Platform: PC
@@ -25,7 +27,8 @@ https://bugs.busybox.net/show_bug.cgi?id=3709
    Estimated Hours: 0.0
 
 
-oprofile doesn't recognize mipsel as an architecture.
+bunzip2 is forcefully selected by some packages no matter if busybox already
+provides it
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
