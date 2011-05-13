@@ -1,27 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 May 2011 12:05:27 +0200
-Subject: [Buildroot] [PATCH] dropbear: fix static link for version 0.53.1
-In-Reply-To: <1304253462-29820-1-git-send-email-plagnioj@jcrosoft.com>
-	(Jean-Christophe PLAGNIOL-VILLARD's message of "Sun, 1 May 2011
-	14:37:42 +0200")
-References: <1304253462-29820-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <8762pelxug.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 13 May 2011 12:04:10 +0200
+Subject: [Buildroot] [git commit] dropbear: link statically if
+	BR2_PREFER_STATIC_LIB
+Message-ID: <20110513100601.30709834D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JC" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
- JC> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
- JC> ---
- JC>  .../dropbear-0.53.1-static_build_fix.patch         |   26 ++++++++++++++++++++
+commit: http://git.buildroot.net/buildroot/commit/?id=7fec8e8b753a77f4635dfa74819bb75354b90ee1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks. Please don't forget to send patch upstream.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dropbear/dropbear.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-I've fixed dropbear to automatically link statically when
-BR2_PREFER_STATIC_LIB is enabled.
-
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index b36c278..d73e993 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -12,6 +12,10 @@ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+ 		PROGRAMS="dropbear dbclient dropbearkey dropbearconvert scp"
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++DROPBEAR_MAKE += STATIC=1
++endif
++
+ define DROPBEAR_FIX_XAUTH
+ 	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
+ endef
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
