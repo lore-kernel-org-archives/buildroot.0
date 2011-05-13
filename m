@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 May 2011 12:26:29 +0200
-Subject: [Buildroot] [PATCH] Disabled altivec optimizations for PPC CPUs
-	lacking it
-In-Reply-To: <1305231160-15062-1-git-send-email-mike@mikebwilliams.com> (Mike
-	Williams's message of "Thu, 12 May 2011 16:12:40 -0400")
-References: <1305231160-15062-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <871v02lwve.fsf@macbook.be.48ers.dk>
+Date: Fri, 13 May 2011 12:48:00 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: ffmpeg binary requires swscale
+In-Reply-To: <1305233238-324-1-git-send-email-mike@mikebwilliams.com> (Mike
+	Williams's message of "Thu, 12 May 2011 16:47:18 -0400")
+References: <1305233238-324-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <87wrhukhb3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +15,20 @@ To: buildroot@busybox.net
 
  Mike> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
  Mike> ---
- Mike>  package/multimedia/ffmpeg/ffmpeg.mk |    8 ++++++++
- Mike>  1 files changed, 8 insertions(+), 0 deletions(-)
+ Mike>  package/multimedia/ffmpeg/Config.in |    1 +
+ Mike>  1 files changed, 1 insertions(+), 0 deletions(-)
 
- Mike> diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
- Mike> index 1e8f09a..e58add4 100644
- Mike> --- a/package/multimedia/ffmpeg/ffmpeg.mk
- Mike> +++ b/package/multimedia/ffmpeg/ffmpeg.mk
- Mike> @@ -142,6 +142,14 @@ endif
- Mike>  ifeq ($(BR2_cortex_a8),y)
- Mike>  FFMPEG_CONF_OPT += --enable-neon
- Mike>  endif
- Mike> +#Set powerpc altivec appropriately
- Mike> +ifeq ($(BR2_powerpc),y)
- Mike> +ifneq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),)
+ Mike> diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
+ Mike> index 7a9513c..d11233e 100644
+ Mike> --- a/package/multimedia/ffmpeg/Config.in
+ Mike> +++ b/package/multimedia/ffmpeg/Config.in
+ Mike> @@ -27,6 +27,7 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+ 
+ Mike>  config BR2_PACKAGE_FFMPEG_FFMPEG
+ Mike>  	bool "Build ffmpeg (the command line application)"
+ Mike> +	select BR2_PACKAGE_FFMPEG_SWSCALE
 
-If prefer to use positive logic, E.G. ifeq (...,y) - Committed with that
-change, thanks.
+Really? It seems to build OK without it here.
 
 -- 
 Bye, Peter Korsgaard
