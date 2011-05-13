@@ -1,34 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 May 2011 12:48:00 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: ffmpeg binary requires swscale
-In-Reply-To: <1305233238-324-1-git-send-email-mike@mikebwilliams.com> (Mike
-	Williams's message of "Thu, 12 May 2011 16:47:18 -0400")
-References: <1305233238-324-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <87wrhukhb3.fsf@macbook.be.48ers.dk>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri, 13 May 2011 08:54:05 -0400
+Subject: [Buildroot] [PATCH] ffmpeg: Version bump to 0.6.3
+Message-ID: <1305291245-15480-1-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Williams <mike@mikebwilliams.com> writes:
+---
+ package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Mike> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
- Mike> ---
- Mike>  package/multimedia/ffmpeg/Config.in |    1 +
- Mike>  1 files changed, 1 insertions(+), 0 deletions(-)
-
- Mike> diff --git a/package/multimedia/ffmpeg/Config.in b/package/multimedia/ffmpeg/Config.in
- Mike> index 7a9513c..d11233e 100644
- Mike> --- a/package/multimedia/ffmpeg/Config.in
- Mike> +++ b/package/multimedia/ffmpeg/Config.in
- Mike> @@ -27,6 +27,7 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index e58add4..ec90e1b 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- Mike>  config BR2_PACKAGE_FFMPEG_FFMPEG
- Mike>  	bool "Build ffmpeg (the command line application)"
- Mike> +	select BR2_PACKAGE_FFMPEG_SWSCALE
-
-Really? It seems to build OK without it here.
-
+-FFMPEG_VERSION = 0.6.1
++FFMPEG_VERSION = 0.6.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
