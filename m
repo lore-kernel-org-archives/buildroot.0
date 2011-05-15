@@ -1,29 +1,33 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Mauduit?= <benoit.mauduit@gmail.com>
-Date: Sun, 15 May 2011 10:50:49 +0200
-Subject: [Buildroot] [PATCH] oprofile: Bump to version 0.9.6
-Message-ID: <1305449449-5651-1-git-send-email-benoit.mauduit@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 May 2011 22:00:14 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/remove-dead-code
+Message-ID: <cover.1305489609.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/oprofile/oprofile.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+The following changes since commit 5c88d720f99ce6374a2a9b6afcb93ff627f464fa:
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 42bf0e2..4522cda 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -3,7 +3,7 @@
- # oprofile
- #
- #############################################################
--OPROFILE_VERSION := 0.9.4
-+OPROFILE_VERSION := 0.9.6
- OPROFILE_CONF_OPT :=	--localstatedir=/var \
- 			--with-kernel-support
- 
+  Merge branch 'for-2011.05/new-codesourcery-toolchain' of http://free-electrons.com/~thomas/buildroot (2011-05-13 15:30:37 +0200)
+
+are available in the git repository at:
+
+  http://free-electrons.com/~thomas/buildroot.git for-2011.05/remove-dead-code
+
+Thomas Petazzoni (2):
+      uClibc: remove AVR32 patches for 0.9.29
+      gcc: remove references to arm-softfloat.patch.conditional
+
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |   13 -
+ toolchain/uClibc/uClibc-0.9.29-arch.patch.avr32    | 3546 --------------------
+ .../uClibc-0.9.29-fix-sa_onstack.patch.avr32       |   31 -
+ 3 files changed, 0 insertions(+), 3590 deletions(-)
+ delete mode 100644 toolchain/uClibc/uClibc-0.9.29-arch.patch.avr32
+ delete mode 100644 toolchain/uClibc/uClibc-0.9.29-fix-sa_onstack.patch.avr32
+
+Thanks,
 -- 
-1.7.5.1
+Thomas Petazzoni
