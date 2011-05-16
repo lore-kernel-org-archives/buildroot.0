@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 16 May 2011 10:13:19 +0200
-Subject: [Buildroot] [git commit] haserl: remove 0.8.0 install workaround
-Message-ID: <20110516081400.8AF8383511@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] haserl: fix lua support after 0.9.29 bump
+Message-ID: <20110516081400.6964883511@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,181 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efce5be9af5c026bb1136cb2876c36edaaaba49a
+commit: http://git.buildroot.net/buildroot/commit/?id=91b2ec27a7b06c603f7c2f1bce3e7f422fb6b776
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Not needed anymore as stripping is handled on a global level.
+haserl no longer ships haserl_lualib.inc so our lua2c hack didn't work
+anymore.
+
+Fix is by adding a patch to re-add it and move the Makefile.in changes
+to here rather than with sed.
+
+Longer term we should probably add host-lua support instead.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/haserl/haserl.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ .../haserl-0.9.29-add-haserl_lualib.inc.patch      |  136 ++++++++++++++++++++
+ package/haserl/haserl.mk                           |    8 -
+ 2 files changed, 136 insertions(+), 8 deletions(-)
+ create mode 100644 package/haserl/haserl-0.9.29/haserl-0.9.29-add-haserl_lualib.inc.patch
 
+diff --git a/package/haserl/haserl-0.9.29/haserl-0.9.29-add-haserl_lualib.inc.patch b/package/haserl/haserl-0.9.29/haserl-0.9.29-add-haserl_lualib.inc.patch
+new file mode 100644
+index 0000000..2870b8b
+--- /dev/null
++++ b/package/haserl/haserl-0.9.29/haserl-0.9.29-add-haserl_lualib.inc.patch
+@@ -0,0 +1,136 @@
++[HACK] add preprocessed lualib file so host-lua isn't needed
++
++Haserl no longer ships with haserl_lualib.inc, causing lua2c (which needs
++host-lua support) to be built to generate it.
++
++Re-add .inc file from 0.9.28 so we don't need host-lua.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ src/Makefile.in       |    3 -
++ src/haserl_lualib.inc |   97 ++++++++++++++++++++++++++++++++++++++++++++++++++
++ 2 files changed, 98 insertions(+), 2 deletions(-)
++
++Index: haserl-0.9.29/src/haserl_lualib.inc
++===================================================================
++--- /dev/null
+++++ haserl-0.9.29/src/haserl_lualib.inc
++@@ -0,0 +1,97 @@
+++/* This file was automatically generated from haserl_lualib.lua. DO NOT EDIT */
+++
+++static const unsigned char haserl_lualib[] = { 
+++   27, 76,117, 97, 81,  0,  1,  4,  4,  4,  8,  0, 19,  0,  0,  0,
+++   64,104, 97,115,101,114,108, 95,108,117, 97,108,105, 98, 46,108,
+++  117, 97,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  2,  7, 24,
+++    0,  0,  0, 10,  0,  0,  0, 74,  0,  0,  0,138,  0,  0,  0,202,
+++    0,  0,  0, 10,  1,  0,  0, 74,  1,  0,  0,138,  1,  0,  0,135,
+++  129,  1,  0, 71, 65,  1,  0,  7,  1,  1,  0,199,192,  0,  0,135,
+++  128,  0,  0, 71, 64,  0,  0,  7,  0,  0,  0,  5,  0,  0,  0,100,
+++    0,  0,  0,  9, 64,128,131,  5,  0,  0,  0,100, 64,  0,  0,  9,
+++   64,  0,132,  5,  0,  0,  0,100,128,  0,  0,  9, 64,128,132, 30,
+++    0,128,  0, 10,  0,  0,  0,  4,  7,  0,  0,  0,104, 97,115,101,
+++  114,108,  0,  4,  5,  0,  0,  0, 70, 79, 82, 77,  0,  4,  4,  0,
+++    0,  0, 69, 78, 86,  0,  4,  7,  0,  0,  0, 67, 79, 79, 75, 73,
+++   69,  0,  4,  7,  0,  0,  0, 72, 65, 83, 69, 82, 76,  0,  4,  4,
+++    0,  0,  0, 71, 69, 84,  0,  4,  5,  0,  0,  0, 80, 79, 83, 84,
+++    0,  4,  9,  0,  0,  0,115,101,116,102,105,101,108,100,  0,  4,
+++    9,  0,  0,  0,103,101,116,102,105,101,108,100,  0,  4,  9,  0,
+++    0,  0,109,121,112,117,116,101,110,118,  0,  3,  0,  0,  0,  0,
+++    0,  0,  0, 22,  0,  0,  0, 36,  0,  0,  0,  0,  2,  0, 10, 29,
+++    0,  0,  0,133,  0,  0,  0,197, 64,  0,  0,198,128,192,  1,  0,
+++    1,  0,  0, 65,193,  0,  0,220,  0,129,  1, 22,128,  4,128,  5,
+++    2,  1,  0, 64,  2,  0,  3, 28,130,  0,  1, 26,  2,  0,  0, 22,
+++  192,  0,128,  5,  2,  1,  0, 64,  2,  0,  3, 28,130,  0,  1,128,
+++    1,  0,  4, 23, 64,193,  3, 22,128,  1,128,  6,130,  1,  1, 26,
+++   66,  0,  0, 22,  0,  0,128, 10,  2,  0,  0,137,  0,  2,  3,134,
+++  128,  1,  1, 22,  0,  0,128,137, 64,  0,  3,225,128,  0,  0, 22,
+++  128,250,127, 30,  0,128,  0,  6,  0,  0,  0,  4,  3,  0,  0,  0,
+++   95, 71,  0,  4,  7,  0,  0,  0,115,116,114,105,110,103,  0,  4,
+++    6,  0,  0,  0,103,102,105,110,100,  0,  4, 15,  0,  0,  0, 40,
+++   91, 37,119, 95, 37, 45, 93, 43, 41, 40, 46, 63, 41,  0,  4,  9,
+++    0,  0,  0,116,111,110,117,109, 98,101,114,  0,  4,  2,  0,  0,
+++    0, 46,  0,  0,  0,  0,  0, 29,  0,  0,  0, 24,  0,  0,  0, 25,
+++    0,  0,  0, 25,  0,  0,  0, 25,  0,  0,  0, 25,  0,  0,  0, 25,
+++    0,  0,  0, 25,  0,  0,  0, 26,  0,  0,  0, 26,  0,  0,  0, 26,
+++    0,  0,  0, 26,  0,  0,  0, 26,  0,  0,  0, 27,  0,  0,  0, 27,
+++    0,  0,  0, 27,  0,  0,  0, 27,  0,  0,  0, 29,  0,  0,  0, 29,
+++    0,  0,  0, 30,  0,  0,  0, 30,  0,  0,  0, 30,  0,  0,  0, 30,
+++    0,  0,  0, 30,  0,  0,  0, 31,  0,  0,  0, 31,  0,  0,  0, 33,
+++    0,  0,  0, 25,  0,  0,  0, 34,  0,  0,  0, 36,  0,  0,  0,  8,
+++    0,  0,  0,  2,  0,  0,  0,102,  0,  0,  0,  0,  0, 28,  0,  0,
+++    0,  2,  0,  0,  0,118,  0,  0,  0,  0,  0, 28,  0,  0,  0,  2,
+++    0,  0,  0,116,  0,  1,  0,  0,  0, 28,  0,  0,  0, 16,  0,  0,
+++    0, 40,102,111,114, 32,103,101,110,101,114, 97,116,111,114, 41,
+++    0,  6,  0,  0,  0, 28,  0,  0,  0, 12,  0,  0,  0, 40,102,111,
+++  114, 32,115,116, 97,116,101, 41,  0,  6,  0,  0,  0, 28,  0,  0,
+++    0, 14,  0,  0,  0, 40,102,111,114, 32, 99,111,110,116,114,111,
+++  108, 41,  0,  6,  0,  0,  0, 28,  0,  0,  0,  2,  0,  0,  0,119,
+++    0,  7,  0,  0,  0, 26,  0,  0,  0,  2,  0,  0,  0,100,  0,  7,
+++    0,  0,  0, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 38,
+++    0,  0,  0, 44,  0,  0,  0,  0,  1,  0,  8, 12,  0,  0,  0, 69,
+++    0,  0,  0,133, 64,  0,  0,134,128, 64,  1,192,  0,  0,  0,  1,
+++  193,  0,  0,156,  0,129,  1, 22,  0,  0,128, 70, 64,129,  0,161,
+++   64,  0,  0, 22,  0,255,127, 94,  0,  0,  1, 30,  0,128,  0,  4,
+++    0,  0,  0,  4,  3,  0,  0,  0, 95, 71,  0,  4,  7,  0,  0,  0,
+++  115,116,114,105,110,103,  0,  4,  6,  0,  0,  0,103,102,105,110,
+++  100,  0,  4,  7,  0,  0,  0, 91, 37,119, 95, 93, 43,  0,  0,  0,
+++    0,  0, 12,  0,  0,  0, 39,  0,  0,  0, 40,  0,  0,  0, 40,  0,
+++    0,  0, 40,  0,  0,  0, 40,  0,  0,  0, 40,  0,  0,  0, 40,  0,
+++    0,  0, 41,  0,  0,  0, 40,  0,  0,  0, 41,  0,  0,  0, 43,  0,
+++    0,  0, 44,  0,  0,  0,  6,  0,  0,  0,  2,  0,  0,  0,102,  0,
+++    0,  0,  0,  0, 11,  0,  0,  0,  2,  0,  0,  0,118,  0,  1,  0,
+++    0,  0, 11,  0,  0,  0, 16,  0,  0,  0, 40,102,111,114, 32,103,
+++  101,110,101,114, 97,116,111,114, 41,  0,  6,  0,  0,  0, 10,  0,
+++    0,  0, 12,  0,  0,  0, 40,102,111,114, 32,115,116, 97,116,101,
+++   41,  0,  6,  0,  0,  0, 10,  0,  0,  0, 14,  0,  0,  0, 40,102,
+++  111,114, 32, 99,111,110,116,114,111,108, 41,  0,  6,  0,  0,  0,
+++   10,  0,  0,  0,  2,  0,  0,  0,119,  0,  7,  0,  0,  0,  8,  0,
+++    0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 46,  0,  0,  0, 52,  0,
+++    0,  0,  0,  2,  0,  6, 20,  0,  0,  0,133,  0,  0,  0,134, 64,
+++   64,  1,192,  0,  0,  0,  1,129,  0,  0, 65,193,  0,  0,156,128,
+++    0,  2,  0,  0,  0,  1,133,  0,  0,  0,134, 64, 64,  1,192,  0,
+++    0,  0,  1,  1,  1,  0, 65,193,  0,  0,156,128,  0,  2,  0,  0,
+++    0,  1,133, 64,  1,  0,134,128, 65,  1,192,  0,  0,  0,  0,  1,
+++  128,  0,156, 64,128,  1, 30,  0,128,  0,  7,  0,  0,  0,  4,  7,
+++    0,  0,  0,115,116,114,105,110,103,  0,  4,  5,  0,  0,  0,103,
+++  115,117, 98,  0,  4,  7,  0,  0,  0, 91, 92, 93, 92, 91, 93,  0,
+++    4,  2,  0,  0,  0, 46,  0,  4,  6,  0,  0,  0, 91, 92, 46, 93,
+++   43,  0,  4,  7,  0,  0,  0,104, 97,115,101,114,108,  0,  4,  9,
+++    0,  0,  0,115,101,116,102,105,101,108,100,  0,  0,  0,  0,  0,
+++   20,  0,  0,  0, 48,  0,  0,  0, 48,  0,  0,  0, 48,  0,  0,  0,
+++   48,  0,  0,  0, 48,  0,  0,  0, 48,  0,  0,  0, 48,  0,  0,  0,
+++   49,  0,  0,  0, 49,  0,  0,  0, 49,  0,  0,  0, 49,  0,  0,  0,
+++   49,  0,  0,  0, 49,  0,  0,  0, 49,  0,  0,  0, 51,  0,  0,  0,
+++   51,  0,  0,  0, 51,  0,  0,  0, 51,  0,  0,  0, 51,  0,  0,  0,
+++   52,  0,  0,  0,  2,  0,  0,  0,  4,  0,  0,  0,107,101,121,  0,
+++    0,  0,  0,  0, 19,  0,  0,  0,  6,  0,  0,  0,118, 97,108,117,
+++  101,  0,  0,  0,  0,  0, 19,  0,  0,  0,  0,  0,  0,  0, 24,  0,
+++    0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,
+++    0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,
+++    0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 20,  0,
+++    0,  0, 20,  0,  0,  0, 20,  0,  0,  0, 22,  0,  0,  0, 36,  0,
+++    0,  0, 22,  0,  0,  0, 38,  0,  0,  0, 44,  0,  0,  0, 38,  0,
+++    0,  0, 46,  0,  0,  0, 52,  0,  0,  0, 46,  0,  0,  0, 52,  0,
+++    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+++};
++Index: haserl-0.9.29/src/Makefile.in
++===================================================================
++--- haserl-0.9.29.orig/src/Makefile.in
+++++ haserl-0.9.29/src/Makefile.in
++@@ -32,7 +32,6 @@
++ NORMAL_UNINSTALL = :
++ PRE_UNINSTALL = :
++ POST_UNINSTALL = :
++- at USE_LUA_TRUE@noinst_PROGRAMS = lua2c$(EXEEXT)
++ @INCLUDE_LUASHELL_TRUE@@USE_LUA_TRUE at am__append_1 = h_lua.c h_lua.h
++ @INCLUDE_LUACSHELL_TRUE@@USE_LUA_TRUE at am__append_2 = h_luac.c h_luac.h
++ bin_PROGRAMS = haserl$(EXEEXT)
++@@ -515,7 +514,7 @@
++ @USE_LUA_TRUE@	$(CC_FOR_BUILD) $(CFLAGS) $(LDFLAGS) $(lua2c_LDFLAGS) \
++ @USE_LUA_TRUE@		-o $@ $^ $(LIBS)
++ 
++- at USE_LUA_TRUE@haserl_lualib.inc : haserl_lualib.lua lua2c
+++ at USE_LUA_TRUE@haserl_lualib.inc :
++ @USE_LUA_TRUE@	if ! ./lua2c haserl_lualib haserl_lualib.lua >$@; then \
++ @USE_LUA_TRUE@		rm $@; \
++ @USE_LUA_TRUE@		exit 1 ;\
 diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index ff3c924..605cbfc 100644
+index c62b344..ff3c924 100644
 --- a/package/haserl/haserl.mk
 +++ b/package/haserl/haserl.mk
-@@ -7,9 +7,6 @@
- HASERL_VERSION = $(call qstrip,$(BR2_PACKAGE_HASERL_VERSION))
- HASERL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/haserl/
+@@ -10,14 +10,6 @@ HASERL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ha
+ # force haserl 0.8.0 to use install-sh so stripping works
+ HASERL_CONF_ENV = ac_cv_path_install=./install-sh
  
--# force haserl 0.8.0 to use install-sh so stripping works
--HASERL_CONF_ENV = ac_cv_path_install=./install-sh
+-# lua2c is only needed when haserl_lualib.inc is older than haserl_lualib.lua
+-# So avoid having a host-lua just for this
+-define HASERL_NO_LUA2C
+-	$(SED) 's/haserl_lualib.lua lua2c/haserl_lualib.lua/' \
+-		$(@D)/src/Makefile.in
+-endef
+-HASERL_POST_EXTRACT_HOOKS += HASERL_NO_LUA2C
 -
  ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
  	HASERL_CONF_OPT += --with-lua=$(STAGING_DIR) \
