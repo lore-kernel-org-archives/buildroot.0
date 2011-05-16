@@ -1,125 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2011 22:22:07 +0200
-Subject: [Buildroot] [PATCH 15/21] grub2: remove package
+Date: Mon, 16 May 2011 22:22:06 +0200
+Subject: [Buildroot] [PATCH 14/21] grub: convert to AUTOTARGETS
 In-Reply-To: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ca3e8c6ca2a13ae6b39ceefb4ffeca0b25f5cc88.1305577083.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7a5cd0fa4d0281e9fb8842ce85105cb5d1b7cba5.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grub 2 has been marked BROKEN in June 2010, and nobody cared to fix it
-since then.
-
-At that time, it was marked broken because the build process needed a
-Ruby interpreter available on the host, and it's really a pain that
-building a bootloader needs such a thing.
-
-I've tried to upgrade the package to Grub2 1.99-rcX, and now it does
-not need a Ruby interpreter anymore, but instead requires a tool
-called "autogen", which itself needs the Guile Scheme interpreter.
-
-Since we haven't heard any complaints about Grub2 being marked broken,
-and since it's such a pain to package, let's get rid of it. Of course,
-anybody interested in Grub2 is invited to contribute a working
-package.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/Config.in       |    1 -
- boot/grub2/Config.in |    9 -----
- boot/grub2/grub2.mk  |   93 --------------------------------------------------
- 3 files changed, 0 insertions(+), 103 deletions(-)
- delete mode 100644 boot/grub2/Config.in
- delete mode 100644 boot/grub2/grub2.mk
+ boot/grub/grub.500-build-fix.patch |   14 +++++
+ boot/grub/grub.mk                  |  102 ++++++++++++++----------------------
+ 2 files changed, 53 insertions(+), 63 deletions(-)
+ create mode 100644 boot/grub/grub.500-build-fix.patch
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 6bcc98a..67ab8ac 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -2,7 +2,6 @@ menu "Bootloaders"
+diff --git a/boot/grub/grub.500-build-fix.patch b/boot/grub/grub.500-build-fix.patch
+new file mode 100644
+index 0000000..b096b7b
+--- /dev/null
++++ b/boot/grub/grub.500-build-fix.patch
+@@ -0,0 +1,14 @@
++--- grub-0.97.orig/netboot/main.c       2004-05-21 00:19:33.000000000 +0200
+++++ grub-0.97/netboot/main.c    2007-07-20 02:31:28.000000000 +0200
++@@ -54,9 +54,9 @@
++ 
++ static int vendorext_isvalid;
++ static unsigned long netmask;
++-static struct bootpd_t bootp_data;
+++struct bootpd_t bootp_data;
++ static unsigned long xid;
++-static unsigned char *end_of_rfc1533 = NULL;
+++unsigned char *end_of_rfc1533 = NULL;
++
++ #ifndef        NO_DHCP_SUPPORT
++ #endif /* NO_DHCP_SUPPORT */
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 9461d1c..4938416 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -3,23 +3,17 @@
+ # grub
+ #
+ #############################################################
+-GRUB_SOURCE:=grub_0.97.orig.tar.gz
+-GRUB_PATCH:=grub_0.97-35.diff.gz
+-GRUB_SITE:=http://snapshot.debian.org/archive/debian/20080329T000000Z/pool/main/g/grub/
+-GRUB_PATCH_SITE:=$(GRUB_SITE)
+-GRUB_CAT:=$(ZCAT)
+-GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+-GRUB_BINARY:=grub/grub
+-GRUB_TARGET_BINARY:=sbin/grub
+-GRUB_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
  
- source "boot/barebox/Config.in"
- source "boot/grub/Config.in"
--source "boot/grub2/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/u-boot/Config.in"
- source "boot/at91bootstrap/Config.in"
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-deleted file mode 100644
-index 1301b5b..0000000
---- a/boot/grub2/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_TARGET_GRUB2
--	bool "grub2"
--	# Only supports PC, Mac (Power, x86 and x86-64), Pegasos
--	depends on BR2_i386 || BR2_powerpc
--	# Build process is broken (./configure doesn't work, Ruby
--	# required, etc.)
--	depends on BROKEN
--	help
--	  The GRand Unified Bootloader for x86 systems, take #2.
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-deleted file mode 100644
-index f939d9a..0000000
---- a/boot/grub2/grub2.mk
-+++ /dev/null
-@@ -1,93 +0,0 @@
--#############################################################
--#
--# grub2
--#
--# TODO
--#
--#  * grub2's autogen uses ruby, which isn't part of the core Debian
--#    installation. So either decide it is a requirement for Buildroot,
--#    or build it for the host.
--#
--#  * improve the installation procedure. For the moment, it just
--#    installs everything in $(TARGET_DIR).
--#
--#############################################################
--GRUB2_SOURCE:=grub2_1.98.orig.tar.gz
--GRUB2_PATCH:=grub2_1.98-1.diff.gz
--GRUB2_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub2
--GRUB2_PATCH_SITE:=$(GRUB2_SITE)
--GRUB2_CAT:=$(ZCAT)
--GRUB2_DIR:=$(BUILD_DIR)/grub-1.98
++GRUB_VERSION = 0.97
++GRUB_SOURCE = grub_$(GRUB_VERSION).orig.tar.gz
++GRUB_PATCH  = grub_$(GRUB_VERSION)-35.diff.gz
++GRUB_SITE   = http://snapshot.debian.org/archive/debian/20080329T000000Z/pool/main/g/grub/
+ 
+ GRUB_CFLAGS=-DSUPPORT_LOOPDEV
+ ifeq ($(BR2_LARGEFILE),)
+ GRUB_CFLAGS+=-U_FILE_OFFSET_BITS
+ endif
+ 
 -
--GRUB2_CFLAGS=-DSUPPORT_LOOPDEV
--ifeq ($(BR2_LARGEFILE),)
--GRUB2_CFLAGS+=-U_FILE_OFFSET_BITS
--endif
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_SPLASH) += --enable-graphics
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_DISKLESS) += --enable-diskless
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_3c595) += --enable-3c595
+@@ -44,69 +38,51 @@ GRUB_CONFIG-$(BR2_TARGET_GRUB_undi) += --enable-undi
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_via_rhine) += --enable-via-rhine
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_w89c840) += --enable-w89c840
+ 
+-$(DL_DIR)/$(GRUB_SOURCE):
+-	 $(call DOWNLOAD,$(GRUB_SITE),$(GRUB_SOURCE))
 -
--$(DL_DIR)/$(GRUB2_SOURCE):
--	 $(call DOWNLOAD,$(GRUB2_SITE),$(GRUB2_SOURCE))
--
--$(DL_DIR)/$(GRUB2_PATCH):
--	 $(call DOWNLOAD,$(GRUB2_PATCH_SITE),$(GRUB2_PATCH))
--
--grub2-source: $(DL_DIR)/$(GRUB2_SOURCE) $(DL_DIR)/$(GRUB2_PATCH)
--
--$(GRUB2_DIR)/.unpacked: $(DL_DIR)/$(GRUB2_SOURCE) $(DL_DIR)/$(GRUB2_PATCH)
--	mkdir -p $(@D)
--	$(GRUB2_CAT) $(DL_DIR)/$(GRUB2_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) -xvf -
--	toolchain/patch-kernel.sh $(@D) $(DL_DIR) $(GRUB2_PATCH)
--	for i in `grep -v "^#" $(@D)/debian/patches/00list`; do \
--		cat $(@D)/debian/patches/$$i | patch -p1 -d $(@D); \
+-$(DL_DIR)/$(GRUB_PATCH):
+-	 $(call DOWNLOAD,$(GRUB_PATCH_SITE),$(GRUB_PATCH))
++define GRUB_DEBIAN_PATCHES
++	# Apply the patches from the Debian patch
++	(cd $(@D) ; for f in `cat debian/patches/00list | grep -v ^#` ; do \
++		cat debian/patches/$$f | patch -p1 ; \
++	done)
++endef
+ 
+-grub-source: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
++GRUB_POST_PATCH_HOOKS += GRUB_DEBIAN_PATCHES
+ 
+-$(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
+-	$(GRUB_CAT) $(DL_DIR)/$(GRUB_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(GRUB_DIR) $(DL_DIR) $(GRUB_PATCH)
+-	for i in `grep -v "^#" $(GRUB_DIR)/debian/patches/00list`; do \
+-		cat $(GRUB_DIR)/debian/patches/$$i | patch -p1 -d $(GRUB_DIR); \
 -	done
--	toolchain/patch-kernel.sh $(@D) boot/grub2 grub-\*.patch
+-	toolchain/patch-kernel.sh $(GRUB_DIR) boot/grub grub.\*.patch{,.bz2}
 -	touch $@
--
--$(GRUB2_DIR)/.configured: $(GRUB2_DIR)/.unpacked
--	(cd $(GRUB2_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) ; \
--		./autogen.sh ; \
++GRUB_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) $(GRUB_CFLAGS)"
+ 
+-$(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
+-	(cd $(GRUB_DIR); rm -rf config.cache; \
 -		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CPPFLAGS="$(GRUB2_CFLAGS)" \
--		grub_cv_i386_check_nested_functions=no \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		CPPFLAGS="$(GRUB_CFLAGS)" \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
@@ -127,39 +111,68 @@ index f939d9a..0000000
 -		--prefix=/ \
 -		--mandir=/usr/man \
 -		--infodir=/usr/info \
--		--disable-grub-mkfont \
--		--disable-grub-fstest \
--		--disable-grub-emu-usb \
--		--disable-werror \
--		$(DISABLE_LARGEFILE) \
--		$(GRUB2_CONFIG-y) \
+-		--disable-auto-linux-mem-opt \
+-		$(GRUB_CONFIG-y) \
 -	)
 -	touch $@
--
--$(GRUB2_DIR)/.compiled: $(GRUB2_DIR)/.configured
--	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
++GRUB_CONF_OPT = \
++	--disable-auto-linux-mem-opt \
++	$(GRUB_CONFIG-y)
+ 
+-$(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(GRUB_DIR)
+-	rm -f $(GRUB_DIR)/$(GRUB_BINARY)
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS+=-static -C $(GRUB_DIR)/grub grub
+-	mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
+-	mv $(GRUB_DIR)/$(GRUB_BINARY) $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
+-	$(MAKE) CC="$(TARGET_CC)" -C $(GRUB_DIR)/grub
++define GRUB_INSTALL_STAGING_CMDS
++	install -m 0755 -D $(@D)/grub/grub $(STAGING_DIR)/sbin/grub
++endef
+ 
+-$(GRUB_DIR)/.installed: $(GRUB_DIR)/$(GRUB_BINARY)
+-	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/$(GRUB_TARGET_BINARY)
+-	test -d $(TARGET_DIR)/boot/grub || mkdir -p $(TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage1/stage1 $(GRUB_DIR)/stage2/*1_5 $(GRUB_DIR)/stage2/stage2 $(TARGET_DIR)/boot/grub/
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+-	test -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) || \
+-		cp $(GRUB_SPLASHIMAGE) $(TARGET_DIR)/boot/grub/
++define GRUB_INSTALL_SPLASH
++	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
++endef
+ endif
 -	touch $@
--
--$(GRUB2_DIR)/.installed: $(GRUB2_DIR)/.compiled
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
--	touch $@
--
--grub2: host-automake host-autoconf $(GRUB2_DIR)/.installed
--
--grub2-clean:
--	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(GRUB2_DIR) uninstall
--	-$(MAKE) -C $(GRUB2_DIR) clean
--
--grub2-dirclean:
--	rm -rf $(GRUB2_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_TARGET_GRUB2),y)
--TARGETS+=grub2
--endif
+ 
+-grub: $(GRUB_DIR)/.installed
++define GRUB_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/grub/grub $(TARGET_DIR)/sbin/grub
++	mkdir -p $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage1/stage1 $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage2/*1_5   $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage2/stage2 $(TARGET_DIR)/boot/grub
++	$(GRUB_INSTALL_SPLASH)
++endef
++
++define GRUB_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/sbin/grub
++endef
+ 
+-grub-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(GRUB_DIR) uninstall
+-	-$(MAKE) -C $(GRUB_DIR) clean
+-	rm -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) \
+-		$(TARGET_DIR)/sbin/$(GRUB_BINARY) \
+-		$(TARGET_DIR)/boot/grub/{stage{1,2},*1_5}
++define GRUB_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/sbin/grub
++	rm -rf $(TARGET_DIR)/boot/grub
++endef
+ 
+-grub-dirclean:
+-	rm -rf $(GRUB_DIR)
++$(eval $(call AUTOTARGETS,boot,grub))
+ 
+ #############################################################
+ #
 -- 
 1.7.1
