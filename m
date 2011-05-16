@@ -1,43 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2011 22:21:59 +0200
-Subject: [Buildroot] [PATCH 07/21] barebox: use = instead of := and re-indent
+Date: Mon, 16 May 2011 22:22:04 +0200
+Subject: [Buildroot] [PATCH 12/21] at91dataflashboot: convert to GENTARGETS
 In-Reply-To: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f4e9fa6d2b9cad9c0f45c302d3a62f56bf41639e.1305577083.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4ac0a4657f818d329c205972a377abd672070048.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit converts the at91dataflashboot bootloader build process to
+GENTARGETS. It also does the following changes :
+
+ * As the package directory name is at91dataflashboot, the
+   configuration options and make variables are renamed to
+   AT91DATAFLASHBOOT instead of DATAFLASHBOOT.
+
+ * Since the board selection in Kconfig wasn't used anywhere, get rid
+   of it. at91dataflashboot is only for AT91RM9200 apparently anyway.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/barebox.mk |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ boot/at91dataflashboot/Config.in            |   24 +--------------
+ boot/at91dataflashboot/at91dataflashboot.mk |   44 ++++++++------------------
+ 2 files changed, 15 insertions(+), 53 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7a2e02e..5a4f36a 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -4,12 +4,13 @@
+diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
+index 25b9723..88cd058 100644
+--- a/boot/at91dataflashboot/Config.in
++++ b/boot/at91dataflashboot/Config.in
+@@ -1,25 +1,3 @@
+-menuconfig BR2_TARGET_DATAFLASHBOOT
++menuconfig BR2_TARGET_AT91DATAFLASHBOOT
+        depends on BR2_arm
+        bool "AT91 DataFlashBoot"
+-
+-if BR2_TARGET_DATAFLASHBOOT
+-
+-choice
+-	prompt "Target Architecture"
+-	default BR2_TARGET_DATAFLASHBOOT_AT91RM9200
+-	help
+-	  Select Chip for which Dataflash boot should be built
+-	  Currently only AT91RM9200 Supported
+-
+-config BR2_TARGET_DATAFLASHBOOT_AT91RM9200
+-	bool "AT91RM9200"
+-
+-config BR2_TARGET_DATAFLASHBOOT_AT91SAM9261
+-	bool "AT91SAM9261"
+-
+-config BR2_TARGET_DATAFLASHBOOT_AT91SAM9261S
+-	bool "AT91SAM9261S"
+-
+-endchoice
+-
+-endif # BR2_TARGET_DATAFLASHBOOT
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index f6e9b67..d27e9f3 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -3,44 +3,28 @@
+ # DataFlashBoot
  #
  #############################################################
+-DATAFLASHBOOT_VERSION = 1.05
+-DATAFLASHBOOT_NAME    = DataflashBoot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
+-DATAFLASHBOOT_SOURCE  = $(DATAFLASHBOOT_NAME).tar.bz2
+-DATAFLASHBOOT_DIR     = $(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_BINARY  = $(DATAFLASHBOOT_NAME).bin
++AT91DATAFLASHBOOT_VERSION = 1.05
++AT91DATAFLASHBOOT_SOURCE  = DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).tar.bz2
++AT91DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
  
--BAREBOX_VERSION:=2011.04.0
--BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
--BAREBOX_SITE:=http://www.barebox.org/download/
--BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
--BAREBOX_CAT:=$(BZCAT)
--BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
-+BAREBOX_VERSION = 2011.04.0
-+BAREBOX_SOURCE  = barebox-$(BAREBOX_VERSION).tar.bz2
-+BAREBOX_SITE    = http://www.barebox.org/download/
-+BAREBOX_DIR     = $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
-+BAREBOX_CAT     = $(BZCAT)
-+
-+BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
+-$(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
+-	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
++AT91DATAFLASHBOOT_INSTALL_TARGET = NO
++AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
  
- ifeq ($(KERNEL_ARCH),i386)
- BAREBOX_ARCH=x86
+-$(DATAFLASHBOOT_DIR)/.unpacked: $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
+-	mkdir -p $(@D)
+-	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	touch $@
++define AT91DATAFLASHBOOT_BUILD_CMDS
++	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS)
++endef
+ 
+-$(DATAFLASHBOOT_DIR)/.patched: $(DATAFLASHBOOT_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(@D) boot/at91dataflashboot \
+-		at91dataflashboot-$(DATAFLASHBOOT_VERSION)-\*.patch
+-	touch $@
++define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
++	cp $(@D)/DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).bin $(BINARIES_DIR)
++endef
+ 
+-$(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.patched
+-	ls $(DATAFLASHBOOT_DIR)/.unpacked
+-	make -C $(DATAFLASHBOOT_DIR) CROSS_COMPILE=$(TARGET_CROSS)
+-
+-dataflashboot-clean:
+-	make -C $(DATAFLASHBOOT_DIR) clean
+-
+-dataflashboot-dirclean:
+-	rm -rf $(DATAFLASHBOOT_DIR)
+-
+-dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
+-	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY) $(BINARIES_DIR)
++$(eval $(call GENTARGETS,boot,at91dataflashboot))
+ 
+ #############################################################
+ #
+ # Toplevel Makefile options
+ #
+ #############################################################
+-ifeq ($(BR2_TARGET_DATAFLASHBOOT),y)
+-TARGETS+=dataflash
++ifeq ($(BR2_TARGET_AT91DATAFLASHBOOT),y)
++TARGETS+=at91dataflashboot
+ endif
 -- 
 1.7.1
