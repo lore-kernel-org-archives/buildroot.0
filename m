@@ -1,41 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 May 2011 14:43:51 +0200
-Subject: [Buildroot] [git commit] libnl: depend on host-bison
-Message-ID: <20110516124542.EF60C83539@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 May 2011 09:52:29 -0300
+Subject: [Buildroot] [PATCH 1/2] openssh: bump to version 5.8p2
+Message-ID: <1305550350-3778-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=5c22f20f4b12395a34ce47c1aba608fccaf1fbe0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-libnl build breaks with bison <2.4 with:
-
-bison -y -d  -o route/cls/ematch_syntax.c route/cls/ematch_syntax.y
-route/cls/ematch_syntax.y:31.9-16: syntax error, unexpected
-identifier, expecting string
-
-So build our own known good version and use instead.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libnl/libnl.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/openssh/openssh.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 767e957..8d3b9ad 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -8,6 +8,7 @@ LIBNL_VERSION = 3.0
- LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
- LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
- LIBNL_INSTALL_STAGING = YES
-+LIBNL_DEPENDENCIES = host-bison
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 104977e..7a6cc90 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- define LIBNL_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
+-OPENSSH_VERSION = 5.8p1
++OPENSSH_VERSION = 5.8p2
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
 -- 
 1.7.3.4
