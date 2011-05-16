@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Vasily Khoruzhick <anarsoul@gmail.com>
 Date: Mon, 16 May 2011 22:54:37 +0200
-Subject: [Buildroot] [git commit] sdl: fix directfb driver build if host has
-	directfb-config
-Message-ID: <20110516210340.CFEAF8352F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xlib_libXfont: don't build devel
+	documentation for host
+Message-ID: <20110516210341.7962E8352F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=668c357fec27d6b02c9201de5764bb8d1bdd67c2
+commit: http://git.buildroot.net/buildroot/commit/?id=017e3061fdd62d42ffb851057b67e6d96b1fd47a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ensure our cross directfb-config is used, so the right linker paths
-as passed to the compiler.
-
+Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sdl/sdl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 8d9d8ae..99488a6 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -6,8 +6,8 @@
- SDL_VERSION:=1.2.14
- SDL_SOURCE:=SDL-$(SDL_VERSION).tar.gz
- SDL_SITE:=http://www.libsdl.org/release
--
- SDL_INSTALL_STAGING = YES
-+SDL_CONF_ENV = ac_cv_path_DIRECTFBCONFIG=$(STAGING_DIR)/usr/bin/directfb-config
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index 3cb52c3..a91999c 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -12,6 +12,7 @@ XLIB_LIBXFONT_INSTALL_STAGING = YES
+ XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto xproto_fontsproto xproto_xproto xfont_encodings
+ XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static --disable-devel-docs
  
- ifeq ($(BR2_PACKAGE_SDL_FBCON),y)
- SDL_CONF_OPT+=--enable-video-fbcon=yes
++HOST_XLIB_LIBXFONT_CONF_OPT = --disable-devel-docs
+ HOST_XLIB_LIBXFONT_DEPENDENCIES = host-freetype host-xlib_libfontenc host-xlib_xtrans host-xproto_fontcacheproto host-xproto_fontsproto host-xproto_xproto host-xfont_encodings
+ 
+ $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXfont))
 -- 
 1.7.3.4
