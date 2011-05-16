@@ -1,32 +1,35 @@
-From: Vasily Khoruzhick <anarsoul@gmail.com>
-Date: Mon, 16 May 2011 18:10:50 +0300
-Subject: [Buildroot] [PATCH 3/3] xlib_libXfont: don't build devel
-	documentation for host
-In-Reply-To: <1305558650-15826-1-git-send-email-anarsoul@gmail.com>
-References: <1305558650-15826-1-git-send-email-anarsoul@gmail.com>
-Message-ID: <1305558650-15826-3-git-send-email-anarsoul@gmail.com>
+From: benoit.mauduit at gmail.com <benoit.mauduit@gmail.com>
+Date: Mon, 16 May 2011 17:25:44 +0200
+Subject: [Buildroot] [PATCH] busybox: Add busybox-xconfig and
+	busybox-gconfig rules
+Message-ID: <1305559544-4902-1-git-send-email-benoit.mauduit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
----
- package/x11r7/xlib_libXfont/xlib_libXfont.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+From: Benoit Mauduit <benoit.mauduit@openwide.fr>
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 3cb52c3..a91999c 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -12,6 +12,7 @@ XLIB_LIBXFONT_INSTALL_STAGING = YES
- XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontcacheproto xproto_fontsproto xproto_xproto xfont_encodings
- XLIB_LIBXFONT_CONF_OPT = --enable-shared --disable-static --disable-devel-docs
+---
+ package/busybox/busybox.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 711d11b..b806cdb 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -165,8 +165,9 @@ endef
  
-+HOST_XLIB_LIBXFONT_CONF_OPT = --disable-devel-docs
- HOST_XLIB_LIBXFONT_DEPENDENCIES = host-freetype host-xlib_libfontenc host-xlib_xtrans host-xproto_fontcacheproto host-xproto_fontsproto host-xproto_xproto host-xfont_encodings
+ $(eval $(call GENTARGETS,package,busybox))
  
- $(eval $(call AUTOTARGETS,package/x11r7,xlib_libXfont))
+-busybox-menuconfig: busybox-patch
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) menuconfig
++busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
++		$(subst busybox-,,$@)
+ 	rm -f $(BUSYBOX_DIR)/.stamp_built
+ 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+ 
 -- 
-1.7.5.rc1
+1.7.5.1
