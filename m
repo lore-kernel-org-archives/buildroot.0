@@ -1,81 +1,101 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 16 May 2011 21:53:41 +0200
-Subject: [Buildroot] adding libiqrf
-Message-ID: <BANLkTi=zt4AaA4HZ_bXGGymeZt5=p_2CqQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 May 2011 22:21:52 +0200
+Subject: [Buildroot] [RFC] Review request for branch for-2011.08/bootloaders
+Message-ID: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I want to add libiqrf to buildroot (https://github.com/nandra/libiqrf).
-I create simple patch but after running make seems library isn't builded.
-I just get:
->>> libiqrf v1.0.0 Extracting
->>> libiqrf v1.0.0 Patching package/libiqrf
->>> libiqrf v1.0.0 Configuring
->>> libiqrf v1.0.0 Building
->>> libiqrf v1.0.0 'Installing to staging directory'
->>> libiqrf v1.0.0 Installing to target
+This is not a pull request. This is stuff I'm preparing for the next
+Buildroot release, and which I'm posting now to let everybody now that
+I'm working on this, and to get early comments. Feedback is therefore
+very welcome.
 
-This library has dependency to libusb which is also added.
+Basically, the idea is that we have a package infrastructure, and
+features such as Git/Mercurial download, or usage of an existing
+source tree should be added at the level of the package infrastructure
+and not specifically for each package.
 
-patch:
-diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
-new file mode 100644
-index 0000000..a9e5a52
---- /dev/null
-+++ b/package/libiqrf/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBIQRF
-+        bool "libiqrf"
-+        depends on BR2_PACKAGE_LIBUSB
-+        help
-+          Libiqrf is a C library for reading and writing a
-+          data do iqrf usb devices (http://iqrf.orf)
-+
-+          https://github.com/nandra/libiqrf
-+
-+
-+
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
-new file mode 100644
-index 0000000..524da0f
---- /dev/null
-+++ b/package/libiqrf/libiqrf.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# libiqrf library
-+#
-+#############################################################
-+
-+LIBIQRF_VERSION = v1.0.0
-+LIBIQRF_SITE = git://github.com/nandra/libiqrf.git
-+LIBIQRF_INSTALL_STAGING = YES
-+LIBIQRF_INSTALL_TARGET = YES
-+
-+LIBIQRF_DEPENDENCIES = libusb
-+
-+
-+$(eval $(call GENTARGETS,package,libiqrf))
-+
+Unfortunately, some of the packages that would most benefit from those
+new infrastructure features are the bootloader and kernel, since it's
+typically the software components that have to be modified/tuned
+during the course of an embedded Linux project.
 
-Any ideas why it doesn't work?
+Therefore, this series converts all bootloaders makefiles and the
+kernel makefile to the package infrastructure. It also does a few
+other related things.
 
-thanks,
+More improvements are probably needed at the infrastructure level
+(like changing the BR2_PACKAGE_<pkg> test to know if a target needs to
+be added to TARGETS or not), but hopefully, you'll get the general
+idea and have some feedback/ideas.
 
-marek
+Thanks for your review,
+
+Thomas
+
+The following changes since commit 5c88d720f99ce6374a2a9b6afcb93ff627f464fa:
+
+  Merge branch 'for-2011.05/new-codesourcery-toolchain' of http://free-electrons.com/~thomas/buildroot (2011-05-13 15:30:37 +0200)
+
+are available in the git repository at:
+
+  http://free-electrons.com/~thomas/buildroot.git for-2011.08/bootloaders
+
+Allan W. Nielsen (1):
+      Makefile.package.in: Makes it possible to override the default extract commands
+
+Thomas Petazzoni (20):
+      Fix quoting in default extract command
+      linux: make it possible to install the kernel in /boot
+      linux: use the defconfig mechanism after tuning the config
+      package: add infrastructure to install things in images/
+      package: fix patching procedure for host packages
+      barebox: use = instead of := and re-indent
+      barebox: convert to GENTARGETS
+      at91bootstrap: use = instead of := and indent properly
+      at91bootstrap: convert to GENTARGETS
+      at91dataflashboot: use = instead of := and indent
+      at91dataflashboot: convert to GENTARGETS
+      syslinux: convert to GENTARGETS
+      grub: convert to AUTOTARGETS
+      grub2: remove package
+      u-boot: convert to GENTARGETS
+      uboot-mkimage: new package
+      linux: rename LINUX26 to LINUX
+      linux: indent and align some definitions
+      package: add support for post-download hooks
+      linux: convert to the GENTARGETS infrastructure
+
+ boot/Config.in                                     |    1 -
+ boot/at91bootstrap/at91bootstrap.mk                |   57 ++----
+ boot/at91dataflashboot/Config.in                   |   24 +--
+ boot/at91dataflashboot/at91dataflashboot.mk        |   44 ++---
+ boot/barebox/barebox.mk                            |   68 +++----
+ boot/grub/grub.500-build-fix.patch                 |   14 ++
+ boot/grub/grub.mk                                  |  102 ++++------
+ boot/grub2/Config.in                               |    9 -
+ boot/grub2/grub2.mk                                |   93 ---------
+ boot/syslinux/Config.in                            |   14 +-
+ boot/syslinux/syslinux.mk                          |   50 ++---
+ boot/u-boot/Config.in                              |    5 -
+ boot/u-boot/u-boot.mk                              |  218 +++++++-------------
+ linux/Config.in                                    |    8 +
+ linux/linux.mk                                     |  203 ++++++++++---------
+ package/Makefile.package.in                        |   56 ++++--
+ .../uboot-mkimage-2011.03-drop-configh.patch       |    0
+ package/uboot-mkimage/uboot-mkimage.mk             |   16 ++
+ 18 files changed, 387 insertions(+), 595 deletions(-)
+ create mode 100644 boot/grub/grub.500-build-fix.patch
+ delete mode 100644 boot/grub2/Config.in
+ delete mode 100644 boot/grub2/grub2.mk
+ rename boot/u-boot/u-boot-2011.03-drop-configh.patch => package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch (100%)
+ create mode 100644 package/uboot-mkimage/uboot-mkimage.mk
+
+Thanks,
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-icq: 290551086
-web: http://open-nandra.com
+Thomas Petazzoni
