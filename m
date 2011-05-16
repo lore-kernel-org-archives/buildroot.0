@@ -1,35 +1,42 @@
-From: benoit.mauduit at gmail.com <benoit.mauduit@gmail.com>
-Date: Mon, 16 May 2011 17:25:44 +0200
-Subject: [Buildroot] [PATCH] busybox: Add busybox-xconfig and
-	busybox-gconfig rules
-Message-ID: <1305559544-4902-1-git-send-email-benoit.mauduit@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 16 May 2011 19:37:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 3733] New: dropbear: make zlib optional
+Message-ID: <bug-3733-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Benoit Mauduit <benoit.mauduit@openwide.fr>
+https://bugs.busybox.net/show_bug.cgi?id=3733
 
----
- package/busybox/busybox.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+           Summary: dropbear: make zlib optional
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Keywords: patch
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: alex at digriz.org.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 711d11b..b806cdb 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -165,8 +165,9 @@ endef
- 
- $(eval $(call GENTARGETS,package,busybox))
- 
--busybox-menuconfig: busybox-patch
--	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) menuconfig
-+busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
-+	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
-+		$(subst busybox-,,$@)
- 	rm -f $(BUSYBOX_DIR)/.stamp_built
- 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
- 
+
+I noticed for my buildroot environment the only componment that was pulling in
+zlib was dropbear.  The patch included drops the zlib dependency when compiling
+with DROPBEAR_SMALL, pruning ~70kB for a LZO compressed root which is handy for
+me with my 4MB NAND.
+
+No idea if the patch is 'correct' by your standards but it gets my usual
+stamps, 'seal of approval' and 'works for me'...
+
+Cheers
+
 -- 
-1.7.5.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
