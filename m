@@ -1,53 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2011 22:21:53 +0200
-Subject: [Buildroot] [PATCH 01/21] Makefile.package.in: Makes it possible to
-	override the default extract commands
+Date: Mon, 16 May 2011 22:21:59 +0200
+Subject: [Buildroot] [PATCH 07/21] barebox: use = instead of := and re-indent
 In-Reply-To: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cc8f2ce91915114807b8834ad4cdfbd7f2bb0f8d.1305577083.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f4e9fa6d2b9cad9c0f45c302d3a62f56bf41639e.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Allan W. Nielsen <a@awn.dk>
-
-When using GENTARGETS (or macroes depending on it), there is no way of
-specifying a custom extraction procedure. When using the patch one can
-simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
-default. If non is defined it will fall back to the default extract
-procedure.
-
-An example could look like this:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ boot/barebox/barebox.mk |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..9949b58 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -243,8 +243,7 @@ endif
- $(BUILD_DIR)/%/.stamp_extracted:
- 	@$(call MESSAGE,"Extracting")
- 	$(Q)mkdir -p $(@D)
--	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
-+	$($(PKG)_EXTRACT_CMDS)
- # some packages have messed up permissions inside
- 	$(Q)chmod -R ug+rw $(@D)
- 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-@@ -425,6 +424,10 @@ $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
- $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 7a2e02e..5a4f36a 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,12 +4,13 @@
+ #
+ #############################################################
  
-+# default extract command
-+$(2)_EXTRACT_CMDS ?= $(if $($(2)_SOURCE),$(INFLATE$(suffix $($(2)_SOURCE))) $(DL_DIR)/$($(2)_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+-BAREBOX_VERSION:=2011.04.0
+-BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
+-BAREBOX_SITE:=http://www.barebox.org/download/
+-BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+-BAREBOX_CAT:=$(BZCAT)
+-BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
++BAREBOX_VERSION = 2011.04.0
++BAREBOX_SOURCE  = barebox-$(BAREBOX_VERSION).tar.bz2
++BAREBOX_SITE    = http://www.barebox.org/download/
++BAREBOX_DIR     = $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
++BAREBOX_CAT     = $(BZCAT)
 +
- # post-steps hooks
- $(2)_POST_EXTRACT_HOOKS         ?=
- $(2)_POST_PATCH_HOOKS           ?=
++BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
+ 
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH=x86
 -- 
 1.7.1
