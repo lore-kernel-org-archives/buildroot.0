@@ -1,23 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 May 2011 15:23:23 +0200
-Subject: [Buildroot] [PATCH 2/2] busybox: add hush patch for version
-	1.18.4
-In-Reply-To: <1305550350-3778-2-git-send-email-gustavo@zacarias.com.ar>
-	(Gustavo Zacarias's message of "Mon, 16 May 2011 09:52:30 -0300")
-References: <1305550350-3778-1-git-send-email-gustavo@zacarias.com.ar>
-	<1305550350-3778-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8739keixtg.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 May 2011 11:18:26 -0300
+Subject: [Buildroot] [PATCH] libnl: minor package fixes
+Message-ID: <1305555506-10082-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+* libnl fails to build with multiple jobs so keep make at -j1
+* Multiple libraries are installed so update uninstall target for this
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnl/libnl.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 8d3b9ad..1810cb5 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -9,9 +9,15 @@ LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison
++LIBNL_MAKE = $(MAKE1)
+ 
+ define LIBNL_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/lib/libnl.so*
++	rm -f $(TARGET_DIR)/usr/lib/libnl-cli.so*
++	rm -f $(TARGET_DIR)/usr/lib/libnl-genl.so*
++	rm -f $(TARGET_DIR)/usr/lib/libnl-nf.so*
++	rm -f $(TARGET_DIR)/usr/lib/libnl-route.so*
++
+ endef
+ 
+ $(eval $(call AUTOTARGETS,package,libnl))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
