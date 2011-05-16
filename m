@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2011 22:22:01 +0200
-Subject: [Buildroot] [PATCH 09/21] at91bootstrap: use = instead of := and
-	indent properly
+Date: Mon, 16 May 2011 22:21:53 +0200
+Subject: [Buildroot] [PATCH 01/21] Makefile.package.in: Makes it possible to
+	override the default extract commands
 In-Reply-To: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7503eada41f1bfc4017962a0f51f75d5ce7657a5.1305577083.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cc8f2ce91915114807b8834ad4cdfbd7f2bb0f8d.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/at91bootstrap/at91bootstrap.mk |   20 ++++++++++----------
- 1 files changed, 10 insertions(+), 10 deletions(-)
+From: Allan W. Nielsen <a@awn.dk>
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 3d4308e..052d1bd 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -3,17 +3,17 @@
- # at91bootstrap
- #
- #############################################################
--AT91BOOTSTRAP_VERSION:=1.16
--AT91BOOTSTRAP_NAME:=AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
--AT91BOOTSTRAP_SITE:=http://www.atmel.com/dyn/resources/prod_documents/
--AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).zip
--AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
-+AT91BOOTSTRAP_VERSION = 1.16
-+AT91BOOTSTRAP_NAME    = AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
-+AT91BOOTSTRAP_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
-+AT91BOOTSTRAP_SOURCE  = $(AT91BOOTSTRAP_NAME).zip
-+AT91BOOTSTRAP_DIR     = $(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
+When using GENTARGETS (or macroes depending on it), there is no way of
+specifying a custom extraction procedure. When using the patch one can
+simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
+default. If non is defined it will fall back to the default extract
+procedure.
+
+An example could look like this:
+---
+ package/Makefile.package.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index bf4e1b4..9949b58 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -243,8 +243,7 @@ endif
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+ 	$(Q)mkdir -p $(@D)
+-	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
++	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+ 	$(Q)chmod -R ug+rw $(@D)
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+@@ -425,6 +424,10 @@ $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
+ $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
  
--AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
--AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
--AT91BOOTSTRAP_BINARY:=$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
--AT91BOOTSTRAP_BUILD_DIR:=$(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
--AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
-+AT91BOOTSTRAP_BOARD     = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
-+AT91BOOTSTRAP_MEMORY    = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
-+AT91BOOTSTRAP_BINARY    = $(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
-+AT91BOOTSTRAP_BUILD_DIR = $(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
-+AT91BOOTSTRAP_TARGET    = $(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
- 
- $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
- 	 $(call DOWNLOAD,$(AT91BOOTSTRAP_SITE),$(AT91BOOTSTRAP_SOURCE))
++# default extract command
++$(2)_EXTRACT_CMDS ?= $(if $($(2)_SOURCE),$(INFLATE$(suffix $($(2)_SOURCE))) $(DL_DIR)/$($(2)_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
++
+ # post-steps hooks
+ $(2)_POST_EXTRACT_HOOKS         ?=
+ $(2)_POST_PATCH_HOOKS           ?=
 -- 
 1.7.1
