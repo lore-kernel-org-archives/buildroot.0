@@ -1,95 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2011 22:21:57 +0200
-Subject: [Buildroot] [PATCH 05/21] package: add infrastructure to install
-	things in images/
+Date: Mon, 16 May 2011 22:21:58 +0200
+Subject: [Buildroot] [PATCH 06/21] package: fix patching procedure for host
+	packages
 In-Reply-To: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b82bb5358a0c5b5912d9a01d9bc5e1e5c7f0b841.1305577083.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ab96b7b0d4db4806e2f588293c4f4eb687739d7a.1305577083.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will allow the bootloader makefiles and the kernel makefile to
-rely on the GENTARGETS infrastructure.
+The patching procedure was using $($(NOHOSTPKG)_NAME) to find the name
+of the package without the host- prefix for host packages, which is
+needed to find the package directory and the prefix of the patches.
+
+However, this $($(NOHOSTPKG)_NAME) variable is empty when there is
+only an host variant for the package and no target variant for it.
+
+Therefore, instead of using this $($(NOHOSTPKG)_NAME) variable, we now
+use a new $(RAWNAME) variable, which is always the name of the package
+without the host- prefix, even for host packages.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   20 +++++++++++++++++++-
- 1 files changed, 19 insertions(+), 1 deletions(-)
+ package/Makefile.package.in |   26 ++++++++++++--------------
+ 1 files changed, 12 insertions(+), 14 deletions(-)
 
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 0a4c220..6126e6b 100644
+index 6126e6b..cdcb5e5 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -304,6 +304,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+@@ -251,23 +251,21 @@ $(BUILD_DIR)/%/.stamp_extracted:
  
-+# Install to images dir
-+$(BUILD_DIR)/%/.stamp_images_installed:
-+	@$(call MESSAGE,'Installing to images directory')
-+	$($(PKG)_INSTALL_IMAGES_CMDS)
-+	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
- # Install to target dir
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call MESSAGE,"Installing to target")
-@@ -408,12 +415,14 @@ endif
- 
- $(2)_DEPENDENCIES		?=
- $(2)_INSTALL_STAGING		?= NO
-+$(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
- $(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
- 
- # define sub-target stamps
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
- $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
-+$(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
- $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
-@@ -438,6 +447,7 @@ $(2)_POST_BUILD_HOOKS           ?=
- $(2)_POST_INSTALL_HOOKS         ?=
- $(2)_POST_INSTALL_STAGING_HOOKS ?=
- $(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- 
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -445,7 +455,7 @@ $(1):			$(1)-install
- ifeq ($$($(2)_TYPE),host)
- $(1)-install:	        $(1)-install-host
- else
--$(1)-install:		$(1)-install-staging $(1)-install-target
-+$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
- ifeq ($$($(2)_INSTALL_TARGET),YES)
-@@ -462,6 +472,13 @@ else
- $(1)-install-staging:
- endif
- 
-+ifeq ($$($(2)_INSTALL_IMAGES),YES)
-+$(1)-install-images:	$(1)-build \
-+			$$($(2)_TARGET_INSTALL_IMAGES)
-+else
-+$(1)-install-images:
-+endif
-+
- $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
- 
- $(1)-build:		$(1)-configure \
-@@ -493,6 +510,7 @@ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- # uppercase package variable prefix
- $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
-+$$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+ # Patch
+ #
+-# The NOHOSTPKG variable is the uppercased package name, without the
+-# HOST_ prefix, even for host packages. This allows to find the
+-# patches in the package directory, because $($(NOHOSTPKG)_NAME)
+-# expands to the package directory name.
+-#
+-$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $($(NOHOSTPKG)_NAME)-$($(PKG)_VERSION)
++# The RAWNAME variable is the lowercased package name, which allows to
++# find the package directory (typically package/<pkgname>) and the
++# prefix of the patches
++$(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched:
+-	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$($(PKG)_NAME)")
++	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(if $($(PKG)_PATCH),toolchain/patch-kernel.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
+ 	$(Q)( \
+-	if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME); then \
+-	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER)*.patch*)"; then \
+-	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
++	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
++	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
++	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+ 	  else \
+-	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME) $($(NOHOSTPKG)_NAME)\*.patch $($(NOHOSTPKG)_NAME)\*.patch.$(ARCH) || exit 1; \
+-	    if test -d $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER); then \
+-	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$($(NOHOSTPKG)_NAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
++	    toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
++	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
++	      toolchain/patch-kernel.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    fi; \
+ 	  fi; \
+ 	fi; \
+@@ -515,7 +513,7 @@ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
  $$($(2)_TARGET_BUILD):			PKG=$(2)
  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
+-$$($(2)_TARGET_PATCH):			NOHOSTPKG=$(3)
++$$($(2)_TARGET_PATCH):			RAWNAME=$(subst host-,,$(1))
+ $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+ $$($(2)_TARGET_SOURCE):			PKG=$(2)
+ $$($(2)_TARGET_UNINSTALL):		PKG=$(2)
 -- 
 1.7.1
