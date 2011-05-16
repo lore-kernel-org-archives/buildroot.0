@@ -1,28 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 May 2011 20:43:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 3733] dropbear: make zlib optional
-In-Reply-To: <bug-3733-163@https.bugs.busybox.net/>
-References: <bug-3733-163@https.bugs.busybox.net/>
-Message-ID: <20110516204301.91B51834EA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 16 May 2011 23:03:10 +0200
+Subject: [Buildroot] [PATCH] libnl: minor package fixes
+In-Reply-To: <1305555506-10082-1-git-send-email-gustavo@zacarias.com.ar>
+	(Gustavo Zacarias's message of "Mon, 16 May 2011 11:18:26 -0300")
+References: <1305555506-10082-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sjsegxyp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3733
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Gustavo> * libnl fails to build with multiple jobs so keep make at -j1
+ Gustavo> * Multiple libraries are installed so update uninstall target for this
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Committed with a minor fixup to also remove the usr/lib/libnl subdir -
+Thanks.
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed with small tweaks, thanks
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
