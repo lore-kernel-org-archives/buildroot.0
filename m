@@ -1,39 +1,28 @@
-From: David Wagner <david.wagner@free-electrons.com>
-Date: Tue, 17 May 2011 15:00:19 +0200
-Subject: [Buildroot] [PATCH] Add support for local packages
- through	'file://' pseudo-protocol
-In-Reply-To: <1305636603-12726-1-git-send-email-david.wagner@free-electrons.com>
-References: <1305636603-12726-1-git-send-email-david.wagner@free-electrons.com>
-Message-ID: <4DD27163.1040900@free-electrons.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Tue, 17 May 2011 16:19:36 +0300
+Subject: [Buildroot] Slow boots caused by
+	ca520507fc15a8213334a76339a3e6d567e91ea0 (udev, inittab)
+Message-ID: <BANLkTi=cikrdVk_mikRhpLYZtgDarZCukw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/2011 02:50 PM, david.wagner at free-electrons.com wrote:
-> From: David Wagner <david.wagner@free-electrons.com>
->
-> Can be useful to integrate a home-made project or for testing purposes.
-> The default command to retrieve files is 'cp' but 'rsync' could also
-be used.
-> Through sshfs, it should also be possible to get non-public remote
-files on a
-> ssh server.
+I am seeing that my boot is now ~60 seconds, and hte boots hangs ~40 secs
+while starting udev.
 
-Sorry for the "raw" format of this submit. I guess I haven't figured out
-yet how to add an introductory text with git send-email.
+This is caused by ca520507fc15a8213334a76339a3e6d567e91ea0 which claims that
+/sys/ and friends are moutned by inittab. I found no such code in the
+ininttab installed is my unit,  and the inittab available in the head
+(59af9a8..ce1ae87)  in fs/skeleton/etc/inittab does not mount /sys/ at boot
+time. Reverting the inittab to the one before this change fixes the boot
+time.
 
-I needed the submitted feature to add a tool that wasn't easily
-available as tarball (logfsprogs: Thomas showed me how to override the
-download method but I couldn't have figured it out otherwise). But there
-are other use-cases, like the ones in the commit message.
+What am I missing?
 
-I hope the patch is ok, tell me if not.
-
-Regards,
--- 
-David Wagner, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I am using busybox's init, code sourcry ARM toolkit, and bootinsg from NFS
+into an OMAP3.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110517/ed29e5de/attachment.html>
