@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2011 10:53:38 +0200
-Subject: [Buildroot] [PATCH] board: mini2440: Add custom patches and
- configs for 2.6.38 kernel series.
-In-Reply-To: <BANLkTi=nd4=RF2mGFMFGZhRp25B+UOmDmw@mail.gmail.com>
-References: <1305615351-8516-1-git-send-email-marek.belisko@open-nandra.com>
-	<20110517094052.65767f36@surf>
-	<BANLkTi=nd4=RF2mGFMFGZhRp25B+UOmDmw@mail.gmail.com>
-Message-ID: <20110517105338.0fe0db78@surf>
+Date: Tue, 17 May 2011 10:55:09 +0200
+Subject: [Buildroot] [git commit] Allow several device tables and split
+ in two parts our device table
+In-Reply-To: <87mxilhg3z.fsf@macbook.be.48ers.dk>
+References: <20110510215121.DFA53826FF@busybox.osuosl.org>
+	<20110517090426.0bd12953@surf> <87mxilhg3z.fsf@macbook.be.48ers.dk>
+Message-ID: <20110517105509.5521276b@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 May 2011 10:48:56 +0200
-Belisko Marek <marek.belisko@gmail.com> wrote:
+On Tue, 17 May 2011 10:43:28 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-> >>>   Patching kernel
-> for p in board/friendlyarm/mini2440/ ; do \
-> 		if echo $p | grep -q -E "^ftp://|^http://" ; then \
-> 			toolchain/patch-kernel.sh
-> /home/open-nandra/projects/buildroot/output/build/linux-2.6.38.6
-> /home/open-nandra/projects/buildroot/dl `basename $p` ; \
-> 		elif test -d $p ; then \
-> 			toolchain/patch-kernel.sh
-> /home/open-nandra/projects/buildroot/output/build/linux-2.6.38.6 $p
-> linux-\*.patch ; \
-> 		else \
-> 			toolchain/patch-kernel.sh
-> /home/open-nandra/projects/buildroot/output/build/linux-2.6.38.6
-> `dirname $p` `basename $p` ; \
-> 		fi \
-> 	done
-> >>>   Configuring kernel
+>  Thomas> But I don't know what we can do against this. Should we instead add an
+>  Thomas> option to makedevs to instruct makedevs to skip entries in /dev ? This
+>  Thomas> option could then be used for all dynamic /dev cases, and would work
+>  Thomas> even if the device table contains entries for /dev ? Or should we keep
+>  Thomas> it as it is ?
 > 
-> Any idea why???
+> Alternatively we can split it up and provide an option for the base
+> device table (which will default to target/generic/device_table.txt) and
+> add an option for static device nodes (which defaults to
+> target/generic/device_table_dev.txt) and only make that option visible
+> if static dev is used.
+> 
+> The makefile can then concatenate those options and use them like it is
+> done today.
 
-They must be named linux-*.patch. See 
+Seems like a good idea. The first option shouldn't be named "device
+table", but instead "permission table", and the file device_table.txt
+could be renamed as well to permission_table.txt.
 
-	toolchain/patch-kernel.sh /home/open-nandra/projects/buildroot/output/build/linux-2.6.38.6 $p linux-\*.patch ; \ 
+We should also preserve the fact that those two options can be lists,
+so that one can keep the original permission table, and add some more
+entries by specifying a second table.
 
-in the "test -d $p" case.
-
-In your board directory, you can store patches for Linux, patches for
-U-Boot, patches for Barebox or whatever, so it makes sense to keep a
-linux- prefix, in my opinion.
+Regards,
 
 Thomas
 -- 
