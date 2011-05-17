@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2011 09:47:56 +0200
-Subject: [Buildroot] Demo rootfs of Fabrice Bellard new x86 emulator built
- with Buildroot
-Message-ID: <20110517094756.662cf8f5@surf>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 May 2011 10:00:01 +0200
+Subject: [Buildroot] [git commit] Makefile.autotools.in: default to same
+	<pkg>_MAKE setting for host and target
+Message-ID: <20110517080243.AB17B83547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Fabrice Bellard, famous for being the initial author of Qemu, but also
-of FFmpeg, for holding several records in PI computation, and for many
-other things, has just released a x86 emulator written in Javascript
-that runs inside your browser: http://bellard.org/jslinux/.
+commit: http://git.buildroot.net/buildroot/commit/?id=ce1ae872aa72547bb291cc9e70adfe1b065cd2a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This news has been slashdoted:
-http://linux.slashdot.org/story/11/05/17/0242244/Boot-Linux-In-Your-Browser
+Similar to how it is done for _SOURCE, _PATCH, _SITE and _SUBDIR.
 
-The link with Buildroot ?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.autotools.in |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-According to the technical details page at
-http://bellard.org/jslinux/tech.html, the system used for the demo has
-been generated with Buildroot:
-
-?
-The disk image is just a ram disk image loaded at boot time. It
-contains a filesystem generated with Buildroot containing BusyBox. I
-added my toy C compiler TinyCC and my unfinished but usable emacs clone
-QEmacs.
-?
-
-Thomas
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 61fcfcf..917600c 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -57,9 +57,16 @@ ifndef $(2)_LIBTOOL_PATCH
+  endif
+ endif
+ 
++ifndef $(2)_MAKE
++ ifdef $(3)_MAKE
++  $(2)_MAKE = $($(3)_MAKE)
++ else
++  $(2)_MAKE ?= $(MAKE)
++ endif
++endif
++
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPT			?=
+-$(2)_MAKE			?= $(MAKE)
+ $(2)_MAKE_ENV			?=
+ $(2)_MAKE_OPT			?=
+ $(2)_AUTORECONF			?= NO
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
