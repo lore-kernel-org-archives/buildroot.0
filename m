@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2011 08:58:47 +0200
-Subject: [Buildroot] Building x86_64 Toolchain
-In-Reply-To: <5ABE8A5E96C0364CAF2B4DC1DEB7CEAC490DDEFA@Mercury.usurf.usu.edu>
-References: <5ABE8A5E96C0364CAF2B4DC1DEB7CEAC490DDEBC@Mercury.usurf.usu.edu>
-	<5ABE8A5E96C0364CAF2B4DC1DEB7CEAC490DDEFA@Mercury.usurf.usu.edu>
-Message-ID: <20110517085847.46aa97fc@surf>
+Date: Tue, 17 May 2011 09:01:30 +0200
+Subject: [Buildroot] u-boot compiler issue
+In-Reply-To: <4DCBEC13.2050802@visionsystems.de>
+References: <4DCBEC13.2050802@visionsystems.de>
+Message-ID: <20110517090130.7aae0ca7@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 May 2011 19:43:53 +0000
-Jonathan Haws <Jonathan.Haws@sdl.usu.edu> wrote:
+On Thu, 12 May 2011 16:17:55 +0200
+Yegor Yefremov <yegor_sub1@visionsystems.de> wrote:
 
-> (cd ./lib && tar -cf - *.so.*) | tar -xf - -C /home/jhaws/opt/svn/duster/EmbeddedLinux/buildroot/buildroot/output/host/usr/x86_64-unknown-linux-uclibc/sysroot/lib/
-> tar: libpthread.so.0: no version information available (required by /lib64/librt.so.1)
-> tar: libpthread.so.0: no version information available (required by /lib64/librt.so.1)
-> /bin/sh: line 1: 17753 Segmentation fault      (core dumped) tar -cf - *.so.*
-> tar: This does not look like a tar archive
-> tar: Exiting with failure status due to previous errors
+> I was building u-boot with buildroots created toolchain. Everything was working except
+> that pointer passed via r8 was not writable (RAM was not configured
+> etc.).
 
-It seems like "tar" is segfaulting here, so it seems to be a problem
-with the tar program of your distribution. Can you check the core dump
-to see to which program it comes from ?
+Could you give more details about this analysis ?
 
-Can you share your Buildroot .config so that I can try to reproduce the
-problem on a different distribution?
+> But if the same code was compiled with CodeSourcery everything
+> was working. Here gcc configuration from buidroot:
 
-> In file included from libpthread/linuxthreads/sysdeps/pthread/errno-loc.c:23:0:
-> ./libpthread/linuxthreads/sysdeps/unix/sysv/linux/x86_64/sysdep-cancel.h:20:20: fatal error: sysdep.h: No such file or directory
-> compilation terminated.
-
-I am not sure if LinuxThreads new is supposed to compile or not.
-
-Regards,
+Does the U-Boot compilation fails, or the compilation works but U-Boot
+fails to run on the device ? If it's the latter, then which version of
+U-Boot are you using ? Only recent versions of U-Boot work well with
+gcc 4.5.
 
 Thomas
 -- 
