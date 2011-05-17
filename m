@@ -1,27 +1,391 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Tue, 17 May 2011 16:45:20 +0300
-Subject: [Buildroot] Slow boots caused by
- ca520507fc15a8213334a76339a3e6d567e91ea0 (udev, inittab)
-In-Reply-To: <20110517152841.2da7be8c@surf>
-References: <BANLkTi=cikrdVk_mikRhpLYZtgDarZCukw@mail.gmail.com>
-	<20110517152841.2da7be8c@surf>
-Message-ID: <BANLkTinfxAON7FioeoC9scz9MF9F3fVp+w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 May 2011 11:36:52 -0300
+Subject: [Buildroot] [PATCH] [RFC] microperl: convert to gentargets and bump
+	to version 5.12.3
+Message-ID: <1305643012-30886-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 17, 2011 at 4:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Well inittab does "mount -a" and /etc/fstab says that sysfs should be
-> mounted.
-Noted. My inittab does contain those line... and the ininttab does
-contain "mount -a"...
+* Convert microperl to gentargets infrastructure
+* Bump to a more modern version 5.12.3
 
+host-microperl is now a fully-fledged perl.
 
-> Moreover the ca520507fc15a8213334a76339a3e6d567e91ea0 you're pointing
-> did not change the inittab, so I don't know how reverting could modify
-> the inittab. Are you referring to the udev startup script ?
-I reverted S10udev of course.
-How can I debug this?
+For the time being we can't build XS (DynaLoader) modules thus breaking
+target automake support for example since it requires IO.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/microperl/Config.in                        |    9 +-
+ .../microperl/microperl-no-signal-handlers.patch   |   22 ++
+ package/microperl/microperl-uudmap.patch           |   47 ++++
+ package/microperl/microperl.mk                     |  246 +++++++++++---------
+ 4 files changed, 206 insertions(+), 118 deletions(-)
+ create mode 100644 package/microperl/microperl-no-signal-handlers.patch
+ create mode 100644 package/microperl/microperl-uudmap.patch
+
+diff --git a/package/microperl/Config.in b/package/microperl/Config.in
+index 82f964c..b00c3e2 100644
+--- a/package/microperl/Config.in
++++ b/package/microperl/Config.in
+@@ -5,10 +5,11 @@ config BR2_PACKAGE_MICROPERL
+ 
+ config BR2_PACKAGE_MICROPERL_MODULES
+ 	string "microperl modules"
+-	default ""
+ 	depends on BR2_PACKAGE_MICROPERL
+ 	help
+ 	  List of microperl modules to copy to the rootfs.
+-	  E.g.
+-	  warnings.pm warnings/register.pm strict.pm constant.pm vars.pm
+-	  Exporter.pm Exporter/Heavy.pm Carp.pm Getopt/Long.pm
++
++	  For example warnings.pm or Getopt/Std.pm
++
++	  Module dependencies are not automatic so be careful.
++	  You can't use XS (DynaLoader) modules.
+diff --git a/package/microperl/microperl-no-signal-handlers.patch b/package/microperl/microperl-no-signal-handlers.patch
+new file mode 100644
+index 0000000..3c9aa41
+--- /dev/null
++++ b/package/microperl/microperl-no-signal-handlers.patch
+@@ -0,0 +1,22 @@
++Backport of http://perl5.git.perl.org/perl.git/commitdiff/01d65469392dfc0a?hp=a82b5f080d91ffe184d8ac4795ac71e72e612c2f
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura perl-5.12.3/miniperlmain.c perl-5.12.3-nosig/miniperlmain.c
++--- perl-5.12.3/miniperlmain.c	2011-01-09 17:20:57.000000000 -0300
+++++ perl-5.12.3-nosig/miniperlmain.c	2011-04-14 10:16:53.564639438 -0300
++@@ -116,12 +116,14 @@
++     if (!exitstatus)
++         perl_run(my_perl);
++ 
+++#ifndef PERL_MICRO
++     /* Unregister our signal handler before destroying my_perl */
++     for (i = 0; PL_sig_name[i]; i++) {
++ 	if (rsignal_state(PL_sig_num[i]) == (Sighandler_t) PL_csighandlerp) {
++ 	    rsignal(PL_sig_num[i], (Sighandler_t) SIG_DFL);
++ 	}
++     }
+++#endif
++ 
++     exitstatus = perl_destruct(my_perl);
++ 
+diff --git a/package/microperl/microperl-uudmap.patch b/package/microperl/microperl-uudmap.patch
+new file mode 100644
+index 0000000..c72f9c9
+--- /dev/null
++++ b/package/microperl/microperl-uudmap.patch
+@@ -0,0 +1,47 @@
++From a82b5f080d91ffe184d8ac4795ac71e72e612c2f Mon Sep 17 00:00:00 2001
++From: David Leadbeater <dgl@dgl.cx>
++Date: Mon, 7 Mar 2011 18:40:55 +0000
++Subject: [PATCH] microperl: Update generate_uudmap in Makefile.micro
++
++Makefile.micro hadn't kept up with the changes for generate_uudmap,
++make it match the real Makefile.
++---
++ Makefile.micro |    8 ++++----
++ 1 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.micro b/Makefile.micro
++index 4b738f5..567d98a 100644
++--- a/Makefile.micro
+++++ b/Makefile.micro
++@@ -35,7 +35,7 @@ H = av.h uconfig.h cop.h cv.h embed.h embedvar.h form.h gv.h handy.h \
++ HE = $(H) EXTERN.h
++ 
++ clean:
++-	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h
+++	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h bitcount.h
++ 
++ distclean:	clean
++ 
++@@ -74,7 +74,7 @@ udoop$(_O):	$(HE) doop.c
++ udump$(_O):	$(HE) dump.c regcomp.h regnodes.h
++ 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) dump.c
++ 
++-uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h
+++uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h uudmap.h bitcount.h
++ 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) globals.c
++ 
++ ugv$(_O):	$(HE) gv.c
++@@ -173,8 +173,8 @@ uutil$(_O):	$(HE) util.c
++ uperlapi$(_O):	$(HE) perlapi.c perlapi.h
++ 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) perlapi.c
++ 
++-uudmap.h: generate_uudmap$(_X)
++-	$(RUN) ./generate_uudmap$(_X) >uudmap.h
+++uudmap.h bitcount.h: generate_uudmap$(_X)
+++	$(RUN) ./generate_uudmap$(_X) uudmap.h bitcount.h
++ 
++ generate_uudmap$(_O): generate_uudmap.c
++ 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) generate_uudmap.c
++-- 
++1.6.5.2.74.g610f9.dirty
++
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index b68e825..e17dbff 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -3,122 +3,140 @@
+ # microperl
+ #
+ #############################################################
+-MICROPERL_MAJ=5
+-MICROPERL_VERSION=$(MICROPERL_MAJ).8.8
+-MICROPERL_SOURCE=perl-$(MICROPERL_VERSION).tar.bz2
+-MICROPERL_CAT:=$(BZCAT)
+-MICROPERL_SITE=ftp://ftp.cpan.org/pub/CPAN/src/5.0
+-MICROPERL_DIR=$(BUILD_DIR)/perl-$(MICROPERL_VERSION)
+ 
+-MICROPERL_MODS_DIR=/usr/lib/perl$(MICROPERL_MAJ)/$(MICROPERL_VERSION)
+-MICROPERL_MODS=$(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
+-ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
+-MICROPERL_MODS+=File/Basename.pm Errno.pm Config.pm IO/File.pm Symbol.pm \
+-	SelectSaver.pm IO/Seekable.pm IO/Handle.pm IO.pm XSLoader.pm \
+-	DynaLoader.pm AutoLoader.pm Carp/Heavy.pm
++MICROPERL_VERSION = 5.12.3
++MICROPERL_SITE = http://www.cpan.org/src/5.0
++MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
++MICROPERL_DEPENDENCIES = host-microperl
++MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
++MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(REAL_GNU_TARGET_NAME)
++MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
++
++# Minimal set of modules required for 'perl -V' to work
++MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
++MICROPERL_BASE_MODS = strict.pm
++
++# Host microperl is actually full-blown perl
++define HOST_MICROPERL_CONFIGURE_CMDS
++	cd $(@D) ; \
++	./Configure -Dcc="$(HOSTCC)" -Dprefix="$(HOST_DIR)/usr" -des
++endef
++
++define HOST_MICROPERL_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_MICROPERL_INSTALL_CMDS
++	$(MAKE) -C $(@D) install
++endef
++
++ifeq ($(BR2_LARGEFILE),y)
++define MICROPERL_LARGEFILE
++	echo "uselargefiles='define'" >>$(@D)/uconfig.sh
++endef
+ endif
+-$(DL_DIR)/$(MICROPERL_SOURCE):
+-	$(call DOWNLOAD,$(MICROPERL_SITE),$(MICROPERL_SOURCE))
+ 
+-$(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+-	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	# makedepend contains bashisms
+-	$(SED) 's~sh ./makedepend~bash ./makedepend~' \
+-		$(MICROPERL_DIR)/Makefile.SH \
+-		$(MICROPERL_DIR)/x2p/Makefile.SH \
+-		$(MICROPERL_DIR)/pod/Makefile.SH
+-	chmod -R u+w $(MICROPERL_DIR)
+-	touch $@
+-
+-$(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
+-	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de  )
+-	touch $@
+-
+-
+-$(MICROPERL_DIR)/.host_configured_and_fixed: $(MICROPERL_DIR)/.host_configured
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/Makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/Makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/makefile
+-	$(SED) 's/^.*<command-line>.*//g' $(MICROPERL_DIR)/x2p/makefile
+-	touch $@
+-
+-$(MICROPERL_DIR)/.host_make: $(MICROPERL_DIR)/.host_configured_and_fixed
+-	$(MAKE) -C $(MICROPERL_DIR)		|| echo "An error is expected on make"
+-	touch $@
+-
+-$(MICROPERL_DIR)/.host_make_fixed: $(MICROPERL_DIR)/.host_make
+-	$(MAKE) -C $(MICROPERL_DIR) test	|| echo "An error is expected on make test"
+-	touch $@
+-
+-$(MICROPERL_DIR)/.configured: $(MICROPERL_DIR)/.host_make_fixed
+-	# we need to build a perl for the host just for Errno.pm
+-	(cd $(MICROPERL_DIR); \
+-	 chmod a+x ext/util/make_ext; \
+-	 ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))" \
+-	)
+-	(cd $(MICROPERL_DIR); \
+-	 chmod u+w uconfig.h; ./uconfig.sh; \
+-	 $(MAKE) -f $(MICROPERL_DIR)/Makefile.micro regen_uconfig; \
+-	 $(SED) 's,PRIVLIB ".*,PRIVLIB "/$(MICROPERL_MODS_DIR)",' \
+-		 -e 's,PRIVLIB_EXP ".*,PRIVLIB_EXP "$(MICROPERL_MODS_DIR)",' \
+-		 -e 's,BIN ".*,BIN "/usr/bin",' \
+-		 ./uconfig.h; \
+-	)
+-	touch $@
+-
+-$(MICROPERL_DIR)/microperl: $(MICROPERL_DIR)/.configured
+-	$(MAKE) -f $(MICROPERL_DIR)/Makefile.micro CC="$(TARGET_CC)" \
+-		OPTIMIZE="$(TARGET_CFLAGS)" -C $(MICROPERL_DIR)
+-ifeq ($(BR2_PACKAGE_AUTOMAKE),y)
+-	#(cd $(@D); \
+-	# CONFIG=uconfig.h $(SHELL) ext/util/make_ext nonxs Errno MAKE="$(firstword $(MAKE))"; \
+-	#)
+-endif
+-
+-$(TARGET_DIR)/usr/bin/microperl: $(MICROPERL_DIR)/microperl
+-ifneq ($(MICROPERL_MODS),)
+-	(cd $(MICROPERL_DIR); \
+-	 for i in $(patsubst %,$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/%,$(dir $(MICROPERL_MODS))); do \
+-		[ -d $$i ] || mkdir -p $$i; \
+-	 done; \
+-	 for i in $(MICROPERL_MODS); do \
+-	 cp -dpf $(MICROPERL_DIR)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+-	 done; \
+-	)
++ifeq ($(BR2_USE_WCHAR),y)
++define MICROPERL_WCHAR
++	echo "d_mbstowcs='define'" >>$(@D)/uconfig.sh
++	echo "d_mbtowc='define'" >>$(@D)/uconfig.sh
++	echo "d_wcstombs='define'" >>$(@D)/uconfig.sh
++	echo "d_wctomb='define'" >>$(@D)/uconfig.sh
++endef
+ endif
+-	cp -dpf $(MICROPERL_DIR)/microperl $@
+-ifneq ($(BR2_STRIP_none),y)
+-	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
+-endif
+-	(cd $(TARGET_DIR)/usr/bin; rm -f perl; ln -s microperl perl;)
+-
+-microperl: $(TARGET_DIR)/usr/bin/microperl
+-
+-microperl-source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 
+-microperl-unpacked: $(MICROPERL_DIR)/.source
+-
+-microperl-config: $(MICROPERL_DIR)/.host_configured
+-
+-microperl-host: $(MICROPERL_DIR)/.host_make
+-
+-microperl-host-fixed: $(MICROPERL_DIR)/.host_make_fixed
+-
+-microperl-clean:
+-	rm -rf $(TARGET_DIR)/usr/bin/microperl \
+-		$(TARGET_DIR)/$(MICROPERL_MODS_DIR) $(TARGET_DIR)/usr/bin/perl
+-	-rmdir $(TARGET_DIR)/usr/lib/perl$(MICROPERL_MAJ)
+-	-$(MAKE) -C $(MICROPERL_DIR) -f Makefile.micro clean
+-
+-microperl-dirclean:
+-	rm -rf $(MICROPERL_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_MICROPERL),y)
+-TARGETS+=microperl
+-endif
++define MICROPERL_CONFIGURE_CMDS
++	$(SED) '/^archlib=/d' -e '/^archlibexp=/d' -e '/^optimize=/d' \
++		-e '/^archname=/d' -e '/^d_poll=/d' -e '/^i_poll=/d' \
++		-e '/^osname=/d' -e '/^uselargefiles=/d' -e '/^d_archlib=/d' \
++		-e '/^d_memset=/d' -e '/^i_fcntl=/d' -e '/^useperlio=/d' \
++		-e '/^u32type=/d' -e '/^need_va_copy=/d' $(@D)/uconfig.sh
++	$(SED) 's/5.12/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
++	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
++	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
++	echo "d_archlib='define'" >>$(@D)/uconfig.sh
++	echo "archname='$(REAL_GNU_TARGET_NAME)'" >>$(@D)/uconfig.sh
++	echo "osname='linux'" >>$(@D)/uconfig.sh
++	echo "cc='$(TARGET_CC)'" >>$(@D)/uconfig.sh
++	echo "ccflags='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
++	echo "optimize='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
++	echo "usecrosscompile='define'" >>$(@D)/uconfig.sh
++	echo "d_memset='define'" >>$(@D)/uconfig.sh
++	echo "i_fcntl='define'" >>$(@D)/uconfig.sh
++	echo "useperlio='define'" >>$(@D)/uconfig.sh
++	echo "u32type='unsigned int'" >>$(@D)/uconfig.sh
++	echo "need_va_copy='define'" >>$(@D)/uconfig.sh
++	echo "d_poll='define'" >>$(@D)/uconfig.sh
++	echo "i_poll='define'" >>$(@D)/uconfig.sh
++	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++	$(SED) 's/local\///' $(@D)/uconfig.sh
++	$(MICROPERL_LARGEFILE)
++	$(MICROPERL_WCHAR)
++	$(MAKE) -C $(@D) -f Makefile.micro regen_uconfig
++	cp -f $(@D)/uconfig.h $(@D)/config.h
++	cp -f $(@D)/uconfig.sh $(@D)/config.sh
++	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
++	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
++	cd $(@D) ; $(HOST_DIR)/usr/bin/perl make_patchnum.pl ; \
++	$(HOST_DIR)/usr/bin/perl configpm
++endef
++
++define MICROPERL_BUILD_CMDS
++	$(MAKE) -f Makefile.micro -C $(@D) \
++		CC="$(HOSTCC)" bitcount.h
++	$(MAKE) -f Makefile.micro -C $(@D) \
++		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
++endef
++
++define MICROPERL_INSTALL_MODS
++	cd $(@D) ; \
++	for i in $(MICROPERL_MODS); do \
++		[ -f $(@D)/lib/$$i ] && $(INSTALL) -m 0644 -D $(@D)/lib/$$i \
++			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
++	done
++	cd $(@D)/ext ; \
++	for i in $(MICROPERL_MODS); do \
++		dir=`echo $$i|cut -d . -f 1`; \
++		[ -d $(@D)/ext/$$dir ] && $(INSTALL) -m 0644 -D $(@D)/ext/$$dir/$$i \
++		$(TARGET_DIR)/$(MICROPERL_MOD_DIR)/$$dir/$$i; \
++	done
++endef
++
++# Some extensions don't need a build run
++# We try to build anyway to avoid a huge black list
++# Just ignore make_ext.pl warning/errors
++define MICROPERL_BUILD_EXTENSIONS
++	for i in $(MICROPERL_MODS); do \
++	cd $(@D); ln -sf $(HOST_DIR)/usr/bin/perl miniperl; \
++		PERL5LIB=$(TARGET_DIR)/$(MICROPERL_ARCH_DIR) \
++		$(HOST_DIR)/usr/bin/perl make_ext.pl MAKE="$(MAKE)" --nonxs \
++		`echo $$i|sed -e 's/.pm//'`; \
++	done
++endef
++
++define MICROPERL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/microperl $(TARGET_DIR)/usr/bin/microperl
++	ln -sf microperl $(TARGET_DIR)/usr/bin/perl
++	for i in $(MICROPERL_ARCH_MODS); do \
++		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
++			$(TARGET_DIR)/$(MICROPERL_ARCH_DIR)/$$i; \
++	done
++	for i in $(MICROPERL_BASE_MODS); do \
++		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
++			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
++	done
++	$(MICROPERL_BUILD_EXTENSIONS)
++	for i in $(MICROPERL_MODS); do \
++		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
++			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
++	done
++endef
++
++define MICROPERL_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/perl
++	rm -f $(TARGET_DIR)/usr/bin/microperl
++	rm -rf $(TARGET_DIR)/usr/lib/perl5
++endef
++
++$(eval $(call GENTARGETS,package,microperl))
++$(eval $(call GENTARGETS,package,microperl,host))
+-- 
+1.7.3.4
