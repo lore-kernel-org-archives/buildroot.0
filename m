@@ -1,76 +1,51 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 17 May 2011 10:15:39 +0200
-Subject: [Buildroot] u-boot compiler issue
-In-Reply-To: <20110517090130.7aae0ca7@surf>
-References: <4DCBEC13.2050802@visionsystems.de> <20110517090130.7aae0ca7@surf>
-Message-ID: <4DD22EAB.70508@visionsystems.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 May 2011 10:43:28 +0200
+Subject: [Buildroot] [git commit] Allow several device tables and split
+	in two parts our device table
+In-Reply-To: <20110517090426.0bd12953@surf> (Thomas Petazzoni's message of
+	"Tue, 17 May 2011 09:04:26 +0200")
+References: <20110510215121.DFA53826FF@busybox.osuosl.org>
+	<20110517090426.0bd12953@surf>
+Message-ID: <87mxilhg3z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->> I was building u-boot with buildroots created toolchain. Everything was working except
->> that pointer passed via r8 was not writable (RAM was not configured
->> etc.).
-> Could you give more details about this analysis ?
+Hi,
 
-#define DECLARE_GLOBAL_DATA_PTR     register volatile gd_t *gd asm ("r8")
+ Thomas> I know it's my stuff, but this doesn't work that well. Once you
+ Thomas> have choosen one particular solution, if you switch to another,
+ Thomas> then the list of default device table isn't updated
+ Thomas> accordingly. Of course, we want to preserve the user choice for
+ Thomas> the list of device tables, but I'm quite sure we'll have some
+ Thomas> support requests from people doing :
 
-in file arch/arm/cpu/arm_cortexa8/omap3/emif4.c:
+ Thomas>  * A build based on a dynamic /dev
+ Thomas>  * Change configuration to static /dev
+ Thomas>  * Build
+ Thomas>  * See that nothing works, because /dev is empty
 
-int dram_init(void)
-{
-        DECLARE_GLOBAL_DATA_PTR;
-        unsigned int size0 = 0, size1 = 0;
+Yes, I know - It's the same kind of issues we have with busybox/uclibc
+configuration file if you change version.
 
-        size0 = get_sdr_cs_size(CS0);
+ Thomas> But I don't know what we can do against this. Should we instead add an
+ Thomas> option to makedevs to instruct makedevs to skip entries in /dev ? This
+ Thomas> option could then be used for all dynamic /dev cases, and would work
+ Thomas> even if the device table contains entries for /dev ? Or should we keep
+ Thomas> it as it is ?
 
-        /*
-         * If a second bank of DDR is attached to CS1 this is
-         * where it can be started.  Early init code will init
-         * memory on CS0.
-         */
-        if ((sysinfo.mtype == DDR_COMBO) || (sysinfo.mtype == DDR_STACKED))
-                size1 = get_sdr_cs_size(CS1);
+Alternatively we can split it up and provide an option for the base
+device table (which will default to target/generic/device_table.txt) and
+add an option for static device nodes (which defaults to
+target/generic/device_table_dev.txt) and only make that option visible
+if static dev is used.
 
-        gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+The makefile can then concatenate those options and use them like it is
+done today.
 
-        gd->bd->bi_dram[0].size = size0;  <----- this assignment has no effect, afterwards the size is 0
-
-        gd->bd->bi_dram[1].start = PHYS_SDRAM_1 + get_sdr_cs_offset(CS1);
-        gd->bd->bi_dram[1].size = size1;
-
-        return 0;
-}
-
-with CodeSourcery 's compiler the size will be correctly assigned.
-
->> But if the same code was compiled with CodeSourcery everything
->> was working. Here gcc configuration from buidroot:
-> Does the U-Boot compilation fails, or the compilation works but U-Boot
-> fails to run on the device ? If it's the latter, then which version of
-> U-Boot are you using ? Only recent versions of U-Boot work well with
-> gcc 4.5.
-
-This is u-boot 2010.06 from ARAGO project (http://arago-project.org/wiki/index.php/Main_Page). Git tree:
-http://arago-project.org/git/projects/?p=u-boot-omap3.git;a=summary
-
-U-Boot compiles correctly in the sense that I get u-boot.bin and it also runs: I get command prompt and can execute various commands. The only things that fail are those that require RAM address and size like bootm and so on.
-
-I hope this info will help.
-
-P.S. I've got a hint that enabling __cxa_atexit would possibly solve the problem. So I added this setting to the toolchain, but it didn't help.
-
-COLLECT_GCC=arm-linux-gcc
-COLLECT_LTO_WRAPPER=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr/libexec/gcc/arm-unknown-linux-uclibcgnueabi/4.5.2/lto-wrapper
-Target: arm-unknown-linux-uclibcgnueabi
-Configured with: /home/YegorYefremov/projects/versioned/tests/buildroot/output/toolchain/gcc-4.5.2/configure --prefix=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr --build=x86_64-unknown-linux-gnu --host=x86_64-unknown-linux-gnu --target=arm-unknown-linux-uclibcgnueabi --enable-languages=c,c++ --with-sysroot=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot --with-build-time-tools=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/bin --disable-__cxa_atexit --enable-target-optspace --with-gnu-ld --disable-libssp --disable-multilib --disable-tls --enable-shared --with-gmp=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr --with-mpfr=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr --with-mpc=/home/YegorYefremov/projects/versioned/tests/buildroot/output/host/usr --disable-nls --enable-threads
---disable-decimal-float --with-float=soft --with-abi=aapcs-linux --with-arch=armv7-a --with-tune=cortex-a8 --enable-__cxa_atexit --with-pkgversion='Buildroot 2011.05-git-00157-gf4c06f4-dirty' --with-bugurl=http://bugs.buildroot.net/
-Thread model: posix
-gcc version 4.5.2 (Buildroot 2011.05-git-00157-gf4c06f4-dirty)
-
---disable-__cxa_atexit
-
---disable-__cxa_atexit
+-- 
+Bye, Peter Korsgaard
