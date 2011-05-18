@@ -1,92 +1,82 @@
-From: Matias Garcia <mgarcia@rossvideo.com>
-Date: Wed, 18 May 2011 17:17:05 -0400
-Subject: [Buildroot] [PATCH] external toolchain: add arbitrary arguments
- to sysroot discovery and toolchain wrapper
-In-Reply-To: <20110518180229.7e8a2501@surf>
-References: <4DC46EC4.2060000@rossvideo.com> <20110508190400.43407143@surf>
-	<1305033911.7239.3.camel@matias-lnx-host>
-	<1305733040.7239.20.camel@matias-lnx-host>
-	<20110518180229.7e8a2501@surf>
-Message-ID: <1305753425.7239.26.camel@matias-lnx-host>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 May 2011 23:48:09 +0200
+Subject: [Buildroot] [RFC] Override source directories
+Message-ID: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2011-05-18 at 18:02 +0200, Thomas Petazzoni wrote:
+Hello,
 
-> Hello Matias,
-> 
-> Please keep the Buildroot list in the loop for Buildroot-related
-> discussions.
+Here is a set of RFC patches that implement the basic mechanism I have
+been referring to since a couple of weeks/months about allowing users
+to override the source directory for packages.
 
+From an user perspective, it allows ones to create a "local.mk" file
+in the Buildroot main source directory, with variable definitions such
+as :
 
-Will do. I sent a reply to the list last time and no-one replied...
+ ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+ MYAPP_OVERRIDE_SRCDIR = /home/foobar/project/myapp
+ LIBGLIB2_OVERRIDE_SRCDIR = /home/foobar/git/libglib2
 
+At build time, Buildroot would use those directories at the source for
+the packages, instead of downloading, extracing and patching them in
+the usual way.
 
-> On Wed, 18 May 2011 11:37:20 -0400
-> Matias Garcia <mgarcia@rossvideo.com> wrote:
-> 
-> > I never received a reply to this e-mail. Do you think it's worth
-> > re-submitting my patch? If I did, would it make it into the 2011.05
-> > build? All I'm doing is updating Peter's wrapper with custom
-> > optimizations.
-> 
-> I'm still not a big fan of adding a different config option than
-> BR2_TARGET_OPTIMIZATION that would be specific to the external
-> toolchain case. But I haven't dug into the issue enough to propose a
-> solution.
+Internally, this is implemented inside our package infrastructure, so
+this mechanism should work for all packages that rely on the
+infrastructure. The GENTARGETS macro makes sure that the package build
+process bypasses the download, extract and patch step when
+<pkg>_OVERRIDE_SRCDIR is defined, and instead a symlinking step is
+added. It's very simple.
 
+This series of patches also add the <pkg>-reconfigure and
+<pkg>-rebuild targets, which makes it easy for users to restart the
+package build process at the compilation step or at the configuration
+step, without having to mess up with stamp file details.
 
-Here's the patch simplified to use only BR2_TARGET_OPTIMIZATION. Again,
-I don't know any fancy ways to post patches, so it's just the git diff.
-I moved the optimizations to the end of the wrapper so that you can
-supersede any of the build-in stuff if you want, at your peril.
+There are still a few issues to solve and discuss, though :
 
+ * Is local.mk inside the main source directory the good solution?
+   Should we instead provide a configuration option to set the path to
+   the override file? Or another solution?
 
-> 
-> Thomas
+ * As the mechanism is implemented today, "make clean" removes the
+   symbolic link $(O)/build/<pkg>-<version>, but not the stamp files
+   created inside this source directory. So next time the build is
+   started, things will go wrong. To solve this, the only solution I
+   see is to separate the directory with the stamp files from the
+   source directory, at least in the case of overriden source
+   directories.
 
+ * Other things?
 
-Matias
---
-Patch to add BR2_TARGET_OPTIMIZATION to the external toolchain wrapper.
+Feedback, comments and ideas welcome.
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk
-b/toolchain/toolchain-external/ext-tool.mk
-index 328f908..ad95d21 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -132,6 +132,10 @@ CC_TARGET_ABI_:=$(call qstrip,
-$(BR2_GCC_TARGET_ABI))
- 
- # march/mtune/floating point mode needs to be passed to the external
-toolchain
- # to select the right multilib variant
-+ifneq ($(BR2_TARGET_OPTIMIZATION),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += $(BR2_TARGET_OPTIMIZATION)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS +=
--DBR_OPT='$(BR2_TARGET_OPTIMIZATION)'
-+endif
- ifneq ($(CC_TARGET_TUNE_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index a485e74..dfa4fba 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -37,6 +37,9 @@ static char *args[MAXARGS] = {
- #ifdef BR_VFPFLOAT
- 	"-mfpu=vfp",
- #endif /* BR_VFPFLOAT */
-+#ifdef BR_OPT
-+	BR_OPT,
-+#endif /* BR_OPT */
- };
- 
- static const char *get_basename(const char *name)b
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110518/4e177f44/attachment-0001.html>
+Regards,
+
+Thomas
+
+The following changes since commit 7234c23967fa70b760c64700e56bb1778019fbeb:
+
+  CHANGES: update with recent changes (2011-05-18 21:02:30 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.08/sourcedir
+
+Thomas Petazzoni (4):
+      package: enhance infrastructure to support source dir override
+      package: remove stamp files in <pkg>-dirclean
+      package: add <pkg>-rebuild and <pkg>-reconfigure
+      Include a local.mk for package overrides
+
+ Makefile                    |    1 +
+ package/Makefile.package.in |   30 ++++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+), 0 deletions(-)
+
+Thanks,
+-- 
+Thomas Petazzoni
