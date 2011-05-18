@@ -1,40 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 May 2011 17:37:17 +0200
-Subject: [Buildroot] [PATCH 09/10] libgtk2: add option to install the
-	gtk-demo program
-In-Reply-To: <d9451fbf4cec2d4a7533fb4dd0fa5853b61e93f0.1305713253.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Wed, 18 May 2011 12:08:27 +0200")
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 May 2011 18:00:22 +0200
+Subject: [Buildroot] [PATCH 02/10] dhcpdump: move as a proper package,
+	bump version
+In-Reply-To: <8739kcvxaj.fsf@macbook.be.48ers.dk>
 References: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
 	<cover.1305713253.git.thomas.petazzoni@free-electrons.com>
-	<d9451fbf4cec2d4a7533fb4dd0fa5853b61e93f0.1305713253.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y624uij6.fsf@macbook.be.48ers.dk>
+	<5397d444fc4c7aacb229d2c103171c9a8ad97e61.1305713253.git.thomas.petazzoni@free-electrons.com>
+	<8739kcvxaj.fsf@macbook.be.48ers.dk>
+Message-ID: <20110518180022.36ae9345@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Wed, 18 May 2011 17:33:08 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/libgtk2/Config.in  |    7 +++++++
- Thomas>  package/libgtk2/libgtk2.mk |    2 ++
- Thomas>  2 files changed, 9 insertions(+), 0 deletions(-)
+> Where does this patch come from?
 
- Thomas> diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
- Thomas> index 38b0b47..b5c42ef 100644
- Thomas> --- a/package/libgtk2/Config.in
- Thomas> +++ b/package/libgtk2/Config.in
- Thomas> @@ -16,5 +16,12 @@ config BR2_PACKAGE_LIBGTK2
- 
- Thomas>  	  http://www.gtk.org/
- 
- Thomas> +config BR2_PACKAGE_LIBGTK2_DEMO
- Thomas> +        bool "Install libgtk2 demo program"
- Thomas> +	depends on BR2_PACKAGE_LIBGTK2
+Me :-)
 
-bool line should be indented with a <tab>
+I'll rebase with a fix for this, and the libgtk2 tab issue.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
