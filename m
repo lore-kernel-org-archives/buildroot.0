@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 18 May 2011 18:22:42 +0200
-Subject: [Buildroot] [git commit] gtk2-engines: bump,
-	rename config option and convert to AUTOTARGETS
-Message-ID: <20110518180431.D03F983564@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] dhcpdump: move as a proper package,
+	bump version
+Message-ID: <20110518180429.D549E83564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,141 +10,187 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e8539797032940eddcba98b3949d730e593b63e
+commit: http://git.buildroot.net/buildroot/commit/?id=95cf21ef8c098369a54e8bd2ec97f1b56433c928
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gtk2-engines is bumped from 2.9.1 to 2.20.2 (the latest available
-version compatible with Gtk2). The package is converted to the
-AUTOTARGETS infrastructure.
-
-The config option is renamed so that it matches the package name
-(gtk2-engines instead of libgtk2-engines).
+dhcpdump 1.7 required tcpdump, but version 1.8 now uses libpcap
+instead. Also version 1.8 is no longer autotools based, but just a
+simple Makefile.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gtk2-engines/Config.in       |    2 +-
- package/gtk2-engines/gtk2-engines.mk |   86 ++++------------------------------
- 2 files changed, 10 insertions(+), 78 deletions(-)
+ package/Config.in                                  |    1 +
+ package/dhcpdump/Config.in                         |    5 ++
+ .../dhcpdump-1.8-use-non-bsd-structures.patch      |   23 +++++++
+ package/dhcpdump/dhcpdump.mk                       |   21 +++++++
+ package/tcpdump/Config.in                          |    6 --
+ package/tcpdump/dhcpdump.mk                        |   62 --------------------
+ 6 files changed, 50 insertions(+), 68 deletions(-)
+ create mode 100644 package/dhcpdump/Config.in
+ create mode 100644 package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+ create mode 100644 package/dhcpdump/dhcpdump.mk
+ delete mode 100644 package/tcpdump/dhcpdump.mk
 
-diff --git a/package/gtk2-engines/Config.in b/package/gtk2-engines/Config.in
-index 265f805..756a7d0 100644
---- a/package/gtk2-engines/Config.in
-+++ b/package/gtk2-engines/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_LIBGTK2_ENGINES
-+config BR2_PACKAGE_GTK2_ENGINES
- 	bool "gtk engines"
- 	depends on BR2_PACKAGE_LIBGTK2
+diff --git a/package/Config.in b/package/Config.in
+index 5e48ab7..1d3c0cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -385,6 +385,7 @@ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+ endif
++source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ethtool/Config.in"
+diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
+new file mode 100644
+index 0000000..1840e34
+--- /dev/null
++++ b/package/dhcpdump/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_DHCPDUMP
++	bool "dhcpdump"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  A tool for monitoring dhcp requests using tcpdump.
+diff --git a/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+new file mode 100644
+index 0000000..40115fb
+--- /dev/null
++++ b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+@@ -0,0 +1,23 @@
++The udphdr structure has uh_* fields when _FAVOR_BSD is
++defined. Otherwise, the fields are just named source, dest, len and
++check. See <netinet/udp.h>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: dhcpdump-1.8/dhcpdump.c
++===================================================================
++--- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
+++++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
++@@ -163,10 +163,10 @@
++ 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
++ 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
++ 
++-	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
+++	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
++ 		return;
++ 
++-	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
+++	printdata((u_char *)(sp + offset), ntohs(udp->len));
++ }
++ 
++ // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+new file mode 100644
+index 0000000..cca6749
+--- /dev/null
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# dhcpdump
++#
++#############################################################
++
++DHCPDUMP_VERSION = 1.8
++DHCPDUMP_SITE    = http://www.mavetju.org/download/
++DHCPDUMP_SOURCE  = dhcpdump-$(DHCPDUMP_VERSION).tar.gz
++
++DHCPDUMP_DEPENDENCIES = libpcap
++
++define DHCPDUMP_BUILD_CMDS
++	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
++endef
++
++define DHCPDUMP_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/dhcpdump $(TARGET_DIR)/usr/bin/dhcpdump
++endef
++
++$(eval $(call GENTARGETS,package,dhcpdump))
+diff --git a/package/tcpdump/Config.in b/package/tcpdump/Config.in
+index 09e2740..c284398 100644
+--- a/package/tcpdump/Config.in
++++ b/package/tcpdump/Config.in
+@@ -11,9 +11,3 @@ config BR2_PACKAGE_TCPDUMP_SMB
+ 	depends on BR2_PACKAGE_TCPDUMP
  	help
-diff --git a/package/gtk2-engines/gtk2-engines.mk b/package/gtk2-engines/gtk2-engines.mk
-index f188188..aa9e4c3 100644
---- a/package/gtk2-engines/gtk2-engines.mk
-+++ b/package/gtk2-engines/gtk2-engines.mk
-@@ -3,16 +3,13 @@
- # gtk2-engines.0
- #
- #############################################################
--GTK2_ENGINES_VERSION:=2.9.1
--GTK2_ENGINES_SOURCE:=gtk-engines-$(GTK2_ENGINES_VERSION).tar.bz2
--GTK2_ENGINES_SITE:=http://ftp.gnome.org/pub/GNOME/sources/gtk-engines/2.9
--GTK2_ENGINES_CAT:=$(BZCAT)
--GTK2_ENGINES_DIR:=$(BUILD_DIR)/gtk-engines-$(GTK2_ENGINES_VERSION)
--GTK2_ENGINES_BINARY:=libclearlooks.so
-+GTK2_ENGINES_VERSION = 2.20.2
-+GTK2_ENGINES_SOURCE  = gtk-engines-$(GTK2_ENGINES_VERSION).tar.bz2
-+GTK2_ENGINES_SITE    = http://ftp.gnome.org/pub/GNOME/sources/gtk-engines/2.20
- 
--GTK2_ENGINES_BUILD_ENV= \
+ 	  enable possibly-buggy SMB printer
+-
+-config BR2_PACKAGE_DHCPDUMP
+-	bool "dhcpdump"
+-	select BR2_PACKAGE_LIBPCAP
+-	help
+-	  A tool for monitoring dhcp requests using tcpdump.
+diff --git a/package/tcpdump/dhcpdump.mk b/package/tcpdump/dhcpdump.mk
+deleted file mode 100644
+index 0b2d64a..0000000
+--- a/package/tcpdump/dhcpdump.mk
++++ /dev/null
+@@ -1,62 +0,0 @@
+-#############################################################
+-#
+-# dhcpdump
+-#
+-#############################################################
+-# Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
+-# Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
+-
+-DHCPDUMP_VERSION:=1.7
+-DHCPDUMP_DIR:=$(BUILD_DIR)/dhcpdump-$(DHCPDUMP_VERSION)
+-DHCPDUMP_SITE:=http://www.mavetju.org/download/
+-DHCPDUMP_SOURCE:=dhcpdump-$(DHCPDUMP_VERSION).tar.gz
+-DHCPDUMP_CAT:=$(ZCAT)
+-
+-$(DL_DIR)/$(DHCPDUMP_SOURCE):
+-	 $(call DOWNLOAD,$(DHCPDUMP_SITE),$(DHCPDUMP_SOURCE))
+-
+-dhcpdump-source: $(DL_DIR)/$(DHCPDUMP_SOURCE)
+-
+-$(DHCPDUMP_DIR)/.unpacked: $(DL_DIR)/$(DHCPDUMP_SOURCE)
+-	$(DHCPDUMP_CAT) $(DL_DIR)/$(DHCPDUMP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(DHCPDUMP_DIR)/.configured: $(DHCPDUMP_DIR)/.unpacked
+-	(cd $(DHCPDUMP_DIR); rm -f config.cache; \
+-		BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)" \
 -		$(TARGET_CONFIGURE_OPTS) \
 -		$(TARGET_CONFIGURE_ARGS) \
-+GTK2_ENGINES_DEPENDENCIES = libgtk2 host-intltool
-+
-+GTK2_ENGINES_CONF_ENV = \
- 		ac_cv_func_posix_getpwuid_r=yes \
- 		glib_cv_stack_grows=no \
- 		glib_cv_uscore=no \
-@@ -65,37 +62,7 @@ GTK2_ENGINES_BUILD_ENV= \
- 		gl_cv_c_restrict=no \
- 		ac_cv_path_CUPS_CONFIG=no
- 
--
--$(DL_DIR)/$(GTK2_ENGINES_SOURCE):
--	 $(call DOWNLOAD,$(GTK2_ENGINES_SITE),$(GTK2_ENGINES_SOURCE))
--
--gtk2-engines-source: $(DL_DIR)/$(GTK2_ENGINES_SOURCE)
--
--$(GTK2_ENGINES_DIR)/.unpacked: $(DL_DIR)/$(GTK2_ENGINES_SOURCE)
--	$(GTK2_ENGINES_CAT) $(DL_DIR)/$(GTK2_ENGINES_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(GTK2_ENGINES_DIR) package/gtk2-engines/ \*.patch*
--	$(CONFIG_UPDATE) $(GTK2_ENGINES_DIR)
--	touch $(GTK2_ENGINES_DIR)/.unpacked
--
--$(GTK2_ENGINES_DIR)/.configured: $(GTK2_ENGINES_DIR)/.unpacked
--	(cd $(GTK2_ENGINES_DIR); rm -rf config.cache; \
--		$(GTK2_ENGINES_BUILD_ENV) \
 -		./configure $(QUIET) \
 -		--target=$(GNU_TARGET_NAME) \
 -		--host=$(GNU_TARGET_NAME) \
 -		--build=$(GNU_HOST_NAME) \
 -		--prefix=/usr \
--		--exec-prefix=/usr \
--		--bindir=/usr/bin \
--		--sbindir=/usr/sbin \
--		--libdir=/lib \
--		--libexecdir=/lib \
 -		--sysconfdir=/etc \
--		--datadir=/usr/share \
 -		--localstatedir=/var \
--		--includedir=/usr/include \
--		--mandir=/usr/man \
--		--infodir=/usr/info \
-+GTK2_ENGINES_CONF_OPT = \
- 		--with-x \
- 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
- 		--x-libraries=$(STAGING_DIR)/usr/lib \
-@@ -114,41 +81,6 @@ $(GTK2_ENGINES_DIR)/.configured: $(GTK2_ENGINES_DIR)/.unpacked
- 		--enable-animation \
- 		--disable-development \
- 		--disable-paranoia \
--		--disable-deprecated \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
 -	)
--	touch $(GTK2_ENGINES_DIR)/.configured
+-	touch $@
 -
--$(GTK2_ENGINES_DIR)/gtk/.libs/$(GTK2_ENGINES_BINARY): $(GTK2_ENGINES_DIR)/.configured
--	$(GTK2_ENGINES_BUILD_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(GTK2_ENGINES_DIR)
--	touch -c $(GTK2_ENGINES_DIR)/gtk/.libs/$(GTK2_ENGINES_BINARY)
+-$(DHCPDUMP_DIR)/dhcpdump: $(DHCPDUMP_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(DHCPDUMP_DIR)
 -
--$(STAGING_DIR)/lib/$(GTK2_ENGINES_BINARY): $(GTK2_ENGINES_DIR)/gtk/.libs/$(GTK2_ENGINES_BINARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(GTK2_ENGINES_DIR) install
--	touch -c $(STAGING_DIR)/lib/$(GTK2_ENGINES_BINARY)
+-$(TARGET_DIR)/usr/sbin/dhcpdump: $(DHCPDUMP_DIR)/dhcpdump
+-	cp -af $< $@
 -
--$(TARGET_DIR)/lib/gtk-2.0/2.10.0/engines/$(GTK2_ENGINES_BINARY): $(STAGING_DIR)/lib/$(GTK2_ENGINES_BINARY)
--	mkdir -p $(TARGET_DIR)/lib/gtk-2.0/2.10.0/engines
--	cp -a $(STAGING_DIR)/lib/gtk-2.0/2.10.0/engines/*.so \
--		$(TARGET_DIR)/lib/gtk-2.0/2.10.0/engines/
--	mkdir -p $(TARGET_DIR)/usr/usr/share/themes
--	cp -a $(STAGING_DIR)/usr/share/themes/Clearlooks \
--		$(TARGET_DIR)/usr/share/themes/
--	touch -c $(TARGET_DIR)/lib/gtk-2.0/2.10.0/engines/$(GTK2_ENGINES_BINARY)
-+		--disable-deprecated
- 
--gtk2-engines: libgtk2 $(TARGET_DIR)/lib/gtk-2.0/2.10.0/engines/$(GTK2_ENGINES_BINARY)
+-dhcpdump: zlib libpcap $(TARGET_DIR)/usr/sbin/dhcpdump
 -
--gtk2-engines-clean:
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(GTK2_ENGINES_DIR) uninstall
--	-$(MAKE) -C $(GTK2_ENGINES_DIR) clean
+-dhcpdump-clean:
+-	rm -f $(TARGET_DIR)/usr/sbin/dhcpdump
+-	-$(MAKE) -C $(DHCPDUMP_DIR) clean
 -
--gtk2-engines-dirclean:
--	rm -rf $(GTK2_ENGINES_DIR)
--
+-dhcpdump-dirclean:
+-	rm -rf $(DHCPDUMP_DIR)
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_GTK2_ENGINES),y)
--TARGETS+=gtk2-engines
+-ifeq ($(BR2_PACKAGE_DHCPDUMP),y)
+-TARGETS+=dhcpdump
 -endif
-+$(eval $(call AUTOTARGETS,package,gtk2-engines))
 -- 
 1.7.3.4
