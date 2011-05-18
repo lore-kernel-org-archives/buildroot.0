@@ -1,62 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 May 2011 17:27:48 +0200
-Subject: [Buildroot] [PATCH] Makefile.package.in: Makes it possible to
- override the default extract commands
-In-Reply-To: <BANLkTimPeuvXnL=Pv_nyBC2EpLLMd8H_Hg@mail.gmail.com>
-References: <1305027254-21565-1-git-send-email-a@awn.dk>
-	<1305027254-21565-2-git-send-email-a@awn.dk>
-	<20110510204332.62afd066@surf> <20110516215226.26540f2a@surf>
-	<BANLkTimPeuvXnL=Pv_nyBC2EpLLMd8H_Hg@mail.gmail.com>
-Message-ID: <20110518172748.70078d60@surf>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 18 May 2011 17:33:08 +0200
+Subject: [Buildroot] [PATCH 02/10] dhcpdump: move as a proper package,
+	bump version
+In-Reply-To: <5397d444fc4c7aacb229d2c103171c9a8ad97e61.1305713253.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Wed, 18 May 2011 12:08:20 +0200")
+References: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
+	<cover.1305713253.git.thomas.petazzoni@free-electrons.com>
+	<5397d444fc4c7aacb229d2c103171c9a8ad97e61.1305713253.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8739kcvxaj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 18 May 2011 16:39:42 +0200
-Allan Nielsen <a@awn.dk> wrote:
+ Thomas> dhcpdump 1.7 required tcpdump, but version 1.8 now uses libpcap
+ Thomas> instead. Also version 1.8 is no longer autotools based, but just a
+ Thomas> simple Makefile.
 
-> Hi Thomas
-> 
-> Sorry for not replaying the last couple of days, but I have been busy
-> with some other concerns.
-> 
-> However, when I did a rebuild I did also realize the problems with the
-> solution I suggested. Since then I changed the extract_cmd statement
-> to also the same as you have suggested:
-> 
-> 430 $(2)_EXTRACT_CMDS ?= $(if $$($(2)_SOURCE),$$(INFLATE$$(suffix
-> $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
-> 431 ????????$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR)
-> $(TAR_OPTIONS) -)
-> 
-> This solution has been working fine for me, (and it should make no
-> difference if I changes it to your suggestion).
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/Config.in                                  |    1 +
+ Thomas>  package/dhcpdump/Config.in                         |    5 ++
+ Thomas>  .../dhcpdump-1.8-use-non-bsd-structures.patch      |   21 +++++++
+ Thomas>  package/dhcpdump/dhcpdump.mk                       |   21 +++++++
+ Thomas>  package/tcpdump/Config.in                          |    6 --
+ Thomas>  package/tcpdump/dhcpdump.mk                        |   62 --------------------
 
-Ok.
+ Thomas> diff --git a/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+ Thomas> new file mode 100644
+ Thomas> index 0000000..15a3508
+ Thomas> --- /dev/null
+ Thomas> +++ b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+ Thomas> @@ -0,0 +1,21 @@
+ Thomas> +The udphdr structure has uh_* fields when _FAVOR_BSD is
+ Thomas> +defined. Otherwise, the fields are just named source, dest, len and
+ Thomas> +check. See <netinet/udp.h>.
+ Thomas> +
 
-> Anyways, I would like to know where you stand on this, do you think
-> this solution to be included in buildroot or would you prefer to wait
-> for a better suggestion?
+Where does this patch come from?
 
-I'm fine with your existing proposal. Could you repost a proper patch
-with the quoting fixes, so that I can give it a test, and send my
-Acked-by ?
-
-Note however that we are pretty close to the 2011.05 release, so it is
-quite likely that Peter will delay such infrastructure changes until
-after the release. But that doesn't prevent us from making progress on
-it, getting my Acked-by, and therefore be on track to merge it
-post-2011.05.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
