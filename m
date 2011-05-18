@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 May 2011 18:02:29 +0200
-Subject: [Buildroot] [PATCH] external toolchain: add arbitrary arguments
- to sysroot discovery and toolchain wrapper
-In-Reply-To: <1305733040.7239.20.camel@matias-lnx-host>
-References: <4DC46EC4.2060000@rossvideo.com> <20110508190400.43407143@surf>
-	<1305033911.7239.3.camel@matias-lnx-host>
-	<1305733040.7239.20.camel@matias-lnx-host>
-Message-ID: <20110518180229.7e8a2501@surf>
+From: Allan Nielsen <a@awn.dk>
+Date: Wed, 18 May 2011 18:05:38 +0200
+Subject: [Buildroot] [PATCH] Makefile.package.in: Makes it possible to
+ override the default extract commands
+In-Reply-To: <20110518172748.70078d60@surf>
+References: <1305027254-21565-1-git-send-email-a@awn.dk>
+	<1305027254-21565-2-git-send-email-a@awn.dk>
+	<20110510204332.62afd066@surf> <20110516215226.26540f2a@surf>
+	<BANLkTimPeuvXnL=Pv_nyBC2EpLLMd8H_Hg@mail.gmail.com>
+	<20110518172748.70078d60@surf>
+Message-ID: <BANLkTikqXNG7V+2AqUe2k0Zr787me=q_2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matias,
+Hi
 
-Please keep the Buildroot list in the loop for Buildroot-related
-discussions.
+> I'm fine with your existing proposal. Could you repost a proper patch
+> with the quoting fixes, so that I can give it a test, and send my
+> Acked-by ?
 
-On Wed, 18 May 2011 11:37:20 -0400
-Matias Garcia <mgarcia@rossvideo.com> wrote:
+Sure
 
-> I never received a reply to this e-mail. Do you think it's worth
-> re-submitting my patch? If I did, would it make it into the 2011.05
-> build? All I'm doing is updating Peter's wrapper with custom
-> optimizations.
+> Note however that we are pretty close to the 2011.05 release, so it is
+> quite likely that Peter will delay such infrastructure changes until
+> after the release. But that doesn't prevent us from making progress on
+> it, getting my Acked-by, and therefore be on track to merge it
+> post-2011.05.
 
-I'm still not a big fan of adding a different config option than
-BR2_TARGET_OPTIMIZATION that would be specific to the external
-toolchain case. But I haven't dug into the issue enough to propose a
-solution.
+No problem
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--
+Allan W. Nielsen
