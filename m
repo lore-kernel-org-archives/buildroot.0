@@ -1,55 +1,202 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 18 May 2011 10:02:09 +0100
-Subject: [Buildroot] [buildroot] Add libiqrf package.
-In-Reply-To: <1305662198-23040-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1305662198-23040-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <BANLkTikt9Eq1V7Uvhx+L-PkHjL3bmyS=Pw@mail.gmail.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 18 May 2011 12:10:36 +0200
+Subject: [Buildroot] [PATCH 1/1] kernel-patch.sh: script changed to support
+	archives in a proper way
+In-Reply-To: <4D9D84AB.3080101@atmel.com>
+References: <4D9D84AB.3080101@atmel.com>
+Message-ID: <1968dad8075f5f4a269aa905e5e07d1138acd7a0.1305713224.git.ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 17, 2011 at 8:56 PM, Marek Belisko
-<marek.belisko@open-nandra.com> wrote:
-> Libiqrf is library written in C which simplify access to
-> iqrf usb devices (http://iqrf.org).
->
-> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-> ---
-> ?package/Config.in ? ? ? ? ?| ? ?1 +
-> ?package/libiqrf/Config.in ?| ? 11 +++++++++++
-> ?package/libiqrf/libiqrf.mk | ? 15 +++++++++++++++
-> ?3 files changed, 27 insertions(+), 0 deletions(-)
-> ?create mode 100644 package/libiqrf/Config.in
-> ?create mode 100644 package/libiqrf/libiqrf.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 5e48ab7..819be1b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -301,6 +301,7 @@ source "package/libhid/Config.in"
-> ?source "package/libusb/Config.in"
-> ?source "package/libusb-compat/Config.in"
-> ?source "package/python-serial/Config.in"
-> +source "package/libiqrf/Config.in"
-> ?endmenu
+The previous script doesn't support patching order with archives since
+it didn't extract archives but simply decompressed file and piped the
+result to the patch command.
+This new script extracts archives in a temporary folder and then applies
+patches.
 
-I think these entries are usually added alphabetically sorted.
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
+ toolchain/patch-kernel.sh |  159 +++++++++++++++++++++++++++++---------------
+ 1 files changed, 105 insertions(+), 54 deletions(-)
 
-> ?if BROKEN
-> diff --git a/package/libiqrf/Config.in b/package/libiqrf/Config.in
-> new file mode 100644
-> index 0000000..a9e5a52
-> --- /dev/null
-> +++ b/package/libiqrf/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LIBIQRF
-> + ? ? ? ?bool "libiqrf"
-> + ? ? ? ?depends on BR2_PACKAGE_LIBUSB
-> + ? ? ? ?help
-> + ? ? ? ? ?Libiqrf is a C library for reading and writing a
-> + ? ? ? ? ?data do iqrf usb devices (http://iqrf.orf)
-
-This description isn't very clear and there's a typo in the URL. Any
-chance you could tidy it up?
+diff --git a/toolchain/patch-kernel.sh b/toolchain/patch-kernel.sh
+index 76cb9f7..0492e01 100755
+--- a/toolchain/patch-kernel.sh
++++ b/toolchain/patch-kernel.sh
+@@ -1,66 +1,117 @@
+-#! /bin/bash
+-# A little script I whipped up to make it easy to
+-# patch source trees and have sane error handling
+-# -Erik
+-#
+-# (c) 2002 Erik Andersen <andersen@codepoet.org>
++#!/bin/bash
+ 
+-# Set directories from arguments, or use defaults.
+-targetdir=${1-.}
+-patchdir=${2-../kernel-patches}
+-shift 2
+-patchpattern=${@-*}
++# function apply_patch patch_file
++# this function no more deal with directory case since it is managed
++# in an upper layer
++function apply_patch {
++apply="patch -p1 -E -d"
++#if [ ! -e "${1}" ] ; then
++#	echo "${1} is not a file"
++#	exit 1
++#fi
+ 
+-if [ ! -d "${targetdir}" ] ; then
+-    echo "Aborting.  '${targetdir}' is not a directory."
+-    exit 1
++case "${1}" in
++*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
++	echo "Error with ${1}";
++	echo "Archives into a directory or another archive is not supported";
++	return 1;
++	;;
++*\.gz$)
++	type="gzip"; uncomp="gunzip -dc"; ;;
++*\.bz$)
++	type="bzip"; uncomp="bunzip -dc"; ;;
++*\.bz2$)
++	type="bzip2"; uncomp="bunzip2 -dc"; ;;
++*\.zip$)
++	type="zip"; uncomp="unzip -d"; ;;
++*\.Z$)
++	type="compress"; uncomp="uncompress -c"; ;;
++*\.diff*)
++	type="diff"; uncomp="cat"; ;;
++*\.patch*)
++	type="patch"; uncomp="cat"; ;;
++*)
++	echo "Unsupported format file for ${1}, skip it";
++	return 0;
++	;;
++esac
++
++echo ""
++echo "Applying ${1} using ${type}: "
++echo ${1} | cat >> ${builddir}/.applied_patches_list
++${uncomp} ${1} | ${apply} ${builddir}
++if [ $? != 0 ] ; then
++	echo "Patch failed! Please fix ${1}!"
++	return 1
+ fi
++}
++
++
++# entry point
++builddir=${1}
++patchdir=${2}
++shift 2
++patchlist=${@}
++patchesdir="${builddir}/../$(basename $builddir)-patches"
++
++# check directories
+ if [ ! -d "${patchdir}" ] ; then
+-    echo "Aborting.  '${patchdir}' is not a directory."
+-    exit 1
++	echo "Aborting: ${patchdir} is not a directory."
++	exit 1
+ fi
+-    
+-for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
+-    apply="patch -p1 -E -d"
+-    uncomp_parm=""
+-    if [ -d "${patchdir}/$i" ] ; then
+-	type="directory overlay"
+-	uncomp="tar cf - --exclude=.svn --no-anchored -C"
+-	uncomp_parm="."
+-	apply="tar xvf - -C"
+-    else case "$i" in
+-	*.gz)
+-	type="gzip"; uncomp="gunzip -dc"; ;; 
+-	*.bz)
+-	type="bzip"; uncomp="bunzip -dc"; ;; 
+-	*.bz2)
+-	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
+-	*.zip)
+-	type="zip"; uncomp="unzip -d"; ;; 
+-	*.Z)
+-	type="compress"; uncomp="uncompress -c"; ;; 
+-	*.tgz)
+-	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
+-	*.tar)
+-	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
+-	*)
+-	type="plaintext"; uncomp="cat"; ;; 
+-    esac fi
+-    echo ""
+-    echo "Applying ${i} using ${type}: " 
+-	echo ${i} | cat >> ${targetdir}/.applied_patches_list
+-    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir} 
+-    if [ $? != 0 ] ; then
+-        echo "Patch failed!  Please fix $i!"
++if [ ! -d "${builddir}" ] ; then
++	echo "Aborting: ${builddir} is not a directory."
+ 	exit 1
+-    fi
++fi
++
++# parse patch list, extract archives, apply patches
++for i in $patchlist ; do
++	# for remote files, directory is buildroot dl dir
++	#if echo $i | grep -q -E "^http://|^ftp://" ; then
++	#	patchdir=$patchdir
++	#else
++	#	patchdir=$(dirname $i)
++	#fi
++	patch_path="${patchdir}/${i}"
++	# three cases: directory, archive, file patch (compressed or not)
++	# directory
++	if [ -d "${patch_path}" ] ; then
++		for p in $(ls ${patch_path}) ; do
++			apply_patch "${patch_path}/${p}" || exit 1
++		done
++	# archive
++	elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
++		mkdir "${patchesdir}"
++		# extract archive
++		if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
++			tar_options="-xjf"
++		else
++			tar_options="-xzf"
++		fi
++		tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
++		# apply patches from the archive
++		#echo ${patchesdir}
++		#find ${patchesdir} | sort
++		for p in $(find ${patchesdir} | sort) ; do
++			apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
++		done
++		rm -rf "${patchesdir}"
++	# file which is not an archive
++	else
++		# we can have regex into patch name as package*.patch.arm that's
++		# why using ls
++		for p in $(ls -d ${patch_path} 2> /dev/null) ; do
++			apply_patch "${p}" || exit 1
++		done
++	fi
+ done
+ 
+-# Check for rejects...
+-if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
++# check for rejects...
++if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+     echo "Aborting.  Reject files found."
+     exit 1
+ fi
+ 
+-# Remove backup files
+-find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
++# remove backup files
++find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
++
+-- 
+1.7.5
