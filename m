@@ -1,98 +1,192 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 May 2011 12:08:18 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.05/package-cleanups
-Message-ID: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 May 2011 12:08:20 +0200
+Subject: [Buildroot] [PATCH 02/10] dhcpdump: move as a proper package,
+	bump version
+In-Reply-To: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5397d444fc4c7aacb229d2c103171c9a8ad97e61.1305713253.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+dhcpdump 1.7 required tcpdump, but version 1.8 now uses libpcap
+instead. Also version 1.8 is no longer autotools based, but just a
+simple Makefile.
 
-This is a set of misc package cleanups or bumps: removal of festival,
-conversion to infrastructure/bump of dhcpdump, sudo and gtk2-engines,
-bump of the Gtk stack.
-
-Thomas
-
-The following changes since commit ce1ae872aa72547bb291cc9e70adfe1b065cd2a8:
-
-  Makefile.autotools.in: default to same <pkg>_MAKE setting for host and target (2011-05-17 10:00:01 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.05/package-cleanups
-
-Thomas Petazzoni (10):
-      festival: remove packages
-      dhcpdump: move as a proper package, bump version
-      sudo: bump and convert to AUTOTARGETS
-      atk: bump to 1.33.6
-      libglib2: bump to 2.28.6
-      pango: bump to 1.28.4
-      libgtk2: bump to 2.24.4
-      libgtk2: change download site
-      libgtk2: add option to install the gtk-demo program
-      gtk2-engines: bump, rename config option and convert to AUTOTARGETS
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/Config.in                                  |    1 +
- package/atk/atk.mk                                 |    4 +-
- package/dhcpdump/Config.in                         |    5 +
- .../dhcpdump-1.8-use-non-bsd-structures.patch      |   21 +
- package/dhcpdump/dhcpdump.mk                       |   21 +
- package/gtk2-engines/Config.in                     |    2 +-
- package/gtk2-engines/gtk2-engines.mk               |   86 +-
- package/libglib2/libglib2-mkenums-nowarn.patch     |   14 -
- package/libglib2/libglib2.mk                       |    4 +-
- package/libgtk2/Config.in                          |    7 +
- package/libgtk2/libgtk2.mk                         |    8 +-
- package/multimedia/Config.in                       |    1 -
- package/multimedia/festival/Config.in              |   27 -
- package/multimedia/festival/festival.mk            |    4 -
- .../festival/festival/festival-1.96-beta-doc.patch |   23 -
- .../festival/festival-1.96-beta-etcsiteinit.patch  |   55 -
- .../festival/festival-1.96-beta-libdir.patch       |   10 -
- .../festival-1.96-beta-speechtools-dir.patch       |   11 -
- package/multimedia/festival/festival/festival.mk   |   21 -
- package/multimedia/festival/lexicons/Config.in     |   20 -
- package/multimedia/festival/lexicons/festlex.mk    |   46 -
- package/multimedia/festival/speech-tools/Config.in |   10 -
- .../speech-tools-1.2.96-beta-install.patch         |   47 -
- .../festival/speech-tools/speech-tools.mk          |   31 -
- package/multimedia/festival/voices/Config.in       |   63 -
- package/multimedia/festival/voices/festvox.mk      |   99 -
- package/pango/pango.mk                             |    2 +-
- package/sudo/sudo-1.6.8p12-001-ubuntu6.patch       | 3994 --------
- .../sudo-1.6.8p12-002-no-cxx-configcheck.patch     |   22 -
- package/sudo/sudo-1.6.8p12-003-cross-compile.patch |10219 --------------------
- package/sudo/sudo.mk                               |   96 +-
- package/tcpdump/Config.in                          |    6 -
- package/tcpdump/dhcpdump.mk                        |   62 -
- 33 files changed, 86 insertions(+), 14956 deletions(-)
+ package/dhcpdump/Config.in                         |    5 ++
+ .../dhcpdump-1.8-use-non-bsd-structures.patch      |   21 +++++++
+ package/dhcpdump/dhcpdump.mk                       |   21 +++++++
+ package/tcpdump/Config.in                          |    6 --
+ package/tcpdump/dhcpdump.mk                        |   62 --------------------
+ 6 files changed, 48 insertions(+), 68 deletions(-)
  create mode 100644 package/dhcpdump/Config.in
  create mode 100644 package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
  create mode 100644 package/dhcpdump/dhcpdump.mk
- delete mode 100644 package/libglib2/libglib2-mkenums-nowarn.patch
- delete mode 100644 package/multimedia/festival/Config.in
- delete mode 100644 package/multimedia/festival/festival.mk
- delete mode 100644 package/multimedia/festival/festival/festival-1.96-beta-doc.patch
- delete mode 100644 package/multimedia/festival/festival/festival-1.96-beta-etcsiteinit.patch
- delete mode 100644 package/multimedia/festival/festival/festival-1.96-beta-libdir.patch
- delete mode 100644 package/multimedia/festival/festival/festival-1.96-beta-speechtools-dir.patch
- delete mode 100644 package/multimedia/festival/festival/festival.mk
- delete mode 100644 package/multimedia/festival/lexicons/Config.in
- delete mode 100644 package/multimedia/festival/lexicons/festlex.mk
- delete mode 100644 package/multimedia/festival/speech-tools/Config.in
- delete mode 100644 package/multimedia/festival/speech-tools/speech-tools-1.2.96-beta-install.patch
- delete mode 100644 package/multimedia/festival/speech-tools/speech-tools.mk
- delete mode 100644 package/multimedia/festival/voices/Config.in
- delete mode 100644 package/multimedia/festival/voices/festvox.mk
- delete mode 100644 package/sudo/sudo-1.6.8p12-001-ubuntu6.patch
- delete mode 100644 package/sudo/sudo-1.6.8p12-002-no-cxx-configcheck.patch
- delete mode 100644 package/sudo/sudo-1.6.8p12-003-cross-compile.patch
  delete mode 100644 package/tcpdump/dhcpdump.mk
 
-Thanks,
+diff --git a/package/Config.in b/package/Config.in
+index 5e48ab7..1d3c0cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -385,6 +385,7 @@ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+ endif
++source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ethtool/Config.in"
+diff --git a/package/dhcpdump/Config.in b/package/dhcpdump/Config.in
+new file mode 100644
+index 0000000..1840e34
+--- /dev/null
++++ b/package/dhcpdump/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_DHCPDUMP
++	bool "dhcpdump"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  A tool for monitoring dhcp requests using tcpdump.
+diff --git a/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+new file mode 100644
+index 0000000..15a3508
+--- /dev/null
++++ b/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+@@ -0,0 +1,21 @@
++The udphdr structure has uh_* fields when _FAVOR_BSD is
++defined. Otherwise, the fields are just named source, dest, len and
++check. See <netinet/udp.h>.
++
++Index: dhcpdump-1.8/dhcpdump.c
++===================================================================
++--- dhcpdump-1.8.orig/dhcpdump.c	2011-05-17 20:20:46.506980003 +0200
+++++ dhcpdump-1.8/dhcpdump.c	2011-05-17 20:20:59.338979999 +0200
++@@ -163,10 +163,10 @@
++ 	strcpy(ip_origin, (u_char *)inet_ntoa(ip->ip_src));
++ 	strcpy(ip_destination, (u_char *)inet_ntoa(ip->ip_dst));
++ 
++-	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->uh_ulen)))
+++	if (hmask && check_ch((u_char *)(sp + offset), ntohs(udp->len)))
++ 		return;
++ 
++-	printdata((u_char *)(sp + offset), ntohs(udp->uh_ulen));
+++	printdata((u_char *)(sp + offset), ntohs(udp->len));
++ }
++ 
++ // check for matching CHADDR (Peter Apian-Bennewitz <apian@ise.fhg.de>)
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+new file mode 100644
+index 0000000..cca6749
+--- /dev/null
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# dhcpdump
++#
++#############################################################
++
++DHCPDUMP_VERSION = 1.8
++DHCPDUMP_SITE    = http://www.mavetju.org/download/
++DHCPDUMP_SOURCE  = dhcpdump-$(DHCPDUMP_VERSION).tar.gz
++
++DHCPDUMP_DEPENDENCIES = libpcap
++
++define DHCPDUMP_BUILD_CMDS
++	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
++endef
++
++define DHCPDUMP_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/dhcpdump $(TARGET_DIR)/usr/bin/dhcpdump
++endef
++
++$(eval $(call GENTARGETS,package,dhcpdump))
+diff --git a/package/tcpdump/Config.in b/package/tcpdump/Config.in
+index 09e2740..c284398 100644
+--- a/package/tcpdump/Config.in
++++ b/package/tcpdump/Config.in
+@@ -11,9 +11,3 @@ config BR2_PACKAGE_TCPDUMP_SMB
+ 	depends on BR2_PACKAGE_TCPDUMP
+ 	help
+ 	  enable possibly-buggy SMB printer
+-
+-config BR2_PACKAGE_DHCPDUMP
+-	bool "dhcpdump"
+-	select BR2_PACKAGE_LIBPCAP
+-	help
+-	  A tool for monitoring dhcp requests using tcpdump.
+diff --git a/package/tcpdump/dhcpdump.mk b/package/tcpdump/dhcpdump.mk
+deleted file mode 100644
+index 0b2d64a..0000000
+--- a/package/tcpdump/dhcpdump.mk
++++ /dev/null
+@@ -1,62 +0,0 @@
+-#############################################################
+-#
+-# dhcpdump
+-#
+-#############################################################
+-# Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
+-# Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
+-
+-DHCPDUMP_VERSION:=1.7
+-DHCPDUMP_DIR:=$(BUILD_DIR)/dhcpdump-$(DHCPDUMP_VERSION)
+-DHCPDUMP_SITE:=http://www.mavetju.org/download/
+-DHCPDUMP_SOURCE:=dhcpdump-$(DHCPDUMP_VERSION).tar.gz
+-DHCPDUMP_CAT:=$(ZCAT)
+-
+-$(DL_DIR)/$(DHCPDUMP_SOURCE):
+-	 $(call DOWNLOAD,$(DHCPDUMP_SITE),$(DHCPDUMP_SOURCE))
+-
+-dhcpdump-source: $(DL_DIR)/$(DHCPDUMP_SOURCE)
+-
+-$(DHCPDUMP_DIR)/.unpacked: $(DL_DIR)/$(DHCPDUMP_SOURCE)
+-	$(DHCPDUMP_CAT) $(DL_DIR)/$(DHCPDUMP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $@
+-
+-$(DHCPDUMP_DIR)/.configured: $(DHCPDUMP_DIR)/.unpacked
+-	(cd $(DHCPDUMP_DIR); rm -f config.cache; \
+-		BUILD_CC="$(TARGET_CC)" HOSTCC="$(HOSTCC)" \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--sysconfdir=/etc \
+-		--localstatedir=/var \
+-		--mandir=/usr/share/man \
+-		--infodir=/usr/share/info \
+-	)
+-	touch $@
+-
+-$(DHCPDUMP_DIR)/dhcpdump: $(DHCPDUMP_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(DHCPDUMP_DIR)
+-
+-$(TARGET_DIR)/usr/sbin/dhcpdump: $(DHCPDUMP_DIR)/dhcpdump
+-	cp -af $< $@
+-
+-dhcpdump: zlib libpcap $(TARGET_DIR)/usr/sbin/dhcpdump
+-
+-dhcpdump-clean:
+-	rm -f $(TARGET_DIR)/usr/sbin/dhcpdump
+-	-$(MAKE) -C $(DHCPDUMP_DIR) clean
+-
+-dhcpdump-dirclean:
+-	rm -rf $(DHCPDUMP_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_DHCPDUMP),y)
+-TARGETS+=dhcpdump
+-endif
 -- 
-Thomas Petazzoni
+1.7.1
