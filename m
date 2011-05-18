@@ -1,32 +1,17 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 May 2011 20:04:19 +0200
-Subject: [Buildroot] [PATCH 02/10] dhcpdump: move as a proper package,
-	bump version
-In-Reply-To: <20110518180022.36ae9345@surf> (Thomas Petazzoni's message of
-	"Wed, 18 May 2011 18:00:22 +0200")
-References: <cover.1305713253.git.thomas.petazzoni@free-electrons.com>
-	<cover.1305713253.git.thomas.petazzoni@free-electrons.com>
-	<5397d444fc4c7aacb229d2c103171c9a8ad97e61.1305713253.git.thomas.petazzoni@free-electrons.com>
-	<8739kcvxaj.fsf@macbook.be.48ers.dk> <20110518180022.36ae9345@surf>
-Message-ID: <87tycrvqak.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 May 2011 18:22:42 +0200
+Subject: [Buildroot] [git commit] sudo: bump and convert to AUTOTARGETS
+Message-ID: <20110518180430.4080283564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> On Wed, 18 May 2011 17:33:08 +0200
- Thomas> Peter Korsgaard <jacmet@uclibc.org> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=7a1115b3c14554f260f2db2c1a490891a6160920
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Where does this patch come from?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Thomas> Me :-)
-
- Thomas> I'll rebase with a fix for this, and the libgtk2 tab issue.
-
-Great, pulled and pushed - Thanks.
-
--- 
-Bye, Peter Korsgaard
+Patch is too large, so refusing to show it
