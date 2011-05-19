@@ -1,63 +1,76 @@
-From: a at awn.dk <a@awn.dk>
-Date: Thu, 19 May 2011 08:25:42 +0200
-Subject: [Buildroot] [PATCH] Makefile.package.in: Makes it possible to
-	override the default extract commands
-Message-ID: <1305786342-20367-1-git-send-email-a@awn.dk>
+From: =?UTF-8?Q?Beno=C3=AEt_Mauduit?= <benoit.mauduit@gmail.com>
+Date: Thu, 19 May 2011 10:50:45 +0200
+Subject: [Buildroot] [RFC] Override source directories
+In-Reply-To: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <BANLkTiktR9dP6DAtEfpU4U7awRnL0mak4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Allan W. Nielsen <a@awn.dk>
+On Wed, May 18, 2011 at 11:48 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 
-When using GENTARGETS (or macroes depending on it), there is no way of
-specifying a custom extraction procedure. When using the patch one can
-simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
-default. If non is defined it will fall back to the default extract
-procedure.
+Hi Thomas,
 
-An example could look like this:
+> >From an user perspective, it allows ones to create a "local.mk" file
+> in the Buildroot main source directory, with variable definitions such
+> as :
+>
+> ?ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+> ?MYAPP_OVERRIDE_SRCDIR = /home/foobar/project/myapp
+> ?LIBGLIB2_OVERRIDE_SRCDIR = /home/foobar/git/libglib2
+>
+> At build time, Buildroot would use those directories at the source for
+> the packages, instead of downloading, extracing and patching them in
+> the usual way.
+>
+> Internally, this is implemented inside our package infrastructure, so
+> this mechanism should work for all packages that rely on the
+> infrastructure. The GENTARGETS macro makes sure that the package build
+> process bypasses the download, extract and patch step when
+> <pkg>_OVERRIDE_SRCDIR is defined, and instead a symlinking step is
+> added. It's very simple.
 
-FGLRX_VERSION=11-3
-FGLRX_SOURCE:=ati-driver-installer-$(FGLRX_VERSION)-x86.x86_64.run
-FGLRX_SITE:=http://www2.ati.com/drivers/linux/
+I do a similar thing but with a python wrapper, so i think it would be
+great to have this feature directly inside Buildroot.
 
-define FGLRX_EXTRACT_CMDS
-	sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
-endef
+> This series of patches also add the <pkg>-reconfigure and
+> <pkg>-rebuild targets, which makes it easy for users to restart the
+> package build process at the compilation step or at the configuration
+> step, without having to mess up with stamp file details.
 
-$(eval $(call GENTARGETS,package,fglrx))
+Very useful for a user point of view :)
 
-Signed-off-by: Allan W. Nielsen <a@awn.dk>
----
- package/Makefile.package.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+> There are still a few issues to solve and discuss, though :
+>
+> ?* Is local.mk inside the main source directory the good solution?
+> ? Should we instead provide a configuration option to set the path to
+> ? the override file? Or another solution?
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..16981b7 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -243,8 +243,7 @@ endif
- $(BUILD_DIR)/%/.stamp_extracted:
- 	@$(call MESSAGE,"Extracting")
- 	$(Q)mkdir -p $(@D)
--	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
-+	$($(PKG)_EXTRACT_CMDS)
- # some packages have messed up permissions inside
- 	$(Q)chmod -R ug+rw $(@D)
- 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-@@ -425,6 +424,10 @@ $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
- $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
- $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
- 
-+# default extract command
-+$(2)_EXTRACT_CMDS ?= $(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-+
- # post-steps hooks
- $(2)_POST_EXTRACT_HOOKS         ?=
- $(2)_POST_PATCH_HOOKS           ?=
+The advantage to have this file on top of Buildroot directory is that
+we can easily find it and made local changes.
+But a configuration option could be more comprehensive for end user,
+and add flexibility.
+
+> ?* As the mechanism is implemented today, "make clean" removes the
+> ? symbolic link $(O)/build/<pkg>-<version>, but not the stamp files
+> ? created inside this source directory. So next time the build is
+> ? started, things will go wrong. To solve this, the only solution I
+> ? see is to separate the directory with the stamp files from the
+> ? source directory, at least in the case of overriden source
+> ? directories.
+
+Maybe i am wrong, but it can be easy to parse the previous local.mk
+file and call the updated <pkg>-dirclean rules just for local package
+before make clean call 'rm' ?
+
+I will be happy to see this feature inside Buildroot :)
+
+Regards,
+
 -- 
-1.7.3.4
+Benoit Mauduit
