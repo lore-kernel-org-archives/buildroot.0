@@ -1,57 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sat, 21 May 2011 01:39:21 +0200
-Subject: [Buildroot] [PATCH 2/3] toolchain/crosstool-NG: update to 1.11.3
+Date: Sat, 21 May 2011 01:39:22 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain/crosstool-NG: fix up ct-ng config
+	file to saner defaults
 In-Reply-To: <1305934762-10058-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1305934762-10058-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1305934762-10058-3-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1305934762-10058-4-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-1.11.3 is the latest stable version, and it has a few improvements
-we'll find usefull. For example, it hasa a boolean option for
-disabling the {,e}glibc fortified build (instead of requiring us
-to shoehorn it in extra cflags.
+Jacmet on IRC reported some build failures for different targets.
+They were of two kinds:
+ - missing/unknown stack unwinding support
+ - missing *_chk functions
 
+The first is about configure not being able to automagically determine
+if stack unwinding support is available for the target. The second is
+about fortified build forgetting to build the fortified functions.
+This applies to both glibc and eglibc.
+
+After some discussions on IRC with Jacmet, it appears that we can
+safely assume both of the following:
+ - virtually all targets of buildroot will have stack unwinding support
+ - we do not care about fortified builds (so far)
+
+So, update the bundled crosstool-NG .config file to saner defaults:
+ - force unwind support
+ - disable fortified builds
+
+Reported-by: Peter Korsgaard <jacmet@sunsite.dk>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- .../002-no-sysroot-prompt-in-backend.patch         |   12 ------------
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |    2 +-
- 2 files changed, 1 insertions(+), 13 deletions(-)
- delete mode 100644 toolchain/toolchain-crosstool-ng/002-no-sysroot-prompt-in-backend.patch
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/002-no-sysroot-prompt-in-backend.patch b/toolchain/toolchain-crosstool-ng/002-no-sysroot-prompt-in-backend.patch
-deleted file mode 100644
-index 4c3426a..0000000
---- a/toolchain/toolchain-crosstool-ng/002-no-sysroot-prompt-in-backend.patch
-+++ /dev/null
-@@ -1,12 +0,0 @@
--diff --git a/config/toolchain.in b/config/toolchain.in
----- a/config/toolchain.in
--+++ b/config/toolchain.in
--@@ -20,7 +20,7 @@
-- 
-- config SYSROOT_NAME
--     string
---    prompt "sysroot directory name"
--+    prompt "sysroot directory name" if ! BACKEND
--     depends on USE_SYSROOT
--     default "sysroot"
--     help
 diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index b9888bf..1fe4501 100644
+index 1fe4501..66cc272 100644
 --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
 +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -14,7 +14,7 @@ uclibc: dependencies $(STAMP_DIR)/ct-ng-toolchain-installed
- # Internal variables
+@@ -328,6 +328,18 @@ $(CTNG_DIR)/libc.config: $(CTNG_UCLIBC_CONFIG_FILE) $(CONFIG_DIR)/.config
+ endif # LIBC is uClibc
  
- # Crostool-NG hard-coded configuration options
--CTNG_VERSION:=1.10.1
-+CTNG_VERSION:=1.11.3
- CTNG_SITE:=http://crosstool-ng.org/download/crosstool-ng/
- CTNG_SOURCE:=crosstool-ng-$(CTNG_VERSION).tar.bz2
- CTNG_DIR:=$(BUILD_DIR)/crosstool-ng-$(CTNG_VERSION)
+ #--------------
++# glibc/eglibc specific options
++ifeq ($(BR2_TOOLCHAIN_CTNG_glibc)$(BR2_TOOLCHAIN_CTNG_eglibc),y)
++
++# Force unwind support
++CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_GLIBC_FORCE_UNWIND) is not set:\1=y:; 
++
++# Force non-fortified build
++CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_ENABLE_FORTIFIED_BUILD)=y:# \1 is not set:;
++
++endif # LIBC is glibc or eglibc
++
++#--------------
+ # Small functions to shoe-horn the above into crosstool-NG's .config
+ 
+ # Function to update the .config
 -- 
 1.7.2.3
