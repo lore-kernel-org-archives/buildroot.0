@@ -1,41 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 May 2011 20:03:35 +0200
-Subject: [Buildroot] [git commit] bind: give path to OpenSSL when OpenSSL is
-	enabled
-Message-ID: <20110519205107.948EA83544@busybox.osuosl.org>
+From: Rafael Toledo <rafaeldtoledo@gmail.com>
+Date: Fri, 20 May 2011 15:38:31 -0300
+Subject: [Buildroot] Fwd: Installed package not found
+Message-ID: <4DD6B527.3030808@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello!
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a02cfbf1f4a82ee6582e2bf7622b2bf105359ea9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'm trying to add the 'libfprint' package into Buildroot. As I read in
+the site of the project, the requisites are glib2, libusb-1.0,
+ImageMagick and nss3 in the current version (0.4.0). As I can't found
+nss in the Buildroot, I 'downgraded' the version, trying to install the
+version 0.0.6. Well, the config files are the following:
 
-bind needs to be specifically told where OpenSSL is, otherwise, the
-build fails with:
+## Config.in ##
+config BR2_PACKAGE_LIBFPRINT
+     bool "libfprint"
+     help
+       The libfprint is a library for biometric
+       fingerprint development.
 
-checking for OpenSSL library... configure: error: OpenSSL was not found in any of /usr /usr/local /usr/local/ssl /usr/pkg /usr/sfw; use --with-openssl=/path
-If you don't want OpenSSL, use --without-openssl
+       http://www.reactivated.net/fprint/wiki/Libfprint
+## end Config.in ##
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bind/bind.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+## libfprint.mk ##
+#############################################################
+#
+# libfprint
+#
+#############################################################
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index e3341bd..2df6ae8 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -27,6 +27,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	BIND_DEPENDENCIES += openssl
-+	BIND_CONF_OPT += --with-openssl=$(STAGING_DIR)/usr
- else
- 	BIND_CONF_OPT += --with-openssl=no
- endif
--- 
-1.7.3.4
+LIBFPRINT_VERSION = 0.0.6
+LIBFPRINT_SOURCE = libfprint-$(LIBFPRINT_VERSION).tar.bz2
+LIBFPRINT_SITE =
+http://sourceforge.net/projects/fprint/files/libfprint/v$(LIBFPRINT_VERSION)/libfprint-$(LIBFPRINT_VERSION).tar.bz2/download
+LIBFPRINT_INSTALL_STAGING = YES
+LIBFPRINT_INSTALL_TARGET = YES
+LIBFPRINT_DEPENDENCIES = libglib2 imagemagick libusb
+
+$(eval $(call AUTOTARGETS,package,libfprint))
+## end libfprint.mk ##
+
+First, the download link isn't ok, but I'll fix it later (the current
+version is git hosted). For tests, I put the file manually in the dl
+folder. My main problem is that, in the ./configure script, the process
+stops saying that 'No package 'libusb' found', but it is installed.
+Someone can help me?
