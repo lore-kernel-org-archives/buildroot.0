@@ -1,63 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 May 2011 17:47:50 +0200
-Subject: [Buildroot] [PATCH 2/2] psmisc: do not install pstree.x11 symbolic
-	link
-In-Reply-To: <cover.1305992862.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1305992862.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a446fd008f0e0abf97ded30951d959c48cc1c92a.1305992862.git.thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 22 May 2011 00:05:39 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] toolchain/crosstool-NG: update to 1.11.3,
+	use sane defaults
+Message-ID: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The psmisc-no-__progname.patch removes the usage of __progname, which
-removes any difference between pstree and pstree.x11. Therefore, we
-make sure to not create the pstree.x11 symbolic link in the target.
+Hello All!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/psmisc/psmisc-no-__progname.patch |   23 ++++++++++++++++++++---
- 1 files changed, 20 insertions(+), 3 deletions(-)
+This patchset updates the crosstool-NG backend.
 
-diff --git a/package/psmisc/psmisc-no-__progname.patch b/package/psmisc/psmisc-no-__progname.patch
-index 063b120..5109657 100644
---- a/package/psmisc/psmisc-no-__progname.patch
-+++ b/package/psmisc/psmisc-no-__progname.patch
-@@ -5,10 +5,12 @@ stuff isn't that critical, so just disable it.
- 
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--diff -Nura psmisc-22.13.orig/src/pstree.c psmisc-22.13/src/pstree.c
----- psmisc-22.13.orig/src/pstree.c	2010-07-12 08:10:03.000000000 -0300
--+++ psmisc-22.13/src/pstree.c	2011-01-07 15:02:41.902741728 -0300
-+Index: psmisc-22.13/src/pstree.c
-+===================================================================
-+--- psmisc-22.13.orig/src/pstree.c	2010-07-12 13:10:03.000000000 +0200
-++++ psmisc-22.13/src/pstree.c	2011-05-21 16:33:37.456530775 +0200
- @@ -49,8 +49,6 @@
-  #include <selinux/selinux.h>
-  #endif                                /*WITH_SELINUX */
-@@ -28,3 +30,18 @@ diff -Nura psmisc-22.13.orig/src/pstree.c psmisc-22.13/src/pstree.c
-      /*
-       * Attempt to figure out a good default symbol set.  Will be overriden by
-       * command-line options, if given.
-+Index: psmisc-22.13/src/Makefile.in
-+===================================================================
-+--- psmisc-22.13.orig/src/Makefile.in	2011-05-21 16:33:42.748530777 +0200
-++++ psmisc-22.13/src/Makefile.in	2011-05-21 16:33:47.360530782 +0200
-+@@ -557,10 +557,6 @@
-+ 		grep '^{ 1,"HUP" },$$' signames.h >/dev/null || \
-+ 		  { rm -f signames.h; exit 1; }
-+ 
-+-install-exec-hook:
-+-		cd $(DESTDIR)$(bindir) && \
-+-			( [ -h pstree.x11 ]  || $(LN_S) pstree pstree.x11)
-+-
-+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
-+ # Otherwise a system limit (for SysV at least) may be exceeded.
-+ .NOEXPORT:
--- 
-1.7.1
+Changes since previous post:
+- fixed a typo, missing termintaing quote, patch 1
+- updating to 1.11.3 also updates the bundled config files, patch 2
+- trailing space removed, patch 3
+
+The typo was due to an un-refreshed patch. Sorry about it.
+
+  [PATCH 1/3] toolchain/crosstool-NG: bundle one CT-NG config file for each libc familly
+  [PATCH 2/3] toolchain/crosstool-NG: update to 1.11.3
+  [PATCH 3/3] toolchain/crosstool-NG: fix up ct-ng config file to saner defaults
+
+ .../002-no-sysroot-prompt-in-backend.patch         |   12 -
+ toolchain/toolchain-crosstool-ng/Config.in         |   11 +-
+ ...sstool-ng.config => crosstool-ng.config-eglibc} |  233 +++++++++++++++-----
+ ...osstool-ng.config => crosstool-ng.config-glibc} |  230 +++++++++++++++-----
+ ...sstool-ng.config => crosstool-ng.config-uClibc} |  209 +++++++++++++-----
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |   32 +++-
+ 6 files changed, 534 insertions(+), 193 deletions(-)
+
+Regards,
+Yann E. MORIN.
