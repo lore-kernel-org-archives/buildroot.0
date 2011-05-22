@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 22 May 2011 16:58:32 +0200
-Subject: [Buildroot] [git commit] psmisc: do not install pstree.x11 symbolic
-	link
-Message-ID: <20110522145941.B02288356F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt: scripttools needs gui
+Message-ID: <20110522145941.E18598356F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9868d2419021a3362d55963b022d18d57438c164
+commit: http://git.buildroot.net/buildroot/commit/?id=5c8c02a0c6747357ecc3f4884b065cf08bf2395a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The psmisc-no-__progname.patch removes the usage of __progname, which
-removes any difference between pstree and pstree.x11. Therefore, we
-make sure to not create the pstree.x11 symbolic link in the target.
+The QtScriptTools library depends on the QtGui library, as can be seen
+in the src/src.pro file of the Qt sources :
+
+!contains(QT_CONFIG, no-gui):contains(QT_CONFIG, scripttools): SRC_SUBDIRS += src_scripttools
+
+If the scripttools are enabled in the Qt configuration, but not the
+gui, then the scripttools library is not built by Qt, and the
+Buildroot build process fails with:
+
+cp: cannot stat `/home/test/outputs/test-502/host/usr/sh4-unknown-linux-gnu/sysroot/usr/lib/libQtScriptTools.so.*': No such file or directory
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/psmisc/psmisc-no-__progname.patch |   23 ++++++++++++++++++++---
- 1 files changed, 20 insertions(+), 3 deletions(-)
+ package/qt/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/psmisc/psmisc-no-__progname.patch b/package/psmisc/psmisc-no-__progname.patch
-index 063b120..5109657 100644
---- a/package/psmisc/psmisc-no-__progname.patch
-+++ b/package/psmisc/psmisc-no-__progname.patch
-@@ -5,10 +5,12 @@ stuff isn't that critical, so just disable it.
- 
- Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- 
--diff -Nura psmisc-22.13.orig/src/pstree.c psmisc-22.13/src/pstree.c
----- psmisc-22.13.orig/src/pstree.c	2010-07-12 08:10:03.000000000 -0300
--+++ psmisc-22.13/src/pstree.c	2011-01-07 15:02:41.902741728 -0300
-+Index: psmisc-22.13/src/pstree.c
-+===================================================================
-+--- psmisc-22.13.orig/src/pstree.c	2010-07-12 13:10:03.000000000 +0200
-++++ psmisc-22.13/src/pstree.c	2011-05-21 16:33:37.456530775 +0200
- @@ -49,8 +49,6 @@
-  #include <selinux/selinux.h>
-  #endif                                /*WITH_SELINUX */
-@@ -28,3 +30,18 @@ diff -Nura psmisc-22.13.orig/src/pstree.c psmisc-22.13/src/pstree.c
-      /*
-       * Attempt to figure out a good default symbol set.  Will be overriden by
-       * command-line options, if given.
-+Index: psmisc-22.13/src/Makefile.in
-+===================================================================
-+--- psmisc-22.13.orig/src/Makefile.in	2011-05-21 16:33:42.748530777 +0200
-++++ psmisc-22.13/src/Makefile.in	2011-05-21 16:33:47.360530782 +0200
-+@@ -557,10 +557,6 @@
-+ 		grep '^{ 1,"HUP" },$$' signames.h >/dev/null || \
-+ 		  { rm -f signames.h; exit 1; }
-+ 
-+-install-exec-hook:
-+-		cd $(DESTDIR)$(bindir) && \
-+-			( [ -h pstree.x11 ]  || $(LN_S) pstree pstree.x11)
-+-
-+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
-+ # Otherwise a system limit (for SysV at least) may be exceeded.
-+ .NOEXPORT:
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index eafc855..4a3945c 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -373,6 +373,7 @@ config BR2_PACKAGE_QT_SCRIPT
+ config BR2_PACKAGE_QT_SCRIPTTOOLS
+ 	bool "Script Tools Module"
+ 	depends on BR2_PACKAGE_QT_SCRIPT
++	depends on BR2_PACKAGE_QT_GUI_MODULE
+ 	help
+ 	  Build the Qt Script Tools module.
+ 	  if unsure, say n.
 -- 
 1.7.3.4
