@@ -1,78 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2011 13:56:08 +0200
-Subject: [Buildroot] [PATCH 1/1] fakeroot: disallow selection for the target
-In-Reply-To: <cover.1306065364.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1306065364.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <81ea6d1172647df1fd579b6386faf965c4bd3026.1306065364.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 22 May 2011 15:51:00 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] toolchain/crosstool-NG: update to
+	1.11.3, use sane defaults
+In-Reply-To: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	(Yann E. MORIN's message of "Sun, 22 May 2011 00:05:39 +0200")
+References: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <878vty4zej.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fakeroot for the target fails to build against glibc, due to largefile
-related problems :
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-libtool: link: /home/test/outputs/test-503/host/usr/bin/powerpc-linux-gnu-gcc -pipe -Os -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o faked faked.o  ./.libs/libcommunicate.a -ldl
-{standard input}: Assembler messages:
-{standard input}:2592: Error: symbol `__fxstatat64' is already defined
-{standard input}:2627: Error: symbol `__fxstat64' is already defined
-{standard input}:2663: Error: symbol `__xstat64' is already defined
-{standard input}:2698: Error: symbol `__lxstat64' is already defined
-make[3]: *** [libfakeroot.lo] Error 1
+ Yann> Hello All!
+ Yann> This patchset updates the crosstool-NG backend.
 
-As fakeroot for the target is not really needed, and was only added
-when we packaged fakeroot for the host, just make fakeroot not
-selectable for the target.
+ Yann> Changes since previous post:
+ Yann> - fixed a typo, missing termintaing quote, patch 1
+ Yann> - updating to 1.11.3 also updates the bundled config files, patch 2
+ Yann> - trailing space removed, patch 3
 
-We have to keet the AUTOTARGETS call for fakeroot on the target,
-because the host variant does not work otherwise, due to issues in the
-package infrastructure (that will be fixed post-2011.05).
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in            |    1 -
- package/fakeroot/Config.in   |    6 ------
- package/fakeroot/fakeroot.mk |    3 +++
- 3 files changed, 3 insertions(+), 7 deletions(-)
- delete mode 100644 package/fakeroot/Config.in
-
-diff --git a/package/Config.in b/package/Config.in
-index 1d3c0cc..40f523d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -48,7 +48,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/diffutils/Config.in"
- endif
- source "package/distcc/Config.in"
--source "package/fakeroot/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/findutils/Config.in"
- endif
-diff --git a/package/fakeroot/Config.in b/package/fakeroot/Config.in
-deleted file mode 100644
-index 186b717..0000000
---- a/package/fakeroot/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_FAKEROOT
--	bool "fakeroot"
--	help
--	  Run commands in an environment faking root privileges.
--
--	  http://joostje.op.het.net/fakeroot/
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 8061443..29e9e5b 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -16,5 +16,8 @@ endef
- 
- FAKEROOT_POST_PATCH_HOOKS += FAKEROOT_PATCH_FAKEROOT_IN
- 
-+# The package for the target cannot be selected (build problems when
-+# largefile is enabled), but is needed for the host package to work
-+# due to deficiencies in the package infrastructure.
- $(eval $(call AUTOTARGETS,package,fakeroot))
- $(eval $(call AUTOTARGETS,package,fakeroot,host))
 -- 
-1.7.1
+Bye, Peter Korsgaard
