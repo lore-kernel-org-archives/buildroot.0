@@ -1,32 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2011 16:32:48 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.05/kbd-libintl-fixes
-Message-ID: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 May 2011 16:32:49 +0200
+Subject: [Buildroot] [PATCH 1/2] kbd: make sure to link against libintl when
+	needed
+In-Reply-To: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f4dd5306878208313e8ee94a9130c63a5d02705e.1306074766.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit a02cfbf1f4a82ee6582e2bf7622b2bf105359ea9:
-
-  bind: give path to OpenSSL when OpenSSL is enabled (2011-05-19 20:03:35 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.05/kbd-libintl-fixes
-
-Thomas Petazzoni (2):
-      kbd: make sure to link against libintl when needed
-      kbd: rename the makefile so that it's named the same as the package
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/kbd/Config.in                      |    2 +
  package/kbd/kbd-link-against-libintl.patch |   34 ++++++++++++++++++++++++++++
- package/kbd/{kdb.mk => kbd.mk}             |    2 +
+ package/kbd/kdb.mk                         |    2 +
  3 files changed, 38 insertions(+), 0 deletions(-)
  create mode 100644 package/kbd/kbd-link-against-libintl.patch
- rename package/kbd/{kdb.mk => kbd.mk} (67%)
 
-Thanks,
+diff --git a/package/kbd/Config.in b/package/kbd/Config.in
+index b6d13b5..1fe4dff 100644
+--- a/package/kbd/Config.in
++++ b/package/kbd/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_KBD
+ 	bool "kbd"
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  Keytable files and keyboard utilities.
+ 
+diff --git a/package/kbd/kbd-link-against-libintl.patch b/package/kbd/kbd-link-against-libintl.patch
+new file mode 100644
+index 0000000..39fd461
+--- /dev/null
++++ b/package/kbd/kbd-link-against-libintl.patch
+@@ -0,0 +1,34 @@
++Make sure we link against libintl if needed
++
++We modify directly the Makefile.in so that we don't have to
++autoreconfigure the package, which doesn't work because packages using
++gettext need the autopoint tool for their autoregeneration step and
++this thing doesn't work (yet) in Buildroot.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: kbd-1.15.2/src/Makefile.am
++===================================================================
++--- kbd-1.15.2.orig/src/Makefile.am	2011-05-22 16:08:51.144530776 +0200
+++++ kbd-1.15.2/src/Makefile.am	2011-05-22 16:09:09.892530778 +0200
++@@ -5,6 +5,8 @@
++ AM_CPPFLAGS = -DDATADIR=\"$(datadir)\" -DLOCALEDIR=\"$(localedir)\" $(WARNINGS) \
++ 	-funit-at-a-time
++ 
+++LDADD = @INTLLIBS@
+++
++ OLDPROGS = mapscrn loadunimap
++ PROGS = \
++ 	dumpkeys loadkeys showkey setfont showconsolefont \
++Index: kbd-1.15.2/src/Makefile.in
++===================================================================
++--- kbd-1.15.2.orig/src/Makefile.in	2011-05-22 16:10:27.540530777 +0200
+++++ kbd-1.15.2/src/Makefile.in	2011-05-22 16:10:51.172530778 +0200
++@@ -26,6 +26,7 @@
++ install_sh_PROGRAM = $(install_sh) -c
++ install_sh_SCRIPT = $(install_sh) -c
++ INSTALL_HEADER = $(INSTALL_DATA)
+++LDADD = @INTLLIBS@
++ transform = $(program_transform_name)
++ NORMAL_INSTALL = :
++ PRE_INSTALL = :
+diff --git a/package/kbd/kdb.mk b/package/kbd/kdb.mk
+index 526e1ff..ec67c5f 100644
+--- a/package/kbd/kdb.mk
++++ b/package/kbd/kdb.mk
+@@ -2,4 +2,6 @@ KBD_VERSION = 1.15.2
+ KBD_SOURCE = kbd-$(KBD_VERSION).tar.gz
+ KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
+ 
++KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
++
+ $(eval $(call AUTOTARGETS,package,kbd))
 -- 
-Thomas Petazzoni
+1.7.1
