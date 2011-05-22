@@ -1,30 +1,67 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 22 May 2011 16:58:56 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.05/kbd-libintl-fixes
-In-Reply-To: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Sun, 22 May 2011 16:32:48 +0200")
-References: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r57q3hov.fsf@macbook.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 22 May 2011 16:58:32 +0200
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: fix up ct-ng
+	config file to saner defaults
+Message-ID: <20110522145941.37A6C835BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The following changes since commit a02cfbf1f4a82ee6582e2bf7622b2bf105359ea9:
- Thomas>   bind: give path to OpenSSL when OpenSSL is enabled (2011-05-19 20:03:35 +0200)
+commit: http://git.buildroot.net/buildroot/commit/?id=40a203f2548f7445f01e7fb84676c87c313d7884
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> are available in the git repository at:
- Thomas>   http://free-electrons.com/~thomas/buildroot.git for-2011.05/kbd-libintl-fixes
+Peter on IRC reported some build failures for different targets.
+They were of two kinds:
+ - missing/unknown stack unwinding support
+ - missing *_chk functions
 
- Thomas> Thomas Petazzoni (2):
- Thomas>       kbd: make sure to link against libintl when needed
- Thomas>       kbd: rename the makefile so that it's named the same as the package
+The first is about configure not being able to automagically determine
+if stack unwinding support is available for the target. The second is
+about fortified build forgetting to build the fortified functions.
+This applies to both glibc and eglibc.
 
-Committed, thanks.
+After some discussions on IRC with Jacmet, it appears that we can
+safely assume both of the following:
+ - virtually all targets of buildroot will have stack unwinding support
+ - we do not care about fortified builds (so far)
 
+So, update the bundled crosstool-NG .config file to saner defaults:
+ - force unwind support
+ - disable fortified builds
+
+[Peter: fix 'force non-fortified build' sed invocation]
+Reported-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index b506651..2d1b51c 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -328,6 +328,18 @@ $(CTNG_DIR)/libc.config: $(CTNG_UCLIBC_CONFIG_FILE) $(CONFIG_DIR)/.config
+ endif # LIBC is uClibc
+ 
+ #--------------
++# glibc/eglibc specific options
++ifeq ($(BR2_TOOLCHAIN_CTNG_glibc)$(BR2_TOOLCHAIN_CTNG_eglibc),y)
++
++# Force unwind support
++CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_GLIBC_FORCE_UNWIND) is not set:\1=y:;
++
++# Force non-fortified build
++CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_ENABLE_FORTIFIED_BUILD)=y:\# \1 is not set:;
++
++endif # LIBC is glibc or eglibc
++
++#--------------
+ # Small functions to shoe-horn the above into crosstool-NG's .config
+ 
+ # Function to update the .config
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
