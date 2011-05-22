@@ -1,28 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 May 2011 15:51:00 +0200
-Subject: [Buildroot] [PATCH 0/3 v2] toolchain/crosstool-NG: update to
-	1.11.3, use sane defaults
-In-Reply-To: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-	(Yann E. MORIN's message of "Sun, 22 May 2011 00:05:39 +0200")
-References: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <878vty4zej.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 22 May 2011 15:53:40 +0200
+Subject: [Buildroot] [PATCH 1/1] qt: scripttools needs gui
+In-Reply-To: <d8244392bcde50c998813d693d8985d1c8fd60b1.1306054416.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sun, 22 May 2011 10:53:40 +0200")
+References: <cover.1306054416.git.thomas.petazzoni@free-electrons.com>
+	<cover.1306054416.git.thomas.petazzoni@free-electrons.com>
+	<d8244392bcde50c998813d693d8985d1c8fd60b1.1306054416.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874o4m4za3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Yann> Hello All!
- Yann> This patchset updates the crosstool-NG backend.
+ Thomas> The QtScriptTools library depends on the QtGui library, as can be seen
+ Thomas> in the src/src.pro file of the Qt sources :
 
- Yann> Changes since previous post:
- Yann> - fixed a typo, missing termintaing quote, patch 1
- Yann> - updating to 1.11.3 also updates the bundled config files, patch 2
- Yann> - trailing space removed, patch 3
+ Thomas> !contains(QT_CONFIG, no-gui):contains(QT_CONFIG, scripttools): SRC_SUBDIRS += src_scripttools
 
-Committed, thanks.
+ Thomas> If the scripttools are enabled in the Qt configuration, but not the
+ Thomas> gui, then the scripttools library is not built by Qt, and the
+ Thomas> Buildroot build process fails with:
+
+ Thomas> cp: cannot stat `/home/test/outputs/test-502/host/usr/sh4-unknown-linux-gnu/sysroot/usr/lib/libQtScriptTools.so.*': No such file or directory
+
+Committed, thanks. I hit this issue with a build earlier today as well.
 
 -- 
 Bye, Peter Korsgaard
