@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 22 May 2011 17:04:47 +0200
-Subject: [Buildroot] [git commit] defconfigs: bump 2.6.38.x stable version
-Message-ID: <20110522150630.A4C2F8357B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: bump 2.6.38.x stable version
+Message-ID: <20110522150630.66B56835BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,40 +9,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=572529a43c3b7e637adff025dabdf335bd100403
+commit: http://git.buildroot.net/buildroot/commit/?id=596fe25ea7441f238707ddc263fd50ccdf7f644b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_arm_versatile_defconfig |    2 +-
- configs/qemu_mipsel_malta_defconfig  |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 6274b68..faf55e3 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 64ce976..3f54cef 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -9,7 +9,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.38.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/linux/Config.in b/linux/Config.in
+index ea04c7d..e7d1bd8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_2_6_38
+ 
+ config BR2_LINUX_KERNEL_2_6_38
+-	bool "2.6.38.6"
++	bool "2.6.38.7"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -52,7 +52,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "2.6.38.6"
++	default "2.6.38.7"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "2.6.38.6" if BR2_LINUX_KERNEL_2_6_38
++	default "2.6.38.7" if BR2_LINUX_KERNEL_2_6_38
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.3.4
