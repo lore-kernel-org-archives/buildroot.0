@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2011 10:53:40 +0200
-Subject: [Buildroot] [PATCH 1/1] qt: scripttools needs gui
-In-Reply-To: <cover.1306054416.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1306054416.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d8244392bcde50c998813d693d8985d1c8fd60b1.1306054416.git.thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sun, 22 May 2011 12:26:30 +0200
+Subject: [Buildroot] [PATCH 3/3] toolchain/crosstool-NG: fix up ct-ng
+	config file to saner defaults
+In-Reply-To: <87d3jb407t.fsf@macbook.be.48ers.dk>
+References: <1306015542-5208-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<1306015542-5208-4-git-send-email-yann.morin.1998@anciens.enib.fr>
+	<87d3jb407t.fsf@macbook.be.48ers.dk>
+Message-ID: <201105221226.30903.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The QtScriptTools library depends on the QtGui library, as can be seen
-in the src/src.pro file of the Qt sources :
+Peter, All,
 
-!contains(QT_CONFIG, no-gui):contains(QT_CONFIG, scripttools): SRC_SUBDIRS += src_scripttools
+On Sunday 22 May 2011 10:18:46 Peter Korsgaard wrote:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+[--SNIP--]
+>  Yann>  #--------------
+>  Yann> +# glibc/eglibc specific options
+>  Yann> +ifeq ($(BR2_TOOLCHAIN_CTNG_glibc)$(BR2_TOOLCHAIN_CTNG_eglibc),y)
+>  Yann> +
+>  Yann> +# Force unwind support
+>  Yann> +CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_GLIBC_FORCE_UNWIND) is not set:\1=y:;
+>  Yann> +
+>  Yann> +# Force non-fortified build
+>  Yann> +CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_ENABLE_FORTIFIED_BUILD)=y:# \1 is not set:;
+> 
+> Does that build for you? For me it fails with:
+[--SNIP--]
+> sed: -e expression #1, char 892: unterminated `s' command
+> 
+> E.G. the replace part of the 'Force non-fortified build' line gets
+> removed as # is the comment character in makefiles. The fix is simply to
+> use \#.
 
-If the scripttools are enabled in the Qt configuration, but not the
-gui, then the scripttools library is not built by Qt, and the
-Buildroot build process fails with:
+Arg... I did yet forgot to refresh the patch yet again. Some combo of
+stgit and send-email issues due to PEBKAC... :-]
 
-cp: cannot stat `/home/test/outputs/test-502/host/usr/sh4-unknown-linux-gnu/sysroot/usr/lib/libQtScriptTools.so.*': No such file or directory
+> I'll fix that up when I commit.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Thank you.
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index eafc855..4a3945c 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -373,6 +373,7 @@ config BR2_PACKAGE_QT_SCRIPT
- config BR2_PACKAGE_QT_SCRIPTTOOLS
- 	bool "Script Tools Module"
- 	depends on BR2_PACKAGE_QT_SCRIPT
-+	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	help
- 	  Build the Qt Script Tools module.
- 	  if unsure, say n.
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
