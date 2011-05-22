@@ -1,25 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2011 16:32:50 +0200
-Subject: [Buildroot] [PATCH 2/2] kbd: rename the makefile so that it's named
-	the same as the package
-In-Reply-To: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1306074766.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <55fae404c8cc1f32c3028bae65851e53146798e5.1306074766.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 22 May 2011 16:55:47 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.05/psmisc-fix
+In-Reply-To: <cover.1305992862.git.thomas.petazzoni@free-electrons.com>
+	(Thomas Petazzoni's message of "Sat, 21 May 2011 17:47:48 +0200")
+References: <cover.1305992862.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87vcx23hu4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kbd/{kdb.mk => kbd.mk} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
- rename package/kbd/{kdb.mk => kbd.mk} (100%)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/kbd/kdb.mk b/package/kbd/kbd.mk
-similarity index 100%
-rename from package/kbd/kdb.mk
-rename to package/kbd/kbd.mk
+ Thomas> The following changes since commit a02cfbf1f4a82ee6582e2bf7622b2bf105359ea9:
+ Thomas>   bind: give path to OpenSSL when OpenSSL is enabled (2011-05-19 20:03:35 +0200)
+
+ Thomas> are available in the git repository at:
+ Thomas>   http://free-electrons.com/~thomas/buildroot.git for-2011.05/psmisc-fix
+
+ Thomas> Thomas Petazzoni (2):
+ Thomas>       psmisc: fix build by linking against libintl when needed
+ Thomas>       psmisc: do not install pstree.x11 symbolic link
+
+Committed, thanks.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
