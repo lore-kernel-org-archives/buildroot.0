@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 22 May 2011 17:04:47 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.38.x stable
-	version
-Message-ID: <20110522150630.36F0A835BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] defconfigs: bump 2.6.38.x stable version
+Message-ID: <20110522150630.A4C2F8357B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +9,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1eda3a5c890645887f7ab36a7fbf850432279eb6
+commit: http://git.buildroot.net/buildroot/commit/?id=572529a43c3b7e637adff025dabdf335bd100403
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/qemu_arm_versatile_defconfig |    2 +-
+ configs/qemu_mipsel_malta_defconfig  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index da6f1c3..d60cea0 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -46,6 +46,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.35.13"	if BR2_KERNEL_HEADERS_2_6_35
- 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
--	default "2.6.38.6"	if BR2_KERNEL_HEADERS_2_6_38
-+	default "2.6.38.7"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 6274b68..faf55e3 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index 64ce976..3f54cef 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.38.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
 -- 
 1.7.3.4
