@@ -1,35 +1,29 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 23 May 2011 08:29:59 +0200
-Subject: [Buildroot] buildroot and the at91sam9261ek.
-In-Reply-To: <4DD956B6.4010907@opensoftware-br.com>
-References: <4DD956B6.4010907@opensoftware-br.com>
-Message-ID: <4DD9FEE7.7080306@atmel.com>
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Mon, 23 May 2011 14:22:19 +0200
+Subject: [Buildroot] Some build failures to solve for volunteers
+In-Reply-To: <20110522171916.0ba1bba7@surf>
+References: <20110522171916.0ba1bba7@surf>
+Message-ID: <BANLkTinq4Nr71bL3+O+nfUXbYvJzu36GJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2011/5/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> I have done a set of test builds, with a random choice of toolchain
+> amongst a set of internal and external toolchains I have and with a
+> random choice of packages. I have fixed some of the issues that occurred
+> multiple times, but there are many remaining issues and I won't have
+> the time to go through all of them.
 
-On 5/22/2011 8:32 PM, Paulo Silva(OpenSoftware) wrote:
-> Hi all,
->
-> I am new to buildroot, but the tool is so easy that I had compiled all 
-> things and I can:
-> * run the bootstrap that calls u-boot
-> * run u-boot that calls kernel.
-> * run kernel that stop because it does not have a rootfile system.
->
-> I configured the buildroot to generate initramfs, but instead to 
-> attach it to a kernel end it put the the initramfs file in /usr 
-> directory.
->
-> So I ask you, how to put the initramfs into kernel file end?
-Do you set the initramfs source file into the kernel configuration 
-(General Setup section) ? I think it's not done into the defconfig of 
-this board.
+Great initiative!
 
-Regards,
+> Unfortunately, some of the builds have been done with external
+> toolchains, and the page above doesn't give details about the custom
+> external toolchains I'm using. But anyway, if people have time to go
+> through some of these failures and contribute fixes, that'd be really
+> great.
 
-Ludovic
+How about setting up a couple of buildbots with different toolchains
+and all options enabled? We can all help running build slaves?
