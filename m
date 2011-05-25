@@ -1,20 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 May 2011 23:28:13 +0200
-Subject: [Buildroot] [PATCH] makedevs: minor fix to command's help
-In-Reply-To: <1306326701-19437-2-git-send-email-javier.viguera@digi.com>
-	(Javier Viguera's message of "Wed, 25 May 2011 14:31:41 +0200")
-References: <1306326701-19437-1-git-send-email-javier.viguera@digi.com>
-	<1306326701-19437-2-git-send-email-javier.viguera@digi.com>
-Message-ID: <871uzmxyfm.fsf@macbook.be.48ers.dk>
+Date: Wed, 25 May 2011 23:28:21 +0200
+Subject: [Buildroot] [PATCH] scripts: fixed svn revision l10n-ism
+In-Reply-To: <874525559.7955141306350655467.JavaMail.root@zimbra4-e1.priv.proxad.net>
+	(f8cfe@free.fr's message of "Wed, 25 May 2011 21:10:55 +0200 (CEST)")
+References: <874525559.7955141306350655467.JavaMail.root@zimbra4-e1.priv.proxad.net>
+Message-ID: <87wrhewjuy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
+>>>>> "f8cfe" == f8cfe  <f8cfe@free.fr> writes:
 
- Javier> Signed-off-by: Javier Viguera <javier.viguera@digi.com>
+ f8cfe> Fixed an l10n-ism in retrieval of the svn revision.
+ f8cfe> Signed-off-by: Stephane Fillod <fillods@users.sf.net>
+
 Committed, thanks.
 
 -- 
