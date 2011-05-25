@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 May 2011 23:28:21 +0200
-Subject: [Buildroot] [PATCH] scripts: fixed svn revision l10n-ism
-In-Reply-To: <874525559.7955141306350655467.JavaMail.root@zimbra4-e1.priv.proxad.net>
-	(f8cfe@free.fr's message of "Wed, 25 May 2011 21:10:55 +0200 (CEST)")
-References: <874525559.7955141306350655467.JavaMail.root@zimbra4-e1.priv.proxad.net>
-Message-ID: <87wrhewjuy.fsf@macbook.be.48ers.dk>
+From: Javier Viguera <javier.viguera@digi.com>
+Date: Wed, 25 May 2011 23:27:22 +0200
+Subject: [Buildroot] [git commit] makedevs: minor fix to command's help
+Message-ID: <20110525212841.E558983610@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "f8cfe" == f8cfe  <f8cfe@free.fr> writes:
 
- f8cfe> Fixed an l10n-ism in retrieval of the svn revision.
- f8cfe> Signed-off-by: Stephane Fillod <fillods@users.sf.net>
+commit: http://git.buildroot.net/buildroot/commit/?id=99ead3c2ead605d6504b9abad111778dc2a93ae6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Javier Viguera <javier.viguera@digi.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/makedevs/makedevs.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index 9fc71af..95c079a 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -328,7 +328,7 @@ void bb_show_usage(void)
+ 	fprintf(stderr, "%s: [-d device_table] rootdir\n\n", bb_applet_name);
+ 	fprintf(stderr, "Creates a batch of special files as specified in a device table.\n");
+ 	fprintf(stderr, "Device table entries take the form of:\n");
+-	fprintf(stderr, "type mode user group major minor start increment count\n\n");
++	fprintf(stderr, "name type mode user group major minor start increment count\n\n");
+ 	fprintf(stderr, "Where name is the file name,  type can be one of:\n");
+ 	fprintf(stderr, "      f       A regular file\n");
+ 	fprintf(stderr, "      d       Directory\n");
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
