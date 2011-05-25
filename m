@@ -1,25 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 May 2011 04:57:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 3781] crosstool-ng-1.11.3 fails to build
-In-Reply-To: <bug-3781-163@https.bugs.busybox.net/>
-References: <bug-3781-163@https.bugs.busybox.net/>
-Message-ID: <20110525045740.43DA68365E@busybox.osuosl.org>
+From: Bob Liu <lliubbo@gmail.com>
+Date: Wed, 25 May 2011 15:31:39 +0800
+Subject: [Buildroot] How to enable Oprofile while using external tool chain?
+Message-ID: <BANLkTikQOCg+ZQy1qc34GWBEo-u7QC41Fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3781
+Hi, folks
 
---- Comment #1 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-Created attachment 3319
-  --> https://bugs.busybox.net/attachment.cgi?id=3319
-.config
+It seems Oprofile package depends on no using external tool chain.
 
-config of crosstool-ng-1.11.3
+Is there any special reason of this, because I am trying to enable
+Oprofile in buildroot while using external tool chain.
+
+Any guide is welcome, Thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards,
+--Bob
