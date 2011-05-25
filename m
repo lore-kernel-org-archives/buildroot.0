@@ -1,34 +1,21 @@
-From: f8cfe at free.fr <f8cfe@free.fr>
-Date: Wed, 25 May 2011 21:10:55 +0200 (CEST)
-Subject: [Buildroot] [PATCH] scripts: fixed svn revision l10n-ism
-In-Reply-To: <99986051.7954541306350551899.JavaMail.root@zimbra4-e1.priv.proxad.net>
-Message-ID: <874525559.7955141306350655467.JavaMail.root@zimbra4-e1.priv.proxad.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 May 2011 23:28:13 +0200
+Subject: [Buildroot] [PATCH] makedevs: minor fix to command's help
+In-Reply-To: <1306326701-19437-2-git-send-email-javier.viguera@digi.com>
+	(Javier Viguera's message of "Wed, 25 May 2011 14:31:41 +0200")
+References: <1306326701-19437-1-git-send-email-javier.viguera@digi.com>
+	<1306326701-19437-2-git-send-email-javier.viguera@digi.com>
+Message-ID: <871uzmxyfm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed an l10n-ism in retrieval of the svn revision.
+>>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
 
-Signed-off-by: Stephane Fillod <fillods@users.sf.net>
----
- setlocalversion |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Javier> Signed-off-by: Javier Viguera <javier.viguera@digi.com>
+Committed, thanks.
 
-diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-index cc2c128..8d6fe90 100755
---- a/scripts/setlocalversion
-+++ b/scripts/setlocalversion
-@@ -56,9 +56,9 @@ if hgid=`hg id 2>/dev/null`; then
- fi
- 
- # Check for svn and a svn repo.
--if rev=`svn info 2>/dev/null | grep '^Last Changed Rev'`; then
-+if rev=`LANG=C svn info 2>/dev/null | grep '^Last Changed Rev'`; then
- 	rev=`echo $rev | awk '{print $NF}'`
--	changes=`svn status 2>/dev/null | grep '^[AMD]' | wc -l`
-+	changes=`LANG=C svn status 2>/dev/null | grep '^[AMD]' | wc -l`
- 
- 	# Are there uncommitted changes?
- 	if [ $changes != 0 ]; then
+-- 
+Bye, Peter Korsgaard
