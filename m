@@ -1,24 +1,17 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 May 2011 15:34:10 +0200
+From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 25 May 2011 16:10:22 +0200
 Subject: [Buildroot] makedevs minor fix
-In-Reply-To: <1306326701-19437-1-git-send-email-javier.viguera@digi.com>
-	(Javier Viguera's message of "Wed, 25 May 2011 14:31:40 +0200")
+In-Reply-To: <87lixuykdp.fsf@macbook.be.48ers.dk>
 References: <1306326701-19437-1-git-send-email-javier.viguera@digi.com>
-Message-ID: <87lixuykdp.fsf@macbook.be.48ers.dk>
+	<87lixuykdp.fsf@macbook.be.48ers.dk>
+Message-ID: <BANLkTimmJQg4z+p=Ua8+GvQ7Htr-_G43ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Javier" == Javier Viguera <javier.viguera@digi.com> writes:
+2011/5/25 Peter Korsgaard <jacmet@uclibc.org>:
+> Patch missing?
 
- Javier> Hi all,
- Javier> Just a minor fix in the help of the makedevs utility.
-
- Javier> Please review and consider applying.
-
-Patch missing?
-
--- 
-Bye, Peter Korsgaard
+It's in another mail prefixed with [PATCH]. At least I got it.
