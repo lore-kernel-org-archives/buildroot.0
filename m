@@ -1,40 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 May 2011 23:27:22 +0200
-Subject: [Buildroot] [git commit] setlocalversion: fix svn revision l10n-ism
-Message-ID: <20110525212842.22D3983610@busybox.osuosl.org>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Thu, 26 May 2011 13:17:27 +0300
+Subject: [Buildroot] Slow boots caused by
+ ca520507fc15a8213334a76339a3e6d567e91ea0 (udev, inittab)
+In-Reply-To: <BANLkTi=J6qHuzsS=aACb7Zssm5Se-LQZVQ@mail.gmail.com>
+References: <BANLkTi=cikrdVk_mikRhpLYZtgDarZCukw@mail.gmail.com>
+	<20110517152841.2da7be8c@surf>
+	<BANLkTinfxAON7FioeoC9scz9MF9F3fVp+w@mail.gmail.com>
+	<BANLkTik-DyW2P62rGHM70=PYS=nBYFiRoQ@mail.gmail.com>
+	<87zkmiud2q.fsf@macbook.be.48ers.dk>
+	<BANLkTi=LS8Tk66Gn8zO2Oi476wEiLfJh0A@mail.gmail.com>
+	<87tycqucj3.fsf@macbook.be.48ers.dk>
+	<BANLkTi=J6qHuzsS=aACb7Zssm5Se-LQZVQ@mail.gmail.com>
+Message-ID: <BANLkTimz=8MSHOsoqqmEeNXB+jFf5+R37A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arggg... now SSH does not work, since the server cannot allocate a PTY....
+Again - the fix is to re-add this line to the S10udev script:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cff599de0816704be966c5f9da36bfab14d9dcaa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+mount -t devpts /dev/pts /dev/pts || (echo "FAIL" && exit 1)
 
-Fixed an l10n-ism in retrieval of the svn revision.
-
-Signed-off-by: Stephane Fillod <fillods@users.sf.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- scripts/setlocalversion |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-index cc2c128..8d6fe90 100755
---- a/scripts/setlocalversion
-+++ b/scripts/setlocalversion
-@@ -56,9 +56,9 @@ if hgid=`hg id 2>/dev/null`; then
- fi
- 
- # Check for svn and a svn repo.
--if rev=`svn info 2>/dev/null | grep '^Last Changed Rev'`; then
-+if rev=`LANG=C svn info 2>/dev/null | grep '^Last Changed Rev'`; then
- 	rev=`echo $rev | awk '{print $NF}'`
--	changes=`svn status 2>/dev/null | grep '^[AMD]' | wc -l`
-+	changes=`LANG=C svn status 2>/dev/null | grep '^[AMD]' | wc -l`
- 
- 	# Are there uncommitted changes?
- 	if [ $changes != 0 ]; then
--- 
-1.7.3.4
+On Thu, May 19, 2011 at 3:04 PM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+>
+> On Thu, May 19, 2011 at 2:59 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+> > ?>> Do you have devtmpfs + mount enabled in your kernel? (DEVTMPFS +
+> > ?>> DEVTMPFS_MOUNT). If you do so, /dev is already a tmpfs.
+> >
+> > ?Diego> It seems not. The sad thing is that I cannot even recompile the
+> >
+> > Argh - Then your best bet is probably to add a local hack to mount a
+> > tmpfs on /dev before starting udev.
+>
+> And I propose adding a back that check in the udev script, as it wan
+> before. This should not hurt existing users.
