@@ -1,28 +1,33 @@
-From: Paulo Carvalho Silva <psilva@opensoftware-br.com>
-Date: Thu, 26 May 2011 18:50:43 -0300
-Subject: [Buildroot] How to generete initramfs inside kernel img.
-Message-ID: <4DDECB33.6070402@opensoftware-br.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 May 2011 22:13:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 3781] crosstool-ng-1.11.3 fails to build
+In-Reply-To: <bug-3781-163@https.bugs.busybox.net/>
+References: <bug-3781-163@https.bugs.busybox.net/>
+Message-ID: <20110526221356.1950083679@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=3781
 
-I am using buildroot-2011-02, without a problem, the tools is the best 
-one, because I tryied a several others.
+Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
 
-I want to generate initramfs inside the kernel image, but I searched how 
-to do that, and the unique information found, is the setup of initramfs 
-into the kernel's config file, but buildroot always generate it in a 
-separate file.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at anciens.eni
+                   |.org                        |b.fr
 
-I got a kernel image with initramfs inside it, but using another 
-method,I downloaded kernel sources, patched it, configured it and 
-compiled it, but I want to use buildroot for all steps, bootstrap, 
-u-boot and kernel.
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
+Created attachment 3325
+  --> https://bugs.busybox.net/attachment.cgi?id=3325
+Force symlink creation
 
-Best regards.
+Please, try applying this patch to crosstool-NG, and re-run.
 
-Paulo
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
