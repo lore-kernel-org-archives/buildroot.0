@@ -1,120 +1,86 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 May 2011 04:55:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 3781] crosstool-ng-1.11.3 fails to build
-In-Reply-To: <bug-3781-163@https.bugs.busybox.net/>
-References: <bug-3781-163@https.bugs.busybox.net/>
-Message-ID: <20110527045558.105DF83694@busybox.osuosl.org>
+Date: Fri, 27 May 2011 04:58:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 3805] New: 2011.05rc2 dies at ./configure with
+ binutils 2.21 on Debian Squeeze
+Message-ID: <bug-3805-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3781
+https://bugs.busybox.net/show_bug.cgi?id=3805
 
---- Comment #4 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-(In reply to comment #3)
-> (In reply to comment #2)
-> > Created attachment 3325 [details] [details]
-> > Force symlink creation
-> > 
-> > Please, try applying this patch to crosstool-NG, and re-run.
-> 
-> After applying this patch, the error becomes:
-> 
-> [ALL  ]    make[4]: Leaving directory
-> `/opt/buildroot_real6410/output_fs2410/build/crosstool-ng-1.11.3/.build/arm-unknown-linux-uclibcgnueabi/build/build-cc'
-> [ALL  ]   
-> `/opt/buildroot_real6410/output_fs2410/host/usr/bin/arm-unknown-linux-uclibcgnueabi-cc'
-> -> `arm-unknown-linux-uclibcgnueabi-gcc'
-> [INFO ]  Installing final compiler: done in 294.83s (at 16:54)
-> [INFO ]  =================================================================
-> [INFO ]  Cleaning-up the toolchain's directory
-> [EXTRA]    Installing the populate helper
-> [EXTRA]    Installing a cross-ldd helper
-> [EXTRA]    Creating toolchain aliases
-> [ALL  ]    ln: creating symbolic link `arm-linux-addr2line': File exists
-> [ERROR]    
-> [ERROR]    >>  Build failed in step 'Cleaning-up the toolchain's directory'
-> [ERROR]    >>
-> [ERROR]    >>  Error happened in: CT_DoExecLog[scripts/functions]
-> [ERROR]    >>        called from: do_finish[scripts/build/internals.sh at 89]
-> [ERROR]    >>        called from: main[scripts/crosstool-NG.sh at 582]
-> [ERROR]    >>
-> [ERROR]    >>  For more info on this error, look at the file: 'build.log'
-> [ERROR]    >>  There is a list of known issues, some with workarounds, in:
-> [ERROR]    >>      'docs/B - Known issues.txt'
-> [ERROR]    
-> [ERROR]    Build failed in step 'Cleaning-up the toolchain's directory'
-> [ERROR]    
-> [ERROR]    (elapsed: 16:53.29)
-> make[3]: *** [build] Error 1
-> make[2]: *** [build.2] Error 2
-> make[1]: ***
-> [/opt/buildroot_real6410/output_fs2410/stamps/ct-ng-toolchain-built] Error 2
-> make: *** [all] Error 2
+           Summary: 2011.05rc2 dies at ./configure with binutils 2.21 on
+                    Debian Squeeze
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: ibid_ag at lavabit.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-After fixing this problem as your patch did, the compilation still failed as
-last:
 
-[ALL  ]   
-`/opt/buildroot_real6410/output_fs2410/host/usr/bin/arm-unknown-linux-uclibcgnueabi-cc'
--> `arm-unknown-linux-uclibcgnueabi-gcc'
-[INFO ]  Installing final compiler: done in 314.20s (at 16:05)
-[INFO ]  =================================================================
-[INFO ]  Cleaning-up the toolchain's directory
-[EXTRA]    Installing the populate helper
-[EXTRA]    Installing a cross-ldd helper
-[EXTRA]    Creating toolchain aliases
-[ALL  ]    `arm-linux-addr2line' -> `arm-unknown-linux-uclibcgnueabi-addr2line'
-[ALL  ]    `arm-linux-ar' -> `arm-unknown-linux-uclibcgnueabi-ar'
-[ALL  ]    `arm-linux-as' -> `arm-unknown-linux-uclibcgnueabi-as'
-[ALL  ]    `arm-linux-c++' -> `arm-unknown-linux-uclibcgnueabi-c++'
-[ALL  ]    `arm-linux-c++filt' -> `arm-unknown-linux-uclibcgnueabi-c++filt'
-[ALL  ]    `arm-linux-cc' -> `arm-unknown-linux-uclibcgnueabi-cc'
-[ALL  ]    `arm-linux-cpp' -> `arm-unknown-linux-uclibcgnueabi-cpp'
-[ALL  ]    `arm-linux-ct-ng.config' ->
-`arm-unknown-linux-uclibcgnueabi-ct-ng.config'
-[ALL  ]    `arm-linux-g++' -> `arm-unknown-linux-uclibcgnueabi-g++'
-[ALL  ]    `arm-linux-gcc' -> `arm-unknown-linux-uclibcgnueabi-gcc'
-[ALL  ]    `arm-linux-gcc-4.4.3' -> `arm-unknown-linux-uclibcgnueabi-gcc-4.4.3'
-[ALL  ]    `arm-linux-gccbug' -> `arm-unknown-linux-uclibcgnueabi-gccbug'
-[ALL  ]    `arm-linux-gcov' -> `arm-unknown-linux-uclibcgnueabi-gcov'
-[ALL  ]    `arm-linux-gprof' -> `arm-unknown-linux-uclibcgnueabi-gprof'
-[ALL  ]    `arm-linux-ld' -> `arm-unknown-linux-uclibcgnueabi-ld'
-[ALL  ]    `arm-linux-ldd' -> `arm-unknown-linux-uclibcgnueabi-ldd'
-[ALL  ]    `arm-linux-nm' -> `arm-unknown-linux-uclibcgnueabi-nm'
-[ALL  ]    `arm-linux-objcopy' -> `arm-unknown-linux-uclibcgnueabi-objcopy'
-[ALL  ]    `arm-linux-objdump' -> `arm-unknown-linux-uclibcgnueabi-objdump'
-[ALL  ]    `arm-linux-populate' -> `arm-unknown-linux-uclibcgnueabi-populate'
-[ALL  ]    `arm-linux-ranlib' -> `arm-unknown-linux-uclibcgnueabi-ranlib'
-[ALL  ]    `arm-linux-readelf' -> `arm-unknown-linux-uclibcgnueabi-readelf'
-[ALL  ]    `arm-linux-size' -> `arm-unknown-linux-uclibcgnueabi-size'
-[ALL  ]    `arm-linux-sstrip' -> `arm-unknown-linux-uclibcgnueabi-sstrip'
-[ALL  ]    `arm-linux-strings' -> `arm-unknown-linux-uclibcgnueabi-strings'
-[ALL  ]    `arm-linux-strip' -> `arm-unknown-linux-uclibcgnueabi-strip'
-[EXTRA]    Removing access to the build system tools
-[EXTRA]    Removing installed documentation
-[INFO ]  Cleaning-up the toolchain's directory: done in 1.35s (at 16:06)
-[INFO ]  Build completed at 20110527.124433
-[INFO ]  (elapsed: 16:05.58)
-[INFO ]  Finishing installation (may take a few seconds)...
-[ERROR]    
-[ERROR]    >>
-[ERROR]    >>  Error happened in: main[scripts/crosstool-NG.sh]
-[ERROR]    >>
-[ERROR]    >>  For more info on this error, look at the file: 'build.log'
-[ERROR]    >>  There is a list of known issues, some with workarounds, in:
-[ERROR]    >>      'docs/B - Known issues.txt'
-[ERROR]    
-[ERROR]    Build failed in step 'Cleaning-up the toolchain's directory'
-[ERROR]    
-[ERROR]    (elapsed: 16:06.08)
-make[3]: *** [build] Error 1
-make[2]: *** [build.2] Error 2
-make[1]: ***
-[/opt/buildroot_real6410/output_fs2410/stamps/ct-ng-toolchain-built] Error 2
-make: *** [all] Error 2
+Created attachment 3331
+  --> https://bugs.busybox.net/attachment.cgi?id=3331
+Config file
+
+Using Debian Squeeze (i386) with GCC 4.4.5, with uclibc 0.9.31.x and binutils
+2.21 selected for a target i386 system, make -j3 dies at the configure step for
+binutils.
+
+Here's the error:
+>>> host-binutils 2.21 Configuring
+(cd
+/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/build/host-binutils-2.21/
+&& rm -rf config.cache;
+PATH=/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/bin:/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/bin:/home/idunham/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm"
+CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++" CPP="/usr/bin/cpp"
+CFLAGS="-O2
+-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/include
+-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/include"
+CXXFLAGS="-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/include
+-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/include"
+LDFLAGS="-L/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/lib
+-L/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib
+-Wl,-rpath,/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib"
+PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+PKG_CONFIG="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/bin/pkg-config"
+PKG_CONFIG_SYSROOT_DIR="/"
+PKG_CONFIG_LIBDIR="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib/pkgconfig:/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/share/pkgconfig"
+PERLLIB="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib/perl"
+LD_LIBRARY_PATH="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib:"
+CFLAGS="-O2
+-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/include
+-I/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/include"
+LDFLAGS="-L/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/lib
+-L/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib
+-Wl,-rpath,/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/lib"
+ ./configure
+--prefix="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr"
+--sysconfdir="/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/etc"
+--disable-multilib --disable-werror --target=-unknown-linux-uclibc
+--with-sysroot=/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/host/usr/-unknown-linux-uclibc/sysroot
+ )
+checking build system type... i686-pc-linux-gnu
+checking host system type... i686-pc-linux-gnu
+checking target system type... configure: error: /bin/sh ./config.sub
+-unknown-linux-uclibc failed
+configure: WARNING: cache variable ac_cv_target contains a newline
+make: ***
+[/home/idunham/misc/toolchain/buildroot-2011.05-rc2/output/build/host-binutils-2.21/.stamp_configured]
+Error 1
+
+It had successfully built a few packages already, but I wasn't logging those.
+This appears to be a quite different problem from 1789, since it's at the
+configure stage.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
