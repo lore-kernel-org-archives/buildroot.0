@@ -1,31 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 May 2011 22:13:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 3781] crosstool-ng-1.11.3 fails to build
-In-Reply-To: <bug-3781-163@https.bugs.busybox.net/>
-References: <bug-3781-163@https.bugs.busybox.net/>
-Message-ID: <20110526221356.1950083679@busybox.osuosl.org>
+Date: Fri, 27 May 2011 00:34:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 3397] New Package: cryptsetup
+In-Reply-To: <bug-3397-163@https.bugs.busybox.net/>
+References: <bug-3397-163@https.bugs.busybox.net/>
+Message-ID: <20110527003450.1A1A083661@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3781
+https://bugs.busybox.net/show_bug.cgi?id=3397
 
-Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
+--- Comment #3 from Matthew Pirretti <mpirretti@gmail.com>  ---
+Shouldn't it be:
+ifneq ($(BR2_PACKAGE_UDEV),y)
+    CRYPTSETUP_CONF_OPT += --disable-udev
+endif
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-         AssignedTo|unassigned at buildroot.uclibc |yann.morin.1998 at anciens.eni
-                   |.org                        |b.fr
+instead of:
+ifneq ($(BR2_PACKAGE_UDEV),y)
+    CRYPTSETUP_CONF_OPT = --disable-udev
+endif
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
-Created attachment 3325
-  --> https://bugs.busybox.net/attachment.cgi?id=3325
-Force symlink creation
-
-Please, try applying this patch to crosstool-NG, and re-run.
+Otherwise if BR2_PACKAGE_UDEV=n, then --with-libgcrypt-prefix will not be
+defined and it won't build.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
