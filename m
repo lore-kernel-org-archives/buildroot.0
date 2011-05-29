@@ -1,87 +1,32 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sat, 28 May 2011 16:21:08 -0500
-Subject: [Buildroot] libnl 3.0 build failure
-Message-ID: <001f01cc1d7d$291e7080$7b5b5180$@zuerker.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 29 May 2011 08:24:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 2419] Add a bundle of Lua modules
+In-Reply-To: <bug-2419-163@https.bugs.busybox.net/>
+References: <bug-2419-163@https.bugs.busybox.net/>
+Message-ID: <20110529082444.10B8C83703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+https://bugs.busybox.net/show_bug.cgi?id=2419
 
- 
+Fran?ois Perrad <francois.perrad@gadz.org> changed:
 
-I'm using an external toolchain (older ct-ng), with glibc 2.12.1,kernel
-2.6.38.7 and try to compile for x86_64.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #3265|0                           |1
+        is obsolete|                            |
 
- 
+--- Comment #7 from Fran?ois Perrad <francois.perrad@gadz.org>  ---
+Created attachment 3337
+  --> https://bugs.busybox.net/attachment.cgi?id=3337
+first patch against Buildroot 2011.05-00001-gda62fc6
 
-I keep getting this error:
-
- 
-
->>> libnl 3.0 Building
-
-PATH="/data/devil-linux/output/host/bin:/data/devil-linux/output/host/usr/bi
-n:/data/devil-linux/output/host/usr/sbin/:/bin:/usr/bin:/sbin:/usr/sbin:/usr
-/local/bin:/tools/bin" PERLLIB="/data/devil-linux/output/host/usr/lib/perl"
-/usr/bin/make -j1  -C /data/devil-linux/output/build/libnl-3.0/
-
-make[1]: Entering directory `/data/devil-linux/output/build/libnl-3.0'
-
-Making all in include
-
-make[2]: Entering directory
-`/data/devil-linux/output/build/libnl-3.0/include'
-
-make[2]: Nothing to be done for `all'.
-
-make[2]: Leaving directory
-`/data/devil-linux/output/build/libnl-3.0/include'
-
-Making all in lib
-
-make[2]: Entering directory `/data/devil-linux/output/build/libnl-3.0/lib'
-
-/usr/bin/make  all-am
-
-make[3]: Entering directory `/data/devil-linux/output/build/libnl-3.0/lib'
-
-  CC     route/pktloc.lo
-
-route/pktloc.c: In function 'read_pktlocs':
-
-route/pktloc.c:127: error: 'YY_BUF_SIZE' undeclared (first use in this
-function)
-
-route/pktloc.c:127: error: (Each undeclared identifier is reported only once
-
-route/pktloc.c:127: error: for each function it appears in.)
-
-route/pktloc.c:97: warning: ignoring return value of 'asprintf', declared
-with attribute warn_unused_result
-
-make[3]: *** [route/pktloc.lo] Error 1
-
-make[3]: Leaving directory `/data/devil-linux/output/build/libnl-3.0/lib'
-
-make[2]: *** [all] Error 2
-
- 
+updated patch after 2011.05 release
 
 -- 
-
- 
-
-Regards
-
-   Heiko Zuerker
-
-    <http://www.devil-linux.org> http://www.devil-linux.org
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110528/eb2943b6/attachment.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
