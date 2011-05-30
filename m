@@ -1,74 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:17 +0200
-Subject: [Buildroot] [PATCH 26/26] u-boot: allow specification of custom Git
-	repo as source
+Date: Mon, 30 May 2011 22:23:04 +0200
+Subject: [Buildroot] [PATCH 13/26] syslinux: convert to GENTARGETS
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d656c5d7c123c351ed32ff011fee9c5791c48ac2.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <094faf23307e4e8734b2ff9684c6e7797d028fb3.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Moreover, the installation of pxelinux and/or isolinux is now selected
+to suboptions, as we traditionally do for other packages. This allows
+to have a single option (BR2_TARGET_SYSLINUX) that enables the
+syslinux package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/Config.in |   14 ++++++++++++++
- boot/u-boot/u-boot.mk |    3 +++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+ boot/syslinux/Config.in   |   14 ++++++++----
+ boot/syslinux/syslinux.mk |   50 +++++++++++++++-----------------------------
+ 2 files changed, 26 insertions(+), 38 deletions(-)
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 658a539..dde92d3 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -34,6 +34,9 @@ config BR2_BOOT_U_BOOT_2010_03
- config BR2_BOOT_U_BOOT_CUSTOM_TARBALL
- 	bool "Custom tarball"
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 5650f91..60f3b8f 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -5,8 +5,12 @@ config BR2_TARGET_SYSLINUX
+ 	  The syslinux bootloader for x86 systems.
+ 	  This includes: syslinux, pxelinux, extlinux.
  
-+config BR2_BOOT_U_BOOT_CUSTOM_GIT
-+        bool "Custom Git repository"
+-config BR2_TARGET_PXELINUX
+-	bool "pxelinux"
+-	depends on BR2_i386 || BR2_x86_64
+-	help
+-	  The pxelinux loader for x86 systems.
++config BR2_TARGET_SYSLINUX_ISOLINUX
++	bool "Install isolinux"
++	depends on BR2_TARGET_SYSLINUX
++	default y
 +
- endchoice
++config BR2_TARGET_SYSLINUX_PXELINUX
++	bool "Install pxelinux"
++	depends on BR2_TARGET_SYSLINUX
++	default y
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 192e905..d1b2907 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -4,42 +4,29 @@
+ #
+ #############################################################
  
- if BR2_BOOT_U_BOOT_CUSTOM_TARBALL
-@@ -43,6 +46,16 @@ config BR2_BOOT_U_BOOT_CUSTOM_TARBALL_LOCATION
+-SYSLINUX_VERSION:=3.85
+-SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
+-SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
+-SYSLINUX_CAT:=$(BZCAT)
+-SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
++SYSLINUX_VERSION = 3.85
++SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
++SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
  
+-$(DL_DIR)/$(SYSLINUX_SOURCE):
+-	 $(call DOWNLOAD,$(SYSLINUX_SITE),$(SYSLINUX_SOURCE))
++SYSLINUX_INSTALL_TARGET = NO
++SYSLINUX_INSTALL_IMAGES = YES
+ 
+-syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
++SYSLINUX_DEPENDENCIES = host-nasm
+ 
+-$(SYSLINUX_DIR)/.unpacked: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
+-	mkdir -p $(@D)
+-	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+-	toolchain/patch-kernel.sh $(@D) boot/syslinux/ \*.patch
+-	touch -c $@
++define SYSLINUX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
++endef
+ 
+-$(SYSLINUX_DIR)/.compiled: $(SYSLINUX_DIR)/.unpacked
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
+-	touch -c $@
++SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
++SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
+ 
+-$(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
+-	cp -a $(SYSLINUX_DIR)/core/isolinux.bin $@
++define SYSLINUX_INSTALL_IMAGES_CMDS
++	for i in $(SYSLINUX_IMAGES-y); do \
++		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/`basename $$i`; \
++	done
++endef
+ 
+-$(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
+-	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
+-
+-syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
+-pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
+-
+-pxelinux-clean syslinux-clean:
+-	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
+-	-$(MAKE) -C $(SYSLINUX_DIR) clean
+-
+-pxelinux-dirclean syslinux-dirclean:
+-	rm -rf $(SYSLINUX_DIR)
++$(eval $(call GENTARGETS,boot,syslinux))
+ 
+ #############################################################
+ #
+@@ -49,6 +36,3 @@ pxelinux-dirclean syslinux-dirclean:
+ ifeq ($(BR2_TARGET_SYSLINUX),y)
+ TARGETS+=syslinux
  endif
- 
-+if BR2_BOOT_U_BOOT_CUSTOM_GIT
-+
-+config BR2_BOOT_U_BOOT_CUSTOM_GIT_REPO_URL
-+        string "URL of custom Git repository"
-+
-+config BR2_BOOT_U_BOOT_CUSTOM_GIT_VERSION
-+        string "Custom Git version"
-+
-+endif
-+
- config BR2_BOOT_U_BOOT_VERSION
- 	string
- 	default "2011.03"	if BR2_BOOT_U_BOOT_2011_03
-@@ -51,6 +64,7 @@ config BR2_BOOT_U_BOOT_VERSION
- 	default "2010.06"	if BR2_BOOT_U_BOOT_2010_06
- 	default "2010.03"	if BR2_BOOT_U_BOOT_2010_03
- 	default "custom"	if BR2_BOOT_U_BOOT_CUSTOM_TARBALL
-+	default $BR2_BOOT_U_BOOT_CUSTOM_GIT_VERSION if BR2_BOOT_U_BOOT_CUSTOM_GIT
- 
- config BR2_BOOT_U_BOOT_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 97d7921..6334fad 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -13,6 +13,9 @@ ifeq ($(U_BOOT_VERSION),custom)
- U_BOOT_TARBALL = $(call qstrip,$(BR2_BOOT_U_BOOT_CUSTOM_TARBALL_LOCATION))
- U_BOOT_SITE    = $(dir $(U_BOOT_TARBALL))
- U_BOOT_SOURCE  = $(notdir $(U_BOOT_TARBALL))
-+else ifeq ($(BR2_BOOT_U_BOOT_CUSTOM_GIT),y)
-+U_BOOT_SITE        = $(call qstrip,$(BR2_BOOT_U_BOOT_CUSTOM_GIT_REPO_URL))
-+U_BOOT_SITE_METHOD = git
- else
- # Handle stable official U-Boot versions
- U_BOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
+-ifeq ($(BR2_TARGET_PXELINUX),y)
+-TARGETS+=pxelinux
+-endif
 -- 
 1.7.1
