@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:22:54 +0200
-Subject: [Buildroot] [PATCH 03/26] linux: make it possible to install the
-	kernel in /boot
+Date: Mon, 30 May 2011 22:22:58 +0200
+Subject: [Buildroot] [PATCH 07/26] barebox: use = instead of := and re-indent
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d8edb7d215a430e3bd8494091ab04b5e2b2fa280.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b6b41e4feb8fcf7f693a8c2c1023d7c5cb62530e.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    8 ++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ boot/barebox/barebox.mk |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e7d1bd8..291f9e0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -153,6 +153,14 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	  Specify the kernel make target to build the kernel that you
- 	  need.
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index f3e769f..bab4b4e 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,12 +4,13 @@
+ #
+ #############################################################
  
-+config BR2_LINUX_KERNEL_INSTALL_TARGET
-+	bool "Install kernel image to /boot in target"
-+	depends on BR2_i386 || BR_x86_64
-+	help
-+	  Select this option to have the kernel image installed to
-+	  /boot in the target root filesystem, as is typically done on
-+	  x86/x86_64 systems.
+-BAREBOX_VERSION:=2011.05.0
+-BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
+-BAREBOX_SITE:=http://www.barebox.org/download/
+-BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+-BAREBOX_CAT:=$(BZCAT)
+-BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
++BAREBOX_VERSION = 2011.05.0
++BAREBOX_SOURCE  = barebox-$(BAREBOX_VERSION).tar.bz2
++BAREBOX_SITE    = http://www.barebox.org/download/
++BAREBOX_DIR     = $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
++BAREBOX_CAT     = $(BZCAT)
 +
- endif # BR2_LINUX_KERNEL
++BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
  
- endmenu
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 43ca87b..2bb32cb 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -158,6 +158,9 @@ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/
- $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 	@$(call MESSAGE,"Installing kernel")
- 	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
-+ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
-+	install -m 0644 -D $(LINUX26_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX26_IMAGE_NAME)
-+endif
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH=x86
 -- 
 1.7.1
