@@ -1,77 +1,81 @@
 From: Daniel Mack <zonque@gmail.com>
-Date: Mon, 30 May 2011 20:16:30 +0200
-Subject: [Buildroot] [PATCH 2/2] Add package attr
+Date: Mon, 30 May 2011 20:16:29 +0200
+Subject: [Buildroot] [PATCH 1/2] Add package acl
 In-Reply-To: <1306779390-19947-1-git-send-email-zonque@gmail.com>
 References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
-Message-ID: <1306779390-19947-3-git-send-email-zonque@gmail.com>
+Message-ID: <1306779390-19947-2-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Daniel Mack <zonque@gmail.com>
 ---
- package/Config.in      |    1 +
- package/attr/Config.in |    6 ++++++
- package/attr/attr.mk   |   25 +++++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/attr/Config.in
- create mode 100644 package/attr/attr.mk
+ package/Config.in     |    1 +
+ package/acl/Config.in |    7 +++++++
+ package/acl/acl.mk    |   27 +++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/acl/Config.in
+ create mode 100644 package/acl/acl.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cefe90e..84bb761 100644
+index 40f523d..cefe90e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -484,6 +484,7 @@ endmenu
+@@ -483,6 +483,7 @@ source "package/xmlstarlet/Config.in"
+ endmenu
  
  menu "System tools"
- source "package/acl/Config.in"
-+source "package/attr/Config.in"
++source "package/acl/Config.in"
  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
  source "package/bootutils/Config.in"
  endif
-diff --git a/package/attr/Config.in b/package/attr/Config.in
+diff --git a/package/acl/Config.in b/package/acl/Config.in
 new file mode 100644
-index 0000000..766c346
+index 0000000..0a07d1e
 --- /dev/null
-+++ b/package/attr/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ATTR
-+	bool "attr"
++++ b/package/acl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ACL
++	bool "ACL tools"
++	depends on BR2_PACKAGE_ATTR
 +	help
-+	  Commands for Manipulating Filesystem Extended Attributes
-+	  See http://savannah.nongnu.org/projects/attr
++	  Commands for Manipulating POSIX Access Control Lists
++	  See http://savannah.nongnu.org/projects/acl
 +
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
 new file mode 100644
-index 0000000..3f76bd4
+index 0000000..30faad1
 --- /dev/null
-+++ b/package/attr/attr.mk
-@@ -0,0 +1,25 @@
++++ b/package/acl/acl.mk
+@@ -0,0 +1,27 @@
 +#############################################################
 +#
-+# attr
++# acl
 +#
 +#############################################################
-+ATTR_VERSION = 2.4.46
-+ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
-+ATTR_SITE = http://mirror.its.uidaho.edu/pub/savannah/attr/
-+ATTR_LIBTOOL_PATCH = NO
-+ATTR_INSTALL_STAGING = YES
-+ATTR_INSTALL_TARGET = YES
-+ATTR_CONF_OPT = --enable-gettext=no
++ACL_VERSION = 2.2.51
++ACL_SOURCE = acl-$(ACL_VERSION).src.tar.gz
++ACL_SITE = http://mirror.its.uidaho.edu/pub/savannah/acl/
++ACL_LIBTOOL_PATCH = NO
++ACL_INSTALL_STAGING = YES
++ACL_INSTALL_TARGET = YES
++ACL_DEPENDENCIES = attr
++ACL_CONF_OPT = --enable-gettext=no
 +
-+define ATTR_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/getfattr/.libs/getfattr $(TARGET_DIR)/usr/bin/
-+	$(INSTALL) -m 0755 -D $(@D)/setfattr/.libs/setfattr $(TARGET_DIR)/usr/bin/
-+	$(INSTALL) -m 0644 -D $(@D)/libattr/.libs/libattr.so* $(STAGING_DIR)/usr/lib/
++define ACL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl $(TARGET_DIR)/usr/bin/
++	$(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl $(TARGET_DIR)/usr/bin/
++	$(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so* $(STAGING_DIR)/usr/lib/
 +endef
 +
-+define ATTR_INSTALL_STAGING_CMDS
-+	test -d $(STAGING_DIR)/usr/include/attr/ || mkdir $(STAGING_DIR)/usr/include/attr/
-+	$(INSTALL) -m 0644 -D $(@D)/include/*.h $(STAGING_DIR)/usr/include/attr/
++define ACL_INSTALL_STAGING_CMDS
++	test -d $(STAGING_DIR)/usr/include/acl/ || mkdir $(STAGING_DIR)/usr/include/acl/
++	$(INSTALL) -m 0644 -D $(@D)/include/*.h $(STAGING_DIR)/usr/include/acl/
++	$(SED) s,sys/acl.h,acl/acl.h, -i $(STAGING_DIR)/usr/include/acl/libacl.h
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,attr))
++$(eval $(call AUTOTARGETS,package,acl))
 -- 
 1.7.5.1
