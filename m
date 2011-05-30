@@ -1,53 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 23:56:59 +0200
-Subject: [Buildroot] [PATCH 4/8] busybox: adjust configuration for non-MMU
-	targets
+Date: Mon, 30 May 2011 23:57:02 +0200
+Subject: [Buildroot] [PATCH 7/8] package/autotools: add --{enable,
+	disable}-{shared, static} automatically
 In-Reply-To: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <de9833234a9a87823a7ad36031c5c66e686c6bbf.1306792524.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dac0f2005b38138ceb18943190580c3bd392a4fa.1306792524.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The swaponoff applet doesn't build (and doesn't make sense) on non-MMU
-platforms.
+For target packages, depending on BR2_PREFER_STATIC_LIB, add the
+correct combination of --{enable,disable}-{shared,static} flags to
+./configure calls.
 
-The ash shell cannot build on non-MMU platforms (because it uses
-fork()), so select the hush shell instead.
+  * When BR2_PREFER_STATIC_LIB is enabled, we pass --enable-static
+  --disable-shared.
+
+  * When BR2_PREFER_STATIC_LIB is disabled, we pass --enable-static
+  --enable-shared. We enable static libraries since they can still be
+  useful to statically link applications against some libraries
+  (sometimes it is useful for size reasons). Static libraries are
+  anyway only installed in the STAGING_DIR, so it doesn't increase in
+  any way the size of the TARGET_DIR.
+
+For host packages, always pass --enable-shared and --disable-static.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/Makefile.autotools.in |    2 ++
+ package/Makefile.in           |    6 ++++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index ca963c1..b77880c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -133,6 +133,14 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 917600c..46ab861 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -104,6 +104,7 @@ define $(2)_CONFIGURE_CMDS
+ 		$$(DISABLE_NLS) \
+ 		$$(DISABLE_LARGEFILE) \
+ 		$$(DISABLE_IPV6) \
++		$$(SHARED_STATIC_LIBS_OPTS) \
+ 		$$(QUIET) $$($$(PKG)_CONF_OPT) \
+ 	)
  endef
+@@ -119,6 +120,7 @@ define $(2)_CONFIGURE_CMDS
+ 		./configure \
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
++		--enable-shared --disable-static \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 31a9639..8e9637c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -276,6 +276,12 @@ else
+ ENABLE_DEBUG:=
  endif
  
-+ifeq ($(BR2_USE_MMU),)
-+define BUSYBOX_DISABLE_MMU_APPLETS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
-+endef
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
++else
++SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
 +endif
 +
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -147,6 +155,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
-+	$(BUSYBOX_DISABLE_MMU_APPLETS)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
+ include package/Makefile.autotools.in
+ include package/Makefile.cmake.in
+ include package/Makefile.package.in
 -- 
 1.7.1
