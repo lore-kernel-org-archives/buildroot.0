@@ -1,118 +1,165 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:04 +0200
-Subject: [Buildroot] [PATCH 13/26] syslinux: convert to GENTARGETS
+Date: Mon, 30 May 2011 22:23:06 +0200
+Subject: [Buildroot] [PATCH 15/26] grub2: remove package
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <094faf23307e4e8734b2ff9684c6e7797d028fb3.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cec12561aafd70c275c12a41f713a051655fd6b1.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Moreover, the installation of pxelinux and/or isolinux is now selected
-to suboptions, as we traditionally do for other packages. This allows
-to have a single option (BR2_TARGET_SYSLINUX) that enables the
-syslinux package.
+Grub 2 has been marked BROKEN in June 2010, and nobody cared to fix it
+since then.
+
+At that time, it was marked broken because the build process needed a
+Ruby interpreter available on the host, and it's really a pain that
+building a bootloader needs such a thing.
+
+I've tried to upgrade the package to Grub2 1.99-rcX, and now it does
+not need a Ruby interpreter anymore, but instead requires a tool
+called "autogen", which itself needs the Guile Scheme interpreter.
+
+Since we haven't heard any complaints about Grub2 being marked broken,
+and since it's such a pain to package, let's get rid of it. Of course,
+anybody interested in Grub2 is invited to contribute a working
+package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/Config.in   |   14 ++++++++----
- boot/syslinux/syslinux.mk |   50 +++++++++++++++-----------------------------
- 2 files changed, 26 insertions(+), 38 deletions(-)
+ boot/Config.in       |    1 -
+ boot/grub2/Config.in |    9 -----
+ boot/grub2/grub2.mk  |   93 --------------------------------------------------
+ 3 files changed, 0 insertions(+), 103 deletions(-)
+ delete mode 100644 boot/grub2/Config.in
+ delete mode 100644 boot/grub2/grub2.mk
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 5650f91..60f3b8f 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -5,8 +5,12 @@ config BR2_TARGET_SYSLINUX
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
+diff --git a/boot/Config.in b/boot/Config.in
+index 6bcc98a..67ab8ac 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -2,7 +2,6 @@ menu "Bootloaders"
  
--config BR2_TARGET_PXELINUX
--	bool "pxelinux"
--	depends on BR2_i386 || BR2_x86_64
+ source "boot/barebox/Config.in"
+ source "boot/grub/Config.in"
+-source "boot/grub2/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/u-boot/Config.in"
+ source "boot/at91bootstrap/Config.in"
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+deleted file mode 100644
+index 1301b5b..0000000
+--- a/boot/grub2/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_TARGET_GRUB2
+-	bool "grub2"
+-	# Only supports PC, Mac (Power, x86 and x86-64), Pegasos
+-	depends on BR2_i386 || BR2_powerpc
+-	# Build process is broken (./configure doesn't work, Ruby
+-	# required, etc.)
+-	depends on BROKEN
 -	help
--	  The pxelinux loader for x86 systems.
-+config BR2_TARGET_SYSLINUX_ISOLINUX
-+	bool "Install isolinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
-+
-+config BR2_TARGET_SYSLINUX_PXELINUX
-+	bool "Install pxelinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 192e905..d1b2907 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -4,42 +4,29 @@
- #
- #############################################################
- 
--SYSLINUX_VERSION:=3.85
--SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
--SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
--SYSLINUX_CAT:=$(BZCAT)
--SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
-+SYSLINUX_VERSION = 3.85
-+SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
-+SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
- 
--$(DL_DIR)/$(SYSLINUX_SOURCE):
--	 $(call DOWNLOAD,$(SYSLINUX_SITE),$(SYSLINUX_SOURCE))
-+SYSLINUX_INSTALL_TARGET = NO
-+SYSLINUX_INSTALL_IMAGES = YES
- 
--syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
-+SYSLINUX_DEPENDENCIES = host-nasm
- 
--$(SYSLINUX_DIR)/.unpacked: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
+-	  The GRand Unified Bootloader for x86 systems, take #2.
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+deleted file mode 100644
+index f939d9a..0000000
+--- a/boot/grub2/grub2.mk
++++ /dev/null
+@@ -1,93 +0,0 @@
+-#############################################################
+-#
+-# grub2
+-#
+-# TODO
+-#
+-#  * grub2's autogen uses ruby, which isn't part of the core Debian
+-#    installation. So either decide it is a requirement for Buildroot,
+-#    or build it for the host.
+-#
+-#  * improve the installation procedure. For the moment, it just
+-#    installs everything in $(TARGET_DIR).
+-#
+-#############################################################
+-GRUB2_SOURCE:=grub2_1.98.orig.tar.gz
+-GRUB2_PATCH:=grub2_1.98-1.diff.gz
+-GRUB2_SITE=$(BR2_DEBIAN_MIRROR)/debian/pool/main/g/grub2
+-GRUB2_PATCH_SITE:=$(GRUB2_SITE)
+-GRUB2_CAT:=$(ZCAT)
+-GRUB2_DIR:=$(BUILD_DIR)/grub-1.98
+-
+-GRUB2_CFLAGS=-DSUPPORT_LOOPDEV
+-ifeq ($(BR2_LARGEFILE),)
+-GRUB2_CFLAGS+=-U_FILE_OFFSET_BITS
+-endif
+-
+-$(DL_DIR)/$(GRUB2_SOURCE):
+-	 $(call DOWNLOAD,$(GRUB2_SITE),$(GRUB2_SOURCE))
+-
+-$(DL_DIR)/$(GRUB2_PATCH):
+-	 $(call DOWNLOAD,$(GRUB2_PATCH_SITE),$(GRUB2_PATCH))
+-
+-grub2-source: $(DL_DIR)/$(GRUB2_SOURCE) $(DL_DIR)/$(GRUB2_PATCH)
+-
+-$(GRUB2_DIR)/.unpacked: $(DL_DIR)/$(GRUB2_SOURCE) $(DL_DIR)/$(GRUB2_PATCH)
 -	mkdir -p $(@D)
--	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(@D) boot/syslinux/ \*.patch
--	touch -c $@
-+define SYSLINUX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
-+endef
- 
--$(SYSLINUX_DIR)/.compiled: $(SYSLINUX_DIR)/.unpacked
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
--	touch -c $@
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
- 
--$(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/isolinux.bin $@
-+define SYSLINUX_INSTALL_IMAGES_CMDS
-+	for i in $(SYSLINUX_IMAGES-y); do \
-+		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/`basename $$i`; \
-+	done
-+endef
- 
--$(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
+-	$(GRUB2_CAT) $(DL_DIR)/$(GRUB2_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) -xvf -
+-	toolchain/patch-kernel.sh $(@D) $(DL_DIR) $(GRUB2_PATCH)
+-	for i in `grep -v "^#" $(@D)/debian/patches/00list`; do \
+-		cat $(@D)/debian/patches/$$i | patch -p1 -d $(@D); \
+-	done
+-	toolchain/patch-kernel.sh $(@D) boot/grub2 grub-\*.patch
+-	touch $@
 -
--syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
--pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
+-$(GRUB2_DIR)/.configured: $(GRUB2_DIR)/.unpacked
+-	(cd $(GRUB2_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) ; \
+-		./autogen.sh ; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CPPFLAGS="$(GRUB2_CFLAGS)" \
+-		grub_cv_i386_check_nested_functions=no \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/ \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--disable-grub-mkfont \
+-		--disable-grub-fstest \
+-		--disable-grub-emu-usb \
+-		--disable-werror \
+-		$(DISABLE_LARGEFILE) \
+-		$(GRUB2_CONFIG-y) \
+-	)
+-	touch $@
 -
--pxelinux-clean syslinux-clean:
--	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
--	-$(MAKE) -C $(SYSLINUX_DIR) clean
+-$(GRUB2_DIR)/.compiled: $(GRUB2_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
+-	touch $@
 -
--pxelinux-dirclean syslinux-dirclean:
--	rm -rf $(SYSLINUX_DIR)
-+$(eval $(call GENTARGETS,boot,syslinux))
- 
- #############################################################
- #
-@@ -49,6 +36,3 @@ pxelinux-dirclean syslinux-dirclean:
- ifeq ($(BR2_TARGET_SYSLINUX),y)
- TARGETS+=syslinux
- endif
--ifeq ($(BR2_TARGET_PXELINUX),y)
--TARGETS+=pxelinux
+-$(GRUB2_DIR)/.installed: $(GRUB2_DIR)/.compiled
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+-	touch $@
+-
+-grub2: host-automake host-autoconf $(GRUB2_DIR)/.installed
+-
+-grub2-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(GRUB2_DIR) uninstall
+-	-$(MAKE) -C $(GRUB2_DIR) clean
+-
+-grub2-dirclean:
+-	rm -rf $(GRUB2_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_GRUB2),y)
+-TARGETS+=grub2
 -endif
 -- 
 1.7.1
