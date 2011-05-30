@@ -1,29 +1,39 @@
-From: Bob Liu <lliubbo@gmail.com>
-Date: Mon, 30 May 2011 15:47:19 +0800
-Subject: [Buildroot] Build qt failed after update to 2011.05
-Message-ID: <BANLkTikfUw4jOL6zYGxdqbFyWT+pjV7X3w@mail.gmail.com>
+From: Christopher Boumenot <boumenot@gmail.com>
+Date: Mon, 30 May 2011 08:05:51 -0400
+Subject: [Buildroot] Build Fails with ruby-1.9.2-p0
+In-Reply-To: <BANLkTimm-3LX2S8-17VyPhuiaLqZC3m4jg@mail.gmail.com>
+References: <BANLkTimm-3LX2S8-17VyPhuiaLqZC3m4jg@mail.gmail.com>
+Message-ID: <BANLkTi=uKZXy-_8wZKoNA6ohoOvh2rsYOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, folks
+I bisected from the last commit against the ruby package to tip, and it
+appears that this commit broke the ruby build.  If I revert it on tip, it
+builds just fine.
 
-After I updated to 2011.05 release, I failed to build qt.
 
-The error message is like this:
------------------------------------------------
-The tslib functionality test failed!
- You might need to modify the include and library search paths by editing
- QMAKE_INCDIR and QMAKE_LIBDIR in
- /home/bob/buildroot-update/output/build/qt-4.7.3/mkspecs/qws/linux-arm-g++.
-make: *** [/home/bob/buildroot-update/output/build/qt-4.7.3/.stamp_configured]
-Error 1
------------------------------------------------
+commit 7e3e8ec040b06d6e2fb69e55c004f1ebc02c76d0
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Fri Apr 29 15:40:58 2011 +0200
 
-Any ideas is welcome, Thanks!
+    package/Makefile.in: CFLAGS/LDFLAGS: don't add -I / -L args for
+STAGING_DIR
 
--- 
-Regards,
---Bob
+    Now that we use sysroot for all toolchains, the explicit -I / -L
+arguments
+    in CFLAGS / LDFLAGS aren't needed anymore (And having them makes the
+build
+    quite noisy for certain packages as STAGING_DIR/include normally doesn't
+    exist).
+
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+
+
+Chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110530/499ff35e/attachment.html>
