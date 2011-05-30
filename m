@@ -1,43 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:11 +0200
-Subject: [Buildroot] [PATCH 20/26] package: add support for post-download
-	hooks
+Date: Mon, 30 May 2011 22:23:16 +0200
+Subject: [Buildroot] [PATCH 25/26] linux: allow specification of a custom
+	Git repository as a source
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ac438e2e70dbc16cfa57c3ba76a5a9222ef3fcfb.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ef04a63e3f1cfe460abe9adce82ae84803ddd212.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will be needed for the Linux kernel package, which needs to
-download patches in a custom way.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ linux/Config.in |   15 +++++++++++++++
+ linux/linux.mk  |    3 +++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index cdcb5e5..ff0fd9f 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -234,6 +234,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE)))
- 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
-+	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)mkdir -p $(@D)
- 	$(Q)touch $@
-@@ -437,6 +438,7 @@ $(2)_EXTRACT_CMDS ?= \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+diff --git a/linux/Config.in b/linux/Config.in
+index 291f9e0..b7578f0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  This option allows to specify the http or ftp location of a
+ 	  specific kernel source tarball
  
- # post-steps hooks
-+$(2)_POST_DOWNLOAD_HOOKS        ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
++config BR2_LINUX_KERNEL_CUSTOM_GIT
++        bool "Custom Git tree"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a Git repository.
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -58,12 +64,21 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 
++config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
++        string "URL of custom Git repository"
++	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
++
++config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++        string "Custom Git version"
++	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
++
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "2.6.38.7" if BR2_LINUX_KERNEL_2_6_38
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+ 
+ #
+ # Patch selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e5f434..03eae3d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -10,6 +10,9 @@ ifeq ($(LINUX_VERSION),custom)
+ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE    = $(dir $(LINUX_TARBALL))
+ LINUX_SOURCE  = $(notdir $(LINUX_TARBALL))
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
++LINUX_SITE        = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
++LINUX_SITE_METHOD = git
+ else
+ LINUX_SOURCE  = linux-$(LINUX_VERSION).tar.bz2
+ LINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
 -- 
 1.7.1
