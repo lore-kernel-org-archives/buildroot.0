@@ -1,124 +1,178 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:03 +0200
-Subject: [Buildroot] [PATCH 12/26] at91dataflashboot: convert to GENTARGETS
+Date: Mon, 30 May 2011 22:23:05 +0200
+Subject: [Buildroot] [PATCH 14/26] grub: convert to AUTOTARGETS
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <37d61169d55b8298b6278c1b6ade3f07e256cd4e.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f8d859506c4c7eabf9d960fb9d9044741c449546.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit converts the at91dataflashboot bootloader build process to
-GENTARGETS. It also does the following changes :
-
- * As the package directory name is at91dataflashboot, the
-   configuration options and make variables are renamed to
-   AT91DATAFLASHBOOT instead of DATAFLASHBOOT.
-
- * Since the board selection in Kconfig wasn't used anywhere, get rid
-   of it. at91dataflashboot is only for AT91RM9200 apparently anyway.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91dataflashboot/Config.in            |   24 +--------------
- boot/at91dataflashboot/at91dataflashboot.mk |   44 ++++++++------------------
- 2 files changed, 15 insertions(+), 53 deletions(-)
+ boot/grub/grub.500-build-fix.patch |   14 +++++
+ boot/grub/grub.mk                  |  102 ++++++++++++++----------------------
+ 2 files changed, 53 insertions(+), 63 deletions(-)
+ create mode 100644 boot/grub/grub.500-build-fix.patch
 
-diff --git a/boot/at91dataflashboot/Config.in b/boot/at91dataflashboot/Config.in
-index 25b9723..88cd058 100644
---- a/boot/at91dataflashboot/Config.in
-+++ b/boot/at91dataflashboot/Config.in
-@@ -1,25 +1,3 @@
--menuconfig BR2_TARGET_DATAFLASHBOOT
-+menuconfig BR2_TARGET_AT91DATAFLASHBOOT
-        depends on BR2_arm
-        bool "AT91 DataFlashBoot"
--
--if BR2_TARGET_DATAFLASHBOOT
--
--choice
--	prompt "Target Architecture"
--	default BR2_TARGET_DATAFLASHBOOT_AT91RM9200
--	help
--	  Select Chip for which Dataflash boot should be built
--	  Currently only AT91RM9200 Supported
--
--config BR2_TARGET_DATAFLASHBOOT_AT91RM9200
--	bool "AT91RM9200"
--
--config BR2_TARGET_DATAFLASHBOOT_AT91SAM9261
--	bool "AT91SAM9261"
--
--config BR2_TARGET_DATAFLASHBOOT_AT91SAM9261S
--	bool "AT91SAM9261S"
--
--endchoice
--
--endif # BR2_TARGET_DATAFLASHBOOT
-diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
-index f6e9b67..d27e9f3 100644
---- a/boot/at91dataflashboot/at91dataflashboot.mk
-+++ b/boot/at91dataflashboot/at91dataflashboot.mk
-@@ -3,44 +3,28 @@
- # DataFlashBoot
+diff --git a/boot/grub/grub.500-build-fix.patch b/boot/grub/grub.500-build-fix.patch
+new file mode 100644
+index 0000000..b096b7b
+--- /dev/null
++++ b/boot/grub/grub.500-build-fix.patch
+@@ -0,0 +1,14 @@
++--- grub-0.97.orig/netboot/main.c       2004-05-21 00:19:33.000000000 +0200
+++++ grub-0.97/netboot/main.c    2007-07-20 02:31:28.000000000 +0200
++@@ -54,9 +54,9 @@
++ 
++ static int vendorext_isvalid;
++ static unsigned long netmask;
++-static struct bootpd_t bootp_data;
+++struct bootpd_t bootp_data;
++ static unsigned long xid;
++-static unsigned char *end_of_rfc1533 = NULL;
+++unsigned char *end_of_rfc1533 = NULL;
++
++ #ifndef        NO_DHCP_SUPPORT
++ #endif /* NO_DHCP_SUPPORT */
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 9461d1c..4938416 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -3,23 +3,17 @@
+ # grub
  #
  #############################################################
--DATAFLASHBOOT_VERSION = 1.05
--DATAFLASHBOOT_NAME    = DataflashBoot-$(DATAFLASHBOOT_VERSION)
--DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
--DATAFLASHBOOT_SOURCE  = $(DATAFLASHBOOT_NAME).tar.bz2
--DATAFLASHBOOT_DIR     = $(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
--DATAFLASHBOOT_BINARY  = $(DATAFLASHBOOT_NAME).bin
-+AT91DATAFLASHBOOT_VERSION = 1.05
-+AT91DATAFLASHBOOT_SOURCE  = DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).tar.bz2
-+AT91DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
+-GRUB_SOURCE:=grub_0.97.orig.tar.gz
+-GRUB_PATCH:=grub_0.97-35.diff.gz
+-GRUB_SITE:=http://snapshot.debian.org/archive/debian/20080329T000000Z/pool/main/g/grub/
+-GRUB_PATCH_SITE:=$(GRUB_SITE)
+-GRUB_CAT:=$(ZCAT)
+-GRUB_DIR:=$(BUILD_DIR)/grub-0.97
+-GRUB_BINARY:=grub/grub
+-GRUB_TARGET_BINARY:=sbin/grub
+-GRUB_SPLASHIMAGE=$(TOPDIR)/boot/grub/splash.xpm.gz
  
--$(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
--	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
-+AT91DATAFLASHBOOT_INSTALL_TARGET = NO
-+AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
++GRUB_VERSION = 0.97
++GRUB_SOURCE = grub_$(GRUB_VERSION).orig.tar.gz
++GRUB_PATCH  = grub_$(GRUB_VERSION)-35.diff.gz
++GRUB_SITE   = http://snapshot.debian.org/archive/debian/20080329T000000Z/pool/main/g/grub/
  
--$(DATAFLASHBOOT_DIR)/.unpacked: $(DL_DIR)/$(DATAFLASHBOOT_SOURCE)
--	mkdir -p $(@D)
--	$(BZCAT) $(DL_DIR)/$(DATAFLASHBOOT_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	touch $@
-+define AT91DATAFLASHBOOT_BUILD_CMDS
-+	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS)
-+endef
- 
--$(DATAFLASHBOOT_DIR)/.patched: $(DATAFLASHBOOT_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(@D) boot/at91dataflashboot \
--		at91dataflashboot-$(DATAFLASHBOOT_VERSION)-\*.patch
--	touch $@
-+define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
-+	cp $(@D)/DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).bin $(BINARIES_DIR)
-+endef
- 
--$(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY): $(DATAFLASHBOOT_DIR)/.patched
--	ls $(DATAFLASHBOOT_DIR)/.unpacked
--	make -C $(DATAFLASHBOOT_DIR) CROSS_COMPILE=$(TARGET_CROSS)
--
--dataflashboot-clean:
--	make -C $(DATAFLASHBOOT_DIR) clean
--
--dataflashboot-dirclean:
--	rm -rf $(DATAFLASHBOOT_DIR)
--
--dataflash:	 $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY)
--	cp $(DATAFLASHBOOT_DIR)/$(DATAFLASHBOOT_BINARY) $(BINARIES_DIR)
-+$(eval $(call GENTARGETS,boot,at91dataflashboot))
- 
- #############################################################
- #
- # Toplevel Makefile options
- #
- #############################################################
--ifeq ($(BR2_TARGET_DATAFLASHBOOT),y)
--TARGETS+=dataflash
-+ifeq ($(BR2_TARGET_AT91DATAFLASHBOOT),y)
-+TARGETS+=at91dataflashboot
+ GRUB_CFLAGS=-DSUPPORT_LOOPDEV
+ ifeq ($(BR2_LARGEFILE),)
+ GRUB_CFLAGS+=-U_FILE_OFFSET_BITS
  endif
+ 
+-
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_SPLASH) += --enable-graphics
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_DISKLESS) += --enable-diskless
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_3c595) += --enable-3c595
+@@ -44,69 +38,51 @@ GRUB_CONFIG-$(BR2_TARGET_GRUB_undi) += --enable-undi
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_via_rhine) += --enable-via-rhine
+ GRUB_CONFIG-$(BR2_TARGET_GRUB_w89c840) += --enable-w89c840
+ 
+-$(DL_DIR)/$(GRUB_SOURCE):
+-	 $(call DOWNLOAD,$(GRUB_SITE),$(GRUB_SOURCE))
+-
+-$(DL_DIR)/$(GRUB_PATCH):
+-	 $(call DOWNLOAD,$(GRUB_PATCH_SITE),$(GRUB_PATCH))
++define GRUB_DEBIAN_PATCHES
++	# Apply the patches from the Debian patch
++	(cd $(@D) ; for f in `cat debian/patches/00list | grep -v ^#` ; do \
++		cat debian/patches/$$f | patch -p1 ; \
++	done)
++endef
+ 
+-grub-source: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
++GRUB_POST_PATCH_HOOKS += GRUB_DEBIAN_PATCHES
+ 
+-$(GRUB_DIR)/.unpacked: $(DL_DIR)/$(GRUB_SOURCE) $(DL_DIR)/$(GRUB_PATCH)
+-	$(GRUB_CAT) $(DL_DIR)/$(GRUB_SOURCE) | tar -C $(BUILD_DIR) -xvf -
+-	toolchain/patch-kernel.sh $(GRUB_DIR) $(DL_DIR) $(GRUB_PATCH)
+-	for i in `grep -v "^#" $(GRUB_DIR)/debian/patches/00list`; do \
+-		cat $(GRUB_DIR)/debian/patches/$$i | patch -p1 -d $(GRUB_DIR); \
+-	done
+-	toolchain/patch-kernel.sh $(GRUB_DIR) boot/grub grub.\*.patch{,.bz2}
+-	touch $@
++GRUB_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) $(GRUB_CFLAGS)"
+ 
+-$(GRUB_DIR)/.configured: $(GRUB_DIR)/.unpacked
+-	(cd $(GRUB_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		CPPFLAGS="$(GRUB_CFLAGS)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/ \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		--disable-auto-linux-mem-opt \
+-		$(GRUB_CONFIG-y) \
+-	)
+-	touch $@
++GRUB_CONF_OPT = \
++	--disable-auto-linux-mem-opt \
++	$(GRUB_CONFIG-y)
+ 
+-$(GRUB_DIR)/$(GRUB_BINARY): $(GRUB_DIR)/.configured
+-	$(MAKE) CC="$(TARGET_CC)" -C $(GRUB_DIR)
+-	rm -f $(GRUB_DIR)/$(GRUB_BINARY)
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS+=-static -C $(GRUB_DIR)/grub grub
+-	mkdir -p $(dir $(STAGING_DIR)/$(GRUB_TARGET_BINARY))
+-	mv $(GRUB_DIR)/$(GRUB_BINARY) $(STAGING_DIR)/$(GRUB_TARGET_BINARY).static
+-	$(MAKE) CC="$(TARGET_CC)" -C $(GRUB_DIR)/grub
++define GRUB_INSTALL_STAGING_CMDS
++	install -m 0755 -D $(@D)/grub/grub $(STAGING_DIR)/sbin/grub
++endef
+ 
+-$(GRUB_DIR)/.installed: $(GRUB_DIR)/$(GRUB_BINARY)
+-	cp $(GRUB_DIR)/$(GRUB_BINARY) $(TARGET_DIR)/$(GRUB_TARGET_BINARY)
+-	test -d $(TARGET_DIR)/boot/grub || mkdir -p $(TARGET_DIR)/boot/grub
+-	cp $(GRUB_DIR)/stage1/stage1 $(GRUB_DIR)/stage2/*1_5 $(GRUB_DIR)/stage2/stage2 $(TARGET_DIR)/boot/grub/
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+-	test -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) || \
+-		cp $(GRUB_SPLASHIMAGE) $(TARGET_DIR)/boot/grub/
++define GRUB_INSTALL_SPLASH
++	cp boot/grub/splash.xpm.gz $(TARGET_DIR)/boot/grub/
++endef
+ endif
+-	touch $@
+ 
+-grub: $(GRUB_DIR)/.installed
++define GRUB_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/grub/grub $(TARGET_DIR)/sbin/grub
++	mkdir -p $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage1/stage1 $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage2/*1_5   $(TARGET_DIR)/boot/grub
++	cp $(@D)/stage2/stage2 $(TARGET_DIR)/boot/grub
++	$(GRUB_INSTALL_SPLASH)
++endef
++
++define GRUB_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/sbin/grub
++endef
+ 
+-grub-clean:
+-	$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(GRUB_DIR) uninstall
+-	-$(MAKE) -C $(GRUB_DIR) clean
+-	rm -f $(TARGET_DIR)/boot/grub/$(GRUB_SPLASHIMAGE) \
+-		$(TARGET_DIR)/sbin/$(GRUB_BINARY) \
+-		$(TARGET_DIR)/boot/grub/{stage{1,2},*1_5}
++define GRUB_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/sbin/grub
++	rm -rf $(TARGET_DIR)/boot/grub
++endef
+ 
+-grub-dirclean:
+-	rm -rf $(GRUB_DIR)
++$(eval $(call AUTOTARGETS,boot,grub))
+ 
+ #############################################################
+ #
 -- 
 1.7.1
