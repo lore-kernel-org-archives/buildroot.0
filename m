@@ -1,74 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:16 +0200
-Subject: [Buildroot] [PATCH 25/26] linux: allow specification of a custom
-	Git repository as a source
-In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ef04a63e3f1cfe460abe9adce82ae84803ddd212.1306782275.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 May 2011 22:27:31 +0200
+Subject: [Buildroot] [RFC] Review request for branch
+ for-2011.08/bootloaders
+In-Reply-To: <4DE022AC.2010205@lucaceresoli.net>
+References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
+	<4DE022AC.2010205@lucaceresoli.net>
+Message-ID: <20110530222731.26b0eabe@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/Config.in |   15 +++++++++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+Hello Luca,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 291f9e0..b7578f0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	  This option allows to specify the http or ftp location of a
- 	  specific kernel source tarball
- 
-+config BR2_LINUX_KERNEL_CUSTOM_GIT
-+        bool "Custom Git tree"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Git repository.
-+
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -58,12 +64,21 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
-+        string "URL of custom Git repository"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
-+        string "Custom Git version"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "2.6.38.7" if BR2_LINUX_KERNEL_2_6_38
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-+	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
- 
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e5f434..03eae3d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -10,6 +10,9 @@ ifeq ($(LINUX_VERSION),custom)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE    = $(dir $(LINUX_TARBALL))
- LINUX_SOURCE  = $(notdir $(LINUX_TARBALL))
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-+LINUX_SITE        = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-+LINUX_SITE_METHOD = git
- else
- LINUX_SOURCE  = linux-$(LINUX_VERSION).tar.bz2
- LINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+On Sat, 28 May 2011 00:16:12 +0200
+Luca Ceresoli <luca@lucaceresoli.net> wrote:
+
+> Thank you for your big work. I appreciate it very much.
+> I currently build my bootloaders and kernel outside buildroot just
+> because I need to fetch them from local git repositories.
+> Bringing them in buildroot would significantly simplify my build system.
+> 
+> I tested your patchset and it worked perfectly.
+
+Great, thanks! Nice to see that it worked for you. It's definitely
+useful having others testing the proposed features.
+
+> I had to hack linux.mk and u-boot.mk because the git download method is 
+> not yet implemented, but it was straightforward in the package infrastructure.
+> This way I got both the bootloader and the kernel working on my board.
+> 
+> I look forward to see your next patchset and test it. Will it implement
+> a git download option in menuconfig?
+
+Yes, it implements a git download option in menuconfig for the kernel
+and for u-boot.
+
+Regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
