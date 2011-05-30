@@ -1,30 +1,60 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Mon, 30 May 2011 15:31:11 -0500
-Subject: [Buildroot] FW: [PATCH v2] add acl and attr support for
-	extended	attributes and POSIX Access Control Lists
-In-Reply-To: <2911fdf24c8da0851176d0fd2168a04e876ec3aa.1292015991.git.smiley73@users.sourceforge.net>
-References: <2911fdf24c8da0851176d0fd2168a04e876ec3aa.1292015991.git.smiley73@users.sourceforge.net>
-Message-ID: <007c01cc1f08$83651120$8a2f3360$@zuerker.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 May 2011 22:34:03 +0200
+Subject: [Buildroot] [RFC] Review request for branch
+ for-2011.08/bootloaders
+In-Reply-To: <BANLkTim_Bb3fRZcC4rT2ofpF7GhuroUULA@mail.gmail.com>
+References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
+	<BANLkTim_Bb3fRZcC4rT2ofpF7GhuroUULA@mail.gmail.com>
+Message-ID: <20110530223403.0f8fcbd4@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Attached you find the acl and attr patches I sent in last year.
+G?nayd?n Alper!
 
+On Mon, 30 May 2011 22:53:11 +0300
+Alper Y?ld?r?m <yildirimalper@gmail.com> wrote:
+
+> Thanks for the comprehensive work. I have a suggestion, maybe you can also
+> implement this within the context of your work.
+> In our project, we have some local applications, hosted under local git
+> repositories. We are currently using the package infrastructure with git. If
+> we give a commit id or tag name everything is fine but in some use cases we
+> want to build the latest commit (HEAD) with buildroot. In that case, giving
+> HEAD as the version is not sufficient, since buildroot checks the dl dir for
+> pkgname-HEAD.tar.gz and finds it there after first build. Currently we
+> manually delete this file and force buildroot to clone the repo again. In my
+> opinion this is not the proper way.
+> 
+> My suggestion is:
+> For the first build, clone the git repo to the build directory and for the
+> next builds make a git pull in the build directory.
+> 
+> It would be nice to have such an option in buildroot.
+
+I think I understand your workflow and your need. However, I
+unfortunately don't think your proposal works properly: the next time
+you will do "make clean", the build directory of your package will have
+disappeared, so Buildroot won't know that it should do a "git pull",
+and will use again the pkgname-HEAD.tar.gz file from the dl directory.
+Or maybe I misunderstood your proposal ?
+
+In your case, wouldn't it be better to not let Buildroot download your
+custom applications from Git, but rather give Buildroot the path to a
+directory where you have the source of code of the applications ? This
+way, you can handle this directory however you want in terms of
+revision control: Buildroot will never remove it.
+
+What do you think of the proposal I've sent on May, 18th ? See
+http://lists.busybox.net/pipermail/buildroot/2011-May/043320.html.
+
+Thanks for your suggestion!
+
+Thomas
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
-
-
--------------- next part --------------
-An embedded message was scrubbed...
-From: <heiko@zuerker.org>
-Subject: [Buildroot] [PATCH v2] add acl and attr support for
-	extended	attributes and POSIX Access Control Lists
-Date: Fri, 10 Dec 2010 16:20:28 -0500
-Size: 4682
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110530/2daae356/attachment-0001.mht>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
