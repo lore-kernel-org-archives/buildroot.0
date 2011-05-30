@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2011 22:23:01 +0200
-Subject: [Buildroot] [PATCH 10/26] at91bootstrap: convert to GENTARGETS
+Date: Mon, 30 May 2011 22:23:02 +0200
+Subject: [Buildroot] [PATCH 11/26] at91dataflashboot: use = instead of :=
+	and indent
 In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0d2f12caf4b742d2e28202091ff67b04b8eaddba.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c5a7678688aea3ddd16aec08e6d24096c50061b3.1306782275.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap/at91bootstrap.mk |   53 ++++++++++++-----------------------
- 1 files changed, 18 insertions(+), 35 deletions(-)
+ boot/at91dataflashboot/at91dataflashboot.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 052d1bd..48fa4e0 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -4,49 +4,32 @@
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 32591f7..f6e9b67 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -3,12 +3,12 @@
+ # DataFlashBoot
  #
  #############################################################
- AT91BOOTSTRAP_VERSION = 1.16
--AT91BOOTSTRAP_NAME    = AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
- AT91BOOTSTRAP_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
--AT91BOOTSTRAP_SOURCE  = $(AT91BOOTSTRAP_NAME).zip
--AT91BOOTSTRAP_DIR     = $(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
-+AT91BOOTSTRAP_SOURCE  = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+-DATAFLASHBOOT_VERSION:=1.05
+-DATAFLASHBOOT_NAME:=DataflashBoot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_SITE:=ftp://www.at91.com/pub/buildroot/
+-DATAFLASHBOOT_SOURCE:=$(DATAFLASHBOOT_NAME).tar.bz2
+-DATAFLASHBOOT_DIR:=$(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_BINARY:=$(DATAFLASHBOOT_NAME).bin
++DATAFLASHBOOT_VERSION = 1.05
++DATAFLASHBOOT_NAME    = DataflashBoot-$(DATAFLASHBOOT_VERSION)
++DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
++DATAFLASHBOOT_SOURCE  = $(DATAFLASHBOOT_NAME).tar.bz2
++DATAFLASHBOOT_DIR     = $(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
++DATAFLASHBOOT_BINARY  = $(DATAFLASHBOOT_NAME).bin
  
--AT91BOOTSTRAP_BOARD     = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
--AT91BOOTSTRAP_MEMORY    = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
--AT91BOOTSTRAP_BINARY    = $(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
--AT91BOOTSTRAP_BUILD_DIR = $(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
--AT91BOOTSTRAP_TARGET    = $(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
-+AT91BOOTSTRAP_BOARD       = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
-+AT91BOOTSTRAP_MEMORY      = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
-+AT91BOOTSTRAP_MAKE_SUBDIR = board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
-+AT91BOOTSTRAP_BINARY      = $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
- 
--$(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
--	 $(call DOWNLOAD,$(AT91BOOTSTRAP_SITE),$(AT91BOOTSTRAP_SOURCE))
-+AT91BOOTSTRAP_INSTALL_IMAGES = YES
-+AT91BOOTSTRAP_INSTALL_TARGET = NO
- 
--$(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--	mkdir -p $(BUILD_DIR)
-+define AT91BOOTSTRAP_EXTRACT_CMDS
- 	unzip -d $(BUILD_DIR) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION) $(AT91BOOTSTRAP_DIR)
--	touch $@
-+	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
-+	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
-+endef
- 
--$(AT91BOOTSTRAP_DIR)/.patched: $(AT91BOOTSTRAP_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) boot/at91bootstrap/ at91bootstrap-$(AT91BOOTSTRAP_VERSION)\*.patch
--	touch $@
-+define AT91BOOTSTRAP_BUILD_CMDS
-+	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
-+endef
- 
--$(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.patched
--	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
--		-C $(AT91BOOTSTRAP_BUILD_DIR)
-+define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
-+	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
-+endef
- 
--$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
--	mkdir -p $(dir $@)
--	cp $^ $@
--
--at91bootstrap: $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--
--at91bootstrap-source: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--
--at91bootstrap-unpacked: $(AT91BOOTSTRAP_DIR)/.unpacked
--
--at91bootstrap-clean:
--	make -C $(AT91BOOTSTRAP_BUILD_DIR) clean
--
--at91bootstrap-dirclean:
--	rm -rf $(AT91BOOTSTRAP_DIR)
-+$(eval $(call GENTARGETS,boot,at91bootstrap))
- 
- #############################################################
- #
+ $(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
+ 	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
 -- 
 1.7.1
