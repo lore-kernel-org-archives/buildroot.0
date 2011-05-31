@@ -1,66 +1,45 @@
-From: Bob Liu <lliubbo@gmail.com>
-Date: Tue, 31 May 2011 11:36:10 +0800
-Subject: [Buildroot] Build qt failed after update to 2011.05
-In-Reply-To: <BANLkTimquVO2HCyVDp4ekXJGGL+vGDTkAQ@mail.gmail.com>
-References: <BANLkTikfUw4jOL6zYGxdqbFyWT+pjV7X3w@mail.gmail.com>
-	<BANLkTimquVO2HCyVDp4ekXJGGL+vGDTkAQ@mail.gmail.com>
-Message-ID: <BANLkTikUmY9+UuQ4mPp7HYth-7ed4iVdUg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 May 2011 08:58:17 +0200
+Subject: [Buildroot] [PATCH 25/26] linux: allow specification of a
+ custom Git repository as a source
+In-Reply-To: <201105301914.49620.vapier@gentoo.org>
+References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
+	<ef04a63e3f1cfe460abe9adce82ae84803ddd212.1306782275.git.thomas.petazzoni@free-electrons.com>
+	<201105301914.49620.vapier@gentoo.org>
+Message-ID: <20110531085817.5a7107eb@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 30, 2011 at 10:35 PM, Christopher Boumenot
-<boumenot@gmail.com> wrote:
-> On Mon, May 30, 2011 at 3:47 AM, Bob Liu <lliubbo@gmail.com> wrote:
->>
->> Hi, folks
->>
->> After I updated to 2011.05 release, I failed to build qt.
->>
-> [snip]
->
->>
->> Any ideas is welcome, Thanks!
->>
->
-> I figured if it worked for ruby it would work for qt. ?I was able to build
-> with this commit reverted.
+Hi Mike,
 
-Thanks for you reply.
+On Mon, 30 May 2011 19:14:47 -0400
+Mike Frysinger <vapier@gentoo.org> wrote:
 
-After revert this commit the error disappeared, but I got another issue.
+> when we already posted a patch to do this, we were shot down because people 
+> wanted a general git solution that'd work for all packages (somehow).  is that 
+> no longer the case ?
 
-linking ../../lib/libQtCore.so.4.7.1
-/lib/libpthread.so.0: file not recognized: File format not recognized
-collect2: ld returned 1 exit status
-make[2]: *** [../../lib/libQtCore.so.4.7.1] Error 1
+The proposal I'm making is different from the one you and others
+submitted in that it reuses the generic package infrastructure to
+perform the git download. This is exactly the reason why I "shot down"
+previous attempts of implementing this.
 
-It seems qt find the wrong libpthread, but I don't know why.
+Of course, contrary to normal packages for which we support a single
+version at a time, defined in the package .mk file, the Linux kernel,
+U-Boot and other very hardware-related components have configurable
+versions. So even if the package infrastructure is used, each of the
+Linux kernel, U-Boot and others have to carry their own set of Kconfig
+knobs to select the Git repository and version. But I don't see any way
+of doing this in a better way.
 
-root # file ./output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libpthread-2.11.1.so
-./output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libpthread-2.11.1.so:
-ELF 32-bit LSB shared object, ARM, version 1 (SYSV), dynamically
-linked (uses shared libs), for GNU/Linux 2.6.16, not stripped
-
-
-> ?commit 7e3e8ec040b06d6e2fb69e55c004f1ebc02c76d0
-> Author: Peter Korsgaard <jacmet@sunsite.dk>
-> Date: ? Fri Apr 29 15:40:58 2011 +0200
-> ? ? package/Makefile.in: CFLAGS/LDFLAGS: don't add -I / -L args for
-> STAGING_DIR
-> ? ? Now that we use sysroot for all toolchains, the explicit -I / -L
-> arguments
-> ? ? in CFLAGS / LDFLAGS aren't needed anymore (And having them makes the
-> build
-> ? ? quite noisy for certain packages as STAGING_DIR/include normally doesn't
-> ? ? exist).
-> ? ? Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
->
-> Chris
->
-
--- 
 Regards,
---Bob
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
