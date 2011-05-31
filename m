@@ -1,37 +1,38 @@
-From: Bob Liu <lliubbo@gmail.com>
-Date: Tue, 31 May 2011 15:08:14 +0800
-Subject: [Buildroot] Build qt failed after update to 2011.05
-In-Reply-To: <20110531090033.04e2ff2d@surf>
-References: <BANLkTikfUw4jOL6zYGxdqbFyWT+pjV7X3w@mail.gmail.com>
-	<20110531090033.04e2ff2d@surf>
-Message-ID: <BANLkTikCiouhqfbkmwqQbeu0m=6Hks06AA@mail.gmail.com>
+From: Daniel Mack <zonque@gmail.com>
+Date: Tue, 31 May 2011 11:06:42 +0200
+Subject: [Buildroot] [PATCH 1/2] Add package acl
+In-Reply-To: <20110530210244.5bd309aa@surf>
+References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
+	<1306779390-19947-2-git-send-email-zonque@gmail.com>
+	<20110530210244.5bd309aa@surf>
+Message-ID: <BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 31, 2011 at 3:00 PM, Thomas Petazzoni
+On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Hello Bob,
+> On Mon, 30 May 2011 20:16:29 +0200
+> Daniel Mack <zonque@gmail.com> wrote:
 >
-> On Mon, 30 May 2011 15:47:19 +0800
-> Bob Liu <lliubbo@gmail.com> wrote:
+>> +define ACL_INSTALL_TARGET_CMDS
+>> + ? ? $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl $(TARGET_DIR)/usr/bin/
+>> + ? ? $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl $(TARGET_DIR)/usr/bin/
+>> + ? ? $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so* $(STAGING_DIR)/usr/lib/
+>> +endef
+>> +
+>> +define ACL_INSTALL_STAGING_CMDS
+>> + ? ? test -d $(STAGING_DIR)/usr/include/acl/ || mkdir $(STAGING_DIR)/usr/include/acl/
+>> + ? ? $(INSTALL) -m 0644 -D $(@D)/include/*.h $(STAGING_DIR)/usr/include/acl/
+>> + ? ? $(SED) s,sys/acl.h,acl/acl.h, -i $(STAGING_DIR)/usr/include/acl/libacl.h
+>> +endef
 >
->> After I updated to 2011.05 release, I failed to build qt.
->
-> Could you provide your Buildroot .config file ?
->
+> Any reason to not use the default "make install" behaviour of the
+> package ? (And ditto for the attr package).
 
-Attached,  Thanks for your help
+The libtool crap failed for cross compilation in these cases, so these
+workarounds are unfortunately necessary.
 
--- 
-Regards,
---Bob
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: a.config
-Type: application/octet-stream
-Size: 21579 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110531/0e1ab11f/attachment-0001.obj>
+Daniel
