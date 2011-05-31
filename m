@@ -1,29 +1,80 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 31 May 2011 18:18:13 +0200
-Subject: [Buildroot] [PATCH 1/2] Add package acl
-In-Reply-To: <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
-References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
-	<1306779390-19947-2-git-send-email-zonque@gmail.com>
-	<20110530210244.5bd309aa@surf>
-	<BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
-	<20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
-Message-ID: <BANLkTimadQbnqUbyK8U9j_ad43X8m8SWLg@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 31 May 2011 22:01:13 +0200
+Subject: [Buildroot] [pull request] Pull request for
+	branch	for-2011.08/bootloaders
+In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4DE54909.80900@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 31, 2011 at 2:47 PM, Heiko Zuerker <heiko@zuerker.org> wrote:
->>> Any reason to not use the default "make install" behaviour of the
->>> package ? (And ditto for the attr package).
->>
->> The libtool crap failed for cross compilation in these cases, so these
->> workarounds are unfortunately necessary.
+Hi Thomas,
+
+Thomas Petazzoni wrote:
+> Hello,
 >
-> Actually this isn't necessary, please see my version of the patches.
+> We have a package infrastructure that allows to share a lot of common
+> behaviour between packages, and allows to add new features easily to
+> all existing packages (Git/Mercurial download support, or usage of an
+> external source tree, etc.).
+>
+> Unfortunately, some of the packages that would most benefit from those
+> new infrastructure features are the bootloader and kernel, since it's
+> typically the software components that have to be modified/tuned
+> during the course of an embedded Linux project.
+>
+> Therefore, this series converts all bootloaders makefiles and the
+> kernel makefile to the package infrastructure, and adds the
+> possibility of fetching the kernel and u-boot through Git (it can be
+> added to other bootloaders with just a few lines of changes, mostly at
+> the Config.in level).
+[snip]
 
-Hmm, ok. Let's bring your patches mainline then, and I'll test again later.
+> Most of the changes have already been tested sucessfully by Luca Ceresoli.
 
-Thanks,
-Daniel
+I confirm the new patchset is working, and the newly-introduced git knob in
+menuconfig does as well.
+
+On the other hand, I noticed an annoying problem.
+
+Both Linux and U-Boot embed a version string computed from git describe or
+similar, which includes the most recent git tag name and possibly the
+abbreviated SHA1. This info is very useful to keep software traceability.
+
+If buildroot is built from a git tree (as opposed to a tar.gz release) 
+and the
+build is done in-tree, the version computation for U-Boot and Linux does not
+work anymore.
+
+U-Boot prints at startup:
+ > U-Boot 2011.03-00106-gbfd25f9-dirty (May 31 2011 - 15:30:36)
+which looks ok, except bfd25f9 is the current commit in the buildroot git
+repository, not in the U-Boot one.
+This looks obvious (after having noticed it...), because U-Boot gets built
+inside output/build/u-boot-$(VERSION)/, which is not a git repo. So git 
+describe
+does actually describe the buildroot repo instead.
+
+Linux just does not attach any -g<SHA1> to its version number, which is 
+equally
+wrong since I configured buildroot to checkout a commit that is not a tag.
+In fact if Linux is built inside its own git repo as I used to do so far, it
+prints a version number that includes the abbreviated SHA1.
+
+The root of this problem is in the way git download with in buildroot, and
+actually it would affect any package downloaded via git which uses git info
+to compute their version numbers.
+
+Is there anyone else out there using the version string (computed from 
+tag and
+SHA1) for software traceability?
+
+If this is considered a problem, the only solution that comes to my mind 
+is that
+we should clone a git repo in output/build/<package>, not extract a tarball.
+This is definitely not very nice.
+
+Luca
