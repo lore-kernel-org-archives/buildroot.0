@@ -1,12 +1,12 @@
 From: Heiko Zuerker <heiko@zuerker.org>
-Date: Tue, 31 May 2011 07:47:15 -0500
-Subject: [Buildroot] [PATCH 1/2] Add package acl
-In-Reply-To: <BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
-References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
-	<1306779390-19947-2-git-send-email-zonque@gmail.com>
-	<20110530210244.5bd309aa@surf>
-	<BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
-Message-ID: <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
+Date: Tue, 31 May 2011 07:48:21 -0500
+Subject: [Buildroot] FW: [PATCH v2] add acl and attr support for
+ extended attributes and POSIX Access Control Lists
+In-Reply-To: <BANLkTi=dh43ocmfq0y85GcqHbyyHoV-gmw@mail.gmail.com>
+References: <2911fdf24c8da0851176d0fd2168a04e876ec3aa.1292015991.git.smiley73@users.sourceforge.net>
+	<007c01cc1f08$83651120$8a2f3360$@zuerker.org>
+	<BANLkTi=dh43ocmfq0y85GcqHbyyHoV-gmw@mail.gmail.com>
+Message-ID: <20110531074821.Horde.e-ExCWms4ABN5OOVdNQTy9A@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,36 +16,15 @@ To: buildroot@busybox.net
 
 Quoting Daniel Mack <zonque@gmail.com>:
 
-> On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> On Mon, 30 May 2011 20:16:29 +0200
->> Daniel Mack <zonque@gmail.com> wrote:
->>
->>> +define ACL_INSTALL_TARGET_CMDS
->>> + ? ? $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl  
->>> $(TARGET_DIR)/usr/bin/
->>> + ? ? $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl  
->>> $(TARGET_DIR)/usr/bin/
->>> + ? ? $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so*  
->>> $(STAGING_DIR)/usr/lib/
->>> +endef
->>> +
->>> +define ACL_INSTALL_STAGING_CMDS
->>> + ? ? test -d $(STAGING_DIR)/usr/include/acl/ || mkdir  
->>> $(STAGING_DIR)/usr/include/acl/
->>> + ? ? $(INSTALL) -m 0644 -D $(@D)/include/*.h  
->>> $(STAGING_DIR)/usr/include/acl/
->>> + ? ? $(SED) s,sys/acl.h,acl/acl.h, -i  
->>> $(STAGING_DIR)/usr/include/acl/libacl.h
->>> +endef
->>
->> Any reason to not use the default "make install" behaviour of the
->> package ? (And ditto for the attr package).
+> On Mon, May 30, 2011 at 10:31 PM, Heiko Zuerker <heiko@zuerker.org> wrote:
+>> Attached you find the acl and attr patches I sent in last year.
 >
-> The libtool crap failed for cross compilation in these cases, so these
-> workarounds are unfortunately necessary.
+> Ah ok, what a pitty.
+>
+> I personally don't care at all which version makes it into the git, as
+> long as we can avoid a third person starting to work on this again ;)
 
-Actually this isn't necessary, please see my version of the patches.
+I so agree! :)
 
 -- 
 
