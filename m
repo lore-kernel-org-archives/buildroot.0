@@ -1,80 +1,109 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 31 May 2011 22:01:13 +0200
-Subject: [Buildroot] [pull request] Pull request for
-	branch	for-2011.08/bootloaders
-In-Reply-To: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1306782275.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4DE54909.80900@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  1 Jun 2011 13:28:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 3811] New: Added auto-mount for USB and SD Card
+ (mdev) (for 2011.05)
+Message-ID: <bug-3811-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=3811
 
-Thomas Petazzoni wrote:
-> Hello,
->
-> We have a package infrastructure that allows to share a lot of common
-> behaviour between packages, and allows to add new features easily to
-> all existing packages (Git/Mercurial download support, or usage of an
-> external source tree, etc.).
->
-> Unfortunately, some of the packages that would most benefit from those
-> new infrastructure features are the bootloader and kernel, since it's
-> typically the software components that have to be modified/tuned
-> during the course of an embedded Linux project.
->
-> Therefore, this series converts all bootloaders makefiles and the
-> kernel makefile to the package infrastructure, and adds the
-> possibility of fetching the kernel and u-boot through Git (it can be
-> added to other bootloaders with just a few lines of changes, mostly at
-> the Config.in level).
-[snip]
+           Summary: Added auto-mount for USB and SD Card (mdev) (for
+                    2011.05)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tkazmierczak at eurofunk.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> Most of the changes have already been tested sucessfully by Luca Ceresoli.
 
-I confirm the new patchset is working, and the newly-introduced git knob in
-menuconfig does as well.
+Works great for me :)
 
-On the other hand, I noticed an annoying problem.
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index d2643d0..47c46f5 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -6,6 +6,7 @@
+ case "$1" in
+   start)
+     echo "Starting mdev..."
++    /bin/echo /sbin/mdev > /proc/sys/kernel/hotplug
+     /sbin/mdev -s
+     ;;
+   stop)
+diff --git a/package/busybox/automount.sh b/package/busybox/automount.sh
+new file mode 100755
+index 0000000..5ae2b97
+--- /dev/null
++++ b/package/busybox/automount.sh
+@@ -0,0 +1,34 @@
++#! /bin/sh
++
++if [ "$1" == "" ]; then
++        exit 1
++fi
++
++mounted=`mount | grep $1 | wc -l`
++
++# mounted, assume we umount
++if [ $mounted -ge 1 ]; then
++        if ! umount "/dev/$1"; then
++                exit 1
++        fi
++
++        if ! rmdir "/media/$1"; then
++                exit 1
++        fi
++# not mounted, lets mount under /media
++else
++        if ! mkdir -p "/media/$1"; then
++                exit 1
++        fi
++
++        if ! mount -o sync "/dev/$1" "/media/$1"; then
++                # failed to mount, clean up mountpoint
++                if ! rmdir "/media/$1"; then
++                        exit 1
++                fi
++                exit 1
++        fi
++fi
++
++exit 0
++
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 711d11b..bbe5c39 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -32,6 +32,8 @@ endif
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+ define BUSYBOX_INSTALL_MDEV_SCRIPT
+     install -m 0755 package/busybox/S10mdev $(TARGET_DIR)/etc/init.d
++    install -m 0755 package/busybox/mdev.conf $(TARGET_DIR)/etc
++    install -m 0755 package/busybox/automount.sh $(TARGET_DIR)/sbin
+ endef
+ define BUSYBOX_SET_MDEV
+     $(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
+diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+new file mode 100644
+index 0000000..08d915c
+--- /dev/null
++++ b/package/busybox/mdev.conf
+@@ -0,0 +1,2 @@
++sd[a-z][0-9]* 0:0 0660 *(/sbin/automount.sh $MDEV)
++mmcblk[0-9]p[0-9] 0:0 0660 *(/sbin/automount.sh $MDEV)
 
-Both Linux and U-Boot embed a version string computed from git describe or
-similar, which includes the most recent git tag name and possibly the
-abbreviated SHA1. This info is very useful to keep software traceability.
-
-If buildroot is built from a git tree (as opposed to a tar.gz release) 
-and the
-build is done in-tree, the version computation for U-Boot and Linux does not
-work anymore.
-
-U-Boot prints at startup:
- > U-Boot 2011.03-00106-gbfd25f9-dirty (May 31 2011 - 15:30:36)
-which looks ok, except bfd25f9 is the current commit in the buildroot git
-repository, not in the U-Boot one.
-This looks obvious (after having noticed it...), because U-Boot gets built
-inside output/build/u-boot-$(VERSION)/, which is not a git repo. So git 
-describe
-does actually describe the buildroot repo instead.
-
-Linux just does not attach any -g<SHA1> to its version number, which is 
-equally
-wrong since I configured buildroot to checkout a commit that is not a tag.
-In fact if Linux is built inside its own git repo as I used to do so far, it
-prints a version number that includes the abbreviated SHA1.
-
-The root of this problem is in the way git download with in buildroot, and
-actually it would affect any package downloaded via git which uses git info
-to compute their version numbers.
-
-Is there anyone else out there using the version string (computed from 
-tag and
-SHA1) for software traceability?
-
-If this is considered a problem, the only solution that comes to my mind 
-is that
-we should clone a git repo in output/build/<package>, not extract a tarball.
-This is definitely not very nice.
-
-Luca
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
