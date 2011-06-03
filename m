@@ -1,48 +1,159 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Jun 2011 18:27:45 +0200
-Subject: [Buildroot] GCC 4.6.x building : bootstraps and some other
- packages fail
-In-Reply-To: <9E448A3C2A524B28B241DFDCA22CF9DC@JohanW7>
-References: <9E448A3C2A524B28B241DFDCA22CF9DC@JohanW7>
-Message-ID: <20110602182745.26ef31a6@surf>
+From: James Hanley <jhanley@dgtlrift.com>
+Date: Fri, 3 Jun 2011 12:40:50 -0400
+Subject: [Buildroot] Building buildroot on cygwin x64 win 7
+Message-ID: <7371680910168986444@unknownmsgid>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Is there a known issue with building on cygwin within win 7 x64?
 
-On Thu, 2 Jun 2011 10:53:32 +0200
-"Sagaert Johan" <sagaert.johan@skynet.be> wrote:
 
-> /home/johan/buildroot-2011.05/output/host/usr/bin/../lib/gcc/arm-unknown-lin
-> ux-uclibcgnueabi/4.6.0/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld:
-> section .text.startup loaded at [00200e7c,00200ea3] overlaps
-> section .data loaded at [00200e7c,00200f3f]
+Here is the output from a build from git..
 
-This doesn't surprise me a lot. AT91Bootstrap is not an open community
-project, so everybody keeps fixing the issues on their own without
-contributing things back, and Atmel isn't really maintaining it
-very actively. The upstream 1.16 version doesn't even build with EABI
-toolchains, and Buildroot has a patch to fix this.
 
-I'm afraid the build issue you had might be a problem in AT91Bootstrap
-that you have to find and fix. Of course, we're interested by the patch.
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
 
-Note that Atmel is working on a newer AT91Bootstrap version, available
-as part of their Android4Sam initiative. This version, labeled "3" is
-available at
-ftp://ftp.linux4sam.org/pub/Android4SAM/9m10g45/v1.1/patches/bootstrap30.tar.gz.
-I haven't tried it for now, but it uses kconfig for the configuration,
-so it's probably a bit better than the 1.16 that is packaged in
-Buildroot currently.
+$ make
 
-Regards,
+target/Config.in.arch:123: unknown option "Note"
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+target/Config.in.arch:124: unknown option "Using"
+
+target/Config.in.arch:154: unknown option "64bit"
+
+target/Config.in.arch:155: unknown option "non"
+
+target/Config.in.arch:505: invalid option
+
+target/Config.in.arch:506: unknown option "BR2_sh3"
+
+target/Config.in.arch:507: invalid option
+
+target/Config.in.arch:508: unknown option "BR2_powerpc"
+
+target/Config.in.arch:509: unknown option "BR2_sh3eb"
+
+Config.in:73: unknown option "The"
+
+Config.in:83: unknown option "The"
+
+Config.in:113: unknown option "The"
+
+Config.in:114: unknown option "http"
+
+Config.in:123: unknown option "Have"
+
+Config.in:124: unknown option "the"
+
+Config.in:126: unknown option "http"
+
+Config.in:127: unknown option "http"
+
+Config.in:136: unknown option "Have"
+
+Config.in:137: unknown option "the"
+
+Config.in:139: unknown option "http"
+
+Config.in:140: unknown option "http"
+
+Config.in:149: unknown option "Usually"
+
+Config.in:150: unknown option "http"
+
+Config.in:314: unknown option "WARNING"
+
+toolchain/Config.in:8: unknown option "Some"
+
+toolchain/Config.in:9: can't open file "form."
+
+make: *** [menuconfig] Error 1
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+
+$ uname -a
+
+CYGWIN_NT-6.1-WOW64 RANDOMWINBOX 1.7.9(0.237/5/3) 2011-03-29 10:10 i686
+Cygwin
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+
+$ git remote -v
+
+origin  git://git.buildroot.net/git/buildroot.git (fetch)
+
+origin  git://git.buildroot.net/git/buildroot.git (push)
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+
+$ git branch -r
+
+  origin/HEAD -> origin/master
+
+  origin/master
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+
+$ cat .git/config
+
+[core]
+
+        repositoryformatversion = 0
+
+        filemode = true
+
+        bare = false
+
+        logallrefupdates = true
+
+        ignorecase = true
+
+[remote "origin"]
+
+        fetch = +refs/heads/*:refs/remotes/origin/*
+
+        url = git://git.buildroot.net/git/buildroot.git
+
+[branch "master"]
+
+        remote = origin
+
+        merge = refs/heads/master
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+
+$ git --no-pager log --max-count=1
+
+commit 9ab73b51e8f0f30e1720639d40732fa20aab9d1a
+
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+
+Date:   Fri May 27 16:18:21 2011 +0200
+
+
+
+    Update for 2011.05
+
+
+
+    Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+
+
+RandomUser at RANDOMWINBOX/d/Users/RandomUser/Documents/Projects/RTOS/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110603/dd4ff705/attachment-0001.html>
