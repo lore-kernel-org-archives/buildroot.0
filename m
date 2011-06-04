@@ -1,24 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jun 2011 10:34:41 +0200
-Subject: [Buildroot] Building buildroot on cygwin x64 win 7
-In-Reply-To: <7371680910168986444@unknownmsgid>
-References: <7371680910168986444@unknownmsgid>
-Message-ID: <20110604103441.4a34284b@surf>
+Date: Sat, 4 Jun 2011 10:35:31 +0200
+Subject: [Buildroot] Anyone working on adding systemd and NetworkManager?
+In-Reply-To: <BANLkTiksOpT2qCKdGm7QUji+jBU=Fzmzig@mail.gmail.com>
+References: <BANLkTiksOpT2qCKdGm7QUji+jBU=Fzmzig@mail.gmail.com>
+Message-ID: <20110604103531.57826da3@surf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 31 May 2011 11:16:04 +0200
+Daniel Mack <zonque@gmail.com> wrote:
 
-On Fri, 3 Jun 2011 12:40:50 -0400
-James Hanley <jhanley@dgtlrift.com> wrote:
+> The subject says it all: did anyone look into what it takes to add
+> systemd to buildroot as an alternative to the SysV init scripts? It
+> seems that that would make a lot of sense for embedded devices.
+> 
+> Also, NetworkManager is being used more and more as the standard API
+> to configure network configuration, Wifi access points and the like -
+> has anyone used that package with buildroot yet?
 
-> Is there a known issue with building on cygwin within win 7 x64?
+I haven't heard of anyone packaging those two components, and they
+would definitely be useful.
 
-Well, the issue is that Buildroot under Cygwin isn't supported. None of
-the main Buildroot developers are using/testing Buildroot under Cygwin.
+However, what about connman instead of NetworkManager ? It seems like
+connman is more embedded/mobile oriented than NetworkManager, no?
 
 Regards,
 
