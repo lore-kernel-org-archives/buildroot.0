@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jun 2011 21:23:50 +0200
-Subject: [Buildroot] Packages Post-extract pre-patch phase ?
-In-Reply-To: <1307284805.2767.10.camel@ceri>
-References: <1307284805.2767.10.camel@ceri>
-Message-ID: <20110605212350.17cff2fd@skate>
+From: Francis Mendes <francis.mendes@gmail.com>
+Date: Mon, 6 Jun 2011 00:03:36 -0300
+Subject: [Buildroot] Add package statserial
+Message-ID: <BANLkTi=bZM8DpVptAVzw13Xs4V0d7b2rVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 05 Jun 2011 15:40:05 +0100,
-Mike Davies <busybox_mail@rovoreed.com> a ?crit :
+Hi,
 
-> Is it possible to have a "post extract" or "pre patch" phase ?
+I needed this package and added it to Buildroot.
 
-Yes, you have the <pkg>_POST_EXTRACT_HOOKS variable for each package,
-which can contain a list of make macros to call after the package
-extraction.
+Can anyone review the attached patch for any mistakes?
 
-See package/dropbear/dropbear.mk for an example.
+Thanks,
 
-The documentation should be updated to reflect the availability of this
-hook point. Would you volunteer to send a patch to update the
-documentation ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Francis
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110606/ffa8edeb/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Add-package-statserial.patch
+Type: text/x-patch
+Size: 3438 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110606/ffa8edeb/attachment.bin>
