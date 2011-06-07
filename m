@@ -1,81 +1,98 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 7 Jun 2011 10:37:09 +0200
-Subject: [Buildroot] [PATCH] packages: dbus: use version 1.4.8
-In-Reply-To: <1306779878-20243-1-git-send-email-zonque@gmail.com>
-References: <1306779878-20243-1-git-send-email-zonque@gmail.com>
-Message-ID: <BANLkTim1GV=Xx4a4m39RwYOKfSkqgT37BQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Jun 2011 12:33:13 +0200
+Subject: [Buildroot] Add package statserial
+In-Reply-To: <BANLkTi=AamsYp47dfhXa6RtJTATze7sCOQ@mail.gmail.com> (Francis
+	Mendes's message of "Mon, 6 Jun 2011 22:54:46 -0300")
+References: <BANLkTi=bZM8DpVptAVzw13Xs4V0d7b2rVg@mail.gmail.com>
+	<20110606212121.335044b2@skate>
+	<BANLkTi=AamsYp47dfhXa6RtJTATze7sCOQ@mail.gmail.com>
+Message-ID: <87zklulymu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also a ping on this one ...
+>>>>> "Francis" == Francis Mendes <francis.mendes@gmail.com> writes:
 
+Hi,
 
-On Mon, May 30, 2011 at 8:24 PM, Daniel Mack <zonque@gmail.com> wrote:
-> The exisiting br2 patch can be dropped.
->
-> Signed-off-by: Daniel Mack <zonque@gmail.com>
-> ---
-> ?.../dbus/dbus-1.2.12-launch-helper-xml-fix.patch ? | ? 33 --------------------
-> ?package/dbus/dbus.mk ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? | ? ?2 +-
-> ?2 files changed, 1 insertions(+), 34 deletions(-)
-> ?delete mode 100644 package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
->
-> diff --git a/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch b/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
-> deleted file mode 100644
-> index bf6b4ae..0000000
-> --- a/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -dbus-daemon-launch-helper: fix build with libxml
-> -
-> -dbus-daemon-launch-helper links with the trival config parser, which
-> -doesn't provide bus_config_parser_check_doctype(), like the big parser does.
-> -The libxml loader unfortunately wants to call it, so this breaks the build.
-> -
-> -Fix it by including a dummy bus_config_parser_check_doctype() in the trivial
-> -config parser.
-> -
-> -Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ----
-> - bus/config-parser-trivial.c | ? ?8 ++++++++
-> - 1 file changed, 8 insertions(+)
-> -
-> -Index: dbus-1.2.12/bus/config-parser-trivial.c
-> -===================================================================
-> ---- dbus-1.2.12.orig/bus/config-parser-trivial.c
-> -+++ dbus-1.2.12/bus/config-parser-trivial.c
-> -@@ -310,6 +310,14 @@
-> - ? return &parser->service_dirs;
-> - }
-> -
-> -+dbus_bool_t
-> -+bus_config_parser_check_doctype (BusConfigParser ? *parser,
-> -+ ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? const char ? ? ? ?*doctype,
-> -+ ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? DBusError ? ? ? ? *error)
-> -+{
-> -+ ? ?return TRUE;
-> -+}
-> -+
-> - #ifdef DBUS_BUILD_TESTS
-> - #include <stdio.h>
-> - #include "test.h"
-> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-> index 153e72b..7d75ca8 100644
-> --- a/package/dbus/dbus.mk
-> +++ b/package/dbus/dbus.mk
-> @@ -3,7 +3,7 @@
-> ?# dbus
-> ?#
-> ?#############################################################
-> -DBUS_VERSION = 1.2.24
-> +DBUS_VERSION = 1.4.8
-> ?DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
-> ?DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
-> ?DBUS_INSTALL_STAGING = YES
-> --
-> 1.7.5.1
->
->
+Looks good, but here's a few more comments.
+
+ Francis> The original Makefile compiles the source code to statserial.o
+ Francis> and then links it. I don't know exactly why, but the linker
+ Francis> fails with the message "undefined reference to
+ Francis> `atexit'". Searching in the web, I found someone suggesting to
+ Francis> compile and link in a single step using gcc, and it worked for
+ Francis> me. The purpose of the patch is to compile and link the source
+ Francis> code this way. If someone has a better way to fix the problem,
+ Francis> let me know.  ?
+
+ Francis> Thanks for the input. Below is the new patch. If there's still
+ Francis> something wrong, let me know.
+
+ Francis> Francis
+
+ Francis> =====================================================
+
+ Francis> Add package statserial
+
+ Francis> +++ b/package/statserial/Config.in
+ Francis> @@ -0,0 +1,11 @@
+ Francis> +config BR2_PACKAGE_STATSERIAL
+ Francis> +??? bool "statserial"
+ Francis> +??? select BR2_PACKAGE_NCURSES
+ Francis> +??? help
+ Francis> +??? ??? Displays a table of the signals on a standard
+ Francis> +??? ??? 9-pin or 25-pin serial port, and indicates the
+ Francis> +??? ??? status of the handshaking lines. It can be
+ Francis> +??? ??? useful for debugging problems with serial
+ Francis> +??? ??? ports or modems.
+ Francis> +
+ Francis> +??? ??? https://sites.google.com/site/tranter/software
+
+Config.in files should be indented with <tab> rather than spaces - So
+the bool/select/help files should be indented with <tab>, and the help
+text lines with <tab><space><space>.
+
+ Francis> diff --git a/package/statserial/statserial-1.1-fixmakefile.patch b/package/
+ Francis> statserial/statserial-1.1-fixmakefile.patch
+ Francis> new file mode 100644
+ Francis> index 0000000..88cdd3f
+ Francis> --- /dev/null
+ Francis> +++ b/package/statserial/statserial-1.1-fixmakefile.patch
+ Francis> @@ -0,0 +1,26 @@
+ Francis> +Compile and link the source in one step only
+ Francis> +
+ Francis> +
+ Francis> +Signed-off-by: Francis M. de P. Mendes <francis.mendes@gmail.com>
+ Francis> +
+ Francis> +diff --git a/Makefile b/Makefile
+ Francis> +index 2ed79f1..bf82034 100644
+ Francis> +--- a/Makefile
+ Francis> ++++ b/Makefile
+ Francis> +@@ -9,11 +9,8 @@ LD??? = gcc
+ Francis> + CFLAGS??? = -Wall -O3 -fomit-frame-pointer
+ Francis> + LDFLAGS = -s -N
+
+The problem is that the package expects LD to be gcc.
+
+ Francis> +++ b/package/statserial/statserial.mk
+ Francis> @@ -0,0 +1,20 @@
+ Francis> +#############################################################
+ Francis> +#
+ Francis> +# statserial
+ Francis> +#
+ Francis> +#############################################################
+ Francis> +STATSERIAL_VERSION = 1.1
+ Francis> +STATSERIAL_SOURCE = statserial-$(STATSERIAL_VERSION).tar.gz
+ Francis> +STATSERIAL_SITE = http://www.ibiblio.org/pub/Linux/system/serial/
+ Francis> +STATSERIAL_DEPENDENCIES = ncurses
+ Francis> +
+ Francis> +define STATSERIAL_BUILD_CMDS
+ Francis> +??? $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="$(TARGET_CFLAGS)"
+
+So it would presumably work if you just passed LD="$(TARGET_CC) $(CFLAGS)"
+
+-- 
+Bye, Peter Korsgaard
