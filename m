@@ -1,98 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Jun 2011 12:33:13 +0200
-Subject: [Buildroot] Add package statserial
-In-Reply-To: <BANLkTi=AamsYp47dfhXa6RtJTATze7sCOQ@mail.gmail.com> (Francis
-	Mendes's message of "Mon, 6 Jun 2011 22:54:46 -0300")
-References: <BANLkTi=bZM8DpVptAVzw13Xs4V0d7b2rVg@mail.gmail.com>
-	<20110606212121.335044b2@skate>
-	<BANLkTi=AamsYp47dfhXa6RtJTATze7sCOQ@mail.gmail.com>
-Message-ID: <87zklulymu.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 Jun 2011 13:08:19 +0200
+Subject: [Buildroot] [git commit] sudo: bump version, use official upstream,
+	don't disable auth
+Message-ID: <20110607110850.DE91F828FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francis" == Francis Mendes <francis.mendes@gmail.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=92ab7428e85027d8155855e67e8e03bb80c93a94
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Looks good, but here's a few more comments.
+sudo without authentication doesn't make much sense, and it has very
+limited impact on binary size.
 
- Francis> The original Makefile compiles the source code to statserial.o
- Francis> and then links it. I don't know exactly why, but the linker
- Francis> fails with the message "undefined reference to
- Francis> `atexit'". Searching in the web, I found someone suggesting to
- Francis> compile and link in a single step using gcc, and it worked for
- Francis> me. The purpose of the patch is to compile and link the source
- Francis> code this way. If someone has a better way to fix the problem,
- Francis> let me know.  ?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sudo/Config.in |    2 ++
+ package/sudo/sudo.mk   |    6 ++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- Francis> Thanks for the input. Below is the new patch. If there's still
- Francis> something wrong, let me know.
-
- Francis> Francis
-
- Francis> =====================================================
-
- Francis> Add package statserial
-
- Francis> +++ b/package/statserial/Config.in
- Francis> @@ -0,0 +1,11 @@
- Francis> +config BR2_PACKAGE_STATSERIAL
- Francis> +??? bool "statserial"
- Francis> +??? select BR2_PACKAGE_NCURSES
- Francis> +??? help
- Francis> +??? ??? Displays a table of the signals on a standard
- Francis> +??? ??? 9-pin or 25-pin serial port, and indicates the
- Francis> +??? ??? status of the handshaking lines. It can be
- Francis> +??? ??? useful for debugging problems with serial
- Francis> +??? ??? ports or modems.
- Francis> +
- Francis> +??? ??? https://sites.google.com/site/tranter/software
-
-Config.in files should be indented with <tab> rather than spaces - So
-the bool/select/help files should be indented with <tab>, and the help
-text lines with <tab><space><space>.
-
- Francis> diff --git a/package/statserial/statserial-1.1-fixmakefile.patch b/package/
- Francis> statserial/statserial-1.1-fixmakefile.patch
- Francis> new file mode 100644
- Francis> index 0000000..88cdd3f
- Francis> --- /dev/null
- Francis> +++ b/package/statserial/statserial-1.1-fixmakefile.patch
- Francis> @@ -0,0 +1,26 @@
- Francis> +Compile and link the source in one step only
- Francis> +
- Francis> +
- Francis> +Signed-off-by: Francis M. de P. Mendes <francis.mendes@gmail.com>
- Francis> +
- Francis> +diff --git a/Makefile b/Makefile
- Francis> +index 2ed79f1..bf82034 100644
- Francis> +--- a/Makefile
- Francis> ++++ b/Makefile
- Francis> +@@ -9,11 +9,8 @@ LD??? = gcc
- Francis> + CFLAGS??? = -Wall -O3 -fomit-frame-pointer
- Francis> + LDFLAGS = -s -N
-
-The problem is that the package expects LD to be gcc.
-
- Francis> +++ b/package/statserial/statserial.mk
- Francis> @@ -0,0 +1,20 @@
- Francis> +#############################################################
- Francis> +#
- Francis> +# statserial
- Francis> +#
- Francis> +#############################################################
- Francis> +STATSERIAL_VERSION = 1.1
- Francis> +STATSERIAL_SOURCE = statserial-$(STATSERIAL_VERSION).tar.gz
- Francis> +STATSERIAL_SITE = http://www.ibiblio.org/pub/Linux/system/serial/
- Francis> +STATSERIAL_DEPENDENCIES = ncurses
- Francis> +
- Francis> +define STATSERIAL_BUILD_CMDS
- Francis> +??? $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="$(TARGET_CFLAGS)"
-
-So it would presumably work if you just passed LD="$(TARGET_CC) $(CFLAGS)"
-
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index a1b596b..fc0a175 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -5,3 +5,5 @@ config BR2_PACKAGE_SUDO
+ 	  limited root privileges to users and log root activity.  The
+ 	  basic philosophy is to give as few privileges as possible
+ 	  but still allow people to get their work done.
++
++	  http://www.sudo.ws/sudo/
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index fde4b77..688df16 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,9 +4,8 @@
+ #
+ #############################################################
+ 
+-SUDO_VERSION = 1.7.4p6
+-SUDO_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sudo
+-SUDO_SOURCE  = sudo_$(SUDO_VERSION).orig.tar.gz
++SUDO_VERSION = 1.7.6p2
++SUDO_SITE    = http://www.sudo.ws/sudo/dist
+ 
+ SUDO_CONF_OPT = \
+ 		--without-lecture \
+@@ -14,7 +13,6 @@ SUDO_CONF_OPT = \
+ 		--without-umask \
+ 		--with-logging=syslog \
+ 		--without-interfaces \
+-		--disable-authentication \
+ 		--without-pam
+ 
+ define SUDO_INSTALL_TARGET_CMDS
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
