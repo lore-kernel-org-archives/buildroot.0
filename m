@@ -1,60 +1,129 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 7 Jun 2011 13:08:19 +0200
-Subject: [Buildroot] [git commit] sudo: bump version, use official upstream,
-	don't disable auth
-Message-ID: <20110607110850.DE91F828FB@busybox.osuosl.org>
+From: Guillaume Gardet <guillaume.gardet@free.fr>
+Date: Tue, 07 Jun 2011 16:09:58 +0200
+Subject: [Buildroot] [PATCH] Added Live555 RTSP Server package.
+In-Reply-To: <1304972048-21092-2-git-send-email-mike@mikebwilliams.com>
+References: <1304972048-21092-1-git-send-email-mike@mikebwilliams.com>
+	<1304972048-21092-2-git-send-email-mike@mikebwilliams.com>
+Message-ID: <4DEE3136.20701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tested on a leopard board DM368 with a codesourcery toolchain (2009q1) and it is working fine.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92ab7428e85027d8155855e67e8e03bb80c93a94
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Guillaume
 
-sudo without authentication doesn't make much sense, and it has very
-limited impact on binary size.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sudo/Config.in |    2 ++
- package/sudo/sudo.mk   |    6 ++----
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-index a1b596b..fc0a175 100644
---- a/package/sudo/Config.in
-+++ b/package/sudo/Config.in
-@@ -5,3 +5,5 @@ config BR2_PACKAGE_SUDO
- 	  limited root privileges to users and log root activity.  The
- 	  basic philosophy is to give as few privileges as possible
- 	  but still allow people to get their work done.
-+
-+	  http://www.sudo.ws/sudo/
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index fde4b77..688df16 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,9 +4,8 @@
- #
- #############################################################
- 
--SUDO_VERSION = 1.7.4p6
--SUDO_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sudo
--SUDO_SOURCE  = sudo_$(SUDO_VERSION).orig.tar.gz
-+SUDO_VERSION = 1.7.6p2
-+SUDO_SITE    = http://www.sudo.ws/sudo/dist
- 
- SUDO_CONF_OPT = \
- 		--without-lecture \
-@@ -14,7 +13,6 @@ SUDO_CONF_OPT = \
- 		--without-umask \
- 		--with-logging=syslog \
- 		--without-interfaces \
--		--disable-authentication \
- 		--without-pam
- 
- define SUDO_INSTALL_TARGET_CMDS
--- 
-1.7.3.4
+Le 09/05/2011 22:14, Mike Williams a ?crit :
+> From: Mike Williams<mwilli60@harris.com>
+>
+>
+> Signed-off-by: Mike Williams<mike@mikebwilliams.com>
+> ---
+>   package/multimedia/Config.in          |    1 +
+>   package/multimedia/live555/Config.in  |   30 ++++++++++++++++++++++
+>   package/multimedia/live555/live555.mk |   44 +++++++++++++++++++++++++++++++++
+>   3 files changed, 75 insertions(+), 0 deletions(-)
+>   create mode 100644 package/multimedia/live555/Config.in
+>   create mode 100644 package/multimedia/live555/live555.mk
+>
+> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+> index b8a0f21..3ae9d5b 100644
+> --- a/package/multimedia/Config.in
+> +++ b/package/multimedia/Config.in
+> @@ -31,6 +31,7 @@ source "package/multimedia/libsamplerate/Config.in"
+>   source "package/multimedia/libsndfile/Config.in"
+>   source "package/multimedia/libtheora/Config.in"
+>   source "package/multimedia/libvorbis/Config.in"
+> +source "package/multimedia/live555/Config.in"
+>   source "package/multimedia/madplay/Config.in"
+>   source "package/multimedia/mpd/Config.in"
+>   source "package/multimedia/mpg123/Config.in"
+> diff --git a/package/multimedia/live555/Config.in b/package/multimedia/live555/Config.in
+> new file mode 100644
+> index 0000000..e77c875
+> --- /dev/null
+> +++ b/package/multimedia/live555/Config.in
+> @@ -0,0 +1,30 @@
+> +config BR2_PACKAGE_LIVE555
+> +	bool "Live555"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  LIVE555 Streaming Media forms a set of C++ libraries for multimedia
+> +	  streaming, using open standard protocols (RTP/RTCP, RTSP, SIP).
+> +
+> +	  http://www.live555.com/liveMedia/
+> +
+> +config BR2_PACKAGE_LIVE555_OPENRTSP
+> +	bool "OpenRRTSP"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		Live555 RTSP Client.
+> +		
+> +config BR2_PACKAGE_LIVE555_MEDIASERVER
+> +	bool "live555MediaServer"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		RTSP Server. Supports numerous media formats such as H.264 and MPEG2.
+> +
+> +config BR2_PACKAGE_LIVE555_MPEG2_INDEXER
+> +	bool "MPEG2TransportStreamIndexer"
+> +	depends on BR2_PACKAGE_LIVE555
+> +	default y
+> +	help
+> +		MPEG2 Transport Stream Indexer. Provides indexes allowing 'trick play'
+> +		operation in the Live555MediaServer.
+> diff --git a/package/multimedia/live555/live555.mk b/package/multimedia/live555/live555.mk
+> new file mode 100644
+> index 0000000..ce119d0
+> --- /dev/null
+> +++ b/package/multimedia/live555/live555.mk
+> @@ -0,0 +1,44 @@
+> +#############################################################
+> +#
+> +# live555 streaming media
+> +#
+> +#############################################################
+> +
+> +LIVE555_VERSION = latest
+> +LIVE555_SOURCE = live555-$(LIVE555_VERSION).tar.gz
+> +LIVE555_SITE = http://www.live555.com/liveMedia/public/
+> +LIVE555_INSTALL_TARGET = YES
+> +
+> +define LIVE555_CONFIGURE_CMDS
+> +	(cd $(@D); ./genMakefiles linux)
+> +endef
+> +
+> +define LIVE555_BUILD_CMDS
+> +	$(MAKE) C_COMPILER="$(TARGET_CC)" CPLUSPLUS_COMPILER="$(TARGET_CXX)" LINK="$(TARGET_CXX) -o" -C $(@D) all
+> +endef
+> +
+> +ifeq (${BR2_PACKAGE_LIVE555_OPENRTSP},y)
+> +define LIVE555_INSTALL_OPENRTSP
+> +	$(INSTALL) -D -m 0755 $(@D)/testProgs/openRTSP $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +ifeq (${BR2_PACKAGE_LIVE555_MEDIASERVER},y)
+> +define LIVE555_INSTALL_MEDIASERVER
+> +	$(INSTALL) -D -m 0755 $(@D)/mediaServer/live555MediaServer $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +ifeq (${BR2_PACKAGE_LIVE555_MPEG2_INDEXER},y)
+> +define LIVE555_INSTALL_MPEG2_INDEXER
+> +	$(INSTALL) -D -m 0755 $(@D)/testProgs/MPEG2TransportStreamIndexer $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
+> +
+> +define LIVE555_INSTALL_TARGET_CMDS
+> +	$(LIVE555_INSTALL_OPENRTSP)
+> +	$(LIVE555_INSTALL_MEDIASERVER)
+> +	$(LIVE555_INSTALL_MPEG2_INDEXER)
+> +endef
+> +
+> +$(eval $(call GENTARGETS,package/multimedia,live555))
