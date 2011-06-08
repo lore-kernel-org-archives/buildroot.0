@@ -1,33 +1,32 @@
-From: =?ISO-8859-9?B?QWxwZXIgWf1sZP1y/W0=?= <yildirimalper@gmail.com>
-Date: Wed, 8 Jun 2011 23:40:14 +0300
-Subject: [Buildroot] [Feature Request] script to run after build completion
-Message-ID: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 08 Jun 2011 15:30:02 -0700
+Subject: [Buildroot] [Feature Request] script to run after build
+	completion
+In-Reply-To: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
+References: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
+Message-ID: <4DEFF7EA.6080701@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 06/08/11 13:40, Alper Y?ld?r?m wrote:
+> Hello,
+> 
+> A feature i want to see in buildroot is to have a post build script to
+> run after image creation process, in other words just before "make"
+> returns to console. This way i can put my post build commands inside
+> this script. It will definitely ease my buildroot usage.
+> 
 
-A feature i want to see in buildroot is to have a post build script to
-run after image creation process, in other words just before "make"
-returns to console. This way i can put my post build commands inside
-this script. It will definitely ease my buildroot usage.
+Hi Alper,
 
-Some examples to put in this script are:
+Yes a post build script is useful. enter your script path in menuconfig
+target_filesystem_options -->
 
-- Printing some king of a "build completed" message,
-- Printing build time,
-- Nfs directory creation from rootfs.tar file,
-- Copying necessary images to some other locations,
-- Playing some sound when build is completed.
+It becomes in your .config something like:
+BR2_ROOTFS_POST_BUILD_SCRIPT=
+"$(TOPDIR)/target/device/beagleboard/patchrootfs.sh"
 
-Also, it will be nice to pass a build failed/completed parameter to
-this script, so different actions could be taken, (i.e. different
-sounds could be played)
-
-What do you think about this Thomas?
-
-Cheers
-Alper
+Regards, Steve
