@@ -1,12 +1,9 @@
 From: =?ISO-8859-9?B?QWxwZXIgWf1sZP1y/W0=?= <yildirimalper@gmail.com>
-Date: Wed, 8 Jun 2011 23:11:47 +0300
-Subject: [Buildroot] [RFC] Review request for branch
-	for-2011.08/bootloaders
-In-Reply-To: <20110530223403.0f8fcbd4@surf>
-References: <cover.1305577083.git.thomas.petazzoni@free-electrons.com>
-	<BANLkTim_Bb3fRZcC4rT2ofpF7GhuroUULA@mail.gmail.com>
-	<20110530223403.0f8fcbd4@surf>
-Message-ID: <BANLkTim570iiTkV3F5vg_zF__jgWaLdqjQ@mail.gmail.com>
+Date: Wed, 8 Jun 2011 23:22:45 +0300
+Subject: [Buildroot] [RFC] Override source directories
+In-Reply-To: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <BANLkTikMaFZ+xhjKb0oPJssjfON+faj75A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +11,99 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
-D?sol? pour la r?ponse tardive
 
-2011/5/30 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Thu, May 19, 2011 at 12:48 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> G?nayd?n Alper!
+> Here is a set of RFC patches that implement the basic mechanism I have
+> been referring to since a couple of weeks/months about allowing users
+> to override the source directory for packages.
 >
-> On Mon, 30 May 2011 22:53:11 +0300
-> Alper Y?ld?r?m <yildirimalper@gmail.com> wrote:
+> >From an user perspective, it allows ones to create a "local.mk" file
+> in the Buildroot main source directory, with variable definitions such
+> as :
 >
-> > Thanks for the comprehensive work. I have a suggestion, maybe you can also
-> > implement this within the context of your work.
-> > In our project, we have some local applications, hosted under local git
-> > repositories. We are currently using the package infrastructure with git. If
-> > we give a commit id or tag name everything is fine but in some use cases we
-> > want to build the latest commit (HEAD) with buildroot. In that case, giving
-> > HEAD as the version is not sufficient, since buildroot checks the dl dir for
-> > pkgname-HEAD.tar.gz and finds it there after first build. Currently we
-> > manually delete this file and force buildroot to clone the repo again. In my
-> > opinion this is not the proper way.
-> >
-> > My suggestion is:
-> > For the first build, clone the git repo to the build directory and for the
-> > next builds make a git pull in the build directory.
-> >
-> > It would be nice to have such an option in buildroot.
+> ?ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+> ?MYAPP_OVERRIDE_SRCDIR = /home/foobar/project/myapp
+> ?LIBGLIB2_OVERRIDE_SRCDIR = /home/foobar/git/libglib2
 >
-> I think I understand your workflow and your need. However, I
-> unfortunately don't think your proposal works properly: the next time
-> you will do "make clean", the build directory of your package will have
-> disappeared, so Buildroot won't know that it should do a "git pull",
-> and will use again the pkgname-HEAD.tar.gz file from the dl directory.
-> Or maybe I misunderstood your proposal ?
+> At build time, Buildroot would use those directories at the source for
+> the packages, instead of downloading, extracing and patching them in
+> the usual way.
 >
-> In your case, wouldn't it be better to not let Buildroot download your
-> custom applications from Git, but rather give Buildroot the path to a
-> directory where you have the source of code of the applications ? This
-> way, you can handle this directory however you want in terms of
-> ?revision control: Buildroot will never remove it.
+> Internally, this is implemented inside our package infrastructure, so
+> this mechanism should work for all packages that rely on the
+> infrastructure. The GENTARGETS macro makes sure that the package build
+> process bypasses the download, extract and patch step when
+> <pkg>_OVERRIDE_SRCDIR is defined, and instead a symlinking step is
+> added. It's very simple.
 >
-> What do you think of the proposal I've sent on May, 18th ? See
-> http://lists.busybox.net/pipermail/buildroot/2011-May/043320.html.
 
-I read your proposal. It totally implements what we want from buildroot.
-It will definitely solve our "buildroot usage" problems.
-I will write my comments to that thread.
+It is definitely what i want from buildroot. This feature is a must when working
+with local application repositories.
 
-Thanks for your support.
-Cheers
+> This series of patches also add the <pkg>-reconfigure and
+> <pkg>-rebuild targets, which makes it easy for users to restart the
+> package build process at the compilation step or at the configuration
+> step, without having to mess up with stamp file details.
+>
+> There are still a few issues to solve and discuss, though :
+>
+> ?* Is local.mk inside the main source directory the good solution?
+> ? Should we instead provide a configuration option to set the path to
+> ? the override file? Or another solution?
+
+I prefer having a configuration option for this, it will be more flexible.
+
+> ?* As the mechanism is implemented today, "make clean" removes the
+> ? symbolic link $(O)/build/<pkg>-<version>, but not the stamp files
+> ? created inside this source directory. So next time the build is
+> ? started, things will go wrong. To solve this, the only solution I
+> ? see is to separate the directory with the stamp files from the
+> ? source directory, at least in the case of overriden source
+> ? directories.
+
+I guess, it won't hurt to have an extra stamp directory for locally overridden
+source directories.
+
+> ?* Other things?
+>
+> Feedback, comments and ideas welcome.
+>
+
+When do you plan to release this feature.
+Please don't wait too much.
+
+Cheers,
 Alper
 
-> Thanks for your suggestion!
+> Regards,
 >
 > Thomas
+>
+> The following changes since commit 7234c23967fa70b760c64700e56bb1778019fbeb:
+>
+> ?CHANGES: update with recent changes (2011-05-18 21:02:30 +0200)
+>
+> are available in the git repository at:
+> ?http://free-electrons.com/~thomas/buildroot.git for-2011.08/sourcedir
+>
+> Thomas Petazzoni (4):
+> ? ? ?package: enhance infrastructure to support source dir override
+> ? ? ?package: remove stamp files in <pkg>-dirclean
+> ? ? ?package: add <pkg>-rebuild and <pkg>-reconfigure
+> ? ? ?Include a local.mk for package overrides
+>
+> ?Makefile ? ? ? ? ? ? ? ? ? ?| ? ?1 +
+> ?package/Makefile.package.in | ? 30 ++++++++++++++++++++++++++++++
+> ?2 files changed, 31 insertions(+), 0 deletions(-)
+>
+> Thanks,
 > --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Thomas Petazzoni
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
