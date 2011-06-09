@@ -1,39 +1,29 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 9 Jun 2011 13:23:22 +0200
-Subject: [Buildroot] [Feature Request] script to run after build
-	completion
-In-Reply-To: <4DEFF7EA.6080701@gmail.com>
-References: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
-	<4DEFF7EA.6080701@gmail.com>
-Message-ID: <BANLkTinzono1kmGg_pL2bVMfHg1qyN6sMg@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 09 Jun 2011 14:19:41 +0200
+Subject: [Buildroot] [PATCH]ethtool: bump to 2.6.39
+Message-ID: <4DF0BA5D.3000106@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/6/9 Steve Calfee <stevecalfee@gmail.com>:
-> On 06/08/11 13:40, Alper Y?ld?r?m wrote:
->> Hello,
->>
->> A feature i want to see in buildroot is to have a post build script to
->> run after image creation process, in other words just before "make"
->> returns to console. This way i can put my post build commands inside
->> this script. It will definitely ease my buildroot usage.
->>
->
-> Hi Alper,
->
-> Yes a post build script is useful. enter your script path in menuconfig
-> target_filesystem_options -->
->
-> It becomes in your .config something like:
-> BR2_ROOTFS_POST_BUILD_SCRIPT=
-> "$(TOPDIR)/target/device/beagleboard/patchrootfs.sh"
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-BR2_ROOTFS_POST_BUILD_SCRIPT is run before image creation, not after
-(so you can change the rootfs before it is packaged). So I don't think
-it is the right solution.
+---
+ package/ethtool/ethtool.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Bj?rn Forsman
+Index: b/package/ethtool/ethtool.mk
+===================================================================
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ETHTOOL_VERSION = 2.6.38
++ETHTOOL_VERSION = 2.6.39
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool/
+ 
+ $(eval $(call AUTOTARGETS,package,ethtool))
