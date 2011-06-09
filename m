@@ -1,32 +1,27 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 08 Jun 2011 15:30:02 -0700
-Subject: [Buildroot] [Feature Request] script to run after build
-	completion
-In-Reply-To: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
-References: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
-Message-ID: <4DEFF7EA.6080701@gmail.com>
+From: Patryk Benderz <Patryk.Benderz@esp.pl>
+Date: Thu, 09 Jun 2011 08:38:46 +0200
+Subject: [Buildroot] [RFC] Override source directories
+In-Reply-To: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1307601526.2967.58.camel@esp-patben-lin.espdx1.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/08/11 13:40, Alper Y?ld?r?m wrote:
+Dnia 2011-05-18, ?ro o godzinie 23:48 +0200, Thomas Petazzoni pisze:
 > Hello,
-> 
-> A feature i want to see in buildroot is to have a post build script to
-> run after image creation process, in other words just before "make"
-> returns to console. This way i can put my post build commands inside
-> this script. It will definitely ease my buildroot usage.
-> 
-
-Hi Alper,
-
-Yes a post build script is useful. enter your script path in menuconfig
-target_filesystem_options -->
-
-It becomes in your .config something like:
-BR2_ROOTFS_POST_BUILD_SCRIPT=
-"$(TOPDIR)/target/device/beagleboard/patchrootfs.sh"
-
-Regards, Steve
+Hi Thomas,
+[cut]
+> Feedback, comments and ideas welcome.
+Any chance you could implement <pkg>-remove target, parallel to
+<pkg>-rebuild target? Because this is what I really miss in Buildroot. I
+often find some packages useless, and I have to build from scratch to
+remove them. I suppose others would also appreciate "remove package"
+function.
+-- 
+Patryk "LeadMan" Benderz
+Linux Registered User #377521
+()  ascii ribbon campaign - against html e-mail 
+/\  www.asciiribbon.org   - against proprietary attachments
