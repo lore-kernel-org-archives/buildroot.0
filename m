@@ -1,35 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 9 Jun 2011 17:42:22 +0200
-Subject: [Buildroot] [git commit] ethtool: bump to 2.6.39
-Message-ID: <20110609154413.B753785A99@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Thu, 9 Jun 2011 08:55:33 -0700
+Subject: [Buildroot] [Feature Request] script to run after build
+	completion
+In-Reply-To: <BANLkTinzono1kmGg_pL2bVMfHg1qyN6sMg@mail.gmail.com>
+References: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
+	<4DEFF7EA.6080701@gmail.com>
+	<BANLkTinzono1kmGg_pL2bVMfHg1qyN6sMg@mail.gmail.com>
+Message-ID: <BANLkTimZfF1WmxH14PEn+kRsPYzs6P8cGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2011/6/9 Bj?rn Forsman <bjorn.forsman@gmail.com>:
+>
+> BR2_ROOTFS_POST_BUILD_SCRIPT is run before image creation, not after
+> (so you can change the rootfs before it is packaged). So I don't think
+> it is the right solution.
+>
+> Best regards,
+> Bj?rn Forsman
+>
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e446aa072a9504906dc01070847a9048410e218f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+OK, I see. When I build and want to extract to nfs etc, I put my
+buildroot make inside a shell script, if it returns success I then do
+the unpacking and copying (uImage).
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ethtool/ethtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 53bbb67..d3f578c 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--ETHTOOL_VERSION = 2.6.38
-+ETHTOOL_VERSION = 2.6.39
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool/
- 
- $(eval $(call AUTOTARGETS,package,ethtool))
--- 
-1.7.3.4
+Steve
