@@ -1,65 +1,65 @@
-From: =?ISO-8859-9?B?QWxwZXIgWf1sZP1y/W0=?= <yildirimalper@gmail.com>
-Date: Thu, 9 Jun 2011 22:35:46 +0300
-Subject: [Buildroot] [Feature Request] script to run after build
-	completion
-In-Reply-To: <BANLkTinru5S__aEQQwWJgjfycAb3af7Pwg@mail.gmail.com>
-References: <BANLkTinE6NPRM67GbdAXutwxOfeHGS_P_g@mail.gmail.com>
-	<BANLkTinru5S__aEQQwWJgjfycAb3af7Pwg@mail.gmail.com>
-Message-ID: <BANLkTikmqT5oZW1VQj2B-YWpxONaBPoXVQ@mail.gmail.com>
+From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
+Date: Fri, 10 Jun 2011 23:41:40 +0700
+Subject: [Buildroot] Generic serial port disappear after udev started
+Message-ID: <BANLkTinE9E==rnL=NJSKkW=SELY=bZbHJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the tip Bjorn.
-I can use this method until such a feature is implemented.
+Hello List,
 
-2011/6/9 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> 2011/6/8 Alper Y?ld?r?m <yildirimalper@gmail.com>:
->> Hello,
->>
->> A feature i want to see in buildroot is to have a post build script to
->> run after image creation process, in other words just before "make"
->> returns to console. This way i can put my post build commands inside
->> this script. It will definitely ease my buildroot usage.
->>
->> Some examples to put in this script are:
->>
->> - Printing some king of a "build completed" message,
->> - Printing build time,
->> - Nfs directory creation from rootfs.tar file,
->> - Copying necessary images to some other locations,
->> - Playing some sound when build is completed.
->>
->> Also, it will be nice to pass a build failed/completed parameter to
->> this script, so different actions could be taken, (i.e. different
->> sounds could be played)
->
-> I do this on the command line:
->
-> make && echo Buildroot success || echo Buildroot error
->
-> You can easily extend this by creating a small script, e.g. build.sh:
->
-> ----8<----
-> #!/bin/sh
->
-> handle_success()
-> {
-> ?echo Buildroot built successfully
-> ?# ...
-> }
->
-> handle_failure()
-> {
-> ?echo Buildroot failed
-> ?# ...
-> }
->
-> make && handle_success || handle_failure
-> ----8<----
->
-> Best regards,
-> Bj?rn Forsman
->
+Normally i put getty on serial port which is /dev/ttySAC0 and so far there
+is no issue with it, but after udev installed and started, the system
+complains that it can not find /dev/ttySAC0.
+
+VFS: Mounted root (nfs filesystem).
+Freeing init memory: 624K
+Populating /dev using udev: done
+Starting portmap: done
+Initializing random number generator... done.
+Starting system message bus: Failed to start message bus: The pid file
+"/var/run/messagebus.pid" exists, if the message bus is not running, remove
+this file
+done
+Starting network...
+ifup: interface lo already configured
+Starting sshd: /var/empty must be owned by root and not group or
+world-writable.
+OK
+/etc/init.d/dhcp-relay not yet configured! - Aborting...
+/etc/init.d/dhcp-server not yet configured! - Aborting...
+Starting HAL daemon: done
+can't open /dev/ttySAC0: No such file or directory
+can't open /dev/ttySAC0: No such file or directory
+
+I thought that there is issue with udev rules and this could be related with
+device_table.txt, but it seems wrong. When I added following line to
+device_table.txt
+
+/dev/ttySAC     c       666     0       0       204     64      0       1
+    4
+
+udev rules (etc/udev/rules.d/50-udev-default.rules) does not change. Then I
+edit etc/udev/rules.d/50-udev-default.rules manually added following line:
+
+KERNEL=="ttySAC[0-3]*",       NAME="%k", OWNER="root"  GROUP="tty",
+MODE="0660"
+
+but still, the system complains that it can not find /dev/ttySAC0
+
+Could anyone please point me to the right direction?
+
+Currently I am still looking for the answer on Google as well as udev
+manual, when it solved I will post it.
+
+Thanks in advance,
+DWI
+
+
+
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110610/a38ef8a0/attachment.html>
