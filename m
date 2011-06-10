@@ -1,72 +1,45 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 10 Jun 2011 13:49:31 -0500
-Subject: [Buildroot] Generic serial port disappear after udev started
-In-Reply-To: <BANLkTinE9E==rnL=NJSKkW=SELY=bZbHJg@mail.gmail.com>
-References: <BANLkTinE9E==rnL=NJSKkW=SELY=bZbHJg@mail.gmail.com>
-Message-ID: <201106101349.34083.minimod@morethan.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jun 2011 23:21:48 +0200
+Subject: [Buildroot] [RFC] Override source directories
+In-Reply-To: <1307601526.2967.58.camel@esp-patben-lin.espdx1.local>
+References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+	<1307601526.2967.58.camel@esp-patben-lin.espdx1.local>
+Message-ID: <20110610232148.5383e3c3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri June 10 2011, Dwi Sasongko Supriyadi wrote:
-> Hello List,
-> 
-> Normally i put getty on serial port which is /dev/ttySAC0 and so far there
-> is no issue with it, but after udev installed and started, the system
-> complains that it can not find /dev/ttySAC0.
-> 
-> VFS: Mounted root (nfs filesystem).
-> Freeing init memory: 624K
-> Populating /dev using udev: done
->
+Hello Patryk,
 
-Is /dev on nfs?
-that might be the problem, nfs makes files, not device nodes.
+Le Thu, 09 Jun 2011 08:38:46 +0200,
+Patryk Benderz <Patryk.Benderz@esp.pl> a ?crit :
 
-Mike
-> Starting portmap: done
-> Initializing random number generator... done.
-> Starting system message bus: Failed to start message bus: The pid file
-> "/var/run/messagebus.pid" exists, if the message bus is not running, remove
-> this file
-> done
-> Starting network...
-> ifup: interface lo already configured
-> Starting sshd: /var/empty must be owned by root and not group or
-> world-writable.
-> OK
-> /etc/init.d/dhcp-relay not yet configured! - Aborting...
-> /etc/init.d/dhcp-server not yet configured! - Aborting...
-> Starting HAL daemon: done
-> can't open /dev/ttySAC0: No such file or directory
-> can't open /dev/ttySAC0: No such file or directory
-> 
-> I thought that there is issue with udev rules and this could be related with
-> device_table.txt, but it seems wrong. When I added following line to
-> device_table.txt
-> 
-> /dev/ttySAC     c       666     0       0       204     64      0       1
->     4
-> 
-> udev rules (etc/udev/rules.d/50-udev-default.rules) does not change. Then I
-> edit etc/udev/rules.d/50-udev-default.rules manually added following line:
-> 
-> KERNEL=="ttySAC[0-3]*",       NAME="%k", OWNER="root"  GROUP="tty",
-> MODE="0660"
-> 
-> but still, the system complains that it can not find /dev/ttySAC0
-> 
-> Could anyone please point me to the right direction?
-> 
-> Currently I am still looking for the answer on Google as well as udev
-> manual, when it solved I will post it.
-> 
-> Thanks in advance,
-> DWI
-> 
-> 
-> 
-> --
-> 
+> > Feedback, comments and ideas welcome.
+> Any chance you could implement <pkg>-remove target, parallel to
+> <pkg>-rebuild target? Because this is what I really miss in
+> Buildroot. I often find some packages useless, and I have to build
+> from scratch to remove them. I suppose others would also appreciate
+> "remove package" function.
+
+This is also on the TODO-list, and some experiments have been made to
+implement this, but it is a very different work than the one I'm
+currently proposing through this patch set. As Buildroot is designed
+today, it does not know which package installed which files in
+TARGET_DIR and STAGING_DIR, which makes it impossible for Buildroot to
+remove a particular package. The package infrastructure needs to be
+extended to maintain the list of the files installed by each package
+(this is relatively simple). But then, when removing a package, you
+need to ensure that all reverse-dependencies of this package are also
+removed, or at least recompiled. This is not completely trivial to
+implement.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
