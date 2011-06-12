@@ -1,30 +1,202 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 12 Jun 2011 23:06:10 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.08/no-mmu-blackfin
-In-Reply-To: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
-	(Thomas Petazzoni's message of "Mon, 30 May 2011 23:56:55 +0200")
-References: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fwne7oal.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 12 Jun 2011 21:59:59 +0200
+Subject: [Buildroot] [git commit] busybox: bump 1.18.x version
+Message-ID: <20110612210710.079E38733B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Hello,
- Thomas> Here are some changes related, or loosely related to non-MMU and
- Thomas> Blackfin support.
+commit: http://git.buildroot.net/buildroot/commit/?id=47d8534c1208e81ec45196599ea15a087432f52b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> The goal of the first commits is to allow a default configuration with
- Thomas> Blackfin selected to build properly (needs support for Blackfin
- Thomas> external toolchain, some Busybox configuration changes, etc.).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in                          |    2 +-
+ .../busybox-1.18.4/busybox-1.18.4-hush.patch       |  160 --------------------
+ 2 files changed, 1 insertions(+), 161 deletions(-)
+ delete mode 100644 package/busybox/busybox-1.18.4/busybox-1.18.4-hush.patch
 
- Thomas> Then, we clarify a bit the usage of shared/static libraries.
-
-Committed, thanks.
-
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 8e43202..283e59f 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -40,7 +40,7 @@ config BR2_BUSYBOX_VERSION
+ 	default "1.15.3"	if BR2_BUSYBOX_VERSION_1_15_X
+ 	default "1.16.2"	if BR2_BUSYBOX_VERSION_1_16_X
+ 	default "1.17.4"	if BR2_BUSYBOX_VERSION_1_17_X
+-	default "1.18.4"	if BR2_BUSYBOX_VERSION_1_18_X
++	default "1.18.5"	if BR2_BUSYBOX_VERSION_1_18_X
+ 
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+diff --git a/package/busybox/busybox-1.18.4/busybox-1.18.4-hush.patch b/package/busybox/busybox-1.18.4/busybox-1.18.4-hush.patch
+deleted file mode 100644
+index 4e995af..0000000
+--- a/package/busybox/busybox-1.18.4/busybox-1.18.4-hush.patch
++++ /dev/null
+@@ -1,160 +0,0 @@
+---- busybox-1.18.4/shell/hush.c
+-+++ busybox-1.18.4-hush/shell/hush.c
+-@@ -427,6 +427,15 @@ enum {
+- /* Used for initialization: o_string foo = NULL_O_STRING; */
+- #define NULL_O_STRING { NULL }
+- 
+-+#ifndef debug_printf_parse
+-+static const char *const assignment_flag[] = {
+-+	"MAYBE_ASSIGNMENT",
+-+	"DEFINITELY_ASSIGNMENT",
+-+	"NOT_ASSIGNMENT",
+-+	"WORD_IS_KEYWORD",
+-+};
+-+#endif
+-+
+- /* I can almost use ordinary FILE*.  Is open_memstream() universally
+-  * available?  Where is it documented? */
+- typedef struct in_str {
+-@@ -2885,24 +2894,24 @@ static const struct reserved_combo* matc
+- 	 */
+- 	static const struct reserved_combo reserved_list[] = {
+- # if ENABLE_HUSH_IF
+--		{ "!",     RES_NONE,  NOT_ASSIGNMENT , 0 },
+--		{ "if",    RES_IF,    WORD_IS_KEYWORD, FLAG_THEN | FLAG_START },
+--		{ "then",  RES_THEN,  WORD_IS_KEYWORD, FLAG_ELIF | FLAG_ELSE | FLAG_FI },
+--		{ "elif",  RES_ELIF,  WORD_IS_KEYWORD, FLAG_THEN },
+--		{ "else",  RES_ELSE,  WORD_IS_KEYWORD, FLAG_FI   },
+--		{ "fi",    RES_FI,    NOT_ASSIGNMENT , FLAG_END  },
+-+		{ "!",     RES_NONE,  NOT_ASSIGNMENT  , 0 },
+-+		{ "if",    RES_IF,    MAYBE_ASSIGNMENT, FLAG_THEN | FLAG_START },
+-+		{ "then",  RES_THEN,  MAYBE_ASSIGNMENT, FLAG_ELIF | FLAG_ELSE | FLAG_FI },
+-+		{ "elif",  RES_ELIF,  MAYBE_ASSIGNMENT, FLAG_THEN },
+-+		{ "else",  RES_ELSE,  MAYBE_ASSIGNMENT, FLAG_FI   },
+-+		{ "fi",    RES_FI,    NOT_ASSIGNMENT  , FLAG_END  },
+- # endif
+- # if ENABLE_HUSH_LOOPS
+--		{ "for",   RES_FOR,   NOT_ASSIGNMENT , FLAG_IN | FLAG_DO | FLAG_START },
+--		{ "while", RES_WHILE, WORD_IS_KEYWORD, FLAG_DO | FLAG_START },
+--		{ "until", RES_UNTIL, WORD_IS_KEYWORD, FLAG_DO | FLAG_START },
+--		{ "in",    RES_IN,    NOT_ASSIGNMENT , FLAG_DO   },
+--		{ "do",    RES_DO,    WORD_IS_KEYWORD, FLAG_DONE },
+--		{ "done",  RES_DONE,  NOT_ASSIGNMENT , FLAG_END  },
+-+		{ "for",   RES_FOR,   NOT_ASSIGNMENT  , FLAG_IN | FLAG_DO | FLAG_START },
+-+		{ "while", RES_WHILE, MAYBE_ASSIGNMENT, FLAG_DO | FLAG_START },
+-+		{ "until", RES_UNTIL, MAYBE_ASSIGNMENT, FLAG_DO | FLAG_START },
+-+		{ "in",    RES_IN,    NOT_ASSIGNMENT  , FLAG_DO   },
+-+		{ "do",    RES_DO,    MAYBE_ASSIGNMENT, FLAG_DONE },
+-+		{ "done",  RES_DONE,  NOT_ASSIGNMENT  , FLAG_END  },
+- # endif
+- # if ENABLE_HUSH_CASE
+--		{ "case",  RES_CASE,  NOT_ASSIGNMENT , FLAG_MATCH | FLAG_START },
+--		{ "esac",  RES_ESAC,  NOT_ASSIGNMENT , FLAG_END  },
+-+		{ "case",  RES_CASE,  NOT_ASSIGNMENT  , FLAG_MATCH | FLAG_START },
+-+		{ "esac",  RES_ESAC,  NOT_ASSIGNMENT  , FLAG_END  },
+- # endif
+- 	};
+- 	const struct reserved_combo *r;
+-@@ -2968,6 +2977,7 @@ static int reserved_word(o_string *word,
+- 	ctx->ctx_res_w = r->res;
+- 	ctx->old_flag = r->flag;
+- 	word->o_assignment = r->assignment_flag;
+-+	debug_printf_parse("word->o_assignment='%s'\n", assignment_flag[word->o_assignment]);
+- 
+- 	if (ctx->old_flag & FLAG_END) {
+- 		struct parse_context *old;
+-@@ -3034,18 +3044,6 @@ static int done_word(o_string *word, str
+- 		debug_printf_parse("word stored in rd_filename: '%s'\n", word->data);
+- 		ctx->pending_redirect = NULL;
+- 	} else {
+--		/* If this word wasn't an assignment, next ones definitely
+--		 * can't be assignments. Even if they look like ones. */
+--		if (word->o_assignment != DEFINITELY_ASSIGNMENT
+--		 && word->o_assignment != WORD_IS_KEYWORD
+--		) {
+--			word->o_assignment = NOT_ASSIGNMENT;
+--		} else {
+--			if (word->o_assignment == DEFINITELY_ASSIGNMENT)
+--				command->assignment_cnt++;
+--			word->o_assignment = MAYBE_ASSIGNMENT;
+--		}
+--
+- #if HAS_KEYWORDS
+- # if ENABLE_HUSH_CASE
+- 		if (ctx->ctx_dsemicolon
+-@@ -3065,8 +3063,9 @@ static int done_word(o_string *word, str
+- 		 && ctx->ctx_res_w != RES_CASE
+- # endif
+- 		) {
+--			debug_printf_parse("checking '%s' for reserved-ness\n", word->data);
+--			if (reserved_word(word, ctx)) {
+-+			int reserved = reserved_word(word, ctx);
+-+			debug_printf_parse("checking for reserved-ness: %d\n", reserved);
+-+			if (reserved) {
+- 				o_reset_to_empty_unquoted(word);
+- 				debug_printf_parse("done_word return %d\n",
+- 						(ctx->ctx_res_w == RES_SNTX));
+-@@ -3087,6 +3086,23 @@ static int done_word(o_string *word, str
+- 					"groups and arglists don't mix\n");
+- 			return 1;
+- 		}
+-+
+-+		/* If this word wasn't an assignment, next ones definitely
+-+		 * can't be assignments. Even if they look like ones. */
+-+		if (word->o_assignment != DEFINITELY_ASSIGNMENT
+-+		 && word->o_assignment != WORD_IS_KEYWORD
+-+		) {
+-+			word->o_assignment = NOT_ASSIGNMENT;
+-+		} else {
+-+			if (word->o_assignment == DEFINITELY_ASSIGNMENT) {
+-+				command->assignment_cnt++;
+-+				debug_printf_parse("++assignment_cnt=%d\n", command->assignment_cnt);
+-+			}
+-+			debug_printf_parse("word->o_assignment was:'%s'\n", assignment_flag[word->o_assignment]);
+-+			word->o_assignment = MAYBE_ASSIGNMENT;
+-+		}
+-+		debug_printf_parse("word->o_assignment='%s'\n", assignment_flag[word->o_assignment]);
+-+
+- 		if (word->has_quoted_part
+- 		 /* optimization: and if it's ("" or '') or ($v... or `cmd`...): */
+- 		 && (word->data[0] == '\0' || word->data[0] == SPECIAL_VAR_SYMBOL)
+-@@ -4105,6 +4121,7 @@ static struct pipe *parse_stream(char **
+- 			 && is_well_formed_var_name(dest.data, '=')
+- 			) {
+- 				dest.o_assignment = DEFINITELY_ASSIGNMENT;
+-+				debug_printf_parse("dest.o_assignment='%s'\n", assignment_flag[dest.o_assignment]);
+- 			}
+- 			continue;
+- 		}
+-@@ -4154,6 +4171,7 @@ static struct pipe *parse_stream(char **
+- 					heredoc_cnt = 0;
+- 				}
+- 				dest.o_assignment = MAYBE_ASSIGNMENT;
+-+				debug_printf_parse("dest.o_assignment='%s'\n", assignment_flag[dest.o_assignment]);
+- 				ch = ';';
+- 				/* note: if (is_blank) continue;
+- 				 * will still trigger for us */
+-@@ -4203,6 +4221,7 @@ static struct pipe *parse_stream(char **
+- 			}
+- 			done_pipe(&ctx, PIPE_SEQ);
+- 			dest.o_assignment = MAYBE_ASSIGNMENT;
+-+			debug_printf_parse("dest.o_assignment='%s'\n", assignment_flag[dest.o_assignment]);
+- 			/* Do we sit outside of any if's, loops or case's? */
+- 			if (!HAS_KEYWORDS
+- 			 IF_HAS_KEYWORDS(|| (ctx.ctx_res_w == RES_NONE && ctx.old_flag == 0))
+-@@ -4309,6 +4328,7 @@ static struct pipe *parse_stream(char **
+- 			/* ch is a special char and thus this word
+- 			 * cannot be an assignment */
+- 			dest.o_assignment = NOT_ASSIGNMENT;
+-+			debug_printf_parse("dest.o_assignment='%s'\n", assignment_flag[dest.o_assignment]);
+- 		}
+- 
+- 		/* Note: nommu_addchr(&ctx.as_string, ch) is already done */
+-@@ -4406,6 +4426,7 @@ static struct pipe *parse_stream(char **
+- 			/* We just finished a cmd. New one may start
+- 			 * with an assignment */
+- 			dest.o_assignment = MAYBE_ASSIGNMENT;
+-+			debug_printf_parse("dest.o_assignment='%s'\n", assignment_flag[dest.o_assignment]);
+- 			break;
+- 		case '&':
+- 			if (done_word(&dest, &ctx)) {
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
