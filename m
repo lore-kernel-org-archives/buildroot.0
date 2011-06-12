@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 12 Jun 2011 21:59:59 +0200
-Subject: [Buildroot] [git commit] busybox: tune config according to
-	BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-Message-ID: <20110612210710.99E5F8733B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Remove unused variable definitions
+Message-ID: <20110612210711.37CC48733B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +9,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=837a85e70c47fbd65a233f690a8c633de15f147c
+commit: http://git.buildroot.net/buildroot/commit/?id=97fafb9adc0fc8a3610fe28e8394accf96ad0a9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/busybox/busybox.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ Makefile |   10 ----------
+ 1 files changed, 0 insertions(+), 10 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 711d11b..ca963c1 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -125,6 +125,14 @@ define BUSYBOX_COPY_CONFIG
- 	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
- endef
+diff --git a/Makefile b/Makefile
+index f3bdf3b..20dd707 100644
+--- a/Makefile
++++ b/Makefile
+@@ -223,16 +223,6 @@ HOST_LIBEXT:=.lib
+ HOST_SHREXT:=.dll
+ endif
  
-+# Disable shadow passwords support if unsupported by the C library
-+ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
-+define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+endif
-+
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -138,6 +146,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_SET_MDEV)
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
-+	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
+-# The preferred type of libs we build for the target
+-ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-LIBTGTEXT=.a
+-#PREFERRED_LIB_FLAGS:=--disable-shared --enable-static
+-else
+-LIBTGTEXT=.so
+-#PREFERRED_LIB_FLAGS:=--disable-static --enable-shared
+-endif
+-PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
+-
+ ##############################################################
+ #
+ # The list of stuff to build for the target toolchain
 -- 
 1.7.3.4
