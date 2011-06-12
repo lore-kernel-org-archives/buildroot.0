@@ -1,7 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 12 Jun 2011 21:59:59 +0200
-Subject: [Buildroot] [git commit] Remove unused variable definitions
-Message-ID: <20110612210711.37CC48733B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Mark some packages as not usable on
+	non-MMU systems
+Message-ID: <20110612210710.DDBED8733B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +10,79 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97fafb9adc0fc8a3610fe28e8394accf96ad0a9c
+commit: http://git.buildroot.net/buildroot/commit/?id=d6993ef3d0aa971ff8349b7c8073a22b215bec51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |   10 ----------
- 1 files changed, 0 insertions(+), 10 deletions(-)
+ package/gpsd/Config.in               |    2 ++
+ package/input-event-daemon/Config.in |    2 ++
+ package/kbd/Config.in                |    2 ++
+ package/setserial/Config.in          |    2 ++
+ package/sysstat/Config.in            |    2 ++
+ 5 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f3bdf3b..20dd707 100644
---- a/Makefile
-+++ b/Makefile
-@@ -223,16 +223,6 @@ HOST_LIBEXT:=.lib
- HOST_SHREXT:=.dll
- endif
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 5e60bb0..d387abd 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_GPSD
+ 	bool "gpsd"
++	# Uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  gpsd is a service daemon that monitors one or more GPSes or AIS
+ 	  receivers attached to a host computer through serial or USB ports,
+diff --git a/package/input-event-daemon/Config.in b/package/input-event-daemon/Config.in
+index edf2886..84177fd 100644
+--- a/package/input-event-daemon/Config.in
++++ b/package/input-event-daemon/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_INPUT_EVENT_DAEMON
+ 	bool "input-event-daemon"
++	# Uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  input-event-daemon is a daemon which executes
+ 	  a user-defined command on input events, such as
+diff --git a/package/kbd/Config.in b/package/kbd/Config.in
+index 1fe4dff..a23b70a 100644
+--- a/package/kbd/Config.in
++++ b/package/kbd/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_KBD
+ 	bool "kbd"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
++	# Uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  Keytable files and keyboard utilities.
  
--# The preferred type of libs we build for the target
--ifeq ($(BR2_PREFER_STATIC_LIB),y)
--LIBTGTEXT=.a
--#PREFERRED_LIB_FLAGS:=--disable-shared --enable-static
--else
--LIBTGTEXT=.so
--#PREFERRED_LIB_FLAGS:=--disable-static --enable-shared
--endif
--PREFERRED_LIB_FLAGS:=--enable-static --enable-shared
--
- ##############################################################
- #
- # The list of stuff to build for the target toolchain
+diff --git a/package/setserial/Config.in b/package/setserial/Config.in
+index 2f6d6ee..cffe50e 100644
+--- a/package/setserial/Config.in
++++ b/package/setserial/Config.in
+@@ -1,4 +1,6 @@
+ config BR2_PACKAGE_SETSERIAL
+ 	bool "setserial"
++	# Uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	     Setserial : configuration of serial ports
+diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
+index 28274d9..6e62ff1 100644
+--- a/package/sysstat/Config.in
++++ b/package/sysstat/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_SYSSTAT
+ 	bool "sysstat"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
++	# Uses fork()
++	depends on BR2_USE_MMU
+ 	help
+           The sysstat utilities are a collection of performance
+           monitoring tools for Linux. These include sar, sadf, mpstat,
 -- 
 1.7.3.4
