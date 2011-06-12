@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 12 Jun 2011 21:59:59 +0200
-Subject: [Buildroot] [git commit] busybox: adjust configuration for non-MMU
-	targets
-Message-ID: <20110612210710.B7CD78733B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] blackfin: support external toolchains
+	provided by blackfin.uclibc.org
+Message-ID: <20110612210710.33F548733B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +10,112 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85e54a6b772ac7423286f6fa6a1a59e761edba54
+commit: http://git.buildroot.net/buildroot/commit/?id=32a0dcea5c77719b79b04000af0125afde2ba5aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The swaponoff applet doesn't build (and doesn't make sense) on non-MMU
-platforms.
-
-The ash shell cannot build on non-MMU platforms (because it uses
-fork()), so select the hush shell instead.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/busybox/busybox.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in   |   17 +++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |   37 ++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index ca963c1..b77880c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -133,6 +133,14 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
- endef
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 84e8ef8..1d8f561 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -152,6 +152,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+             - SH4A, uClibc, little endian
+             - SH4A, uClibc, big endian
+ 
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
++	bool "Blackfin.uclinux.org 2010RC1"
++	depends on BR2_bfin
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_INET_RPC
++	select BR2_USE_WCHAR
++	select BR2_PROGRAM_INVOCATION
++	select BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+        bool "Custom toolchain"
+        help
+@@ -191,6 +206,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
+ 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 9171e85..ef71ce0 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -189,6 +189,11 @@ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-g
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://www.codesourcery.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
++TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
++TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8386/
++TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2010R1-RC4.i386.tar.bz2
+ else
+ # A value must be set (even if unused), otherwise the
+ # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
+@@ -196,6 +201,37 @@ else
+ TOOLCHAIN_EXTERNAL_SOURCE=none
  endif
  
-+ifeq ($(BR2_USE_MMU),)
-+define BUSYBOX_DISABLE_MMU_APPLETS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+endif
++# Special handling for Blackfin toolchain, because of the split in two
++# tarballs, and the organization of tarball contents. The tarballs
++# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
++# which themselves contain the toolchain. This is why we strip more
++# components than usual.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
++$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
++	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1),$(TOOLCHAIN_EXTERNAL_SOURCE_1))
 +
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
++$(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2):
++	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_2),$(TOOLCHAIN_EXTERNAL_SOURCE_2))
++
++$(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2)
++	mkdir -p $(@D)
++	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_1))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
++	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
++		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
++ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
++	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
++	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
++	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
++	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
++else
++	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux
++	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc $(TOOLCHAIN_EXTERNAL_DIR)/tmp
++	mv $(TOOLCHAIN_EXTERNAL_DIR)/tmp/* $(TOOLCHAIN_EXTERNAL_DIR)/
++	rmdir $(TOOLCHAIN_EXTERNAL_DIR)/tmp
++endif
++	$(Q)touch $@
++else
+ # Download and extraction of a toolchain
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
+ 	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE),$(TOOLCHAIN_EXTERNAL_SOURCE))
+@@ -204,6 +240,7 @@ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
+ 	mkdir -p $(@D)
+ 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
+ 	$(Q)touch $@
++endif
  
-@@ -147,6 +155,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITBASE)
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
-+	$(BUSYBOX_DISABLE_MMU_APPLETS)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
+ # Checks for an already installed toolchain: check the toolchain
+ # location, check that it supports sysroot, and then verify that it
 -- 
 1.7.3.4
