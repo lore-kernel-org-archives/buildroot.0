@@ -1,7 +1,7 @@
 From: Murat Demirten <mdemirten@yh.com.tr>
-Date: Mon, 13 Jun 2011 12:40:54 +0300
-Subject: [Buildroot] [PATCH] Add package fribidi
-Message-ID: <BANLkTinpAtwa0MsVbvyR7cTrbewGt5Jc6A@mail.gmail.com>
+Date: Mon, 13 Jun 2011 13:18:56 +0300
+Subject: [Buildroot] [PATCH] Add package libgeotiff
+Message-ID: <BANLkTinABWL+chL8wDP3q=KYiKxjBf_daw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,77 +10,77 @@ To: buildroot@busybox.net
 
 Hi,
 
-I'm sending the patch for the new package fribidi.
+Libgeotiff is an open source library normally hosted on top of libtiff for
+reading, and writing GeoTIFF information tags.
 
-Fribidi is a free implementation of the Unicode BiDi algorithm for Hebrew
-and/or Arabic languages.
-It is required mostly by the applications which have I18n support.
+Regards,
 
+[master b7094a9] package: libgeotiff added.
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/libgeotiff/Config.in
+ create mode 100644 package/libgeotiff/libgeotiff.mk
 
-
-[master 7d6b6b6] GNU fribidi package added
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/fribidi/Config.in
- create mode 100644 package/fribidi/fribidi.mk
 ---
-
- package/Config.in          |    1 +
- package/fribidi/Config.in  |    6 ++++++
- package/fribidi/fribidi.mk |   17 +++++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/fribidi/Config.in
- create mode 100644 package/fribidi/fribidi.mk
+ package/Config.in                |    1 +
+ package/libgeotiff/Config.in     |    7 +++++++
+ package/libgeotiff/libgeotiff.mk |   18 ++++++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/libgeotiff/Config.in
+ create mode 100644 package/libgeotiff/libgeotiff.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 10d435c..81701d8 100644
+index 81701d8..7b43143 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -344,6 +344,7 @@ endmenu
-
- menu "Text and terminal handling"
- source "package/enchant/Config.in"
-+source "package/fribidi/Config.in"
- source "package/icu/Config.in"
- source "package/libiconv/Config.in"
- source "package/ncurses/Config.in"
-diff --git a/package/fribidi/Config.in b/package/fribidi/Config.in
+@@ -280,6 +280,7 @@ source "package/libart/Config.in"
+ source "package/libdrm/Config.in"
+ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
++source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
+ source "package/gdk-pixbuf/Config.in"
+ source "package/libgtk2/Config.in"
+diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
 new file mode 100644
-index 0000000..f8f4bc1
+index 0000000..47420fd
 --- /dev/null
-+++ b/package/fribidi/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_FRIBIDI
-+       bool "fribidi"
++++ b/package/libgeotiff/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBGEOTIFF
++       bool "libgeotiff"
++       select BR2_PACKAGE_TIFF
 +       help
-+         Free Implementation of the Unicode BiDi algorithm for Hebrew
-and/or Arabic languages.
++        Libgeotiff is an open source library normally hosted on top of
+libtiff for reading, and writing GeoTIFF information tags.
 +
-+         http://fribidi.org/download
-diff --git a/package/fribidi/fribidi.mk b/package/fribidi/fribidi.mk
++        http://geotiff.osgeo.org/
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/
+libgeotiff.mk
 new file mode 100644
-index 0000000..532d648
+index 0000000..742fd75
 --- /dev/null
-+++ b/package/fribidi/fribidi.mk
-@@ -0,0 +1,17 @@
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -0,0 +1,18 @@
 +#############################################################
 +#
-+# fribidi
++# libgeotiff
 +#
 +#############################################################
-+FRIBIDI_VERSION = 0.10.9
-+FRIBIDI_SOURCE = fribidi-$(FRIBIDI_VERSION).tar.gz
-+FRIBIDI_SITE = http://fribidi.org/download
-+FRIBIDI_INSTALL_STAGING = YES
-+FRIBIDI_INSTALL_TARGET = YES
++LIBGEOTIFF_VERSION = 1.3.0
++LIBGEOTIFF_SOURCE = libgeotiff-$(LIBGEOTIFF_VERSION).tar.gz
++LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
++LIBGEOTIFF_DEPENDENCIES = tiff
++LIBGEOTIFF_INSTALL_STAGING = YES
++LIBGEOTIFF_INSTALL_TARGET = YES
 +
-+define FRIBIDI_INSTALL_TARGET_CMDS
++define LIBGEOTIFF_INSTALL_TARGET_CMDS
 +       mkdir -p $(TARGET_DIR)/usr/lib
-+       cp -dpf $(@D)/.libs/libfribidi.so* $(TARGET_DIR)/usr/lib/
++       cp -dpf $(@D)/.libs/libgeotiff.so* $(TARGET_DIR)/usr/lib/
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,fribidi))
++$(eval $(call AUTOTARGETS,package,libgeotiff))
 -- 
 1.7.5.4
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110613/5ce79455/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110613/3df2c59a/attachment.html>
