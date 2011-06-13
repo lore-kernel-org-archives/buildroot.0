@@ -1,86 +1,92 @@
-From: Murat Demirten <mdemirten@yh.com.tr>
-Date: Mon, 13 Jun 2011 13:18:56 +0300
-Subject: [Buildroot] [PATCH] Add package libgeotiff
-Message-ID: <BANLkTinABWL+chL8wDP3q=KYiKxjBf_daw@mail.gmail.com>
+From: Robin Holt <holt@sgi.com>
+Date: Mon, 13 Jun 2011 07:14:05 -0500
+Subject: [Buildroot] [PATCH] Introduce argtable2 support.
+Message-ID: <20110613121404.GC3525@sgi.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Libgeotiff is an open source library normally hosted on top of libtiff for
-reading, and writing GeoTIFF information tags.
+The argtable2 sourceforge project provides easy parsing of command line
+options and file contents.
 
-Regards,
-
-[master b7094a9] package: libgeotiff added.
- 3 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/libgeotiff/Config.in
- create mode 100644 package/libgeotiff/libgeotiff.mk
-
+Signed-off-by: Robin Holt <holt@sgi.com>
 ---
- package/Config.in                |    1 +
- package/libgeotiff/Config.in     |    7 +++++++
- package/libgeotiff/libgeotiff.mk |   18 ++++++++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/libgeotiff/Config.in
- create mode 100644 package/libgeotiff/libgeotiff.mk
+
+I added libargtable2 into the Packages->Libraries->Other.  Its purpose
+is to parse text.  It is really not of the clase of the other libraries
+in libraries->Text...  If you would rather have it there, please change
+it for me or let me know and I will change it.
+
+
+ package/Config.in                 |    1 +
+ package/argtable2/Config.in       |    7 +++++++
+ package/argtable2/libargtable2.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/argtable2/Config.in
+ create mode 100644 package/argtable2/libargtable2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 81701d8..7b43143 100644
+index 10d435c..e52ee33 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -280,6 +280,7 @@ source "package/libart/Config.in"
- source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
- source "package/libgail/Config.in"
-+source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
- source "package/gdk-pixbuf/Config.in"
- source "package/libgtk2/Config.in"
-diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
+@@ -329,6 +329,7 @@ source "package/libupnp/Config.in"
+ endmenu
+ 
+ menu "Other"
++source "package/argtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
+diff --git a/package/argtable2/Config.in b/package/argtable2/Config.in
 new file mode 100644
-index 0000000..47420fd
+index 0000000..42d067b
 --- /dev/null
-+++ b/package/libgeotiff/Config.in
++++ b/package/argtable2/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBGEOTIFF
-+       bool "libgeotiff"
-+       select BR2_PACKAGE_TIFF
-+       help
-+        Libgeotiff is an open source library normally hosted on top of
-libtiff for reading, and writing GeoTIFF information tags.
++config BR2_PACKAGE_LIBARGTABLE2
++	bool "libargtable2"
++	help
++	  A greatly simplified and yet quite robust argument parsing
++	  set of library calls.
 +
-+        http://geotiff.osgeo.org/
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/
-libgeotiff.mk
++	  http://argtable.sourceforge.net/
+diff --git a/package/argtable2/libargtable2.mk b/package/argtable2/libargtable2.mk
 new file mode 100644
-index 0000000..742fd75
+index 0000000..79cfce8
 --- /dev/null
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -0,0 +1,18 @@
++++ b/package/argtable2/libargtable2.mk
+@@ -0,0 +1,31 @@
 +#############################################################
 +#
-+# libgeotiff
++# argtable2 from sourceforge
 +#
 +#############################################################
-+LIBGEOTIFF_VERSION = 1.3.0
-+LIBGEOTIFF_SOURCE = libgeotiff-$(LIBGEOTIFF_VERSION).tar.gz
-+LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
-+LIBGEOTIFF_DEPENDENCIES = tiff
-+LIBGEOTIFF_INSTALL_STAGING = YES
-+LIBGEOTIFF_INSTALL_TARGET = YES
 +
-+define LIBGEOTIFF_INSTALL_TARGET_CMDS
-+       mkdir -p $(TARGET_DIR)/usr/lib
-+       cp -dpf $(@D)/.libs/libgeotiff.so* $(TARGET_DIR)/usr/lib/
++LIBARGTABLE2_VERSION = 13
++LIBARGTABLE2_SOURCE = argtable2-$(LIBARGTABLE2_VERSION).tar.gz
++LIBARGTABLE2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/argtable/
++
++LIBARGTABLE2_INSTALL_STAGING = YES
++LIBARGTABLE2_CONF_OPT= --program-prefix="" \
++		--enable-shared \
++		--enable-static \
++		--disable-nls \
++		--disable-example \
++		--disable-kernel-module \
++		--enable-lib \
++		--enable-util
++
++define LIBARGTABLE2_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libargtable2.so* $(TARGET_DIR)/usr/lib/
 +endef
 +
-+$(eval $(call AUTOTARGETS,package,libgeotiff))
--- 
-1.7.5.4
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110613/3df2c59a/attachment.html>
++define LIBARGTABLE2_CLEAN_CMDS
++	-$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) uninstall
++	-$(MAKE) -C $(@D) clean
++	rm -f $(TARGET_DIR)/usr/lib/libargtable2.so*
++endef
++
++$(eval $(call AUTOTARGETS,package,libargtable2))
