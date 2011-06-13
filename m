@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jun 2011 00:16:30 +0200
-Subject: [Buildroot] [PATCH 7/8] package/autotools: add --{enable,
- disable}-{shared, static} automatically
-In-Reply-To: <87k4cq7rdq.fsf@macbook.be.48ers.dk>
-References: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
-	<cover.1306792524.git.thomas.petazzoni@free-electrons.com>
-	<dac0f2005b38138ceb18943190580c3bd392a4fa.1306792524.git.thomas.petazzoni@free-electrons.com>
-	<87k4cq7rdq.fsf@macbook.be.48ers.dk>
-Message-ID: <20110613001630.1281e5c3@skate>
+From: Stefano Canepa <sc@linux.it>
+Date: Mon, 13 Jun 2011 10:04:15 +0200
+Subject: [Buildroot] New to buildroot with problems adding nut
+Message-ID: <BANLkTi=x+eEp6cf9dTrp6O38YMhrSjRjGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Jun 2011 21:59:29 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Hi all,
+I'm new to buildroot, I'm using it to build an initramfs based
+distribution to deploy an application developed by my firm.
 
-> But it does mean that autotools stuff now gets built twice, increasing
-> the build time..
+Our application needs nut to check the UPS connected via USB to our
+computer, if I run our previous installation, that is based on RedHat
+7, nut works, if I run the newly created distribution, nut is not
+capable to found HID device. I check nut compile options on RedHat 7
+and they are the same I passed to busybox. I tried with nut 2.0.5 (the
+same distributed with RedHat 7) and with last tarball. The result is
+the same HID ups not found. What do I need to enable to have hid
+working properly? I checked kernel config but I was unable to find out
+something usefull.
 
-It's true that I haven't checked the impact on the build time. Does it
-really build libraries twice ? Isn't only the link stage performed
-twice ?
+TIA
+Stefano Canepa
 
-If the impact on the build time is too high, then we could probably
-make the static library generation conditional. I enabled it so that
-the staging directory contains static libraries, which allows users to
-statically link their programs against some libraries.
+PS: sorry for my bad English
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Stefano Canepa aka sc: sc at linux.it - http://www.stefanocanepa.it
+Three great virtues of a programmer: laziness, impatience and hubris.
+Le tre grandi virt? di un programmatore: pigrizia, impazienza e
+arroganza. (Larry Wall)
