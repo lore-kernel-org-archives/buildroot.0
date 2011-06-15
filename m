@@ -1,33 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 15 Jun 2011 09:33:24 +0200
-Subject: [Buildroot] [PATCH 7/8] package/autotools: add --{enable,
-	disable}-{shared, static} automatically
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C603216F@ex-mb1.corp.adtran.com>
- (ANDY KENNEDY's message of "Wed, 15 Jun 2011 07:28:16 +0000")
-References: <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
- <cover.1306792524.git.thomas.petazzoni@free-electrons.com>
- <dac0f2005b38138ceb18943190580c3bd392a4fa.1306792524.git.thomas.petazzoni@free-electrons.com>
- <87k4cq7rdq.fsf@macbook.be.48ers.dk> <20110613001630.1281e5c3@skate>
- <874o3t9zs2.fsf@macbook.be.48ers.dk> <20110614085430.3229006e@skate>
- <87wrgn8usg.fsf@macbook.be.48ers.dk> <20110615084756.5d787906@skate>
- <F9C551623D2CBB4C9488801D14F864C603216F@ex-mb1.corp.adtran.com>
-Message-ID: <87lix38s6z.fsf@macbook.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 15 Jun 2011 17:47:58 +0200
+Subject: [Buildroot] [PATCH 2/2] netsnmp: allow not to install MIB files
+In-Reply-To: <1308152878-14593-1-git-send-email-luca@lucaceresoli.net>
+References: <1308152878-14593-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1308152878-14593-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/netsnmp/Config.in  |    7 +++++++
+ package/netsnmp/netsnmp.mk |    4 ++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-Hi,
-
- ANDY> I need the static libs.  If no one else does, I do.  If you do
- ANDY> something like that, please make it configurable so I can get
- ANDY> back to the old way.
-
-BR2_PREFER_STATIC_LIB is not going away. This is purely about the
-semantics of !BR2_PREFER_STATIC_LIB.
-
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 5a3e9aa..2aa537e 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -6,3 +6,10 @@ config BR2_PACKAGE_NETSNMP
+ 
+ 	  http://net-snmp.sourceforge.net/
+ 
++config BR2_PACKAGE_NETSNMP_INSTALL_MIBS
++	bool "Install MIB files on target"
++	default y
++	depends on BR2_PACKAGE_NETSNMP
++	help
++	  The net-snmp package contains a selection of MIB files.
++	  Say yes if you want those MIB files installed on the target.
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 5704327..4eae544 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -43,6 +43,10 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	NETSNMP_CONF_OPT += --disable-manuals
+ endif
+ 
++ifneq ($(BR2_PACKAGE_NETSNMP_INSTALL_MIBS),y)
++	NETSNMP_CONF_OPT += --disable-mibs
++endif
++
+ # Remove IPv6 MIBs if there's no IPv6
+ ifneq ($(BR2_INET_IPV6),y)
+ define NETSNMP_REMOVE_MIBS_IPV6
 -- 
-Bye, Peter Korsgaard
+1.7.4.1
