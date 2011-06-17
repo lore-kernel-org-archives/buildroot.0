@@ -1,46 +1,80 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 Jun 2011 10:59:33 +0200
-Subject: [Buildroot] [git commit] bmon: link dynamically unless explicitly
-	requested otherwise
-Message-ID: <20110617090059.9B3B188CAE@busybox.osuosl.org>
+From: Daniel Mack <zonque@gmail.com>
+Date: Fri, 17 Jun 2011 11:07:28 +0200
+Subject: [Buildroot] [PATCH] Qt: add config option to build
+	libQtDeclarative module
+In-Reply-To: <BANLkTi=cj-ZdHnL7iKo6aMVXTbMra4w-ug@mail.gmail.com>
+References: <1306858594-28995-1-git-send-email-zonque@gmail.com>
+ <BANLkTi=cj-ZdHnL7iKo6aMVXTbMra4w-ug@mail.gmail.com>
+Message-ID: <BANLkTikE-g_4XiWxipaqO+PYQJy9Et8GiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ping ...
 
-commit: http://git.buildroot.net/buildroot/commit/?id=587863b039d3e9f1daabcada723450d633333473
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit 009d8fceab4d (add --{enable,disable}-{shared,static} automatically)
-caused us to pass --enable-static in the normal (non-static) case as well,
-which bmon interpretes as a request to link the bmon program statically,
-bloating the image.
-
-Fix it by passing an extra --disable-static to bmon configure to nullify
-this.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bmon/bmon.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
-
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index e9b10b0..97d4b02 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -9,6 +9,11 @@ BMON_SOURCE = bmon-$(BMON_VERSION).tar.gz
- BMON_SITE = http://distfiles.gentoo.org/distfiles
- BMON_DEPENDENCIES = ncurses
- 
-+ifneq ($(BR2_PREFER_STATIC_LIB),y)
-+# link dynamically unless explicitly requested otherwise
-+BMON_CONF_OPT += --disable-static
-+endif
-+
- define BMON_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/bmon
- endef
--- 
-1.7.3.4
+On Tue, Jun 7, 2011 at 10:36 AM, Daniel Mack <zonque@gmail.com> wrote:
+> I just wanted to ping on this one.
+> I haven't contributed to BR2 for awhile, so I don't know who's able to
+> pick and commit this one?
+>
+> Thanks,
+> Daniel
+>
+>
+> On Tue, May 31, 2011 at 6:16 PM, Daniel Mack <zonque@gmail.com> wrote:
+>> Signed-off-by: Daniel Mack <zonque@gmail.com>
+>> ---
+>> ?package/qt/Config.in | ? ?7 +++++++
+>> ?package/qt/qt.mk ? ? | ? ?9 +++++++++
+>> ?2 files changed, 16 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/package/qt/Config.in b/package/qt/Config.in
+>> index 4a3945c..214f140 100644
+>> --- a/package/qt/Config.in
+>> +++ b/package/qt/Config.in
+>> @@ -378,4 +378,11 @@ config BR2_PACKAGE_QT_SCRIPTTOOLS
+>> ? ? ? ? ?Build the Qt Script Tools module.
+>> ? ? ? ? ?if unsure, say n.
+>>
+>> +config BR2_PACKAGE_QT_DECLARATIVE
+>> + ? ? ? bool "Declarative module"
+>> + ? ? ? depends on BR2_PACKAGE_QT_GUI_MODULE
+>> + ? ? ? help
+>> + ? ? ? ? Build the Qt Declarative Module for qml support
+>> + ? ? ? ? if unsure, say n.
+>> +
+>> ?endif # BR2_PACKAGE_QT
+>> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+>> index 8bcbd3f..e8b7a49 100644
+>> --- a/package/qt/qt.mk
+>> +++ b/package/qt/qt.mk
+>> @@ -398,6 +398,12 @@ else
+>> ?QT_CONFIGURE_OPTS += -no-stl
+>> ?endif
+>>
+>> +ifeq ($(BR2_PACKAGE_QT_DECLARATIVE),y)
+>> +QT_CONFIGURE_OPTS += -declarative
+>> +else
+>> +QT_CONFIGURE_OPTS += -no-declarative
+>> +endif
+>> +
+>> ?# ccache and precompiled headers don't play well together
+>> ?ifeq ($(BR2_CCACHE),y)
+>> ?QT_CONFIGURE_OPTS += -no-pch
+>> @@ -535,6 +541,9 @@ endif
+>> ?ifeq ($(BR2_PACKAGE_QT_SCRIPTTOOLS),y)
+>> ?QT_INSTALL_LIBS ? ?+= QtScriptTools
+>> ?endif
+>> +ifeq ($(BR2_PACKAGE_QT_DECLARATIVE),y)
+>> +QT_INSTALL_LIBS ? ?+= QtDeclarative
+>> +endif
+>> ?ifeq ($(BR2_PACKAGE_QT_QT3SUPPORT),y)
+>> ?QT_INSTALL_LIBS ? ?+= Qt3Support
+>> ?endif
+>> --
+>> 1.7.5.1
+>>
+>>
+>
