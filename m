@@ -1,59 +1,38 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 16 Jun 2011 17:27:13 +0200
-Subject: [Buildroot] [PATCH v2 3/3] netsnmp: allow not to install MIB files
-In-Reply-To: <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
-References: <1308152878-14593-1-git-send-email-luca@lucaceresoli.net>
- <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1308238033-20127-4-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 17 Jun 2011 10:59:33 +0200
+Subject: [Buildroot] [git commit] bmon: add optional alsa support
+Message-ID: <20110617090100.0471A88CAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+commit: http://git.buildroot.net/buildroot/commit/?id=85aed3e325e953025426fdde0447359ab7a4c8a6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
-Changes in v2:
- - MIB installation is forcibly enabled with the MIB loading code; otherwise
-   net-snmp would loudly flood the console for missing MIBs.
+ package/bmon/bmon.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- package/netsnmp/Config.in  |    8 ++++++++
- package/netsnmp/netsnmp.mk |    4 ++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
-
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 6f88b03..a6a768c 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -10,6 +10,14 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING
- 	bool "Enable MIB loading code"
- 	default y
- 	depends on BR2_PACKAGE_NETSNMP
-+	select BR2_PACKAGE_NETSNMP_INSTALL_MIBS
- 	help
- 	  Include code that parses and manipulates the mib files.
- 
-+config BR2_PACKAGE_NETSNMP_INSTALL_MIBS
-+	bool "Install MIB files on target"
-+	default y
-+	depends on BR2_PACKAGE_NETSNMP
-+	help
-+	  The net-snmp package contains a selection of MIB files.
-+	  Say yes if you want those MIB files installed on the target.
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index c0e631b..09111bf 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -47,6 +47,10 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING),y)
- 	NETSNMP_CONF_OPT += --disable-mib-loading
+diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
+index aa097fb..ef2dcf0 100644
+--- a/package/bmon/bmon.mk
++++ b/package/bmon/bmon.mk
+@@ -14,6 +14,12 @@ else
+ BMON_CONF_OPT += --disable-curses
  endif
  
-+ifneq ($(BR2_PACKAGE_NETSNMP_INSTALL_MIBS),y)
-+	NETSNMP_CONF_OPT += --disable-mibs
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++BMON_DEPENDENCIES += alsa-lib
++else
++BMON_CONF_OPT += --disable-asound
 +endif
 +
- # Remove IPv6 MIBs if there's no IPv6
- ifneq ($(BR2_INET_IPV6),y)
- define NETSNMP_REMOVE_MIBS_IPV6
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ # link dynamically unless explicitly requested otherwise
+ BMON_CONF_OPT += --disable-static
 -- 
-1.7.4.1
+1.7.3.4
