@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 20 Jun 2011 17:59:55 +0200
-Subject: [Buildroot] [PATCH 2/2] berkeleydb: fix build of shared libraries
+Date: Mon, 20 Jun 2011 17:59:54 +0200
+Subject: [Buildroot] [PATCH 1/2] ffmpeg: fix build of shared libraries
 In-Reply-To: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net>
 References: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1308585595-3948-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1308585595-3948-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ This broke Autotools packages that override _CONFIGURE_CMDS.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/berkeleydb/berkeleydb.mk |    1 +
+ package/multimedia/ffmpeg/ffmpeg.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 1bac745..e80f66f 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -38,6 +38,7 @@ define BERKELEYDB_CONFIGURE_CMDS
- 		--disable-rpc \
- 		--disable-tcl \
- 		--disable-compat185 \
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index babb16a..b50503b 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -167,6 +167,7 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--arch=$(BR2_ARCH) \
+ 		--target-os=linux \
+ 		--extra-cflags=-fPIC \
 +		$(SHARED_STATIC_LIBS_OPTS) \
- 		--with-pic \
+ 		$(FFMPEG_CONF_OPT) \
  	)
- 	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
+ endef
 -- 
 1.7.4.1
