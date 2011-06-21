@@ -1,7 +1,14 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Jun 2011 17:13:20 +0200
-Subject: [Buildroot] [git commit] package: add yajl
-Message-ID: <20110621153045.5F78488D84@busybox.osuosl.org>
+From: Heiko Zuerker <heiko@zuerker.org>
+Date: Tue, 21 Jun 2011 12:40:02 -0500
+Subject: [Buildroot] [PATCH 1/2] Add package acl
+In-Reply-To: <4E006EF0.9080408@visionsystems.de>
+References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
+ <1306779390-19947-2-git-send-email-zonque@gmail.com>
+ <20110530210244.5bd309aa@surf>
+ <BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
+ <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
+ <4E006EF0.9080408@visionsystems.de>
+Message-ID: <20110621124002.Horde.FlRsXGms4ABOANdyT8bFvAA@www.home.zuerker.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +16,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9f637383d1c4fc5161494460a0ce2d04f9066a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Quoting Yegor Yefremov <yegor_sub1@visionsystems.de>:
 
-yajl is Yet Another JSON Library.
+> Am 31.05.2011 14:47, schrieb Heiko Zuerker:
+>>
+>> Quoting Daniel Mack <zonque@gmail.com>:
+>>
+>>> On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
+>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>> On Mon, 30 May 2011 20:16:29 +0200
+>>>> Daniel Mack <zonque@gmail.com> wrote:
+>>>>
+>>>>> +define ACL_INSTALL_TARGET_CMDS
+>>>>> +     $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl  
+>>>>> $(TARGET_DIR)/usr/bin/
+>>>>> +     $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl  
+>>>>> $(TARGET_DIR)/usr/bin/
+>>>>> +     $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so*  
+>>>>> $(STAGING_DIR)/usr/lib/
+>>>>> +endef
+>>>>> +
+>>>>> +define ACL_INSTALL_STAGING_CMDS
+>>>>> +     test -d $(STAGING_DIR)/usr/include/acl/ || mkdir  
+>>>>> $(STAGING_DIR)/usr/include/acl/
+>>>>> +     $(INSTALL) -m 0644 -D $(@D)/include/*.h  
+>>>>> $(STAGING_DIR)/usr/include/acl/
+>>>>> +     $(SED) s,sys/acl.h,acl/acl.h, -i  
+>>>>> $(STAGING_DIR)/usr/include/acl/libacl.h
+>>>>> +endef
+>>>>
+>>>> Any reason to not use the default "make install" behaviour of the
+>>>> package ? (And ditto for the attr package).
+>>>
+>>> The libtool crap failed for cross compilation in these cases, so these
+>>> workarounds are unfortunately necessary.
+>>
+>> Actually this isn't necessary, please see my version of the patches.
+>>
+>
+> Any update on this issue?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in      |    3 ++-
- package/yajl/Config.in |    8 ++++++++
- package/yajl/yajl.mk   |   11 +++++++++++
- 3 files changed, 21 insertions(+), 1 deletions(-)
- create mode 100644 package/yajl/Config.in
- create mode 100644 package/yajl/yajl.mk
+I don't believe that either version of the package has been added.
 
-diff --git a/package/Config.in b/package/Config.in
-index 10d435c..85d50ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -354,13 +354,14 @@ source "package/readline/Config.in"
- source "package/slang/Config.in"
- endmenu
- 
--menu "XML"
-+menu "JSON/XML"
- source "package/expat/Config.in"
- source "package/ezxml/Config.in"
- source "package/libxml-parser-perl/Config.in"
- source "package/libxml2/Config.in"
- source "package/libxslt/Config.in"
- source "package/xerces/Config.in"
-+source "package/yajl/Config.in"
- endmenu
- 
- endmenu
-diff --git a/package/yajl/Config.in b/package/yajl/Config.in
-new file mode 100644
-index 0000000..be2c133
---- /dev/null
-+++ b/package/yajl/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_YAJL
-+	bool "yajl"
-+	help
-+	  Yet Another JSON Library. YAJL is a small event-driven
-+	  (SAX-style) JSON parser written in ANSI C, and a small
-+	  validating JSON generator.
-+
-+	  http://lloyd.github.com/yajl/
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-new file mode 100644
-index 0000000..e67a7da
---- /dev/null
-+++ b/package/yajl/yajl.mk
-@@ -0,0 +1,11 @@
-+################################################################################
-+#
-+# yajl
-+#
-+################################################################################
-+
-+YAJL_VERSION = 2.0.2
-+YAJL_SITE = git://github.com/lloyd/yajl.git
-+YAJL_INSTALL_STAGING = YES
-+
-+$(eval $(call CMAKETARGETS,package,yajl))
 -- 
-1.7.3.4
+
+Regards
+   Heiko Zuerker
+   http://www.devil-linux.org
