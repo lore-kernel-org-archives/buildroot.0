@@ -1,31 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 22 Jun 2011 00:21:39 +0200
-Subject: [Buildroot] [PATCH v3] ext-toolchain-wrapper.c: Handle an
-	arbitrary amount of arguments
-In-Reply-To: <1308686067-6091-1-git-send-email-daniel.nystrom@timeterminal.se>
- ("Daniel =?utf-8?Q?Nystr=C3=B6m=22's?= message of "Tue, 21 Jun 2011
- 21:54:27 +0200")
-References: <1308686067-6091-1-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <874o3iddvw.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Wed, 22 Jun 2011 00:22:05 +0200
+Subject: [Buildroot] [PATCH] ext-toolchain-wrapper.c: Handle an
+ arbitrary amount of arguments
+In-Reply-To: <BANLkTi=QFr+OtRR-LYzkdMTO9QmxTcwihg@mail.gmail.com>
+References: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
+ <BANLkTim9Hm8zyVDSs5_cfu-fWh2Z=z3Xtw@mail.gmail.com>
+ <BANLkTi=QFr+OtRR-LYzkdMTO9QmxTcwihg@mail.gmail.com>
+Message-ID: <BANLkTinRzg-CHke9yF8Fm_i==JAgGqhECA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Nystr?m <daniel.nystrom@timeterminal.se> writes:
+On 21 June 2011 20:12, Mike Frysinger <vapier@gentoo.org> wrote:
+> free(NULL) is not invalid, it's a nop
 
- Daniel> Even though MAXARGS 1000 seems large, it wasn't enought for at least
- Daniel> QtWebKit package. This new version does not have any predefined limits.
-
- Daniel> Closes #3907
-
- Daniel> Many thanks to Thomas for tracing the source of the build error.
-
- Daniel> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
- Daniel> Reported-by: Thomas Bj?rk <thomas.bjork@home.se>
-
-Committed, thanks!
-
--- 
-Bye, Peter Korsgaard
+I didn't know. Thanks!
