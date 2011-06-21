@@ -1,7 +1,7 @@
-From: Daniel Mack <zonque@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 21 Jun 2011 11:39:37 +0200
-Subject: [Buildroot] [git commit] packages: dbus: use version 1.4.8
-Message-ID: <20110621094118.CB69788D82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libdnet: fix python module build
+Message-ID: <20110621094118.9D45D88C8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,70 +9,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c9dbb3c680d15fb143db3df8ce6795eff675a9c
+commit: http://git.buildroot.net/buildroot/commit/?id=21438ec500ca0962fa0f2572a6212786674d5e32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The exisiting br2 patch can be dropped.
+Ensure the correct compiler/linker flags are used.
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../dbus/dbus-1.2.12-launch-helper-xml-fix.patch   |   33 --------------------
- package/dbus/dbus.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 34 deletions(-)
- delete mode 100644 package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
+ package/libdnet/libdnet-002-python-makefile.patch |   12 +++++++++---
+ package/libdnet/libdnet.mk                        |    2 +-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch b/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
-deleted file mode 100644
-index bf6b4ae..0000000
---- a/package/dbus/dbus-1.2.12-launch-helper-xml-fix.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--dbus-daemon-launch-helper: fix build with libxml
--
--dbus-daemon-launch-helper links with the trival config parser, which
--doesn't provide bus_config_parser_check_doctype(), like the big parser does.
--The libxml loader unfortunately wants to call it, so this breaks the build.
--
--Fix it by including a dummy bus_config_parser_check_doctype() in the trivial
--config parser.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- bus/config-parser-trivial.c |    8 ++++++++
-- 1 file changed, 8 insertions(+)
--
--Index: dbus-1.2.12/bus/config-parser-trivial.c
--===================================================================
----- dbus-1.2.12.orig/bus/config-parser-trivial.c
--+++ dbus-1.2.12/bus/config-parser-trivial.c
--@@ -310,6 +310,14 @@
--   return &parser->service_dirs;
-- }
-- 
--+dbus_bool_t
--+bus_config_parser_check_doctype (BusConfigParser   *parser,
--+                                 const char        *doctype,
--+                                 DBusError         *error)
--+{
--+    return TRUE;
--+}
--+
-- #ifdef DBUS_BUILD_TESTS
-- #include <stdio.h>
-- #include "test.h"
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 153e72b..7d75ca8 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -3,7 +3,7 @@
- # dbus
- #
- #############################################################
--DBUS_VERSION = 1.2.24
-+DBUS_VERSION = 1.4.8
- DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
- DBUS_INSTALL_STAGING = YES
+diff --git a/package/libdnet/libdnet-002-python-makefile.patch b/package/libdnet/libdnet-002-python-makefile.patch
+index 4c8729d..fb41e43 100644
+--- a/package/libdnet/libdnet-002-python-makefile.patch
++++ b/package/libdnet/libdnet-002-python-makefile.patch
+@@ -1,10 +1,16 @@
+---- a/python/Makefile.am	2006-01-15 18:08:23.000000000 +1100
+-+++ b/python/Makefile.am	2008-09-04 15:25:52.000000000 +1000
++---
++ python/Makefile.am |    1 +
++ 1 file changed, 1 insertion(+)
++
++Index: libdnet-1.11/python/Makefile.am
++===================================================================
++--- libdnet-1.11.orig/python/Makefile.am
+++++ libdnet-1.11/python/Makefile.am
+ @@ -11,6 +11,7 @@
+  	pyrexc $(srcdir)/dnet.pyx
+  
+  python-build: $(srcdir)/dnet.c
+-+	CC="$(CC)" LDSHARED="$(CC) -shared" $(PYTHON) setup.py build_ext -I$(PYINCDIR)
+++	CC="$(CC)" LDSHARED="$(CC) -shared" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(PYTHON) setup.py build_ext -I$(PYINCDIR) -L$(PYLIBDIR)
+  	$(PYTHON) setup.py build
+  	touch python-build
+  
+diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
+index 649db31..ae4c9ff 100644
+--- a/package/libdnet/libdnet.mk
++++ b/package/libdnet/libdnet.mk
+@@ -17,7 +17,7 @@ LIBDNET_CONF_OPT = \
+ ifneq ($(BR2_PACKAGE_LIBDNET_PYTHON),)
+ LIBDNET_DEPENDENCIES = python
+ LIBDNET_CONF_OPT += --with-python
+-LIBDNET_MAKE_OPT = PYTHON=python$(PYTHON_VERSION_MAJOR) PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)
++LIBDNET_MAKE_OPT = PYINCDIR=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) PYLIBDIR=$(STAGING_DIR)/usr/lib
+ LIBDNET_INSTALL_TARGET_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(TARGET_DIR) INSTALL_STRIP_FLAG=-s install-exec
+ LIBDNET_INSTALL_STAGING_OPT = $(LIBDNET_MAKE_OPT) DESTDIR=$(STAGING_DIR) install
+ endif
 -- 
 1.7.3.4
