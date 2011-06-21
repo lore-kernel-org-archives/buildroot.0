@@ -1,30 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 21 Jun 2011 13:29:32 +0200
-Subject: [Buildroot] [PATCH 0/2] Fix build of shared libraries
-In-Reply-To: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Mon, 20 Jun 2011 17:59:53 +0200")
-References: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87hb7jctib.fsf@macbook.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 21 Jun 2011 13:48:16 +0200
+Subject: [Buildroot] [git commit] berkeleydb: fix build of shared libraries
+Message-ID: <20110621114917.A301588D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Luca> Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=b1d02f73146731ce1f14ee81a2e92e3f8ab4d317
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> 009d8fceab4 and 0a5e5534cbf8 broke shared library building for
- Luca> those AUTOTOOLS packaged that override _CONFIGURE_CMDS.
+009d8fceab4 and 0a5e5534cbf8 moved the --enable-static configure flag
+from package files to the default _CONFIGURE_CMDS in
+package/Makefile.autotools.in.
+This broke Autotools packages that override _CONFIGURE_CMDS.
 
- Luca> According to my grep'ing, the affetced packages should be only ffmpeg and
- Luca> berkeleydb. These two patched fixes them.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/berkeleydb/berkeleydb.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Luca> Please note I only could test ffmpeg, but the change is pretty trivial so
- Luca> hopefully it works for berkeleydb as well.
-
-Good catch - Committed both, thanks!
-
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index 1bac745..e80f66f 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -38,6 +38,7 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 		--disable-rpc \
+ 		--disable-tcl \
+ 		--disable-compat185 \
++		$(SHARED_STATIC_LIBS_OPTS) \
+ 		--with-pic \
+ 	)
+ 	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
