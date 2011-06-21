@@ -1,36 +1,72 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 20 Jun 2011 17:59:54 +0200
-Subject: [Buildroot] [PATCH 1/2] ffmpeg: fix build of shared libraries
-In-Reply-To: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net>
-References: <1308585595-3948-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1308585595-3948-2-git-send-email-luca@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Jun 2011 06:22:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 3907] New: 2011.05 - Qt 4.7.3 not building on ARM
+Message-ID: <bug-3907-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-009d8fceab4 and 0a5e5534cbf8 moved the --enable-static configure flag
-from package files to the default _CONFIGURE_CMDS in
-package/Makefile.autotools.in.
-This broke Autotools packages that override _CONFIGURE_CMDS.
+https://bugs.busybox.net/show_bug.cgi?id=3907
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/multimedia/ffmpeg/ffmpeg.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+           Summary: 2011.05 - Qt 4.7.3 not building on ARM
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mailinglists at bluespirit.la
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index babb16a..b50503b 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -167,6 +167,7 @@ define FFMPEG_CONFIGURE_CMDS
- 		--arch=$(BR2_ARCH) \
- 		--target-os=linux \
- 		--extra-cflags=-fPIC \
-+		$(SHARED_STATIC_LIBS_OPTS) \
- 		$(FFMPEG_CONF_OPT) \
- 	)
- endef
+
+Created attachment 3457
+  --> https://bugs.busybox.net/attachment.cgi?id=3457
+Config of buildroot-2011.05
+
+Linking of QtWebKit returns: Too many arguments
+
+Using External toolchain from CodeSoucery
+(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103=y).
+
+Also posted in Qt bugtracker: http://bugreports.qt.nokia.com/browse/QTBUG-19988
+We should track the changes and/or add a patch in the meantime.
+
+
+/opt/integra/toolchain-arm-cs1103/usr/bin/arm-none-linux-gnueabi-g++
+Wl,-rpath-link,/home/charly/Projects/integra-system/buildroot-2.6.37/build/qt-4.7.3/lib
+-Wl,no-undefined -Wl,gc-sections -Wl,-no-undefined -Wl,-O1 -shared
+-Wl,-soname,libQtWebKit.so.4 -o libQtWebKit.so.4.7.3
+.obj/release-shared-emb-arm/SVGNames.o
+.obj/release-shared-emb-arm/SVGElementFactory.o
+.obj/release-shared-emb-arm/JSSVGElementWrapperFactory.o
+.obj/release-shared-emb-arm/XLinkNames.o
+.obj/release-shared-emb-arm/JSCounter.o
+.obj/release-shared-emb-arm/JSCSSCharsetRule.o
+.obj/release-shared-emb-arm/JSCSSFontFaceRule.o
+.obj/release-shared-emb-arm/JSCSSImportRule.o [...]
+.obj/release-shared-emb-arm/moc_QtFallbackWebPopup.o
+.obj/release-shared-emb-arm/moc_DnsPrefetchHelper.o
+.obj/release-shared-emb-arm/moc_qwebframe.o
+.obj/release-shared-emb-arm/moc_qwebhistoryinterface.o
+.obj/release-shared-emb-arm/moc_qwebpluginfactory.o
+.obj/release-shared-emb-arm/moc_qwebinspector.o
+.obj/release-shared-emb-arm/qrc_WebCore.o
+.obj/release-shared-emb-arm/qrc_WebKit.o
+-L/home/charly/Projects/integra-system/buildroot-2.6.37/build/qt-4.7.3/lib
+-L../JavaScriptCore/release -ljscore
+-L/home/charly/Projects/integra-system/buildroot-2.6.37/build/qt-4.7.3/lib
+-lQtGui -lQtNetwork -lQtCore -lpthread
+linking ../../../../lib/libQtWebKit.so.4.7.3
+Too many arguments
+make: *** [../../../../lib/libQtWebKit.so.4.7.3] Error 1
+
 -- 
-1.7.4.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
