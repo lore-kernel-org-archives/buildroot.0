@@ -1,45 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 21 Jun 2011 11:39:37 +0200
-Subject: [Buildroot] [git commit] dbus-glib: nowadays works with libxml2
-	backend as well
-Message-ID: <20110621094119.0D03B88D83@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 21 Jun 2011 11:40:54 +0200
+Subject: [Buildroot] [PATCH] packages: dbus: use version 1.4.8
+In-Reply-To: <1306779878-20243-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Mon, 30 May 2011 20:24:38 +0200")
+References: <1306779878-20243-1-git-send-email-zonque@gmail.com>
+Message-ID: <87pqm7cyjd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a5d51cbdf49c69641f1cedfeb76ecbffe578e9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Daniel> The exisiting br2 patch can be dropped.
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
 
-So get rid of expat dependency.
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dbus-glib/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
-
-diff --git a/package/dbus-glib/Config.in b/package/dbus-glib/Config.in
-index c019be7..f1dab43 100644
---- a/package/dbus-glib/Config.in
-+++ b/package/dbus-glib/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_DBUS_GLIB
- 	bool "dbus-glib"
- 	depends on BR2_PACKAGE_DBUS
--	depends on BR2_DBUS_EXPAT
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
-@@ -9,8 +8,5 @@ config BR2_PACKAGE_DBUS_GLIB
- 
- 	  http://www.freedesktop.org/software/dbus
- 
--comment "dbus-glib needs dbus to be compiled with expat support"
--	depends on BR2_PACKAGE_DBUS && !BR2_DBUS_EXPAT
--
- comment "dbus-glib requires a toolchain with WCHAR support"
- 	depends on BR2_PACKAGE_DBUS && !BR2_USE_WCHAR
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
