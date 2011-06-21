@@ -1,22 +1,29 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 21 Jun 2011 11:54:13 +0200
-Subject: [Buildroot] [PATCH] ext-toolchain-wrapper.c: Handle an
-	arbitrary amount of arguments
-In-Reply-To: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
-References: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
-Message-ID: <BANLkTingz3ixGb1BhPtHtM-FuKF_0723iQ@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 21 Jun 2011 11:55:14 +0200
+Subject: [Buildroot] [PATCH] usbutils: bump to 003
+Message-ID: <4E006A82.2040606@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Den 21 juni 2011 11:50 skrev Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
-> Even though MAXARGS 1000 seems large, it wasn't enought for at least
-> QtWebKit package. This new version does not have any predefined limits.
->
-> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-> Reported-by: Thomas Bj?rk <thomas.bjork@home.se>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Forgot:
-Fixes #3907: https://bugs.busybox.net/show_bug.cgi?id=3907
+---
+ package/usbutils/usbutils.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: b/package/usbutils/usbutils.mk
+===================================================================
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-USBUTILS_VERSION = 002
++USBUTILS_VERSION = 003
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ USBUTILS_INSTALL_STAGING = YES
