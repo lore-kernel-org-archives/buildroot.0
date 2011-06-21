@@ -1,44 +1,35 @@
 From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 21 Jun 2011 12:14:08 +0200
-Subject: [Buildroot] [PATCH 1/2] Add package acl
-In-Reply-To: <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
-References: <1306779390-19947-1-git-send-email-zonque@gmail.com>	<1306779390-19947-2-git-send-email-zonque@gmail.com>	<20110530210244.5bd309aa@surf>	<BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
- <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
-Message-ID: <4E006EF0.9080408@visionsystems.de>
+Date: Tue, 21 Jun 2011 13:15:04 +0200
+Subject: [Buildroot] [git commit] usbutils: bump to 003
+Message-ID: <20110621111612.483EC873F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 31.05.2011 14:47, schrieb Heiko Zuerker:
-> 
-> Quoting Daniel Mack <zonque@gmail.com>:
-> 
->> On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> On Mon, 30 May 2011 20:16:29 +0200
->>> Daniel Mack <zonque@gmail.com> wrote:
->>>
->>>> +define ACL_INSTALL_TARGET_CMDS
->>>> +     $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl $(TARGET_DIR)/usr/bin/
->>>> +     $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl $(TARGET_DIR)/usr/bin/
->>>> +     $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so* $(STAGING_DIR)/usr/lib/
->>>> +endef
->>>> +
->>>> +define ACL_INSTALL_STAGING_CMDS
->>>> +     test -d $(STAGING_DIR)/usr/include/acl/ || mkdir $(STAGING_DIR)/usr/include/acl/
->>>> +     $(INSTALL) -m 0644 -D $(@D)/include/*.h $(STAGING_DIR)/usr/include/acl/
->>>> +     $(SED) s,sys/acl.h,acl/acl.h, -i $(STAGING_DIR)/usr/include/acl/libacl.h
->>>> +endef
->>>
->>> Any reason to not use the default "make install" behaviour of the
->>> package ? (And ditto for the attr package).
->>
->> The libtool crap failed for cross compilation in these cases, so these
->> workarounds are unfortunately necessary.
-> 
-> Actually this isn't necessary, please see my version of the patches.
-> 
 
-Any update on this issue?
+commit: http://git.buildroot.net/buildroot/commit/?id=e46df26e11a790da253de2d4c8ae99b4768b684a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/usbutils/usbutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index a034ddc..1ddadbe 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-USBUTILS_VERSION = 002
++USBUTILS_VERSION = 003
+ USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ USBUTILS_INSTALL_STAGING = YES
+-- 
+1.7.3.4
