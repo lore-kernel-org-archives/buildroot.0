@@ -1,32 +1,99 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 21 Jun 2011 20:32:29 +0200
-Subject: [Buildroot] [PATCH] ext-toolchain-wrapper.c: Handle an
- arbitrary amount of arguments
-In-Reply-To: <BANLkTim9Hm8zyVDSs5_cfu-fWh2Z=z3Xtw@mail.gmail.com>
-References: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
- <BANLkTim9Hm8zyVDSs5_cfu-fWh2Z=z3Xtw@mail.gmail.com>
-Message-ID: <BANLkTikb3r=LzgqUemMwVYQ481M=YmfhWQ@mail.gmail.com>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Tue, 21 Jun 2011 21:47:58 +0200
+Subject: [Buildroot] [PATCH v2] ext-toolchain-wrapper.c: Handle an arbitrary
+	amount of arguments
+Message-ID: <1308685678-6006-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/6/21 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> 2011/6/21 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
->> @@ -55,21 +55,27 @@ static const char *get_basename(const char *name)
->> ?int main(int argc, char **argv)
->> ?{
->> ? ? ? ?int i;
->> + ? ? ? char **args, **cur;
->> +
->> + ? ? ? cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
->
-> Would you mind checking for args == NULL here, to avoid possible
-> segfault on the next line (...and invalid free() later)? Thanks!
+Even though MAXARGS 1000 seems large, it wasn't enought for at least
+QtWebKit package. This new version does not have any predefined limits.
 
-Would there be any other case but when running out of memory? Else,
-you will have probably have bigger issues. :)
+Closes #3907
 
-But indeed, handling it is to prefer. I'll fix it PATCHv2 which I will
-post when there are no more comments on this one.
+Many thanks to Thomas for tracing the source of the build error.
+
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+Reported-by: Thomas Bj?rk <thomas.bjork@home.se>
+---
+
+New in v2:
+  * Check for malloc returning NULL
+  * Remove unused variable 'i'
+  * Add closing bug # in commit message
+
+
+.../toolchain-external/ext-toolchain-wrapper.c     |   30 +++++++++++++------
+ 1 files changed, 20 insertions(+), 10 deletions(-)
+
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index a485e74..91732b0 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -4,6 +4,7 @@
+  * to ensure the external toolchain uses the correct configuration.
+  *
+  * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
++ * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+  *
+  * This file is licensed under the terms of the GNU General Public License
+  * version 2.  This program is licensed "as is" without any warranty of any
+@@ -14,12 +15,11 @@
+ #include <string.h>
+ #include <limits.h>
+ #include <unistd.h>
+-
+-#define MAXARGS 1000
++#include <stdlib.h>
+ 
+ static char path[PATH_MAX] = BR_CROSS_PATH;
+ 
+-static char *args[MAXARGS] = {
++static char *predef_args[] = {
+ 	path,
+ 	"--sysroot", BR_SYSROOT,
+ #ifdef BR_ARCH
+@@ -55,21 +55,31 @@ static const char *get_basename(const char *name)
+ int main(int argc, char **argv)
+ {
+ 	int i;
++	char **args, **cur;
+ 
+-	for (i=0; args[i]; i++);
+-
+-	if ((argc+i) >= MAXARGS) {
+-		fputs("Too many arguments\n", stderr);
+-		return 1;
++	cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
++	if (args == NULL) {
++		perror("malloc");
++		abort();
+ 	}
+ 
+-	/* forward args */
+-	memcpy(&args[i], &argv[1], sizeof(argv[0]) * (argc - 1));
++	/* start with predefined args */
++	memcpy(cur, predef_args, sizeof(predef_args));
++	cur += sizeof(predef_args) / sizeof(predef_args[0]);
++
++	/* append forward args */
++	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
++	cur += argc - 1;
++
++	/* finish with NULL termination */
++	*cur = NULL;
+ 
+ 	strcat(path, get_basename(argv[0]));
+ 
+ 	if (execv(path, args))
+ 		perror(path);
+ 
++	free(args);
++
+ 	return 2;
+ }
+-- 
+1.7.4.1
