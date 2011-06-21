@@ -1,65 +1,95 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Tue, 21 Jun 2011 12:40:02 -0500
-Subject: [Buildroot] [PATCH 1/2] Add package acl
-In-Reply-To: <4E006EF0.9080408@visionsystems.de>
-References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
- <1306779390-19947-2-git-send-email-zonque@gmail.com>
- <20110530210244.5bd309aa@surf>
- <BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
- <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
- <4E006EF0.9080408@visionsystems.de>
-Message-ID: <20110621124002.Horde.FlRsXGms4ABOANdyT8bFvAA@www.home.zuerker.org>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 21 Jun 2011 19:47:22 +0200
+Subject: [Buildroot] [PATCH] ext-toolchain-wrapper.c: Handle an
+ arbitrary amount of arguments
+In-Reply-To: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
+References: <1308649845-21724-1-git-send-email-daniel.nystrom@timeterminal.se>
+Message-ID: <BANLkTim9Hm8zyVDSs5_cfu-fWh2Z=z3Xtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Quoting Yegor Yefremov <yegor_sub1@visionsystems.de>:
-
-> Am 31.05.2011 14:47, schrieb Heiko Zuerker:
->>
->> Quoting Daniel Mack <zonque@gmail.com>:
->>
->>> On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>>> On Mon, 30 May 2011 20:16:29 +0200
->>>> Daniel Mack <zonque@gmail.com> wrote:
->>>>
->>>>> +define ACL_INSTALL_TARGET_CMDS
->>>>> +     $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl  
->>>>> $(TARGET_DIR)/usr/bin/
->>>>> +     $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl  
->>>>> $(TARGET_DIR)/usr/bin/
->>>>> +     $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so*  
->>>>> $(STAGING_DIR)/usr/lib/
->>>>> +endef
->>>>> +
->>>>> +define ACL_INSTALL_STAGING_CMDS
->>>>> +     test -d $(STAGING_DIR)/usr/include/acl/ || mkdir  
->>>>> $(STAGING_DIR)/usr/include/acl/
->>>>> +     $(INSTALL) -m 0644 -D $(@D)/include/*.h  
->>>>> $(STAGING_DIR)/usr/include/acl/
->>>>> +     $(SED) s,sys/acl.h,acl/acl.h, -i  
->>>>> $(STAGING_DIR)/usr/include/acl/libacl.h
->>>>> +endef
->>>>
->>>> Any reason to not use the default "make install" behaviour of the
->>>> package ? (And ditto for the attr package).
->>>
->>> The libtool crap failed for cross compilation in these cases, so these
->>> workarounds are unfortunately necessary.
->>
->> Actually this isn't necessary, please see my version of the patches.
->>
+2011/6/21 Daniel Nystr?m <daniel.nystrom@timeterminal.se>:
+> Even though MAXARGS 1000 seems large, it wasn't enought for at least
+> QtWebKit package. This new version does not have any predefined limits.
 >
-> Any update on this issue?
+> Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> Reported-by: Thomas Bj?rk <thomas.bjork@home.se>
+> ---
+> ?.../toolchain-external/ext-toolchain-wrapper.c ? ? | ? 26 ++++++++++++-------
+> ?1 files changed, 16 insertions(+), 10 deletions(-)
+>
+> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> index a485e74..51f85e7 100644
+> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> @@ -4,6 +4,7 @@
+> ?* to ensure the external toolchain uses the correct configuration.
+> ?*
+> ?* (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
+> + * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
+> ?*
+> ?* This file is licensed under the terms of the GNU General Public License
+> ?* version 2. ?This program is licensed "as is" without any warranty of any
+> @@ -14,12 +15,11 @@
+> ?#include <string.h>
+> ?#include <limits.h>
+> ?#include <unistd.h>
+> -
+> -#define MAXARGS 1000
+> +#include <stdlib.h>
+>
+> ?static char path[PATH_MAX] = BR_CROSS_PATH;
+>
+> -static char *args[MAXARGS] = {
+> +static char *predef_args[] = {
+> ? ? ? ?path,
+> ? ? ? ?"--sysroot", BR_SYSROOT,
+> ?#ifdef BR_ARCH
+> @@ -55,21 +55,27 @@ static const char *get_basename(const char *name)
+> ?int main(int argc, char **argv)
+> ?{
+> ? ? ? ?int i;
+> + ? ? ? char **args, **cur;
+> +
+> + ? ? ? cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
 
-I don't believe that either version of the package has been added.
+Would you mind checking for args == NULL here, to avoid possible
+segfault on the next line (...and invalid free() later)? Thanks!
 
--- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+> - ? ? ? for (i=0; args[i]; i++);
+> + ? ? ? /* start with predefined args */
+> + ? ? ? memcpy(cur, predef_args, sizeof(predef_args));
+> + ? ? ? cur += sizeof(predef_args) / sizeof(predef_args[0]);
+>
+> - ? ? ? if ((argc+i) >= MAXARGS) {
+> - ? ? ? ? ? ? ? fputs("Too many arguments\n", stderr);
+> - ? ? ? ? ? ? ? return 1;
+> - ? ? ? }
+> + ? ? ? /* append forward args */
+> + ? ? ? memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+> + ? ? ? cur += argc - 1;
+>
+> - ? ? ? /* forward args */
+> - ? ? ? memcpy(&args[i], &argv[1], sizeof(argv[0]) * (argc - 1));
+> + ? ? ? /* finish with NULL termination */
+> + ? ? ? *cur = NULL;
+>
+> ? ? ? ?strcat(path, get_basename(argv[0]));
+>
+> ? ? ? ?if (execv(path, args))
+> ? ? ? ? ? ? ? ?perror(path);
+>
+> + ? ? ? free(args);
+> +
+> ? ? ? ?return 2;
+> ?}
+> --
+> 1.7.4.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
