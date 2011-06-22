@@ -1,28 +1,87 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Jun 2011 07:29:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 3907] 2011.05 - Qt 4.7.3 not building on ARM
-In-Reply-To: <bug-3907-163@https.bugs.busybox.net/>
-References: <bug-3907-163@https.bugs.busybox.net/>
-Message-ID: <20110622072902.11E88873F4@busybox.osuosl.org>
+From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
+Date: Wed, 22 Jun 2011 21:09:31 +0700
+Subject: [Buildroot] Issue with pthread_mutex_lock with external
+	toolchain
+In-Reply-To: <BANLkTi=VZ=q7MTfyf453BAAfEqqAZ41Lpg@mail.gmail.com>
+References: <BANLkTi=VZ=q7MTfyf453BAAfEqqAZ41Lpg@mail.gmail.com>
+Message-ID: <BANLkTi=3TYjz7BY6a-3cCZvLfm4Ynxm6xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3907
+On Wed, Jun 22, 2011 at 2:00 PM, Dwi Sasongko Supriyadi
+<ruckuus@gmail.com>wrote:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+> Hello list,
+>
+> I am testing pcscd of pcsc-lite and I got segmentation fault, following is
+> the gdb backtrace:
+>
+> # gdb /usr/sbin/pcscd
+> GNU gdb 6.8
+> Copyright (C) 2008 Free Software Foundation, Inc.
+> License GPLv3+: GNU GPL version 3 or later <
+> http://gnu.org/licenses/gpl.html>
+> This is free software: you are free to change and redistribute it.
+> There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+> and "show warranty" for details.
+> This GDB was configured as "arm-unknown-linux-gnueabi"...
+> (no debugging symbols found)
+> (gdb) run --foreground --debug --apdu
+> Starting program: /usr/sbin/pcscd --foreground --debug --apdu
+> (no debugging symbols found)
+> (no debugging symbols found)
+> (no debugging symbols found)
+> (no debugging symbols found)
+> (no debugging symbols found)
+> (no debugging symbols found)
+> (no debugging symbols found)
+> debuglog.c:277:DebugLogSetLevel() debug level=debug
+> debuglog.c:306:DebugLogSetCategory() Debug options: APDU
+> pcscdaemon.c:550:main() pcsc-lite 1.7.2 daemon ready.
+> [New LWP 1183]
+>
+> Program received signal SIGSEGV, Segmentation fault.
+> [Switching to LWP 1183]
+> 0x400624e8 in pthread_mutex_lock () from /lib/libpthread.so.0
+> (gdb)
+>
+>
+> Has anyone faced the same issue in the past and came up with solution?
+>
+>
+I felt that my previous message doesn't have any detail info. Sorry for
+that.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Herewith I came back with better info
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git by Daniel Nystr?m, thanks
+1. PCSC-lite support patch is on the way, I will submit once the testing
+completed, I would love to share with anyone who interested in
+2. Buildroot version: buildroot-2011.02 from git
+3. External toolchain from Code Sourcery 2010.09
+4. Running kernel on the target linux-2.6.28.6
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+I also tried to rebuild everything using buildroot toolchain with linux
+headers 2.6.37.2, but there is no change.
+
+I suspect that the root cause is the running kernel on the target taking
+into account using different toolchain (and different pthread library) there
+is no difference.
+
+I really appreciate any feedback/suggestion from all of you.
+
+Thanks in advance,
+
+
+
+
+
+
+
+
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110622/14a787f6/attachment.html>
