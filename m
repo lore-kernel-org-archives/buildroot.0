@@ -1,87 +1,54 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Wed, 22 Jun 2011 21:09:31 +0700
-Subject: [Buildroot] Issue with pthread_mutex_lock with external
-	toolchain
-In-Reply-To: <BANLkTi=VZ=q7MTfyf453BAAfEqqAZ41Lpg@mail.gmail.com>
-References: <BANLkTi=VZ=q7MTfyf453BAAfEqqAZ41Lpg@mail.gmail.com>
-Message-ID: <BANLkTi=3TYjz7BY6a-3cCZvLfm4Ynxm6xA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 22 Jun 2011 17:08:55 +0200
+Subject: [Buildroot] [git commit] yajl: fix link issue on uClibc
+Message-ID: <20110622151138.BD98C88DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 22, 2011 at 2:00 PM, Dwi Sasongko Supriyadi
-<ruckuus@gmail.com>wrote:
 
-> Hello list,
->
-> I am testing pcscd of pcsc-lite and I got segmentation fault, following is
-> the gdb backtrace:
->
-> # gdb /usr/sbin/pcscd
-> GNU gdb 6.8
-> Copyright (C) 2008 Free Software Foundation, Inc.
-> License GPLv3+: GNU GPL version 3 or later <
-> http://gnu.org/licenses/gpl.html>
-> This is free software: you are free to change and redistribute it.
-> There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-> and "show warranty" for details.
-> This GDB was configured as "arm-unknown-linux-gnueabi"...
-> (no debugging symbols found)
-> (gdb) run --foreground --debug --apdu
-> Starting program: /usr/sbin/pcscd --foreground --debug --apdu
-> (no debugging symbols found)
-> (no debugging symbols found)
-> (no debugging symbols found)
-> (no debugging symbols found)
-> (no debugging symbols found)
-> (no debugging symbols found)
-> (no debugging symbols found)
-> debuglog.c:277:DebugLogSetLevel() debug level=debug
-> debuglog.c:306:DebugLogSetCategory() Debug options: APDU
-> pcscdaemon.c:550:main() pcsc-lite 1.7.2 daemon ready.
-> [New LWP 1183]
->
-> Program received signal SIGSEGV, Segmentation fault.
-> [Switching to LWP 1183]
-> 0x400624e8 in pthread_mutex_lock () from /lib/libpthread.so.0
-> (gdb)
->
->
-> Has anyone faced the same issue in the past and came up with solution?
->
->
-I felt that my previous message doesn't have any detail info. Sorry for
-that.
+commit: http://git.buildroot.net/buildroot/commit/?id=489692fcde8477ac7b949d32a424bded815b360c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Herewith I came back with better info
+We need to link with -lm for isnan() / isinf().
 
-1. PCSC-lite support patch is on the way, I will submit once the testing
-completed, I would love to share with anyone who interested in
-2. Buildroot version: buildroot-2011.02 from git
-3. External toolchain from Code Sourcery 2010.09
-4. Running kernel on the target linux-2.6.28.6
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/yajl/yajl-2.0.2-math-link.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/yajl/yajl-2.0.2-math-link.patch
 
-I also tried to rebuild everything using buildroot toolchain with linux
-headers 2.6.37.2, but there is no change.
-
-I suspect that the root cause is the running kernel on the target taking
-into account using different toolchain (and different pthread library) there
-is no difference.
-
-I really appreciate any feedback/suggestion from all of you.
-
-Thanks in advance,
-
-
-
-
-
-
-
-
---
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110622/14a787f6/attachment.html>
+diff --git a/package/yajl/yajl-2.0.2-math-link.patch b/package/yajl/yajl-2.0.2-math-link.patch
+new file mode 100644
+index 0000000..355a248
+--- /dev/null
++++ b/package/yajl/yajl-2.0.2-math-link.patch
+@@ -0,0 +1,24 @@
++[PATCH] fix json_reformat linking on uClibc
++
++json_reformat calls yajl_gen_* functions, which internally use isnan() /
++isinf(). On Glibc, these are provided by libc, but on uClibc you need to
++link with -lm (like the spec says), so ensure we do so.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ reformatter/CMakeLists.txt |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: yajl-2.0.2/reformatter/CMakeLists.txt
++===================================================================
++--- yajl-2.0.2.orig/reformatter/CMakeLists.txt
+++++ yajl-2.0.2/reformatter/CMakeLists.txt
++@@ -26,7 +26,7 @@
++ 
++ ADD_EXECUTABLE(json_reformat ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(json_reformat yajl_s)
+++TARGET_LINK_LIBRARIES(json_reformat yajl_s m)
++ 
++ # copy the binary into the output directory
++ GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
+-- 
+1.7.3.4
