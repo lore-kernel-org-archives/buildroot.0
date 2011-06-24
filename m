@@ -1,42 +1,49 @@
-From: Dominic Newton <dominic.newton@in-2-technology.co.uk>
-Date: Thu, 23 Jun 2011 18:49:13 +0100
-Subject: [Buildroot] Compiling problem with NPTL threads on x86
-Message-ID: <4E037C99.2030308@in-2-technology.co.uk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 24 Jun 2011 11:06:35 +0200
+Subject: [Buildroot] [git commit] webkit: update pthread_getattr_np patches
+	for uClibc 0.9.32
+Message-ID: <20110624090758.5F3F988DF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I'm fairly new to buildroot and have run into a problem that I have 
-partially fixed - but I could use a few pointers.
+commit: http://git.buildroot.net/buildroot/commit/?id=ec61799c338f939adc9ca830fdab6cb07bd1c1cd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've built several systems using buildroot that run perfectly OK. 
-However I would like to use NPTL library rather than linuxthreads.
+Similar to how it is done for qt.
 
-I've had the same problem with buildroot-2011.02 and .05 using the 
-recent rc2 and rc3 of uclibc0.9....
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/webkit/webkit-pthread_getattr_np.patch |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-Compiling with NPTL throws up some errors involving 'pthread.h not 
-found/does not exist'. I've compiled a linuxthreads version OK.
-
-A bit of digging has found that while linuxthreads puts pthread.h, 
-semaphore.h and bits/ptheadtypes.h into the include directories, when 
-configuring NPTL, they get forgotten. The uclibc libpthread/nptl has 
-semaphore.h and pthread.h, but no pthreadtypes. I symlinked them into 
-the the include directory in the output/toolchain/uclicbc... and the 
-output/host/usr.....sysroot directories and this seems to have cludged 
-it together (using pthreadtypes from linuxthreads).
-
-So I think I'm on the right track. My question is where do I find the 
-script/makefile(s) that unpacks the uclibc archive, parses the buildroot 
-config and attempts to create the includes. I'd like to make sure the 
-appropriate files are copied over in as amny cases as possible.
-
-Any help gratefull received, once properly sorted I'll feed it back in - 
-assuming I'm not doing something idiotic or a fix already exists.
-
+diff --git a/package/webkit/webkit-pthread_getattr_np.patch b/package/webkit/webkit-pthread_getattr_np.patch
+index b71c878..8027e37 100644
+--- a/package/webkit/webkit-pthread_getattr_np.patch
++++ b/package/webkit/webkit-pthread_getattr_np.patch
+@@ -13,16 +13,17 @@ Index: webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp
+ ===================================================================
+ --- webkit-1.2.3.orig/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:16:19.000000000 +0200
+ +++ webkit-1.2.3/JavaScriptCore/runtime/Collector.cpp	2010-07-22 17:25:02.000000000 +0200
+-@@ -75,6 +75,18 @@
++@@ -75,6 +75,19 @@
+  #endif
+  #include <unistd.h>
+  
+ +#if defined(__UCLIBC__)
+-+// versions of uClibc 0.9.31 and below do not have
+++// versions of uClibc 0.9.32 and below with linuxthreads.old do not have
+ +// pthread_getattr_np or pthread_attr_getstack.
+ +#if __UCLIBC_MAJOR__ == 0 &&					\
+ +  (__UCLIBC_MINOR__ < 9 ||					\
+-+   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 31))
+++   (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 32)) &&	\
+++   defined(__LINUXTHREADS_OLD__)
+ +#define UCLIBC_USE_PROC_SELF_MAPS 1
+ +#include <stdio_ext.h>
+ +extern int *__libc_stack_end;
 -- 
-Dominic Newton
+1.7.3.4
