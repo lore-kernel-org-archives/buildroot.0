@@ -1,36 +1,72 @@
 From: raymond zhao <raymond.zhao.ml@gmail.com>
-Date: Fri, 24 Jun 2011 17:12:30 -0400
-Subject: [Buildroot] Is this a bug? libm in uclibc 0.9.32
-In-Reply-To: <BANLkTinjm+-sO4jPHckVJg1VH2__Ejii+A@mail.gmail.com>
-References: <BANLkTimqhX+pHGkSHQMpTX=n82_eHmj0tA@mail.gmail.com>
- <BANLkTinjm+-sO4jPHckVJg1VH2__Ejii+A@mail.gmail.com>
-Message-ID: <BANLkTikFc-OSQ+jyrDB9C8L5DwKvF-qi=w@mail.gmail.com>
+Date: Fri, 24 Jun 2011 17:14:15 -0400
+Subject: [Buildroot] how to tune powerpc e500v2 cpus in BR
+In-Reply-To: <4E04C9EE.4050206@rossvideo.com>
+References: <BANLkTikRNGx1Mte+sOYDeOr9f896K8GuZw@mail.gmail.com>
+ <4E04C9EE.4050206@rossvideo.com>
+Message-ID: <BANLkTi=m8QyX9YMrp_eeMUT=SMiU6D6Jbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I agree.
-But does anyone have a better solution to fix this bug?
+Thanks, Matias
+After looked into the scripts. I believe you are right. But somehow I have
+problem with building target gdb server when I put this flags there. I am
+keep digging now.
 
-Also, how about the first one? Does anyone have same experience as me?
-
-thanks,
+thanks
 
 raymond
+On Fri, Jun 24, 2011 at 1:31 PM, Matias Garcia <mgarcia@rossvideo.com>wrote:
 
-On Fri, Jun 24, 2011 at 4:50 PM, Mike Frysinger <vapier@gentoo.org> wrote:
-> On Fri, Jun 24, 2011 at 15:52, raymond zhao wrote:
->> 1. No one defines libm_ARCH_fpu_OUT in make files, so the files under
->> directory toolchain\uClibc-0.9.32\libm\powerpc\e500\fpu will nor be
->> build at all. then there will be a link error for unsolved functions.
->> 2. Somehow the NOT_IN_lic is not passed to the build command line for
->> libm/powerpc/e500/fpu/fe_nomask.c, then the ?__libc_errno ?in this
->> files will compain.
+> Hi Raymond,
 >
-> random .c files should not be touched as this is a build file bug.
-> see libm/Makefile:CFLAGS-libm ... those should be applied when
-> building all files under libm/.
-> -mike
+> You can put those in the BR2_TARGET_OPTIMIZATIONS setting under the
+> Toolchain page e.g.
 >
+> (-mcpu=8548 -mspe=yes -mabi=spe -mhard-float -mfloat-gprs=double)  Target
+> Optimizations
+>
+> I selected a generic powerpc target because I didn't need the -mtune when I
+> was specifying -mcpu already. As far as I know, 8548 and 8540 work out to
+> the same code.
+>
+> I switched to the external CodeSourcery build tools for two reasons: (1) it
+> allowed us to compile our application with -O3 (which we need) while the
+> standard GNU toolchain caused some errors, and (2) they're supported by the
+> Freescale/Mentor/CodeSourcery relationship, and not all of the patches get
+> applied to mainline (particularly for newer processors). I had to add an
+> option to the external wrapper so that it would call the toolchain with
+> '-te500v2' which is a shortcut for the optimizations you list below. In that
+> case, you can build your own applications without calling any options
+> explicitly.
+>
+> Cheers,
+> Matias
+>
+>
+> On 11-06-24 10:27 AM, raymond zhao wrote:
+>
+>> Hi,
+>> I am using freescale's p1020 CPU. It is a e500v2 core. How could I
+>> config the build root to tune the tool chain for the following
+>> options:
+>>
+>> -mcpu=8548 -mspe=yes -mabi=spe -mhard-float -mfloat-gprs=double
+>>
+>>  From the menuconfig, I can only select CPU as 8540.
+>>
+>> Thanks,
+>>
+>> Raymond
+>> ______________________________**_________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/9bd90154/attachment.html>
