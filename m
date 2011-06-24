@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 24 Jun 2011 14:52:03 +0200
-Subject: [Buildroot] cyrus-sasl in buildroot: makemd5 is wrongly
-	cross-compiled
+Date: Fri, 24 Jun 2011 15:03:06 +0200
+Subject: [Buildroot] cyrus-sasl in buildroot: installs files with
+	"arm-linux-" prefix
 In-Reply-To: <4E04828A.6030908@lucaceresoli.net>
 References: <4E04828A.6030908@lucaceresoli.net>
-Message-ID: <4E048873.1090000@lucaceresoli.net>
+Message-ID: <4E048B0A.8080003@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi,
-after having worked around the "apparent CFLAGS mismatch" problem, I hit
-another cross-compilation error while trying to build cyrus-sasl in 
-buildroot:
 
-   $ make cyrus-sasl-dirclean
-   $ make cyrus-sasl 2>&1 | tee cyrus-sasl.log
+after somehow working around the two previous issues I reported in
+cross-compiling cyrus-sasl in buildroot ("apparent CFLAGS mismatch on 
+saslauthd"
+and "fix HOSTCC and related variables") I finally got buildroot to complete
+compilation and installation of cyrus-sasl!
+
+Alas, not all is perfect. While libraries look correctly installed, the 
+manpages
+and executables are installed with an unwanted "arm-linux-" prefix:
+
+   $ make cyrus-sasl-install-target
    [...]
-   /home/murray/devel/buildroot/output/host/usr/bin/ccache 
-/home/murray/devel/buildroot/output/host/usr/bin/arm-linux-gcc -Wall -W 
--Os -pipe -Os -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
--D_FILE_OFFSET_BITS=64 -o makemd5 makemd5.o -lresolv
-   rm -f md5global.h
-   ./makemd5 md5global.h
-   /bin/bash: ./makemd5: cannot execute binary file
-   make[3]: *** [md5global.h] Error 126
+   $ find output/target/ -name "*sasl*"
+   output/target/usr/man/man3/arm-linux-sasl_verifyfile_t.3
+   output/target/usr/man/man3/arm-linux-sasl_idle.3
+   output/target/usr/man/man3/arm-linux-sasl_checkpass.3
+   output/target/usr/man/man3/arm-linux-sasl_canon_user_t.3
    [...]
+   output/target/usr/man/man3/arm-linux-sasl_getrealm_t.3
+   output/target/usr/man/man8/arm-linux-saslpasswd2.8
+   output/target/usr/man/man8/arm-linux-sasldblistusers2.8
+   output/target/usr/sbin/arm-linux-sasldblistusers2
+   output/target/usr/sbin/arm-linux-saslpasswd2
+   output/target/usr/lib/libsasl2.so.2
+   output/target/usr/lib/libsasl2.so
+   output/target/usr/lib/libsasl2.la
+   output/target/usr/lib/libsasl2.so.2.0.24
+   output/target/usr/lib/libsasl2.a
+   output/target/usr/lib/sasl2
+   output/target/usr/lib/sasl2/libsasldb.so.2.0.24
+   output/target/usr/lib/sasl2/libsasldb.so.2
+   output/target/usr/lib/sasl2/libsasldb.la
+   output/target/usr/lib/sasl2/libsasldb.a
+   output/target/usr/lib/sasl2/libsasldb.so
+   output/target/usr/include/sasl
+   output/target/usr/include/sasl/sasl.h
+   output/target/usr/include/sasl/saslutil.h
+   output/target/usr/include/sasl/saslplug.h
+   $
 
-The problem here is pretty clear: makemd5, which is meant to run on the 
-host,
-has been cross-compiled instead:
+Once more, the install log is attached.
 
-   $ file output/build/cyrus-sasl-2.1.24rc1/include/makemd5
-   output/build/cyrus-sasl-2.1.24rc1/include/makemd5: ELF 32-bit LSB 
-executable, ARM, version 1 (SYSV), dynamically linked (uses shared 
-libs), for GNU/Linux 2.6.31, not stripped
+This might not be a real issue for manpages and static libs, which are 
+removed
+by buildroot later in the build process (unless one wants them 
+installed, which
+is uncommon in an embedded device).
 
-Attached is my patch to allow makemd5 to correctly (non-cross) compiled.
-Basically, it consists in replacing $(CC) with $(HOSTCC) in cyrus-sasl's
-include/Makefile.in.
-Note that I'm not the first that faced this problem. My patch has been
-inspired by:
-http://tech.dir.groups.yahoo.com/group/nslu2-linux/message/4044?var=0
+It is more annoying for sasldblistusers2 and saslpasswd2.
 
-The build log is attached too.
+I currently have no solution to this problem; instructing buildroot to 
+rename
+the two files in a post-install hook would be trivial, but if anybody 
+came up
+with a solution that fixes the problem at its root, it sure would be better.
 
 Luca
 
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: cyrus-sasl-makemd5.log.gz
+Name: cyrus-sasl-install.log.gz
 Type: application/x-gzip
-Size: 3477 bytes
+Size: 2151 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/6e781892/attachment-0002.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: cyrus-sasl-hostcc.patch
-Type: text/x-patch
-Size: 1317 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/6e781892/attachment-0003.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/f8a84d83/attachment.bin>
