@@ -1,54 +1,48 @@
-From: Matias Garcia <mgarcia@rossvideo.com>
-Date: Fri, 24 Jun 2011 13:31:26 -0400
-Subject: [Buildroot] how to tune powerpc e500v2 cpus in BR
-In-Reply-To: <BANLkTikRNGx1Mte+sOYDeOr9f896K8GuZw@mail.gmail.com>
-References: <BANLkTikRNGx1Mte+sOYDeOr9f896K8GuZw@mail.gmail.com>
-Message-ID: <4E04C9EE.4050206@rossvideo.com>
+From: raymond zhao <raymond.zhao.ml@gmail.com>
+Date: Fri, 24 Jun 2011 15:52:39 -0400
+Subject: [Buildroot] Is this a bug? libm in uclibc 0.9.32
+Message-ID: <BANLkTimqhX+pHGkSHQMpTX=n82_eHmj0tA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Raymond,
+Hi,
+I am trying to build tool chain with uclibc 0.9.32 and gcc 4.6.x for
+powerpc 8540 processor. there are errors when it build libm lib. I do
+not know if it a bug or there are some thing wrong in my config.
 
-You can put those in the BR2_TARGET_OPTIMIZATIONS setting under the 
-Toolchain page e.g.
+1. No one defines libm_ARCH_fpu_OUT in make files, so the files under
+directory toolchain\uClibc-0.9.32\libm\powerpc\e500\fpu will nor be
+build at all. then there will be a link error for unsolved functions.
+2. Somehow the NOT_IN_lic is not passed to the build command line for
+libm/powerpc/e500/fpu/fe_nomask.c, then the  __libc_errno  in this
+files will compain.
 
-(-mcpu=8548 -mspe=yes -mabi=spe -mhard-float -mfloat-gprs=double)  
-Target Optimizations
+Here is my patch to make it works. It it is a bug and I am fixing it
+correctly. I will be very happy to see them in next release. :-)
 
-I selected a generic powerpc target because I didn't need the -mtune 
-when I was specifying -mcpu already. As far as I know, 8548 and 8540 
-work out to the same code.
 
-I switched to the external CodeSourcery build tools for two reasons: (1) 
-it allowed us to compile our application with -O3 (which we need) while 
-the standard GNU toolchain caused some errors, and (2) they're supported 
-by the Freescale/Mentor/CodeSourcery relationship, and not all of the 
-patches get applied to mainline (particularly for newer processors). I 
-had to add an option to the external wrapper so that it would call the 
-toolchain with '-te500v2' which is a shortcut for the optimizations you 
-list below. In that case, you can build your own applications without 
-calling any options explicitly.
+--- a/libm/powerpc/e500/fpu/Makefile.arch	2011-03-16 15:11:13.000000000 -0400
++++ b/libm/powerpc/e500/fpu/Makefile.arch.new	2011-05-25
+12:15:55.619014656 -0400
+@@ -5,6 +5,7 @@
+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+ #
 
-Cheers,
-Matias
++libm_ARCH_fpu_OUT := $(libm_ARCH_fpu_DIR)
+ libm_ARCH_SRC:=$(wildcard $(libm_ARCH_fpu_DIR)/*.c)
+ libm_ARCH_OBJ:=$(patsubst
+$(libm_ARCH_fpu_DIR)/%.c,$(libm_ARCH_fpu_OUT)/%.o,$(libm_ARCH_SRC))
 
-On 11-06-24 10:27 AM, raymond zhao wrote:
-> Hi,
-> I am using freescale's p1020 CPU. It is a e500v2 core. How could I
-> config the build root to tune the tool chain for the following
-> options:
->
-> -mcpu=8548 -mspe=yes -mabi=spe -mhard-float -mfloat-gprs=double
->
->  From the menuconfig, I can only select CPU as 8540.
->
-> Thanks,
->
-> Raymond
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+--- a/libm/powerpc/e500/fpu/fe_nomask.c	2011-03-16 15:11:13.000000000 -0400
++++ b/libm/powerpc/e500/fpu/fe_nomask.c	2011-05-25 12:35:15.015045993 -0400
+@@ -17,6 +17,7 @@
+    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307 USA.  */
+
++#define NOT_IN_libc     //Raymond add this to kill __libc_errno error
+ #include <fenv.h>
+ #include <errno.h>
