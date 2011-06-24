@@ -1,104 +1,52 @@
-From: Alper YILDIRIM <yildirimalper@gmail.com>
-Date: Fri, 24 Jun 2011 05:04:56 -0700 (PDT)
-Subject: [Buildroot] [PATCH 1/4] package: enhance infrastructure to
- support source dir override
-In-Reply-To: <c7659f95de05fab6acb0cc1b5e8772a80832fc33.1305755245.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
- <c7659f95de05fab6acb0cc1b5e8772a80832fc33.1305755245.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <31919307.post@talk.nabble.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 24 Jun 2011 14:26:50 +0200
+Subject: [Buildroot] Cross-compiling Cyrus in Buildroot
+Message-ID: <4E04828A.6030908@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Cyrus and Buildroot developers,
 
-Hello Thomas,
+I'm working to add cyrus-sasl and cyrus-imapd (http://www.cyrusimap.org/)
+to buildroot (http://www.buildroot.net/) for use on embedded systems.
 
-We started using your "source override" patches, but we encountered a
-problem.
-Package dependencies are not build when a package source is overriden. 
-To overcome this problem we made the following change in Makefile.package.in
+On my road I hit various problems with the cross-build process:
+configuration, compilation and installation.
+I could work around some, but not really fix them as they should.
 
-ifeq ($($(2)_OVERRIDE_SRCDIR),)
-$(1)-configure:		$(1)-patch \
-			$$($(2)_TARGET_CONFIGURE)
-else
-$(1)-configure:		$(1)-symlink \
-+                      $(1)-depends \
-			$$($(2)_TARGET_CONFIGURE)
-endif
+I would like to share my findings with both communities, with the goal of
+clearly identifying the issues and fixing them in the proper way, thus
+contributing an improvement to both projects: two new packages for Buildroot
+and improvements and/or fixes for Cyrus (both -sasl and -imapd).
 
-$(1)-symlink:		$$($(2)_TARGET_SYMLINK)
+I'll start a new thread for each issue, and keep in copy both mailing lists.
+Please reply-to-all in order to keep the discussion alive in both places.
 
-Cheers,
-Alper
+Here's a list of the issues I found:
+  - cyrus-sasl: apparent CFLAGS mismatch on saslauthd;
+  - cyrus-sasl: makemd5 is wrongly cross-compiled;
+  - cyrus-sasl: installs files with "arm-linux-" prefix
+  - cyrus-imapd: imtest does not cross-compile correctly;
+  - cyrus-imapd: static binaries are huge, cannot build them shared;
+  - cyrus-imapd: choose binaries to (build and) install;
+  - others might follow as I go on with my work.
 
+Before starting, a general question to Cyrus developers.
+So far I've been working with the most recent released packages: cyrus-sasl
+2.1.24rc1 and cyrus-imapd 2.4.9, but I see the cyrus-imapd git 
+repository has
+a master branch that diverges dramatically from the 2.4.x branch:
 
-Thomas Petazzoni-2 wrote:
-> 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/Makefile.package.in |   16 ++++++++++++++++
->  1 files changed, 16 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index bf4e1b4..1afc18d 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -250,6 +250,13 @@ $(BUILD_DIR)/%/.stamp_extracted:
->  	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
->  	$(Q)touch $@
->  
-> +# Set up symbolic link to the source directory if the
-> +# <pkg>_OVERRIDE_SRCDIR feature is used.
-> +$(BUILD_DIR)/%/.stamp_symlinked:
-> +	@$(call MESSAGE,"Symlinking to source dir")
-> +	ln -s $(SRCDIR) $(@D)
-> +	$(Q)touch $@
-> +
->  # Patch
->  #
->  # The NOHOSTPKG variable is the uppercased package name, without the
-> @@ -418,6 +425,7 @@ $(2)_TARGET_INSTALL_STAGING =
-> $$($(2)_DIR)/.stamp_staging_installed
->  $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
->  $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
->  $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
-> +$(2)_TARGET_SYMLINK =		$$($(2)_DIR)/.stamp_symlinked
->  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
->  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
->  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-> @@ -463,8 +471,15 @@ $(1)-install-host:      $(1)-build
-> $$($(2)_TARGET_INSTALL_HOST)
->  $(1)-build:		$(1)-configure \
->  			$$($(2)_TARGET_BUILD)
->  
-> +ifeq ($($(2)_OVERRIDE_SRCDIR),)
->  $(1)-configure:		$(1)-patch \
->  			$$($(2)_TARGET_CONFIGURE)
-> +else
-> +$(1)-configure:		$(1)-symlink \
-> +			$$($(2)_TARGET_CONFIGURE)
-> +endif
-> +
-> +$(1)-symlink:		$$($(2)_TARGET_SYMLINK)
->  
->  $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
->  
-> @@ -492,6 +507,7 @@ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
->  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
->  $$($(2)_TARGET_BUILD):			PKG=$(2)
->  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-> +$$($(2)_TARGET_SYMLINK):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
->  $$($(2)_TARGET_PATCH):			PKG=$(2)
->  $$($(2)_TARGET_PATCH):			NOHOSTPKG=$(3)
->  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
-> -- 
-> 
-> 
+   $ git diff --shortstat  cyrus-imapd-2.4 master --
+    229 files changed, 20358 insertions(+), 8177 deletions(-)
 
--- 
-View this message in context: http://old.nabble.com/-RFC--Override-source-directories-tp31651180p31919307.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Do you think I should start working on the master branch?
+Is it stable/usable? Is it similar to the 2.4.x branch in terms of usage and
+administration? Has the build system been improved in the master branch
+(especially with respect to the issues I'm facing)?
+
+Thanks,
+Luca
