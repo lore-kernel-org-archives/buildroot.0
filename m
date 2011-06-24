@@ -1,35 +1,38 @@
-From: Daniel Hobi <daniel.hobi@schmid-telecom.ch>
-Date: Fri, 24 Jun 2011 14:09:46 +0200
-Subject: [Buildroot] [PATCH] infrastructure: remove leftover of old style
-	hooks
-Message-ID: <1308917386-11117-1-git-send-email-daniel.hobi@schmid-telecom.ch>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Jun 2011 14:44:33 +0200
+Subject: [Buildroot] [PATCH 1/4] package: enhance infrastructure to
+ support source dir override
+In-Reply-To: <31919307.post@talk.nabble.com>
+References: <cover.1305755245.git.thomas.petazzoni@free-electrons.com>
+ <c7659f95de05fab6acb0cc1b5e8772a80832fc33.1305755245.git.thomas.petazzoni@free-electrons.com>
+ <31919307.post@talk.nabble.com>
+Message-ID: <20110624144433.3bdc7bb0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit ae2be8d (infrastructure: remove support for old style hooks)
-forgot to update an uninstall rule.
+Hello Alper,
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Daniel Hobi <daniel.hobi@schmid-telecom.ch>
----
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Le Fri, 24 Jun 2011 05:04:56 -0700 (PDT),
+Alper YILDIRIM <yildirimalper@gmail.com> a ?crit :
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..4bd40ba 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -324,7 +324,7 @@ $(BUILD_DIR)/%/.stamp_uninstalled:
- 	$($(PKG)_UNINSTALL_STAGING_CMDS)
- 	rm -f $($(PKG)_TARGET_INSTALL_STAGING)
- 	$($(PKG)_UNINSTALL_TARGET_CMDS)
--	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
-+	rm -f $($(PKG)_TARGET_INSTALL_TARGET)
- 
- # Remove package sources
- $(BUILD_DIR)/%/.stamp_dircleaned:
+> We started using your "source override" patches, but we encountered a
+> problem.
+> Package dependencies are not build when a package source is
+> overriden. To overcome this problem we made the following change in
+> Makefile.package.in
+
+Yes, this is correct. I also found the problem a few days ago, and
+fixed it locally, but I haven't had the time to post a newer version of
+the patch set, because I'm fixing other issues with this new feature.
+
+Regards,
+
+Thomas
 -- 
-1.7.5.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
