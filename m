@@ -1,52 +1,110 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 24 Jun 2011 14:26:50 +0200
-Subject: [Buildroot] Cross-compiling Cyrus in Buildroot
-Message-ID: <4E04828A.6030908@lucaceresoli.net>
+Date: Fri, 24 Jun 2011 14:38:44 +0200
+Subject: [Buildroot] cyrus-sasl in buildroot: apparent CFLAGS mismatch on
+	saslauthd
+In-Reply-To: <4E04828A.6030908@lucaceresoli.net>
+References: <4E04828A.6030908@lucaceresoli.net>
+Message-ID: <4E048554.4050602@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cyrus and Buildroot developers,
+Hi,
+the first issue I hit while trying to cross-compile cyrus-sasl within 
+buildroot
+is in the configure step.
 
-I'm working to add cyrus-sasl and cyrus-imapd (http://www.cyrusimap.org/)
-to buildroot (http://www.buildroot.net/) for use on embedded systems.
+Cyrus developers might be interested to know that buildroot, in the case of
+the Cyrus packages, builds packages unpacking the source package (the 
+released
+tarball in thi case), optionally patches them, then executes ./configure 
+with
+suitable environment and options, then launches make and make install.
 
-On my road I hit various problems with the cross-build process:
-configuration, compilation and installation.
-I could work around some, but not really fix them as they should.
+I instructed buildroot to unpack cyrus-sasl 2.1.24rc1 and run its 
+./configure
+script with most options disabled to make things simple. It ran fine 
+until it
+entered the saslauthd subdir with the following error (the full 
+compilation log
+is attached).
 
-I would like to share my findings with both communities, with the goal of
-clearly identifying the issues and fixing them in the proper way, thus
-contributing an improvement to both projects: two new packages for Buildroot
-and improvements and/or fixes for Cyrus (both -sasl and -imapd).
+   $ pwd
+   /home/murray/devel/buildroot
+   $ make cyrus-sasl-dirclean
+   rm -Rf /home/murray/devel/buildroot/output/build/cyrus-sasl-2.1.24rc1
+   $ make cyrus-sasl 2>&1 | tee cyrus-sasl.log
+   [...]
+   configure: configuring in saslauthd
+   configure: running /bin/bash './configure' --prefix=/usr  
+'--target=arm-linux' '--host=arm-linux' '--build=i686-pc-linux-gnu' 
+'--prefix=/usr' '--exec-prefix=/usr' '--sysconfdir=/etc' 
+'--disable-gtk-doc' '--enable-static' '--enable-shared' 
+'--disable-dependency-tracking' '--disable-sample' '--disable-checkapop' 
+'--enable-login' '--disable-otp' '--disable-srp' '--disable-gssapi' 
+'--disable-cram' '--disable-anon' '--disable-digest' '--disable-ntlm' 
+'--disable-passdss' '--without-des' '--without-openssl' 
+'CC=/home/murray/devel/buildroot/output/host/usr/bin/ccache 
+/home/murray/devel/buildroot/output/host/usr/bin/arm-linux-gcc' 
+'CFLAGS=-Os -pipe -Os -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
+-D_FILE_OFFSET_BITS=64' 
+'CPP=/home/murray/devel/buildroot/output/host/usr/bin/arm-linux-cpp' 
+'LDFLAGS=' 'build_alias=i686-pc-linux-gnu' 'host_alias=arm-linux' 
+'target_alias=arm-linux' --cache-file=.././config.cache --srcdir=.
+   configure: loading cache .././config.cache
+   configure: error: `CFLAGS' has changed since the previous run:
+   configure:   former value:  -Os -pipe -Os  -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+   configure:   current value: -Os -pipe -Os -D_LARGEFILE_SOURCE 
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+   configure: error: changes in the environment can compromise the build
+   configure: error: run `make distclean' and/or `rm .././config.cache' 
+and start over
+   configure: error: /bin/bash './configure' failed for saslauthd
+   $
 
-I'll start a new thread for each issue, and keep in copy both mailing lists.
-Please reply-to-all in order to keep the discussion alive in both places.
+It is clear from the output that the "former" and "current" CFLAGS are
+substantially identical, differing only in spacing.
 
-Here's a list of the issues I found:
-  - cyrus-sasl: apparent CFLAGS mismatch on saslauthd;
-  - cyrus-sasl: makemd5 is wrongly cross-compiled;
-  - cyrus-sasl: installs files with "arm-linux-" prefix
-  - cyrus-imapd: imtest does not cross-compile correctly;
-  - cyrus-imapd: static binaries are huge, cannot build them shared;
-  - cyrus-imapd: choose binaries to (build and) install;
-  - others might follow as I go on with my work.
+After a quick look at the CFLAGS handling on both the buildroot and 
+cyrus-sasl
+side I gave up and, since I do not need saslauthd, I worked around with this
+ugly patch:
 
-Before starting, a general question to Cyrus developers.
-So far I've been working with the most recent released packages: cyrus-sasl
-2.1.24rc1 and cyrus-imapd 2.4.9, but I see the cyrus-imapd git 
-repository has
-a master branch that diverges dramatically from the 2.4.x branch:
+  diff -u -r cyrus-sasl-2.1.24rc1-orig/configure 
+cyrus-sasl-2.1.24rc1/configure
+  --- cyrus-sasl-2.1.24rc1-orig/configure    2009-05-07 
+16:24:25.000000000 +0200
+  +++ cyrus-sasl-2.1.24rc1/configure    2011-05-02 15:10:36.793333728 +0200
+  @@ -15542,8 +15542,10 @@
+  -subdirs="$subdirs saslauthd"
 
-   $ git diff --shortstat  cyrus-imapd-2.4 master --
-    229 files changed, 20358 insertions(+), 8177 deletions(-)
+  +if test "$with_saslauthd" != no; then
+  +  subdirs="$subdirs saslauthd"
+  +fi
 
-Do you think I should start working on the master branch?
-Is it stable/usable? Is it similar to the 2.4.x branch in terms of usage and
-administration? Has the build system been improved in the master branch
-(especially with respect to the issues I'm facing)?
+and adding --disable-saslauthd to the ./configure options within buildroot's
+cyrus-sasl.mk (which contains the buildroot instructions to build 
+cyrus-sasl).
+
+This leaves two questions open:
+  - Why not adding a --disable-saslauthd option (the autoconf/automake 
+way) thus
+    allowing to build cyrus-sasl without this component?
+  - How to solve the problem with the CFLAGS spacing handling, for those who
+    might need saslauthd cross-compiled in buildroot?
+
+The full compilation log is attached.
 
 Thanks,
 Luca
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: cyrus-sasl-saslauthd-cflags-mismatch.log.gz
+Type: application/x-gzip
+Size: 3481 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/cd235ed1/attachment.bin>
