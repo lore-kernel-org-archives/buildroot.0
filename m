@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 24 Jun 2011 17:20:38 +0200
-Subject: [Buildroot] cyrus-imapd in buildroot: imtest does not cross-compile
-	correctly
+Date: Fri, 24 Jun 2011 18:27:22 +0200
+Subject: [Buildroot] cyrus-imapd: static binaries are huge + choose binaries
+	to install
 In-Reply-To: <4E04828A.6030908@lucaceresoli.net>
 References: <4E04828A.6030908@lucaceresoli.net>
-Message-ID: <4E04AB46.2070704@lucaceresoli.net>
+Message-ID: <4E04BAEA.1040608@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,42 @@ To: buildroot@busybox.net
 
 Hi,
 
-trying to cross-compile cyrus-imapd 2.4.9 in buildroot, with most options
-disabled to keep things simple, I got this:
+the last two issues that I'm facing with cyrus-imapd are not strictly 
+related to buildroot, nor to cross-compilation, but rather to using 
+cyrus-imapd in an embedded system.
 
-   [...]
-   ### Making install in /home/murray/devel/buildroot/output/build/cyrus-imapd-2.4.9/imtest
-   make[2]: Entering directory `/home/murray/devel/buildroot/output/build/cyrus-imapd-2.4.9/imtest'
-   /usr/bin/install -c -s -m 755 imtest /home/murray/devel/buildroot/output/target/usr/bin
-   strip: Unable to recognise the format of the input file `/home/murray/devel/buildroot/output/target/usr/bin/imtest'
-   /usr/bin/install: strip process terminated abnormally
-   make[2]: *** [install] Error 1
-   make[2]: Leaving directory `/home/murray/devel/buildroot/output/build/cyrus-imapd-2.4.9/imtest'
-   [...]
+I'm discussing them together in this e-mail as they are closely related.
 
-Clearly, the host install (/usr/bin/install) is being used and it is normal that
-it fails in stripping cross-compiled files.
-What I don't know is how to tell ./configure that it should not instruct install
-to strip files, i.e. not pass the -s option.
+The cyrus-imapd build system apparently does not currently allow to 
+build shared executables. This results in needlessly large files.
+In a basic build for x86 (./configure && make), most of the executables 
+in imap/ have a size between 2.2 and 2.5 MB, and the sum is 62.8 MB.
 
-After a very brief research, I cowardly opted for patching cyrus-imapd to
-completely disable imtest compilation, as I don't need it.
+This may not be a problem on a classic mail server, but storage space 
+can be a precious resource on embedded systems.
+Clearly, using  shared libraries would reduce the overall space required.
 
-Any idea on how to really fix this issue, instead of just disabling imtest?
-And how about adding a --disable-imtest option?
+It looks like I'm not the first to think about this. In
+   http://bugzilla.cyrusimap.org/show_bug.cgi?id=3095
+a patch was proposed and rejected. Unfortunately I could not apply it, 
+possibly because it's based on an old code base (2008).
 
-Attached are the build log and my awful patch.
+Would it be feasible to add shared build support in the cyrus-imapd 
+build system?
 
+
+For the same motivation (saving precious storage space), it would be 
+extremely useful to disable the compilation and installation of selected 
+executables.
+
+The standard distribution installed as many as 30 executables in 
+/usr/cyrus/bin/, which cross-compiled for ARM and stripped take 32 MB. 
+Those that I really need take <7 MB and I wish I could get rid of them 
+by passing --disable-pop3proxyd or similar to ./configure.
+
+AFAIK this is not currently possible in cyrus-imapd. Is this correct?
+Do the Cyrus developers have anything similar in mind for the future of 
+cyrus-imapd? Is this feasible?
+
+Thanks,
 Luca
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: cyrus-imapd-imtest.log.gz
-Type: application/x-gzip
-Size: 6664 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/7b28cc1f/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: cyrus-imapd-disable-imtest.patch
-Type: text/x-patch
-Size: 1755 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110624/7b28cc1f/attachment-0001.bin>
