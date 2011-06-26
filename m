@@ -1,44 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Jun 2011 00:19:06 +0200
-Subject: [Buildroot] adding libiqrf
-In-Reply-To: <BANLkTi=zt4AaA4HZ_bXGGymeZt5=p_2CqQ@mail.gmail.com> (Belisko
- Marek's message of "Mon, 16 May 2011 21:53:41 +0200")
-References: <BANLkTi=zt4AaA4HZ_bXGGymeZt5=p_2CqQ@mail.gmail.com>
-Message-ID: <8739iw6xt1.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?q?Beno=C3=AEt=20Mauduit?= <benoit.mauduit@gmail.com>
+Date: Mon, 27 Jun 2011 00:48:13 +0200
+Subject: [Buildroot] [git commit] oprofile: Bump to version 0.9.6
+Message-ID: <20110626224854.417CA85AA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Belisko" == Belisko Marek <marek.belisko@gmail.com> writes:
 
- Belisko> Hi,
- Belisko> I want to add libiqrf to buildroot (https://github.com/nandra/libiqrf).
- Belisko> I create simple patch but after running make seems library isn't builded.
- Belisko> I just get:
- >>>> libiqrf v1.0.0 Extracting
- >>>> libiqrf v1.0.0 Patching package/libiqrf
- >>>> libiqrf v1.0.0 Configuring
- >>>> libiqrf v1.0.0 Building
- >>>> libiqrf v1.0.0 'Installing to staging directory'
- >>>> libiqrf v1.0.0 Installing to target
+commit: http://git.buildroot.net/buildroot/commit/?id=001949a1e0aafc6d5dec384f20ccd9059142f774
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Belisko> +LIBIQRF_VERSION = v1.0.0
- Belisko> +LIBIQRF_SITE = git://github.com/nandra/libiqrf.git
- Belisko> +LIBIQRF_INSTALL_STAGING = YES
- Belisko> +LIBIQRF_INSTALL_TARGET = YES
- Belisko> +
- Belisko> +LIBIQRF_DEPENDENCIES = libusb
- Belisko> +
- Belisko> +$(eval $(call GENTARGETS,package,libiqrf))
- Belisko> +
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/oprofile/oprofile.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Belisko> Any ideas why it doesn't work?
-
-With gentargets there's no default implementation of the build + install
-steps, so you need to explicitly implement them (look at the other
-gentargets packages for examples).
-
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 42bf0e2..4522cda 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -3,7 +3,7 @@
+ # oprofile
+ #
+ #############################################################
+-OPROFILE_VERSION := 0.9.4
++OPROFILE_VERSION := 0.9.6
+ OPROFILE_CONF_OPT :=	--localstatedir=/var \
+ 			--with-kernel-support
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
