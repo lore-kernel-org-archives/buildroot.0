@@ -1,46 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Jun 2011 23:07:01 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110626210718.934E688E6E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Jun 2011 23:07:57 +0200
+Subject: [Buildroot] Is this a bug? libm in uclibc 0.9.32
+In-Reply-To: <201106242100.45976.vapier@gentoo.org> (Mike Frysinger's message
+ of "Fri, 24 Jun 2011 21:00:43 -0400")
+References: <BANLkTimqhX+pHGkSHQMpTX=n82_eHmj0tA@mail.gmail.com>
+ <BANLkTinjm+-sO4jPHckVJg1VH2__Ejii+A@mail.gmail.com>
+ <BANLkTikFc-OSQ+jyrDB9C8L5DwKvF-qi=w@mail.gmail.com>
+ <201106242100.45976.vapier@gentoo.org>
+Message-ID: <87ei2g713m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94ad0667ded7dd4c5c7c44df329f9eabe46314bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Mike> On Friday, June 24, 2011 17:12:30 raymond zhao wrote:
+ Mike> please dont top post
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ >> I agree.
+ >> But does anyone have a better solution to fix this bug?
 
-diff --git a/CHANGES b/CHANGES
-index a10fa18..3419590 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,5 +1,20 @@
- 2011.08, Not released yet:
- 
-+	Fixes all over the tree and new features.
-+
-+	Toolchain: uClibc 0.9.32 / NPTL support, ext-toolchain-wrapper
-+	improvements, improved non-MMU support.
-+
-+	Updated/fixed packages: berkeleydb, bmon, busybox, dbus,
-+	dbus-glib, ethtool, ffmpeg, gst-plugins-bad, libdnet,
-+	libmpeg2, mtd-utils, qt, sudo, synergy, usbutils, webkit
-+
-+	New packages: live555, sredird, statserial, yajl
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#3907: 2011.05 - Qt 4.7.3 not building on ARM
-+
- 2011.05, Released May 27th, 2011:
- 
- 	Updated/fixed packages: makedevs
+ Mike> i pointed at the correct solution.  it's simply a matter of implementing it.
+
+ Mike> also, this is a uClibc issue, not buildroot, so it probably
+ Mike> should be taken up there.  like a bug filed in their tracker.
+
+Indeed. Please report this issue to the uClibc devs.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
