@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 26 Jun 2011 09:12:52 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.39.x stable
-	version
-Message-ID: <20110626071724.3E97988E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sheevaplug_defconfig: bump kernel version
+Message-ID: <20110626071724.94DC488E22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +9,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b72b806f364a49688c478d849b6da6d01f47fbcf
+commit: http://git.buildroot.net/buildroot/commit/?id=b93c609f118aa8e7c9c0b489f5f124507bdaf6e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
+ configs/sheevaplug_defconfig |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 4c551a2..2a5cf5c 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -50,6 +50,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
--	default "2.6.39.1"	if BR2_KERNEL_HEADERS_2_6_39
-+	default "2.6.39.2"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 757e1f5..305aadd 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -19,6 +19,6 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="kirkwood"
+ BR2_LINUX_KERNEL_UIMAGE=y
 -- 
 1.7.3.4
