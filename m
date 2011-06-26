@@ -1,34 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Jun 2011 06:22:37 +0300
-Subject: [Buildroot] device_table & /dev/shm
-In-Reply-To: <BANLkTi=j9SD2aLP73Cnp6iUWov99h9Npog@mail.gmail.com>
-References: <BANLkTi=j9SD2aLP73Cnp6iUWov99h9Npog@mail.gmail.com>
-Message-ID: <20110626032236.GA17733@tarshish>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 26 Jun 2011 09:12:52 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.39.x stable
+	version
+Message-ID: <20110626071724.3E97988E22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
 
-On Sat, Jun 25, 2011 at 11:29:46AM -0700, Charles Krinke wrote:
-> 1. I can see the generic device_table.txt and it includes a /dev/shm
-> node. I can also see the /dev structure in output/target and it
-> matches the generic device_table.txt. But, ... when I build the jffs2
-> and load it on my MPC8323 target, what I see in /dev does not include
-> /dev/shm. In fact it is significantly different. So, my first question
-> is:
-> 
-> "What besides generic/device_table.txt can determine the contents of
-> /dev on an MPC8323 target?"
+commit: http://git.buildroot.net/buildroot/commit/?id=b72b806f364a49688c478d849b6da6d01f47fbcf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do you have devtmpfs mounted on /dev? If so, devtmpfs takes over the content 
-of /dev, and hides the device nodes and directories from your device table.  
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-baruch
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 4c551a2..2a5cf5c 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -50,6 +50,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+-	default "2.6.39.1"	if BR2_KERNEL_HEADERS_2_6_39
++	default "2.6.39.2"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.3.4
