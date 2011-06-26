@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 26 Jun 2011 09:12:52 +0200
-Subject: [Buildroot] [git commit] linux: bump 2.6.39.x stable version
-Message-ID: <20110626071724.74DE988E22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] mtd: bump version
+Message-ID: <20110626071724.C46D888E22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,44 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7a4ffa77d5f6957789455acb0cd801100b6d35d
+commit: http://git.buildroot.net/buildroot/commit/?id=f7fcfbfa9d1e571672877da8d85f838329713825
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e461a53..1f1a69c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_2_6_39
- 
- config BR2_LINUX_KERNEL_2_6_39
--	bool "2.6.39.1"
-+	bool "2.6.39.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -52,7 +52,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "2.6.39.1"
-+	default "2.6.39.2"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -60,7 +60,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "2.6.39.1" if BR2_LINUX_KERNEL_2_6_39
-+	default "2.6.39.2" if BR2_LINUX_KERNEL_2_6_39
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index a957441..78ab765 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION:=1.4.4
++MTD_VERSION:=1.4.5
+ MTD_SOURCE:=mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE:=ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
 -- 
 1.7.3.4
