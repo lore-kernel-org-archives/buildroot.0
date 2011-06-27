@@ -1,66 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Jun 2011 11:18:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 3925] New: midori not getting compile
-Message-ID: <bug-3925-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jun 2011 14:22:40 +0200
+Subject: [Buildroot] [PATCH] linux: Change patch matching string to
+ allow all names. This allows the use of patches output by git format-patch.
+In-Reply-To: <BANLkTikb9RCrHgJMYtaw1_d9K1j6bk=unw@mail.gmail.com>
+References: <1308924529-32225-1-git-send-email-mike@mikebwilliams.com>
+ <BANLkTikb9RCrHgJMYtaw1_d9K1j6bk=unw@mail.gmail.com>
+Message-ID: <20110627142240.7454703d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3925
+Hello,
 
-           Summary: midori not getting compile
-           Product: buildroot
-           Version: 2011.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: azhar.karnalkar at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Le Mon, 27 Jun 2011 09:10:02 +0200,
+Daniel Nystr?m <daniel.nystrom@timeterminal.se> a ?crit :
 
+> I have to disagree on this. There might be patches for other packages
+> in that same dir.
 
-Hi team buildroot
+I was initially tempted to ACK Mike's patch, because I have the same
+use case than Mike's (using git format-patch and then copying patches
+to the Buildroot board specific directory), but as Daniel says, there
+may be patches for other components in the same directory.
 
-I am trying to buildrootfilesystem with midori (lightweight window web browser)
+Maybe we should simply document this in the option help text?
 
-but it fails while compiling 1 of its library
+Regards,
 
-below is the log of the error:
-make[3]: Entering directory
-`/home/eclat/Downloads/buildroot-2011.02/output/build/icu-4.4.2/source/tools/makeconv'
-/home/eclat/arm-2009q3//bin/arm-none-linux-gnueabi-g++
---sysroot=/home/eclat/Downloads/buildroot-2011.02/output/host/usr/arm-unknown-linux-gnueabi/sysroot
--pipe -Os  -mtune=arm926ej-s -march=armv5te -mabi=aapcs-linux -msoft-float
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -W -Wall -ansi
--pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long 
--L/home/eclat/Downloads/buildroot-2011.02/output/host/usr/arm-unknown-linux-gnueabi/sysroot/lib
--L/home/eclat/Downloads/buildroot-2011.02/output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/lib
- -o ../../bin/makeconv makeconv.o ucnvstat.o genmbcs.o gencnvex.o -L../../lib
--licutu -L../../lib -licui18n -L../../lib -licuuc -L../../lib -L../../stubdata
--licudata -lpthread -ldl -lm  
-/home/eclat/arm-2009q3/bin/../lib/gcc/arm-none-linux-gnueabi/4.4.1/../../../../arm-none-linux-gnueabi/bin/ld:
-../../bin/makeconv: hidden symbol `__sync_val_compare_and_swap_4' in
-/home/eclat/arm-2009q3/bin/../lib/gcc/arm-none-linux-gnueabi/4.4.1/libgcc.a(linux-atomic.o)
-is referenced by DSO
-/home/eclat/arm-2009q3/bin/../lib/gcc/arm-none-linux-gnueabi/4.4.1/../../../../arm-none-linux-gnueabi/bin/ld:
-final link failed: Nonrepresentable section on output
-collect2: ld returned 1 exit status
-make[3]: *** [../../bin/makeconv] Error 1
-make[3]: Leaving directory
-`/home/eclat/Downloads/buildroot-2011.02/output/build/icu-4.4.2/source/tools/makeconv'
-
-Can u please send me some info on how to debug this error as i am stuck on it
-from last 3 days
-Thanks and regards,
-Azhar
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
