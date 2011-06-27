@@ -1,28 +1,37 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Mon, 27 Jun 2011 09:10:02 +0200
-Subject: [Buildroot] [PATCH] linux: Change patch matching string to
- allow all names. This allows the use of patches output by git format-patch.
-In-Reply-To: <1308924529-32225-1-git-send-email-mike@mikebwilliams.com>
-References: <1308924529-32225-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <BANLkTikb9RCrHgJMYtaw1_d9K1j6bk=unw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 27 Jun 2011 10:29:46 +0200
+Subject: [Buildroot] [git commit] qt: fix typo in webkit pthread_getattr_np
+	patch
+Message-ID: <20110627091554.0AA9788EC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/6/24 Mike Williams <mike@mikebwilliams.com>:
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -98,7 +98,7 @@ $(LINUX26_DIR)/.stamp_patched: $(LINUX26_DIR)/.stamp_extracted
-> ? ? ? ? ? ? ? ?if echo $$p | grep -q -E "^ftp://|^http://" ; then \
-> ? ? ? ? ? ? ? ? ? ? ? ?toolchain/patch-kernel.sh $(@D) $(DL_DIR) `basename $$p` ; \
-> ? ? ? ? ? ? ? ?elif test -d $$p ; then \
-> - ? ? ? ? ? ? ? ? ? ? ? toolchain/patch-kernel.sh $(@D) $$p linux-\*.patch ; \
-> + ? ? ? ? ? ? ? ? ? ? ? toolchain/patch-kernel.sh $(@D) $$p \*.patch ; \
 
-I have to disagree on this. There might be patches for other packages
-in that same dir.
+commit: http://git.buildroot.net/buildroot/commit/?id=36f8b40d22ce68155744124d75489dc15b5ff34c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And by the way;
-http://spheredev.org/wiki/Git_for_the_lazy#Writing_good_commit_messages
+Missing continuation (\) character in #if check.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../qt/qt-4.7.3-pthread_getattr_np_webkit.patch    |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch b/package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch
+index dc078ad..934c332 100644
+--- a/package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch
++++ b/package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch
+@@ -9,7 +9,7 @@
+ +// pthread_getattr_np or pthread_attr_getstack.
+ +#if __UCLIBC_MAJOR__ == 0 && \
+ +    (__UCLIBC_MINOR__ < 9 || \
+-+    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 32)) &&
+++    (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 32)) && \
+ +    defined(__LINUXTHREADS_OLD__)
+ +#define UCLIBC_USE_PROC_SELF_MAPS 1
+ +#include <stdio_ext.h>
+-- 
+1.7.3.4
