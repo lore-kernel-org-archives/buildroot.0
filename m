@@ -1,113 +1,60 @@
 From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 28 Jun 2011 10:34:52 +0200
-Subject: [Buildroot] [PATCH] New packages: acl and attr
-Message-ID: <4E09922C.6060803@visionsystems.de>
+Date: Tue, 28 Jun 2011 10:35:55 +0200
+Subject: [Buildroot] [PATCH 1/2] Add package acl
+In-Reply-To: <20110621124002.Horde.FlRsXGms4ABOANdyT8bFvAA@www.home.zuerker.org>
+References: <1306779390-19947-1-git-send-email-zonque@gmail.com>
+ <1306779390-19947-2-git-send-email-zonque@gmail.com>
+ <20110530210244.5bd309aa@surf>
+ <BANLkTikqvZ9iJTvg7QC7WDOUKX+F9KyK0g@mail.gmail.com>
+ <20110531074715.Horde.sKpzOGms4ABN5ONTHDNzy_A@www.home.zuerker.org>
+ <4E006EF0.9080408@visionsystems.de>
+ <20110621124002.Horde.FlRsXGms4ABOANdyT8bFvAA@www.home.zuerker.org>
+Message-ID: <4E09926B.40203@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to providing the acl and extended attributes functionality,
-these new packages satisfy newer udev versions, so you can build all extras.
+Am 21.06.2011 19:40, schrieb Heiko Zuerker:
+> 
+> Quoting Yegor Yefremov <yegor_sub1@visionsystems.de>:
+> 
+>> Am 31.05.2011 14:47, schrieb Heiko Zuerker:
+>>>
+>>> Quoting Daniel Mack <zonque@gmail.com>:
+>>>
+>>>> On Mon, May 30, 2011 at 9:02 PM, Thomas Petazzoni
+>>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>>> On Mon, 30 May 2011 20:16:29 +0200
+>>>>> Daniel Mack <zonque@gmail.com> wrote:
+>>>>>
+>>>>>> +define ACL_INSTALL_TARGET_CMDS
+>>>>>> +     $(INSTALL) -m 0755 -D $(@D)/getfacl/.libs/getfacl $(TARGET_DIR)/usr/bin/
+>>>>>> +     $(INSTALL) -m 0755 -D $(@D)/setfacl/.libs/setfacl $(TARGET_DIR)/usr/bin/
+>>>>>> +     $(INSTALL) -m 0644 -D $(@D)/libacl/.libs/libacl.so* $(STAGING_DIR)/usr/lib/
+>>>>>> +endef
+>>>>>> +
+>>>>>> +define ACL_INSTALL_STAGING_CMDS
+>>>>>> +     test -d $(STAGING_DIR)/usr/include/acl/ || mkdir $(STAGING_DIR)/usr/include/acl/
+>>>>>> +     $(INSTALL) -m 0644 -D $(@D)/include/*.h $(STAGING_DIR)/usr/include/acl/
+>>>>>> +     $(SED) s,sys/acl.h,acl/acl.h, -i $(STAGING_DIR)/usr/include/acl/libacl.h
+>>>>>> +endef
+>>>>>
+>>>>> Any reason to not use the default "make install" behaviour of the
+>>>>> package ? (And ditto for the attr package).
+>>>>
+>>>> The libtool crap failed for cross compilation in these cases, so these
+>>>> workarounds are unfortunately necessary.
+>>>
+>>> Actually this isn't necessary, please see my version of the patches.
+>>>
+>>
+>> Any update on this issue?
+> 
+> I don't believe that either version of the package has been added.
 
-Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
-Signed-off-by: Daniel Mack <zonque@gmail.com>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in      |    2 ++
- package/acl/Config.in  |   11 +++++++++++
- package/acl/acl.mk     |   18 ++++++++++++++++++
- package/attr/Config.in |    7 +++++++
- package/attr/attr.mk   |   16 ++++++++++++++++
- 5 files changed, 54 insertions(+)
- create mode 100644 package/acl/Config.in
- create mode 100644 package/acl/acl.mk
- create mode 100644 package/attr/Config.in
- create mode 100644 package/attr/attr.mk
+I just sent new patch combined of yours and Daniels. Please review.
 
-Index: b/package/Config.in
-===================================================================
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -487,6 +487,8 @@
- endmenu
- 
- menu "System tools"
-+source "package/acl/Config.in"
-+source "package/attr/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
-Index: b/package/acl/Config.in
-===================================================================
---- /dev/null
-+++ b/package/acl/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ACL
-+	bool "acl"
-+	select BR2_PACKAGE_ATTR
-+	help
-+	  POSIX Access Control Lists, which are used to define more
-+	  fine-grained discretionary access rights for files and
-+	  directories.
-+	  This package also provides libacl.
-+
-+comment "acl requires attr to be built"
-+        depends on !BR2_PACKAGE_ATTR
-Index: b/package/acl/acl.mk
-===================================================================
---- /dev/null
-+++ b/package/acl/acl.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# acl
-+#
-+#############################################################
-+
-+ACL_VERSION = 2.2.49
-+ACL_SOURCE := acl_$(ACL_VERSION).orig.tar.gz
-+ACL_SITE = http://ftp.debian.org/debian/pool/main/a/acl
-+ACL_INSTALL_STAGING = YES
-+ACL_DEPENDENCIES = attr
-+ACL_CONF_OPT = --enable-gettext=no
-+
-+
-+ACL_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(TARGET_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
-+ACL_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
-+
-+$(eval $(call AUTOTARGETS,package,acl))
-Index: b/package/attr/Config.in
-===================================================================
---- /dev/null
-+++ b/package/attr/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ATTR
-+	bool "attr"
-+	help
-+	  Extended attributes are name:value pairs associated permanently with
-+	  files and directories, similar to the environment strings associated
-+	  with a process
-+	  This package also provides libattr.
-Index: b/package/attr/attr.mk
-===================================================================
---- /dev/null
-+++ b/package/attr/attr.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# attr
-+#
-+#############################################################
-+
-+ATTR_VERSION = 2.4.46
-+ATTR_SOURCE := attr_$(ATTR_VERSION).orig.tar.gz
-+ATTR_SITE = http://ftp.debian.org/debian/pool/main/a/attr
-+ATTR_INSTALL_STAGING = YES
-+ATTR_CONF_OPT = --enable-gettext=no
-+
-+ATTR_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(STAGING_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
-+ATTR_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
-+
-+$(eval $(call AUTOTARGETS,package,attr))
+Best regards,
+Yegor
