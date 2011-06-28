@@ -1,78 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jun 2011 16:33:15 +0200
-Subject: [Buildroot] Buildroot root fs over NFS bug
-In-Reply-To: <4E09C8A0.8000808@labri.fr>
-References: <4E09C8A0.8000808@labri.fr>
-Message-ID: <20110628163315.7f9a2527@skate>
+From: =?UTF-8?Q?Beno=C3=AEt_Mauduit?= <benoit.mauduit@gmail.com>
+Date: Tue, 28 Jun 2011 17:42:50 +0200
+Subject: [Buildroot] [PATCH] [package/config] Change behaviour of
+	symlink .config
+In-Reply-To: <20110628161807.094016bd@skate>
+References: <1309262850-11224-1-git-send-email-benoit.mauduit@openwide.fr>
+ <20110628161807.094016bd@skate>
+Message-ID: <BANLkTimi895==H2_wovhoSsyFMewHCpdFYUVYRYaCH48-ANz1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Jun 28, 2011 at 4:18 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> I am not sure to understand your use case. Isn't using out-of-tree
+> builds with O= a better solution, if what you want is to have the
+> config file outside of the Buildroot source directory ?
 
-Le Tue, 28 Jun 2011 14:27:12 +0200,
-Jigar SOLANKI <jigar.solanki@labri.fr> a ?crit :
+I will try to explain my use case :
+We use buildroot as a tool inside another, but we want to have the
+choice of the tool for particular target.
+For example, if I want to build the kernel and rootfs with Buildroot
+and the bootloader with another tool.
+Actually, the "Buildroot tool" is a Buildroot wrapper. It can be
+configured with buildroot .config files and keep track of them in
+another directory with another config filename.
 
-> I'm trying to build a full Linux environment on a Virtex4 FPGA board.
-> I'm actually using a sparc's clone (LEON).
-> I've successfully built and run the system using grmon
-> grmon> load image.ram
-> grmon> run
-> 
-> But when it comes to mount the root filesystem over NFS, i get the
-> following error :
+We can save config for specific board (using make savedefconfig), but
+we don't want to because is much for development purpose.
+Also, we don't need to export the output of buildroot in another
+directory. The trivial solution is to override the CONFIG_DIR variable
+but we must name the config file ".config".
 
-According to the following log, you are not mounting your root
-filesystem over NFS.
+I know this patch is not useful for buildroot itself, but if it can
+help some users.
 
-> ...
-> IP-Config: Complete:
->      device=eth0, addr=10.10.10.1, mask=255.255.255.0,
-> gw=10.10.10.254, host=houat, domain=, nis-domain=(none),
->      bootserver=10.10.10.254, rootserver=10.10.10.254, rootpath=
-> Freeing unused kernel memory: 5060k freed
+> Regards,
+Thanks for the review :)
 
-This is the last line from the kernel.
 
-> Initializing random number generator... done.
-
-This is the first line from the userspace initialization scripts. So I
-guess your root filesystem is in an initramfs.
-
-> Starting network...
-> ip: RTNETLINK answers: File exists
-> Starting NFS statd: touch: /var/lock/subsys/nfslock: No such file or
-> directory
-
-presumably the nfs-utils init script forgets to create this subsys
-directory.
-
-> done
-> Starting NFS services: *** invalid open64 call: O_CREAT without mode
-> ***: /usr/sbin/exportfs terminated
-> ======= Backtrace: =========
-> /lib/libc.so.6(__open64_2+0x28)[0x50133790]
-> /usr/sbin/exportfs[0x15ca8]
-> /usr/sbin/exportfs[0x13d90]
-> /usr/sbin/exportfs[0x11f3c]
-> /lib/libc.so.6(__libc_start_main+0x10c)[0x50079674]
-> /usr/sbin/exportfs[0x11154]
-> ======= Memory map: ========
-> 00010000-00019000 r-xp 000000
-
-Looks like a bug in exportfs.
-
-But if your goal is to mount a root filesystem over NFS, then the
-nfs-utils package is useless. The kernel contains all the necessary
-bits to mount a NFS filesystem as the root filesystem.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Beno?t Mauduit
