@@ -1,66 +1,113 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Jun 2011 07:23:24 +0300
-Subject: [Buildroot] how to tune powerpc e500v2 cpus in BR
-In-Reply-To: <4E08E6DB.4070606@rossvideo.com>
-References: <BANLkTikRNGx1Mte+sOYDeOr9f896K8GuZw@mail.gmail.com>
- <4E04C9EE.4050206@rossvideo.com>
- <20110627035939.GB3046@jasper.tkos.co.il>
- <BANLkTinSC4W8=vwRCHYmBndbJqt7rv=xgQ@mail.gmail.com>
- <4E08E6DB.4070606@rossvideo.com>
-Message-ID: <20110628042324.GA3154@jasper.tkos.co.il>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 28 Jun 2011 10:34:52 +0200
+Subject: [Buildroot] [PATCH] New packages: acl and attr
+Message-ID: <4E09922C.6060803@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matias, raymod,
-On Mon, Jun 27, 2011 at 04:23:55PM -0400, Matias Garcia wrote:
-> On 11-06-27 04:10 PM, raymond zhao wrote:
-> >On Sun, Jun 26, 2011 at 11:59 PM, Baruch Siach<baruch@tkos.co.il>  wrote:
-> >>Hi Raymond, Matias,
-> >>I'm also using the CodeSourcery toolchain for the e500v2 target (P1011), and I
-> >>figured out that I must pass -te500v2 to gcc at link time as well. Since there
-> >>is no generic way to add LDFLAGS options in Buildroot, I've posted the patch
-> >>at http://lists.busybox.net/pipermail/buildroot/2011-June/043668.html. Did you
-> >>find a better solution?
-> >>
-> >I took a look at the CodeSourcery. Looks it doesn't support uCLibc.
+In addition to providing the acl and extended attributes functionality,
+these new packages satisfy newer udev versions, so you can build all extras.
 
-Yes. I'm also trying to build a uClibc toolchain using crosstool-ng. No luck 
-yet. You may try the Aboriginal Linux toolchain 
-(http://landley.net/aboriginal/downloads/binaries/), although it's based on an 
-old gcc version (4.2.1).
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in      |    2 ++
+ package/acl/Config.in  |   11 +++++++++++
+ package/acl/acl.mk     |   18 ++++++++++++++++++
+ package/attr/Config.in |    7 +++++++
+ package/attr/attr.mk   |   16 ++++++++++++++++
+ 5 files changed, 54 insertions(+)
+ create mode 100644 package/acl/Config.in
+ create mode 100644 package/acl/acl.mk
+ create mode 100644 package/attr/Config.in
+ create mode 100644 package/attr/attr.mk
 
-> changbing: That's correct. You may find an older toolchain from them
-> that uses uClibc, but you'll have to specify it yourself in the
-> Buildroot config. I found a very small difference in size (<2MB)
-> between uclibc and eglibc filesystems, but I'm using 32MB of flash
-> just for the OS, so small is relative.
-
-The greatest advantage of uClibc is that it behaves better when doing static 
-linking. I use it to generate Busybox based initramfs, and for this use case 
-the 2MB size reduction is a big difference.
-
-> Baruch: I use the external toolchain wrapper introduced just before
-> 2011.05, but I had to patch it to add arbitrary options. I posted a
-> couple of patches here, one that introduces a new option for
-> selecting the sysroot when compiling the external wrapper, and
-> another that simply passes the BR2_TARGET_OPTIMIZATIONS to the
-> external wrapper, but they didn't get much attention.
-
-Can this solve the link time -te500v2 issue? I'll look into this.
-
-baruch
-
-> I prefer the first method (new config option) because you can choose
-> not to pass the optimizations at some later point for whatever
-> reason, and thus use the wrapper only to select your sysroot.
-> 
-> Cheers,
-> Matias
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -487,6 +487,8 @@
+ endmenu
+ 
+ menu "System tools"
++source "package/acl/Config.in"
++source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+Index: b/package/acl/Config.in
+===================================================================
+--- /dev/null
++++ b/package/acl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ACL
++	bool "acl"
++	select BR2_PACKAGE_ATTR
++	help
++	  POSIX Access Control Lists, which are used to define more
++	  fine-grained discretionary access rights for files and
++	  directories.
++	  This package also provides libacl.
++
++comment "acl requires attr to be built"
++        depends on !BR2_PACKAGE_ATTR
+Index: b/package/acl/acl.mk
+===================================================================
+--- /dev/null
++++ b/package/acl/acl.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# acl
++#
++#############################################################
++
++ACL_VERSION = 2.2.49
++ACL_SOURCE := acl_$(ACL_VERSION).orig.tar.gz
++ACL_SITE = http://ftp.debian.org/debian/pool/main/a/acl
++ACL_INSTALL_STAGING = YES
++ACL_DEPENDENCIES = attr
++ACL_CONF_OPT = --enable-gettext=no
++
++
++ACL_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(TARGET_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
++ACL_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
++
++$(eval $(call AUTOTARGETS,package,acl))
+Index: b/package/attr/Config.in
+===================================================================
+--- /dev/null
++++ b/package/attr/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ATTR
++	bool "attr"
++	help
++	  Extended attributes are name:value pairs associated permanently with
++	  files and directories, similar to the environment strings associated
++	  with a process
++	  This package also provides libattr.
+Index: b/package/attr/attr.mk
+===================================================================
+--- /dev/null
++++ b/package/attr/attr.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# attr
++#
++#############################################################
++
++ATTR_VERSION = 2.4.46
++ATTR_SOURCE := attr_$(ATTR_VERSION).orig.tar.gz
++ATTR_SITE = http://ftp.debian.org/debian/pool/main/a/attr
++ATTR_INSTALL_STAGING = YES
++ATTR_CONF_OPT = --enable-gettext=no
++
++ATTR_INSTALL_STAGING_OPT = prefix=$(STAGING_DIR)/usr exec_prefix=$(STAGING_DIR)/usr PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib install-dev install-lib
++ATTR_INSTALL_TARGET_OPT = prefix=$(TARGET_DIR)/usr exec_prefix=$(TARGET_DIR)/usr install install-lib
++
++$(eval $(call AUTOTARGETS,package,attr))
