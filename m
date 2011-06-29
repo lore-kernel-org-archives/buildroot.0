@@ -1,44 +1,57 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 29 Jun 2011 17:13:15 +0100
-Subject: [Buildroot] [pull request] libnspr, libnss, and orc packages
-Message-ID: <BANLkTikhBBip+ogOg4hET8UR=SptAiMbYA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 29 Jun 2011 18:14:37 +0200
+Subject: [Buildroot] problems compiling uclibc for Geode (i386)
+In-Reply-To: <20110629164330.1f5780a7@skate>
+References: <1309291371.21632.5.camel@bender> <1309350574.17457.5.camel@sven>
+ <20110629164330.1f5780a7@skate>
+Message-ID: <201106291814.38165.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A few patches adding some new packages that I have been sitting on for a while.
+Sven, Thomas, All,
 
-The following changes since commit c80224a3a05e41af5a32e1c663fd3853f313382b:
+On Wednesday 29 June 2011 16:43:30 Thomas Petazzoni wrote:
+> Le Wed, 29 Jun 2011 14:29:34 +0200,
+> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+> 
+> > >   LD libuClibc-0.9.32.so
+> > > libc/libc_so.a(err.os):(.text.vwarn_work+0x127): undefined
+> > > reference to `__lll_unlock_wake_private'
+> > > collect2: ld returned 1 exit status
+> > > make[1]: *** [lib/libc.so] Error 1
+> > > make[1]: Leaving directory
+> > > `/home/sven/git/buildroot/output/toolchain/uClibc-0.9.32'
+> > 
+> > Looks like NPTL support is broken for the generic 386 target. I've
+> > changed the uclibc configuration to i586 now (in the hope that this
+> > will work for a Geode processor) and that has fixed above problem for
+> > me.
+> 
+> This function is implemented in
+> libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S, so
+> presumably, i386 does not work, but i486 should.
+> 
+> My understanding is that the futex mechanism uses the cmpxchgl
+> instruction, which is only available on 486+ processors.
 
-  toolchain/gcc: bump 4.6.x version to 4.6.1 (2011-06-28 15:19:13 +0200)
+I confirm Thomas' explanations.
 
-are available in the git repository at:
-  git://github.com/willnewton/buildroot.git for-upstream
+NPTL on x86 requires i486+ because of the cmpxchg opcode.
+NPTL will never be implemented for i386.
 
-Paul Burton (1):
-      orc: New package for the Oil Runtime Compiler
+IIRC, Geode is at least an i586, so you should be OK by selecting i586
+instead of generic i386.
 
-Will Newton (2):
-      libnspr: New package.
-      libnss: Add new package.
+Regards,
+Yann E. MORIN.
 
- package/Config.in                  |    3 ++
- package/libnspr/Config.in          |   13 +++++++
- package/libnspr/libnspr.mk         |   17 ++++++++++
- package/libnss/Config.in           |   13 +++++++
- package/libnss/libnss-cross.patch  |   24 ++++++++++++++
- package/libnss/libnss-uclibc.patch |   14 ++++++++
- package/libnss/libnss.mk           |   62 ++++++++++++++++++++++++++++++++++++
- package/orc/Config.in              |    7 ++++
- package/orc/orc.mk                 |   49 ++++++++++++++++++++++++++++
- 9 files changed, 202 insertions(+), 0 deletions(-)
- create mode 100644 package/libnspr/Config.in
- create mode 100644 package/libnspr/libnspr.mk
- create mode 100644 package/libnss/Config.in
- create mode 100644 package/libnss/libnss-cross.patch
- create mode 100644 package/libnss/libnss-uclibc.patch
- create mode 100644 package/libnss/libnss.mk
- create mode 100644 package/orc/Config.in
- create mode 100644 package/orc/orc.mk
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
