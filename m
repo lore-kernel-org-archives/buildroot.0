@@ -1,64 +1,86 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 29 Jun 2011 15:46:20 +0200
-Subject: [Buildroot] [PATCH 5/6] Rework the logging daemons startup
-Message-ID: <1309355181-21048-5-git-send-email-maxime.ripard@free-electrons.com>
+Date: Wed, 29 Jun 2011 15:46:21 +0200
+Subject: [Buildroot] [PATCH 6/6] Add the rsyslog package.
+Message-ID: <1309355181-21048-6-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The logging mechanism startup being in inittab, it isn't easy to
-overcharge the default policy. With this patch, the startup of the
-syslog daemon is moved to an init.d script, that can easily be
-overwritten.
+Rsyslog is a powerful and flexible syslog daemon.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- fs/skeleton/etc/inittab    |    2 --
- package/busybox/S01logging |   26 ++++++++++++++++++++++++++
- package/busybox/busybox.mk |    5 +++++
- 3 files changed, 31 insertions(+), 2 deletions(-)
- create mode 100644 package/busybox/S01logging
+ package/Config.in          |    1 +
+ package/rsyslog/Config.in  |    6 ++++++
+ package/rsyslog/S01logging |   38 ++++++++++++++++++++++++++++++++++++++
+ package/rsyslog/rsyslog.mk |   23 +++++++++++++++++++++++
+ 4 files changed, 68 insertions(+), 0 deletions(-)
+ create mode 100644 package/rsyslog/Config.in
+ create mode 100644 package/rsyslog/S01logging
+ create mode 100644 package/rsyslog/rsyslog.mk
 
-diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-index 0e50467..191c525 100644
---- a/fs/skeleton/etc/inittab
-+++ b/fs/skeleton/etc/inittab
-@@ -28,8 +28,6 @@ null::sysinit:/bin/hostname -F /etc/hostname
- 
- # Logging junk
- null::sysinit:/bin/touch /var/log/messages
--null::respawn:/sbin/syslogd -n -m 0
--null::respawn:/sbin/klogd -n
- tty3::respawn:/usr/bin/tail -f /var/log/messages
- 
- # Stuff to do for the 3-finger salute
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+diff --git a/package/Config.in b/package/Config.in
+index 1a4815a..b06c669 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -496,6 +496,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+ source "package/util-linux/Config.in"
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
 new file mode 100644
-index 0000000..6badebe
+index 0000000..cee19fc
 --- /dev/null
-+++ b/package/busybox/S01logging
-@@ -0,0 +1,26 @@
++++ b/package/rsyslog/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_RSYSLOG
++	bool "rsyslog"
++	help
++          Rsyslog is a powerful and flexible syslog implementation
++
++	  http://www.rsyslog.com
+diff --git a/package/rsyslog/S01logging b/package/rsyslog/S01logging
+new file mode 100644
+index 0000000..cc640ea
+--- /dev/null
++++ b/package/rsyslog/S01logging
+@@ -0,0 +1,38 @@
 +#!/bin/sh
 +#
-+# Start logging
++# Starts rsyslog.
 +#
++
++start() {
++ 	echo -n "Starting rsyslog daemon: "
++	umask 077
++	start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
++	echo "OK"
++}
++stop() {
++	echo -n "Stopping rsyslog daemon: "
++	start-stop-daemon -K -q -p /var/run/rsyslogd.pid
++	echo "OK"
++}
++restart() {
++	stop
++	start
++}
 +
 +case "$1" in
 +  start)
-+	echo -n "Starting logging :"
-+	start-stop-daemon -S -q -p /var/run/syslog.pid --exec /sbin/syslogd -- -m 0
-+	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
-+	echo "OK"
++  	start
 +	;;
 +  stop)
-+	echo -n "Stopping logging :"
-+	start-stop-daemon -K -q -p /var/run/syslog.pid
-+	start-stop-daemon -K -q -p /var/run/klogd.pid
-+	echo "OK"
++  	stop
 +	;;
 +  restart|reload)
++  	restart
 +	;;
 +  *)
 +	echo $"Usage: $0 {start|stop|restart}"
@@ -66,28 +88,35 @@ index 0000000..6badebe
 +esac
 +
 +exit $?
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d2ba226..963c037 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -122,6 +122,10 @@ define BUSYBOX_DISABLE_MMU_APPLETS
- endef
- endif
- 
-+define BUSYBOX_INSTALL_LOGGING_SCRIPT
-+	$(INSTALL) -m 0755 package/busybox/S01logging $(TARGET_DIR)/etc/init.d
++
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+new file mode 100644
+index 0000000..fd2ba0b
+--- /dev/null
++++ b/package/rsyslog/rsyslog.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# rsyslog
++#
++#############################################################
++RSYSLOG_VERSION = 5.8.0
++RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog/
++RSYSLOG_DEPENDENCIES = zlib
++
++# Build after Busybox
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++	RSYSLOG_DEPENDENCIES += busybox
++endif
++
++define RSYSLOG_INSTALL_CONF_SCRIPT
++	$(INSTALL) -m 0755 -D package/rsyslog/S01logging $(TARGET_DIR)/etc/init.d/
++	$(INSTALL) -m 0644 -D $(@D)/rsyslog.conf $(TARGET_DIR)/etc/rsyslog.conf
++	mkdir -p $(TARGET_DIR)/etc/rsyslog.d
 +endef
 +
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -152,6 +156,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
- 	fi
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
-+	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- endef
- 
- define BUSYBOX_UNINSTALL_TARGET_CMDS
++RSYSLOG_POST_INSTALL_TARGET_HOOKS += RSYSLOG_INSTALL_CONF_SCRIPT
++
++$(eval $(call AUTOTARGETS,package,rsyslog))
 -- 
 1.7.4.1
