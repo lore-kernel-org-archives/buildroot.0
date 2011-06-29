@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jun 2011 16:55:17 +0200
-Subject: [Buildroot] problems compiling uclibc for Geode (i386)
-In-Reply-To: <4E0B3B3D.3090108@in-2-technology.co.uk>
-References: <1309291371.21632.5.camel@bender> <1309350574.17457.5.camel@sven>
- <20110629164330.1f5780a7@skate>
- <4E0B3B3D.3090108@in-2-technology.co.uk>
-Message-ID: <20110629165517.49e81d99@skate>
+Date: Wed, 29 Jun 2011 16:57:45 +0200
+Subject: [Buildroot] Buildroot root fs over NFS bug
+In-Reply-To: <4E0B2562.9090208@labri.fr>
+References: <4E09C8A0.8000808@labri.fr> <20110628163315.7f9a2527@skate>
+ <4E0B2562.9090208@labri.fr>
+Message-ID: <20110629165745.01b2aff4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-Please don't reply to me directly, but rather to the Buildroot list.
+Please don't reply to me directly, but to the Buildroot list instead.
 
-Le Wed, 29 Jun 2011 15:48:29 +0100,
-Dominic Newton <dominic.newton@in-2-technology.co.uk> a ?crit :
+Le Wed, 29 Jun 2011 15:15:14 +0200,
+Jigar SOLANKI <jigar.solanki@labri.fr> a ?crit :
 
-> uclibc menuconfig correctly shows that the i386 sub-architecture does 
-> not support NPTL. For some reason this is not picked up in the main 
-> buildroot config options. I've not had time to see why. I normally
-> run uclicb-menuconfig and see what is supported their as a double
-> check at the moment.
+> Thanks a lot for the reply.
+> You were absolutely right, my bad, I wasnt mounting my root filesystem
+> over NFS, it was just an initramfs.
+> 
+> I deactivated the initramfs support in the kernel config and it mounts
+> just fine.
+> 
+> My question, just to be sure, is : why the kernel wasnt  mounting it
+> before, even if it had everything in his command line (and even if the
+> initramfs support was activated ?) It should have mounted it, right ?
 
-Ah, then it's Buildroot that needs to be fixed.
+If you have an initramfs, then the kernel uncompresses it at boot time,
+and executes the /init script/application in this initramfs. And that's
+all the kernel does when an initramfs is present: it's the job of the
+initramfs initialization procedure to mount the real root filesystem
+and switch to it.
+
+So if you have an initramfs, it's normal not to see the typical:
+
+  VFS: Mounted root (nfs filesystem) on device 0:14.
+
+message in your boot log.
+
+Regards,
 
 Thomas
 -- 
