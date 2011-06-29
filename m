@@ -1,20 +1,79 @@
 From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Wed, 29 Jun 2011 18:13:25 +0200
-Subject: [Buildroot] [PATCH]Add support for at91sam9x5
-Message-ID: <1309364007-17823-1-git-send-email-ludovic.desroches@atmel.com>
+Date: Wed, 29 Jun 2011 18:13:26 +0200
+Subject: [Buildroot] [PATCH 1/2] Add defconfig file for at91sam9x5ek board
+In-Reply-To: <1309364007-17823-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1309364007-17823-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <b58eed752fc6b5f16c387d997ac0a2cf7c96f7f6.1309358465.git.ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-These patches provide at91sam9x5 support. The build was done with the patch-kernel.sh patch v2 I have sent:
-[RFC PATCH v2 1/1] kernel-patch.sh: script changed to support archives in a proper way
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
+ configs/at91sam9x5ek_defconfig |   51 ++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 configs/at91sam9x5ek_defconfig
 
-Warning: it includes some post build scripts, I don't know what will be the behavior of git format-patch/am about permissions.
-
-Regards
-
-Ludovic
+diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
+new file mode 100644
+index 0000000..321db09
+--- /dev/null
++++ b/configs/at91sam9x5ek_defconfig
+@@ -0,0 +1,51 @@
++BR2_arm=y
++BR2_arm926t=y
++BR2_CCACHE=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="2.6.39"
++BR2_TARGET_OPTIMIZATION="-Os -pipe"
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TARGET_GENERIC_HOSTNAME="AT91SAM9"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/atmel/at91sam9x5ek/post-build.sh"
++BR2_PACKAGE_ALSA_UTILS=y
++BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
++BR2_PACKAGE_ALSA_UTILS_AMIXER=y
++BR2_PACKAGE_ALSA_UTILS_APLAY=y
++BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
++BR2_PACKAGE_MADPLAY=y
++BR2_PACKAGE_BZIP2=y
++BR2_PACKAGE_I2C_TOOLS=y
++BR2_PACKAGE_UDEV=y
++BR2_PACKAGE_BRIDGE=y
++BR2_PACKAGE_CAN_UTILS=y
++BR2_PACKAGE_DROPBEAR=y
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_IPERF=y
++BR2_PACKAGE_IPROUTE2=y
++BR2_PACKAGE_IPTABLES=y
++BR2_PACKAGE_LRZSZ=y
++BR2_PACKAGE_MII_DIAG=y
++BR2_PACKAGE_PORTMAP=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
++BR2_PACKAGE_FILE=y
++BR2_PACKAGE_WHICH=y
++BR2_TARGET_ROOTFS_JFFS2=y
++BR2_TARGET_ROOTFS_JFFS2_FLASH_64=y
++BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=1984
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
++BR2_TARGET_ROOTFS_TAR_BZIP2=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39"
++BR2_LINUX_KERNEL_PATCH="ftp://www.linux4sam.org/pub/linux/2.6.39-at91/2.6.39-at91-exp.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="at91sam9x5ek"
+-- 
+1.7.0.4
