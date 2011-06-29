@@ -1,45 +1,120 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 29 Jun 2011 15:46:16 +0200
-Subject: [Buildroot] [PATCH 1/6] Create and mount /dev/shm
-Message-ID: <1309355181-21048-1-git-send-email-maxime.ripard@free-electrons.com>
+Date: Wed, 29 Jun 2011 15:46:17 +0200
+Subject: [Buildroot] [PATCH 2/6] Add the stunnel package
+Message-ID: <1309355181-21048-2-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The /dev/shm directory is neither created nor mounted as tmpfs as boot
-time. This will cause troubles when using named semaphores on the
-system.
+Stunnel is an SSL tunnelling proxy.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- fs/skeleton/etc/fstab   |    1 +
- fs/skeleton/etc/inittab |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in          |    1 +
+ package/stunnel/Config.in  |    6 ++++++
+ package/stunnel/S50stunnel |   37 +++++++++++++++++++++++++++++++++++++
+ package/stunnel/stunnel.mk |   22 ++++++++++++++++++++++
+ 4 files changed, 66 insertions(+), 0 deletions(-)
+ create mode 100644 package/stunnel/Config.in
+ create mode 100644 package/stunnel/S50stunnel
+ create mode 100644 package/stunnel/stunnel.mk
 
-diff --git a/fs/skeleton/etc/fstab b/fs/skeleton/etc/fstab
-index 87d9da0..a2f56ff 100644
---- a/fs/skeleton/etc/fstab
-+++ b/fs/skeleton/etc/fstab
-@@ -4,5 +4,6 @@
- /dev/root       /              ext2	rw,noauto         0      1
- proc		/proc	       proc     defaults	  0	 0
- devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
-+tmpfs           /dev/shm       tmpfs    mode=0777         0      0
- tmpfs           /tmp           tmpfs    defaults          0      0
- sysfs		/sys	       sysfs    defaults	  0	 0
-diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-index b1e5c16..0e50467 100644
---- a/fs/skeleton/etc/inittab
-+++ b/fs/skeleton/etc/inittab
-@@ -17,6 +17,7 @@
- null::sysinit:/bin/mount -t proc proc /proc
- null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mkdir -p /dev/pts
-+null::sysinit:/bin/mkdir -p /dev/shm
- null::sysinit:/bin/mount -a
- null::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
+diff --git a/package/Config.in b/package/Config.in
+index 8f1f030..1a4815a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -441,6 +441,7 @@ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/squid/Config.in"
++source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+ source "package/tcpreplay/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/stunnel/Config.in b/package/stunnel/Config.in
+new file mode 100644
+index 0000000..b3603ed
+--- /dev/null
++++ b/package/stunnel/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_STUNNEL
++	bool "stunnel"
++	depends on BR2_PACKAGE_OPENSSL
++	help
++	  Stunnel is a program that wraps any TCP connection with an SSL
++	  connection.
+diff --git a/package/stunnel/S50stunnel b/package/stunnel/S50stunnel
+new file mode 100644
+index 0000000..394eb82
+--- /dev/null
++++ b/package/stunnel/S50stunnel
+@@ -0,0 +1,37 @@
++#!/bin/sh
++#
++# Starts stunnel
++#
++
++start() {
++ 	echo -n "Starting stunnel: "
++	start-stop-daemon -S -q -p /var/run/stunnel.pid --exec /usr/bin/stunnel
++	echo "OK"
++}
++stop() {
++	echo -n "Stopping stunnel: "
++	start-stop-daemon -K -q -p /var/run/stunnel.pid
++	echo "OK"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++  	start
++	;;
++  stop)
++  	stop
++	;;
++  restart|reload)
++  	restart
++	;;
++  *)
++	echo $"Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
++
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+new file mode 100644
+index 0000000..1c1ba9b
+--- /dev/null
++++ b/package/stunnel/stunnel.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# stunnel
++#
++#############################################################
++
++STUNNEL_VERSION = 4.36
++STUNNEL_SITE = http://ftp.nluug.nl/pub/networking/stunnel/obsolete/4.x/
++STUNNEL_DEPENDENCIES = openssl
++
++STUNNEL_CONF_OPT += \
++	--with-ssl=$(STAGING_DIR)/usr \
++	--with-threads=fork
++
++define STUNNEL_INSTALL_CONF_SCRIPT
++	$(INSTALL) -m 0755 -D package/stunnel/S50stunnel $(TARGET_DIR)/etc/init.d/S50stunnel
++	$(INSTALL) -m 0644 -D $(@D)/tools/stunnel.conf $(TARGET_DIR)/etc/stunnel/stunnel.conf
++endef
++
++STUNNEL_POST_INSTALL_TARGET_HOOKS += STUNNEL_INSTALL_CONF_SCRIPT
++
++$(eval $(call AUTOTARGETS,package,stunnel))
 -- 
 1.7.4.1
