@@ -1,24 +1,26 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 30 Jun 2011 18:48:57 +0200
-Subject: [Buildroot] tail -f /var/log/messages in inittab
-Message-ID: <4E0CA8F9.7080706@lucaceresoli.net>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Thu, 30 Jun 2011 13:27:29 -0400
+Subject: [Buildroot] Library search paths and ld.so.conf
+In-Reply-To: <1309449926.14232.10.camel@dublxciaranr1.verifone.com>
+References: <1309449926.14232.10.camel@dublxciaranr1.verifone.com>
+Message-ID: <BANLkTi=Pi5sktNUeT-+3-CfvyvyLrRbAAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Thu, Jun 30, 2011 at 12:05, Quotient Remainder wrote:
+> Is it possible to dynamically add a library search path on the target?
+> I'm aware that it's possible to add to the ld.so library search path by
+> adding an entry into "/etc/ld.so.conf" and running ldconfig as well as
+> using LD_LIBRARY_PATH as is done in target-finalize but I don't want to
+> run ldconfig and take the time penalty it entails to generate the cache.
+> Can't I just tell ld.so to look in an extra directory or two if the
+> normal ones fail?
 
-I've been staring at the following line in fs/skeleton/etc/inittab:
+off the top of my head, LD_LIBRARY_PATH is the only way to inject a
+non-standard path at runtime without touching ld.so.conf / ldconfig.
 
- > tty3::respawn:/usr/bin/tail -f /var/log/messages
-
-and wondered if it's useful to anybody.
-I guess in many embedded systems it is a useless waste of resources.
-At least it is on mine, so I wiped it in my port.
-
-Out of curiosity, does anybody really use it?
-Or should I send a patch that removes it?
-
-Luca
+`man ld.so` explains the runtime lookup process.
+-mike
