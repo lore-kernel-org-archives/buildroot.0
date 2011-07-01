@@ -1,34 +1,58 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Fri, 01 Jul 2011 12:02:42 +0100
-Subject: [Buildroot] Library search paths and ld.so.conf
-In-Reply-To: <BANLkTi=Pi5sktNUeT-+3-CfvyvyLrRbAAw@mail.gmail.com>
-References: <1309449926.14232.10.camel@dublxciaranr1.verifone.com>
- <BANLkTi=Pi5sktNUeT-+3-CfvyvyLrRbAAw@mail.gmail.com>
-Message-ID: <1309518164.14232.17.camel@dublxciaranr1.verifone.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 01 Jul 2011 15:56:55 +0200
+Subject: [Buildroot] lame linking issue
+Message-ID: <4E0DD227.6050807@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ar D?ar, 2011-06-30 ag 13:27 -0400, scr?obh Mike Frysinger:
-> On Thu, Jun 30, 2011 at 12:05, Quotient Remainder wrote:
-> > Is it possible to dynamically add a library search path on the target?
-> > I'm aware that it's possible to add to the ld.so library search path by
-> > adding an entry into "/etc/ld.so.conf" and running ldconfig as well as
-> > using LD_LIBRARY_PATH as is done in target-finalize but I don't want to
-> > run ldconfig and take the time penalty it entails to generate the cache.
-> > Can't I just tell ld.so to look in an extra directory or two if the
-> > normal ones fail?
-> 
-> off the top of my head, LD_LIBRARY_PATH is the only way to inject a
-> non-standard path at runtime without touching ld.so.conf / ldconfig.
+I'm using the latest git version of BR and wanted to build lame-3.98.4. During linking phase I got following errors:
 
-I feared this would be the case.
+parse.o: In function `local_strcasecmp':
+parse.c:(.text+0x134): undefined reference to `__ctype_tolower_loc'
+get_audio.o: In function `fskip.constprop.1':
+get_audio.c:(.text+0x224): undefined reference to `__fxstat64'
+lametime.o: In function `lame_get_file_size':
+lametime.c:(.text+0x9c): undefined reference to `__xstat64'
+portableio.o: In function `ReadByte':
+portableio.c:(.text+0x4): undefined reference to `_IO_getc'
+portableio.o: In function `Read16BitsLowHigh':
+portableio.c:(.text+0x28): undefined reference to `_IO_getc'
+portableio.c:(.text+0x34): undefined reference to `_IO_getc'
+portableio.o: In function `Read16BitsHighLow':
+portableio.c:(.text+0x60): undefined reference to `_IO_getc'
+portableio.c:(.text+0x6c): undefined reference to `_IO_getc'
+portableio.o: In function `Write8Bits':
+portableio.c:(.text+0x9c): undefined reference to `_IO_putc'
+portableio.o: In function `Write16BitsLowHigh':
+portableio.c:(.text+0xbc): undefined reference to `_IO_putc'
+portableio.c:(.text+0xcc): undefined reference to `_IO_putc'
+portableio.o: In function `Write16BitsHighLow':
+portableio.c:(.text+0xf0): undefined reference to `_IO_putc'
+portableio.c:(.text+0xfc): undefined reference to `_IO_putc'
+portableio.o: In function `Read24BitsHighLow':
+portableio.c:(.text+0x110): undefined reference to `_IO_getc'
+portableio.c:(.text+0x11c): undefined reference to `_IO_getc'
+portableio.c:(.text+0x128): undefined reference to `_IO_getc'
+portableio.o: In function `ReadBytes':
+portableio.c:(.text+0x23c): undefined reference to `_IO_getc'
+portableio.o: In function `ReadBytesSwapped':
+portableio.c:(.text+0x290): undefined reference to `_IO_getc'
+portableio.o: In function `WriteBytes':
+portableio.c:(.text+0x30c): undefined reference to `_IO_putc'
+portableio.o: In function `WriteBytesSwapped':
+portableio.c:(.text+0x344): undefined reference to `_IO_putc'
+collect2: ld returned 1 exit status
 
-> `man ld.so` explains the runtime lookup process.
+Any idea? 
 
-:-) Yeah I had a look at that before posting alright.  Just wondering if
-there were any "sly" ways around it.  It seems like a normal enough
-thing to want to add a directory to the search path system-wide, as
-opposed to a specific shell instance that LD_LIBRARY_PATH provides.
+Some toolchain details:
+
+uClibc: 0.9.32
+GCC: 4.6.1
+
+I could also post the whole config file. 
+
+Yegor
