@@ -1,29 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2011 09:47:47 +0200
-Subject: [Buildroot] [PATCH] fs/skeleton: remove useless logging from
- inittab
-In-Reply-To: <1309505931-31799-1-git-send-email-luca@lucaceresoli.net>
-References: <1309505931-31799-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20110701094747.6f3438ea@skate>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 01 Jul 2011 12:48:12 +0200
+Subject: [Buildroot] [PATCH] New packages: acl and attr
+In-Reply-To: <BANLkTikj8vuZNKoiE=g7k3E02R8yPONRhg@mail.gmail.com>
+References: <4E09922C.6060803@visionsystems.de>
+ <20110628104841.731f2371@skate> <4E09D287.5060608@visionsystems.de>
+ <20110628152455.0b2aa6a4@skate> <4E09D729.2040207@visionsystems.de>
+ <BANLkTikj8vuZNKoiE=g7k3E02R8yPONRhg@mail.gmail.com>
+Message-ID: <4E0DA5EC.90909@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri,  1 Jul 2011 09:38:51 +0200,
-Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
 
-> Currently the default inittab launches a "tail -f /var/log/messages"
-> that remains active during the entire target uptime.
-> For most embedded systems this is a useless waste of resources, so
-> remove it.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>>> These passages are needed because of non-conform installation routine
+>>>> (as far as I can see). Otherwise installation script would try to
+>>>> install the files to /usr/ directly.
+>>> This should not happen with autotools-based packages. Are you sure ?
+>> I know it shouldn't, but this is the behavior I observe.
+> It's weird indeed:
+> http://git.savannah.gnu.org/cgit/attr.git/tree/configure.in
+> http://git.savannah.gnu.org/cgit/attr.git/tree/Makefile
+> http://git.savannah.gnu.org/cgit/attr.git/tree/include/builddefs.in
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Could we apply the patch as is, so we can move on with udev update? Meanwhile I'll try to contact the maintainers of acl and attr and discuss the issue with them.
+
+Yegor
