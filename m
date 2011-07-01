@@ -1,29 +1,34 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Fri, 01 Jul 2011 12:48:12 +0200
-Subject: [Buildroot] [PATCH] New packages: acl and attr
-In-Reply-To: <BANLkTikj8vuZNKoiE=g7k3E02R8yPONRhg@mail.gmail.com>
-References: <4E09922C.6060803@visionsystems.de>
- <20110628104841.731f2371@skate> <4E09D287.5060608@visionsystems.de>
- <20110628152455.0b2aa6a4@skate> <4E09D729.2040207@visionsystems.de>
- <BANLkTikj8vuZNKoiE=g7k3E02R8yPONRhg@mail.gmail.com>
-Message-ID: <4E0DA5EC.90909@visionsystems.de>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Fri, 01 Jul 2011 12:02:42 +0100
+Subject: [Buildroot] Library search paths and ld.so.conf
+In-Reply-To: <BANLkTi=Pi5sktNUeT-+3-CfvyvyLrRbAAw@mail.gmail.com>
+References: <1309449926.14232.10.camel@dublxciaranr1.verifone.com>
+ <BANLkTi=Pi5sktNUeT-+3-CfvyvyLrRbAAw@mail.gmail.com>
+Message-ID: <1309518164.14232.17.camel@dublxciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Ar D?ar, 2011-06-30 ag 13:27 -0400, scr?obh Mike Frysinger:
+> On Thu, Jun 30, 2011 at 12:05, Quotient Remainder wrote:
+> > Is it possible to dynamically add a library search path on the target?
+> > I'm aware that it's possible to add to the ld.so library search path by
+> > adding an entry into "/etc/ld.so.conf" and running ldconfig as well as
+> > using LD_LIBRARY_PATH as is done in target-finalize but I don't want to
+> > run ldconfig and take the time penalty it entails to generate the cache.
+> > Can't I just tell ld.so to look in an extra directory or two if the
+> > normal ones fail?
+> 
+> off the top of my head, LD_LIBRARY_PATH is the only way to inject a
+> non-standard path at runtime without touching ld.so.conf / ldconfig.
 
->>>> These passages are needed because of non-conform installation routine
->>>> (as far as I can see). Otherwise installation script would try to
->>>> install the files to /usr/ directly.
->>> This should not happen with autotools-based packages. Are you sure ?
->> I know it shouldn't, but this is the behavior I observe.
-> It's weird indeed:
-> http://git.savannah.gnu.org/cgit/attr.git/tree/configure.in
-> http://git.savannah.gnu.org/cgit/attr.git/tree/Makefile
-> http://git.savannah.gnu.org/cgit/attr.git/tree/include/builddefs.in
+I feared this would be the case.
 
-Could we apply the patch as is, so we can move on with udev update? Meanwhile I'll try to contact the maintainers of acl and attr and discuss the issue with them.
+> `man ld.so` explains the runtime lookup process.
 
-Yegor
+:-) Yeah I had a look at that before posting alright.  Just wondering if
+there were any "sly" ways around it.  It seems like a normal enough
+thing to want to add a directory to the search path system-wide, as
+opposed to a specific shell instance that LD_LIBRARY_PATH provides.
