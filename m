@@ -1,83 +1,33 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Fri, 01 Jul 2011 16:49:59 +0200
-Subject: [Buildroot] lame linking issue
-In-Reply-To: <BANLkTikpCNTTL8aMbkejweQsLN_B9oxB+g@mail.gmail.com>
-References: <4E0DD227.6050807@visionsystems.de>
- <BANLkTikpCNTTL8aMbkejweQsLN_B9oxB+g@mail.gmail.com>
-Message-ID: <4E0DDE97.2070905@visionsystems.de>
+From: Wolfram Gloger <wg@malloc.de>
+Date: Fri, 01 Jul 2011 18:27:13 +0200
+Subject: [Buildroot] [PATCH] new package: libav
+Message-ID: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hariharan,
+Hi,
 
-see .config for details: http://pastebin.com/xtR3jnHm
+This is a copy of the ffmpeg package with the names and download
+changed for libav-0.7.
 
-Yegor
+Why choose this fork when there is "original" ffmpeg?
 
-Am 01.07.2011 16:44, schrieb hariharan veerappan:
-> Hi Yegor,
->
-> Whether you are using build root toolchain or external?
-> Provide your Host Platform ( compilation ) and target platform.
->
-> Hariharan.V.
->
-> On Fri, Jul 1, 2011 at 7:26 PM, Yegor Yefremov <yegor_sub1 at visionsystems.de <mailto:yegor_sub1@visionsystems.de>> wrote:
->
->     I'm using the latest git version of BR and wanted to build lame-3.98.4. During linking phase I got following errors:
->
->     parse.o: In function `local_strcasecmp':
->     parse.c:(.text+0x134): undefined reference to `__ctype_tolower_loc'
->     get_audio.o: In function `fskip.constprop.1':
->     get_audio.c:(.text+0x224): undefined reference to `__fxstat64'
->     lametime.o: In function `lame_get_file_size':
->     lametime.c:(.text+0x9c): undefined reference to `__xstat64'
->     portableio.o: In function `ReadByte':
->     portableio.c:(.text+0x4): undefined reference to `_IO_getc'
->     portableio.o: In function `Read16BitsLowHigh':
->     portableio.c:(.text+0x28): undefined reference to `_IO_getc'
->     portableio.c:(.text+0x34): undefined reference to `_IO_getc'
->     portableio.o: In function `Read16BitsHighLow':
->     portableio.c:(.text+0x60): undefined reference to `_IO_getc'
->     portableio.c:(.text+0x6c): undefined reference to `_IO_getc'
->     portableio.o: In function `Write8Bits':
->     portableio.c:(.text+0x9c): undefined reference to `_IO_putc'
->     portableio.o: In function `Write16BitsLowHigh':
->     portableio.c:(.text+0xbc): undefined reference to `_IO_putc'
->     portableio.c:(.text+0xcc): undefined reference to `_IO_putc'
->     portableio.o: In function `Write16BitsHighLow':
->     portableio.c:(.text+0xf0): undefined reference to `_IO_putc'
->     portableio.c:(.text+0xfc): undefined reference to `_IO_putc'
->     portableio.o: In function `Read24BitsHighLow':
->     portableio.c:(.text+0x110): undefined reference to `_IO_getc'
->     portableio.c:(.text+0x11c): undefined reference to `_IO_getc'
->     portableio.c:(.text+0x128): undefined reference to `_IO_getc'
->     portableio.o: In function `ReadBytes':
->     portableio.c:(.text+0x23c): undefined reference to `_IO_getc'
->     portableio.o: In function `ReadBytesSwapped':
->     portableio.c:(.text+0x290): undefined reference to `_IO_getc'
->     portableio.o: In function `WriteBytes':
->     portableio.c:(.text+0x30c): undefined reference to `_IO_putc'
->     portableio.o: In function `WriteBytesSwapped':
->     portableio.c:(.text+0x344): undefined reference to `_IO_putc'
->     collect2: ld returned 1 exit status
->
->     Any idea?
->
->     Some toolchain details:
->
->     uClibc: 0.9.32
->     GCC: 4.6.1
->
->     I could also post the whole config file.
->
->     Yegor
->     _______________________________________________
->     buildroot mailing list
->     buildroot at busybox.net <mailto:buildroot@busybox.net>
->     http://lists.busybox.net/mailman/listinfo/buildroot
->
->
+- It may be the future?  I don't know, but for sure it was dreadfully
+  hard to get patches into ffmpeg.
+
+- I found that ffmpeg (at least 0.6.3) does _not_ work with minidlna
+  (buildroot patch forthcoming), there are strange hangups just
+  calling av_stream_info() on many ts files.
+  libav worked out of the box in this context.
+
+Signed-off-by: Wolfram Gloger <wg@malloc.de>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-2011.05-libav.diff
+Type: application/octet-stream
+Size: 10730 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110701/37dc5e8a/attachment-0001.obj>
