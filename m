@@ -1,7 +1,7 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 3 Jul 2011 22:41:20 +0200
-Subject: [Buildroot] [git commit] sqlite: update to version 3.7.6.3
-Message-ID: <20110703204137.07E4489038@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lighttpd: bump version
+Message-ID: <20110703204137.EDAC589038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49d359ff7b62f83c5525208437cd2bf12af73aff
+commit: http://git.buildroot.net/buildroot/commit/?id=90cdd7d925553c63fff3e208e8fd4a4e178603cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sqlite/sqlite.mk |    2 +-
+ package/lighttpd/lighttpd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index da5f53a..de2e499 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 332afe7..45941eb 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--SQLITE_VERSION = 3070500
-+SQLITE_VERSION = 3070603
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
- SQLITE_INSTALL_STAGING = YES
+-LIGHTTPD_VERSION = 1.4.28
++LIGHTTPD_VERSION = 1.4.29
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-1.4.x
+ LIGHTTPD_DEPENDENCIES = host-pkg-config
+ LIGHTTPD_CONF_OPT = \
 -- 
 1.7.3.4
