@@ -1,60 +1,98 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun,  3 Jul 2011 12:47:58 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix boot with mdev
-In-Reply-To: <1309690078-9197-1-git-send-email-luca@lucaceresoli.net>
-References: <1309690078-9197-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1309690078-9197-2-git-send-email-luca@lucaceresoli.net>
+Date: Sun,  3 Jul 2011 12:56:03 +0200
+Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be remounted
+	read-write
+Message-ID: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 726b15f64a10b, buildroot supports automatic creation of /dev entries
-via mdev or udev. This can result in an incorrect boot sequence with
-the default inittab, which uses /dev/null before mdev is started.
-
-This is fixed adding a new device_table that creates the minimal /dev
-entries that need to exist before starting mdev, and use it by default
-when mdev or udev is used.
-
-This list only contains /dev/null.
-
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- target/generic/Config.in                    |    2 +-
- target/generic/device_table_dynamic_dev.txt |   10 ++++++++++
- 2 files changed, 11 insertions(+), 1 deletions(-)
- create mode 100644 target/generic/device_table_dynamic_dev.txt
+ fs/skeleton/etc/inittab    |    2 +-
+ package/sysvinit/inittab   |    2 +-
+ target/generic/Config.in   |   11 +++++++++++
+ target/generic/Makefile.in |   13 +++++++++++++
+ 4 files changed, 26 insertions(+), 2 deletions(-)
 
+diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
+index b1e5c16..47ab8e8 100644
+--- a/fs/skeleton/etc/inittab
++++ b/fs/skeleton/etc/inittab
+@@ -15,7 +15,7 @@
+ 
+ # Startup the system
+ null::sysinit:/bin/mount -t proc proc /proc
+-null::sysinit:/bin/mount -o remount,rw /
++null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mount -a
+ null::sysinit:/bin/hostname -F /etc/hostname
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index a4bcf82..afa0dc3 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -5,7 +5,7 @@
+ id:1:initdefault:
+ 
+ proc::sysinit:/bin/mount -t proc proc /proc
+-rwmo::sysinit:/bin/mount -o remount,rw /
++rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+ dpts::sysinit:/bin/mkdir -p /dev/pts
+ moun::sysinit:/bin/mount -a
+ host::sysinit:/bin/hostname -F /etc/hostname
 diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 4969fcd..cab6938 100644
+index 4969fcd..716f428 100644
 --- a/target/generic/Config.in
 +++ b/target/generic/Config.in
-@@ -36,7 +36,7 @@ config BR2_ROOTFS_DEVICE_TABLE
- 	string "Path to the device tables"
- 	default "target/generic/device_table.txt target/generic/device_table_dev.txt" \
- 		if BR2_ROOTFS_DEVICE_CREATION_STATIC
--	default "target/generic/device_table.txt" \
-+	default "target/generic/device_table.txt target/generic/device_table_dynamic_dev.txt" \
- 		if (BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV || \
- 		    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV || \
- 		    BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS)
-diff --git a/target/generic/device_table_dynamic_dev.txt b/target/generic/device_table_dynamic_dev.txt
-new file mode 100644
-index 0000000..ea25a94
---- /dev/null
-+++ b/target/generic/device_table_dynamic_dev.txt
-@@ -0,0 +1,10 @@
-+# See package/makedevs/README for details
-+#
-+# This device table is used only when mdev or udev are in use, to create
-+# device files that need to be present before dynamic creation of devices
-+# is started.
-+#
-+# <name>	<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
+@@ -109,6 +109,17 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ 	default "57600"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600
+ 	default "115200"	if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+ 
++config BR2_REMOUNT_ROOTFS_RW
++	bool "remount root filesystem read-write during boot"
++	default y
++	help
++	  The root filesystem is typically mounted read-only at boot.
++	  By default, buildroot remounts it in read-write mode early during the
++	  boot process.
++	  Say no here if you would rather like your root filesystem to remain
++	  read-only.
++	  If unsure, say Y.
 +
-+# Normal system devices
-+/dev/null	c	666	0	0	1	3	0	0	-
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_ROOTFS_POST_BUILD_SCRIPT
+diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
+index ce07ecf..d945f4c 100644
+--- a/target/generic/Makefile.in
++++ b/target/generic/Makefile.in
+@@ -23,6 +23,14 @@ target-generic-getty-sysvinit:
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+ 		$(TARGET_DIR)/etc/inittab
+ 
++# Find commented line, if any, and remove leading '#'s
++target-generic-do-remount-rw:
++	$(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
++
++# Find uncommented line, if any, and add a leading '#'
++target-generic-dont-remount-rw:
++	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
++
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+ TARGETS += target-generic-hostname
+ endif
+@@ -37,4 +45,9 @@ TARGETS += target-generic-getty-sysvinit
+ else
+ TARGETS += target-generic-getty-busybox
+ endif
++ifeq ($(BR2_REMOUNT_ROOTFS_RW),y)
++TARGETS += target-generic-do-remount-rw
++else
++TARGETS += target-generic-dont-remount-rw
++endif
+ endif
 -- 
 1.7.4.1
