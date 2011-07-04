@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2011 23:33:42 +0200
-Subject: [Buildroot] [PATCH 25/28] linux: allow specification of a custom
-	Git repository as a source
+Date: Mon,  4 Jul 2011 23:33:43 +0200
+Subject: [Buildroot] [PATCH 26/28] u-boot: allow specification of custom Git
+	repo as source
 In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <faeba833d537a9ad0fbf476f6c7047504ae897a8.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bc45d2f0ba415cd89ea7601f6cc020a293edbc7a.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,62 +13,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |   15 +++++++++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ boot/u-boot/Config.in |   14 ++++++++++++++
+ boot/u-boot/u-boot.mk |    3 +++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c9229a5..f44dc62 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	  This option allows to specify the http or ftp location of a
- 	  specific kernel source tarball
+diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
+index 658a539..dde92d3 100644
+--- a/boot/u-boot/Config.in
++++ b/boot/u-boot/Config.in
+@@ -34,6 +34,9 @@ config BR2_BOOT_U_BOOT_2010_03
+ config BR2_BOOT_U_BOOT_CUSTOM_TARBALL
+ 	bool "Custom tarball"
  
-+config BR2_LINUX_KERNEL_CUSTOM_GIT
-+        bool "Custom Git tree"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Git repository.
++config BR2_BOOT_U_BOOT_CUSTOM_GIT
++        bool "Custom Git repository"
 +
  endchoice
  
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -58,12 +64,21 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ if BR2_BOOT_U_BOOT_CUSTOM_TARBALL
+@@ -43,6 +46,16 @@ config BR2_BOOT_U_BOOT_CUSTOM_TARBALL_LOCATION
  
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
+ endif
+ 
++if BR2_BOOT_U_BOOT_CUSTOM_GIT
++
++config BR2_BOOT_U_BOOT_CUSTOM_GIT_REPO_URL
 +        string "URL of custom Git repository"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
 +
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++config BR2_BOOT_U_BOOT_CUSTOM_GIT_VERSION
 +        string "Custom Git version"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
 +
- config BR2_LINUX_KERNEL_VERSION
++endif
++
+ config BR2_BOOT_U_BOOT_VERSION
  	string
- 	default "2.6.39.2" if BR2_LINUX_KERNEL_2_6_39
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-+	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+ 	default "2011.03"	if BR2_BOOT_U_BOOT_2011_03
+@@ -51,6 +64,7 @@ config BR2_BOOT_U_BOOT_VERSION
+ 	default "2010.06"	if BR2_BOOT_U_BOOT_2010_06
+ 	default "2010.03"	if BR2_BOOT_U_BOOT_2010_03
+ 	default "custom"	if BR2_BOOT_U_BOOT_CUSTOM_TARBALL
++	default $BR2_BOOT_U_BOOT_CUSTOM_GIT_VERSION if BR2_BOOT_U_BOOT_CUSTOM_GIT
  
- #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e5f434..03eae3d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -10,6 +10,9 @@ ifeq ($(LINUX_VERSION),custom)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE    = $(dir $(LINUX_TARBALL))
- LINUX_SOURCE  = $(notdir $(LINUX_TARBALL))
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-+LINUX_SITE        = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-+LINUX_SITE_METHOD = git
+ config BR2_BOOT_U_BOOT_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index 97d7921..6334fad 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -13,6 +13,9 @@ ifeq ($(U_BOOT_VERSION),custom)
+ U_BOOT_TARBALL = $(call qstrip,$(BR2_BOOT_U_BOOT_CUSTOM_TARBALL_LOCATION))
+ U_BOOT_SITE    = $(dir $(U_BOOT_TARBALL))
+ U_BOOT_SOURCE  = $(notdir $(U_BOOT_TARBALL))
++else ifeq ($(BR2_BOOT_U_BOOT_CUSTOM_GIT),y)
++U_BOOT_SITE        = $(call qstrip,$(BR2_BOOT_U_BOOT_CUSTOM_GIT_REPO_URL))
++U_BOOT_SITE_METHOD = git
  else
- LINUX_SOURCE  = linux-$(LINUX_VERSION).tar.bz2
- LINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+ # Handle stable official U-Boot versions
+ U_BOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
 -- 
 1.7.4.1
