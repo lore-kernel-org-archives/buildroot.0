@@ -1,34 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 5 Jul 2011 00:27:11 +0200
-Subject: [Buildroot] [PATCH 24/28] Improve TARGETS handling for
-	bootloaders and kernel
-In-Reply-To: <dd17a4cd8c4097bbeef45838f4c9dd11325c3aa8.1309815048.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <dd17a4cd8c4097bbeef45838f4c9dd11325c3aa8.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201107050027.11292.yann.morin.1998@anciens.enib.fr>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Tue, 5 Jul 2011 00:42:18 +0200
+Subject: [Buildroot] DNS resolv issue with localhost
+Message-ID: <23843298-AAFD-4E03-A77D-2883BBA856B2@labri.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello all,
 
-On Monday 04 July 2011 23:33:41 Thomas Petazzoni wrote:
-[--SNIP--]
-> This commit improves the package infrastructure so that it looks at
-> BR2_PACKAGE_<pkg> for packages, BR2_BOOT_<pkg> for bootloaders and at
-> the special BR2_LINUX_KERNEL for the linux package.
+I have a LEON3 / XILINX Virtex / Buildroot Linux running on my fpga.
 
-For consistency, I'd suggest using 'BR2_KERNEL_LINUX'.
+I have a weird issue with localhost :
 
-Regards,
-Yann E. MORIN.
+When there is no default route, ping localhost works fine.
+When I set a default route (route add default gw 1.2.3.4), ping localhost doesnt work anymore (but ping 127.0.0.1 still does).
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I have checked my /etc/hosts and my /etc/network/interfaces, they are fine :
+
+auto lo
+iface lo inet loopback
+
+hosts :
+127.0.0.1 localhost
+
+
+What am I missing ? 
+
+Thanks.
