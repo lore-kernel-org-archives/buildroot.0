@@ -1,22 +1,21 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Jul 2011 10:21:26 +0200
-Subject: [Buildroot] [PATCH 4/6] Remove obsolete code in busybox.mk
-In-Reply-To: <1309355181-21048-4-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Wed, 29 Jun 2011 15:46:19 +0200")
-References: <1309355181-21048-4-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87d3hq1mnt.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 4 Jul 2011 10:18:21 +0200
+Subject: [Buildroot] [git commit] toolchain/uClibc: remove 0.9.29,
+	mark 0.9.30 as deprecated
+Message-ID: <20110704082354.3BC568A2EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
- Maxime> Remove this quirk since the tested code is no longer present in busybox
- Maxime> since 1.10.
+commit: http://git.buildroot.net/buildroot/commit/?id=31f5268b3dff62bc414b719c556b61923a4601b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+0.9.29 doesn't seem to build anymore with the toolchain versions in BR
+and is very old, so remove it.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+Patch is too large, so refusing to show it
