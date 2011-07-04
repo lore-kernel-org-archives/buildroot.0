@@ -1,29 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Jul 2011 21:55:14 +0200
-Subject: [Buildroot] tail -f /var/log/messages in inittab
-In-Reply-To: <4E0CA8F9.7080706@lucaceresoli.net> (Luca Ceresoli's message of
- "Thu, 30 Jun 2011 18:48:57 +0200")
-References: <4E0CA8F9.7080706@lucaceresoli.net>
-Message-ID: <874o31253x.fsf@macbook.be.48ers.dk>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Mon, 4 Jul 2011 23:25:06 +0300
+Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be
+	remounted read-write
+In-Reply-To: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
+References: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CALR4fEKRmHBdjGznPFeS4R2DOkC9DE+X7_rfb6T=Rw4N1=xzzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+On Sun, Jul 3, 2011 at 1:56 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+  +config BR2_REMOUNT_ROOTFS_RW
++       bool "remount root filesystem read-write during boot"
++       default y
++       help
++         The root filesystem is typically mounted read-only at boot.
++         By default, buildroot remounts it in read-write mode early during
+the
++         boot process.
++         Say no here if you would rather like your root filesystem to
+remain
++         read-only.
++         If unsure, say Y.
++
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
 
- Luca> Hi,
- Luca> I've been staring at the following line in fs/skeleton/etc/inittab:
 
- >> tty3::respawn:/usr/bin/tail -f /var/log/messages
-
- Luca> and wondered if it's useful to anybody.
- Luca> I guess in many embedded systems it is a useless waste of resources.
- Luca> At least it is on mine, so I wiped it in my port.
-
-Sorry, I missed your mail, but it was pointed out to me on IRC as well,
-so I removed it.
-
--- 
-Bye, Peter Korsgaard
+Wait... nothing breaks...? this just works?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110704/c2e09c1e/attachment.html>
