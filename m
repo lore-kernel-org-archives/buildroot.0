@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 5 Jul 2011 00:12:31 +0200
-Subject: [Buildroot] [PATCH 13/28] syslinux: convert to GENTARGETS
-In-Reply-To: <d09d6de7ba245ee9763b6f23e6df6fa6711194f8.1309815048.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 00:27:11 +0200
+Subject: [Buildroot] [PATCH 24/28] Improve TARGETS handling for
+	bootloaders and kernel
+In-Reply-To: <dd17a4cd8c4097bbeef45838f4c9dd11325c3aa8.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <d09d6de7ba245ee9763b6f23e6df6fa6711194f8.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201107050012.31481.yann.morin.1998@anciens.enib.fr>
+ <dd17a4cd8c4097bbeef45838f4c9dd11325c3aa8.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201107050027.11292.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +14,16 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Monday 04 July 2011 23:33:30 Thomas Petazzoni wrote:
-> Moreover, the installation of pxelinux and/or isolinux is now selected
-> to suboptions, as we traditionally do for other packages. This allows
-> to have a single option (BR2_TARGET_SYSLINUX) that enables the
-> syslinux package.
+On Monday 04 July 2011 23:33:41 Thomas Petazzoni wrote:
+[--SNIP--]
+> This commit improves the package infrastructure so that it looks at
+> BR2_PACKAGE_<pkg> for packages, BR2_BOOT_<pkg> for bootloaders and at
+> the special BR2_LINUX_KERNEL for the linux package.
 
-You're doing two unrelated chances here:
- - adding new options
- - converting to GENTARGETS
-
-In case something goes wrong, we would not know what of the two breaks.
+For consistency, I'd suggest using 'BR2_KERNEL_LINUX'.
 
 Regards,
 Yann E. MORIN.
-
-PS. Yes, I'm in a review spree!
-    It can happen when my toolchians are building in the background! ;-)
-YEM.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
