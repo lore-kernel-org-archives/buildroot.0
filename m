@@ -1,103 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2011 23:33:44 +0200
-Subject: [Buildroot] [PATCH 27/28] Add x-loader bootloader
+Date: Mon,  4 Jul 2011 23:33:28 +0200
+Subject: [Buildroot] [PATCH 11/28] at91dataflashboot: use = instead of :=
+	and indent
 In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <be098b58b371ec0b0075ae47b955cb615f19956b.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <319dea2f867cee36a8ba4f07314d93a23b4d98e6.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Philippe Reynes <tremyfr@yahoo.fr>
-
-[Thomas Petazzoni: use BR2_BOOT prefix instead of BR2_TARGET, misc
-fixes]
-
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/Config.in            |    1 +
- boot/x-loader/Config.in   |   15 +++++++++++++++
- boot/x-loader/x-loader.mk |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+), 0 deletions(-)
- create mode 100644 boot/x-loader/Config.in
- create mode 100644 boot/x-loader/x-loader.mk
+ boot/at91dataflashboot/at91dataflashboot.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 67ab8ac..a07102e 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -6,6 +6,7 @@ source "boot/syslinux/Config.in"
- source "boot/u-boot/Config.in"
- source "boot/at91bootstrap/Config.in"
- source "boot/at91dataflashboot/Config.in"
-+source "boot/x-loader/Config.in"
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 32591f7..f6e9b67 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -3,12 +3,12 @@
+ # DataFlashBoot
+ #
+ #############################################################
+-DATAFLASHBOOT_VERSION:=1.05
+-DATAFLASHBOOT_NAME:=DataflashBoot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_SITE:=ftp://www.at91.com/pub/buildroot/
+-DATAFLASHBOOT_SOURCE:=$(DATAFLASHBOOT_NAME).tar.bz2
+-DATAFLASHBOOT_DIR:=$(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
+-DATAFLASHBOOT_BINARY:=$(DATAFLASHBOOT_NAME).bin
++DATAFLASHBOOT_VERSION = 1.05
++DATAFLASHBOOT_NAME    = DataflashBoot-$(DATAFLASHBOOT_VERSION)
++DATAFLASHBOOT_SITE    = ftp://www.at91.com/pub/buildroot/
++DATAFLASHBOOT_SOURCE  = $(DATAFLASHBOOT_NAME).tar.bz2
++DATAFLASHBOOT_DIR     = $(BUILD_DIR)/at91dataflashboot-$(DATAFLASHBOOT_VERSION)
++DATAFLASHBOOT_BINARY  = $(DATAFLASHBOOT_NAME).bin
  
- endmenu
- 
-diff --git a/boot/x-loader/Config.in b/boot/x-loader/Config.in
-new file mode 100644
-index 0000000..9597337
---- /dev/null
-+++ b/boot/x-loader/Config.in
-@@ -0,0 +1,15 @@
-+menuconfig BR2_BOOT_XLOADER
-+	bool "X-loader"
-+	depends on BR2_arm
-+	help
-+	  The x-loader bootloader. It is mainly used on OMAP-based
-+	  platforms.
-+
-+if BR2_BOOT_XLOADER
-+config BR2_BOOT_XLOADER_BOARDNAME
-+	string "x-loader board name"
-+	help
-+	  One of x-loader supported boards to be built.
-+	  This will be suffixed with _config to meet x-loader
-+	  standard naming.
-+endif
-diff --git a/boot/x-loader/x-loader.mk b/boot/x-loader/x-loader.mk
-new file mode 100644
-index 0000000..31395ee
---- /dev/null
-+++ b/boot/x-loader/x-loader.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# x-loader
-+#
-+#############################################################
-+XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
-+XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
-+XLOADER_BOARD_NAME = $(call qstrip,$(BR2_BOOT_XLOADER_BOARDNAME))
-+
-+define XLOADER_BUILD_CMDS
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) $(XLOADER_BOARD_NAME)_config
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) ift
-+endef
-+
-+define XLOADER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
-+endef
-+
-+$(eval $(call GENTARGETS,boot,xloader))
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(BR2_BOOT_XLOADER),y)
-+# we NEED a board name unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(XLOADER_BOARD_NAME),)
-+$(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
-+endif
-+endif
-+
-+endif
+ $(DL_DIR)/$(DATAFLASHBOOT_SOURCE):
+ 	 $(call DOWNLOAD,$(DATAFLASHBOOT_SITE),$(DATAFLASHBOOT_SOURCE))
 -- 
 1.7.4.1
