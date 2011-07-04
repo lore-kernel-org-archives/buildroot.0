@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2011 23:33:36 +0200
-Subject: [Buildroot] [PATCH 19/28] linux: indent and align some definitions
+Date: Mon,  4 Jul 2011 23:33:37 +0200
+Subject: [Buildroot] [PATCH 20/28] package: add support for post-download
+	hooks
 In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1389ae6ea476daf9a18cece03545204f734dfd4c.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c7c63733b57fbe00792d36dd412d1be5194469f2.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This will be needed for the Linux kernel package, which needs to
+download patches in a custom way.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ package/Makefile.package.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 0aab92d..eea84b5 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -7,16 +7,16 @@ LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- 
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(LINUX_VERSION),custom)
--LINUX_TARBALL:=$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
--LINUX_SITE:=$(dir $(LINUX_TARBALL))
--LINUX_SOURCE:=$(notdir $(LINUX_TARBALL))
-+LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-+LINUX_SITE    = $(dir $(LINUX_TARBALL))
-+LINUX_SOURCE  = $(notdir $(LINUX_TARBALL))
- else
--LINUX_SOURCE:=linux-$(LINUX_VERSION).tar.bz2
--LINUX_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-+LINUX_SOURCE  = linux-$(LINUX_VERSION).tar.bz2
-+LINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index cdcb5e5..ff0fd9f 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -234,6 +234,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
  endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE)))
+ 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
++	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+@@ -437,6 +438,7 @@ $(2)_EXTRACT_CMDS ?= \
+ 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
  
--LINUX_DIR:=$(BUILD_DIR)/linux-$(LINUX_VERSION)
--LINUX_PATCH=$(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+LINUX_DIR     = $(BUILD_DIR)/linux-$(LINUX_VERSION)
-+LINUX_PATCH   = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
- LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
+ # post-steps hooks
++$(2)_POST_DOWNLOAD_HOOKS        ?=
+ $(2)_POST_EXTRACT_HOOKS         ?=
+ $(2)_POST_PATCH_HOOKS           ?=
+ $(2)_PRE_CONFIGURE_HOOKS        ?=
 -- 
 1.7.4.1
