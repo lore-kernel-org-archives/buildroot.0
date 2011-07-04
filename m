@@ -1,34 +1,58 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 04 Jul 2011 16:04:26 +0200
-Subject: [Buildroot] [PATCH 5/6] gst-plugins-base: depend on orc if it
- is enabled
-In-Reply-To: <CAFbHwiSbwfbGKa-mKiXFq-HN6b0UnxB+P3tpJLgGzu2K7V9ziw@mail.gmail.com>
-References: <1309787685-22269-1-git-send-email-s.neumann@raumfeld.com>
- <1309787685-22269-6-git-send-email-s.neumann@raumfeld.com>
- <CAFbHwiSbwfbGKa-mKiXFq-HN6b0UnxB+P3tpJLgGzu2K7V9ziw@mail.gmail.com>
-Message-ID: <1309788266.3709.5.camel@sven>
+From: Matias Garcia <mgarcia@rossvideo.com>
+Date: Mon, 04 Jul 2011 10:14:19 -0400
+Subject: [Buildroot] [PATCH 1/2] hostapd: fix build
+In-Reply-To: <20110704085628.29549092@skate>
+References: <52492b5cb97af2b80f86cf2dee27c8a931d14856.1309759154.git.baruch@tkos.co.il>
+ <20110704085628.29549092@skate>
+Message-ID: <1309788859.1984.8.camel@matias-lnx-host>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2011-07-04 at 15:02 +0100, Will Newton wrote:
-> On Mon, Jul 4, 2011 at 2:54 PM, Sven Neumann <s.neumann@raumfeld.com> wrote:
+Hi Thomas,
+
+On Mon, 2011-07-04 at 08:56 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> >  GST_PLUGINS_BASE_CONF_OPT = \
-> > @@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
-> >
-> >  GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
-> >
-> > +ifeq ($(BR2_PACKAGE_ORC),y)
-> > +GST_FFMPEG_DEPENDENCIES += orc
-> > +endif
-> > +
+> Le Mon,  4 Jul 2011 09:00:29 +0300,
+> Baruch Siach <baruch@tkos.co.il> a ?crit :
 > 
-> Also it looks like this should be setting GST_PLUGINS_BASE_DEPENDENCIES.
+> > The --sysroot option is required in CFLAGS and LDFLAGS to avoid
+> > compile time and link time failures.
+> 
+> This should no longer be needed, as Buildroot 2011.05 has added a
+> wrapper for external toolchains which avoids the need to pass an
+> explicit --sysroot option.
+> 
+> Can you point to a specific Buildroot configuration that exhibits the
+> problem ?
 
-Indeed.
+The CodeSourcery PowerPC toolchains require a special flag which selects
+the sysroot. in our case, the flag is "-e500v2" which takes the place of
+"-mcpu=8540 -mspe -mabi=spe -mhard-float -mfloat-gprs=double" in a
+regular BR toolchain. In either case, if these optimizations are not
+passed to the compiler(s) AND the linker, the code generated can be
+wrong because (as far as I understand it) the e500 has no generic float
+instruction support and breaks the generic PowerPC ABI spec.
 
+There is currently no way to pass this to the wrapper at compile time. I
+submitted a couple of patches to allow this, though I'm not sure I did
+it properly as I simply submitted my diffs.
 
-Sven
+Matias
+
+> 
+> Regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
