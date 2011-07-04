@@ -1,38 +1,29 @@
-From: Arnout Vandecappelle (Essensium - Mind) <arnout@mind.be>
-Date: Mon,  4 Jul 2011 16:37:20 +0200
-Subject: [Buildroot] [PATCH] BR2_ARCH definition was missing for 32-bit AMD
-	architecture variants.
-Message-ID: <1309790240-25341-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Jul 2011 21:04:31 +0200
+Subject: [Buildroot] [PATCH 5/6] Rework the logging daemons startup
+In-Reply-To: <1309355181-21048-5-git-send-email-maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Wed, 29 Jun 2011 15:46:20 +0200")
+References: <1309355181-21048-5-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <878vsd27gg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium - Mind)" <arnout@mind.be>
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- target/Config.in.arch |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ Maxime> The logging mechanism startup being in inittab, it isn't easy to
+ Maxime> overcharge the default policy. With this patch, the startup of the
+ Maxime> syslog daemon is moved to an init.d script, that can easily be
+ Maxime> overwritten.
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 7c80945..1964357 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -478,6 +478,13 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_pentiumpro
- 	default "i686"		if BR2_x86_nocona
- 	default "i686"		if BR2_x86_core2
-+	default "i686"		if BR2_x86_opteron
-+	default "i686"		if BR2_x86_opteron_sse3
-+	default "i686"		if BR2_x86_barcelona
-+	default "i686"		if BR2_x86_k6
-+	default "i686"		if BR2_x86_k6_2
-+	default "i686"		if BR2_x86_athlon
-+	default "i686"		if BR2_x86_athlon_4
- 	default "m68k"		if BR2_m68k
- 	default "mips"		if BR2_mips
- 	default "mipsel"	if BR2_mipsel
+Committed with minor fixes, thanks.
+
+ Maxime> +define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ Maxime> +	$(INSTALL) -m 0755 package/busybox/S01logging $(TARGET_DIR)/etc/init.d
+
+Please always use install -D
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
