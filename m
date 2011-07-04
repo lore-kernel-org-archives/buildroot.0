@@ -1,118 +1,197 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2011 23:33:30 +0200
-Subject: [Buildroot] [PATCH 13/28] syslinux: convert to GENTARGETS
+Date: Mon,  4 Jul 2011 23:33:41 +0200
+Subject: [Buildroot] [PATCH 24/28] Improve TARGETS handling for bootloaders
+	and kernel
 In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d09d6de7ba245ee9763b6f23e6df6fa6711194f8.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <dd17a4cd8c4097bbeef45838f4c9dd11325c3aa8.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Moreover, the installation of pxelinux and/or isolinux is now selected
-to suboptions, as we traditionally do for other packages. This allows
-to have a single option (BR2_TARGET_SYSLINUX) that enables the
-syslinux package.
+As the kernel and bootloaders do not use the normal BR2_PACKAGE_*
+Kconfig options, their target name was not automatically added to the
+global TARGETS variable. Each bootloader .mk and the linux.mk had to
+add their own target manually to TARGETS, and the package
+infrastructure was making tests on non-existing Kconfig variables.
+
+This commit improves the package infrastructure so that it looks at
+BR2_PACKAGE_<pkg> for packages, BR2_BOOT_<pkg> for bootloaders and at
+the special BR2_LINUX_KERNEL for the linux package.
+
+This allows to simplify a little bit the bootloaders and linux .mk
+files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/Config.in   |   14 ++++++++----
- boot/syslinux/syslinux.mk |   50 +++++++++++++++-----------------------------
- 2 files changed, 26 insertions(+), 38 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk         |    8 --------
+ boot/at91dataflashboot/at91dataflashboot.mk |    9 ---------
+ boot/barebox/barebox.mk                     |    2 --
+ boot/grub/grub.mk                           |    9 ---------
+ boot/syslinux/syslinux.mk                   |    9 ---------
+ boot/u-boot/u-boot.mk                       |    2 --
+ linux/linux.mk                              |    5 -----
+ package/Makefile.package.in                 |   16 +++++++++++++---
+ 8 files changed, 13 insertions(+), 47 deletions(-)
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 5650f91..60f3b8f 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -5,8 +5,12 @@ config BR2_TARGET_SYSLINUX
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 58d547d..9c1dfe1 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -31,19 +31,11 @@ endef
  
--config BR2_TARGET_PXELINUX
--	bool "pxelinux"
--	depends on BR2_i386 || BR2_x86_64
--	help
--	  The pxelinux loader for x86 systems.
-+config BR2_TARGET_SYSLINUX_ISOLINUX
-+	bool "Install isolinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
-+
-+config BR2_TARGET_SYSLINUX_PXELINUX
-+	bool "Install pxelinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
+ $(eval $(call GENTARGETS,boot,at91bootstrap))
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+ ifeq ($(BR2_BOOT_AT91BOOTSTRAP),y)
+-TARGETS+=at91bootstrap
+-
+ # we NEED a board name unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(AT91BOOTSTRAP_BOARD),)
+ $(error No AT91Bootstrap board name set. Check your BR2_BOOT_AT91BOOTSTRAP_BOARD setting)
+ endif
+ endif
+-
+ endif
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 119c452..a891c60 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -19,12 +19,3 @@ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+ endef
+ 
+ $(eval $(call GENTARGETS,boot,at91dataflashboot))
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_BOOT_AT91DATAFLASHBOOT),y)
+-TARGETS+=at91dataflashboot
+-endif
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 859b301..8f39661 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -54,8 +54,6 @@ endif
+ $(eval $(call GENTARGETS,boot,barebox))
+ 
+ ifeq ($(BR2_BOOT_BAREBOX),y)
+-TARGETS+=barebox
+-
+ # we NEED a board defconfig file unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 93238cb..aed89d0 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -83,12 +83,3 @@ define GRUB_UNINSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(call AUTOTARGETS,boot,grub))
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_BOOT_GRUB),y)
+-TARGETS+=grub
+-endif
 diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 192e905..d1b2907 100644
+index 1f50ed5..be1f0ca 100644
 --- a/boot/syslinux/syslinux.mk
 +++ b/boot/syslinux/syslinux.mk
-@@ -4,42 +4,29 @@
- #
- #############################################################
+@@ -27,12 +27,3 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+ endef
  
--SYSLINUX_VERSION:=3.85
--SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
--SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
--SYSLINUX_CAT:=$(BZCAT)
--SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
-+SYSLINUX_VERSION = 3.85
-+SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
-+SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
- 
--$(DL_DIR)/$(SYSLINUX_SOURCE):
--	 $(call DOWNLOAD,$(SYSLINUX_SITE),$(SYSLINUX_SOURCE))
-+SYSLINUX_INSTALL_TARGET = NO
-+SYSLINUX_INSTALL_IMAGES = YES
- 
--syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
-+SYSLINUX_DEPENDENCIES = host-nasm
- 
--$(SYSLINUX_DIR)/.unpacked: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
--	mkdir -p $(@D)
--	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(@D) boot/syslinux/ \*.patch
--	touch -c $@
-+define SYSLINUX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
-+endef
- 
--$(SYSLINUX_DIR)/.compiled: $(SYSLINUX_DIR)/.unpacked
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
--	touch -c $@
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
- 
--$(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/isolinux.bin $@
-+define SYSLINUX_INSTALL_IMAGES_CMDS
-+	for i in $(SYSLINUX_IMAGES-y); do \
-+		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/`basename $$i`; \
-+	done
-+endef
- 
--$(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
+ $(eval $(call GENTARGETS,boot,syslinux))
 -
--syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
--pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
--
--pxelinux-clean syslinux-clean:
--	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
--	-$(MAKE) -C $(SYSLINUX_DIR) clean
--
--pxelinux-dirclean syslinux-dirclean:
--	rm -rf $(SYSLINUX_DIR)
-+$(eval $(call GENTARGETS,boot,syslinux))
- 
- #############################################################
- #
-@@ -49,6 +36,3 @@ pxelinux-dirclean syslinux-dirclean:
- ifeq ($(BR2_TARGET_SYSLINUX),y)
- TARGETS+=syslinux
- endif
--ifeq ($(BR2_TARGET_PXELINUX),y)
--TARGETS+=pxelinux
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_BOOT_SYSLINUX),y)
+-TARGETS+=syslinux
 -endif
+diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
+index d6fb881..97d7921 100644
+--- a/boot/u-boot/u-boot.mk
++++ b/boot/u-boot/u-boot.mk
+@@ -117,12 +117,10 @@ $(eval $(call GENTARGETS,boot,u-boot))
+ #
+ #############################################################
+ ifeq ($(BR2_BOOT_U_BOOT),y)
+-TARGETS+=u-boot
+ # we NEED a board name unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(U_BOOT_BOARD_NAME),)
+ $(error NO U-Boot board name set. Check your BR2_BOOT_U_BOOT_BOARDNAME setting)
+ endif
+ endif
+-
+ endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0753fac..7e5f434 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -196,11 +196,6 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ # after it generated the initramfs list of files.
+ linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ 
+-
+-ifeq ($(BR2_LINUX_KERNEL),y)
+-TARGETS+=linux
+-endif
+-
+ # Checks to give errors that the user can understand
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index ff0fd9f..61947a8 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -522,10 +522,20 @@ $$($(2)_TARGET_UNINSTALL):		PKG=$(2)
+ $$($(2)_TARGET_CLEAN):			PKG=$(2)
+ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ 
++# Compute the name of the Kconfig option that correspond to the
++# package being enabled. We handle three cases: the special Linux
++# kernel case, the bootloaders case, and the normal packages case.
++ifeq ($(1),linux)
++$(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
++else ifeq ($(4),boot)
++$(2)_KCONFIG_VAR = BR2_BOOT_$(2)
++else
++$(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
++endif
++
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+-
+-ifeq ($$(BR2_PACKAGE_$(2)),y)
++ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
+ TARGETS += $(1)
+ 
+@@ -537,7 +547,7 @@ else ifeq ($$($(2)_SITE_METHOD),bzr)
+ DL_TOOLS_DEPENDENCIES += bzr
+ endif # SITE_METHOD
+ 
+-endif # BR2_PACKAGE_$(2)
++endif # $(2)_KCONFIG_VAR
+ endef # GENTARGETS_INNER
+ 
+ ################################################################################
 -- 
 1.7.4.1
