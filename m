@@ -1,62 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 5 Jul 2011 00:01:50 +0200
-Subject: [Buildroot] [PATCH 06/28] package: fix patching procedure for
-	host packages
-In-Reply-To: <3f344e77a60fbd473b25eb91fd7a6a270197b01d.1309815048.git.thomas.petazzoni@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 00:07:43 +0200
+Subject: [Buildroot] [PATCH 01/28] Makefile.package.in: Makes it
+ possible to override the default extract commands
+In-Reply-To: <201107042345.18109.yann.morin.1998@anciens.enib.fr>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <3f344e77a60fbd473b25eb91fd7a6a270197b01d.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201107050001.50292.yann.morin.1998@anciens.enib.fr>
+ <117195471c3cd2af65c86e9ebf40a46de961183a.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <201107042345.18109.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20110705000743.5a3c15f3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Le Mon, 4 Jul 2011 23:45:17 +0200,
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
 
-On Monday 04 July 2011 23:33:23 Thomas Petazzoni wrote:
-> The patching procedure was using $($(NOHOSTPKG)_NAME) to find the name
-> of the package without the host- prefix for host packages, which is
-> needed to find the package directory and the prefix of the patches.
+> On Monday 04 July 2011 23:33:18 Thomas Petazzoni wrote:
+> > From: Allan W. Nielsen <a@awn.dk>
 > 
-> However, this $($(NOHOSTPKG)_NAME) variable is empty when there is
-> only an host variant for the package and no target variant for it.
+> Maybe add Allan to the CC: list?
+
+Fixed.
+
+> > When using GENTARGETS (or macroes depending on it), there is no way of
+> > specifying a custom extraction procedure. When using the patch one can
+> > simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
+> > default. If non is defined it will fall back to the default extract
+> > procedure.
+> > 
+> > An example could look like this:
+> > ---
+> >  package/Makefile.package.in |    7 +++++--
+> >  1 files changed, 5 insertions(+), 2 deletions(-)
+> [--SNIP--]
 > 
-> Therefore, instead of using this $($(NOHOSTPKG)_NAME) variable, we now
-> use a new $(RAWNAME) variable, which is always the name of the package
-> without the host- prefix, even for host packages.
-[--SNIP--]
-> @@ -515,7 +513,7 @@ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
->  $$($(2)_TARGET_BUILD):			PKG=$(2)
->  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
->  $$($(2)_TARGET_PATCH):			PKG=$(2)
-> -$$($(2)_TARGET_PATCH):			NOHOSTPKG=$(3)
-> +$$($(2)_TARGET_PATCH):			RAWNAME=$(subst host-,,$(1))
+> It seems the xample got lost in the mail. I can't check the repo, it's 403.
 
-I might say something stupid, but what abouta package that is named
-'foohost-bar'? The 'host-' part will be stripped, and we'd get 'foobar'.
-And that'd be wrong, I think.
+Fixed!
 
-I'd use: $(patsubst host-%,%,$(1))
+Thanks,
 
-And even in that case, that does not prevent a target package that
-is named 'host-utils' from matching, and be renamed to just 'utils'.
-
-But it's been a while I looked at the generic infra, so I might be
-just saying cracks here...
-
->  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKG=$(2)
->  $$($(2)_TARGET_UNINSTALL):		PKG=$(2)
-> 
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
