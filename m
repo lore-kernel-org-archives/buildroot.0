@@ -1,35 +1,53 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Mon, 4 Jul 2011 23:25:06 +0300
-Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be
-	remounted read-write
-In-Reply-To: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
-References: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CALR4fEKRmHBdjGznPFeS4R2DOkC9DE+X7_rfb6T=Rw4N1=xzzw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  4 Jul 2011 23:33:18 +0200
+Subject: [Buildroot] [PATCH 01/28] Makefile.package.in: Makes it possible to
+	override the default extract commands
+In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <117195471c3cd2af65c86e9ebf40a46de961183a.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 3, 2011 at 1:56 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-  +config BR2_REMOUNT_ROOTFS_RW
-+       bool "remount root filesystem read-write during boot"
-+       default y
-+       help
-+         The root filesystem is typically mounted read-only at boot.
-+         By default, buildroot remounts it in read-write mode early during
-the
-+         boot process.
-+         Say no here if you would rather like your root filesystem to
-remain
-+         read-only.
-+         If unsure, say Y.
+From: Allan W. Nielsen <a@awn.dk>
+
+When using GENTARGETS (or macroes depending on it), there is no way of
+specifying a custom extraction procedure. When using the patch one can
+simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
+default. If non is defined it will fall back to the default extract
+procedure.
+
+An example could look like this:
+---
+ package/Makefile.package.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index bf4e1b4..9949b58 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -243,8 +243,7 @@ endif
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+ 	$(Q)mkdir -p $(@D)
+-	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
++	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+ 	$(Q)chmod -R ug+rw $(@D)
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+@@ -425,6 +424,10 @@ $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
+ $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ 
++# default extract command
++$(2)_EXTRACT_CMDS ?= $(if $($(2)_SOURCE),$(INFLATE$(suffix $($(2)_SOURCE))) $(DL_DIR)/$($(2)_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
 +
- endif # BR2_ROOTFS_SKELETON_DEFAULT
-
-
-Wait... nothing breaks...? this just works?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110704/c2e09c1e/attachment.html>
+ # post-steps hooks
+ $(2)_POST_EXTRACT_HOOKS         ?=
+ $(2)_POST_PATCH_HOOKS           ?=
+-- 
+1.7.4.1
