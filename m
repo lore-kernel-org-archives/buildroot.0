@@ -1,156 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2011 23:33:17 +0200
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.08/bootloaders
-Message-ID: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+Date: Mon,  4 Jul 2011 23:33:20 +0200
+Subject: [Buildroot] [PATCH 03/28] linux: make it possible to install the
+	kernel in /boot
+In-Reply-To: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8f2cdc43b7b0efaf09e1f1be70019f9cdc0cb8ec.1309815048.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    7 +++++++
+ linux/linux.mk  |    3 +++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-We have a package infrastructure that allows to share a lot of common
-behaviour between packages, and allows to add new features easily to
-all existing packages (Git/Mercurial download support, or usage of an
-external source tree, etc.).
-
-Unfortunately, some of the packages that would most benefit from those
-new infrastructure features are the bootloader and kernel, since it's
-typically the software components that have to be modified/tuned
-during the course of an embedded Linux project.
-
-Therefore, this series converts all bootloaders makefiles and the
-kernel makefile to the package infrastructure, and adds the
-possibility of fetching the kernel and u-boot through Git (it can be
-added to other bootloaders with just a few lines of changes, mostly at
-the Config.in level).
-
-It also does various other things :
-
- * Integrate Allan Nielsen patch that allows package to override the
-   default extract command. Allan wrote it for the ATI fglrx drivers,
-   but this is also required by this patchset for the AT91Bootstrap
-   bootloader, which is provided as a .zip file.
-
- * Allow the kernel to be installed in /boot in the root
-   filesystem. This is mostly useful for x86 and x86_64 systems, where
-   it is traditional to have the kernel inside the root filesystem.
-
- * Modify the way the kernel is configured, to always use a defconfig
-   mechanism. This allows to make a silent oldconfig after linux.mk
-   has tuned the kernel configuration according to various Buildroot
-   configuration options (see the commit log for details).
-
- * Modify the package infrastructure to provide a <pkg>_INSTALL_IMAGE
-   knob in addition to <pkg>_INSTALL_STAGING and <pkg>_INSTALL_TARGET.
-
- * Fix the patching procedure for host packages. It was incorrect,
-   because it required the target package to exist even if only the
-   host package was actually useful.
-
- * Adds support for post-download hooks at the package infrastructure
-   level. This is needed for the kernel, as the kernel requires to
-   download a custom list of patches.
-
- * Integrate Philippe Reynes patch that adds support for the x-loader
-   first stage bootloader (for OMAP-based platforms).
-
-The changes have already been tested sucessfully by Luca
-Ceresoli. Thanks to him for testing this patch set and for the
-feedback provided, as well as the bug fixes. Many, many thanks!
-
-Changes since the last posting (May, 30th) :
-
- - Made the option that allows to have the kernel installed in /boot
-   available to all architectures, not only x86 and x86_64
-
- - Fixed the package infrastructure modifications so that packages in
-   subdirectories (such as package/multimedia/) continue to work
-   properly.
-
- - Add the x-loader bootloader, contributed by Philippe Reynes
-
- - Bump Barebox version
-
-Regards,
-
-Thomas
-
-The following changes since commit c80224a3a05e41af5a32e1c663fd3853f313382b:
-
-  toolchain/gcc: bump 4.6.x version to 4.6.1 (2011-06-28 15:19:13 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.08/bootloaders
-
-Allan W. Nielsen (1):
-      Makefile.package.in: Makes it possible to override the default extract commands
-
-Philippe Reynes (1):
-      Add x-loader bootloader
-
-Thomas Petazzoni (26):
-      Fix quoting in default extract command
-      linux: make it possible to install the kernel in /boot
-      linux: use the defconfig mechanism after tuning the config
-      package: add infrastructure to install things in images/
-      package: fix patching procedure for host packages
-      barebox: use = instead of := and re-indent
-      barebox: convert to GENTARGETS
-      at91bootstrap: use = instead of := and indent properly
-      at91bootstrap: convert to GENTARGETS
-      at91dataflashboot: use = instead of := and indent
-      at91dataflashboot: convert to GENTARGETS
-      syslinux: convert to GENTARGETS
-      grub: convert to AUTOTARGETS
-      grub2: remove package
-      u-boot: convert to GENTARGETS
-      uboot-mkimage: new package
-      linux: rename LINUX26 to LINUX
-      linux: indent and align some definitions
-      package: add support for post-download hooks
-      linux: convert to the GENTARGETS infrastructure
-      boot: rename BR2_TARGET_* to BR2_BOOT_*
-      u-boot: rename options BR2_BOOT_UBOOT* to BR2_BOOT_U_BOOT*
-      Improve TARGETS handling for bootloaders and kernel
-      linux: allow specification of a custom Git repository as a source
-      u-boot: allow specification of custom Git repo as source
-      barebox: bump version
-
- boot/Config.in                                     |    2 +-
- boot/at91bootstrap/Config.in                       |   18 +-
- boot/at91bootstrap/at91bootstrap.mk                |   69 ++----
- boot/at91dataflashboot/Config.in                   |   24 +--
- boot/at91dataflashboot/at91dataflashboot.mk        |   49 +---
- boot/barebox/Config.in                             |    8 +-
- boot/barebox/barebox.mk                            |   74 +++----
- boot/grub/Config.in                                |   94 ++++----
- boot/grub/grub.500-build-fix.patch                 |   14 ++
- boot/grub/grub.mk                                  |  157 +++++--------
- boot/grub2/Config.in                               |    9 -
- boot/grub2/grub2.mk                                |   93 --------
- boot/syslinux/Config.in                            |   16 +-
- boot/syslinux/syslinux.mk                          |   59 ++----
- boot/u-boot/Config.in                              |   89 ++++----
- boot/u-boot/u-boot.mk                              |  234 +++++++-------------
- boot/x-loader/Config.in                            |   15 ++
- boot/x-loader/x-loader.mk                          |   35 +++
- linux/Config.in                                    |   22 ++
- linux/linux.mk                                     |  210 +++++++++---------
- package/Makefile.package.in                        |   72 +++++--
- .../uboot-mkimage-2011.03-drop-configh.patch       |    0
- package/uboot-mkimage/uboot-mkimage.mk             |   16 ++
- 23 files changed, 611 insertions(+), 768 deletions(-)
- create mode 100644 boot/grub/grub.500-build-fix.patch
- delete mode 100644 boot/grub2/Config.in
- delete mode 100644 boot/grub2/grub2.mk
- create mode 100644 boot/x-loader/Config.in
- create mode 100644 boot/x-loader/x-loader.mk
- rename boot/u-boot/u-boot-2011.03-drop-configh.patch => package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch (100%)
- create mode 100644 package/uboot-mkimage/uboot-mkimage.mk
-
-Thanks,
+diff --git a/linux/Config.in b/linux/Config.in
+index 1f1a69c..c9229a5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -153,6 +153,13 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
+ 
++config BR2_LINUX_KERNEL_INSTALL_TARGET
++	bool "Install kernel image to /boot in target"
++	help
++	  Select this option to have the kernel image installed to
++	  /boot in the target root filesystem, as is typically done on
++	  x86/x86_64 systems.
++
+ endif # BR2_LINUX_KERNEL
+ 
+ endmenu
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 43ca87b..2bb32cb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -158,6 +158,9 @@ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/
+ $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+ 	@$(call MESSAGE,"Installing kernel")
+ 	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
++ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
++	install -m 0644 -D $(LINUX26_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX26_IMAGE_NAME)
++endif
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
 -- 
-Thomas Petazzoni
+1.7.4.1
