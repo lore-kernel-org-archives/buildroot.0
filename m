@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 4 Jul 2011 23:45:17 +0200
-Subject: [Buildroot] [PATCH 01/28] Makefile.package.in: Makes it
-	possible to override the default extract commands
-In-Reply-To: <117195471c3cd2af65c86e9ebf40a46de961183a.1309815048.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2011 23:48:43 +0200
+Subject: [Buildroot] [PATCH 03/28] linux: make it possible to install
+	the kernel in /boot
+In-Reply-To: <8f2cdc43b7b0efaf09e1f1be70019f9cdc0cb8ec.1309815048.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <117195471c3cd2af65c86e9ebf40a46de961183a.1309815048.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201107042345.18109.yann.morin.1998@anciens.enib.fr>
+ <8f2cdc43b7b0efaf09e1f1be70019f9cdc0cb8ec.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201107042348.43715.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,47 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Monday 04 July 2011 23:33:18 Thomas Petazzoni wrote:
-> From: Allan W. Nielsen <a@awn.dk>
-
-Maybe add Allan to the CC: list?
-
-> When using GENTARGETS (or macroes depending on it), there is no way of
-> specifying a custom extraction procedure. When using the patch one can
-> simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
-> default. If non is defined it will fall back to the default extract
-> procedure.
-> 
-> An example could look like this:
+On Monday 04 July 2011 23:33:20 Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/Makefile.package.in |    7 +++++--
->  1 files changed, 5 insertions(+), 2 deletions(-)
-[--SNIP--]
+>  linux/Config.in |    7 +++++++
+>  linux/linux.mk  |    3 +++
+>  2 files changed, 10 insertions(+), 0 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 1f1a69c..c9229a5 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -153,6 +153,13 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+>  	  Specify the kernel make target to build the kernel that you
+>  	  need.
+>  
+> +config BR2_LINUX_KERNEL_INSTALL_TARGET
+> +	bool "Install kernel image to /boot in target"
+> +	help
+> +	  Select this option to have the kernel image installed to
+> +	  /boot in the target root filesystem, as is typically done on
+> +	  x86/x86_64 systems.
+> +
+>  endif # BR2_LINUX_KERNEL
+>  
+>  endmenu
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 43ca87b..2bb32cb 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -158,6 +158,9 @@ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/
+>  $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
+>  	@$(call MESSAGE,"Installing kernel")
+>  	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
+> +ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+> +	install -m 0644 -D $(LINUX26_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX26_IMAGE_NAME)
+> +endif
 
-It seems the xample got lost in the mail. I can't check the repo, it's 403.
+If we install the kernel in /boot, why do we stil install it in
+${BINARIES_DIR} ?
+
+It can only be confusing to have the kernel image in two places.
 
 Regards,
 Yann E. MORIN.
