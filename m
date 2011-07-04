@@ -1,50 +1,37 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sun, 3 Jul 2011 22:41:20 +0200
-Subject: [Buildroot] [git commit] Create and mount /dev/shm
-Message-ID: <20110703204137.5DC8789038@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  4 Jul 2011 09:00:30 +0300
+Subject: [Buildroot] [PATCH 2/2] iw: fix build
+In-Reply-To: <52492b5cb97af2b80f86cf2dee27c8a931d14856.1309759154.git.baruch@tkos.co.il>
+References: <52492b5cb97af2b80f86cf2dee27c8a931d14856.1309759154.git.baruch@tkos.co.il>
+Message-ID: <a57ca01c880d3bb519f1e96aa12ec0e7ca135648.1309759154.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The --sysroot option is required in CFLAGS and LDFLAGS to avoid compile time
+and link time failures.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22fde22e35f98f7830c2f8955465532328348cd1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The /dev/shm directory is neither created nor mounted as tmpfs as boot
-time. This will cause troubles when using named semaphores on the
-system.
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- fs/skeleton/etc/fstab   |    1 +
- fs/skeleton/etc/inittab |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/iw/iw.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/skeleton/etc/fstab b/fs/skeleton/etc/fstab
-index 87d9da0..a2f56ff 100644
---- a/fs/skeleton/etc/fstab
-+++ b/fs/skeleton/etc/fstab
-@@ -4,5 +4,6 @@
- /dev/root       /              ext2	rw,noauto         0      1
- proc		/proc	       proc     defaults	  0	 0
- devpts		/dev/pts       devpts   defaults,gid=5,mode=620	  0	 0
-+tmpfs           /dev/shm       tmpfs    mode=0777         0      0
- tmpfs           /tmp           tmpfs    defaults          0      0
- sysfs		/sys	       sysfs    defaults	  0	 0
-diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-index b1e5c16..0e50467 100644
---- a/fs/skeleton/etc/inittab
-+++ b/fs/skeleton/etc/inittab
-@@ -17,6 +17,7 @@
- null::sysinit:/bin/mount -t proc proc /proc
- null::sysinit:/bin/mount -o remount,rw /
- null::sysinit:/bin/mkdir -p /dev/pts
-+null::sysinit:/bin/mkdir -p /dev/shm
- null::sysinit:/bin/mount -a
- null::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 0f5dd0e..4db47c5 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -15,8 +15,8 @@ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 
+ define IW_CONFIGURE_CMDS
+ 	echo "CC = $(TARGET_CC)" >$(IW_CONFIG)
+-	echo "CFLAGS = $(TARGET_CFLAGS)" >>$(IW_CONFIG)
+-	echo "LDFLAGS = $(TARGET_LDFLAGS)" >>$(IW_CONFIG)
++	echo "CFLAGS = $(TARGET_CFLAGS) --sysroot=$(STAGING_DIR)" >>$(IW_CONFIG)
++	echo "LDFLAGS = $(TARGET_LDFLAGS) --sysroot=$(STAGING_DIR)" >>$(IW_CONFIG)
+ endef
+ 
+ define IW_BUILD_CMDS
 -- 
-1.7.3.4
+1.7.5.4
