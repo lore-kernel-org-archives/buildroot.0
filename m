@@ -1,45 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2011 09:31:15 +0200
-Subject: [Buildroot] [PATCH 07/28] barebox: use = instead of := and
- re-indent
-In-Reply-To: <201107050008.38502.yann.morin.1998@anciens.enib.fr>
-References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <b98e01894aa9475d1480f8c2337190caf1281b7e.1309815048.git.thomas.petazzoni@free-electrons.com>
- <201107050008.38502.yann.morin.1998@anciens.enib.fr>
-Message-ID: <20110705093115.0d35dcb6@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Jul 2011 10:39:02 +0200
+Subject: [Buildroot] lame linking issue
+In-Reply-To: <4E0DD227.6050807@visionsystems.de> (Yegor Yefremov's message of
+ "Fri, 01 Jul 2011 15:56:55 +0200")
+References: <4E0DD227.6050807@visionsystems.de>
+Message-ID: <87hb71xgt5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 5 Jul 2011 00:08:38 +0200,
-"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-> What is the rationale for using '=' instead of ':='?
+ Yegor> I'm using the latest git version of BR and wanted to build lame-3.98.4. During linking phase I got following errors:
 
-Consistency. And also because personally, I find = nicer to read
-than :=, but as you state below, it's true that the behaviour is not
-the same.
+ Yegor> Any idea? 
 
-> Using '=' evaluates the assignemnt every time it is referenced, which
-> can be a little bit costly when there are tons of them (like in
-> buildroot); while using ':=' does the evaluation only once, at the
-> time of the assignment, not evaluation.
-> 
-> I agree that the code should be homogeneous, but I'd think it should
-> be fast as well. He, if I can get butter, buter's money, and a litle
-> smile from the dairywoman! ;-)
+ Yegor> Some toolchain details:
 
-Then, we should state that those variables must all be defined with :=
-all over the place and enforce this decision. In the mean time, I will
-drop those modifications from my patch set.
+ Yegor> uClibc: 0.9.32
+ Yegor> GCC: 4.6.1
 
-Regards,
+gcc 4.6.x support is experimental. Lame builds here with the default
+(4.3.x) compiler.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
