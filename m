@@ -1,32 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2011 21:54:19 +0200
-Subject: [Buildroot] [PATCH 28/28] barebox: bump version
+Date: Tue,  5 Jul 2011 21:54:18 +0200
+Subject: [Buildroot] [PATCH 27/28] Add x-loader bootloader
 In-Reply-To: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5f57641a9d064a0eb7470a9d9f03a854acf0d447.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e81373f4cb76c6c2d2ae33caa2bf93d19873b604.1309895466.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Philippe Reynes <tremyfr@yahoo.fr>
+
+[Thomas Petazzoni: use BR2_BOOT prefix instead of BR2_TARGET, misc
+fixes]
+
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/barebox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/Config.in            |    1 +
+ boot/x-loader/Config.in   |   15 +++++++++++++++
+ boot/x-loader/x-loader.mk |   35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 boot/x-loader/Config.in
+ create mode 100644 boot/x-loader/x-loader.mk
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 2745213..a254ec0 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/boot/Config.in b/boot/Config.in
+index 67ab8ac..a07102e 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -6,6 +6,7 @@ source "boot/syslinux/Config.in"
+ source "boot/u-boot/Config.in"
+ source "boot/at91bootstrap/Config.in"
+ source "boot/at91dataflashboot/Config.in"
++source "boot/x-loader/Config.in"
  
--BAREBOX_VERSION := 2011.05.0
-+BAREBOX_VERSION := 2011.06.0
- BAREBOX_SOURCE  := barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE    := http://www.barebox.org/download/
+ endmenu
  
+diff --git a/boot/x-loader/Config.in b/boot/x-loader/Config.in
+new file mode 100644
+index 0000000..9597337
+--- /dev/null
++++ b/boot/x-loader/Config.in
+@@ -0,0 +1,15 @@
++menuconfig BR2_BOOT_XLOADER
++	bool "X-loader"
++	depends on BR2_arm
++	help
++	  The x-loader bootloader. It is mainly used on OMAP-based
++	  platforms.
++
++if BR2_BOOT_XLOADER
++config BR2_BOOT_XLOADER_BOARDNAME
++	string "x-loader board name"
++	help
++	  One of x-loader supported boards to be built.
++	  This will be suffixed with _config to meet x-loader
++	  standard naming.
++endif
+diff --git a/boot/x-loader/x-loader.mk b/boot/x-loader/x-loader.mk
+new file mode 100644
+index 0000000..31395ee
+--- /dev/null
++++ b/boot/x-loader/x-loader.mk
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# x-loader
++#
++#############################################################
++XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
++XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
++XLOADER_BOARD_NAME = $(call qstrip,$(BR2_BOOT_XLOADER_BOARDNAME))
++
++define XLOADER_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) $(XLOADER_BOARD_NAME)_config
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) ift
++endef
++
++define XLOADER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
++endef
++
++$(eval $(call GENTARGETS,boot,xloader))
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(BR2_BOOT_XLOADER),y)
++# we NEED a board name unless we're at make source
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(XLOADER_BOARD_NAME),)
++$(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
++endif
++endif
++
++endif
 -- 
 1.7.4.1
