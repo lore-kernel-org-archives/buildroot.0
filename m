@@ -1,55 +1,50 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 05 Jul 2011 22:33:17 +0200
-Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be
- remounted read-write
-In-Reply-To: <CALR4fEKRmHBdjGznPFeS4R2DOkC9DE+X7_rfb6T=Rw4N1=xzzw@mail.gmail.com>
-References: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
- <CALR4fEKRmHBdjGznPFeS4R2DOkC9DE+X7_rfb6T=Rw4N1=xzzw@mail.gmail.com>
-Message-ID: <4E13750D.3080607@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 22:46:42 +0200
+Subject: [Buildroot] [PATCH] new package: libav
+In-Reply-To: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
+References: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
+Message-ID: <20110705224642.4953b847@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Diego,
+Hello Wolfram,
 
-Diego Iastrubni wrote:
-> On Sun, Jul 3, 2011 at 1:56 PM, Luca Ceresoli <luca@lucaceresoli.net 
-> <mailto:luca@lucaceresoli.net>> wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net 
-> <mailto:luca@lucaceresoli.net>>
->   +config BR2_REMOUNT_ROOTFS_RW
-> +       bool "remount root filesystem read-write during boot"
-> +       default y
-> +       help
-> +         The root filesystem is typically mounted read-only at boot.
-> +         By default, buildroot remounts it in read-write mode early 
-> during the
-> +         boot process.
-> +         Say no here if you would rather like your root filesystem to 
-> remain
-> +         read-only.
-> +         If unsure, say Y.
-> +
->  endif # BR2_ROOTFS_SKELETON_DEFAULT
->
->
-> Wait... nothing breaks...? this just works?
+Thanks for your patches!
 
-It does not break anything.
+Le Fri, 01 Jul 2011 18:27:13 +0200,
+Wolfram Gloger <wg@malloc.de> a ?crit :
 
-If the new BR2_REMOUNT_ROOTFS_RW option is left at its default value (y),
-then the generated filesystem does the same thing it used to do in the past.
+> This is a copy of the ffmpeg package with the names and download
+> changed for libav-0.7.
+> 
+> Why choose this fork when there is "original" ffmpeg?
+> 
+> - It may be the future?  I don't know, but for sure it was dreadfully
+>   hard to get patches into ffmpeg.
+> 
+> - I found that ffmpeg (at least 0.6.3) does _not_ work with minidlna
+>   (buildroot patch forthcoming), there are strange hangups just
+>   calling av_stream_info() on many ts files.
+>   libav worked out of the box in this context.
+> 
+> Signed-off-by: Wolfram Gloger <wg@malloc.de>
 
-If you disable it, BR will simply comment out the "mount -o remount,rw /"
-line in /etc/inittab, thus the rootfs will stay read-only.
+Could you turn this into a proper commit log message ? Could you also
+send your patch inline and not as an attached file ? This make it
+easier to review and comment.
 
-It works quite well, unless your apps need to write the rootfs.
-I use it since >1 year without problems.
+If the libav package is a copy of the ffmpeg one, isn't it possible to
+share the same .mk file ? We could then make them separate when/if
+libav diverges from ffmpeg in a significant way.
 
-The only issue I notice is that the random seed cannot be saved on shutdown.
-But this is a no-issue on those embedded devices that can be shut down only
-by removing power: these will never see a clean shutdown.
+What do you think ?
 
-Luca
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
