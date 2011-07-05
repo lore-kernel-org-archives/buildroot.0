@@ -1,53 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2011 23:00:18 +0200
-Subject: [Buildroot] [PATCH] new package: minidlna
-In-Reply-To: <0MKxYi-1QcgdO2zs8-00018x@mrelayeu.kundenserver.de>
-References: <0MKxYi-1QcgdO2zs8-00018x@mrelayeu.kundenserver.de>
-Message-ID: <20110705230018.01be536a@skate>
+Date: Tue, 5 Jul 2011 23:03:29 +0200
+Subject: [Buildroot] [git commit] Rework the logging daemons startup
+In-Reply-To: <20110704191001.ADED18A31E@busybox.osuosl.org>
+References: <20110704191001.ADED18A31E@busybox.osuosl.org>
+Message-ID: <20110705230329.5523cbdf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Wolfram,
+Hello,
 
-Le Fri, 01 Jul 2011 18:32:02 +0200,
-Wolfram Gloger <wg@malloc.de> a ?crit :
+Le Mon, 4 Jul 2011 21:03:37 +0200,
+Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
-> MiniDLNA is server software with the aim of being fully compliant with
-> DLNA/UPnP-AV clients.
-> 
-> This new package depends on libav (see my other patch) as I could not
-> get it to work with the current ffmpeg package in buildroot.
-> 
-> Signed-off-by: Wolfram Gloger <wg@malloc.de>
+>  # Logging junk
+>  null::sysinit:/bin/touch /var/log/messages
+> -null::respawn:/sbin/syslogd -n -m 0
+> -null::respawn:/sbin/klogd -n
 
-Could you sent your patch inline ?
+Starting the daemon is removed, but stopping the daemons is still there:
 
-Your .mk file lists multiple dependencies, but your Config.in forgets
-to "depends on" or "select" them.
-
-Your minidlna-1.0.20-cross.patch file must come with a header detailing
-what the patch does and why it is needed, along with a Signed-off-by
-line identifying the author of the patch. This patch uses STAGING_DIR
-in several places, which makes the patch completely unsuitable for
-upstream inclusion. Isn't there a way of making this a little bit more
-generic so that there's at least a hope of getting this patch merged
-upstream in the minidlna project ?
-
-In the .mk file, remove all useless commented lines.
-
-Also remove the
-
-+		BR2_DEFAULT_KERNEL_HEADERS=$(BR2_DEFAULT_KERNEL_HEADERS) \
-
-line, which apparently is useless.
-
-Regarding the dependencies, is it directly minidlna that depends on
-libvorbis, flac, libogg, etc. ? Or is it libav that depends on those ?
-
-Regards,
+# Stuff to do before rebooting
+null::shutdown:/usr/bin/killall klogd
+null::shutdown:/usr/bin/killall syslogd
 
 Thomas
 -- 
