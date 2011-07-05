@@ -1,53 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2011 21:54:08 +0200
-Subject: [Buildroot] [PATCH 17/28] uboot-mkimage: new package
+Date: Tue,  5 Jul 2011 21:54:01 +0200
+Subject: [Buildroot] [PATCH 10/28] at91bootstrap: convert to GENTARGETS
 In-Reply-To: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2471ac07175a85be59fb24bdf604c19ecabc3b06.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e423a6c12baf2bcd99ecfacc8c967d3aff4f9770.1309895466.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mkimage for the host is now built by a package, so that
-boot/u-boot/u-boot.mk is no longer responsible for doing this. It
-makes things a lot easier to handle, as linux/linux.mk now simply
-depends on host-uboot-mkimage.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uboot-mkimage-2011.03-drop-configh.patch       |    0
- package/uboot-mkimage/uboot-mkimage.mk             |   16 ++++++++++++++++
- 2 files changed, 16 insertions(+), 0 deletions(-)
- rename boot/u-boot/u-boot-2011.03-drop-configh.patch => package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch (100%)
- create mode 100644 package/uboot-mkimage/uboot-mkimage.mk
+ boot/at91bootstrap/at91bootstrap.mk |   53 ++++++++++++-----------------------
+ 1 files changed, 18 insertions(+), 35 deletions(-)
 
-diff --git a/boot/u-boot/u-boot-2011.03-drop-configh.patch b/package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch
-similarity index 100%
-rename from boot/u-boot/u-boot-2011.03-drop-configh.patch
-rename to package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch
-diff --git a/package/uboot-mkimage/uboot-mkimage.mk b/package/uboot-mkimage/uboot-mkimage.mk
-new file mode 100644
-index 0000000..055348c
---- /dev/null
-+++ b/package/uboot-mkimage/uboot-mkimage.mk
-@@ -0,0 +1,16 @@
-+UBOOT_MKIMAGE_VERSION = 2011.03
-+UBOOT_MKIMAGE_SOURCE  = u-boot-$(UBOOT_MKIMAGE_VERSION).tar.bz2
-+UBOOT_MKIMAGE_SITE    = ftp://ftp.denx.de/pub/u-boot
-+
-+define HOST_UBOOT_MKIMAGE_BUILD_CMDS
-+	$(MAKE) -C $(@D) 			\
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
-+		ARCH=$(U_BOOT_ARCH) 		\
-+		tools
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index d753d5b..66fc961 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -4,49 +4,32 @@
+ #
+ #############################################################
+ AT91BOOTSTRAP_VERSION := 1.16
+-AT91BOOTSTRAP_NAME    := AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
+ AT91BOOTSTRAP_SITE    := http://www.atmel.com/dyn/resources/prod_documents/
+-AT91BOOTSTRAP_SOURCE  := $(AT91BOOTSTRAP_NAME).zip
+-AT91BOOTSTRAP_DIR     := $(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
++AT91BOOTSTRAP_SOURCE  := AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+ 
+-AT91BOOTSTRAP_BOARD     := $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+-AT91BOOTSTRAP_MEMORY    := $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+-AT91BOOTSTRAP_BINARY    := $(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+-AT91BOOTSTRAP_BUILD_DIR := $(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
+-AT91BOOTSTRAP_TARGET    := $(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
++AT91BOOTSTRAP_BOARD       := $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
++AT91BOOTSTRAP_MEMORY      := $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
++AT91BOOTSTRAP_MAKE_SUBDIR := board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
++AT91BOOTSTRAP_BINARY      := $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+ 
+-$(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
+-	 $(call DOWNLOAD,$(AT91BOOTSTRAP_SITE),$(AT91BOOTSTRAP_SOURCE))
++AT91BOOTSTRAP_INSTALL_IMAGES = YES
++AT91BOOTSTRAP_INSTALL_TARGET = NO
+ 
+-$(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-	mkdir -p $(BUILD_DIR)
++define AT91BOOTSTRAP_EXTRACT_CMDS
+ 	unzip -d $(BUILD_DIR) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION) $(AT91BOOTSTRAP_DIR)
+-	touch $@
++	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
++	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
 +endef
-+
-+define HOST_UBOOT_MKIMAGE_INSTALL_CMDS
-+	install -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin
+ 
+-$(AT91BOOTSTRAP_DIR)/.patched: $(AT91BOOTSTRAP_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) boot/at91bootstrap/ at91bootstrap-$(AT91BOOTSTRAP_VERSION)\*.patch
+-	touch $@
++define AT91BOOTSTRAP_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
 +endef
-+
-+$(eval $(call GENTARGETS,package,uboot-mkimage,host))
+ 
+-$(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.patched
+-	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+-		-C $(AT91BOOTSTRAP_BUILD_DIR)
++define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
++	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
++endef
+ 
+-$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
+-	mkdir -p $(dir $@)
+-	cp $^ $@
+-
+-at91bootstrap: $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-
+-at91bootstrap-source: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-
+-at91bootstrap-unpacked: $(AT91BOOTSTRAP_DIR)/.unpacked
+-
+-at91bootstrap-clean:
+-	make -C $(AT91BOOTSTRAP_BUILD_DIR) clean
+-
+-at91bootstrap-dirclean:
+-	rm -rf $(AT91BOOTSTRAP_DIR)
++$(eval $(call GENTARGETS,boot,at91bootstrap))
+ 
+ #############################################################
+ #
 -- 
 1.7.4.1
