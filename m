@@ -1,103 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2011 21:54:18 +0200
-Subject: [Buildroot] [PATCH 27/28] Add x-loader bootloader
-In-Reply-To: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e81373f4cb76c6c2d2ae33caa2bf93d19873b604.1309895466.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 22:11:26 +0200
+Subject: [Buildroot] [PATCH] BR2_ARCH definition was missing for 32-bit
+ AMD architecture variants.
+In-Reply-To: <1309790240-25341-1-git-send-email-arnout@mind.be>
+References: <1309790240-25341-1-git-send-email-arnout@mind.be>
+Message-ID: <20110705221126.5912c201@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Philippe Reynes <tremyfr@yahoo.fr>
+Hello,
 
-[Thomas Petazzoni: use BR2_BOOT prefix instead of BR2_TARGET, misc
-fixes]
+Le Mon,  4 Jul 2011 16:37:20 +0200,
+"Arnout Vandecappelle (Essensium - Mind)" <arnout@mind.be> a ?crit :
 
-Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/Config.in            |    1 +
- boot/x-loader/Config.in   |   15 +++++++++++++++
- boot/x-loader/x-loader.mk |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+), 0 deletions(-)
- create mode 100644 boot/x-loader/Config.in
- create mode 100644 boot/x-loader/x-loader.mk
+> @@ -478,6 +478,13 @@ config BR2_ARCH
+>  	default "i686"		if BR2_x86_pentiumpro
+>  	default "i686"		if BR2_x86_nocona
+>  	default "i686"		if BR2_x86_core2
+> +	default "i686"		if BR2_x86_opteron
+> +	default "i686"		if BR2_x86_opteron_sse3
+> +	default "i686"		if BR2_x86_barcelona
+> +	default "i686"		if BR2_x86_k6
+> +	default "i686"		if BR2_x86_k6_2
+> +	default "i686"		if BR2_x86_athlon
+> +	default "i686"		if BR2_x86_athlon_4
+>  	default "m68k"		if BR2_m68k
+>  	default "mips"		if BR2_mips
+>  	default "mipsel"	if BR2_mipsel
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 67ab8ac..a07102e 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -6,6 +6,7 @@ source "boot/syslinux/Config.in"
- source "boot/u-boot/Config.in"
- source "boot/at91bootstrap/Config.in"
- source "boot/at91dataflashboot/Config.in"
-+source "boot/x-loader/Config.in"
- 
- endmenu
- 
-diff --git a/boot/x-loader/Config.in b/boot/x-loader/Config.in
-new file mode 100644
-index 0000000..9597337
---- /dev/null
-+++ b/boot/x-loader/Config.in
-@@ -0,0 +1,15 @@
-+menuconfig BR2_BOOT_XLOADER
-+	bool "X-loader"
-+	depends on BR2_arm
-+	help
-+	  The x-loader bootloader. It is mainly used on OMAP-based
-+	  platforms.
-+
-+if BR2_BOOT_XLOADER
-+config BR2_BOOT_XLOADER_BOARDNAME
-+	string "x-loader board name"
-+	help
-+	  One of x-loader supported boards to be built.
-+	  This will be suffixed with _config to meet x-loader
-+	  standard naming.
-+endif
-diff --git a/boot/x-loader/x-loader.mk b/boot/x-loader/x-loader.mk
-new file mode 100644
-index 0000000..31395ee
---- /dev/null
-+++ b/boot/x-loader/x-loader.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# x-loader
-+#
-+#############################################################
-+XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
-+XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
-+XLOADER_BOARD_NAME = $(call qstrip,$(BR2_BOOT_XLOADER_BOARDNAME))
-+
-+define XLOADER_BUILD_CMDS
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) $(XLOADER_BOARD_NAME)_config
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
-+	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) ift
-+endef
-+
-+define XLOADER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
-+endef
-+
-+$(eval $(call GENTARGETS,boot,xloader))
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(BR2_BOOT_XLOADER),y)
-+# we NEED a board name unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(XLOADER_BOARD_NAME),)
-+$(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
-+endif
-+endif
-+
-+endif
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+This whole BR2_ARCH thing is a little nasty. For some archs, there is a
+single entry (for example ARM), but for other archs (for example x86 or
+x86_64) there are multiple entries. I would be tempted to replace all
+the x86 entries by :
+
+	default "i386"	if BR2_i386
+
+but according to commit 6212c19a8fbe86bf6c9ab854bd9b0db4ecc8d5ba having
+different BR2_ARCH is needed :
+
+"""
+allow people to build for i386/i486/i586/i686 targets since some
+packages (like gcc) build differently based upon the host tuplet
+"""
+
+What do people think about this ?
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
