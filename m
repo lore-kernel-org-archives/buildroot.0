@@ -1,306 +1,209 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2011 21:54:07 +0200
-Subject: [Buildroot] [PATCH 16/28] u-boot: convert to GENTARGETS
+Date: Tue,  5 Jul 2011 21:54:12 +0200
+Subject: [Buildroot] [PATCH 21/28] linux: convert to the GENTARGETS
+	infrastructure
 In-Reply-To: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1b701e02eb384f3f3156106699a7d6598ed614f4.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b786acbc300bab636e857f629236165680a630f9.1309895466.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The feature of building mkimage for the target is removed, it wasn't
-building with current U-Boot, and doesn't make a lot of sense (mkimage
-is needed only to prepare a kernel image, or an U-Boot script).
-
-The feature of building mkimage for the host is moved to a proper
-package. It duplicates a few things (U-Boot URL, etc.) but it makes
-things a lot cleaner than having it handled by boot/u-boot/u-boot.mk.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/u-boot/Config.in |    5 -
- boot/u-boot/u-boot.mk |  218 +++++++++++++++++--------------------------------
- 2 files changed, 74 insertions(+), 149 deletions(-)
+ linux/linux.mk |  111 +++++++++++++++++++++++++++-----------------------------
+ 1 files changed, 53 insertions(+), 58 deletions(-)
 
-diff --git a/boot/u-boot/Config.in b/boot/u-boot/Config.in
-index 00a4a5f..aada346 100644
---- a/boot/u-boot/Config.in
-+++ b/boot/u-boot/Config.in
-@@ -77,11 +77,6 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 83af4e2..e3a485e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -15,8 +15,10 @@ LINUX_SOURCE  := linux-$(LINUX_VERSION).tar.bz2
+ LINUX_SITE    := $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+ endif
  
- endchoice
- 
--config BR2_TARGET_UBOOT_TOOL_MKIMAGE
--	bool "mkimage tool in target"
--	help
--	  Install mkimage tool in target.
--
- config BR2_TARGET_UBOOT_TOOL_ENV
- 	bool "fw_printenv tool in target"
- 	help
-diff --git a/boot/u-boot/u-boot.mk b/boot/u-boot/u-boot.mk
-index 047f2c8..215b1c7 100644
---- a/boot/u-boot/u-boot.mk
-+++ b/boot/u-boot/u-boot.mk
-@@ -3,43 +3,31 @@
- # U-Boot
- #
- #############################################################
--U_BOOT_VERSION:=$(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
--U_BOOT_BOARD_NAME:=$(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
--
--# U-Boot may not be selected in the configuration, but mkimage might
--# be needed to build/prepare a kernel image. In this case, we just
--# pick some random stable U-Boot version that will be used just to
--# build mkimage.
--ifeq ($(U_BOOT_VERSION),)
--U_BOOT_VERSION=2011.03
--endif
-+U_BOOT_VERSION    = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
-+U_BOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+-LINUX_DIR     := $(BUILD_DIR)/linux-$(LINUX_VERSION)
+-LINUX_PATCH   := $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
++LINUX_PATCHES   := $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
 +
-+U_BOOT_INSTALL_IMAGES = YES
++LINUX_INSTALL_IMAGES = YES
++LINUX_DEPENDENCIES  += host-module-init-tools
  
- ifeq ($(U_BOOT_VERSION),custom)
- # Handle custom U-Boot tarballs as specified by the configuration
--U_BOOT_TARBALL=$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
--U_BOOT_SITE:=$(dir $(U_BOOT_TARBALL))
--U_BOOT_SOURCE:=$(notdir $(U_BOOT_TARBALL))
-+U_BOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
-+U_BOOT_SITE    = $(dir $(U_BOOT_TARBALL))
-+U_BOOT_SOURCE  = $(notdir $(U_BOOT_TARBALL))
+ LINUX_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC)" \
+@@ -74,27 +76,17 @@ LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+ endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+ 
+-# Download
+-$(LINUX_DIR)/.stamp_downloaded:
+-	@$(call MESSAGE,"Downloading kernel")
+-	$(call DOWNLOAD,$(LINUX_SITE),$(LINUX_SOURCE))
+-	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCH)),\
++define LINUX_DOWNLOAD_PATCHES
++	$(if $(LINUX_PATCHES),
++		@$(call MESSAGE,"Download additional patches"))
++	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCHES)),\
+ 		$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
+-	mkdir -p $(@D)
+-	touch $@
+-
+-# Extraction
+-$(LINUX_DIR)/.stamp_extracted: $(LINUX_DIR)/.stamp_downloaded
+-	@$(call MESSAGE,"Extracting kernel")
+-	mkdir -p $(@D)
+-	$(Q)$(INFLATE$(suffix $(LINUX_SOURCE))) $(DL_DIR)/$(LINUX_SOURCE) | \
+-		tar -C $(@D) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
+-	$(Q)touch $@
++endef
++
++LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ 
+-# Patch
+-$(LINUX_DIR)/.stamp_patched: $(LINUX_DIR)/.stamp_extracted
+-	@$(call MESSAGE,"Patching kernel")
+-	for p in $(LINUX_PATCH) ; do \
++define LINUX_APPLY_PATCHES
++	for p in $(LINUX_PATCHES) ; do \
+ 		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
+ 			toolchain/patch-kernel.sh $(@D) $(DL_DIR) `basename $$p` ; \
+ 		elif test -d $$p ; then \
+@@ -103,7 +95,9 @@ $(LINUX_DIR)/.stamp_patched: $(LINUX_DIR)/.stamp_extracted
+ 			toolchain/patch-kernel.sh $(@D) `dirname $$p` `basename $$p` ; \
+ 		fi \
+ 	done
+-	$(Q)touch $@
++endef
++
++LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
+ 
+ # As we are tweaking the kernel configuration file, we want to run a
+ # silent oldconfig pass on the configuration file after having done
+@@ -115,61 +109,60 @@ $(LINUX_DIR)/.stamp_patched: $(LINUX_DIR)/.stamp_extracted
+ KERNEL_DEFCONFIG_NAME = buildroot_defconfig
+ KERNEL_DEFCONFIG_PATH = $(KERNEL_ARCH_PATH)/configs/$(KERNEL_DEFCONFIG_NAME)
+ 
+-# Configuration
+-$(LINUX_DIR)/.stamp_configured: $(LINUX_DIR)/.stamp_patched
+-	@$(call MESSAGE,"Configuring kernel")
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-	cp $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig $(KERNEL_DEFCONFIG_PATH)
++KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(KERNEL_DEFCONFIG_PATH)
++KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ endif
+-ifeq ($(BR2_ARM_EABI),y)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(KERNEL_DEFCONFIG_PATH))
+-else
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(KERNEL_DEFCONFIG_PATH))
+-endif
+-ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
++
++define LINUX_CONFIGURE_CMDS
++	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_DEFCONFIG_PATH)
++	$(if $(BR2_ARM_EABI),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(KERNEL_DEFCONFIG_PATH)),
++		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(KERNEL_DEFCONFIG_PATH)))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake initramfs file list. It'll be
+ 	# replaced later by the real list, and the kernel will be
+ 	# rebuilt using the linux26-rebuild-with-initramfs target.
+-	touch $(BINARIES_DIR)/rootfs.initramfs
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.initramfs\",$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_GZIP,$(KERNEL_DEFCONFIG_PATH))
+-endif
+-ifneq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(KERNEL_DEFCONFIG_PATH))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(KERNEL_DEFCONFIG_PATH))
+-endif
+-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+-	$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(KERNEL_DEFCONFIG_PATH))
+-endif
++	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
++		touch $(BINARIES_DIR)/rootfs.initramfs
++		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.initramfs\",$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_GZIP,$(KERNEL_DEFCONFIG_PATH)))
++	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(KERNEL_DEFCONFIG_PATH))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(KERNEL_DEFCONFIG_PATH)))
++	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
++		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(KERNEL_DEFCONFIG_PATH)))
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DEFCONFIG_NAME)
+ 	rm $(KERNEL_DEFCONFIG_PATH)
+-	$(Q)touch $@
++endef
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+-$(LINUX_DIR)/.stamp_compiled: $(LINUX_DIR)/.stamp_configured $(LINUX_DIR)/.config
+-	@$(call MESSAGE,"Compiling kernel")
++define LINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
+ 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX_DIR)/.config) != 0 ] ; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
+-	$(Q)touch $@
++endef
++
+ 
+-# Installation
+-$(LINUX_DIR)/.stamp_installed: $(LINUX_DIR)/.stamp_compiled
+-	@$(call MESSAGE,"Installing kernel")
+ ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
++define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+ 	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
++endef
  else
- # Handle stable official U-Boot versions
--U_BOOT_SITE:=ftp://ftp.denx.de/pub/u-boot
--U_BOOT_SOURCE:=u-boot-$(U_BOOT_VERSION).tar.bz2
-+U_BOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
-+U_BOOT_SOURCE  = u-boot-$(U_BOOT_VERSION).tar.bz2
++define LINUX_INSTALL_IMAGES_CMDS
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++endef
  endif
- 
--U_BOOT_DIR:=$(BUILD_DIR)/u-boot-$(U_BOOT_VERSION)
--U_BOOT_CAT:=$(BZCAT)
--
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
--U_BOOT_BIN:=u-boot.kwb
--U_BOOT_MAKE_OPT:=$(U_BOOT_BIN)
-+U_BOOT_BIN          = u-boot.kwb
-+U_BOOT_MAKE_TARGET  = $(U_BOOT_BIN)
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
--U_BOOT_BIN:=u-boot.ldr
-+U_BOOT_BIN          = u-boot.ldr
- else
--U_BOOT_BIN:=u-boot.bin
-+U_BOOT_BIN          = u-boot.bin
- endif
- 
--MKIMAGE:=$(HOST_DIR)/usr/bin/mkimage
--
--U_BOOT_TARGETS:=$(BINARIES_DIR)/$(U_BOOT_BIN) $(MKIMAGE)
- U_BOOT_ARCH=$(KERNEL_ARCH)
- 
- # u-boot in the past used arch=ppc for powerpc
-@@ -47,139 +35,81 @@ ifneq ($(findstring x2010.03,x$(U_BOOT_VERSION)),)
- U_BOOT_ARCH=$(KERNEL_ARCH:powerpc=ppc)
- endif
- 
--U_BOOT_INC_CONF_FILE:=$(U_BOOT_DIR)/include/config.h
--
--ifeq ($(BR2_TARGET_UBOOT_TOOL_MKIMAGE),y)
--U_BOOT_TARGETS+=$(TARGET_DIR)/usr/bin/mkimage
--endif
--ifeq ($(BR2_TARGET_UBOOT_TOOL_ENV),y)
--U_BOOT_TARGETS+=$(TARGET_DIR)/usr/sbin/fw_printenv
--endif
--
- U_BOOT_CONFIGURE_OPTS += CONFIG_NOSOFTFLOAT=1
--
--# Define a helper function
-+U_BOOT_MAKE_OPTS += \
-+	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+	ARCH=$(U_BOOT_ARCH)
 +
-+# Helper function to fill the U-Boot config.h file.
-+# Argument 1: option name
-+# Argument 2: option value
-+# If the option value is empty, this function does nothing.
- define insert_define
-- at echo "#ifdef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
-- at echo "#undef $(strip $(1))" >> $(U_BOOT_INC_CONF_FILE)
-- at echo "#endif" >> $(U_BOOT_INC_CONF_FILE)
-- at echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(U_BOOT_INC_CONF_FILE)
-+$(if $(call qstrip,$(2)),
-+	@echo "#ifdef $(strip $(1))" >> $(@D)/include/config.h
-+	@echo "#undef $(strip $(1))" >> $(@D)/include/config.h
-+	@echo "#endif" >> $(@D)/include/config.h
-+	@echo '#define $(strip $(1)) $(call qstrip,$(2))' >> $(@D)/include/config.h)
- endef
- 
--$(DL_DIR)/$(U_BOOT_SOURCE):
--	 $(call DOWNLOAD,$(U_BOOT_SITE),$(U_BOOT_SOURCE))
--
--$(U_BOOT_DIR)/.unpacked: $(DL_DIR)/$(U_BOOT_SOURCE)
--	mkdir -p $(@D)
--	$(INFLATE$(suffix $(U_BOOT_SOURCE))) $(DL_DIR)/$(U_BOOT_SOURCE) \
--		| tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	touch $@
--
--$(U_BOOT_DIR)/.patched: $(U_BOOT_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(U_BOOT_DIR) boot/u-boot \
--		u-boot-$(U_BOOT_VERSION)-\*.patch \
--		u-boot-$(U_BOOT_VERSION)-\*.patch.$(ARCH)
- ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
--	toolchain/patch-kernel.sh $(U_BOOT_DIR) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) u-boot-$(U_BOOT_VERSION)-\*.patch
--endif
--	touch $@
-+define U_BOOT_APPLY_CUSTOM_PATCHES
-+	toolchain/patch-kernel.sh $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
-+		u-boot-$(U_BOOT_VERSION)-\*.patch
++define LINUX_INSTALL_TARGET_CMDS
++	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX_DIR)/.config) != 0 ] ; then 	\
+@@ -178,17 +171,18 @@ endif
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;	\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
+-	$(Q)touch $@
 +endef
  
--$(U_BOOT_DIR)/.configured: $(U_BOOT_DIR)/.patched
--ifeq ($(U_BOOT_BOARD_NAME),)
--	$(error NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
-+U_BOOT_POST_PATCH_HOOKS += U_BOOT_APPLY_CUSTOM_PATCHES
- endif
--	$(TARGET_CONFIGURE_OPTS)		\
--		$(U_BOOT_CONFIGURE_OPTS) \
--		$(MAKE) -C $(U_BOOT_DIR) \
--		CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
+-linux linux26: host-module-init-tools $(LINUX_DEPENDENCIES) $(LINUX_DIR)/.stamp_installed
++$(eval $(call GENTARGETS,,linux))
+ 
+ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+ 		$(subst linux-,,$(subst linux26-,,$@))
++	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
+ 
+ # Support for rebuilding the kernel after the initramfs file list has
+ # been generated in $(BINARIES_DIR)/rootfs.initramfs.
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_installed $(BINARIES_DIR)/rootfs.initramfs
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.initramfs
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Remove the previously generated initramfs which was empty,
+ 	# to make sure the kernel will actually regenerate it.
+@@ -203,6 +197,7 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_installed $(BINARIES_
+ # after it generated the initramfs list of files.
+ linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ 
 +
-+define U_BOOT_CONFIGURE_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(U_BOOT_CONFIGURE_OPTS) 	\
-+		$(MAKE) -C $(@D) $(U_BOOT_MAKE_OPTS)		\
- 		$(U_BOOT_BOARD_NAME)_config
--	touch $@
--
--$(U_BOOT_DIR)/.header_modified: $(U_BOOT_DIR)/.configured
--	# Modify configuration header in $(U_BOOT_INC_CONF_FILE)
--ifdef BR2_TARGET_UBOOT_NETWORK
--	@echo >> $(U_BOOT_INC_CONF_FILE)
--	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(U_BOOT_INC_CONF_FILE)
--	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
--	@echo "#define __BR2_ADDED_CONFIG_H" >> $(U_BOOT_INC_CONF_FILE)
--	$(call insert_define, DATE, $(DATE))
--	$(call insert_define, CONFIG_LOAD_SCRIPTS, 1)
--ifneq ($(strip $(BR2_TARGET_UBOOT_IPADDR)),"")
--	$(call insert_define, CONFIG_IPADDR, $(BR2_TARGET_UBOOT_IPADDR))
--endif
--ifneq ($(strip $(BR2_TARGET_UBOOT_GATEWAY)),"")
--	$(call insert_define, CONFIG_GATEWAYIP, $(BR2_TARGET_UBOOT_GATEWAY))
--endif
--ifneq ($(strip $(BR2_TARGET_UBOOT_NETMASK)),"")
--	$(call insert_define, CONFIG_NETMASK, $(BR2_TARGET_UBOOT_NETMASK))
--endif
--ifneq ($(strip $(BR2_TARGET_UBOOT_SERVERIP)),"")
--	$(call insert_define, CONFIG_SERVERIP, $(BR2_TARGET_UBOOT_SERVERIP))
--endif
--ifneq ($(strip $(BR2_TARGET_UBOOT_ETHADDR)),"")
--	$(call insert_define, CONFIG_ETHADDR, $(BR2_TARGET_UBOOT_ETHADDR))
--endif
--ifneq ($(strip $(BR2_TARGET_UBOOT_ETH1ADDR)),"")
--	$(call insert_define, CONFIG_ETH1ADDR, $(BR2_TARGET_UBOOT_ETH1ADDR))
--endif
--	@echo "#endif /* __BR2_ADDED_CONFIG_H */" >> $(U_BOOT_INC_CONF_FILE)
--endif # BR2_TARGET_UBOOT_NETWORK
--	touch $@
--
--# Build U-Boot itself
--$(U_BOOT_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/.header_modified
--	$(TARGET_CONFIGURE_OPTS) \
--		$(U_BOOT_CONFIGURE_OPTS) \
--		$(MAKE) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) \
--		$(U_BOOT_MAKE_OPT) -C $(U_BOOT_DIR)
--
--# Copy the result to the images/ directory
--$(BINARIES_DIR)/$(U_BOOT_BIN): $(U_BOOT_DIR)/$(U_BOOT_BIN)
--	rm -f $(BINARIES_DIR)/$(U_BOOT_BIN)
--	cp -dpf $(U_BOOT_DIR)/$(U_BOOT_BIN) $(BINARIES_DIR)/
--
--# Build just mkimage for the host. It might have already been built by
--# the U-Boot build procedure, but mkimage may also be needed even if
--# U-Boot isn't selected in the configuration, to generate a kernel
--# uImage.
--$(MKIMAGE): $(U_BOOT_DIR)/.patched
--	mkdir -p $(@D)
--	$(MAKE) -C $(U_BOOT_DIR) CROSS_COMPILE="$(TARGET_CROSS)" ARCH=$(U_BOOT_ARCH) tools
--	cp -dpf $(U_BOOT_DIR)/tools/mkimage $(@D)
--
--# Build manually mkimage for the target
--$(TARGET_DIR)/usr/bin/mkimage: $(U_BOOT_DIR)/.configured
--	mkdir -p $(@D)
--	$(TARGET_CC) -I$(U_BOOT_DIR)/include -I$(U_BOOT_DIR)/tools \
--		-DUSE_HOSTCC -o $@ \
--		$(U_BOOT_DIR)/common/image.c \
--		$(wildcard $(addprefix $(U_BOOT_DIR)/tools/,default_image.c \
--			fit_image.c imximage.c kwbimage.c mkimage.c)) \
--		$(addprefix $(U_BOOT_DIR)/lib*/,crc32.c md5.c sha1.c) \
--		$(U_BOOT_DIR)/tools/os_support.c \
--		$(wildcard $(U_BOOT_DIR)/libfdt/fdt*.c $(U_BOOT_DIR)/lib/libfdt/fdt*.c)
--
--# Build manually fw_printenv for the target
--$(TARGET_DIR)/usr/sbin/fw_printenv: $(U_BOOT_DIR)/.configured
--	$(TARGET_CONFIGURE_OPTS) \
--		$(MAKE) HOSTCC="$(TARGET_CC)" -C $(U_BOOT_DIR) env
--	$(INSTALL) -m 0755 -D $(U_BOOT_DIR)/tools/env/fw_printenv $@
--	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
-+	@echo >> $(@D)/include/config.h
-+	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(@D)/include/config.h
-+	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(@D)/include/config.h
-+	@echo "#define __BR2_ADDED_CONFIG_H" >> $(@D)/include/config.h
-+	$(call insert_define,DATE,$(DATE))
-+	$(call insert_define,CONFIG_LOAD_SCRIPTS,1)
-+	$(call insert_define,CONFIG_IPADDR,$(BR2_TARGET_UBOOT_IPADDR))
-+	$(call insert_define,CONFIG_GATEWAYIP,$(BR2_TARGET_UBOOT_GATEWAY))
-+	$(call insert_define,CONFIG_NETMASK,$(BR2_TARGET_UBOOT_NETMASK))
-+	$(call insert_define,CONFIG_SERVERIP,$(BR2_TARGET_UBOOT_SERVERIP))
-+	$(call insert_define,CONFIG_ETHADDR,$(BR2_TARGET_UBOOT_ETHADDR))
-+	$(call insert_define,CONFIG_ETH1ADDR,$(BR2_TARGET_UBOOT_ETH1ADDR))
-+	@echo "#endif /* __BR2_ADDED_CONFIG_H */" >> $(@D)/include/config.h
-+endef
- 
--u-boot: $(U_BOOT_TARGETS)
-+ifeq ($(BR2_TARGET_UBOOT_TOOL_ENV),y)
-+define U_BOOT_BUILD_TARGET_ENV_UTILS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) HOSTCC="$(TARGET_CC)" -C $(@D) env
-+endef
-+endif
- 
--u-boot-clean:
--	-$(MAKE) -C $(U_BOOT_DIR) clean
--	rm -f $(MKIMAGE)
-+define U_BOOT_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(U_BOOT_CONFIGURE_OPTS) 	\
-+		$(MAKE) -C $(@D) $(U_BOOT_MAKE_OPTS) 		\
-+		$(U_BOOT_MAKE_TARGET)
-+	$(U_BOOT_BUILD_TARGET_ENV_UTILS)
-+endef
- 
--u-boot-dirclean:
--	rm -rf $(U_BOOT_DIR)
-+define U_BOOT_INSTALL_IMAGES_CMDS
-+	cp -dpf $(@D)/$(U_BOOT_BIN) $(BINARIES_DIR)/
-+endef
- 
--u-boot-source: $(DL_DIR)/$(U_BOOT_SOURCE)
-+ifeq ($(BR2_TARGET_UBOOT_TOOL_ENV),y)
-+define U_BOOT_INSTALL_TARGET_ENV_UTILS
-+	$(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv \
-+		$(TARGET_DIR)/usr/sbin/fw_printenv
-+	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
-+endef
-+endif
- 
--u-boot-unpacked: $(U_BOOT_DIR)/.patched
-+define U_BOOT_INSTALL_TARGET_CMDS
-+	$(U_BOOT_INSTALL_TARGET_ENV_UTILS)
-+endef
- 
--u-boot-configured: $(U_BOOT_DIR)/.header_modified
-+$(eval $(call GENTARGETS,boot,u-boot))
- 
- #############################################################
- #
+ ifeq ($(BR2_LINUX_KERNEL),y)
+ TARGETS+=linux
+ endif
 -- 
 1.7.4.1
