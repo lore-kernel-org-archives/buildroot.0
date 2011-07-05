@@ -1,34 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Jul 2011 09:00:50 +0200
-Subject: [Buildroot] [git commit] toolchain/uClibc: NPTL needs i486+ for
-	cmpxchgl instruction
-Message-ID: <20110705070101.A421E88E70@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 09:17:52 +0200
+Subject: [Buildroot] problems compiling uclibc for Geode (i386)
+In-Reply-To: <87liwdyzy8.fsf@macbook.be.48ers.dk>
+References: <1309291371.21632.5.camel@bender> <1309350574.17457.5.camel@sven>
+ <20110629164330.1f5780a7@skate>
+ <4E0B3B3D.3090108@in-2-technology.co.uk>
+ <20110629165517.49e81d99@skate>
+ <87liwdyzy8.fsf@macbook.be.48ers.dk>
+Message-ID: <20110705091752.6d1b9887@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Tue, 05 Jul 2011 09:00:15 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fef54db1a14b7e7eed4e0e75b3bf2330a11207da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> I've fixed it now. Perhaps we should consider defaulting to something
+> slightly less ancient than i386.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-buildroot/Config.in.2 |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Agreed. At least i486 or i586 seems like a good default.
 
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index b5ecbc1..0c3a510 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -102,6 +102,7 @@ choice
- 		bool "Native POSIX Threading (NPTL)"
- 	        select BR2_TOOLCHAIN_HAS_THREADS
- 		depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32
-+		depends on !BR2_x86_i386
- endchoice
- 
- source "toolchain/elf2flt/Config.in"
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
