@@ -1,32 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jul 2011 23:49:18 +0200
-Subject: [Buildroot] [git commit] Rework the logging daemons startup
-In-Reply-To: <20110705230329.5523cbdf@skate> (Thomas Petazzoni's message of
- "Tue, 5 Jul 2011 23:03:29 +0200")
-References: <20110704191001.ADED18A31E@busybox.osuosl.org>
- <20110705230329.5523cbdf@skate>
-Message-ID: <87oc18v1nl.fsf@macbook.be.48ers.dk>
+From: Matias Garcia <mdhgarcia@gmail.com>
+Date: Tue,  5 Jul 2011 18:15:35 -0400
+Subject: [Buildroot] [PATCH] Add arbitrary arguments to sysroot selection
+	and wrapper for external toolchains
+Message-ID: <1309904136-28700-1-git-send-email-mdhgarcia@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+  CodeSourcery uses non-standard arguments to determine which sysroot
+    to use and to set other optimizations (e.g. which floating point
+    ABI to use). This patch allows one to pass an arbitrary argument to
+    the sysroot discovery in ext-tool.mk and adds the same option to
+    the argument list in ext-toolchain-wrapper.c
 
- Thomas> Hello,
- Thomas> Le Mon, 4 Jul 2011 21:03:37 +0200,
- Thomas> Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
-
- >> # Logging junk
- >> null::sysinit:/bin/touch /var/log/messages
- >> -null::respawn:/sbin/syslogd -n -m 0
- >> -null::respawn:/sbin/klogd -n
-
- Thomas> Starting the daemon is removed, but stopping the daemons is still there:
-
-Ahh yes, will fix. We should probably tweak rcS so we can call all the
-init scripts in reverse order with stop argument for shutting down.
+ toolchain/toolchain-external/Config.in             |    8 ++++++++
+ toolchain/toolchain-external/ext-tool.mk           |    4 ++++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
+ 3 files changed, 15 insertions(+), 0 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+1.7.4.1
