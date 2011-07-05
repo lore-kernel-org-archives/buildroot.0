@@ -1,25 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jul 2011 08:58:17 +0200
+Date: Tue, 05 Jul 2011 09:00:15 +0200
 Subject: [Buildroot] problems compiling uclibc for Geode (i386)
-In-Reply-To: <1309350574.17457.5.camel@sven> (Sven Neumann's message of "Wed, 
- 29 Jun 2011 14:29:34 +0200")
+In-Reply-To: <20110629165517.49e81d99@skate> (Thomas Petazzoni's message of
+ "Wed, 29 Jun 2011 16:55:17 +0200")
 References: <1309291371.21632.5.camel@bender> <1309350574.17457.5.camel@sven>
-Message-ID: <87vcvhz01i.fsf@macbook.be.48ers.dk>
+ <20110629164330.1f5780a7@skate>
+ <4E0B3B3D.3090108@in-2-technology.co.uk>
+ <20110629165517.49e81d99@skate>
+Message-ID: <87liwdyzy8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> Hello,
+ Thomas> Please don't reply to me directly, but rather to the Buildroot list.
 
- Sven> Looks like NPTL support is broken for the generic 386 target. I've
- Sven> changed the uclibc configuration to i586 now (in the hope that this will
- Sven> work for a Geode processor) and that has fixed above problem for me.
+ Thomas> Le Wed, 29 Jun 2011 15:48:29 +0100,
+ Thomas> Dominic Newton <dominic.newton@in-2-technology.co.uk> a ?crit :
 
-I've committed a fix so you cannot enable NPTL if you choose i386.
+ >> uclibc menuconfig correctly shows that the i386 sub-architecture does 
+ >> not support NPTL. For some reason this is not picked up in the main 
+ >> buildroot config options. I've not had time to see why. I normally
+ >> run uclicb-menuconfig and see what is supported their as a double
+ >> check at the moment.
+
+ Thomas> Ah, then it's Buildroot that needs to be fixed.
+
+I've fixed it now. Perhaps we should consider defaulting to something
+slightly less ancient than i386.
 
 -- 
 Bye, Peter Korsgaard
