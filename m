@@ -1,53 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 5 Jul 2011 23:28:43 +0200
-Subject: [Buildroot] [PATCH 13/28] syslinux: convert to GENTARGETS
-In-Reply-To: <20110705214602.3b2c2dad@skate>
-References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <201107050012.31481.yann.morin.1998@anciens.enib.fr>
- <20110705214602.3b2c2dad@skate>
-Message-ID: <201107052328.43306.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Jul 2011 23:49:18 +0200
+Subject: [Buildroot] [git commit] Rework the logging daemons startup
+In-Reply-To: <20110705230329.5523cbdf@skate> (Thomas Petazzoni's message of
+ "Tue, 5 Jul 2011 23:03:29 +0200")
+References: <20110704191001.ADED18A31E@busybox.osuosl.org>
+ <20110705230329.5523cbdf@skate>
+Message-ID: <87oc18v1nl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tuesday 05 July 2011 21:46:02 Thomas Petazzoni wrote:
-> Le Tue, 5 Jul 2011 00:12:31 +0200,
-> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
-> 
-> > You're doing two unrelated chances here:
-                                   ^
-Hmmm... Maybe I should re-read myself before posting... :-]
+ Thomas> Hello,
+ Thomas> Le Mon, 4 Jul 2011 21:03:37 +0200,
+ Thomas> Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
-> Before, we add:
-> 
->  * an option to enable isolinux
->  * an option to enable pxelinux
-> 
-> But this isn't compatible with GENTARGETS because with GENTARGETS, we
-> need a single option that enables/disables the package, and other
-> options should be suboptions. Which is why we now have :
-> 
->  * an option to enable syslinux
->    * a suboption to enable isolinux
->    * a suboption to enable pxelinux
-> 
-> I could have done this option change *before* doing the GENTARGETS
-> conversion, but honestly, I didn't want to mess up with the existing
-> makefile code before converting it to GENTARGETS.
+ >> # Logging junk
+ >> null::sysinit:/bin/touch /var/log/messages
+ >> -null::respawn:/sbin/syslogd -n -m 0
+ >> -null::respawn:/sbin/klogd -n
 
-Granted. Doing both in one go is thus understandable.
+ Thomas> Starting the daemon is removed, but stopping the daemons is still there:
 
-Regards,
-Yann E. MORIN.
+Ahh yes, will fix. We should probably tweak rcS so we can call all the
+init scripts in reverse order with stop argument for shutting down.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
