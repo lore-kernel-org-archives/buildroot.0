@@ -1,32 +1,29 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 05 Jul 2011 16:13:09 +0200
-Subject: [Buildroot] [PATCH] New packages: acl and attr
-In-Reply-To: <4E0DA5EC.90909@visionsystems.de>
-References: <4E09922C.6060803@visionsystems.de>
- <20110628104841.731f2371@skate> <4E09D287.5060608@visionsystems.de>
- <20110628152455.0b2aa6a4@skate> <4E09D729.2040207@visionsystems.de>
- <BANLkTikj8vuZNKoiE=g7k3E02R8yPONRhg@mail.gmail.com>
- <4E0DA5EC.90909@visionsystems.de>
-Message-ID: <4E131BF5.3000401@visionsystems.de>
+From: Dechesne, Nicolas <n-dechesne@ti.com>
+Date: Tue, 5 Jul 2011 16:24:00 +0200
+Subject: [Buildroot] [PATCH 18/28] linux: rename LINUX26 to LINUX
+In-Reply-To: <f3386d4ed8c8b2d759031f525cbf7e01ad032e89.1309815048.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <f3386d4ed8c8b2d759031f525cbf7e01ad032e89.1309815048.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CALB96NnSoFwoHuxYNwMsfow_iCUc9D9g6+UW-iVKqfO35af_0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Jul 4, 2011 at 11:33 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
->>>>> These passages are needed because of non-conform installation routine
->>>>> (as far as I can see). Otherwise installation script would try to
->>>>> install the files to /usr/ directly.
->>>> This should not happen with autotools-based packages. Are you sure ?
->>> I know it shouldn't, but this is the behavior I observe.
->> It's weird indeed:
->> http://git.savannah.gnu.org/cgit/attr.git/tree/configure.in
->> http://git.savannah.gnu.org/cgit/attr.git/tree/Makefile
->> http://git.savannah.gnu.org/cgit/attr.git/tree/include/builddefs.in
-> 
-> Could we apply the patch as is, so we can move on with udev update? Meanwhile I'll try to contact the maintainers of acl and attr and discuss the issue with them.
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index a59a237..0aab92d 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -3,22 +3,22 @@
+>  # Linux kernel 2.6 target
+>  #
+>
 
-This is a discussion with attr and acl devs: http://lists.gnu.org/archive/html/acl-devel/2011-07/threads.html#00001
-
-Yegor
+you probably missed this instance of '2.6', granted it's a comment ;-)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110705/e79607c0/attachment.html>
