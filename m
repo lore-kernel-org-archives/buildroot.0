@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2011 22:46:42 +0200
-Subject: [Buildroot] [PATCH] new package: libav
-In-Reply-To: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
-References: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
-Message-ID: <20110705224642.4953b847@skate>
+Date: Tue, 5 Jul 2011 23:00:18 +0200
+Subject: [Buildroot] [PATCH] new package: minidlna
+In-Reply-To: <0MKxYi-1QcgdO2zs8-00018x@mrelayeu.kundenserver.de>
+References: <0MKxYi-1QcgdO2zs8-00018x@mrelayeu.kundenserver.de>
+Message-ID: <20110705230018.01be536a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,42 @@ To: buildroot@busybox.net
 
 Hello Wolfram,
 
-Thanks for your patches!
-
-Le Fri, 01 Jul 2011 18:27:13 +0200,
+Le Fri, 01 Jul 2011 18:32:02 +0200,
 Wolfram Gloger <wg@malloc.de> a ?crit :
 
-> This is a copy of the ffmpeg package with the names and download
-> changed for libav-0.7.
+> MiniDLNA is server software with the aim of being fully compliant with
+> DLNA/UPnP-AV clients.
 > 
-> Why choose this fork when there is "original" ffmpeg?
-> 
-> - It may be the future?  I don't know, but for sure it was dreadfully
->   hard to get patches into ffmpeg.
-> 
-> - I found that ffmpeg (at least 0.6.3) does _not_ work with minidlna
->   (buildroot patch forthcoming), there are strange hangups just
->   calling av_stream_info() on many ts files.
->   libav worked out of the box in this context.
+> This new package depends on libav (see my other patch) as I could not
+> get it to work with the current ffmpeg package in buildroot.
 > 
 > Signed-off-by: Wolfram Gloger <wg@malloc.de>
 
-Could you turn this into a proper commit log message ? Could you also
-send your patch inline and not as an attached file ? This make it
-easier to review and comment.
+Could you sent your patch inline ?
 
-If the libav package is a copy of the ffmpeg one, isn't it possible to
-share the same .mk file ? We could then make them separate when/if
-libav diverges from ffmpeg in a significant way.
+Your .mk file lists multiple dependencies, but your Config.in forgets
+to "depends on" or "select" them.
 
-What do you think ?
+Your minidlna-1.0.20-cross.patch file must come with a header detailing
+what the patch does and why it is needed, along with a Signed-off-by
+line identifying the author of the patch. This patch uses STAGING_DIR
+in several places, which makes the patch completely unsuitable for
+upstream inclusion. Isn't there a way of making this a little bit more
+generic so that there's at least a hope of getting this patch merged
+upstream in the minidlna project ?
+
+In the .mk file, remove all useless commented lines.
+
+Also remove the
+
++		BR2_DEFAULT_KERNEL_HEADERS=$(BR2_DEFAULT_KERNEL_HEADERS) \
+
+line, which apparently is useless.
+
+Regarding the dependencies, is it directly minidlna that depends on
+libvorbis, flac, libogg, etc. ? Or is it libav that depends on those ?
+
+Regards,
 
 Thomas
 -- 
