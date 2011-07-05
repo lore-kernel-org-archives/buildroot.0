@@ -1,118 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2011 21:54:04 +0200
-Subject: [Buildroot] [PATCH 13/28] syslinux: convert to GENTARGETS
+Date: Tue,  5 Jul 2011 21:53:56 +0200
+Subject: [Buildroot] [PATCH 05/28] package: add infrastructure to install
+	things in images/
 In-Reply-To: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ff407c5d7821b472c7deaf825d7e960bfbb80db0.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <33602d37e6e1d6e90cb573f5a440fe0f185df099.1309895466.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Moreover, the installation of pxelinux and/or isolinux is now selected
-to suboptions, as we traditionally do for other packages. This allows
-to have a single option (BR2_TARGET_SYSLINUX) that enables the
-syslinux package.
+This will allow the bootloader makefiles and the kernel makefile to
+rely on the GENTARGETS infrastructure.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/Config.in   |   14 ++++++++----
- boot/syslinux/syslinux.mk |   50 +++++++++++++++-----------------------------
- 2 files changed, 26 insertions(+), 38 deletions(-)
+ package/Makefile.package.in |   20 +++++++++++++++++++-
+ 1 files changed, 19 insertions(+), 1 deletions(-)
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 5650f91..60f3b8f 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -5,8 +5,12 @@ config BR2_TARGET_SYSLINUX
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 0a4c220..6126e6b 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -304,6 +304,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
--config BR2_TARGET_PXELINUX
--	bool "pxelinux"
--	depends on BR2_i386 || BR2_x86_64
--	help
--	  The pxelinux loader for x86 systems.
-+config BR2_TARGET_SYSLINUX_ISOLINUX
-+	bool "Install isolinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
++# Install to images dir
++$(BUILD_DIR)/%/.stamp_images_installed:
++	@$(call MESSAGE,'Installing to images directory')
++	$($(PKG)_INSTALL_IMAGES_CMDS)
++	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
++	$(Q)touch $@
 +
-+config BR2_TARGET_SYSLINUX_PXELINUX
-+	bool "Install pxelinux"
-+	depends on BR2_TARGET_SYSLINUX
-+	default y
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 192e905..d1b2907 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -4,42 +4,29 @@
- #
- #############################################################
+ # Install to target dir
+ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call MESSAGE,"Installing to target")
+@@ -408,12 +415,14 @@ endif
  
--SYSLINUX_VERSION:=3.85
--SYSLINUX_DIR=$(BUILD_DIR)/syslinux-$(SYSLINUX_VERSION)
--SYSLINUX_SOURCE=syslinux-$(SYSLINUX_VERSION).tar.bz2
--SYSLINUX_CAT:=$(BZCAT)
--SYSLINUX_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
-+SYSLINUX_VERSION = 3.85
-+SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
-+SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
+ $(2)_DEPENDENCIES		?=
+ $(2)_INSTALL_STAGING		?= NO
++$(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+ $(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
  
--$(DL_DIR)/$(SYSLINUX_SOURCE):
--	 $(call DOWNLOAD,$(SYSLINUX_SITE),$(SYSLINUX_SOURCE))
-+SYSLINUX_INSTALL_TARGET = NO
-+SYSLINUX_INSTALL_IMAGES = YES
+ # define sub-target stamps
+ $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
+ $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
++$(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
+ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+ $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+@@ -438,6 +447,7 @@ $(2)_POST_BUILD_HOOKS           ?=
+ $(2)_POST_INSTALL_HOOKS         ?=
+ $(2)_POST_INSTALL_STAGING_HOOKS ?=
+ $(2)_POST_INSTALL_TARGET_HOOKS  ?=
++$(2)_POST_INSTALL_IMAGES_HOOKS  ?=
  
--syslinux-source: $(DL_DIR)/$(SYSLINUX_SOURCE)
-+SYSLINUX_DEPENDENCIES = host-nasm
- 
--$(SYSLINUX_DIR)/.unpacked: $(DL_DIR)/$(SYSLINUX_SOURCE) $(SYSLINUX_PATCH)
--	mkdir -p $(@D)
--	$(SYSLINUX_CAT) $(DL_DIR)/$(SYSLINUX_SOURCE) | tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
--	toolchain/patch-kernel.sh $(@D) boot/syslinux/ \*.patch
--	touch -c $@
-+define SYSLINUX_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
-+endef
- 
--$(SYSLINUX_DIR)/.compiled: $(SYSLINUX_DIR)/.unpacked
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(SYSLINUX_DIR)
--	touch -c $@
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
- 
--$(BINARIES_DIR)/isolinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/isolinux.bin $@
-+define SYSLINUX_INSTALL_IMAGES_CMDS
-+	for i in $(SYSLINUX_IMAGES-y); do \
-+		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/`basename $$i`; \
-+	done
-+endef
- 
--$(BINARIES_DIR)/pxelinux.bin: $(SYSLINUX_DIR)/.compiled
--	cp -a $(SYSLINUX_DIR)/core/pxelinux.bin $@
--
--syslinux: host-nasm $(BINARIES_DIR)/isolinux.bin
--pxelinux: host-nasm $(BINARIES_DIR)/pxelinux.bin
--
--pxelinux-clean syslinux-clean:
--	rm -f $(BINARIES_DIR)/isolinux.bin $(BINARIES_DIR)/pxelinux.bin
--	-$(MAKE) -C $(SYSLINUX_DIR) clean
--
--pxelinux-dirclean syslinux-dirclean:
--	rm -rf $(SYSLINUX_DIR)
-+$(eval $(call GENTARGETS,boot,syslinux))
- 
- #############################################################
- #
-@@ -49,6 +36,3 @@ pxelinux-dirclean syslinux-dirclean:
- ifeq ($(BR2_TARGET_SYSLINUX),y)
- TARGETS+=syslinux
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -445,7 +455,7 @@ $(1):			$(1)-install
+ ifeq ($$($(2)_TYPE),host)
+ $(1)-install:	        $(1)-install-host
+ else
+-$(1)-install:		$(1)-install-staging $(1)-install-target
++$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
  endif
--ifeq ($(BR2_TARGET_PXELINUX),y)
--TARGETS+=pxelinux
--endif
+ 
+ ifeq ($$($(2)_INSTALL_TARGET),YES)
+@@ -462,6 +472,13 @@ else
+ $(1)-install-staging:
+ endif
+ 
++ifeq ($$($(2)_INSTALL_IMAGES),YES)
++$(1)-install-images:	$(1)-build \
++			$$($(2)_TARGET_INSTALL_IMAGES)
++else
++$(1)-install-images:
++endif
++
+ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+ 
+ $(1)-build:		$(1)-configure \
+@@ -493,6 +510,7 @@ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+ # uppercase package variable prefix
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
++$$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
 -- 
 1.7.4.1
