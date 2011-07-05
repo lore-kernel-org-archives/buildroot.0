@@ -1,39 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Jul 2011 14:58:20 +0200
-Subject: [Buildroot] [git commit] lame: fix build if host has libgtk12-dev
-	(gtk-config)
-Message-ID: <20110705130146.02BA98A334@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Jul 2011 15:01:49 +0200
+Subject: [Buildroot] lame linking issue
+In-Reply-To: <4E12FE2E.6090206@visionsystems.de> (Yegor Yefremov's message of
+ "Tue, 05 Jul 2011 14:06:06 +0200")
+References: <4E0DD227.6050807@visionsystems.de>
+ <87hb71xgt5.fsf@macbook.be.48ers.dk>
+ <4E12D425.1010201@visionsystems.de>
+ <87iprhw05l.fsf@macbook.be.48ers.dk>
+ <4E12E104.8050403@visionsystems.de>
+ <8762nhvy1n.fsf@macbook.be.48ers.dk>
+ <4E12E382.6050602@visionsystems.de>
+ <871uy5vue9.fsf@macbook.be.48ers.dk>
+ <4E12FE2E.6090206@visionsystems.de>
+Message-ID: <87wrfwvq2q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0387830b2e6c6cb2513802b8abe86914d49f605c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Lame contains an optional gtk12 based frame analyzer application, which
-will be built if gtk12 is detected (using gtk-config). We no longer
-have support for (the obsolete) gtk12 in BR, but the host might have
-gtk-config, so forcible disable it.
+ >> Ok, try adding LAME_CONF_ENV = GTK_CONFIG=/bin/false and see if that
+ >> helps.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/lame/lame.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Yegor> Yes, it helped. Thanks!
 
-diff --git a/package/multimedia/lame/lame.mk b/package/multimedia/lame/lame.mk
-index 841cbff..281c1e8 100644
---- a/package/multimedia/lame/lame.mk
-+++ b/package/multimedia/lame/lame.mk
-@@ -8,6 +8,7 @@ LAME_VERSION = 3.98.4
- LAME_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lame
- LAME_DEPENDENCIES = host-pkg-config
- LAME_INSTALL_STAGING = YES
-+LAME_CONF_ENV = GTK_CONFIG=/bin/false
- 
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- LAME_DEPENDENCIES += libsndfile
+Ok, great - I've committed a fix.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
