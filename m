@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2011 09:17:52 +0200
-Subject: [Buildroot] problems compiling uclibc for Geode (i386)
-In-Reply-To: <87liwdyzy8.fsf@macbook.be.48ers.dk>
-References: <1309291371.21632.5.camel@bender> <1309350574.17457.5.camel@sven>
- <20110629164330.1f5780a7@skate>
- <4E0B3B3D.3090108@in-2-technology.co.uk>
- <20110629165517.49e81d99@skate>
- <87liwdyzy8.fsf@macbook.be.48ers.dk>
-Message-ID: <20110705091752.6d1b9887@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Jul 2011 09:23:46 +0200
+Subject: [Buildroot] [git commit] target: default to i586 for x86
+Message-ID: <20110705072700.454BC8A2ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 05 Jul 2011 09:00:15 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> I've fixed it now. Perhaps we should consider defaulting to something
-> slightly less ancient than i386.
+commit: http://git.buildroot.net/buildroot/commit/?id=1fa6b1c276bc3e8e957c3442cdca68bd893ce552
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Agreed. At least i486 or i586 seems like a good default.
+The i586 was introduced almost 20 years ago, and some software
+(NPTL, libstdc++, ..) doesn't work nicely with i386 anymore, so
+it is time to move on.
 
-Thomas
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/Config.in.arch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 7c80945..23946e8 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -232,7 +232,7 @@ endchoice
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_i386
+-	default BR2_x86_i386
++	default BR2_x86_i586
+ 	help
+ 	  Specific CPU variant to use
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
