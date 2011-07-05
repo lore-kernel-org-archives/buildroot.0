@@ -1,38 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Jul 2011 09:23:46 +0200
-Subject: [Buildroot] [git commit] target: default to i586 for x86
-Message-ID: <20110705072700.454BC8A2ED@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2011 09:28:50 +0200
+Subject: [Buildroot] [PATCH 06/28] package: fix patching procedure for
+ host packages
+In-Reply-To: <201107050001.50292.yann.morin.1998@anciens.enib.fr>
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <3f344e77a60fbd473b25eb91fd7a6a270197b01d.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <201107050001.50292.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20110705092850.48d9e235@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fa6b1c276bc3e8e957c3442cdca68bd893ce552
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 5 Jul 2011 00:01:50 +0200,
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
 
-The i586 was introduced almost 20 years ago, and some software
-(NPTL, libstdc++, ..) doesn't work nicely with i386 anymore, so
-it is time to move on.
+> I might say something stupid, but what abouta package that is named
+> 'foohost-bar'? The 'host-' part will be stripped, and we'd get
+> 'foobar'. And that'd be wrong, I think.
+> 
+> I'd use: $(patsubst host-%,%,$(1))
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Config.in.arch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Ah, good idea, thanks! I've updated my patch with this.
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 7c80945..23946e8 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -232,7 +232,7 @@ endchoice
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_i386
--	default BR2_x86_i386
-+	default BR2_x86_i586
- 	help
- 	  Specific CPU variant to use
- 
+> And even in that case, that does not prevent a target package that
+> is named 'host-utils' from matching, and be renamed to just 'utils'.
+> 
+> But it's been a while I looked at the generic infra, so I might be
+> just saying cracks here...
+
+I would say that we don't allow a package to have a name that starts
+with "host-". I think even without this patch, having such a package
+could cause troubles.
+
+Regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
