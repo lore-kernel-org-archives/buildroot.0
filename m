@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2011 21:04:37 +0200
-Subject: [Buildroot] DNS resolv issue with localhost
-In-Reply-To: <4E130353.7030207@labri.fr>
-References: <23843298-AAFD-4E03-A77D-2883BBA856B2@labri.fr>
- <4E130353.7030207@labri.fr>
-Message-ID: <20110705210437.47fd7806@skate>
+Date: Tue, 5 Jul 2011 21:11:38 +0200
+Subject: [Buildroot] [PATCH 18/28] linux: rename LINUX26 to LINUX
+In-Reply-To: <CALB96NnSoFwoHuxYNwMsfow_iCUc9D9g6+UW-iVKqfO35af_0g@mail.gmail.com>
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <f3386d4ed8c8b2d759031f525cbf7e01ad032e89.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <CALB96NnSoFwoHuxYNwMsfow_iCUc9D9g6+UW-iVKqfO35af_0g@mail.gmail.com>
+Message-ID: <20110705211138.5b4e63f6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 05 Jul 2011 14:28:03 +0200,
-Jigar SOLANKI <jigar.solanki@labri.fr> a ?crit :
+Le Tue, 5 Jul 2011 16:24:00 +0200,
+"Dechesne, Nicolas" <n-dechesne@ti.com> a ?crit :
 
-> Problem SOLVED :
-> I was missing the nsswitch.conf file in /etc, so the resolv order was
-> wrong (nslookup localhost was requesting the dns server in
-> /etc/resolv.conf whereas it should have beeb /etc/hosts)
-> I just added a nsswitch.conf from an another correctly running linux.
+> >  # Linux kernel 2.6 target
+> >  #
+> >
+> 
+> you probably missed this instance of '2.6', granted it's a comment ;-)
 
-So you're using a glibc-based system, right ? If so, maybe we should
-add this nsswitch.conf file to the default Buildroot and make sure it
-gets installed when a glibc toolchain is used.
+Right, fixed! Thanks Nicolas.
 
 Thomas
 -- 
