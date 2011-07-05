@@ -1,51 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jul 2011 23:04:58 +0200
-Subject: [Buildroot] [PATCH 07/28] barebox: use = instead of := and
-	re-indent
-In-Reply-To: <20110705093115.0d35dcb6@skate> (Thomas Petazzoni's message of
- "Tue, 5 Jul 2011 09:31:15 +0200")
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 5 Jul 2011 23:28:43 +0200
+Subject: [Buildroot] [PATCH 13/28] syslinux: convert to GENTARGETS
+In-Reply-To: <20110705214602.3b2c2dad@skate>
 References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
- <b98e01894aa9475d1480f8c2337190caf1281b7e.1309815048.git.thomas.petazzoni@free-electrons.com>
- <201107050008.38502.yann.morin.1998@anciens.enib.fr>
- <20110705093115.0d35dcb6@skate>
-Message-ID: <87sjqkv3ph.fsf@macbook.be.48ers.dk>
+ <201107050012.31481.yann.morin.1998@anciens.enib.fr>
+ <20110705214602.3b2c2dad@skate>
+Message-ID: <201107052328.43306.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thomas, All,
 
-Hi,
+On Tuesday 05 July 2011 21:46:02 Thomas Petazzoni wrote:
+> Le Tue, 5 Jul 2011 00:12:31 +0200,
+> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
+> 
+> > You're doing two unrelated chances here:
+                                   ^
+Hmmm... Maybe I should re-read myself before posting... :-]
 
- >> Using '=' evaluates the assignemnt every time it is referenced, which
- >> can be a little bit costly when there are tons of them (like in
- >> buildroot); while using ':=' does the evaluation only once, at the
- >> time of the assignment, not evaluation.
- >> 
- >> I agree that the code should be homogeneous, but I'd think it should
- >> be fast as well. He, if I can get butter, buter's money, and a litle
- >> smile from the dairywoman! ;-)
+> Before, we add:
+> 
+>  * an option to enable isolinux
+>  * an option to enable pxelinux
+> 
+> But this isn't compatible with GENTARGETS because with GENTARGETS, we
+> need a single option that enables/disables the package, and other
+> options should be suboptions. Which is why we now have :
+> 
+>  * an option to enable syslinux
+>    * a suboption to enable isolinux
+>    * a suboption to enable pxelinux
+> 
+> I could have done this option change *before* doing the GENTARGETS
+> conversion, but honestly, I didn't want to mess up with the existing
+> makefile code before converting it to GENTARGETS.
 
- Thomas> Then, we should state that those variables must all be defined with :=
- Thomas> all over the place and enforce this decision. In the mean time, I will
- Thomas> drop those modifications from my patch set.
+Granted. Doing both in one go is thus understandable.
 
-:= is only a performance advantage if variables are expensive to expand
-(use) and are used more than once - E.G. stuff involving $(shell) and
-similar, like the UPPERCASE macro we had calling tr.
-
-= has a number of advantages though. As it only gets expanded at the
-last possible moment you don't have to take care about variable
-ordering, E.G. when you use a variable like LIBGLIB2_HOST_BINARY on
-another package, whereas with := you do. This can also be interesting
-when the variable contains $(shell) or other functions, as you might
-only want to execute them if/when they are needed, and not right away
-when the Makefiles are parsed.
-
-I would prefer to use = by default, and only use := where it matters for
-correctness or performance.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
