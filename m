@@ -1,73 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Jul 2011 00:53:43 +0200
-Subject: [Buildroot] [git commit] uClibc: fix 0.9.32 build on x86
-Message-ID: <20110706230554.901568A3BC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 01:07:12 +0200
+Subject: [Buildroot] libglib2 now requires gettext
+In-Reply-To: <15734.99.181.179.117.1306510521.squirrel@lavabit.com>
+ (idunham@lavabit.com's message of "Fri, 27 May 2011 08:35:21 -0700
+ (PDT)")
+References: <15734.99.181.179.117.1306510521.squirrel@lavabit.com>
+Message-ID: <87d3hnt3dr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "idunham" == idunham  <idunham@lavabit.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=920dd594ed39c982f62ca71948c63ce6d7f2c4dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ idunham> I've been trying to build a system with buildroot 2011.05rc2, complete
+ idunham> with GTK2, which requires libglib2; gettext is enabled for some other
+ idunham> library.
+ idunham> So far, buildroot has reached configuring libglib2 for the target system;
+ idunham> here, it ignores the --disable-nls flag, and goes on to:
+ idunham> ...
+ idunham> checking for libintl.h... no
+ idunham> configure: error:
+ idunham> *** You must have either have gettext support in your C library, or use the
+ idunham> *** GNU gettext library. (http://www.gnu.org/software/gettext/gettext.html)
 
-Patch from uClibc git.
+ idunham> This with is libglib2-2.28.6
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...__libc_epoll_pwait-compile-failure-on-x86.patch |   43 ++++++++++++++++++++
- 1 files changed, 43 insertions(+), 0 deletions(-)
- create mode 100644 toolchain/uClibc/uClibc-0.9.32-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
+Odd, it works here with this config:
 
-diff --git a/toolchain/uClibc/uClibc-0.9.32-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch b/toolchain/uClibc/uClibc-0.9.32-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-new file mode 100644
-index 0000000..8cda4f9
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.32-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
-@@ -0,0 +1,43 @@
-+From 8245f3b4638fdff2011c2657af1bb211def704bc Mon Sep 17 00:00:00 2001
-+From: Phil Blundell <pb@pbcl.net>
-+Date: Sat, 11 Jun 2011 01:10:46 -0400
-+Subject: [PATCH] Fix __libc_epoll_pwait compile failure on x86
-+
-+This prevents "memory input 7 is not directly addressable" errors.
-+
-+| libc/sysdeps/linux/common/epoll.c: In function '__libc_epoll_pwait':
-+| libc/sysdeps/linux/common/epoll.c:71:80: error: memory input 7 is not directly addressable
-+| libc/sysdeps/linux/common/epoll.c:75:86: error: memory input 7 is not directly addressable
-+| make: *** [libc/sysdeps/linux/common/epoll.o] Error 1
-+| make: *** Waiting for unfinished jobs....
-+
-+Signed-off-by: Phil Blundell <pb@pbcl.net>
-+Signed-off-by: Jason Woodward <jason.woodward@timesys.com>
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+---
-+ libc/sysdeps/linux/common/epoll.c |    5 +++--
-+ 1 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/common/epoll.c b/libc/sysdeps/linux/common/epoll.c
-+index 85b0cfd..ab3e73b 100644
-+--- a/libc/sysdeps/linux/common/epoll.c
-++++ b/libc/sysdeps/linux/common/epoll.c
-+@@ -67,12 +67,13 @@ extern __typeof(epoll_pwait) __libc_epoll_pwait;
-+ int __libc_epoll_pwait(int epfd, struct epoll_event *events, int maxevents,
-+ 						int timeout, const sigset_t *set)
-+ {
-++    int nsig = _NSIG / 8;
-+ 	if (SINGLE_THREAD_P)
-+-		return INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, _NSIG / 8);
-++		return INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, nsig);
-+ # ifdef __UCLIBC_HAS_THREADS_NATIVE__
-+ 	else {
-+ 		int oldtype = LIBC_CANCEL_ASYNC ();
-+-		int result = INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, _NSIG / 8);
-++		int result = INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, nsig);
-+ 		LIBC_CANCEL_RESET (oldtype);
-+ 		return result;
-+ 	}
-+-- 
-+1.7.5.4
-+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_LIBGLIB2=y
+
+ idunham> So I guess the makefiles need to be changed so as to set gettext as a
+ idunham> dependency for libglib2, if buildroot uses the latest version.
+
+It already does so (and has done for some time). Could you please
+provide some more details about your exact configuration?
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
