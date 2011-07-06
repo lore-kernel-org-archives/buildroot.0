@@ -1,33 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Jul 2011 09:22:23 +0200
-Subject: [Buildroot] [PATCH] new package: libav
-In-Reply-To: <20110706085140.749b6388@skate> (Thomas Petazzoni's message of
- "Wed, 6 Jul 2011 08:51:40 +0200")
-References: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
- <20110705224642.4953b847@skate> <87k4bwuh1x.fsf@macbook.be.48ers.dk>
- <20110706085140.749b6388@skate>
-Message-ID: <8739ijvpow.fsf@macbook.be.48ers.dk>
+From: Sergey Gusarov <laborer2008@gmail.com>
+Date: Wed, 06 Jul 2011 23:47:56 +0400
+Subject: [Buildroot] Note on the large files support in sqlite(as part of Qt)
+Message-ID: <4E14BBEC.40908@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi all,
 
-Hi,
+In git i saw a 
+http://git.buildroot.net/buildroot/commit/?id=7e4d47593850851d6fcaa6068258c16cc8761ab5 
+commit, but it seems it is no longer necessary.
+Look at this page http://bugreports.qt.nokia.com/browse/QTBUG-15395
+Patch from qt bugtracker already included in the upstream, at least it 
+is in the Qt 4.7.3 release.
+This means that the qt build system itself conveys the desired 
+flag(-DSQLITE_DISABLE_LFS) for sqlite.
 
- Thomas> My understanding is that libav is a fork of ffmpeg. So, it will
- Thomas> probably become more and more different than ffmpeg, in which case
- Thomas> separate packages are obviously the right way of handling this.
-
- Thomas> In the mean time, as they are exactly similar (at least in terms of
- Thomas> build mechanism and options), I wanted to suggest doing a modular/tinyx
- Thomas> style of selection. We might switch to a separate package when needed.
- Thomas> But on the other hand, having a separate package is probably more clear.
-
-Yes. Also if they both use the same binary/library names, then we need
-to ensure that you cannot enable both at once.
-
--- 
-Bye, Peter Korsgaard
+Regards, Sergey
