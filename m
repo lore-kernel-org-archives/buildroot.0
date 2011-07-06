@@ -1,36 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 08:49:21 +0200
-Subject: [Buildroot] Build Fails with ruby-1.9.2-p0
-In-Reply-To: <BANLkTi=uKZXy-_8wZKoNA6ohoOvh2rsYOg@mail.gmail.com> (Christopher
- Boumenot's message of "Mon, 30 May 2011 08:05:51 -0400")
-References: <BANLkTimm-3LX2S8-17VyPhuiaLqZC3m4jg@mail.gmail.com>
- <BANLkTi=uKZXy-_8wZKoNA6ohoOvh2rsYOg@mail.gmail.com>
-Message-ID: <874o2ytwjy.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 6 Jul 2011 19:00:37 +0200
+Subject: [Buildroot] Why chmod ug+rw?
+Message-ID: <201107061900.37544.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christopher" == Christopher Boumenot <boumenot@gmail.com> writes:
+ Hoi all,
 
-Hi,
+ Why does buildroot make the sources group-writable?
 
- Christopher> I bisected from the last commit against the ruby package
- Christopher> to tip, and it appears that this commit broke the ruby
- Christopher> build. ?If I revert it on tip, it builds just fine.
+ A bit of context: I'm using Thomas Petazzoni's patch to have a custom package 
+extract function that rsyncs the source code into the build directory.  I 
+noticed that rsync always goes through the whole tree, because it needs to 
+update permissions.  This is because of the below:
 
+	$($(PKG)_EXTRACT_CMDS)
+# some packages have messed up permissions inside
+	$(Q)chmod -R ug+rw $(@D)
 
- Christopher> commit 7e3e8ec040b06d6e2fb69e55c004f1ebc02c76d0
- Christopher> Author: Peter Korsgaard <jacmet@sunsite.dk>
- Christopher> Date: ? Fri Apr 29 15:40:58 2011 +0200
+ Now I agree that some packages have messed up permissions, but why does the 
+group need read and write permission?  Especially since in buildroot 
+everything is owned by the user and no su-ing is done.
 
- Christopher> ? ? package/Makefile.in: CFLAGS/LDFLAGS: don't add -I / -L args for STAGING_DIR
-
-Thanks, but the -I / -L flags probably just masked away the fact that
-ruby was looking at your /usr/lib. The real fix is presumably to not let
-it do so, but it would be easier to do so if I could reproduce your
-build issue.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
