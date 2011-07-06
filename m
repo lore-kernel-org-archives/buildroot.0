@@ -1,40 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 6 Jul 2011 07:21:08 +0200
-Subject: [Buildroot] [git commit] infrastructure: remove leftover of old
-	style hooks
-Message-ID: <20110706052314.A88CA8A348@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Jul 2011 07:14:18 +0200
+Subject: [Buildroot] [PATCH] new package: libav
+In-Reply-To: <20110705224642.4953b847@skate> (Thomas Petazzoni's message of
+ "Tue, 5 Jul 2011 22:46:42 +0200")
+References: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
+ <20110705224642.4953b847@skate>
+Message-ID: <87k4bwuh1x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76b128f11c07d62654928e597747fe972c079ca7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Commit ae2be8d (infrastructure: remove support for old style hooks)
-forgot to update an uninstall rule.
+ >> - I found that ffmpeg (at least 0.6.3) does _not_ work with minidlna
+ >> (buildroot patch forthcoming), there are strange hangups just
+ >> calling av_stream_info() on many ts files.
+ >> libav worked out of the box in this context.
+ >> 
+ >> Signed-off-by: Wolfram Gloger <wg@malloc.de>
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Daniel Hobi <daniel.hobi@schmid-telecom.ch>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Thomas> Could you turn this into a proper commit log message ? Could you also
+ Thomas> send your patch inline and not as an attached file ? This make it
+ Thomas> easier to review and comment.
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index bf4e1b4..4bd40ba 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -324,7 +324,7 @@ $(BUILD_DIR)/%/.stamp_uninstalled:
- 	$($(PKG)_UNINSTALL_STAGING_CMDS)
- 	rm -f $($(PKG)_TARGET_INSTALL_STAGING)
- 	$($(PKG)_UNINSTALL_TARGET_CMDS)
--	rm -f $($(PKG)_TARGET_INSTALL_TARGET) $($(PKG)_HOOK_POST_INSTALL)
-+	rm -f $($(PKG)_TARGET_INSTALL_TARGET)
- 
- # Remove package sources
- $(BUILD_DIR)/%/.stamp_dircleaned:
+Yes please - Please use git format-patch -s / git send-email
+
+ Thomas> If the libav package is a copy of the ffmpeg one, isn't it
+ Thomas> possible to share the same .mk file ? We could then make them
+ Thomas> separate when/if libav diverges from ffmpeg in a significant
+ Thomas> way.
+
+I haven't followed the libav discussions in detail - Is it (currently) a
+100% drop in replacement for ffmpeg? If so, perhaps we should handle it
+like the modular/tinyx selection for the X server. If not, I think it
+should be two completely independent packages.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
