@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2011 08:51:40 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Jul 2011 09:22:23 +0200
 Subject: [Buildroot] [PATCH] new package: libav
-In-Reply-To: <87k4bwuh1x.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20110706085140.749b6388@skate> (Thomas Petazzoni's message of
+ "Wed, 6 Jul 2011 08:51:40 +0200")
 References: <0LvAri-1Rcapv3sjy-010LQJ@mrelayeu.kundenserver.de>
- <20110705224642.4953b847@skate>
- <87k4bwuh1x.fsf@macbook.be.48ers.dk>
-Message-ID: <20110706085140.749b6388@skate>
+ <20110705224642.4953b847@skate> <87k4bwuh1x.fsf@macbook.be.48ers.dk>
+ <20110706085140.749b6388@skate>
+Message-ID: <8739ijvpow.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 06 Jul 2011 07:14:18 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I haven't followed the libav discussions in detail - Is it (currently) a
-> 100% drop in replacement for ffmpeg? If so, perhaps we should handle it
-> like the modular/tinyx selection for the X server. If not, I think it
-> should be two completely independent packages.
+Hi,
 
-My understanding is that libav is a fork of ffmpeg. So, it will
-probably become more and more different than ffmpeg, in which case
-separate packages are obviously the right way of handling this.
+ Thomas> My understanding is that libav is a fork of ffmpeg. So, it will
+ Thomas> probably become more and more different than ffmpeg, in which case
+ Thomas> separate packages are obviously the right way of handling this.
 
-In the mean time, as they are exactly similar (at least in terms of
-build mechanism and options), I wanted to suggest doing a modular/tinyx
-style of selection. We might switch to a separate package when needed.
-But on the other hand, having a separate package is probably more clear.
+ Thomas> In the mean time, as they are exactly similar (at least in terms of
+ Thomas> build mechanism and options), I wanted to suggest doing a modular/tinyx
+ Thomas> style of selection. We might switch to a separate package when needed.
+ Thomas> But on the other hand, having a separate package is probably more clear.
 
-Thomas
+Yes. Also if they both use the same binary/library names, then we need
+to ensure that you cannot enable both at once.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
