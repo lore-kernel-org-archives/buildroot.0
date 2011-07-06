@@ -1,29 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 06 Jul 2011 07:19:07 +0200
-Subject: [Buildroot] Compiling problem with NPTL threads on x86
-In-Reply-To: <4E04CD6C.3000200@in-2-technology.co.uk> (Dominic Newton's
- message of "Fri, 24 Jun 2011 18:46:20 +0100")
-References: <4E037C99.2030308@in-2-technology.co.uk>
- <4E04CD6C.3000200@in-2-technology.co.uk>
-Message-ID: <87box8ugtw.fsf@macbook.be.48ers.dk>
+Date: Wed, 06 Jul 2011 07:21:16 +0200
+Subject: [Buildroot] [PATCH] infrastructure: remove leftover of old
+	style hooks
+In-Reply-To: <1308917386-11117-1-git-send-email-daniel.hobi@schmid-telecom.ch>
+ (Daniel Hobi's message of "Fri, 24 Jun 2011 14:09:46 +0200")
+References: <1308917386-11117-1-git-send-email-daniel.hobi@schmid-telecom.ch>
+Message-ID: <877h7wugqb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dominic" == Dominic Newton <dominic.newton@in-2-technology.co.uk> writes:
+>>>>> "Daniel" == Daniel Hobi <daniel.hobi@schmid-telecom.ch> writes:
 
- Dominic> OK problem looks more or less solved.
- Dominic> NPTL threads are mainly supported by the latest uclibc release, but
- Dominic> the devil is in the detail. Some target architecture variants are not
- Dominic> supported. The buildroot menuconfig may show that NPTL threads are
- Dominic> available as an options, but when uclibc is configured the local logic
- Dominic> throws this out. A good check is to run uclibc-menuconfig and test out
- Dominic> the options on that.
+ Daniel> Commit ae2be8d (infrastructure: remove support for old style hooks)
+ Daniel> forgot to update an uninstall rule.
 
-What configurations are those? Perhaps we can improve the menuconfig
-logic in buildroot.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
