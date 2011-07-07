@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 7 Jul 2011 23:48:41 +0200
-Subject: [Buildroot] [git commit] package: add infrastructure to install
-	things in images/
-Message-ID: <20110707220518.16EAA8A3F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: simplify modules check
+Message-ID: <20110707220517.CE7D08A3F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,89 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2985998f2810fb3b45af4e1ee46eaec993959edb
+commit: http://git.buildroot.net/buildroot/commit/?id=ce03b89881571e9dd3a5c83430f1d32a6a6307c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will allow the bootloader makefiles and the kernel makefile to
-rely on the GENTARGETS infrastructure.
+No need to mix make and shell code.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in |   20 +++++++++++++++++++-
- 1 files changed, 19 insertions(+), 1 deletions(-)
+ linux/linux.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 5b2e389..f79359a 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -304,6 +304,13 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a5b9b8e..f9fe454 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -149,7 +149,7 @@ endif
+ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/.config
+ 	@$(call MESSAGE,"Compiling kernel")
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) $(LINUX26_IMAGE_NAME)
+-	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
  	$(Q)touch $@
- 
-+# Install to images dir
-+$(BUILD_DIR)/%/.stamp_images_installed:
-+	@$(call MESSAGE,'Installing to images directory')
-+	$($(PKG)_INSTALL_IMAGES_CMDS)
-+	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
-+	$(Q)touch $@
-+
- # Install to target dir
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call MESSAGE,"Installing to target")
-@@ -408,12 +415,14 @@ endif
- 
- $(2)_DEPENDENCIES		?=
- $(2)_INSTALL_STAGING		?= NO
-+$(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
- $(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
- 
- # define sub-target stamps
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
- $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
-+$(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
- $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
-@@ -438,6 +447,7 @@ $(2)_POST_BUILD_HOOKS           ?=
- $(2)_POST_INSTALL_HOOKS         ?=
- $(2)_POST_INSTALL_STAGING_HOOKS ?=
- $(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- 
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -445,7 +455,7 @@ $(1):			$(1)-install
- ifeq ($$($(2)_TYPE),host)
- $(1)-install:	        $(1)-install-host
- else
--$(1)-install:		$(1)-install-staging $(1)-install-target
-+$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
- ifeq ($$($(2)_INSTALL_TARGET),YES)
-@@ -462,6 +472,13 @@ else
- $(1)-install-staging:
- endif
- 
-+ifeq ($$($(2)_INSTALL_IMAGES),YES)
-+$(1)-install-images:	$(1)-build \
-+			$$($(2)_TARGET_INSTALL_IMAGES)
-+else
-+$(1)-install-images:
-+endif
-+
- $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
- 
- $(1)-build:		$(1)-configure \
-@@ -493,6 +510,7 @@ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- # uppercase package variable prefix
- $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
-+$$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
- $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+@@ -163,7 +163,7 @@ endif
+ 	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+-	@if [ $(shell grep -c "CONFIG_MODULES=y" $(LINUX26_DIR)/.config) != 0 ] ; then 	\
++	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
+ 			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
 -- 
 1.7.3.4
