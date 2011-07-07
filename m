@@ -1,37 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2011 16:19:43 +0200
-Subject: [Buildroot] Feature request - pull sources from repose
-In-Reply-To: <5725744097739393062@unknownmsgid>
-References: <5725744097739393062@unknownmsgid>
-Message-ID: <20110707161943.714c9791@skate>
+From: Tom Smith <penguin.linux1@gmail.com>
+Date: Thu, 7 Jul 2011 11:06:23 -0400
+Subject: [Buildroot] IntelCE PR18.5 install
+Message-ID: <CAJmoUz40MAyHOR1LG8086rSOH0it53EhcwVehVqOOOfoSmy+mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 7 Jul 2011 10:06:18 -0400,
-James Hanley <jhanley@dgtlrift.com> a ?crit :
+Hello,
 
-> Right now, buildroot downloads sources from released tarball urls, it
-> would be great if they could also pull from source repositories (git,
-> svn, etc.) to get unreleased features. For example I ran into an issue
-> with uclibc which was fixed but not yet released.  It may also assist
-> in weeding out integration issues before package release.
+We're trying to compile PR18.5 on a host machine but when I try the "make
+all" command, I get this error:
 
-This is already implemented. In a package, you can do :
+make: *** No rule to make target `cross-depmod26', needed by
+`linux26-modules'.  Stop.
 
-<pkg>_SITE = git://foobar.com/barfoo.git
-<pkg>_SITE_METHOD = git
-<pkg>_VERSION = some-git-tag-or-commit-id-or-branch
+Does anyone have any advice?
 
-Same with Subversion and Bazaar.
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Tom
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110707/84218e45/attachment.html>
