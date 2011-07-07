@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 23:46:18 +0200
-Subject: [Buildroot] [PATCH 04/28] linux: use the defconfig mechanism
-	after tuning the config
-In-Reply-To: <505d71eb153b750e7af08640a90e2efec8cbcf39.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:53:55 +0200")
+Date: Thu, 07 Jul 2011 23:47:05 +0200
+Subject: [Buildroot] [PATCH 05/28] package: add infrastructure to
+	install things in images/
+In-Reply-To: <33602d37e6e1d6e90cb573f5a440fe0f185df099.1309895466.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:53:56 +0200")
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
  <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <505d71eb153b750e7af08640a90e2efec8cbcf39.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pqllpxw5.fsf@macbook.be.48ers.dk>
+ <33602d37e6e1d6e90cb573f5a440fe0f185df099.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87liw9pxuu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,30 +16,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Currently, the kernel configuration mechanism works as follows for
- Thomas> custom configuration files:
+ Thomas> This will allow the bootloader makefiles and the kernel makefile to
+ Thomas> rely on the GENTARGETS infrastructure.
 
- Thomas>  * Copy the custom config file to buildroot_defconfig in the kernel
- Thomas>    tree
- Thomas>  * Run "make buildroot_defconfig"
- Thomas>  * Remove the buildroot_defconfig
- Thomas>  * Tune the .config depending on some Buildroot options (EABI, MDEV,
- Thomas>    etc.)
- Thomas>  * Run oldconfig
-
- Thomas> And for a defconfig-based configuration:
-
- Thomas>  * Run "make XXX_defconfig"
- Thomas>  * Tune the .config depending on some Buildroot options (EABI, MDEV,
- Thomas>    etc.)
- Thomas>  * Run oldconfig
-
- Thomas> The problem is that the tuning done on the .config file can lead to
- Thomas> have new options available for which no value has been set. Therefore,
- Thomas> the "oldconfig" at the end of the process will hang the build process,
- Thomas> waiting for the user to confirm what should be done.
-
-Why don't we just call 'make silentoldconfig' instead?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
