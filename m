@@ -1,83 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 7 Jul 2011 08:37:19 +0200
-Subject: [Buildroot] [git commit] ruby: fix build with openssl 1.0
-Message-ID: <20110707063813.125738A341@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 08:47:50 +0200
+Subject: [Buildroot] Build Fails with ruby-1.9.2-p0
+In-Reply-To: <BANLkTimm-3LX2S8-17VyPhuiaLqZC3m4jg@mail.gmail.com> (Christopher
+ Boumenot's message of "Sun, 29 May 2011 11:03:27 -0400")
+References: <BANLkTimm-3LX2S8-17VyPhuiaLqZC3m4jg@mail.gmail.com>
+Message-ID: <878vsatwmh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Christopher" == Christopher Boumenot <boumenot@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a78063a616d43d854f0984a0ffaeb694227e41af
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Patch from Debian bug #620998
+ Christopher> I am trying to create a minimal x86 root image that
+ Christopher> includes ruby-1.9.2-p0, but the build fails when compiling
+ Christopher> ruby.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/ruby-openssl1.0-fix.patch |   53 ++++++++++++++++++++++++++++++++
- 1 files changed, 53 insertions(+), 0 deletions(-)
- create mode 100644 package/ruby/ruby-openssl1.0-fix.patch
+ Christopher> "/home/boumenot/src/buildroot-2011.05/output/host/usr/bin/ccache /home/boumenot
+ Christopher> /src/buildroot-2011.05/output/host/usr/bin/i686-unknown-linux-uclibc-gcc -o
+ Christopher> conftest -I../../.ext/include/i686-linux -I../.././include -I../.././ext/
+ Christopher> bigdecimal ? ?-pipe -Os ?conftest.c ?-L. -L../.. -L. ?-rdynamic
+ Christopher> -Wl,-export-dynamic ? ? -Wl,-R -Wl,/usr/lib -L/usr/lib -lruby-static ?-lpthread
+ Christopher> -lrt -ldl -lcrypt -lm ? -lc"
+ Christopher> /home/boumenot/src/buildroot-2011.05/output/host/usr/i686-unknown-linux-uclibc/
+ Christopher> sysroot/usr/lib/crt1.o: In function `_start':
+ Christopher> (.text+0x1d): undefined reference to `__uClibc_main'
 
-diff --git a/package/ruby/ruby-openssl1.0-fix.patch b/package/ruby/ruby-openssl1.0-fix.patch
-new file mode 100644
-index 0000000..5591d99
---- /dev/null
-+++ b/package/ruby/ruby-openssl1.0-fix.patch
-@@ -0,0 +1,53 @@
-+From b983e73adf7a7d3fd07fdf493eee51c22881a6e6 Mon Sep 17 00:00:00 2001
-+From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-+Date: Wed, 6 Apr 2011 02:28:09 +0900
-+Subject: [PATCH] Add option which enable SSLv2 support
-+
-+From openssl 1.0, SSLv2 becomes disable by default.
-+If you want to use SSLv2 in ruby, you need config with --enable-opensslv2.
-+The SSLv2 support is disable by default.
-+
-+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-+---
-+ ext/openssl/extconf.rb |    8 ++++++++
-+ ext/openssl/ossl_ssl.c |    2 ++
-+ 2 files changed, 10 insertions(+), 0 deletions(-)
-+
-+diff --git a/ext/openssl/extconf.rb b/ext/openssl/extconf.rb
-+index b1f2d88..89c6f19 100644
-+--- a/ext/openssl/extconf.rb
-++++ b/ext/openssl/extconf.rb
-+@@ -33,6 +33,14 @@ if with_config("debug") or enable_config("debug")
-+   end
-+ end
-+ 
-++## 
-++## From openssl 1.0, SSLv2 becomes disable by default.
-++## If you want to use SSLv2 in ruby, you need config with --enable-opensslv2.
-++##
-++if enable_config("opensslv2")
-++  $defs << "-DENABLE_OPENSSLV2"
-++end
-++
-+ message "=== Checking for system dependent stuff... ===\n"
-+ have_library("nsl", "t_open")
-+ have_library("socket", "socket")
-+diff --git a/ext/openssl/ossl_ssl.c b/ext/openssl/ossl_ssl.c
-+index d8951fb..d0c9059 100644
-+--- a/ext/openssl/ossl_ssl.c
-++++ b/ext/openssl/ossl_ssl.c
-+@@ -107,9 +107,11 @@ struct {
-+     OSSL_SSL_METHOD_ENTRY(TLSv1),
-+     OSSL_SSL_METHOD_ENTRY(TLSv1_server),
-+     OSSL_SSL_METHOD_ENTRY(TLSv1_client),
-++#if defined(ENABLE_OPENSSLV2)
-+     OSSL_SSL_METHOD_ENTRY(SSLv2),
-+     OSSL_SSL_METHOD_ENTRY(SSLv2_server),
-+     OSSL_SSL_METHOD_ENTRY(SSLv2_client),
-++#endif
-+     OSSL_SSL_METHOD_ENTRY(SSLv3),
-+     OSSL_SSL_METHOD_ENTRY(SSLv3_server),
-+     OSSL_SSL_METHOD_ENTRY(SSLv3_client),
-+-- 
-+1.7.4.1
-+
+So it ends up looking at your host libraries which leads to a linker
+error.
+
+ Christopher> This is against buildroot-2011.05. ?I am building on
+ Christopher> OpenSuSE v11.4 x86_64?targeting?x86. ?I am using the
+ Christopher> default toolchain values for this version of buildroot. ?I
+ Christopher> am not sure what other information would help.
+
+The entire .config would be good. I just tried on my Debian x86-64
+system with the following defconfig (i586, default gcc version):
+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PACKAGE_RUBY=y
+BR2_PACKAGE_LIBGLIB2=y
+
+Which works without problems.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
