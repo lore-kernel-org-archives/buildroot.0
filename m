@@ -1,8 +1,8 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Allan W. Nielsen <a@awn.dk>
 Date: Thu, 7 Jul 2011 23:48:41 +0200
-Subject: [Buildroot] [git commit] linux: make it possible to install the
-	kernel in /boot
-Message-ID: <20110707220517.A03E68A3F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile.package.in: Makes it possible to
+	override the default extract commands
+Message-ID: <20110707220517.494118A3F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,49 +10,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eff25f4cca89d816665de469b7164267aaf52d4b
+commit: http://git.buildroot.net/buildroot/commit/?id=c4d57780be46770f9b9374a85c1e790f54e9e5f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: always copy to output/images as requested by Luca]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+When using GENTARGETS (or macroes depending on it), there is no way of
+specifying a custom extraction procedure. When using the patch one can
+simply define $(PACKAGE_NAME)_EXTRACT_CMDS which will override the
+default. If non is defined it will fall back to the default extract
+procedure.
+
+An example could look like this:
+
+=== PACKAGE BEGIN ===
+FGLRX_VERSION=11-3
+FGLRX_SOURCE:=ati-driver-installer-$(FGLRX_VERSION)-x86.x86_64.run
+FGLRX_SITE:=http://www2.ati.com/drivers/linux/
+
+define FGLRX_EXTRACT_CMDS
+	sh $(DL_DIR)/$(FGLRX_SOURCE) --extract $(@D)
+endef
+
+$(eval $(call GENTARGETS,package,fglrx))
+=== PACKAGE END ===
+
+Signed-off-by: Allan W. Nielsen <a@awn.dk>
+Cc: Allan W. Nielsen <a@awn.dk>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    8 ++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ package/Makefile.package.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1f1a69c..bdfa5b7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -153,6 +153,14 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	  Specify the kernel make target to build the kernel that you
- 	  need.
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 6b63bae..c20d12c 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -243,8 +243,7 @@ endif
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+ 	$(Q)mkdir -p $(@D)
+-	$(Q)$(if $($(PKG)_SOURCE),$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -)
++	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+ 	$(Q)chmod -R +rw $(@D)
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+@@ -425,6 +424,10 @@ $(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
+ $(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
  
-+config BR2_LINUX_KERNEL_INSTALL_TARGET
-+	bool "Install kernel image to /boot in target"
-+	depends on !BR2_TARGET_ROOTFS_INITRAMFS
-+	help
-+	  Select this option to have the kernel image installed to
-+	  /boot in the target root filesystem, as is typically done on
-+	  x86/x86_64 systems.
++# default extract command
++$(2)_EXTRACT_CMDS ?= $(if $($(2)_SOURCE),$(INFLATE$(suffix $($(2)_SOURCE))) $(DL_DIR)/$($(2)_SOURCE) | \
++	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
 +
- endif # BR2_LINUX_KERNEL
- 
- endmenu
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 43ca87b..a5b9b8e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -157,6 +157,9 @@ $(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/
- # Installation
- $(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
- 	@$(call MESSAGE,"Installing kernel")
-+ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
-+	install -m 0644 -D $(LINUX26_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX26_IMAGE_NAME)
-+endif
- 	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
+ # post-steps hooks
+ $(2)_POST_EXTRACT_HOOKS         ?=
+ $(2)_POST_PATCH_HOOKS           ?=
 -- 
 1.7.3.4
