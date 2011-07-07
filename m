@@ -1,10 +1,9 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu,  7 Jul 2011 09:39:04 +0200
-Subject: [Buildroot] [PATCH 5/9] gst-plugins-base: depend on orc if it is
-	enabled
+Date: Thu,  7 Jul 2011 09:39:05 +0200
+Subject: [Buildroot] [PATCH 6/9] gst-ffmpeg: depend on orc if it is enabled
 In-Reply-To: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
 References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310024348-3575-6-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1310024348-3575-7-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,55 @@ To: buildroot@busybox.net
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- .../gst-plugins-base/gst-plugins-base.mk           |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |   36 +++++++++++++++++++++++++-
+ 1 files changed, 34 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index 79ced30..09e0729 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
- 
- GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
- 
+diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+index ebe87dc..4e7ca66 100644
+--- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+@@ -8,8 +8,40 @@ GST_FFMPEG_VERSION = 0.10.11
+ GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+ GST_FFMPEG_INSTALL_STAGING = YES
+-GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
+-GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
++GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base
++
 +ifeq ($(BR2_PACKAGE_ORC),y)
-+GST_PLUGINS_BASE_DEPENDENCIES += orc
++GST_FFMPEG_DEPENDENCIES += orc
 +endif
 +
- # alsa support needs pcm+mixer support, but configure fails to check for it
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
- GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
++GST_FFMPEG_CONF_OPT = \
++	--with-ffmpeg-extra-configure="--target-os=linux \
++				       --disable-ffmpeg \
++                                       --disable-ffplay \
++                                       --disable-ffserver \
++                                       --disable-avfilter \
++                                       --disable-swscale \
++                                       --enable-gpl \
++                                       --enable-nonfree \
++                                       --enable-postproc \
++                                       --enable-pthreads \
++                                       --enable-zlib \
++                                       --disable-avfilter \
++                                       --enable-postproc \
++                                       --enable-swscale \
++                                       --prefix=$(STAGING_DIR)/usr \
++                                       --enable-cross-compile \
++                                       --sysroot=$(STAGING_DIR) \
++                                       --host-cc=$(TARGET_CC) \
++                                       --cc=$(TARGET_CC) \
++                                       --arch=$(BR2_ARCH) \
++                                       --enable-cross-compile \
++                                       --cross-prefix=$(TARGET_CROSS) \
++                                       --disable-shared \
++                                       --enable-static \
++                                       --disable-encoders \
++                                       --disable-muxers \
++				       --disable-iwmmxt"
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ GST_FFMPEG_DEPENDENCIES += bzip2
 -- 
 1.7.1
