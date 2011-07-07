@@ -1,68 +1,35 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu,  7 Jul 2011 09:39:03 +0200
-Subject: [Buildroot] [PATCH 4/9] orc: new package
+Date: Thu,  7 Jul 2011 09:39:04 +0200
+Subject: [Buildroot] [PATCH 5/9] gst-plugins-base: depend on orc if it is
+	enabled
 In-Reply-To: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
 References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310024348-3575-5-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1310024348-3575-6-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Orc - the Oil Runtime Compiler - is the successor of liboil.
-
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/Config.in     |    1 +
- package/orc/Config.in |    7 +++++++
- package/orc/orc.mk    |   12 ++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/orc/Config.in
- create mode 100644 package/orc/orc.mk
+ .../gst-plugins-base/gst-plugins-base.mk           |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b06c669..ef800b9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -340,6 +340,7 @@ source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/liboil/Config.in"
- source "package/libsigc/Config.in"
-+source "package/orc/Config.in"
- source "package/startup-notification/Config.in"
- endmenu
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index 79ced30..09e0729 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
  
-diff --git a/package/orc/Config.in b/package/orc/Config.in
-new file mode 100644
-index 0000000..3b3e059
---- /dev/null
-+++ b/package/orc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ORC
-+	bool "orc"
-+	help
-+	  Orc is a library and set of tools for compiling and executing
-+          very simple programs that operate on arrays of data.
+ GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
+ 
++ifeq ($(BR2_PACKAGE_ORC),y)
++GST_PLUGINS_BASE_DEPENDENCIES += orc
++endif
 +
-+          http://code.entropywave.com/projects/orc/
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-new file mode 100644
-index 0000000..c1b4baa
---- /dev/null
-+++ b/package/orc/orc.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# orc
-+#
-+#############################################################
-+ORC_VERSION = 0.4.14
-+ORC_SOURCE = orc-$(ORC_VERSION).tar.gz
-+ORC_SITE = http://code.entropywave.com/download/orc/
-+ORC_AUTORECONF = YES
-+ORC_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS,package,orc))
+ # alsa support needs pcm+mixer support, but configure fails to check for it
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+ GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
 -- 
 1.7.1
