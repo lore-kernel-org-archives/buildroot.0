@@ -1,40 +1,75 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 07 Jul 2011 15:17:58 +0200
-Subject: [Buildroot] [PATCH 6/9] gst-ffmpeg: depend on orc if it is
- enabled
-In-Reply-To: <20110707104327.38439e72@skate>
-References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
- <1310024348-3575-7-git-send-email-s.neumann@raumfeld.com>
- <20110707104327.38439e72@skate>
-Message-ID: <1310044678.2076.23.camel@sven>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  7 Jul 2011 16:42:01 +0300
+Subject: [Buildroot] [PATCH] ebtables: new package
+Message-ID: <f2408a31cec10972f6f2a4a5fc885b4cc6704eb8.1310046029.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2011-07-07 at 10:43 +0200, Thomas Petazzoni wrote:
-> Hello Sven,
-> 
-> Le Thu,  7 Jul 2011 09:39:05 +0200,
-> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
-> 
-> > -GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
-> > -GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
-> 
-> This patch does two things: depend on orc if it is enabled (as stated
-> by the commit title), but it also switches gst-ffmpeg from the system
-> ffmpeg to (apparently) an internal ffmpeg. Besides the fact that those
-> two things should be done in two separate patches, could you elaborate
-> on the reason why you switch from the system ffmpeg to the internal
-> ffmpeg ? In general, in most Buildroot packages, we prefer to use
-> external libraries, and they might also be used by other components in
-> the system.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/Config.in            |    1 +
+ package/ebtables/Config.in   |    6 ++++++
+ package/ebtables/ebtables.mk |   24 ++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/ebtables/Config.in
+ create mode 100644 package/ebtables/ebtables.mk
 
-Oops, I should have indeed split this into two patches. And I would
-probably only have submitted the orc dependency. The switch to the
-internal ffmpeg is a good choice for us, but might not be desirable for
-others. Ideally there would be a br2 configuration option for this.
-
-
-Sven
+diff --git a/package/Config.in b/package/Config.in
+index 40f523d..853194f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -387,6 +387,7 @@ endif
+ source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
++source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/ifplugd/Config.in"
+diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
+new file mode 100644
+index 0000000..73af12a
+--- /dev/null
++++ b/package/ebtables/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_EBTABLES
++	bool "ebtables"
++	help
++	  Ethernet bridge frame table administration
++
++	  http://ebtables.sourceforge.net
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+new file mode 100644
+index 0000000..553bbb7
+--- /dev/null
++++ b/package/ebtables/ebtables.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# ebtables
++#
++#############################################################
++EBTABLES_VERSION = 2.0.9-2
++EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
++EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
++
++define EBTABLES_BUILD_CMDS
++	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) LIBDIR=/lib/ebtables -C $(@D)
++endef
++
++define EBTABLES_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/lib/ebtables
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/extensions/*.so \
++		$(TARGET_DIR)/lib/ebtables
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/*.so \
++		$(TARGET_DIR)/lib/ebtables
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
++		$(TARGET_DIR)/sbin/ebtables
++endef
++
++$(eval $(call GENTARGETS,package,ebtables))
+-- 
+1.7.5.4
