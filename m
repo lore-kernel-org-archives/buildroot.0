@@ -1,75 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  7 Jul 2011 16:42:01 +0300
-Subject: [Buildroot] [PATCH] ebtables: new package
-Message-ID: <f2408a31cec10972f6f2a4a5fc885b4cc6704eb8.1310046029.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Jul 2011 15:44:16 +0200
+Subject: [Buildroot] [PATCH 6/9] gst-ffmpeg: depend on orc if it is
+ enabled
+In-Reply-To: <1310044678.2076.23.camel@sven>
+References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
+ <1310024348-3575-7-git-send-email-s.neumann@raumfeld.com>
+ <20110707104327.38439e72@skate> <1310044678.2076.23.camel@sven>
+Message-ID: <20110707154416.36cfdb98@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/Config.in            |    1 +
- package/ebtables/Config.in   |    6 ++++++
- package/ebtables/ebtables.mk |   24 ++++++++++++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
- create mode 100644 package/ebtables/Config.in
- create mode 100644 package/ebtables/ebtables.mk
+Le Thu, 07 Jul 2011 15:17:58 +0200,
+Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
-diff --git a/package/Config.in b/package/Config.in
-index 40f523d..853194f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -387,6 +387,7 @@ endif
- source "package/dhcpdump/Config.in"
- source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
-+source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
- source "package/hostapd/Config.in"
- source "package/ifplugd/Config.in"
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-new file mode 100644
-index 0000000..73af12a
---- /dev/null
-+++ b/package/ebtables/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_EBTABLES
-+	bool "ebtables"
-+	help
-+	  Ethernet bridge frame table administration
-+
-+	  http://ebtables.sourceforge.net
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-new file mode 100644
-index 0000000..553bbb7
---- /dev/null
-+++ b/package/ebtables/ebtables.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# ebtables
-+#
-+#############################################################
-+EBTABLES_VERSION = 2.0.9-2
-+EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
-+EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
-+
-+define EBTABLES_BUILD_CMDS
-+	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) LIBDIR=/lib/ebtables -C $(@D)
-+endef
-+
-+define EBTABLES_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/ebtables
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/extensions/*.so \
-+		$(TARGET_DIR)/lib/ebtables
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/*.so \
-+		$(TARGET_DIR)/lib/ebtables
-+	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
-+		$(TARGET_DIR)/sbin/ebtables
-+endef
-+
-+$(eval $(call GENTARGETS,package,ebtables))
+> Oops, I should have indeed split this into two patches. And I would
+> probably only have submitted the orc dependency. The switch to the
+> internal ffmpeg is a good choice for us, but might not be desirable
+> for others.
+
+Ok, could you resubmit a patch that only adds the orc dependency ?
+
+> Ideally there would be a br2 configuration option for this.
+
+Yes, this could be a solution. But is there any special advantage in
+using the internal ffmpeg vs. the system ffmpeg ? Of course, when you
+build things manually, using the internal ffmpeg is nicer, but since
+Buildroot takes care of the dependency, what is the advantage of the
+internal ffmpeg ?
+
+Regards,
+
+Thomas
 -- 
-1.7.5.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
