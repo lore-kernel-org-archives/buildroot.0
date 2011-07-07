@@ -1,60 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 7 Jul 2011 23:05:49 +0200
-Subject: [Buildroot] how buildroot handles sysroot in cross tool chain
-In-Reply-To: <CAAa76NRtMHbgOH=j9yNr4wUxMpd_2RR5UHFpfvy8V306BenbJw@mail.gmail.com>
-References: <CAAa76NRtMHbgOH=j9yNr4wUxMpd_2RR5UHFpfvy8V306BenbJw@mail.gmail.com>
-Message-ID: <201107072305.49923.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 23:14:33 +0200
+Subject: [Buildroot] [PATCH 03/28] linux: make it possible to install
+	the kernel in /boot
+In-Reply-To: <4E1584C1.3060203@lucaceresoli.net> (Luca Ceresoli's message of
+ "Thu, 07 Jul 2011 12:04:49 +0200")
+References: <cover.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <8f2cdc43b7b0efaf09e1f1be70019f9cdc0cb8ec.1309815048.git.thomas.petazzoni@free-electrons.com>
+ <201107042348.43715.yann.morin.1998@anciens.enib.fr>
+ <4E1584C1.3060203@lucaceresoli.net>
+Message-ID: <87y609pzd2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Raymond, All,
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-On Thursday 07 July 2011 22:30:11 raymond zhao wrote:
-> I have a question in my head for a while: When we build cross tool
-> chains, there always is a sysroot path hide in the compiler. The
-> problem is, this path is a absolutely path. So, if we move the tool
-> chain to other locations, the sysroot path will be broken. How could I
-> distribute my tool chain to other developer's work station if I they
-> can only access their HOME directory? Since they have different user
-> name, their home directory will has different path. I do not want
-> every one spend a long time to build the tool chain. Is it even
-> possible?
+ >> If we install the kernel in /boot, why do we stil install it in
+ >> ${BINARIES_DIR} ?
+ >> 
+ >> It can only be confusing to have the kernel image in two places.
 
-If the sysroot is a sub-dir of the gcc prefix, then gcc will automagically
-find the sysroot if the toolchain is moved. If this is so, then we say the
-toolchain is relocatable.
+ Luca> Does this really hurt? I found that a handy _feature_ indeed.
 
-If the sysroot is not a sub-dir of the gcc prefix, then it will break if you
-move the toolchain.
+ Luca> Well, sorry for writing after v3 was submitted, but Thomas was so much
+ Luca> faster than my review! :)
 
-Buildroot has two ways to build toolchains:
-- internal backend (the default)
-- crosstool-NG backend
+ Luca> I need the kernel in the target for some products, but with v2 of
+ Luca> Thomas' work I also was sure that I always have an uImage in
+ Luca> output/images, ready for network boot via TFTP and other stuff.
 
-Both backends generate relocatable toolchains. So you should be safe to
-move those toolchains around.
+ Luca> Now I'd have to try both places, or script around the config to know
+ Luca> where I'll find my uImage.
 
-Beware however that, if the host systems are different (eg. you build the
-toolchain on a recent distro, and you move the toolchain to an old distro,
-or the other way around), you may get problems running the toolchain, as
-it will depend on the host libraries to run (after all, gcc et al. are
-just binaries that are linked to the host libraries!). Most notably, the
-libstdc++ is known to be one of the most common issues.
-
-If this is your case, then you may want to build the toolchain entirely
-staticaly linked. AFAIK, in buildroot, only the crosstool-NG backend can
-generate such a statically linked toolchain.
-
-Regards,
-Yann E. MORIN.
+Ok, I'll make the copy-to-images unconditional when applying v3.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
