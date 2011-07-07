@@ -1,222 +1,106 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 22:32:50 +0200
-Subject: [Buildroot] [PATCH] libnss: Add new package.
-In-Reply-To: <CAFbHwiRfvF=c5Lys-rc7=vXUXqML+TyJvdQogcTrm2M-MoSf2w@mail.gmail.com>
- (Will Newton's message of "Thu, 7 Jul 2011 13:08:21 +0100")
-References: <CAFbHwiRfvF=c5Lys-rc7=vXUXqML+TyJvdQogcTrm2M-MoSf2w@mail.gmail.com>
-Message-ID: <87k4btrfv1.fsf@macbook.be.48ers.dk>
+Date: Thu, 07 Jul 2011 22:55:09 +0200
+Subject: [Buildroot] [PATCH] Add package libgeotiff
+In-Reply-To: <BANLkTinABWL+chL8wDP3q=KYiKxjBf_daw@mail.gmail.com> (Murat
+ Demirten's message of "Mon, 13 Jun 2011 13:18:56 +0300")
+References: <BANLkTinABWL+chL8wDP3q=KYiKxjBf_daw@mail.gmail.com>
+Message-ID: <87ei21retu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>>>>> "Murat" == Murat Demirten <mdemirten@yh.com.tr> writes:
 
- Will> NSS is the Network Security Services library developed as part of
- Will> the Mozilla project. It provides similar functions to OpenSSL but
- Will> allows MPL, GPL and LGPL licensing.
+ Murat> Hi,
+ Murat> Libgeotiff is an open source library normally hosted on top of libtiff for
+ Murat> reading, and writing GeoTIFF information tags.
 
-Thanks, a few comments.
+ Murat> Regards,
 
- Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
- Will> ---
- Will>  package/Config.in                  |    1 +
- Will>  package/libnss/Config.in           |   13 +++++++
- Will>  package/libnss/libnss-cross.patch  |   24 ++++++++++++++
- Will>  package/libnss/libnss-uclibc.patch |   14 ++++++++
- Will>  package/libnss/libnss.mk           |   62 ++++++++++++++++++++++++++++++++++++
- Will>  5 files changed, 114 insertions(+), 0 deletions(-)
- Will>  create mode 100644 package/libnss/Config.in
- Will>  create mode 100644 package/libnss/libnss-cross.patch
- Will>  create mode 100644 package/libnss/libnss-uclibc.patch
- Will>  create mode 100644 package/libnss/libnss.mk
+Thanks, a few comments:
 
- Will> diff --git a/package/Config.in b/package/Config.in
- Will> index 2a48d82..e8eb4c6 100644
- Will> --- a/package/Config.in
- Will> +++ b/package/Config.in
- Will> @@ -249,6 +249,7 @@ menu "Crypto"
- Will>  source "package/beecrypt/Config.in"
- Will>  source "package/libgcrypt/Config.in"
- Will>  source "package/libgpg-error/Config.in"
- Will> +source "package/libnss/Config.in"
- Will>  source "package/openssl/Config.in"
- Will>  endmenu
+ Murat> [master b7094a9] package: libgeotiff added.
+ Murat> ?3 files changed, 26 insertions(+), 0 deletions(-)
+ Murat> ?create mode 100644 package/libgeotiff/Config.in
+ Murat> ?create mode 100644 package/libgeotiff/libgeotiff.mk
 
- Will> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
- Will> new file mode 100644
- Will> index 0000000..12502c8
- Will> --- /dev/null
- Will> +++ b/package/libnss/Config.in
- Will> @@ -0,0 +1,13 @@
- Will> +config BR2_PACKAGE_LIBNSS
- Will> +	bool "libnss"
- Will> +	select BR2_PACKAGE_LIBNSPR
- Will> +	select BR2_PACKAGE_SQLITE
- Will> +	select BR2_PACKAGE_ZLIB
- Will> +	help
+Your mailer seems to corrupt the patch, so I cannot apply it with git
+am. Please consider sending patches with git send-email in the future.
 
-nspr needs largefile support, so you need to depend on largefile support
-(and show a warning if not available) like nspr does,
+ Murat> ---
+ Murat> ?package/Config.in ? ? ? ? ? ? ? ?| ? ?1 +
+ Murat> ?package/libgeotiff/Config.in ? ? | ? ?7 +++++++
+ Murat> ?package/libgeotiff/libgeotiff.mk | ? 18 ++++++++++++++++++
+ Murat> ?3 files changed, 26 insertions(+), 0 deletions(-)
+ Murat> ?create mode 100644 package/libgeotiff/Config.in
+ Murat> ?create mode 100644 package/libgeotiff/libgeotiff.mk
 
+ Murat> diff --git a/package/Config.in b/package/Config.in
+ Murat> index 81701d8..7b43143 100644
+ Murat> --- a/package/Config.in
+ Murat> +++ b/package/Config.in
+ Murat> @@ -280,6 +280,7 @@ source "package/libart/Config.in"
+ Murat> ?source "package/libdrm/Config.in"
+ Murat> ?source "package/libexif/Config.in"
+ Murat> ?source "package/libgail/Config.in"
+ Murat> +source "package/libgeotiff/Config.in"
+ Murat> ?source "package/libglade/Config.in"
+ Murat> ?source "package/gdk-pixbuf/Config.in"
+ Murat> ?source "package/libgtk2/Config.in"
+ Murat> diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
+ Murat> new file mode 100644
+ Murat> index 0000000..47420fd
+ Murat> --- /dev/null
+ Murat> +++ b/package/libgeotiff/Config.in
+ Murat> @@ -0,0 +1,7 @@
+ Murat> +config BR2_PACKAGE_LIBGEOTIFF
+ Murat> + ? ? ? bool "libgeotiff"
+ Murat> + ? ? ? select BR2_PACKAGE_TIFF
+ Murat> + ? ? ? help
+ Murat> + ? ? ? ?Libgeotiff is an open source library normally hosted on top of libtiff
+ Murat> for reading, and writing GeoTIFF information tags.?
 
- Will> +	  Network Security Services (NSS) is a set of libraries designed
- Will> +	  to support development of security-enabled client and server
- Will> +	  applications. Applications built with NSS can support SSL v2
- Will> +	  and v3, TLS, PKCS #5, PKCS #7, PKCS #11, PKCS #12, S/MIME,
- Will> +	  and X.509 v3 certificates.
- Will> +
- Will> +	  http://www.mozilla.org/projects/security/pki/nss/
- Will> diff --git a/package/libnss/libnss-cross.patch
- Will> b/package/libnss/libnss-cross.patch
- Will> new file mode 100644
- Will> index 0000000..8d01d7c
- Will> --- /dev/null
- Will> +++ b/package/libnss/libnss-cross.patch
- Will> @@ -0,0 +1,24 @@
- Will> +
- Will> +This patch allows us to set a value for the cross compiler via
- Will> TARGETCC without setting
- Will> +CC on the command line. CC is used for host tools as well as cross
- Will> compiled code so we
- Will> +cannot define it on the command line without breaking the host tools build.
- Will> +
+Please keep help text lines < 70 chars.
 
-Please sign off (git-style) on patches so it is easy to see who the
-author is. What is the upstream status of this patch?
+ Murat> +
+ Murat> + ? ? ? ?http://geotiff.osgeo.org/
+ Murat> diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/
+ Murat> libgeotiff.mk
+ Murat> new file mode 100644
+ Murat> index 0000000..742fd75
+ Murat> --- /dev/null
+ Murat> +++ b/package/libgeotiff/libgeotiff.mk
+ Murat> @@ -0,0 +1,18 @@
+ Murat> +#############################################################
+ Murat> +#
+ Murat> +# libgeotiff
+ Murat> +#
+ Murat> +#############################################################
+ Murat> +LIBGEOTIFF_VERSION = 1.3.0
+ Murat> +LIBGEOTIFF_SOURCE = libgeotiff-$(LIBGEOTIFF_VERSION).tar.gz
+ Murat> +LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
+ Murat> +LIBGEOTIFF_DEPENDENCIES = tiff
+ Murat> +LIBGEOTIFF_INSTALL_STAGING = YES
+ Murat> +LIBGEOTIFF_INSTALL_TARGET = YES
 
+Minor detail, the _SOURCE and INSTALL_TARGET lines can be removed as
+this is their default value.
 
-Will> +--- libnss-3.12.9.old/mozilla/security/coreconf/Linux.mk	2011-03-01
- Will> 10:31:21.517847183 +0000
- Will> ++++ libnss-3.12.9/mozilla/security/coreconf/Linux.mk	2011-03-01
- Will> 10:33:42.688648237 +0000
- Will> +@@ -46,9 +46,13 @@
- Will> + 	IMPL_STRATEGY = _PTH
- Will> + endif
- Will> +
- Will> +-CC			= gcc
- Will> +-CCC			= g++
- Will> +-RANLIB			= ranlib
- Will> ++TARGETCC		= gcc
- Will> ++TARGETCCC		= g++
- Will> ++TARGETRANLIB		= ranlib
- Will> ++
- Will> ++CC			= $(TARGETCC)
- Will> ++CCC			= $(TARGETCCC)
- Will> ++RANLIB			= $(TARGETRANLIB)
- Will> +
- Will> + DEFAULT_COMPILER = gcc
- Will> +
+ Murat> +
+ Murat> +define LIBGEOTIFF_INSTALL_TARGET_CMDS
+ Murat> + ? ? ? mkdir -p $(TARGET_DIR)/usr/lib
+ Murat> + ? ? ? cp -dpf $(@D)/.libs/libgeotiff.so* $(TARGET_DIR)/usr/lib/
+ Murat> +endef
 
+Why not just use make install like you do for the staging install.
 
- Will> diff --git a/package/libnss/libnss-uclibc.patch
- Will> b/package/libnss/libnss-uclibc.patch
- Will> new file mode 100644
- Will> index 0000000..46b71b4
- Will> --- /dev/null
- Will> +++ b/package/libnss/libnss-uclibc.patch
- Will> @@ -0,0 +1,14 @@
- Will> +
- Will> +uCLibc does not support RTLD_NOLOAD.
+ Murat> +
+ Murat> +$(eval $(call AUTOTARGETS,package,libgeotiff))
 
-Signed-off-by and upstream status again, please. This is because of the
-libdl check, right?
-
-      if (!(flag & (RTLD_LAZY|RTLD_NOW))) {
-                _dl_error_number = LD_BAD_HANDLE;
-                return NULL;
-
-It would be good to only drop NOLOAD for uClibc, and not E.G. if you're
-using an external (e)glibc toolchain with something like:
-
-#include <features.h>
-#ifdef __UCLIBC__
-/* uClibc dlopen errors on NOLOAD */
-#undef RTLD_NOLOAD
-#define RTLD_NOLOAD 0
-#endif
-
- Will> +
- Will> +--- libnss-3.12.9.old/mozilla/security/nss/lib/freebl/stubs.c	2011-03-01
- Will> 10:41:35.226450100 +0000
- Will> ++++ libnss-3.12.9/mozilla/security/nss/lib/freebl/stubs.c	2011-03-01
- Will> 10:42:14.628507934 +0000
- Will> +@@ -539,7 +539,7 @@
- Will> +  * fetch the library if it's loaded. For NSS it should already be loaded
- Will> +  */
- Will> + #define freebl_getLibrary(libName)  \
- Will> +-    dlopen (libName, RTLD_LAZY|RTLD_NOLOAD)
- Will> ++    dlopen (libName, RTLD_LAZY)
- Will> +
- Will> + #define freebl_releaseLibrary(lib) \
- Will> +     if (lib) dlclose(lib)
- Will> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
- Will> new file mode 100644
- Will> index 0000000..b530cc3
- Will> --- /dev/null
- Will> +++ b/package/libnss/libnss.mk
- Will> @@ -0,0 +1,62 @@
- Will> +#############################################################
- Will> +#
- Will> +# libnss
- Will> +#
- Will> +#############################################################
- Will> +LIBNSS_VERSION = 3.12.9
- Will> +LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- Will> +LIBNSS_SITE_VERSION = $(subst .,_,$(LIBNSS_VERSION))
- Will> +LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(LIBNSS_SITE_VERSION)_RTM/src/
- Will> +LIBNSS_SUBDIR = mozilla/security
- Will> +LIBNSS_DISTDIR = mozilla/dist
- Will> +LIBNSS_INSTALL_STAGING = YES
- Will> +LIBNSS_DEPENDENCIES = libnspr sqlite zlib
- Will> +
- Will> +LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
- Will> +		NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
- Will> +		NSPR_LIB_DIR=$(STAGING_DIR)/usr/lib \
- Will> +		BUILD_OPT=1 \
- Will> +		NS_USE_GCC=1 \
- Will> +		OPTIMIZER="$(TARGET_CFLAGS)" \
- Will> +		NSS_USE_SYSTEM_SQLITE=1 \
- Will> +		NSS_ENABLE_ECC=1 \
- Will> +		NATIVE_CC="$(HOSTCC)" \
- Will> +		TARGETCC="$(TARGET_CC)" \
- Will> +		TARGETCCC="$(TARGET_CXX)" \
- Will> +		TARGETRANLIB="$(TARGET_RANLIB)" \
- Will> +		OS_ARCH="Linux" \
- Will> +		OS_RELEASE="2.6" \
- Will> +		OS_TEST="$(ARCH)"
- Will> +
- Will> +
- Will> +define LIBNSS_BUILD_CMDS
- Will> +	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
- Will> +			SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- Will> +			DIST=$(@D)/$(LIBNSS_DISTDIR) \
- Will> +			CHECKLOC= \
- Will> +			$(LIBNSS_BUILD_VARS)
- Will> +endef
- Will> +
- Will> +define LIBNSS_INSTALL_STAGING_CMDS
- Will> +	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
- Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
- Will> +	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/nss
- Will> +	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/include/nss \
- Will> +		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
- Will> +	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
- Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
- Will> +endef
-
-No make install?
-
- Will> +
- Will> +define LIBNSS_INSTALL_TARGET_CMDS
- Will> +	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/lib/ \
- Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
- Will> +endef
-
-target install should preferably also install development stuff like
-headers / .a files for people wanting to do development on target. The
-global target-finalize step will remove them again if not needed.
+Other than that it looks fine. Please fix these minor issues and resend
+(with git send-email or as an attachment if that isn't possible).
 
 -- 
 Bye, Peter Korsgaard
