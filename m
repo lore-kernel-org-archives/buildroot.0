@@ -1,25 +1,24 @@
-From: Sergey Gusarov <laborer2008@gmail.com>
-Date: Fri, 08 Jul 2011 01:00:46 +0400
-Subject: [Buildroot] Note on the large files support in sqlite(as part
-	of Qt)
-In-Reply-To: <8762nes487.fsf@macbook.be.48ers.dk>
-References: <4E14BBEC.40908@gmail.com> <87iprft86n.fsf@macbook.be.48ers.dk>
- <4E159ACF.7030508@gmail.com> <8762nes487.fsf@macbook.be.48ers.dk>
-Message-ID: <4E161E7E.6060604@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 23:05:00 +0200
+Subject: [Buildroot] [PATCH 02/28] Fix quoting in default extract command
+In-Reply-To: <0c3601a44b9247f8f2e888dbb8c061c0171f968b.1309895466.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:53:53 +0200")
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <0c3601a44b9247f8f2e888dbb8c061c0171f968b.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8762ndredf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-07.07.2011 15:46, Peter Korsgaard writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- >Well, I did - That's why I added the commit in the first place. Are 
-you saying that the commit somehow isn't needed?
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-It seems that now we can not do anything. Just your decision may be 
-irrelevant (redundant) in the near future
-(depending on the activity of the qt developers).
-Sorry for your troubles.
+Committed, thanks.
 
-Regards, Sergey
+-- 
+Bye, Peter Korsgaard
