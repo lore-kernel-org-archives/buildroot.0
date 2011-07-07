@@ -1,36 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 12:08:10 +0200
-Subject: [Buildroot] [pull request] libnspr, libnss, and orc packages
-In-Reply-To: <BANLkTikhBBip+ogOg4hET8UR=SptAiMbYA@mail.gmail.com> (Will
- Newton's message of "Wed, 29 Jun 2011 17:13:15 +0100")
-References: <BANLkTikhBBip+ogOg4hET8UR=SptAiMbYA@mail.gmail.com>
-Message-ID: <87ei22s8s5.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 07 Jul 2011 12:09:20 +0200
+Subject: [Buildroot] asking for advice on improving our buildroot setup
+Message-ID: <1310033360.2076.18.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+Hi,
 
- Will> A few patches adding some new packages that I have been sitting on for a while.
- Will> The following changes since commit c80224a3a05e41af5a32e1c663fd3853f313382b:
+we are successfully using buildroot for quite a while now. However our
+setup is somewhat akward and I'd like to improve it. Now that we have
+updated to the latest buildroot I dare to ask for advice here on how you
+would implement the following scenario:
 
- Will>   toolchain/gcc: bump 4.6.x version to 4.6.1 (2011-06-28 15:19:13 +0200)
+We are building factory images, USB rescue images and update images for
+our Raumfeld evices. In order to do this we need to build, for each
+target platform (2 platforms currently):
 
- Will> are available in the git repository at:
- Will>   git://github.com/willnewton/buildroot.git for-upstream
+ (1) a kernel and initramfs with some basic tools
+ (2) an ext2 rootfs that contains factory tests as well
+     as tools to format the flash and unpack a tar.gz
+     rootfs on it
+ (3) the actual rootfs of the devices as tar.gz
+     this includes a kernel and modules and this kernel
+     may be different from the kernel built in step 1
 
- Will> Paul Burton (1):
- Will>       orc: New package for the Oil Runtime Compiler
+So what we are doing currently is that we are running full independent
+buildroot builds for each of the steps listed above and then build our
+images from the results of those runs. That is we pick up the kernel
+with initramfs from step 1, combine it with the ext rootfs that is
+created in step 2 and add the rootfs.tar.gz from step 3.
 
- Will> Will Newton (2):
- Will>       libnspr: New package.
- Will>       libnss: Add new package.
+Actually step 3 is even performed twice for the ARM platform because we
+need two different rootfs for two different hardware types (Controller
+and Speaker/Connector).
 
-Thanks, care to send the individual patches to the list as well. Sven
-Neumann has also posted an orc patch, what are the differences between
-his and this one?
+As you can imagine this build consumes a lot of time and disk space.
+Currently I can think of two ways to improve this:
+
+(1) Add an initial step that builds a toolchain and then use that
+    toolchain from the following steps. This would save the time
+    to rebuild the toolchain for each of the steps.
+
+(2) Combine all steps and build different rootfs from within the
+    same buildroot tree. I read that this would be supported. But
+    I would like to get advice from you first. Is there a chance
+    that this will work for the described setup?
+
+
+Thanks,
+Sven
 
 -- 
-Bye, Peter Korsgaard
+Sven Neumann
+Head of RAUMFELD Software Development
+
+Lautsprecher Teufel GmbH | B?lowstr. 66 | 10783 Berlin | Germany
+Tel: +49 (0)30-300 930 153 | s.neumann at raumfeld.com
