@@ -1,98 +1,47 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu,  7 Jul 2011 09:39:08 +0200
-Subject: [Buildroot] [PATCH 9/9] gst-plugins-good: update configuration
-	options
-In-Reply-To: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
-References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310024348-3575-10-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 10:14:25 +0200
+Subject: [Buildroot] Why chmod ug+rw?
+In-Reply-To: <201107061900.37544.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 6 Jul 2011 19:00:37 +0200")
+References: <201107061900.37544.arnout@mind.be>
+Message-ID: <87zkkqse1q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the list of plugins that can be selected/deselected.
----
- package/multimedia/gst-plugins-good/Config.in      |    9 +++++++++
- .../gst-plugins-good/gst-plugins-good.mk           |   18 ++++++++++++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 368642f..b431603 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -82,6 +82,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ICYDEMUX
- 	bool "icydemux"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE
-+	bool "imagefreeze"
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE
- 	bool "interleave"
- 
-@@ -127,6 +130,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP
- 	bool "rtsp"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SHAPEWIPE
-+	bool "shapewipe"
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE
- 	bool "smpte"
- 
-@@ -180,6 +186,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
- 	bool "ossaudio (OSS audio)"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4
-+	bool "oss4 (Open Sound System 4)"
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
- 	select BR2_PACKAGE_LIBSOUP
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index afde749..d037031 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -148,6 +148,12 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-icydemux
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-imagefreeze
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-imagefreeze
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-interleave
- else
-@@ -238,6 +244,12 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-rtsp
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SHAPEWIPE),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-shapewipe
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-shapewipe
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-smpte
- else
-@@ -325,6 +337,12 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-oss
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-oss4
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-oss4
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-soup
- GST_PLUGINS_GOOD_DEPENDENCIES += libsoup
+ Arnout>  Hoi all,
+ Arnout>  Why does buildroot make the sources group-writable?
+
+ Arnout>  A bit of context: I'm using Thomas Petazzoni's patch to have a
+ Arnout> custom package extract function that rsyncs the source code
+ Arnout> into the build directory.  I noticed that rsync always goes
+ Arnout> through the whole tree, because it needs to update permissions.
+ Arnout> This is because of the below:
+
+ Arnout> 	$($(PKG)_EXTRACT_CMDS)
+ Arnout> # some packages have messed up permissions inside
+ Arnout> 	$(Q)chmod -R ug+rw $(@D)
+
+ Arnout>  Now I agree that some packages have messed up permissions, but
+ Arnout> why does the group need read and write permission?  Especially
+ Arnout> since in buildroot everything is owned by the user and no
+ Arnout> su-ing is done.
+
+I don't see any reason for it either. The ug+rw dates back from the
+original AUTOTARGETS work (2008, pre-git) by John Voltz who we haven't
+heard from for several years:
+
+commit de54a6ebc8f54f01eebd78723003a2f809873030
+Author: John Voltz <john.voltz@gmail.com>
+Date:   Thu Mar 6 18:39:42 2008 +0000
+
+    fixed nasty makefile bugs
+
+I'll change it to chmod -R +rw instead.
+
 -- 
-1.7.1
+Bye, Peter Korsgaard
