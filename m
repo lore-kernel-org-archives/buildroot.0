@@ -1,20 +1,23 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 07 Jul 2011 21:08:00 +0200
-Subject: [Buildroot] [PATCH 03/28] linux: make it possible to install
- the kernel in /boot
-In-Reply-To: <07bf3a97203cd7841967bfe0c9e148af85fc0d8d.1309895466.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <07bf3a97203cd7841967bfe0c9e148af85fc0d8d.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1310065681.14037.6.camel@bender>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 07 Jul 2011 21:41:13 +0200
+Subject: [Buildroot] [PATCH] BR2_ARCH definition was missing for 32-bit
+	AMD architecture variants.
+In-Reply-To: <1309790240-25341-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 4 Jul 2011 16:37:20 +0200")
+References: <1309790240-25341-1-git-send-email-arnout@mind.be>
+Message-ID: <87sjqhri92.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That will come in very handy. We have had to hack around the lack of
-this option in the post-build script.
+>>>>> ""Arnout" == "Arnout Vandecappelle (Essensium <- Mind)" <arnout@mind.be>> writes:
 
+ Arnout> From: "Arnout Vandecappelle (Essensium - Mind)" <arnout@mind.be>
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Thanks,
-Sven
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
