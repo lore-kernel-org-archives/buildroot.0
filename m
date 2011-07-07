@@ -1,40 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 13:42:10 +0200
-Subject: [Buildroot] asking for advice on improving our buildroot setup
-In-Reply-To: <1310033360.2076.18.camel@sven> (Sven Neumann's message of "Thu, 
- 07 Jul 2011 12:09:20 +0200")
-References: <1310033360.2076.18.camel@sven>
-Message-ID: <87aacqs4fh.fsf@macbook.be.48ers.dk>
+Date: Thu, 07 Jul 2011 13:46:32 +0200
+Subject: [Buildroot] Note on the large files support in sqlite(as part
+	of Qt)
+In-Reply-To: <4E159ACF.7030508@gmail.com> (Sergey Gusarov's message of "Thu,
+ 07 Jul 2011 15:38:55 +0400")
+References: <4E14BBEC.40908@gmail.com> <87iprft86n.fsf@macbook.be.48ers.dk>
+ <4E159ACF.7030508@gmail.com>
+Message-ID: <8762nes487.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Sergey" == Sergey Gusarov <laborer2008@gmail.com> writes:
 
 Hi,
 
- Sven> As you can imagine this build consumes a lot of time and disk space.
- Sven> Currently I can think of two ways to improve this:
+ Sergey> Oh, i was wrong. My Qt 4.7.3 sources were already patched. The patch
+ Sergey> is not yet included. Nevertheless, it seems correct errors in upsteam
+ Sergey> project more accurately.
 
- Sven> (1) Add an initial step that builds a toolchain and then use that
- Sven>     toolchain from the following steps. This would save the time
- Sven>     to rebuild the toolchain for each of the steps.
+Sorry, I cannot parse the last sentence. What do you mean exactly? That
+I should have submitted a bug report to Qt?
 
-I think that is the best/easiest option.
+ >> Did you try it?
 
- Sven> (2) Combine all steps and build different rootfs from within the
- Sven>     same buildroot tree. I read that this would be supported. But
- Sven>     I would like to get advice from you first. Is there a chance
- Sven>     that this will work for the described setup?
+ Sergey> Yes. I compiled qt with uclibc-based toolchain without LFS. You also
+ Sergey> can try to do this.
 
-Unfortunately not, buildroot only knows of a single rootfs - So you'll
-need to build the 2 rootfs'es seperately.
+Well, I did - That's why I added the commit in the first place. Are you
+saying that the commit somehow isn't needed?
 
-The only other option I could think of is perhaps to combine the two
-rootfs'es and include the factory test sw in the device rootfs if that's
-an option?
+From a quick look at the patch in the qt bugtracker, it seem like only
+the sqlite extension is fixed, not webkit.
 
 -- 
 Bye, Peter Korsgaard
