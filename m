@@ -1,26 +1,41 @@
-From: Tom Smith <penguin.linux1@gmail.com>
-Date: Thu, 7 Jul 2011 11:06:23 -0400
-Subject: [Buildroot] IntelCE PR18.5 install
-Message-ID: <CAJmoUz40MAyHOR1LG8086rSOH0it53EhcwVehVqOOOfoSmy+mw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Jul 2011 17:12:31 +0200
+Subject: [Buildroot] Feature request - pull sources from repose
+In-Reply-To: <20110707161943.714c9791@skate>
+References: <5725744097739393062@unknownmsgid> <20110707161943.714c9791@skate>
+Message-ID: <20110707171231.0e3efbf1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Thu, 7 Jul 2011 16:19:43 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-We're trying to compile PR18.5 on a host machine but when I try the "make
-all" command, I get this error:
+> This is already implemented. In a package, you can do :
+> 
+> <pkg>_SITE = git://foobar.com/barfoo.git
+> <pkg>_SITE_METHOD = git
+> <pkg>_VERSION = some-git-tag-or-commit-id-or-branch
+> 
+> Same with Subversion and Bazaar.
 
-make: *** No rule to make target `cross-depmod26', needed by
-`linux26-modules'.  Stop.
+I should probably have said that this wouldn't work with uClibc. This
+is due to the fact that uClibc is not a normal Buildroot package that
+relies on the common infrastructure. It's a very special component,
+built by its own Makefile.
 
-Does anyone have any advice?
+However, we have an option to build an uClibc snapshot tarball. If you
+just tell Buildroot to do this, it will grab the latest daily tarball
+of uClibc. You can also tell Buildroot to select an arbitrary tarball,
+by date.
 
+Regards,
 
-Best regards,
-Tom
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110707/84218e45/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
