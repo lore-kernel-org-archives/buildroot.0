@@ -1,39 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 07 Jul 2011 13:46:32 +0200
-Subject: [Buildroot] Note on the large files support in sqlite(as part
-	of Qt)
-In-Reply-To: <4E159ACF.7030508@gmail.com> (Sergey Gusarov's message of "Thu,
- 07 Jul 2011 15:38:55 +0400")
-References: <4E14BBEC.40908@gmail.com> <87iprft86n.fsf@macbook.be.48ers.dk>
- <4E159ACF.7030508@gmail.com>
-Message-ID: <8762nes487.fsf@macbook.be.48ers.dk>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 7 Jul 2011 12:54:47 +0100
+Subject: [Buildroot] [pull request] libnspr, libnss, and orc packages
+In-Reply-To: <87ei22s8s5.fsf@macbook.be.48ers.dk>
+References: <BANLkTikhBBip+ogOg4hET8UR=SptAiMbYA@mail.gmail.com>
+ <87ei22s8s5.fsf@macbook.be.48ers.dk>
+Message-ID: <CAFbHwiTZdk5uR0w=hMrwpW_OUpCxeaAoYy_JVvkZAFUzE7DfpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergey" == Sergey Gusarov <laborer2008@gmail.com> writes:
+On Thu, Jul 7, 2011 at 11:08 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>
+> ?Will> A few patches adding some new packages that I have been sitting on for a while.
+> ?Will> The following changes since commit c80224a3a05e41af5a32e1c663fd3853f313382b:
+>
+> ?Will> ? toolchain/gcc: bump 4.6.x version to 4.6.1 (2011-06-28 15:19:13 +0200)
+>
+> ?Will> are available in the git repository at:
+> ?Will> ? git://github.com/willnewton/buildroot.git for-upstream
+>
+> ?Will> Paul Burton (1):
+> ?Will> ? ? ? orc: New package for the Oil Runtime Compiler
+>
+> ?Will> Will Newton (2):
+> ?Will> ? ? ? libnspr: New package.
+> ?Will> ? ? ? libnss: Add new package.
+>
+> Thanks, care to send the individual patches to the list as well. Sven
+> Neumann has also posted an orc patch, what are the differences between
+> his and this one?
 
-Hi,
+The patch for orc that I sent has a little more extra cleanup stuff in
+it. I'm not the original author so I'll have to check what the precise
+difference is.
 
- Sergey> Oh, i was wrong. My Qt 4.7.3 sources were already patched. The patch
- Sergey> is not yet included. Nevertheless, it seems correct errors in upsteam
- Sergey> project more accurately.
-
-Sorry, I cannot parse the last sentence. What do you mean exactly? That
-I should have submitted a bug report to Qt?
-
- >> Did you try it?
-
- Sergey> Yes. I compiled qt with uclibc-based toolchain without LFS. You also
- Sergey> can try to do this.
-
-Well, I did - That's why I added the commit in the first place. Are you
-saying that the commit somehow isn't needed?
-
-From a quick look at the patch in the qt bugtracker, it seem like only
-the sqlite extension is fixed, not webkit.
-
--- 
-Bye, Peter Korsgaard
+The libnspr/libnss ones have been on the list in March and April so I
+assumed there was no more review comments to come on those. I'll send
+them again anyway.
