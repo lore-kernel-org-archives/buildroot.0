@@ -1,54 +1,68 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu,  7 Jul 2011 09:39:00 +0200
-Subject: [Buildroot] [PATCH 1/9] gst-plugins-base: add option for
-	dependency-less plugin
+Date: Thu,  7 Jul 2011 09:39:03 +0200
+Subject: [Buildroot] [PATCH 4/9] orc: new package
 In-Reply-To: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
 References: <1310024348-3575-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310024348-3575-2-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1310024348-3575-5-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the build of the dependency-less plugin 'encoding' optional.
+Orc - the Oil Runtime Compiler - is the successor of liboil.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/multimedia/gst-plugins-base/Config.in      |    3 +++
- .../gst-plugins-base/gst-plugins-base.mk           |    6 ++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/Config.in     |    1 +
+ package/orc/Config.in |    7 +++++++
+ package/orc/orc.mk    |   12 ++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/orc/Config.in
+ create mode 100644 package/orc/orc.mk
 
-diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
-index 09c243c..3ac4dac 100644
---- a/package/multimedia/gst-plugins-base/Config.in
-+++ b/package/multimedia/gst-plugins-base/Config.in
-@@ -30,6 +30,9 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
- 	bool "audiotestsrc"
+diff --git a/package/Config.in b/package/Config.in
+index b06c669..ef800b9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -340,6 +340,7 @@ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/liboil/Config.in"
+ source "package/libsigc/Config.in"
++source "package/orc/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
  
-+config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ENCODING
-+	bool "encoding"
+diff --git a/package/orc/Config.in b/package/orc/Config.in
+new file mode 100644
+index 0000000..3b3e059
+--- /dev/null
++++ b/package/orc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ORC
++	bool "orc"
++	help
++	  Orc is a library and set of tools for compiling and executing
++          very simple programs that operate on arrays of data.
 +
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE
- 	bool "ffmpegcolorspace (mandatory for video playback)"
- 	default y
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index 1d0b19d..7218873 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -69,6 +69,12 @@ else
- GST_PLUGINS_BASE_CONF_OPT += --disable-audiotestsrc
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ENCODING),y)
-+GST_PLUGINS_BASE_CONF_OPT += --enable-encoding
-+else
-+GST_PLUGINS_BASE_CONF_OPT += --disable-encoding
-+endif
++          http://code.entropywave.com/projects/orc/
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+new file mode 100644
+index 0000000..c1b4baa
+--- /dev/null
++++ b/package/orc/orc.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# orc
++#
++#############################################################
++ORC_VERSION = 0.4.14
++ORC_SOURCE = orc-$(ORC_VERSION).tar.gz
++ORC_SITE = http://code.entropywave.com/download/orc/
++ORC_AUTORECONF = YES
++ORC_INSTALL_STAGING = YES
 +
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE),y)
- GST_PLUGINS_BASE_CONF_OPT += --enable-ffmpegcolorspace
- else
++$(eval $(call AUTOTARGETS,package,orc))
 -- 
 1.7.1
