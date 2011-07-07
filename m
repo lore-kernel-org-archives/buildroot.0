@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2011 17:12:31 +0200
-Subject: [Buildroot] Feature request - pull sources from repose
-In-Reply-To: <20110707161943.714c9791@skate>
-References: <5725744097739393062@unknownmsgid> <20110707161943.714c9791@skate>
-Message-ID: <20110707171231.0e3efbf1@skate>
+Date: Thu, 7 Jul 2011 18:15:33 +0200
+Subject: [Buildroot] IntelCE PR18.5 install
+In-Reply-To: <CAJmoUz40MAyHOR1LG8086rSOH0it53EhcwVehVqOOOfoSmy+mw@mail.gmail.com>
+References: <CAJmoUz40MAyHOR1LG8086rSOH0it53EhcwVehVqOOOfoSmy+mw@mail.gmail.com>
+Message-ID: <20110707181533.3e1e0f2a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 7 Jul 2011 16:19:43 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Hi Tom,
 
-> This is already implemented. In a package, you can do :
+Le Thu, 7 Jul 2011 11:06:23 -0400,
+Tom Smith <penguin.linux1@gmail.com> a ?crit :
+
+> We're trying to compile PR18.5 on a host machine but when I try the
+> "make all" command, I get this error:
+
+What is PR18.5 ? How is building PR18.5 on your host machine related to
+Buildroot ?
+
+> make: *** No rule to make target `cross-depmod26', needed by
+> `linux26-modules'.  Stop.
 > 
-> <pkg>_SITE = git://foobar.com/barfoo.git
-> <pkg>_SITE_METHOD = git
-> <pkg>_VERSION = some-git-tag-or-commit-id-or-branch
-> 
-> Same with Subversion and Bazaar.
+> Does anyone have any advice?
 
-I should probably have said that this wouldn't work with uClibc. This
-is due to the fact that uClibc is not a normal Buildroot package that
-relies on the common infrastructure. It's a very special component,
-built by its own Makefile.
-
-However, we have an option to build an uClibc snapshot tarball. If you
-just tell Buildroot to do this, it will grab the latest daily tarball
-of uClibc. You can also tell Buildroot to select an arbitrary tarball,
-by date.
+Yes, upgrade your Buildroot. There is not such rule linux26-modules in
+the modern versions of Buildroot.
 
 Regards,
 
