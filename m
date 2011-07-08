@@ -1,42 +1,98 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri,  8 Jul 2011 15:12:55 +0200
-Subject: [Buildroot] [PATCH 3/6] gst-ffmpeg: depend on orc if it is enabled
+Date: Fri,  8 Jul 2011 15:12:58 +0200
+Subject: [Buildroot] [PATCH 6/6] gst-plugins-good: update configuration
+	options
 In-Reply-To: <1310130778-6359-1-git-send-email-s.neumann@raumfeld.com>
 References: <1310130778-6359-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310130778-6359-4-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1310130778-6359-7-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Update the list of plugins that can be selected/deselected.
 ---
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/multimedia/gst-plugins-good/Config.in      |    9 +++++++++
+ .../gst-plugins-good/gst-plugins-good.mk           |   18 ++++++++++++++++++
+ 2 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-index ebe87dc..14a6e99 100644
---- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-@@ -8,11 +8,16 @@ GST_FFMPEG_VERSION = 0.10.11
- GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
- GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
- GST_FFMPEG_INSTALL_STAGING = YES
--GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
--GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
-+GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index 368642f..b431603 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -82,6 +82,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ID3DEMUX
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ICYDEMUX
+ 	bool "icydemux"
  
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- GST_FFMPEG_DEPENDENCIES += bzip2
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE
++	bool "imagefreeze"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE
+ 	bool "interleave"
+ 
+@@ -127,6 +130,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP
+ 	bool "rtsp"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SHAPEWIPE
++	bool "shapewipe"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE
+ 	bool "smpte"
+ 
+@@ -180,6 +186,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
+ 	bool "ossaudio (OSS audio)"
+ 
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4
++	bool "oss4 (Open Sound System 4)"
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+ 	bool "souphttpsrc (http client)"
+ 	select BR2_PACKAGE_LIBSOUP
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index afde749..d037031 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -148,6 +148,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-icydemux
  endif
  
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST_FFMPEG_DEPENDENCIES += orc
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-imagefreeze
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-imagefreeze
 +endif
 +
-+GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-interleave
+ else
+@@ -238,6 +244,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-rtsp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SHAPEWIPE),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-shapewipe
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-shapewipe
++endif
 +
- $(eval $(call AUTOTARGETS,package/multimedia,gst-ffmpeg))
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SMPTE),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-smpte
+ else
+@@ -325,6 +337,12 @@ else
+ GST_PLUGINS_GOOD_CONF_OPT += --disable-oss
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-oss4
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-oss4
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-soup
+ GST_PLUGINS_GOOD_DEPENDENCIES += libsoup
 -- 
 1.7.1
