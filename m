@@ -1,66 +1,42 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri,  8 Jul 2011 15:12:56 +0200
-Subject: [Buildroot] [PATCH 4/6] gst-plugins-ugly: add option dependency on
-	orc package
+Date: Fri,  8 Jul 2011 15:12:55 +0200
+Subject: [Buildroot] [PATCH 3/6] gst-ffmpeg: depend on orc if it is enabled
 In-Reply-To: <1310130778-6359-1-git-send-email-s.neumann@raumfeld.com>
 References: <1310130778-6359-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1310130778-6359-5-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1310130778-6359-4-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove the option for the libid3tag plug-in as is not any
-longer found in gst-plugins-ugly.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/multimedia/gst-plugins-ugly/Config.in      |    4 ----
- .../gst-plugins-ugly/gst-plugins-ugly.mk           |   11 ++++-------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-ugly/Config.in b/package/multimedia/gst-plugins-ugly/Config.in
-index 9f738cf..e20426f 100644
---- a/package/multimedia/gst-plugins-ugly/Config.in
-+++ b/package/multimedia/gst-plugins-ugly/Config.in
-@@ -38,10 +38,6 @@ config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_SYNAESTHESIA
+diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+index ebe87dc..14a6e99 100644
+--- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+@@ -8,11 +8,16 @@ GST_FFMPEG_VERSION = 0.10.11
+ GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+ GST_FFMPEG_INSTALL_STAGING = YES
+-GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
+-GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
++GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base
  
- comment "plugins with external dependencies (there may be more available)"
- 
--config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ID3TAG
--	bool "id3tag"
--	select BR2_PACKAGE_LIBID3TAG
--
- config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD
- 	bool "mad (*.mp3 audio)"
- 	select BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ID3TAG
-diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-index a173df1..0d8d32d 100644
---- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-+++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-@@ -12,6 +12,10 @@ GST_PLUGINS_UGLY_CONF_OPT = \
- 
- GST_PLUGINS_UGLY_DEPENDENCIES = gstreamer gst-plugins-base
- 
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST_PLUGINS_UGLY_DEPENDENCIES += orc
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
- GST_PLUGINS_UGLY_CONF_OPT += --enable-asfdemux
- else
-@@ -60,13 +64,6 @@ else
- GST_PLUGINS_UGLY_CONF_OPT += --disable-synaesthesia
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ GST_FFMPEG_DEPENDENCIES += bzip2
  endif
  
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ID3TAG),y)
--GST_PLUGINS_UGLY_CONF_OPT += --enable-id3tag
--GST_PLUGINS_UGLY_DEPENDENCIES += libid3tag
--else
--GST_PLUGINS_UGLY_CONF_OPT += --disable-id3tag
--endif
--
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD),y)
- GST_PLUGINS_UGLY_CONF_OPT += --enable-mad
- GST_PLUGINS_UGLY_DEPENDENCIES += libmad
++ifeq ($(BR2_PACKAGE_ORC),y)
++GST_FFMPEG_DEPENDENCIES += orc
++endif
++
++GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
++
+ $(eval $(call AUTOTARGETS,package/multimedia,gst-ffmpeg))
 -- 
 1.7.1
