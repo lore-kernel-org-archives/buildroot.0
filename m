@@ -1,40 +1,50 @@
-From: James Hanley <jhanley@dgtlrift.com>
-Date: Fri, 8 Jul 2011 12:36:55 -0400
-Subject: [Buildroot] Feature request - pull sources from repose
-In-Reply-To: <87wrfuqa4e.fsf@macbook.be.48ers.dk>
-References: <5725744097739393062@unknownmsgid>
- <87wrfuqa4e.fsf@macbook.be.48ers.dk>
-Message-ID: <CAF++6AOsD-5==iwidP2xfQJiDiFcBzqM6FgkdD4p5THY-R1C3A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Jul 2011 19:08:53 +0200
+Subject: [Buildroot] [PATCH 04/28] linux: use the defconfig mechanism
+ after tuning the config
+In-Reply-To: <87pqllpxw5.fsf@macbook.be.48ers.dk>
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <505d71eb153b750e7af08640a90e2efec8cbcf39.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <87pqllpxw5.fsf@macbook.be.48ers.dk>
+Message-ID: <20110708190853.126e7e3a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I meant to reply all - sorry Peter for the double message.
+Le Thu, 07 Jul 2011 23:46:18 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-I used this patch
-http://lists.uclibc.org/pipermail/uclibc-cvs/2011-June/029684.html
-with some modification - specifically where he used
-int nsig = _NSIG / 8;
-I used
-const int nsig = _NSIG / 8;
+> Why don't we just call 'make silentoldconfig' instead?
 
+No, silentoldconfig, despite its name, will ask many questions when
+the .config is simply a minimal defconfig. See below:
 
+thomas at skate:~/projets/linux-2.6$ cp ../buildroot/board/qemu/arm-versatile/linux-2.6.38.config .config
+thomas at skate:~/projets/linux-2.6$ make ARCH=arm silentoldconfig
+scripts/kconfig/conf --silentoldconfig Kconfig
+*
+* Restart config...
+*
+*
+* Linux/arm 2.6.39 Kernel Configuration
+*
+Patch physical to virtual translations at runtime (EXPERIMENTAL) (ARM_PATCH_PHYS_VIRT) [N/y/?] (NEW) 
+[...]
+[...] Lots of questions follow
+[...]
+thomas at skate:~/projets/linux-2.6$ cp ../buildroot/board/qemu/arm-versatile/linux-2.6.38.config arch/arm/configs/blabla_defconfig
+thomas at skate:~/projets/linux-2.6$ make ARCH=arm blabla_defconfig
+#
+# configuration written to .config
+#
+thomas at skate:~/projets/linux-2.6$ 
 
-On Thu, Jul 7, 2011 at 1:22 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "James" == James Hanley <jhanley@dgtlrift.com> writes:
->
-> ?James> Right now, buildroot downloads sources from released tarball urls, it
-> ?James> would be great if they could also pull from source repositories (git,
-> ?James> svn, etc.) to get unreleased features. For example I ran into an issue
-> ?James> with uclibc which was fixed but not yet released. ?It may also assist
-> ?James> in weeding out integration issues before package release.
->
-> I see Thomas already answered you, but what problem was this exactly and
-> what uClibc git commit fixed it? Probably we can backport it to 0.9.32
-> and include it in buildroot.
->
-> --
-> Bye, Peter Korsgaard
->
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
