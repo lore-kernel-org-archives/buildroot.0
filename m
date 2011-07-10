@@ -1,36 +1,64 @@
-From: Heiko Zuerker <heiko@zuerker.org>
-Date: Sat, 9 Jul 2011 08:59:39 -0500
-Subject: [Buildroot] [PATCH v2] new package: mysql server and
-	client	v5.1 and v5.5
-In-Reply-To: <201107090824.49226.minimod@morethan.org>
-References: <4df3951e8d62cbcb33b32b7aa071ec270698fa8f.1310217504.git.smiley73@users.sourceforge.net>
- <201107090824.49226.minimod@morethan.org>
-Message-ID: <000001cc3e40$71e90f30$55bb2d90$@zuerker.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Jul 2011 10:57:07 +0200
+Subject: [Buildroot] [PATCH 07/28] barebox: re-indent variable
+	definitions
+In-Reply-To: <a7757c6616c0eb9d9f1a3dddf06a3be2f24adcb0.1309895466.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:53:58 +0200")
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <a7757c6616c0eb9d9f1a3dddf06a3be2f24adcb0.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxgm1pjw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> > +config BR2_PACKAGE_MYSQL_51
-> > +	bool "5.1.x"
-> > +	select BR2_TARGET_SYSLINUX
-> >
-> 
-> That looks strange to my eyes.
-> How is MySQL and SysLinux related so that you __must__ have SysLinux?
-> 
-> Wouldn't it be better to put a "with syslinux" choice in the options
-listing that
-> follows below?
+Hi,
 
-Good catch.
-New patch has been sent in.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  boot/barebox/barebox.mk |   13 +++++++------
+ Thomas>  1 files changed, 7 insertions(+), 6 deletions(-)
+
+ Thomas> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+ Thomas> index f3e769f..88f222e 100644
+ Thomas> --- a/boot/barebox/barebox.mk
+ Thomas> +++ b/boot/barebox/barebox.mk
+ Thomas> @@ -4,12 +4,13 @@
+ Thomas>  #
+ Thomas>  #############################################################
+ 
+ Thomas> -BAREBOX_VERSION:=2011.05.0
+ Thomas> -BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
+ Thomas> -BAREBOX_SITE:=http://www.barebox.org/download/
+ Thomas> -BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+ Thomas> -BAREBOX_CAT:=$(BZCAT)
+ Thomas> -BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
+ Thomas> +BAREBOX_VERSION := 2011.05.0
+ Thomas> +BAREBOX_SOURCE  := barebox-$(BAREBOX_VERSION).tar.bz2
+ Thomas> +BAREBOX_SITE    := http://www.barebox.org/download/
+ Thomas> +BAREBOX_DIR     := $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+ Thomas> +BAREBOX_CAT     := $(BZCAT)
+
+I prefer the BAREBOX_CAT = $(BZCAT) style, which is the most commonly
+used style under package:
+
+grep -l '[A-Z0-9] = ' package/**/*mk|wc -l
+625
+
+grep -l '  = ' package/**/*mk|wc -l
+18
+
+grep -l '[A-Z0-9] := ' package/**/*mk|wc -l
+7
+
+grep -l '  := ' package/**/*mk|wc -l
+0
+
+Care to respin?
 
 -- 
-
-Regards
-   Heiko Zuerker
-   http://www.devil-linux.org
+Bye, Peter Korsgaard
