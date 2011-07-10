@@ -1,23 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 15:30:42 +0200
-Subject: [Buildroot] [PATCH 14/28] grub: convert to AUTOTARGETS
-In-Reply-To: <20a318776db62b41f3bb365d2417e6251fc2d8ea.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:05 +0200")
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <20a318776db62b41f3bb365d2417e6251fc2d8ea.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8739iez2il.fsf@macbook.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 10 Jul 2011 16:30:33 +0300
+Subject: [Buildroot] [PATCH] libarchive: bump to version 2.8.4
+Message-ID: <0c0acd2751642f682c33db5ea13d96c8ce3993ac.1310304596.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The libxml2 dependency is new in this version, and does not behave nicely with
+cross compile. The configure script looks for the host xml2-config. Add
+'--disable-xml2' as a workaround for now.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libarchive/libarchive.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 0038cd3..563c9d7 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -3,7 +3,7 @@
+ # libarchive (reusable C library for archive formats)
+ #
+ #############################################################
+-LIBARCHIVE_VERSION = 2.7.1
++LIBARCHIVE_VERSION = 2.8.4
+ LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
+ LIBARCHIVE_INSTALL_STAGING = YES
+@@ -14,6 +14,7 @@ LIBARCHIVE_DEPENDENCIES = zlib
+ endif
+ 
+ LIBARCHIVE_CONF_OPT = \
++	--without-xml2 \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
