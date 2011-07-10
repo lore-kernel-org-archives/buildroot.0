@@ -1,63 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 22:10:38 +0200
-Subject: [Buildroot] [PATCH 17/28] uboot-mkimage: new package
-In-Reply-To: <2471ac07175a85be59fb24bdf604c19ecabc3b06.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:08 +0200")
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <2471ac07175a85be59fb24bdf604c19ecabc3b06.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ipr9yk01.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Jul 2011 22:11:09 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.39.x stable
+	version
+Message-ID: <20110710201143.C40C58A422@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The mkimage for the host is now built by a package, so that
- Thomas> boot/u-boot/u-boot.mk is no longer responsible for doing this. It
- Thomas> makes things a lot easier to handle, as linux/linux.mk now simply
- Thomas> depends on host-uboot-mkimage.
+commit: http://git.buildroot.net/buildroot/commit/?id=db52b63005b623c37975a2b42c905c3cbd7c8c1c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Perhaps it would make sense to call it uboot-tools instead, if we move
-fw_printenv over here as well (similar to the Debian package) - But ok,
-that can be done later.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  .../uboot-mkimage-2011.03-drop-configh.patch       |    0
- Thomas>  package/uboot-mkimage/uboot-mkimage.mk             |   16 ++++++++++++++++
- Thomas>  2 files changed, 16 insertions(+), 0 deletions(-)
- Thomas>  rename boot/u-boot/u-boot-2011.03-drop-configh.patch => package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch (100%)
- Thomas>  create mode 100644 package/uboot-mkimage/uboot-mkimage.mk
-
- Thomas> diff --git a/boot/u-boot/u-boot-2011.03-drop-configh.patch b/package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch
- Thomas> similarity index 100%
- Thomas> rename from boot/u-boot/u-boot-2011.03-drop-configh.patch
- Thomas> rename to package/uboot-mkimage/uboot-mkimage-2011.03-drop-configh.patch
- Thomas> diff --git a/package/uboot-mkimage/uboot-mkimage.mk b/package/uboot-mkimage/uboot-mkimage.mk
- Thomas> new file mode 100644
- Thomas> index 0000000..055348c
- Thomas> --- /dev/null
- Thomas> +++ b/package/uboot-mkimage/uboot-mkimage.mk
- Thomas> @@ -0,0 +1,16 @@
- Thomas> +UBOOT_MKIMAGE_VERSION = 2011.03
- Thomas> +UBOOT_MKIMAGE_SOURCE  = u-boot-$(UBOOT_MKIMAGE_VERSION).tar.bz2
- Thomas> +UBOOT_MKIMAGE_SITE    = ftp://ftp.denx.de/pub/u-boot
- Thomas> +
- Thomas> +define HOST_UBOOT_MKIMAGE_BUILD_CMDS
- Thomas> +	$(MAKE) -C $(@D) 			\
- Thomas> +		CROSS_COMPILE="$(TARGET_CROSS)" \
- Thomas> +		ARCH=$(U_BOOT_ARCH) 		\
-
-I don't think CROSS_COMPILE / ARCH are needed for tools. It would be
-good to set HOSTCC/CFLAGS/LDFLAGS to the host versions we're using
-elsewhere in BR instead of using the defaults from u-boot.
-
-I've fixed that in a followup patch.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2a5cf5c..774810f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -50,6 +50,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+-	default "2.6.39.2"	if BR2_KERNEL_HEADERS_2_6_39
++	default "2.6.39.3"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
