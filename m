@@ -1,64 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 10:57:07 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Jul 2011 12:25:29 +0200
 Subject: [Buildroot] [PATCH 07/28] barebox: re-indent variable
 	definitions
-In-Reply-To: <a7757c6616c0eb9d9f1a3dddf06a3be2f24adcb0.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:53:58 +0200")
+In-Reply-To: <87mxgm1pjw.fsf@macbook.be.48ers.dk>
 References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
  <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
  <a7757c6616c0eb9d9f1a3dddf06a3be2f24adcb0.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mxgm1pjw.fsf@macbook.be.48ers.dk>
+ <87mxgm1pjw.fsf@macbook.be.48ers.dk>
+Message-ID: <20110710122529.59118e17@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Sun, 10 Jul 2011 10:57:07 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Hi,
+> I prefer the BAREBOX_CAT = $(BZCAT) style, which is the most commonly
+> used style under package:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  boot/barebox/barebox.mk |   13 +++++++------
- Thomas>  1 files changed, 7 insertions(+), 6 deletions(-)
+This assignation is removed by patch 8/28, which convers Barebox to
+GENTARGETS :
 
- Thomas> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
- Thomas> index f3e769f..88f222e 100644
- Thomas> --- a/boot/barebox/barebox.mk
- Thomas> +++ b/boot/barebox/barebox.mk
- Thomas> @@ -4,12 +4,13 @@
- Thomas>  #
- Thomas>  #############################################################
- 
- Thomas> -BAREBOX_VERSION:=2011.05.0
- Thomas> -BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
- Thomas> -BAREBOX_SITE:=http://www.barebox.org/download/
- Thomas> -BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
- Thomas> -BAREBOX_CAT:=$(BZCAT)
- Thomas> -BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
- Thomas> +BAREBOX_VERSION := 2011.05.0
- Thomas> +BAREBOX_SOURCE  := barebox-$(BAREBOX_VERSION).tar.bz2
- Thomas> +BAREBOX_SITE    := http://www.barebox.org/download/
- Thomas> +BAREBOX_DIR     := $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
- Thomas> +BAREBOX_CAT     := $(BZCAT)
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -7,8 +7,11 @@
+ BAREBOX_VERSION := 2011.05.0
+ BAREBOX_SOURCE  := barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE    := http://www.barebox.org/download/
+-BAREBOX_DIR     := $(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+-BAREBOX_CAT     := $(BZCAT)
 
-I prefer the BAREBOX_CAT = $(BZCAT) style, which is the most commonly
-used style under package:
+Knowing this, is it a problem if patch 7/28 uses := ?
 
-grep -l '[A-Z0-9] = ' package/**/*mk|wc -l
-625
+Regards,
 
-grep -l '  = ' package/**/*mk|wc -l
-18
-
-grep -l '[A-Z0-9] := ' package/**/*mk|wc -l
-7
-
-grep -l '  := ' package/**/*mk|wc -l
-0
-
-Care to respin?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
