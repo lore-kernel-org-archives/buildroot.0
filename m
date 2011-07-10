@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 10 Jul 2011 22:11:09 +0200
-Subject: [Buildroot] [git commit] uboot-mkimage: use correct host
-	compiler/flags
-Message-ID: <20110710201144.AA6658A422@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] uboot-mkimage: add target support
+Message-ID: <20110710201144.E0D358A422@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +9,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b819c32f8830676433764eb2fd7af6851bb5034
+commit: http://git.buildroot.net/buildroot/commit/?id=bd40fcec77c8977730013e84538221a5cc32f910
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As used elswwhere in BR.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...t-mkimage-2011.03-hostcflags-override-fix.patch |   29 ++++++++++++++++++++
- package/uboot-mkimage/uboot-mkimage.mk             |    5 ++-
- 2 files changed, 32 insertions(+), 2 deletions(-)
- create mode 100644 package/uboot-mkimage/uboot-mkimage-2011.03-hostcflags-override-fix.patch
+ package/Config.in                      |    1 +
+ package/uboot-mkimage/Config.in        |    7 +++++++
+ package/uboot-mkimage/uboot-mkimage.mk |   14 ++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/uboot-mkimage/Config.in
 
-diff --git a/package/uboot-mkimage/uboot-mkimage-2011.03-hostcflags-override-fix.patch b/package/uboot-mkimage/uboot-mkimage-2011.03-hostcflags-override-fix.patch
+diff --git a/package/Config.in b/package/Config.in
+index 09aa76a..9a73998 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -206,6 +206,7 @@ source "package/sredird/Config.in"
+ source "package/sshfs/Config.in"
+ source "package/statserial/Config.in"
+ source "package/sysstat/Config.in"
++source "package/uboot-mkimage/Config.in"
+ source "package/udev/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+diff --git a/package/uboot-mkimage/Config.in b/package/uboot-mkimage/Config.in
 new file mode 100644
-index 0000000..0202eda
+index 0000000..e1dec53
 --- /dev/null
-+++ b/package/uboot-mkimage/uboot-mkimage-2011.03-hostcflags-override-fix.patch
-@@ -0,0 +1,29 @@
-+[PATCH] Fix tools build with custom HOSTCFLAGS
++++ b/package/uboot-mkimage/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_UBOOT_MKIMAGE
++	bool "uboot-mkimage"
++	help
++	  The mkimage tool from Das U-Boot bootloader, which allows
++	  generation of U-Boot images in various formats.
 +
-+We always need to append HOSTCPPFLAGS, even if HOSTCFLAGS have been
-+overridden on the cmdline.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ config.mk |    6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+Index: u-boot-2011.03/config.mk
-+===================================================================
-+--- u-boot-2011.03.orig/config.mk
-++++ u-boot-2011.03/config.mk
-+@@ -46,10 +46,12 @@
-+ 
-+ #########################################################################
-+ 
-+-HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer \
-+-		  $(HOSTCPPFLAGS)
-++HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
-+ HOSTSTRIP	= strip
-+ 
-++# append CPPFLAGS even if CFLAGS has been overridden on cmdline
-++override HOSTCFLAGS += $(HOSTCPPFLAGS)
-++
-+ #
-+ # Mac OS X / Darwin's C preprocessor is Apple specific.  It
-+ # generates numerous errors and warnings.  We want to bypass it
++	  http://www.denx.de/wiki/U-Boot/WebHome
 diff --git a/package/uboot-mkimage/uboot-mkimage.mk b/package/uboot-mkimage/uboot-mkimage.mk
-index 055348c..b8f2ee5 100644
+index b8f2ee5..d8a8fbb 100644
 --- a/package/uboot-mkimage/uboot-mkimage.mk
 +++ b/package/uboot-mkimage/uboot-mkimage.mk
-@@ -4,8 +4,9 @@ UBOOT_MKIMAGE_SITE    = ftp://ftp.denx.de/pub/u-boot
+@@ -2,6 +2,19 @@ UBOOT_MKIMAGE_VERSION = 2011.03
+ UBOOT_MKIMAGE_SOURCE  = u-boot-$(UBOOT_MKIMAGE_VERSION).tar.bz2
+ UBOOT_MKIMAGE_SITE    = ftp://ftp.denx.de/pub/u-boot
  
++define UBOOT_MKIMAGE_BUILD_CMDS
++	$(MAKE) -C $(@D) 			\
++		HOSTCC="$(TARGET_CC)"		\
++		HOSTCFLAGS="$(TARGET_CFLAGS)"	\
++		HOSTLDFLAGS="$(TARGET_LDFLAGS)"	\
++		HOSTSTRIP=true			\
++		tools
++endef
++
++define UBOOT_MKIMAGE_INSTALL_CMDS
++	install -m 0755 -D $(@D)/tools/mkimage $(TARGET_DIR)/usr/bin
++endef
++
  define HOST_UBOOT_MKIMAGE_BUILD_CMDS
  	$(MAKE) -C $(@D) 			\
--		CROSS_COMPILE="$(TARGET_CROSS)" \
--		ARCH=$(U_BOOT_ARCH) 		\
-+		HOSTCC="$(HOSTCC)"		\
-+		HOSTCFLAGS="$(HOST_CFLAGS)"	\
-+		HOSTLDFLAGS="$(HOST_LDFLAGS)"	\
- 		tools
+ 		HOSTCC="$(HOSTCC)"		\
+@@ -14,4 +27,5 @@ define HOST_UBOOT_MKIMAGE_INSTALL_CMDS
+ 	install -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin
  endef
  
++$(eval $(call GENTARGETS,package,uboot-mkimage))
+ $(eval $(call GENTARGETS,package,uboot-mkimage,host))
 -- 
 1.7.3.4
