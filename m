@@ -1,46 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Jul 2011 22:24:56 +0200
-Subject: [Buildroot] [git commit] package: add support for post-download
-	hooks
-Message-ID: <20110710203105.5B5038A42E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Jul 2011 22:45:36 +0200
+Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be
+	remounted read-write
+In-Reply-To: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Sun, 3 Jul 2011 12:56:03 +0200")
+References: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <8739idyidr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c917550361feb0858e5cc479273f46af136d8347
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-This will be needed for the Linux kernel package, which needs to
-download patches in a custom way.
+Committed with minor edit, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Makefile.package.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Luca> +config BR2_REMOUNT_ROOTFS_RW
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 8b5657b..aa5c0d7 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -234,6 +234,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE)))
- 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
-+	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)mkdir -p $(@D)
- 	$(Q)touch $@
-@@ -437,6 +438,7 @@ $(2)_EXTRACT_CMDS ?= \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
- 
- # post-steps hooks
-+$(2)_POST_DOWNLOAD_HOOKS        ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
+The other options are prefixed with TARGET_GENERIC, so I renamed it to
+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
