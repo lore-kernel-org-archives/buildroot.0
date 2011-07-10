@@ -1,37 +1,98 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 15:31:33 +0200
-Subject: [Buildroot] [PATCH 15/28] grub2: remove package
-In-Reply-To: <41b9f835e983516f570512d44799a9b8c7cd0601.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:06 +0200")
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <41b9f835e983516f570512d44799a9b8c7cd0601.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y606xnwq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Jul 2011 15:31:16 +0200
+Subject: [Buildroot] [git commit] at91bootstrap: convert to GENTARGETS
+Message-ID: <20110710141144.E53ED8A419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Grub 2 has been marked BROKEN in June 2010, and nobody cared to fix it
- Thomas> since then.
+commit: http://git.buildroot.net/buildroot/commit/?id=df9624b73feeb5e0dda0ed4772efcce1679add5b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> At that time, it was marked broken because the build process needed a
- Thomas> Ruby interpreter available on the host, and it's really a pain that
- Thomas> building a bootloader needs such a thing.
+[Peter: add ':=' -> '=' change]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/at91bootstrap/at91bootstrap.mk |   57 ++++++++++++----------------------
+ 1 files changed, 20 insertions(+), 37 deletions(-)
 
- Thomas> I've tried to upgrade the package to Grub2 1.99-rcX, and now it does
- Thomas> not need a Ruby interpreter anymore, but instead requires a tool
- Thomas> called "autogen", which itself needs the Guile Scheme interpreter.
-
- Thomas> Since we haven't heard any complaints about Grub2 being marked broken,
- Thomas> and since it's such a pain to package, let's get rid of it. Of course,
- Thomas> anybody interested in Grub2 is invited to contribute a working
- Thomas> package.
-
-Committed, thanks.
-
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 3d4308e..37f8ac7 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -3,50 +3,33 @@
+ # at91bootstrap
+ #
+ #############################################################
+-AT91BOOTSTRAP_VERSION:=1.16
+-AT91BOOTSTRAP_NAME:=AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
+-AT91BOOTSTRAP_SITE:=http://www.atmel.com/dyn/resources/prod_documents/
+-AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).zip
+-AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
++AT91BOOTSTRAP_VERSION = 1.16
++AT91BOOTSTRAP_SITE = http://www.atmel.com/dyn/resources/prod_documents/
++AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+ 
+-AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+-AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+-AT91BOOTSTRAP_BINARY:=$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+-AT91BOOTSTRAP_BUILD_DIR:=$(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
+-AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
++AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
++AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
++AT91BOOTSTRAP_MAKE_SUBDIR = board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
++AT91BOOTSTRAP_BINARY = $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+ 
+-$(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
+-	 $(call DOWNLOAD,$(AT91BOOTSTRAP_SITE),$(AT91BOOTSTRAP_SOURCE))
++AT91BOOTSTRAP_INSTALL_IMAGES = YES
++AT91BOOTSTRAP_INSTALL_TARGET = NO
+ 
+-$(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-	mkdir -p $(BUILD_DIR)
++define AT91BOOTSTRAP_EXTRACT_CMDS
+ 	unzip -d $(BUILD_DIR) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION) $(AT91BOOTSTRAP_DIR)
+-	touch $@
++	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
++	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
++endef
+ 
+-$(AT91BOOTSTRAP_DIR)/.patched: $(AT91BOOTSTRAP_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) boot/at91bootstrap/ at91bootstrap-$(AT91BOOTSTRAP_VERSION)\*.patch
+-	touch $@
++define AT91BOOTSTRAP_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
++endef
+ 
+-$(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.patched
+-	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
+-		-C $(AT91BOOTSTRAP_BUILD_DIR)
++define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
++	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
++endef
+ 
+-$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
+-	mkdir -p $(dir $@)
+-	cp $^ $@
+-
+-at91bootstrap: $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
+-
+-at91bootstrap-source: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+-
+-at91bootstrap-unpacked: $(AT91BOOTSTRAP_DIR)/.unpacked
+-
+-at91bootstrap-clean:
+-	make -C $(AT91BOOTSTRAP_BUILD_DIR) clean
+-
+-at91bootstrap-dirclean:
+-	rm -rf $(AT91BOOTSTRAP_DIR)
++$(eval $(call GENTARGETS,boot,at91bootstrap))
+ 
+ #############################################################
+ #
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
