@@ -1,47 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 10 Jul 2011 20:15:54 +0200
-Subject: [Buildroot] [git commit] libarchive: bump to version 2.8.4
-Message-ID: <20110710181610.3F0928A43B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Jul 2011 22:07:47 +0200
+Subject: [Buildroot] [PATCH 16/28] u-boot: convert to GENTARGETS
+In-Reply-To: <1b701e02eb384f3f3156106699a7d6598ed614f4.1309895466.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:07 +0200")
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <1b701e02eb384f3f3156106699a7d6598ed614f4.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxglyk4s.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec0b51648b68de94f715fadef9a3a9085c15e22a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Thomas> The feature of building mkimage for the target is removed, it wasn't
+ Thomas> building with current U-Boot, and doesn't make a lot of sense (mkimage
+ Thomas> is needed only to prepare a kernel image, or an U-Boot script).
 
-The libxml2 dependency is new in this version, and does not behave nicely with
-cross compile. The configure script looks for the host xml2-config. Add
-'--disable-xml2' as a workaround for now.
+That's the primary use, yes - But mkimage -l is sometimes also handy on
+the target. I've worked on a project where we used it to see the current
+versions in flash (similar to the imls command in u-boot).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libarchive/libarchive.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+But ok, not that common a feature - Committed, thanks.
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 0038cd3..563c9d7 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -3,7 +3,7 @@
- # libarchive (reusable C library for archive formats)
- #
- #############################################################
--LIBARCHIVE_VERSION = 2.7.1
-+LIBARCHIVE_VERSION = 2.8.4
- LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
- LIBARCHIVE_INSTALL_STAGING = YES
-@@ -14,6 +14,7 @@ LIBARCHIVE_DEPENDENCIES = zlib
- endif
- 
- LIBARCHIVE_CONF_OPT = \
-+	--without-xml2 \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
- 
+ Thomas> The feature of building mkimage for the host is moved to a proper
+ Thomas> package. It duplicates a few things (U-Boot URL, etc.) but it makes
+ Thomas> things a lot cleaner than having it handled by boot/u-boot/u-boot.mk.
+
+It probably makes sense to move fw_printenv there as well.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
