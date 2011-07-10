@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 10 Jul 2011 15:31:16 +0200
-Subject: [Buildroot] [git commit] at91bootstrap: convert to GENTARGETS
-Message-ID: <20110710141144.E53ED8A419@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] barebox: convert to GENTARGETS
+Message-ID: <20110710141144.AD18B8A419@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,90 +9,106 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df9624b73feeb5e0dda0ed4772efcce1679add5b
+commit: http://git.buildroot.net/buildroot/commit/?id=1ff88054a84f1fd6a28465aad4e6bed241e431d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Peter: add ':=' -> '=' change]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/at91bootstrap/at91bootstrap.mk |   57 ++++++++++++----------------------
- 1 files changed, 20 insertions(+), 37 deletions(-)
+ boot/barebox/barebox.mk |   68 ++++++++++++++++++++++-------------------------
+ 1 files changed, 32 insertions(+), 36 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index 3d4308e..37f8ac7 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -3,50 +3,33 @@
- # at91bootstrap
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index f3e769f..34ec5da 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,12 +4,16 @@
  #
  #############################################################
--AT91BOOTSTRAP_VERSION:=1.16
--AT91BOOTSTRAP_NAME:=AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
--AT91BOOTSTRAP_SITE:=http://www.atmel.com/dyn/resources/prod_documents/
--AT91BOOTSTRAP_SOURCE:=$(AT91BOOTSTRAP_NAME).zip
--AT91BOOTSTRAP_DIR:=$(BUILD_DIR)/at91bootstrap-$(AT91BOOTSTRAP_VERSION)
-+AT91BOOTSTRAP_VERSION = 1.16
-+AT91BOOTSTRAP_SITE = http://www.atmel.com/dyn/resources/prod_documents/
-+AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
  
--AT91BOOTSTRAP_BOARD:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
--AT91BOOTSTRAP_MEMORY:=$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
--AT91BOOTSTRAP_BINARY:=$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
--AT91BOOTSTRAP_BUILD_DIR:=$(AT91BOOTSTRAP_DIR)/board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
--AT91BOOTSTRAP_TARGET:=$(AT91BOOTSTRAP_BUILD_DIR)/$(AT91BOOTSTRAP_BINARY)
-+AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
-+AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
-+AT91BOOTSTRAP_MAKE_SUBDIR = board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
-+AT91BOOTSTRAP_BINARY = $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+-BAREBOX_VERSION:=2011.05.0
+-BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
+-BAREBOX_SITE:=http://www.barebox.org/download/
+-BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
+-BAREBOX_CAT:=$(BZCAT)
+-BAREBOX_BOARD_DEFCONFIG:=$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
++BAREBOX_VERSION = 2011.05.0
++BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
++BAREBOX_SITE = http://www.barebox.org/download/
++
++BAREBOX_INSTALL_IMAGES = YES
++ifneq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++BAREBOX_INSTALL_TARGET = NO
++endif
++
++BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
  
--$(DL_DIR)/$(AT91BOOTSTRAP_SOURCE):
--	 $(call DOWNLOAD,$(AT91BOOTSTRAP_SITE),$(AT91BOOTSTRAP_SOURCE))
-+AT91BOOTSTRAP_INSTALL_IMAGES = YES
-+AT91BOOTSTRAP_INSTALL_TARGET = NO
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH=x86
+@@ -21,41 +25,33 @@ endif
  
--$(AT91BOOTSTRAP_DIR)/.unpacked: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--	mkdir -p $(BUILD_DIR)
-+define AT91BOOTSTRAP_EXTRACT_CMDS
- 	unzip -d $(BUILD_DIR) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION) $(AT91BOOTSTRAP_DIR)
+ BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
+ 
+-$(DL_DIR)/$(BAREBOX_SOURCE):
+-	 $(call DOWNLOAD,$(BAREBOX_SITE),$(BAREBOX_SOURCE))
+-
+-$(BAREBOX_DIR)/.unpacked: $(DL_DIR)/$(BAREBOX_SOURCE)
+-	mkdir -p $(@D)
+-	$(INFLATE$(suffix $(BAREBOX_SOURCE))) $(DL_DIR)/$(BAREBOX_SOURCE) \
+-		| tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
 -	touch $@
-+	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
-+	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
++define BAREBOX_CONFIGURE_CMDS
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
 +endef
  
--$(AT91BOOTSTRAP_DIR)/.patched: $(AT91BOOTSTRAP_DIR)/.unpacked
--	toolchain/patch-kernel.sh $(AT91BOOTSTRAP_DIR) boot/at91bootstrap/ at91bootstrap-$(AT91BOOTSTRAP_VERSION)\*.patch
+-$(BAREBOX_DIR)/.patched: $(BAREBOX_DIR)/.unpacked
+-	toolchain/patch-kernel.sh $(BAREBOX_DIR) boot/barebox \
+-		barebox-$(BAREBOX_VERSION)-\*.patch \
+-		barebox-$(BAREBOX_VERSION)-\*.patch.$(ARCH)
 -	touch $@
-+define AT91BOOTSTRAP_BUILD_CMDS
-+	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
+-
+-$(BAREBOX_DIR)/.configured: $(BAREBOX_DIR)/.patched
+-	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
+-	touch $@
++ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++define BAREBOX_BUILD_BAREBOXENV_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o $(@D)/bareboxenv \
++		$(@D)/scripts/bareboxenv.c
++endef
++endif
+ 
+-$(BAREBOX_DIR)/.built: $(BAREBOX_DIR)/.configured
+-	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR)
+-	touch $@
++define BAREBOX_BUILD_CMDS
++	$(BAREBOX_BUILD_BAREBOXENV_CMDS)
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
 +endef
  
--$(AT91BOOTSTRAP_TARGET): $(AT91BOOTSTRAP_DIR)/.patched
--	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
--		-C $(AT91BOOTSTRAP_BUILD_DIR)
-+define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
-+	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
+-$(BAREBOX_DIR)/.installed: $(BAREBOX_DIR)/.built
+-	cp $(BAREBOX_DIR)/barebox.bin $(BINARIES_DIR)
+-	touch $@
++define BAREBOX_INSTALL_IMAGES_CMDS
++	cp $(@D)/barebox.bin $(BINARIES_DIR)
 +endef
  
--$(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY): $(AT91BOOTSTRAP_TARGET)
--	mkdir -p $(dir $@)
--	cp $^ $@
--
--at91bootstrap: $(BINARIES_DIR)/$(AT91BOOTSTRAP_BINARY)
--
--at91bootstrap-source: $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
--
--at91bootstrap-unpacked: $(AT91BOOTSTRAP_DIR)/.unpacked
--
--at91bootstrap-clean:
--	make -C $(AT91BOOTSTRAP_BUILD_DIR) clean
--
--at91bootstrap-dirclean:
--	rm -rf $(AT91BOOTSTRAP_DIR)
-+$(eval $(call GENTARGETS,boot,at91bootstrap))
+-# bareboxenv for the target
+-$(TARGET_DIR)/usr/bin/bareboxenv: $(BAREBOX_DIR)/.configured
+-	mkdir -p $(@D)
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o $@ \
+-		$(BAREBOX_DIR)/scripts/bareboxenv.c
++ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++define BAREBOX_INSTALL_TARGET_CMDS
++	cp $(@D)/bareboxenv $(TARGET_DIR)/usr/bin
++endef
++endif
  
- #############################################################
- #
+-barebox: $(BAREBOX_DIR)/.installed \
+-	$(if $(BR2_TARGET_BAREBOX_BAREBOXENV),$(TARGET_DIR)/usr/bin/bareboxenv)
++$(eval $(call GENTARGETS,boot,barebox))
+ 
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ TARGETS+=barebox
 -- 
 1.7.3.4
