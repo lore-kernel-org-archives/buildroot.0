@@ -1,60 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 23:08:35 +0200
-Subject: [Buildroot] [PATCH] ebtables: new package
-In-Reply-To: <f2408a31cec10972f6f2a4a5fc885b4cc6704eb8.1310046029.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 7 Jul 2011 16:42:01 +0300")
-References: <f2408a31cec10972f6f2a4a5fc885b4cc6704eb8.1310046029.git.baruch@tkos.co.il>
-Message-ID: <87y605x2r0.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Jul 2011 23:27:03 +0200
+Subject: [Buildroot] [PATCH 22/28] boot: rename BR2_TARGET_* to
+	BR2_BOOT_*
+In-Reply-To: <877h7pyj7o.fsf@macbook.be.48ers.dk>
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <66caabc54512ea1f23a7361744fd5e9c74d8a192.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <877h7pyj7o.fsf@macbook.be.48ers.dk>
+Message-ID: <20110710232703.1a11140e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Le Sun, 10 Jul 2011 22:27:39 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Is this purely cosmetical or is there a deeper reason for this? This
+> presumably breaks all existing configs where bootloaders are used.
 
-Thanks, a few comments:
+It is a preparation for patch 24/28, which improves the package
+infrastructure so that the bootloader packages do not have to do
+TARGETS+=u-boot manually, but this is instead done automatically by the
+package infrastructure, as is done for conventional userspace packages.
 
- Baruch> +++ b/package/ebtables/ebtables.mk
- Baruch> @@ -0,0 +1,24 @@
- Baruch> +#############################################################
- Baruch> +#
- Baruch> +# ebtables
- Baruch> +#
- Baruch> +#############################################################
- Baruch> +EBTABLES_VERSION = 2.0.9-2
+In order to do that, I needed to differentiate the package type from
+the option name. So, we had BR2_PACKAGE for userspace packages, and we
+now have BR2_BOOT for bootloader packages. See how patch 24/28 is
+implemented.
 
-2.0.10-1 is (now) out.
+Regards,
 
- Baruch> +EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
- Baruch> +EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
- Baruch> +
- Baruch> +define EBTABLES_BUILD_CMDS
- Baruch> +	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) LIBDIR=/lib/ebtables -C $(@D)
-
-You have to add quotes ("") around TARGET_CC / TARGET_LD as
-E.G. TARGET_CC is two words when ccache is enabled. You should also set
-CFLAGS / LDFLAGS, or even better use TARGET_CONFIGURE_OPTS.
-
- Baruch> +endef
- Baruch> +
- Baruch> +define EBTABLES_INSTALL_TARGET_CMDS
- Baruch> +	mkdir -p $(TARGET_DIR)/lib/ebtables
- Baruch> +	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/extensions/*.so \
- Baruch> +		$(TARGET_DIR)/lib/ebtables
- Baruch> +	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/*.so \
- Baruch> +		$(TARGET_DIR)/lib/ebtables
- Baruch> +	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
- Baruch> +		$(TARGET_DIR)/sbin/ebtables
-
-Doesn't the makefile have an install target? You need to provide the
-destination file name (not just the dir) when you use install -D.
-
-Uninstall handling would be good as well.
-
-Care to fix and resend?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
