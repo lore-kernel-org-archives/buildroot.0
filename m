@@ -1,27 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 20:15:34 +0200
-Subject: [Buildroot] [PATCH] libarchive: bump to version 2.8.4
-In-Reply-To: <0c0acd2751642f682c33db5ea13d96c8ce3993ac.1310304596.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 10 Jul 2011 16:30:33 +0300")
-References: <0c0acd2751642f682c33db5ea13d96c8ce3993ac.1310304596.git.baruch@tkos.co.il>
-Message-ID: <87r55yxard.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Jul 2011 20:15:54 +0200
+Subject: [Buildroot] [git commit] libarchive: add optional libxml2 support
+Message-ID: <20110710181610.6C5098A43B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Baruch> The libxml2 dependency is new in this version, and does not behave nicely with
- Baruch> cross compile. The configure script looks for the host xml2-config. Add
- Baruch> '--disable-xml2' as a workaround for now.
+commit: http://git.buildroot.net/buildroot/commit/?id=9eb70889bc7ec28790ac488a8edf5cd4404c2467
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks, committed.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libarchive/libarchive.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-From a quick look, it seems like the configure script respects
-XML2_CONFIG, so I added a followup commit to add optional libxml2
-support.
-
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 563c9d7..d539047 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -14,8 +14,14 @@ LIBARCHIVE_DEPENDENCIES = zlib
+ endif
+ 
+ LIBARCHIVE_CONF_OPT = \
+-	--without-xml2 \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
+ 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
+ 
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++LIBARCHIVE_DEPENDENCIES += libxml2
++LIBARCHIVE_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
++else
++LIBARCHIVE_CONF_OPT += --without-xml2
++endif
++
+ $(eval $(call AUTOTARGETS,package,libarchive))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
