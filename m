@@ -1,40 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Jul 2011 23:27:03 +0200
-Subject: [Buildroot] [PATCH 22/28] boot: rename BR2_TARGET_* to
-	BR2_BOOT_*
-In-Reply-To: <877h7pyj7o.fsf@macbook.be.48ers.dk>
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <66caabc54512ea1f23a7361744fd5e9c74d8a192.1309895466.git.thomas.petazzoni@free-electrons.com>
- <877h7pyj7o.fsf@macbook.be.48ers.dk>
-Message-ID: <20110710232703.1a11140e@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jul 2011 00:45:03 +0200
+Subject: [Buildroot] [PATCH v2] libnss: Add new package.
+In-Reply-To: <CAFbHwiTz-KPomDTeSsn_s2Ax+YrT=Mo3r_udBs1Aig=Hv1EYrg@mail.gmail.com>
+ (Will Newton's message of "Fri, 8 Jul 2011 14:27:30 +0100")
+References: <CAFbHwiTz-KPomDTeSsn_s2Ax+YrT=Mo3r_udBs1Aig=Hv1EYrg@mail.gmail.com>
+Message-ID: <87tyatwya8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 10 Jul 2011 22:27:39 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-> Is this purely cosmetical or is there a deeper reason for this? This
-> presumably breaks all existing configs where bootloaders are used.
+ Will> NSS is the Network Security Services library developed as part of
+ Will> the Mozilla project. It provides similar functions to OpenSSL but
+ Will> allows MPL, GPL and LGPL licensing.
 
-It is a preparation for patch 24/28, which improves the package
-infrastructure so that the bootloader packages do not have to do
-TARGETS+=u-boot manually, but this is instead done automatically by the
-package infrastructure, as is done for conventional userspace packages.
+Committed with minor tweaks, thanks.
 
-In order to do that, I needed to differentiate the package type from
-the option name. So, we had BR2_PACKAGE for userspace packages, and we
-now have BR2_BOOT for bootloader packages. See how patch 24/28 is
-implemented.
+ Will> +define LIBNSS_INSTALL_STAGING_CMDS
+ Will> +	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
+ Will> +	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/nss
+ Will> +	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/include/nss \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
+ Will> +	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
+ Will> +endef
+ Will> +
+ Will> +define LIBNSS_INSTALL_TARGET_CMDS
+ Will> +	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/lib/ \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.so
+ Will> +	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/nss
+ Will> +	$(INSTALL) -m 644 -t $(STAGING_DIR)/usr/include/nss \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
+ Will> +	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
+ Will> +		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
+ Will> +endef
 
-Regards,
+s/STAGING_DIR/TARGET_DIR/
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
