@@ -1,39 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 22:27:39 +0200
-Subject: [Buildroot] [PATCH 22/28] boot: rename BR2_TARGET_* to
-	BR2_BOOT_*
-In-Reply-To: <66caabc54512ea1f23a7361744fd5e9c74d8a192.1309895466.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:13 +0200")
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <66caabc54512ea1f23a7361744fd5e9c74d8a192.1309895466.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <877h7pyj7o.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Jul 2011 22:24:56 +0200
+Subject: [Buildroot] [git commit] package: add support for post-download
+	hooks
+Message-ID: <20110710203105.5B5038A42E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  boot/at91bootstrap/Config.in                |   18 +++---
- Thomas>  boot/at91bootstrap/at91bootstrap.mk         |    8 +-
- Thomas>  boot/at91dataflashboot/Config.in            |    2 +-
- Thomas>  boot/at91dataflashboot/at91dataflashboot.mk |    2 +-
- Thomas>  boot/barebox/Config.in                      |    8 +-
- Thomas>  boot/barebox/barebox.mk                     |   12 ++--
- Thomas>  boot/grub/Config.in                         |   94 +++++++++++++-------------
- Thomas>  boot/grub/grub.mk                           |   50 +++++++-------
- Thomas>  boot/syslinux/Config.in                     |   10 ++--
- Thomas>  boot/syslinux/syslinux.mk                   |    6 +-
- Thomas>  boot/u-boot/Config.in                       |   70 ++++++++++----------
- Thomas>  boot/u-boot/u-boot.mk                       |   34 +++++-----
- Thomas>  12 files changed, 157 insertions(+), 157 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=c917550361feb0858e5cc479273f46af136d8347
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Is this purely cosmetical or is there a deeper reason for this? This
-presumably breaks all existing configs where bootloaders are used.
+This will be needed for the Linux kernel package, which needs to
+download patches in a custom way.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 8b5657b..aa5c0d7 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -234,6 +234,7 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE)))
+ 	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
++	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
+@@ -437,6 +438,7 @@ $(2)_EXTRACT_CMDS ?= \
+ 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+ 
+ # post-steps hooks
++$(2)_POST_DOWNLOAD_HOOKS        ?=
+ $(2)_POST_EXTRACT_HOOKS         ?=
+ $(2)_POST_PATCH_HOOKS           ?=
+ $(2)_PRE_CONFIGURE_HOOKS        ?=
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
