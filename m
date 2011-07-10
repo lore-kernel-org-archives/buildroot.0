@@ -1,42 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 10 Jul 2011 16:30:33 +0300
-Subject: [Buildroot] [PATCH] libarchive: bump to version 2.8.4
-Message-ID: <0c0acd2751642f682c33db5ea13d96c8ce3993ac.1310304596.git.baruch@tkos.co.il>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 10 Jul 2011 15:31:33 +0200
+Subject: [Buildroot] [PATCH 15/28] grub2: remove package
+In-Reply-To: <41b9f835e983516f570512d44799a9b8c7cd0601.1309895466.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 5 Jul 2011 21:54:06 +0200")
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <41b9f835e983516f570512d44799a9b8c7cd0601.1309895466.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y606xnwq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libxml2 dependency is new in this version, and does not behave nicely with
-cross compile. The configure script looks for the host xml2-config. Add
-'--disable-xml2' as a workaround for now.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libarchive/libarchive.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Thomas> Grub 2 has been marked BROKEN in June 2010, and nobody cared to fix it
+ Thomas> since then.
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 0038cd3..563c9d7 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -3,7 +3,7 @@
- # libarchive (reusable C library for archive formats)
- #
- #############################################################
--LIBARCHIVE_VERSION = 2.7.1
-+LIBARCHIVE_VERSION = 2.8.4
- LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
- LIBARCHIVE_INSTALL_STAGING = YES
-@@ -14,6 +14,7 @@ LIBARCHIVE_DEPENDENCIES = zlib
- endif
- 
- LIBARCHIVE_CONF_OPT = \
-+	--without-xml2 \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
- 	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
- 
+ Thomas> At that time, it was marked broken because the build process needed a
+ Thomas> Ruby interpreter available on the host, and it's really a pain that
+ Thomas> building a bootloader needs such a thing.
+
+ Thomas> I've tried to upgrade the package to Grub2 1.99-rcX, and now it does
+ Thomas> not need a Ruby interpreter anymore, but instead requires a tool
+ Thomas> called "autogen", which itself needs the Guile Scheme interpreter.
+
+ Thomas> Since we haven't heard any complaints about Grub2 being marked broken,
+ Thomas> and since it's such a pain to package, let's get rid of it. Of course,
+ Thomas> anybody interested in Grub2 is invited to contribute a working
+ Thomas> package.
+
+Committed, thanks.
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
