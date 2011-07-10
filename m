@@ -1,27 +1,105 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jul 2011 22:45:36 +0200
-Subject: [Buildroot] [PATCH] fs/skeleton: allow rootfs not to be
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 10 Jul 2011 22:44:24 +0200
+Subject: [Buildroot] [git commit] fs/skeleton: allow rootfs not to be
 	remounted read-write
-In-Reply-To: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Sun, 3 Jul 2011 12:56:03 +0200")
-References: <1309690563-9490-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <8739idyidr.fsf@macbook.be.48ers.dk>
+Message-ID: <20110710205702.962F98A448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+commit: http://git.buildroot.net/buildroot/commit/?id=36b4b852eea02a95f6162cba4ed5e7f3079637c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed with minor edit, thanks.
+[Peter: prefix option with TARGET_GENERIC_]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/skeleton/etc/inittab    |    2 +-
+ package/sysvinit/inittab   |    2 +-
+ target/generic/Config.in   |   11 +++++++++++
+ target/generic/Makefile.in |   13 +++++++++++++
+ 4 files changed, 26 insertions(+), 2 deletions(-)
 
- Luca> +config BR2_REMOUNT_ROOTFS_RW
-
-The other options are prefixed with TARGET_GENERIC, so I renamed it to
-BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW.
-
+diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
+index 4f3bb96..ac410d6 100644
+--- a/fs/skeleton/etc/inittab
++++ b/fs/skeleton/etc/inittab
+@@ -15,7 +15,7 @@
+ 
+ # Startup the system
+ null::sysinit:/bin/mount -t proc proc /proc
+-null::sysinit:/bin/mount -o remount,rw /
++null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mkdir -p /dev/shm
+ null::sysinit:/bin/mount -a
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index a4bcf82..afa0dc3 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -5,7 +5,7 @@
+ id:1:initdefault:
+ 
+ proc::sysinit:/bin/mount -t proc proc /proc
+-rwmo::sysinit:/bin/mount -o remount,rw /
++rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+ dpts::sysinit:/bin/mkdir -p /dev/pts
+ moun::sysinit:/bin/mount -a
+ host::sysinit:/bin/hostname -F /etc/hostname
+diff --git a/target/generic/Config.in b/target/generic/Config.in
+index 4969fcd..7961bec 100644
+--- a/target/generic/Config.in
++++ b/target/generic/Config.in
+@@ -109,6 +109,17 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ 	default "57600"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600
+ 	default "115200"	if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
+ 
++config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
++	bool "remount root filesystem read-write during boot"
++	default y
++	help
++	  The root filesystem is typically mounted read-only at boot.
++	  By default, buildroot remounts it in read-write mode early during the
++	  boot process.
++	  Say no here if you would rather like your root filesystem to remain
++	  read-only.
++	  If unsure, say Y.
++
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_ROOTFS_POST_BUILD_SCRIPT
+diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
+index ce07ecf..4185202 100644
+--- a/target/generic/Makefile.in
++++ b/target/generic/Makefile.in
+@@ -23,6 +23,14 @@ target-generic-getty-sysvinit:
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+ 		$(TARGET_DIR)/etc/inittab
+ 
++# Find commented line, if any, and remove leading '#'s
++target-generic-do-remount-rw:
++	$(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
++
++# Find uncommented line, if any, and add a leading '#'
++target-generic-dont-remount-rw:
++	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
++
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+ TARGETS += target-generic-hostname
+ endif
+@@ -37,4 +45,9 @@ TARGETS += target-generic-getty-sysvinit
+ else
+ TARGETS += target-generic-getty-busybox
+ endif
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++TARGETS += target-generic-do-remount-rw
++else
++TARGETS += target-generic-dont-remount-rw
++endif
+ endif
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
