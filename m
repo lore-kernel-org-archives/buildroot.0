@@ -1,74 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 15:53:51 +0200
-Subject: [Buildroot] [PATCH 07/12] u-boot: allow specification of custom Git
-	repo as source
-In-Reply-To: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6c2e3e2e44b61f427fa861ce4c7d5d76eb48682a.1310392269.git.thomas.petazzoni@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Jul 2011 17:33:31 +0300
+Subject: [Buildroot] [PATCHv2] ebtables: new package
+Message-ID: <4b82d4fbde55720d5d6e0a34b51e4b1b3f80e48d.1310394628.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- boot/uboot/Config.in |   14 ++++++++++++++
- boot/uboot/uboot.mk  |    3 +++
- 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index aada346..b8eb42d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -34,6 +34,9 @@ config BR2_TARGET_UBOOT_2010_03
- config BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-+config BR2_TARGET_UBOOT_CUSTOM_GIT
-+        bool "Custom Git repository"
+Changes in v2:
+	* Update to version 2.0.10-1
+	* Use target file name in $(INSTALL)
+	* Add uninstall
+
+ package/Config.in            |    1 +
+ package/ebtables/Config.in   |    6 ++++++
+ package/ebtables/ebtables.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
+ create mode 100644 package/ebtables/Config.in
+ create mode 100644 package/ebtables/ebtables.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 40f523d..853194f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -387,6 +387,7 @@ endif
+ source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
++source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/ifplugd/Config.in"
+diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
+new file mode 100644
+index 0000000..73af12a
+--- /dev/null
++++ b/package/ebtables/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_EBTABLES
++	bool "ebtables"
++	help
++	  Ethernet bridge frame table administration
 +
- endchoice
- 
- if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -51,6 +54,7 @@ config BR2_TARGET_UBOOT_VERSION
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-+	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
- 
- config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
-@@ -61,6 +65,16 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 
- 	  Most users may leave this empty
- 
-+if BR2_TARGET_UBOOT_CUSTOM_GIT
++	  http://ebtables.sourceforge.net
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+new file mode 100644
+index 0000000..67c0d92
+--- /dev/null
++++ b/package/ebtables/ebtables.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# ebtables
++#
++#############################################################
++EBTABLES_VERSION = 2.0.10-1
++EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
++EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
 +
-+config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL
-+        string "URL of custom Git repository"
++define EBTABLES_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables -C $(@D)
++endef
 +
-+config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
-+        string "Custom Git version"
++define EBTABLES_INSTALL_TARGET_CMDS
++	for so in $(@D)/$(EBTABLES_SUBDIR)/*.so \
++		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
++		do \
++		$(INSTALL) -m 0755 -D $${so} \
++			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
++	done
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
++		$(TARGET_DIR)/sbin/ebtables
++endef
 +
-+endif
++define EBTABLES_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/lib/ebtables
++	rm -f $(TARGET_DIR)/sbin/ebtables
++endef
 +
- choice
- 	prompt "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dfa012a..e87727b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -13,6 +13,9 @@ ifeq ($(UBOOT_VERSION),custom)
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
- UBOOT_SITE    = $(dir $(UBOOT_TARBALL))
- UBOOT_SOURCE  = $(notdir $(UBOOT_TARBALL))
-+else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
-+UBOOT_SITE        = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL))
-+UBOOT_SITE_METHOD = git
- else
- # Handle stable official U-Boot versions
- UBOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
++$(eval $(call GENTARGETS,package,ebtables))
 -- 
-1.7.4.1
+1.7.5.4
