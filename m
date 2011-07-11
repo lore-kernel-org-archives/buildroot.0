@@ -1,252 +1,209 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 15:53:45 +0200
-Subject: [Buildroot] [PATCH 01/12] linux: rename LINUX26 to LINUX
+Date: Mon, 11 Jul 2011 15:53:49 +0200
+Subject: [Buildroot] [PATCH 05/12] Improve TARGETS handling for bootloaders
+	and kernel
 In-Reply-To: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fb255cfc385061e639d2c2815585d75b5345545e.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <de300cb9cb615b39176323e4851945d208cfc2be.1310392269.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As the kernel and bootloaders do not use the normal BR2_PACKAGE_*
+Kconfig options, their target name was not automatically added to the
+global TARGETS variable. Each bootloader .mk and the linux.mk had to
+add their own target manually to TARGETS, and the package
+infrastructure was making tests on non-existing Kconfig variables.
+
+This commit improves the package infrastructure so that it looks at
+BR2_PACKAGE_<pkg> for packages, BR2_BOOT_<pkg> for bootloaders and at
+the special BR2_LINUX_KERNEL for the linux package.
+
+This allows to simplify a little bit the bootloaders and linux .mk
+files.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |  110 ++++++++++++++++++++++++++++----------------------------
- 1 files changed, 55 insertions(+), 55 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk         |    8 --------
+ boot/at91dataflashboot/at91dataflashboot.mk |    9 ---------
+ boot/barebox/barebox.mk                     |    3 ---
+ boot/grub/grub.mk                           |    9 ---------
+ boot/syslinux/syslinux.mk                   |    9 ---------
+ boot/uboot/uboot.mk                         |    8 --------
+ linux/linux.mk                              |    5 -----
+ package/Makefile.package.in                 |   16 +++++++++++++---
+ 8 files changed, 13 insertions(+), 54 deletions(-)
 
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 37f8ac7..871b0ff 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -31,19 +31,11 @@ endef
+ 
+ $(eval $(call GENTARGETS,boot,at91bootstrap))
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+-TARGETS+=at91bootstrap
+-
+ # we NEED a board name unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(AT91BOOTSTRAP_BOARD),)
+ $(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
+ endif
+ endif
+-
+ endif
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 9b6cf21..14fb8c5 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -20,12 +20,3 @@ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+ endef
+ 
+ $(eval $(call GENTARGETS,boot,at91dataflashboot))
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_AT91DATAFLASHBOOT),y)
+-TARGETS+=at91dataflashboot
+-endif
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 34ec5da..1952c98 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -54,13 +54,10 @@ endif
+ $(eval $(call GENTARGETS,boot,barebox))
+ 
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+-TARGETS+=barebox
+-
+ # we NEED a board defconfig file unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
+ $(error No Barebox defconfig file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
+ endif
+ endif
+-
+ endif
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index 4938416..2ce8eab 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -83,12 +83,3 @@ define GRUB_UNINSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(call AUTOTARGETS,boot,grub))
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_GRUB),y)
+-TARGETS+=grub
+-endif
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index e9c32b6..686124f 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -27,12 +27,3 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+ endef
+ 
+ $(eval $(call GENTARGETS,boot,syslinux))
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_TARGET_SYSLINUX),y)
+-TARGETS+=syslinux
+-endif
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3e945c7..dfa012a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -111,19 +111,11 @@ endef
+ 
+ $(eval $(call GENTARGETS,boot,uboot))
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+ ifeq ($(BR2_TARGET_UBOOT),y)
+-TARGETS+=u-boot
+-
+ # we NEED a board name unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(UBOOT_BOARD_NAME),)
+ $(error NO U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
+ endif
+ endif
+-
+ endif
 diff --git a/linux/linux.mk b/linux/linux.mk
-index f9fe454..6dfd558 100644
+index 2c7ce89..0e1466f 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -1,24 +1,24 @@
- ###############################################################################
- #
--# Linux kernel 2.6 target
-+# Linux kernel target
- #
- ###############################################################################
--LINUX26_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- 
--# Compute LINUX26_SOURCE and LINUX26_SITE from the configuration
--ifeq ($(LINUX26_VERSION),custom)
--LINUX26_TARBALL:=$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
--LINUX26_SITE:=$(dir $(LINUX26_TARBALL))
--LINUX26_SOURCE:=$(notdir $(LINUX26_TARBALL))
-+# Compute LINUX_SOURCE and LINUX_SITE from the configuration
-+ifeq ($(LINUX_VERSION),custom)
-+LINUX_TARBALL:=$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-+LINUX_SITE:=$(dir $(LINUX_TARBALL))
-+LINUX_SOURCE:=$(notdir $(LINUX_TARBALL))
- else
--LINUX26_SOURCE:=linux-$(LINUX26_VERSION).tar.bz2
--LINUX26_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
-+LINUX_SOURCE:=linux-$(LINUX_VERSION).tar.bz2
-+LINUX_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
- endif
- 
--LINUX26_DIR:=$(BUILD_DIR)/linux-$(LINUX26_VERSION)
--LINUX26_PATCH=$(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+LINUX_DIR:=$(BUILD_DIR)/linux-$(LINUX_VERSION)
-+LINUX_PATCH=$(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- 
--LINUX26_MAKE_FLAGS = \
-+LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
-@@ -28,27 +28,27 @@ LINUX26_MAKE_FLAGS = \
- 
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX26_VERSION_PROBED = $(shell $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) --no-print-directory -s kernelrelease)
-+LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
- 
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
--LINUX26_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-+LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
- ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
- ifeq ($(KERNEL_ARCH),blackfin)
- # a uImage, but with a different file name
--LINUX26_IMAGE_NAME=vmImage
-+LINUX_IMAGE_NAME=vmImage
- else
--LINUX26_IMAGE_NAME=uImage
-+LINUX_IMAGE_NAME=uImage
- endif
--LINUX26_DEPENDENCIES+=$(MKIMAGE)
-+LINUX_DEPENDENCIES+=host-uboot-mkimage
- else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
--LINUX26_IMAGE_NAME=bzImage
-+LINUX_IMAGE_NAME=bzImage
- else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
--LINUX26_IMAGE_NAME=zImage
-+LINUX_IMAGE_NAME=zImage
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
--LINUX26_IMAGE_NAME=vmlinux.bin
-+LINUX_IMAGE_NAME=vmlinux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
--LINUX26_IMAGE_NAME=vmlinux
-+LINUX_IMAGE_NAME=vmlinux
- endif
- endif
- 
-@@ -57,44 +57,44 @@ endif
- # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
- # defconfig file.
- ifeq ($(KERNEL_ARCH),i386)
--KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/x86
-+KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
- else ifeq ($(KERNEL_ARCH),x86_64)
--KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/x86
-+KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/x86
- else
--KERNEL_ARCH_PATH=$(LINUX26_DIR)/arch/$(KERNEL_ARCH)
-+KERNEL_ARCH_PATH=$(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
- 
- ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
--LINUX26_IMAGE_PATH=$(LINUX26_DIR)/$(LINUX26_IMAGE_NAME)
-+LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
- else
- ifeq ($(KERNEL_ARCH),avr32)
--LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX26_IMAGE_NAME)
-+LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
- else
--LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX26_IMAGE_NAME)
-+LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
- endif
- endif # BR2_LINUX_KERNEL_VMLINUX
- 
- # Download
--$(LINUX26_DIR)/.stamp_downloaded:
-+$(LINUX_DIR)/.stamp_downloaded:
- 	@$(call MESSAGE,"Downloading kernel")
--	$(call DOWNLOAD,$(LINUX26_SITE),$(LINUX26_SOURCE))
--	$(foreach patch,$(filter ftp://% http://%,$(LINUX26_PATCH)),\
-+	$(call DOWNLOAD,$(LINUX_SITE),$(LINUX_SOURCE))
-+	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCH)),\
- 		$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
- 	mkdir -p $(@D)
- 	touch $@
- 
- # Extraction
--$(LINUX26_DIR)/.stamp_extracted: $(LINUX26_DIR)/.stamp_downloaded
-+$(LINUX_DIR)/.stamp_extracted: $(LINUX_DIR)/.stamp_downloaded
- 	@$(call MESSAGE,"Extracting kernel")
- 	mkdir -p $(@D)
--	$(Q)$(INFLATE$(suffix $(LINUX26_SOURCE))) $(DL_DIR)/$(LINUX26_SOURCE) | \
-+	$(Q)$(INFLATE$(suffix $(LINUX_SOURCE))) $(DL_DIR)/$(LINUX_SOURCE) | \
- 		tar -C $(@D) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
- 	$(Q)touch $@
- 
- # Patch
--$(LINUX26_DIR)/.stamp_patched: $(LINUX26_DIR)/.stamp_extracted
-+$(LINUX_DIR)/.stamp_patched: $(LINUX_DIR)/.stamp_extracted
- 	@$(call MESSAGE,"Patching kernel")
--	for p in $(LINUX26_PATCH) ; do \
-+	for p in $(LINUX_PATCH) ; do \
- 		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
- 			toolchain/patch-kernel.sh $(@D) $(DL_DIR) `basename $$p` ; \
- 		elif test -d $$p ; then \
-@@ -107,13 +107,13 @@ $(LINUX26_DIR)/.stamp_patched: $(LINUX26_DIR)/.stamp_extracted
- 
- 
- # Configuration
--$(LINUX26_DIR)/.stamp_configured: $(LINUX26_DIR)/.stamp_patched
-+$(LINUX_DIR)/.stamp_configured: $(LINUX_DIR)/.stamp_patched
- 	@$(call MESSAGE,"Configuring kernel")
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
--	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- 	cp $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
--	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) buildroot_defconfig
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- endif
- ifeq ($(BR2_ARM_EABI),y)
-@@ -141,61 +141,61 @@ endif
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
- 	$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config)
- endif
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) oldconfig
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- 	$(Q)touch $@
- 
- # Compilation. We make sure the kernel gets rebuilt when the
- # configuration has changed.
--$(LINUX26_DIR)/.stamp_compiled: $(LINUX26_DIR)/.stamp_configured $(LINUX26_DIR)/.config
-+$(LINUX_DIR)/.stamp_compiled: $(LINUX_DIR)/.stamp_configured $(LINUX_DIR)/.config
- 	@$(call MESSAGE,"Compiling kernel")
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) $(LINUX26_IMAGE_NAME)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
--		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) modules ;	\
-+		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
- 	$(Q)touch $@
- 
- # Installation
--$(LINUX26_DIR)/.stamp_installed: $(LINUX26_DIR)/.stamp_compiled
-+$(LINUX_DIR)/.stamp_installed: $(LINUX_DIR)/.stamp_compiled
- 	@$(call MESSAGE,"Installing kernel")
- ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
--	install -m 0644 -D $(LINUX26_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX26_IMAGE_NAME)
-+	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
- endif
--	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
-+	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
--		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX26_MAKE_FLAGS) -C $(@D) 		\
-+		$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) 		\
- 			DEPMOD="$(HOST_DIR)/usr/sbin/depmod" modules_install ;		\
--		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/build ;	\
--		rm -f $(TARGET_DIR)/lib/modules/$(LINUX26_VERSION_PROBED)/source ;	\
-+		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
-+		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
- 	fi
- 	$(Q)touch $@
- 
--linux linux26: host-module-init-tools $(LINUX26_DEPENDENCIES) $(LINUX26_DIR)/.stamp_installed
-+linux linux26: host-module-init-tools $(LINUX_DEPENDENCIES) $(LINUX_DIR)/.stamp_installed
- 
--linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX26_DIR)/.stamp_configured
--	$(MAKE) $(LINUX26_MAKE_FLAGS) -C $(LINUX26_DIR) \
-+linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
-+	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
- 		$(subst linux-,,$(subst linux26-,,$@))
- 
- # Support for rebuilding the kernel after the initramfs file list has
- # been generated in $(BINARIES_DIR)/rootfs.initramfs.
--$(LINUX26_DIR)/.stamp_initramfs_rebuilt: $(LINUX26_DIR)/.stamp_installed $(BINARIES_DIR)/rootfs.initramfs
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_installed $(BINARIES_DIR)/rootfs.initramfs
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Remove the previously generated initramfs which was empty,
- 	# to make sure the kernel will actually regenerate it.
- 	$(RM) -f $(@D)/usr/initramfs_data.cpio*
- 	# Build the kernel.
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX26_MAKE_FLAGS) -C $(@D) $(LINUX26_IMAGE_NAME)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	# Copy the kernel image to its final destination
--	cp $(LINUX26_IMAGE_PATH) $(BINARIES_DIR)
-+	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
- 	$(Q)touch $@
- 
- # The initramfs building code must make sure this target gets called
+@@ -189,11 +189,6 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
  # after it generated the initramfs list of files.
--linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX26_DIR)/.stamp_initramfs_rebuilt
-+linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
  
- ifeq ($(BR2_LINUX_KERNEL),y)
--TARGETS+=linux26
-+TARGETS+=linux
- endif
- 
+-
+-ifeq ($(BR2_LINUX_KERNEL),y)
+-TARGETS+=linux
+-endif
+-
  # Checks to give errors that the user can understand
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index aa5c0d7..faa7ff1 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -522,10 +522,20 @@ $$($(2)_TARGET_UNINSTALL):		PKG=$(2)
+ $$($(2)_TARGET_CLEAN):			PKG=$(2)
+ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ 
++# Compute the name of the Kconfig option that correspond to the
++# package being enabled. We handle three cases: the special Linux
++# kernel case, the bootloaders case, and the normal packages case.
++ifeq ($(1),linux)
++$(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
++else ifeq ($(4),boot)
++$(2)_KCONFIG_VAR = BR2_TARGET_$(2)
++else
++$(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
++endif
++
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+-
+-ifeq ($$(BR2_PACKAGE_$(2)),y)
++ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
+ TARGETS += $(1)
+ 
+@@ -537,7 +547,7 @@ else ifeq ($$($(2)_SITE_METHOD),bzr)
+ DL_TOOLS_DEPENDENCIES += bzr
+ endif # SITE_METHOD
+ 
+-endif # BR2_PACKAGE_$(2)
++endif # $(2)_KCONFIG_VAR
+ endef # GENTARGETS_INNER
+ 
+ ################################################################################
 -- 
 1.7.4.1
