@@ -1,40 +1,91 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 23:24:58 +0200
-Subject: [Buildroot] [PATCH 1/1] valgrind: bump to 3.6.1 and add support
-	for ARMv7
-In-Reply-To: <7ab179c630afa8f3bcafaa99934fed108cf137c5.1310415416.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 Jul 2011 22:17:16 +0200")
-References: <cover.1310415416.git.thomas.petazzoni@free-electrons.com>
- <cover.1310415416.git.thomas.petazzoni@free-electrons.com>
- <7ab179c630afa8f3bcafaa99934fed108cf137c5.1310415416.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ipr8jys5.fsf@macbook.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Jul 2011 23:23:17 +0200
+Subject: [Buildroot] [git commit] ebtables: new package
+Message-ID: <20110711212520.06EA68A47B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> We removed the shell script that wrapped valgrind (not nice to install
- Thomas> such non-standard things), and will let the user use the uclibc.supp
- Thomas> suppression file if needed.
+commit: http://git.buildroot.net/buildroot/commit/?id=a8041c0973528f4ef15e1a67cc1d3baf08261b4f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks (but see below).
+[Peter: add ipv6 dependency]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in            |    1 +
+ package/ebtables/Config.in   |   10 ++++++++++
+ package/ebtables/ebtables.mk |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/ebtables/Config.in
+ create mode 100644 package/ebtables/ebtables.mk
 
- Thomas> +VALGRIND_VERSION = 3.6.1
- Thomas> +VALGRIND_SITE    = http://valgrind.org/downloads/
- Thomas> +VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
- Thomas> +
- Thomas> +VALGRIND_CONF_OPT = --disable-tls
-
-I know we had this before as well, but is that really needed nowadays
-with NPTL and so on? It seems to compile fine here without that option.
-
- Thomas> +$(eval $(call AUTOTARGETS,package,valgrind))
- Thomas> \ No newline at end of file
-
-I've fixed that.
-
+diff --git a/package/Config.in b/package/Config.in
+index e58254b..d87dcd8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -394,6 +394,7 @@ endif
+ source "package/dhcpdump/Config.in"
+ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
++source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
+ source "package/hostapd/Config.in"
+ source "package/ifplugd/Config.in"
+diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
+new file mode 100644
+index 0000000..40bc45c
+--- /dev/null
++++ b/package/ebtables/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_EBTABLES
++	bool "ebtables"
++	depends on BR2_INET_IPV6
++	help
++	  Ethernet bridge frame table administration
++
++	  http://ebtables.sourceforge.net
++
++comment "ebtables requires a toolchain with IPv6 support"
++	depends on !BR2_INET_IPV6
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+new file mode 100644
+index 0000000..67c0d92
+--- /dev/null
++++ b/package/ebtables/ebtables.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# ebtables
++#
++#############################################################
++EBTABLES_VERSION = 2.0.10-1
++EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
++EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
++
++define EBTABLES_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables -C $(@D)
++endef
++
++define EBTABLES_INSTALL_TARGET_CMDS
++	for so in $(@D)/$(EBTABLES_SUBDIR)/*.so \
++		$(@D)/$(EBTABLES_SUBDIR)/extensions/*.so; \
++		do \
++		$(INSTALL) -m 0755 -D $${so} \
++			$(TARGET_DIR)/lib/ebtables/`basename $${so}`; \
++	done
++	$(INSTALL) -m 0755 -D $(@D)/$(EBTABLES_SUBDIR)/ebtables \
++		$(TARGET_DIR)/sbin/ebtables
++endef
++
++define EBTABLES_UNINSTALL_TARGET_CMDS
++	rm -rf $(TARGET_DIR)/lib/ebtables
++	rm -f $(TARGET_DIR)/sbin/ebtables
++endef
++
++$(eval $(call GENTARGETS,package,ebtables))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
