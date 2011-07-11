@@ -1,34 +1,108 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jul 2011 23:46:22 +0200
-Subject: [Buildroot] [git commit] barebox: bump version
-Message-ID: <20110711214654.E88B88A482@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Mon, 11 Jul 2011 14:51:26 -0700
+Subject: [Buildroot] /tmp puzzle
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60401F1@ex-mb1.corp.adtran.com>
+References: <CALo-6+h28+HSpczw86fD=Jk0GJa3m+JR9hmHswTpvE59xvMKig@mail.gmail.com>
+ <F9C551623D2CBB4C9488801D14F864C60401F1@ex-mb1.corp.adtran.com>
+Message-ID: <CALo-6+j3AzdfCMxBmRVOCYWV8h8bZGZuNYRo6fuiyEkOtav-TA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear andy:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33c4e77c2acc9615181b26255684e7d952393c2f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thank you. That confirms my experiments. I have gotten sem_open() to
+work and the key is that there *must* be a either a /dev/shm or a
+"tmpfs" accessible via /proc/mounts.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/barebox/barebox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I ended up disabling CONFIG_DEVTMPFS as after looking at all the
+mpc83x_defconfig's in the kernels from 2.6.32 through 2.6.39, they all
+have CONFIG_DEVTMPFS=n.
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7e69437..55e1ffd 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BAREBOX_VERSION = 2011.06.0
-+BAREBOX_VERSION = 2011.07.0
- BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE = http://www.barebox.org/download/
- 
+So, I am doing a completly clean build of the rootfilesystem and the
+kernel to see if it actually, er, mounts properly after a make clean.
+
+Thank you kindly, everyone.
+
+On Mon, Jul 11, 2011 at 2:06 PM, ANDY KENNEDY <ANDY.KENNEDY@adtran.com> wrote:
+>> I need to ask a slighly different question in my desire to
+>> understand
+>> what is going on.
+>
+> the config should be something like:
+> CONFIG_SHMEM=y
+> # CONFIG_DEVTMPFS is not set
+> # CONFIG_SENSORS_TMP102 is not set
+> # CONFIG_SENSORS_TMP401 is not set
+> # CONFIG_SENSORS_TMP421 is not set
+> CONFIG_TMPFS=y
+> CONFIG_TMPFS_POSIX_ACL=y
+>
+> These two options are found in the following two locations:
+> General setup ?--->
+> ?[*] Configure standard kernel features (for small systems) ?--->
+> ? ?-*- ? Use full shmem filesystem
+>
+> File systems ?--->
+> ?Pseudo filesystems ?--->
+> ? ?-*- Virtual memory file system support (former shm fs)
+>
+> Earlier, you posted something about CONFIG_DEVTMPFS, but that
+> is not the same thing as CONFIG_TMPFS.
+>
+> HTH,
+> Andy
+>
+>>
+>> If I disable "devtmpfs", I build my kernel and rootfilesystem and
+>> when
+>> it is mounted, I have a /tmp directory with *stuff* in it, but it
+>> is
+>> mounted at /var/tmp. I dont understand how /tmp got mounted. Would
+>> someone be willing to help me understand how "/tmp" got mounted
+>> when
+>> it is not in the result of "mount" ?
+>>
+>> # cat /etc/fstab
+>> # /etc/fstab: static file system information.
+>> #
+>> # <file system> <mount pt> ? ? <type> ? <options> ? ? ? ? <dump>
+>> <pass>
+>> /dev/root ? ? ? / ? ? ? ? ? ? ?jffs2 ? ?rw,noauto ? ? ? ? 0 ? ? ?1
+>> proc ? ? ? ? ? ?/proc ? ? ? ? ?proc ? ? defaults ? ? ? ? ?0 ? ? ?0
+>> devpts ? ? ? ? ?/dev/pts ? ? ? devpts ? defaults,gid=5,mode=620 ? 0
+>> 0
+>> tmpfs ? ? ? ? ? /tmp ? ? ? ? ? tmpfs ? ?defaults ? ? ? ? ?0 ? ? ?0
+>> sysfs ? ? ? ? ? /sys ? ? ? ? ? sysfs ? ?defaults ? ? ? ? ?0 ? ? ?0
+>>
+>> # mount
+>> rootfs on / type rootfs (rw)
+>> /dev/root on / type jffs2 (rw,relatime)
+>> proc on /proc type proc (rw,relatime)
+>> devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
+>> sysfs on /sys type sysfs (rw,relatime)
+>>
+>> # mount -a
+>> mount: mounting tmpfs on /tmp failed: Invalid argument
+>> #
+>>
+>> # ls /tmp
+>> dropbear.pid ? ? log ? ? ? ? ? ? ?sshd
+>> ifstate ? ? ? ? ?messages ? ? ? ? subsys
+>> ldconfig ? ? ? ? portmap_mapping ?utmp
+>> #
+>>
+>> --
+>> Charles Krinke
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
 -- 
-1.7.3.4
+Charles Krinke
