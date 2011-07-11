@@ -1,39 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 21:27:35 +0200
-Subject: [Buildroot] [PATCH] alsa-utils: Add patch for amixer TLV output
-In-Reply-To: <1310399020-27026-1-git-send-email-zonque@gmail.com> (Daniel
- Mack's message of "Mon, 11 Jul 2011 17:43:40 +0200")
-References: <1310399020-27026-1-git-send-email-zonque@gmail.com>
-Message-ID: <874o2smxco.fsf@macbook.be.48ers.dk>
+Date: Mon, 11 Jul 2011 21:30:20 +0200
+Subject: [Buildroot] [PATCH 02/12] linux: indent and align some
+	definitions
+In-Reply-To: <b5726dec06543122cd9aff7a50c199d69bbc1e28.1310392269.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:46 +0200")
+References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
+ <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
+ <b5726dec06543122cd9aff7a50c199d69bbc1e28.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zkkklinn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Daniel> This patch is queued upstream, so it can be dropped once a new version
- Daniel> of alsa-utils is released.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  linux/linux.mk |   16 ++++++++--------
+ Thomas>  1 files changed, 8 insertions(+), 8 deletions(-)
 
-Could you give a quick explanation about what the patch does for people
-not following alsa development?
+Please use the
 
- Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
- Daniel> ---
- Daniel>  .../alsa-utils/alsa-utils-amixer-tlv-fix.patch     |   32 ++++++++++++++++++++
- Daniel>  1 files changed, 32 insertions(+), 0 deletions(-)
- Daniel>  create mode 100644 package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
+BLAH = foo
 
- Daniel> diff --git a/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch b/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
- Daniel> new file mode 100644
- Daniel> index 0000000..1b5e9c5
- Daniel> --- /dev/null
- Daniel> +++ b/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
- Daniel> @@ -0,0 +1,32 @@
+Style instead, for the reasons outlined in my mails yesterday.
 
-Please add a full git-style patch header with your signed-off-by (which
-should be easy to do if it's upstream).
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
