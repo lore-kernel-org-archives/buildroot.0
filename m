@@ -1,41 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 22:42:16 +0200
-Subject: [Buildroot] [PATCH 02/12] linux: indent and align some
-	definitions
-In-Reply-To: <87zkkklinn.fsf@macbook.be.48ers.dk>
+Date: Mon, 11 Jul 2011 22:42:45 +0200
+Subject: [Buildroot] [PATCH 03/12] linux: convert to the GENTARGETS
+	infrastructure
+In-Reply-To: <87vcv8likw.fsf@macbook.be.48ers.dk>
 References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
  <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <b5726dec06543122cd9aff7a50c199d69bbc1e28.1310392269.git.thomas.petazzoni@free-electrons.com>
- <87zkkklinn.fsf@macbook.be.48ers.dk>
-Message-ID: <20110711224216.62376ec0@skate>
+ <66c7e86f52aad84878870876946a99810e5fe2cb.1310392269.git.thomas.petazzoni@free-electrons.com>
+ <87vcv8likw.fsf@macbook.be.48ers.dk>
+Message-ID: <20110711224245.1f296d46@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 11 Jul 2011 21:30:20 +0200,
+Le Mon, 11 Jul 2011 21:31:59 +0200,
 Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> >>>>> "Thomas" == Thomas Petazzoni
-> >>>>> <thomas.petazzoni@free-electrons.com> writes:
-> 
->  Thomas> Signed-off-by: Thomas Petazzoni
->  Thomas> <thomas.petazzoni@free-electrons.com> ---
->  Thomas>  linux/linux.mk |   16 ++++++++--------
->  Thomas>  1 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> Please use the
-> 
-> BLAH = foo
-> 
-> Style instead, for the reasons outlined in my mails yesterday.
+> Please use '=' for consistency. Otherwise looks good.
 
-I have dropped this patch, and used the
-
-BLAH = foo
-
-syntax elsewhere.
+Done for places I have modified.
 
 Thomas
 -- 
