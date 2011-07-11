@@ -1,25 +1,30 @@
-From: Dechesne, Nicolas <n-dechesne@ti.com>
-Date: Mon, 11 Jul 2011 14:59:30 +0200
-Subject: [Buildroot] CONFIG_FEATURE_MDEV_LOAD_FIRMWARE not enough to get
-	firmware loading working
-Message-ID: <CALB96N=r5bjJKyPq+T3rsr0M5dVZVuAW-fnCG=4FGQGehjxj7Q@mail.gmail.com>
+From: Daniel Mack <zonque@gmail.com>
+Date: Mon, 11 Jul 2011 15:34:26 +0200
+Subject: [Buildroot] [PATCH 1/2] libgcrypt: bump version to 1.5.0
+Message-ID: <1310391267-19364-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi there,
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/libgcrypt/libgcrypt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-it seems that enabling CONFIG_FEATURE_MDEV_LOAD_FIRMWARE in the busybox
-config is not enough to get mdev firmware loading out-of-the-box, and we
-need to create an init script that ends up doing something like this:
-
-echo /sbin/mdev > /proc/sys/kernel/hotplug
-
-is that expected or are we missing something?
-
-thx
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110711/961895a6/attachment.html>
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index a7163ea..8b08c3e 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBGCRYPT_VERSION = 1.4.6
++LIBGCRYPT_VERSION = 1.5.0
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
+-- 
+1.7.5.4
