@@ -1,74 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 22:46:12 +0200
-Subject: [Buildroot] [PATCH 06/11] u-boot: allow specification of custom Git
-	repo as source
+Date: Mon, 11 Jul 2011 22:46:13 +0200
+Subject: [Buildroot] [PATCH 07/11] Add x-loader bootloader
 In-Reply-To: <cover.1310417153.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1310417153.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a8bafd42523e51533862368d10d502ebaf0fba13.1310417153.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <79ffd86bcff22612791979f731735dca5499409e.1310417153.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/uboot/Config.in |   14 ++++++++++++++
- boot/uboot/uboot.mk  |    3 +++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+From: Philippe Reynes <tremyfr@yahoo.fr>
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index aada346..dbd4f34 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -34,6 +34,9 @@ config BR2_TARGET_UBOOT_2010_03
- config BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	bool "Custom tarball"
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+merge xloader
+---
+ boot/Config.in          |    1 +
+ boot/xloader/Config.in  |   15 +++++++++++++++
+ boot/xloader/xloader.mk |   37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 boot/xloader/Config.in
+ create mode 100644 boot/xloader/xloader.mk
+
+diff --git a/boot/Config.in b/boot/Config.in
+index 67adae8..2a97695 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -6,6 +6,7 @@ source "boot/syslinux/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/at91bootstrap/Config.in"
+ source "boot/at91dataflashboot/Config.in"
++source "boot/xloader/Config.in"
  
-+config BR2_TARGET_UBOOT_CUSTOM_GIT
-+	bool "Custom Git repository"
+ endmenu
+ 
+diff --git a/boot/xloader/Config.in b/boot/xloader/Config.in
+new file mode 100644
+index 0000000..d295b45
+--- /dev/null
++++ b/boot/xloader/Config.in
+@@ -0,0 +1,15 @@
++menuconfig BR2_TARGET_XLOADER
++	bool "X-loader"
++	depends on BR2_cortex_a8 || BR2_cortex_a9
++	help
++	  The x-loader bootloader. It is mainly used on OMAP-based
++	  platforms.
 +
- endchoice
- 
- if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -51,6 +54,7 @@ config BR2_TARGET_UBOOT_VERSION
- 	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
- 	default "2010.03"	if BR2_TARGET_UBOOT_2010_03
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-+	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
- 
- config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 	string "custom patch dir"
-@@ -61,6 +65,16 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 
- 	  Most users may leave this empty
- 
-+if BR2_TARGET_UBOOT_CUSTOM_GIT
++if BR2_TARGET_XLOADER
++config BR2_TARGET_XLOADER_BOARDNAME
++	string "x-loader board name"
++	help
++	  One of x-loader supported boards to be built.
++	  This will be suffixed with _config to meet x-loader
++	  standard naming.
++endif
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+new file mode 100644
+index 0000000..8d8cce3
+--- /dev/null
++++ b/boot/xloader/xloader.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# x-loader
++#
++#############################################################
++XLOADER_VERSION    = 6f3a26101303051e0f91b6213735b68ce804e94e
++XLOADER_SITE       = git://gitorious.org/x-loader/x-loader.git
++XLOADER_BOARD_NAME = $(call qstrip,$(BR2_TARGET_XLOADER_BOARDNAME))
 +
-+config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL
-+	string "URL of custom Git repository"
++XLOADER_INSTALL_IMAGES = YES
 +
-+config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
-+	string "Custom Git version"
++define XLOADER_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) $(XLOADER_BOARD_NAME)_config
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) ift
++endef
 +
++define XLOADER_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
++endef
++
++$(eval $(call GENTARGETS,boot,xloader))
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(BR2_TARGET_XLOADER),y)
++# we NEED a board name unless we're at make source
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(XLOADER_BOARD_NAME),)
++$(error NO x-loader board name set. Check your BR2_BOOT_XLOADER_BOARDNAME setting)
++endif
 +endif
 +
- choice
- 	prompt "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index dfa012a..e87727b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -13,6 +13,9 @@ ifeq ($(UBOOT_VERSION),custom)
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
- UBOOT_SITE    = $(dir $(UBOOT_TARBALL))
- UBOOT_SOURCE  = $(notdir $(UBOOT_TARBALL))
-+else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
-+UBOOT_SITE        = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL))
-+UBOOT_SITE_METHOD = git
- else
- # Handle stable official U-Boot versions
- UBOOT_SITE    = ftp://ftp.denx.de/pub/u-boot
++endif
 -- 
 1.7.4.1
