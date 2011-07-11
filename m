@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 21:35:13 +0200
-Subject: [Buildroot] [PATCH 06/12] linux: allow specification of a
-	custom Git repository as a source
-In-Reply-To: <34af0b74e6f973c57a15d469210e044f2aee5c77.1310392269.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:50 +0200")
+Date: Mon, 11 Jul 2011 21:38:05 +0200
+Subject: [Buildroot] [PATCH 07/12] u-boot: allow specification of custom
+	Git repo as source
+In-Reply-To: <6c2e3e2e44b61f427fa861ce4c7d5d76eb48682a.1310392269.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:51 +0200")
 References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
  <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <34af0b74e6f973c57a15d469210e044f2aee5c77.1310392269.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mxgklifi.fsf@macbook.be.48ers.dk>
+ <6c2e3e2e44b61f427fa861ce4c7d5d76eb48682a.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ipr8liaq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,34 +18,39 @@ To: buildroot@busybox.net
 
  Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  Thomas> ---
- Thomas>  linux/Config.in |   15 +++++++++++++++
- Thomas>  linux/linux.mk  |    3 +++
- Thomas>  2 files changed, 18 insertions(+), 0 deletions(-)
+ Thomas>  boot/uboot/Config.in |   14 ++++++++++++++
+ Thomas>  boot/uboot/uboot.mk  |    3 +++
+ Thomas>  2 files changed, 17 insertions(+), 0 deletions(-)
 
- Thomas> diff --git a/linux/Config.in b/linux/Config.in
- Thomas> index bf16ddf..4a17cba 100644
- Thomas> --- a/linux/Config.in
- Thomas> +++ b/linux/Config.in
- Thomas> @@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- Thomas>  	  This option allows to specify the http or ftp location of a
- Thomas>  	  specific kernel source tarball
+ Thomas> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+ Thomas> index aada346..b8eb42d 100644
+ Thomas> --- a/boot/uboot/Config.in
+ Thomas> +++ b/boot/uboot/Config.in
+ Thomas> @@ -34,6 +34,9 @@ config BR2_TARGET_UBOOT_2010_03
+ Thomas>  config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ Thomas>  	bool "Custom tarball"
  
- Thomas> +config BR2_LINUX_KERNEL_CUSTOM_GIT
- Thomas> +        bool "Custom Git tree"
+ Thomas> +config BR2_TARGET_UBOOT_CUSTOM_GIT
+ Thomas> +        bool "Custom Git repository"
 
-Wrong indentation.
- 
- Thomas> +config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
+Should be <tab> rather than spaces.
+
+ Thomas> +if BR2_TARGET_UBOOT_CUSTOM_GIT
+ Thomas> +
+ Thomas> +config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL
  Thomas> +        string "URL of custom Git repository"
 
 Here as well.
 
- Thomas> +config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ Thomas> +
+ Thomas> +config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
  Thomas> +        string "Custom Git version"
 
 And here.
 
-Otherwise it looks good.
+Otherwise it looks good. The only possible improvement would be to make
+it simply a custum URL, and let the Makefile.package.in support sort out
+if it's a tarball, a svn repo or git or whatever.
 
 -- 
 Bye, Peter Korsgaard
