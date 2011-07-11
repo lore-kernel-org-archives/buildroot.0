@@ -1,80 +1,103 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 12:23:40 +0200
-Subject: [Buildroot] [PATCH] busybox: provide /etc/mdev.conf if mdev is
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 11 Jul 2011 12:25:51 +0200
+Subject: [Buildroot] [PATCH v2] busybox: provide /etc/mdev.conf if mdev is
 	used
-In-Reply-To: <4E1ACBC3.7020806@lucaceresoli.net> (Luca Ceresoli's message of
- "Mon, 11 Jul 2011 12:09:07 +0200")
+In-Reply-To: <1310140073-14231-1-git-send-email-luca@lucaceresoli.net>
 References: <1310140073-14231-1-git-send-email-luca@lucaceresoli.net>
- <8739igy7e9.fsf@macbook.be.48ers.dk>
- <4E1ACBC3.7020806@lucaceresoli.net>
-Message-ID: <8762n9p13n.fsf@macbook.be.48ers.dk>
+Message-ID: <1310379951-11019-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+Without an mdev.conf file installed, mdev generates some /dev entries in
+an incorrect or non-standard way. Some examples:
+ 1. /dev/null has permissions 660, but it should be accessible to normal
+    users;
+ 2. alsa devices get created in /dev, not /dev/snd as is more common,
+    and as the default value of BR2_PACKAGE_ALSA_LIB_DEVDIR suggests;
+ 3. event<N> files are created in /dev, not /dev/input.
 
-Hi,
+This mdev.conf is a selection from the examples provided in the busybox
+sources with minor tweaks.
 
- >> Please use install -D, and only install if the file is not already
- >> there in the rootfs.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
 
- Luca> Will do both changes, but I'd like to better understand why this file
- Luca> should not be installed if already present, which differs from how some
- Luca> other files are installed.
+New in v2:
+ - use install -D;
+ - only install if the file is not already there in the rootfs.
 
- Luca> For example, S10mdev is installed just before mdef.conf (see quoted
- Luca> lined above) without -D and without checking for existence.
+ package/busybox/busybox.mk |    6 ++++++
+ package/busybox/mdev.conf  |   35 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/mdev.conf
 
- Luca> Is there a general policy about this? I did not find one in the docs,
- Luca> but I might have missed it.
-
-The general idea (which isn't followed everywhere unfortunately) is to
-not enforce any policy unless we absolutely have to.
-
-This has to be balanced against us wanting BR to work out of the box. As
-an example we force enable devtmpfs if you build a kernel and have
-devtmpfs /dev option enabled, as it cannot work with the kernel doesn't
-have this enabled. Another example is the ARM EABI selection.
-
-Next to these hard options, that we clearly should enforce we have a
-number of places where we provide sensible defaults. This is typically
-for configuration files. For those we should make it work out of the box
-where possible, but still make it possible to override if the user knows
-better. Historically this is done in two ways (the 1st has existed for a
-very long time, the 2nd is relatively new):
-
-- Use a custom rootfs skeleton with tweaked configuration files
-- Use a post-build script to tweak configuration files
-
-For users of the first option, we should ensure that we don't overwrite
-custom configuration files, so we need to check if the file already
-exists before installing.
-
-For the init script things are a bit more complicated, as the
-format/file name depends on the init implementation used. We so far
-only handle this through option 2.
-
-And yes, we should probably add this to the docs somewhere.
-
- Luca> Additionally, if there is a clear policy, it may be useful to have
- Luca> macros to automate it and make it verifiable, such as:
-
- Luca>   INSTALL_FILE = $(INSTALL) -D
- Luca>   INSTALL_DIR = $(INSTALL) -d
- Luca>   INSTALL_FOO = $(INSTALL)
-
- Luca> or, maybe better, macros with parameters that would be easier to use:
-
- Luca>   $(call install_file, $(@D)/foo.conf, 0640, etc/foo)
-
-Yes, ptxdist does something like that. It might be interesting to do so
-as well.
-
-The install -D is just for robustness, in case the destination directory
-doesn't exist yet.
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 509c3bb..8998ca0 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -33,6 +33,11 @@ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+ define BUSYBOX_INSTALL_MDEV_SCRIPT
+ 	install -m 0755 package/busybox/S10mdev $(TARGET_DIR)/etc/init.d
+ endef
++define BUSYBOX_INSTALL_MDEV_CONF
++	[ -f $(TARGET_DIR)/etc/mdev.conf ] || \
++		install -D -m 0644 package/busybox/mdev.conf \
++			$(TARGET_DIR)/etc/mdev.conf
++endef
+ define BUSYBOX_SET_MDEV
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_CONF,$(BUSYBOX_BUILD_CONFIG))
+@@ -159,6 +164,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+ 	fi
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
++	$(BUSYBOX_INSTALL_MDEV_CONF)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ endef
+ 
+diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+new file mode 100644
+index 0000000..247c0ed
+--- /dev/null
++++ b/package/busybox/mdev.conf
+@@ -0,0 +1,35 @@
++# null may already exist; therefore ownership has to be changed with command
++null		root:root 666 @chmod 666 $MDEV
++zero		root:root 666
++full		root:root 666
++random		root:root 444
++urandom		root:root 444
++hwrandom	root:root 444
++grsec		root:root 660
++
++kmem		root:root 640
++mem		root:root 640
++port		root:root 640
++# console may already exist; therefore ownership has to be changed with command
++console		root:tty 600 @chmod 600 $MDEV
++ptmx		root:tty 666
++pty.*		root:tty 660
++
++# Typical devices
++tty		root:tty 666
++tty[0-9]*	root:tty 660
++vcsa*[0-9]*	root:tty 660
++ttyS[0-9]*	root:root 660
++
++# alsa sound devices
++pcm.*		root:audio 660 =snd/
++control.*	root:audio 660 =snd/
++midi.*		root:audio 660 =snd/
++seq		root:audio 660 =snd/
++timer		root:audio 660 =snd/
++
++# input stuff
++event[0-9]+	root:root 640 =input/
++mice		root:root 640 =input/
++mouse[0-9]	root:root 640 =input/
++ts[0-9]		root:root 600 =input/
 -- 
-Bye, Peter Korsgaard
+1.7.4.1
