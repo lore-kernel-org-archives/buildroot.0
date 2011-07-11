@@ -1,36 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 22:06:49 +0200
-Subject: [Buildroot] [PATCH 07/12] u-boot: allow specification of custom
-	Git repo as source
-In-Reply-To: <20110711214456.2eebfc37@skate> (Thomas Petazzoni's message of
- "Mon, 11 Jul 2011 21:44:56 +0200")
-References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <6c2e3e2e44b61f427fa861ce4c7d5d76eb48682a.1310392269.git.thomas.petazzoni@free-electrons.com>
- <87ipr8liaq.fsf@macbook.be.48ers.dk> <20110711214456.2eebfc37@skate>
-Message-ID: <87sjqck2ee.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Jul 2011 22:17:15 +0200
+Subject: [Buildroot] [pull request] Pull request for branch valgrind
+Message-ID: <cover.1310415416.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The following changes since commit bd76bc5f80b963570e8eda92efc961e683264402:
 
- Thomas> Le Mon, 11 Jul 2011 21:38:05 +0200,
- Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+  CHANGES: update with recent changes (2011-07-11 07:44:24 +0200)
 
- >> Otherwise it looks good. The only possible improvement would be to
- >> make it simply a custum URL, and let the Makefile.package.in support
- >> sort out if it's a tarball, a svn repo or git or whatever.
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git valgrind
 
- Thomas> This would rule out support for SVN over HTTP and Git over HTTP.
+Thomas Petazzoni (1):
+      valgrind: bump to 3.6.1 and add support for ARMv7
 
-Yes, unless we extend the logic in Makefile.package.in to support
-pseudo URLs like OE, something like <url>;method=<method> or
-<method>;<url>.
+ package/valgrind/Config.in                         |    3 +-
+ package/valgrind/valgrind-3.6.1-largefile.patch    |   56 ++++++
+ ...rind.patch => valgrind-3.6.1-more-ioctls.patch} |  198 ++++++++++----------
+ package/valgrind/valgrind-largefile.patch          |   27 ---
+ package/valgrind/valgrind.mk                       |   99 ++--------
+ package/valgrind/valgrind.sh                       |   10 -
+ 6 files changed, 176 insertions(+), 217 deletions(-)
+ create mode 100644 package/valgrind/valgrind-3.6.1-largefile.patch
+ rename package/valgrind/{valgrind.patch => valgrind-3.6.1-more-ioctls.patch} (83%)
+ delete mode 100644 package/valgrind/valgrind-largefile.patch
+ delete mode 100755 package/valgrind/valgrind.sh
 
-But ok, we can do that later.
-
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
