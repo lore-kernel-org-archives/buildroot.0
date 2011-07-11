@@ -1,49 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 23:53:21 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.08/debugging-improvements
-Message-ID: <cover.1310421076.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Jul 2011 23:53:22 +0200
+Subject: [Buildroot] [PATCH 1/4] debug: do not force installation of
+	gdbserver
+In-Reply-To: <cover.1310421076.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1310421076.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <74cb14fae380ec1789a3d97a797fe15e9c957f58.1310421076.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The BR2_ENABLE_DEBUG option selects the compilation and installation
+of gdbserver on the target. This is a bit restrictive, especially for
+external toolchains, which may already contain a gdbserver on the
+target.
 
-Here is a small set of patches that improves a few things around
-debugging.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-The main change is that debugging symbols are now enabled by
-default. As explained in the commit log, the reasoning is that
-debugging symbols in the staging directory are often useful for remote
-debugging, and disk space is typically not a problem for the staging
-directory, as it remains on the development workstation. Binaries and
-libraries for the target are still stripped by default, getting rid of
-all debugging symbols.
-
-Regards,
-
-Thomas
-
-The following changes since commit bd76bc5f80b963570e8eda92efc961e683264402:
-
-  CHANGES: update with recent changes (2011-07-11 07:44:24 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.08/debugging-improvements
-
-Thomas Petazzoni (4):
-      debug: do not force installation of gdbserver
-      debug: enable debugging symbols by default
-      debug: provide an option to copy the gdbserver to the target
-      config: improve help text and prompt for debugging related options
-
- Config.in                                |   34 ++++++++++++++++++-----------
- toolchain/gdb/Config.in                  |    8 +++++++
- toolchain/toolchain-external/ext-tool.mk |   10 ++++++++
- 3 files changed, 39 insertions(+), 13 deletions(-)
-
-Thanks,
+diff --git a/Config.in b/Config.in
+index a67c08d..b130b27 100644
+--- a/Config.in
++++ b/Config.in
+@@ -172,7 +172,6 @@ config BR2_DEPRECATED
+ 
+ config BR2_ENABLE_DEBUG
+ 	bool "build packages with debugging symbols"
+-	select BR2_PACKAGE_GDB_SERVER
+ 	help
+ 	  Build packages with debugging symbols
+ 	  enabled
 -- 
-Thomas Petazzoni
+1.7.4.1
