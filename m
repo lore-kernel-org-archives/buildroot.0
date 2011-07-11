@@ -1,85 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 15:53:44 +0200
-Subject: [Buildroot] [pull request v4] Pull request for branch
-	for-2011.08/bootloaders
-Message-ID: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Jul 2011 15:53:50 +0200
+Subject: [Buildroot] [PATCH 06/12] linux: allow specification of a custom
+	Git repository as a source
+In-Reply-To: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <34af0b74e6f973c57a15d469210e044f2aee5c77.1310392269.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |   15 +++++++++++++++
+ linux/linux.mk  |    3 +++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-Here is a new version of the remaining patches to convert the
-bootloaders and the kernel to the GENTARGETS infrastructure + misc
-related fixes.
-
-Changes since v3 :
-
- * Updated against latest master, removed all already merged patches
-
- * Removed the renaming BR2_TARGET -> BR2_BOOT for bootloaders, in
-   order not to break existing configuration files. As U-Boot options
-   were named BR2_TARGET_UBOOT but the directory and package was named
-   u-boot, we had to rename everything to uboot (without the dash).
-
- * Use yes '' | make oldconfig in the kernel configuration step
-   instead of messing around with a _defconfig.
-
- * Add support for Linux 3.x versions and -rc versions.
-
- * Bump U-Boot.
-
-Regards,
-
-Thomas
-
-The following changes since commit bd76bc5f80b963570e8eda92efc961e683264402:
-
-  CHANGES: update with recent changes (2011-07-11 07:44:24 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.08/bootloaders
-
-Philippe Reynes (1):
-      Add x-loader bootloader
-
-Thomas Petazzoni (11):
-      linux: rename LINUX26 to LINUX
-      linux: indent and align some definitions
-      linux: convert to the GENTARGETS infrastructure
-      u-boot: rename to uboot
-      Improve TARGETS handling for bootloaders and kernel
-      linux: allow specification of a custom Git repository as a source
-      u-boot: allow specification of custom Git repo as source
-      barebox: bump version
-      at91dataflashboot: use "config" instead of "menuconfig"
-      linux: add support for 3.x and -rc versions
-      uboot: Add 2011.06
-
- boot/Config.in                                     |    3 +-
- boot/at91bootstrap/at91bootstrap.mk                |    8 -
- boot/at91dataflashboot/Config.in                   |    2 +-
- boot/at91dataflashboot/at91dataflashboot.mk        |    9 -
- boot/barebox/barebox.mk                            |    5 +-
- boot/grub/grub.mk                                  |    9 -
- boot/syslinux/syslinux.mk                          |    9 -
- boot/{u-boot => uboot}/Config.in                   |   20 ++-
- .../uboot-2010.03-fix-avr32.patch}                 |    0
- boot/{u-boot/u-boot.mk => uboot/uboot.mk}          |   89 ++++-----
- boot/xloader/Config.in                             |   15 ++
- boot/xloader/xloader.mk                            |   37 ++++
- linux/Config.in                                    |   15 ++
- linux/linux.mk                                     |  209 ++++++++++----------
- package/Makefile.package.in                        |   16 ++-
- 15 files changed, 251 insertions(+), 195 deletions(-)
- rename boot/{u-boot => uboot}/Config.in (84%)
- rename boot/{u-boot/u-boot-2010.03-fix-avr32.patch => uboot/uboot-2010.03-fix-avr32.patch} (100%)
- rename boot/{u-boot/u-boot.mk => uboot/uboot.mk} (58%)
- create mode 100644 boot/xloader/Config.in
- create mode 100644 boot/xloader/xloader.mk
-
-Thanks,
+diff --git a/linux/Config.in b/linux/Config.in
+index bf16ddf..4a17cba 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  This option allows to specify the http or ftp location of a
+ 	  specific kernel source tarball
+ 
++config BR2_LINUX_KERNEL_CUSTOM_GIT
++        bool "Custom Git tree"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a Git repository.
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -58,12 +64,21 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 
++config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
++        string "URL of custom Git repository"
++	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
++
++config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++        string "Custom Git version"
++	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
++
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "2.6.39.3" if BR2_LINUX_KERNEL_2_6_39
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+ 
+ #
+ # Patch selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0e1466f..9ead859 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -10,6 +10,9 @@ ifeq ($(LINUX_VERSION),custom)
+ LINUX_TARBALL := $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE    := $(dir $(LINUX_TARBALL))
+ LINUX_SOURCE  := $(notdir $(LINUX_TARBALL))
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
++LINUX_SITE        := $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
++LINUX_SITE_METHOD := git
+ else
+ LINUX_SOURCE  := linux-$(LINUX_VERSION).tar.bz2
+ LINUX_SITE    := $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
 -- 
-Thomas Petazzoni
+1.7.4.1
