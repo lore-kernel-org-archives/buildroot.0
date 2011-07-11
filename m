@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 21:31:59 +0200
-Subject: [Buildroot] [PATCH 03/12] linux: convert to the GENTARGETS
-	infrastructure
-In-Reply-To: <66c7e86f52aad84878870876946a99810e5fe2cb.1310392269.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:47 +0200")
+Date: Mon, 11 Jul 2011 21:34:10 +0200
+Subject: [Buildroot] [PATCH 05/12] Improve TARGETS handling for
+	bootloaders and kernel
+In-Reply-To: <de300cb9cb615b39176323e4851945d208cfc2be.1310392269.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:49 +0200")
 References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
  <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <66c7e86f52aad84878870876946a99810e5fe2cb.1310392269.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vcv8likw.fsf@macbook.be.48ers.dk>
+ <de300cb9cb615b39176323e4851945d208cfc2be.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r55wlih9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,24 +16,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  linux/linux.mk |  116 +++++++++++++++++++++++++++-----------------------------
- Thomas>  1 files changed, 56 insertions(+), 60 deletions(-)
+ Thomas> As the kernel and bootloaders do not use the normal BR2_PACKAGE_*
+ Thomas> Kconfig options, their target name was not automatically added to the
+ Thomas> global TARGETS variable. Each bootloader .mk and the linux.mk had to
+ Thomas> add their own target manually to TARGETS, and the package
+ Thomas> infrastructure was making tests on non-existing Kconfig variables.
 
- Thomas> diff --git a/linux/linux.mk b/linux/linux.mk
- Thomas> index 9a63382..2c7ce89 100644
- Thomas> --- a/linux/linux.mk
- Thomas> +++ b/linux/linux.mk
- Thomas> @@ -15,8 +15,10 @@ LINUX_SOURCE  := linux-$(LINUX_VERSION).tar.bz2
- Thomas>  LINUX_SITE    := $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
- Thomas>  endif
- 
- Thomas> -LINUX_DIR     := $(BUILD_DIR)/linux-$(LINUX_VERSION)
- Thomas> -LINUX_PATCH   := $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- Thomas> +LINUX_PATCHES   := $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ Thomas> This commit improves the package infrastructure so that it looks at
+ Thomas> BR2_PACKAGE_<pkg> for packages, BR2_BOOT_<pkg> for bootloaders and at
+ Thomas> the special BR2_LINUX_KERNEL for the linux package.
 
-Please use '=' for consistency. Otherwise looks good.
+You forgot to adjust the commit message now that you kept bootloaders as
+BR2_TARGET_<pkg>.
+
+Otherwise it looks good.
 
 -- 
 Bye, Peter Korsgaard
