@@ -1,84 +1,39 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Mon, 11 Jul 2011 11:49:21 -0700
-Subject: [Buildroot] tmpfs puzzle
-In-Reply-To: <201107111250.01085.minimod@morethan.org>
-References: <CALo-6+iVEYuZm=Tr9opt-VOz+4ZqnGQJ8LbD-tV-dEojfdXMMA@mail.gmail.com>
- <201107111250.01085.minimod@morethan.org>
-Message-ID: <CALo-6+j9oqzSrrg=UKAyUiqVtJSoaON1Q0e42CcBncVtrj2png@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jul 2011 21:27:35 +0200
+Subject: [Buildroot] [PATCH] alsa-utils: Add patch for amixer TLV output
+In-Reply-To: <1310399020-27026-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Mon, 11 Jul 2011 17:43:40 +0200")
+References: <1310399020-27026-1-git-send-email-zonque@gmail.com>
+Message-ID: <874o2smxco.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am downloading and compiling the daily snapshot, thank you Michael.
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-One parting question.
+ Daniel> This patch is queued upstream, so it can be dropped once a new version
+ Daniel> of alsa-utils is released.
 
-I tried adding the incantations to /etc/fstab and /etc/inittab and on
-re-booting,  when trying to mount tmpfs, I get "Invalid argument". I
-am using busybox 1.18.3 and am now suspecting that something else has
-changed, perhaps in busybox (or the linux kernel) with respect to the
-mount command.
+Could you give a quick explanation about what the patch does for people
+not following alsa development?
 
-I am working with linux-2.6.35.12, so have advanced the linux kernel
-several revisions.
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
+ Daniel> ---
+ Daniel>  .../alsa-utils/alsa-utils-amixer-tlv-fix.patch     |   32 ++++++++++++++++++++
+ Daniel>  1 files changed, 32 insertions(+), 0 deletions(-)
+ Daniel>  create mode 100644 package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
 
-I wonder if there is any comment on mount failing with "Invalid
-command" with respect to either busybox or linux-2.6.35.12 while I do
-wait for the compile on the daily snapshot with optimism that I will
-not see this error when it is done.
+ Daniel> diff --git a/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch b/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
+ Daniel> new file mode 100644
+ Daniel> index 0000000..1b5e9c5
+ Daniel> --- /dev/null
+ Daniel> +++ b/package/multimedia/alsa-utils/alsa-utils-amixer-tlv-fix.patch
+ Daniel> @@ -0,0 +1,32 @@
 
-
-On Mon, Jul 11, 2011 at 10:49 AM, Michael S. Zick <minimod@morethan.org> wrote:
-> On Mon July 11 2011, Charles Krinke wrote:
->> I am puzzled why "tmpfs" is not mounting in my buildroot glibc root
->> filesystem and would appreciate a "clue" or at least a sarcastic
->> "RTFM" if one could tell me *which* "FM" and what its URL might be.
->>
->
-> http://lists.busybox.net/pipermail/buildroot/2011-June/043752.html
->
-> Mike
->>
->> Here is my /etc/fstab, a cat or /proc/mounts and the result of "mount
->> -a", which fails on tmpfs.
->>
->> # cat /etc/fstab
->> # /etc/fstab: static file system information.
->> #
->> # <file system> <mount pt> ? ? <type> ? <options> ? ? ? ? <dump> <pass>
->> /dev/root ? ? ? / ? ? ? ? ? ? ?ext2 ? ? rw,noauto ? ? ? ? 0 ? ? ?1
->> proc ? ? ? ? ? ?/proc ? ? ? ? ?proc ? ? defaults ? ? ? ? ?0 ? ? ?0
->> devpts ? ? ? ? ?/dev/pts ? ? ? devpts ? defaults,gid=5,mode=620 ? 0 ? ? ?0
->> tmpfs ? ? ? ? ? /tmp ? ? ? ? ? tmpfs ? ?defaults ? ? ? ? ?0 ? ? ?0
->> sysfs ? ? ? ? ? /sys ? ? ? ? ? sysfs ? ?defaults ? ? ? ? ?0 ? ? ?0
->> #
->> #
->> # cat /proc/mounts
->> rootfs / rootfs rw 0 0
->> /dev/root / jffs2 rw,relatime 0 0
->> devtmpfs /dev devtmpfs rw,relatime,mode=0755 0 0
->> proc /proc proc rw,relatime 0 0
->> devpts /dev/pts devpts rw,relatime,gid=5,mode=620 0 0
->> sysfs /sys sysfs rw,relatime 0 0
->> #
->> #
->> #
->> # mount -a
->> mount: mounting tmpfs on /tmp failed: Invalid argument
->> #
->>
->>
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+Please add a full git-style patch header with your signed-off-by (which
+should be easy to do if it's upstream).
 
 -- 
-Charles Krinke
+Bye, Peter Korsgaard
