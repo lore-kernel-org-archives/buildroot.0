@@ -1,31 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2011 21:44:56 +0200
-Subject: [Buildroot] [PATCH 07/12] u-boot: allow specification of custom
- Git repo as source
-In-Reply-To: <87ipr8liaq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jul 2011 21:45:07 +0200
+Subject: [Buildroot] [PATCH 10/12] at91dataflashboot: use "config"
+	instead of "menuconfig"
+In-Reply-To: <b2fcb2072644e90dc7316b5861ceb5791007eb77.1310392269.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Jul 2011 15:53:54 +0200")
 References: <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
  <cover.1310392269.git.thomas.petazzoni@free-electrons.com>
- <6c2e3e2e44b61f427fa861ce4c7d5d76eb48682a.1310392269.git.thomas.petazzoni@free-electrons.com>
- <87ipr8liaq.fsf@macbook.be.48ers.dk>
-Message-ID: <20110711214456.2eebfc37@skate>
+ <b2fcb2072644e90dc7316b5861ceb5791007eb77.1310392269.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <877h7olhz0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 11 Jul 2011 21:38:05 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Otherwise it looks good. The only possible improvement would be to
-> make it simply a custum URL, and let the Makefile.package.in support
-> sort out if it's a tarball, a svn repo or git or whatever.
+ Thomas> Since at91dataflashboot, using "menuconfig" is useless and confusing,
 
-This would rule out support for SVN over HTTP and Git over HTTP.
+Missing words? '.. is a single option' or something like that?
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
