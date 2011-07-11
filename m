@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 11 Jul 2011 23:46:22 +0200
-Subject: [Buildroot] [git commit] linux: allow specification of a custom Git
-	repository as a source
-Message-ID: <20110711214653.293E48A482@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] barebox: bump version
+Message-ID: <20110711214653.C53D98A482@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=205fb19cdb475b0b56e675f53bdeca17deb98fbe
+commit: http://git.buildroot.net/buildroot/commit/?id=6fa85c6c035de54fd202805e13e2923327583fae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |   15 +++++++++++++++
- linux/linux.mk  |    3 +++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ boot/barebox/barebox.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bf16ddf..8d3b0ba 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -47,6 +47,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	  This option allows to specify the http or ftp location of a
- 	  specific kernel source tarball
- 
-+config BR2_LINUX_KERNEL_CUSTOM_GIT
-+	bool "Custom Git tree"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Git repository.
-+
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -58,12 +64,21 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
-+	string "URL of custom Git repository"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+
-+config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
-+	string "Custom Git version"
-+	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-+
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "2.6.39.3" if BR2_LINUX_KERNEL_2_6_39
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-+	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
- 
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 1952c98..7e69437 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,7 +4,7 @@
  #
- # Patch selection
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 25db1f5..bba4921 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -10,6 +10,9 @@ ifeq ($(LINUX_VERSION),custom)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_SITE = $(dir $(LINUX_TARBALL))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-+LINUX_SITE_METHOD = git
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
- LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+ #############################################################
+ 
+-BAREBOX_VERSION = 2011.05.0
++BAREBOX_VERSION = 2011.06.0
+ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE = http://www.barebox.org/download/
+ 
 -- 
 1.7.3.4
