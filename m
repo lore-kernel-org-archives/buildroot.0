@@ -1,34 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jul 2011 23:12:27 +0200
-Subject: [Buildroot] [PATCHv2] ebtables: new package
-In-Reply-To: <4b82d4fbde55720d5d6e0a34b51e4b1b3f80e48d.1310394628.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 11 Jul 2011 17:33:31 +0300")
-References: <4b82d4fbde55720d5d6e0a34b51e4b1b3f80e48d.1310394628.git.baruch@tkos.co.il>
-Message-ID: <87mxgkjzd0.fsf@macbook.be.48ers.dk>
+Date: Mon, 11 Jul 2011 23:24:58 +0200
+Subject: [Buildroot] [PATCH 1/1] valgrind: bump to 3.6.1 and add support
+	for ARMv7
+In-Reply-To: <7ab179c630afa8f3bcafaa99934fed108cf137c5.1310415416.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 11 Jul 2011 22:17:16 +0200")
+References: <cover.1310415416.git.thomas.petazzoni@free-electrons.com>
+ <cover.1310415416.git.thomas.petazzoni@free-electrons.com>
+ <7ab179c630afa8f3bcafaa99934fed108cf137c5.1310415416.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ipr8jys5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- Baruch> ---
+ Thomas> We removed the shell script that wrapped valgrind (not nice to install
+ Thomas> such non-standard things), and will let the user use the uclibc.supp
+ Thomas> suppression file if needed.
 
- Baruch> Changes in v2:
- Baruch> 	* Update to version 2.0.10-1
- Baruch> 	* Use target file name in $(INSTALL)
- Baruch> 	* Add uninstall
+Committed, thanks (but see below).
 
-It needs ipv6 support in toolchain:
+ Thomas> +VALGRIND_VERSION = 3.6.1
+ Thomas> +VALGRIND_SITE    = http://valgrind.org/downloads/
+ Thomas> +VALGRIND_SOURCE  = valgrind-$(VALGRIND_VERSION).tar.bz2
+ Thomas> +
+ Thomas> +VALGRIND_CONF_OPT = --disable-tls
 
-useful_functions.c: In function 'ebt_parse_ip6_address':
-useful_functions.c:394: error: 'in6addr_any' undeclared (first use in this function)
-useful_functions.c:394: error: (Each undeclared identifier is reported only once
-useful_functions.c:394: error: for each function it appears in.)
+I know we had this before as well, but is that really needed nowadays
+with NPTL and so on? It seems to compile fine here without that option.
 
-I've added the dependency myself. Committed, thanks.
+ Thomas> +$(eval $(call AUTOTARGETS,package,valgrind))
+ Thomas> \ No newline at end of file
+
+I've fixed that.
 
 -- 
 Bye, Peter Korsgaard
