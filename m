@@ -1,36 +1,37 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Tue, 12 Jul 2011 11:55:12 +0100
-Subject: [Buildroot] Installation of package files in staging and target
-In-Reply-To: <20110712000117.3af73a1a@skate>
-References: <20110712000117.3af73a1a@skate>
-Message-ID: <1310468114.2189.8.camel@dublxciaranr1.verifone.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Jul 2011 13:50:10 +0200
+Subject: [Buildroot] [PATCH] pcsc-lite and ccid support
+In-Reply-To: <CAG7bwAJ-9V3k1yaFzLo4QK466mkddMR8rPXEZ0YrSewf=wY3iQ@mail.gmail.com>
+References: <1310452089-23322-1-git-send-email-ruckuus@gmail.com>
+ <20110712084323.74ff5c0c@skate>
+ <CAG7bwA+MEJDb_1tXHQ82_R7_7eCmm1fwYnE2O0DSiMBwL0USqQ@mail.gmail.com>
+ <20110712091730.6372c872@skate>
+ <CAG7bwAJ-9V3k1yaFzLo4QK466mkddMR8rPXEZ0YrSewf=wY3iQ@mail.gmail.com>
+Message-ID: <20110712135010.3038cb04@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, all,
+Le Tue, 12 Jul 2011 17:10:01 +0700,
+Dwi Sasongko Supriyadi <ruckuus@gmail.com> a ?crit :
 
-On Tue, 2011-07-12 at 00:01 +0200, Thomas Petazzoni wrote:
-> Typically, a "program" package will install its program(s) only in the
-> target directory, while a "library" package will install its library
-> and headers in the staging directory and in the target directory (the
-> headers, static libraries and other useless files are removed using
-> global mechanisms before creating the target filesystem image).
-> 
-<snip>
-> This would make the target directory be a cleaned up and stripped
-> *subset* of the staging directory. We would therefore have in the
-> staging directory the libraries *and* binaries with debugging symbols
-> for all packages.
-> 
-> What do you think about this ?
+> I have already modified the patch after testing from scratch
+> (recompile everything) and found out that there are other dependencies
+> for ccid.
 
-I'm a little behind in tracking the changes with toolchain movements
-from a few months back but I was of the understanding that the current
-install scheme still allows the staging directory to be treated as a
-kind of mini SDK and so if I build a system using Buildroot I can tar up
-the staging dir and give it to application developers as an interface.
-Is this still the case?  If so, wouldn't putting executable programs
-into the staging dir be a bad thing?
+Ok.
+
+> Should I send the patch here or creating another thread?
+
+Either way is fine.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
