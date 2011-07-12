@@ -1,57 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 12 Jul 2011 22:59:13 +0200
-Subject: [Buildroot] how BR download the linux kernel now
-In-Reply-To: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
-References: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
-Message-ID: <201107122259.14014.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 12 Jul 2011 23:14:44 +0200
+Subject: [Buildroot] [git commit] Makefile.package.in: Add BR2_XZCAT for
+	LZMA compression type
+Message-ID: <20110712211553.C0CBA8A43F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Raymond, All,
 
-On Tuesday 12 July 2011 22:26:49 raymond zhao wrote:
-> I checked out the latest version of the buildroot, and noticed that
-> the linux.mk was changed a lot. Thomas checked in a version with log
-> message "linux: convert to the GENTARGETS infrastructure". And, from
-> there, I am confused. How the BR download the linux kernel now? I
-> mean, before this version, there are download, extraction and patch.
-> But they are removed and there is only LINUX_DOWNLOAD_PATCHES in the
-> new version. Where is the script for BR to download the kernel source
-> code now?
+commit: http://git.buildroot.net/buildroot/commit/?id=177b4b4ac036a34fd2a037f22f121722ce163dd2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In a word, it's automagic, now! :-)
+Signed-off-by: Allan W. Nielsen <a@awn.dk>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Config.in                   |    7 +++++++
+ Makefile                    |    1 +
+ package/Makefile.package.in |    1 +
+ 3 files changed, 9 insertions(+), 0 deletions(-)
 
-In a hundred words, look at linux/linux.mk:
-
-- on line 9-28, we set the two variables LINUX_SITE and LINUX_TARBALL
-  depending on the user's options
-- on line 180, we call GENTARGETS that generates all the reuired rules
-
-- the variable LINUX_SITE tells where the kernel is to be get from
-- the variable LINUX_TARBALL tells the tarball's file name
-- the function GENTARGETS instantiates download+extract+build+install rules
-  for the specified package
-
-GENTARGETS is defined in package/Makefile.package.in
-It's the basis for the generic package infrastructure. It's a bit complex,
-but that Makefile is rather pretty well commented. Also, you can have a
-look at the doc:
-  http://buildroot.org/buildroot.html#add_packages
-  http://buildroot.org/buildroot.html#generic-reference
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in b/Config.in
+index a67c08d..2fce9d7 100644
+--- a/Config.in
++++ b/Config.in
+@@ -52,6 +52,13 @@ config BR2_BZCAT
+ 	  Default is "bzcat"
+ 	  Other possible values include "bunzip2 -c" or "bzip2 -d -c".
+ 
++config BR2_XZCAT
++	string "xzcat command"
++	default "xzcat"
++	help
++	  Command to be used to extract a xz'ed file to stdout.
++	  Default is "xzcat"
++
+ config BR2_TAR_OPTIONS
+ 	string "Tar options"
+ 	default ""
+diff --git a/Makefile b/Makefile
+index 20dd707..2f3802c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -261,6 +261,7 @@ KERNEL_ARCH:=$(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 
+ ZCAT:=$(call qstrip,$(BR2_ZCAT))
+ BZCAT:=$(call qstrip,$(BR2_BZCAT))
++XZCAT:=$(call qstrip,$(BR2_XZCAT))
+ TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
+ 
+ GNU_TARGET_SUFFIX:=-$(call qstrip,$(BR2_GNU_TARGET_SUFFIX))
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index faa7ff1..74087cd 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -61,6 +61,7 @@ INFLATE.gz   = $(ZCAT)
+ INFLATE.tbz  = $(BZCAT)
+ INFLATE.tbz2 = $(BZCAT)
+ INFLATE.tgz  = $(ZCAT)
++INFLATE.xz   = $(XZCAT)
+ INFLATE.tar  = cat
+ 
+ # MESSAGE Macro -- display a message in bold type
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110712/75eb5552/attachment.html>
+1.7.3.4
