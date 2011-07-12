@@ -1,46 +1,145 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Tue, 12 Jul 2011 16:23:15 +0100
-Subject: [Buildroot] Installation of package files in staging and target
-In-Reply-To: <20110712135140.4d2bd314@skate>
-References: <20110712000117.3af73a1a@skate>
- <1310468114.2189.8.camel@dublxciaranr1.verifone.com>
- <20110712135140.4d2bd314@skate>
-Message-ID: <1310484198.2189.35.camel@dublxciaranr1.verifone.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 Jul 2011 17:24:15 +0200
+Subject: [Buildroot] [PATCH v3] New packages: acl and attr
+In-Reply-To: <4E1BFF3B.4040606@visionsystems.de> (Yegor Yefremov's message of
+ "Tue, 12 Jul 2011 10:00:59 +0200")
+References: <4E1BFF3B.4040606@visionsystems.de>
+Message-ID: <878vs3iktc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2011-07-12 at 13:51 +0200, Thomas Petazzoni wrote:
-> Le Tue, 12 Jul 2011 11:55:12 +0100,
-> Quotient Remainder <quotientvremainder@gmail.com> a ?crit :
-> 
-> > I'm a little behind in tracking the changes with toolchain movements
-> > from a few months back but I was of the understanding that the current
-> > install scheme still allows the staging directory to be treated as a
-> > kind of mini SDK and so if I build a system using Buildroot I can tar
-> > up the staging dir and give it to application developers as an
-> > interface. Is this still the case?  If so, wouldn't putting
-> > executable programs into the staging dir be a bad thing?
-> 
-> Why would it be bad ? The binaries for the target are not inside
-> host/usr/bin, but inside host/usr/<tuple>/sysroot/usr/bin, so even if
-> the user adds host/usr/bin to its path to get access to the SDK, the
-> target binaries won't be visible.
-> 
-> It's true however that this would enlarge the size of the SDK.
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-"Bad" isn't the right word; I shouldn't have used it.
-It wasn't that they'd end up in the host's path that was my concern.
-My thinking was that the binaries don't belong in an SDK since all we'd
-need in it are header files and libraries so applications could be built
-and linked with them.
-I suppose it comes down to clarifying what the purpose of STAGING_DIR
-actually is.
+ Yegor> In addition to providing the acl and extended attributes functionality,
+ Yegor> these new packages satisfy newer udev versions, so you can build all extras.
 
-The size increase you mention would be significant.  Just looking at my
-current build.  "output/staging/" is 330 MiB (of which 150 MiB is docs
-and locale) and the stripped "output/target/" is 61 MiB, which could be
-ten times larger with debugging symbols and it is this that would be
-included in staging, right?
+Thanks, see below for a few comments..
+
+ Yegor> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+ Yegor> Signed-off-by: Daniel Mack <zonque@gmail.com>
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Yegor> ---
+ Yegor>  package/Config.in      |    2 ++
+ Yegor>  package/acl/Config.in  |    8 ++++++++
+ Yegor>  package/acl/acl.mk     |   28 ++++++++++++++++++++++++++++
+ Yegor>  package/attr/Config.in |    7 +++++++
+ Yegor>  package/attr/attr.mk   |   27 +++++++++++++++++++++++++++
+ Yegor>  5 files changed, 72 insertions(+)
+ Yegor>  create mode 100644 package/acl/Config.in
+ Yegor>  create mode 100644 package/acl/acl.mk
+ Yegor>  create mode 100644 package/attr/Config.in
+ Yegor>  create mode 100644 package/attr/attr.mk
+
+ Yegor> Index: b/package/Config.in
+ Yegor> ===================================================================
+ Yegor> --- a/package/Config.in
+ Yegor> +++ b/package/Config.in
+ Yegor> @@ -492,6 +492,8 @@
+ Yegor>  endmenu
+ 
+ Yegor>  menu "System tools"
+ Yegor> +source "package/acl/Config.in"
+ Yegor> +source "package/attr/Config.in"
+ Yegor>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ Yegor>  source "package/bootutils/Config.in"
+ Yegor>  endif
+ Yegor> Index: b/package/acl/Config.in
+ Yegor> ===================================================================
+ Yegor> --- /dev/null
+ Yegor> +++ b/package/acl/Config.in
+ Yegor> @@ -0,0 +1,8 @@
+ Yegor> +config BR2_PACKAGE_ACL
+ Yegor> +	bool "acl"
+ Yegor> +	select BR2_PACKAGE_ATTR
+ Yegor> +	help
+ Yegor> +	  POSIX Access Control Lists, which are used to define more
+ Yegor> +	  fine-grained discretionary access rights for files and
+ Yegor> +	  directories.
+ Yegor> +	  This package also provides libacl.
+
+No upstream URL? (seems to be http://savannah.nongnu.org/projects/acl)
+
+ Yegor> Index: b/package/acl/acl.mk
+ Yegor> ===================================================================
+ Yegor> --- /dev/null
+ Yegor> +++ b/package/acl/acl.mk
+ Yegor> @@ -0,0 +1,28 @@
+ Yegor> +#############################################################
+ Yegor> +#
+ Yegor> +# acl
+ Yegor> +#
+ Yegor> +#############################################################
+ Yegor> +
+ Yegor> +ACL_VERSION = 2.2.49
+ Yegor> +ACL_SOURCE = acl_$(ACL_VERSION).orig.tar.gz
+ Yegor> +ACL_SITE = http://ftp.debian.org/debian/pool/main/a/acl
+
+Why are you using Debian as upstream instead of
+http://download.savannah.gnu.org/releases/acl/? Latest release seems to
+be 2.2.51.
+
+
+ Yegor> +++ b/package/attr/Config.in
+
+Ideally this should be 2 independent patches, but ok ..
+
+ Yegor> @@ -0,0 +1,7 @@
+ Yegor> +config BR2_PACKAGE_ATTR
+ Yegor> +	bool "attr"
+ Yegor> +	help
+ Yegor> +	  Extended attributes are name:value pairs associated permanently with
+ Yegor> +	  files and directories, similar to the environment strings associated
+ Yegor> +	  with a process
+
+A trailing dot (.) is missing. Instead of explaining what extended
+attributes are, perhaps we should rather explain what the package
+contains - E.G. something like:
+
+Utilities/library for manipulating filesystem extended attributes
+
+ Yegor> +	  This package also provides libattr.
+
+No upstream URL (seems to be http://savannah.nongnu.org/projects/attr)
+
+ Yegor> Index: b/package/attr/attr.mk
+ Yegor> ===================================================================
+ Yegor> --- /dev/null
+ Yegor> +++ b/package/attr/attr.mk
+ Yegor> @@ -0,0 +1,27 @@
+ Yegor> +#############################################################
+ Yegor> +#
+ Yegor> +# attr
+ Yegor> +#
+ Yegor> +#############################################################
+ Yegor> +
+ Yegor> +ATTR_VERSION = 2.4.46
+ Yegor> +ATTR_SOURCE = attr_$(ATTR_VERSION).orig.tar.gz
+ Yegor> +ATTR_SITE = http://ftp.debian.org/debian/pool/main/a/attr
+
+Again, why Debian instead of http://download.savannah.gnu.org/releases/attr/?
+
+
+ Yegor> +ATTR_INSTALL_STAGING = YES
+ Yegor> +ATTR_CONF_OPT = --enable-gettext=no
+ Yegor> +
+ Yegor> +# While the configuration system uses autoconf, the Makefiles are
+ Yegor> +# hand-written and do not use automake. Therefore, we have to hack
+ Yegor> +# around their deficiencies by passing installation paths.
+ Yegor> +ATTR_INSTALL_STAGING_OPT = 			\
+ Yegor> +	prefix=$(STAGING_DIR)/usr 		\
+ Yegor> +	exec_prefix=$(STAGING_DIR)/usr 		\
+ Yegor> +	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
+ Yegor> +	install-dev install-lib
+ Yegor> +
+ Yegor> +ATTR_INSTALL_TARGET_OPT = 			\
+ Yegor> +	prefix=$(TARGET_DIR)/usr 		\
+ Yegor> +	exec_prefix=$(TARGET_DIR)/usr 		\
+ Yegor> +	install install-lib
+ Yegor> +
+ Yegor> +$(eval $(call AUTOTARGETS,package,attr))
+
+-- 
+Bye, Peter Korsgaard
