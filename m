@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Jul 2011 13:50:10 +0200
-Subject: [Buildroot] [PATCH] pcsc-lite and ccid support
-In-Reply-To: <CAG7bwAJ-9V3k1yaFzLo4QK466mkddMR8rPXEZ0YrSewf=wY3iQ@mail.gmail.com>
-References: <1310452089-23322-1-git-send-email-ruckuus@gmail.com>
- <20110712084323.74ff5c0c@skate>
- <CAG7bwA+MEJDb_1tXHQ82_R7_7eCmm1fwYnE2O0DSiMBwL0USqQ@mail.gmail.com>
- <20110712091730.6372c872@skate>
- <CAG7bwAJ-9V3k1yaFzLo4QK466mkddMR8rPXEZ0YrSewf=wY3iQ@mail.gmail.com>
-Message-ID: <20110712135010.3038cb04@skate>
+Date: Tue, 12 Jul 2011 13:51:40 +0200
+Subject: [Buildroot] Installation of package files in staging and target
+In-Reply-To: <1310468114.2189.8.camel@dublxciaranr1.verifone.com>
+References: <20110712000117.3af73a1a@skate>
+ <1310468114.2189.8.camel@dublxciaranr1.verifone.com>
+Message-ID: <20110712135140.4d2bd314@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 12 Jul 2011 17:10:01 +0700,
-Dwi Sasongko Supriyadi <ruckuus@gmail.com> a ?crit :
+Le Tue, 12 Jul 2011 11:55:12 +0100,
+Quotient Remainder <quotientvremainder@gmail.com> a ?crit :
 
-> I have already modified the patch after testing from scratch
-> (recompile everything) and found out that there are other dependencies
-> for ccid.
+> I'm a little behind in tracking the changes with toolchain movements
+> from a few months back but I was of the understanding that the current
+> install scheme still allows the staging directory to be treated as a
+> kind of mini SDK and so if I build a system using Buildroot I can tar
+> up the staging dir and give it to application developers as an
+> interface. Is this still the case?  If so, wouldn't putting
+> executable programs into the staging dir be a bad thing?
 
-Ok.
+Why would it be bad ? The binaries for the target are not inside
+host/usr/bin, but inside host/usr/<tuple>/sysroot/usr/bin, so even if
+the user adds host/usr/bin to its path to get access to the SDK, the
+target binaries won't be visible.
 
-> Should I send the patch here or creating another thread?
-
-Either way is fine.
+It's true however that this would enlarge the size of the SDK.
 
 Regards,
 
