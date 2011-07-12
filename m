@@ -1,40 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Jul 2011 22:31:55 +0200
-Subject: [Buildroot] ccache valgrind build errors / disabling ccache per
-	package
-In-Reply-To: <BANLkTikkDg9tiZZs5OdNHoD0jw7hUK4_BQ@mail.gmail.com> (Mike
- Williams's message of "Fri, 27 May 2011 10:36:07 -0400")
-References: <BANLkTikkDg9tiZZs5OdNHoD0jw7hUK4_BQ@mail.gmail.com>
-Message-ID: <87sjqbgs04.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Jul 2011 20:35:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 3967] New: pb to compil lib alsa-utils due to the
+ libasound versionning
+Message-ID: <bug-3967-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Williams <mike@mikebwilliams.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=3967
 
- Mike> All,
- Mike> I'm working on updating the valgrind package based on a couple of
- Mike> other patches floating around. However, I get the following error when
- Mike> compiling:
+           Summary: pb to compil lib alsa-utils  due to the libasound
+                    versionning
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Outdated package
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: dark_footix at yahoo.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Mike> /opt/buildroot/buildroot-git/output/host/usr/bin/ccache: invalid option -- t
 
- Mike> Manually editing the Makefiles to remove ccache usage results in the
- Mike> compile succeeding. Googling has not revealed an obvious solution to
- Mike> this problem. Any advice?
+Hi,
 
-probably something isn't quoting TARGET_CC correctly. With ccache
-TARGET_CC is "ccache cross-gcc".
+I have tried to compile the alsa with alsa-utils option, but I have an error,
+of versionning of the libasound ( libasound is too old ? )
 
-Notice that I yesterday merged a patch from Thomas to update valgrind.
+I will send more detail nearly.
 
- Mike> As a side question, is there a flag for disabling ccache per package?
-
-No, and I would rather fix problems if any rather than adding such a
-workaround.
-
+depreciated alsa-utils ( depreciated but I need it of retro compatibility and
+the /dev/mixer  )
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
