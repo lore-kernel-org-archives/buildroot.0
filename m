@@ -1,113 +1,128 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Tue, 12 Jul 2011 17:10:01 +0700
+From: ruckuus at gmail.com <ruckuus@gmail.com>
+Date: Tue, 12 Jul 2011 17:10:37 +0700
 Subject: [Buildroot] [PATCH] pcsc-lite and ccid support
-In-Reply-To: <20110712091730.6372c872@skate>
-References: <1310452089-23322-1-git-send-email-ruckuus@gmail.com>
- <20110712084323.74ff5c0c@skate>
- <CAG7bwA+MEJDb_1tXHQ82_R7_7eCmm1fwYnE2O0DSiMBwL0USqQ@mail.gmail.com>
- <20110712091730.6372c872@skate>
-Message-ID: <CAG7bwAJ-9V3k1yaFzLo4QK466mkddMR8rPXEZ0YrSewf=wY3iQ@mail.gmail.com>
+Message-ID: <1310465437-30946-1-git-send-email-ruckuus@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: Dwi Sasongko S <ruckuus@gmail.com>
 
-On Tue, Jul 12, 2011 at 2:17 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Dwi,
->
-> Le Tue, 12 Jul 2011 14:03:01 +0700,
-> Dwi Sasongko Supriyadi <ruckuus@gmail.com> a ?crit :
->
->> > The latest ccid release is 1.4.4, dated May 2011, which doesn't
->> > seem to be that old. In general, we prefer using stable releases
->> > rather than SVN versions when possible. Do you have a good reason
->> > for choosing a specific SVN version instead of the latest project
->> > release ?
->> >
->>
->> It should have been using the latest version.
->>
->> The reason is somehow fuzzy for me, and I need your advise. The idea
->> is to keep the changes in .mk file as less as possible when there is
->> new release, so in above case we only need to change the CCID_VERSION
->> based on SVN version.
->>
->> I agree to use the stable release which is in this case will look as
->> follow:
->>
->> CCID_VERSION = 1.4.4
->> CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
->> CCID_SITE = https://alioth.debian.org/frs/download.php/3579
->>
->> Comparing to the previous release: 1.4.3
->> CCID_VERSION = 1.4.3
->> CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
->> CCID_SITE = https://alioth.debian.org/frs/download.php/3535
->>
->> There will be changes in CCID_VERSION and CCID_SITE when upgrading
->> from 1.4.3 to 1.4.4
->>
->> Please advise, should this is not reasonable
->
-> Well, I think updating two lines (CCID_VERSION and CCID_SITE) is
-> reasonable when the package version needs to be changed. It would of
-> course have been better if Alioth did not use this strange (and
-> stupid?) URL scheme, but that's the way it is.
->
+This is support for a generic usb smartcard reader.
 
-I have modified the url to point to the tarball instead of SVN
+See the project page:
+http://pcsclite.alioth.debian.org/
 
->> >> +CCID_AUTORECONF = YES
->
-> Presumably, if you use the tarball versions, the ./configure script and
-> Makefile.in files will already be available, so this line could be
-> removed.
->
+List of supported hardware:
+http://pcsclite.alioth.debian.org/ccid/section.html
 
-Thank you for this info.
+Signed-off-by: Dwi Sasongko S <ruckuus@gmail.com>
+---
+ package/Config.in              |    2 ++
+ package/ccid/Config.in         |   15 +++++++++++++++
+ package/ccid/ccid.mk           |   13 +++++++++++++
+ package/pcsc-lite/Config.in    |    8 ++++++++
+ package/pcsc-lite/pcsc-lite.mk |   13 +++++++++++++
+ 5 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 package/ccid/Config.in
+ create mode 100644 package/ccid/ccid.mk
+ create mode 100644 package/pcsc-lite/Config.in
+ create mode 100644 package/pcsc-lite/pcsc-lite.mk
 
->> >> +##########################################################
->> >> +#
->> >> +# PCSC-Lite
->> >> +#
->> >> +# ########################################################
->> >> +PCSC_LITE_VERSION = 5853
->> >> +PCSC_LITE_SITE = svn://anonscm.debian.org/pcsclite/trunk/PCSC
->> >
->> > Same question, SVN version really needed ?
->> >
->>
->> Actually no. When checking out from SVN it will always get the latest
->> version.
->
-> No, with what you have written, it will always get revision 5853, and
-> nothing else. It'd be better to use the tarball version here as well.
->
-
-Indeed, when saying it will check out the latest version what I mean
-is when the version is not specified.
-
->> >> +PCSC_LITE_AUTORECONF = YES
->
-> And remove this line.
->
->> Many thanks for your comments. This is my first attempt on buildroot,
->> I will try my best to accomplish it.
->
-> And your first attempt is very good! Thanks for contributing!
->
-
-Thank you.
-
-I have already modified the patch after testing from scratch
-(recompile everything) and found out that there are other dependencies
-for ccid.
-
-Should I send the patch here or creating another thread?
-
-Thanks in advance,
-DWI
+diff --git a/package/Config.in b/package/Config.in
+index 09aa76a..db82d95 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -303,6 +303,7 @@ source "package/libiqrf/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/python-serial/Config.in"
++source "package/pcsc-lite/Config.in"
+ endmenu
+ 
+ if BROKEN
+@@ -342,6 +343,7 @@ source "package/libnspr/Config.in"
+ source "package/liboil/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/startup-notification/Config.in"
++source "package/ccid/Config.in"
+ endmenu
+ 
+ menu "Text and terminal handling"
+diff --git a/package/ccid/Config.in b/package/ccid/Config.in
+new file mode 100644
+index 0000000..35bec37
+--- /dev/null
++++ b/package/ccid/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CCID
++	bool "ccid"
++	select BR2_PACKAGE_PKG_CONFIG
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_PCSC_LITE
++	help
++	  This package provides the source code for a generic USB CCID 
++	  (Chip/Smart Card Interface Device) driver and ICCD (Integrated Circuit(s) Card Devices)
++	  
++	  For more information, please visit the project page: 
++	  http://pcsclite.alioth.debian.org/ccid.html
++
++	  List of supported hardware:
++	  http://pcsclite.alioth.debian.org/ccid/section.html
++
+diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+new file mode 100644
+index 0000000..3263ccd
+--- /dev/null
++++ b/package/ccid/ccid.mk
+@@ -0,0 +1,13 @@
++##########################################################
++#
++# CCID
++#
++# ########################################################
++CCID_VERSION = 1.4.4 
++CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
++CCID_SITE = https://alioth.debian.org/frs/download.php/3579
++CCID_INSTALL_STAGING = YES
++CCID_INSTALL_TARGET = YES
++CCID_DEPENDENCIES = pkg-config libusb pcsc-lite
++
++$(eval $(call AUTOTARGETS, package, ccid))
+diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
+new file mode 100644
+index 0000000..55ac6d3
+--- /dev/null
++++ b/package/pcsc-lite/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PCSC_LITE
++	bool "pcsc-lite"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  Middleware to access a smart card using SCard API (PC/SC).
++	  For more information, please visit:
++	  http://pcsclite.alioth.debian.org/pcsclite.html
++
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+new file mode 100644
+index 0000000..2fdda5f
+--- /dev/null
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -0,0 +1,13 @@
++##########################################################
++#
++# PCSC-Lite
++#
++# ########################################################
++PCSC_LITE_VERSION = 1.7.4
++PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
++PCSC_LITE_SITE = https://alioth.debian.org/frs/download.php/3598
++PCSC_LITE_INSTALL_STAGING = YES
++PCSC_LITE_INSTALL_TARGET = YES
++PCSC_LITE_CONF_OPT = --disable-libudev --enable-libusb --enable-embedded
++
++$(eval $(call AUTOTARGETS, package, pcsc-lite))
+-- 
+1.7.0.4
