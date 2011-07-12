@@ -1,23 +1,26 @@
-From: raymond zhao <raymond.zhao.ml@gmail.com>
-Date: Tue, 12 Jul 2011 16:26:49 -0400
-Subject: [Buildroot] how BR download the linux kernel now
-Message-ID: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 Jul 2011 22:28:39 +0200
+Subject: [Buildroot] [PATCH 2/2] Add new package gnutls
+In-Reply-To: <1310391267-19364-2-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Mon, 11 Jul 2011 15:34:27 +0200")
+References: <1310391267-19364-1-git-send-email-zonque@gmail.com>
+ <1310391267-19364-2-git-send-email-zonque@gmail.com>
+Message-ID: <87wrfngs5k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I checked out the latest version of the buildroot, and noticed that
-the linux.mk was changed a lot. Thomas checked in a version with log
-message "linux: convert to the GENTARGETS infrastructure". And, from
-there, I am confused. How the BR download the linux kernel now? I
-mean, before this version, there are download, extraction and patch.
-But they are removed and there is only LINUX_DOWNLOAD_PATCHES in the
-new version. Where is the script for BR to download the kernel source
-code now?
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-thanks,
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
 
-Raymond
+ Daniel>  menu "Networking"
+ Daniel> +source "package/gnutls/Config.in"
+
+This should be in the crypto section, otherwise it looks good. I'll fix
+that - Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
