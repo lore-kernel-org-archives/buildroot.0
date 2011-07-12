@@ -1,78 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 12 Jul 2011 22:49:07 +0200
-Subject: [Buildroot] [git commit] package: add libargtable2
-Message-ID: <20110712205024.6237C8A483@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 12 Jul 2011 22:59:13 +0200
+Subject: [Buildroot] how BR download the linux kernel now
+In-Reply-To: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
+References: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
+Message-ID: <201107122259.14014.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Raymond, All,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1ebbb3df9d6ec1405e19244c81ca4c852bf3c34
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tuesday 12 July 2011 22:26:49 raymond zhao wrote:
+> I checked out the latest version of the buildroot, and noticed that
+> the linux.mk was changed a lot. Thomas checked in a version with log
+> message "linux: convert to the GENTARGETS infrastructure". And, from
+> there, I am confused. How the BR download the linux kernel now? I
+> mean, before this version, there are download, extraction and patch.
+> But they are removed and there is only LINUX_DOWNLOAD_PATCHES in the
+> new version. Where is the script for BR to download the kernel source
+> code now?
 
-The argtable2 sourceforge project provides easy parsing of command line
-options and file contents.
+In a word, it's automagic, now! :-)
 
-[Peter: Misc cleanup/fixes]
-Signed-off-by: Robin Holt <holt@sgi.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                    |    1 +
- package/libargtable2/Config.in       |    7 +++++++
- package/libargtable2/libargtable2.mk |   17 +++++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/libargtable2/Config.in
- create mode 100644 package/libargtable2/libargtable2.mk
+In a hundred words, look at linux/linux.mk:
 
-diff --git a/package/Config.in b/package/Config.in
-index aef701d..55ea343 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -333,6 +333,7 @@ source "package/libupnp/Config.in"
- endmenu
- 
- menu "Other"
-+source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
- source "package/libatomic_ops/Config.in"
- source "package/libcap/Config.in"
-diff --git a/package/libargtable2/Config.in b/package/libargtable2/Config.in
-new file mode 100644
-index 0000000..42d067b
---- /dev/null
-+++ b/package/libargtable2/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBARGTABLE2
-+	bool "libargtable2"
-+	help
-+	  A greatly simplified and yet quite robust argument parsing
-+	  set of library calls.
-+
-+	  http://argtable.sourceforge.net/
-diff --git a/package/libargtable2/libargtable2.mk b/package/libargtable2/libargtable2.mk
-new file mode 100644
-index 0000000..57eb629
---- /dev/null
-+++ b/package/libargtable2/libargtable2.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# libargtable2
-+#
-+#############################################################
-+
-+LIBARGTABLE2_VERSION = 13
-+LIBARGTABLE2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/argtable/
-+
-+LIBARGTABLE2_INSTALL_STAGING = YES
-+LIBARGTABLE2_CONF_OPT= --program-prefix="" \
-+		--disable-example \
-+		--disable-kernel-module \
-+		--enable-lib \
-+		--enable-util
-+
-+$(eval $(call AUTOTARGETS,package,libargtable2))
+- on line 9-28, we set the two variables LINUX_SITE and LINUX_TARBALL
+  depending on the user's options
+- on line 180, we call GENTARGETS that generates all the reuired rules
+
+- the variable LINUX_SITE tells where the kernel is to be get from
+- the variable LINUX_TARBALL tells the tarball's file name
+- the function GENTARGETS instantiates download+extract+build+install rules
+  for the specified package
+
+GENTARGETS is defined in package/Makefile.package.in
+It's the basis for the generic package infrastructure. It's a bit complex,
+but that Makefile is rather pretty well commented. Also, you can have a
+look at the doc:
+  http://buildroot.org/buildroot.html#add_packages
+  http://buildroot.org/buildroot.html#generic-reference
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.3.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110712/75eb5552/attachment.html>
