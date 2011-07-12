@@ -1,21 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Jul 2011 23:45:23 +0200
-Subject: [Buildroot] [PATCH] bridge-utils: bump to version 1.5
-In-Reply-To: <1304690685-19754-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 6 May 2011 11:04:45 -0300")
-References: <1304690685-19754-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bowzgolo.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Jul 2011 23:48:34 +0200
+Subject: [Buildroot] [PATCHv2] udev: bump to 172
+In-Reply-To: <4E1C5DE4.4010208@visionsystems.de>
+References: <4E1C5DE4.4010208@visionsystems.de>
+Message-ID: <20110712234834.5786dab0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Le Tue, 12 Jul 2011 16:44:52 +0200,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +define UDEV_INSTALL_INITSCRIPT
+> +    $(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+>  endef
 
-Committed, thanks.
+This isn't used anywhere. It looks like something like:
 
+UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
