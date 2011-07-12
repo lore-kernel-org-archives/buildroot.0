@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Jul 2011 23:15:59 +0200
-Subject: [Buildroot] [PATCH 2/3] Makefile.package.in: Added LZMA as
-	compression type
-In-Reply-To: <1305008226-8906-3-git-send-email-a@awn.dk> (Allan W. Nielsen's
- message of "Tue, 10 May 2011 08:17:05 +0200")
-References: <1305008226-8906-1-git-send-email-a@awn.dk>
- <1305008226-8906-3-git-send-email-a@awn.dk>
-Message-ID: <87k4bngpyo.fsf@macbook.be.48ers.dk>
+Date: Tue, 12 Jul 2011 23:30:51 +0200
+Subject: [Buildroot] [PATCH] sh: Add SH2A CodeSourcery external toolchain
+In-Reply-To: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
+ (Phil Edworthy's message of "Fri, 06 May 2011 15:23:04 +0100")
+References: <1304691784-29011-1-git-send-email-phil.edworthy@renesas.com>
+Message-ID: <87fwmbgp9w.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Allan" == Allan W Nielsen <a@awn.dk> writes:
+>>>>> "Phil" == Phil Edworthy <PHIL.EDWORTHY@renesas.com> writes:
 
- Allan> Signed-off-by: Allan W. Nielsen <a@awn.dk>
+ Phil> Added the CodeSourcery uCLinux/uClibc toolchain for the SH2A big
+ Phil> endian devices.
+
+ Phil> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 
 Committed, thanks.
 
