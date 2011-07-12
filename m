@@ -1,33 +1,26 @@
-From: Milton Soares Filho <milton.soares.filho@gmail.com>
-Date: Tue, 12 Jul 2011 01:04:39 -0400
-Subject: [Buildroot] [PATCH] sysvinit: package name typo
-Message-ID: <CAPNngRMZf5Ltph9Q9iUzs0jrzerCKWjyZFN0GOFhvhBArvHjTA@mail.gmail.com>
+From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
+Date: Tue, 12 Jul 2011 12:48:03 +0700
+Subject: [Buildroot] [PATCH] Support for accessing USB smartcard reader
+Message-ID: <CAG7bwAJ3_E+WcW3v_BEh2rdoh-jCUg40z6uMQgmwQxohLzbMMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fails when Make decides to process sysvinit targets before busybox.
+Hello,
 
-Signed-off-by: Milton Soares Filho <milton.soares.filho@gmail.com>
----
- package/sysvinit/sysvinit.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Enclosed is a patch for pcsc-lite and ccid. Please advise me should I
+miss anything.
 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 97576b8..adcc1ad 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -10,7 +10,7 @@ SYSVINIT_SITE    =
-$(BR2_DEBIAN_MIRROR)/debian/pool/main/s/sysvinit
+Any response will be appreciated.
 
- # Override Busybox implementations if Busybox is enabled.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSKLOGD_DEPENDENCIES = busybox
-+SYSVINIT_DEPENDENCIES = busybox
- endif
-
- define SYSVINIT_DEBIAN_PATCHES
--- 
-1.7.1
+Best regards,
+DWI
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-pcsc-lite-and-ccid-support.patch
+Type: text/x-patch
+Size: 3213 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110712/4424f70f/attachment-0001.bin>
