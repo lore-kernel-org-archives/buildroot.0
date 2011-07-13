@@ -1,72 +1,33 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 13 Jul 2011 18:48:12 +0200
-Subject: [Buildroot] [PATCH] shared-mime-info: update to version 0.90
-Message-ID: <1310575692-8877-1-git-send-email-s.neumann@raumfeld.com>
+Date: Wed, 13 Jul 2011 18:54:47 +0200
+Subject: [Buildroot] [PATCH 1/3] gvfs: update to latest upstream version
+	(1.8.2)
+Message-ID: <1310576089-9207-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Need to pass -j1 to make as parallel builds appear to be broken.
-
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- .../shared-mime-info-0.60-fix-xmllint.patch        |   17 -----------------
- package/shared-mime-info/shared-mime-info.mk       |    7 ++++---
- 2 files changed, 4 insertions(+), 20 deletions(-)
- delete mode 100644 package/shared-mime-info/shared-mime-info-0.60-fix-xmllint.patch
+ package/gvfs/gvfs.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shared-mime-info/shared-mime-info-0.60-fix-xmllint.patch b/package/shared-mime-info/shared-mime-info-0.60-fix-xmllint.patch
-deleted file mode 100644
-index 921333e..0000000
---- a/package/shared-mime-info/shared-mime-info-0.60-fix-xmllint.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
-----
-- Makefile.am |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: shared-mime-info-0.60/Makefile.am
--===================================================================
----- shared-mime-info-0.60.orig/Makefile.am
--+++ shared-mime-info-0.60/Makefile.am
--@@ -72,7 +72,7 @@
-- 
-- check: freedesktop.org.xml
-- 	if test -n $(XMLLINT) ; then \
---		xmllint --noout --valid $(top_srcdir)/freedesktop.org.xml;	\
--+		$(XMLLINT) --noout --valid $(top_srcdir)/freedesktop.org.xml;	\
-- 	fi
-- 	if test -d CVS/ && test -x ../xdgmime/src/test-mime-data && test -x $(top_builddir)/test-tree-magic ; then \
-- 		mkdir -p $(top_builddir)/temp-mime-dir/mime/packages ; \
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index 6abfa75..44733ce 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -3,7 +3,7 @@
- # shared-mime-info
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index adfa966..bd370b5 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -3,8 +3,8 @@
+ # gvfs
  #
  #############################################################
--SHARED_MIME_INFO_VERSION = 0.60
-+SHARED_MIME_INFO_VERSION = 0.90
- SHARED_MIME_INFO_SOURCE = shared-mime-info-$(SHARED_MIME_INFO_VERSION).tar.bz2
- SHARED_MIME_INFO_SITE = http://freedesktop.org/~hadess
- 
-@@ -15,11 +15,12 @@ SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
- SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-libglib2 host-libxml2 host-shared-mime-info libxml2 libglib2
- 
- SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
-+SHARED_MIME_INFO_MAKE_OPT = -j1
- 
- HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
- 
--HOST_SHARED_MIME_INFO_CONF_OPT = \
--	--disable-update-mimedb
-+HOST_SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
-+HOST_SHARED_MIME_INFO_MAKE_OPT = -j1
- 
- define SHARED_MIME_INFO_INSTALL_TARGET_CMDS
- 	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+-GVFS_VERSION_MAJOR = 1.6
+-GVFS_VERSION_MINOR = 6
++GVFS_VERSION_MAJOR = 1.8
++GVFS_VERSION_MINOR = 2
+ GVFS_VERSION = $(GVFS_VERSION_MAJOR).$(GVFS_VERSION_MINOR)
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.gz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
 -- 
 1.7.1
