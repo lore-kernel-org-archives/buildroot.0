@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2011 19:12:52 +0200
-Subject: [Buildroot] [PATCH 1/2] libsoup: update to version 2.32.2 and
- enable SSL support
-In-Reply-To: <1310576324-9603-1-git-send-email-s.neumann@raumfeld.com>
-References: <1310576324-9603-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <20110713191252.4e0c7a65@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 13 Jul 2011 19:15:21 +0200
+Subject: [Buildroot] Depending on uClibc configuration variables
+In-Reply-To: <CACTFLAMrGpqoJNJq=2xYwiEi_MY4Eo_JBEf3tHnsVBLfX0R+3w@mail.gmail.com>
+ (Daniel Mack's message of "Wed, 13 Jul 2011 18:36:03 +0200")
+References: <CACTFLAORWLAkCfzgfMxu_75txKhFiuxNfF4t81nQ5646BMngWw@mail.gmail.com>
+ <87mxgifyd1.fsf@macbook.be.48ers.dk>
+ <CACTFLAO+rT2UEZ+wJ_8ePQwbbG6m9B4SfPtm8chUzkzS_PoKGw@mail.gmail.com>
+ <20110713163105.37f42131@skate>
+ <CACTFLAOtkXndrv1G6xkKa1K=_J8bGZi3hBHc9TbkWxUpiYJp4w@mail.gmail.com>
+ <20110713182431.1163f950@skate> <87sjqadtwr.fsf@macbook.be.48ers.dk>
+ <CACTFLAMrGpqoJNJq=2xYwiEi_MY4Eo_JBEf3tHnsVBLfX0R+3w@mail.gmail.com>
+Message-ID: <87oc0ydrva.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 13 Jul 2011 18:58:43 +0200,
-Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+>>>>> "Daniel" == Daniel Mack <daniel@zonque.org> writes:
 
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +LIBSOUP_DEPENDENCIES += gnutls
-> +LIBSOUP_CONF_OPT += --enable-ssl
-> +else
-> +LIBSOUP_CONF_OPT += --disable-ssl
-> +endif
-> +
+Hi,
 
-Question not specific to your patch: how are we going to handle openssl
-vs. gnutls in Buildroot? Is gnutls a drop-in replacement for openssl?
-It'd be a mess to have a portion of our packages using openssl for SSL,
-and another portion of our packages using gnutls for SSL, no?
+ Daniel> No, I'm still waiting for review and it probably needs one or
+ Daniel> more cycles to make it happen.
 
-Thomas
+ Daniel> I'm just preparing patches for buildroot in parallel, and came
+ Daniel> across this problem. So for the first shot, we would depend on
+ Daniel> a BR2 snapshot, and once a new release is ready, add this as
+ Daniel> dependency option. Correct?
+
+Either that or backport it to 0.9.32.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
