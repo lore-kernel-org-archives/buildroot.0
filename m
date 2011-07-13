@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2011 16:14:51 +0200
-Subject: [Buildroot] how BR download the linux kernel now
-In-Reply-To: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
-References: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
-Message-ID: <20110713161451.791f42ea@skate>
+Date: Wed, 13 Jul 2011 16:16:55 +0200
+Subject: [Buildroot] [PATCH] Mini-XML: new package
+In-Reply-To: <c0733fd8bffa6150cd9efeb202da470a2fdf0137.1310564424.git.baruch@tkos.co.il>
+References: <c0733fd8bffa6150cd9efeb202da470a2fdf0137.1310564424.git.baruch@tkos.co.il>
+Message-ID: <20110713161655.5607235e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 13 Jul 2011 09:31:10 -0400,
-raymond zhao <raymond.zhao.ml@gmail.com> a ?crit :
+Le Wed, 13 Jul 2011 16:40:46 +0300,
+Baruch Siach <baruch@tkos.co.il> a ?crit :
 
-> That's great. I will definitely check it. If we solved this problem. I
-> believe BR will be #1 choice for most embedded linux projects.
+> The added patch is a workaround for cross build as follows:
+> 
+> 	* disable run of a test binary at build time
+> 	* disable generation of documentation using the mxmldoc binary
+> 	* remove now non-existent entries from the install target
+> 	* disable strip when running install
 
-Thanks. I indeed think that this feature would be a really nice
-addition to Buildroot. I miss it in many of the projects for which I
-use Buildroot.
+Can you put these explanations in the header of the patch + add your
+Signed-off-by line to this patch ?
 
-For the moment, my workaround is to not use Buildroot to build the part
-of the system I'm actively working on. When I'm doing kernel
-development, I build the kernel outside of Buildroot. When I develop an
-application, I build the application outside of Buildroot. Buildroot is
-here to build all the rest, and to provide a reproducible mechanism to
-build the final system image.
+Just curious, what is this library useful for compared to expat,
+libxml2 or roxml ?
+
+> +MXML_CONF_OPT = --enable-shared
+
+This is not needed, it is passed automatically by Buildroot.
 
 Regards,
 
