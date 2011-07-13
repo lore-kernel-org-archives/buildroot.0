@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2011 18:23:46 +0200
-Subject: [Buildroot] [PATCH 0/2] Add Xenomai real-time framework
-In-Reply-To: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
-References: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
-Message-ID: <20110713182346.0ec83ec6@skate>
+Date: Wed, 13 Jul 2011 18:24:31 +0200
+Subject: [Buildroot] Depending on uClibc configuration variables
+In-Reply-To: <CACTFLAOtkXndrv1G6xkKa1K=_J8bGZi3hBHc9TbkWxUpiYJp4w@mail.gmail.com>
+References: <CACTFLAORWLAkCfzgfMxu_75txKhFiuxNfF4t81nQ5646BMngWw@mail.gmail.com>
+ <87mxgifyd1.fsf@macbook.be.48ers.dk>
+ <CACTFLAO+rT2UEZ+wJ_8ePQwbbG6m9B4SfPtm8chUzkzS_PoKGw@mail.gmail.com>
+ <20110713163105.37f42131@skate>
+ <CACTFLAOtkXndrv1G6xkKa1K=_J8bGZi3hBHc9TbkWxUpiYJp4w@mail.gmail.com>
+Message-ID: <20110713182431.1163f950@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Benoit,
+Le Wed, 13 Jul 2011 16:36:28 +0200,
+Daniel Mack <daniel@zonque.org> a ?crit :
 
-Le Wed, 13 Jul 2011 17:52:58 +0200,
-benoit.mauduit at gmail.com a ?crit :
-
-> From: Benoit Mauduit <benoit.mauduit@openwide.fr>
+> > What is the binary size impact of having your option enabled in uClibc ?
 > 
-> These two patches are an initial add for Xenomai in buildroot.
+> It adds ~5kb.
 
-Hey, this is great!
-
-I did a quick review. There a few things I am not totally happy with,
-but I like the way you hooked up the Xenomai kernel patch into the
-kernel build process.
-
-I will have a more detailed look, do some testing, and give some more
-precise feedback.
-
-Thanks again for doing this work!
+Then I would say that we can include the feature in our default uClibc
+configuration.
 
 Thomas
 -- 
