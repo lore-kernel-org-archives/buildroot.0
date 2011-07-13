@@ -1,50 +1,29 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Jul 2011 08:14:41 +0200
-Subject: [Buildroot] [git commit] Fix colon location in S01logging script
-Message-ID: <20110713062815.AE3488A593@busybox.osuosl.org>
+Date: Wed, 13 Jul 2011 08:36:43 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/crosstool-ng: allow
+	pre-downloading the sources
+In-Reply-To: <1310512066-11450-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+ (Yann E. MORIN's message of "Wed, 13 Jul 2011 01:07:45 +0200")
+References: <1310512066-11450-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+ <1310512066-11450-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87vcv6g004.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72eb844be64567dadd7d619aa049fafbfa347736
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Yann> On "make source", just download the required sources, and do not
+ Yann> build the entire toolchain. This requires a new patch against
+ Yann> crosstool-NG (got from upstream).
 
-The S01logging script currently displays the start/stop messages like this:
+ Yann> The "uclibc-source" rule requires an installed and configured
+ Yann> crosstool-NG, so it has to be after the variables declaration.
+ Yann> For consistency, move down the main rule "uclibc".
 
-Start logging :OK
+Committed, thanks.
 
-The normal form for these messages is:
-
-Start logging: OK
-
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/busybox/S01logging |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index 6badebe..581f192 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -5,13 +5,13 @@
- 
- case "$1" in
-   start)
--	echo -n "Starting logging :"
-+	echo -n "Starting logging: "
- 	start-stop-daemon -S -q -p /var/run/syslog.pid --exec /sbin/syslogd -- -m 0
- 	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
- 	echo "OK"
- 	;;
-   stop)
--	echo -n "Stopping logging :"
-+	echo -n "Stopping logging: "
- 	start-stop-daemon -K -q -p /var/run/syslog.pid
- 	start-stop-daemon -K -q -p /var/run/klogd.pid
- 	echo "OK"
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
