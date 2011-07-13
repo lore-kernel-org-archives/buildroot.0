@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2011 19:09:58 +0200
-Subject: [Buildroot] [PATCH] shared-mime-info: update to version 0.90
-In-Reply-To: <1310575692-8877-1-git-send-email-s.neumann@raumfeld.com>
-References: <1310575692-8877-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <20110713190958.05f00698@skate>
+Date: Wed, 13 Jul 2011 19:11:35 +0200
+Subject: [Buildroot] [PATCH 3/3] gvfs: fix installation of gsettings
+ schemas
+In-Reply-To: <1310576089-9207-3-git-send-email-s.neumann@raumfeld.com>
+References: <1310576089-9207-1-git-send-email-s.neumann@raumfeld.com>
+ <1310576089-9207-3-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <20110713191135.25b4454b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 13 Jul 2011 18:48:12 +0200,
+Le Wed, 13 Jul 2011 18:54:49 +0200,
 Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
->  .../shared-mime-info-0.60-fix-xmllint.patch        |   17 -----------------
+> -GVFS_POST_INSTALL_TARGET_HOOKS += GVFS_REMOVE_USELESS_BINARY
+> +define GVFS_REMOVE_TARGET_SCHEMAS
+> +	rm $(TARGET_DIR)/usr/share/glib-2.0/schemas/*.xml
+> +endef
+> +
+> +define GVFS_COMPILE_SCHEMAS
+> +	$(HOST_DIR)/usr/bin/glib-compile-schemas --targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas $(STAGING_DIR)/usr/share/glib-2.0/schemas
+> +endef
+> +
+> +GVFS_POST_INSTALL_TARGET_HOOKS += \
+> +	GVFS_REMOVE_USELESS_BINARY	\
+> +	GVFS_REMOVE_TARGET_SCHEMAS	\
+> +	GVFS_COMPILE_SCHEMAS
 
-Patch mainlined ?
-
->  SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
-> +SHARED_MIME_INFO_MAKE_OPT = -j1
->  
->  HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
->  
-> -HOST_SHARED_MIME_INFO_CONF_OPT = \
-> -	--disable-update-mimedb
-> +HOST_SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
-> +HOST_SHARED_MIME_INFO_MAKE_OPT = -j1
-
-
-Usually, we do :
-
-<pkg>_MAKE = $(MAKE1)
+I have no idea what those schemas are, but why do you remove them in
+GVFS_REMOVE_TARGET_SCHEMAS to generate them again in
+GVFS_COMPILE_SCHEMAS ?
 
 Thomas
 -- 
