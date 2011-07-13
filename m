@@ -1,42 +1,35 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 12 Jul 2011 17:45:22 -0700
-Subject: [Buildroot] [PATCH] Fix colon location in S01logging script
-Message-ID: <201107121745.23113.hartleys@visionengravers.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 13 Jul 2011 08:09:41 +0200
+Subject: [Buildroot] [git commit] libargtable2: fix source tarball name
+Message-ID: <20110713061023.76A618A593@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The S01logging script currently displays the start/stop messages like this:
 
-Start logging :OK
+commit: http://git.buildroot.net/buildroot/commit/?id=aa0c4d4e48c615b1eab0b10296680b4a047c500e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The normal form for these messages is:
+Last minute brown paper bag bug.
 
-Start logging: OK
-
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
-
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
+ package/libargtable2/libargtable2.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index 6badebe..581f192 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -5,13 +5,13 @@
+diff --git a/package/libargtable2/libargtable2.mk b/package/libargtable2/libargtable2.mk
+index 57eb629..5f388f9 100644
+--- a/package/libargtable2/libargtable2.mk
++++ b/package/libargtable2/libargtable2.mk
+@@ -5,6 +5,7 @@
+ #############################################################
  
- case "$1" in
-   start)
--	echo -n "Starting logging :"
-+	echo -n "Starting logging: "
- 	start-stop-daemon -S -q -p /var/run/syslog.pid --exec /sbin/syslogd -- -m 0
- 	start-stop-daemon -S -q -p /var/run/klogd.pid --exec /sbin/klogd
- 	echo "OK"
- 	;;
-   stop)
--	echo -n "Stopping logging :"
-+	echo -n "Stopping logging: "
- 	start-stop-daemon -K -q -p /var/run/syslog.pid
- 	start-stop-daemon -K -q -p /var/run/klogd.pid
- 	echo "OK"
+ LIBARGTABLE2_VERSION = 13
++LIBARGTABLE2_SOURCE = argtable2-$(LIBARGTABLE2_VERSION).tar.gz
+ LIBARGTABLE2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/argtable/
+ 
+ LIBARGTABLE2_INSTALL_STAGING = YES
+-- 
+1.7.3.4
