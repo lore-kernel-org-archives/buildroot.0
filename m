@@ -1,38 +1,43 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 13 Jul 2011 21:02:51 +0200
-Subject: [Buildroot] [PATCH 1/2] libsoup: update to version 2.32.2 and
- enable SSL support
-In-Reply-To: <20110713191252.4e0c7a65@skate>
-References: <1310576324-9603-1-git-send-email-s.neumann@raumfeld.com>
- <20110713191252.4e0c7a65@skate>
-Message-ID: <1310583771.11691.2.camel@bender>
+Date: Wed, 13 Jul 2011 21:03:51 +0200
+Subject: [Buildroot] [PATCH] shared-mime-info: update to version 0.90
+In-Reply-To: <20110713190958.05f00698@skate>
+References: <1310575692-8877-1-git-send-email-s.neumann@raumfeld.com>
+ <20110713190958.05f00698@skate>
+Message-ID: <1310583832.11691.3.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2011-07-13 at 19:12 +0200, Thomas Petazzoni wrote:
-> Le Wed, 13 Jul 2011 18:58:43 +0200,
+On Wed, 2011-07-13 at 19:09 +0200, Thomas Petazzoni wrote:
+> Le Wed, 13 Jul 2011 18:48:12 +0200,
 > Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 > 
-> > +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> > +LIBSOUP_DEPENDENCIES += gnutls
-> > +LIBSOUP_CONF_OPT += --enable-ssl
-> > +else
-> > +LIBSOUP_CONF_OPT += --disable-ssl
-> > +endif
-> > +
+> >  .../shared-mime-info-0.60-fix-xmllint.patch        |   17 -----------------
 > 
-> Question not specific to your patch: how are we going to handle openssl
-> vs. gnutls in Buildroot? Is gnutls a drop-in replacement for openssl?
-> It'd be a mess to have a portion of our packages using openssl for SSL,
-> and another portion of our packages using gnutls for SSL, no?
+> Patch mainlined ?
 
-Honestly, this mess seems hard to avoid. We are using openssl for ssh
-and also in our own software stack. And we also need libsoup with
-support for HTTPS. And it seems the only way to get that is to depend on
-gnutls.
+Yes, this has been fixed in mainline.
+
+> >  SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+> > +SHARED_MIME_INFO_MAKE_OPT = -j1
+> >  
+> >  HOST_SHARED_MIME_INFO_DEPENDENCIES = host-pkg-config host-intltool
+> >  
+> > -HOST_SHARED_MIME_INFO_CONF_OPT = \
+> > -	--disable-update-mimedb
+> > +HOST_SHARED_MIME_INFO_CONF_OPT = --disable-update-mimedb
+> > +HOST_SHARED_MIME_INFO_MAKE_OPT = -j1
+> 
+> 
+> Usually, we do :
+> 
+> <pkg>_MAKE = $(MAKE1)
+
+Ah, I see. I'll submit an updated patch then unless someone beats me to
+it...
 
 
 Sven
