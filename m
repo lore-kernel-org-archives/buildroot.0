@@ -1,25 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 13 Jul 2011 15:03:59 +0200
-Subject: [Buildroot] [PATCH] New package: acl
-In-Reply-To: <4E1D61D7.1080704@visionsystems.de> (Yegor Yefremov's message of
- "Wed, 13 Jul 2011 11:13:59 +0200")
-References: <4E1D61D7.1080704@visionsystems.de>
-Message-ID: <87wrfme3i8.fsf@macbook.be.48ers.dk>
+From: raymond zhao <raymond.zhao.ml@gmail.com>
+Date: Wed, 13 Jul 2011 09:31:10 -0400
+Subject: [Buildroot] how BR download the linux kernel now
+Message-ID: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>> The linux kernel is a special "package". Lots of embedded projects
 
- Yegor> POSIX Access Control Lists, which are used to define more
- Yegor> fine-grained discretionary access rights for files and
- Yegor> directories.
+>> (if not all of them) will start from a certain version of the kernel
 
-It needs largefile support in the toolchain, otherwise it looks good.
+>> and hack the kernel from there, such as add device drivers etc. Then,
 
-Committed with that change - Thanks everyone.
+>> put the source code into a local git server to do version control.
 
--- 
-Bye, Peter Korsgaard
+>> Some people argued to use original tarball plus the patch, but it
+
+>> makes the development procedure very painful. In the old approach, it
+
+>> is very easy to hack the linux.mk to checkout the kernel source code
+
+>> directly into the output directory. But, in the new one. Looks it
+>
+>> becomes more complex. The kernel is very big. Check out with the git,
+>
+>> archive it to a tarball, and then extract it to the output directory
+>
+>> for building will waste lots of time. Is there a official solution
+>
+>> (or suggestion) for my situation?
+>
+>Yes, I am currently working on extending the package infrastructure so
+>
+>that any package (not only the Linux kernel, but any package) can be
+>
+>sourced from an existing directory, instead of being downloaded through
+>
+>git/svn/http.
+>
+>I have already published preliminary versions of this work (see "[RFC]
+>
+>Override source directories", posted May, 18th 2011), and I intend to
+>
+>continue. The basic mechanism is working, I still have issues
+>
+>implementing "make source" and "make external-deps" with this mechanism.
+>
+>It'd be really nice if you could have a look at what I did to see if it
+>
+>would solve your use case as well.
+
+That's great. I will definitely check it. If we solved this problem. I
+believe BR will be #1 choice for most embedded linux projects.
+
+thanks,
+raymond
