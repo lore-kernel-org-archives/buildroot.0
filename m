@@ -1,59 +1,67 @@
-From: raymond zhao <raymond.zhao.ml@gmail.com>
-Date: Wed, 13 Jul 2011 09:31:10 -0400
-Subject: [Buildroot] how BR download the linux kernel now
-Message-ID: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 13 Jul 2011 15:32:50 +0200
+Subject: [Buildroot] libiconv and BR2_ENABLE_LOCALE
+Message-ID: <1310563970.2860.7.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> The linux kernel is a special "package". Lots of embedded projects
+Hi,
 
->> (if not all of them) will start from a certain version of the kernel
+since our update to the latest buildroot environment, our Controller
+device can't work with SMB shares any longer. Judging from the output,
+there is a problem with iconv. It does not seem to be capable of doing
+certain conversions that are needed here:
 
->> and hack the kernel from there, such as add device drivers etc. Then,
+init_iconv: Attempting to replace with conversion from UTF-16LE to ASCII
+init_iconv: Conversion from UTF-8 to CP850 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from ASCII to CP850 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from CP850 to UTF-16LE not supported
+init_iconv: Attempting to replace with conversion from ASCII to UTF-16LE
+init_iconv: Conversion from CP850 to UTF-8 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from CP850 to ASCII not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from CP850 to UTF8 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from CP850 to UTF-16BE not supported
+init_iconv: Attempting to replace with conversion from ASCII to UTF-16BE
 
->> put the source code into a local git server to do version control.
+Now this used to work, so I had a closer look and found that we are not
+using libiconv any longer. It appears that this is due to the following
+change:
 
->> Some people argued to use original tarball plus the patch, but it
 
->> makes the development procedure very painful. In the old approach, it
+commit 2fae26486f86e9ed2b466ebc61a3521b60897a12
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Sat May 15 09:19:24 2010 +0200
 
->> is very easy to hack the linux.mk to checkout the kernel source code
+    iconv: disallow selection when BR2_ENABLE_LOCALE is enabled
+    
+    A C library compiled with locale support already has an iconv()
+    implementation. In that case, libiconv is useless. Therefore,
+disallow
+    the selection of libiconv when the configuration says that the
+    toolchain has locale support.
+    
+    This fixes build issues similar to the one we had with gettext:
+    libiconv headers are installed, but -liconv is not added because the
+    ./configure script detects that the C library supports iconv.
+    
+    Signed-off-by: Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>
 
->> directly into the output directory. But, in the new one. Looks it
->
->> becomes more complex. The kernel is very big. Check out with the git,
->
->> archive it to a tarball, and then extract it to the output directory
->
->> for building will waste lots of time. Is there a official solution
->
->> (or suggestion) for my situation?
->
->Yes, I am currently working on extending the package infrastructure so
->
->that any package (not only the Linux kernel, but any package) can be
->
->sourced from an existing directory, instead of being downloaded through
->
->git/svn/http.
->
->I have already published preliminary versions of this work (see "[RFC]
->
->Override source directories", posted May, 18th 2011), and I intend to
->
->continue. The basic mechanism is working, I still have issues
->
->implementing "make source" and "make external-deps" with this mechanism.
->
->It'd be really nice if you could have a look at what I did to see if it
->
->would solve your use case as well.
 
-That's great. I will definitely check it. If we solved this problem. I
-believe BR will be #1 choice for most embedded linux projects.
+Now it looks to me that while uCLibC does indeed have an implementation
+if iconv(), it is not a very capable one. I'd prefer to use libiconv
+instead. What problems will we be facing if we revert this change and
+configure buildroot to build libiconv and a toolchain with locale
+support?
 
-thanks,
-raymond
+
+Regards,
+Sven
