@@ -1,55 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Jul 2011 20:42:05 +0200
-Subject: [Buildroot] [PATCH 2/2] source: print messages when all sources
-	downloaded
-In-Reply-To: <201107132011.51230.yann.morin.1998@anciens.enib.fr> (Yann
- E. MORIN's message of "Wed, 13 Jul 2011 20:11:50 +0200")
-References: <1310512066-11450-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- <1310512066-11450-3-git-send-email-yann.morin.1998@anciens.enib.fr>
- <87r55ufzyx.fsf@macbook.be.48ers.dk>
- <201107132011.51230.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87fwmadnuq.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 13 Jul 2011 21:02:51 +0200
+Subject: [Buildroot] [PATCH 1/2] libsoup: update to version 2.32.2 and
+ enable SSL support
+In-Reply-To: <20110713191252.4e0c7a65@skate>
+References: <1310576324-9603-1-git-send-email-s.neumann@raumfeld.com>
+ <20110713191252.4e0c7a65@skate>
+Message-ID: <1310583771.11691.2.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+On Wed, 2011-07-13 at 19:12 +0200, Thomas Petazzoni wrote:
+> Le Wed, 13 Jul 2011 18:58:43 +0200,
+> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+> 
+> > +ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> > +LIBSOUP_DEPENDENCIES += gnutls
+> > +LIBSOUP_CONF_OPT += --enable-ssl
+> > +else
+> > +LIBSOUP_CONF_OPT += --disable-ssl
+> > +endif
+> > +
+> 
+> Question not specific to your patch: how are we going to handle openssl
+> vs. gnutls in Buildroot? Is gnutls a drop-in replacement for openssl?
+> It'd be a mess to have a portion of our packages using openssl for SSL,
+> and another portion of our packages using gnutls for SSL, no?
 
-Hi,
+Honestly, this mess seems hard to avoid. We are using openssl for ssh
+and also in our own software stack. And we also need libsoup with
+support for HTTPS. And it seems the only way to get that is to depend on
+gnutls.
 
- Yann> Indeed. We could print the message only if DL_MODE==DOWNLOAD. Would that
- Yann> be OK with you?
 
-We could, but I'm not really sure if we should. We don't do anything
-like that for any of the other make targets.
-
- Yann> Incidentally, external-deps and source-check will not be really complete
- Yann> when crostool-NG is the backend, as there is no way to ask such a thing
- Yann> to crosstool-NG.
-
-Ok, also not by playing games with a replacement wget/curl/whatever that
-just prints basename $1 or similar?
-
- Yann> Note that source-check is currently borked due to some unconfigured
- Yann> defconfig files for bootloaders and kernel. Eg. for barebox:
- Yann>   $ make -C ../br.upstream O=$(pwd) source-check
- Yann>   [--SNIP-]
- Yann>   make O=/home/ymorin/dev/buildroot/O _source-check
- Yann>   make[1]: Entering directory `/home/ymorin/dev/buildroot/br.upstream'
- Yann>   boot/barebox/barebox.mk:60: *** No Barebox defconfig file. Check your
- Yann>   BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting.  Stop.
- Yann>   make[1]: Leaving directory `/home/ymorin/dev/buildroot/br.upstream'
- Yann>   make: *** [source-check] Error 2
- Yann>   make: Leaving directory `/home/ymorin/dev/buildroot/br.upstream'
-
-Yes, we currently require a buildable .config for make
-source/source-check/external-deps, which I don't really think is big
-issue for normal use cases. I do hit it when I update the
-sources.buildroot.net mirror using make allyesconfig && make source, so
-we could try to get rid of that restriction if it doesn't make the
-linux/barebox/uboot Makefiles too ugly.
-
--- 
-Bye, Peter Korsgaard
+Sven
