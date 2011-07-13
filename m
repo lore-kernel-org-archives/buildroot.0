@@ -1,38 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2011 10:29:44 +0200
-Subject: [Buildroot] [PATCH] pcsc-lite and ccid support
-In-Reply-To: <CAG7bwAJHiDMdXixN-hZD68j40DSN=GUjLzmBhBbktcp5aAHOzQ@mail.gmail.com>
-References: <1310465437-30946-1-git-send-email-ruckuus@gmail.com>
- <20110712173853.7ff2d5ce@skate>
- <CAG7bwAJD8xUyuALJ-_zm5O4WBP7O1u=Z1vhMhw=NH5XRG=eCxA@mail.gmail.com>
- <CAG7bwAJHiDMdXixN-hZD68j40DSN=GUjLzmBhBbktcp5aAHOzQ@mail.gmail.com>
-Message-ID: <20110713102944.4088aba2@skate>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 13 Jul 2011 11:12:29 +0200
+Subject: [Buildroot] [PATCH] New package: attr
+Message-ID: <4E1D617D.4080303@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commands for Manipulating Filesystem Extended Attributes.
 
-Le Wed, 13 Jul 2011 14:38:21 +0700,
-Dwi Sasongko Supriyadi <ruckuus@gmail.com> a ?crit :
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> Enclosed is the modified version. I have sent the patch previously via
-> git send-email (yesterday) but there was no response. Please let me
-> know should I miss anything.
+---
+ package/Config.in      |    1 +
+ package/attr/Config.in |    7 +++++++
+ package/attr/attr.mk   |   27 +++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+)
 
-You didn't miss anything. From a review perspective, the patches look
-fine to me.
-
-Now, it's up to Peter, the project maintainer, to merge them when he
-finds the time to review/test them.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Index: b/package/attr/Config.in
+===================================================================
+--- /dev/null
++++ b/package/attr/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ATTR
++	bool "attr"
++	help
++	  Commands for Manipulating Filesystem Extended Attributes.
++	  This package also provides libattr.
++
++	  http://savannah.nongnu.org/projects/attr
+Index: b/package/attr/attr.mk
+===================================================================
+--- /dev/null
++++ b/package/attr/attr.mk
+@@ -0,0 +1,27 @@
++#############################################################
++#
++# attr
++#
++#############################################################
++
++ATTR_VERSION = 2.4.46
++ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
++ATTR_SITE = http://download.savannah.gnu.org/releases/attr
++ATTR_INSTALL_STAGING = YES
++ATTR_CONF_OPT = --enable-gettext=no
++
++# While the configuration system uses autoconf, the Makefiles are
++# hand-written and do not use automake. Therefore, we have to hack
++# around their deficiencies by passing installation paths.
++ATTR_INSTALL_STAGING_OPT = 			\
++	prefix=$(STAGING_DIR)/usr 		\
++	exec_prefix=$(STAGING_DIR)/usr 		\
++	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
++	install-dev install-lib
++
++ATTR_INSTALL_TARGET_OPT = 			\
++	prefix=$(TARGET_DIR)/usr 		\
++	exec_prefix=$(TARGET_DIR)/usr 		\
++	install install-lib
++
++$(eval $(call AUTOTARGETS,package,attr))
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -492,6 +492,7 @@
+ endmenu
+ 
+ menu "System tools"
++source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
