@@ -1,38 +1,66 @@
-From: Daniel Mack <daniel@zonque.org>
-Date: Wed, 13 Jul 2011 16:36:28 +0200
-Subject: [Buildroot] Depending on uClibc configuration variables
-In-Reply-To: <20110713163105.37f42131@skate>
-References: <CACTFLAORWLAkCfzgfMxu_75txKhFiuxNfF4t81nQ5646BMngWw@mail.gmail.com>
- <87mxgifyd1.fsf@macbook.be.48ers.dk>
- <CACTFLAO+rT2UEZ+wJ_8ePQwbbG6m9B4SfPtm8chUzkzS_PoKGw@mail.gmail.com>
- <20110713163105.37f42131@skate>
-Message-ID: <CACTFLAOtkXndrv1G6xkKa1K=_J8bGZi3hBHc9TbkWxUpiYJp4w@mail.gmail.com>
+From: benoit.mauduit at gmail.com <benoit.mauduit@gmail.com>
+Date: Wed, 13 Jul 2011 17:52:58 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_0/2=5D_Add_Xenomai_real-time_frame?=
+	=?utf-8?q?work?=
+Message-ID: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 13, 2011 at 4:31 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 13 Jul 2011 16:26:22 +0200,
-> Daniel Mack <zonque@gmail.com> a ?crit :
->
->> The thing is that I have been teaching new DNS lookup functions to
->> libuClibc which will be built depending on a new config variable
->> switch. The puropose for this is to make connman build in buildroot,
->> and I have it running here already. However, to prevent breakage, I
->> would like to depend on this new uClibc configuration directive, so
->> people can't select the new package unless they have a recent uClibc
->> with this new option selected. How would I do this?
->
-> Either we decide that this option doesn't add too much overhead to
-> uClibc, and we integrate it to the default uClibc configuration we
-> ship. Or, we create yet another toolchain config knob that connman can
-> depend on, and which would tune the uClibc configuration when enabled.
->
-> What is the binary size impact of having your option enabled in uClibc ?
+From: Benoit Mauduit <benoit.mauduit@openwide.fr>
 
-It adds ~5kb.
+These two patches are an initial add for Xenomai in buildroot.
 
-Daniel
+"Xenomai is a real-time development framework cooperating with the
+Linux kernel, in order to provide a pervasive, interface-agnostic,
+hard real-time support to user-space applications, seamlessly
+integrated into the GNU/Linux environment."
+[http://www.xenomai.org]
+
+Xenomai comes with a Linux Kernel and user-space part.
+I added a Linux extensions sub-menu (The first patch) which handles
+the kernel modification provided by Adeos/Xenomai. The advantage of
+this way is for maintenance purpose. (Xenomai do not provide a full
+kernel patch, but use a script called "prepare-kernel.sh")
+Also, this split the user-space from the kernel in a nice way instead
+of adding a serie of patches.
+
+The Xenomai user-space part can be built separately with an external
+real-time Kernel.
+
+I have tested on both x86 and Arm with buildroot toolchains (uclibc).
+
+Any feedback is welcome, especially for the first patch.
+
+Regards,
+-- 
+Beno?t Mauduit
+
+---
+
+Benoit Mauduit (2):
+  linux: Add Linux Kernel extensions menu
+  Add xenomai real-time Framework to buildroot for Arm and x86
+
+ Makefile                                           |    2 +-
+ linux/Config.ext.in                                |   20 ++++
+ linux/Config.in                                    |    4 +
+ linux/xenomai.mk                                   |   29 ++++++
+ package/Config.in                                  |    4 +
+ package/xenomai/Config.in                          |   81 +++++++++++++++++
+ package/xenomai/README                             |   48 ++++++++++
+ .../xenomai/xenomai-do-not-install-devices.patch   |   11 +++
+ package/xenomai/xenomai.mk                         |   95 ++++++++++++++++++++
+ target/generic/device_table_dev.txt                |    5 +
+ 10 files changed, 298 insertions(+), 1 deletions(-)
+ create mode 100644 linux/Config.ext.in
+ create mode 100644 linux/xenomai.mk
+ create mode 100644 package/xenomai/Config.in
+ create mode 100644 package/xenomai/README
+ create mode 100644 package/xenomai/xenomai-do-not-install-devices.patch
+ create mode 100644 package/xenomai/xenomai.mk
+
+-- 
+1.7.6
