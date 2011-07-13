@@ -1,30 +1,94 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Wed, 13 Jul 2011 13:54:34 +0100
-Subject: [Buildroot] Installation of package files in staging and target
-In-Reply-To: <1310507103.6261.30.camel@cabbage.rehill.info>
-References: <20110712000117.3af73a1a@skate>
- <201107121939.20652.yann.morin.1998@anciens.enib.fr>
- <1310500118.6261.18.camel@cabbage.rehill.info>
- <201107122246.26672.yann.morin.1998@anciens.enib.fr>
- <1310507103.6261.30.camel@cabbage.rehill.info>
-Message-ID: <1310561676.2189.41.camel@dublxciaranr1.verifone.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 13 Jul 2011 15:02:54 +0200
+Subject: [Buildroot] [git commit] New package: attr
+Message-ID: <20110713130342.9BC6F8A593@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2011-07-12 at 22:45 +0100, Quotient Remainder wrote:
 
-> > . Maybe you could share your changes, so they get mainlined, and every one
-> > profits from it, and you stop having to port them from version to version.
-> > ;-)
-> 
-> As it happens I think I have some time tomorrow so will try to post a
-> patch to illustrate it, if there's interest.
+commit: http://git.buildroot.net/buildroot/commit/?id=691a5ead68deb5c77442f7a88ede479e57a9758c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've posted a patch for this titled: "Generate a package-specific tree
-of installed components for all generic targets."
+Commands for Manipulating Filesystem Extended Attributes.
 
-There's also a separate patch from me that has no connection with this
-thread, just a suggested modification on the recent RAWNAME change.
+[Peter: needs largefile]
+Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in      |    1 +
+ package/attr/Config.in |   11 +++++++++++
+ package/attr/attr.mk   |   27 +++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+), 0 deletions(-)
+ create mode 100644 package/attr/Config.in
+ create mode 100644 package/attr/attr.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index d073a1b..069d8bb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -495,6 +495,7 @@ source "package/xmlstarlet/Config.in"
+ endmenu
+ 
+ menu "System tools"
++source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+diff --git a/package/attr/Config.in b/package/attr/Config.in
+new file mode 100644
+index 0000000..79f2336
+--- /dev/null
++++ b/package/attr/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ATTR
++	bool "attr"
++	depends on BR2_LARGEFILE
++	help
++	  Commands for Manipulating Filesystem Extended Attributes.
++	  This package also provides libattr.
++
++	  http://savannah.nongnu.org/projects/attr
++
++comment "attr requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+new file mode 100644
+index 0000000..b744ef6
+--- /dev/null
++++ b/package/attr/attr.mk
+@@ -0,0 +1,27 @@
++#############################################################
++#
++# attr
++#
++#############################################################
++
++ATTR_VERSION = 2.4.46
++ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
++ATTR_SITE = http://download.savannah.gnu.org/releases/attr
++ATTR_INSTALL_STAGING = YES
++ATTR_CONF_OPT = --enable-gettext=no
++
++# While the configuration system uses autoconf, the Makefiles are
++# hand-written and do not use automake. Therefore, we have to hack
++# around their deficiencies by passing installation paths.
++ATTR_INSTALL_STAGING_OPT = 			\
++	prefix=$(STAGING_DIR)/usr 		\
++	exec_prefix=$(STAGING_DIR)/usr 		\
++	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
++	install-dev install-lib
++
++ATTR_INSTALL_TARGET_OPT = 			\
++	prefix=$(TARGET_DIR)/usr 		\
++	exec_prefix=$(TARGET_DIR)/usr 		\
++	install install-lib
++
++$(eval $(call AUTOTARGETS,package,attr))
+-- 
+1.7.3.4
