@@ -1,114 +1,58 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Wed, 13 Jul 2011 14:38:21 +0700
-Subject: [Buildroot] [PATCH] pcsc-lite and ccid support
-In-Reply-To: <CAG7bwAJD8xUyuALJ-_zm5O4WBP7O1u=Z1vhMhw=NH5XRG=eCxA@mail.gmail.com>
-References: <1310465437-30946-1-git-send-email-ruckuus@gmail.com>
- <20110712173853.7ff2d5ce@skate>
- <CAG7bwAJD8xUyuALJ-_zm5O4WBP7O1u=Z1vhMhw=NH5XRG=eCxA@mail.gmail.com>
-Message-ID: <CAG7bwAJHiDMdXixN-hZD68j40DSN=GUjLzmBhBbktcp5aAHOzQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Jul 2011 09:46:38 +0200
+Subject: [Buildroot] how BR download the linux kernel now
+In-Reply-To: <CAAa76NSqWgSvUZEgtpCGvk-Ly69P9wdfSoWz1q2XC=-y7EtKFg@mail.gmail.com>
+References: <CAAa76NT59eY9Kbhej2vyk23GBP-ofu5FyApsnHpsgHvSLzZaNQ@mail.gmail.com>
+ <201107122259.14014.yann.morin.1998@anciens.enib.fr>
+ <CAAa76NSqWgSvUZEgtpCGvk-Ly69P9wdfSoWz1q2XC=-y7EtKFg@mail.gmail.com>
+Message-ID: <20110713094638.40cec50c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Le Tue, 12 Jul 2011 18:03:27 -0400,
+raymond zhao <raymond.zhao.ml@gmail.com> a ?crit :
 
-On Wed, Jul 13, 2011 at 12:07 AM, Dwi Sasongko Supriyadi
-<ruckuus@gmail.com> wrote:
-> On Tue, Jul 12, 2011 at 10:38 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Le Tue, 12 Jul 2011 17:10:37 +0700,
->> ruckuus at gmail.com a ?crit :
->>
->>> +config BR2_PACKAGE_CCID
->>> + ? ? bool "ccid"
->>> + ? ? select BR2_PACKAGE_PKG_CONFIG
->>
->> No, I don't think you need pkg-config on the target.
->>
->>> +CCID_DEPENDENCIES = pkg-config libusb pcsc-lite
->>
->> Are you really sure you need pkg-config on the target ? Usually,
->> pkg-config is needed in the host. In this case, add "host-pkg-config"
->> to the DEPENDENCIES variable, and do not "select" anything related to
->> BR2_PACKAGE_PKG_CONFIG in the Config.in file.
->>
->
-> Ok. Actually no need pkg-config on the target, you are right, I need
-> host-pkg-config instead.
->
->>> +$(eval $(call AUTOTARGETS, package, ccid))
->>
->> No space after the commas:
->>
->> $(eval $(call AUTOTARGETS,package,ccid))
->>
->>> diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
->>> new file mode 100644
->>> index 0000000..55ac6d3
->>> --- /dev/null
->>> +++ b/package/pcsc-lite/Config.in
->>> @@ -0,0 +1,8 @@
->>> +config BR2_PACKAGE_PCSC_LITE
->>> + ? ? bool "pcsc-lite"
->>> + ? ? select BR2_PACKAGE_LIBUSB
->>> + ? ? help
->>> + ? ? ? Middleware to access a smart card using SCard API (PC/SC).
->>> + ? ? ? For more information, please visit:
->>> + ? ? ? http://pcsclite.alioth.debian.org/pcsclite.html
->>> +
->>> diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
->>> new file mode 100644
->>> index 0000000..2fdda5f
->>> --- /dev/null
->>> +++ b/package/pcsc-lite/pcsc-lite.mk
->>> @@ -0,0 +1,13 @@
->>> +##########################################################
->>> +#
->>> +# PCSC-Lite
->>> +#
->>> +# ########################################################
->>> +PCSC_LITE_VERSION = 1.7.4
->>> +PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
->>> +PCSC_LITE_SITE = https://alioth.debian.org/frs/download.php/3598
->>> +PCSC_LITE_INSTALL_STAGING = YES
->>> +PCSC_LITE_INSTALL_TARGET = YES
->>> +PCSC_LITE_CONF_OPT = --disable-libudev --enable-libusb --enable-embedded
->>
->> According to your Config.in, this package depends on LIBUSB. If it is
->> indeed the case, then libusb should be in the DEPENDENCIES variable of
->> this package.
->>
->
-> Yes, I forgot this. Now it is corrected.
->
->>> +$(eval $(call AUTOTARGETS, package, pcsc-lite))
->>
->> No spaces after commas.
->>
->> $(eval $(call AUTOTARGETS,package,pcsc-lite))
->>
->
-> Thanks for your patience reviewing my patch.
->
-> The updated version is already submitted.
->
+> I do not know the initial motive of this movement, but I prefer the
+> old approach.
 
-Enclosed is the modified version. I have sent the patch previously via
-git send-email (yesterday) but there was no response. Please let me
-know should I miss anything.
+The motivation is to benefit from the common features of the package
+infrastructure (git/svn/bzr download, common way of tracking package
+construction, etc.)
 
-Thanks and regards,
+> The linux kernel is a special "package". Lots of embedded projects
+> (if not all of them) will start from a certain version of the kernel
+> and hack the kernel from there, such as add device drivers etc. Then,
+> put the source code into a local git server to do version control.
+> Some people argued to use original tarball plus the patch, but it
+> makes the development procedure very painful. In the old approach, it
+> is very easy to hack the linux.mk to checkout the kernel source code
+> directly into the output directory. But, in the new one. Looks it
+> becomes more complex. The kernel is very big. Check out with the git,
+> archive it to a tarball, and then extract it to the output directory
+> for building will waste lots of time. Is there a official solution
+> (or suggestion) for my situation?
 
+Yes, I am currently working on extending the package infrastructure so
+that any package (not only the Linux kernel, but any package) can be
+sourced from an existing directory, instead of being downloaded through
+git/svn/http.
 
+I have already published preliminary versions of this work (see "[RFC]
+Override source directories", posted May, 18th 2011), and I intend to
+continue. The basic mechanism is working, I still have issues
+implementing "make source" and "make external-deps" with this mechanism.
 
+It'd be really nice if you could have a look at what I did to see if it
+would solve your use case as well.
+
+Regards,
+
+Thomas
 -- 
-Dwi Sasongko S
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Support-for-a-generic-usb-smartcard-reader.patch
-Type: text/x-patch
-Size: 3937 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110713/41cbfafd/attachment.bin>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
