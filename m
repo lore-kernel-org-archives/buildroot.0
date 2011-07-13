@@ -1,8 +1,9 @@
 From: benoit.mauduit at gmail.com <benoit.mauduit@gmail.com>
-Date: Wed, 13 Jul 2011 17:52:58 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_0/2=5D_Add_Xenomai_real-time_frame?=
-	=?utf-8?q?work?=
-Message-ID: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
+Date: Wed, 13 Jul 2011 17:52:59 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: Add Linux Kernel extensions menu
+In-Reply-To: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
+References: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
+Message-ID: <1310572380-26403-2-git-send-email-benoit.mauduit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,56 +12,56 @@ To: buildroot@busybox.net
 
 From: Benoit Mauduit <benoit.mauduit@openwide.fr>
 
-These two patches are an initial add for Xenomai in buildroot.
+Add a kernel sub-menu (called "Linux Kernel Extensions"), which makes
+possible to patch it or tweak the kernel build step.
 
-"Xenomai is a real-time development framework cooperating with the
-Linux kernel, in order to provide a pervasive, interface-agnostic,
-hard real-time support to user-space applications, seamlessly
-integrated into the GNU/Linux environment."
-[http://www.xenomai.org]
+ * All linux/*.mk files will be read by the make process.
+ * The menu can be customized in "linux/Config.ext.in".
 
-Xenomai comes with a Linux Kernel and user-space part.
-I added a Linux extensions sub-menu (The first patch) which handles
-the kernel modification provided by Adeos/Xenomai. The advantage of
-this way is for maintenance purpose. (Xenomai do not provide a full
-kernel patch, but use a script called "prepare-kernel.sh")
-Also, this split the user-space from the kernel in a nice way instead
-of adding a serie of patches.
-
-The Xenomai user-space part can be built separately with an external
-real-time Kernel.
-
-I have tested on both x86 and Arm with buildroot toolchains (uclibc).
-
-Any feedback is welcome, especially for the first patch.
-
-Regards,
--- 
-Beno?t Mauduit
-
+Signed-off-by: Benoit Mauduit <benoit.mauduit@openwide.fr>
 ---
-
-Benoit Mauduit (2):
-  linux: Add Linux Kernel extensions menu
-  Add xenomai real-time Framework to buildroot for Arm and x86
-
- Makefile                                           |    2 +-
- linux/Config.ext.in                                |   20 ++++
- linux/Config.in                                    |    4 +
- linux/xenomai.mk                                   |   29 ++++++
- package/Config.in                                  |    4 +
- package/xenomai/Config.in                          |   81 +++++++++++++++++
- package/xenomai/README                             |   48 ++++++++++
- .../xenomai/xenomai-do-not-install-devices.patch   |   11 +++
- package/xenomai/xenomai.mk                         |   95 ++++++++++++++++++++
- target/generic/device_table_dev.txt                |    5 +
- 10 files changed, 298 insertions(+), 1 deletions(-)
+ Makefile            |    2 +-
+ linux/Config.ext.in |    3 +++
+ linux/Config.in     |    4 ++++
+ 3 files changed, 8 insertions(+), 1 deletions(-)
  create mode 100644 linux/Config.ext.in
- create mode 100644 linux/xenomai.mk
- create mode 100644 package/xenomai/Config.in
- create mode 100644 package/xenomai/README
- create mode 100644 package/xenomai/xenomai-do-not-install-devices.patch
- create mode 100644 package/xenomai/xenomai.mk
 
+diff --git a/Makefile b/Makefile
+index 2f3802c..27e4375 100644
+--- a/Makefile
++++ b/Makefile
+@@ -313,7 +313,7 @@ include package/*/*.mk
+ 
+ include boot/common.mk
+ include target/Makefile.in
+-include linux/linux.mk
++include linux/*.mk
+ 
+ TARGETS+=target-finalize
+ 
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+new file mode 100644
+index 0000000..50e801d
+--- /dev/null
++++ b/linux/Config.ext.in
+@@ -0,0 +1,3 @@
++menu "Linux Kernel Extensions"
++
++endmenu
+diff --git a/linux/Config.in b/linux/Config.in
+index 8d3b0ba..3a22686 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -176,6 +176,10 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
+ 
++
++# Linux extensions (Xenomai)
++source "linux/Config.ext.in"
++
+ endif # BR2_LINUX_KERNEL
+ 
+ endmenu
 -- 
 1.7.6
