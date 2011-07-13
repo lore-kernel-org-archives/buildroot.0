@@ -1,67 +1,115 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 13 Jul 2011 15:32:50 +0200
-Subject: [Buildroot] libiconv and BR2_ENABLE_LOCALE
-Message-ID: <1310563970.2860.7.camel@sven>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 13 Jul 2011 16:40:46 +0300
+Subject: [Buildroot] [PATCH] Mini-XML: new package
+Message-ID: <c0733fd8bffa6150cd9efeb202da470a2fdf0137.1310564424.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The added patch is a workaround for cross build as follows:
 
-since our update to the latest buildroot environment, our Controller
-device can't work with SMB shares any longer. Judging from the output,
-there is a problem with iconv. It does not seem to be capable of doing
-certain conversions that are needed here:
+	* disable run of a test binary at build time
+	* disable generation of documentation using the mxmldoc binary
+	* remove now non-existent entries from the install target
+	* disable strip when running install
 
-init_iconv: Attempting to replace with conversion from UTF-16LE to ASCII
-init_iconv: Conversion from UTF-8 to CP850 not supported
-init_iconv: Attempting to replace with conversion from ASCII to ASCII
-init_iconv: Conversion from ASCII to CP850 not supported
-init_iconv: Attempting to replace with conversion from ASCII to ASCII
-init_iconv: Conversion from CP850 to UTF-16LE not supported
-init_iconv: Attempting to replace with conversion from ASCII to UTF-16LE
-init_iconv: Conversion from CP850 to UTF-8 not supported
-init_iconv: Attempting to replace with conversion from ASCII to ASCII
-init_iconv: Conversion from CP850 to ASCII not supported
-init_iconv: Attempting to replace with conversion from ASCII to ASCII
-init_iconv: Conversion from CP850 to UTF8 not supported
-init_iconv: Attempting to replace with conversion from ASCII to ASCII
-init_iconv: Conversion from CP850 to UTF-16BE not supported
-init_iconv: Attempting to replace with conversion from ASCII to UTF-16BE
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/Config.in                                  |    1 +
+ package/mxml/Config.in                             |    6 ++++
+ .../mxml-2.6-fix-cross-target-installation.patch   |   32 ++++++++++++++++++++
+ package/mxml/mxml.mk                               |   17 ++++++++++
+ 4 files changed, 56 insertions(+), 0 deletions(-)
+ create mode 100644 package/mxml/Config.in
+ create mode 100644 package/mxml/mxml-2.6-fix-cross-target-installation.patch
+ create mode 100644 package/mxml/mxml.mk
 
-Now this used to work, so I had a closer look and found that we are not
-using libiconv any longer. It appears that this is due to the following
-change:
-
-
-commit 2fae26486f86e9ed2b466ebc61a3521b60897a12
-Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date:   Sat May 15 09:19:24 2010 +0200
-
-    iconv: disallow selection when BR2_ENABLE_LOCALE is enabled
-    
-    A C library compiled with locale support already has an iconv()
-    implementation. In that case, libiconv is useless. Therefore,
-disallow
-    the selection of libiconv when the configuration says that the
-    toolchain has locale support.
-    
-    This fixes build issues similar to the one we had with gettext:
-    libiconv headers are installed, but -liconv is not added because the
-    ./configure script detects that the C library supports iconv.
-    
-    Signed-off-by: Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>
-
-
-Now it looks to me that while uCLibC does indeed have an implementation
-if iconv(), it is not a very capable one. I'd prefer to use libiconv
-instead. What problems will we be facing if we revert this change and
-configure buildroot to build libiconv and a toolchain with locale
-support?
-
-
-Regards,
-Sven
+diff --git a/package/Config.in b/package/Config.in
+index d073a1b..44f5b76 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -367,6 +367,7 @@ source "package/libroxml/Config.in"
+ source "package/libxml-parser-perl/Config.in"
+ source "package/libxml2/Config.in"
+ source "package/libxslt/Config.in"
++source "package/mxml/Config.in"
+ source "package/xerces/Config.in"
+ source "package/yajl/Config.in"
+ endmenu
+diff --git a/package/mxml/Config.in b/package/mxml/Config.in
+new file mode 100644
+index 0000000..d3202b4
+--- /dev/null
++++ b/package/mxml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_MXML
++	bool "Mini-XML"
++	help
++	  Lightweight XML Library
++
++	  http://www.minixml.org
+diff --git a/package/mxml/mxml-2.6-fix-cross-target-installation.patch b/package/mxml/mxml-2.6-fix-cross-target-installation.patch
+new file mode 100644
+index 0000000..f56efdc
+--- /dev/null
++++ b/package/mxml/mxml-2.6-fix-cross-target-installation.patch
+@@ -0,0 +1,32 @@
++diff -Nuar mxml-2.6-dist//Makefile.in mxml-2.6/Makefile.in
++--- mxml-2.6-dist//Makefile.in	2008-12-06 06:20:38.000000000 +0200
+++++ mxml-2.6/Makefile.in	2011-07-13 07:25:36.615999491 +0300
++@@ -59,7 +59,7 @@
++ # Install commands...
++ #
++ 
++-INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -m 755 -s
+++INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -m 755
++ INSTALL_DATA	=	$(INSTALL) -m 644
++ INSTALL_DIR	=	$(INSTALL) -d
++ INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -m 755
++@@ -88,7 +88,7 @@
++ 			mxml-node.o mxml-search.o mxml-set.o
++ LIBOBJS		=	$(PUBLIBOBJS) mxml-private.o mxml-string.o
++ OBJS		=	mxmldoc.o testmxml.o $(LIBOBJS)
++-TARGETS		=	$(LIBMXML) mxmldoc testmxml mxml.xml doc/mxml.man
+++TARGETS		=	$(LIBMXML) mxmldoc libmxml.a
++ 
++ 
++ #
++@@ -144,10 +144,6 @@
++ 	$(INSTALL_DATA) mxml.h $(BUILDROOT)$(includedir)
++ 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)/pkgconfig
++ 	$(INSTALL_DATA) mxml.pc $(BUILDROOT)$(libdir)/pkgconfig
++-	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man1
++-	$(INSTALL_MAN) doc/mxmldoc.man $(BUILDROOT)$(mandir)/man1/mxmldoc.1
++-	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man3
++-	$(INSTALL_MAN) doc/mxml.man $(BUILDROOT)$(mandir)/man3/mxml.3
++ 
++ install-libmxml.a:
++ 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+new file mode 100644
+index 0000000..a55d01d
+--- /dev/null
++++ b/package/mxml/mxml.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# mxml
++#
++#############################################################
++MXML_VERSION = 2.6
++MXML_SOURCE = mxml-$(MXML_VERSION).tar.gz
++MXML_SITE = http://ftp.easysw.com/pub/mxml/2.6
++MXML_INSTALL_STAGING = YES
++MXML_INSTALL_TARGET = YES
++MXML_CONF_OPT = --enable-shared
++MXML_INSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) install
++MXML_INSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) install
++MXML_UNINSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) uninstall
++MXML_UNINSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) uninstall
++
++$(eval $(call AUTOTARGETS,package,mxml))
+-- 
+1.7.5.4
