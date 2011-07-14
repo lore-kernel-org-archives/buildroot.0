@@ -1,41 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Jul 2011 16:46:49 +0200
-Subject: [Buildroot] [git commit] linux: add support for 3.x and -rc
-	versions
-In-Reply-To: <1310653763.10990.1.camel@sven> (Sven Neumann's message of "Thu, 
- 14 Jul 2011 16:29:23 +0200")
-References: <20110711214654.9E4738A482@busybox.osuosl.org>
- <1310632596.2068.3.camel@sven> <87ipr5cg14.fsf@macbook.be.48ers.dk>
- <1310653763.10990.1.camel@sven>
-Message-ID: <87y600c42u.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 14 Jul 2011 09:35:52 +0200
+Subject: [Buildroot] [git commit] libpng: bump version
+Message-ID: <20110714075410.A6AE18A5B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> On Thu, 2011-07-14 at 12:28 +0200, Peter Korsgaard wrote:
- >> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
- >> 
- >> Hi,
- >> 
- Sven> I've updated to latest git today and ran into this error:
- >> 
- Sven> linux/linux.mk:26: *** Recursive variable `LINUX_SITE' references itself
- Sven> (eventually).  Stop.
- >> 
- >> Interesting, I haven't seen that here. What make version are you using?
+commit: http://git.buildroot.net/buildroot/commit/?id=33cddbb86706dd8d5efa7dda3a68e9af9318412a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> GNU Make 3.81
+Security fix.
 
- >> I just built qemu_arm_versatile_defconfig with make 3.81 without any
- >> problems. Could you post your config, please?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libpng/libpng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Sven> Here's the kernel part, in the hope that this is sufficient:
-
-Ahh yes, fixed - Thanks.
-
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 657ba45..c4c37d8 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -3,7 +3,7 @@
+ # libpng (Portable Network Graphic library)
+ #
+ #############################################################
+-LIBPNG_VERSION = 1.4.7
++LIBPNG_VERSION = 1.4.8
+ LIBPNG_SERIES = 14
+ LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
