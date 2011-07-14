@@ -1,21 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Jul 2011 22:02:17 +0200
-Subject: [Buildroot] [PATCH] linux-fusion: change linux26 dependency to
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 14 Jul 2011 22:02:02 +0200
+Subject: [Buildroot] [git commit] linux-fusion: change linux26 dependency to
 	linux
-In-Reply-To: <1310673606-30130-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Thu, 14 Jul 2011 22:00:06 +0200")
-References: <1310673606-30130-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87mxggbph2.fsf@macbook.be.48ers.dk>
+Message-ID: <20110714200342.1F1AE8A5A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Committed, thanks.
+commit: http://git.buildroot.net/buildroot/commit/?id=8e3bf78a85bc434b92558f1929728ce8e0bbf4f9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-fusion/linux-fusion.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index 440b8b9..392ffd6 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -7,7 +7,7 @@ LINUX_FUSION_VERSION = 8.1.2
+ LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
+ LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
+ LINUX_FUSION_INSTALL_STAGING = YES
+-LINUX_FUSION_DEPENDENCIES = linux26
++LINUX_FUSION_DEPENDENCIES = linux
+ 
+ LINUX_FOR_FUSION=$(LINUX26_VERSION_PROBED)
+ LINUX_FUSION_ETC_DIR=$(TARGET_DIR)/etc/udev/rules.d
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
