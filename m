@@ -1,54 +1,36 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 14 Jul 2011 16:29:23 +0200
-Subject: [Buildroot] [git commit] linux: add support for 3.x and -rc
-	versions
-In-Reply-To: <87ipr5cg14.fsf@macbook.be.48ers.dk>
-References: <20110711214654.9E4738A482@busybox.osuosl.org>
- <1310632596.2068.3.camel@sven>  <87ipr5cg14.fsf@macbook.be.48ers.dk>
-Message-ID: <1310653763.10990.1.camel@sven>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 14 Jul 2011 16:38:07 +0200
+Subject: [Buildroot] [git commit] linux: fix build with release candidates
+Message-ID: <20110714144643.75FDC8A5A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2011-07-14 at 12:28 +0200, Peter Korsgaard wrote:
-> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
-> 
-> Hi,
-> 
->  Sven> I've updated to latest git today and ran into this error:
-> 
->  Sven> linux/linux.mk:26: *** Recursive variable `LINUX_SITE' references itself
->  Sven> (eventually).  Stop.
-> 
-> Interesting, I haven't seen that here. What make version are you using?
 
-GNU Make 3.81
+commit: http://git.buildroot.net/buildroot/commit/?id=ea7f5ff97617e6d84017df63a8599b17d10ca57c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I just built qemu_arm_versatile_defconfig with make 3.81 without any
-> problems. Could you post your config, please?
+Fixes *** Recursive variable `LINUX_SITE' references itself
 
-Here's the kernel part, in the hope that this is sufficient:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-# Kernel
-#
-BR2_LINUX_KERNEL=y
-# BR2_LINUX_KERNEL_2_6_39 is not set
-# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
-# BR2_LINUX_KERNEL_CUSTOM_GIT is not set
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0-rc7"
-BR2_LINUX_KERNEL_VERSION="3.0-rc7"
-BR2_LINUX_KERNEL_PATCH="raumfeld/kernel-arm.patch"
-# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="raumfeld/kernel-arm.config"
-BR2_LINUX_KERNEL_UIMAGE=y
-# BR2_LINUX_KERNEL_ZIMAGE is not set
-# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-
-
-Sven
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0679238..bdd8bb3 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -23,7 +23,7 @@ LINUX_VERSION_MINOR = $(word 2,$(subst ., ,$(subst -, ,$(LINUX_VERSION))))
+ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(LINUX_VERSION_MAJOR).$(LINUX_VERSION_MINOR)/
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+-LINUX_SITE = $(LINUX_SITE)testing/
++LINUX_SITE := $(LINUX_SITE)testing/
+ endif # -rc
+ endif
+ 
+-- 
+1.7.3.4
