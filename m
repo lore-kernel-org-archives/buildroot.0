@@ -1,7 +1,7 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 14 Jul 2011 22:00:06 +0200
-Subject: [Buildroot] [PATCH] linux-fusion: change linux26 dependency to linux
-Message-ID: <1310673606-30130-1-git-send-email-s.neumann@raumfeld.com>
+Date: Thu, 14 Jul 2011 22:01:14 +0200
+Subject: [Buildroot] [PATCH] dbus-glib: update to version 0.94
+Message-ID: <1310673674-30200-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/linux-fusion/linux-fusion.mk |    2 +-
+ package/dbus-glib/dbus-glib.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index 440b8b9..392ffd6 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -7,7 +7,7 @@ LINUX_FUSION_VERSION = 8.1.2
- LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
- LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- LINUX_FUSION_INSTALL_STAGING = YES
--LINUX_FUSION_DEPENDENCIES = linux26
-+LINUX_FUSION_DEPENDENCIES = linux
- 
- LINUX_FOR_FUSION=$(LINUX26_VERSION_PROBED)
- LINUX_FUSION_ETC_DIR=$(TARGET_DIR)/etc/udev/rules.d
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index fac5f2b..6058b23 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -3,7 +3,7 @@
+ # dbus-glib
+ #
+ #############################################################
+-DBUS_GLIB_VERSION = 0.92
++DBUS_GLIB_VERSION = 0.94
+ DBUS_GLIB_SOURCE = dbus-glib-$(DBUS_GLIB_VERSION).tar.gz
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib/
+ DBUS_GLIB_INSTALL_STAGING = YES
 -- 
 1.7.4.1
