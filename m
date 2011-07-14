@@ -1,33 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 Jul 2011 13:43:37 +0200
-Subject: [Buildroot] [git commit] sheevaplug_defconfig: use 2.6.39.3
-Message-ID: <20110714114411.A09178A5AA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Jul 2011 16:46:49 +0200
+Subject: [Buildroot] [git commit] linux: add support for 3.x and -rc
+	versions
+In-Reply-To: <1310653763.10990.1.camel@sven> (Sven Neumann's message of "Thu, 
+ 14 Jul 2011 16:29:23 +0200")
+References: <20110711214654.9E4738A482@busybox.osuosl.org>
+ <1310632596.2068.3.camel@sven> <87ipr5cg14.fsf@macbook.be.48ers.dk>
+ <1310653763.10990.1.camel@sven>
+Message-ID: <87y600c42u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e48d8ba57d59d4400251a526ee9c03fa0b07c36f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> On Thu, 2011-07-14 at 12:28 +0200, Peter Korsgaard wrote:
+ >> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ Sven> I've updated to latest git today and ran into this error:
+ >> 
+ Sven> linux/linux.mk:26: *** Recursive variable `LINUX_SITE' references itself
+ Sven> (eventually).  Stop.
+ >> 
+ >> Interesting, I haven't seen that here. What make version are you using?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/sheevaplug_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Sven> GNU Make 3.81
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index 305aadd..3ba568e 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -19,6 +19,6 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.39.3"
- BR2_LINUX_KERNEL_DEFCONFIG="kirkwood"
- BR2_LINUX_KERNEL_UIMAGE=y
+ >> I just built qemu_arm_versatile_defconfig with make 3.81 without any
+ >> problems. Could you post your config, please?
+
+ Sven> Here's the kernel part, in the hope that this is sufficient:
+
+Ahh yes, fixed - Thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
