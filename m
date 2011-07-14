@@ -1,38 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 Jul 2011 13:43:37 +0200
-Subject: [Buildroot] [git commit] uboot: unbreak kirkwood format handling
-	after a4ca959321
-Message-ID: <20110714114411.6331F8A597@busybox.osuosl.org>
+From: Evgeni Dobrev <evgeni_dobrev@developer.bg>
+Date: Thu, 14 Jul 2011 13:56:47 +0200
+Subject: [Buildroot] [PATCH] New package: libyaml
+Message-ID: <1310644607-25251-1-git-send-email-evgeni_dobrev@developer.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=908c5610cc2e74340b6e589e4331cee780dea05e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit a4ca959321 (u-boot: rename to uboot) forgot to change the kirkwood
-format handling to look for the new variable name, breaking support.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+YAML 1.1 parser and emitter written in C
 ---
- boot/uboot/uboot.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in          |    1 +
+ package/libyaml/Config.in  |    8 ++++++++
+ package/libyaml/libyaml.mk |   14 ++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/libyaml/Config.in
+ create mode 100644 package/libyaml/libyaml.mk
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ec592e1..0610e4c 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -24,7 +24,7 @@ endif
+diff --git a/package/Config.in b/package/Config.in
+index fb5a570..dee3b70 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -345,6 +345,7 @@ source "package/libglib2/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/liboil/Config.in"
+ source "package/libsigc/Config.in"
++source "package/libyaml/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
  
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BIN          = u-boot.kwb
--UBOOT_MAKE_TARGET  = $(U_BOOT_BIN)
-+UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
- UBOOT_BIN          = u-boot.ldr
- else
+diff --git a/package/libyaml/Config.in b/package/libyaml/Config.in
+new file mode 100644
+index 0000000..23e74a5
+--- /dev/null
++++ b/package/libyaml/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBYAML
++	bool "libyaml"
++	default n
++	help
++	LibYAML is a YAML 1.1 parser and emitter written in C.
++
++	http://pyyaml.org/wiki/LibYAML
++
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+new file mode 100644
+index 0000000..2e936fc
+--- /dev/null
++++ b/package/libyaml/libyaml.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# yaml
++#
++#############################################################
++LIBYAML_VERSION = 0.1.4
++LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
++LIBYAML_SITE = http://pyyaml.org/download/libyaml/
++LIBYAML_INSTALL_STAGING = YES
++LIBYAML_INSTALL_TARGET = YES
++
++$(eval $(call AUTOTARGETS,package,libyaml))
++
++
 -- 
-1.7.3.4
+1.7.2.5
