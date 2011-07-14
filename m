@@ -1,30 +1,21 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 14 Jul 2011 22:01:14 +0200
-Subject: [Buildroot] [PATCH] dbus-glib: update to version 0.94
-Message-ID: <1310673674-30200-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 14 Jul 2011 22:02:17 +0200
+Subject: [Buildroot] [PATCH] linux-fusion: change linux26 dependency to
+	linux
+In-Reply-To: <1310673606-30130-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Thu, 14 Jul 2011 22:00:06 +0200")
+References: <1310673606-30130-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87mxggbph2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/dbus-glib/dbus-glib.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index fac5f2b..6058b23 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -3,7 +3,7 @@
- # dbus-glib
- #
- #############################################################
--DBUS_GLIB_VERSION = 0.92
-+DBUS_GLIB_VERSION = 0.94
- DBUS_GLIB_SOURCE = dbus-glib-$(DBUS_GLIB_VERSION).tar.gz
- DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib/
- DBUS_GLIB_INSTALL_STAGING = YES
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Committed, thanks.
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard
