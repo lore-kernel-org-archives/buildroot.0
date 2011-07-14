@@ -1,55 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Jul 2011 13:34:05 +0200
-Subject: [Buildroot] [PATCH] Config: unbreak check-source caused by
-	empty defconfigs
-In-Reply-To: <201107141228.54544.yann.morin.1998@anciens.enib.fr> (Yann
- E. MORIN's message of "Thu, 14 Jul 2011 12:28:54 +0200")
-References: <1310593649-26237-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- <20110714101457.6521ebbd@skate>
- <201107141228.54544.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87ei1tcd02.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 14 Jul 2011 13:43:37 +0200
+Subject: [Buildroot] [git commit] uboot: unbreak kirkwood format handling
+	after a4ca959321
+Message-ID: <20110714114411.6331F8A597@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=908c5610cc2e74340b6e589e4331cee780dea05e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> That's because, 'source-check' spawns a second make to run '_source-check'
- Yann> which in turn runs a third make for 'source' with DL_MODE=SOURCE_CHECK
+Commit a4ca959321 (u-boot: rename to uboot) forgot to change the kirkwood
+format handling to look for the new variable name, breaking support.
 
-Ahh yes, so your problem is the first run - E.G. with annotation added:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/uboot/uboot.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 2f3802c..64bcafc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -22,6 +22,7 @@
- # Just run 'make menuconfig', configure stuff, then run 'make'.
- # You shouldn't need to mess with anything beyond this point...
- #--------------------------------------------------------------
-+$(warning MAKECMDGOALS=$(MAKECMDGOALS))
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index ec592e1..0610e4c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -24,7 +24,7 @@ endif
  
- # Set and export the version string
- export BR2_VERSION:=2011.08-git
-
-We get:
-
-make external-deps
-Makefile:25: MAKECMDGOALS=external-deps
-Makefile:25: MAKECMDGOALS=source
-
- Yann> Now, I wonder how to properly fix this.
-
- Yann> Either we check for 'source' and '_source-check', or we change
- Yann> the way '_source-check' behaves. I'll push a patch for the second
- Yann> case, so you can see what I have in my head about this... ;-)
-
-We could probably combine source-check and _source-check, but as far as
-I can see we would need to handle both source/source-check/external-deps
-
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
+ UBOOT_BIN          = u-boot.kwb
+-UBOOT_MAKE_TARGET  = $(U_BOOT_BIN)
++UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+ UBOOT_BIN          = u-boot.ldr
+ else
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
