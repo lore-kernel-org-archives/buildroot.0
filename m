@@ -1,36 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 14 Jul 2011 09:35:52 +0200
-Subject: [Buildroot] [git commit] libpng: bump version
-Message-ID: <20110714075410.A6AE18A5B5@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Thu, 14 Jul 2011 13:02:33 +0200
+Subject: [Buildroot] [PATCH] Makefile: unbreak source-check
+Message-ID: <1310641353-7351-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+'source-check' breaks because the *_DEFCONFIG options are empty strings.
+There is an explicit check to avoid erroring-out when doing 'source', but
+not when doing 'source-check'.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33cddbb86706dd8d5efa7dda3a68e9af9318412a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch set DL_MODE right from the first sub-make call.
 
-Security fix.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/libpng/libpng.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 657ba45..c4c37d8 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -3,7 +3,7 @@
- # libpng (Portable Network Graphic library)
- #
- #############################################################
--LIBPNG_VERSION = 1.4.7
-+LIBPNG_VERSION = 1.4.8
- LIBPNG_SERIES = 14
- LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
+diff --git a/Makefile b/Makefile
+index 2f3802c..f50457a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -488,9 +488,6 @@ endif
+ 
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ 
+-_source-check:
+-	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+-
+ external-deps:
+ 	@$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+ 
+@@ -595,7 +592,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ # check if download URLs are outdated
+ source-check: allyesconfig
+-	$(MAKE) $(EXTRAMAKEARGS) _source-check
++	$(MAKE) $(EXTRAMAKEARGS) source DL_MODE=SOURCE_CHECK
+ 
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
 -- 
-1.7.3.4
+1.7.2.5
