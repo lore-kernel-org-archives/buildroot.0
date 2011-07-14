@@ -1,46 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 14 Jul 2011 13:02:33 +0200
-Subject: [Buildroot] [PATCH] Makefile: unbreak source-check
-Message-ID: <1310641353-7351-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
+Date: Thu, 14 Jul 2011 12:12:20 -0400
+Subject: [Buildroot] [PATCH] qt: add QtTest to default installed libs
+Message-ID: <1310659940-11141-1-git-send-email-jerome.oufella@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-'source-check' breaks because the *_DEFCONFIG options are empty strings.
-There is an explicit check to avoid erroring-out when doing 'source', but
-not when doing 'source-check'.
+When selecting Qt, the QtTest library is not copied to the target.
+This adds QtTest to the list of copied libraries.
 
-This patch set DL_MODE right from the first sub-make call.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Jerome Oufella <jerome.oufella@savoirfairelinux.com>
 ---
- Makefile |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ package/qt/qt.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 2f3802c..f50457a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -488,9 +488,6 @@ endif
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ff67058..e8bb62e 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -512,7 +512,7 @@ endef
  
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+ # Build the list of libraries and plugins to install to the target
  
--_source-check:
--	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
--
- external-deps:
- 	@$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+-QT_INSTALL_LIBS    += QtCore
++QT_INSTALL_LIBS    += QtCore QtTest
+ QT_HOST_PROGRAMS   += moc rcc qmake lrelease
  
-@@ -595,7 +592,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- # check if download URLs are outdated
- source-check: allyesconfig
--	$(MAKE) $(EXTRAMAKEARGS) _source-check
-+	$(MAKE) $(EXTRAMAKEARGS) source DL_MODE=SOURCE_CHECK
- 
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
 -- 
-1.7.2.5
+1.7.6
