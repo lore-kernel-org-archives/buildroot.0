@@ -1,45 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 14 Jul 2011 15:43:47 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.08/debugging-improvements
-In-Reply-To: <20110714153638.2143a699@skate> (Thomas Petazzoni's message of
- "Thu, 14 Jul 2011 15:36:38 +0200")
-References: <cover.1310421076.git.thomas.petazzoni@free-electrons.com>
- <87sjqchsbe.fsf@macbook.be.48ers.dk> <20110714153638.2143a699@skate>
-Message-ID: <87aachc6zw.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 14 Jul 2011 16:29:23 +0200
+Subject: [Buildroot] [git commit] linux: add support for 3.x and -rc
+	versions
+In-Reply-To: <87ipr5cg14.fsf@macbook.be.48ers.dk>
+References: <20110711214654.9E4738A482@busybox.osuosl.org>
+ <1310632596.2068.3.camel@sven>  <87ipr5cg14.fsf@macbook.be.48ers.dk>
+Message-ID: <1310653763.10990.1.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Thu, 2011-07-14 at 12:28 +0200, Peter Korsgaard wrote:
+> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+> 
+> Hi,
+> 
+>  Sven> I've updated to latest git today and ran into this error:
+> 
+>  Sven> linux/linux.mk:26: *** Recursive variable `LINUX_SITE' references itself
+>  Sven> (eventually).  Stop.
+> 
+> Interesting, I haven't seen that here. What make version are you using?
 
- >> Next to the size impact (which I agree is not a big problem) there's
- >> also potentially a build time impact. Did you test this?
+GNU Make 3.81
 
- Thomas> Here is the result of a fairly big build for ARM (X.org, Gtk2, WebKit,
- Thomas> Midori), on a fairly big machine (quad-core, 12 GB of RAM), build was
- Thomas> done with BR2_JLEVEL=16, and the build does not include a toolchain (I
- Thomas> used an existing internal toolchain).
+> I just built qemu_arm_versatile_defconfig with make 3.81 without any
+> problems. Could you post your config, please?
 
-Thanks!
+Here's the kernel part, in the hope that this is sufficient:
 
- Thomas> Without debugging symbols
- Thomas> =========================
+# Kernel
+#
+BR2_LINUX_KERNEL=y
+# BR2_LINUX_KERNEL_2_6_39 is not set
+# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
+# BR2_LINUX_KERNEL_CUSTOM_GIT is not set
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0-rc7"
+BR2_LINUX_KERNEL_VERSION="3.0-rc7"
+BR2_LINUX_KERNEL_PATCH="raumfeld/kernel-arm.patch"
+# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="raumfeld/kernel-arm.config"
+BR2_LINUX_KERNEL_UIMAGE=y
+# BR2_LINUX_KERNEL_ZIMAGE is not set
+# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
 
- Thomas>  * Size of output directory:	3.4 GB
- Thomas>  * Size of staging directory:	445 MB
 
- Thomas> With debugging symbols
- Thomas> ======================
-
- Thomas>  * Size of output directory:	9.0 GB
- Thomas>  * Size of staging directory:	2.0 GB
-
- Thomas> So, I'd say we should drop my patch 2/4.
-
-Yeah, this is a bit too much.
-
--- 
-Bye, Peter Korsgaard
+Sven
