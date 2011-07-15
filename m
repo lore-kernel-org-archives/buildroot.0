@@ -1,45 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Fri, 15 Jul 2011 15:10:07 +0200
-Subject: [Buildroot] linux: why is vmlinux only available for mips?
-In-Reply-To: <20110715143053.558a756a@skate>
-References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
- <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
- <20110715143053.558a756a@skate>
-Message-ID: <201107151510.08098.yann.morin.1998@anciens.enib.fr>
+From: Alper YILDIRIM <yildirimalper@gmail.com>
+Date: Fri, 15 Jul 2011 08:19:33 -0700 (PDT)
+Subject: [Buildroot] Installation of package files in staging and target
+In-Reply-To: <1310561676.2189.41.camel@dublxciaranr1.verifone.com>
+References: <20110712000117.3af73a1a@skate>
+ <1310468114.2189.8.camel@dublxciaranr1.verifone.com>
+ <20110712135140.4d2bd314@skate>
+ <1310484198.2189.35.camel@dublxciaranr1.verifone.com>
+ <201107121939.20652.yann.morin.1998@anciens.enib.fr>
+ <1310500118.6261.18.camel@cabbage.rehill.info>
+ <201107122246.26672.yann.morin.1998@anciens.enib.fr>
+ <1310507103.6261.30.camel@cabbage.rehill.info>
+ <1310561676.2189.41.camel@dublxciaranr1.verifone.com>
+Message-ID: <32069154.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas and Thomas, All,
 
-On Friday 15 July 2011 14:30:53 Thomas Petazzoni wrote:
-> Le Fri, 15 Jul 2011 08:34:34 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-> > * I need to get to the dtc (device tree compiler) which resides in
-> > <linux>/scripts/dtc/dtc
+
+Quotient Remainder wrote:
 > 
-> This tool looks like a useful host tool built by the kernel. Maybe we
-> should install it in $(HOST_DIR)/usr/bin ?
+> On Tue, 2011-07-12 at 22:45 +0100, Quotient Remainder wrote:
 > 
-> > * I need to be able to compile external kernel modules, so in that
-> > Makefile I need to point to the right kernel directory.
+> I've posted a patch for this titled: "Generate a package-specific tree
+> of installed components for all generic targets."
 > 
-> Ok. Those could be integrated as Buildroot packages, in which case
-> getting access to the Linux source directory is easy.
+> There's also a separate patch from me that has no connection with this
+> thread, just a suggested modification on the recent RAWNAME change.
+> 
+> 
 
-Or use the 'build' and 'source' symlinks in the (rootfs)/lib/modules/(version)
-Of course, it still requires the version string, which Daniele provided
-a very simple way to get it.
-
-Regards,
-Yann E. MORIN.
-
+Hello, i am interested with your patch because we are in the stage of
+adding such a feature to buildroot.
+Maybe your patch can get mainlined in the future
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+View this message in context: http://old.nabble.com/Installation-of-package-files-in-staging-and-target-tp32041764p32069154.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
