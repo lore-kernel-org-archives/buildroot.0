@@ -1,48 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 15 Jul 2011 13:55:38 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Jul 2011 14:30:53 +0200
 Subject: [Buildroot] linux: why is vmlinux only available for mips?
-In-Reply-To: <4E200C58.4050401@daccii.it>
+In-Reply-To: <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
 References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
  <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
- <201107151122.41685.yann.morin.1998@anciens.enib.fr>
- <CAAXf6LXwcpiXfJF26ABizR5y3KuJ2OCVHSyyhQePzxCeG-H6bg@mail.gmail.com>
- <4E200C58.4050401@daccii.it>
-Message-ID: <CAAXf6LWs6bOc9xPhJOCLx3nbpOqCc0mrPOZZdXEhqvgREEdgOA@mail.gmail.com>
+Message-ID: <20110715143053.558a756a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 15, 2011 at 11:46 AM, Daniele Salvatore Albano
-<info@daccii.it> wrote:
-> Il 15/07/2011 11:34, Thomas De Schampheleire ha scritto:
->>
->> This works fine in the context of buildroot. However, I need to access
->> these files from a non-buildroot context (external makefiles/scripts)
->> and so the variable BR2_LINUX_KERNEL_VERSION is not known.
->>
->> Thomas
->
-> If you're using *sh scripts, you can just do something like
-> . /PATH/TO/BUILDROOT/.config
->
-> to access buildroot config variables so you can use that variable
->
-> If you're using make file i don't know, but there is a way to do it too,
-> sure :)
->
-> In the end, if you're using anithing else you can try to parse using regular
-> expressions (needs delimiters and/or backslashes around quotes)
-> BR2_LINUX_KERNEL_VERSION="?([a-zA-Z0-9\.\-]+)"?
->
-> or cat, grep and cut
-> cat .config | grep BR2_LINUX_KERNEL_VERSION | cut -d"\"" -f2
+Le Fri, 15 Jul 2011 08:34:34 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-This is indeed a good suggestion that I didn't think of before.
-For Makefiles, you can also include the .config file as-is; in fact,
-this is how the buildroot Makefile does it.
-I will try and see if this solves all my use-cases.
+> > The depend statement causes the vmlinux target only to be available
+> > for mips processors.
+> > For powerpc for example, only uImage and zImage are selectable.
+> >
+> > However, I'd like to have vmlinux in the output/images directory.
+> > First of all because I am directly loading this on target, rather than
+> > uImage or zImage.
 
-Thanks!
+If vmlinux is useful on powerpc platforms, then it should be added to
+the list of architectures for which vmlinux is proposed.
+
+> In fact I have more problems with this version encoding in the output
+> build/linux-X directory:
+> * I need to get to the vmlinux file (mentioned above)
+
+Just need to add "|| BR2_powerpc" as you suggested.
+
+> * I need to get to the dtc (device tree compiler) which resides in
+> <linux>/scripts/dtc/dtc
+
+This tool looks like a useful host tool built by the kernel. Maybe we
+should install it in $(HOST_DIR)/usr/bin ?
+
+> * I need to be able to compile external kernel modules, so in that
+> Makefile I need to point to the right kernel directory.
+
+Ok. Those could be integrated as Buildroot packages, in which case
+getting access to the Linux source directory is easy.
+
+> If you stick with one kernel version, then you can hardcode it in the
+> relevant scripts and Makefiles. However, when switching to another
+> version, you have to update all of these files.
+> One approach to solve all of this would be to create a symbolic link
+> output/build/linux, pointing to the output/build/linux-X directory
+> corresponding to the actually configured version.
+
+I think I'd prefer something like :
+
+$ make <pkg>-show-srcdir
+
+which would be implemented at the package infrastructure, and which
+would return the source directory of a particular package. This way,
+you can easily ask where a given package source code has been extracted
+by Buildroot.
+
+Regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
