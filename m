@@ -1,25 +1,47 @@
-From: Vasanth Ragavendran <ragavendra.2007@gmail.com>
-Date: Fri, 15 Jul 2011 12:20:02 +0800
-Subject: [Buildroot] Buildroot ext3 filesystem
-Message-ID: <CADfuMF6LHMTTVunskwU3hxcFgqa3nWi=V3rLUs1CSWcd9hdqhQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 15 Jul 2011 08:20:04 +0200
+Subject: [Buildroot] linux: why is vmlinux only available for mips?
+Message-ID: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi,
 
-I am new to buildroot and hence my question could be trivial. Plz help. My
-question is Is it possible to create a ext3 root filesystem using build
-root? because during makeconfig i couldn't find ext3 only ext2 was present.
-Further, i read in the manual under "Using an external toolchain" that an
-external toolchain like glibc could be used. However there is no option for
-downloading it from the internet and it only asks for the path of the
-toolchain. What is it that i am missing? Awaiting your response.
+linux/Config.in contains the following configuration option:
 
-Thanks and Regards,
-R.Vasanth Ragavendran.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110715/5f837b64/attachment.html>
+config BR2_LINUX_KERNEL_VMLINUX
+        bool "vmlinux"
+        depends on BR2_mips || BR2_mipsel
+
+The depend statement causes the vmlinux target only to be available
+for mips processors.
+For powerpc for example, only uImage and zImage are selectable.
+
+However, I'd like to have vmlinux in the output/images directory.
+First of all because I am directly loading this on target, rather than
+uImage or zImage.
+Secondly, right now my wrapper scripts go and fetch the vmlinux
+executable in output/build/linux-<version>/vmlinux, which has the
+disadvantage of needing to know what version of Linux was configured
+in buildroot. I'd like to have a way to get the vmlinux file from
+whichever version was configured in buildroot. Making sure it ends up
+in output/images seems the simplest way.
+
+I patched the Config.in file to read:
+
+config BR2_LINUX_KERNEL_VMLINUX
+        bool "vmlinux"
+        depends on BR2_mips || BR2_mipsel || BR2_powerpc
+
+which works fine.
+I would even assume that every target can benefit from this option.
+
+Moreover, why don't we allow multiple targets? For example, in some
+projects you have different ways of loading your target, e.g. u-boot
+(uImage) and directly copying to memory with a probe (in which case
+vmlinux would be better suited).
+
+Thomas
