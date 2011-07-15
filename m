@@ -1,25 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 15 Jul 2011 22:10:54 +0200
-Subject: [Buildroot] [PATCH] gnutls: update to version 2.10.3
-In-Reply-To: <1310627455-2628-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Thu, 14 Jul 2011 09:10:55 +0200")
-References: <1310627455-2628-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87pqlb8fu9.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 15 Jul 2011 21:24:24 +0200
+Subject: [Buildroot] [git commit] gnutls: update to version 2.10.3
+Message-ID: <20110715201119.954738A58E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> There are newer releases available, but this is the last release that
- Sven> uses libgcrypt. Newer versions prefer nettle over gcrypt. But then there
- Sven> are users of gnutls (for example libsoup and glib-networking) that
- Sven> assume that gnutls uses gcrypt as its crypto backend. They won't compile
- Sven> with a version of gnutls that uses nettle.
+commit: http://git.buildroot.net/buildroot/commit/?id=8a08570c19269dfa138ed5138035c105327ee2f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+There are newer releases available, but this is the last release that
+uses libgcrypt. Newer versions prefer nettle over gcrypt. But then there
+are users of gnutls (for example libsoup and glib-networking) that
+assume that gnutls uses gcrypt as its crypto backend. They won't compile
+with a version of gnutls that uses nettle.
 
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gnutls/gnutls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 5f31e1e..db5d583 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GNUTLS_VERSION = 2.8.6
++GNUTLS_VERSION = 2.10.3
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
+ GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls/
+ GNUTLS_DEPENDENCIES = libgcrypt
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
