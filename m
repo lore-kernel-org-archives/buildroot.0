@@ -1,42 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 Jul 2011 02:07:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 3985] New: "help" target's defconfig list needs
-	sort
-Message-ID: <bug-3985-163@https.bugs.busybox.net/>
+From: David J. Fiddes <D.J@fiddes.net>
+Date: Sun, 17 Jul 2011 11:55:29 +0100
+Subject: [Buildroot] ARM OABI build broken with current buildroot tip
+Message-ID: <4E22BFA1.7080800@fiddes.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3985
+Hi,
 
-           Summary: "help" target's defconfig list needs sort
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: d_mo1234 at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I'm trying to build an up to date ARM OABI toolchain with uClibc 0.9.32. 
+The build fails with a missing stack unwind symobl.
 
+The toolchain I'm trying to configure is pretty straight forward. From a 
+"make distclean" I configure:
+  - ARM processor
+  - OABI
+  - Disable busybox and filesystem image generation
 
-Created attachment 3481
-  --> https://bugs.busybox.net/attachment.cgi?id=3481
-patch file to add sort to "help" target's defconfig list
+Switching uClibc to 0.9.31 allows the build to succeed.
 
-The latest "make" version, 3.82, changed the behavior of "wildcard" to no
-longer sort its output.  The result is that the defconfig list in buildroot's
-"help" target now lists things in some bizarro order.  Not good for those of us
-who manage multiple configurations.  It would help if a "sort" were added.  A
-patch is attached.
+I'm using buildroot: bef98b7c10a9969bc3f8b977dd9e0bdafba684a3
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+The build error is:
+
+/usr/bin/make -j1 -C 
+/home/dave/source/cvs-versions/buildroot/output/toolchain/uClibc-0.9.32 \
+	ARCH="arm" \
+	PREFIX=/home/dave/source/cvs-versions/buildroot/output/host/usr/arm-unknown-linux-uclibc/sysroot \
+	DEVEL_PREFIX=/usr/ \
+	RUNTIME_PREFIX=/ \
+	install_runtime install_dev
+make[1]: Entering directory 
+`/home/dave/source/cvs-versions/buildroot/output/toolchain/uClibc-0.9.32'
+   LD libuClibc-0.9.32.so
+libc/libc_so.a(close.oS):(.ARM.exidx+0x0): undefined reference to 
+`__aeabi_unwind_cpp_pr0'
+collect2: ld returned 1 exit status
+make[1]: *** [lib/libc.so] Error 1
+make[1]: Leaving directory 
+`/home/dave/source/cvs-versions/buildroot/output/toolchain/uClibc-0.9.32'
+make: *** 
+[/home/dave/source/cvs-versions/buildroot/output/host/usr/arm-unknown-linux-uclibc/sysroot/usr/lib/libc.a] 
+Error 2
+
+It seems like this is a uClibc bug but I'm not sure how best to separate 
+the toolchain build form the uClibc build.
+
+Dave
