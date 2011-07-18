@@ -1,36 +1,34 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Mon, 18 Jul 2011 16:08:25 +0100
-Subject: [Buildroot] [RFC PATCH 0/2] Add the ability to rebuild packages.
-In-Reply-To: <CAAXf6LUvhKbdPvCX4K6DS-ZLmh4ZP15cOr_rhFMzCze3pzsESA@mail.gmail.com>
-References: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
- <CAAXf6LU3_s_E03b2KzNusjvMsbcYUFZupr-DoP+SRT9F7y_99Q@mail.gmail.com>
- <1310997747.2189.53.camel@dublxciaranr1.verifone.com>
- <CAAXf6LUvhKbdPvCX4K6DS-ZLmh4ZP15cOr_rhFMzCze3pzsESA@mail.gmail.com>
-Message-ID: <1311001713.2189.58.camel@dublxciaranr1.verifone.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jul 2011 18:07:53 +0200
+Subject: [Buildroot] [PATCHv3] udev: bump to 172
+In-Reply-To: <87oc0s6n6k.fsf@macbook.be.48ers.dk>
+References: <4E1D4062.9010909@visionsystems.de>
+ <87y5zz8jm6.fsf@macbook.be.48ers.dk>
+ <20110716092425.02e80735@skate>
+ <87oc0s6n6k.fsf@macbook.be.48ers.dk>
+Message-ID: <20110718180753.35727036@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2011-07-18 at 16:14 +0200, Thomas De Schampheleire wrote:
-> > xxx-reconfigure should be fairly straightforward since no
-> > TARGET_NORECONFIGURE variable would be needed, just remove the stamp and
-> > make xxx-configure.
-> >
-> > Would xxx-repatch be effectively a re-extraction?  That is, the patch
-> > has been applied, then changed and so can't be applied in reverse so
-> > you'll have to erase the extracted package and re-extract, patch, ...
-> > So in effect it's a "make xxx-dirclean xxx" operation, right?
-> 
-> Yes, you're right. Really repatching would require re-extracting.
-> Let's skip this target.
+Le Mon, 18 Jul 2011 09:52:03 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-What about xxx-reconfigure; should it (1) reconfigure and then build the
-package to completion (including installation) or (2) just configure and
-stop, requiring a separate step to complete?
-There's an argument in favour of both approaches.
-(1) means that the package is installed to target/staging, etc. with one
-command.
-(2) clearly (?!) demonstrates that a top-level "make" is required to
-press the changes into an RFS/tarball image.
+> But it is as we build pkg-config with:
+> 
+> --with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig"
+
+It wasn't at the time I did my udev package (which I lost), and maybe
+the same is true for Yegor's package. Yegor, can you retry without this
+PKG_CONFIG_PATH variable ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
