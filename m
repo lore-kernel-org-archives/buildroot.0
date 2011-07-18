@@ -1,28 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 Jul 2011 20:19:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 3985] "help" target's defconfig list needs sort
-In-Reply-To: <bug-3985-163@https.bugs.busybox.net/>
-References: <bug-3985-163@https.bugs.busybox.net/>
-Message-ID: <20110717201954.583DB8A6CB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Jul 2011 09:52:03 +0200
+Subject: [Buildroot] [PATCHv3] udev: bump to 172
+In-Reply-To: <20110716092425.02e80735@skate> (Thomas Petazzoni's message of
+ "Sat, 16 Jul 2011 09:24:25 +0200")
+References: <4E1D4062.9010909@visionsystems.de>
+ <87y5zz8jm6.fsf@macbook.be.48ers.dk> <20110716092425.02e80735@skate>
+Message-ID: <87oc0s6n6k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3985
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hi,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+ Yegor> +    	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/share/pkgconfig 		\
+ >> 
+ >> Why do you need to set this?
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
+ Thomas> I think because usr/share/pkgconfig is not in the default pkg-config
+ Thomas> search path, and things like hwdata install their .pc file in
+ Thomas> usr/share/pkgconfig. At least, that's what I remember from the time I
+ Thomas> did a modern udev package in Buildroot (stuff that I lost when my
+ Thomas> laptop got stolen...).
+
+But it is as we build pkg-config with:
+
+--with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig"
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
