@@ -1,34 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jul 2011 09:52:03 +0200
-Subject: [Buildroot] [PATCHv3] udev: bump to 172
-In-Reply-To: <20110716092425.02e80735@skate> (Thomas Petazzoni's message of
- "Sat, 16 Jul 2011 09:24:25 +0200")
-References: <4E1D4062.9010909@visionsystems.de>
- <87y5zz8jm6.fsf@macbook.be.48ers.dk> <20110716092425.02e80735@skate>
-Message-ID: <87oc0s6n6k.fsf@macbook.be.48ers.dk>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Mon, 18 Jul 2011 10:15:51 +0100
+Subject: [Buildroot] [RFC PATCH 0/2] Add the ability to rebuild packages.
+Message-ID: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Sometimes it's necessary to fix something up in the source code of a package.
+Usually this requires deleting the stamp file and runinng "make" again.
+This patch set allows this sequence to be done by just issuing either a top-level
+"make rebuild" to rebuild all packages or a package-specific command, e.g.
+"make busybox-rebuild".  The package-specific command will normally be followed by
+a "make" (*not* "make rebuild") command to sweep up and generate the RFS.
 
-Hi,
+There may be some subtle harmful effects from rebuilding packages unconditionally
+but I've been using this approach for some time and noticed nothing.  The original
+patch was based on v2010.08 and I've made efforts to update but may have missed some
+things.  It's mainly testing the water anyway as an RFC.
 
- Yegor> +    	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/share/pkgconfig 		\
- >> 
- >> Why do you need to set this?
+This feature may be useful if Buildroot is extended to being used as a day-to-day
+development environment as opposed to a build-once tool.
 
- Thomas> I think because usr/share/pkgconfig is not in the default pkg-config
- Thomas> search path, and things like hwdata install their .pc file in
- Thomas> usr/share/pkgconfig. At least, that's what I remember from the time I
- Thomas> did a modern udev package in Buildroot (stuff that I lost when my
- Thomas> laptop got stolen...).
+Quotient Remainder (2):
+  Allow rebuilding of generic targets.
+  Add top-level rebuild target.
 
-But it is as we build pkg-config with:
-
---with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig"
+ Makefile                    |   10 ++++++++++
+ fs/common.mk                |    2 ++
+ package/Makefile.package.in |   22 ++++++++++++++++++++++
+ target/generic/Makefile.in  |    6 ++++++
+ 4 files changed, 40 insertions(+), 0 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+1.7.6
