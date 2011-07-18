@@ -1,47 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jul 2011 12:06:23 +0200
-Subject: [Buildroot] ARM OABI build broken with current buildroot tip
-In-Reply-To: <4E22BFA1.7080800@fiddes.net> (David J. Fiddes's message of "Sun, 
- 17 Jul 2011 11:55:29 +0100")
-References: <4E22BFA1.7080800@fiddes.net>
-Message-ID: <87fwm37vj4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Jul 2011 12:12:13 +0200
+Subject: [Buildroot] [git commit] toolchain-buildroot: NPTL is only
+	supported with EABI on ARM
+Message-ID: <20110718101253.E8C548AC5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "David" == David J Fiddes <D.J@fiddes.net> writes:
 
- David> Hi,
- David> I'm trying to build an up to date ARM OABI toolchain with uClibc
- David> 0.9.32. The build fails with a missing stack unwind symobl.
+commit: http://git.buildroot.net/buildroot/commit/?id=530890bb95a5073002fb5d0b63dcbcfb9f47fde1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- David> The toolchain I'm trying to configure is pretty straight forward. From
- David> a "make distclean" I configure:
- David>  - ARM processor
- David>  - OABI
- David>  - Disable busybox and filesystem image generation
+So hide option if OABI is selected.
 
- David> Switching uClibc to 0.9.31 allows the build to succeed.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-buildroot/Config.in.2 |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-The problem is NPTL threading support. A quick look in
-libpthread/nptl/sysdeps/arm shows a number of EABI references. It seems
-like NPTL on ARM is only supported with EABI.
-
-And indeed, OABI / uClibc 0.9.32  / linuxthreads-old builds fine.
-
-I'll adjust Buildroot so you cannot select NTPL together with OABI.
-
- David> It seems like this is a uClibc bug but I'm not sure how best to
- David> separate the toolchain build form the uClibc build.
-
-It looks pretty independent of anything Buildroot related. You are
-welcome to ask them regarding non-EABI NPTL support, but I would imagine
-that such an uncommon configuration has fairly low priority.
-
-May I ask why you want to use a new C library / NPTL together with the
-obsolete OABI?
-
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 0c3a510..5df188f 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -78,7 +78,7 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 
+ choice
+ 	prompt "Thread library implementation"
+-	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32
++	default BR2_PTHREADS_NATIVE if (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32) && !BR2_ARM_OABI
+ 	default BR2_PTHREADS_OLD
+ 	help
+ 	  Use this option to select the thread library implementation
+@@ -102,6 +102,7 @@ choice
+ 		bool "Native POSIX Threading (NPTL)"
+ 	        select BR2_TOOLCHAIN_HAS_THREADS
+ 		depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32
++		depends on !BR2_ARM_OABI
+ 		depends on !BR2_x86_i386
+ endchoice
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
