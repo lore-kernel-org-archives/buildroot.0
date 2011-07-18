@@ -1,8 +1,8 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Jul 2011 12:12:13 +0200
-Subject: [Buildroot] [git commit] toolchain-buildroot: NPTL is only
-	supported with EABI on ARM
-Message-ID: <20110718101253.E8C548AC5A@busybox.osuosl.org>
+Date: Mon, 18 Jul 2011 12:49:25 +0200
+Subject: [Buildroot] [git commit] Makefile.package.in: use "" for MESSAGE
+	arguments
+Message-ID: <20110718105128.EB2F48AC58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=530890bb95a5073002fb5d0b63dcbcfb9f47fde1
+commit: http://git.buildroot.net/buildroot/commit/?id=20d6fca6cd7c96d2a16e6ef80de453f69a5e3bc0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So hide option if OABI is selected.
+Otherwise we get output like:
+
+>>> host-pkg-config 0.25 'Installing to host directory'
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-buildroot/Config.in.2 |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/Makefile.package.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 0c3a510..5df188f 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -78,7 +78,7 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 74087cd..90530dc 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -292,21 +292,21 @@ $(BUILD_DIR)/%/.stamp_built::
  
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32
-+	default BR2_PTHREADS_NATIVE if (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32) && !BR2_ARM_OABI
- 	default BR2_PTHREADS_OLD
- 	help
- 	  Use this option to select the thread library implementation
-@@ -102,6 +102,7 @@ choice
- 		bool "Native POSIX Threading (NPTL)"
- 	        select BR2_TOOLCHAIN_HAS_THREADS
- 		depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_0_9_32
-+		depends on !BR2_ARM_OABI
- 		depends on !BR2_x86_i386
- endchoice
+ # Install to host dir
+ $(BUILD_DIR)/%/.stamp_host_installed:
+-	@$(call MESSAGE,'Installing to host directory')
++	@$(call MESSAGE,"Installing to host directory")
+ 	$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
+ # Install to staging dir
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+-	@$(call MESSAGE,'Installing to staging directory')
++	@$(call MESSAGE,"Installing to staging directory")
+ 	$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
+-	@$(call MESSAGE,'Installing to images directory')
++	@$(call MESSAGE,"Installing to images directory")
+ 	$($(PKG)_INSTALL_IMAGES_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
 -- 
 1.7.3.4
