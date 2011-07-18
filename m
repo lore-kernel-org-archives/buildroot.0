@@ -1,45 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Jul 2011 13:13:25 +0200
-Subject: [Buildroot] [git commit] linux-fusion: fix build after af52661d
-	(linux: rename LINUX26 to LINUX)
-Message-ID: <20110718111345.178148AA8F@busybox.osuosl.org>
+From: =?ISO-8859-15?Q?Markus_K=F6nigshaus?= <m.koenigshaus@wut.de>
+Date: Mon, 18 Jul 2011 13:41:31 +0200
+Subject: [Buildroot] Problem with toolchain generation
+Message-ID: <4E241BEB.5010203@wut.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1dfc43cced8d30984687950beca6448203fb576d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I try to generate a ARM - Toolchain for XSCALE ARM. My distro is
+OpenSuse 11.4 (gcc 4.5.1 / binutils 2.21). Trying to "make" I get a
+resolution error: symbol lookup error in
+output/build/host-binutils-2.21:
+usr/lib64/gcc/x86_64-suse-linux/4.5/../../../../x86_64-suse-linux/bin/ld: undefined
+symbol: elf64_alpha_use_secureplt
+collect2: ld returned 127 exit status
 
-linux-fusion uses a number of linux-specific variables. Adjust to match
-their new names.
+To fix this problem I simply comment out HOST_LIB_PATH_bfd in
+output/build/host-binutils-2.21/Makefile - Not an elegant solution, but
+it works. How can this be fixed?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/linux-fusion/linux-fusion.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+Regards, Markus
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index 392ffd6..be1cc71 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -9,12 +9,12 @@ LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- LINUX_FUSION_INSTALL_STAGING = YES
- LINUX_FUSION_DEPENDENCIES = linux
- 
--LINUX_FOR_FUSION=$(LINUX26_VERSION_PROBED)
-+LINUX_FOR_FUSION=$(LINUX_VERSION_PROBED)
- LINUX_FUSION_ETC_DIR=$(TARGET_DIR)/etc/udev/rules.d
- 
- LINUX_FUSION_MAKE_OPTS =  KERNEL_VERSION=$(LINUX_FOR_FUSION)
--LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX26_DIR)
--LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX26_DIR)
-+LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX_DIR)
-+LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX_DIR)
- 
- LINUX_FUSION_MAKE_OPTS += SYSROOT=$(TARGET_DIR)
- LINUX_FUSION_MAKE_OPTS += ARCH=$(KERNEL_ARCH)
--- 
-1.7.3.4
+
+-- Unsere Aussagen koennen Irrtuemer und Missverstaendnisse enthalten.
+Bitte pruefen Sie die Aussagen fuer Ihren Fall, bevor Sie Entscheidungen 
+auf Grundlage dieser Aussagen treffen.
+Wiesemann & Theis GmbH, Porschestr. 12, D-42279 Wuppertal
+Geschaeftsfuehrer: Dipl.-Ing. Ruediger Theis
+Registergericht: Amtsgericht Wuppertal, HRB 6377 
+Tel. +49-202/2680-0, Fax +49-202/2680-265, http://www.wut.de
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110718/dd9f6e13/attachment-0001.html>
