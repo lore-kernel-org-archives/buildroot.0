@@ -1,122 +1,85 @@
 From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Mon, 18 Jul 2011 10:15:53 +0100
-Subject: [Buildroot] [PATCH 2/2] Add top-level rebuild target.
+Date: Mon, 18 Jul 2011 10:15:52 +0100
+Subject: [Buildroot] [PATCH 1/2] Allow rebuilding of generic targets.
 In-Reply-To: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
 References: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
-Message-ID: <1310980553-20754-3-git-send-email-quotientvremainder@gmail.com>
+Message-ID: <1310980553-20754-2-git-send-email-quotientvremainder@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This runs the rebuild command for all enabled targets and runs the RFS
-packaging commands.
+Individual packages using the GENTARGETS and AUTOTARGETS infrastructure
+can now be rebuilt by issuing "make ${pkg}-rebuild".
+Changes can be made in output/build/${pkg}/* and make ${pkg}-rebuild will
+run the normal build command for that directory again.
 
 Signed-off-by: Quotient Remainder <quotientvremainder@gmail.com>
 ---
- Makefile                   |   10 ++++++++++
- fs/common.mk               |    2 ++
- target/generic/Makefile.in |    6 ++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
+ package/Makefile.package.in |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 2f3802c..1c846ff 100644
---- a/Makefile
-+++ b/Makefile
-@@ -316,17 +316,21 @@ include target/Makefile.in
- include linux/linux.mk
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 74087cd..27e5721 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -290,6 +290,11 @@ $(BUILD_DIR)/%/.stamp_built::
+ 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
- TARGETS+=target-finalize
-+TARGETS_NOREBUILD+=target-finalize
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- TARGETS+=target-purgelocales
-+TARGETS_NOREBUILD += target-purgelocales
- endif
- 
- include fs/common.mk
- 
- TARGETS+=erase-fakeroots
-+TARGETS_NOREBUILD+=erase-fakeroots
- 
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
- TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-+TARGETS_REBUILD:=$(patsubst %,%-rebuild,$(filter-out $(TARGETS_NOREBUILD),$(TARGETS)))
- TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
- TARGETS_ALL:=$(patsubst %,__real_tgt_%,$(TARGETS))
- 
-@@ -497,6 +501,9 @@ external-deps:
- show-targets:
- 	@echo $(TARGETS)
- 
-+show-rebuild-targets:
-+	@echo $(TARGETS_REBUILD)
++# Rebuild
++$(BUILD_DIR)/%/.stamp_rebuilt:
++	@$(call MESSAGE,"Rebuilding")
++	$($(PKG)_REBUILD_CMDS)
 +
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ # Install to host dir
+ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	@$(call MESSAGE,'Installing to host directory')
+@@ -425,6 +430,7 @@ $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
+ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
+ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
++$(2)_TARGET_REBUILD =		$$($(2)_DIR)/.stamp_rebuilt
+ $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
+ $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+ $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+@@ -485,6 +491,8 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+ $(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD)
  
- all: menuconfig
-@@ -628,6 +635,8 @@ endif
- 
- cross: $(BASE_TARGETS)
- 
-+rebuild: $(TARGETS_REBUILD) $(TARGETS_NOREBUILD)
++$(1)-rebuild:	$$($(2)_TARGET_REBUILD) $(1)
 +
- help:
- 	@echo 'Cleaning:'
- 	@echo '  clean                  - delete all files created by build'
-@@ -635,6 +644,7 @@ help:
- 	@echo
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
-+	@echo '  rebuild                - rerun build commands for all enabled targets'
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
-diff --git a/fs/common.mk b/fs/common.mk
-index 4d50514..594ca5e 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -71,6 +71,8 @@ rootfs-$(1)-show-depends:
+ $(1)-configure:		$(1)-patch \
+ 			$$($(2)_TARGET_CONFIGURE)
  
- rootfs-$(1): $(BINARIES_DIR)/rootfs.$(1) $(ROOTFS_$(2)_POST_TARGETS)
+@@ -514,6 +522,7 @@ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
+ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
++$$($(2)_TARGET_REBUILD):		PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
+ $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
+@@ -534,6 +543,19 @@ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+ endif
  
-+$(1)-root-rebuild: $(1)-root
++ifndef $(2)_REBUILD_CMDS
++ ifeq ($(5),target)
++  define $(2)_REBUILD_CMDS
++	$(Q)rm -f $(2)_TARGET_BUILD $(2)_TARGET_INSTALL_TARGET \
++		$(2)_TARGET_INSTALL_STAGING $(2)_TARGET_INSTALL_IMAGES
++  endef
++ else
++  define $(2)_REBUILD_CMDS
++	$(Q)rm -f $(2)_TARGET_BUILD $(2)_TARGET_INSTALL_HOST
++  endef
++ endif
++endif
 +
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS += rootfs-$(1)
- endif
-diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index 4185202..8a29174 100644
---- a/target/generic/Makefile.in
-+++ b/target/generic/Makefile.in
-@@ -33,21 +33,27 @@ target-generic-dont-remount-rw:
- 
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- TARGETS += target-generic-hostname
-+TARGETS_NOREBUILD += target-generic-hostname
- endif
- 
- ifneq ($(TARGET_GENERIC_ISSUE),)
- TARGETS += target-generic-issue
-+TARGETS_NOREBUILD += target-generic-issue
- endif
- 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- ifeq ($(BR2_PACKAGE_SYSVINIT),y)
- TARGETS += target-generic-getty-sysvinit
-+TARGETS_NOREBUILD += target-generic-getty-sysvinit
- else
- TARGETS += target-generic-getty-busybox
-+TARGETS_NOREBUILD += target-generic-getty-busybox
- endif
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- TARGETS += target-generic-do-remount-rw
-+TARGETS_NOREBUILD += target-generic-do-remount-rw
- else
- TARGETS += target-generic-dont-remount-rw
-+TARGETS_NOREBUILD += target-generic-dont-remount-rw
- endif
- endif
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
 -- 
 1.7.6
