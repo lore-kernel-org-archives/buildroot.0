@@ -1,37 +1,32 @@
-From: =?ISO-8859-15?Q?Markus_K=F6nigshaus?= <m.koenigshaus@wut.de>
-Date: Mon, 18 Jul 2011 13:41:31 +0200
-Subject: [Buildroot] Problem with toolchain generation
-Message-ID: <4E241BEB.5010203@wut.de>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 18 Jul 2011 14:11:29 +0200
+Subject: [Buildroot] [git commit] linux-fusion: fix build after af52661d
+ (linux: rename LINUX26 to LINUX)
+In-Reply-To: <20110718111345.178148AA8F@busybox.osuosl.org>
+References: <20110718111345.178148AA8F@busybox.osuosl.org>
+Message-ID: <1310991089.8862.14.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 2011-07-18 at 13:13 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=1dfc43cced8d30984687950beca6448203fb576d
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> linux-fusion uses a number of linux-specific variables. Adjust to match
+> their new names.
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
 
-I try to generate a ARM - Toolchain for XSCALE ARM. My distro is
-OpenSuse 11.4 (gcc 4.5.1 / binutils 2.21). Trying to "make" I get a
-resolution error: symbol lookup error in
-output/build/host-binutils-2.21:
-usr/lib64/gcc/x86_64-suse-linux/4.5/../../../../x86_64-suse-linux/bin/ld: undefined
-symbol: elf64_alpha_use_secureplt
-collect2: ld returned 127 exit status
+Still getting hits when I "git grep" for LINUX26:
 
-To fix this problem I simply comment out HOST_LIB_PATH_bfd in
-output/build/host-binutils-2.21/Makefile - Not an elegant solution, but
-it works. How can this be fixed?
+ fs/iso9660/iso9660.mk
+ scripts/get_linux_config.sh
 
-Regards, Markus
+Those probably need to be changed as well.
 
 
--- Unsere Aussagen koennen Irrtuemer und Missverstaendnisse enthalten.
-Bitte pruefen Sie die Aussagen fuer Ihren Fall, bevor Sie Entscheidungen 
-auf Grundlage dieser Aussagen treffen.
-Wiesemann & Theis GmbH, Porschestr. 12, D-42279 Wuppertal
-Geschaeftsfuehrer: Dipl.-Ing. Ruediger Theis
-Registergericht: Amtsgericht Wuppertal, HRB 6377 
-Tel. +49-202/2680-0, Fax +49-202/2680-265, http://www.wut.de
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110718/dd9f6e13/attachment-0001.html>
+Sven
