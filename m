@@ -1,34 +1,27 @@
-From: David J. Fiddes <D.J@fiddes.net>
-Date: Mon, 18 Jul 2011 20:35:58 +0100
-Subject: [Buildroot] ARM OABI build broken with current buildroot tip
-In-Reply-To: <87fwm37vj4.fsf@macbook.be.48ers.dk>
-References: <4E22BFA1.7080800@fiddes.net> <87fwm37vj4.fsf@macbook.be.48ers.dk>
-Message-ID: <4E248B1E.1090904@fiddes.net>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 18 Jul 2011 22:29:55 +0200
+Subject: [Buildroot] pending patches (gstreamer, gvfs, shared-mime-info, ...)
+Message-ID: <1311020996.382.5.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi,
 
-> The problem is NPTL threading support. A quick look in
-> libpthread/nptl/sysdeps/arm shows a number of EABI references. It seems
-> like NPTL on ARM is only supported with EABI.
+there are a number of patches that I sent to this list over the last two
+weeks, which are not yet committed. Some of them have seen review and I
+have changed the patches according to your input and re-submitted them.
 
-Ah. That's a bit of a show stopper.
+Are the pending patches still being considered for inclusion? Would it
+help if provided them as pull requests instead of (or even in addition
+to) sending the patches to the list?
 
-> May I ask why you want to use a new C library / NPTL together with the
-> obsolete OABI?
+Excuse me if I am sounding impatient, I'm just trying to get our patches
+in and would like to know if there's anything I can/should do to make
+that happen.
 
-I have a very large multi-threaded C++ app and a custom embedded Linux 
-platform that have historically been developed at different times. The 
-SW is now over 10 years old and I fear change so just stuck to the ABI 
-that has always worked...
 
-Probably time to bite the bullet and move our kernel to EABI for our 
-next major release.
-
-thanks,
-
-Dave
+Regards,
+Sven
