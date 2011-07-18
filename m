@@ -1,42 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Jul 2011 16:01:37 +0200
-Subject: [Buildroot] [git commit] proftpd: bump version
-Message-ID: <20110718140226.1EF018A36C@busybox.osuosl.org>
+From: Quotient Remainder <quotientvremainder@gmail.com>
+Date: Mon, 18 Jul 2011 15:02:25 +0100
+Subject: [Buildroot] [RFC PATCH 0/2] Add the ability to rebuild packages.
+In-Reply-To: <CAAXf6LU3_s_E03b2KzNusjvMsbcYUFZupr-DoP+SRT9F7y_99Q@mail.gmail.com>
+References: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
+ <CAAXf6LU3_s_E03b2KzNusjvMsbcYUFZupr-DoP+SRT9F7y_99Q@mail.gmail.com>
+Message-ID: <1310997747.2189.53.camel@dublxciaranr1.verifone.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=135f1140a1160be3ebcd21e6c6a37ffd8abcf6ba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 2011-07-18 at 11:30 +0200, Thomas De Schampheleire wrote:
+> We are currently using Buildroot in such a development mode, and
+> indeed face the problems you are solving with this patch. So: thumbs
+> up!
+> 
+> But it is not only 'rebuild' that is useful. The conditions under
+> which the configure command of a certain package originally ran, may
+> have changed. A similar thing is true for patches: you may have
+> updated the patchfile. In such cases, generic reconfigure and repatch
+> targets are very welcome, together with the rebuild target you already
+> made...
 
-Fixes several security-related issues.
+xxx-reconfigure should be fairly straightforward since no
+TARGET_NORECONFIGURE variable would be needed, just remove the stamp and
+make xxx-configure.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ....3e-fix-kernel-header-capability-version.patch} |    0
- package/proftpd/proftpd.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
- rename package/proftpd/{proftpd-1.3.3b-fix-kernel-header-capability-version.patch => proftpd-1.3.3e-fix-kernel-header-capability-version.patch} (100%)
-
-diff --git a/package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.3e-fix-kernel-header-capability-version.patch
-similarity index 100%
-rename from package/proftpd/proftpd-1.3.3b-fix-kernel-header-capability-version.patch
-rename to package/proftpd/proftpd-1.3.3e-fix-kernel-header-capability-version.patch
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 75ab930..3733cd6 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -3,7 +3,7 @@
- # proftpd
- #
- #############################################################
--PROFTPD_VERSION = 1.3.3b
-+PROFTPD_VERSION = 1.3.3e
- PROFTPD_SOURCE = proftpd-$(PROFTPD_VERSION).tar.bz2
- PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source/
- 
--- 
-1.7.3.4
+Would xxx-repatch be effectively a re-extraction?  That is, the patch
+has been applied, then changed and so can't be applied in reverse so
+you'll have to erase the extracted package and re-extract, patch, ...
+So in effect it's a "make xxx-dirclean xxx" operation, right?
