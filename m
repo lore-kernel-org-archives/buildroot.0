@@ -1,56 +1,47 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Mon, 18 Jul 2011 10:46:07 +0100
-Subject: [Buildroot] [PATCH] Makefile.package.in: Pass non-prefixed name as
-	argument to GENTARGETS_INNER.
-Message-ID: <1310982367-20976-1-git-send-email-quotientvremainder@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 18 Jul 2011 12:06:23 +0200
+Subject: [Buildroot] ARM OABI build broken with current buildroot tip
+In-Reply-To: <4E22BFA1.7080800@fiddes.net> (David J. Fiddes's message of "Sun, 
+ 17 Jul 2011 11:55:29 +0100")
+References: <4E22BFA1.7080800@fiddes.net>
+Message-ID: <87fwm37vj4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of effectively running s/^host-// on the package name, just pass the
-non-prefixed name to GENTARGETS_INNER.  This removes the need to ban packages
-with names starting with "host-".
+>>>>> "David" == David J Fiddes <D.J@fiddes.net> writes:
 
-Signed-off-by: Quotient Remainder <quotientvremainder@gmail.com>
----
- package/Makefile.package.in |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ David> Hi,
+ David> I'm trying to build an up to date ARM OABI toolchain with uClibc
+ David> 0.9.32. The build fails with a missing stack unwind symobl.
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 74087cd..f4d54fe 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -347,6 +347,7 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
- #             for host packages
- #  argument 4 is the package directory prefix
- #  argument 5 is the type (target or host)
-+#  argument 6 is the lowercase package name without the host- prefix.
- ################################################################################
- 
- define GENTARGETS_INNER
-@@ -516,7 +517,7 @@ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
- $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
--$$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
-+$$($(2)_TARGET_PATCH):			RAWNAME=$(6)
- $$($(2)_TARGET_EXTRACT):		PKG=$(2)
- $$($(2)_TARGET_SOURCE):			PKG=$(2)
- $$($(2)_TARGET_UNINSTALL):		PKG=$(2)
-@@ -562,10 +563,10 @@ endef # GENTARGETS_INNER
- define GENTARGETS
- ifeq ($(3),host)
- # In the case of host packages, turn the package name "pkg" into "host-pkg"
--$(call GENTARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
-+$(call GENTARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host,$(2))
- else
- # In the case of target packages, keep the package name "pkg"
--$(call GENTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
-+$(call GENTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target,$(2))
- endif
- endef
- 
+ David> The toolchain I'm trying to configure is pretty straight forward. From
+ David> a "make distclean" I configure:
+ David>  - ARM processor
+ David>  - OABI
+ David>  - Disable busybox and filesystem image generation
+
+ David> Switching uClibc to 0.9.31 allows the build to succeed.
+
+The problem is NPTL threading support. A quick look in
+libpthread/nptl/sysdeps/arm shows a number of EABI references. It seems
+like NPTL on ARM is only supported with EABI.
+
+And indeed, OABI / uClibc 0.9.32  / linuxthreads-old builds fine.
+
+I'll adjust Buildroot so you cannot select NTPL together with OABI.
+
+ David> It seems like this is a uClibc bug but I'm not sure how best to
+ David> separate the toolchain build form the uClibc build.
+
+It looks pretty independent of anything Buildroot related. You are
+welcome to ask them regarding non-EABI NPTL support, but I would imagine
+that such an uncommon configuration has fairly low priority.
+
+May I ask why you want to use a new C library / NPTL together with the
+obsolete OABI?
+
 -- 
-1.7.6
+Bye, Peter Korsgaard
