@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jul 2011 23:01:30 +0200
-Subject: [Buildroot] [PATCH] shared-mime-info: update to version 0.90
-In-Reply-To: <1310627788-3185-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Thu, 14 Jul 2011 09:16:28 +0200")
-References: <1310627788-3185-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87ei1n5mmt.fsf@macbook.be.48ers.dk>
+Date: Mon, 18 Jul 2011 23:12:34 +0200
+Subject: [Buildroot] [PATCH 1/3] gvfs: update to latest upstream version
+	(1.8.2)
+In-Reply-To: <1310576089-9207-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Wed, 13 Jul 2011 18:54:47 +0200")
+References: <1310576089-9207-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87aacb5m4d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +14,6 @@ To: buildroot@busybox.net
 
 >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Need to use $(MAKE1) as parallel builds appear to be broken.
  Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
 Committed, thanks.
