@@ -1,49 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jul 2011 23:14:07 +0200
-Subject: [Buildroot] [PATCH 2/3] gvfs: drop dbus-glib dependency
-In-Reply-To: <1310576089-9207-2-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Wed, 13 Jul 2011 18:54:48 +0200")
-References: <1310576089-9207-1-git-send-email-s.neumann@raumfeld.com>
- <1310576089-9207-2-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <8762mz5m1s.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 18 Jul 2011 23:17:39 +0200
+Subject: [Buildroot] [git commit] gvfs: fix installation of gsettings schemas
+Message-ID: <20110718211805.920E48ACEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Drop the dbus-glib dependency as gvfs uses dbus directly.
- Sven> Also change dependency on the XML parser for dbus to be more
- Sven> in sync with the dbus package.
+commit: http://git.buildroot.net/buildroot/commit/?id=b8ee6635ed6339e2676f64903d0c079cdd968c3c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
- Sven> ---
- Sven>  package/gvfs/Config.in |    6 ++++--
- Sven>  package/gvfs/gvfs.mk   |    2 +-
- Sven>  2 files changed, 5 insertions(+), 3 deletions(-)
+Install gvfs into staging and compile the installed schemas for
+use on the target.
 
- Sven> diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
- Sven> index 04fce93..38eb093 100644
- Sven> --- a/package/gvfs/Config.in
- Sven> +++ b/package/gvfs/Config.in
- Sven> @@ -2,10 +2,9 @@ config BR2_PACKAGE_GVFS
- Sven>  	bool "gvfs"
- Sven>  	depends on BR2_LARGEFILE
- Sven>  	depends on BR2_USE_WCHAR # glib2
- Sven> +	depends on BR2_PACKAGE_EXPAT || BR2_PACKAGE_LIBXML2 # dbus
- Sven>  	select BR2_PACKAGE_LIBGLIB2
- Sven> -	select BR2_PACKAGE_EXPAT # needed by dbus(-glib)
- Sven>  	select BR2_PACKAGE_DBUS
- Sven> -	select BR2_PACKAGE_DBUS_GLIB
- Sven>  	select BR2_PACKAGE_SHARED_MIME_INFO
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gvfs/gvfs.mk |   15 +++++++++++++--
+ 1 files changed, 13 insertions(+), 2 deletions(-)
 
-mconf unfortunately complains about recursive dependencies because of
-libxml2, bus as shared-mime-info already selects libxml2 we can drop the
-expat || libxml2 and simply select dbus instead.
-
-Committed, thanks.
-
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index f208973..b0fcf3d 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -8,7 +8,7 @@ GVFS_VERSION_MINOR = 2
+ GVFS_VERSION = $(GVFS_VERSION_MAJOR).$(GVFS_VERSION_MINOR)
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.gz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+-GVFS_INSTALL_STAGING = NO
++GVFS_INSTALL_STAGING = YES
+ GVFS_INSTALL_TARGET = YES
+ GVFS_AUTORECONF = NO
+ GVFS_DEPENDENCIES = host-pkg-config host-libglib2 libglib2 dbus shared-mime-info
+@@ -71,6 +71,17 @@ define GVFS_REMOVE_USELESS_BINARY
+ 	rm $(TARGET_DIR)/usr/bin/gvfs-less
+ endef
+ 
+-GVFS_POST_INSTALL_TARGET_HOOKS += GVFS_REMOVE_USELESS_BINARY
++define GVFS_REMOVE_TARGET_SCHEMAS
++	rm $(TARGET_DIR)/usr/share/glib-2.0/schemas/*.xml
++endef
++
++define GVFS_COMPILE_SCHEMAS
++	$(HOST_DIR)/usr/bin/glib-compile-schemas --targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas $(STAGING_DIR)/usr/share/glib-2.0/schemas
++endef
++
++GVFS_POST_INSTALL_TARGET_HOOKS += \
++	GVFS_REMOVE_USELESS_BINARY	\
++	GVFS_REMOVE_TARGET_SCHEMAS	\
++	GVFS_COMPILE_SCHEMAS
+ 
+ $(eval $(call AUTOTARGETS,package,gvfs))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
