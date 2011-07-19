@@ -1,42 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Jul 2011 23:01:49 +0200
-Subject: [Buildroot] [Patch] Allow file to be built against static libs.
-In-Reply-To: <87sjq22f6n.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Tue, 19 Jul 2011 22:22:56 +0200")
-References: <F9C551623D2CBB4C9488801D14F864C6044668@ex-mb1.corp.adtran.com>
- <87sjq22f6n.fsf@macbook.be.48ers.dk>
-Message-ID: <87oc0q2ddu.fsf@macbook.be.48ers.dk>
+Date: Tue, 19 Jul 2011 23:11:57 +0200
+Subject: [Buildroot] [git commit] sdl: build alsa support if enabled
+Message-ID: <20110719211531.85EA58B346@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
->>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
- ANDY> If selected "prefer static libs", file fails to build reporting:
- ANDY> relocation R_X86_64_32S against `zcalloc' can not be used when making
- ANDY> a shared object; recompile with -fPIC
- ANDY> The suggested -fPIC doesn't work.  The issue is that the default
- ANDY> configure has --enable-shared --enable-static.  This patch modifies
- ANDY> the configure to disable shared when "prefer static libs" is selected.
+commit: http://git.buildroot.net/buildroot/commit/?id=8a6f23a42409a0784ffa38c262b50516516e56ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- ANDY> FILE_DEPENDENCIES = host-file zlib
- ANDY> HOST_FILE_DEPENDENCIES = host-zlib
+Ensure alsa-lib gets built before SDL if enabled, so the SDL configure
+script correctly detects alsa support.
 
- ANDY> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
- ANDY> +FILE_CONF_OPT = --disable-shared --enable-static
- ANDY> +HOST_FILE_CONF_OPT = --disable-shared --enable-static
+Noticed by Ayla on IRC.
 
- Peter> We indeed force --enable-shared --disable-static for host builds, but
- Peter> that doesn't really matter. For target builds we use (see
- Peter> package/Makefile.in) --enable-static --enable-shared when
- Peter> PREFER_STATIC_LIB is enabled, so rather than something file specific, I
- Peter> think it would make more sense to set that to --enable-static
- Peter> --disable-shared instead.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdl/sdl.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Ehh, drop that, I remembered wrong - We're already doing --enable-static --disable-shared.
-
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 99488a6..af462c4 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -40,6 +40,10 @@ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ SDL_DEPENDENCIES += tslib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++SDL_DEPENDENCIES += alsa-lib
++endif
++
+ SDL_CONF_OPT += --enable-pulseaudio=no \
+ 		--disable-arts \
+ 		--disable-esd \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
