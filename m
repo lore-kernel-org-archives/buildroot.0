@@ -1,34 +1,29 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 19 Jul 2011 12:13:40 +0200
-Subject: [Buildroot] [PATCHv3] udev: bump to 172
-In-Reply-To: <87pql75rlk.fsf@macbook.be.48ers.dk>
-References: <4E1D4062.9010909@visionsystems.de>
- <87y5zz8jm6.fsf@macbook.be.48ers.dk> <20110716092425.02e80735@skate>
- <87oc0s6n6k.fsf@macbook.be.48ers.dk> <20110718180753.35727036@skate>
- <87pql75rlk.fsf@macbook.be.48ers.dk>
-Message-ID: <4E2558D4.2010201@visionsystems.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Jul 2011 12:21:17 +0200
+Subject: [Buildroot] [PATCHv4] udev: bump to 172
+In-Reply-To: <4E25586E.1030509@visionsystems.de> (Yegor Yefremov's message of
+ "Tue, 19 Jul 2011 12:11:58 +0200")
+References: <4E25586E.1030509@visionsystems.de>
+Message-ID: <87ei1m4llu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 18.07.2011 21:14, schrieb Peter Korsgaard:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
->  >> But it is as we build pkg-config with:
->  >> 
->  >> --with-pc-path="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig"
-> 
->  Thomas> It wasn't at the time I did my udev package (which I lost), and
->  Thomas> maybe the same is true for Yegor's package. Yegor, can you
->  Thomas> retry without this PKG_CONFIG_PATH variable ?
-> 
-> Please also take my other comments into considerations when respinning
-> the patch.
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-I've followed all your comments except of dependencies with volume id (see v4).
+ Yegor> Signed-off-by: Heiko Zuerker <smiley73@users.sourceforge.net>
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Yegor
+Thanks - It would be good if you in the future could list (after the ---
+line so it doesn't become part of the commit message) what you have
+changed since the previous version.
+
+From a quick look, I think the only pending issue is about the
+UDEV_VOLUME_ID dependencies of usbmount/hal. What do we do about those?
+I don't know much about udev/hal/usbmount, but presumably there's a way
+forward here?
+
+-- 
+Bye, Peter Korsgaard
