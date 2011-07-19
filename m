@@ -1,43 +1,34 @@
-From: Quotient Remainder <quotientvremainder@gmail.com>
-Date: Tue, 19 Jul 2011 15:16:42 +0100
-Subject: [Buildroot] [Bug 3685] ncurses installation hangs due to old
- version of tic
-In-Reply-To: <CAAXf6LW-QMMyqGr8UyV1sf_woy+6+c4nkrQs_VK56BgqxgW0KQ@mail.gmail.com>
-References: <bug-3685-163@https.bugs.busybox.net/>
- <20110719124505.D22168B2ED@busybox.osuosl.org>
- <CANPyyuNysycKDHUOJbanqWB4qp0t+NgWKYjk5xyj3bV7BypDJA@mail.gmail.com>
- <CAAXf6LW-QMMyqGr8UyV1sf_woy+6+c4nkrQs_VK56BgqxgW0KQ@mail.gmail.com>
-Message-ID: <1311085004.2189.61.camel@dublxciaranr1.verifone.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 19 Jul 2011 16:51:51 +0200
+Subject: [Buildroot] [PATCHv4] udev: bump to 172
+In-Reply-To: <8762my4k8d.fsf@macbook.be.48ers.dk>
+References: <4E25586E.1030509@visionsystems.de>	<87ei1m4llu.fsf@macbook.be.48ers.dk>
+ <4E2560AA.20603@visionsystems.de> <8762my4k8d.fsf@macbook.be.48ers.dk>
+Message-ID: <4E259A07.7060800@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2011-07-19 at 15:59 +0200, Thomas De Schampheleire wrote:
-> On Tue, Jul 19, 2011 at 3:23 PM, Mike Williams <mike@mikebwilliams.com> wrote:
-> > All,
-> >
-> >> --- Comment #3 from Peter Korsgaard <jacmet@uclibc.org>  ---
-> >> (In reply to comment #2)
-> >>> Any specific reason why this has not been included in buildroot yet?
-> >>>
-> >>> Thanks,
-> >>> Thomas
-> >>
-> >> No, I just haven't looked at it / forgotten about it / not been able to
-> >> reproduce it locally. Will take a look at it tonight.
-> >
-> > I also had this problem. It appears to be caused by the old version
-> > present on RHEL 5.4, which is what I'm using in our corporate
-> > environment. If I had to guess, it would be because the tic being
-> > called is the one on the host system, not the one built by buildroot.
-> 
-> Correct. The patch I proposed avoids that by compiling a host version
-> of tic in buildroot. This one is later used during the installation of
-> the target ncurses.
-> 
-I also came across this problem a year ago: 
-http://lists.busybox.net/pipermail/buildroot/2010-July/036100.html
-and later proposed a patch:
-http://lists.busybox.net/pipermail/buildroot/2010-December/039670.html
+
+>  >> >From a quick look, I think the only pending issue is about the
+>  >> UDEV_VOLUME_ID dependencies of usbmount/hal. What do we do about those?
+>  >> I don't know much about udev/hal/usbmount, but presumably there's a way
+>  >> forward here?
+>
+>  Yegor> It seems to become a lot of work :-)
+>
+> Yes, I know - Sorry about that. On the other hand, I cannot break the
+> build for the existing users of hal/usbmount.
+
+Never mind :-)
+
+> Thanks for the links, will take a look
+
+
+I looked at the latest usbmount 0.0.21 package hosted by Debian. It uses blkid, which is part of util-linux and busybox. The busybox one is not capable of delivering the needed info about partitions, so we really need util-linux. The present package is rather old and didn't want to get compiled. At first the package needs to be converted to autotarget and bumped to the newer version, which in turn seems to have issues with uclibc: http://permalink.gmane.org/gmane.comp.embedded.ptxdist.devel/7547.
+
+That's my preliminary summary.
+
+Yegor
