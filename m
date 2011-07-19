@@ -1,40 +1,46 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 19 Jul 2011 14:35:45 +0200
-Subject: [Buildroot] [PATCH] [resend] linux: add linux-update target to save
-	configuration
-Message-ID: <df2d47a2798ac5fe5920.1311078945@localhost6.localdomain6>
+Date: Tue, 19 Jul 2011 14:39:32 +0200
+Subject: [Buildroot] [PATCH 0 of 3] Add support for local package
+ downloads (file://)
+In-Reply-To: <20110315235428.1f50e78d@surf>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+ <20110315235428.1f50e78d@surf>
+Message-ID: <CAAXf6LUiuwOu9dj0_5EQLMkiJNk=DVErGiyEfwB+4xoLZO0hag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In analogy to build targets uclibc-update and busybox-update, add linux-update
-that copies the current configuration to the custom configuration file set in
-buildroot.
-This facilitates the work of developers adding support for a specific board
-to buildroot.
+Hi Thomas,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Tue, Mar 15, 2011 at 11:54 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Tue, 15 Mar 2011 08:27:05 +0100
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
+>
+>> This patch series add support for file:// URLs for both the package
+>> infrastructure, as for the BR2_PRIMARY_SITE and BR2_BACKUP_SITE
+>> options. URLs starting with file:// will be handled by a plain 'cp'
+>> instead of wget. A new SITE_METHOD 'file' is added. Documentation is
+>> updated as well.
+>>
+>> Note that this is mainly useful in situations where developers
+>> working on a project are sharing the same filesystem (e.g. disk,
+>> NFS, ...), as typically is the case in corporate environments. In
+>> that case, one may add one or more local project-specific packages,
+>> and even use a central storage location as 'proxy' for package
+>> downloads (using BR2_PRIMARY_SITE with a file:// URL).
+>>
+>> Signed-off-by: Thomas De Schampheleire
+>> <thomas.de.schampheleire@gmail.com>
+>
+> I agree with the principle, I need to do a bit of testing before acking
+> the patches.
+>
+> Thanks for this work!
 
----
- linux/linux.mk |  7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+Did you have some time to have a better look at these patches?
 
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -184,6 +184,13 @@
- 		$(subst linux-,,$(subst linux26-,,$@))
- 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
- 
-+ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-+linux-update linux26-update: $(LINUX26_DIR)/.config
-+	cp -f $(LINUX26_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
-+else
-+linux-update linux26-update: ;
-+endif
-+
- # Support for rebuilding the kernel after the initramfs file list has
- # been generated in $(BINARIES_DIR)/rootfs.initramfs.
- $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.initramfs
+Thanks,
+Thomas
