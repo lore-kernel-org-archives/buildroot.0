@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Jul 2011 12:26:27 +0200
-Subject: [Buildroot] [git commit] uboot-tools: enable fw_printenv by default
-Message-ID: <20110719114043.C6DA68B2EE@busybox.osuosl.org>
+Date: Tue, 19 Jul 2011 14:00:19 +0200
+Subject: [Buildroot] [git commit] uboot: fix custom patch dir typo
+Message-ID: <20110719120041.151C78A694@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfb54ef515dc6043ffdca14424307791c14f2a18
+commit: http://git.buildroot.net/buildroot/commit/?id=e5decb1905708573e4741e786db7bbb8e1f93561
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Normally people want to atleast use fw_printenv if they are using u-boot
-tools, so default to 'y'.
+Noticed by robinmholt on IRC.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/uboot-tools/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ boot/uboot/uboot.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index f197391..9cc837c 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 1425579..776bdef 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -56,7 +56,7 @@ define UBOOT_APPLY_CUSTOM_PATCHES
+ 		uboot-$(UBOOT_VERSION)-\*.patch
+ endef
  
- config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	bool "fw_printenv"
-+	default y
- 	help
- 	  The fw_printenv / fw_setenv tools from Das U-Boot
- 	  bootloader, which allows access to the U-Boot environment
+-UBOOT_POST_PATCH_HOOKS += U_BOOT_APPLY_CUSTOM_PATCHES
++UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+ endif
+ 
+ define UBOOT_CONFIGURE_CMDS
 -- 
 1.7.3.4
