@@ -1,34 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jul 2011 18:47:14 +0200
-Subject: [Buildroot] [PATCHv4] udev: bump to 172
-In-Reply-To: <4E259A07.7060800@visionsystems.de>
-References: <4E25586E.1030509@visionsystems.de>
- <87ei1m4llu.fsf@macbook.be.48ers.dk>
- <4E2560AA.20603@visionsystems.de>
- <8762my4k8d.fsf@macbook.be.48ers.dk>
- <4E259A07.7060800@visionsystems.de>
-Message-ID: <20110719184714.2b3205c8@skate>
+Date: Tue, 19 Jul 2011 18:51:19 +0200
+Subject: [Buildroot] [PATCH 1/2] Allow rebuilding of generic targets.
+In-Reply-To: <CAAXf6LWqq4vPq8ST-LoheSR=eKy+0sjr4ydZXbLFB=cMXLCqrQ@mail.gmail.com>
+References: <1310980553-20754-1-git-send-email-quotientvremainder@gmail.com>
+ <1310980553-20754-2-git-send-email-quotientvremainder@gmail.com>
+ <20110719070526.44b8f083@skate>
+ <CAAXf6LWqq4vPq8ST-LoheSR=eKy+0sjr4ydZXbLFB=cMXLCqrQ@mail.gmail.com>
+Message-ID: <20110719185119.1ba8e4ca@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 19 Jul 2011 16:51:51 +0200,
-Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+Le Tue, 19 Jul 2011 08:52:07 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> I looked at the latest usbmount 0.0.21 package hosted by Debian. It
-> uses blkid, which is part of util-linux and busybox. The busybox one
-> is not capable of delivering the needed info about partitions, so we
-> really need util-linux. The present package is rather old and didn't
-> want to get compiled. At first the package needs to be converted to
-> autotarget and bumped to the newer version, which in turn seems to
-> have issues with uclibc:
-> http://permalink.gmane.org/gmane.comp.embedded.ptxdist.devel/7547.
+> Has this patch already been applied?
 
-For util-linux, multiple patches have been posted to the list to update
-it, but none have been merged. So I think looking at the archives of
-the Buildroot list would be a good starting point.
+No, not yet. I intend to send a pull request for it (and other
+features) quite soon. Maybe today, or tomorrow morning.
 
 Regards,
 
