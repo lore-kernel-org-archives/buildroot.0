@@ -1,32 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 19 Jul 2011 12:50:58 +0200
-Subject: [Buildroot] [PATCHv4] udev: bump to 172
-In-Reply-To: <4E2560AA.20603@visionsystems.de> (Yegor Yefremov's message of
- "Tue, 19 Jul 2011 12:47:06 +0200")
-References: <4E25586E.1030509@visionsystems.de>
- <87ei1m4llu.fsf@macbook.be.48ers.dk> <4E2560AA.20603@visionsystems.de>
-Message-ID: <8762my4k8d.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Jul 2011 13:23:36 +0200
+Subject: [Buildroot] devtmpfs and initramfs
+In-Reply-To: <87aaca4l1y.fsf@macbook.be.48ers.dk>
+References: <201107191222.19313.arnout@mind.be>
+ <87aaca4l1y.fsf@macbook.be.48ers.dk>
+Message-ID: <201107191323.36347.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-Hi,
+On Tuesday 19 July 2011 12:33:13, Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>  Arnout>  I ended up adding the following to my inittab:
+> 
+>  Arnout> null::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
+> 
+>  Arnout>  Does anyone know a more elegant solution?
+> 
+> Not really - Besides adding a devtmps_mount() call in kernel_init(), but
+> that's kind of icky as well.
 
- >> >From a quick look, I think the only pending issue is about the
- >> UDEV_VOLUME_ID dependencies of usbmount/hal. What do we do about those?
- >> I don't know much about udev/hal/usbmount, but presumably there's a way
- >> forward here?
+ We could of course use the same trick as for GENERIC_SERIAL...
 
- Yegor> It seems to become a lot of work :-)
-
-Yes, I know - Sorry about that. On the other hand, I cannot break the
-build for the existing users of hal/usbmount.
-
-Thanks for the links, will take a look.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
