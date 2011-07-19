@@ -1,32 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Jul 2011 12:22:19 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 19 Jul 2011 12:33:13 +0200
 Subject: [Buildroot] devtmpfs and initramfs
-Message-ID: <201107191222.19313.arnout@mind.be>
+In-Reply-To: <201107191222.19313.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 19 Jul 2011 12:22:19 +0200")
+References: <201107191222.19313.arnout@mind.be>
+Message-ID: <87aaca4l1y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hoi all,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- I'm using an initramfs as the root filesystem image, and devtmpfs for the 
-devices.  However, it turns out that devtmpfs doesn't get mounted 
-automatically if the root filesystem is an initramfs (at least in 2.6.35).
+ Arnout>  Hoi all,
 
- I ended up adding the following to my inittab:
+ Arnout>  I'm using an initramfs as the root filesystem image, and
+ Arnout> devtmpfs for the devices.  However, it turns out that devtmpfs
+ Arnout> doesn't get mounted automatically if the root filesystem is an
+ Arnout> initramfs (at least in 2.6.35).
 
-null::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
+Indeed, init/mainc::kernel_init() doesn't call prepare_namespace()
+(which calls devtmpfs_mount()) if an initramfs with an /init is found.
 
+ Arnout>  I ended up adding the following to my inittab:
 
- Does anyone know a more elegant solution?
+ Arnout> null::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
 
- Regards,
- Arnout
+ Arnout>  Does anyone know a more elegant solution?
+
+Not really - Besides adding a devtmps_mount() call in kernel_init(), but
+that's kind of icky as well.
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Bye, Peter Korsgaard
