@@ -1,28 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Jul 2011 19:43:04 +0200
-Subject: [Buildroot] [git commit] initramfs: fix boot with dynamic /dev
-In-Reply-To: <201107201112.44209.minimod@morethan.org> (Michael S. Zick's
- message of "Wed, 20 Jul 2011 11:12:41 -0500")
-References: <20110720150418.E95188B391@busybox.osuosl.org>
- <201107201112.44209.minimod@morethan.org>
-Message-ID: <87pql426hj.fsf@macbook.be.48ers.dk>
+Date: Wed, 20 Jul 2011 19:41:45 +0200
+Subject: [Buildroot] devtmpfs and initramfs
+In-Reply-To: <201107201300.39616.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 20 Jul 2011 13:00:38 +0200")
+References: <201107191222.19313.arnout@mind.be>
+ <201107201057.48006.arnout@mind.be>
+ <874o2h2pif.fsf@macbook.be.48ers.dk>
+ <201107201300.39616.arnout@mind.be>
+Message-ID: <87tyag26jq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
- Michael> Will the various shell aps run a script without /dev/console
- Michael> and /dev/null?
+ Arnout>  But next thing you know, some other piece of Makefile also
+ Arnout> wants to do something with /init...
 
- Michael> Once upon a time, some did not, but that may no longer be true.
-
-The busybox ones do atleast (I've tested it). I haven't tried with
-/bin/sh == bash though, but that's probably fairly unlikely for an
-initramfs.
+What would that be? /init is specific to initramfs.
 
 -- 
 Bye, Peter Korsgaard
