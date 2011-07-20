@@ -1,57 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:11:51 +0200
-Subject: [Buildroot] [pull request v2] Pull request for branch disko
-Message-ID: <cover.1311138690.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jul 2011 18:19:55 +0200
+Subject: [Buildroot] ccache directory
+In-Reply-To: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+Message-ID: <20110720181955.36911f14@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Wed, 20 Jul 2011 17:42:52 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Here is a set of patches that add the disko multimedia framework and
-its demonstration application. Since disko uses SCons as it builds
-system, we also add a host-scons package.
+> A while ago, there were some changes in the ccache handling, with
+> which the cache location also changed to $(HOME)/.buildroot-ccache.
+> Before that, the cache directory was configurable in .config. What is
+> the reason of changing the cache location?
 
-Changes since v1:
- * Removed an UTF-8 only character from the disko/Config.in file
+Simplifying the ccache support, mainly.
+
+> In my (corporate) environment, the home directories are actually on
+> the network (NFS) which is not ideal for performance. I would like to
+> configure another cache directory.
+> 
+> Would you accept a patch that re-introduces BR2_CCACHE_DIR ?
+
+I guess your use case is valid, so I would personally accept such a
+patch. I don't like cluttering the "Build options" menu with too many
+options, but I guess this option is a valid thing to have when ccache
+support is enabled.
 
 Regards,
 
 Thomas
-
-The following changes since commit ffe62f915dcbf62a840b40167f391127f0702aac:
-
-  sysvinit: package name typo (2011-07-12 09:11:39 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git disko
-
-Thomas Petazzoni (3):
-      scons: new package
-      disko: new package
-      disko-demos: new package
-
- package/multimedia/Config.in                       |    2 +
- package/multimedia/disko-demos/Config.in           |    8 ++
- .../disko-demos-1.8.0-fix-install-paths.patch      |   61 +++++++++++++++
- package/multimedia/disko-demos/disko-demos.mk      |   27 +++++++
- package/multimedia/disko/Config.in                 |   41 ++++++++++
- .../disko/disko-1.8.0-directfb-fix-errors.patch    |   82 ++++++++++++++++++++
- .../disko/disko-1.8.0-fixup-pkgconfig.patch        |   22 +++++
- package/multimedia/disko/disko.mk                  |   57 ++++++++++++++
- package/scons/scons.mk                             |   13 +++
- 9 files changed, 313 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/disko-demos/Config.in
- create mode 100644 package/multimedia/disko-demos/disko-demos-1.8.0-fix-install-paths.patch
- create mode 100644 package/multimedia/disko-demos/disko-demos.mk
- create mode 100644 package/multimedia/disko/Config.in
- create mode 100644 package/multimedia/disko/disko-1.8.0-directfb-fix-errors.patch
- create mode 100644 package/multimedia/disko/disko-1.8.0-fixup-pkgconfig.patch
- create mode 100644 package/multimedia/disko/disko.mk
- create mode 100644 package/scons/scons.mk
-
-Thanks,
 -- 
-Thomas Petazzoni
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
