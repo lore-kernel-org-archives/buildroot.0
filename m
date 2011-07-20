@@ -1,100 +1,73 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 20 Jul 2011 16:46:28 +0200
-Subject: [Buildroot] [PATCH] usbmount: bump to 0.0.21
-Message-ID: <4E26EA44.8080405@visionsystems.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 20 Jul 2011 16:30:14 +0200
+Subject: [Buildroot] [git commit] initramfs: fix boot with dynamic /dev
+Message-ID: <20110720150418.E95188B391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/usbmount/usbmount-0.0.14.1.patch |   57 -------------------------------
- package/usbmount/usbmount.mk             |    7 ++-
- 2 files changed, 4 insertions(+), 60 deletions(-)
 
-Index: b/package/usbmount/usbmount.mk
-===================================================================
---- a/package/usbmount/usbmount.mk
-+++ b/package/usbmount/usbmount.mk
-@@ -3,13 +3,14 @@
- # usbmount
+commit: http://git.buildroot.net/buildroot/commit/?id=424888e47431db738f5f9b3c6392435bfce7a842
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Devtmpfs (which is used by devtmpfs/mdev/udev options) doesn't get
+automounted by the kernel when an initramfs is used, causing boot
+failures when a dynamic /dev is used.
+
+Fix it by adding a pre-init script to mount devtmpfs before running init.
+
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/initramfs/init         |    4 ++++
+ fs/initramfs/initramfs.mk |   17 +++++++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+ create mode 100755 fs/initramfs/init
+
+diff --git a/fs/initramfs/init b/fs/initramfs/init
+new file mode 100755
+index 0000000..751cb27
+--- /dev/null
++++ b/fs/initramfs/init
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# devtmpfs does not get automounted for initramfs
++/bin/mount -t devtmpfs devtmpfs /dev
++exec /sbin/init $*
+diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+index 73122a8..1cd48b6 100644
+--- a/fs/initramfs/initramfs.mk
++++ b/fs/initramfs/initramfs.mk
+@@ -6,13 +6,26 @@
  #
  #############################################################
--USBMOUNT_VERSION=0.0.14.1
-+USBMOUNT_VERSION=0.0.21
- USBMOUNT_SOURCE:=usbmount_$(USBMOUNT_VERSION).tar.gz
--USBMOUNT_SITE:=http://usbmount.alioth.debian.org/package/
-+USBMOUNT_SITE:=http://ftp.de.debian.org/debian/pool/main/u/usbmount
- USBMOUNT_DEPENDENCIES = udev lockfile-progs
  
- define USBMOUNT_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/sbin/usbmount
-+	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/usr/share/usbmount/usbmount
-+	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d
- 	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
- 	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
+-define ROOTFS_INITRAMFS_INIT_SYMLINK
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
++
++define ROOTFS_INITRAMFS_ADD_INIT
+ 	if [ ! -e $(TARGET_DIR)/init ]; then \
+ 		ln -sf sbin/init $(TARGET_DIR)/init; \
  	fi
-Index: b/package/usbmount/usbmount-0.0.14.1.patch
-===================================================================
---- a/package/usbmount/usbmount-0.0.14.1.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--diff -ur usbmount-0.0.14.1/usbmount usbmount-0.0.14.1-patched/usbmount
----- usbmount-0.0.14.1/usbmount	2007-01-27 05:22:14.000000000 -0600
--+++ usbmount-0.0.14.1-patched/usbmount	2007-03-15 07:25:18.000000000 -0500
--@@ -20,7 +20,7 @@
-- log()
-- {
--     if test $1 != debug || expr "$VERBOSE" : "[yY]" > /dev/null; then
---	logger -p user.$1 -t "usbmount[$$]" -- "$2"
--+	echo "usbmount[$$] -- $2" >> $LOGFILE
--     fi
-- }
-- 
--@@ -57,11 +57,11 @@
-- if test "$1" = add; then
-- 
--     # Acquire lock.
---    log debug "trying to acquire lock /var/run/usbmount/.mount.lock"
---    lockfile-create --retry 3 /var/run/usbmount/.mount || \
---	{ log err "cannot acquire lock /var/run/usbmount/.mount.lock"; exit 1; }
---    trap '( lockfile-remove /var/run/usbmount/.mount )' 0
---    log debug "acquired lock /var/run/usbmount/.mount.lock"
--+    log debug "trying to acquire lock /var/run/.usbmount.lock"
--+    lockfile-create --retry 5 /var/run/.usbmount || \
--+	{ log err "cannot acquire lock /var/run/.usbmount.lock"; exit 1; }
--+    trap '( lockfile-remove /var/run/.usbmount )' 0
--+    log debug "acquired lock /var/run/.usbmount.lock"
-- 
--     # Try to read from the device.  Some devices need a few seconds
--     # initialization time before they can be accessed.  Give up after
--@@ -184,6 +184,7 @@
-- 		log info "executing command: run-parts /etc/usbmount/umount.d"
-- 		run-parts /etc/usbmount/umount.d || :
-- 	    fi
--+	    lockfile-remove /var/run/.usbmount
-- 	    break
-- 	fi
--     done < /proc/mounts
--diff -ur usbmount-0.0.14.1/usbmount.conf usbmount-0.0.14.1-patched/usbmount.conf
----- usbmount-0.0.14.1/usbmount.conf	2005-04-08 09:05:10.000000000 -0500
--+++ usbmount-0.0.14.1-patched/usbmount.conf	2007-03-15 07:21:33.000000000 -0500
--@@ -17,7 +17,7 @@
-- # sure all data is written to the medium before you remove it (e.g. run the #
-- # "sync" command in a terminal window).  Otherwise, you *WILL* lose data!   #
-- #############################################################################
---FILESYSTEMS="ext2 ext3"
--+FILESYSTEMS="ext2 ext3 msdos vfat"
-- 
-- # Mount options: Options passed to the mount command with the -o flag.
-- # WARNING!  Removing "sync" from the options is a very bad idea and
--@@ -35,3 +35,7 @@
-- # If set to "yes", more information will be logged via the syslog
-- # facility.
-- VERBOSE="no"
--+
--+# Location of the log file when verbose is Yes
--+LOGFILE="/var/log/usbmount.log"
--+
+ endef
+ 
+-ROOTFS_INITRAMFS_PRE_GEN_HOOKS += ROOTFS_INITRAMFS_INIT_SYMLINK
++else
++# devtmpfs does not get automounted when initramfs is used.
++# Add a pre-init script to mount it before running init
++define ROOTFS_INITRAMFS_ADD_INIT
++	if [ ! -e $(TARGET_DIR)/init ]; then \
++		$(INSTALL) -m 0755 fs/initramfs/init $(TARGET_DIR)/init; \
++	fi
++endef
++
++endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
++
++ROOTFS_INITRAMFS_PRE_GEN_HOOKS += ROOTFS_INITRAMFS_ADD_INIT
+ 
+ define ROOTFS_INITRAMFS_CMD
+ 	$(SHELL) fs/initramfs/gen_initramfs_list.sh -u 0 -g 0 $(TARGET_DIR) > $$@
+-- 
+1.7.3.4
